@@ -20,15 +20,22 @@
 #ifndef BSP_HAS_NO_VME
 #include <bsp/VMEConfig.h>
 #endif
+#if BSP_PCI_IRQ_NUMBER > 0
 #include <bsp/openpic.h>
+#endif
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
 #include <stdlib.h>
 
 #include <rtems/bspIo.h> /* for printk */
-#define RAVEN_INTR_ACK_REG 0xfeff0030
 
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#ifndef qemu
+#define RAVEN_INTR_ACK_REG 0xfeff0030
+#else
+#define RAVEN_INTR_ACK_REG 0xbffffff0
+#endif
+
+#if BSP_ISA_IRQ_NUMBER > 0
 /*
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
@@ -47,33 +54,35 @@ static rtems_irq_connect_data	default_rtems_entry;
 
 static rtems_irq_connect_data*		rtems_hdl_tbl;
 
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
 /*
  * Check if IRQ is an ISA IRQ
  */
 static inline int is_isa_irq(const rtems_irq_number irqLine)
 {
-  return (((int) irqLine <= BSP_ISA_IRQ_MAX_OFFSET) &
+  return (((int) irqLine <= BSP_ISA_IRQ_MAX_OFFSET) &&
 	  ((int) irqLine >= BSP_ISA_IRQ_LOWEST_OFFSET)
 	 );
 }
 #endif
 
+#if BSP_PCI_IRQ_NUMBER > 0
 /*
  * Check if IRQ is an OPENPIC IRQ
  */
 static inline int is_pci_irq(const rtems_irq_number irqLine)
 {
-  return (((int) irqLine <= BSP_PCI_IRQ_MAX_OFFSET) &
+  return OpenPIC && (((int) irqLine <= BSP_PCI_IRQ_MAX_OFFSET) &&
 	  ((int) irqLine >= BSP_PCI_IRQ_LOWEST_OFFSET)
 	 );
 }
+#endif
 
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
  */
 
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
 /*
  * Caution : this function assumes the variable "*config"
  * is already set and that the tables it contains are still valid
@@ -103,7 +112,7 @@ static void compute_i8259_masks_from_prio (rtems_irq_global_settings* config)
 void
 BSP_enable_irq_at_pic(const rtems_irq_number name)
 {
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
     if (is_isa_irq(name)) {
       /*
        * Enable interrupt at PIC level
@@ -112,18 +121,20 @@ BSP_enable_irq_at_pic(const rtems_irq_number name)
     }
 #endif
 
+#if BSP_PCI_IRQ_NUMBER > 0
     if (is_pci_irq(name)) {
       /*
        * Enable interrupt at OPENPIC level
        */
       openpic_enable_irq ((int) name - BSP_PCI_IRQ_LOWEST_OFFSET);
     }
+#endif
 }
 
 int
 BSP_disable_irq_at_pic(const rtems_irq_number name)
 {
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
     if (is_isa_irq(name)) {
       /*
        * disable interrupt at PIC level
@@ -131,12 +142,14 @@ BSP_disable_irq_at_pic(const rtems_irq_number name)
       return BSP_irq_disable_at_i8259s ((int) name - BSP_ISA_IRQ_LOWEST_OFFSET);
     }
 #endif
+#if BSP_PCI_IRQ_NUMBER > 0
     if (is_pci_irq(name)) {
       /*
        * disable interrupt at OPENPIC level
        */
       return openpic_disable_irq ((int) name - BSP_PCI_IRQ_LOWEST_OFFSET);
     }
+#endif
 	return -1;
 }
 
@@ -156,7 +169,7 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
      * set up internal tables used by rtems interrupt prologue
      */
 
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
     /*
      * start with ISA IRQ
      */
@@ -179,6 +192,9 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
 	}
 #endif
 
+#if BSP_PCI_IRQ_NUMBER > 0
+	if ( ! OpenPIC )
+		return 1;
     /*
      * continue with PCI IRQ
      */
@@ -197,12 +213,11 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
     }
 
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
-	if ( BSP_ISA_IRQ_NUMBER > 0 ) {
-    	/*
-	     * Must enable PCI/ISA bridge IRQ
-	     */
-    	openpic_enable_irq (0);
-	}
+   	/*
+     * Must enable PCI/ISA bridge IRQ
+     */
+   	openpic_enable_irq (BSP_PCI_ISA_BRIDGE_IRQ);
+#endif
 #endif
 
     return 1;
@@ -218,7 +233,7 @@ unsigned BSP_spuriousIntr = 0;
 int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
   register unsigned isaIntr;                  /* boolean */
   register unsigned oldMask = 0;	      /* old isa pic masks */
   register unsigned newMask;                  /* new isa pic masks */
@@ -231,17 +246,39 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
     return 0;
 
   }
-  irq = openpic_irq(0);
-  if (irq == OPENPIC_VEC_SPURIOUS) {
-    ++BSP_spuriousIntr;
-    return 0;
-  }
 
-  /* some BSPs might want to use a different numbering... */
-  irq = irq - OPENPIC_VEC_SOURCE + BSP_PCI_IRQ_LOWEST_OFFSET;
+#if BSP_PCI_IRQ_NUMBER > 0
+  if ( OpenPIC ) {
+    irq = openpic_irq(0);
+    if (irq == OPENPIC_VEC_SPURIOUS) {
+      ++BSP_spuriousIntr;
+      return 0;
+    }
 
+    /* some BSPs might want to use a different numbering... */
+    irq = irq - OPENPIC_VEC_SOURCE + BSP_PCI_IRQ_LOWEST_OFFSET;
+  } else {
+#if BSP_ISA_IRQ_NUMBER > 0
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
+	irq = BSP_PCI_ISA_BRIDGE_IRQ;
+#else
+#error "Configuration Error -- BSP with ISA + PCI IRQs MUST define BSP_PCI_ISA_BRIDGE_IRQ"
+#endif
+#else
+	rtems_panic("MUST have an OpenPIC if BSP has PCI IRQs but no ISA IRQs");
+#endif
+  }
+#endif
+
+#if BSP_ISA_IRQ_NUMBER > 0
+#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if 0 == BSP_PCI_IRQ_NUMBER 
+#error "Configuration Error -- BSP w/o PCI IRQs MUST NOT define BSP_PCI_ISA_BRIDGE_IRQ"
+#endif
   isaIntr = (irq == BSP_PCI_ISA_BRIDGE_IRQ);
+#else
+  isaIntr = 1;
+#endif
   if (isaIntr)  {
     /*
      * Acknowledge and read 8259 vector
@@ -256,14 +293,17 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
     outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
     BSP_irq_ack_at_i8259s (irq);
-    openpic_eoi(0);
+#if BSP_PCI_IRQ_NUMBER > 0
+	if ( OpenPIC )
+      openpic_eoi(0);
+#endif
   }
 #endif
 
   /* dispatch handlers */
   bsp_irq_dispatch_list(rtems_hdl_tbl, irq, default_rtems_entry.hdl);
 
-#ifdef BSP_PCI_ISA_BRIDGE_IRQ
+#if BSP_ISA_IRQ_NUMBER > 0
   if (isaIntr)  {
     i8259s_cache = oldMask;
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
@@ -272,14 +312,18 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
   else
 #endif
   {
+#if BSP_PCI_IRQ_NUMBER > 0
 #ifdef BSP_PCI_VME_DRIVER_DOES_EOI
 	/* leave it to the VME bridge driver to do EOI, so
      * it can re-enable the openpic while handling
      * VME interrupts (-> VME priorities in software)
 	 */
-	if (_BSP_vme_bridge_irq != irq)
+	if (_BSP_vme_bridge_irq != irq && OpenPIC)
 #endif
     		openpic_eoi(0);
+#else
+	do {} while (0);
+#endif
   }
   return 0;
 }

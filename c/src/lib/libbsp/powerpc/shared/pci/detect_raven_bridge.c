@@ -10,6 +10,7 @@
 #include <bsp/consoleIo.h>
 #include <bsp/residual.h>
 #include <bsp/openpic.h>
+#include <bsp/irq.h>
 
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
@@ -187,9 +188,12 @@ void detect_host_bridge(void)
       printk("OpenPIC found at %x.\n", OpenPIC);
     }
   }
+
+#if BSP_PCI_IRQ_NUMBER > 0
   if (OpenPIC == (volatile struct OpenPIC *)0) {
     BSP_panic("OpenPic Not found\n");
   }
+#endif
 
 }
 

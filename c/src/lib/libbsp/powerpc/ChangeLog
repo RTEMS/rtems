@@ -1,3 +1,11 @@
+2011-07-15  Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/init_irq.c, shared/irq/openpic_i8259_irq.c,
+	shared/pci/detect_raven_bridge.c: conditionally compile
+	ISA and PCI-interrupt related stuff only if BSP defines
+	BSP_ISA_IRQ_NUMBER > 0 and/or BSP_PCI_IRQ_NUMBER > 0,
+	respectively.
+	
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove references to non-existing files.

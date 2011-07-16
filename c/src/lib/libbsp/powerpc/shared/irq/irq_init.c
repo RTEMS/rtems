@@ -22,8 +22,10 @@
 #include <libcpu/spr.h>
 #include <bsp/pci.h>
 #include <bsp/residual.h>
-#include <bsp/openpic.h>
 #include <bsp/irq.h>
+#if BSP_PCI_IRQ_NUMBER > 0
+#include <bsp/openpic.h>
+#endif
 #include <bsp/irq_supp.h>
 #include <bsp.h>
 #include <bsp/motorola.h>
@@ -36,7 +38,9 @@ typedef struct {
 } pci_isa_bridge_device;
 
 pci_isa_bridge_device* via_82c586 = 0;
+#ifndef qemu
 static pci_isa_bridge_device bridge;
+#endif
 
 /*
  * default methods
@@ -83,16 +87,19 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   0,0,
   255,
   0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+#if BSP_PCI_IRQ_NUMBER > 0
   /*
    * PCI Interrupts
    */
   8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, /* for raven prio 0 means unactive... */
+#endif
   /*
    * Processor exceptions handled as interrupts
    */
   0
 };
 
+#if BSP_PCI_IRQ_NUMBER > 0
 #if defined(mvme2100)
 static unsigned char mvme2100_openpic_initpolarities[16] = {
     0,  /* Not used - should be disabled */
@@ -156,7 +163,9 @@ static unsigned char mcp750_openpic_initsenses[] = {
     1,	/* MCP750_INT_PCI_BUS2_INTD */
 };
 #endif
+#endif
 
+#if BSP_ISA_IRQ_NUMBER > 0 && !defined(qemu)
 void VIA_isa_bridge_interrupts_setup(void)
 {
   pci_isa_bridge_device pci_dev;
@@ -259,6 +268,7 @@ loop_exit:
 #endif
   }
 }
+#endif
 
   /*
    * This code assumes the exceptions management setup has already
@@ -268,7 +278,7 @@ loop_exit:
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
-#if !defined(mvme2100)
+#if BSP_ISA_IRQ_NUMBER > 0 && !defined(mvme2100)
   int known_cpi_isa_bridge = 0;
 #endif
   int i;
@@ -285,6 +295,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
    */
   openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses, 16, 16, BSP_bus_frequency);
 #else
+#if BSP_PCI_IRQ_NUMBER > 0
 #ifdef TRACE_IRQ_INIT
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif
@@ -292,8 +303,13 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
+#endif
+
+#if BSP_ISA_IRQ_NUMBER > 0
   if ( currentBoard == MESQUITE ) {
+#ifndef qemu
     VIA_isa_bridge_interrupts_setup();
+#endif
     known_cpi_isa_bridge = 1;
   }
   if ( currentBoard == MVME_2300 ) {
@@ -314,6 +330,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   printk("Going to initialize the ISA PC legacy IRQ management hardware\n");
 #endif
   BSP_i8259s_init();
+#endif
+
 #endif
 
   /*
