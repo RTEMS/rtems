@@ -1,5 +1,13 @@
 2011-07-15  Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/ppc_idle.c: added an 'idle task' body
+	which switches the CPU into power-save mode. IIRC, this
+	cannot be used on real hardware due to errata :-( but
+	it still saves valuable host-CPU cycles when used by
+	the qemuprep BSP.
+
+2011-07-15  Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/irq/init_irq.c, shared/irq/openpic_i8259_irq.c,
 	shared/pci/detect_raven_bridge.c: conditionally compile
 	ISA and PCI-interrupt related stuff only if BSP defines
