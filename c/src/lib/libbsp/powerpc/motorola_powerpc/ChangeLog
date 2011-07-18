@@ -1,16 +1,17 @@
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>
 
-	* motorola_powerpc/make/custom/qemuprep-altivec.cfg,
-	motorola_powerpc/Makefile.am: added altivec-enabled variant.
+	* README.qemu: added.
+
+2011-07-18  Till Straumann <strauman@slac.stanford.edu>
+
+	* make/custom/qemuprep-altivec.cfg, Makefile.am:
+	added altivec-enabled variant 'qemuprep-altivec'.
 
 2011-07-15  Till Straumann <strauman@slac.stanford.edu>
 
-	* motorola_powerpc/Makefile.am,
-	motorola_powerpc/configure.ac, motorola_powerpc/preinstall.am,
-	motorola_powerpc/include/bsp.h, motorola_powerpc/make/custom/qemuprep.cfg,
-	motorola_powerpc/qemu_fakerom/Makefile.am,
-	motorola_powerpc/qemu_fakerom/.cvsignore:
-	Added 'qemuprep' BSP variant.
+	* Makefile.am, configure.ac, preinstall.am, include/bsp.h,
+	make/custom/qemuprep.cfg, qemu_fakerom/Makefile.am,
+	qemu_fakerom/.cvsignore: Added 'qemuprep' BSP variant.
 
 2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
