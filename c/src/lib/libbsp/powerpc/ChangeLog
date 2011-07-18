@@ -1,5 +1,10 @@
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/bootloader/qemu_fakerom.S: Added work-around for
+	qemu bug 811683.
+
+2011-07-18  Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/bootloader/head.S: disable USE_PPCBUG under qemu.
 
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>

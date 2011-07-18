@@ -18,6 +18,8 @@
 
 #define PCI_MAX_DEV 32
 
+#define BA_OPCODE(tgt)  ((18<<(31-5)) | 2 | ((tgt) & 0x03fffffc))
+
 	.global fake_data
 	.global res_set_memsz
 
@@ -25,6 +27,20 @@
 _start:
 	lis    1,  INIT_STACK@h
 	ori    1,1,INIT_STACK@l
+
+		/* qemu 0.14.1 has the wrong exception prefix for 74xx CPUs
+		 * (bug 811683). Work around this by putting a stub at 0x00000X00
+		 * which simply jumps to high memory. We only need the SC exception
+		 * for now.
+		 */
+	lis  3,    BA_OPCODE(0xfff00000)@h
+	ori  3, 3, BA_OPCODE(0xfff00000)@l
+	li   4, 0x0c00
+	add  3, 3, 4
+	stw  3, 0(4)
+	dcbf 0, 4
+	icbi 0, 4
+
 	bl     pci_irq_set
 		/* copy residual to RAM and fix up; 
 		 * this routine returns a pointer to
