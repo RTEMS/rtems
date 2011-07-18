@@ -1,3 +1,9 @@
+2011-07-18	Jennifer Averett <Jennifer.Averett@oarcorp.com>
+
+	* score/src/threadenabledispatch.c: Modified to call
+	_Thread_Dispatch_decrement_disable_level() instead of accessing the
+	variable directly.
+
 2011-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/malloc_report_statistics_plugin.c: Fixed format

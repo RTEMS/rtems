@@ -42,7 +42,7 @@
 #if defined (__THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__ )
 void _Thread_Enable_dispatch( void )
 {
-  if ( --_Thread_Dispatch_disable_level )
+  if ( _Thread_Dispatch_decrement_disable_level() )
     return;
   _Thread_Dispatch();
 }
