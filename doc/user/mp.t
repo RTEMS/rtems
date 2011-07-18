@@ -432,9 +432,9 @@ Many MPCI layers use the @code{packet_length} field of the
 of the packet to avoid sending unnecessary data.  This is especially 
 useful if the media connecting the nodes is relatively slow.
 
-The to_convert field of the MP_packet_prefix portion of the packet indicates
-how much of the packet (in @code{uint32_t}'s) may require
-conversion in a heterogeneous system.
+The @code{to_convert} field of the @code{rtems_packet_prefix} portion of the
+packet indicates how much of the packet in 32-bit units may require conversion
+in a heterogeneous system.
 
 @subsection Supporting Heterogeneous Environments
 
@@ -507,10 +507,10 @@ must be aware of the following:
 @itemize @bullet
 @item All packets must begin on a four byte boundary.
 
-@item Packets are composed of both RTEMS and application data.
-All RTEMS data is treated as thirty-two (32) bit unsigned
-quantities and is in the first @code{@value{RPREFIX}MINIMUM_UNSIGNED32S_TO_CONVERT}
-thirty-two (32) quantities of the packet.
+@item Packets are composed of both RTEMS and application data.  All RTEMS data
+is treated as 32-bit unsigned quantities and is in the first @code{to_convert}
+32-bit quantities of the packet.  The @code{to_convert} field is part of the
+@code{rtems_packet_prefix} portion of the packet.
 
 @item The RTEMS data component of the packet must be in native
 endian format.  Endian conversion may be performed by either the

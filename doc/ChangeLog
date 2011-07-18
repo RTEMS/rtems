@@ -1,3 +1,7 @@
+2011-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* user/mp.t: Avoid obsolete notation.
+
 2011-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* user/part.t, user/sem.t: Typos.
