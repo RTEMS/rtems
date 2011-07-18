@@ -67,20 +67,41 @@
  */
 
 #include <rtems/powerpc/registers.h>
+#include <libcpu/cpuIdent.h>
+#include <libcpu/spr.h>
+
+SPR_RW(HID0)
 
 void *
 bsp_ppc_idle_task_body(uintptr_t ignored)
 {
 uint32_t msr;
-	_CPU_MSR_GET(msr);
-	msr |= MSR_POW;
-	asm volatile(
-	"1: sync       \n"
-	"	mtmsr %0   \n"
-	"   isync      \n"
-	"   b 1b       \n"
-	::"r"(msr)
-	);
+
+	switch ( current_ppc_cpu ) {
+
+		case PPC_7400:
+		case PPC_7455:
+		case PPC_7457:
+			/* Must enable NAP mode in HID0 for MSR_POW to work */
+			_write_HID0( _read_HID0() | HID0_NAP );
+		break;
+
+		default:
+		break;
+	}
+
+	for ( ;; ) {
+		_CPU_MSR_GET(msr);
+		msr |= MSR_POW;
+		asm volatile(
+				"1: sync       \n"
+				"	mtmsr %0   \n"
+				"   isync      \n"
+				"   b 1b       \n"
+				::"r"(msr)
+				);
+	}
+
 	return 0;
 }
 
