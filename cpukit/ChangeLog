@@ -1,3 +1,8 @@
+2011-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/malloc_report_statistics_plugin.c: Fixed format
+	specifiers.
+
 2011-07-15	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* score/Makefile.am, score/preinstall.am,

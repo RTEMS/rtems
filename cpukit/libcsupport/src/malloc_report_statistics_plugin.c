@@ -24,27 +24,27 @@ void malloc_report_statistics_with_plugin(
   rtems_printk_plugin_t  print
 )
 {
-  rtems_malloc_statistics_t *s;
-  uintmax_t allocated;
-
-  s = &rtems_malloc_statistics;
-
-  allocated  = s->lifetime_allocated - s->lifetime_freed;
+  rtems_malloc_statistics_t *s = &rtems_malloc_statistics;
+  uint32_t space_available = s->space_available;
+  uint32_t allocated = (uint32_t) (s->lifetime_allocated - s->lifetime_freed);
+  uint32_t max_depth = s->max_depth;
+    /* avoid float! */
+  uint32_t allocated_per_cent = (allocated * 100) / space_available;
+  uint32_t max_depth_per_cent = (max_depth * 100) / space_available;
 
   (*print)(
     context,
     "Malloc statistics\n"
-    "  avail:%"PRIu32"k  allocated:%"PRIu32"k (%"PRId32"%%) "
+    "  avail:%"PRIu32"k  allocated:%"PRIu32"k (%"PRIu32"%%) "
       "max:%"PRIu32"k (%"PRIu32"%%)"
-      " lifetime:%"PRIu32"k freed:%"PRIu32"k\n",
-    s->space_available / 1024,
+      " lifetime:%"PRIuMAX"k freed:%"PRIuMAX"k\n",
+    space_available / 1024,
     allocated / 1024,
-    /* avoid float! */
-    (allocated * 100) / s->space_available,
-    s->max_depth / 1024,
-    (s->max_depth * 100) / s->space_available,
-    (uint32_t) (s->lifetime_allocated / 1024),
-    (uint32_t) (s->lifetime_freed / 1024)
+    allocated_per_cent,
+    max_depth / 1024,
+    max_depth_per_cent,
+    s->lifetime_allocated / 1024,
+    s->lifetime_freed / 1024
   );
   (*print)(
     context,
