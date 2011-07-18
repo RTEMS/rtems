@@ -1,5 +1,9 @@
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/bootloader/head.S: disable USE_PPCBUG under qemu.
+
+2011-07-18  Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/bspstart.c: Select console *before* doing
 	any potential printk() (e.g., panic).
 
