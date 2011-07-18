@@ -196,6 +196,22 @@ void bsp_start( void )
    */
   L1_caches_enables();
 
+  select_console(CONSOLE_LOG);
+
+  /*
+   * We check that the keyboard is present and immediately
+   * select the serial console if not.
+   */
+#if defined(BSP_KBD_IOBASE)
+  { int err;
+    err = kbdreset();
+    if (err) select_console(CONSOLE_SERIAL);
+  }
+#else
+  select_console(CONSOLE_SERIAL);
+#endif
+
+
 #if !defined(mvme2100)
   /*
    * Enable L2 Cache. Note that the set_L2CR(L2CR) codes checks for
@@ -226,21 +242,6 @@ void bsp_start( void )
   if (sc != RTEMS_SUCCESSFUL) {
     BSP_panic("cannot initialize exceptions");
   }
-
-  select_console(CONSOLE_LOG);
-
-  /*
-   * We check that the keyboard is present and immediately
-   * select the serial console if not.
-   */
-#if defined(BSP_KBD_IOBASE)
-  { int err;
-    err = kbdreset();
-    if (err) select_console(CONSOLE_SERIAL);
-  }
-#else
-  select_console(CONSOLE_SERIAL);
-#endif
 
   boardManufacturer   =  checkPrepBoardType(&residualCopy);
   if (boardManufacturer != PREP_Motorola) {

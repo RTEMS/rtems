@@ -1,5 +1,10 @@
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>
 
+	* shared/startup/bspstart.c: Select console *before* doing
+	any potential printk() (e.g., panic).
+
+2011-07-18  Till Straumann <strauman@slac.stanford.edu>
+
 	* shared/startup/ppc_idle.c: Need to enable HID0[NAP] on
 	a 7400/7455/7457 for MSR[POW] to have an effect.
 
