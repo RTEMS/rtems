@@ -156,7 +156,8 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
+    ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
 
 if QEMU
 libbsp_a_LIBADD+=ne2000.rel

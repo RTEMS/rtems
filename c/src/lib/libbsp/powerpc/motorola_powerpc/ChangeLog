@@ -1,3 +1,8 @@
+2011-07-18  Till Straumann <strauman@slac.stanford.edu>
+
+	* motorola_powerpc/make/custom/qemuprep-altivec.cfg,
+	motorola_powerpc/Makefile.am: added altivec-enabled variant.
+
 2011-07-15  Till Straumann <strauman@slac.stanford.edu>
 
 	* motorola_powerpc/Makefile.am,
