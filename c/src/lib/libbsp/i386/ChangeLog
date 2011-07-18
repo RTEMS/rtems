@@ -1,3 +1,8 @@
+2011-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* shared/irq/apic.h, shared/smp/smp-imps.c, shared/smp/smp-imps.h:
+	Reformat to be more compliant with RTEMS style.
+
 2011-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/apic.h, shared/smp/smp-imps.c, shared/smp/smp-imps.h: Per
