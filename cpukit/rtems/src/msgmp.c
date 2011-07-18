@@ -122,7 +122,6 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
        */
 
       if (the_packet->Prefix.length > _MPCI_table->maximum_packet_size) {
-          _Thread_Enable_dispatch();
           return RTEMS_INVALID_SIZE;
       }
 
