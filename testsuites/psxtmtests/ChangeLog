@@ -1,3 +1,7 @@
+2011-07-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* configure.ac: Remove psxtmmutex04 until PR 1836 is processed.
+
 2011-07-15	Ricardo Aguirre <el.mastin@ymail.com>
 
 	PR 1835/tests

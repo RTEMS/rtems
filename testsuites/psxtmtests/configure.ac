@@ -82,7 +82,6 @@ AC_CONFIG_FILES([Makefile
 psxtmmutex01/Makefile
 psxtmmutex02/Makefile
 psxtmmutex03/Makefile
-psxtmmutex04/Makefile
 psxtmmutex07/Makefile
 psxtmnanosleep01/Makefile
 psxtmnanosleep02/Makefile
