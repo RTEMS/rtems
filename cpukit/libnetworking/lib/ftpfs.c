@@ -79,6 +79,21 @@ typedef struct {
   int data_socket;
 
   /**
+   * Current index into the reply buffer.
+   */
+  size_t reply_current;
+
+  /**
+   * End index of the reply buffer.
+   */
+  size_t reply_end;
+
+  /**
+   * Buffer for relpy data.
+   */
+  char reply_buffer [128];
+
+  /**
    * End of file flag.
    */
   bool eof;
@@ -218,10 +233,9 @@ typedef void (*rtems_ftpfs_reply_parser)(
 typedef enum {
   RTEMS_FTPFS_REPLY_START,
   RTEMS_FTPFS_REPLY_SINGLE_LINE,
-  RTEMS_FTPFS_REPLY_SINGLE_LINE_DONE,
+  RTEMS_FTPFS_REPLY_DONE,
   RTEMS_FTPFS_REPLY_MULTI_LINE,
-  RTEMS_FTPFS_REPLY_NEW_LINE,
-  RTEMS_FTPFS_REPLY_NEW_LINE_START
+  RTEMS_FTPFS_REPLY_MULTI_LINE_START
 } rtems_ftpfs_reply_state;
 
 typedef enum {
@@ -235,73 +249,99 @@ typedef enum {
 
 #define RTEMS_FTPFS_REPLY_SIZE 3
 
+static bool rtems_ftpfs_is_reply_code_valid(unsigned char *reply)
+{
+  return isdigit(reply [0]) && isdigit(reply [1]) && isdigit(reply [2]);
+}
+
 static rtems_ftpfs_reply rtems_ftpfs_get_reply(
-  int socket,
+  rtems_ftpfs_entry *e,
   rtems_ftpfs_reply_parser parser,
   void *parser_arg,
   bool verbose
 )
 {
   rtems_ftpfs_reply_state state = RTEMS_FTPFS_REPLY_START;
-  unsigned char reply_first [RTEMS_FTPFS_REPLY_SIZE] = { 'a', 'a', 'a' };
-  unsigned char reply_last [RTEMS_FTPFS_REPLY_SIZE] = { 'b', 'b', 'b' };
-  size_t reply_first_index = 0;
-  size_t reply_last_index = 0;
-  char buf [128];
+  unsigned char reply_code [RTEMS_FTPFS_REPLY_SIZE] = { 'a', 'a', 'a' };
+  size_t reply_code_index = 0;
 
-  while (true) {
+  while (state != RTEMS_FTPFS_REPLY_DONE) {
+    char *buf = NULL;
+    size_t i = 0;
+    size_t n = 0;
+
     /* Receive reply fragment from socket */
-    ssize_t i = 0;
-    ssize_t rv = recv(socket, buf, sizeof(buf), 0);
+    if (e->reply_current == e->reply_end) {
+      ssize_t rv = 0;
 
-    if (rv <= 0) {
-      return RTEMS_FTPFS_REPLY_ERROR;
+      e->reply_current = 0;
+      e->reply_end = 0;
+
+      rv = recv(
+        e->ctrl_socket,
+        &e->reply_buffer [0],
+        sizeof(e->reply_buffer),
+        0
+      );
+
+      if (rv > 0) {
+        e->reply_end = (size_t) rv;
+      } else {
+        return RTEMS_FTPFS_REPLY_ERROR;
+      }
     }
 
-    /* Be verbose if necessary */
-    if (verbose) {
-      write(STDERR_FILENO, buf, (size_t) rv);
-    }
+    buf = &e->reply_buffer [e->reply_current];
+    n = e->reply_end - e->reply_current;
 
     /* Invoke parser if necessary */
     if (parser != NULL) {
-      parser(buf, (size_t) rv, parser_arg);
+      parser(buf, n, parser_arg);
     }
 
     /* Parse reply fragment */
-    for (i = 0; i < rv; ++i) {
+    for (i = 0; i < n && state != RTEMS_FTPFS_REPLY_DONE; ++i) {
       char c = buf [i];
 
       switch (state) {
         case RTEMS_FTPFS_REPLY_START:
-          if (reply_first_index < RTEMS_FTPFS_REPLY_SIZE) {
-            reply_first [reply_first_index] = c;
-            ++reply_first_index;
-          } else if (c == '-') {
-            state = RTEMS_FTPFS_REPLY_MULTI_LINE;
+          if (reply_code_index < RTEMS_FTPFS_REPLY_SIZE) {
+            reply_code [reply_code_index] = c;
+            ++reply_code_index;
+          } else if (rtems_ftpfs_is_reply_code_valid(reply_code)) {
+            if (c == '-') {
+              state = RTEMS_FTPFS_REPLY_MULTI_LINE;
+            } else {
+              state = RTEMS_FTPFS_REPLY_SINGLE_LINE;
+            }
           } else {
-            state = RTEMS_FTPFS_REPLY_SINGLE_LINE;
+            return RTEMS_FTPFS_REPLY_ERROR;
           }
           break;
         case RTEMS_FTPFS_REPLY_SINGLE_LINE:
           if (c == '\n') {
-            state = RTEMS_FTPFS_REPLY_SINGLE_LINE_DONE;
+            state = RTEMS_FTPFS_REPLY_DONE;
           }
           break;
         case RTEMS_FTPFS_REPLY_MULTI_LINE:
           if (c == '\n') {
-            state = RTEMS_FTPFS_REPLY_NEW_LINE_START;
-            reply_last_index = 0;
+            state = RTEMS_FTPFS_REPLY_MULTI_LINE_START;
+            reply_code_index = 0;
           }
           break;
-        case RTEMS_FTPFS_REPLY_NEW_LINE:
-        case RTEMS_FTPFS_REPLY_NEW_LINE_START:
-          if (reply_last_index < RTEMS_FTPFS_REPLY_SIZE) {
-            state = RTEMS_FTPFS_REPLY_NEW_LINE;
-            reply_last [reply_last_index] = c;
-            ++reply_last_index;
+        case RTEMS_FTPFS_REPLY_MULTI_LINE_START:
+          if (reply_code_index < RTEMS_FTPFS_REPLY_SIZE) {
+            if (reply_code [reply_code_index] == c) {
+              ++reply_code_index;
+            } else {
+              state = RTEMS_FTPFS_REPLY_MULTI_LINE;
+            }
           } else {
-            state = RTEMS_FTPFS_REPLY_MULTI_LINE;
+            if (c == ' ') {
+              state = RTEMS_FTPFS_REPLY_SINGLE_LINE;
+            } else {
+              state = RTEMS_FTPFS_REPLY_MULTI_LINE;
+            }
           }
           break;
         default:
@@ -309,37 +349,20 @@ static rtems_ftpfs_reply rtems_ftpfs_get_reply(
       }
     }
 
-    /* Check reply */
-    if (state == RTEMS_FTPFS_REPLY_SINGLE_LINE_DONE) {
-      if (
-        isdigit(reply_first [0])
-          && isdigit(reply_first [1])
-          && isdigit(reply_first [2])
-      ) {
-        break;
-      } else {
-        return RTEMS_FTPFS_REPLY_ERROR;
-      }
-    } else if (state == RTEMS_FTPFS_REPLY_NEW_LINE_START) {
-      bool ok = true;
-
-      for (i = 0; i < RTEMS_FTPFS_REPLY_SIZE; ++i) {
-        ok = ok
-          && reply_first [i] == reply_last [i]
-          && isdigit(reply_first [i]);
-      }
-
-      if (ok) {
-        break;
-      }
+    /* Be verbose if necessary */
+    if (verbose) {
+      write(STDERR_FILENO, buf, i);
     }
+
+    /* Update reply index */
+    e->reply_current += i;
   }
 
-  return reply_first [0];
+  return reply_code [0];
 }
 
 static rtems_ftpfs_reply rtems_ftpfs_send_command_with_parser(
-  int socket,
+  rtems_ftpfs_entry *e,
   const char *cmd,
   const char *arg,
   rtems_ftpfs_reply_parser parser,
@@ -364,14 +387,14 @@ static rtems_ftpfs_reply rtems_ftpfs_send_command_with_parser(
     buf_eol [1] = '\n';
 
     /* Send */
-    n = send(socket, buf, len, 0);
+    n = send(e->ctrl_socket, buf, len, 0);
     if (n == (ssize_t) len) {
       if (verbose) {
         write(STDERR_FILENO, buf, len);
       }
 
       /* Reply */
-      reply = rtems_ftpfs_get_reply(socket, parser, parser_arg, verbose);
+      reply = rtems_ftpfs_get_reply(e, parser, parser_arg, verbose);
     }
 
     free(buf);
@@ -381,14 +404,14 @@ static rtems_ftpfs_reply rtems_ftpfs_send_command_with_parser(
 }
 
 static rtems_ftpfs_reply rtems_ftpfs_send_command(
-  int socket,
+  rtems_ftpfs_entry *e,
   const char *cmd,
   const char *arg,
   bool verbose
 )
 {
   return rtems_ftpfs_send_command_with_parser(
-    socket,
+    e,
     cmd,
     arg,
     NULL,
@@ -542,7 +565,7 @@ static int rtems_ftpfs_terminate(rtems_libio_t *iop, bool error)
           && (iop->flags & LIBIO_FLAGS_WRITE) != 0
           && !error
       ) {
-        reply = rtems_ftpfs_get_reply(e->ctrl_socket, NULL, NULL, verbose);
+        reply = rtems_ftpfs_get_reply(e, NULL, NULL, verbose);
         if (reply != RTEMS_FTPFS_REPLY_2) {
           eno = EIO;
         }
@@ -551,12 +574,7 @@ static int rtems_ftpfs_terminate(rtems_libio_t *iop, bool error)
 
     /* Close control connection if necessary */
     if (e->ctrl_socket >= 0) {
-      reply = rtems_ftpfs_send_command(
-        e->ctrl_socket,
-        "QUIT",
-        NULL,
-        verbose
-      );
+      reply = rtems_ftpfs_send_command(e, "QUIT", NULL, verbose);
       if (reply != RTEMS_FTPFS_REPLY_2) {
         eno = EIO;
       }
@@ -644,21 +662,16 @@ static int rtems_ftpfs_open_ctrl_connection(
   DEBUG_PRINTF("client = %s\n", inet_ntoa(sa.sin_addr));
 
   /* Now we should get a welcome message from the server */
-  reply = rtems_ftpfs_get_reply(e->ctrl_socket, NULL, NULL, verbose);
+  reply = rtems_ftpfs_get_reply(e, NULL, NULL, verbose);
   if (reply != RTEMS_FTPFS_REPLY_2) {
     return ENOENT;
   }
 
   /* Send USER command */
-  reply = rtems_ftpfs_send_command(e->ctrl_socket, "USER ", user, verbose);
+  reply = rtems_ftpfs_send_command(e, "USER ", user, verbose);
   if (reply == RTEMS_FTPFS_REPLY_3) {
     /* Send PASS command */
-    reply = rtems_ftpfs_send_command(
-      e->ctrl_socket,
-      "PASS ",
-      password,
-      verbose
-    );
+    reply = rtems_ftpfs_send_command(e, "PASS ", password, verbose);
     if (reply != RTEMS_FTPFS_REPLY_2) {
       return EACCES;
     }
@@ -669,7 +682,7 @@ static int rtems_ftpfs_open_ctrl_connection(
   }
 
   /* Send TYPE command to set binary mode for all data transfers */
-  reply = rtems_ftpfs_send_command(e->ctrl_socket, "TYPE I", NULL, verbose);
+  reply = rtems_ftpfs_send_command(e, "TYPE I", NULL, verbose);
   if (reply != RTEMS_FTPFS_REPLY_2) {
     return EIO;
   }
@@ -739,12 +752,7 @@ static int rtems_ftpfs_open_data_connection_active(
     (data_port >> 8) & 0xffUL,
     (data_port >> 0) & 0xffUL
   );
-  reply = rtems_ftpfs_send_command(
-    e->ctrl_socket,
-    port_command,
-    NULL,
-    verbose
-  );
+  reply = rtems_ftpfs_send_command(e, port_command, NULL, verbose);
   if (reply != RTEMS_FTPFS_REPLY_2) {
     eno = ENOTSUP;
     goto cleanup;
@@ -758,12 +766,7 @@ static int rtems_ftpfs_open_data_connection_active(
   }
 
   /* Send RETR or STOR command with filename */
-  reply = rtems_ftpfs_send_command(
-    e->ctrl_socket,
-    file_command,
-    filename,
-    verbose
-  );
+  reply = rtems_ftpfs_send_command(e, file_command, filename, verbose);
   if (reply != RTEMS_FTPFS_REPLY_1) {
     eno = EIO;
     goto cleanup;
@@ -888,7 +891,7 @@ static int rtems_ftpfs_open_data_connection_passive(
 
   /* Send PASV command */
   reply = rtems_ftpfs_send_command_with_parser(
-    e->ctrl_socket,
+    e,
     "PASV",
     NULL,
     rtems_ftpfs_pasv_parser,
@@ -925,12 +928,7 @@ static int rtems_ftpfs_open_data_connection_passive(
   }
 
   /* Send RETR or STOR command with filename */
-  reply = rtems_ftpfs_send_command(
-    e->ctrl_socket,
-    file_command,
-    filename,
-    verbose
-  );
+  reply = rtems_ftpfs_send_command(e, file_command, filename, verbose);
   if (reply != RTEMS_FTPFS_REPLY_1) {
     return EIO;
   }
@@ -1006,7 +1004,7 @@ static int rtems_ftpfs_open(
   }
 
   /* Allocate connection entry */
-  e = malloc(sizeof(*e));
+  e = calloc(1, sizeof(*e));
   if (e == NULL) {
     rtems_set_errno_and_return_minus_one(ENOMEM);
   }
@@ -1014,7 +1012,6 @@ static int rtems_ftpfs_open(
   /* Initialize connection entry */
   e->ctrl_socket = -1;
   e->data_socket = -1;
-  e->eof = false;
 
   /* Save connection state */
   iop->data1 = e;
@@ -1094,7 +1091,7 @@ static ssize_t rtems_ftpfs_read(
     if (rv <= 0) {
       if (rv == 0) {
         rtems_ftpfs_reply reply =
-          rtems_ftpfs_get_reply(e->ctrl_socket, NULL, NULL, verbose);
+          rtems_ftpfs_get_reply(e, NULL, NULL, verbose);
 
         if (reply == RTEMS_FTPFS_REPLY_2) {
           e->eof = true;

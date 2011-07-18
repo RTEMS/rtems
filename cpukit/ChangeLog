@@ -1,5 +1,9 @@
 2011-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libnetworking/lib/ftpfs.c: Fixed reply parsing.
+
+2011-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/src/msgmp.c: Getting a remote object does not start a critical
 	section.
 
