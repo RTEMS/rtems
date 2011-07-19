@@ -67,7 +67,7 @@ typedef struct Chain_Node_struct Chain_Node;
  *
  */
 struct Chain_Node_struct {
-  /** This points to the node after to this one on this chain. */
+  /** This points to the node after this one on this chain. */
   Chain_Node *next;
   /** This points to the node immediate prior to this one on this chain. */
   Chain_Node *previous;

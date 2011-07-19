@@ -1,3 +1,7 @@
+2011-07-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/chain.h: Fix typo.
+
 2011-07-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1838/filesystem
