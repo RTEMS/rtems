@@ -38,9 +38,6 @@ int fchmod(
   /*
    *  Now process the fchmod().
    */
-
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
-
   if ( !iop->handlers->fchmod_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
