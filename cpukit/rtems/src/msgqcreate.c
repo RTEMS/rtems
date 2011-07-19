@@ -66,6 +66,7 @@ rtems_status_code rtems_message_queue_create(
   CORE_message_queue_Attributes   the_msgq_attributes;
 #if defined(RTEMS_MULTIPROCESSING)
   bool                            is_global;
+  size_t                          max_packet_payload_size;
 #endif
 
   if ( !rtems_is_name_valid( name ) )
@@ -94,7 +95,9 @@ rtems_status_code rtems_message_queue_create(
    * and then just send smaller msgs from remote (or all) nodes.
    */
 
-  if ( is_global && (_MPCI_table->maximum_packet_size < max_message_size) )
+  max_packet_payload_size = _MPCI_table->maximum_packet_size
+    - sizeof ( Message_queue_MP_Packet );
+  if ( is_global && max_packet_payload_size < max_message_size )
     return RTEMS_INVALID_SIZE;
 #endif
 #endif

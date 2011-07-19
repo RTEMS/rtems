@@ -1,3 +1,8 @@
+2011-07-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/src/msgqcreate.c: Make packet size check consistent with
+	_Message_queue_MP_Send_request_packet().
+
 2011-07-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/lib/ftpfs.c: Fixed reply parsing.
