@@ -1,7 +1,7 @@
 /*
  *  fchmod() - POSIX 1003.1b 5.6.4 - Change File Modes
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,9 +38,6 @@ int fchmod(
   /*
    *  Now process the fchmod().
    */
-
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
-
   if ( !iop->handlers->fchmod_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
