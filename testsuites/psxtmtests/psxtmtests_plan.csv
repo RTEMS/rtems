@@ -37,8 +37,8 @@
 "pthread_once",,,
 ,,,
 "pthread_key_create","psxtmkey01","psxtmtest_init_destroy",
-"pthread_setspecific","psxtmkey02","psxtmtest_single",
-"pthread_getspecific","psxtmkey02","psxtmtest_single",
+"pthread_setspecific","psxtmkey02","psxtmtest_single","Yes"
+"pthread_getspecific","psxtmkey02","psxtmtest_single","Yes"
 "pthread_key_delete","psxtmkey01","psxtmtest_init_destroy",
 ,,,
 "pthread_cancel",,,

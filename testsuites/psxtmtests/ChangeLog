@@ -1,3 +1,11 @@
+2011-07-19	Ricardo Aguirre <el.mastin@ymail.com>
+
+	PR 1840/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of key
+	set and get.
+	* psxtmkey02/.cvsignore, psxtmkey02/Makefile.am, psxtmkey02/init.c,
+	psxtmkey02/psxtmkey02.doc: New files.
+
 2011-07-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* configure.ac: Remove psxtmmutex04 until PR 1836 is processed.

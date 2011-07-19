@@ -7,6 +7,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 SUBDIRS =
 
 if HAS_POSIX
+SUBDIRS += psxtmkey02
 SUBDIRS += psxtmmutex01
 SUBDIRS += psxtmmutex02
 SUBDIRS += psxtmmutex03
