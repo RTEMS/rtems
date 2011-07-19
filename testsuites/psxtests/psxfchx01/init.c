@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,7 +55,7 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  puts(" Init - closing /newfile -- OK" );
+  puts( "Init - closing /newfile -- OK" );
   status = close( fd );
   rtems_test_assert( status == 0 );
 
@@ -140,12 +140,11 @@ rtems_task Init(
   fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
   
-  puts( "Init - fchmod, with the opened file descriptor - expect EINVAL" );
+  puts( "Init - fchmod, with the opened file descriptor -- OK" );
   status = fchmod( fd, 0 );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( status == 0 );
 
-  puts(" Init - close and remove /newfile" );
+  puts( "Init - close and remove /newfile" );
   status = close( fd );
   status |= unlink( "/newfile" );
   rtems_test_assert( status == 0 );
@@ -158,7 +157,7 @@ rtems_task Init(
   status = fchmod( fd, S_IRUSR );
   rtems_test_assert( status == 0 );
 
-  puts(" Init - close and remove /newfile -- OK" );
+  puts( "Init - close and remove /newfile -- OK" );
   status = close( fd );
   status |= unlink( "/newfile" );
   rtems_test_assert( status == 0 );
@@ -190,7 +189,7 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  puts(" Init - close and remove /newfile" );
+  puts( "Init - close and remove /newfile" );
   status = close( fd );
   status |= unlink( "/newfile" );
   rtems_test_assert( status == 0 );
@@ -203,7 +202,7 @@ rtems_task Init(
   status = fchown( fd, 1, 0 );
   rtems_test_assert( status == 0 );
 
-  puts(" Init - close and remove /newfile -- OK" );
+  puts( "Init - close and remove /newfile -- OK" );
   status = close( fd );
   status |= unlink( "/newfile" );
   rtems_test_assert( status == 0 );
