@@ -9,7 +9,7 @@
 "pthread_mutex_unlock - thread waiting, no preempt","psxtmmutex05","psxtmtest_unblocking_nopreempt",
 "pthread_mutex_unlock - thread waiting, preempt","psxtmmutex06","psxtmtest_unblocking_preempt",
 "pthread_mutex_timedlock - available","psxtmmutex03","psxtmtest_single","Yes"
-"pthread_mutex_timedlock - not available, block","psxtmmutex04","psxtmtest_blocking",
+"pthread_mutex_timedlock - not available, block","psxtmmutex04","psxtmtest_blocking","Yes"
 "pthread_mutex_setprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 "pthread_mutex_getprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 ,,,
@@ -36,10 +36,10 @@
 ,,,
 "pthread_once",,,
 ,,,
-"pthread_key_create","psxtmkey01","psxtmtest_init_destroy",
+"pthread_key_create","psxtmkey01","psxtmtest_single","Yes"
 "pthread_setspecific","psxtmkey02","psxtmtest_single","Yes"
 "pthread_getspecific","psxtmkey02","psxtmtest_single","Yes"
-"pthread_key_delete","psxtmkey01","psxtmtest_init_destroy",
+"pthread_key_delete","psxtmkey01","psxtmtest_single","Yes"
 ,,,
 "pthread_cancel",,,
 "pthread_setcancelstate",,,

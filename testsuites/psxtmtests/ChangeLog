@@ -1,3 +1,11 @@
+2011-07-20	Ricardo Aguirre <el.mastin@ymail.com>
+
+	PR 1843/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of key
+	create and delete.
+	* psxtmkey01/.cvsignore, psxtmkey01/Makefile.am, psxtmkey01/init.c,
+	psxtmkey01/psxtmkey01.doc: New files.
+
 2011-07-19	Ricardo Aguirre <el.mastin@ymail.com>
 
 	PR 1840/tests
