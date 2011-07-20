@@ -1,6 +1,6 @@
 2011-05-17	Till Straumann <strauman@slac.stanford.edu>
 
-	PR1797/bsps
+	PR 1797/bsps
 	* configure.ac, include/bsp.h: Made
 	CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK a bspopts.h setting.
 
