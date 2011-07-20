@@ -296,8 +296,12 @@ typedef struct {
       int               (*swizzler)(int, int);
 } mot_info_t;
 
+/* NOTE: When adding boards here the 'motorolaBoard' enums MUST be
+ *       updated accordingly!
+ */
 static const mot_info_t mot_boards[] = {
-  {0x3E0, 0x00, PPC_750,     "MVME 2400", mvme24xx_intmap,prep_pci_swizzle},
+  {0x0E0, 0xF9, PPC_604,     "MVME 2400", mvme24xx_intmap,prep_pci_swizzle},
+  {0x3E0, 0x00, PPC_750,     "MVME 2400 (PPC 750)", mvme24xx_intmap,prep_pci_swizzle},
   {0x010, 0x00, PPC_UNKNOWN, "Genesis", NULL, NULL},
   {0x020, 0x00, PPC_UNKNOWN, "Powerstack (Series E)", NULL, NULL},
   {0x040, 0x00, PPC_UNKNOWN, "Blackhawk (Powerstack)", NULL, NULL},
