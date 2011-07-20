@@ -1,5 +1,9 @@
 2011-07-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
+	* psxtmmutex05/init.c: Fix test. Pattern was wrong.
+
+2011-07-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
 	* Makefile.am, configure.ac: Add benchmark of pthread_mutex_unlock
 	where it is unblocking threads without preemption.
 	* psxtmmutex05/.cvsignore, psxtmmutex05/Makefile.am,
