@@ -84,6 +84,7 @@ psxtmkey02/Makefile
 psxtmmutex01/Makefile
 psxtmmutex02/Makefile
 psxtmmutex03/Makefile
+psxtmmutex05/Makefile
 psxtmmutex07/Makefile
 psxtmnanosleep01/Makefile
 psxtmnanosleep02/Makefile

@@ -1,3 +1,10 @@
+2011-07-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add benchmark of pthread_mutex_unlock
+	where it is unblocking threads without preemption.
+	* psxtmmutex05/.cvsignore, psxtmmutex05/Makefile.am,
+	psxtmmutex05/init.c, psxtmmutex05/psxtmmutex05.doc: New files.
+
 2011-07-20	Ricardo Aguirre <el.mastin@ymail.com>
 
 	PR 1843/tests

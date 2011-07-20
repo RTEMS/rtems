@@ -12,6 +12,7 @@ SUBDIRS += psxtmkey02
 SUBDIRS += psxtmmutex01
 SUBDIRS += psxtmmutex02
 SUBDIRS += psxtmmutex03
+SUBDIRS += psxtmmutex05
 SUBDIRS += psxtmmutex07
 SUBDIRS += psxtmnanosleep01
 SUBDIRS += psxtmnanosleep02
