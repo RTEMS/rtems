@@ -1,3 +1,9 @@
+2011-07-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 1837/bsps
+	* shared/motorola/motorola.c, shared/motorola/motorola.h: Add MVME2400
+	board with 750 CPU to list of supported Motorola boards.
+
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/bootloader/qemu_fakerom.S: Added work-around for
