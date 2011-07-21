@@ -41,6 +41,7 @@
 #define CONSOLE_FDR (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x28))
 #define CONSOLE_TER (*(volatile uint32_t *) (BSP_CONSOLE_UART_BASE + 0x30))
 
+#define CONSOLE_LSR_RDR 0x1
 #define CONSOLE_LSR_THRE 0x20
 
 #define BSP_CONSOLE_UART_INIT(dll) \
