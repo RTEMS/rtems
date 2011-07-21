@@ -1,3 +1,9 @@
+2011-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/dosfs/fat_file.c, libmisc/monitor/monitor.h,
+	score/cpu/m68k/rtems/score/cpu.h: Remove stray spaces from unsigned32
+	to uint32_t conversion.
+
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/include/rtems/libio_.h: Added

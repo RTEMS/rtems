@@ -6,7 +6,7 @@
  *  This include file contains information pertaining to the Motorola
  *  m68xxx processor family.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -457,7 +457,7 @@ uint32_t   _CPU_ISR_Get_level( void );
      uint32_t   _stack;                                                 \
                                                                         \
      (_the_context)->sr      = 0x3000 | ((_isr) << 8);                  \
-     _stack                  = (uint32_t  )(_stack_base) + (_size) - 4; \
+     _stack                  = (uint32_t)(_stack_base) + (_size) - 4;   \
      (_the_context)->a7_msp  = (void *)_stack;                          \
      *(void **)_stack        = (void *)(_entry_point);                  \
    } while ( 0 )

@@ -392,7 +392,7 @@ void    rtems_monitor_task(rtems_task_argument);
 void    rtems_monitor_server_kill(void);
 rtems_status_code rtems_monitor_server_request(uint32_t  , rtems_monitor_server_request_t *, rtems_monitor_server_response_t *);
 void    rtems_monitor_server_task(rtems_task_argument);
-void    rtems_monitor_server_init(uint32_t  );
+void    rtems_monitor_server_init(uint32_t);
 
 /* command.c */
 int     rtems_monitor_make_argv(char *, int *, char **);
@@ -488,9 +488,9 @@ void     rtems_monitor_driver_dump(rtems_monitor_driver_t *, bool);
 rtems_symbol_table_t *rtems_symbol_table_create(void);
 void                  rtems_symbol_table_destroy(rtems_symbol_table_t *table);
 
-rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, const char *, uint32_t  );
-rtems_symbol_t *rtems_symbol_value_lookup(rtems_symbol_table_t *, uint32_t  );
-const rtems_symbol_t *rtems_symbol_value_lookup_exact(rtems_symbol_table_t *, uint32_t  );
+rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, const char *, uint32_t);
+rtems_symbol_t *rtems_symbol_value_lookup(rtems_symbol_table_t *, uint32_t);
+const rtems_symbol_t *rtems_symbol_value_lookup_exact(rtems_symbol_table_t *, uint32_t);
 rtems_symbol_t *rtems_symbol_name_lookup(rtems_symbol_table_t *, const char *);
 void   *rtems_monitor_symbol_next(void *object_info, rtems_monitor_symbol_t *, rtems_id *);
 void    rtems_monitor_symbol_canonical(rtems_monitor_symbol_t *, rtems_symbol_t *);
