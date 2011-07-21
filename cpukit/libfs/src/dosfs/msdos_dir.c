@@ -679,7 +679,7 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *parent_pathloc,
     /*
      * You cannot remove the file system root node.
      */
-    if (pathloc->mt_entry->mt_fs_root.node_access == pathloc->node_access)
+    if (rtems_filesystem_is_root_location(pathloc))
     {
         rtems_semaphore_release(fs_info->vol_sema);
         rtems_set_errno_and_return_minus_one(EBUSY);

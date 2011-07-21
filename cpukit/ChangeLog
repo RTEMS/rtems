@@ -1,5 +1,13 @@
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/include/rtems/libio_.h: Added
+	rtems_filesystem_is_root_location().
+	* libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/dosfs/msdos_dir.c, libfs/src/dosfs/msdos_eval.c: Use
+	rtems_filesystem_is_root_location().
+
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1842/cpukit
 	* score/include/rtems/score/basedefs.h: Added RTEMS_STATIC_ASSERT().
 

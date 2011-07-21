@@ -238,6 +238,13 @@ void rtems_filesystem_get_sym_start_loc(const char *path,
 					int *index,
 					rtems_filesystem_location_info_t *loc);
 
+static inline bool rtems_filesystem_is_root_location(
+  const rtems_filesystem_location_info_t *loc
+)
+{
+  return loc->mt_entry->mt_fs_root.node_access == loc->node_access;
+}
+
 #ifdef __cplusplus
 }
 #endif

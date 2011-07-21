@@ -346,7 +346,7 @@ int IMFS_evaluate_for_make(
          * Am I at the root of this mounted filesystem?
          */
 
-        if (pathloc->node_access == pathloc->mt_entry->mt_fs_root.node_access){
+        if ( rtems_filesystem_is_root_location( pathloc ) ) {
 
           /*
            *  Am I at the root of all filesystems?
@@ -544,8 +544,7 @@ int IMFS_eval_path(
          *  Am I at the root of this mounted filesystem?
          */
 
-        if (pathloc->node_access ==
-            pathloc->mt_entry->mt_fs_root.node_access) {
+        if ( rtems_filesystem_is_root_location( pathloc ) ) {
 
           /*
            *  Am I at the root of all filesystems?
