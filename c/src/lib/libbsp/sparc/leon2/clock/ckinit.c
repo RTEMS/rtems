@@ -64,6 +64,8 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
   uint32_t clicks;
   uint32_t usecs;
 
+  clicks = LEON_REG.Timer_Counter_1;
+
   if ( LEON_Is_interrupt_pending( LEON_INTERRUPT_TIMER1 ) ) {
     clicks = LEON_REG.Timer_Counter_1;
     usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
