@@ -1,0 +1,18 @@
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1799/bsps
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
+	clock/clock-config.c, console/console-config.c,
+	console/uart-bridge-master.c, console/uart-bridge-slave.c,
+	include/.cvsignore, include/bsp.h, include/hwreg_vals.h,
+	include/intercom.h, include/irq.h, include/mmu.h, include/qoriq.h,
+	include/tm27.h, include/tsec-config.h, include/u-boot-config.h,
+	include/uart-bridge.h, irq/irq.c, make/custom/qoriq.inc,
+	make/custom/qoriq_core_0.cfg, make/custom/qoriq_core_1.cfg,
+	make/custom/qoriq_p1020rdb.cfg, network/if_intercom.c,
+	network/network.c, rtc/rtc-config.c, shmsupp/intercom-mpci.c,
+	shmsupp/intercom.c, shmsupp/lock.S, start/start.S,
+	startup/bsppredriverhook.c, startup/bspreset.c, startup/bspstart.c,
+	startup/linkcmds.base, startup/linkcmds.qoriq_core_0,
+	startup/linkcmds.qoriq_core_1, startup/linkcmds.qoriq_p1020rdb,
+	startup/mmu-config.c, startup/mmu-tlb1.S, startup/mmu.c: New files.
