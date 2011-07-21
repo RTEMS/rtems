@@ -286,3 +286,9 @@ $(PROJECT_INCLUDE)/bsp/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
+if qoriq
+$(PROJECT_INCLUDE)/bsp/tsec.h: mpc83xx/network/tsec.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tsec.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tsec.h
+
+endif

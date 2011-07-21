@@ -35,6 +35,7 @@ noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
 new_exceptions_exc_bspsupport_rel_SOURCES = \
     new-exceptions/bspsupport/ppc-code-copy.c \
     new-exceptions/bspsupport/ppc_exc.S \
+    new-exceptions/bspsupport/ppc_exc_async_normal.S \
     new-exceptions/bspsupport/ppc_exc_naked.S \
     new-exceptions/bspsupport/ppc_exc_hdl.c \
     new-exceptions/bspsupport/ppc_exc_initialize.c \
@@ -473,6 +474,25 @@ mpc55xx_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 ##############################################################################
 # END: MPC55XX                                                               #
+##############################################################################
+
+##############################################################################
+# START: QorIQ                                                               #
+##############################################################################
+if qoriq
+
+# Network
+include_bsp_HEADERS += mpc83xx/network/tsec.h
+if HAS_NETWORKING
+noinst_PROGRAMS += tsec.rel
+tsec_rel_SOURCES = mpc83xx/network/tsec.c
+tsec_rel_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
+tsec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+endif
+
+endif
+##############################################################################
+# END: QorIQ                                                                 #
 ##############################################################################
 
 include $(srcdir)/preinstall.am

@@ -24,6 +24,8 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2011 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -33,7 +35,25 @@
 
 #include <rtems/asm.h>
 #include <rtems/powerpc/powerpc.h>
-#include <rtems/powerpc/registers.h>
+#include <rtems/score/cpu.h>
+#include <bspopts.h>
+
+#if BSP_DATA_CACHE_ENABLED && PPC_CACHE_ALIGNMENT == 32
+  #define DATA_CACHE_ALIGNMENT(reg) \
+    li reg, PPC_CACHE_ALIGNMENT
+  #define DATA_CACHE_ZERO(rega, regb) \
+    dcbz rega, regb
+  #define DATA_CACHE_TOUCH(rega, regb) \
+    dcbt rega, regb
+  #define DATA_CACHE_ZERO_AND_TOUCH(reg, offset) \
+    li reg, offset; dcbz reg, r3; dcbt reg, r4
+#else
+  #define DATA_CACHE_ALIGNMENT(reg)
+  #define DATA_CACHE_ZERO(rega, regb)
+  #define DATA_CACHE_TOUCH(rega, regb)
+  #define DATA_CACHE_ZERO_AND_TOUCH(reg, offset) \
+    li reg, offset
+#endif
 
 /*
  * Offsets for various Contexts
@@ -290,26 +310,26 @@ PROC (_CPU_Context_restore_fp):
 	ALIGN (PPC_CACHE_ALIGNMENT, PPC_CACHE_ALIGN_POWER)
 	PUBLIC_PROC (_CPU_Context_switch)
 PROC (_CPU_Context_switch):
+#ifndef __SPE__
 	sync
 	isync
 	/* This assumes that all the registers are in the given order */
-#if ( BSP_DATA_CACHE_ENABLED )
-#if PPC_CACHE_ALIGNMENT != 32
-#error "code assumes PPC_CACHE_ALIGNMENT == 32!"
-#endif
-	li	r5, PPC_CACHE_ALIGNMENT
-#endif
+	DATA_CACHE_ALIGNMENT(r5)
 	addi	r9,r3,-4
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbz	r5, r9
+	DATA_CACHE_ZERO(r5, r9)
+#ifdef RTEMS_MULTIPROCESSING
+	/*
+	 * We have to clear the reservation of the executing thread.  See also
+	 * Book E section 6.1.6.2 "Atomic Update Primitives".
+	 */
+	li	r10, GP_1 + 4
+	stwcx.	r1, r9, r10
 #endif
 	stw	r1, GP_1+4(r9)
 	stw	r2, GP_2+4(r9)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r9, r9, GP_18+4
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbz	r5, r9
-#endif
+	DATA_CACHE_ZERO(r5, r9)
 	stmw	r13, GP_13-GP_18(r9)
 #else
 	stw	r13, GP_13+4(r9)
@@ -318,9 +338,7 @@ PROC (_CPU_Context_switch):
 	stw	r16, GP_16+4(r9)
 	stw	r17, GP_17+4(r9)
 	stwu	r18, GP_18+4(r9)
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbz	r5, r9
-#endif
+	DATA_CACHE_ZERO(r5, r9)
 	stw	r19, GP_19-GP_18(r9)
 	stw	r20, GP_20-GP_18(r9)
 	stw	r21, GP_21-GP_18(r9)
@@ -335,9 +353,7 @@ PROC (_CPU_Context_switch):
 	stw	r30, GP_30-GP_18(r9)
 	stw	r31, GP_31-GP_18(r9)
 #endif
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbt	r0, r4
-#endif
+	DATA_CACHE_TOUCH(r0, r4)
 	mfcr	r6
 	stw	r6, GP_CR-GP_18(r9)
 	mflr	r7
@@ -350,21 +366,15 @@ PROC (_CPU_Context_switch):
 	EXTERN_PROC(_CPU_Context_switch_altivec)
 	bl		_CPU_Context_switch_altivec
 	mr      r4, r14
-#if ( BSP_DATA_CACHE_ENABLED )
-	li      r5, PPC_CACHE_ALIGNMENT
-#endif
+	DATA_CACHE_ALIGNMENT(r5)
 #endif
 
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbt	r5, r4
-#endif
+	DATA_CACHE_TOUCH(r5, r4)
 	lwz	r1, GP_1(r4)
 	lwz	r2, GP_2(r4)
 #if (PPC_USE_MULTIPLE == 1)
 	addi	r4, r4, GP_19
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbt	r5, r4
-#endif
+	DATA_CACHE_TOUCH(r5, r4)
 	lmw	r13, GP_13-GP_19(r4)
 #else
 	lwz	r13, GP_13(r4)
@@ -374,9 +384,7 @@ PROC (_CPU_Context_switch):
 	lwz	r17, GP_17(r4)
 	lwz	r18, GP_18(r4)
 	lwzu	r19, GP_19(r4)
-#if ( BSP_DATA_CACHE_ENABLED )
-	dcbt	r5, r4
-#endif
+	DATA_CACHE_TOUCH(r5, r4)
 	lwz	r20, GP_20-GP_19(r4)
 	lwz	r21, GP_21-GP_19(r4)
 	lwz	r22, GP_22-GP_19(r4)
@@ -399,6 +407,100 @@ PROC (_CPU_Context_switch):
 	isync
 
 	blr
+#else /* __SPE__ */
+	/* Align to a cache line */
+	clrrwi	r3, r3, 5
+	clrrwi	r4, r4, 5
+
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_0)
+	DATA_CACHE_ZERO_AND_TOUCH(r11, PPC_CONTEXT_CACHE_LINE_1)
+
+	/* Save context to r3 */
+
+	mfmsr	r5
+	mflr	r6
+	mfcr	r7
+#ifdef RTEMS_MULTIPROCESSING
+	/*
+	 * We have to clear the reservation of the executing thread.  See also
+	 * Book E section 6.1.6.2 "Atomic Update Primitives".
+	 *
+	 * Here we assume PPC_CONTEXT_OFFSET_SP == PPC_CONTEXT_CACHE_LINE_0.
+	 */
+	stwcx.	r1, r3, r10
+#endif
+	stw	r1, PPC_CONTEXT_OFFSET_SP(r3)
+	stw	r5, PPC_CONTEXT_OFFSET_MSR(r3)
+	stw	r6, PPC_CONTEXT_OFFSET_LR(r3)
+	stw	r7, PPC_CONTEXT_OFFSET_CR(r3)
+	evstdd	r14, PPC_CONTEXT_OFFSET_GPR14(r3)
+	evstdd	r15, PPC_CONTEXT_OFFSET_GPR15(r3)
+
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_2)
+
+	evstdd	r16, PPC_CONTEXT_OFFSET_GPR16(r3)
+	evstdd	r17, PPC_CONTEXT_OFFSET_GPR17(r3)
+	evstdd	r18, PPC_CONTEXT_OFFSET_GPR18(r3)
+	evstdd	r19, PPC_CONTEXT_OFFSET_GPR19(r3)
+
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_3)
+
+	evstdd	r20, PPC_CONTEXT_OFFSET_GPR20(r3)
+	evstdd	r21, PPC_CONTEXT_OFFSET_GPR21(r3)
+	evstdd	r22, PPC_CONTEXT_OFFSET_GPR22(r3)
+	evstdd	r23, PPC_CONTEXT_OFFSET_GPR23(r3)
+
+	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_4)
+
+	evstdd	r24, PPC_CONTEXT_OFFSET_GPR24(r3)
+	evstdd	r25, PPC_CONTEXT_OFFSET_GPR25(r3)
+	evstdd	r26, PPC_CONTEXT_OFFSET_GPR26(r3)
+	evstdd	r27, PPC_CONTEXT_OFFSET_GPR27(r3)
+
+	evstdd	r28, PPC_CONTEXT_OFFSET_GPR28(r3)
+	evstdd	r29, PPC_CONTEXT_OFFSET_GPR29(r3)
+	evstdd	r30, PPC_CONTEXT_OFFSET_GPR30(r3)
+	evstdd	r31, PPC_CONTEXT_OFFSET_GPR31(r3)
+
+	/* Restore context from r4 */
+restore_context:
+
+	lwz	r1, PPC_CONTEXT_OFFSET_SP(r4)
+	lwz	r5, PPC_CONTEXT_OFFSET_MSR(r4)
+	lwz	r6, PPC_CONTEXT_OFFSET_LR(r4)
+	lwz	r7, PPC_CONTEXT_OFFSET_CR(r4)
+
+	evldd	r14, PPC_CONTEXT_OFFSET_GPR14(r4)
+	evldd	r15, PPC_CONTEXT_OFFSET_GPR15(r4)
+
+	DATA_CACHE_TOUCH(r0, r1)
+
+	evldd	r16, PPC_CONTEXT_OFFSET_GPR16(r4)
+	evldd	r17, PPC_CONTEXT_OFFSET_GPR17(r4)
+	evldd	r18, PPC_CONTEXT_OFFSET_GPR18(r4)
+	evldd	r19, PPC_CONTEXT_OFFSET_GPR19(r4)
+
+	evldd	r20, PPC_CONTEXT_OFFSET_GPR20(r4)
+	evldd	r21, PPC_CONTEXT_OFFSET_GPR21(r4)
+	evldd	r22, PPC_CONTEXT_OFFSET_GPR22(r4)
+	evldd	r23, PPC_CONTEXT_OFFSET_GPR23(r4)
+
+	evldd	r24, PPC_CONTEXT_OFFSET_GPR24(r4)
+	evldd	r25, PPC_CONTEXT_OFFSET_GPR25(r4)
+	evldd	r26, PPC_CONTEXT_OFFSET_GPR26(r4)
+	evldd	r27, PPC_CONTEXT_OFFSET_GPR27(r4)
+
+	evldd	r28, PPC_CONTEXT_OFFSET_GPR28(r4)
+	evldd	r29, PPC_CONTEXT_OFFSET_GPR29(r4)
+	evldd	r30, PPC_CONTEXT_OFFSET_GPR30(r4)
+	evldd	r31, PPC_CONTEXT_OFFSET_GPR31(r4)
+
+	mtcr	r7
+	mtlr	r6
+	mtmsr	r5
+
+	blr
+#endif /* __SPE__ */
 
 /*
  *  _CPU_Context_restore
@@ -414,6 +516,7 @@ PROC (_CPU_Context_switch):
 	ALIGN (PPC_CACHE_ALIGNMENT, PPC_CACHE_ALIGN_POWER)
 	PUBLIC_PROC (_CPU_Context_restore)
 PROC (_CPU_Context_restore):
+#ifndef __SPE__
 	lwz	r5, GP_CR(r3)
 	lwz	r6, GP_PC(r3)
 	lwz	r7, GP_MSR(r3)
@@ -451,3 +554,9 @@ PROC (_CPU_Context_restore):
 	b _CPU_Context_restore_altivec
 #endif
 	blr
+#else /* __SPE__ */
+	/* Align to a cache line */
+	clrrwi	r4, r3, 5
+
+	b	restore_context
+#endif /* __SPE__ */

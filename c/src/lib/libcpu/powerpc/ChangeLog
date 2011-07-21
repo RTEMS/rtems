@@ -1,3 +1,15 @@
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1799/bsps
+	* new-exceptions/bspsupport/ppc_exc_async_normal.S: New file.
+	* new-exceptions/cpu.c, new-exceptions/cpu_asm.S,
+	new-exceptions/bspsupport/ppc_exc_asm_macros.h,
+	new-exceptions/bspsupport/ppc_exc_global_handler.c,
+	new-exceptions/bspsupport/ppc_exc_prologue.c,
+	new-exceptions/bspsupport/vectors.h: Added support for SPE.
+	* configure.ac, preinstall.am, Makefile.am: Added support for qoriq
+	BSPs.
+
 2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove reference to non-existing file

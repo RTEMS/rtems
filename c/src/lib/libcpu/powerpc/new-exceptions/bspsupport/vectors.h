@@ -143,11 +143,27 @@ extern "C" {
 
 /** @} */
 
-#define PPC_EXC_GPR_TYPE unsigned
-#define PPC_EXC_GPR_SIZE 4
-#define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_EXC_GPR_SIZE + 36)
-#define PPC_EXC_MINIMAL_FRAME_SIZE 96
-#define PPC_EXC_FRAME_SIZE 176
+#ifndef __SPE__
+  #define PPC_EXC_GPR_TYPE unsigned
+  #define PPC_EXC_GPR_SIZE 4
+  #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_EXC_GPR_SIZE + 36)
+  #define PPC_EXC_VECTOR_PROLOGUE_OFFSET PPC_EXC_GPR_OFFSET(4)
+  #define PPC_EXC_GPR_LOAD lwz
+  #define PPC_EXC_GPR_STORE stw
+  #define PPC_EXC_MINIMAL_FRAME_SIZE 96
+  #define PPC_EXC_FRAME_SIZE 176
+#else
+  #define PPC_EXC_GPR_TYPE uint64_t
+  #define PPC_EXC_GPR_SIZE 8
+  #define PPC_EXC_SPEFSCR_OFFSET 36
+  #define PPC_EXC_ACC_OFFSET 40
+  #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_EXC_GPR_SIZE + 48)
+  #define PPC_EXC_VECTOR_PROLOGUE_OFFSET (PPC_EXC_GPR_OFFSET(4) + 4)
+  #define PPC_EXC_GPR_LOAD evldd
+  #define PPC_EXC_GPR_STORE evstdd
+  #define PPC_EXC_MINIMAL_FRAME_SIZE 160
+  #define PPC_EXC_FRAME_SIZE 320
+#endif
 
 /**
  * @defgroup ppc_exc_frame PowerPC Exception Frame
@@ -250,6 +266,10 @@ typedef struct {
   unsigned EXC_CTR;
   unsigned EXC_XER;
   unsigned EXC_LR;
+  #ifdef __SPE__
+    uint32_t EXC_SPEFSCR;
+    uint64_t EXC_ACC;
+  #endif
   PPC_EXC_GPR_TYPE GPR0;
   PPC_EXC_GPR_TYPE GPR1;
   PPC_EXC_GPR_TYPE GPR2;

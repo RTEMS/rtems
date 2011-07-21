@@ -49,6 +49,7 @@ extern const uint32_t ppc_exc_min_prolog_sync_tmpl_bookE_crit [];
 extern const uint32_t ppc_exc_min_prolog_sync_tmpl_e500_mchk [];
 extern const uint32_t ppc_exc_min_prolog_async_tmpl_e500_mchk [];
 extern const uint32_t ppc_exc_min_prolog_tmpl_naked [];
+extern const uint32_t ppc_exc_min_prolog_async_tmpl_normal [];
 
 static const uint32_t *const ppc_exc_prologue_templates [] = {
   [PPC_EXC_CLASSIC] = ppc_exc_min_prolog_sync_tmpl_std,
@@ -126,10 +127,18 @@ rtems_status_code ppc_exc_make_prologue(
   } else if (
     category == PPC_EXC_CLASSIC
       && ppc_cpu_is_bookE() != PPC_BOOKE_STD
-        && ppc_cpu_is_bookE() != PPC_BOOKE_E500
+      && ppc_cpu_is_bookE() != PPC_BOOKE_E500
   ) {
     prologue_template = ppc_exc_min_prolog_auto;
     prologue_template_size = (size_t) ppc_exc_min_prolog_size;
+  } else if (
+    category == PPC_EXC_CLASSIC_ASYNC
+      && ppc_cpu_is_bookE() == PPC_BOOKE_E500
+      && (ppc_interrupt_get_disable_mask() & MSR_CE) == 0
+  ) {
+    prologue_template = ppc_exc_min_prolog_async_tmpl_normal;
+    prologue_template_size = (size_t) ppc_exc_min_prolog_size;
+    fixup_vector = true;
   } else {
     prologue_template = ppc_exc_prologue_templates [category];
     prologue_template_size = (size_t) ppc_exc_min_prolog_size;

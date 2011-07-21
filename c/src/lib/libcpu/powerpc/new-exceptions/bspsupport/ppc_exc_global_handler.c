@@ -21,6 +21,12 @@
 
 #include <bsp/vectors.h>
 
+#ifndef __SPE__
+  #define GET_GPR(gpr) (gpr)
+#else
+  #define GET_GPR(gpr) ((int) ((gpr) >> 32))
+#endif
+
 exception_handler_t globalExceptHdl = C_exception_handler;
 
 /* T. Straumann: provide a stack trace
@@ -62,7 +68,7 @@ void BSP_printStackTrace(BSP_Exception_frame *excPtr)
   printk("Stack Trace: \n  ");
   if (excPtr) {
     printk("IP: 0x%08x, ", excPtr->EXC_SRR0);
-    sp = (LRFrame) excPtr->GPR1;
+    sp = (LRFrame) GET_GPR(excPtr->GPR1);
     lr = (void *) excPtr->EXC_LR;
   } else {
     /* there's no macro for this */
@@ -133,44 +139,44 @@ void C_exception_handler(BSP_Exception_frame *excPtr)
 
   /* Dump registers */
 
-  printk("\t R0  = %08x", excPtr->GPR0);
+  printk("\t R0  = %08x", GET_GPR(excPtr->GPR0));
   if (synch) {
-    printk(" R1  = %08x", excPtr->GPR1);
-    printk(" R2  = %08x", excPtr->GPR2);
+    printk(" R1  = %08x", GET_GPR(excPtr->GPR1));
+    printk(" R2  = %08x", GET_GPR(excPtr->GPR2));
   } else {
     printk("               ");
     printk("               ");
   }
-  printk(" R3  = %08x\n", excPtr->GPR3);
-  printk("\t R4  = %08x", excPtr->GPR4);
-  printk(" R5  = %08x", excPtr->GPR5);
-  printk(" R6  = %08x", excPtr->GPR6);
-  printk(" R7  = %08x\n", excPtr->GPR7);
-  printk("\t R8  = %08x", excPtr->GPR8);
-  printk(" R9  = %08x", excPtr->GPR9);
-  printk(" R10 = %08x", excPtr->GPR10);
-  printk(" R11 = %08x\n", excPtr->GPR11);
-  printk("\t R12 = %08x", excPtr->GPR12);
+  printk(" R3  = %08x\n", GET_GPR(excPtr->GPR3));
+  printk("\t R4  = %08x", GET_GPR(excPtr->GPR4));
+  printk(" R5  = %08x", GET_GPR(excPtr->GPR5));
+  printk(" R6  = %08x", GET_GPR(excPtr->GPR6));
+  printk(" R7  = %08x\n", GET_GPR(excPtr->GPR7));
+  printk("\t R8  = %08x", GET_GPR(excPtr->GPR8));
+  printk(" R9  = %08x", GET_GPR(excPtr->GPR9));
+  printk(" R10 = %08x", GET_GPR(excPtr->GPR10));
+  printk(" R11 = %08x\n", GET_GPR(excPtr->GPR11));
+  printk("\t R12 = %08x", GET_GPR(excPtr->GPR12));
   if (synch) {
-    printk(" R13 = %08x", excPtr->GPR13);
-    printk(" R14 = %08x", excPtr->GPR14);
-    printk(" R15 = %08x\n", excPtr->GPR15);
-    printk("\t R16 = %08x", excPtr->GPR16);
-    printk(" R17 = %08x", excPtr->GPR17);
-    printk(" R18 = %08x", excPtr->GPR18);
-    printk(" R19 = %08x\n", excPtr->GPR19);
-    printk("\t R20 = %08x", excPtr->GPR20);
-    printk(" R21 = %08x", excPtr->GPR21);
-    printk(" R22 = %08x", excPtr->GPR22);
-    printk(" R23 = %08x\n", excPtr->GPR23);
-    printk("\t R24 = %08x", excPtr->GPR24);
-    printk(" R25 = %08x", excPtr->GPR25);
-    printk(" R26 = %08x", excPtr->GPR26);
-    printk(" R27 = %08x\n", excPtr->GPR27);
-    printk("\t R28 = %08x", excPtr->GPR28);
-    printk(" R29 = %08x", excPtr->GPR29);
-    printk(" R30 = %08x", excPtr->GPR30);
-    printk(" R31 = %08x\n", excPtr->GPR31);
+    printk(" R13 = %08x", GET_GPR(excPtr->GPR13));
+    printk(" R14 = %08x", GET_GPR(excPtr->GPR14));
+    printk(" R15 = %08x\n", GET_GPR(excPtr->GPR15));
+    printk("\t R16 = %08x", GET_GPR(excPtr->GPR16));
+    printk(" R17 = %08x", GET_GPR(excPtr->GPR17));
+    printk(" R18 = %08x", GET_GPR(excPtr->GPR18));
+    printk(" R19 = %08x\n", GET_GPR(excPtr->GPR19));
+    printk("\t R20 = %08x", GET_GPR(excPtr->GPR20));
+    printk(" R21 = %08x", GET_GPR(excPtr->GPR21));
+    printk(" R22 = %08x", GET_GPR(excPtr->GPR22));
+    printk(" R23 = %08x\n", GET_GPR(excPtr->GPR23));
+    printk("\t R24 = %08x", GET_GPR(excPtr->GPR24));
+    printk(" R25 = %08x", GET_GPR(excPtr->GPR25));
+    printk(" R26 = %08x", GET_GPR(excPtr->GPR26));
+    printk(" R27 = %08x\n", GET_GPR(excPtr->GPR27));
+    printk("\t R28 = %08x", GET_GPR(excPtr->GPR28));
+    printk(" R29 = %08x", GET_GPR(excPtr->GPR29));
+    printk(" R30 = %08x", GET_GPR(excPtr->GPR30));
+    printk(" R31 = %08x\n", GET_GPR(excPtr->GPR31));
   } else {
     printk("\n");
   }

@@ -28,6 +28,8 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/context.h>
@@ -73,7 +75,6 @@ void _CPU_Context_Initialize(
   sp &= ~(CPU_STACK_ALIGNMENT-1);
 
   *((uint32_t*)sp) = 0;
-  the_context->gpr1 = sp;
 
   _CPU_MSR_GET( msr_value );
 
@@ -97,8 +98,6 @@ void _CPU_Context_Initialize(
     msr_value &= ~ppc_interrupt_get_disable_mask();
   }
 
-  the_context->msr = msr_value;
-
   /*
    *  The FP bit of the MSR should only be enabled if this is a floating
    *  point task.  Unfortunately, the vfprintf_r routine in newlib
@@ -119,12 +118,17 @@ void _CPU_Context_Initialize(
    * only way...)
    */
   if ( is_fp )
-    the_context->msr |= PPC_MSR_FP;
+    msr_value |= PPC_MSR_FP;
   else
-    the_context->msr &= ~PPC_MSR_FP;
+    msr_value &= ~PPC_MSR_FP;
 
-  the_context->pc = (uint32_t)entry_point;
+  memset( the_context, 0, sizeof( *the_context ) );
 
+  PPC_CONTEXT_SET_SP( the_context, sp );
+  PPC_CONTEXT_SET_PC( the_context, (uint32_t) entry_point );
+  PPC_CONTEXT_SET_MSR( the_context, msr_value );
+
+#ifndef __SPE__
 #if (PPC_ABI == PPC_ABI_SVR4)
   /*
    * SVR4 says R2 is for 'system-reserved' use; it cannot hurt to
@@ -148,6 +152,7 @@ void _CPU_Context_Initialize(
 #else
 #error unsupported PPC_ABI
 #endif
+#endif /* __SPE__ */
 
 #ifdef __ALTIVEC__
   _CPU_Context_initialize_altivec(the_context);
