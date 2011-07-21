@@ -1,3 +1,7 @@
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/cpu.h: Added SPE support to CPU context.
+
 2011-05-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Reformat.

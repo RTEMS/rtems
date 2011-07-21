@@ -23,7 +23,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010 embedded brains GmbH.
+ *  Copyright (c) 2010-2011 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -252,6 +252,7 @@ extern "C" {
 #ifndef ASM
 
 typedef struct {
+  #ifndef __SPE__
     uint32_t   gpr1;	/* Stack pointer for all */
     uint32_t   gpr2;	/* Reserved SVR4, section ptr EABI + */
     uint32_t   gpr13;	/* Section ptr SVR4/EABI */
@@ -276,24 +277,105 @@ typedef struct {
     uint32_t   cr;	/* PART of the CR is non volatile for all */
     uint32_t   pc;	/* Program counter/Link register */
     uint32_t   msr;	/* Initial interrupt level */
-#ifdef __ALTIVEC__
-	/* 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
-	 * and padding to ensure cache-alignment.
-	 * Unfortunately, we can't verify the cache line size here
-	 * in the cpukit but altivec support code will produce an
-	 * error if this is ever different from 32 bytes.
-	 * 
-	 * Note: it is the BSP/CPU-support's responsibility to
-	 *       save/restore volatile vregs across interrupts
-	 *       and exceptions.
-	 */
-	uint8_t    altivec[16*12 + 32 + 32];
-#endif
+    #ifdef __ALTIVEC__
+      /*
+       * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
+       * and padding to ensure cache-alignment.  Unfortunately, we can't verify
+       * the cache line size here in the cpukit but altivec support code will
+       * produce an error if this is ever different from 32 bytes.
+       * 
+       * Note: it is the BSP/CPU-support's responsibility to save/restore
+       *       volatile vregs across interrupts and exceptions.
+       */
+      uint8_t altivec[16*12 + 32 + 32];
+    #endif
+  #else
+    /* Non-volatile context according to E500ABIUG and EABI */
+    uint32_t context [
+      8 /* Cache line padding */
+      + 1 /* Stack pointer */
+      + 1 /* MSR */
+      + 1 /* LR */
+      + 1 /* CR */
+      + 18 * 2 /* GPR 14 to GPR 31 */
+    ];
+  #endif
 } Context_Control;
+#endif /* ASM */
 
-#define _CPU_Context_Get_SP( _context ) \
-  (_context)->gpr1
+#ifndef __SPE__
+  #define PPC_CONTEXT_SET_SP( _context, _sp ) \
+    do { \
+      (_context)->gpr1 = _sp; \
+    } while (0)
 
+  #define PPC_CONTEXT_SET_MSR( _context, _msr ) \
+    do { \
+      (_context)->msr = _msr; \
+    } while (0)
+
+  #define PPC_CONTEXT_SET_PC( _context, _pc ) \
+    do { \
+      (_context)->pc = _pc; \
+    } while (0)
+
+  #define _CPU_Context_Get_SP( _context ) \
+    (_context)->gpr1
+#else
+  #define PPC_CONTEXT_CACHE_LINE_0 32
+  #define PPC_CONTEXT_OFFSET_SP 32
+  #define PPC_CONTEXT_OFFSET_MSR 36
+  #define PPC_CONTEXT_OFFSET_LR 40
+  #define PPC_CONTEXT_OFFSET_CR 44
+  #define PPC_CONTEXT_OFFSET_GPR14 48
+  #define PPC_CONTEXT_OFFSET_GPR15 56
+  #define PPC_CONTEXT_CACHE_LINE_1 64
+  #define PPC_CONTEXT_OFFSET_GPR16 64
+  #define PPC_CONTEXT_OFFSET_GPR17 72
+  #define PPC_CONTEXT_OFFSET_GPR18 80
+  #define PPC_CONTEXT_OFFSET_GPR19 88
+  #define PPC_CONTEXT_CACHE_LINE_2 96
+  #define PPC_CONTEXT_OFFSET_GPR20 96
+  #define PPC_CONTEXT_OFFSET_GPR21 104
+  #define PPC_CONTEXT_OFFSET_GPR22 112
+  #define PPC_CONTEXT_OFFSET_GPR23 120
+  #define PPC_CONTEXT_CACHE_LINE_3 128
+  #define PPC_CONTEXT_OFFSET_GPR24 128
+  #define PPC_CONTEXT_OFFSET_GPR25 136
+  #define PPC_CONTEXT_OFFSET_GPR26 144
+  #define PPC_CONTEXT_OFFSET_GPR27 152
+  #define PPC_CONTEXT_CACHE_LINE_4 160
+  #define PPC_CONTEXT_OFFSET_GPR28 160
+  #define PPC_CONTEXT_OFFSET_GPR29 168
+  #define PPC_CONTEXT_OFFSET_GPR30 176
+  #define PPC_CONTEXT_OFFSET_GPR31 184
+
+  #define PPC_CONTEXT_AREA( _context ) \
+    ((uint32_t *) (((uintptr_t) (_context)) & ~0x1fU))
+
+  #define PPC_CONTEXT_FIELD( _context, _offset ) \
+    PPC_CONTEXT_AREA( _context ) [(_offset) / 4]
+
+  #define PPC_CONTEXT_SET_SP( _context, _sp ) \
+    do { \
+      PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_SP ) = _sp; \
+    } while (0)
+
+  #define PPC_CONTEXT_SET_MSR( _context, _msr ) \
+    do { \
+      PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_MSR ) = _msr; \
+    } while (0)
+
+  #define PPC_CONTEXT_SET_PC( _context, _pc ) \
+    do { \
+      PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_LR ) = _pc; \
+    } while (0)
+
+  #define _CPU_Context_Get_SP( _context ) \
+    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_SP )
+#endif
+
+#ifndef ASM
 typedef struct {
     /* The ABIs (PowerOpen/SVR4/EABI) only require saving f14-f31 over
      * procedure calls.  However, this would mean that the interrupt
