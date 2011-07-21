@@ -1,5 +1,11 @@
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1799/bsps
+	* acinclude.m4: Update for qoriq BSPs.
+	* shared/include/linker-symbols.h: New file.
+
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* shared/clock/clock.c: Fix to clear the first pending decrementer
 	exception.
 
