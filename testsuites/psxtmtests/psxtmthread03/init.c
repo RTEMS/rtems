@@ -45,7 +45,7 @@ void *Low(
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST TM02 ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMTHREAD03 ***" );
   rtems_test_exit( 0 );
   return NULL;
 }
@@ -74,7 +74,7 @@ void *POSIX_Init(
   int        status;
   pthread_t  threadId;
 
-  puts( "\n\n*** POSIX TIME TEST TM02 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMTHREAD03 ***" );
 
   for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );

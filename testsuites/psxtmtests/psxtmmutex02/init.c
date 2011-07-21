@@ -40,14 +40,14 @@ void *Low(
   end_time = benchmark_timer_read();
 
   put_time(
-    "pthread_mutex_lock (unavailable)",
+    "pthread_mutex_lock - unavailable, block",
     end_time,
     OPERATION_COUNT,
     0,
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST MUTEX 02 ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMMUTEX02 ***" );
 
   rtems_test_exit( 0 );
   return NULL;
@@ -81,7 +81,7 @@ void *POSIX_Init(
   int        status;
   pthread_t  threadId;
 
-  puts( "\n\n*** POSIX TIME TEST MUTEX 02 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMMUTEX02 ***" );
 
   for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );

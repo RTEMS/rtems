@@ -36,14 +36,14 @@ void *Low(
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_mutex_unlock (unblocking, prempt)",
+    "pthread_mutex_unlock - unblocking, preempt",
     end_time,
     OPERATION_COUNT,
     0,
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST MUTEX 07 ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMMUTEX07 ***" );
   rtems_test_exit( 0 );
   return NULL;
 }
@@ -77,7 +77,7 @@ void *POSIX_Init(
   pthread_attr_t      attr;
   struct sched_param  param;
 
-  puts( "\n\n*** POSIX TIME TEST MUTEX 02 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMMUTEX02 ***" );
 
   /*
    * Deliberately create the mutex BEFORE the threads.  This way the

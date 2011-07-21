@@ -35,7 +35,7 @@ void *Low(
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST nanosleep - blocking ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMNANOSLEEP02 ***" );
 
   rtems_test_exit( 0 );
   return NULL;
@@ -70,7 +70,7 @@ void *POSIX_Init(
   remainder.tv_sec = 0;
   remainder.tv_nsec = 0;
 
-  puts( "\n\n*** POSIX TIME TEST nanosleep - blocking ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMNANOSLEEP02 ***" );
 
   for ( i=0 ; i < OPERATION_COUNT - 1 ; i++ ) {
     status = pthread_create( &threadId, NULL, Middle, NULL );

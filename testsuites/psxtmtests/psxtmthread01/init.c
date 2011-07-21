@@ -45,7 +45,7 @@ void *POSIX_Init(
   void *argument
 )
 {
-  puts( "\n\n*** POSIX TIME TEST THREAD 01 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMTHREAD01 ***" );
 
   rtems_time_test_measure_operation(
     "pthread_create",
@@ -56,7 +56,7 @@ void *POSIX_Init(
   );
 
   
-  puts( "*** END OF POSIX TIME TEST THREAD 01 ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMTHREAD01 ***" );
 
   rtems_test_exit(0);
 }

@@ -42,7 +42,7 @@ void *POSIX_Init(
   pthread_t  threadId;
   long       end_time;
 
-  puts( "\n\n*** POSIX TIME TEST MUTEX 05 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMMUTEX05 ***" );
 
   status = pthread_create( &threadId, NULL, Blocker, NULL );
   rtems_test_assert( status == 0 );
@@ -73,14 +73,14 @@ void *POSIX_Init(
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_mutex_unlock (no preemption)",
+    "pthread_mutex_unlock - unblocking, no preemption",
     end_time,
     1,
     0,
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST MUTEX 05 ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMMUTEX05 ***" );
   rtems_test_exit( 0 );
 
   return NULL;

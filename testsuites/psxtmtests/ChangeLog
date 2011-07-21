@@ -1,3 +1,9 @@
+2011-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxtmmutex02/init.c, psxtmmutex05/init.c, psxtmmutex06/init.c,
+	psxtmnanosleep02/init.c, psxtmsleep02/init.c, psxtmthread01/init.c,
+	psxtmthread03/init.c: Standardize start and end test messages.
+
 2011-07-20	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
