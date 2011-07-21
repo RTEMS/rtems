@@ -165,6 +165,9 @@
   #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE
 #endif
 
+#define RTEMS_STATIC_ASSERT(cond, msg) \
+  typedef int rtems_static_assert ## msg [(cond) ? 1 : -1]
+
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
     typedef bool boolean;
