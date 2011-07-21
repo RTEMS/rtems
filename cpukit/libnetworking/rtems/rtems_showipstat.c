@@ -13,8 +13,12 @@
 #include <sys/sysctl.h>
 #include <sys/proc.h>
 #include <sys/mbuf.h>
-#include <netinet/in_systm.h>
+#include <sys/socket.h>
+#include <net/if.h>
+#include <net/if_var.h>
 #include <netinet/in.h>
+#include <netinet/in_systm.h>
+#include <netinet/in_var.h>
 #include <netinet/ip.h>
 #include <netinet/ip_var.h>
 
@@ -59,5 +63,6 @@ rtems_bsdnet_show_ip_stats (void)
 	showipstat ("ip version != 4", ipstat.ips_badvers);
 	showipstat ("total raw ip packets generated", ipstat.ips_rawout);
 	showipstat ("ip length > max ip packet size", ipstat.ips_toolong);
+	showipstat ("ip input queue drops", ipintrq.ifq_drops);
 	printf ("\n");
 }

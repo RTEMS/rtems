@@ -1,3 +1,7 @@
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/rtems/rtems_showipstat.c: Print IP input queue drops.
+
 2011-07-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libfs/src/dosfs/fat_file.c, libmisc/monitor/monitor.h,
