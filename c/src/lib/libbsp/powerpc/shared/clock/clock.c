@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -94,6 +95,18 @@ static int ppc_clock_exception_handler( BSP_Exception_frame *frame, unsigned num
 	return 0;
 }
 
+static int ppc_clock_exception_handler_first( BSP_Exception_frame *frame, unsigned number)
+{
+	/* We have to clear the first pending decrementer exception this way */
+
+	if (ppc_decrementer_register() >= 0x80000000) {
+		ppc_clock_exception_handler( frame, number);
+	}
+
+	ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler);
+
+	return 0;
+}
 
 static int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsigned number)
 {
@@ -208,7 +221,7 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 		ppc_clock_next_time_base = ppc_time_base() + ppc_clock_decrementer_value;
 
 		/* Install exception handler */
-		ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler);
+		ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler_first);
 	}
 
 	/* Set the decrementer value */
