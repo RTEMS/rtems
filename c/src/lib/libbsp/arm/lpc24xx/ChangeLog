@@ -1,3 +1,8 @@
+2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc24xx.h: Added ADC defines.
+	* make/custom/lpc24xx.inc: Workaround for GCC bug 49641.
+
 2011-06-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix broken path to cache_.h.

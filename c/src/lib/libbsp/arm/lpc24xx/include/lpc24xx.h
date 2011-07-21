@@ -1962,6 +1962,24 @@ typedef struct {
 
 static volatile lpc_i2s *const lpc24xx_i2s = (lpc_i2s *) I2S_BASE_ADDR;
 
+/* ADC */
+
+#define ADC_CR_SEL(val) BSP_FLD32(val, 0, 7)
+#define ADC_CR_SEL_GET(val) BSP_FLD32GET(val, 0, 7)
+#define ADC_CR_SEL_SET(reg, val) BSP_FLD32SET(reg, val, 0, 7)
+#define ADC_CR_CLKDIV(val) BSP_FLD32(val, 8, 15)
+#define ADC_CR_CLKDIV_GET(reg) BSP_FLD32GET(reg, 8, 15)
+#define ADC_CR_CLKDIV_SET(reg, val) BSP_FLD32SET(reg, val, 8, 15)
+#define ADC_CR_BURST BSP_BIT32(16)
+#define ADC_CR_CLKS(val) BSP_FLD32(val, 17, 19)
+#define ADC_CR_PDN BSP_BIT32(21)
+#define ADC_CR_START(val) BSP_FLD32(val, 24, 26)
+#define ADC_CR_EDGE BSP_BIT32(27)
+
+#define ADC_DR_VALUE(reg) BSP_FLD32GET(reg, 6, 15)
+#define ADC_DR_OVERRUN BSP_BIT32(30)
+#define ADC_DR_DONE BSP_BIT32(31)
+
 /* DAC */
 
 #define DAC_STEPS 1024
