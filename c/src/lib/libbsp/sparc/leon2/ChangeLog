@@ -1,3 +1,8 @@
+2011-07-21	Jorge Lopez <jorge.lopez.trescastro@esa.int>
+
+	PR 1766/bsps
+	* clock/ckinit.c: Add missing read of Timer_Counter_1.
+
 2011-04-25	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1783/bsps
