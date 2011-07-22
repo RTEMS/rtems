@@ -9,7 +9,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -102,10 +102,10 @@ typedef struct {
 #define MP_PACKET_MINIMUM_PACKET_SIZE  64
 
 /**
- *  The following constant defines the number of uint32_t  's
+ *  The following constant defines the number of uint32_t's
  *  in a packet which must be converted to native format in a
  *  heterogeneous system.  In packets longer than
- *  MP_PACKET_MINIMUN_HETERO_CONVERSION uint32_t  's, some of the "extra" data
+ *  MP_PACKET_MINIMUN_HETERO_CONVERSION uint32_t's, some of the "extra" data
  *  may a user message buffer which is not automatically endian swapped.
  */
 #define MP_PACKET_MINIMUN_HETERO_CONVERSION  \

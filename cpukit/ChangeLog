@@ -1,3 +1,7 @@
+2011-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/mppkt.h: Remove extra spaces.
+
 2011-07-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1839/filesystem
