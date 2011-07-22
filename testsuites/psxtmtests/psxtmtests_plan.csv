@@ -106,14 +106,14 @@
 "sem_unlink (does not delete)","psxtmsem01","psxtmtest_single","Yes"
 "sem_close (named second close - removes)","psxtmsem01","psxtmtest_single","Yes"
 "sem_unlink (deletes)","psxtmsem01","psxtmtest_single","Yes"
-"sem_wait - available",,"psxtmtest_single",
+"sem_wait - available","psxtmsem02","psxtmtest_single","Yes"
 "sem_wait - not available, block",,"psxtmtest_blocking",
-"sem_trywait - available",,"psxtmtest_single",
-"sem_trywait - not available",,"psxtmtest_single",
-"sem_post - no threads waiting",,"psxtmtest_single",
+"sem_trywait - available","psxtmsem02","psxtmtest_single","Yes"
+"sem_trywait - not available","psxtmsem02","psxtmtest_single","Yes"
+"sem_post - no threads waiting","psxtmsem02","psxtmtest_single","Yes"
 "sem_post - thread waiting, no preempt",,"psxtmtest_unblocking_nopreempt",
 "sem_post - thread waiting, preempt",,"psxtmtest_unblocking_preempt",
-"sem_getvalue",,"psxtmtest_single",
+"sem_getvalue","psxtmsem02","psxtmtest_single","Yes"
 ,,,
 "sleep - yield","psxtmsleep01","psxtmtest_single","Yes"
 "sleep - blocking","psxtmsleep02","psxtmtest_blocking","Yes"

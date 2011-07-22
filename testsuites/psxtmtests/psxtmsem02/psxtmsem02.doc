@@ -1,0 +1,19 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ sem_getvalue
++ sem_wait – available
++ sem_post - no threads waiting
++ sem_trywait - available_
++ sem_trywait - not available
+
