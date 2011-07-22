@@ -14,7 +14,7 @@ stat of /dev/console
 ....atime = Fri Jan  1 00:00:00 1988
 ....mtime = Fri Jan  1 00:00:00 1988
 ....ctime = Fri Jan  1 00:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 
 mkdir /dev/tty
@@ -55,10 +55,10 @@ Unlink /tmp/bha using the reentrant version -- OK
 mknod with bad type - expect EINVAL
 open /tmp/bha in write only mode -- OK
 attempt fcntl on opened file -- OK
-attempt to read from /tmp/bha - expect EINVAL
+attempt to read from /tmp/bha - expect EBADF
 closing and unlinking /tmp/bha
 open /tmp/bha in read only mode -- OK
-attempt to read from /tmp/bha - expect EINVAL
+attempt to read from /tmp/bha - expect EBADF
 closing and unlinking /tmp/bha
 attempt to read from an unopened filedes - expect EBADF
 attempt to write to an unopened filedes - expect EBADF
@@ -93,7 +93,7 @@ stat( /tmp/joel ) returned
 ....atime = Sat Dec 31 09:00:00 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 unlink /tmp/joel
 unlink /tmp/joel
@@ -126,7 +126,7 @@ stat( /tmp/joel ) returned
 ....atime = Sat Dec 31 09:00:00 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 stat of /tmp/j
 stat(/tmp/j) returned -1 (errno=2)
@@ -139,7 +139,7 @@ stat(/tmp/j) returned -1 (errno=2)
 ....atime = Fri Jan  1 00:00:00 1988
 ....mtime = Fri Jan  1 00:00:00 1988
 ....ctime = Fri Jan  1 00:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 fopen of /tmp/j
 fprintf to /tmp/j
@@ -157,7 +157,7 @@ fprintf to /tmp/j
 ....atime = Sat Dec 31 09:00:00 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 This is call 1 to fprintf
 This is call 2 to fprintf
@@ -173,14 +173,14 @@ This is call 5 to fprintf
 ....atime = Sat Dec 31 09:00:01 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
 ........console (device 0, 0)
 ........tty/
-............S3 (device 128, 255)
+............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -203,14 +203,14 @@ truncate /tmp/j to length of 40
 ....atime = Sat Dec 31 09:00:02 1988
 ....mtime = Sat Dec 31 09:00:00 1988
 ....ctime = Sat Dec 31 09:00:00 1988
-....st_blksize 0
+....st_blksize 80
 ....st_blocks  0
 *************** Dump of Entire IMFS ***************
 /
 ....dev/
 ........console (device 0, 0)
 ........tty/
-............S3 (device 128, 255)
+............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)
@@ -231,7 +231,7 @@ truncate /tmp to length of 0 should fail with EISDIR
 ....dev/
 ........console (device 0, 0)
 ........tty/
-............S3 (device 128, 255)
+............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
 ........passwd (file 0)

@@ -50,10 +50,10 @@ rtems_task Init(
   fd = open( "/newfile", O_WRONLY | O_CREAT, S_IWUSR );
   rtems_test_assert( fd != -1 );
 
-  puts( "Init - fchdir on the file descriptor - expect EINVAL" );
+  puts( "Init - fchdir on the file descriptor - expect ENOTDIR" );
   status = fchdir( fd );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( errno == ENOTDIR );
 
   puts( "Init - closing /newfile -- OK" );
   status = close( fd );

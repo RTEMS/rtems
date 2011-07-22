@@ -384,10 +384,10 @@ int main(
   status = fcntl( fd, F_SETFD, 0 );
   rtems_test_assert( status == 0 );
 
-  puts( "attempt to read from /tmp/bha - expect EINVAL" );
+  puts( "attempt to read from /tmp/bha - expect EBADF" );
   status = read( fd, buffer, 10 );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( errno == EBADF );
 
   puts( "closing and unlinking /tmp/bha" );
   status = close( fd );
@@ -398,10 +398,10 @@ int main(
   fd = open( "/tmp/bha", O_CREAT | O_RDONLY, S_IRWXU|S_IRWXG|S_IRWXO );
   rtems_test_assert( fd != -1 );
   
-  puts( "attempt to read from /tmp/bha - expect EINVAL" );
+  puts( "attempt to read from /tmp/bha - expect EBADF" );
   status = write( fd, buffer, 10 );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( errno == EBADF );
 
   puts( "closing and unlinking /tmp/bha" );
   status = close( fd );

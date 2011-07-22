@@ -3,7 +3,7 @@ Init - fchdir tests
 Init - Attempt fchdir with bad file descriptor - expect EBADF
 Init - Attempt fchdir with bad file descriptor - expect EBADF
 Init - opening /newfile in write-mode -- OK
-Init - fchdir on the file descriptor - expect EINVAL
+Init - fchdir on the file descriptor - expect ENOTDIR
 Init - closing /newfile -- OK
 Init - removing /newfile -- OK
 Init - opening /newfile in read-mode -- OK
