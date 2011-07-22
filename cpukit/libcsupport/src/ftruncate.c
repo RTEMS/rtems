@@ -32,6 +32,7 @@ int ftruncate(
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
+  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   /*
    *  Now process the ftruncate() request.
@@ -44,8 +45,6 @@ int ftruncate(
   loc = iop->pathinfo;
   if ( (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
     rtems_set_errno_and_return_minus_one( EISDIR );
-
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   return (*iop->pathinfo.handlers->ftruncate_h)( iop, length );
 }
