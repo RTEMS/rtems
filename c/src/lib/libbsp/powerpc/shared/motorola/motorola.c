@@ -69,8 +69,7 @@
 
 #ifdef qemu
 static struct _int_map qemu_prep_intmap[] = {
-    { 0, -1, PCI_FIXUP_OPT_OVERRIDE_NAME,
-	            { { 1, { 9, -1, -1, -1}},
+    { 0, -1, 0, { { 1, { 9, -1, -1, -1}},
                   { 2, {11, -1  -1, -1}},
                   NULL_PINMAP }},
 	NULL_INTMAP

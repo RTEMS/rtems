@@ -1,3 +1,9 @@
+2011-07-21  Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/motorola/motorola.c: removed
+	PCI_FIXUP_OPT_OVERRIDE_NAME for qemu - qemu gets it
+	right and this option messes things rather up.
+
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1799/bsps
