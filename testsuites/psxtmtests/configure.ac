@@ -90,6 +90,7 @@ psxtmmutex06/Makefile
 psxtmmutex07/Makefile
 psxtmnanosleep01/Makefile
 psxtmnanosleep02/Makefile
+psxtmsem01/Makefile
 psxtmsleep01/Makefile
 psxtmsleep02/Makefile
 psxtmthread01/Makefile

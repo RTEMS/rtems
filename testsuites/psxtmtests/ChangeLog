@@ -1,3 +1,12 @@
+2011-07-22	Ricardo Aguirre <el.mastin@ymail.com>
+
+	PR 1846/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	various sem_open(), sem_close(), sem_unlink(), sem_init(), and
+	sem_destroy() cases.
+	* psxtmsem01/.cvsignore, psxtmsem01/Makefile.am, psxtmsem01/init.c,
+	psxtmsem01/psxtmsem01.doc: New files.
+
 2011-07-21	Ricardo Aguirre <el.mastin@ymail.com>
 
 	PR 1835/tests

@@ -86,7 +86,7 @@
 "mq_open (second open)","psxtmsem03","psxtmtest_init_destroy",
 "mq_close (close of second)","psxtmsem03","psxtmtest_init_destroy",
 "mq_unlink",,,
-"mq_receive – available",,"psxtmtest_single",
+"mq_receive - available",,"psxtmtest_single",
 "mq_receive - not available, block",,"psxtmtest_blocking",
 "mq_timedreceive - available",,"psxtmtest_single",
 "mq_timedreceive - not available, blocks",,"psxtmtest_single",
@@ -98,13 +98,15 @@
 "mq_timedsend - thread waiting, preemption",,"psxtmtest_unblocking_preempt",
 "mq_notify ",,"psxtmtest_single",
 ,,,
-"sem_init","psxtmsem01","psxtmtest_init_destroy",
-"sem_destroy","psxtmsem01","psxtmtest_init_destroy",
-"sem_open (first open)","psxtmsem01","psxtmtest_init_destroy",
-"sem_close (close of first)","psxtmsem01","psxtmtest_init_destroy",
-"sem_open (second open)","psxtmsem01","psxtmtest_init_destroy",
-"sem_close (close of second)","psxtmsem01","psxtmtest_init_destroy",
-"sem_wait – available",,"psxtmtest_single",
+"sem_init","psxtmsem01","psxtmtest_single","Yes"
+"sem_destroy","psxtmsem01","psxtmtest_single","Yes"
+"sem_open (first open named)","psxtmsem01","psxtmtest_single","Yes"
+"sem_open (second open named)","psxtmsem01","psxtmtest_single","Yes"
+"sem_close (named first/nested close)","psxtmsem01","psxtmtest_single","Yes"
+"sem_unlink (does not delete)","psxtmsem01","psxtmtest_single","Yes"
+"sem_close (named second close - removes)","psxtmsem01","psxtmtest_single","Yes"
+"sem_unlink (deletes)","psxtmsem01","psxtmtest_single","Yes"
+"sem_wait - available",,"psxtmtest_single",
 "sem_wait - not available, block",,"psxtmtest_blocking",
 "sem_trywait - available",,"psxtmtest_single",
 "sem_trywait - not available",,"psxtmtest_single",

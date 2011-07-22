@@ -1,0 +1,20 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ sem_init
++ sem_open (first 'O_CREAT')
++ sem_close (first)
++ sem_open (second 'O_EXCL')
++ sem_close (second)
++ sem_destroy
+
