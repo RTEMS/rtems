@@ -1,3 +1,9 @@
+2011-07-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1845/bsps
+	* make/custom/rtl22xx_t.cfg: Remove unused line with what is now
+	invalid syntax.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
