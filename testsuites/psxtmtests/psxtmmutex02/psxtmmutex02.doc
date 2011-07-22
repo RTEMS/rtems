@@ -11,4 +11,4 @@
 
 This test benchmarks the following operations:
 
-+ TBD
++ pthread_mutex_lock - unavailable, block 

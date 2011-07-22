@@ -12,9 +12,11 @@
 This test benchmarks the following operations:
 
 + sem_init
-+ sem_open (first 'O_CREAT')
-+ sem_close (first)
-+ sem_open (second 'O_EXCL')
-+ sem_close (second)
 + sem_destroy
++ sem_open (first open 'O_CREAT')
++ sem_open (second open 'O_EXCL')
++ sem_close (named first/nested close)
++ sem_unlink (does not delete)
++ sem_close (named second close)
++ sem_unlink (deletes semaphore)
 
