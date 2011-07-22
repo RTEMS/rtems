@@ -1,3 +1,11 @@
+2011-03-31      Kate Feng <feng@bnl.gov>
+
+	PR 1778/bsps
+	* vme/VMEConfig.h: Used the VME shared IRQ handlers.
+	* include/bsp.h: Removed BSP_PIC_DO_EOI.
+	* network/if_100MHz/GT64260eth.c:
+	  Recycle the Rx mbuf if there is any Rx error.
+	
 2009-05-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* irq/irq.c, network/if_1GHz/POSSIBLEBUG: Removed.

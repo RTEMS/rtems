@@ -1,6 +1,21 @@
 #ifndef RTEMS_BSP_VME_CONFIG_H
 #define RTEMS_BSP_VME_CONFIG_H
-/* VMEConfig.h, S. Kate Feng modified it for MVME5500 3/04  */
+/* VMEConfig.h, S. Kate Feng modified it for MVME5500 3/04 
+ * 
+ * May 2011 : Use the VME shared IRQ handlers.
+ *
+ * It seems that the implementation of VMEUNIVERSE_IRQ_MGR_FLAG_PW_WORKAROUND
+ * is not fully developed. The UNIV_REGOFF_VCSR_BS is defined for VME64
+ * specification, which does not apply to a VME32 crate. In order to avoid
+ * spurious VME interrupts, a better and more universal solution is
+ * to flush the vmeUniverse FIFO by reading a register back within the
+ * users' Interrupt Service Routine (ISR)  before returning.
+ *
+ * Some devices might require the ISR to issue an interrupt status READ
+ * after its IRQ is cleared, but before its corresponding interrupt
+ * is enabled again. 
+ * 
+ */
 /* BSP specific address space configuration parameters */
 
 /* 
@@ -11,6 +26,10 @@
  * layout:
  */
 #define _VME_A32_WIN0_ON_PCI	        0x90000000
+/* If _VME_CSR_ON_PCI is defined then the A32 window is reduced to accommodate
+ * CSR for space.
+ */
+#define _VME_CSR_ON_PCI			0x9e000000
 #define _VME_A24_ON_PCI			0x9f000000
 #define _VME_A16_ON_PCI			0x9fff0000
 
@@ -30,7 +49,12 @@
 
 #define BSP_VME_UNIVERSE_INSTALL_IRQ_MGR(err)			\
 	do {											\
-		err = vmeUniverseInstallIrqMgr(0,64+12,1,64+13);	\
+	  err = vmeUniverseInstallIrqMgrAlt(VMEUNIVERSE_IRQ_MGR_FLAG_SHARED,\
+             0, BSP_GPP_VME_VLINT0, \         
+             1, BSP_GPP_VME_VLINT1, \          
+             2, BSP_GPP_VME_VLINT2, \        
+             3, BSP_GPP_VME_VLINT3, \
+             -1 /* terminate list  */);  \             
 	} while (0)
 
 #endif

@@ -743,21 +743,22 @@ static int GT64260eth_rx(struct GTeth_softc *sc)
         if (cmdsts & RX_STS_SF) sc->stats.frame_errors++;
         if ((cmdsts & RX_STS_LC) || (cmdsts & RX_STS_COL))
            ifp->if_collisions++;
-        goto give_it_back;
+        /* recycle the buffer */
+        m->m_len=sc->rx_buf_sz;        
      }
-     m = sc->rxq_mbuf[sc->rxq_fi];
-     m->m_len = m->m_pkthdr.len = byteCount - sizeof(struct ether_header);
-     eh = mtod (m, struct ether_header *);
-     m->m_data += sizeof(struct ether_header);
-     ether_input (ifp, eh, m);
+     else {
+       m = sc->rxq_mbuf[sc->rxq_fi];
+       m->m_len = m->m_pkthdr.len = byteCount - sizeof(struct ether_header);
+       eh = mtod (m, struct ether_header *);
+       m->m_data += sizeof(struct ether_header);
+       ether_input (ifp, eh, m);
 
-     ifp->if_ipackets++;
-     ifp->if_ibytes+=byteCount;
-     --sc->rxq_active;
-
-     give_it_back:
-     MGETHDR (m, M_WAIT, MT_DATA);
-     MCLGET (m, M_WAIT);
+       ifp->if_ipackets++;
+       ifp->if_ibytes+=byteCount;
+       --sc->rxq_active;
+       MGETHDR (m, M_WAIT, MT_DATA);
+       MCLGET (m, M_WAIT);
+     }
      m->m_pkthdr.rcvif = ifp;
      sc->rxq_mbuf[sc->rxq_fi]= m;
      /* convert mbuf pointer to data pointer of correct type */	
