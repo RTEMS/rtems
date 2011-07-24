@@ -6,7 +6,7 @@
  *  The tick frequency is directly programmed to the configured number of
  *  microseconds per tick.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modified for LEON3 BSP.
@@ -99,8 +99,8 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
   uint32_t clicks;
   uint32_t usecs;
 
-  if ( LEON_Is_interrupt_pending( LEON_INTERRUPT_TIMER1 ) ) {
-    clicks = LEON_REG.Timer_Counter_1;
+  clicks = LEON3_Timer_Regs->timer[0].value;
+  if ( LEON_Is_interrupt_pending( clkirq ) ) {
     usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
   } else {
     usecs = (rtems_configuration_get_microseconds_per_tick() - clicks);

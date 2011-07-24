@@ -1,3 +1,7 @@
+2011-07-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* clock/ckinit.c: Correct back port.
+
 2011-04-25	Jennifer Averett <jennifer.averett@OARcorp.com>
 
 	PR 1783/bsps
