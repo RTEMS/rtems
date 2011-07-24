@@ -57,6 +57,7 @@
     %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
 %if %build_newlib
     --enable-newlib-io-c99-formats \
+    %{?with_iconv:--enable-newlib-iconv} \
 %endif
 %if %build_libgcj
     --enable-libgcj \

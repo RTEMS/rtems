@@ -69,13 +69,22 @@
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/include/bits
   fi
 
-  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
-%if ! %{with pygdb}
-  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
-    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+%if %build_newlib
+%if %{with iconv}
+  # Iconv enabled newlib installs external ccts (target files)
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/iconv_data; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/iconv_data
   fi
 %endif
 
+%endif
+%if ! %{with pygdb}
+  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+  fi
+
+%endif
 %if %build_go
 %if "%{gcc_version}" == "4.6.0"
   # Bug in gcc == 4.6.0: Installs gccgo under bogus name
