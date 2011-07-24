@@ -1,3 +1,8 @@
+2011-07-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am, preinstall.am: Include stubs so all tests compile.
+	* include/tm27.h: New file.
+
 2008-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* bsp_specs: Backport from CVS-HEAD.

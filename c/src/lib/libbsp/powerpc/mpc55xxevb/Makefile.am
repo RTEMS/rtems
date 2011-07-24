@@ -29,7 +29,10 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.memory
 
 # Includes
-include_HEADERS = include/bsp.h
+include_HEADERS  = include/bsp.h
+include_HEADERS += include/tm27.h
+
+include_HEADERS += ../../shared/include/coverhd.h
 
 nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h
 include_bspdir = $(includedir)/bsp
@@ -47,6 +50,8 @@ clock_SOURCES = ../shared/clock/clock.c
 irq_generic_SOURCES = ../../shared/src/irq-generic.c \
     ../../shared/src/irq-legacy.c
 
+timer_SOURCES = ../../shared/timerstub.c
+
 tests_SOURCES = tests/tests.c startup/sd-card-init.c
 
 # Network
@@ -60,7 +65,7 @@ endif
 # BSP library
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(irq_generic_SOURCES) \
-    $(tests_SOURCES)
+    $(timer_SOURCES) $(tests_SOURCES)
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
