@@ -46,8 +46,7 @@ void _CPU_Initialize(void)
   /* FP context initialization support goes here */
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_Get_level
  *
  *  LM32 Specific Information:
@@ -64,8 +63,7 @@ uint32_t   _CPU_ISR_Get_level( void )
   return 0;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_raw_handler
  *
  *  LM32 Specific Information:
@@ -85,8 +83,7 @@ void _CPU_ISR_install_raw_handler(
    */
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -129,8 +126,7 @@ void _CPU_ISR_install_vector(
     _ISR_Vector_table[ vector ] = new_handler;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Install_interrupt_stack
  *
  *  LM32 Specific Information:
@@ -142,8 +138,7 @@ void _CPU_Install_interrupt_stack( void )
 {
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Thread_Idle_body
  *
  *  NOTES:

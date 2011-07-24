@@ -46,8 +46,7 @@ uint32_t   _CPU_ISR_Get_level( void )
   return 0;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_raw_handler
  *
  *  NO_CPU Specific Information:
@@ -68,8 +67,7 @@ void _CPU_ISR_install_raw_handler(
   /* _set_var_vect(new_handler,vector); */
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -112,8 +110,7 @@ void _CPU_ISR_install_vector(
     _ISR_Vector_table[ vector ] = new_handler;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Install_interrupt_stack
  *
  *  NO_CPU Specific Information:
