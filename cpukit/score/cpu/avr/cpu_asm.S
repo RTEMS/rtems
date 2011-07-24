@@ -306,8 +306,7 @@ SYM(_CPU_Context_restore):
 
 
 
-/*PAGE
- *
+/*
  *  _CPU_Context_Initialize
  *
  *  This kernel routine initializes the basic non-FP context area associated

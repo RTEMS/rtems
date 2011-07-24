@@ -930,8 +930,7 @@ void context_initialize(unsigned short* context,
 		unsigned short stack_add,
 		unsigned short entry_point);
 
-/*PAGE
- *
+/*
  *  _CPU_Context_Initialize
  *
  *  This kernel routine initializes the basic non-FP context area associated
