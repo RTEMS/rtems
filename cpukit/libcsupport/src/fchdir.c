@@ -1,7 +1,7 @@
 /*
  *  fchdir() - compatible with SVr4, 4.4BSD and X/OPEN - Change Directory
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,12 +34,6 @@ int fchdir(
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
-
-  /*
-   *  Now process the fchmod().
-   */
-
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
 
   /*
    * Verify you can change directory into this node.

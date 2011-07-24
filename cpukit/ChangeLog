@@ -1,3 +1,13 @@
+2011-07-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1839/filesystem
+	* libcsupport/include/rtems/libio_.h, libcsupport/src/fchdir.c,
+	libcsupport/src/fdatasync.c, libcsupport/src/fpathconf.c,
+	libcsupport/src/fsync.c, libcsupport/src/read.c,
+	libcsupport/src/readv.c, libcsupport/src/write.c,
+	libcsupport/src/writev.c: Some calls did not return proper status for
+	permission errors or incorrectly permissions at all.
+
 2011-07-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1838/filesystem
