@@ -20,8 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/cache.h>
 
-/*PAGE
- *
+/*
  *  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -58,8 +57,7 @@ void _CPU_Initialize(void)
   _CPU_ISR_Dispatch_disable = 0;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Context_Initialize
  *
  *  This kernel routine initializes the basic non-FP context area associated

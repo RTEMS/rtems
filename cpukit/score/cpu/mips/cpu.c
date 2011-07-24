@@ -91,8 +91,7 @@ void _CPU_Initialize(void)
 #endif
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_Get_level
  *
  *  This routine returns the current interrupt level.
@@ -173,8 +172,7 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
 
 
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_raw_handler
  *
  *  Input parameters:
@@ -201,8 +199,7 @@ void _CPU_ISR_install_raw_handler(
    */
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -241,8 +238,7 @@ void _CPU_ISR_install_vector(
     _ISR_Vector_table[ vector ] = new_handler;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Install_interrupt_stack
  */
 
@@ -294,8 +290,7 @@ void _CPU_Context_Initialize(
 }
 
 
-/*PAGE
- *
+/*
  *  _CPU_Internal_threads_Idle_thread_body
  *
  *  NOTES:

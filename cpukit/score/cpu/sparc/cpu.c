@@ -36,8 +36,7 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template = {
   0xa6102000       /* mov   _vector, %l3        */
 };
 
-/*PAGE
- *
+/*
  *  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -73,8 +72,7 @@ void _CPU_Initialize(void)
   _CPU_ISR_Dispatch_disable = 0;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_Get_level
  *
  *  Input Parameters: NONE
@@ -92,8 +90,7 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_raw_handler
  *
  *  This routine installs the specified handler as a "raw" non-executive
@@ -200,8 +197,7 @@ void _CPU_ISR_install_raw_handler(
 
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -253,8 +249,7 @@ void _CPU_ISR_install_vector(
     _ISR_Vector_table[ real_vector ] = new_handler;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_Context_Initialize
  *
  *  This kernel routine initializes the basic non-FP context area associated
