@@ -93,8 +93,7 @@ void _CPU_Initialize(void)
 #endif
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_Get_level
  */
 

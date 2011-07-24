@@ -49,8 +49,7 @@ void _CPU_Initialize(void)
 #endif /* M68K_HAS_VBR */
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_Get_level
  */
 
@@ -63,8 +62,7 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_raw_handler
  */
 
@@ -115,8 +113,7 @@ void _CPU_ISR_install_raw_handler(
 #endif /* M68K_HAS_VBR */
 }
 
-/*PAGE
- *
+/*
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -146,8 +143,7 @@ void _CPU_ISR_install_vector(
 }
 
 
-/*PAGE
- *
+/*
  *  _CPU_Install_interrupt_stack
  */
 
@@ -184,8 +180,7 @@ const unsigned char _CPU_m68k_BFFFO_table[256] = {
 };
 #endif
 
-/*PAGE
- *
+/*
  *  The following code context switches the software FPU emulation
  *  code provided with GCC.
  */

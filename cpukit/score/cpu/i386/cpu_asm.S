@@ -90,8 +90,7 @@ SYM (_CPU_Context_restore):
         movl      NEWCONTEXT_ARG(esp),eax  /* eax = running threads context */
         jmp       restore
 
-/*PAGE
- *  void _CPU_Context_save_fp_context( &fp_context_ptr )
+/*void _CPU_Context_save_fp_context( &fp_context_ptr )
  *  void _CPU_Context_restore_fp_context( &fp_context_ptr )
  *
  *  This section is used to context switch an i80287, i80387,

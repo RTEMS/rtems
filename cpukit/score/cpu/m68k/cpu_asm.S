@@ -216,8 +216,7 @@ norst:
         rts
 #endif
 
-/*PAGE
- *  void _ISR_Handler()
+/*void _ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.
  *
@@ -352,8 +351,7 @@ exit:   moveml  a7@,d0-d1/a0-a1          | restore d0-d1,a0-a1
         rte                              | return to thread
                                          |   OR _Isr_dispatch
 
-/*PAGE
- *  void _ISR_Dispatch()
+/*void _ISR_Dispatch()
  *
  *  Entry point from the outermost interrupt service routine exit.
  *  The current stack is the supervisor mode stack if this processor
