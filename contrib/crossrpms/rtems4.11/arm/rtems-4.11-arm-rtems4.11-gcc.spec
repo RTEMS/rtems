@@ -58,7 +58,7 @@ Summary:      	arm-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	4%{?dist}
+Release:      	5%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -82,6 +82,9 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Should be applicable to gcc >= 4.5.0
 %bcond_with gcc_stdint
 
+# EXPERIMENTAL: Enable newlib's iconv
+%bcond_without iconv
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.2
@@ -102,12 +105,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 
 %if 0%{?fc14}
-%global mpc_provided 0.8.1
-%global mpfr_provided 2.4.2
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.1
@@ -209,7 +206,6 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 
 
 %if %{defined cloog_required}
-%{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
@@ -245,7 +241,7 @@ BuildRequires:	rtems-4.11-arm-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-arm-rtems4.11-binutils
 Requires:	rtems-4.11-arm-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-14%{?dist}
+Requires:	rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-15%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -276,7 +272,7 @@ Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.3-rtems4.11-2011
 
 %if "%{newlib_version}" == "1.19.0"
 Source50:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_pkgvers}.tar.gz
-Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110720.diff
+Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/newlib-1.19.0-rtems4.11-20110724.diff
 %endif
 
 %if 0%{?_build_mpfr}
@@ -360,7 +356,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-14%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-5%{?dist}/newlib-%{newlib_version}-15%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -405,6 +401,7 @@ echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-14%{?dist}" > 
     %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
     %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
     --enable-newlib-io-c99-formats \
+    %{?with_iconv:--enable-newlib-iconv} \
     --enable-languages="$languages"
 
 %if "%_host" != "%_build"
@@ -473,13 +470,20 @@ echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-14%{?dist}" > 
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/arm-rtems4.11/include/bits
   fi
 
-  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
-%if ! %{with pygdb}
-  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
-    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+%if %{with iconv}
+  # Iconv enabled newlib installs external ccts (target files)
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/iconv_data; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/iconv_data
   fi
 %endif
 
+%if ! %{with pygdb}
+  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
+  if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
+    rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
+  fi
+
+%endif
   # Collect multilib subdirectories
   multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
@@ -637,7 +641,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-arm-rtems4.11-binutils
-# Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-14%{?dist}
+# Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-15%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -655,7 +659,7 @@ Summary:        libgcc for arm-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-14%{?dist}
+Requires:       rtems-4.11-arm-rtems4.11-newlib = %{newlib_version}-15%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-arm-rtems4.11-gcc-libgcc
@@ -834,7 +838,7 @@ Summary:      	C Library (newlib) for arm-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        14%{?dist}
+Release:        15%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -855,7 +859,7 @@ Newlib C Library for arm-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        14%{?dist}
+Release:        15%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
