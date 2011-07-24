@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_delete
  *
  *  This directive allows a thread to delete a region specified by

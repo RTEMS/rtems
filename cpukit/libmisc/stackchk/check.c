@@ -476,8 +476,7 @@ void Stack_check_Dump_threads_usage(
   }
 #endif
 
-/*PAGE
- *
+/*
  *  rtems_stack_checker_report_usage
  */
 

@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_barrier_Initialize
  *
  *  This function initialize a barrier and sets the initial value based

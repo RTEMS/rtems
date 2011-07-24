@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_extend
  *
  *  This directive attempts to grow a region of physical contiguous memory area

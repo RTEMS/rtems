@@ -33,8 +33,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_create
  *
  *  This directive creates a thread by allocating and initializing a

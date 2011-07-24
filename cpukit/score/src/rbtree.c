@@ -17,8 +17,7 @@
 #include <rtems/score/rbtree.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _RBTree_Initialize
  *
  *  This kernel routine initializes a Red-Black Tree.

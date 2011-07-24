@@ -18,8 +18,7 @@
 
 #include <rtems/system.h>
 
-/*PAGE
- *
+/*
  *  RWLock Attributes Initialization
  */
 

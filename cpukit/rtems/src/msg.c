@@ -35,8 +35,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Message_queue_Manager_initialization
  *
  *  This routine initializes all message queue manager related

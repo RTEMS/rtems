@@ -30,8 +30,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _CORE_message_queue_Broadcast
  *
  *  This function sends a message for every thread waiting on the queue and

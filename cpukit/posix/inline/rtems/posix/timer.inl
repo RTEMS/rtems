@@ -23,8 +23,7 @@
 #ifndef _RTEMS_POSIX_TIMER_INL
 #define _RTEMS_POSIX_TIMER_INL
 
-/*PAGE
- *
+/*
  *  _POSIX_Timer_Allocate
  *
  *  DESCRIPTION:
@@ -38,8 +37,7 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Allocate( void )
   return (POSIX_Timer_Control *) _Objects_Allocate( &_POSIX_Timer_Information );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Timer_Free
  *
  *  DESCRIPTION:
@@ -55,8 +53,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Timer_Free (
   _Objects_Free( &_POSIX_Timer_Information, &the_timer->Object );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Timer_Get
  *
  *  DESCRIPTION:
@@ -77,8 +74,7 @@ RTEMS_INLINE_ROUTINE POSIX_Timer_Control *_POSIX_Timer_Get (
     _Objects_Get( &_POSIX_Timer_Information, (Objects_Id) id, location );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Timer_Is_null
  *
  *  DESCRIPTION:

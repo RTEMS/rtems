@@ -23,8 +23,7 @@
 
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  14.2.1 Clocks, P1003.1b-1993, p. 263
  */
 

@@ -16,8 +16,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-/*PAGE
- *
+/*
  *  RWLock Attributes Get Process Shared
  */
 

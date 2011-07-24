@@ -27,8 +27,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_mutex_Initialize
  *
  *  This routine initializes a mutex at create time and set the control

@@ -32,8 +32,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Create_extension
  *
  *  This routine is an extension routine that is invoked as part
@@ -80,8 +79,7 @@ bool _RTEMS_tasks_Create_extension(
   return true;
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Start_extension
  *
  *  This extension routine is invoked when a task is started for the
@@ -100,8 +98,7 @@ void _RTEMS_tasks_Start_extension(
   api->pending_events = EVENT_SETS_NONE_PENDING;
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Delete_extension
  *
  *  This extension routine is invoked when a task is deleted.
@@ -134,8 +131,7 @@ void _RTEMS_tasks_Delete_extension(
   deleted->API_Extensions[ THREAD_API_RTEMS ] = NULL;
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Switch_extension
  *
  *  This extension routine is invoked at each context switch.
@@ -167,8 +163,7 @@ void _RTEMS_tasks_Switch_extension(
   }
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Post_switch_extension
  *
  *  This extension routine is invoked at each context switch.
@@ -236,8 +231,7 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
   }
 };
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Manager_initialization
  *
  *  This routine initializes all Task Manager related data structures.
@@ -286,8 +280,7 @@ void _RTEMS_tasks_Manager_initialization(void)
 
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Initialize_user_tasks
  *
  *  This routine creates and starts all configured user

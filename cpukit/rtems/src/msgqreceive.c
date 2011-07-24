@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  rtems_message_queue_receive
  *
  *  This directive dequeues a message from the designated message queue

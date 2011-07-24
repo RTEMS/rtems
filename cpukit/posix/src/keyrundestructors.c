@@ -20,8 +20,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/key.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Keys_Run_destructors
  *
  *  17.1.1 Thread-Specific Data Key Create, P1003.1c/Draft 10, p. 163

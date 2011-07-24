@@ -23,8 +23,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  11.3.2 Initializing and Destroying a Mutex, P1003.1c/Draft 10, p. 87
  *
  *  NOTE:  XXX Could be optimized so all the attribute error checking

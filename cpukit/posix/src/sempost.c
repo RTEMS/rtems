@@ -27,8 +27,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  11.2.7 Unlock a Semaphore, P1003.1b-1993, p.227
  */
 

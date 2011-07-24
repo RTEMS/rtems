@@ -21,8 +21,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _CORE_rwlock_Obtain_for_reading
  *
  *  This function waits for the rwlock to become available.  Optionally,

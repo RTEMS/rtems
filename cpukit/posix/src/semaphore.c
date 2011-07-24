@@ -28,8 +28,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Semaphore_Manager_initialization
  *
  *  This routine initializes all semaphore manager related data structures.

@@ -31,8 +31,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _Thread_Initialize
  *
  *  This routine initializes the specified the thread.  It allocates

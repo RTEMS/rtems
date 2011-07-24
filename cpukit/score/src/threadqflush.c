@@ -25,8 +25,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
 
-/*PAGE
- *
+/*
  *  _Thread_queue_Flush
  *
  *  This kernel routine flushes the given thread queue.

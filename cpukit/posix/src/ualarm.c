@@ -23,8 +23,7 @@
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_signals_Ualarm_TSR
  */
 

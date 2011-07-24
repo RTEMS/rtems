@@ -40,8 +40,7 @@ void _CORE_mutex_Seize(
 }
 #endif
 
-/*PAGE
- *
+/*
  *  _CORE_mutex_Seize (interrupt blocking support)
  *
  *  This routine blocks the caller thread after an attempt attempts to obtain

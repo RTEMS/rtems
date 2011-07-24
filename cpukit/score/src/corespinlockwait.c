@@ -21,8 +21,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _CORE_spinlock_Wait
  *
  *  This function waits for the spinlock to become available.  Optionally,

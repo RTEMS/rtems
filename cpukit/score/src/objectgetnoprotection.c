@@ -28,8 +28,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  * _Objects_Get_no_protection
  *
  * This routine sets the object pointer for the given

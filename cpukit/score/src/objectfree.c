@@ -28,8 +28,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _Objects_Free
  *
  *  DESCRIPTION:

@@ -23,8 +23,7 @@
 #ifndef _RTEMS_POSIX_MQUEUE_INL
 #define _RTEMS_POSIX_MQUEUE_INL
  
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Allocate
  */
  
@@ -35,8 +34,7 @@ RTEMS_INLINE_ROUTINE
     _Objects_Allocate( &_POSIX_Message_queue_Information );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Allocate_fd
  */
  
@@ -47,8 +45,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *
     _Objects_Allocate( &_POSIX_Message_queue_Information_fds );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Free
  */
  
@@ -59,8 +56,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
   _Objects_Free( &_POSIX_Message_queue_Information, &the_mq->Object );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Free_fd
  */
  
@@ -71,8 +67,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free_fd (
   _Objects_Free( &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Namespace_remove
  */
  
@@ -84,8 +79,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
     &_POSIX_Message_queue_Information, &the_mq->Object );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Get
  */
  
@@ -98,8 +92,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
     _Objects_Get( &_POSIX_Message_queue_Information, id, location );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Get_fd
  */
  
@@ -115,8 +108,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control_fd *_POSIX_Message_queue_Get_fd
   );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Is_null
  */
  
@@ -127,8 +119,7 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Message_queue_Is_null (
   return !the_mq;
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Priority_to_core
  */
  

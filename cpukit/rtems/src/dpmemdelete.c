@@ -24,8 +24,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
 
-/*PAGE
- *
+/*
  *  rtems_port_delete
  *
  *  This directive allows a thread to delete a dual-ported memory area

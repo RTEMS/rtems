@@ -19,8 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/apiext.h>
 
-/*PAGE
- *
+/*
  *  _API_extensions_Initialization
  */
 
@@ -29,8 +28,7 @@ void _API_extensions_Initialization( void )
  _Chain_Initialize_empty( &_API_extensions_List );
 }
 
-/*PAGE
- *
+/*
  *  _API_extensions_Add
  */
 
@@ -42,8 +40,7 @@ void _API_extensions_Add(
 }
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /*PAGE
-   *
+  /*
    *  _API_extensions_Run_predriver
    */
 
@@ -64,8 +61,7 @@ void _API_extensions_Add(
   }
 #endif
 
-/*PAGE
- *
+/*
  *  _API_extensions_Run_postdriver
  */
 
@@ -90,8 +86,7 @@ void _API_extensions_Run_postdriver( void )
   }
 }
 
-/*PAGE
- *
+/*
  *  _API_extensions_Run_postswitch
  */
 

@@ -32,8 +32,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_is_suspended
  *
  *  This directive returns a status indicating whether or not

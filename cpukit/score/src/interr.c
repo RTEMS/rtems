@@ -20,8 +20,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userext.h>
 
-/*PAGE
- *
+/*
  *  _Internal_error_Occurred
  *
  *  This routine will invoke the fatal error handler supplied by the user

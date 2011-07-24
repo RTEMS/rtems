@@ -47,8 +47,7 @@
 
 Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 
-/*PAGE
- *
+/*
  *  _RTEMS_API_Initialize
  *
  *  XXX

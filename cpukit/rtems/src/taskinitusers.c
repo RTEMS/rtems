@@ -34,8 +34,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_Initialize_user_tasks_body
  *
  *  This routine creates and starts all configured user

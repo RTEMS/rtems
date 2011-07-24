@@ -23,8 +23,7 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  _Rate_monotonic_Timeout
  *
  *  This routine processes a period ending.  If the owning thread

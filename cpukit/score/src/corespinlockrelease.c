@@ -21,8 +21,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _CORE_spinlock_Release
  *
  *  This function releases the spinlock.

@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_partition_create
  *
  *  This directive creates a partiton of fixed sized buffers from the

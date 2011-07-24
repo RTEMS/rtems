@@ -23,8 +23,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  11.3.1 Mutex Initialization Attributes, P1003.1c/Draft 10, p. 81
  */
 

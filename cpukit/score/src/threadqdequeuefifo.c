@@ -25,8 +25,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
 
-/*PAGE
- *
+/*
  *  _Thread_queue_Dequeue_fifo
  *
  *  This routine removes a thread from the specified threadq.

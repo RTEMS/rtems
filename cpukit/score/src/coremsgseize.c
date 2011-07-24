@@ -30,8 +30,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _CORE_message_queue_Seize
  *
  *  This kernel routine dequeues a message, copies the message buffer to

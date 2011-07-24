@@ -33,8 +33,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_get_note
  *
  *  This directive obtains the note from the specified notepad

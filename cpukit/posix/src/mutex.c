@@ -28,8 +28,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Mutex_Manager_initialization
  *
  *  This routine initializes all mutex manager related data structures.

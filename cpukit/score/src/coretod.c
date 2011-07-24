@@ -22,8 +22,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _TOD_Handler_initialization
  *
  *  This routine initializes the time of day handler.

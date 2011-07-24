@@ -226,8 +226,7 @@ void _Rate_monotonic_Update_statistics(
 }
 
 
-/*PAGE
- *
+/*
  *  rtems_rate_monotonic_period
  *
  *  This directive allows a thread to manipulate a rate monotonic timer.

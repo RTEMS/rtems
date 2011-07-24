@@ -23,8 +23,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _TOD_Set
  *
  *  This rountine sets the current date and time with the specified

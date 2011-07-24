@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  rtems_event_receive
  *
  *  This directive allows a thread to receive a set of events.

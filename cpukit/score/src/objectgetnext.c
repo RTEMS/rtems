@@ -28,8 +28,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  * _Objects_Get_next
  *
  * Like _Objects_Get, but considers the 'id' as a "hint" and

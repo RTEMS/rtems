@@ -33,8 +33,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_wake_after
  *
  *  This directive suspends the requesting thread for the given amount

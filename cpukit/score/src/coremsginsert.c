@@ -30,8 +30,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _CORE_message_queue_Insert_message
  *
  *  This kernel routine inserts the specified message into the

@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_get_segment
  *
  *  This directive will obtain a segment from the given region.

@@ -38,8 +38,7 @@ const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
 
 
 
-/*PAGE
- *
+/*
  *  _TOD_To_seconds
  *
  *  This routine returns the seconds from the epoch until the

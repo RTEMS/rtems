@@ -25,8 +25,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
 
-/*PAGE
- *
+/*
  *  _Thread_queue_First_fifo
  *
  *  This routines returns a pointer to the first thread on the

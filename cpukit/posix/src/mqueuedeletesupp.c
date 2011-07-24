@@ -43,8 +43,7 @@
   #include <rtems/bspIo.h>
 #endif
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Delete
  */
 

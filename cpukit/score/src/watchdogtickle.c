@@ -20,8 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _Watchdog_Tickle
  *
  *  This routine decrements the delta counter in response to a tick.  The

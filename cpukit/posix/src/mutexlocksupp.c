@@ -26,8 +26,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Mutex_Lock_support
  *
  *  A support routine which implements guts of the blocking, non-blocking, and

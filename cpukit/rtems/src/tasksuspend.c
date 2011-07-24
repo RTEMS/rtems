@@ -32,8 +32,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_suspend
  *
  *  This directive will place the specified thread in the "suspended"

@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  _Event_Timeout
  *
  *  This routine processes a thread which timeouts while waiting to

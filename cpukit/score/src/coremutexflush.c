@@ -27,8 +27,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_mutex_Flush
  *
  *  This function a flushes the mutex's task wait queue.

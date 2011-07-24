@@ -23,8 +23,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  13.6.2 Change the Priority Ceiling of a Mutex, P1003.1c/Draft 10, p. 131
  */
 

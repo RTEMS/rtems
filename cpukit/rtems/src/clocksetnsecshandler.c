@@ -23,8 +23,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_clock_set_nanoseconds_extension
  *
  *  This directive sets the BSP provided nanoseconds since last tick

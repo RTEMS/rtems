@@ -27,8 +27,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Message_queue_MP_Send_process_packet
  *
  */
@@ -83,8 +82,7 @@ void _Message_queue_MP_Send_process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _Message_queue_MP_Send_request_packet
  *
  */
@@ -192,8 +190,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-/*PAGE
- *
+/*
  *  _Message_queue_MP_Send_response_packet
  *
  */
@@ -250,8 +247,7 @@ void _Message_queue_MP_Send_response_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *
  *  _Message_queue_MP_Process_packet
  *
@@ -430,8 +426,7 @@ void _Message_queue_MP_Process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _Message_queue_MP_Send_object_was_deleted
  *
  */
@@ -449,8 +444,7 @@ void _Message_queue_MP_Send_object_was_deleted (
   );
 }
 
-/*PAGE
- *
+/*
  *  _Message_queue_MP_Send_extract_proxy
  *
  */
@@ -469,8 +463,7 @@ void _Message_queue_MP_Send_extract_proxy (
   );
 }
 
-/*PAGE
- *
+/*
  *  _Message_queue_MP_Get_packet
  *
  */
@@ -481,8 +474,7 @@ Message_queue_MP_Packet *_Message_queue_MP_Get_packet ( void )
 }
 
 
-/*PAGE
- *
+/*
  *  _Message_queue_Core_message_queue_mp_support
  *
  *  Input parameters:

@@ -21,8 +21,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
-/*PAGE
- *
+/*
  *  rtems_object_get_classic_name
  *
  *  This directive returns the name associated with the specified

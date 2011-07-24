@@ -27,8 +27,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  sem_open
  *
  *  Opens a named semaphore.  Used in conjunction with the sem_close

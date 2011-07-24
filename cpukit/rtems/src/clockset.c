@@ -24,8 +24,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_clock_set
  *
  *  This directive sets the date and time for this node.

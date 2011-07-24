@@ -32,8 +32,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_set_priority
  *
  *  This directive changes the priority of the specified thread.

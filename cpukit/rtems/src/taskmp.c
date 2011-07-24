@@ -27,8 +27,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_MP_Send_process_packet
  *
  */
@@ -71,8 +70,7 @@ void _RTEMS_tasks_MP_Send_process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_MP_Send_request_packet
  *
  */
@@ -129,8 +127,7 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_MP_Send_response_packet
  *
  */
@@ -177,8 +174,7 @@ void _RTEMS_tasks_MP_Send_response_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *
  *  _RTEMS_tasks_MP_Process_packet
  *
@@ -311,8 +307,7 @@ void _RTEMS_tasks_MP_Process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_MP_Send_object_was_deleted
  *
  *  This routine is not neededby the Tasks since a task
@@ -320,8 +315,7 @@ void _RTEMS_tasks_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_MP_Send_extract_proxy
  *
  *  This routine is not neededby the Tasks since a task
@@ -329,8 +323,7 @@ void _RTEMS_tasks_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _RTEMS_tasks_MP_Get_packet
  *
  */

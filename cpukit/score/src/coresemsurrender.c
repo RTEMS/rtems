@@ -28,8 +28,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_semaphore_Surrender
  *
  *  Input parameters:

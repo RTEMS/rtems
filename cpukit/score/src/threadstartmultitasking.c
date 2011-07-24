@@ -30,8 +30,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _Thread_Start_multitasking
  *
  *  This kernel routine readies the requested thread, the thread chain

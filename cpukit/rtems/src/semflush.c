@@ -40,8 +40,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_semaphore_flush
  *
  *  This directive allows a thread to flush the threads

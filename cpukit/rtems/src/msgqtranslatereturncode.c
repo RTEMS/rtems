@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Message_queue_Translate_core_message_queue_return_code
  *
  *  Input parameters:

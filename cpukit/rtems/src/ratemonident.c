@@ -23,8 +23,7 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  rtems_rate_monotonic_ident
  *
  *  This directive returns the system ID associated with

@@ -24,8 +24,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Condition_variables_Wait_support
  *
  *  A support routine which implements guts of the blocking, non-blocking, and

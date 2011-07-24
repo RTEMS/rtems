@@ -22,8 +22,7 @@
 #ifndef _RTEMS_POSIX_MUTEX_INL
 #define _RTEMS_POSIX_MUTEX_INL
  
-/*PAGE
- *
+/*
  *  _POSIX_Mutex_Allocate
  */
  
@@ -32,8 +31,7 @@ RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Allocate( void )
   return (POSIX_Mutex_Control *) _Objects_Allocate( &_POSIX_Mutex_Information );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Mutex_Free
  */
  
@@ -44,8 +42,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Free (
   _Objects_Free( &_POSIX_Mutex_Information, &the_mutex->Object );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Mutex_Is_null
  */
  

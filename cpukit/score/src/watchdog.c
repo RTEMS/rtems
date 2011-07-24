@@ -20,8 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _Watchdog_Handler_initialization
  *
  *  This routine initializes the watchdog handler.

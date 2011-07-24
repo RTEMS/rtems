@@ -24,8 +24,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/config.h>
 
-/*PAGE
- *
+/*
  *  _TOD_Tickle_ticks
  *
  *  This routine processes a clock tick.

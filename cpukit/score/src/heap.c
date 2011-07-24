@@ -35,8 +35,7 @@
 
 static uint32_t instance = 0;
 
-/*PAGE
- *
+/*
  *  _Heap_Initialize
  *
  *  This kernel routine initializes a heap.

@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  _Event_Manager_initialization
  *
  *  DESCRIPTION:

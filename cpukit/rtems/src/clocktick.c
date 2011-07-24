@@ -21,8 +21,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_clock_tick
  *
  *  This directive notifies the executve that a tick has occurred.

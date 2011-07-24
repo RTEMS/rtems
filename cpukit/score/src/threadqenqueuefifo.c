@@ -25,8 +25,7 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
 
-/*PAGE
- *
+/*
  *  _Thread_queue_Enqueue_fifo
  *
  *  This routine places a blocked thread on a FIFO thread queue.

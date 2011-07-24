@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  rtems_message_queue_get_number_pending
  *
  *  This directive returns the number of messages pending.

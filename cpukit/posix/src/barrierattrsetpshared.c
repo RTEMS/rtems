@@ -16,8 +16,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-/*PAGE
- *
+/*
  *  Barrier Attributes Set Process Shared
  */
 

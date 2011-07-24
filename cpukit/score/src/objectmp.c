@@ -23,8 +23,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Handler_early_initialization
  *
  */
@@ -47,8 +46,7 @@ void _Objects_MP_Handler_early_initialization(void)
   _Objects_Maximum_nodes = maximum_nodes;
 }
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Handler_initialization
  *
  */
@@ -78,8 +76,7 @@ void _Objects_MP_Handler_initialization(void)
 
 }
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Open
  *
  */
@@ -101,8 +98,7 @@ void _Objects_MP_Open (
 
 }
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Allocate_and_open
  *
  */
@@ -135,8 +131,7 @@ bool _Objects_MP_Allocate_and_open (
   return true;
 }
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Close
  *
  */
@@ -174,8 +169,7 @@ void _Objects_MP_Close (
   );
 }
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Global_name_search
  *
  */
@@ -243,8 +237,7 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   return OBJECTS_INVALID_NAME;
 }
 
-/*PAGE
- *
+/*
  *  _Objects_MP_Is_remote
  *
  */

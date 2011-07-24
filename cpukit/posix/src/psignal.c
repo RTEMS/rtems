@@ -92,8 +92,7 @@ Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 Watchdog_Control _POSIX_signals_Alarm_timer;
 Watchdog_Control _POSIX_signals_Ualarm_timer;
 
-/*PAGE
- *
+/*
  *  XXX - move these
  */
 
@@ -152,8 +151,7 @@ void _POSIX_signals_Post_switch_extension(
   }
 }
 
-/*PAGE
- *
+/*
  *  _POSIX_signals_Manager_Initialization
  */
 

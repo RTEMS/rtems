@@ -15,8 +15,7 @@
 
 #include <unistd.h>
 
-/*PAGE
- *
+/*
  *  12.2.3 Change Memory Protection, P1003.1b-1996, p. 277.
  *
  *  This is not a functional version but the SPARC backend for at least

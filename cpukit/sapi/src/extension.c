@@ -22,8 +22,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/extension.h>
 
-/*PAGE
- *
+/*
  *  _Extension_Manager_initialization
  *
  *  This routine initializes all extension manager related data structures.

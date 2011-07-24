@@ -30,8 +30,7 @@
 
 #include <string.h>  /* for memcpy() */
 
-/*PAGE
- *
+/*
  *  _Objects_Extend_information
  *
  *  This routine extends all object information related data structures.

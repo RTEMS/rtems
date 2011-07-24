@@ -25,8 +25,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_timer_reset
  *
  *  This directive allows a thread to reset a timer.

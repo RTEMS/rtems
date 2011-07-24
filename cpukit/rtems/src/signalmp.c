@@ -28,8 +28,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Signal_MP_Send_process_packet
  *
  *  This subprogram is not needed since there are no process
@@ -37,8 +36,7 @@
  *
  */
 
-/*PAGE
- *
+/*
  *  _Signal_MP_Send_request_packet
  *
  */
@@ -81,8 +79,7 @@ rtems_status_code _Signal_MP_Send_request_packet (
   return RTEMS_INTERNAL_ERROR;
 }
 
-/*PAGE
- *
+/*
  *  _Signal_MP_Send_response_packet
  *
  */
@@ -119,8 +116,7 @@ void _Signal_MP_Send_response_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *
  *  _Signal_MP_Process_packet
  *
@@ -160,8 +156,7 @@ void _Signal_MP_Process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _Signal_MP_Send_object_was_deleted
  *
  *  This subprogram is not needed since there are no objects
@@ -169,8 +164,7 @@ void _Signal_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _Signal_MP_Send_extract_proxy
  *
  *  This subprogram is not needed since there are no objects
@@ -178,8 +172,7 @@ void _Signal_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _Signal_MP_Get_packet
  *
  */

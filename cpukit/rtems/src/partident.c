@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_partition_ident
  *
  *  This directive returns the system ID associated with

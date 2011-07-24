@@ -24,8 +24,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*PAGE
- *
+/*
  *  The default condition variable attributes structure.
  */
 

@@ -28,8 +28,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _Objects_Shrink_information
  *
  *  This routine shrinks object information related data structures.

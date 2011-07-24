@@ -23,8 +23,7 @@
 #ifndef _RTEMS_POSIX_PTHREAD_INL
 #define _RTEMS_POSIX_PTHREAD_INL
  
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Allocate
  */
  
@@ -33,8 +32,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate( void )
   return (Thread_Control *) _Objects_Allocate( &_POSIX_Threads_Information );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Free
  */
  
@@ -45,8 +43,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free (
   _Objects_Free( &_POSIX_Threads_Information, &the_pthread->Object );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Get
  */
  
@@ -59,8 +56,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Get (
     _Objects_Get( &_POSIX_Threads_Information, (Objects_Id)id, location );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Is_null
  */
  

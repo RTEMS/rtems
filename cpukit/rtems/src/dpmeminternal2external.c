@@ -24,8 +24,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
 
-/*PAGE
- *
+/*
  *  rtems_port_internal_to_external
  *
  *  This directive converts an internal dual-ported memory address to an

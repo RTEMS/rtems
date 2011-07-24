@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  rtems_signal_send
  *
  *  This directive allows a thread to send signals to a thread.

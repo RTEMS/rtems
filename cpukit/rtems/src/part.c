@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  _Partition_Manager_initialization
  *
  *  This routine initializes all partition manager related

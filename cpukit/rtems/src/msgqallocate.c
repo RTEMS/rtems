@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Message_queue_Allocate
  *
  *  Allocate a message queue and the space for its messages

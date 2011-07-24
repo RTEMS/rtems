@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_resize_segment
  *
  *  This directive will try to resize segment to the new size 'size'

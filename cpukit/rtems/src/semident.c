@@ -49,8 +49,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_semaphore_ident
  *
  *  This directive returns the system ID associated with

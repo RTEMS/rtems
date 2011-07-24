@@ -23,8 +23,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _Thread_MP_Handler_initialization
  *
  */
@@ -53,8 +52,7 @@ void _Thread_MP_Handler_initialization (
 
 }
 
-/*PAGE
- *
+/*
  *  _Thread_MP_Allocate_proxy
  *
  */
@@ -104,8 +102,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
   return NULL;
 }
 
-/*PAGE
- *
+/*
  *  _Thread_MP_Find_proxy
  *
  */

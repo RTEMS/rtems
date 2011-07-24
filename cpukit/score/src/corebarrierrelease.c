@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_barrier_Release
  *
  *  Input parameters:

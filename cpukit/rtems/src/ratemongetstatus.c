@@ -27,8 +27,7 @@
   #include <rtems/score/timespec.h>
 #endif
 
-/*PAGE
- *
+/*
  *  rtems_rate_monotonic_get_status
  *
  *  This directive allows a thread to obtain status information on a

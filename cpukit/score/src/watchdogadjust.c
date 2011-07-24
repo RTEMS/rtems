@@ -20,8 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _Watchdog_Adjust
  *
  *  This routine adjusts the delta chain backward or forward in response

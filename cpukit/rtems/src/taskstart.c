@@ -32,8 +32,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_start
  *
  *  This directive readies the thread identified by the "id"

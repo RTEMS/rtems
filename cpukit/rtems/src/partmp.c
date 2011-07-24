@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Partition_MP_Send_process_packet
  *
  */
@@ -73,8 +72,7 @@ void _Partition_MP_Send_process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _Partition_MP_Send_request_packet
  *
  */
@@ -124,8 +122,7 @@ rtems_status_code _Partition_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-/*PAGE
- *
+/*
  *  _Partition_MP_Send_response_packet
  *
  */
@@ -168,8 +165,7 @@ void _Partition_MP_Send_response_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *
  *  _Partition_MP_Process_packet
  *
@@ -263,8 +259,7 @@ void _Partition_MP_Process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _Partition_MP_Send_object_was_deleted
  *
  *  This routine is not needed by the Partition since a partition
@@ -272,8 +267,7 @@ void _Partition_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _Partition_MP_Send_extract_proxy
  *
  */
@@ -293,8 +287,7 @@ void _Partition_MP_Send_extract_proxy (
 
 }
 
-/*PAGE
- *
+/*
  *  _Partition_MP_Get_packet
  *
  */

@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  rtems_message_queue_delete
  *
  *  This directive allows a thread to delete the message queue specified

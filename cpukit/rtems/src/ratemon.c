@@ -25,8 +25,7 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  _Rate_monotonic_Manager_initialization
  *
  *  This routine initializes all Rate Monotonic Manager related

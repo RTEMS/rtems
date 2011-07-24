@@ -39,8 +39,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  15.2.8 Get Message Queue Attributes, P1003.1b-1993, p. 283
  */
 

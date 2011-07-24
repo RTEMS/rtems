@@ -49,8 +49,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_semaphore_create
  *
  *  This directive creates a semaphore and sets the initial value based

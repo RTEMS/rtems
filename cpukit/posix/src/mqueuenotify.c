@@ -41,8 +41,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Notify_handler
  *
  */
@@ -60,8 +59,7 @@ void _POSIX_Message_queue_Notify_handler(
   _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );
 }
 
-/*PAGE
- *
+/*
  *  15.2.6 Notify Process that a Message is Available on a Queue,
  *         P1003.1b-1993, p. 280
  */

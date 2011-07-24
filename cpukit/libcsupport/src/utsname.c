@@ -15,8 +15,7 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  4.4.1 Get System Name, P1003.1b-1993, p. 90
  */
 

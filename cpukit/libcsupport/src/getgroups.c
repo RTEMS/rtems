@@ -9,8 +9,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-/*PAGE
- *
+/*
  *  4.2.3 Get Supplementary IDs, P1003.1b-1993, p. 86
  */
 

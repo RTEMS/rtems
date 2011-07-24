@@ -18,8 +18,7 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _Chain_Initialize
  *
  *  This kernel routine initializes a doubly linked chain.

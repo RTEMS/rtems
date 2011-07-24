@@ -26,8 +26,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Condition_variables_Manager_initialization
  *
  *  This routine initializes all condition variable manager related data

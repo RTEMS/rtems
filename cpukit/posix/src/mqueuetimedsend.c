@@ -41,8 +41,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
  *
  *  NOTE: P1003.4b/D8, p. 45 adds mq_timedsend().

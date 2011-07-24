@@ -23,8 +23,7 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  rtems_rate_monotonic_delete
  *
  *  This directive allows a thread to delete a rate monotonic timer.

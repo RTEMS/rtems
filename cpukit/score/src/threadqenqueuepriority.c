@@ -32,8 +32,7 @@
   #define CPU_UNROLL_ENQUEUE_PRIORITY FALSE
 #endif
 
-/*PAGE
- *
+/*
  *  _Thread_queue_Enqueue_priority
  *
  *  This routine places a blocked thread on a priority thread queue.

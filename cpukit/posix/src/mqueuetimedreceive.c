@@ -41,8 +41,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  15.2.5 Receive a Message From a Message Queue, P1003.1b-1993, p. 279
  *
  *  NOTE: P1003.4b/D8, p. 45 adds mq_timedreceive().

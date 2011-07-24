@@ -30,8 +30,7 @@
 #include <rtems/score/isr.h>
 
 #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-/*PAGE
- *
+/*
  *  _Objects_Name_to_id_string
  *
  *  These kernel routines search the object table(s) for the given

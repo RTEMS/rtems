@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_partition_get_buffer
  *
  *  This directive will obtain a buffer from a buffer partition.

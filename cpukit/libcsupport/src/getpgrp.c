@@ -15,8 +15,7 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  4.3.1 Get Process Group IDs, P1003.1b-1993, p. 89
  */
 

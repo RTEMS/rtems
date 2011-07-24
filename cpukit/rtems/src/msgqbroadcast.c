@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  rtems_message_queue_broadcast
  *
  *  This directive sends a message for every thread waiting on the queue

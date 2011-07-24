@@ -27,8 +27,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _Objects_Initialize_information
  *
  *  This routine initializes all object information related data structures.

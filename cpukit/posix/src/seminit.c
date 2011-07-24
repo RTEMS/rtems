@@ -27,8 +27,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  11.2.1 Initialize an Unnamed Semaphore, P1003.1b-1993, p.219
  */
 

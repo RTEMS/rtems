@@ -25,8 +25,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_timer_create
  *
  *  This directive creates a timer and performs some initialization.

@@ -49,8 +49,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  _Semaphore_Translate_core_mutex_return_code
  *
  *  Input parameters:
@@ -98,8 +97,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
   return _Semaphore_Translate_core_mutex_return_code_[status];
 }
 
-/*PAGE
- *
+/*
  *  _Semaphore_Translate_core_semaphore_return_code
  *
  *  Input parameters:

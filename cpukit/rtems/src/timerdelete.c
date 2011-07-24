@@ -25,8 +25,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_timer_delete
  *
  *  This directive allows a thread to delete a timer.

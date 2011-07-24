@@ -24,8 +24,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
 
-/*PAGE
- *
+/*
  *  rtems_port_ident
  *
  *  This directive returns the system ID associated with

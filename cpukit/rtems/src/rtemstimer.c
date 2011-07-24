@@ -26,8 +26,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _Timer_Manager_initialization
  *
  *  This routine initializes all timer manager related data structures.

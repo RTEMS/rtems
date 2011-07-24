@@ -49,8 +49,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_semaphore_obtain
  *
  *  This directive allows a thread to acquire a semaphore.

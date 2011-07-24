@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  _Region_Process_queue
  *
  *  If enough memory is available to satisfy the rtems_region_get_segment of

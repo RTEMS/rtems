@@ -32,8 +32,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  * rtems_task_set_note
  *
  *  This directive sets the specified notepad contents to the given

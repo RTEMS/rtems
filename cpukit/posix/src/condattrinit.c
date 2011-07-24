@@ -24,8 +24,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*PAGE
- *
+/*
  *  11.4.1 Condition Variable Initialization Attributes,
  *            P1003.1c/Draft 10, p. 96
  */

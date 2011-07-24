@@ -24,8 +24,7 @@
 
 #include <sys/param.h>
 
-/*PAGE
- *
+/*
  *  4.8.1 Get Configurable System Variables, P1003.1b-1993, p. 95
  */
 

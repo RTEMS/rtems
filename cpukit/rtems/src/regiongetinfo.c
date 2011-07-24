@@ -26,8 +26,7 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_get_information
  *
  *  This directive will return information about the region specified.

@@ -50,8 +50,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  _Semaphore_Manager_initialization
  *
  *  This routine initializes all semaphore manager related data structures.

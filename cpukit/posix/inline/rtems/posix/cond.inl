@@ -25,8 +25,7 @@
  
 #include <pthread.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Condition_variables_Allocate
  */
  
@@ -37,8 +36,7 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control
     _Objects_Allocate( &_POSIX_Condition_variables_Information );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Condition_variables_Free
  */
  
@@ -52,8 +50,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
   );
 }
  
-/*PAGE
- *
+/*
  *  _POSIX_Condition_variables_Is_null
  */
  

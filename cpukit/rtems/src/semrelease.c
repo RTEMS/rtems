@@ -49,8 +49,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_semaphore_release
  *
  *  This directive allows a thread to release a semaphore.

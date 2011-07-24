@@ -24,8 +24,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
 
-/*PAGE
- *
+/*
  *  rtems_port_create
  *
  *  This directive creates a port into a dual-ported memory area.

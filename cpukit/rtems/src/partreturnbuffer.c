@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_partition_return_buffer
  *
  *  This directive will return the given buffer to the specified

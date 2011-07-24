@@ -12,8 +12,7 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  4.1.1 Get Process and Parent Process IDs, P1003.1b-1993, p. 83
  */
 

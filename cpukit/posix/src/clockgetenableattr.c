@@ -24,8 +24,7 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  20.1.5 CPU-time Clock Attribute Access, P1003.4b/D8, p. 58
  */
 

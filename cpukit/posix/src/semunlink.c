@@ -27,8 +27,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  sem_unlink
  *
  *  Unlinks a named semaphore, sem_close must also be called to remove

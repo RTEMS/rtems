@@ -23,8 +23,7 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  rtems_rate_monotonic_create
  *
  *  This directive creates a rate monotonic timer and performs

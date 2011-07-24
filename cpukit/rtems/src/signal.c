@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  _Signal_Manager_initialization
  *
  *  This routine initializes all signal manager related data structures.

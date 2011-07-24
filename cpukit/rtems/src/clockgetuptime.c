@@ -24,8 +24,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_clock_get_uptime
  *
  *  This directive obtains the system uptime.  A timestamp is the seconds

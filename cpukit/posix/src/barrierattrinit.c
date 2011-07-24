@@ -18,8 +18,7 @@
 
 #include <rtems/system.h>
 
-/*PAGE
- *
+/*
  *  Barrier Attributes Initialization
  */
 

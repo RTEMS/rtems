@@ -49,8 +49,7 @@
 
 #include <rtems/score/interr.h>
 
-/*PAGE
- *
+/*
  *  rtems_semaphore_delete
  *
  *  This directive allows a thread to delete a semaphore specified by

@@ -34,8 +34,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  rtems_message_queue_create
  *
  *  This directive creates a message queue by allocating and initializing

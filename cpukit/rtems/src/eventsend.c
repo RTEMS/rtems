@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  rtems_event_send
  *
  *  This directive allows a thread send an event set to another thread.

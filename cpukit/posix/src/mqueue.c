@@ -40,8 +40,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Manager_initialization
  *
  *  This routine initializes all message_queue manager related data structures.

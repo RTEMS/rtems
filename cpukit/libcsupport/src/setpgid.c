@@ -10,8 +10,7 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  4.3.3 Set Process Group ID for Job Control, P1003.1b-1993, p. 89
  */
 

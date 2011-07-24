@@ -27,8 +27,7 @@ void _Debug_Manager_initialization( void )
   rtems_debug_disable( RTEMS_DEBUG_ALL_MASK );
 }
 
-/*PAGE
- *
+/*
  *  rtems_debug_enable
  */
 void rtems_debug_enable (

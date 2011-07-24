@@ -34,8 +34,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_return_segment
  *
  *  This directive will return a segment to its region.

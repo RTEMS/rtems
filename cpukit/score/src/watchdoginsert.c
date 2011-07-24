@@ -20,8 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _Watchdog_Insert
  *
  *  This routine inserts a watchdog timer on to the appropriate delta

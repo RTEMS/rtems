@@ -40,8 +40,7 @@
 #include <rtems/posix/time.h>
 
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Send_support
  */
 

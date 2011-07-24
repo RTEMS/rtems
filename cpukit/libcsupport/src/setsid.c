@@ -10,8 +10,7 @@
 
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  4.3.2 Create Session and Set Process Group ID, P1003.1b-1993, p. 88
  */
 

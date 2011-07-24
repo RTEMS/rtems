@@ -33,8 +33,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  rtems_message_queue_urgent
  *
  *  This routine implements the directives rtems_message_queue_urgent.  It

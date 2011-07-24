@@ -33,8 +33,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_delete
  *
  *  This directive allows a thread to delete itself or the thread

@@ -25,8 +25,7 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  rtems_timer_server_fire_when
  *
  *  This directive allows a thread to start a timer which will by

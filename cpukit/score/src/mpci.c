@@ -39,8 +39,7 @@
  */
 CORE_semaphore_Control _MPCI_Semaphore;
 
-/*PAGE
- *
+/*
  *  _MPCI_Handler_initialization
  *
  *  This subprogram performs the initialization necessary for this handler.
@@ -96,8 +95,7 @@ void _MPCI_Handler_initialization(
   );
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Create_server
  *
  *  This subprogram creates the MPCI receive server.
@@ -143,8 +141,7 @@ void _MPCI_Create_server( void )
   );
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Initialization
  *
  *  This subprogram initializes the MPCI driver by
@@ -156,8 +153,7 @@ void _MPCI_Initialization ( void )
   (*_MPCI_table->initialization)();
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Register_packet_processor
  *
  *  This routine registers the MPCI packet processor for the
@@ -173,8 +169,7 @@ void _MPCI_Register_packet_processor(
   _MPCI_Packet_processors[ the_class ] = the_packet_processor;
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Get_packet
  *
  *  This subprogram obtains a packet by invoking the user provided
@@ -204,8 +199,7 @@ MP_packet_Prefix *_MPCI_Get_packet ( void )
   return the_packet;
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Return_packet
  *
  *  This subprogram returns a packet by invoking the user provided
@@ -219,8 +213,7 @@ void _MPCI_Return_packet (
   (*_MPCI_table->return_packet)( the_packet );
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Send_process_packet
  *
  *  This subprogram sends a process packet by invoking the user provided
@@ -239,8 +232,7 @@ void _MPCI_Send_process_packet (
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Send_request_packet
  *
  *  This subprogram sends a request packet by invoking the user provided
@@ -285,8 +277,7 @@ uint32_t   _MPCI_Send_request_packet (
   return _Thread_Executing->Wait.return_code;
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Send_response_packet
  *
  *  This subprogram sends a response packet by invoking the user provided
@@ -303,8 +294,7 @@ void _MPCI_Send_response_packet (
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Receive_packet
  *
  *  This subprogram receives a packet by invoking the user provided
@@ -320,8 +310,7 @@ MP_packet_Prefix  *_MPCI_Receive_packet ( void )
   return the_packet;
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Process_response
  *
  *  This subprogram obtains a packet by invoking the user provided
@@ -353,8 +342,7 @@ Thread_Control *_MPCI_Process_response (
   return the_thread;
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Receive_server
  *
  */
@@ -405,8 +393,7 @@ Thread _MPCI_Receive_server(
   return 0;   /* unreached - only to remove warnings */
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Announce
  *
  */
@@ -418,8 +405,7 @@ void _MPCI_Announce ( void )
   _Thread_Enable_dispatch();
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Internal_packets_Send_process_packet
  *
  */
@@ -449,8 +435,7 @@ void _MPCI_Internal_packets_Send_process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Internal_packets_Send_request_packet
  *
  *  This subprogram is not needed since there are no request
@@ -458,8 +443,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _MPCI_Internal_packets_Send_response_packet
  *
  *  This subprogram is not needed since there are no response
@@ -467,8 +451,7 @@ void _MPCI_Internal_packets_Send_process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *
  *  _MPCI_Internal_packets_Process_packet
  *
@@ -508,8 +491,7 @@ void _MPCI_Internal_packets_Process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _MPCI_Internal_packets_Send_object_was_deleted
  *
  *  This subprogram is not needed since there are no objects
@@ -517,8 +499,7 @@ void _MPCI_Internal_packets_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _MPCI_Internal_packets_Send_extract_proxy
  *
  *  This subprogram is not needed since there are no objects
@@ -526,8 +507,7 @@ void _MPCI_Internal_packets_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _MPCI_Internal_packets_Get_packet
  *
  */

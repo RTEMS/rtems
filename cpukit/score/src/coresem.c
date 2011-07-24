@@ -28,8 +28,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  CORE_semaphore_Initialize
  *
  *  This function initialize a semaphore and sets the initial value based

@@ -30,8 +30,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _Thread_Load_environment
  *
  *  Load starting environment for another thread from its start area in the

@@ -28,8 +28,7 @@
 #include <rtems/seterr.h>
 
 
-/*PAGE
- *
+/*
  *  sem_close
  *
  *  Routine to close a semaphore that has been opened or initialized.

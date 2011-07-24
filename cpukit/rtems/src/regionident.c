@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_ident
  *
  *  This directive returns the system ID associated with

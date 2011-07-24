@@ -30,8 +30,7 @@
 #include <stdio.h>
 
 
-/*PAGE
- *
+/*
  *  _POSIX_signals_Unblock_thread
  */
 

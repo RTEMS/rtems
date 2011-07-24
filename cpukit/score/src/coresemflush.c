@@ -28,8 +28,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_semaphore_Flush
  *
  *  This function a flushes the semaphore's task wait queue.

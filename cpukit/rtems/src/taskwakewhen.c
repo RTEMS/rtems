@@ -33,8 +33,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 
-/*PAGE
- *
+/*
  *  rtems_task_wake_when
  *
  *  This directive blocks the requesting thread until the given date and

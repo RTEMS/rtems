@@ -29,8 +29,7 @@
 #include <rtems/posix/time.h>
 #include <stdio.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_signals_Clear_process_signals
  */
 

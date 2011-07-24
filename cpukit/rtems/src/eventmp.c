@@ -26,8 +26,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/support.h>
 
-/*PAGE
- *
+/*
  *  _Event_MP_Send_process_packet
  *
  *  This subprogram is not needed since there are no process
@@ -35,8 +34,7 @@
  *
  */
 
-/*PAGE
- *
+/*
  *  _Event_MP_Send_request_packet
  *
  */
@@ -81,8 +79,7 @@ rtems_status_code _Event_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-/*PAGE
- *
+/*
  *  _Event_MP_Send_response_packet
  *
  */
@@ -119,8 +116,7 @@ void _Event_MP_Send_response_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *
  *  _Event_MP_Process_packet
  *
@@ -161,8 +157,7 @@ void _Event_MP_Process_packet (
   }
 }
 
-/*PAGE
- *
+/*
  *  _Event_MP_Send_object_was_deleted
  *
  *  This subprogram is not needed since there are no objects
@@ -170,8 +165,7 @@ void _Event_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _Event_MP_Send_extract_proxy
  *
  *  This subprogram is not needed since there are no objects
@@ -179,8 +173,7 @@ void _Event_MP_Process_packet (
  *
  */
 
-/*PAGE
- *
+/*
  *  _Event_MP_Get_packet
  *
  */

@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
-/*PAGE
- *
+/*
  *  rtems_signal_catch
  *
  *  This directive allows a thread to specify what action to take when

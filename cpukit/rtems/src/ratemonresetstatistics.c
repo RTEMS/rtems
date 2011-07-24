@@ -23,8 +23,7 @@
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  rtems_rate_monotonic_reset_statistics
  *
  *  This directive allows a thread to reset the statistics information

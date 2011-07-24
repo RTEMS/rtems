@@ -25,8 +25,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/threadsup.h>
 
-/*PAGE
- *
+/*
  *  18.2.3.1 Establishing Cancellation Handlers, P1003.1c/Draft 10, p. 184
  */
 

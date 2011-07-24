@@ -256,8 +256,7 @@ extern struct rtems_ftpd_configuration rtems_ftpd_configuration;
 /* this is not prototyped in strict ansi mode */
 FILE *fdopen (int fildes, const char *mode);
 
-/*PAGE
- * SessionInfo structure.
+/*SessionInfo structure.
  *
  * The following structure is allocated for each session.
  */
@@ -315,8 +314,7 @@ static int ftpd_timeout = 0;
  */
 static int ftpd_access = 0;
 
-/*PAGE
- *
+/*
  * serr
  *
  * Return error string corresponding to current 'errno'.
@@ -330,8 +328,7 @@ serr(void)
   return strerror(err);
 }
 
-/*PAGE
- *
+/*
  * Utility routines for access control.
  *
  */
@@ -348,15 +345,13 @@ can_write(void)
   return (ftpd_access & FTPD_NO_WRITE) == 0;
 }
 
-/*PAGE
- *
+/*
  * Task pool management routines
  *
  */
 
 
-/*PAGE
- *
+/*
  * task_pool_done
  *
  * Cleanup task pool.
@@ -389,8 +384,7 @@ task_pool_done(int count)
   task_pool.mutex = -1;
 }
 
-/*PAGE
- *
+/*
  * task_pool_init
  *
  * Initialize task pool.
@@ -484,8 +478,7 @@ task_pool_init(int count, rtems_task_priority priority)
   return 1;
 }
 
-/*PAGE
- *
+/*
  * task_pool_obtain
  *
  * Obtain free task from task pool.
@@ -515,8 +508,7 @@ task_pool_obtain(void)
   return info;
 }
 
-/*PAGE
- *
+/*
  * task_pool_release
  *
  * Return task obtained by 'obtain()' back to the task pool.
@@ -543,8 +535,7 @@ task_pool_release(FTPD_SessionInfo_t* info)
  * End of task pool routines
  */
 
-/*PAGE
- *
+/*
  * Function: send_reply
  *
  *
@@ -568,8 +559,7 @@ send_reply(FTPD_SessionInfo_t  *info, int code, char *text)
 }
 
 
-/*PAGE
- *
+/*
  * close_socket
  *
  * Close socket.
@@ -602,8 +592,7 @@ set_socket_timeout(int s, int seconds)
   return res;
 }
 
-/*PAGE
- *
+/*
  * close_socket
  *
  * Close socket.
@@ -629,8 +618,7 @@ close_socket(int s)
   return 1;
 }
 
-/*PAGE
- *
+/*
  * data_socket
  *
  * Create data socket for session.
@@ -701,8 +689,7 @@ data_socket(FTPD_SessionInfo_t *info)
   return s;
 }
 
-/*PAGE
- *
+/*
  * close_data_socket
  *
  * Close data socket for session.
@@ -729,8 +716,7 @@ close_data_socket(FTPD_SessionInfo_t *info)
   info->use_default = 1;
 }
 
-/*PAGE
- *
+/*
  * close_stream
  *
  * Close control stream of session.
@@ -763,8 +749,7 @@ close_stream(FTPD_SessionInfo_t* info)
 }
 
 
-/*PAGE
- *
+/*
  * send_mode_reply
  *
  * Sends BINARY/ASCII reply string depending on current transfer mode.
@@ -785,8 +770,7 @@ send_mode_reply(FTPD_SessionInfo_t *info)
     send_reply(info, 150, "Opening ASCII mode data connection.");
 }
 
-/*PAGE
- *
+/*
  * command_retrieve
  *
  * Perform the "RETR" command (send file to client).
@@ -904,8 +888,7 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
 }
 
 
-/*PAGE
- *
+/*
  * discard
  *
  * Analog of `write' routine that just discards passed data
@@ -927,8 +910,7 @@ discard(int fd, void const* buf, size_t count)
   return count;
 }
 
-/*PAGE
- *
+/*
  * command_store
  *
  * Performs the "STOR" command (receive data from client).
@@ -1158,8 +1140,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
 }
 
 
-/*PAGE
- *
+/*
  * send_dirline
  *
  * Sends one line of LIST command reply corresponding to single file.
@@ -1256,8 +1237,7 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
   return 1;
 }
 
-/*PAGE
- *
+/*
  * command_list
  *
  * Send file list to client.
@@ -1337,8 +1317,7 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
 }
 
 
-/*PAGE
- *
+/*
  * command_cwd
  *
  * Change current working directory.
@@ -1367,8 +1346,7 @@ command_cwd(FTPD_SessionInfo_t  *info, char *dir)
 }
 
 
-/*PAGE
- *
+/*
  * command_pwd
  *
  * Send current working directory to client.
@@ -1411,8 +1389,7 @@ command_pwd(FTPD_SessionInfo_t  *info)
   }
 }
 
-/*PAGE
- *
+/*
  * command_mdtm
  *
  * Handle FTP MDTM command (send file modification time to client)/
@@ -1452,8 +1429,7 @@ command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
   }
 }
 
-/*PAGE
- *
+/*
  * command_port
  *
  * This procedure fills address for data connection given the IP address and
@@ -1522,8 +1498,7 @@ command_port(FTPD_SessionInfo_t *info, char const *args)
 }
 
 
-/*PAGE
- *
+/*
  * command_pasv
  *
  * Handle FTP PASV command.
@@ -1594,8 +1569,7 @@ command_pasv(FTPD_SessionInfo_t *info)
 }
 
 
-/*PAGE
- *
+/*
  * skip_options
  *
  * Utility routine to skip options (if any) from input command.
@@ -1635,8 +1609,7 @@ skip_options(char **p)
   *p = buf;
 }
 
-/*PAGE
- *
+/*
  * split_command
  *
  * Split command into command itself, options, and arguments. Command itself
@@ -1680,8 +1653,7 @@ split_command(char *buf, char **cmd, char **opts, char **args)
     *p++ = '\0';
 }
 
-/*PAGE
- *
+/*
  * exec_command
  *
  * Parse and execute FTP command.
@@ -1894,8 +1866,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
 }
 
 
-/*PAGE
- *
+/*
  * session
  *
  * This task handles single session.  It is waked up when the FTP daemon gets a
@@ -1969,8 +1940,7 @@ session(rtems_task_argument arg)
 }
 
 
-/*PAGE
- *
+/*
  * daemon
  *
  * This task runs forever.  It waits for service requests on the FTP port
@@ -2068,8 +2038,7 @@ daemon(rtems_task_argument args __attribute__((unused)))
 }
 
 
-/*PAGE
- *
+/*
  * rtems_ftpd_start
  *
  * Here, we start the FTPD task which waits for FTP requests and services

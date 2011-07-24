@@ -31,8 +31,7 @@
 #include <rtems/score/wkspace.h>
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /*PAGE
-   *
+  /*
    *  _CORE_message_queue_Flush_waiting_threads
    *
    *  This function flushes the message_queue's task wait queue.  The number

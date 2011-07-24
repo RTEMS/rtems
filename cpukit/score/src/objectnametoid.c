@@ -27,8 +27,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  *  _Objects_Name_to_id_u32
  *
  *  These kernel routines search the object table(s) for the given

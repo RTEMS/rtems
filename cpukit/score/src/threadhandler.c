@@ -56,8 +56,7 @@
 #endif
 
 
-/*PAGE
- *
+/*
  *  _Thread_Handler
  *
  *  This routine is the "primal" entry point for all threads.

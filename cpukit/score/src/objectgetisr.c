@@ -28,8 +28,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
-/*PAGE
- *
+/*
  * _Objects_Get_isr_disable
  *
  * This routine sets the object pointer for the given

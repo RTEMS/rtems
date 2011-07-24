@@ -24,8 +24,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
- *
+/*
  *  _Dual_ported_memory_Manager_initialization
  *
  *  This routine initializes all dual-ported memory manager related

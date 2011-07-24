@@ -30,8 +30,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
-/*PAGE
- *
+/*
  *  _Thread_Stack_Allocate
  *
  *  Allocate the requested stack space for the thread.

@@ -21,8 +21,7 @@
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpci.h>
 
-/*PAGE
- *
+/*
  *  _Multiprocessing_Manager_initialization
  *
  */
@@ -31,8 +30,7 @@ void _Multiprocessing_Manager_initialization ( void )
 {
 }
 
-/*PAGE
- *
+/*
  *  rtems_multiprocessing_announce
  *
  */

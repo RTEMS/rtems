@@ -32,8 +32,7 @@
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Threads_Initialize_user_threads_body
  *
  *  This routine creates and starts all configured user

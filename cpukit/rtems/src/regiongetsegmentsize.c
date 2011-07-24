@@ -25,8 +25,7 @@
 #include <rtems/score/states.h>
 #include <rtems/score/apimutex.h>
 
-/*PAGE
- *
+/*
  *  rtems_region_get_segment_size
  *
  *  This directive will return the size of the segment indicated

@@ -45,8 +45,7 @@
 /* pure ANSI mode does not have this prototype */
 size_t strnlen(const char *, size_t);
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Create_support
  *
  *  This routine does the actual creation and initialization of

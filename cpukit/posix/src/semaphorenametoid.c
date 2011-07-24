@@ -27,8 +27,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_Semaphore_Name_to_id
  *
  *  Look up the specified name and attempt to locate the id

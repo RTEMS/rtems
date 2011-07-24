@@ -47,8 +47,7 @@
 #include <rtems/posix/spinlock.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  _POSIX_API_Initialize
  *
  *  XXX

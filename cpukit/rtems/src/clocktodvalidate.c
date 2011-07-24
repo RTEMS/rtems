@@ -31,8 +31,7 @@ const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
   { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
 
-/*PAGE
- *
+/*
  *  _TOD_Validate
  *
  *  This kernel routine checks the validity of a date and time structure.

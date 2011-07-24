@@ -34,8 +34,7 @@
 #include <rtems/bspIo.h>
 #endif
 
-/*PAGE
- *
+/*
  *  _Objects_Allocate
  *
  *  DESCRIPTION:

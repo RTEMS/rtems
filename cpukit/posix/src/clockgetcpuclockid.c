@@ -24,8 +24,7 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/time.h>
 
-/*PAGE
- *
+/*
  *  20.1.3 Accessing a Process CPU-time CLock, P1003.4b/D8, p. 55
  */
 

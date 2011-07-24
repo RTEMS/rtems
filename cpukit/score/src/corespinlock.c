@@ -25,8 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-/*PAGE
- *
+/*
  *  _CORE_spinlock_Initialize
  *
  *  This function initialize a spinlock and sets the initial value based

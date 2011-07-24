@@ -30,8 +30,7 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
+/*
  *  _Thread_Delay_ended
  *
  *  This routine processes a thread whose delay period has ended.

@@ -224,8 +224,7 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
   CORE_message_queue_Submit_types priority
 );
 
-/*PAGE
- *
+/*
  *  _POSIX_Message_queue_Translate_core_message_queue_return_code
  *
  *  DESCRIPTION:

@@ -20,8 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
 
-/*PAGE
- *
+/*
  *  _Watchdog_Remove
  *
  *  The routine removes a watchdog from a delta chain and updates
