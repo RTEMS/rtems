@@ -1,13 +1,5 @@
-/*  Priority_task
- *
- *  This routine serves as a test task.  It verifies the semaphore manager.
- *
- *  Input parameters:
- *    its_index - priority index
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,7 +23,7 @@ rtems_task Priority_task(
   rtems_task_priority its_priority;
   rtems_task_priority current_priority;
   rtems_status_code   status;
-  uint32_t      index;
+  uint32_t            index;
 
   its_priority = Task_priority[ its_index ];
 
@@ -51,7 +43,12 @@ rtems_task Priority_task(
   directive_failed( status, "rtems_semaphore_obtain of SM2" );
 
   if ( its_priority < PRIORITY_INHERIT_BASE_PRIORITY ) {
-    printf( "PRI%" PRIdrtems_task_argument " - WHY AM I HERE? (pri=%" PRIdrtems_task_priority ")", its_index, its_priority );
+    printf(
+      "PRI%" PRIdrtems_task_argument " - WHY AM I HERE? (pri=%"
+        PRIdrtems_task_priority ")",
+     its_index,
+     its_priority
+    );
     rtems_test_exit( 0 );
   }
 
@@ -67,7 +64,12 @@ rtems_task Priority_task(
     status = rtems_task_set_priority( RTEMS_SELF, priority, &old_priority );
     directive_failed( status, "rtems_task_set_priority with resource" );
     if ( priority != old_priority ) {
-      printf( "priority != old_priority (%" PRIdrtems_task_priority " != %" PRIdrtems_task_priority ")\n", priority, old_priority );
+      printf(
+        "priority != old_priority (%" PRIdrtems_task_priority
+            " != %" PRIdrtems_task_priority ")\n",
+         priority,
+         old_priority
+      );
       rtems_test_exit(0);
     }
   }
@@ -105,7 +107,10 @@ rtems_task Priority_task(
     &current_priority
   );
   directive_failed( status, "PRI5 rtems_task_set_priority CURRENT" );
-  printf( "PRI5 - priority of PRI5 is %" PRIdrtems_task_priority "\n", current_priority );
+  printf(
+    "PRI5 - priority of PRI5 is %" PRIdrtems_task_priority "\n",
+     current_priority
+  );
 
   (void) rtems_task_suspend( RTEMS_SELF );
 }

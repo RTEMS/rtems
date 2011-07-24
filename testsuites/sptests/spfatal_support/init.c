@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -127,9 +127,13 @@ void Fatal_extension(
   if ( is_internal !=  FATAL_ERROR_EXPECTED_IS_INTERNAL )
   {
     if ( is_internal == TRUE )
-      printk( "ERROR==> Fatal Extension is internal set to TRUE expected FALSE\n" );
+      printk(
+        "ERROR==> Fatal Extension is internal set to TRUE expected FALSE\n"
+      );
     else
-      printk( "ERROR==> Fatal Extension is internal set to FALSE expected TRUE\n" );
+      printk(
+        "ERROR==> Fatal Extension is internal set to FALSE expected TRUE\n"
+      );
   }
 
   if ( error !=  FATAL_ERROR_EXPECTED_ERROR ) {

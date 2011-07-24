@@ -1,14 +1,5 @@
-/*  Task_1
- *
- *  This routine serves as a test task.  It verifies the basic task
- *  switching capabilities of the executive.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2009 embedded brains GmbH.
@@ -124,10 +115,14 @@ rtems_task Task_1(
   directive_failed( status, "rtems_timer_server_fire_after" );
 
   status = rtems_timer_get_information( tmid, &info );
-  printf( "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-    info.start_time + info.initial );
-  printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-    schedule_time() );
+  printf(
+    "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
+    info.start_time + info.initial
+  );
+  printf(
+    "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
+    schedule_time()
+  );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
   status = rtems_task_wake_after( 1 * rtems_clock_get_ticks_per_second() );
@@ -140,10 +135,14 @@ rtems_task Task_1(
 
   status = rtems_timer_get_information( tmid, &info );
   directive_failed( status, "rtems_timer_get_information" );
-  printf( "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-    info.start_time + info.initial );
-  printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-    schedule_time() );
+  printf(
+    "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
+    info.start_time + info.initial
+  );
+  printf(
+    "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
+    schedule_time()
+  );
   rtems_test_assert( (info.start_time + info.initial) == schedule_time() );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
@@ -157,10 +156,14 @@ rtems_task Task_1(
 
   status = rtems_timer_get_information( tmid, &info );
   directive_failed( status, "rtems_timer_get_information" );
-  printf( "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-    info.start_time + info.initial );
-  printf( "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
-    schedule_time() );
+  printf(
+    "Timer 1 scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
+     info.start_time + info.initial
+  );
+  printf(
+    "Timer Server scheduled for %" PRIdWatchdog_Interval " ticks since boot\n",
+     schedule_time()
+  );
   rtems_test_assert( (info.start_time + info.initial) == schedule_time() );
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );

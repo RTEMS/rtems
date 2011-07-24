@@ -1,14 +1,5 @@
-/*  Task_2
- *
- *  This routine serves as a test task.  Plays with priorities to verify
- *  that the highest priority task is always executed.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,7 +28,8 @@ rtems_task Task_2(
     status = rtems_task_get_note( RTEMS_SELF, RTEMS_NOTEPAD_8, &the_priority );
     directive_failed( status, "rtems_task_get_note" );
     printf(
-"TA2 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - current priority: %02" PRIdrtems_task_priority "\n",
+      "TA2 - rtems_task_get_note - get RTEMS_NOTEPAD_8 - "
+          "current priority: %02" PRIdrtems_task_priority "\n",
       the_priority
     );
 
@@ -61,14 +53,18 @@ rtems_task Task_2(
 
     } else {
 
-      printf( "TA2 - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8: %02" PRIdrtems_task_priority "\n",
-              the_priority
+      printf(
+        "TA2 - rtems_task_set_note - set TA1's RTEMS_NOTEPAD_8: "
+            "%02" PRIdrtems_task_priority "\n",
+        the_priority
       );
       status = rtems_task_set_note(Task_id[ 1 ], RTEMS_NOTEPAD_8, the_priority);
       directive_failed( status, "rtems_task_set_note" );
 
-      printf( "TA2 - rtems_task_set_priority - set TA1's priority: %02" PRIdrtems_task_priority "\n",
-              the_priority
+      printf(
+        "TA2 - rtems_task_set_priority - set TA1's priority: "
+            "%02" PRIdrtems_task_priority "\n",
+        the_priority
       );
       status = rtems_task_set_priority(
                  Task_id[ 1 ],

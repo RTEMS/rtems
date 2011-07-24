@@ -2,7 +2,7 @@
  *  Interrupt Disable/Enable Tests
  *  Clock Tick from task level
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -48,8 +48,9 @@ rtems_timer_service_routine test_isr_in_progress(
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
-  rtems_attribute level_attribute, level_attribute_macro;
-  bool                  in_isr;
+  rtems_attribute level_attribute;
+  rtems_attribute level_attribute_macro;
+  bool            in_isr;
 
   puts( "interrupt is in progress (use body)" );
   in_isr = rtems_interrupt_is_in_progress();
@@ -250,7 +251,9 @@ rtems_task Init(
   }
   switch ( blocked_task_status ) {
      case -1:
-       puts( "clock_tick with task preempt -- task blocked, timer did not fire" );
+       puts(
+         "clock_tick with task preempt -- task blocked, timer did not fire"
+       );
        rtems_test_exit(0);
        break;
      case 1:
@@ -315,7 +318,6 @@ rtems_task Init(
   check_isr_worked( "inline", isr_in_progress_body );
 
   check_isr_worked( "body", isr_in_progress_body );
-
 
   puts( "*** END OF TEST 37 ***" );
   rtems_test_exit( 0 );

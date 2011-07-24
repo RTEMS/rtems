@@ -117,13 +117,16 @@ static void obtain_callback(rtems_id timer_id, void *arg)
       sc = rtems_semaphore_obtain(mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
       break;
     case MESSAGE_QUEUE:
-      sc = rtems_message_queue_receive(message_queue, buf, &size, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+      sc = rtems_message_queue_receive(
+        message_queue, buf, &size, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
       break;
     case REGION:
-      sc = rtems_region_get_segment(region, 1, RTEMS_WAIT, RTEMS_NO_TIMEOUT, &new_region_item);
+      sc = rtems_region_get_segment(
+        region, 1, RTEMS_WAIT, RTEMS_NO_TIMEOUT, &new_region_item);
       break;
     case EVENT:
-      sc = rtems_event_receive(RTEMS_EVENT_0, RTEMS_EVENT_ALL | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
+      sc = rtems_event_receive(
+        RTEMS_EVENT_0, RTEMS_EVENT_ALL | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
       break;
     case BARRIER:
       sc = rtems_barrier_wait(barrier, RTEMS_NO_TIMEOUT);
@@ -433,7 +436,8 @@ rtems_task Init(rtems_task_argument argument)
 
   do {
     region_item = new_region_item;
-    sc = rtems_region_get_segment(region, 1, RTEMS_NO_WAIT, 0, &new_region_item);
+    sc = rtems_region_get_segment(
+        region, 1, RTEMS_NO_WAIT, 0, &new_region_item);
   } while (sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_barrier_create(

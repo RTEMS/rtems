@@ -1,12 +1,5 @@
-/*  Screen7
- *
- *  This routine generates error screen 7 for test 9.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -260,7 +253,10 @@ void Screen7()
     RTEMS_INVALID_ADDRESS,
     "rtems_message_queue_receive NULL buffer"
   );
-  puts( "TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL buffer" );
+  puts(
+    "TA1 - rtems_message_queue_receive - Q 1 - "
+      "RTEMS_INVALID_ADDRESS NULL buffer"
+  );
 
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
@@ -274,7 +270,10 @@ void Screen7()
     RTEMS_INVALID_ADDRESS,
     "rtems_message_queue_receive NULL size"
   );
-  puts( "TA1 - rtems_message_queue_receive - Q 1 - RTEMS_INVALID_ADDRESS NULL size" );
+  puts(
+    "TA1 - rtems_message_queue_receive - Q 1 - "
+      "RTEMS_INVALID_ADDRESS NULL size"
+  );
 
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
@@ -393,6 +392,8 @@ void Screen7()
     RTEMS_INVALID_ADDRESS,
     "rtems_message_queue_broadcast with NULL count"
   );
-  puts( "TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS" );
+  puts(
+    "TA1 - rtems_message_queue_broadcast - NULL count - RTEMS_INVALID_ADDRESS"
+  );
 
 }

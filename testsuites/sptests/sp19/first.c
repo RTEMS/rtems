@@ -1,15 +1,5 @@
-/*  First_FP_task
- *
- *  This routine serves as a floating point test task.  It verifies the
- *  basic task switching capabilities of the executive when floating
- *  point is configured.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,13 +37,16 @@ rtems_task First_FP_task(
   FP_LOAD( FP_factors[ task_index ] );
 
   put_name( Task_name[ task_index ], FALSE );
-  printf( " - integer base = (0x%" PRIx32 ")\n", INTEGER_factors[ task_index ] );
+  printf(
+    " - integer base = (0x%" PRIx32 ")\n",
+    INTEGER_factors[ task_index ]
+  );
   put_name( Task_name[ task_index ], FALSE );
-#if ( RTEMS_HAS_HARDWARE_FP == 1 )
-  printf( " - float base = (%g)\n", FP_factors[ task_index ] );
-#else
-  printf( " - float base = (NA)\n" );
-#endif
+  #if ( RTEMS_HAS_HARDWARE_FP == 1 )
+    printf( " - float base = (%g)\n", FP_factors[ task_index ] );
+  #else
+    printf( " - float base = (NA)\n" );
+  #endif
 
   if ( argument == 0 ) {
     status = rtems_task_restart( RTEMS_SELF, 1 );

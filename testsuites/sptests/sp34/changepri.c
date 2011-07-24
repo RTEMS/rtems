@@ -80,7 +80,12 @@ rtems_task BlockingTasks(rtems_task_argument arg)
   status = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &opri);
   directive_failed( status, "rtems_task_set_priority" );
 
-  printf("semaphore_obtain -- BlockingTask %" PRIdrtems_task_argument " @ pri=%" PRIdrtems_task_priority ") blocks\n", arg, opri);
+  printf(
+    "semaphore_obtain -- BlockingTask %" PRIdrtems_task_argument
+      " @ pri=%" PRIdrtems_task_priority ") blocks\n",
+    arg,
+    opri
+  );
   status = rtems_semaphore_obtain(Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   directive_failed( status, "rtems_semaphore_obtain" );
 
@@ -88,7 +93,12 @@ rtems_task BlockingTasks(rtems_task_argument arg)
   status = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &npri);
   directive_failed( status, "rtems_task_set_priority" );
 
-  printf("semaphore_obtain -- BlockingTask %" PRIdrtems_task_argument " @ pri=%" PRIdrtems_task_priority ") returns\n", arg, npri);
+  printf(
+    "semaphore_obtain -- BlockingTask %" PRIdrtems_task_argument
+      " @ pri=%" PRIdrtems_task_priority ") returns\n",
+    arg,
+    npri
+  );
 
   (void) rtems_task_delete( RTEMS_SELF );
 }
@@ -108,8 +118,8 @@ rtems_task Init(rtems_task_argument ignored)
   status = rtems_semaphore_create(
     rtems_build_name ('S', 'E', 'M', '1'),           /* name */
     0,                                               /* initial count = 0 */
-    RTEMS_LOCAL                   |
-    RTEMS_COUNTING_SEMAPHORE      |
+    RTEMS_LOCAL              |
+    RTEMS_COUNTING_SEMAPHORE |
     RTEMS_PRIORITY,
     0,
     &Semaphore);                                    /* *id */
@@ -161,7 +171,7 @@ rtems_task Init(rtems_task_argument ignored)
 
   /* exit the test */
   puts( "*** END OF TEST 34 ***" );
-  exit(0);
+  rtems_test_exit(0);
 }
 
 /* configuration information */

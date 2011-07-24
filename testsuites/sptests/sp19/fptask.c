@@ -1,15 +1,5 @@
-/*  FP_task
- *
- *  This routine serves as a floating point test task.  It verifies the
- *  basic task switching capabilities of the executive when floating
- *  point is configured.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,8 +24,8 @@ rtems_task FP_task(
   rtems_status_code status;
   rtems_id          tid;
   rtems_time_of_day time;
-  uint32_t    task_index;
-  uint32_t    previous_seconds;
+  uint32_t          task_index;
+  uint32_t          previous_seconds;
   INTEGER_DECLARE;
   FP_DECLARE;
 
@@ -48,13 +38,16 @@ rtems_task FP_task(
   FP_LOAD( FP_factors[ task_index ] );
 
   put_name( Task_name[ task_index ], FALSE );
-  printf( " - integer base = (0x%" PRIx32 ")\n", INTEGER_factors[ task_index ] );
+  printf(
+    " - integer base = (0x%" PRIx32 ")\n",
+    INTEGER_factors[ task_index ]
+  );
   put_name( Task_name[ task_index ], FALSE );
-#if ( RTEMS_HAS_HARDWARE_FP == 1 )
-  printf( " - float base = (%g)\n", FP_factors[ task_index ] );
-#else
-  printf( " - float base = (NA)\n" );
-#endif
+  #if ( RTEMS_HAS_HARDWARE_FP == 1 )
+    printf( " - float base = (%g)\n", FP_factors[ task_index ] );
+  #else
+    printf( " - float base = (NA)\n" );
+  #endif
 
   previous_seconds = (uint32_t)-1;
 
@@ -64,7 +57,6 @@ rtems_task FP_task(
     directive_failed( status, "rtems_clock_get_tod" );
 
     if ( time.second >= 16 ) {
-
       if ( task_number( tid ) == 4 ) {
         puts( "TA4 - rtems_task_delete - self" );
         status = rtems_task_delete( RTEMS_SELF );
@@ -78,8 +70,7 @@ rtems_task FP_task(
       rtems_test_exit( 0 );
     }
 
-    if (previous_seconds != time.second)
-    {
+    if (previous_seconds != time.second) {
       put_name( Task_name[ task_index ], FALSE );
       print_time( " - rtems_clock_get_tod - ", &time, "\n" );
       previous_seconds = time.second;
@@ -92,8 +83,7 @@ rtems_task FP_task(
      * so that we likely are interrupted
      * After that, we go to sleep for a second at a time
      */
-    if (time.second >= 4)
-    {
+    if (time.second >= 4) {
       status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
     }

@@ -1,13 +1,5 @@
-/*  Task_1
- *
- *  This routine serves as a test task.  It tests the region manager.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -190,7 +182,10 @@ rtems_task Task_1(
   printf( "TA1 - got segment size of %" PRIuPTR "\n", segment_size );
 
   /* Get information about the region */
-  printf( "TA1 - rtems_region_get_information - 0x%08" PRIxrtems_id "\n", region_id );
+  printf(
+    "TA1 - rtems_region_get_information - 0x%08" PRIxrtems_id "\n",
+    region_id
+  );
   status = rtems_region_get_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_information of RN01");
   printf(
@@ -199,7 +194,10 @@ rtems_task Task_1(
     region_info.Used.number
   );
 
-  printf( "TA1 - rtems_region_get_free_information - 0x%08" PRIxrtems_id "\n", region_id );
+  printf(
+    "TA1 - rtems_region_get_free_information - 0x%08" PRIxrtems_id "\n",
+    region_id
+  );
   status = rtems_region_get_free_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_free_information of RN01");
   printf(

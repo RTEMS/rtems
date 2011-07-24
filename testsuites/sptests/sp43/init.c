@@ -1,7 +1,7 @@
 /*
  *  Exercise Object Manager Services
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -60,7 +60,8 @@ void print_class_info(
 {
   printf(
     "%s API %s Information\n"
-    "    minimum id  : 0x%08" PRIxrtems_id " maximum id: 0x%08" PRIxrtems_id "\n"
+    "    minimum id  : 0x%08" PRIxrtems_id
+      " maximum id: 0x%08" PRIxrtems_id "\n"
     "    maximum     :    %7" PRIu32 " available : %" PRIu32 "\n"
     "    auto_extend : %s\n",
     rtems_object_get_api_name(api),

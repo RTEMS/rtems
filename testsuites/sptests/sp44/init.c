@@ -1,30 +1,10 @@
 /*
- * Original version submitted as part of PR1212
+ *  Original version submitted as part of PR1212
  *
- * This example shows a possible blocking of timeslicing if task mode is
- * changed to timeslicing in the middle of its executing.
+ *  This example shows a possible blocking of timeslicing if task mode is
+ *  changed to timeslicing in the middle of its executing.
  *
- * The expected output is:
- *
- *   Task #0's turn. Now setting turn to 1
- *   Task #1's turn. Now setting turn to 0
- *   Task #0's turn. Now setting turn to 1
- *   Task #1's turn. Now setting turn to 0
- *   Task #0's turn. Now setting turn to 1
- *   Task #1's turn. Now setting turn to 0
- *   Task #0's turn. Now setting turn to 1
- *   ...
- *
- * The actural output is:
- *
- *   Task #0's turn. Now setting turn to 1
- *
- * Task #1 can not be dispatched also both tasks have timeslice enabled.
- *
- * Setting TASK_A/B_INITMODE to RTEMS_DEFAULT_MODES | RTEMS_TIMESLICE
- * will produce the expected output.
- *
- * $Id$
+ *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -40,7 +20,7 @@ rtems_task Init(rtems_task_argument ignored);
 rtems_task TaskAB_entry(rtems_task_argument me);
 
 /*** Task priorities ***/
-#define TASK_A_PRIORITY    10
+#define TASK_A_PRIORITY   10
 #define TASK_B_PRIORITY   10
 
 /*** Task names ***/
@@ -60,12 +40,6 @@ rtems_task TaskAB_entry(rtems_task_argument me);
 volatile uint32_t turn;
 rtems_id TaskA_id, TaskB_id;
 
-#define TEST_FAILED(_status, _msg) \
-  do { \
-    printf("Test failed, status code: %d, msg: %s\n", _status, _msg); \
-    exit(1); \
-  } while(0)
-
 /* TASK A/B */
 rtems_task TaskAB_entry(rtems_task_argument me)
 {
@@ -73,15 +47,21 @@ rtems_task TaskAB_entry(rtems_task_argument me)
   rtems_status_code status;
   uint32_t iterations = 0;
 
-  status = rtems_task_mode(RTEMS_PREEMPT | RTEMS_TIMESLICE,
-                  RTEMS_PREEMPT_MASK | RTEMS_TIMESLICE_MASK,
-                  &previous_mode_set);
-  if (status != RTEMS_SUCCESSFUL)
-    TEST_FAILED(status, "Unable to change task mode.");
+  status = rtems_task_mode(
+    RTEMS_PREEMPT | RTEMS_TIMESLICE,
+    RTEMS_PREEMPT_MASK | RTEMS_TIMESLICE_MASK,
+    &previous_mode_set
+  );
+  directive_failed(status, "Unable to change task mode.");
 
   while(1) {
     if (turn == me) {
-      printf("Task #%" PRIdrtems_task_argument "'s turn. Now setting turn to %" PRIdrtems_task_argument "\n", me, 1 - me);
+      printf(
+        "Task #%" PRIdrtems_task_argument "'s turn. Now setting turn to %"
+          PRIdrtems_task_argument "\n",
+          me,
+          1 - me
+      );
       turn = 1 - me;
 
       if ( ++iterations == 10 ) {
@@ -99,37 +79,42 @@ rtems_task Init(rtems_task_argument ignored)
   puts( "\n\n*** SP44 TEST ***" );
 
   /* Create Task A */
-  status = rtems_task_create(TASK_A_NAME, TASK_A_PRIORITY, TASK_A_STACKSIZE,
-         TASK_A_INITMODE, TASK_A_MODEATTR, &TaskA_id);
-
-  if (status != RTEMS_SUCCESSFUL)
-    TEST_FAILED(status,"rtems_task_create failed.\n");
+  status = rtems_task_create(
+    TASK_A_NAME,
+    TASK_A_PRIORITY,
+    TASK_A_STACKSIZE,
+    TASK_A_INITMODE,
+    TASK_A_MODEATTR,
+    &TaskA_id
+  );
+  directive_failed(status,"rtems_task_create");
 
   /* Start Task A */
   status = rtems_task_start(TaskA_id, TaskAB_entry, 0);
-  if (status != RTEMS_SUCCESSFUL)
-    TEST_FAILED(status,"rtems_task_start failed.\n");
+  directive_failed(status,"rtems_task_start");
 
   /* Create Task B */
-  status = rtems_task_create(TASK_B_NAME, TASK_B_PRIORITY, TASK_B_STACKSIZE,
-         TASK_B_INITMODE, TASK_B_MODEATTR, &TaskB_id);
-
-  if (status != RTEMS_SUCCESSFUL)
-    TEST_FAILED(status,"rtems_task_create failed.\n");
+  status = rtems_task_create(
+    TASK_B_NAME,
+    TASK_B_PRIORITY,
+    TASK_B_STACKSIZE,
+    TASK_B_INITMODE,
+    TASK_B_MODEATTR,
+    &TaskB_id
+  );
+  directive_failed( status, "rtems_task_create" );
 
   /* Start Task B */
   status = rtems_task_start(TaskB_id, TaskAB_entry, 1);
-  if (status != RTEMS_SUCCESSFUL)
-    TEST_FAILED(status,"rtems_task_start failed.\n");
+  directive_failed( status, "rtems_task_start" );
 
   /* Suspend itself */
   status = rtems_task_suspend(RTEMS_SELF);
-  if (status != RTEMS_SUCCESSFUL)
-    TEST_FAILED(status,"rtems_task_suspend failed.\n");
+  directive_failed( status, "rtems_task_suspend" );
 
   /* This task is not suposed to be executed anymore */
   printf("\nNOT SUPOSED TO RETURN HERE...\n");
-  exit(1);
+  rtems_test_exit(1);
 }
 
 /* configuration information */

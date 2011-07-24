@@ -1,7 +1,7 @@
 /*
  * Classic API Init task create failure
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,7 +36,8 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
         "Core Configuration Invalid ISR stack size"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
-#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
+#define FATAL_ERROR_EXPECTED_ERROR       \
+          INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
 
 void force_error()
 {

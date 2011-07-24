@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,13 +37,14 @@ volatile int nDeleted;
 rtems_task
 subtask (rtems_task_argument arg)
 {
-  uintptr_t localvar = arg;
-  int i;
+  uintptr_t         localvar = arg;
+  int               i;
   rtems_status_code sc;
 
   nRunning++;
   while (nRunning != 3)
     rtems_task_wake_after (0);
+
   sc = rtems_task_variable_add(RTEMS_SELF, (void **)&taskvar, NULL);
   directive_failed( sc, "task variable add" );
 
@@ -54,8 +55,13 @@ subtask (rtems_task_argument arg)
     taskvar = (void *)((uintptr_t)taskvar + 1);
     rtems_task_wake_after (0);
     if ((uintptr_t)taskvar != localvar) {
-      printf ("Task:%" PRIdrtems_task_argument " taskvar:%" PRIuPTR " localvar:%" PRIuPTR "\n",
-        arg, (uintptr_t)taskvar, localvar);
+      printf(
+        "Task:%" PRIdrtems_task_argument " taskvar:%" PRIuPTR
+          " localvar:%" PRIuPTR "\n",
+        arg,
+        (uintptr_t)taskvar,
+        localvar
+      );
       rtems_task_suspend (RTEMS_SELF);
     }
   }
@@ -64,8 +70,13 @@ subtask (rtems_task_argument arg)
   directive_failed( sc, "task variable delete" );
 
   if ((uintptr_t)taskvar == localvar) {
-    printf("Task:%" PRIdrtems_task_argument " deleted taskvar:%" PRIuPTR " localvar:%" PRIuPTR "\n",
-      arg, (uintptr_t)taskvar, localvar);
+    printf(
+      "Task:%" PRIdrtems_task_argument " deleted taskvar:%" PRIuPTR
+        " localvar:%" PRIuPTR "\n",
+      arg,
+      (uintptr_t)taskvar,
+      localvar
+    );
     nRunning--;
     rtems_task_suspend (RTEMS_SELF);
   }
@@ -77,8 +88,13 @@ subtask (rtems_task_argument arg)
     if (nRunning <= 1)
       break;
     if ((uintptr_t)taskvar == localvar) {
-      printf("Task:%" PRIdrtems_task_argument " taskvar:%" PRIuPTR " localvar:%" PRIuPTR "\n",
-        arg, (uintptr_t)taskvar, localvar);
+      printf(
+        "Task:%" PRIdrtems_task_argument " taskvar:%" PRIuPTR
+          " localvar:%" PRIuPTR "\n",
+       arg,
+       (uintptr_t)taskvar,
+       localvar
+      );
       nRunning--;
       rtems_task_suspend(RTEMS_SELF);
     }
@@ -241,7 +257,10 @@ void test_multiple_taskvars(void)
   directive_failed( sc, "delete multiple #3" );
 
   if ( test_dtor_ran != 2 ) {
-    printf( "Test dtor ran %" PRIu32 " times not 2 times as expected\n", test_dtor_ran );
+    printf(
+      "Test dtor ran %" PRIu32 " times not 2 times as expected\n",
+       test_dtor_ran
+    );
     rtems_test_exit(0);
   }
 }
@@ -323,7 +342,10 @@ void test_delete_from_other_task(void)
   rtems_task_wake_after( 100 );
 
   if ( test_dtor_ran != 1 ) {
-    printf( "Test dtor ran %" PRIu32 " times not 1 times as expected\n", test_dtor_ran );
+    printf(
+      "Test dtor ran %" PRIu32 " times not 1 times as expected\n",
+      test_dtor_ran
+    );
     rtems_test_exit(0);
   }
 }
@@ -370,7 +392,10 @@ void test_delete_as_side_effect(void)
   rtems_task_wake_after( 100 );
 
   if ( test_dtor_ran != 2 ) {
-    printf( "Test dtor ran %" PRIu32 " times not 2 times as expected\n", test_dtor_ran );
+    printf(
+      "Test dtor ran %" PRIu32 " times not 2 times as expected\n",
+      test_dtor_ran
+    );
     rtems_test_exit(0);
   }
 }

@@ -1,14 +1,5 @@
-/*  Task_1_through_5
- *
- *  This routine serves as a test task for the period capabilities of the
- *  Rate Monotonic Manager.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -53,15 +44,26 @@ rtems_task Task_1_through_6(
   status = rtems_rate_monotonic_ident( argument, &test_rmid );
   directive_failed( status, "rtems_rate_monotonic_ident" );
   put_name( Task_name[ argument ], FALSE );
-  printf( "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n", test_rmid );
+  printf(
+    "- rtems_rate_monotonic_ident id = 0x%08" PRIxrtems_id "\n",
+    test_rmid
+  );
 
   if ( rmid != test_rmid ) {
-     printf( "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n", rmid, test_rmid );
-     rtems_test_exit( 0 );
+    printf(
+      "RMID's DO NOT MATCH (0x%" PRIxrtems_id " and 0x%" PRIxrtems_id ")\n",
+       rmid,
+       test_rmid
+    );
+    rtems_test_exit( 0 );
   }
 
   put_name( Task_name[ argument ], FALSE );
-  printf( "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n", rmid, Periods[ argument ] );
+  printf(
+    "- (0x%08" PRIxrtems_id ") period %" PRIu32 "\n",
+    rmid,
+    Periods[ argument ]
+  );
 
   status = rtems_task_wake_after( 2 );
   directive_failed( status, "rtems_task_wake_after" );
@@ -134,8 +136,7 @@ rtems_task Task_1_through_6(
         time[0] = _Watchdog_Ticks_since_boot; /* timestamp */
         /*printf("%d - %d\n", period, time[0]);*/
 
-        for (index = 1; index <= TA6_ITERATIONS; index++)
-        {
+        for (index = 1; index <= TA6_ITERATIONS; index++) {
           period = (index+1)*TA6_PERIOD_FACTOR;
           status = rtems_rate_monotonic_period( rmid,  period);
           directive_failed( status, "rtems_rate_monotonic_period of TA6" );
@@ -143,13 +144,17 @@ rtems_task Task_1_through_6(
           /*printf("%d - %d\n", period, time[index]);*/
         }
 
-        for (index = 1; index <= TA6_ITERATIONS; index++)
-        {
+        for (index = 1; index <= TA6_ITERATIONS; index++) {
           rtems_interval meas = time[index] - time[index-1];
           period = index*TA6_PERIOD_FACTOR;
-          printf("TA6 - Actual: %" PRIdrtems_interval " Expected: %" PRIdrtems_interval, meas, period);
+          printf(
+            "TA6 - Actual: %" PRIdrtems_interval
+              " Expected: %" PRIdrtems_interval,
+            meas,
+            period
+          );
           if (period == meas) printf(" - OK\n");
-          else printf(" - FAILED\n");
+          else                printf(" - FAILED\n");
         }
       }
       rtems_task_suspend(RTEMS_SELF);

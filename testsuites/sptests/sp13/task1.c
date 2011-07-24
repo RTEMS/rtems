@@ -1,13 +1,5 @@
-/*  Task_1
- *
- *  This routine serves as a test task.  It verifies the message manager.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -47,9 +39,9 @@ void dope_buffer(
   ch = (' ' + (v % (0x7f - ' ')));
 
   for (i=0; i<buff_size; i++) {
-      *buff++ = ch++;
-      if (ch >= 0x7f)
-          ch = ' ';
+    *buff++ = ch++;
+    if (ch >= 0x7f)
+      ch = ' ';
   }
 }
 
@@ -70,7 +62,10 @@ rtems_task Task_1(
     RTEMS_SEARCH_ALL_NODES,
     &qid
   );
-  printf( "TA1 - rtems_message_queue_ident - qid => %08" PRIxrtems_id "\n", qid );
+  printf(
+    "TA1 - rtems_message_queue_ident - qid => %08" PRIxrtems_id "\n",
+     qid
+  );
   directive_failed( status, "rtems_message_queue_ident" );
 
   Fill_buffer( "BUFFER 1 TO Q 1", buffer );
@@ -275,7 +270,10 @@ rtems_test_pause();
   );
   directive_failed( status, "rtems_message_queue_create of Q1; 20 bytes each" );
   status = rtems_message_queue_send( Queue_id[ 1 ], big_send_buffer, 40 );
-  fatal_directive_status(status, RTEMS_INVALID_SIZE, "expected RTEMS_INVALID_SIZE");
+  fatal_directive_status(status,
+    RTEMS_INVALID_SIZE,
+    "expected RTEMS_INVALID_SIZE"
+  );
 
   puts( "TA1 - rtems_message_queue_delete - delete queue 1" );
   status = rtems_message_queue_delete( Queue_id[ 1 ] );
@@ -284,89 +282,86 @@ rtems_test_pause();
 rtems_test_pause();
 
   puts( "TA1 - rtems_message_queue_create - variable sizes " );
-  for (queue_size = 1; queue_size < 1030; queue_size++)
-  {
-      status = rtems_message_queue_create(
-          Queue_name[ 1 ],
-          2,            /* just 2 msgs each */
-          queue_size,
-          RTEMS_DEFAULT_ATTRIBUTES,
-          &Queue_id[ 1 ]
-          );
-      if (status != RTEMS_SUCCESSFUL)
-      {
-          printf("TA1 - msq que size: %zu\n", queue_size);
-          directive_failed( status, "rtems_message_queue_create of Q1" );
-      }
+  for (queue_size = 1; queue_size < 1030; queue_size++) {
+    status = rtems_message_queue_create(
+      Queue_name[ 1 ],
+      2,            /* just 2 msgs each */
+      queue_size,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &Queue_id[ 1 ]
+    );
+    if (status != RTEMS_SUCCESSFUL) {
+      printf("TA1 - msq que size: %zu\n", queue_size);
+      directive_failed( status, "rtems_message_queue_create of Q1" );
+    }
 
-      status = rtems_message_queue_delete( Queue_id[ 1 ] );
-      directive_failed( status, "rtems_message_queue_delete" );
+    status = rtems_message_queue_delete( Queue_id[ 1 ] );
+    directive_failed( status, "rtems_message_queue_delete" );
   }
 
   puts( "TA1 - rtems_message_queue_create and send - variable sizes " );
-  for (queue_size = 1; queue_size < 1030; queue_size++)
-  {
-      /* printf("TA1 - message queue size: %d\n", queue_size); */
+  for (queue_size = 1; queue_size < 1030; queue_size++) {
+    status = rtems_message_queue_create(
+      Queue_name[ 1 ],
+      2,            /* just 2 msgs each */
+      queue_size,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &Queue_id[ 1 ]
+    );
+    directive_failed( status, "rtems_message_queue_create of Q1" );
 
-      status = rtems_message_queue_create(
-          Queue_name[ 1 ],
-          2,            /* just 2 msgs each */
-          queue_size,
-          RTEMS_DEFAULT_ATTRIBUTES,
-          &Queue_id[ 1 ]
-          );
+    dope_buffer(big_send_buffer, sizeof(big_send_buffer), queue_size);
+    memset(big_receive_buffer, 'Z', sizeof(big_receive_buffer));
 
-      directive_failed( status, "rtems_message_queue_create of Q1" );
+    /* send a msg too big */
+    status = rtems_message_queue_send(
+      Queue_id[ 1 ],
+      big_send_buffer,
+      queue_size + 1
+    );
+    fatal_directive_status(
+      status,
+      RTEMS_INVALID_SIZE,
+      "rtems_message_queue_send too large"
+    );
 
-      dope_buffer(big_send_buffer, sizeof(big_send_buffer), queue_size);
-      memset(big_receive_buffer, 'Z', sizeof(big_receive_buffer));
+    /* send a msg that is just right */
+    status = rtems_message_queue_send(
+      Queue_id[ 1 ],
+      big_send_buffer,
+      queue_size);
+    directive_failed(status, "rtems_message_queue_send exact size");
 
-      /* send a msg too big */
-      status = rtems_message_queue_send( Queue_id[ 1 ],
-                                         big_send_buffer,
-                                         queue_size + 1 );
+    /* now read and verify the message just sent */
+    status = rtems_message_queue_receive(
+      Queue_id[ 1 ],
+      big_receive_buffer,
+      &size,
+      RTEMS_DEFAULT_OPTIONS,
+      1 * rtems_clock_get_ticks_per_second()
+    );
+   directive_failed(status, "rtems_message_queue_receive exact size");
+   if (size != queue_size) {
+     puts("TA1 - exact size size match failed");
+     rtems_test_exit(1);
+   }
 
-      fatal_directive_status(status,
-                             RTEMS_INVALID_SIZE,
-                             "rtems_message_queue_send too large");
+   if (memcmp(big_send_buffer, big_receive_buffer, size) != 0) {
+     puts("TA1 - exact size data match failed");
+     rtems_test_exit(1);
+   }
 
-      /* send a msg that is just right */
-      status = rtems_message_queue_send(Queue_id[ 1 ],
-                                        big_send_buffer,
-                                        queue_size);
-      directive_failed(status, "rtems_message_queue_send exact size");
+   for (cp = (big_receive_buffer + size);
+        cp < (big_receive_buffer + sizeof(big_receive_buffer));
+        cp++)
+    if (*cp != 'Z') {
+      puts("TA1 - exact size overrun match failed");
+      rtems_test_exit(1);
+    }
 
-      /* now read and verify the message just sent */
-      status = rtems_message_queue_receive(Queue_id[ 1 ],
-                                           big_receive_buffer,
-                                           &size,
-                                           RTEMS_DEFAULT_OPTIONS,
-                                           1 * rtems_clock_get_ticks_per_second());
-      directive_failed(status, "rtems_message_queue_receive exact size");
-      if (size != queue_size)
-      {
-          puts("TA1 - exact size size match failed");
-          rtems_test_exit(1);
-      }
-
-      if (memcmp(big_send_buffer, big_receive_buffer, size) != 0)
-      {
-          puts("TA1 - exact size data match failed");
-          rtems_test_exit(1);
-      }
-
-      for (cp = (big_receive_buffer + size);
-           cp < (big_receive_buffer + sizeof(big_receive_buffer));
-           cp++)
-          if (*cp != 'Z')
-          {
-              puts("TA1 - exact size overrun match failed");
-              rtems_test_exit(1);
-          }
-
-      /* all done with this one; delete it */
-      status = rtems_message_queue_delete( Queue_id[ 1 ] );
-      directive_failed( status, "rtems_message_queue_delete" );
+    /* all done with this one; delete it */
+    status = rtems_message_queue_delete( Queue_id[ 1 ] );
+    directive_failed( status, "rtems_message_queue_delete" );
   }
 
   puts( "*** END OF TEST 13 ***" );

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -62,7 +62,12 @@ subTask2 (rtems_task_argument arg)
   rtems_event_set ev;
 
   rtems_task_wake_after (ticksPerSecond * 1);
-  sc = rtems_event_receive (1, RTEMS_WAIT|RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT, &ev);
+  sc = rtems_event_receive(
+    1,
+    RTEMS_WAIT|RTEMS_EVENT_ANY,
+    RTEMS_NO_TIMEOUT,
+    &ev
+  );
   if (sc != RTEMS_SUCCESSFUL) {
     printf ("subTask2 - Can't receive event (%d)\n", sc);
     rtems_task_suspend (RTEMS_SELF);

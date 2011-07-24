@@ -1,6 +1,4 @@
-/*  inttest.h
- *
- *  XXX: ???
+/*
  *  This include file contains the CPU dependent implementation
  *  of the following routines needed to test RTEMS floating
  *  point support:
@@ -15,7 +13,7 @@
  *         inttest.h.  These routines form the core of the
  *         floating point context switch test.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -103,10 +101,14 @@
   } while (0)
 
 #define INTEGER_CHECK_ONE( _v, _base, _factor ) \
-      if ( (_v) != ((_base) + (_factor)) )  { \
-          printf("%" PRIu32 ": " #_v " wrong -- (0x%" PRIx32 " not 0x%" PRIx32 ")\n", \
-             task_index, (_v), (_base + _factor));  \
-      }
+  if ( (_v) != ((_base) + (_factor)) )  { \
+    printf( \
+      "%" PRIu32 ": " #_v " wrong -- (0x%" PRIx32 " not 0x%" PRIx32 ")\n", \
+      task_index, \
+      (_v), \
+      (_base + _factor) \
+    ); \
+  }
 
 
 #define INTEGER_CHECK( _factor ) \

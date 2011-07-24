@@ -1,14 +1,5 @@
-/*  Task_1
- *
- *  This routine serves as a test task.  It verifies the basic task
- *  switching capabilities of the executive.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,7 +23,7 @@ rtems_task Task_1(
   rtems_status_code status;
   rtems_id          tid;
   rtems_time_of_day time;
-  uint32_t    task_index;
+  uint32_t          task_index;
   INTEGER_DECLARE;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
@@ -43,7 +34,10 @@ rtems_task Task_1(
   INTEGER_LOAD( INTEGER_factors[ task_index ] );
 
   put_name( Task_name[ task_index ], FALSE );
-  printf( " - integer base = (0x%" PRIx32 ")\n", INTEGER_factors[ task_index ] );
+  printf(
+    " - integer base = (0x%" PRIx32 ")\n",
+    INTEGER_factors[ task_index ]
+  );
 
   while( FOREVER ) {
     status = rtems_clock_get_tod( &time );

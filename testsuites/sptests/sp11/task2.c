@@ -1,14 +1,5 @@
-/*  Task_2
- *
- *  This routine serves as a test task.  Multiple tasks are required to
- *  verify all capabilities of the event manager.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,7 +34,10 @@ rtems_task Task_2(
     &eventout
   );
   directive_failed( status, "rtems_event_receive" );
-  printf( "TA2 - RTEMS_EVENT_16 received - eventout => %08" PRIxrtems_event_set "\n", eventout );
+  printf(
+    "TA2 - RTEMS_EVENT_16 received - eventout => %08" PRIxrtems_event_set "\n",
+     eventout
+  );
 
   puts(
     "TA2 - rtems_event_send - send RTEMS_EVENT_14 and RTEMS_EVENT_15 to TA1"
@@ -63,7 +57,8 @@ rtems_task Task_2(
   );
   directive_failed( status, "rtems_event_receive" );
   printf(
-    "TA2 - RTEMS_EVENT_17 or RTEMS_EVENT_18 received - eventout => %08" PRIxrtems_event_set "\n",
+    "TA2 - RTEMS_EVENT_17 or RTEMS_EVENT_18 received - "
+      "eventout => %08" PRIxrtems_event_set "\n",
     eventout
   );
 
@@ -100,7 +95,10 @@ rtems_task Task_2(
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_get_tod" );
 
-  printf( "TA2 - RTEMS_EVENT_10 received - eventout => %08" PRIxrtems_event_set "\n", eventout );
+  printf(
+    "TA2 - RTEMS_EVENT_10 received - eventout => %08" PRIxrtems_event_set "\n",
+     eventout
+  );
   print_time( "TA2 - rtems_clock_get_tod - ", &time, "\n" );
 
   puts( "TA2 - rtems_event_receive - RTEMS_PENDING_EVENTS" );
@@ -121,7 +119,10 @@ rtems_task Task_2(
     &eventout
   );
   directive_failed( status, "rtems_event_receive" );
-  printf( "TA2 - RTEMS_EVENT_19 received - eventout => %08" PRIxrtems_event_set "\n", eventout );
+  printf(
+    "TA2 - RTEMS_EVENT_19 received - eventout => %08" PRIxrtems_event_set "\n",
+     eventout
+  );
 
   puts( "TA2 - rtems_task_delete - deletes self" );
   status = rtems_task_delete( Task_id[ 2 ] );

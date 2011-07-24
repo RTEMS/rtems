@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -76,7 +76,6 @@ rtems_task Init(
   status = rtems_semaphore_release( Mutex_id );
   directive_failed( status, "rtems_semaphore_release" );
 
-
   puts( "*** END OF TEST 65 ***" );
 
   rtems_test_exit(0);
@@ -90,7 +89,11 @@ rtems_task Task_1(
   rtems_id *Mutex_id = (rtems_id *)arg;
 
   puts( "Init Task_1: Obtaining semaphore" );
-  status_in_task = rtems_semaphore_obtain( *Mutex_id, RTEMS_DEFAULT_OPTIONS, 0 );
+  status_in_task = rtems_semaphore_obtain(
+    *Mutex_id,
+    RTEMS_DEFAULT_OPTIONS,
+    0
+  );
   directive_failed( status_in_task, "Task_1 rtems_semaphore_obtain" );
   return;
 }

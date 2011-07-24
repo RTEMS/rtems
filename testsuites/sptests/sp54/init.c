@@ -1,7 +1,7 @@
 /*  Odd Id Cases where API configured but No Threads
  *    + Possibly Valid Id passed to directive
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,20 +32,20 @@ rtems_task Init(
   puts( "\n\n*** TEST 54 ***" );
 
   puts( "Init - use valid id of API class with no objects" );
-  status = rtems_task_set_priority( rtems_build_id(0x2,0x1,0x01,0x0001) /* 0xa010001 */, RTEMS_CURRENT_PRIORITY, &pri );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_ID,
-    "rtems_task_set_priority"
+  status = rtems_task_set_priority(
+    rtems_build_id(0x2,0x1,0x01,0x0001) /* 0xa010001 */,
+    RTEMS_CURRENT_PRIORITY,
+    &pri
   );
+  fatal_directive_status( status, RTEMS_INVALID_ID, "rtems_task_set_priority" );
 
   puts( "Init - lookup name within API class with no objects" );
-  status = rtems_task_ident( rtems_build_id( 0, 0, 0x12, 0x3456) /* 0x123456 */, RTEMS_SEARCH_ALL_NODES, &id );
-  fatal_directive_status(
-    status,
-    RTEMS_INVALID_NAME,
-    "rtems_task_ident"
+  status = rtems_task_ident(
+    rtems_build_id( 0, 0, 0x12, 0x3456) /* 0x123456 */,
+    RTEMS_SEARCH_ALL_NODES,
+    &id
   );
+  fatal_directive_status( status, RTEMS_INVALID_NAME, "rtems_task_ident" );
 
   puts( "*** END OF TEST 54 ***" );
   rtems_test_exit(0);
@@ -72,7 +72,7 @@ rtems_task Init(
 #define CONFIGURE_HAS_OWN_INIT_TASK_TABLE 1
 
 rtems_initialization_tasks_table Initialization_tasks[1] =
-{ { 0, }};
+  { { 0, }};
 
 #define CONFIGURE_INIT_TASK_TABLE      Initialization_tasks
 #define CONFIGURE_INIT_TASK_TABLE_SIZE 0

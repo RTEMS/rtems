@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -174,8 +174,11 @@ rtems_task Init(
   status = rtems_barrier_release( Barrier, &released );
   directive_failed(status, "rtems_barrier_release");
   if ( released != 0 ) {
-    printf( "ERROR -- rtems_barrier_release -- released != 0, = %" PRIu32, released);
-    exit(0);
+    printf(
+      "ERROR -- rtems_barrier_release -- released != 0, = %" PRIu32,
+      released
+    );
+    rtems_test_exit(0);
   }
 
   /*  Create some tasks to wait for the barrier */
@@ -206,9 +209,12 @@ rtems_task Init(
   status = rtems_barrier_release( Barrier, &released );
   directive_failed(status, "rtems_barrier_release");
   if ( released != (CONFIGURE_MAXIMUM_TASKS-1) ) {
-    printf( "ERROR -- rtems_barrier_release -- released != %d, = %" PRIu32,
-         (CONFIGURE_MAXIMUM_TASKS-1), released);
-    exit(0);
+    printf(
+      "ERROR -- rtems_barrier_release -- released != %d, = %" PRIu32,
+      (CONFIGURE_MAXIMUM_TASKS-1),
+      released
+    );
+    rtems_test_exit(0);
   }
 
   puts( "Delay to let Waiters print a message" );

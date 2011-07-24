@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -70,7 +70,12 @@ static void test_chain_with_notification(void)
 
   puts( "INIT - Verify rtems_chain_append_with_notification" );
   rtems_chain_initialize_empty( &chain );
-  sc = rtems_chain_append_with_notification( &chain, &a, rtems_task_self(), EVENT );
+  sc = rtems_chain_append_with_notification(
+    &chain,
+    &a,
+    rtems_task_self(),
+    EVENT
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   sc = rtems_chain_get_with_wait( &chain, EVENT, TIMEOUT, &p );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
@@ -79,20 +84,35 @@ static void test_chain_with_notification(void)
   rtems_chain_initialize_empty( &chain );
 
   rtems_chain_append( &chain, &b );
-  sc = rtems_chain_append_with_notification( &chain, &a, rtems_task_self(), EVENT );
+  sc = rtems_chain_append_with_notification(
+    &chain,
+    &a,
+    rtems_task_self(),
+    EVENT
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( p == &a );
 
   puts( "INIT - Verify rtems_chain_prepend_with_notification" );
   rtems_chain_initialize_empty( &chain );
-  sc = rtems_chain_prepend_with_notification( &chain, &a, rtems_task_self(), EVENT );
+  sc = rtems_chain_prepend_with_notification(
+    &chain,
+    &a,
+    rtems_task_self(),
+    EVENT
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   sc = rtems_chain_get_with_wait( &chain, EVENT, TIMEOUT, &p );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( p == &a );
 
   rtems_chain_prepend( &chain, &b );
-  sc = rtems_chain_prepend_with_notification( &chain, &a, rtems_task_self(), EVENT );
+  sc = rtems_chain_prepend_with_notification(
+    &chain,
+    &a,
+    rtems_task_self(),
+    EVENT
+  );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( p == &a );
 

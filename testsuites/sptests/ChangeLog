@@ -1,3 +1,16 @@
+2011-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp04/tswitch.c, sp07/task1.c, sp07/task2.c, sp09/screen07.c,
+	sp11/task1.c, sp11/task2.c, sp12/pridrv.c, sp12/pritask.c,
+	sp13/task1.c, sp14/asr.c, sp14/task1.c, sp19/first.c, sp19/fptask.c,
+	sp19/inttest.h, sp19/task1.c, sp20/task1.c, sp25/task1.c,
+	sp26/task1.c, sp28/init.c, sp29/init.c, sp31/task1.c, sp32/init.c,
+	sp33/init.c, sp34/changepri.c, sp36/strict_order_mut.c, sp37/init.c,
+	sp43/init.c, sp44/init.c, sp48/init.c, sp54/init.c, sp59/init.c,
+	sp65/init.c, sp68/init.c, spchain/init.c, spclockget/init.c,
+	spfatal03/testcase.h, spfatal07/testcase.h, spfatal_support/init.c:
+	Do not line length exceed 80 columns.
+
 2011-07-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp09/screen07.c, sp09/sp09.scn: Add a case where the multiply of

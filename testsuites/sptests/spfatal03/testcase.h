@@ -1,7 +1,7 @@
 /*
  *  Semaphore Obtain in Critical Section
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,7 +19,8 @@
 #define FATAL_ERROR_DESCRIPTION          "Core Mutex obtain in critical section"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
-#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
+#define FATAL_ERROR_EXPECTED_ERROR       \
+          INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
 
 void force_error(void)
 {

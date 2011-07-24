@@ -47,19 +47,31 @@ rtems_task Init(
 
   sc = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &interval );
   directive_failed( sc, "rtems_clock_get -- Seconds Since Epoch" );
-  printf( "Init - rtems_clock_get - Seconds Since Epoch = %" PRIdrtems_interval "\n", interval );
+  printf(
+    "Init - rtems_clock_get - Seconds Since Epoch = %" PRIdrtems_interval "\n",
+     interval
+  );
 
   sc = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &interval );
   directive_failed( sc, "rtems_clock_get -- Ticks Since Boot" );
-  printf( "Init - rtems_clock_get - Ticks Since Boot = %" PRIdrtems_interval "\n", interval );
+  printf(
+    "Init - rtems_clock_get - Ticks Since Boot = %" PRIdrtems_interval "\n",
+     interval
+  );
 
   sc = rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &interval );
   directive_failed( sc, "rtems_clock_get -- Ticks Per Second" );
-  printf( "Init - rtems_clock_get - Ticks Per Second = %" PRIdrtems_interval "\n", interval );
+  printf(
+    "Init - rtems_clock_get - Ticks Per Second = %" PRIdrtems_interval "\n",
+     interval
+  );
 
   sc = rtems_clock_get( RTEMS_CLOCK_GET_TIME_VALUE, &timev );
   directive_failed( sc, "rtems_clock_get -- Time Value" );
-  printf( "Init - rtems_clock_get - Time Value = %" PRItime_t "\n", timev.tv_sec );
+  printf(
+    "Init - rtems_clock_get - Time Value = %" PRItime_t "\n",
+     timev.tv_sec
+  );
 
   puts( "*** END OF TEST LEGACY RTEMS_CLOCK_GET ***" );
   rtems_test_exit(0);

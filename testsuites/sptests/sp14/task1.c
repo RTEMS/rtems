@@ -1,14 +1,5 @@
-/*  Task_1
- *
- *  This routine serves as a test task.  It establishes an RTEMS_ASR and
- *  sends signal to itself to determine if the RTEMS_ASR gets to execute.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -100,7 +91,8 @@ rtems_test_pause();
     puts( "TA1 - timer routine got the correct arguments" );
   else
     printf(
-      "TA1 - timer got (0x%" PRIxrtems_id ", %p) instead of (0x%" PRIxrtems_id ", %p)!!!!\n",
+      "TA1 - timer got (0x%" PRIxrtems_id ", %p) instead of (0x%"
+        PRIxrtems_id ", %p)!!!!\n",
       Timer_got_this_id,
       Timer_got_this_pointer,
       Timer_id[ 1 ],

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -55,7 +55,10 @@ rtems_task Init(
 
   priority = RTEMS_MAXIMUM_PRIORITY / 4;
   priority = (priority * 3) + (priority / 2);
-  printf( "Init - blocking task priority will be %" PRIdrtems_task_priority "\n", priority );
+  printf(
+    "Init - blocking task priority will be %" PRIdrtems_task_priority "\n",
+     priority
+  );
 
   puts( "Init - rtems_task_create - delay task - OK" );
   status = rtems_task_create(

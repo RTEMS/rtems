@@ -1,17 +1,5 @@
-/*  Priority_test_driver
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
- *  and starting the tasks that make up the test.  If the time of day
- *  clock is required for the test, it should also be set to a known
- *  value by this function.
- *
- *  Input parameters:
- *    priority_base - priority_base switch
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -87,7 +75,9 @@ void Priority_test_driver(
             priority_base + 4,
             &previous_priority
           );
-          printf( "PDRV - change priority of PRI5 from %" PRIdrtems_task_priority " to %" PRIdrtems_task_priority "\n",
+          printf(
+	    "PDRV - change priority of PRI5 from %" PRIdrtems_task_priority
+              " to %" PRIdrtems_task_priority "\n",
              previous_priority,
              priority_base + 4
           );
@@ -99,7 +89,10 @@ void Priority_test_driver(
           &previous_priority
         );
         directive_failed( status, "PDRV rtems_task_set_priority CURRENT" );
-        printf( "PDRV - priority of PRI5 is %" PRIdrtems_task_priority "\n", previous_priority );
+        printf(
+          "PDRV - priority of PRI5 is %" PRIdrtems_task_priority "\n",
+           previous_priority
+        );
       }
     }
   }
