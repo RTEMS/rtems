@@ -37,6 +37,9 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Should be applicable to gcc >= 4.5.0
 %bcond_with gcc_stdint
 
+# EXPERIMENTAL: Enable newlib's iconv
+%bcond_with iconv
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.2
@@ -57,12 +60,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 
 %if 0%{?fc14}
-%global mpc_provided 0.8.1
-%global mpfr_provided 2.4.2
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.1
@@ -168,7 +165,6 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 
 
 %if %{defined cloog_required}
-%{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
