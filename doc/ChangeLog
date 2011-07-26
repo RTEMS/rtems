@@ -1,3 +1,8 @@
+2011-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1851/doc
+	* user/conf.t: Fix typo in CONFIGURE_MESSAGE_BUFFER_MEMORY example.
+
 2011-03-04	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1744/doc
