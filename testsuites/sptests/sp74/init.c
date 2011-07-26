@@ -15,11 +15,6 @@
 
 #include <tmacros.h>
 
-/*
- *  Keep the names and IDs in global variables so another task can use them.
- */
-rtems_id   Task_id[ 3 ];         /* array of task ids */
-rtems_name Task_name[ 3 ];       /* array of task names */
 
 rtems_task Test_task(
   rtems_task_argument index
@@ -35,40 +30,24 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code   	status;
+  rtems_status_code  status;
+  rtems_id           id;
 
   puts( "\n\n*** SP74 (YIELD) TEST ***" );
 
-  Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
-  Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
-
   puts( "Create TA1 at higher priority task" );
   status = rtems_task_create(
-    Task_name[ 1 ],
+    rtems_build_name( 'T', 'A', '1', ' ' ),
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &Task_id[ 1 ]
+    &id
   );
   directive_failed( status, "create 1" );
 
-  puts( "Create TA2 at equal priority task" );
-  status = rtems_task_create(
-    Task_name[ 2 ],
-    2,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Task_id[ 2 ]
-  );
-  directive_failed( status, "create 2" );
-
-  status = rtems_task_start( Task_id[ 1 ], Test_task, 1 );
+  status = rtems_task_start( id, Test_task, 1 );
   directive_failed( status, "start 1" );
-
-  status = rtems_task_start( Task_id[ 2 ], Test_task, 2 );
-  directive_failed( status, "start 2" );
 
   puts( "Yield to TA1" );
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );

@@ -1,3 +1,8 @@
+2011-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sp74/init.c, sp74/sp74.scn: Fix to get the case hit per coverage
+	reports.
+
 2011-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp74/init.c: Does not need clock driver.
