@@ -100,6 +100,7 @@ sp71/Makefile
 sp72/Makefile
 sp73/Makefile
 sp74/Makefile
+sp75/Makefile
 spassoc01/Makefile
 spchain/Makefile
 spclockget/Makefile

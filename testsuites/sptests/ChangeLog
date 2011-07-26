@@ -1,5 +1,13 @@
 2011-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* Makefile.am, configure.ac: New test to get coverage of core mutex
+	obtain while in ISR or other dispatch disabled critical section but
+	no wait.
+	* sp75/.cvsignore, sp75/Makefile.am, sp75/init.c, sp75/sp75.doc,
+	sp75/sp75.scn: New files.
+
+2011-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* sp74/init.c, sp74/sp74.scn: Fix to get the case hit per coverage
 	reports.
 
