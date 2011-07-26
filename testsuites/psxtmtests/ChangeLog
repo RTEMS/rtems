@@ -1,5 +1,13 @@
 2011-07-26	Ricardo Aguirre <el.mastin@ymail.com>
 
+	PR 1850/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	sem_post - thread waiting, preempt.
+	* psxtmsem05/.cvsignore, psxtmsem05/Makefile.am, psxtmsem05/init.c,
+	psxtmsem05/psxtmsem05.doc: New files.
+
+2011-07-26	Ricardo Aguirre <el.mastin@ymail.com>
+
 	PR 1849/tests
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
 	sem_post - thread waiting, no preempt.

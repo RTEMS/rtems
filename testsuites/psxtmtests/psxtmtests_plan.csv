@@ -112,7 +112,7 @@
 "sem_trywait - not available","psxtmsem02","psxtmtest_single","Yes"
 "sem_post - no threads waiting","psxtmsem02","psxtmtest_single","Yes"
 "sem_post - thread waiting, no preempt","psxsemtm04","psxtmtest_unblocking_nopreempt","Yes"
-"sem_post - thread waiting, preempt",,"psxtmtest_unblocking_preempt",
+"sem_post - thread waiting, preempt","psxtmsem05","psxtmtest_unblocking_preempt",
 "sem_getvalue","psxtmsem02","psxtmtest_single","Yes"
 ,,,
 "sleep - yield","psxtmsleep01","psxtmtest_single","Yes"

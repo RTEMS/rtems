@@ -93,6 +93,7 @@ psxtmnanosleep02/Makefile
 psxtmsem01/Makefile
 psxtmsem02/Makefile
 psxtmsem04/Makefile
+psxtmsem05/Makefile
 psxtmsleep01/Makefile
 psxtmsleep02/Makefile
 psxtmthread01/Makefile
