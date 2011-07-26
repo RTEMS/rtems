@@ -1,3 +1,7 @@
+2011-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp74/init.c: Does not need clock driver.
+
 2011-07-26	Pawel Zagorski <pzagor@agh.edu.pl>
 
 	PR 1853/tests
