@@ -301,7 +301,7 @@ by the type @code{other_message_type}.
 
 @example
 
-#define CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE \
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
  (CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
     24, sizeof(one_message_type) + \
   CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
