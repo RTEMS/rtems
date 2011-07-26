@@ -1,3 +1,12 @@
+2011-07-26	Pawel Zagorski <pzagor@agh.edu.pl>
+
+	PR 1853/tests
+	* Makefile.am, configure.ac: Add test for case where a thread is
+	non-preemptive, multiple threads are ready at that priority, a higher
+	priority thread is heir and the thread yields.
+	* sp74/.cvsignore, sp74/Makefile.am, sp74/init.c, sp74/sp74.doc,
+	sp74/sp74.scn: New files.
+
 2011-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp04/tswitch.c, sp07/task1.c, sp07/task2.c, sp09/screen07.c,

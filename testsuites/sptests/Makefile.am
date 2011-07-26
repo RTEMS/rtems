@@ -14,7 +14,7 @@ SUBDIRS = \
     sp40 sp41 sp42 sp43 sp44 sp45 sp46 sp47 sp48 sp49 \
     sp50 sp51 sp52 sp53 sp54 sp55 sp56 sp57 sp58 sp59 \
     sp60      sp62 sp63 sp64 sp65 sp66 sp67 sp68 sp69 \
-    sp70 sp71 sp72 sp73 \
+    sp70 sp71 sp72 sp73 sp74 \
     spassoc01 spchain spclockget spcoverage spobjgetnext \
     spnotepad01 spprintk spprivenv01 sprbtree01 spsize spstkalloc \
 		spthreadq01 spwatchdog spwkspace \

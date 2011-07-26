@@ -1,0 +1,26 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spsimplesched04
+
+directives:
+  + rtems_task_wake_after - yield case when non-preemptive
+
+concepts:
+
++ This test is specifically designed to exercise the yield case when
+  a task is non-preemptive, a higher priority task is ready, and there
+  are multiple threads ready at the same priority as the non-preemptive
+  task.
+
++ test where there is more than one thread at a priority with the executing thread being non-preemptive. Create a higher priority thread and then yield. sparc init task at priority 2, non-preemptive create task at priority 2 create task at priority 1 yield 
