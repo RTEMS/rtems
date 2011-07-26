@@ -20,6 +20,7 @@ SUBDIRS += psxtmnanosleep01
 SUBDIRS += psxtmnanosleep02
 SUBDIRS += psxtmsem01
 SUBDIRS += psxtmsem02
+SUBDIRS += psxtmsem03
 SUBDIRS += psxtmsem04
 SUBDIRS += psxtmsem05
 SUBDIRS += psxtmsleep01

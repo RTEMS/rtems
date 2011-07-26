@@ -107,7 +107,7 @@
 "sem_close (named second close - removes)","psxtmsem01","psxtmtest_single","Yes"
 "sem_unlink (deletes)","psxtmsem01","psxtmtest_single","Yes"
 "sem_wait - available","psxtmsem02","psxtmtest_single","Yes"
-"sem_wait - not available, block",,"psxtmtest_blocking",
+"sem_wait - not available, block","psxtmsem03","psxtmtest_blocking","Yes"
 "sem_trywait - available","psxtmsem02","psxtmtest_single","Yes"
 "sem_trywait - not available","psxtmsem02","psxtmtest_single","Yes"
 "sem_post - no threads waiting","psxtmsem02","psxtmtest_single","Yes"
