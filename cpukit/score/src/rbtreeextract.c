@@ -164,9 +164,11 @@ void _RBTree_Extract_unprotected(
 
     /* set target's new children to the original node's children */
     target->child[RBT_RIGHT] = the_node->child[RBT_RIGHT];
-    the_node->child[RBT_RIGHT]->parent = target;
+    if (the_node->child[RBT_RIGHT])
+      the_node->child[RBT_RIGHT]->parent = target;
     target->child[RBT_LEFT] = the_node->child[RBT_LEFT];
-    the_node->child[RBT_LEFT]->parent = target;
+    if (the_node->child[RBT_LEFT])
+      the_node->child[RBT_LEFT]->parent = target;
 
     /* finally, update the parent node and recolor. target has completely
      * replaced the_node, and target's child has moved up the tree if needed.

@@ -1,3 +1,9 @@
+2011-07-27	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1856/cpukit
+	* posix/src/pthread.c, posix/src/pthreadjoin.c,
+	score/src/rbtreeextract.c: Do not derefence NULL.
+
 2011-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* ftpd/ftpd.c, libcsupport/src/geteuid.c, libcsupport/src/getgroups.c,
