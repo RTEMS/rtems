@@ -10,6 +10,9 @@ INIT - Verify rtems_rbtree_insert with 100 nodes value [0,99]
 INIT - Removing 100 nodes
 INIT - Verify rtems_rbtree_insert with 100 nodes value [99,0]
 INIT - Removing 100 nodes
+INIT - Verify rtems_rbtree_extract with 100 nodes value [0,99]
+INIT - Extracting 20 random nodes
+INIT - Removing 80 nodes
 INIT - Verify rtems_rbtree_get_max with 100 nodes value [99,0]
 INIT - Removing 100 nodes
 INIT - Verify rtems_rbtree_get_max with 100 nodes value [0,99]

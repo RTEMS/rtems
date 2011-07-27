@@ -1,3 +1,9 @@
+2011-07-27	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1854/cpukit
+	* sprbtree01/init.c, sprbtree01/sprbtree01.scn: Add test of the
+	rtems_rbtree_extract() to improve test coverage.
+
 2011-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am, configure.ac: New test to get coverage of core mutex

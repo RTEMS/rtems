@@ -12,10 +12,10 @@
 #include <rtems/rbtree.h>
 
 int numbers[20] = {
-52, 99, 5, 85, 43, 44, 10, 60, 50, 19, 8, 68, 48, 57, 17, 67, 90, 12, 77, 71};
+52, 99, 0, 85, 43, 44, 10, 60, 50, 19, 8, 68, 48, 57, 17, 67, 90, 12, 77, 71};
 
 int numbers_sorted[20] = {
-  5, 8, 10, 12, 17, 19, 43, 44, 48, 50, 52, 57, 60, 67, 68, 71, 77, 85, 90, 99};
+  0, 8, 10, 12, 17, 19, 43, 44, 48, 50, 52, 57, 60, 67, 68, 71, 77, 85, 90, 99};
 
 typedef struct {
   int              id;
@@ -258,6 +258,58 @@ rtems_task Init(
       puts( "INIT - TOO MANY NODES ON RBTREE" );
       rtems_test_exit(0);
     }
+    if ( t->id != id ) {
+      puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
+      rtems_test_exit(0);
+    }
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  if(!rtems_rbtree_is_empty(&rbtree1)) {
+    puts( "INIT - TREE NOT EMPTY" );
+    rtems_test_exit(0);
+  }
+
+  /* testing rbtree_extract by adding 100 nodes then removing the 20 with
+   * keys specified by the numbers array, then removing the rest */
+  puts( "INIT - Verify rtems_rbtree_extract with 100 nodes value [0,99]" );
+  for (i = 0; i < 100; i++) {
+    node_array[i].id = i;
+    node_array[i].Node.value = i;
+    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  puts( "INIT - Extracting 20 random nodes" );
+
+  for (i = 0; i < 20; i++) {
+    id = numbers[i];
+    rtems_rbtree_extract( &rbtree1, &node_array[id].Node );
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  puts( "INIT - Removing 80 nodes" );
+
+  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0, i = 0 ; p ;
+      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+    test_node *t = rtems_rbtree_container_of(p, test_node, Node);
+
+    while ( id == numbers_sorted[i] ) {
+      /* skip if expected minimum (id) is in the set of extracted numbers */
+      id++;
+      i++;
+    }
+
+    if ( id > 99 ) {
+      puts( "INIT - TOO MANY NODES ON RBTREE" );
+      rtems_test_exit(0);
+    }
+
     if ( t->id != id ) {
       puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
       rtems_test_exit(0);
