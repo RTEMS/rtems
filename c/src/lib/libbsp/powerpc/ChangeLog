@@ -1,3 +1,7 @@
+2011-07-26  Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/openpic_i8259_irq.c: silenced compiler warnings.
+	
 2011-07-21  Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/motorola/motorola.c: removed

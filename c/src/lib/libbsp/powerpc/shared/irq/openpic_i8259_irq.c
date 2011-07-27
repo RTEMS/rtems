@@ -265,7 +265,11 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 #error "Configuration Error -- BSP with ISA + PCI IRQs MUST define BSP_PCI_ISA_BRIDGE_IRQ"
 #endif
 #else
-	rtems_panic("MUST have an OpenPIC if BSP has PCI IRQs but no ISA IRQs");
+	BSP_panic("MUST have an OpenPIC if BSP has PCI IRQs but no ISA IRQs");
+	/* BSP_panic() never returns but the 'return' statement silences
+	 * a compiler warning about 'irq' possibly being used w/o initialization.
+	 */
+	return -1;
 #endif
   }
 #endif
