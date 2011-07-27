@@ -1,3 +1,8 @@
+2011-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* posix/src/pthread.c, posix/src/pthreadjoin.c: Revert accidental
+	commit.
+
 2011-07-27	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1856/cpukit
