@@ -222,7 +222,7 @@ __vecf:	b	__vecf
 PUBLIC_VAR (start)
 start:
 /* 1st: initialization work (common for RAM/ROM startup) */
-        mfmsr	r30
+	mfmsr	r30
 	SETBITS r30, r29, MSR_ME|MSR_RI
 	CLRBITS r30, r29, MSR_EE
 	mtmsr	r30 				/* Set RI/ME, Clr EE in MSR */
@@ -442,19 +442,19 @@ skip_ROM_start:
 /* clear entire on chip SRAM (unique for ROM startup) */
 	lis	r30, (MBAR+ONCHIP_SRAM_OFFSET)@h	/* get start address of onchip SRAM */
 	ori	r30, r30,(MBAR+ONCHIP_SRAM_OFFSET)@l
-        LWI	r29, ONCHIP_SRAM_SIZE		/* get size of onchip SRAM */
+	LWI	r29, ONCHIP_SRAM_SIZE		/* get size of onchip SRAM */
 
-        bl      clr_mem				/* Clear onchip SRAM */
+	bl      clr_mem				/* Clear onchip SRAM */
 
 #else /* defined(NEED_LOW_LEVEL_INIT) */
 	bl	XLB_init
 #endif /* defined(NEED_LOW_LEVEL_INIT) */
 /* clear .bss section (unique for ROM startup) */
 	LWI	r30, bsp_section_bss_start	/* get start address of bss section */
-        LWI	r29, bsp_section_bss_size  	/* get size of bss section */
+	LWI	r29, bsp_section_bss_size  	/* get size of bss section */
 
 
-        bl      clr_mem				/* Clear the bss section */
+	bl      clr_mem				/* Clear the bss section */
 
 #ifdef HAS_UBOOT
 	mr	r3, r14
@@ -463,7 +463,10 @@ skip_ROM_start:
 
 /* set stack pointer (common for RAM/ROM startup) */
 	LA	r1, bsp_section_text_start
-        addi    r1, r1, -0x10			/* Set up stack pointer = beginning of text section - 0x10 */
+	addi    r1, r1, -0x10			/* Set up stack pointer = beginning of text section - 0x10 */
+	/* tag TOS with a NULL pointer (termination mark for stack dump) */
+	li  r0, 0
+	stw r0, 0(r1)
 
 	bl	__eabi				/* Set up EABI and SYSV environment */
 
@@ -475,10 +478,10 @@ skip_ROM_start:
 
 /* clear arguments and do further init. in C (common for RAM/ROM startup) */
 
-        /* Clear cmdline */
-        xor r3, r3, r3
+	/* Clear cmdline */
+	xor r3, r3, r3
 
-        bl      SYM (boot_card)			/* Call the first C routine */
+	bl      SYM (boot_card)			/* Call the first C routine */
 
 twiddle:
 	b	twiddle				/* We don't expect to return from boot_card but if we do */
@@ -507,7 +510,7 @@ SDRAM_init:
 	or	r29,r29,r30			/* set bit 0 in r29/GPIOWDD */
 	stw	r29,GPIOWDD(r31)
 
-      /* activate MEM_CS1 output */
+	/* activate MEM_CS1 output */
 	lwz	r29, GPIOPCR(r31)
 	or	r29,r29,r30			/* set bit 0 in r29/GPIOPCR */
 	stw	r29,GPIOPCR(r31)
@@ -625,20 +628,20 @@ copy_image_end:
 FID_DCache:
 	mflr	r26
 
-        bl      PPC_HID0_rd
-        TSTBITS	r30, r29, HID0_DCE
-        bne     FID_DCache_exit			/* If data cache is switched of, skip further actions */
+	bl      PPC_HID0_rd
+	TSTBITS	r30, r29, HID0_DCE
+	bne     FID_DCache_exit			/* If data cache is switched of, skip further actions */
 
 	li   	r29, PPC_D_CACHE		/* 16 Kb data cache on 603e */
 	LWI	r28, bsp_section_text_start	/* Load base address (begin of RAM) */
 
 FID_DCache_loop_1:
-        lwz     r27, 0(r28)			/* Load data at address */
+	lwz     r27, 0(r28)			/* Load data at address */
 
-        addi    r28, r28, PPC_CACHE_ALIGNMENT 	/* increment cache line address */
-        subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */
-        cmpwi	r29, 0x0
-        bne     FID_DCache_loop_1		/* Loop until cache size is reached */
+	addi    r28, r28, PPC_CACHE_ALIGNMENT 	/* increment cache line address */
+	subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */
+	cmpwi	r29, 0x0
+	bne     FID_DCache_loop_1		/* Loop until cache size is reached */
 
 	li   	r29, PPC_D_CACHE		/* 16 Kb data cache on 603e */
 	LWI	r28, bsp_section_text_start	/* Reload base address (begin of RAM) */
@@ -647,14 +650,14 @@ FID_DCache_loop_2:
 
 	dcbf    r27, r28                	/* Flush and invalidate cache */
 
-        addi    r28, r28, PPC_CACHE_ALIGNMENT 	/* increment cache line address */
+	addi    r28, r28, PPC_CACHE_ALIGNMENT 	/* increment cache line address */
 	subi    r29, r29, PPC_CACHE_ALIGNMENT 	/* increment loop counter */
 	cmpwi	r29, 0x0
-        bne     FID_DCache_loop_2		/* Loop around until cache size is reached */
+	bne     FID_DCache_loop_2		/* Loop around until cache size is reached */
 
-        bl      PPC_HID0_rd			/* Read HID0 */
-       	CLRBITS	r30, r29, HID0_DCE
-        bl      PPC_HID0_wr			/* Clear DCE */
+	bl      PPC_HID0_rd			/* Read HID0 */
+	CLRBITS	r30, r29, HID0_DCE
+	bl      PPC_HID0_wr			/* Clear DCE */
 
 FID_DCache_exit:
 	mtlr	r26
@@ -663,21 +666,21 @@ FID_DCache_exit:
 IDUL_ICache:
 	mflr 	r26
 
-        bl      PPC_HID0_rd
-        TSTBITS	r30, r29, HID0_ICE
-        bne     IDUL_ICache_exit		/* If instruction cache is switched of, skip further actions */
+	bl      PPC_HID0_rd
+	TSTBITS	r30, r29, HID0_ICE
+	bne     IDUL_ICache_exit		/* If instruction cache is switched of, skip further actions */
 
 	CLRBITS r30, r29, HID0_ICE
-        bl      PPC_HID0_wr 			/* Disable ICE bit */
+	bl      PPC_HID0_wr 			/* Disable ICE bit */
 
 	SETBITS r30, r29, HID0_ICFI
-        bl	PPC_HID0_wr			/* Invalidate instruction cache */
+	bl	PPC_HID0_wr			/* Invalidate instruction cache */
 
-        CLRBITS r30, r29, HID0_ICFI
-        bl	PPC_HID0_wr			/* Disable cache invalidate */
+	CLRBITS r30, r29, HID0_ICFI
+	bl	PPC_HID0_wr			/* Disable cache invalidate */
 
-        CLRBITS r30, r29, HID0_ILOCK
-        bl      PPC_HID0_wr			/* Disable instruction cache lock */
+	CLRBITS r30, r29, HID0_ILOCK
+	bl      PPC_HID0_wr			/* Disable instruction cache lock */
 
 IDUL_ICache_exit:
 	mtlr	r26
@@ -854,47 +857,47 @@ SPRG_brk_init:
 PPC_HID0_rd:					/* get HID0 content to r30 */
 
 
-        mfspr   r30, HID0
+	mfspr   r30, HID0
 
-        blr
+	blr
 
 
 PPC_HID0_wr:					/* put r30 content to HID0 */
 
 
-        mtspr   HID0, r30
+	mtspr   HID0, r30
 
-        blr
+	blr
 
 clr_mem:
 	mr 	r28, r29
 	srwi	r29, r29, 2
-        mtctr   r29				/* set ctr reg */
+	mtctr   r29				/* set ctr reg */
 
 
-        slwi	r29, r29, 2
-        sub     r28, r28, r29			/* maybe some residual bytes */
-        xor     r29, r29, r29
+	slwi	r29, r29, 2
+	sub     r28, r28, r29			/* maybe some residual bytes */
+	xor     r29, r29, r29
 
 
 clr_mem_word:
-        stswi   r29, r30, 0x04			/* store r29 (word) to r30 memory location */
-        addi    r30, r30, 0x04			/* increment r30 */
+	stswi   r29, r30, 0x04			/* store r29 (word) to r30 memory location */
+	addi    r30, r30, 0x04			/* increment r30 */
 
-        bdnz    clr_mem_word			/* dec counter and loop */
+	bdnz    clr_mem_word			/* dec counter and loop */
 
 
 	cmpwi	r28, 0x00			/* clear mem. finished ? */
 	beq	clr_mem_end;
-        mtctr   r28				/* reload counter for residual bytes */
+	mtctr   r28				/* reload counter for residual bytes */
 clr_mem_byte:
 	stswi   r29, r30, 0x01			/* store r29 (byte) to r30 memory location  */
 	addi    r30, r30, 0x01			/* update r30 */
 
-        bdnz    clr_mem_byte			/* dec counter and loop */
+	bdnz    clr_mem_byte			/* dec counter and loop */
 
 clr_mem_end:
-        blr					/* return */
+	blr					/* return */
 
 XLB_init:
 /* init arbiter and stuff... */
