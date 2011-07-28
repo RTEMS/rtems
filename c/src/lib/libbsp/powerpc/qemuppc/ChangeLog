@@ -1,3 +1,8 @@
+2011-27-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S: Align stack and tag TOS with a NULL
+	pointer (help terminate when walking the stack).
+
 2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove references to non-existing files.
