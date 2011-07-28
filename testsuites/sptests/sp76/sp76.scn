@@ -1,0 +1,9 @@
+
+
+*** SP76 (YIELD) TEST ***
+Set Init task priority = 2
+Create TA1 at higher priority task
+Create TA2 at equal priority task
+Yield to TA1
+TA1  - Successfully yielded it to higher priority task
+*** END OF SP76 TEST ***

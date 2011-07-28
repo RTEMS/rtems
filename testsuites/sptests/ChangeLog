@@ -1,3 +1,11 @@
+2011-07-28	Pawel Zagorski <pzagor@agh.edu.pl>
+
+	PR 1857/tests
+	* Makefile.am, configure.ac: Add test where there is more than one
+	thread at a priority with the executing thread being non-preemptive.
+	* sp76/.cvsignore, sp76/Makefile.am, sp76/init.c, sp76/sp76.doc,
+	sp76/sp76.scn: New files.
+
 2011-07-28	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1858/testing
