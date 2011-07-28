@@ -1,3 +1,10 @@
+2011-07-27  Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/start/start.S, shared/start/preload.S:
+	Make sure stack is 16-byte aligned and the TOS
+	is tagged with a NULL pointer (used as a terminator
+	when printing stack traces).
+
 2011-07-26  Till Straumann <strauman@slac.stanford.edu>
 
 	* shared/irq/openpic_i8259_irq.c: silenced compiler warnings.

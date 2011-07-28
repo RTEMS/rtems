@@ -84,7 +84,7 @@
  * if DESTINATION_ADDR is not 0
  */
 #define KERNELBASE			0x0
-#define INITIAL_STACK		0x78					/* 8-byte aligned */
+#define INITIAL_STACK		0x70					/* 16-byte aligned */
 #define CACHE_LINE_SIZE		PPC_CACHE_ALIGNMENT 	/* autodetect doesn't work, see below */
 #define	ASSUME_RTEMS_INSTALLS_VECTORS				/* assume we need not load vectors */
 #define DONT_USE_R5_ENTRY							/* always dynamically determine the address we're running from */
@@ -211,6 +211,9 @@ return_here:
 
 	/* setup initial stack for rtems early boot */
 	li		r1,INITIAL_STACK
+	/* tag TOS with a NULL pointer (for stack trace) */
+	li      r0, 0
+	stw     r0, 0(r1)
 	/* disable the MMU and fire up rtems */
 	mfmsr	r0
 	ori 	r0,r0,MSR_IR|MSR_DR|MSR_IP|MSR_ME

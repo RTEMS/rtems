@@ -130,6 +130,12 @@ enter_C_code:
 	li   r0, (CPU_STACK_ALIGNMENT-1)
 	andc r1, r9, r0
 	/*
+	 * Tag TOS with a NULL (terminator for stack dump)
+	 */
+	li   r0, 0
+	stw  r0, 0(r1)
+	
+	/*
 	 * We are now in a environment that is totally independent from
 	 * bootloader setup.
 	 */
