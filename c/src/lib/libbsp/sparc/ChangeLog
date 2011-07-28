@@ -1,3 +1,9 @@
+2011-07-28	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1801
+	* shared/irq_asm.S: Modifications to synch the sparc with the smp
+	working tree.
+
 2011-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Jennifer Averett <jennifer.averett@OARcorp.com>
 
