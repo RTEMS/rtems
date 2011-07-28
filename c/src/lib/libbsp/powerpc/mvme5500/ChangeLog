@@ -1,3 +1,8 @@
+2011-27-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S: Tag TOS with a NULL pointer
+	(help terminate when walking the stack).
+
 2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1824/cpukit

@@ -1,3 +1,8 @@
+2011-27-28	Till Straumann <strauman@slac.stanford.edu>
+
+	* start/start.S: Tag TOS with a NULL pointer
+	(help terminate when walking the stack).
+
 2011-06-11	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am: Remove reference to wrapup directory.

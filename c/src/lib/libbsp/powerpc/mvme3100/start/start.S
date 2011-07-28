@@ -78,6 +78,11 @@ __rtems_entry_point:
 	/* align down to 16-bytes */
 	li  r5, (CPU_STACK_ALIGNMENT - 1)
 	andc r1, r9, r5
+
+	/* NULL ptr to back chain */
+	li  r0, 0
+	stw r0, 0(r1)
+
 	/*
 	 * We are now in a environment that is totally independent from
 	 * bootloader setup.
