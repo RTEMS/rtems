@@ -1,3 +1,8 @@
+2011-07-28	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1858/testing
+	* sp74/sp74.doc: Fix after changes.
+
 2011-07-27	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1854/cpukit

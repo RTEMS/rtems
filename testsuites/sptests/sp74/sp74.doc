@@ -11,7 +11,7 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  spsimplesched04
+test set name:  sp74
 
 directives:
   + rtems_task_wake_after - yield case when non-preemptive
@@ -19,8 +19,6 @@ directives:
 concepts:
 
 + This test is specifically designed to exercise the yield case when
-  a task is non-preemptive, a higher priority task is ready, and there
-  are multiple threads ready at the same priority as the non-preemptive
-  task.
+  a task is non-preemptive and a higher priority task is ready
 
-+ test where there is more than one thread at a priority with the executing thread being non-preemptive. Create a higher priority thread and then yield. sparc init task at priority 2, non-preemptive create task at priority 2 create task at priority 1 yield 
++ test where there is one thread at a priority with the executing thread being non-preemptive. Create a higher priority thread and then yield from Init task.
