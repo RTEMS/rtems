@@ -45,7 +45,8 @@
 #define TEST_STRING_TO_NAME          test_rtems_string_to_unsigned_char
 #define STRING_TO_NAME_METHOD        rtems_string_to_unsigned_char
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_unsigned_char"
-/* #define TEST_TOO_LARGE_STRING        "987654321123456789123456789" */
+#define TEST_TOO_LARGE_STRING        "987654321123456789123456789"
+#define TEST_TOO_LARGE_FOR_UCHAR     "256" 
 #define STRING_TO_INTEGER
 #include "stringto_test_template.h"
 
@@ -57,6 +58,7 @@
 #define STRING_TO_NAME_METHOD        rtems_string_to_int
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_int"
 #define TEST_TOO_LARGE_STRING        "987654321123456789123456789"
+#define TEST_TOO_SMALL_STRING        "-98765432198765432123456789"
 #define STRING_TO_INTEGER
 #include "stringto_test_template.h"
 
@@ -117,6 +119,7 @@
 #define STRING_TO_NAME_METHOD        rtems_string_to_float
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_float"
 #define TEST_TOO_LARGE_STRING        "9.87654321123456789123456789E10240"
+#define TEST_TOO_SMALL_STRING        "-9.87654321123456789123456789E10240"
 #define STRING_TO_FLOAT
 #include "stringto_test_template.h"
 
@@ -126,6 +129,7 @@
 #define STRING_TO_NAME_METHOD        rtems_string_to_double
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_double"
 #define TEST_TOO_LARGE_STRING        "9.87654321123456789123456789E10240"
+#define TEST_TOO_SMALL_STRING        "-9.87654321123456789123456789E10240"
 #define STRING_TO_FLOAT
 #include "stringto_test_template.h"
 

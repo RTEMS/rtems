@@ -28,4 +28,4 @@ Directives:
 
 Concepts:
 
-+ Exhaustively test strong to number conversion helpers.
++ Exhaustively test string to number conversion helpers.

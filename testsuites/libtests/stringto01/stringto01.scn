@@ -1,3 +1,5 @@
+
+
 *** STRING TO CONVERSION TEST ***
 
 Testing rtems_string_to_pointer
@@ -13,6 +15,8 @@ rtems_string_to_unsigned_char - 123 NULL endptr return value - RTEMS_SUCCESSFUL
 rtems_string_to_unsigned_char - 123 w/endptr return value - RTEMS_SUCCESSFUL
 rtems_string_to_unsigned_char - YYY w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_unsigned_char - empty string - w/endptr return value - RTEMS_NOT_DEFINED
+rtems_string_to_unsigned_char - overflow - RTEMS_INVALID_NUMBER
+rtems_string_to_unsigned_char - overflow - RTEMS_INVALID_NUMBER
 
 Testing rtems_string_to_int
 rtems_string_to_int - NULL return value - RTEMS_INVALID_ADDRESS
@@ -22,6 +26,7 @@ rtems_string_to_int - 123 w/endptr return value - RTEMS_SUCCESSFUL
 rtems_string_to_int - YYY w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_int - empty string - w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_int - overflow - RTEMS_INVALID_NUMBER
+rtems_string_to_int- RTEMS_INVALID_NUMBER
 
 Testing rtems_string_to_unsigned_int
 rtems_string_to_unsigned_int - NULL return value - RTEMS_INVALID_ADDRESS
@@ -74,6 +79,7 @@ rtems_string_to_float - 1.23 w/endptr return value - RTEMS_SUCCESSFUL
 rtems_string_to_float - zzz w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_float - empty string - w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_float - overflow - RTEMS_INVALID_NUMBER
+rtems_string_to_float- RTEMS_INVALID_NUMBER
 
 Testing rtems_string_to_double
 rtems_string_to_double - NULL return value - RTEMS_INVALID_ADDRESS
@@ -82,4 +88,5 @@ rtems_string_to_double - 1.23 w/endptr return value - RTEMS_SUCCESSFUL
 rtems_string_to_double - zzz w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_double - empty string - w/endptr return value - RTEMS_NOT_DEFINED
 rtems_string_to_double - overflow - RTEMS_INVALID_NUMBER
+rtems_string_to_double- RTEMS_INVALID_NUMBER
 *** END OF STRING TO CONVERSION TEST ***

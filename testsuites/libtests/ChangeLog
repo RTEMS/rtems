@@ -1,3 +1,10 @@
+2011-07-29	Pawel Zagorski <pzagor@agh.edu.pl>
+
+	PR 1865/tests
+	* stringto01/Makefile.am, stringto01/init.c, stringto01/stringto01.doc,
+	stringto01/stringto01.scn, stringto01/stringto_test_template.h:
+	Improve coverage of string conversion routines.
+
 2011-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* POSIX/iconv.c, POSIX/iconv_open.c, POSIX/iconv_close.c: New.

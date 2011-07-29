@@ -139,6 +139,23 @@ void TEST_STRING_TO_NAME(void)
     rtems_test_assert( endptr );
   #endif
 
+
+  /* Conversion of number that is too large for unsigned char */
+  #if defined(TEST_TOO_LARGE_FOR_UCHAR)
+    endptr = NULL;
+    value = 0;
+    puts(
+    STRING_TO_NAME_METHOD_STRING " - overflow - RTEMS_INVALID_NUMBER" );
+    #if defined(STRING_TO_INTEGER)
+      status = STRING_TO_NAME_METHOD(
+                 TEST_TOO_LARGE_FOR_UCHAR, &value, &endptr, 10 );
+    #endif
+    if ( status != RTEMS_INVALID_NUMBER )
+      printf( "ERROR = %s\n", rtems_status_text(status) );
+    rtems_test_assert( status == RTEMS_INVALID_NUMBER );
+    rtems_test_assert( endptr );
+  #endif
+
   /* Conversion of number that is too small */
   #if defined(TEST_TOO_SMALL_STRING)
     endptr = NULL;
@@ -170,3 +187,4 @@ void TEST_STRING_TO_NAME(void)
 #undef BAD_VALUE_STRING
 #undef TEST_TOO_LARGE_STRING
 #undef TEST_TOO_SMALL_STRING
+#undef TEST_TOO_LARGE_FOR_UCHAR
