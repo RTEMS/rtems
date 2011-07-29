@@ -25,12 +25,7 @@ rtems_task Test_task(
   sprintf( task_name, "TA%" PRIu32, task_index );
   PrintTaskInfo( task_name );
 
-  /* If this is the last task created set a flag for the
-   * test to end.
-   */
-  if ( task_index  == rtems_smp_get_number_of_processors() ) {
-    TestFinished = true;
-  }
+  TaskRan[task_index] = true;
 
   /* Wait for the test to end without giving up this processor */
   while(1)

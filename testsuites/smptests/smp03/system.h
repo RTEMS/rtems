@@ -50,6 +50,12 @@ rtems_task Test_task(
 /*
  *  Keep the names and IDs in global variables so another task can use them.
  */
+
+TEST_EXTERN volatile bool TaskRan[ CONFIGURE_SMP_MAXIMUM_PROCESSORS + 1 ];
+
+/*
+ *  Keep the names and IDs in global variables so another task can use them.
+ */
 void Loop(void);
 void PrintTaskInfo(
   const char *task_name

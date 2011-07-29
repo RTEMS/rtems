@@ -1,5 +1,13 @@
 2011-07-29	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
+	* smp03/init.c, smp03/system.h, smp03/tasks.c: Modified test to force a
+	task to run prior to starting the next task. This allows the last
+	task to always preempt, where if the tasks started in an odd order
+	the last task could run prior the the task it was supposed to
+	preempt.
+
+2011-07-29	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
 	* smp01/init.c, smp02/init.c, smp02/tasks.c, smp03/init.c,
 	smp03/tasks.c, smp04/Makefile.am, smp04/init.c, smp05/init.c,
 	smp06/init.c, smp07/init.c, smp08/init.c: Cleaned up tests and fixed

@@ -49,6 +49,11 @@ rtems_task Init(
 
   locked_printf( "\n\n***  SMP03 TEST ***\n" );
 
+  /* Initialize the TaskRan array */
+  TaskRan[0] = true;
+  for ( i=1; i<rtems_smp_get_number_of_processors() ; i++ ) {
+    TaskRan[i] = false;
+  }
 
   /* Show that the init task is running on this cpu */
   PrintTaskInfo( "Init" );
@@ -67,8 +72,12 @@ rtems_task Init(
       &id
     );
     status = rtems_task_start( id, Test_task, i );
-
-    Loop();
+    
+    /* Allow task to start before starting next task.
+     * This is necessary on some simulators.
+     */ 
+    while (TaskRan[i] == false)
+      ;
   }
 
   /* Create/Start an aditional task with the highest priority */
@@ -80,16 +89,20 @@ rtems_task Init(
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  TestFinished = false;
   status = rtems_task_start(id,Test_task,rtems_smp_get_number_of_processors());
 
-  /* Wait on the last task to run */
-  while(!TestFinished)
-    ;
+  /* Wait on all tasks to run */
+  while (1) {
+    TestFinished = true;
+    for ( i=1; i < (rtems_smp_get_number_of_processors()+1) ; i++ ) {
+      if (TaskRan[i] == false)
+        TestFinished = false;
+    }
+    if (TestFinished) {
+      locked_printf( "*** END OF TEST SMP03 ***\n" );
+      rtems_test_exit( 0 );
+    }
+  }
 
-  /* End the test */
-  Loop();
-  locked_printf( "*** END OF TEST SMP03 ***\n" );
-  Loop();
   rtems_test_exit( 0 );    
 }
