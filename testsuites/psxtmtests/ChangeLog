@@ -1,5 +1,13 @@
 2011-07-29	Ricardo Aguirre <el.mastin@ymail.com>
 
+	PR 1863/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	pthread_barrier_wait - releasing, no preempt
+	* psxtmbarrier03/.cvsignore, psxtmbarrier03/Makefile.am,
+	psxtmbarrier03/init.c, psxtmbarrier03/psxtmbarrier03.doc: New files.
+
+2011-07-29	Ricardo Aguirre <el.mastin@ymail.com>
+
 	PR 1859/tests
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
 	pthread_barrier_wait - blocking
