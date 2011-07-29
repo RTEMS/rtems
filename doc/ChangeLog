@@ -1,3 +1,11 @@
+2011-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1864/doc
+	* user/conf.t: Add missing documentation for
+	CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS,
+	CONFIGURE_MAXIMUM_POSIX_BARRIERS , CONFIGURE_MAXIMUM_POSIX_SPINLOCKS,
+	CONFIGURE_MAXIMUM_POSIX_RWLOCKS.
+
 2011-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1851/doc
