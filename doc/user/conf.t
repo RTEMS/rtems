@@ -688,6 +688,21 @@ The default is 0.
 POSIX API semaphores that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_BARRIERS
+@item @code{CONFIGURE_MAXIMUM_POSIX_BARRIERS} is the maximum number of
+POSIX API barriers that can be concurrently active.
+The default is 0.
+
+@findex CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
+@item @code{CONFIGURE_MAXIMUM_POSIX_SPINLOCKS} is the maximum number of
+POSIX API spinlocks that can be concurrently active.
+The default is 0.
+
+@findex CONFIGURE_MAXIMUM_POSIX_RWLOCKS
+@item @code{CONFIGURE_MAXIMUM_POSIX_RWLOCKS} is the maximum number of
+POSIX API read-write locks that can be concurrently active.
+The default is 0.
+
 @end itemize
 
 @subsection POSIX Initialization Threads Table Configuration
