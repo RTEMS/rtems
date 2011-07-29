@@ -1,3 +1,8 @@
+2011-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* POSIX/iconv.c, POSIX/iconv_open.c, POSIX/iconv_close.c: New.
+	* POSIX/Makefile.am: Add iconv, iconv_open, iconv_close.
+
 2011-07-12	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* malloc04/init.c, malloc04/malloc04.scn: Remove test cases which are

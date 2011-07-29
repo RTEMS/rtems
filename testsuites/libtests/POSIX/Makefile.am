@@ -61,6 +61,15 @@ getuid_SOURCES = getuid.c
 check_PROGRAMS += htonl
 htonl_SOURCES = htonl.c
 
+check_PROGRAMS += iconv
+iconv_SOURCES = iconv.c
+
+check_PROGRAMS += iconv_close
+iconv_close_SOURCES = iconv_close.c
+
+check_PROGRAMS += iconv_open
+iconv_open_SOURCES = iconv_open.c
+
 check_PROGRAMS += lseek
 lseek_SOURCES = lseek.c
 
