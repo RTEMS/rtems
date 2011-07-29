@@ -85,7 +85,7 @@ void rtems_time_test_measure_operation(
 /**************              TEST SUPPORT               **************/
 /*********************************************************************/
 /*********************************************************************/
-extern void locked_print_init(void);
+extern void locked_print_initialize(void);
 extern void locked_printf(const char *fmt, ...);
 extern void locked_printk(const char *fmt, ...);
 
