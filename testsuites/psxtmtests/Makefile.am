@@ -8,6 +8,7 @@ SUBDIRS =
 
 if HAS_POSIX
 SUBDIRS += psxtmbarrier01
+SUBDIRS += psxtmbarrier02
 SUBDIRS += psxtmkey01
 SUBDIRS += psxtmkey02
 SUBDIRS += psxtmmutex01
