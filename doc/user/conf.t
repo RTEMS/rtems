@@ -719,9 +719,32 @@ The default is 0.
 POSIX API message queues that can be concurrently active.
 The default is 0.
 
+@findex CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
+@item @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS}
+is the maximum number of POSIX API message
+queue descriptors that can be concurrently
+active. @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS}
+should be greater than or equal to
+@code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}. The default is 0.
+
 @findex CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
 @item @code{CONFIGURE_MAXIMUM_POSIX_SEMAPHORES} is the maximum number of
 POSIX API semaphores that can be concurrently active.
+The default is 0.
+
+@findex CONFIGURE_MAXIMUM_POSIX_BARRIERS
+@item @code{CONFIGURE_MAXIMUM_POSIX_BARRIERS} is the maximum number of
+POSIX API barriers that can be concurrently active.
+The default is 0.
+
+@findex CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
+@item @code{CONFIGURE_MAXIMUM_POSIX_SPINLOCKS} is the maximum number of
+POSIX API spinlocks that can be concurrently active.
+The default is 0.
+
+@findex CONFIGURE_MAXIMUM_POSIX_RWLOCKS
+@item @code{CONFIGURE_MAXIMUM_POSIX_RWLOCKS} is the maximum number of
+POSIX API read-write locks that can be concurrently active.
 The default is 0.
 
 @end itemize
