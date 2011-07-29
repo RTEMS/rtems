@@ -1,3 +1,11 @@
+2011-07-29	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* smp01/init.c, smp02/init.c, smp02/tasks.c, smp03/init.c,
+	smp03/tasks.c, smp04/Makefile.am, smp04/init.c, smp05/init.c,
+	smp06/init.c, smp07/init.c, smp08/init.c: Cleaned up tests and fixed
+	some print statement problems.
+	* smp04/tasks.c: Removed.
+
 2011-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* smp01/smp01.doc, smp02/smp02.doc, smp03/smp03.doc, smp04/smp04.doc,

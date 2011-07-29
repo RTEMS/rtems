@@ -44,7 +44,11 @@ rtems_task Test_task(
   TaskRan = true;
 
   /* Print that the task is up and running. */
-  locked_printf(" CPU %d running Task %s after semaphore release\n", cpu_num, name);
+  locked_printf(
+    " CPU %d running Task %s after semaphore release\n", 
+    cpu_num, 
+    name
+  );
 
   (void) rtems_task_delete( RTEMS_SELF );
 }

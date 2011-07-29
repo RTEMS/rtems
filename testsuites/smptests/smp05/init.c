@@ -17,7 +17,7 @@ rtems_task Test_task(
 )
 {
   locked_printf( "Shut down from CPU %d\n", bsp_smp_processor_id() );
-  locked_printf( "*** END OF TEST SMP05 ***" );
+  locked_printf( "*** END OF TEST SMP05 ***\n" );
   rtems_test_exit(0);
 }
 

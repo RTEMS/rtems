@@ -5,7 +5,7 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = smp04
-smp04_SOURCES = init.c tasks.c system.h ../../support/src/locked_print.c
+smp04_SOURCES = init.c system.h ../../support/src/locked_print.c
 
 dist_rtems_tests_DATA = smp04.scn
 dist_rtems_tests_DATA += smp04.doc

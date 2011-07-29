@@ -22,7 +22,6 @@ void PrintTaskInfo(
 )
 {
   int               cpu_num;
-  rtems_status_code sc;
 
   cpu_num = bsp_smp_processor_id();
 
@@ -45,7 +44,7 @@ rtems_task Init(
   rtems_status_code status;
   rtems_time_of_day time;
   int               i;
-  char              ch;
+  char              ch[4];
   rtems_id          id;
  
   locked_print_initialize();
@@ -77,10 +76,10 @@ rtems_task Init(
   PrintTaskInfo( "Init", &time );
 
   for ( i=1; i <= rtems_smp_get_number_of_processors() *3; i++ ) {
-    ch = '0' + i;
 
+    sprintf(ch, "%02" PRId32, i );
     status = rtems_task_create(
-      rtems_build_name( 'T', 'A', ch, ' ' ),
+      rtems_build_name( 'T', 'A', ch[0], ch[1] ),
       1,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,

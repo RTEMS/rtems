@@ -63,7 +63,7 @@ rtems_task Init(
     directive_failed( status, "task create" );
 
     cpu_num = bsp_smp_processor_id();
-    (" CPU %d start task TA%c\n", cpu_num, ch);
+    locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
     status = rtems_task_start( id, Test_task, i+1 );
     directive_failed( status, "task start" );
 
@@ -78,8 +78,7 @@ rtems_task Init(
         allDone = false;
     }
     if (allDone) {
-      Loop();
-      locked_printf( "*** END OF TEST SMP01 ***" );
+      locked_printf( "*** END OF TEST SMP01 ***\n" );
       rtems_test_exit( 0 );
     }
   }

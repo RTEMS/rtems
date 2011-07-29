@@ -15,7 +15,7 @@
 
 #include "system.h"
 
-void Loop() {
+void Loop(void) {
   volatile int i;
 
   for (i=0; i<300000; i++);
@@ -26,8 +26,6 @@ void LogSemaphore(
   int       cpu_num,
   uint32_t  task_index
 ){
-  int i;
-
   if (Log_index < LOG_SIZE) { 
     /* Log the information */
     Log[ Log_index ].IsLocked   = obtained;
@@ -57,7 +55,5 @@ rtems_task Test_task(
     LogSemaphore(false, cpu_num, task_index);
   
     rtems_semaphore_release( Semaphore );
-  }
-
-  while(1);
+  } while(1);
 }

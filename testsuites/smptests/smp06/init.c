@@ -31,7 +31,7 @@ rtems_task Test_task(
   Ran = true;
 
   if ( do_exit ) {
-    locked_printf( "*** END OF TEST SMP06 ***" );
+    locked_printf( "*** END OF TEST SMP06 ***\n" );
     rtems_test_exit(0);
   }
   while(1)
@@ -42,8 +42,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int                i;
-  char               ch;
   int                cpu_num;
   rtems_id           id;
   rtems_status_code  status;
@@ -115,7 +113,7 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS           4
 
 #define CONFIGURE_INIT_TASK_PRIORITY      2
-#define CONFIGURE_INIT_TASK_MODES         RTEMS_PREEMPT
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

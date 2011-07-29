@@ -47,7 +47,7 @@ rtems_task Init(
   status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0);
   directive_failed( status,"rtems_semaphore_obtain of SEM1\n");
 
-  for ( i=1; i < CONFIGURE_SMP_MAXIMUM_PROCESSORS; i++ ){
+  for ( i=1; i < rtems_smp_get_number_of_processors(); i++ ){
 
     /* Create and start tasks for each CPU */
     ch = '0' + i;
@@ -64,7 +64,6 @@ rtems_task Init(
     cpu_num = bsp_smp_processor_id();
     locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
     status = rtems_task_start( id, Test_task, i+1 );
-    locked_printf(str, "rtems_task_start TA%d", i+1);
     directive_failed( status, str );
   }
 

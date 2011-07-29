@@ -29,7 +29,6 @@ void PrintTaskInfo(
 )
 {
   int               cpu_num;
-  rtems_status_code sc;
 
   cpu_num = bsp_smp_processor_id();
 
@@ -41,21 +40,21 @@ rtems_task Init(
 )
 {
   int               i;
-  char              ch;
+  char              ch = '0';
   rtems_id          id;
   rtems_status_code status;
 
   Loop();
   locked_print_initialize();
 
-  locked_printf( "\n\n***  SMP03 TEST ***" );
+  locked_printf( "\n\n***  SMP03 TEST ***\n" );
 
 
   /* Show that the init task is running on this cpu */
   PrintTaskInfo( "Init" );
 
   /* for each remaining cpu create and start a task */
-  for ( i=1; i < CONFIGURE_SMP_MAXIMUM_PROCESSORS; i++ ){
+  for ( i=1; i < rtems_smp_get_number_of_processors(); i++ ){
 
     ch = '0' + i;
 
@@ -82,13 +81,15 @@ rtems_task Init(
     &id
   );
   TestFinished = false;
-  status = rtems_task_start( id, Test_task, CONFIGURE_SMP_MAXIMUM_PROCESSORS );
+  status = rtems_task_start(id,Test_task,rtems_smp_get_number_of_processors());
 
   /* Wait on the last task to run */
   while(!TestFinished)
     ;
 
   /* End the test */
-  locked_printf( "*** END OF TEST SMP03 ***" );
+  Loop();
+  locked_printf( "*** END OF TEST SMP03 ***\n" );
+  Loop();
   rtems_test_exit( 0 );    
 }

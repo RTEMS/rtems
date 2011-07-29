@@ -28,7 +28,7 @@ rtems_task Test_task(
   /* If this is the last task created set a flag for the
    * test to end.
    */
-  if ( task_index  == CONFIGURE_SMP_MAXIMUM_PROCESSORS ) {
+  if ( task_index  == rtems_smp_get_number_of_processors() ) {
     TestFinished = true;
   }
 
