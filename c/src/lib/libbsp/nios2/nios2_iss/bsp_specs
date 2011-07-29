@@ -1,12 +1,6 @@
-%rename lib old_lib
 %rename endfile old_endfile
 %rename startfile old_startfile
 %rename link old_link
-
-*lib:
-%{!qrtems: %(old_lib)} \
-%{!nostdlib: %{qrtems: --start-group -lrtemsbsp -lrtemscpu -lc -lgcc --end-group \
-%{!qnolinkcmds: -T linkcmds%s}}}
 
 *startfile:
 %{!qrtems: %(old_startfile)} \

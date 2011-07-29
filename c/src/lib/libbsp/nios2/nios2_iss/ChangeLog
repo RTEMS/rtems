@@ -1,3 +1,7 @@
+2011-07-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* bsp_specs: Remove *lib (Anachronism).
+
 2011-03-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am: Remove stub version.
