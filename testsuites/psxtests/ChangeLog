@@ -1,5 +1,17 @@
 2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	PR 1855/cpukit
+	* Makefile.am, configure.ac: Correct signal processing during
+	pthread_join. We are supposed to unblock the thread waiting on a
+	pthread_join(), dispatch the signal handler, account for it
+	potentially overwriting errno, and then have the thread return to
+	blocking within pthread_join().
+	* psxeintr_join/.cvsignore, psxeintr_join/Makefile.am,
+	psxeintr_join/init.c, psxeintr_join/psxeintr_join.doc,
+	psxeintr_join/psxeintr_join.scn: New files.
+
+2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1867/cpukit
 	* Makefile.am, configure.ac, psx12/task.c, psxkey03/init.c,
 	psxrwlock01/test.c: Correct implementation of pthread_exit() and
