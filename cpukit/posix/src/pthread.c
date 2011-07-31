@@ -214,7 +214,7 @@ bool _POSIX_Threads_Create_extension(
   _Thread_queue_Initialize(
     &api->Join_List,
     THREAD_QUEUE_DISCIPLINE_FIFO,
-    STATES_WAITING_FOR_JOIN_AT_EXIT,
+    STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_INTERRUPTIBLE_BY_SIGNAL,
     0
   );
 
