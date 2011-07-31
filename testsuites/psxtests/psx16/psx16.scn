@@ -1,0 +1,6 @@
+*** POSIX TEST PSX16 ***
+Creating TestThread
+Let TestThread run and exit before we attempt to join
+TestThread exiting
+Successfully joined with TestThread
+*** END OF POSIX TEST PSX16 ***

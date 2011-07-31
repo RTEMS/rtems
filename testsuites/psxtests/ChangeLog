@@ -1,14 +1,24 @@
-2011-02-08	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1867/cpukit
+	* Makefile.am, configure.ac, psx12/task.c, psxkey03/init.c,
+	psxrwlock01/test.c: Correct implementation of pthread_exit() and
+	pthread_join() to support the case where a thread is joinable but
+	calls pthread_exit() before a thread has attempted to join.
+	* psx16/.cvsignore, psx16/Makefile.am, psx16/init.c, psx16/psx16.doc,
+	psx16/psx16.scn: New files.
+
+2011-02-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/pmacros.h: Add PRIxblksize_t, PRIxblkcnt_t.
 	* configure.ac: Add AC_CHECK_SIZEOF([blksize_t]),
 	AC_CHECK_SIZEOF([blkcnt_t]).
 
-2011-02-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
 
-2010-10-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2010-10-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for pthread_attr_{get,set}cputime instead of 
 	pthread_pthread_attr_{get,set}cputime (Typo).
@@ -18,7 +28,7 @@
 	* psxfile01/test.c, psxmount/test.c, psxreaddir/test.c,
 	psxstat/test.c: Update to the new mount API.
 
-2010-05-29	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Add AC_CHECK_SIZEOF(off_t).
 	* include/pmacros.h: Add PRIdoff_t.
@@ -55,7 +65,7 @@
 	psxhdrs/pthread22.c, psxhdrs/sched01.c, psxhdrs/sched03.c:
 	Reflect POSIX changes to sched_param.
 
-2010-04-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2010-04-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxhdrs/proc01.c, psxhdrs/proc02.c, psxhdrs/proc07.c,
 	psxhdrs/proc08.c, psxhdrs/proc09.c, psxhdrs/proc10.c,
@@ -136,28 +146,28 @@
 	* psxenosys/Makefile.am: Add documentation file.
 	* psxenosys/psxenosys.doc: New file.
 
-2009-01-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-01-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxsignal03/init.c: 
 	Print sigval.sival_ptr instead of "union sigval".
 
-2009-01-01	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-01-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxstat/test.c: Apply PRI* macros to print struct stat fields.
 	* psxreaddir/test.c: Apply PRI* macros to print struct stat fields.
 	* psxfile01/test.c: Remove obsure #ifdef's.
 	Apply PRI* macros to print struct stat fields.
 
-2009-10-31	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/pmacros.h: Change TM_OCTOBER to 9, TM_NOVEMBER to 10,
 	TM_DECEMBER to 11 (tm_mon months start with JAN = 0).
 
-2009-10-31	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-31	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/pmacros.h: November is the 11th month.
 
-2009-10-30	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxstat/test.c: Remove #ifdef's.
 	* psxmount/test.c, psxreaddir/test.c: Remove __P (unused anachronism).
@@ -169,7 +179,7 @@
 	rtems_object_api_minimum_class, rtems_object_api_maximum_class.
 	Reflect the prototypes having been missing to printf's.
 
-2009-10-29	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxsysconf/init.c: 
 	Comment out sysconf(LONG_MAX) check (not useful).
@@ -179,11 +189,11 @@
 	* psx10/init.c: Pass 0x7FFF instead of 0xFFFFFF as invalid pshared
 	attribute to pthread_condattr_setpshared for 16bit target compliance.
 
-2009-10-28	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-28	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxbarrier01/test.c: Include <tmacros.h>
 
-2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psx01/init.c, psx01/task.c, psx02/init.c, psx03/init.c,
 	psx04/init.c, psx05/init.c, psx06/init.c, psx07/init.c,
@@ -193,7 +203,7 @@
 	psxmsgq02/init.c, psxsignal01/init.c, psxualarm/init.c:
 	Use PRIxpthread_t to print pthread_t's.
 
-2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxmsgq02/init.c:
 	Remove cast in call to fatal_posix_service_status_errno.
@@ -206,14 +216,14 @@
 	* configure.ac:
 	Add AC_CHECK_DECLS pthread_attr_getcputime, pthread_attr_setcputime.
 
-2009-10-27	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-27	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxtimer01/psxtimer.c: Use %ld to print *.tv_nsec.
 	* psxsysconf/init.c: Use %ld to print *.tv_nsec.
 	* psxclock/init.c: Use %ld to print *.tv_nsec.
 	* psx06/init.c, psx06/system.h: Misc. warning fixes.
 
-2009-10-26	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxsignal03/init.c: Add missing argument to printf.
 	* psxfile01/test.c: Use %zu instead of %d to print size_t's.
@@ -222,7 +232,7 @@
 	* configure.ac: Add AC_CHECK_HEADERS sys/mman.h.
 	Add AC_CHECK_DECLS pthread_atfork, adjtime, mprotect.
 
-2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxtime/test.c: Include <sys/time.h>.
 	Conditionally add local prototype for adjtime()
@@ -236,27 +246,27 @@
 	if pthread.h doesn't supply it.
 	* psxkey01/init.c: Include "test_support.h".
 
-2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for pthread_atfork in pthread.h.
 	* psxrwlock01/test.c: Conditionally add local prototype for
 	pthread_atfork() if pthread.h doesn't supply it.
 	Include <pthread.h>.
 
-2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for sys/mman.h.
 	Check for mprotect in sys/mman.h.
 	* psxenosys/init.c: Conditionally add local prototype for
 	mprotect() if sys/mman.h doesn't supply it.
 
-2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for pthread_rwlock_unlock in pthread.h.
 	* psxrwlock01/test.c: Conditionally add local prototype for
 	pthread_rwlock_unlock() if pthread.h doesn't supply it.
 
-2009-10-25	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psx01/init.c, psxalarm01/init.c, psxbarrier01/test.c,
 	psxclock/init.c, psxfatal01/testcase.h, psxfatal02/testcase.h,
@@ -273,7 +283,7 @@
 	* Makefile.am: Build file IO related tests even with POSIX threading is
 	disabled.
 
-2009-10-20	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Don't add -ansi -fasm to CFLAGS.
 
@@ -768,7 +778,7 @@
 
 	* psxfile01/test.c: Change from int to size_t.
 
-2009-04-03	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2009-04-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
 	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
@@ -816,7 +826,7 @@
 
 	* psx01/psx01.scn: Bump version to 4.9.99.0
 
-2008-09-06	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxcleanup/psxcleanup.c, psxfatal_support/init.c,
 	psxfatal_support/system.h: Convert to "bool".
@@ -1044,7 +1054,7 @@
 	* psxrwlock01/main.c, psxrwlock01/test.c: Improve rwlock test to
 	include normal blocking and unblocking on timeout.
 
-2006-12-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
 
@@ -1078,11 +1088,11 @@
 	* psxsem01/init.c: Make sem_timedwait more conformant to Open Group
 	specification.
 
-2006-10-17	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.
 
-2006-07-11	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2006-07-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
 	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
@@ -1268,7 +1278,7 @@
 	* psxfile01/test.c, psxmsgq01/init.c, psxstat/test.c,
 	psxtimer/psxtimer.c: Eliminate warnings and typos.
 
-2004-02-26	SÃ©bastien BarrÃ© <sbarre@sdelcc.com>
+2004-02-26	Sébastien Barré <sbarre@sdelcc.com>
 
 	PR 582/core
 	* psxmsgq01/init.c, psxmsgq01/psxmsgq01.scn: Fix the POSIX message

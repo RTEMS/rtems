@@ -35,6 +35,11 @@ void *ReadLockThread(void *arg)
 {
   int status;
 
+  /*
+   * Detach ourselves so we don't wait for a join that won't happen.
+   */
+  pthread_detach( pthread_self() );
+
   puts( "ReadThread - pthread_rwlock_rdlock(RWLock) blocking -- OK" );
   status = pthread_rwlock_rdlock(&RWLock);
   rtems_test_assert(  !status );
@@ -51,6 +56,11 @@ void *ReadLockThread(void *arg)
 void *WriteLockThread(void *arg)
 {
   int status;
+
+  /*
+   * Detach ourselves so we don't wait for a join that won't happen.
+   */
+  pthread_detach( pthread_self() );
 
   puts( "WriteThread - pthread_rwlock_wrlock(RWLock) blocking -- OK" );
   status = pthread_rwlock_wrlock(&RWLock);

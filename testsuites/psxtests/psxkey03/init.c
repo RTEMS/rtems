@@ -28,6 +28,11 @@ void *Test_Thread(
 {
   int sc;
 
+  /*
+   * Detach ourselves so we don't wait for a join that won't happen.
+   */
+  pthread_detach( pthread_self() );
+
   puts( "Test_Thread - pthread_setspecific - OK" );
   sc = pthread_setspecific( Key, key_value );
   rtems_test_assert(  !sc );

@@ -26,6 +26,11 @@ void *Task_1(
   void *argument
 )
 {
+  /*
+   * Detach ourselves so we don't wait for a join that won't happen.
+   */
+  pthread_detach( pthread_self() );
+
   puts( "Task_1: exitting" );
   pthread_exit( NULL );
 

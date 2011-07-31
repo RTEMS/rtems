@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 SUBDIRS = psxclock
 if HAS_POSIX
 SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
-    psx10 psx11 psx12 psx13 psx14 psxalarm01 \
+    psx10 psx11 psx12 psx13 psx14 psx16 psxalarm01 \
     psxautoinit01 psxautoinit02 psxbarrier01 \
     psxcancel psxcancel01 psxcleanup psxcleanup01 \
     psxcond01 psxenosys psxkey01 psxkey02 \
