@@ -46,6 +46,7 @@ psxbarrier01/Makefile
 psxcancel/Makefile
 psxchroot01/Makefile
 psxcleanup/Makefile
+psxeintr_join/Makefile
 psxenosys/Makefile
 psxfatal01/Makefile
 psxfatal02/Makefile
