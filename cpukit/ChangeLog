@@ -1,5 +1,14 @@
 2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	PR 1855/cpukit
+	* posix/src/psignal.c, posix/src/pthread.c, posix/src/pthreadjoin.c:
+	Correct signal processing during pthread_join. We are supposed to
+	unblock the thread waiting on a pthread_join(), dispatch the signal
+	handler, account for it potentially overwriting errno, and then have
+	the thread return to blocking within pthread_join().
+
+2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1867/cpukit
 	* posix/src/pthreadexit.c, posix/src/pthreadjoin.c: Correct
 	implementation of pthread_exit() and pthread_join() to support the
