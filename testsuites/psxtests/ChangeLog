@@ -1,4 +1,14 @@
-2008-09-06	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1867/cpukit
+	* Makefile.am, configure.ac, psx12/task.c, psxrwlock01/test.c: Correct
+	implementation of pthread_exit() and pthread_join() to support the
+	case where a thread is joinable but calls pthread_exit() before a
+	thread has attempted to join.
+	* psx16/.cvsignore, psx16/Makefile.am, psx16/init.c, psx16/psx16.doc,
+	psx16/psx16.scn: New files.
+
+2008-09-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxcleanup/psxcleanup.c, psxfatal_support/init.c,
 	psxfatal_support/system.h: Convert to "bool".
@@ -226,7 +236,7 @@
 	* psxrwlock01/main.c, psxrwlock01/test.c: Improve rwlock test to
 	include normal blocking and unblocking on timeout.
 
-2006-12-02	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2006-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: New BUG-REPORT address.
 
@@ -260,11 +270,11 @@
 	* psxsem01/init.c: Make sem_timedwait more conformant to Open Group
 	specification.
 
-2006-10-17	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2006-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.60. Require automake-1.10.
 
-2006-07-11	Ralf CorsÃ©pius <ralf.corsepius@rtems.org>
+2006-07-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
 	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
@@ -450,7 +460,7 @@
 	* psxfile01/test.c, psxmsgq01/init.c, psxstat/test.c,
 	psxtimer/psxtimer.c: Eliminate warnings and typos.
 
-2004-02-26	SÃ©bastien BarrÃ© <sbarre@sdelcc.com>
+2004-02-26	Sébastien Barré <sbarre@sdelcc.com>
 
 	PR 582/core
 	* psxmsgq01/init.c, psxmsgq01/psxmsgq01.scn: Fix the POSIX message

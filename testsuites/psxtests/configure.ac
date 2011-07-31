@@ -41,6 +41,7 @@ psx11/Makefile
 psx12/Makefile
 psx13/Makefile
 psx14/Makefile
+psx16/Makefile
 psxbarrier01/Makefile
 psxcancel/Makefile
 psxchroot01/Makefile
