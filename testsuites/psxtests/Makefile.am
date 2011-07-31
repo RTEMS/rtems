@@ -15,7 +15,7 @@ SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psxmutexattr01 psxobj01 psxrwlock01 psxsem01 psxsignal01 psxsignal02 \
     psxsignal03 psxsignal04 psxsignal05 psxspin01 psxspin02 psxsysconf \
     psxtime psxtimer01 psxtimer02 psxualarm psxusleep psxfatal01 psxfatal02 \
-    psxintrcritical01 psxstack01
+    psxintrcritical01 psxstack01 psxeintr_join
 endif
 
 ## File IO tests
