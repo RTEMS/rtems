@@ -1,3 +1,11 @@
+2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1867/cpukit
+	* posix/src/pthreadexit.c, posix/src/pthreadjoin.c: Correct
+	implementation of pthread_exit() and pthread_join() to support the
+	case where a thread is joinable but calls pthread_exit() before a
+	thread has attempted to join.
+
 2011-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* posix/src/pthread.c, posix/src/pthreadjoin.c: Revert accidental

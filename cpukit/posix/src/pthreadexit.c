@@ -3,7 +3,7 @@
  *
  *  NOTE: Key destructors are executed in the POSIX api delete extension.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -25,14 +25,20 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/pthread.h>
 
+
 void _POSIX_Thread_Exit(
   Thread_Control *the_thread,
   void           *value_ptr
 )
 {
-  Objects_Information     *the_information;
+  Objects_Information  *the_information;
+  Thread_Control       *unblocked;
+  POSIX_API_Control    *api;
 
   the_information = _Objects_Get_information_id( the_thread->Object.id );
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
 
   /*
    * The_information has to be non-NULL.  Otherwise, we couldn't be
@@ -51,6 +57,31 @@ void _POSIX_Thread_Exit(
 
       the_thread->Wait.return_argument = value_ptr;
 
+      /*
+       * Process join
+       */
+      if ( api->detachstate == PTHREAD_CREATE_JOINABLE ) {
+        unblocked = _Thread_queue_Dequeue( &api->Join_List );
+        if ( unblocked ) {
+          do {
+            *(void **)unblocked->Wait.return_argument = value_ptr;
+          } while ( (unblocked = _Thread_queue_Dequeue( &api->Join_List )) );
+        } else {
+          _Thread_Set_state(
+            the_thread,
+            STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT
+          );
+           _RTEMS_Unlock_allocator();
+          _Thread_Enable_dispatch();
+          /* now waiting for thread to arrive */
+          _RTEMS_Lock_allocator();
+          _Thread_Disable_dispatch();
+        }
+      }
+
+      /*
+       *  Now shut down the thread
+       */
       _Thread_Close( the_information, the_thread );
 
       _POSIX_Threads_Free( the_thread );
