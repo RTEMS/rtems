@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -106,6 +106,13 @@ void _POSIX_signals_Post_switch_extension(
   POSIX_API_Control  *api;
   int                 signo;
   ISR_Level           level;
+  int                 hold_errno;
+
+  /*
+   *  We need to ensure that if the signal handler executes a call
+   *  which overwrites the unblocking status, we restore it.
+   */
+  hold_errno = _Thread_Executing->Wait.return_code;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
   if ( !api )

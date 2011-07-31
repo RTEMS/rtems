@@ -1,7 +1,7 @@
 /*
  *  16.1.3 Wait for Thread Termination, P1003.1c/Draft 10, p. 147
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,6 +32,7 @@ int pthread_join(
   Objects_Locations        location;
   void                    *return_pointer;
 
+on_EINTR:
   the_thread = _Thread_Get( thread, &location );
   switch ( location ) {
 
@@ -65,6 +66,9 @@ int pthread_join(
         _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
       }
       _Thread_Enable_dispatch();
+
+      if ( _Thread_Executing->Wait.return_code == EINTR )
+        goto on_EINTR;
 
       if ( value_ptr )
         *value_ptr = return_pointer;
