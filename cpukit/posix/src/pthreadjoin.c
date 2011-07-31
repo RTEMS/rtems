@@ -52,12 +52,18 @@ int pthread_join(
        *  Put ourself on the threads join list
        */
 
-      _Thread_Executing->Wait.return_argument = &return_pointer;
-
-      _Thread_queue_Enter_critical_section( &api->Join_List );
-
-      _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
-
+      if ( the_thread->current_state ==
+             (STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT) ) {
+         return_pointer = the_thread->Wait.return_argument;
+         _Thread_Clear_state(
+           the_thread,
+           (STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT)
+         );
+      } else {
+	_Thread_Executing->Wait.return_argument = &return_pointer;
+        _Thread_queue_Enter_critical_section( &api->Join_List );
+        _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
+      }
       _Thread_Enable_dispatch();
 
       if ( value_ptr )
