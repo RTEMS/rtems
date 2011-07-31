@@ -96,6 +96,7 @@ psx12/Makefile
 psx13/Makefile
 psx14/Makefile
 psx15/Makefile
+psx16/Makefile
 psxaio01/Makefile
 psxaio02/Makefile
 psxaio03/Makefile
