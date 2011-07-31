@@ -5,7 +5,7 @@
  *
  *  http://www.opengroup.org/onlinepubs/009695399/functions/readv.html
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -40,7 +40,7 @@ ssize_t readv(
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open( iop );
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
+  rtems_libio_check_permissions_with_error( iop, LIBIO_FLAGS_READ, EBADF );
 
   /*
    *  Argument validation on IO vector

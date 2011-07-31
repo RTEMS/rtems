@@ -39,7 +39,7 @@ ssize_t write(
   rtems_libio_check_is_open( iop );
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
+  rtems_libio_check_permissions_with_error( iop, LIBIO_FLAGS_WRITE, EBADF );
 
   /*
    *  Now process the write() request.

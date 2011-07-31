@@ -1,7 +1,7 @@
 /*
  *  fpathconf() - POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,7 +33,6 @@ long fpathconf(
   rtems_libio_check_fd(fd);
   iop = rtems_libio_iop(fd);
   rtems_libio_check_is_open(iop);
-  rtems_libio_check_permissions(iop, LIBIO_FLAGS_READ);
 
   /*
    *  Now process the information request.

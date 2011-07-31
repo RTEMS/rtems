@@ -124,18 +124,29 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
   } while (0)
 
 /*
- *  rtems_libio_check_permissions
+ *  rtems_libio_check_permissions_with_error
  *
  *  Macro to check if a file descriptor is open for this operation.
+ *  On failure, return the user specified error.
  */
 
-#define rtems_libio_check_permissions(_iop, _flag)          \
+#define rtems_libio_check_permissions_with_error(_iop, _flag, _errno) \
   do {                                                      \
       if (((_iop)->flags & (_flag)) == 0) {                 \
-            rtems_set_errno_and_return_minus_one( EINVAL ); \
+            rtems_set_errno_and_return_minus_one( _errno ); \
             return -1;                                      \
       }                                                     \
   } while (0)
+
+/*
+ *  rtems_libio_check_permissions
+ *
+ *  Macro to check if a file descriptor is open for this operation.
+ *  On failure, return EINVAL
+ */
+
+#define rtems_libio_check_permissions(_iop, _flag) \
+   rtems_libio_check_permissions_with_error(_iop, _flag, EINVAL )
 
 /*
  *  rtems_filesystem_freenode
