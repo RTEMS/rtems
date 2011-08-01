@@ -13,7 +13,15 @@
 #include <sys/types.h>
 
 #include <rtems/libio.h>
+#include <rtems/rtems-rfs-format.h>
+#include "ramdisk_support.h"
 
+#define BLOCK_SIZE (512)
+
+rtems_rfs_format_config config=
+{
+block_size:BLOCK_SIZE
+};
 
 
 void test_initialize_filesystem(void)
@@ -22,10 +30,14 @@ void test_initialize_filesystem(void)
   rc=mkdir(BASE_FOR_TEST,0777);
   rtems_test_assert(rc==0);
 
+  init_ramdisk();
 
-  rc=mount(NULL,
+  rc=rtems_rfs_format(RAMDISK_PATH,&config);
+  rtems_test_assert(rc==0);
+
+  rc=mount(RAMDISK_PATH,
       BASE_FOR_TEST,
-      "imfs",
+      "rfs",
       RTEMS_FILESYSTEM_READ_WRITE,
       NULL);
   rtems_test_assert(rc==0);
@@ -37,6 +49,7 @@ void test_shutdown_filesystem(void)
   int rc=0;
   rc=unmount(BASE_FOR_TEST) ;
   rtems_test_assert(rc==0);
+  del_ramdisk();
 }
 
 /* configuration information */
@@ -65,6 +78,7 @@ void test_shutdown_filesystem(void)
 #define CONFIGURE_MAXIMUM_DRIVERS                  100
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
+#define CONFIGURE_FILESYSTEM_RFS
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

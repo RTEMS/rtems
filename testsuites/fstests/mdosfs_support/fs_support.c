@@ -13,8 +13,23 @@
 #include <sys/types.h>
 
 #include <rtems/libio.h>
+#include <rtems/dosfs.h>
+#include "ramdisk_support.h"
 
+#define BLOCK_SIZE 512
 
+msdos_format_request_param_t rqdata = {
+    OEMName:             "RTEMS",
+    VolLabel:            "RTEMSDisk",
+    sectors_per_cluster: 0,
+    fat_num:             0,
+    files_per_root_dir:  0,
+    fattype:             MSDOS_FMT_FATANY,
+    media:               0,
+    quick_format:        FALSE,
+    cluster_align:       0,
+    info_level:          0
+};
 
 void test_initialize_filesystem(void)
 {
@@ -22,10 +37,14 @@ void test_initialize_filesystem(void)
   rc=mkdir(BASE_FOR_TEST,0777);
   rtems_test_assert(rc==0);
 
+  init_ramdisk();
 
-  rc=mount(NULL,
+  rc=msdos_format(RAMDISK_PATH,&rqdata);
+  rtems_test_assert(rc==0);
+
+  rc=mount(RAMDISK_PATH,
       BASE_FOR_TEST,
-      "imfs",
+      "dosfs",
       RTEMS_FILESYSTEM_READ_WRITE,
       NULL);
   rtems_test_assert(rc==0);
@@ -37,6 +56,7 @@ void test_shutdown_filesystem(void)
   int rc=0;
   rc=unmount(BASE_FOR_TEST) ;
   rtems_test_assert(rc==0);
+  del_ramdisk();
 }
 
 /* configuration information */
@@ -65,6 +85,7 @@ void test_shutdown_filesystem(void)
 #define CONFIGURE_MAXIMUM_DRIVERS                  100
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
+#define CONFIGURE_FILESYSTEM_DOSFS
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

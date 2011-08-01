@@ -1,0 +1,35 @@
+##
+##  $Id$
+##
+
+MANAGERS = all
+
+rtems_tests_PROGRAMS = mrfs_fslink
+mrfs_fslink_SOURCES =  ../fslink/test.c ../support/ramdisk_support.c\
+         ../support/fstest_support.c ../support/fstest_support.h\
+         ../support/ramdisk_support.h ../support/fstest.h   ../../psxtests/include/pmacros.h \
+  ../mrfs_support/fs_support.c ../mrfs_support/fs_config.h 
+
+
+#dist_rtems_tests_DATA = mrfs_fslink.scn
+#dist_rtems_tests_DATA += mrfs_fslink.doc
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/leaf.am
+
+mrfs_fslink_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
+
+AM_CPPFLAGS += -I$(top_srcdir)/support
+AM_CPPFLAGS += -I$(top_srcdir)/mrfs_support
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
+
+LINK_OBJS = $(mrfs_fslink_OBJECTS) $(mrfs_fslink_LDADD)
+LINK_LIBS = $(mrfs_fslink_LDLIBS)
+
+mrfs_fslink$(EXEEXT): $(mrfs_fslink_OBJECTS) $(mrfs_fslink_DEPENDENCIES)
+	@rm -f mrfs_fslink$(EXEEXT)
+	$(make-exe)
+
+include $(top_srcdir)/../automake/local.am
