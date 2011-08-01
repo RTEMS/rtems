@@ -41,7 +41,7 @@ Summary:      	amd64-pc-freebsd8.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20110321.1%{?dist}
+Release:      	0.20110731.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -65,6 +65,9 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Should be applicable to gcc >= 4.5.0
 %bcond_with gcc_stdint
 
+# EXPERIMENTAL: Enable newlib's iconv
+%bcond_without iconv
+
 # versions of libraries, we conditionally bundle if necessary
 %global mpc_version	0.8.1
 %global mpfr_version	2.4.2
@@ -72,6 +75,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global libelf_version  0.8.13
 
 # versions of libraries these distros are known to ship
+%if 0%{?fc16}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
 %if 0%{?fc15}
 %global mpc_provided 0.8.3
 %global mpfr_provided 3.0.0
@@ -79,12 +88,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 
 %if 0%{?fc14}
-%global mpc_provided 0.8.1
-%global mpfr_provided 2.4.2
-%global gmp_provided 4.3.1
-%endif
-
-%if 0%{?fc13}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
 %global gmp_provided 4.3.1
@@ -100,12 +103,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
-%endif
-
-%if 0%{?suse11_2}
-%global mpc_provided 0.7
-%global mpfr_provided 2.4.1
-%global gmp_provided 4.3.1
 %endif
 
 %if 0%{?suse11_3}
@@ -194,13 +191,12 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 
 
 %if %{defined cloog_required}
-%{?fc13:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
-%{?suse11_2:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
 
 
@@ -348,9 +344,6 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
 
   languages="c"
   languages="$languages,c++"
-  case amd64-pc-freebsd8.2 in
-  *-rtems4.11) optargs="$optargs --enable-libstdcxx-time";;
-  esac
   languages="$languages,fortran"
   languages="$languages,objc"
 %if "%{_build}" != "%{_host}"
@@ -382,7 +375,7 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
     --with-sysroot=%{_exec_prefix}/amd64-pc-freebsd8.2/sys-root \
     %{?with_lto:--enable-lto}%{!?with_lto:--disable-lto} \
     %{?with_plugin:--enable-plugin}%{!?with_plugin:--disable-plugin} \
-    --enable-languages="$languages" $optargs
+    --enable-languages="$languages"
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
@@ -431,6 +424,9 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
 # Conflict with a native GCC's man pages
   rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 
+  # We don't want libffi's man-pages
+  rm -f $RPM_BUILD_ROOT%{_mandir}/man3/*ffi*
+
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/amd64-pc-freebsd8.2-amd64-pc-freebsd8.2-gcjh%{_exeext}
 
@@ -444,13 +440,13 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
     rmdir ${RPM_BUILD_ROOT}%{_prefix}/amd64-pc-freebsd8.2/include/bits
   fi
 
-  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
 %if ! %{with pygdb}
+  # gcc >= 4.5.0: installs weird libstdc++ python bindings.
   if test -d ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python; then
     rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gcc-%{gcc_version}/python/libstdcxx
   fi
-%endif
 
+%endif
   # Collect multilib subdirectories
   multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
@@ -472,6 +468,7 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
   cp dirs build/files.objc
   cp dirs build/files.gcj
   cp dirs build/files.g++
+  cp dirs build/files.go
 
   TGTDIR="%{_gcclibdir}/gcc/amd64-pc-freebsd8.2/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
@@ -485,17 +482,20 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
     *cc1plus) ;; # ignore: explicitly put into rpm elsewhere
     *collect2) ;;
     *libobjc*) echo "$i" >> build/files.objc ;;
+    *go1) ;; # ignore: explicitly put into rpm elsewhere
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
     *include-fixed/*);;
     *finclude/*);;
+    */go/*) ;; # ignore : explicitly put into rpm elsewhere
     *adainclude*);;
     *adalib*);;
     *gnat1);;
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
+    */libgo*.a) echo "$i" >> build/files.go ;;
     %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
     %{?with_pygdb:*/libstdc++*gdb.py*) >> build/files.g++ ;;}
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
@@ -621,7 +621,9 @@ libgcc amd64-pc-freebsd8.2-gcc.
 %{_bindir}/amd64-pc-freebsd8.2-gcc%{_exeext}
 %{_bindir}/amd64-pc-freebsd8.2-gcc-%{gcc_version}%{_exeext}
 %{_bindir}/amd64-pc-freebsd8.2-gcov%{_exeext}
+%if "%{gcc_version}" < "4.6.0"
 %{_bindir}/amd64-pc-freebsd8.2-gccbug
+%endif
 
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/amd64-pc-freebsd8.2
