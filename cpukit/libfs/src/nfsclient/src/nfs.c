@@ -2137,7 +2137,7 @@ mode_t					type = S_IFMT & mode;
 	SERP_ARGS(node).createarg.attributes.mtime.useconds	= now.tv_usec;
 
 	if ( nfscall( node->nfs->server,
-						NFSPROC_CREATE,
+						(type == S_IFDIR) ? NFSPROC_MKDIR : NFSPROC_CREATE,
 						(xdrproc_t)xdr_createargs,	&SERP_FILE(node),
 						(xdrproc_t)xdr_diropres,	&res)
 		|| (NFS_OK != (errno = res.status)) ) {

@@ -1,3 +1,7 @@
+2011-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/nfsclient/src/nfs.c: Fixed creation of directories.
+
 2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1855/cpukit
