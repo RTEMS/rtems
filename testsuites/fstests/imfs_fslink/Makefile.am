@@ -5,10 +5,13 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = imfs_fslink
-imfs_fslink_SOURCES =  ../fslink/test.c ../support/fstest_support.c\
-         ../support/fstest_support.h ../support/fstest.h   ../../psxtests/include/pmacros.h \
-  ../imfs_support/fs_support.c ../imfs_support/fs_config.h 
-
+imfs_fslink_SOURCES  =  ../fslink/test.c
+imfs_fslink_SOURCES +=  ../support/fstest_support.c
+imfs_fslink_SOURCES += ../support/fstest_support.h
+imfs_fslink_SOURCES +=  ../support/fstest.h
+imfs_fslink_SOURCES += ../../psxtests/include/pmacros.h
+imfs_fslink_SOURCES += ../imfs_support/fs_support.c
+imfs_fslink_SOURCES += ../imfs_support/fs_config.h 
 
 #dist_rtems_tests_DATA = imfs_fslink.scn
 #dist_rtems_tests_DATA += imfs_fslink.doc

@@ -1,5 +1,39 @@
 2011-08-01	Xiang Cui <medivhc@gmail.com>
 
+	* imfs_fslink/Makefile.am, imfs_fssymlink/Makefile.am,
+	mimfs_fslink/Makefile.am, mimfs_fssymlink/Makefile.am,
+	mrfs_fslink/Makefile.am, mrfs_fssymlink/Makefile.am,
+	mrfs_support/fs_config.h: Correcting from previous commit of
+	incorrect tarball.
+	* fserror/fserror.doc, fserror/test.c, fspatheval/patheval.doc,
+	fspatheval/test.c, fspermission/fspermission.doc,
+	fspermission/test.c, fsrdwr/fsrdwr.doc, fsrdwr/init.c,
+	fstime/fstime.doc, fstime/test.c, imfs_fserror/.cvsignore,
+	imfs_fserror/Makefile.am, imfs_fslink/.cvsignore,
+	imfs_fspatheval/.cvsignore, imfs_fspatheval/Makefile.am,
+	imfs_fspermission/.cvsignore, imfs_fspermission/Makefile.am,
+	imfs_fsrdwr/.cvsignore, imfs_fsrdwr/Makefile.am,
+	imfs_fssymlink/.cvsignore, imfs_fstime/.cvsignore,
+	imfs_fstime/Makefile.am, imfs_support/fs_supprot.h,
+	mdosfs_fserror/.cvsignore, mdosfs_fserror/Makefile.am,
+	mdosfs_fspatheval/.cvsignore, mdosfs_fspatheval/Makefile.am,
+	mdosfs_fsrdwr/.cvsignore, mdosfs_fsrdwr/Makefile.am,
+	mdosfs_fstime/.cvsignore, mdosfs_fstime/Makefile.am,
+	mimfs_fserror/.cvsignore, mimfs_fserror/Makefile.am,
+	mimfs_fslink/.cvsignore, mimfs_fspatheval/.cvsignore,
+	mimfs_fspatheval/Makefile.am, mimfs_fspermission/.cvsignore,
+	mimfs_fspermission/Makefile.am, mimfs_fsrdwr/.cvsignore,
+	mimfs_fsrdwr/Makefile.am, mimfs_fssymlink/.cvsignore,
+	mimfs_fstime/.cvsignore, mimfs_fstime/Makefile.am,
+	mrfs_fserror/.cvsignore, mrfs_fserror/Makefile.am,
+	mrfs_fslink/.cvsignore, mrfs_fspatheval/.cvsignore,
+	mrfs_fspatheval/Makefile.am, mrfs_fspermission/.cvsignore,
+	mrfs_fspermission/Makefile.am, mrfs_fsrdwr/.cvsignore,
+	mrfs_fsrdwr/Makefile.am, mrfs_fssymlink/.cvsignore,
+	mrfs_fstime/.cvsignore, mrfs_fstime/Makefile.am: New files.
+
+2011-08-01	Xiang Cui <medivhc@gmail.com>
+
 	* Makefile.am, configure.ac, fslink/fslink.doc, fslink/test.c,
 	fssymlink/test.c, imfs_fslink/Makefile.am,
 	imfs_fssymlink/Makefile.am, imfs_support/fs_config.h,

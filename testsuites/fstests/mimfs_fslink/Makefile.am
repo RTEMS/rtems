@@ -5,11 +5,13 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = mimfs_fslink
-mimfs_fslink_SOURCES =  ../fslink/test.c ../support/fstest_support.c\
-         ../support/fstest_support.h ../support/fstest.h  \
-				 ../../psxtests/include/pmacros.h \
-  ../mimfs_support/fs_support.c ../mimfs_support/fs_config.h 
-
+mimfs_fslink_SOURCES  = ../fslink/test.c
+mimfs_fslink_SOURCES += ../support/fstest_support.c
+mimfs_fslink_SOURCES += ../support/fstest_support.h
+mimfs_fslink_SOURCES += ../support/fstest.h
+mimfs_fslink_SOURCES += ../../psxtests/include/pmacros.h
+mimfs_fslink_SOURCES += ../mimfs_support/fs_support.c
+mimfs_fslink_SOURCES += ../mimfs_support/fs_config.h
 
 #dist_rtems_tests_DATA = mimfs_fslink.scn
 #dist_rtems_tests_DATA += mimfs_fslink.doc

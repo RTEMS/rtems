@@ -5,11 +5,15 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = mrfs_fslink
-mrfs_fslink_SOURCES =  ../fslink/test.c ../support/ramdisk_support.c\
-         ../support/fstest_support.c ../support/fstest_support.h\
-         ../support/ramdisk_support.h ../support/fstest.h   ../../psxtests/include/pmacros.h \
-  ../mrfs_support/fs_support.c ../mrfs_support/fs_config.h 
-
+mrfs_fslink_SOURCES  = ../fslink/test.c
+mrfs_fslink_SOURCES += ../support/ramdisk_support.c
+mrfs_fslink_SOURCES += ../support/fstest_support.c
+mrfs_fslink_SOURCES += ../support/fstest_support.h
+mrfs_fslink_SOURCES += ../support/ramdisk_support.h
+mrfs_fslink_SOURCES += ../support/fstest.h
+mrfs_fslink_SOURCES += ../../psxtests/include/pmacros.h
+mrfs_fslink_SOURCES += ../mrfs_support/fs_support.c
+mrfs_fslink_SOURCES += ../mrfs_support/fs_config.h
 
 #dist_rtems_tests_DATA = mrfs_fslink.scn
 #dist_rtems_tests_DATA += mrfs_fslink.doc
