@@ -1,5 +1,5 @@
 /*
- *  Uart driver for Lattice Mico32 (lm32) UART
+ *  Driver for Milkymist UART
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -7,63 +7,60 @@
  *
  *  $Id$
  *
+ *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
  *  COPYRIGHT (c) Yann Sionneau <yann.sionneau@telecom-sudparis.eu> (GSoC 2010)
  *  Telecom SudParis
  */
 
+#include <rtems.h>
+#include <rtems/libio.h>
 #include "../include/system_conf.h"
 #include "uart.h"
-#include <rtems/libio.h>
 
-static inline int uartread(unsigned int reg)
-{
-  return *((int*)(reg));
-}
-
-static inline void uartwrite(unsigned int reg, int value)
-{
-  *((int*)(reg)) = value;
-}
+bool BSP_uart_txbusy;
 
 void BSP_uart_init(int baud)
 {
-
-  /* Set baud rate */
-  uartwrite(MM_UART_DIV, CPU_FREQUENCY/baud/16);
+  MM_WRITE(MM_UART_DIV, CPU_FREQUENCY/baud/16);
 }
 
 void BSP_uart_polled_write(char ch)
 {
   int ip;
-  /* Wait until THR is empty. */
-  uartwrite(MM_UART_RXTX, ch);
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+  if (BSP_uart_txbusy) {
+    /* wait for the end of the transmission by the IRQ-based driver */
+    do {
+      lm32_read_interrupts(ip);
+    } while (!(ip & (1 << MM_IRQ_UARTTX)));
+    lm32_interrupt_ack(1 << MM_IRQ_UARTTX);
+  }
+  MM_WRITE(MM_UART_RXTX, ch);
   do {
     lm32_read_interrupts(ip);
-  } while (! (ip & MM_IRQ_UARTTX) );
-  lm32_interrupt_ack(MM_IRQ_UARTTX);
+  } while (!(ip & (1 << MM_IRQ_UARTTX)));
+  /* if TX was busy, do not ack the IRQ
+   * so that the IRQ-based driver ISR is run */
+  if (!BSP_uart_txbusy)
+    lm32_interrupt_ack(1 << MM_IRQ_UARTTX);
+  rtems_interrupt_enable(level);
 }
 
-char BSP_uart_polled_read( void )
+int BSP_uart_polled_read(void)
 {
   int ip;
-  /* Wait until there is a byte in RBR */
+  char r;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
   do {
     lm32_read_interrupts(ip);
-  } while(! (ip & MM_IRQ_UARTRX) );
-  lm32_interrupt_ack(MM_IRQ_UARTRX);
-  return (char) uartread(MM_UART_RXTX);
-}
+  } while (!(ip & (1 << MM_IRQ_UARTRX)));
+  lm32_interrupt_ack(1 << MM_IRQ_UARTRX);
+  r = MM_READ(MM_UART_RXTX);
+  rtems_interrupt_enable(level);
 
-char BSP_uart_is_character_ready(char *ch)
-{
-  int ip;
-  lm32_read_interrupts(ip);
-  if (ip & MM_IRQ_UARTRX)
-    {
-      *ch = (char) uartread(MM_UART_RXTX);
-      lm32_interrupt_ack(MM_IRQ_UARTRX);
-      return true;
-    }
-  *ch = '0';
-  return false;
+  return r;
 }

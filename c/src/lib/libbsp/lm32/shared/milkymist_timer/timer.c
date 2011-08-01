@@ -25,23 +25,13 @@
 #include "../include/system_conf.h"
 #include "../../shared/clock/clock.h"
 
-static inline int timerread(unsigned int reg)
-{
-  return *((int*)(reg));
-}
-
-static inline void timerwrite(unsigned int reg, int value)
-{
-  *((int*)reg) = value;
-}
-
 bool benchmark_timer_find_average_overhead;
 
-void benchmark_timer_initialize( void )
+void benchmark_timer_initialize(void)
 {
-  timerwrite(MM_TIMER1_COMPARE, 0xffffffff);
-  timerwrite(MM_TIMER1_COUNTER, 0);
-  timerwrite(MM_TIMER1_CONTROL, TIMER_ENABLE);
+  MM_WRITE(MM_TIMER1_COMPARE, 0xffffffff);
+  MM_WRITE(MM_TIMER1_COUNTER, 0);
+  MM_WRITE(MM_TIMER1_CONTROL, TIMER_ENABLE);
 }
 
 /*
@@ -59,25 +49,25 @@ void benchmark_timer_initialize( void )
                              /* This value is in microseconds. */
 #define LEAST_VALID       4  /* Don't trust a clicks value lower than this */
 
-uint32_t benchmark_timer_read( void )
+uint32_t benchmark_timer_read(void)
 {
   uint32_t ticks;
   uint32_t total;
-  ticks = timerread(MM_TIMER1_COUNTER);
+
+  ticks = MM_READ(MM_TIMER1_COUNTER);
   if (ticks == 0xffffffff)
     printk("Timer overflow!\n");
 
   total = ticks / (CPU_FREQUENCY / 1000000);
 
-  if ( benchmark_timer_find_average_overhead == true )
+  if (benchmark_timer_find_average_overhead)
     return total;
   else
   {
-    if ( total < LEAST_VALID )
+    if (total < LEAST_VALID)
       return 0;
 
     return (total - AVG_OVERHEAD);
-
   }
 }
 

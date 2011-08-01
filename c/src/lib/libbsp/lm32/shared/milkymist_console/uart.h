@@ -14,13 +14,10 @@
 #ifndef _BSPUART_H
 #define _BSPUART_H
 
+extern bool BSP_uart_txbusy;
+
 void BSP_uart_init(int baud);
-
-#define MM_UART_RXTX	(0xe0000000)
-
-#define MM_UART_DIV     (0xe0000004)
-
-#define MM_IRQ_UARTTX	(0x00000010) /* 4 */
-#define MM_IRQ_UARTRX	(0x00000008) /* 3 */
+void BSP_uart_polled_write(char ch);
+int BSP_uart_polled_read(void);
 
 #endif /* _BSPUART_H */

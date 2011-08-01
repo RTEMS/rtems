@@ -11,13 +11,13 @@
  *
  *  COPYRIGHT (c) Yann Sionneau <yann.sionneau@telecom-sudparis.eu> (GSoC 2010)
  *  Telecom SudParis
+ *  Copyright (c) 2011 Sebastien Bourdeauducq
  */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 #include <sys/types.h>
-#include <pthread.h>
 #include <rtems.h>
 #include <bsp.h>
 #include "../include/system_conf.h"
@@ -26,44 +26,29 @@
 
 #define FRAMEBUFFER_DEVICE_NAME "/dev/fb"
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static unsigned short int framebufferA[1024*768]
+  __attribute__((aligned(32)));
+static unsigned short int framebufferB[1024*768]
+  __attribute__((aligned(32)));
+static unsigned short int framebufferC[1024*768]
+  __attribute__((aligned(32)));
 
-static unsigned short int framebufferA[640*480] __attribute__((aligned(32)));
-static unsigned short int framebufferB[640*480] __attribute__((aligned(32)));
-static unsigned short int framebufferC[640*480] __attribute__((aligned(32)));
+static unsigned short int *frontbuffer;
+static unsigned short int *backbuffer;
+static unsigned short int *lastbuffer;
 
-static unsigned short int *frontbuffer = framebufferA;
-static unsigned short int *backbuffer = framebufferB;
-static unsigned short int *lastbuffer = framebufferC;
-
-static inline void fb_write(unsigned int reg, int value)
-{
-  *((int*)reg) = value;
-}
-
-static inline int fb_read(unsigned int reg)
-{
-  return *((int*)(reg));
-}
-
-/* screen information for the VGA driver */
-static struct fb_var_screeninfo fb_var =
-{
+static struct fb_var_screeninfo fb_var = {
   .xres                = 640,
   .yres                = 480,
   .bits_per_pixel      = 16
 };
 
-static struct fb_fix_screeninfo fb_fix =
-{
-// this is initialized at start-up
-  .smem_len            = 640 * 480 * 2,                      /* buffer size       */
-// 2 bytes per pixels
-  .type                = FB_TYPE_VGA_PLANES,           /* type of display    */
-  .visual              = FB_VISUAL_TRUECOLOR,        /* color scheme used */
-  .line_length         = 80                            /* chars per line    */
+static struct fb_fix_screeninfo fb_fix = {
+  .smem_len            = 1024 * 768 * 2,
+  .type                = FB_TYPE_VGA_PLANES,
+  .visual              = FB_VISUAL_TRUECOLOR,
+  .line_length         = 80
 };
-
 
 static int get_fix_screen_info( struct fb_fix_screeninfo *info )
 {
@@ -77,83 +62,19 @@ static int get_var_screen_info( struct fb_var_screeninfo *info )
   return 0;
 }
 
-
-rtems_device_driver frame_buffer_initialize(
-rtems_device_major_number  major,
-rtems_device_minor_number  minor,
-void *arg)
+static void init_buffers(void)
 {
-  rtems_status_code status;
-
-  printk( "frame buffer driver initializing..\n" );
-
-  fb_fix.smem_start = (volatile char *)frontbuffer;
-
-  fb_write(MM_VGA_BASEADDRESS, (unsigned int)frontbuffer);
-  fb_write(MM_VGA_RESET, (unsigned int)0);
-
-  /*
-  * Register the device
-  */
-  status = rtems_io_register_name(FRAMEBUFFER_DEVICE_NAME, major, 0);
-  if (status != RTEMS_SUCCESSFUL)
-  {
-    printk("Error registering frame buffer device!\n");
-    rtems_fatal_error_occurred( status );
-  }
-
-  printk("VGA: initialized at resolution %dx%d\n", fb_var.xres, fb_var.yres);
-  printk("VGA: framebuffers at 0x%08x 0x%08x 0x%08x\n",
-  (unsigned int)frontbuffer, (unsigned int)backbuffer,
-  (unsigned int)lastbuffer);
-
-  /*
-  * graphics hardware initialization goes here for non-console
-  * devices
-  */
-  return RTEMS_SUCCESSFUL;
+  frontbuffer = framebufferA;
+  backbuffer = framebufferB;
+  lastbuffer = framebufferC;
 }
 
-rtems_device_driver frame_buffer_close(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void *arg
-)
-{
-  if (pthread_mutex_unlock(&mutex) == 0){
-  /* restore previous state.  for VGA this means return to text mode.
-   * leave out if graphics hardware has been initialized in
-   * frame_buffer_initialize() */
-    fb_write(MM_VGA_RESET, MM_VGA_RESET_MODE);
-    return RTEMS_SUCCESSFUL;
-  }
-  return RTEMS_UNSATISFIED;
-}
-
-rtems_device_driver frame_buffer_open(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void *arg
-)
-{
-  if (pthread_mutex_trylock(&mutex) == 0){
-    fb_write(MM_VGA_RESET, (unsigned int)0);
-    return RTEMS_SUCCESSFUL;
-  }
-  return RTEMS_UNSATISFIED;
-}
-
-static void vga_swap_buffers(void)
+static void swap_buffers(void)
 {
   unsigned short int *p;
 
-  /*
-  * Make sure last buffer swap has been executed.
-  * Beware, DMA address registers of vgafb are incomplete
-  * (only LSBs are present) so don't compare them directly
-  * with CPU pointers.
-  */
-  while( fb_read(MM_VGA_BASEADDRESS_ACT) != fb_read(MM_VGA_BASEADDRESS) );
+  /* Make sure last buffer swap has been executed */
+  while (MM_READ(MM_VGA_BASEADDRESS_ACT) != MM_READ(MM_VGA_BASEADDRESS));
 
   p = frontbuffer;
   frontbuffer = backbuffer;
@@ -161,84 +82,171 @@ static void vga_swap_buffers(void)
   lastbuffer = p;
 
   fb_fix.smem_start = (volatile char *)backbuffer;
+  MM_WRITE(MM_VGA_BASEADDRESS, (unsigned int)frontbuffer);
+}
 
-  fb_write(MM_VGA_BASEADDRESS, (unsigned int)frontbuffer);
+static void set_video_mode(int mode)
+{
+  int hres, vres;
+  
+  MM_WRITE(MM_VGA_RESET, VGA_RESET);
+  hres = vres = 0;
+  switch(mode) {
+    case 0: // 640x480, pixel clock: 25MHz
+      hres = 640;
+      vres = 480;
+      MM_WRITE(MM_VGA_HSYNC_START, 656);
+      MM_WRITE(MM_VGA_HSYNC_END, 752);
+      MM_WRITE(MM_VGA_HSCAN, 799);
+      MM_WRITE(MM_VGA_VSYNC_START, 491);
+      MM_WRITE(MM_VGA_VSYNC_END, 493);
+      MM_WRITE(MM_VGA_VSCAN, 523);
+      MM_WRITE(MM_VGA_CLKSEL, 0);
+      break;
+    case 1: // 800x600, pixel clock: 50MHz
+      hres = 800;
+      vres = 600;
+      MM_WRITE(MM_VGA_HSYNC_START, 848);
+      MM_WRITE(MM_VGA_HSYNC_END, 976);
+      MM_WRITE(MM_VGA_HSCAN, 1040);
+      MM_WRITE(MM_VGA_VSYNC_START, 637);
+      MM_WRITE(MM_VGA_VSYNC_END, 643);
+      MM_WRITE(MM_VGA_VSCAN, 666);
+      MM_WRITE(MM_VGA_CLKSEL, 1);
+      break;
+    case 2: // 1024x768, pixel clock: 65MHz
+      hres = 1024;
+      vres = 768;
+      MM_WRITE(MM_VGA_HSYNC_START, 1048);
+      MM_WRITE(MM_VGA_HSYNC_END, 1184);
+      MM_WRITE(MM_VGA_HSCAN, 1344);
+      MM_WRITE(MM_VGA_VSYNC_START, 771);
+      MM_WRITE(MM_VGA_VSYNC_END, 777);
+      MM_WRITE(MM_VGA_VSCAN, 806);
+      MM_WRITE(MM_VGA_CLKSEL, 2);
+      break;
+  }
+  if((hres != 0) && (vres != 0)) {
+    MM_WRITE(MM_VGA_HRES, hres);
+    MM_WRITE(MM_VGA_VRES, vres);
+    fb_var.xres = hres;
+    fb_var.yres = vres;
+    memset(framebufferA, 0, hres*vres*2);
+    memset(framebufferB, 0, hres*vres*2);
+    memset(framebufferC, 0, hres*vres*2);
+    MM_WRITE(MM_VGA_BURST_COUNT, hres*vres/16);
+    MM_WRITE(MM_VGA_RESET, 0);
+  } /* otherwise, leave the VGA controller in reset */
+}
+
+rtems_device_driver frame_buffer_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  rtems_status_code status;
+
+  init_buffers();
+  fb_fix.smem_start = (volatile char *)frontbuffer;
+  MM_WRITE(MM_VGA_BASEADDRESS, (unsigned int)frontbuffer);
+
+  status = rtems_io_register_name(FRAMEBUFFER_DEVICE_NAME, major, 0);
+  if (status != RTEMS_SUCCESSFUL) {
+    printk("Error registering frame buffer device!\n");
+    rtems_fatal_error_occurred( status );
+  }
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver frame_buffer_close(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_device_driver frame_buffer_open(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_device_driver frame_buffer_read(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
 )
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
-  memcpy(rw_args->buffer, (const void *) (fb_fix.smem_start + rw_args->offset), rw_args->bytes_moved);
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len)
+    ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy(rw_args->buffer, (const void *)(fb_fix.smem_start + rw_args->offset),
+    rw_args->bytes_moved);
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_device_driver frame_buffer_write(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
 )
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len ) ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
-  memcpy( (void *) (fb_fix.smem_start + rw_args->offset), rw_args->buffer, rw_args->bytes_moved);
+  rw_args->bytes_moved = ((rw_args->offset + rw_args->count) > fb_fix.smem_len)
+     ? (fb_fix.smem_len - rw_args->offset) : rw_args->count;
+  memcpy((void *)(fb_fix.smem_start + rw_args->offset), rw_args->buffer,
+    rw_args->bytes_moved);
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_device_driver frame_buffer_control(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
 )
 {
   rtems_libio_ioctl_args_t *args = arg;
 
-  switch( args->command ) {
+  switch (args->command) {
     case FBIOGET_FSCREENINFO:
-      args->ioctl_return =  get_fix_screen_info( ( struct fb_fix_screeninfo * ) args->buffer );
-      break;
+      args->ioctl_return =
+        get_fix_screen_info((struct fb_fix_screeninfo *)args->buffer);
+      return RTEMS_SUCCESSFUL;
     case FBIOGET_VSCREENINFO:
-      args->ioctl_return =  get_var_screen_info( ( struct fb_var_screeninfo * ) args->buffer );
-      break;
-    case FBIOPUT_VSCREENINFO:
-      /* not implemented yet */
-      args->ioctl_return = -1;
-      return RTEMS_UNSATISFIED;
-    case FBIOGETCMAP:
-      /* not implemented yet */
-      args->ioctl_return = -1;
-      return RTEMS_UNSATISFIED;
-      break;
-    case FBIOPUTCMAP:
-      /* not implemented yet */
-      args->ioctl_return = -1;
-      return RTEMS_UNSATISFIED;
-      break;
+      args->ioctl_return =
+        get_var_screen_info((struct fb_var_screeninfo *)args->buffer);
+      return RTEMS_SUCCESSFUL;
     case FBIOSWAPBUFFERS:
-      vga_swap_buffers();
+      swap_buffers();
       args->ioctl_return = 0;
-      break;
+      return RTEMS_SUCCESSFUL;
     case FBIOSETBUFFERMODE:
       args->ioctl_return = 0;
-      switch ( (unsigned int)args->buffer ) {
+      switch ((unsigned int)args->buffer) {
         case FB_SINGLE_BUFFERED:
+          init_buffers();
           fb_fix.smem_start = (volatile char *)frontbuffer;
-          break;
-        case  FB_TRIPLE_BUFFERED:
+          MM_WRITE(MM_VGA_BASEADDRESS, (unsigned int)frontbuffer);
+          return RTEMS_SUCCESSFUL;
+        case FB_TRIPLE_BUFFERED:
           fb_fix.smem_start = (volatile char *)backbuffer;
-          break;
+          return RTEMS_SUCCESSFUL;
         default:
-          printk("[framebuffer] : error no such buffer mode\n");
+          return RTEMS_UNSATISFIED;
       }
-      break;
+    case FBIOSETVIDEOMODE:
+      set_video_mode((int)args->buffer);
+      return RTEMS_SUCCESSFUL;
     default:
-     args->ioctl_return = 0;
-     break;
+      args->ioctl_return = -1;
+      return RTEMS_UNSATISFIED;
   }
-  return RTEMS_SUCCESSFUL;
 }
 

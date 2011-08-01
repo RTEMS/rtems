@@ -35,10 +35,9 @@
  *  This routine does the bulk of the system initialization.
  */
 
-void bsp_start( void )
+void bsp_start(void)
 {
-  /* Setup console baud rate which we derive from
-     Mico System Builder (MSB) generated system_conf.h */
+  /* Setup console baud rate */
   BSP_uart_init(UART_BAUD_RATE);
 }
 

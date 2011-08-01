@@ -9,13 +9,13 @@ ENTRY(_start)
  * Declare some sizes. Heap is sized at whatever ram space is left.
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x40000000;
-RamSize = DEFINED(RamSize) ? RamSize : 64M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 2M;
+RamSize = DEFINED(RamSize) ? RamSize : 128M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 92M;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
 PROVIDE (__stack = 0);
 MEMORY {
-	sdram   : ORIGIN = 0x40000000 , LENGTH = 64M
+	sdram   : ORIGIN = 0x40000000 , LENGTH = 128M
 }
 SECTIONS
 {

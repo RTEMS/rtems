@@ -145,24 +145,18 @@ crt0:
 	bi	.clear_bss
 .end_clear_bss:
 	mvi	r1, 0
+	be	r4, r0, .no_rescue
+	mvhi	r1, hi(.rescue_str)
+	ori	r1, r1, lo(.rescue_str)
+.no_rescue:
 	mvhi	r7, hi(boot_card)
 	ori	r7, r7, lo(boot_card)
 	call	r7
 	# boot_card returns when RTEMS is shutdown
-#if ON_SIMULATOR
-    #if defined(ON_GDB_SIM)
-	#define	SYS_exit	1
-        mvi     r8, SYS_exit
-        scall
-    #else
-	# on qemu-lm32
-	#define	SYS_CTRL_REG 0xffff0000
-	mvhi	r7, hi(SYS_CTRL_REG)
-	ori	r7, r7, lo(SYS_CTRL_REG)
-	sw	(r7+0), r0
-    #endif
-#endif
-
 .dead_end:
 	bi	.dead_end
+
+.section .rodata
+.rescue_str:
+	.ascii "rescue"
 

@@ -41,9 +41,73 @@ $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
 
-$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+$(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: ../../lm32/shared/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_gpio.h: ../../lm32/shared/milkymist_gpio/milkymist_gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_gpio.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_buttons.h: ../../lm32/shared/milkymist_buttons/milkymist_buttons.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_buttons.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_buttons.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_ac97.h: ../../lm32/shared/milkymist_ac97/milkymist_ac97.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_ac97.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_ac97.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_usbinput.h: ../../lm32/shared/milkymist_usbinput/milkymist_usbinput.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_usbinput.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_usbinput.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_pfpu.h: ../../lm32/shared/milkymist_pfpu/milkymist_pfpu.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_pfpu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_pfpu.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_tmu.h: ../../lm32/shared/milkymist_tmu/milkymist_tmu.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_tmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_tmu.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_memcard.h: ../../lm32/shared/milkymist_memcard/milkymist_memcard.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_memcard.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_memcard.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_flash.h: ../../lm32/shared/milkymist_flash/milkymist_flash.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_flash.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_flash.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_dmx.h: ../../lm32/shared/milkymist_dmx/milkymist_dmx.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_dmx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_dmx.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_midi.h: ../../lm32/shared/milkymist_midi/milkymist_midi.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_midi.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_midi.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_ir.h: ../../lm32/shared/milkymist_ir/milkymist_ir.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_ir.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_ir.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_video.h: ../../lm32/shared/milkymist_video/milkymist_video.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_video.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_video.h
+
+$(PROJECT_INCLUDE)/bsp/milkymist_versions.h: ../../lm32/shared/milkymist_versions/milkymist_versions.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/milkymist_versions.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/milkymist_versions.h
 
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
@@ -52,10 +116,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h
 $(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
-
-$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 $(PROJECT_INCLUDE)/system_conf.h: include/system_conf.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/system_conf.h

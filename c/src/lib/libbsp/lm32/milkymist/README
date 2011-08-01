@@ -2,20 +2,19 @@
 # $Id$
 #
 
-This is a BSP written by Yann Sionneau <yann.sionneau@telecom-sudparis.eu>
-as part of Google Summer of Code 2010.
+Full RTEMS port to the Milkymist One. Supports Milkymist SoC 1.0.x.
 
-This is a BSP to make RTEMS run on Milkymist One board using Milkymist SoC
+Includes drivers for:
+- Multi-standard video input (PAL/SECAM/NTSC)
+- Two DMX512 (RS485) ports
+- MIDI IN and MIDI OUT ports
+- VGA output
+- AC'97 audio
+- NOR flash
+- 10/100 Ethernet
+- Memory card (experimental and incomplete)
+- USB host connectors (input devices only, using the softusb-input firmware)
+- RC5 infrared receiver
+- RS232 debug port
 
-It provides driver for timer, uart, ethernet, framebuffer so far.
-
-Milkymist SoC is running @ 83 MHz with 128 MB of 32-bit DDR400 SDRAM
-The SoC is based on a XC6SLX45 Spartan-6 FPGA running 
-the LatticeMico32 softcore.
-
-More informations available at : http://www.milkymist.org/
-
-Information about the porting can be found in Yann Sionneau's blog
-at http://sionneau.net/
-
-Milkymist is a project leaded by Sebastien Bourdeauducq (aka lekernel)
+For more information: http://www.milkymist.org/

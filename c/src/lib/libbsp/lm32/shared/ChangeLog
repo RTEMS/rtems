@@ -19,18 +19,3 @@
 	  - RC5 infrared receiver
 	  - RS232 debug port
 
-2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
-
-	* configure.ac: Require autoconf-2.68, automake-1.11.1.
-
-2010-08-25	Joel Sherrill <joel.sherrilL@OARcorp.com>
-
-	* .cvsignore: New file.
-
-2010-08-20	<yann.sionneau@telecom-sudparis.eu>
-
-	Add Milkymist BSP developed as part of GSOC 2010.
-	* ChangeLog, Makefile.am, README, bsp_specs, configure.ac,
-	preinstall.am, Documentation/uart.txt, include/.cvsignore,
-	include/bsp.h, include/system_conf.h, include/tm27.h,
-	make/custom/milkymist.cfg, startup/linkcmds: New files.
