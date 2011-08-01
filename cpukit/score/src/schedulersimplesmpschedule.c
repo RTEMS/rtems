@@ -93,12 +93,12 @@ bool _Scheduler_simple_smp_Assign(
     }
 
     if ( !_States_Is_ready( e->current_state ) ) {
-      pheir     = h;
+      pheir     = e;
       found_cpu = cpu;
       found     = true;
       blocked   = true;
       D( "SCHED CPU=%d PHeir=0x%08x considering=0x%08x BLOCKED\n",
-        cpu, h->Object.id, consider->Object.id );
+        cpu, e->Object.id, consider->Object.id );
       continue;
     }
 
@@ -182,6 +182,8 @@ bool _Scheduler_simple_smp_Assign(
      *  inversions and let threads run earlier.
      */
     if ( !pheir->is_preemptible && h->is_preemptible ) {
+      D( "SCHED CPU=%d PHeir==0x%08x is NOT PREEMPTIBLE\n", 
+        cpu, pheir->Object.id );
       pheir = h;
       found_cpu = cpu;
       D( "SCHED CPU=%d PHeir=0x%08x considering=0x%08x PREEMPTIBLE\n",

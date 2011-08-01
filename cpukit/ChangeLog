@@ -1,3 +1,8 @@
+2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/src/schedulersimplesmpschedule.c: Fix bug in smp simple
+	scheduler.
+
 2011-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libfs/src/nfsclient/src/nfs.c: Fixed creation of directories.
