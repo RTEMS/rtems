@@ -90,9 +90,13 @@ SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
 void _ISR_Handler_initialization ( void );
 
 /**
+ *  @brief Disable Interrupts
+ *
  *  This routine disables all interrupts so that a critical section
- *  of code can be executing without being interrupted.  Upon return,
- *  the argument _level will contain the previous interrupt mask level.
+ *  of code can be executing without being interrupted.
+ *
+ *  @return The argument @a _level will contain the previous interrupt
+ *          mask level.
  */
 #define _ISR_Disable( _level ) \
   do { \
@@ -101,9 +105,14 @@ void _ISR_Handler_initialization ( void );
   } while (0)
 
 /**
+ *  @brief Enable Interrupts
+ *
  *  This routine enables interrupts to the previous interrupt mask
  *  LEVEL.  It is used at the end of a critical section of code to
  *  enable interrupts so they can be processed again.
+ *
+ *  @param[in] level contains the interrupt level mask level
+ *             previously returned by @ref _ISR_Disable_on_core.
  */
 #define _ISR_Enable( _level ) \
   do { \
@@ -112,16 +121,23 @@ void _ISR_Handler_initialization ( void );
   } while (0)
 
 /**
+ *  @brief Temporarily Enable Interrupts
+ *
  *  This routine temporarily enables interrupts to the previous
  *  interrupt mask level and then disables all interrupts so that
  *  the caller can continue into the second part of a critical
- *  section.  This routine is used to temporarily enable interrupts
+ *  section.
+ *
+ *  This routine is used to temporarily enable interrupts
  *  during a long critical section.  It is used in long sections of
  *  critical code when a point is reached at which interrupts can
  *  be temporarily enabled.  Deciding where to flash interrupts
  *  in a long critical section is often difficult and the point
  *  must be selected with care to ensure that the critical section
  *  properly protects itself.
+ *
+ *  @param[in] level contains the interrupt level mask level
+ *             previously returned by @ref _ISR_Disable_on_core.
  */
 #define _ISR_Flash( _level ) \
   do { \
@@ -131,33 +147,51 @@ void _ISR_Handler_initialization ( void );
   } while (0)
 
 /**
+ *  @brief Install Interrupt Handler Vector
+ *
  *  This routine installs new_handler as the interrupt service routine
  *  for the specified vector.  The previous interrupt service routine is
  *  returned as old_handler.
+ *
+ *  @param[in] _vector is the vector number
+ *  @param[in] _new_handler is ISR handler to install
+ *  @param[in] _old_handler is a pointer to a variable which will be set
+ *             to the old handler
+ *
+ *  @return *_old_handler will be set to the old ISR handler
  */
 #define _ISR_Install_vector( _vector, _new_handler, _old_handler ) \
   _CPU_ISR_install_vector( _vector, _new_handler, _old_handler )
 
 /**
+ *  @brief Return Current Interrupt Level
+ *
  *  This routine returns the current interrupt level.
+ *
+ *  @return This method returns the current level.
  */
 #define _ISR_Get_level() \
         _CPU_ISR_Get_level()
 
 /**
+ *  @brief Set Current Interrupt Level
+ *
  *  This routine sets the current interrupt level to that specified
- *  by new_level.  The new interrupt level is effective when the
+ *  by @a _new_level.  The new interrupt level is effective when the
  *  routine exits.
+ *
+ *  @param[in] _new_level contains the desired interrupt level.
  */
 #define _ISR_Set_level( _new_level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER();  \
     _CPU_ISR_Set_level( _new_level ); \
     RTEMS_COMPILER_MEMORY_BARRIER();  \
-    } while (0)
-
+  } while (0)
 
 /**
+ *  @brief ISR Handler or Dispatcher
+ *
  *  This routine is the interrupt dispatcher.  ALL interrupts
  *  are vectored to this routine so that minimal context can be saved
  *  and setup performed before the application's high-level language
@@ -172,6 +206,8 @@ void _ISR_Handler_initialization ( void );
 void _ISR_Handler( void );
 
 /**
+ *  @brief ISR Wrapper for Thread Dispatcher
+ *
  *  This routine provides a wrapper so that the routine
  *  @ref _Thread_Dispatch can be invoked when a reschedule is necessary
  *  at the end of the outermost interrupt service routine.  This
@@ -180,20 +216,24 @@ void _ISR_Handler( void );
  *  corrupted by _Thread_Dispatch.  This context typically consists
  *  of registers which are not preserved across routine invocations.
  *
- *  @note  Implemented in assembly language.
+ *  @note  Typically mplemented in assembly language.
  */
 void _ISR_Dispatch( void );
 
 /**
+ *  @brief Is an ISR in Progress
+ *
  *  This function returns true if the processor is currently servicing
  *  and interrupt and false otherwise.   A return value of true indicates
- *  that the caller is an interrupt service routine, NOT a thread.  The
+ *  that the caller is an interrupt service routine, NOT a thread.
+ *
+ *  @return This methods returns true when called from an ISR.
  */
 #if (CPU_PROVIDES_ISR_IS_IN_PROGRESS == TRUE)
-bool _ISR_Is_in_progress( void );
+  bool _ISR_Is_in_progress( void );
 #else
-#define _ISR_Is_in_progress() \
-        (_ISR_Nest_level != 0)
+  #define _ISR_Is_in_progress() \
+          (_ISR_Nest_level != 0)
 #endif
 
 #include <rtems/score/isr.inl>
