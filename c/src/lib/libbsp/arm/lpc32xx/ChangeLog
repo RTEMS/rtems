@@ -1,3 +1,8 @@
+2011-08-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/.cvsignore: New file.
+	* include/bspopts.h.in: Removed file.
+
 2011-07-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* misc/nand-mlc-erase-block-safe.c, misc/nand-mlc-write-blocks.c,
