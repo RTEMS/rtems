@@ -31,13 +31,17 @@ rtems_task Init(
   );
   directive_failed(sc, "rtems_semaphore_create");
 
+  /*
+   *  Call semaphore obtain with dispatching disabled.  Reenable
+   *  dispatching before checking the status returned since
+   *  directive_failed() checks for dispatching being enabled.
+   */
+  puts( "rtems_semaphore_obtain - with dispatching disabled" );
   _Thread_Disable_dispatch();
-
-  sc = rtems_semaphore_obtain(mutex, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT);
+    sc = rtems_semaphore_obtain(mutex, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT);
+  _Thread_Enable_dispatch();
   directive_failed(sc, "rtems_semaphore_obtain");
 
-  _Thread_Enable_dispatch();
-  
   puts( "*** END OF TEST SP75 ***" );
   rtems_test_exit(0);
 }

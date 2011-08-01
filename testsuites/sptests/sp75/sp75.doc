@@ -15,8 +15,9 @@ test set name:  sp75
 
 directives:
 
-  XXX list them
+  rtems_semaphore_obtain
 
 concepts:
 
-+ XXX list them
++ obtain semaphore in no wait mode with dispatching disabled.  This is
+logically the same as performing the same operation from an ISR.

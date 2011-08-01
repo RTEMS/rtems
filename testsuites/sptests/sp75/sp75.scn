@@ -1,1 +1,3 @@
-XXX fill in with test output
+*** TEST SP75 ***
+rtems_semaphore_obtain - with dispatching disabled
+*** END OF TEST SP75 ***

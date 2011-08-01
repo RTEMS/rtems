@@ -1,3 +1,8 @@
+2011-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp75/init.c, sp75/sp75.doc, sp75/sp75.scn: Correct test and
+	supporting documentation.
+
 2011-07-28	Pawel Zagorski <pzagor@agh.edu.pl>
 
 	PR 1857/tests
