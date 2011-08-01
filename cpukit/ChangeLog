@@ -1,5 +1,9 @@
 2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
+	* score/include/rtems/score/smplock.h: Fix comments.
+
+2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
 	* score/src/schedulersimplesmpschedule.c: Fix bug in smp simple
 	scheduler.
 

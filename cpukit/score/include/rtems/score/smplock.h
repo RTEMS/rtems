@@ -108,9 +108,10 @@ void _SMP_lock_spinlock_nested_Initialize(
  *  This method is used to obtain the lock at @a lock.  ISR's are
  *  disabled when this routine returns and it is the callers responsibility
  *  to either:
- *   1) Do something very short and then call
+ *
+ *   # Do something very short and then call
  *      _SMP_lock_spinlock_nested_Release  or
- *   2) Do something very sort, call isr enable, then when ready
+ *   # Do something very sort, call isr enable, then when ready
  *      call isr_disable and _SMP_lock_spinlock_nested_Release
  *
  *  @param [in] lock is the address of the lock to obtain.
@@ -125,8 +126,9 @@ ISR_Level _SMP_lock_spinlock_nested_Obtain(
 /**
  *  @brief Release a Lock
  *
- *  This method is used to release the lock at @a lock.  Note:
- *  ISR's are reenabled by this method and are expected to be
+ *  This method is used to release the lock at @a lock.  
+ *
+ *  @note ISR's are reenabled by this method and are expected to be
  *  disabled upon entry to the method.
  *
  *  @param [in] lock is the address of the lock to obtain.
