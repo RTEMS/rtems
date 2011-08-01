@@ -37,6 +37,22 @@
  *  Intel literature center.
  */
 
+/*
+ *  This file is based upon code by Eric Boleyn as documented above.  
+ *  RTEMS support was added and minimal other changes were made.  
+ *  This should make it easier to compare this file with the original 
+ *  version.
+ *
+ *  COPYRIGHT (c) 2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id$
+ */
+
 #ifndef _SMP_IMPS_H
 #define _SMP_IMPS_H
 
@@ -194,47 +210,14 @@ struct imps_interrupt
  */
 
 /*
- *  "imps_enabled" is non-zero if the probe sequence found IMPS
- *  information and was successful.
- */
-extern int imps_enabled;
-
-/*
- *  This contains the local APIC hardware address.
- */
-extern unsigned imps_lapic_addr;
-
-/*
- *  This represents the number of CPUs found.
- */
-extern int imps_num_cpus;
-
-/*
  *  These map from virtual cpu numbers to APIC id's and back.
  */
 extern unsigned char imps_cpu_apic_map[IMPS_MAX_CPUS];
 extern unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
 
-/*
- *  This is the primary function for probing for Intel MPS 1.1/1.4
- *  compatible hardware and BIOS information.  While probing the CPUs
- *  information returned from the BIOS, this also starts up each CPU
- *  and gets it ready for use.
- *
- *  Call this during the early stages of OS startup, before memory can
- *  be messed up.
- *
- *  Returns N if IMPS information was found (for number of CPUs started)
- *  and is valid, else 0.
- */
-int imps_probe(void);
-
-/*
- *  This one is used as a "force" function.  Give it the number of CPUs
- *  to start, and it will assume a certain number and try it.
- */
-int imps_force(int ncpus);
-
+/* base address of application processor reset code at 0x70000 */
+extern char _binary_appstart_bin_start[];
+extern char _binary_appstart_bin_size[];
 
 /*
  *  Defines that use variables

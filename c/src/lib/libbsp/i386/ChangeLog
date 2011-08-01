@@ -1,3 +1,10 @@
+2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1802
+	* shared/irq/irq_asm.S, shared/irq/irq_init.c, shared/smp/smp-imps.c,
+	shared/smp/smp-imps.h: Add SMP support for i386.
+	* shared/smp/getcpuid.c: New file.
+
 2011-07-18	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* shared/irq/apic.h, shared/smp/smp-imps.c, shared/smp/smp-imps.h:

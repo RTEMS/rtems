@@ -6,6 +6,9 @@
  *  Copyright (c) 2009 embedded brains GmbH
  *  CopyRight (C) 1998 valette@crf.canon.fr
  *
+ *  COPYRIGHT (c) 2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.

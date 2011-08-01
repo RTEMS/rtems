@@ -47,6 +47,16 @@
 #define _SMP_IMPS_C
 
 /*
+ *  Includes here
+ */
+#if 0
+#define IMPS_DEBUG
+#endif
+
+#include <bsp/apic.h>
+#include <bsp/smp-imps.h>
+
+/*
  *  XXXXX  The following absolutely must be defined!!!
  *
  *  The "KERNEL_PRINT" could be made a null macro with no danger, of
@@ -63,17 +73,69 @@
 #define UDELAY(x)             /* delay roughly at least "x" microsecs */
 #define TEST_BOOTED(x)        /* test bootaddr x to see if CPU started */
 #define READ_MSR_LO(x)        /* Read MSR low function */
+#else
+#include <string.h>
+#include <unistd.h>
+#include <rtems.h>
+#include <rtems/bspsmp.h>
+#include <rtems/bspIo.h>
+#include <libcpu/cpu.h>
+
+extern void _pc386_delay(void);
+
+/* #define KERNEL_PRINT(_format)       printk(_format) */
+
+static void CMOS_WRITE_BYTE(
+  unsigned int  offset,
+  unsigned char value
+)
+{
+  if ( offset < 128 ) {
+    outport_byte( 0x70, offset );
+    outport_byte( 0x71, value );
+  } else {
+    outport_byte( 0x72, offset );
+    outport_byte( 0x73, value );
+  }
+}
+
+static unsigned char CMOS_READ_BYTE(
+  unsigned int  offset
+)
+{
+  unsigned char value;
+  if ( offset < 128 ) {
+    outport_byte( 0x70, offset );
+    inport_byte( 0x71, value );
+  } else {
+    outport_byte( 0x72, offset );
+    inport_byte( 0x73, value );
+  }
+  return value;
+}
+
+#define PHYS_TO_VIRTUAL(_x)    _x
+#define VIRTUAL_TO_PHYS(_x)    _x
+static void UDELAY(int x)
+{ int _i = x;
+  while ( _i-- )
+    _pc386_delay();
+}
+ 
+#define READ_MSR_LO(_x) \
+  (unsigned int)(read_msr(_x) & 0xffffffff)
+
+#define TEST_BOOTED(_cpu) \
+  (_Per_CPU_Information[_cpu].state == RTEMS_BSP_SMP_CPU_INITIALIZED)
+
+static inline unsigned long long read_msr(unsigned int msr)
+{
+  unsigned long long value;
+ 
+  asm volatile("rdmsr" : "=A" (value) : "c" (msr));
+  return value;
+}
 #endif
-
-/*
- *  Includes here
- */
-
-#define IMPS_DEBUG
-
-#include "apic.h"
-#include "smp-imps.h"
-
 
 /*
  *  Defines that are here so as not to be in the global header file.
@@ -92,7 +154,6 @@
 
 #define DEF_ENTRIES  23
 
-static int lapic_dummy = 0;
 static struct {
   imps_processor proc[2];
   imps_bus bus[2];
@@ -132,9 +193,11 @@ static struct {
 volatile int imps_release_cpus = 0;
 int imps_enabled = 0;
 int imps_num_cpus = 1;
-unsigned imps_lapic_addr = ((unsigned)(&lapic_dummy)) - LAPIC_ID;
 unsigned char imps_cpu_apic_map[IMPS_MAX_CPUS];
 unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
+
+/* now defined in getcpuid.c */
+extern unsigned imps_lapic_addr;
 
 /*
  *  MPS checksum function
@@ -180,10 +243,10 @@ send_ipi(unsigned int dst, unsigned int v)
  *  This must be modified to perform whatever OS-specific initialization
  *  that is required.
  */
-static int
+int
 boot_cpu(imps_processor *proc)
 {
-  int apicid = proc->apic_id, success = 1, to;
+  int apicid = proc->apic_id, success = 1;
   unsigned bootaddr, accept_status;
   unsigned bios_reset_vector = PHYS_TO_VIRTUAL(BIOS_RESET_VECTOR);
 
@@ -195,10 +258,19 @@ boot_cpu(imps_processor *proc)
    * under the 1MB boundary.
    */
 
-  extern char patch_code_start[];
-  extern char patch_code_end[];
+  uint32_t *reset;
+
   bootaddr = (512-64)*1024;
-  memcpy((char *)bootaddr, patch_code_start, patch_code_end - patch_code_start);
+  reset= (uint32_t *)bootaddr;
+
+  memcpy(
+    (char *) bootaddr,
+    _binary_appstart_bin_start,
+    (size_t)_binary_appstart_bin_size
+  );
+
+  reset[1] = (uint32_t)rtems_smp_secondary_cpu_initialize;
+  reset[2] = (uint32_t)_Per_CPU_Information[apicid].interrupt_stack_high;
 
   /*
    *  Generic CPU startup sequence starts here.
@@ -214,8 +286,9 @@ boot_cpu(imps_processor *proc)
 
   /* assert INIT IPI */
   send_ipi(
-    apicid, LAPIC_ICR_TM_LEVEL | LAPIC_ICR_LEVELASSERT | LAPIC_ICR_DM_INIT);
-
+    apicid,
+    LAPIC_ICR_TM_LEVEL | LAPIC_ICR_LEVELASSERT | LAPIC_ICR_DM_INIT
+  );
   UDELAY(10000);
 
   /* de-assert INIT IPI */
@@ -238,14 +311,17 @@ boot_cpu(imps_processor *proc)
   /*
    *  Check to see if other processor has started.
    */
-  to = 0;
-  while (!TEST_BOOTED(bootaddr) && to++ < 100)
-    UDELAY(10000);
-  if (to >= 100) {
-    KERNEL_PRINT(("CPU Not Responding, DISABLED"));
+  bsp_smp_wait_for(
+    (volatile unsigned int *)&_Per_CPU_Information[imps_num_cpus].state,
+    RTEMS_BSP_SMP_CPU_INITIALIZED,
+    1600
+  );
+  if ( _Per_CPU_Information[imps_num_cpus].state ==
+        RTEMS_BSP_SMP_CPU_INITIALIZED )
+    printk("#%d  Application Processor (AP)", imps_num_cpus);
+  else {
+    printk("CPU Not Responding, DISABLED");
     success = 0;
-  } else {
-    KERNEL_PRINT(("#%d  Application Processor (AP)", imps_num_cpus));
   }
 
   /*
@@ -260,7 +336,7 @@ boot_cpu(imps_processor *proc)
   CMOS_WRITE_BYTE(CMOS_RESET_CODE, 0);
   *((volatile unsigned *) bios_reset_vector) = 0;
 
-  KERNEL_PRINT(("\n"));
+  printk("\n");
 
   return success;
 }
@@ -273,14 +349,13 @@ add_processor(imps_processor *proc)
 {
   int apicid = proc->apic_id;
 
-  KERNEL_PRINT(("  Processor [APIC id %d ver %d]:  ",
-          apicid, proc->apic_ver));
+  printk("  Processor [APIC id %d ver %d]: ", apicid, proc->apic_ver);
   if (!(proc->flags & IMPS_FLAG_ENABLED)) {
-    KERNEL_PRINT(("DISABLED\n"));
+    printk("DISABLED\n");
     return;
   }
   if (proc->flags & (IMPS_CPUFLAG_BOOT)) {
-    KERNEL_PRINT(("#0  BootStrap Processor (BSP)\n"));
+    printk("#0  BootStrap Processor (BSP)\n");
     return;
   }
   if (boot_cpu(proc)) {
@@ -301,7 +376,7 @@ add_bus(imps_bus *bus)
 
   memcpy(str, bus->bus_type, 6);
   str[6] = 0;
-  KERNEL_PRINT(("  Bus id %d is %s\n", bus->id, str));
+  printk("  Bus id %d is %s\n", bus->id, str);
 
   /*  XXXXX  add OS-specific code here */
 }
@@ -309,13 +384,13 @@ add_bus(imps_bus *bus)
 static void
 add_ioapic(imps_ioapic *ioapic)
 {
-  KERNEL_PRINT(("  I/O APIC id %d ver %d, address: 0x%x  ",
-          ioapic->id, ioapic->ver, ioapic->addr));
+  printk("  I/O APIC id %d ver %d, address: 0x%x  ",
+          ioapic->id, ioapic->ver, ioapic->addr);
   if (!(ioapic->flags & IMPS_FLAG_ENABLED)) {
-    KERNEL_PRINT(("DISABLED\n"));
+    printk("DISABLED\n");
     return;
   }
-  KERNEL_PRINT(("\n"));
+  printk("\n");
 
   /*  XXXXX  add OS-specific code here */
 }
@@ -326,7 +401,10 @@ imps_read_config_table(unsigned start, int count)
   while (count-- > 0) {
     switch (*((unsigned char *)start)) {
     case IMPS_BCT_PROCESSOR:
-      add_processor((imps_processor *)start);
+      if ( imps_num_cpus < rtems_configuration_smp_maximum_processors ) {
+	add_processor((imps_processor *)start);
+      } else 
+        imps_num_cpus++;
       start += 12;  /* 20 total */
       break;
     case IMPS_BCT_BUS:
@@ -350,6 +428,15 @@ imps_read_config_table(unsigned start, int count)
     }
     start += 8;
   }
+  if ( imps_num_cpus > rtems_configuration_smp_maximum_processors ) {
+    printk(
+      "WARNING!! Found more CPUs (%d) than configured for (%d)!!\n",
+      imps_num_cpus - 1,
+      rtems_configuration_smp_maximum_processors
+    );
+    imps_num_cpus = rtems_configuration_smp_maximum_processors;
+    return;
+  }
 }
 
 static int
@@ -360,8 +447,8 @@ imps_bad_bios(imps_fps *fps_ptr)
     = (imps_cth *) PHYS_TO_VIRTUAL(fps_ptr->cth_ptr);
 
   if (fps_ptr->feature_info[0] > IMPS_FPS_DEFAULT_MAX) {
-    KERNEL_PRINT(("    Invalid MP System Configuration type %d\n",
-            fps_ptr->feature_info[0]));
+    printk("    Invalid MP System Configuration type %d\n",
+            fps_ptr->feature_info[0]);
     return 1;
   }
 
@@ -369,17 +456,17 @@ imps_bad_bios(imps_fps *fps_ptr)
     sum = get_checksum((unsigned)local_cth_ptr,
                                    local_cth_ptr->base_length);
     if (local_cth_ptr->sig != IMPS_CTH_SIGNATURE || sum) {
-      KERNEL_PRINT(
-        ("    Bad MP Config Table sig 0x%x and/or checksum 0x%x\n",
+      printk(
+        "    Bad MP Config Table sig 0x%x and/or checksum 0x%x\n",
         (unsigned)(fps_ptr->cth_ptr),
-        sum)
+        sum
       );
       return 1;
     }
     if (local_cth_ptr->spec_rev != fps_ptr->spec_rev) {
-      KERNEL_PRINT(
-        ("    Bad MP Config Table sub-revision # %d\n",
-        local_cth_ptr->spec_rev)
+      printk(
+        "    Bad MP Config Table sub-revision # %d\n",
+        local_cth_ptr->spec_rev
       );
       return 1;
     }
@@ -389,12 +476,12 @@ imps_bad_bios(imps_fps *fps_ptr)
               local_cth_ptr->extended_length)
              + local_cth_ptr->extended_checksum) & 0xFF;
       if (sum) {
-        KERNEL_PRINT(("    Bad Extended MP Config Table checksum 0x%x\n", sum));
+        printk("    Bad Extended MP Config Table checksum 0x%x\n", sum);
         return 1;
       }
     }
   } else if (!fps_ptr->feature_info[0]) {
-    KERNEL_PRINT(("    Missing configuration information\n"));
+    printk("    Missing configuration information\n");
     return 1;
   }
 
@@ -410,15 +497,15 @@ imps_read_bios(imps_fps *fps_ptr)
     = (imps_cth *)PHYS_TO_VIRTUAL(fps_ptr->cth_ptr);
   char *str_ptr;
 
-  KERNEL_PRINT(("Intel MultiProcessor Spec 1.%d BIOS support detected\n",
-          fps_ptr->spec_rev));
+  printk("Intel MultiProcessor Spec 1.%d BIOS support detected\n",
+          fps_ptr->spec_rev);
 
   /*
    *  Do all checking of errors which would definitely
    *  lead to failure of the SMP boot here.
    */
   if (imps_bad_bios(fps_ptr)) {
-    KERNEL_PRINT(("    Disabling MPS support\n"));
+    printk("    Disabling MPS support\n");
     return;
   }
 
@@ -432,10 +519,10 @@ imps_read_bios(imps_fps *fps_ptr)
   } else {
     imps_lapic_addr = LAPIC_ADDR_DEFAULT;
   }
-  KERNEL_PRINT(("    APIC config: \"%s mode\"    Local APIC address: 0x%x\n",
-          str_ptr, imps_lapic_addr));
+  printk("    APIC config: \"%s mode\"    Local APIC address: 0x%x\n",
+          str_ptr, imps_lapic_addr);
   if (imps_lapic_addr != (READ_MSR_LO(0x1b) & 0xFFFFF000)) {
-    KERNEL_PRINT(("Inconsistent Local APIC address, Disabling SMP support\n"));
+    printk("Inconsistent Local APIC address, Disabling SMP support\n");
     return;
   }
   imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
@@ -455,7 +542,7 @@ imps_read_bios(imps_fps *fps_ptr)
     str1[8] = 0;
     memcpy(str2, local_cth_ptr->prod_id, 12);
     str2[12] = 0;
-    KERNEL_PRINT(("  OEM id: %s  Product id: %s\n", str1, str2));
+    printk("  OEM id: %s  Product id: %s\n", str1, str2);
     cth_start = ((unsigned) local_cth_ptr) + sizeof(imps_cth);
     cth_count = local_cth_ptr->entry_count;
   } else {
@@ -518,8 +605,7 @@ imps_read_bios(imps_fps *fps_ptr)
 static int
 imps_scan(unsigned start, unsigned length)
 {
-  IMPS_DEBUG_PRINT(("Scanning from 0x%x for %d bytes\n",
-        start, length));
+  printk("Scanning from 0x%x for %d bytes\n", start, length);
 
   while (length > 0) {
     imps_fps *fps_ptr = (imps_fps *) PHYS_TO_VIRTUAL(start);
@@ -528,7 +614,7 @@ imps_scan(unsigned start, unsigned length)
      && fps_ptr->length == 1
      && (fps_ptr->spec_rev == 1 || fps_ptr->spec_rev == 4)
      && !get_checksum(start, 16)) {
-      IMPS_DEBUG_PRINT(("Found MP Floating Structure Pointer at %x\n", start));
+      printk("Found MP Floating Structure Pointer at %x\n", start);
       imps_read_bios(fps_ptr);
       return 1;
     }
@@ -540,6 +626,7 @@ imps_scan(unsigned start, unsigned length)
   return 0;
 }
 
+#if !defined(__rtems__)
 /*
  *  This is the primary function to "force" SMP support, with
  *  the assumption that you have consecutively numbered APIC ids.
@@ -550,7 +637,7 @@ imps_force(int ncpus)
   int apicid, i;
   imps_processor p;
 
-  KERNEL_PRINT(("Intel MultiProcessor \"Force\" Support\n"));
+  printk("Intel MultiProcessor \"Force\" Support\n");
 
   imps_lapic_addr = (READ_MSR_LO(0x1b) & 0xFFFFF000);
   imps_lapic_addr = PHYS_TO_VIRTUAL(imps_lapic_addr);
@@ -580,6 +667,7 @@ imps_force(int ncpus)
 
   return imps_num_cpus;
 }
+#endif
 
 /*
  *  This is the primary function for probing for MPS compatible hardware
@@ -661,3 +749,116 @@ imps_probe(void)
   return 0;
 }
 
+/*
+ *  RTEMS SMP BSP Support
+ */
+void smp_apic_ack(void)
+{
+  (void) IMPS_LAPIC_READ(LAPIC_SPIV);  /* dummy read */
+  IMPS_LAPIC_WRITE(LAPIC_EOI, 0 );     /* ACK the interrupt */
+}
+
+rtems_isr ap_ipi_isr(
+  rtems_vector_number vector
+)
+{
+  smp_apic_ack();
+
+  rtems_smp_process_interrupt();
+}
+
+#include <rtems/irq.h>
+
+static rtems_irq_connect_data apIPIIrqData = {
+  16,
+  (void *)ap_ipi_isr,
+  0,
+  NULL,            /* On */
+  NULL,            /* Off */
+  NULL,            /* IsOn */
+};
+
+extern void bsp_reset(void);
+void ipi_install_irq(void)
+{
+  if (!BSP_install_rtems_irq_handler (&apIPIIrqData)) {
+    printk("Unable to initialize IPI\n");
+    bsp_reset();
+  }
+}
+
+#ifdef __SSE__
+extern void enable_sse(void);
+#endif
+
+/* pc386 specific initialization */
+void bsp_smp_secondary_cpu_initialize(int cpu)
+{
+  int apicid;
+
+  asm volatile( "lidt IDT_Descriptor" );
+
+  apicid = IMPS_LAPIC_READ(LAPIC_SPIV);
+  IMPS_LAPIC_WRITE(LAPIC_SPIV, apicid|LAPIC_SPIV_ENABLE_APIC);
+
+#ifdef __SSE__
+  enable_sse();
+#endif
+}
+
+#include <rtems/bspsmp.h>
+int bsp_smp_initialize(
+  int maximum
+)
+{
+  int cores;
+  /* XXX need to deal with finding too many cores */
+
+  cores = imps_probe();
+
+  if ( cores > 1 )
+    ipi_install_irq();
+  return cores;
+}
+
+void bsp_smp_interrupt_cpu(
+  int cpu
+)
+{
+  send_ipi( cpu, 0x30 );
+}
+
+void bsp_smp_broadcast_interrupt(void)
+{
+  /* Single broadcast interrupt */
+  send_ipi( 0, LAPIC_ICR_DS_ALLEX | 0x30 );
+}
+
+void bsp_smp_wait_for(
+  volatile unsigned int *address,
+  unsigned int           desired,
+  int                    maximum_usecs
+)
+{
+  int iterations;
+  volatile int i;
+  volatile unsigned int *p = (volatile unsigned int *)address;
+
+  for (iterations=0 ;  iterations < maximum_usecs ; iterations++ ) {
+    if ( *p == desired )
+      break;
+    #ifdef __SSE3__
+      __builtin_ia32_monitor( (const void *)address, 0, 0 );
+      if ( *p == desired )
+        break;
+      __builtin_ia32_mwait( 0, 0 );
+    #endif
+
+    /*
+     *  Until i386 ms delay does not depend upon the clock we
+     *  will use this less sophisticated delay. 
+     */
+    for(i=5000; i>0; i--)
+      ;
+  }
+}
