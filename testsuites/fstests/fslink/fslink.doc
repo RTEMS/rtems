@@ -15,10 +15,8 @@ test set name: fslink
 
 directives:
 
-+ link
-+ chmod
-+ chown
-
++link
++stat
 
 concepts:
 

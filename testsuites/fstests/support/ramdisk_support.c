@@ -1,13 +1,19 @@
-
 /*
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
  *
- *  $Id$
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
  */
 #include <rtems/ramdisk.h>
 #include <rtems/blkdev.h>
 #include <rtems/libio.h>
 
 #include "ramdisk_support.h"
+#include "fstest.h"
 /*
  * Ramdisk information 
  */
@@ -25,6 +31,7 @@ void init_ramdisk(void)
   rtems_test_assert( rc == 0 );
 
 }
+
 void del_ramdisk(void )
 {
   int rc=0;
@@ -35,12 +42,15 @@ void del_ramdisk(void )
   rtems_test_assert( rc == 0 );
 
   rtems_filesystem_split_dev_t(dev,major,minor);
-
+  
+  rtems_test_assert(major>=0);
+  rtems_test_assert(minor>=0);
+ 
   rc=rtems_io_unregister_driver(major);
   rtems_test_assert( rc == 0 );
 
   rc=rtems_disk_io_done();
   rtems_test_assert( rc == 0 );
-}
 
+}
 

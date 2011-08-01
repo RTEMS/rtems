@@ -1,6 +1,16 @@
 
+/*
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
+ */
+
 #include <sys/stat.h>
-#include <limits.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <stdio.h>
@@ -16,122 +26,138 @@
 /*
  * Test the function of symlink 
  */
-void symlink_test01()
+
+void symlink_test01(void )
 {
   int   fd;
-  char* name0="file";
-  char* name1="symlink";
+  char* file01="file";
+  char* symlink_file01="symlink";
+  char name[20];
   int   status;
   struct stat statbuf;
-  int   len=strlen(name0);
+  size_t   len=strlen(file01);
+  size_t   name_len;
+  
 
-  printf("Create a file named %s\n",name0);
-  fd=creat(name0,0777);
+  printf("Create a file named %s\n",file01);
+  fd=creat(file01,0777);
   status=close(fd);
   rtems_test_assert(status==0);
 
-  printf("Create a symlink named %s to %s\n",name1,name0);
-  status=symlink(name0,name1);
+  printf("Create a symlink named %s to %s\n",symlink_file01,file01);
+  status=symlink(file01,symlink_file01);
   rtems_test_assert(status==0);
 
-  status=stat(name0,&statbuf);
+  status=stat(file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISREG(statbuf.st_mode));
   rtems_test_assert(0==statbuf.st_size);
-  
 
-  status=lstat(name1,&statbuf);
+  status=lstat(symlink_file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
-#if !defined(IMFS_TEST) && !defined(MIMFS_TEST)
   rtems_test_assert(len==statbuf.st_size);
-#endif 
 
+  
+  puts("call readlink ");
+  name_len=readlink(symlink_file01,name,sizeof(name)-1);
+  rtems_test_assert(name_len!=-1);
+  name[name_len]='\0';
+  rtems_test_assert(!strncmp(name,file01,name_len));
+  puts(name);
 
   puts("Unlink the file");
   
-  status=unlink(name0);
+  status=unlink(file01);
   rtems_test_assert(status==0);
 
-
-  status=lstat(name1,&statbuf);
-  rtems_test_assert(status==0);
-  rtems_test_assert(S_ISLNK(statbuf.st_mode));
-
-  status=unlink(name1);
-  rtems_test_assert(status==0);
-
-  printf("Create a dir named %s\n",name0);
-  status=mkdir (name0,0777);
-  
-  printf("Create a symlink named %s to %s\n",name1,name0);
-  status=symlink(name0,name1);
-  rtems_test_assert(status==0);
-
-
-
-  status=lstat(name1,&statbuf);
+  status=lstat(symlink_file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
-#if !defined(IMFS_TEST) && !defined(MIMFS_TEST)
   rtems_test_assert(len==statbuf.st_size);
-#endif 
+  
+  puts("call readlink ");
+  name_len=readlink(symlink_file01,name,sizeof(name)-1);
+  rtems_test_assert(name_len!=-1);
+  name[name_len]='\0';
+  rtems_test_assert(!strncmp(name,file01,name_len));
+  status=unlink(symlink_file01);
+  rtems_test_assert(status==0);
+
+  printf("Create a dir named %s\n",file01);
+  status=mkdir (file01,0777);
+  
+  printf("Create a symlink named %s to %s\n",symlink_file01,file01);
+  status=symlink(file01,symlink_file01);
+  rtems_test_assert(status==0);
+
+  status=lstat(symlink_file01,&statbuf);
+  rtems_test_assert(status==0);
+  rtems_test_assert(S_ISLNK(statbuf.st_mode));
+  rtems_test_assert(len==statbuf.st_size);
+
+  
+  puts("call readlink ");
+  name_len=readlink(symlink_file01,name,sizeof(name)-1);
+  rtems_test_assert(name_len!=-1);
+  name[name_len]='\0';
+  rtems_test_assert(!strncmp(name,file01,name_len));
+
+  name_len=readlink(symlink_file01,name,3);
+  rtems_test_assert(name_len!=-1);
+  name[name_len]='\0';
+  rtems_test_assert(!strncmp(name,file01,name_len));
 
   puts("rmdir the dir");
-  status=rmdir(name0);
+  status=rmdir(file01);
   rtems_test_assert(status==0);
-  
 
-  status=lstat(name1,&statbuf);
+  status=lstat(symlink_file01,&statbuf);
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
 
-  status=unlink(name1);
+  status=unlink(symlink_file01);
   rtems_test_assert(status==0);
 
 }
 /*
- *  symlink loop test
+ *  symlink loop error test
  */
-void symlink_test02()
+void symlink_loop_error_test(void )
 {
+  char* file01="file01";
+  char* file02="file02";
 
-  char* name0="symlink0";
-  char* name1="symlink1";
+  char* file04="file04";
+  char* path="file01/t";
+
   int   status;
 
+  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-  puts("symlink loop test");
-  status=symlink(name0,name1);
-  rtems_test_assert(status==0);
-  status=symlink(name1,name0);
-  rtems_test_assert(status==0);
+  puts("symlink loop erro test");
 
+  status=symlink(file01,file02);
+  rtems_test_assert(status==0);
+  status=symlink(file02,file01);
+  rtems_test_assert(status==0);
   
-  puts("create a file Should fail with ELOOP");
-  status=creat(name0,0777);
-  rtems_test_assert(status!=0);
-#if !defined(MRFS_TEST)
-  rtems_test_assert(errno==ELOOP);
-#endif 
-  puts("truncate a file Should with ELOOP");
-  status=truncate(name0,0777);
-  rtems_test_assert(status!=0);
-#if !defined(MRFS_TEST)
-  rtems_test_assert(errno==ELOOP);
-#endif 
+
+  EXPECT_ERROR(ELOOP,creat,path,mode);
+  EXPECT_ERROR(ELOOP,open,path,O_CREAT|O_WRONLY,mode);
+  EXPECT_ERROR(ELOOP,truncate,path,0);
+  EXPECT_ERROR(ELOOP,rename,path,file04);
+  EXPECT_ERROR(ELOOP,unlink,path);
+  EXPECT_ERROR(ELOOP,mkdir,path,mode);
+  EXPECT_ERROR(ELOOP,rmdir,path);
 }
 
-void test()
+void test(void )
 {
 
   puts( "\n\n*** SYMLINK TEST ***" );
-#if defined(MDOSFS_TEST) 
-#else
   symlink_test01();
-  symlink_test02();
-#endif 
-
+  symlink_loop_error_test();
   puts( "*** END OF SYMLINK TEST ***" );
 
 }

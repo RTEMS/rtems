@@ -1,7 +1,13 @@
 /*
- *  $Id$
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
  */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -34,7 +40,7 @@ msdos_format_request_param_t rqdata = {
 void test_initialize_filesystem(void)
 {
   int rc=0;
-  rc=mkdir(BASE_FOR_TEST,0777);
+  rc = mkdir (BASE_FOR_TEST,S_IRWXU|S_IRWXG|S_IRWXO);
   rtems_test_assert(rc==0);
 
   init_ramdisk();
@@ -69,20 +75,12 @@ void test_shutdown_filesystem(void)
  * Configure base RTEMS resources.
  */
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MEMORY_OVERHEAD                  512
-#define CONFIGURE_MAXIMUM_TASKS                    rtems_resource_unlimited (10)
-#define CONFIGURE_MAXIMUM_SEMAPHORES               rtems_resource_unlimited (10)
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES           rtems_resource_unlimited (6)
-#define CONFIGURE_MAXIMUM_PARTITIONS               rtems_resource_unlimited (4)
-#define CONFIGURE_MAXIMUM_TIMERS                   10
 
-
-/**
- * Configure file system and libblock.
- */
+#define CONFIGURE_MAXIMUM_TASKS                     10
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS  100
-#define CONFIGURE_MAXIMUM_DRIVERS                  100
+#define CONFIGURE_MAXIMUM_DRIVERS                   10
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS    40
+
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
 #define CONFIGURE_FILESYSTEM_DOSFS

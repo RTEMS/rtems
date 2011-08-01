@@ -1,5 +1,12 @@
 /*
- *  $Id$
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
  */
 #ifndef __IMFS_SUPPORT_h
 #define __IMFS_SUPPORT_h
@@ -7,18 +14,5 @@
 #define IMFS_TEST
 
 #define FILESYSTEM "IMFS"
-#define BASE_FOR_TEST "/mnt/"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern void test_initialize_filesystem(void);
-
-extern void test_shutdown_filesystem(void);
-
-#ifdef __cplusplus
-};
-#endif
 
 #endif

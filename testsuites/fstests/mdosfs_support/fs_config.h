@@ -1,5 +1,12 @@
 /*
- *  $Id$
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
  */
 
 #ifndef __MIMFS_SUPPORT_h
@@ -9,12 +16,5 @@
 
 #define FILESYSTEM "MOUNTED DOSFS"
 #define BASE_FOR_TEST "/mnt/"
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-};
-#endif
 
 #endif

@@ -1,3 +1,14 @@
+/*
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
+ */
+
 #include <stdio.h>  
 #include <errno.h>  
 #include <fcntl.h>  
@@ -11,6 +22,8 @@
 #include "fstest_support.h"
 #include "fs_config.h"
 
+#include "fstest.h"
+
 #define TEMP_DIR "waterbuffalo"  
 
 
@@ -18,8 +31,6 @@
 void break_out_of_chroot(void)
 {
 
-  int x;            /* Used to move up a directory tree */  
-  int done=0;       /* Are we done yet ? */  
   int dir_fd;       /* File descriptor to directory */  
   struct stat sbuf; /* The stat() buffer */  
   chdir("/");
@@ -87,7 +98,6 @@ rtems_task Init(
   break_out_of_chroot();
   chdir("/");
 
-
   puts( "\n\nShutting down filesystem " FILESYSTEM );
   test_shutdown_filesystem();
 
@@ -95,4 +105,3 @@ rtems_task Init(
   rtems_test_exit(0);
 
 }
-

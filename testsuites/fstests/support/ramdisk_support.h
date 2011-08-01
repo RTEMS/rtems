@@ -1,6 +1,12 @@
 /*
+ *  COPYRIGHT (c) 1989-2011.
+ *  On-Line Applications Research Corporation (OAR).
  *
- *  $Id$
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  $Id Exp $
  */
 #ifndef __RAMDISK_SUPPORT_H
 #define __RAMDISK_SUPPORT_H
@@ -8,8 +14,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif 
-
-#include "fstest_support.h"
 
 #define  RAMDISK_BLOCK_SIZE  (512)
 #define  RAMDISK_BLOCK_COUNT (1024)

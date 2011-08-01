@@ -5,9 +5,9 @@
 MANAGERS = all
 
 rtems_tests_PROGRAMS = mimfs_fslink
-mimfs_fslink_SOURCES =  ../fslink/test.c ../support/ramdisk_support.c\
-         ../support/fstest_support.c ../support/fstest_support.h\
-         ../support/ramdisk_support.h ../support/fstest.h   ../../psxtests/include/pmacros.h \
+mimfs_fslink_SOURCES =  ../fslink/test.c ../support/fstest_support.c\
+         ../support/fstest_support.h ../support/fstest.h  \
+				 ../../psxtests/include/pmacros.h \
   ../mimfs_support/fs_support.c ../mimfs_support/fs_config.h 
 
 
