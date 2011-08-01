@@ -1,3 +1,10 @@
+2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1802
+	* Makefile.am, configure.ac, preinstall.am, clock/ckinit.c,
+	start/start16.S, startup/bspstart.c, startup/ldsegs.S: Add SMP
+	support for i386.
+
 2011-07-20	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* start/start16.S: Removed tabs and added OAR standard copyright header

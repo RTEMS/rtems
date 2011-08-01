@@ -31,6 +31,7 @@
 +--------------------------------------------------------------------------*/
 
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <rtems/pci.h>
 #include <libcpu/cpuModel.h>
 
@@ -40,6 +41,7 @@
 extern void Calibrate_loop_1ms(void);
 extern void rtems_irq_mngt_init(void);
 extern void bsp_size_memory(void);
+void Clock_driver_install_handler(void);
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start
@@ -79,6 +81,8 @@ void bsp_start_default( void )
   if (pci_init_retval != PCIB_ERR_SUCCESS) {
       printk("PCI bus: could not initialize PCI BIOS interface\n");
   }
+
+  Clock_driver_install_handler();
 
   bsp_ide_cmdline_init();
 

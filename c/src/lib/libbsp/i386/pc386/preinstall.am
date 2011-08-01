@@ -73,6 +73,15 @@ $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 
+if HAS_SMP
+$(PROJECT_INCLUDE)/bsp/apic.h: ../../i386/shared/irq/apic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/apic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/apic.h
+
+$(PROJECT_INCLUDE)/bsp/smp-imps.h: ../../i386/shared/smp/smp-imps.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/smp-imps.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/smp-imps.h
+endif
 $(PROJECT_INCLUDE)/crt.h: include/crt.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/crt.h
@@ -122,6 +131,11 @@ $(PROJECT_INCLUDE)/uart.h: ../../i386/shared/comm/uart.h $(PROJECT_INCLUDE)/$(di
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h
 
+if HAS_SMP
+$(PROJECT_LIB)/appstart.$(OBJEXT): appstart.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/appstart.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/appstart.$(OBJEXT)
+endif
 if HAS_NETWORKING
 $(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/wd80x3.h

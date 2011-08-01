@@ -96,7 +96,7 @@ pc386_delay1:
 SYM (_load_segments):
 
 	lgdt SYM(gdtdesc)
-	lidt SYM(idtdesc)
+	lidt SYM(IDT_Descriptor)
 
 	/* Load CS, flush prefetched queue */
 	ljmp $0x8, $next_step
@@ -211,7 +211,8 @@ SYM(Interrupt_descriptor_table):
 +--------------------------------------------------------------------------*/
 
 	.p2align 4
-SYM(idtdesc):
+	PUBLIC(IDT_Descriptor)
+SYM(IDT_Descriptor):
 	.word  (256*8 - 1)
 	.long  SYM (Interrupt_descriptor_table)
 

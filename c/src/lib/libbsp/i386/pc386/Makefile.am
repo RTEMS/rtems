@@ -31,6 +31,11 @@ include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h
 
+if HAS_SMP
+include_bsp_HEADERS += ../../i386/shared/irq/apic.h
+include_bsp_HEADERS += ../../i386/shared/smp/smp-imps.h
+endif
+
 include_HEADERS += include/crt.h
 nodist_include_HEADERS += ../../shared/include/coverhd.h
 
@@ -109,8 +114,19 @@ libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 libbsp_a_SOURCES += ide/idecfg.c ide/ide.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c \
-    ../../shared/smp/bspsmp_wait_for.c
+libbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c 
+libbsp_a_SOURCES += ../../i386/shared/smp/smp-imps.c 
+
+project_lib_DATA += appstart.$(OBJEXT)
+appcpustart.$(OBJEXT): start/start16.S
+	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DSMP_SECONDARY_CORE -o $@ -c $<
+
+appstart.$(OBJEXT): appcpustart.$(OBJEXT)
+	$(LD) -N -T $(top_srcdir)/startup/linkcmds \
+	    -Ttext 0x70000 -e app_processor_start -nostdlib \
+	    -o appstart_tmp.exe $<
+	$(OBJCOPY) -O binary appstart_tmp.exe appstart.bin
+	$(OBJCOPY) -I binary -O elf32-i386 -B i386 appstart.bin $@
 endif
 
 if HAS_NETWORKING
@@ -144,6 +160,11 @@ endif
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/page.rel \
     ../../../libcpu/@RTEMS_CPU@/score.rel
+
+if HAS_SMP
+libbsp_a_LIBADD += appstart.$(OBJEXT)
+endif
+
 # We only build the Network library if HAS_NETWORKING was defined
 # dec21140 is supported via libchip
 if HAS_NETWORKING

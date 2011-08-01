@@ -234,6 +234,8 @@ static void clockOn(
   }
   pc386_clock_click_count = US_TO_TICK(pc386_microseconds_per_isr);
 
+  BSP_irq_enable_at_i8259s( BSP_PERIODIC_TIMER - BSP_IRQ_VECTOR_BASE );
+
   #if 0
     printk( "configured usecs per tick=%d \n",
       rtems_configuration_get_microseconds_per_tick() );
@@ -271,14 +273,32 @@ int clockIsOn(const rtems_irq_connect_data* unused)
 rtems_isr Clock_isr(
   rtems_vector_number vector
 );
+
+bool Clock_isr_enabled = false;
+void Clock_isr_handler(
+  rtems_irq_hdl_param param 
+)
+{
+  if ( Clock_isr_enabled )
+    Clock_isr( 0 );
+}
+
 static rtems_irq_connect_data clockIrqData = {
   BSP_PERIODIC_TIMER,
-  (void *)Clock_isr,
+  Clock_isr_handler,
   0,
   clockOn,
   clockOff,
   clockIsOn
 };
+
+void Clock_driver_install_handler(void)
+{
+  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
+    printk("Unable to install system clock ISR handler\n");
+    rtems_fatal_error_occurred(1);
+  }
+}
 
 void Clock_driver_support_initialize_hardware(void)
 {
@@ -318,11 +338,7 @@ void Clock_driver_support_initialize_hardware(void)
     Clock_driver_nanoseconds_since_last_tick
   );
 
-  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
-    printk("Unable to initialize system clock\n");
-    rtems_fatal_error_occurred(1);
-  }
-
+  Clock_isr_enabled = true;
 }
 
 #define Clock_driver_support_shutdown_hardware() \

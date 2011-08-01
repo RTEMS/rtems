@@ -85,6 +85,12 @@ RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
 [Always defined when on a pc386 to enable the pc386 support for
  determining the CPU core number in an SMP configuration.])
 
+## The PC386 BSP supports SMP configurations if this is enabled.
+RTEMS_BSPOPTS_SET([BSP_HAS_SMP],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
+[Always defined when on a pc386 to enable the pc386 support for
+ determining the CPU core number in an SMP configuration.])
+
 ## if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])

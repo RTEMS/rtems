@@ -37,35 +37,57 @@
 | Constants
 +----------------------------------------------------------------------------*/
 
+#if defined(SMP_SECONDARY_CORE)
+.set PROT_CODE_SEG, 0x08        # offset of code segment descriptor into GDT
+#else
 .set PROT_CODE_SEG, 0x0         # offset of code segment descriptor into GDT
+#endif
+
 .set PROT_DATA_SEG, 0x10        # offset of code segment descriptor into GDT
 .set CR0_PE,        1           # protected mode flag on CR0 register
 .set HDRSTART,      HEADERADDR  # address of start of bin2boot header
 .set HDROFF,        0x24        # offset into bin2boot header of start32 addr
 .set STACKOFF,      0x200-0x10  # offset to load into %esp, from start of image
 
- /* #define NEW_GAS */
+/* #define NEW_GAS */
+#ifdef NEW_GAS
+  #define LJMPL ljmpl
+#else
+  #define LJMPL ljmp
+#endif
+
 /*----------------------------------------------------------------------------+
 | CODE section
 +----------------------------------------------------------------------------*/
 
 .text
-
+#if defined(SMP_SECONDARY_CORE)
+        .globl app_processor_start                # entry point
+app_processor_start:
+#else
         .globl _start16         # entry point
         .globl start16
 start16:
 _start16:
+#endif
 
 .code16
         cli                     # DISABLE INTERRUPTS!!!
+#if defined(SMP_SECONDARY_CORE)
+        jmp     1f
+	.align 4
+app_cpu_start:
+	.long   0
+app_cpu_stack:
+	.long   0
+1:
+#endif
+        movw    %cs, %ax                   # Initialize the rest of 
+        movw    %ax, %ds                   #   segment registers
+        movw    %ax, %es
+        movw    %ax, %ss
 
-        movw    %cs, %ax        #
-        movw    %ax, %ds        # set the rest of real mode registers
-        movw    %ax, %es        #
-        movw    %ax, %ss        #
-
-#if (RTEMS_VIDEO_80x50 == 1)
-
+#if !defined(SMP_SECONDARY_CODE) && (RTEMS_VIDEO_80x50 == 1)
         movl    $0x0040,%eax    # use 32 bit constant to ensure 16 MSB=0
         mov     %ax,%es
         movw    %es:0x4a, %ax   # get 16 bit number of columns
@@ -87,26 +109,30 @@ _start16:
         movb    $0x01, %ah      # define cursor (scan lines 0 to 7)
         movw    $0x0007, %cx
         int     $0x10
-
 1:
-#endif /* RTEMS_VIDEO_80x50 */
+#endif /* !SMP_SECONDARY_CODE and RTEMS_VIDEO_80x50 */
 
         /*---------------------------------------------------------------------+
         | Bare PC machines boot in real mode! We have to turn protected mode on.
         +---------------------------------------------------------------------*/
 
+#if defined(SMP_SECONDARY_CORE)
+        lgdt    gdtptr - app_processor_start  # load Global Descriptor Table
+#else
         lgdt    gdtptr - start16        # load Global Descriptor Table
+#endif /* SMP_SECONDARY_CORE */
+
         movl    %cr0, %eax
         orl     $CR0_PE, %eax
         movl    %eax, %cr0              # turn on protected mode
-
-#ifdef NEW_GAS
-        ljmpl   $PROT_CODE_SEG, $1f     # flush prefetch queue, and reload %cs
+#if defined(SMP_SECONDARY_CORE)
+        LJMPL   $PROT_CODE_SEG, $2f     # flush prefetch queue, and reload %cs
 #else
-        ljmp    $PROT_CODE_SEG, $1f     # flush prefetch queue, and reload %cs
+        LJMPL   $PROT_CODE_SEG, $2f     # flush prefetch queue, and reload %cs
 #endif
 .code32
-1:
+2:
+
         /*---------------------------------------------------------------------+
         | load the other segment registers
         +---------------------------------------------------------------------*/
@@ -114,8 +140,13 @@ _start16:
         movw    %ax, %ds
         movw    %ax, %es
         movw    %ax, %ss
+#if defined(SMP_SECONDARY_CORE)
+        movl    app_cpu_stack, %esp            # stack pointer
+        movl    app_cpu_stack, %ebp            # base pointer
+ #else
         movl    $start16 + STACKOFF, %esp       # set up stack pointer
         addl    $start16 + STACKOFF, %ebp       # set up stack pointer
+#endif  /* SMP_SECONDARY_CORE */
 
         /*---------------------------------------------------------------------+
         | we have to enable A20 in order to access memory above 1MByte
@@ -132,9 +163,14 @@ _start16:
         call    pc386_delay
         call    pc386_delay
 
-        movl    %cs:HDRSTART + HDROFF, %eax     #
-        pushl   %eax                            # jump to start of 32 bit code
-        ret                                     #
+#if defined(SMP_SECONDARY_CORE)
+        movl    app_cpu_start, %eax             # jump to app CPU start
+#else
+        movl    %cs:HDRSTART + HDROFF, %eax     # jump to start of 32 bit code
+#endif  /* SMP_SECONDARY_CORE */
+        pushl   %eax                            
+        ret                                    
+ 
 
 /*----------------------------------------------------------------------------+
 | pc386_delay
