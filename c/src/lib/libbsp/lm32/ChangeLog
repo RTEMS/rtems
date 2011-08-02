@@ -1,3 +1,79 @@
+2011-08-02	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
+
+	PR 1869/bsps
+	* ChangeLog: Spacing.
+	* README: Removed.
+
+2011-08-01	Sébastien Bourdeauducq <sebastien@milkymist.org>
+
+	* c/src/lib/libbsp/lm32/README,
+	c/src/lib/libbsp/lm32/lm32_evr/README,
+	c/src/lib/libbsp/lm32/milkymist/Makefile.am,
+	c/src/lib/libbsp/lm32/milkymist/README,
+	c/src/lib/libbsp/lm32/milkymist/include/bsp.h,
+	c/src/lib/libbsp/lm32/milkymist/include/system_conf.h,
+	c/src/lib/libbsp/lm32/milkymist/include/tm27.h,
+	c/src/lib/libbsp/lm32/milkymist/make/custom/milkymist.cfg,
+	c/src/lib/libbsp/lm32/milkymist/preinstall.am,
+	c/src/lib/libbsp/lm32/milkymist/startup/bspclean.c,
+	c/src/lib/libbsp/lm32/milkymist/startup/linkcmds,
+	c/src/lib/libbsp/lm32/shared/include/irq.h,
+	c/src/lib/libbsp/lm32/shared/irq/irq.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_ac97/ac97.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_ac97/milkymist_ac97.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_buttons/buttons.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_buttons/milkymist_buttons.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_clock/ckinit.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_clock/clock.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_console/console.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_console/uart.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_console/uart.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_dmx/dmx.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_dmx/milkymist_dmx.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_flash/flash.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_flash/milkymist_flash.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_framebuffer/framebuffer.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_gpio/gpio.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_gpio/milkymist_gpio.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_ir/ir.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_ir/milkymist_ir.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_memcard/memcard.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_memcard/milkymist_memcard.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_midi/midi.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_midi/milkymist_midi.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_networking/mm_crc32.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_networking/network.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_networking/network.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_pfpu/milkymist_pfpu.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_pfpu/pfpu.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_timer/timer.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_tmu/milkymist_tmu.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_tmu/tmu.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_usbinput/comloc.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_usbinput/milkymist_usbinput.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_usbinput/softusb-input.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_usbinput/usbinput.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_versions/milkymist_versions.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_versions/versions.c,
+	c/src/lib/libbsp/lm32/shared/milkymist_video/milkymist_video.h,
+	c/src/lib/libbsp/lm32/shared/milkymist_video/video.c,
+	c/src/lib/libbsp/lm32/shared/start/start.S,
+	c/src/lib/libbsp/lm32/shared/startup/bspstart.c,
+	c/src/lib/libbsp/lm32/shared/startup/setvec.c:
+	Full port to the Milkymist One. Supports Milkymist SoC 1.0.x.
+	Includes new or updated drivers for:
+	- Multi-standard video input (PAL/SECAM/NTSC)
+	- Two DMX512 (RS485) ports
+	- MIDI IN and MIDI OUT ports
+	- VGA output
+	- AC'97 audio
+	- NOR flash
+	- 10/100 Ethernet
+	- Memory card (experimental and incomplete)
+	- USB host connectors (input devices only)
+	- RC5 infrared receiver
+	- RS232 debug port
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/milkymist_networking/network.c:
