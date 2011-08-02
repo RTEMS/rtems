@@ -40,9 +40,9 @@ void umask_test01(void )
   char* directory01="dir01";
 
   const char* wd=__func__;
-  
+
   mode_t mode=S_IRWXU|S_IRWXG|S_IRWXO ;
-  
+
 
 
   /*
@@ -88,7 +88,7 @@ void umask_test01(void )
   tmp_mode = (statbuf.st_mode) & ALLPERMS;
   printf("The file mode of %s is %03o\n",file02,(unsigned int)tmp_mode);
   rtems_test_assert(tmp_mode==file_mode);
-  
+
   status = stat (directory01, &statbuf);
   rtems_test_assert (status == 0);
   tmp_mode = (statbuf.st_mode) & ALLPERMS;
@@ -136,7 +136,7 @@ void umask_test01(void )
   tmp_mode = (statbuf.st_mode) & ALLPERMS;
   printf("The file mode of %s is %03o\n",file02,(unsigned int)tmp_mode);
   rtems_test_assert(tmp_mode==file_mode);
-  
+
   status = stat (directory01, &statbuf);
   rtems_test_assert (status == 0);
   tmp_mode = (statbuf.st_mode) & ALLPERMS;
@@ -167,17 +167,17 @@ void test_premission01(void )
   char path[20];
   char* test_data="Test Data";
   char* data_buf;
-  size_t len=strlen(test_data); 
+  size_t len=strlen(test_data);
 
   int n;
   DIR *dp;
 
   const char* wd=__func__;
-  
+
   mode_t mode=S_IRWXU|S_IRWXG|S_IRWXO ;
   uid_t user_id =65534;
   gid_t group_id =65534;
-  
+
   uid_t another_user_id =65533;
   gid_t another_group_id =65533;
 
@@ -234,7 +234,7 @@ void test_premission01(void )
   rtems_test_assert(statbuf.st_gid==group_id);
 
   /*
-   * Create directory and a file in it for tese 
+   * Create directory and a file in it for tese
    */
 
   status=mkdir(directory01,0777);
@@ -253,7 +253,7 @@ void test_premission01(void )
   rtems_test_assert(statbuf.st_gid==group_id);
 
   /*
-   * Check the file with open and write 
+   * Check the file with open and write
    */
 
   /*
@@ -264,7 +264,7 @@ void test_premission01(void )
   rtems_test_assert(n==len);
   status=close(fd);
   rtems_test_assert(status==0);
-  
+
   fd=open(file02,O_WRONLY);
   n=write(fd,test_data,len);
   rtems_test_assert(n==len);
@@ -281,7 +281,7 @@ void test_premission01(void )
   rtems_test_assert(n==len);
   status=close(fd);
   rtems_test_assert(status==0);
- 
+
   EXPECT_ERROR(EACCES,open,file02,O_RDONLY);
   EXPECT_ERROR(EACCES,open,file02,O_RDWR);
 
@@ -349,7 +349,7 @@ void test_premission01(void )
 
   status=seteuid(another_user_id);
   rtems_test_assert(status==0);
- 
+
   EXPECT_ERROR(EACCES,open,file02,O_WRONLY);
   EXPECT_ERROR(EACCES,open,file02,O_RDONLY);
   EXPECT_ERROR(EACCES,open,file02,O_RDWR);
@@ -395,7 +395,7 @@ void  test_premission02(void )
   mode_t file_mode=0321;
 
   const char* wd=__func__;
-  
+
   mode_t mode=S_IRWXU|S_IRWXG|S_IRWXO ;
   uid_t user_id =65534;
   gid_t group_id =65534;

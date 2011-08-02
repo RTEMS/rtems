@@ -22,7 +22,9 @@
 
 
 #define FS_PASS() do {puts("PASS");} while (0)
-#define FS_FAIL() do {printf( "FAIL    %s: %d \n", __FILE__, __LINE__ ); } while (0)
+#define FS_FAIL() do {\
+  printf( "FAIL   %s: %d \n", __FILE__, __LINE__ );\
+ } while (0)
 
 
 #define SHOW_MESSAGE(e, func, ...) printf(\
@@ -55,6 +57,6 @@
 
 
 #define BASE_FOR_TEST "/mnt"
-#endif 
+#endif
 
 

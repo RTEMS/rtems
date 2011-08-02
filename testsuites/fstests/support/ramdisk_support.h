@@ -13,7 +13,7 @@
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif 
+#endif
 
 #define  RAMDISK_BLOCK_SIZE  (512)
 #define  RAMDISK_BLOCK_COUNT (1024)

@@ -1,5 +1,5 @@
 ## Process this file with autoconf to produce a configure script.
-## 
+##
 ## $Id$
 
 AC_PREREQ([2.68])
@@ -78,32 +78,32 @@ AC_CHECK_SIZEOF([blksize_t])
 AC_CHECK_SIZEOF([blkcnt_t])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile 
-imfs_fserror/Makefile 
-imfs_fslink/Makefile 
-imfs_fspatheval/Makefile 
-imfs_fspermission/Makefile 
-imfs_fsrdwr/Makefile 
-imfs_fssymlink/Makefile 
-imfs_fstime/Makefile 
-mdosfs_fserror/Makefile 
-mdosfs_fspatheval/Makefile 
-mdosfs_fsrdwr/Makefile 
-mdosfs_fstime/Makefile 
-mimfs_fserror/Makefile 
-mimfs_fslink/Makefile 
-mimfs_fspatheval/Makefile 
-mimfs_fspermission/Makefile 
-mimfs_fsrdwr/Makefile 
-mimfs_fssymlink/Makefile 
-mimfs_fstime/Makefile 
-mrfs_fserror/Makefile 
-mrfs_fslink/Makefile 
-mrfs_fspatheval/Makefile 
-mrfs_fspermission/Makefile 
-mrfs_fsrdwr/Makefile 
-mrfs_fssymlink/Makefile 
-mrfs_fstime/Makefile 
+AC_CONFIG_FILES([Makefile
+imfs_fserror/Makefile
+imfs_fslink/Makefile
+imfs_fspatheval/Makefile
+imfs_fspermission/Makefile
+imfs_fsrdwr/Makefile
+imfs_fssymlink/Makefile
+imfs_fstime/Makefile
+mdosfs_fserror/Makefile
+mdosfs_fspatheval/Makefile
+mdosfs_fsrdwr/Makefile
+mdosfs_fstime/Makefile
+mimfs_fserror/Makefile
+mimfs_fslink/Makefile
+mimfs_fspatheval/Makefile
+mimfs_fspermission/Makefile
+mimfs_fsrdwr/Makefile
+mimfs_fssymlink/Makefile
+mimfs_fstime/Makefile
+mrfs_fserror/Makefile
+mrfs_fslink/Makefile
+mrfs_fspatheval/Makefile
+mrfs_fspermission/Makefile
+mrfs_fsrdwr/Makefile
+mrfs_fssymlink/Makefile
+mrfs_fstime/Makefile
 
 ])
 AC_OUTPUT

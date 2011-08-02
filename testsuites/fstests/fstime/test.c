@@ -80,7 +80,7 @@ void time_test01 (void)
   mtime2 = statbuf.st_mtime;
 
   /*
-   * Make sure they are the same 
+   * Make sure they are the same
    */
 
   rtems_test_assert (TIME_EQUAL (ctime1, mtime1));
@@ -98,7 +98,7 @@ void time_test01 (void)
   mtime2 = statbuf.st_mtime;
 
   /*
-   * Make sure they are the same 
+   * Make sure they are the same
    */
   rtems_test_assert (TIME_EQUAL (ctime1, mtime1));
   rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
@@ -112,7 +112,7 @@ void time_test01 (void)
   sleep (TIME_PRECISION);
 
   /*
-   * Create an empty directory 
+   * Create an empty directory
    */
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);
@@ -133,11 +133,11 @@ void time_test01 (void)
    *  truncate shall not modify the file offset for any open file
    *   descriptions associated with the file. Upon successful completion,
    *   if the file size is changed, this function shall mark for update
-   *   the st_ctime and st_mtime fields of the file 
+   *   the st_ctime and st_mtime fields of the file
    */
 
   /*
-   * file01 shall not update 
+   * file01 shall not update
    */
   status = stat (file01, &statbuf);
   rtems_test_assert (status == 0);
@@ -160,7 +160,7 @@ void time_test01 (void)
   rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
 
   /*
-   *  Upon successful completion, mkdir() shall mark for update the 
+   *  Upon successful completion, mkdir() shall mark for update the
    *  5st_atime, st_ctime, and st_mtime fields of the directory.
    *  Also, the st_ctime and st_mtime fields of the directory that
    *  contains the new entry shall be marked for update.
@@ -252,7 +252,7 @@ void time_test01 (void)
 }
 
 /*
- * These tests only get time_t value, and test 
+ * These tests only get time_t value, and test
  * if they are changed. Thest tests don't check atime
  */
 void test (void)

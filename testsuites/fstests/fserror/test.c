@@ -69,7 +69,7 @@ void open_mkdir_error (void)
   /*
    * O_CREAT is not set and the named file does not exist
    * or O_CREAT is set and either the path prefix does not exist or
-   * the path argument points to an empty string.  
+   * the path argument points to an empty string.
    */
 
   sprintf (name, "%s/%s", name03, name02);
@@ -128,7 +128,7 @@ void rename_error (void)
 
 
   /*
-   * Create a new directory and a new directory in it 
+   * Create a new directory and a new directory in it
    */
 
   status = mkdir (name01, mode);
@@ -147,12 +147,12 @@ void rename_error (void)
   rtems_test_assert (status != 0);
   rtems_test_assert (errno == EEXIST || errno == ENOTEMPTY);
   /*
-   * The new directory pathname contains a path prefix 
+   * The new directory pathname contains a path prefix
    *  that names the old directory.
    */
   EXPECT_ERROR (EINVAL, rename, name01, name);
   /*
-   * The new argument points to a directory and 
+   * The new argument points to a directory and
    *  the old argument points to a file that is not a directory.
    */
   fd = creat (name03, mode);
@@ -206,7 +206,7 @@ void truncate_error (void)
   status = chdir (wd);
   rtems_test_assert (status == 0);
   /*
-   * Create a file 
+   * Create a file
    */
   fd = creat (file, mode);
   status = close (fd);
@@ -256,7 +256,8 @@ void rmdir_unlink_error (void)
 
   /*
    * The path argument names a directory that is not an empty directory,
-   * or there are hard links to the directory other than dot or a single entry in dot-dot.
+   * or there are hard links to the directory other than
+   * dot or a single entry in dot-dot.
    */
 
   EXPECT_ERROR (ENOTEMPTY, rmdir, "..");
@@ -272,8 +273,9 @@ void rmdir_unlink_error (void)
   EXPECT_ERROR (EINVAL, rmdir, "tmp/.");
 
   /*
-   * A component of path does not name an existing file, 
-   * or the path argument names a nonexistent directory or points to an empty string
+   * A component of path does not name an existing file,
+   * or the path argument names a nonexistent directory or
+   * points to an empty string
    */
   EXPECT_ERROR (ENOENT, rmdir, "");
   EXPECT_ERROR (ENOENT, rmdir, nonexistence);
@@ -338,7 +340,7 @@ void rdwr_error (void)
   EXPECT_ERROR (EBADF, write, 100, readbuf, 10);
 
   /*
-   * The whence argument is not a proper value, 
+   * The whence argument is not a proper value,
    * or the resulting file offset would be negative for a regular file,
    * block special file, or directory.
    */

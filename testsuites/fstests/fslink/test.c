@@ -65,7 +65,7 @@ void link_test01 (void)
   rtems_test_assert (statbuf.st_nlink == 2);
 
   /*
-   * link the file and check the nlink 
+   * link the file and check the nlink
    */
   status = link (name1, name2);
   rtems_test_assert (status == 0);

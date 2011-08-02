@@ -20,7 +20,9 @@
 
 #include <rtems/libio.h>
 #include <rtems/dosfs.h>
+
 #include "ramdisk_support.h"
+#include "fstest.h"
 
 #define BLOCK_SIZE 512
 

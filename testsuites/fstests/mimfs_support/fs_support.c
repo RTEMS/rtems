@@ -53,7 +53,7 @@ test_shutdown_filesystem (void)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_TASKS                  10 
+#define CONFIGURE_MAXIMUM_TASKS                  10
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 40
 

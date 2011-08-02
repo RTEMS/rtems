@@ -1,3 +1,13 @@
+2011-08-02	Xiang Cui <medivhc@gmail.com>
+
+	* configure.ac, fserror/test.c, fslink/test.c, fspermission/test.c,
+	fsrdwr/init.c, fssymlink/test.c, fstime/test.c,
+	mdosfs_support/fs_config.h, mdosfs_support/fs_support.c,
+	mimfs_support/fs_support.c, mrfs_support/fs_config.h,
+	support/fstest.h, support/fstest_support.c,
+	support/ramdisk_support.c, support/ramdisk_support.h: Perform first
+	phase of clean up.
+
 2011-08-01	Xiang Cui <medivhc@gmail.com>
 
 	* imfs_fslink/Makefile.am, imfs_fssymlink/Makefile.am,

@@ -24,7 +24,7 @@
 #include "fstest.h"
 
 /*
- * Test the function of symlink 
+ * Test the function of symlink
  */
 
 void symlink_test01(void )
@@ -37,7 +37,7 @@ void symlink_test01(void )
   struct stat statbuf;
   size_t   len=strlen(file01);
   size_t   name_len;
-  
+
 
   printf("Create a file named %s\n",file01);
   fd=creat(file01,0777);
@@ -58,7 +58,7 @@ void symlink_test01(void )
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
   rtems_test_assert(len==statbuf.st_size);
 
-  
+
   puts("call readlink ");
   name_len=readlink(symlink_file01,name,sizeof(name)-1);
   rtems_test_assert(name_len!=-1);
@@ -67,7 +67,7 @@ void symlink_test01(void )
   puts(name);
 
   puts("Unlink the file");
-  
+
   status=unlink(file01);
   rtems_test_assert(status==0);
 
@@ -75,7 +75,7 @@ void symlink_test01(void )
   rtems_test_assert(status==0);
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
   rtems_test_assert(len==statbuf.st_size);
-  
+
   puts("call readlink ");
   name_len=readlink(symlink_file01,name,sizeof(name)-1);
   rtems_test_assert(name_len!=-1);
@@ -86,7 +86,7 @@ void symlink_test01(void )
 
   printf("Create a dir named %s\n",file01);
   status=mkdir (file01,0777);
-  
+
   printf("Create a symlink named %s to %s\n",symlink_file01,file01);
   status=symlink(file01,symlink_file01);
   rtems_test_assert(status==0);
@@ -96,7 +96,7 @@ void symlink_test01(void )
   rtems_test_assert(S_ISLNK(statbuf.st_mode));
   rtems_test_assert(len==statbuf.st_size);
 
-  
+
   puts("call readlink ");
   name_len=readlink(symlink_file01,name,sizeof(name)-1);
   rtems_test_assert(name_len!=-1);
@@ -141,7 +141,7 @@ void symlink_loop_error_test(void )
   rtems_test_assert(status==0);
   status=symlink(file02,file01);
   rtems_test_assert(status==0);
-  
+
 
   EXPECT_ERROR(ELOOP,creat,path,mode);
   EXPECT_ERROR(ELOOP,open,path,O_CREAT|O_WRONLY,mode);

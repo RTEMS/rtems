@@ -15,6 +15,5 @@
 #define MDOSFS_TEST
 
 #define FILESYSTEM "MOUNTED DOSFS"
-#define BASE_FOR_TEST "/mnt/"
 
 #endif
