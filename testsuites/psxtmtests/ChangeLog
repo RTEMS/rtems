@@ -1,5 +1,13 @@
 2011-08-02	Ricardo Aguirre <el.mastin@ymail.com>
 
+	PR 1875/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	pthread_rwlock_rdlock - not available, blocks.
+	* psxtmrwlock02/.cvsignore, psxtmrwlock02/Makefile.am,
+	psxtmrwlock02/init.c, psxtmrwlock02/psxtmrwlock02.doc: New files.
+
+2011-08-02	Ricardo Aguirre <el.mastin@ymail.com>
+
 	PR 1874/tests
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
 	multiple pthread_rwlock operations that can be done as single shot
