@@ -1,3 +1,8 @@
+2011-08-02	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1861/cpukit
+	* score/src/rbtreeextract.c: Remove redundant code.
+
 2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* score/include/rtems/score/isr.h: Cleaned up comments.

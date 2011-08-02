@@ -54,8 +54,7 @@ void _RBTree_Extract_validate_unprotected(
     }
 
     /* sibling is black, see if both of its children are also black. */
-    if (sibling &&
-        !_RBTree_Is_red(sibling->child[RBT_RIGHT]) &&
+    if (!_RBTree_Is_red(sibling->child[RBT_RIGHT]) &&
         !_RBTree_Is_red(sibling->child[RBT_LEFT])) {
         sibling->color = RBT_RED;
         if (_RBTree_Is_red(parent)) {
@@ -65,7 +64,7 @@ void _RBTree_Extract_validate_unprotected(
         the_node = parent; /* done if parent is red */
         parent = the_node->parent;
         sibling = _RBTree_Sibling(the_node);
-    } else if(sibling) {
+    } else {
       /* at least one of sibling's children is red. we now proceed in two
        * cases, either the_node is to the left or the right of the parent.
        * In both cases, first check if one of sibling's children is black,
@@ -105,7 +104,7 @@ void _RBTree_Extract_unprotected(
   RBTree_Color victim_color;
   RBTree_Direction dir;
 
-  if(!the_node) return;
+  if (!the_node) return;
 
   /* check if min needs to be updated */
   if (the_node == the_rbtree->first[RBT_LEFT]) {
@@ -147,7 +146,7 @@ void _RBTree_Extract_unprotected(
      * should become NULL. This may cause the coloring to be violated.
      * For now we store the color of the node being deleted in victim_color.
      */
-     leaf = target->child[RBT_LEFT];
+    leaf = target->child[RBT_LEFT];
     if(leaf) {
       leaf->parent = target->parent;
     } else {
@@ -199,17 +198,14 @@ void _RBTree_Extract_unprotected(
   }
 
   /* fix coloring. leaf has moved up the tree. The color of the deleted
-   * node is in victim_color. There are three cases:
+   * node is in victim_color. There are two cases:
    *   1. Deleted a red node, its child must be black. Nothing must be done.
-   *   2. Deleted a black node and the child is red. Paint child black.
-   *   3. Deleted a black node and its child is black. This requires some
-   *      care and rotations.
+   *   2. Deleted a black node, its child must be red. Paint child black.
    */
   if (victim_color == RBT_BLACK) { /* eliminate case 1 */
-    if (_RBTree_Is_red(leaf))
+    if (leaf) {
       leaf->color = RBT_BLACK; /* case 2 */
-    else if(leaf)
-      _RBTree_Extract_validate_unprotected(leaf); /* case 3 */
+    }
   }
 
   /* Wipe the_node */
