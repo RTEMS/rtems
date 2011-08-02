@@ -1,3 +1,9 @@
+2011-08-02	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
+
+	PR 1869/bsps
+	* README: Merge content from lm32/README which was specific to
+	this BSP.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
