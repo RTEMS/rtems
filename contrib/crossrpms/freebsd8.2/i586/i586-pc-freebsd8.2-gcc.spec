@@ -41,7 +41,7 @@ Summary:      	i586-pc-freebsd8.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20110731.0%{?dist}
+Release:      	0.20110802.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -495,7 +495,7 @@ sed -i -e '/thread_file=.*rtems/,/use_gcc_stdint=wrap/ { s/use_gcc_stdint=wrap/u
     *jc1) ;;
     *jvgenmain) ;;
     */libgfortran*.*) echo "$i" >> build/files.gfortran ;;
-    */libgo*.a) echo "$i" >> build/files.go ;;
+    */libgo.*) echo "$i" >> build/files.go ;;
     %{!?with_pygdb:*/libstdc++*gdb.py*) rm ${RPM_BUILD_ROOT}/$i ;;} # ignore for now
     %{?with_pygdb:*/libstdc++*gdb.py*) >> build/files.g++ ;;}
     */libstdc++.*) echo "$i" >> build/files.g++ ;;
