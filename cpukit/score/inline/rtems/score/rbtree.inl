@@ -235,13 +235,15 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
  *  This routine initializes @a the_rbtree to contain zero nodes.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
-    RBTree_Control *the_rbtree
+    RBTree_Control *the_rbtree,
+    void           *compare_function
     )
 {
-  the_rbtree->permanent_null = NULL;
-  the_rbtree->root           = NULL;
-  the_rbtree->first[0]       = NULL;
-  the_rbtree->first[1]       = NULL;
+  the_rbtree->permanent_null   = NULL;
+  the_rbtree->root             = NULL;
+  the_rbtree->first[0]         = NULL;
+  the_rbtree->first[1]         = NULL;
+  the_rbtree->compare_function = compare_function;
 }
 
 /** @brief Return a pointer to node's grandparent
@@ -310,21 +312,26 @@ RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header_unprotected(
   return (RBTree_Control*)the_node;
 }
 
-/** @brief Find the node with given value in the tree
+/** @brief Find the node with given key in the tree
  *
  *  This function returns a pointer to the node in @a the_rbtree 
- *  having value equal to @a the_value if it exists, and NULL if not. 
+ *  having key equal to key of  @a the_node if it exists,
+ *  and NULL if not. @a the_node has to be made up before a search.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
     RBTree_Control *the_rbtree,
-    unsigned int the_value
+    RBTree_Node *the_node
     )
 {
   RBTree_Node* iter_node = the_rbtree->root;
+  int compare_result;
   while (iter_node) {
-    if (the_value == iter_node->value) return(iter_node);
+    compare_result = the_rbtree->compare_function(the_node, iter_node);
+    if (compare_result == 0) {
+        return(iter_node);
+    }
 
-    RBTree_Direction dir = the_value > iter_node->value;
+    RBTree_Direction dir = (compare_result != -1);
     iter_node = iter_node->child[dir];
   } /* while(iter_node) */
 

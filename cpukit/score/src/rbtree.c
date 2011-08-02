@@ -33,6 +33,7 @@
 
 void _RBTree_Initialize(
   RBTree_Control *the_rbtree,
+  void           *compare_function,
   void           *starting_address,
   size_t         number_nodes,
   size_t         node_size
@@ -45,7 +46,7 @@ void _RBTree_Initialize(
   if (!the_rbtree) return;
 
   /* could do sanity checks here */
-  _RBTree_Initialize_empty(the_rbtree);
+  _RBTree_Initialize_empty(the_rbtree, compare_function);
 
   count = number_nodes;
   next  = starting_address;

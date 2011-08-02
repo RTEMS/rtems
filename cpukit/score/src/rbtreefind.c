@@ -21,11 +21,11 @@
  *  _RBTree_Find
  *
  *  This kernel routine returns a pointer to the rbtree node containing the
- *  given value within the given tree, if it exists, or NULL otherwise.
+ *  given key within the given tree, if it exists, or NULL otherwise.
  *
  *  Input parameters:
  *    the_rbtree - pointer to rbtree control
- *    the_value - value of the node to search for
+ *    search_node - node with the key to search for
  *
  *  Output parameters:
  *    return_node - pointer to control header of rbtree
@@ -38,7 +38,7 @@
 
 RBTree_Node *_RBTree_Find(
   RBTree_Control *the_rbtree,
-  unsigned int the_value
+  RBTree_Node *search_node
 )
 {
   ISR_Level          level;
@@ -46,7 +46,7 @@ RBTree_Node *_RBTree_Find(
 
   return_node = NULL;
   _ISR_Disable( level );
-      return_node = _RBTree_Find_unprotected( the_rbtree, the_value );
+      return_node = _RBTree_Find_unprotected( the_rbtree, search_node );
   _ISR_Enable( level );
   return return_node;
 }

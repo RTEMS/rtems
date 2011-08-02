@@ -71,7 +71,7 @@ void _RBTree_Validate_insert_unprotected(
  *
  *  @retval 0 Successfully inserted.
  *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal value to @a the_node->value exists
+ *  @retval RBTree_Node* if one with equal key to the key of @a the_node exists
  *          in @a the_rbtree.
  *
  *  @note It does NOT disable interrupts to ensure the atomicity
@@ -85,6 +85,7 @@ RBTree_Node *_RBTree_Insert_unprotected(
   if(!the_node) return (RBTree_Node*)-1;
 
   RBTree_Node *iter_node = the_rbtree->root;
+  int compare_result;
 
   if (!iter_node) { /* special case: first node inserted */
     the_node->color = RBT_BLACK;
@@ -95,8 +96,9 @@ RBTree_Node *_RBTree_Insert_unprotected(
   } else {
     /* typical binary search tree insert, descend tree to leaf and insert */
     while (iter_node) {
-      if(the_node->value == iter_node->value) return(iter_node);
-      RBTree_Direction dir = the_node->value > iter_node->value;
+      compare_result = the_rbtree->compare_function(the_node, iter_node);
+      if ( !compare_result ) return iter_node;
+      RBTree_Direction dir = (compare_result != -1);
       if (!iter_node->child[dir]) {
         the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
         the_node->color = RBT_RED;

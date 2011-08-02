@@ -75,8 +75,6 @@ struct RBTree_Node_struct {
   RBTree_Node *parent;
   /** child[0] points to the left child, child[1] points to the right child */
   RBTree_Node *child[2];
-  /** This is the integer value stored by this node, used for sorting */
-  unsigned int value;
   /** The color of the node. Either red or black */
   RBTree_Color color;
 };
@@ -127,6 +125,12 @@ typedef struct {
   RBTree_Node *root;
   /** This points to the min and max nodes of this RBT. */
   RBTree_Node *first[2];
+  /**
+   * Comparison function pointer. Keys to compare has to be found
+   * inside to maintain generality. It has to return 1 if first node
+   * has higher key than second, -1 if lower, 0 if equal.
+   */
+  int (*compare_function) (RBTree_Node*, RBTree_Node*);
 } RBTree_Control;
 
 /**
@@ -138,6 +142,7 @@ typedef struct {
   .root = NULL, \
   .first[0] = NULL, \
   .first[1] = NULL, \
+  .compare_function = NULL \
 }
 
 /**
@@ -154,7 +159,6 @@ RBTree_Control name = RBTREE_INITIALIZER_EMPTY(name)
   .parent = NULL, \
   .child[0] = NULL, \
   .child[1] = NULL, \
-  .value = -1, \
   RBT_RED \
 }
 
@@ -173,9 +177,10 @@ RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY(name)
  */
 void _RBTree_Initialize(
   RBTree_Control *the_rbtree,
-  void          *starting_address,
-  size_t         number_nodes,
-  size_t         node_size
+  void           *compare_function,
+  void           *starting_address,
+  size_t          number_nodes,
+  size_t          node_size
 );
 
 /**
@@ -214,14 +219,15 @@ RBTree_Node *_RBTree_Peek(
 );
 
 /**
- * @brief Find the node with given value in the tree
+ * @brief Find the node with given key in the tree
  *
- *  This function returns a pointer to the node with value equal to @a value
- *  if it exists in the Red-Black Tree @a the_rbtree, and NULL if not.
+ *  This function returns a pointer to the node with key equal to a key
+ *  of @a the_node if it exists in the Red-Black Tree @a the_rbtree,
+ *  and NULL if not.
  */
 RBTree_Node *_RBTree_Find(
   RBTree_Control *the_rbtree,
-  unsigned int value
+  RBTree_Node *the_node
 );
 
 /**

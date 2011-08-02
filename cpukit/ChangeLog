@@ -1,3 +1,12 @@
+2011-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1877/cpukit
+	* libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/memfile.c,
+	sapi/inline/rtems/rbtree.inl, score/include/rtems/score/rbtree.h,
+	score/inline/rtems/score/rbtree.inl, score/src/rbtree.c,
+	score/src/rbtreefind.c, score/src/rbtreeinsert.c: Add comparison
+	function for RBTrees.
+
 2011-08-02	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* score/include/rtems/score/coremutex.h: Move check dispatch for seize

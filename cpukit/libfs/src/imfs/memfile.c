@@ -326,6 +326,9 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    *  Set the new length of the file.
    */
   the_jnode->info.file.size = new_length;
+
+  IMFS_update_ctime(the_jnode);
+  IMFS_update_mtime(the_jnode);
   return 0;
 }
 

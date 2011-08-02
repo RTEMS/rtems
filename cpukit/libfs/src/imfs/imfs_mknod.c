@@ -72,5 +72,7 @@ int IMFS_mknod(
   if ( !new_node )
     rtems_set_errno_and_return_minus_one( ENOMEM );
 
+  IMFS_update_ctime(new_node->Parent);
+  IMFS_update_mtime(new_node->Parent);
   return 0;
 }

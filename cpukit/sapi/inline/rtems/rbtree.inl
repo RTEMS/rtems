@@ -36,12 +36,14 @@
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
   rtems_rbtree_control *the_rbtree,
-  void                *starting_address,
-  size_t               number_nodes,
-  size_t               node_size
+  void                 *compare_function,
+  void                 *starting_address,
+  size_t                number_nodes,
+  size_t                node_size
 )
 {
-  _RBTree_Initialize( the_rbtree, starting_address, number_nodes, node_size);
+  _RBTree_Initialize( the_rbtree, compare_function, starting_address,
+    number_nodes, node_size);
 }
 
 /**
@@ -50,10 +52,11 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
  *  This routine initializes @a the_rbtree to contain zero nodes.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
-  rtems_rbtree_control *the_rbtree
+  rtems_rbtree_control *the_rbtree,
+  void                 *compare_function
 )
 {
-  _RBTree_Initialize_empty( the_rbtree );
+  _RBTree_Initialize_empty( the_rbtree, compare_function );
 }
 
 /**
@@ -249,17 +252,18 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
   return _RBTree_Is_root( the_rbtree, the_node );
 }
 
-/** @brief Find the node with given value in the tree
+/** @brief Find the node with given key in the tree
  *
- *  This function returns a pointer to the node having value equal to @a value 
- *  if it exists within @a the_rbtree, and NULL if not. 
+ *  This function returns a pointer to the node having key equal to the key
+ *  of @a the_node if it exists within @a the_rbtree, and NULL if not.
+ *  @a the_node has to be made up before a search.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
   rtems_rbtree_control *the_rbtree,
-  unsigned int value
+  rtems_rbtree_node *the_node
 )
 {
-  return _RBTree_Find( the_rbtree, value );
+  return _RBTree_Find( the_rbtree, the_node );
 }
 
 /** @brief Find the node's in-order predecessor 
