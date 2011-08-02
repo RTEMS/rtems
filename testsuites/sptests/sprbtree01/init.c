@@ -96,6 +96,18 @@ rtems_task Init(
   rtems_rbtree_insert( &rbtree1, &node1.Node );
   rtems_rbtree_insert( &rbtree1, &node2.Node );
 
+  p = _RBTree_Insert_unprotected( &rbtree1, NULL );
+  if (p != (void *)(-1))
+    puts( "INIT - FAILED NULL NODE INSERT" );
+
+  _RBTree_Rotate(NULL, RBT_LEFT);
+  i = (node1.Node.parent == &node2.Node);
+  _RBTree_Rotate( &node1.Node,
+                  !node1.Node.child[RBT_LEFT] ? RBT_RIGHT : RBT_LEFT
+                );
+  if ( (node1.Node.parent == &node2.Node) != i )
+    puts( "INIT - FAILED FALSE ROTATION" );
+
   if (!rb_assert(rbtree1.root) )
     puts( "INIT - FAILED TREE CHECK" );
 
@@ -324,6 +336,27 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
+  /* Additional rtems_rbtree_extract test which removes a node
+   * with two children while target node has a left child only. */
+  for ( i = 0; i < 7; i++ ) {
+    node_array[i].id = i;
+    node_array[i].Node.value = i;
+  }
+  rtems_rbtree_insert( &rbtree1, &node_array[3].Node );
+  rtems_rbtree_insert( &rbtree1, &node_array[1].Node );
+  rtems_rbtree_insert( &rbtree1, &node_array[5].Node );
+  rtems_rbtree_insert( &rbtree1, &node_array[0].Node );
+  rtems_rbtree_insert( &rbtree1, &node_array[2].Node );
+  rtems_rbtree_insert( &rbtree1, &node_array[4].Node );
+  rtems_rbtree_insert( &rbtree1, &node_array[6].Node );
+  rtems_rbtree_extract( &rbtree1, &node_array[2].Node );
+  /* node_array[1] has now only a left child. */
+  if ( !node_array[1].Node.child[RBT_LEFT] ||
+        node_array[1].Node.child[RBT_RIGHT] )
+     puts( "INIT - LEFT CHILD ONLY NOT FOUND" );
+  rtems_rbtree_extract( &rbtree1, &node_array[3].Node );
+  while( (p = rtems_rbtree_get_max(&rbtree1)) );
+
   puts( "INIT - Verify rtems_rbtree_get_max with 100 nodes value [99,0]" );
   for (i = 0; i < 100; i++) {
     node_array[i].id = 99-i;
@@ -368,31 +401,38 @@ rtems_task Init(
   }
 
   puts( "INIT - Verify rtems_rbtree_find" );
-  p = rtems_rbtree_find(&rbtree1, 50);
-  if(rtems_rbtree_container_of(p,test_node,Node)->id != 50) {
+  p = rtems_rbtree_find(&rbtree1, 30);
+  if(rtems_rbtree_container_of(p,test_node,Node)->id != 30) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
 
   puts( "INIT - Verify rtems_rbtree_predecessor/successor");
   p = rtems_rbtree_predecessor(p);
-  if(p && rtems_rbtree_container_of(p,test_node,Node)->id > 50) {
+  if(p && rtems_rbtree_container_of(p,test_node,Node)->id > 30) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
-  p = rtems_rbtree_find(&rbtree1, 50);
+  p = rtems_rbtree_find(&rbtree1, 30);
   p = rtems_rbtree_successor(p);
-  if(p && rtems_rbtree_container_of(p,test_node,Node)->id < 50) {
+  if(p && rtems_rbtree_container_of(p,test_node,Node)->id < 30) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
 
-  p = rtems_rbtree_find(&rbtree1, 50);
+  p = rtems_rbtree_find(&rbtree1, 30);
   puts( "INIT - Verify rtems_rbtree_find_header" );
   if (rtems_rbtree_find_header(p) != &rbtree1) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
+
+  if ( _RBTree_Sibling( NULL ) != NULL )
+    puts ( "INIT - ERROR ON RBTREE NULL SIBLING MISMATCH" );
+  if ( _RBTree_Sibling( rbtree1.root ) != NULL )
+    puts ( "INIT - ERROR ON RBTREE NULL SIBLING MISMATCH" );
+  if ( _RBTree_Grandparent( NULL ) != NULL )
+    puts ( "INIT - ERROR ON RBTREE NULL GRANDPARENT MISMATCH" );
 
   puts( "INIT - Removing 100 nodes" );
 
@@ -417,6 +457,15 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
+  if (rtems_rbtree_find_header(p) != NULL) {
+    puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
+    rtems_test_exit(0);
+  }
+  if (rtems_rbtree_find_header(NULL) != NULL) {
+    puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
+    rtems_test_exit(0);
+  }
+
   puts("INIT - Insert 20 random numbers");
   for (i = 0; i < 20; i++) {
     node_array[i].id = numbers[i];
@@ -437,6 +486,38 @@ rtems_task Init(
       rtems_test_exit(0);
     }
     if ( t->id != numbers_sorted[id] ) {
+      puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
+      rtems_test_exit(0);
+    }
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  if(!rtems_rbtree_is_empty(&rbtree1)) {
+    puts( "INIT - TREE NOT EMPTY" );
+    rtems_test_exit(0);
+  }
+
+  puts( "INIT - Verify rtems_rbtree_initialize with 100 nodes value [0,99]" );
+  for (i = 0; i < 100; i++) {
+    node_array[i].id = i;
+    node_array[i].Node.value = i;
+  }
+  rtems_rbtree_initialize( &rbtree1, &node_array[0].Node, 100,
+                           sizeof(test_node));
+
+  puts( "INIT - Removing 100 nodes" );
+
+  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    if ( id > 99 ) {
+      puts( "INIT - TOO MANY NODES ON RBTREE" );
+      rtems_test_exit(0);
+    }
+
+    if ( t->id != id ) {
       puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
       rtems_test_exit(0);
     }

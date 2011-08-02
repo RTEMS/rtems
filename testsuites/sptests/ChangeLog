@@ -1,3 +1,8 @@
+2011-08-02	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1862/testing
+	* sprbtree01/init.c, sprbtree01/sprbtree01.scn: Improve test coverage.
+
 2011-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* sp75/init.c, sp75/sp75.doc, sp75/sp75.scn: Correct test and
