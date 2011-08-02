@@ -1,0 +1,23 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ pthread_rwlock_init 
++ pthread_rwlock_rdlock - available 
++ pthread_rwlock_unlock
++ pthread_rwlock_tryrdlock - available 
++ pthread_rwlock_timedrdlock - available 
++ pthread_rwlock_wrlock - available 
++ pthread_rwlock_trywrlock - available 
++ pthread_rwlock_timedwrlock - available 
++ pthread_rwlock_destroy 
+

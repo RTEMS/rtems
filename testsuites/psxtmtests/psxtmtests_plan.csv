@@ -63,22 +63,22 @@
 "pthread_spin_trylock - not available",,"psxtmtest_single",
 "pthread_spin_unlock",,,
 ,,,
-"pthread_rwlock_init",,"psxtmtest_init_destroy",
-"pthread_rwlock_destroy",,"psxtmtest_init_destroy",
-"pthread_rwlock_rdlock - available",,"psxtmtest_single",
+"pthread_rwlock_init","psxtmrwlock01","psxtmtest_init_destroy","Yes"
+"pthread_rwlock_destroy","psxtmrwlock01","psxtmtest_init_destroy","Yes"
+"pthread_rwlock_rdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_rdlock - not available, blocks",,"psxtmtest_blocking",
-"pthread_rwlock_tryrdlock - available",,"psxtmtest_single",
+"pthread_rwlock_tryrdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_tryrdlock - not available",,"psxtmtest_single",
-"pthread_rwlock_timedrdlock - available",,"psxtmtest_single",
+"pthread_rwlock_timedrdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedrdlock - not available, blocks",,"psxtmtest_blocking",
-"pthread_rwlock_unlock - no threads waiting",,,
+"pthread_rwlock_unlock - no threads waiting","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_unlock - thread waiting, no preempt",,,
 "pthread_rwlock_unlock - thread waiting, preempt",,,
-"pthread_rwlock_wrlock - available",,"psxtmtest_single",
+"pthread_rwlock_wrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_wrlock - not available, blocks",,"psxtmtest_blocking",
-"pthread_rwlock_trywrlock - available",,"psxtmtest_single",
+"pthread_rwlock_trywrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_trywrlock - not available",,"psxtmtest_single",
-"pthread_rwlock_timedwrlock - available",,"psxtmtest_single",
+"pthread_rwlock_timedwrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedwrlock - not available, blocks",,"psxtmtest_blocking",
 ,,,
 "mq_open (first open)","psxtmmq01","psxtmtest_init_destroy",

@@ -1,3 +1,12 @@
+2011-08-02	Ricardo Aguirre <el.mastin@ymail.com>
+
+	PR 1874/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	multiple pthread_rwlock operations that can be done as single shot
+	times.
+	* psxtmrwlock01/.cvsignore, psxtmrwlock01/Makefile.am,
+	psxtmrwlock01/init.c, psxtmrwlock01/psxtmrwlock01.doc: New files.
+
 2011-07-29	Ricardo Aguirre <el.mastin@ymail.com>
 
 	PR 1863/tests
