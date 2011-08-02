@@ -1,3 +1,8 @@
+2011-08-02	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* score/include/rtems/score/coremutex.h: Move check dispatch for seize
+	into its own macro and add smp support.
+
 2011-08-02	Jennifer.Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1872

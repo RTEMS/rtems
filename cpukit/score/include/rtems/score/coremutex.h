@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -339,6 +339,25 @@ void _CORE_mutex_Seize_interrupt_blocking(
   Watchdog_Interval    timeout
 );
 
+
+/**
+ *  @brief Sieze Interrupt Wrapper
+ *
+ *  This macro is to verify that a mutex blocking seize is
+ *  performed from a safe system state.  For example, one 
+ *  cannot block inside an isr.
+ *
+ *  @return this method returns true if dispatch is in an unsafe state.
+ */
+#ifdef RTEMS_SMP
+  #define _CORE_mutex_Check_dispatch_for_seize(_wait) 0
+#else
+  #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
+      (_Thread_Dispatch_in_critical_section() \
+        && (_wait) \
+        && (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING))
+#endif
+
 /**
  *  @brief Sieze Interrupt Wrapper
  *
@@ -366,14 +385,10 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  * If the caller is willing to wait
  *      then they are blocked.
  */
-
 #define _CORE_mutex_Seize_body( \
   _the_mutex, _id, _wait, _timeout, _level ) \
   do { \
-    if ( _Thread_Dispatch_in_critical_section() \
-        && (_wait) \
-        && (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING ) \
-       ) { \
+    if ( _CORE_mutex_Check_dispatch_for_seize(_wait) ) { \
         _Internal_error_Occurred( \
            INTERNAL_ERROR_CORE, \
            false, \
