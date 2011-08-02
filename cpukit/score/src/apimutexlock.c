@@ -22,6 +22,10 @@ void _API_Mutex_Lock(
 {
   ISR_Level level;
 
+  #if defined(RTEMS_SMP)
+    _Thread_Disable_dispatch();
+  #endif
+
   _ISR_Disable( level );
 
   _CORE_mutex_Seize(

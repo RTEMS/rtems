@@ -1,3 +1,9 @@
+2011-08-02	Jennifer.Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1872
+	* score/src/apimutexlock.c, score/src/apimutexunlock.c: Added smp
+	support to apimutex.
+
 2011-08-02	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1861/cpukit
