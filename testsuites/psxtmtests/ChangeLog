@@ -1,5 +1,13 @@
 2011-08-02	Ricardo Aguirre <el.mastin@ymail.com>
 
+	PR 1878/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	pthread_rwlock_timedrdlock - not available, blocks.
+	* psxtmrwlock03/.cvsignore, psxtmrwlock03/Makefile.am,
+	psxtmrwlock03/init.c, psxtmrwlock03/psxtmrwlock03.doc: New files.
+
+2011-08-02	Ricardo Aguirre <el.mastin@ymail.com>
+
 	PR 1875/tests
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
 	pthread_rwlock_rdlock - not available, blocks.

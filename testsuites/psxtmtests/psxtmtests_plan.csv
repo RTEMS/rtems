@@ -66,11 +66,11 @@
 "pthread_rwlock_init","psxtmrwlock01","psxtmtest_init_destroy","Yes"
 "pthread_rwlock_destroy","psxtmrwlock01","psxtmtest_init_destroy","Yes"
 "pthread_rwlock_rdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
-"pthread_rwlock_rdlock - not available, blocks",,"psxtmtest_blocking","Yes"
+"pthread_rwlock_rdlock - not available, blocks","psxtmrwlock02","psxtmtest_blocking","Yes"
 "pthread_rwlock_tryrdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_tryrdlock - not available",,"psxtmtest_single",
 "pthread_rwlock_timedrdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
-"pthread_rwlock_timedrdlock - not available, blocks",,"psxtmtest_blocking",
+"pthread_rwlock_timedrdlock - not available, blocks","psxtmrwlock03","psxtmtest_blocking","Yes"
 "pthread_rwlock_unlock - no threads waiting","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_unlock - thread waiting, no preempt",,,
 "pthread_rwlock_unlock - thread waiting, preempt",,,
