@@ -1,3 +1,8 @@
+2011-08-02	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1883/testing
+	* sprbtree01/init.c: Attempt provide coverage on last two ranges.
+
 2011-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1877/cpukit

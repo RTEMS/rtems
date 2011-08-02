@@ -453,6 +453,8 @@ rtems_task Init(
     puts ( "INIT - ERROR ON RBTREE NULL SIBLING MISMATCH" );
   if ( _RBTree_Grandparent( NULL ) != NULL )
     puts ( "INIT - ERROR ON RBTREE NULL GRANDPARENT MISMATCH" );
+  if ( _RBTree_Is_red( NULL ) != 0 )
+    puts ( "INIT - ERROR ON RBTREE NULL IS RED MISMATCH" );
 
   puts( "INIT - Removing 100 nodes" );
 
@@ -477,7 +479,7 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
-  if (rtems_rbtree_find_header(p) != NULL) {
+  if (rtems_rbtree_find_header(&node_array[0].Node) != NULL) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
