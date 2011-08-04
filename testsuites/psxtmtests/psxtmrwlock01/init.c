@@ -12,7 +12,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
 #include <errno.h>
 #include <timesys.h>
 #include <rtems/timerdrv.h>
@@ -40,6 +39,7 @@ void benchmark_pthread_rwlock_init(void)
     0,
     0
   );
+
 }
 
 void benchmark_pthread_rwlock_rdlock(void)
@@ -59,9 +59,10 @@ void benchmark_pthread_rwlock_rdlock(void)
     0,
     0
   );
+
 }
 
-void benchmark_pthread_rwlock_unlock(bool do_print)
+void benchmark_pthread_rwlock_unlock(int print)
 {
   long end_time;
   int  status;
@@ -69,12 +70,8 @@ void benchmark_pthread_rwlock_unlock(bool do_print)
   benchmark_timer_initialize();
     status = pthread_rwlock_unlock(&rwlock);
   end_time = benchmark_timer_read();
-  if ( status == EPERM )
-    puts( "The current thread does not own the read-write lock");
-  else
-    rtems_test_assert( status == 0 );
-
-  if ( do_print ) {
+  rtems_test_assert( status == 0 );
+  if ( print == 1 ){
     put_time(
       "pthread_rwlock_unlock - available",
       end_time,
@@ -93,15 +90,24 @@ void benchmark_pthread_rwlock_tryrdlock(void)
   benchmark_timer_initialize();
     status = pthread_rwlock_tryrdlock(&rwlock);
   end_time = benchmark_timer_read();
-  rtems_test_assert( status == 0 );
-
-  put_time(
-    "pthread_rwlock_tryrdlock - available",
-    end_time,
-    1,        /* Only executed once */
-    0,
-    0
-  );
+  rtems_test_assert( status == 0 || status == EBUSY );
+  if (status == EBUSY) {
+    put_time(
+      "pthread_rwlock_tryrdlock - not available",
+      end_time,
+      1,        /* Only executed once */
+      0,
+      0
+    );
+  } else if (status == 0) {
+    put_time(
+      "pthread_rwlock_tryrdlock - available",
+      end_time,
+      1,        /* Only executed once */
+      0,
+      0
+    );
+  }
 }
 
 void benchmark_pthread_rwlock_timedrdlock(void)
@@ -121,6 +127,7 @@ void benchmark_pthread_rwlock_timedrdlock(void)
     0,
     0
   );
+
 }
 
 void benchmark_pthread_rwlock_wrlock(void)
@@ -140,6 +147,7 @@ void benchmark_pthread_rwlock_wrlock(void)
     0,
     0
   );
+
 }
 
 void benchmark_pthread_rwlock_trywrlock(void)
@@ -150,15 +158,25 @@ void benchmark_pthread_rwlock_trywrlock(void)
   benchmark_timer_initialize();
     status = pthread_rwlock_trywrlock(&rwlock);
   end_time = benchmark_timer_read();
-  rtems_test_assert( status == 0 );
 
-  put_time(
-    "pthread_rwlock_trywrlock - available",
-    end_time,
-    1,        /* Only executed once */
-    0,
-    0
-  );
+  rtems_test_assert( status == 0 || status == EBUSY );
+  if ( status == EBUSY ) {
+    put_time(
+      "pthread_rwlock_trywrlock - not available ",
+      end_time,
+      1,        /* Only executed once */
+      0,
+      0
+    );
+  } else if ( status == 0 ) {
+    put_time(
+      "pthread_rwlock_trywrlock - available",
+      end_time,
+      1,        /* Only executed once */
+      0,
+      0
+    );
+  }
 }
 
 void benchmark_pthread_rwlock_timedwrlock(void)
@@ -211,31 +229,36 @@ void *POSIX_Init(
   /* applying a read lock */
   benchmark_pthread_rwlock_rdlock();
   /* unlocking rwlock */
-  benchmark_pthread_rwlock_unlock( true );
-  /* trying to apply a read lock when it is available */
+  benchmark_pthread_rwlock_unlock(0);
+  /* trying to apply a read lock when it is available*/
   benchmark_pthread_rwlock_tryrdlock();
   /* unlocking rwlock */
-  benchmark_pthread_rwlock_unlock( false );
+  benchmark_pthread_rwlock_unlock(0);
   /* applying a timed read lock */
   benchmark_pthread_rwlock_timedrdlock();
   /* unlocking rwlock */
-  benchmark_pthread_rwlock_unlock( false );
+  benchmark_pthread_rwlock_unlock(0);
   /* applying a write lock */
   benchmark_pthread_rwlock_wrlock();
+  /* trying to get read lock, when is not available*/
+  benchmark_pthread_rwlock_tryrdlock();
   /* unlocking rwlock */
-  benchmark_pthread_rwlock_unlock( false );
-  /* trying to apply a write lock, when it is available */
+  benchmark_pthread_rwlock_unlock(0);
+  /* trying to apply a write lock, when it is available*/
+  benchmark_pthread_rwlock_trywrlock();
+  /* trying to get write lock, when it is not available*/
   benchmark_pthread_rwlock_trywrlock();
   /* unlocking rwlock */
-  benchmark_pthread_rwlock_unlock( false );
+  benchmark_pthread_rwlock_unlock(0);
   /* applying a timed write lock */
   benchmark_pthread_rwlock_timedwrlock();
   /* unlocking rwlock */
-  benchmark_pthread_rwlock_unlock( false );
+  benchmark_pthread_rwlock_unlock(1);
   /* destroying rwlock */
   benchmark_pthread_rwlock_destroy();
 
   puts( "*** END OF POSIX TIME PSXTMRWLOCK 01 ***" );
+
   rtems_test_exit(0);
 }
 

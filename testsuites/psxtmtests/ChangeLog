@@ -1,5 +1,9 @@
 2011-08-04	Ricardo Aguirre <el.mastin@ymail.com>
 
+	* psxtmrwlock01/init.c, psxtmrwlock01/psxtmrwlock01.doc: Update.
+
+2011-08-04	Ricardo Aguirre <el.mastin@ymail.com>
+
 	PR 1881/tests
 	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
 	pthread_rwlock_timedwrlock - not available, blocks.
