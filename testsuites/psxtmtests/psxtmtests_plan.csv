@@ -72,7 +72,7 @@
 "pthread_rwlock_timedrdlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedrdlock - not available, blocks","psxtmrwlock03","psxtmtest_blocking","Yes"
 "pthread_rwlock_unlock - no threads waiting","psxtmrwlock01","psxtmtest_single","Yes"
-"pthread_rwlock_unlock - thread waiting, no preempt",,,
+"pthread_rwlock_unlock - thread waiting, no preempt","psxtmrwlock06",,"Yes"
 "pthread_rwlock_unlock - thread waiting, preempt",,,
 "pthread_rwlock_wrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_wrlock - not available, blocks","psxtmwrlock04","psxtmtest_blocking","Yes"

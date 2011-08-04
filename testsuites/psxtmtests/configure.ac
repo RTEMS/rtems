@@ -98,6 +98,7 @@ psxtmrwlock02/Makefile
 psxtmrwlock03/Makefile
 psxtmrwlock04/Makefile
 psxtmrwlock05/Makefile
+psxtmrwlock06/Makefile
 psxtmsem01/Makefile
 psxtmsem02/Makefile
 psxtmsem03/Makefile

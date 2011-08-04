@@ -1,5 +1,13 @@
 2011-08-04	Ricardo Aguirre <el.mastin@ymail.com>
 
+	PR 1887/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	pthread_rwlock_unlock - thread waiting, no preempt.
+	* psxtmrwlock06/.cvsignore, psxtmrwlock06/Makefile.am,
+	psxtmrwlock06/init.c, psxtmrwlock06/psxtmrwlock06.doc: New files.
+
+2011-08-04	Ricardo Aguirre <el.mastin@ymail.com>
+
 	* psxtmrwlock01/init.c, psxtmrwlock01/psxtmrwlock01.doc: Update.
 
 2011-08-04	Ricardo Aguirre <el.mastin@ymail.com>

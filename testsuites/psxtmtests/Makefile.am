@@ -26,6 +26,7 @@ SUBDIRS += psxtmrwlock02
 SUBDIRS += psxtmrwlock03
 SUBDIRS += psxtmrwlock04
 SUBDIRS += psxtmrwlock05
+SUBDIRS += psxtmrwlock06
 SUBDIRS += psxtmsem01
 SUBDIRS += psxtmsem02
 SUBDIRS += psxtmsem03
