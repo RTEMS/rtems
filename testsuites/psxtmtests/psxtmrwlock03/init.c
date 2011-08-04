@@ -22,6 +22,7 @@
 #include "test_support.h"
 
 pthread_rwlock_t     rwlock;
+struct timespec      abstime;
 
 void *Low(
   void *argument
@@ -58,10 +59,6 @@ void *Middle(
 )
 {
   int status;
-  struct timespec      abstime;
-
-  abstime.tv_sec = 0;
-  abstime.tv_nsec = 0;
 
   /*
    * Now we have finished the thread startup overhead,
@@ -74,9 +71,7 @@ void *Middle(
   /* this timed read lock operation will be blocked
    * cause a write operation has the lock */
     status = pthread_rwlock_timedrdlock(&rwlock, &abstime);
-  /*status should be non zero, cause read lock is refused...
-   * blocked during abstime */
-  rtems_test_assert( status == ETIMEDOUT );
+  rtems_test_assert( status == 0 );
   return NULL;
 }
 
@@ -98,6 +93,13 @@ void *POSIX_Init(
 
   status = pthread_create( &threadId, NULL, Low, NULL );
   rtems_test_assert( !status );
+
+  /*
+   *  Timeout for 5 seconds from now.
+   */
+  status = clock_gettime( CLOCK_REALTIME, &abstime );
+  rtems_test_assert( !status );
+  abstime.tv_sec += 5;
 
   /*
    * Deliberately create the rwlock after the threads.  This way if the
