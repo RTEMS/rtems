@@ -1,3 +1,11 @@
+2011-08-04	Ricardo Aguirre <el.mastin@ymail.com>
+
+	PR 1881/tests
+	* Makefile.am, configure.ac, psxtmtests_plan.csv: Add benchmark of
+	pthread_rwlock_timedwrlock - not available, blocks.
+	* psxtmrwlock05/.cvsignore, psxtmrwlock05/Makefile.am,
+	psxtmrwlock05/init.c, psxtmrwlock05/psxtmrwlock05.doc: New files.
+
 2011-08-04	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtmrwlock03/init.c: Fix abstime issue. Time is now reasonable.

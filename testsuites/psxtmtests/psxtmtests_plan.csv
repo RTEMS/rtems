@@ -79,7 +79,7 @@
 "pthread_rwlock_trywrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_trywrlock - not available",,"psxtmtest_single",
 "pthread_rwlock_timedwrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
-"pthread_rwlock_timedwrlock - not available, blocks",,"psxtmtest_blocking",
+"pthread_rwlock_timedwrlock - not available, blocks","psxtmrwlock05","psxtmtest_blocking","Yes"
 ,,,
 "mq_open (first open)","psxtmmq01","psxtmtest_init_destroy",
 "mq_close (close of first)","psxtmmq01","psxtmtest_init_destroy",
