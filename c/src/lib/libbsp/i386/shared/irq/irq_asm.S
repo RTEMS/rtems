@@ -76,6 +76,8 @@ SYM (_ISR_Handler):
 	movl      ebx, EBX_OFF(esp)
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
+	movw      SYM (i8259s_cache), ax /* save current i8259 interrupt mask */
+	movl      eax, MSK_OFF(esp)      /* save in stack frame */
 
 #ifdef __SSE__
 	/* NOTE: SSE only is supported if the BSP enables fxsave/fxrstor
@@ -142,8 +144,7 @@ nested:
 	/*
 	 * acknowledge the interrupt
 	 */
-	movw      SYM (i8259s_cache), ax /* save current i8259 interrupt mask */
-	movl      eax, MSK_OFF(esp)      /* save in stack frame */
+	movw      SYM (i8259s_cache), ax /* fetch current i8259 interrupt mask */
 
 	/*
 	 * compute the new PIC mask:

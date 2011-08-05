@@ -1,3 +1,12 @@
+2011-08-04	Till Straumann <strauman@slac.stanford.edu>
+
+	* shared/irq/irq_asm.S: BUGFIX (introduced by SMP changes
+	which moved code around, apparently): *must* store i8259
+	mask to frame *before* switching to IRQ stack. The code
+	retrieves the mask after switching back to original stack.
+	Also, the IRQ stack has no reserved space for the mask;
+	storing it there could overwrite memory!
+
 2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1802
