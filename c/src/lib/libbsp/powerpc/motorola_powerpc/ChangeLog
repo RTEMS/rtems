@@ -1,5 +1,10 @@
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>
 
+	* configure.ac: changed tests so that variants
+	of qemuprep (e.g., qemuprep-altivec) are recognized.
+
+2011-07-18  Till Straumann <strauman@slac.stanford.edu>
+
 	* README.qemu: added.
 
 2011-07-18  Till Straumann <strauman@slac.stanford.edu>

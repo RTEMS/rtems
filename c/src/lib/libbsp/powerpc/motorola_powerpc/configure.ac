@@ -48,7 +48,7 @@ RTEMS_BSPOPTS_SET([mpc8240],[*],[])
 RTEMS_BSPOPTS_HELP([mpc8240],
 [Defined for boards with MPC8240 -- undefined for others])
 
-RTEMS_BSPOPTS_SET([qemu],[qemuprep],[1])
+RTEMS_BSPOPTS_SET([qemu],[qemuprep*],[1])
 RTEMS_BSPOPTS_SET([qemu],[*],[])
 RTEMS_BSPOPTS_HELP([qemu],[Defined for QEMU BSP -- undefined for others])
 
@@ -56,13 +56,15 @@ RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
-if test xx"${RTEMS_BSP}" = xxqemuprep ; then
+case "${RTEMS_BSP}" in
+	qemuprep* )
 AC_CONFIG_FILES([qemu_fakerom/Makefile])
-fi
+	;;
+esac
 AC_CONFIG_FILES([bootloader/Makefile])
 
 RTEMS_PPC_EXCEPTIONS
 
-AM_CONDITIONAL([QEMU],[test xx"${RTEMS_BSP}" = xxqemuprep])
+AM_CONDITIONAL([QEMU],[case xx"${RTEMS_BSP}" in xxqemuprep*) true;; *) false;; esac])
 
 AC_OUTPUT
