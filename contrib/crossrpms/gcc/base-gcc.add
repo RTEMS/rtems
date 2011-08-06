@@ -22,16 +22,9 @@ GCC files that are shared by all targets.
 %{_infodir}/cppinternals.info*
 %{_infodir}/gcc.info*
 %{_infodir}/gccint.info*
-%if "%{gcc_version}" >= "3.4"
 %{_infodir}/gccinstall.info*
-%endif
 
 %sysdir %{_mandir}
-%if "%{gcc_version}" < "3.4"
-%sysdir %{_mandir}/man1
-%{_mandir}/man1/cpp.1*
-%{_mandir}/man1/gcov.1*
-%endif
 %sysdir %{_mandir}/man7
 %{_mandir}/man7/fsf-funding.7*
 %{_mandir}/man7/gfdl.7*
@@ -42,9 +35,7 @@ GCC files that are shared by all targets.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
 
 %preun -n @rpmprefix@gcc-common
 if [ $1 -eq 0 ]; then
@@ -52,9 +43,7 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
 fi
 
 %endif

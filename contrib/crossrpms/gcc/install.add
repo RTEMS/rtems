@@ -51,17 +51,13 @@
 #  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/@tool_target@-gfortran
 %endif
 
-%if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-@tool_target@-gcjh%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
   rm -rf ${RPM_BUILD_ROOT}%{gcclib}/@tool_target@/%{gcc_version}/install-tools
   rm -rf ${RPM_BUILD_ROOT}%{gccexec}/@tool_target@/%{gcc_version}/install-tools
-%endif
 
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/@tool_target@/include/bits; then
