@@ -32,7 +32,7 @@ GCC c++ compiler for @tool_target@.
 %dir %{gccexec}/@tool_target@/%{gcc_version}
 %{gccexec}/@tool_target@/%{gcc_version}/cc1plus%{_exeext}
 
-%dir %{gcclib}/@tool_target@/%{gcc_version}/include
-%{gcclib}/@tool_target@/%{gcc_version}/include/c++
+%dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include
+%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include/c++
 %endif
 

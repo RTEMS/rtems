@@ -31,17 +31,17 @@ GNU cc compiler for @tool_target@.
 %{_bindir}/@tool_target@-gcov%{_exeext}
 %{_bindir}/@tool_target@-gccbug
 
-%dir %{gcclib}/@tool_target@/%{gcc_version}/include
+%dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include
 %if "%{gcc_version}" > "4.0.3"
 %if "@tool_target@" != "bfin-rtems@rtems_api@"
 %if "@tool_target@" != "avr-rtems@rtems_api@"
-%dir %{gcclib}/@tool_target@/%{gcc_version}/include/ssp
+%dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include/ssp
 %endif
 %endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{gcclib}/@tool_target@/%{gcc_version}/include-fixed
+%dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include-fixed
 %endif
 
 %dir %{gccexec}

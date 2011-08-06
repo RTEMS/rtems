@@ -29,7 +29,7 @@ This is the gcc/gnat compiler for @tool_target@.
 %dir %{gccexec}/@tool_target@/%{gcc_version}
 %{gccexec}/@tool_target@/%{gcc_version}/gnat1%{_exeext}
 
-%{gcclib}/@tool_target@/%{gcc_version}/adalib
-%{gcclib}/@tool_target@/%{gcc_version}/adainclude
+%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/adalib
+%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/adainclude
 %endif
 
