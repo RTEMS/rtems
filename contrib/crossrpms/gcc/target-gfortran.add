@@ -8,14 +8,10 @@ Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
 
-Provides:	@rpmprefix@@tool_target@-gfortran = %{gcc_rpmvers}-%{release}
-Obsoletes:	@rpmprefix@@tool_target@-gfortran < %{gcc_rpmvers}-%{release}
-
 %if %build_infos
 Requires:       @rpmprefix@gcc-gfortran-common
 %endif
-Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
-Obsoletes:      @rpmprefix@@tool_target@-g77 < %{gcc_rpmvers}-%{release}
+Requires:       @rpmprefix@@tool_target@-gcc-libgfortran = %{gcc_rpmvers}-%{release}
 
 %description -n @rpmprefix@@tool_target@-gcc-gfortran
 GCC fortran compiler for @tool_target@.
