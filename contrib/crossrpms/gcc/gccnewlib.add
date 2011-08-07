@@ -28,9 +28,13 @@ BuildRequires:  gmp-devel >= 4.1
 BuildRequires:  %{_host_rpmprefix}gmp-devel
 BuildRequires:  %{_host_rpmprefix}mpfr-devel
 %endif
-%if 0%{?fedora} >= 8
-BuildRequires:  mpfr-devel >= 2.3.0
-%endif
+%if %{defined cloog_required}
+%{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %if "%{?suse}" > "10.3"
 BuildRequires:  mpfr-devel >= 2.3.0
 %endif
