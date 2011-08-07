@@ -40,6 +40,9 @@ cd newlib-%{newlib_version}
 cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
+  # Make sure not to be using GPL'ed sources
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/linux
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/rdos
 %endif
 
 %if 0%{?_build_mpfr}

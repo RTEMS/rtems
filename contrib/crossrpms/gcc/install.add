@@ -24,7 +24,14 @@
 %endif
 
   # host library
+%if "%{gcc_version}" >= "4.2.0"
+  # libiberty doesn't honor --libdir, but always installs to a 
+  # magically guessed _libdir
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+%else
+  # libiberty installs to --libdir=...
+  rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%endif
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-c++filt%{_exeext}
@@ -46,10 +53,8 @@
   rm -rf $RPM_BUILD_ROOT%{_mandir}/man7
 %endif
 
-%if %build_fortran
-#  # Bug in gcc-4.0.0pre
-#  mv $RPM_BUILD_ROOT%{_bindir}/gfortran $RPM_BUILD_ROOT%{_bindir}/@tool_target@-gfortran
-%endif
+  # We don't want libffi's man-pages
+  rm -f $RPM_BUILD_ROOT%{_mandir}/man3/*ffi*
 
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/@tool_target@-@tool_target@-gcjh%{_exeext}
@@ -65,12 +70,12 @@
   fi
 
   # Collect multilib subdirectories
-  f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+  multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
 %if %build_newlib
   echo "%defattr(-,root,root,-)" > build/files.newlib
   TGTDIR="%{_exec_prefix}/@tool_target@/lib"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> build/files.newlib
       ;;
@@ -93,7 +98,7 @@
   echo "%dir %{_gcclibdir}/gcc/@tool_target@" >> dirs
 
   TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
       ;;
