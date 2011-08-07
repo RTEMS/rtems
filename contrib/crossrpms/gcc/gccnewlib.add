@@ -22,6 +22,74 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
+# versions of libraries, we conditionally bundle if necessary
+%global mpc_version	0.8.1
+%global mpfr_version	2.4.2
+%global gmp_version	4.3.2
+%global libelf_version  0.8.13
+
+# versions of libraries these distros are known to ship
+%if 0%{?fc16}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?fc14}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el6}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el5}
+%global mpc_provided %{nil}
+%global mpfr_provided %{nil}
+%global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse11_3}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?suse11_4}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.0
+%global gmp_provided 5.0.1
+%endif
+
+%if 0%{?cygwin}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?mingw32}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.2
+%endif
+
+%if "%{gcc_version}" >= "4.2.0"
+%if %build_fortran
+%define gmp_required		4.1
+%define mpfr_required		2.2.1
+%endif
+%endif
+
 %if "%{gcc_version}" >= "4.3.0"
 BuildRequires:  gmp-devel >= 4.1
 %if "%{_build}" != "%{_host}"
