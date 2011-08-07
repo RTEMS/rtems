@@ -7,7 +7,6 @@ Summary:        Ada support for for @tool_target@-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
-Provides:	@rpmprefix@@tool_target@-gcc-gnat = %{gcc_rpmvers}-%{release}
 
 %if %_build_infos
 Requires:       @rpmprefix@gcc-gnat-common
@@ -21,14 +20,22 @@ This is the gcc/gnat compiler for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-gcc-gnat
 %defattr(-,root,root)
+%sysdir %{_prefix}
+
+%sysdir %{_bindir}
 %{_bindir}/@tool_target@-gnat*
 %{_bindir}/@tool_target@-gprmake%{_exeext}
 
+%sysdir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/@tool_target@
 %dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
 %{_libexecdir}/gcc/@tool_target@/%{gcc_version}/gnat1%{_exeext}
 
+%sysdir %{_gcclibdir}
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/@tool_target@
+%dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}
 %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/adalib
 %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/adainclude
 %endif

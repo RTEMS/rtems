@@ -52,6 +52,27 @@ cd ..
   ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
 %endif
 
+%if 0%{?_build_mpc}
+%setup -q -T -D -n %{name}-%{version} -a61
+%{?PATCH61:%patch61 -p1}
+  # Build mpc one-tree style
+  ln -s ../mpc-%{mpc_version} gcc-%{gcc_pkgvers}/mpc
+%endif
+
+%if 0%{?_build_gmp}
+%setup -q -T -D -n %{name}-%{version} -a62
+%{?PATCH62:%patch62 -p1}
+  # Build gmp one-tree style
+  ln -s ../gmp-%{gmp_version} gcc-%{gcc_pkgvers}/gmp
+%endif
+
+%if 0%{?_build_libelf}
+%setup -q -T -D -n %{name}-%{version} -a63
+%{?PATCH63:%patch63 -p1}
+  # Build libelf one-tree style
+  ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
+%endif
+
 @PREP@
 
   # Fix timestamps

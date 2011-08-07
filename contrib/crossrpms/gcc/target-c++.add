@@ -7,6 +7,7 @@ Summary:	GCC c++ compiler for @tool_target@
 Group:		Development/Tools
 Version:        %{gcc_rpmvers}
 License:	GPL
+Requires:       @rpmprefix@@tool_target@-gcc-libstdc++ = %{gcc_rpmvers}-%{release}
 
 %if "%{_build}" != "%{_host}"
 BuildRequires:  @rpmprefix@@tool_target@-gcc-c++ = %{gcc_rpmvers}
@@ -20,18 +21,44 @@ Requires:       @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}-%{release}
 %description -n @rpmprefix@@tool_target@-gcc-c++
 GCC c++ compiler for @tool_target@.
 
-%files -n @rpmprefix@@tool_target@-gcc-c++ -f build/files.g++
+
+%package -n @rpmprefix@@tool_target@-gcc-libstdc++
+Summary:	libstdc++ for @tool_target@
+Group:		Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+License:	GPL
+
+%description -n @rpmprefix@@tool_target@-gcc-libstdc++
+%{summary}
+
+
+%files -n @rpmprefix@@tool_target@-gcc-c++
 %defattr(-,root,root)
+%sysdir %{_prefix}
+
+%sysdir %{_mandir}
+%sysdir %{_mandir}/man1
 %{_mandir}/man1/@tool_target@-g++.1*
 
+%sysdir %{_bindir}
 %{_bindir}/@tool_target@-c++%{_exeext}
 %{_bindir}/@tool_target@-g++%{_exeext}
 
+%sysdir %{_libexecdir}
 %dir %{_libexecdir}/gcc
 %dir %{_libexecdir}/gcc/@tool_target@
 %dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
 %{_libexecdir}/gcc/@tool_target@/%{gcc_version}/cc1plus%{_exeext}
 
+
+%files -n @rpmprefix@@tool_target@-gcc-libstdc++ -f build/files.g++
+%defattr(-,root,root)
+%sysdir %{_prefix}
+%sysdir %{_gcclibdir}
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/@tool_target@
+%dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}
 %dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include
 %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include/c++
 %endif

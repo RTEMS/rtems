@@ -8,6 +8,7 @@ Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
 Release:        @NEWLIB_RPMREL@
+%{?_with_noarch_subpackages:BuildArch: noarch}
 
 %if %build_infos
 Requires:	@rpmprefix@newlib-common
@@ -18,7 +19,7 @@ Newlib C Library for @tool_target@.
 
 %files -n @rpmprefix@@tool_target@-newlib -f build/files.newlib
 %defattr(-,root,root)
-%sysdir %{_prefix}
+%sysdir %{_exec_prefix}
 %dir %{_exec_prefix}/@tool_target@
 %{_exec_prefix}/@tool_target@/include
 

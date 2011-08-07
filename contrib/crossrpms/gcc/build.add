@@ -19,9 +19,6 @@
 %if %build_gnat
   languages="$languages,ada"
 %endif
-%if %build_libgcj
-  optargs="--enable-libgcj"
-%endif
 %if "%{_prefix}" != "/usr"
   export PATH="%{_bindir}:${PATH}"
 %endif
