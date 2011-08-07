@@ -53,14 +53,12 @@
 %define newlib_pkgvers		1.16.0
 %define newlib_version		1.16.0
 
-%define mpfr_version	2.3.1
-
 Name:         	rtems-4.9-avr-rtems4.9-gcc
 Summary:      	avr-rtems4.9 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	24%{?dist}
+Release:      	25%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -69,21 +67,145 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
+# versions of libraries, we conditionally bundle if necessary
+%global mpc_version	0.8.1
+%global mpfr_version	2.4.2
+%global gmp_version	4.3.2
+%global libelf_version  0.8.13
+
+# versions of libraries these distros are known to ship
+%if 0%{?fc16}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?fc15}
+%global mpc_provided 0.8.3
+%global mpfr_provided 3.0.0
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?fc14}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el6}
+%global mpc_provided %{nil}
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?el5}
+%global mpc_provided %{nil}
+%global mpfr_provided %{nil}
+%global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse11_3}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.2
+%global gmp_provided 4.3.2
+%endif
+
+%if 0%{?suse11_4}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.0
+%global gmp_provided 5.0.1
+%endif
+
+%if 0%{?cygwin}
+%global mpc_provided 0.8
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.1
+%endif
+
+%if 0%{?mingw32}
+%global mpc_provided 0.8.1
+%global mpfr_provided 2.4.1
+%global gmp_provided 4.3.2
+%endif
+
+%if "%{gcc_version}" >= "4.2.0"
+%endif
+
 %if "%{gcc_version}" >= "4.3.0"
-BuildRequires:  gmp-devel >= 4.1
+%define gmp_required		4.1
+%define mpfr_required		2.3.1
+%endif
+
+%if "%{gcc_version}" >= "4.3.3"
+%define cloog_required 		0.15
+%endif
+
+%if "%{gcc_version}" >= "4.4.0"
+%define mpfr_required		2.3.2
+%endif
+
+%if "%{gcc_version}" >= "4.5.0"
+%define mpc_required 		0.8
+%if %{with lto}
+%define libelf_required 	0.8.12
+%endif
+%endif
+
+%if %{defined mpc_required}
+%if "%{mpc_provided}" >= "%{mpc_required}"
+%{?fedora:BuildRequires: libmpc-devel >= %{mpc_required}}
+%{?suse:BuildRequires: mpc-devel >= %{mpc_required}}
 %if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}gmp-devel
-BuildRequires:  %{_host_rpmprefix}mpfr-devel
+BuildRequires:  %{_host_rpmprefix}mpc-devel >= %{mpc_required}
 %endif
-%if 0%{?fedora} >= 8
-BuildRequires:  mpfr-devel >= 2.3.0
+%else
+%define _build_mpc 1
+%define gmp_required 		4.2
 %endif
-%if "%{?suse}" > "10.3"
-BuildRequires:  mpfr-devel >= 2.3.0
 %endif
-# These distros ship an insufficient mpfr
-%{?el4:%define 	_build_mpfr 	1}
-%{?suse10_3:%define 	_build_mpfr 	1}
+
+%if %{defined gmp_required}
+%if "%{gmp_provided}" >= "%{gmp_required}"
+BuildRequires: gmp-devel >= %{gmp_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}gmp-devel >= %{gmp_required}
+%endif
+%else
+%define _build_gmp 1
+%endif
+%endif
+
+%if %{defined libelf_required}
+%if "%{libelf_provided}" >= "%{libelf_required}"
+BuildRequires: libelf-devel >= %{libelf_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
+%endif
+%else
+%define _build_libelf 1
+%endif
+%endif
+
+
+%if %{defined cloog_required}
+%{?fc14:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
+%endif
+
+
+%if %{defined mpfr_required}
+%if "%{mpfr_provided}" >= "%{mpfr_required}"
+BuildRequires: mpfr-devel >= %{mpfr_required}
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
+%endif
+%else
+%define _build_mpfr 1
+%endif
 %endif
 
 %if "%{_build}" != "%{_host}"
@@ -100,16 +222,18 @@ BuildRequires:	rtems-4.9-avr-rtems4.9-binutils
 
 Requires:	rtems-4.9-gcc-common
 Requires:	rtems-4.9-avr-rtems4.9-binutils
-Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-24%{?dist}
+Requires:	rtems-4.9-avr-rtems4.9-gcc-libgcc = %{gcc_rpmvers}-%{release}
+Requires:	rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-25%{?dist}
 
-
-%if "%{gcc_version}" >= "3.4"
-%define gcclib %{_libdir}/gcc
-%define gccexec %{_libexecdir}/gcc
-%else
-%define gcclib %{_libdir}/gcc-lib
-%define gccexec %{_libdir}/gcc-lib
+%if "%{gcc_version}" >= "4.5.0"
+BuildRequires:  zlib-devel
+%if "%{_build}" != "%{_host}"
+BuildRequires:  %{_host_rpmprefix}zlib-devel
 %endif
+%else
+%endif
+
+%global _gcclibdir %{_prefix}/lib
 
 %if "%{gcc_version}" == "4.3.2"
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -123,8 +247,20 @@ Patch50:	ftp://ftp.rtems.org/pub/rtems/SOURCES/4.9/newlib-1.16.0-rtems4.9-200903
 %endif
 %{?_without_sources:NoSource:	50}
 
-%if "%{gcc_version}" >= "4.3.0"
-Source60:    http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.bz2
+%if 0%{?_build_mpfr}
+Source60:    http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
+%endif
+
+%if 0%{?_build_mpc}
+Source61:    http://www.multiprecision.org/mpc/download/mpc-%{mpc_version}.tar.gz
+%endif
+
+%if 0%{?_build_gmp}
+Source62:    ftp://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
+%endif
+
+%if 0%{?_build_libelf}
+Source63:    http://www.mr511.de/software/libelf-%{libelf_version}.tar.gz
 %endif
 
 %description
@@ -134,7 +270,9 @@ Cross gcc for avr-rtems4.9.
 %setup -c -T -n %{name}-%{version}
 
 %setup -q -T -D -n %{name}-%{version} -a0
-%{?PATCH0:%patch0 -p0}
+cd gcc-%{gcc_pkgvers}
+%{?PATCH0:%patch0 -p1}
+cd ..
 
 
 
@@ -147,6 +285,9 @@ cd newlib-%{newlib_version}
 cd ..
   # Copy the C library into gcc's source tree
   ln -s ../newlib-%{newlib_version}/newlib gcc-%{gcc_pkgvers}
+  # Make sure not to be using GPL'ed sources
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/linux
+  rm -rf gcc-%{gcc_pkgvers}/newlib/libc/sys/rdos
 
 %if 0%{?_build_mpfr}
 %setup -q -T -D -n %{name}-%{version} -a60
@@ -155,7 +296,28 @@ cd ..
   ln -s ../mpfr-%{mpfr_version} gcc-%{gcc_pkgvers}/mpfr
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+%if 0%{?_build_mpc}
+%setup -q -T -D -n %{name}-%{version} -a61
+%{?PATCH61:%patch61 -p1}
+  # Build mpc one-tree style
+  ln -s ../mpc-%{mpc_version} gcc-%{gcc_pkgvers}/mpc
+%endif
+
+%if 0%{?_build_gmp}
+%setup -q -T -D -n %{name}-%{version} -a62
+%{?PATCH62:%patch62 -p1}
+  # Build gmp one-tree style
+  ln -s ../gmp-%{gmp_version} gcc-%{gcc_pkgvers}/gmp
+%endif
+
+%if 0%{?_build_libelf}
+%setup -q -T -D -n %{name}-%{version} -a63
+%{?PATCH63:%patch63 -p1}
+  # Build libelf one-tree style
+  ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
+%endif
+
+echo "RTEMS gcc-%{gcc_version}-25%{?dist}\/newlib-%{newlib_version}-25%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -181,7 +343,7 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
     --bindir=%{_bindir} \
     --exec_prefix=%{_exec_prefix} \
     --includedir=%{_includedir} \
-    --libdir=%{_libdir} \
+    --libdir=%{_gcclibdir} \
     --libexecdir=%{_libexecdir} \
     --mandir=%{_mandir} \
     --infodir=%{_infodir} \
@@ -197,7 +359,7 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
     --enable-version-specific-runtime-libs \
     --enable-threads \
     --enable-newlib-io-c99-formats \
-    --enable-languages="$languages" $optargs
+    --enable-languages="$languages"
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:
@@ -227,12 +389,19 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
 # Misplaced header file
   if test -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h; then
     mv $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h \
-      $RPM_BUILD_ROOT%{gcclib}/avr-rtems4.9/%{gcc_version}/include/
+      $RPM_BUILD_ROOT%{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}/include/
   fi
 %endif
 
   # host library
+%if "%{gcc_version}" >= "4.2.0"
+  # libiberty doesn't honor --libdir, but always installs to a 
+  # magically guessed _libdir
   rm -f  ${RPM_BUILD_ROOT}%{_libdir}/libiberty.a
+%else
+  # libiberty installs to --libdir=...
+  rm -f ${RPM_BUILD_ROOT}%{_gcclibdir}/libiberty.a
+%endif
 
   # We use the version from binutils
   rm -f $RPM_BUILD_ROOT%{_bindir}/avr-rtems4.9-c++filt%{_exeext}
@@ -242,18 +411,16 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   touch $RPM_BUILD_ROOT%{_infodir}/dir
 
+  # We don't want libffi's man-pages
+  rm -f $RPM_BUILD_ROOT%{_mandir}/man3/*ffi*
 
-%if "%{gcc_version}" >= "3.4"
   # Bug in gcc-3.4.0pre
   rm -f $RPM_BUILD_ROOT%{_bindir}/avr-rtems4.9-avr-rtems4.9-gcjh%{_exeext}
-%endif
 
-%if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x/gcc-3.4.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gcclib}/avr-rtems4.9/%{gcc_version}/install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/avr-rtems4.9/%{gcc_version}/install-tools
-%endif
+  rm -rf ${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{_libexecdir}/gcc/avr-rtems4.9/%{gcc_version}/install-tools
 
   # Bug in gcc > 4.1.0: Installs an unused, empty directory
   if test -d ${RPM_BUILD_ROOT}%{_prefix}/avr-rtems4.9/include/bits; then
@@ -261,11 +428,11 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
   fi
 
   # Collect multilib subdirectories
-  f=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+  multilibs=`build/gcc/xgcc -Bbuild/gcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
   echo "%defattr(-,root,root,-)" > build/files.newlib
   TGTDIR="%{_exec_prefix}/avr-rtems4.9/lib"
-  for i in $f; do
+  for i in $multilibs; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> build/files.newlib
       ;;
@@ -276,19 +443,10 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-  echo "%dir %{_prefix}" >> dirs
-  echo "%dir %{_libdir}" >> dirs
-%if "%{gcc_version}" >= "3.4"
-  echo "%dir %{_libexecdir}" >> dirs
-%endif
-  echo "%dir %{gcclib}" >> dirs
-  echo "%dir %{gcclib}/avr-rtems4.9" >> dirs
-
-  TGTDIR="%{gcclib}/avr-rtems4.9/%{gcc_version}"
-  for i in $f; do
+  TGTDIR="%{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}"
+  for i in $multilibs; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> dirs
-      ;;
+    \.) ;; # ignore, handled elsewhere
     *)  echo "%dir ${TGTDIR}/$i" >> dirs
       ;;
     esac
@@ -301,7 +459,7 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
   cp dirs build/files.gcj
   cp dirs build/files.g++
 
-  TGTDIR="%{gcclib}/avr-rtems4.9/%{gcc_version}"
+  TGTDIR="%{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
@@ -316,6 +474,8 @@ echo "RTEMS gcc-%{gcc_version}-24%{?dist}\/newlib-%{newlib_version}-24%{?dist}" 
     *include/objc*) ;;
     *include/g++*);;
     *include/c++*);;
+    *include-fixed/*);;
+    *finclude/*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;
@@ -370,7 +530,7 @@ sed -e 's,^[ ]*/usr/lib/rpm.*/brp-strip,./brp-strip,' \
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/avr-rtems4.9/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/avr-rtems4.9/' | %__find_provides
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/avr-rtems4.9/'} | %__find_provides
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 %define __find_provides %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
@@ -378,7 +538,7 @@ chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-provides
 cat << EOF > %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 #!/bin/sh
 grep -E -v '^${RPM_BUILD_ROOT}%{_exec_prefix}/avr-rtems4.9/(lib|include|sys-root)' \
-  | grep -v '^${RPM_BUILD_ROOT}%{gcclib}/avr-rtems4.9/' | %__find_requires
+  %{?_gcclibdir:| grep -v '^${RPM_BUILD_ROOT}%{_gcclibdir}/gcc/avr-rtems4.9/'} | %__find_requires
 EOF
 chmod +x %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
 %define __find_requires %{_builddir}/%{name}-%{gcc_rpmvers}/find-requires
@@ -418,7 +578,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.9-avr-rtems4.9-binutils
-# Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-24%{?dist}
+# Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-25%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -428,43 +588,71 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 %description -n rtems-4.9-avr-rtems4.9-gcc
 GNU cc compiler for avr-rtems4.9.
 
-%files -n rtems-4.9-avr-rtems4.9-gcc -f build/files.gcc
+# ==============================================================
+# rtems-4.9-avr-rtems4.9-gcc-libgcc
+# ==============================================================
+%package -n rtems-4.9-avr-rtems4.9-gcc-libgcc
+Summary:        libgcc for avr-rtems4.9-gcc
+Group:          Development/Tools
+Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
+Requires:       rtems-4.9-avr-rtems4.9-newlib = %{newlib_version}-25%{?dist}
+License:	GPL
+
+%description -n rtems-4.9-avr-rtems4.9-gcc-libgcc
+libgcc avr-rtems4.9-gcc.
+
+
+%files -n rtems-4.9-avr-rtems4.9-gcc
 %defattr(-,root,root)
+%dir %{_prefix}
+
 %dir %{_mandir}
 %dir %{_mandir}/man1
 %{_mandir}/man1/avr-rtems4.9-gcc.1*
-%if "%{gcc_version}" >= "3.4"
 %{_mandir}/man1/avr-rtems4.9-cpp.1*
 %{_mandir}/man1/avr-rtems4.9-gcov.1*
-%endif
 
 %dir %{_bindir}
 %{_bindir}/avr-rtems4.9-cpp%{_exeext}
 %{_bindir}/avr-rtems4.9-gcc%{_exeext}
-%if "%{gcc_version}" >= "3.3"
 %{_bindir}/avr-rtems4.9-gcc-%{gcc_version}%{_exeext}
-%endif
 %{_bindir}/avr-rtems4.9-gcov%{_exeext}
+%if "%{gcc_version}" < "4.6.0"
 %{_bindir}/avr-rtems4.9-gccbug
+%endif
 
-%dir %{gcclib}/avr-rtems4.9/%{gcc_version}/include
+%dir %{_libexecdir}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/avr-rtems4.9
+%dir %{_libexecdir}/gcc/avr-rtems4.9/%{gcc_version}
+%{_libexecdir}/gcc/avr-rtems4.9/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/avr-rtems4.9/%{gcc_version}/collect2%{_exeext}
+%if "%{gcc_version}" >= "4.5.0"
+%{?with_lto:%{_libexecdir}/gcc/avr-rtems4.9/%{gcc_version}/lto%{_exeext}}
+%{_libexecdir}/gcc/avr-rtems4.9/%{gcc_version}/lto-wrapper%{_exeext}
+%endif
+
+%files -n rtems-4.9-avr-rtems4.9-gcc-libgcc -f build/files.gcc
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_gcclibdir}
+%dir %{_gcclibdir}/gcc
+%dir %{_gcclibdir}/gcc/avr-rtems4.9
+%dir %{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}
+%dir %{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}/include
+
 %if "%{gcc_version}" > "4.0.3"
 %if "avr-rtems4.9" != "bfin-rtems4.9"
 %if "avr-rtems4.9" != "avr-rtems4.9"
-%dir %{gcclib}/avr-rtems4.9/%{gcc_version}/include/ssp
+%dir %{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}/include/ssp
 %endif
 %endif
 %endif
 
 %if "%{gcc_version}" >= "4.3.0"
-%dir %{gcclib}/avr-rtems4.9/%{gcc_version}/include-fixed
+%{_gcclibdir}/gcc/avr-rtems4.9/%{gcc_version}/include-fixed
 %endif
-
-%dir %{gccexec}
-%dir %{gccexec}/avr-rtems4.9
-%dir %{gccexec}/avr-rtems4.9/%{gcc_version}
-%{gccexec}/avr-rtems4.9/%{gcc_version}/cc1%{_exeext}
-%{gccexec}/avr-rtems4.9/%{gcc_version}/collect2%{_exeext}
 
 # ==============================================================
 # rtems-4.9-gcc-common
@@ -473,6 +661,7 @@ GNU cc compiler for avr-rtems4.9.
 Summary:	Base package for rtems gcc and newlib C Library
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	GPL
 
 Requires(post): 	/sbin/install-info
@@ -483,22 +672,21 @@ GCC files that are shared by all targets.
 
 %files -n rtems-4.9-gcc-common
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/cpp.info*
 %{_infodir}/cppinternals.info*
 %{_infodir}/gcc.info*
 %{_infodir}/gccint.info*
-%if "%{gcc_version}" >= "3.4"
 %{_infodir}/gccinstall.info*
+%if "%{gcc_version}" >= "4.6.0"
+%{_infodir}/libquadmath.info*
 %endif
 
 %dir %{_mandir}
-%if "%{gcc_version}" < "3.4"
-%dir %{_mandir}/man1
-%{_mandir}/man1/cpp.1*
-%{_mandir}/man1/gcov.1*
-%endif
 %dir %{_mandir}/man7
 %{_mandir}/man7/fsf-funding.7*
 %{_mandir}/man7/gfdl.7*
@@ -509,9 +697,7 @@ GCC files that are shared by all targets.
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
   /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
 
 %preun -n rtems-4.9-gcc-common
 if [ $1 -eq 0 ]; then
@@ -519,9 +705,7 @@ if [ $1 -eq 0 ]; then
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/cppinternals.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gcc.info.gz || :
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccint.info.gz || :
-%if "%{gcc_version}" >= "3.4"
   /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gccinstall.info.gz || :
-%endif
 fi
 
 
@@ -535,7 +719,8 @@ Summary:      	C Library (newlib) for avr-rtems4.9
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        24%{?dist}
+Release:        25%{?dist}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.9-newlib-common
 
@@ -544,7 +729,7 @@ Newlib C Library for avr-rtems4.9.
 
 %files -n rtems-4.9-avr-rtems4.9-newlib -f build/files.newlib
 %defattr(-,root,root)
-%dir %{_prefix}
+%dir %{_exec_prefix}
 %dir %{_exec_prefix}/avr-rtems4.9
 %{_exec_prefix}/avr-rtems4.9/include
 
@@ -555,7 +740,8 @@ Newlib C Library for avr-rtems4.9.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        24%{?dist}
+Release:        25%{?dist}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
@@ -566,6 +752,9 @@ newlib files that are shared by all targets.
 
 %files -n rtems-4.9-newlib-common
 %defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
 %dir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/libc.info*
