@@ -6,6 +6,7 @@
 Summary:	Base package for rtems gcc and newlib C Library
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	GPL
 
 Requires(post): 	/sbin/install-info
@@ -16,6 +17,9 @@ GCC files that are shared by all targets.
 
 %files -n @rpmprefix@gcc-common
 %defattr(-,root,root)
+%sysdir %{_prefix}
+%sysdir %{_prefix}/share
+
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/cpp.info*
@@ -23,6 +27,9 @@ GCC files that are shared by all targets.
 %{_infodir}/gcc.info*
 %{_infodir}/gccint.info*
 %{_infodir}/gccinstall.info*
+%if "%{gcc_version}" >= "4.6.0"
+%{_infodir}/libquadmath.info*
+%endif
 
 %sysdir %{_mandir}
 %sysdir %{_mandir}/man7

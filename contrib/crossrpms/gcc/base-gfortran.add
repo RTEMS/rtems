@@ -6,6 +6,7 @@
 %package -n @rpmprefix@gcc-gfortran-common
 Summary:	Base package for RTEMS gcc/gfortran compiler
 Group:          Development/Tools
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	GPL
 
 Requires(post): 	/sbin/install-info
@@ -18,6 +19,9 @@ This is the files for gcc/gfortran that are shared by all targets.
 
 %files -n @rpmprefix@gcc-gfortran-common
 %defattr(-,root,root)
+%sysdir %{_prefix}
+%sysdir %{_prefix}/share
+
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/gfortran.info*.gz

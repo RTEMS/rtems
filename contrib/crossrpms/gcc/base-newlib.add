@@ -8,6 +8,7 @@ Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
 Release:        @NEWLIB_RPMREL@
+%{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
 Requires(post): 	/sbin/install-info
@@ -18,6 +19,9 @@ newlib files that are shared by all targets.
 
 %files -n @rpmprefix@newlib-common
 %defattr(-,root,root)
+%sysdir %{_prefix}
+%sysdir %{_prefix}/share
+
 %sysdir %{_infodir}
 %ghost %{_infodir}/dir
 %{_infodir}/libc.info*
