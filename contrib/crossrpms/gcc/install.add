@@ -87,21 +87,10 @@
 
   rm -f dirs ;
   echo "%defattr(-,root,root,-)" >> dirs
-%if "%{_prefix}" != "/usr"
-  echo "%dir %{_prefix}" >> dirs
-  echo "%dir %{_libdir}" >> dirs
-%if "%{gcc_version}" >= "3.4"
-  echo "%dir %{_libexecdir}" >> dirs
-%endif
-%endif
-  echo "%dir %{_gcclibdir}/gcc" >> dirs
-  echo "%dir %{_gcclibdir}/gcc/@tool_target@" >> dirs
-
   TGTDIR="%{_gcclibdir}/gcc/@tool_target@/%{gcc_version}"
   for i in $multilibs; do
     case $i in
-    \.) echo "%dir ${TGTDIR}" >> dirs
-      ;;
+    \.) ;; # ignore, handled elsewhere
     *)  echo "%dir ${TGTDIR}/$i" >> dirs
       ;;
     esac

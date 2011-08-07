@@ -53,7 +53,7 @@
 %if %build_newlib
     --enable-newlib-io-c99-formats \
 %endif
-    --enable-languages="$languages" $optargs
+    --enable-languages="$languages"
 
 %if "%_host" != "%_build"
   # Bug in gcc-3.2.1:

@@ -81,9 +81,6 @@ BuildRequires:	zlib-devel
 BuildRequires:	gcc-gnat
 BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMREL@
 %endif
-%if %build_fortran
-BuildRequires: gmp-devel
-%endif
 
 %global _gcclibdir %{_prefix}/lib
 
