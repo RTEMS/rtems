@@ -27,10 +27,10 @@ GCC c++ compiler for @tool_target@.
 %{_bindir}/@tool_target@-c++%{_exeext}
 %{_bindir}/@tool_target@-g++%{_exeext}
 
-%dir %{gccexec}
-%dir %{gccexec}/@tool_target@
-%dir %{gccexec}/@tool_target@/%{gcc_version}
-%{gccexec}/@tool_target@/%{gcc_version}/cc1plus%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/@tool_target@
+%dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
+%{_libexecdir}/gcc/@tool_target@/%{gcc_version}/cc1plus%{_exeext}
 
 %dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include
 %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include/c++

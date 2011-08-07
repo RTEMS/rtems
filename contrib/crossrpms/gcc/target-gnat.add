@@ -24,10 +24,10 @@ This is the gcc/gnat compiler for @tool_target@.
 %{_bindir}/@tool_target@-gnat*
 %{_bindir}/@tool_target@-gprmake%{_exeext}
 
-%dir %{gccexec}
-%dir %{gccexec}/@tool_target@
-%dir %{gccexec}/@tool_target@/%{gcc_version}
-%{gccexec}/@tool_target@/%{gcc_version}/gnat1%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/@tool_target@
+%dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
+%{_libexecdir}/gcc/@tool_target@/%{gcc_version}/gnat1%{_exeext}
 
 %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/adalib
 %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/adainclude

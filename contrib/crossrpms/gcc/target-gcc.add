@@ -44,9 +44,9 @@ GNU cc compiler for @tool_target@.
 %dir %{_gcclibdir}/gcc/@tool_target@/%{gcc_version}/include-fixed
 %endif
 
-%dir %{gccexec}
-%dir %{gccexec}/@tool_target@
-%dir %{gccexec}/@tool_target@/%{gcc_version}
-%{gccexec}/@tool_target@/%{gcc_version}/cc1%{_exeext}
-%{gccexec}/@tool_target@/%{gcc_version}/collect2%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/@tool_target@
+%dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
+%{_libexecdir}/gcc/@tool_target@/%{gcc_version}/cc1%{_exeext}
+%{_libexecdir}/gcc/@tool_target@/%{gcc_version}/collect2%{_exeext}
 

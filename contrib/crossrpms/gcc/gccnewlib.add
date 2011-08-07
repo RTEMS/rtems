@@ -87,7 +87,6 @@ BuildRequires:	@rpmprefix@@tool_target@-newlib < %{newlib_version}-@NEWLIB_RPMRE
 BuildRequires: gmp-devel
 %endif
 
-%define gccexec %{_libexecdir}/gcc
 %global _gcclibdir %{_prefix}/lib
 
 @SOURCES@

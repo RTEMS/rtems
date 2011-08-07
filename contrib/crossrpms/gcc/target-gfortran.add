@@ -22,9 +22,9 @@ GCC fortran compiler for @tool_target@.
 
 %{_mandir}/man1/@tool_target@-gfortran.1*
 
-%dir %{gccexec}
-%dir %{gccexec}/@tool_target@
-%dir %{gccexec}/@tool_target@/%{gcc_version}
-%{gccexec}/@tool_target@/%{gcc_version}/f951%{_exeext}
+%dir %{_libexecdir}/gcc
+%dir %{_libexecdir}/gcc/@tool_target@
+%dir %{_libexecdir}/gcc/@tool_target@/%{gcc_version}
+%{_libexecdir}/gcc/@tool_target@/%{gcc_version}/f951%{_exeext}
 %endif
 
