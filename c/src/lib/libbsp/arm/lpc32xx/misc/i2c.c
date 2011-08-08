@@ -190,12 +190,6 @@ rtems_status_code lpc32xx_i2c_read_with_optional_stop(
   }
 
   while (rx <= last) {
-    if ((i2c->stat & I2C_STAT_TDI) != 0) {
-      stop = true;
-
-      break;
-    }
-
     while (tx < last && can_tx_for_rx(i2c)) {
       i2c->rx_or_tx = 0;
       ++tx;
