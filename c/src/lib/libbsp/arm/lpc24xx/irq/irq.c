@@ -7,15 +7,17 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <bsp.h>
@@ -46,24 +48,6 @@ unsigned lpc24xx_irq_get_priority(rtems_vector_number vector)
   } else {
     return LPC24XX_IRQ_PRIORITY_VALUE_MIN - 1U;
   }
-}
-
-void bsp_interrupt_dispatch(void)
-{
-  /* Read current vector number */
-  rtems_vector_number vector = VICVectAddr;
-
-  /* Enable interrupts in program status register */
-  uint32_t psr = arm_status_irq_enable();
-
-  /* Dispatch interrupt handlers */
-  bsp_interrupt_handler_dispatch(vector);
-
-  /* Restore program status register */
-  arm_status_restore(psr);
-
-  /* Acknowledge interrupt */
-  VICVectAddr = 0;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)

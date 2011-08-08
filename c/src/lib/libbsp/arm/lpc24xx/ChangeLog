@@ -1,3 +1,9 @@
+2011-08-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* irq/irq-dispatch.c: New file.
+	* irq/irq.c: Moved bsp_interrupt_dispatch() to new file.
+	* Makefile.am: Reflect change from above.
+
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/lpc24xx.h: Added ADC defines.

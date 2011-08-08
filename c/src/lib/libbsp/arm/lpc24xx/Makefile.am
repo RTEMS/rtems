@@ -103,7 +103,8 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 	../../shared/src/irq-info.c \
 	../../shared/src/irq-shell.c \
 	../../shared/src/irq-server.c \
-	irq/irq.c
+	irq/irq.c \
+	irq/irq-dispatch.c
 
 # Console
 libbsp_a_SOURCES += ../../shared/console.c \
