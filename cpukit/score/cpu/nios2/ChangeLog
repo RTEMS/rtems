@@ -1,3 +1,9 @@
+2011-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpu_asm.S, rtems/score/cpu.h: There is no need to save the global
+	pointer (gp) in the thread register context since it is a system wide
+	constant and set-up with the C runtime environment.
+
 2011-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c: Remove /*PAGE markers which were interpreted by a long dead

@@ -453,27 +453,27 @@ extern "C" {
  */
 
 /**
- *  @ingroup CPUContext Management
- *  This defines the minimal set of integer and processor state registers
- *  that must be saved during a voluntary context switch from one thread
- *  to another.
+ * @brief Thread register context.
+ *
+ * The thread register context covers the non-volatile registers, the thread
+ * stack pointer, the return address, and the processor status.
+ *
+ * There is no need to save the global pointer (gp) since it is a system wide
+ * constant and set-up with the C runtime environment.
  */
 typedef struct {
-    uint32_t r16;
-    uint32_t r17;
-    uint32_t r18;
-    uint32_t r19;
-    uint32_t r20;
-    uint32_t r21;
-    uint32_t r22;
-    uint32_t r23;
-    uint32_t gp;
-    uint32_t fp;
-    uint32_t sp;
-    uint32_t ra;
-    uint32_t status;
-    /* ienable? */
-    /* ipending? */
+  uint32_t r16;
+  uint32_t r17;
+  uint32_t r18;
+  uint32_t r19;
+  uint32_t r20;
+  uint32_t r21;
+  uint32_t r22;
+  uint32_t r23;
+  uint32_t fp;
+  uint32_t sp;
+  uint32_t ra;
+  uint32_t status;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -866,9 +866,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                  _isr, _entry_point, _is_fp ) \
    do { \
-     extern char _gp[]; \
      uint32_t _stack = (uint32_t)(_stack_base) + (_size) - 4; \
-     (_the_context)->gp = (void *)_gp; \
      (_the_context)->fp = (void *)_stack; \
      (_the_context)->sp = (void *)_stack; \
      (_the_context)->ra = (void *)(_entry_point); \

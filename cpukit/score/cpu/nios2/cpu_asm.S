@@ -46,12 +46,11 @@ _CPU_Context_switch:
     stw r21, 20(r4)
     stw r22, 24(r4)
     stw r23, 28(r4)
-    stw gp,  32(r4)
-    stw fp,  36(r4)
-    stw sp,  40(r4)
-    stw ra,  44(r4)
+    stw fp,  32(r4)
+    stw sp,  36(r4)
+    stw ra,  40(r4)
     /* r6 saved status */
-    stw r6,  48(r4)
+    stw r6,  44(r4)
 
 _CPU_Context_switch_restore:
 
@@ -63,15 +62,14 @@ _CPU_Context_switch_restore:
     ldw r21, 20(r5)
     ldw r22, 24(r5)
     ldw r23, 28(r5)
-    ldw gp,  32(r5)
-    ldw fp,  36(r5)
-    ldw sp,  40(r5)
+    ldw fp,  32(r5)
+    ldw sp,  36(r5)
 
     /* Disable interrupts */
     wrctl status, r0
 
-    ldw ea,  44(r5)
-    ldw at,  48(r5)
+    ldw ea,  40(r5)
+    ldw at,  44(r5)
     /* FIXME: Always have interrupts enabled when we return from Context_switch */
     ori at, at, 1
     wrctl estatus, at
