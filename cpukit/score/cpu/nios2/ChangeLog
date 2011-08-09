@@ -1,5 +1,11 @@
 2011-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* nios2-iic-low-level.S: New file.
+	* cpu_asm.S: Moved low-level interrupt handling into new file.
+	* Makefile.am: Reflect change from above.
+
+2011-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* cpu_asm.S, rtems/score/cpu.h: There is no need to save the global
 	pointer (gp) in the thread register context since it is a system wide
 	constant and set-up with the C runtime environment.

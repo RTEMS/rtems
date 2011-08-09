@@ -17,7 +17,10 @@ include_rtems_score_HEADERS += rtems/score/cpu_asm.h
 include_rtems_score_HEADERS += rtems/score/types.h
 
 noinst_LIBRARIES = libscorecpu.a
-libscorecpu_a_SOURCES = cpu.c irq.c cpu_asm.S
+libscorecpu_a_SOURCES = cpu.c \
+	irq.c \
+	nios2-iic-low-level.S \
+	cpu_asm.S
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 all-local: $(PREINSTALL_FILES)
