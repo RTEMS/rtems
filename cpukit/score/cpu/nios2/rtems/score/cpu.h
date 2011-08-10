@@ -310,7 +310,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /**
  *  Does the stack grow up (toward higher addresses) or down
@@ -1153,19 +1153,6 @@ void _CPU_ISR_install_vector(
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
-
-/**
- *  @ingroup CPUInterrupt
- *  This routine installs the hardware interrupt stack pointer.
- *
- *  @note  It need only be provided if @ref CPU_HAS_HARDWARE_INTERRUPT_STACK
- *         is TRUE.
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-void _CPU_Install_interrupt_stack( void );
 
 /**
  *  This routine is the CPU dependent IDLE thread body.

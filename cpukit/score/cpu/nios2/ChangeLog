@@ -1,3 +1,7 @@
+2011-08-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/cpu.h, cpu.c: Removed superfluous functions.
+
 2011-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* nios2-iic-low-level.S: New file.
