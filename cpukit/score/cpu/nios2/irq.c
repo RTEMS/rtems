@@ -34,7 +34,73 @@
 
 register unsigned long  *stack_ptr __asm__ ("sp");
 
+RTEMS_INLINE_ROUTINE void
+__Dipatch_interrupt_vector(uint32_t vector, proc_ptr pp)
+{
+  if ( _ISR_Vector_table[ vector] )
+  {
+    (*_ISR_Vector_table[ vector ])(vector, pp);
+  };
+}
+
+#if (RTEMS_NIOS_USE_ALT_HAL == TRUE)
+
+#include <bsp/alt/nios2.h>
+
+RTEMS_INLINE_ROUTINE void __IIC_Handler(void)
+{
+  uint32_t active;
+  uint32_t mask;
+  uint32_t vector;
+
+  /*
+   * Obtain from the interrupt controller a bit list of pending interrupts,
+   * and then process the highest priority interrupt. This process loops,
+   * loading the active interrupt list on each pass until alt_irq_pending()
+   * return zero.
+   *
+   * The maximum interrupt latency for the highest priority interrupt is
+   * reduced by finding out which interrupts are pending as late as possible.
+   * Consider the case where the high priority interupt is asserted during
+   * the interrupt entry sequence for a lower priority interrupt to see why
+   * this is the case.
+   */
+
+  NIOS2_READ_IPENDING (active);
+
+  while (active)
+  {
+    vector = 0;
+    mask = 1;
+
+    /*
+     * Test each bit in turn looking for an active interrupt. Once one is
+     * found, the interrupt handler asigned by a call to alt_irq_register() is
+     * called to clear the interrupt condition.
+     */
+
+    while (active)
+    {
+      if (active & mask)
+      {
+        __Dipatch_interrupt_vector(vector, NULL);
+        active &= ~mask;
+      }
+      mask <<= 1;
+      ++vector;
+    };
+
+    NIOS2_READ_IPENDING (active);
+  }
+  
+}
+#endif
+
+#if (RTEMS_NIOS_USE_ALT_HAL == TRUE)
+void __ISR_Handler(void)
+#else
 void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
+#endif
 {
   register uint32_t   level;
 
@@ -52,11 +118,12 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
 
   _Thread_Dispatch_increment_disable_level();
 
-  if ( _ISR_Vector_table[ vector] )
-  {
-    (*_ISR_Vector_table[ vector ])(vector, ifr);
-  };
-
+#if (RTEMS_NIOS_USE_ALT_HAL == TRUE)
+  __IIC_Handler();
+#else
+  __Dipatch_interrupt_vector(vector, ifr);
+#endif
+  
   /* Make sure that interrupts are disabled again */
   _CPU_ISR_Disable( level );
 
@@ -87,5 +154,3 @@ void __Exception_Handler(CPU_Exception_frame *efr)
 {
   _CPU_Fatal_halt(0xECC0);
 }
-
-

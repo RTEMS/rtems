@@ -182,7 +182,12 @@ typedef struct {
   uint32_t ipending;
 } CPU_Exception_frame;
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+#define _CPU_Initialize_vectors() \
+  memset(_ISR_Vector_table, 0, sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS)
+#else
 #define _CPU_Initialize_vectors()
+#endif
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
