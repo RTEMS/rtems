@@ -15,6 +15,7 @@
 #include <bsp/bootcard.h>
 #include <nds.h>
 
+extern void defaultExceptionHandler ();
 extern void BSP_rtems_irq_mngt_init (void);
 /*
  * start the platform.
@@ -44,6 +45,8 @@ void bsp_start (void)
 
   /* configure clock period */
   Configuration.microseconds_per_tick = 10000;  /* us */
+
+  defaultExceptionHandler ();
 }
 
 /*

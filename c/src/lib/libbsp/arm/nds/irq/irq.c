@@ -34,8 +34,6 @@ isValidInterrupt (int irq)
 void
 BSP_rtems_irq_mngt_init (void)
 {
-  printk ("[+] irq manager started\n");
-
   irqInit ();
 
   REG_IME = IME_ENABLE;

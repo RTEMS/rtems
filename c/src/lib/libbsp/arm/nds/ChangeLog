@@ -1,3 +1,10 @@
+2011-08-15	Julien Delange <julien.delange@gmail.com>
+
+	* irq/irq.c: Removed printk() before the interrupt initialization
+	because it somehow destroys the interrupt context.
+	* make/custom/nds.cfg: Enable Thumb interwork.
+	* startup/bspstart.c: Set default exception handler.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
