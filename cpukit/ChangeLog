@@ -1,3 +1,9 @@
+2011-08-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/newlibc_exit.c, score/src/threadhandler.c: Added
+	init/fini array support for ARM EABI.  The __libc_init_array() and
+	__libc_fini_array() functions are provided by Newlib.
+
 2011-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1877/cpukit

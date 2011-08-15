@@ -128,6 +128,8 @@ void libc_wrapup(void)
   #if defined(__USE_INIT_FINI__)
     #if defined(__m32r__)
       #define FINI_SYMBOL __fini
+    #elif defined(__ARM_EABI__)
+      #define FINI_SYMBOL __libc_fini_array
     #else
       #define FINI_SYMBOL _fini
     #endif
@@ -141,7 +143,7 @@ void EXIT_SYMBOL(int status)
    *  If the toolset uses init/fini sections, then we need to
    *  run the global destructors now.
    */
-  #if defined(__USE_INIT_FINI__)
+  #if defined(FINI_SYMBOL)
     FINI_SYMBOL();
   #endif
 

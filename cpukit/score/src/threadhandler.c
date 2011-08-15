@@ -37,6 +37,8 @@
 #if defined(__USE_INIT_FINI__)
   #if defined(__M32R__)
     #define INIT_NAME __init
+  #elif defined(__ARM_EABI__)
+    #define INIT_NAME __libc_init_array
   #else
     #define INIT_NAME _init
   #endif
