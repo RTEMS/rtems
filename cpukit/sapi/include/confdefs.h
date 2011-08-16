@@ -45,6 +45,8 @@
 #include <rtems.h>
 #include <rtems/score/apimutex.h>
 
+#include <bsp.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
