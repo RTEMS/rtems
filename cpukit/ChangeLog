@@ -1,3 +1,8 @@
+2011-08-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/confdefs.h: Revert previous commit due to multi-lib
+	rule violation.
+
 2011-08-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h: Include <bsp.h> for BSP_IDLE_TASK_BODY,
