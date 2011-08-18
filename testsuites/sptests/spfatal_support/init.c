@@ -152,6 +152,7 @@ void Fatal_extension(
     printk( "*** END OF TEST ***\n" );
   }
 
-  _Thread_Stop_multitasking();
+  if ( _System_state_Is_up( _System_state_Get() ) )
+    _Thread_Stop_multitasking();
 }
 

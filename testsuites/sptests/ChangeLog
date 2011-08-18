@@ -1,3 +1,8 @@
+2011-08-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spfatal_support/init.c: Ensure that _Thread_BSP_context is
+	initialized.
+
 2011-08-02	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1883/testing
