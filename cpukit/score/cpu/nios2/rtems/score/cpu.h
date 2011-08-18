@@ -189,40 +189,101 @@ typedef struct {
 #define _CPU_Initialize_vectors()
 #endif
 
+/**
+ *  @brief Read the ienable register.
+ */
+#define _CPU_read_ienable( value ) \
+    do { value = __builtin_rdctl(3); } while (0)
+
+/**
+ *  @brief Write the ienable register.
+ */
+#define _CPU_write_ienable( value ) \
+    do { __builtin_wrctl(3, value); } while (0)
+
+/**
+ *  @brief Read the ipending register.
+ */
+#define _CPU_read_ipending( value ) \
+    do { value = __builtin_rdctl(4); } while (0)
+
+/**
+ *  Disable all interrupts for a critical section.  The previous
+ *  level is returned in _level.
+ */
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
     _isr_cookie = __builtin_rdctl( 0 ); \
     __builtin_wrctl( 0, 0 ); \
   } while ( 0 )
 
+/**
+ *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
+ *  This indicates the end of a critical section.  The parameter
+ *  _level is not modified.
+ */
 #define _CPU_ISR_Enable( _isr_cookie ) \
   do { \
     __builtin_wrctl( 0, (int) _isr_cookie ); \
   } while ( 0 )
 
+/**
+ *  This temporarily restores the interrupt to _level before immediately
+ *  disabling them again.  This is used to divide long critical
+ *  sections into two or more parts.  The parameter _level is not
+ *  modified.
+ */
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
     __builtin_wrctl( 0, (int) _isr_cookie ); \
     __builtin_wrctl( 0, 0 ); \
   } while ( 0 )
 
-#define _CPU_ISR_Set_level( new_level ) \
+/**
+ *  Map interrupt level in task mode onto the hardware that the CPU
+ *  actually provides.  Currently, interrupt levels which do not
+ *  map onto the CPU in a straight fashion are undefined.
+ */
+#define _CPU_ISR_Set_level( new_level )      \
   _CPU_ISR_Enable( new_level == 0 ? 1 : 0 );
 
+/**
+ *  @brief Obtain the Current Interrupt Disable Level
+ *
+ *  This method is invoked to return the current interrupt disable level.
+ *
+ *  @return This method returns the current interrupt disable level.
+ */
 uint32_t _CPU_ISR_Get_level( void );
 
-/*
- * FIXME: Evaluate interrupt level.
+/**
+ *  Initialize the context to a state suitable for starting a
+ *  task after a context restore operation.  Generally, this
+ *  involves:
+ *
+ *  - setting a starting address
+ *  - preparing the stack
+ *  - preparing the stack and frame pointers
+ *  - setting the proper interrupt level in the context
+ *  - initializing the floating point context
+ *
+ * @param[in] the_context points to the context area
+ * @param[in] stack_base is the low address of the allocated stack area
+ * @param[in] size is the size of the stack area in bytes
+ * @param[in] new_level is the interrupt level for the task
+ * @param[in] entry_point is the task's entry point
+ * @param[in] is_fp is set to TRUE if the task is a floating point task
+ *
+ *  @note  Implemented as a subroutine for the NIOS2 port.
  */
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
-  do { \
-    uint32_t _stack = (uint32_t)(_stack_base) + (_size) - 4; \
-    (_the_context)->fp = (void *)_stack; \
-    (_the_context)->sp = (void *)_stack; \
-    (_the_context)->ra = (void *)(_entry_point); \
-    (_the_context)->status  = 0x1; /* IRQs enabled */ \
-  } while ( 0 )
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
+  void             *entry_point,
+  bool              is_fp
+);
 
 #define _CPU_Context_Restart_self( _the_context ) \
   _CPU_Context_restore( (_the_context) );

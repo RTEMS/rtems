@@ -19,6 +19,8 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
 
+#include <rtems/score/nios2.h>
+
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -44,19 +46,33 @@ void _CPU_Initialize(void)
 
 /*
  *  _CPU_ISR_Get_level
- *
- *  NO_CPU Specific Information:
- *
- *  XXX document implementation including references if appropriate
  */
 
 uint32_t   _CPU_ISR_Get_level( void )
 {
-  /*
-   *  This routine returns the current interrupt level.
-   */
+  /* @todo Add EIC support. */
+  uint32_t status = __builtin_rdctl(0);
+  return status & 1 ? 0 : 1;
+}
 
-  return 0;
+/*
+ * FIXME: Evaluate interrupt level.
+ */
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
+  void             *entry_point,
+  bool              is_fp
+)
+{
+  uint32_t stack = (uint32_t)stack_base + size - 4;
+  the_context->fp = stack;
+  the_context->sp = stack;
+  the_context->ra = (intptr_t) entry_point;
+  /* @todo Add EIC support. */
+  the_context->status = new_level ? 0 : 1;
 }
 
 /*

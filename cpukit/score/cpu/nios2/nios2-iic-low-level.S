@@ -231,6 +231,7 @@ _ISR_Handler:
     stw et,  68(sp)
     stw ea,  72(sp)
 
+#if REMOVED_BY_CCJ
     /*
      * Obtain a bitlist of the pending interrupts.
      */
@@ -266,7 +267,8 @@ _ISR_Handler:
      */
 
     mov     r5, sp
-
+#endif
+	
     .extern __ISR_Handler
     call    __ISR_Handler
 

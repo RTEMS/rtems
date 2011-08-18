@@ -1,3 +1,15 @@
+2011-08-18	Chris Johns <chrisj@rtems.org>
+
+	* cpu.c: Fix the ISR get level for the IIC. Make
+	_CPU_Context_Initialize a function rather than inlined.
+	* cpu_asm.S: Do not enable interrupt on return, rather resume the
+	state on entry to the ISR.
+	* irq.c, nios2/nios2-iic-low-level.S: Change the ISR handler so
+	the ipending decoding is in C and within the interrupt
+	context. This is usable with the Altera HAL directly.
+	* rtems/score/cpu.h: Add ienable and ipending interfaces. Add some
+	comments. Remove _CPU_Context_Initialize.
+
 2011-08-14	Chris Johns <chrisj@rtems.org>
 
 	* rtems/score/cpu.h: Clear the vector table for simple vectored

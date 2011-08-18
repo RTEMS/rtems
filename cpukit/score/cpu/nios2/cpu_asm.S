@@ -70,8 +70,6 @@ _CPU_Context_switch_restore:
 
     ldw ea,  40(r5)
     ldw at,  44(r5)
-    /* FIXME: Always have interrupts enabled when we return from Context_switch */
-    ori at, at, 1
     wrctl estatus, at
 
     eret
