@@ -1,3 +1,8 @@
+2011-08-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* psxfatal_support/init.c: Ensure that _Thread_BSP_context is
+	initialized.
+
 2011-08-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psx16/Makefile.am: New file.
