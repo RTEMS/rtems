@@ -1,3 +1,10 @@
+2011-08-21	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1886/cpukit
+	* sprbtree01/init.c, sprbtree01/sprbtree01.scn: This patch enables
+	inserting duplicate keys into rbtree. It is possible to turn on this
+	feature when initializing the tree.
+
 2011-08-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spfatal_support/init.c: Ensure that _Thread_BSP_context is

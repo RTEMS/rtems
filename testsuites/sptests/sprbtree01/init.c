@@ -100,8 +100,14 @@ rtems_task Init(
   puts( "\n\n*** TEST OF RTEMS RBTREE API ***" );
 
   puts( "Init - Initialize rbtree empty" );
-  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function );
-  
+  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function,
+                                 RTEMS_RBTREE_UNIQUE );
+
+  if ( !rtems_rbtree_is_unique( &rbtree1 ) )
+    puts( "INIT - FAILED IS UNIQUE CHECK" );
+  if ( rtems_rbtree_is_unique( NULL ) )
+    puts( "INIT - FAILED IS UNIQUE CHECK" );
+
   /* verify that the rbtree insert work */
   puts( "INIT - Verify rtems_rbtree_insert with two nodes" );
   node1.id = 1;
@@ -111,7 +117,7 @@ rtems_task Init(
   rtems_rbtree_insert( &rbtree1, &node1.Node );
   rtems_rbtree_insert( &rbtree1, &node2.Node );
 
-  p = _RBTree_Insert_unprotected( &rbtree1, NULL );
+  p = rtems_rbtree_insert( &rbtree1, NULL );
   if (p != (void *)(-1))
     puts( "INIT - FAILED NULL NODE INSERT" );
 
@@ -149,7 +155,11 @@ rtems_task Init(
   puts("INIT - Verify rtems_rbtree_insert with the same value twice");
   node2.key = node1.key;
   rtems_rbtree_insert(&rbtree1, &node1.Node);
-  rtems_rbtree_insert(&rbtree1, &node2.Node);
+  p = rtems_rbtree_insert(&rbtree1, &node2.Node);
+
+  if (p != &node1.Node)
+    puts( "INIT - FAILED DUPLICATE INSERT" );
+
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
       p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
@@ -527,7 +537,8 @@ rtems_task Init(
     node_array[i].key = i;
   }
   rtems_rbtree_initialize( &rbtree1, &test_compare_function,
-                           &node_array[0].Node, 100, sizeof(test_node));
+                           &node_array[0].Node, 100,
+                           sizeof(test_node), RTEMS_RBTREE_UNIQUE );
 
   puts( "INIT - Removing 100 nodes" );
 
@@ -540,6 +551,98 @@ rtems_task Init(
     }
 
     if ( t->id != id ) {
+      puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
+      rtems_test_exit(0);
+    }
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  if(!rtems_rbtree_is_empty(&rbtree1)) {
+    puts( "INIT - TREE NOT EMPTY" );
+    rtems_test_exit(0);
+  }
+
+  /* Initialize the tree for duplicate keys */
+  puts( "Init - Initialize duplicate rbtree empty" );
+  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function,
+                                 RTEMS_RBTREE_DUPLICATE );
+
+  if ( rtems_rbtree_is_unique( &rbtree1 ) )
+    puts( "INIT - FAILED IS UNIQUE CHECK" );
+  if ( rtems_rbtree_is_unique( NULL ) )
+    puts( "INIT - FAILED IS UNIQUE CHECK" );
+
+  puts( "INIT - Verify rtems_rbtree_insert with 100 nodes value [0,99]" );
+  for (i = 0; i < 100; i++) {
+    node_array[i].id = i;
+    node_array[i].key = i%5;
+    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  puts( "INIT - Verify rtems_rbtree_find in a duplicate tree" );
+  search_node.key = 2;
+  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
+  if(rtems_rbtree_container_of(p,test_node,Node)->id != 2) {
+    puts ("INIT - ERROR ON RBTREE ID MISMATCH");
+    rtems_test_exit(0);
+  }
+
+  puts( "INIT - Removing 100 nodes" );
+
+  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    if ( id > 99 ) {
+      puts( "INIT - TOO MANY NODES ON RBTREE" );
+      rtems_test_exit(0);
+    }
+    if ( t->id != ( ((id*5)%100) + (id/20) ) ) {
+      puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
+      rtems_test_exit(0);
+    }
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  if(!rtems_rbtree_is_empty(&rbtree1)) {
+    puts( "INIT - TREE NOT EMPTY" );
+    rtems_test_exit(0);
+  }
+
+  puts( "INIT - Verify rtems_rbtree_insert with 100 nodes value [99,0]" );
+  for (i = 0; i < 100; i++) {
+    node_array[i].id = 99-i;
+    node_array[i].key = (99-i)%5;
+    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+
+    if (!rb_assert(rbtree1.root) )
+      puts( "INIT - FAILED TREE CHECK" );
+  }
+
+  puts( "INIT - Verify rtems_rbtree_find in a duplicate tree" );
+  search_node.key = 2;
+  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
+  if(rtems_rbtree_container_of(p,test_node,Node)->id != 97) {
+    puts ("INIT - ERROR ON RBTREE ID MISMATCH");
+    rtems_test_exit(0);
+  }
+
+  puts( "INIT - Removing 100 nodes" );
+
+  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+    test_node *t = rtems_rbtree_container_of(p,test_node,Node);
+    if ( id > 99 ) {
+      puts( "INIT - TOO MANY NODES ON RBTREE" );
+      rtems_test_exit(0);
+    }
+    if ( t->id != ( (((99-id)*5)%100) + (id/20) ) ) {
       puts( "INIT - ERROR ON RBTREE ID MISMATCH" );
       rtems_test_exit(0);
     }
