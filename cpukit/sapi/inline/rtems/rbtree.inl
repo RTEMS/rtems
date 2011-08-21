@@ -35,15 +35,16 @@
  *  @a starting_address.  Each node is of @a node_size bytes.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
-  rtems_rbtree_control *the_rbtree,
-  void                 *compare_function,
-  void                 *starting_address,
-  size_t                number_nodes,
-  size_t                node_size
+  rtems_rbtree_control          *the_rbtree,
+  rtems_rbtree_compare_function  compare_function,
+  void                          *starting_address,
+  size_t                         number_nodes,
+  size_t                         node_size,
+  rtems_rbtree_unique            is_unique
 )
 {
   _RBTree_Initialize( the_rbtree, compare_function, starting_address,
-    number_nodes, node_size);
+    number_nodes, node_size, is_unique);
 }
 
 /**
@@ -52,11 +53,12 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
  *  This routine initializes @a the_rbtree to contain zero nodes.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
-  rtems_rbtree_control *the_rbtree,
-  void                 *compare_function
+  rtems_rbtree_control          *the_rbtree,
+  rtems_rbtree_compare_function  compare_function,
+  rtems_rbtree_unique            is_unique
 )
 {
-  _RBTree_Initialize_empty( the_rbtree, compare_function );
+  _RBTree_Initialize_empty( the_rbtree, compare_function, is_unique );
 }
 
 /**
@@ -257,6 +259,9 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
  *  This function returns a pointer to the node having key equal to the key
  *  of @a the_node if it exists within @a the_rbtree, and NULL if not.
  *  @a the_node has to be made up before a search.
+ *
+ *  @note If the tree is not unique and contains duplicate keys, the set
+ *        of duplicate keys acts as FIFO.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
   rtems_rbtree_control *the_rbtree,
@@ -382,13 +387,27 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_header(
  *
  *  This routine inserts @a the_node on @a the_rbtree.
  *  It disables interrupts to ensure the atomicity of the insert operation.
+ *
+ *  @retval 0 Successfully inserted.
+ *  @retval -1 NULL @a the_node.
+ *  @retval RBTree_Node* if one with equal key to the key of @a the_node exists
+ *          in an unique @a the_rbtree.
  */
-RTEMS_INLINE_ROUTINE void rtems_rbtree_insert(
+RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(
   rtems_rbtree_control *the_rbtree,
   rtems_rbtree_node *the_node
 )
 {
-  _RBTree_Insert( the_rbtree, the_node );
+  return _RBTree_Insert( the_rbtree, the_node );
+}
+
+/** @brief Determines whether the tree is unique
+ */
+RTEMS_INLINE_ROUTINE rtems_rbtree_unique rtems_rbtree_is_unique(
+    rtems_rbtree_control *the_rbtree
+)
+{
+  return( _RBTree_Is_unique(the_rbtree) );
 }
 
 #endif

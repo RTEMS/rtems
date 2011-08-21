@@ -100,6 +100,16 @@ typedef enum {
 } RBTree_Direction;
 
 /**
+ * This type defines function pointers for user-provided comparison
+ * function. The function compares two nodes in order to determine
+ * the order in a red-black tree.
+ */
+typedef int (*RBTree_Compare_function)(
+    RBTree_Node *node1,
+    RBTree_Node *node2
+);
+
+/**
  *  @struct RBTree_Control
  *
  * This is used to manage a RBT.  A rbtree consists of a tree of zero or more
@@ -126,11 +136,13 @@ typedef struct {
   /** This points to the min and max nodes of this RBT. */
   RBTree_Node *first[2];
   /**
-   * Comparison function pointer. Keys to compare has to be found
+   * Comparison function pointer. Keys to compare have to be found
    * inside to maintain generality. It has to return 1 if first node
    * has higher key than second, -1 if lower, 0 if equal.
    */
-  int (*compare_function) (RBTree_Node*, RBTree_Node*);
+  RBTree_Compare_function compare_function;
+  /** Determines whether the tree accepts duplicate keys. */
+  bool is_unique;
 } RBTree_Control;
 
 /**
@@ -142,7 +154,8 @@ typedef struct {
   .root = NULL, \
   .first[0] = NULL, \
   .first[1] = NULL, \
-  .compare_function = NULL \
+  .compare_function = NULL, \
+  .is_unique = 0 \
 }
 
 /**
@@ -176,11 +189,12 @@ RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY(name)
  *  @a starting_address.  Each node is of @a node_size bytes.
  */
 void _RBTree_Initialize(
-  RBTree_Control *the_rbtree,
-  void           *compare_function,
-  void           *starting_address,
-  size_t          number_nodes,
-  size_t          node_size
+  RBTree_Control          *the_rbtree,
+  RBTree_Compare_function  compare_function,
+  void                    *starting_address,
+  size_t                   number_nodes,
+  size_t                   node_size,
+  bool                     is_unique
 );
 
 /**
@@ -247,8 +261,8 @@ RBTree_Control *_RBTree_Find_header(
  *
  *  @retval 0 Successfully inserted.
  *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal value to @a the_node->value exists
- *          in @a the_rbtree.
+ *  @retval RBTree_Node* if one with equal value to @a the_node 's key exists
+ *          in an unique @a the_rbtree.
  *
  *  @note It does NOT disable interrupts to ensure the atomicity
  *        of the extract operation.
@@ -263,10 +277,15 @@ RBTree_Node *_RBTree_Insert_unprotected(
  *
  *  This routine inserts @a the_node on the tree @a the_rbtree.
  *
+ *  @retval 0 Successfully inserted.
+ *  @retval -1 NULL @a the_node.
+ *  @retval RBTree_Node* if one with equal value to @a the_node 's key exists
+ *          in an unique @a the_rbtree.
+ *
  *  @note It disables interrupts to ensure the atomicity
  *  of the extract operation.
  */
-void _RBTree_Insert(
+RBTree_Node *_RBTree_Insert(
   RBTree_Control *the_rbtree,
   RBTree_Node *the_node
 );

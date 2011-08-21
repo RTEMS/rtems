@@ -72,7 +72,7 @@ void _RBTree_Validate_insert_unprotected(
  *  @retval 0 Successfully inserted.
  *  @retval -1 NULL @a the_node.
  *  @retval RBTree_Node* if one with equal key to the key of @a the_node exists
- *          in @a the_rbtree.
+ *          in an unique @a the_rbtree.
  *
  *  @note It does NOT disable interrupts to ensure the atomicity
  *        of the extract operation.
@@ -97,7 +97,8 @@ RBTree_Node *_RBTree_Insert_unprotected(
     /* typical binary search tree insert, descend tree to leaf and insert */
     while (iter_node) {
       compare_result = the_rbtree->compare_function(the_node, iter_node);
-      if ( !compare_result ) return iter_node;
+      if ( the_rbtree->is_unique && !compare_result )
+        return iter_node;
       RBTree_Direction dir = (compare_result != -1);
       if (!iter_node->child[dir]) {
         the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
@@ -138,7 +139,7 @@ RBTree_Node *_RBTree_Insert_unprotected(
  *    only case
  */
 
-void _RBTree_Insert(
+RBTree_Node *_RBTree_Insert(
   RBTree_Control *tree,
   RBTree_Node *node
 )
@@ -146,6 +147,6 @@ void _RBTree_Insert(
   ISR_Level level;
 
   _ISR_Disable( level );
-    _RBTree_Insert_unprotected( tree, node );
+    return _RBTree_Insert_unprotected( tree, node );
   _ISR_Enable( level );
 }

@@ -235,8 +235,9 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
  *  This routine initializes @a the_rbtree to contain zero nodes.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
-    RBTree_Control *the_rbtree,
-    void           *compare_function
+    RBTree_Control          *the_rbtree,
+    RBTree_Compare_function  compare_function,
+    bool                     is_unique
     )
 {
   the_rbtree->permanent_null   = NULL;
@@ -244,6 +245,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
   the_rbtree->first[0]         = NULL;
   the_rbtree->first[1]         = NULL;
   the_rbtree->compare_function = compare_function;
+  the_rbtree->is_unique        = is_unique;
 }
 
 /** @brief Return a pointer to node's grandparent
@@ -317,6 +319,9 @@ RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header_unprotected(
  *  This function returns a pointer to the node in @a the_rbtree 
  *  having key equal to key of  @a the_node if it exists,
  *  and NULL if not. @a the_node has to be made up before a search.
+ *
+ *  @note If the tree is not unique and contains duplicate keys, the set
+ *        of duplicate keys acts as FIFO.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
     RBTree_Control *the_rbtree,
@@ -324,18 +329,21 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
     )
 {
   RBTree_Node* iter_node = the_rbtree->root;
+  RBTree_Node* found = NULL;
   int compare_result;
   while (iter_node) {
     compare_result = the_rbtree->compare_function(the_node, iter_node);
     if (compare_result == 0) {
-        return(iter_node);
+      found = iter_node;
+      if ( the_rbtree->is_unique )
+        break;
     }
 
-    RBTree_Direction dir = (compare_result != -1);
+    RBTree_Direction dir = (compare_result == 1);
     iter_node = iter_node->child[dir];
   } /* while(iter_node) */
 
-  return 0;
+  return found;
 }
 
 /** @brief Find the nodes in-order predecessor
@@ -428,7 +436,6 @@ RTEMS_INLINE_ROUTINE void _RBTree_Rotate(
   RBTree_Node *c;
   if (the_node == NULL) return;
   if (the_node->child[(1-dir)] == NULL) return;
-  
 
   c = the_node->child[(1-dir)];
   the_node->child[(1-dir)] = c->child[dir];
@@ -442,6 +449,15 @@ RTEMS_INLINE_ROUTINE void _RBTree_Rotate(
 
   c->parent = the_node->parent;
   the_node->parent = c;
+}
+
+/** @brief Determines whether the tree is unique
+ */
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_unique(
+    RBTree_Control *the_rbtree
+)
+{
+  return( the_rbtree && the_rbtree->is_unique );
 }
 /**@}*/
 
