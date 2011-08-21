@@ -1,3 +1,9 @@
+2011-08-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1873/cpukit
+	* score/include/rtems/score/heap.h: When using heap protection, we
+	should account for adding an aligned protection footer.
+
 2011-08-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sapi/include/confdefs.h: Revert previous commit due to multi-lib
