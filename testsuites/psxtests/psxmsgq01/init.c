@@ -1137,11 +1137,10 @@ void verify_timedout_mq_timedreceive(
   int   is_blocking
 )
 {
-  char message[ 100 ];
-  unsigned int priority;
-  struct timespec tm;
-  struct timeval  tv1, tv2, tv3;
-  struct timezone tz1, tz2;
+  char             message[ 100 ];
+  struct timespec  tm;
+  struct timeval   tv1, tv2, tv3;
+  struct timezone  tz1, tz2;
   int              status;
 
   printf(
@@ -1154,7 +1153,7 @@ void verify_timedout_mq_timedreceive(
   tm.tv_sec  = tv1.tv_sec - 1;
   tm.tv_nsec = tv1.tv_usec * 1000;
 
-  status = mq_timedreceive( Test_q[ que ].mq, message, 100, &priority, &tm );
+  status = mq_timedreceive( Test_q[ que ].mq, message, 100, NULL, &tm );
 
   gettimeofday( &tv2, &tz2 );
   tv3.tv_sec  = tv2.tv_sec - tv1.tv_sec;
