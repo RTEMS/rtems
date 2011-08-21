@@ -1,5 +1,11 @@
 2011-08-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	PR 1890/cpukit
+	* posix/src/mqueuerecvsupp.c: POSIX says msg_prio is allowed to be
+	NULL.
+
+2011-08-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	PR 1873/cpukit
 	* score/include/rtems/score/heap.h: When using heap protection, we
 	should account for adding an aligned protection footer.
