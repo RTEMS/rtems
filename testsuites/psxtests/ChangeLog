@@ -1,3 +1,8 @@
+2011-08-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1890/cpukit
+	* psxmsgq01/init.c: POSIX says msg_prio is allowed to be NULL.
+
 2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1855/cpukit
