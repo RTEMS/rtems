@@ -17,7 +17,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CPPFLAGS += -DSEMAPHORES_REMAINING=5
+AM_CPPFLAGS += -DSEMAPHORES_REMAINING=4
 
 LINK_OBJS = $(spfatal16_OBJECTS) $(spfatal16_LDADD)
 LINK_LIBS = $(spfatal16_LDLIBS)
