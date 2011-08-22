@@ -7,34 +7,34 @@ cd gcc-%{gcc_pkgvers}
 cd ..
 
 %if %build_cxx
-%setup -q -T -D -n %{name}-%{version} -a1
+%{?SOURCE1:%setup -q -T -D -n %{name}-%{version} -a1}
 cd gcc-%{gcc_pkgvers}
 %{?PATCH1:%patch1 -p1}
 cd ..
 %endif
 
 %if %build_fortran
-%setup -q -T -D -n %{name}-%{version} -a2
+%{?SOURCE2:%setup -q -T -D -n %{name}-%{version} -a2}
 %{?PATCH2:%patch2 -p0}
 %endif
 
 %if %build_gcj
-%setup -q -T -D -n %{name}-%{version} -a3
+%{?SOURCE3:%setup -q -T -D -n %{name}-%{version} -a3}
 %{?PATCH3:%patch3 -p0}
 %endif
 
 %if %build_gnat
-%setup -q -T -D -n %{name}-%{version} -a4
+%{?SOURCE4:%setup -q -T -D -n %{name}-%{version} -a4}
 %{?PATCH4:%patch4 -p0}
 %endif
 
 %if %build_objc
-%setup -q -T -D -n %{name}-%{version} -a5
+%{?SOURCE5:%setup -q -T -D -n %{name}-%{version} -a5}
 %{?PATCH5:%patch5 -p0}
 %endif
 
 %if %build_go
-%setup -q -T -D -n %{name}-%{version} -a6
+%{?SOURCE6:%setup -q -T -D -n %{name}-%{version} -a6}
 %{?PATCH6:%patch6 -p0}
 
 %endif
