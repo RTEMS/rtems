@@ -1,3 +1,7 @@
+2011-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* start/start.S: Fixed code section.
+
 2011-08-15	Julien Delange <julien.delange@gmail.com>
 
 	* irq/irq.c: Removed printk() before the interrupt initialization
