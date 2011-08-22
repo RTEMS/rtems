@@ -10,7 +10,7 @@
  *  $Id$
  */
 
-#define FATAL_ERROR_TEST_NAME            "12"
+#define FATAL_ERROR_TEST_NAME            "13"
 #define FATAL_ERROR_DESCRIPTION  \
         "Configuration of unlimited and maximum of 0"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE

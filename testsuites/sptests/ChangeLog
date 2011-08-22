@@ -1,5 +1,24 @@
 2011-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* spfatal13/testcase.h: Fixed test name.
+	* spfatal05/testcase.h: Increased wait time for slow hardware.
+	* spfatal_support/init.c: Print test name at end of test.
+	* spfatal01/spfatal01.scn, spfatal02/spfatal02.scn,
+	spfatal03/spfatal03.scn, spfatal04/spfatal04.scn,
+	spfatal05/spfatal05.scn, spfatal06/spfatal06.scn,
+	spfatal07/spfatal07.scn, spfatal08/spfatal08.scn,
+	spfatal09/spfatal09.scn, spfatal10/spfatal10.scn,
+	spfatal11/spfatal11.scn, spfatal12/spfatal12.scn,
+	spfatal13/spfatal13.scn, spfatal14/spfatal14.scn,
+	spfatal15/spfatal15.scn, spfatal16/spfatal16.scn,
+	spfatal17/spfatal17.scn, spfatal18/spfatal18.scn,
+	spfatal19/spfatal19.scn, spfatal20/spfatal20.scn,
+	spfatal21/spfatal21.scn, spfatal22/spfatal22.scn,
+	spfatal23/spfatal23.scn, spfatal24/spfatal24.scn,
+	spfatal25/spfatal25.scn: Reflect changes from above.
+
+2011-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1899/testing
 	* spfatal14/Makefile.am: Adjust number of semaphores to consume to
 	trigger fatal error.

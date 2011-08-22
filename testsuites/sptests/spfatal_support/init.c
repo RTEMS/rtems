@@ -149,7 +149,7 @@ void Fatal_extension(
       && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
       && error == FATAL_ERROR_EXPECTED_ERROR
   ) {
-    printk( "*** END OF TEST ***\n" );
+    printk( "*** END OF TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
   }
 
   if ( _System_state_Is_up( _System_state_Get() ) )
