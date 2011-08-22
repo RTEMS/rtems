@@ -1,3 +1,9 @@
+2011-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1899/testing
+	* spfatal14/Makefile.am: Adjust number of semaphores to consume to
+	trigger fatal error.
+
 2011-08-21	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1899/testing
