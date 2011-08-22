@@ -80,4 +80,7 @@ void _ISR_Handler_initialization( void )
   _CPU_Install_interrupt_stack();
 #endif
 
+#if defined(RTEMS_SMP)
+  _ISR_SMP_Initialize();
+#endif
 }

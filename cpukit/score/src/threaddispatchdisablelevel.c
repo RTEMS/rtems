@@ -66,8 +66,7 @@ uint32_t _Thread_Dispatch_increment_disable_level(void)
   _Thread_Dispatch_disable_level++;
   level = _Thread_Dispatch_disable_level;
 
-  _ISR_Enable(isr_level); 
-
+  _ISR_Enable_on_this_core(isr_level);
   return level;
 }
 
@@ -79,8 +78,7 @@ uint32_t _Thread_Dispatch_decrement_disable_level(void)
   /*  First we must disable ISRs in order to protect
    *  accesses to the dispatch disable level.
    */
-
-  _ISR_Disable( isr_level );
+  _ISR_Disable_on_this_core( isr_level );
 
   _Thread_Dispatch_disable_level--;
   level = _Thread_Dispatch_disable_level;

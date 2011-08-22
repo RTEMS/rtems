@@ -169,9 +169,10 @@ void _Thread_Dispatch( void )
   }
 
 post_switch:
-  _Thread_Dispatch_set_disable_level( 0 );
 
   _ISR_Enable( level );
 
+  _Thread_Unnest_dispatch();
+ 
   _API_extensions_Run_postswitch();
 }

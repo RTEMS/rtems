@@ -90,7 +90,7 @@ SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
 void _ISR_Handler_initialization ( void );
 
 /**
- *  @brief Disable Interrupts
+ *  @brief Disable Interrupts on This Core
  *
  *  This routine disables all interrupts so that a critical section
  *  of code can be executing without being interrupted.
@@ -98,30 +98,30 @@ void _ISR_Handler_initialization ( void );
  *  @return The argument @a _level will contain the previous interrupt
  *          mask level.
  */
-#define _ISR_Disable( _level ) \
+#define _ISR_Disable_on_this_core( _level ) \
   do { \
     _CPU_ISR_Disable( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
 
 /**
- *  @brief Enable Interrupts
+ *  @brief Enable Interrupts on This Core
  *
  *  This routine enables interrupts to the previous interrupt mask
  *  LEVEL.  It is used at the end of a critical section of code to
  *  enable interrupts so they can be processed again.
  *
  *  @param[in] level contains the interrupt level mask level
- *             previously returned by @ref _ISR_Disable_on_core.
+ *             previously returned by @ref _ISR_Disable_on_this_core.
  */
-#define _ISR_Enable( _level ) \
+#define _ISR_Enable_on_this_core( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
     _CPU_ISR_Enable( _level ); \
   } while (0)
 
 /**
- *  @brief Temporarily Enable Interrupts
+ *  @brief Temporarily Enable Interrupts on This Core
  *
  *  This routine temporarily enables interrupts to the previous
  *  interrupt mask level and then disables all interrupts so that
@@ -137,14 +137,138 @@ void _ISR_Handler_initialization ( void );
  *  properly protects itself.
  *
  *  @param[in] level contains the interrupt level mask level
- *             previously returned by @ref _ISR_Disable_on_core.
+ *             previously returned by @ref _ISR_Disable_on_this_core.
  */
-#define _ISR_Flash( _level ) \
+#define _ISR_Flash_on_this_core( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
     _CPU_ISR_Flash( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
+
+#if defined(RTEMS_SMP)
+
+/**
+ *  @brief Initialize SMP Interrupt Critical Section Support
+ *
+ *  This method initializes the variables required by the SMP implementation
+ *  of interrupt critical section management.
+ */
+void _ISR_SMP_Initialize(void);
+
+/**
+ *  @brief Enter Interrupt Critical Section on SMP System
+ *
+ *  This method is used to enter an interrupt critical section that
+ *  is honored across all cores in an SMP system.
+ *
+ *  @return This method returns the previous interrupt mask level.
+ */
+ISR_Level _ISR_SMP_Disable(void);
+
+/**
+ *  @brief Exit Interrupt Critical Section on SMP System
+ *
+ *  This method is used to exit an interrupt critical section that
+ *  is honored across all cores in an SMP system.
+ *
+ *  @param[in] level contains the interrupt level mask level
+ *             previously returned by @ref _ISR_SMP_Disable.
+ */
+void _ISR_SMP_Enable(ISR_Level level);
+
+/**
+ *  @brief Temporarily Exit Interrupt Critical Section on SMP System
+ *
+ *  This method is used to temporarily exit an interrupt critical section
+ *  that is honored across all cores in an SMP system.
+ *
+ *  @param[in] level contains the interrupt level mask level
+ *             previously returned by @ref _ISR_SMP_Disable.
+ */
+void _ISR_SMP_Flash(ISR_Level level);
+
+/**
+ *  @brief Enter SMP interrupt code
+ *
+ *  This method is used to enter the SMP interrupt section.
+ *
+ *  @return This method returns the isr level.
+ */
+int _ISR_SMP_Enter(void);
+
+/**
+ *  @brief Exit SMP interrupt code
+ *
+ *  This method is used to exit the SMP interrupt.
+ *
+ *  @return This method returns 0 on a simple return and returns 1 on a
+ *  dispatching return.
+ */
+int _ISR_SMP_Exit(void);
+
+#endif
+
+/**
+ *  @brief Enter Interrupt Disable Critical Section
+ *
+ *  This routine enters an interrupt disable critical section.  When
+ *  in an SMP configuration, this involves obtaining a spinlock to ensure
+ *  that only one core is inside an interrupt disable critical section.
+ *  When on a single core system, this only involves disabling local
+ *  CPU interrupts.
+ *
+ *  @return The argument @a _level will contain the previous interrupt
+ *          mask level.
+ */
+#if defined(RTEMS_SMP)
+  #define _ISR_Disable( _level ) \
+    _level = _ISR_SMP_Disable();
+#else
+  #define _ISR_Disable( _level ) \
+    _ISR_Disable_on_this_core( _level );
+#endif
+  
+/**
+ *  @brief Exits Interrupt Disable Critical Section
+ *
+ *  This routine exits an interrupt disable critical section.  When
+ *  in an SMP configuration, this involves releasing a spinlock.
+ *  When on a single core system, this only involves disabling local
+ *  CPU interrupts.
+ *
+ *  @return The argument @a _level will contain the previous interrupt
+ *          mask level.
+ */
+#if defined(RTEMS_SMP)
+  #define _ISR_Enable( _level ) \
+    _ISR_SMP_Enable( _level );
+#else
+  #define _ISR_Enable( _level ) \
+    _ISR_Enable_on_this_core( _level );
+#endif
+
+/**
+ *  @brief Temporarily Exit Interrupt Disable Critical Section
+ *
+ *  This routine is used to temporarily enable interrupts
+ *  during a long critical section.  It is used in long sections of
+ *  critical code when a point is reached at which interrupts can
+ *  be temporarily enabled.  Deciding where to flash interrupts
+ *  in a long critical section is often difficult and the point
+ *  must be selected with care to ensure that the critical section
+ *  properly protects itself.
+ *
+ *  @return The argument @a _level will contain the previous interrupt
+ *          mask level.
+ */
+#if defined(RTEMS_SMP)
+  #define _ISR_Flash( _level ) \
+    _ISR_SMP_Flash( _level );
+#else
+  #define _ISR_Flash( _level ) \
+    _ISR_Flash_on_this_core( _level );
+#endif
 
 /**
  *  @brief Install Interrupt Handler Vector
@@ -201,7 +325,7 @@ void _ISR_Handler_initialization ( void );
  *  ensure that the necessary thread scheduling operations are
  *  performed when the outermost interrupt service routine exits.
  *
- *  @note  Implemented in assembly language.
+ *  @note  Typically implemented in assembly language.
  */
 void _ISR_Handler( void );
 

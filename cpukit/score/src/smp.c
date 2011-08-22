@@ -18,10 +18,6 @@
 #include <rtems/score/smp.h>
 #include <rtems/score/thread.h>
 
-#if defined(RTEMS_SMP)
-  #define RTEMS_DEBUG
-#endif
-
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
 #endif
@@ -32,6 +28,9 @@
 void rtems_smp_run_first_task(int cpu)
 {
   Thread_Control *heir;
+  ISR_Level       level;
+
+  _ISR_Disable_on_this_core( level );
 
   /*
    *  The Scheduler will have selected the heir thread for each CPU core.
@@ -50,15 +49,13 @@ void rtems_smp_run_first_task(int cpu)
  */
 void rtems_smp_secondary_cpu_initialize(void)
 {
-  int cpu;
+  int       cpu;
+  ISR_Level level;
 
   cpu = bsp_smp_processor_id();
 
+  _ISR_Disable_on_this_core( level );
   bsp_smp_secondary_cpu_initialize(cpu);
-
-  #if defined(RTEMS_DEBUG)
-    printk( "Made it to %d -- ", cpu );
-  #endif
 
   /*
    *  Inform the primary CPU that this secondary CPU is initialized
@@ -67,20 +64,31 @@ void rtems_smp_secondary_cpu_initialize(void)
    */
   _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_INITIALIZED;
 
+  #if defined(RTEMS_DEBUG)
+    printk( "Made it to %d -- ", cpu );
+  #endif
+
   /*
    *  With this secondary core out of reset, we can wait for the
    *  request to switch to the first task.
-   *
-   *  XXX When SMP ISR code is complete, do we want interrupts on
-   *  XXX or off at this point?
    */
-  _ISR_Set_level( 0 );
   while(1) {
+    uint32_t   message;
+
     bsp_smp_wait_for(
       (volatile unsigned int *)&_Per_CPU_Information[cpu].message,
       RTEMS_BSP_SMP_FIRST_TASK,
       10000
     );
+
+    level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
+      message = _Per_CPU_Information[cpu].message;
+      if ( message & RTEMS_BSP_SMP_FIRST_TASK ) {
+	_SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
+        _ISR_Set_level( 0 );
+      }
+     
+    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
   }
 }
 
@@ -119,33 +127,25 @@ void rtems_smp_process_interrupt(void)
   #endif
 
   if ( message & RTEMS_BSP_SMP_FIRST_TASK ) {
-    /*
-     * XXX Thread dispatch disable level at this point will have to be
-     * XXX revisited when Interrupts on SMP is addressed.
-     */
-    _Thread_Dispatch_disable_level--; /* undo ISR code */
     _Per_CPU_Information[cpu].isr_nest_level = 0;
     _Per_CPU_Information[cpu].message &= ~message;
     _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_UP;
 
     _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
-    _Thread_Disable_dispatch();
+
     rtems_smp_run_first_task(cpu);
     /* does not return */
   }
 
   if ( message & RTEMS_BSP_SMP_SHUTDOWN ) {
-    /*
-     * XXX Thread dispatch disable level at this point will have to be
-     * XXX revisited when Interrupts on SMP is addressed.
-     */
     _Per_CPU_Information[cpu].message &= ~message;
-    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
 
-    _Thread_Dispatch_disable_level--; /* undo ISR code */
     _Per_CPU_Information[cpu].isr_nest_level = 0;
     _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_SHUTDOWN;
-    _ISR_Disable( level );
+    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
+
+    _Thread_Enable_dispatch();       /* undo ISR code */
+    _ISR_Disable_on_this_core( level );
     while(1)
       ;
     /* does not continue past here */
@@ -155,10 +155,6 @@ void rtems_smp_process_interrupt(void)
     #if defined(RTEMS_DEBUG)
       printk( "switch needed\n" );
     #endif
-    /*
-     * XXX Thread dispatch disable level at this point will have to be
-     * XXX revisited when Interrupts on SMP is addressed.
-     */
     _Per_CPU_Information[cpu].message &= ~message;
     _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
   }
@@ -173,6 +169,11 @@ void _SMP_Send_message(
 )
 {
   ISR_Level level;
+
+  #if defined(RTEMS_DEBUG)
+    if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
+      printk( "Send 0x%x to %d\n", message, cpu );
+  #endif
 
   level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
     _Per_CPU_Information[cpu].message |= message;
@@ -210,15 +211,9 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void)
 {
   int    cpu;
 
+  _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_UP; 
   for (cpu=1 ; cpu < _SMP_Processor_count ; cpu++ ) {
     _SMP_Send_message( cpu, RTEMS_BSP_SMP_FIRST_TASK );
-    while (_Per_CPU_Information[cpu].state != RTEMS_BSP_SMP_CPU_UP ) {
-      bsp_smp_wait_for(
-        (volatile unsigned int *)&_Per_CPU_Information[cpu].state,
-        RTEMS_BSP_SMP_CPU_UP,
-        10000
-      );
-    }
   }
 }
 
@@ -243,11 +238,6 @@ void _SMP_Request_other_cores_to_dispatch(void)
     if ( !_Per_CPU_Information[i].dispatch_necessary )
       continue;
     _SMP_Send_message( i, RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY );
-    bsp_smp_wait_for(
-      (volatile unsigned int *)&_Per_CPU_Information[i].message,
-      0,
-      10000
-    );
   }
 }
 
@@ -256,28 +246,32 @@ void _SMP_Request_other_cores_to_dispatch(void)
  */
 void _SMP_Request_other_cores_to_shutdown(void)
 {
-  bool allDown;
-  int  ncpus;
-  int  cpu;
+  bool   allDown;
+  int    ncpus;
+  int    n;
+  int    cpu;
 
+  cpu   = bsp_smp_processor_id();
   ncpus = _SMP_Processor_count;
 
   _SMP_Broadcast_message( RTEMS_BSP_SMP_SHUTDOWN );
 
   allDown = true;
-  for (cpu=1 ; cpu<ncpus ; cpu++ ) {
+  for (n=0 ; n<ncpus ; n++ ) {
+     if ( n == cpu ) 
+       continue;
      bsp_smp_wait_for(
-       (unsigned int *)&_Per_CPU_Information[cpu].state,
+       (unsigned int *)&_Per_CPU_Information[n].state,
        RTEMS_BSP_SMP_CPU_SHUTDOWN,
        10000
     );
-    if ( _Per_CPU_Information[cpu].state != RTEMS_BSP_SMP_CPU_SHUTDOWN )
+    if ( _Per_CPU_Information[n].state != RTEMS_BSP_SMP_CPU_SHUTDOWN )
       allDown = false;
   }
   if ( !allDown )
-    printk( "All CPUs not successfully shutdown -- timed out\n" );
+    printk( "not all down -- timed out\n" );
   #if defined(RTEMS_DEBUG)
-    else 
+    else
       printk( "All CPUs shutdown successfully\n" );
   #endif
 }
