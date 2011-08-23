@@ -1,3 +1,7 @@
+2011-08-23	Julien Delange <julien.delange@gmail.com>
+
+	* startup/linkcmds: Fixed instruction cache size.
+
 2011-08-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* start/start.S: Fixed code section.
