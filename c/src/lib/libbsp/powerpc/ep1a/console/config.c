@@ -12,6 +12,7 @@
  */
 
 #include <libchip/serial.h>
+#include <libchip/ns16550.h>
 #include "ns16550cfg.h"
 #include <bsp.h>
 #include <libcpu/io.h>
@@ -361,6 +362,13 @@ console_tbl	Console_Port_Tbl[] = {
                 0                               /* ulIntVector */
         }
 };
+
+/* rtems console uses the following minor number */
+rtems_device_minor_number  Console_Port_Minor = 0;
+
+#define NUM_CONSOLE_PORTS (sizeof(Console_Port_Tbl)/sizeof(console_tbl))
+unsigned long	Console_Port_Count = NUM_CONSOLE_PORTS;
+console_data    Console_Port_Data[NUM_CONSOLE_PORTS];
 
 static bool config_68360_scc_base_probe(int minor, unsigned long busNo, unsigned long slotNo, int channel)
 {

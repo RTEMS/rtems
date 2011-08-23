@@ -1,5 +1,10 @@
 2011-08-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
+	* Makefile.am, console/config.c: Resolved printk issues.
+	* console/printk_support.c: New file.
+
+2011-08-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
 	* Makefile.am: Removed console.c and linked to the shared console.c.
 	Note: This change was verified through compilation only.
 	* console/console.c: Removed.
