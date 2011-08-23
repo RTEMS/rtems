@@ -50,7 +50,7 @@ include_bsp_HEADERS = ../../powerpc/shared/console/uart.h \
     ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/console/consoleIo.h console/rsPMCQ1.h
 # console
-libbsp_a_SOURCES += console/console.c console/ns16550cfg.c \
+libbsp_a_SOURCES += ../../shared/console.c console/ns16550cfg.c \
     console/mc68360_scc.c console/rsPMCQ1.c console/alloc360.c \
     console/init68360.c
 

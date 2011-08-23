@@ -1,3 +1,9 @@
+2011-08-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* Makefile.am: Removed console.c and linked to the shared console.c.
+	Note: This change was verified through compilation only.
+	* console/console.c: Removed.
+
 2011-06-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* configure.ac: Use standard cache BSP options.
