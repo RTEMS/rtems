@@ -18,7 +18,7 @@
 #include <bsp.h>
 
 SPR_RW(ICTRL);
-SPR_RW(DEC);
+SPR_RW(PPC_DEC);
 SPR_RW(TBWU);
 SPR_RW(TBWL);
 SPR_RO(IMMR);
@@ -76,7 +76,7 @@ void _InitSS555 (void)
   usiu.tbscrk = 0;
 
   usiu.tbk = USIU_UNLOCK_KEY;
-  _write_DEC(0x7FFFFFFF);
+  _write_PPC_DEC(0x7FFFFFFF);
   _write_TBWU(0x00000000 );
   _write_TBWL(0x00000000 );
   usiu.tbk = 0;
