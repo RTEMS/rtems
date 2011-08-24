@@ -1,3 +1,7 @@
+2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* network/network.c: Update due to API changes.
+
 2011-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove references to non-existing files.

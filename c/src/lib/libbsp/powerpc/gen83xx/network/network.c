@@ -58,7 +58,7 @@
 SPR_RO( SVR)
 
 /* Processor Version Register */
-SPR_RO( PVR)
+SPR_RO( PPC_PVR)
 
 /*=========================================================================*\
 | Function:                                                                 |
@@ -83,7 +83,7 @@ int BSP_tsec_attach
   int    unitNumber;
   char *unitName;
   uint32_t svr = _read_SVR();
-  uint32_t pvr = _read_PVR();
+  uint32_t pvr = _read_PPC_PVR();
 
   memset(&tsec_cfg, 0, sizeof(tsec_cfg));
   config->drv_ctrl = &tsec_cfg;
