@@ -1,3 +1,9 @@
+2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/powerpc/registers.h: Renamed defines XER in PPC_XER, LR in
+	PPC_LR, CTR in PPC_CTR, PVR in PPC_PVR, RPA in PPC_RPA, DAR in
+	PPC_DAR, DEC in PPC_DEC, and EAR in PPC_EAR.
+
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/cpu.h: Added SPE support to CPU context.

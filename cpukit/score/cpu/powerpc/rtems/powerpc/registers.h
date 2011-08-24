@@ -122,14 +122,14 @@ n:
 #define	TBRL	268
 #define TBWU	285	/* Time base Upper/Lower (Writing) */
 #define TBWL	284
-#define	XER	1
-#define LR	8
-#define CTR	9
+#define	PPC_XER	1
+#define PPC_LR	8
+#define PPC_CTR	9
 #define HID0	1008	/* Hardware Implementation 0 */
 #define HID1	1009	/* Hardware Implementation 1 */
 #define HID2	1011	/* Hardware Implementation 2 */
 #define DABR	1013	/* Data Access Breakpoint  */
-#define PVR	287	/* Processor Version */
+#define PPC_PVR	287	/* Processor Version */
 #define IBAT0U	528	/* Instruction BAT #0 Upper/Lower */
 #define IBAT0L	529
 #define IBAT1U	530	/* Instruction BAT #1 Upper/Lower */
@@ -174,9 +174,9 @@ n:
 #define HASH2	979
 #define IMISS	980
 #define ICMP	981
-#define RPA	982
+#define PPC_RPA	982
 #define SDR1	25	/* MMU hash base register */
-#define DAR	19	/* Data Address Register */
+#define PPC_DAR	19	/* Data Address Register */
 #define DEAR_BOOKE 61
 #define DEAR_405 981
 #define SPR0	272	/* Supervisor Private Registers */
@@ -196,8 +196,8 @@ n:
 #define SRR0	26	/* Saved Registers (exception) */
 #define SRR1	27
 #define IABR	1010	/* Instruction Address Breakpoint */
-#define DEC	22	/* Decrementer */
-#define EAR	282	/* External Address Register */
+#define PPC_DEC	22	/* Decrementer */
+#define PPC_EAR	282	/* External Address Register */
 
 #define MSSCR0   1014   /* Memory Subsystem Control Register */
 
