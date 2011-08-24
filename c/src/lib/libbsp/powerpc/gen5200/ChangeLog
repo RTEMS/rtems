@@ -1,3 +1,7 @@
+2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* start/start.S: Update due to API changes.
+
 2011-27-28	Till Straumann <strauman@slac.stanford.edu>
 
 	* start/start.S: fixed indentation. Tag TOS with a NULL

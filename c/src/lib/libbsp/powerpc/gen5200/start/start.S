@@ -755,11 +755,11 @@ FPU_init:
 SPRG_init:					/* initialize registers */
 	xor	r30, r30, r30
 
-	mtspr	XER, r30
-	mtspr	CTR, r30
+	mtspr	PPC_XER, r30
+	mtspr	PPC_CTR, r30
 	mtspr	DSISR, r30
-	mtspr	DAR, r30
-	mtspr	DEC, r30
+	mtspr	PPC_DAR, r30
+	mtspr	PPC_DEC, r30
 	mtspr	SDR1, r30
 	mtspr	SRR0, r30
 	mtspr	SRR1, r30
@@ -773,7 +773,7 @@ SPRG_init:					/* initialize registers */
 	mtspr	SPRG5, r30
 	mtspr	SPRG6, r30
 	mtspr	SPRG7, r30
-	mtspr	EAR, r30
+	mtspr	PPC_EAR, r30
 	mtspr	TBWU, r30
 	mtspr	TBWL, r30
 	mtspr	IBAT0U, r30
@@ -814,7 +814,7 @@ SPRG_init:					/* initialize registers */
 	mtspr	HASH2, r30
 	mtspr	IMISS, r30
 	mtspr	ICMP, r30
-	mtspr	RPA, r30
+	mtspr	PPC_RPA, r30
 	mtsr	PPC_SR0, r30
 	mtsr	PPC_SR1, r30
 	mtsr	PPC_SR2, r30
