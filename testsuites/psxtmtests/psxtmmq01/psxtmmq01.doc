@@ -1,0 +1,23 @@
+#
+#  $Id$
+#
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ mq_close (close of first)
++ mq_close (close of second)
++ mq_notify
++ mq_open (first open)
++ mq_open (second open)
++ mq_receive - available
++ mq_send - no threads waiting
++ mq_timedreceive - available
++ mq_timedsend - no threads waiting
++ mq_unlink

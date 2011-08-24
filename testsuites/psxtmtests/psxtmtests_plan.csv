@@ -83,22 +83,22 @@
 "pthread_rwlock_timedwrlock - available","psxtmrwlock01","psxtmtest_single","Yes"
 "pthread_rwlock_timedwrlock - not available, blocks","psxtmrwlock05","psxtmtest_blocking","Yes"
 ,,,
-"mq_open (first open)","psxtmmq01","psxtmtest_init_destroy",
-"mq_close (close of first)","psxtmmq01","psxtmtest_init_destroy",
-"mq_open (second open)","psxtmmq01","psxtmtest_init_destroy",
-"mq_close (close of second)","psxtmmq01","psxtmtest_init_destroy",
-"mq_unlink","psxtmmq01","psxtmtest_init_destroy",
-"mq_receive - available",,"psxtmtest_single",
+"mq_open (first open)","psxtmmq01","psxtmtest_init_destroy","Yes"
+"mq_close (close of first)","psxtmmq01","psxtmtest_init_destroy","Yes"
+"mq_open (second open)","psxtmmq01","psxtmtest_init_destroy","Yes"
+"mq_close (close of second)","psxtmmq01","psxtmtest_init_destroy","Yes"
+"mq_unlink","psxtmmq01","psxtmtest_init_destroy","Yes"
+"mq_receive - available",,"psxtmtest_single","Yes"
 "mq_receive - not available, block",,"psxtmtest_blocking",
-"mq_timedreceive - available",,"psxtmtest_single",
+"mq_timedreceive - available",,"psxtmtest_single","Yes"
 "mq_timedreceive - not available, blocks",,"psxtmtest_single",
-"mq_send - no threads waiting",,"psxtmtest_single",
+"mq_send - no threads waiting",,"psxtmtest_single","Yes"
 "mq_send - thread waiting, no preempt",,"psxtmtest_unblocking_nopreempt",
 "mq_send - thread waiting, preempt",,"psxtmtest_unblocking_preempt",
-"mq_timedsend - no threads waiting",,"psxtmtest_single",
+"mq_timedsend - no threads waiting",,"psxtmtest_single","Yes"
 "mq_timedsend - thread waiting, no preempt",,"psxtmtest_unblocking_nopreempt",
 "mq_timedsend - thread waiting, preemption",,"psxtmtest_unblocking_preempt",
-"mq_notify ",,"psxtmtest_single",
+"mq_notify ",,"psxtmtest_single","Yes"
 ,,,
 "sem_init","psxtmsem01","psxtmtest_single","Yes"
 "sem_destroy","psxtmsem01","psxtmtest_single","Yes"

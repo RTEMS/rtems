@@ -84,6 +84,7 @@ psxtmbarrier02/Makefile
 psxtmbarrier03/Makefile
 psxtmkey01/Makefile
 psxtmkey02/Makefile
+psxtmmq01/Makefile
 psxtmmutex01/Makefile
 psxtmmutex02/Makefile
 psxtmmutex03/Makefile
