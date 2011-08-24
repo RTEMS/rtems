@@ -95,7 +95,7 @@ typedef struct _map {
 
 SPR_RW(SDR1);
 SPR_RO(DSISR);
-SPR_RO(DAR);
+SPR_RO(PPC_DAR);
 
 /* We need a few statically allocated free maps to bootstrap the
  * memory managment */
@@ -140,7 +140,7 @@ void _handler(int vec, ctxt *p) {
 		vaddr = p->nip;
 		cause = p->msr;
 	} else { /* Valid for DSI and alignment exceptions */
-		vaddr = _read_DAR();
+		vaddr = _read_PPC_DAR();
 		cause = _read_DSISR();
 	}
 

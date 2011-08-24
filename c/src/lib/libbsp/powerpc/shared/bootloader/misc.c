@@ -26,8 +26,7 @@
 #include <rtems/bspIo.h>
 #include <bsp.h>
 
-SPR_RW(DEC)
-SPR_RO(PVR)
+SPR_RO(PPC_PVR)
 
 struct inode;
 struct wait_queue;
@@ -264,7 +263,7 @@ setup_hw(void)
 	default_vga_cmd = 0;
 
 #define vpd res->VitalProductData
-	if (_read_PVR()>>16 != 1) {
+	if (_read_PPC_PVR()>>16 != 1) {
 		if ( res && vpd.ProcessorBusHz ) {
 			ticks_per_ms = vpd.ProcessorBusHz/
 			    (vpd.TimeBaseDivisor ? vpd.TimeBaseDivisor : 4000);

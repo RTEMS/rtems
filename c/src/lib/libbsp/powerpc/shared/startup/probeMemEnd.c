@@ -110,7 +110,7 @@ extern uint32_t __rtems_end[];
 
 SPR_RW(L2CR)
 SPR_RW(L3CR)
-SPR_RO(PVR)
+SPR_RO(PPC_PVR)
 SPR_RW(HID0)
 
 
@@ -127,8 +127,8 @@ register uint32_t v, x;
 #undef  DSSALL
 	}
 	asm volatile("sync");
-	switch ( _read_PVR()>>16 ) {
-		default:		printk(__FILE__" CPU_lockUnlockCaches(): unknown CPU (PVR = 0x%08x)\n",_read_PVR());
+	switch ( _read_PPC_PVR()>>16 ) {
+		default:		printk(__FILE__" CPU_lockUnlockCaches(): unknown CPU (PVR = 0x%08x)\n",_read_PPC_PVR());
 						return -1;
 		case PPC_750:	printk("CPU_lockUnlockCaches(): Can't lock L2 on a mpc750, sorry :-(\n");
 						return -2;	/* cannot lock L2 :-( */

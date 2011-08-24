@@ -151,7 +151,7 @@ tlb_handlers:
 #ifdef ASSUME_REF_SET
 	andi.	r3,r1,8       # check for guarded memory
 	bne-	5f
-	mtspr	RPA,r1
+	mtspr	PPC_RPA,r1
 	mfsrr1	r3
 	tlbli	r0
 #else
@@ -167,7 +167,7 @@ both tests are combined and there is a single CR rename buffer */
 	blt-    5f            # Negative means guarded, zero R not set.
 	mfsrr1  r3            # get saved cr0 bits now to dual issue
 	ori     r1,r1,0x100
-	mtspr   RPA,r1
+	mtspr   PPC_RPA,r1
 	tlbli   r0
 /* Do not update PTE if R bit already set, this will save one cache line
 writeback at a later time, and avoid even more bus traffic in
@@ -246,14 +246,14 @@ inserted for complex cases or for statistics recording. */
 2:	lwz     r1,4(r2)      # Found:	load second word of PTE
 	mfspr   r0,DMISS      # get miss address during load delay
 #ifdef ASSUME_REF_SET
-	mtspr	RPA,r1
+	mtspr	PPC_RPA,r1
 	mfsrr1	r3
 	tlbld	r0
 #else
 	andi.   r3,r1,0x100   # check R bit ahead to help folding
 	mfsrr1  r3            # get saved cr0 bits now to dual issue
 	ori     r1,r1,0x100
-	mtspr   RPA,r1
+	mtspr   PPC_RPA,r1
 	tlbld   r0
 /* Do not update PTE if R bit already set, this will save one cache line
 writeback at a later time, and avoid even more bus traffic in
@@ -323,7 +323,7 @@ write schemes. So the protection check is ABSOLUTELY necessary. */
 	andi.   r3,r1,0x80    # check C bit
 	beq-    5f            # if (C==0) go to check protection
 3:	mfsrr1  r3            # get the saved cr0 bits
-	mtspr   RPA,r1        # set the pte
+	mtspr   PPC_RPA,r1        # set the pte
 	tlbld   r0            # load the dtlb
 	mtcrf   0x80,r3       # restore CR0
 	rfi                   # return to executing program
