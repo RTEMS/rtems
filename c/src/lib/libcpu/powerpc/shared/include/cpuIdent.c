@@ -21,7 +21,7 @@
 /*
  * Generate inline code to read Processor Version Register
  */
-SPR_RO(PVR)
+SPR_RO(PPC_PVR)
 
 ppc_cpu_id_t       current_ppc_cpu      = PPC_UNKNOWN;
 ppc_cpu_revision_t current_ppc_revision = 0xff;
@@ -79,7 +79,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   if ( PPC_UNKNOWN != current_ppc_cpu )
   	return current_ppc_cpu;
 
-  pvr = (_read_PVR() >> 16);
+  pvr = (_read_PPC_PVR() >> 16);
   /*
    * apply tweaks to ignore version
    */
@@ -210,7 +210,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 
 ppc_cpu_revision_t get_ppc_cpu_revision(void)
 {
-  ppc_cpu_revision_t rev = (ppc_cpu_revision_t) (_read_PVR() & 0xffff);
+  ppc_cpu_revision_t rev = (ppc_cpu_revision_t) (_read_PPC_PVR() & 0xffff);
   current_ppc_revision = rev;
   return rev;
 }

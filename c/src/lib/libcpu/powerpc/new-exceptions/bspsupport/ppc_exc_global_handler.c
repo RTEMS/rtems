@@ -42,7 +42,7 @@ typedef struct LRFrameRec_ {
 static uint32_t ppc_exc_get_DAR_dflt(void)
 {
   if (ppc_cpu_is_60x())
-    return PPC_SPECIAL_PURPOSE_REGISTER(DAR);
+    return PPC_SPECIAL_PURPOSE_REGISTER(PPC_DAR);
   else
     switch (ppc_cpu_is_bookE()) {
       default:

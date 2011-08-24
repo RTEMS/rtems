@@ -1,3 +1,10 @@
+2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc6xx/clock/c_clock.c, mpc6xx/mmu/mmuAsm.S,
+	new-exceptions/bspsupport/ppc_exc_global_handler.c,
+	shared/include/cpuIdent.c, shared/src/stack.c: Update due to API
+	changes.
+
 2011-07-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1799/bsps

@@ -2,7 +2,7 @@
 #include <rtems/bspIo.h>
 #include <libcpu/spr.h>
 
-SPR_RO(LR)
+SPR_RO(PPC_LR)
 
 typedef struct FrameRec_ {
 	struct FrameRec_ *up;
@@ -17,7 +17,7 @@ register Frame	p = (Frame)lr;
 register int	i=0;
 	if (pc) stack[i++]=pc;
 	if (!p)
-		p = (Frame)_read_LR();
+		p = (Frame)_read_PPC_LR();
 	stack[i++]=p;
 	p = r1;
 	if (!p) /* no macro for reading user regs */

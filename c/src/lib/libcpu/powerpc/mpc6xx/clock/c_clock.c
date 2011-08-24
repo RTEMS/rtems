@@ -35,7 +35,6 @@
 SPR_RW(BOOKE_TCR)
 SPR_RW(BOOKE_TSR)
 SPR_RW(BOOKE_DECAR)
-SPR_RW(DEC)
 
 extern int BSP_connect_clock_handler (void);
 

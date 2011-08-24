@@ -64,7 +64,7 @@ L1_caches_enables:
 	/*
 	 * Enable caches and 604-specific features if necessary.
 	 */
-	mfspr	r9,PVR
+	mfspr	r9,PPC_PVR
 	rlwinm	r9,r9,16,16,31
 	cmpi	0,r9,PPC_601
 	beq	4f			/* not needed for 601 */
@@ -128,7 +128,7 @@ get_L1CR:
 	.type  get_L2CR, @function
 get_L2CR:
 	/* Make sure this is a > 750 chip */
-	mfspr	r3,PVR
+	mfspr	r3,PPC_PVR
 	rlwinm	r3,r3,16,16,31
 	cmplwi	r3,PPC_750	/* it's a 750 */
 	beq	1f
@@ -179,7 +179,7 @@ set_L2CR:
 	 */
 
 	/* Make sure this is a > 750 chip */
-	mfspr	r0,PVR
+	mfspr	r0,PPC_PVR
 	rlwinm	r0,r0,16,16,31
 	cmplwi	r0,PPC_750
 	beq	thisIs750
@@ -349,7 +349,7 @@ enableCache:
 	.type  get_L3CR, @function
 get_L3CR:
 	/* Make sure this is a 7455 chip */
-	mfspr	r3,PVR
+	mfspr	r3,PPC_PVR
 	rlwinm	r3,r3,16,16,31
 	cmplwi  r3,PPC_7455	/* it's a 7455 */
 	beq	1f
@@ -379,7 +379,7 @@ set_L3CR:
 	 */
 
 	/* Make sure this is a 7455 chip */
-	mfspr	r0,PVR
+	mfspr	r0,PPC_PVR
 	rlwinm	r0,r0,16,16,31
 	cmplwi	r0,PPC_7455
 	beq	thisIs7455
@@ -482,7 +482,7 @@ enableL3Cache:
 	.type	CPU_clear_bats_early,@function
 CPU_clear_bats_early:
 	li		r3,0
-	mfspr	r4,PVR
+	mfspr	r4,PPC_PVR
 	rlwinm	r4,r4,16,16,31		/* r4 = 1 for 601, 4 for 604 */
 	cmpwi	r4, 1
 	sync
