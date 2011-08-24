@@ -381,9 +381,6 @@ unsigned int accent_table_size = 68;
 #define KBD_MODE_KCC 		0x40	/* Scan code conversion to PC format */
 #define KBD_MODE_RFU		0x80
 
-SPR_RW(DEC)
-SPR_RO(PVR)
-
 #endif /* USE_KBD_SUPPORT */
 
 

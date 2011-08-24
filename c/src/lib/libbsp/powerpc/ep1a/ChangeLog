@@ -1,3 +1,7 @@
+2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/polled_io.c: Update due to API changes.
+
 2011-08-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* Makefile.am, console/config.c: Resolved printk issues.
