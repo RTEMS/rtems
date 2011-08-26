@@ -189,14 +189,9 @@ BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 BuildRequires:  @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}
 %endif
 
-%if "%{gcc_version}" >= "4.2.0"
+# Not strictly required, but patches may introduce a need to use them.
+# For reasons of simplicity, always require them.
 BuildRequires:	flex bison
-%endif
-
-%if %build_gcj
-# Building gcj requires bison and zlib
-BuildRequires:	bison
-%endif
 
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@@tool_target@-binutils
