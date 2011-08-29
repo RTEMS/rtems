@@ -9,7 +9,6 @@ DISTCLEANFILES  =
 noinst_PROGRAMS =
 EXTRA_DIST      = 
 
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -64,7 +63,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += startup/bspstart.c \
     ../shared/motorola/vpd.c startup/reboot.c startup/i2c_init.c \
     ../../powerpc/shared/startup/panic.c \
-	../../powerpc/shared/startup/bspgetworkarea.c \
+    ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/probeMemEnd.c \
     ../../powerpc/shared/startup/pretaskinghook.c \
     ../../powerpc/shared/startup/zerobss.c \
@@ -72,7 +71,7 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
-	../../shared/bsppredriverhook.c \
+    ../../shared/bsppredriverhook.c \
     ../../shared/gnatinstallhandler.c
 
 include_bsp_HEADERS += ../shared/motorola/vpd.h
@@ -87,8 +86,8 @@ include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
 libbsp_a_SOURCES +=  \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
-	../../powerpc/shared/console/consoleIo.h \
-	../../powerpc/shared/console/uart.h
+    ../../powerpc/shared/console/consoleIo.h \
+    ../../powerpc/shared/console/uart.h
 
 #irq
 include_bsp_HEADERS += irq/irq.h
@@ -98,7 +97,7 @@ libbsp_a_SOURCES += irq/irq_init.c irq/discovery_pic.c
 #marvell
 include_bsp_HEADERS += marvell/gtreg.h marvell/gtintrreg.h \
     marvell/gti2creg.h marvell/gti2c_busdrv.h marvell/gt_timer.h \
-	marvell/gtpcireg.h
+    marvell/gtpcireg.h
 
 libbsp_a_SOURCES += marvell/discovery.c marvell/gti2c.c marvell/gt_timer.c
 
@@ -107,8 +106,8 @@ include_bsp_HEADERS += ../shared/flash/flashPgm.h
 include_bsp_HEADERS += ../shared/flash/flashPgmPvt.h
 
 libbsp_a_SOURCES += ../shared/flash/flash.c \
-	../shared/flash/intelFlash.c \
-	flash/flashcfg.c
+    ../shared/flash/intelFlash.c \
+    flash/flashcfg.c
 
 #pci
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
@@ -133,10 +132,10 @@ include_bsp_HEADERS += vme/VMEConfig.h \
     ../../shared/vmeUniverse/VMEDMA.h
 
 libbsp_a_SOURCES += ../shared/vme/vmeconfig.c \
-	../shared/vme/vme_universe.c \
+    ../shared/vme/vme_universe.c \
     ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/vmeTsi148.c \
-	../../shared/vmeUniverse/bspVmeDmaList.c
+    ../../shared/vmeUniverse/bspVmeDmaList.c
 
 #network
 if HAS_NETWORKING
@@ -161,22 +160,22 @@ network_if_mve_tmp_rel_LDFLAGS  = $(RTEMS_RELLDFLAGS)
 # with BSD stuff;
 network_if_mve.rel: network_if_mve_tmp.rel
 	$(OBJCOPY) -G rtems_mve_attach -G rtems_mve_early_link_check_ops \
-	           -G BSP_mve_ack_irqs -G BSP_mve_disable_irqs \
-	           -G BSP_mve_enable_irqs -G BSP_mve_init_hw \
-	           -G BSP_mve_ack_irq_mask -G BSP_mve_disable_irq_mask \
-	           -G BSP_mve_enable_irq_mask -G BSP_mve_setup_1 \
-	           -G BSP_mve_read_eaddr -G BSP_mve_send_buf \
-               -G BSP_mve_send_buf_raw \
-	           -G BSP_mve_setup -G BSP_mve_stop_hw \
-	           -G BSP_mve_swipe_rx -G BSP_mve_swipe_tx \
-	           -G BSP_mve_detach -G BSP_mve_media_ioctl \
-			   -G BSP_mve_get_tid \
-			   -G BSP_mve_dump_stats -G BSP_mve_ack_link_chg \
-			   -G BSP_mve_mcast_filter_clear \
-			   -G BSP_mve_mcast_filter_accept_all \
-			   -G BSP_mve_mcast_filter_accept_add \
-			   -G BSP_mve_mcast_filter_accept_del \
-			   -G mveth_serial_ctrl_config_val \
+                   -G BSP_mve_ack_irqs -G BSP_mve_disable_irqs \
+                   -G BSP_mve_enable_irqs -G BSP_mve_init_hw \
+                   -G BSP_mve_ack_irq_mask -G BSP_mve_disable_irq_mask \
+                   -G BSP_mve_enable_irq_mask -G BSP_mve_setup_1 \
+                   -G BSP_mve_read_eaddr -G BSP_mve_send_buf \
+                   -G BSP_mve_send_buf_raw \
+                   -G BSP_mve_setup -G BSP_mve_stop_hw \
+                   -G BSP_mve_swipe_rx -G BSP_mve_swipe_tx \
+                   -G BSP_mve_detach -G BSP_mve_media_ioctl \
+                   -G BSP_mve_get_tid \
+                   -G BSP_mve_dump_stats -G BSP_mve_ack_link_chg \
+                   -G BSP_mve_mcast_filter_clear \
+                   -G BSP_mve_mcast_filter_accept_all \
+                   -G BSP_mve_mcast_filter_accept_add \
+                   -G BSP_mve_mcast_filter_accept_del \
+                   -G mveth_serial_ctrl_config_val \
 	           $^ $@
 
 include_bsp_HEADERS += network/if_gfe/if_gfe_pub.h

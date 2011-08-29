@@ -249,7 +249,6 @@ void bsp_start( void )
   intrStackStart = (uint32_t)__rtems_end;
   intrStackSize  = rtems_configuration_get_interrupt_stack_size();
 
-
   /*
    * Initialize default raw exception handlers. See vectors/vectors_init.c
    */
@@ -348,7 +347,7 @@ void bsp_start( void )
    * they can use atexit()
    */
 
-  bsp_clicks_per_usec            = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
+  bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Configuration.work_space_size = %x\n", Configuration.work_space_size); 

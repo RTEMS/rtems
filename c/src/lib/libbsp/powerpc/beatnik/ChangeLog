@@ -1,3 +1,7 @@
+2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am, startup/bspstart.c: Formatting.
+
 2011-07-13	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1824/cpukit
