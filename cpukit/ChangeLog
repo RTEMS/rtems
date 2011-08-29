@@ -1,5 +1,9 @@
 2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* rtems/include/rtems/rtems/tasks.h: Formatting.
+
+2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* include/rtems/userenv.h, score/src/threadhandler.c: Formatting.
 	* sapi/src/exshutdown.c: Add comments.
 

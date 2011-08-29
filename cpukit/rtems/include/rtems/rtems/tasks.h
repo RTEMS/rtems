@@ -22,7 +22,8 @@
  *     - wake up when specified
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -387,9 +388,9 @@ rtems_status_code rtems_task_set_priority(
  *  set to entry_point with the initial argument.
  */
 rtems_status_code rtems_task_start(
-  rtems_id     id,
-  rtems_task_entry entry_point,
-  rtems_task_argument     argument
+  rtems_id             id,
+  rtems_task_entry     entry_point,
+  rtems_task_argument  argument
 );
 
 /**
