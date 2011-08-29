@@ -80,11 +80,6 @@ if test X${CLOCK_DRIVER_USE_TSC} = X1 -a X${CLOCK_DRIVER_USE_8254} = X1 ; then
   AC_MSG_ERROR([pc386 both TSC and 8254 specified for clock driver])
 fi
 
-RTEMS_BSPOPTS_SET([BSP_HAS_SMP],[*],[1])
-RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
-[Always defined when on a pc386 to enable the pc386 support for
- determining the CPU core number in an SMP configuration.])
-
 ## The PC386 BSP supports SMP configurations if this is enabled.
 RTEMS_BSPOPTS_SET([BSP_HAS_SMP],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
@@ -95,10 +90,8 @@ RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,[test "$RTEMS_GAS_CODE16" = "yes"])
 
-
 AM_CONDITIONAL(HAS_NETWORKING,[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
-
 
 AC_SUBST([RTEMS_ROOT],[${rtems_updir}'$(top_builddir)'])
 

@@ -1,3 +1,7 @@
+2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* configure.ac: Formatting. Remove duplication BSP_HAS_SMP.
+
 2011-08-01	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1802
