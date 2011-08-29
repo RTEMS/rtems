@@ -160,7 +160,9 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
 
 if QEMU
+if HAS_NETWORKING
 libbsp_a_LIBADD+=ne2000.rel
+endif
 endif
 
 EXTRA_DIST = BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
