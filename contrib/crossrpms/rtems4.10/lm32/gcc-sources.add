@@ -1,19 +1,13 @@
-%if "%{gcc_version}" == "4.4.5"
-Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.5-rtems4.10-20110301.diff
-%endif
 %if "%{gcc_version}" == "4.4.6"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.6-rtems4.10-20110420.diff
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-core-4.4.6-rtems4.10-20110829.diff
 %endif
 %{?_without_sources:NoSource:	0}
 
 %if %build_cxx
-%if "%{gcc_version}" == "4.4.5" 
-Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-%endif
 %if "%{gcc_version}" == "4.4.6" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
+Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gcc-g++-4.4.6-rtems4.10-20110829.diff
 %endif
 %{?_without_sources:NoSource:	1}
 
