@@ -178,9 +178,9 @@ uint32_t boot_card(
 
   if ( work_area_size <= Configuration.work_space_size ) {
     printk(
-      "bootcard: work space too big for work area: %p > %p\n",
-      (void *) Configuration.work_space_size,
-      (void *) work_area_size
+      "bootcard: work space too big for work area: 0x%08x > 0x%08x\n",
+      Configuration.work_space_size,
+      work_area_size
     );
     bsp_cleanup(1);
     return 1;
