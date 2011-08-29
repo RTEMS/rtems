@@ -29,7 +29,15 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
+#if defined(RTEMS_SMP)
+  #include <rtems/score/smp.h>
+#endif
 
+
+/*
+ *  Conditional magic to determine what style of C++ constructor
+ *  initialization this target and compiler version uses.
+ */
 #if defined(__AVR__)
   #undef __USE_INIT_FINI__
 #endif
@@ -52,11 +60,6 @@
   #define INIT_NAME __main
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
-
-#if defined(RTEMS_SMP)
-  #include <rtems/score/smp.h>
-#endif
-
 
 /*
  *  _Thread_Handler
@@ -81,7 +84,6 @@
  *
  *  Output parameters:  NONE
  */
-
 void _Thread_Handler( void )
 {
   ISR_Level  level;
@@ -104,7 +106,6 @@ void _Thread_Handler( void )
    * have to put level into a register for those cpu's that use
    * inline asm here
    */
-
   level = executing->Start.isr_level;
   _ISR_Set_level(level);
 
@@ -150,7 +151,6 @@ void _Thread_Handler( void )
           _SMP_Request_other_cores_to_perform_first_context_switch();
         _Thread_Enable_dispatch();
       #endif
-
     }
  #endif
 

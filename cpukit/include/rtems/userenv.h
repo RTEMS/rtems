@@ -46,20 +46,19 @@ extern "C" {
 #endif
 
 typedef struct {
- rtems_id                         task_id;
- rtems_filesystem_location_info_t current_directory;
- rtems_filesystem_location_info_t root_directory;
- /* Default mode for all files. */
- mode_t                           umask;
- nlink_t                          link_counts;
- /* _POSIX_types */
- uid_t                            uid;
- gid_t                            gid;
- uid_t                            euid;
- gid_t                            egid;
- char      login_buffer[LOGIN_NAME_MAX];
-
- pid_t                            pgrp; /* process group id */
+  rtems_id                         task_id;
+  rtems_filesystem_location_info_t current_directory;
+  rtems_filesystem_location_info_t root_directory;
+  /* Default mode for all files. */
+  mode_t                           umask;
+  nlink_t                          link_counts;
+  /* _POSIX_types */
+  uid_t                            uid;
+  gid_t                            gid;
+  uid_t                            euid;
+  gid_t                            egid;
+  char      login_buffer[LOGIN_NAME_MAX];
+  pid_t                            pgrp; /* process group id */
 } rtems_user_env_t;
 
 extern rtems_user_env_t * rtems_current_user_env;

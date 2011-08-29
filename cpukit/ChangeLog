@@ -1,3 +1,8 @@
+2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* include/rtems/userenv.h, score/src/threadhandler.c: Formatting.
+	* sapi/src/exshutdown.c: Add comments.
+
 2011-08-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1876
