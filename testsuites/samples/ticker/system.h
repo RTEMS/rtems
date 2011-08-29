@@ -15,7 +15,6 @@
 
 #include <rtems.h>
 #include <inttypes.h>
-#include "../../support/include/buffer_test_io.h"
 #include "tmacros.h"
 
 /* functions */
