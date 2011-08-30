@@ -39,7 +39,7 @@
  *  Thanks to Chris Johns <cjohns@plessey.com.au> for the idea
  *  to move C++ global constructors into the first task.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -176,11 +176,20 @@ uint32_t boot_card(
   }
 #endif
 
+  /*
+   *  If the user has configured a set of objects which will require more
+   *  workspace than is actually available, print a message indicating
+   *  such and return to the invoking initialization code.
+   *
+   *  NOTE: Output from printk() may not work at this point on some BSPs.
+   *
+   *  NOTE: Use cast to (void *) and %p since these are uintptr_t types.
+   */
   if ( work_area_size <= Configuration.work_space_size ) {
     printk(
-      "bootcard: work space too big for work area: 0x%08x > 0x%08x\n",
-      Configuration.work_space_size,
-      work_area_size
+      "bootcard: work space too big for work area: %p > %p\n",
+      (void *) Configuration.work_space_size,
+      (void *) work_area_size
     );
     bsp_cleanup(1);
     return 1;
