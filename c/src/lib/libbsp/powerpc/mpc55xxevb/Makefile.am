@@ -24,8 +24,11 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
 project_lib_DATA += startup/linkcmds
-dist_project_lib_DATA += startup/linkcmds.gwlcfm  startup/linkcmds.mpc5566evb \
-	startup/linkcmds.base	
+dist_project_lib_DATA += \
+	startup/linkcmds.gwlcfm \
+	startup/linkcmds.phycore_mpc5554 \
+	startup/linkcmds.mpc5566evb \
+	startup/linkcmds.base
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
@@ -71,7 +74,7 @@ libbsp_a_SOURCES += i2c/i2c_init.c \
 
 # Network
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/smsc9218i.c
+libbsp_a_SOURCES += network/smsc9218i.c network/if_smc.c
 endif
 
 # BSP library

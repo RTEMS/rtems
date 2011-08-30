@@ -1,3 +1,33 @@
+2011-08-30	Peter Dufault <dufault@hda.com>
+
+	* make/custom/phycore_mpc5554.cfg, startup/linkcmds.phycore_mpc5554,
+	network/if_smc.c: New files.
+	* Makefile.am, preinstall.am: Reflect changes above.
+	* configure.ac: Add support for the Phytec PhyCORE MPC5554.  Includes:
+	  - HAS_SMC91111 to indicate a BSP has that neworking.
+	  - SMC91111_ENADDR_IS_SETUP so that it skips code to set up the MAC
+	  address.
+	  - MPC55XX_CLOCK_EMIOS_CHANNEL to permit one to set which eMIOS
+	  channel to use for the clock.
+	  - MPC55XX_BOOTFLAGS: Skips two words above the RCHW in the startup
+	  for use in skpping over the MMU setup.  Required for debugging via a
+	  cheap emulator where code is loaded into RAM and then mapped in as
+	  flash.
+	 - BOARD_PHYCORE_MPC5554 If defined, use custom settings for the
+	 Phytec PhyCORE MPC5554 SOM.
+	* clock/clock-config.c: Modify so that the EMIOS channel used for the
+	clock can be selected at configuration time.  For MPC5544 only:
+	  - Conditionally skip access to a register that faults if accessed on
+	  the MPC5554
+	  - Do not set the control register mode as was done for GW_LCFM
+	  support, it breaks interrupts.
+	* make/custom/mpc55xx.inc: Make it possible to override the soft-float
+	to set the type of floating point BSP will use.
+	* startup/start.S: Add support for the "boot flags", two long-words
+	that I manipulate with the debugger to skip over MMU setup.  Use an
+	external for the start of external SRAM instead of the hardwired
+	number 0x20000000.  Disable write access to the internal flash.
+
 2011-08-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/bsp.h: Define BSP_FEATURE_IRQ_EXTENSION.

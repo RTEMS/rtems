@@ -29,6 +29,10 @@
 #include <bspopts.h>
 	
 .section ".bsp_start_text", "ax"
+#ifdef MPC55XX_BOOTFLAGS
+PUBLIC_VAR (mpc55xx_bootflag_0)
+PUBLIC_VAR (mpc55xx_bootflag_1)
+#endif
 PUBLIC_VAR (start)
 .globl  fmpll_syncr_vals
 bam_rchw:
@@ -39,8 +43,27 @@ bam_rchw:
 	/* BAM: RCHW */
 	.int 0x005a0000
 
-	/* BAM: Address of start instruction */
-	.int 0x8
+#ifdef MPC55XX_BOOTFLAGS
+	/* BAM: Address of start instruction
+     *      We skip over the next two boot flag words to the next
+     *      64-bit aligned start address. It is 64-bit aligned
+     *      to play well with FLASH programming.
+     *      These boot flags can be set by debuggers and emulators to
+     *      customize boot.
+     *      Currently bit0 of bootflag_0 means to "skip setting up the MMU",
+     *      allowing external MMU setup in a debugger before branching
+     *      to 0x10.  This can be used e.g., to map FLASH into RAM.
+     */
+	.int 0x00000010 /* Start address is 0x10. */
+
+mpc55xx_bootflag_0:
+    .int 0xffffffff
+mpc55xx_bootflag_1:
+    .int 0xffffffff
+
+#else
+	.int 0x00000008 /* Start address is 0x08. */
+#endif
 
 /*
  * Enable time base
@@ -97,6 +120,8 @@ start:
 .equ MAS2, 626
 .equ MAS3, 627
 
+/* Read back MMU TLB1 entry 3 (internal SRAM) and enable the cache.
+ */
 	LWI r3, 0x10030000
 	mtspr MAS0, r3
 	tlbre
@@ -110,14 +135,29 @@ start:
  * TODO, FIXME: Set MMU for the external SRAM
  */
 
+/* Read back MMU TLB1 entry 2 (external SRAM) and set the
+ * logical address to the external RAM start.
+ */
 	LWI r3, 0x10020000
 	mtspr MAS0, r3
 	tlbre
 	LWI r4, 0xfff
 	mfspr r3, MAS3
 	and r3, r3, r4
-	LWI r4, 0x20000000
+	LA r4, bsp_external_ram_start
 	or r3, r3, r4
+	mtspr MAS3, r3
+	tlbwe
+
+/* Read back MMU TLB1 entry 1 (internal flash) and disable
+ * write access.
+ */
+	LWI r3, 0x10010000
+	mtspr MAS0, r3
+	tlbre
+	LWI r4, ~0x0000000C
+	mfspr r3, MAS3
+	and r3, r3, r4
 	mtspr MAS3, r3
 	tlbwe
 

@@ -50,6 +50,7 @@ RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
 [Define to 1 if you want interrupt-driven I/O for the SCI ports.])
 
 RTEMS_BSPOPTS_SET([PRINTK_MINOR],[gwlcfm],[MPC55XX_ESCI_A_MINOR])
+RTEMS_BSPOPTS_SET([PRINTK_MINOR],[phytec_mpc5554],[MPC55XX_ESCI_A_MINOR])
 RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*]     ,[MPC55XX_ESCI_B_MINOR])
 RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
 [Must be defined to be one of MPC55XX_ESCI_A_MINOR or MPC55XX_ESCI_B_MINOR.  Determines which
@@ -83,11 +84,27 @@ RTEMS_BSPOPTS_SET([MPC55XX_EMIOS_PRESCALER],[*]     ,[1])
 RTEMS_BSPOPTS_HELP([MPC55XX_EMIOS_PRESCALER],
 [Must be defined to set the EMIOS prescaler])
 
+RTEMS_BSPOPTS_SET([HAS_SMC91111],[phycore_mpc5554],[1])
+RTEMS_BSPOPTS_HELP([HAS_SMC91111],
+[If defined the board has the SMC91111 networking chip.])
+
+RTEMS_BSPOPTS_SET([SMC91111_ENADDR_IS_SETUP],[phycore_mpc5554],[1])
+RTEMS_BSPOPTS_HELP([SMC91111_ENADDR_IS_SETUP],
+[If defined the SMC91111 chip has the ethernet address loaded at reset.])
+
+RTEMS_BSPOPTS_SET([MPC55XX_CLOCK_EMIOS_CHANNEL],[*],[(MPC55XX_EMIOS_CHANNEL_NUMBER-1)])
+RTEMS_BSPOPTS_HELP([MPC55XX_CLOCK_EMIOS_CHANNEL],
+[Define to the eMIOS channel to use for the BSP clock.
+ The default is the last channel.])
+
 RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[mpc5566evb],[5566])
 RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[gwlcfm]    ,[5516])
 RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[*]         ,[5554])
 RTEMS_BSPOPTS_HELP([MPC55XX_CHIP_TYPE],
 [specifies the chip type in use (e.g. 5554 for MPC5554)])
+
+RTEMS_BSPOPTS_HELP([MPC55XX_BOOTFLAGS],
+[If defined, builds in bootflags above the RCHW for setup in a debugger to avoid startup MMU setup])
 
 RTEMS_BSPOPTS_SET([BOARD_GWLCFM],[gwlcfm],[1])
 RTEMS_BSPOPTS_HELP([BOARD_GWLCFM],
@@ -97,6 +114,10 @@ RTEMS_BSPOPTS_SET([RTEMS_BSP_I2C_EEPROM_DEVICE_NAME],[gwlcfm],['"eeprom"'])
 RTEMS_BSPOPTS_HELP([RTEMS_BSP_I2C_EEPROM_DEVICE_NAME],[EEPROM name for LibI2C])
 RTEMS_BSPOPTS_SET([RTEMS_BSP_I2C_EEPROM_DEVICE_PATH],[gwlcfm],['"/dev/i2c1.eeprom"'])
 RTEMS_BSPOPTS_HELP([RTEMS_BSP_I2C_EEPROM_DEVICE_PATH],[EEPROM device file path])
+
+RTEMS_BSPOPTS_SET([BOARD_PHYCORE_MPC5554],[phycore_mpc5554],[1])
+RTEMS_BSPOPTS_HELP([BOARD_PHYCORE_MPC5554],
+[If defined, use custom settings for the Phytec PhyCORE MPC5554 SOM])
 
 AC_CONFIG_FILES([Makefile
 include/bspopts.h])

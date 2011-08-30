@@ -31,8 +31,6 @@
 
 #include <rtems/status-checks.h>
 
-#define MPC55XX_CLOCK_EMIOS_CHANNEL (MPC55XX_EMIOS_CHANNEL_NUMBER - 1)
-
 /* This is defined in clockdrv_shell.h */
 rtems_isr Clock_isr( rtems_vector_number vector);
 
@@ -104,10 +102,21 @@ static void mpc55xx_clock_initialize( void)
   /* Set unused registers */
   regs->CBDR.R = 0;
   regs->CCNTR.R = 0;
+#if MPC55XX_CHIP_TYPE != 5554
+  /* This is reserved on the MPC5554.
+   */
   regs->ALTCADR.R = 0;
+#endif
 
   /* Set control register */
+  /* The mode change, made by Thomas for GW_LCFM support, breaks interrupts
+   * on the MPC5554.
+   */
+#if MPC55XX_CHIP_TYPE == 5554
+  ccr.B.MODE = MPC55XX_EMIOS_MODE_MC_UP_INT_CLK;
+#else
   ccr.B.MODE = MPC55XX_EMIOS_MODE_MCB_UP_INT_CLK;
+#endif
   ccr.B.UCPREN = 1;
   ccr.B.FEN = 1;
   ccr.B.FREN = 1;

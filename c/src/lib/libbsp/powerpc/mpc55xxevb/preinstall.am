@@ -57,6 +57,10 @@ $(PROJECT_LIB)/linkcmds.gwlcfm: startup/linkcmds.gwlcfm $(PROJECT_LIB)/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.gwlcfm
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.gwlcfm
 
+$(PROJECT_LIB)/linkcmds.phycore_mpc5554: startup/linkcmds.phycore_mpc5554 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.phycore_mpc5554
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.phycore_mpc5554
+
 $(PROJECT_LIB)/linkcmds.mpc5566evb: startup/linkcmds.mpc5566evb $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5566evb
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5566evb
