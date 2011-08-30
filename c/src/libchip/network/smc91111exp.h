@@ -12,6 +12,14 @@ typedef struct scmv91111_configuration {
   unsigned int              ctl_rspeed;
   unsigned int              ctl_rfduplx;
   unsigned int              ctl_autoneg;
+#ifndef _OLD_EXCEPTIONS
+  /* New arguments for the Interrupt Manager Extension:
+   */
+  const char *              info;
+  rtems_option              options;
+  rtems_interrupt_handler   interrupt_wrapper;
+  void *                    arg;
+#endif
 } scmv91111_configuration_t;
 
 #endif  /* _SMC_91111_EXP_H_ */

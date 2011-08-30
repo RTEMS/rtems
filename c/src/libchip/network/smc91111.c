@@ -5,28 +5,28 @@
 #include <rtems.h>
 #include <errno.h>
 
+#include <bsp.h>
+
 /*
- *  This driver currently only supports architectures with the old style
- *  exception processing.  The following checks try to keep this
- *  from being compiled on systems which can't support this driver.
+ *  This driver currently only supports SPARC with the old style
+ *  exception processing and the Phytec Phycore MPC5554.
+ *  This test keeps it from being compiled on systems which haven't been
+ *  tested.
  *
- *  NOTE: As of 28 September 2005, this has only been tested on the SPARC,
- *        so that is all it is enabled for.
  */
 
-#if defined(__sparc__)
+#if defined(__sparc__) || defined(HAS_SMC91111)
   #define SMC91111_SUPPORTED
 #endif
 
 #if defined(SMC91111_SUPPORTED)
-
-#include <bsp.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/irq-extension.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -54,14 +54,19 @@
 /*#define DEBUG (-1)*/
 /*#define DEBUG (-1 & ~(16))*/
 #define DEBUG (0)
+/*#define DEBUG (1)*/
 
 #include "smc91111config.h"
 #include <libchip/smc91111.h>
 
+#ifdef _OLD_EXCEPTIONS
 #if defined(__m68k__)
 extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 #else
 extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
+#endif
+#else
+#include <rtems/irq-extension.h>
 #endif
 
 struct lan91cxx_priv_data smc91111;
@@ -795,33 +800,33 @@ static void lan91cxx_finish_sent(struct lan91cxx_priv_data *cpd)
  */
 static void smc91111_stats(struct lan91cxx_priv_data *priv)
 {
-	printf("tx_good             :%-8d", priv->stats.tx_good);
-	printf("tx_max_collisions   :%-8d", priv->stats.tx_max_collisions);
-	printf("tx_late_collisions  :%-8d", priv->stats.tx_late_collisions);
-	printf("tx_underrun         :%-8d", priv->stats.tx_underrun);
-	printf("tx_carrier_loss     :%-8d", priv->stats.tx_carrier_loss);
-	printf("tx_deferred         :%-8d", priv->stats.tx_deferred);
-	printf("tx_sqetesterrors    :%-8d", priv->stats.tx_sqetesterrors);
-	printf("tx_single_collisions:%-8d", priv->stats.tx_single_collisions);
-	printf("tx_mult_collisions  :%-8d", priv->stats.tx_mult_collisions);
-	printf("tx_total_collisions :%-8d", priv->stats.tx_total_collisions);
-	printf("rx_good             :%-8d", priv->stats.rx_good);
-	printf("rx_crc_errors       :%-8d", priv->stats.rx_crc_errors);
-	printf("rx_align_errors     :%-8d", priv->stats.rx_align_errors);
-	printf("rx_resource_errors  :%-8d", priv->stats.rx_resource_errors);
-	printf("rx_overrun_errors   :%-8d", priv->stats.rx_overrun_errors);
-	printf("rx_collisions       :%-8d", priv->stats.rx_collisions);
-	printf("rx_short_frames     :%-8d", priv->stats.rx_short_frames);
-	printf("rx_too_long_frames  :%-8d", priv->stats.rx_too_long_frames);
-	printf("rx_symbol_errors    :%-8d", priv->stats.rx_symbol_errors);
-	printf("interrupts          :%-8d", priv->stats.interrupts);
-	printf("rx_count            :%-8d", priv->stats.rx_count);
-	printf("rx_deliver          :%-8d", priv->stats.rx_deliver);
-	printf("rx_resource         :%-8d", priv->stats.rx_resource);
-	printf("rx_restart          :%-8d", priv->stats.rx_restart);
-	printf("tx_count            :%-8d", priv->stats.tx_count);
-	printf("tx_complete         :%-8d", priv->stats.tx_complete);
-	printf("tx_dropped          :%-8d", priv->stats.tx_dropped);
+	printf("tx_good             :%-8d\n", priv->stats.tx_good);
+	printf("tx_max_collisions   :%-8d\n", priv->stats.tx_max_collisions);
+	printf("tx_late_collisions  :%-8d\n", priv->stats.tx_late_collisions);
+	printf("tx_underrun         :%-8d\n", priv->stats.tx_underrun);
+	printf("tx_carrier_loss     :%-8d\n", priv->stats.tx_carrier_loss);
+	printf("tx_deferred         :%-8d\n", priv->stats.tx_deferred);
+	printf("tx_sqetesterrors    :%-8d\n", priv->stats.tx_sqetesterrors);
+	printf("tx_single_collisions:%-8d\n", priv->stats.tx_single_collisions);
+	printf("tx_mult_collisions  :%-8d\n", priv->stats.tx_mult_collisions);
+	printf("tx_total_collisions :%-8d\n", priv->stats.tx_total_collisions);
+	printf("rx_good             :%-8d\n", priv->stats.rx_good);
+	printf("rx_crc_errors       :%-8d\n", priv->stats.rx_crc_errors);
+	printf("rx_align_errors     :%-8d\n", priv->stats.rx_align_errors);
+	printf("rx_resource_errors  :%-8d\n", priv->stats.rx_resource_errors);
+	printf("rx_overrun_errors   :%-8d\n", priv->stats.rx_overrun_errors);
+	printf("rx_collisions       :%-8d\n", priv->stats.rx_collisions);
+	printf("rx_short_frames     :%-8d\n", priv->stats.rx_short_frames);
+	printf("rx_too_long_frames  :%-8d\n", priv->stats.rx_too_long_frames);
+	printf("rx_symbol_errors    :%-8d\n", priv->stats.rx_symbol_errors);
+	printf("interrupts          :%-8d\n", priv->stats.interrupts);
+	printf("rx_count            :%-8d\n", priv->stats.rx_count);
+	printf("rx_deliver          :%-8d\n", priv->stats.rx_deliver);
+	printf("rx_resource         :%-8d\n", priv->stats.rx_resource);
+	printf("rx_restart          :%-8d\n", priv->stats.rx_restart);
+	printf("tx_count            :%-8d\n", priv->stats.tx_count);
+	printf("tx_complete         :%-8d\n", priv->stats.tx_complete);
+	printf("tx_dropped          :%-8d\n", priv->stats.tx_dropped);
 }
 
 /*
@@ -948,6 +953,15 @@ int _rtems_smc91111_driver_attach (struct rtems_bsdnet_ifconfig *config,
 	if (config->hardware_address) {
 		memcpy(cpd->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
 	} else {
+#ifdef SMC91111_ENADDR_IS_SETUP
+        /* The address was put in the chip at reset time.  Retrieve it. */
+        int i;
+        for (i = 0; i < sizeof(cpd->enaddr); i += 2) {
+            unsigned short r = get_reg(cpd, LAN91CXX_IA01 + i / 2);
+            cpd->arpcom.ac_enaddr[i] = r;
+            cpd->arpcom.ac_enaddr[i+1] = r >> 8;
+        }
+#else
 		/* dummy default address */
 		cpd->arpcom.ac_enaddr[0] = 0x12;
 		cpd->arpcom.ac_enaddr[1] = 0x13;
@@ -955,6 +969,7 @@ int _rtems_smc91111_driver_attach (struct rtems_bsdnet_ifconfig *config,
 		cpd->arpcom.ac_enaddr[3] = 0x15;
 		cpd->arpcom.ac_enaddr[4] = 0x16;
 		cpd->arpcom.ac_enaddr[5] = 0x17;
+#endif
 	}
 
 	cpd->enaddr[0] = cpd->arpcom.ac_enaddr[0];
@@ -1020,6 +1035,8 @@ static void smc91111_init(void *arg)
 							smc91111_rxDaemon, cpd);
 		cpd->txDaemonTid =
 		    rtems_bsdnet_newproc("DCtx", 4096, smc91111_txDaemon, cpd);
+	} else {
+		lan91cxx_start(ifp);
 	}
 
 	/*
@@ -1055,8 +1072,22 @@ int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 	cpd->txbusy = cpd->within_send = 0;
 
 	/* install interrupt vector */
+#ifdef _OLD_EXCEPTIONS
 	db_printf("Install lan91cxx irqvector at %d\n", cpd->config.vector);
 	set_vector(lan91cxx_interrupt_handler, cpd->config.vector, 1);
+#else
+    {
+        int r;
+        if ((r = rtems_interrupt_handler_install(cpd->config.vector,
+        cpd->config.info,
+        cpd->config.options,
+        cpd->config.interrupt_wrapper,
+        cpd->config.arg) )) {
+                printf("rtems_interrupt_handler_install returned %d.\n", r);
+                return 0;
+        }
+    }
+#endif
 
 	/* Reset chip */
 	put_reg(cpd, LAN91CXX_RCR, LAN91CXX_RCR_SOFT_RST);
@@ -1622,8 +1653,6 @@ lan91cxx_write_phy(struct lan91cxx_priv_data *cpd, uint8_t phyaddr,
 	db16_printf("phy_write: %d : %04x\n", phyreg, value);
 }
 
-#endif
-
 #if 0
 void lan91cxx_print_bank(int bank){
 	struct lan91cxx_priv_data *cpd = &smc91111;
@@ -1643,4 +1672,6 @@ void lan91cxx_print_bank(int bank){
 	}
 
 }
+#endif
+
 #endif

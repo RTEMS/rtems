@@ -451,7 +451,7 @@ get_reg(struct lan91cxx_priv_data *cpd, int regno)
 
     /*rtems_interrupt_enable(Irql);*/
 
-#ifdef DEBUG & 32
+#if DEBUG & 32
     while ((c = dbg->reg) != -1) {
       if (c == regno) {
         db_printf("%sread  reg [%d:%x] -> 0x%04x (%-20s)\n", dbg_prefix, regno>>3,(regno&0x7)*2, val, dbg->name);
@@ -474,7 +474,7 @@ put_reg(struct lan91cxx_priv_data *cpd, int regno, unsigned short val)
     debug_regs_pair *dbg = debug_regs; int c;
     uint32_t              Irql;
 
-#ifdef DEBUG & 32
+#if DEBUG & 32
     while ((c = dbg->reg) != -1) {
       if (c == regno) {
         db_printf("%swrite reg [%d:%x] <- 0x%04x (%-20s)\n", dbg_prefix, regno>>3, (regno&0x07)*2, val, dbg->name);

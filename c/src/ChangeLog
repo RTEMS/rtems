@@ -1,3 +1,16 @@
+2011-08-30	Peter Dufault <dufault@hda.com>
+
+	* libchip/network/smc91111.c: Modify to support the MPC5554 using new
+	exceptions.  Fix where the networking status is being dumped to a
+	single thousand-character line.  Add support for when the chip loaded
+	it's MAC address from a serial chip at reset (the
+	SMC91111_ENADDR_IS_SETUP option).  Call lan91cxx_start() every time
+	the the device is initialized.  Without this change the chip can not
+	be "upped" once it has been downed.
+	* c/src/libchip/network/smc91111.h: Change the "#ifdef expression" to
+	"#if expression".
+	* c/src/libchip/network/smc91111exp.h: Add support for new exceptions.
+
 2011-07-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/ns16550_p.h, libchip/serial/ns16550.c: Remove
