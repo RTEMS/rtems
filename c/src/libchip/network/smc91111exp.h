@@ -5,6 +5,8 @@
 #ifndef _SMC91111_EXP_H_
 #define _SMC91111_EXP_H_
 
+#include <bsp.h>
+
 typedef struct scmv91111_configuration {
   void                     *baseaddr;
   unsigned int              vector;
@@ -12,9 +14,7 @@ typedef struct scmv91111_configuration {
   unsigned int              ctl_rspeed;
   unsigned int              ctl_rfduplx;
   unsigned int              ctl_autoneg;
-#ifndef _OLD_EXCEPTIONS
-  /* New arguments for the Interrupt Manager Extension:
-   */
+#ifdef BSP_FEATURE_IRQ_EXTENSION
   const char *              info;
   rtems_option              options;
   rtems_interrupt_handler   interrupt_wrapper;

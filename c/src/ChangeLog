@@ -1,3 +1,8 @@
+2011-08-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libchip/network/smc91111exp.h, libchip/network/smc91111.c: Use
+	BSP_FEATURE_IRQ_EXTENSION define.
+
 2011-08-30	Peter Dufault <dufault@hda.com>
 
 	* libchip/network/smc91111.c: Modify to support the MPC5554 using new
