@@ -309,10 +309,24 @@ typedef struct {
       (_context)->gpr1 = _sp; \
     } while (0)
 
+  #define PPC_CONTEXT_GET_CR( _context ) \
+    (_context)->cr
+
+  #define PPC_CONTEXT_GET_MSR( _context ) \
+    (_context)->msr
+
   #define PPC_CONTEXT_SET_MSR( _context, _msr ) \
     do { \
       (_context)->msr = _msr; \
     } while (0)
+
+  #define PPC_CONTEXT_FIRST_SAVED_GPR 13
+
+  #define PPC_CONTEXT_GET_FIRST_SAVED( _context ) \
+    (_context)->gpr13
+
+  #define PPC_CONTEXT_GET_PC( _context ) \
+    (_context)->pc
 
   #define PPC_CONTEXT_SET_PC( _context, _pc ) \
     do { \
@@ -361,10 +375,24 @@ typedef struct {
       PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_SP ) = _sp; \
     } while (0)
 
+  #define PPC_CONTEXT_GET_CR( _context ) \
+    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_CR )
+
+  #define PPC_CONTEXT_GET_MSR( _context ) \
+    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_MSR )
+
   #define PPC_CONTEXT_SET_MSR( _context, _msr ) \
     do { \
       PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_MSR ) = _msr; \
     } while (0)
+
+  #define PPC_CONTEXT_FIRST_SAVED_GPR 14
+
+  #define PPC_CONTEXT_GET_FIRST_SAVED( _context ) \
+    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_GPR14 )
+
+  #define PPC_CONTEXT_GET_PC( _context ) \
+    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_LR )
 
   #define PPC_CONTEXT_SET_PC( _context, _pc ) \
     do { \

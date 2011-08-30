@@ -1,3 +1,8 @@
+2011-08-30	Peter Dufault <dufault@hda.com>
+
+	* rtems/score/cpu.h: Add more context access functionality.  Needed to
+	get GDB debugger hooks working.
+
 2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/powerpc/registers.h: Renamed defines XER in PPC_XER, LR in
