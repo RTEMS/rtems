@@ -1,3 +1,18 @@
+2011-08-30	Peter Dufault <dufault@hda.com>
+
+	* mpc55xx/misc/flash_support.c: New file.
+	* Makefile.am: Reflect change above.
+	* mpc55xx/include/mpc55xx.h: Add definitions for the FLASH interface
+	and two memory protect interfaces.  Add modifications to eliminate
+	warnings in some of the cache macros.
+	* mpc55xx/include/regs.h: Add some structure tag names for some
+	structures that I needed access to.  Don't define the ALTCADR for the
+	MPC5554 - it is reserved and acess casues an exception.  Hide the C99
+	designated initializers when compiling with C++.  Add some support for
+	the EQADC.
+	* mpc55xx/include/esci.h, mpc55xx/include/watchdog.h: Add C++
+	protection.
+
 2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc6xx/clock/c_clock.c, mpc6xx/mmu/mmuAsm.S,

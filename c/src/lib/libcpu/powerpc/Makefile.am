@@ -468,7 +468,8 @@ mpc55xx_dspi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_PROGRAMS += mpc55xx/misc.rel
 mpc55xx_misc_rel_SOURCES = mpc55xx/misc/copy.S \
 	mpc55xx/misc/fmpll.S \
-	mpc55xx/misc/flash.S
+	mpc55xx/misc/flash.S \
+	mpc55xx/misc/flash_support.c
 mpc55xx_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 endif

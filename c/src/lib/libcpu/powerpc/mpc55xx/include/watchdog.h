@@ -27,6 +27,10 @@
 
 #include <libcpu/powerpc-utility.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 static inline void mpc55xx_watchdog_clear()
 {
 	PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_TSR, BOOKE_TSR_WIS);
@@ -55,5 +59,9 @@ static inline rtems_status_code mpc55xx_watchdog_set_time_base_bit( uint32_t bit
 
 	return RTEMS_SUCCESSFUL;
 }
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBCPU_POWERPC_MPC55XX_WATCHDOG_H */

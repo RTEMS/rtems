@@ -562,7 +562,7 @@ extern "C" {
             } B;
         } MCR;
 
-        union {                 /* LML Register */
+        union LMLR_tag {                 /* LML Register */
             uint32_t R;
             struct {
                 uint32_t LME:1;
@@ -573,7 +573,7 @@ extern "C" {
             } B;
         } LMLR;
 
-        union {                 /* HL Register */
+        union HLR_tag {                 /* HL Register */
             uint32_t R;
             struct {
                 uint32_t HBE:1;
@@ -582,7 +582,7 @@ extern "C" {
             } B;
         } HLR;
 
-        union {                 /* SLML Register */
+        union SLMLR_tag {                 /* SLML Register */
             uint32_t R;
             struct {
                 uint32_t SLE:1;
@@ -1130,9 +1130,15 @@ extern "C" {
                 } B;
             } CSR;              /* Channel Status Register */
 
+#if MPC55XX_CHIP_TYPE == 5554
+          /* ALTCADR is reserved on the MPC5554 and writes will cause an exception.
+           */
+            uint32_t altcadr_reserved;
+#else
             union {
                 uint32_t R;    /* Alternate Channel A Data Register */
             } ALTCADR;
+#endif
 
             uint32_t emios_channel_reserved[2];
 
@@ -2838,6 +2844,7 @@ extern "C" {
         } TCD[64];              /* transfer_control_descriptor */
     };
 
+#ifndef __cplusplus
     static const struct tcd_t EDMA_TCD_DEFAULT = {
         .SADDR = 0,
         .SDF = { .R = 0 },
@@ -2848,6 +2855,7 @@ extern "C" {
         .DLAST_SGA = 0,
         .BMF = { .R = 0 }
     };
+#endif
 
 #define EDMA_TCD_BITER_MASK 0x7fff
 
@@ -2982,7 +2990,7 @@ extern "C" {
 
         uint32_t eqadc_reserved4;
 
-        union {
+        union EQADC_CFCR_tag {
             uint16_t R;
             struct {
                 uint16_t:5;
@@ -2996,7 +3004,7 @@ extern "C" {
 
         uint32_t eqadc_reserved5;
 
-        union {
+        union EQADC_IDCR_tag {
             uint16_t R;
             struct {
                 uint16_t NCIE:1;
@@ -3017,7 +3025,7 @@ extern "C" {
 
         uint32_t eqadc_reserved6;
 
-        union {
+        union EQADC_FISR_tag {
             uint32_t R;
             struct {
                 uint32_t NCF:1;
@@ -4381,6 +4389,7 @@ extern "C" {
         } MAS6;
     };
 
+#ifndef __cplusplus
     static const struct MMU_tag MMU_DEFAULT = {
         .MAS0 = { .R = 0x10000000 },
         .MAS1 = { .R = 0 },
@@ -4389,6 +4398,41 @@ extern "C" {
         .MAS4 = { .R = 0 },
         .MAS6 = { .R = 0 }
     };
+#endif
+
+/* Message Formats for On-Chip ADC Operation
+ */
+union EQADC_CONVERSION_COMMAND_tag {
+    uint32_t R;
+    struct {
+        uint32_t EOQ:1;
+        uint32_t PAUSE:1;
+            uint32_t:3;
+        uint32_t EB:1;
+        uint32_t BN:1;
+        uint32_t CAL:1;
+        uint32_t MESSAGE_TAG:4;
+        uint32_t LST:2;
+        uint32_t TSR:1;
+        uint32_t FMT:1;
+        uint32_t CHANNEL_NUMBER:8;
+            uint32_t:8;
+    } B;
+}; /* Conversion command */
+
+union EQADC_WRITE_CONFIGURATION_COMMAND_tag {
+    uint32_t R;
+    struct {
+        uint32_t EOQ:1;
+        uint32_t PAUSE:1;
+            uint32_t:3;
+        uint32_t EB:1;
+        uint32_t BN:1;
+        uint32_t RW:1;
+        uint32_t VALUE:16;
+        uint32_t ADDR:8;
+    } B;
+}; /* Write configuration command */
 
 #if ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
 /* Define memories */

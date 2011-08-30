@@ -29,6 +29,10 @@
 
 #include <rtems/termiostypes.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #define MPC55XX_ESCI_NUMBER 2
 
 struct ESCI_tag;
@@ -44,5 +48,9 @@ typedef struct {
 } mpc55xx_esci_driver_entry;
 
 extern mpc55xx_esci_driver_entry mpc55xx_esci_driver_table [ /* MPC55XX_ESCI_NUMBER */ ];
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBCPU_POWERPC_MPC55XX_ESCI_H */
