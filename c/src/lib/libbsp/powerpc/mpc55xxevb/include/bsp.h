@@ -37,6 +37,8 @@ extern "C" {
 
 #define BSP_SMALL_MEMORY 1
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 #ifndef ASM
 
 /** @brief System clock frequency */
