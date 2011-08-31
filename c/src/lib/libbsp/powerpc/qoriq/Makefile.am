@@ -50,7 +50,7 @@ libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds \
-	startup/linkcmds.base \
+	../shared/startup/linkcmds.base \
 	startup/linkcmds.qoriq_core_0 \
 	startup/linkcmds.qoriq_core_1 \
 	startup/linkcmds.qoriq_p1020rdb
