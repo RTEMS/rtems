@@ -17,9 +17,7 @@
     --disable-werror \
     %{build_sim} \
     %{?with_system_readline:--with-system-readline} \
-%if "%{gdb_version}" >= "6.6"
     --with-expat \
-%endif
 %if "%{gdb_version}" >= "6.8.50"
 %if %{with python}
     --with-python \

@@ -14,6 +14,10 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
 
+# Whether to build against system readline
+# Default: yes
+%bcond_without system_readline
+
 %if "@tool_target@" == "powerpc-rtems@rtems_api@"
 %if "%{_build}" != "%{_host}"
 # psim doesn't support Cdn-X
@@ -53,7 +57,6 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %endif
 %endif
 
-%if "%{gdb_version}" >= "6.6"
 # suse
 %if "%{?suse}" >= "10.3"
 BuildRequires: libexpat-devel
@@ -61,16 +64,7 @@ BuildRequires: libexpat-devel
 # Fedora/CentOS/Cygwin/MinGW
 BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
-%endif
 
-%if "%{gdb_version}" < "6.7"
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}termcap-devel
-%endif
-%bcond_with system_readline
-%else
-%bcond_without system_readline
-%endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
