@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.5
-%define gdb_rpmvers %{expand:%(echo 6.5 | tr - _)} 
+%define gdb_version 7.3
+%define gdb_rpmvers %{expand:%(echo 7.3 | tr - _)} 
 
 Name:		rtems-4.11-bfin-rtems4.11-gdb
 Summary:	Gdb for target bfin-rtems4.11
@@ -61,8 +61,28 @@ BuildRequires:  %{_host_rpmprefix}gcc
 
 %define build_sim --enable-sim
 
+# Whether to build against system readline
+# Default: yes
+%bcond_without system_readline
 
-%if "%{gdb_version}" >= "6.6"
+# Whether to build python support
+%if "%{_build}" != "%{_host}"
+# Can't build python Cdn-X
+%bcond_with python
+%else
+%if "%{gdb_version}" >= "7.3"
+# Python support is broken
+%bcond_with python
+%elseif "%{gdb_version}" >= "6.8.50"
+%bcond_without python
+%else
+# python is unsupported
+%bcond_with python
+%endif
+%endif
+%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
+
+
 # suse
 %if "%{?suse}" >= "10.3"
 BuildRequires: libexpat-devel
@@ -70,33 +90,24 @@ BuildRequires: libexpat-devel
 # Fedora/CentOS/Cygwin/MinGW
 BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
-%endif
 
-%if "%{gdb_version}" < "6.7"
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}termcap-devel
-%endif
-%bcond_with system_readline
-%else
-%bcond_without system_readline
-%endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
-%if "%{gdb_version}" >= "6.8.50"
-%if "%{_build}" != "%{_host}"
-# Can't build python Cdn-X
-%bcond_with python
-%else
-%bcond_without python
-%endif
-%endif
-%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
 
 
 
-Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.5-bfinrtems-20090122.diff
+BuildRequires:  rtems-4.11-bfin-rtems4.11-binutils
+BuildRequires:  texinfo
+
+# The bfin simulator silently tries to conditionally build an SDL based GUI, 
+# but fails to link correctly
+# Force not building the GUI.
+%{!?suse:BuildConflicts: SDL-devel}
+%{?suse:BuildConflicts: libSDL-devel}
+
+Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}a.tar.bz2
+Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.3-rtems4.11-20110831.diff
 
 %description
 GDB for target bfin-rtems4.11
@@ -127,16 +138,8 @@ cd ..
     --disable-werror \
     %{build_sim} \
     %{?with_system_readline:--with-system-readline} \
-%if "%{gdb_version}" >= "6.6"
     --with-expat \
-%endif
-%if "%{gdb_version}" >= "6.8.50"
-%if %{with python}
-    --with-python \
-%else
-    --without-python \
-%endif
-%endif
+    %{?with_python:--with-python}%{!?with_python:--without-python} \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
@@ -174,6 +177,12 @@ cd ..
   fi
 %endif
 
+%if "{gdb_version}" >= "7.3"
+%if ! %{with python}
+# gdb-7.3 doesn't honor --without-python correctly
+  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gdb/python
+%endif
+%endif
   cd ..
 
 # Extract %%__os_install_post into os_install_post~
