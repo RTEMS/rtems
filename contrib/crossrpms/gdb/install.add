@@ -40,5 +40,11 @@
   fi
 %endif
 
+%if "{gdb_version}" >= "7.3"
+%if ! %{with python}
+# gdb-7.3 doesn't honor --without-python correctly
+  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gdb/python
+%endif
+%endif
   cd ..
 
