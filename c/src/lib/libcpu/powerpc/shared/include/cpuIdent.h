@@ -56,10 +56,10 @@ typedef enum
   PPC_e300c1  = 0x8083, /* e300c1  core, in MPC83xx*/
   PPC_e300c2  = 0x8084, /* e300c2  core */
   PPC_e300c3  = 0x8085, /* e300c3  core */
-  PPC_e200z0  = 0x8171,
-  PPC_e200z1  = 0x8144,
-  PPC_e200z6  = 0x8112,
-  PPC_e200z6v5= 0x8115,
+  PPC_e200z0  = 0x8170,
+  PPC_e200z1  = 0x8140,
+  PPC_e200z6  = 0x8110,
+  PPC_e200z7  = 0x8160,
   PPC_PSIM    = 0xfffe,  /* GDB PowerPC simulator -- fake version */
   PPC_UNKNOWN = 0xffff
 } ppc_cpu_id_t;

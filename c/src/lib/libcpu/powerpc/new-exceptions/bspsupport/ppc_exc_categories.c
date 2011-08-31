@@ -275,6 +275,7 @@ const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
     case PPC_e200z0:
     case PPC_e200z1:
     case PPC_e200z6:
+    case PPC_e200z7:
       return &e200_category_table;
     case PPC_5XX:
       return &mpc_5xx_category_table;

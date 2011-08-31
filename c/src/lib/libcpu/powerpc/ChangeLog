@@ -1,3 +1,8 @@
+2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/ppc_exc_categories.c,
+	shared/include/cpuIdent.c, shared/include/cpuIdent.h: Support e200z7.
+
 2011-08-30	Peter Dufault <dufault@hda.com>
 
 	* mpc55xx/misc/flash_support.c: New file.

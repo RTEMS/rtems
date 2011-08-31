@@ -54,6 +54,7 @@ char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_e200z0:		return "e200z0";
     case PPC_e200z1:		return "e200z1";
     case PPC_e200z6:		return "e200z6";
+    case PPC_e200z7:		return "e200z7";
     case PPC_e500v2:		return "e500v2";
     default:
       printk("Unknown CPU value of 0x%x. Please add it to "
@@ -66,12 +67,14 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 {
   /*
    * cpu types listed here have the lowermost nibble as a version identifier
-   * we will tweak them to the starndard version
+   * we will tweak them to the standard version
    */
   const uint32_t ppc_cpu_id_version_nibble[] = {
-    PPC_e200z6,
     PPC_e200z0,
-    PPC_e200z1};
+    PPC_e200z1,
+    PPC_e200z6,
+    PPC_e200z7
+  };
 
   unsigned int pvr;
   int i;
@@ -120,6 +123,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_e200z0:
     case PPC_e200z1:
     case PPC_e200z6:
+    case PPC_e200z7:
     case PPC_e300c1:
     case PPC_e300c2:
     case PPC_e300c3:
@@ -179,6 +183,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   	case PPC_e200z0:
   	case PPC_e200z1:
   	case PPC_e200z6:
+  	case PPC_e200z7:
   	case PPC_e500v2:
 		current_ppc_features.is_bookE			= PPC_BOOKE_E500;
 	default:
