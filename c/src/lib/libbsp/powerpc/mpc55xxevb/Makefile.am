@@ -24,11 +24,11 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
 project_lib_DATA += startup/linkcmds
-dist_project_lib_DATA += \
-	startup/linkcmds.gwlcfm \
-	startup/linkcmds.phycore_mpc5554 \
-	startup/linkcmds.mpc5566evb \
-	startup/linkcmds.base
+dist_project_lib_DATA += ../shared/startup/linkcmds.base	
+dist_project_lib_DATA += startup/linkcmds.gwlcfm
+dist_project_lib_DATA += startup/linkcmds.mpc5566evb
+dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
+dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
@@ -41,20 +41,35 @@ nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h \
     ../../shared/include/coverhd.h
 include_bsp_HEADERS = include/mpc55xxevb.h \
     include/smsc9218i.h \
+    include/mpc55xx-config.h \
     ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
     ../../shared/include/utility.h \
+    ../shared/include/linker-symbols.h \
     ../shared/include/start.h \
     ../shared/include/tictac.h
 
 # startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bootcard.c ../shared/src/tictac.c ../../shared/bspclean.c \
-    ../shared/startup/bspidle.c startup/bspstart.c startup/bspgetworkarea.c \
-    ../../shared/bsppretaskinghook.c \
-    ../shared/src/memcpy.c \
-    ../shared/src/bsp-start-zero.S
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
+libbsp_a_SOURCES += ../shared/src/memcpy.c
+libbsp_a_SOURCES += ../shared/src/tictac.c
+libbsp_a_SOURCES += ../shared/startup/bspidle.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/fmpll-syncr-vals.c
+libbsp_a_SOURCES += startup/exc-vector-base.S
+libbsp_a_SOURCES += startup/ebi-cs-config.c
+libbsp_a_SOURCES += startup/ebi-cal-cs-config.c
+libbsp_a_SOURCES += startup/mmu-config.c
+libbsp_a_SOURCES += startup/siu-pcr-config.c
+libbsp_a_SOURCES += startup/early-init.c
 
 # clock
 libbsp_a_SOURCES += clock/clock-config.c
@@ -74,7 +89,8 @@ libbsp_a_SOURCES += i2c/i2c_init.c \
 
 # Network
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/smsc9218i.c network/if_smc.c
+libbsp_a_SOURCES += network/smsc9218i.c
+libbsp_a_SOURCES += network/if_smc.c
 endif
 
 # BSP library

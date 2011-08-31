@@ -2,12 +2,14 @@
  *  $Id$
  */
 
+#include <bsp.h>
+
+#ifdef HAS_SMC91111M
+
 #include <mpc55xx/mpc55xx.h>
 #include <mpc55xx/regs.h>
 
 #include <rtems.h>
-
-#include <bsp.h>
 
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>
@@ -165,3 +167,5 @@ int rtems_smc91111_driver_attach_mpc5554(struct rtems_bsdnet_ifconfig *config)
 
     return _rtems_smc91111_driver_attach(config,&mpc5554_scmv91111_configuration);
 };
+
+#endif /* HAS_SMC91111M */

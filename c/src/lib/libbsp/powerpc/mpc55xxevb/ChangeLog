@@ -1,3 +1,23 @@
+2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspgetworkarea.c, startup/linkcmds.base: Removed files.
+	* include/mpc55xx-config.h, make/custom/mpc5674fevb.cfg,
+	startup/early-init.c, startup/ebi-cal-cs-config.c,
+	startup/ebi-cs-config.c, startup/exc-vector-base.S,
+	startup/fmpll-syncr-vals.c, startup/linkcmds.mpc5674fevb,
+	startup/mmu-config.c, startup/siu-pcr-config.c: New files.
+	* Makefile.am, preinstall.am: Reflect changes above.
+	* startup/linkcmds.gwlcfm, startup/linkcmds.mpc5566evb,
+	startup/linkcmds.phycore_mpc5554: Use linker command base file.
+	* configure.ac: Support MPC5674F.  Changed eSCI options.
+	* clock/clock-config.c: Support MPC5674F.
+	* i2c/i2c_init.c, network/smsc9218i.c, startup/sd-card-init.c: Update
+	due to API changes.
+	* include/bsp.h: Define BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN.
+	* network/if_smc.c: Use HAS_SMC91111.
+	* startup/start.S, startup/bspstart.c: Moved low-level initialization
+	into new files.  Overall cleanup.
+
 2011-08-30	Peter Dufault <dufault@hda.com>
 
 	* make/custom/phycore_mpc5554.cfg, startup/linkcmds.phycore_mpc5554,

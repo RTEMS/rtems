@@ -23,7 +23,7 @@
 #include <bsp/irq.h>
 #include <bsp/mpc83xx_i2cdrv.h>
 
-#ifdef MPC55XX_IRQ_I2C
+#if MPC55XX_CHIP_TYPE / 10 == 551
   static mpc83xx_i2c_desc_t mpc55xx_i2c_bus = {
     .bus_desc = {
       .ops = &mpc83xx_i2c_ops,
@@ -32,7 +32,7 @@
     .softc = {
       .reg_ptr = (m83xxI2CRegisters_t *) 0xfff88000,
       .initialized = FALSE,
-      .irq_number = MPC55XX_IRQ_I2C,
+      .irq_number = MPC55XX_IRQ_I2C(0),
       .base_frq = 0
     }
   };
@@ -41,9 +41,9 @@
   {
     int rv = 0;
     int busno = 0;
-  
+
     rtems_libi2c_initialize ();
-  
+
     mpc55xx_i2c_bus.softc.base_frq = bsp_clock_speed;
     busno = rtems_libi2c_register_bus(
       "/dev/i2c1",
@@ -64,7 +64,7 @@
         return RTEMS_IO_ERROR;
       }
     #endif
-  
+
     return RTEMS_SUCCESSFUL;
   }
 #endif

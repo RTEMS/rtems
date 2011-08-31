@@ -25,56 +25,45 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([gwlcfm],[])
 RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([mpc5566evb],[1])
+RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([mpc5674fevb],[1])
 RTEMS_BSPOPTS_SET_DATA_CACHE_ENABLED([*],[1])
 RTEMS_BSPOPTS_HELP_DATA_CACHE_ENABLED
 
 RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([gwlcfm],[])
 RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([mpc5566evb],[1])
+RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([mpc5674fevb],[1])
 RTEMS_BSPOPTS_SET_INSTRUCTION_CACHE_ENABLED([*],[1])
 RTEMS_BSPOPTS_HELP_INSTRUCTION_CACHE_ENABLED
 
-RTEMS_BSPOPTS_SET([UARTS_USE_TERMIOS],[*],[])
-RTEMS_BSPOPTS_HELP([UARTS_USE_TERMIOS],
-[Define to 1 if you want termios support for every port.
- Termios support is independent of the choice of UART I/O mode.])
+RTEMS_BSPOPTS_SET([MPC55XX_ESCI_CONSOLE_MINOR],[*],[0])
+RTEMS_BSPOPTS_HELP([MPC55XX_ESCI_CONSOLE_MINOR],
+[determines which eSCI device will be registered as /dev/console])
 
-RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[gwlcfm],[MPC55XX_ESCI_A_MINOR])
-RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[*]     ,[MPC55XX_ESCI_A_MINOR])
-RTEMS_BSPOPTS_HELP([CONSOLE_MINOR],
-[Must be defined to be one of MPC55XX_ESCI_A_MINOR or MPC55XX_ESCI_B_MINOR.  Determines which
- device will be registered as /dev/console.])
-
-RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[gwlcfm],[1])
-RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*]     ,[])
-RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
-[Define to 1 if you want interrupt-driven I/O for the SCI ports.])
-
-RTEMS_BSPOPTS_SET([PRINTK_MINOR],[gwlcfm],[MPC55XX_ESCI_A_MINOR])
-RTEMS_BSPOPTS_SET([PRINTK_MINOR],[phytec_mpc5554],[MPC55XX_ESCI_A_MINOR])
-RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*]     ,[MPC55XX_ESCI_B_MINOR])
-RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
-[Must be defined to be one of MPC55XX_ESCI_A_MINOR or MPC55XX_ESCI_B_MINOR.  Determines which
- device is used for output by printk().  The printk port always uses polled
- I/O.  Don't open the printk port from RTEMS unless also using polled I/O
- for the SCI ports.])
+RTEMS_BSPOPTS_SET([MPC55XX_ESCI_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([MPC55XX_ESCI_USE_INTERRUPTS],
+[define to zero or one to disable or enable interrupts for the eSCI devices])
 
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_REF_CLOCK],[gwlcfm],[40000000])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_REF_CLOCK],[mpc5674fevb],[40000000])
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_REF_CLOCK],[*]     ,[8000000])
 RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_REF_CLOCK],
 [Must be defined to be the external reference clock (in Hz) 
  for clock generation])
 
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_CLK_OUT],[gwlcfm],[66000000])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_CLK_OUT],[mpc5674fevb],[264000000])
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_CLK_OUT],[*]     ,[128000000])
 RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_CLK_OUT],
 [Must be defined to be the PLL output clock (in Hz) for clock generation])
 
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_PREDIV],[gwlcfm],[10])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_PREDIV],[mpc5674fevb],[5])
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_PREDIV],[*]     ,[1])
 RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_PREDIV],
 [Must be defined to be the PLL predivider factor for clock generation])
 
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_MFD],[gwlcfm],[99])
+RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_MFD],[mpc5674fevb],[66])
 RTEMS_BSPOPTS_SET([MPC55XX_FMPLL_MFD],[*]     ,[12])
 RTEMS_BSPOPTS_HELP([MPC55XX_FMPLL_MFD],
 [Must be defined to be the PLL multiplication factor for clock generation])
@@ -97,18 +86,28 @@ RTEMS_BSPOPTS_HELP([MPC55XX_CLOCK_EMIOS_CHANNEL],
 [Define to the eMIOS channel to use for the BSP clock.
  The default is the last channel.])
 
+RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[mpc5674fevb],[5674])
 RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[mpc5566evb],[5566])
 RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[gwlcfm]    ,[5516])
 RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[*]         ,[5554])
 RTEMS_BSPOPTS_HELP([MPC55XX_CHIP_TYPE],
 [specifies the chip type in use (e.g. 5554 for MPC5554)])
 
+RTEMS_BSPOPTS_SET([MPC55XX_BOOTFLAGS],[*],[])
 RTEMS_BSPOPTS_HELP([MPC55XX_BOOTFLAGS],
-[If defined, builds in bootflags above the RCHW for setup in a debugger to avoid startup MMU setup])
+[if defined, builds in bootflags above the RCHW for setup in a debugger to avoid startup MMU setup])
 
-RTEMS_BSPOPTS_SET([BOARD_GWLCFM],[gwlcfm],[1])
-RTEMS_BSPOPTS_HELP([BOARD_GWLCFM],
-[If defined, use custom settings of for the GW_LCFM board])
+RTEMS_BSPOPTS_SET([MPC55XX_BOARD_MPC5674FEVB],[mpc5674fevb],[1])
+RTEMS_BSPOPTS_HELP([MPC55XX_BOARD_MPC5674FEVB],[if defined, use custom settings for MPC5674FEVB board])
+
+RTEMS_BSPOPTS_SET([MPC55XX_BOARD_MPC5566EVB],[mpc5566evb],[1])
+RTEMS_BSPOPTS_HELP([MPC55XX_BOARD_MPC5566EVB],[if defined, use custom settings for MPC5566EVB board])
+
+RTEMS_BSPOPTS_SET([MPC55XX_BOARD_GWLCFM],[gwlcfm],[1])
+RTEMS_BSPOPTS_HELP([MPC55XX_BOARD_GWLCFM],[if defined, use custom settings for GWLCFM board])
+
+RTEMS_BSPOPTS_SET([MPC55XX_BOARD_PHYCORE_MPC5554],[phycore_mpc5554],[1])
+RTEMS_BSPOPTS_HELP([MPC55XX_BOARD_PHYCORE_MPC5554],[if defined, use custom settings for phyCORE MPC5554 board])
 
 RTEMS_BSPOPTS_SET([RTEMS_BSP_I2C_EEPROM_DEVICE_NAME],[gwlcfm],['"eeprom"'])
 RTEMS_BSPOPTS_HELP([RTEMS_BSP_I2C_EEPROM_DEVICE_NAME],[EEPROM name for LibI2C])

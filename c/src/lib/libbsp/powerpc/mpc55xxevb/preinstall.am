@@ -53,21 +53,25 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+$(PROJECT_LIB)/linkcmds.base: ../shared/startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
+
 $(PROJECT_LIB)/linkcmds.gwlcfm: startup/linkcmds.gwlcfm $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.gwlcfm
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.gwlcfm
-
-$(PROJECT_LIB)/linkcmds.phycore_mpc5554: startup/linkcmds.phycore_mpc5554 $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.phycore_mpc5554
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.phycore_mpc5554
 
 $(PROJECT_LIB)/linkcmds.mpc5566evb: startup/linkcmds.mpc5566evb $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5566evb
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5566evb
 
-$(PROJECT_LIB)/linkcmds.base: startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
+$(PROJECT_LIB)/linkcmds.mpc5674fevb: startup/linkcmds.mpc5674fevb $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674fevb
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674fevb
+
+$(PROJECT_LIB)/linkcmds.phycore_mpc5554: startup/linkcmds.phycore_mpc5554 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.phycore_mpc5554
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.phycore_mpc5554
 
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
@@ -97,6 +101,10 @@ $(PROJECT_INCLUDE)/bsp/smsc9218i.h: include/smsc9218i.h $(PROJECT_INCLUDE)/bsp/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/smsc9218i.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/smsc9218i.h
 
+$(PROJECT_INCLUDE)/bsp/mpc55xx-config.h: include/mpc55xx-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
+
 $(PROJECT_INCLUDE)/bsp/mpc83xx_i2cdrv.h: ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc83xx_i2cdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc83xx_i2cdrv.h
@@ -112,6 +120,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 $(PROJECT_INCLUDE)/bsp/utility.h: ../../shared/include/utility.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/utility.h
+
+$(PROJECT_INCLUDE)/bsp/linker-symbols.h: ../shared/include/linker-symbols.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/linker-symbols.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/linker-symbols.h
 
 $(PROJECT_INCLUDE)/bsp/start.h: ../shared/include/start.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/start.h

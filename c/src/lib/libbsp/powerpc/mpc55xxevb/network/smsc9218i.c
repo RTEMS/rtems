@@ -790,7 +790,10 @@ static void smsc9218i_init_receive_jobs(
 
   /* Obtain receive eDMA channel */
   e->edma_receive.id = e->receive_task;
-  sc = mpc55xx_edma_obtain_channel(&e->edma_receive);
+  sc = mpc55xx_edma_obtain_channel(
+    &e->edma_receive,
+    MPC55XX_INTC_DEFAULT_PRIORITY
+  );
   ASSERT_SC(sc);
 
   for (i = 0; i < SMSC9218I_RX_JOBS; ++i) {
@@ -1341,7 +1344,10 @@ static void smsc9218i_transmit_task(void *arg)
 
   /* Obtain transmit eDMA channel */
   e->edma_transmit.id = e->transmit_task;
-  sc = mpc55xx_edma_obtain_channel(&e->edma_transmit);
+  sc = mpc55xx_edma_obtain_channel(
+    &e->edma_transmit,
+    MPC55XX_INTC_DEFAULT_PRIORITY
+  );
   ASSERT_SC(sc);
 
   /* Setup transmit eDMA descriptors */
@@ -1409,8 +1415,6 @@ static void smsc9218i_transmit_task(void *arg)
 
     SMSC9218I_PRINTF("tx: done\n");
   }
-
-cleanup:
 
   /* Release network semaphore */
   rtems_bsdnet_semaphore_release();
@@ -1523,7 +1527,9 @@ static void smsc9218i_interrupt_init(
   pcr.B.PA = 2;
   pcr.B.OBE = 0;
   pcr.B.IBE = 1;
+#if MPC55XX_CHIP_TYPE / 10 != 551
   pcr.B.DSC = 0;
+#endif
   pcr.B.ODE = 0;
   pcr.B.HYS = 0;
   pcr.B.SRC = 3;
@@ -1534,7 +1540,9 @@ static void smsc9218i_interrupt_init(
   /* DMA/Interrupt Request Select */
   rtems_interrupt_disable(level);
   dirsr.R = SIU.DIRSR.R;
+#if MPC55XX_CHIP_TYPE / 10 != 551
   dirsr.B.DIRS0 = 0;
+#endif
   SIU.DIRSR.R = dirsr.R;
   rtems_interrupt_enable(level);
 
@@ -1607,7 +1615,9 @@ static void smsc9218i_reset_signal_init(void)
   pcr.B.PA = 0;
   pcr.B.OBE = 1;
   pcr.B.IBE = 0;
+#if MPC55XX_CHIP_TYPE / 10 != 551
   pcr.B.DSC = 0;
+#endif
   pcr.B.ODE = 0;
   pcr.B.HYS = 0;
   pcr.B.SRC = 3;

@@ -49,7 +49,7 @@ static void mpc55xx_clock_handler_install( rtems_isr_entry isr,
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   sc = mpc55xx_interrupt_handler_install(
-    MPC55XX_IRQ_EMIOS_GET_REQUEST( MPC55XX_CLOCK_EMIOS_CHANNEL),
+    MPC55XX_IRQ_EMIOS( MPC55XX_CLOCK_EMIOS_CHANNEL),
     "clock",
     RTEMS_INTERRUPT_UNIQUE,
     MPC55XX_INTC_MIN_PRIORITY,
@@ -96,26 +96,17 @@ static void mpc55xx_clock_initialize( void)
   csr.B.FLAG = 1;
   regs->CSR.R = csr.R;
 
+  /* Set internal counter start value */
+  regs->CCNTR.R = 1;
+
   /* Set timer period */
   regs->CADR.R = (uint32_t) interval - 1;
 
-  /* Set unused registers */
-  regs->CBDR.R = 0;
-  regs->CCNTR.R = 0;
-#if MPC55XX_CHIP_TYPE != 5554
-  /* This is reserved on the MPC5554.
-   */
-  regs->ALTCADR.R = 0;
-#endif
-
   /* Set control register */
-  /* The mode change, made by Thomas for GW_LCFM support, breaks interrupts
-   * on the MPC5554.
-   */
-#if MPC55XX_CHIP_TYPE == 5554
-  ccr.B.MODE = MPC55XX_EMIOS_MODE_MC_UP_INT_CLK;
-#else
+#if MPC55XX_CHIP_TYPE / 10 == 551
   ccr.B.MODE = MPC55XX_EMIOS_MODE_MCB_UP_INT_CLK;
+#else
+  ccr.B.MODE = MPC55XX_EMIOS_MODE_MC_UP_INT_CLK;
 #endif
   ccr.B.UCPREN = 1;
   ccr.B.FEN = 1;
@@ -135,7 +126,7 @@ static void mpc55xx_clock_cleanup( void)
 
   /* Remove interrupt handler */
   sc = rtems_interrupt_handler_remove(
-    MPC55XX_IRQ_EMIOS_GET_REQUEST( MPC55XX_CLOCK_EMIOS_CHANNEL),
+    MPC55XX_IRQ_EMIOS( MPC55XX_CLOCK_EMIOS_CHANNEL),
     (rtems_interrupt_handler) Clock_isr,
     NULL
   );
