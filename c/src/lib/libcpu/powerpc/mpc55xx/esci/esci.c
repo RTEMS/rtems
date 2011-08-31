@@ -7,15 +7,19 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 /* Include order is important */
@@ -23,6 +27,7 @@
 #include <mpc55xx/esci.h>
 #include <bsp/irq.h>
 
+#include <assert.h>
 #include <unistd.h>
 #include <termios.h>
 
@@ -31,9 +36,7 @@
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
 
-#define RTEMS_STATUS_CHECKS_USE_PRINTK
-
-#include <rtems/status-checks.h>
+#include <bspopts.h>
 
 /* Evil define conflicts */
 #define TERMIOS_CR1 CR1
@@ -45,27 +48,23 @@
 
 #define MPC55XX_ESCI_IS_MINOR_INVALD(minor) ((minor) < 0 || (minor) >= MPC55XX_ESCI_NUMBER)
 
-#define MPC55XX_ESCI_USE_INTERRUPTS(e) (!(e)->console && (e)->use_interrupts)
-
 /**
  * @brief eSCI driver table.
  */
 mpc55xx_esci_driver_entry mpc55xx_esci_driver_table [MPC55XX_ESCI_NUMBER] = { {
 		.regs = &ESCI_A,
-		.device_name = "/dev/tty1",
+		.device_name = "/dev/ttyS0",
 		.use_termios = 1,
-		.use_interrupts = 0,
-		.console = 1,
+		.use_interrupts = MPC55XX_ESCI_USE_INTERRUPTS,
 		.tty = NULL,
-		.irq_number = 146
+		.irq_number = MPC55XX_IRQ_ESCI(0)
 	}, {
 		.regs = &ESCI_B,
-		.device_name = "/dev/tty2",
+		.device_name = "/dev/ttyS1",
 		.use_termios = 1,
-		.use_interrupts = 0,
-		.console = 0,
+		.use_interrupts = MPC55XX_ESCI_USE_INTERRUPTS,
 		.tty = NULL,
-		.irq_number = 149
+		.irq_number = MPC55XX_IRQ_ESCI(1)
 	}
 };
 
@@ -104,40 +103,51 @@ static inline uint8_t mpc55xx_esci_read_char( mpc55xx_esci_driver_entry *e)
 	return data->B.D;
 }
 
-/**
- * @brief Writes the character @a c to the transmit register.
- *
- * @note Waits for the transmit data register empty flag.
- */
-static inline void mpc55xx_esci_write_char( mpc55xx_esci_driver_entry *e, uint8_t c)
+static inline void mpc55xx_esci_write_char(mpc55xx_esci_driver_entry *e, char c)
 {
-	volatile union ESCI_SR_tag *status = &e->regs->SR;
-	volatile union ESCI_DR_tag *data = &e->regs->DR;
-	union ESCI_SR_tag sr = MPC55XX_ZERO_FLAGS;
+	static const union ESCI_SR_tag clear_tdre = { .B = { .TDRE = 1 } };
+	volatile struct ESCI_tag *esci = e->regs;
 	rtems_interrupt_level level;
+	bool done = false;
 
-	/* Set clear flag */
-	sr.B.TDRE = 1;
+	rtems_interrupt_disable(level);
+	if (e->transmit_nest_level == 0) {
+		union ESCI_CR1_tag cr1 = { .R = esci->CR1.R };
 
-	while (true) {
-		rtems_interrupt_disable( level);
-		if (status->B.TDRE != 0) {
-			/* Clear flag */
-			status->R = sr.R;
-
-			/* Write */
-			data->B.D = c;
-
-			/* Done */
-			rtems_interrupt_enable( level);
-			break;
+		if (cr1.B.TIE != 0) {
+			cr1.B.TIE = 0;
+			e->transmit_nest_level = 1;
+			esci->CR1.R = cr1.R;
 		}
-		rtems_interrupt_enable( level);
+	} else {
+		++e->transmit_nest_level;
+	}
+	rtems_interrupt_enable(level);
 
-		while (status->B.TDRE == 0) {
-			/* Wait */
+	while (!done) {
+		rtems_interrupt_disable(level);
+		bool tx = e->transmit_in_progress;
+		if (!tx || (tx && esci->SR.B.TDRE)) {
+			esci->SR.R = clear_tdre.R;
+			esci->DR.B.D = c;
+			e->transmit_in_progress = true;
+			done = true;
+		}
+		rtems_interrupt_enable(level);
+	}
+
+	rtems_interrupt_disable(level);
+	if (e->transmit_nest_level > 0) {
+		--e->transmit_nest_level;
+
+		if (e->transmit_nest_level == 0) {
+			union ESCI_CR1_tag cr1 = { .R = esci->CR1.R };
+
+			cr1.B.TIE = 1;
+			esci->CR1.R = cr1.R;
 		}
 	}
+	rtems_interrupt_enable(level);
 }
 
 static inline void mpc55xx_esci_interrupts_enable( mpc55xx_esci_driver_entry *e)
@@ -186,21 +196,21 @@ static int mpc55xx_esci_termios_first_open( int major, int minor, void *arg)
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	/* Connect TTY */
 	e->tty = tty;
 
 	/* Enable interrupts */
-	if (MPC55XX_ESCI_USE_INTERRUPTS( e)) {
+	if (e->use_interrupts) {
 		mpc55xx_esci_interrupts_enable( e);
 	}
 
 	rv = rtems_termios_set_initial_baud( e->tty, 115200);
-	RTEMS_CHECK_RV_SC( rv, "Set initial baud");
+	assert(rv == 0);
 
-	return RTEMS_SUCCESSFUL;
+	return 0;
 }
 
 /**
@@ -214,7 +224,7 @@ static int mpc55xx_esci_termios_last_close( int major, int minor, void* arg)
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	/* Disable interrupts */
@@ -255,7 +265,7 @@ static int mpc55xx_esci_termios_poll_read( int minor)
  *
  * @return Returns number of chars sent on success or -1 otherwise.
  */
-static int mpc55xx_esci_termios_poll_write( int minor, const char *out, 
+static int mpc55xx_esci_termios_poll_write( int minor, const char *out,
 					    size_t n)
 {
 	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [minor];
@@ -285,9 +295,12 @@ static int mpc55xx_esci_termios_poll_write( int minor, const char *out,
 static int mpc55xx_esci_termios_write( int minor, const char *out, size_t n)
 {
 	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [minor];
+	rtems_interrupt_level level;
 
-	/* Write */
+	rtems_interrupt_disable(level);
 	e->regs->DR.B.D = out [0];
+	e->transmit_in_progress = true;
+	rtems_interrupt_enable(level);
 
 	return 0;
 }
@@ -310,14 +323,14 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	/* Enable module */
 	cr2.B.MDIS = 0;
 
 	/* Interrupts */
-	if (MPC55XX_ESCI_USE_INTERRUPTS( e) && e->tty != NULL) {
+	if (e->use_interrupts && e->tty != NULL) {
 		cr1.B.RIE = 1;
 		cr1.B.TIE = 1;
 	} else {
@@ -418,6 +431,7 @@ static void mpc55xx_esci_termios_interrupt_handler( void *arg)
 	volatile union ESCI_DR_tag *data = &e->regs->DR;
 	union ESCI_SR_tag sr = MPC55XX_ZERO_FLAGS;
 	union ESCI_SR_tag active = MPC55XX_ZERO_FLAGS;
+	rtems_interrupt_level level;
 
 	/* Status */
 	sr.R = status->R;
@@ -433,7 +447,10 @@ static void mpc55xx_esci_termios_interrupt_handler( void *arg)
 	}
 
 	/* Clear flags */
+	rtems_interrupt_disable(level);
 	status->R = active.R;
+	e->transmit_in_progress = false;
+	rtems_interrupt_enable(level);
 
 	/* Enqueue */
 	if (active.B.RDRF != 0) {
@@ -485,7 +502,6 @@ static const rtems_termios_callbacks mpc55xx_esci_termios_callbacks_polled = {
 rtems_device_driver console_initialize( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	int console_done = 0;
 	int termios_do_init = 1;
 	rtems_device_minor_number i = 0;
 	mpc55xx_esci_driver_entry *e = NULL;
@@ -493,17 +509,15 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 	for (i = 0; i < MPC55XX_ESCI_NUMBER; ++i) {
 		e = &mpc55xx_esci_driver_table [i];
 		sc = rtems_io_register_name ( e->device_name, major, i);
-		RTEMS_CHECK_SC( sc, "Register IO device");
-		if (e->console) {
-			if (console_done) {
-				RTEMS_SYSLOG_WARNING( "Multiple console ports defined\n");
-			} else {
-				console_done = 1;
-				if (e->use_interrupts) {
-					RTEMS_SYSLOG_WARNING( "Cannot use interrupts for console port\n");
-				}
-				sc = rtems_io_register_name( CONSOLE_DEVICE_NAME, major, i);
-				RTEMS_CHECK_SC( sc, "Register IO device");
+		if (sc != RTEMS_SUCCESSFUL) {
+			/* FIXME */
+			rtems_fatal_error_occurred(0xdeadbeef);
+		}
+		if (i == MPC55XX_ESCI_CONSOLE_MINOR) {
+			sc = rtems_io_register_name( CONSOLE_DEVICE_NAME, major, i);
+			if (sc != RTEMS_SUCCESSFUL) {
+				/* FIXME */
+				rtems_fatal_error_occurred(0xdeadbeef);
 			}
 		}
 		if (e->use_termios && termios_do_init) {
@@ -511,7 +525,7 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 				termios_do_init = 0;
 				rtems_termios_initialize();
 			}
-			if (MPC55XX_ESCI_USE_INTERRUPTS( e)) {
+			if (e->use_interrupts) {
 				sc = mpc55xx_interrupt_handler_install(
 					e->irq_number,
 					"eSCI",
@@ -520,7 +534,10 @@ rtems_device_driver console_initialize( rtems_device_major_number major, rtems_d
 					mpc55xx_esci_termios_interrupt_handler,
 					e
 				);
-				RTEMS_CHECK_SC( sc, "Install IRQ handler");
+				if (sc != RTEMS_SUCCESSFUL) {
+					/* FIXME */
+					rtems_fatal_error_occurred(0xdeadbeef);
+				}
 			}
 		}
 		mpc55xx_esci_termios_set_attributes( (int) i, &mpc55xx_esci_termios_default);
@@ -536,19 +553,18 @@ rtems_device_driver console_open( rtems_device_major_number major, rtems_device_
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	if (e->use_termios) {
-		if (MPC55XX_ESCI_USE_INTERRUPTS( e)) {
+		if (e->use_interrupts) {
 			sc =  rtems_termios_open( major, minor, arg, &mpc55xx_esci_termios_callbacks);
 		} else {
 			sc =  rtems_termios_open( major, minor, arg, &mpc55xx_esci_termios_callbacks_polled);
 		}
-		RTEMS_CHECK_SC( sc, "Open");
 	}
 
-	return RTEMS_SUCCESSFUL;
+	return sc;
 }
 
 rtems_device_driver console_close( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
@@ -557,7 +573,7 @@ rtems_device_driver console_close( rtems_device_major_number major, rtems_device
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	if (e->use_termios) {
@@ -573,7 +589,7 @@ rtems_device_driver console_read( rtems_device_major_number major, rtems_device_
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	if (e->use_termios) {
@@ -597,7 +613,7 @@ rtems_device_driver console_write( rtems_device_major_number major, rtems_device
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	if (e->use_termios) {
@@ -606,10 +622,10 @@ rtems_device_driver console_write( rtems_device_major_number major, rtems_device
 		rtems_libio_rw_args_t *rw = (rtems_libio_rw_args_t *) arg;
 		uint32_t i = 0;
 		while (i < rw->count) {
-			mpc55xx_esci_write_char( e, rw->buffer [i]);
 			if (rw->buffer [i] == '\n') {
 				mpc55xx_esci_write_char( e, '\r');
 			}
+			mpc55xx_esci_write_char( e, rw->buffer [i]);
 			++i;
 		}
 		rw->bytes_moved = i;
@@ -624,7 +640,7 @@ rtems_device_driver console_control( rtems_device_major_number major, rtems_devi
 
 	/* Check minor number */
 	if (MPC55XX_ESCI_IS_MINOR_INVALD( minor)) {
-		return RTEMS_INVALID_NUMBER;
+		return RTEMS_INVALID_ID;
 	}
 
 	if (e->use_termios) {
@@ -637,54 +653,27 @@ rtems_device_driver console_control( rtems_device_major_number major, rtems_devi
 /** @} */
 
 /**
- * @brief Port number for the BSP character output function.
- *
- * The correct value will be set by mpc55xx_esci_output_char_init().
- */
-static int mpc55xx_esci_output_char_minor = 0;
-
-/**
  * @name BSP Character Output
  * @{
  */
 
 static void mpc55xx_esci_output_char( char c)
 {
-	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [mpc55xx_esci_output_char_minor];
+	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [MPC55XX_ESCI_CONSOLE_MINOR];
 
 	mpc55xx_esci_interrupts_disable( e);
-	mpc55xx_esci_write_char( e, c);
 	if (c == '\n') {
 		mpc55xx_esci_write_char( e, '\r');
 	}
+	mpc55xx_esci_write_char( e, c);
 	mpc55xx_esci_interrupts_enable( e);
-}
-
-static void mpc55xx_esci_output_char_nop( char c)
-{
-	/* Do nothing */
 }
 
 static void mpc55xx_esci_output_char_init( char c)
 {
-	bool console_found = false;
-	int i = 0;
-
-	for (i = 0; i < MPC55XX_ESCI_NUMBER; ++i) {
-		if (mpc55xx_esci_driver_table [i].console) {
-			console_found = true;
-			mpc55xx_esci_output_char_minor = i;
-			break;
-		}
-	}
-
-	if (console_found) {
-		BSP_output_char = mpc55xx_esci_output_char;
-		mpc55xx_esci_termios_set_attributes( mpc55xx_esci_output_char_minor, &mpc55xx_esci_termios_default);
-		mpc55xx_esci_output_char( c);
-	} else {
-		BSP_output_char = mpc55xx_esci_output_char_nop;
-	}
+	mpc55xx_esci_termios_set_attributes( MPC55XX_ESCI_CONSOLE_MINOR, &mpc55xx_esci_termios_default);
+	mpc55xx_esci_output_char( c);
+	BSP_output_char = mpc55xx_esci_output_char;
 }
 
 /** @} */

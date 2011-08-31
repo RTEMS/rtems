@@ -32,17 +32,17 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct mpc55xx_edma_channel_entry {
-	rtems_chain_node node;
-	unsigned channel;
-	void (*done)( struct mpc55xx_edma_channel_entry *, uint32_t);
-	rtems_id id;
+  rtems_chain_node node;
+  unsigned channel;
+  void (*done)( struct mpc55xx_edma_channel_entry *, uint32_t);
+  rtems_id id;
 } mpc55xx_edma_channel_entry;
 
-rtems_status_code mpc55xx_edma_init();
+void mpc55xx_edma_init(void);
 
-rtems_status_code mpc55xx_edma_obtain_channel( mpc55xx_edma_channel_entry *e);
+rtems_status_code mpc55xx_edma_obtain_channel( mpc55xx_edma_channel_entry *e, unsigned irq_priority);
 
-rtems_status_code mpc55xx_edma_release_channel( mpc55xx_edma_channel_entry *e);
+void mpc55xx_edma_release_channel( mpc55xx_edma_channel_entry *e);
 
 void mpc55xx_edma_enable_hardware_requests( unsigned channel, bool enable);
 

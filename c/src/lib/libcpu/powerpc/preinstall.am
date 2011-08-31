@@ -278,9 +278,37 @@ $(PROJECT_INCLUDE)/mpc55xx/siu.h: mpc55xx/include/siu.h $(PROJECT_INCLUDE)/mpc55
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/siu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/siu.h
 
+$(PROJECT_INCLUDE)/mpc55xx/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/irq.h
+
 $(PROJECT_INCLUDE)/mpc55xx/watchdog.h: mpc55xx/include/watchdog.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
+
+$(PROJECT_INCLUDE)/mpc55xx/fsl-mpc551x.h: mpc55xx/include/fsl-mpc551x.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc551x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc551x.h
+
+$(PROJECT_INCLUDE)/mpc55xx/fsl-mpc555x.h: mpc55xx/include/fsl-mpc555x.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc555x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc555x.h
+
+$(PROJECT_INCLUDE)/mpc55xx/fsl-mpc556x.h: mpc55xx/include/fsl-mpc556x.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc556x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc556x.h
+
+$(PROJECT_INCLUDE)/mpc55xx/fsl-mpc567x.h: mpc55xx/include/fsl-mpc567x.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc567x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc567x.h
+
+$(PROJECT_INCLUDE)/mpc55xx/regs-edma.h: mpc55xx/include/regs-edma.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/regs-edma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/regs-edma.h
+
+$(PROJECT_INCLUDE)/mpc55xx/regs-mmu.h: mpc55xx/include/regs-mmu.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/regs-mmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/regs-mmu.h
 
 $(PROJECT_INCLUDE)/bsp/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h

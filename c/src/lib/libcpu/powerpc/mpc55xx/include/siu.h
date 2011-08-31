@@ -7,25 +7,25 @@
  */
 
 /*
- * Copyright (c) 2010
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef LIBCPU_POWERPC_MPC55XX_SIU_H
 #define LIBCPU_POWERPC_MPC55XX_SIU_H
 
-#include <stdbool.h>
-#include <stdint.h>
-
 #include <rtems.h>
-#include <rtems/chain.h>
+
+#include <mpc55xx/regs.h>
 
 #ifdef __cplusplus
 extern "C" {

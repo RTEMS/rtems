@@ -411,15 +411,23 @@ if mpc55xx
 # Includes
 include_mpc55xxdir = $(includedir)/mpc55xx
 
-include_mpc55xx_HEADERS = mpc55xx/include/regs.h \
-	mpc55xx/include/reg-defs.h \
-	mpc55xx/include/dspi.h \
-	mpc55xx/include/edma.h \
-	mpc55xx/include/emios.h \
-	mpc55xx/include/mpc55xx.h \
-	mpc55xx/include/esci.h \
-	mpc55xx/include/siu.h \
-	mpc55xx/include/watchdog.h
+include_mpc55xx_HEADERS =
+include_mpc55xx_HEADERS += mpc55xx/include/regs.h
+include_mpc55xx_HEADERS += mpc55xx/include/reg-defs.h
+include_mpc55xx_HEADERS += mpc55xx/include/dspi.h
+include_mpc55xx_HEADERS += mpc55xx/include/edma.h
+include_mpc55xx_HEADERS += mpc55xx/include/emios.h
+include_mpc55xx_HEADERS += mpc55xx/include/mpc55xx.h
+include_mpc55xx_HEADERS += mpc55xx/include/esci.h
+include_mpc55xx_HEADERS += mpc55xx/include/siu.h
+include_mpc55xx_HEADERS += mpc55xx/include/irq.h
+include_mpc55xx_HEADERS += mpc55xx/include/watchdog.h
+include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc551x.h
+include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc555x.h
+include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc556x.h
+include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc567x.h
+include_mpc55xx_HEADERS += mpc55xx/include/regs-edma.h
+include_mpc55xx_HEADERS += mpc55xx/include/regs-mmu.h
 
 include_bsp_HEADERS += mpc55xx/include/irq.h
 

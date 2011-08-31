@@ -7,15 +7,19 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 /**
@@ -43,23 +47,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/* Defined in copy.S */
-int mpc55xx_copy_8( const void *src, void *dest, size_t n);
+/* Defined in fmpll.S */
+int mpc55xx_get_system_clock(void);
 
 /* Defined in fmpll.S */
-void mpc55xx_fmpll_reset_config();
-
-/* Defined in fmpll.S */
-void mpc55xx_fmpll_wait_for_lock();
-
-/* Defined in fmpll.S */
-int mpc55xx_get_system_clock();
-
-/* Defined in fmpll.S */
-void mpc55xx_system_reset();
-
-/* Defined in flash.S */
-void mpc55xx_flash_config();
+void mpc55xx_system_reset(void);
 
 int mpc55xx_flash_copy(void *dest, const void *src, size_t nbytes);
 int mpc55xx_flash_copy_op(void *rdest, const void *src, size_t nbytes,

@@ -22,6 +22,8 @@
 #include <mpc55xx/dspi.h>
 #include <mpc55xx/mpc55xx.h>
 
+#include <bsp/irq.h>
+
 #include <libcpu/powerpc-utility.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
@@ -172,7 +174,7 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 	);
 	RTEMS_CHECK_SC( sc, "create receive update semaphore");
 
-	sc = mpc55xx_edma_obtain_channel( &e->edma_receive);
+	sc = mpc55xx_edma_obtain_channel( &e->edma_receive, MPC55XX_INTC_DEFAULT_PRIORITY);
 	RTEMS_CHECK_SC( sc, "obtain receive eDMA channel");
 
 	/* eDMA transmit */
@@ -185,10 +187,10 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 	);
 	RTEMS_CHECK_SC( sc, "create transmit update semaphore");
 
-	sc = mpc55xx_edma_obtain_channel( &e->edma_transmit);
+	sc = mpc55xx_edma_obtain_channel( &e->edma_transmit, MPC55XX_INTC_DEFAULT_PRIORITY);
 	RTEMS_CHECK_SC( sc, "obtain transmit eDMA channel");
 
-	sc = mpc55xx_edma_obtain_channel( &e->edma_push);
+	sc = mpc55xx_edma_obtain_channel( &e->edma_push, MPC55XX_INTC_DEFAULT_PRIORITY);
 	RTEMS_CHECK_SC( sc, "obtain push eDMA channel");
 
 	tcd_push.SADDR = mpc55xx_dspi_push_data_address( e);

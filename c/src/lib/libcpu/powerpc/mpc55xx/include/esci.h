@@ -27,6 +27,7 @@
 #ifndef LIBCPU_POWERPC_MPC55XX_ESCI_H
 #define LIBCPU_POWERPC_MPC55XX_ESCI_H
 
+#include <rtems.h>
 #include <rtems/termiostypes.h>
 
 #ifdef __cplusplus
@@ -35,16 +36,15 @@ extern "C" {
 
 #define MPC55XX_ESCI_NUMBER 2
 
-struct ESCI_tag;
-
 typedef struct {
 	volatile struct ESCI_tag *regs;
-	const char *device_name;
-	int use_termios;
-	int use_interrupts;
-	int console;
 	struct rtems_termios_tty *tty;
-	unsigned irq_number;
+	const char *device_name;
+	rtems_vector_number irq_number;
+	int transmit_nest_level;
+	bool transmit_in_progress;
+	bool use_termios;
+	bool use_interrupts;
 } mpc55xx_esci_driver_entry;
 
 extern mpc55xx_esci_driver_entry mpc55xx_esci_driver_table [ /* MPC55XX_ESCI_NUMBER */ ];

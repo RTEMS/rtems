@@ -34,13 +34,8 @@ extern "C" {
  * Interrupt numbers
  */
 
-/* Basics */
+#define MPC55XX_IRQ_INVALID 0x10000U
 #define MPC55XX_IRQ_MIN 0U
-#define MPC55XX_IRQ_MAX 328U
-#define MPC55XX_IRQ_MIN 0U
-#define MPC55XX_IRQ_MAX 328U
-#define MPC55XX_IRQ_BASE MPC55XX_IRQ_MIN
-#define MPC55XX_IRQ_NUMBER (MPC55XX_IRQ_MAX + 1U)
 
 /* Software interrupts */
 #define MPC55XX_IRQ_SOFTWARE_MIN 0U
@@ -49,19 +44,18 @@ extern "C" {
 #define MPC55XX_IRQ_SOFTWARE_GET_REQUEST(i) (i)
 #define MPC55XX_IRQ_SOFTWARE_NUMBER (MPC55XX_IRQ_SOFTWARE_MAX + 1U)
 
-#if MPC55XX_CHIP_TYPE >= 5510 && MPC55XX_CHIP_TYPE <= 5517
-  /* eDMA interrupts */
-  #define MPC55XX_IRQ_EDMA_ERROR_LOW 10U
-  #define MPC55XX_IRQ_EDMA_REQUEST_LOW_MIN 11U
-  #define MPC55XX_IRQ_EDMA_REQUEST_LOW_MAX 26U
+#if MPC55XX_CHIP_TYPE / 10 == 551
+  #define MPC55XX_IRQ_MAX 293U
 
-  #define MPC55XX_IRQ_EDMA_GET_CHANNEL(v) \
-    ((v) - MPC55XX_IRQ_EDMA_REQUEST_LOW_MIN)
-  #define MPC55XX_IRQ_EDMA_GET_REQUEST(c) \
-    ((c) + MPC55XX_IRQ_EDMA_REQUEST_LOW_MIN)
+  /* eDMA */
+  #define MPC55XX_IRQ_EDMA_ERROR(group) \
+    ((group) == 0 ? 10U : MPC55XX_IRQ_INVALID)
+  #define MPC55XX_IRQ_EDMA(ch) \
+    ((unsigned) (ch) < 16U ? 11U + (ch) : MPC55XX_IRQ_INVALID)
 
-  /* I2C interrupt */
-  #define MPC55XX_IRQ_I2C 48U
+  /* I2C */
+  #define MPC55XX_IRQ_I2C(mod) \
+    ((mod) == 0 ? 48U : MPC55XX_IRQ_INVALID)
 
   /* SIU external interrupts */
   #define MPC55XX_IRQ_SIU_EXTERNAL_0 53U
@@ -70,31 +64,74 @@ extern "C" {
   #define MPC55XX_IRQ_SIU_EXTERNAL_3 56U
   #define MPC55XX_IRQ_SIU_EXTERNAL_4_15 57U
 
-  /* eMIOS interrupts */
-  #define MPC55XX_IRQ_EMIOS_REQUEST_LOW_MIN 58U
-  #define MPC55XX_IRQ_EMIOS_REQUEST_LOW_MAX 81U
-  #define MPC55XX_IRQ_EMIOS_GET_CHANNEL(v) \
-    ((v) - MPC55XX_IRQ_EMIOS_REQUEST_LOW_MIN)
-  #define MPC55XX_IRQ_EMIOS_GET_REQUEST(c) \
-    ((c) + MPC55XX_IRQ_EMIOS_REQUEST_LOW_MIN)
-#elif MPC55XX_CHIP_TYPE >= 5554 && MPC55XX_CHIP_TYPE <= 5567
-  /* eDMA interrupts */
-  #define MPC55XX_IRQ_EDMA_ERROR_LOW 10U
-  #define MPC55XX_IRQ_EDMA_REQUEST_LOW_MIN 11U
-  #define MPC55XX_IRQ_EDMA_REQUEST_LOW_MAX 42U
+  /* PIT */
+  #define MPC55XX_IRQ_RTI 148U
+  #define MPC55XX_IRQ_PIT(timer) (148U + (timer))
 
-  #define MPC55XX_IRQ_EDMA_ERROR_HIGH 210U
-  #define MPC55XX_IRQ_EDMA_REQUEST_HIGH_MIN 211U
-  #define MPC55XX_IRQ_EDMA_REQUEST_HIGH_MAX 242U
+  /* eTPU */
+  #define MPC55XX_IRQ_ETPU_BASE(mod) MPC55XX_IRQ_INVALID
 
-  #define MPC55XX_IRQ_EDMA_GET_CHANNEL(v) \
-    (((v) > MPC55XX_IRQ_EDMA_REQUEST_LOW_MAX) \
-      ? ((v) + 32U - MPC55XX_IRQ_EDMA_REQUEST_HIGH_MIN) \
-      : ((v) - MPC55XX_IRQ_EDMA_REQUEST_LOW_MIN))
-  #define MPC55XX_IRQ_EDMA_GET_REQUEST(c) \
-    (((c) >= 32U) \
-      ? ((c) - 32U + MPC55XX_IRQ_EDMA_REQUEST_HIGH_MIN) \
-      : ((c) + MPC55XX_IRQ_EDMA_REQUEST_LOW_MIN))
+  /* DSPI */
+  #define MPC55XX_IRQ_DSPI_BASE(mod) \
+    ((mod) == 0 ? 117U : \
+      ((mod) == 1 ? 122U : \
+        ((mod) == 2 ? 274U : \
+          ((mod) == 3 ? 279U : MPC55XX_IRQ_INVALID))))
+
+  /* eMIOS */
+  #define MPC55XX_IRQ_EMIOS(ch) \
+    ((unsigned) (ch) < 24U ? 58U + (ch) : MPC55XX_IRQ_INVALID)
+
+  /* eQADC */
+  #define MPC55XX_IRQ_EQADC_BASE(mod) \
+    ((mod) == 0 ? 82U : MPC55XX_IRQ_INVALID)
+
+  /* eSCI */
+  #define MPC55XX_IRQ_ESCI_BASE(mod) \
+    ((mod) == 0 ? 113U : \
+      ((mod) == 1 ? 114U : \
+        ((mod) == 2 ? 115U : \
+          ((mod) == 3 ? 116U : \
+            ((mod) == 4 ? 270U : \
+              ((mod) == 5 ? 271U : \
+                ((mod) == 6 ? 272U : \
+                  ((mod) == 7 ? 273U : MPC55XX_IRQ_INVALID))))))))
+
+  /* FlexCAN */
+  #define MPC55XX_IRQ_CAN_BASE(mod) \
+    ((mod) == 0 ? 127U : \
+      ((mod) == 1 ? 157U : \
+        ((mod) == 2 ? 178U : \
+          ((mod) == 3 ? 199U : \
+            ((mod) == 4 ? 220U : \
+              ((mod) == 5 ? 241U : MPC55XX_IRQ_INVALID))))))
+
+  /* FlexRay */
+  #define MPC55XX_IRQ_FLEXRAY_BASE(mod) \
+    ((mod) == 0 ? 284U : MPC55XX_IRQ_INVALID)
+#else
+  #if MPC55XX_CHIP_TYPE / 10 == 555
+    #define MPC55XX_IRQ_MAX 307U
+  #elif MPC55XX_CHIP_TYPE / 10 == 556
+    #define MPC55XX_IRQ_MAX 360U
+  #elif MPC55XX_CHIP_TYPE / 10 == 567
+    #define MPC55XX_IRQ_MAX 479U
+  #else
+    #error "unsupported chip type"
+  #endif
+
+  /* eDMA */
+  #define MPC55XX_IRQ_EDMA_ERROR(group) \
+    ((group) == 0 ? 10U : \
+      ((group) == 1 ? 210U : \
+        ((group) == 2 ? 425U : MPC55XX_IRQ_INVALID)))
+  #define MPC55XX_IRQ_EDMA(ch) \
+    ((unsigned) (ch) < 32U ? 11U + (ch) : \
+      ((unsigned) (ch) < 64U ? 179U + (ch) : \
+        ((unsigned) (ch) < 96U ? 362U + (ch) : MPC55XX_IRQ_INVALID)))
+
+  /* I2C */
+  #define MPC55XX_IRQ_I2C(mod) MPC55XX_IRQ_INVALID
 
   /* SIU external interrupts */
   #define MPC55XX_IRQ_SIU_EXTERNAL_0 46U
@@ -103,24 +140,115 @@ extern "C" {
   #define MPC55XX_IRQ_SIU_EXTERNAL_3 49U
   #define MPC55XX_IRQ_SIU_EXTERNAL_4_15 50U
 
-  /* eMIOS interrupts */
-  #define MPC55XX_IRQ_EMIOS_REQUEST_LOW_MIN 51U
-  #define MPC55XX_IRQ_EMIOS_REQUEST_LOW_MAX 66U
-  #define MPC55XX_IRQ_EMIOS_REQUEST_HIGH_MIN 202U
-  #define MPC55XX_IRQ_EMIOS_REQUEST_HIGH_MAX 209U
+  /* PIT */
+  #define MPC55XX_IRQ_RTI 305U
+  #define MPC55XX_IRQ_PIT(ch) (301U + (ch))
 
-  #define MPC55XX_IRQ_EMIOS_GET_CHANNEL(v) \
-    (((v) > MPC55XX_IRQ_EMIOS_REQUEST_LOW_MAX) \
-      ? ((v) + 16U - MPC55XX_IRQ_EMIOS_REQUEST_HIGH_MIN) \
-      : ((v) - MPC55XX_IRQ_EMIOS_REQUEST_LOW_MIN))
+  /* eTPU */
+  #define MPC55XX_IRQ_ETPU_BASE(mod) \
+    ((mod) == 0 ? 67U : \
+      ((mod) == 1 ? 243U : MPC55XX_IRQ_INVALID))
 
-  #define MPC55XX_IRQ_EMIOS_GET_REQUEST(c) \
-    (((c) >= 16U) \
-      ? ((c) - 16U + MPC55XX_IRQ_EMIOS_REQUEST_HIGH_MIN) \
-      : ((c) + MPC55XX_IRQ_EMIOS_REQUEST_LOW_MIN))
-#else
-  #error "unexpected chip type"
+  /* DSPI */
+  #define MPC55XX_IRQ_DSPI_BASE(mod) \
+    ((mod) == 0 ? 275U : \
+      ((mod) == 1 ? 131U : \
+        ((mod) == 2 ? 136U : \
+          ((mod) == 3 ? 141U : MPC55XX_IRQ_INVALID))))
+
+  /* eMIOS */
+  #define MPC55XX_IRQ_EMIOS(ch) \
+    ((unsigned) (ch) < 16U ? 51U + (ch) : \
+      ((unsigned) (ch) < 24U ? 186U + (ch) : \
+        ((unsigned) (ch) < 32U ? 435U + (ch) : MPC55XX_IRQ_INVALID)))
+
+  /* eQADC */
+  #define MPC55XX_IRQ_EQADC_BASE(mod) \
+    ((mod) == 0 ? 100U : \
+      ((mod) == 1 ? 394U : MPC55XX_IRQ_INVALID))
+
+  /* eSCI */
+  #define MPC55XX_IRQ_ESCI_BASE(mod) \
+    ((mod) == 0 ? 146U : \
+      ((mod) == 1 ? 149U : \
+        ((mod) == 2 ? 473U : MPC55XX_IRQ_INVALID)))
+
+  /* FlexCAN */
+  #define MPC55XX_IRQ_CAN_BASE(mod) \
+    ((mod) == 0 ? 152U : \
+      ((mod) == 1 ? 280U : \
+        ((mod) == 2 ? 173U : \
+          ((mod) == 3 ? 308U : \
+            ((mod) == 4 ? 329U : MPC55XX_IRQ_INVALID)))))
+
+  /* FlexRay */
+  #define MPC55XX_IRQ_FLEXRAY_BASE(mod) \
+    ((mod) == 0 ? 350U : MPC55XX_IRQ_INVALID)
 #endif
+
+#define MPC55XX_IRQ_NUMBER (MPC55XX_IRQ_MAX + 1U)
+
+/* eTPU */
+#define MPC55XX_IRQ_ETPU(mod) \
+  (MPC55XX_IRQ_ETPU_BASE(mod) + 0U)
+#define MPC55XX_IRQ_ETPU_CHANNEL(mod, ch) \
+  (MPC55XX_IRQ_ETPU_BASE(mod) + 1U + (ch))
+
+/* DSPI */
+#define MPC55XX_IRQ_DSPI_TFUF_RFOF(mod) (MPC55XX_IRQ_DSPI_BASE(mod) + 0U)
+#define MPC55XX_IRQ_DSPI_EOQF(mod) (MPC55XX_IRQ_DSPI_BASE(mod) + 1U)
+#define MPC55XX_IRQ_DSPI_TFFF(mod) (MPC55XX_IRQ_DSPI_BASE(mod) + 2U)
+#define MPC55XX_IRQ_DSPI_TCF(mod) (MPC55XX_IRQ_DSPI_BASE(mod) + 3U)
+#define MPC55XX_IRQ_DSPI_RFDF(mod) (MPC55XX_IRQ_DSPI_BASE(mod) + 4U)
+
+/* eQADC */
+#define MPC55XX_IRQ_EQADC_TORF_RFOF_CFUF(mod) \
+  (MPC55XX_IRQ_EQADC_BASE(mod) + 0U)
+#define MPC55XX_IRQ_EQADC_NCF(mod, fifo) \
+  (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 0U)
+#define MPC55XX_IRQ_EQADC_PF(mod, fifo) \
+  (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 1U)
+#define MPC55XX_IRQ_EQADC_EOQF(mod, fifo) \
+  (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 2U)
+#define MPC55XX_IRQ_EQADC_CFFF(mod, fifo) \
+  (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 3U)
+#define MPC55XX_IRQ_EQADC_RFDF(mod, fifo) \
+  (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 4U)
+
+/* eSCI */
+#define MPC55XX_IRQ_ESCI(mod) (MPC55XX_IRQ_ESCI_BASE(mod) + 0U)
+
+/* FlexCAN */
+#define MPC55XX_IRQ_CAN_BOFF_TWRN_RWRN(mod) (MPC55XX_IRQ_CAN(mod) + 0U)
+#define MPC55XX_IRQ_CAN_ERR(mod) (MPC55XX_IRQ_CAN(mod) + 1U)
+#define MPC55XX_IRQ_CAN_BUF_0(mod) (MPC55XX_IRQ_CAN(mod) + 3U)
+#define MPC55XX_IRQ_CAN_BUF_1(mod) (MPC55XX_IRQ_CAN(mod) + 4U)
+#define MPC55XX_IRQ_CAN_BUF_2(mod) (MPC55XX_IRQ_CAN(mod) + 5U)
+#define MPC55XX_IRQ_CAN_BUF_3(mod) (MPC55XX_IRQ_CAN(mod) + 6U)
+#define MPC55XX_IRQ_CAN_BUF_4(mod) (MPC55XX_IRQ_CAN(mod) + 7U)
+#define MPC55XX_IRQ_CAN_BUF_5(mod) (MPC55XX_IRQ_CAN(mod) + 8U)
+#define MPC55XX_IRQ_CAN_BUF_6(mod) (MPC55XX_IRQ_CAN(mod) + 9U)
+#define MPC55XX_IRQ_CAN_BUF_7(mod) (MPC55XX_IRQ_CAN(mod) + 10U)
+#define MPC55XX_IRQ_CAN_BUF_8(mod) (MPC55XX_IRQ_CAN(mod) + 12U)
+#define MPC55XX_IRQ_CAN_BUF_9(mod) (MPC55XX_IRQ_CAN(mod) + 12U)
+#define MPC55XX_IRQ_CAN_BUF_10(mod) (MPC55XX_IRQ_CAN(mod) + 13U)
+#define MPC55XX_IRQ_CAN_BUF_11(mod) (MPC55XX_IRQ_CAN(mod) + 14U)
+#define MPC55XX_IRQ_CAN_BUF_12(mod) (MPC55XX_IRQ_CAN(mod) + 15U)
+#define MPC55XX_IRQ_CAN_BUF_13(mod) (MPC55XX_IRQ_CAN(mod) + 16U)
+#define MPC55XX_IRQ_CAN_BUF_14(mod) (MPC55XX_IRQ_CAN(mod) + 17U)
+#define MPC55XX_IRQ_CAN_BUF_15(mod) (MPC55XX_IRQ_CAN(mod) + 18U)
+#define MPC55XX_IRQ_CAN_BUF_16_31(mod) (MPC55XX_IRQ_CAN(mod) + 19U)
+#define MPC55XX_IRQ_CAN_BUF_32_63(mod) (MPC55XX_IRQ_CAN(mod) + 20U)
+
+/* FlexRay */
+#define MPC55XX_IRQ_FLEXRAY_MIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 0U)
+#define MPC55XX_IRQ_FLEXRAY_PRIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 1U)
+#define MPC55XX_IRQ_FLEXRAY_CHIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 2U)
+#define MPC55XX_IRQ_FLEXRAY_WUP_IF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 3U)
+#define MPC55XX_IRQ_FLEXRAY_FBNE_F(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 4U)
+#define MPC55XX_IRQ_FLEXRAY_FANE_F(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 5U)
+#define MPC55XX_IRQ_FLEXRAY_RBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 6U)
+#define MPC55XX_IRQ_FLEXRAY_TBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 7U)
 
 /* Checks */
 #define MPC55XX_IRQ_IS_VALID(v) \
@@ -171,9 +299,9 @@ rtems_status_code mpc55xx_intc_clear_software_irq(rtems_vector_number vector);
  * @{
  */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
+#define BSP_INTERRUPT_VECTOR_MIN MPC55XX_IRQ_MIN
 
-#define BSP_INTERRUPT_VECTOR_MAX 328
+#define BSP_INTERRUPT_VECTOR_MAX MPC55XX_IRQ_MAX
 
 #define BSP_INTERRUPT_USE_INDEX_TABLE
 
@@ -185,6 +313,10 @@ rtems_status_code mpc55xx_intc_clear_software_irq(rtems_vector_number vector);
 #endif
 
 /** @} */
+
+/* Legacy API */
+#define MPC55XX_IRQ_EDMA_GET_REQUEST(ch) MPC55XX_IRQ_EDMA(ch)
+#define MPC55XX_IRQ_EMIOS_GET_REQUEST(ch) MPC55XX_IRQ_EMIOS(ch)
 
 #ifdef __cplusplus
 };

@@ -7,36 +7,41 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #include <libcpu/powerpc-utility.h>
 #include <mpc55xx/reg-defs.h>
 
-.section ".text"
+.section ".bsp_start_text", "ax"
 
 /* Optimized flash configurations (Table 13-15 [MPC5567 Microcontroller Reference Manual]) */
 .equ FLASH_SETTINGS_RESET, 0xff00
 .equ FLASH_SETTINGS_82, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_1 | FLASH_BUICR_RWSC_1 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_3 | FLASH_BUICR_IPFEN_3 | FLASH_BUICR_PFLIM_6 | FLASH_BUICR_BFEN
 .equ FLASH_SETTINGS_102, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_1 | FLASH_BUICR_RWSC_2 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_3 | FLASH_BUICR_IPFEN_3 | FLASH_BUICR_PFLIM_6 | FLASH_BUICR_BFEN
 .equ FLASH_SETTINGS_132, FLASH_BUICR_CPU_PREFTCH | FLASH_BUICR_APC_2 | FLASH_BUICR_RWSC_3 | FLASH_BUICR_WWSC_1 | FLASH_BUICR_DPFEN_3 | FLASH_BUICR_IPFEN_3 | FLASH_BUICR_PFLIM_6 | FLASH_BUICR_BFEN
+.equ FLASH_SETTINGS_264, 0x01716B15
 
 /**
- * @fn void mpc55xx_flash_config()
+ * @fn void mpc55xx_flash_init()
  * @brief Optimized flash configuration.
  * @warning Code will be copied and executed on the stack.  The stack pointer
  * will not be updated, since this function has to work before memory
  * initialization.
  */
-GLOBAL_FUNCTION mpc55xx_flash_config
+GLOBAL_FUNCTION mpc55xx_flash_init
 	mflr r31
 
 	/* Flash settings dependent on system clock */
@@ -50,6 +55,9 @@ GLOBAL_FUNCTION mpc55xx_flash_config
 	LWI r4, 132000000
 	cmpw r3, r4
 	ble clock_132
+	LWI r4, 264000000
+	cmpw r3, r4
+	ble clock_264
 	LWI r30, FLASH_SETTINGS_RESET
 	b settings_done
 clock_82:
@@ -60,6 +68,9 @@ clock_102:
 	b settings_done
 clock_132:
 	LWI r30, FLASH_SETTINGS_132
+	b settings_done
+clock_264:
+	LWI r30, FLASH_SETTINGS_264
 	b settings_done
 settings_done:
 

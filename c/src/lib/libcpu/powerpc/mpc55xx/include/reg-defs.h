@@ -7,15 +7,19 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #ifndef LIBCPU_POWERPC_MPC55XX_REG_DEFS_H
@@ -47,9 +51,12 @@
 
 #define FMPLL_SYNCR 0xC3F80000
 #define FMPLL_SYNSR 0xC3F80004
+#define FMPLL_ESYNCR1 0XC3F80008
+#define FMPLL_ESYNCR2 0XC3F8000C
 #define FLASH_BIUCR 0xC3F8801C
 #define SIU_ECCR 0xC3F90984
 #define SIU_SRCR 0xC3F90010
+#define SIU_SYSDIV 0xC3F909A0
 
 #endif /*((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))*/
 /*

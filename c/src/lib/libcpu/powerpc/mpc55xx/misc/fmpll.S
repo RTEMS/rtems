@@ -7,22 +7,32 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #include <libcpu/powerpc-utility.h>
 #include <mpc55xx/reg-defs.h>
 #include <bspopts.h>
+
+#define FMPLL_IS_MPC551X (5510 <= MPC55XX_CHIP_TYPE && MPC55XX_CHIP_TYPE <= 5517)
+
+#define FMPLL_IS_MPC5674 (MPC55XX_CHIP_TYPE == 5674)
+
+#define FMPLL_HAS_ENHANCED_FMPLL (FMPLL_IS_MPC551X || FMPLL_IS_MPC5674)
 	
-.section ".text"
+	.section ".bsp_start_text", "ax"
 
 /* Timeout for delay in clocks */
 .equ FMPLL_TIMEOUT, 6000
@@ -31,20 +41,18 @@
 	lwz r5, \setting
 	stw r5, 0(r4)
 	msync
-	bl mpc55xx_fmpll_wait_for_lock
+	bl fmpll_wait_for_lock
 .endm
 
 /**
- * @fn void mpc55xx_fmpll_reset_config()
+ * @fn void mpc55xx_fmpll_init()
  * @brief Configure FMPLL after reset.
- *
- * Sets the system clock from 12 MHz in two steps up to 128 MHz.
  */
-GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
+GLOBAL_FUNCTION mpc55xx_fmpll_init
 	/* Save link register */
 	mflr r9
 
-#if ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
+#if FMPLL_HAS_ENHANCED_FMPLL
 	/*
 	 * for MPC5510: pass in ptr to array with:
 	 * off 0:  temp setting for ESYNCR2
@@ -60,10 +68,11 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 	lwz r5, 8(r3)
 	stw r5, (FMPLL_ESYNCR1-FMPLL_ESYNCR2)(r4)	
 	msync
-	bl mpc55xx_fmpll_wait_for_lock
+	bl fmpll_wait_for_lock
 
 	DO_SETTING 4(r3)
 
+#if FMPLL_IS_MPC551X
 	/*
 	 * switch to PLL clock in SIU
 	 */
@@ -74,7 +83,8 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 	LWI r6, SIU_SYSCLK_SYSCLKSEL_PLL
 	or  r5, r5, r6
 	stw r5, 0(r4)
-#else
+#endif /* FMPLL_IS_MPC551X */
+#else /* !FMPLL_HAS_ENHANCED_FMPLL */
 	/*
 	 * for MPC5566: pass in ptr to array with:
 	 * off 0:  temp setting for SYNCR
@@ -95,19 +105,13 @@ GLOBAL_FUNCTION mpc55xx_fmpll_reset_config
 	LWI r6, ~FMPLL_SYNCR_LOCRE & ~FMPLL_SYNCR_LOLRE
 	and r5, r5, r6
 	stw r5, 0(r4)
-#endif
+#endif /* !FMPLL_HAS_ENHANCED_FMPLL */
 
 	/* Restore link register and return */
 	mtlr r9
 	blr
 
-/**
- * @fn void mpc55xx_fmpll_wait_for_lock()
- * @brief Wait for FMPLL lock.
- * @warning If the lock cannot be obtained within some clock cycles a software
- * system reset will be initiated.
- */
-GLOBAL_FUNCTION mpc55xx_fmpll_wait_for_lock
+fmpll_wait_for_lock:
 	LWI r6, FMPLL_TIMEOUT
 	mtctr r6
 
@@ -126,12 +130,14 @@ fmpll_continue:
 
 	blr
 
+	.section ".text", "aw"
+
 /**
  * @fn int mpc55xx_get_system_clock()
  * @brief Returns the system clock.
  */
 GLOBAL_FUNCTION mpc55xx_get_system_clock
-#if ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
+#if FMPLL_HAS_ENHANCED_FMPLL
 	LA r4, FMPLL_ESYNCR1
 	lwz r3, 0(r4)
 	/* EPREDIV */
@@ -152,8 +158,7 @@ GLOBAL_FUNCTION mpc55xx_get_system_clock
 	divw r3, r8, r5  /* REF_CLOCK/PREDIV */
 	mullw r3, r6, r3 /* REF_CLOCK/PREDIV*MFD */
 	divw r3, r3, r7  /* REF_CLOCK/PREDIV*MFD/RFD */
-	
-#else
+#else /* !FMPLL_HAS_ENHANCED_FMPLL */
 	LA r4, FMPLL_SYNCR
 	lwz r3, 0(r4)
 
@@ -172,7 +177,7 @@ GLOBAL_FUNCTION mpc55xx_get_system_clock
 	mullw r6, r6, r8
 	sraw r6, r6, r7
 	divw r3, r6, r5
-#endif
+#endif /* !FMPLL_HAS_ENHANCED_FMPLL */
 
 	blr
 

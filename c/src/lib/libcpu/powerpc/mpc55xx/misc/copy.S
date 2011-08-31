@@ -21,7 +21,7 @@
 #include <libcpu/powerpc-utility.h>
 #include <bspopts.h>
 
-.section ".text"
+	.section ".bsp_start_text", "ax"
 
 /**
  * @fn int mpc55xx_copy_8( const void *src, void *dest, size_t n)

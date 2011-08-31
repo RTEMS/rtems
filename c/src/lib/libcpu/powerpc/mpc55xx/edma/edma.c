@@ -22,258 +22,288 @@
 #include <mpc55xx/edma.h>
 #include <mpc55xx/mpc55xx.h>
 
+#include <assert.h>
 #include <string.h>
 
 #include <bsp/irq.h>
 
-#define RTEMS_STATUS_CHECKS_USE_PRINTK
+#if MPC55XX_CHIP_TYPE / 10 == 551
+  #define EDMA_CHANNEL_COUNT 16U
+#elif MPC55XX_CHIP_TYPE / 10 == 567
+  #define EDMA_CHANNEL_COUNT 96U
+#else
+  #define EDMA_CHANNEL_COUNT 64U
+#endif
 
-#include <rtems/status-checks.h>
+#define EDMA_CHANNELS_PER_GROUP 32U
 
-#if   ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517))
-#define MPC55XX_EDMA_CHANNEL_COUNT 16U
-#else /* ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517)) */
-#define MPC55XX_EDMA_CHANNEL_COUNT 64U
-#endif /* ((MPC55XX_CHIP_TYPE >= 5510) && (MPC55XX_CHIP_TYPE <= 5517)) */
+#define EDMA_CHANNELS_PER_MODULE 64U
 
-#define MPC55XX_EDMA_INVALID_CHANNEL MPC55XX_EDMA_CHANNEL_COUNT
+#define EDMA_GROUP_COUNT ((EDMA_CHANNEL_COUNT + 31U) / 32U)
 
-#define MPC55XX_EDMA_IS_CHANNEL_INVALID( i) ((unsigned) (i) >= MPC55XX_EDMA_CHANNEL_COUNT)
+#define EDMA_MODULE_COUNT ((EDMA_CHANNEL_COUNT + 63U) / 64U)
 
-#define MPC55XX_EDMA_IS_CHANNEL_VALID( i) ((unsigned) (i) < MPC55XX_EDMA_CHANNEL_COUNT)
+#define EDMA_INVALID_CHANNEL EDMA_CHANNEL_COUNT
 
-#define MPC55XX_EDMA_IRQ_PRIORITY MPC55XX_INTC_DEFAULT_PRIORITY
+#define EDMA_IS_CHANNEL_INVALID(i) ((unsigned) (i) >= EDMA_CHANNEL_COUNT)
 
-#define MPC55XX_EDMA_CHANNEL_FLAG( channel) ((uint64_t) 1 << (channel))
+#define EDMA_IS_CHANNEL_VALID(i) ((unsigned) (i) < EDMA_CHANNEL_COUNT)
 
-static uint64_t mpc55xx_edma_channel_occupation = 0;
+#define EDMA_GROUP_INDEX(channel) ((channel) / EDMA_CHANNELS_PER_GROUP)
 
-static rtems_chain_control mpc55xx_edma_channel_chain;
+#define EDMA_GROUP_BIT(channel) (1U << ((channel) % EDMA_CHANNELS_PER_GROUP))
 
-static void mpc55xx_edma_interrupt_handler( void *arg)
+#define EDMA_MODULE_INDEX(channel) ((channel) / EDMA_CHANNELS_PER_MODULE)
+
+#define EDMA_MODULE_BIT(channel) (1U << ((channel) % EDMA_CHANNELS_PER_MODULE))
+
+static uint32_t edma_channel_occupation [EDMA_GROUP_COUNT];
+
+static RTEMS_CHAIN_DEFINE_EMPTY(edma_channel_chain);
+
+volatile struct EDMA_tag *edma_get_regs_by_channel(unsigned channel)
 {
-	mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) arg;
-
-#ifdef DEBUG
-	uint32_t citer = EDMA.TCD [e->channel].CITERE_LINK ? EDMA.TCD [e->channel].CITER & EDMA_TCD_BITER_LINKED_MASK : EDMA.TCD [e->channel].CITER;
-	RTEMS_DEBUG_PRINT( "channel %i (CITER = %i)\n", e->channel, citer);
-#endif /* DEBUG */
-
-	/* Clear interrupt */
-	EDMA.CIRQR.R = (uint8_t) e->channel;
-
-	/* Notify user */
-	e->done( e, 0);
+#if EDMA_MODULE_COUNT == 1
+  return &EDMA;
+#elif EDMA_MODULE_COUNT == 2
+  return channel < EDMA_CHANNELS_PER_MODULE ? &EDMA_A : &EDMA_B;
+#else
+  #error "unsupported module count"
+#endif
 }
 
-static void mpc55xx_edma_interrupt_error_handler( void *arg)
+volatile struct EDMA_tag *edma_get_regs_by_module(unsigned module)
 {
-	rtems_chain_control *chain = &mpc55xx_edma_channel_chain;
-	rtems_chain_node *node = rtems_chain_first( chain );
-	unsigned i = 0;
-	uint64_t error_status = EDMA.ESR.R;
-	uint64_t error_channels = ((uint64_t) EDMA.ERH.R << 32) | EDMA.ERL.R;
-	uint64_t error_channels_update = 0;
-
-	RTEMS_DEBUG_PRINT( "error channels: %08x %08x\n", (unsigned) (error_channels >> 32), (unsigned) error_channels);
-
-	/* Mark all channels that are linked to a channel with errors */
-	do {
-		error_channels_update = 0;
-
-		for (i = 0; i < MPC55XX_EDMA_CHANNEL_COUNT; ++i) {
-			uint64_t channel_flags = 0;
-			unsigned minor_link = i;
-			unsigned major_link = i;
-
-			/* Check if we have linked channels */
-			if (EDMA.TCD [i].BMF.B.BITERE_LINK) {
-				minor_link = EDMA_TCD_BITER_LINK( i);
-			}
-			if (EDMA.TCD [i].BMF.B.MAJORE_LINK) {
-				major_link = EDMA.TCD [i].BMF.B.MAJORLINKCH;
-			}
-
-			/* Set flags related to this channel */
-			channel_flags = MPC55XX_EDMA_CHANNEL_FLAG( i) | MPC55XX_EDMA_CHANNEL_FLAG( minor_link) | MPC55XX_EDMA_CHANNEL_FLAG( major_link);
-
-			/* Any errors in these channels? */
-			if ( error_channels & channel_flags ) {
-				/* Get new error channels */
-				uint64_t update = (error_channels & channel_flags) ^ channel_flags;
-
-				/* Update error channels */
-				error_channels |= channel_flags;
-
-				/* Contribute to the update of this round */
-				error_channels_update |=  update;
-			}
-		}
-	} while (error_channels_update != 0);
-
-	RTEMS_DEBUG_PRINT( "error channels (all): %08x %08x\n", (unsigned) (error_channels >> 32), (unsigned) error_channels);
-
-	/* Process the channels related to errors */
-	while (!rtems_chain_is_tail( chain, node)) {
-		mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) node;
-
-		if ( error_channels & MPC55XX_EDMA_CHANNEL_FLAG( e->channel)) {
-			mpc55xx_edma_enable_hardware_requests( e->channel, false);
-
-			/* Notify user */
-			e->done( e, error_status);
-		}
-
-		node = node->next;
-	}
-
-	/* Clear the error interrupt requests */
-	for (i = 0; i < MPC55XX_EDMA_CHANNEL_COUNT; ++i) {
-		if ( error_channels & MPC55XX_EDMA_CHANNEL_FLAG( i)) {
-			EDMA.CER.R = (uint8_t) i;
-		}
-	}
+#if EDMA_MODULE_COUNT == 1
+  return &EDMA;
+#elif EDMA_MODULE_COUNT == 2
+  return module == 0 ? &EDMA_A : &EDMA_B;
+#else
+  #error "unsupported module count"
+#endif
 }
 
-void mpc55xx_edma_enable_hardware_requests( unsigned channel, bool enable)
+static uint32_t edma_bit_array_set(unsigned channel, uint32_t *bit_array)
 {
-	if (MPC55XX_EDMA_IS_CHANNEL_VALID( channel)) {
-		if (enable) {
-			EDMA.SERQR.R = (uint8_t) channel;
-		} else {
-			EDMA.CERQR.R = (uint8_t) channel;
-		}
-	} else {
-		RTEMS_SYSLOG_ERROR( "invalid channel number\n");
-	}
+  unsigned array = channel / 32;
+  uint32_t bit = 1U << (channel % 32);
+  uint32_t previous = bit_array [array];
+
+  bit_array [array] = previous | bit;
+
+  return previous;
 }
 
-void mpc55xx_edma_enable_error_interrupts( unsigned channel, bool enable)
+static uint32_t edma_bit_array_clear(unsigned channel, uint32_t *bit_array)
 {
-	if (MPC55XX_EDMA_IS_CHANNEL_VALID( channel)) {
-		if (enable) {
-			EDMA.SEEIR.R = (uint8_t) channel;
-		} else {
-			EDMA.CEEIR.R = (uint8_t) channel;
-		}
-	} else {
-		RTEMS_SYSLOG_ERROR( "invalid channel number\n");
-	}
+  unsigned array = channel / 32;
+  uint32_t bit = 1U << (channel % 32);
+  uint32_t previous = bit_array [array];
+
+  bit_array [array] = previous & ~bit;
+
+  return previous;
 }
 
-rtems_status_code mpc55xx_edma_init(void)
+static void edma_interrupt_handler(void *arg)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
+  mpc55xx_edma_channel_entry *e = arg;
+  unsigned channel = e->channel;
+  volatile struct EDMA_tag *edma = edma_get_regs_by_channel(channel);
 
-	/* Initialize channel chain */
-	rtems_chain_initialize_empty( &mpc55xx_edma_channel_chain);
+  edma->CIRQR.R = (uint8_t) channel;
 
-	/* Arbitration mode: round robin */
-	EDMA.CR.B.ERCA = 1;
-	EDMA.CR.B.ERGA = 1;
-
-	/* Clear TCDs */
-	memset( (void *)&EDMA.TCD [0], 0, 
-		MPC55XX_EDMA_CHANNEL_COUNT * sizeof( EDMA.TCD[0]));
-
-	/* Error interrupt handlers */
-	sc = mpc55xx_interrupt_handler_install(
-		MPC55XX_IRQ_EDMA_ERROR_LOW,
-		"eDMA Error (Low)",
-		RTEMS_INTERRUPT_UNIQUE,
-		MPC55XX_EDMA_IRQ_PRIORITY,
-		mpc55xx_edma_interrupt_error_handler,
-		NULL
-	);
-	RTEMS_CHECK_SC( sc, "install low error interrupt handler");
-
-#if defined(MPC55XX_IRQ_EDMA_ERROR_HIGH)
-	sc = mpc55xx_interrupt_handler_install(
-		MPC55XX_IRQ_EDMA_ERROR_HIGH,
-		"eDMA Error (High)",
-		RTEMS_INTERRUPT_UNIQUE,
-		MPC55XX_EDMA_IRQ_PRIORITY,
-		mpc55xx_edma_interrupt_error_handler,
-		NULL
-	);
-	RTEMS_CHECK_SC( sc, "install high error interrupt handler");
-#endif /* defined(MPC55XX_IRQ_EDMA_ERROR_HIGH) */
-
-	return RTEMS_SUCCESSFUL;
+  e->done(e, 0);
 }
 
-rtems_status_code mpc55xx_edma_obtain_channel( mpc55xx_edma_channel_entry *e)
+static void edma_interrupt_error_handler(void *arg)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	rtems_interrupt_level level;
-	uint64_t channel_occupation = 0;
+  rtems_chain_control *chain = &edma_channel_chain;
+  rtems_chain_node *node = rtems_chain_first(chain);
+  uint32_t error_channels [] = {
+#if EDMA_GROUP_COUNT >= 1
+    EDMA.ERL.R
+#endif
+#if EDMA_GROUP_COUNT >= 2
+    , EDMA.ERH.R
+#endif
+#if EDMA_GROUP_COUNT >= 3
+    , EDMA_B.ERL.R
+#endif
+  };
+  uint32_t error_status [] = {
+#if EDMA_GROUP_COUNT >= 1
+    EDMA.ESR.R
+#endif
+#if EDMA_GROUP_COUNT >= 3
+    , EDMA_B.ESR.R
+#endif
+  };
 
-	if (MPC55XX_EDMA_IS_CHANNEL_INVALID( e->channel)) {
-		return RTEMS_INVALID_NUMBER;
-	}
+#if EDMA_GROUP_COUNT >= 1
+  EDMA.ERL.R = error_channels [0];
+#endif
+#if EDMA_GROUP_COUNT >= 2
+  EDMA.ERH.R = error_channels [1];
+#endif
+#if EDMA_GROUP_COUNT >= 3
+  EDMA_B.ERL.R = error_channels [2];
+#endif
 
-	/* Test and set channel occupation flag */
-	rtems_interrupt_disable( level);
-	channel_occupation = mpc55xx_edma_channel_occupation;
-	if ( (channel_occupation & MPC55XX_EDMA_CHANNEL_FLAG( e->channel)) == 0 ) {
-		mpc55xx_edma_channel_occupation = channel_occupation | MPC55XX_EDMA_CHANNEL_FLAG( e->channel);
-	}
-	rtems_interrupt_enable( level);
+  while (!rtems_chain_is_tail(chain, node)) {
+    mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) node;
+    unsigned channel = e->channel;
+    unsigned group_index = EDMA_GROUP_INDEX(channel);
+    unsigned group_bit = EDMA_GROUP_BIT(channel);
 
-	/* Check channel occupation flag */
-	if ( channel_occupation & MPC55XX_EDMA_CHANNEL_FLAG( e->channel)) {
-		return RTEMS_RESOURCE_IN_USE;
-	}
+    if ((error_channels [group_index] & group_bit) != 0) {
+      unsigned module_index = EDMA_MODULE_INDEX(channel);
 
-	/* Interrupt handler */
-	sc = mpc55xx_interrupt_handler_install(
-		MPC55XX_IRQ_EDMA_GET_REQUEST( e->channel),
-		"eDMA Channel",
-		RTEMS_INTERRUPT_SHARED,
-		MPC55XX_EDMA_IRQ_PRIORITY,
-		mpc55xx_edma_interrupt_handler,
-		e
-	);
-	RTEMS_CHECK_SC( sc, "install channel interrupt handler");
+      e->done(e, error_status [module_index]);
+    }
 
-	/* Enable error interrupts */
-	mpc55xx_edma_enable_error_interrupts( e->channel, true);
-
-	/* Prepend channel entry to channel list */
-	rtems_chain_prepend( &mpc55xx_edma_channel_chain, &e->node);
-
-	return RTEMS_SUCCESSFUL;
+    node = rtems_chain_next(node);
+  }
 }
 
-rtems_status_code mpc55xx_edma_release_channel( mpc55xx_edma_channel_entry *e)
+void mpc55xx_edma_enable_hardware_requests(unsigned channel, bool enable)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	rtems_interrupt_level level;
+  volatile struct EDMA_tag *edma = edma_get_regs_by_channel(channel);
 
-	/* Clear channel occupation flag */
-	rtems_interrupt_disable( level);
-	mpc55xx_edma_channel_occupation &= ~MPC55XX_EDMA_CHANNEL_FLAG( e->channel);
-	rtems_interrupt_enable( level);
+  assert(EDMA_IS_CHANNEL_VALID(channel));
 
-	/* Disable hardware requests */
-	mpc55xx_edma_enable_hardware_requests( e->channel, false);
+  if (enable) {
+    edma->SERQR.R = (uint8_t) channel;
+  } else {
+    edma->CERQR.R = (uint8_t) channel;
+  }
+}
 
-	/* Disable error interrupts */
-	mpc55xx_edma_enable_error_interrupts( e->channel, false);
+void mpc55xx_edma_enable_error_interrupts(unsigned channel, bool enable)
+{
+  volatile struct EDMA_tag *edma = edma_get_regs_by_channel(channel);
 
-	/* Extract channel entry from channel chain */
-	rtems_chain_extract( &e->node);
+  assert(EDMA_IS_CHANNEL_VALID(channel));
 
-	/* Remove interrupt handler */
-	sc = rtems_interrupt_handler_remove(
-		MPC55XX_IRQ_EDMA_GET_REQUEST( e->channel),
-		mpc55xx_edma_interrupt_handler,
-		e
-	);
-	RTEMS_CHECK_SC( sc, "remove channel interrupt handler");
+  if (enable) {
+    edma->SEEIR.R = (uint8_t) channel;
+  } else {
+    edma->CEEIR.R = (uint8_t) channel;
+  }
+}
 
-	/* Notify user */
-	e->done( e, 0);
+void mpc55xx_edma_init(void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  unsigned channel_remaining = EDMA_CHANNEL_COUNT;
+  unsigned module = 0;
+  unsigned group = 0;
 
-	return RTEMS_SUCCESSFUL;
+  for (module = 0; module < EDMA_MODULE_COUNT; ++module) {
+    volatile struct EDMA_tag *edma = edma_get_regs_by_module(module);
+    unsigned channel_count = channel_remaining < EDMA_CHANNELS_PER_MODULE ?
+      channel_remaining : EDMA_CHANNELS_PER_MODULE;
+    unsigned channel = 0;
+
+    channel_remaining -= channel_count;
+
+    /* Arbitration mode: group round robin, channel fixed */
+    edma->CR.B.ERGA = 1;
+    edma->CR.B.ERCA = 0;
+    for (channel = 0; channel < channel_count; ++channel) {
+      edma->CPR [channel].R = 0x80U | (channel & 0xfU);
+    }
+
+    /* Clear TCDs */
+    memset((void *) &edma->TCD [0], 0, channel_count * sizeof(edma->TCD [0]));
+  }
+
+  for (group = 0; group < EDMA_GROUP_COUNT; ++group) {
+    sc = mpc55xx_interrupt_handler_install(
+      MPC55XX_IRQ_EDMA_ERROR(group),
+      "eDMA Error",
+      RTEMS_INTERRUPT_UNIQUE,
+      MPC55XX_INTC_DEFAULT_PRIORITY,
+      edma_interrupt_error_handler,
+      NULL
+    );
+    if (sc != RTEMS_SUCCESSFUL) {
+      /* FIXME */
+      rtems_fatal_error_occurred(0xdeadbeef);
+    }
+  }
+}
+
+rtems_status_code mpc55xx_edma_obtain_channel(
+  mpc55xx_edma_channel_entry *e,
+  unsigned irq_priority
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_interrupt_level level;
+  unsigned channel = e->channel;
+  uint32_t channel_occupation = 0;
+
+  if (EDMA_IS_CHANNEL_INVALID(channel)) {
+    return RTEMS_INVALID_ID;
+  }
+
+  rtems_interrupt_disable(level);
+  channel_occupation = edma_bit_array_set(
+    channel,
+    &edma_channel_occupation [0]
+  );
+  rtems_interrupt_enable(level);
+
+  if ((channel_occupation & EDMA_GROUP_BIT(channel))) {
+    return RTEMS_RESOURCE_IN_USE;
+  }
+
+  sc = mpc55xx_interrupt_handler_install(
+    MPC55XX_IRQ_EDMA(channel),
+    "eDMA Channel",
+    RTEMS_INTERRUPT_SHARED,
+    irq_priority,
+    edma_interrupt_handler,
+    e
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    rtems_interrupt_disable(level);
+    edma_bit_array_clear(channel, &edma_channel_occupation [0]);
+    rtems_interrupt_enable(level);
+
+    return RTEMS_IO_ERROR;
+  }
+
+  rtems_chain_prepend(&edma_channel_chain, &e->node);
+  mpc55xx_edma_enable_error_interrupts(channel, true);
+
+  return RTEMS_SUCCESSFUL;
+}
+
+void mpc55xx_edma_release_channel(mpc55xx_edma_channel_entry *e)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_interrupt_level level;
+  unsigned channel = e->channel;
+
+  rtems_interrupt_disable(level);
+  edma_bit_array_clear(channel, &edma_channel_occupation [0]);
+  rtems_interrupt_enable(level);
+
+  mpc55xx_edma_enable_hardware_requests(channel, false);
+  mpc55xx_edma_enable_error_interrupts(channel, false);
+  rtems_chain_extract(&e->node);
+
+  sc = rtems_interrupt_handler_remove(
+    MPC55XX_IRQ_EDMA(e->channel),
+    edma_interrupt_handler,
+    e
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    /* FIXME */
+    rtems_fatal_error_occurred(0xdeadbeef);
+  }
+
+  e->done(e, 0);
 }

@@ -1,5 +1,24 @@
 2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* mpc55xx/include/fsl-mpc551x.h, mpc55xx/include/fsl-mpc555x.h,
+	mpc55xx/include/fsl-mpc556x.h, mpc55xx/include/fsl-mpc567x.h,
+	mpc55xx/include/regs-edma.h, mpc55xx/include/regs-mmu.h: New files.
+	* Makefile.am, M preinstall.am: Reflect changes above.
+	* mpc55xx/dspi/dspi.c: Update due to API changes.
+	* mpc55xx/include/edma.h, mpc55xx/edma/edma.c: Rework to support
+	multiple eDMA modules.  Removed complex error interrupt handling.
+	* mpc55xx/include/esci.h, mpc55xx/esci/esci.c: Support interrupt mode
+	and printk().  Use configure options.
+	* mpc55xx/include/irq.h: More defines.  API changes.
+	* mpc55xx/include/mpc55xx.h: API changes.
+	* mpc55xx/include/reg-defs.h: Added register defines.
+	* mpc55xx/include/regs.h: Use new register header files.
+	* mpc55xx/include/siu.h: Fixed includes.
+	* mpc55xx/misc/fmpll.S, mpc55xx/misc/copy.S, mpc55xx/misc/flash.S:
+	Changed sections.  API changes. Support MPC5674F.
+
+2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* new-exceptions/bspsupport/ppc_exc_categories.c,
 	shared/include/cpuIdent.c, shared/include/cpuIdent.h: Support e200z7.
 
