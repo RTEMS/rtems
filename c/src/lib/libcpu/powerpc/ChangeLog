@@ -1,5 +1,9 @@
 2011-09-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* mpc55xx/include/fsl-mpc551x.h: Use legacy register naming.
+
+2011-09-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* mpc55xx/include/fsl-mpc551x.h, mpc55xx/include/fsl-mpc556x.h,
 	mpc55xx/include/fsl-mpc567x.h: Added missing FLASH types.
 

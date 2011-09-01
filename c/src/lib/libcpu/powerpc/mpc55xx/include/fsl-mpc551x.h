@@ -1072,7 +1072,7 @@ extern "C" {
                   uint32_t:23;
                 uint32_t HBLOCK:8;
             } B;
-        } HBL;
+        } HLR; /* Legacy naming - refer to HBL in Reference Manual */
 
         union SLMLR_tag {       /* Secondary Low/Mid Block Locking Register */
             uint32_t R;
@@ -1085,9 +1085,9 @@ extern "C" {
                   uint32_t:6;
                 uint32_t SLLOCK:10;
             } B;
-        } SLL;
+        } SLMLR; /* Legacy naming - refer to SLL in Reference Manual */
 
-        union {                 /* LMS Register */
+        union {                 /* Low/Mid Address Space Block Select Register */
             uint32_t R;
             struct {
                 uint32_t:14;
@@ -1095,24 +1095,24 @@ extern "C" {
                   uint32_t:6;
                 uint32_t LSEL:10;
             } B;
-        } LMS;
+        } LMSR; /* Legacy naming - refer to LMS in Reference Manual */
 
-        union {
+        union {                 /* High Address Space Block Select Register */
             uint32_t R;
             struct {
                 uint32_t:28;
                 uint32_t HBSEL:4;
             } B;
-        } HBS;
+        } HSR; /* Legacy naming - refer to HBS in Reference Manual */
 
-        union {
+        union {                 /* Address Register */
             uint32_t R;
             struct {
                 uint32_t:10;
                 uint32_t ADDR:19;
                   uint32_t:3;
             } B;
-        } ADR;
+        } AR; /* Legacy naming - refer to ADR in Reference Manual */
 
         union {                 /* Platform Flash Configuration Register for Port 0 */
             uint32_t R;
