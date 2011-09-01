@@ -35,6 +35,10 @@ $(PROJECT_INCLUDE)/rtems/score/nios2.h: rtems/score/nios2.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/nios2.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/nios2.h
 
+$(PROJECT_INCLUDE)/rtems/score/nios2-utility.h: rtems/score/nios2-utility.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/nios2-utility.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/nios2-utility.h
+
 $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h: rtems/score/cpu_asm.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h

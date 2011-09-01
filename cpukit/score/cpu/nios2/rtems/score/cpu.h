@@ -41,7 +41,7 @@ extern "C" {
 
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
-#define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
+#define CPU_PROVIDES_ISR_IS_IN_PROGRESS TRUE
 
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
 
@@ -86,9 +86,20 @@ extern "C" {
 
 #define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
 
-#define CPU_STACK_ALIGNMENT CPU_ALIGNMENT
+/*
+ * Alignment value according to "Nios II Processor Reference" chapter 7
+ * "Application Binary Interface" section "Stacks".
+ */
+#define CPU_STACK_ALIGNMENT 4
 
-#define CPU_MODES_INTERRUPT_MASK 0x1
+/*
+ * A Nios II configuration with an external interrupt controller (EIC) supports
+ * up to 64 interrupt levels.  A Nios II configuration with an internal
+ * interrupt controller (IIC) has only two interrupt levels (enabled and
+ * disabled).  The _CPU_ISR_Get_level() and _CPU_ISR_Set_level() functions will
+ * take care about configuration specific mappings.
+ */
+#define CPU_MODES_INTERRUPT_MASK 0x3f
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
@@ -106,6 +117,11 @@ extern "C" {
  *
  * There is no need to save the global pointer (gp) since it is a system wide
  * constant and set-up with the C runtime environment.
+ *
+ * The @a thread_dispatch_disabled field is used for the external interrupt
+ * controller (EIC) support.
+ *
+ * @see _Nios2_Thread_dispatch_disabled
  */
 typedef struct {
   uint32_t r16;
@@ -117,9 +133,10 @@ typedef struct {
   uint32_t r22;
   uint32_t r23;
   uint32_t fp;
+  uint32_t status;
   uint32_t sp;
   uint32_t ra;
-  uint32_t status;
+  uint32_t thread_dispatch_disabled;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
@@ -182,118 +199,123 @@ typedef struct {
   uint32_t ipending;
 } CPU_Exception_frame;
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-#define _CPU_Initialize_vectors() \
-  memset(_ISR_Vector_table, 0, sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS)
-#else
-#define _CPU_Initialize_vectors()
-#endif
+void _CPU_Initialize_vectors( void );
 
 /**
- *  @brief Read the ienable register.
- */
-#define _CPU_read_ienable( value ) \
-    do { value = __builtin_rdctl(3); } while (0)
-
-/**
- *  @brief Write the ienable register.
- */
-#define _CPU_write_ienable( value ) \
-    do { __builtin_wrctl(3, value); } while (0)
-
-/**
- *  @brief Read the ipending register.
- */
-#define _CPU_read_ipending( value ) \
-    do { value = __builtin_rdctl(4); } while (0)
-
-/**
- *  Disable all interrupts for a critical section.  The previous
- *  level is returned in _level.
+ * @brief Macro to disable interrupts.
+ *
+ * The processor status before disabling the interrupts will be stored in
+ * @a _isr_cookie.  This value will be used in _CPU_ISR_Flash() and
+ * _CPU_ISR_Enable().
+ *
+ * The global symbol _Nios2_ISR_Status_mask will be used to clear the bits in
+ * the status register representing the interrupt level.  The global symbol
+ * _Nios2_ISR_Status_bits will be used to set the bits representing an
+ * interrupt level that disables interrupts.  Both global symbols must be
+ * provided by the board support package.
+ *
+ * In case the Nios II uses the internal interrupt controller (IIC), then only
+ * the PIE status bit is used.
+ *
+ * In case the Nios II uses the external interrupt controller (EIC), then the
+ * RSIE status bit or the IL status field is used depending on the interrupt
+ * handling variant and the shadow register usage.
  */
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
-    _isr_cookie = __builtin_rdctl( 0 ); \
-    __builtin_wrctl( 0, 0 ); \
+    int _tmp; \
+    __asm__ volatile ( \
+      "rdctl %0, status\n" \
+      "movhi %1, %%hiadj(_Nios2_ISR_Status_mask)\n" \
+      "addi %1, %1, %%lo(_Nios2_ISR_Status_mask)\n" \
+      "and %1, %0, %1\n" \
+      "ori %1, %1, %%lo(_Nios2_ISR_Status_bits)\n" \
+      "wrctl status, %1" \
+      : "=&r" (_isr_cookie), "=&r" (_tmp) \
+    ); \
   } while ( 0 )
 
 /**
- *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
- *  This indicates the end of a critical section.  The parameter
- *  _level is not modified.
+ * @brief Macro to restore the processor status.
+ *
+ * The @a _isr_cookie must contain the processor status returned by
+ * _CPU_ISR_Disable().  The value is not modified.
  */
 #define _CPU_ISR_Enable( _isr_cookie ) \
-  do { \
-    __builtin_wrctl( 0, (int) _isr_cookie ); \
-  } while ( 0 )
+  __builtin_wrctl( 0, (int) _isr_cookie )
 
 /**
- *  This temporarily restores the interrupt to _level before immediately
- *  disabling them again.  This is used to divide long critical
- *  sections into two or more parts.  The parameter _level is not
- *  modified.
+ * @brief Macro to restore the processor status and disable the interrupts
+ * again.
+ *
+ * The @a _isr_cookie must contain the processor status returned by
+ * _CPU_ISR_Disable().  The value is not modified.
+ *
+ * This flash code is optimal for all Nios II configurations.  The rdctl does
+ * not flush the pipeline and has only a late result penalty.  The wrctl on the
+ * other hand leads to a pipeline flush.
  */
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
+    int _status = __builtin_rdctl( 0 ); \
     __builtin_wrctl( 0, (int) _isr_cookie ); \
-    __builtin_wrctl( 0, 0 ); \
+    __builtin_wrctl( 0, _status ); \
   } while ( 0 )
 
 /**
- *  Map interrupt level in task mode onto the hardware that the CPU
- *  actually provides.  Currently, interrupt levels which do not
- *  map onto the CPU in a straight fashion are undefined.
+ * @brief Sets the interrupt level for the executing thread.
+ *
+ * The valid values of @a new_level depend on the Nios II configuration.  A
+ * value of zero represents enabled interrupts in all configurations.
+ *
+ * @see _CPU_ISR_Get_level()
  */
-#define _CPU_ISR_Set_level( new_level )      \
-  _CPU_ISR_Enable( new_level == 0 ? 1 : 0 );
+void _CPU_ISR_Set_level( uint32_t new_level );
 
 /**
- *  @brief Obtain the Current Interrupt Disable Level
+ * @brief Returns the interrupt level of the executing thread.
  *
- *  This method is invoked to return the current interrupt disable level.
- *
- *  @return This method returns the current interrupt disable level.
+ * @retval 0 Interrupts are enabled.
+ * @retval otherwise The value depends on the Nios II configuration.  In case
+ * of an internal interrupt controller (IIC) the only valid value is one which
+ * indicates disabled interrupts.  In case of an external interrupt controller
+ * (EIC) there are two possibilities.  Firstly if the RSIE status bit is used
+ * to disable interrupts, then one is the only valid value indicating disabled
+ * interrupts.  Secondly if the IL status field is used to disable interrupts,
+ * then this value will be returned.  Interrupts are disabled at the maximum
+ * level specified by the _Nios2_ISR_Status_bits.
  */
 uint32_t _CPU_ISR_Get_level( void );
 
 /**
- *  Initialize the context to a state suitable for starting a
- *  task after a context restore operation.  Generally, this
- *  involves:
- *
+ * @brief Initializes the CPU context.
+ * 
+ * The following steps are performed:
  *  - setting a starting address
  *  - preparing the stack
  *  - preparing the stack and frame pointers
  *  - setting the proper interrupt level in the context
- *  - initializing the floating point context
  *
- * @param[in] the_context points to the context area
- * @param[in] stack_base is the low address of the allocated stack area
- * @param[in] size is the size of the stack area in bytes
+ * @param[in] context points to the context area
+ * @param[in] stack_area_begin is the low address of the allocated stack area
+ * @param[in] stack_area_size is the size of the stack area in bytes
  * @param[in] new_level is the interrupt level for the task
  * @param[in] entry_point is the task's entry point
- * @param[in] is_fp is set to TRUE if the task is a floating point task
- *
- *  @note  Implemented as a subroutine for the NIOS2 port.
+ * @param[in] is_fp is set to @c true if the task is a floating point task
  */
 void _CPU_Context_Initialize(
-  Context_Control  *the_context,
-  uint32_t         *stack_base,
-  uint32_t          size,
-  uint32_t          new_level,
-  void             *entry_point,
-  bool              is_fp
+  Context_Control *context,
+  void *stack_area_begin,
+  size_t stack_area_size,
+  uint32_t new_level,
+  void (*entry_point)( void ),
+  bool is_fp
 );
 
 #define _CPU_Context_Restart_self( _the_context ) \
   _CPU_Context_restore( (_the_context) );
 
-#define _CPU_Fatal_halt( _error ) \
-  do { \
-    __builtin_wrctl(0, 0); /* write 0 to status register (disable interrupts) */ \
-    __asm volatile ("mov et, %z0" : : "rM" (_error)); /* write error code to ET register */ \
-    for (;;); \
-  } while ( 0 )
+void _CPU_Fatal_halt( uint32_t _error ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 void _CPU_Initialize( void );
 

@@ -1,3 +1,19 @@
+2011-09-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpu.c, cpu_asm.S: Removed files.
+	* nios2-context-initialize.c, nios2-context-switch.S,
+	nios2-fatal-halt.c, nios2-initialize-vectors.c, nios2-initialize.c,
+	nios2-isr-get-level.c, nios2-isr-install-raw-handler.c,
+	nios2-isr-install-vector.c, nios2-isr-is-in-progress.c,
+	nios2-isr-set-level.c, nios2-thread-dispatch-disabled.c,
+	rtems/score/nios2-utility.h: New files.
+	* Makefile.am, preinstall.am: Reflect changes above.
+	* irq.c: Update due to API changes.
+	* rtems/score/cpu.h: New functions _CPU_Initialize_vectors(),
+	_CPU_ISR_Set_level(), and _CPU_Fatal_halt() (instead of macros).
+	Support for external interrupt controller (EIC).  Documentation
+	changes.
+
 2011-08-18	Chris Johns <chrisj@rtems.org>
 
 	* cpu.c: Fix the ISR get level for the IIC. Make

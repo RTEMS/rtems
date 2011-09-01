@@ -21,6 +21,7 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/nios2-utility.h>
 
 /*
  *  This routine provides the RTEMS interrupt management.
@@ -53,7 +54,7 @@ RTEMS_INLINE_ROUTINE void __IIC_Handler(void)
    * this is the case.
    */
 
-  _CPU_read_ipending (active);
+  active = _Nios2_Get_ctlreg_ipending();
 
   while (active)
   {
@@ -77,7 +78,7 @@ RTEMS_INLINE_ROUTINE void __IIC_Handler(void)
       ++vector;
     };
 
-    _CPU_read_ipending (active);
+    active = _Nios2_Get_ctlreg_ipending();
   }
   
 }
