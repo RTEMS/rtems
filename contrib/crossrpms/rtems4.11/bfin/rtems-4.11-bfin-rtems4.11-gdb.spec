@@ -59,7 +59,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
-%define build_sim --enable-sim
+%global build_sim --enable-sim
 
 # Whether to build against system readline
 # Default: yes
@@ -70,15 +70,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Can't build python Cdn-X
 %bcond_with python
 %else
-%if "%{gdb_version}" >= "7.3"
-# Python support is broken
-%bcond_with python
-%elseif "%{gdb_version}" >= "6.8.50"
 %bcond_without python
-%else
-# python is unsupported
-%bcond_with python
-%endif
 %endif
 %{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
 
@@ -93,9 +85,6 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
-
-
-
 
 BuildRequires:  rtems-4.11-bfin-rtems4.11-binutils
 BuildRequires:  texinfo
@@ -140,6 +129,7 @@ cd ..
     %{?with_system_readline:--with-system-readline} \
     --with-expat \
     %{?with_python:--with-python}%{!?with_python:--without-python} \
+    --with-gdb-datadir=%{_datadir}/bfin-rtems4.11-gdb \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
@@ -163,24 +153,22 @@ cd ..
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libbfin-rtems4.11-sim.a
 
-%if "%{gdb_version}" >= "7.0"
 # Bug in gdb-7.0, bogusly installs linux-only files
   somethinguseful=0
-  for f in ${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls/*.xml; do
+  for f in ${RPM_BUILD_ROOT}%{_datadir}/bfin-rtems4.11-gdb/syscalls/*.xml; do
     case $f in
     *linux.xml) rm -f $f;;
     *.xml) somethinguseful=1;;
     esac
   done
   if test $somethinguseful -eq 0; then
-    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls"
+    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/bfin-rtems4.11-gdb/syscalls"
   fi
-%endif
 
 %if "{gdb_version}" >= "7.3"
 %if ! %{with python}
 # gdb-7.3 doesn't honor --without-python correctly
-  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/gdb/python
+  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/bfin-rtems4.11-gdb/python
 %endif
 %endif
   cd ..
@@ -233,6 +221,7 @@ GNU gdb targetting bfin-rtems4.11.
 %defattr(-,root,root)
 %dir %{_prefix}
 %dir %{_prefix}/share
+%{?with_python:%{_datadir}/bfin-rtems4.11-gdb}
 
 %dir %{_mandir}
 %dir %{_mandir}/man1

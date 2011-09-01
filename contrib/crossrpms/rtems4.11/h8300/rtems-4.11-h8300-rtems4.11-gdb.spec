@@ -45,21 +45,21 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 7.2
-%define gdb_rpmvers %{expand:%(echo 7.2 | tr - _)} 
+%define gdb_version 7.3
+%define gdb_rpmvers %{expand:%(echo 7.3 | tr - _)} 
 
 Name:		rtems-4.11-h8300-rtems4.11-gdb
 Summary:	Gdb for target h8300-rtems4.11
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
-%define build_sim --enable-sim
+%global build_sim --enable-sim
 
 # Whether to build against system readline
 # Default: yes
@@ -70,15 +70,7 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Can't build python Cdn-X
 %bcond_with python
 %else
-%if "%{gdb_version}" >= "7.3"
-# Python support is broken
-%bcond_with python
-%elseif "%{gdb_version}" >= "6.8.50"
 %bcond_without python
-%else
-# python is unsupported
-%bcond_with python
-%endif
 %endif
 %{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
 
@@ -98,14 +90,15 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
-
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-
-
 Requires:	rtems-4.11-gdb-common
 
+%if "%{gdb_version}" == "7.3"
+Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.3a.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.3-rtems4.11-20110831.diff
+%endif
 %if "%{gdb_version}" == "7.2"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.2.tar.bz2
 Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.2-rtems4.11-20100907.diff
@@ -146,6 +139,7 @@ cd ..
     %{?with_system_readline:--with-system-readline} \
     --with-expat \
     %{?with_python:--with-python}%{!?with_python:--without-python} \
+    --with-gdb-datadir=%{_datadir}/h8300-rtems4.11-gdb \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
@@ -175,20 +169,24 @@ cd ..
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libh8300-rtems4.11-sim.a
 
-%if "%{gdb_version}" >= "7.0"
 # Bug in gdb-7.0, bogusly installs linux-only files
   somethinguseful=0
-  for f in ${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls/*.xml; do
+  for f in ${RPM_BUILD_ROOT}%{_datadir}/h8300-rtems4.11-gdb/syscalls/*.xml; do
     case $f in
     *linux.xml) rm -f $f;;
     *.xml) somethinguseful=1;;
     esac
   done
   if test $somethinguseful -eq 0; then
-    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls"
+    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/h8300-rtems4.11-gdb/syscalls"
   fi
-%endif
 
+%if "{gdb_version}" >= "7.3"
+%if ! %{with python}
+# gdb-7.3 doesn't honor --without-python correctly
+  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/h8300-rtems4.11-gdb/python
+%endif
+%endif
   cd ..
 
 # Extract %%__os_install_post into os_install_post~
@@ -239,6 +237,7 @@ GNU gdb targetting h8300-rtems4.11.
 %defattr(-,root,root)
 %dir %{_prefix}
 %dir %{_prefix}/share
+%{?with_python:%{_datadir}/h8300-rtems4.11-gdb}
 
 %dir %{_mandir}
 %dir %{_mandir}/man1
