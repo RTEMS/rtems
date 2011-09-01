@@ -12,7 +12,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
-%define build_sim --enable-sim
+%global build_sim --enable-sim
 
 # Whether to build against system readline
 # Default: yes
@@ -23,24 +23,16 @@ BuildRequires:  %{_host_rpmprefix}gcc
 # Can't build python Cdn-X
 %bcond_with python
 %else
-%if "%{gdb_version}" >= "7.3"
-# Python support is broken
-%bcond_with python
-%elseif "%{gdb_version}" >= "6.8.50"
 %bcond_without python
-%else
-# python is unsupported
-%bcond_with python
-%endif
 %endif
 %{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
 
 %if "@tool_target@" == "powerpc-rtems@rtems_api@"
 %if "%{_build}" != "%{_host}"
 # psim doesn't support Cdn-X
-%define build_sim --disable-sim
+%global build_sim --disable-sim
 %else
-%define build_sim --enable-sim --enable-sim-trace
+%global build_sim --enable-sim --enable-sim-trace
 %endif
 %endif
 %if "@tool_target@" == "sparc-rtems@rtems_api@"
@@ -85,18 +77,13 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
-
 %if %build_infos
 # Required for building the infos
 BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
-%endif
-
-%if %build_infos
-
 Requires:	@rpmprefix@gdb-common
-%endif
 
+%endif
 @SOURCES@
 
 %description

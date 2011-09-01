@@ -19,6 +19,7 @@
     %{?with_system_readline:--with-system-readline} \
     --with-expat \
     %{?with_python:--with-python}%{!?with_python:--without-python} \
+    --with-gdb-datadir=%{_datadir}/@tool_target@-gdb \
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
