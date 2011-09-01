@@ -1052,7 +1052,7 @@ extern "C" {
             } B;
         } MCR;
 
-        union {                 /* LML Register */
+        union LMLR_tag {        /* Low/Mid Address Space Block Locking Register */
             uint32_t R;
             struct {
                 uint32_t LME:1;
@@ -1063,9 +1063,9 @@ extern "C" {
                   uint32_t:6;
                 uint32_t LLOCK:10;
             } B;
-        } LML;
+        } LMLR; /* Legacy naming - refer to LML in Reference Manual */
 
-        union {                 /* HBL Register */
+        union HLR_tag {         /* High Address Space Block Locking Register */
             uint32_t R;
             struct {
                 uint32_t HBE:1;
@@ -1074,7 +1074,7 @@ extern "C" {
             } B;
         } HBL;
 
-        union {                 /* SLML Register */
+        union SLMLR_tag {       /* Secondary Low/Mid Block Locking Register */
             uint32_t R;
             struct {
                 uint32_t SLE:1;

@@ -568,7 +568,7 @@ extern "C" {
             } B;
         } MCR;
 
-        union {                 /* LML Register */
+        union LMLR_tag {        /* LML Register */
             uint32_t R;
             struct {
                 uint32_t LME:1;
@@ -579,7 +579,7 @@ extern "C" {
             } B;
         } LMLR;
 
-        union {                 /* HL Register */
+        union HLR_tag {         /* HL Register */
             uint32_t R;
             struct {
                 uint32_t HBE:1;
@@ -588,7 +588,7 @@ extern "C" {
             } B;
         } HLR;
 
-        union {                 /* SLML Register */
+        union SLMLR_tag {       /* SLML Register */
             uint32_t R;
             struct {
                 uint32_t SLE:1;
