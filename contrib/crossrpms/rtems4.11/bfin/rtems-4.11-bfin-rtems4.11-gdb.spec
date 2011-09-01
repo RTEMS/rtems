@@ -52,7 +52,7 @@ Name:		rtems-4.11-bfin-rtems4.11-gdb
 Summary:	Gdb for target bfin-rtems4.11
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -85,6 +85,11 @@ BuildRequires: %{_host_rpmprefix}expat-devel
 
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
+
+# Required for building the infos
+BuildRequires:	/sbin/install-info
+BuildRequires:	texinfo >= 4.2
+Requires:	rtems-4.11-gdb-common
 
 BuildRequires:  rtems-4.11-bfin-rtems4.11-binutils
 BuildRequires:  texinfo
@@ -135,6 +140,7 @@ cd ..
     --mandir=%{_mandir} --infodir=%{_infodir}
 
   make %{?_smp_mflags} all
+  make info
   cd ..
 
 %install
@@ -144,8 +150,13 @@ cd ..
   cd build
   make DESTDIR=$RPM_BUILD_ROOT install
 
-# Conflict with a native gdb's infos
-  rm -rf $RPM_BUILD_ROOT%{_infodir}
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+  touch $RPM_BUILD_ROOT%{_infodir}/dir
+
+# These come from other packages
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/bfd*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/configure*
+  rm -rf $RPM_BUILD_ROOT%{_infodir}/standards*
 
 # We don't ship host files
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libiberty*
@@ -229,4 +240,45 @@ GNU gdb targetting bfin-rtems4.11.
 
 %dir %{_bindir}
 %{_bindir}/bfin-rtems4.11-*
+
+# ==============================================================
+# rtems-4.11-gdb-common
+# ==============================================================
+%package -n rtems-4.11-gdb-common
+Summary:      Base package for RTEMS gdbs
+Group: Development/Tools
+Requires(post):		/sbin/install-info
+Requires(preun):	/sbin/install-info
+%{?_with_noarch_subpackages:BuildArch: noarch}
+
+%description -n rtems-4.11-gdb-common
+
+GDB files shared by all targets.
+
+%post -n rtems-4.11-gdb-common
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
+  /sbin/install-info --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
+
+%preun -n rtems-4.11-gdb-common
+if [ $1 -eq 0 ]; then
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdb.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/gdbint.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/stabs.info.gz || :
+  /sbin/install-info --delete --info-dir=%{_infodir} %{_infodir}/annotate.info.gz || :
+fi
+
+%files -n rtems-4.11-gdb-common
+%defattr(-,root,root)
+%dir %{_prefix}
+%dir %{_prefix}/share
+
+%dir %{_infodir}
+%ghost %{_infodir}/dir
+%{_infodir}/gdb.info*
+
+%{_infodir}/gdbint.info*
+%{_infodir}/stabs.info*
+%{_infodir}/annotate.info*
 
