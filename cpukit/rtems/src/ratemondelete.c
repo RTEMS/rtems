@@ -51,6 +51,7 @@ rtems_status_code rtems_rate_monotonic_delete(
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Rate_monotonic_Free( the_period );
+      _Scheduler_Release_job(the_period->owner, 0);
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
 

@@ -77,8 +77,18 @@ typedef struct {
   /** extract a thread from the ready set */
   void ( *extract )(Thread_Control *);
 
+  /**
+   * Compares two priorities (returns >0 for higher priority, 0 for equal
+   * and <0 for lower priority).
+   */
+  int ( *priority_compare )(Priority_Control, Priority_Control);
+
+  /** This routine is called upon release of a new job. */
+  void ( *release_job ) (Thread_Control *, uint32_t);
+
   /** perform scheduler update actions required at each clock tick */
   void ( *tick )(void);
+
 } Scheduler_Operations;
 
 /**
@@ -105,6 +115,20 @@ typedef struct {
  * @note This is instantiated and initialized in confdefs.h.
  */
 extern Scheduler_Control  _Scheduler;
+
+/**
+ * Macro testing whether @a p1 has lower priority than @a p2
+ * in the intuitive sense of priority.
+ */
+#define _Scheduler_Is_priority_lower_than( _p1, _p2 ) \
+  (_Scheduler_Priority_compare(_p1,_p2) < 0)
+
+/**
+ * Macro testing whether @a p1 has higher priority than @a p2
+ * in the intuitive sense of priority.
+ */
+#define _Scheduler_Is_priority_higher_than( _p1, _p2 ) \
+  (_Scheduler_Priority_compare(_p1,_p2) > 0)
 
 /**
  *  This routine initializes the scheduler to the policy chosen by the user

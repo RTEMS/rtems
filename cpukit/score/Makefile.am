@@ -203,6 +203,8 @@ libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerpriorityenqueuefirst.c \
     src/schedulerpriorityextract.c \
     src/schedulerpriorityfree.c \
+    src/schedulerpriorityprioritycompare.c \
+    src/schedulerpriorityreleasejob.c \
     src/schedulerpriorityschedule.c \
     src/schedulerpriorityunblock.c \
     src/schedulerpriorityupdate.c \

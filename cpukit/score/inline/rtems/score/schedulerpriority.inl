@@ -185,6 +185,23 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(void)
   );
 }
 
+/**
+ *  @brief Scheduler priority Priority compare body
+ *
+ *  This routine implements priority comparison for priority-based
+ *  scheduling.
+ *
+ *  @return >0 for higher priority, 0 for equal and <0 for lower priority.
+ */
+RTEMS_INLINE_ROUTINE int _Scheduler_priority_Priority_compare_body(
+  Priority_Control      p1,
+  Priority_Control      p2
+)
+{
+  /* High priority in priority scheduler is represented by low numbers. */
+  return ( p2 - p1 );
+}
+
 /**@}*/
 
 #endif

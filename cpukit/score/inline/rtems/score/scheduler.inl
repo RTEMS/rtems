@@ -159,6 +159,32 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Extract(
   _Scheduler.Operations.extract( the_thread );
 }
 
+/**
+ * @brief Scheduler Priority compare
+ *
+ * This routine compares two priorities.
+ */
+RTEMS_INLINE_ROUTINE int _Scheduler_Priority_compare(
+  Priority_Control p1,
+  Priority_Control p2
+)
+{
+  return _Scheduler.Operations.priority_compare(p1, p2);
+}
+
+/**
+ * @brief Scheduler Release job
+ *
+ * This routine is called when a new period of task is issued.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
+  Thread_Control *the_thread,
+  uint32_t       length
+)
+{
+  _Scheduler.Operations.release_job(the_thread, length);
+}
+
 /** @brief Scheduler Method Invoked at Each Clock Tick
  *
  * This method is invoked at each clock tick to allow the scheduler

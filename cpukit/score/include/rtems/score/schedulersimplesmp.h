@@ -40,24 +40,27 @@ extern "C" {
 
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulersimple.h>
+#include <rtems/score/schedulerpriority.h>
 
 /**
  *  Entry points for Scheduler Simple SMP
  */
 #define SCHEDULER_SIMPLE_SMP_ENTRY_POINTS \
   { \
-    _Scheduler_simple_Initialize,    /* initialize entry point */ \
-    _Scheduler_simple_smp_Schedule,  /* schedule entry point */ \
-    _Scheduler_simple_Yield,         /* yield entry point */ \
-    _Scheduler_simple_smp_Block,     /* block entry point */ \
-    _Scheduler_simple_smp_Unblock,   /* unblock entry point */ \
-    _Scheduler_simple_Allocate,      /* allocate entry point */ \
-    _Scheduler_simple_Free,          /* free entry point */ \
-    _Scheduler_simple_Update,        /* update entry point */ \
-    _Scheduler_simple_Enqueue,       /* enqueue entry point */ \
-    _Scheduler_simple_Enqueue_first, /* enqueue_first entry point */ \
-    _Scheduler_simple_Extract,       /* extract entry point */ \
-    _Scheduler_simple_smp_Tick       /* tick entry point */ \
+    _Scheduler_simple_Initialize,         /* initialize entry point */ \
+    _Scheduler_simple_smp_Schedule,       /* schedule entry point */ \
+    _Scheduler_simple_Yield,              /* yield entry point */ \
+    _Scheduler_simple_smp_Block,          /* block entry point */ \
+    _Scheduler_simple_smp_Unblock,        /* unblock entry point */ \
+    _Scheduler_simple_Allocate,           /* allocate entry point */ \
+    _Scheduler_simple_Free,               /* free entry point */ \
+    _Scheduler_simple_Update,             /* update entry point */ \
+    _Scheduler_simple_Enqueue,            /* enqueue entry point */ \
+    _Scheduler_simple_Enqueue_first,      /* enqueue_first entry point */ \
+    _Scheduler_simple_Extract,            /* extract entry point */ \
+    _Scheduler_priority_Priority_compare, /* compares two priorities */ \
+    _Scheduler_priority_Release_job,      /* new period of task */ \
+    _Scheduler_simple_smp_Tick            /* tick entry point */ \
   }
 
 /**

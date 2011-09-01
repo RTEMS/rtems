@@ -35,18 +35,20 @@ extern "C" {
  */
 #define SCHEDULER_SIMPLE_ENTRY_POINTS \
   { \
-    _Scheduler_simple_Initialize,    /* initialize entry point */ \
-    _Scheduler_simple_Schedule,      /* schedule entry point */ \
-    _Scheduler_simple_Yield,         /* yield entry point */ \
-    _Scheduler_simple_Block,         /* block entry point */ \
-    _Scheduler_simple_Unblock,       /* unblock entry point */ \
-    _Scheduler_simple_Allocate,      /* allocate entry point */ \
-    _Scheduler_simple_Free,          /* free entry point */ \
-    _Scheduler_simple_Update,        /* update entry point */ \
-    _Scheduler_simple_Enqueue,       /* enqueue entry point */ \
-    _Scheduler_simple_Enqueue_first, /* enqueue_first entry point */ \
-    _Scheduler_simple_Extract,       /* extract entry point */ \
-    _Scheduler_priority_Tick         /* tick entry point */ \
+    _Scheduler_simple_Initialize,         /* initialize entry point */ \
+    _Scheduler_simple_Schedule,           /* schedule entry point */ \
+    _Scheduler_simple_Yield,              /* yield entry point */ \
+    _Scheduler_simple_Block,              /* block entry point */ \
+    _Scheduler_simple_Unblock,            /* unblock entry point */ \
+    _Scheduler_simple_Allocate,           /* allocate entry point */ \
+    _Scheduler_simple_Free,               /* free entry point */ \
+    _Scheduler_simple_Update,             /* update entry point */ \
+    _Scheduler_simple_Enqueue,            /* enqueue entry point */ \
+    _Scheduler_simple_Enqueue_first,      /* enqueue_first entry point */ \
+    _Scheduler_simple_Extract,            /* extract entry point */ \
+    _Scheduler_priority_Priority_compare, /* compares two priorities */ \
+    _Scheduler_priority_Release_job,      /* new period of task */ \
+    _Scheduler_priority_Tick              /* tick entry point */ \
   }
 
 /**

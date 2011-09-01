@@ -143,6 +143,8 @@ void _Rate_monotonic_Initiate_statistics(
       _Timespec_Add_to( &the_period->cpu_usage_period_initiated, &ran );
     }
   #endif
+
+  _Scheduler_Release_job(the_period->owner, the_period->next_length);
 }
 
 void _Rate_monotonic_Update_statistics(
@@ -282,6 +284,8 @@ rtems_status_code rtems_rate_monotonic_period(
       if ( the_period->state == RATE_MONOTONIC_INACTIVE ) {
         _ISR_Enable( level );
 
+        the_period->next_length = length;
+
         /*
          *  Baseline statistics information for the beginning of a period.
          */
@@ -294,8 +298,6 @@ rtems_status_code rtems_rate_monotonic_period(
           id,
           NULL
         );
-
-        the_period->next_length = length;
 
         _Watchdog_Insert_ticks( &the_period->Timer, length );
         _Thread_Enable_dispatch();
@@ -353,6 +355,7 @@ rtems_status_code rtems_rate_monotonic_period(
         the_period->next_length = length;
 
         _Watchdog_Insert_ticks( &the_period->Timer, length );
+        _Scheduler_Release_job(the_period->owner, the_period->next_length);
         _Thread_Enable_dispatch();
         return RTEMS_TIMEOUT;
       }
