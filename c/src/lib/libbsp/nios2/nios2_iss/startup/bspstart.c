@@ -16,16 +16,19 @@
  *  $Id$
  */
 
-#include <string.h>
+#include <sys/cdefs.h>
+
+#include <rtems.h>
+#include <rtems/score/nios2-utility.h>
 
 #include <bsp.h>
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
-
 void bsp_start( void )
 {
+  __asm__ volatile (
+    ".globl _Nios2_ISR_Status_mask\n"
+    ".globl _Nios2_ISR_Status_bits\n"
+    ".set _Nios2_ISR_Status_mask, " __XSTRING(NIOS2_ISR_STATUS_MASK_IIC) "\n"
+    ".set _Nios2_ISR_Status_bits, " __XSTRING(NIOS2_ISR_STATUS_BITS_IIC)
+  );
 }
