@@ -1,3 +1,11 @@
+2011-09-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1895/cpukit
+	* posix/src/mqueuerecvsupp.c, posix/src/pthreadjoin.c,
+	score/src/coretodmsecstoticks.c, score/src/coretodusectoticks.c,
+	score/src/timespectoticks.c: Ensure time conversions to ticks do not
+	ignore partial tick and return 1 less than desired.
+
 2011-07-31	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1855/cpukit

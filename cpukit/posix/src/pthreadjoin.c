@@ -55,20 +55,21 @@ on_EINTR:
 
       if ( the_thread->current_state ==
              (STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT) ) {
-         return_pointer = the_thread->Wait.return_argument;
-         _Thread_Clear_state(
-           the_thread,
-           (STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT)
-         );
+        return_pointer = the_thread->Wait.return_argument;
+        _Thread_Clear_state(
+          the_thread,
+          (STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT)
+        );
+        _Thread_Enable_dispatch();
       } else {
-	_Thread_Executing->Wait.return_argument = &return_pointer;
+        _Thread_Executing->Wait.return_argument = &return_pointer;
         _Thread_queue_Enter_critical_section( &api->Join_List );
         _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
-      }
-      _Thread_Enable_dispatch();
+        _Thread_Enable_dispatch();
 
-      if ( _Thread_Executing->Wait.return_code == EINTR )
-        goto on_EINTR;
+        if ( _Thread_Executing->Wait.return_code == EINTR )
+          goto on_EINTR;
+      }
 
       if ( value_ptr )
         *value_ptr = return_pointer;
