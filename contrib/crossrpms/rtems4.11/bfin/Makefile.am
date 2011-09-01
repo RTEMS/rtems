@@ -24,7 +24,7 @@ GDB_VERS = 7.3
 GDB_PKGVERS = $(GDB_VERS)
 GDB_RPMREL = 1
 include ../gdb.am
-GDB_OPTS += --disable-infos
+GDB_OPTS +=
 
 # CPUKIT_VERS = 4.10.99.0
 # CPUKIT_PKGVERS = $(CPUKIT_VERS)-YYYYMMDD-R
