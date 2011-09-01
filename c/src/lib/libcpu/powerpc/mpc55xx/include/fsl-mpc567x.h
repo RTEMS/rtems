@@ -6527,6 +6527,7 @@ extern "C" {
 #define FMPLL     (*( volatile struct FMPLL_tag *)      0xC3F80000)
 #define EBI       (*( volatile struct EBI_tag *)        0xC3F84000)
 #define FLASH_A   (*( volatile struct FLASH_tag *)      0xC3F88000)
+#define FLASH FLASH_A
 #define FLASH_B   (*( volatile struct FLASH_tag *)      0xC3F8C000)
 #define SIU       (*( volatile struct SIU_tag *)        0xC3F90000)
 
