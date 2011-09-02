@@ -1,3 +1,8 @@
+2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* stackchk/init.c, stackchk/system.h, stackchk/stackchk.scn: Print end
+	of test message.
+
 2011-07-29	Pawel Zagorski <pzagor@agh.edu.pl>
 
 	PR 1865/tests

@@ -43,6 +43,11 @@ void blow_stack( void );
 
 #define CONFIGURE_STACK_CHECKER_ENABLED
 
+void Fatal_extension( uint32_t source, bool is_internal, uint32_t error );
+
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { NULL, NULL, NULL, NULL, NULL, NULL, NULL, Fatal_extension }
+
 #include <rtems/confdefs.h>
 
 /* global variables */
