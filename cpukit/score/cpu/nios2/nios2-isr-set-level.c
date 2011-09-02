@@ -21,10 +21,8 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/nios2-utility.h>
 
-void _CPU_ISR_Set_level( uint32_t new_level )
+uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status )
 {
-  uint32_t status = _Nios2_Get_ctlreg_status();
-
   switch ( _Nios2_Get_ISR_status_mask() ) {
     case NIOS2_ISR_STATUS_MASK_IIC:
       if ( new_level == 0 ) {
@@ -49,6 +47,15 @@ void _CPU_ISR_Set_level( uint32_t new_level )
       _Internal_error_Occurred( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
       break;
   }
+
+  return status;
+}
+
+void _CPU_ISR_Set_level( uint32_t new_level )
+{
+  uint32_t status = _Nios2_Get_ctlreg_status();
+
+  status = _Nios2_ISR_Set_level( new_level, status );
 
   _Nios2_Set_ctlreg_status( status );
 }

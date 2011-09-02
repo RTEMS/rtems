@@ -103,16 +103,36 @@
 #define NIOS2_MPUBASE_BASE_OFFSET 5
 #define NIOS2_MPUBASE_BASE_MASK (0x1ffffff << NIOS2_MPUBASE_BASE_OFFSET)
 #define NIOS2_MPUBASE_INDEX_OFFSET 1
-#define NIOS2_MPUBASE_INDEX_MASK (0x1f << NIOS2_MPUBASE_INDEX_OFFSET)
+
+/* Avoid redefines with Altera HAL */
+#ifndef NIOS2_MPUBASE_INDEX_MASK
+  #define NIOS2_MPUBASE_INDEX_MASK (0x1f << NIOS2_MPUBASE_INDEX_OFFSET)
+#endif
+
 #define NIOS2_MPUBASE_D (1 << 0)
 
 #define NIOS2_MPUACC_MASK_OFFSET 6
-#define NIOS2_MPUACC_MASK_MASK (0x1ffffff << NIOS2_MPUACC_MASK_OFFSET)
+
+/* Avoid redefines with Altera HAL */
+#ifndef NIOS2_MPUACC_MASK_MASK
+  #define NIOS2_MPUACC_MASK_MASK (0x1ffffff << NIOS2_MPUACC_MASK_OFFSET)
+#endif
+
 #define NIOS2_MPUACC_LIMIT_OFFSET 6
-#define NIOS2_MPUACC_LIMIT_MASK (0x3ffffff << NIOS2_MPUACC_LIMIT_OFFSET)
+
+/* Avoid redefines with Altera HAL */
+#ifndef NIOS2_MPUACC_LIMIT_MASK
+  #define NIOS2_MPUACC_LIMIT_MASK (0x3ffffff << NIOS2_MPUACC_LIMIT_OFFSET)
+#endif
+
 #define NIOS2_MPUACC_C (1 << 5)
 #define NIOS2_MPUACC_PERM_OFFSET 2
-#define NIOS2_MPUACC_PERM_MASK (0x7 << NIOS2_MPUACC_PERM_OFFSET)
+
+/* Avoid redefines with Altera HAL */
+#ifndef NIOS2_MPUACC_PERM_MASK
+  #define NIOS2_MPUACC_PERM_MASK (0x7 << NIOS2_MPUACC_PERM_OFFSET)
+#endif
+
 #define NIOS2_MPUACC_RD (1 << 1)
 #define NIOS2_MPUACC_WR (1 << 0)
 
@@ -286,10 +306,10 @@ static inline uint32_t _Nios2_Get_ISR_status_bits( void )
 
 static inline bool _Nios2_Has_internal_interrupt_controller( void )
 {
-  uint32_t isr_status_mask = _Nios2_Get_ISR_status_mask();
-
-  return isr_status_mask == NIOS2_ISR_STATUS_MASK_IIC;
+  return _Nios2_Get_ISR_status_mask() == NIOS2_ISR_STATUS_MASK_IIC;
 }
+
+uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status );
 
 #ifdef __cplusplus
 }

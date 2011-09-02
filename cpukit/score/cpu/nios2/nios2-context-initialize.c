@@ -17,8 +17,10 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/cpu.h>
 #include <string.h>
+
+#include <rtems/score/cpu.h>
+#include <rtems/score/nios2-utility.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -34,8 +36,7 @@ void _CPU_Context_Initialize(
   memset(context, 0, sizeof(*context));
 
   context->fp = stack;
+  context->status = _Nios2_ISR_Set_level( new_level, NIOS2_STATUS_PIE );
   context->sp = stack;
   context->ra = (uint32_t) entry_point;
-  /* @todo Add EIC support. */
-  context->status = new_level ? 0 : 1;
 }
