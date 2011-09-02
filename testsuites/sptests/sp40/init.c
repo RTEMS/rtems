@@ -62,8 +62,14 @@ rtems_task Init(
   rtems_device_major_number registered_not;
   rtems_device_major_number invalid_major = _IO_Number_of_drivers + 1;
   rtems_interrupt_level level;
+  bool do_interrupt_context_test = true;
 
   puts( "\n\n*** TEST 40 ***" );
+
+  /* Ensure that this test works as expected */
+  test_interrupt_context_enter( level );
+  do_interrupt_context_test = rtems_interrupt_is_in_progress();
+  test_interrupt_context_leave( level );
 
   /*
    *  Register a driver with init == NULL and open != NULL
@@ -100,14 +106,16 @@ rtems_task Init(
   directive_failed( sc, "rtems_io_register_driver" );
 
   puts( "Init - rtems_io_register_driver - called from interrupt context" );
-  test_interrupt_context_enter( level );
-  sc = rtems_io_register_driver( 0, NULL, NULL );
-  test_interrupt_context_leave( level );
-  fatal_directive_status(
-    sc,
-    RTEMS_CALLED_FROM_ISR,
-    "rtems_io_register_driver"
-  );
+  if ( do_interrupt_context_test ) {
+    test_interrupt_context_enter( level );
+    sc = rtems_io_register_driver( 0, NULL, NULL );
+    test_interrupt_context_leave( level );
+    fatal_directive_status(
+      sc,
+      RTEMS_CALLED_FROM_ISR,
+      "rtems_io_register_driver"
+    );
+  }
 
   puts( "Init - rtems_io_register_driver - invalid registered major pointer" );
   sc = rtems_io_register_driver( 0, NULL, NULL );
@@ -144,14 +152,16 @@ rtems_task Init(
   );
 
   puts( "Init - rtems_io_unregister_driver - called from interrupt context" );
-  test_interrupt_context_enter( level );
-  sc = rtems_io_unregister_driver( 0 );
-  test_interrupt_context_leave( level );
-  fatal_directive_status(
-    sc,
-    RTEMS_CALLED_FROM_ISR,
-    "rtems_io_unregister_driver"
-  );
+  if ( do_interrupt_context_test ) {
+    test_interrupt_context_enter( level );
+    sc = rtems_io_unregister_driver( 0 );
+    test_interrupt_context_leave( level );
+    fatal_directive_status(
+      sc,
+      RTEMS_CALLED_FROM_ISR,
+      "rtems_io_unregister_driver"
+    );
+  }
 
   puts( "Init - rtems_io_unregister_driver - invalid major number" );
   sc = rtems_io_unregister_driver( invalid_major );
