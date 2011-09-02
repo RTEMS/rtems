@@ -197,36 +197,20 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       { RTEMS_MONITOR_OBJECT_DNAME },
       &rtems_monitor_commands[16],
     },
-    { "exit",
-      "Invoke 'rtems_fatal_error_occurred' with 'status' "
-      "(default is RTEMS_SUCCESSFUL)\n"
-      "  exit [status]",
-      0,
-      rtems_monitor_fatal_cmd,
-      { .status_code = RTEMS_SUCCESSFUL },
-      &rtems_monitor_commands[17],
-    },
     { "fatal",
       "'exit' with fatal error; default error is RTEMS_TASK_EXITTED\n"
       "  fatal [status]",
       0,
       rtems_monitor_fatal_cmd,
       { .status_code = RTEMS_TASK_EXITTED },		/* exit value */
-      &rtems_monitor_commands[18],
-    },
-    { "quit",
-      "Alias for 'exit'\n",
-      0,
-      rtems_monitor_fatal_cmd,
-      { .status_code = RTEMS_SUCCESSFUL },		/* exit value */
-      &rtems_monitor_commands[19],
+      &rtems_monitor_commands[17],
     },
     { "reset",
       "(SW)Resets the System.",
       0,
       rtems_monitor_reset_cmd,
       { 0 },
-      &rtems_monitor_commands[20],
+      &rtems_monitor_commands[18],
     },
 #if defined(RTEMS_MULTIPROCESSING)
     { "node",
@@ -235,11 +219,11 @@ static const rtems_monitor_command_entry_t rtems_monitor_commands[] = {
       0,
       rtems_monitor_node_cmd,
       { 0 },
-      &rtems_monitor_commands[21],
+      &rtems_monitor_commands[19],
     },
-  #define RTEMS_MONITOR_POSIX_NEXT 22
+  #define RTEMS_MONITOR_POSIX_NEXT 20
 #else
-  #define RTEMS_MONITOR_POSIX_NEXT 21
+  #define RTEMS_MONITOR_POSIX_NEXT 19
 #endif
 #ifdef RTEMS_POSIX_API
     { "pthread",
