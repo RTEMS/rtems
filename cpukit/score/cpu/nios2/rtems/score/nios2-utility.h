@@ -286,19 +286,19 @@ static inline void _Nios2_Set_ctlreg_mpuacc( uint32_t value )
   __builtin_wrctl( NIOS2_CTLREG_INDEX_MPUACC, (int) value );
 }
 
-static inline uint32_t _Nios2_Get_ISR_status_mask( void )
+static inline uint32_t _Nios2_ISR_Get_status_mask( void )
 {
   return (uint32_t) &_Nios2_ISR_Status_mask [0];
 }
 
-static inline uint32_t _Nios2_Get_ISR_status_bits( void )
+static inline uint32_t _Nios2_ISR_Get_status_bits( void )
 {
   return (uint32_t) &_Nios2_ISR_Status_bits [0];
 }
 
 static inline bool _Nios2_Has_internal_interrupt_controller( void )
 {
-  return _Nios2_Get_ISR_status_mask() == NIOS2_ISR_STATUS_MASK_IIC;
+  return _Nios2_ISR_Get_status_mask() == NIOS2_ISR_STATUS_MASK_IIC;
 }
 
 uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status );

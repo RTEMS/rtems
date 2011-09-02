@@ -23,7 +23,7 @@
 
 uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status )
 {
-  switch ( _Nios2_Get_ISR_status_mask() ) {
+  switch ( _Nios2_ISR_Get_status_mask() ) {
     case NIOS2_ISR_STATUS_MASK_IIC:
       if ( new_level == 0 ) {
         status |= NIOS2_STATUS_PIE;

@@ -26,7 +26,7 @@ uint32_t _CPU_ISR_Get_level( void )
   uint32_t status = _Nios2_Get_ctlreg_status();
   uint32_t level = 0;
 
-  switch ( _Nios2_Get_ISR_status_mask() ) {
+  switch ( _Nios2_ISR_Get_status_mask() ) {
     case NIOS2_ISR_STATUS_MASK_IIC:
       level = (status & NIOS2_STATUS_PIE) == 0;
       break;
