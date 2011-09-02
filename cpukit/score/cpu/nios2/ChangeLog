@@ -1,5 +1,10 @@
 2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* rtems/score/nios2-utility.h: Use the same values for defines used by
+	Altera HAL.
+
+2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/score/nios2-utility.h: Avoid redefines with Altera HAL.
 	Declare _Nios2_ISR_Set_level().
 	* nios2-context-initialize.c: Use _Nios2_ISR_Set_level().

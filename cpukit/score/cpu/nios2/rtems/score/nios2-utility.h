@@ -105,33 +105,25 @@
 #define NIOS2_MPUBASE_INDEX_OFFSET 1
 
 /* Avoid redefines with Altera HAL */
-#ifndef NIOS2_MPUBASE_INDEX_MASK
-  #define NIOS2_MPUBASE_INDEX_MASK (0x1f << NIOS2_MPUBASE_INDEX_OFFSET)
-#endif
+#define NIOS2_MPUBASE_INDEX_MASK (0x0000003e)
 
 #define NIOS2_MPUBASE_D (1 << 0)
 
 #define NIOS2_MPUACC_MASK_OFFSET 6
 
 /* Avoid redefines with Altera HAL */
-#ifndef NIOS2_MPUACC_MASK_MASK
-  #define NIOS2_MPUACC_MASK_MASK (0x1ffffff << NIOS2_MPUACC_MASK_OFFSET)
-#endif
+#define NIOS2_MPUACC_MASK_MASK (0x7fffffc0)
 
 #define NIOS2_MPUACC_LIMIT_OFFSET 6
 
 /* Avoid redefines with Altera HAL */
-#ifndef NIOS2_MPUACC_LIMIT_MASK
-  #define NIOS2_MPUACC_LIMIT_MASK (0x3ffffff << NIOS2_MPUACC_LIMIT_OFFSET)
-#endif
+#define NIOS2_MPUACC_LIMIT_MASK (0xffffffc0)
 
 #define NIOS2_MPUACC_C (1 << 5)
 #define NIOS2_MPUACC_PERM_OFFSET 2
 
 /* Avoid redefines with Altera HAL */
-#ifndef NIOS2_MPUACC_PERM_MASK
-  #define NIOS2_MPUACC_PERM_MASK (0x7 << NIOS2_MPUACC_PERM_OFFSET)
-#endif
+#define NIOS2_MPUACC_PERM_MASK (0x0000001c)
 
 #define NIOS2_MPUACC_RD (1 << 1)
 #define NIOS2_MPUACC_WR (1 << 0)
