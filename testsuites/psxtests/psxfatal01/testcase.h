@@ -24,6 +24,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
   sizeof(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME) / \
       sizeof(posix_initialization_threads_table)
 
+#define FATAL_ERROR_TEST_NAME            "1"
 #define FATAL_ERROR_DESCRIPTION \
         "POSIX API Init thread create failure - NULL entry"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_POSIX_API

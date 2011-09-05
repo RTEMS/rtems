@@ -16,10 +16,21 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+static void print_test_begin_message(void)
+{
+  static bool done = false;
+
+  if (!done) {
+    done = true;
+    printk( "\n\n\n*** TEST POSIX FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+  }
+}
+
 void *POSIX_Init(
   void *argument
 )
 {
+  print_test_begin_message();
   force_error();
   printk( "Fatal error (%s) NOT hit\n", FATAL_ERROR_DESCRIPTION );
   rtems_test_exit(0);
@@ -115,6 +126,7 @@ void Fatal_extension(
   uint32_t   error
 )
 {
+  print_test_begin_message();
   printk( "Fatal error (%s) hit\n", FATAL_ERROR_DESCRIPTION );
 
   if ( source != FATAL_ERROR_EXPECTED_SOURCE ){
@@ -146,7 +158,7 @@ void Fatal_extension(
       && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
       && error == FATAL_ERROR_EXPECTED_ERROR
   ) {
-    printk( "*** END OF TEST ***\n" );
+    printk( "*** END OF TEST POSIX FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
   }
 
   if ( _System_state_Is_up( _System_state_Get() ) )

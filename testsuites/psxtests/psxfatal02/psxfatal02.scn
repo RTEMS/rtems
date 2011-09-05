@@ -1,2 +1,3 @@
+*** TEST POSIX FATAL 2 ***
 Fatal error (POSIX API Init thread create failure -- no memory for stack) hit
-*** END OF TEST ***
+*** END OF TEST POSIX FATAL 2 ***
