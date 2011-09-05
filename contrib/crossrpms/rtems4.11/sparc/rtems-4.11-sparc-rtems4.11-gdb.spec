@@ -95,7 +95,7 @@ BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.11-gdb-common
 
-%if "%{gdb_version}" == "7.3"
+%if "%{gdb_version}" == "7.3.1"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.3.1.tar.bz2
 Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.3.1-rtems4.11-20110905.diff
 %endif
