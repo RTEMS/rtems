@@ -58,7 +58,7 @@ Summary:      	h8300-rtems4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	7%{?dist}
+Release:      	8%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -240,7 +240,7 @@ BuildRequires:	rtems-4.11-h8300-rtems4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-h8300-rtems4.11-binutils
 Requires:	rtems-4.11-h8300-rtems4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-h8300-rtems4.11-newlib = %{newlib_version}-14%{?dist}
+Requires:	rtems-4.11-h8300-rtems4.11-newlib = %{newlib_version}-15%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -258,7 +258,7 @@ Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.1-rtems4
 %endif
 %if "%{gcc_version}" == "4.5.3"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.3-rtems4.11-20110426.diff
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.3-rtems4.11-20110905.diff
 %endif
 
 %if "%{gcc_version}" == "4.6.1"
@@ -266,7 +266,7 @@ Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/%{gcc_pkgvers}/gcc-g++-%{g
 %endif
 %if "%{gcc_version}" == "4.5.3" 
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-g++-%{gcc_pkgvers}.tar.bz2
-Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.3-rtems4.11-20110426.diff
+Patch1:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-g++-4.5.3-rtems4.11-20110905.diff
 %endif
 
 %if "%{newlib_version}" == "1.19.0"
@@ -355,7 +355,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-7%{?dist}/newlib-%{newlib_version}-14%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-8%{?dist}/newlib-%{newlib_version}-15%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -640,7 +640,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-h8300-rtems4.11-binutils
-# Requires:       rtems-4.11-h8300-rtems4.11-newlib = %{newlib_version}-14%{?dist}
+# Requires:       rtems-4.11-h8300-rtems4.11-newlib = %{newlib_version}-15%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -658,7 +658,7 @@ Summary:        libgcc for h8300-rtems4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-h8300-rtems4.11-newlib = %{newlib_version}-14%{?dist}
+Requires:       rtems-4.11-h8300-rtems4.11-newlib = %{newlib_version}-15%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-h8300-rtems4.11-gcc-libgcc
@@ -837,7 +837,7 @@ Summary:      	C Library (newlib) for h8300-rtems4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        14%{?dist}
+Release:        15%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -858,7 +858,7 @@ Newlib C Library for h8300-rtems4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        14%{?dist}
+Release:        15%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 

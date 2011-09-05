@@ -91,13 +91,18 @@ BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.11-gdb-common
 
+BuildRequires:  rtems-4.11-bfin-rtems4.11-binutils
+BuildRequires:  texinfo
+
+# The bfin simulator silently tries to conditionally build an SDL based GUI, 
+# but fails to link correctly
+# Force not building the GUI.
+%{!?suse:BuildConflicts: SDL-devel}
+%{?suse:BuildConflicts: libSDL-devel}
+
 %if "%{gdb_version}" == "7.3.1"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.3.1.tar.bz2
 Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.3.1-rtems4.11-20110905.diff
-%endif
-%if "%{gdb_version}" == "7.2"
-Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.2.tar.bz2
-Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.2-rtems4.11-20100907.diff
 %endif
 
 %description
