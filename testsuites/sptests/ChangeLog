@@ -1,3 +1,12 @@
+2011-09-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spfatal01/spfatal01.scn, spfatal02/spfatal02.scn,
+	spfatal13/spfatal13.scn, spfatal14/spfatal14.scn,
+	spfatal15/spfatal15.scn, spfatal16/spfatal16.scn,
+	spfatal17/spfatal17.scn, spfatal18/spfatal18.scn,
+	spfatal19/spfatal19.scn, spfatal20/spfatal20.scn,
+	spfatal_support/init.c: Print proper begin message.
+
 2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp40/init.c: Avoid unsupported test cases.

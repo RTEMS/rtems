@@ -1,2 +1,3 @@
+*** TEST FATAL 20 ***
 Fatal error (rtems_termios_initialize cannot create semaphore) hit
 *** END OF TEST FATAL 20 ***

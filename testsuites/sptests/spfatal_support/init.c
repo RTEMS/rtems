@@ -16,11 +16,21 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+static void print_test_begin_message(void)
+{
+  static bool done = false;
+
+  if (!done) {
+    done = true;
+    printk( "\n\n\n*** TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+  }
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  printk( "\n\n\n*** TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+  print_test_begin_message();
   force_error();
   printk( "Fatal error (%s) NOT hit\n", FATAL_ERROR_DESCRIPTION );
   rtems_test_exit(0);
@@ -114,6 +124,7 @@ void Fatal_extension(
   uint32_t   error
 )
 {
+  print_test_begin_message();
   printk( "Fatal error (%s) hit\n", FATAL_ERROR_DESCRIPTION );
 
   if ( source != FATAL_ERROR_EXPECTED_SOURCE ){
