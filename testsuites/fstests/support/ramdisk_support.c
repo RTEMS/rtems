@@ -8,6 +8,11 @@
  *
  *  $Id$
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/ramdisk.h>
 #include <rtems/blkdev.h>
 #include <rtems/libio.h>

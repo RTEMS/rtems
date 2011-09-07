@@ -1,5 +1,9 @@
 2011-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* fserror/test.c, fslink/test.c, fspatheval/test.c,
+	fspermission/test.c, fsrdwr/init.c, fssymlink/test.c,
+	fstime/test.c, support/fstest_support.c, support/ramdisk_support.c:
+	Add config-header support.
 	* support/fstest.h: Include "pmacros.h".
 	* fserror/fserror.doc, fserror/test.c, fslink/fslink.doc,
 	fslink/test.c, fspatheval/patheval.doc, fspatheval/test.c,
