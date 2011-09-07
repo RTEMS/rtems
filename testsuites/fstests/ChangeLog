@@ -1,3 +1,19 @@
+2011-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* fserror/fserror.doc, fserror/test.c, fslink/fslink.doc,
+	fslink/test.c, fspatheval/patheval.doc, fspatheval/test.c,
+	fspermission/fspermission.doc, fspermission/test.c,
+	fsrdwr/fsrdwr.doc, fsrdwr/init.c, fssymlink/fssymlink.doc,
+	fssymlink/test.c, fstime/fstime.doc, fstime/test.c,
+	imfs_support/fs_config.h, imfs_support/fs_support.c,
+	imfs_support/fs_supprot.h, mdosfs_support/fs_config.h,
+	mdosfs_support/fs_support.c, mimfs_support/fs_config.h,
+	mimfs_support/fs_support.c, mrfs_support/fs_config.h,
+	mrfs_support/fs_support.c, support/fstest.h,
+	support/fstest_support.c, support/fstest_support.h,
+	support/ramdisk_support.c, support/ramdisk_support.h:
+	Fix CVS-Ids.
+
 2011-08-02	Xiang Cui <medivhc@gmail.com>
 
 	* configure.ac, fserror/test.c, fslink/test.c, fspermission/test.c,
