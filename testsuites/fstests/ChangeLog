@@ -1,5 +1,7 @@
 2011-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* imfs_support/fs_supprot.h, support/fstest.h,
+	support/ramdisk_support.h: Don't include config.h.
 	* fserror/test.c, fslink/test.c, fspatheval/test.c,
 	fspermission/test.c, fsrdwr/init.c, fssymlink/test.c,
 	fstime/test.c, support/fstest_support.c, support/ramdisk_support.c:

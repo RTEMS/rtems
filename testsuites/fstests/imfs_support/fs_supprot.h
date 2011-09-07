@@ -8,11 +8,8 @@
  *
  *  $Id$
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-#include "pmacros.h"
 
+#include "pmacros.h"
 #include "fs_config.h"
 
 void test_initialize_filesystem(void)

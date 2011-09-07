@@ -12,10 +12,6 @@
 #ifndef __FSTEST_H
 #define __FSTEST_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "pmacros.h"
 
 #define TIME_PRECISION  (2)
@@ -59,5 +55,3 @@
 
 #define BASE_FOR_TEST "/mnt"
 #endif
-
-
