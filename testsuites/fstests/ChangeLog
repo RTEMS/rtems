@@ -1,5 +1,6 @@
 2011-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* support/fstest.h: Include "pmacros.h".
 	* fserror/fserror.doc, fserror/test.c, fslink/fslink.doc,
 	fslink/test.c, fspatheval/patheval.doc, fspatheval/test.c,
 	fspermission/fspermission.doc, fspermission/test.c,

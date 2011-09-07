@@ -15,7 +15,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include <pmacros.h>
+
+#include "pmacros.h"
 
 #define TIME_PRECISION  (2)
 #define TIME_EQUAL(x,y) (abs((x)-(y))<TIME_PRECISION)
