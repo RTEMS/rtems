@@ -1,4 +1,4 @@
-*** TEST 27 ***
-Testing binary semaphore flush
+*** TEST 27a ***
+Testing counting semaphore flush
 Flushed all waiting tasks
-*** END OF TEST 27 ***
+*** END OF TEST 27a ***

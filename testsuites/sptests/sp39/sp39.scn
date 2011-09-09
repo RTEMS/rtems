@@ -1,4 +1,4 @@
 *** TEST 39 ***
 Event sent from ISR hitting synchronization point has occurred
-Event timeout hitting synchronization point has occurred
+Event sent from ISR (with timeout) hitting synchronization point has occurred
 *** END OF TEST 39 ***
