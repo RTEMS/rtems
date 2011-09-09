@@ -1,5 +1,12 @@
 2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1873/cpukit
+	* score/include/rtems/score/heap.h: Revert previous commit.
+	* sapi/include/confdefs.h: Use proper constants in
+	_Configure_From_workspace().
+
+2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/include/rtems/score/basedefs.h: Typo.
 	* score/src/mpci.c, rtems/src/eventmp.c, rtems/src/msgmp.c,
 	rtems/src/partmp.c, rtems/src/regionmp.c, rtems/src/semmp.c,

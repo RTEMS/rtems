@@ -867,7 +867,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  may be applied.
  */
 #define _Configure_From_workspace(_size) \
-  (ssize_t)((_size) + (2 * sizeof(uint32_t)) + CPU_ALIGNMENT)
+  (ssize_t)((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1)
 
 /**
  *  Do not use the unlimited bit as part of the multiplication

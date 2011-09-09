@@ -177,9 +177,7 @@ typedef struct Heap_Block Heap_Block;
   } Heap_Protection_block_end;
 
   #define HEAP_PROTECTION_HEADER_SIZE \
-    (sizeof(Heap_Protection_block_begin) + \
-     CPU_ALIGNMENT + \
-     sizeof(Heap_Protection_block_end))
+    (sizeof(Heap_Protection_block_begin) + sizeof(Heap_Protection_block_end))
 #endif
 
 /**
