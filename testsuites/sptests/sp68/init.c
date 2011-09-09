@@ -375,7 +375,7 @@ static void test_case(enum resource_type rt)
 rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  char region_area [128] CPU_STRUCTURE_ALIGNMENT;
+  char region_area [256];
   enum resource_type rt = SEMAPHORE;
   void *new_region_item = NULL;
   size_t i = 0;
