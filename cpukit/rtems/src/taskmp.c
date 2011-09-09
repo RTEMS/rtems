@@ -27,6 +27,11 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
+RTEMS_STATIC_ASSERT(
+  sizeof(RTEMS_tasks_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  RTEMS_tasks_MP_Packet
+);
+
 /*
  *  _RTEMS_tasks_MP_Send_process_packet
  *

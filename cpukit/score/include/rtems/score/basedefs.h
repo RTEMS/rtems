@@ -166,7 +166,7 @@
 #endif
 
 #define RTEMS_STATIC_ASSERT(cond, msg) \
-  typedef int rtems_static_assert ## msg [(cond) ? 1 : -1]
+  typedef int rtems_static_assert_ ## msg [(cond) ? 1 : -1]
 
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES

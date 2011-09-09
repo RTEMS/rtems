@@ -26,6 +26,11 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/support.h>
 
+RTEMS_STATIC_ASSERT(
+  sizeof(Region_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  Region_MP_Packet
+);
+
 /*
  *  _Region_MP_Send_process_packet
  *

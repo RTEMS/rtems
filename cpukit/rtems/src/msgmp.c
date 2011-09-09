@@ -27,6 +27,14 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
+#define MESSAGE_QUEUE_MP_PACKET_SIZE \
+  offsetof(Message_queue_MP_Packet, Buffer.buffer)
+
+RTEMS_STATIC_ASSERT(
+  MESSAGE_QUEUE_MP_PACKET_SIZE <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  Message_queue_MP_Packet
+);
+
 /*
  *  _Message_queue_MP_Send_process_packet
  *

@@ -34,6 +34,11 @@
 #include <rtems/score/coresem.h>
 #include <rtems/config.h>
 
+RTEMS_STATIC_ASSERT(
+  sizeof(MPCI_Internal_packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
+  MPCI_Internal_packet
+);
+
 /**
  *  This is the core semaphore which the MPCI Receive Server blocks on.
  */

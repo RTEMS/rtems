@@ -1,3 +1,11 @@
+2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/basedefs.h: Typo.
+	* score/src/mpci.c, rtems/src/eventmp.c, rtems/src/msgmp.c,
+	rtems/src/partmp.c, rtems/src/regionmp.c, rtems/src/semmp.c,
+	rtems/src/signalmp.c, rtems/src/taskmp.c: Use RTEMS_STATIC_ASSERT() to
+	ensure that the packet size is small enough.
+
 2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libmisc/monitor/mon-monitor.c: Removed "exit" and "quit" commands to
