@@ -95,7 +95,7 @@ rtems_status_code rtems_message_queue_create(
    */
 
   max_packet_payload_size = _MPCI_table->maximum_packet_size
-    - sizeof ( Message_queue_MP_Packet );
+    - MESSAGE_QUEUE_MP_PACKET_SIZE;
   if ( is_global && max_packet_payload_size < max_message_size )
     return RTEMS_INVALID_SIZE;
 #endif

@@ -76,6 +76,9 @@ typedef struct {
   CORE_message_queue_Buffer          Buffer;
 }   Message_queue_MP_Packet;
 
+#define MESSAGE_QUEUE_MP_PACKET_SIZE \
+  offsetof(Message_queue_MP_Packet, Buffer.buffer)
+
 /**
  *  @brief _Message_queue_MP_Send_process_packet
  *

@@ -27,9 +27,6 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
-#define MESSAGE_QUEUE_MP_PACKET_SIZE \
-  offsetof(Message_queue_MP_Packet, Buffer.buffer)
-
 RTEMS_STATIC_ASSERT(
   MESSAGE_QUEUE_MP_PACKET_SIZE <= MP_PACKET_MINIMUM_PACKET_SIZE,
   Message_queue_MP_Packet
@@ -116,10 +113,10 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
 
       the_packet                    = _Message_queue_MP_Get_packet();
       the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = sizeof(Message_queue_MP_Packet);
+      the_packet->Prefix.length     = MESSAGE_QUEUE_MP_PACKET_SIZE;
       if ( size_p )
         the_packet->Prefix.length     += *size_p;
-      the_packet->Prefix.to_convert = sizeof(Message_queue_MP_Packet);
+      the_packet->Prefix.to_convert = MESSAGE_QUEUE_MP_PACKET_SIZE;
 
       /*
        * make sure message is not too big for our MPCI driver
@@ -162,8 +159,8 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
 
       the_packet                    = _Message_queue_MP_Get_packet();
       the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = sizeof(Message_queue_MP_Packet);
-      the_packet->Prefix.to_convert = sizeof(Message_queue_MP_Packet);
+      the_packet->Prefix.length     = MESSAGE_QUEUE_MP_PACKET_SIZE;
+      the_packet->Prefix.to_convert = MESSAGE_QUEUE_MP_PACKET_SIZE;
 
       if (! _Options_Is_no_wait(option_set))
           the_packet->Prefix.timeout = timeout;

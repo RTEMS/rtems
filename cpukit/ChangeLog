@@ -1,5 +1,13 @@
 2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1844/cpukit
+	* rtems/include/rtems/rtems/msgmp.h: Define
+	MESSAGE_QUEUE_MP_PACKET_SIZE.
+	* rtems/src/msgmp.c, rtems/src/msgqcreate.c: Use
+	MESSAGE_QUEUE_MP_PACKET_SIZE.
+
+2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1873/cpukit
 	* score/include/rtems/score/heap.h: Revert previous commit.
 	* sapi/include/confdefs.h: Use proper constants in
