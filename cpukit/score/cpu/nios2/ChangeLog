@@ -1,3 +1,8 @@
+2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* nios2-thread-dispatch-disabled.c: Use offsetof() instead of
+	RTEMS_offsetof().
+
 2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/nios2-utility.h, nios2-isr-set-level.c,

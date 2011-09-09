@@ -23,8 +23,7 @@
 
 #define NIOS2_ASSERT_OFFSET(field, off) \
   RTEMS_STATIC_ASSERT( \
-    RTEMS_offsetof(Context_Control, field) \
-      == NIOS2_CONTEXT_OFFSET_ ## off, \
+    offsetof(Context_Control, field) == NIOS2_CONTEXT_OFFSET_ ## off, \
     nios2_context_offset_ ## field \
   )
 
