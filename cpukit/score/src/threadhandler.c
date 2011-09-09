@@ -89,8 +89,8 @@ void _Thread_Handler( void )
   ISR_Level  level;
   Thread_Control *executing;
   #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    static char doneConstructors;
-    char doneCons;
+    static bool doneConstructors;
+    bool doCons;
   #endif
 
   executing = _Thread_Executing;
@@ -110,8 +110,15 @@ void _Thread_Handler( void )
   _ISR_Set_level(level);
 
   #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    doneCons = doneConstructors;
-    doneConstructors = 1;
+    #if defined(RTEMS_MULTIPROCESSING)
+      doCons = !doneConstructors
+        && _Objects_Get_API( executing->Object.id ) != OBJECTS_INTERNAL_API;
+      if (doCons)
+        doneConstructors = true;
+    #else
+      doCons = !doneConstructors;
+      doneConstructors = true;
+    #endif
   #endif
 
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -143,7 +150,7 @@ void _Thread_Handler( void )
      *  in any configuration I know of and it generates a warning on every
      *  RTEMS target configuration.  --joel (12 May 2007)
      */
-    if (!doneCons) /* && (volatile void *)_init) */ {
+    if (doCons) /* && (volatile void *)_init) */ {
       INIT_NAME ();
    
       #if defined(RTEMS_SMP)
