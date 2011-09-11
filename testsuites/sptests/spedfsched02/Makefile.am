@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic semaphore clock
+MANAGERS = all
 
 rtems_tests_PROGRAMS = spedfsched02
 spedfsched02_SOURCES = init.c getall.c task1.c system.h
