@@ -573,6 +573,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
+ *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
  * 
  * If no configuration is specified by the application, then 
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
@@ -598,7 +599,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
-    !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP)
+    !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
+    !defined(CONFIGURE_SCHEDULER_EDF)
   #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
     #define CONFIGURE_SCHEDULER_SIMPLE_SMP
   #else
@@ -656,6 +658,22 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     _Configure_From_workspace( sizeof(Chain_Control) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
+#endif
+
+/*
+ * If the EDF Scheduler is selected, then configure for it.
+ */
+#if defined(CONFIGURE_SCHEDULER_EDF)
+  #include <rtems/score/scheduleredf.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_EDF_ENTRY_POINTS
+
+  /**
+   * define the memory used by the EDF scheduler
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace(0))
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
+    _Configure_From_workspace(sizeof(Scheduler_EDF_Per_thread)))
 #endif
 
 #if defined(CONFIGURE_SCHEDULER_USER)

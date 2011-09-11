@@ -40,6 +40,7 @@ include_rtems_score_HEADERS += include/rtems/score/priority.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
 include_rtems_score_HEADERS += include/rtems/score/rbtree.h
 include_rtems_score_HEADERS += include/rtems/score/scheduler.h
+include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersimple.h
 include_rtems_score_HEADERS += include/rtems/score/stack.h
@@ -221,6 +222,21 @@ libscore_a_SOURCES += src/schedulersimple.c \
     src/schedulersimpleschedule.c \
     src/schedulersimpleunblock.c \
     src/schedulersimpleyield.c 
+
+## SCHEDULEREDF_C_FILES
+libscore_a_SOURCES += src/scheduleredf.c \
+    src/scheduleredfallocate.c \
+    src/scheduleredfblock.c \
+    src/scheduleredfenqueue.c \
+    src/scheduleredfenqueuefirst.c \
+    src/scheduleredfextract.c \
+    src/scheduleredffree.c \
+    src/scheduleredfprioritycompare.c \
+    src/scheduleredfreleasejob.c \
+    src/scheduleredfschedule.c \
+    src/scheduleredfunblock.c \
+    src/scheduleredfupdate.c \
+    src/scheduleredfyield.c
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \
