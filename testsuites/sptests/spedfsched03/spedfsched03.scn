@@ -1,0 +1,176 @@
+*** TEST EDF SCHEDULER 3 ***
+PT1 - rtems_rate_monotonic_create id = 0x42010001
+PT1 - rtems_rate_monotonic_ident id = 0x42010001
+PT1 - (0x42010001) period 30
+PT2 - rtems_rate_monotonic_create id = 0x42010002
+PT2 - rtems_rate_monotonic_ident id = 0x42010002
+PT2 - (0x42010002) period 40
+PT3 - rtems_rate_monotonic_create id = 0x42010003
+PT3 - rtems_rate_monotonic_ident id = 0x42010003
+PT3 - (0x42010003) period 50
+PT4 - rtems_rate_monotonic_create id = 0x42010004
+PT4 - rtems_rate_monotonic_ident id = 0x42010004
+PT4 - (0x42010004) period 70
+AT5 AT6 P1-S ticks:2
+P1-F ticks:12
+P2-S ticks:12
+P2-F ticks:22
+P3-S ticks:22
+P1-S ticks:32
+P1-F ticks:42
+P3-F ticks:42
+P4-S ticks:42
+P2-S ticks:52
+P2-F ticks:62
+P1-S ticks:62
+P1-F ticks:72
+P4-F ticks:72
+P3-S ticks:72
+P3-F ticks:82
+AT6-S ticks:82
+P6-F ticks:87
+Killing task 6
+AT5-S ticks:87
+P1-S ticks:92
+P1-F ticks:102
+P2-S ticks:102
+P2-F ticks:112
+P4-S ticks:112
+P1-S ticks:122
+P1-F ticks:132
+P3-S ticks:132
+P3-F ticks:142
+P2-S ticks:142
+P2-F ticks:152
+P4-F ticks:152
+P1-S ticks:152
+P1-F ticks:162
+P2-S ticks:172
+P2-F ticks:182
+P1-S ticks:182
+P1-F ticks:192
+P3-S ticks:192
+P3-F ticks:202
+P4-S ticks:202
+P1-S ticks:212
+P1-F ticks:222
+P4-F ticks:222
+P2-S ticks:222
+P2-F ticks:232
+P3-S ticks:232
+P3-F ticks:242
+P1-S ticks:242
+P1-F ticks:252
+P2-S ticks:252
+P2-F ticks:262
+P4-S ticks:262
+P1-S ticks:272
+P1-F ticks:282
+P4-F ticks:282
+P3-S ticks:282
+P3-F ticks:292
+P2-S ticks:292
+P2-F ticks:302
+P1-S ticks:302
+P1-F ticks:312
+P5-F ticks:312
+Killing task 5
+P3-S ticks:322
+P1-S ticks:332
+P1-F ticks:342
+P3-F ticks:342
+P2-S ticks:342
+P2-F ticks:352
+P4-S ticks:352
+P4-F ticks:362
+P1-S ticks:362
+P1-F ticks:372
+P2-S ticks:372
+P2-F ticks:382
+P3-S ticks:382
+P3-F ticks:392
+P1-S ticks:392
+P1-F ticks:402
+P4-S ticks:402
+P2-S ticks:412
+P2-F ticks:422
+P1-S ticks:422
+P1-F ticks:432
+P4-F ticks:432
+P3-S ticks:432
+P3-F ticks:442
+P1-S ticks:452
+P1-F ticks:462
+P2-S ticks:462
+P2-F ticks:472
+P3-S ticks:472
+P1-S ticks:482
+P1-F ticks:492
+P3-F ticks:492
+P4-S ticks:492
+P4-F ticks:502
+P2-S ticks:502
+P2-F ticks:512
+P1-S ticks:512
+P1-F ticks:522
+P3-S ticks:522
+P3-F ticks:532
+P2-S ticks:532
+P2-F ticks:542
+P1-S ticks:542
+P1-F ticks:552
+P4-S ticks:552
+P4-F ticks:562
+P1-S ticks:572
+P1-F ticks:582
+P2-S ticks:582
+P2-F ticks:592
+P3-S ticks:592
+P3-F ticks:602
+P1-S ticks:602
+P1-F ticks:612
+P2-S ticks:612
+P2-F ticks:622
+P4-S ticks:622
+P1-S ticks:632
+P1-F ticks:642
+P4-F ticks:642
+P3-S ticks:642
+P3-F ticks:652
+P2-S ticks:652
+P2-F ticks:662
+P1-S ticks:662
+P1-F ticks:672
+P3-S ticks:672
+P3-F ticks:682
+P4-S ticks:682
+P1-S ticks:692
+P1-F ticks:702
+P2-S ticks:702
+P2-F ticks:712
+P4-F ticks:712
+P1-S ticks:722
+P1-F ticks:732
+P3-S ticks:732
+P3-F ticks:742
+P2-S ticks:742
+P2-F ticks:752
+P1-S ticks:752
+P1-F ticks:762
+P4-S ticks:762
+P4-F ticks:772
+P2-S ticks:772
+P2-F ticks:782
+P1-S ticks:782
+P1-F ticks:792
+P3-S ticks:792
+P3-F ticks:802
+P1-S ticks:812
+P1-F ticks:822
+P2-S ticks:822
+P2-F ticks:832
+P3-S ticks:832
+P3-F ticks:842
+P1-S ticks:842
+P4-S ticks:842
+*** END OF TEST EDF SCHEDULER 3 ***

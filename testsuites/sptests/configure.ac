@@ -106,6 +106,9 @@ spassoc01/Makefile
 spchain/Makefile
 spclockget/Makefile
 spcoverage/Makefile
+spedfsched01/Makefile
+spedfsched02/Makefile
+spedfsched03/Makefile
 sperror01/Makefile
 sperror02/Makefile
 sperror03/Makefile

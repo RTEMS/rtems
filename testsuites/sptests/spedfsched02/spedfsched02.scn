@@ -1,0 +1,40 @@
+*** TEST EDF Scheduler 2 ***
+TA1 - rtems_rate_monotonic_create id = 0x42010001
+TA1 - rtems_rate_monotonic_ident id = 0x42010001
+TA1 - (0x42010001) period 2
+TA2 - rtems_rate_monotonic_create id = 0x42010002
+TA2 - rtems_rate_monotonic_ident id = 0x42010002
+TA2 - (0x42010002) period 2
+TA3 - rtems_rate_monotonic_create id = 0x42010003
+TA3 - rtems_rate_monotonic_ident id = 0x42010003
+TA3 - (0x42010003) period 2
+TA4 - rtems_rate_monotonic_create id = 0x42010004
+TA4 - rtems_rate_monotonic_ident id = 0x42010004
+TA4 - (0x42010004) period 2
+TA6 - rtems_rate_monotonic_create id = 0x42010005
+TA6 - rtems_rate_monotonic_ident id = 0x42010005
+TA6 - (0x42010005) period 0
+TA5 - rtems_rate_monotonic_create id = 0x42010006
+TA5 - rtems_rate_monotonic_ident id = 0x42010006
+TA5 - (0x42010006) period 100
+TA5 - PERIODS CHECK OK (1)
+TA5 - PERIODS CHECK OK (2)
+TA5 - PERIODS CHECK OK (3)
+TA5 - PERIODS CHECK OK (4)
+TA5 - PERIODS CHECK OK (5)
+TA6 - Actual: 10 Expected: 10 - OK
+TA6 - Actual: 20 Expected: 20 - OK
+TA6 - Actual: 30 Expected: 30 - OK
+TA6 - Actual: 40 Expected: 40 - OK
+TA6 - Actual: 50 Expected: 50 - OK
+TA6 - Actual: 60 Expected: 60 - OK
+TA6 - Actual: 70 Expected: 70 - OK
+TA6 - Actual: 80 Expected: 80 - OK
+TA6 - Actual: 90 Expected: 90 - OK
+TA6 - Actual: 100 Expected: 100 - OK
+TA5 - PERIODS CHECK OK (6)
+TA5 - PERIODS CHECK OK (7)
+TA5 - PERIODS CHECK OK (8)
+TA5 - PERIODS CHECK OK (9)
+TA5 - PERIODS CHECK OK (10)
+*** END OF TEST EDF SCHEDULER 2 ***

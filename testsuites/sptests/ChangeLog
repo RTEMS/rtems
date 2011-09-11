@@ -1,3 +1,21 @@
+2011-09-11	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1897/testing
+	* Makefile.am, configure.ac: Add tests for Earliest Deadline First
+	(EDF) Scheduling Algorithm implementation.
+	* spedfsched01/.cvsignore, spedfsched01/Makefile.am,
+	spedfsched01/init.c, spedfsched01/spedfsched01.doc,
+	spedfsched01/spedfsched01.scn, spedfsched01/system.h,
+	spedfsched01/task1.c, spedfsched02/.cvsignore,
+	spedfsched02/Makefile.am, spedfsched02/getall.c, spedfsched02/init.c,
+	spedfsched02/spedfsched02.doc, spedfsched02/spedfsched02.scn,
+	spedfsched02/system.h, spedfsched02/task1.c, spedfsched03/.cvsignore,
+	spedfsched03/Makefile.am, spedfsched03/edfparams.h,
+	spedfsched03/init.c, spedfsched03/spedfsched03.doc,
+	spedfsched03/spedfsched03.scn, spedfsched03/system.h,
+	spedfsched03/tasks_aperiodic.c, spedfsched03/tasks_periodic.c: New
+	files.
+
 2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp03/sp03.scn, sp05/sp05.scn, sp23/sp23.scn, sp27/sp27.scn,

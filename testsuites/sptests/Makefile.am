@@ -29,7 +29,8 @@ SUBDIRS = \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
     spintrcritical17 spmkdir spmountmgr01 spheapprot \
-    spsimplesched01 spsimplesched02 spsimplesched03 spnsext01
+    spsimplesched01 spsimplesched02 spsimplesched03 spnsext01 \
+    spedfsched01 spedfsched02 spedfsched03
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am
