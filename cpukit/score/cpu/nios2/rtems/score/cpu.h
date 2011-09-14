@@ -65,10 +65,7 @@ extern "C" {
 
 #define CPU_STACK_GROWS_UP FALSE
 
-/*
- * TODO: Run the timing tests and figure out if we profit from cache alignment.
- */
-#define CPU_STRUCTURE_ALIGNMENT
+#define CPU_STRUCTURE_ALIGNMENT __attribute__((section(".sdata"), aligned(32)))
 
 #define CPU_BIG_ENDIAN FALSE
 

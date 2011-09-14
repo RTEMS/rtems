@@ -1,3 +1,8 @@
+2011-09-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/cpu.h: Request cache alignment and small data area in
+	CPU_STRUCTURE_ALIGNMENT.
+
 2011-09-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* nios2-thread-dispatch-disabled.c: Use offsetof() instead of
