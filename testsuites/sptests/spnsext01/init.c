@@ -46,7 +46,7 @@ static rtems_task Init(rtems_task_argument argument)
     ++n;
     sc = rtems_clock_get_uptime(&new_uptime);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(!_Timestamp_Less_than(&new_uptime, &uptime));
+    rtems_test_assert(!_Timespec_Less_than(&new_uptime, &uptime));
     uptime = new_uptime;
   }
 
@@ -61,7 +61,7 @@ static rtems_task Init(rtems_task_argument argument)
 
     sc = rtems_clock_get_uptime(&new_uptime);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(!_Timestamp_Less_than(&new_uptime, &uptime));
+    rtems_test_assert(!_Timespec_Less_than(&new_uptime, &uptime));
     uptime = new_uptime;
   }
   rtems_interrupt_enable(level);
