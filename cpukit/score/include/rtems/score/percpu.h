@@ -216,7 +216,7 @@ typedef struct {
  *
  *  This is an array of per CPU core information.
  */
-extern Per_CPU_Control _Per_CPU_Information[];
+extern Per_CPU_Control _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
 #if defined(RTEMS_SMP)
 /**
