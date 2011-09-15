@@ -1,3 +1,10 @@
+2011-09-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* cpukit/libmisc/cpuuse/cpuuse.h,
+	cpukit/libmisc/cpuuse/cpuusagedata.c,
+	cpukit/libmisc/cpuuse/cpuusagereport.c,
+	cpukit/libmisc/cpuuse/cpuusagereset.c: Fixed timestamp usage.
+
 2011-09-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1898/cpukit

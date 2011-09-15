@@ -15,14 +15,10 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
 #include <rtems/cpuuse.h>
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timespec.h>
-#endif
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  struct timespec    CPU_usage_Uptime_at_last_reset;
+  Timestamp_Control  CPU_usage_Uptime_at_last_reset;
 #else
   uint32_t           CPU_usage_Ticks_at_last_reset;
 #endif

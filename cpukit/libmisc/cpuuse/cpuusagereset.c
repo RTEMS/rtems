@@ -15,9 +15,6 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/score/timestamp.h>
-
 #include <stdlib.h>
 #include <ctype.h>
 #include <inttypes.h>
@@ -34,15 +31,6 @@ static void CPU_usage_Per_thread_handler(
     the_thread->cpu_time_used = 0;
   #endif
 }
-
-/*
- * External data that is shared by cpu usage code but not declared in .h files.
- */
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  extern Timestamp_Control CPU_usage_Uptime_at_last_reset;
-#else
-  extern uint32_t   CPU_usage_Ticks_at_last_reset;
-#endif
 
 /*
  *  rtems_cpu_usage_reset

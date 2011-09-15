@@ -15,8 +15,6 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,17 +22,6 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
-#include <rtems/bspIo.h>
-
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timestamp.h>
-#endif
-
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  extern Timestamp_Control  CPU_usage_Uptime_at_last_reset;
-#else
-  extern uint32_t           CPU_usage_Ticks_at_last_reset;
-#endif
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   static bool is_executing_on_a_core(
@@ -77,6 +64,7 @@ void rtems_cpu_usage_report_with_plugin(
   uint32_t             ival, fval;
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     Timestamp_Control  uptime, total, ran, uptime_at_last_reset;
+    uint32_t seconds, nanoseconds;
   #else
     uint32_t           total_units = 0;
   #endif
@@ -171,11 +159,12 @@ void rtems_cpu_usage_report_with_plugin(
            * Print the information
            */
 
+          seconds = _Timestamp_Get_seconds( &ran );
+          nanoseconds = _Timestamp_Get_nanoseconds( &ran ) /
+            TOD_NANOSECONDS_PER_MICROSECOND;
           (*print)( context,
             "%7" PRIu32 ".%06" PRIu32 " |%4" PRIu32 ".%03" PRIu32 "\n",
-            _Timestamp_Get_seconds( &ran ),
-            _Timestamp_Get_nanoseconds( &ran ) /
-               TOD_NANOSECONDS_PER_MICROSECOND,
+            seconds, nanoseconds,
             ival, fval
           );
         }
@@ -204,13 +193,15 @@ void rtems_cpu_usage_report_with_plugin(
   }
 
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+    seconds = _Timestamp_Get_seconds( &total );
+    nanoseconds = _Timestamp_Get_nanoseconds( &total ) /
+      TOD_NANOSECONDS_PER_MICROSECOND;
     (*print)(
        context,
        "------------+----------------------------------------+---------------+---------\n"
        " TIME SINCE LAST CPU USAGE RESET IN SECONDS:                    %7" PRIu32 ".%06" PRIu32 "\n"
        "-------------------------------------------------------------------------------\n",
-       _Timestamp_Get_seconds( &total ),
-       _Timestamp_Get_nanoseconds( &total ) / TOD_NANOSECONDS_PER_MICROSECOND
+       seconds, nanoseconds
     );
   #else
     (*print)(
