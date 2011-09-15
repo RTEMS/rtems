@@ -103,6 +103,9 @@ sp74/Makefile
 sp75/Makefile
 sp76/Makefile
 spassoc01/Makefile
+spcbssched01/Makefile
+spcbssched02/Makefile
+spcbssched03/Makefile
 spchain/Makefile
 spclockget/Makefile
 spcoverage/Makefile

@@ -1,3 +1,21 @@
+2011-09-15	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1907/testing
+	* Makefile.am, configure.ac: Add tests for the CBS (Constant Bandwidth
+	Server) scheduler.
+	* spcbssched01/.cvsignore, spcbssched01/Makefile.am,
+	spcbssched01/init.c, spcbssched01/spcbssched01.doc,
+	spcbssched01/spcbssched01.scn, spcbssched01/system.h,
+	spcbssched01/task1.c, spcbssched02/.cvsignore,
+	spcbssched02/Makefile.am, spcbssched02/init.c,
+	spcbssched02/spcbssched02.doc, spcbssched02/spcbssched02.scn,
+	spcbssched02/system.h, spcbssched02/task_periodic.c,
+	spcbssched03/.cvsignore, spcbssched03/Makefile.am,
+	spcbssched03/cbsparams.h, spcbssched03/init.c,
+	spcbssched03/spcbssched03.doc, spcbssched03/spcbssched03.scn,
+	spcbssched03/system.h, spcbssched03/tasks_aperiodic.c,
+	spcbssched03/tasks_periodic.c: New files.
+
 2011-09-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spnsext01/init.c: Use correct API.
