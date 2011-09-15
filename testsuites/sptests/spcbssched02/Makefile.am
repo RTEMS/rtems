@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic semaphore clock
+MANAGERS = all
 
 rtems_tests_PROGRAMS = spcbssched02
 spcbssched02_SOURCES = init.c task_periodic.c system.h

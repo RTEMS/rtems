@@ -2,10 +2,11 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic semaphore clock
+MANAGERS = all
 
 rtems_tests_PROGRAMS = spcbssched03
-spcbssched03_SOURCES = init.c tasks_periodic.c tasks_aperiodic.c system.h cbsparams.h
+spcbssched03_SOURCES = init.c tasks_periodic.c tasks_aperiodic.c system.h \
+    cbsparams.h
 
 dist_rtems_tests_DATA = spcbssched03.scn
 dist_rtems_tests_DATA += spcbssched03.doc
