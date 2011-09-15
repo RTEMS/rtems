@@ -40,6 +40,7 @@ include_rtems_score_HEADERS += include/rtems/score/priority.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
 include_rtems_score_HEADERS += include/rtems/score/rbtree.h
 include_rtems_score_HEADERS += include/rtems/score/scheduler.h
+include_rtems_score_HEADERS += include/rtems/score/schedulercbs.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersimple.h
@@ -237,6 +238,22 @@ libscore_a_SOURCES += src/scheduleredf.c \
     src/scheduleredfunblock.c \
     src/scheduleredfupdate.c \
     src/scheduleredfyield.c
+
+## SCHEDULERCBS_C_FILES
+libscore_a_SOURCES += src/schedulercbs.c \
+    src/schedulercbsattachthread.c \
+    src/schedulercbscleanup.c \
+    src/schedulercbscreateserver.c \
+    src/schedulercbsdestroyserver.c \
+    src/schedulercbsdetachthread.c \
+    src/schedulercbsgetapprovedbudget.c \
+    src/schedulercbsgetexecutiontime.c \
+    src/schedulercbsgetparameters.c \
+    src/schedulercbsgetremainingbudget.c \
+    src/schedulercbsgetserverid.c \
+    src/schedulercbssetparameters.c \
+    src/schedulercbsreleasejob.c \
+    src/schedulercbsunblock.c
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \

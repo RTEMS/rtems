@@ -15,6 +15,7 @@ include_rtems_HEADERS += include/rtems/fatal.h
 include_rtems_HEADERS += include/rtems/init.h
 include_rtems_HEADERS += include/rtems/io.h
 include_rtems_HEADERS += include/rtems/mptables.h
+include_rtems_HEADERS += include/rtems/cbs.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/sptables.h
 
@@ -22,6 +23,7 @@ EXTRA_DIST = include/rtems/README
 
 include_rtems_HEADERS += inline/rtems/chain.inl
 include_rtems_HEADERS += inline/rtems/extension.inl
+include_rtems_HEADERS += inline/rtems/cbs.inl
 include_rtems_HEADERS += inline/rtems/rbtree.inl
 
 ## src

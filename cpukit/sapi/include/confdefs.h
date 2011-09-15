@@ -574,6 +574,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
+ *  CONFIGURE_SCHEDULER_CBS        - CBS Scheduler
  * 
  * If no configuration is specified by the application, then 
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
@@ -600,7 +601,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
-    !defined(CONFIGURE_SCHEDULER_EDF)
+    !defined(CONFIGURE_SCHEDULER_EDF) && \
+    !defined(CONFIGURE_SCHEDULER_CBS)
   #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
     #define CONFIGURE_SCHEDULER_SIMPLE_SMP
   #else
@@ -674,6 +676,31 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     _Configure_From_workspace(0))
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_EDF_Per_thread)))
+#endif
+
+/*
+ * If the CBS Scheduler is selected, then configure for it.
+ */
+#if defined(CONFIGURE_SCHEDULER_CBS)
+  #include <rtems/score/schedulercbs.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_CBS_ENTRY_POINTS
+
+  #ifndef CONFIGURE_CBS_MAXIMUM_SERVERS
+    #define CONFIGURE_CBS_MAXIMUM_SERVERS CONFIGURE_MAXIMUM_TASKS
+  #endif
+
+  #ifdef CONFIGURE_INIT
+    uint32_t _Scheduler_CBS_Maximum_servers = CONFIGURE_CBS_MAXIMUM_SERVERS;
+  #endif
+
+  /**
+   * define the memory used by the CBS scheduler
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace((sizeof(Scheduler_CBS_Server) + \
+        sizeof(Scheduler_CBS_Server*)) * CONFIGURE_CBS_MAXIMUM_SERVERS))
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
+    _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
 #endif
 
 #if defined(CONFIGURE_SCHEDULER_USER)
