@@ -40,9 +40,11 @@
   #define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
 #endif
 
-#if defined(RTEMS_POSIX_API)
-  #define RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT
-#endif
+/*
+ * With the addition of the Constant Block Scheduler (CBS),
+ * this feature is needed even when POSIX is disabled.
+ */
+#define RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT
 
 #if defined(RTEMS_POSIX_API)
   #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
