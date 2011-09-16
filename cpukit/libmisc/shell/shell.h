@@ -285,6 +285,26 @@ void rtems_shell_mount_add_fsys(rtems_shell_filesystems_t* fs);
  */
 void rtems_shell_mount_del_fsys(rtems_shell_filesystems_t* fs);
 
+typedef void (*rtems_shell_wait_for_input_notification)(
+  int fd,
+  int seconds_remaining,
+  void *arg
+);
+
+/**
+ * @brief Waits for input.
+ *
+ * @retval RTEMS_SUCCESSFUL Input detected.
+ * @retval RTEMS_TIMEOUT Timeout expired.
+ * @retval RTEMS_UNSATISFIED Cannot change or restore termios attributes.
+ */
+rtems_status_code rtems_shell_wait_for_input(
+  int fd,
+  int timeout_in_seconds,
+  rtems_shell_wait_for_input_notification notification,
+  void *notification_arg
+);
+
 #ifdef __cplusplus
 }
 #endif

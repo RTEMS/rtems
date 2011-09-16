@@ -1,3 +1,9 @@
+2011-09-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmisc/shell/shell-wait-for-input.c: New file.
+	* libmisc/Makefile.am: Reflect change above.
+	* libmisc/shell/shell.h: Declare rtems_shell_wait_for_input().
+
 2011-09-15	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* score/include/rtems/score/thread.h: Ensure CBS builds with POSIX
