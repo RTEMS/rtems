@@ -1,3 +1,11 @@
+2011-09-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* nios2-eic-il-low-level.S, nios2-eic-rsie-low-level.S: New files.
+	* Makefile.am: Reflect changes above.
+	* rtems/score/cpu.h, rtems/score/nios2-utility.h,
+	nios2-thread-dispatch-disabled.c, nios2-context-switch.S: Added
+	support for thread stack protection via the MPU.
+
 2011-09-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/cpu.h: Request cache alignment and small data area in

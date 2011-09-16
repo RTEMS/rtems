@@ -39,6 +39,8 @@ NIOS2_ASSERT_OFFSET(fp, FP);
 NIOS2_ASSERT_OFFSET(status, STATUS);
 NIOS2_ASSERT_OFFSET(sp, SP);
 NIOS2_ASSERT_OFFSET(ra, RA);
-NIOS2_ASSERT_OFFSET(thread_dispatch_disabled, TDD);
+NIOS2_ASSERT_OFFSET(thread_dispatch_disabled, THREAD_DISPATCH_DISABLED);
+NIOS2_ASSERT_OFFSET(stack_mpubase, STACK_MPUBASE);
+NIOS2_ASSERT_OFFSET(stack_mpuacc, STACK_MPUACC);
 
 uint32_t _Nios2_Thread_dispatch_disabled;

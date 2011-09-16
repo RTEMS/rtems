@@ -134,6 +134,8 @@ typedef struct {
   uint32_t sp;
   uint32_t ra;
   uint32_t thread_dispatch_disabled;
+  uint32_t stack_mpubase;
+  uint32_t stack_mpuacc;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
