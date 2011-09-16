@@ -43,6 +43,7 @@
 #include <rtems/ramdisk.h>
 #include <rtems/nvdisk.h>
 #include <rtems/nvdisk-sram.h>
+#include <rtems/shell.h>
 
 #if FILEIO_BUILD
 
@@ -226,7 +227,6 @@ fstab_t fs_table[] = {
 #define USE_SHELL
 
 #ifdef USE_SHELL
-#include <rtems/shell.h>
 
 int
 shell_nvdisk_trace (int argc, char* argv[])
@@ -1213,6 +1213,15 @@ fileio_task (rtems_task_argument ignored)
   fileio_menu();
 }
 
+static void
+notification (int fd, int seconds_remaining, void *arg)
+{
+  printf(
+    "Press any key to start file I/O sample (%is remaining)\n",
+    seconds_remaining
+  );
+}
+
 /*
  * RTEMS Startup Task
  */
@@ -1223,22 +1232,34 @@ Init (rtems_task_argument ignored)
   rtems_id   Task_id;
   rtems_status_code status;
 
-  puts( "\n\n*** FILE I/O SAMPLE AND TEST ***" );
+  puts( "\n\n*** TEST FILE I/O SAMPLE ***" );
 
-  Task_name = rtems_build_name('F','M','N','U');
-
-  status = rtems_task_create(
-    Task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2,
-    RTEMS_DEFAULT_MODES ,
-    RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES, &Task_id
+  status = rtems_shell_wait_for_input(
+    STDIN_FILENO,
+    20,
+    notification,
+    NULL
   );
-  directive_failed( status, "create" ); 
+  if (status == RTEMS_SUCCESSFUL) {
+    Task_name = rtems_build_name('F','M','N','U');
 
-  status = rtems_task_start( Task_id, fileio_task, 1 );
-  directive_failed( status, "start" ); 
+    status = rtems_task_create(
+      Task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2,
+      RTEMS_DEFAULT_MODES ,
+      RTEMS_FLOATING_POINT | RTEMS_DEFAULT_ATTRIBUTES, &Task_id
+    );
+    directive_failed( status, "create" ); 
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "delete" ); 
+    status = rtems_task_start( Task_id, fileio_task, 1 );
+    directive_failed( status, "start" ); 
+
+    status = rtems_task_delete( RTEMS_SELF );
+    directive_failed( status, "delete" ); 
+  } else {
+    puts( "*** END OF TEST FILE I/O SAMPLE ***" );
+
+    rtems_test_exit( 0 );
+  }
 }
 
 #if defined(USE_SHELL)

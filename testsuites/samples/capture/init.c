@@ -33,8 +33,17 @@
 #include <rtems.h>
 #include <rtems/capture-cli.h>
 #include <rtems/monitor.h>
+#include <rtems/shell.h>
 
 volatile int can_proceed = 1;
+
+static void notification(int fd, int seconds_remaining, void *arg)
+{
+  printf(
+    "Press any key to start capture engine (%is remaining)\n",
+    seconds_remaining
+  );
+}
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -43,27 +52,40 @@ rtems_task Init(
 #if BSP_SMALL_MEMORY
   printf("NO Capture Engine. MEMORY TOO SMALL");
 #else
+  rtems_status_code   status;
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
 
-  /* lower the task priority to allow created tasks to execute */
+  puts( "\n\n*** TEST CAPTURE ENGINE ***" );
 
-  rtems_task_set_priority(RTEMS_SELF, 20, &old_priority);
-  rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
+  status = rtems_shell_wait_for_input(
+    STDIN_FILENO,
+    20,
+    notification,
+    NULL
+  );
+  if (status == RTEMS_SUCCESSFUL) {
+    /* lower the task priority to allow created tasks to execute */
 
-  printf( "\n*** CAPTURE ENGINE TEST ***\n" );
+    rtems_task_set_priority(RTEMS_SELF, 20, &old_priority);
+    rtems_task_mode(RTEMS_PREEMPT,  RTEMS_PREEMPT_MASK, &old_mode);
 
-  while (!can_proceed)
-  {
-    printf ("Sleeping\n");
-    usleep (1000000);
+    while (!can_proceed)
+    {
+      printf ("Sleeping\n");
+      usleep (1000000);
+    }
+
+    rtems_monitor_init (0);
+    rtems_capture_cli_init (0);
+
+    setup_tasks_to_watch ();
+
+    rtems_task_delete (RTEMS_SELF);
+  } else {
+    puts( "*** END OF TEST CAPTURE ENGINE ***" );
+
+    exit( 0 );
   }
-
-  rtems_monitor_init (0);
-  rtems_capture_cli_init (0);
-
-  setup_tasks_to_watch ();
-
-  rtems_task_delete (RTEMS_SELF);
 #endif
 }
