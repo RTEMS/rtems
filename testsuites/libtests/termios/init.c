@@ -43,6 +43,7 @@
 rtems_task Init (rtems_task_argument argument);
 
 #include <rtems/confdefs.h>
+#include <rtems/shell.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -711,6 +712,13 @@ void usage( void )
   printf( "Enter your choice (1 to 5 or 9, followed by a carriage return): " );
 }
 
+static void notification( int fd, int seconds_remaining, void *arg )
+{
+  printf(
+    "Press any key to check the termios input capabilities (%is remaining)\n",
+    seconds_remaining
+  );
+}
 
 /*
  * RTEMS Startup Task
@@ -718,61 +726,74 @@ void usage( void )
 rtems_task
 Init (rtems_task_argument ignored)
 {
+  rtems_status_code status;
   char c ;
   struct termios orig_termios, test_termios;
 
-  printf( "\n\n*** TEST OF TERMIOS INPUT CAPABILITIES ***\n" );
+  puts( "\n\n*** TEST TERMIOS INPUT CAPABILITIES ***" );
 
-  if( tcgetattr( fileno( stdin ), &orig_termios ) < 0 ) {
-    perror( "tcgetattr() failed" );
-    rtems_test_exit( 0 );
-  }
-
-  test_termios = orig_termios;
-
-  usage();
-  for(;;) {
-    switch( c = getchar() ) {
-      case '1':
-        printf( "\nResetting the line to the original termios setting\n\n" );
-        test_termios = orig_termios;
-        if( tcsetattr( fileno( stdin ), TCSADRAIN, &test_termios ) < 0 ) {
-          perror( "tcsetattr() failed" );
-          rtems_test_exit( 1 );
-        }
-        usage();
-        break;
-
-      case '2':
-        print_termios( &test_termios );
-        usage();
-        break;
-
-      case '3':
-        change_line_settings( &test_termios );
-        usage();
-        break;
-
-      case '4':
-        canonical_input( &test_termios );
-        usage();
-        break;
-
-      case '5':
-        raw_input( &test_termios );
-        usage();
-        break;
-
-      case '9':
-        rtems_test_exit( 1 );
-
-      case '\n':
-        break;
-
-      default:
-        printf( "\n%c is not a valid choice. Try again\n\n", c );
-        usage();
-        break;
+  status = rtems_shell_wait_for_input(
+    STDIN_FILENO,
+    20,
+    notification,
+    NULL
+  );
+  if (status == RTEMS_SUCCESSFUL) {
+    if( tcgetattr( fileno( stdin ), &orig_termios ) < 0 ) {
+      perror( "tcgetattr() failed" );
+      rtems_test_exit( 0 );
     }
+
+    test_termios = orig_termios;
+
+    usage();
+    for(;;) {
+      switch( c = getchar() ) {
+        case '1':
+          printf( "\nResetting the line to the original termios setting\n\n" );
+          test_termios = orig_termios;
+          if( tcsetattr( fileno( stdin ), TCSADRAIN, &test_termios ) < 0 ) {
+            perror( "tcsetattr() failed" );
+            rtems_test_exit( 1 );
+          }
+          usage();
+          break;
+
+        case '2':
+          print_termios( &test_termios );
+          usage();
+          break;
+
+        case '3':
+          change_line_settings( &test_termios );
+          usage();
+          break;
+
+        case '4':
+          canonical_input( &test_termios );
+          usage();
+          break;
+
+        case '5':
+          raw_input( &test_termios );
+          usage();
+          break;
+
+        case '9':
+          rtems_test_exit( 1 );
+
+        case '\n':
+          break;
+
+        default:
+          printf( "\n%c is not a valid choice. Try again\n\n", c );
+          usage();
+          break;
+      }
+    }
+  } else {
+    puts( "*** END OF TEST TERMIOS INPUT CAPABILITIES ***" );
+
+    rtems_test_exit( 0 );
   }
 }

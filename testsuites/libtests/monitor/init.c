@@ -21,6 +21,7 @@
 #include "system.h"
 
 #include <rtems/monitor.h>
+#include <rtems/shell.h>
 
 rtems_task_priority Priorities[6] = { 0,   1,   1,   3,   4,   5 };
 
@@ -36,7 +37,13 @@ rtems_task Task_1_through_5(
   }
 }
 
-
+static void notification(int fd, int seconds_remaining, void *arg)
+{
+  printf(
+    "Press any key to enter monitor (%is remaining)\n",
+    seconds_remaining
+  );
+}
 
 rtems_task Init(
   rtems_task_argument argument
@@ -45,7 +52,7 @@ rtems_task Init(
   uint32_t    index;
   rtems_status_code status;
 
-  puts( "\n\n*** MONITOR TASK TEST ***" );
+  puts( "\n\n*** TEST MONITOR ***" );
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );
@@ -70,8 +77,20 @@ rtems_task Init(
     directive_failed( status, "rtems_task_start loop" );
   }
 
-  rtems_monitor_init( 0 );
+  status = rtems_shell_wait_for_input(
+    STDIN_FILENO,
+    20,
+    notification,
+    NULL
+  );
+  if (status == RTEMS_SUCCESSFUL) {
+    rtems_monitor_init( 0 );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+    status = rtems_task_delete( RTEMS_SELF );
+    directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  } else {
+    puts( "*** END OF TEST MONITOR ***" );
+
+    rtems_test_exit( 0 );
+  }
 }

@@ -1,3 +1,8 @@
+2011-09-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* monitor/monitor.scn, termios/termios.scn: New files.
+	* monitor/init.c, termios01/init.c: Use rtems_shell_wait_for_input().
+
 2011-09-02	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* stackchk/init.c, stackchk/system.h, stackchk/stackchk.scn: Print end
