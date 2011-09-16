@@ -66,6 +66,15 @@ extern "C" {
 #elif defined(__ARM_ARCH_6J__)
 #  define CPU_MODEL_NAME  "ARMv6J"
 
+#elif defined(__ARM_ARCH_6M__)
+#  define CPU_MODEL_NAME  "ARMv6M"
+
+#elif defined(__ARM_ARCH_7__)
+#  define CPU_MODEL_NAME  "ARMv7"
+
+#elif defined(__ARM_ARCH_7M__)
+#  define CPU_MODEL_NAME  "ARMv7M"
+
 #elif defined(__ARM_ARCH_7A__)
 #  define CPU_MODEL_NAME  "ARMv7A"
 
