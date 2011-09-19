@@ -1,0 +1,586 @@
+diff -Naur gdb-7.3.1.orig/gdb/lm32-tdep.c gdb-7.3.1/gdb/lm32-tdep.c
+--- gdb-7.3.1.orig/gdb/lm32-tdep.c	2011-03-18 19:52:30.000000000 +0100
++++ gdb-7.3.1/gdb/lm32-tdep.c	2011-09-05 05:15:58.049769734 +0200
+@@ -35,7 +35,7 @@
+ #include "regcache.h"
+ #include "trad-frame.h"
+ #include "reggroups.h"
+-#include "opcodes/lm32-desc.h"
++#include "../opcodes/lm32-desc.h"
+ 
+ #include "gdb_string.h"
+ 
+diff -Naur gdb-7.3.1.orig/gdb/sparc-tdep.c gdb-7.3.1/gdb/sparc-tdep.c
+--- gdb-7.3.1.orig/gdb/sparc-tdep.c	2011-03-18 19:52:32.000000000 +0100
++++ gdb-7.3.1/gdb/sparc-tdep.c	2011-09-05 05:15:58.049769734 +0200
+@@ -1117,7 +1117,7 @@
+ sparc32_store_return_value (struct type *type, struct regcache *regcache,
+ 			    const gdb_byte *valbuf)
+ {
+-  int len = TYPE_LENGTH (type);
++  size_t len = TYPE_LENGTH (type);
+   gdb_byte buf[8];
+ 
+   gdb_assert (!sparc_structure_or_union_p (type));
+diff -Naur gdb-7.3.1.orig/sim/common/gentmap.c gdb-7.3.1/sim/common/gentmap.c
+--- gdb-7.3.1.orig/sim/common/gentmap.c	2006-11-07 20:29:59.000000000 +0100
++++ gdb-7.3.1/sim/common/gentmap.c	2011-09-05 05:15:58.064769977 +0200
+@@ -2,6 +2,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ struct tdefs {
+   char *symbol;
+diff -Naur gdb-7.3.1.orig/sim/erc32/configure gdb-7.3.1/sim/erc32/configure
+--- gdb-7.3.1.orig/sim/erc32/configure	2010-01-09 22:11:39.000000000 +0100
++++ gdb-7.3.1/sim/erc32/configure	2011-09-05 05:15:58.075770156 +0200
+@@ -591,8 +591,9 @@
+ ac_subst_vars='LTLIBOBJS
+ LIBOBJS
+ cgen_breaks
++READLINE_CFLAGS
++READLINE_DEPS
+ READLINE
+-TERMCAP
+ REPORT_BUGS_TEXI
+ REPORT_BUGS_TO
+ PKGVERSION
+@@ -716,6 +717,7 @@
+ enable_sim_profile
+ with_pkgversion
+ with_bugurl
++with_system_readline
+ '
+       ac_precious_vars='build_alias
+ host_alias
+@@ -1358,6 +1360,7 @@
+   --with-zlib             include zlib support (auto/yes/no) default=auto
+   --with-pkgversion=PKG   Use PKG in the version string in place of "GDB"
+   --with-bugurl=URL       Direct users to URL to report a bug
++  --with-system-readline  use installed readline library
+ 
+ Some influential environment variables:
+   CC          C compiler command
+@@ -2416,7 +2419,6 @@
+ 
+ 
+ 
+-
+ # Bugs in autoconf 2.59 break the call to SIM_AC_COMMON, hack around
+ # it by inlining the macro's contents.
+ # This file contains common code used by all simulators.
+@@ -2916,18 +2918,18 @@
+ int
+ main ()
+ {
+-
++return 0;
+   ;
+   return 0;
+ }
+ _ACEOF
+ ac_clean_files_save=$ac_clean_files
+-ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out conftest.out"
++ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
+ # Try to create an executable without -o first, disregard a.out.
+ # It will help us diagnose broken compilers, and finding out an intuition
+ # of exeext.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler default output file name" >&5
+-$as_echo_n "checking for C compiler default output file name... " >&6; }
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the C compiler works" >&5
++$as_echo_n "checking whether the C compiler works... " >&6; }
+ ac_link_default=`$as_echo "$ac_link" | sed 's/ -o *conftest[^ ]*//'`
+ 
+ # The possible output files:
+@@ -2989,10 +2991,10 @@
+ else
+   ac_file=''
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_file" >&5
+-$as_echo "$ac_file" >&6; }
+ if test -z "$ac_file"; then :
+-  $as_echo "$as_me: failed program was:" >&5
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++$as_echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+ { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+@@ -3000,51 +3002,18 @@
+ { as_fn_set_status 77
+ as_fn_error "C compiler cannot create executables
+ See \`config.log' for more details." "$LINENO" 5; }; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
+ fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler default output file name" >&5
++$as_echo_n "checking for C compiler default output file name... " >&6; }
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_file" >&5
++$as_echo "$ac_file" >&6; }
+ ac_exeext=$ac_cv_exeext
+ 
+-# Check that the compiler produces executables we can run.  If not, either
+-# the compiler is broken, or we cross compile.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the C compiler works" >&5
+-$as_echo_n "checking whether the C compiler works... " >&6; }
+-# If not cross compiling, check that we can run a simple program.
+-if test "$cross_compiling" != yes; then
+-  if { ac_try='./$ac_file'
+-  { { case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_try") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; }; then
+-    cross_compiling=no
+-  else
+-    if test "$cross_compiling" = maybe; then
+-	cross_compiling=yes
+-    else
+-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error "cannot run C compiled programs.
+-If you meant to cross compile, use \`--host'.
+-See \`config.log' for more details." "$LINENO" 5; }
+-    fi
+-  fi
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-
+-rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out conftest.out
++rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
+ ac_clean_files=$ac_clean_files_save
+-# Check that the compiler produces executables we can run.  If not, either
+-# the compiler is broken, or we cross compile.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are cross compiling" >&5
+-$as_echo_n "checking whether we are cross compiling... " >&6; }
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $cross_compiling" >&5
+-$as_echo "$cross_compiling" >&6; }
+-
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for suffix of executables" >&5
+ $as_echo_n "checking for suffix of executables... " >&6; }
+ if { { ac_try="$ac_link"
+@@ -3084,6 +3053,63 @@
+ rm -f conftest.$ac_ext
+ EXEEXT=$ac_cv_exeext
+ ac_exeext=$EXEEXT
++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++int
++main ()
++{
++
++  ;
++  return 0;
++}
++_ACEOF
++ac_clean_files="$ac_clean_files conftest.out"
++# Check that the compiler produces executables we can run.  If not, either
++# the compiler is broken, or we cross compile.
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are cross compiling" >&5
++$as_echo_n "checking whether we are cross compiling... " >&6; }
++if test "$cross_compiling" != yes; then
++  { { ac_try="$ac_link"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
++$as_echo "$ac_try_echo"; } >&5
++  (eval "$ac_link") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }
++  if { ac_try='./conftest$ac_cv_exeext'
++  { { case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
++$as_echo "$ac_try_echo"; } >&5
++  (eval "$ac_try") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; }; then
++    cross_compiling=no
++  else
++    if test "$cross_compiling" = maybe; then
++	cross_compiling=yes
++    else
++	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error "cannot run C compiled programs.
++If you meant to cross compile, use \`--host'.
++See \`config.log' for more details." "$LINENO" 5; }
++    fi
++  fi
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $cross_compiling" >&5
++$as_echo "$cross_compiling" >&6; }
++
++rm -f conftest.$ac_ext conftest$ac_cv_exeext conftest.out
++ac_clean_files=$ac_clean_files_save
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for suffix of object files" >&5
+ $as_echo_n "checking for suffix of object files... " >&6; }
+ if test "${ac_cv_objext+set}" = set; then :
+@@ -4532,86 +4558,41 @@
+ done
+ 
+ 
+-# In the Cygwin environment, we need some additional flags.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for cygwin" >&5
+-$as_echo_n "checking for cygwin... " >&6; }
+-if test "${sim_cv_os_cygwin+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+ 
+-#ifdef __CYGWIN__
+-lose
+-#endif
+-_ACEOF
+-if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+-  $EGREP "lose" >/dev/null 2>&1; then :
+-  sim_cv_os_cygwin=yes
+-else
+-  sim_cv_os_cygwin=no
++# Check whether --with-system-readline was given.
++if test "${with_system_readline+set}" = set; then :
++  withval=$with_system_readline;
+ fi
+-rm -f conftest*
+ 
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $sim_cv_os_cygwin" >&5
+-$as_echo "$sim_cv_os_cygwin" >&6; }
+ 
+-if test x$sim_cv_os_cygwin = xyes; then
+-  TERMCAP='`if test -r ../../libtermcap/libtermcap.a; then echo ../../libtermcap/libtermcap.a; else echo -ltermcap; fi` -luser32'
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ltermcap" >&5
+-$as_echo_n "checking for main in -ltermcap... " >&6; }
+-if test "${ac_cv_lib_termcap_main+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-ltermcap  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++if test "$with_system_readline" = yes; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for readline" >&5
++$as_echo_n "checking for readline... " >&6; }
++  save_LIBS="$LIBS"
++  LIBS="-lreadline $save_LIBS"
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+-
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++char add_history ();
+ int
+ main ()
+ {
+-return main ();
++return add_history ();
+   ;
+   return 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_termcap_main=yes
+-else
+-  ac_cv_lib_termcap_main=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_termcap_main" >&5
+-$as_echo "$ac_cv_lib_termcap_main" >&6; }
+-if test "x$ac_cv_lib_termcap_main" = x""yes; then :
+-  TERMCAP=-ltermcap
+-else
+-  TERMCAP=""
+-fi
+-
+-fi
+-
+-
+-# We prefer the in-tree readline.  Top-level dependencies make sure
+-# src/readline (if it's there) is configured before src/sim.
+-if test -r ../../readline/Makefile; then
+-  READLINE=../../readline/libreadline.a
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for readline in -lreadline" >&5
+-$as_echo_n "checking for readline in -lreadline... " >&6; }
+-if test "${ac_cv_lib_readline_readline+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
++  READLINE=-lreadline
+ else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lreadline $TERMCAP $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++   LIBS="-lreadline -lncurses $save_LIBS"
++      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+ /* Override any GCC internal prototype to avoid an error.
+@@ -4620,33 +4601,39 @@
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char readline ();
++char add_history ();
+ int
+ main ()
+ {
+-return readline ();
++return add_history ();
+   ;
+   return 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_readline_readline=yes
++  READLINE="-lreadline -lncurses"
+ else
+-  ac_cv_lib_readline_readline=no
++  as_fn_error "unable to detect readline" "$LINENO" 5
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
++
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_readline" >&5
+-$as_echo "$ac_cv_lib_readline_readline" >&6; }
+-if test "x$ac_cv_lib_readline_readline" = x""yes; then :
+-  READLINE=-lreadline
+-else
+-  as_fn_error "the required \"readline\" library is missing" "$LINENO" 5
++rm -f core conftest.err conftest.$ac_objext \
++    conftest$ac_exeext conftest.$ac_ext
++  LIBS="$save_LIBS"
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $READLINE" >&5
++$as_echo "$READLINE" >&6; }
++  READLINE_DEPS=
++  READLINE_CFLAGS=
++else
++  READLINE='../../readline/libreadline.a -lncurses'
++  READLINE_DEPS='$(READLINE)'
++  READLINE_CFLAGS='-I$(READLINE_SRC)/..'
+ fi
+ 
+-fi
++
++
+ 
+ 
+ ac_sources="$sim_link_files"
+diff -Naur gdb-7.3.1.orig/sim/erc32/configure.ac gdb-7.3.1/sim/erc32/configure.ac
+--- gdb-7.3.1.orig/sim/erc32/configure.ac	2006-12-20 23:35:51.000000000 +0100
++++ gdb-7.3.1/sim/erc32/configure.ac	2011-09-05 05:15:58.075770156 +0200
+@@ -11,27 +11,32 @@
+ 
+ AC_CHECK_HEADERS(stdlib.h)
+ 
+-# In the Cygwin environment, we need some additional flags.
+-AC_CACHE_CHECK([for cygwin], sim_cv_os_cygwin,
+-[AC_EGREP_CPP(lose, [
+-#ifdef __CYGWIN__
+-lose
+-#endif],[sim_cv_os_cygwin=yes],[sim_cv_os_cygwin=no])])
++AC_ARG_WITH([system-readline],
++  [AS_HELP_STRING([--with-system-readline],
++                  [use installed readline library])])
+ 
+-if test x$sim_cv_os_cygwin = xyes; then
+-  TERMCAP='`if test -r ../../libtermcap/libtermcap.a; then echo ../../libtermcap/libtermcap.a; else echo -ltermcap; fi` -luser32'
++if test "$with_system_readline" = yes; then
++  AC_MSG_CHECKING([for readline])
++  save_LIBS="$LIBS"
++  LIBS="-lreadline $save_LIBS"
++  AC_LINK_IFELSE([AC_LANG_CALL([],
++    [add_history])], [READLINE=-lreadline], 
++    [ LIBS="-lreadline -lncurses $save_LIBS"
++      AC_LINK_IFELSE([AC_LANG_CALL([],
++        [add_history])], [READLINE="-lreadline -lncurses"],
++        [AC_MSG_ERROR([unable to detect readline])])
++    ])
++  LIBS="$save_LIBS"
++  AC_MSG_RESULT($READLINE)
++  READLINE_DEPS=
++  READLINE_CFLAGS=
+ else
+-  AC_CHECK_LIB(termcap, main, TERMCAP=-ltermcap, TERMCAP="")
+-fi
+-AC_SUBST(TERMCAP)
+-
+-# We prefer the in-tree readline.  Top-level dependencies make sure
+-# src/readline (if it's there) is configured before src/sim.
+-if test -r ../../readline/Makefile; then
+-  READLINE=../../readline/libreadline.a
+-else
+-  AC_CHECK_LIB(readline, readline, READLINE=-lreadline,
+-	       AC_ERROR([the required "readline" library is missing]), $TERMCAP)
++  READLINE='../../readline/libreadline.a -lncurses'
++  READLINE_DEPS='$(READLINE)'
++  READLINE_CFLAGS='-I$(READLINE_SRC)/..'
+ fi
+ AC_SUBST(READLINE)
++AC_SUBST(READLINE_DEPS)
++AC_SUBST(READLINE_CFLAGS)
++
+ SIM_AC_OUTPUT
+diff -Naur gdb-7.3.1.orig/sim/erc32/erc32.c gdb-7.3.1/sim/erc32/erc32.c
+--- gdb-7.3.1.orig/sim/erc32/erc32.c	2010-05-11 16:18:20.000000000 +0200
++++ gdb-7.3.1/sim/erc32/erc32.c	2011-09-05 05:15:58.076770172 +0200
+@@ -414,7 +414,7 @@
+     if (rom8) mec_memcfg &= ~0x20000;
+     else mec_memcfg |= 0x20000;
+ 
+-    mem_ramsz = (256 * 1024) << ((mec_memcfg >> 10) & 7);
++    mem_ramsz = (512 * 1024) << ((mec_memcfg >> 10) & 7);
+     mem_romsz = (128 * 1024) << ((mec_memcfg >> 18) & 7);
+ 
+     if (sparclite_board) {
+diff -Naur gdb-7.3.1.orig/sim/erc32/Makefile.in gdb-7.3.1/sim/erc32/Makefile.in
+--- gdb-7.3.1.orig/sim/erc32/Makefile.in	2011-01-01 16:33:58.000000000 +0100
++++ gdb-7.3.1/sim/erc32/Makefile.in	2011-09-05 05:15:58.076770172 +0200
+@@ -19,12 +19,12 @@
+ 
+ ## COMMON_PRE_CONFIG_FRAG
+ 
+-TERMCAP_LIB = @TERMCAP@
++# TERMCAP_LIB = -lncurses
+ READLINE_LIB = @READLINE@
+ 
+ SIM_OBJS = exec.o erc32.o func.o help.o float.o interf.o
+ SIM_EXTRA_LIBS = $(READLINE_LIB) $(TERMCAP_LIB) -lm
+-SIM_EXTRA_ALL = sis
++SIM_EXTRA_ALL = sis$(EXEEXT)
+ SIM_EXTRA_INSTALL = install-sis
+ SIM_EXTRA_CLEAN = clean-sis
+ 
+@@ -38,8 +38,8 @@
+ # `sis' doesn't need interf.o.
+ SIS_OFILES = exec.o erc32.o func.o help.o float.o
+ 
+-sis: sis.o $(SIS_OFILES) $(COMMON_OBJS) $(LIBDEPS)
+-	$(CC) $(ALL_CFLAGS) -o sis \
++sis$(EXEEXT): sis.o $(SIS_OFILES) $(COMMON_OBJS) $(LIBDEPS)
++	$(CC) $(ALL_CFLAGS) -o sis$(EXEEXT) \
+ 	  sis.o $(SIS_OFILES) $(COMMON_OBJS) $(EXTRA_LIBS)
+ 
+ # FIXME: This computes the build host's endianness, doesn't it?
+@@ -52,11 +52,11 @@
+ 
+ # Copy the files into directories where they will be run.
+ install-sis: installdirs
+-	n=`echo sis | sed '$(program_transform_name)'`; \
+-	$(INSTALL_PROGRAM) sis$(EXEEXT) $(DESTDIR)$(bindir)/$$n$(EXEEXT)
++	n=`echo sis$(EXEEXT) | sed '$(program_transform_name)'`; \
++	$(INSTALL_PROGRAM) sis$(EXEEXT) $(DESTDIR)$(bindir)/$$n
+ 
+ clean-sis:
+-	rm -f sis end end.h
++	rm -f sis$(EXEEXT) end end.h
+ 
+ configure:
+ 	@echo "Rebuilding configure..."
+diff -Naur gdb-7.3.1.orig/sim/h8300/compile.c gdb-7.3.1/sim/h8300/compile.c
+--- gdb-7.3.1.orig/sim/h8300/compile.c	2011-01-11 15:19:32.000000000 +0100
++++ gdb-7.3.1/sim/h8300/compile.c	2011-09-05 05:15:58.085770319 +0200
+@@ -38,6 +38,12 @@
+ # define SIGTRAP 5
+ #endif
+ 
++#ifdef _WIN32
++#ifndef SIGBUS
++#define SIGBUS 10
++#endif
++#endif
++
+ int debug;
+ 
+ host_callback *sim_callback;
+diff -Naur gdb-7.3.1.orig/sim/m32c/Makefile.in gdb-7.3.1/sim/m32c/Makefile.in
+--- gdb-7.3.1.orig/sim/m32c/Makefile.in	2011-01-01 16:34:01.000000000 +0100
++++ gdb-7.3.1/sim/m32c/Makefile.in	2011-09-05 05:15:58.098770530 +0200
+@@ -56,7 +56,7 @@
+ 	./opc2c -l m32c.out $(srcdir)/m32c.opc > m32c.c
+ 
+ opc2c : opc2c.o safe-fgets.o
+-	$(CC_FOR_BUILD) $(BUILD_CFLAGS) $(BUILD_LDFLAGS) $^ -o $@ $(BUILD_LIBS)
++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) $(LDFLAGS_FOR_BUILD) $^ -o $@ $(BUILD_LIBS)
+ 
+ sample.x : $(srcdir)/sample.S $(srcdir)/sample.ld
+ 	../../gcc/xgcc $(CPUFLAGS) -B../../gcc/ -c $(srcdir)/sample.S -o sample.o
+@@ -90,8 +90,8 @@
+ r8c.o : cpu.h mem.h misc.h int.h
+ 
+ opc2c.o : opc2c.c safe-fgets.h
+-	$(CC_FOR_BUILD) $(BUILD_CFLAGS) -c $(srcdir)/opc2c.c
++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $@ -c $(srcdir)/opc2c.c
+ 
+ safe-fgets.o : safe-fgets.c safe-fgets.h
+-	$(CC_FOR_BUILD) $(BUILD_CFLAGS) -c $(srcdir)/safe-fgets.c
++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $@ -c $(srcdir)/safe-fgets.c
+ 
+diff -Naur gdb-7.3.1.orig/sim/ppc/device.c gdb-7.3.1/sim/ppc/device.c
+--- gdb-7.3.1.orig/sim/ppc/device.c	2011-02-14 06:14:27.000000000 +0100
++++ gdb-7.3.1/sim/ppc/device.c	2011-09-05 05:15:58.112770758 +0200
+@@ -1816,7 +1816,7 @@
+ /* I/O */
+ 
+ EXTERN_DEVICE\
+-(void volatile)
++(void)
+ device_error(device *me,
+ 	     const char *fmt,
+ 	     ...)
+diff -Naur gdb-7.3.1.orig/sim/ppc/device.h gdb-7.3.1/sim/ppc/device.h
+--- gdb-7.3.1.orig/sim/ppc/device.h	2001-12-14 01:22:12.000000000 +0100
++++ gdb-7.3.1/sim/ppc/device.h	2011-09-05 05:15:58.112770758 +0200
+@@ -727,7 +727,7 @@
+    */
+ 
+ EXTERN_DEVICE\
+-(void volatile) device_error
++(void) device_error
+ (device *me,
+  const char *fmt,
+  ...) __attribute__ ((format (printf, 2, 3)));
+diff -Naur gdb-7.3.1.orig/sim/ppc/hw_glue.c gdb-7.3.1/sim/ppc/hw_glue.c
+--- gdb-7.3.1.orig/sim/ppc/hw_glue.c	1999-04-16 03:35:09.000000000 +0200
++++ gdb-7.3.1/sim/ppc/hw_glue.c	2011-09-05 05:15:58.112770758 +0200
+@@ -194,13 +194,13 @@
+     if (glue->sizeof_output == 0)
+       device_error(me, "at least one reg property size must be nonzero");
+     if (glue->sizeof_output % sizeof(unsigned_word) != 0)
+-      device_error(me, "reg property size must be %d aligned", sizeof(unsigned_word));
++      device_error(me, "reg property size must be %zd aligned", sizeof(unsigned_word));
+     /* and the address */
+     device_address_to_attach_address(device_parent(me),
+ 				     &unit.address, &glue->space, &glue->address,
+ 				     me);
+     if (glue->address % (sizeof(unsigned_word) * max_nr_interrupts) != 0)
+-      device_error(me, "reg property address must be %d aligned",
++      device_error(me, "reg property address must be %zd aligned",
+ 		   sizeof(unsigned_word) * max_nr_interrupts);
+     glue->nr_outputs = glue->sizeof_output / sizeof(unsigned_word);
+     glue->output = zalloc(glue->sizeof_output);
