@@ -1,3 +1,13 @@
-Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-%{?_without_sources:NoSource:	0}
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.5-bfinrtems-20090122.diff
+BuildRequires:  @rpmprefix@bfin-rtems4.10-binutils
+BuildRequires:  texinfo
+
+# The bfin simulator silently tries to conditionally build an SDL based GUI, 
+# but fails to link correctly
+# Force not building the GUI.
+%{!?suse:BuildConflicts: SDL-devel}
+%{?suse:BuildConflicts: libSDL-devel}
+
+%if "%{gdb_version}" == "7.3.1"
+Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.3.1.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.3.1-rtems4.10-20110919.diff
+%endif

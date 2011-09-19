@@ -45,24 +45,37 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 6.5
-%define gdb_rpmvers %{expand:%(echo 6.5 | tr - _)} 
+%define gdb_version 7.3.1
+%define gdb_rpmvers %{expand:%(echo 7.3.1 | tr - _)} 
 
 Name:		rtems-4.10-bfin-rtems4.10-gdb
 Summary:	Gdb for target bfin-rtems4.10
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	12%{?dist}
+Release:	1%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  %{_host_rpmprefix}gcc
 
-%define build_sim --enable-sim
+%global build_sim --enable-sim
 
+# Whether to build against system readline
+# Default: yes
+%bcond_without system_readline
 
-%if "%{gdb_version}" >= "6.6"
+# Whether to build python support
+%if "%{_build}" != "%{_host}"
+# Can't build python Cdn-X
+%bcond_with python
+%else
+%bcond_without python
+%endif
+%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
+
+%global build_sim --enable-sim --enable-sim-trace
+
 # suse
 %if "%{?suse}" >= "10.3"
 BuildRequires: libexpat-devel
@@ -70,34 +83,23 @@ BuildRequires: libexpat-devel
 # Fedora/CentOS/Cygwin/MinGW
 BuildRequires: %{_host_rpmprefix}expat-devel
 %endif
-%endif
 
-%if "%{gdb_version}" < "6.7"
-%if "%{_build}" != "%{_host}"
-BuildRequires:  %{_host_rpmprefix}termcap-devel
-%endif
-%bcond_with system_readline
-%else
-%bcond_without system_readline
-%endif
 %{?with_system_readline:BuildRequires: %{_host_rpmprefix}readline-devel}
 BuildRequires:  %{_host_rpmprefix}ncurses-devel
 
-%if "%{gdb_version}" >= "6.8.50"
-%if "%{_build}" != "%{_host}"
-# Can't build python Cdn-X
-%bcond_with python
-%else
-%bcond_without python
+BuildRequires:  rtems-4.10-bfin-rtems4.10-binutils
+BuildRequires:  texinfo
+
+# The bfin simulator silently tries to conditionally build an SDL based GUI, 
+# but fails to link correctly
+# Force not building the GUI.
+%{!?suse:BuildConflicts: SDL-devel}
+%{?suse:BuildConflicts: libSDL-devel}
+
+%if "%{gdb_version}" == "7.3.1"
+Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.3.1.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-7.3.1-rtems4.10-20110919.diff
 %endif
-%endif
-%{?with_python:BuildRequires: %{_host_rpmprefix}python-devel}
-
-
-
-Source0:	ftp://ftp.gnu.org/pub/gnu/gdb/gdb-%{gdb_version}.tar.bz2
-%{?_without_sources:NoSource:	0}
-Patch0:		ftp://ftp.rtems.org/pub/rtems/SOURCES/4.10/gdb-6.5-bfinrtems-20090122.diff
 
 %description
 GDB for target bfin-rtems4.10
@@ -128,16 +130,9 @@ cd ..
     --disable-werror \
     %{build_sim} \
     %{?with_system_readline:--with-system-readline} \
-%if "%{gdb_version}" >= "6.6"
     --with-expat \
-%endif
-%if "%{gdb_version}" >= "6.8.50"
-%if %{with python}
-    --with-python \
-%else
-    --without-python \
-%endif
-%endif
+    %{?with_python:--with-python}%{!?with_python:--without-python} \
+    --with-gdb-datadir=%{_datadir}/bfin-rtems4.10-gdb \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \
     --mandir=%{_mandir} --infodir=%{_infodir}
@@ -161,20 +156,24 @@ cd ..
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/libbfin-rtems4.10-sim.a
 
-%if "%{gdb_version}" >= "7.0"
 # Bug in gdb-7.0, bogusly installs linux-only files
   somethinguseful=0
-  for f in ${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls/*.xml; do
+  for f in ${RPM_BUILD_ROOT}%{_datadir}/bfin-rtems4.10-gdb/syscalls/*.xml; do
     case $f in
     *linux.xml) rm -f $f;;
     *.xml) somethinguseful=1;;
     esac
   done
   if test $somethinguseful -eq 0; then
-    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls"
+    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/bfin-rtems4.10-gdb/syscalls"
   fi
-%endif
 
+%if "{gdb_version}" >= "7.3"
+%if ! %{with python}
+# gdb-7.3 doesn't honor --without-python correctly
+  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/bfin-rtems4.10-gdb/python
+%endif
+%endif
   cd ..
 
 # Extract %%__os_install_post into os_install_post~
@@ -225,6 +224,7 @@ GNU gdb targetting bfin-rtems4.10.
 %defattr(-,root,root)
 %dir %{_prefix}
 %dir %{_prefix}/share
+%{?with_python:%{_datadir}/bfin-rtems4.10-gdb}
 
 %dir %{_mandir}
 %dir %{_mandir}/man1
