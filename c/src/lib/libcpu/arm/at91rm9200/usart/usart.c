@@ -122,10 +122,10 @@ static int usart_read_polled(int minor)
     return -1;
 
   /* if nothing ready return -1 */
-  if ( (usart->sr & US_IER_RXBUFF) == 0 )
+  if ( (usart->sr & US_IER_RXRDY) == 0 )
     return -1;
 
-  return usart->thr;
+  return usart->rhr;
 }
 
 
