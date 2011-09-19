@@ -15,6 +15,7 @@ GNU gdb targetting @tool_target@.
 %defattr(-,root,root)
 %sysdir %{_prefix}
 %sysdir %{_prefix}/share
+%{?with_python:%{_datadir}/@tool_target@-gdb}
 
 %sysdir %{_mandir}
 %sysdir %{_mandir}/man1

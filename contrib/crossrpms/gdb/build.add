@@ -17,16 +17,9 @@
     --disable-werror \
     %{build_sim} \
     %{?with_system_readline:--with-system-readline} \
-%if "%{gdb_version}" >= "6.6"
     --with-expat \
-%endif
-%if "%{gdb_version}" >= "6.8.50"
-%if %{with python}
-    --with-python \
-%else
-    --without-python \
-%endif
-%endif
+    %{?with_python:--with-python}%{!?with_python:--without-python} \
+    --with-gdb-datadir=%{_datadir}/@tool_target@-gdb \
     --with-sysroot=%{_prefix}/@tool_target@/sys-root \
     --prefix=%{_prefix} --bindir=%{_bindir} \
     --includedir=%{_includedir} --libdir=%{_libdir} \

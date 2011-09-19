@@ -26,19 +26,23 @@
 # host library, installed to a bogus directory
   rm -f ${RPM_BUILD_ROOT}%{_libdir}/lib@tool_target@-sim.a
 
-%if "%{gdb_version}" >= "7.0"
 # Bug in gdb-7.0, bogusly installs linux-only files
   somethinguseful=0
-  for f in ${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls/*.xml; do
+  for f in ${RPM_BUILD_ROOT}%{_datadir}/@tool_target@-gdb/syscalls/*.xml; do
     case $f in
     *linux.xml) rm -f $f;;
     *.xml) somethinguseful=1;;
     esac
   done
   if test $somethinguseful -eq 0; then
-    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/gdb/syscalls"
+    rm -rf "${RPM_BUILD_ROOT}%{_datadir}/@tool_target@-gdb/syscalls"
   fi
-%endif
 
+%if "{gdb_version}" >= "7.3"
+%if ! %{with python}
+# gdb-7.3 doesn't honor --without-python correctly
+  rm -rf ${RPM_BUILD_ROOT}%{_datadir}/@tool_target@-gdb/python
+%endif
+%endif
   cd ..
 
