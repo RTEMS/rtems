@@ -31,7 +31,7 @@ void _Scheduler_CBS_Release_job(
 
   if (deadline) {
     /* Initializing or shifting deadline. */
-    if (serv_info && serv_info->parameters.budget)
+    if (serv_info)
       new_priority = (_Watchdog_Ticks_since_boot + serv_info->parameters.deadline)
         & ~SCHEDULER_EDF_PRIO_MSB;
     else
@@ -44,7 +44,7 @@ void _Scheduler_CBS_Release_job(
   }
 
   /* Budget replenishment for the next job. */
-  if (serv_info && serv_info->parameters.budget)
+  if (serv_info)
     the_thread->cpu_time_budget = serv_info->parameters.budget;
 
   the_thread->real_priority = new_priority;

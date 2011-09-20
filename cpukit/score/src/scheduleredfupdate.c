@@ -35,16 +35,4 @@ void _Scheduler_EDF_Update(
     the_thread->current_priority = the_thread->Start.initial_priority;
     sched_info->queue_state = SCHEDULER_EDF_QUEUE_STATE_NOT_PRESENTLY;
   }
-
-  if ( sched_info->queue_state == SCHEDULER_EDF_QUEUE_STATE_YES ) {
-    _RBTree_Extract(&_Scheduler_EDF_Ready_queue, the_node);
-    _RBTree_Insert(&_Scheduler_EDF_Ready_queue, the_node);
-
-    _Scheduler_EDF_Schedule();
-    if ( _Thread_Executing != _Thread_Heir ) {
-      if ( _Thread_Executing->is_preemptible ||
-           the_thread->current_priority == 0 )
-        _Thread_Dispatch_necessary = true;
-    }
-  }
 }
