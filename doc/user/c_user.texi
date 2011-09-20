@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1988-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -86,12 +86,15 @@
 @include overview.texi
 @include concepts.texi
 @include datatypes.texi
+@include schedule.texi
 @include init.texi
 @include task.texi
 @include intr.texi
 @include clock.texi
 @include timer.texi
+@include rtmon.texi
 @include sem.texi
+@include barrier.texi
 @include msg.texi
 @include event.texi
 @include signal.texi
@@ -100,9 +103,6 @@
 @include dpmem.texi
 @include io.texi
 @include fatal.texi
-@include schedule.texi
-@include rtmon.texi
-@include barrier.texi
 @include bsp.texi
 @include userext.texi
 @include conf.texi
@@ -126,12 +126,15 @@ This is the online version of the RTEMS C User's Guide.
 * Overview::
 * Key Concepts::
 * RTEMS Data Types::
+* Scheduling Concepts::
 * Initialization Manager::
 * Task Manager::
 * Interrupt Manager::
 * Clock Manager::
 * Timer Manager::
+* Rate Monotonic Manager::
 * Semaphore Manager::
+* Barrier Manager::
 * Message Manager::
 * Event Manager::
 * Signal Manager::
@@ -140,9 +143,6 @@ This is the online version of the RTEMS C User's Guide.
 * Dual-Ported Memory Manager::
 * I/O Manager::
 * Fatal Error Manager::
-* Scheduling Concepts::
-* Rate Monotonic Manager::
-* Barrier Manager::
 * Board Support Packages::
 * User Extensions Manager::
 * Configuring a System::

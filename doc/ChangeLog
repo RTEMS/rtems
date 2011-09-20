@@ -1,3 +1,10 @@
+2011-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* user/Makefile.am, user/c_user.texi: Reorder chapters to put
+	scheduling earlier. Also put Barrier and Rate Monotonic Manager where
+	they logically belong. They appear to have just be added toward the
+	end.
+
 2011-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1864/doc

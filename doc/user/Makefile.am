@@ -1,5 +1,5 @@
 #
-#  COPYRIGHT (c) 1988-2007
+#  COPYRIGHT (c) 1988-2011
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
@@ -54,10 +54,15 @@ concepts.texi: concepts.t
 datatypes.texi: datatypes.t
 	$(BMENU2) -p "Key Concepts Memory Management" \
 	    -u "Top" \
+	    -n "Scheduling Concepts" < $< > $@
+
+schedule.texi: schedule.t
+	$(BMENU2) -p "RTEMS Data Types List of Data Types" \
+	    -u "Top" \
 	    -n "Initialization Manager" < $< > $@
 
 init.texi: init.t
-	$(BMENU2) -p "RTEMS Data Types List of Data Types" \
+	$(BMENU2) -p "Scheduling Concepts Task State Transitions" \
 	    -u "Top" \
 	    -n "Task Manager" < $< > $@
 
@@ -80,15 +85,25 @@ clock.texi: clock.t
 timer.texi: timer.t
 	$(BMENU2) -p "Clock Manager CLOCK_TICK - Announce a clock tick" \
 	    -u "Top" \
+	    -n "Rate Monotonic Manager" < $< > $@
+
+rtmon.texi: rtmon.t
+	$(BMENU2) -p "Timer Manager TIMER_RESET - Reset an interval timer" \
+	    -u "Top" \
 	    -n "Semaphore Manager" < $< > $@
 
 sem.texi: sem.t
-	$(BMENU2) -p "Timer Manager TIMER_RESET - Reset an interval timer" \
+	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_REPORT_STATISTICS - Print period statistics report" \
+	    -u "Top" \
+	    -n "Barrier Manager" < $< > $@
+
+barrier.texi: barrier.t
+	$(BMENU2) -p "Semaphore Manager SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore" \
 	    -u "Top" \
 	    -n "Message Manager" < $< > $@
 
 msg.texi: msg.t
-	$(BMENU2) -p "Semaphore Manager SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore" \
+	$(BMENU2) -p "Barrier Manager BARRIER_RELEASE - Release a barrier" \
 	    -u "Top" \
 	    -n "Event Manager" < $< > $@
 
@@ -128,26 +143,10 @@ io.texi: io.t
 fatal.texi: fatal.t
 	$(BMENU2) -p "I/O Manager IO_CONTROL - Special device services" \
 	    -u "Top" \
-	    -n "Scheduling Concepts" < $< > $@
-
-schedule.texi: schedule.t
-	$(BMENU2) \
--p "Fatal Error Manager FATAL_ERROR_OCCURRED - Invoke the fatal error handler" \
-	    -u "Top" \
-	    -n "Rate Monotonic Manager" < $< > $@
-
-rtmon.texi: rtmon.t
-	$(BMENU2) -p "Scheduling Concepts Task State Transitions" \
-	    -u "Top" \
-	    -n "Barrier Manager" < $< > $@
-
-barrier.texi: barrier.t
-	$(BMENU2) -p "Rate Monotonic Manager RATE_MONOTONIC_REPORT_STATISTICS - Print period statistics report" \
-	    -u "Top" \
 	    -n "Board Support Packages" < $< > $@
 
 bsp.texi: bsp.t
-	$(BMENU2) -p "Barrier Manager BARRIER_RELEASE - Release a barrier" \
+	$(BMENU2) -p "Fatal Error Manager FATAL_ERROR_OCCURRED - Invoke the fatal error handler" \
 	    -u "Top" \
 	    -n "User Extensions Manager" < $< > $@
 
