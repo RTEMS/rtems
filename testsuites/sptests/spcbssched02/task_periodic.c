@@ -34,61 +34,64 @@ rtems_task Task_Periodic(
   params.deadline = Period;
   params.budget = Execution+1;
 
-  printf( "Periodic task: Create server and Attach thread\n" );
-  if ( rtems_cbs_create_server( &params, NULL, &server_id ) )
-    printf( "ERROR: CREATE SERVER FAILED\n" );
-  if ( rtems_cbs_attach_thread( server_id, Task_id ) )
-    printf( "ERROR: ATTACH THREAD FAILED\n" );
+  /* Taks 1 will be attached to a server, task 2 not. */
+  if ( argument == 1 ) {
+    printf( "Periodic task: Create server and Attach thread\n" );
+    if ( rtems_cbs_create_server( &params, NULL, &server_id ) )
+      printf( "ERROR: CREATE SERVER FAILED\n" );
+    if ( rtems_cbs_attach_thread( server_id, Task_id ) )
+      printf( "ERROR: ATTACH THREAD FAILED\n" );
 
-  printf( "Periodic task: ID and Get parameters\n" );
-  if ( rtems_cbs_get_server_id( Task_id, &tsid ) )
-    printf( "ERROR: GET SERVER ID FAILED\n" );
-  if ( tsid != server_id )
-    printf( "ERROR: SERVER ID MISMATCH\n" );
-  if ( rtems_cbs_get_parameters( server_id, &tparams ) )
-    printf( "ERROR: GET PARAMETERS FAILED\n" );
-  if ( params.deadline != tparams.deadline ||
-       params.budget != tparams.budget )
-    printf( "ERROR: PARAMETERS MISMATCH\n" );
+    printf( "Periodic task: ID and Get parameters\n" );
+    if ( rtems_cbs_get_server_id( Task_id, &tsid ) )
+      printf( "ERROR: GET SERVER ID FAILED\n" );
+    if ( tsid != server_id )
+      printf( "ERROR: SERVER ID MISMATCH\n" );
+    if ( rtems_cbs_get_parameters( server_id, &tparams ) )
+      printf( "ERROR: GET PARAMETERS FAILED\n" );
+    if ( params.deadline != tparams.deadline ||
+         params.budget != tparams.budget )
+      printf( "ERROR: PARAMETERS MISMATCH\n" );
 
-  printf( "Periodic task: Detach thread and Destroy server\n" );
-  if ( rtems_cbs_detach_thread( server_id, Task_id ) )
-    printf( "ERROR: DETACH THREAD FAILED\n" );
-  if ( rtems_cbs_destroy_server( server_id ) )
-    printf( "ERROR: DESTROY SERVER FAILED\n" );
-  if ( rtems_cbs_create_server( &params, NULL, &server_id ) )
-    printf( "ERROR: CREATE SERVER FAILED\n" );
+    printf( "Periodic task: Detach thread and Destroy server\n" );
+    if ( rtems_cbs_detach_thread( server_id, Task_id ) )
+      printf( "ERROR: DETACH THREAD FAILED\n" );
+    if ( rtems_cbs_destroy_server( server_id ) )
+      printf( "ERROR: DESTROY SERVER FAILED\n" );
+    if ( rtems_cbs_create_server( &params, NULL, &server_id ) )
+      printf( "ERROR: CREATE SERVER FAILED\n" );
 
-  printf( "Periodic task: Remaining budget and Execution time\n" );
-  if ( rtems_cbs_get_remaining_budget( server_id, &remaining_budget ) )
-    printf( "ERROR: GET REMAINING BUDGET FAILED\n" );
-  if ( remaining_budget != params.budget )
-    printf( "ERROR: REMAINING BUDGET MISMATCH\n" );
-  if ( rtems_cbs_get_execution_time( server_id, &exec_time, &abs_time ) )
-    printf( "ERROR: GET EXECUTION TIME FAILED\n" );
+    printf( "Periodic task: Remaining budget and Execution time\n" );
+    if ( rtems_cbs_get_remaining_budget( server_id, &remaining_budget ) )
+      printf( "ERROR: GET REMAINING BUDGET FAILED\n" );
+    if ( remaining_budget != params.budget )
+      printf( "ERROR: REMAINING BUDGET MISMATCH\n" );
+    if ( rtems_cbs_get_execution_time( server_id, &exec_time, &abs_time ) )
+      printf( "ERROR: GET EXECUTION TIME FAILED\n" );
 
-  printf( "Periodic task: Set parameters\n" );
-  if ( rtems_cbs_attach_thread( server_id, Task_id ) )
-    printf( "ERROR: ATTACH THREAD FAILED\n" );
-  params.deadline = Period * 2;
-  params.budget = Execution * 2 +1;
-  if ( rtems_cbs_set_parameters( server_id, &params ) )
-    printf( "ERROR: SET PARAMS FAILED\n" );
-  if ( rtems_cbs_get_parameters( server_id, &tparams ) )
-    printf( "ERROR: GET PARAMS FAILED\n" );
-  if ( params.deadline != tparams.deadline ||
-       params.budget != tparams.budget )
-    printf( "ERROR: PARAMS MISMATCH\n" );
-  params.deadline = Period;
-  params.budget = Execution+1;
-  if ( rtems_cbs_set_parameters( server_id, &params ) )
-    printf( "ERROR: SET PARAMS FAILED\n" );
-  if ( rtems_cbs_get_approved_budget( server_id, &approved_budget ) )
-    printf( "ERROR: GET APPROVED BUDGET FAILED\n" );
+    printf( "Periodic task: Set parameters\n" );
+    if ( rtems_cbs_attach_thread( server_id, Task_id ) )
+      printf( "ERROR: ATTACH THREAD FAILED\n" );
+    params.deadline = Period * 2;
+    params.budget = Execution * 2 +1;
+    if ( rtems_cbs_set_parameters( server_id, &params ) )
+      printf( "ERROR: SET PARAMS FAILED\n" );
+    if ( rtems_cbs_get_parameters( server_id, &tparams ) )
+      printf( "ERROR: GET PARAMS FAILED\n" );
+    if ( params.deadline != tparams.deadline ||
+         params.budget != tparams.budget )
+      printf( "ERROR: PARAMS MISMATCH\n" );
+    params.deadline = Period;
+    params.budget = Execution+1;
+    if ( rtems_cbs_set_parameters( server_id, &params ) )
+      printf( "ERROR: SET PARAMS FAILED\n" );
+    if ( rtems_cbs_get_approved_budget( server_id, &approved_budget ) )
+      printf( "ERROR: GET APPROVED BUDGET FAILED\n" );
 
-  printf( "Periodic task: Approved budget\n" );
-  if ( approved_budget != params.budget )
-    printf( "ERROR: APPROVED BUDGET MISMATCH\n" );
+    printf( "Periodic task: Approved budget\n" );
+    if ( approved_budget != params.budget )
+      printf( "ERROR: APPROVED BUDGET MISMATCH\n" );
+  }
 
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
@@ -129,10 +132,7 @@ rtems_task Task_Periodic(
     printf("rtems_rate_monotonic_delete failed with status of %d.\n", status);
     rtems_test_exit( 0 );
   }
-  if ( rtems_cbs_cleanup() )
-    printf( "ERROR: CBS CLEANUP\n" );
-
-  fflush(stdout);
-  puts( "*** END OF TEST CBS SCHEDULER 2 ***" );
-  rtems_test_exit( 0 );
+  printf( "Periodic task: Deleting self\n" );
+  status = rtems_task_delete( RTEMS_SELF );
+  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }

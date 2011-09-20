@@ -32,7 +32,7 @@ rtems_task Task_Periodic(
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 100000
 
-#define CONFIGURE_MAXIMUM_TASKS               2
+#define CONFIGURE_MAXIMUM_TASKS               3
 #define CONFIGURE_MAXIMUM_PERIODS             10
 
 #define CONFIGURE_INIT_TASK_PRIORITY          100
@@ -54,6 +54,8 @@ rtems_task Task_Periodic(
 
 rtems_id   Task_id;
 rtems_name Task_name;
+rtems_id   Task_id2;
+rtems_name Task_name2;
 rtems_task_priority Priority;
 time_t  Period;
 time_t  Execution;

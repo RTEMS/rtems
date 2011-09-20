@@ -27,4 +27,6 @@ P1-F ticks:71
 P1-S ticks:91
 P1-F ticks:101
 P1-S ticks:121
+Periodic task: Deleting self
+Init: Checking server with a deleted task
 *** END OF TEST CBS SCHEDULER 2 ***

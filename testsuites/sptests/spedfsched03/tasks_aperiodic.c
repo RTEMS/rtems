@@ -21,15 +21,20 @@ rtems_task Tasks_Aperiodic(
   rtems_task_argument argument
 )
 {
-  rtems_status_code  status;
-  int                start;
-  int                stop;
-  int                now;
+  rtems_status_code   status;
+  int                 start;
+  int                 stop;
+  int                 now;
 
   put_name( Task_name[ argument ], FALSE );
 
   status = rtems_task_wake_after( 2 + Phases[argument] );
   directive_failed( status, "rtems_task_wake_after" );
+
+  if ( argument == 6 ) {
+    rtems_task_suspend( Task_id[5] );
+    rtems_task_resume( Task_id[5] );
+  }
 
   rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start);
   printf("AT%" PRIdPTR "-S ticks:%d\n", argument, start);

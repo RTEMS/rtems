@@ -47,6 +47,7 @@ rtems_task Init(
   puts( "\n\n*** TEST CBS SCHEDULER 2 ***" );
 
   Task_name = rtems_build_name( 'P', 'T', '1', ' ' );
+  Task_name2 = rtems_build_name( 'P', 'T', '2', ' ' );
 
   status = rtems_task_create(
     Task_name,
@@ -55,6 +56,16 @@ rtems_task Init(
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id
+  );
+  directive_failed( status, "rtems_task_create loop" );
+
+  status = rtems_task_create(
+    Task_name2,
+    Priority,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
+    RTEMS_NO_PREEMPT,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &Task_id2
   );
   directive_failed( status, "rtems_task_create loop" );
 
@@ -85,6 +96,8 @@ rtems_task Init(
        SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
     printf( "ERROR: CREATE SERVER PASSED UNEXPECTEDLY\n" );
   if ( rtems_cbs_create_server( &params, NULL, &server_id2 ) )
+    printf( "ERROR: CREATE SERVER FAILED\n" );
+  if ( rtems_cbs_create_server( &params, NULL, &server_id ) )
     printf( "ERROR: CREATE SERVER FAILED\n" );
   if ( rtems_cbs_create_server( &params, NULL, &server_id ) )
     printf( "ERROR: CREATE SERVER FAILED\n" );
@@ -217,11 +230,25 @@ rtems_task Init(
   if ( rtems_cbs_initialize() )
     printf( "ERROR: CBS INITIALIZATION FAILED\n" );
 
-  /* Start periodic task */
+  /* Start periodic tasks */
   printf( "Init: Starting periodic task\n" );
   status = rtems_task_start( Task_id, Task_Periodic, 1 );
   directive_failed( status, "rtems_task_start periodic" );
+  status = rtems_task_start( Task_id2, Task_Periodic, 2 );
+  directive_failed( status, "rtems_task_start periodic" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_wake_after( 130 );
+
+  printf( "Init: Checking server with a deleted task\n" );
+  if ( rtems_cbs_get_execution_time( 0, &exec_time, &abs_time ) )
+    printf( "ERROR: GET EXECUTION TIME FAILED\n" );
+  if ( rtems_cbs_get_remaining_budget( 0, &remaining_budget) )
+    printf( "ERROR: GET REMAINING BUDGET FAILED\n" );
+
+  if ( rtems_cbs_cleanup() )
+    printf( "ERROR: CBS CLEANUP\n" );
+
+  fflush(stdout);
+  puts( "*** END OF TEST CBS SCHEDULER 2 ***" );
+  rtems_test_exit( 0 );
 }
