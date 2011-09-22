@@ -74,6 +74,8 @@ extern "C" {
 #define MLC_SMALL_PAGE_SIZE 528
 #define MLC_SMALL_DATA_SIZE 512
 #define MLC_SMALL_SPARE_SIZE 16
+#define MLC_SMALL_USER_SPARE_SIZE 6
+#define MLC_SMALL_ECC_SPARE_SIZE 10
 #define MLC_SMALL_DATA_WORD_COUNT (MLC_SMALL_DATA_SIZE / 4)
 #define MLC_SMALL_SPARE_WORD_COUNT (MLC_SMALL_SPARE_SIZE / 4)
 #define MLC_SMALL_PAGES_PER_LARGE_PAGE 4
@@ -136,6 +138,7 @@ extern "C" {
  */
 
 #define MLC_ISR_DECODER_FAILURE BSP_BIT32(6)
+#define MLC_ISR_SYMBOL_ERRORS(reg) BSP_FLD32GET(reg, 4, 5)
 #define MLC_ISR_ERRORS_DETECTED BSP_BIT32(3)
 #define MLC_ISR_ECC_READY BSP_BIT32(2)
 #define MLC_ISR_CONTROLLER_READY BSP_BIT32(1)
@@ -166,21 +169,6 @@ extern "C" {
 
 /** @} */
 
-#define MLC_BAD_BLOCK_MASK ((uint32_t) 0xff00)
-
-/**
- * @brief Bad block mark.
- * 
- * We define our own bad block mark to be able to recognize the blocks that
- * have been marked bad during operation later.
- */
-#define MLC_BAD_BLOCK_MARK ((uint32_t) 0xbadb)
-
-/**
- * @brief The bytes 4 and 5 are reserved for bad block handling.
- */
-#define MLC_RESERVED ((uint32_t) 0xffff)
-
 /**
  * @name NAND Status Register
  *
@@ -209,20 +197,27 @@ typedef struct {
 
 /**
  * @brief Selects small pages (512 Bytes user data and 16 Bytes spare data)
- * or large pages (2048 Bytes user data and 64 Bytes spare data).
+ * or large pages (2048 Bytes user data and 64 Bytes spare data) if not set.
  */
 #define MLC_SMALL_PAGES 0x1U
 
 /**
- * @Brief Selects 3/4 address cycles for small pages/large pages or 4/5
- * address cycles.
+ * @Brief Selects 4/5 address cycles for small/large pages or 3/4 address
+ * cycles if not set.
  */
 #define MLC_MANY_ADDRESS_CYCLES 0x2U
 
 /**
- * @brief Selects 64 or 128 pages per block in case of large pages.
+ * @brief Selects 64 pages per block or 128 pages per block if not set.
+ *
+ * This flag is only valid for large pages.
  */
 #define MLC_NORMAL_BLOCKS 0x4U
+
+/**
+ * @brief Selects 16-bit IO width or 8-bit IO width if not set.
+ */
+#define MLC_IO_WIDTH_16_BIT 0x8U
 
 /**
  * @brief Initializes the MLC NAND controller according to @a cfg.
@@ -235,6 +230,8 @@ uint32_t lpc32xx_mlc_pages_per_block(void);
 
 uint32_t lpc32xx_mlc_block_count(void);
 
+uint32_t lpc32xx_mlc_io_width(void);
+
 void lpc32xx_mlc_write_protection(
   uint32_t page_index_low,
   uint32_t page_index_high
@@ -245,9 +242,11 @@ void lpc32xx_mlc_read_id(uint8_t *id, size_t n);
 /**
  * @brief Reads the page with index @a page_index.
  *
- * 32-bit reads will be performed.
+ * Bytes 6 to 15 of the spare area will contain the ECC.
  *
- * Bytes 7 to 15 of the spare area will contain the ECC.
+ * If the read is successful, then the @a symbol_error_count will contain the
+ * number of detected symbol errors (0, 1, 2, 3, or 4), else the value will be
+ * 0xffffffff.  The @a symbol_error_count pointer may be @c NULL.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid @a page_index value.
@@ -255,16 +254,35 @@ void lpc32xx_mlc_read_id(uint8_t *id, size_t n);
  */
 rtems_status_code lpc32xx_mlc_read_page(
   uint32_t page_index,
-  uint32_t *data,
-  uint32_t *spare
+  void *data,
+  void *spare,
+  uint32_t *symbol_error_count
 );
+
+/**
+ * @brief Checks if the block with index @a block_index is valid.
+ *
+ * The initial valid block information of the manufacturer will be used.
+ * Unfortunatly there seems to be no standard for this.  A block will be
+ * considered as bad if the first or second page of this block does not contain
+ * 0xff at the 6th byte of the spare area.  This should work for flashes with
+ * small pages and a 8-bit IO width.
+ *
+ * @retval RTEMS_SUCCESSFUL The block is valid.
+ * @retval RTEMS_INVALID_ID Invalid @a block_index value.
+ * @retval RTEMS_IO_ERROR Uncorrectable bit error.
+ * @retval RTEMS_INCORRECT_STATE The block is bad.
+ * @retval RTEMS_NOT_IMPLEMENTED No implementation available for this flash
+ * type.
+ */
+rtems_status_code lpc32xx_mlc_is_valid_block(uint32_t block_index);
 
 /**
  * @brief Erases the block with index @a block_index.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid @a block_index value.
- * @retval RTEMS_IO_ERROR Erase error.
+ * @retval RTEMS_UNSATISFIED Erase error.
  */
 rtems_status_code lpc32xx_mlc_erase_block(uint32_t block_index);
 
@@ -272,13 +290,14 @@ rtems_status_code lpc32xx_mlc_erase_block(uint32_t block_index);
  * @brief Erases the block with index @a block_index.
  *
  * In case of an erase error all pages and the spare areas of this block are
- * programmed with zero values.  This will mark the first and second page as
- * bad.
+ * programmed with zero values.  This will hopefully mark the block as bad.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The first or second page of this block is bad.
+ * @retval RTEMS_INCORRECT_STATE The block is bad.
  * @retval RTEMS_INVALID_ID Invalid @a block_index value.
- * @retval RTEMS_IO_ERROR Erase error.
+ * @retval RTEMS_UNSATISFIED Erase error.
+ * @retval RTEMS_NOT_IMPLEMENTED No implementation available for this flash
+ * type.
  */
 rtems_status_code lpc32xx_mlc_erase_block_safe(uint32_t block_index);
 
@@ -307,10 +326,8 @@ void lpc32xx_mlc_zero_pages(uint32_t page_begin, uint32_t page_end);
 /**
  * @brief Writes the page with index @a page_index.
  *
- * 32-bit writes will be performed.
- *
- * Bytes 7 to 15 of the spare area will be used for the automatically generated
- * ECC.
+ * Only the bytes 0 to 5 of the spare area can be used for user data, the bytes
+ * 6 to 15 will be used for the automatically generated ECC.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID Invalid @a page_index value.
@@ -318,8 +335,8 @@ void lpc32xx_mlc_zero_pages(uint32_t page_begin, uint32_t page_end);
  */
 rtems_status_code lpc32xx_mlc_write_page_with_ecc(
   uint32_t page_index,
-  const uint32_t *data,
-  const uint32_t *spare
+  const void *data,
+  const void *spare
 );
 
 /**
@@ -377,17 +394,8 @@ rtems_status_code lpc32xx_mlc_read_blocks(
 
 static inline bool lpc32xx_mlc_is_bad_page(const uint32_t *spare)
 {
-  return (spare [1] & MLC_BAD_BLOCK_MASK) != MLC_BAD_BLOCK_MASK;
-}
-
-static inline void lpc32xx_mlc_set_bad_page(uint32_t *spare)
-{
-  spare [1] = MLC_BAD_BLOCK_MARK;
-}
-
-static inline void lpc32xx_mlc_set_reserved(uint32_t *spare)
-{
-  spare [1] = MLC_RESERVED;
+  uint32_t valid_block_mask = 0xff00;
+  return (spare [1] & valid_block_mask) != valid_block_mask;
 }
 
 /** @} */

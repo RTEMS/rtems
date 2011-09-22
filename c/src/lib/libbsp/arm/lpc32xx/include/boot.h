@@ -101,6 +101,10 @@ void lpc32xx_setup_boot_block(
   uint8_t page_count
 );
 
+void lpc32xx_set_boot_block_bad(
+  lpc32xx_boot_block *boot_block
+);
+
 /** @} */
 
 #ifdef __cplusplus

@@ -36,7 +36,7 @@ static rtems_status_code read_page(
     memset(page_spare, 0, MLC_LARGE_SPARE_SIZE);
   }
 
-  sc = lpc32xx_mlc_read_page(page_index, page_data, page_spare);
+  sc = lpc32xx_mlc_read_page(page_index, page_data, page_spare, NULL);
   if (possible_bad_page && lpc32xx_mlc_is_bad_page(page_spare)) {
     return RTEMS_UNSATISFIED;
   } else if (sc == RTEMS_SUCCESSFUL) {

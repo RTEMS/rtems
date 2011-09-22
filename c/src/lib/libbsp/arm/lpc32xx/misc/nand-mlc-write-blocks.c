@@ -84,7 +84,7 @@ rtems_status_code lpc32xx_mlc_write_blocks(
           ones_spare
         );
         if (sc != RTEMS_SUCCESSFUL) {
-          lpc32xx_mlc_erase_block_safe_3(block, page_begin, page_end);
+          lpc32xx_mlc_erase_block(block);
           lpc32xx_mlc_zero_pages(page_begin, page_end);
           current = last;
           continue;

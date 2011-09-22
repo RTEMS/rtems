@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -70,6 +71,15 @@ uint32_t lpc32xx_mlc_pages_per_block(void)
 uint32_t lpc32xx_mlc_block_count(void)
 {
   return mlc_block_count;
+}
+
+uint32_t lpc32xx_mlc_io_width(void)
+{
+  if ((mlc_flags & MLC_IO_WIDTH_16_BIT) == 0) {
+    return 8;
+  } else {
+    return 16;
+  }
 }
 
 static void mlc_unlock(void)
@@ -193,10 +203,16 @@ void lpc32xx_mlc_write_protection(
   mlc->icr |= MLC_ICR_SOFT_WRITE_PROT;
 }
 
+bool is_word_aligned(const void *data, const void *spare)
+{
+  return (((uintptr_t) data) | ((uintptr_t) spare)) % 4 == 0;
+}
+
 rtems_status_code lpc32xx_mlc_read_page(
   uint32_t page_index,
-  uint32_t *data,
-  uint32_t *spare
+  void *data,
+  void *spare,
+  uint32_t *symbol_error_count_ptr
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -204,6 +220,10 @@ rtems_status_code lpc32xx_mlc_read_page(
   size_t sp = 0;
   size_t i = 0;
   uint32_t isr = 0;
+  uint32_t symbol_error_count = 0xffffffff;
+  bool aligned = is_word_aligned(data, spare);
+  uint8_t *current_data = data;
+  uint8_t *current_spare = spare;
 
   if (page_index >= mlc_page_count) {
     return RTEMS_INVALID_ID;
@@ -218,35 +238,65 @@ rtems_status_code lpc32xx_mlc_read_page(
   mlc_wait(MLC_ISR_NAND_READY);
 
   for (sp = 0; sc == RTEMS_SUCCESSFUL && sp < small_pages_count; ++sp) {
+    uint32_t *aligned_data = (uint32_t *) current_data;
+    uint32_t *aligned_spare = (uint32_t *) current_spare;
+
     mlc->ecc_dec = 0;
 
-    for (i = 0; i < MLC_SMALL_DATA_WORD_COUNT; ++i) {
-      data [i] = mlc->data.w32;
-    }
-    for (i = 0; i < MLC_SMALL_SPARE_WORD_COUNT; ++i) {
-      spare [i] = mlc->data.w32;
+    if (aligned) {
+      for (i = 0; i < MLC_SMALL_DATA_WORD_COUNT; ++i) {
+        aligned_data [i] = mlc->data.w32;
+      }
+      for (i = 0; i < MLC_SMALL_SPARE_WORD_COUNT; ++i) {
+        aligned_spare [i] = mlc->data.w32;
+      }
+    } else {
+      for (i = 0; i < MLC_SMALL_DATA_SIZE; ++i) {
+        current_data [i] = mlc->data.w8;
+      }
+      for (i = 0; i < MLC_SMALL_SPARE_SIZE; ++i) {
+        current_spare [i] = mlc->data.w8;
+      }
     }
 
     mlc_wait(MLC_ISR_ECC_READY);
 
     isr = mlc->isr;
-    if ((isr & MLC_ISR_ERRORS_DETECTED) != 0) {
+    if ((isr & MLC_ISR_ERRORS_DETECTED) == 0) {
+      symbol_error_count = 0;
+    } else {
       if ((isr & MLC_ISR_DECODER_FAILURE) == 0) {
-        mlc->rubp = 0;
-        for (i = 0; i < MLC_SMALL_DATA_WORD_COUNT; ++i) {
-          data [i] = mlc->buff.w32;
-        }
-        mlc->robp = 0;
-        for (i = 0; i < MLC_SMALL_SPARE_WORD_COUNT; ++i) {
-          spare [i] = mlc->buff.w32;
+        symbol_error_count = MLC_ISR_SYMBOL_ERRORS(isr);
+        if (aligned) {
+          mlc->rubp = 0;
+          for (i = 0; i < MLC_SMALL_DATA_WORD_COUNT; ++i) {
+            aligned_data [i] = mlc->buff.w32;
+          }
+          mlc->robp = 0;
+          for (i = 0; i < MLC_SMALL_SPARE_WORD_COUNT; ++i) {
+            aligned_spare [i] = mlc->buff.w32;
+          }
+        } else {
+          mlc->rubp = 0;
+          for (i = 0; i < MLC_SMALL_DATA_SIZE; ++i) {
+            current_data [i] = mlc->buff.w8;
+          }
+          mlc->robp = 0;
+          for (i = 0; i < MLC_SMALL_SPARE_SIZE; ++i) {
+            current_spare [i] = mlc->buff.w8;
+          }
         }
       } else {
         sc = RTEMS_IO_ERROR;
       }
     }
 
-    data += MLC_SMALL_DATA_WORD_COUNT;
-    spare += MLC_SMALL_SPARE_WORD_COUNT;
+    current_data += MLC_SMALL_DATA_SIZE;
+    current_spare += MLC_SMALL_SPARE_SIZE;
+  }
+
+  if (symbol_error_count_ptr != NULL) {
+    *symbol_error_count_ptr = symbol_error_count;
   }
 
   return sc;
@@ -268,7 +318,7 @@ void lpc32xx_mlc_read_id(uint8_t *id, size_t n)
 
 rtems_status_code lpc32xx_mlc_erase_block(uint32_t block_index)
 {
-  rtems_status_code sc = RTEMS_IO_ERROR;
+  rtems_status_code sc = RTEMS_UNSATISFIED;
 
   if (block_index >= mlc_block_count) {
     return RTEMS_INVALID_ID;
@@ -288,14 +338,18 @@ rtems_status_code lpc32xx_mlc_erase_block(uint32_t block_index)
 
 rtems_status_code lpc32xx_mlc_write_page_with_ecc(
   uint32_t page_index,
-  const uint32_t *data,
-  const uint32_t *spare
+  const void *data,
+  const void *spare
 )
 {
   rtems_status_code sc = RTEMS_IO_ERROR;
-  size_t small_pages_count = mlc_small_pages() ? 1 : MLC_SMALL_PAGES_PER_LARGE_PAGE;
+  size_t small_pages_count = mlc_small_pages() ?
+    1 : MLC_SMALL_PAGES_PER_LARGE_PAGE;
   size_t sp = 0;
   size_t i = 0;
+  bool aligned = is_word_aligned(data, spare);
+  const uint8_t *current_data = data;
+  const uint8_t *current_spare = spare;
 
   if (page_index >= mlc_page_count) {
     return RTEMS_INVALID_ID;
@@ -308,17 +362,29 @@ rtems_status_code lpc32xx_mlc_write_page_with_ecc(
   for (sp = 0; sp < small_pages_count; ++sp) {
     mlc->ecc_enc = 0;
 
-    for (i = 0; i < MLC_SMALL_DATA_WORD_COUNT; ++i) {
-      mlc->data.w32 = data [i];
+    if (aligned) {
+      const uint32_t *aligned_data = (const uint32_t *) current_data;
+      const uint32_t *aligned_spare = (const uint32_t *) current_spare;
+
+      for (i = 0; i < MLC_SMALL_DATA_WORD_COUNT; ++i) {
+        mlc->data.w32 = aligned_data [i];
+      }
+      mlc->data.w32 = aligned_spare [0];
+      mlc->data.w16 = (uint16_t) aligned_spare [1];
+    } else {
+      for (i = 0; i < MLC_SMALL_DATA_SIZE; ++i) {
+        mlc->data.w8 = current_data [i];
+      }
+      for (i = 0; i < MLC_SMALL_USER_SPARE_SIZE; ++i) {
+        mlc->data.w8 = current_spare [i];
+      }
     }
-    mlc->data.w32 = spare [0];
-    mlc->data.w16 = (uint16_t) spare [1];
     mlc->wpr = 0;
 
     mlc_wait(MLC_ISR_CONTROLLER_READY);
 
-    data += MLC_SMALL_DATA_WORD_COUNT;
-    spare += MLC_SMALL_SPARE_WORD_COUNT;
+    current_data += MLC_SMALL_DATA_SIZE;
+    current_spare += MLC_SMALL_SPARE_SIZE;
   }
 
   mlc->cmd = 0x10;

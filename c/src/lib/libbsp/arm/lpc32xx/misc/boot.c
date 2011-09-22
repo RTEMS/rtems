@@ -52,3 +52,10 @@ void lpc32xx_setup_boot_block(
 
   boot_block->field.d12 = 0xaa;
 }
+
+void lpc32xx_set_boot_block_bad(
+  lpc32xx_boot_block *boot_block
+)
+{
+  boot_block->field.d12 = 0;
+}

@@ -526,6 +526,7 @@ typedef struct {
   uint32_t time;
   uint32_t irq_mr;
   uint32_t irq_sr;
+  uint32_t reserved_2;
   uint32_t lock_pr;
   uint32_t isr;
   uint32_t ceh;

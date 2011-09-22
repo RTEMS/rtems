@@ -1,3 +1,14 @@
+2011-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc32xx.inc: Workaround for GCC bug 50106.
+	* include/lpc32xx.h: Fixed register map for NAND MLC.
+	* include/boot.h: Declare lpc32xx_set_boot_block_bad().
+	* misc/boot.c: Define lpc32xx_set_boot_block_bad().
+	* include/nand-mlc.h, misc/nand-mlc-erase-block-safe.c,
+	misc/nand-mlc-read-blocks.c, misc/nand-mlc-write-blocks.c,
+	misc/nand-mlc.c: Changed bad block handling.  Support for non-aligned
+	data.  Documentation.
+
 2011-08-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* misc/i2c.c: Bugfix.
