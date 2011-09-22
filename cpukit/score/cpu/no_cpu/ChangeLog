@@ -1,3 +1,9 @@
+2011-09-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1914/cpukit
+	* rtems/score/cpu.h: Document CPU_TIMESTAMP_USE_STRUCT_TIMESPEC,
+	CPU_TIMESTAMP_USE_INT64, and CPU_TIMESTAMP_USE_INT64_INLINE.
+
 2011-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c: Remove /*PAGE markers which were interpreted by a long dead

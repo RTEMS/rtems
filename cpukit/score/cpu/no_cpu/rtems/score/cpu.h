@@ -356,6 +356,76 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT
 
 /**
+ *  @defgroup CPUTimestamp Processor Dependent Timestamp Support
+ *
+ *  This group assists in issues related to timestamp implementation.
+ *
+ *  The port must choose exactly one of the following defines:
+ *  - #define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
+ *  - #define CPU_TIMESTAMP_USE_INT64 TRUE
+ *  - #define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+ *
+ *  Performance of int64_t versus struct timespec
+ *  =============================================
+ *
+ *  On PowerPC/psim, inlined int64_t saves ~50 instructions on each
+ *    _Thread_Dispatch operation which results in a context switch.
+ *    This works out to be about 10% faster dispatches and 7.5% faster
+ *    blocking semaphore obtains.  The following numbers are in instructions
+ *    and from tm02 and tm26.
+ *
+ *                         timespec  int64  inlined int64
+ *    dispatch:              446      446      400
+ *    blocking sem obtain:   627      626      581
+ *
+ *  On SPARC/sis, inlined int64_t shows the same percentage gains.
+ *    The following numbers are in microseconds and from tm02 and tm26.
+ *
+ *                         timespec  int64  inlined int64
+ *    dispatch:               59       61       53
+ *    blocking sem obtain:    98      100       92
+ *
+ *  Inlining appears to have a tendency to increase the size of
+ *    some executables.
+ *  Not inlining reduces the execution improvement but does not seem to
+ *    be an improvement on the PowerPC and SPARC. The struct timespec
+ *    and the executables with int64 not inlined are about the same size.
+ */
+
+/**
+ *  @ingroup CPUTimestamp
+ *
+ *  Selects the timestamp implementation using struct timespec.
+ *
+ *  Port Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
+
+/**
+ *  @ingroup CPUTimestamp
+ *
+ *  Selects the timestamp implementation using int64_t and no inlined methods.
+ *
+ *  Port Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_TIMESTAMP_USE_INT64 TRUE
+
+/**
+ *  @ingroup CPUTimestamp
+ *
+ *  Selects the timestamp implementation using int64_t and inlined methods.
+ *
+ *  Port Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
+ */
+#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+
+/**
  *  @defgroup CPUEndian Processor Dependent Endianness Support
  *
  *  This group assists in issues related to processor endianness.
