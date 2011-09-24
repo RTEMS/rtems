@@ -34,6 +34,8 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
         .text
 
 /*
@@ -78,3 +80,5 @@ _restore:
 DEFINE_FUNCTION_ARM(_CPU_Context_restore)
         mov     r1, r0
         b       _restore
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

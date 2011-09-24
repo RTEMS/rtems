@@ -36,6 +36,8 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/cpu.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 static void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
     printk("\n\r");
@@ -119,3 +121,5 @@ void rtems_exception_init_mngt(void)
 
       _CPU_ISR_Enable(level);
 }
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

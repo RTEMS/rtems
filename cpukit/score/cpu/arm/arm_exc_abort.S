@@ -26,6 +26,8 @@
 #include <rtems/asm.h>
 #include <rtems/system.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 .extern rtems_fatal_error_occurred
 
 .globl arm_exc_data_abort_set_handler
@@ -133,3 +135,5 @@ save_more_context:
 call_handler:
 	bx	r2
 #endif /* __thumb__ */
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

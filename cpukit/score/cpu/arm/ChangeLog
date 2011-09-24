@@ -1,3 +1,21 @@
+2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/score/armv7m.h, armv7m-context-initialize.c,
+	armv7m-context-restore.c, armv7m-context-switch.c,
+	armv7m-exception-handler-get.c, armv7m-exception-handler-set.c,
+	armv7m-exception-priority-get.c, armv7m-exception-priority-set.c,
+	armv7m-initialize.c, armv7m-isr-dispatch.c, armv7m-isr-enter-leave.c,
+	armv7m-isr-level-get.c, armv7m-isr-level-set.c,
+	armv7m-isr-vector-install.c, armv7m-multitasking-start-stop.c: New
+	files.
+	* Makefile.am, preinstall.am: Reflect changes above.
+	* rtems/score/arm.h: Define ARM_MULTILIB_ARCH_V4 and
+	ARM_MULTILIB_ARCH_V7M.
+	* rtems/score/cpu.h, cpu_asm.S, cpu.c, arm_exc_abort.S,
+	arm_exc_handler_high.c, arm_exc_handler_low.S, arm_exc_interrupt.S:
+	Define CPU_HAS_HARDWARE_INTERRUPT_STACK to FALSE.  Use
+	ARM_MULTILIB_ARCH_V4 and ARM_MULTILIB_ARCH_V7M.
+
 2011-09-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/arm.h: More CPU_MODEL_NAME variants.

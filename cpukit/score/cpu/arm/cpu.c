@@ -15,7 +15,7 @@
  *
  *  Copyright (c) 2007 Ray xu <rayx.cn@gmail.com>
  *
- *  Copyright (c) 2009 embedded brains GmbH
+ *  Copyright (c) 2009-2011 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -36,6 +36,8 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/cpu.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 /*
  * This variable can be used to change the running mode of the execution
  * contexts.
@@ -44,14 +46,14 @@ uint32_t arm_cpu_mode = 0x13;
 
 void _CPU_Context_Initialize(
   Context_Control *the_context,
-  uint32_t *stack_base,
-  uint32_t size,
+  void *stack_area_begin,
+  size_t stack_area_size,
   uint32_t new_level,
-  void *entry_point,
+  void (*entry_point)( void ),
   bool is_fp
 )
 {
-  the_context->register_sp = (uint32_t) stack_base + size ;
+  the_context->register_sp = (uint32_t) stack_area_begin + stack_area_size;
   the_context->register_lr = (uint32_t) entry_point;
   the_context->register_cpsr = new_level | arm_cpu_mode;
 }
@@ -114,12 +116,9 @@ void _CPU_ISR_install_vector(
   }
 }
 
-void _CPU_Install_interrupt_stack( void )
-{
-  /* This function is empty since the BSP must set up the interrupt stacks */
-}
-
 void _CPU_Initialize( void )
 {
   /* Do nothing */
 }
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

@@ -32,6 +32,8 @@
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 #define EXCHANGE_LR r4
 #define EXCHANGE_SPSR r5
 #define EXCHANGE_CPSR r6
@@ -175,3 +177,5 @@ thread_dispatch_done:
 
 	/* Return from interrupt */
 	subs	pc, lr, #4
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

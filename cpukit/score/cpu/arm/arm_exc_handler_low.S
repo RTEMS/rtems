@@ -33,6 +33,8 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu_asm.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
         .text
 
 /* FIXME:       _Exception_Handler_Undef_Swi is untested */
@@ -162,3 +164,5 @@ arm_code:
 	subs	pc, r14, #4
 #endif
 						/* _AFTER_ the aborted one */
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

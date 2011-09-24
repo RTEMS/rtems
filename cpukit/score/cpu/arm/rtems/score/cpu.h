@@ -12,7 +12,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009-2010 embedded brains GmbH.
+ *  Copyright (c) 2009-2011 embedded brains GmbH.
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -35,6 +35,8 @@
 
 #include <rtems/score/types.h>
 #include <rtems/score/arm.h>
+
+#if defined(ARM_MULTILIB_ARCH_V4)
 
 /**
  * @defgroup ScoreCPUARM ARM Specific Support
@@ -93,6 +95,8 @@
 
 /** @} */
 
+#endif /* defined(ARM_MULTILIB_ARCH_V4) */
+
 /**
  * @addtogroup ScoreCPU
  *
@@ -120,7 +124,7 @@
 
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
 
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
 
 #define CPU_ALLOCATE_INTERRUPT_STACK FALSE
 
@@ -216,6 +220,7 @@ extern "C" {
  */
 
 typedef struct {
+#if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t register_cpsr;
   uint32_t register_r4;
   uint32_t register_r5;
@@ -228,6 +233,19 @@ typedef struct {
   uint32_t register_sp;
   uint32_t register_lr;
   uint32_t register_pc;
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+  uint32_t register_r4;
+  uint32_t register_r5;
+  uint32_t register_r6;
+  uint32_t register_r7;
+  uint32_t register_r8;
+  uint32_t register_r9;
+  uint32_t register_r10;
+  uint32_t register_r11;
+  void *register_lr;
+  void *register_sp;
+  uint32_t isr_nest_level;
+#endif
 } Context_Control;
 
 typedef struct {
@@ -240,6 +258,7 @@ extern uint32_t arm_cpu_mode;
 
 static inline uint32_t arm_interrupt_disable( void )
 {
+#if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t arm_switch_reg;
   uint32_t level;
 
@@ -253,10 +272,24 @@ static inline uint32_t arm_interrupt_disable( void )
   );
 
   return level;
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+  uint32_t level;
+  uint32_t basepri = 0x80;
+
+  __asm__ volatile (
+    "mrs %[level], basepri\n"
+    "msr basepri_max, %[basepri]\n"
+    : [level] "=&r" (level)
+    : [basepri] "r" (basepri)
+  );
+
+  return level;
+#endif
 }
 
 static inline void arm_interrupt_enable( uint32_t level )
 {
+#if defined(ARM_MULTILIB_ARCH_V4)
   ARM_SWITCH_REGISTERS;
 
   __asm__ volatile (
@@ -266,10 +299,18 @@ static inline void arm_interrupt_enable( uint32_t level )
     : ARM_SWITCH_OUTPUT
     : [level] "r" (level)
   );
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+  __asm__ volatile (
+    "msr basepri, %[level]\n"
+    :
+    : [level] "r" (level)
+  );
+#endif
 }
 
 static inline void arm_interrupt_flash( uint32_t level )
 {
+#if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t arm_switch_reg;
 
   __asm__ volatile (
@@ -281,6 +322,17 @@ static inline void arm_interrupt_flash( uint32_t level )
     : [arm_switch_reg] "=&r" (arm_switch_reg)
     : [level] "r" (level)
   );
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+  uint32_t basepri;
+
+  __asm__ volatile (
+    "mrs %[basepri], basepri\n"
+    "msr basepri, %[level]\n"
+    "msr basepri, %[basepri]\n"
+    : [basepri] "=&r" (basepri)
+    : [level] "r" (level)
+  );
+#endif
 }
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
@@ -300,10 +352,10 @@ uint32_t _CPU_ISR_Get_level( void );
 
 void _CPU_Context_Initialize(
   Context_Control *the_context,
-  uint32_t *stack_base,
-  uint32_t size,
+  void *stack_area_begin,
+  size_t stack_area_size,
   uint32_t new_level,
-  void *entry_point,
+  void (*entry_point)( void ),
   bool is_fp
 );
 
@@ -343,12 +395,18 @@ void _CPU_ISR_install_vector(
   proc_ptr *old_handler
 );
 
-void _CPU_Install_interrupt_stack( void );
-
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
 void _CPU_Context_restore( Context_Control *new_context )
-       RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+#if defined(ARM_MULTILIB_ARCH_V7M)
+  void _ARMV7M_Start_multitasking( Context_Control *bsp, Context_Control *heir );
+  void _ARMV7M_Stop_multitasking( Context_Control *bsp )
+    RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+  #define _CPU_Start_multitasking _ARMV7M_Start_multitasking
+  #define _CPU_Stop_multitasking _ARMV7M_Stop_multitasking
+#endif
 
 void _CPU_Context_save_fp( Context_Control_fp **fp_context_ptr );
 
@@ -356,7 +414,14 @@ void _CPU_Context_restore_fp( Context_Control_fp **fp_context_ptr );
 
 static inline uint32_t CPU_swap_u32( uint32_t value )
 {
-#if defined(__thumb__)
+#if defined(__thumb2__)
+  __asm__ volatile (
+    "rev %0, %0"
+    : "=r" (value)
+    : "0" (value)
+  );
+  return value;
+#elif defined(__thumb__)
   uint32_t byte1, byte2, byte3, byte4, swapped;
 
   byte4 = (value >> 24) & 0xff;
@@ -380,10 +445,21 @@ static inline uint32_t CPU_swap_u32( uint32_t value )
 
 static inline uint16_t CPU_swap_u16( uint16_t value )
 {
+#if defined(__thumb2__)
+  __asm__ volatile (
+    "rev16 %0, %0"
+    : "=r" (value)
+    : "0" (value)
+  );
+  return value;
+#else
   return (uint16_t) (((value & 0xffU) << 8) | ((value >> 8) & 0xffU));
+#endif
 }
 
 /** @} */
+
+#if defined(ARM_MULTILIB_ARCH_V4)
 
 /**
  * @addtogroup ScoreCPUARM
@@ -486,6 +562,12 @@ typedef struct {
 } CPU_Exception_frame;
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;
+
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+
+typedef void CPU_Interrupt_frame;
+
+#endif /* defined(ARM_MULTILIB_ARCH_V7M) */
 
 #ifdef __cplusplus
 }
