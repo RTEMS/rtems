@@ -1,3 +1,7 @@
+2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* acinclude.m4: Added lm3s69xx BSP.
+
 2011-05-19	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* shared/lpc/include/lpc-emc.h, shared/lpc/include/lpc-lcd.h: New
