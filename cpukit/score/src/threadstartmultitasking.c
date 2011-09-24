@@ -86,5 +86,9 @@ void _Thread_Start_multitasking( void )
      _Context_Restore_fp( &_Thread_Heir->fp_context );
 #endif
 
+#if defined(_CPU_Start_multitasking)
+  _CPU_Start_multitasking( &_Thread_BSP_context, &_Thread_Heir->Registers );
+#else
   _Context_Switch( &_Thread_BSP_context, &_Thread_Heir->Registers );
+#endif
 }

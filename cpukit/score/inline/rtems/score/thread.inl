@@ -111,6 +111,9 @@
 
 RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
 {
+#if defined(_CPU_Stop_multitasking)
+  _CPU_Stop_multitasking( &_Thread_BSP_context );
+#else
   /*
    *  This may look a bit of an odd but _Context_Restart_self is just
    *  a very careful restore of a specific context which ensures that
@@ -120,6 +123,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
    *  saving the context.
    */
   _Context_Restart_self( &_Thread_BSP_context );
+#endif
 
   /***************************************************************
    ***************************************************************

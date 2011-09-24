@@ -1,3 +1,10 @@
+2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1921/cpukit
+	* score/inline/rtems/score/thread.inl,
+	score/src/threadstartmultitasking.c: Allow CPU port to provide
+	optional multitasking start and stop.
+
 2011-09-20	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1916/testing
