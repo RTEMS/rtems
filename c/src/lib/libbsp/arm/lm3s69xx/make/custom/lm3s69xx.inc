@@ -1,0 +1,19 @@
+#
+#  Config file for LM3S69XX.
+#
+#  $Id$
+#
+
+include $(RTEMS_ROOT)/make/custom/default.cfg
+
+RTEMS_CPU = arm
+
+CPU_CFLAGS = -mstructure-size-boundary=8 -march=armv7-m -mthumb \
+	-fno-schedule-insns2 -fno-common
+
+CFLAGS_OPTIMIZE_V = -O2 -g
+
+define bsp-post-link
+	$(default-bsp-post-link)
+	$(OBJCOPY) -O binary $(basename $@).exe $(basename $@).ralf
+endef

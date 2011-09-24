@@ -1,0 +1,15 @@
+Tested only on Qemu simulator with git (git://git.qemu.org/qemu.git) version
+f9188227a455446b5c10a8f5114f266001c1c801 (Tue May 17 17:08:43 2011).
+
+You have to apply the patches:
+
+0001-Fixed-interrupt-handling-for-ARMv7M.patch
+0002-Fixed-system-handler-priority-register-access.patch
+0003-Disable-priority_mask-unused-for-NVIC.patch
+0004-Typo.patch
+0005-Evil-hack-for-BASEPRI-BASEPRI_MAX.patch
+0006-Evil-hack-to-increase-the-RAM-size.patch
+
+Command line:
+
+qemu-system-arm -S -s -net none -nographic -M lm3s6965evb -kernel hello.bin

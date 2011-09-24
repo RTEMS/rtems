@@ -1,0 +1,14 @@
+2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* 0001-Fixed-interrupt-handling-for-ARMv7M.patch,
+	0002-Fixed-system-handler-priority-register-access.patch,
+	0003-Disable-priority_mask-unused-for-NVIC.patch, 0004-Typo.patch,
+	0005-Evil-hack-for-BASEPRI-BASEPRI_MAX.patch,
+	0006-Evil-hack-to-increase-the-RAM-size.patch, bsp_specs, ChangeLog,
+	clock/clock-config.c, configure.ac, console/console-config.c,
+	console/uart.c, .cvsignore, include/bsp.h, include/.cvsignore,
+	include/irq.h, include/lm3s69xx.h, include/uart.h, irq/irq.c,
+	make/custom/lm3s6965.cfg, make/custom/lm3s69xx.inc, Makefile.am,
+	README, start/start.S, startup/bspreset.c, startup/bspstart.c,
+	startup/bspstarthook.c, startup/linkcmds.lm3s6965, timer/timer.c: New
+	files.

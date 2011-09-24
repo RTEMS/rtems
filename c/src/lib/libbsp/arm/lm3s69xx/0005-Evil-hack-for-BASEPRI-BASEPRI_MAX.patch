@@ -1,0 +1,49 @@
+From ee20f52f56b076e71f617e4e3cfe413bea73b824 Mon Sep 17 00:00:00 2001
+From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+Date: Fri, 16 Sep 2011 21:28:21 +0200
+Subject: [PATCH 5/6] Evil hack for BASEPRI/BASEPRI_MAX.
+
+---
+ target-arm/helper.c |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+diff --git a/target-arm/helper.c b/target-arm/helper.c
+index 2fd45c4..d5fc9d3 100644
+--- a/target-arm/helper.c
++++ b/target-arm/helper.c
+@@ -1997,7 +1997,11 @@ uint32_t HELPER(v7m_mrs)(CPUState *env, uint32_t reg)
+         return (env->uncached_cpsr & CPSR_I) != 0;
+     case 17: /* BASEPRI */
+     case 18: /* BASEPRI_MAX */
++	/* FIXME */
++        return (env->uncached_cpsr & CPSR_I) != 0;
++#if 0
+         return env->v7m.basepri;
++#endif
+     case 19: /* FAULTMASK */
+         return (env->uncached_cpsr & CPSR_F) != 0;
+     case 20: /* CONTROL */
+@@ -2052,6 +2056,12 @@ void HELPER(v7m_msr)(CPUState *env, uint32_t reg, uint32_t val)
+             env->uncached_cpsr &= ~CPSR_I;
+         break;
+     case 17: /* BASEPRI */
++    case 18: /* BASEPRI_MAX */
++        if (val)
++            env->uncached_cpsr |= CPSR_I;
++        else
++            env->uncached_cpsr &= ~CPSR_I;
++#if 0
+         env->v7m.basepri = val & 0xff;
+         break;
+     case 18: /* BASEPRI_MAX */
+@@ -2059,6 +2069,7 @@ void HELPER(v7m_msr)(CPUState *env, uint32_t reg, uint32_t val)
+         if (val != 0 && (val < env->v7m.basepri || env->v7m.basepri == 0))
+             env->v7m.basepri = val;
+         break;
++#endif
+     case 19: /* FAULTMASK */
+         if (val & 1)
+             env->uncached_cpsr |= CPSR_F;
+-- 
+1.7.1
+

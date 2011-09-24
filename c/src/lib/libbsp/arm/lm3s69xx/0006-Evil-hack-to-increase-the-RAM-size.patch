@@ -1,0 +1,26 @@
+From 187cd2844ffb0e197231dbf7a844e531c1146e09 Mon Sep 17 00:00:00 2001
+From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+Date: Sat, 24 Sep 2011 15:21:41 +0200
+Subject: [PATCH 6/6] Evil hack to increase the RAM size.
+
+---
+ hw/stellaris.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/hw/stellaris.c b/hw/stellaris.c
+index ac9fcc1..c00b2fa 100644
+--- a/hw/stellaris.c
++++ b/hw/stellaris.c
+@@ -1177,7 +1177,8 @@ static stellaris_board_info stellaris_boards[] = {
+   { "LM3S6965EVB",
+     0x10010002,
+     0x1073402e,
+-    0x00ff007f, /* dc0 */
++    /* FIXME */
++    0xffffffff, /* dc0 */
+     0x001133ff,
+     0x030f5317,
+     0x0f0f87ff,
+-- 
+1.7.1
+
