@@ -29,7 +29,7 @@
 /*
  * distinguish board characteristics
  */
-#if defined(MPC8349EAMDS)
+#if defined(MPC83XX_BOARD_MPC8349EAMDS)
 /*
  * for Freescale MPC8349 EAMDS
  */
@@ -69,7 +69,7 @@
 			  RCWHR_ENDIAN_BIG   |	\
 			  RCWHR_LALE_NORM    |	\
 			  RCWHR_LDP_PAR)
-#elif defined(HSC_CM01)
+#elif defined(MPC83XX_BOARD_HSC_CM01)
 /*
  * for JPK HSC_CM01
  */
@@ -119,9 +119,9 @@
 
 #endif
 
-#if defined(MPC8349EAMDS)
+#if defined(MPC83XX_BOARD_MPC8349EAMDS)
 /**************************
- * for Freescale MPC8349EAMDS
+ * for Freescale MPC83XX_BOARD_MPC8349EAMDS
  */
 
 /*
@@ -174,7 +174,7 @@
 #define DDR_SDRAM_INTTVL_VAL         0x045B0100
 #define DDR_SDRAM_CLK_CNTL_VAL       0x00000000
 
-#elif defined(HSC_CM01)
+#elif defined(MPC83XX_BOARD_HSC_CM01)
 /**************************
  * for JPK HSC_CM01
  */

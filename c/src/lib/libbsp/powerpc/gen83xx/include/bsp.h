@@ -96,7 +96,7 @@ struct rtems_bsdnet_ifconfig;
 extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	BSP_tsec_attach
 
-#ifdef MPC8313ERDB
+#ifdef MPC83XX_BOARD_MPC8313ERDB
   #define RTEMS_BSP_NETWORK_DRIVER_NAME "tsec2"
   #define RTEMS_BSP_NETWORK_DRIVER_NAME2 "tsec1"
 #else
@@ -104,7 +104,7 @@ extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
   #define RTEMS_BSP_NETWORK_DRIVER_NAME2 "tsec2"
 #endif
 
-#if defined(MPC8349EAMDS)
+#if defined(MPC83XX_BOARD_MPC8349EAMDS)
 /*
  * i2c EEPROM device name
  */
@@ -116,9 +116,9 @@ extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
  */
 #define RTEMS_BSP_SPI_FLASH_DEVICE_NAME "flash"
 #define RTEMS_BSP_SPI_FLASH_DEVICE_PATH "/dev/spi.flash"
-#endif /* defined(MPC8349EAMDS) */
+#endif /* defined(MPC83XX_BOARD_MPC8349EAMDS) */
 
-#if defined(HSC_CM01)
+#if defined(MPC83XX_BOARD_HSC_CM01)
 /*
  * i2c EEPROM device name
  */
@@ -130,7 +130,7 @@ extern int BSP_tsec_attach(struct rtems_bsdnet_ifconfig *config,int attaching);
  */
 #define RTEMS_BSP_SPI_FRAM_DEVICE_NAME "fram"
 #define RTEMS_BSP_SPI_FRAM_DEVICE_PATH "/dev/spi.fram"
-#endif /* defined(HSC_CM01) */
+#endif /* defined(MPC83XX_BOARD_HSC_CM01) */
 
 extern unsigned int BSP_bus_frequency;
 

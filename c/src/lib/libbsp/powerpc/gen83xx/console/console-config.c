@@ -80,7 +80,11 @@ console_tbl Console_Port_Tbl [PORT_COUNT] = {
     .getData = NULL,
     .setData = NULL,
     .ulClock = 0,
+#if MPC83XX_CHIP_TYPE / 10 == 830
+    .ulIntVector = BSP_IPIC_IRQ_UART
+#else
     .ulIntVector = BSP_IPIC_IRQ_UART1
+#endif
   }
 #ifdef BSP_USE_UART2
   , {
@@ -100,7 +104,11 @@ console_tbl Console_Port_Tbl [PORT_COUNT] = {
     .getData = NULL,
     .setData = NULL,
     .ulClock = 0,
+#if MPC83XX_CHIP_TYPE / 10 == 830
+    .ulIntVector = BSP_IPIC_IRQ_UART
+#else
     .ulIntVector = BSP_IPIC_IRQ_UART2
+#endif
   }
 #endif
 };

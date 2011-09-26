@@ -1,3 +1,14 @@
+2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/mpc8309som.cfg, startup/linkcmds.mpc8309som: New file.
+	* Makefile.am, preinstall.am: Reflect changes above.
+	* configure.ac, console/console-config.c, include/bsp.h,
+	include/hwreg_vals.h, include/irq.h, network/network.c,
+	spi/spi_init.c, startup/cpuinit.c: Renamed various BSP options.
+	* make/custom/gen83xx.inc, make/custom/hsc_cm01.cfg,
+	make/custom/mpc8313erdb.cfg, make/custom/mpc8349eamds.cfg: Avoid
+	special linkcmds.
+
 2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* network/network.c: Update due to API changes.

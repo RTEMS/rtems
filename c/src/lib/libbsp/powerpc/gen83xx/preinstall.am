@@ -77,6 +77,10 @@ $(PROJECT_LIB)/linkcmds.base: startup/linkcmds.base $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
 
+$(PROJECT_LIB)/linkcmds.mpc8309som: startup/linkcmds.mpc8309som $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc8309som
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc8309som
+
 $(PROJECT_LIB)/linkcmds.mpc8313erdb: startup/linkcmds.mpc8313erdb $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc8313erdb
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc8313erdb

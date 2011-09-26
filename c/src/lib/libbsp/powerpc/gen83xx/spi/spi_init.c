@@ -26,15 +26,15 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
 #include <libchip/spi-sd-card.h>
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
 #include <libchip/spi-flash-m25p40.h>
 
-#elif defined( HSC_CM01)
+#elif defined( MPC83XX_BOARD_HSC_CM01)
 
 #include <libchip/spi-fram-fm25l256.h>
 
@@ -69,7 +69,7 @@ static rtems_status_code bsp_spi_sel_addr
 \*=========================================================================*/
 {
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
   /* Check address */
   if (addr > 0) {
@@ -79,7 +79,7 @@ static rtems_status_code bsp_spi_sel_addr
   /* SCS (active low) */
   mpc83xx.gpio [0].gpdat &= ~0x20000000;
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
   /*
    * check device address for valid range
@@ -94,7 +94,7 @@ static rtems_status_code bsp_spi_sel_addr
    */
   mpc83xx.gpio[0].gpdat &= ~(1 << (31- 0));
 
-#elif defined( HSC_CM01)
+#elif defined( MPC83XX_BOARD_HSC_CM01)
 
   /*
    * check device address for valid range
@@ -143,12 +143,12 @@ static rtems_status_code bsp_spi_send_start_dummy
 \*=========================================================================*/
 {
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
   /* SCS (inactive high) */
   mpc83xx.gpio [0].gpdat |= 0x20000000;
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
   /*
    * GPIO1[0] is nSEL_SPI for M25P40
@@ -156,7 +156,7 @@ static rtems_status_code bsp_spi_send_start_dummy
    */
   mpc83xx.gpio[0].gpdat |=  (1 << (31- 0));
 
-#elif defined( HSC_CM01)
+#elif defined( MPC83XX_BOARD_HSC_CM01)
 
   /*
    * GPIO1[27] is high-active strobe
@@ -191,12 +191,12 @@ static rtems_status_code bsp_spi_send_stop
   printk("bsp_spi_send_stop called... ");
 #endif
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
   /* SCS (inactive high) */
   mpc83xx.gpio [0].gpdat |= 0x20000000;
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
   /*
    * deselect given device
@@ -205,7 +205,7 @@ static rtems_status_code bsp_spi_send_stop
    */
   mpc83xx.gpio[0].gpdat |=  (1 << (31- 0));
 
-#elif defined( HSC_CM01)
+#elif defined( MPC83XX_BOARD_HSC_CM01)
 
   /*
    * deselect device
@@ -248,7 +248,7 @@ static mpc83xx_spi_desc_t bsp_spi_bus_desc = {
   }
 };
 
-#ifdef MPC8313ERDB
+#ifdef MPC83XX_BOARD_MPC8313ERDB
 
 #include <libchip/spi-sd-card.h>
 
@@ -274,7 +274,7 @@ sd_card_driver_entry sd_card_driver_table [SD_CARD_NUMBER] = {
   }
 };
 
-#endif /* MPC8313ERDB */
+#endif /* MPC83XX_BOARD_MPC8313ERDB */
 
 
 /*=========================================================================*\
@@ -312,7 +312,7 @@ rtems_status_code bsp_register_spi
    * init port pins used to address/select SPI devices
    */
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
   /*
    * Configured as master (direct connection to SD card)
@@ -336,7 +336,7 @@ rtems_status_code bsp_register_spi
   /* Open Drain */
   /* mpc83xx.gpio [0].gpdr  |= 0x0000000f; */
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
   /*
    * GPIO1[0] is nSEL_SPI for M25P40
@@ -346,7 +346,7 @@ rtems_status_code bsp_register_spi
   mpc83xx.gpio[0].gpdir |=  (1 << (31- 0));
   mpc83xx.gpio[0].gpdr  &= ~(1 << (31- 0));
 
-#elif defined( HSC_CM01)
+#elif defined( MPC83XX_BOARD_HSC_CM01)
 
   /*
    * GPIO1[24] is SPI_A0
@@ -376,7 +376,7 @@ rtems_status_code bsp_register_spi
   }
   spi_busno = (unsigned) ret_code;
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
   /* Register SD Card driver */
   sd_card_driver_table [0].bus = spi_busno;
@@ -385,7 +385,7 @@ rtems_status_code bsp_register_spi
     return sc;
   }
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
   /*
    * register M25P40 Flash
@@ -393,7 +393,7 @@ rtems_status_code bsp_register_spi
   ret_code = rtems_libi2c_register_drv(RTEMS_BSP_SPI_FLASH_DEVICE_NAME,
 				       spi_flash_m25p40_rw_driver_descriptor,
 				       spi_busno,0x00);
-#elif defined(HSC_CM01)
+#elif defined(MPC83XX_BOARD_HSC_CM01)
 
   /*
    * register FM25L256 FRAM

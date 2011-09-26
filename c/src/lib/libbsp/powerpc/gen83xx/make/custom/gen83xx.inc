@@ -20,5 +20,3 @@ CPU_CFLAGS = -mcpu=603e -meabi -msdata -fno-common -mstrict-align
 
 # optimize flag: typically -O2
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
-
-LDFLAGS += -qnolinkcmds -T $(RTEMS_LINKCMDS)

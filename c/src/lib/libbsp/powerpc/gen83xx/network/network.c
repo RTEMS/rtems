@@ -32,18 +32,20 @@
 #include <string.h>
 #include <libcpu/spr.h>
 
+#if MPC83XX_CHIP_TYPE / 10 != 830
+
 #define TSEC_IFMODE_RGMII 0
 #define TSEC_IFMODE_GMII  1
 
-#if defined( MPC8313ERDB)
+#if defined( MPC83XX_BOARD_MPC8313ERDB)
 
 #define TSEC_IFMODE TSEC_IFMODE_RGMII
 
-#elif defined( MPC8349EAMDS)
+#elif defined( MPC83XX_BOARD_MPC8349EAMDS)
 
 #define TSEC_IFMODE TSEC_IFMODE_GMII
 
-#elif defined( HSC_CM01)
+#elif defined( MPC83XX_BOARD_HSC_CM01)
 
 #define TSEC_IFMODE TSEC_IFMODE_RGMII
 
@@ -100,7 +102,7 @@ int BSP_tsec_attach
 
   if (attaching) {
 #if (TSEC_IFMODE==TSEC_IFMODE_GMII)
-#if !defined(HSC_CM01)
+#if !defined(MPC83XX_BOARD_HSC_CM01)
 
       /*
        * do not change system I/O configuration registers on HSC board
@@ -132,7 +134,7 @@ int BSP_tsec_attach
       mpc83xx.gpio[0].gpdir = ((mpc83xx.gpio[0].gpdir & ~0x000FFFFF)
 			       |                         0x00087881);
     }
-#endif /* !defined(HSC_CM01) */
+#endif /* !defined(MPC83XX_BOARD_HSC_CM01) */
 #endif
 #if (TSEC_IFMODE==TSEC_IFMODE_RGMII)
 
@@ -232,16 +234,16 @@ int BSP_tsec_attach
    * XXX: Although most hardware builders will assign the PHY addresses
    * like this, this should be more configurable
    */
-#ifdef MPC8313ERDB
+#ifdef MPC83XX_BOARD_MPC8313ERDB
   if (unitNumber == 2) {
 	  tsec_cfg.phy_default = 4;
   } else {
 	  /* TODO */
 	  return 0;
   }
-#else /* MPC8313ERDB */
+#else /* MPC83XX_BOARD_MPC8313ERDB */
   tsec_cfg.phy_default = unitNumber-1;
-#endif /* MPC8313ERDB */
+#endif /* MPC83XX_BOARD_MPC8313ERDB */
 
   tsec_cfg.unit_number = unitNumber;
   tsec_cfg.unit_name = unitName;
@@ -251,3 +253,5 @@ int BSP_tsec_attach
    */
   return tsec_driver_attach_detach(config, attaching);
 }
+
+#endif /* MPC83XX_CHIP_TYPE / 10 != 830 */

@@ -260,7 +260,7 @@ void cpu_init( void)
   );
   SET_DBAT( 2, dbat.batu, dbat.batl);
 
-#if defined(HSC_CM01)
+#if defined(MPC83XX_BOARD_HSC_CM01)
   calc_dbat_regvals(
     &dbat,
     FPGA_START,
@@ -274,7 +274,7 @@ void cpu_init( void)
   SET_DBAT(3,dbat.batu,dbat.batl);
 #endif
 
-#ifdef MPC8313ERDB
+#ifdef MPC83XX_BOARD_MPC8313ERDB
   /* Enhanced Local Bus Controller (eLBC) */
   calc_dbat_regvals(
     &dbat,
@@ -287,7 +287,7 @@ void cpu_init( void)
     BPP_RW
   );
   SET_DBAT( 3, dbat.batu, dbat.batl);
-#endif /* MPC8313ERDB */
+#endif /* MPC83XX_BOARD_MPC8313ERDB */
 
   /* Read MSR */
   msr = ppc_machine_state_register();
