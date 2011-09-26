@@ -1,3 +1,8 @@
+2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* mpc83xx/include/mpc83xx.h, mpc83xx/network/tsec.c: Update due to API
+	changes.
+
 2011-09-01	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc55xx/include/fsl-mpc567x.h: Added FLASH as an alias to FLASH_A.

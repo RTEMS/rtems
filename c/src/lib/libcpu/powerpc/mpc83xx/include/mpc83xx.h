@@ -7,23 +7,21 @@
 
 #include <bspopts.h>
 
-#if defined(MPC8343)
+#if MPC83XX_CHIP_TYPE == 8343
 #define M83xx_HAS_PCI      TRUE
 #define M83xx_HAS_USB1     TRUE
-#elif defined(MPC8347)
+#elif MPC83XX_CHIP_TYPE == 8347
 #define M83xx_HAS_PCI      TRUE
 #define M83xx_HAS_USB1     TRUE
 #define M83xx_HAS_USB2     TRUE
-#elif defined(MPC8349)
+#elif MPC83XX_CHIP_TYPE == 8349
 #define M83xx_HAS_PCI      TRUE
 #define M83xx_HAS_WIDE_PCI TRUE
 #define M83xx_HAS_USB1     TRUE
 #define M83xx_HAS_USB2     TRUE
-#elif defined(MPC8360)
+#elif MPC83XX_CHIP_TYPE == 8360
 #define M83xx_HAS_PCI      TRUE
 #define M83xx_HAS_QE       TRUE
-#else
-#error "add feature list in mpc83xx_regs.h"
 #endif
 
 #if !defined(ASM)

@@ -1507,7 +1507,7 @@ static void tsec_init
     sc->reg_ptr->rctrl &= ~TSEC_RCTRL_PROM;
   }
 
-#if defined(HSC_CM01)
+#if defined(MPC83XX_BOARD_HSC_CM01)
   /*
    * for HSC CM01: we need to configure the PHY to use maximum skew adjust
    */
