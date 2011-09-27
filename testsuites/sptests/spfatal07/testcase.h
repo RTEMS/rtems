@@ -48,6 +48,7 @@ void force_error()
     printk(
       "WARNING - Test not applicable on this target architecture.\n"
       "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE.\n"
+      "*** END OF TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n"
     );
     rtems_test_exit(0);
   #endif

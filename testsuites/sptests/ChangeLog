@@ -1,3 +1,7 @@
+2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spfatal07/testcase.h: Print end of test if test is not applicable.
+
 2011-09-26	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1923/testing
