@@ -1,3 +1,8 @@
+2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1914/cpukit
+	* rtems/score/cpu.h: Select timestamp implementation.
+
 2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/score/armv7m.h, armv7m-context-initialize.c,

@@ -151,6 +151,8 @@
 /* XXX Why 32? */
 #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (32)))
 
+#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+
 /*
  * The interrupt mask disables only normal interrupts (IRQ).
  *
