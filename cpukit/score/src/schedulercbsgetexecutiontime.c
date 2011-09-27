@@ -31,7 +31,7 @@ int _Scheduler_CBS_Get_execution_time (
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   if ( !_Scheduler_CBS_Server_list[server_id] )
     return SCHEDULER_CBS_ERROR_NOSERVER;
-  if ( !_Scheduler_CBS_Server_list[server_id]->task_id ) {
+  if ( _Scheduler_CBS_Server_list[server_id]->task_id == -1 ) {
     *exec_time = 0;
     return SCHEDULER_CBS_OK;
   }
