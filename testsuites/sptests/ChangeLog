@@ -1,3 +1,10 @@
+2011-09-26	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1923/testing
+	* spcbssched02/spcbssched02.scn, spcbssched02/system.h,
+	spcbssched03/init.c, spcbssched03/system.h, spedfsched02/system.h,
+	spedfsched03/system.h, sprbtree01/init.c: Improve coverage.
+
 2011-09-20	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1916/testing

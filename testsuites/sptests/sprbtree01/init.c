@@ -465,6 +465,8 @@ rtems_task Init(
     puts ( "INIT - ERROR ON RBTREE NULL GRANDPARENT MISMATCH" );
   if ( _RBTree_Is_red( NULL ) != 0 )
     puts ( "INIT - ERROR ON RBTREE NULL IS RED MISMATCH" );
+  if ( _RBTree_Is_red( rbtree1.root ) != 0 )
+    puts ( "INIT - ERROR ON RBTREE NULL IS RED MISMATCH" );
 
   puts( "INIT - Removing 100 nodes" );
 

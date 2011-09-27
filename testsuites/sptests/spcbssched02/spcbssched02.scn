@@ -18,14 +18,23 @@ Periodic task: Remaining budget and Execution time
 Periodic task: Set parameters
 Periodic task: Approved budget
 Periodic task: Starting periodic behavior
+Periodic task: Starting periodic behavior
 P1-S ticks:1
 P1-F ticks:11
+P2-S ticks:11
+P2-F ticks:21
 P1-S ticks:31
 P1-F ticks:41
+P2-S ticks:41
+P2-F ticks:51
 P1-S ticks:61
 P1-F ticks:71
+P2-S ticks:71
+P2-F ticks:81
 P1-S ticks:91
 P1-F ticks:101
+P2-S ticks:101
+P2-F ticks:111
 P1-S ticks:121
 Periodic task: Deleting self
 Init: Checking server with a deleted task
