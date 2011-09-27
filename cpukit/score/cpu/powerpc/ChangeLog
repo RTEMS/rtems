@@ -1,3 +1,8 @@
+2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1914/cpukit
+	* rtems/score/cpu.h: Select timestamp implementation.
+
 2011-08-30	Peter Dufault <dufault@hda.com>
 
 	* rtems/score/cpu.h: Add more context access functionality.  Needed to

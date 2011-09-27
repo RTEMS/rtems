@@ -85,6 +85,8 @@ extern "C" {
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
 
+#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+
 /*
  *  Does this port provide a CPU dependent IDLE task implementation?
  *

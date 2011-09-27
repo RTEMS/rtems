@@ -67,6 +67,8 @@ extern "C" {
 
 #define CPU_STRUCTURE_ALIGNMENT __attribute__((section(".sdata"), aligned(32)))
 
+#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+
 #define CPU_BIG_ENDIAN FALSE
 
 #define CPU_LITTLE_ENDIAN TRUE

@@ -1,3 +1,8 @@
+2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1914/cpukit
+	* rtems/score/cpu.h: Select timestamp implementation.
+
 2011-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* cpu.c, cpu_asm.S, rtems/score/cpu.h: Remove /*PAGE markers which were

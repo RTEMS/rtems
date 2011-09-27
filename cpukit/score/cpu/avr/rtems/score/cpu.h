@@ -348,6 +348,8 @@ extern "C" {
 
 #define CPU_STRUCTURE_ALIGNMENT
 
+#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
+
 /*
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.

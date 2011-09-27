@@ -273,6 +273,8 @@ extern "C" {
 
 #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned(16)))
 
+#define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
+
 /*
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.
