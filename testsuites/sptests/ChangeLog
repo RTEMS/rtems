@@ -1,3 +1,9 @@
+2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp2038/Makefile.am, sp2038/init.c, sp2038/sp2038.doc,
+	sp2038/sp2038.scn: New files.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* spfatal07/testcase.h: Print end of test if test is not applicable.

@@ -1,0 +1,23 @@
+#
+#  $Id$
+#
+#  Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp2038
+
+directives:
+
+  rtems_clock_set
+  rtems_clock_get
+  time
+
+concepts:
+
++ Ensure that special time values lead to the expected result
