@@ -17,19 +17,14 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timestamp.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 void _Timestamp64_To_timespec(
-  Timestamp64_Control *_timestamp,
-  struct timespec     *_timespec
+  const Timestamp64_Control *_timestamp,
+  struct timespec           *_timespec
 )
 {
-  _timespec->tv_sec = *_timestamp / 1000000000;
-  _timespec->tv_nsec = *_timestamp % 1000000000;
+  _Timestamp64_implementation_To_timespec( _timestamp, _timespec );
 }
 #endif

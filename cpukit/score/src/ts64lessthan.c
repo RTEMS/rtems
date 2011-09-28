@@ -17,18 +17,14 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timestamp.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 bool _Timestamp64_Less_than(
-  Timestamp64_Control *_lhs,
-  Timestamp64_Control *_rhs
+  const Timestamp64_Control *_lhs,
+  const Timestamp64_Control *_rhs
 )
 {
-  return (*(_lhs) < *(_rhs));
+  _Timestamp64_implementation_Less_than( _lhs, _rhs );
 }
 #endif

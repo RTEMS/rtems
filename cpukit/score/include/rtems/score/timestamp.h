@@ -40,93 +40,33 @@
  */
 /**@{*/
 
+#include <rtems/score/cpu.h>
 #include <rtems/score/timespec.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *  NOTE: Eventually each port should select what it should use!!!
- *
- *  These control which implementation of SuperCore Timestamp is used.
- *
- *  if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
- *     struct timespec is used
- *  else if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
- *     int64_t is used
- *
- *  When int64_t is used, then
- *     if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
- *        the methods are inlined
- *     else
- *        the methods are NOT inlined
- *
- *  Performance of int64_t versus struct timespec
- *  =============================================
- *
- *  On PowerPC/psim, inlined int64_t saves ~50 instructions on each
- *    _Thread_Dispatch operation which results in a context switch.
- *    This works out to be about 10% faster dispatches and 7.5% faster
- *    blocking semaphore obtains.  The following numbers are in instructions
- *    and from tm02 and tm26.
- *
- *                         timespec  int64  inlined int64
- *    dispatch:              446      446      400
- *    blocking sem obtain:   627      626      581
- *
- *  On SPARC/sis, inlined int64_t shows the same percentage gains.
- *    The following numbers are in microseconds and from tm02 and tm26.
- *
- *                         timespec  int64  inlined int64
- *    dispatch:               59       61       53
- *    blocking sem obtain:    98      100       92
- *
- *  Inlining appears to have a tendency to increase the size of
- *    some executables.
- *  Not inlining reduces the execution improvement but does not seem to
- *    be an improvement on the PowerPC and SPARC. The struct timespec
- *    and the executables with int64 not inlined are about the same size.
- *
- *  Once there has some analysis of which algorithm and configuration
- *  is best suited to each target, these defines should be moved to
- *  the appropriate score/cpu cpu.h file.  In the meantime, it is
- *  appropriate to select an implementation here using CPU macros.
- */
-
-#define CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC
-/*
-#define CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64
-#define CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE
-*/
-
-/*
- *  Verify something is defined.
- */
-#if !defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
-  #error "No SuperCore Timestamp implementation selected."
+#if ! ( ( CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE \
+    && CPU_TIMESTAMP_USE_INT64 == FALSE \
+    && CPU_TIMESTAMP_USE_INT64_INLINE == FALSE ) \
+  || ( CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == FALSE \
+    && CPU_TIMESTAMP_USE_INT64 == TRUE \
+    && CPU_TIMESTAMP_USE_INT64_INLINE == FALSE ) \
+  || ( CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == FALSE \
+    && CPU_TIMESTAMP_USE_INT64 == FALSE \
+    && CPU_TIMESTAMP_USE_INT64_INLINE == TRUE ) )
+  #error "Invalid SuperCore Timestamp implementations selection."
 #endif
 
-/*
- * Verify that more than one is not defined.
- */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC) && \
-    defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
-  #error "Too many SuperCore Timestamp implementations selected."
-#endif
-
-/**
- *   Include any implementation specific header files
- */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE || CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #include <rtems/score/timestamp64.h>
 #endif
 
 /**
  *   Define the Timestamp control type.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   typedef struct timespec Timestamp_Control;
 #else
   typedef Timestamp64_Control Timestamp_Control;
@@ -142,7 +82,7 @@ extern "C" {
  *  @param[in] _seconds is the seconds portion of the timestamp
  *  @param[in] _nanoseconds is the nanoseconds portion of the timestamp
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Set( _time, _seconds, _nanoseconds ) \
           _Timespec_Set( _time, _seconds, _nanoseconds )
 #else
@@ -158,7 +98,7 @@ extern "C" {
  *
  *  @param[in] _time points to the timestamp instance to zero.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Set_to_zero( _time ) \
           _Timespec_Set_to_zero( _time )
 #else
@@ -176,7 +116,7 @@ extern "C" {
  *  @return This method returns true if @a time is valid and
  *          false otherwise.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Is_valid( _time ) \
           _Timespec_Is_valid( _time )
 #else
@@ -195,7 +135,7 @@ extern "C" {
  *  @return This method returns true if @a _lhs is less than the @a _rhs and
  *          false otherwise.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Less_than( _lhs, _rhs ) \
           _Timespec_Less_than( _lhs, _rhs )
 #else
@@ -214,13 +154,8 @@ extern "C" {
  *  @return This method returns true if @a _lhs is greater than the @a _rhs and
  *          false otherwise.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
-  #define _Timestamp_Greater_than( _lhs, _rhs ) \
-          _Timespec_Greater_than( _lhs, _rhs )
-#else
-  #define _Timestamp_Greater_than( _lhs, _rhs ) \
-	  _Timestamp64_Greater_than( _lhs, _rhs )
-#endif
+#define _Timestamp_Greater_than( _lhs, _rhs ) \
+  _Timestamp_Less_than( _rhs, _lhs )
 
 /**
  *  @brief Timestamp equal to Operator
@@ -233,7 +168,7 @@ extern "C" {
  *  @return This method returns true if @a _lhs is equal to  @a _rhs and
  *          false otherwise.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Equal_to( _lhs, _rhs ) \
           _Timespec_Equal_to( _lhs, _rhs )
 #else
@@ -252,7 +187,7 @@ extern "C" {
  *
  *  @return This method returns the number of seconds @a time increased by.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Add_to( _time, _add ) \
           _Timespec_Add_to( _time, _add )
 #else
@@ -277,7 +212,7 @@ extern "C" {
  *
  *  @return This method returns the number of seconds @a time increased by.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Add_to_at_tick( _time, _add ) \
           _Timespec_Add_to( _time, _add )
 #else
@@ -295,7 +230,7 @@ extern "C" {
  *
  *  @return This method returns the number of ticks computed.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_To_ticks( _time ) \
           _Timespec_To_ticks( _time )
 #else
@@ -312,7 +247,7 @@ extern "C" {
  *  @param[in] _time points to the timestamp format time result
  *  @param[in] _ticks points to the number of ticks to be filled in
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_From_ticks( _ticks, _time ) \
           _Timespec_From_ticks( _ticks, _time )
 #else
@@ -333,7 +268,7 @@ extern "C" {
  *
  *  @return This method fills in @a _result.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Subtract( _start, _end, _result ) \
           _Timespec_Subtract( _start, _end, _result )
 #else
@@ -354,7 +289,7 @@ extern "C" {
  *
  *  @return This method fills in @a result.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Divide_by_integer( _time, _iterations, _result ) \
           _Timespec_Divide_by_integer(_time, _iterations, _result )
 #else
@@ -375,7 +310,7 @@ extern "C" {
  *
  *  @return This method fills in @a result.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage ) \
           _Timespec_Divide( _lhs, _rhs, _ival_percentage, _fval_percentage )
 #else
@@ -392,7 +327,7 @@ extern "C" {
  *
  *  @return The seconds portion of @a _time.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Get_seconds( _time ) \
           _Timespec_Get_seconds( _time )
 #else
@@ -409,7 +344,7 @@ extern "C" {
  *
  *  @return The nanoseconds portion of @a _time.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   #define _Timestamp_Get_nanoseconds( _time ) \
           _Timespec_Get_nanoseconds( _time )
 #else
@@ -425,7 +360,7 @@ extern "C" {
  *  @param[in] _timestamp points to the timestamp
  *  @param[in] _timespec points to the timespec
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_STRUCT_SPEC)
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
   /* in this case we know they are the same type so use simple assignment */
   #define _Timestamp_To_timespec( _timestamp, _timespec  ) \
           *(_timespec) = *(_timestamp)

@@ -17,17 +17,13 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timestamp.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 void _Timestamp64_Set_to_zero(
   Timestamp64_Control *_time
 )
 {
-  *_time = 0;
+  _Timestamp64_implementation_Set_to_zero( _time );
 }
 #endif

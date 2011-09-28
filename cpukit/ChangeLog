@@ -1,3 +1,21 @@
+2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1914/cpukit
+	* score/src/timespecgreaterthan.c, score/src/ts64greaterthan.c:
+	Removed files.
+	* score/Makefile.am: Reflect changes above.
+	* score/include/rtems/score/timespec.h,
+	score/include/rtems/score/timestamp.h,
+	score/include/rtems/score/timestamp64.h, score/src/ts64addto.c,
+	score/src/ts64divide.c, score/src/ts64dividebyinteger.c,
+	score/src/ts64equalto.c, score/src/ts64getnanoseconds.c,
+	score/src/ts64getseconds.c, score/src/ts64lessthan.c,
+	score/src/ts64set.c, score/src/ts64settozero.c,
+	score/src/ts64subtract.c, score/src/ts64toticks.c,
+	score/src/ts64totimespec.c: Use CPU_TIMESTAMP_USE_STRUCT_TIMESPEC,
+	CPU_TIMESTAMP_USE_INT64, and CPU_TIMESTAMP_USE_INT64_INLINE.  Removed
+	copy and paste.
+
 2011-09-26	Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1923/testing

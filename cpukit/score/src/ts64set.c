@@ -17,23 +17,15 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timestamp.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 void _Timestamp64_Set(
   Timestamp64_Control *_time,
   long                 _seconds,
   long                 _nanoseconds
 )
 {
-  int64_t time;
-
-  time = (int64_t)_seconds * 1000000000;
-  time += (int64_t)_nanoseconds;
-  *_time = time;
+  _Timestamp64_implementation_Set( _time, _seconds, _nanoseconds );
 }
 #endif

@@ -131,10 +131,8 @@ bool _Timespec_Less_than(
  *  @return This method returns true if @a lhs is greater than the @a rhs and
  *          false otherwise.
  */
-bool _Timespec_Greater_than(
-  const struct timespec *lhs,
-  const struct timespec *rhs
-);
+#define _Timespec_Greater_than( _lhs, _rhs ) \
+  _Timespec_Less_than( _rhs, _lhs )
 
 /**
  * @brief Timespec equal to Operator

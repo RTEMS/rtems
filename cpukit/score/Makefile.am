@@ -295,7 +295,7 @@ libscore_a_SOURCES += src/threadq.c src/threadqdequeue.c \
 
 ## TIMESPEC_C_FILES
 libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
-    src/timespecisvalid.c src/timespeclessthan.c src/timespecgreaterthan.c \
+    src/timespecisvalid.c src/timespeclessthan.c \
     src/timespecsubtract.c src/timespectoticks.c src/timespecdivide.c \
     src/timespecdividebyinteger.c
 
@@ -303,7 +303,7 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
 libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \
     src/ts64divide.c src/ts64equalto.c \
     src/ts64getnanoseconds.c src/ts64getseconds.c \
-    src/ts64greaterthan.c src/ts64lessthan.c \
+    src/ts64lessthan.c \
     src/ts64set.c src/ts64settozero.c src/ts64subtract.c \
     src/ts64toticks.c src/ts64totimespec.c
 

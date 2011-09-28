@@ -17,19 +17,15 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timestamp.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 void _Timestamp64_Divide_by_integer(
-  Timestamp64_Control *_time,
-  uint32_t             _iterations,
-  Timestamp64_Control *_result
+  const Timestamp64_Control *_time,
+  uint32_t                   _iterations,
+  Timestamp64_Control       *_result
 )
 {
-  *_result = *_time / _iterations;
+  _Timestamp64_implementation_Divide_by_integer( _time, _iterations, _result );
 }
 #endif

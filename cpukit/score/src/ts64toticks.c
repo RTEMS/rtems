@@ -24,8 +24,7 @@
 #include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 uint32_t _Timestamp64_To_ticks(
   const Timestamp64_Control *time
 )

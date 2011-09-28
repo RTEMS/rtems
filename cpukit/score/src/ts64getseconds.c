@@ -17,17 +17,13 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timestamp.h>
 
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64) && \
-    !defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE
 uint32_t _Timestamp64_Get_seconds(
-  Timestamp64_Control *_time
+  const Timestamp64_Control *_time
 )
 {
-  return *(_time) / 1000000000;
+  _Timestamp64_implementation_Get_seconds( _time );
 }
 #endif

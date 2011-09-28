@@ -44,7 +44,7 @@ extern "C" {
 /*
  *  Verify something is defined.
  */
-#if !defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
+#if CPU_TIMESTAMP_USE_INT64 != TRUE && CPU_TIMESTAMP_USE_INT64_INLINE != TRUE
   #error "SuperCore Timestamp64 implementation included but not defined."
 #endif
 
@@ -52,6 +52,18 @@ extern "C" {
  *   Define the Timestamp control type.
  */
 typedef int64_t Timestamp64_Control;
+
+static inline void _Timestamp64_implementation_Set(
+  Timestamp64_Control *_time,
+  long                 _seconds,
+  long                 _nanoseconds
+)
+{
+  Timestamp64_Control _seconds64 = _seconds;
+  Timestamp64_Control _nanoseconds64 = _nanoseconds;
+
+  *_time = _seconds64 * 1000000000L + _nanoseconds64;
+}
 
 /**
  *  @brief Set Timestamp to Seconds Nanosecond
@@ -63,12 +75,9 @@ typedef int64_t Timestamp64_Control;
  *  @param[in] _seconds is the seconds portion of the timestamp
  *  @param[in] _nanoseconds is the nanoseconds portion of the timestamp
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Set( _time, _seconds, _nanoseconds ) \
-	  do { \
-	    *(_time) = ((int64_t)_seconds * 1000000000); \
-	    *(_time) += (int64_t)(_nanoseconds); \
-	  } while (0)
+    _Timestamp64_implementation_Set( _time, _seconds, _nanoseconds )
 #else
   void _Timestamp64_Set(
     Timestamp64_Control *_time,
@@ -76,6 +85,13 @@ typedef int64_t Timestamp64_Control;
     long                _nanoseconds
   );
 #endif
+
+static inline void _Timestamp64_implementation_Set_to_zero(
+  Timestamp64_Control *_time
+)
+{
+  *_time = 0;
+}
 
 /**
  *  @brief Zero Timestamp
@@ -85,9 +101,9 @@ typedef int64_t Timestamp64_Control;
  *
  *  @param[in] _time points to the timestamp instance to zero.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Set_to_zero( _time ) \
-	  *(_time) = 0
+    _Timestamp64_implementation_Set_to_zero( _time )
 #else
   void _Timestamp64_Set_to_zero(
     Timestamp64_Control *_time
@@ -105,7 +121,15 @@ typedef int64_t Timestamp64_Control;
  *          false otherwise.
  */
 #define _Timestamp64_Is_valid( _time ) \
-	(1)
+  (1)
+
+static inline bool _Timestamp64_implementation_Less_than(
+  const Timestamp64_Control *_lhs,
+  const Timestamp64_Control *_rhs
+)
+{
+  return *_lhs < *_rhs;
+}
 
 /**
  *  @brief Timestamp Less Than Operator
@@ -118,36 +142,26 @@ typedef int64_t Timestamp64_Control;
  *  @return This method returns true if @a _lhs is less than the @a _rhs and
  *          false otherwise.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Less_than( _lhs, _rhs ) \
-	  (*(_lhs) < *(_rhs))
+    _Timestamp64_implementation_Less_than( _lhs, _rhs )
 #else
   bool _Timestamp64_Less_than(
-    Timestamp64_Control *_lhs,
-    Timestamp64_Control *_rhs
+    const Timestamp64_Control *_lhs,
+    const Timestamp64_Control *_rhs
   );
 #endif
 
-/**
- *  @brief Timestamp Greater Than Operator
- *
- *  This method is the greater than operator for timestamps.
- *
- *  @param[in] _lhs points to the left hand side timestamp
- *  @param[in] _rhs points to the right hand side timestamp
- *
- *  @return This method returns true if @a _lhs is greater than the @a _rhs and
- *          false otherwise.
- */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
-  #define _Timestamp64_Greater_than( _lhs, _rhs ) \
-	  (*(_lhs) > *(_rhs))
-#else
-  bool _Timestamp64_Greater_than(
-    Timestamp64_Control *_lhs,
-    Timestamp64_Control *_rhs
-  );
-#endif
+static inline bool _Timestamp64_implementation_Equal_to(
+  const Timestamp64_Control *_lhs,
+  const Timestamp64_Control *_rhs
+)
+{
+  return *_lhs == *_rhs;
+}
+
+#define _Timestamp64_Greater_than( _lhs, _rhs ) \
+  _Timestamp64_Less_than( _rhs, _lhs )
 
 /**
  *  @brief Timestamp equal to Operator
@@ -160,15 +174,23 @@ typedef int64_t Timestamp64_Control;
  *  @return This method returns true if @a _lhs is equal to  @a _rhs and
  *          false otherwise.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Equal_to( _lhs, _rhs ) \
-	  (*(_lhs) == *(_rhs))
+    _Timestamp64_implementation_Equal_to( _lhs, _rhs )
 #else
   bool _Timestamp64_Equal_to(
-    Timestamp64_Control *_lhs,
-    Timestamp64_Control *_rhs
+    const Timestamp64_Control *_lhs,
+    const Timestamp64_Control *_rhs
   );
 #endif
+
+static inline void _Timestamp64_implementation_Add_to(
+  Timestamp64_Control       *_time,
+  const Timestamp64_Control *_add
+)
+{
+  *_time += *_add;
+}
 
 /**
  *  @brief Add to a Timestamp
@@ -181,13 +203,13 @@ typedef int64_t Timestamp64_Control;
  *
  *  @return This method returns the number of seconds @a time increased by.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Add_to( _time, _add ) \
-	  *(_time) += *(_add)
+    _Timestamp64_implementation_Add_to( _time, _add )
 #else
   void _Timestamp64_Add_to(
-    Timestamp64_Control *_time,
-    Timestamp64_Control *_add
+    Timestamp64_Control       *_time,
+    const Timestamp64_Control *_add
   );
 #endif
 
@@ -210,12 +232,12 @@ typedef int64_t Timestamp64_Control;
  */
 static inline uint32_t _Timestamp64_Add_to_at_tick(
   Timestamp64_Control *_time,
-  Timestamp64_Control *_add
+  const Timestamp64_Control *_add
 )
 {
-  Timestamp64_Control start = *_time / 1000000000;
+  Timestamp64_Control _start = *_time / 1000000000L;
   *_time += *_add;
-  if ( ((*_time) / 1000000000) != start ) {
+  if ( ((*_time) / 1000000000L) != _start ) {
     return 1;
   }
   return 0;
@@ -242,12 +264,21 @@ uint32_t _Timestamp64_To_ticks(
  *  timestamp format @a _time.
  *
  *  @param[in] _time points to the timestamp format time result
- *  @param[in] _ticks points to the number of ticks to be filled in
+ *  @param[out] _ticks points to the number of ticks to be filled in
  */
 void _Timestamp64_From_ticks(
   uint32_t             _ticks,
   Timestamp64_Control *_time
 );
+
+static inline void _Timestamp64_implementation_Subtract(
+  const Timestamp64_Control *_start,
+  const Timestamp64_Control *_end,
+  Timestamp64_Control       *_result
+)
+{
+  *_result = *_end - *_start;
+}
 
 /**
  *  @brief Subtract Two Timestamp
@@ -257,23 +288,28 @@ void _Timestamp64_From_ticks(
  *
  *  @param[in] _start points to the starting time
  *  @param[in] _end points to the ending time
- *  @param[in] _result points to the difference between
+ *  @param[out] _result points to the difference between
  *             starting and ending time.
- *
- *  @return This method fills in @a _result.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Subtract( _start, _end, _result ) \
-	  do { \
-	     *(_result) = *(_end) - *(_start); \
-	  } while (0)
+    _Timestamp64_implementation_Subtract( _start, _end, _result )
 #else
   void _Timestamp64_Subtract(
-    Timestamp64_Control *_start,
-    Timestamp64_Control *_end,
-    Timestamp64_Control *_result
+    const Timestamp64_Control *_start,
+    const Timestamp64_Control *_end,
+    Timestamp64_Control       *_result
   );
 #endif
+
+static inline void _Timestamp64_implementation_Divide_by_integer(
+  const Timestamp64_Control *_time,
+  uint32_t             _iterations,
+  Timestamp64_Control *_result
+)
+{
+  *_result = *_time / _iterations;
+}
 
 /**
  *  @brief Divide Timestamp By Integer
@@ -284,20 +320,16 @@ void _Timestamp64_From_ticks(
  *
  *  @param[in] _time points to the total
  *  @param[in] _iterations is the number of iterations
- *  @param[in] _result points to the average time.
- *
- *  @return This method fills in @a result.
+ *  @param[out] _result points to the average time.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Divide_by_integer( _time, _iterations, _result ) \
-	  do { \
-	     *(_result) = *(_time) / (_iterations); \
-	  } while (0)
+    _Timestamp64_implementation_Divide_by_integer( _time, _iterations, _result )
 #else
   void _Timestamp64_Divide_by_integer(
-    Timestamp64_Control *_time,
-    uint32_t             _iterations,
-    Timestamp64_Control *_result
+    const Timestamp64_Control *_time,
+    uint32_t                   _iterations,
+    Timestamp64_Control       *_result
   );
 #endif
 
@@ -309,10 +341,8 @@ void _Timestamp64_From_ticks(
  *
  *  @param[in] _lhs points to the left hand number
  *  @param[in] _rhs points to the right hand number
- *  @param[in] _ival_percentage points to the integer portion of the average
- *  @param[in] _fval_percentage points to the thousandths of percentage
- *
- *  @return This method fills in @a result.
+ *  @param[out] _ival_percentage points to the integer portion of the average
+ *  @param[out] _fval_percentage points to the thousandths of percentage
  */
 void _Timestamp64_Divide(
   const Timestamp64_Control *_lhs,
@@ -320,6 +350,13 @@ void _Timestamp64_Divide(
   uint32_t                  *_ival_percentage,
   uint32_t                  *_fval_percentage
 );
+
+static inline uint32_t _Timestamp64_implementation_Get_seconds(
+  const Timestamp64_Control *_time
+)
+{
+  return (uint32_t) (*_time / 1000000000L);
+}
 
 /**
  *  @brief Get Seconds Portion of Timestamp
@@ -330,14 +367,21 @@ void _Timestamp64_Divide(
  *
  *  @return The seconds portion of @a _time.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Get_seconds( _time ) \
-	  (*(_time) / 1000000000)
+    _Timestamp64_implementation_Get_seconds( _time )
 #else
   uint32_t _Timestamp64_Get_seconds(
-    Timestamp64_Control *_time
+    const Timestamp64_Control *_time
   );
 #endif
+
+static inline uint32_t _Timestamp64_implementation_Get_nanoseconds(
+  const Timestamp64_Control *_time
+)
+{
+  return (uint32_t) (*_time % 1000000000L);
+}
 
 /**
  *  @brief Get Nanoseconds Portion of Timestamp
@@ -348,14 +392,23 @@ void _Timestamp64_Divide(
  *
  *  @return The nanoseconds portion of @a _time.
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Get_nanoseconds( _time ) \
-	  (*(_time) % 1000000000)
+    _Timestamp64_implementation_Get_nanoseconds( _time )
 #else
   uint32_t _Timestamp64_Get_nanoseconds(
-    Timestamp64_Control *_time
+    const Timestamp64_Control *_time
   );
 #endif
+
+static inline void _Timestamp64_implementation_To_timespec(
+  const Timestamp64_Control *_timestamp,
+  struct timespec           *_timespec
+)
+{
+  _timespec->tv_sec = *_timestamp / 1000000000L;
+  _timespec->tv_nsec = *_timestamp % 1000000000L;
+}
 
 /**
  *  @brief Convert Timestamp to struct timespec
@@ -363,18 +416,15 @@ void _Timestamp64_Divide(
  *  This method returns the seconds portion of the specified timestamp
  *
  *  @param[in] _timestamp points to the timestamp
- *  @param[in] _timespec points to the timespec
+ *  @param[out] _timespec points to the timespec
  */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_INT64_INLINE)
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_To_timespec( _timestamp, _timespec  ) \
-	do { \
-	  (_timespec)->tv_sec = *(_timestamp) / 1000000000; \
-	  (_timespec)->tv_nsec = *(_timestamp) % 1000000000; \
-	} while (0)
+    _Timestamp64_implementation_To_timespec( _timestamp, _timespec )
 #else
   void _Timestamp64_To_timespec(
-    Timestamp64_Control *_timestamp,
-    struct timespec     *_timespec
+    const Timestamp64_Control *_timestamp,
+    struct timespec           *_timespec
   );
 #endif
 

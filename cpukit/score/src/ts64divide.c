@@ -17,12 +17,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <sys/types.h>
 #include <rtems/score/timestamp.h>
 
 /* This method is never inlined. */
-#if defined(CPU_RTEMS_SCORE_TIMESTAMP_IS_INT64)
+#if CPU_TIMESTAMP_USE_INT64 == TRUE || CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
 void _Timestamp64_Divide(
   const Timestamp64_Control *_lhs,
   const Timestamp64_Control *_rhs,
