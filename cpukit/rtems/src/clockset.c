@@ -38,7 +38,7 @@
  */
 
 rtems_status_code rtems_clock_set(
-  rtems_time_of_day *time_buffer
+  const rtems_time_of_day *time_buffer
 )
 {
   struct timespec  newtime;

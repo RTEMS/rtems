@@ -181,7 +181,7 @@ rtems_interval rtems_clock_get_ticks_per_second(void);
  *        may be executed immediately if the time is moved forward.
  */
 rtems_status_code rtems_clock_set(
-  rtems_time_of_day *time_buffer
+  const rtems_time_of_day *time_buffer
 );
 
 /**

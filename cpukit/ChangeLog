@@ -1,5 +1,10 @@
 2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* rtems/include/rtems/rtems/clock.h, rtems/src/clockset.c: Added const
+	qualifier in rtems_clock_set().
+
+2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1914/cpukit
 	* score/src/timespecgreaterthan.c, score/src/ts64greaterthan.c:
 	Removed files.
