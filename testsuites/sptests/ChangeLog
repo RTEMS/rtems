@@ -1,3 +1,7 @@
+2011-09-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp2038/init.c: More test cases.
+
 2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp2038/Makefile.am, sp2038/init.c, sp2038/sp2038.doc,
