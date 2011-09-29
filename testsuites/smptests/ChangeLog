@@ -1,3 +1,8 @@
+2011-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* smp05/init.c, smp06/init.c, smp07/init.c, smp09/init.c:
+	Add HAVE_CONFIG_H.
+
 2011-07-29	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* smp03/init.c, smp03/system.h, smp03/tasks.c: Modified test to force a
