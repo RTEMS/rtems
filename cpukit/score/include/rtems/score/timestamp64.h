@@ -55,14 +55,11 @@ typedef int64_t Timestamp64_Control;
 
 static inline void _Timestamp64_implementation_Set(
   Timestamp64_Control *_time,
-  long                 _seconds,
-  long                 _nanoseconds
+  Timestamp64_Control  _seconds,
+  Timestamp64_Control  _nanoseconds
 )
 {
-  Timestamp64_Control _seconds64 = _seconds;
-  Timestamp64_Control _nanoseconds64 = _nanoseconds;
-
-  *_time = _seconds64 * 1000000000L + _nanoseconds64;
+  *_time = _seconds * 1000000000L + _nanoseconds;
 }
 
 /**
@@ -81,8 +78,8 @@ static inline void _Timestamp64_implementation_Set(
 #else
   void _Timestamp64_Set(
     Timestamp64_Control *_time,
-    long                _seconds,
-    long                _nanoseconds
+    Timestamp64_Control  _seconds,
+    Timestamp64_Control  _nanoseconds
   );
 #endif
 
@@ -406,8 +403,8 @@ static inline void _Timestamp64_implementation_To_timespec(
   struct timespec           *_timespec
 )
 {
-  _timespec->tv_sec = *_timestamp / 1000000000L;
-  _timespec->tv_nsec = *_timestamp % 1000000000L;
+  _timespec->tv_sec = (time_t) (*_timestamp / 1000000000L);
+  _timespec->tv_nsec = (long) (*_timestamp % 1000000000L);
 }
 
 /**

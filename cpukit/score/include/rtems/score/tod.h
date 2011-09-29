@@ -163,26 +163,47 @@ SCORE_EXTERN Timestamp_Control _TOD_Uptime;
 void _TOD_Handler_initialization(void);
 
 /**
- *  @brief _TOD_Set
+ *  @brief Sets the time of day according to @a tod_as_timestamp.
  *
- *  This routine sets the current time of day to @a time and
- *  the equivalent SECONDS_SINCE_EPOCH.
+ *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.  The watchdog
+ *  seconds chain will be adjusted.
  */
-void _TOD_Set(
-  const struct timespec *time
+void _TOD_Set_with_timestamp(
+  const Timestamp_Control *tod_as_timestamp
 );
 
+static inline void _TOD_Set(
+  const struct timespec *tod_as_timespec
+)
+{
+  Timestamp_Control tod_as_timestamp;
+
+  _Timestamp_Set(
+    &tod_as_timestamp,
+    tod_as_timespec->tv_sec,
+    tod_as_timespec->tv_nsec
+  );
+  _TOD_Set_with_timestamp( &tod_as_timestamp );
+}
+
 /**
- *  @brief _TOD_Get
+ *  @brief Returns the time of day in @a tod_as_timestamp.
  *
- *  This routine returns the current time of day with potential accuracy
- *  to the nanosecond.
- *
- *  @param[in] time is a pointer to the time to be returned
+ *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
  */
-void _TOD_Get(
-  struct timespec *time
+void _TOD_Get_as_timestamp(
+  Timestamp_Control *tod_as_timestamp
 );
+
+static inline void _TOD_Get(
+  struct timespec *tod_as_timespec
+)
+{
+  Timestamp_Control tod_as_timestamp;
+
+  _TOD_Get_as_timestamp( &tod_as_timestamp );
+  _Timestamp_To_timespec( &tod_as_timestamp, tod_as_timespec );
+}
 
 /**
  *  @brief _TOD_Get_uptime

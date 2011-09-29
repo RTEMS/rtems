@@ -30,7 +30,7 @@
  *  This directive sets the date and time for this node.
  *
  *  Input parameters:
- *    time_buffer - pointer to the time and date structure
+ *    tod - pointer to the time and date structure
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
@@ -38,23 +38,26 @@
  */
 
 rtems_status_code rtems_clock_set(
-  const rtems_time_of_day *time_buffer
+  const rtems_time_of_day *tod
 )
 {
-  struct timespec  newtime;
-
-  if ( !time_buffer )
+  if ( !tod )
     return RTEMS_INVALID_ADDRESS;
 
-  if ( _TOD_Validate( time_buffer ) ) {
-    newtime.tv_sec = _TOD_To_seconds( time_buffer );
-    newtime.tv_nsec = time_buffer->ticks *
-      rtems_configuration_get_nanoseconds_per_tick();
+  if ( _TOD_Validate( tod ) ) {
+    Timestamp_Control tod_as_timestamp;
+    uint32_t seconds = _TOD_To_seconds( tod );
+    uint32_t nanoseconds = tod->ticks
+      * rtems_configuration_get_nanoseconds_per_tick();
+
+    _Timestamp_Set( &tod_as_timestamp, seconds, nanoseconds );
 
     _Thread_Disable_dispatch();
-      _TOD_Set( &newtime );
+      _TOD_Set_with_timestamp( &tod_as_timestamp );
     _Thread_Enable_dispatch();
+
     return RTEMS_SUCCESSFUL;
   }
+
   return RTEMS_INVALID_CLOCK;
 }

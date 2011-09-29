@@ -23,39 +23,26 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*
- *  _TOD_Set
- *
- *  This rountine sets the current date and time with the specified
- *  new date and time structure.
- *
- *  Input parameters:
- *    time                - pointer to the time and date structure
- *
- *  Output parameters: NONE
- */
-
-void _TOD_Set(
-  const struct timespec *time
+void _TOD_Set_with_timestamp(
+  const Timestamp_Control *tod
 )
 {
-  long seconds;
+  Watchdog_Interval seconds_next = _Timestamp_Get_seconds( tod );
+  Watchdog_Interval seconds_now;
 
   _Thread_Disable_dispatch();
   _TOD_Deactivate();
 
-  seconds = _TOD_Seconds_since_epoch();
+  seconds_now = _TOD_Seconds_since_epoch();
 
-  if ( time->tv_sec < seconds )
-    _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD, seconds - time->tv_sec );
+  if ( seconds_next < seconds_now )
+    _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD, seconds_now - seconds_next );
   else
-    _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, time->tv_sec - seconds );
+    _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, seconds_next - seconds_now );
 
-  /* POSIX format TOD (timespec) */
-  _Timestamp_Set( &_TOD_Now, time->tv_sec, time->tv_nsec );
+  _TOD_Now = *tod;
   _TOD_Is_set = true;
 
   _TOD_Activate();
-
   _Thread_Enable_dispatch();
 }

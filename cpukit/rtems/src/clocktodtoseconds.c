@@ -18,6 +18,8 @@
 #include <rtems/system.h>
 #include <rtems/rtems/clock.h>
 
+#define TOD_SECONDS_AT_2100_03_01_00_00 4107538800UL
+
 /*
  *  The following array contains the number of days in all months
  *  up to the month indicated by the index of the second dimension.
@@ -77,6 +79,12 @@ uint32_t   _TOD_To_seconds(
              * TOD_SECONDS_PER_MINUTE;
 
   time += the_tod->second;
+
+  /* The year 2100 is not a leap year */
+  if ( time
+      >= (TOD_SECONDS_AT_2100_03_01_00_00 - TOD_SECONDS_1970_THROUGH_1988)) {
+    time -= TOD_SECONDS_PER_DAY;
+  }
 
   time += TOD_SECONDS_1970_THROUGH_1988;
 

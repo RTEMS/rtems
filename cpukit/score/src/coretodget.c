@@ -22,19 +22,8 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-/*
- *  _TOD_Get
- *
- *  This routine is used to obtain the current date and time.
- *
- *  Input parameters:
- *    time  - pointer to the time and date structure
- *
- *  Output parameters: NONE
- */
-
-void _TOD_Get(
-  struct timespec *time
+void _TOD_Get_as_timestamp(
+  Timestamp_Control *tod
 )
 {
   ISR_Level         level;
@@ -52,5 +41,6 @@ void _TOD_Get(
 
   _Timestamp_Set( &offset, 0, nanoseconds );
   _Timestamp_Add_to( &now, &offset );
-  _Timestamp_To_timespec( &now, time );
+
+  *tod = now;
 }

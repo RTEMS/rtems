@@ -1,3 +1,14 @@
+2011-09-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/tod.h: Declare _TOD_Set_with_timestamp()
+	and _TOD_Get_as_timestamp().
+	* score/src/coretodset.c: Define _TOD_Set_with_timestamp().
+	* score/src/coretodget.c: Define _TOD_Get_as_timestamp().
+	* rtems/src/clockset.c: Use _TOD_Set_with_timestamp().
+	* score/include/rtems/score/timestamp64.h, score/src/ts64set.c:
+	Changed parameter types of _Timestamp64_Set().
+	* rtems/src/clocktodtoseconds.c: Year 2100 is not a leap year.
+
 2011-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/include/rtems/rtems/clock.h, rtems/src/clockset.c: Added const

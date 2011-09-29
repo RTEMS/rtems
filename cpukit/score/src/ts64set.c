@@ -22,8 +22,8 @@
 #if CPU_TIMESTAMP_USE_INT64 == TRUE
 void _Timestamp64_Set(
   Timestamp64_Control *_time,
-  long                 _seconds,
-  long                 _nanoseconds
+  Timestamp64_Control  _seconds,
+  Timestamp64_Control  _nanoseconds
 )
 {
   _Timestamp64_implementation_Set( _time, _seconds, _nanoseconds );
