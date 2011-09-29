@@ -1,3 +1,7 @@
+2011-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxtmsem03/init.c: Add HAVE_CONFIG_H.
+
 2011-08-24	Ricardo Aguirre <el.mastin@ymail.com>
 
 	PR 1903/testing
