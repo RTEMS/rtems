@@ -13,6 +13,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "tmacros.h"
 #include <rtems/serial_mouse.h>
 #include "termios_testdriver_intr.h"

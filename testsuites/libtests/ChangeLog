@@ -1,3 +1,8 @@
+2011-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* mouse01/init.c, mouse01/msmouse.c, mouse01/serial_mouse_config.c:
+	Add HAVE_CONFIG_H.
+
 2011-09-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
 
 	* monitor/monitor.scn, termios/termios.scn: New files.
