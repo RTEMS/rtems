@@ -1,3 +1,14 @@
+2011-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sp75/init.c, spcbssched01/init.c, spcbssched01/task1.c
+	spcbssched02/init.c, spcbssched02/task_periodic.c,
+	spcbssched03/init.c, spcbssched03/tasks_aperiodic.c,
+	spcbssched03/tasks_periodic.c, spedfsched01/init.c,
+	spedfsched01/task1.c, spedfsched02/getall.c, spedfsched02/init.c,
+	spedfsched02/task1.c, spedfsched03/init.c,
+	spedfsched03/tasks_aperiodic.c, spedfsched03/tasks_periodic.c,
+	sprbtree01/init.c: Add HAVE_CONFIG_H.
+
 2011-09-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp2038/init.c: More test cases.

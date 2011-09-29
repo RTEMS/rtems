@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "system.h"
 
 void overrun_handler_task_4 (
