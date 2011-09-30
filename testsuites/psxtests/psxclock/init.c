@@ -13,9 +13,11 @@
 #include "config.h"
 #endif
 
-#include <pmacros.h>
 #include <time.h>
 #include <errno.h>
+
+#include "pmacros.h"
+#include "pritime.h"
 
 void check_enosys(int status);
 
@@ -84,7 +86,7 @@ rtems_task Init(
 
   puts( "Init: clock_getres - SUCCESSFUL" );
   sc = clock_getres( CLOCK_REALTIME, &tv );
-  printf( "Init: resolution = sec (%ld), nsec (%ld)\n", tv.tv_sec, tv.tv_nsec );
+  printf( "Init: resolution = sec (%" PRIdtime_t "), nsec (%ld)\n", tv.tv_sec, tv.tv_nsec );
   rtems_test_assert( !sc );
 
   /* set the time of day, and print our buffer in multiple ways */
@@ -114,7 +116,7 @@ rtems_task Init(
   /* print new times to make sure it has changed and we can get the realtime */
   sc = clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &tv );
   rtems_test_assert( !sc );
-  printf("Time since boot: (%" PRItime_t ", %ld)\n", tv.tv_sec,tv.tv_nsec );
+  printf("Time since boot: (%" PRIdtime_t ", %ld)\n", tv.tv_sec,tv.tv_nsec );
 
   sc = clock_gettime( CLOCK_REALTIME, &tv );
   rtems_test_assert( !sc );
@@ -207,7 +209,7 @@ rtems_task Init(
 
   /* check the time remaining */
 
-  printf( "Init: sec (%ld), nsec (%ld) remaining\n", tr.tv_sec, tr.tv_nsec );
+  printf( "Init: sec (%" PRIdtime_t "), nsec (%ld) remaining\n", tr.tv_sec, tr.tv_nsec );
   rtems_test_assert( !tr.tv_sec && !tr.tv_nsec );
 
   puts( "Init: nanosleep - 1.35 seconds" );

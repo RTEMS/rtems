@@ -32,6 +32,7 @@ extern int pthread_attr_setcputime(
 #include "system.h"
 #include <errno.h>
 #include "tmacros.h"
+#include "pritime.h"
 
 void print_schedparam(
   char               *prefix,
@@ -47,10 +48,10 @@ void print_schedparam(
 #if defined(_POSIX_SPORADIC_SERVER)
   printf( "%ssched_ss_low_priority     = %d\n",
      prefix, schedparam->sched_ss_low_priority );
-  printf( "%ssched_ss_replenish_period = (%ld, %ld)\n", prefix,
+  printf( "%ssched_ss_replenish_period = (%" PRIdtime_t ", %ld)\n", prefix,
      schedparam->sched_ss_repl_period.tv_sec,
      schedparam->sched_ss_repl_period.tv_nsec );
-  printf( "%ssched_sched_ss_initial_budget = (%ld, %ld)\n", prefix,
+  printf( "%ssched_sched_ss_initial_budget = (%" PRIdtime_t ", %ld)\n", prefix,
      schedparam->sched_ss_init_budget.tv_sec,
      schedparam->sched_ss_init_budget.tv_nsec );
 #else

@@ -18,6 +18,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
+#include "pritime.h"
 
 void print_schedparam(
   char               *prefix,
@@ -33,10 +34,10 @@ void print_schedparam(
 #if defined(_POSIX_SPORADIC_SERVER)
   printf( "%ssched_ss_low_priority     = %d\n",
      prefix, schedparam->sched_ss_low_priority );
-  printf( "%ssched_ss_repl_period = (%ld, %ld)\n", prefix,
+  printf( "%ssched_ss_repl_period = (%" PRIdtime_t ", %ld)\n", prefix,
      schedparam->sched_ss_repl_period.tv_sec,
      schedparam->sched_ss_repl_period.tv_nsec );
-  printf( "%ssched_ss_init_budget = (%ld, %ld)\n", prefix,
+  printf( "%ssched_ss_init_budget = (%" PRIdtime_t ", %ld)\n", prefix,
      schedparam->sched_ss_init_budget.tv_sec,
      schedparam->sched_ss_init_budget.tv_nsec );
 #else

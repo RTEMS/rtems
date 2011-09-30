@@ -35,6 +35,7 @@
 #include <time.h>     /* time facilities */
 #include <stdio.h>    /* console facilities */
 #include <rtems/score/timespec.h>
+#include "pritime.h"
 
 void StopTimer(
   timer_t  timer_id,
@@ -125,7 +126,7 @@ void * task_a (void *arg)
      rtems_test_exit(0);
    }
    printf(
-    "task A: timer_settime - value=%" PRItime_t ":%ld interval=%" PRItime_t ":%ld\n",
+    "task A: timer_settime - value=%" PRIdtime_t ":%ld interval=%" PRIdtime_t ":%ld\n",
     timergetdata.it_value.tv_sec, timergetdata.it_value.tv_nsec,
     timergetdata.it_interval.tv_sec, timergetdata.it_interval.tv_nsec
   );
@@ -311,7 +312,7 @@ void * task_c (void *arg)
          rtems_test_exit(0);
        }
        printf(
-         "task C: timer_gettime - %" PRItime_t ":%ld remaining from %" PRItime_t ":%ld\n",
+         "task C: timer_gettime - %" PRIdtime_t ":%ld remaining from %" PRIdtime_t ":%ld\n",
          timergetdata.it_value.tv_sec, timergetdata.it_value.tv_nsec,
          timergetdata.it_interval.tv_sec, timergetdata.it_interval.tv_nsec
        );

@@ -1,5 +1,11 @@
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psx01/init.c, psx07/init.c, psx09/init.c, psx12/init.c,
+	psxclock/init.c, psxtimer01/psxtimer.c: Include "pritime.h".
+	Use PRIdtime_t to print time_t.
+
+2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Check for size of time_t.
 
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>

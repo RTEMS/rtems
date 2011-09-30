@@ -13,10 +13,12 @@
 #include "config.h"
 #endif
 
-#define CONFIGURE_INIT
-#include "system.h"
 #include <sched.h>
 #include <sys/utsname.h>
+
+#define CONFIGURE_INIT
+#include "system.h"
+#include "pritime.h"
 
 void *POSIX_Init(
   void *argument
@@ -87,7 +89,7 @@ void *POSIX_Init(
 
   status = sched_rr_get_interval( getpid(), &tr );
   printf(
-    "Init: Round Robin quantum is %ld seconds, %ld nanoseconds\n",
+    "Init: Round Robin quantum is %" PRIdtime_t " seconds, %ld nanoseconds\n",
     tr.tv_sec,
     tr.tv_nsec
   );
