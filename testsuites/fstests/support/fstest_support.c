@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h> /* exit */
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -27,6 +28,7 @@
 #include "fs_config.h"
 
 #include "fstest.h"
+#include "pmacros.h"
 
 #define TEMP_DIR "waterbuffalo"
 

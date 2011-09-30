@@ -19,6 +19,8 @@
 
 #include "ramdisk_support.h"
 #include "fstest.h"
+#include "pmacros.h"
+
 /*
  * Ramdisk information
  */

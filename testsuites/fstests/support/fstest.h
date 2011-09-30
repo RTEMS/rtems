@@ -12,8 +12,6 @@
 #ifndef __FSTEST_H
 #define __FSTEST_H
 
-#include "pmacros.h"
-
 #define TIME_PRECISION  (2)
 #define TIME_EQUAL(x,y) (abs((x)-(y))<TIME_PRECISION)
 

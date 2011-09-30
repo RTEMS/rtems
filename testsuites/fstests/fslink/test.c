@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "fstest.h"
+#include "pmacros.h"
 
 /*
  * Test if the successful call works as expect

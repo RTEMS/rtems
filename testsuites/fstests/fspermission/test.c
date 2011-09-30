@@ -25,6 +25,7 @@
 #include <unistd.h>
 
 #include "fstest.h"
+#include "pmacros.h"
 
 /*
  *  Test the umask

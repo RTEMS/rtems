@@ -26,6 +26,7 @@
 #include <dirent.h>
 
 #include "fstest.h"
+#include "pmacros.h"
 
 /*
  * Test the function of symlink

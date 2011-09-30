@@ -1,3 +1,11 @@
+2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* fserror/test.c, fslink/test.c, fspatheval/test.c,
+	fspermission/test.c, fsrdwr/init.c, fssymlink/test.c,
+	fstime/test.c, support/fstest_support.c, support/ramdisk_support.c:
+	Explicitly include "pmacros.h".
+	* support/fstest.h: Don't include "pmacros.h".
+
 2011-09-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* imfs_support/fs_supprot.h, support/fstest.h,

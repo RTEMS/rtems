@@ -24,6 +24,7 @@
 #include <unistd.h>
 
 #include "fstest.h"
+#include "pmacros.h"
 
 void open_mkdir_error (void)
 {

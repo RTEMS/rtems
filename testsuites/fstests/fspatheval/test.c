@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include "fstest.h"
+#include "pmacros.h"
 
 #define BUF_SIZE 100
 

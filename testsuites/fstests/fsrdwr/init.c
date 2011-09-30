@@ -24,6 +24,7 @@
 #include <unistd.h>
 
 #include "fstest.h"
+#include "pmacros.h"
 
 const char *databuf =
   "Happy days are here again.  Happy days are here again.1Happy "
