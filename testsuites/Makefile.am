@@ -11,6 +11,7 @@ noinst_HEADERS =
 noinst_HEADERS += support/include/buffer_test_io.h
 noinst_HEADERS += support/include/test_support.h
 noinst_HEADERS += support/include/tmacros.h
+noinst_HEADERS += support/include/pritime.h
 
 SUBDIRS = @subdirs@
 
