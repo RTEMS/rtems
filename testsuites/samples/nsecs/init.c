@@ -26,7 +26,9 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <rtems/score/timespec.h> /* _Timespec_Substract */
+
 #include "tmacros.h"
+#include "pritime.h"
 
 char *my_ctime( time_t t )
 {
@@ -92,7 +94,7 @@ rtems_task Init(
       my_ctime(stop.tv_sec), stop.tv_nsec
     );
 
-    printf( " --> %" PRItime_t ":%ld\n", diff.tv_sec, diff.tv_nsec );
+    printf( " --> %" PRIdtime_t ":%ld\n", diff.tv_sec, diff.tv_nsec );
   }
 
   /*
@@ -106,7 +108,7 @@ rtems_task Init(
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "%" PRItime_t ":%ld %" PRItime_t ":%ld --> %" PRItime_t ":%ld\n",
+    printf( "%" PRIdtime_t ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
       start.tv_sec, start.tv_nsec,
       stop.tv_sec, stop.tv_nsec,
       diff.tv_sec, diff.tv_nsec
@@ -127,7 +129,7 @@ rtems_task Init(
     rtems_clock_get_uptime( &stop );
 
     subtract_em( &start, &stop, &diff );
-    printf( "loop of %d %" PRItime_t ":%ld %" PRItime_t ":%ld --> %" PRItime_t ":%ld\n",
+    printf( "loop of %d %" PRIdtime_t ":%ld %" PRIdtime_t ":%ld --> %" PRIdtime_t ":%ld\n",
       max,
       start.tv_sec, start.tv_nsec,
       stop.tv_sec, stop.tv_nsec,
