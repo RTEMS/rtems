@@ -24,6 +24,9 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
+# FIXME: We should get rid of this. It's a cludge.
+AC_CHECK_SIZEOF([time_t])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 sp01/Makefile

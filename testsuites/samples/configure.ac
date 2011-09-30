@@ -55,6 +55,9 @@ AM_CONDITIONAL([CXXTESTS],[test $CXXTESTS = "yes"])
 AM_CONDITIONAL(NETTESTS,test "$rtems_cv_RTEMS_NETWORKING" = "yes")
 AM_CONDITIONAL(MPTESTS,test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes")
 
+# FIXME: We should get rid of this. It's a cludge.
+AC_CHECK_SIZEOF([time_t])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 base_sp/Makefile

@@ -1,5 +1,9 @@
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for size of time_t.
+
+2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* psx16/init.c, psxclassic01/init.c, psxeintr_join/init.c:
 	Add HAVE_CONFIG_H.
 
