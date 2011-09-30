@@ -284,6 +284,9 @@ AC_CHECK_DECLS([CHAR_BIT],,,[#include <limits.h>])
 AC_CHECK_SIZEOF([mode_t])
 AC_CHECK_SIZEOF([off_t])
 
+# FIXME: We should get rid of this. It's a cludge.
+AC_CHECK_SIZEOF([time_t])
+
 # FIXME: Mandatory in SUSv4, optional in SUSv3. 
 #   Not implemented in GCC/newlib, so far.
 AC_CHECK_DECLS([WORD_BIT],,,[#include <limits.h>])
