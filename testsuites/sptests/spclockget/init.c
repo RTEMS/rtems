@@ -14,6 +14,7 @@
 #endif
 
 #include <tmacros.h>
+#include "pritime.h"
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -69,7 +70,7 @@ rtems_task Init(
   sc = rtems_clock_get( RTEMS_CLOCK_GET_TIME_VALUE, &timev );
   directive_failed( sc, "rtems_clock_get -- Time Value" );
   printf(
-    "Init - rtems_clock_get - Time Value = %" PRItime_t "\n",
+    "Init - rtems_clock_get - Time Value = %" PRIdtime_t "\n",
      timev.tv_sec
   );
 

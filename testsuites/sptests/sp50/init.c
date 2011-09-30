@@ -14,6 +14,7 @@
 #endif
 
 #include <tmacros.h>
+#include "pritime.h"
 
 volatile int   Fired;
 volatile bool  timerRan;
@@ -70,7 +71,7 @@ rtems_task Init(
       sc = rtems_clock_get_uptime( &uptime );
       directive_failed( sc, "rtems_clock_get_uptime" );
 
-      printf( "Timer fired at %" PRItime_t "\n", uptime.tv_sec );
+      printf( "Timer fired at %" PRIdtime_t "\n", uptime.tv_sec );
     }
 
     if ( Fired >= 10 ) {
