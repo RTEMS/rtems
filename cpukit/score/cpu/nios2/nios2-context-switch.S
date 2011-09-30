@@ -27,9 +27,7 @@
 
 _CPU_Context_switch:
 
-	movhi	r12, %hiadj(_Nios2_Thread_dispatch_disabled)
-	addi	r12, r12, %lo(_Nios2_Thread_dispatch_disabled)
-	ldw	r9, 0(r12)
+	ldw	r9, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
 	rdctl	r8, status
 	stw	r16, NIOS2_CONTEXT_OFFSET_R16(r4)
 	stw	r17, NIOS2_CONTEXT_OFFSET_R17(r4)
@@ -57,7 +55,7 @@ restore:
 	ldw	r22, NIOS2_CONTEXT_OFFSET_R22(r5)
 	ldw	r23, NIOS2_CONTEXT_OFFSET_R23(r5)
 	ldw	fp, NIOS2_CONTEXT_OFFSET_FP(r5)
-	stw	r10, 0(r12)
+	stw	r10, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
 	ldw	r11, NIOS2_CONTEXT_OFFSET_STATUS(r5)
 	ldw	sp, NIOS2_CONTEXT_OFFSET_SP(r5)
 	ldw	ra, NIOS2_CONTEXT_OFFSET_RA(r5)

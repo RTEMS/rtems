@@ -1,3 +1,8 @@
+2011-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* nios2-context-switch.S: Use small-data area access for
+	_Per_CPU_Information fields.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1914/cpukit
