@@ -329,7 +329,7 @@ lseek_test (void)
   rtems_test_assert (pos == 0);
 
 
-  printf ("Writing %d bytes to file\n", len * 10);
+  printf ("Writing %zd bytes to file\n", len * 10);
   for (i = 0; i < 10; i++) {
     n = write (fd, databuf, len);
     rtems_test_assert (n != -1);
