@@ -273,10 +273,6 @@ extern "C" {
  * certain system types on different targets.
  */
 
-/* HACK: Presume time_t to be a "long" */
-/* HACK: There is no portable way to print time_t's */
-#define PRItime_t "ld"
-
 #if defined(RTEMS_USE_16_BIT_OBJECT)
 #define PRIxrtems_id PRIx16
 #else
