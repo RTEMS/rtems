@@ -1,6 +1,12 @@
 2011-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* libmisc/shell/main_time.c: Introduce PRIdtime_t.
+	* libmisc/shell/main_time.c: Introduce PRIutime_t, SCNutime_t and
+	"utime_t" for 64bit-time_t support.
+
+2011-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/main_time.c: Introduce PRIdtime_t for 64bit-time_t
+	support.
 
 2011-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
