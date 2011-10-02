@@ -95,6 +95,18 @@
 #include <sys/resource.h>
 #endif
 
+#if SIZEOF_TIME_T == 8
+#define PRIutime_t	PRIu64
+#define SCNutime_t	SCNu64
+#define utime_t		uint64_t
+#elif SIZEOF_TIME_T == 4
+#define PRIutime_t	PRIu32
+#define SCNutime_t	SCNu32
+#define utime_t		uint32_t
+#else
+#error "unsupport size of time_t"
+#endif
+
 #include "uuidP.h"
 #include "uuidd.h"
 
@@ -352,10 +364,11 @@ static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
 	}
 	if (state_fd >= 0) {
 		unsigned int cl;
-		unsigned long tv1, tv2;
+		utime_t tv1;
+		unsigned long tv2;
 		int a;
 
-		if (fscanf(state_f, "clock: %04x tv: %lu %lu adj: %d\n",
+		if (fscanf(state_f, "clock: %04x tv: %" SCNutime_t " %lu adj: %d\n",
 			   &cl, &tv1, &tv2, &a) == 4) {
 			clock_seq = cl & 0x3FFF;
 			last.tv_sec = tv1;
@@ -404,7 +417,7 @@ try_again:
 	if (state_fd > 0) {
 		rewind(state_f);
 		len = fprintf(state_f,
-			      "clock: %04x tv: %016lu %08lu adj: %08d\n",
+			      "clock: %04x tv: %016" PRIutime_t " %08lu adj: %08d\n",
 			      clock_seq, last.tv_sec, last.tv_usec, adjustment);
 		fflush(state_f);
 		if (ftruncate(state_fd, len) < 0) {
