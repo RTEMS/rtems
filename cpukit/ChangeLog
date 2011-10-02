@@ -1,3 +1,7 @@
+2011-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/libc/res_comp.c: Eliminate unused var "ppch".
+
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for size of time_t.
