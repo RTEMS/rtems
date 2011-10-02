@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <inttypes.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -24,6 +25,15 @@
 #include <rtems.h>
 #include <rtems/shell.h>
 #include "internal.h"
+
+/* Helper macro to print "time_t" */
+#if SIZEOF_TIME_T == 8
+#define PRIdtime_t PRId64
+#elif SIZEOF_TIME_T == 4
+#define PRIdtime_t PRId32
+#else
+#error "PRIdtime_t: unsupported size of time_t"
+#endif
 
 int rtems_shell_main_time(
   int   argc,
@@ -66,7 +76,7 @@ int rtems_shell_main_time(
     period.tv_nsec += 1000000000UL;
   }
 
-  printf("time: %li:%02li:%02li.%03li\n",
+  printf("time: %" PRIdtime_t ":%02" PRIdtime_t ":%02" PRIdtime_t ".%03li\n",
          period.tv_sec / 3600,
          period.tv_sec / 60, period.tv_sec % 60,
          period.tv_nsec / 1000000);
