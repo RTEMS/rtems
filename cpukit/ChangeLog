@@ -1,3 +1,7 @@
+2011-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/src/scheduleredfupdate.c: Remove unused var "the_node".
+
 2011-10-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/uuid/gen_uuid.c: Introduce PRIutime_t, SCNutime_t and
