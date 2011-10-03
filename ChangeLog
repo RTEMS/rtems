@@ -1,3 +1,9 @@
+2011-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* depcomp, compile, texinfo.tex, mdate-sh: New.
+	* bootstrap (-c): Don't remove depcomp, compile, texinfo.tex,
+	mdate-sh.
+
 2011-05-24	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1810/misc
