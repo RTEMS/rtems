@@ -1,17 +1,13 @@
 aclocal.m4
 autom4te*.cache
-compile
 config.cache
 config.guess
 config.log
 config.status
 config.sub
 configure
-depcomp
 install-sh
 install.sh
 Makefile
 Makefile.in
-mdate-sh
 missing
-texinfo.tex
