@@ -152,3 +152,5 @@ $(PROJECT_INCLUDE)/wd80x3.h: $(srcdir)/../../i386/pc386/include/wd80x3.h $(PROJE
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/wd80x3.h
 endif
 endif
+if QEMU
+endif

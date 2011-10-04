@@ -1,3 +1,8 @@
+2011-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1922
+	* preinstall.am: EDF and CBS scheduler: extern declarations fix.
+
 2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am: Do not include ne2000.rel unless networking is enabled.
