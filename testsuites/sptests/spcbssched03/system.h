@@ -64,10 +64,10 @@ rtems_task Tasks_Aperiodic(
 
 TEST_EXTERN rtems_id   Task_id[ 1+NUM_TASKS ];     /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 1+NUM_TASKS ];   /* array of task names */
-extern rtems_task_priority Priorities[ 1+NUM_TASKS ];
-extern uint32_t  Periods[ 1 + NUM_PERIODIC_TASKS ];
-extern uint32_t  Phases[1 + NUM_TASKS];
-extern uint32_t  Execution[1 + NUM_TASKS];
-bool Violating_task[1 + NUM_PERIODIC_TASKS];
+TEST_EXTERN rtems_task_priority Priorities[ 1+NUM_TASKS ];
+TEST_EXTERN uint32_t  Periods[ 1 + NUM_PERIODIC_TASKS ];
+TEST_EXTERN uint32_t  Phases[1 + NUM_TASKS];
+TEST_EXTERN uint32_t  Execution[1 + NUM_TASKS];
+TEST_EXTERN bool Violating_task[1 + NUM_PERIODIC_TASKS];
 
 /* end of include file */

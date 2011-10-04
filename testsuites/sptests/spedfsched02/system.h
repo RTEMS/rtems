@@ -60,6 +60,6 @@ TEST_EXTERN rtems_name Task_name[ 7 ];   /* array of task names */
 
 TEST_EXTERN struct counters Count;       /* iteration counters */
 TEST_EXTERN struct counters Temporary_count;
-extern rtems_task_priority Priorities[ 7 ];
+TEST_EXTERN rtems_task_priority *Priorities;
 
 /* end of include file */

@@ -52,13 +52,13 @@ rtems_task Task_Periodic(
 
 /* global variables */
 
-rtems_id   Task_id;
-rtems_name Task_name;
-rtems_id   Task_id2;
-rtems_name Task_name2;
-rtems_task_priority Priority;
-time_t  Period;
-time_t  Execution;
-time_t  Phase;
+TEST_EXTERN rtems_id   Task_id;
+TEST_EXTERN rtems_name Task_name;
+TEST_EXTERN rtems_id   Task_id2;
+TEST_EXTERN rtems_name Task_name2;
+TEST_EXTERN rtems_task_priority Priority;
+TEST_EXTERN time_t  Period;
+TEST_EXTERN time_t  Execution;
+TEST_EXTERN time_t  Phase;
 
 /* end of include file */

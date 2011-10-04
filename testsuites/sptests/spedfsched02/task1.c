@@ -31,7 +31,7 @@
 
 uint32_t      Periods[7]    = { 0,   2,   2,   2,   2, 100, 0 };
 uint32_t      Iterations[7] = { 0,  50,  50,  50,  50,   1, TA6_ITERATIONS };
-rtems_task_priority Priorities[7] = { 0,   2,   2,   2,   2,  100, 1 };
+rtems_task_priority Prio[7] = { 0,   2,   2,   2,   2,  100, 1 };
 
 rtems_task Task_1_through_6(
   rtems_task_argument argument
@@ -43,6 +43,8 @@ rtems_task Task_1_through_6(
   int               pass;
   uint32_t          failed;
   rtems_status_code status;
+
+  Priorities = Prio;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );

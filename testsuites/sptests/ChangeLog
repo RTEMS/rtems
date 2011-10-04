@@ -1,3 +1,10 @@
+2011-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1922
+	* spcbssched02/system.h, spcbssched03/system.h, spedfsched02/system.h,
+	spedfsched02/task1.c, spedfsched03/system.h: EDF and CBS scheduler:
+	extern declarations fix.
+
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp50/init.c, spclockget/init.c: Include "pritime.h".
