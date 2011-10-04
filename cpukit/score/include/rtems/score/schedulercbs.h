@@ -130,7 +130,7 @@ typedef struct {
  * List of servers. The @a Scheduler_CBS_Server is the index to the array
  * of pointers to @a _Scheduler_CBS_Server_list.
  */
-Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
+extern Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
 
 /**
  *  @brief Scheduler CBS Unblock

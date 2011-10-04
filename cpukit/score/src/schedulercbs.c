@@ -19,6 +19,8 @@
 #include <rtems/score/schedulercbs.h>
 #include <rtems/rtems/signal.h>
 
+Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
+
 void _Scheduler_CBS_Budget_callout(
   Thread_Control *the_thread
 )

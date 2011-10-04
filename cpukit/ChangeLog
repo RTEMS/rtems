@@ -1,3 +1,9 @@
+2011-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1922
+	* score/include/rtems/score/schedulercbs.h, score/src/schedulercbs.c:
+	EDF and CBS scheduler: extern declarations fix.
+
 2011-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/src/scheduleredfupdate.c: Remove unused var "the_node".
