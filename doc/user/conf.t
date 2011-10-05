@@ -436,13 +436,33 @@ only selected when @code{CONFIGURE_SMP_APPLICATION} is defined.  In a
 configuration with SMP enabled at configure time, it may be explicitly
 selected by defining @code{CONFIGURE_SCHEDULER_SIMPLE_SMP}.
 
+@findex CONFIGURE_SCHEDULER_EDF
+@item Earliest Deadline First Scheduler (EDF) - This is an alternative
+scheduler in RTEMS for single core applications. The EDF schedules tasks
+with dynamic priorities equal to deadlines. The deadlines are
+declared using only Rate Monotonic manager which handles periodic behavior.
+Period is always equal to deadline. If a task does not have any deadline
+declared or the deadline is cancelled, the task is considered a background
+task which is scheduled in case no deadline-driven tasks are ready to run.
+Moreover, multiple background tasks are scheduled according their priority
+assigned upon initialization. All ready tasks reside in a single ready queue.
+This scheduler may be explicitly selected by defining
+@code{CONFIGURE_SCHEDULER_EDF}.
+
+@findex CONFIGURE_SCHEDULER_CBS
+@item Constant Bandwidth Server Scheduler (CBS) - This is an alternative
+scheduler in RTEMS for single core applications. The CBS is a budget aware
+extention of EDF scheduler. The goal of this scheduler is to ensure temporal
+isolation of tasks. The CBS is equipped with a set of additional rules and
+provides with an extensive API. This scheduler may be explicitly selected
+by defining @code{CONFIGURE_SCHEDULER_CBS}.
+
 @end itemize
 
 The pluggable scheduler interface was added after the 4.10 release series
 so there are not a lot of options at this point.  We anticipate a lower
-memory, non-deterministic priority scheduler suitable for use in small
-systems and an Earliest Deadline First Scheduler (EDF) to arrive in
-the future.
+memory and a non-deterministic priority scheduler suitable for use in small
+systems to arrive in the future.
 
 The pluggable scheduler interface enables the user to provide their own scheduling algorithm.  If you choose to do this, you must define multiple configuration macros.  
 

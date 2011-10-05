@@ -1,3 +1,10 @@
+2011-10-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+		Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1912/doc
+	* user/conf.t, user/schedule.t: Rework to add scheduler specific
+	information.
+
 2011-09-19	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/Makefile.am, user/c_user.texi: Reorder chapters to put
