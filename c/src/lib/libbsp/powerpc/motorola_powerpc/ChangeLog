@@ -1,6 +1,6 @@
-2011-10-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+2011-10-04	Petr Benes <benesp16@fel.cvut.cz>
 
-	PR 1922
+	PR 1922/testing
 	* preinstall.am: EDF and CBS scheduler: extern declarations fix.
 
 2011-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
