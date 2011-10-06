@@ -89,11 +89,11 @@ project_lib_DATA = start.$(OBJEXT)
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
 startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+    ../../shared/bspstart.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../shared/startup/bspgetworkarea.c \
-    ../shared/startup/bspstart.c \
+    ../shared/startup/bsppredriverhook.c \
     ../shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c  \
     ../shared/helenos/boot/genarch/balloc.c \

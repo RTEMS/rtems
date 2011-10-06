@@ -1,3 +1,8 @@
+2011-10-06	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1919/bsp
+	* Makefile.am: Change install ISR callout to bsppredriverhook.
+
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Don't reference non-existing files.
