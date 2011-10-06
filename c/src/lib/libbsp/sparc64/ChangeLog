@@ -1,5 +1,13 @@
 2011-10-06	Gedare Bloom <giddyup44@yahoo.com>
 
+	PR 1920/bsp
+	* shared/helenos/kernel/sparc64/src/sun4u/takemmu.S,
+	shared/start/start.S, shared/startup/bspgetworkarea.c,
+	shared/startup/linkcmds: Fix BSP memory use to support more than 4 MB
+	of RAM.
+
+2011-10-06	Gedare Bloom <giddyup44@yahoo.com>
+
 	PR 1919/bsp
 	* shared/startup/bsppredriverhook.c: New file.
 

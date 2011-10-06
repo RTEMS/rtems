@@ -13,9 +13,9 @@
  * Declare some sizes.
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
-RamSize = DEFINED(RamSize) ? RamSize : 16M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 256k;
-StackSize = DEFINED(StackSize) ? StackSize : 256k;
+RamSize = DEFINED(RamSize) ? RamSize : 12M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 1M;
+StackSize = DEFINED(StackSize) ? StackSize : 1M;
 
 RAM_END = RamBase + RamSize;
 
@@ -25,7 +25,7 @@ ENTRY(start)
 
 MEMORY
         {
-	        ram : ORIGIN = 0x0, LENGTH = 16M
+	        ram : ORIGIN = 0x0, LENGTH = 12M
 	}
 
 

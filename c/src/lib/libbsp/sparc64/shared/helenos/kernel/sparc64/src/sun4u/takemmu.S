@@ -178,11 +178,11 @@ _take_mmu:
 	stxa %g0, [%g1] ASI_DMMU_DEMAP			
 	membar #Sync
 */
-#define SET_TLB_TAG(r1, context) \
-	set VMA | (context << TLB_TAG_ACCESS_CONTEXT_SHIFT), %r1
+#define SET_TLB_TAG(xVMA, r1, context) \
+	set xVMA | (context << TLB_TAG_ACCESS_CONTEXT_SHIFT), %r1
 
 	! write DTLB tag
-	SET_TLB_TAG(g1, MEM_CONTEXT_KERNEL)
+	SET_TLB_TAG(0x4000, g1, MEM_CONTEXT_KERNEL)
 	stxa %g1, [VA_DMMU_TAG_ACCESS] %asi			
 	membar #Sync
 
@@ -271,7 +271,7 @@ _take_mmu:
 	flush %g5
 */
 	! write ITLB tag of context 0
-	SET_TLB_TAG(g1, MEM_CONTEXT_KERNEL)
+	SET_TLB_TAG(0x4000, g1, MEM_CONTEXT_KERNEL)
 	mov VA_DMMU_TAG_ACCESS, %g2
 	stxa %g1, [%g2] ASI_IMMU
 	flush %g5
@@ -280,6 +280,36 @@ _take_mmu:
 	SET_TLB_DATA(g1, g2, TTE_L)		! use non-global mapping
 	stxa %g1, [%g0] ASI_ITLB_DATA_IN_REG		
 	flush %g5
+
+  ! GAB: add more mappings for dmmu in 4 MB chunks
+  SET_TLB_TAG(0x404000, g1, MEM_CONTEXT_KERNEL)
+  stxa %g1, [VA_DMMU_TAG_ACCESS] %asi
+  membar #Sync
+  set 0x400000, %g1
+  add %g1, %l5, %l5
+  SET_TLB_DATA(g1, g2, TTE_L | TTE_W)
+  stxa %g1, [%g0] ASI_DTLB_DATA_IN_REG
+  membar #Sync
+
+  SET_TLB_TAG(0x804000, g1, MEM_CONTEXT_KERNEL)
+  stxa %g1, [VA_DMMU_TAG_ACCESS] %asi
+  membar #Sync
+  set 0x400000, %g1
+  add %g1, %l5, %l5
+  SET_TLB_DATA(g1, g2, TTE_L | TTE_W)
+  stxa %g1, [%g0] ASI_DTLB_DATA_IN_REG
+  membar #Sync
+
+  SET_TLB_TAG(0xc04000, g1, MEM_CONTEXT_KERNEL)
+  stxa %g1, [VA_DMMU_TAG_ACCESS] %asi
+  membar #Sync
+  set 0x400000, %g1
+  add %g1, %l5, %l5
+  SET_TLB_DATA(g1, g2, TTE_L | TTE_W)
+  stxa %g1, [%g0] ASI_DTLB_DATA_IN_REG
+  membar #Sync
+
+
 /*
 	! enter nucleus - using context 0
 	wrpr %g0, 1, %tl

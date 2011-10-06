@@ -59,7 +59,7 @@ void bsp_get_work_area(
   #endif
 
   *work_area_start = WorkAreaBase;
-  *work_area_size  = ram_end - (uintptr_t) WorkAreaBase;
+  *work_area_size  = (uintptr_t) HeapSize;
   *heap_start      = (void*) HeapBase;
   *heap_size       = (uintptr_t) HeapSize;
 
