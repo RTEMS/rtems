@@ -1,3 +1,8 @@
+2011-10-06	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1919/bsp
+	* shared/startup/bsppredriverhook.c: New file.
+
 2011-06-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove superfluous EXTRA_DIST.
