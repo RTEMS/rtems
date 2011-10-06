@@ -1,3 +1,8 @@
+2011-10-06	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1918/cpukit
+	* cpu.c: Initialize context with cleared g4 register.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1914/cpukit
