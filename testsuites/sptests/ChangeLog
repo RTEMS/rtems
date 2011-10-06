@@ -1,3 +1,7 @@
+2011-10-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp2038/.cvsignore: New file.
+
 2011-10-04      Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1922/testing
