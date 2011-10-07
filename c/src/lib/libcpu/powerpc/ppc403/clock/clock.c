@@ -262,10 +262,6 @@ void Install_clock(
 {
    rtems_irq_connect_data clockIrqConnData;
 
-#ifdef ppc403
-    uint32_t   pvr;
-#endif /* ppc403 */
-
     Clock_driver_ticks = 0;
 
     /*
