@@ -50,7 +50,7 @@
       p->interrupt_stack_low = _Workspace_Allocate_or_fatal_error( size );
 
       ptr = (uintptr_t) _Addresses_Add_offset( p->interrupt_stack_low, size );
-      ptr &= ~CPU_STACK_ALIGNMENT;
+      ptr &= ~(CPU_STACK_ALIGNMENT - 1);
       p->interrupt_stack_high = (void *)ptr;
       p->state = RTEMS_BSP_SMP_CPU_INITIAL_STATE;
       RTEMS_COMPILER_MEMORY_BARRIER();

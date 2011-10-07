@@ -1,3 +1,9 @@
+2011-10-07	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 1931/cpukit
+	* score/src/percpu.c: The stack must be aligned to CPU alignment
+	requirement.
+
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* score/src/threadhandler.c: Don't undefine __USE_INIT_FINI__ for
