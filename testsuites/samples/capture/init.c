@@ -37,6 +37,7 @@
 
 volatile int can_proceed = 1;
 
+#if !BSP_SMALL_MEMORY
 static void notification(int fd, int seconds_remaining, void *arg)
 {
   printf(
@@ -44,6 +45,7 @@ static void notification(int fd, int seconds_remaining, void *arg)
     seconds_remaining
   );
 }
+#endif
 
 rtems_task Init(
   rtems_task_argument ignored

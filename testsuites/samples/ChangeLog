@@ -1,3 +1,7 @@
+2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* capture/init.c: Declare notification only if being used.
+
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* nsecs/init.c: Include "pritime.h".
