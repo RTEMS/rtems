@@ -193,10 +193,6 @@ int memfile_ioctl(
   void          *buffer
 )
 {
-  IMFS_jnode_t   *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
-
   return 0;
 }
 

@@ -1,3 +1,8 @@
+2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/imfs/memfile.c (memfile_ioctl): Remove unused var
+	"the_jnode".
+
 2011-10-04	 Petr Benes <benesp16@fel.cvut.cz>
 
 	PR 1922/testing
