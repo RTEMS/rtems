@@ -1,5 +1,6 @@
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* shared/startup/bspstart.c: Comment out unused vars.
 	* shared/console/console.c: Remove stray local decl of "close".
 
 2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
