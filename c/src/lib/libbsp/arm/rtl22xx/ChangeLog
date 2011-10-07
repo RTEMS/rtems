@@ -1,3 +1,8 @@
+2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/rtl22xx_t.cfg: Remove USE_THUMB (Violates *.cfg
+	conventions, unused).
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspreset.c:
