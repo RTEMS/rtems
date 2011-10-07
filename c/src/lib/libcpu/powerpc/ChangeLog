@@ -1,5 +1,7 @@
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* new-exceptions/bspsupport/ppc_exc_prologue.c 
+	(ppc_exc_create_branch_op): Comment out unused var "BRANCH_OP_LINK".
 	* mpc5xx/clock/clock.c: Make BSP_disconnect_clock_handler decl a
 	prototype.
 

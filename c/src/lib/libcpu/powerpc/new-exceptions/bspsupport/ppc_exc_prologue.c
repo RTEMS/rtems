@@ -70,7 +70,7 @@ static bool ppc_exc_create_branch_op(
 )
 {
   static const uintptr_t BRANCH_OP_CODE = 18 << 26;
-  static const uintptr_t BRANCH_OP_LINK = 0x1;
+/*  static const uintptr_t BRANCH_OP_LINK = 0x1; */
   static const uintptr_t BRANCH_OP_ABS = 0x2;
   static const uintptr_t BRANCH_OP_MSK = 0x3ffffff;
   size_t branch_op_index = prologue_size / 4 - 1;
