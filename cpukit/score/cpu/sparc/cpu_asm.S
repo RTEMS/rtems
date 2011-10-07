@@ -336,22 +336,22 @@ SYM(_CPU_Context_restore):
  *
  *  This routine is only used to switch to the first task on a
  *  secondary core in an SMP configuration.  We do not need to
- *  flush all the windows and, in fact, this can be dangerous
+ *  flush any windows and, in fact, this can be dangerous
  *  as they may or may not be initialized properly.  So we just
  *  reinitialize the PSR and WIM.
  */
         PUBLIC(_CPU_Context_switch_to_first_task_smp)
 SYM(_CPU_Context_switch_to_first_task_smp):
-        save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
-
-        mov	%psr, %g1         	! Initialize WIM
-	add	%g1, 1, %g2
-	and	%g2, 0x7, %g2
-	set	1, %g3
-	sll	%g3, %g2, %g3
-        mov     %g3, %wim
-        ba      done_flushing
-        mov     %i0, %o1                      ! in the delay slot
+	mov	%psr, %g1		! Turn of traps when modifying WIM
+	andn	%g1, SPARC_PSR_ET_MASK, %g1
+	mov	%g1, %psr
+	/* WIM and PSR will be set in done_flushing, it need args:
+	 * g1=PSR, g3=CWP, o1=Context
+	 */
+	and	%g1, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
+	nop
+	mov	%o0, %o1		! in the delay slot
+	ba,a	done_flushing
 #endif
 
 /* end of file */

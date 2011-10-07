@@ -1,3 +1,15 @@
+2011-10-07	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 1932/cpukit
+	* cpu_asm.S: At some point the interrupt trap handler causes a
+	window-overflow and the window overflow trap handler crashes when
+	writing to 0. I found that this is because the WIM was bad, to the
+	window overflow handler uses a uninitialized stack pointer in a
+	window never used. 
+	 * g3=CWP, not WIM
+	 * CWP is incremented by done_flushing no need doing that here also
+	 * I see no reason to create an additional stack frame (save)
+	 * Must turn off traps when updating WIM (maybe already done by caller?)	
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1914/cpukit
