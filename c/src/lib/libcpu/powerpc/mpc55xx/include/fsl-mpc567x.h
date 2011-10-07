@@ -639,8 +639,7 @@ extern "C" {
             uint32_t R;
             struct {
                 uint32_t:5;
-                uint32_t SIZE:3;
-                uint32_t:1;
+                uint32_t SIZE:4;
                 uint32_t LAS:3;
                 uint32_t:3;
                 uint32_t MAS:1;
