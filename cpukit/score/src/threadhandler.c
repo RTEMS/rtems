@@ -33,15 +33,10 @@
   #include <rtems/score/smp.h>
 #endif
 
-
 /*
  *  Conditional magic to determine what style of C++ constructor
  *  initialization this target and compiler version uses.
  */
-#if defined(__AVR__)
-  #undef __USE_INIT_FINI__
-#endif
-
 #if defined(__USE_INIT_FINI__)
   #if defined(__M32R__)
     #define INIT_NAME __init

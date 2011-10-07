@@ -1,5 +1,10 @@
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/threadhandler.c: Don't undefine __USE_INIT_FINI__ for
+	the avr.
+
+2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/imfs/memfile.c (memfile_ioctl): Remove unused var
 	"the_jnode".
 
