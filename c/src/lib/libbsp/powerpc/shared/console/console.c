@@ -26,8 +26,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-extern int close(int fd);
-
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>
