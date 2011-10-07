@@ -184,7 +184,7 @@ void ClockOn(
 {
     uint32_t   iocr;
     register uint32_t   tcr;
-#ifdef ppc403
+#ifndef ppc405
     uint32_t   pvr;
 #endif /* ppc403 */
 

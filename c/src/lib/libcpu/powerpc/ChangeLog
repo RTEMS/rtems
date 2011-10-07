@@ -1,5 +1,6 @@
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ppc403/clock/clock.c (ClockOn): Define pvr only for "ifndef ppc405".
 	* ppc403/clock/clock.c (Install_clock): Remove unused var "pvr".
 	* new-exceptions/bspsupport/ppc_exc_prologue.c 
 	(ppc_exc_create_branch_op): Comment out unused var "BRANCH_OP_LINK".
