@@ -267,8 +267,6 @@ SYM(_ISR_PER_CPU):
 	add	%l5, %l7, %l5
     #endif
         ld       [%l5], %l5	/* l5 = pointer to per CPU */
-        nop
-        nop
 
         /*
          *  On multi-core system, we need to use SMP safe versions
@@ -277,9 +275,8 @@ SYM(_ISR_PER_CPU):
          *  _ISR_SMP_Enter returns the interrupt nest level.  If we are
          *  outermost interrupt, then we need to switch stacks.
          */
-        mov      %sp, %fp
         call    SYM(_ISR_SMP_Enter), 0
-        nop                             ! delay slot
+         mov      %sp, %fp              ! delay slot
 	cmp	%o0, 0
 #else
         /*
@@ -321,8 +318,8 @@ SYM(_ISR_PER_CPU):
         /*
          *  Do we need to switch to the interrupt stack?
          */
-        bnz      dont_switch_stacks      ! No, then do not switch stacks
-        ld       [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
+        beq,a    dont_switch_stacks      ! No, then do not switch stacks
+         ld      [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
 
 dont_switch_stacks:
         /*
@@ -358,6 +355,7 @@ dont_switch_stacks:
         nop                             ! delay slot
 	cmp	%o0, 0
 	bz	simple_return
+	 nop
 #else
         !sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
         !ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
@@ -405,7 +403,7 @@ dont_switch_stacks:
         ld       [%l6 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
-        nop
+         nop
 
         /*
          *  If a context switch is necessary, then do fudge stack to
@@ -413,11 +411,9 @@ dont_switch_stacks:
          */
 
         ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
-        nop
-        nop
-
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
         bz       simple_return   ! No, then return
+         nop
 #endif
         /*
          *  Invoke interrupt dispatcher.
@@ -479,16 +475,11 @@ isr_dispatch:
         nop
     #endif
         ld       [%l5], %l5	/* l5 = pointer to per CPU */
-        nop
-        nop
 #else
         sethi    %hi(_Per_CPU_Information), %l5
         add      %l5, %lo(_Per_CPU_Information), %l5
 #endif
         ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
-        nop
-        nop
-
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
         bz       allow_nest_again
         nop

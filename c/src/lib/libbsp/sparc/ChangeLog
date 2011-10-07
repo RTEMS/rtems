@@ -1,3 +1,14 @@
+2011-10-07	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 1933/cpukit
+	* shared/irq_asm.S: From code inspection I have found the following
+	issues (most SMP), and some improvements in irq_asm.S. I would need a
+	long test with interrupts to verify the interrupt handler better,
+	however I can not see that these patches hurt. Please see comment per
+	hunk below, One should go through the file to indent delay-slots
+	correctly, I have fixed some in the patch areas. An extra space is
+	added in front of delay slots to indicate a delay slot.
+
 2011-07-28	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1801
