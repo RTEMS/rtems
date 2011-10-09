@@ -81,7 +81,7 @@ typedef uint32_t   (*sonic_read_register_t)(
 );
 
 typedef struct {
-  uint32_t                base_address;
+  void                   *base_address;
   uint32_t                vector;
   uint32_t                dcr_value;
   uint32_t                dc2_value;

@@ -734,7 +734,7 @@ rtems_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *config,
 	mtu = ETHERMTU;
 
     sc->acceptBroadcast = !config->ignore_broadcast;
-    sc->regs = (void *) chip->base_address;
+    sc->regs = chip->base_address;
     sc->vector = chip->vector;
     sc->txbufs = chip->txd_count;
     sc->rxbufs = chip->rxd_count;

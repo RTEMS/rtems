@@ -1,3 +1,10 @@
+2011-10-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/greth.c, libchip/network/open_eth.c
+	libchip/network/sonic.c: Eliminate evil typecasts.
+	* libchip/network/greth.h, libchip/network/open_eth.h,
+	libchip/network/sonic.h: Use void* for addresses.
+
 2011-08-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/network/smc91111exp.h, libchip/network/smc91111.c: Use

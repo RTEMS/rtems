@@ -1590,7 +1590,7 @@ rtems_sonic_driver_attach (
     sc->tdaCount = chip->tda_count;
   sc->acceptBroadcast = !config->ignore_broadcast;
 
-  sc->sonic = (void *) chip->base_address;
+  sc->sonic = chip->base_address;
   sc->vector = chip->vector;
   sc->dcr_value = chip->dcr_value;
   sc->dc2_value  = chip->dc2_value;

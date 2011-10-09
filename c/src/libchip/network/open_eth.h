@@ -8,7 +8,7 @@
 /* Configuration Information */
 
 typedef struct {
-  uint32_t                base_address;
+  void                   *base_address;
   uint32_t                vector;
   uint32_t                txd_count;
   uint32_t                rxd_count;
