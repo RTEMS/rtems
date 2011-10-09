@@ -1,3 +1,8 @@
+2011-10-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/serdbg/serdbg.h (putDebugChar, getDebugChar):
+	Remove duplicate decls.
+
 2011-10-07	Daniel Hellstrom <daniel@gaisler.com>
 
 	PR 1931/cpukit
