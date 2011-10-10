@@ -6555,6 +6555,7 @@ extern "C" {
 #define EDMA_B    (*( volatile struct EDMA_tag *)       0xFFF54000)
 
 #define EQADC_A   (*( volatile struct EQADC_tag *)      0xFFF80000)
+#define EQADC EQADC_A
 #define EQADC_B   (*( volatile struct EQADC_tag *)      0xFFF84000)
 
 #define DECFIL_A   (*( volatile struct DECFIL_tag *)      0xFFF88000)

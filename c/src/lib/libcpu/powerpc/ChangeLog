@@ -1,5 +1,9 @@
 2011-10-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* mpc55xx/include/fsl-mpc567x.h: Added EQADC as an alias to EQADC_A.
+
+2011-10-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1928/bsps:
 	* mpc55xx/include/fsl-mpc567x.h: Revert previous change.
 	* mpc55xx/misc/flash_support.c: Enable this file only for MPC55XX.
