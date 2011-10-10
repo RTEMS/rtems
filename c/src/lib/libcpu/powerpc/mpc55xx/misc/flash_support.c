@@ -37,6 +37,8 @@
 #include <libcpu/powerpc-utility.h>
 #include <rtems/powerpc/registers.h>
 
+#if MPC55XX_CHIP_TYPE / 100 == 55
+
 /* Set up the memory ranges for the flash on
  * the MPC5553, MPC5554, MPC5566 and MPC5567.
  * I check if it is an unknown CPU and return an error.
@@ -695,3 +697,5 @@ mpc55xx_flash_address(void)
 
     return mas2 & 0xFFFFF000;
 }
+
+#endif /* MPC55XX_CHIP_TYPE / 100 == 55 */

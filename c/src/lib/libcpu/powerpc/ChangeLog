@@ -1,3 +1,9 @@
+2011-10-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1928/bsps:
+	* mpc55xx/include/fsl-mpc567x.h: Revert previous change.
+	* mpc55xx/misc/flash_support.c: Enable this file only for MPC55XX.
+
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ppc403/clock/clock.c (ClockOn): Define pvr only for "ifndef ppc405".
