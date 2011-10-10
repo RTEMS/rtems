@@ -116,8 +116,8 @@ extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 /*
  * Macros for manipulating 32-bit pointers as 16-bit fragments
  */
-#define LSW(p)   ((uint16_t)((uint32_t)(p)))
-#define MSW(p)   ((uint16_t)((uint32_t)(p) >> 16))
+#define LSW(p)   ((uint16_t)((uintptr_t)(p)))
+#define MSW(p)   ((uint16_t)((uintptr_t)(p) >> 16))
 #define PTR(m,l) ((void*)(((uint16_t)(m)<<16)|(uint16_t)(l)))
 
 /*

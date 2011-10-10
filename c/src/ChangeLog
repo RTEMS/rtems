@@ -1,3 +1,7 @@
+2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/sonic.c: Don't cast pointers to uint32_t.
+
 2011-10-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/greth.c, libchip/network/open_eth.c
