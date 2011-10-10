@@ -669,8 +669,8 @@ rtems_termios_puts (
     if (tty->rawOutBufState == rob_idle) {
       /* check, whether XOFF has been received */
       if (!(tty->flow_ctrl & FL_ORCVXOF)) {
-        (*tty->device.write)(tty->minor,
-      (char *)&tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
+        (*tty->device.write)(
+          tty->minor, &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
       } else {
         /* remember that output has been stopped due to flow ctrl*/
         tty->flow_ctrl |= FL_OSTOP;
