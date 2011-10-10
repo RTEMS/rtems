@@ -69,7 +69,7 @@ int devFS_mknod(
       rtems_set_errno_and_return_minus_one( ENOMEM );
 
   _ISR_Disable(level);
-  device_name_table[slot].device_name  = (char *)path;
+  device_name_table[slot].device_name  = path;
   device_name_table[slot].device_name_length = strlen(path);
   device_name_table[slot].major = major;
   device_name_table[slot].minor = minor;

@@ -174,7 +174,7 @@ rtems_status_code rtems_io_control(
 /** @} */
 
 typedef struct {
-    char                     *device_name;
+    const char               *device_name;
     size_t                    device_name_length;
     rtems_device_major_number major;
     rtems_device_minor_number minor;

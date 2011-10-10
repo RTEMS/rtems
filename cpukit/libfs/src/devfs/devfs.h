@@ -21,7 +21,7 @@ extern "C" {
 typedef struct
 {
   /** This member points to device name which is a null-terminated string */
-  char                     *device_name;
+  const char               *device_name;
   /** This member is the name length of a device */
   uint32_t                  device_name_length;
   /** major number of a device */

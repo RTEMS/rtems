@@ -1,5 +1,12 @@
 2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/devfs/devfs_mknod.c: Remove const cast.
+	* libfs/src/imfs/ioman.c: Remove const cast.
+	* libfs/src/devfs/devfs.h: Make device_name a const char*.
+	* sapi/include/rtems/io.h: Make device_name a const char*.
+
+2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/termios.c: Remove meaningless typecast.
 
 2011-10-09	Ralf Corsépius <ralf.corsepius@rtems.org>

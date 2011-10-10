@@ -82,7 +82,7 @@ rtems_status_code rtems_io_lookup_name(
     return RTEMS_UNSATISFIED;
   }
 
-  device_info->device_name        = (char *) name;
+  device_info->device_name        = name;
   device_info->device_name_length = strlen( name );
   device_info->major              = the_jnode->info.device.major;
   device_info->minor              = the_jnode->info.device.minor;
