@@ -254,7 +254,6 @@ Z85C30_STATIC int z85c30_close(
 Z85C30_STATIC void z85c30_init(int minor)
 {
   uintptr_t        ulCtrlPort;
-  uint8_t          dummy;
   z85c30_context  *pz85c30Context;
   setRegister_f    setReg;
   getRegister_f    getReg;
@@ -276,7 +275,7 @@ Z85C30_STATIC void z85c30_init(int minor)
     /*
      * Ensure port state machine is reset
      */
-    dummy = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
+    (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
 
     (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR9, SCC_WR9_CH_A_RST);
 
@@ -287,7 +286,7 @@ Z85C30_STATIC void z85c30_init(int minor)
     /*
      * Ensure port state machine is reset
      */
-    dummy = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
+    (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD0);
 
     (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR9, SCC_WR9_CH_B_RST);
   }

@@ -1,5 +1,6 @@
 2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/serial/z85c30.c: Eliminate unused var "dummy".
 	* libchip/network/sonic.c: Don't cast pointers to uint32_t.
 
 2011-10-09	Ralf Corsépius <ralf.corsepius@rtems.org>
