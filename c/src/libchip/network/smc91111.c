@@ -716,7 +716,6 @@ static void smc91111_start(struct ifnet *ifp)
 static void lan91cxx_finish_sent(struct lan91cxx_priv_data *cpd)
 {
 	unsigned short packet, tcr;
-	int success = 1;
 	int saved_packet;
 
 	DEBUG_FUNCTION();
@@ -777,7 +776,6 @@ static void lan91cxx_finish_sent(struct lan91cxx_priv_data *cpd)
 		db1_printf("%s: ENGINE RESTART: tcr %x \n", __FUNCTION__, tcr);
 		tcr |= LAN91CXX_TCR_TXENA;
 		put_reg(cpd, LAN91CXX_TCR, tcr);
-		success = 0;	/* And treat this as an error... */
 	}
 
 	packet &= 0xff;
