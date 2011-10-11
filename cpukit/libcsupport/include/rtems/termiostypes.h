@@ -164,7 +164,7 @@ void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty);
  */
 void rtems_termios_puts (
   const void               *buf,
-  int                       len,
+  size_t                    len,
   struct rtems_termios_tty *tty
 );
 

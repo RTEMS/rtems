@@ -628,7 +628,7 @@ rtems_termios_ioctl (void *arg)
  */
 void
 rtems_termios_puts (
-  const void *_buf, int len, struct rtems_termios_tty *tty)
+  const void *_buf, size_t len, struct rtems_termios_tty *tty)
 {
   const unsigned char *buf = _buf;
   unsigned int newHead;

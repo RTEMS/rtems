@@ -1,3 +1,9 @@
+2011-10-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/termios.c,
+	libcsupport/include/rtems/termiostypes.h (rtems_termios_puts):
+	Use size_t for buffer size.
+
 2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/devfs/devfs_mknod.c: Remove const cast.
