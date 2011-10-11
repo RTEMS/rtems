@@ -1,6 +1,6 @@
 2011-10-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* libchip/serial/mc68681.c: Eliminate unused var "success".
+	* libchip/serial/mc68681.c: Eliminate unused var "getReg".
 
 2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
