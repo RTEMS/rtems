@@ -1,3 +1,7 @@
+2011-10-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/serial/mc68681.c: Eliminate unused var "success".
+
 2011-10-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/serial/z85c30.c: Eliminate unused var "dummy".

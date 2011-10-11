@@ -223,7 +223,6 @@ MC68681_STATIC void mc68681_init(int minor)
   uint32_t                pMC68681;
   mc68681_context        *pmc68681Context;
   setRegister_f           setReg;
-  getRegister_f           getReg;
 
   pmc68681Context = (mc68681_context *) malloc(sizeof(mc68681_context));
 
@@ -234,7 +233,6 @@ MC68681_STATIC void mc68681_init(int minor)
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
-  getReg        = Console_Port_Tbl[minor].getRegister;
 
   /*
    *  Reset everything and leave this port disabled.
