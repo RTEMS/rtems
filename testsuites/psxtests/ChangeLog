@@ -1,3 +1,8 @@
+2011-10-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* psxaio01/system.h, psxaio02/system.h, psxaio03/system.h: Do not use
+	the stack checker.
+
 2011-10-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxhdrs/sync01.c, psxhdrs/sync02.c: Let test() return values
