@@ -55,9 +55,7 @@ rtems_device_driver serial_mouse_initialize(
   void                      *arg
 )
 {
-  bool status;
-
-  status = bsp_get_serial_mouse_device(
+  bsp_get_serial_mouse_device(
     &serial_mouse_device,
     &serial_mouse_type
   );
