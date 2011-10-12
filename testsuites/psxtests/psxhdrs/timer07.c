@@ -18,13 +18,15 @@
 
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   useconds_t usec;
   unsigned   result;
 
   usec = 0;
   result = usleep( usec );
+
+  return result;
 }

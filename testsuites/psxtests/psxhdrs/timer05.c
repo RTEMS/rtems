@@ -22,12 +22,14 @@
 #error "rtems is supposed to have timer_getoverrun"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   timer_t           timerid = 0;
   int               result;
 
   result = timer_getoverrun( timerid );
+
+  return result;
 }

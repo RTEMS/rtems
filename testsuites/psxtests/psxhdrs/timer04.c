@@ -22,13 +22,15 @@
 #error "rtems is supposed to have timer_gettime"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   timer_t           timerid = 0;
   struct itimerspec value;
   int               result;
 
   result = timer_gettime( timerid, &value );
+
+  return result;
 }

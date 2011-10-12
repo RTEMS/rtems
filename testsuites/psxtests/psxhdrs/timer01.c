@@ -22,9 +22,9 @@
 #error "rtems is supposed to have timer_create"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   clockid_t        clock_id = 0;
   timer_t          timerid = 0;
@@ -39,4 +39,6 @@ void test( void )
   evp.sigev_value.sival_ptr = NULL;
 
   result = timer_create( clock_id, &evp, &timerid );
+  
+  return result;
 }

@@ -22,9 +22,9 @@
 #error "rtems is supposed to have nanosleep"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   struct timespec rqtp;
   struct timespec rmtp;
@@ -33,4 +33,6 @@ void test( void )
   rqtp.tv_sec = 0;
   rqtp.tv_nsec = 0;
   result = nanosleep( &rqtp, &rmtp );
+
+  return result;
 }

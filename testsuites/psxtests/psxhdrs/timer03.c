@@ -22,9 +22,9 @@
 #error "rtems is supposed to have timer_settime"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   timer_t           timerid = 0;
   int               flags;
@@ -41,4 +41,6 @@ void test( void )
   flags = CLOCK_REALTIME;
 
   result = timer_settime( timerid, flags, &value, &ovalue );
+
+  return result;
 }
