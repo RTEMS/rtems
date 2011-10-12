@@ -18,11 +18,13 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   clock_t clock_ticks;
 
   clock_ticks = clock();
+
+  return (clock_ticks != -1);
 }

@@ -18,9 +18,9 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   time_t time1;
   time_t time2;
@@ -30,4 +30,6 @@ void test( void )
   time2 = 0;
 
   difference = difftime( time1, time2 );
+
+  return (difference != 0.0);
 }

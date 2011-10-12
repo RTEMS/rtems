@@ -1,5 +1,10 @@
 2011-10-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/time01.c, psxhdrs/time02.c, psxhdrs/time03.c,
+	psxhdrs/time04.c, psxhdrs/time05.c, psxhdrs/time06.c,
+	psxhdrs/time07.c, psxhdrs/time08.c, psxhdrs/time09.c,
+	psxhdrs/time10.c, psxhdrs/time11.c, psxhdrs/time12.c,
+	psxhdrs/time13.c: Let test() return values (avoid warnings).
 	* psxhdrs/timer01.c, psxhdrs/timer02.c, psxhdrs/timer03.c,
 	psxhdrs/timer04.c, psxhdrs/timer05.c, psxhdrs/timer06.c,
 	psxhdrs/timer07.c: Let test() return values (avoid warnings).

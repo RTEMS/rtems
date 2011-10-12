@@ -18,9 +18,9 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   struct tm timestruct;
   time_t    time_encoded;
@@ -36,4 +36,6 @@ void test( void )
   timestruct.tm_isdst = 0;
 
   time_encoded = mktime( &timestruct );
+
+  return (time_encoded != -1);
 }

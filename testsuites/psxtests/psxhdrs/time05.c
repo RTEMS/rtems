@@ -18,9 +18,9 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   size_t    length;
   size_t    max_length;
@@ -30,4 +30,6 @@ void test( void )
   max_length = sizeof( buffer );
 
   length = strftime( buffer, max_length, "%A", &timestruct );
+
+  return (length != 0);
 }

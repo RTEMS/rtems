@@ -18,12 +18,14 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   char      *buffer;
   struct tm  timestruct;
 
   buffer = asctime( &timestruct );
+
+  return (buffer != NULL);
 }

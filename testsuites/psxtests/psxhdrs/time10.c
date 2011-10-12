@@ -18,13 +18,15 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   char      *buffer_pointer;
   struct tm  timestruct;
   char       buffer[ 80 ];
 
   buffer_pointer = asctime_r( &timestruct, buffer );
+
+  return (buffer_pointer != NULL);
 }

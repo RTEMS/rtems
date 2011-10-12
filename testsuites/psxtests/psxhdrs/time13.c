@@ -18,13 +18,15 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   time_t     time;
   struct tm *timestruct_pointer;
   struct tm  timestruct;
 
   timestruct_pointer = localtime_r( &time, &timestruct );
+
+  return (timestruct_pointer != NULL);
 }

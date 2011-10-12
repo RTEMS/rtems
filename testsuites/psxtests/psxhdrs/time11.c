@@ -18,13 +18,15 @@
 
 #include <time.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   char     *buffer_pointer;
   char      buffer[ 80 ];
   time_t    time;
 
   buffer_pointer = ctime_r( &time, buffer );
+
+  return (buffer_pointer != NULL);
 }
