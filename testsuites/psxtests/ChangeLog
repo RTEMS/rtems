@@ -1,5 +1,7 @@
 2011-10-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/sync01.c, psxhdrs/sync02.c: Let test() return values
+	(avoid warnings).
 	* psxhdrs/time01.c, psxhdrs/time02.c, psxhdrs/time03.c,
 	psxhdrs/time04.c, psxhdrs/time05.c, psxhdrs/time06.c,
 	psxhdrs/time07.c, psxhdrs/time08.c, psxhdrs/time09.c,
