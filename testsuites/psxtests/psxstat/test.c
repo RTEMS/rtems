@@ -33,6 +33,8 @@
 #include <rtems/imfs.h>
 #include <pmacros.h>
 
+#include "primode.h"
+
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
 #define TIMEOUT_VALUE  ( 5 * rtems_clock_get_ticks_per_second() )
 
@@ -211,7 +213,7 @@ void stat_a_file_helper(
 
     printf("\n...st_dev     (0x%x:0x%x)\n", major1, minor1 );
     printf(  "...st_ino     %" PRIxino_t "\n", statbuf.st_ino );
-    printf(  "...st_mode    %o\n", (unsigned int) statbuf.st_mode );
+    printf(  "...st_mode    %" PRIomode_t "\n", statbuf.st_mode );
     printf(  "...st_nlink   %x\n", statbuf.st_nlink );
     printf(  "...st_uid     %d\n", statbuf.st_uid );
     printf(  "...st_gid     %d\n", statbuf.st_gid );

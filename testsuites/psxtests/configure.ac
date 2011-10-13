@@ -79,6 +79,7 @@ AC_CHECK_SIZEOF([off_t])
 AC_CHECK_SIZEOF([blksize_t])
 AC_CHECK_SIZEOF([blkcnt_t])
 AC_CHECK_SIZEOF([time_t])
+AC_CHECK_SIZEOF([mode_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
