@@ -1,8 +1,14 @@
+2011-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/include/primode.h: New.
+	* Makefile.am: Add support/include/primode.h
+
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: Remove PRItime_t.
 
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* support/include/pritime.h: New.
 	* Makefile.am: Add support/include/pritime.h
 
