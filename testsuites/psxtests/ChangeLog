@@ -1,5 +1,6 @@
 2011-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/signal23.c: Add comment to denote test as obsolete.
 	* configure.ac: Check for size of mode_t.
 	* psxfile01/test.c, psxstat/test.c: Include "primode.h".
 	Use PRIomode_t to print mode_t.
