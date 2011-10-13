@@ -110,8 +110,6 @@ BSP_uart_init
   int hwFlow
 )
 {
-  unsigned char tmp;
-
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
 
@@ -156,9 +154,9 @@ BSP_uart_init
   uwrite(uart, IER, 0);
 
   /* Read status to clear them */
-  tmp = uread(uart, LSR);
-  tmp = uread(uart, RBR);
-  tmp = uread(uart, MSR);
+  uread(uart, LSR);
+  uread(uart, RBR);
+  uread(uart, MSR);
 
   /* Remember state */
   uart_data[uart].baud       = baud;
