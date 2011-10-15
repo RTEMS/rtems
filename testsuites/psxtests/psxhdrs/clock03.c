@@ -22,13 +22,15 @@
 #error "rtems is supposed to have clock_getres"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   clockid_t        clock_id = 0;
   struct timespec  res;
   int              result;
 
   result = clock_getres( clock_id, &res );
+  
+  return result;
 }

@@ -25,9 +25,9 @@
 #error "rtems is supposed to have clock_setenable_attr"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   clockid_t  clock_id = 0;
   int        attr;
@@ -37,4 +37,6 @@ void test( void )
   attr = CLOCK_DISABLED;
 
   result = clock_setenable_attr( clock_id, attr );
+
+  return result;
 }

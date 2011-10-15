@@ -22,13 +22,15 @@
 #error "rtems is supposed to have clock_settime"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   clockid_t        clock_id = 0;
   struct timespec  tp;
   int              result;
 
   result = clock_settime( clock_id, &tp );
+  
+  return result;
 }

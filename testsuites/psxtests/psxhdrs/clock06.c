@@ -25,13 +25,15 @@
 #error "rtems is supposed to have clock_getenable_attr"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   clockid_t  clock_id = 0;
   int        attr;
   int        result;
 
   result = clock_getenable_attr( clock_id, &attr );
+  
+  return result;
 }

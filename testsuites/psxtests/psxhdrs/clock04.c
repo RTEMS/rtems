@@ -22,13 +22,15 @@
 #error "rtems is supposed to have clock_getcpuclockid"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t      pid = 0;
   clockid_t  clock_id;
   int        result;
 
   result = clock_getcpuclockid( pid, &clock_id );
+  
+  return result;
 }

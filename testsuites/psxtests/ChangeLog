@@ -1,3 +1,9 @@
+2011-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxhdrs/clock01.c, psxhdrs/clock02.c, psxhdrs/clock03.c,
+	psxhdrs/clock04.c, psxhdrs/clock05.c, psxhdrs/clock06.c:
+	Let test() return values (avoid warnings).
+
 2011-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxhdrs/signal23.c: Add comment to denote test as obsolete.
