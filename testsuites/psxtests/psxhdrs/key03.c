@@ -22,9 +22,9 @@
 #error "rtems is supposed to have pthread_getspecific"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_key_t    key;
   void            *value;
@@ -32,4 +32,6 @@ void test( void )
   key = 0;
 
   value = pthread_getspecific( key );
+  
+  return (value != 0);
 }

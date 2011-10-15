@@ -22,7 +22,7 @@
 #error "rtems is supposed to have pthread_key_create"
 #endif
 
-void test( void );
+int test( void );
 void key_destructor( void *argument );
 
 void key_destructor(
@@ -31,10 +31,12 @@ void key_destructor(
 {
 }
 
-void test( void )
+int test( void )
 {
   pthread_key_t    key;
   int              result;
 
   result = pthread_key_create( &key, key_destructor );
+  
+  return result;
 }

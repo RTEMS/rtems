@@ -1,5 +1,7 @@
 2011-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/key01.c, psxhdrs/key02.c, psxhdrs/key03.c,
+	psxhdrs/key04.c: Let test() return values (avoid warnings).
 	* psxhdrs/clock01.c, psxhdrs/clock02.c, psxhdrs/clock03.c,
 	psxhdrs/clock04.c, psxhdrs/clock05.c, psxhdrs/clock06.c:
 	Let test() return values (avoid warnings).
