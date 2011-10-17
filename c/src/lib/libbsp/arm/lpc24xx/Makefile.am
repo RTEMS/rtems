@@ -39,16 +39,17 @@ include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-emc.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-dma.h
 include_bsp_HEADERS += ../shared/lpc/include/lpc-lcd.h
-include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/lpc24xx.h
-include_bsp_HEADERS += include/system-clocks.h
-include_bsp_HEADERS += include/ssp.h
 include_bsp_HEADERS += include/dma.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/io.h
+include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/lcd.h
+include_bsp_HEADERS += include/lpc24xx.h
 include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/lpc-ethernet-config.h
+include_bsp_HEADERS += include/ssp.h
+include_bsp_HEADERS += include/start-config.h
+include_bsp_HEADERS += include/system-clocks.h
 
 include_HEADERS += ../../shared/include/tm27.h
 
@@ -63,12 +64,14 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
-EXTRA_DIST = startup/linkcmds.lpc24xx_ea
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
-EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_ram
+EXTRA_DIST = 
 EXTRA_DIST += startup/linkcmds.lpc2362
 EXTRA_DIST += startup/linkcmds.lpc23xx_tli800
+EXTRA_DIST += startup/linkcmds.lpc24xx_ea
+EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_ram
+EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
+EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
+EXTRA_DIST += startup/linkcmds.lpc24xx_plx800_rom_int
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -142,6 +145,9 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
+libbsp_a_SOURCES += startup/start-config-emc-dynamic.c
+libbsp_a_SOURCES += startup/start-config-emc-static.c
+libbsp_a_SOURCES += startup/start-config-pinsel.c
 
 ###############################################################################
 #                  Network                                                    #

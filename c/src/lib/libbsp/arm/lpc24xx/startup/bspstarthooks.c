@@ -27,286 +27,141 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/lpc-emc.h>
+#include <bsp/start-config.h>
 
-#if defined(LPC24XX_EMC_MICRON) || defined(LPC24XX_EMC_NUMONYX)
-  #define LPC24XX_EMC_INIT
-#endif
+static void BSP_START_TEXT_SECTION lpc24xx_cpu_delay(unsigned ticks)
+{
+  unsigned i = 0;
 
-static volatile lpc_emc *const emc = (lpc_emc *) EMC_BASE_ADDR;
+  /* One loop execution needs four instructions */
+  ticks /= 4;
 
-typedef struct {
-  uint32_t refresh;
-  uint32_t readconfig;
-  uint32_t trp;
-  uint32_t tras;
-  uint32_t tsrex;
-  uint32_t tapr;
-  uint32_t tdal;
-  uint32_t twr;
-  uint32_t trc;
-  uint32_t trfc;
-  uint32_t txsr;
-  uint32_t trrd;
-  uint32_t tmrd;
-} lpc24xx_emc_dynamic_config;
-
-typedef struct {
-  uint32_t config;
-  uint32_t rascas;
-  uint32_t mode;
-} lpc24xx_emc_dynamic_chip_config;
-
-typedef struct {
-  uint32_t config;
-  uint32_t waitwen;
-  uint32_t waitoen;
-  uint32_t waitrd;
-  uint32_t waitpage;
-  uint32_t waitwr;
-  uint32_t waitrun;
-} lpc24xx_emc_static_chip_config;
-
-#ifdef LPC24XX_EMC_MICRON
-  static void BSP_START_TEXT_SECTION lpc24xx_ram_test_32(void)
-  {
-    #ifdef LPC24XX_EMC_TEST
-      int *begin = (int *) 0xa0000000;
-      const int *end = (const int *) 0xa0800000;
-      int *out = begin;
-
-      while (out != end) {
-        *out = (int) out;
-        ++out;
-      }
-
-      out = begin;
-      while (out != end) {
-        if (*out != (int) out) {
-          while (true) {
-            /* Do nothing */
-          }
-        }
-        ++out;
-      }
-    #endif
+  for (i = 0; i <= ticks; ++i) {
+    __asm__ volatile ("nop");
   }
+}
 
-  static void BSP_START_TEXT_SECTION lpc24xx_cpu_delay(unsigned ticks)
-  {
-    unsigned i = 0;
-
-    /* One loop execution needs four instructions */
-    ticks /= 4;
-
-    for (i = 0; i <= ticks; ++i) {
-      __asm__ volatile ("nop");
-    }
-  }
-
-  static void BSP_START_TEXT_SECTION lpc24xx_udelay(unsigned us)
-  {
-    lpc24xx_cpu_delay(us * (LPC24XX_CCLK / 1000000));
-  }
-#endif
+static void BSP_START_TEXT_SECTION lpc24xx_udelay(unsigned us)
+{
+  lpc24xx_cpu_delay(us * (LPC24XX_CCLK / 1000000));
+}
 
 static void BSP_START_TEXT_SECTION lpc24xx_init_emc_pinsel(void)
 {
-  #ifdef LPC24XX_EMC_INIT
-    static const BSP_START_DATA_SECTION uint32_t pinsel_5_9 [5] = {
-      0x05010115,
-      0x55555555,
-      0x0,
-      0x55555555,
-      0x40050155
-    };
-
-    bsp_start_memcpy(
-      (int *) &PINSEL5,
-      (const int *) &pinsel_5_9,
-      sizeof(pinsel_5_9)
-    );
-  #endif
+  bsp_start_memcpy(
+    (int *) &PINSEL5,
+    (const int *) &lpc24xx_start_config_pinsel_5_9,
+    lpc24xx_start_config_pinsel_5_9_size
+  );
 }
 
 static void BSP_START_TEXT_SECTION lpc24xx_init_emc_static(void)
 {
-  #ifdef LPC24XX_EMC_NUMONYX
-    /*
-     * Static Memory 1: Numonyx M29W160EB
-     *
-     * 1 clock cycle = 1/72MHz = 13.9ns
-     */
-    static const BSP_START_DATA_SECTION lpc24xx_emc_static_chip_config chip_config = {
-      /*
-       * 16 bit, page mode disabled, active LOW chip select, extended wait
-       * disabled, writes not protected, byte lane state LOW/LOW (!).
-       */
-      .config = 0x81,
+  size_t i = 0;
+  size_t chip_count = lpc24xx_start_config_emc_static_chip_count;
 
-      /* 1 clock cycles delay from the chip select 1 to the write enable */
-      .waitwen = 0,
-
-      /*
-       * 0 clock cycles delay from the chip select 1 or address change
-       * (whichever is later) to the output enable
-       */
-      .waitoen = 0,
-
-      /* 7 clock cycles delay from the chip select 1 to the read access */
-      .waitrd = 0x6,
-
-      /*
-       * 32 clock cycles delay for asynchronous page mode sequential accesses
-       */
-      .waitpage = 0x1f,
-
-      /* 5 clock cycles delay from the chip select 1 to the write access */
-      .waitwr = 0x3,
-
-      /* 16 bus turnaround cycles */
-      .waitrun = 0xf
-    };
+  for (i = 0; i < chip_count; ++i) {
+    const lpc24xx_emc_static_chip_config *chip_config =
+      &lpc24xx_start_config_emc_static_chip [i];
     lpc24xx_emc_static_chip_config chip_config_on_stack;
+    size_t config_size = sizeof(chip_config_on_stack.config);
 
     bsp_start_memcpy(
-      (int *) &chip_config_on_stack,
-      (const int *) &chip_config,
-      sizeof(chip_config_on_stack)
+      (int *) &chip_config_on_stack.config,
+      (const int *) &chip_config->config,
+      config_size
     );
     bsp_start_memcpy(
-      (int *) EMC_STA_BASE_1,
-      (const int *) &chip_config_on_stack,
-      sizeof(chip_config_on_stack)
+      (int *) chip_config->chip_select,
+      (const int *) &chip_config_on_stack.config,
+      config_size
     );
-  #endif
+  }
 }
 
 static void BSP_START_TEXT_SECTION lpc24xx_init_emc_memory_map(void)
 {
-  #ifdef LPC24XX_EMC_INIT
-    /* Use normal memory map */
-    EMC_CTRL &= ~0x2U;
-  #endif
+  /* Use normal memory map */
+  EMC_CTRL &= ~0x2U;
 }
 
 static void BSP_START_TEXT_SECTION lpc24xx_init_emc_dynamic(void)
 {
-  #ifdef LPC24XX_EMC_MICRON
-    /* Dynamic Memory 0: Micron M T48LC 4M16 A2 P 75 IT */
+  size_t chip_count = lpc24xx_start_config_emc_dynamic_chip_count;
 
-    static const BSP_START_DATA_SECTION lpc24xx_emc_dynamic_config dynamic_config = {
-      /* Auto-refresh command every 15.6 us */
-      .refresh = 0x46,
+  if (chip_count > 0) {
+    bool do_initialization = true;
+    size_t i = 0;
 
-      /* Use command delayed strategy */
-      .readconfig = 1,
+    for (i = 0; do_initialization && i < chip_count; ++i) {
+      const lpc24xx_emc_dynamic_chip_config *chip_cfg =
+        &lpc24xx_start_config_emc_dynamic_chip [i];
+      volatile lpc_emc_dynamic *chip_select = chip_cfg->chip_select;
 
-      /* Precharge command period 20 ns */
-      .trp = 1,
+      do_initialization = (chip_select->config & EMC_DYN_CFG_B) == 0;
+    }
 
-      /* Active to precharge command period 44 ns */
-      .tras = 3,
+    if (do_initialization) {
+      volatile lpc_emc *emc = (volatile lpc_emc *) EMC_BASE_ADDR;
+      const lpc24xx_emc_dynamic_config *cfg =
+        &lpc24xx_start_config_emc_dynamic [0];
+      uint32_t dynamiccontrol = EMC_DYN_CTRL_CE | EMC_DYN_CTRL_CS;
 
-      /* FIXME */
-      .tsrex = 5,
+      emc->dynamicreadconfig = cfg->readconfig;
 
-      /* FIXME */
-      .tapr = 2,
+      /* Timings */
+      emc->dynamictrp = cfg->trp;
+      emc->dynamictras = cfg->tras;
+      emc->dynamictsrex = cfg->tsrex;
+      emc->dynamictapr = cfg->tapr;
+      emc->dynamictdal = cfg->tdal;
+      emc->dynamictwr = cfg->twr;
+      emc->dynamictrc = cfg->trc;
+      emc->dynamictrfc = cfg->trfc;
+      emc->dynamictxsr = cfg->txsr;
+      emc->dynamictrrd = cfg->trrd;
+      emc->dynamictmrd = cfg->tmrd;
 
-      /* Data-in to active command period tWR + tRP */
-      .tdal = 4,
-
-      /* Write recovery time 15 ns */
-      .twr = 1,
-
-      /* Active to active command period 66 ns */
-      .trc = 4,
-
-      /* Auto refresh period 66 ns */
-      .trfc = 4,
-
-      /* Exit self refresh to active command period 75 ns */
-      .txsr = 5,
-
-      /* Active bank a to active bank b command period 15 ns */
-      .trrd = 1,
-
-      /* Load mode register to active or refresh command period 2 tCK */
-      .tmrd = 1,
-    };
-    static const BSP_START_DATA_SECTION lpc24xx_emc_dynamic_chip_config chip_config = {
-      /*
-       * Use SDRAM, 0 0 001 01 address mapping, disabled buffer, unprotected writes
-       */
-      .config = 0x280,
-
-      .rascas = EMC_DYN_RASCAS_RAS(2) | EMC_DYN_RASCAS_CAS(2, 0),
-      .mode = 0xa0000000 | (0x23 << (1 + 2 + 8))
-    };
-
-    volatile lpc_emc_dynamic *chip = &emc->dynamic [0];
-    uint32_t dynamiccontrol = EMC_DYN_CTRL_CE | EMC_DYN_CTRL_CS;
-
-    /* Check if we need to initialize it */
-    if ((chip->config & EMC_DYN_CFG_B) == 0) {
-      /*
-       * The buffer enable bit is not set.  Now we assume that the controller
-       * is not properly initialized.
-       */
-
-      /* Global dynamic settings */
-      emc->dynamicreadconfig = dynamic_config.readconfig;
-      emc->dynamictrp = dynamic_config.trp;
-      emc->dynamictras = dynamic_config.tras;
-      emc->dynamictsrex = dynamic_config.tsrex;
-      emc->dynamictapr = dynamic_config.tapr;
-      emc->dynamictdal = dynamic_config.tdal;
-      emc->dynamictwr = dynamic_config.twr;
-      emc->dynamictrc = dynamic_config.trc;
-      emc->dynamictrfc = dynamic_config.trfc;
-      emc->dynamictxsr = dynamic_config.txsr;
-      emc->dynamictrrd = dynamic_config.trrd;
-      emc->dynamictmrd = dynamic_config.tmrd;
-
-      /* Wait 100us after the power is applied and the clocks have stabilized */
-      lpc24xx_udelay(100);
-
-      /* NOP period, disable self-refresh */
+      /* NOP period */
       emc->dynamiccontrol = dynamiccontrol | EMC_DYN_CTRL_I_NOP;
       lpc24xx_udelay(200);
 
-      /* Precharge all */
+      /* Precharge */
       emc->dynamiccontrol = dynamiccontrol | EMC_DYN_CTRL_I_PALL;
+      emc->dynamicrefresh = 1;
 
       /*
        * Perform several refresh cycles with a memory refresh every 16 AHB
        * clock cycles.  Wait until eight SDRAM refresh cycles have occurred
        * (128 AHB clock cycles).
        */
-      emc->dynamicrefresh = 1;
       lpc24xx_cpu_delay(128);
 
-      /* Set refresh period */
-      emc->dynamicrefresh = dynamic_config.refresh;
+      /* Refresh timing */
+      emc->dynamicrefresh = cfg->refresh;
+      lpc24xx_cpu_delay(128);
 
-      /* Operational values for the chip */
-      chip->rascas = chip_config.rascas;
-      chip->config = chip_config.config;
+      for (i = 0; i < chip_count; ++i) {
+        const lpc24xx_emc_dynamic_chip_config *chip_cfg =
+          &lpc24xx_start_config_emc_dynamic_chip [i];
+        volatile lpc_emc_dynamic *chip_select = chip_cfg->chip_select;
+        uint32_t config = chip_cfg->config;
 
-      /* Mode */
-      emc->dynamiccontrol = dynamiccontrol | EMC_DYN_CTRL_I_MODE;
-      *((volatile uint32_t *) chip_config.mode);
+        /* Chip select */
+        chip_select->config = config;
+        chip_select->rascas = chip_cfg->rascas;
 
-      /* Normal operation */
-      emc->dynamiccontrol = 0;
+        /* Set modes */
+        emc->dynamiccontrol = dynamiccontrol | EMC_DYN_CTRL_I_MODE;
+        *(volatile uint32_t *)(chip_cfg->address + chip_cfg->mode);
 
-      /* Enable buffer */
-      chip->config |= EMC_DYN_CFG_B;
+        /* Enable buffer */
+        chip_select->config = config | EMC_DYN_CFG_B;
+      }
 
-      /* Test RAM */
-      lpc24xx_ram_test_32();
+      emc->dynamiccontrol = dynamiccontrol;
     }
-  #endif
+  }
 }
 
 static void BSP_START_TEXT_SECTION lpc24xx_pll_config(
@@ -400,9 +255,19 @@ static void BSP_START_TEXT_SECTION lpc24xx_init_pll(void)
 
   /* Set PLL */
   #if LPC24XX_OSCILLATOR_MAIN == 12000000U
-    lpc24xx_set_pll(1, 0, 11, 3);
+    #if LPC24XX_CCLK == 72000000U
+      lpc24xx_set_pll(1, 0, 11, 3);
+    #elif LPC24XX_CCLK == 51612800U
+      lpc24xx_set_pll(1, 30, 399, 5);
+    #else
+      #error "unexpected CCLK"
+    #endif
   #elif LPC24XX_OSCILLATOR_MAIN == 3686400U
-    lpc24xx_set_pll(1, 0, 47, 5);
+    #if LPC24XX_CCLK == 58982400U
+      lpc24xx_set_pll(1, 0, 47, 5);
+    #else
+      #error "unexpected CCLK"
+    #endif
   #else
     #error "unexpected main oscillator frequency"
   #endif
