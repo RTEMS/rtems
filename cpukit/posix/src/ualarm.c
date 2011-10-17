@@ -27,7 +27,7 @@
  *  _POSIX_signals_Ualarm_TSR
  */
 
-void _POSIX_signals_Ualarm_TSR(
+static void _POSIX_signals_Ualarm_TSR(
   Objects_Id      id __attribute__((unused)),
   void           *argument __attribute__((unused))
 )

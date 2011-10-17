@@ -1,3 +1,7 @@
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/ualarm.c: Make _POSIX_signals_Ualarm_TSR static.
+
 2011-10-12	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/mouse/serial_mouse.c (serial_mouse_initialize):
