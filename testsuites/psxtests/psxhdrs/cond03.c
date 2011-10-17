@@ -22,13 +22,15 @@
 #error "rtems is supposed to have pthread_cond_init"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_cond_t     cond = PTHREAD_COND_INITIALIZER;
   pthread_condattr_t attribute;
   int result;
 
   result = pthread_cond_init( &cond, &attribute );
+
+  return result;
 }

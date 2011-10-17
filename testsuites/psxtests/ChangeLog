@@ -1,5 +1,12 @@
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/cond01.c, psxhdrs/cond02.c, psxhdrs/cond03.c,
+	psxhdrs/cond04.c, psxhdrs/cond05.c, psxhdrs/cond06.c,
+	psxhdrs/cond07.c, psxhdrs/cond08.c, psxhdrs/cond09.c,
+	psxhdrs/cond10.c: Let test() return values (avoid warnings).
+
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* psxhdrs/mutex01.c, psxhdrs/mutex02.c, psxhdrs/mutex03.c,
 	psxhdrs/mutex04.c, psxhdrs/mutex05.c, psxhdrs/mutex06.c,
 	psxhdrs/mutex07.c, psxhdrs/mutex08.c, psxhdrs/mutex09.c,

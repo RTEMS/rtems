@@ -22,13 +22,15 @@
 #error "rtems is supposed to have pthread_cond_wait"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_cond_t  cond  = PTHREAD_COND_INITIALIZER;
   pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   int result;
 
   result = pthread_cond_wait( &cond, &mutex );
+
+  return result;
 }

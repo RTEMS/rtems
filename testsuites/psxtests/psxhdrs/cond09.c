@@ -25,9 +25,9 @@
 #error "rtems is supposed to have pthread_condattr_setpshared"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_condattr_t attribute;
   int                pshared;
@@ -37,4 +37,6 @@ void test( void )
   pshared = PTHREAD_PROCESS_PRIVATE;
 
   result = pthread_condattr_setpshared( &attribute, pshared );
+
+  return result;
 }

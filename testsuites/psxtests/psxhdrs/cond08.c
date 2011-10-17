@@ -25,13 +25,15 @@
 #error "rtems is supposed to have pthread_condattr_setpshared"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_condattr_t attribute;
   int                pshared;
   int                result;
 
   result = pthread_condattr_getpshared( &attribute, &pshared );
+
+  return result;
 }
