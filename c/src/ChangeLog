@@ -1,3 +1,8 @@
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/rtc/icm7170.c (icm7170_get_time): Remove unused var setReg.
+	* libchip/rtc/icm7170.c (icm7170_set_time): Remove unused var getReg.
+
 2011-10-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/smc91111.c: Eliminate unused var "success".

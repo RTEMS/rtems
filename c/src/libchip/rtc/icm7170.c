@@ -67,12 +67,10 @@ static int icm7170_get_time(
 {
   uint32_t       icm7170;
   getRegister_f  getReg;
-  setRegister_f  setReg;
   uint32_t       year;
 
   icm7170 = RTC_Table[ minor ].ulCtrlPort1;
   getReg = RTC_Table[ minor ].getRegister;
-  setReg = RTC_Table[ minor ].setRegister;
 
   /*
    *  Put the RTC into read mode
@@ -119,13 +117,11 @@ static int icm7170_set_time(
 )
 {
   uintptr_t      icm7170;
-  getRegister_f  getReg;
   setRegister_f  setReg;
   uint32_t       year;
   uintptr_t      clock;
 
   icm7170 = RTC_Table[ minor ].ulCtrlPort1;
-  getReg = RTC_Table[ minor ].getRegister;
   setReg = RTC_Table[ minor ].setRegister;
   clock = (uintptr_t) RTC_Table[ minor ].pDeviceParams;
 
