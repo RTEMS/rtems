@@ -29,6 +29,6 @@ int test( void )
   pthread_t  self;
 
   self = pthread_self();
-  
+
   return ( self != 0 );
 }

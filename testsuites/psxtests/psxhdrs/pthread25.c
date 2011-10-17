@@ -36,6 +36,6 @@ int test( void )
   int             result;
 
   result = pthread_attr_getstackaddr( &attribute, &stackaddr );
-  
+
   return result;
 }
