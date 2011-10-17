@@ -26,14 +26,12 @@
  *  _POSIX_signals_Alarm_TSR
  */
 
-void _POSIX_signals_Alarm_TSR(
+static void _POSIX_signals_Alarm_TSR(
   Objects_Id      id __attribute__((unused)),
   void           *argument __attribute__((unused))
 )
 {
-  int status;
-
-  status = kill( getpid(), SIGALRM );
+  kill( getpid(), SIGALRM );
   /* XXX can't print from an ISR, should this be fatal? */
 }
 

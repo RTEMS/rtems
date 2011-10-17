@@ -1,5 +1,7 @@
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/alarm.c: Make _POSIX_signals_Alarm_TSR static.
+	Remove unused var "status".
 	* libmisc/shell/main_ls.c: Comment out unused var kflag.
 	* posix/src/ualarm.c: Make _POSIX_signals_Ualarm_TSR static.
 
