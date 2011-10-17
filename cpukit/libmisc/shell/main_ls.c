@@ -153,7 +153,9 @@ main_ls(rtems_shell_ls_globals* globals, int argc, char *argv[])
 	static char dot[] = ".", *dotav[] = { dot, NULL };
 	//struct winsize win;
 	int ch, fts_options;
+#if RTEMS_REMOVED
 	int kflag = 0;
+#endif
 	const char *p;
 
     struct getopt_data getopt_reent;
@@ -267,7 +269,9 @@ main_ls(rtems_shell_ls_globals* globals, int argc, char *argv[])
 			break;
 		case 'k':
 			blocksize = 1024;
+#if RTEMS_REMOVED
 			kflag = 1;
+#endif
 			break;
 		/* The -h option forces all sizes to be measured in bytes. */
 		case 'h':
