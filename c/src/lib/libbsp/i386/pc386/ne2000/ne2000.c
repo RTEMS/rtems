@@ -566,7 +566,7 @@ ne_rx_daemon (void *arg)
     {
       unsigned char startpage, currpage;
       unsigned short len;
-      unsigned char next, stat, cnt1, cnt2;
+      unsigned char next, cnt1, cnt2;
       struct mbuf *m;
       unsigned char *p;
       int startaddr;
@@ -652,8 +652,6 @@ ne_rx_daemon (void *arg)
         ne_reset(sc);
         goto Next;
       }
-
-      stat = hdr.rsr;
 
       /* The first four bytes of the length are the buffer header.  */
       len -= sizeof(struct ne_ring);
