@@ -1,3 +1,10 @@
+2011-10-17	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 1935/cpukit
+	* score/include/rtems/score/smplock.h, score/src/smplock.c: SMP nested
+	count variable was being overritten when nested lock was taken more
+	than once.
+
 2011-10-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1938/cpukit

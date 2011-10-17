@@ -114,6 +114,7 @@ void _SMP_lock_spinlock_nested_Initialize(
   SMP_lock_spinlock_nested_Control *lock
 )
 {
+  lock->lock = 0;
   lock->count = 0;
   lock->cpu_id = -1;
 }
@@ -143,8 +144,9 @@ void _SMP_lock_spinlock_nested_Release(
   if (lock->count == 1) {
     lock->cpu_id = -1;
     debug_logit( 'U', lock );
-    RTEMS_COMPILER_MEMORY_BARRIER();
     lock->count  = 0;
+    RTEMS_COMPILER_MEMORY_BARRIER();
+    lock->lock = 0;
   } else {
     debug_logit( 'u', lock );
     lock->count--;
@@ -174,7 +176,7 @@ ISR_Level _SMP_lock_spinlock_nested_Obtain(
    */
   while (1) {
     RTEMS_COMPILER_MEMORY_BARRIER();
-    SMP_CPU_SWAP( &lock->count, value, previous );
+    SMP_CPU_SWAP( &lock->lock, value, previous );
     RTEMS_COMPILER_MEMORY_BARRIER();
     if ( previous == 0 ) {
       /* was not locked */
@@ -190,6 +192,7 @@ ISR_Level _SMP_lock_spinlock_nested_Obtain(
   }
 
   lock->cpu_id = cpu_id;
+  lock->count = 1;
   debug_logit( 'L', lock );
 
   return level;

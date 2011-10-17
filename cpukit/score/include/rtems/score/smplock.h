@@ -50,6 +50,7 @@ typedef uint32_t SMP_lock_spinlock_simple_Control;
  *  times.
  */
 typedef struct {
+  SMP_lock_spinlock_simple_Control lock;
   uint32_t  count;
   int       cpu_id;
 } SMP_lock_spinlock_nested_Control;
