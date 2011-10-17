@@ -18,9 +18,9 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   sigset_t signal_set;
   int      signal_number;
@@ -29,4 +29,6 @@ void test( void )
   signal_number = SIGALRM;
 
   result = sigaddset( &signal_set, signal_number );
+
+  return result;
 }

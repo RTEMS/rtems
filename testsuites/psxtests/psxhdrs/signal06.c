@@ -18,9 +18,9 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int              signal_number;
   struct sigaction act;
@@ -41,4 +41,6 @@ void test( void )
   act.sa_sigaction = NULL;
 
   result = sigaction( signal_number, &act, &oact );
+
+  return result;
 }

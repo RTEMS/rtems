@@ -22,9 +22,9 @@
 #error "rtems is supposed to have pthread_kill"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_t  thread;
   int        signal_number;
@@ -34,4 +34,6 @@ void test( void )
   signal_number = SIGALRM;
 
   result = pthread_kill( thread, signal_number );
+
+  return result;
 }

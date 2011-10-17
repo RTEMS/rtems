@@ -18,12 +18,14 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   sigset_t signal_set;
   int      result;
 
   result = sigfillset( &signal_set );
+
+  return result;
 }

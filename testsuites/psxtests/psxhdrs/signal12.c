@@ -18,9 +18,9 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   void (*signal_function_pointer)(int);
   int  signal_number;
@@ -28,4 +28,6 @@ void test( void )
   signal_number = SIGALRM;
 
   signal_function_pointer = signal( signal_number, SIG_IGN );
+
+  return (signal_function_pointer == SIG_ERR) ? -1 : 0;
 }

@@ -18,11 +18,13 @@
 
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int result;
 
   result = pause();
+
+  return result;
 }

@@ -18,9 +18,9 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   sigset_t  set;
   siginfo_t info;
@@ -29,4 +29,6 @@ void test( void )
   (void) sigemptyset( &set );
 
   result = sigwaitinfo( &set, &info );
+
+  return result;
 }

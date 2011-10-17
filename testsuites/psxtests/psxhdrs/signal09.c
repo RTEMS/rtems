@@ -19,9 +19,9 @@
 #include <sys/types.h>
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t pid;
   int   signal_number;
@@ -31,4 +31,6 @@ void test( void )
   signal_number = SIGALRM;
 
   result = kill( pid, signal_number );
+
+  return result;
 }

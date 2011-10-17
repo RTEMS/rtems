@@ -18,9 +18,9 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int      signal_number;
   int      result;
@@ -28,4 +28,6 @@ void test( void )
   signal_number = SIGALRM;
 
   result = raise( signal_number );
+
+  return result;
 }

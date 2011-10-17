@@ -18,9 +18,9 @@
 
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   unsigned int seconds;
   unsigned int result;
@@ -28,4 +28,6 @@ void test( void )
   seconds = 10;
 
   result = sleep( seconds );
+
+  return result;
 }

@@ -22,9 +22,9 @@
  * POSIX.1-2008 removes the specification of ualarm(). */
 
 useconds_t _EXFUN(ualarm, (useconds_t __useconds, useconds_t __interval));
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   useconds_t useconds;
   useconds_t interval;
@@ -34,4 +34,6 @@ void test( void )
   interval = 10;
 
   result = ualarm( useconds, interval );
+
+  return (result == 0) ? 0 : -1;
 }

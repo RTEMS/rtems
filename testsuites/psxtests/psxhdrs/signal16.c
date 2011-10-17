@@ -22,9 +22,9 @@
 #define "rtems is supposed to have pthread_sigmask"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int       how;
   sigset_t  set;
@@ -38,4 +38,6 @@ void test( void )
   (void) sigemptyset( &set );
 
   result = pthread_sigmask( how, &set, &oset );
+
+  return result;
 }

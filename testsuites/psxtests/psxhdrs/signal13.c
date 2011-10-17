@@ -18,9 +18,9 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int       how;
   sigset_t  set;
@@ -34,4 +34,6 @@ void test( void )
   (void) sigemptyset( &set );
 
   result = sigprocmask( how, &set, &oset );
+
+  return result;
 }

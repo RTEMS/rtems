@@ -1,3 +1,15 @@
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxhdrs/signal01.c, psxhdrs/signal02.c, psxhdrs/signal03.c,
+	psxhdrs/signal04.c, psxhdrs/signal05.c, psxhdrs/signal06.c,
+	psxhdrs/signal07.c, psxhdrs/signal08.c, psxhdrs/signal09.c,
+	psxhdrs/signal10.c, psxhdrs/signal11.c, psxhdrs/signal12.c,
+	psxhdrs/signal13.c, psxhdrs/signal14.c, psxhdrs/signal15.c,
+	psxhdrs/signal16.c, psxhdrs/signal17.c, psxhdrs/signal18.c,
+	psxhdrs/signal19.c, psxhdrs/signal20.c, psxhdrs/signal21.c,
+	psxhdrs/signal22.c, psxhdrs/signal23.c:
+	Let test() return values (avoid warnings).
+
 2011-10-15	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxhdrs/key01.c, psxhdrs/key02.c, psxhdrs/key03.c,

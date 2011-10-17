@@ -18,16 +18,18 @@
 
 #include <signal.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   sigset_t        set;
   siginfo_t       info;
   struct timespec timeout;
   int             result;
 
-  (void) sigemptyset( &set );
+  sigemptyset( &set );
 
   result = sigtimedwait( &set, &info, &timeout );
+
+  return result;
 }
