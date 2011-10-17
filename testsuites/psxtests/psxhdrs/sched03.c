@@ -22,9 +22,9 @@
 #error "rtems is supposed to have sched_setscheduler"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t  pid;
   int    policy;
@@ -54,4 +54,6 @@ void test( void )
 #endif
 
   result = sched_setscheduler( pid, policy, &param );
+
+  return result;
 }

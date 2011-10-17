@@ -22,9 +22,9 @@
 #error "rtems is supposed to have sched_get_priority_min"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int    policy;
   int    result;
@@ -37,4 +37,6 @@ void test( void )
 #endif
 
   result = sched_get_priority_min( policy );
+
+  return result;
 }

@@ -22,9 +22,9 @@
 #error "rtems is supposed to have sched_rr_get_interval"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t  pid;
   struct timespec interval;
@@ -33,4 +33,6 @@ void test( void )
   pid = 0;
 
   result = sched_rr_get_interval( pid, &interval );
+
+  return result;
 }

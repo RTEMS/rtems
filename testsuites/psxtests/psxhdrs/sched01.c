@@ -22,9 +22,9 @@
 #error "rtems is supposed to have sched_setparam"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t  pid;
   struct sched_param param;
@@ -46,4 +46,6 @@ void test( void )
 #endif
 
   result = sched_setparam( pid, &param );
+
+  return result;
 }

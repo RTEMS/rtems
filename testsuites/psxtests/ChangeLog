@@ -1,5 +1,12 @@
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/sched01.c, psxhdrs/sched02.c, psxhdrs/sched03.c,
+	psxhdrs/sched04.c, psxhdrs/sched05.c, psxhdrs/sched06.c,
+	psxhdrs/sched07.c, psxhdrs/sched08.c:
+	Let test() return values (avoid warnings).
+
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* psxhdrs/signal01.c, psxhdrs/signal02.c, psxhdrs/signal03.c,
 	psxhdrs/signal04.c, psxhdrs/signal05.c, psxhdrs/signal06.c,
 	psxhdrs/signal07.c, psxhdrs/signal08.c, psxhdrs/signal09.c,

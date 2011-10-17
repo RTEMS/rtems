@@ -22,11 +22,13 @@
 #error "rtems is supposed to have sched_yield"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   int    result;
 
   result = sched_yield();
+
+  return result;
 }

@@ -22,9 +22,9 @@
 #error "rtems is supposed to have sched_getscheduler"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t  pid;
   int    result;
@@ -32,4 +32,6 @@ void test( void )
   pid = 0;
 
   result = sched_getscheduler( pid );
+
+  return result;
 }
