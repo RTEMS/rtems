@@ -37,6 +37,6 @@ int test( void )
   int              result;
 
   result = pthread_key_create( &key, key_destructor );
-  
+
   return result;
 }

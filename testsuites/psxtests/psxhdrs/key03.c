@@ -32,6 +32,6 @@ int test( void )
   key = 0;
 
   value = pthread_getspecific( key );
-  
+
   return (value != 0);
 }

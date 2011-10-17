@@ -31,6 +31,6 @@ int test( void )
   int              result;
 
   result = clock_settime( clock_id, &tp );
-  
+
   return result;
 }

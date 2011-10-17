@@ -30,6 +30,6 @@ int test( void )
   int              result;
 
   result = pthread_key_delete( key );
-  
+
   return result;
 }

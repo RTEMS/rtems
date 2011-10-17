@@ -34,6 +34,6 @@ int test( void )
   value = 0;
 
   result = pthread_setspecific( key, &value );
-  
+
   return result;
 }

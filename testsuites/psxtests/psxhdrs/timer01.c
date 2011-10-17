@@ -39,6 +39,6 @@ int test( void )
   evp.sigev_value.sival_ptr = NULL;
 
   result = timer_create( clock_id, &evp, &timerid );
-  
+
   return result;
 }

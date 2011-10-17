@@ -34,6 +34,6 @@ int test( void )
   int        result;
 
   result = clock_getenable_attr( clock_id, &attr );
-  
+
   return result;
 }

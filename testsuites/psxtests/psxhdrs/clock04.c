@@ -31,6 +31,6 @@ int test( void )
   int        result;
 
   result = clock_getcpuclockid( pid, &clock_id );
-  
+
   return result;
 }
