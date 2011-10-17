@@ -390,8 +390,6 @@ struct Thread_Control_struct {
   Chain_Control            lock_mutex;
 #endif
      /*================= end of common block =================*/
-  /** This field is the number of nested suspend calls. */
-  uint32_t                              suspend_count;
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is true if the thread is offered globally */
   bool                                  is_global;

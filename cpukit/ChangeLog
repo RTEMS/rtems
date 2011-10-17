@@ -1,3 +1,9 @@
+2011-10-17	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1938/cpukit
+	* score/include/rtems/score/thread.h: Removed obsolete suspend_count
+	field from Thread_Control.
+
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libfs/src/rfs/rtems-rfs-file-system.c (rtems_rfs_fs_open):
