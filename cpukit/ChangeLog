@@ -1,6 +1,8 @@
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	*  libmisc/monitor/mon-editor.c (rtems_monitor_task):
+	* libfs/src/rfs/rtems-rfs-file-system.c (rtems_rfs_fs_open):
+	Comment out unused vars "group", "group_base".
+	* libmisc/monitor/mon-editor.c (rtems_monitor_task):
 	Comment out unused vars "debugee", "rp", "fp".
 	* posix/src/alarm.c: Make _POSIX_signals_Alarm_TSR static.
 	Remove unused var "status".

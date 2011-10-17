@@ -198,8 +198,10 @@ rtems_rfs_fs_open (const char*             name,
                    uint32_t                flags,
                    rtems_rfs_file_system** fs)
 {
+#if UNUSED
   rtems_rfs_group*       group;
   size_t                 group_base;
+#endif
   rtems_rfs_inode_handle inode;
   uint16_t               mode;
   int                    rc;
@@ -230,8 +232,10 @@ rtems_rfs_fs_open (const char*             name,
   (*fs)->release_modified_count = 0;
   (*fs)->flags = flags;
 
+#if UNUSED
   group = &(*fs)->groups[0];
   group_base = 0;
+#endif
 
   /*
    * Open the buffer interface.
