@@ -25,9 +25,9 @@
 #error "rtems is supposed to have pthread_mutexattr_setprotocol"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutexattr_t attribute;
   int                 protocol;
@@ -38,4 +38,6 @@ void test( void )
   protocol = PTHREAD_PRIO_PROTECT;
 
   result = pthread_mutexattr_setprotocol( &attribute, protocol );
+
+  return result;
 }

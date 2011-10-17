@@ -25,13 +25,15 @@
 #error "rtems is supposed to have pthread_mutexattr_getprotocol"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutexattr_t attribute;
   int                 protocol;
   int                 result;
 
   result = pthread_mutexattr_getprotocol( &attribute, &protocol );
+
+  return result;
 }

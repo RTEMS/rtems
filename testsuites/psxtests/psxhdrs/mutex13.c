@@ -25,13 +25,15 @@
 #error "rtems is supposed to have pthread_mutex_timedlock"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   struct timespec timeout;
   int result;
 
   result = pthread_mutex_timedlock( &mutex, &timeout );
+
+  return result;
 }

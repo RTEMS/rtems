@@ -22,13 +22,15 @@
 #error "rtems is supposed to have pthread_mutex_init"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutex_t     mutex = PTHREAD_MUTEX_INITIALIZER;
   pthread_mutexattr_t attribute;
   int result;
 
   result = pthread_mutex_init( &mutex, &attribute );
+
+  return result;
 }

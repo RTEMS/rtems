@@ -25,9 +25,9 @@
 #error "rtems is supposed to have pthread_mutex_setprioceiling"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutex_t mutex;
   int             prioceiling;
@@ -37,4 +37,6 @@ void test( void )
   prioceiling = 0;
 
   result = pthread_mutex_setprioceiling( &mutex, prioceiling, &oldceiling );
+
+  return result;
 }

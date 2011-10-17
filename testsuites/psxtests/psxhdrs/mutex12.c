@@ -22,12 +22,14 @@
 #error "rtems is supposed to have pthread_mutex_trylock"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   int result;
 
   result = pthread_mutex_trylock( &mutex );
+
+  return result;
 }

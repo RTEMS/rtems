@@ -25,13 +25,15 @@
 #error "rtems is supposed to have pthread_mutex_getprioceiling"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutex_t mutex;
   int             prioceiling;
   int             result;
 
   result = pthread_mutex_getprioceiling( &mutex, &prioceiling );
+
+  return result;
 }

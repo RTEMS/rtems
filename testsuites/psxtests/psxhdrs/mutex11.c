@@ -25,9 +25,9 @@
 #error "rtems is supposed to have pthread_mutexattr_setpshared"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_mutexattr_t attribute;
   int                 pshared;
@@ -37,4 +37,6 @@ void test( void )
   pshared = PTHREAD_PROCESS_PRIVATE;
 
   result = pthread_mutexattr_setpshared( &attribute, pshared );
+
+  return result;
 }

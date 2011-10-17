@@ -1,5 +1,14 @@
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/mutex01.c, psxhdrs/mutex02.c, psxhdrs/mutex03.c,
+	psxhdrs/mutex04.c, psxhdrs/mutex05.c, psxhdrs/mutex06.c,
+	psxhdrs/mutex07.c, psxhdrs/mutex08.c, psxhdrs/mutex09.c,
+	psxhdrs/mutex10.c, psxhdrs/mutex11.c, psxhdrs/mutex12.c,
+	psxhdrs/mutex13.c, psxhdrs/mutex14.c, psxhdrs/mutex15.c,
+	psxhdrs/mutex16.c: Let test() return values (avoid warnings).
+
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* psxhdrs/proc01.c, psxhdrs/proc02.c, psxhdrs/proc03.c,
 	psxhdrs/proc04.c, psxhdrs/proc05.c, psxhdrs/proc06.c,
 	psxhdrs/proc07.c, psxhdrs/proc08.c, psxhdrs/proc09.c,
