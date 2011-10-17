@@ -19,11 +19,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   char *loginname;
 
   loginname = getlogin();
+
+  return (loginname == NULL) ? -1 : 0;
 }

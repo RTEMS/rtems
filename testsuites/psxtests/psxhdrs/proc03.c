@@ -19,11 +19,13 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   uid_t uid;
 
   uid = getuid();
+
+  return uid;
 }

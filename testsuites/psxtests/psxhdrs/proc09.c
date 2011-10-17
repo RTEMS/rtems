@@ -19,9 +19,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   gid_t grouplist[ 20 ];
   int   gidsetsize;
@@ -30,4 +30,6 @@ void test( void )
   gidsetsize = 20;
 
   result = getgroups( gidsetsize, grouplist );
+
+  return result;
 }

@@ -20,12 +20,14 @@
 #include <unistd.h>
 #include <limits.h>   /* for LOGIN_NAME_MAX */
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   char  loginnamebuffer[ LOGIN_NAME_MAX ];
   int   result;
 
   result = getlogin_r( loginnamebuffer, LOGIN_NAME_MAX );
+
+  return result;
 }

@@ -19,9 +19,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   uid_t uid;
   int   result;
@@ -29,4 +29,6 @@ void test( void )
   uid = 0;
 
   result = setuid( uid );
+
+  return result;
 }

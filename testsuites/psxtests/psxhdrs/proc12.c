@@ -19,11 +19,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pid_t pgrp;
 
   pgrp = getpgrp();
+
+  return (pgrp == -1) ? -1 : 0;
 }
