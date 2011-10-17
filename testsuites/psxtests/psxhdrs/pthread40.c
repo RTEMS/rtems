@@ -23,14 +23,16 @@
 #error "rtems is supposed to have pthread_getstacksize"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   size_t          size;
   int             result;
 
   result = pthread_attr_getguardsize( &attribute, &size );
+
+  return result;
 }
 #endif

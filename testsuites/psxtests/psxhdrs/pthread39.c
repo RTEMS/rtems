@@ -24,9 +24,9 @@
 #error "rtems is supposed to have pthread_setstacksize"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   size_t          size;
@@ -35,5 +35,7 @@ void test( void )
   size = PTHREAD_STACK_MIN;
 
   result = pthread_attr_setguardsize( &attribute, size );
+
+  return result;
 }
 #endif

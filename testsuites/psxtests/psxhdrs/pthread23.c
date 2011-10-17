@@ -22,9 +22,9 @@
 #error "RTEMS is supposed to have pthread_getschedparam"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_t           thread = 0;
   int                 policy;
@@ -32,4 +32,6 @@ void test( void )
   int                 result;
 
   result = pthread_getschedparam( thread, &policy, &param );
+
+  return result;
 }

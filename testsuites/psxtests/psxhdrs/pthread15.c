@@ -22,9 +22,9 @@
 #error "RTEMS is supposed to have pthread_attr_setinheritsched"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             inheritsched;
@@ -34,4 +34,6 @@ void test( void )
   inheritsched = PTHREAD_EXPLICIT_SCHED;
 
   result = pthread_attr_setinheritsched( &attr, inheritsched );
+
+  return result;
 }

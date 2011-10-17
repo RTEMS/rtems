@@ -22,9 +22,9 @@
 #error "RTEMS is supposed to have pthread_attr_setschedpolicy"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             policy;
@@ -38,4 +38,6 @@ void test( void )
 #endif
 
   result = pthread_attr_setschedpolicy( &attr, policy );
+
+  return result;
 }

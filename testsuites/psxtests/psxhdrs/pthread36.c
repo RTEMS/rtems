@@ -28,13 +28,15 @@ extern int pthread_attr_getcputime(
 #error "rtems is supposed to have pthread_attr_getcputime"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             clock_allowed;
   int             result;
 
   result = pthread_attr_getcputime( &attr, &clock_allowed );
+
+  return result;
 }

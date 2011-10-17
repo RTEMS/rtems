@@ -22,13 +22,15 @@
 #error "RTEMS is supposed to have pthread_attr_getinheritsched"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             inheritsched;
   int             result;
 
   result = pthread_attr_getinheritsched( &attr, &inheritsched );
+
+  return result;
 }

@@ -22,11 +22,13 @@
 #error "rtems is supposed to have pthread_self"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_t  self;
 
   self = pthread_self();
+  
+  return ( self != 0 );
 }

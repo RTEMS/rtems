@@ -22,13 +22,15 @@
 #error "RTEMS is supposed to have pthread_attr_getschedpolicy"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             policy;
   int             result;
 
   result = pthread_attr_getschedpolicy( &attr, &policy );
+
+  return result;
 }

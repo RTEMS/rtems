@@ -28,9 +28,9 @@
 #error "rtems is supposed to have pthread_setstackaddr"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   void           *stackaddr;
@@ -41,5 +41,7 @@ void test( void )
   stacksize = 1024;
 
   result = pthread_attr_setstack( &attribute, stackaddr, stacksize );
+
+  return result;
 }
 #endif

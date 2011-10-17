@@ -22,14 +22,14 @@
 #error "rtems is supposed to have pthread_setcanceltype"
 #endif
 
-void test( void );
+int test( void );
 void init_routine( void );
 
 void init_routine( void )
 {
 }
 
-void test( void )
+int test( void )
 {
   int         type;
   int         oldtype;
@@ -39,4 +39,6 @@ void test( void )
   type = PTHREAD_CANCEL_ASYNCHRONOUS;
 
   result = pthread_setcanceltype( type, &oldtype );
+
+  return result;
 }

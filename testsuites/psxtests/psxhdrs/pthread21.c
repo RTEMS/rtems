@@ -22,13 +22,15 @@
 #error "rtems is supposed to have pthread_detach"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_t   thread;
   int         result;
 
   thread = 0;
   result = pthread_detach( thread );
+
+  return result;
 }

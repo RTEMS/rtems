@@ -22,14 +22,14 @@
 #error "rtems is supposed to have pthread_setcancelstate"
 #endif
 
-void test( void );
+int test( void );
 void init_routine( void );
 
 void init_routine( void )
 {
 }
 
-void test( void )
+int test( void )
 {
   int         state;
   int         oldstate;
@@ -39,4 +39,6 @@ void test( void )
   state = PTHREAD_CANCEL_DISABLE;
 
   result = pthread_setcancelstate( state, &oldstate );
+
+  return result;
 }

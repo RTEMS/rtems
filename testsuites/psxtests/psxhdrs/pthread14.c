@@ -22,13 +22,15 @@
 #error "RTEMS is supposed to have pthread_attr_getscope"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             contentionscope;
   int             result;
 
   result = pthread_attr_getscope( &attr, &contentionscope );
+
+  return result;
 }

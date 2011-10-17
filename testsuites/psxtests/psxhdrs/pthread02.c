@@ -22,12 +22,14 @@
 #error "rtems is supposed to have pthread_attr_destroy"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   int             result;
 
   result = pthread_attr_destroy( &attribute );
+
+  return result;
 }

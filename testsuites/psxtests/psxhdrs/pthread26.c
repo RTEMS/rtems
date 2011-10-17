@@ -22,9 +22,9 @@
 #error "rtems is supposed to have pthread_join"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_t   thread;
   void       *value_ptr;
@@ -33,4 +33,6 @@ void test( void )
   thread = 0;
 
   result = pthread_join( thread, &value_ptr );
+
+  return result;
 }

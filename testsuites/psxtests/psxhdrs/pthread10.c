@@ -22,13 +22,15 @@
 #error "rtems is supposed to have pthread_equal"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_t  id_1 = 0;
   pthread_t  id_2 = 0;
   int        result;
 
   result = pthread_equal( id_1, id_2 );
+
+  return result;
 }

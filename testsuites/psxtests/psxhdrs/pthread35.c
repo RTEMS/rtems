@@ -28,9 +28,9 @@ extern int pthread_attr_setcputime(
 #error "rtems is supposed to have pthread_attr_setcputime"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             clock_allowed;
@@ -40,4 +40,6 @@ void test( void )
   clock_allowed = CLOCK_DISALLOWED;
 
   result = pthread_attr_setcputime( &attr, clock_allowed );
+
+  return result;
 }

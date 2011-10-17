@@ -22,9 +22,9 @@
 #error "rtems is supposed to have pthread_attr_setdetachstate"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   int             state;
@@ -34,4 +34,6 @@ void test( void )
   state = PTHREAD_CREATE_JOINABLE;
 
   result = pthread_attr_setdetachstate( &attribute, state );
+
+  return result;
 }

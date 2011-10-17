@@ -22,18 +22,20 @@
 #error "rtems is supposed to have pthread_cancel"
 #endif
 
-void test( void );
+int test( void );
 void init_routine( void );
 
 void init_routine( void )
 {
 }
 
-void test( void )
+int test( void )
 {
   pthread_t   thread;
   int         result;
 
   thread = 0;
   result = pthread_cancel( thread );
+
+  return result;
 }

@@ -22,13 +22,15 @@
 #error "rtems is supposed to have pthread_attr_getdetachstate"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   int             state;
   int             result;
 
   result = pthread_attr_getdetachstate( &attribute, &state );
+
+  return result;
 }

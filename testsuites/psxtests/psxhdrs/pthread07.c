@@ -22,7 +22,7 @@
 #error "rtems is supposed to have pthread_create"
 #endif
 
-void test( void );
+int test( void );
 void *test_task( void * arg );
 
 void *test_task(
@@ -34,7 +34,7 @@ void *test_task(
   return NULL;
 }
 
-void test( void )
+int test( void )
 {
   pthread_t       thread;
   pthread_attr_t  attribute;
@@ -42,4 +42,6 @@ void test( void )
   int             result;
 
   result = pthread_create( &thread, &attribute, test_task, arg );
+
+  return result;
 }

@@ -22,9 +22,9 @@
 #error "RTEMS is supposed to have pthread_attr_setscope"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attr;
   int             contentionscope;
@@ -34,4 +34,6 @@ void test( void )
   contentionscope = PTHREAD_SCOPE_PROCESS;
 
   result = pthread_attr_setscope( &attr, contentionscope );
+
+  return result;
 }

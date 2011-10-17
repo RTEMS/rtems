@@ -22,12 +22,14 @@
 #error "rtems is supposed to have pthread_attr_init"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t attribute;
   int result;
 
   result = pthread_attr_init( &attribute );
+
+  return result;
 }

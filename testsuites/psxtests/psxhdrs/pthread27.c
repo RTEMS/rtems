@@ -22,17 +22,19 @@
 #error "rtems is supposed to have pthread_once"
 #endif
 
-void test( void );
+int test( void );
 void init_routine( void );
 
 void init_routine( void )
 {
 }
 
-void test( void )
+int test( void )
 {
   pthread_once_t   once_control = PTHREAD_ONCE_INIT;
   int              result;
 
   result = pthread_once( &once_control, init_routine );
+
+  return result;
 }

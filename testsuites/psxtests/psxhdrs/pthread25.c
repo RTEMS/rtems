@@ -27,13 +27,15 @@
 #error "rtems is supposed to have pthread_getstackaddr"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t  attribute;
   void           *stackaddr;
   int             result;
 
   result = pthread_attr_getstackaddr( &attribute, &stackaddr );
+  
+  return result;
 }

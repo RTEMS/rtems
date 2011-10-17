@@ -1,5 +1,21 @@
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxhdrs/pthread01.c, psxhdrs/pthread02.c, psxhdrs/pthread03.c,
+	psxhdrs/pthread04.c, psxhdrs/pthread05.c, psxhdrs/pthread06.c,
+	psxhdrs/pthread07.c, psxhdrs/pthread09.c, psxhdrs/pthread10.c,
+	psxhdrs/pthread11.c, psxhdrs/pthread12.c, psxhdrs/pthread13.c,
+	psxhdrs/pthread14.c, psxhdrs/pthread15.c, psxhdrs/pthread16.c,
+	psxhdrs/pthread17.c, psxhdrs/pthread18.c, psxhdrs/pthread19.c,
+	psxhdrs/pthread20.c, psxhdrs/pthread21.c, psxhdrs/pthread22.c,
+	psxhdrs/pthread23.c, psxhdrs/pthread24.c, psxhdrs/pthread25.c,
+	psxhdrs/pthread26.c, psxhdrs/pthread27.c, psxhdrs/pthread28.c,
+	psxhdrs/pthread29.c, psxhdrs/pthread30.c, psxhdrs/pthread34.c,
+	psxhdrs/pthread35.c, psxhdrs/pthread36.c, psxhdrs/pthread37.c,
+	psxhdrs/pthread38.c, psxhdrs/pthread39.c, psxhdrs/pthread40.c:
+	Let test() return values (avoid warnings).
+
+2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* psxhdrs/cond01.c, psxhdrs/cond02.c, psxhdrs/cond03.c,
 	psxhdrs/cond04.c, psxhdrs/cond05.c, psxhdrs/cond06.c,
 	psxhdrs/cond07.c, psxhdrs/cond08.c, psxhdrs/cond09.c,

@@ -22,13 +22,15 @@
 #error "RTEMS is supposed to have pthread_attr_getschedparam"
 #endif
 
-void test( void );
+int test( void );
 
-void test( void )
+int test( void )
 {
   pthread_attr_t      attr;
   struct sched_param  param;
   int                 result;
 
   result = pthread_attr_getschedparam( &attr, &param );
+
+  return result;
 }
