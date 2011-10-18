@@ -39,7 +39,9 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
   ../../shared/bspclean.c startup/bspstart.c startup/memmap.c
 
 #console
-libbsp_a_SOURCES += console/uarts.c ../../shared/console.c
+libbsp_a_SOURCES += console/uarts.c ../../shared/console.c \
+  ../../shared/console_select.c  ../../shared/console_control.c \
+  ../../shared/console_read.c ../../shared/console_write.c 
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h

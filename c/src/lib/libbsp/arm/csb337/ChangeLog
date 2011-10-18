@@ -1,3 +1,9 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* Makefile.am, console/uarts.c: Modifications to add dynamic tables for
+	libchip serial drivers.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

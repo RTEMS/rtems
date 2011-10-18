@@ -18,7 +18,7 @@
  *  Joel Sherrill, 2009.
  *
  *  $Id$
-*/
+ */
 
 #include <bsp.h>
 #include <rtems/libio.h>
@@ -31,8 +31,6 @@
 #include <libchip/sersupp.h>
 #include <bspopts.h>
 
-/* rtems console uses the following minor number */
-rtems_device_minor_number  Console_Port_Minor = 0;
 extern console_fns dbgu_fns;
 
 #if ENABLE_LCD
@@ -82,8 +80,7 @@ extern console_fns dbgu_fns;
   USART0_DEV + USART1_DEV + USART2_DEV + USART3_DEV)
 
 /* These are used by code in console.c */
-unsigned long Console_Port_Count = NUM_DEVS;
-console_data  Console_Port_Data[NUM_DEVS];
+unsigned long Console_Configuration_Count = NUM_DEVS;
 
 /*
  * There's one item in array for each UART.
@@ -94,7 +91,7 @@ console_data  Console_Port_Data[NUM_DEVS];
  * when we add other types of UARTS we will need to move this
  * structure to a generic uart.c file with only this in it
  */
-console_tbl Console_Port_Tbl[] = {
+console_tbl Console_Configuration_Ports[] = {
   {
     "/dev/console",    /* sDeviceName */
     SERIAL_CUSTOM,     /* deviceType */
@@ -244,5 +241,5 @@ console_tbl Console_Port_Tbl[] = {
 
 console_tbl *BSP_get_uart_from_minor(int minor)
 {
-    return &Console_Port_Tbl[minor];
+    return Console_Port_Tbl[minor];
 }
