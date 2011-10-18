@@ -643,7 +643,11 @@ fts_build(FTS *sp, int type)
 	DIR *dirp;
 	void *oldaddr;
 	size_t dnamlen;
-	int cderrno, descend, level, nlinks, saved_errno, nostat, doadjust;
+	int cderrno, descend, level, nlinks, saved_errno;
+#ifdef DT_DIR
+	int nostat;
+#endif
+	int doadjust;
 	size_t len, maxlen;
 #ifdef FTS_WHITEOUT
 	int oflag;
@@ -682,13 +686,19 @@ fts_build(FTS *sp, int type)
 	 */
 	if (type == BNAMES) {
 		nlinks = 0;
+#ifdef DT_DIR
 		nostat = 1;
+#endif
 	} else if (ISSET(FTS_NOSTAT) && ISSET(FTS_PHYSICAL)) {
 		nlinks = cur->fts_nlink - (ISSET(FTS_SEEDOT) ? 0 : 2);
+#ifdef DT_DIR
 		nostat = 1;
+#endif
 	} else {
 		nlinks = -1;
+#ifdef DT_DIR
 		nostat = 0;
+#endif
 	}
 
 #ifdef notdef

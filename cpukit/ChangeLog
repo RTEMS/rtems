@@ -1,5 +1,6 @@
 2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/fts.c: Conditionally use var "nostat".
 	* pppd/options.c: Remove unused var "ok".
 	* libnetworking/rtems/rtems_dhcp.c: Remove unused var
 	"disconnected".
