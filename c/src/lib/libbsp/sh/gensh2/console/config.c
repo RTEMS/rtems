@@ -80,7 +80,7 @@ static const struct termios term2 = {
     { 0 }
 };
 
-console_tbl	Console_Port_Tbl[] = {
+console_tbl	Console_Configuration_Ports[] = {
     {
         "/dev/sci0",            /* sDeviceName */
         SERIAL_CUSTOM,          /* deviceType */
@@ -125,10 +125,6 @@ console_tbl	Console_Port_Tbl[] = {
  *  Declare some information used by the console driver
  */
 
-#define NUM_CONSOLE_PORTS (sizeof(Console_Port_Tbl)/sizeof(console_tbl))
+#define NUM_CONSOLE_PORTS (sizeof(Console_Configuration_Ports)/sizeof(console_tbl))
 
-unsigned long  Console_Port_Count =  NUM_CONSOLE_PORTS;
-
-console_data  Console_Port_Data[NUM_CONSOLE_PORTS];
-
-rtems_device_minor_number  Console_Port_Minor;
+unsigned long  Console_Configuration_Count =  NUM_CONSOLE_PORTS;
