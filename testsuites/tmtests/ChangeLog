@@ -1,3 +1,7 @@
+2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tm26/fptest.h: Use PRIu32 to print uint32_t.
+
 2011-05-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* tm26/system.h, tm27/system.h: Ensure these tests use the correct
