@@ -1617,9 +1617,9 @@ void rtems_termios_initialize (void);
  * is open, close then open it again.
  */
 rtems_status_code rtems_termios_bufsize (
-  int cbufsize,     /* cooked buffer size */
-  int raw_input,    /* raw input buffer size */
-  int raw_output    /* raw output buffer size */
+  size_t cbufsize,     /* cooked buffer size */
+  size_t raw_input,    /* raw input buffer size */
+  size_t raw_output    /* raw output buffer size */
 );
 
 rtems_status_code rtems_termios_open (

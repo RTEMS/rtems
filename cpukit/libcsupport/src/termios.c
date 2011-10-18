@@ -82,9 +82,9 @@ extern struct rtems_termios_tty *rtems_termios_ttyHead;
 extern struct rtems_termios_tty *rtems_termios_ttyTail;
 extern rtems_id rtems_termios_ttyMutex;
 
-static int rtems_termios_cbufsize = 256;
-static int rtems_termios_raw_input_size = 128;
-static int rtems_termios_raw_output_size = 64;
+static size_t rtems_termios_cbufsize = 256;
+static size_t rtems_termios_raw_input_size = 128;
+static size_t rtems_termios_raw_output_size = 64;
 
 static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument);
 static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
@@ -432,9 +432,9 @@ rtems_termios_close (void *arg)
 }
 
 rtems_status_code rtems_termios_bufsize (
-  int cbufsize,
-  int raw_input,
-  int raw_output
+  size_t cbufsize,
+  size_t raw_input,
+  size_t raw_output
 )
 {
   rtems_termios_cbufsize        = cbufsize;

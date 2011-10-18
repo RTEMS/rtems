@@ -1,5 +1,10 @@
 2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libio.h, libcsupport/src/termios.c:
+	Use size_t for sizes.
+
+2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/pipe/fifo.c: Conditionally use var "sc".
 	* libmisc/shell/fts.c: Conditionally use var "nostat".
 	* pppd/options.c: Remove unused var "ok".
