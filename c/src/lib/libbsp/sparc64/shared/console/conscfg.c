@@ -67,7 +67,7 @@ console_flow sun4v_console_console_flow={
 };
 
 
-console_tbl     Console_Port_Tbl[] = {
+console_tbl     Console_Configuration_Ports[] = {
 {
    NULL,                                   /* sDeviceName */
    SERIAL_CUSTOM,                    	   /* deviceType */
@@ -97,11 +97,7 @@ console_tbl     Console_Port_Tbl[] = {
 
 #define NUM_CONSOLE_PORTS 1
 
-unsigned long  Console_Port_Count = NUM_CONSOLE_PORTS;
-
-console_data  Console_Port_Data[NUM_CONSOLE_PORTS];
-
-rtems_device_minor_number  Console_Port_Minor;
+unsigned long  Console_Configuration_Count = NUM_CONSOLE_PORTS;
 
 
 /* putchar/getchar for printk */
