@@ -41,7 +41,9 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 # console
-libbsp_a_SOURCES += ../../shared/console.c
+libbsp_a_SOURCES += ../../shared/console.c \
+    ../../shared/console_select.c ../../shared/console_control.c \
+    ../../shared/console_read.c ../../shared/console_write.c
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h

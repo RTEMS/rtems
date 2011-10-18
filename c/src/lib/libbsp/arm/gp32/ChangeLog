@@ -1,3 +1,9 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* Makefile.am, console/uart.c: Modifications to add dynamic tables for
+	libchip serial drivers.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspreset.c, startup/bspstart.c:

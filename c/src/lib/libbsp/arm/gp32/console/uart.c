@@ -46,11 +46,7 @@ static void    uart_write_polled(int minor, char c);
 static int     uart_set_attributes(int minor, const struct termios *t);
 
 /* These are used by code in console.c */
-unsigned long Console_Port_Count = NUM_DEVS;
-console_data  Console_Port_Data[NUM_DEVS];
-
-/* rtems console uses the following minor number */
-rtems_device_minor_number  Console_Port_Minor = 0;
+unsigned long Console_Configuration_Count = NUM_DEVS;
 
 /* Pointers to functions for handling the UART. */
 console_fns uart_fns =
@@ -73,7 +69,7 @@ console_fns uart_fns =
  * by console.c, but may be used by drivers in libchip
  *
  */
-console_tbl Console_Port_Tbl[] = {
+console_tbl Console_Configuration_Ports[] = {
     {
         "/dev/com0",                      /* sDeviceName */
         SERIAL_CUSTOM,                    /* deviceType */
