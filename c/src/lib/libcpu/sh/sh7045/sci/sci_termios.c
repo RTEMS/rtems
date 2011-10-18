@@ -38,15 +38,15 @@
  * Some handy macros
  */
 #define SH_SCI_REG_DATA(_data, _minor, _register) \
- (write8(_data, Console_Port_Tbl[_minor].ulCtrlPort1 + (_register)))
+ (write8(_data, Console_Port_Tbl[_minor]->ulCtrlPort1 + (_register)))
 
 #define SH_SCI_REG_FLAG(_flag, _minor, _register) \
- (write8(read8(Console_Port_Tbl[_minor].ulCtrlPort1 + (_register)) | (_flag), \
-         Console_Port_Tbl[_minor].ulCtrlPort1 + (_register)))
+ (write8(read8(Console_Port_Tbl[_minor]->ulCtrlPort1 + (_register)) | (_flag), \
+         Console_Port_Tbl[_minor]->ulCtrlPort1 + (_register)))
 
 #define SH_SCI_REG_MASK(_flag, _minor, _register) \
- (write8(read8(Console_Port_Tbl[_minor].ulCtrlPort1 + (_register)) & ~(_flag), \
-         Console_Port_Tbl[_minor].ulCtrlPort1 + (_register)))
+ (write8(read8(Console_Port_Tbl[_minor]->ulCtrlPort1 + (_register)) & ~(_flag),\
+         Console_Port_Tbl[_minor]->ulCtrlPort1 + (_register)))
 
 /*
  * NOTE: Some SH variants have 3 sci devices
@@ -131,13 +131,13 @@ rtems_isr sh_sci_rx_isr(rtems_vector_number vector)
     int minor;
 
     for (minor = 0; minor < Console_Port_Count; minor++) {
-        if (Console_Port_Tbl[minor].ulIntVector == vector) {
+        if (Console_Port_Tbl[minor]->ulIntVector == vector) {
             char   temp8;
 
             /*
              * FIXME: error handling should be added
              */
-            temp8 = read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_RDR);
+            temp8 = read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_RDR);
 
             rtems_termios_enqueue_raw_characters(
                 Console_Port_Data[minor].termios_data, &temp8, 1);
@@ -158,7 +158,7 @@ rtems_isr sh_sci_tx_isr(rtems_vector_number vector)
     int minor;
 
     for (minor = 0; minor < Console_Port_Count; minor++) {
-        if (Console_Port_Tbl[minor].ulDataPort == vector) {
+        if (Console_Port_Tbl[minor]->ulDataPort == vector) {
             /*
              * FIXME: Error handling should be added
              */
@@ -224,7 +224,7 @@ void sh_sci_initialize_interrupts(int minor)
     /*
      * Disable IRQ of SCIx
      */
-    status = sh_set_irq_priority( Console_Port_Tbl[minor].ulIntVector, 0);
+    status = sh_set_irq_priority( Console_Port_Tbl[minor]->ulIntVector, 0);
 
     if (status != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred(status);
@@ -236,7 +236,7 @@ void sh_sci_initialize_interrupts(int minor)
      */
     status = rtems_interrupt_catch(
         sh_sci_rx_isr,
-        Console_Port_Tbl[minor].ulIntVector,
+        Console_Port_Tbl[minor]->ulIntVector,
         &old_isr);
 
     if (status != RTEMS_SUCCESSFUL)
@@ -244,7 +244,7 @@ void sh_sci_initialize_interrupts(int minor)
 
     status = rtems_interrupt_catch(
         sh_sci_tx_isr,
-        Console_Port_Tbl[minor].ulDataPort,
+        Console_Port_Tbl[minor]->ulDataPort,
         &old_isr);
 
     if (status != RTEMS_SUCCESSFUL)
@@ -256,8 +256,8 @@ void sh_sci_initialize_interrupts(int minor)
     SH_SCI_REG_FLAG(SCI_RIE, minor, SCI_SCR);
 
     status = sh_set_irq_priority(
-        Console_Port_Tbl[minor].ulIntVector,
-        Console_Port_Tbl[minor].ulCtrlPort2);
+        Console_Port_Tbl[minor]->ulIntVector,
+        Console_Port_Tbl[minor]->ulCtrlPort2);
 
     if (status != RTEMS_SUCCESSFUL)
         rtems_fatal_error_occurred(status);
@@ -292,28 +292,28 @@ int sh_sci_first_open(
     SH_SCI_REG_DATA(0x00, minor, SCI_SCR);
 
     /* set SMR and BRR - baudrate and format */
-    sh_sci_set_attributes(minor, Console_Port_Tbl[minor].pDeviceParams);
+    sh_sci_set_attributes(minor, Console_Port_Tbl[minor]->pDeviceParams);
 
     for (a=0; a < 10000L; a++) {                      /* Delay */
         __asm__ volatile ("nop");
     }
 
     write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */
-           Console_Port_Tbl[minor].ulCtrlPort1 + SCI_SCR);
+           Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_SCR);
 
     /*
      * clear error flags
      */
-    temp8 = read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_SSR);
+    temp8 = read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_SSR);
     while(temp8 & (SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER)) {
         /* flush input */
-        temp8 = read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_RDR);
+        temp8 = read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_RDR);
 
         /* clear some flags */
-        SH_SCI_REG_FLAG((SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER), minor, SCI_SSR);
+        SH_SCI_REG_FLAG((SCI_RDRF|SCI_ORER|SCI_FER|SCI_PER), minor, SCI_SSR);
 
         /* check if everything is OK */
-        temp8 = read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_SSR);
+        temp8 = read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_SSR);
     }
 
     /* Clear RDRF flag */
@@ -325,7 +325,7 @@ int sh_sci_first_open(
     /*
      * Interrupt setup
      */
-    if (Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts) {
+    if (Console_Port_Tbl[minor]->pDeviceFns->deviceOutputUsesInterrupts) {
         SH_SCI_REG_FLAG(SCI_RIE, minor, SCI_SCR);
     }
 
@@ -345,7 +345,7 @@ int sh_sci_last_close(
     /* FIXME: Incomplete */
 
     /* Shutdown interrupts if necessary */
-    if (Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts)
+    if (Console_Port_Tbl[minor]->pDeviceFns->deviceOutputUsesInterrupts)
     {
         SH_SCI_REG_MASK((SCI_TIE | SCI_RIE), minor, SCI_SCR);
     }
@@ -408,7 +408,7 @@ void sh_sci_write_polled(
     /*
      * Wait for end of previous character
      */
-    while(!(read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_SSR) & SCI_TDRE));
+    while(!(read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_SSR) & SCI_TDRE));
     /*
      * Send the character
      */
@@ -430,14 +430,14 @@ int sh_sci_inbyte_nonblocking_polled(int minor)
     /*
      * Check if input buffer is full
      */
-    if (read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_SSR) & SCI_RDRF) {
-        inbyte = read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_RDR);
+    if (read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_SSR) & SCI_RDRF) {
+        inbyte = read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_RDR);
         SH_SCI_REG_MASK(SCI_RDRF, minor, SCI_SSR);
 
         /*
          * Check for errors
          */
-        if (read8(Console_Port_Tbl[minor].ulCtrlPort1 + SCI_SSR) &
+        if (read8(Console_Port_Tbl[minor]->ulCtrlPort1 + SCI_SSR) &
            (SCI_ORER | SCI_FER | SCI_PER)) {
             SH_SCI_REG_MASK((SCI_ORER | SCI_FER | SCI_PER), minor, SCI_SSR);
             return -1;

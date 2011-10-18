@@ -1,3 +1,9 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* sh7045/sci/sci_termios.c: Modifications to add dynamic tables for
+	libchip serial drivers.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sh7032/delay/delay.c, sh7032/score/cpu_asm.c,
