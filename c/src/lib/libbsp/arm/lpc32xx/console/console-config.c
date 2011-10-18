@@ -42,11 +42,9 @@ static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
   reg [i] = val;
 }
 
-rtems_device_minor_number Console_Port_Minor = 0;
-
 /* FIXME: Console selection */
 
-console_tbl Console_Port_Tbl [] = {
+console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC32XX_CONFIG_U5CLK
     {
       .sDeviceName = "/dev/ttyS5",
@@ -197,8 +195,6 @@ console_tbl Console_Port_Tbl [] = {
 };
 
 #define LPC32XX_UART_COUNT \
-  (sizeof(Console_Port_Tbl) / sizeof(Console_Port_Tbl [0]))
+  (sizeof(Console_Configuration_Ports) / sizeof(Console_Configuration_Ports [0]))
 
-unsigned long Console_Port_Count = LPC32XX_UART_COUNT;
-
-console_data Console_Port_Data [LPC32XX_UART_COUNT];
+unsigned long Console_Configuration_Count = LPC32XX_UART_COUNT;

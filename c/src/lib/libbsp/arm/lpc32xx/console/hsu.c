@@ -64,7 +64,7 @@ static int lpc32xx_hsu_first_open(int major, int minor, void *arg)
 {
   rtems_libio_open_close_args_t *oca = arg;
   struct rtems_termios_tty *tty = oca->iop->data1;
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
   volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
 
@@ -77,7 +77,7 @@ static int lpc32xx_hsu_first_open(int major, int minor, void *arg)
 
 static ssize_t lpc32xx_hsu_write(int minor, const char *buf, size_t len)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
   volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
   size_t tx_level = (hsu->level & HSU_LEVEL_TX_MASK) >> HSU_LEVEL_TX_SHIFT;
@@ -101,7 +101,7 @@ static ssize_t lpc32xx_hsu_write(int minor, const char *buf, size_t len)
 static void lpc32xx_hsu_interrupt_handler(void *arg)
 {
   int minor = (int) arg;
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
   volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
 
@@ -141,7 +141,7 @@ static void lpc32xx_hsu_interrupt_handler(void *arg)
 
 static void lpc32xx_hsu_initialize(int minor)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
   volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
 
@@ -166,7 +166,7 @@ static void lpc32xx_hsu_initialize(int minor)
 
 static int lpc32xx_hsu_set_attributes(int minor, const struct termios *term)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   volatile lpc32xx_hsu *hsu = (volatile lpc32xx_hsu *) ct->ulCtrlPort1;
   int baud_flags = term->c_cflag & CBAUD;
 
