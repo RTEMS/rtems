@@ -89,9 +89,7 @@ static void lpc24xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
   }
 #endif
 
-rtems_device_minor_number Console_Port_Minor = 0;
-
-console_tbl Console_Port_Tbl [] = {
+console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC24XX_CONFIG_CONSOLE
     {
       .sDeviceName = "/dev/ttyS0",
@@ -179,8 +177,5 @@ console_tbl Console_Port_Tbl [] = {
 };
 
 #define LPC24XX_UART_COUNT \
-  (sizeof(Console_Port_Tbl) / sizeof(Console_Port_Tbl [0]))
-
-unsigned long Console_Port_Count = LPC24XX_UART_COUNT;
-
-console_data Console_Port_Data [LPC24XX_UART_COUNT];
+  (sizeof(Console_Configuration_Ports) / sizeof(console_tbl))
+unsigned long Console_Configuration_Count = LPC24XX_UART_COUNT;
