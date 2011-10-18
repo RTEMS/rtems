@@ -150,7 +150,7 @@ static rtems_id create_task(
 
 static void initialize(int minor)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   uart_bridge_master_control *control = ct->pDeviceParams;
   intercom_type type = control->type;
 

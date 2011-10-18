@@ -94,9 +94,14 @@ libbsp_a_SOURCES += irq/irq.c \
 
 # Console
 libbsp_a_SOURCES += ../../shared/console.c \
+        ../../shared/console_select.c \
 	console/uart-bridge-master.c \
 	console/uart-bridge-slave.c \
-	console/console-config.c
+	console/console-config.c \
+        ../../shared/console_read.c \
+        ../../shared/console_write.c \
+        ../../shared/console_control.c
+
 
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c \

@@ -95,7 +95,7 @@ void bsp_start(void)
 
   /* Initialize some console parameters */
   for (i = 0; i < Console_Port_Count; ++i) {
-    console_tbl *ct = &Console_Port_Tbl [i];
+    console_tbl *ct = &Console_Configuration_Ports[i];
 
     ct->ulClock = BSP_bus_frequency;
 

@@ -28,6 +28,7 @@
 
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
+#include "../../../shared/console_private.h"
 
 #include <bspopts.h>
 #include <bsp/irq.h>
@@ -116,13 +117,8 @@
   }
 #endif
 
-unsigned long Console_Port_Count = CONSOLE_COUNT;
-
-rtems_device_minor_number Console_Port_Minor;
-
-console_data Console_Port_Data [CONSOLE_COUNT];
-
-console_tbl Console_Port_Tbl [CONSOLE_COUNT] = {
+unsigned long Console_Configuration_Count = CONSOLE_COUNT;
+console_tbl Console_Configuration_Ports [CONSOLE_COUNT] = {
   #if QORIQ_UART_0_ENABLE
     {
       .sDeviceName = "/dev/ttyS0",
@@ -193,7 +189,7 @@ console_tbl Console_Port_Tbl [CONSOLE_COUNT] = {
 
 static void output_char(char c)
 {
-  const console_fns *con = Console_Port_Tbl [Console_Port_Minor].pDeviceFns;
+  const console_fns *con = Console_Port_Tbl [Console_Port_Minor]->pDeviceFns;
   
   if (c == '\n') {
     con->deviceWritePolled((int) Console_Port_Minor, '\r');

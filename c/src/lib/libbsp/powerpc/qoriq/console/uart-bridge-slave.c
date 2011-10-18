@@ -129,7 +129,7 @@ static int first_open(int major, int minor, void *arg)
 {
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl[minor];
   console_data *cd = &Console_Port_Data [minor];
   uart_bridge_slave_control *control = ct->pDeviceParams;
   intercom_type type = control->type;
@@ -145,7 +145,7 @@ static int first_open(int major, int minor, void *arg)
 
 static int last_close(int major, int minor, void *arg)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl[minor];
   uart_bridge_slave_control *control = ct->pDeviceParams;
 
   qoriq_intercom_service_remove(control->type);
@@ -156,7 +156,7 @@ static int last_close(int major, int minor, void *arg)
 static ssize_t write_with_interrupts(int minor, const char *buf, size_t len)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl[minor];
   uart_bridge_slave_control *control = ct->pDeviceParams;
   intercom_packet *packet = qoriq_intercom_allocate_packet(
     control->type,
@@ -183,7 +183,7 @@ static ssize_t write_with_interrupts(int minor, const char *buf, size_t len)
 
 static void write_polled(int minor, char c)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl[minor];
   uart_bridge_slave_control *control = ct->pDeviceParams;
   intercom_packet *packet = qoriq_intercom_allocate_packet(
     control->type,

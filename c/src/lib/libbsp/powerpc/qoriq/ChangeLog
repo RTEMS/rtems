@@ -1,3 +1,10 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* Makefile.am, console/console-config.c, console/uart-bridge-master.c,
+	console/uart-bridge-slave.c, startup/bspstart.c: Modifications to add
+	dynamic tables for libchip serial drivers.
+
 2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/linkcmds.base: Removed file.
