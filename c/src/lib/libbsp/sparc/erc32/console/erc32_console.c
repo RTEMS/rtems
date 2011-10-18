@@ -58,8 +58,6 @@ static int erc32_console_first_open(int major, int minor, void *arg);
 #endif
 static void erc32_console_initialize(int minor);
 
-rtems_device_minor_number Console_Port_Minor = 0;
-
 #if (CONSOLE_USE_INTERRUPTS)
   console_fns erc32_fns = {
     libchip_serial_default_probe,           /* deviceProbe */
@@ -86,7 +84,7 @@ rtems_device_minor_number Console_Port_Minor = 0;
   };
 #endif
 
-console_tbl Console_Port_Tbl [] = {
+console_tbl Console_Configuration_Ports [] = {
   {
     .sDeviceName = "/dev/console_a",
     .deviceType = SERIAL_CUSTOM,
@@ -130,9 +128,7 @@ console_tbl Console_Port_Tbl [] = {
 /* always exactly two uarts for erc32 */
 #define ERC32_UART_COUNT (2)
 
-unsigned long Console_Port_Count = ERC32_UART_COUNT;
-
-console_data Console_Port_Data [ERC32_UART_COUNT];
+unsigned long Console_Configuration_Count = ERC32_UART_COUNT;
 
 static int erc32_console_first_open(int major, int minor, void *arg)
 {
@@ -143,7 +139,7 @@ static int erc32_console_first_open(int major, int minor, void *arg)
   
   rtems_libio_open_close_args_t *oca = arg;
   struct rtems_termios_tty *tty = oca->iop->data1;
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
   
   cd->termios_data = tty;

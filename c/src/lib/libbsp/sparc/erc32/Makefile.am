@@ -44,7 +44,9 @@ libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
-libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c
+libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c \
+    ../../shared/console_select.c  ../../shared/console_control.c \
+    ../../shared/console_read.c ../../shared/console_write.c
 # debugio
 libbsp_a_SOURCES += console/debugputs.c
 # clock
