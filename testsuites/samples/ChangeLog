@@ -1,3 +1,8 @@
+2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* fileio/init.c: Explictly consts in size_t initializers
+	(avoid overflows on 16bit-int targets).
+
 2011-10-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* capture/init.c: Declare notification only if being used.

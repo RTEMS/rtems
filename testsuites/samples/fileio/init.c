@@ -92,7 +92,7 @@ rtems_nvdisk_device_desc rtems_nv_heap_device_descriptor[] =
   {
     flags:  0,
     base:   0,
-    size:   1 * 1024 * 1024,
+    size:   (size_t) 1024 * 1024,
     nv_ops: &rtems_nvdisk_sram_handlers
   }
 };
@@ -424,7 +424,7 @@ parse_size_arg (const char* arg)
   switch (arg[strlen (arg) - 1])
   {
     case 'M':
-      scalar = 1000 * 1024;
+      scalar = (size_t) 1000 * 1024;
       break;
     case 'm':
       scalar = 1000000;
