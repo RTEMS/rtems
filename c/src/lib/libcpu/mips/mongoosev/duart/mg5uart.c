@@ -88,8 +88,8 @@ MG5UART_STATIC int mg5uart_set_attributes(
   uint32_t               shift;
   rtems_interrupt_level  Irql;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   /*
    *  Set the baud rate
@@ -161,7 +161,7 @@ MG5UART_STATIC int mg5uart_set_attributes(
    *  Now write the registers
    */
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_CMD_SHIFT;
   else
     shift = MONGOOSEV_UART1_CMD_SHIFT;
@@ -197,14 +197,14 @@ MG5UART_STATIC void mg5uart_initialize_context(
   unsigned int pMG5UART;
   unsigned int pMG5UART_port;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   pmg5uartContext->mate = -1;
 
   for (port=0 ; port<Console_Port_Count ; port++ ) {
-    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMG5UART &&
-         Console_Port_Tbl[port].ulCtrlPort2 != pMG5UART_port ) {
+    if ( Console_Port_Tbl[port]->ulCtrlPort1 == pMG5UART &&
+         Console_Port_Tbl[port]->ulCtrlPort2 != pMG5UART_port ) {
       pmg5uartContext->mate = port;
       break;
     }
@@ -233,10 +233,10 @@ MG5UART_STATIC void mg5uart_init(int minor)
 
   mg5uart_initialize_context( minor, pmg5uartContext );
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
      shift = MONGOOSEV_UART0_CMD_SHIFT;
   else
      shift = MONGOOSEV_UART1_CMD_SHIFT;
@@ -278,11 +278,11 @@ MG5UART_STATIC int mg5uart_open(
 
   rtems_interrupt_level  Irql;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  vector        = Console_Port_Tbl[minor].ulIntVector;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  vector        = Console_Port_Tbl[minor]->ulIntVector;
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_CMD_SHIFT;
   else
     shift = MONGOOSEV_UART1_CMD_SHIFT;
@@ -332,8 +332,8 @@ MG5UART_STATIC int mg5uart_close(
   uint32_t      shift;
   rtems_interrupt_level  Irql;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   /*
    *  Disable interrupts from this channel and then disable it totally.
@@ -343,7 +343,7 @@ MG5UART_STATIC int mg5uart_close(
 
   cmd = MONGOOSEV_UART_CMD_TX_DISABLE | MONGOOSEV_UART_CMD_RX_DISABLE;
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_CMD_SHIFT;
   else
     shift = MONGOOSEV_UART1_CMD_SHIFT;
@@ -380,10 +380,10 @@ MG5UART_STATIC void mg5uart_write_polled(
   int                     shift;
   int                     timeout;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_IRQ_SHIFT;
   else
     shift = MONGOOSEV_UART1_IRQ_SHIFT;
@@ -454,8 +454,8 @@ extern void mips_default_isr(int vector);
     int   minor; \
     \
     for(minor=0 ; minor<Console_Port_Count ; minor++) { \
-      if( Console_Port_Tbl[minor].deviceType == SERIAL_MG5UART && \
-          vector == Console_Port_Tbl[minor].ulIntVector + _OFFSET ) { \
+      if( Console_Port_Tbl[minor]->deviceType == SERIAL_MG5UART && \
+          vector == Console_Port_Tbl[minor]->ulIntVector + _OFFSET ) { \
         mg5uart_process_isr_ ## _TYPE (minor); \
 	return; \
       } \
@@ -478,9 +478,9 @@ MG5UART_STATIC void mg5uart_process_isr_rx_error(
   uint32_t                pMG5UART;
   int                     shift;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_IRQ_SHIFT;
   else
     shift = MONGOOSEV_UART1_IRQ_SHIFT;
@@ -523,11 +523,11 @@ MG5UART_STATIC void mg5uart_process_tx_isr(
    uint32_t        pMG5UART;
    int             shift;
 
-   pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
+   pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
 
    mg5uart_enable_interrupts(minor, MG5UART_ENABLE_ALL_EXCEPT_TX);
 
-   if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+   if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
       shift = MONGOOSEV_UART0_IRQ_SHIFT;
    else
       shift = MONGOOSEV_UART1_IRQ_SHIFT;
@@ -580,7 +580,7 @@ MG5UART_STATIC void mg5uart_process_isr_rx_ready(
   uint32_t   pMG5UART_port;
   char       c;
 
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   /* reading the RX buffer automatically resets the interrupt flag */
 
@@ -609,7 +609,7 @@ MG5UART_STATIC void mg5uart_initialize_interrupts(int minor)
   mg5uart_init(minor);
 
   Console_Port_Data[minor].bActive = FALSE;
-  v = Console_Port_Tbl[minor].ulIntVector;
+  v = Console_Port_Tbl[minor]->ulIntVector;
 
   set_vector(mg5uart_isr_rx_frame_error,   v + MG5UART_IRQ_RX_FRAME_ERROR, 1);
   set_vector(mg5uart_isr_rx_overrun_error, v + MG5UART_IRQ_RX_OVERRUN_ERROR, 1);
@@ -639,7 +639,7 @@ MG5UART_STATIC int mg5uart_write_support_int(
   uint32_t        Irql;
   uint32_t        pMG5UART_port;
 
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   /*
    *  We are using interrupt driven output and termios only sends us
@@ -715,10 +715,10 @@ MG5UART_STATIC int mg5uart_inbyte_nonblocking_polled(
   uint32_t                status;
   uint32_t                tmp,shift;
 
-  pMG5UART      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMG5UART_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMG5UART      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMG5UART_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_IRQ_SHIFT;
   else
     shift = MONGOOSEV_UART1_IRQ_SHIFT;
@@ -762,7 +762,7 @@ MG5UART_STATIC int mg5uart_baud_rate(
 
   baud_requested = rtems_termios_baud_to_number( baud_requested );
 
-  clock = (uint32_t) Console_Port_Tbl[minor].ulClock;
+  clock = (uint32_t) Console_Port_Tbl[minor]->ulClock;
   if (!clock)
     rtems_fatal_error_occurred(RTEMS_INVALID_NUMBER);
 
@@ -813,13 +813,13 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
   uint32_t              shift;
   rtems_interrupt_level  Irql;
 
-  pMG5UART = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMG5UART = Console_Port_Tbl[minor]->ulCtrlPort1;
 
   /*
    *  Enable interrupts on RX and TX -- not break
    */
 
-  if ( Console_Port_Tbl[minor].ulDataPort == MG5UART_UART0 )
+  if ( Console_Port_Tbl[minor]->ulDataPort == MG5UART_UART0 )
     shift = MONGOOSEV_UART0_IRQ_SHIFT;
   else
     shift = MONGOOSEV_UART1_IRQ_SHIFT;
