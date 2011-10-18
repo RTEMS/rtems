@@ -1,3 +1,8 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	* mrfs_support/fs_support.c: Resolved name conflict that was causing a
+	compiler error.
+
 2011-09-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* fsrdwr/init.c: Use %zd to print size_t.

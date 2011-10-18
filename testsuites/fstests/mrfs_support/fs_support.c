@@ -26,7 +26,7 @@
 
 #define BLOCK_SIZE (512)
 
-rtems_rfs_format_config config = {
+rtems_rfs_format_config rfs_config = {
 block_size:BLOCK_SIZE
 };
 
@@ -40,7 +40,7 @@ test_initialize_filesystem (void)
 
   init_ramdisk ();
 
-  rc = rtems_rfs_format (RAMDISK_PATH, &config);
+  rc = rtems_rfs_format (RAMDISK_PATH, &rfs_config);
   rtems_test_assert (rc == 0);
 
   rc = mount (RAMDISK_PATH,
