@@ -40,7 +40,9 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
 # console
-libbsp_a_SOURCES += console/conscfg.c ../../shared/console.c
+libbsp_a_SOURCES += console/conscfg.c ../../shared/console.c \
+    ../../shared/console_select.c ../../shared/console_control.c \
+    ../../shared/console_read.c ../../shared/console_write.c
 # debugio
 libbsp_a_SOURCES += console/debugio.c
 # timer

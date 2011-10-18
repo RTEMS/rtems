@@ -28,7 +28,7 @@
 #define MG5UART_FUNCTIONS &mg5uart_fns_polled
 #endif
 
-console_tbl     Console_Port_Tbl[] = {
+console_tbl     Console_Configuration_Ports[] = {
 {
   "/dev/com0",                             /* sDeviceName */
    SERIAL_MG5UART,                         /* deviceType */
@@ -73,13 +73,9 @@ console_tbl     Console_Port_Tbl[] = {
  *  Declare some information used by the console driver
  */
 
-#define NUM_CONSOLE_PORTS (sizeof(Console_Port_Tbl)/sizeof(console_tbl))
+#define NUM_CONSOLE_PORTS (sizeof(Console_Configuration_Ports)/sizeof(console_tbl))
 
-unsigned long  Console_Port_Count = NUM_CONSOLE_PORTS;
-
-console_data  Console_Port_Data[NUM_CONSOLE_PORTS];
-
-rtems_device_minor_number  Console_Port_Minor;
+unsigned long  Console_Configuration_Count = NUM_CONSOLE_PORTS;
 
 /*
  *  printk() support that simply routes printk to stderr
