@@ -39,7 +39,10 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/gnatinstallhandler.c
 # console
-libbsp_a_SOURCES += ../gp32/console/uart.c ../../shared/console.c
+libbsp_a_SOURCES += ../gp32/console/uart.c ../../shared/console.c \
+    ../../shared/console_select.c \
+    ../../shared/console_read.c ../../shared/console_write.c \
+    ../../shared/console_control.c
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h

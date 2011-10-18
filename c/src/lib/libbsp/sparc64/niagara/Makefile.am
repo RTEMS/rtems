@@ -63,7 +63,9 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
 #clock_SOURCES = ../../shared/clock_driver_simidle.c
 clock_SOURCES = ../shared/clock/ckinit.c
 
-console_SOURCES = ../../shared/console.c  ../shared/console/conscfg.c
+console_SOURCES = ../../shared/console.c  ../shared/console/conscfg.c \
+    ../../shared/console_select.c ../../shared/console_control.c \
+    ../../shared/console_read.c ../../shared/console_write.c
 
 timer_SOURCES = ../../shared/timerstub.c
 
