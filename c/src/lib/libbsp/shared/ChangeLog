@@ -1,3 +1,11 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* console.c: Modifications to add dynamic tables for libchip serial
+	drivers.
+	* console_control.c, console_private.h, console_read.c,
+	console_select.c, console_write.c: New files.
+
 2011-08-30	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* bootcard.c: Revert patch and add comment clarifying code and need for
