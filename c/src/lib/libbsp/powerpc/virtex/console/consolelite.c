@@ -121,7 +121,7 @@ int xlite_write_char(uint32_t base, char ch)
 
 void xlite_init (int minor )
 {
-   uint32_t base = Console_Port_Tbl[minor].ulCtrlPort1;
+   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
 
    /* clear status register */
    *((volatile uint32_t*)(base+STAT_REG)) = 0;
@@ -137,7 +137,7 @@ int xlite_open(
   void    *arg
 )
 {
-   uint32_t base = Console_Port_Tbl[minor].ulCtrlPort1;
+   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
 
    /* the lite uarts have hardcoded baud & serial parms so no port
     * conditioning is needed.  We're running polled so no interrupt
@@ -167,7 +167,7 @@ int xlite_close(
 
 int xlite_read_polled (int minor )
 {
-   uint32_t base = Console_Port_Tbl[minor].ulCtrlPort1;
+   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
 
    unsigned int status = xlite_uart_status(base);
 
@@ -186,7 +186,7 @@ ssize_t xlite_write_buffer_polled(
   size_t      len
 )
 {
-   uint32_t base = Console_Port_Tbl[minor].ulCtrlPort1;
+   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
    int nwrite = 0;
 
    /*
@@ -210,7 +210,7 @@ void xlite_write_char_polled(
   char  c
 )
 {
-   uint32_t base = Console_Port_Tbl[minor].ulCtrlPort1;
+   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
    xlite_write_char(base, c);
    return;
 }
@@ -251,7 +251,7 @@ console_fns xlite_fns_polled =
 */
 
 
-console_tbl     Console_Port_Tbl[] = {
+console_tbl     Console_Configuration_Ports[] = {
 {
   "/dev/ttyS0",                             /* sDeviceName */
    SERIAL_CUSTOM,                           /* deviceType */
@@ -333,17 +333,10 @@ console_tbl     Console_Port_Tbl[] = {
 
 
 
-#define NUM_CONSOLE_PORTS (sizeof(Console_Port_Tbl)/sizeof(console_tbl))
+#define NUM_CONSOLE_PORTS \
+  (sizeof(Console_Configuration_Ports)/sizeof(console_tbl))
 
-unsigned long			Console_Port_Count = NUM_CONSOLE_PORTS;
-console_data			Console_Port_Data[NUM_CONSOLE_PORTS];
-rtems_device_minor_number	Console_Port_Minor;
-
-
-
-
-
-
+unsigned long Console_Configuration_Count = NUM_CONSOLE_PORTS;
 
 
 #include <rtems/bspIo.h>

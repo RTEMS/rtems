@@ -43,8 +43,9 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
 # dlentry
 libbsp_a_SOURCES += dlentry/dlentry.S
 # bspconsole
-libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c
-
+libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
+    ../../shared/console_select.c ../../shared/console_control.c \
+    ../../shared/console_read.c ../../shared/console_write.c 
 include_bsp_HEADERS = include/opbintctrl.h
 # opbintctrl
 libbsp_a_SOURCES += opbintctrl/opbintctrl.c
