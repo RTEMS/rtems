@@ -24,6 +24,7 @@
 
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
+#include "../../../shared/console_private.h"
 
 #include <mpc83xx/mpc83xx.h>
 
@@ -56,13 +57,9 @@ static void gen83xx_console_set_register(uint32_t addr, uint8_t i, uint8_t val)
   reg [i] = val; 
 }
 
-unsigned long Console_Port_Count = PORT_COUNT;
+unsigned long Console_Configuration_Count = PORT_COUNT;
 
-rtems_device_minor_number Console_Port_Minor = 0;
-
-console_data Console_Port_Data [PORT_COUNT];
-
-console_tbl Console_Port_Tbl [PORT_COUNT] = {
+console_tbl Console_Configuration_Ports [PORT_COUNT] = {
   {
     .sDeviceName = "/dev/ttyS0",
     .deviceType = SERIAL_NS16550,
@@ -115,7 +112,7 @@ console_tbl Console_Port_Tbl [PORT_COUNT] = {
 
 static void gen83xx_output_char(char c)
 {
-  const console_fns *console = Console_Port_Tbl [Console_Port_Minor].pDeviceFns;
+  const console_fns *console = Console_Port_Tbl [Console_Port_Minor]->pDeviceFns;
   
   if (c == '\n') {
     console->deviceWritePolled((int) Console_Port_Minor, '\r');

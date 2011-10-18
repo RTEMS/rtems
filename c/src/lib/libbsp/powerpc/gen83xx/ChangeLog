@@ -1,3 +1,9 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* Makefile.am, console/console-config.c, startup/bspstart.c:
+	Modifications to add dynamic tables for libchip serial drivers.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* make/custom/mpc8309som.cfg, startup/linkcmds.mpc8309som: New file.

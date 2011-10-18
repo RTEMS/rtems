@@ -121,10 +121,10 @@ void bsp_start( void)
 
   /* Initialize some console parameters */
   for (i = 0; i < Console_Port_Count; ++i) {
-    Console_Port_Tbl [i].ulClock = BSP_bus_frequency;
+    Console_Configuration_Ports [i].ulClock = BSP_bus_frequency;
 
     #ifdef HAS_UBOOT
-      Console_Port_Tbl [i].pDeviceParams =
+      Console_Configuration_Ports [i].pDeviceParams =
         (void *) bsp_uboot_board_info.bi_baudrate;
     #endif
   }
