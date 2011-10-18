@@ -187,9 +187,12 @@ static int pipe_lock(void)
 
 static void pipe_unlock(void)
 {
+#ifdef RTEMS_DEBUG
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  sc = rtems_semaphore_release(pipe_semaphore);
+  sc =
+#endif
+   rtems_semaphore_release(pipe_semaphore);
   #ifdef RTEMS_DEBUG
     if (sc != RTEMS_SUCCESSFUL) {
       rtems_fatal_error_occurred(0xdeadbeef);
