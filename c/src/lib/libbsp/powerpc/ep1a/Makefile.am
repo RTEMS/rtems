@@ -48,13 +48,17 @@ include_bsp_HEADERS = ../../powerpc/shared/console/uart.h \
     ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/pnp.h \
-    ../../powerpc/shared/console/consoleIo.h console/rsPMCQ1.h
+    ../../powerpc/shared/console/consoleIo.h console/rsPMCQ1.h \
+    ../../shared/console_private.h
+
 # console
-libbsp_a_SOURCES += ../../shared/console.c console/ns16550cfg.c \
+libbsp_a_SOURCES += console/ns16550cfg.c \
     console/mc68360_scc.c console/rsPMCQ1.c console/alloc360.c \
     console/init68360.c console/config.c console/printk_support.c \
-    console/config.c
-
+    ../../shared/console.c ../../shared/console_select.c \
+    ../../shared/console_read.c ../../shared/console_write.c \
+    ../../shared/console_control.c
+ 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
 # openpic
 libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h \

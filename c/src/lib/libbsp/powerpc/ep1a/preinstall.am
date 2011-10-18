@@ -93,6 +93,10 @@ $(PROJECT_INCLUDE)/bsp/rsPMCQ1.h: console/rsPMCQ1.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/rsPMCQ1.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/rsPMCQ1.h
 
+$(PROJECT_INCLUDE)/bsp/console_private.h: ../../shared/console_private.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/console_private.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/console_private.h
+
 $(PROJECT_INCLUDE)/bsp/openpic.h: ../../powerpc/shared/openpic/openpic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/openpic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h

@@ -81,7 +81,7 @@ extern console_fns mc68360_scc_fns;
  * ulIntVector	This encodes the interrupt vector of the device.
  *
  */
-console_tbl	Console_Port_Tbl[] = {
+console_tbl	Console_Configuration_Ports[] = {
         /*
          *  NS16550 Chips provide first COM1 and COM2 Ports.
          */
@@ -363,12 +363,12 @@ console_tbl	Console_Port_Tbl[] = {
         }
 };
 
-/* rtems console uses the following minor number */
-rtems_device_minor_number  Console_Port_Minor = 0;
-
-#define NUM_CONSOLE_PORTS (sizeof(Console_Port_Tbl)/sizeof(console_tbl))
-unsigned long	Console_Port_Count = NUM_CONSOLE_PORTS;
-console_data    Console_Port_Data[NUM_CONSOLE_PORTS];
+/* 
+ *  Define a variable that contains the number of statically configured
+ *  console devices.
+ */
+unsigned long  Console_Configuration_Count = \
+    (sizeof(Console_Configuration_Ports)/sizeof(console_tbl));
 
 static bool config_68360_scc_base_probe(int minor, unsigned long busNo, unsigned long slotNo, int channel)
 {
@@ -386,7 +386,7 @@ static bool config_68360_scc_base_probe(int minor, unsigned long busNo, unsigned
   if (!chip)
     return false;
 
-  Console_Port_Tbl[minor].pDeviceParams = &chip->port[ channel-1 ];
+  Console_Port_Tbl[minor]->pDeviceParams = &chip->port[ channel-1 ];
   chip->port[ channel-1 ].minor         = minor;
   return true;
 }

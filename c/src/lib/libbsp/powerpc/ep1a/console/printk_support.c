@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <termios.h>
-
-#include "console.h"
 #include <rtems/bspIo.h>
+
+rtems_device_minor_number         BSPPrintkPort = 0;
 
 /* const char arg to be compatible with BSP_output_char decl. */
 void

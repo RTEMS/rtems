@@ -12,8 +12,9 @@
  */
 
 #include <rtems.h>
+#include <libchip/serial.h>
+#include <libchip/ns16550.h>
 #include <bsp.h>
-#include "console.h"
 
 typedef struct uart_reg
 {

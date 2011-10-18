@@ -1,3 +1,10 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* Makefile.am, preinstall.am, console/config.c, console/mc68360_scc.c,
+	console/ns16550cfg.c, console/printk_support.c: Modifications to add
+	dynamic tables for libchip serial drivers.
+
 2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console/polled_io.c: Update due to API changes.

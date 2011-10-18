@@ -48,7 +48,7 @@ void mc68360_Show_length_array(void) {
 M68360_t    M68360_chips = NULL;
 
 #define SYNC     eieio
-#define mc68360_scc_Is_422( _minor ) (Console_Port_Tbl[minor].sDeviceName[7] == '4' )
+#define mc68360_scc_Is_422( _minor ) (Console_Port_Tbl[minor]->sDeviceName[7] == '4' )
 
 
 void mc68360_scc_nullFunc(void) {}
@@ -147,7 +147,7 @@ void scc_write32(
 
 void mc68360_sccShow_Regs(int minor){
   M68360_serial_ports_t  ptr;
-  ptr   = Console_Port_Tbl[minor].pDeviceParams;
+  ptr   = Console_Port_Tbl[minor]->pDeviceParams;
 
   printk( "scce 0x%08x", &ptr->pSCCR->scce );
   printk( " 0x%04x\n", ptr->pSCCR->scce );
@@ -343,7 +343,7 @@ int mc68360_scc_open(
 #endif
 
 
-  ptr   = Console_Port_Tbl[minor].pDeviceParams;
+  ptr   = Console_Port_Tbl[minor]->pDeviceParams;
   m360  = ptr->chip->m360;
 
   /*
@@ -402,11 +402,11 @@ void mc68360_scc_initialize_interrupts(int minor)
 
 #ifdef DEBUG_360
   printk("mc68360_scc_initialize_interrupts: minor %d\n", minor );
-  printk("Console_Port_Tbl[minor].pDeviceParams 0x%08x\n",
-    Console_Port_Tbl[minor].pDeviceParams );
+  printk("Console_Port_Tbl[minor]->pDeviceParams 0x%08x\n",
+    Console_Port_Tbl[minor]->pDeviceParams );
 #endif
 
-  ptr   = Console_Port_Tbl[minor].pDeviceParams;
+  ptr   = Console_Port_Tbl[minor]->pDeviceParams;
   m360  = ptr->chip->m360;
 
 #ifdef DEBUG_360
@@ -671,7 +671,7 @@ int mc68360_scc_write_support_int(
     mc68360_length_count=0;
 #endif
 
-  ptr   = Console_Port_Tbl[minor].pDeviceParams;
+  ptr   = Console_Port_Tbl[minor]->pDeviceParams;
 
   /*
    *  We are using interrupt driven output and termios only sends us
@@ -744,7 +744,7 @@ int mc68360_scc_set_attributes(
 printk("mc68360_scc_set_attributes\n");
 #endif
 
-   ptr   = Console_Port_Tbl[minor].pDeviceParams;
+   ptr   = Console_Port_Tbl[minor]->pDeviceParams;
    m360  = ptr->chip->m360;
 
    switch (t->c_cflag & CBAUD)
