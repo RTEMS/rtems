@@ -688,13 +688,11 @@ dhcp_task (rtems_task_argument _sdl)
   unsigned int        timeout = 0;
   int                 error;
   struct proc *procp = NULL;
-  int                 disconnected;
   rtems_status_code   ev_st;
 
   sdl = (struct sockaddr_dl *) _sdl;
 
   count = dhcp_elapsed_time;
-  disconnected = 0;
 
   while (true)
   {

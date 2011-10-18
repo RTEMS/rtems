@@ -1,3 +1,8 @@
+2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/rtems/rtems_dhcp.c: Remove unused var
+	"disconnected".
+
 2011-10-17	Daniel Hellstrom <daniel@gaisler.com>
 
 	PR 1935/cpukit
