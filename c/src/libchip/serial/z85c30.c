@@ -96,8 +96,8 @@ Z85C30_STATIC void z85c30_initialize_port(
   uintptr_t       ulBaudDivisor;
   setRegister_f   setReg;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg   = Console_Port_Tbl[minor]->setRegister;
 
   /*
    * Using register 4
@@ -137,8 +137,8 @@ Z85C30_STATIC void z85c30_initialize_port(
   );
 
   ulBaudDivisor = Z85C30_Baud(
-    (uint32_t) Console_Port_Tbl[minor].ulClock,
-    (uint32_t) ((uintptr_t)Console_Port_Tbl[minor].pDeviceParams)
+    (uint32_t) Console_Port_Tbl[minor]->ulClock,
+    (uint32_t) ((uintptr_t)Console_Port_Tbl[minor]->pDeviceParams)
   );
 
   /*
@@ -219,7 +219,7 @@ Z85C30_STATIC int z85c30_open(
    * Assert DTR
    */
 
-  if (Console_Port_Tbl[minor].pDeviceFlow !=&z85c30_flow_DTRCTS) {
+  if (Console_Port_Tbl[minor]->pDeviceFlow !=&z85c30_flow_DTRCTS) {
     z85c30_assert_DTR(minor);
   }
 
@@ -240,7 +240,7 @@ Z85C30_STATIC int z85c30_close(
    * Negate DTR
    */
 
-  if (Console_Port_Tbl[minor].pDeviceFlow !=&z85c30_flow_DTRCTS) {
+  if (Console_Port_Tbl[minor]->pDeviceFlow !=&z85c30_flow_DTRCTS) {
     z85c30_negate_DTR(minor);
   }
 
@@ -258,8 +258,9 @@ Z85C30_STATIC void z85c30_init(int minor)
   setRegister_f    setReg;
   getRegister_f    getReg;
 
-  setReg = Console_Port_Tbl[minor].setRegister;
-  getReg   = Console_Port_Tbl[minor].getRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor]->setRegister;
+  getReg     = Console_Port_Tbl[minor]->getRegister;
 
   pz85c30Context = (z85c30_context *)malloc(sizeof(z85c30_context));
 
@@ -267,8 +268,8 @@ Z85C30_STATIC void z85c30_init(int minor)
 
   pz85c30Context->ucModemCtrl = SCC_WR5_TX_8_BITS | SCC_WR5_TX_EN;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  if ( ulCtrlPort == Console_Port_Tbl[minor].ulCtrlPort2 ) {
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  if ( ulCtrlPort == Console_Port_Tbl[minor]->ulCtrlPort2 ) {
     /*
      * This is channel A
      */
@@ -306,7 +307,7 @@ Z85C30_STATIC int z85c30_assert_RTS(int minor)
   z85c30_context        *pz85c30Context;
   setRegister_f          setReg;
 
-  setReg = Console_Port_Tbl[minor].setRegister;
+  setReg = Console_Port_Tbl[minor]->setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
 
@@ -317,7 +318,7 @@ Z85C30_STATIC int z85c30_assert_RTS(int minor)
   rtems_interrupt_disable(Irql);
     pz85c30Context->ucModemCtrl|=SCC_WR5_RTS;
     (*setReg)(
-      Console_Port_Tbl[minor].ulCtrlPort1,
+      Console_Port_Tbl[minor]->ulCtrlPort1,
       SCC_WR0_SEL_WR5,
       pz85c30Context->ucModemCtrl
     );
@@ -335,7 +336,7 @@ Z85C30_STATIC int z85c30_negate_RTS(int minor)
   z85c30_context        *pz85c30Context;
   setRegister_f          setReg;
 
-  setReg = Console_Port_Tbl[minor].setRegister;
+  setReg = Console_Port_Tbl[minor]->setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
 
@@ -346,7 +347,7 @@ Z85C30_STATIC int z85c30_negate_RTS(int minor)
   rtems_interrupt_disable(Irql);
     pz85c30Context->ucModemCtrl&=~SCC_WR5_RTS;
     (*setReg)(
-      Console_Port_Tbl[minor].ulCtrlPort1,
+      Console_Port_Tbl[minor]->ulCtrlPort1,
       SCC_WR0_SEL_WR5,
       pz85c30Context->ucModemCtrl
     );
@@ -369,7 +370,7 @@ Z85C30_STATIC int z85c30_assert_DTR(int minor)
   z85c30_context        *pz85c30Context;
   setRegister_f          setReg;
 
-  setReg = Console_Port_Tbl[minor].setRegister;
+  setReg = Console_Port_Tbl[minor]->setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
 
@@ -380,7 +381,7 @@ Z85C30_STATIC int z85c30_assert_DTR(int minor)
   rtems_interrupt_disable(Irql);
     pz85c30Context->ucModemCtrl|=SCC_WR5_DTR;
     (*setReg)(
-      Console_Port_Tbl[minor].ulCtrlPort1,
+      Console_Port_Tbl[minor]->ulCtrlPort1,
       SCC_WR0_SEL_WR5,
       pz85c30Context->ucModemCtrl
   );
@@ -398,7 +399,7 @@ Z85C30_STATIC int z85c30_negate_DTR(int minor)
   z85c30_context        *pz85c30Context;
   setRegister_f          setReg;
 
-  setReg = Console_Port_Tbl[minor].setRegister;
+  setReg = Console_Port_Tbl[minor]->setRegister;
 
   pz85c30Context = (z85c30_context *) Console_Port_Data[minor].pDeviceContext;
 
@@ -409,7 +410,7 @@ Z85C30_STATIC int z85c30_negate_DTR(int minor)
   rtems_interrupt_disable(Irql);
     pz85c30Context->ucModemCtrl&=~SCC_WR5_DTR;
     (*setReg)(
-      Console_Port_Tbl[minor].ulCtrlPort1,
+      Console_Port_Tbl[minor]->ulCtrlPort1,
       SCC_WR0_SEL_WR5,
       pz85c30Context->ucModemCtrl
   );
@@ -438,8 +439,8 @@ Z85C30_STATIC int z85c30_set_attributes(
   setRegister_f          setReg;
   rtems_interrupt_level  Irql;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg     = Console_Port_Tbl[minor].setRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  Calculate the baud rate divisor
@@ -450,7 +451,7 @@ Z85C30_STATIC int z85c30_set_attributes(
     baud_requested = B9600;              /* default to 9600 baud */
 
   ulBaudDivisor = Z85C30_Baud(
-    (uint32_t) Console_Port_Tbl[minor].ulClock,
+    (uint32_t) Console_Port_Tbl[minor]->ulClock,
     (uint32_t) rtems_termios_baud_to_number( baud_requested )
   );
 
@@ -540,9 +541,9 @@ Z85C30_STATIC void z85c30_process(
   setRegister_f       setReg;
   getRegister_f       getReg;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg     = Console_Port_Tbl[minor].setRegister;
-  getReg     = Console_Port_Tbl[minor].getRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor]->setRegister;
+  getReg     = Console_Port_Tbl[minor]->getRegister;
 
   /*
    * Deal with any received characters
@@ -604,7 +605,7 @@ Z85C30_STATIC void z85c30_process(
     rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
     if (rtems_termios_dequeue_characters(
          Console_Port_Data[minor].termios_data, 1)) {
-      if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
+      if (Console_Port_Tbl[minor]->pDeviceFlow != &z85c30_flow_RTSCTS) {
         z85c30_negate_RTS(minor);
       }
       Console_Port_Data[minor].bActive = FALSE;
@@ -646,10 +647,10 @@ Z85C30_STATIC rtems_isr z85c30_isr(
   getRegister_f       getReg;
 
   for (minor=0;minor<Console_Port_Count;minor++) {
-    if(Console_Port_Tbl[minor].ulIntVector == vector &&
-       Console_Port_Tbl[minor].deviceType == SERIAL_Z85C30 ) {
-      ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort2;
-      getReg     = Console_Port_Tbl[minor].getRegister;
+    if(Console_Port_Tbl[minor]->ulIntVector == vector &&
+       Console_Port_Tbl[minor]->deviceType == SERIAL_Z85C30 ) {
+      ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort2;
+      getReg     = Console_Port_Tbl[minor]->getRegister;
       do {
         ucIntPend = (*getReg)(ulCtrlPort, SCC_WR0_SEL_RD3);
 
@@ -657,7 +658,7 @@ Z85C30_STATIC rtems_isr z85c30_isr(
            * If this is channel A select channel A status
            */
 
-          if (ulCtrlPort == Console_Port_Tbl[minor].ulCtrlPort1) {
+          if (ulCtrlPort == Console_Port_Tbl[minor]->ulCtrlPort1) {
             ucIntPendPort = ucIntPend >> 3;
             ucIntPendPort &= 7;
           } else {
@@ -686,8 +687,8 @@ Z85C30_STATIC void z85c30_enable_interrupts(
   uint32_t       ulCtrlPort;
   setRegister_f  setReg;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg     = Console_Port_Tbl[minor].setRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor]->setRegister;
 
   (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR1, interrupt_mask);
 }
@@ -706,9 +707,9 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
   uint32_t       ulCtrlPort2;
   setRegister_f  setReg;
 
-  ulCtrlPort1 = Console_Port_Tbl[minor].ulCtrlPort1;
-  ulCtrlPort2 = Console_Port_Tbl[minor].ulCtrlPort2;
-  setReg      = Console_Port_Tbl[minor].setRegister;
+  ulCtrlPort1 = Console_Port_Tbl[minor]->ulCtrlPort1;
+  ulCtrlPort2 = Console_Port_Tbl[minor]->ulCtrlPort2;
+  setReg      = Console_Port_Tbl[minor]->setRegister;
 
 
   z85c30_init(minor);
@@ -717,11 +718,11 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
 
   z85c30_initialize_port( minor );
 
-  if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
+  if (Console_Port_Tbl[minor]->pDeviceFlow != &z85c30_flow_RTSCTS) {
     z85c30_negate_RTS(minor);
   }
 
-  set_vector(z85c30_isr, Console_Port_Tbl[minor].ulIntVector, 1);
+  set_vector(z85c30_isr, Console_Port_Tbl[minor]->ulIntVector, 1);
 
   z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX);
 
@@ -751,8 +752,8 @@ Z85C30_STATIC ssize_t z85c30_write_support_int(
   uint32_t       ulCtrlPort;
   setRegister_f  setReg;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg     = Console_Port_Tbl[minor].setRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg     = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  We are using interrupt driven output and termios only sends us
@@ -766,7 +767,7 @@ Z85C30_STATIC ssize_t z85c30_write_support_int(
    *  Put the character out and enable interrupts if necessary.
    */
 
-  if (Console_Port_Tbl[minor].pDeviceFlow != &z85c30_flow_RTSCTS) {
+  if (Console_Port_Tbl[minor]->pDeviceFlow != &z85c30_flow_RTSCTS) {
     z85c30_assert_RTS(minor);
   }
   rtems_interrupt_disable(Irql);
@@ -794,8 +795,8 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
   uint32_t            ulCtrlPort;
   getRegister_f       getReg;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg     = Console_Port_Tbl[minor].getRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  getReg     = Console_Port_Tbl[minor]->getRegister;
 
   /*
    * return -1 if a character is not available.
@@ -856,9 +857,9 @@ Z85C30_STATIC void z85c30_write_polled(
   getRegister_f      getReg;
   setRegister_f      setReg;
 
-  ulCtrlPort = Console_Port_Tbl[minor].ulCtrlPort1;
-  getReg     = Console_Port_Tbl[minor].getRegister;
-  setReg     = Console_Port_Tbl[minor].setRegister;
+  ulCtrlPort = Console_Port_Tbl[minor]->ulCtrlPort1;
+  getReg     = Console_Port_Tbl[minor]->getRegister;
+  setReg     = Console_Port_Tbl[minor]->setRegister;
 
   /*
    * Wait for the Transmit buffer to indicate that it is empty.

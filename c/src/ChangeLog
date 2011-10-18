@@ -1,3 +1,10 @@
+2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1917/bsps
+	* libchip/serial/mc68681.c, libchip/serial/ns16550.c,
+	libchip/serial/serial.h, libchip/serial/z85c30.c: Modifications to
+	add dynamic tables for libchip serial drivers.
+
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/rtc/icm7170.c (icm7170_get_time): Remove unused var setReg.

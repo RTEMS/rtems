@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief  The generic libchip serial driver interface
+ */
+
+
 /*
  *  This file contains the TTY driver table definition
  *
@@ -28,11 +35,46 @@ extern "C" {
  *  Types for get and set register routines
  */
 
+/**
+ *  @typedef getRegister_f
+ *
+ *  This type function provides a hook for the bsp specific method
+ *  that gets register data from the given port and register. 
+ */
 typedef uint8_t   (*getRegister_f)(uintptr_t port, uint8_t reg);
+
+/**
+ *  @typedef setData_f
+ *
+ *  This type function provides a hook for the bsp specific method
+ *  that sets register data from the given port and register to the
+ *  given value. 
+ */
 typedef void      (*setRegister_f)(uintptr_t port, uint8_t reg, uint8_t  value);
+
+/**
+ *  @typedef getData_f
+ *
+ *  This type function provides a hook for the bsp specific method
+ *  that gets data from the specified port. 
+ */
 typedef uint8_t   (*getData_f)(uintptr_t port);
+
+/**
+ *  @typedef setData_f
+ *
+ *  This type function provides a hook for the bsp specific method
+ *  that writes value to the specified port.
+ */
 typedef void      (*setData_f)(uintptr_t port, uint8_t value);
 
+/**
+ *  @typedef _console_fns
+ *
+ *  This type definition provides a structure of functions each
+ *  methood provides an interfce to the serial por to do a specific
+ *  function.
+ */
 typedef struct _console_fns {
   bool    (*deviceProbe)(int minor);
   int     (*deviceFirstOpen)(int major, int minor, void *arg);
@@ -45,11 +87,22 @@ typedef struct _console_fns {
   bool      deviceOutputUsesInterrupts;
 } console_fns;
 
+/**
+ *  @typedef _console_flow
+ *
+ *  This type definition provides a structure of functions
+ *  that provide flow control for the transmit buffer.
+ */
 typedef struct _console_flow {
   int (*deviceStopRemoteTx)(int minor);
   int (*deviceStartRemoteTx)(int minor);
 } console_flow;
 
+
+/**
+ * This type defination provides an enumerated type of all
+ * supported libchip console drivers.
+ */
 typedef enum {
   SERIAL_MC68681,              /* Motorola MC68681 or Exar 88681 */
   SERIAL_NS16550,              /* National Semiconductor NS16550 */
@@ -57,100 +110,114 @@ typedef enum {
   SERIAL_CUSTOM                /* BSP specific driver */
 } console_devs;
 
-/*
- * Each field is interpreted thus:
- *
- * sDeviceName  This is the name of the device.
- *
- * deviceType   This indicates the chip type.  It is especially important when
- *              multiple devices share the same interrupt vector and must be
- *              distinguished.
- *
- * pDeviceFns   This is a pointer to the set of driver routines to use.
- *
- * pDeviceFlow  This is a pointer to the set of flow control routines to
- *              use. Serial device drivers will typically supply RTSCTS
- *              and DTRCTS handshake routines for DCE to DCE communication,
- *              however for DCE to DTE communication, no such routines
- *              should be necessary as RTS will be driven automatically
- *              when the transmitter is active.
- *
- * ulMargin     The high water mark in the input buffer is set to the buffer
- *              size less ulMargin. Once this level is reached, the driver's
- *              flow control routine used to stop the remote transmitter will
- *              be called. This figure should be greater than or equal to
- *              the number of stages of FIFO between the transmitter and
- *              receiver.
- *
- *              NOTE: At the current time, this parameter is hard coded
- *                    in termios and this number is ignored.
- *
- * ulHysteresis After the high water mark specified by ulMargin has been
- *              reached, the driver's routine to re-start the remote
- *              transmitter will be called once the level in the input
- *              buffer has fallen by ulHysteresis bytes.
- *
- *              NOTE: At the current time, this parameter is hard coded
- *                    in termios and this number is ignored.
- *
- * pDeviceParams This contains either device specific data or a pointer to a
- *              device specific structure containing additional information
- *              not provided in this table.
- *
- * ulCtrlPort1  This is the primary control port number for the device. This
- *              may be used to specify different instances of the same device
- *              type.
- *
- * ulCtrlPort2  This is the secondary control port number, of use when a given
- *              device has more than one available channel.
- *
- * ulDataPort   This is the port number for the data port of the device
- *
- * getRegister  This is the routine used to read register values.
- *
- * setRegister  This is the routine used to write register values.
- *
- * getData      This is the routine used to read the data register (RX).
- *
- * setData      This is the routine used to write the data register (TX).
- *
- * ulClock      This is the baud rate clock speed.
- *
- * ulIntVector  This encodes the interrupt vector of the device.
+/**
+ * This type defination provides an structure that is used to 
+ * uniquely identify a specific serial port.
  */
-
 typedef struct _console_tbl {
+  /**  This is the name of the device. */
   char          *sDeviceName;
+  /** This indicates the chip type.  It is especially important when
+   *   multiple devices share the same interrupt vector and must be
+   *   distinguished.
+   */
   console_devs   deviceType;
+  /** pDeviceFns   This is a pointer to the set of driver routines to use. */
   console_fns   *pDeviceFns;
+  /** This value is passed to the serial device driver for use.  In termios
+   *  itself the number is ignored.
+   */
   bool         (*deviceProbe)(int minor);
+  /** This is a pointer to the set of flow control routines to
+   *  use. Serial device drivers will typically supply RTSCTS
+   *  and DTRCTS handshake routines for DCE to DCE communication,
+   *  however for DCE to DTE communication, no such routines
+   *  should be necessary as RTS will be driven automatically
+   *  when the transmitter is active.
+   */
   console_flow  *pDeviceFlow;
+  /** The high water mark in the input buffer is set to the buffer
+   *  size less ulMargin. Once this level is reached, the driver's
+   *  flow control routine used to stop the remote transmitter will
+   *  be called. This figure should be greater than or equal to
+   *  the number of stages of FIFO between the transmitter and
+   *  receiver.
+   *
+   *  @note At the current time, this parameter is hard coded
+   *        in termios and this number is ignored.
+   */
   uint32_t       ulMargin;
+  /** After the high water mark specified by ulMargin has been
+   *  reached, the driver's routine to re-start the remote
+   *  transmitter will be called once the level in the input
+   *  buffer has fallen by ulHysteresis bytes.
+   *
+   *  @note At the current time, this parameter is hard coded in termios.
+   */
   uint32_t       ulHysteresis;
+  /** This contains either device specific data or a pointer to a
+   *  device specific structure containing additional information
+   *  not provided in this table.
+   */
   void          *pDeviceParams;
+  /** This is the primary control port number for the device. This
+   *  may be used to specify different instances of the same device type.
+   */
   uint32_t       ulCtrlPort1;
+  /** This is the secondary control port number, of use when a given
+   *  device has more than one available channel.
+   */
   uint32_t       ulCtrlPort2;
+  /** This is the port number for the data port of the device */
   uint32_t       ulDataPort;
+  /** This is the routine used to read register values. */
   getRegister_f  getRegister;
+  /** This is the routine used to write register values. */
   setRegister_f  setRegister;
+  /** This is the routine used to read the data register (RX). */
   getData_f      getData;
+  /* This is the routine used to write the data register (TX). */
   setData_f      setData;
+  /** This is the baud rate clock speed.*/
   uint32_t       ulClock;
+  /** This encodes the interrupt vector of the device. */
   unsigned int   ulIntVector;
 } console_tbl;
 
+/**
+ * This type defination provides data for the console port.
+ */
 typedef struct _console_data {
   void                   *termios_data;
   volatile bool           bActive;
-  /*
-   * This field may be used for any purpose required by the driver
-   */
+  /** This field may be used for any purpose required by the driver  */
   void                   *pDeviceContext;
 } console_data;
 
-extern console_tbl  Console_Port_Tbl[];
-extern console_data Console_Port_Data[];
-extern unsigned long  Console_Port_Count;
+/**
+ *  This is a dynamically sized set of tables containing the serial 
+ *  port information.
+ */
+extern console_tbl   **Console_Port_Tbl;
+/**
+ * This is the number of serial ports defined in the Console_Port_Tbl.
+ */
+extern unsigned long   Console_Port_Count;
+
+/**
+ *  The statically configured serial port information tables which
+ *  are used to initially populate the dynamic tables.
+ */
+extern console_tbl    Console_Configuration_Ports[];
+/**
+ * The number of serial ports defined in Console_Configuration_Ports 
+ * */
+extern unsigned long  Console_Configuration_Count;
+
+/**
+ *  This is an array of per port information.
+ */
+extern console_data  *Console_Port_Data;
 
 #ifdef __cplusplus
 }

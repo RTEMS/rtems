@@ -99,9 +99,9 @@ MC68681_STATIC int mc68681_set_attributes(
   setRegister_f          setReg;
   rtems_interrupt_level  Irql;
 
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  setReg        = Console_Port_Tbl[minor].setRegister;
+  pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  Set the baud rate
@@ -195,14 +195,14 @@ MC68681_STATIC void mc68681_initialize_context(
   unsigned int pMC68681;
   unsigned int pMC68681_port;
 
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
 
   pmc68681Context->mate = -1;
 
   for (port=0 ; port<Console_Port_Count ; port++ ) {
-    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 &&
-         Console_Port_Tbl[port].ulCtrlPort2 != pMC68681_port ) {
+    if ( Console_Port_Tbl[port]->ulCtrlPort1 == pMC68681 &&
+         Console_Port_Tbl[port]->ulCtrlPort2 != pMC68681_port ) {
       pmc68681Context->mate = port;
       pmc68681Context->imr  = 0;
       break;
@@ -230,9 +230,9 @@ MC68681_STATIC void mc68681_init(int minor)
 
   mc68681_initialize_context( minor, pmc68681Context );
 
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  setReg        = Console_Port_Tbl[minor].setRegister;
+  pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  Reset everything and leave this port disabled.
@@ -282,10 +282,10 @@ MC68681_STATIC int mc68681_open(
   unsigned int			 status;
 
 
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  setReg        = Console_Port_Tbl[minor].setRegister;
-  vector        = Console_Port_Tbl[minor].ulIntVector;
+  pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
+  vector        = Console_Port_Tbl[minor]->ulIntVector;
 
   /* XXX default baud rate should be from configuration table */
 
@@ -332,9 +332,9 @@ MC68681_STATIC int mc68681_close(
   uint32_t        pMC68681_port;
   setRegister_f   setReg;
 
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  setReg        = Console_Port_Tbl[minor].setRegister;
+  pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  Disable interrupts from this channel and then disable it totally.
@@ -365,9 +365,9 @@ MC68681_STATIC void mc68681_write_polled(
   getRegister_f           getReg;
   setRegister_f           setReg;
 
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  getReg        = Console_Port_Tbl[minor].getRegister;
-  setReg        = Console_Port_Tbl[minor].setRegister;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor]->getRegister;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
 
   /*
    * wait for transmitter holding register to be empty
@@ -415,8 +415,8 @@ MC68681_STATIC rtems_isr mc68681_isr(
   int     minor;
 
   for(minor=0 ; minor<Console_Port_Count ; minor++) {
-    if(Console_Port_Tbl[minor].ulIntVector == vector &&
-       Console_Port_Tbl[minor].deviceType == SERIAL_MC68681 ) {
+    if(Console_Port_Tbl[minor]->ulIntVector == vector &&
+       Console_Port_Tbl[minor]->deviceType == SERIAL_MC68681 ) {
       mc68681_process(minor);
     }
   }
@@ -435,7 +435,7 @@ MC68681_STATIC void mc68681_initialize_interrupts(int minor)
 
   Console_Port_Data[minor].bActive = FALSE;
 
-  set_vector(mc68681_isr, Console_Port_Tbl[minor].ulIntVector, 1);
+  set_vector(mc68681_isr, Console_Port_Tbl[minor]->ulIntVector, 1);
 
   mc68681_enable_interrupts(minor,MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
 }
@@ -456,8 +456,8 @@ MC68681_STATIC ssize_t mc68681_write_support_int(
   uint32_t        pMC68681_port;
   setRegister_f   setReg;
 
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  setReg        = Console_Port_Tbl[minor].setRegister;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  We are using interrupt driven output and termios only sends us
@@ -529,8 +529,8 @@ MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
   unsigned char        cChar;
   getRegister_f        getReg;
 
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  getReg        = Console_Port_Tbl[minor].getRegister;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor]->getRegister;
 
   ucLineStatus = (*getReg)(pMC68681_port, MC68681_STATUS);
   if(ucLineStatus & MC68681_RX_READY) {
@@ -564,14 +564,14 @@ MC68681_STATIC int mc68681_baud_rate(
   acr_bit = 0;
   status = 0;
 
-  if (Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_2)
+  if (Console_Port_Tbl[minor]->ulDataPort & MC68681_DATA_BAUD_RATE_SET_2)
   {
     acr_bit = 1;
   }
 
   is_extended = 0;
 
-  switch (Console_Port_Tbl[minor].ulDataPort & MC68681_XBRG_MASK) {
+  switch (Console_Port_Tbl[minor]->ulDataPort & MC68681_XBRG_MASK) {
     case MC68681_XBRG_IGNORED:
       *command = 0x00;
       break;
@@ -591,7 +591,7 @@ MC68681_STATIC int mc68681_baud_rate(
   baud_requested = rtems_termios_baud_to_index( baud_requested );
 
   baud_tbl = (mc68681_baud_table_t *)
-     ((uintptr_t)Console_Port_Tbl[minor].ulClock);
+     ((uintptr_t)Console_Port_Tbl[minor]->ulClock);
   if (!baud_tbl)
     rtems_fatal_error_occurred(RTEMS_INVALID_ADDRESS);
 
@@ -630,10 +630,10 @@ MC68681_STATIC void mc68681_process(
   getRegister_f           getReg;
   setRegister_f           setReg;
 
-  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
-  getReg        = Console_Port_Tbl[minor].getRegister;
-  setReg        = Console_Port_Tbl[minor].setRegister;
+  pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port = Console_Port_Tbl[minor]->ulCtrlPort2;
+  getReg        = Console_Port_Tbl[minor]->getRegister;
+  setReg        = Console_Port_Tbl[minor]->setRegister;
 
   /* Get ISR at the beginning of the IT routine */
   ucISRStatus = (*getReg)(pMC68681, MC68681_INTERRUPT_STATUS_REG);
@@ -710,8 +710,8 @@ MC68681_STATIC unsigned int mc68681_build_imr(
   mc68681_context *pmc68681Context;
   mc68681_context *mateContext;
 
-  pMC68681        = Console_Port_Tbl[minor].ulCtrlPort1;
-  pMC68681_port   = Console_Port_Tbl[minor].ulCtrlPort2;
+  pMC68681        = Console_Port_Tbl[minor]->ulCtrlPort1;
+  pMC68681_port   = Console_Port_Tbl[minor]->ulCtrlPort2;
   pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
   mate            = pmc68681Context->mate;
 
@@ -735,7 +735,7 @@ MC68681_STATIC unsigned int mc68681_build_imr(
    *  Calculate this port's IMR mask and save it in the context area.
    */
 
-  if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts )
+  if ( Console_Port_Tbl[minor]->pDeviceFns->deviceOutputUsesInterrupts )
     mask = enable_flag;
 
   pmc68681Context->imr = mask;
@@ -764,8 +764,8 @@ MC68681_STATIC void mc68681_enable_interrupts(
   uint32_t              pMC68681;
   setRegister_f         setReg;
 
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
+  pMC68681 = Console_Port_Tbl[minor]->ulCtrlPort1;
+  setReg   = Console_Port_Tbl[minor]->setRegister;
 
   /*
    *  Enable interrupts on RX and TX -- not break
