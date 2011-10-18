@@ -1416,7 +1416,7 @@ setnetmask(
     char **argv)
 {
     uint32_t mask, b;
-    int n, ok;
+    int n;
     char *p, *endp;
 
     /*
@@ -1424,7 +1424,6 @@ setnetmask(
      * a result of all 1s is an error or a valid 255.255.255.255.
      */
     p = *argv;
-    ok = 0;
     mask = 0;
     for (n = 3;; --n) {
 	b = strtoul(p, &endp, 0);
