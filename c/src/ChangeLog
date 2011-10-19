@@ -1,3 +1,7 @@
+2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/smc91111.c: Use PRIxPTR to print pointers.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps

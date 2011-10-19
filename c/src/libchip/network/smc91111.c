@@ -445,8 +445,8 @@ static int readpacket(struct lan91cxx_priv_data *cpd)
 				struct mbuf *n = m;
 				db_printf("mbuf-chain:");
 				while (n) {
-					db_printf("[%x:%x]",
-						  (unsigned int)(n-> m_data),
+					db_printf("[%" PRIxPTR ":%x]",
+						  n->m_data,
 						  (unsigned int)(n->m_len));
 					n = n->m_next;
 				}
@@ -1273,8 +1273,8 @@ static int smc_probe(struct lan91cxx_priv_data *cpd)
 	if (!chip_ids[(revision_register >> 4) & 0xF]) {
 		/* I don't recognize this chip, so... */
 		db_printf
-		    ("smc_probe: IO %x: Unrecognized revision register:"
-		     " %x, Contact author. \n", (unsigned int)cpd->base,
+		    ("smc_probe: IO %" PRIxPTR ": Unrecognized revision register:"
+		     " %x, Contact author. \n", cpd->base,
 		     revision_register);
 
 		return -ENODEV;
