@@ -129,18 +129,17 @@ void _Rate_monotonic_Initiate_statistics(
    */
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     if (owning_thread == _Thread_Executing) {
-
-      rtems_thread_cpu_usage_t ran;
+      Timestamp_Control ran;
 
       /*
        *  Adjust the CPU time used to account for the time since last
        *  context switch.
        */
-      _Timespec_Subtract(
+      _Timestamp_Subtract(
         &_Thread_Time_of_last_context_switch, &uptime, &ran
       );
 
-      _Timespec_Add_to( &the_period->cpu_usage_period_initiated, &ran );
+      _Timestamp_Add_to( &the_period->cpu_usage_period_initiated, &ran );
     }
   #endif
 

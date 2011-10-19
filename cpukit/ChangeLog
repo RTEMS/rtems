@@ -1,3 +1,8 @@
+2011-10-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1939/cpukit
+	* rtems/src/ratemonperiod.c: Fixed type mismatch.
+
 2011-10-18	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/rtems/libio.h, libcsupport/src/termios.c:
