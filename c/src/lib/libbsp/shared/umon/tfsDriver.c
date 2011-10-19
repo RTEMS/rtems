@@ -168,7 +168,7 @@ int rtems_initialize_tfs_filesystem(
 
   if (rtems_filesystem_register( "tfs", rtems_tfs_mount_me ) < 0)
     return -1;
-  
+
   status = mount( "umon", TFS_PATHNAME_PREFIX, "tfs", RTEMS_FILESYSTEM_READ_WRITE, NULL);
 
   if (status < 0) {

@@ -55,19 +55,19 @@ extern void bsp_com_outch(char ch);
  *  @return This method returns the character that
  *    was retrieved from the console port.
  */
-extern int bsp_com_inch(void); 
+extern int bsp_com_inch(void);
 
 /**
- *  @brief 
+ *  @brief
  *
- *  This function 
+ *  This function
  *
- *  @return This method returns 
+ *  @return This method returns
  */
 int vt_ioctl( unsigned int cmd, unsigned long arg);
 
 /**
- *  @brief console_register_devices 
+ *  @brief console_register_devices
  *
  *  This function expands the console table to include previous
  *  ports and the array of new ports specified.

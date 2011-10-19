@@ -3,11 +3,11 @@
  *
  * @ingroup Console
  *
- * @brief Generic libchip console select 
+ * @brief Generic libchip console select
  */
 
 /*
- *  This file contains a routine to select the 
+ *  This file contains a routine to select the
  *  console based upon a number of criteria.
  *
  *  COPYRIGHT (c) 2011.
@@ -44,7 +44,7 @@ static bool bsp_Is_Available( rtems_device_minor_number minor )
    */
   if ((!cptr->deviceProbe || cptr->deviceProbe(minor)) &&
        cptr->pDeviceFns->deviceProbe(minor)) {
-    return true; 
+    return true;
   }
   return false;
 }
@@ -71,7 +71,7 @@ static rtems_device_minor_number bsp_First_Available_Device( void )
   }
 
   /*
-   *  Error No devices were found.  We will want to bail here. 
+   *  Error No devices were found.  We will want to bail here.
    */
   rtems_fatal_error_occurred(RTEMS_IO_ERROR);
 }
@@ -80,9 +80,9 @@ void bsp_console_select(void)
 {
 
   /*
-   *  Reset Console_Port_Minor and 
+   *  Reset Console_Port_Minor and
    *  BSPPrintkPort here if desired.
-   *  
+   *
    *  This default version allows the bsp to set these
    *  values at creation and will not touch them again
    *  unless the selected port number is not available.

@@ -8,7 +8,7 @@
 
 
 /*
- *  This file is an extension of the generic console driver 
+ *  This file is an extension of the generic console driver
  *  shell used by all console drivers using libchip.
  *
  *  COPYRIGHT (c) 1989-2011.

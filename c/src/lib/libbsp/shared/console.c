@@ -50,7 +50,7 @@ static void console_initialize_pointers(void)
   Console_Port_Tbl   = malloc( Console_Port_Count * sizeof( console_tbl * ) );
   if (Console_Port_Tbl == NULL)
     rtems_panic("No memory for console pointers");
-    
+
   for (i=0 ; i < Console_Port_Count ; i++)
     Console_Port_Tbl[i] = &Console_Configuration_Ports[i];
 }
@@ -103,7 +103,7 @@ void console_register_devices(
   /*
    *  Now add the new devices at the end.
    */
-  
+
   for (i=0 ; i < number_of_ports ; i++) {
     Console_Port_Tbl[old_number_of_ports + i] = &new_ports[i];
   }

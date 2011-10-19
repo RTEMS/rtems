@@ -1,5 +1,5 @@
 /*
- *  tfs.h - Header file for TFS transactions, used by both application and 
+ *  tfs.h - Header file for TFS transactions, used by both application and
  *  monnitor.
  *
  *  Based upon code from MicroMonitor 1.17 from http://www.umonfw.com/
