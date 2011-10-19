@@ -24,7 +24,7 @@ int           Value1;
 
 void benchmark_pthread_setspecific( void *value_p )
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -44,7 +44,7 @@ void benchmark_pthread_setspecific( void *value_p )
 
 void benchmark_pthread_getspecific( void *expected )
 {
-  long  end_time;
+  benchmark_timer_t end_time;
   void *value_p;
 
   benchmark_timer_initialize();

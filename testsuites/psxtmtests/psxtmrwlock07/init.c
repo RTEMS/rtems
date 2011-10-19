@@ -28,7 +28,7 @@ void *Low(
 )
 {
   int      status;
-  uint32_t end_time;
+  benchmark_timer_t end_time;
 
   /* write locking */
     status = pthread_rwlock_wrlock(&rwlock);

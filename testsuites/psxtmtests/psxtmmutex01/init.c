@@ -23,7 +23,7 @@ pthread_mutex_t MutexId;
 
 void test_mutex_create(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -42,7 +42,7 @@ void test_mutex_create(void)
 
 void test_mutex_destroy(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();

@@ -23,7 +23,7 @@ pthread_mutex_t MutexId;
 
 void benchmark_mutex_lock_available(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -42,7 +42,7 @@ void benchmark_mutex_lock_available(void)
 
 void benchmark_mutex_unlock_no_threads_waiting(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -61,7 +61,7 @@ void benchmark_mutex_unlock_no_threads_waiting(void)
 
 void benchmark_mutex_trylock_available(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -81,7 +81,7 @@ void benchmark_mutex_trylock_available(void)
 
 void benchmark_mutex_trylock_not_available(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -105,7 +105,7 @@ void benchmark_mutex_trylock_not_available(void)
 
 void benchmark_mutex_timedlock_available(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();

@@ -23,7 +23,7 @@ void *POSIX_Init(
   void *argument
 )
 {
-  long end_time;
+  benchmark_timer_t end_time;
 
   puts( "\n\n*** POSIX TIME TEST PSXTMSLEEP01 ***" );
 

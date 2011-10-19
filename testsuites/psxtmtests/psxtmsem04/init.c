@@ -42,7 +42,7 @@ void *POSIX_Init(void *argument)
 {
   int        status;
   pthread_t  threadId;
-  long       end_time;
+  benchmark_timer_t end_time;
 
   puts( "\n\n*** POSIX TIME TEST SEMAPHORE 04 ***" );
 

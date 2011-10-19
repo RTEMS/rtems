@@ -25,7 +25,7 @@ void *Low(
   void *argument
 )
 {
-  uint32_t end_time;
+  benchmark_timer_t end_time;
 
   /*
    * Now we have finished the thread startup overhead,

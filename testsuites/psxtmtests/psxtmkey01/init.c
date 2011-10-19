@@ -23,7 +23,7 @@ pthread_key_t Key;
 
 void benchmark_pthread_key_create(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -43,7 +43,7 @@ void benchmark_pthread_key_create(void)
 
 void benchmark_pthread_key_delete(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();

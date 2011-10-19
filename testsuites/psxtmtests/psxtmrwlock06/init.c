@@ -40,7 +40,7 @@ void *POSIX_Init(
 {
   int                   status;
   pthread_t             threadId;
-  long                  end_time;
+  benchmark_timer_t end_time;
   pthread_rwlockattr_t  attr;
 
   puts( "\n\n*** POSIX TIME TEST PSXTMRWLOCK 06 ***" );

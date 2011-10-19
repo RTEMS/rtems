@@ -28,7 +28,7 @@ void *Low(
 )
 {
   int      status;
-  uint32_t end_time;
+  benchmark_timer_t end_time;
 
     status = pthread_mutex_lock( &MutexId );
   end_time = benchmark_timer_read();

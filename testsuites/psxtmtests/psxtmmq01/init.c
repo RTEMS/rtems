@@ -30,7 +30,7 @@ const char *q_name;
 
 void benchmark_mq_open(int printable)
 {
-  long            end_time;
+  benchmark_timer_t end_time;
   struct mq_attr  attr;
 
   attr.mq_maxmsg  = MQ_MAXMSG;
@@ -54,7 +54,7 @@ void benchmark_mq_open(int printable)
 
 void benchmark_mq_open_second(int printable)
 {
-  long            end_time;
+  benchmark_timer_t end_time;
   struct mq_attr  attr;
 
   attr.mq_maxmsg  = MQ_MAXMSG;
@@ -78,7 +78,7 @@ void benchmark_mq_open_second(int printable)
 
 void benchmark_mq_close(int printable)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -98,7 +98,7 @@ void benchmark_mq_close(int printable)
 
 void benchmark_mq_close_second(int printable)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -118,7 +118,7 @@ void benchmark_mq_close_second(int printable)
 
 void benchmark_mq_unlink(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -137,7 +137,7 @@ void benchmark_mq_unlink(void)
 
 void benchmark_mq_notify(void)
 {
-  long            end_time;
+  benchmark_timer_t end_time;
   int             status;
   struct sigevent event;
 
@@ -160,7 +160,7 @@ void benchmark_mq_notify(void)
 
 void benchmark_mq_send(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   status = 9;
@@ -180,7 +180,7 @@ void benchmark_mq_send(void)
 
 void benchmark_mq_receive(void)
 {
-  long           end_time;
+  benchmark_timer_t end_time;
   int           status;
   unsigned int  priority;
   int           message[MQ_MAXMSG];
@@ -202,7 +202,7 @@ void benchmark_mq_receive(void)
 
 void benchmark_mq_timedsend(void)
 {
-  long             end_time;
+  benchmark_timer_t end_time;
   int              status;
   struct timespec  timeout;
 
@@ -226,7 +226,7 @@ void benchmark_mq_timedsend(void)
 
 void benchmark_mq_timedreceive(void)
 {
-  long             end_time;
+  benchmark_timer_t end_time;
   int              status;
   unsigned int     priority;
   struct timespec  timeout;

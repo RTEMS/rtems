@@ -26,7 +26,7 @@ sem_t           *n_sem1;
 
 void benchmark_sem_getvalue(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
   int  value;
 
@@ -46,7 +46,7 @@ void benchmark_sem_getvalue(void)
 
 void benchmark_sem_wait(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -65,7 +65,7 @@ void benchmark_sem_wait(void)
 
 void benchmark_sem_post(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -84,7 +84,7 @@ void benchmark_sem_post(void)
 
 void benchmark_sem_trywait_available(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();
@@ -103,7 +103,7 @@ void benchmark_sem_trywait_available(void)
 
 void benchmark_sem_trywait_not_available(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
 
   benchmark_timer_initialize();

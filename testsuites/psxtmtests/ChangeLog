@@ -1,3 +1,18 @@
+2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxtmbarrier01/init.c, psxtmbarrier02/init.c, psxtmbarrier03/init.c,
+	psxtmkey01/init.c, psxtmkey02/init.c, psxtmmq01/init.c,
+	psxtmmutex01/init.c, psxtmmutex02/init.c, psxtmmutex03/init.c,
+	psxtmmutex04/init.c, psxtmmutex05/init.c, psxtmmutex06/init.c,
+	psxtmmutex07/init.c, psxtmnanosleep01/init.c, psxtmnanosleep02/init.c,
+	psxtmrwlock01/init.c, psxtmrwlock02/init.c, psxtmrwlock03/init.c,
+	psxtmrwlock04/init.c, psxtmrwlock05/init.c, psxtmrwlock06/init.c,
+	psxtmrwlock07/init.c, psxtmsem01/init.c, psxtmsem02/init.c,
+	psxtmsem03/init.c, psxtmsem04/init.c, psxtmsem05/init.c,
+	psxtmsleep01/init.c, psxtmsleep02/init.c, psxtmthread03/init.c:
+	Use benchmark_timer_t for benchmark_timer values (Avoid 64bit
+	arch issues).
+
 2011-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxtmsem03/init.c: Add HAVE_CONFIG_H.

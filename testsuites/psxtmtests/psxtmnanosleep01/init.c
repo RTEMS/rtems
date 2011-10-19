@@ -21,7 +21,7 @@ void *POSIX_Init(
   void *argument
 )
 {
-  long end_time;
+  benchmark_timer_t end_time;
   struct timespec sleepTime;
 
   sleepTime.tv_sec = 0;

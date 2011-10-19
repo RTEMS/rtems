@@ -23,7 +23,7 @@ pthread_mutex_t MutexId;
 
 void test_mutex_setprioceiling(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
   int  old_ceiling;
 
@@ -43,7 +43,7 @@ void test_mutex_setprioceiling(void)
 
 void test_mutex_getprioceiling(void)
 {
-  long end_time;
+  benchmark_timer_t end_time;
   int  status;
   int  current_ceiling;
 

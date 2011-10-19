@@ -33,7 +33,7 @@ void *Low(
 )
 {
   int      status;
-  uint32_t end_time;
+  benchmark_timer_t end_time;
 
     status = sem_wait(&sem1); /* semaphore blocks */
   end_time = benchmark_timer_read();
