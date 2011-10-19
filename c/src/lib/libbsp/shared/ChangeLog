@@ -1,3 +1,7 @@
+2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console.c: RTEMS_DEBUG is a define, not a variable.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps

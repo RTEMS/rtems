@@ -298,8 +298,9 @@ rtems_device_driver console_initialize(
       }
 
       if (minor == Console_Port_Minor) {
-        if (RTEMS_DEBUG)
+#if defined(RTEMS_DEBUG)
           printk( "Register %s as the CONSOLE\n", port->sDeviceName );
+#endif
         status = rtems_io_register_name( "dev/console", major, minor );
         if (status != RTEMS_SUCCESSFUL) {
           printk( "Unable to register /dev/console\n" );
