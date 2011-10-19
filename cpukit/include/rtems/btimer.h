@@ -35,11 +35,13 @@
 extern "C" {
 #endif
 
+typedef uint32_t benchmark_timer_t;
+
 /* functions */
 
 extern void benchmark_timer_initialize( void );
 
-extern uint32_t   benchmark_timer_read( void );
+extern benchmark_timer_t benchmark_timer_read( void );
 
 extern rtems_status_code benchmark_timer_empty_function( void );
 

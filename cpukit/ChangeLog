@@ -1,3 +1,8 @@
+2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/btimer.h: Introduce benchmark_timer_t.
+	Let benchmark_timer_read return benchmark_timer_t.
+
 2011-10-18	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1939/cpukit
