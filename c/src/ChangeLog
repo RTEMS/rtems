@@ -1,5 +1,9 @@
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/display/disp_hcms29xx.c: Remove ARRAY_COUNT (unused).
+
+2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1940/misc:
 	* libchip/serial/ns16550.c: Reflect changes to console-driver.
 

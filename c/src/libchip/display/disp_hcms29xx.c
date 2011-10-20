@@ -25,10 +25,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef ARRAY_COUNT
-#define ARRAY_COUNT(a) (sizeof(a)/sizeof(a[0]))
-#endif /* ARRAY_COUNT */
-
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <bsp.h>
