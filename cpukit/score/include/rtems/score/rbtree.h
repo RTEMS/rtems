@@ -18,6 +18,8 @@
 #ifndef _RTEMS_SCORE_RBTREE_H
 #define _RTEMS_SCORE_RBTREE_H
 
+#include <stddef.h>
+
 /**
  *  @defgroup ScoreRBTree Red-Black Tree Handler
  *
@@ -88,8 +90,7 @@ struct RBTree_Node_struct {
  *
  */
 #define _RBTree_Container_of(node,container_type, node_field_name) \
-((container_type*) \
- ((size_t)node - ((size_t)(&((container_type *)0)->node_field_name))))
+  ((container_type*) (node - offsetof(container_type,node_field_name)))
 
 /**
  *  This type indicates the direction.

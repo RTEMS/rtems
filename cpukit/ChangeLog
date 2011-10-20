@@ -1,5 +1,7 @@
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/score/rbtree.h (_RBTree_Container_of):
+	Use offsetof. Don't cast to size_t. Include <stddef.h>.
 	* libnetworking/libc/res_mkupdate.c (res_mkupdate):
 	Remove unused var "sp1".
 	* libfs/src/dosfs/msdos_file.c (msdos_file_datasync):
