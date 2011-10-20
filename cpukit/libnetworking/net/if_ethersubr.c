@@ -121,12 +121,11 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 	register struct rtentry *rt;
 	struct mbuf *mcopy = (struct mbuf *)0;
 	register struct ether_header *eh;
-	int off, len = m->m_pkthdr.len;
+	int len = m->m_pkthdr.len;
 	struct arpcom *ac = (struct arpcom *)ifp;
 #ifdef NETATALK
 	struct at_ifaddr *aa;
 #endif /* NETATALK */
-	int hlen;	/* link layer header length */
 
 	if ((ifp->if_flags & (IFF_UP|IFF_RUNNING)) != (IFF_UP|IFF_RUNNING))
 		senderr(ENETDOWN);
@@ -155,7 +154,6 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 			    rtems_bsdnet_seconds_since_boot() < rt->rt_rmx.rmx_expire)
 				senderr(rt == rt0 ? EHOSTDOWN : EHOSTUNREACH);
 	}
-	hlen = ETHER_HDR_LEN;
 	switch (dst->sa_family) {
 
 #ifdef INET
@@ -165,7 +163,6 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 		/* If broadcasting on a simplex interface, loopback a copy */
 		if ((m->m_flags & M_BCAST) && (ifp->if_flags & IFF_SIMPLEX))
 			mcopy = m_copy(m, 0, (int)M_COPYALL);
-		off = m->m_pkthdr.len - m->m_len;
 		type = htons(ETHERTYPE_IP);
 		break;
 #endif

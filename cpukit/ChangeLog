@@ -1,5 +1,7 @@
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_ethersubr.c (ether_output): 
+	Remove unused vars "hlen", "off".
 	* score/include/rtems/score/rbtree.h (_RBTree_Container_of):
 	Use offsetof. Don't cast to size_t. Include <stddef.h>.
 	* libnetworking/libc/res_mkupdate.c (res_mkupdate):
