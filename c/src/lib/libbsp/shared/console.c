@@ -24,6 +24,7 @@
 #include <termios.h>
 
 #include <rtems/termiostypes.h>
+#include <rtems/error.h>  /* rtems_panic */
 #include <libchip/serial.h>
 #include "console_private.h"
 

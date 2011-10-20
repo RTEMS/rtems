@@ -1,3 +1,7 @@
+2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console.c: Include <rtems/error.h> for rtems_panic().
+
 2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console.c: RTEMS_DEBUG is a define, not a variable.
