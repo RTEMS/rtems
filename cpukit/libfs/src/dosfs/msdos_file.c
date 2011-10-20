@@ -407,7 +407,6 @@ msdos_file_sync(rtems_libio_t *iop)
 int
 msdos_file_datasync(rtems_libio_t *iop)
 {
-    int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
@@ -418,7 +417,7 @@ msdos_file_datasync(rtems_libio_t *iop)
         rtems_set_errno_and_return_minus_one(EIO);
 
     /* synchronize file data */
-    rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
+    fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;

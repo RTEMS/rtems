@@ -1,3 +1,8 @@
+2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/dosfs/msdos_file.c (msdos_file_datasync):
+	Remove unused var "rc". 
+
 2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/rtems/btimer.h: Introduce benchmark_timer_t.
