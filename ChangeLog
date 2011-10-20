@@ -1,3 +1,7 @@
+2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* MAINTAINERS: Remove references to c4x, or32 (abandoned).
+
 2011-10-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* depcomp, compile, texinfo.tex, mdate-sh: New.
