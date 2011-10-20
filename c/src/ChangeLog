@@ -1,3 +1,8 @@
+2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1940/misc:
+	* libchip/serial/ns16550.c: Reflect changes to console-driver.
+
 2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/smc91111.c: Use PRIxPTR to print pointers.

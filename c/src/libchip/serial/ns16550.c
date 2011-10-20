@@ -203,7 +203,7 @@ NS16550_STATIC int ns16550_close(
   void    * arg
 )
 {
-  console_tbl *c = &Console_Port_Tbl [minor];
+  console_tbl *c = Console_Port_Tbl [minor];
 
   /*
    * Negate DTR
@@ -601,7 +601,7 @@ NS16550_STATIC void ns16550_enable_interrupts(
 NS16550_STATIC void ns16550_initialize_interrupts( int minor)
 {
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
-  console_tbl *c = &Console_Port_Tbl [minor];
+  console_tbl *c = Console_Port_Tbl [minor];
 #endif
   console_data *d = &Console_Port_Data [minor];
 
@@ -661,7 +661,7 @@ NS16550_STATIC void ns16550_cleanup_interrupts(int minor)
 {
   #if defined(BSP_FEATURE_IRQ_EXTENSION)
     rtems_status_code sc = RTEMS_SUCCESSFUL;
-    console_tbl *c = &Console_Port_Tbl [minor];
+    console_tbl *c = Console_Port_Tbl [minor];
     sc = rtems_interrupt_handler_remove(
       c->ulIntVector,
       ns16550_isr,
@@ -674,7 +674,7 @@ NS16550_STATIC void ns16550_cleanup_interrupts(int minor)
     }
   #elif defined(BSP_FEATURE_IRQ_LEGACY)
     int rv = 0;
-    console_tbl *c = &Console_Port_Tbl [minor];
+    console_tbl *c = Console_Port_Tbl [minor];
     rtems_irq_connect_data cd = {
       .name = c->ulIntVector,
       .hdl = ns16550_isr,
