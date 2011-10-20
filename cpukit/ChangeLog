@@ -1,5 +1,7 @@
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/res_mkupdate.c (res_mkupdate):
+	Remove unused var "sp1".
 	* libfs/src/dosfs/msdos_file.c (msdos_file_datasync):
 	Remove unused var "rc". 
 
