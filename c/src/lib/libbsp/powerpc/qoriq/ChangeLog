@@ -1,3 +1,9 @@
+2011-10-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1926/bsps
+	* timer/timer.c: New file.
+	* Makefile.am: Reflect change above.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps

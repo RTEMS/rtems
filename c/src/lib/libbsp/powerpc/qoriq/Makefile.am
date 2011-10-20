@@ -84,6 +84,9 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 libbsp_a_SOURCES += clock/clock-config.c \
 	../../shared/clockdrv_shell.h
 
+# Timer
+libbsp_a_SOURCES += timer/timer.c
+
 # IRQ
 libbsp_a_SOURCES += irq/irq.c \
 	../../shared/src/irq-generic.c \
