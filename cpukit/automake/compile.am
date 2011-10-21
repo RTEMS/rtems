@@ -4,7 +4,4 @@
 
 AM_CPPFLAGS = @RTEMS_CPPFLAGS@
 AM_CFLAGS =
-AM_CFLAGS += -Werror=overflow
-AM_CFLAGS += -Werror=pointer-to-int-cast
-AM_CFLAGS += -Werror=int-to-pointer-cast
 AM_CCASFLAGS = @RTEMS_CCASFLAGS@

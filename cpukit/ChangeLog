@@ -1,3 +1,7 @@
+2011-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* automake/compile.am: Remove -Werror=...
+
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_ethersubr.c (ether_output): 
