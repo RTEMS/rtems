@@ -102,7 +102,7 @@
 #define NIOS2_CONFIG_ANI (1 << 1)
 #define NIOS2_CONFIG_PE (1 << 0)
 
-#define NIOS2_MPUBASE_BASE_OFFSET 5
+#define NIOS2_MPUBASE_BASE_OFFSET 6
 #define NIOS2_MPUBASE_BASE_MASK (0x1ffffff << NIOS2_MPUBASE_BASE_OFFSET)
 #define NIOS2_MPUBASE_INDEX_OFFSET 1
 
@@ -132,6 +132,7 @@
 
 #ifndef ASM
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -167,6 +168,14 @@ extern char _Nios2_ISR_Status_mask [];
  * specifiy the status register bits used in _CPU_ISR_Disable().
  */
 extern char _Nios2_ISR_Status_bits [];
+
+/**
+ * @brief This global variable indicates that the Nios2 MPU is active
+ *
+ * This global variable is set to 1 when the board support package
+ * initializes the MPU during startup.
+ */
+extern uint32_t _Nios2_Mpu_active;
 
 static inline uint32_t _Nios2_Get_ctlreg_status( void )
 {
@@ -305,10 +314,133 @@ static inline bool _Nios2_Has_internal_interrupt_controller( void )
 
 uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status );
 
+typedef struct {
+  int data_address_width;
+  int instruction_address_width;
+  int data_region_size_log2;
+  int instruction_region_size_log2;
+  int data_region_count;
+  int instruction_region_count;
+  int data_index_for_stack_protection;
+  bool region_uses_limit;
+  bool enable_data_cache_for_stack;
+} Nios2_MPU_Configuration;
+
+void _Nios2_MPU_Set_configuration( const Nios2_MPU_Configuration *config );
+
+const Nios2_MPU_Configuration *_Nios2_MPU_Get_configuration( void );
+
+typedef enum {
+  NIOS2_MPU_INST_PERM_SVR_NONE_USER_NONE = 0,
+  NIOS2_MPU_INST_PERM_SVR_EXECUTE_USER_NONE,
+  NIOS2_MPU_INST_PERM_SVR_EXECUTE_USER_EXECUTE,
+  NIOS2_MPU_DATA_PERM_SVR_NONE_USER_NONE = 0,
+  NIOS2_MPU_DATA_PERM_SVR_READONLY_USER_NONE,
+  NIOS2_MPU_DATA_PERM_SVR_READONLY_USER_READONLY,
+  NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_NONE = 4,
+  NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_READONLY,
+  NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_READWRITE
+} Nios2_MPU_Region_permissions;
+
+typedef struct {
+  int index;
+  const void *base;
+  const void *end;
+  Nios2_MPU_Region_permissions perm;
+  bool data;
+  bool cacheable;
+  bool read;
+  bool write;
+} Nios2_MPU_Region_descriptor;
+
+#define NIOS2_MPU_REGION_DESC_INST( index, base, end ) \
+  { \
+    (index), (base), (end), NIOS2_MPU_INST_PERM_SVR_EXECUTE_USER_NONE, \
+    false, false, false, true \
+  }
+
+#define NIOS2_MPU_REGION_DESC_DATA_RO( index, base, end ) \
+  { \
+    (index), (base), (end), NIOS2_MPU_DATA_PERM_SVR_READONLY_USER_NONE, \
+    true, true, false, true \
+  }
+
+#define NIOS2_MPU_REGION_DESC_DATA_RW( index, base, end ) \
+  { \
+    (index), (base), (end), NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_NONE, \
+    true, true, false, true \
+  }
+
+#define NIOS2_MPU_REGION_DESC_DATA_IO( index, base, end ) \
+  { \
+    (index), (base), (end), NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_NONE, \
+    true, false, false, true \
+  }
+
+bool _Nios2_MPU_Setup_region_registers(
+  const Nios2_MPU_Configuration *config,
+  const Nios2_MPU_Region_descriptor *desc,
+  uint32_t *mpubase,
+  uint32_t *mpuacc
+);
+
+static inline void _Nios2_MPU_Get_region_registers(
+  int index,
+  bool data,
+  uint32_t *mpubase,
+  uint32_t *mpuacc
+)
+{
+  uint32_t base = (uint32_t)
+    (((index << NIOS2_MPUBASE_INDEX_OFFSET) & NIOS2_MPUBASE_INDEX_MASK)
+      | (data ? NIOS2_MPUBASE_D : 0));
+
+  _Nios2_Set_ctlreg_mpubase( base );
+  _Nios2_Set_ctlreg_mpuacc( NIOS2_MPUACC_RD );
+  *mpubase = _Nios2_Get_ctlreg_mpubase() | base;
+  *mpuacc = _Nios2_Get_ctlreg_mpuacc();
+}
+
+static inline void _Nios2_MPU_Enable( void )
+{
+  uint32_t config = _Nios2_Get_ctlreg_config();
+
+  _Nios2_Set_ctlreg_config( config | NIOS2_CONFIG_PE );
+}
+
+static inline uint32_t _Nios2_MPU_Disable( void )
+{
+  uint32_t config = _Nios2_Get_ctlreg_config();
+  uint32_t config_pe = NIOS2_CONFIG_PE;
+
+  _Nios2_Set_ctlreg_config( config & ~config_pe );
+
+  return config;
+}
+
+static inline void _Nios2_MPU_Restore( uint32_t config )
+{
+  _Nios2_Set_ctlreg_config( config );
+}
+
+uint32_t _Nios2_MPU_Disable_protected( void );
+
+void _Nios2_MPU_Reset( const Nios2_MPU_Configuration *config );
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* !ASM */
+#else /* ASM */
+
+	.macro	NIOS2_ASM_DISABLE_INTERRUPTS new_status, current_status
+	movhi	\new_status, %hiadj(_Nios2_ISR_Status_mask)
+	addi	\new_status, \new_status, %lo(_Nios2_ISR_Status_mask)
+	and	\new_status, \current_status, \new_status
+	ori	\new_status, \new_status, %lo(_Nios2_ISR_Status_bits)
+	wrctl	status, \new_status
+	.endm
+
+#endif /* ASM */
 
 #endif /* _RTEMS_SCORE_NIOS2_UTILITY_H */

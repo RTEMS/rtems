@@ -37,6 +37,10 @@ libscorecpu_a_SOURCES += nios2-isr-install-raw-handler.c
 libscorecpu_a_SOURCES += nios2-isr-install-vector.c
 libscorecpu_a_SOURCES += nios2-isr-is-in-progress.c
 libscorecpu_a_SOURCES += nios2-isr-set-level.c
+libscorecpu_a_SOURCES += nios2-mpu-configuration.c
+libscorecpu_a_SOURCES += nios2-mpu-descriptor.c
+libscorecpu_a_SOURCES += nios2-mpu-disable-protected.c
+libscorecpu_a_SOURCES += nios2-mpu-reset.c
 libscorecpu_a_SOURCES += nios2-thread-dispatch-disabled.c
 
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)

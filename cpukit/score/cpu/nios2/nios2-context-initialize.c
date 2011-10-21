@@ -21,6 +21,7 @@
 
 #include <rtems/score/cpu.h>
 #include <rtems/score/nios2-utility.h>
+#include <rtems/score/interr.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -31,6 +32,7 @@ void _CPU_Context_Initialize(
   bool is_fp
 )
 {
+  const Nios2_MPU_Configuration *mpu_config = _Nios2_MPU_Get_configuration();
   uint32_t stack = (uint32_t) stack_area_begin + stack_area_size - 4;
 
   memset(context, 0, sizeof(*context));
@@ -39,4 +41,29 @@ void _CPU_Context_Initialize(
   context->status = _Nios2_ISR_Set_level( new_level, NIOS2_STATUS_PIE );
   context->sp = stack;
   context->ra = (uint32_t) entry_point;
+
+  if ( mpu_config != NULL ) {
+    Nios2_MPU_Region_descriptor desc = {
+      .index = mpu_config->data_index_for_stack_protection,
+      /* FIXME: Brocken stack allocator */
+      .base = (void *) ((int) stack_area_begin & ~((1 << mpu_config->data_region_size_log2) - 1)),
+      .end = (char *) stack_area_begin + stack_area_size,
+      .perm = NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_NONE,
+      .data = true,
+      .cacheable = mpu_config->enable_data_cache_for_stack,
+      .read = false,
+      .write = true
+    };
+    bool ok = _Nios2_MPU_Setup_region_registers(
+      mpu_config,
+      &desc,
+      &context->stack_mpubase,
+      &context->stack_mpuacc
+    );
+
+    if ( !ok ) {
+      /* The task stack allocator must ensure that the stack area is valid */
+      _Internal_error_Occurred( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
+    }
+  }
 }

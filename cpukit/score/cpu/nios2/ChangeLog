@@ -1,3 +1,11 @@
+2011-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* nios2-mpu-configuration.c, nios2-mpu-descriptor.c,
+	nios2-mpu-disable-protected.c, nios2-mpu-reset.c: New files.
+	* Makefile.am: Reflect changes above.
+	* rtems/score/nios2-utility.h, nios2-context-initialize.c: Added
+	support for the memory protection unit (MPU).
+
 2011-09-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* nios2-context-switch.S: Use small-data area access for
