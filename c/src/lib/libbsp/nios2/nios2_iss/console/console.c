@@ -109,13 +109,13 @@ void console_outbyte_polled(
 }
 
 /*
- *  *  To support printk
- *   */
+ * To support printk
+ */
 
 #include <rtems/bspIo.h>
 
 
-ISS_output_char(char c) { console_outbyte_polled( 0, c ); }
+void ISS_output_char(char c) { console_outbyte_polled( 0, c ); }
 
 BSP_output_char_function_type           BSP_output_char = ISS_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

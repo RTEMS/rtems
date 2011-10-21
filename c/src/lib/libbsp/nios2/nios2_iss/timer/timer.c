@@ -40,8 +40,6 @@ void timerisr( void )
 
 void benchmark_timer_initialize( void )
 {
-  uint32_t old_ie;
-
   /* Disable timer interrupt, stop timer */
 
   TIMER_REGS->control = ALTERA_AVALON_TIMER_CONTROL_STOP_MSK;
@@ -104,7 +102,6 @@ uint32_t benchmark_timer_read( void )
   uint32_t timer_snap;
   uint32_t timer_ticks;
   uint32_t total;
-  uint32_t old_ie;
 
   /* Hold timer */
   TIMER_REGS->control = ALTERA_AVALON_TIMER_CONTROL_STOP_MSK;
