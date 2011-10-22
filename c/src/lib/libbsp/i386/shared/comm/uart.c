@@ -86,10 +86,8 @@ uartError(int uart)
 #else
 inline void uartError(int uart)
 {
-  unsigned char uartStatus;
-
-  uartStatus = uread(uart, LSR);
-  uartStatus = uread(uart, RBR);
+  uread(uart, LSR);
+  uread(uart, RBR);
 }
 #endif
 
