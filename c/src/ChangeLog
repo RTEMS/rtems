@@ -1,5 +1,7 @@
 2011-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/dec21140.c (dec21140_rxDaemon):
+	Remove unused var "tbase".
 	* libchip/rtc/mc146818a.c (mc146818a_initialize): 
 	Remove unused var "getReg".
 	* libchip/rtc/mc146818a.c (mc146818a_set_time): 

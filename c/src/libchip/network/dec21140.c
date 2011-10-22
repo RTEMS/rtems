@@ -560,7 +560,6 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 static void
 dec21140_rxDaemon (void *arg)
 {
-   volatile uint32_t     *tbase;
    volatile struct MD    *rmd;
    struct dec21140_softc *sc;
    struct ifnet          *ifp;
@@ -585,7 +584,6 @@ dec21140_rxDaemon (void *arg)
             if( events & sc->ioevent )
             {
                ifp   = &sc->arpcom.ac_if;
-               tbase = sc->base;
                rmd   = sc->nextRxMD;
 
                /*
