@@ -1,3 +1,7 @@
+2011-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxfile01/test.c: Remove local redeclaration of IMFS_dump. 
+
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxhdrs/pthread01.c, psxhdrs/pthread02.c, psxhdrs/pthread03.c,

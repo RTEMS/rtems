@@ -69,7 +69,6 @@ void test_extend(
   off_t new_len
 );
 
-void IMFS_dump( void );
 int IMFS_memfile_maximum_size( void );
 
 /*
