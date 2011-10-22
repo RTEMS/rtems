@@ -62,11 +62,12 @@ void * sbrk(ptrdiff_t incr)
   return p;
 }
 
+void *p1, *p2, *p3, *p4;
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  void *p1, *p2, *p3, *p4;
   Heap_Control *TempHeap;
 
   sbrk_count = 0;
