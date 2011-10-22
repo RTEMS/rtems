@@ -1,3 +1,10 @@
+2011-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/rtc/mc146818a.c (mc146818a_initialize): 
+	Remove unused var "getReg".
+	* libchip/rtc/mc146818a.c (mc146818a_set_time): 
+	Remove unused var "getReg".
+
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/display/disp_hcms29xx.c: Remove ARRAY_COUNT (unused).

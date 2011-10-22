@@ -59,11 +59,9 @@ void mc146818a_initialize(
 )
 {
   uint32_t     mc146818a;
-  getRegister_f  getReg;
   setRegister_f  setReg;
 
   mc146818a = RTC_Table[ minor ].ulCtrlPort1;
-  getReg = RTC_Table[ minor ].getRegister;
   setReg = RTC_Table[ minor ].setRegister;
 
   (*setReg)( mc146818a, MC146818A_STATUSA, MC146818ASA_DIVIDER|MC146818ASA_1024 );
@@ -139,11 +137,9 @@ int mc146818a_set_time(
 )
 {
   uint32_t     mc146818a;
-  getRegister_f  getReg;
   setRegister_f  setReg;
 
   mc146818a = RTC_Table[ minor ].ulCtrlPort1;
-  getReg = RTC_Table[ minor ].getRegister;
   setReg = RTC_Table[ minor ].setRegister;
 
   /*
