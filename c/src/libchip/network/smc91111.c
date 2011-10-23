@@ -160,9 +160,11 @@ static void lan91cxx_recv(struct lan91cxx_priv_data *cpd, struct mbuf *m)
 	struct ether_header *eh;
 	short mlen = 0, plen;
 	char *start;
-	rxd_t *data = NULL, val, lp;
+	rxd_t *data = NULL, val;
+#if DEBUG & 64
+	rxd_t lp = 0;
+#endif
 	struct mbuf *n;
-	lp = 0;
 	dbg_prefix = "<";
 
 	DEBUG_FUNCTION();
