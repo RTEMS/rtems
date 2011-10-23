@@ -336,7 +336,6 @@ int _CPU_unmap_virt_address(
   linear_address linearAddr;
   page_table *localPageTable;
   unsigned int lastAddr ;
-  unsigned int dirCount ;
   unsigned char pagingWasEnabled;
 
   pagingWasEnabled = 0;
@@ -348,7 +347,6 @@ int _CPU_unmap_virt_address(
 
   linearAddr.address = (unsigned int)mappedAddress;
   lastAddr = (unsigned int)mappedAddress + (size - 1);
-  dirCount = linearAddr.bits.directory;
 
   while (1){
 
