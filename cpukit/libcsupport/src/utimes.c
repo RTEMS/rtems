@@ -26,8 +26,8 @@ int utimes(
   if ( times == NULL )
     return utime( path, NULL );
 
-  timeinsecs.actime  = (time_t) times[0].tv_sec;
-  timeinsecs.modtime = (time_t) times[1].tv_sec;
+  timeinsecs.actime  = times[0].tv_sec;
+  timeinsecs.modtime = times[1].tv_sec;
 
   return utime( path, &timeinsecs );
 }

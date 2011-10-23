@@ -1,3 +1,7 @@
+2011-10-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/utimes.c (utimes): Remove casts to time_t.
+
 2011-10-21	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* automake/compile.am: Remove -Werror=...
