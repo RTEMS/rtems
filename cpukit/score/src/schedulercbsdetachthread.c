@@ -31,7 +31,6 @@ int _Scheduler_CBS_Detach_thread (
   /* The routine _Thread_Get may disable dispatch and not enable again. */
   if ( the_thread ) {
     _Thread_Enable_dispatch();
-    sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
   }
 
   if ( server_id < 0 || server_id >= _Scheduler_CBS_Maximum_servers )
@@ -46,6 +45,7 @@ int _Scheduler_CBS_Detach_thread (
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   _Scheduler_CBS_Server_list[server_id]->task_id = -1;
+  sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
   sched_info->cbs_server = NULL;
 
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
