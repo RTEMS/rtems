@@ -298,6 +298,15 @@ AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
 ## Check if libc provides BSD's strlcpy/strlcat
 AC_CHECK_FUNCS(strlcpy strlcat)
 
+## Check if libc provides decl of utime
+## FIXME: utime has been deprecated in SUSv4.
+##        and is likely to be removed in future versions.
+## FIXME (BUG in newlib): SUSv4 saids including <utime.h> should be sufficient.
+AC_CHECK_DECLS([utime],,,[#include <sys/types.h>
+#include <utime.h>])
+## Check if libc provides decl of utimes
+AC_CHECK_DECLS([utimes],,,[#include <sys/time.h>])
+
 # ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")

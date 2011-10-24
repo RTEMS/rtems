@@ -1,5 +1,9 @@
 2011-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for decls of utime and utimes.
+
+2011-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1942/cpukit:
 	* score/src/schedulercbsdetachthread.c: Move initialization of var
 	"sched_info" down (Avoid it being used uninitialized).
