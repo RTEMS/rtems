@@ -122,15 +122,6 @@ extern "C" {
 #define fatal_posix_service_status( _stat, _desired, _msg ) \
   fatal_posix_service_status_with_level( _stat, _desired, _msg, 0 )
 
-#define fatal_posix_service_pointer_minus_one( _ptr, _msg ) \
-  if ( (_ptr != (void *)-1) ) { \
-    check_dispatch_disable_level( 0 ); \
-    printf( "\n%s FAILED -- expected (-1) got (%p - %d/%s)\n", \
-	    (_msg), _ptr, errno, strerror(errno) ); \
-    FLUSH_OUTPUT(); \
-    rtems_test_exit( -1 ); \
-  }
-
 #define fatal_posix_service_status_with_level( _stat, _desired, _msg, _level ) \
   do { \
     check_dispatch_disable_level( _level ); \

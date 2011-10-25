@@ -1,3 +1,8 @@
+2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/include/tmacros.h: 
+	Remove fatal_posix_service_pointer_minus_one (unused).
+
 2011-10-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/primode.h: New.
