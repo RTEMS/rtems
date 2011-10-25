@@ -65,8 +65,8 @@ void printdir( DIR *directory )
   d = readdir(directory);
 
   while (d) {
-    printf( "%-20s %8d %8d %6d   0x%04x\n",
-       d->d_name, (int)d->d_ino, (int)d->d_off, d->d_reclen, d->d_type );
+    printf( "%-20s %8ld %8" PRIdoff_t " %6d   0x%04x\n",
+       d->d_name, d->d_ino, d->d_off, d->d_reclen, d->d_type );
     d = readdir(directory);
 
   }
@@ -420,15 +420,15 @@ int main(
 
   printf( "\nSeek directory\n" );
   printf( "telldir() should report only sizeof(struct dirent) increments \n" );
-  printf( "in position. Sizeof(struct dirent): %ld\n",
-                          (unsigned long) sizeof(struct dirent) );
+  printf( "in position. Sizeof(struct dirent): %zd\n",
+                          sizeof(struct dirent) );
   rewinddir( directory );
   for( off=0 ; off<=200 ; off=off + sizeof(struct dirent) / 4 ) {
     seekdir( directory, off );
     printf(
-       "seeked to %2d -- currently at %2d\n",
-       (int)off,
-       (int)telldir(directory)
+       "seeked to %2" PRIdoff_t " -- currently at %2ld\n",
+       off,
+       telldir(directory)
     );
   }
 
