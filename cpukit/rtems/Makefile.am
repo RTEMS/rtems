@@ -80,86 +80,177 @@ include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/timer.inl
 
 ## src
-librtems_a_SOURCES = src/rtemsbuildid.c src/rtemsbuildname.c \
-    src/rtemsobjectgetname.c src/rtemsobjectsetname.c \
-    src/rtemsobjectidapimaximum.c src/rtemsobjectidapiminimum.c \
-    src/rtemsobjectidgetapi.c src/rtemsobjectidgetclass.c \
-    src/rtemsobjectidgetindex.c src/rtemsobjectidgetnode.c \
-    src/rtemsobjectapiminimumclass.c src/rtemsobjectapimaximumclass.c \
-    src/rtemsobjectgetapiname.c src/rtemsobjectgetapiclassname.c \
-    src/rtemsobjectgetclassinfo.c src/rtemsobjectgetclassicname.c
+librtems_a_SOURCES = src/rtemsbuildid.c
+librtems_a_SOURCES += src/rtemsbuildname.c
+librtems_a_SOURCES += src/rtemsobjectgetname.c
+librtems_a_SOURCES += src/rtemsobjectsetname.c
+librtems_a_SOURCES += src/rtemsobjectidapimaximum.c
+librtems_a_SOURCES += src/rtemsobjectidapiminimum.c
+librtems_a_SOURCES += src/rtemsobjectidgetapi.c
+librtems_a_SOURCES += src/rtemsobjectidgetclass.c
+librtems_a_SOURCES += src/rtemsobjectidgetindex.c
+librtems_a_SOURCES += src/rtemsobjectidgetnode.c
+librtems_a_SOURCES += src/rtemsobjectapiminimumclass.c
+librtems_a_SOURCES += src/rtemsobjectapimaximumclass.c
+librtems_a_SOURCES += src/rtemsobjectgetapiname.c
+librtems_a_SOURCES += src/rtemsobjectgetapiclassname.c
+librtems_a_SOURCES += src/rtemsobjectgetclassinfo.c
+librtems_a_SOURCES += src/rtemsobjectgetclassicname.c
 
 ## TASK_C_FILES
-librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
-    src/taskgetnote.c src/taskident.c src/taskinitusers.c \
-    src/taskissuspended.c src/taskmode.c src/taskrestart.c src/taskresume.c \
-    src/taskself.c src/tasksetnote.c src/tasksetpriority.c src/taskstart.c \
-    src/tasksuspend.c src/taskwakeafter.c src/taskwakewhen.c \
-    src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c \
-    src/taskvariable_invoke_dtor.c src/taskdata.c
+librtems_a_SOURCES += src/tasks.c
+librtems_a_SOURCES += src/taskcreate.c
+librtems_a_SOURCES += src/taskdelete.c
+librtems_a_SOURCES += src/taskgetnote.c
+librtems_a_SOURCES += src/taskident.c
+librtems_a_SOURCES += src/taskinitusers.c
+librtems_a_SOURCES += src/taskissuspended.c
+librtems_a_SOURCES += src/taskmode.c
+librtems_a_SOURCES += src/taskrestart.c
+librtems_a_SOURCES += src/taskresume.c
+librtems_a_SOURCES += src/taskself.c
+librtems_a_SOURCES += src/tasksetnote.c
+librtems_a_SOURCES += src/tasksetpriority.c
+librtems_a_SOURCES += src/taskstart.c
+librtems_a_SOURCES += src/tasksuspend.c
+librtems_a_SOURCES += src/taskwakeafter.c
+librtems_a_SOURCES += src/taskwakewhen.c
+librtems_a_SOURCES += src/taskvariableadd.c
+librtems_a_SOURCES += src/taskvariabledelete.c
+librtems_a_SOURCES += src/taskvariableget.c
+librtems_a_SOURCES += src/taskvariable_invoke_dtor.c
+librtems_a_SOURCES += src/taskdata.c
 
 ## RATEMON_C_FILES
-librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
-    src/ratemondelete.c src/ratemongetstatus.c src/ratemongetstatistics.c \
-    src/ratemonresetstatistics.c src/ratemonresetall.c \
-    src/ratemonreportstatistics.c src/ratemonident.c \
-    src/ratemonperiod.c src/ratemontimeout.c src/ratemondata.c
+librtems_a_SOURCES += src/ratemon.c
+librtems_a_SOURCES += src/ratemoncancel.c
+librtems_a_SOURCES += src/ratemoncreate.c
+librtems_a_SOURCES += src/ratemondelete.c
+librtems_a_SOURCES += src/ratemongetstatus.c
+librtems_a_SOURCES += src/ratemongetstatistics.c
+librtems_a_SOURCES += src/ratemonresetstatistics.c
+librtems_a_SOURCES += src/ratemonresetall.c
+librtems_a_SOURCES += src/ratemonreportstatistics.c
+librtems_a_SOURCES += src/ratemonident.c
+librtems_a_SOURCES += src/ratemonperiod.c
+librtems_a_SOURCES += src/ratemontimeout.c
+librtems_a_SOURCES += src/ratemondata.c
 
 ## INTR_C_FILES
-librtems_a_SOURCES += src/intrbody.c src/intrcatch.c
+librtems_a_SOURCES += src/intrbody.c
+librtems_a_SOURCES += src/intrcatch.c
 
 ## BARRIER_C_FILES
-librtems_a_SOURCES += src/barrier.c src/barriercreate.c src/barrierdelete.c \
-   src/barrierident.c src/barriertranslatereturncode.c src/barrierrelease.c \
-   src/barrierwait.c src/barrierdata.c
+librtems_a_SOURCES += src/barrier.c
+librtems_a_SOURCES += src/barriercreate.c
+librtems_a_SOURCES += src/barrierdelete.c
+librtems_a_SOURCES += src/barrierident.c
+librtems_a_SOURCES += src/barriertranslatereturncode.c
+librtems_a_SOURCES += src/barrierrelease.c
+librtems_a_SOURCES += src/barrierwait.c
+librtems_a_SOURCES += src/barrierdata.c
 
 ## CLOCK_C_FILES
-librtems_a_SOURCES += src/clockget.c src/clockgetsecondssinceepoch.c \
-    src/clockgettickspersecond.c src/clockgettickssinceboot.c \
-    src/clockgettod.c src/clockgettodtimeval.c src/clockgetuptime.c \
-    src/clockset.c src/clocksetnsecshandler.c src/clocktick.c \
-    src/clocktodtoseconds.c src/clocktodvalidate.c
+librtems_a_SOURCES += src/clockget.c
+librtems_a_SOURCES += src/clockgetsecondssinceepoch.c
+librtems_a_SOURCES += src/clockgettickspersecond.c
+librtems_a_SOURCES += src/clockgettickssinceboot.c
+librtems_a_SOURCES += src/clockgettod.c
+librtems_a_SOURCES += src/clockgettodtimeval.c
+librtems_a_SOURCES += src/clockgetuptime.c
+librtems_a_SOURCES += src/clockset.c
+librtems_a_SOURCES += src/clocksetnsecshandler.c
+librtems_a_SOURCES += src/clocktick.c
+librtems_a_SOURCES += src/clocktodtoseconds.c
+librtems_a_SOURCES += src/clocktodvalidate.c
 
 ## TIMER_C_FILES
-librtems_a_SOURCES += src/rtemstimer.c src/timercancel.c src/timercreate.c \
-    src/timerdelete.c src/timerfireafter.c src/timerfirewhen.c \
-    src/timergetinfo.c src/timerident.c src/timerreset.c src/timerserver.c \
-    src/timerserverfireafter.c src/timerserverfirewhen.c src/rtemstimerdata.c
+librtems_a_SOURCES += src/rtemstimer.c
+librtems_a_SOURCES += src/timercancel.c
+librtems_a_SOURCES += src/timercreate.c
+librtems_a_SOURCES += src/timerdelete.c
+librtems_a_SOURCES += src/timerfireafter.c
+librtems_a_SOURCES += src/timerfirewhen.c
+librtems_a_SOURCES += src/timergetinfo.c
+librtems_a_SOURCES += src/timerident.c
+librtems_a_SOURCES += src/timerreset.c
+librtems_a_SOURCES += src/timerserver.c
+librtems_a_SOURCES += src/timerserverfireafter.c
+librtems_a_SOURCES += src/timerserverfirewhen.c
+librtems_a_SOURCES += src/rtemstimerdata.c
 
 ## MESSAGE_QUEUE_C_FILES
-librtems_a_SOURCES += src/msg.c src/msgqallocate.c src/msgqbroadcast.c \
-    src/msgqcreate.c src/msgqdelete.c src/msgqflush.c \
-    src/msgqgetnumberpending.c src/msgqident.c src/msgqreceive.c \
-    src/msgqsend.c src/msgqtranslatereturncode.c src/msgqurgent.c \
-    src/msgdata.c
+librtems_a_SOURCES += src/msg.c
+librtems_a_SOURCES += src/msgqallocate.c
+librtems_a_SOURCES += src/msgqbroadcast.c
+librtems_a_SOURCES += src/msgqcreate.c
+librtems_a_SOURCES += src/msgqdelete.c
+librtems_a_SOURCES += src/msgqflush.c
+librtems_a_SOURCES += src/msgqgetnumberpending.c
+librtems_a_SOURCES += src/msgqident.c
+librtems_a_SOURCES += src/msgqreceive.c
+librtems_a_SOURCES += src/msgqsend.c
+librtems_a_SOURCES += src/msgqtranslatereturncode.c
+librtems_a_SOURCES += src/msgqurgent.c
+librtems_a_SOURCES += src/msgdata.c
 
 ## SEMAPHORE_C_FILES
-librtems_a_SOURCES += src/sem.c src/semcreate.c src/semdelete.c src/semident.c \
-    src/semobtain.c src/semrelease.c src/semflush.c \
-    src/semtranslatereturncode.c src/semdata.c
+librtems_a_SOURCES += src/sem.c
+librtems_a_SOURCES += src/semcreate.c
+librtems_a_SOURCES += src/semdelete.c
+librtems_a_SOURCES += src/semident.c
+librtems_a_SOURCES += src/semobtain.c
+librtems_a_SOURCES += src/semrelease.c
+librtems_a_SOURCES += src/semflush.c
+librtems_a_SOURCES += src/semtranslatereturncode.c
+librtems_a_SOURCES += src/semdata.c
 
 ## EVENT_C_FILES
-librtems_a_SOURCES += src/event.c src/eventreceive.c src/eventseize.c \
-    src/eventsend.c src/eventsurrender.c src/eventtimeout.c src/eventdata.c
+librtems_a_SOURCES += src/event.c
+librtems_a_SOURCES += src/eventreceive.c
+librtems_a_SOURCES += src/eventseize.c
+librtems_a_SOURCES += src/eventsend.c
+librtems_a_SOURCES += src/eventsurrender.c
+librtems_a_SOURCES += src/eventtimeout.c
+librtems_a_SOURCES += src/eventdata.c
 
 ## SIGNAL_C_FILES
-librtems_a_SOURCES += src/signal.c src/signalcatch.c src/signalsend.c
+librtems_a_SOURCES += src/signal.c
+librtems_a_SOURCES += src/signalcatch.c
+librtems_a_SOURCES += src/signalsend.c
 
 ## REGION_C_FILES
-librtems_a_SOURCES += src/region.c src/regioncreate.c src/regiondelete.c \
-    src/regionextend.c src/regiongetsegment.c src/regiongetsegmentsize.c \
-    src/regionident.c src/regionreturnsegment.c src/regiongetinfo.c \
-    src/regiongetfreeinfo.c src/regionresizesegment.c \
-    src/regionprocessqueue.c src/regiondata.c
+librtems_a_SOURCES += src/region.c
+librtems_a_SOURCES += src/regioncreate.c
+librtems_a_SOURCES += src/regiondelete.c
+librtems_a_SOURCES += src/regionextend.c
+librtems_a_SOURCES += src/regiongetsegment.c
+librtems_a_SOURCES += src/regiongetsegmentsize.c
+librtems_a_SOURCES += src/regionident.c
+librtems_a_SOURCES += src/regionreturnsegment.c
+librtems_a_SOURCES += src/regiongetinfo.c
+librtems_a_SOURCES += src/regiongetfreeinfo.c
+librtems_a_SOURCES += src/regionresizesegment.c
+librtems_a_SOURCES += src/regionprocessqueue.c
+librtems_a_SOURCES += src/regiondata.c
 
 ## PARTITION_C_FILES
-librtems_a_SOURCES += src/part.c src/partcreate.c src/partdelete.c \
-    src/partgetbuffer.c src/partident.c src/partreturnbuffer.c src/partdata.c
+librtems_a_SOURCES += src/part.c
+librtems_a_SOURCES += src/partcreate.c
+librtems_a_SOURCES += src/partdelete.c
+librtems_a_SOURCES += src/partgetbuffer.c
+librtems_a_SOURCES += src/partident.c
+librtems_a_SOURCES += src/partreturnbuffer.c
+librtems_a_SOURCES += src/partdata.c
 
 ## DPMEM_C_FILES
-librtems_a_SOURCES += src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
-    src/dpmemexternal2internal.c src/dpmemident.c \
-    src/dpmeminternal2external.c src/dpmemdata.c
+librtems_a_SOURCES += src/dpmem.c
+librtems_a_SOURCES += src/dpmemcreate.c
+librtems_a_SOURCES += src/dpmemdelete.c
+librtems_a_SOURCES += src/dpmemexternal2internal.c
+librtems_a_SOURCES += src/dpmemident.c
+librtems_a_SOURCES += src/dpmeminternal2external.c
+librtems_a_SOURCES += src/dpmemdata.c
 
 ## WORKSPACE_FILES
 librtems_a_SOURCES += src/workspace.c
@@ -168,8 +259,14 @@ librtems_a_SOURCES += src/attr.c
 
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
-librtems_a_SOURCES += src/eventmp.c src/mp.c src/msgmp.c src/partmp.c \
-    src/regionmp.c src/semmp.c src/signalmp.c src/taskmp.c
+librtems_a_SOURCES += src/eventmp.c
+librtems_a_SOURCES += src/mp.c
+librtems_a_SOURCES += src/msgmp.c
+librtems_a_SOURCES += src/partmp.c
+librtems_a_SOURCES += src/regionmp.c
+librtems_a_SOURCES += src/semmp.c
+librtems_a_SOURCES += src/signalmp.c
+librtems_a_SOURCES += src/taskmp.c
 endif
 
 include $(srcdir)/preinstall.am
