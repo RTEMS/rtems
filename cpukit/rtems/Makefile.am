@@ -257,6 +257,8 @@ librtems_a_SOURCES += src/workspace.c
 
 librtems_a_SOURCES += src/attr.c
 
+librtems_a_SOURCES += src/status.c
+
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
 librtems_a_SOURCES += src/eventmp.c

@@ -1,5 +1,13 @@
 2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/Makefile.am: Add src/status.c.
+	* rtems/include/rtems/rtems/status.h: Make
+	_Status_Object_name_errors_to_status an external variable.
+	* rtems/src/status.c: New (split out from
+	rtems/include/rtems/rtems/status.h).
+
+2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/Makefile.am: Reformat.
 
 2011-10-24	Ralf Corsépius <ralf.corsepius@rtems.org>

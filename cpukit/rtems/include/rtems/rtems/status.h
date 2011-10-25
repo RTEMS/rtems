@@ -188,22 +188,7 @@ typedef enum {
  *  This array is used to map SuperCore Object Handler return
  *  codes to Classic API status codes.
  */
-#ifdef RTEMS_API_INIT
-const rtems_status_code _Status_Object_name_errors_to_status[] = {
-  /** This maps OBJECTS_SUCCESSFUL to RTEMS_SUCCESSFUL. */
-  RTEMS_SUCCESSFUL,
-  /** This maps OBJECTS_INVALID_NAME to RTEMS_INVALID_NAME. */
-  RTEMS_INVALID_NAME,
-  /** This maps OBJECTS_INVALID_ADDRESS to RTEMS_INVALID_NAME. */
-  RTEMS_INVALID_ADDRESS,
-  /** This maps OBJECTS_INVALID_ID to RTEMS_INVALID_ADDRESS. */
-  RTEMS_INVALID_ID,
-  /** This maps OBJECTS_INVALID_NODE to RTEMS_INVALID_NODE. */
-  RTEMS_INVALID_NODE
-};
-#else
-extern rtems_status_code _Status_Object_name_errors_to_status[];
-#endif
+extern const rtems_status_code _Status_Object_name_errors_to_status[];
 
 /*
  *  Applications are allowed to use the macros to compare status codes.
