@@ -22,6 +22,16 @@
 #include <pmacros.h>
 #include "test_support.h"
 
+#define fatal_posix_sem( _ptr, _msg ) \
+  if ( (_ptr != SEM_FAILED) ) { \
+    check_dispatch_disable_level( 0 ); \
+    printf( "\n%s FAILED -- expected (-1) got (%p - %d/%s)\n", \
+	    (_msg), _ptr, errno, strerror(errno) ); \
+    FLUSH_OUTPUT(); \
+    rtems_test_exit( -1 ); \
+  }
+
+
 #define MAX_SEMS  10
 
 void *POSIX_Init(
@@ -175,8 +185,7 @@ void *POSIX_Init(
 
   puts( "Init: sem_open - UNSUCCESSFUL (ENAMETOOLONG)" );
   n_sem1 = sem_open(Get_Too_Long_Name(), O_CREAT, 0777, 1 );
-  fatal_posix_service_pointer_minus_one(
-    n_sem1, "sem_open error return status");
+  fatal_posix_sem( n_sem1, "sem_open error return status" );
   fatal_posix_service_status(
     errno, ENAMETOOLONG, "sem_open errorno ENAMETOOLONG" );
 
@@ -191,14 +200,12 @@ void *POSIX_Init(
 
   puts( "Init: sem_open - Create an Existing sem (EEXIST)" );
   n_sem2 = sem_open("sem1", O_CREAT | O_EXCL, 0777, 1);
-  fatal_posix_service_pointer_minus_one(
-    n_sem2, "sem_open error return status" );
+  fatal_posix_sem( n_sem2, "sem_open error return status" );
   fatal_posix_service_status( errno, EEXIST,  "sem_open errno EEXIST");
 
   puts( "Init: sem_open - Open new sem without create flag (ENOENT)" );
   n_sem2 = sem_open("sem3", O_EXCL, 0777, 1);
-  fatal_posix_service_pointer_minus_one(
-    n_sem2, "sem_open error return status" );
+  fatal_posix_sem( n_sem2, "sem_open error return status" );
   fatal_posix_service_status( errno, ENOENT,  "sem_open errno EEXIST");
 
   /*

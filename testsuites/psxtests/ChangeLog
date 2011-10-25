@@ -1,5 +1,12 @@
 2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psxmsgq01/init.c: Introduce fatal_posix_mqd.
+	Replace fatal_posix_service_pointer_minus_one with fatal_posix_mqd.
+	* psxsem01/init.c: Introduce fatal_posix_sem.
+	Replace fatal_posix_service_pointer_minus_one with fatal_posix_sem.
+
+2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* psxreaddir/test.c: Remove bogus casts.
 	Fix fprintf format strings.
 
