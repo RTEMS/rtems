@@ -303,6 +303,12 @@ extern IMFS_token_types IMFS_get_token(
 
 extern void IMFS_dump( void );
 
+/*
+ * Return the size of the largest file which can be created
+ * using the IMFS memory file type.
+ */
+extern int IMFS_memfile_maximum_size( void );
+
 extern void IMFS_initialize_jnode(
   IMFS_jnode_t        *the_jnode,
   IMFS_jnode_types_t   type,
