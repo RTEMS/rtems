@@ -1,5 +1,9 @@
 2011-10-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* mouse01/init.c: Account for extra message buffer size.
+
+2011-10-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* ftp01/init.c: Account for extra FTP worker task stack sizes.
 
 2011-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>

@@ -27,6 +27,8 @@
 #include "termios_testdriver_intr.h"
 #include "tmacros.h"
 
+#define UID_MESSAGE_COUNT 10
+
 extern const char *Mouse_Type_Long;
 extern const char *Mouse_Type_Short;
 extern const unsigned char Mouse_Actions[];
@@ -68,7 +70,7 @@ void register_it(void)
   char               name[5] = "mous";
 
   printf( "uid_open_queue() - mouse queue\n" );
-  rc = uid_open_queue( name, 0, 10 );
+  rc = uid_open_queue( name, 0, UID_MESSAGE_COUNT );
   rtems_test_assert( rc == 0 );
 
   printf( "uid_register_device() - OK\n");
@@ -154,6 +156,12 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS  1
 #define CONFIGURE_MAXIMUM_TIMERS 2
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( \
+    UID_MESSAGE_COUNT, \
+    sizeof(struct MW_UID_MESSAGE) \
+  )
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT
