@@ -1,5 +1,10 @@
 2011-10-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* ftpd/ftpd.h, ftpd/ftpd.c: Moved buffer and stack size constants into
+	header file.
+
+2011-10-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* ftpd/ftpd.c: Increased data buffer size to 4096 bytes.  Use
 	RTEMS_MINIMUM_STACK_SIZE plus the data buffer size for worker thread
 	stack size.

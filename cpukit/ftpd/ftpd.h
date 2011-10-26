@@ -15,6 +15,13 @@ extern "C" {
 
 #define FTPD_CONTROL_PORT   21
 
+/* Various buffer sizes */
+enum {
+  FTPD_BUFSIZE  = 256,       /* Size for temporary buffers */
+  FTPD_DATASIZE = 4 * 1024,      /* Size for file transfer buffers */
+  FTPD_STACKSIZE = RTEMS_MINIMUM_STACK_SIZE + FTPD_DATASIZE /* Tasks stack size */
+};
+
 /* FTPD access control flags */
 enum
 {
