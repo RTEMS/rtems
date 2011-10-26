@@ -1,3 +1,7 @@
+2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/can/occan.c: Comment out unused var "tmp".
+
 2011-10-07	Daniel Hellstrom <daniel@gaisler.com>
 
 	PR 1933/cpukit

@@ -399,7 +399,7 @@ static void pelican_init(occan_priv *priv){
 }
 
 static void pelican_open(occan_priv *priv){
-	unsigned char tmp;
+	/* unsigned char tmp; */
 	int ret;
 
 	/* Set defaults */
@@ -430,11 +430,11 @@ static void pelican_open(occan_priv *priv){
 	priv->regs->inten = 0;
 
 	/* clear pending interrupts by reading */
-	tmp = READ_REG(&priv->regs->intflags);
+	/* tmp = */ READ_REG(&priv->regs->intflags);
 }
 
 static int pelican_start(occan_priv *priv){
-	unsigned char tmp;
+	/* unsigned char tmp; */
 	/* Start HW communication */
 
 	if ( !priv->rxfifo || !priv->txfifo )
@@ -450,7 +450,7 @@ static int pelican_start(occan_priv *priv){
 	priv->status = 0;
 
 	/* clear pending interrupts */
-	tmp = READ_REG(&priv->regs->intflags);
+	/* tmp = */ READ_REG(&priv->regs->intflags);
 
 	/* clear error counters */
 	priv->regs->rx_err_cnt = 0;
