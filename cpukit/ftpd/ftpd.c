@@ -240,8 +240,8 @@
 enum
 {
   FTPD_BUFSIZE  = 256,       /* Size for temporary buffers */
-  FTPD_DATASIZE = 1024,      /* Size for file transfer buffers */
-  FTPD_STACKSIZE = 8 * 1024, /* Tasks stack size */
+  FTPD_DATASIZE = 4 * 1024,      /* Size for file transfer buffers */
+  FTPD_STACKSIZE = RTEMS_MINIMUM_STACK_SIZE + FTPD_DATASIZE /* Tasks stack size */
 };
 
 /* Event to be used by session tasks for waiting */
@@ -2087,7 +2087,7 @@ rtems_initialize_ftpd(void)
   }
 
   sc = rtems_task_create(rtems_build_name('F', 'T', 'P', 'D'),
-    priority, FTPD_STACKSIZE,
+    priority, RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR |
     RTEMS_INTERRUPT_LEVEL(0),
     RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
