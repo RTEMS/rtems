@@ -4,15 +4,39 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = imfs_fserror imfs_fslink imfs_fspatheval imfs_fspermission\
-         imfs_fsrdwr imfs_fssymlink imfs_fstime mdosfs_fserror\
-         mdosfs_fspatheval mdosfs_fsrdwr mdosfs_fstime mimfs_fserror\
-         mimfs_fslink mimfs_fspatheval mimfs_fspermission\
-         mimfs_fsrdwr mimfs_fssymlink mimfs_fstime mrfs_fserror\
-         mrfs_fslink mrfs_fspatheval mrfs_fspermission mrfs_fsrdwr\
-         mrfs_fssymlink mrfs_fstime
-DIST_SUBDIRS = $(SUBDIRS) support
-EXTRA_DIST = support/ramdisk_support.c support/ramdisk_support.h support/fstest_support.c support/fstest_support.h
+SUBDIRS = 
+SUBDIRS += imfs_fserror
+SUBDIRS += imfs_fslink
+SUBDIRS += imfs_fspatheval
+SUBDIRS += imfs_fspermission
+SUBDIRS += imfs_fsrdwr
+SUBDIRS += imfs_fssymlink
+SUBDIRS += imfs_fstime
+SUBDIRS += mdosfs_fserror
+SUBDIRS += mdosfs_fspatheval
+SUBDIRS += mdosfs_fsrdwr
+SUBDIRS += mdosfs_fstime
+SUBDIRS += mimfs_fserror
+SUBDIRS += mimfs_fslink
+SUBDIRS += mimfs_fspatheval
+SUBDIRS += mimfs_fspermission
+SUBDIRS += mimfs_fsrdwr
+SUBDIRS += mimfs_fssymlink
+SUBDIRS += mimfs_fstime
+SUBDIRS += mrfs_fserror
+SUBDIRS += mrfs_fslink
+SUBDIRS += mrfs_fspatheval
+SUBDIRS += mrfs_fspermission
+SUBDIRS += mrfs_fsrdwr
+SUBDIRS += mrfs_fssymlink
+SUBDIRS += mrfs_fstime
+
+EXTRA_DIST =
+EXTRA_DIST += support/ramdisk_support.c
+EXTRA_DIST += support/ramdisk_support.h
+EXTRA_DIST += support/fstest_support.c
+EXTRA_DIST += support/fstest_support.h
+EXTRA_DIST += support/fstest.h
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

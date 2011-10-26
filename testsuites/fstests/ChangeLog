@@ -1,3 +1,9 @@
+2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix DIST_SUBDIRS.
+	Reformat.
+	Add support/fstest.h.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com
 
 	* mrfs_support/fs_support.c: Resolved name conflict that was causing a
