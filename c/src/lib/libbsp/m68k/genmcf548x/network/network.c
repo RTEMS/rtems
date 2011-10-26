@@ -968,7 +968,6 @@ static void mcf548x_fec_rxDaemon(void *arg){
   rtems_event_set events;
   size_t len = 1;
   MCD_bufDescFec *bd;
-  void	    *dptr;
 
   /*
    * Input packet handling loop
@@ -996,7 +995,7 @@ static void mcf548x_fec_rxDaemon(void *arg){
       /*
        * Remember the data pointer from this transfer.
        */
-      dptr = GET_BD_BUFFER(bd);
+      GET_BD_BUFFER(bd);
       m    = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = (len
 				    - sizeof(uint32_t)

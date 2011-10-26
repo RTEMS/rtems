@@ -1,3 +1,7 @@
+2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* network/network.c: Remove unused var "dptr".
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* startup/bspstart.c:
