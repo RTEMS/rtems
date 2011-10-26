@@ -295,9 +295,7 @@ rtems_monitor_reset_cmd(
 void
 rtems_monitor_wakeup(void)
 {
-    rtems_status_code status;
-
-    status = rtems_event_send(rtems_monitor_task_id, MONITOR_WAKEUP_EVENT);
+    rtems_event_send(rtems_monitor_task_id, MONITOR_WAKEUP_EVENT);
 }
 
 void rtems_monitor_debugger_cmd(

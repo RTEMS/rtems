@@ -1,3 +1,8 @@
+2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/monitor/mon-monitor.c (rtems_monitor_wakeup):
+	Remove unused var "status" (Avoid warning). 
+
 2011-10-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* ftpd/ftpd.h, ftpd/ftpd.c: Moved buffer and stack size constants into
