@@ -1,3 +1,7 @@
+2011-10-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* ftp01/init.c: Account for extra FTP worker task stack sizes.
+
 2011-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* malloc04/init.c: Define p1, p2, p3, p4 extern (Avoid warnings).

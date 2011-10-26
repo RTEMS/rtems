@@ -31,13 +31,17 @@
 
 struct rtems_bsdnet_config rtems_bsdnet_config;
 
+#define FTP_WORKER_TASK_COUNT 2
+
+#define FTP_WORKER_TASK_EXTRA_STACK (FTP_WORKER_TASK_COUNT * FTPD_STACKSIZE)
+
 struct rtems_ftpd_configuration rtems_ftpd_configuration = {
   .priority = 90,
   .max_hook_filesize = 0,
   .port = 21,
   .hooks = NULL,
   .root = NULL,
-  .tasks_count = 2,
+  .tasks_count = FTP_WORKER_TASK_COUNT,
   .idle = 0,
   .access = 0
 };
@@ -203,8 +207,10 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_MAXIMUM_DRIVERS 2
 
-#define CONFIGURE_MAXIMUM_TASKS 5
+#define CONFIGURE_MAXIMUM_TASKS (3 + FTP_WORKER_TASK_COUNT)
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
+
+#define CONFIGURE_EXTRA_TASK_STACKS FTP_WORKER_TASK_EXTRA_STACK
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
