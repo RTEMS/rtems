@@ -96,7 +96,6 @@ console_fns ns16550_fns_polled = {
 NS16550_STATIC void ns16550_init(int minor)
 {
   uintptr_t               pNS16550;
-  uint8_t                 ucTrash;
   uint8_t                 ucDataByte;
   uint32_t                ulBaudDivisor;
   ns16550_context        *pns16550Context;
@@ -156,8 +155,8 @@ NS16550_STATIC void ns16550_init(int minor)
   /* And open interrupt tristate line */
   (*setReg)(pNS16550, NS16550_MODEM_CONTROL,pns16550Context->ucModemCtrl);
 
-  ucTrash = (*getReg)(pNS16550, NS16550_LINE_STATUS );
-  ucTrash = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER );
+  (*getReg)(pNS16550, NS16550_LINE_STATUS );
+  (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER );
 }
 
 /*
