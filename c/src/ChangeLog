@@ -1,3 +1,8 @@
+2011-10-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1944/misc
+	* libchip/serial/mc68681.c: Remove #if 0.
+
 2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/serial/ns16550.c (ns16550_init): 

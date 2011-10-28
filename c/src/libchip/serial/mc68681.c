@@ -339,11 +339,8 @@ MC68681_STATIC int mc68681_close(
   /*
    *  Disable interrupts from this channel and then disable it totally.
    */
-
-#if 0
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
-#endif
 
   return(RTEMS_SUCCESSFUL);
 }
