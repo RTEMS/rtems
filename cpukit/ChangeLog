@@ -1,3 +1,7 @@
+2011-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/newlibc_exit.c: Don't undef __USE_INIT_FINI__.
+
 2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/monitor/mon-monitor.c (rtems_monitor_wakeup):

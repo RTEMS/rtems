@@ -122,9 +122,6 @@ void libc_wrapup(void)
 /* FIXME: These defines are a blatant hack */
   #define EXIT_SYMBOL _exit
 
-  #if defined(__AVR__)
-    #undef __USE_INIT_FINI__
-  #endif
   #if defined(__USE_INIT_FINI__)
     #if defined(__m32r__)
       #define FINI_SYMBOL __fini
