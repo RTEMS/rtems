@@ -1,3 +1,9 @@
+2011-10-31	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1947/doc
+	* started/buildrt.t: Make note that native toolset is needed to
+	configure and build RTEMS.
+
 2011-10-05	Joel Sherrill <joel.sherrill@oarcorp.com>
 		Petr Benes <benesp16@fel.cvut.cz>
 

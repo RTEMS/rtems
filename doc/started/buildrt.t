@@ -156,6 +156,12 @@ disabled. Your application does not have to use networking but it must
 be enabled.  Thus the RTEMS configuration for a GNAT/RTEMS environment
 MUST include the @code{--enable-posix --enable-networking} flag.
 
+@b{NOTE}: Building RTEMS requires that a few support programs be compiled
+natively.  This means there must be a native toolchain installed on your
+development host. You will need to have a native compiler such as @i{gcc}
+or @i{cc} in your execution path.  If you cannot compile, link and execute
+a native hello world program, then you will be unable to build RTEMS.
+
 The following shows the command sequence required to configure,
 compile, and install RTEMS with the POSIX API, FreeBSD TCP/IP,
 and C++ support disabled.  RTEMS will be built to target
