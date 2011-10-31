@@ -21,6 +21,6 @@ GCC_OPTS += --languages=cxx
 
 GDB_VERS = 7.3.1
 GDB_PKGVERS = $(GDB_VERS)
-GDB_RPMREL = 1
+GDB_RPMREL = 2
 include ../gdb.am
 GDB_OPTS += --disable-infos
