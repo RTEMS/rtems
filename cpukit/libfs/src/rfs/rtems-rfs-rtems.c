@@ -106,7 +106,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
     }
     
     /*
-     * Is this the end of the pathname we where given ?
+     * Is this the end of the pathname we were given ?
      */
     if ((*path == '\0') || (pathlen == 0))
       break;
@@ -137,7 +137,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
     }
 
     /*
-     * Eat any separators at start of the path.
+     * Eat any separators at the start of the path.
      */
     stripped = rtems_filesystem_prefix_separators (path, pathlen);
     path += stripped;
@@ -146,7 +146,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
 
     /*
      * If the node is the current directory and there is more path to come move
-     * on it else we are at the inode we want.
+     * on to it otherwise we are at the inode we want.
      */
     if (rtems_rfs_current_dir (node))
     {
@@ -166,7 +166,8 @@ rtems_rfs_rtems_eval_path (const char*                       path,
     if (rtems_rfs_parent_dir (node))
     {
       /*
-       * If we are at root inode of the file system we have a crossmount path.
+       * If we are at the root inode of the file system we have a crossmount
+       * path.
        */
       if (ino == RTEMS_RFS_ROOT_INO)
       {
@@ -183,7 +184,9 @@ rtems_rfs_rtems_eval_path (const char*                       path,
       /*
        * We need to find the parent of this node.
        */
-      rc = rtems_rfs_dir_lookup_ino (fs, &inode, "..", 2, &ino, &doff);
+      rc = rtems_rfs_dir_lookup_ino (fs, &inode,
+                                     RTEMS_RFS_PARENT_DIR_STR,
+                                     RTEMS_RFS_PARENT_DIR_SIZE, &ino, &doff);
       if (rc > 0)
       {
         rtems_rfs_inode_close (fs, &inode);
@@ -308,7 +311,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
     }
     
     /*
-     * Is this the end of the pathname we where given ?
+     * Is this the end of the pathname we were given ?
      */
     if (path == *name)
       break;
@@ -335,7 +338,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
 
     /*
      * If the node is the current directory and there is more path to come move
-     * on it else we are at the inode we want.
+     * on to it otherwise we are at the inode we want.
      */
     if (rtems_rfs_current_dir (node))
     {
@@ -384,7 +387,9 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
       /*
        * We need to find the parent of this node.
        */
-      rc = rtems_rfs_dir_lookup_ino (fs, &inode, "..", 2, &ino, &doff);
+      rc = rtems_rfs_dir_lookup_ino (fs, &inode,
+                                     RTEMS_RFS_PARENT_DIR_STR,
+                                     RTEMS_RFS_PARENT_DIR_SIZE, &ino, &doff);
       if (rc > 0)
       {
         rtems_rfs_inode_close (fs, &inode);
@@ -1224,8 +1229,40 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
 {
   rtems_rfs_rtems_private* rtems;
   rtems_rfs_file_system*   fs;
+  uint32_t                 flags = 0;
+  uint32_t                 max_held_buffers = RTEMS_RFS_FS_MAX_HELD_BUFFERS;
+  const char*              options = data;
   int                      rc;
 
+  /*
+   * Parse the options the user specifiies.
+   */
+  while (options)
+  {
+    printf ("options=%s\n", options);
+    if (strncmp (options, "hold-bitmaps",
+                 sizeof ("hold-bitmaps") - 1) == 0)
+      flags |= RTEMS_RFS_FS_BITMAPS_HOLD;
+    else if (strncmp (options, "no-local-cache",
+                      sizeof ("no-local-cache") - 1) == 0)
+      flags |= RTEMS_RFS_FS_NO_LOCAL_CACHE;
+    else if (strncmp (options, "max-held-bufs",
+                      sizeof ("max-held-bufs") - 1) == 0)
+    {
+      max_held_buffers = strtoul (options + sizeof ("max-held-bufs"), 0, 0);
+    }
+    else
+      return rtems_rfs_rtems_error ("initialise: invalid option", EINVAL);
+
+    options = strchr (options, ',');
+    if (options)
+    {
+      ++options;
+      if (*options == '\0')
+        options = NULL;
+    }
+  }
+  
   rtems = malloc (sizeof (rtems_rfs_rtems_private));
   if (!rtems)
     return rtems_rfs_rtems_error ("initialise: local data", ENOMEM);
@@ -1247,7 +1284,7 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
     return rtems_rfs_rtems_error ("initialise: cannot lock access  mutex", rc);
   }
   
-  rc = rtems_rfs_fs_open (mt_entry->dev, rtems, 0, &fs);
+  rc = rtems_rfs_fs_open (mt_entry->dev, rtems, flags, max_held_buffers, &fs);
   if (rc)
   {
     free (rtems);

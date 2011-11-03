@@ -384,11 +384,14 @@ uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
  * @param name The device to open.
  * @param fs The file system data filled in by this call.
  * @param user A pointer to user data.
+ * @param flags The initial set of user flags for the file system.
+ * @param max_held_buffers The maximum number of buffers the RFS holds.
  * @return int The error number (errno). No error if 0.
  */
 int rtems_rfs_fs_open (const char*             name,
                        void*                   user,
                        uint32_t                flags,
+                       uint32_t                max_held_buffers,
                        rtems_rfs_file_system** fs);
 
 /**

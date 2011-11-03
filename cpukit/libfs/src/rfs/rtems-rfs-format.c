@@ -465,7 +465,9 @@ rtems_rfs_write_root_dir (const char* name)
   /*
    * External API so returns -1.
    */
-  rc = rtems_rfs_fs_open (name, NULL, RTEMS_RFS_FS_FORCE_OPEN, &fs);
+  rc = rtems_rfs_fs_open (name, NULL,
+                          RTEMS_RFS_FS_FORCE_OPEN | RTEMS_RFS_FS_NO_LOCAL_CACHE,
+                          0, &fs);
   if (rc < 0)
   {
     printf ("rtems-rfs: format: file system open failed: %d: %s\n",
