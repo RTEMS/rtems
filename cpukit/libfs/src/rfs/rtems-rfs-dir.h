@@ -29,13 +29,34 @@
 #include <rtems/rfs/rtems-rfs-inode.h>
 
 /**
+ * The current directory string as held in directory lists.
+ */
+#define RTEMS_RFS_CURRENT_DIR_STR "."
+
+/**
+ * The size of the current directory.
+ */
+#define RTEMS_RFS_CURRENT_DIR_SIZE (1)
+
+/**
  * Test if the path provided is a current directory.
  *
  * @param _p Pointer to the path string.
  * @return bool True if the path is a current directory.
  */
 #define rtems_rfs_current_dir(_p) \
-  ((_p[0] == '.') && ((_p[1] == '\0') || rtems_filesystem_is_separator (_p[1])))
+  ((_p[0] == RTEMS_RFS_CURRENT_DIR_STR[0]) && \
+   ((_p[1] == '\0') || rtems_filesystem_is_separator (_p[1])))
+
+/**
+ * The parent directory string as held in directory lists.
+ */
+#define RTEMS_RFS_PARENT_DIR_STR ".."
+
+/**
+ * The size of the parent directory.
+ */
+#define RTEMS_RFS_PARENT_DIR_SIZE (2)
 
 /**
  * Test if the path provided is a parent directory.
@@ -44,7 +65,8 @@
  * @return bool True if the path is a parent directory.
  */
 #define rtems_rfs_parent_dir(_p) \
-  ((_p[0] == '.') && (_p[1] == '.') && \
+  ((_p[0] == RTEMS_RFS_PARENT_DIR_STR[0]) && \
+   (_p[1] == RTEMS_RFS_PARENT_DIR_STR[1]) && \
    ((_p[2] == '\0') || rtems_filesystem_is_separator (_p[2])))
 
 /**
