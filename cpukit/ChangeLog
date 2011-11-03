@@ -1,3 +1,13 @@
+2011-11-03	Chris Johns <chrisj@rtems.org>
+
+	PR 1948/filesystem
+	* libfs/src/rfs/rtems-rfs-file-system.c,
+	libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-format.c, libfs/src/rfs/rtems-rfs-rtems.c:
+	Add support for mount passing an ASCIIZ string containing
+	configuration options.
+	* libblock/src/bdbuf.c: Fix state labels in trace output.
+
 2011-10-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/serdbg/serdbg.h (putDebugChar, getDebugChar):

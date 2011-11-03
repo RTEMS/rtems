@@ -196,6 +196,7 @@ int
 rtems_rfs_fs_open (const char*             name,
                    void*                   user,
                    uint32_t                flags,
+                   uint32_t                max_held_buffers,
                    rtems_rfs_file_system** fs)
 {
   rtems_rfs_group*       group;
@@ -224,7 +225,7 @@ rtems_rfs_fs_open (const char*             name,
   rtems_chain_initialize_empty (&(*fs)->release_modified);
   rtems_chain_initialize_empty (&(*fs)->file_shares);
 
-  (*fs)->max_held_buffers = RTEMS_RFS_FS_MAX_HELD_BUFFERS;
+  (*fs)->max_held_buffers = max_held_buffers;
   (*fs)->buffers_count = 0;
   (*fs)->release_count = 0;
   (*fs)->release_modified_count = 0;

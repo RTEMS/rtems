@@ -1268,8 +1268,40 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
 {
   rtems_rfs_rtems_private* rtems;
   rtems_rfs_file_system*   fs;
+  uint32_t                 flags = 0;
+  uint32_t                 max_held_buffers = RTEMS_RFS_FS_MAX_HELD_BUFFERS;
+  const char*              options = data;
   int                      rc;
 
+  /*
+   * Parse the options the user specifiies.
+   */
+  while (options)
+  {
+    printf ("options=%s\n", options);
+    if (strncmp (options, "hold-bitmaps",
+                 sizeof ("hold-bitmaps") - 1) == 0)
+      flags |= RTEMS_RFS_FS_BITMAPS_HOLD;
+    else if (strncmp (options, "no-local-cache",
+                      sizeof ("no-local-cache") - 1) == 0)
+      flags |= RTEMS_RFS_FS_NO_LOCAL_CACHE;
+    else if (strncmp (options, "max-held-bufs",
+                      sizeof ("max-held-bufs") - 1) == 0)
+    {
+      max_held_buffers = strtoul (options + sizeof ("max-held-bufs"), 0, 0);
+    }
+    else
+      return rtems_rfs_rtems_error ("initialise: invalid option", EINVAL);
+
+    options = strchr (options, ',');
+    if (options)
+    {
+      ++options;
+      if (*options == '\0')
+        options = NULL;
+    }
+  }
+  
   rtems = malloc (sizeof (rtems_rfs_rtems_private));
   if (!rtems)
     return rtems_rfs_rtems_error ("initialise: local data", ENOMEM);
@@ -1291,7 +1323,7 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
     return rtems_rfs_rtems_error ("initialise: cannot lock access  mutex", rc);
   }
   
-  rc = rtems_rfs_fs_open (mt_entry->dev, rtems, 0, &fs);
+  rc = rtems_rfs_fs_open (mt_entry->dev, rtems, flags, max_held_buffers, &fs);
   if (rc)
   {
     free (rtems);

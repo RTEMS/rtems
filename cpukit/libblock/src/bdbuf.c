@@ -291,7 +291,7 @@ void
 rtems_bdbuf_show_users (const char* where, rtems_bdbuf_buffer* bd)
 {
   const char* states[] =
-    { "EM", "FR", "CH", "AC", "AM", "MD", "SY", "TR" };
+    { "FR", "EM", "CH", "AC", "AM", "MD", "SY", "TR" };
 
   printf ("bdbuf:users: %15s: [%" PRIu32 " (%s)] %td:%td = %" PRIu32 " %s\n",
           where,
