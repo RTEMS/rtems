@@ -1,3 +1,14 @@
+2011-11-03      Chris Johns <chrisj@rtems.org>
+
+	PR 1948/filesystem
+	* libfs/src/rfs/rtems-rfs-file-system.c,
+	libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-format.c, libfs/src/rfs/rtems-rfs-rtems.c:
+	Add support for mount passing an ASCIIZ string containing
+	configuration options. Remove the hardcoded dir string and
+	size. Fix comments.
+	* libblock/src/bdbuf.c: Fix state labels in trace output.
+
 2011-10-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/newlibc_exit.c: Don't undef __USE_INIT_FINI__.
