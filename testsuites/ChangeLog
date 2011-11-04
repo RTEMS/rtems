@@ -1,3 +1,7 @@
+2011-11-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* support/src/test_support.c: Avoid magic numbers.
+
 2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* support/include/tmacros.h: 

@@ -54,7 +54,7 @@ void Allocate_majority_of_workspace( int smallest )
 
   do {
     result = rtems_workspace_allocate(
-      info.Free.largest-16,
+      info.Free.largest - HEAP_BLOCK_HEADER_SIZE,
       &temp
     );
     if ((!result) || (!temp))
@@ -72,7 +72,7 @@ void Allocate_majority_of_heap( int smallest )
   puts("Allocate_majority_of_heap: ");
   size = malloc_free_space();
   do {
-    temp = malloc( size-16 );
+    temp = malloc( size - HEAP_BLOCK_HEADER_SIZE );
     if (!temp)
       perror("Unable to allocate from workspace");
     size = malloc_free_space();
