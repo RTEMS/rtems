@@ -497,8 +497,8 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
  *     RC_OK on success, or -1 if error occured (errno
  *     set apropriately).
  */
-rtems_off64_t
-msdos_dir_lseek(rtems_libio_t *iop, rtems_off64_t offset, int whence)
+off_t        
+msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
 {
     switch (whence)
     {

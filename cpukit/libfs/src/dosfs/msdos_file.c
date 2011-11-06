@@ -222,8 +222,8 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
  *     new offset on success, or -1 if error occured (errno set
  *     appropriately).
  */
-rtems_off64_t
-msdos_file_lseek(rtems_libio_t *iop, rtems_off64_t offset, int whence)
+off_t        
+msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -301,7 +301,7 @@ msdos_file_stat(
  *     RC_OK on success, or -1 if error occured (errno set appropriately).
  */
 int
-msdos_file_ftruncate(rtems_libio_t *iop, rtems_off64_t length)
+msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;

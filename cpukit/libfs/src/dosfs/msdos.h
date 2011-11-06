@@ -291,9 +291,9 @@ ssize_t msdos_file_write(
   size_t         count            /* IN  */
 );
 
-rtems_off64_t msdos_file_lseek(
+off_t msdos_file_lseek(
   rtems_libio_t        *iop,              /* IN  */
-  rtems_off64_t         offset,           /* IN  */
+  off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
 );
 
@@ -305,7 +305,7 @@ int msdos_file_stat(
 int
 msdos_file_ftruncate(
   rtems_libio_t *iop,               /* IN  */
-  rtems_off64_t  length            /* IN  */
+  off_t          length            /* IN  */
 );
 
 int msdos_file_sync(rtems_libio_t *iop);
@@ -342,9 +342,9 @@ ssize_t msdos_dir_read(
   size_t         count             /* IN  */
 );
 
-rtems_off64_t msdos_dir_lseek(
+off_t msdos_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
-  rtems_off64_t         offset,           /* IN  */
+  off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
 );
 
