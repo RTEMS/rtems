@@ -32,9 +32,9 @@
 #include <inttypes.h>
 
 #if SIZEOF_OFF_T == 8
-#define PRIdoff_t PRIo64
+#define PRIooff_t PRIo64
 #elif SIZEOF_OFF_T == 4
-#define PRIdoff_t PRIo32
+#define PRIooff_t PRIo32
 #else
 #error "unsupported size of off_t"
 #endif
@@ -630,7 +630,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       dirent->d_namlen = elength;
       
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-        printf ("rtems-rfs: dir-read: found off:%" PRIdoff_t " ino:%ld name=%s\n",
+        printf ("rtems-rfs: dir-read: found off:%" PRIooff_t " ino:%ld name=%s\n",
                 dirent->d_off, dirent->d_ino, dirent->d_name);
       break;
     }
