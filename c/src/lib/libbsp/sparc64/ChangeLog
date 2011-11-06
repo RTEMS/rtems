@@ -1,5 +1,9 @@
 2011-11-06	Gedare Bloom <gedare@rtems.org>
 
+	* shared/console/conscfg.c: Whitespace and style fixes.
+
+2011-11-06	Gedare Bloom <gedare@rtems.org>
+
 	* shared/console/conscfg.c: Give console port a name.
 
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
