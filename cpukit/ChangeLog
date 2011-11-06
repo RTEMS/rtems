@@ -1,5 +1,12 @@
 2011-11-06      Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	PR1945/cpukit
+	* libcsupport/include/rtems/libio.h: Mark rtems_off64_t as
+	deprecated.
+	Replace rtems_off64_t with off_t.
+
+2011-11-06      Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/rfs/rtems-rfs-dir.c: Rename PRIdoff_t into PRIooff_t.
 
 2011-11-04      Chris Johns <chrisj@rtems.org>

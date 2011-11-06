@@ -49,11 +49,7 @@ extern "C" {
  * @{
  */
 
-/**
- * A 64-bit file offset for internal use by RTEMS. Based on the Newlib
- * type.
- */
-typedef _off64_t rtems_off64_t;
+typedef off_t rtems_off64_t __attribute__((deprecated));
 
 /**
  * @brief File system node types.
@@ -126,9 +122,9 @@ typedef int (*rtems_filesystem_ioctl_t)(
  *  This type defines the interface to the lseek(2) system call 
  *  support which is provided by a file system implementation.
  */
-typedef rtems_off64_t (*rtems_filesystem_lseek_t)(
+typedef off_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
-  rtems_off64_t  length,
+  off_t          length,
   int            whence
 );
 
@@ -156,7 +152,7 @@ typedef int (*rtems_filesystem_fchmod_t)(
  */
 typedef int (*rtems_filesystem_ftruncate_t)(
   rtems_libio_t *iop,
-  rtems_off64_t  length
+  off_t          length
 );
 
 /**
@@ -417,9 +413,9 @@ int rtems_filesystem_default_ioctl(
  *  This method defines the interface to the default lseek(2) system call 
  *  support which is provided by a file system implementation.
  */
-rtems_off64_t rtems_filesystem_default_lseek(
+off_t rtems_filesystem_default_lseek(
   rtems_libio_t *iop,
-  rtems_off64_t  length,
+  off_t          length,
   int            whence
 );
 
@@ -447,7 +443,7 @@ int rtems_filesystem_default_fchmod(
  */
 int rtems_filesystem_default_ftruncate(
   rtems_libio_t *iop,
-  rtems_off64_t  length
+  off_t          length
 );
 
 /**
@@ -1112,8 +1108,8 @@ extern const rtems_filesystem_limits_and_options_t rtems_filesystem_default_path
  */
 struct rtems_libio_tt {
   rtems_driver_name_t                    *driver;
-  rtems_off64_t                           size;      /* size of file */
-  rtems_off64_t                           offset;    /* current offset into file */
+  off_t                                   size;      /* size of file */
+  off_t                                   offset;    /* current offset into file */
   uint32_t                                flags;
   rtems_filesystem_location_info_t        pathinfo;
   rtems_id                                sem;
@@ -1129,7 +1125,7 @@ struct rtems_libio_tt {
  */
 typedef struct {
   rtems_libio_t          *iop;
-  rtems_off64_t           offset;
+  off_t                   offset;
   char                   *buffer;
   uint32_t                count;
   uint32_t                flags;
@@ -1208,9 +1204,9 @@ typedef int (*rtems_libio_ioctl_t)(
   void       *buffer
 );
 
-typedef rtems_off64_t (*rtems_libio_lseek_t)(
+typedef off_t (*rtems_libio_lseek_t)(
   int           fd,
-  rtems_off64_t offset,
+  off_t         offset,
   int           whence
 );
 
