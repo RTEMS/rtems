@@ -116,9 +116,9 @@ int IMFS_fifo_ioctl(
   IMFS_FIFO_RETURN(err);
 }
 
-rtems_off64_t IMFS_fifo_lseek(
+off_t IMFS_fifo_lseek(
   rtems_libio_t *iop,
-  rtems_off64_t  offset,
+  off_t          offset,
   int            whence
 )
 {

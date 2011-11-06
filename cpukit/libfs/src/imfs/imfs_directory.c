@@ -181,9 +181,9 @@ int imfs_dir_close(
  *     SEEK_END - N/A --> This will cause an EINVAL to be returned.
  */
 
-rtems_off64_t imfs_dir_lseek(
+off_t imfs_dir_lseek(
   rtems_libio_t  *iop,
-  rtems_off64_t   offset,
+  off_t           offset,
   int             whence
 )
 {

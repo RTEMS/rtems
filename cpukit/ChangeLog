@@ -8,8 +8,10 @@
 	libfs/src/defaults/default_lseek.c:
 	Replace rtems_off64_t with off_t.
 	* libfs/src/dosfs/msdos.h, libfs/src/dosfs/msdos_dir.c,
-	libfs/src/dosfs/msdos_file.c:
-	Replace rtems_off64_t with off_t.
+	libfs/src/dosfs/msdos_file.c: Replace rtems_off64_t with off_t.
+	* libfs/src/imfs/deviceio.c, libfs/src/imfs/imfs.h,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_fifo.c,
+	libfs/src/imfs/memfile.c: Replace rtems_off64_t with off_t.
 
 2011-11-06      Ralf Corsépius <ralf.corsepius@rtems.org>
 

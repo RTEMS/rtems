@@ -203,9 +203,9 @@ int device_ioctl(
  *  writes fail.
  */
 
-rtems_off64_t device_lseek(
+off_t device_lseek(
   rtems_libio_t *iop,
-  rtems_off64_t  offset,
+  off_t          offset,
   int            whence
 )
 {
@@ -226,7 +226,7 @@ rtems_off64_t device_lseek(
 
 int device_ftruncate(
   rtems_libio_t *iop,
-  rtems_off64_t  length
+  off_t          length
 )
 {
   return 0;

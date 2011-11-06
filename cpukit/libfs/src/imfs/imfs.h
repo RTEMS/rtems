@@ -102,14 +102,14 @@ typedef uint8_t *block_p;
 typedef block_p *block_ptr;
 
 typedef struct {
-  rtems_off64_t size;             /* size of file in bytes */
+  off_t         size;             /* size of file in bytes */
   block_ptr     indirect;         /* array of 128 data blocks pointers */
   block_ptr     doubly_indirect;  /* 128 indirect blocks */
   block_ptr     triply_indirect;  /* 128 doubly indirect blocks */
 } IMFS_memfile_t;
 
 typedef struct {
-  rtems_off64_t size;             /* size of file in bytes */
+  off_t         size;             /* size of file in bytes */
   block_p       direct;           /* pointer to file image */
 } IMFS_linearfile_t;
 
@@ -407,7 +407,7 @@ extern int IMFS_memfile_remove(
 
 extern int memfile_ftruncate(
   rtems_libio_t *iop,               /* IN  */
-  rtems_off64_t  length             /* IN  */
+  off_t          length             /* IN  */
 );
 
 extern int imfs_dir_open(
@@ -427,9 +427,9 @@ extern ssize_t imfs_dir_read(
   size_t         count             /* IN  */
 );
 
-extern rtems_off64_t imfs_dir_lseek(
+extern off_t imfs_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
-  rtems_off64_t         offset,           /* IN  */
+  off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
 );
 
@@ -472,9 +472,9 @@ extern int memfile_ioctl(
   void          *buffer           /* IN  */
 );
 
-extern rtems_off64_t memfile_lseek(
+extern off_t memfile_lseek(
   rtems_libio_t        *iop,        /* IN  */
-  rtems_off64_t         offset,     /* IN  */
+  off_t                 offset,     /* IN  */
   int                   whence      /* IN  */
 );
 
@@ -507,15 +507,15 @@ extern int device_ioctl(
   void          *buffer             /* IN  */
 );
 
-extern rtems_off64_t device_lseek(
+extern off_t device_lseek(
   rtems_libio_t *iop,               /* IN  */
-  rtems_off64_t  offset,            /* IN  */
+  off_t          offset,            /* IN  */
   int            whence             /* IN  */
 );
 
 extern int device_ftruncate(
   rtems_libio_t *iop,               /* IN  */
-  rtems_off64_t  length             /* IN  */
+  off_t          length             /* IN  */
 );
 
 extern int IMFS_utime(
