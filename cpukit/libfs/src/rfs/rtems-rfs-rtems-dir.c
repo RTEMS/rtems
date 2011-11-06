@@ -171,11 +171,11 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
  * @param iop
  * @param offset
  * @param whence
- * return rtems_off64_t
+ * return off_t        
  */
-static rtems_off64_t
+static off_t        
 rtems_rfs_rtems_dir_lseek (rtems_libio_t* iop,
-                           rtems_off64_t  offset,
+                           off_t          offset,
                            int            whence)
 {
   switch (whence)

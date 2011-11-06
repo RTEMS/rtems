@@ -1046,7 +1046,7 @@ static ssize_t rtems_tftp_write(
  */
 static int rtems_tftp_ftruncate(
     rtems_libio_t   *iop __attribute__((unused)),
-    rtems_off64_t    count __attribute__((unused))
+    off_t            count __attribute__((unused))
 )
 {
     return 0;

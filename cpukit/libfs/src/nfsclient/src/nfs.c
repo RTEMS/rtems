@@ -2688,9 +2688,9 @@ int			e;
 	return count;
 }
 
-static rtems_off64_t nfs_file_lseek(
+static off_t nfs_file_lseek(
 	rtems_libio_t *iop,
-	rtems_off64_t  length,
+	off_t          length,
 	int            whence
 )
 {
@@ -2721,9 +2721,9 @@ static rtems_off64_t nfs_file_lseek(
 	return iop->offset;
 }
 
-static rtems_off64_t nfs_dir_lseek(
+static off_t nfs_dir_lseek(
 	rtems_libio_t *iop,
-	rtems_off64_t  length,
+	off_t          length,
 	int            whence
 )
 {
@@ -2774,7 +2774,7 @@ struct  stat
 		uid_t         st_uid;
 		gid_t         st_gid;
 		dev_t         st_rdev;
-		rtems_off64_t st_size;
+		off_t         st_size;
 		/* SysV/sco doesn't have the rest... But Solaris, eabi does.  */
 #if defined(__svr4__) && !defined(__PPC__) && !defined(__sun__)
 		time_t        st_atime;
@@ -2958,7 +2958,7 @@ sattr	arg;
  */
 static int nfs_file_ftruncate(
 	rtems_libio_t *iop,
-	rtems_off64_t  length
+	off_t          length
 )
 {
 sattr					arg;

@@ -24,6 +24,14 @@
 
 #include <inttypes.h>
 
+#if SIZEOF_OFF_T == 8
+#define PRIdoff_t PRId64
+#elif SIZEOF_OFF_T == 4
+#define PRIdoff_t PRId32
+#else
+#error "unsupported size of off_t"
+#endif
+
 #include <rtems/rfs/rtems-rfs-file.h>
 #include "rtems-rfs-rtems.h"
 
@@ -272,11 +280,11 @@ rtems_rfs_rtems_file_ioctl (rtems_libio_t* iop, uint32_t command, void* buffer)
  * @param iop
  * @param offset
  * @param whence
- * @return rtems_off64_t
+ * @return off_t        
  */
-static rtems_off64_t
+static off_t        
 rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
-                            rtems_off64_t  offset,
+                            off_t          offset,
                             int            whence)
 {
   rtems_rfs_file_handle* file = rtems_rfs_rtems_get_iop_file_handle (iop);
@@ -284,7 +292,7 @@ rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_LSEEK))
-    printf("rtems-rfs: file-lseek: handle:%p offset:%Ld\n", file, offset);
+    printf("rtems-rfs: file-lseek: handle:%p offset:%" PRIdoff_t "\n", file, offset);
 
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
   
@@ -311,13 +319,13 @@ rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
  */
 static int
 rtems_rfs_rtems_file_ftruncate (rtems_libio_t* iop,
-                                rtems_off64_t  length)
+                                off_t          length)
 {
   rtems_rfs_file_handle* file = rtems_rfs_rtems_get_iop_file_handle (iop);
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_FTRUNC))
-    printf("rtems-rfs: file-ftrunc: handle:%p length:%Ld\n", file, length);
+    printf("rtems-rfs: file-ftrunc: handle:%p length:%" PRIdoff_t "\n", file, length);
   
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
   

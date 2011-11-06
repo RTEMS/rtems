@@ -12,6 +12,10 @@
 	* libfs/src/imfs/deviceio.c, libfs/src/imfs/imfs.h,
 	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_fifo.c,
 	libfs/src/imfs/memfile.c: Replace rtems_off64_t with off_t.
+	* libfs/src/nfsclient/src/nfs.c, libfs/src/rfs/rtems-rfs-rtems-dev.c,
+	libfs/src/rfs/rtems-rfs-rtems-dir.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c, libnetworking/lib/ftpfs.c,
+	libnetworking/lib/tftpDriver.c: Replace rtems_off64_t with off_t.
 
 2011-11-06      Ralf Corsépius <ralf.corsepius@rtems.org>
 

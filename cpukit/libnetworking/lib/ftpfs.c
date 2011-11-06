@@ -1149,7 +1149,7 @@ static int rtems_ftpfs_close(rtems_libio_t *iop)
 }
 
 /* Dummy version to let fopen(*,"w") work properly */
-static int rtems_ftpfs_ftruncate(rtems_libio_t *iop, rtems_off64_t count)
+static int rtems_ftpfs_ftruncate(rtems_libio_t *iop, off_t count)
 {
   return 0;
 }

@@ -224,12 +224,12 @@ rtems_rfs_rtems_device_ioctl (rtems_libio_t* iop,
  * @param iop
  * @param offset
  * @param whence
- * @return rtems_off64_t
+ * @return off_t        
  */
 
-static rtems_off64_t
+static off_t        
 rtems_rfs_rtems_device_lseek (rtems_libio_t* iop,
-                              rtems_off64_t  offset,
+                              off_t          offset,
                               int            whence)
 {
   return offset;
@@ -244,7 +244,7 @@ rtems_rfs_rtems_device_lseek (rtems_libio_t* iop,
  */
 
 static int
-rtems_rfs_rtems_device_ftruncate (rtems_libio_t* iop, rtems_off64_t length)
+rtems_rfs_rtems_device_ftruncate (rtems_libio_t* iop, off_t length)
 {
   return 0;
 }
