@@ -1,8 +1,12 @@
-2011-11-06	gedare@rtems.org
+2011-11-06	Gedare Bloom <gedare@rtems.org>
+
+	* ChangeLog: Fix ChangeLog with name and email address
+
+2011-11-06	Gedare Bloom <gedare@rtems.org>
 
 	* MAINTAINERS: Fix whitespace.
 
-2011-11-04	gedare@rtems.org
+2011-11-04	Gedare Bloom <gedare@rtems.org>
 
 	* MAINTAINERS: Add myself as maintainer
 
