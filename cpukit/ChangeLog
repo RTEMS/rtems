@@ -4,6 +4,9 @@
 	* libcsupport/include/rtems/libio.h: Mark rtems_off64_t as
 	deprecated.
 	Replace rtems_off64_t with off_t.
+	* libfs/src/defaults/default_ftruncate.c, 
+	libfs/src/defaults/default_lseek.c:
+	Replace rtems_off64_t with off_t.
 
 2011-11-06      Ralf Corsépius <ralf.corsepius@rtems.org>
 

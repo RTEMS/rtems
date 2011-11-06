@@ -15,7 +15,7 @@
 
 int rtems_filesystem_default_ftruncate(
   rtems_libio_t *iop,
-  rtems_off64_t  length
+  off_t          length
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

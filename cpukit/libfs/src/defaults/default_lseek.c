@@ -13,9 +13,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-rtems_off64_t rtems_filesystem_default_lseek(
+off_t rtems_filesystem_default_lseek(
   rtems_libio_t *iop,
-  rtems_off64_t  length,
+  off_t          length,
   int            whence
 )
 {
