@@ -614,9 +614,9 @@ static ssize_t rtems_tfs_write(
   return(ret);
 }
 
-static rtems_off64_t rtems_tfs_lseek(
+static off_t rtems_tfs_lseek(
   rtems_libio_t *iop,
-  rtems_off64_t  offset,
+  off_t          offset,
   int            whence
 )
 {
@@ -643,7 +643,7 @@ static rtems_off64_t rtems_tfs_lseek(
   if (ret < 0)
     return(-1);
 
-  return (rtems_off64_t)ret;
+  return (off_t)ret;
 }
 
 /*
@@ -651,7 +651,7 @@ static rtems_off64_t rtems_tfs_lseek(
  */
 static int rtems_tfs_ftruncate(
   rtems_libio_t *iop,
-  rtems_off64_t  count
+  off_t          count
 )
 {
   int ret, fd;

@@ -1,3 +1,8 @@
+2011-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1945/cpukit
+	* umon/tfsDriver.c: Replace rtems_off64_t with off_t.
+
 2011-10-20	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* console.c: Include <rtems/error.h> for rtems_panic().
