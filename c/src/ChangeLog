@@ -1,3 +1,8 @@
+2011-11-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1945/cpukit
+	* libchip/i2c/spi-memdrv.c: Replace rtems_off64_t with off_t.
+
 2011-10-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1944/misc

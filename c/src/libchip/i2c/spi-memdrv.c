@@ -126,7 +126,7 @@ rtems_status_code spi_memdrv_write
 {
   rtems_status_code          rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
-  rtems_off64_t             off = rwargs->offset;
+  off_t                     off = rwargs->offset;
   int                       cnt = rwargs->count;
   unsigned char            *buf = (unsigned char *)rwargs->buffer;
   int                bytes_sent = 0;
@@ -312,7 +312,7 @@ rtems_status_code spi_memdrv_read
 {
   rtems_status_code rc = RTEMS_SUCCESSFUL;
   rtems_libio_rw_args_t *rwargs = arg;
-  rtems_off64_t             off = rwargs->offset;
+  off_t                     off = rwargs->offset;
   int                       cnt = rwargs->count;
   unsigned char            *buf = (unsigned char *)rwargs->buffer;
   unsigned char         cmdbuf[4];
