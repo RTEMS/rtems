@@ -161,6 +161,7 @@ PUBLIC(_ISR_Handler)
   mov  %o1, %g2  ! get the trap #
   mov  %o5, %g7  ! store the interrupted %sp (preserve)
   mov  %sp, %o1  ! 2nd arg to ISR Handler = address of ISF
+  add  %o1, STACK_BIAS, %o1 ! need to adjust for stack bias, 2nd arg = ISF
 
   /*
    *  Increment ISR nest level and Thread dispatch disable level.

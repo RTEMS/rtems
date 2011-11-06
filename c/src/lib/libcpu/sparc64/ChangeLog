@@ -1,3 +1,7 @@
+2011-11-06	gedare@rtems.org
+
+	* shared/score/interrupt.S: Pass ISR correct pointer to interrupt frame
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/cache/cache.c:
