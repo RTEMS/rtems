@@ -79,14 +79,14 @@ msdos_rename(rtems_filesystem_location_info_t  *old_parent_loc,
         rtems_semaphore_release(fs_info->vol_sema);
         return rc;
     }
-    
+
     /*
      * mark file removed
      */
     rc = msdos_set_first_char4file_name(old_loc->mt_entry,
                                         &old_fat_fd->dir_pos,
                                         MSDOS_THIS_DIR_ENTRY_EMPTY);
-    
+
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;
 }

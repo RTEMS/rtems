@@ -66,7 +66,7 @@ int IMFS_stat(
   fs_info = loc->mt_entry->fs_info;
   buf->st_dev =
     rtems_filesystem_make_dev_t( IMFS_DEVICE_MAJOR_NUMBER, fs_info->instance );
-  
+
   buf->st_mode  = the_jnode->st_mode;
   buf->st_nlink = the_jnode->st_nlink;
   buf->st_ino   = the_jnode->st_ino;

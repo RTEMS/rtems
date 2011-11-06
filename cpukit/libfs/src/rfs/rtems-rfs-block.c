@@ -109,7 +109,7 @@ rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
   map->inode = NULL;
   rtems_rfs_block_set_size_zero (&map->size);
   rtems_rfs_block_set_bpos_zero (&map->bpos);
-  
+
   rc = rtems_rfs_buffer_handle_open (fs, &map->singly_buffer);
   if (rc > 0)
     return rc;
@@ -124,7 +124,7 @@ rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
     rtems_rfs_buffer_handle_close (fs, &map->doubly_buffer);
     return rc;
   }
-  
+
   /*
    * Extract the block and block count data from the inode into the targets
    * byte order.
@@ -138,7 +138,7 @@ rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
   map->last_data_block = rtems_rfs_inode_get_last_data_block (inode);
 
   rc = rtems_rfs_inode_unload (fs, inode, false);
-  
+
   return rc;
 }
 
@@ -154,7 +154,7 @@ rtems_rfs_block_map_close (rtems_rfs_file_system* fs,
     brc = rtems_rfs_inode_load (fs, map->inode);
     if (brc > 0)
       rc = brc;
-    
+
     if (rc == 0)
     {
       int b;
@@ -169,7 +169,7 @@ rtems_rfs_block_map_close (rtems_rfs_file_system* fs,
       brc = rtems_rfs_inode_unload (fs, map->inode, true);
       if (brc > 0)
         rc = brc;
-      
+
       map->dirty = false;
     }
   }
@@ -225,7 +225,7 @@ rtems_rfs_block_find_indirect (rtems_rfs_file_system*   fs,
     *result = 0;
     rc = EIO;
   }
-  
+
   return 0;
 }
 
@@ -238,7 +238,7 @@ rtems_rfs_block_map_find (rtems_rfs_file_system* fs,
   int rc = 0;
 
   *block = 0;
-  
+
   /*
    * Range checking here makes the remaining logic simpler.
    */
@@ -270,7 +270,7 @@ rtems_rfs_block_map_find (rtems_rfs_file_system* fs,
        */
       rtems_rfs_block_no direct;
       rtems_rfs_block_no singly;
-    
+
       direct = bpos->bno % fs->blocks_per_block;
       singly = bpos->bno / fs->blocks_per_block;
 
@@ -316,7 +316,7 @@ rtems_rfs_block_map_find (rtems_rfs_file_system* fs,
            */
           rc = ENXIO;
         }
-      }    
+      }
     }
   }
 
@@ -325,7 +325,7 @@ rtems_rfs_block_map_find (rtems_rfs_file_system* fs,
     rtems_rfs_block_copy_bpos (&map->bpos, bpos);
     map->bpos.block = *block;
   }
-  
+
   return rc;
 }
 
@@ -409,7 +409,7 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
                           rtems_rfs_block_no*    new_block)
 {
   int b;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
     printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%" PRIu32 "\n",
             blocks, map->size.count);
@@ -425,12 +425,12 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
   {
     rtems_rfs_bitmap_bit block;
     int                  rc;
-    
+
     /*
      * Allocate the block. If an indirect block is needed and cannot be
      * allocated free this block.
      */
-    
+
     rc = rtems_rfs_group_bitmap_alloc (fs, map->last_data_block,
                                        false, &block);
     if (rc > 0)
@@ -445,7 +445,7 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
        */
       rtems_rfs_block_no direct;
       rtems_rfs_block_no singly;
-      
+
       direct = map->size.count % fs->blocks_per_block;
       singly = map->size.count / fs->blocks_per_block;
 
@@ -561,7 +561,7 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
 
           singly_block = rtems_rfs_block_get_number (&map->doubly_buffer,
                                                      singly);
-          
+
           rc = rtems_rfs_buffer_handle_request (fs, &map->singly_buffer,
                                                 singly_block, true);
           if (rc > 0)
@@ -577,7 +577,7 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
 
     map->size.count++;
     map->size.offset = 0;
-    
+
     if (b == 0)
       *new_block = block;
     map->last_data_block = block;
@@ -617,7 +617,7 @@ rtems_rfs_block_map_indirect_shrink (rtems_rfs_file_system*   fs,
       ((indirect == 0) && (index == RTEMS_RFS_INODE_BLOCKS)))
   {
     rtems_rfs_block_no block_to_free = map->blocks[indirect];
-  
+
     if ((indirect == 0) && (index == RTEMS_RFS_INODE_BLOCKS))
     {
       /*
@@ -634,14 +634,14 @@ rtems_rfs_block_map_indirect_shrink (rtems_rfs_file_system*   fs,
        */
       map->blocks[indirect] = 0;
     }
-    
+
     rc = rtems_rfs_group_bitmap_free (fs, false, block_to_free);
     if (rc > 0)
       return rc;
-    
+
     map->last_map_block = block_to_free;
   }
-  
+
   return rc;
 }
 
@@ -653,10 +653,10 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_SHRINK))
     printf ("rtems-rfs: block-map-shrink: entry: blocks=%zd count=%" PRIu32 "\n",
             blocks, map->size.count);
-            
+
   if (map->size.count == 0)
     return 0;
-    
+
   if (blocks > map->size.count)
     blocks = map->size.count;
 
@@ -667,7 +667,7 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
     int                rc;
 
     block = map->size.count - 1;
-    
+
     if (block < RTEMS_RFS_INODE_BLOCKS)
     {
       /*
@@ -702,7 +702,7 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
                                               map->blocks[singly], true);
         if (rc > 0)
           return rc;
-        
+
         block_to_free = rtems_rfs_block_get_number (&map->singly_buffer,
                                                     direct);
 
@@ -752,14 +752,14 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
           rc = rtems_rfs_group_bitmap_free (fs, false, singly);
           if (rc > 0)
             return rc;
-          
+
           map->last_map_block = singly;
-          
+
           rc = rtems_rfs_block_map_indirect_shrink (fs, map, &map->doubly_buffer,
                                                     doubly, doubly_singly);
           if (rc)
             return rc;
-        }        
+        }
       }
       else
       {

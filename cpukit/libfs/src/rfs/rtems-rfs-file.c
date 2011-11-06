@@ -40,7 +40,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_OPEN))
     printf ("rtems-rfs: file-open: ino=%" PRId32 "\n", ino);
-            
+
   *file = NULL;
 
   /*
@@ -63,7 +63,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
     free (handle);
     return rc;
   }
-  
+
   /*
    * Scan the file system data list of open files for this ino. If found up
    * the reference count and return the pointer to the data.
@@ -90,7 +90,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
     }
 
     memset (shared, 0, sizeof (rtems_rfs_file_shared));
-    
+
     rc = rtems_rfs_inode_open (fs, ino, &shared->inode, true);
     if (rc > 0)
     {
@@ -134,9 +134,9 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
 
   handle->flags  = flags;
   handle->shared = shared;
-  
+
   *file = handle;
-  
+
   return 0;
 }
 
@@ -148,7 +148,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
   int rc;
 
   rrc = 0;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_CLOSE))
     printf ("rtems-rfs: file-close: entry: ino=%" PRId32 "\n",
             handle->shared->inode.ino);
@@ -177,7 +177,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
         rtems_rfs_block_map_set_size (&handle->shared->map,
                                       &handle->shared->size);
     }
-    
+
     rc = rtems_rfs_block_map_close (fs, &handle->shared->map);
     if (rc > 0)
     {
@@ -187,7 +187,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
       if (rrc == 0)
         rrc = rc;
     }
-    
+
     rc = rtems_rfs_inode_close (fs, &handle->shared->inode);
     if (rc > 0)
     {
@@ -197,7 +197,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
       if (rrc == 0)
         rrc = rc;
     }
-    
+
     rtems_chain_extract (&handle->shared->link);
     free (handle->shared);
   }
@@ -205,7 +205,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
   rc = rtems_rfs_buffer_handle_close (fs, &handle->buffer);
   if ((rrc == 0) && (rc > 0))
     rrc = rc;
-  
+
   if (rrc > 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_CLOSE))
@@ -213,7 +213,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
   }
 
   free (handle);
-  
+
   return rrc;
 }
 
@@ -223,19 +223,19 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
                          bool                   read)
 {
   size_t size;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-io: start: %s pos=%" PRIu32 ":%" PRIu32 "\n",
             read ? "read" : "write",  handle->bpos.bno, handle->bpos.boff);
-  
+
   if (!rtems_rfs_buffer_handle_has_block (&handle->buffer))
   {
     rtems_rfs_buffer_block block;
     bool                   request_read;
     int                    rc;
-     
+
     request_read = read;
-    
+
     rc = rtems_rfs_block_map_find (rtems_rfs_file_fs (handle),
                                    rtems_rfs_file_map (handle),
                                    rtems_rfs_file_bpos (handle),
@@ -250,13 +250,13 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
         *available = 0;
         return 0;
       }
-      
+
       if (rc != ENXIO)
         return rc;
 
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
         printf ("rtems-rfs: file-io: start: grow\n");
-      
+
       rc = rtems_rfs_block_map_grow (rtems_rfs_file_fs (handle),
                                      rtems_rfs_file_map (handle),
                                      1, &block);
@@ -277,31 +277,31 @@ rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
            (*available < rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle)))))
         request_read = true;
     }
-    
+
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
       printf ("rtems-rfs: file-io: start: block=%" PRIu32 " request-read=%s\n",
               block, request_read ? "yes" : "no");
-    
+
     rc = rtems_rfs_buffer_handle_request (rtems_rfs_file_fs (handle),
                                           rtems_rfs_file_buffer (handle),
                                           block, request_read);
     if (rc > 0)
       return rc;
   }
-  
+
   if (read
       && rtems_rfs_block_map_last (rtems_rfs_file_map (handle))
       && rtems_rfs_block_map_size_offset (rtems_rfs_file_map (handle)))
     size = rtems_rfs_block_map_size_offset (rtems_rfs_file_map (handle));
   else
     size = rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
-  
+
   *available = size - rtems_rfs_file_block_offset (handle);
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-io: start: available=%zu (%zu)\n",
             *available, size);
-    
+
   return 0;
 }
 
@@ -318,7 +318,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-io:   end: %s size=%zu\n",
             read ? "read" : "write", size);
-  
+
   if (rtems_rfs_buffer_handle_has_block (&handle->buffer))
   {
     if (!read)
@@ -330,7 +330,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
       printf (
         "rtems-rfs: file-io:   end: error on release: %s size=%zu: %d: %s\n",
         read ? "read" : "write", size, rc, strerror (rc));
-      
+
       return rc;
     }
   }
@@ -354,7 +354,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
 
   length = false;
   mtime = false;
-  
+
   if (!read &&
       rtems_rfs_block_map_past_end (rtems_rfs_file_map (handle),
                                     rtems_rfs_file_bpos (handle)))
@@ -364,16 +364,16 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
     length = true;
     mtime = true;
   }
-  
+
   atime  = rtems_rfs_file_update_atime (handle);
   mtime  = rtems_rfs_file_update_mtime (handle) && mtime;
   length = rtems_rfs_file_update_length (handle) && length;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-io:   end: pos=%" PRIu32 ":%" PRIu32 " %c %c %c\n",
             handle->bpos.bno, handle->bpos.boff,
             atime ? 'A' : '-', mtime ? 'M' : '-', length ? 'L' : '-');
-  
+
   if (atime || mtime)
   {
     time_t now = time (NULL);
@@ -389,7 +389,7 @@ rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
     handle->shared->size.offset =
       rtems_rfs_block_map_size_offset (rtems_rfs_file_map (handle));
   }
-  
+
   return rc;
 }
 
@@ -410,7 +410,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
 {
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-seek: new=%" PRIu64 "\n", pos);
-  
+
   /*
    * This call only sets the position if it is in a valid part of the file. The
    * user can request past the end of the file then write to extend the
@@ -425,7 +425,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
   if (pos < rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (handle),
                                             handle->shared))
     rtems_rfs_file_set_bpos (handle, pos);
-  
+
   *new_pos = pos;
   return 0;
 }
@@ -453,7 +453,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
   else
   {
     size = rtems_rfs_file_size (handle);
-  
+
     /*
      * If the file is same size do nothing else grow or shrink it ?
      */
@@ -471,7 +471,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
         count = new_size - size;
         length = rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
         read_block = false;
-        
+
         while (count)
         {
           rtems_rfs_buffer_block block;
@@ -529,7 +529,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
                                                 rtems_rfs_file_buffer (handle));
           if (rc > 0)
             return rc;
-        
+
           count -= length - bpos.boff;
         }
       }
@@ -540,7 +540,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
          */
         rtems_rfs_block_no blocks;
         uint32_t           offset;
-    
+
         blocks =
           rtems_rfs_block_map_count (map) -
           (((new_size - 1) /
@@ -548,7 +548,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
 
         offset =
           new_size % rtems_rfs_fs_block_size (rtems_rfs_file_fs (handle));
-      
+
         if (blocks)
         {
           int rc;
@@ -574,7 +574,7 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
 
   if (rtems_rfs_file_update_mtime (handle))
     handle->shared->mtime = time (NULL);
-  
+
   return 0;
 }
 

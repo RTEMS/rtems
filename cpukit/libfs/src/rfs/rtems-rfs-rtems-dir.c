@@ -55,21 +55,21 @@ rtems_rfs_rtems_dir_open (rtems_libio_t* iop,
   int                    rc;
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc)
   {
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("dir_open: opening inode", rc);
   }
-  
+
   if (!RTEMS_RFS_S_ISDIR (rtems_rfs_inode_get_mode (&inode)))
   {
     rtems_rfs_inode_close (fs, &inode);
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("dir_open: not dir", ENOTDIR);
   }
-    
+
   iop->offset = 0;
 
   rtems_rfs_inode_close (fs, &inode);
@@ -120,9 +120,9 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
 
   count  = count / sizeof (struct dirent);
   dirent = buffer;
-  
+
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc)
   {
@@ -131,7 +131,7 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
   }
 
   bytes_transferred = 0;
-  
+
   for (d = 0; d < count; d++, dirent++)
   {
     size_t size;
@@ -152,7 +152,7 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
 
   rtems_rfs_inode_close (fs, &inode);
   rtems_rfs_rtems_unlock (fs);
-  
+
   return bytes_transferred;
 }
 
@@ -171,9 +171,9 @@ rtems_rfs_rtems_dir_read (rtems_libio_t* iop,
  * @param iop
  * @param offset
  * @param whence
- * return off_t        
+ * return off_t
  */
-static off_t        
+static off_t
 rtems_rfs_rtems_dir_lseek (rtems_libio_t* iop,
                            off_t          offset,
                            int            whence)
@@ -211,7 +211,7 @@ rtems_rfs_rtems_dir_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
     return rtems_rfs_rtems_error ("dir_rmnod: root inode", EBUSY);
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_if_empty);
   if (rc)
   {

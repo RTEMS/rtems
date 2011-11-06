@@ -53,9 +53,9 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
   int                           minor;
   rtems_status_code             status;
   int                           rc;
-  
+
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc > 0)
   {
@@ -74,10 +74,10 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
   }
 
   rtems_rfs_rtems_unlock (fs);
-  
+
   iop->data0 = major;
   iop->data1 = (void*)((intptr_t) minor);
-  
+
   args.iop   = iop;
   args.flags = iop->flags;
   args.mode  = mode;
@@ -154,7 +154,7 @@ rtems_rfs_rtems_device_read (rtems_libio_t* iop, void* buffer, size_t count)
  * @param iop
  * @param buffer
  * @param count
- * @return ssize_t 
+ * @return ssize_t
  */
 
 static ssize_t
@@ -224,10 +224,10 @@ rtems_rfs_rtems_device_ioctl (rtems_libio_t* iop,
  * @param iop
  * @param offset
  * @param whence
- * @return off_t        
+ * @return off_t
  */
 
-static off_t        
+static off_t
 rtems_rfs_rtems_device_lseek (rtems_libio_t* iop,
                               off_t          offset,
                               int            whence)

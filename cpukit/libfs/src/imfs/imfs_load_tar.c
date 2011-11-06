@@ -19,7 +19,7 @@
  * Directories from the TAR file are created as usual in the IMFS.
  * File entries are created as IMFS_LINEAR_FILE nodes with their nods
  * pointing to addresses in the TAR image.
- */ 
+ */
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -160,7 +160,7 @@ int rtems_tarfs_load(
      *        IMFS_create_node was ONLY passed a NULL when we created the
      *        root node.  We added a new IMFS_create_root_node() so this
      *        path no longer existed.  The result was simpler code which
-     *        should not have this path. 
+     *        should not have this path.
      */
     else if (linkflag == REGTYPE) {
       const char  *name;

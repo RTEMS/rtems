@@ -83,7 +83,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
     printf ("rtems-rfs-rtems: eval-path: in: path:%s pathlen:%zi ino:%" PRId32 "\n",
             path, pathlen, ino);
-  
+
   /*
    * Eat any separators at the start of the path.
    */
@@ -92,7 +92,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
   pathlen -= stripped;
 
   rtems_rfs_rtems_lock (fs);
-  
+
   while (true)
   {
     /*
@@ -104,7 +104,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
       rtems_rfs_rtems_unlock (fs);
       return rtems_rfs_rtems_error ("eval_path: opening inode", rc);
     }
-    
+
     /*
      * Is this the end of the pathname we were given ?
      */
@@ -121,7 +121,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
       rtems_rfs_rtems_unlock (fs);
       return rtems_rfs_rtems_error ("eval_path: eval perms", EACCES);
     }
-    
+
     /*
      * Extract the node name we will look for this time around.
      */
@@ -210,7 +210,7 @@ rtems_rfs_rtems_eval_path (const char*                       path,
         rtems_rfs_inode_close (fs, &inode);
         rtems_rfs_rtems_unlock (fs);
         return ((errno = rc) == 0) ? 0 : -1;
-      }    
+      }
       if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PATH))
         printf("rtems-rfs-rtems: eval-path: down: path:%s ino:%" PRId32 "\n", node, ino);
     }
@@ -221,14 +221,14 @@ rtems_rfs_rtems_eval_path (const char*                       path,
       rtems_rfs_inode_close (fs, &inode);
       rtems_rfs_rtems_unlock (fs);
       return rtems_rfs_rtems_error ("eval_path: closing node", rc);
-    }    
+    }
   }
-  
+
   rtems_rfs_rtems_set_pathloc_ino (pathloc, ino);
   rtems_rfs_rtems_set_pathloc_doff (pathloc, doff);
 
   rc = rtems_rfs_rtems_set_handlers (pathloc, &inode) ? 0 : EIO;
-  
+
   rtems_rfs_inode_close (fs, &inode);
   rtems_rfs_rtems_unlock (fs);
 
@@ -266,7 +266,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_FOR_MAKE))
     printf ("rtems-rfs-rtems: eval-for-make: path:%s ino:%" PRId32 "\n", path, ino);
-  
+
   *name = path + strlen (path);
 
   while (*name != path)
@@ -278,7 +278,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
       break;
     }
   }
-      
+
   /*
    * Eat any separators at start of the path.
    */
@@ -286,7 +286,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
   path += stripped;
 
   rtems_rfs_rtems_lock (fs);
-  
+
   while (true)
   {
     /*
@@ -298,7 +298,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
       rtems_rfs_rtems_unlock (fs);
       return rtems_rfs_rtems_error ("eval_for_make: read ino", rc);
     }
-  
+
     /*
      * If a directory the execute bit must be set for us to enter.
      */
@@ -309,13 +309,13 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
       rtems_rfs_rtems_unlock (fs);
       return rtems_rfs_rtems_error ("eval_for_make: eval perms", EACCES);
     }
-    
+
     /*
      * Is this the end of the pathname we were given ?
      */
     if (path == *name)
       break;
-    
+
     /*
      * Extract the node name we will look for this time around.
      */
@@ -349,7 +349,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
       }
       break;
     }
-     
+
     /*
      * If the node is a parent we must move up one directory. If the location
      * is on another file system we have a crossmount so we call that file
@@ -383,7 +383,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
         rtems_rfs_rtems_unlock (fs);
         return rtems_rfs_rtems_error ("eval_for_make: not dir", ENOTSUP);
       }
-      
+
       /*
        * We need to find the parent of this node.
        */
@@ -422,7 +422,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
     {
       rtems_rfs_rtems_unlock (fs);
       return rtems_rfs_rtems_error ("eval_for_make: closing node", rc);
-    }    
+    }
   }
 
   if (!RTEMS_RFS_S_ISDIR (rtems_rfs_inode_get_mode (&inode)))
@@ -438,7 +438,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("eval_for_make: cannot write", EACCES);
   }
-  
+
   /*
    * Make sure the name does not already exists in the directory.
    */
@@ -457,7 +457,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("eval_for_make: look up", rc);
   }
-  
+
   /*
    * Set the parent ino in the path location.
    */
@@ -473,7 +473,7 @@ rtems_rfs_rtems_eval_for_make (const char*                       path,
 
   rtems_rfs_inode_close (fs, &inode);
   rtems_rfs_rtems_unlock (fs);
-  
+
   return rc;
 }
 
@@ -499,9 +499,9 @@ rtems_rfs_rtems_link (rtems_filesystem_location_info_t* to_loc,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_LINK))
     printf ("rtems-rfs-rtems: link: in: parent:%" PRId32 " target:%" PRId32 "\n",
             parent, target);
-  
+
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_link (fs, name, strlen (name), parent, target, false);
   if (rc)
   {
@@ -510,7 +510,7 @@ rtems_rfs_rtems_link (rtems_filesystem_location_info_t* to_loc,
 	}
 
   rtems_rfs_rtems_unlock (fs);
-  
+
 	return 0;
 }
 
@@ -533,20 +533,20 @@ rtems_rfs_rtems_unlink (rtems_filesystem_location_info_t* parent_loc,
   int                    rc;
 
   rtems_rfs_rtems_lock (fs);
-  
+
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_UNLINK))
     printf("rtems-rfs-rtems: unlink: parent:%" PRId32 " doff:%" PRIu32 " ino:%" PRId32 "\n",
            parent, doff, ino);
-  
+
   rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_denied);
   if (rc)
   {
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("unlink: unlink inode", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
-  
+
   return 0;
 }
 
@@ -576,7 +576,7 @@ rtems_rfs_rtems_node_type (rtems_filesystem_location_info_t* pathloc)
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("node_type: opening inode", rc);
   }
-  
+
   /*
    * Do not return RTEMS_FILESYSTEM_HARD_LINK because this would result in an
    * eval link which does not make sense in the case of the RFS file
@@ -601,9 +601,9 @@ rtems_rfs_rtems_node_type (rtems_filesystem_location_info_t* pathloc)
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("node_type: closing inode", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
-  
+
   return type;
 }
 
@@ -629,20 +629,20 @@ rtems_rfs_rtems_chown (rtems_filesystem_location_info_t *pathloc,
   uid_t                  uid;
 #endif
   int                    rc;
-  
+
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_CHOWN))
     printf ("rtems-rfs-rtems: chown: in: ino:%" PRId32 " uid:%d gid:%d\n",
             ino, owner, group);
-  
+
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc > 0)
   {
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("chown: opening inode", rc);
   }
-  
+
   /*
    *  Verify I am the owner of the node or the super user.
    */
@@ -668,7 +668,7 @@ rtems_rfs_rtems_chown (rtems_filesystem_location_info_t *pathloc,
   }
 
   rtems_rfs_rtems_unlock (fs);
-  
+
   return 0;
 }
 
@@ -693,7 +693,7 @@ rtems_rfs_rtems_utime(rtems_filesystem_location_info_t* pathloc,
   int                    rc;
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc)
   {
@@ -710,9 +710,9 @@ rtems_rfs_rtems_utime(rtems_filesystem_location_info_t* pathloc,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("utime: closing inode", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
-  
+
   return 0;
 }
 
@@ -746,7 +746,7 @@ rtems_rfs_rtems_symlink (rtems_filesystem_location_info_t* parent_loc,
 #endif
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_symlink (fs, node_name, strlen (node_name),
                           link_name, strlen (link_name),
                           uid, gid, parent);
@@ -755,9 +755,9 @@ rtems_rfs_rtems_symlink (rtems_filesystem_location_info_t* parent_loc,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("symlink: linking", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
-  
+
   return 0;
 }
 
@@ -779,12 +779,12 @@ rtems_rfs_rtems_readlink (rtems_filesystem_location_info_t* pathloc,
   rtems_rfs_ino           ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
   size_t                  length;
   int                     rc;
-  
+
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_READLINK))
     printf ("rtems-rfs-rtems: readlink: in: ino:%" PRId32 "\n", ino);
-  
+
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_symlink_read (fs, ino, buf, bufsize, &length);
   if (rc)
   {
@@ -813,9 +813,9 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
     printf ("rtems-rfs-rtems: fchmod: in: ino:%" PRId32 " mode:%06" PRIomode_t "\n",
             ino, mode);
-  
+
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc)
   {
@@ -824,7 +824,7 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
   }
 
   imode = rtems_rfs_inode_get_mode (&inode);
-  
+
   /*
    *  Verify I am the owner of the node or the super user.
    */
@@ -843,16 +843,16 @@ rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
   imode |= mode & (S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
 
   rtems_rfs_inode_set_mode (&inode, imode);
-  
+
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc > 0)
   {
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("fchmod: closing inode", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
-  
+
   return 0;
 }
 
@@ -871,7 +871,7 @@ rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
     printf ("rtems-rfs-rtems: stat: in: ino:%" PRId32 "\n", ino);
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc)
   {
@@ -880,14 +880,14 @@ rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
   }
 
   mode = rtems_rfs_inode_get_mode (&inode);
-  
+
   if (RTEMS_RFS_S_ISCHR (mode) || RTEMS_RFS_S_ISBLK (mode))
   {
-    buf->st_rdev = 
+    buf->st_rdev =
       rtems_filesystem_make_dev_t (rtems_rfs_inode_get_block (&inode, 0),
                                    rtems_rfs_inode_get_block (&inode, 1));
   }
-  
+
   buf->st_dev     = rtems_rfs_fs_device (fs);
   buf->st_ino     = rtems_rfs_inode_ino (&inode);
   buf->st_mode    = rtems_rfs_rtems_mode (mode);
@@ -925,16 +925,16 @@ rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
     else
       buf->st_size = rtems_rfs_inode_get_size (fs, &inode);
   }
-  
+
   buf->st_blksize = rtems_rfs_fs_block_size (fs);
-  
+
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc > 0)
   {
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("stat: closing inode", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
   return 0;
 }
@@ -972,7 +972,7 @@ rtems_rfs_rtems_mknod (const char                       *name,
 #endif
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_inode_create (fs, parent, name, strlen (name),
                                rtems_rfs_rtems_imode (mode),
                                1, uid, gid, &ino);
@@ -988,7 +988,7 @@ rtems_rfs_rtems_mknod (const char                       *name,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("mknod: inode open", rc);
   }
-    
+
   if (S_ISDIR(mode) || S_ISREG(mode))
   {
   }
@@ -1000,7 +1000,7 @@ rtems_rfs_rtems_mknod (const char                       *name,
     rtems_rfs_inode_set_block (&inode, 0, major);
     rtems_rfs_inode_set_block (&inode, 1, minor);
   }
-  else 
+  else
   {
     rtems_rfs_inode_close (fs, &inode);
     rtems_rfs_rtems_unlock (fs);
@@ -1013,7 +1013,7 @@ rtems_rfs_rtems_mknod (const char                       *name,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("mknod: closing inode", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (fs);
   return 0;
 }
@@ -1023,7 +1023,7 @@ rtems_rfs_rtems_mknod (const char                       *name,
  *
  * @param parent_pathloc
  * @param pathloc
- * @return int 
+ * @return int
  */
 int
 rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
@@ -1040,7 +1040,7 @@ rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
             parent, doff, ino);
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_denied);
   if (rc)
   {
@@ -1057,13 +1057,13 @@ rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
  * everything related to this device.
  *
  * @param iop
- * @return int 
+ * @return int
  */
 int
 rtems_rfs_rtems_fdatasync (rtems_libio_t* iop)
 {
   int rc;
-  
+
   rc = rtems_rfs_buffer_sync (rtems_rfs_rtems_pathloc_dev (&iop->pathinfo));
   if (rc)
     return rtems_rfs_rtems_error ("fdatasync: sync", rc);
@@ -1078,7 +1078,7 @@ rtems_rfs_rtems_fdatasync (rtems_libio_t* iop)
  * @param old_loc The old name's location.
  * @param new_parent_loc The new name's parent location.
  * @param new_name The new name.
- * @return int 
+ * @return int
  */
 static int
 rtems_rfs_rtems_rename(rtems_filesystem_location_info_t* old_parent_loc,
@@ -1092,7 +1092,7 @@ rtems_rfs_rtems_rename(rtems_filesystem_location_info_t* old_parent_loc,
   rtems_rfs_ino           ino;
   uint32_t                doff;
   int                     rc;
-  
+
   old_parent = rtems_rfs_rtems_get_pathloc_ino (old_parent_loc);
   new_parent = rtems_rfs_rtems_get_pathloc_ino (new_parent_loc);
 
@@ -1115,7 +1115,7 @@ rtems_rfs_rtems_rename(rtems_filesystem_location_info_t* old_parent_loc,
     rtems_rfs_rtems_unlock (fs);
     return rtems_rfs_rtems_error ("rename: linking", rc);
   }
-  
+
   /*
    * Unlink all inodes even directories with the dir option as false because a
    * directory may not be empty.
@@ -1149,7 +1149,7 @@ rtems_rfs_rtems_statvfs (rtems_filesystem_location_info_t* pathloc,
   size_t                 inodes;
 
   rtems_rfs_group_usage (fs, &blocks, &inodes);
-  
+
   sb->f_bsize   = rtems_rfs_fs_block_size (fs);
   sb->f_frsize  = rtems_rfs_fs_media_block_size (fs);
   sb->f_blocks  = rtems_rfs_fs_media_blocks (fs);
@@ -1161,7 +1161,7 @@ rtems_rfs_rtems_statvfs (rtems_filesystem_location_info_t* pathloc,
   sb->f_fsid    = RTEMS_RFS_SB_MAGIC;
   sb->f_flag    = rtems_rfs_fs_flags (fs);
   sb->f_namemax = rtems_rfs_fs_max_name (fs);
-  
+
   return 0;
 }
 
@@ -1262,13 +1262,13 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
         options = NULL;
     }
   }
-  
+
   rtems = malloc (sizeof (rtems_rfs_rtems_private));
   if (!rtems)
     return rtems_rfs_rtems_error ("initialise: local data", ENOMEM);
 
   memset (rtems, 0, sizeof (rtems_rfs_rtems_private));
-  
+
   rc = rtems_rfs_mutex_create (&rtems->access);
   if (rc > 0)
   {
@@ -1283,14 +1283,14 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
     free (rtems);
     return rtems_rfs_rtems_error ("initialise: cannot lock access  mutex", rc);
   }
-  
+
   rc = rtems_rfs_fs_open (mt_entry->dev, rtems, flags, max_held_buffers, &fs);
   if (rc)
   {
     free (rtems);
     return rtems_rfs_rtems_error ("initialise: open", rc);
   }
-  
+
   mt_entry->fs_info = fs;
 
   mt_entry->mt_fs_root.node_access = (void*) RTEMS_RFS_ROOT_INO;
@@ -1298,7 +1298,7 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
   mt_entry->mt_fs_root.ops         = &rtems_rfs_ops;
 
   rtems_rfs_rtems_unlock (fs);
-  
+
   return 0;
 }
 
@@ -1313,11 +1313,11 @@ rtems_rfs_rtems_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
   int                      rc;
 
   rtems = rtems_rfs_fs_user (fs);
-  
+
   rc = rtems_rfs_fs_close(fs);
-  
+
   rtems_rfs_mutex_destroy (&rtems->access);
   free (rtems);
-  
+
   return rtems_rfs_rtems_error ("shutdown: close", rc);
 }

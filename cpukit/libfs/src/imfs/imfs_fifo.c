@@ -56,7 +56,7 @@ int IMFS_fifo_close(
 
   iop->flags &= ~LIBIO_FLAGS_OPEN;
   IMFS_check_node_remove(jnode);
-  
+
   IMFS_FIFO_RETURN(err);
 }
 

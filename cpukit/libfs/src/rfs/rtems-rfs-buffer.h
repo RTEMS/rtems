@@ -168,7 +168,7 @@ typedef struct rtems_rfs_buffer_handle_t
  * @param read Read the data from the disk.
  * @return int The error number (errno). No error if 0.
  */
-int rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs, 
+int rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
                                      rtems_rfs_buffer_handle* handle,
                                      rtems_rfs_buffer_block   block,
                                      bool                     read);
@@ -197,7 +197,7 @@ rtems_rfs_buffer_handle_open (rtems_rfs_file_system*   fs,
                               rtems_rfs_buffer_handle* handle)
 {
   handle->dirty = false;
-  handle->bnum  = 0; 
+  handle->bnum  = 0;
   handle->buffer = NULL;
   return 0;
 }
@@ -215,7 +215,7 @@ rtems_rfs_buffer_handle_close (rtems_rfs_file_system*   fs,
 {
   rtems_rfs_buffer_handle_release (fs, handle);
   handle->dirty = false;
-  handle->bnum  = 0; 
+  handle->bnum  = 0;
   handle->buffer = NULL;
   return 0;
 }

@@ -51,7 +51,7 @@
                          ((_b) * sizeof (rtems_rfs_block_no)), (_n)); \
     rtems_rfs_buffer_mark_dirty (_h); \
   } while (0)
-  
+
 /**
  * A block map manges the block lists that originate from an inode. The inode
  * contains a number of block numbers. A block map takes those block numbers
@@ -196,7 +196,7 @@ typedef struct rtems_rfs_block_map_s
  * @param map Pointer to the open map to set the offset in.
  * @param offset The offset to set in the map's size.
  */
-static inline void 
+static inline void
 rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
                                      rtems_rfs_block_off  offset)
 {
@@ -210,7 +210,7 @@ rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
  * @param map Pointer to the open map to set the offset in.
  * @param size The size to set in the map's size.
  */
-static inline void 
+static inline void
 rtems_rfs_block_map_set_size (rtems_rfs_block_map*  map,
                               rtems_rfs_block_size* size)
 {

@@ -125,7 +125,7 @@ msdos_name_type(const char *name, int name_len)
 #if MSDOS_NAME_TYPE_PRINT
         printf ("MSDOS_NAME_TYPE: c:%02x type:%d\n", *name, type);
 #endif
-        
+
         if ((type == MSDOS_NAME_INVALID) || (type == MSDOS_NAME_LONG))
             return type;
 
@@ -170,7 +170,7 @@ msdos_name_type(const char *name, int name_len)
 #endif
         return MSDOS_NAME_LONG;
     }
-    
+
 #if MSDOS_NAME_TYPE_PRINT
     printf ("MSDOS_NAME_TYPE: SHORT[1]\n");
 #endif
@@ -283,7 +283,7 @@ msdos_get_token(const char  *path,
 
     if (pathlen == 0)
         return MSDOS_NO_MORE_PATH;
-    
+
     /*
      *  Check for a separator.
      */

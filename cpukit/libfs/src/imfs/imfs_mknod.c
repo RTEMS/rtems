@@ -55,7 +55,7 @@ int IMFS_mknod(
     rtems_filesystem_split_dev_t( dev, info.device.major, info.device.minor );
   } else if (S_ISFIFO(mode))
     type = IMFS_FIFO;
-  else 
+  else
     IMFS_assert( 0 );
 
   /*
@@ -66,7 +66,7 @@ int IMFS_mknod(
    *        was ONLY passed a NULL when we created the root node.  We
    *        added a new IMFS_create_root_node() so this path no longer
    *        existed.  The result was simpler code which should not have
-   *        this path. 
+   *        this path.
    */
   new_node = IMFS_create_node( pathloc, type, new_name, mode, &info );
   if ( !new_node )

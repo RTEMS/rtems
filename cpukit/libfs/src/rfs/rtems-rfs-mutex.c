@@ -46,7 +46,7 @@ rtems_rfs_mutex_create (rtems_rfs_mutex* mutex)
   if (sc != RTEMS_SUCCESSFUL)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_MUTEX))
-      printf ("rtems-rfs: mutex: open failed: %s\n", 
+      printf ("rtems-rfs: mutex: open failed: %s\n",
               rtems_status_text (sc));
     return EIO;
   }
@@ -63,7 +63,7 @@ rtems_rfs_mutex_destroy (rtems_rfs_mutex* mutex)
   if (sc != RTEMS_SUCCESSFUL)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_MUTEX))
-      printf ("rtems-rfs: mutex: close failed: %s\n", 
+      printf ("rtems-rfs: mutex: close failed: %s\n",
               rtems_status_text (sc));
     return EIO;
   }

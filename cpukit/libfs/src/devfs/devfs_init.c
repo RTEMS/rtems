@@ -35,7 +35,7 @@ rtems_filesystem_operations_table devFS_ops =
     rtems_filesystem_default_symlink,
     rtems_filesystem_default_readlink,
     rtems_filesystem_default_rename,
-    rtems_filesystem_default_statvfs 
+    rtems_filesystem_default_statvfs
 };
 
 

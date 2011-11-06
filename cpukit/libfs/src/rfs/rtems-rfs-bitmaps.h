@@ -197,7 +197,7 @@ rtems_rfs_bitmap_element rtems_rfs_bitmap_mask (unsigned int size);
  * @param end The end bit of the mask numbered from 0.
  * @return Mask section as defined by the start and end arguments.
  */
-rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section (unsigned int start, 
+rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section (unsigned int start,
                                                         unsigned int end);
 
 /**
@@ -240,7 +240,7 @@ rtems_rfs_bitmap_map_test (rtems_rfs_bitmap_control* control,
  *
  * @param control The bitmap control.
  * @return int The error number (errno). No error if 0.
- */ 
+ */
 int rtems_rfs_bitmap_map_set_all (rtems_rfs_bitmap_control* control);
 
 /**
@@ -248,7 +248,7 @@ int rtems_rfs_bitmap_map_set_all (rtems_rfs_bitmap_control* control);
  *
  * @param control The bitmap control.
  * @return int The error number (errno). No error if 0.
- */ 
+ */
 int rtems_rfs_bitmap_map_clear_all (rtems_rfs_bitmap_control* control);
 
 /**

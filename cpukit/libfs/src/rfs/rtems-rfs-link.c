@@ -67,7 +67,7 @@ rtems_rfs_link (rtems_rfs_file_system* fs,
     rtems_rfs_inode_close (fs, &target_inode);
     return ENOTSUP;
   }
-  
+
   rc = rtems_rfs_inode_open (fs, parent, &parent_inode, true);
   if (rc)
   {
@@ -82,7 +82,7 @@ rtems_rfs_link (rtems_rfs_file_system* fs,
     rtems_rfs_inode_close (fs, &target_inode);
     return rc;
   }
-  
+
   links = rtems_rfs_inode_get_links (&target_inode) + 1;
   rtems_rfs_inode_set_links (&target_inode, links);
 
@@ -125,12 +125,12 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
   rc = rtems_rfs_inode_open (fs, target, &target_inode, true);
   if (rc)
     return rc;
-  
+
   /*
    * If a directory process the unlink mode.
    */
-  
-  dir = RTEMS_RFS_S_ISDIR (rtems_rfs_inode_get_mode (&target_inode));  
+
+  dir = RTEMS_RFS_S_ISDIR (rtems_rfs_inode_get_mode (&target_inode));
   if (dir)
   {
     switch (dir_mode)
@@ -156,7 +156,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
         break;
     }
   }
-  
+
   rc = rtems_rfs_inode_open (fs, parent, &parent_inode, true);
   if (rc)
   {
@@ -166,7 +166,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
     rtems_rfs_inode_close (fs, &target_inode);
     return rc;
   }
-  
+
   rc = rtems_rfs_dir_del_entry (fs, &parent_inode, target, doff);
   if (rc > 0)
   {
@@ -177,7 +177,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
     rtems_rfs_inode_close (fs, &target_inode);
     return rc;
   }
-  
+
   links = rtems_rfs_inode_get_links (&target_inode);
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
@@ -212,7 +212,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
       rtems_rfs_inode_set_links (&parent_inode, links);
     }
   }
-  
+
   rc = rtems_rfs_inode_time_stamp_now (&parent_inode, true, true);
   if (rc > 0)
   {
@@ -239,7 +239,7 @@ rtems_rfs_unlink (rtems_rfs_file_system* fs,
   if ((rc > 0) && rtems_rfs_trace (RTEMS_RFS_TRACE_UNLINK))
     printf ("rtems-rfs: link: target inode-close failed: %d: %s\n",
             rc, strerror (rc));
-  
+
   return rc;
 }
 
@@ -256,7 +256,7 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
   rtems_rfs_inode_handle inode;
   rtems_rfs_ino          ino;
   int                    rc;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_SYMLINK))
   {
     int c;
@@ -270,13 +270,13 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
 
   if (link_length >= rtems_rfs_fs_block_size (fs))
     return ENAMETOOLONG;
-  
+
   rc = rtems_rfs_inode_create (fs, parent, name, strlen (name),
                                RTEMS_RFS_S_SYMLINK,
                                1, uid, gid, &ino);
   if (rc > 0)
     return rc;
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc > 0)
     return rc;
@@ -298,7 +298,7 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
     rtems_rfs_block_no      block;
     rtems_rfs_buffer_handle buffer;
     uint8_t*                data;
-    
+
     rc = rtems_rfs_block_map_open (fs, &inode, &map);
     if (rc > 0)
     {
@@ -331,7 +331,7 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
     }
 
     data = rtems_rfs_buffer_data (&buffer);
-    
+
     memset (data, 0xff, rtems_rfs_fs_block_size (fs));
     memcpy (data, link, link_length);
 
@@ -350,11 +350,11 @@ rtems_rfs_symlink (rtems_rfs_file_system* fs,
       return rc;
     }
   }
-  
+
   rtems_rfs_inode_set_block_offset (&inode, link_length);
 
   rc = rtems_rfs_inode_close (fs, &inode);
-  
+
   return rc;
 }
 
@@ -367,7 +367,7 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
 {
   rtems_rfs_inode_handle inode;
   int                    rc;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_SYMLINK_READ))
     printf ("rtems-rfs: symlink-read: link:%" PRIu32 "\n", link);
 
@@ -382,13 +382,13 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
   }
 
   *length = rtems_rfs_inode_get_block_offset (&inode);
-  
+
   if (size < *length)
   {
     rtems_rfs_inode_close (fs, &inode);
     return EINVAL;
   }
-      
+
   if (rtems_rfs_inode_get_block_count (&inode) == 0)
   {
     memcpy (path, inode.node->data.name, *length);
@@ -399,7 +399,7 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
     rtems_rfs_block_no      block;
     rtems_rfs_buffer_handle buffer;
     char*                   data;
-    
+
     rc = rtems_rfs_block_map_open (fs, &inode, &map);
     if (rc > 0)
     {
@@ -453,6 +453,6 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
   path[*length] = '\0';
 
   rc = rtems_rfs_inode_close (fs, &inode);
-  
+
   return rc;
 }

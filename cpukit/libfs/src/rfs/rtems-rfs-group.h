@@ -37,7 +37,7 @@
  * bit allocator for blocks in the group simpler plus is allows a simple way to
  * localise access to files and directories.
  */
-typedef struct _rtems_rfs_group 
+typedef struct _rtems_rfs_group
 {
   /**
    * Base block number.

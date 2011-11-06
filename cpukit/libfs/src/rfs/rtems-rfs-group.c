@@ -35,7 +35,7 @@ rtems_rfs_group_open (rtems_rfs_file_system* fs,
                       rtems_rfs_group*       group)
 {
   int rc;
-  
+
   if (base >= rtems_rfs_fs_blocks (fs))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_OPEN))
@@ -55,15 +55,15 @@ rtems_rfs_group_open (rtems_rfs_file_system* fs,
    */
   if (inodes > size)
     inodes = size;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_OPEN))
     printf ("rtems-rfs: group-open: base=%" PRId32 ", blocks=%zd inodes=%zd\n",
             base, size, inodes);
 
   group->base = base;
   group->size = size;
-  
-  rc = rtems_rfs_buffer_handle_open (fs, &group->block_bitmap_buffer);  
+
+  rc = rtems_rfs_buffer_handle_open (fs, &group->block_bitmap_buffer);
   if (rc > 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_OPEN))
@@ -114,7 +114,7 @@ rtems_rfs_group_open (rtems_rfs_file_system* fs,
     rtems_rfs_bitmap_release_buffer (fs, &group->block_bitmap);
     rtems_rfs_bitmap_release_buffer (fs, &group->inode_bitmap);
   }
-  
+
   return 0;
 }
 
@@ -144,7 +144,7 @@ rtems_rfs_group_close (rtems_rfs_file_system* fs, rtems_rfs_group* group)
   rc = rtems_rfs_buffer_handle_close (fs, &group->block_bitmap_buffer);
   if (rc > 0)
     result = rc;
-  
+
   return result;
 }
 
@@ -168,13 +168,13 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
   }
   else
     size = fs->group_blocks;
-    
+
   group_start = goal / size;
   bit = (rtems_rfs_bitmap_bit) (goal % size);
   offset = 0;
   updown = true;
   direction = 1;
-      
+
   /*
    * Try the goal group first and if that group fails try the groups either
    * side until the whole file system has be tried.
@@ -193,7 +193,7 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
     group = group_start + (direction * offset);
     if (offset)
       bit = direction > 0 ? 0 : size - 1;
-    
+
     /*
      * If we are still looking up and down and if the group is out of range we
      * have reached one end. Stopping looking up and down and just move in the
@@ -212,14 +212,14 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
       bitmap = &fs->groups[group].inode_bitmap;
     else
       bitmap = &fs->groups[group].block_bitmap;
-    
+
     rc = rtems_rfs_bitmap_map_alloc (bitmap, bit, &allocated, &bit);
     if (rc > 0)
       return rc;
-    
+
     if (rtems_rfs_fs_release_bitmaps (fs))
       rtems_rfs_bitmap_release_buffer (fs, bitmap);
-      
+
     if (allocated)
     {
       if (inode)
@@ -237,7 +237,7 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
 
     offset++;
   }
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_GROUP_BITMAPS))
     printf ("rtems-rfs: group-bitmap-alloc: no blocks available\n");
 
@@ -263,25 +263,25 @@ rtems_rfs_group_bitmap_free (rtems_rfs_file_system* fs,
   {
     no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_inodes;
-  }    
+  }
   else
   {
     no -= RTEMS_RFS_SUPERBLOCK_SIZE;
     size = fs->group_blocks;
   }
-  
+
   group = no / size;
   bit = (rtems_rfs_bitmap_bit) (no % size);
-  
+
   if (inode)
     bitmap = &fs->groups[group].inode_bitmap;
   else
     bitmap = &fs->groups[group].block_bitmap;
 
   rc = rtems_rfs_bitmap_map_clear (bitmap, bit);
-  
+
   rtems_rfs_bitmap_release_buffer (fs, bitmap);
-  
+
   return rc;
 }
 
@@ -307,26 +307,26 @@ rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
         return EINVAL;
     no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_inodes;
-  }    
+  }
   else
   {
     if (no >= rtems_rfs_fs_blocks (fs))
         return EINVAL;
     size = fs->group_blocks;
   }
-  
+
   group = no / size;
   bit = (rtems_rfs_bitmap_bit) (no % size);
-  
+
   if (inode)
     bitmap = &fs->groups[group].inode_bitmap;
   else
     bitmap = &fs->groups[group].block_bitmap;
 
   rc = rtems_rfs_bitmap_map_test (bitmap, bit, state);
-  
+
   rtems_rfs_bitmap_release_buffer (fs, bitmap);
-  
+
   return rc;
 }
 
@@ -336,10 +336,10 @@ rtems_rfs_group_usage (rtems_rfs_file_system* fs,
                        size_t*                inodes)
 {
   int g;
-  
+
   *blocks = 0;
   *inodes = 0;
-  
+
   for (g = 0; g < fs->group_count; g++)
   {
     rtems_rfs_group* group = &fs->groups[g];
@@ -355,7 +355,7 @@ rtems_rfs_group_usage (rtems_rfs_file_system* fs,
     *blocks = rtems_rfs_fs_blocks (fs);
   if (*inodes > rtems_rfs_fs_inodes (fs))
     *inodes = rtems_rfs_fs_inodes (fs);
-  
+
   return 0;
 }
 

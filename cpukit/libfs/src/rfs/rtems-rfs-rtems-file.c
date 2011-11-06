@@ -65,9 +65,9 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
            pathname, ino, flags, mode);
 
   rtems_rfs_rtems_lock (fs);
-  
+
   ino = rtems_rfs_rtems_get_iop_ino (iop);
-  
+
   rc = rtems_rfs_file_open (fs, ino, flags, &file);
   if (rc > 0)
   {
@@ -77,10 +77,10 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
     printf("rtems-rfs: file-open: handle:%p\n", file);
-  
+
   iop->size = rtems_rfs_file_size (file);
   rtems_rfs_rtems_set_iop_file_handle (iop, file);
-  
+
   rtems_rfs_rtems_unlock (fs);
   return 0;
 }
@@ -103,11 +103,11 @@ rtems_rfs_rtems_file_close (rtems_libio_t* iop)
     printf("rtems-rfs: file-close: handle:%p\n", file);
 
   rtems_rfs_rtems_lock (fs);
-  
+
   rc = rtems_rfs_file_close (fs, file);
   if (rc > 0)
     rc = rtems_rfs_rtems_error ("file-close: file close", rc);
-  
+
   rtems_rfs_rtems_unlock (fs);
   return rc;
 }
@@ -137,7 +137,7 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 
   pos = iop->offset;
-  
+
   if (pos < rtems_rfs_file_size (file))
   {
     while (count)
@@ -153,10 +153,10 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
 
       if (size == 0)
         break;
-    
+
       if (size > count)
         size = count;
-    
+
       memcpy (data, rtems_rfs_file_data (file), size);
 
       data  += size;
@@ -171,9 +171,9 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
       }
     }
   }
-  
+
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
-  
+
   return read;
 }
 
@@ -202,7 +202,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 
   pos = iop->offset;
-  
+
   /*
    * If the iop position is past the physical end of the file we need to set
    * the file size to the new length before writing. If the position equals the
@@ -210,7 +210,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
    * from 0. For a specific position we need a file that has a length of one
    * more.
    */
-  
+
   if (pos >= rtems_rfs_file_size (file))
   {
     rc = rtems_rfs_file_set_size (file, pos + 1);
@@ -220,20 +220,20 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
       return rtems_rfs_rtems_error ("file-write: write extend", rc);
     }
   }
-  
+
   rtems_rfs_file_set_bpos (file, pos);
-  
+
   while (count)
   {
     size_t size = count;
-    
+
     rc = rtems_rfs_file_io_start (file, &size, false);
     if (rc)
     {
       write = rtems_rfs_rtems_error ("file-write: write open", rc);
       break;
     }
-    
+
     if (size > count)
       size = count;
 
@@ -242,7 +242,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
     data  += size;
     count -= size;
     write  += size;
-    
+
     rc = rtems_rfs_file_io_end (file, size, false);
     if (rc)
     {
@@ -250,11 +250,11 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
       break;
     }
   }
-  
+
   iop->size = rtems_rfs_file_size (file);
-  
+
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
-  
+
   return write;
 }
 
@@ -280,9 +280,9 @@ rtems_rfs_rtems_file_ioctl (rtems_libio_t* iop, uint32_t command, void* buffer)
  * @param iop
  * @param offset
  * @param whence
- * @return off_t        
+ * @return off_t
  */
-static off_t        
+static off_t
 rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
                             off_t          offset,
                             int            whence)
@@ -295,18 +295,18 @@ rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
     printf("rtems-rfs: file-lseek: handle:%p offset:%" PRIdoff_t "\n", file, offset);
 
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
-  
+
   pos = iop->offset;
-  
+
   rc = rtems_rfs_file_seek (file, pos, &pos);
   if (rc)
   {
     rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
     return rtems_rfs_rtems_error ("file_lseek: lseek", rc);
   }
-  
+
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
-  
+
   return iop->offset;
 }
 
@@ -326,15 +326,15 @@ rtems_rfs_rtems_file_ftruncate (rtems_libio_t* iop,
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_FTRUNC))
     printf("rtems-rfs: file-ftrunc: handle:%p length:%" PRIdoff_t "\n", file, length);
-  
+
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
-  
+
   rc = rtems_rfs_file_set_size (file, length);
   if (rc)
     rc = rtems_rfs_rtems_error ("file_ftruncate: set size", rc);
 
   iop->size = rtems_rfs_file_size (file);
-  
+
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
 
   return rc;

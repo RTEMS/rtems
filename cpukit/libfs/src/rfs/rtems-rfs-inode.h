@@ -581,7 +581,7 @@ int rtems_rfs_inode_free (rtems_rfs_file_system* fs,
  * @param load If true load the inode into memory from the media.
  * @return int The error number (errno). No error if 0.
  */
-int rtems_rfs_inode_open (rtems_rfs_file_system*  fs, 
+int rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
                           rtems_rfs_ino           ino,
                           rtems_rfs_inode_handle* handle,
                           bool                    load);
@@ -675,7 +675,7 @@ int rtems_rfs_inode_initialise (rtems_rfs_inode_handle* handle,
  *             loaded.
  */
 int rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
-                                    bool                    atime, 
+                                    bool                    atime,
                                     bool                    mtime);
 
 /**

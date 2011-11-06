@@ -55,9 +55,9 @@ typedef struct _rtems_rfs_file_shared
    * map.
    */
   rtems_rfs_block_map map;
-  
+
   /**
-   * The size of the file as taken from the inode. The map's size and 
+   * The size of the file as taken from the inode. The map's size and
    * this size should be the same.
    */
   rtems_rfs_block_size size;
@@ -152,7 +152,7 @@ rtems_rfs_file_shared_get_block_offset (rtems_rfs_file_shared* shared)
  * @oaram shared The shared file data.
  * @return rtems_rfs_pos The data size in bytes.
  */
-static inline rtems_rfs_pos 
+static inline rtems_rfs_pos
 rtems_rfs_file_shared_get_size (rtems_rfs_file_system* fs,
                                 rtems_rfs_file_shared* shared)
 {

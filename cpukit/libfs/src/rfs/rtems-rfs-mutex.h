@@ -71,7 +71,7 @@ rtems_rfs_mutex_lock (rtems_rfs_mutex* mutex)
   {
 #if RTEMS_RFS_TRACE
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_MUTEX))
-      printf ("rtems-rfs: mutex: obtain failed: %s\n", 
+      printf ("rtems-rfs: mutex: obtain failed: %s\n",
               rtems_status_text (sc));
 #endif
     return EIO;
@@ -96,7 +96,7 @@ rtems_rfs_mutex_unlock (rtems_rfs_mutex* mutex)
   {
 #if RTEMS_RFS_TRACE
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_MUTEX))
-      printf ("rtems-rfs: mutex: release failed: %s\n", 
+      printf ("rtems-rfs: mutex: release failed: %s\n",
               rtems_status_text (sc));
 #endif
     return EIO;

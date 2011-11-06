@@ -38,7 +38,7 @@ rtems_rfs_rtems_eval_perms (rtems_rfs_inode_handle* inode, int flags)
   uid = rtems_rfs_inode_get_uid (inode);
   gid = rtems_rfs_inode_get_gid (inode);
   mode = rtems_rfs_inode_get_mode (inode);
-  
+
 #if defined (RTEMS_POSIX_API)
   st_uid = geteuid ();
   st_gid = getegid ();
@@ -46,7 +46,7 @@ rtems_rfs_rtems_eval_perms (rtems_rfs_inode_handle* inode, int flags)
   st_uid = uid;
   st_gid = gid;
 #endif
-  
+
   /*
    * Check if I am owner or a group member or someone else.
    */
@@ -65,7 +65,7 @@ rtems_rfs_rtems_eval_perms (rtems_rfs_inode_handle* inode, int flags)
             st_uid, st_gid, uid, gid,
             flags, flags_to_test, mode & 0777,
             flags_to_test & (mode & 0777));
-  
+
   /*
    * If all of the flags are set we have permission
    * to do this.
@@ -166,7 +166,7 @@ rtems_rfs_rtems_trace_shell_command (int argc, char *argv[])
 {
   const char* table[] =
   {
-    "error-msgs",   
+    "error-msgs",
     "eval-path"
     "eval-for-make",
     "eval-perms",
@@ -190,7 +190,7 @@ rtems_rfs_rtems_trace_shell_command (int argc, char *argv[])
   bool set = true;
   int  arg;
   int  t;
-  
+
   for (arg = 1; arg < argc; arg++)
   {
     if (argv[arg][0] == '-')
@@ -230,7 +230,7 @@ rtems_rfs_rtems_trace_shell_command (int argc, char *argv[])
           }
         }
       }
-      
+
       if (set)
         rtems_rfs_rtems_trace_mask |= value;
       else

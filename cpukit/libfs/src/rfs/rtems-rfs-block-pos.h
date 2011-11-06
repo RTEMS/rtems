@@ -126,7 +126,7 @@ rtems_rfs_block_add_pos (rtems_rfs_file_system*  fs,
                          rtems_rfs_pos_rel       offset,
                          rtems_rfs_block_pos*    bpos)
 {
-  rtems_rfs_block_get_bpos (fs, 
+  rtems_rfs_block_get_bpos (fs,
                             rtems_rfs_block_get_pos (fs, bpos) + offset,
                             bpos);
   bpos->block = 0;

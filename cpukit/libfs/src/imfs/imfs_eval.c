@@ -578,7 +578,7 @@ int IMFS_eval_path(
         if ( node->type == IMFS_HARD_LINK ) {
           IMFS_evaluate_hard_link( pathloc, 0 );
           node = pathloc->node_access;
-       
+
           /*
            * It would be a design error if we evaluated the link and
            * was broken.

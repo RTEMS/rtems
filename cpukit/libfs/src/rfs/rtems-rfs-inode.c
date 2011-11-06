@@ -60,20 +60,20 @@ rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
   int gino;
   int index;
   int rc;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_OPEN))
     printf ("rtems-rfs: inode-open: ino: %" PRIu32 "\n", ino);
 
   if (ino == RTEMS_RFS_EMPTY_INO)
     return EINVAL;
-  
+
   if ((ino - RTEMS_RFS_ROOT_INO) > rtems_rfs_fs_inodes (fs))
     return EINVAL;
-  
+
   handle->ino = ino;
   handle->node = NULL;
   handle->loads = 0;
-  
+
   gino  = ino - RTEMS_RFS_ROOT_INO;
   group = gino / fs->group_inodes;
   gino  = gino % fs->group_inodes;
@@ -106,7 +106,7 @@ rtems_rfs_inode_close (rtems_rfs_file_system*  fs,
               handle->loads);
     rc = EIO;
   }
-  
+
   handle->ino = 0;
   return rc;
 }
@@ -127,7 +127,7 @@ rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
   if (!rtems_rfs_inode_is_loaded (handle))
   {
     int rc;
-    
+
     rc = rtems_rfs_buffer_handle_request (fs,&handle->buffer,
                                           handle->block, true);
     if (rc > 0)
@@ -138,7 +138,7 @@ rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
   }
 
   handle->loads++;
-  
+
   return 0;
 }
 
@@ -148,19 +148,19 @@ rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
                         bool                    update_ctime)
 {
   int rc = 0;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_UNLOAD))
     printf ("rtems-rfs: inode-unload: ino=%" PRIu32 " loads=%i loaded=%s\n",
             handle->ino, handle->loads,
             rtems_rfs_inode_is_loaded (handle) ? "yes" : "no");
-  
+
   if (rtems_rfs_inode_is_loaded (handle))
   {
     if (handle->loads == 0)
       return EIO;
 
     handle->loads--;
-    
+
     if (handle->loads == 0)
     {
       /*
@@ -172,7 +172,7 @@ rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
       handle->node = NULL;
     }
   }
-  
+
   return rc;
 }
 
@@ -190,7 +190,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
   rtems_rfs_inode_handle parent_inode;
   rtems_rfs_inode_handle inode;
   int                    rc;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_CREATE))
   {
     const char* type = "unknown";
@@ -225,7 +225,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
     default:
       return EINVAL;
   }
-  
+
   rc = rtems_rfs_inode_alloc (fs, parent, ino);
   if (rc > 0)
     return rc;
@@ -236,7 +236,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
     rtems_rfs_inode_free (fs, *ino);
     return rc;
   }
-  
+
   rc = rtems_rfs_inode_initialise (&inode, links, mode, uid, gid);
   if (rc > 0)
   {
@@ -287,7 +287,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
   if (RTEMS_RFS_S_ISDIR (mode))
     rtems_rfs_inode_set_links (&parent_inode,
                                rtems_rfs_inode_get_links (&parent_inode) + 1);
-  
+
   rc = rtems_rfs_inode_close (fs, &parent_inode);
   if (rc > 0)
   {
@@ -302,7 +302,7 @@ rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
     rtems_rfs_inode_free (fs, *ino);
     return rc;
   }
-  
+
   return 0;
 }
 
@@ -311,7 +311,7 @@ rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
                         rtems_rfs_inode_handle* handle)
 {
   int rc = 0;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_INODE_DELETE))
     printf("rtems-rfs: inode-delete: ino:%" PRIu32 " loaded:%s\n",
            rtems_rfs_inode_ino (handle),
@@ -327,7 +327,7 @@ rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
     rc = rtems_rfs_inode_free (fs, handle->ino);
     if (rc > 0)
       return rc;
-    
+
     /*
      * Free the blocks the inode may have attached.
      */
@@ -377,7 +377,7 @@ rtems_rfs_inode_initialise (rtems_rfs_inode_handle* handle,
 
 int
 rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
-                                bool                    atime, 
+                                bool                    atime,
                                 bool                    mtime)
 {
   time_t now;

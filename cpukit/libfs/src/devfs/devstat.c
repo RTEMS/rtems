@@ -36,7 +36,7 @@ int devFS_stat(
   #if defined(RTEMS_DEBUG)
     if (!the_dev)
       rtems_set_errno_and_return_minus_one( EFAULT );
-  #endif 
+  #endif
 
   buf->st_rdev  = rtems_filesystem_make_dev_t( the_dev->major, the_dev->minor );
   buf->st_mode = the_dev->mode;

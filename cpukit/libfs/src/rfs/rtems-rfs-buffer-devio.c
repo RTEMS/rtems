@@ -34,7 +34,7 @@
 
 int
 rtems_rfs_buffer_deviceio_request (rtems_rfs_buffer_handle* handle,
-                                   dev_t                    device, 
+                                   dev_t                    device,
                                    rtems_rfs_buffer_block   block,
                                    bool                     read)
 {

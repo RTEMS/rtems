@@ -41,7 +41,7 @@ rtems_rfs_scan_chain (rtems_chain_control*   chain,
 {
   rtems_rfs_buffer* buffer;
   rtems_chain_node* node;
-  
+
   node = rtems_chain_last (chain);
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CHAINS))
@@ -81,7 +81,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
                                  bool                     read)
 {
   int rc;
-  
+
   /*
    * If the handle has a buffer release it. This allows a handle to be reused
    * without needing to close then open it again.
@@ -158,7 +158,7 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
         rtems_rfs_buffer_mark_dirty (handle);
     }
   }
-    
+
   /*
    * If not located we request the buffer from the I/O layer.
    */
@@ -183,15 +183,15 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
   rtems_rfs_buffer_refs_up (handle);
   rtems_chain_append (&fs->buffers, rtems_rfs_buffer_link (handle));
   fs->buffers_count++;
-  
+
   handle->buffer->user = (void*) ((intptr_t) block);
   handle->bnum = block;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))
     printf ("rtems-rfs: buffer-request: block=%" PRIu32 " bdbuf-%s=%" PRIu32 " refs=%d\n",
             block, read ? "read" : "get", handle->buffer->block,
             handle->buffer->references);
-  
+
   return 0;
 }
 
@@ -200,7 +200,7 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
                                  rtems_rfs_buffer_handle* handle)
 {
   int rc = 0;
-  
+
   if (rtems_rfs_buffer_handle_has_block (handle))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_RELEASE))
@@ -212,12 +212,12 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
 
     if (rtems_rfs_buffer_refs (handle) > 0)
       rtems_rfs_buffer_refs_down (handle);
-    
+
     if (rtems_rfs_buffer_refs (handle) == 0)
     {
       rtems_chain_extract (rtems_rfs_buffer_link (handle));
       fs->buffers_count--;
-      
+
       if (rtems_rfs_fs_no_local_cache (fs))
       {
         handle->buffer->user = (void*) 0;
@@ -240,11 +240,11 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
         {
           rtems_rfs_buffer* buffer;
           bool              modified;
-        
+
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_RELEASE))
             printf ("rtems-rfs: buffer-release: local cache overflow:"
                     " %" PRIu32 "\n", fs->release_count + fs->release_modified_count);
-        
+
           if (fs->release_count > fs->release_modified_count)
           {
             buffer = (rtems_rfs_buffer*) rtems_chain_get (&fs->release);
@@ -261,7 +261,7 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
           buffer->user = (void*) 0;
           rc = rtems_rfs_buffer_io_release (buffer, modified);
         }
-      
+
         if (rtems_rfs_buffer_dirty (handle))
         {
           rtems_chain_append (&fs->release_modified,
@@ -277,7 +277,7 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
     }
     handle->buffer = NULL;
   }
-  
+
   return rc;
 }
 
@@ -288,7 +288,7 @@ rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs)
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SYNC))
     printf ("rtems-rfs: buffer-open: opening: %s\n", name);
-  
+
   if (stat (name, &st) < 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
@@ -333,7 +333,7 @@ rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs)
     printf ("rtems-rfs: buffer-open: blks=%" PRId32 ", blk-size=%" PRId32 "\n",
             rtems_rfs_fs_media_blocks (fs),
             rtems_rfs_fs_media_block_size (fs));
-  
+
   return 0;
 }
 
@@ -354,7 +354,7 @@ rtems_rfs_buffer_close (rtems_rfs_file_system* fs)
   if ((rc > 0) && rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_CLOSE))
     printf ("rtems-rfs: buffer-close: set media block size failed: %d: %s\n",
             rc, strerror (rc));
-  
+
 #if RTEMS_RFS_USE_LIBBLOCK
   rtems_disk_release (fs->disk);
 #else
@@ -366,7 +366,7 @@ rtems_rfs_buffer_close (rtems_rfs_file_system* fs)
               rc, strerror (rc));
   }
 #endif
-  
+
   return rc;
 }
 
@@ -418,12 +418,12 @@ rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, size_t size)
   if ((rc > 0) && rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SETBLKSIZE))
     printf ("rtems-rfs: buffer-setblksize: buffer release failed: %d: %s\n",
             rc, strerror (rc));
-  
+
   rc = rtems_rfs_buffer_sync (fs);
   if ((rc > 0) && rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SETBLKSIZE))
     printf ("rtems-rfs: buffer-setblksize: device sync failed: %d: %s\n",
             rc, strerror (rc));
-  
+
 #if RTEMS_RFS_USE_LIBBLOCK
   rc = fs->disk->ioctl (fs->disk, RTEMS_BLKIO_SETBLKSIZE, &size);
   if (rc < 0)
@@ -450,7 +450,7 @@ rtems_rfs_release_chain (rtems_chain_control* chain,
     (*count)--;
 
     buffer->user = (void*) 0;
-    
+
     rc = rtems_rfs_buffer_io_release (buffer, modified);
     if ((rc > 0) && (rrc == 0))
       rrc = rc;

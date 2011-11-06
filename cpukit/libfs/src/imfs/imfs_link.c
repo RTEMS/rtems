@@ -55,7 +55,7 @@ int IMFS_link(
    *        was ONLY passed a NULL when we created the root node.  We
    *        added a new IMFS_create_root_node() so this path no longer
    *        existed.  The result was simpler code which should not have
-   *        this path. 
+   *        this path.
    */
   new_node = IMFS_create_node(
     parent_loc,

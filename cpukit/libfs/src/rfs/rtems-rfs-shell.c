@@ -58,7 +58,7 @@ rtems_rfs_shell_lock_rfs (rtems_rfs_file_system* fs)
 {
 #if __rtems__
   rtems_rfs_rtems_lock (fs);
-#endif  
+#endif
 }
 
 /**
@@ -69,7 +69,7 @@ rtems_rfs_shell_unlock_rfs (rtems_rfs_file_system* fs)
 {
 #if __rtems__
   rtems_rfs_rtems_unlock (fs);
-#endif  
+#endif
 }
 
 /**
@@ -108,7 +108,7 @@ rtems_rfs_get_fs (const char* path, rtems_rfs_file_system** fs)
     rtems_filesystem_freenode (&pathloc);
   }
 #endif
-  
+
   return rc;
 }
 
@@ -145,17 +145,17 @@ rtems_rfs_shell_data (rtems_rfs_file_system* fs, int argc, char *argv[])
   rtems_rfs_shell_lock_rfs (fs);
 
   rtems_rfs_group_usage (fs, &blocks, &inodes);
-  
+
   rtems_rfs_shell_unlock_rfs (fs);
 
   bpcent = (blocks * 1000) / rtems_rfs_fs_blocks (fs);
   ipcent = (inodes * 1000) / rtems_rfs_fs_inodes (fs);
-  
+
   printf ("       blocks used: %zd (%d.%d%%)\n",
           blocks, bpcent / 10, bpcent % 10);
   printf ("       inodes used: %zd (%d.%d%%)\n",
           inodes, ipcent / 10, ipcent % 10);
-  
+
   return 0;
 }
 
@@ -168,7 +168,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   bool                    state;
   int                     b;
   int                     rc;
-  
+
   if (argc <= 1)
   {
     printf ("error: no block number provided\n");
@@ -178,7 +178,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   block = strtoul (argv[1], 0, 0);
 
   rtems_rfs_shell_lock_rfs (fs);
-  
+
   rc = rtems_rfs_group_bitmap_test (fs, false, block, &state);
   if (rc > 0)
   {
@@ -189,7 +189,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   }
 
   printf (" %5" PRIu32 ": block %s\n", block, state ? "allocated" : "free");
-    
+
   rc = rtems_rfs_buffer_handle_open (fs, &buffer);
   if (rc > 0)
   {
@@ -226,7 +226,7 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
   }
 
   printf ("\n");
-  
+
   rc = rtems_rfs_buffer_handle_close (fs, &buffer);
   if (rc > 0)
   {
@@ -235,9 +235,9 @@ rtems_rfs_shell_block (rtems_rfs_file_system* fs, int argc, char *argv[])
             block, rc, strerror (rc));
     return 1;
   }
-  
+
   rtems_rfs_shell_unlock_rfs (fs);
-  
+
   return 0;
 }
 
@@ -309,7 +309,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
   }
 
   rtems_rfs_shell_lock_rfs (fs);
-  
+
   for (ino = start; ino <= end; ino++)
   {
     rtems_rfs_inode_handle inode;
@@ -339,7 +339,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
       }
 
       error = false;
-      
+
       mode = rtems_rfs_inode_get_mode (&inode);
 
       if (error_check_only)
@@ -372,11 +372,11 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
                 ino, rtems_rfs_buffer_bnum (&inode.buffer),
                 inode.offset * RTEMS_RFS_INODE_SIZE,
                 allocated ? 'A' : 'F');
-    
+
         if (!allocated && !forced)
           printf (" --\n");
         else
-        {      
+        {
           const char* type;
           type = "UKN";
           if (RTEMS_RFS_S_ISDIR (mode))
@@ -399,7 +399,7 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
           printf ("%" PRIu32 "]\n", rtems_rfs_inode_get_block (&inode, b));
         }
       }
-      
+
       rc = rtems_rfs_inode_close (fs, &inode);
       if (rc > 0)
       {
@@ -410,9 +410,9 @@ rtems_rfs_shell_inode (rtems_rfs_file_system* fs, int argc, char *argv[])
       }
     }
   }
-  
+
   rtems_rfs_shell_unlock_rfs (fs);
-  
+
   return 0;
 }
 
@@ -426,7 +426,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   int                     entry;
   int                     b;
   int                     rc;
-  
+
   if (argc <= 1)
   {
     printf ("error: no block number provided\n");
@@ -436,7 +436,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   block = strtoul (argv[1], 0, 0);
 
   rtems_rfs_shell_lock_rfs (fs);
-  
+
   rc = rtems_rfs_group_bitmap_test (fs, false, block, &state);
   if (rc > 0)
   {
@@ -470,7 +470,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
   b = 0;
   entry = 1;
   data = rtems_rfs_buffer_data (&buffer);
-  
+
   while (b < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE - 1))
   {
     rtems_rfs_ino eino;
@@ -480,7 +480,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
 
     eino    = rtems_rfs_dir_entry_ino (data);
     elength = rtems_rfs_dir_entry_length (data);
-    
+
     if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
       break;
 
@@ -490,15 +490,15 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
       printf (" %5d: entry length appears corrupt: %d\n", entry, elength);
       break;
     }
-    
+
     if ((eino < RTEMS_RFS_ROOT_INO) || (eino >= rtems_rfs_fs_inodes (fs)))
     {
       printf (" %5d: entry ino appears corrupt: ino=%" PRId32 "\n", entry, eino);
       break;
     }
-    
+
     length = elength - RTEMS_RFS_DIR_ENTRY_SIZE;
-    
+
     printf (" %5d: %04x inode=%-6" PRIu32 " hash=%08" PRIx32 " name[%03u]=",
             entry, b,
             rtems_rfs_dir_entry_ino (data),
@@ -507,7 +507,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
 
     if (length > 50)
       length = 50;
-    
+
     for (c = 0; c < length; c++)
       printf ("%c", data[RTEMS_RFS_DIR_ENTRY_SIZE + c]);
     if (length < elength - RTEMS_RFS_DIR_ENTRY_SIZE)
@@ -518,7 +518,7 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
     data += elength;
     entry++;
   }
-  
+
   rc = rtems_rfs_buffer_handle_close (fs, &buffer);
   if (rc > 0)
   {
@@ -527,9 +527,9 @@ rtems_rfs_shell_dir (rtems_rfs_file_system* fs, int argc, char *argv[])
             block, rc, strerror (rc));
     return 1;
   }
-  
+
   rtems_rfs_shell_unlock_rfs (fs);
-  
+
   return 0;
 }
 
@@ -565,7 +565,7 @@ rtems_rfs_shell_group (rtems_rfs_file_system* fs, int argc, char *argv[])
     printf ("error: group out of range (0->%d).\n", fs->group_count);
     return 1;
   }
-  
+
   rtems_rfs_shell_lock_rfs (fs);
 
   for (g = start; g <= end; g++)
@@ -580,9 +580,9 @@ rtems_rfs_shell_group (rtems_rfs_file_system* fs, int argc, char *argv[])
             blocks, (blocks * 100)  / group->size,
             inodes, (inodes * 100) / fs->group_inodes);
   }
-  
+
   rtems_rfs_shell_unlock_rfs (fs);
-  
+
   return 0;
 }
 
@@ -618,7 +618,7 @@ rtems_shell_debugrfs (int argc, char *argv[])
 
   int arg;
   int t;
-  
+
   for (arg = 1; arg < argc; arg++)
   {
     if (argv[arg][0] != '-')
@@ -653,7 +653,7 @@ rtems_shell_debugrfs (int argc, char *argv[])
       printf ("error: command not found: %s\n", argv[arg + 1]);
     }
   }
-  
+
   return 1;
 }
 
@@ -675,7 +675,7 @@ rtems_shell_rfs_format (int argc, char* argv[])
         case 'v':
           config.verbose = true;
           break;
-          
+
         case 's':
           arg++;
           if (arg >= argc)
@@ -685,7 +685,7 @@ rtems_shell_rfs_format (int argc, char* argv[])
           }
           config.block_size = strtoul (argv[arg], 0, 0);
           break;
-        
+
         case 'b':
           arg++;
           if (arg >= argc)
@@ -695,7 +695,7 @@ rtems_shell_rfs_format (int argc, char* argv[])
           }
           config.group_blocks = strtoul (argv[arg], 0, 0);
           break;
-          
+
         case 'i':
           arg++;
           if (arg >= argc)
@@ -709,7 +709,7 @@ rtems_shell_rfs_format (int argc, char* argv[])
         case 'I':
           config.initialise_inodes = true;
           break;
-          
+
         case 'o':
           arg++;
           if (arg >= argc)
@@ -719,7 +719,7 @@ rtems_shell_rfs_format (int argc, char* argv[])
           }
           config.inode_overhead = strtoul (argv[arg], 0, 0);
           break;
-          
+
         default:
           printf ("error: invalid option: %s\n", argv[arg]);
           return 1;
@@ -748,6 +748,6 @@ rtems_shell_rfs_format (int argc, char* argv[])
             driver, strerror (errno));
     return 1;
   }
-  
+
   return 0;
 }

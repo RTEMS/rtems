@@ -100,7 +100,7 @@ rtems_rfs_trace_shell_command (int argc, char *argv[])
   bool                 set = true;
   int                  arg;
   int                  t;
-  
+
   for (arg = 1; arg < argc; arg++)
   {
     if (argv[arg][0] == '-')

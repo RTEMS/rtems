@@ -85,7 +85,7 @@ rtems_rfs_buffer_bdbuf_release (rtems_rfs_buffer* buffer,
 #endif
     rc = EIO;
   }
-  
+
   return rc;
 }
 

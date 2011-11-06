@@ -112,11 +112,11 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
 
     if (fs->block_size < 512)
       fs->block_size = 512;
-    
+
     if (fs->block_size > (4 * 1024))
       fs->block_size = (4 * 1024);
   }
-  
+
   if ((fs->block_size % rtems_rfs_fs_media_block_size (fs)) != 0)
   {
     printf ("block size (%zd) is not a multiple of media block size (%" PRId32 ")\n",
@@ -139,14 +139,14 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
     printf ("group block count is higher than bits in block\n");
     return false;
   }
-  
+
   fs->blocks = rtems_rfs_fs_media_size (fs) / fs->block_size;
 
   /*
    * The bits per block sets the upper limit for the number of blocks in a
    * group. The disk will be divided into groups which are the number of bits
    * per block.
-   */  
+   */
   fs->group_count = rtems_rfs_rup_quotient (rtems_rfs_fs_blocks (fs),
                                             rtems_rfs_bits_per_block (fs));
 
@@ -154,13 +154,13 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   if (!fs->group_inodes)
   {
     int inode_overhead = RTEMS_RFS_INODE_OVERHEAD_PERCENTAGE;
-    
+
     /*
      * The number of inodes per group is set as a percentage.
      */
     if (config->inode_overhead)
       inode_overhead = config->inode_overhead;
-      
+
     fs->group_inodes = rtems_rfs_inodes_from_percent (fs, inode_overhead);
   }
 
@@ -171,7 +171,7 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   fs->group_inodes =
     rtems_rfs_rup_quotient (fs->group_inodes,
                             fs->inodes_per_block) * fs->inodes_per_block;
-  
+
   if (fs->group_inodes > rtems_rfs_bitmap_numof_bits (fs->block_size))
     fs->group_inodes = rtems_rfs_bitmap_numof_bits (fs->block_size);
 
@@ -180,7 +180,7 @@ rtems_rfs_check_config (rtems_rfs_file_system*         fs,
   {
     fs->max_name_length = 512;
   }
-  
+
   return true;
 }
 
@@ -197,7 +197,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
   int                      blocks;
   int                      b;
   int                      rc;
-  
+
   group_base = rtems_rfs_fs_block (fs, group, 0);
 
   if (group_base > rtems_rfs_fs_blocks (fs))
@@ -234,7 +234,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
 
   if (verbose)
     printf (", blocks");
-  
+
   /*
    * Open the block bitmap using the new buffer.
    */
@@ -253,7 +253,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
    * whole block.
    */
   memset (rtems_rfs_buffer_data (&handle), 0xff, rtems_rfs_fs_block_size (fs));
-  
+
   /*
    * Clear the bitmap.
    */
@@ -266,7 +266,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
             group, rc, strerror (rc));
     return false;
   }
-  
+
   /*
    * Forced allocation of the block bitmap.
    */
@@ -304,7 +304,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
 
   if (verbose)
     printf (", inodes");
-  
+
   /*
    * Open the inode bitmap using the old buffer. Should release any changes.
    */
@@ -323,7 +323,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
    * whole block.
    */
   memset (rtems_rfs_buffer_data (&handle), 0x00, rtems_rfs_fs_block_size (fs));
-  
+
   /*
    * Clear the inode bitmap.
    */
@@ -336,7 +336,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
             " clear all failed: %d: %s\n", group, rc, strerror (rc));
     return false;
   }
-  
+
   /*
    * Close the inode bitmap.
    */
@@ -369,17 +369,17 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
                 rc, strerror (rc));
         return false;
       }
-    
+
       /*
        * Force the whole buffer to a known state. The bit map may not occupy the
        * whole block.
        */
       memset (rtems_rfs_buffer_data (&handle), 0xff, rtems_rfs_fs_block_size (fs));
-  
+
       rtems_rfs_buffer_mark_dirty (&handle);
     }
   }
-  
+
   rc = rtems_rfs_buffer_handle_close (fs, &handle);
   if (rc > 0)
   {
@@ -387,7 +387,7 @@ rtems_rfs_write_group (rtems_rfs_file_system* fs,
             rc, strerror (rc));
     return false;
   }
-  
+
   return true;
 }
 
@@ -416,9 +416,9 @@ rtems_rfs_write_superblock (rtems_rfs_file_system* fs)
   }
 
   sb = rtems_rfs_buffer_data (&handle);
-  
+
 #define write_sb(_o, _d) rtems_rfs_write_u32(sb + (_o), _d)
-  
+
   memset (sb, 0xff, rtems_rfs_fs_block_size (fs));
 
   write_sb (RTEMS_RFS_SB_OFFSET_MAGIC, RTEMS_RFS_SB_MAGIC);
@@ -450,7 +450,7 @@ rtems_rfs_write_superblock (rtems_rfs_file_system* fs)
             rc, strerror (rc));
     return false;
   }
-  
+
   return true;
 }
 
@@ -474,7 +474,7 @@ rtems_rfs_write_root_dir (const char* name)
             errno, strerror (errno));
     return -1;
   }
-  
+
   rc = rtems_rfs_inode_alloc (fs, RTEMS_RFS_ROOT_INO, &ino);
   if (rc > 0)
   {
@@ -490,7 +490,7 @@ rtems_rfs_write_root_dir (const char* name)
     rtems_rfs_fs_close (fs);
     return rc;
   }
-  
+
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
   if (rc > 0)
   {
@@ -508,22 +508,22 @@ rtems_rfs_write_root_dir (const char* name)
   if (rc > 0)
     printf ("rtems-rfs: format: inode initialise failed: %d: %s\n",
             rc, strerror (rc));
-  
+
   rc = rtems_rfs_dir_add_entry (fs, &inode, ".", 1, ino);
   if (rc > 0)
     printf ("rtems-rfs: format: directory add failed: %d: %s\n",
             rc, strerror (rc));
-  
+
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc > 0)
     printf ("rtems-rfs: format: inode close failed: %d: %s\n",
             rc, strerror (rc));
-  
+
   rc = rtems_rfs_fs_close (fs);
   if (rc < 0)
     printf ("rtems-rfs: format: file system close failed: %d: %s\n",
             errno, strerror (errno));
-  
+
   return rc;
 }
 
@@ -536,7 +536,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
 
   if (config->verbose)
     printf ("rtems-rfs: format: %s\n", name);
-  
+
   memset (&fs, 0, sizeof (rtems_rfs_file_system));
 
   rtems_chain_initialize_empty (&fs.buffers);
@@ -550,7 +550,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
   fs.release_modified_count = 0;
 
   fs.flags = RTEMS_RFS_FS_NO_LOCAL_CACHE;
-  
+
   /*
    * Open the buffer interface.
    */
@@ -571,7 +571,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
             rtems_rfs_fs_media_block_size (&fs));
     return -1;
   }
-  
+
   /*
    * Check the configuration data.
    */
@@ -611,7 +611,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
             rc, strerror (rc));
     return -1;
   }
-  
+
   if (!rtems_rfs_write_superblock (&fs))
   {
     printf ("rtems-rfs: format: superblock write failed\n");
@@ -625,7 +625,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
 
   if (config->verbose)
     printf ("\n");
-  
+
   rc = rtems_rfs_buffer_close (&fs);
   if (rc > 0)
   {
@@ -641,6 +641,6 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
             rc, strerror (rc));
     return -1;
   }
-  
+
   return 0;
 }

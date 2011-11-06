@@ -36,15 +36,15 @@ int IMFS_rename(
   the_jnode = old_loc->node_access;
 
   strncpy( the_jnode->name, new_name, IMFS_NAME_MAX );
-  
+
   if ( the_jnode->Parent != NULL )
     rtems_chain_extract( (rtems_chain_node *) the_jnode );
 
   new_parent = new_parent_loc->node_access;
   the_jnode->Parent = new_parent;
-  
+
   rtems_chain_append( &new_parent->info.directory.Entries, &the_jnode->Node );
-  
+
   /*
    * Update the time.
    */

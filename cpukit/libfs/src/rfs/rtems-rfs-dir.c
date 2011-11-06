@@ -77,7 +77,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
 
   *ino = RTEMS_RFS_EMPTY_INO;
   *offset = 0;
-  
+
   rc = rtems_rfs_block_map_open (fs, inode, &map);
   if (rc > 0)
   {
@@ -86,7 +86,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
               rtems_rfs_inode_ino (inode), rc, strerror (rc));
     return rc;
   }
-  
+
   rc = rtems_rfs_buffer_handle_open (fs, &entries);
   if (rc > 0)
   {
@@ -105,7 +105,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
      * Calculate the hash of the look up string.
      */
     hash = rtems_rfs_dir_hash (name, length);
-  
+
     /*
      * Locate the first block. The map points to the start after open so just
      * seek 0. If an error the block will be 0.
@@ -122,16 +122,16 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
       rtems_rfs_block_map_close (fs, &map);
       return rc;
     }
-        
+
     while ((rc == 0) && block)
     {
       uint8_t* entry;
-      
+
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
         printf ("rtems-rfs: dir-lookup-ino: block read, ino=%" PRIu32 " bno=%" PRId32 "\n",
                 rtems_rfs_inode_ino (inode), map.bpos.bno);
-      
-      rc = rtems_rfs_buffer_handle_request (fs, &entries, block, true); 
+
+      rc = rtems_rfs_buffer_handle_request (fs, &entries, block, true);
       if (rc > 0)
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
@@ -146,21 +146,21 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
        */
 
       entry = rtems_rfs_buffer_data (&entries);
-      
+
       map.bpos.boff = 0;
 
       while (map.bpos.boff < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
       {
         uint32_t ehash;
         int      elength;
-      
+
         ehash  = rtems_rfs_dir_entry_hash (entry);
         elength = rtems_rfs_dir_entry_length (entry);
         *ino = rtems_rfs_dir_entry_ino (entry);
 
         if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
           break;
-        
+
         if (rtems_rfs_dir_entry_valid (fs, elength, *ino))
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO))
@@ -170,7 +170,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
           rc = EIO;
           break;
         }
-          
+
         if (ehash == hash)
         {
           if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_CHECK))
@@ -183,7 +183,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
           if (memcmp (entry + RTEMS_RFS_DIR_ENTRY_SIZE, name, length) == 0)
           {
             *offset = rtems_rfs_block_map_pos (fs, &map);
-            
+
             if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_LOOKUP_INO_FOUND))
               printf ("rtems-rfs: dir-lookup-ino: "
                       "entry found in ino %" PRIu32 ", ino=%" PRIu32 " offset=%" PRIu32 "\n",
@@ -222,7 +222,7 @@ rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
                 rtems_rfs_inode_ino (inode), rc, strerror (rc));
     }
   }
-  
+
   rtems_rfs_buffer_handle_close (fs, &entries);
   rtems_rfs_block_map_close (fs, &map);
   return rc;
@@ -249,7 +249,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
       printf ("%c", name[c]);
     printf (", len=%zd\n", length);
   }
-        
+
   rc = rtems_rfs_block_map_open (fs, dir, &map);
   if (rc > 0)
     return rc;
@@ -260,19 +260,19 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
     rtems_rfs_block_map_close (fs, &map);
     return rc;
   }
-  
+
   /*
    * Search the map from the beginning to find any empty space.
    */
   rtems_rfs_block_set_bpos_zero (&bpos);
-  
+
   while (true)
   {
     rtems_rfs_block_no block;
     uint8_t*           entry;
     int                offset;
     bool               read = true;
-    
+
     /*
      * Locate the first block. If an error the block will be 0. If the map is
      * empty which happens when creating a directory and adding the first entry
@@ -307,7 +307,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
     }
 
     bpos.bno++;
-    
+
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, read);
     if (rc > 0)
     {
@@ -317,14 +317,14 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
                 rtems_rfs_inode_ino (dir), rc, strerror (rc));
       break;
     }
-    
+
     entry  = rtems_rfs_buffer_data (&buffer);
-    
+
     if (!read)
       memset (entry, 0xff, rtems_rfs_fs_block_size (fs));
 
     offset = 0;
-    
+
     while (offset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
@@ -353,7 +353,7 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
 
         break;
       }
-      
+
       if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_ADD_ENTRY))
@@ -364,12 +364,12 @@ rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
         rtems_rfs_block_map_close (fs, &map);
         return EIO;
       }
-        
+
       entry  += elength;
       offset += elength;
     }
   }
-  
+
   rtems_rfs_buffer_handle_close (fs, &buffer);
   rtems_rfs_block_map_close (fs, &map);
   return rc;
@@ -380,7 +380,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
                          rtems_rfs_inode_handle* dir,
                          rtems_rfs_ino           ino,
                          uint32_t                offset)
-{  
+{
   rtems_rfs_block_map     map;
   rtems_rfs_block_no      block;
   rtems_rfs_buffer_handle buffer;
@@ -420,7 +420,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
   {
     uint8_t* entry;
     int      eoffset;
-    
+
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
     if (rc > 0)
     {
@@ -439,9 +439,9 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
       eoffset = 0;
     else
       eoffset = offset % rtems_rfs_fs_block_size (fs);
-    
+
     entry = rtems_rfs_buffer_data (&buffer) + eoffset;
-    
+
     while (eoffset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
@@ -452,7 +452,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
 
       if (elength == RTEMS_RFS_DIR_ENTRY_EMPTY)
         break;
-      
+
       if (rtems_rfs_dir_entry_valid (fs, elength, eino))
       {
         if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_DEL_ENTRY))
@@ -499,7 +499,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
                       rtems_rfs_inode_ino (dir), rc, strerror (rc));
           }
         }
-        
+
         rtems_rfs_buffer_mark_dirty (&buffer);
         rtems_rfs_buffer_handle_close (fs, &buffer);
         rtems_rfs_block_map_close (fs, &map);
@@ -511,7 +511,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
         rc = EIO;
         break;
       }
-      
+
       entry   += elength;
       eoffset += elength;
     }
@@ -523,7 +523,7 @@ rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
         rc = ENOENT;
     }
   }
-  
+
   rtems_rfs_buffer_handle_close (fs, &buffer);
   rtems_rfs_block_map_close (fs, &map);
   return rc;
@@ -546,7 +546,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
             rtems_rfs_inode_ino (dir), offset);
 
   *length = 0;
-  
+
   rc = rtems_rfs_block_map_open (fs, dir, &map);
   if (rc > 0)
     return rc;
@@ -555,7 +555,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
         (offset % rtems_rfs_fs_block_size (fs))) <= RTEMS_RFS_DIR_ENTRY_SIZE))
     offset = (((offset / rtems_rfs_fs_block_size (fs)) + 1) *
               rtems_rfs_fs_block_size (fs));
-  
+
   rc = rtems_rfs_block_map_seek (fs, &map, offset, &block);
   if (rc > 0)
   {
@@ -564,7 +564,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
     rtems_rfs_block_map_close (fs, &map);
     return rc;
   }
-  
+
   rc = rtems_rfs_buffer_handle_open (fs, &buffer);
   if (rc > 0)
   {
@@ -580,9 +580,9 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
   {
     uint8_t*      entry;
     rtems_rfs_ino eino;
-    int           elength;    
+    int           elength;
     int           remaining;
-    
+
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
     if (rc > 0)
     {
@@ -593,7 +593,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
 
     entry  = rtems_rfs_buffer_data (&buffer);
     entry += map.bpos.boff;
-    
+
     elength = rtems_rfs_dir_entry_length (entry);
     eino    = rtems_rfs_dir_entry_ino (entry);
 
@@ -608,7 +608,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
         rc = EIO;
         break;
       }
-        
+
       memset (dirent, 0, sizeof (struct dirent));
       dirent->d_off = offset;
       dirent->d_reclen = sizeof (struct dirent);
@@ -616,19 +616,19 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       *length += elength;
 
       remaining = rtems_rfs_fs_block_size (fs) - (map.bpos.boff + elength);
-      
+
       if (remaining <= RTEMS_RFS_DIR_ENTRY_SIZE)
         *length += remaining;
-      
+
       elength -= RTEMS_RFS_DIR_ENTRY_SIZE;
       if (elength > NAME_MAX)
         elength = NAME_MAX;
-      
+
       memcpy (dirent->d_name, entry + RTEMS_RFS_DIR_ENTRY_SIZE, elength);
 
       dirent->d_ino = rtems_rfs_dir_entry_ino (entry);
       dirent->d_namlen = elength;
-      
+
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
         printf ("rtems-rfs: dir-read: found off:%" PRIooff_t " ino:%ld name=%s\n",
                 dirent->d_off, dirent->d_ino, dirent->d_name);
@@ -636,11 +636,11 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
     }
 
     *length += rtems_rfs_fs_block_size (fs) - map.bpos.boff;
-    
+
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
       printf ("rtems-rfs: dir-read: next block: off:%" PRId64 " length:%zd\n",
               offset, *length);
-      
+
     rc = rtems_rfs_block_map_next_block (fs, &map, &block);
     if (rc == ENXIO)
       rc = ENOENT;
@@ -665,7 +665,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
     printf ("rtems-rfs: dir-empty: dir=%" PRId32 "\n", rtems_rfs_inode_ino (dir));
 
   empty = true;
-  
+
   rc = rtems_rfs_block_map_open (fs, dir, &map);
   if (rc > 0)
     return rc;
@@ -676,7 +676,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
     rtems_rfs_block_map_close (fs, &map);
     return rc;
   }
-  
+
   rc = rtems_rfs_buffer_handle_open (fs, &buffer);
   if (rc > 0)
   {
@@ -692,14 +692,14 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
   {
     uint8_t* entry;
     int      offset;
-    
+
     rc = rtems_rfs_buffer_handle_request (fs, &buffer, block, true);
     if (rc > 0)
       break;
 
     entry  = rtems_rfs_buffer_data (&buffer);
     offset = 0;
-    
+
     while (offset < (rtems_rfs_fs_block_size (fs) - RTEMS_RFS_DIR_ENTRY_SIZE))
     {
       rtems_rfs_ino eino;
@@ -720,7 +720,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
         rc = EIO;
         break;
       }
-        
+
       /*
        * Ignore the current (.) and parent (..) entries. Anything else means
        * the directory is not empty.
@@ -753,7 +753,7 @@ rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
 
   if ((rc == 0) && !empty)
     rc = ENOTEMPTY;
-  
+
   rtems_rfs_buffer_handle_close (fs, &buffer);
   rtems_rfs_block_map_close (fs, &map);
   return rc;

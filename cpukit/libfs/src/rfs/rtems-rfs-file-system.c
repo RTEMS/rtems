@@ -71,9 +71,9 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
   }
 
   sb = rtems_rfs_buffer_data (&handle);
-  
+
 #define read_sb(_o) rtems_rfs_read_u32 (sb + (_o))
-  
+
   if (read_sb (RTEMS_RFS_SB_OFFSET_MAGIC) != RTEMS_RFS_SB_MAGIC)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
@@ -102,7 +102,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
     rtems_rfs_buffer_handle_close (fs, &handle);
     return EIO;
   }
-      
+
   if (read_sb (RTEMS_RFS_SB_OFFSET_INODE_SIZE) != RTEMS_RFS_INODE_SIZE)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
@@ -111,7 +111,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
     rtems_rfs_buffer_handle_close (fs, &handle);
     return EIO;
   }
-      
+
   fs->bad_blocks      = read_sb (RTEMS_RFS_SB_OFFSET_BAD_BLOCKS);
   fs->max_name_length = read_sb (RTEMS_RFS_SB_OFFSET_MAX_NAME_LENGTH);
   fs->group_count     = read_sb (RTEMS_RFS_SB_OFFSET_GROUPS);
@@ -120,7 +120,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
 
   fs->blocks_per_block =
     rtems_rfs_fs_block_size (fs) / sizeof (rtems_rfs_inode_block);
-  
+
   fs->block_map_singly_blocks =
     fs->blocks_per_block * RTEMS_RFS_INODE_BLOCKS;
   fs->block_map_doubly_blocks =
@@ -129,7 +129,7 @@ rtems_rfs_fs_read_superblock (rtems_rfs_file_system* fs)
   fs->inodes = fs->group_count * fs->group_inodes;
 
   fs->inodes_per_block = fs->block_size / RTEMS_RFS_INODE_SIZE;
-  
+
   if (fs->group_blocks >
       rtems_rfs_bitmap_numof_bits (rtems_rfs_fs_block_size (fs)))
   {
@@ -206,10 +206,10 @@ rtems_rfs_fs_open (const char*             name,
   rtems_rfs_inode_handle inode;
   uint16_t               mode;
   int                    rc;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_OPEN))
     printf ("rtems-rfs: open: %s\n", name);
-  
+
   *fs = malloc (sizeof (rtems_rfs_file_system));
   if (!*fs)
   {
@@ -291,7 +291,7 @@ rtems_rfs_fs_open (const char*             name,
       return -1;
     }
   }
-  
+
   rc = rtems_rfs_inode_close (*fs, &inode);
   if (rc > 0)
   {
@@ -302,7 +302,7 @@ rtems_rfs_fs_open (const char*             name,
     errno = rc;
     return -1;
   }
-    
+
   errno = 0;
   return 0;
 }
@@ -311,7 +311,7 @@ int
 rtems_rfs_fs_close (rtems_rfs_file_system* fs)
 {
   int group;
-  
+
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_CLOSE))
     printf ("rtems-rfs: close\n");
 
@@ -319,7 +319,7 @@ rtems_rfs_fs_close (rtems_rfs_file_system* fs)
     rtems_rfs_group_close (fs, &fs->groups[group]);
 
   rtems_rfs_buffer_close (fs);
-  
+
   free (fs);
-  return 0;  
+  return 0;
 }
