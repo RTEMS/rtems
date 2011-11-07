@@ -32,7 +32,7 @@ unsigned long               Console_Port_Count  = 0;
 console_tbl               **Console_Port_Tbl    = NULL;
 console_data               *Console_Port_Data   = NULL;
 rtems_device_minor_number   Console_Port_Minor  = 0;
-bool                        console_initialized = false;
+static bool                 console_initialized = false;
 
 /*
  *  console_initialize_pointers
@@ -76,7 +76,7 @@ void console_register_devices(
    *  console_initialize has been invoked so it is now too late to
    *  register devices.
    */
-  if ( console_initialized == true ) {
+  if ( console_initialized ) {
     printk( "Attempt to register console devices after driver initialized\n" );
     rtems_fatal_error_occurred( 0xdead0001 );
   }

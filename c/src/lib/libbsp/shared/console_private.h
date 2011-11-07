@@ -26,7 +26,6 @@
 extern "C" {
 #endif
 
-extern rtems_device_minor_number  Console_Port_Minor;
 extern rtems_device_minor_number  BSPPrintkPort;
 
 /**
