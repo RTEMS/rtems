@@ -1,3 +1,7 @@
+2011-11-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/console-config.c: Avoid explicit type.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps

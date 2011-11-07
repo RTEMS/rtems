@@ -177,5 +177,6 @@ console_tbl Console_Configuration_Ports [] = {
 };
 
 #define LPC24XX_UART_COUNT \
-  (sizeof(Console_Configuration_Ports) / sizeof(console_tbl))
+  (sizeof(Console_Configuration_Ports) \
+    / sizeof(Console_Configuration_Ports [0]))
 unsigned long Console_Configuration_Count = LPC24XX_UART_COUNT;
