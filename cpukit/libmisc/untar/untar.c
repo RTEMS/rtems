@@ -205,6 +205,7 @@ Untar_FromMemory(
                if (n != len)
                {
                   printk("untar: Error during write\n");
+                  retval  = UNTAR_FAIL;
                   break;
                }
                ptr += 512;

@@ -1,3 +1,9 @@
+2011-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 1952/cpukit
+	* libmisc/untar/untar.c: Add return code for failure when unable to
+	write file.
+
 2011-11-03	Chris Johns <chrisj@rtems.org>
 
 	PR 1948/filesystem
