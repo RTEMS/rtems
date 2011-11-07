@@ -23,9 +23,9 @@
 #ifndef __LIBCHIP_SERIAL_h
 #define __LIBCHIP_SERIAL_h
 
-#include <stdint.h>
-#include <stdbool.h>
 #include <termios.h>
+
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -218,6 +218,8 @@ extern unsigned long  Console_Configuration_Count;
  *  This is an array of per port information.
  */
 extern console_data  *Console_Port_Data;
+
+extern rtems_device_minor_number Console_Port_Minor;
 
 #ifdef __cplusplus
 }
