@@ -1,3 +1,9 @@
+2011-11-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1953/bsps
+	* console/uart.c: Do not use /dev/console in libchip configuration
+	table. Shared driver framework selects device to use as /dev/console.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps

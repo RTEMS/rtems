@@ -70,7 +70,7 @@ console_fns uart_fns =
  */
 console_tbl Console_Configuration_Ports[] = {
     {
-        "/dev/console",                   /* sDeviceName */
+        "/dev/com0",                      /* sDeviceName */
         SERIAL_CUSTOM,                    /* deviceType */
         &uart_fns,                        /* pDeviceFns */
         NULL,                             /* deviceProbe */
