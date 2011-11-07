@@ -1,9 +1,3 @@
-2011-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
-
-	PR 1952/cpukit
-	* libcsupport/include/rtems/libio.h: Add return code for failure when
-	unable to write file.
-
 2011-11-06      Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	PR1945/cpukit
