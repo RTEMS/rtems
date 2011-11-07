@@ -234,7 +234,6 @@ typedef struct {
   uint32_t register_fp;
   uint32_t register_sp;
   uint32_t register_lr;
-  uint32_t register_pc;
 #elif defined(ARM_MULTILIB_ARCH_V7M)
   uint32_t register_r4;
   uint32_t register_r5;
