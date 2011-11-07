@@ -1,3 +1,10 @@
+2011-11-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1949/cpukit
+	PR 1950/cpukit
+	* rtems/score/arm.h: Select ARMv4 multilib implementation for
+	__ARM_ARCH_6J__.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1914/cpukit
