@@ -1,3 +1,8 @@
+2011-11-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1951/bsps
+	* Makefile.am, console/console-config.c: Update due to API changes.
+
 2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* 0001-Fixed-interrupt-handling-for-ARMv7M.patch,

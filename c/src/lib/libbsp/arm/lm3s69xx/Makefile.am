@@ -88,9 +88,13 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
 	irq/irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console.c \
-	console/console-config.c \
-	console/uart.c
+libbsp_a_SOURCES += ../../shared/console.c
+libbsp_a_SOURCES += ../../shared/console_control.c
+libbsp_a_SOURCES += ../../shared/console_read.c
+libbsp_a_SOURCES += ../../shared/console_select.c
+libbsp_a_SOURCES += ../../shared/console_write.c
+libbsp_a_SOURCES += console/console-config.c
+libbsp_a_SOURCES += console/uart.c
 
 # Clock
 libbsp_a_SOURCES += clock/clock-config.c \

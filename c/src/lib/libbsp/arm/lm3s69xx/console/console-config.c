@@ -23,7 +23,7 @@
 #include <bsp/uart.h>
 #include <bsp/lm3s69xx.h>
 
-console_tbl Console_Port_Tbl [] = {
+console_tbl Console_Configuration_Ports [] = {
   #ifdef LM3S69XX_ENABLE_UART_0
     {
       .sDeviceName = "/dev/ttyS0",
@@ -56,17 +56,16 @@ console_tbl Console_Port_Tbl [] = {
   #endif
 };
 
-#define PORT_COUNT (sizeof(Console_Port_Tbl) / sizeof(Console_Port_Tbl [0]))
+#define PORT_COUNT \
+  (sizeof(Console_Configuration_Ports) \
+    / sizeof(Console_Configuration_Ports [0]))
 
-unsigned long Console_Port_Count = PORT_COUNT;
-
-rtems_device_minor_number Console_Port_Minor;
-
-console_data Console_Port_Data [PORT_COUNT];
+unsigned long Console_Configuration_Count = PORT_COUNT;
 
 static void output_char(char c)
 {
-  const console_fns *con = Console_Port_Tbl [Console_Port_Minor].pDeviceFns;
+  const console_fns *con =
+    Console_Configuration_Ports [Console_Port_Minor].pDeviceFns;
   
   if (c == '\n') {
     con->deviceWritePolled((int) Console_Port_Minor, '\r');
