@@ -93,7 +93,7 @@ unsigned long Console_Configuration_Count = NUM_DEVS;
  */
 console_tbl Console_Configuration_Ports[] = {
   {
-    "/dev/console",    /* sDeviceName */
+    "/dev/com0",       /* sDeviceName */
     SERIAL_CUSTOM,     /* deviceType */
     &dbgu_fns,         /* pDeviceFns */
     NULL,              /* deviceProbe */

@@ -42,15 +42,15 @@ extern console_fns ffuart_fns;
  */
 console_tbl Console_Configuration_Ports[] = {
     {
-        "/dev/console",    /* sDeviceName */
+        "/dev/com0",       /* sDeviceName */
         SERIAL_CUSTOM,     /* deviceType */
-        &ffuart_fns,         /* pDeviceFns */
+        &ffuart_fns,       /* pDeviceFns */
         NULL,              /* deviceProbe */
         NULL,              /* pDeviceFlow */
         0,                 /* ulMargin - NOT USED */
         0,                 /* ulHysteresis - NOT USED */
         NULL,              /* pDeviceParams */
-        FFUART_BASE,         /* ulCtrlPort1  - Pointer to DBGU regs */
+        FFUART_BASE,       /* ulCtrlPort1  - Pointer to DBGU regs */
         0,                 /* ulCtrlPort2  - NOT USED */
         0,                 /* ulDataPort  - NOT USED */
         NULL,              /* getRegister - NOT USED */
