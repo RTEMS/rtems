@@ -1,3 +1,7 @@
+2011-11-08	Gedare Bloom <gedare@rtems.org>
+
+	* MAINTAINERS: Revert adding myself as a maintainer.
+
 2011-11-06	Gedare Bloom <gedare@rtems.org>
 
 	* ChangeLog: Fix ChangeLog with name and email address
