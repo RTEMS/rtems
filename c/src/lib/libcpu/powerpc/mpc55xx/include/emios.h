@@ -28,6 +28,8 @@
 #include <rtems.h>
 #include <rtems/chain.h>
 
+#include <bspopts.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -169,7 +171,11 @@ extern "C" {
 
 /** @} */
 
-#define MPC55XX_EMIOS_CHANNEL_NUMBER 24U
+#if MPC55XX_CHIP_TYPE / 10 == 567
+  #define MPC55XX_EMIOS_CHANNEL_NUMBER 32U
+#else
+  #define MPC55XX_EMIOS_CHANNEL_NUMBER 24U
+#endif
 
 #define MPC55XX_EMIOS_VALUE_MAX 0x00ffffffU
 

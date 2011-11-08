@@ -73,6 +73,7 @@ ppc_exc_wrap_async_normal:
 	mfmsr	FRAME_REGISTER
 	oris	FRAME_REGISTER, FRAME_REGISTER, MSR_SPE >> 16
 	mtmsr	FRAME_REGISTER
+	isync
 #endif
 
 	/* Move frame pointer to non-volatile FRAME_REGISTER */

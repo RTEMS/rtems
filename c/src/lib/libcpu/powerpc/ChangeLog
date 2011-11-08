@@ -1,3 +1,11 @@
+2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* new-exceptions/bspsupport/ppc_exc_async_normal.S: Bugfix for
+	MPC5674F.  Use it for all to be safe.
+	* mpc55xx/include/emios.h: Fixed eMIOS module count.
+	* mpc55xx/include/irq.h: Fixed CAN vector numbers.
+	BSP_INTERRUPT_HANDLER_TABLE_SIZE is now a BSP option.
+
 2011-10-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* mpc55xx/include/fsl-mpc567x.h: Added EQADC as an alias to EQADC_A.
