@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -76,6 +77,11 @@ void bsp_start_memcpy(int *dest, const int *src, size_t n);
  * @brief ARM entry point to bsp_start_memcpy().
  */
 void bsp_start_memcpy_arm(int *dest, const int *src, size_t n);
+
+/**
+ * @brief Copies all standard sections from the load to the runtime area.
+ */
+void bsp_start_copy_sections(void);
 
 /** @} */
 

@@ -5,15 +5,17 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <rtems/asm.h>
@@ -21,30 +23,34 @@
 #include <rtems/score/cpu.h>
 	
 #include <bspopts.h>
+#include <bsp/irq.h>
 #include <bsp/linker-symbols.h>
 
-/* External symbols */
+	/* External symbols */
+	.extern	bsp_reset
+	.extern	boot_card
+	.extern	bsp_start_hook_0
+	.extern	bsp_start_hook_1
 
-.extern bsp_reset
-.extern boot_card
-.extern bsp_start_hook_0
-.extern bsp_start_hook_1
+	/* Global symbols */
+	.globl	_start
+	.globl	bsp_start_vector_table_begin
+	.globl	bsp_start_vector_table_end
+	.globl	bsp_start_vector_table_size
+	.globl	bsp_vector_table_size
 
-/* Global symbols */
+	.section	".bsp_start_text", "ax"
 
-.globl _start
-.globl bsp_start_memcpy
+#if defined(ARM_MULTILIB_ARCH_V4)
 
-.section ".bsp_start_text", "ax"
-
-.arm
+	.arm
 
 /*
  * This is the exception vector table and the pointers to the default
  * exceptions handlers.
  */
 
-vector_block:
+bsp_start_vector_table_begin:
 
 	ldr	pc, handler_addr_reset
 	ldr	pc, handler_addr_undef
@@ -93,6 +99,8 @@ handler_addr_irq:
 handler_addr_fiq:
 
 	.word	reset
+
+bsp_start_vector_table_end:
 
 /* Start entry */
 
@@ -169,7 +177,7 @@ bsp_start_hook_0_done:
 	 */
 
 	ldr	r0, =bsp_vector_table_begin
-	adr	r1, vector_block
+	adr	r1, bsp_start_vector_table_begin
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
 	ldmia	r1!, {r2-r9}
@@ -198,64 +206,58 @@ reset:
 	SWITCH_FROM_ARM_TO_THUMB	r0
 	b	twiddle
 
-DEFINE_FUNCTION_ARM(bsp_start_memcpy)
+#elif defined(ARM_MULTILIB_ARCH_V7M)
 
-	/* Return if dest == src */
-	cmp	r0, r1
-#ifdef __thumb__
-	bxeq	lr
-#else
-	moveq	pc, lr
-#endif
+	.syntax	unified
 
-	/* Return if length is zero */
-	mov	r3, #0
-	cmp	r3, r2
-#ifdef __thumb__
-	bxeq	lr
-#else
-	moveq	pc, lr
-#endif
+	.extern	bsp_stack_main_end
 
-	/* Save non-volatile registers */
-	push	{r4-r8, lr}
+	.thumb
 
-	/* Copy worker routine to stack */
-	adr	ip, bsp_start_memcpy_begin
-	ldm	ip, {r3-r8}
-	push	{r3-r8}
+bsp_start_vector_table_begin:
 
-	/* Execute worker routine */
-	mov	r3, #0
-	mov	ip, sp
-	mov	lr, pc
-#ifdef __thumb__
-	bx	ip
-#else
-	mov	pc, ip
-#endif
+	.word	bsp_stack_main_end
+	.word	_start /* Reset */
+	.word	bsp_reset /* NMI */
+	.word	bsp_reset /* Hard Fault */
+	.word	bsp_reset /* MPU Fault */
+	.word	bsp_reset /* Bus Fault */
+	.word	bsp_reset /* Usage Fault */
+	.word	bsp_reset /* Reserved */
+	.word	bsp_reset /* Reserved */
+	.word	bsp_reset /* Reserved */
+	.word	bsp_reset /* Reserved */
+	.word	bsp_reset /* SVC */
+	.word	bsp_reset /* Debug Monitor */
+	.word	bsp_reset /* Reserved */
+	.word	bsp_reset /* PendSV */
+	.word	bsp_reset /* SysTick */
+	.rept	BSP_INTERRUPT_VECTOR_MAX + 1
+	.word	bsp_reset /* IRQ */
+	.endr
 
-	/* Restore stack and non-volatile registers */
-	add	sp, sp, #24
-	pop	{r4-r8, lr}
+bsp_start_vector_table_end:
 
-	/* Return */
-#ifdef __thumb__
-	bx	lr
-#else
-	mov	pc, lr
-#endif
+	.thumb_func
 
-bsp_start_memcpy_begin:
+_start:
 
-	/* Worker routine */
-	ldr	ip, [r1, r3]
-	str	ip, [r0, r3]
-	add	r3, r3, #4
-	cmp	r3, r2
-	bcc	bsp_start_memcpy_begin
-#ifdef __thumb__
-	bx	lr
-#else
-	mov	pc, lr
-#endif
+	ldr	sp, =bsp_stack_main_end
+	ldr	lr, =bsp_start_hook_0_done + 1
+	b	bsp_start_hook_0
+
+bsp_start_hook_0_done:
+
+	bl	bsp_start_hook_1
+	movs	r0, #0
+	bl	boot_card
+
+twiddle:
+
+	bl	bsp_reset
+	b	twiddle
+
+#endif /* defined(ARM_MULTILIB_ARCH_V7M) */
+
+	.set	bsp_start_vector_table_size, bsp_start_vector_table_end - bsp_start_vector_table_begin
+	.set	bsp_vector_table_size, bsp_start_vector_table_size

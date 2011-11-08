@@ -116,6 +116,10 @@ LINKER_SYMBOL(bsp_vector_table_begin)
 LINKER_SYMBOL(bsp_vector_table_end)
 LINKER_SYMBOL(bsp_vector_table_size)
 
+LINKER_SYMBOL(bsp_start_vector_table_begin)
+LINKER_SYMBOL(bsp_start_vector_table_end)
+LINKER_SYMBOL(bsp_start_vector_table_size)
+
 #define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
 
 #define BSP_FAST_DATA_SECTION __attribute__((section(".bsp_fast_data")))

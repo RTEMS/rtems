@@ -1,3 +1,11 @@
+2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* shared/startup/bsp-start-copy-sections.c,
+	shared/startup/bsp-start-memcpy.S: New files.
+	* shared/include/start.h: Declare bsp_start_copy_sections().
+	* shared/start/start.S, shared/include/linker-symbols.h: Moved
+	content.  Support for ARMv7-M.
+
 2011-09-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* acinclude.m4: Added lm3s69xx BSP.
