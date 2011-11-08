@@ -7,16 +7,19 @@
  */
 
 /*
- * Copyright (c) 2008, 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #ifndef LIBCPU_SHARED_UTILITY_H
@@ -25,13 +28,14 @@
 #include <stdint.h>
 
 #define BSP_BIT8(bit) \
-  ((uint8_t) (((uint8_t) 1) << (bit)))
+  ((uint8_t) (((unsigned int) 1) << (bit)))
 
 #define BSP_MSK8(first_bit, last_bit) \
   ((uint8_t) ((BSP_BIT8((last_bit) - (first_bit) + 1) - 1) << (first_bit)))
 
 #define BSP_FLD8(val, first_bit, last_bit) \
-  ((uint8_t) (((val) << (first_bit)) & BSP_MSK8(first_bit, last_bit)))
+  ((uint8_t) \
+    ((((unsigned int) (val)) << (first_bit)) & BSP_MSK8(first_bit, last_bit)))
 
 #define BSP_FLD8GET(reg, first_bit, last_bit) \
   ((uint8_t) (((reg) & BSP_MSK8(first_bit, last_bit)) >> (first_bit)))
@@ -41,13 +45,14 @@
     | BSP_FLD8(val, first_bit, last_bit)))
 
 #define BSP_BIT16(bit) \
-  ((uint16_t) (((uint16_t) 1) << (bit)))
+  ((uint16_t) (((unsigned int) 1) << (bit)))
 
 #define BSP_MSK16(first_bit, last_bit) \
   ((uint16_t) ((BSP_BIT16((last_bit) - (first_bit) + 1) - 1) << (first_bit)))
 
 #define BSP_FLD16(val, first_bit, last_bit) \
-  ((uint16_t) (((val) << (first_bit)) & BSP_MSK16(first_bit, last_bit)))
+  ((uint16_t) \
+    ((((unsigned int) (val)) << (first_bit)) & BSP_MSK16(first_bit, last_bit)))
 
 #define BSP_FLD16GET(reg, first_bit, last_bit) \
   ((uint16_t) (((reg) & BSP_MSK16(first_bit, last_bit)) >> (first_bit)))
@@ -63,7 +68,8 @@
   ((uint32_t) ((BSP_BIT32((last_bit) - (first_bit) + 1) - 1) << (first_bit)))
 
 #define BSP_FLD32(val, first_bit, last_bit) \
-  ((uint32_t) (((val) << (first_bit)) & BSP_MSK32(first_bit, last_bit)))
+  ((uint32_t) \
+    ((((uint32_t) (val)) << (first_bit)) & BSP_MSK32(first_bit, last_bit)))
 
 #define BSP_FLD32GET(reg, first_bit, last_bit) \
   ((uint32_t) (((reg) & BSP_MSK32(first_bit, last_bit)) >> (first_bit)))
@@ -79,7 +85,8 @@
   ((uint64_t) ((BSP_BIT64((last_bit) - (first_bit) + 1) - 1) << (first_bit)))
 
 #define BSP_FLD64(val, first_bit, last_bit) \
-  ((uint64_t) (((val) << (first_bit)) & BSP_MSK64(first_bit, last_bit)))
+  ((uint64_t) \
+    ((((uint64_t) (val)) << (first_bit)) & BSP_MSK64(first_bit, last_bit)))
 
 #define BSP_FLD64GET(reg, first_bit, last_bit) \
   ((uint64_t) (((reg) & BSP_MSK64(first_bit, last_bit)) >> (first_bit)))

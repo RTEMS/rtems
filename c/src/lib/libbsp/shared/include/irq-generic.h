@@ -65,6 +65,13 @@ typedef struct bsp_interrupt_handler_entry bsp_interrupt_handler_entry;
 extern bsp_interrupt_handler_entry bsp_interrupt_handler_table [];
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
+  #if BSP_INTERRUPT_HANDLER_TABLE_SIZE < 0x100
+    typedef uint8_t bsp_interrupt_handler_index_type;
+  #elif BSP_INTERRUPT_HANDLER_TABLE_SIZE < 0x10000
+    typedef uint16_t bsp_interrupt_handler_index_type;
+  #else
+    typedef uint32_t bsp_interrupt_handler_index_type;
+  #endif
   extern bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table [];
 #endif
 
@@ -102,10 +109,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * For boards with small memory requirements you can define
  * @ref BSP_INTERRUPT_USE_INDEX_TABLE.  With an enabled index table the handler
  * table will be accessed via a small index table.  You can define the size of
- * the handler table with @ref BSP_INTERRUPT_HANDLER_TABLE_SIZE.  You must
- * provide a data type for the index table
- * (@ref bsp_interrupt_handler_index_type).  It must be an integer type big
- * enough to index the complete handler table.
+ * the handler table with @ref BSP_INTERRUPT_HANDLER_TABLE_SIZE.
  *
  * Normally new list entries are allocated from the heap.  You may define
  * @ref BSP_INTERRUPT_NO_HEAP_USAGE, if you do not want to use the heap.  For

@@ -1,3 +1,9 @@
+2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/utility.h: Fixed some casts.
+	* include/irq-generic.h: Define bsp_interrupt_handler_index_type
+	conditionally.
+
 2011-11-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console_private.h: Removed Console_Port_Minor declaration.
