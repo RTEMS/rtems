@@ -20,24 +20,29 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/score/armv7m.h>
+
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/lpc24xx.h>
 
 void bsp_interrupt_dispatch(void)
 {
-  /* Read current vector number */
-  rtems_vector_number vector = VICVectAddr;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    /* Read current vector number */
+    rtems_vector_number vector = VICVectAddr;
 
-  /* Enable interrupts in program status register */
-  uint32_t psr = arm_status_irq_enable();
+    /* Enable interrupts in program status register */
+    uint32_t psr = arm_status_irq_enable();
 
-  /* Dispatch interrupt handlers */
-  bsp_interrupt_handler_dispatch(vector);
+    /* Dispatch interrupt handlers */
+    bsp_interrupt_handler_dispatch(vector);
 
-  /* Restore program status register */
-  arm_status_restore(psr);
+    /* Restore program status register */
+    arm_status_restore(psr);
 
-  /* Acknowledge interrupt */
-  VICVectAddr = 0;
+    /* Acknowledge interrupt */
+    VICVectAddr = 0;
+  #endif
 }

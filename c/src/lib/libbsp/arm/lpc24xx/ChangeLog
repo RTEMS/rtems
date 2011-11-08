@@ -1,3 +1,18 @@
+2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc17xx.h: New file.
+	* Makefile.am, preinstall.am: Reflect change above.  Update due to API
+	changes.
+	* configure.ac, console/console-config.c, include/bsp.h, include/io.h,
+	include/irq.h, include/lcd.h, include/lpc-clock-config.h,
+	include/lpc24xx.h, include/start-config.h, irq/irq-dispatch.c,
+	irq/irq.c, misc/bspidle.c, misc/io.c, misc/lcd.c, misc/restart.c,
+	misc/system-clocks.c, ssp/ssp.c, startup/bspreset.c,
+	startup/bspstart.c, startup/bspstarthooks.c,
+	startup/start-config-emc-dynamic.c, startup/start-config-emc-static.c,
+	startup/start-config-pinsel.c: Basic support for LPC17XX.  New memory
+	configurations for W9825G2JB75I, IS42S32800B, and SST39VF3201.
+
 2011-11-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* console/console-config.c: Avoid explicit type.

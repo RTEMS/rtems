@@ -25,9 +25,9 @@
 #include <bsp/start-config.h>
 #include <bsp/lpc24xx.h>
 
-const BSP_START_DATA_SECTION lpc24xx_emc_static_chip_config
+BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
    lpc24xx_start_config_emc_static_chip [] = {
-#ifdef LPC24XX_EMC_NUMONYX
+#if defined(LPC24XX_EMC_NUMONYX_M29W160E)
   /*
    * Static Memory 1: Numonyx M29W160EB
    *
@@ -66,10 +66,40 @@ const BSP_START_DATA_SECTION lpc24xx_emc_static_chip_config
       .waitrun = 0xf
     }
   }
-#endif /* LPC24XX_EMC_NUMONYX */
+#elif defined(LPC24XX_EMC_SST39VF3201)
+  /* Static Memory 1: SST SST39VF3201 at 51612800Hz (tCK = 19.4ns) */
+  {
+    .chip_select = (volatile lpc_emc_static *) EMC_STA_BASE_0,
+    .config = {
+      /*
+       * 16 bit, page mode disabled, active LOW chip select, extended wait
+       * disabled, writes not protected, byte lane state LOW/LOW.
+       */
+      .config = 0x81,
+
+      /* (n + 1) clock cycles -> 19.4ns >= 0ns (tCS, tAS) */
+      .waitwen = 0,
+
+      /* (n + 1) clock cycles -> 19.4ns >= 0ns (tOES) */
+      .waitoen = 0,
+
+      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tRC) */
+      .waitrd = 2,
+
+      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tRC) */
+      .waitpage = 2,
+
+      /* (n + 2) clock cycles -> 38.8ns >= 20ns (tCHZ, TOHZ) */
+      .waitwr = 0,
+
+      /* (n + 1) clock cycles -> 38.8ns >= 20ns (tCHZ, TOHZ) */
+      .waitrun = 1
+    }
+  }
+#endif
 };
 
-const BSP_START_DATA_SECTION size_t
+BSP_START_DATA_SECTION const size_t
   lpc24xx_start_config_emc_static_chip_count =
     sizeof(lpc24xx_start_config_emc_static_chip)
       / sizeof(lpc24xx_start_config_emc_static_chip [0]);

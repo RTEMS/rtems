@@ -71,7 +71,7 @@ static void initialize_console(void)
       LPC24XX_PIN_TERMINAL
     };
 
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_CCLK);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_PCLK_DEFAULT);
     lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
     BSP_CONSOLE_UART_INIT(lpc24xx_cclk() / 16 / LPC24XX_UART_BAUD);
   #endif
@@ -80,7 +80,7 @@ static void initialize_console(void)
 void bsp_start(void)
 {
   /* Initialize Timer 1 */
-  lpc24xx_module_enable(LPC24XX_MODULE_TIMER_1, LPC24XX_MODULE_CCLK);
+  lpc24xx_module_enable(LPC24XX_MODULE_TIMER_1, LPC24XX_MODULE_PCLK_DEFAULT);
 
   /* Initialize standard timer */
   lpc24xx_timer_initialize();

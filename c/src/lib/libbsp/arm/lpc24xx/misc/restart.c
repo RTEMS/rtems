@@ -28,16 +28,18 @@
 
 void bsp_restart(void *addr)
 {
-  ARM_SWITCH_REGISTERS;
-  rtems_interrupt_level level;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    ARM_SWITCH_REGISTERS;
+    rtems_interrupt_level level;
 
-  rtems_interrupt_disable(level);
+    rtems_interrupt_disable(level);
 
-  asm volatile (
-    ARM_SWITCH_TO_ARM
-    "mov pc, %[addr]\n"
-    ARM_SWITCH_BACK
-    : ARM_SWITCH_OUTPUT
-    : [addr] "r" (addr)
-  );
+    asm volatile (
+      ARM_SWITCH_TO_ARM
+      "mov pc, %[addr]\n"
+      ARM_SWITCH_BACK
+      : ARM_SWITCH_OUTPUT
+      : [addr] "r" (addr)
+    );
+  #endif
 }

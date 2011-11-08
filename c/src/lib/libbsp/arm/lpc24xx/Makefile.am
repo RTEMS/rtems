@@ -44,6 +44,7 @@ include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/io.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/lcd.h
+include_bsp_HEADERS += include/lpc17xx.h
 include_bsp_HEADERS += include/lpc24xx.h
 include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/lpc-ethernet-config.h
@@ -93,12 +94,13 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/sbrk.c \
 	../../shared/src/stackalloc.c \
-	../../shared/src/uart-output-char.c \
-	../shared/abort/simple_abort.c
+	../../shared/src/uart-output-char.c
 
 # Startup
-libbsp_a_SOURCES += startup/bspstart.c \
-	startup/bspreset.c
+libbsp_a_SOURCES += ../shared/startup/bsp-start-copy-sections.c
+libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += startup/bspstart.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c \

@@ -121,6 +121,10 @@ $(PROJECT_INCLUDE)/bsp/lcd.h: include/lcd.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lcd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lcd.h
 
+$(PROJECT_INCLUDE)/bsp/lpc17xx.h: include/lpc17xx.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc17xx.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc17xx.h
+
 $(PROJECT_INCLUDE)/bsp/lpc24xx.h: include/lpc24xx.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc24xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc24xx.h

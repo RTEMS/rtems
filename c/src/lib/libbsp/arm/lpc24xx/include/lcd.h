@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -42,15 +42,17 @@ extern "C" {
  */
 
 typedef enum {
-  LCD_MODE_STN_4_BIT = 0,
-  LCD_MODE_STN_8_BIT,
-  LCD_MODE_STN_DUAL_PANEL_4_BIT,
-  LCD_MODE_STN_DUAL_PANEL_8_BIT,
-  LCD_MODE_TFT_12_BIT_4_4_4,
-  LCD_MODE_TFT_16_BIT_5_6_5,
-  LCD_MODE_TFT_16_BIT_1_5_5_5,
-  LCD_MODE_TFT_24_BIT,
-  LCD_MODE_DISABLED
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LCD_MODE_STN_4_BIT = 0,
+    LCD_MODE_STN_8_BIT,
+    LCD_MODE_STN_DUAL_PANEL_4_BIT,
+    LCD_MODE_STN_DUAL_PANEL_8_BIT,
+    LCD_MODE_TFT_12_BIT_4_4_4,
+    LCD_MODE_TFT_16_BIT_5_6_5,
+    LCD_MODE_TFT_16_BIT_1_5_5_5,
+    LCD_MODE_TFT_24_BIT,
+    LCD_MODE_DISABLED
+  #endif
 } lpc24xx_lcd_mode;
 
 /**

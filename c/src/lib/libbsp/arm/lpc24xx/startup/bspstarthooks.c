@@ -22,14 +22,16 @@
 
 #include <stdbool.h>
 
+#include <rtems/score/armv7m.h>
+
 #include <bspopts.h>
+#include <bsp/io.h>
 #include <bsp/start.h>
-#include <bsp/linker-symbols.h>
 #include <bsp/lpc24xx.h>
 #include <bsp/lpc-emc.h>
 #include <bsp/start-config.h>
 
-static void BSP_START_TEXT_SECTION lpc24xx_cpu_delay(unsigned ticks)
+static BSP_START_TEXT_SECTION void lpc24xx_cpu_delay(unsigned ticks)
 {
   unsigned i = 0;
 
@@ -41,21 +43,20 @@ static void BSP_START_TEXT_SECTION lpc24xx_cpu_delay(unsigned ticks)
   }
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_udelay(unsigned us)
+static BSP_START_TEXT_SECTION void lpc24xx_udelay(unsigned us)
 {
   lpc24xx_cpu_delay(us * (LPC24XX_CCLK / 1000000));
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_init_emc_pinsel(void)
+static BSP_START_TEXT_SECTION void lpc24xx_init_pinsel(void)
 {
-  bsp_start_memcpy(
-    (int *) &PINSEL5,
-    (const int *) &lpc24xx_start_config_pinsel_5_9,
-    lpc24xx_start_config_pinsel_5_9_size
+  lpc24xx_pin_config(
+    &lpc24xx_start_config_pinsel [0],
+    LPC24XX_PIN_SET_FUNCTION
   );
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_init_emc_static(void)
+static BSP_START_TEXT_SECTION void lpc24xx_init_emc_static(void)
 {
   size_t i = 0;
   size_t chip_count = lpc24xx_start_config_emc_static_chip_count;
@@ -79,13 +80,7 @@ static void BSP_START_TEXT_SECTION lpc24xx_init_emc_static(void)
   }
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_init_emc_memory_map(void)
-{
-  /* Use normal memory map */
-  EMC_CTRL &= ~0x2U;
-}
-
-static void BSP_START_TEXT_SECTION lpc24xx_init_emc_dynamic(void)
+static BSP_START_TEXT_SECTION void lpc24xx_init_emc_dynamic(void)
 {
   size_t chip_count = lpc24xx_start_config_emc_dynamic_chip_count;
 
@@ -159,12 +154,26 @@ static void BSP_START_TEXT_SECTION lpc24xx_init_emc_dynamic(void)
         chip_select->config = config | EMC_DYN_CFG_B;
       }
 
-      emc->dynamiccontrol = dynamiccontrol;
+      emc->dynamiccontrol = 0;
     }
   }
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_pll_config(
+static BSP_START_TEXT_SECTION void lpc24xx_init_main_oscillator(void)
+{
+  #ifdef ARM_MULTILIB_ARCH_V4
+    if ((SCS & 0x40) == 0) {
+      SCS |= 0x20;
+      while ((SCS & 0x40) == 0) {
+        /* Wait */
+      }
+    }
+  #endif
+}
+
+#ifdef ARM_MULTILIB_ARCH_V4
+
+static BSP_START_TEXT_SECTION void lpc24xx_pll_config(
   uint32_t val
 )
 {
@@ -187,7 +196,7 @@ static void BSP_START_TEXT_SECTION lpc24xx_pll_config(
  * @param cclksel Selects the divide value for creating the CPU clock (CCLK)
  * from the PLL output.
  */
-static void BSP_START_TEXT_SECTION lpc24xx_set_pll(
+static BSP_START_TEXT_SECTION void lpc24xx_set_pll(
   unsigned clksrc,
   unsigned nsel,
   unsigned msel,
@@ -243,151 +252,133 @@ static void BSP_START_TEXT_SECTION lpc24xx_set_pll(
   lpc24xx_pll_config(PLLCON_PLLE | PLLCON_PLLC);
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_init_pll(void)
-{
-  /* Enable main oscillator */
-  if ((SCS & 0x40) == 0) {
-    SCS |= 0x20;
-    while ((SCS & 0x40) == 0) {
-      /* Wait */
-    }
-  }
+#endif /* ARM_MULTILIB_ARCH_V4 */
 
-  /* Set PLL */
-  #if LPC24XX_OSCILLATOR_MAIN == 12000000U
-    #if LPC24XX_CCLK == 72000000U
-      lpc24xx_set_pll(1, 0, 11, 3);
-    #elif LPC24XX_CCLK == 51612800U
-      lpc24xx_set_pll(1, 30, 399, 5);
+static BSP_START_TEXT_SECTION void lpc24xx_init_pll(void)
+{
+  #ifdef ARM_MULTILIB_ARCH_V4
+    #if LPC24XX_OSCILLATOR_MAIN == 12000000U
+      #if LPC24XX_CCLK == 72000000U
+        lpc24xx_set_pll(1, 0, 11, 3);
+      #elif LPC24XX_CCLK == 51612800U
+        lpc24xx_set_pll(1, 30, 399, 5);
+      #else
+        #error "unexpected CCLK"
+      #endif
+    #elif LPC24XX_OSCILLATOR_MAIN == 3686400U
+      #if LPC24XX_CCLK == 58982400U
+        lpc24xx_set_pll(1, 0, 47, 5);
+      #else
+        #error "unexpected CCLK"
+      #endif
     #else
-      #error "unexpected CCLK"
+      #error "unexpected main oscillator frequency"
     #endif
-  #elif LPC24XX_OSCILLATOR_MAIN == 3686400U
-    #if LPC24XX_CCLK == 58982400U
-      lpc24xx_set_pll(1, 0, 47, 5);
-    #else
-      #error "unexpected CCLK"
-    #endif
-  #else
-    #error "unexpected main oscillator frequency"
   #endif
 }
 
-static void BSP_START_TEXT_SECTION lpc24xx_clear_bss(void)
+static BSP_START_TEXT_SECTION void lpc24xx_init_memory_map(void)
 {
-  const int *end = (const int *) bsp_section_bss_end;
-  int *out = (int *) bsp_section_bss_begin;
-
-  /* Clear BSS */
-  while (out != end) {
-    *out = 0;
-    ++out;
-  }
-}
-
-void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
-{
-  lpc24xx_init_pll();
-  lpc24xx_init_emc_pinsel();
-  lpc24xx_init_emc_static();
-}
-
-void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
-{
-  /* Re-map interrupt vectors to internal RAM */
-  MEMMAP = SET_MEMMAP_MAP(MEMMAP, 2);
-
-  /* Fully enable memory accelerator module functions (MAM) */
-  MAMCR = 0;
-  #if LPC24XX_CCLK <= 20000000U
-    MAMTIM = 0x1;
-  #elif LPC24XX_CCLK <= 40000000U
-    MAMTIM = 0x2;
-  #elif LPC24XX_CCLK <= 60000000U
-    MAMTIM = 0x3;
-  #else
-    MAMTIM = 0x4;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    /* Re-map interrupt vectors to internal RAM */
+    MEMMAP = SET_MEMMAP_MAP(MEMMAP, 2);
   #endif
-  MAMCR = 0x2;
 
-  /* Enable fast IO for ports 0 and 1 */
-  SCS |= 0x1;
+  /* Use normal memory map */
+  EMC_CTRL &= ~0x2U;
+}
 
-  /* Set fast IO */
-  FIO0DIR = 0;
-  FIO1DIR = 0;
-  FIO2DIR = 0;
-  FIO3DIR = 0;
-  FIO4DIR = 0;
-  FIO0CLR = 0xffffffff;
-  FIO1CLR = 0xffffffff;
-  FIO2CLR = 0xffffffff;
-  FIO3CLR = 0xffffffff;
-  FIO4CLR = 0xffffffff;
+static BSP_START_TEXT_SECTION void lpc24xx_init_memory_accelerator(void)
+{
+  #ifdef ARM_MULTILIB_ARCH_V4
+    /* Fully enable memory accelerator module functions (MAM) */
+    MAMCR = 0;
+    #if LPC24XX_CCLK <= 20000000U
+      MAMTIM = 0x1;
+    #elif LPC24XX_CCLK <= 40000000U
+      MAMTIM = 0x2;
+    #elif LPC24XX_CCLK <= 60000000U
+      MAMTIM = 0x3;
+    #else
+      MAMTIM = 0x4;
+    #endif
+    MAMCR = 0x2;
 
-  lpc24xx_init_emc_memory_map();
-  lpc24xx_init_emc_dynamic();
+    /* Enable fast IO for ports 0 and 1 */
+    SCS |= 0x1;
+  #endif
+}
 
+static BSP_START_TEXT_SECTION void lpc24xx_stop_gpdma(void)
+{
   #ifdef LPC24XX_STOP_GPDMA
-    if ((PCONP & PCONP_GPDMA) != 0) {
+    #ifdef ARM_MULTILIB_ARCH_V4
+      bool has_power = (PCONP & PCONP_GPDMA) != 0;
+    #endif
+
+    if (has_power) {
       GPDMA_CONFIG = 0;
-      PCONP &= ~PCONP_GPDMA;
+
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PCONP &= ~PCONP_GPDMA;
+      #endif
     }
   #endif
+}
 
+static BSP_START_TEXT_SECTION void lpc24xx_stop_ethernet(void)
+{
   #ifdef LPC24XX_STOP_ETHERNET
-    if ((PCONP & PCONP_ETHERNET) != 0) {
+    #ifdef ARM_MULTILIB_ARCH_V4
+      bool has_power = (PCONP & PCONP_ETHERNET) != 0;
+    #endif
+
+    if (has_power) {
       MAC_COMMAND = 0x38;
       MAC_MAC1 = 0xcf00;
       MAC_MAC1 = 0;
-      PCONP &= ~PCONP_ETHERNET;
+
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PCONP &= ~PCONP_ETHERNET;
+      #endif
     }
   #endif
+}
 
+static BSP_START_TEXT_SECTION void lpc24xx_stop_usb(void)
+{
   #ifdef LPC24XX_STOP_USB
-    if ((PCONP & PCONP_USB) != 0) {
+    #ifdef ARM_MULTILIB_ARCH_V4
+      bool has_power = (PCONP & PCONP_USB) != 0;
+    #endif
+
+    if (has_power) {
       OTG_CLK_CTRL = 0;
-      PCONP &= ~PCONP_USB;
+
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PCONP &= ~PCONP_USB;
+      #endif
     }
   #endif
+}
 
-  /* Copy .text section */
-  bsp_start_memcpy(
-    (int *) bsp_section_text_begin,
-    (const int *) bsp_section_text_load_begin,
-    (size_t) bsp_section_text_size
-  );
+BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
+{
+  lpc24xx_init_main_oscillator();
+  lpc24xx_init_pll();
+  lpc24xx_init_pinsel();
+  lpc24xx_init_emc_static();
+}
 
-  /* Copy .rodata section */
-  bsp_start_memcpy(
-    (int *) bsp_section_rodata_begin,
-    (const int *) bsp_section_rodata_load_begin,
-    (size_t) bsp_section_rodata_size
-  );
-
-  /* Copy .data section */
-  bsp_start_memcpy(
-    (int *) bsp_section_data_begin,
-    (const int *) bsp_section_data_load_begin,
-    (size_t) bsp_section_data_size
-  );
-
-  /* Copy .fast_text section */
-  bsp_start_memcpy(
-    (int *) bsp_section_fast_text_begin,
-    (const int *) bsp_section_fast_text_load_begin,
-    (size_t) bsp_section_fast_text_size
-  );
-
-  /* Copy .fast_data section */
-  bsp_start_memcpy(
-    (int *) bsp_section_fast_data_begin,
-    (const int *) bsp_section_fast_data_load_begin,
-    (size_t) bsp_section_fast_data_size
-  );
-
-  /* Clear .bss section */
-  lpc24xx_clear_bss();
+BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
+{
+  lpc24xx_init_memory_map();
+  lpc24xx_init_memory_accelerator();
+  lpc24xx_init_emc_dynamic();
+  lpc24xx_stop_gpdma();
+  lpc24xx_stop_ethernet();
+  lpc24xx_stop_usb();
+  bsp_start_copy_sections();
 
   /* At this point we can use objects outside the .start section */
 }

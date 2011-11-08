@@ -50,7 +50,7 @@ static void lpc24xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
       LPC24XX_PIN_TERMINAL
     };
 
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_1, LPC24XX_MODULE_CCLK);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_1, LPC24XX_MODULE_PCLK_DEFAULT);
     lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
 
     return true;
@@ -66,7 +66,7 @@ static void lpc24xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
       LPC24XX_PIN_TERMINAL
     };
 
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_2, LPC24XX_MODULE_CCLK);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_2, LPC24XX_MODULE_PCLK_DEFAULT);
     lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
 
     return true;
@@ -82,7 +82,7 @@ static void lpc24xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
       LPC24XX_PIN_TERMINAL
     };
 
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_CCLK);
+    lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_PCLK_DEFAULT);
     lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
 
     return true;
@@ -107,7 +107,7 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = LPC24XX_CCLK,
+      .ulClock = LPC24XX_PCLK,
       .ulIntVector = LPC24XX_IRQ_UART_0
     },
   #endif
@@ -128,7 +128,7 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = LPC24XX_CCLK,
+      .ulClock = LPC24XX_PCLK,
       .ulIntVector = LPC24XX_IRQ_UART_1
     },
   #endif
@@ -149,7 +149,7 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = LPC24XX_CCLK,
+      .ulClock = LPC24XX_PCLK,
       .ulIntVector = LPC24XX_IRQ_UART_2
     },
   #endif
@@ -170,7 +170,7 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc24xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = LPC24XX_CCLK,
+      .ulClock = LPC24XX_PCLK,
       .ulIntVector = LPC24XX_IRQ_UART_3
     },
   #endif

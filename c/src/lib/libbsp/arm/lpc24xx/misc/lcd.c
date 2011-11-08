@@ -24,10 +24,13 @@
 
 #include <bsp/lpc24xx.h>
 #include <bsp/lcd.h>
+#include <bsp/lpc-lcd.h>
 #include <bsp/utility.h>
 #include <bsp/system-clocks.h>
 
-#define LCD_ENABLE BSP_BIT32(0)
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define LCD_ENABLE BSP_BIT32(0)
+#endif
 
 rtems_status_code lpc24xx_lcd_set_mode(
   lpc24xx_lcd_mode mode,
@@ -61,7 +64,9 @@ rtems_status_code lpc24xx_lcd_set_mode(
       sc = lpc24xx_module_enable(LPC24XX_MODULE_LCD, LPC24XX_MODULE_PCLK_DEFAULT);
       assert(sc == RTEMS_SUCCESSFUL);
 
-      PINSEL11 = BSP_FLD32(mode, 1, 3) | LCD_ENABLE;
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PINSEL11 = BSP_FLD32(mode, 1, 3) | LCD_ENABLE;
+      #endif
 
       sc = lpc24xx_pin_config(pins, LPC24XX_PIN_SET_FUNCTION);
       assert(sc == RTEMS_SUCCESSFUL);
@@ -83,7 +88,9 @@ rtems_status_code lpc24xx_lcd_set_mode(
       sc = lpc24xx_pin_config(pins, LPC24XX_PIN_SET_INPUT);
       assert(sc == RTEMS_SUCCESSFUL);
 
-      PINSEL11 = 0;
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PINSEL11 = 0;
+      #endif
 
       sc = lpc24xx_module_disable(LPC24XX_MODULE_LCD);
       assert(sc == RTEMS_SUCCESSFUL);
@@ -95,11 +102,13 @@ rtems_status_code lpc24xx_lcd_set_mode(
 
 lpc24xx_lcd_mode lpc24xx_lcd_current_mode(void)
 {
-  uint32_t pinsel11 = PINSEL11;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    uint32_t pinsel11 = PINSEL11;
 
-  if ((PCONP & BSP_BIT32(20)) != 0 && (pinsel11 & LCD_ENABLE) != 0) {
-    return BSP_FLD32GET(pinsel11, 1, 3);
-  } else {
-    return LCD_MODE_DISABLED;
-  }
+    if ((PCONP & BSP_BIT32(20)) != 0 && (pinsel11 & LCD_ENABLE) != 0) {
+      return BSP_FLD32GET(pinsel11, 1, 3);
+    } else {
+      return LCD_MODE_DISABLED;
+    }
+  #endif
 }

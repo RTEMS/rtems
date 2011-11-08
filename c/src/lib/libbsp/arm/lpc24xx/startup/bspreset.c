@@ -22,19 +22,22 @@
 
 #include <bsp/bootcard.h>
 #include <bsp/lpc24xx.h>
+#include <bsp/start.h>
 
-void bsp_reset(void)
+BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
 {
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
 
-  /* Trigger watchdog reset */
-  WDCLKSEL = 0;
-  WDTC = 0xff;
-  WDMOD = 0x3;
-  WDFEED = 0xaa;
-  WDFEED = 0x55;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    /* Trigger watchdog reset */
+    WDCLKSEL = 0;
+    WDTC = 0xff;
+    WDMOD = 0x3;
+    WDFEED = 0xaa;
+    WDFEED = 0x55;
+  #endif
 
   while (true) {
     /* Do nothing */

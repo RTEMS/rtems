@@ -7,23 +7,31 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ *
+ * $Id$
  */
 
 #ifndef LIBBSP_ARM_LPC24XX_LPC24XX_H
 #define LIBBSP_ARM_LPC24XX_LPC24XX_H
 
-#include <stdint.h>
+#include <rtems/score/cpu.h>
 #include <bsp/utility.h>
 #include <bsp/lpc-i2s.h>
+
+#ifdef ARM_MULTILIB_ARCH_V7M
+  #include <bsp/lpc17xx.h>
+#endif
 
 /**
  * @defgroup lpc24xx_regs Register Definitions
@@ -34,6 +42,8 @@
  *
  * @{
  */
+
+#ifdef ARM_MULTILIB_ARCH_V4
 
 /* Vectored Interrupt Controller (VIC) */
 #define VIC_BASE_ADDR	0xFFFFF000
@@ -118,9 +128,17 @@
 
 #define VICVectAddr    (*(volatile uint32_t *) (VIC_BASE_ADDR + 0xF00))
 
+#endif /* ARM_MULTILIB_ARCH_V4 */
 
 /* Pin Connect Block */
-#define PINSEL_BASE_ADDR	0xE002C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define PINSEL_BASE_ADDR	0xE002C000
+#else
+  #define PINSEL_BASE_ADDR	0x4002C000
+#endif
+
+#ifdef ARM_MULTILIB_ARCH_V4
+
 #define PINSEL0        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x00))
 #define PINSEL1        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x04))
 #define PINSEL2        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x08))
@@ -145,8 +163,14 @@
 #define PINMODE8        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x60))
 #define PINMODE9        (*(volatile uint32_t *) (PINSEL_BASE_ADDR + 0x64))
 
+#endif /* ARM_MULTILIB_ARCH_V4 */
+
 /* General Purpose Input/Output (GPIO) */
-#define GPIO_BASE_ADDR		0xE0028000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define GPIO_BASE_ADDR		0xE0028000
+#else
+  #define GPIO_BASE_ADDR		0x40028000
+#endif
 #define IOPIN0         (*(volatile uint32_t *) (GPIO_BASE_ADDR + 0x00))
 #define IOSET0         (*(volatile uint32_t *) (GPIO_BASE_ADDR + 0x04))
 #define IODIR0         (*(volatile uint32_t *) (GPIO_BASE_ADDR + 0x08))
@@ -171,11 +195,19 @@
 
 #define IO_INT_STAT     (*(volatile uint32_t *) (GPIO_BASE_ADDR + 0x80))
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 #define PARTCFG_BASE_ADDR		0x3FFF8000
 #define PARTCFG        (*(volatile uint32_t *) (PARTCFG_BASE_ADDR + 0x00))
 
+#endif /* ARM_MULTILIB_ARCH_V4 */
+
 /* Fast I/O setup */
-#define FIO_BASE_ADDR		0x3FFFC000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define FIO_BASE_ADDR		0x3FFFC000
+#else
+  #define FIO_BASE_ADDR		0x20098000
+#endif
 #define FIO0DIR        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x00))
 #define FIO0MASK       (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x10))
 #define FIO0PIN        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x14))
@@ -205,6 +237,16 @@
 #define FIO4PIN        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x94))
 #define FIO4SET        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x98))
 #define FIO4CLR        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0x9C))
+
+#ifdef ARM_MULTILIB_ARCH_V7M
+
+#define FIO5DIR        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0xa0))
+#define FIO5MASK       (*(volatile uint32_t *) (FIO_BASE_ADDR + 0xb0))
+#define FIO5PIN        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0xb4))
+#define FIO5SET        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0xb8))
+#define FIO5CLR        (*(volatile uint32_t *) (FIO_BASE_ADDR + 0xbC))
+
+#endif /* ARM_MULTILIB_ARCH_V7M */
 
 /* FIOs can be accessed through WORD, HALF-WORD or BYTE. */
 #define FIO0DIR0       (*(volatile uint8_t *) (FIO_BASE_ADDR + 0x00))
@@ -387,6 +429,7 @@
 #define FIO3CLRU       (*(volatile uint16_t *) (FIO_BASE_ADDR + 0x7E))
 #define FIO4CLRU       (*(volatile uint16_t *) (FIO_BASE_ADDR + 0x9E))
 
+#ifdef ARM_MULTILIB_ARCH_V4
 
 /* System Control Block(SCB) modules include Memory Accelerator Module,
 Phase Locked Loop, VPB divider, Power Control, External Interrupt,
@@ -435,9 +478,14 @@ Reset, and Code Security/Debugging */
 /* System Controls and Status */
 #define SCS            (*(volatile uint32_t *) (SCB_BASE_ADDR + 0x1A0))
 
+#endif /* ARM_MULTILIB_ARCH_V4 */
 
 /* External Memory Controller (EMC) */
-#define EMC_BASE_ADDR		0xFFE08000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define EMC_BASE_ADDR		0xFFE08000
+#else
+  #define EMC_BASE_ADDR		0x2009c000
+#endif
 #define EMC_CTRL       (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x000))
 #define EMC_STAT       (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x004))
 #define EMC_CONFIG     (*(volatile uint32_t *) (EMC_BASE_ADDR + 0x008))
@@ -508,7 +556,11 @@ Reset, and Code Security/Debugging */
 
 
 /* Timer 0 */
-#define TMR0_BASE_ADDR		0xE0004000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define TMR0_BASE_ADDR		0xE0004000
+#else
+  #define TMR0_BASE_ADDR		0x40004000
+#endif
 #define T0IR           (*(volatile uint32_t *) (TMR0_BASE_ADDR + 0x00))
 #define T0TCR          (*(volatile uint32_t *) (TMR0_BASE_ADDR + 0x04))
 #define T0TC           (*(volatile uint32_t *) (TMR0_BASE_ADDR + 0x08))
@@ -528,7 +580,11 @@ Reset, and Code Security/Debugging */
 #define T0CTCR         (*(volatile uint32_t *) (TMR0_BASE_ADDR + 0x70))
 
 /* Timer 1 */
-#define TMR1_BASE_ADDR		0xE0008000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define TMR1_BASE_ADDR		0xE0008000
+#else
+  #define TMR1_BASE_ADDR		0x40008000
+#endif
 #define T1IR           (*(volatile uint32_t *) (TMR1_BASE_ADDR + 0x00))
 #define T1TCR          (*(volatile uint32_t *) (TMR1_BASE_ADDR + 0x04))
 #define T1TC           (*(volatile uint32_t *) (TMR1_BASE_ADDR + 0x08))
@@ -548,7 +604,11 @@ Reset, and Code Security/Debugging */
 #define T1CTCR         (*(volatile uint32_t *) (TMR1_BASE_ADDR + 0x70))
 
 /* Timer 2 */
-#define TMR2_BASE_ADDR		0xE0070000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define TMR2_BASE_ADDR		0xE0070000
+#else
+  #define TMR2_BASE_ADDR		0x40090000
+#endif
 #define T2IR           (*(volatile uint32_t *) (TMR2_BASE_ADDR + 0x00))
 #define T2TCR          (*(volatile uint32_t *) (TMR2_BASE_ADDR + 0x04))
 #define T2TC           (*(volatile uint32_t *) (TMR2_BASE_ADDR + 0x08))
@@ -568,7 +628,11 @@ Reset, and Code Security/Debugging */
 #define T2CTCR         (*(volatile uint32_t *) (TMR2_BASE_ADDR + 0x70))
 
 /* Timer 3 */
-#define TMR3_BASE_ADDR		0xE0074000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define TMR3_BASE_ADDR		0xE0074000
+#else
+  #define TMR3_BASE_ADDR		0x40094000
+#endif
 #define T3IR           (*(volatile uint32_t *) (TMR3_BASE_ADDR + 0x00))
 #define T3TCR          (*(volatile uint32_t *) (TMR3_BASE_ADDR + 0x04))
 #define T3TC           (*(volatile uint32_t *) (TMR3_BASE_ADDR + 0x08))
@@ -589,7 +653,11 @@ Reset, and Code Security/Debugging */
 
 
 /* Pulse Width Modulator (PWM) */
-#define PWM0_BASE_ADDR		0xE0014000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define PWM0_BASE_ADDR		0xE0014000
+#else
+  #define PWM0_BASE_ADDR		0x40014000
+#endif
 #define PWM0IR          (*(volatile uint32_t *) (PWM0_BASE_ADDR + 0x00))
 #define PWM0TCR         (*(volatile uint32_t *) (PWM0_BASE_ADDR + 0x04))
 #define PWM0TC          (*(volatile uint32_t *) (PWM0_BASE_ADDR + 0x08))
@@ -613,7 +681,11 @@ Reset, and Code Security/Debugging */
 #define PWM0LER         (*(volatile uint32_t *) (PWM0_BASE_ADDR + 0x50))
 #define PWM0CTCR        (*(volatile uint32_t *) (PWM0_BASE_ADDR + 0x70))
 
-#define PWM1_BASE_ADDR		0xE0018000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define PWM1_BASE_ADDR		0xE0018000
+#else
+  #define PWM1_BASE_ADDR		0x40018000
+#endif
 #define PWM1IR          (*(volatile uint32_t *) (PWM1_BASE_ADDR + 0x00))
 #define PWM1TCR         (*(volatile uint32_t *) (PWM1_BASE_ADDR + 0x04))
 #define PWM1TC          (*(volatile uint32_t *) (PWM1_BASE_ADDR + 0x08))
@@ -639,7 +711,11 @@ Reset, and Code Security/Debugging */
 
 
 /* Universal Asynchronous Receiver Transmitter 0 (UART0) */
-#define UART0_BASE_ADDR		0xE000C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define UART0_BASE_ADDR		0xE000C000
+#else
+  #define UART0_BASE_ADDR		0x4000C000
+#endif
 #define U0RBR          (*(volatile uint32_t *) (UART0_BASE_ADDR + 0x00))
 #define U0THR          (*(volatile uint32_t *) (UART0_BASE_ADDR + 0x00))
 #define U0DLL          (*(volatile uint32_t *) (UART0_BASE_ADDR + 0x00))
@@ -656,7 +732,11 @@ Reset, and Code Security/Debugging */
 #define U0TER          (*(volatile uint32_t *) (UART0_BASE_ADDR + 0x30))
 
 /* Universal Asynchronous Receiver Transmitter 1 (UART1) */
-#define UART1_BASE_ADDR		0xE0010000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define UART1_BASE_ADDR		0xE0010000
+#else
+  #define UART1_BASE_ADDR		0x40010000
+#endif
 #define U1RBR          (*(volatile uint32_t *) (UART1_BASE_ADDR + 0x00))
 #define U1THR          (*(volatile uint32_t *) (UART1_BASE_ADDR + 0x00))
 #define U1DLL          (*(volatile uint32_t *) (UART1_BASE_ADDR + 0x00))
@@ -674,7 +754,11 @@ Reset, and Code Security/Debugging */
 #define U1TER          (*(volatile uint32_t *) (UART1_BASE_ADDR + 0x30))
 
 /* Universal Asynchronous Receiver Transmitter 2 (UART2) */
-#define UART2_BASE_ADDR		0xE0078000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define UART2_BASE_ADDR		0xE0078000
+#else
+  #define UART2_BASE_ADDR		0x40098000
+#endif
 #define U2RBR          (*(volatile uint32_t *) (UART2_BASE_ADDR + 0x00))
 #define U2THR          (*(volatile uint32_t *) (UART2_BASE_ADDR + 0x00))
 #define U2DLL          (*(volatile uint32_t *) (UART2_BASE_ADDR + 0x00))
@@ -691,7 +775,11 @@ Reset, and Code Security/Debugging */
 #define U2TER          (*(volatile uint32_t *) (UART2_BASE_ADDR + 0x30))
 
 /* Universal Asynchronous Receiver Transmitter 3 (UART3) */
-#define UART3_BASE_ADDR		0xE007C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define UART3_BASE_ADDR		0xE007C000
+#else
+  #define UART3_BASE_ADDR		0x4009C000
+#endif
 #define U3RBR          (*(volatile uint32_t *) (UART3_BASE_ADDR + 0x00))
 #define U3THR          (*(volatile uint32_t *) (UART3_BASE_ADDR + 0x00))
 #define U3DLL          (*(volatile uint32_t *) (UART3_BASE_ADDR + 0x00))
@@ -708,7 +796,11 @@ Reset, and Code Security/Debugging */
 #define U3TER          (*(volatile uint32_t *) (UART3_BASE_ADDR + 0x30))
 
 /* I2C Interface 0 */
-#define I2C0_BASE_ADDR		0xE001C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define I2C0_BASE_ADDR		0xE001C000
+#else
+  #define I2C0_BASE_ADDR		0x4001C000
+#endif
 #define I20CONSET      (*(volatile uint32_t *) (I2C0_BASE_ADDR + 0x00))
 #define I20STAT        (*(volatile uint32_t *) (I2C0_BASE_ADDR + 0x04))
 #define I20DAT         (*(volatile uint32_t *) (I2C0_BASE_ADDR + 0x08))
@@ -718,7 +810,11 @@ Reset, and Code Security/Debugging */
 #define I20CONCLR      (*(volatile uint32_t *) (I2C0_BASE_ADDR + 0x18))
 
 /* I2C Interface 1 */
-#define I2C1_BASE_ADDR		0xE005C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define I2C1_BASE_ADDR		0xE005C000
+#else
+  #define I2C1_BASE_ADDR		0x4005C000
+#endif
 #define I21CONSET      (*(volatile uint32_t *) (I2C1_BASE_ADDR + 0x00))
 #define I21STAT        (*(volatile uint32_t *) (I2C1_BASE_ADDR + 0x04))
 #define I21DAT         (*(volatile uint32_t *) (I2C1_BASE_ADDR + 0x08))
@@ -728,7 +824,11 @@ Reset, and Code Security/Debugging */
 #define I21CONCLR      (*(volatile uint32_t *) (I2C1_BASE_ADDR + 0x18))
 
 /* I2C Interface 2 */
-#define I2C2_BASE_ADDR		0xE0080000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define I2C2_BASE_ADDR		0xE0080000
+#else
+  #define I2C2_BASE_ADDR		0x400a0000
+#endif
 #define I22CONSET      (*(volatile uint32_t *) (I2C2_BASE_ADDR + 0x00))
 #define I22STAT        (*(volatile uint32_t *) (I2C2_BASE_ADDR + 0x04))
 #define I22DAT         (*(volatile uint32_t *) (I2C2_BASE_ADDR + 0x08))
@@ -746,7 +846,11 @@ Reset, and Code Security/Debugging */
 #define S0SPINT        (*(volatile uint32_t *) (SPI0_BASE_ADDR + 0x1C))
 
 /* SSP0 Controller */
-#define SSP0_BASE_ADDR		0xE0068000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define SSP0_BASE_ADDR		0xE0068000
+#else
+  #define SSP0_BASE_ADDR		0x40088000
+#endif
 #define SSP0CR0        (*(volatile uint32_t *) (SSP0_BASE_ADDR + 0x00))
 #define SSP0CR1        (*(volatile uint32_t *) (SSP0_BASE_ADDR + 0x04))
 #define SSP0DR         (*(volatile uint32_t *) (SSP0_BASE_ADDR + 0x08))
@@ -759,7 +863,11 @@ Reset, and Code Security/Debugging */
 #define SSP0DMACR      (*(volatile uint32_t *) (SSP0_BASE_ADDR + 0x24))
 
 /* SSP1 Controller */
-#define SSP1_BASE_ADDR		0xE0030000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define SSP1_BASE_ADDR		0xE0030000
+#else
+  #define SSP1_BASE_ADDR		0x40030000
+#endif
 #define SSP1CR0        (*(volatile uint32_t *) (SSP1_BASE_ADDR + 0x00))
 #define SSP1CR1        (*(volatile uint32_t *) (SSP1_BASE_ADDR + 0x04))
 #define SSP1DR         (*(volatile uint32_t *) (SSP1_BASE_ADDR + 0x08))
@@ -771,9 +879,29 @@ Reset, and Code Security/Debugging */
 #define SSP1ICR        (*(volatile uint32_t *) (SSP1_BASE_ADDR + 0x20))
 #define SSP1DMACR      (*(volatile uint32_t *) (SSP1_BASE_ADDR + 0x24))
 
+#ifdef ARM_MULTILIB_ARCH_V7M
+
+/* SSP2 Controller */
+#define SSP2_BASE_ADDR		0x400ac000
+#define SSP2CR0        (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x00))
+#define SSP2CR1        (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x04))
+#define SSP2DR         (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x08))
+#define SSP2SR         (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x0C))
+#define SSP2CPSR       (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x10))
+#define SSP2IMSC       (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x14))
+#define SSP2RIS        (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x18))
+#define SSP2MIS        (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x1C))
+#define SSP2ICR        (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x20))
+#define SSP2DMACR      (*(volatile uint32_t *) (SSP2_BASE_ADDR + 0x24))
+
+#endif /* ARM_MULTILIB_ARCH_V4 */
 
 /* Real Time Clock */
-#define RTC_BASE_ADDR		0xE0024000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define RTC_BASE_ADDR		0xE0024000
+#else
+  #define RTC_BASE_ADDR		0x40024000
+#endif
 #define RTC_ILR         (*(volatile uint32_t *) (RTC_BASE_ADDR + 0x00))
 #define RTC_CTC         (*(volatile uint32_t *) (RTC_BASE_ADDR + 0x04))
 #define RTC_CCR         (*(volatile uint32_t *) (RTC_BASE_ADDR + 0x08))
@@ -804,7 +932,11 @@ Reset, and Code Security/Debugging */
 
 
 /* A/D Converter 0 (AD0) */
-#define AD0_BASE_ADDR		0xE0034000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define AD0_BASE_ADDR		0xE0034000
+#else
+  #define AD0_BASE_ADDR		0x40034000
+#endif
 #define AD0CR          (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x00))
 #define AD0GDR         (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x04))
 #define AD0INTEN       (*(volatile uint32_t *) (AD0_BASE_ADDR + 0x0C))
@@ -821,12 +953,20 @@ Reset, and Code Security/Debugging */
 
 
 /* D/A Converter */
-#define DAC_BASE_ADDR		0xE006C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define DAC_BASE_ADDR		0xE006C000
+#else
+  #define DAC_BASE_ADDR		0x4008C000
+#endif
 #define DACR           (*(volatile uint32_t *) (DAC_BASE_ADDR + 0x00))
 
 
 /* Watchdog */
-#define WDG_BASE_ADDR		0xE0000000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define WDG_BASE_ADDR		0xE0000000
+#else
+  #define WDG_BASE_ADDR		0x40000000
+#endif
 #define WDMOD          (*(volatile uint32_t *) (WDG_BASE_ADDR + 0x00))
 #define WDTC           (*(volatile uint32_t *) (WDG_BASE_ADDR + 0x04))
 #define WDFEED         (*(volatile uint32_t *) (WDG_BASE_ADDR + 0x08))
@@ -834,7 +974,11 @@ Reset, and Code Security/Debugging */
 #define WDCLKSEL       (*(volatile uint32_t *) (WDG_BASE_ADDR + 0x10))
 
 /* CAN CONTROLLERS AND ACCEPTANCE FILTER */
-#define CAN_ACCEPT_BASE_ADDR		0xE003C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define CAN_ACCEPT_BASE_ADDR		0xE003C000
+#else
+  #define CAN_ACCEPT_BASE_ADDR		0x4003C000
+#endif
 #define CAN_AFMR		(*(volatile uint32_t *) (CAN_ACCEPT_BASE_ADDR + 0x00))
 #define CAN_SFF_SA 		(*(volatile uint32_t *) (CAN_ACCEPT_BASE_ADDR + 0x04))
 #define CAN_SFF_GRP_SA 	(*(volatile uint32_t *) (CAN_ACCEPT_BASE_ADDR + 0x08))
@@ -844,12 +988,20 @@ Reset, and Code Security/Debugging */
 #define CAN_LUT_ERR_ADR (*(volatile uint32_t *) (CAN_ACCEPT_BASE_ADDR + 0x18))
 #define CAN_LUT_ERR 	(*(volatile uint32_t *) (CAN_ACCEPT_BASE_ADDR + 0x1C))
 
-#define CAN_CENTRAL_BASE_ADDR		0xE0040000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define CAN_CENTRAL_BASE_ADDR		0xE0040000
+#else
+  #define CAN_CENTRAL_BASE_ADDR		0x40040000
+#endif
 #define CAN_TX_SR 	(*(volatile uint32_t *) (CAN_CENTRAL_BASE_ADDR + 0x00))
 #define CAN_RX_SR 	(*(volatile uint32_t *) (CAN_CENTRAL_BASE_ADDR + 0x04))
 #define CAN_MSR 	(*(volatile uint32_t *) (CAN_CENTRAL_BASE_ADDR + 0x08))
 
-#define CAN1_BASE_ADDR		0xE0044000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define CAN1_BASE_ADDR		0xE0044000
+#else
+  #define CAN1_BASE_ADDR		0x40044000
+#endif
 #define CAN1MOD 	(*(volatile uint32_t *) (CAN1_BASE_ADDR + 0x00))
 #define CAN1CMR 	(*(volatile uint32_t *) (CAN1_BASE_ADDR + 0x04))
 #define CAN1GSR 	(*(volatile uint32_t *) (CAN1_BASE_ADDR + 0x08))
@@ -876,7 +1028,11 @@ Reset, and Code Security/Debugging */
 #define CAN1TDA3 	(*(volatile uint32_t *) (CAN1_BASE_ADDR + 0x58))
 #define CAN1TDB3 	(*(volatile uint32_t *) (CAN1_BASE_ADDR + 0x5C))
 
-#define CAN2_BASE_ADDR		0xE0048000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define CAN2_BASE_ADDR		0xE0048000
+#else
+  #define CAN2_BASE_ADDR		0x40048000
+#endif
 #define CAN2MOD 	(*(volatile uint32_t *) (CAN2_BASE_ADDR + 0x00))
 #define CAN2CMR 	(*(volatile uint32_t *) (CAN2_BASE_ADDR + 0x04))
 #define CAN2GSR 	(*(volatile uint32_t *) (CAN2_BASE_ADDR + 0x08))
@@ -905,7 +1061,11 @@ Reset, and Code Security/Debugging */
 
 
 /* MultiMedia Card Interface(MCI) Controller */
-#define MCI_BASE_ADDR		0xE008C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define MCI_BASE_ADDR		0xE008C000
+#else
+  #define MCI_BASE_ADDR		0x400c0000
+#endif
 #define MCI_POWER      (*(volatile uint32_t *) (MCI_BASE_ADDR + 0x00))
 #define MCI_CLOCK      (*(volatile uint32_t *) (MCI_BASE_ADDR + 0x04))
 #define MCI_ARGUMENT   (*(volatile uint32_t *) (MCI_BASE_ADDR + 0x08))
@@ -928,7 +1088,11 @@ Reset, and Code Security/Debugging */
 
 
 /* I2S Interface Controller (I2S) */
-#define I2S_BASE_ADDR		0xE0088000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define I2S_BASE_ADDR		0xE0088000
+#else
+  #define I2S_BASE_ADDR		0x400a8000
+#endif
 #define I2S_DAO        (*(volatile uint32_t *) (I2S_BASE_ADDR + 0x00))
 #define I2S_DAI        (*(volatile uint32_t *) (I2S_BASE_ADDR + 0x04))
 #define I2S_TX_FIFO    (*(volatile uint32_t *) (I2S_BASE_ADDR + 0x08))
@@ -942,7 +1106,11 @@ Reset, and Code Security/Debugging */
 
 
 /* General-purpose DMA Controller */
-#define DMA_BASE_ADDR		0xFFE04000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define DMA_BASE_ADDR		0xFFE04000
+#else
+  #define DMA_BASE_ADDR		0x20080000
+#endif
 #define GPDMA_INT_STAT         (*(volatile uint32_t *) (DMA_BASE_ADDR + 0x000))
 #define GPDMA_INT_TCSTAT       (*(volatile uint32_t *) (DMA_BASE_ADDR + 0x004))
 #define GPDMA_INT_TCCLR        (*(volatile uint32_t *) (DMA_BASE_ADDR + 0x008))
@@ -974,10 +1142,14 @@ Reset, and Code Security/Debugging */
 #define GPDMA_CH1_CTRL     (*(volatile uint32_t *) (DMA_BASE_ADDR + 0x12C))
 #define GPDMA_CH1_CFG      (*(volatile uint32_t *) (DMA_BASE_ADDR + 0x130))
 
-
 /* USB Controller */
-#define USB_INT_BASE_ADDR	0xE01FC1C0
-#define USB_BASE_ADDR		0xFFE0C200		/* USB Base Address */
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define USB_INT_BASE_ADDR	0xE01FC1C0
+  #define USB_BASE_ADDR		0xFFE0C200		/* USB Base Address */
+#else
+  #define USB_INT_BASE_ADDR	0x400fc1c0
+  #define USB_BASE_ADDR		0x2008c200
+#endif
 
 #define USB_INT_STAT    (*(volatile uint32_t *) (USB_INT_BASE_ADDR + 0x00))
 
@@ -1031,9 +1203,12 @@ Reset, and Code Security/Debugging */
 #define SYS_ERR_INT_CLR     (*(volatile uint32_t *) (USB_BASE_ADDR + 0xBC))
 #define SYS_ERR_INT_SET     (*(volatile uint32_t *) (USB_BASE_ADDR + 0xC0))
 
-
 /* USB Host Controller */
-#define USBHC_BASE_ADDR		0xFFE0C000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define USBHC_BASE_ADDR		0xFFE0C000
+#else
+  #define USBHC_BASE_ADDR		0x2008c000
+#endif
 #define HC_REVISION         (*(volatile uint32_t *) (USBHC_BASE_ADDR + 0x00))
 #define HC_CONTROL          (*(volatile uint32_t *) (USBHC_BASE_ADDR + 0x04))
 #define HC_CMD_STAT         (*(volatile uint32_t *) (USBHC_BASE_ADDR + 0x08))
@@ -1059,7 +1234,11 @@ Reset, and Code Security/Debugging */
 #define HC_RH_PORT_STAT2    (*(volatile uint32_t *) (USBHC_BASE_ADDR + 0x58))
 
 /* USB OTG Controller */
-#define USBOTG_BASE_ADDR	0xFFE0C100
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define USBOTG_BASE_ADDR	0xFFE0C100
+#else
+  #define USBOTG_BASE_ADDR	0x2008c100
+#endif
 #define OTG_INT_STAT        (*(volatile uint32_t *) (USBOTG_BASE_ADDR + 0x00))
 #define OTG_INT_EN          (*(volatile uint32_t *) (USBOTG_BASE_ADDR + 0x04))
 #define OTG_INT_SET         (*(volatile uint32_t *) (USBOTG_BASE_ADDR + 0x08))
@@ -1067,7 +1246,11 @@ Reset, and Code Security/Debugging */
 #define OTG_STAT_CTRL       (*(volatile uint32_t *) (USBOTG_BASE_ADDR + 0x10))
 #define OTG_TIMER           (*(volatile uint32_t *) (USBOTG_BASE_ADDR + 0x14))
 
-#define USBOTG_I2C_BASE_ADDR	0xFFE0C300
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define USBOTG_I2C_BASE_ADDR	0xFFE0C300
+#else
+  #define USBOTG_I2C_BASE_ADDR	0x2008c300
+#endif
 #define OTG_I2C_RX          (*(volatile uint32_t *) (USBOTG_I2C_BASE_ADDR + 0x00))
 #define OTG_I2C_TX          (*(volatile uint32_t *) (USBOTG_I2C_BASE_ADDR + 0x00))
 #define OTG_I2C_STS         (*(volatile uint32_t *) (USBOTG_I2C_BASE_ADDR + 0x04))
@@ -1075,13 +1258,20 @@ Reset, and Code Security/Debugging */
 #define OTG_I2C_CLKHI       (*(volatile uint32_t *) (USBOTG_I2C_BASE_ADDR + 0x0C))
 #define OTG_I2C_CLKLO       (*(volatile uint32_t *) (USBOTG_I2C_BASE_ADDR + 0x10))
 
-#define USBOTG_CLK_BASE_ADDR	0xFFE0CFF0
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define USBOTG_CLK_BASE_ADDR	0xFFE0CFF0
+#else
+  #define USBOTG_CLK_BASE_ADDR	0x2008cff0
+#endif
 #define OTG_CLK_CTRL        (*(volatile uint32_t *) (USBOTG_CLK_BASE_ADDR + 0x04))
 #define OTG_CLK_STAT        (*(volatile uint32_t *) (USBOTG_CLK_BASE_ADDR + 0x08))
 
-
 /* Ethernet MAC (32 bit data bus) -- all registers are RW unless indicated in parentheses */
-#define MAC_BASE_ADDR		0xFFE00000 /* AHB Peripheral # 0 */
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define MAC_BASE_ADDR		0xFFE00000 /* AHB Peripheral # 0 */
+#else
+  #define MAC_BASE_ADDR		0x20084000
+#endif
 #define MAC_MAC1            (*(volatile uint32_t *) (MAC_BASE_ADDR + 0x000)) /* MAC config reg 1 */
 #define MAC_MAC2            (*(volatile uint32_t *) (MAC_BASE_ADDR + 0x004)) /* MAC config reg 2 */
 #define MAC_IPGT            (*(volatile uint32_t *) (MAC_BASE_ADDR + 0x008)) /* b2b InterPacketGap reg */
@@ -1138,7 +1328,11 @@ Reset, and Code Security/Debugging */
 
 /* LCD Controller */
 
-#define LCD_BASE_ADDR 0xFFE10000
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define LCD_BASE_ADDR 0xFFE10000
+#else
+  #define LCD_BASE_ADDR 0x20088000
+#endif
 #define LCD_CFG       (*(volatile uint32_t *) 0xE01FC1B8)
 #define LCD_TIMH      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x000))
 #define LCD_TIMV      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x004))
@@ -1937,6 +2131,28 @@ typedef struct {
 
 /* IO */
 
+#ifdef ARM_MULTILIB_ARCH_V4
+  #define LPC24XX_PINSEL ((volatile uint32_t *) &PINSEL0)
+  #define LPC24XX_PINMODE ((volatile uint32_t *) &PINMODE0)
+#else
+  #define IOCON_FUNC(val) BSP_FLD32(val, 0, 2)
+  #define IOCON_FUNC_GET(reg) BSP_FLD32GET(reg, 0, 2)
+  #define IOCON_FUNC_SET(reg, val) BSP_FLD32SET(reg, val, 0, 2)
+  #define IOCON_MODE(val) BSP_FLD32(val, 3, 4)
+  #define IOCON_MODE_GET(reg) BSP_FLD32GET(reg, 3, 4)
+  #define IOCON_MODE_SET(reg, val) BSP_FLD32SET(reg, val, 3, 4)
+  #define IOCON_HYS BSP_BIT32(5)
+  #define IOCON_INV BSP_BIT32(6)
+  #define IOCON_ADMODE BSP_BIT32(7)
+  #define IOCON_FILTER BSP_BIT32(8)
+  #define IOCON_HS BSP_BIT32(8)
+  #define IOCON_SLEW BSP_BIT32(9)
+  #define IOCON_HIDRIVE BSP_BIT32(9)
+  #define IOCON_OD BSP_BIT32(10)
+  #define IOCON_DACEN BSP_BIT32(16)
+  #define LPC17XX_IOCON ((volatile uint32_t *) PINSEL_BASE_ADDR)
+#endif
+
 typedef struct {
   uint32_t dir;
   uint32_t reserved [3];
@@ -1946,17 +2162,17 @@ typedef struct {
   uint32_t clr;
 } lpc24xx_fio;
 
-#define LPC24XX_PINSEL ((volatile uint32_t *) &PINSEL0)
-
-#define LPC24XX_PINMODE ((volatile uint32_t *) &PINMODE0)
-
 #define LPC24XX_FIO ((volatile lpc24xx_fio *) FIO_BASE_ADDR)
+
+#ifdef ARM_MULTILIB_ARCH_V4
 
 /* PCONP */
 
 #define PCONP_GPDMA (1U << 29)
 #define PCONP_ETHERNET (1U << 30)
 #define PCONP_USB (1U << 31)
+
+#endif /* ARM_MULTILIB_ARCH_V4 */
 
 /* I2S */
 

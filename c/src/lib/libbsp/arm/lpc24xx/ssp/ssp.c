@@ -25,6 +25,7 @@
 #include <bsp/irq.h>
 #include <bsp/system-clocks.h>
 #include <bsp/dma.h>
+#include <bsp/io.h>
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 
@@ -181,6 +182,7 @@ static rtems_status_code lpc24xx_ssp_init(rtems_libi2c_bus_t *bus)
   unsigned pclk = lpc24xx_cclk();
   unsigned pre =
     ((pclk + LPC24XX_SSP_BAUD_RATE - 1) / LPC24XX_SSP_BAUD_RATE + 1) & ~1U;
+  lpc24xx_module module = LPC24XX_MODULE_SSP_0;
   rtems_vector_number vector = UINT32_MAX;
 
   if (lpc24xx_ssp_dma_data.status == LPC24XX_SSP_DMA_NOT_INITIALIZED) {
@@ -213,25 +215,22 @@ static rtems_status_code lpc24xx_ssp_init(rtems_libi2c_bus_t *bus)
   /* Disable module */
   regs->cr1 = 0;
 
-  /* Set clock select and get vector number */
   switch ((uintptr_t) regs) {
     case SSP0_BASE_ADDR:
-      rtems_interrupt_disable(level);
-      PCLKSEL1 = SET_PCLKSEL1_PCLK_SSP0(PCLKSEL1, 1);
-      rtems_interrupt_enable(level);
-
+      module = LPC24XX_MODULE_SSP_0;
       vector = LPC24XX_IRQ_SPI_SSP_0;
       break;
     case SSP1_BASE_ADDR:
-      rtems_interrupt_disable(level);
-      PCLKSEL0 = SET_PCLKSEL0_PCLK_SSP1(PCLKSEL0, 1);
-      rtems_interrupt_enable(level);
-
+      module = LPC24XX_MODULE_SSP_1;
       vector = LPC24XX_IRQ_SSP_1;
       break;
     default:
       return RTEMS_IO_ERROR;
   }
+
+  /* Set clock select */
+  sc = lpc24xx_module_enable(module, LPC24XX_MODULE_PCLK_DEFAULT);
+  RTEMS_CHECK_SC(sc, "enable module clock");
 
   /* Set serial clock rate to save value */
   regs->cr0 = SET_SSP_CR0_SCR(0, 255);

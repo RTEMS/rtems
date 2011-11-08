@@ -20,57 +20,62 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <bsp/io.h>
+#include <bsp/start.h>
 #include <bsp/system-clocks.h>
 
-#define LPC24XX_PIN_SELECT(pin) (pin >> 4U)
+#define LPC24XX_PIN_SELECT(index) ((index) >> 4U)
 
-#define LPC24XX_PIN_SELECT_SHIFT(pin) ((pin & 0xfU) << 1U)
+#define LPC24XX_PIN_SELECT_SHIFT(index) (((index) & 0xfU) << 1U)
 
 #define LPC24XX_PIN_SELECT_MASK 0x3U
 
 rtems_status_code lpc24xx_gpio_config(
-  unsigned pin,
+  unsigned index,
   lpc24xx_gpio_settings settings
 )
 {
-  if (pin <= LPC24XX_IO_INDEX_MAX) {
+  if (index <= LPC24XX_IO_INDEX_MAX) {
     rtems_interrupt_level level;
-    unsigned port = LPC24XX_IO_PORT(pin);
-    unsigned bit = LPC24XX_IO_PORT_BIT(pin);
-    unsigned select = LPC24XX_PIN_SELECT(pin);
-    unsigned shift = LPC24XX_PIN_SELECT_SHIFT(pin);
-    unsigned resistor = settings & LPC24XX_GPIO_RESISTOR_MASK;
-    unsigned output = (settings & LPC24XX_GPIO_OUTPUT) != 0 ? 1U : 0U;
+    uint32_t port = LPC24XX_IO_PORT(index);
+    uint32_t port_bit = LPC24XX_IO_PORT_BIT(index);
+    uint32_t output = (settings & LPC24XX_GPIO_OUTPUT) != 0 ? 1U : 0U;
+    uint32_t resistor = settings & 0x3U;
+    #ifdef ARM_MULTILIB_ARCH_V4
+      uint32_t select = LPC24XX_PIN_SELECT(index);
+      uint32_t shift = LPC24XX_PIN_SELECT_SHIFT(index);
 
-    /* Get resistor flags */
-    switch (resistor) {
-      case LPC24XX_GPIO_RESISTOR_PULL_UP:
-      case LPC24XX_GPIO_RESISTOR_DEFAULT:
-        resistor = 0x0U;
-        break;
-      case LPC24XX_GPIO_RESISTOR_NONE:
-        resistor = 0x2U;
-        break;
-      case LPC24XX_GPIO_RESISTOR_PULL_DOWN:
-        resistor = 0x3U;
-        break;
-      default:
-        return RTEMS_INVALID_NUMBER;
-    }
+      /* Get resistor flags */
+      switch (resistor) {
+        case LPC24XX_GPIO_RESISTOR_PULL_UP:
+          resistor = 0x0U;
+          break;
+        case LPC24XX_GPIO_RESISTOR_NONE:
+          resistor = 0x2U;
+          break;
+        case LPC24XX_GPIO_RESISTOR_PULL_DOWN:
+          resistor = 0x3U;
+          break;
+        default:
+          return RTEMS_INVALID_NUMBER;
+      }
+    #endif
 
     rtems_interrupt_disable(level);
 
-    /* Resistor */
-    LPC24XX_PINMODE [select] =
-      (LPC24XX_PINMODE [select] & ~(LPC24XX_PIN_SELECT_MASK << shift))
-        | ((resistor & LPC24XX_PIN_SELECT_MASK) << shift);
+    #ifdef ARM_MULTILIB_ARCH_V4
+      /* Resistor */
+      LPC24XX_PINMODE [select] =
+        (LPC24XX_PINMODE [select] & ~(LPC24XX_PIN_SELECT_MASK << shift))
+          | ((resistor & LPC24XX_PIN_SELECT_MASK) << shift);
+    #endif
 
     rtems_interrupt_flash(level);
 
     /* Input or output */
     LPC24XX_FIO [port].dir =
-      (LPC24XX_FIO [port].dir & ~(1U << bit)) | (output << bit);
+      (LPC24XX_FIO [port].dir & ~(1U << port_bit)) | (output << port_bit);
 
     rtems_interrupt_enable(level);
   } else {
@@ -94,27 +99,41 @@ typedef struct {
 } lpc24xx_module_entry;
 
 static const lpc24xx_module_entry lpc24xx_module_table [] = {
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ACF, 0, 1, 15),
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ACF, 0, 1, 15),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ADC, 1, 1, 12),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_BAT_RAM, 0, 1, 16),
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_BAT_RAM, 0, 1, 16),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_CAN_0, 1, 1, 13),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_CAN_1, 1, 1, 14),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_DAC, 0, 1, 11),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_EMC, 1, 0, 11),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_ETHERNET, 1, 0, 30),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_GPDMA, 1, 1, 29),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_GPIO, 0, 1, 17),
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_GPIO, 0, 1, 17),
+  #else
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_GPIO, 0, 1, 15),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_0, 1, 1, 7),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_1, 1, 1, 19),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2C_2, 1, 1, 26),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_I2S, 1, 1, 27),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 0, 20),
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 0, 20),
+  #else
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 0, 0),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_MCI, 1, 1, 28),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PCB, 0, 1, 18),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_0, 1, 1, 5),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_1, 1, 1, 6),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_RTC, 1, 1, 9),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SPI, 1, 1, 8),
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SPI, 1, 1, 8),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_0, 1, 1, 21),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_1, 1, 1, 10),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SYSCON, 0, 1, 30),
@@ -126,8 +145,10 @@ static const lpc24xx_module_entry lpc24xx_module_table [] = {
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_1, 1, 1, 4),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_2, 1, 1, 24),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_3, 1, 1, 25),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_USB, 1, 0, 31),
-  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_WDT, 0, 1, 0)
+  #ifdef ARM_MULTILIB_ARCH_V4
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_WDT, 0, 1, 0),
+  #endif
+  LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_USB, 1, 0, 31)
 };
 
 static rtems_status_code lpc24xx_module_do_enable(
@@ -145,9 +166,23 @@ static rtems_status_code lpc24xx_module_do_enable(
       return RTEMS_INVALID_ID;
   }
 
-  if ((clock & ~LPC24XX_MODULE_CLOCK_MASK) != 0U) {
-    return RTEMS_INVALID_NUMBER;
-  }
+  #ifdef ARM_MULTILIB_ARCH_V4
+    if (clock == LPC24XX_MODULE_PCLK_DEFAULT) {
+      #if LPC24XX_PCLKDIV == 1U
+        clock = LPC24XX_MODULE_CCLK;
+      #elif LPC24XX_PCLKDIV == 2U
+        clock = LPC24XX_MODULE_CCLK_2;
+      #elif LPC24XX_PCLKDIV == 4U
+        clock = LPC24XX_MODULE_CCLK_4;
+      #elif LPC24XX_PCLKDIV == 8U
+        clock = LPC24XX_MODULE_CCLK_8;
+      #endif
+    }
+
+    if ((clock & ~LPC24XX_MODULE_CLOCK_MASK) != 0U) {
+      return RTEMS_INVALID_CLOCK;
+    }
+  #endif
 
   has_power = lpc24xx_module_table [module].power;
   has_clock = lpc24xx_module_table [module].clock;
@@ -157,39 +192,51 @@ static rtems_status_code lpc24xx_module_do_enable(
   if (enable) {
     if (has_power) {
       rtems_interrupt_disable(level);
-      PCONP |= 1U << index;
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PCONP |= 1U << index;
+      #endif
       rtems_interrupt_enable(level);
     }
 
     if (module != LPC24XX_MODULE_USB) {
       if (has_clock) {
-        unsigned clock_shift = 2U * index;
+        #ifdef ARM_MULTILIB_ARCH_V4
+          unsigned clock_shift = 2U * index;
 
-        rtems_interrupt_disable(level);
-        if (clock_shift < 32U) {
-          PCLKSEL0 = (PCLKSEL0 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
-              | (clock << clock_shift);
-        } else {
-          clock_shift -= 32U;
-          PCLKSEL1 = (PCLKSEL1 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
-              | (clock << clock_shift);
-        }
-        rtems_interrupt_enable(level);
+          rtems_interrupt_disable(level);
+          if (clock_shift < 32U) {
+            PCLKSEL0 = (PCLKSEL0 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
+                | (clock << clock_shift);
+          } else {
+            clock_shift -= 32U;
+            PCLKSEL1 = (PCLKSEL1 & ~(LPC24XX_MODULE_CLOCK_MASK << clock_shift))
+                | (clock << clock_shift);
+          }
+          rtems_interrupt_enable(level);
+        #endif
       }
     } else {
-      unsigned pllclk = lpc24xx_pllclk();
-      unsigned usbsel = pllclk / 48000000U - 1U;
+      #ifdef ARM_MULTILIB_ARCH_V4
+        unsigned pllclk = lpc24xx_pllclk();
+        unsigned usbsel = pllclk / 48000000U - 1U;
 
-      if (usbsel > 15U || (usbsel % 2U != 1U) || (pllclk % 48000000U) != 0U) {
-        return RTEMS_INCORRECT_STATE;
-      }
+        if (
+          usbsel > 15U
+            || (usbsel % 2U != 1U)
+            || (pllclk % 48000000U) != 0U
+        ) {
+          return RTEMS_INCORRECT_STATE;
+        }
 
-      USBCLKCFG = usbsel;
+        USBCLKCFG = usbsel;
+      #endif
     }
   } else {
     if (has_power) {
       rtems_interrupt_disable(level);
-      PCONP &= ~(1U << index);
+      #ifdef ARM_MULTILIB_ARCH_V4
+        PCONP &= ~(1U << index);
+      #endif
       rtems_interrupt_enable(level);
     }
   }
@@ -213,49 +260,63 @@ rtems_status_code lpc24xx_module_disable(
 }
 
 typedef rtems_status_code (*lpc24xx_pin_visitor)(
-  volatile uint32_t *pinsel,
-  uint32_t pinsel_mask,
-  uint32_t pinsel_value,
+  #ifdef ARM_MULTILIB_ARCH_V4
+    volatile uint32_t *pinsel,
+    uint32_t pinsel_mask,
+    uint32_t pinsel_value,
+  #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
 );
 
-static rtems_status_code lpc24xx_pin_set_function(
-  volatile uint32_t *pinsel,
-  uint32_t pinsel_mask,
-  uint32_t pinsel_value,
+static BSP_START_TEXT_SECTION __attribute__((flatten)) rtems_status_code
+lpc24xx_pin_set_function(
+  #ifdef ARM_MULTILIB_ARCH_V4
+    volatile uint32_t *pinsel,
+    uint32_t pinsel_mask,
+    uint32_t pinsel_value,
+  #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
 )
 {
-  rtems_interrupt_level level;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    rtems_interrupt_level level;
 
-  rtems_interrupt_disable(level);
-  *pinsel = (*pinsel & ~pinsel_mask) | pinsel_value;
-  rtems_interrupt_enable(level);
+    rtems_interrupt_disable(level);
+    *pinsel = (*pinsel & ~pinsel_mask) | pinsel_value;
+    rtems_interrupt_enable(level);
+  #endif
 
   return RTEMS_SUCCESSFUL;
 }
 
-static rtems_status_code lpc24xx_pin_check_function(
-  volatile uint32_t *pinsel,
-  uint32_t pinsel_mask,
-  uint32_t pinsel_value,
+static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_function(
+  #ifdef ARM_MULTILIB_ARCH_V4
+    volatile uint32_t *pinsel,
+    uint32_t pinsel_mask,
+    uint32_t pinsel_value,
+  #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
 )
 {
-  if ((*pinsel & pinsel_mask) == pinsel_value) {
-    return RTEMS_SUCCESSFUL;
-  } else {
-    return RTEMS_IO_ERROR;
-  }
+  #ifdef ARM_MULTILIB_ARCH_V4
+    if ((*pinsel & pinsel_mask) == pinsel_value) {
+      return RTEMS_SUCCESSFUL;
+    } else {
+      return RTEMS_IO_ERROR;
+    }
+  #endif
 }
 
-static rtems_status_code lpc24xx_pin_set_input(
-  volatile uint32_t *pinsel,
-  uint32_t pinsel_mask,
-  uint32_t pinsel_value,
+static BSP_START_TEXT_SECTION __attribute__((flatten)) rtems_status_code
+lpc24xx_pin_set_input(
+  #ifdef ARM_MULTILIB_ARCH_V4
+    volatile uint32_t *pinsel,
+    uint32_t pinsel_mask,
+    uint32_t pinsel_value,
+  #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
 )
@@ -264,35 +325,49 @@ static rtems_status_code lpc24xx_pin_set_input(
 
   rtems_interrupt_disable(level);
   *fio_dir &= ~fio_bit;
-  *pinsel &= ~pinsel_mask;
+  #ifdef ARM_MULTILIB_ARCH_V4
+    *pinsel &= ~pinsel_mask;
+  #endif
   rtems_interrupt_enable(level);
 
   return RTEMS_SUCCESSFUL;
 }
 
-static rtems_status_code lpc24xx_pin_check_input(
-  volatile uint32_t *pinsel,
-  uint32_t pinsel_mask,
-  uint32_t pinsel_value,
+static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_input(
+  #ifdef ARM_MULTILIB_ARCH_V4
+    volatile uint32_t *pinsel,
+    uint32_t pinsel_mask,
+    uint32_t pinsel_value,
+  #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
 )
 {
-  if ((*pinsel & pinsel_mask) == 0 && (*fio_dir & fio_bit) == 0) {
-    return RTEMS_SUCCESSFUL;
-  } else {
-    return RTEMS_IO_ERROR;
+  rtems_status_code sc = RTEMS_IO_ERROR;
+  bool is_input = (*fio_dir & fio_bit) == 0;
+
+  if (is_input) {
+    #ifdef ARM_MULTILIB_ARCH_V4
+      bool is_gpio = (*pinsel & pinsel_mask) == 0;
+    #endif
+
+    if (is_gpio) {
+      sc = RTEMS_SUCCESSFUL;
+    }
   }
+
+  return sc;
 }
 
-static const lpc24xx_pin_visitor lpc24xx_pin_visitors [] = {
+static BSP_START_DATA_SECTION const lpc24xx_pin_visitor
+  lpc24xx_pin_visitors [] = {
   [LPC24XX_PIN_SET_FUNCTION] = lpc24xx_pin_set_function,
   [LPC24XX_PIN_CHECK_FUNCTION] = lpc24xx_pin_check_function,
   [LPC24XX_PIN_SET_INPUT] = lpc24xx_pin_set_input,
   [LPC24XX_PIN_CHECK_INPUT] = lpc24xx_pin_check_input
 };
 
-rtems_status_code lpc24xx_pin_config(
+BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_config(
   const lpc24xx_pin_range *pins,
   lpc24xx_pin_action action
 )
@@ -302,29 +377,42 @@ rtems_status_code lpc24xx_pin_config(
   if ((unsigned) action <= LPC24XX_PIN_CHECK_INPUT) {
     lpc24xx_pin_visitor visitor = lpc24xx_pin_visitors [action];
     lpc24xx_pin_range terminal = LPC24XX_PIN_TERMINAL;
+    lpc24xx_pin_range pin_range = *pins;
+    uint32_t previous_port_bit = pin_range.fields.port_bit;
 
-    while (sc == RTEMS_SUCCESSFUL && pins->value != terminal.value) {
-      uint32_t port = pins->fields.port;
-      uint32_t index = pins->fields.index_begin;
-      uint32_t last = pins->fields.index_last;
-      uint32_t function = pins->fields.function;
+    while (sc == RTEMS_SUCCESSFUL && pin_range.value != terminal.value) {
+      uint32_t port = pin_range.fields.port;
+      uint32_t port_bit = pin_range.fields.port_bit;
+      uint32_t port_bit_last = port_bit;
+      uint32_t range = pin_range.fields.range;
+      #ifdef ARM_MULTILIB_ARCH_V4
+        uint32_t function = pin_range.fields.function;
+      #endif
       volatile uint32_t *fio_dir = &LPC24XX_FIO [port].dir;
 
-      while (sc == RTEMS_SUCCESSFUL && index <= last) {
-        uint32_t pin = LPC24XX_IO_INDEX_BY_PORT(port, index);
-        uint32_t select = LPC24XX_PIN_SELECT(pin);
-        uint32_t shift = LPC24XX_PIN_SELECT_SHIFT(pin);
-        volatile uint32_t *pinsel = &LPC24XX_PINSEL [select];
-        uint32_t pinsel_mask = LPC24XX_PIN_SELECT_MASK << shift;
-        uint32_t pinsel_value = (function & LPC24XX_PIN_SELECT_MASK) << shift;
-        uint32_t fio_bit = 1U << index;
+      if (range) {
+        port_bit = previous_port_bit;
+      }
 
-        sc = (*visitor)(pinsel, pinsel_mask, pinsel_value, fio_dir, fio_bit);
+      while (sc == RTEMS_SUCCESSFUL && port_bit <= port_bit_last) {
+        uint32_t index = LPC24XX_IO_INDEX_BY_PORT(port, port_bit);
+        uint32_t fio_bit = 1U << port_bit;
+        #ifdef ARM_MULTILIB_ARCH_V4
+          uint32_t select = LPC24XX_PIN_SELECT(index);
+          uint32_t shift = LPC24XX_PIN_SELECT_SHIFT(index);
+          volatile uint32_t *pinsel = &LPC24XX_PINSEL [select];
+          uint32_t pinsel_mask = LPC24XX_PIN_SELECT_MASK << shift;
+          uint32_t pinsel_value = (function & LPC24XX_PIN_SELECT_MASK) << shift;
 
-        ++index;
+          sc = (*visitor)(pinsel, pinsel_mask, pinsel_value, fio_dir, fio_bit);
+        #endif
+
+        ++port_bit;
       }
 
       ++pins;
+      previous_port_bit = port_bit;
+      pin_range = *pins;
     }
   } else {
     sc = RTEMS_NOT_DEFINED;

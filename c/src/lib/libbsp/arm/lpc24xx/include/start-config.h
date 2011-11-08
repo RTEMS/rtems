@@ -26,6 +26,7 @@
 #define LIBBSP_ARM_LPC24XX_START_CONFIG_H
 
 #include <bsp.h>
+#include <bsp/io.h>
 #include <bsp/start.h>
 #include <bsp/lpc-emc.h>
 
@@ -47,6 +48,7 @@ typedef struct {
   uint32_t txsr;
   uint32_t trrd;
   uint32_t tmrd;
+  uint32_t emcdlyctl;
 } lpc24xx_emc_dynamic_config;
 
 typedef struct {
@@ -70,25 +72,22 @@ typedef struct {
   } config;
 } lpc24xx_emc_static_chip_config;
 
-extern const BSP_START_DATA_SECTION uint32_t
-  lpc24xx_start_config_pinsel_5_9 [];
+extern BSP_START_DATA_SECTION const lpc24xx_pin_range
+  lpc24xx_start_config_pinsel [];
 
-extern const BSP_START_DATA_SECTION size_t
-  lpc24xx_start_config_pinsel_5_9_size;
-
-extern const BSP_START_DATA_SECTION lpc24xx_emc_dynamic_config
+extern BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
   lpc24xx_start_config_emc_dynamic [];
 
-extern const BSP_START_DATA_SECTION lpc24xx_emc_dynamic_chip_config
+extern BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
   lpc24xx_start_config_emc_dynamic_chip [];
 
-extern const BSP_START_DATA_SECTION size_t
+extern BSP_START_DATA_SECTION const size_t
   lpc24xx_start_config_emc_dynamic_chip_count;
 
-extern const BSP_START_DATA_SECTION lpc24xx_emc_static_chip_config
+extern BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
   lpc24xx_start_config_emc_static_chip [];
 
-extern const BSP_START_DATA_SECTION size_t
+extern BSP_START_DATA_SECTION const size_t
   lpc24xx_start_config_emc_static_chip_count;
 
 #ifdef __cplusplus
