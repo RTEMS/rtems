@@ -35,7 +35,7 @@
 extern uint32_t mpc55xx_bootflag_0 [];
 #endif
 
-static void mpc55xx_siu_init(void)
+static void BSP_START_TEXT_SECTION mpc55xx_siu_init(void)
 {
   size_t i = 0;
 

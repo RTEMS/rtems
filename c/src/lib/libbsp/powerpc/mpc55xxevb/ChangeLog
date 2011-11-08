@@ -1,3 +1,14 @@
+2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/mpc5566evb_spe.cfg, make/custom/mpc5674fevb_spe.cfg,
+	startup/linkcmds.mpc5566evb_spe, startup/linkcmds.mpc5674fevb_spe,
+	startup/reset.c: New files.
+	* Makefile.am, preinstall.am: Reflect changes above.
+	* startup/early-init.c: Added missing section attribute.
+	* configure.ac, network/smsc9218i.c: New BSP options
+	SMSC9218I_EDMA_RX_CHANNEL and SMSC9218I_EDMA_TX_CHANNEL.  Enable reset
+	at cleanup.
+
 2011-08-31	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* startup/bspgetworkarea.c, startup/linkcmds.base: Removed files.

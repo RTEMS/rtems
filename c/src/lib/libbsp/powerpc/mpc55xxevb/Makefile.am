@@ -27,7 +27,9 @@ project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base	
 dist_project_lib_DATA += startup/linkcmds.gwlcfm
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb
+dist_project_lib_DATA += startup/linkcmds.mpc5566evb_spe
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
+dist_project_lib_DATA += startup/linkcmds.mpc5674fevb_spe
 dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
 
 noinst_LIBRARIES += libbsp.a
@@ -70,6 +72,7 @@ libbsp_a_SOURCES += startup/ebi-cal-cs-config.c
 libbsp_a_SOURCES += startup/mmu-config.c
 libbsp_a_SOURCES += startup/siu-pcr-config.c
 libbsp_a_SOURCES += startup/early-init.c
+libbsp_a_SOURCES += startup/reset.c
 
 # clock
 libbsp_a_SOURCES += clock/clock-config.c
