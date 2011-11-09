@@ -696,7 +696,7 @@ NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
 {
   uint32_t             pNS16550;
   unsigned char        ucLineStatus;
-  char                 cChar;
+  uint8_t              cChar;
   getRegister_f        getReg;
 
   pNS16550 = Console_Port_Tbl[minor].ulCtrlPort1;

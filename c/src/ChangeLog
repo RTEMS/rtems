@@ -1,3 +1,8 @@
+2011-11-09	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	PR 1934/bsps
+	* libchip/serial/ns16550.c: Change to unsigned variable.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.
