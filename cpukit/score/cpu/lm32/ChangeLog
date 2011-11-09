@@ -1,3 +1,8 @@
+2011-11-09	Werner Almesberger <werner@almesberger.net>
+
+	PR 1955/cpukit
+	* rtems/score/cpu.h: Convert CPU_swap_u16 into a static inline.
+
 2010-05-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* irq.c: Change _exception_stack_frame into void*.

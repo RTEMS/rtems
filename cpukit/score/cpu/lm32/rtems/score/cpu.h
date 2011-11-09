@@ -1272,8 +1272,10 @@ static inline uint32_t CPU_swap_u32(
  *  @param[in] value is the value to be swapped
  *  @return the value after being endian swapped
  */
-#define CPU_swap_u16( value ) \
-  (((value&0xff) << 8) | ((value >> 8)&0xff))
+static inline uint16_t CPU_swap_u16(uint16_t v)
+{
+    return v << 8 | v >> 8;
+}
 
 #ifdef __cplusplus
 }
