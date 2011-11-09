@@ -1,15 +1,3 @@
-2011-11-09	Werner Almesberger <werner@almesberger.net>
-
-	PR 1954/cpukit
-	* score/cpu/lm32/rtems/score/lm32.h: Protect against macro expansion.
-
-2011-11-09	Werner Almesberger <werner@almesberger.net>
-
-	PR 1957/cpukit
-	* score/include/rtems/score/coremutex.h,
-	score/inline/rtems/score/threadmp.inl: Add parentheses to protect
-	macro arguments.
-
 2011-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 1952/cpukit
