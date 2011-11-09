@@ -74,7 +74,7 @@ extern "C" {
 #define lm32_disable_interrupts( _level ) \
   do { register uint32_t ie; \
     __asm__ volatile ("rcsr %0,ie":"=r"(ie)); \
-    _level = ie; \
+    (_level) = ie; \
     ie &= (~0x0001); \
     __asm__ volatile ("wcsr ie,%0"::"r"(ie)); \
   } while (0)
@@ -85,7 +85,7 @@ extern "C" {
 #define lm32_flash_interrupts( _level ) \
   do { register uint32_t ie; \
     __asm__ volatile ("wcsr ie,%0"::"r"(_level)); \
-    ie = _level & (~0x0001); \
+    ie = (_level) & (~0x0001); \
     __asm__ volatile ("wcsr ie,%0"::"r"(ie)); \
   } while (0)
 
@@ -99,7 +99,7 @@ extern "C" {
 #define lm32_interrupt_mask( _mask ) \
   do { register uint32_t im; \
     __asm__ volatile ("rcsr %0,im":"=r"(im)); \
-    im &= ~_mask; \
+    im &= ~(_mask); \
     __asm__ volatile ("wcsr im,%0"::"r"(im)); \
   } while (0)
 
