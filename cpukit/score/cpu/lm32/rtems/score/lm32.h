@@ -71,7 +71,7 @@ extern "C" {
 #define lm32_disable_interrupts( _level ) \
   do { register uint32_t ie; \
     asm volatile ("rcsr %0,ie":"=r"(ie)); \
-    _level = ie; \
+    (_level) = ie; \
     ie &= (~0x0001); \
     asm volatile ("wcsr ie,%0"::"r"(ie)); \
   } while (0)
@@ -82,7 +82,7 @@ extern "C" {
 #define lm32_flash_interrupts( _level ) \
   do { register uint32_t ie; \
     asm volatile ("wcsr ie,%0"::"r"(_level)); \
-    ie = _level & (~0x0001); \
+    ie = (_level) & (~0x0001); \
     asm volatile ("wcsr ie,%0"::"r"(ie)); \
   } while (0)
 
