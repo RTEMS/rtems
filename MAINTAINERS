@@ -1,52 +1,54 @@
-Note
-====
-
-This file contains information about people who are permitted to make
-changes to various parts of RTEMS and its associated components and
-add-ons.
-
-Please do not contact the people in this file directly to report
-problems with RTEMS.
-
-For general information about RTEMS, please visit:
-
-  http://www.rtems.com
-
-To report problems in RTEMS, please visit:
-
-  http://www.rtems.com/bugs.html
-
 Maintainers
 ===========
+This file contains information about people who are permitted to make
+changes to RTEMS and its associated components and add-ons.  Please do
+not contact the people in this file directly to report problems with RTEMS.
 
-		Blanket Write Privileges (alphabetical order)
+For general information about RTEMS, please visit: http://www.rtems.org
 
-Jennifer Averett				jennifer@oarcorp.com
-Ralf Corsepius					ralf.corsepius@rtems.org
-Chris Johns					chris.johns@rtems.com
-Eric Norum					eric.norum@rtems.com
-Joel Sherrill					joel.sherrill@oarcorp.com
+To report problems in RTEMS, please visit: http://www.rtems.org/bugs.html
 
-		Various Component Maintainers
+RTEMS is maintained by collection of volunteers.  RTEMS is a very
+broad and diverse project which requires expertise in many areas.
+This breadth of knowledge exceeds the capabilities of any
+single person. Each volunteer has areas of expertise where they
+are more comfortable but each is capable of making technical
+decisions across the entirety of RTEMS.
 
-Networking		NAME-TBD		EMAIL-TBD
+Blanket Write Privileges are granted to experienced RTEMS developers
+who can be trusted to distinguish between changes which require
+others to review, require a problem report, or can be safely committed
+with limited review.
 
-			CPU Port Maintainers	(CPU alphabetical order)
+Write After Approval is granted to experienced but also trusted 
+RTEMS developers.  These developers may be less familiar with
+the breadth of RTEMS.  Developers with write after approval need
+to submit their patches for review. Once the patches have been
+approved by a developer with Blanket Write Privileges, the patches
+may be checked in.  
 
-arm			Jay Monkman		jtm@lopingdog.com
-avr			NAME-TBD		EMAIL-TBD
-h8300			NAME-TBD		EMAIL-TBD
-i386			NAME-TBD		EMAIL-TBD
-m68k			NAME-TBD		EMAIL-TBD
-mips			NAME-TBD		EMAIL-TBD
-no_cpu			NAME-TBD		EMAIL-TBD
-powerpc			NAME-TBD		EMAIL-TBD
-sh			NAME-TBD		EMAIL-TBD
-sparc			NAME-TBD		EMAIL-TBD
+Localized Write Permission is for developers who have primary
+responsibility for a port and all associated BSPs, a BSP, or other
+specific aspects of RTEMS.  These folks are allowed to make changes to
+areas they maintain and related documentation, web pages, and test cases
+without approval from anyone else, and approve other people's changes
+in those areas. They must get approval for changes elsewhere in RTEMS.
 
-		    BSP Maintainers		(CPU/BSP alphabetical order)
+Blanket Write Privileges
+========================
+Jennifer Averett           jennifer.averett@OARcorp.com
+Ralf Corsepius             ralf.corsepius@rtems.org
+Thomas Doefler             Thomas.Doerfler@embedded-brains.de
+Sebastian Huber            sebastian.huber@embedded-brains.de
+Chris Johns                chris.johns@rtems.org
+Eric Norum                 eric.norum@rtems.org
+Joel Sherrill              joel.sherrill@OARcorp.com
 
-CPU/BSP			NAME-TBD		EMAIL-TBD
-arm/edb7312  		Jay Monkman		jtm@lopingdog.com
-arm/gp32		Philippe Simons		loki_666@fastmail.fm
+Write After Approval
+====================
+Gedare Bloom               gedare@rtems.org
+
+Localized Write Permission
+==========================
+sparc64                    Gedare Bloom          gedare@rtems.org
 

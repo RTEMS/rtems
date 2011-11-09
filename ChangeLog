@@ -1,3 +1,7 @@
+2011-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* MAINTAINERS: Rewrite and update.
+
 2011-11-08	Gedare Bloom <gedare@rtems.org>
 
 	* MAINTAINERS: Revert adding myself as a maintainer.
