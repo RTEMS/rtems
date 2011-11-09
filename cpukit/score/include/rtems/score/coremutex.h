@@ -374,8 +374,8 @@ void _CORE_mutex_Seize_interrupt_blocking(
            INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE \
            ); \
     } \
-    if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, &_level ) ) {  \
-      if ( !_wait ) { \
+    if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, &(_level) ) ) {  \
+      if ( !(_wait) ) { \
         _ISR_Enable( _level ); \
         _Thread_Executing->Wait.return_code = \
           CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT; \
