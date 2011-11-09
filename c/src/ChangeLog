@@ -1,3 +1,8 @@
+2011-11-09	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	PR 1934/bsps
+	* libchip/serial/ns16550.c: Change to unsigned variable.
+
 2011-11-07	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libchip/serial/serial.h: Declare Console_Port_Minor.
