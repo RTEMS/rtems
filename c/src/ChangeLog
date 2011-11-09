@@ -1,3 +1,8 @@
+2011-11-09	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	PR 1934/bsps
+	* libchip/serial/ns16550.c: Change to unsigned variable.
+
 2009-03-12	Daniel Hellstrom <daniel@gaisler.com>
 
 	PR 1392/bsps
