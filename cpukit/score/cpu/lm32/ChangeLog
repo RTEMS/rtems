@@ -1,3 +1,8 @@
+2011-11-09	Werner Almesberger <werner@almesberger.net>
+
+	PR 1955/cpukit
+	* rtems/score/cpu.h: Convert CPU_swap_u16 into a static inline.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1914/cpukit
