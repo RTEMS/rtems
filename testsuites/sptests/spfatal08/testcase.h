@@ -41,8 +41,9 @@ char Workspace[ 256 ] CPU_STRUCTURE_ALIGNMENT;
 
 void force_error()
 {
-  Configuration.work_space_start = Workspace;
-  Configuration.work_space_size  = 256;
+  rtems_configuration_set_work_space_start( Workspace );
+  rtems_configuration_set_work_space_size( sizeof(Workspace) );
+  rtems_configuration_set_stack_space_size( 0 );
 
   rtems_initialize_data_structures();;
   /* we will not run this far */

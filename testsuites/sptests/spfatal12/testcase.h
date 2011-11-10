@@ -19,7 +19,8 @@
 
 void force_error()
 {
-  Configuration.work_space_size  = sizeof(void *);
+  rtems_configuration_set_work_space_size( sizeof(void *) );
+  rtems_configuration_set_stack_space_size( 0 );
   rtems_initialize_data_structures();
 
   /* we will not run this far */
