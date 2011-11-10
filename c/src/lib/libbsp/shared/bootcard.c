@@ -66,11 +66,6 @@
 const char *bsp_boot_cmdline;
 
 /*
- * Are we using a single heap for the RTEMS Workspace and C Program Heap?
- */
-extern bool rtems_unified_work_area;
-
-/*
  *  These are the prototypes and helper routines which are used
  *  when the BSP lets the framework handle RAM allocation between
  *  the RTEMS Workspace and C Program Heap.
@@ -84,7 +79,7 @@ static void bootcard_bsp_libc_helper(
 )
 {
   if ( heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA ) {
-    if ( ! rtems_unified_work_area ) {
+    if ( !rtems_configuration_get_unified_work_area() ) {
       uintptr_t work_space_size = rtems_configuration_get_work_space_size();
 
       heap_start = (char *) work_area_start + work_space_size;
@@ -121,7 +116,8 @@ uint32_t boot_card(
   void                  *heap_start = NULL;
   uintptr_t              heap_size = 0;
   uintptr_t              sbrk_amount = 0;
-  uint32_t               status;
+  uintptr_t              work_space_size = 0;
+  uint32_t               status = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -158,11 +154,12 @@ uint32_t boot_card(
    */
   if ( rtems_malloc_sbrk_helpers ) {
     sbrk_amount = bsp_sbrk_init(work_area_start, &work_area_size);
-    if ( work_area_size <  Configuration.work_space_size && sbrk_amount > 0 ) {
+    work_space_size = rtems_configuration_get_work_space_size();
+    if ( work_area_size <  work_space_size && sbrk_amount > 0 ) {
       /* Need to use sbrk right now */
       uintptr_t sbrk_now;
 
-      sbrk_now = (Configuration.work_space_size - work_area_size) / sbrk_amount;
+      sbrk_now = (work_space_size - work_area_size) / sbrk_amount;
       sbrk( sbrk_now * sbrk_amount );
     }
   }
@@ -171,8 +168,9 @@ uint32_t boot_card(
     printk("Configuration error!\n"
            "Application was configured with CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK\n"
            "but BSP was configured w/o sbrk support\n");
-    bsp_cleanup(1);
-    return 1;
+    status = 1;
+    bsp_cleanup( status );
+    return status;
   }
 #endif
 
@@ -185,21 +183,26 @@ uint32_t boot_card(
    *
    *  NOTE: Use cast to (void *) and %p since these are uintptr_t types.
    */
-  if ( work_area_size <= Configuration.work_space_size ) {
+  work_space_size = rtems_configuration_get_work_space_size();
+  if ( work_area_size <= work_space_size ) {
     printk(
-      "bootcard: work space too big for work area: %p > %p\n",
-      (void *) Configuration.work_space_size,
+      "bootcard: work space too big for work area: %p >= %p\n",
+      (void *) work_space_size,
       (void *) work_area_size
     );
-    bsp_cleanup(1);
-    return 1;
+    status = 1;
+    bsp_cleanup( status );
+    return status;
   }
 
-  if ( rtems_unified_work_area ) {
-    Configuration.work_space_start = work_area_start;
-    Configuration.work_space_size  = work_area_size;
+  if ( !rtems_configuration_get_unified_work_area() ) {
+    rtems_configuration_set_work_space_start( work_area_start );
   } else {
-    Configuration.work_space_start = work_area_start;
+    rtems_configuration_set_work_space_start( work_area_start );
+    rtems_configuration_set_work_space_size( work_area_size );
+    if ( !rtems_configuration_get_stack_allocator_avoids_work_space() ) {
+      rtems_configuration_set_stack_space_size( 0 );
+    }
   }
 
   #if (BSP_DIRTY_MEMORY == 1)
