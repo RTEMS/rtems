@@ -362,7 +362,7 @@ static __inline__ int bsp_irq_fixup(int irq)
   (ERC32_MEC.Interrupt_Pending & (1 << (_source)))
 
 #define ERC32_Is_interrupt_masked( _source ) \
-  (ERC32_MEC.Interrupt_Masked & (1 << (_source)))
+  (ERC32_MEC.Interrupt_Mask & (1 << (_source)))
 
 #define ERC32_Mask_interrupt( _source ) \
   do { \
