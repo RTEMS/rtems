@@ -1,3 +1,8 @@
+2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1929/bsps
+	* irq/irq_init.c: Fixed warning.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps
