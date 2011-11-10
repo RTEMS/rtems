@@ -764,6 +764,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_MINIMUM_TASK_STACK_SIZE CPU_STACK_MINIMUM_SIZE
 #endif
 
+#define CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE \
+  (2 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
+
 /**
  *  @brief Idle task stack size configuration
  *
@@ -776,6 +779,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #else
     #define CONFIGURE_IDLE_TASK_STACK_SIZE CONFIGURE_MINIMUM_TASK_STACK_SIZE
   #endif
+#endif
+#if CONFIGURE_IDLE_TASK_STACK_SIZE < CONFIGURE_MINIMUM_TASK_STACK_SIZE
+  #error "CONFIGURE_IDLE_TASK_STACK_SIZE less than CONFIGURE_MINIMUM_TASK_STACK_SIZE"
 #endif
 
 /**
@@ -855,11 +861,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
     #include <rtems/score/wkspace.h>
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
-    bool           rtems_unified_work_area = true;
   #else
     Heap_Control   RTEMS_Malloc_Area;
     Heap_Control  *RTEMS_Malloc_Heap = &RTEMS_Malloc_Area;
-    bool           rtems_unified_work_area = false;
   #endif
 #endif
 
@@ -1241,6 +1245,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_LIBBLOCK_SEMAPHORES 0
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 
+#ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
+  #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
+#endif
+
 #if defined(RTEMS_MULTIPROCESSING)
   /*
    *  Default Multiprocessing Configuration Table.  The defaults are
@@ -1272,10 +1280,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       #endif
       #define CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
         _Configure_Object_RAM((_proxies) + 1, sizeof(Thread_Proxy_control) )
-
-      #ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
-        #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
-      #endif
 
       #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
         #include <mpci.h>
@@ -1521,7 +1525,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
     _Configure_From_workspace( \
-      CONFIGURE_MINIMUM_TASK_STACK_SIZE + \
       sizeof (POSIX_API_Control) + \
      (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
     )
@@ -1639,7 +1642,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
       #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
         #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-                (CONFIGURE_MINIMUM_TASK_STACK_SIZE * 2)
+          CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
       #endif
 
       #ifdef CONFIGURE_INIT
@@ -1685,8 +1688,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
           CONFIGURE_MAXIMUM_POSIX_SPINLOCKS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( \
           CONFIGURE_MAXIMUM_POSIX_RWLOCKS ) + \
-      CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ) + \
-      (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE) \
+      CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ) \
      )
 #else
 
@@ -1728,18 +1730,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
   #endif
 
-  /**
-   * Ada tasks are allocated twice the minimum stack space.
-   */
-  #define CONFIGURE_ADA_TASKS_STACK \
-    (CONFIGURE_MAXIMUM_ADA_TASKS * \
-      (CONFIGURE_MINIMUM_TASK_STACK_SIZE + (6 * 1024)))
-
 #else
   #define CONFIGURE_GNAT_MUTEXES           0
   #define CONFIGURE_MAXIMUM_ADA_TASKS      0
   #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
-  #define CONFIGURE_ADA_TASKS_STACK        0
 #endif
 
 #ifdef CONFIGURE_ENABLE_GO
@@ -1795,6 +1789,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB 0
 #endif
 
+/**
+ *  This is so we can account for tasks with stacks greater than minimum
+ *  size.  This is in bytes.
+ */
+#ifndef CONFIGURE_EXTRA_TASK_STACKS
+  #define CONFIGURE_EXTRA_TASK_STACKS 0
+#endif
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
@@ -1813,8 +1814,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  ( \
   _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
   (_Configure_Max_Objects(_tasks) * \
-   (_Configure_From_workspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
-    CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API + \
+    (CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API + \
     CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB + \
     CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
     CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER))  + \
@@ -1833,19 +1833,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     (CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
      CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS( \
              CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) + \
-     CONFIGURE_MEMORY_FOR_TASKS(1, 1) + \
-     CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK \
+     CONFIGURE_MEMORY_FOR_TASKS(1, 1) \
   )
 #else
   #define CONFIGURE_MEMORY_FOR_MP  0
-#endif
-
-/**
- *  This is so we can account for tasks with stacks greater than minimum
- *  size.  This is in bytes.
- */
-#ifndef CONFIGURE_EXTRA_TASK_STACKS
-  #define CONFIGURE_EXTRA_TASK_STACKS 0
 #endif
 
 /**
@@ -1915,25 +1906,21 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   _Configure_Object_RAM(1, sizeof(API_Mutex_Control))
 
 /**
- *  This defines the formula used to compute the amount of memory
- *  reserved for IDLE task control structures and stacks.
- */
-#define CONFIGURE_IDLE_TASKS(_count) \
-    (CONFIGURE_MEMORY_FOR_TASKS(_count, 0) + \
-      _count * _Configure_From_workspace( \
-       (CONFIGURE_IDLE_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)))
-
-/**
  *  This calculates the amount of memory reserved for the IDLE tasks.
  *  In an SMP system, each CPU core has its own idle task.
  */
 #if defined(RTEMS_SMP)
-  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
-          CONFIGURE_IDLE_TASKS(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
+  #define CONFIGURE_IDLE_TASKS_COUNT CONFIGURE_SMP_MAXIMUM_PROCESSORS
 #else
-  #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
-          CONFIGURE_IDLE_TASKS(1)
+  #define CONFIGURE_IDLE_TASKS_COUNT 1
 #endif
+
+/**
+ *  This defines the formula used to compute the amount of memory
+ *  reserved for IDLE task control structures.
+ */
+#define CONFIGURE_MEMORY_FOR_IDLE_TASK \
+  CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_IDLE_TASKS_COUNT, 0)
 
 /**
  *  This macro accounts for general RTEMS system overhead.
@@ -1945,42 +1932,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_INTERRUPT_STACK_MEMORY +             /* interrupt stack */ \
     CONFIGURE_API_MUTEX_MEMORY                     /* allocation mutex */ \
   )
-
-/*
- *  Now account for any extra memory that initialization tasks or threads
- *  may have requested.
- */
-
-/**
- *  This accounts for any extra memory required by the Classic API
- *  Initialization Task.
- */
-#if (CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
-      (CONFIGURE_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-#else
-  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART 0
-#endif
-
-/**
- *  This accounts for any extra memory required by the POSIX API
- *  Initialization Thread.
- */
-#if defined(RTEMS_POSIX_API) && \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-#else
-  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART 0
-#endif
-
-/**
- *  This macro provides a summation of the various initialization task
- *  and thread stack requirements.
- */
-#define CONFIGURE_INITIALIZATION_THREADS_STACKS \
-    (CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
-    CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART)
 
 /**
  *  This macro provides a summation of the various task and thread
@@ -2030,110 +1981,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_FOR_SMP 0
 #endif
 
-#if defined(CONFIGURE_CONFDEFS_DEBUG) && defined(CONFIGURE_INIT)
-  /**
-   *  This is a debug mechanism, so if you need to, the executable will
-   *  have a structure with various partial values.  Add to this as you
-   *  need to.  Viewing this structure in gdb combined with dumping
-   *  the Configuration structures generated should help a lot in tracing
-   *  down errors and analyzing where over and under allocations are.
-   */
-  typedef struct {
-    uint32_t SYSTEM_OVERHEAD;
-    uint32_t STATIC_EXTENSIONS;
-    uint32_t INITIALIZATION_THREADS_STACKS;
-
-    uint32_t PER_INTEGER_TASK;
-    uint32_t FP_OVERHEAD;
-    uint32_t CLASSIC;
-    uint32_t POSIX;
-
-    /* System overhead pieces */
-    uint32_t INTERRUPT_VECTOR_TABLE;
-    uint32_t INTERRUPT_STACK_MEMORY;
-    uint32_t MEMORY_FOR_IDLE_TASK;
-    uint32_t MEMORY_FOR_SCHEDULER;
-    uint32_t MEMORY_PER_TASK_FOR_SCHEDULER;
-
-    /* Classic API Pieces */
-    uint32_t CLASSIC_TASKS;
-    uint32_t TASK_VARIABLES;
-    uint32_t TIMERS;
-    uint32_t SEMAPHORES;
-    uint32_t MESSAGE_QUEUES;
-    uint32_t PARTITIONS;
-    uint32_t REGIONS;
-    uint32_t PORTS;
-    uint32_t PERIODS;
-    uint32_t BARRIERS;
-    uint32_t USER_EXTENSIONS;
-#ifdef RTEMS_POSIX_API
-    /* POSIX API Pieces */
-    uint32_t POSIX_MUTEXES;
-    uint32_t POSIX_CONDITION_VARIABLES;
-    uint32_t POSIX_KEYS;
-    uint32_t POSIX_TIMERS;
-    uint32_t POSIX_QUEUED_SIGNALS;
-    uint32_t POSIX_MESSAGE_QUEUES;
-    uint32_t POSIX_SEMAPHORES;
-    uint32_t POSIX_BARRIERS;
-    uint32_t POSIX_SPINLOCKS;
-    uint32_t POSIX_RWLOCKS;
-#endif
-  } Configuration_Debug_t;
-
-  Configuration_Debug_t Configuration_Memory_Debug = {
-    /* General Information */
-    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD,
-    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS,
-    CONFIGURE_INITIALIZATION_THREADS_STACKS,
-    CONFIGURE_MEMORY_FOR_TASKS(1, 0),
-    CONFIGURE_MEMORY_FOR_TASKS(0, 1),
-    CONFIGURE_MEMORY_FOR_CLASSIC,
-    CONFIGURE_MEMORY_FOR_POSIX,
-
-    /* System overhead pieces */
-    CONFIGURE_INTERRUPT_VECTOR_TABLE,
-    CONFIGURE_INTERRUPT_STACK_MEMORY,
-    CONFIGURE_MEMORY_FOR_IDLE_TASK,
-    CONFIGURE_MEMORY_FOR_SCHEDULER,
-    CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER,
-
-    /* Classic API Pieces */
-    CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),
-    CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES +
-      CONFIGURE_GOROUTINES_TASK_VARIABLES),
-    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS),
-    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_SEMAPHORES),
-    CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES),
-    CONFIGURE_MEMORY_FOR_PARTITIONS(CONFIGURE_MAXIMUM_PARTITIONS),
-    CONFIGURE_MEMORY_FOR_REGIONS( CONFIGURE_MAXIMUM_REGIONS ),
-    CONFIGURE_MEMORY_FOR_PORTS(CONFIGURE_MAXIMUM_PORTS),
-    CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS),
-    CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_BARRIERS),
-    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS),
-
-#ifdef RTEMS_POSIX_API
-    /* POSIX API Pieces */
-    CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES +
-      CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_MUTEXES),
-    CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(
-      CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
-      CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_CONDITION_VARIABLES),
-    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ),
-    CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(
-      CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ),
-    CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
-      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ),
-    CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ),
-    CONFIGURE_MEMORY_FOR_POSIX_BARRIERS( CONFIGURE_MAXIMUM_POSIX_BARRIERS ),
-    CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS( CONFIGURE_MAXIMUM_POSIX_SPINLOCKS ),
-    CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( CONFIGURE_MAXIMUM_POSIX_RWLOCKS ),
-    CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ),
-#endif
-  };
-#endif
-
 /**
  *  This calculates the memory required for the executive workspace.
  */
@@ -2145,17 +1992,101 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
      CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \
    CONFIGURE_MEMORY_FOR_POSIX + \
-   (CONFIGURE_MAXIMUM_POSIX_THREADS * CONFIGURE_MINIMUM_TASK_STACK_SIZE ) + \
-   (CONFIGURE_MAXIMUM_GOROUTINES * CONFIGURE_MINIMUM_TASK_STACK_SIZE) + \
-   CONFIGURE_INITIALIZATION_THREADS_STACKS + \
    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MEMORY_FOR_SMP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
-   (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
-   (CONFIGURE_EXTRA_TASK_STACKS) + (CONFIGURE_ADA_TASKS_STACK) \
+   (CONFIGURE_MEMORY_OVERHEAD * 1024) \
 ) & ~0x7)
+
+/*
+ *  Now account for any extra memory that initialization tasks or threads
+ *  may have requested.
+ */
+
+/**
+ *  This accounts for any extra memory required by the Classic API
+ *  Initialization Task.
+ */
+#if (CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
+      (CONFIGURE_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
+#else
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART 0
 #endif
+
+/**
+ *  This accounts for any extra memory required by the POSIX API
+ *  Initialization Thread.
+ */
+#if defined(RTEMS_POSIX_API) && \
+    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > \
+      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE)
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
+    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - \
+      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE)
+#else
+  #define CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART 0
+#endif
+
+/**
+ *  This macro provides a summation of the various initialization task
+ *  and thread stack requirements.
+ */
+#define CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS \
+    (CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
+    CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART)
+
+#define CONFIGURE_IDLE_TASKS_STACK \
+  (CONFIGURE_IDLE_TASKS_COUNT * \
+    _Configure_From_workspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
+
+#define CONFIGURE_TASKS_STACK \
+  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_TASKS ) * \
+    _Configure_From_workspace( CONFIGURE_MINIMUM_TASK_STACK_SIZE ) )
+
+#define CONFIGURE_POSIX_THREADS_STACK \
+  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_POSIX_THREADS ) * \
+    _Configure_From_workspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+
+#define CONFIGURE_GOROUTINES_STACK \
+  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_GOROUTINES ) * \
+    _Configure_From_workspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+
+#define CONFIGURE_ADA_TASKS_STACK \
+  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_ADA_TASKS ) * \
+    _Configure_From_workspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+
+#else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
+
+#define CONFIGURE_IDLE_TASKS_STACK 0
+#define CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS 0
+#define CONFIGURE_TASKS_STACK 0
+#define CONFIGURE_POSIX_THREADS_STACK 0
+#define CONFIGURE_GOROUTINES_STACK 0
+#define CONFIGURE_ADA_TASKS_STACK 0
+
+#if CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK != 0
+  #error "CONFIGURE_EXECUTIVE_RAM_SIZE defined with request for CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK"
+#endif
+
+#if CONFIGURE_EXTRA_TASK_STACKS != 0
+  #error "CONFIGURE_EXECUTIVE_RAM_SIZE defined with request for CONFIGURE_EXTRA_TASK_STACKS"
+#endif
+
+#endif /* CONFIGURE_EXECUTIVE_RAM_SIZE */
+
+#define CONFIGURE_STACK_SPACE_SIZE \
+  ( \
+    CONFIGURE_IDLE_TASKS_STACK + \
+    CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS + \
+    CONFIGURE_TASKS_STACK + \
+    CONFIGURE_POSIX_THREADS_STACK + \
+    CONFIGURE_GOROUTINES_STACK + \
+    CONFIGURE_ADA_TASKS_STACK + \
+    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK + \
+    CONFIGURE_EXTRA_TASK_STACKS \
+  )
 
 #ifdef CONFIGURE_INIT
   /**
@@ -2230,6 +2161,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   rtems_configuration_table Configuration = {
     NULL,                                     /* filled in by BSP */
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
+    CONFIGURE_STACK_SPACE_SIZE,               /* required stack space */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
@@ -2239,6 +2171,18 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
     CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
     CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,   /* true to clear memory */
+    #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
+      true,
+    #else
+      false,
+    #endif
+    #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE /* true to avoid
+                                                 work space for thread stack
+                                                 allocation */
+      true,
+    #else
+      false,
+    #endif
     CONFIGURE_MAXIMUM_DRIVERS,                /* maximum device drivers */
     CONFIGURE_NUMBER_OF_DRIVERS,              /* static device drivers */
     Device_drivers,                           /* pointer to driver table */
@@ -2317,6 +2261,131 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  ******************************************************************
  ******************************************************************
  */
+
+#if defined(CONFIGURE_CONFDEFS_DEBUG) && defined(CONFIGURE_INIT)
+  /**
+   *  This is a debug mechanism, so if you need to, the executable will
+   *  have a structure with various partial values.  Add to this as you
+   *  need to.  Viewing this structure in gdb combined with dumping
+   *  the Configuration structures generated should help a lot in tracing
+   *  down errors and analyzing where over and under allocations are.
+   */
+  typedef struct {
+    uint32_t SYSTEM_OVERHEAD;
+    uint32_t STATIC_EXTENSIONS;
+    uint32_t INITIALIZATION_THREADS_STACKS;
+
+    uint32_t PER_INTEGER_TASK;
+    uint32_t FP_OVERHEAD;
+    uint32_t CLASSIC;
+    uint32_t POSIX;
+
+    /* System overhead pieces */
+    uint32_t INTERRUPT_VECTOR_TABLE;
+    uint32_t INTERRUPT_STACK_MEMORY;
+    uint32_t MEMORY_FOR_IDLE_TASK;
+    uint32_t MEMORY_FOR_SCHEDULER;
+    uint32_t MEMORY_PER_TASK_FOR_SCHEDULER;
+
+    /* Classic API Pieces */
+    uint32_t CLASSIC_TASKS;
+    uint32_t TASK_VARIABLES;
+    uint32_t TIMERS;
+    uint32_t SEMAPHORES;
+    uint32_t MESSAGE_QUEUES;
+    uint32_t PARTITIONS;
+    uint32_t REGIONS;
+    uint32_t PORTS;
+    uint32_t PERIODS;
+    uint32_t BARRIERS;
+    uint32_t USER_EXTENSIONS;
+
+#ifdef RTEMS_POSIX_API
+    /* POSIX API Pieces */
+    uint32_t POSIX_MUTEXES;
+    uint32_t POSIX_CONDITION_VARIABLES;
+    uint32_t POSIX_KEYS;
+    uint32_t POSIX_TIMERS;
+    uint32_t POSIX_QUEUED_SIGNALS;
+    uint32_t POSIX_MESSAGE_QUEUES;
+    uint32_t POSIX_SEMAPHORES;
+    uint32_t POSIX_BARRIERS;
+    uint32_t POSIX_SPINLOCKS;
+    uint32_t POSIX_RWLOCKS;
+#endif
+
+    /* Stack space sizes */
+    uint32_t IDLE_TASKS_STACK;
+    uint32_t INITIALIZATION_THREADS_EXTRA_STACKS;
+    uint32_t TASKS_STACK;
+    uint32_t POSIX_THREADS_STACK;
+    uint32_t GOROUTINES_STACK;
+    uint32_t ADA_TASKS_STACK;
+    uint32_t EXTRA_MPCI_RECEIVE_SERVER_STACK;
+    uint32_t EXTRA_TASK_STACKS;
+  } Configuration_Debug_t;
+
+  Configuration_Debug_t Configuration_Memory_Debug = {
+    /* General Information */
+    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD,
+    CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS,
+    CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS,
+    CONFIGURE_MEMORY_FOR_TASKS(1, 0),
+    CONFIGURE_MEMORY_FOR_TASKS(0, 1),
+    CONFIGURE_MEMORY_FOR_CLASSIC,
+    CONFIGURE_MEMORY_FOR_POSIX,
+
+    /* System overhead pieces */
+    CONFIGURE_INTERRUPT_VECTOR_TABLE,
+    CONFIGURE_INTERRUPT_STACK_MEMORY,
+    CONFIGURE_MEMORY_FOR_IDLE_TASK,
+    CONFIGURE_MEMORY_FOR_SCHEDULER,
+    CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER,
+
+    /* Classic API Pieces */
+    CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),
+    CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES +
+      CONFIGURE_GOROUTINES_TASK_VARIABLES),
+    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS),
+    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_SEMAPHORES),
+    CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES),
+    CONFIGURE_MEMORY_FOR_PARTITIONS(CONFIGURE_MAXIMUM_PARTITIONS),
+    CONFIGURE_MEMORY_FOR_REGIONS( CONFIGURE_MAXIMUM_REGIONS ),
+    CONFIGURE_MEMORY_FOR_PORTS(CONFIGURE_MAXIMUM_PORTS),
+    CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS),
+    CONFIGURE_MEMORY_FOR_BARRIERS(CONFIGURE_BARRIERS),
+    CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS),
+
+#ifdef RTEMS_POSIX_API
+    /* POSIX API Pieces */
+    CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES +
+      CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_MUTEXES),
+    CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(
+      CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
+      CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_CONDITION_VARIABLES),
+    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ),
+    CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(
+      CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ),
+    CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
+      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ),
+    CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ),
+    CONFIGURE_MEMORY_FOR_POSIX_BARRIERS( CONFIGURE_MAXIMUM_POSIX_BARRIERS ),
+    CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS( CONFIGURE_MAXIMUM_POSIX_SPINLOCKS ),
+    CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( CONFIGURE_MAXIMUM_POSIX_RWLOCKS ),
+    CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ),
+#endif
+
+    /* Stack space sizes */
+    CONFIGURE_IDLE_TASKS_STACK,
+    CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS,
+    CONFIGURE_TASKS_STACK,
+    CONFIGURE_POSIX_THREADS_STACK,
+    CONFIGURE_GOROUTINES_STACK,
+    CONFIGURE_ADA_TASKS_STACK,
+    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK,
+    CONFIGURE_EXTRA_TASK_STACKS
+  };
+#endif
 
 /*
  *  Make sure a task/thread of some sort is configured.

@@ -1,5 +1,18 @@
 2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1924/cpukit
+	* sapi/include/rtems/config.h: New fields stack_space_size,
+	unified_work_area, and stack_allocator_avoids_work_space in
+	rtems_configuration_table.
+	* sapi/include/confdefs.h: Removed rtems_unified_work_area (this is
+	now part of the Configuration).  Separate work space and stack space
+	estimate.  Added CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
+	configuration option.
+	* libmisc/shell/main_wkspaceinfo.c, score/src/wkspace.c,
+	libcsupport/src/malloc_initialize.c: Update due to API changes.
+
+2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* rtems/include/rtems/rtems/event.h,
 	rtems/include/rtems/rtems/eventset.h,
 	rtems/inline/rtems/rtems/eventset.inl: Documentation.

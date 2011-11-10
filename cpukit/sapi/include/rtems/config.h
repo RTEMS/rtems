@@ -104,6 +104,10 @@ typedef struct {
    */
   uintptr_t                      work_space_size;
 
+  /** This field specifies the size in bytes of the RTEMS thread stack space.
+   */
+  uintptr_t                      stack_space_size;
+
   /** This field specifies the maximum number of dynamically installed
    *  used extensions.
    */
@@ -152,6 +156,23 @@ typedef struct {
    */
   bool                           do_zero_of_workspace;
 
+  /**
+   * @brief Specifies if a unified work area is used or not.
+   *
+   * If this element is @a true, then the RTEMS Workspace and the C Program
+   * Heap use the same heap, otherwise they use separate heaps.
+   */
+  bool                           unified_work_area;
+
+  /**
+   * @brief Specifies if the stack allocator avoids the work space.
+   *
+   * If this element is @a true, then the stack allocator must not allocate the
+   * thread stacks from the RTEMS Workspace, otherwise it should allocate the
+   * thread stacks from the RTEMS Workspace.
+   */
+  bool                           stack_allocator_avoids_work_space;
+
   uint32_t                       maximum_drivers;
   uint32_t                       number_of_device_drivers;
   rtems_driver_address_table    *Device_driver_table;
@@ -193,11 +214,31 @@ extern rtems_configuration_table  Configuration;
 #define rtems_configuration_get_table() \
         (&Configuration)
 
+#define rtems_configuration_get_unified_work_area() \
+        (Configuration.unified_work_area)
+
+#define rtems_configuration_get_stack_allocator_avoids_work_space() \
+        (Configuration.stack_allocator_avoids_work_space)
+
+#define rtems_configuration_get_stack_space_size() \
+        (Configuration.stack_space_size)
+
+#define rtems_configuration_set_stack_space_size( _size ) \
+        do { Configuration.stack_space_size = (_size); } while (0)
+
 #define rtems_configuration_get_work_space_start() \
         (Configuration.work_space_start)
 
+#define rtems_configuration_set_work_space_start( _start ) \
+        do { Configuration.work_space_start = (_start); } while (0)
+
 #define rtems_configuration_get_work_space_size() \
-        (Configuration.work_space_size)
+        (Configuration.work_space_size + \
+          (rtems_configuration_get_stack_allocator_avoids_work_space() ? \
+            0 : rtems_configuration_get_stack_space_size()))
+
+#define rtems_configuration_set_work_space_size( _size ) \
+        do { Configuration.work_space_size = (_size); } while (0)
 
 #define rtems_configuration_get_maximum_extensions() \
         (Configuration.maximum_extensions)
@@ -254,9 +295,10 @@ extern rtems_configuration_table    Configuration;
 
 #if defined(RTEMS_MULTIPROCESSING)
   #define rtems_configuration_get_user_multiprocessing_table() \
-	  (Configuration.User_multiprocessing_table)
+        (Configuration.User_multiprocessing_table)
 #else
-  #define rtems_configuration_get_user_multiprocessing_table() NULL
+  #define rtems_configuration_get_user_multiprocessing_table() \
+        NULL
 #endif
 
 #define rtems_configuration_get_rtems_api_configuration() \

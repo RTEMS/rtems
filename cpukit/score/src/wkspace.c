@@ -33,11 +33,11 @@
 void _Workspace_Handler_initialization(void)
 {
   uintptr_t memory_available = 0;
-  void *starting_address = Configuration.work_space_start;
-  uintptr_t size = Configuration.work_space_size;
+  void *starting_address = rtems_configuration_get_work_space_start();
+  uintptr_t size = rtems_configuration_get_work_space_size();
 
-  if ( Configuration.do_zero_of_workspace )
-   memset( starting_address, 0, size );
+  if ( rtems_configuration_get_do_zero_of_workspace() )
+    memset( starting_address, 0, size );
 
   memory_available = _Heap_Initialize(
     &_Workspace_Area,

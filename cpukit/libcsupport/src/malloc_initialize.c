@@ -35,7 +35,6 @@ void RTEMS_Malloc_Initialize(
 }
 #else
 rtems_malloc_statistics_t rtems_malloc_statistics;
-extern bool rtems_unified_work_area;
 
 void RTEMS_Malloc_Initialize(
   void *heap_begin,
@@ -43,6 +42,7 @@ void RTEMS_Malloc_Initialize(
   size_t sbrk_amount
 )
 {
+  bool separate_areas = !rtems_configuration_get_unified_work_area();
   /*
    *  If configured, initialize the statistics support
    */
@@ -86,10 +86,7 @@ void RTEMS_Malloc_Initialize(
    *  left over from another process.  This would be a security violation.
    */
 
-  if (
-    !rtems_unified_work_area
-      && rtems_configuration_get_do_zero_of_workspace()
-  ) {
+  if ( separate_areas && rtems_configuration_get_do_zero_of_workspace() ) {
      memset( heap_begin, 0, heap_size );
   }
 
@@ -99,7 +96,7 @@ void RTEMS_Malloc_Initialize(
    *  STDIO cannot work because there will be no buffers.
    */
 
-  if ( !rtems_unified_work_area ) {
+  if ( separate_areas ) {
     uintptr_t status = _Protected_heap_Initialize(
       RTEMS_Malloc_Heap,
       heap_begin,

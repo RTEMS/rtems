@@ -24,12 +24,10 @@
 #include <rtems/score/protectedheap.h>
 #include "internal.h"
 
-extern bool rtems_unified_work_area;
-
 void rtems_shell_print_unified_work_area_message(void)
 {
   printf( "\nC Program Heap and RTEMS Workspace are %s.\n",
-    ((rtems_unified_work_area) ? "the same" : "separate")
+    rtems_configuration_get_unified_work_area() ? "the same" : "separate"
   );
 }
 
