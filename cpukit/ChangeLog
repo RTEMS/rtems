@@ -1,5 +1,9 @@
 2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* rtems/include/rtems/rtems/event.h: Revert parameter name change.
+
+2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	PR 1924/cpukit
 	* sapi/include/rtems/config.h: New fields stack_space_size,
 	unified_work_area, and stack_allocator_avoids_work_space in

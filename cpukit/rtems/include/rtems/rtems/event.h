@@ -103,7 +103,7 @@ extern "C" {
  *  @brief Sends an event set to the target task.
  *
  *  This directive sends an event set @a event_in to the task specified by
- *  @a target_task_id.
+ *  @a id.
  *
  *  Based upon the state of the target task, one of the following situations
  *  applies. The target task is
@@ -126,15 +126,15 @@ extern "C" {
  *  node will generate a request telling the remote node to send the event set
  *  to the appropriate task.
  *
- *  @param[in] target_task_id Identifier of the target task.  Specifying
- *  @ref RTEMS_SELF results in the event set being sent to the calling task.
+ *  @param[in] id Identifier of the target task.  Specifying @ref RTEMS_SELF
+ *  results in the event set being sent to the calling task.
  *  @param[in] event_in Event set sent to the target task.
  *
  *  @retval RTEMS_SUCCESSFUL Successful operation.
  *  @retval RTEMS_INVALID_ID Invalid task identifier.
  */
 rtems_status_code rtems_event_send (
-  rtems_id        target_task_id,
+  rtems_id        id,
   rtems_event_set event_in
 );
 
