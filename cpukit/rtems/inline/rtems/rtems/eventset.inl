@@ -25,7 +25,7 @@
 #include <rtems/score/isr.h> /* ISR_Level */
 
 /**
- *  @addtogroup ClassicEventSet
+ *  @addtogroup ScoreEvent
  *  @{
  */
 

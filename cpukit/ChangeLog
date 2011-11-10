@@ -1,3 +1,9 @@
+2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/include/rtems/rtems/event.h,
+	rtems/include/rtems/rtems/eventset.h,
+	rtems/inline/rtems/rtems/eventset.inl: Documentation.
+
 2011-11-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	PR 1952/cpukit
