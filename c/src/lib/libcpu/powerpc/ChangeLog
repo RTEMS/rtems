@@ -1,3 +1,8 @@
+2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1927/bsps:
+	* mpc83xx/network/tsec.c: Fixed integer truncation.
+
 2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* new-exceptions/bspsupport/ppc_exc_async_normal.S: Bugfix for

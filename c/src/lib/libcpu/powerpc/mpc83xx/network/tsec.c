@@ -331,18 +331,19 @@ static void tsec_mdio_init
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  static const uint8_t divider [] = { 64, 64, 96, 128, 160, 224, 320, 448 };
+  static const uint8_t divider [] = { 32, 32, 48, 64, 80, 112, 160, 224 };
   size_t n = sizeof(divider) / sizeof(divider [0]);
   size_t i = 0;
-  uint32_t clock = UINT32_MAX;
+  uint32_t mii_clock = UINT32_MAX;
+  uint32_t tsec_system_clock = BSP_bus_frequency / 2;
 
   /* Set TSEC registers for MDIO communication */
 
   /*
    * set clock divider
    */
-  for (i = 0; i < n && clock > 2500000; ++i) {
-    clock = BSP_bus_frequency / divider [i];
+  for (i = 0; i < n && mii_clock > 2500000; ++i) {
+    mii_clock = tsec_system_clock / divider [i];
   }
 
   sc->mdio_ptr->miimcfg = i;
