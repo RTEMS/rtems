@@ -58,7 +58,7 @@ Summary:      	h8300-rtems4.10 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	3%{?dist}
+Release:      	4%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -117,6 +117,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse12_1}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.1
+%global gmp_provided 5.0.2
 %endif
 
 %if 0%{?suse11_3}
@@ -227,10 +233,9 @@ BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 BuildRequires:  rtems-4.10-h8300-rtems4.10-gcc = %{gcc_rpmvers}
 %endif
 
-%if "%{gcc_version}" >= "4.2.0"
+# Not strictly required, but patches may introduce a need to use them.
+# For reasons of simplicity, always require them.
 BuildRequires:	flex bison
-%endif
-
 
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	rtems-4.10-h8300-rtems4.10-binutils
@@ -238,7 +243,7 @@ BuildRequires:	rtems-4.10-h8300-rtems4.10-binutils
 Requires:	rtems-4.10-gcc-common
 Requires:	rtems-4.10-h8300-rtems4.10-binutils
 Requires:	rtems-4.10-h8300-rtems4.10-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-26%{?dist}
+Requires:	rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-27%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -349,7 +354,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-3%{?dist}/newlib-%{newlib_version}-26%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-27%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -622,7 +627,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.10-h8300-rtems4.10-binutils
-# Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-26%{?dist}
+# Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-27%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -640,7 +645,7 @@ Summary:        libgcc for h8300-rtems4.10-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-26%{?dist}
+Requires:       rtems-4.10-h8300-rtems4.10-newlib = %{newlib_version}-27%{?dist}
 License:	GPL
 
 %description -n rtems-4.10-h8300-rtems4.10-gcc-libgcc
@@ -816,7 +821,7 @@ Summary:      	C Library (newlib) for h8300-rtems4.10
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        26%{?dist}
+Release:        27%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.10-newlib-common
@@ -837,7 +842,7 @@ Newlib C Library for h8300-rtems4.10.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        26%{?dist}
+Release:        27%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
