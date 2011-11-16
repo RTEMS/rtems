@@ -74,6 +74,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global gmp_provided 4.1.4
 %endif
 
+%if 0%{?suse12_1}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.1
+%global gmp_provided 5.0.2
+%endif
+
 %if 0%{?suse11_3}
 %global mpc_provided 0.8.1
 %global mpfr_provided 2.4.2
@@ -186,14 +192,9 @@ BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 BuildRequires:  @rpmprefix@@tool_target@-gcc = %{gcc_rpmvers}
 %endif
 
-%if "%{gcc_version}" >= "4.2.0"
+# Not strictly required, but patches may introduce a need to use them.
+# For reasons of simplicity, always require them.
 BuildRequires:	flex bison
-%endif
-
-%if %build_gcj
-# Building gcj requires bison and zlib
-BuildRequires:	bison
-%endif
 
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	@rpmprefix@@tool_target@-binutils
