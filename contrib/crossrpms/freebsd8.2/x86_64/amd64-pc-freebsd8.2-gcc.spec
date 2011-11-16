@@ -41,7 +41,7 @@ Summary:      	amd64-pc-freebsd8.2 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	0.20110802.0%{?dist}
+Release:      	0.20111116.0%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -103,6 +103,12 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global mpc_provided %{nil}
 %global mpfr_provided %{nil}
 %global gmp_provided 4.1.4
+%endif
+
+%if 0%{?suse12_1}
+%global mpc_provided 0.8.2
+%global mpfr_provided 3.0.1
+%global gmp_provided 5.0.2
 %endif
 
 %if 0%{?suse11_3}
@@ -215,10 +221,9 @@ BuildRequires:  %{_host_rpmprefix}mpfr-devel >= %{mpfr_required}
 BuildRequires:  amd64-pc-freebsd8.2-gcc = %{gcc_rpmvers}
 %endif
 
-%if "%{gcc_version}" >= "4.2.0"
+# Not strictly required, but patches may introduce a need to use them.
+# For reasons of simplicity, always require them.
 BuildRequires:	flex bison
-%endif
-
 
 BuildRequires:	texinfo >= 4.2
 BuildRequires:	amd64-pc-freebsd8.2-binutils
@@ -239,9 +244,6 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 %global _gcclibdir %{_prefix}/lib
 
 Source0: 	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-core-%{gcc_pkgvers}.tar.bz2
-%if "%{gcc_version}" == "4.5.0"
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.0-rtems4.11-20100609.diff
-%endif
 %if "%{gcc_version}" == "4.5.2"
 Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.5.2-rtems4.11-20110220.diff
 %endif
@@ -286,17 +288,17 @@ cd gcc-%{gcc_pkgvers}
 %{?PATCH0:%patch0 -p1}
 cd ..
 
-%setup -q -T -D -n %{name}-%{version} -a1
+%{?SOURCE1:%setup -q -T -D -n %{name}-%{version} -a1}
 cd gcc-%{gcc_pkgvers}
 %{?PATCH1:%patch1 -p1}
 cd ..
 
-%setup -q -T -D -n %{name}-%{version} -a2
+%{?SOURCE2:%setup -q -T -D -n %{name}-%{version} -a2}
 %{?PATCH2:%patch2 -p0}
 
 
 
-%setup -q -T -D -n %{name}-%{version} -a5
+%{?SOURCE5:%setup -q -T -D -n %{name}-%{version} -a5}
 %{?PATCH5:%patch5 -p0}
 
 %if %{with gcc_stdint}
