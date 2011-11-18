@@ -418,14 +418,24 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
 
-  /*
+  /**
    *  DEVFS variables.
+   *
+   *  The number of individual devices that may be registered
+   *  in the system or the CONFIGURE_MAXIMUM_DEVICES variable
+   *  is defaulted to 4 when a filesystem is enabled, unless
+   *  the bsp overwrides this.  In which case the value is set
+   *  to BSP_MAXIMUM_DEVICES.
    */
   #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
     #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #elif defined(CONFIGURE_FILESYSTEM_DEVFS)
     #ifndef CONFIGURE_MAXIMUM_DEVICES
-      #define CONFIGURE_MAXIMUM_DEVICES 4
+      #if defined(BSP_MAXIMUM_DEVICES)
+        #define CONFIGURE_MAXIMUM_DEVICES BSP_MAXIMUM_DEVICES
+      #else
+        #define CONFIGURE_MAXIMUM_DEVICES 4
+      #endif
     #endif
     #include <rtems/devfs.h>
     uint32_t rtems_device_table_size = CONFIGURE_MAXIMUM_DEVICES;

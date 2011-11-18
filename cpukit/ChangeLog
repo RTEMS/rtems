@@ -1,3 +1,8 @@
+2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* sapi/include/confdefs.h: Added a bsp override option for
+	MAXIMUM_DEVICES.
+
 2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* rtems/include/rtems/rtems/event.h: Revert parameter name change.
