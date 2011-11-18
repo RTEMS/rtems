@@ -175,6 +175,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse12_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
