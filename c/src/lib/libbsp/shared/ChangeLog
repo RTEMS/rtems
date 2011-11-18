@@ -1,3 +1,7 @@
+2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* console.c: Added a some error checks and fixed a error message.
+
 2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1924/cpukit

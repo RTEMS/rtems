@@ -292,15 +292,18 @@ rtems_device_driver console_initialize(
     if ( (!port->deviceProbe || port->deviceProbe(minor)) &&
          port->pDeviceFns->deviceProbe(minor)) {
 
-      status = rtems_io_register_name( port->sDeviceName, major, minor );
-      if (status != RTEMS_SUCCESSFUL) {
-        printk( "Unable to register /dev/console\n" );
-        rtems_fatal_error_occurred(status);
+      if (port->sDeviceName != NULL) {
+        status = rtems_io_register_name( port->sDeviceName, major, minor );
+        if (status != RTEMS_SUCCESSFUL) {
+          printk( "Unable to register %s\n",  port->sDeviceName );
+          rtems_fatal_error_occurred(status);
+        }
       }
 
       if (minor == Console_Port_Minor) {
 #if defined(RTEMS_DEBUG)
-          printk( "Register %s as the CONSOLE\n", port->sDeviceName );
+          if (port->sDeviceName != NULL)
+            printk( "Register %s as the CONSOLE\n", port->sDeviceName );
 #endif
         status = rtems_io_register_name( "dev/console", major, minor );
         if (status != RTEMS_SUCCESSFUL) {
