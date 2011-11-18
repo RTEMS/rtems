@@ -55,6 +55,8 @@ extern "C" {
 #define BSP_KEYBOARD          	1
 #define BSP_UART_COM2_IRQ	3
 #define BSP_UART_COM1_IRQ	4
+#define BSP_UART_COM3_IRQ	5
+#define BSP_UART_COM4_IRQ	6
 #define BSP_RT_TIMER1	      	8
 #define BSP_RT_TIMER3		10
 #define BSP_SMP_IPI   		16

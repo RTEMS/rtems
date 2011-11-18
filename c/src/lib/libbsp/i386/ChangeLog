@@ -1,3 +1,9 @@
+2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1925
+	* shared/irq/irq.h: Changed i386 console to libchip style console and
+	added support for com3 and com4.
+
 2011-10-22	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/comm/uart.c (uartError): Remove unused var "uartStatus".
