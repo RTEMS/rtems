@@ -1,3 +1,7 @@
+2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* user/conf.t: Added a bsp override option for MAXIMUM_DEVICES.
+
 2011-10-31	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1947/doc

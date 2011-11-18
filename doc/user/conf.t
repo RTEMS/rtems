@@ -537,7 +537,10 @@ set to 10.
 @findex CONFIGURE_MAXIMUM_DEVICES
 @item @code{CONFIGURE_MAXIMUM_DEVICES} is defined
 to the number of individual devices that may be registered
-in the system.  By default, this is set to 4.
+in the system.  Unless @code{BSP_MAXIMUM_DEVICES} is set
+by the BSP, the default value for this is set to 4.
+If overridden by the BSP the value is set to the value
+specified by the BSP.
 
 @findex CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 @item @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
