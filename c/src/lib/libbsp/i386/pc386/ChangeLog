@@ -1,3 +1,13 @@
+2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1925
+	* Makefile.am, preinstall.am, console/serial_mouse_config.c,
+	include/bsp.h, start/start.S: Converted 1386 console to the libchip
+	style console
+	* console/conscfg.c, console/console_control.c,
+	console/printk_support.c, console/vgacons.c, console/vgacons.h: New
+	files.
+
 2011-10-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* ne2000/ne2000.c: Remove unused var "stat".

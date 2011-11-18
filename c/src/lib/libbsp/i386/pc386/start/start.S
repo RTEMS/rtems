@@ -209,11 +209,6 @@ SYM (zero_bss):
 +---------------------------------------------------------------------*/
 	call checkCPUtypeSetCr0
 
-/*---------------------------------------------------------------------+
-| Redirect printk (and console) port if desired
-+---------------------------------------------------------------------*/
-	call SYM(BSP_console_select)
-
 #ifdef __SSE__
 	call SYM(enable_sse)
 #endif

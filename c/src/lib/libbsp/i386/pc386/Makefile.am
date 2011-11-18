@@ -68,16 +68,21 @@ libbsp_a_SOURCES += clock/ckinit.c clock/todcfg.c ../../shared/tod.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = console/keyboard.h console/kd.h console/ps2_drv.h
+include_rtems_HEADERS = console/keyboard.h console/kd.h console/ps2_drv.h \
+    ../../shared/console_private.h console/vgacons.h
 
 include_HEADERS += ../../i386/shared/comm/i386_io.h
 # console
-libbsp_a_SOURCES += console/console.c console/inch.c console/outch.c \
+libbsp_a_SOURCES += console/inch.c console/outch.c \
     console/defkeymap.c console/fb_vga.c console/keyboard.c \
     console/pc_keyb.c console/ps2_mouse.c \
     console/vgainit.c console/vt.c console/videoAsm.S \
     console/kbd_parser.c console/serial_mouse_config.c \
-    ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c
+    ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c \
+    ../../shared/console.c ../../shared/console_select.c \
+    ../../shared/console_read.c ../../shared/console_write.c \
+    console/console_control.c console/conscfg.c console/printk_support.c \
+    console/vgacons.c
 
 # gdb
 libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c \

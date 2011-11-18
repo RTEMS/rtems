@@ -201,6 +201,8 @@ void i386_stub_glue_init_breakin(void);
 void set_debug_traps(void);
 void breakpoint(void);
 
+#define BSP_MAXIMUM_DEVICES 6
+
 #ifdef __cplusplus
 }
 #endif

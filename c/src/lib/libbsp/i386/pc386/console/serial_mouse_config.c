@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,35 +16,31 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "libchip/serial.h"
+#include "../../../shared/console_private.h"
+
 /* select which serial port the mouse is connected to */
-/* XXX - Hook these somewhere */
-#ifdef   SERIAL_MOUSE_COM1
-  #define SERIAL_MOUSE_COM  1
-#elif defined(SERIAL_MOUSE_COM2)
-  #define SERIAL_MOUSE_COM  2
+#if defined(SERIAL_MOUSE_COM2)
+  #define MOUSE_DEVICE "/dev/com2"
 #else
-  /* Select Default to be COM1  */
-  #define SERIAL_MOUSE_COM  1
+  #define MOUSE_DEVICE "/dev/com1"
 #endif
 
-extern int BSPConsolePort;
+static const char *SerialMouseDevice = MOUSE_DEVICE;
 
 bool bsp_get_serial_mouse_device(
   const char **name,
   const char **type
 )
 {
-  #ifdef SERIAL_MOUSE_COM2
-    *name = "/dev/ttyS2";
-  #else
-    *name = "/dev/ttyS1";
-  #endif
-  
+  const char *consname;
+
+  *name = SerialMouseDevice;
   *type = "ms";
 
   /* Check if this port is not been used as console */
-  /* XXX configure the serial port, take boot args additionally */
-  if ( BSPConsolePort == SERIAL_MOUSE_COM ) {
+  consname = Console_Port_Tbl[ Console_Port_Minor ]->sDeviceName;
+  if ( !strcmp(MOUSE_DEVICE, consname) ) {
     printk( "SERIAL MOUSE: port selected as console.(%s)\n", *name );
     rtems_fatal_error_occurred( -1 );
   }
