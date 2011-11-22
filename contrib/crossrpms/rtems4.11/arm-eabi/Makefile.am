@@ -5,7 +5,7 @@ TARGET = arm-rtemseabi4.11
 
 include $(top_srcdir)/mkspec.am
 
-BINUTILS_VERS = 2.21.1
+BINUTILS_VERS = 2.22
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
 BINUTILS_RPMREL = 1
 include ../binutils.am
