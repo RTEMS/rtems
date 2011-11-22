@@ -45,9 +45,9 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.21.1
-%define binutils_version 2.21.1
-%define binutils_rpmvers %{expand:%(echo "2.21.1" | tr - _ )}
+%define binutils_pkgvers 2.22
+%define binutils_version 2.22
+%define binutils_rpmvers %{expand:%(echo "2.22" | tr - _ )}
 
 Name:		rtems-4.11-sparc64-rtems4.11-binutils
 Summary:	Binutils for target sparc64-rtems4.11
