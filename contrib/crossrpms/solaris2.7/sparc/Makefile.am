@@ -10,14 +10,14 @@ EXTRA_DIST += libs.add
 EXTRA_DIST += target-libs.add
 include ../libs.am
 
-BINUTILS_VERS = 2.20.1
+BINUTILS_VERS = 2.22
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 0.20100305.1
+BINUTILS_RPMREL = 0.20111122.0
 include ../binutils.am
 BINUTILS_OPTS +=
 
-GCC_VERS = 4.4.3
+GCC_VERS = 4.4.6
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20100317.1
+GCC_RPMREL = 0.20111123.0
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx,fortran,objc
