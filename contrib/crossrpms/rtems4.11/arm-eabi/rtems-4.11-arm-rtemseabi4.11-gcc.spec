@@ -58,7 +58,7 @@ Summary:      	arm-rtemseabi4.11 gcc
 
 Group:	      	Development/Tools
 Version:        %{gcc_rpmvers}
-Release:      	2%{?dist}
+Release:      	4%{?dist}
 License:      	GPL
 URL:		http://gcc.gnu.org
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -216,6 +216,7 @@ BuildRequires:  %{_host_rpmprefix}libelf-devel >= %{libelf_required}
 %{?fc15:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?fc16:BuildRequires: cloog-ppl-devel >= %cloog_required}
 %{?el6:BuildRequires: cloog-ppl-devel >= %cloog_required}
+%{?suse12_1:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_4:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %{?suse11_3:BuildRequires: cloog-devel >= %cloog_required, ppl-devel}
 %endif
@@ -246,7 +247,7 @@ BuildRequires:	rtems-4.11-arm-rtemseabi4.11-binutils
 Requires:	rtems-4.11-gcc-common
 Requires:	rtems-4.11-arm-rtemseabi4.11-binutils
 Requires:	rtems-4.11-arm-rtemseabi4.11-gcc-libgcc = %{gcc_rpmvers}-%{release}
-Requires:	rtems-4.11-arm-rtemseabi4.11-newlib = %{newlib_version}-21%{?dist}
+Requires:	rtems-4.11-arm-rtemseabi4.11-newlib = %{newlib_version}-23%{?dist}
 
 %if "%{gcc_version}" >= "4.5.0"
 BuildRequires:  zlib-devel
@@ -260,7 +261,7 @@ BuildRequires:  %{_host_rpmprefix}zlib-devel
 
 %if "%{gcc_version}" == "4.6.2"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
-Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.2-rtems4.11-20111028.diff
+Patch0:         ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gcc-core-4.6.2-rtems4.11-20111124.diff
 %endif
 %if "%{gcc_version}" == "4.5.3"
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{gcc_pkgvers}/gcc-core-%{gcc_pkgvers}.tar.bz2
@@ -361,7 +362,7 @@ cd ..
   ln -s ../libelf-%{libelf_version} gcc-%{gcc_pkgvers}/libelf
 %endif
 
-echo "RTEMS gcc-%{gcc_version}-2%{?dist}/newlib-%{newlib_version}-21%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
+echo "RTEMS gcc-%{gcc_version}-4%{?dist}/newlib-%{newlib_version}-23%{?dist}" > gcc-%{gcc_pkgvers}/gcc/DEV-PHASE
 
 
   # Fix timestamps
@@ -646,7 +647,7 @@ sed -e 's,^[ ]*/usr/lib/rpm/find-debuginfo.sh,./find-debuginfo.sh,' \
 # Group:          Development/Tools
 # Version:        %{gcc_rpmvers}
 # Requires:       rtems-4.11-arm-rtemseabi4.11-binutils
-# Requires:       rtems-4.11-arm-rtemseabi4.11-newlib = %{newlib_version}-21%{?dist}
+# Requires:       rtems-4.11-arm-rtemseabi4.11-newlib = %{newlib_version}-23%{?dist}
 # License:	GPL
 
 # %if %build_infos
@@ -664,7 +665,7 @@ Summary:        libgcc for arm-rtemseabi4.11-gcc
 Group:          Development/Tools
 Version:        %{gcc_rpmvers}
 %{?_with_noarch_subpackages:BuildArch: noarch}
-Requires:       rtems-4.11-arm-rtemseabi4.11-newlib = %{newlib_version}-21%{?dist}
+Requires:       rtems-4.11-arm-rtemseabi4.11-newlib = %{newlib_version}-23%{?dist}
 License:	GPL
 
 %description -n rtems-4.11-arm-rtemseabi4.11-gcc-libgcc
@@ -843,7 +844,7 @@ Summary:      	C Library (newlib) for arm-rtemseabi4.11
 Group: 		Development/Tools
 License:	Distributable
 Version:	%{newlib_version}
-Release:        21%{?dist}
+Release:        23%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 
 Requires:	rtems-4.11-newlib-common
@@ -864,7 +865,7 @@ Newlib C Library for arm-rtemseabi4.11.
 Summary:	Base package for RTEMS newlib C Library
 Group:          Development/Tools
 Version:        %{newlib_version}
-Release:        21%{?dist}
+Release:        23%{?dist}
 %{?_with_noarch_subpackages:BuildArch: noarch}
 License:	Distributable
 
