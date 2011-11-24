@@ -30,15 +30,15 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define binutils_pkgvers 2.20.1
-%define binutils_version 2.20.1
-%define binutils_rpmvers %{expand:%(echo "2.20.1" | tr - _ )}
+%define binutils_pkgvers 2.22
+%define binutils_version 2.22
+%define binutils_rpmvers %{expand:%(echo "2.22" | tr - _ )}
 
 Name:		sparc-sun-solaris2.7-binutils
 Summary:	Binutils for target sparc-sun-solaris2.7
 Group:		Development/Tools
 Version:	%{binutils_rpmvers}
-Release:	0.20100305.1%{?dist}
+Release:	0.20111122.0%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/binutils
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -49,9 +49,6 @@ BuildRequires:	%{_host_rpmprefix}gcc
 # Bug in bfd: Doesn't build without texinfo installed
 BuildRequires:	texinfo >= 4.2
 %else
-%if "sparc-sun-solaris2.7" == "i686-pc-cygwin"
-BuildRequires:	texinfo >= 4.2
-%endif
 %endif
 BuildRequires:	flex
 BuildRequires:	bison
