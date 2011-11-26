@@ -89,8 +89,11 @@ struct RBTree_Node_struct {
  * field name of the RBTree_Node structure in @a container_type.
  *
  */
-#define _RBTree_Container_of(node,container_type, node_field_name) \
-  ((container_type*) (node - offsetof(container_type,node_field_name)))
+#define _RBTree_Container_of(node, container_type, node_field_name) \
+( \
+  (container_type*) \
+    ( (uintptr_t)(node) - offsetof(container_type, node_field_name) ) \
+)
 
 /**
  *  This type indicates the direction.

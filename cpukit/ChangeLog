@@ -1,5 +1,11 @@
 2011-11-26	Gedare Bloom <gedare@rtems.org>
 
+	PR 1963
+	* score/include/rtems/score/rbtree.h: Fix _RBTree_Container_of macro to
+	use correct arithmetic.
+
+2011-11-26	Gedare Bloom <gedare@rtems.org>
+
 	PR 1964
 	* score/inline/rtems/score/chain.inl: Fix chain is first and last.
 
