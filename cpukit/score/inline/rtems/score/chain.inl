@@ -297,7 +297,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_first(
   const Chain_Node *the_node
 )
 {
-  return (the_node->previous == NULL);
+  return (the_node->previous->previous == NULL);
 }
 
 /** @brief Is this the Last Node on the Chain
@@ -314,7 +314,7 @@ RTEMS_INLINE_ROUTINE bool _Chain_Is_last(
   const Chain_Node *the_node
 )
 {
-  return (the_node->next == NULL);
+  return (the_node->next->next == NULL);
 }
 
 /** @brief Does this Chain have only One Node

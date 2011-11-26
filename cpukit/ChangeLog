@@ -1,3 +1,8 @@
+2011-11-26	Gedare Bloom <gedare@rtems.org>
+
+	PR 1964
+	* score/inline/rtems/score/chain.inl: Fix chain is first and last.
+
 2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* sapi/include/confdefs.h: Added a bsp override option for
