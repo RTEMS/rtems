@@ -59,6 +59,25 @@ static void test_chain_get_with_wait(void)
   rtems_test_assert( p == NULL );
 }
 
+static void test_chain_first_and_last(void)
+{
+  rtems_chain_control   chain;
+  rtems_chain_node      node1, node2;
+  rtems_chain_node     *cnode;
+
+  rtems_chain_initialize_empty( &chain );
+  rtems_chain_append( &chain, &node1 );
+  rtems_chain_insert( &node1, &node2 );
+
+  puts( "INIT - Verify rtems_chain_is_first" );
+  cnode = rtems_chain_first(&chain);  
+  rtems_test_assert( rtems_chain_is_first( cnode ) );
+
+  puts( "INIT - Verify rtems_chain_is_last" );
+  cnode = rtems_chain_last(&chain);
+  rtems_test_assert( rtems_chain_is_last( cnode ) );
+}
+
 static void test_chain_with_notification(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -214,6 +233,7 @@ rtems_task Init(
      }
   }
 
+  test_chain_first_and_last();
   test_chain_with_empty_check();
   test_chain_with_notification();
   test_chain_get_with_wait();

@@ -1,6 +1,8 @@
 *** TEST OF RTEMS CHAIN API ***
 Init - Initialize chain empty
 INIT - Verify rtems_chain_insert
+INIT - Verify rtems_chain_is_first
+INIT - Verify rtems_chain_is_last
 INIT - Verify rtems_chain_append_with_empty_check
 INIT - Verify rtems_chain_prepend_with_empty_check
 INIT - Verify rtems_chain_get_with_empty_check
