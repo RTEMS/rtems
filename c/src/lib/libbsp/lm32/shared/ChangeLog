@@ -1,3 +1,10 @@
+2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
+
+	PR 1966/bsps
+	* milkymist_console/console.c, milkymist_console/uart.c,
+	milkymist_console/uart.h, milkymist_midi/midi.c: support for the new
+	UART core and interrupt map
+
 2011-08-02	Sebastien Bourdeauducq <sebastien.bourdeauducq@gmail.com>
 
 	PR 1869/bsps

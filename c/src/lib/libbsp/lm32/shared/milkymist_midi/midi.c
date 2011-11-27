@@ -31,9 +31,12 @@ static rtems_isr interrupt_handler(rtems_vector_number n)
 {
   unsigned char msg;
 
-  lm32_interrupt_ack(1 << MM_IRQ_MIDIRX);
-  msg = MM_READ(MM_MIDI_RXTX);
-  rtems_message_queue_send(midi_q, &msg, 1);
+  while (MM_READ(MM_MIDI_STAT) & MIDI_STAT_RX_EVT) {
+    msg = MM_READ(MM_MIDI_RXTX);
+    MM_WRITE(MM_MIDI_STAT, MIDI_STAT_RX_EVT);
+    rtems_message_queue_send(midi_q, &msg, 1);
+  }
+  lm32_interrupt_ack(1 << MM_IRQ_MIDI);
 }
 
 rtems_device_driver midi_initialize(
@@ -57,11 +60,10 @@ rtems_device_driver midi_initialize(
   );
   RTEMS_CHECK_SC(sc, "create MIDI queue");
 
-  rtems_interrupt_catch(interrupt_handler, MM_IRQ_MIDIRX, &dummy);
-  bsp_interrupt_vector_enable(MM_IRQ_MIDIRX);
-
+  rtems_interrupt_catch(interrupt_handler, MM_IRQ_MIDI, &dummy);
+  bsp_interrupt_vector_enable(MM_IRQ_MIDI);
   /* Only MIDI THRU mode is supported atm */
-  MM_WRITE(MM_MIDI_THRU, 1);
+  MM_WRITE(MM_MIDI_CTRL, MIDI_CTRL_RX_INT|MIDI_CTRL_THRU);
 
   return RTEMS_SUCCESSFUL;
 }

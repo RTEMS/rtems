@@ -119,25 +119,24 @@ static ssize_t mmconsole_write(int minor, const char *buf, size_t n)
   rtems_interrupt_level level;
 
   rtems_interrupt_disable(level);
-  BSP_uart_txbusy = true;
   MM_WRITE(MM_UART_RXTX, *buf);
   rtems_interrupt_enable(level);
   return 0;
 }
 
-static rtems_isr mmconsole_txdone(rtems_vector_number n)
-{
-  BSP_uart_txbusy = false;
-  lm32_interrupt_ack(1 << MM_IRQ_UARTTX);
-  rtems_termios_dequeue_characters(tty, 1);
-}
-
-static rtems_isr mmconsole_rxdone(rtems_vector_number n)
+static rtems_isr mmconsole_interrupt(rtems_vector_number n)
 {
   char c;
-  c = MM_READ(MM_UART_RXTX);
-  lm32_interrupt_ack(1 << MM_IRQ_UARTRX);
-  rtems_termios_enqueue_raw_characters(tty, &c, 1);
+  while (MM_READ(MM_UART_STAT) & UART_STAT_RX_EVT) {
+    c = MM_READ(MM_UART_RXTX);
+    MM_WRITE(MM_UART_STAT, UART_STAT_RX_EVT);
+    rtems_termios_enqueue_raw_characters(tty, &c, 1);
+  }
+  if (MM_READ(MM_UART_STAT) & UART_STAT_TX_EVT) {
+    MM_WRITE(MM_UART_STAT, UART_STAT_TX_EVT);
+    rtems_termios_dequeue_characters(tty, 1);
+  }
+  lm32_interrupt_ack(1 << MM_IRQ_UART);
 }
 
 static const rtems_termios_callbacks mmconsole_callbacks = {
@@ -166,10 +165,9 @@ rtems_device_driver console_initialize(
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
 
-  rtems_interrupt_catch(mmconsole_txdone, MM_IRQ_UARTTX, &dummy);
-  rtems_interrupt_catch(mmconsole_rxdone, MM_IRQ_UARTRX, &dummy);
-  bsp_interrupt_vector_enable(MM_IRQ_UARTTX);
-  bsp_interrupt_vector_enable(MM_IRQ_UARTRX);
+  rtems_interrupt_catch(mmconsole_interrupt, MM_IRQ_UART, &dummy);
+  bsp_interrupt_vector_enable(MM_IRQ_UART);
+  MM_WRITE(MM_UART_CTRL, UART_CTRL_RX_INT|UART_CTRL_TX_INT);
 
   return RTEMS_SUCCESSFUL;
 }
