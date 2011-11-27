@@ -15,8 +15,10 @@
 #ifndef __SYSTEM_CONFIG_H_
 #define __SYSTEM_CONFIG_H_
 
-#define CPU_FREQUENCY           (80000000)
 #define UART_BAUD_RATE          (115200)
+
+/* Clock frequency */
+#define MM_FREQUENCY            (0xe0001074)
 
 /* FML bridge */
 #define FMLBRG_FLUSH_BASE       (0xc8000000)
@@ -65,10 +67,10 @@
 #define GPIO_LED2               (0x00000002)
 
 /* System ID and reset */
-#define MM_SYSTEM_ID            (0xe000103c)
+#define MM_SYSTEM_ID            (0xe000107c)
 
 /* ICAP */
-#define MM_ICAP                 (0xe0001034)
+#define MM_ICAP                 (0xe0001040)
 
 #define ICAP_READY              (0x01)
 #define ICAP_CE                 (0x10000)

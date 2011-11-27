@@ -1,5 +1,11 @@
 2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
 
+	PR 1970/bsps
+	* include/system_conf.h: Support for the new Milkymist sysctl and clock
+	frequency detection.
+
+2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
+
 	PR 1966/bsps
 	* include/system_conf.h: support for the new UART core and interrupt
 	map
