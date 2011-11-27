@@ -267,6 +267,37 @@ static void invalidate_caches(void)
   );
 }
 
+static void set_format(int format)
+{
+  switch(format) {
+    case VIDEO_FORMAT_CVBS6:
+      write_reg(0x00, 0x00);
+      write_reg(0xc3, 0x05);
+      write_reg(0xc4, 0x80);
+      break;
+    case VIDEO_FORMAT_CVBS5:
+      write_reg(0x00, 0x00);
+      write_reg(0xc3, 0x0d);
+      write_reg(0xc4, 0x80);
+      break;
+    case VIDEO_FORMAT_CVBS4:
+      write_reg(0x00, 0x00);
+      write_reg(0xc3, 0x04);
+      write_reg(0xc4, 0x80);
+      break;
+    case VIDEO_FORMAT_SVIDEO:
+      write_reg(0x00, 0x06);
+      write_reg(0xc3, 0xd5);
+      write_reg(0xc4, 0x80);
+      break;
+    case VIDEO_FORMAT_COMPONENT:
+      write_reg(0x00, 0x09);
+      write_reg(0xc3, 0x45);
+      write_reg(0xc4, 0x8d);
+      break;
+  }
+}
+
 rtems_device_driver video_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -333,12 +364,17 @@ rtems_device_driver video_control(
       break;
     
     case VIDEO_SET_REGISTER:
-      write_reg(((unsigned int )a & 0xffff0000) >> 16,
+      write_reg(((unsigned int)a & 0xffff0000) >> 16,
         (unsigned int)a & 0x0000ffff);
       sc = RTEMS_SUCCESSFUL;
       break;
     case VIDEO_GET_REGISTER:
       *a = read_reg(*a);
+      sc = RTEMS_SUCCESSFUL;
+      break;
+    
+    case VIDEO_SET_FORMAT:
+      set_format((int)a);
       sc = RTEMS_SUCCESSFUL;
       break;
     

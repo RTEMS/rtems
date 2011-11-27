@@ -1,5 +1,12 @@
 2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
 
+	PR 1972/bsps
+	* milkymist_video/milkymist_video.h, milkymist_video/video.c: Adds an
+	ioctl to implement selection of composite on any connector, S-Video
+	and Component sources on the Milkymist One.
+
+2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
+
 	PR 1970/bsps
 	* milkymist_clock/ckinit.c, milkymist_console/console.c,
 	milkymist_console/uart.c, milkymist_timer/timer.c: Support for the

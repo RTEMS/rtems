@@ -8,7 +8,7 @@
  *
  *  $Id$
  *
- *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ *  COPYRIGHT (c) 2010, 2011 Sebastien Bourdeauducq
  */
 
 #ifndef __MILKYMIST_VIDEO_H_
@@ -32,6 +32,16 @@ extern "C" {
 
 #define VIDEO_SET_REGISTER     0x5609
 #define VIDEO_GET_REGISTER     0x560a
+
+#define VIDEO_SET_FORMAT       0x560b
+
+enum {
+  VIDEO_FORMAT_CVBS6 = 0,
+  VIDEO_FORMAT_CVBS5,
+  VIDEO_FORMAT_CVBS4,
+  VIDEO_FORMAT_SVIDEO,
+  VIDEO_FORMAT_COMPONENT,
+};
 
 rtems_device_driver video_initialize(
   rtems_device_major_number major,
