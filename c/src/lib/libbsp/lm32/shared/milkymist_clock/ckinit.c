@@ -35,7 +35,7 @@
 void Clock_driver_support_initialize_hardware(void)
 {
   MM_WRITE(MM_TIMER0_COMPARE, 
-   (CPU_FREQUENCY/(1000000/rtems_configuration_get_microseconds_per_tick())));
+   (MM_READ(MM_FREQUENCY)/(1000000/rtems_configuration_get_microseconds_per_tick())));
   MM_WRITE(MM_TIMER0_COUNTER, 0);
   MM_WRITE(MM_TIMER0_CONTROL, TIMER_ENABLE | TIMER_AUTORESTART);
   bsp_interrupt_vector_enable(MM_IRQ_TIMER0);

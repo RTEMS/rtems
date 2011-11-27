@@ -109,7 +109,7 @@ static int mmconsole_set_attributes(int minor, const struct termios *t)
   }
 
   if (baud > 0)
-    MM_WRITE(MM_UART_DIV, CPU_FREQUENCY/baud/16);
+    MM_WRITE(MM_UART_DIV, MM_READ(MM_FREQUENCY)/baud/16);
 
   return 0;
 }

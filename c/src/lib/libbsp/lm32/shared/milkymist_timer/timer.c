@@ -58,7 +58,7 @@ uint32_t benchmark_timer_read(void)
   if (ticks == 0xffffffff)
     printk("Timer overflow!\n");
 
-  total = ticks / (CPU_FREQUENCY / 1000000);
+  total = ticks / (MM_READ(MM_FREQUENCY) / 1000000);
 
   if (benchmark_timer_find_average_overhead)
     return total;

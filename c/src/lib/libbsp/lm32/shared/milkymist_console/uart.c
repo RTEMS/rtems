@@ -19,7 +19,7 @@
 
 void BSP_uart_init(int baud)
 {
-  MM_WRITE(MM_UART_DIV, CPU_FREQUENCY/baud/16);
+  MM_WRITE(MM_UART_DIV, MM_READ(MM_FREQUENCY)/baud/16);
 }
 
 void BSP_uart_polled_write(char ch)

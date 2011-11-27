@@ -1,5 +1,12 @@
 2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
 
+	PR 1970/bsps
+	* milkymist_clock/ckinit.c, milkymist_console/console.c,
+	milkymist_console/uart.c, milkymist_timer/timer.c: Support for the
+	new Milkymist sysctl and clock frequency detection.
+
+2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
+
 	PR 1966/bsps
 	* milkymist_console/console.c, milkymist_console/uart.c,
 	milkymist_console/uart.h, milkymist_midi/midi.c: support for the new
