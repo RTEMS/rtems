@@ -26,6 +26,16 @@
 /* UART */
 #define MM_UART_RXTX            (0xe0000000)
 #define MM_UART_DIV             (0xe0000004)
+#define MM_UART_STAT            (0xe0000008)
+#define MM_UART_CTRL            (0xe000000c)
+
+#define UART_STAT_THRE          (0x1)
+#define UART_STAT_RX_EVT        (0x2)
+#define UART_STAT_TX_EVT        (0x4)
+
+#define UART_CTRL_RX_INT        (0x1)
+#define UART_CTRL_TX_INT        (0x2)
+#define UART_CTRL_THRU          (0x4)
 
 /* Timers */
 #define MM_TIMER1_COMPARE       (0xe0001024)
@@ -225,8 +235,17 @@
 
 /* MIDI */
 #define MM_MIDI_RXTX            (0xe000b000)
-#define MM_MIDI_DIVISOR         (0xe000b004)
-#define MM_MIDI_THRU            (0xe000b008)
+#define MM_MIDI_DIV             (0xe000b004)
+#define MM_MIDI_STAT            (0xe000b008)
+#define MM_MIDI_CTRL            (0xe000b00c)
+
+#define MIDI_STAT_THRE          (0x1)
+#define MIDI_STAT_RX_EVT        (0x2)
+#define MIDI_STAT_TX_EVT        (0x4)
+
+#define MIDI_CTRL_RX_INT        (0x1)
+#define MIDI_CTRL_TX_INT        (0x2)
+#define MIDI_CTRL_THRU          (0x4)
 
 /* IR */
 #define MM_IR_RX                (0xe000e000)
@@ -248,24 +267,22 @@
 #define BT656_FILTER_INFRAME    (0x4)
 
 /* Interrupts */
-#define MM_IRQ_UARTRX           (0)
-#define MM_IRQ_UARTTX           (1)
-#define MM_IRQ_GPIO             (2)
-#define MM_IRQ_TIMER0           (3)
-#define MM_IRQ_TIMER1           (4)
-#define MM_IRQ_AC97CRREQUEST    (5)
-#define MM_IRQ_AC97CRREPLY      (6)
-#define MM_IRQ_AC97DMAR         (7)
-#define MM_IRQ_AC97DMAW         (8)
-#define MM_IRQ_PFPU             (9)
-#define MM_IRQ_TMU              (10)
-#define MM_IRQ_ETHRX            (11)
-#define MM_IRQ_ETHTX            (12)
-#define MM_IRQ_VIDEOIN          (13)
-#define MM_IRQ_MIDIRX           (14)
-#define MM_IRQ_MIDITX           (15)
-#define MM_IRQ_IR               (16)
-#define MM_IRQ_USB              (17)
+#define MM_IRQ_UART             (0)
+#define MM_IRQ_GPIO             (1)
+#define MM_IRQ_TIMER0           (2)
+#define MM_IRQ_TIMER1           (3)
+#define MM_IRQ_AC97CRREQUEST    (4)
+#define MM_IRQ_AC97CRREPLY      (5)
+#define MM_IRQ_AC97DMAR         (6)
+#define MM_IRQ_AC97DMAW         (7)
+#define MM_IRQ_PFPU             (8)
+#define MM_IRQ_TMU              (9)
+#define MM_IRQ_ETHRX            (10)
+#define MM_IRQ_ETHTX            (11)
+#define MM_IRQ_VIDEOIN          (12)
+#define MM_IRQ_MIDI             (13)
+#define MM_IRQ_IR               (14)
+#define MM_IRQ_USB              (15)
 
 /* Flash layout */
 #define FLASH_BASE                      (0x80000000)
