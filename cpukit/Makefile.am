@@ -8,6 +8,7 @@ SUBDIRS = . score rtems sapi posix
 SUBDIRS += dev
 SUBDIRS += libcrypt
 SUBDIRS += libcsupport libblock libfs
+SUBDIRS += libdrvmgr
 SUBDIRS += libnetworking librpc
 SUBDIRS += libpci
 SUBDIRS += libi2c
@@ -237,6 +238,12 @@ include_rtems_HEADERS += libmisc/untar/untar.h
 
 ## fsmount
 include_rtems_HEADERS += libmisc/fsmount/fsmount.h
+
+## Driver manager
+include_drvmgrdir = $(includedir)/drvmgr
+include_drvmgr_HEADERS = libdrvmgr/drvmgr.h
+include_drvmgr_HEADERS += libdrvmgr/drvmgr_confdefs.h
+include_drvmgr_HEADERS += libdrvmgr/drvmgr_list.h
 
 ## HACK: doxygen filter.
 EXTRA_DIST = doxy-filter

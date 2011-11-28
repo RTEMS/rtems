@@ -161,6 +161,15 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 #define CONFIGURE_LIBIO_POSIX_KEYS 1
 
+/**
+ *  Driver Manager Configuration
+ */
+#ifdef RTEMS_DRVMGR_STARTUP
+  #define CONFIGURE_DRVMGR_SEMAPHORES 1
+#else
+  #define CONFIGURE_DRVMGR_SEMAPHORES 0
+#endif
+
 #ifdef CONFIGURE_INIT
   rtems_libio_t rtems_libio_iops[CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS];
 
@@ -2170,7 +2179,7 @@ const rtems_libio_helper rtems_fs_init_helper =
     (CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES + \
       CONFIGURE_TERMIOS_SEMAPHORES + CONFIGURE_LIBBLOCK_SEMAPHORES + \
       CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
-      CONFIGURE_NETWORKING_SEMAPHORES)
+      CONFIGURE_NETWORKING_SEMAPHORES + CONFIGURE_DRVMGR_SEMAPHORES)
 
   /**
    * This macro is calculated to specify the memory required for

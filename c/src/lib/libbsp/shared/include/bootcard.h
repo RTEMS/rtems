@@ -57,6 +57,8 @@ void bsp_pretasking_hook(void);
 
 void bsp_predriver_hook(void);
 
+void bsp_driver_level_hook( int level );
+
 void bsp_postdriver_hook(void);
 
 void bsp_reset(void);

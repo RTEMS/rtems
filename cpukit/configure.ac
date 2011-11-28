@@ -17,6 +17,7 @@ RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_PARAVIRT
 RTEMS_ENABLE_PROFILING
+RTEMS_ENABLE_DRVMGR
 
 RTEMS_ENV_RTEMSCPU
 RTEMS_CHECK_RTEMS_DEBUG
@@ -228,6 +229,11 @@ RTEMS_CPUOPT([RTEMS_NETWORKING],
   [test x"$rtems_cv_HAS_NETWORKING" = xyes],
   [1],
   [if networking is enabled])
+
+RTEMS_CPUOPT([RTEMS_DRVMGR_STARTUP],
+  [test x"$enable_drvmgr" = xyes],
+  [1],
+  [if driver manager api is supported])
 
 RTEMS_CPUOPT([RTEMS_VERSION],
   [true],
@@ -453,6 +459,7 @@ score/cpu/v850/Makefile
 score/cpu/no_cpu/Makefile
 posix/Makefile
 libblock/Makefile
+libdrvmgr/Makefile
 libfs/Makefile
 libfs/src/nfsclient/Makefile
 libgnat/Makefile
