@@ -3,20 +3,8 @@
  */
 
 /*
- *  This include file contains information pertaining to the XXX
+ *  This include file contains information pertaining to the LM32
  *  processor.
- *
- *  @note This file is part of a porting template that is intended
- *  to be used as the starting point when porting RTEMS to a new
- *  CPU family.  The following needs to be done when using this as
- *  the starting point for a new port:
- *
- *  + Anywhere there is an XXX, it should be replaced
- *    with information about the CPU family being ported to.
- *
- *  + At the end of each comment section, there is a heading which
- *    says "Port Specific Information:".  When porting to RTEMS,
- *    add CPU family specific information in this section
  */
 
 /*
@@ -347,9 +335,9 @@ extern "C" {
  *
  *  Port Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  L2 cache lines are 32 bytes in Milkymist SoC
  */
-#define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (8)))
+#define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (32)))
 
 #define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
 
@@ -634,10 +622,12 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *  alignment does not take into account the requirements for the stack.
  *
  *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
+ *  The LM32 architecture manual simply states: "All memory accesses must be
+ *  aligned to the size of the access", and there is no hardware support
+ *  whatsoever for 64-bit numbers.
+ *  (lm32_archman.pdf, July 2009, p. 15)
  */
-#define CPU_ALIGNMENT              8
+#define CPU_ALIGNMENT              4
 
 /**
  *  This number corresponds to the byte alignment requirement for the
@@ -685,17 +675,14 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 /**
  *  This number corresponds to the byte alignment requirement for the
  *  stack.  This alignment requirement may be stricter than that for the
- *  data types alignment specified by @ref CPU_ALIGNMENT.  If the
- *  @ref CPU_ALIGNMENT is strict enough for the stack, then this should be
- *  set to 0.
+ *  data types alignment specified by @ref CPU_ALIGNMENT.
  *
- *  @note This must be a power of 2 either 0 or greater than @ref CPU_ALIGNMENT.
  *
  *  Port Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  Stack is software-managed
  */
-#define CPU_STACK_ALIGNMENT        4
+#define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
 
 /*
  *  ISR handler macros

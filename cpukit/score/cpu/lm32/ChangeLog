@@ -1,3 +1,9 @@
+2011-11-28	Werner Almesberger <werner@almesberger.net>
+
+	PR 1956/cpukit
+	* rtems/score/cpu.h: Correct multiple alignment constants. Improve
+	comments.
+
 2011-11-09	Werner Almesberger <werner@almesberger.net>
 
 	PR 1954/cpukit
