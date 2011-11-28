@@ -102,21 +102,9 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
    *  No one waiting on the message queue at this time, so attempt to
    *  queue the message up for a future receive.
    */
-  if ( the_message_queue->number_of_pending_messages <
-       the_message_queue->maximum_pending_messages ) {
-
-    the_message =
-        _CORE_message_queue_Allocate_message_buffer( the_message_queue );
-
-    #if defined(RTEMS_DEBUG)
-      /*
-       *  NOTE: If the system is consistent, this error should never occur.
-       */
-
-      if ( !the_message )
-        return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
-     #endif
-
+  the_message =
+      _CORE_message_queue_Allocate_message_buffer( the_message_queue );
+  if ( the_message ) {
     _CORE_message_queue_Copy_buffer(
       buffer,
       the_message->Contents.buffer,
