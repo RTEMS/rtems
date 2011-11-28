@@ -101,11 +101,9 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
    *  queue the message up for a future receive.
    */
 
-  if ( the_message_queue->number_of_pending_messages <
-       the_message_queue->maximum_pending_messages ) {
-
-    the_message =
-        _CORE_message_queue_Allocate_message_buffer( the_message_queue );
+  the_message =
+      _CORE_message_queue_Allocate_message_buffer( the_message_queue );
+  if ( the_message ) {
 
     /*
      *  NOTE: If the system is consistent, this error should never occur.

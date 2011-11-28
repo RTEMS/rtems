@@ -1,3 +1,9 @@
+2011-11-28	Werner Almesberger <werner@almesberger.net>
+
+	PR 1961/cpukit
+	* score/src/coremsgsubmit.c: Close window caused by using message
+	pending count rather than directly obtaining unused buffer.
+
 2011-11-09	Werner Almesberger <werner@almesberger.net>
 
 	PR 1957/cpukit
