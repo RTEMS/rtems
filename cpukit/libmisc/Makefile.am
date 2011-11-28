@@ -110,7 +110,8 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_mkrfs.c shell/main_debugrfs.c shell/main_df.c \
     shell/main_lsof.c shell/main_edit.c \
     shell/main_blkstats.c shell/main_rtrace.c \
-    shell/shell-wait-for-input.c
+    shell/shell-wait-for-input.c \
+    shell/main_pci.c
 libshell_a_SOURCES += shell/main_cmdls.c
 libshell_a_SOURCES += shell/main_cmdchown.c
 libshell_a_SOURCES += shell/main_cmdchmod.c
