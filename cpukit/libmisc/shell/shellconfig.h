@@ -98,6 +98,7 @@ extern rtems_shell_cmd_t rtems_shell_RTRACE_Command;
 /*
  *  Extern for System commands
  */
+extern rtems_shell_cmd_t rtems_shell_DRVMGR_Command;
 extern rtems_shell_cmd_t rtems_shell_PCI_Command;
 
 extern rtems_shell_cmd_t * const rtems_shell_Initial_commands[];
@@ -517,6 +518,14 @@ extern rtems_shell_alias_t * const rtems_shell_Initial_aliases[];
     /*
      *  System related commands
      */
+    #if defined(RTEMS_DRVMGR_STARTUP) || defined(CONFIGURE_SHELL_COMMAND_DRVMGR)
+      #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+           !defined(CONFIGURE_SHELL_NO_COMMAND_DRVMGR)) || \
+          defined(CONFIGURE_SHELL_COMMAND_DRVMGR)
+        &rtems_shell_DRVMGR_Command,
+      #endif
+    #endif
+
     #if defined(RTEMS_PCI_CONFIG_LIB)
       #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
            !defined(CONFIGURE_SHELL_NO_COMMAND_PCI)) || \
