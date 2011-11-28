@@ -160,7 +160,7 @@ rtems_monitor_server_task(
                 response.result0 = next_id;
                 response.result1 = size;
 
-#define SERVER_OVERHEAD  (RTEMS_offsetof(rtems_monitor_server_response_t, \
+#define SERVER_OVERHEAD  (offsetof(rtems_monitor_server_response_t, \
                                          payload))
 
                 status = rtems_message_queue_send(request.return_id,

@@ -1,3 +1,11 @@
+2011-11-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1941/cpukit
+	* libmisc/monitor/mon-server.c, score/include/rtems/system.h: Remove
+	use of RTEMS_offset() in favor of standard offsetof(). This was
+	undocumented and there was only one internal use. Change noted in
+	4.11 release notes.
+
 2011-11-28	Werner Almesberger <werner@almesberger.net>
 
 	PR 1961/cpukit

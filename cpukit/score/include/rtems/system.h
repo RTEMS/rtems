@@ -34,12 +34,6 @@ int POSIX_NOT_IMPLEMENTED( void );
 #endif
 
 /**
- *  This macro is used to obtain the offset of a field in a structure.
- */
-#define RTEMS_offsetof(type, field) \
-       ((uintptr_t) &(((type *) 0)->field))
-
-/**
  *  The following is the extern for the RTEMS version string.
  *
  *  @note The contents of this string are CPU specific.
