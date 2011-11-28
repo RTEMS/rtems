@@ -108,6 +108,7 @@
 * Configuring a System::
 * Multiprocessing Manager::
 * Symmetric Multiprocessing Services::
+* PCI Library::
 * Stack Bounds Checker::
 * CPU Usage Statistics::
 * Object Services::
@@ -153,6 +154,7 @@
 @include user/conf.texi
 @include user/mp.texi
 @include user/smp.texi
+@include user/libpci.texi
 @include user/stackchk.texi
 @include user/cpuuse.texi
 @include user/object.texi

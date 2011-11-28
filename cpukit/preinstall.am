@@ -232,10 +232,11 @@ $(PROJECT_INCLUDE)/rtems/fs.h: include/rtems/fs.h $(PROJECT_INCLUDE)/rtems/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fs.h
 
+if !LIBPCI
 $(PROJECT_INCLUDE)/rtems/pci.h: include/rtems/pci.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/pci.h
-
+endif
 $(PROJECT_INCLUDE)/rtems/concat.h: include/rtems/concat.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/concat.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/concat.h

@@ -16,6 +16,7 @@ COMMON_FILES += \
     $(top_builddir)/user/event.texi $(top_builddir)/user/fatal.texi \
     $(top_builddir)/user/glossary.texi $(top_builddir)/user/init.texi \
     $(top_builddir)/user/intr.texi $(top_builddir)/user/io.texi \
+    $(top_builddir)/user/libpci.texi  \
     $(top_builddir)/user/mp.texi $(top_builddir)/user/msg.texi \
     $(top_builddir)/user/overview.texi $(top_builddir)/user/part.texi \
     $(top_builddir)/user/preface.texi $(top_builddir)/user/region.texi \

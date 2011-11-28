@@ -1,0 +1,46 @@
+ 2011-03-03, Daniel Hellstrom <daniel@gaisler.com>
+  Added support for ROM BARs at devices and PCI-PCI bridges.
+
+ 2011-02-11, Daniel Hellstrom <daniel@gaisler.com>
+  Split Library into different parts, this enables PCI initialization to be done
+  outside of the PCI Host driver and smaller systems that don't want
+  Configuration Space to be setup.
+    - Access Library (Configuration, Memory and I/O Space read/write routines)
+    - Configuration Libarary
+        A. Auto Config
+        B. Static Config (not implemented yet)
+    - Interrupt Library (shared interrupt support rely on BSP)
+  This file created.
+
+ 2011-02-11, Daniel Hellstrom <daniel@gaisler.com>
+  Changed library to use 16-bit identifiers (pci_dev_t), instead to 3 integers
+  (BUS,SLOT,FUNC), this reduces the footprint.
+
+ 2010-09-29, Kristoffer Glembo <kristoffer@gaisler.com>
+  Fixed I/O BAR size calculation of bridges. Reading/Writing to 0x1C instead of
+  faulty 0x1E.
+
+ 2010-06-10, Daniel Hellstrom <daniel@gaisler.com>
+  Fix in pci_res_insert(), where the above mentioned optimization failed due to
+  bad compare statement. Optimization only affects systems with multiple PCI
+  buses.
+
+ 2010-04-19, Daniel Hellstrom <daniel@gaisler.com>
+  Optimized resource allocation when bridges are present: the resources lists
+  are sorted by boundary instead of size and a reorder aligorithm introduced
+  that move resources into unused areas if possible.
+
+ 2010-04-19, Daniel Hellstrom <daniel@gaisler.com>
+  Fixed autoconf issue when bridges are present
+
+ 2010-02-03, Daniel Hellstrom <daniel@gaisler.com>
+  Fixed initialization problem when first device is a bridge.
+
+ 2010-02-03, Daniel Hellstrom <daniel@gaisler.com>
+  PCI Library rewritten from scratch. Support multiple buses/bridges, print
+  current PCI configuration space setup, BAR assigment sort implementation
+  speeded up drastically (bootup time noticable shorter), interrupt assignment
+  implemented, PCI Host driver extracted from library, support for I/O areas.
+
+
+.... not updated ... lots of more changes

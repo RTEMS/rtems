@@ -448,6 +448,9 @@ TCP/IP stack to RTEMS.
 This directory contains the port of the FreeBSD
 RPC/XDR source to RTEMS.
 
+@item $@{RTEMS_ROOT@}/cpukit/libpci/
+This directory contains RTEMS PCI Library.
+
 @item $@{RTEMS_ROOT@}/cpukit/posix/
 This directory contains the RTEMS implementation
 of the threading portions of the POSIX API.  

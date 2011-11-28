@@ -410,6 +410,17 @@ esac
 AM_CONDITIONAL(SHA,[test x"$HAVE_SHA" = x"yes"])
 AC_MSG_RESULT([$HAVE_SHA])
 
+# Filter libpci to only build for architectures that have support for it
+AC_MSG_CHECKING([whether CPU supports libpci])
+case $RTEMS_CPU in
+  sparc)
+   HAVE_LIBPCI=yes ;;
+  *)
+   HAVE_LIBPCI=no ;;
+esac
+AM_CONDITIONAL(LIBPCI,[test x"$HAVE_LIBPCI" = x"yes"])
+AC_MSG_RESULT([$HAVE_LIBPCI])
+
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
@@ -448,6 +459,7 @@ libgnat/Makefile
 libcrypt/Makefile
 libcsupport/Makefile
 libnetworking/Makefile
+libpci/Makefile
 librpc/Makefile
 libmisc/Makefile
 libi2c/Makefile

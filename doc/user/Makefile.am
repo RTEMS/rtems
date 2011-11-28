@@ -15,7 +15,7 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
     mp.texi stackchk.texi cpuuse.texi object.texi chains.texi rbtree.texi \
-    timespec.texi cbs.texi dirstat.texi smp.texi
+    timespec.texi cbs.texi dirstat.texi smp.texi libpci.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -166,10 +166,15 @@ mp.texi: mp.t
 smp.texi: smp.t
 	$(BMENU2) -p  "Multiprocessing Manager MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet"\
 	    -u "Top" \
+	    -n "PCI Library" < $< > $@
+
+libpci.texi: libpci.t
+	$(BMENU2) -p "Symmetric Multiprocessing Services TASK_SET_AFFINITY - Set task processor affinity" \
+	    -u "Top" \
 	    -n "Stack Bounds Checker" < $< > $@
 
 stackchk.texi: stackchk.t
-	$(BMENU2) -p "Symmetric Multiprocessing Services TASK_SET_AFFINITY - Set task processor affinity" \
+	$(BMENU2) -p "PCI Library PCI Shell command" \
 	    -u "Top" \
 	    -n "CPU Usage Statistics" < $< > $@
 

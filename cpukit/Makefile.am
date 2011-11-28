@@ -9,6 +9,7 @@ SUBDIRS += dev
 SUBDIRS += libcrypt
 SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
+SUBDIRS += libpci
 SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += libmd
@@ -95,7 +96,9 @@ endif
 include_rtems_HEADERS += include/rtems/bspIo.h
 include_rtems_HEADERS += include/rtems/userenv.h
 include_rtems_HEADERS += include/rtems/fs.h
+if !LIBPCI
 include_rtems_HEADERS += include/rtems/pci.h
+endif
 include_rtems_HEADERS += include/rtems/concat.h
 include_rtems_HEADERS += include/rtems/status-checks.h
 
