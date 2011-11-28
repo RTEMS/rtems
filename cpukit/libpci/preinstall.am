@@ -63,4 +63,13 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci/ids_extra.h
 $(PROJECT_INCLUDE)/pci/irq.h: pci/irq.h $(PROJECT_INCLUDE)/pci/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci/irq.h
+
+$(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
+	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+
+$(PROJECT_INCLUDE)/drvmgr/pci_bus.h: pci_bus.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/pci_bus.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/pci_bus.h
 endif
