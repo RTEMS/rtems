@@ -65,13 +65,6 @@ typedef union {
 } Objects_Name;
 
 /**
- *  Space for object names is allocated in multiples of this.
- *
- *  NOTE:  Must be a power of 2.  Matches the name manipulation routines.
- */
-#define OBJECTS_NAME_ALIGNMENT     sizeof( uint32_t )
-
-/**
  *  Functions which compare names are prototyped like this.
  */
 typedef bool    (*Objects_Name_comparators)(

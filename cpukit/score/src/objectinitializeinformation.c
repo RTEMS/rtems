@@ -128,18 +128,12 @@ void _Objects_Initialize_information(
   /*
    *  Calculate the maximum name length
    *
-   *  NOTE: Always 4 bytes long in Class so aligned.  It is POSIX name
-   *        lengths that may be an odd number of bytes.
+   *  NOTE: Either 4 bytes for Classic API names or an arbitrary
+   *        number for POSIX names which are strings that may be
+   *        an odd number of bytes.
    */
-  name_length = maximum_name_length;
 
-  #if defined(RTEMS_POSIX_API)
-    if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
-      name_length = (name_length + OBJECTS_NAME_ALIGNMENT) &
-                    ~(OBJECTS_NAME_ALIGNMENT-1);
-  #endif
-
-  information->name_length = name_length;
+  information->name_length = maximum_name_length;
 
   _Chain_Initialize_empty( &information->Inactive );
 
@@ -164,12 +158,12 @@ void _Objects_Initialize_information(
     if ( (supports_global == true) && _System_state_Is_multiprocessing ) {
 
       information->global_table =
-	(Chain_Control *) _Workspace_Allocate_or_fatal_error(
-	  (_Objects_Maximum_nodes + 1) * sizeof(Chain_Control)
-	);
+        (Chain_Control *) _Workspace_Allocate_or_fatal_error(
+          (_Objects_Maximum_nodes + 1) * sizeof(Chain_Control)
+        );
 
       for ( index=1; index <= _Objects_Maximum_nodes ; index++ )
-	_Chain_Initialize_empty( &information->global_table[ index ] );
+        _Chain_Initialize_empty( &information->global_table[ index ] );
      }
      else
        information->global_table = NULL;

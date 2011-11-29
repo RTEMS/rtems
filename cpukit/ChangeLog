@@ -1,3 +1,10 @@
+2011-11-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1967/cpukit
+	* score/include/rtems/score/object.h,
+	score/src/objectinitializeinformation.c: Remove
+	OBJECTS_NAME_ALIGNMENT and uses.
+
 2011-11-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1941/cpukit
