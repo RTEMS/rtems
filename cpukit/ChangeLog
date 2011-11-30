@@ -1,3 +1,8 @@
+2011-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/src/objectinitializeinformation.c
+	(_Objects_Initialize_information): Remove unused var "name_length".
+
 2011-11-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1967/cpukit
