@@ -1,5 +1,7 @@
 2011-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/rtems_dhcp.c (dhcp_init):
+	Remove unused var "len".
 	* score/src/objectinitializeinformation.c
 	(_Objects_Initialize_information): Remove unused var "name_length".
 

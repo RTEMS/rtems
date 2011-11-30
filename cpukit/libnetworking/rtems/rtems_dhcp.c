@@ -851,7 +851,6 @@ dhcp_init (int update_files)
   struct ifreq         ireq;
   struct ifnet         *ifp;
   struct socket        *so;
-  int                  len;
   int                  error;
   struct sockaddr_in   myaddr;
   struct ifaddr        *ifa;
@@ -914,7 +913,7 @@ dhcp_init (int update_files)
   /*
    * Build the DHCP Discover
    */
-  len = dhcp_discover_req (&call, sdl, &xid);
+  dhcp_discover_req (&call, sdl, &xid);
 
   /*
    * Send the Discover.
