@@ -94,6 +94,7 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/src/stackalloc.c \
 	../../shared/src/uart-output-char.c \
 	../shared/abort/simple_abort.c
+libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 
 # Startup
 libbsp_a_SOURCES += startup/bspstart.c \

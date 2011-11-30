@@ -1,3 +1,7 @@
+2011-11-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* Makefile.am: Add shared/startup/bsp-start-memcpy.S
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps
