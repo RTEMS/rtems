@@ -1,5 +1,10 @@
 2011-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* librpc/src/rpc/clnt_udp.c (struct cu_data):
+	Introduce unions _cu_inbuf, _cu_outbuf to avoid aliasing.
+
+2011-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/rtems_dhcp.c (dhcp_init):
 	Remove unused var "len".
 	* score/src/objectinitializeinformation.c
