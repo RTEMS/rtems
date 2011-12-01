@@ -50,7 +50,7 @@
 typedef struct rtems_rootfs_dir_table
 {
   const char *name;
-  int        mode;
+  mode_t      mode;
 } rtems_rootfs_dir_table;
 
 /*
@@ -99,7 +99,7 @@ rtems_rootfs_file_append (const char *file,
        * path. If it exists nothing happens.
        */
 
-      int i = strlen (file);
+      size_t i = strlen (file);
 
       while (i)
       {
@@ -144,7 +144,7 @@ rtems_rootfs_file_append (const char *file,
 
   for (i = 0; i < line_cnt; i++)
   {
-    int len = strlen (lines[i]);
+    size_t len = strlen (lines[i]);
 
     if (len)
     {
@@ -212,7 +212,7 @@ int
 rtems_create_root_fs (void)
 {
   const char *lines[1];
-  int        i;
+  size_t      i;
 
   /*
    * Create the directories.

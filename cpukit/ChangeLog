@@ -1,5 +1,7 @@
 2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/mkrootfs.c: Use mode_t for modes, 
+	Use size_t for sizes.
 	* libcsupport/src/open.c: Use va_arg(..., mode_t) to retrieve mode.
 	* posix/src/mqueueopen.c: Use va_arg(..., mode_t) to retrieve mode.
 	* posix/src/semopen.c: Use va_arg(..., mode_t) to retrieve mode.
