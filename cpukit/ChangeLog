@@ -1,5 +1,6 @@
 2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/mqueueopen.c: Use va_arg(..., mode_t) to retrieve mode.
 	* posix/src/semopen.c: Use va_arg(..., mode_t) to retrieve mode.
 
 2011-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>

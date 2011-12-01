@@ -63,8 +63,8 @@ mqd_t mq_open(
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
-    mode = (mode_t) va_arg( arg, unsigned int );
-    attr = (struct mq_attr *) va_arg( arg, struct mq_attr * );
+    mode = va_arg( arg, mode_t );
+    attr = va_arg( arg, struct mq_attr * );
     va_end(arg);
   }
 
