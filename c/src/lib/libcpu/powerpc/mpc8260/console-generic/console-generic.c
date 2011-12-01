@@ -353,8 +353,6 @@ m8xx_uart_setAttributes(
 static void
 m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
-  int nb_overflow;
-
   /*
    * Buffer received?
    */
@@ -367,7 +365,7 @@ m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
       rtems_cache_invalidate_multiple_data_lines(
         (const void *) RxBd[SCC1_MINOR]->buffer,
         RxBd[SCC1_MINOR]->length );
-      nb_overflow = rtems_termios_enqueue_raw_characters(
+      rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC1_MINOR],
         (char *)RxBd[SCC1_MINOR]->buffer,
         (int)RxBd[SCC1_MINOR]->length );
@@ -397,8 +395,6 @@ m8xx_scc1_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
-  int nb_overflow;
-
   /*
    * Buffer received?
    */
@@ -411,7 +407,7 @@ m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
       rtems_cache_invalidate_multiple_data_lines(
         (const void *) RxBd[SCC2_MINOR]->buffer,
         RxBd[SCC2_MINOR]->length );
-      nb_overflow = rtems_termios_enqueue_raw_characters(
+      rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC2_MINOR],
         (char *)RxBd[SCC2_MINOR]->buffer,
         (int)RxBd[SCC2_MINOR]->length );
@@ -442,8 +438,6 @@ m8xx_scc2_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 {
-  int nb_overflow;
-
   /*
    * Buffer received?
    */
@@ -456,7 +450,7 @@ m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
       rtems_cache_invalidate_multiple_data_lines(
         (const void *) RxBd[SCC3_MINOR]->buffer,
         RxBd[SCC3_MINOR]->length );
-      nb_overflow = rtems_termios_enqueue_raw_characters(
+      rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC3_MINOR],
         (char *)RxBd[SCC3_MINOR]->buffer,
         (int)RxBd[SCC3_MINOR]->length );
@@ -488,8 +482,6 @@ m8xx_scc3_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
 {
-  int nb_overflow;
-
   /*
    * Buffer received?
    */
@@ -502,7 +494,7 @@ m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
       rtems_cache_invalidate_multiple_data_lines(
         (const void *) RxBd[SCC4_MINOR]->buffer,
         RxBd[SCC4_MINOR]->length );
-      nb_overflow = rtems_termios_enqueue_raw_characters(
+      rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SCC4_MINOR],
         (char *)RxBd[SCC4_MINOR]->buffer,
         (int)RxBd[SCC4_MINOR]->length );
@@ -532,8 +524,6 @@ m8xx_scc4_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
 {
-  int nb_overflow;
-
   /*
    * Buffer received?
    */
@@ -546,7 +536,7 @@ m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
       rtems_cache_invalidate_multiple_data_lines(
         (const void *) RxBd[SMC1_MINOR]->buffer,
         RxBd[SMC1_MINOR]->length );
-      nb_overflow = rtems_termios_enqueue_raw_characters(
+      rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SMC1_MINOR],
         (char *)RxBd[SMC1_MINOR]->buffer,
         (int)RxBd[SMC1_MINOR]->length );
@@ -577,8 +567,6 @@ m8xx_smc1_interrupt_handler (rtems_irq_hdl_param unused)
 static void
 m8xx_smc2_interrupt_handler (rtems_irq_hdl_param unused)
 {
-  int nb_overflow;
-
   /*
    * Buffer received?
    */
@@ -591,7 +579,7 @@ m8xx_smc2_interrupt_handler (rtems_irq_hdl_param unused)
       rtems_cache_invalidate_multiple_data_lines(
         (const void *) RxBd[SMC2_MINOR]->buffer,
         RxBd[SMC2_MINOR]->length );
-      nb_overflow = rtems_termios_enqueue_raw_characters(
+      rtems_termios_enqueue_raw_characters(
         (void *)ttyp[SMC2_MINOR],
         (char *)RxBd[SMC2_MINOR]->buffer,
         (int)RxBd[SMC2_MINOR]->length );
