@@ -1,3 +1,7 @@
+2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/console.c: Eliminate unused var "nb_overflow".
+
 2011-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* start/start.S: Update due to API changes.

@@ -284,7 +284,6 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
 {
   unsigned char c;
   uint16_t isr;
-  int nb_overflow;
   int minor = (int)handle;
   struct mpc5200_psc *psc =
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
@@ -311,7 +310,7 @@ static void mpc5200_psc_interrupt_handler(rtems_irq_hdl_param handle)
        c = (psc->rb_tb >> 24);
 
       if (ttyp[minor] != NULL) {
-        nb_overflow = rtems_termios_enqueue_raw_characters(
+        rtems_termios_enqueue_raw_characters(
            (void *)ttyp[minor], (char *)&c, (int)1);
         channel_info[minor].rx_characters++;
       }
