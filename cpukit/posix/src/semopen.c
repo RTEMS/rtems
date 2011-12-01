@@ -60,7 +60,7 @@ sem_t *sem_open(
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
-    mode = (mode_t) va_arg( arg, unsigned int );
+    mode = va_arg( arg, mode_t );
     value = va_arg( arg, unsigned int );
     va_end(arg);
   }

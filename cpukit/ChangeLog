@@ -1,3 +1,7 @@
+2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/semopen.c: Use va_arg(..., mode_t) to retrieve mode.
+
 2011-11-30	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* librpc/src/rpc/clnt_udp.c (struct cu_data):
