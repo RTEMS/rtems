@@ -64,7 +64,7 @@ int open(
 )
 {
   va_list                             ap;
-  int                                 mode;
+  mode_t                              mode;
   int                                 rc;
   rtems_libio_t                      *iop = 0;
   int                                 status;
@@ -84,7 +84,7 @@ int open(
 
   va_start(ap, flags);
 
-  mode = va_arg( ap, int );
+  mode = va_arg( ap, mode_t );
 
   /*
    * NOTE: This comment is OBSOLETE.  The proper way to do this now
