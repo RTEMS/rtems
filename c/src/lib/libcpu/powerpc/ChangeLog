@@ -1,3 +1,8 @@
+2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/include/cpuIdent.c, shared/include/cpuIdent.h
+	(get_ppc_cpu_type_name): Return const char*.
+
 2011-11-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1927/bsps:

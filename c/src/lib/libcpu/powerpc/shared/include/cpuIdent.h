@@ -91,7 +91,7 @@ extern ppc_cpu_id_t current_ppc_cpu;
 typedef unsigned short ppc_cpu_revision_t;
 
 extern ppc_cpu_id_t get_ppc_cpu_type (void);
-extern char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu);
+extern const char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu);
 extern ppc_cpu_revision_t get_ppc_cpu_revision (void);
 extern ppc_cpu_revision_t current_ppc_revision;
 

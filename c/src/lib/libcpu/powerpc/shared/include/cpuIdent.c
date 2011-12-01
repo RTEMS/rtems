@@ -27,7 +27,7 @@ ppc_cpu_id_t       current_ppc_cpu      = PPC_UNKNOWN;
 ppc_cpu_revision_t current_ppc_revision = 0xff;
 ppc_feature_t      current_ppc_features;
 
-char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
+const char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
 {
   switch (cpu) {
     case PPC_405:		return "PPC405";
