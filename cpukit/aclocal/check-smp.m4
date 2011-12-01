@@ -4,7 +4,7 @@ AC_DEFUN([RTEMS_CHECK_SMP],
 [dnl
 AC_REQUIRE([RTEMS_ENABLE_SMP])dnl
 
-AC_CACHE_CHECK([whether CPU supports libposix],
+AC_CACHE_CHECK([whether CPU supports SMP],
   rtems_cv_HAS_SMP,
   [dnl
     case "$RTEMS_CPU" in

@@ -1,5 +1,9 @@
 2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* aclocal/check-smp.m4: Fix bogus log message.
+
+2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/mkrootfs.c: Use mode_t for modes, 
 	Use size_t for sizes.
 	* libcsupport/src/open.c: Use va_arg(..., mode_t) to retrieve mode.
