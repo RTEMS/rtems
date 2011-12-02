@@ -1,3 +1,11 @@
+2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/imfs/imfs_eval.c: Make IMFS_evaluate_permission,
+	IMFS_evaluate_hard_link, IMFS_evaluate_sym_link static.
+	* libfs/src/imfs/imfs_fifo.c: Make IMFS_fifo_open,
+	IMFS_fifo_close, IMFS_fifo_read, IMFS_fifo_write,
+	IMFS_fifo_ioctl static.
+
 2011-12-01	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/check-smp.m4: Fix bogus log message.

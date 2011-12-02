@@ -70,7 +70,7 @@ int IMFS_Set_handlers(
  *  The following routine evaluates that we have permission
  *  to do flags on the node.
  */
-int IMFS_evaluate_permission(
+static int IMFS_evaluate_permission(
   rtems_filesystem_location_info_t  *node,
   int                                flags
 )
@@ -123,7 +123,7 @@ int IMFS_evaluate_permission(
  *  The following routine evaluates a hardlink to the actual node.
  */
 
-int IMFS_evaluate_hard_link(
+static int IMFS_evaluate_hard_link(
   rtems_filesystem_location_info_t  *node,   /* IN/OUT */
   int                                flags   /* IN     */
 )
@@ -160,7 +160,7 @@ int IMFS_evaluate_hard_link(
  *  The following routine evaluates a symbolic link to the actual node.
  */
 
-int IMFS_evaluate_sym_link(
+static int IMFS_evaluate_sym_link(
   rtems_filesystem_location_info_t  *node,   /* IN/OUT */
   int                                flags   /* IN     */
 )

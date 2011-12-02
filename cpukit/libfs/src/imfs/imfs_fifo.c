@@ -32,7 +32,7 @@ do {  \
   return _err; \
 } while (0)
 
-int IMFS_fifo_open(
+static int IMFS_fifo_open(
   rtems_libio_t *iop,
   const char    *pathname,
   uint32_t       flag,
@@ -45,7 +45,7 @@ int IMFS_fifo_open(
   IMFS_FIFO_RETURN(err);
 }
 
-int IMFS_fifo_close(
+static int IMFS_fifo_close(
   rtems_libio_t *iop
 )
 {
@@ -60,7 +60,7 @@ int IMFS_fifo_close(
   IMFS_FIFO_RETURN(err);
 }
 
-ssize_t IMFS_fifo_read(
+static ssize_t IMFS_fifo_read(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count
@@ -75,7 +75,7 @@ ssize_t IMFS_fifo_read(
   IMFS_FIFO_RETURN(err);
 }
 
-ssize_t IMFS_fifo_write(
+static ssize_t IMFS_fifo_write(
   rtems_libio_t *iop,
   const void    *buffer,
   size_t         count
@@ -91,7 +91,7 @@ ssize_t IMFS_fifo_write(
   IMFS_FIFO_RETURN(err);
 }
 
-int IMFS_fifo_ioctl(
+static int IMFS_fifo_ioctl(
   rtems_libio_t *iop,
   uint32_t       command,
   void          *buffer
@@ -116,7 +116,7 @@ int IMFS_fifo_ioctl(
   IMFS_FIFO_RETURN(err);
 }
 
-off_t IMFS_fifo_lseek(
+static off_t IMFS_fifo_lseek(
   rtems_libio_t *iop,
   off_t          offset,
   int            whence
