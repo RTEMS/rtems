@@ -18,7 +18,7 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/scheduleredf.h>
 
-int _Scheduler_EDF_RBTree_compare_function
+static int _Scheduler_EDF_RBTree_compare_function
 (
   RBTree_Node* n1,
   RBTree_Node* n2

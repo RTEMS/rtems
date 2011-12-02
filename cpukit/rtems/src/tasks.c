@@ -42,7 +42,7 @@
  *  area.
  */
 
-bool _RTEMS_tasks_Create_extension(
+static bool _RTEMS_tasks_Create_extension(
   Thread_Control *executing,
   Thread_Control *created
 )
@@ -86,7 +86,7 @@ bool _RTEMS_tasks_Create_extension(
  *  first time.
  */
 
-void _RTEMS_tasks_Start_extension(
+static void _RTEMS_tasks_Start_extension(
   Thread_Control *executing,
   Thread_Control *started
 )
@@ -104,7 +104,7 @@ void _RTEMS_tasks_Start_extension(
  *  This extension routine is invoked when a task is deleted.
  */
 
-void _RTEMS_tasks_Delete_extension(
+static void _RTEMS_tasks_Delete_extension(
   Thread_Control *executing,
   Thread_Control *deleted
 )
@@ -137,7 +137,7 @@ void _RTEMS_tasks_Delete_extension(
  *  This extension routine is invoked at each context switch.
  */
 
-void _RTEMS_tasks_Switch_extension(
+static void _RTEMS_tasks_Switch_extension(
   Thread_Control *executing,
   Thread_Control *heir
 )
@@ -169,7 +169,7 @@ void _RTEMS_tasks_Switch_extension(
  *  This extension routine is invoked at each context switch.
  */
 
-void _RTEMS_tasks_Post_switch_extension(
+static void _RTEMS_tasks_Post_switch_extension(
   Thread_Control *executing
 )
 {

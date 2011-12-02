@@ -1,5 +1,14 @@
 2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/tasks.c: Make _RTEMS_tasks_Create_extension,
+	_RTEMS_tasks_Start_extension, _RTEMS_tasks_Delete_extension,
+	_RTEMS_tasks_Switch_extension, _RTEMS_tasks_Post_switch_extension
+	static.
+	* score/src/scheduleredf.c: Make _Scheduler_EDF_RBTree_compare_function
+	static.
+
+2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libfs/src/imfs/imfs_eval.c: Make IMFS_evaluate_permission,
 	IMFS_evaluate_hard_link, IMFS_evaluate_sym_link static.
 	* libfs/src/imfs/imfs_fifo.c: Make IMFS_fifo_open,
