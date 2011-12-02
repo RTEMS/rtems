@@ -127,6 +127,8 @@ _start:
 	li	r3, 0			/* command line */
 	bl	FUNC_NAME(boot_card)
 
+       .globl  FUNC_NAME(bsp_reset)
+FUNC_NAME(bsp_reset):
 	li  10,99			/* 0x63 */
   	sc
 
