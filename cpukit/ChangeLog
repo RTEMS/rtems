@@ -1,5 +1,7 @@
 2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/include/rtems/libcsupport.h: 
+	Add prototype of malloc_info().
 	* libfs/src/imfs/deviceerrno.c: 
 	Include <rtems/devfs.h> for missing prototypes.
 	* libfs/src/rfs/rtems-rfs-rtems-dev.c:

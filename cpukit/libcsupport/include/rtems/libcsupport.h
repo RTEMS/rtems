@@ -45,6 +45,8 @@ extern void fix_syscall_errno(void);
 extern size_t malloc_free_space(void);
 extern void open_dev_console(void);
 
+extern int malloc_info(Heap_Information_block *the_info);
+
 /*
  *  Prototypes required to install newlib reentrancy user extension
  */
