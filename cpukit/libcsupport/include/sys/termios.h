@@ -38,6 +38,12 @@ struct termios {
 	cc_t c_cc[NCCS];		/* control characters */
 };
 
+/**
+ *  This value is used to disable processing of a member of c_cc
+ *  in the struct termios.
+ */
+#define _POSIX_VDISABLE 0
+
 /* c_cc characters */
 #define VINTR 0
 #define VQUIT 1
