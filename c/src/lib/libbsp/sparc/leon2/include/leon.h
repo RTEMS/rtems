@@ -369,6 +369,14 @@ extern LEON_Register_Map LEON_REG;
 #define LEON_REG_TIMER_COUNTER_DEFINED_MASK       0x00000003
 #define LEON_REG_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000003
 
+/* Load 32-bit word by forcing a cache-miss */
+static inline unsigned int leon_r32_no_cache(uintptr_t addr)
+{
+	unsigned int tmp;
+	asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr));
+	return tmp;
+}
+
 #endif /* !ASM */
 
 #ifdef __cplusplus

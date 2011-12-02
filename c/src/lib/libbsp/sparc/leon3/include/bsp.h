@@ -73,6 +73,10 @@ extern int rtems_leon_greth_driver_attach(
 
 #define HAS_SMC91111
 
+/* Configure GRETH driver */
+#define GRETH_SUPPORTED
+#define GRETH_MEM_LOAD(addr) leon_r32_no_cache(addr)
+
 extern int   CPU_SPARC_HAS_SNOOPING;
 
 
