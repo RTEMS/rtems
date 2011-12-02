@@ -23,12 +23,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/devfs.h>
 #include "rtems-rfs-rtems.h"
-
-/*
- * Convert RTEMS status to a UNIX errno
- */
-extern int rtems_deviceio_errno (rtems_status_code code);
 
 /**
  * This handler maps an open() operation onto rtems_io_open().

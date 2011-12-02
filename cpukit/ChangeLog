@@ -1,4 +1,10 @@
 2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-rtems-dev.c:
+	Remove duplicate prototype of rtems_deviceio_errno. 
+	Include <rtems/devfs.h> for rtems_deviceio_errno().
+
+2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
  
 	* score/src/rbtreeextract.c: 
 	Make _RBTree_Extract_validate_unprotected static.
