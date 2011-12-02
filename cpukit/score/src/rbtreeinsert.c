@@ -25,7 +25,7 @@
  *  @note It does NOT disable interrupts to ensure the atomicity of the
  *        append operation.
  */
-void _RBTree_Validate_insert_unprotected(
+static void _RBTree_Validate_insert_unprotected(
     RBTree_Node    *the_node
     )
 {

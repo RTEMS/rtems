@@ -25,7 +25,7 @@
  *  @note It does NOT disable interrupts to ensure the atomicity
  *        of the extract operation.
  */
-void _RBTree_Extract_validate_unprotected(
+static void _RBTree_Extract_validate_unprotected(
     RBTree_Node *the_node
     )
 {

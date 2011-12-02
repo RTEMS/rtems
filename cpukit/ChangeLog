@@ -1,3 +1,10 @@
+2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+ 
+	* score/src/rbtreeextract.c: 
+	Make _RBTree_Extract_validate_unprotected static.
+	* score/src/rbtreeinsert.c:
+	Make _RBTree_Validate_insert_unprotected static.
+
 2011-12-02	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/include/sys/termios.h: Add _POSIX_VDISABLE.
