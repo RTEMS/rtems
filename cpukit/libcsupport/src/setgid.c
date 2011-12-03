@@ -6,6 +6,7 @@
 #include "config.h"
 #endif
 
+#include <unistd.h>
 #include <rtems/userenv.h>
 
 /*

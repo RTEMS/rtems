@@ -1,5 +1,12 @@
 2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/getgid.c: Include <unistd.h>.
+	* libcsupport/src/setgid.c: Include <unistd.h>.
+	* libcsupport/src/getpgrp.c: Include <unistd.h>.
+	Remove unnecessary includes.
+
+2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/pthread.c (_POSIX_Threads_Default_attributes): Add
 	missing initializer.
 	* posix/src/pthread.c: Make 
