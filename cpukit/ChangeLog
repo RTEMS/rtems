@@ -1,5 +1,8 @@
 2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/inline/rtems/score/coremsg.inl (_CORE_message_queue_Send,
+	_CORE_message_queue_Urgent):
+	Pass through api_message_queue_mp_support parameter.
 	* posix/src/aio_misc.c: Make rtems_aio_move_to_work,
 	rtems_aio_insert_prio static.
 

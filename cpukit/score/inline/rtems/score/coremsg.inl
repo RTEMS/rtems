@@ -48,11 +48,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
     buffer,
     size,
     id,
-#if defined(RTEMS_MULTIPROCESSING)
     api_message_queue_mp_support,
-#else
-    NULL,
-#endif
     CORE_MESSAGE_QUEUE_SEND_REQUEST,
     wait,     /* sender may block */
     timeout   /* timeout interval */
@@ -77,11 +73,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
     buffer,
     size,
     id,
-#if defined(RTEMS_MULTIPROCESSING)
     api_message_queue_mp_support,
-#else
-    NULL,
-#endif
     CORE_MESSAGE_QUEUE_URGENT_REQUEST,
     wait,     /* sender may block */
     timeout   /* timeout interval */
