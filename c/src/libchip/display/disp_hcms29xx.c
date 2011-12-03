@@ -927,6 +927,15 @@ static disp_hcms29xx_drv_t disp_hcms29xx_drv_tbl = {
     .size =        sizeof (disp_hcms29xx_drv_t),
   },
   { /* our private fields */
+    0,
+    { 0 },
+    0,
+    { 0 },
+    { 0 },
+    0,
+    0,
+    0,
+    false
   }
 };
 

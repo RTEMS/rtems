@@ -1,3 +1,7 @@
+2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/display/disp_hcms29xx.c: Add missing initializer.
+
 2011-11-09	Jennifer Averett <jennifer.averett@oarcorp.com>
 
 	PR 1934/bsps
