@@ -136,7 +136,7 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
  *        NONE
  */
 
-void
+static void
 rtems_aio_move_to_work (rtems_aio_request_chain *r_chain)
 {
   rtems_aio_request_chain *temp;
@@ -169,7 +169,7 @@ rtems_aio_move_to_work (rtems_aio_request_chain *r_chain)
  *        NONE
  */
 
-void
+static void
 rtems_aio_insert_prio (rtems_chain_control *chain, rtems_aio_request *req)
 {
   rtems_chain_node *node;

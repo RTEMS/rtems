@@ -1,5 +1,10 @@
 2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/aio_misc.c: Make rtems_aio_move_to_work,
+	rtems_aio_insert_prio static.
+
+2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/getgid.c: Include <unistd.h>.
 	* libcsupport/src/setgid.c: Include <unistd.h>.
 	* libcsupport/src/getpgrp.c: Include <unistd.h>.
