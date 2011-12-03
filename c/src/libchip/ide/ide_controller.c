@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <rtems/blkdev.h>
 
+#include <libchip/ide_ctrl.h>
 #include <libchip/ide_ctrl_cfg.h>
 #include <libchip/ide_ctrl_io.h>
 

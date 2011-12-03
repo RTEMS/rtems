@@ -630,8 +630,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
  *     NONE
  */
 #if defined(CPU_SIMPLE_VECTORED_INTERRUPTS)
-rtems_isr
-ata_interrupt_handler(rtems_vector_number vec)
+static rtems_isr ata_interrupt_handler(rtems_vector_number vec)
 {
     rtems_chain_node *the_node = rtems_chain_first(&ata_int_vec[vec]);
     ata_queue_msg_t  msg;
@@ -654,7 +653,7 @@ ata_interrupt_handler(rtems_vector_number vec)
     }
 }
 #else
-void ata_interrupt_handler(rtems_irq_hdl_param handle)
+static void ata_interrupt_handler(rtems_irq_hdl_param handle)
 {
   int ata_irq_chain_index = (int) handle;
     rtems_chain_node *the_node =
