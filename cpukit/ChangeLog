@@ -1,3 +1,12 @@
+2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/pthread.c (_POSIX_Threads_Default_attributes): Add
+	missing initializer.
+	* posix/src/pthread.c: Make 
+	_POSIX_Threads_Create_extension,_POSIX_Threads_Delete_extension,
+	_POSIX_Threads_Exitted_extension,
+	_POSIX_Threads_Initialize_user_threads static.
+
 2011-12-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/include/rtems/libcsupport.h: 

@@ -52,7 +52,8 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
         defined(_POSIX_THREAD_SPORADIC_SERVER)
       0,                        /* sched_ss_low_priority */
       { 0L, 0 },                /* sched_ss_repl_period */
-      { 0L, 0 }                 /* sched_ss_init_budget */
+      { 0L, 0 },                /* sched_ss_init_budget */
+      0                         /* sched_ss_max_repl */
     #endif
   },
   #if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
@@ -163,7 +164,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
  *  This method is invoked for each thread created.
  */
 
-bool _POSIX_Threads_Create_extension(
+static bool _POSIX_Threads_Create_extension(
   Thread_Control *executing __attribute__((unused)),
   Thread_Control *created
 )
@@ -236,7 +237,7 @@ bool _POSIX_Threads_Create_extension(
  *
  *  This method is invoked for each thread deleted.
  */
-void _POSIX_Threads_Delete_extension(
+static void _POSIX_Threads_Delete_extension(
   Thread_Control *executing __attribute__((unused)),
   Thread_Control *deleted
 )
@@ -278,7 +279,7 @@ void _POSIX_Threads_Delete_extension(
  *
  *  This method is invoked each time a thread exits.
  */
-void _POSIX_Threads_Exitted_extension(
+static void _POSIX_Threads_Exitted_extension(
   Thread_Control *executing
 )
 {
@@ -296,7 +297,7 @@ void _POSIX_Threads_Exitted_extension(
  *  This routine creates and starts all configured user
  *  initialzation threads.
  */
-void _POSIX_Threads_Initialize_user_threads( void )
+static void _POSIX_Threads_Initialize_user_threads( void )
 {
   if ( _POSIX_Threads_Initialize_user_threads_p )
     (*_POSIX_Threads_Initialize_user_threads_p)();
