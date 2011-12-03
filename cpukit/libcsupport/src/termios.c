@@ -45,16 +45,16 @@
 #define RAW_OUTPUT_BUFFER_SIZE  (rtems_termios_raw_output_size)
 
 /* fields for "flow_ctrl" status */
-#define FL_IREQXOF 1        /* input queue requests stop of incoming data */
-#define FL_ISNTXOF 2        /* XOFF has been sent to other side of line   */
-#define FL_IRTSOFF 4        /* RTS has been turned off for other side..   */
+#define FL_IREQXOF 1U        /* input queue requests stop of incoming data */
+#define FL_ISNTXOF 2U        /* XOFF has been sent to other side of line   */
+#define FL_IRTSOFF 4U        /* RTS has been turned off for other side..   */
 
-#define FL_ORCVXOF 0x10     /* XOFF has been received                     */
-#define FL_OSTOP   0x20     /* output has been stopped due to XOFF        */
+#define FL_ORCVXOF 0x10U     /* XOFF has been received                     */
+#define FL_OSTOP   0x20U     /* output has been stopped due to XOFF        */
 
-#define FL_MDRTS   0x100    /* input controlled with RTS/CTS handshake    */
-#define FL_MDXON   0x200    /* input controlled with XON/XOFF protocol    */
-#define FL_MDXOF   0x400    /* output controlled with XON/XOFF protocol   */
+#define FL_MDRTS   0x100U    /* input controlled with RTS/CTS handshake    */
+#define FL_MDXON   0x200U    /* input controlled with XON/XOFF protocol    */
+#define FL_MDXOF   0x400U    /* output controlled with XON/XOFF protocol   */
 
 #define NODISC(n) \
   { NULL,  NULL,  NULL,  NULL, \
