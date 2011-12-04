@@ -43,14 +43,15 @@ __FBSDID("$FreeBSD: src/lib/libc/gen/pwcache.c,v 1.11 2007/01/09 00:27:55 imp Ex
 #include <pwd.h>
 #include <stdio.h>
 #include <string.h>
-//#include <utmp.h>
+
+#include "internal.h"
 
 #define UT_NAMESIZE 64
 
 #define	NCACHE	64			/* power of 2 */
 #define	MASK	(NCACHE - 1)		/* bits to store with */
 
-static const char *
+const char *
 user_from_uid(uid_t uid, int nouser)
 {
 	static struct ncache {

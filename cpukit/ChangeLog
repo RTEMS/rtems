@@ -1,5 +1,7 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/pwcache.c: Include "internal.h".
+	Make user_from_uid non-static.
 	* libmisc/shell/internal.h: Add user_from_uid, group_from_gid.
 
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
