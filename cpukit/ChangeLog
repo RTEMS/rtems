@@ -1,5 +1,6 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/main_ls.c: Include "internal.h".
 	* libmisc/shell/main_mv.c: Remove decl of user_from_uid,
 	group_from_gid.
 	* libmisc/shell/main_rm.c: Remove decl of user_from_uid.

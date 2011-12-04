@@ -75,6 +75,7 @@ __RCSID("$NetBSD: ls.c,v 1.58 2005/10/26 02:24:22 jschauma Exp $");
 #include <pwd.h>
 #include <grp.h>
 
+#include "internal.h"
 #include "extern-ls.h"
 
 static void	 display(rtems_shell_ls_globals* globals, FTSENT *, FTSENT *);
