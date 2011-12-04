@@ -17,6 +17,7 @@
 #endif
 
 #include <stdio.h>
+#include <rtems/shell.h>
 
 int rtems_shell_cat_file(FILE * out,const char * name) {
   FILE * fd;

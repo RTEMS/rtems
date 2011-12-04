@@ -1,5 +1,8 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/cat_file.c: #include <rtems/shell.h>.
+	* libmisc/shell/filemode.c: #include "internal.h".
+	* libmisc/shell/shell.h: Declare functions "extern".
 	* libmisc/shell/shell_cmdset.c: Remove superflous casts.
 
 2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>

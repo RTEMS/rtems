@@ -60,14 +60,14 @@ typedef bool (*rtems_shell_login_check_t)(
   const char * /* passphrase */
 );
 
-bool rtems_shell_login_prompt(
+extern bool rtems_shell_login_prompt(
   FILE *in,
   FILE *out,
   const char *device,
   rtems_shell_login_check_t check
 );
 
-bool rtems_shell_login_check(
+extern bool rtems_shell_login_check(
   const char *user,
   const char *passphrase
 );
@@ -95,11 +95,11 @@ typedef struct {
  * The return value has RTEMS_SHELL_KEYS_EXTENDED set if the key
  * is extended, ie a special key.
  */
-unsigned int rtems_shell_getchar(FILE *in);
+extern unsigned int rtems_shell_getchar(FILE *in);
 
-rtems_shell_cmd_t * rtems_shell_lookup_cmd(const char *cmd);
+extern rtems_shell_cmd_t * rtems_shell_lookup_cmd(const char *cmd);
 
-rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
+extern rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
   rtems_shell_cmd_t *shell_cmd
 );
 
@@ -110,29 +110,29 @@ rtems_shell_cmd_t * rtems_shell_add_cmd(
   rtems_shell_command_t  command
 );
 
-rtems_shell_cmd_t * rtems_shell_alias_cmd(
+extern rtems_shell_cmd_t * rtems_shell_alias_cmd(
   const char *cmd,
   const char *alias
 );
 
-int rtems_shell_make_args(
+extern int rtems_shell_make_args(
   char  *commandLine,
   int   *argc_p,
   char **argv_p,
   int    max_args
 );
 
-int rtems_shell_cat_file(
+extern int rtems_shell_cat_file(
   FILE *out,
   const char *name
 );
 
-void rtems_shell_write_file(
+extern void rtems_shell_write_file(
   const char *name,
   const char *content
 );
 
-int rtems_shell_script_file(
+extern int rtems_shell_script_file(
   int    argc,
   char **argv
 );
@@ -149,7 +149,7 @@ int rtems_shell_script_file(
  * @param login_check User login check function, NULL disables login checks.
  *
  */
-rtems_status_code rtems_shell_init(
+extern rtems_status_code rtems_shell_init(
   const char *task_name,
   size_t task_stacksize,
   rtems_task_priority task_priority,
@@ -172,7 +172,7 @@ rtems_status_code rtems_shell_init(
  *                      Create if it does not exist.
  * @param wait Wait for the script to finish.
  */
-rtems_status_code rtems_shell_script(
+extern rtems_status_code rtems_shell_script(
   const char          *task_name,
   size_t               task_stacksize,  /* 0 default*/
   rtems_task_priority  task_priority,
@@ -250,7 +250,7 @@ struct rtems_shell_filesystems_tt {
  *  @note An application specific implementation can be provided
  *        by the user.
  */
-void rtems_shell_get_prompt(
+extern void rtems_shell_get_prompt(
   rtems_shell_env_t *shell_env,
   char              *prompt,
   size_t             size
@@ -264,7 +264,7 @@ void rtems_shell_get_prompt(
  * @param[in] fs The file system definition.
  * @param[in] options Special file system options.
  */
-int rtems_shell_libc_mounter(
+extern int rtems_shell_libc_mounter(
   const char*                driver,
   const char*                path,
   rtems_shell_filesystems_t* fs,
@@ -276,14 +276,14 @@ int rtems_shell_libc_mounter(
  *
  * @param[in] fs The file system mount data.
  */
-void rtems_shell_mount_add_fsys(rtems_shell_filesystems_t* fs);
+extern void rtems_shell_mount_add_fsys(rtems_shell_filesystems_t* fs);
 
 /**
  * Delete file system mount configuration from the mount command.
  *
  * @param[in] fs The file system mount data to remove.
  */
-void rtems_shell_mount_del_fsys(rtems_shell_filesystems_t* fs);
+extern void rtems_shell_mount_del_fsys(rtems_shell_filesystems_t* fs);
 
 typedef void (*rtems_shell_wait_for_input_notification)(
   int fd,
@@ -298,7 +298,7 @@ typedef void (*rtems_shell_wait_for_input_notification)(
  * @retval RTEMS_TIMEOUT Timeout expired.
  * @retval RTEMS_UNSATISFIED Cannot change or restore termios attributes.
  */
-rtems_status_code rtems_shell_wait_for_input(
+extern rtems_status_code rtems_shell_wait_for_input(
   int fd,
   int timeout_in_seconds,
   rtems_shell_wait_for_input_notification notification,

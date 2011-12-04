@@ -41,6 +41,8 @@ __FBSDID("$FreeBSD: src/lib/libc/string/strmode.c,v 1.5 2007/01/09 00:28:12 imp 
 #include <sys/stat.h>
 #include <string.h>
 
+#include "internal.h"
+
 void
 strmode(
 	mode_t mode,
