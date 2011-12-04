@@ -59,7 +59,7 @@ rtems_shell_topic_t * rtems_shell_lookup_topic(const char * topic) {
       return shell_topic;
     shell_topic=shell_topic->next;
   }
-  return (rtems_shell_topic_t *) NULL;
+  return NULL;
 }
 
 /*
@@ -71,7 +71,7 @@ rtems_shell_topic_t * rtems_shell_add_topic(const char * topic) {
   if (!rtems_shell_first_topic) {
     aux = malloc(sizeof(rtems_shell_topic_t));
     aux->topic = topic;
-    aux->next  = (rtems_shell_topic_t*)NULL;
+    aux->next  = NULL;
     return rtems_shell_first_topic = aux;
   }
   current=rtems_shell_first_topic;
@@ -85,7 +85,7 @@ rtems_shell_topic_t * rtems_shell_add_topic(const char * topic) {
   }
   aux = malloc(sizeof(rtems_shell_topic_t));
   aux->topic = topic;
-  aux->next = (rtems_shell_topic_t*)NULL;
+  aux->next = NULL;
   current->next = aux;
   return aux;
 }
@@ -100,7 +100,7 @@ rtems_shell_cmd_t * rtems_shell_lookup_cmd(const char * cmd) {
    if (!strcmp(shell_cmd->name,cmd)) return shell_cmd;
    shell_cmd=shell_cmd->next;
   };
-  return (rtems_shell_cmd_t *) NULL;
+  return NULL;
 }
 
 /*

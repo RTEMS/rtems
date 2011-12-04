@@ -1,3 +1,7 @@
+2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/shell_cmdset.c: Remove superflous casts.
+
 2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/termios.c: Make FL_* defines unsigned.
