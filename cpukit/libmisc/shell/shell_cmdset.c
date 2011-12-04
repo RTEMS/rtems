@@ -65,7 +65,7 @@ rtems_shell_topic_t * rtems_shell_lookup_topic(const char * topic) {
 /*
  *  Add a new topic to the list of topics
  */
-rtems_shell_topic_t * rtems_shell_add_topic(const char * topic) {
+static rtems_shell_topic_t * rtems_shell_add_topic(const char * topic) {
   rtems_shell_topic_t * current,*aux;
 
   if (!rtems_shell_first_topic) {

@@ -17,6 +17,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <rtems/shell.h>
 
 int rtems_shell_make_args(
   char  *commandLine,

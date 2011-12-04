@@ -1,5 +1,16 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/print-ls.c: Include "internal.h".
+	* libmisc/shell/pwcache.c: Make user_from_uid static.
+	* libmisc/shell/shell.c: Make rtems_shell_init_env,
+	rtems_shell_env_free, rtems_shell_line_editor,
+	rtems_shell_init_issue, rtems_shell_task static.
+	* libmisc/shell/shell_cmdset.c: Make rtems_shell_add_topic static.
+	* libmisc/shell/shell_makeargs.c: Include <rtems/shell.h>.
+	* libmisc/shell/write_file.c: Include <rtems/shell.h>.
+
+2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/main_help.c: Make rtems_shell_help_cmd,
 	rtems_shell_help static.
 	* libmisc/shell/main_hexdump.c: Make main_hexdump static.

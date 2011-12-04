@@ -61,7 +61,7 @@ rtems_shell_env_t *rtems_current_shell_env = &rtems_global_shell_env;
 /*
  *  Initialize the shell user/process environment information
  */
-rtems_shell_env_t *rtems_shell_init_env(
+static rtems_shell_env_t *rtems_shell_init_env(
   rtems_shell_env_t *shell_env_p
 )
 {
@@ -83,7 +83,7 @@ rtems_shell_env_t *rtems_shell_init_env(
 /*
  *  Completely free a shell_env_t and all associated memory
  */
-void rtems_shell_env_free(
+static void rtems_shell_env_free(
   void *ptr
 )
 {
@@ -103,7 +103,7 @@ void rtems_shell_env_free(
 /*
  *  Get a line of user input with modest features
  */
-int rtems_shell_line_editor(
+static int rtems_shell_line_editor(
   char       *cmds[],
   int         count,
   int         size,
@@ -384,7 +384,7 @@ int rtems_shell_line_editor(
  * TODO: Redirection. Tty Signals. ENVVARs. Shell language.
  * ----------------------------------------------- */
 
-void rtems_shell_init_issue(void)
+static void rtems_shell_init_issue(void)
 {
   static bool issue_inited=false;
   struct stat buf;
@@ -550,7 +550,7 @@ void rtems_shell_print_env(
 }
 #endif
 
-rtems_task rtems_shell_task(rtems_task_argument task_argument)
+static rtems_task rtems_shell_task(rtems_task_argument task_argument)
 {
   rtems_shell_env_t *shell_env = (rtems_shell_env_t*) task_argument;
   rtems_id           wake_on_end = shell_env->wake_on_end;

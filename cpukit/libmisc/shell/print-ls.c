@@ -68,6 +68,7 @@ __RCSID("$NetBSD: print.c,v 1.40 2004/11/17 17:00:00 mycroft Exp $");
 #include <unistd.h>
 //#include <util.h>
 
+#include "internal.h"
 #include "extern-ls.h"
 
 #define DAYSPERNYEAR ((time_t)365)

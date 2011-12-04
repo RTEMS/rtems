@@ -50,7 +50,7 @@ __FBSDID("$FreeBSD: src/lib/libc/gen/pwcache.c,v 1.11 2007/01/09 00:27:55 imp Ex
 #define	NCACHE	64			/* power of 2 */
 #define	MASK	(NCACHE - 1)		/* bits to store with */
 
-const char *
+static const char *
 user_from_uid(uid_t uid, int nouser)
 {
 	static struct ncache {

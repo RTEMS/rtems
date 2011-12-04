@@ -22,6 +22,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <rtems/shell.h>
+
 void rtems_shell_write_file(
   const char *name,
   const char *content
