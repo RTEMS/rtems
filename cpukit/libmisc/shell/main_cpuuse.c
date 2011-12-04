@@ -22,7 +22,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_cpuuse(
+static int rtems_shell_main_cpuuse(
   int   argc,
   char *argv[]
 )

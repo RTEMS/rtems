@@ -70,7 +70,7 @@
 
 
 
-int rtems_shell_main_echo(
+static int rtems_shell_main_echo(
   int   argc,
   char *argv[]
 )

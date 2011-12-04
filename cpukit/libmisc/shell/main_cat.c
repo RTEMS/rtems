@@ -35,7 +35,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_cat(int argc, char *argv[])
+static int rtems_shell_main_cat(int argc, char *argv[])
 {
   int n;
   int sc;

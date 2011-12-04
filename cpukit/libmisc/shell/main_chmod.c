@@ -28,7 +28,7 @@
 #include <rtems/stringto.h>
 #include "internal.h"
 
-int rtems_shell_main_chmod(
+static int rtems_shell_main_chmod(
   int argc,
   char *argv[]
 )

@@ -27,7 +27,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_date(
+static int rtems_shell_main_date(
   int   argc,
   char *argv[]
 )

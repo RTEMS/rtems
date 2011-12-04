@@ -21,7 +21,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_halt(
+static int rtems_shell_main_halt(
   int   argc __attribute__((unused)),
   char *argv[] __attribute__((unused))
 )

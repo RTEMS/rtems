@@ -25,7 +25,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_chroot(
+static int rtems_shell_main_chroot(
   int argc,
   char * argv[]
 )

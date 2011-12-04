@@ -111,7 +111,7 @@ rtems_shell_dd_exit (rtems_shell_dd_globals* globals, int code)
 
 static int main_dd(rtems_shell_dd_globals* globals, int argc, char *argv[]);
 
-int
+static int
 rtems_shell_main_dd(int argc, char *argv[])
 {
   rtems_shell_dd_globals  dd_globals;

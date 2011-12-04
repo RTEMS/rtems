@@ -22,7 +22,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_rtems_main_alias(int argc, char **argv)
+static int rtems_shell_rtems_main_alias(int argc, char **argv)
 {
   if (argc<3) {
     fprintf(stderr,"too few arguments\n");

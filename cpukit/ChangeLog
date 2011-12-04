@@ -1,5 +1,33 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/cmds.c:
+	Make rtems_shell_main_monitor static.
+	* libmisc/shell/main_alias.c:
+	Make rtems_shell_rtems_main_alias static.
+	* libmisc/shell/main_blksync.c:
+	Make rtems_shell_main_blksync static.
+	* libmisc/shell/main_cat.c:
+	Make rtems_shell_main_cat static.
+	* libmisc/shell/main_chdir.c:
+	Make rtems_shell_main_chdir static.
+	* libmisc/shell/main_chmod.c:
+	Make rtems_shell_main_chmod static.
+	* libmisc/shell/main_chroot.c:
+	Make rtems_shell_main_chroot static.
+	* libmisc/shell/main_cp.c:
+	Make rtems_shell_cp_exit, rtems_shell_main_cp static.
+	* libmisc/shell/main_cpuuse.c:
+	Make rtems_shell_main_cpuuse static.
+	* libmisc/shell/main_date.c: 
+	Make rtems_shell_main_date static.
+	* libmisc/shell/main_dd.c:
+	Make rtems_shell_main_dd static.
+	* libmisc/shell/main_echo.c:
+	Make rtems_shell_main_echo static.
+	* libmisc/shell/main_getenv.c:
+	Make rtems_shell_main_getenv static.
+	* libmisc/shell/main_halt.c:
+	Make rtems_shell_main_halt static.
 	* libmisc/shell/internal.h: #include "shell.h".
 	Add various missing decls.
 	* libmisc/shell/cat_file.c: #include <rtems/shell.h>.

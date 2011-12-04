@@ -28,7 +28,7 @@
 #include <rtems/blkdev.h>
 #include "internal.h"
 
-int rtems_shell_main_blksync(
+static int rtems_shell_main_blksync(
   int argc,
   char *argv[]
 )

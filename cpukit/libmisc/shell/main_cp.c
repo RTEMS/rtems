@@ -102,13 +102,13 @@ static int main_cp(rtems_shell_cp_globals* cp_globals, int, char *[]);
 static int copy(rtems_shell_cp_globals* cp_globals, char *[], enum op, int);
 static int mastercmp(const FTSENT **, const FTSENT **);
 
-void
+static void
 rtems_shell_cp_exit (rtems_shell_cp_globals* cp_global, int code __attribute__((unused)))
 {
   longjmp (cp_global->exit_jmp, 1);
 }
 
-int
+static int
 rtems_shell_main_cp(int argc, char *argv[])
 {
   rtems_shell_cp_globals cp_globals;
