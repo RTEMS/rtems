@@ -1,5 +1,7 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/main_rm.c: Remove decl of user_from_uid.
+	Comment out decl of fflagstostr.
 	* libmisc/shell/pwcache.c: Include "internal.h".
 	Make user_from_uid non-static.
 	* libmisc/shell/internal.h: Add user_from_uid, group_from_gid.

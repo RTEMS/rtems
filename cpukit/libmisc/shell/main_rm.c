@@ -537,8 +537,9 @@ err:	eval = 1;
 	return (0);
 }
 
+#if RTEMS_REMOVED
 char *fflagstostr(u_long flags);
-const char *user_from_uid(uid_t uid, int nouser);
+#endif
 
 int
 check_rm(rtems_shell_rm_globals* globals, char *path, char *name, struct stat *sp)
