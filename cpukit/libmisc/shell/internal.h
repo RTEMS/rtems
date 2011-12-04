@@ -47,5 +47,7 @@ extern int rtems_shell_main_cp(int argc, char *argv[]);
 #include <sys/types.h>
 
 extern void strmode(mode_t mode, char *p);
+extern const char *user_from_uid(uid_t uid, int nouser);
+extern char *group_from_gid(gid_t gid, int nogroup);
 
 #endif

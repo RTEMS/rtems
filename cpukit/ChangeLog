@@ -1,5 +1,9 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/internal.h: Add user_from_uid, group_from_gid.
+
+2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/print-ls.c: Include "internal.h".
 	* libmisc/shell/pwcache.c: Make user_from_uid static.
 	* libmisc/shell/shell.c: Make rtems_shell_init_env,
