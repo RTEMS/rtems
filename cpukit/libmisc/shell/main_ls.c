@@ -132,8 +132,7 @@ rtems_shell_ls_exit (rtems_shell_ls_globals* globals, int code)
 
 static int main_ls(rtems_shell_ls_globals* globals, int argc, char *argv[]);
 
-int
-rtems_shell_main_ls(int argc, char *argv[])
+static int rtems_shell_main_ls(int argc, char *argv[])
 {
   rtems_shell_ls_globals  ls_globals;
   rtems_shell_ls_globals* globals = &ls_globals;

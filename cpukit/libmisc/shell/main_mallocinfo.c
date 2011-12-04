@@ -19,13 +19,12 @@
 
 #include <rtems.h>
 #include <rtems/malloc.h>
+#include <rtems/libcsupport.h>
 #include <rtems/shell.h>
+
 #include "internal.h"
 
-extern int malloc_info( region_information_block * );
-extern void rtems_shell_print_unified_work_area_message(void);
-
-int rtems_shell_main_malloc_info(
+static int rtems_shell_main_malloc_info(
   int   argc,
   char *argv[]
 )

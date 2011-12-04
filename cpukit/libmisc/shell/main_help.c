@@ -27,7 +27,7 @@
 /*
  * show the help for one command.
  */
-int rtems_shell_help_cmd(
+static int rtems_shell_help_cmd(
   rtems_shell_cmd_t *shell_cmd
 )
 {
@@ -76,7 +76,7 @@ int rtems_shell_help_cmd(
  * Can you see the header of routine? Known?
  * The same with all the commands....
  */
-int rtems_shell_help(
+static int rtems_shell_help(
   int argc,
   char * argv[]
 )

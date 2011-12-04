@@ -23,7 +23,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_pwd(
+static int rtems_shell_main_pwd(
   int   argc __attribute__((unused)),
   char *argv[] __attribute__((unused))
 )

@@ -35,7 +35,7 @@
 #error "PRIdtime_t: unsupported size of time_t"
 #endif
 
-int rtems_shell_main_time(
+static int rtems_shell_main_time(
   int   argc,
   char *argv[]
 )

@@ -25,9 +25,7 @@
 #include <rtems/stringto.h>
 #include "internal.h"
 
-extern int rtems_shell_main_mdump(int, char *);
-
-int rtems_shell_main_mmove(
+static int rtems_shell_main_mmove(
   int   argc,
   char *argv[]
 )

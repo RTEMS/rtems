@@ -67,6 +67,8 @@ __FBSDID("$FreeBSD: src/bin/rm/rm.c,v 1.58 2006/10/31 02:22:36 delphij Exp $");
 #include <string.h>
 #include <unistd.h>
 
+#include "internal.h"
+
 #define rindex(s,c)	strrchr(s,c)
 
 /* RTEMS specific changes */
@@ -94,7 +96,7 @@ typedef struct {
 #include <setjmp.h>
 
 #define exit(ec) rtems_shell_rm_exit(globals, ec)
-void
+static void
 rtems_shell_rm_exit (rtems_shell_rm_globals* globals, int code)
 {
   globals->exit_code = code;
@@ -535,7 +537,6 @@ err:	eval = 1;
 	return (0);
 }
 
-void strmode(mode_t mode, char *p);
 char *fflagstostr(u_long flags);
 const char *user_from_uid(uid_t uid, int nouser);
 

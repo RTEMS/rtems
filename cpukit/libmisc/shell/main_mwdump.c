@@ -26,7 +26,7 @@
 #include <rtems/stringto.h>
 #include "internal.h"
 
-int rtems_shell_main_mwdump(
+static int rtems_shell_main_mwdump(
   int   argc,
   char *argv[]
 )

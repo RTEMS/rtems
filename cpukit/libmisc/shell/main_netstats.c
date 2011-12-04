@@ -39,7 +39,7 @@ static void netstats_usage(void)
   );
 }
 
-int rtems_shell_main_netstats(                       /* command */
+static int rtems_shell_main_netstats(                       /* command */
   int   argc,
   char *argv[]
 )

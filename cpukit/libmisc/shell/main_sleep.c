@@ -23,7 +23,7 @@
 #include <rtems/stringto.h>
 #include "internal.h"
 
-int rtems_shell_main_sleep(
+static int rtems_shell_main_sleep(
   int   argc,
   char *argv[]
 )

@@ -16,7 +16,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_unsetenv(int argc, char *argv[])
+static int rtems_shell_main_unsetenv(int argc, char *argv[])
 {
   if (argc != 2)
   {

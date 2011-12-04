@@ -34,7 +34,7 @@ static bool print_filesystem(const rtems_filesystem_table_t *entry, void *arg)
   return false;
 }
 
-int rtems_shell_main_mount(
+static int rtems_shell_main_mount(
   int   argc,
   char *argv[]
 )

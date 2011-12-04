@@ -25,7 +25,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_rmdir (int argc, char *argv[])
+static int rtems_shell_main_rmdir (int argc, char *argv[])
 {
   char *dir;
   int n;

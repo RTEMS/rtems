@@ -1,5 +1,60 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/main_help.c: Make rtems_shell_help_cmd,
+	rtems_shell_help static.
+	* libmisc/shell/main_hexdump.c: Make main_hexdump static.
+	* libmisc/shell/main_id.c: Make rtems_shell_main_id static.
+	* libmisc/shell/main_ifconfig.c: Make rtems_shell_main_ifconfig static.
+	* libmisc/shell/main_ln.c: Make rtems_shell_main_ln static.
+	* libmisc/shell/main_logoff.c: Make rtems_shell_main_logoff static.
+	* libmisc/shell/main_ls.c: Make rtems_shell_main_ls static.
+	* libmisc/shell/main_mallocinfo.c: Include <rtems/libcsupport.h>.
+	Remove private decls of malloc_info,
+	rtems_shell_print_unified_work_area_message.
+	Make rtems_shell_main_malloc_info static.
+	* libmisc/shell/main_medit.c: Remove private decl of
+	rtems_shell_main_mdump.
+	Make rtems_shell_main_medit static.
+	* libmisc/shell/main_mfill.c: Make rtems_shell_main_mfill static.
+	* libmisc/shell/main_mkdir.c: Make rtems_shell_main_mkdir static.
+	* libmisc/shell/main_mknod.c: Make rtems_shell_main_mknod static.
+	* libmisc/shell/main_mmove.c: Remove private decl of
+	rtems_shell_main_mdump.
+	Make rtems_shell_main_mmove static.
+	* libmisc/shell/main_mount.c: Make rtems_shell_main_mount static.
+	* libmisc/shell/main_msdosfmt.c: Make rtems_shell_main_msdos_format
+	static.
+	* libmisc/shell/main_mv.c: Include "internal.h".
+	Make rtems_shell_mv_exit, rtems_shell_main_mv static.
+	Remove private decls of strmode rtems_shell_main_cp, 
+	rtems_shell_main_rm.
+	* libmisc/shell/main_mwdump.c: Make rtems_shell_main_mwdump static.
+	* libmisc/shell/main_netstats.c: Make rtems_shell_main_netstats
+	static.
+	* libmisc/shell/main_perioduse.c: Make rtems_shell_main_perioduse
+	static.
+	* libmisc/shell/main_pwd.c: Make rtems_shell_main_pwd static.
+	* libmisc/shell/main_rm.c: Include "internal.h".
+	Make rtems_shell_rm_exit static.
+	Remove private decl of strmode.
+	* libmisc/shell/main_rmdir.c: Make rtems_shell_main_rmdir static.
+	libmisc/shell/main_route.c: Make rtems_shell_main_route static.
+	* libmisc/shell/main_setenv.c: Make rtems_shell_main_setenv static.
+	* libmisc/shell/main_sleep.c: Make rtems_shell_main_sleep static.
+	* libmisc/shell/main_stackuse.c: Make rtems_shell_main_stackuse static.
+	* libmisc/shell/main_time.c: Make rtems_shell_main_time static.
+	* libmisc/shell/main_tty.c: Make rtems_shell_main_tty static.
+	* libmisc/shell/main_umask.c: Make rtems_shell_main_umask static.
+	* libmisc/shell/main_unmount.c: Make rtems_shell_main_unmount
+	static.
+	* libmisc/shell/main_unsetenv.c: Make rtems_shell_main_unsetenv
+	static.
+	* libmisc/shell/main_whoami.c: Make rtems_shell_main_whoami static.
+	* libmisc/shell/main_wkspaceinfo.c: Make
+	rtems_shell_main_wkspace_info static.
+
+2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/cmds.c:
 	Make rtems_shell_main_monitor static.
 	* libmisc/shell/main_alias.c:

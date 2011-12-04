@@ -24,7 +24,7 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
-int rtems_shell_main_msdos_format(
+static int rtems_shell_main_msdos_format(
   int   argc,
   char *argv[]
 )

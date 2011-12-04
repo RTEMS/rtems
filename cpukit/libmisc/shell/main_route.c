@@ -27,7 +27,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_route(
+static int rtems_shell_main_route(
   int   argc,
   char *argv[]
 )

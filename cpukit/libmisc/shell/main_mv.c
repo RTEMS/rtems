@@ -74,6 +74,8 @@ __RCSID("$NetBSD: mv.c,v 1.41 2008/07/20 00:52:40 lukem Exp $");
 #include <string.h>
 #include <unistd.h>
 
+#include "internal.h"
+
 #include "pathnames-mv.h"
 
 /* RTEMS specific changes */
@@ -100,23 +102,17 @@ int	main(int, char *[]);
 
 #define exit(ec) rtems_shell_mv_exit(globals, ec)
 
-void
+static void
 rtems_shell_mv_exit (rtems_shell_mv_globals* globals, int code)
 {
   globals->exit_code = code;
   longjmp (globals->exit_jmp, 1);
 }
 
-void strmode(mode_t mode, char *p);
 const char *user_from_uid(uid_t uid, int nouser);
 char *group_from_gid(gid_t gid, int nogroup);
 
-static int main_mv(rtems_shell_mv_globals* globals, int argc, char *argv[]);
-
-int rtems_shell_main_cp(int argc, char *argv[]);
-int rtems_shell_main_rm(int argc, char *argv[]);
-
-int
+static int
 rtems_shell_main_mv(int argc, char *argv[])
 {
   rtems_shell_mv_globals mv_globals;

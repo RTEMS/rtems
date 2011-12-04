@@ -16,7 +16,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_setenv(int argc, char *argv[])
+static int rtems_shell_main_setenv(int argc, char *argv[])
 {
   char* env = NULL;
   char* string = NULL;

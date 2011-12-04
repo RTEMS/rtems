@@ -79,7 +79,7 @@ rtems_shell_hexdump_exit (rtems_shell_hexdump_globals* globals, int code)
 
 static int main_hexdump(rtems_shell_hexdump_globals* globals, int argc, char *argv[]);
 
-int
+static int
 rtems_shell_main_hexdump(int argc, char *argv[])
 {
   rtems_shell_hexdump_globals  hexdump_globals;

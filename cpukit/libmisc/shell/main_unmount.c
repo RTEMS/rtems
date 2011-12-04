@@ -27,7 +27,7 @@
 #include <rtems/fsmount.h>
 #include "internal.h"
 
-int rtems_shell_main_unmount(
+static int rtems_shell_main_unmount(
   int   argc,
   char *argv[]
 )

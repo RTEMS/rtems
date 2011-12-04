@@ -28,7 +28,7 @@
 #include <rtems/stringto.h>
 #include "internal.h"
 
-int rtems_shell_main_umask(
+static int rtems_shell_main_umask(
   int   argc,
   char *argv[]
 )

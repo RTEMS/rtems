@@ -25,7 +25,7 @@
 #include <rtems/stringto.h>
 #include "internal.h"
 
-int rtems_shell_main_mfill(
+static int rtems_shell_main_mfill(
   int   argc,
   char *argv[]
 )

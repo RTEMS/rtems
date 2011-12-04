@@ -100,7 +100,7 @@ rtems_shell_mknod_exit (rtems_shell_mknod_globals* globals, int code)
 
 #include "mknod-pack_dev.c"
 
-int
+static int
 rtems_shell_main_mknod(int argc, char *argv[])
 {
   rtems_shell_mknod_globals  mknod_globals;

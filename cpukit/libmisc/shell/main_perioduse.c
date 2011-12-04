@@ -21,7 +21,7 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
-int rtems_shell_main_perioduse(
+static int rtems_shell_main_perioduse(
   int   argc,
   char *argv[]
 )
