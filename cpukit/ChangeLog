@@ -1,5 +1,7 @@
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/internal.h: #include "shell.h".
+	Add various missing decls.
 	* libmisc/shell/cat_file.c: #include <rtems/shell.h>.
 	* libmisc/shell/filemode.c: #include "internal.h".
 	* libmisc/shell/shell.h: Declare functions "extern".
