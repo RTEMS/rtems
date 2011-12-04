@@ -85,6 +85,8 @@ __RCSID("$NetBSD: cp.c,v 1.39 2005/10/24 12:59:07 kleink Exp $");
 #include <string.h>
 #include <unistd.h>
 
+#include "internal.h"
+
 #include "extern-cp.h"
 
 #define S_ISTXT 0
@@ -108,7 +110,7 @@ rtems_shell_cp_exit (rtems_shell_cp_globals* cp_global, int code __attribute__((
   longjmp (cp_global->exit_jmp, 1);
 }
 
-static int
+int
 rtems_shell_main_cp(int argc, char *argv[])
 {
   rtems_shell_cp_globals cp_globals;
