@@ -305,6 +305,9 @@ extern rtems_status_code rtems_shell_wait_for_input(
   void *notification_arg
 );
 
+extern int rtems_shell_main_monitor(int argc, char **argv);
+
+
 #ifdef __cplusplus
 }
 #endif

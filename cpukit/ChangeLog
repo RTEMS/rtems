@@ -1,5 +1,10 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/shell/shell.h: Add rtems_shell_main_monitor.
+	* libmisc/shell/cmds.c: Make rtems_shell_main_monitor non-static.
+
+2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/src/tasks.c: Fix typos.
 	* rtems/src/taskinitusers.c: Fix typos.
 	* posix/src/pthread.c: Fix typos.

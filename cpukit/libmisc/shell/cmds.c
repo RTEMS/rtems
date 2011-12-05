@@ -29,7 +29,7 @@
  * with this you can call at all the rtems monitor commands.
  * Not all work fine but you can show the rtems status and more.
  *-----------------------------------------------------------*/
-static int rtems_shell_main_monitor(int argc, char **argv) {
+int rtems_shell_main_monitor(int argc, char **argv) {
   const rtems_monitor_command_entry_t *command = NULL;
 
   if (argc < 1) {
