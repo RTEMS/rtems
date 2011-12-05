@@ -1,3 +1,7 @@
+2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/main_mv.c: Add prototype for main_mv.
+
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/shell/main_cp.c: Include "internal.h".

@@ -102,6 +102,10 @@ int	main(int, char *[]);
 
 #define exit(ec) rtems_shell_mv_exit(globals, ec)
 
+static int
+main_mv(rtems_shell_mv_globals* globals, int argc, char *argv[]);
+
+
 static void
 rtems_shell_mv_exit (rtems_shell_mv_globals* globals, int code)
 {
