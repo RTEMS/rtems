@@ -26,6 +26,8 @@
 #define DEVICE_NAME "/dev/midi"
 
 static rtems_id midi_q;
+static unsigned char *midi_p = NULL;
+static unsigned char midi_msg[3];
 
 static rtems_isr interrupt_handler(rtems_vector_number n)
 {
@@ -34,7 +36,23 @@ static rtems_isr interrupt_handler(rtems_vector_number n)
   while (MM_READ(MM_MIDI_STAT) & MIDI_STAT_RX_EVT) {
     msg = MM_READ(MM_MIDI_RXTX);
     MM_WRITE(MM_MIDI_STAT, MIDI_STAT_RX_EVT);
-    rtems_message_queue_send(midi_q, &msg, 1);
+
+    if ((msg & 0xf8) == 0xf8)
+      continue; /* ignore system real-time */
+
+    if (msg & 0x80)
+      midi_p = midi_msg; /* status byte */
+
+    if (!midi_p)
+      continue; /* ignore extra or unsynchronized data */
+
+    *midi_p++ = msg;
+
+    if (midi_p == midi_msg+3) {
+      /* received a complete MIDI message */
+      rtems_message_queue_send(midi_q, midi_msg, 3);
+      midi_p = NULL;
+    }
   }
   lm32_interrupt_ack(1 << MM_IRQ_MIDI);
 }
@@ -53,8 +71,8 @@ rtems_device_driver midi_initialize(
 
  sc = rtems_message_queue_create(
     rtems_build_name('M', 'I', 'D', 'I'),
-    64,
-    1,
+    32,
+    3,
     0,
     &midi_q
   );

@@ -1,3 +1,8 @@
+2011-12-05	Sebastien Bourdeauducq <seb@tmplab.org>
+
+	* milkymist_midi/midi.c: move MIDI message detection from higher layers
+	to the MIDI interrupt handler
+
 2011-11-27	Sebastien Bourdeauducq <seb@tmplab.org>
 
 	PR 1972/bsps
