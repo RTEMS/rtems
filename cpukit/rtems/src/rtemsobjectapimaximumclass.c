@@ -18,6 +18,7 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/types.h>
+#include <rtems/rtems/object.h>
 
 int rtems_object_api_maximum_class(
   int api

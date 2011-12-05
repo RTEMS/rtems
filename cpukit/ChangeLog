@@ -1,5 +1,9 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/rtemsobjectapimaximumclass.c: 
+	Include <rtems/rtems/object.h> (Missing prototypes).
+	* sapi/src/exshutdown.c:
+	Include <rtems/init.h> (Missing prototypes).
 	* libmisc/mouse/mouse_parser.c: Make MOU_Data static.
 
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
