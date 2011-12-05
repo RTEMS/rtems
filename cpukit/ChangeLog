@@ -1,6 +1,7 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
-	* rtems/include/rtems/rtems/tasks.h: Typo fixes.
+	* posix/src/pthreadinitthreads.c: Fix typos.
+	* rtems/include/rtems/rtems/tasks.h: Fix typos.
 
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 

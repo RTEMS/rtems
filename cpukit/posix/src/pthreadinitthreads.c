@@ -36,7 +36,7 @@
  *  _POSIX_Threads_Initialize_user_threads_body
  *
  *  This routine creates and starts all configured user
- *  initialzation threads.
+ *  initialization threads.
  *
  *  Input parameters: NONE
  *
