@@ -1,5 +1,6 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/termios.c: Remove unnecessary cast.
 	* libmisc/shell/main_mv.c: Add prototype for main_mv.
 
 2011-12-04	Ralf Corsépius <ralf.corsepius@rtems.org>
