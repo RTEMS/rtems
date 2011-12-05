@@ -15,14 +15,10 @@
 #include "config.h"
 #endif
 
-#include <sys/stat.h>
-#include <errno.h>
+#include <unistd.h>
 
 #include <rtems.h>
-#include <rtems/libio.h>
-
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int _chown_helper(
   const char *path,

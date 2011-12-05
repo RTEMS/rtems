@@ -1,5 +1,10 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/chown.c, libcsupport/src/lchown.c:
+	Include <unistd.h>. Cleanup included headers.
+
+2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/include/rtems/posix/pthread.h:
 	Add _POSIX_Threads_Initialize_user_threads_body.
 	* rtems/include/rtems/rtems/tasks.h:
