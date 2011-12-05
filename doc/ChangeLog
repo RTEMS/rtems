@@ -1,3 +1,13 @@
+2011-12-05	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* ada_user/version.texi, bsp_howto/version.texi,
+	cpu_supplement/version.texi, develenv/version.texi,
+	filesystem/version.texi, networking/version.texi,
+	porting/version.texi, posix1003.1/version.texi,
+	posix_users/version.texi, shell/version.texi, started/version.texi,
+	user/version.texi: Update to match when files in directory where last
+	touched.
+
 2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	* user/conf.t: Added a bsp override option for MAXIMUM_DEVICES.
