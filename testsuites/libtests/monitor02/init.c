@@ -25,12 +25,6 @@
 #include <rtems/shellconfig.h>
 #define MAX_ARGS 128
 
-/*
- * HACK: API visibility violation
- * rtems_shell_main_monitor should better be declared in rtems/shell.h
- */
-extern int rtems_shell_main_monitor(int argc, char **argv);
-
 char        *Commands[] = {
   "task",
   "task 32",
