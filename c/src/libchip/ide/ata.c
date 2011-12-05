@@ -421,7 +421,10 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
     ata_req_t       *areq;
     uint16_t         byte; /* emphasize that only 8 low bits is meaningful */
     ata_queue_msg_t  msg;
-    uint8_t          i, dev;
+    uint8_t          i;
+#if 0
+    uint8_t          dev;
+#endif
     uint16_t         val;
     ISR_Level        level;
 
@@ -434,9 +437,11 @@ ata_process_request(rtems_device_minor_number ctrl_minor)
     areq = (ata_req_t *)rtems_chain_first(&ata_ide_ctrls[ctrl_minor].reqs);
     _ISR_Enable(level);
 
+#if 0
     /* get ATA device identifier (0 or 1) */
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
+#endif
 
     /* execute device select protocol */
     ide_controller_write_register(ctrl_minor, IDE_REGISTER_DEVICE_HEAD,
@@ -742,11 +747,15 @@ static inline void
 ata_pio_in_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 {
     uint16_t        val;
+#if 0
     uint8_t         dev;
+#endif
     ata_queue_msg_t msg;
 
+#if 0
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
+#endif
 
     if (areq->cnt)
     {
@@ -786,15 +795,19 @@ static inline void
 ata_pio_out_protocol(rtems_device_minor_number ctrl_minor, ata_req_t *areq)
 {
     uint16_t        val;
+#if 0
     uint8_t         dev;
+#endif
     ata_queue_msg_t msg;
 
 #if ATA_DEBUG
     ata_printf("ata_pio_out_protocol:\n");
 #endif
 
+#if 0
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
+#endif
 
     if (areq->cnt == 0)
     {

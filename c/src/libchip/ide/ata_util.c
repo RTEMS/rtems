@@ -35,14 +35,19 @@ ata_process_request_on_init_phase(rtems_device_minor_number  ctrl_minor,
                                   ata_req_t                 *areq)
 {
     uint16_t           byte;/* emphasize that only 8 low bits is meaningful */
-    uint8_t            i, dev;
+    uint8_t            i;
+#if 0
+    uint8_t            dev;
+#endif
     uint16_t           val, val1;
     volatile unsigned  retries;
 
     assert(areq);
 
+#if 0
     dev =  areq->regs.regs[IDE_REGISTER_DEVICE_HEAD] &
            IDE_REGISTER_DEVICE_HEAD_DEV;
+#endif
 
     ide_controller_write_register(ctrl_minor, IDE_REGISTER_DEVICE_HEAD,
                                   areq->regs.regs[IDE_REGISTER_DEVICE_HEAD]);

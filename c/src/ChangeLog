@@ -1,3 +1,8 @@
+2011-12-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1975/misc
+	* libchip/ide/ata.c, libchip/ide/ata_util.c: Fixed warnings.
+
 2011-12-03	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/ide/ata.c: Make ata_interrupt_handler static.
