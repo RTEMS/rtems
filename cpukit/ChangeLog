@@ -1,5 +1,9 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/mouse/mouse_parser.c: Make MOU_Data static.
+
+2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/chown.c, libcsupport/src/lchown.c:
 	Include <unistd.h>. Cleanup included headers.
 

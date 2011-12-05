@@ -130,7 +130,7 @@ int mouse_parser_initialize(const char *type)
  * When a new state is read, the current buttons and x and y deltas
  * are returned.  This routine does not block.
  */
-int MOU_Data( int ch, COORD *dx, COORD *dy, COORD *dz, BUTTON *bptr)
+static int MOU_Data( int ch, COORD *dx, COORD *dy, COORD *dz, BUTTON *bptr)
 {
   int b;
 
