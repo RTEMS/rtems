@@ -96,7 +96,7 @@ typedef struct rtems_capture_control_s
 /**
  * Control flags.
  */
-#define RTEMS_CAPTURE_WATCH         (1 << 0)
+#define RTEMS_CAPTURE_WATCH         (1U << 0)
 
 /**
  * Control triggers.
@@ -169,7 +169,7 @@ typedef struct rtems_capture_task_s
 /**
  * Task flags.
  */
-#define RTEMS_CAPTURE_TRACED  (1 << 0)
+#define RTEMS_CAPTURE_TRACED  (1U << 0)
 
 /*
  * rtems_capture_record_t

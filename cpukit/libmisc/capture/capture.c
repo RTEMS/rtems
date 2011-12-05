@@ -60,14 +60,14 @@
 /*
  * Global capture flags.
  */
-#define RTEMS_CAPTURE_ON             (1 << 0)
-#define RTEMS_CAPTURE_NO_MEMORY      (1 << 1)
-#define RTEMS_CAPTURE_OVERFLOW       (1 << 2)
-#define RTEMS_CAPTURE_TRIGGERED      (1 << 3)
-#define RTEMS_CAPTURE_READER_ACTIVE  (1 << 4)
-#define RTEMS_CAPTURE_READER_WAITING (1 << 5)
-#define RTEMS_CAPTURE_GLOBAL_WATCH   (1 << 6)
-#define RTEMS_CAPTURE_ONLY_MONITOR   (1 << 7)
+#define RTEMS_CAPTURE_ON             (1U << 0)
+#define RTEMS_CAPTURE_NO_MEMORY      (1U << 1)
+#define RTEMS_CAPTURE_OVERFLOW       (1U << 2)
+#define RTEMS_CAPTURE_TRIGGERED      (1U << 3)
+#define RTEMS_CAPTURE_READER_ACTIVE  (1U << 4)
+#define RTEMS_CAPTURE_READER_WAITING (1U << 5)
+#define RTEMS_CAPTURE_GLOBAL_WATCH   (1U << 6)
+#define RTEMS_CAPTURE_ONLY_MONITOR   (1U << 7)
 
 /*
  * RTEMS Capture Data.
@@ -574,7 +574,7 @@ rtems_capture_record (rtems_capture_task_t* task,
  * See if we have triggered and if not see if this event is a
  * cause of a trigger.
  */
-bool
+static bool
 rtems_capture_trigger (rtems_capture_task_t* ft,
                        rtems_capture_task_t* tt,
                        uint32_t              events)
@@ -1480,7 +1480,7 @@ rtems_capture_watch_get_floor (void)
  * Map the trigger to a bit mask.
  *
  */
-uint32_t
+static uint32_t
 rtems_capture_map_trigger (rtems_capture_trigger_t trigger)
 {
   /*
