@@ -1,5 +1,15 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/include/rtems/posix/pthread.h:
+	Add _POSIX_Threads_Initialize_user_threads_body.
+	* rtems/include/rtems/rtems/tasks.h:
+	Add _RTEMS_tasks_Initialize_user_tasks_body.
+	* sapi/include/confdefs.h: Remove conditional, nested redeclaration of 
+	_POSIX_Threads_Initialize_user_threads_body,
+	_RTEMS_tasks_Initialize_user_tasks_body.
+
+2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/shell/shell.h: Add rtems_shell_main_monitor.
 	* libmisc/shell/cmds.c: Make rtems_shell_main_monitor non-static.
 

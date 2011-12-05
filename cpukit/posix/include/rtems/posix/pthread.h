@@ -165,6 +165,14 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_CPU_budget_algorithm_callout *budget_callout
 );
 
+/**
+ *  @brief  _POSIX_Threads_Initialize_user_threads_body
+ *
+ *  This routine creates and starts all configured user
+ *  initialization threads.
+ */
+extern void _POSIX_Threads_Initialize_user_threads_body(void);
+
 #include <rtems/posix/pthread.inl>
 
 #ifdef __cplusplus

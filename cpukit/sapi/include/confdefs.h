@@ -2234,7 +2234,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef CONFIGURE_INIT
   #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) || \
       defined(CONFIGURE_HAS_OWN_INIT_TASK_TABLE)
-    void (_RTEMS_tasks_Initialize_user_tasks_body)(void);
     void (*_RTEMS_tasks_Initialize_user_tasks_p)(void) =
               _RTEMS_tasks_Initialize_user_tasks_body;
   #else
@@ -2250,7 +2249,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #ifdef CONFIGURE_INIT
     #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
         defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
-      void _POSIX_Threads_Initialize_user_threads_body(void);
       void (*_POSIX_Threads_Initialize_user_threads_p)(void) =
                 _POSIX_Threads_Initialize_user_threads_body;
     #else

@@ -491,6 +491,19 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
   rtems_task_variable_t *tvp
 );
 
+/**
+ *  @brief _RTEMS_tasks_Initialize_user_tasks_body
+ *
+ *  This routine creates and starts all configured user
+ *  initialization threads.
+ *
+ *  Input parameters: NONE
+ *
+ *  Output parameters:  NONE
+ */
+
+extern void _RTEMS_tasks_Initialize_user_tasks_body( void );
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/tasks.inl>
 #endif
