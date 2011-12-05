@@ -24,6 +24,8 @@
 #include "config.h"
 #endif
 
+#include <pthread.h>
+
 #include <errno.h>
 #include <rtems/seterr.h>
 
