@@ -38,7 +38,7 @@
  *  _RTEMS_tasks_Initialize_user_tasks_body
  *
  *  This routine creates and starts all configured user
- *  initialzation threads.
+ *  initialization threads.
  *
  *  Input parameters: NONE
  *
