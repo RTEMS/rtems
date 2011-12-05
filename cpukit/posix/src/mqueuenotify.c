@@ -46,7 +46,7 @@
  *
  */
 
-void _POSIX_Message_queue_Notify_handler(
+static void _POSIX_Message_queue_Notify_handler(
   void    *user_data
 )
 {
