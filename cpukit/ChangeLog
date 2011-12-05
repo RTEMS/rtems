@@ -1,5 +1,11 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/mqueuetranslatereturncode.c:
+	Include <rtems/posix/mqueue.h> (Missing prototypes).
+	* posix/src/mutextranslatereturncode.c:
+	Include <rtems/posix/mutex.h> (Missing prototypes).
+	* posix/src/semaphoretranslatereturncode.c:
+	Include <rtems/posix/semaphore.h> (Missing prototypes).
 	* posix/src/mqueuenotify.c: Make _POSIX_Message_queue_Notify_handler
 	static.
 	* posix/src/fork.c: Include <unistd.h> for "fork" prototype.

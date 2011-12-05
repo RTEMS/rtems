@@ -20,6 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/coresem.h>
+#include <rtems/posix/semaphore.h>
 
 /*
  *  _POSIX_Semaphore_Translate_core_semaphore_return_code

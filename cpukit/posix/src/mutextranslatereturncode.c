@@ -20,6 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
+#include <rtems/posix/mutex.h>
 
 /*
  *  _POSIX_Mutex_Translate_core_mutex_return_code
