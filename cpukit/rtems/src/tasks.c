@@ -284,7 +284,7 @@ void _RTEMS_tasks_Manager_initialization(void)
  *  _RTEMS_tasks_Initialize_user_tasks
  *
  *  This routine creates and starts all configured user
- *  initialzation threads.
+ *  initialization threads.
  *
  *  Input parameters: NONE
  *
