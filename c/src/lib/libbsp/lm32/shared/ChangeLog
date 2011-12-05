@@ -1,5 +1,10 @@
+2011-12-05	Gedare Bloom <gedare@rtems.org>
+
+	* ChangeLog: Add PR number to ChangeLog entry
+
 2011-12-05	Sebastien Bourdeauducq <seb@tmplab.org>
 
+	PR 1979/bsps
 	* milkymist_midi/midi.c: move MIDI message detection from higher layers
 	to the MIDI interrupt handler
 
