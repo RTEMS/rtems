@@ -295,7 +295,7 @@ static void _POSIX_Threads_Exitted_extension(
  *  _POSIX_Threads_Initialize_user_threads
  *
  *  This routine creates and starts all configured user
- *  initialzation threads.
+ *  initialization threads.
  */
 static void _POSIX_Threads_Initialize_user_threads( void )
 {
