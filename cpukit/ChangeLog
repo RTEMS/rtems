@@ -1,5 +1,9 @@
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/include/rtems/rtems/tasks.h: Typo fixes.
+
+2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/pthreadatfork.c:
 	Include <pthread.h> (Missing prototypes).
 	* posix/src/mqueuetranslatereturncode.c:

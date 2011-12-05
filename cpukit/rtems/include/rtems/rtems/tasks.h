@@ -468,7 +468,7 @@ rtems_id rtems_task_self(void);
  *  @brief _RTEMS_tasks_Initialize_user_tasks
  *
  *  This routine creates and starts all configured user
- *  initialzation threads.
+ *  initialization threads.
  *
  *  Input parameters: NONE
  *
@@ -477,7 +477,7 @@ rtems_id rtems_task_self(void);
 void _RTEMS_tasks_Initialize_user_tasks( void );
 
 /**
- *  @brief _RTEMS_Tasks_Invoke_task_variable_dtor(
+ *  @brief _RTEMS_Tasks_Invoke_task_variable_dtor
  *
  *  This routine invokes the optional user provided destructor on the
  *  task variable and frees the memory for the task variable.
