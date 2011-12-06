@@ -1,5 +1,8 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/mouse/serial_mouse.c: Make serial_mouse_l_rint static.
+	* libfs/src/pipe/pipe.c: Include <rtems/pipe.h> (Missing
+	prototypes).
 	* libcsupport/src/malloc_sbrk_helpers.c: Make
 	malloc_sbrk_initialize, malloc_sbrk_extend_and_allocate static.
 

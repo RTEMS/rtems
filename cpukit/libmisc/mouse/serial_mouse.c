@@ -25,7 +25,7 @@ int         serial_mouse_fd = -1;
 const char *serial_mouse_device;
 const char *serial_mouse_type;
 
-int serial_mouse_l_rint(int c, struct rtems_termios_tty *tp)
+static int serial_mouse_l_rint(int c, struct rtems_termios_tty *tp)
 {
   unsigned char buf = c;
   
