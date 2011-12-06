@@ -1,8 +1,14 @@
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/libio.h:
+	Make LIBIO_FLAGS_* defined unsigned (Avoid implicit sign
+	conversions).
+
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libmisc/capture/capture.c: 
 	Make RTEMS_CAPTURE_* defines unsigned (Avoid implicit
-	sign-conversions).
+	sign conversions).
 	Make rtems_capture_trigger static (Missing prototypes).
 	Make rtems_capture_trigger static (Missing prototypes).
 	* libmisc/capture/capture.h:
