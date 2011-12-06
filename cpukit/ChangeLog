@@ -1,5 +1,17 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* score/src/schedulercbsattachthread.c,
+	score/src/schedulercbsdestroyserver.c,
+	score/src/schedulercbsdetachthread.c,
+	score/src/schedulercbsgetapprovedbudget.c,
+	score/src/schedulercbsgetexecutiontime.c,
+	score/src/schedulercbsgetparameters.c,
+	score/src/schedulercbsgetremainingbudget.c,
+	score/src/schedulercbssetparameters.c:
+	Remove checks for server_id < 0 (server_id is unsigned).
+
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/pspinlocktranslatereturncode.c:
 	Include <rtems/posix/spinlock.h> (Missing prototypes).
 	* libfs/src/imfs/imfs_debug.c: Make IMFS_print_jnode, 

@@ -23,7 +23,7 @@ int _Scheduler_CBS_Set_parameters (
   Scheduler_CBS_Parameters *params
 )
 {
-  if ( server_id < 0 || server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   if ( params->budget <= 0 ||

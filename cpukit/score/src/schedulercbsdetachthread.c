@@ -33,7 +33,7 @@ int _Scheduler_CBS_Detach_thread (
     _Thread_Enable_dispatch();
   }
 
-  if ( server_id < 0 || server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   if ( !the_thread )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;

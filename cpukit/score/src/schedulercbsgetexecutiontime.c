@@ -27,7 +27,7 @@ int _Scheduler_CBS_Get_execution_time (
   Objects_Locations location;
   Thread_Control *the_thread;
 
-  if ( server_id < 0 || server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
   if ( !_Scheduler_CBS_Server_list[server_id] )
     return SCHEDULER_CBS_ERROR_NOSERVER;

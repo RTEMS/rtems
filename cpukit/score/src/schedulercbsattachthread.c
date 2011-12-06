@@ -28,7 +28,7 @@ int _Scheduler_CBS_Attach_thread (
   Thread_Control *the_thread;
   Scheduler_CBS_Per_thread *sched_info;
 
-  if ( server_id < 0 || server_id >= _Scheduler_CBS_Maximum_servers )
+  if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
 
   the_thread = _Thread_Get(task_id, &location);
