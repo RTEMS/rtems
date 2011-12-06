@@ -322,7 +322,23 @@ lidate */
 #define BOOKE_TCR_FPEXT_MASK	(0xf<<13)
 
 #define BOOKE_PID 48
+#define BOOKE_ESR 62
+#define BOOKE_IVPR 63
 #define BOOKE_PIR 286
+#define BOOKE_DBSR 304
+#define BOOKE_DBCR0 308
+#define BOOKE_DBCR1 309
+#define BOOKE_DBCR2 310
+#define BOOKE_DAC1 316
+#define BOOKE_DAC2 317
+#define BOOKE_DVC1 318
+#define BOOKE_DVC2 319
+
+/* Freescale Book E Implementation Standards (EIS): Branch Operations */
+
+#define FSL_EIS_BUCSR 1013
+#define FSL_EIS_BUCSR_BBFI (1 << (63 - 54))
+#define FSL_EIS_BUCSR_BPEN (1 << (63 - 63))
 
 /* Freescale Book E Implementation Standards (EIS): Hardware Implementation-Dependent Registers */
 
@@ -418,9 +434,28 @@ lidate */
 #define FSL_EIS_ATBL 526
 #define FSL_EIS_ATBU 527
 
+/* Freescale Book E Implementation Standards (EIS): Interrupt */
+
+#define FSL_EIS_MCAR 573 
+#define FSL_EIS_DSRR0 574 
+#define FSL_EIS_DSRR1 575 
+
 /* Freescale Book E Implementation Standards (EIS): Signal Processing Engine (SPE) */
 
 #define FSL_EIS_SPEFSCR 512
+
+/* Freescale Book E Implementation Standards (EIS): Software-Use SPRs */
+
+#define FSL_EIS_SPRG8 604 
+#define FSL_EIS_SPRG9 605 
+
+/* Freescale Book E Implementation Standards (EIS): Debug */
+
+#define FSL_EIS_DBCR3 561 
+#define FSL_EIS_DBCR4 563 
+#define FSL_EIS_DBCR5 564 
+#define FSL_EIS_DBCR6 603 
+#define FSL_EIS_DBCNT 562 
 
 /**
  * @brief Default value for the interrupt disable mask.
