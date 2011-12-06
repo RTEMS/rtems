@@ -82,23 +82,23 @@ libbsp_a_CPPFLAGS =
 libbsp_a_LIBADD =
 
 # Shared
-libbsp_a_SOURCES += ../../shared/bootcard.c \
-	../../shared/bspclean.c \
-	../../shared/bspgetworkarea.c \
-	../../shared/bsplibc.c \
-	../../shared/bsppost.c \
-	../../shared/bsppredriverhook.c \
-	../../shared/bsppretaskinghook.c \
-	../../shared/gnatinstallhandler.c \
-	../../shared/sbrk.c \
-	../../shared/src/stackalloc.c \
-	../../shared/src/uart-output-char.c \
-	../shared/abort/simple_abort.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += ../../shared/src/stackalloc.c
+libbsp_a_SOURCES += ../../shared/src/uart-output-char.c
+libbsp_a_SOURCES += ../shared/abort/simple_abort.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 
 # Startup
-libbsp_a_SOURCES += startup/bspstart.c \
-	startup/bspreset.c
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += startup/bspstart.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
@@ -126,16 +126,17 @@ libbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
 
 # Misc
-libbsp_a_SOURCES += misc/timer.c \
-	misc/nand-mlc.c \
-	misc/nand-mlc-read-blocks.c \
-	misc/nand-mlc-write-blocks.c \
-	misc/nand-mlc-erase-block-safe.c \
-	misc/restart.c \
-	misc/boot.c \
-	misc/emc.c \
-	misc/mmu.c \
-	misc/i2c.c
+libbsp_a_SOURCES += misc/boot.c
+libbsp_a_SOURCES += misc/emc.c
+libbsp_a_SOURCES += misc/i2c.c
+libbsp_a_SOURCES += misc/mmu.c
+libbsp_a_SOURCES += misc/nand-mlc.c
+libbsp_a_SOURCES += misc/nand-mlc-erase-block-safe.c
+libbsp_a_SOURCES += misc/nand-mlc-read-blocks.c
+libbsp_a_SOURCES += misc/nand-mlc-write-blocks.c
+libbsp_a_SOURCES += misc/restart.c
+libbsp_a_SOURCES += misc/system-clocks.c
+libbsp_a_SOURCES += misc/timer.c
 
 # SSP
 

@@ -93,9 +93,6 @@ static void dynamic_init(const lpc32xx_emc_dynamic_config *cfg)
 
 void lpc32xx_emc_init(const lpc32xx_emc_dynamic_config *dyn_cfg)
 {
-  /* Enable clock */
-  LPC32XX_HCLKDIV_CTRL |= HCLK_DIV_DDRAM_CLK(1);
-
   /* Enable buffers in AHB ports */
   emc_ahb [0].control = EMC_AHB_PORT_BUFF_EN;
   emc_ahb [3].control = EMC_AHB_PORT_BUFF_EN;

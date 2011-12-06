@@ -1,3 +1,14 @@
+2011-12-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* misc/system-clocks.c: New file.
+	* Makefile.am: Reflect change from above.
+	* include/nand-mlc.h: Fixed lpc32xx_mlc_is_bad_page().
+	* make/custom/lpc32xx.inc, make/custom/lpc32xx_mzx_stage_1.cfg: Flags
+	for EABI tool chain.
+	* configure.ac, include/bsp.h, include/lpc32xx.h, misc/emc.c,
+	misc/i2c.c, rtc/rtc-config.c, startup/bspstarthooks.c: Avoid compile
+	time ARM_CLK and HCLK.
+
 2011-11-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am: Add shared/startup/bsp-start-memcpy.S

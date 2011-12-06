@@ -201,8 +201,11 @@
 
 #define HCLK_PLL_LOCK BSP_BIT32(0)
 #define HCLK_PLL_M(val) BSP_FLD32(val, 1, 8)
+#define HCLK_PLL_M_GET(reg) BSP_FLD32GET(reg, 1, 8)
 #define HCLK_PLL_N(val) BSP_FLD32(val, 9, 10)
+#define HCLK_PLL_N_GET(reg) BSP_FLD32GET(reg, 9, 10)
 #define HCLK_PLL_P(val) BSP_FLD32(val, 11, 12)
+#define HCLK_PLL_P_GET(reg) BSP_FLD32GET(reg, 11, 12)
 #define HCLK_PLL_FBD_FCLKOUT BSP_BIT32(13)
 #define HCLK_PLL_DIRECT BSP_BIT32(14)
 #define HCLK_PLL_BYPASS BSP_BIT32(15)
@@ -217,8 +220,11 @@
  */
 
 #define HCLK_DIV_HCLK(val) BSP_FLD32(val, 0, 1)
+#define HCLK_DIV_HCLK_GET(reg) BSP_FLD32GET(reg, 0, 1)
 #define HCLK_DIV_PERIPH_CLK(val) BSP_FLD32(val, 2, 6)
+#define HCLK_DIV_PERIPH_CLK_GET(reg) BSP_FLD32GET(reg, 2, 6)
 #define HCLK_DIV_DDRAM_CLK(val) BSP_FLD32(val, 7, 8)
+#define HCLK_DIV_DDRAM_CLK_GET(reg) BSP_FLD32GET(reg, 7, 8)
 
 /** @} */
 

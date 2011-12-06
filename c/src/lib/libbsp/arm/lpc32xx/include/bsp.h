@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009, 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -109,6 +110,33 @@ static inline void lpc32xx_micro_seconds_delay(unsigned us)
     elapsed = lpc32xx_timer() - start;
   } while (elapsed < delay);
 }
+
+#if LPC32XX_OSCILLATOR_MAIN == 13000000U
+  #define LPC32XX_HCLKPLL_CTRL_INIT_VALUE \
+    (HCLK_PLL_POWER | HCLK_PLL_DIRECT | HCLK_PLL_M(16 - 1))
+  #define LPC32XX_HCLKDIV_CTRL_INIT_VALUE \
+    (HCLK_DIV_HCLK(2 - 1) | HCLK_DIV_PERIPH_CLK(16 - 1) | HCLK_DIV_DDRAM_CLK(1))
+#else
+  #error "unexpected main oscillator frequency"
+#endif
+
+bool lpc32xx_start_pll_setup(
+  uint32_t hclkpll_ctrl,
+  uint32_t hclkdiv_ctrl,
+  bool force
+);
+
+uint32_t lpc32xx_sysclk(void);
+
+uint32_t lpc32xx_hclkpll_clk(void);
+
+uint32_t lpc32xx_periph_clk(void);
+
+uint32_t lpc32xx_hclk(void);
+
+uint32_t lpc32xx_arm_clk(void);
+
+uint32_t lpc32xx_dram_clk(void);
 
 void bsp_restart(void *addr);
 

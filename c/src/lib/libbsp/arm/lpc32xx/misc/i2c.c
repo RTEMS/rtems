@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -51,30 +52,27 @@ rtems_status_code lpc32xx_i2c_init(
   return lpc32xx_i2c_clock(i2c, clock_in_hz);
 }
 
-#if LPC32XX_HCLK != 104000000U
-  #error "unexpected HCLK"
-#endif
-
 rtems_status_code lpc32xx_i2c_clock(
   volatile lpc32xx_i2c *i2c,
   unsigned clock_in_hz
 )
 {
+  uint32_t clk_div = lpc32xx_hclk() / clock_in_hz;
   uint32_t clk_lo = 0;
   uint32_t clk_hi = 0;
 
   switch (clock_in_hz) {
     case 100000:
-      clk_lo = 520;
-      clk_hi = 520;
+      clk_lo = clk_div / 2;
       break;
     case 400000:
-      clk_lo = 166;
-      clk_hi = 94;
+      clk_lo = (64 * clk_div) / 100;
       break;
     default:
       return RTEMS_INVALID_CLOCK;
   }
+
+  clk_hi = clk_div - clk_lo;
 
   i2c->clk_lo = clk_lo;
   i2c->clk_hi = clk_hi;

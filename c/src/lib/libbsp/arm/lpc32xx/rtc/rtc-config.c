@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -40,7 +41,7 @@
 
 static void lpc32xx_rtc_set(uint32_t val)
 {
-  unsigned i = LPC32XX_ARM_CLK / LPC32XX_OSCILLATOR_RTC;
+  unsigned i = lpc32xx_arm_clk() / LPC32XX_OSCILLATOR_RTC;
 
   lpc32xx.rtc.ctrl |= LPC32XX_RTC_CTRL_STOP;
   lpc32xx.rtc.ucount = val;

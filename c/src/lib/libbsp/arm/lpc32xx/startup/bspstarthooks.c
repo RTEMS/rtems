@@ -7,21 +7,20 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <stdbool.h>
-
-#include <bspopts.h>
+#include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/lpc32xx.h>
 #include <bsp/mmu.h>
@@ -44,7 +43,7 @@
 
 LINKER_SYMBOL(lpc32xx_translation_table_base);
 
-static void BSP_START_TEXT_SECTION clear_bss(void)
+static BSP_START_TEXT_SECTION void clear_bss(void)
 {
   const int *end = (const int *) bsp_section_bss_end;
   int *out = (int *) bsp_section_bss_begin;
@@ -134,7 +133,7 @@ static void BSP_START_TEXT_SECTION clear_bss(void)
     }
   };
 
-  static void BSP_START_TEXT_SECTION set_translation_table_entries(
+  static BSP_START_TEXT_SECTION void set_translation_table_entries(
     uint32_t *ttb,
     const lpc32xx_mmu_config *config
   )
@@ -151,7 +150,7 @@ static void BSP_START_TEXT_SECTION clear_bss(void)
     }
   }
 
-  static void BSP_START_TEXT_SECTION
+  static BSP_START_TEXT_SECTION void
     setup_translation_table_and_enable_mmu(uint32_t ctrl)
   {
     uint32_t const dac =
@@ -179,7 +178,7 @@ static void BSP_START_TEXT_SECTION clear_bss(void)
   }
 #endif
 
-static void BSP_START_TEXT_SECTION setup_mmu_and_cache(void)
+static BSP_START_TEXT_SECTION void setup_mmu_and_cache(void)
 {
   uint32_t ctrl = 0;
 
@@ -198,36 +197,56 @@ static void BSP_START_TEXT_SECTION setup_mmu_and_cache(void)
   #endif
 }
 
-#if LPC32XX_OSCILLATOR_MAIN != 13000000U
-  #error "unexpected main oscillator frequency"
-#endif
-
-static void BSP_START_TEXT_SECTION setup_pll(void)
+BSP_START_TEXT_SECTION bool lpc32xx_start_pll_setup(
+  uint32_t hclkpll_ctrl,
+  uint32_t hclkdiv_ctrl,
+  bool force
+)
 {
   uint32_t pwr_ctrl = LPC32XX_PWR_CTRL;
+  bool settings_ok =
+    ((LPC32XX_HCLKPLL_CTRL ^ hclkpll_ctrl) & BSP_MSK32(1, 16)) == 0
+      && ((LPC32XX_HCLKDIV_CTRL ^ hclkdiv_ctrl) & BSP_MSK32(0, 8)) == 0;
 
-  if ((pwr_ctrl & PWR_NORMAL_RUN_MODE) == 0) {
-    /* Enable HCLK PLL */
-    LPC32XX_HCLKPLL_CTRL = HCLK_PLL_POWER | HCLK_PLL_DIRECT | HCLK_PLL_M(16 - 1);
+  if ((pwr_ctrl & PWR_NORMAL_RUN_MODE) == 0 || (!settings_ok && force)) {
+    /* Disable HCLK PLL output */
+    LPC32XX_PWR_CTRL = pwr_ctrl & ~PWR_NORMAL_RUN_MODE;
+
+    /* Configure HCLK PLL */
+    LPC32XX_HCLKPLL_CTRL = hclkpll_ctrl;
     while ((LPC32XX_HCLKPLL_CTRL & HCLK_PLL_LOCK) == 0) {
       /* Wait */
     }
 
     /* Setup HCLK divider */
-    LPC32XX_HCLKDIV_CTRL = HCLK_DIV_HCLK(2 - 1) | HCLK_DIV_PERIPH_CLK(16 - 1);
+    LPC32XX_HCLKDIV_CTRL = hclkdiv_ctrl;
 
     /* Enable HCLK PLL output */
     LPC32XX_PWR_CTRL = pwr_ctrl | PWR_NORMAL_RUN_MODE;
   }
+
+  return settings_ok;
 }
 
-void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
+#if LPC32XX_OSCILLATOR_MAIN != 13000000U
+  #error "unexpected main oscillator frequency"
+#endif
+
+static BSP_START_TEXT_SECTION void setup_pll(void)
+{
+  uint32_t hclkpll_ctrl = LPC32XX_HCLKPLL_CTRL_INIT_VALUE;
+  uint32_t hclkdiv_ctrl = LPC32XX_HCLKDIV_CTRL_INIT_VALUE;
+
+  lpc32xx_start_pll_setup(hclkpll_ctrl, hclkdiv_ctrl, false);
+}
+
+BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
   setup_pll();
   setup_mmu_and_cache();
 }
 
-static void BSP_START_TEXT_SECTION stop_dma_activities(void)
+static BSP_START_TEXT_SECTION void stop_dma_activities(void)
 {
   #ifdef LPC32XX_STOP_GPDMA
     LPC32XX_DO_STOP_GPDMA;
@@ -242,7 +261,7 @@ static void BSP_START_TEXT_SECTION stop_dma_activities(void)
   #endif
 }
 
-static void BSP_START_TEXT_SECTION setup_uarts(void)
+static BSP_START_TEXT_SECTION void setup_uarts(void)
 {
   uint32_t uartclk_ctrl = 0;
 
@@ -277,7 +296,7 @@ static void BSP_START_TEXT_SECTION setup_uarts(void)
   #endif
 }
 
-static void BSP_START_TEXT_SECTION setup_timer(void)
+static BSP_START_TEXT_SECTION void setup_timer(void)
 {
   volatile lpc_timer *timer = LPC32XX_STANDARD_TIMER;
 
@@ -292,7 +311,7 @@ static void BSP_START_TEXT_SECTION setup_timer(void)
   timer->tcr = LPC_TIMER_TCR_EN;
 }
 
-void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
+BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
   stop_dma_activities();
   setup_uarts();
