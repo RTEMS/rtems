@@ -66,6 +66,11 @@ AC_CHECK_DECLS([flockfile],[AC_CHECK_FUNCS([flockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([funlockfile],[AC_CHECK_FUNCS([funlockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio.h>])
 
+# Newlib proprietary
+AC_CHECK_HEADERS([envlock.h])
+AC_CHECK_DECLS([__env_lock],,,[#include <envlock.h>])
+AC_CHECK_DECLS([__env_unlock],,,[#include <envlock.h>])
+
 # Mandated by POSIX, older newlibs bogusly provided CLOCK_PROCESS_CPUTIME+CLOCK_THREAD_CPUTIME
 AC_CHECK_DECL([CLOCK_PROCESS_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_PROCESS_CPUTIME_ID])],[#include <time.h>])
 AC_CHECK_DECL([CLOCK_THREAD_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_THREAD_CPUTIME_ID])],[#include <time.h>])

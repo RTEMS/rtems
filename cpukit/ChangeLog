@@ -1,5 +1,10 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Check for envlock.h.
+	Check for decls of __env_lock, __env_unlock.
+
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/envlock.c: Rename define ENVLOCK_DEDIDCATED_MUTEX
 	into ENVLOCK_DEDICATED_MUTEX (Typo).
 
