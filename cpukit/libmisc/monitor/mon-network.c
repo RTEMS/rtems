@@ -26,6 +26,7 @@
 #include <sys/sockio.h>
 #include <net/route.h>
 
+#include <rtems/monitor.h>
 
 void mon_ifconfig(int argc, char *argv[],
   uint32_t command_arg __attribute__((unused)),

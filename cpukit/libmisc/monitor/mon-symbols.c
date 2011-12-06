@@ -419,7 +419,7 @@ rtems_monitor_symbol_dump(
 }
 
 
-void
+static void
 rtems_monitor_symbol_dump_all(
     rtems_symbol_table_t *table,
     bool                  verbose __attribute__((unused))

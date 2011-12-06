@@ -186,7 +186,7 @@ rtems_monitor_object_lookup(
     return 0;
 }
 
-rtems_id
+static rtems_id
 rtems_monitor_object_canonical_next_remote(
     rtems_monitor_object_type_t type,
     rtems_id            id,
@@ -293,7 +293,7 @@ rtems_monitor_object_canonical_get(
 }
 
 
-void
+static void
 rtems_monitor_object_dump_1(
     const rtems_monitor_object_info_t *info,
     rtems_id                     id,
@@ -327,7 +327,7 @@ rtems_monitor_object_dump_1(
     }
 }
 
-void
+static void
 rtems_monitor_object_dump_all(
     const rtems_monitor_object_info_t *info,
     bool                         verbose

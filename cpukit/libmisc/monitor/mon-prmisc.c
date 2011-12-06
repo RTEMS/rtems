@@ -60,11 +60,11 @@ rtems_monitor_dump_hex(uint32_t   num)
     return fprintf(stdout,"0x%" PRIx32, num);
 }
 
-int
+static int
 rtems_monitor_dump_assoc_bitfield(
     const rtems_assoc_t *ap,
     const char          *separator,
-    uint32_t       value
+    uint32_t             value
   )
 {
     uint32_t   b;

@@ -1,5 +1,16 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/monitor/mon-network.c: Include <rtems/monitor.h>.
+	* libmisc/monitor/mon-object.c:
+	Make rtems_monitor_object_canonical_next_remote,
+	rtems_monitor_object_dump_1, rtems_monitor_object_dump_all static.
+	* libmisc/monitor/mon-prmisc.c:
+	Make rtems_monitor_dump_assoc_bitfield static.
+	* libmisc/monitor/mon-symbols.c:
+	Make rtems_monitor_symbol_dump_all static.
+
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* score/src/schedulercbsattachthread.c,
 	score/src/schedulercbsdestroyserver.c,
 	score/src/schedulercbsdetachthread.c,
