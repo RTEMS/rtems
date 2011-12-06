@@ -1,5 +1,11 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/flockfile.c, libcsupport/src/ftrylockfile.c,
+	libcsupport/src/funlockfile.c: 
+	Add __attribute__((unused)) to unused function parameters.
+
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libcsupport/src/envlock.c: Build conditionally.
 	* configure.ac: Check for envlock.h.
 	Check for decls of __env_lock, __env_unlock.
