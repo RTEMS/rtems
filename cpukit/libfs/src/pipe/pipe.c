@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
+#include <rtems/pipe.h>
 
 /* Incremental number added to names of anonymous pipe files */
 /* FIXME: This approach is questionable */
