@@ -1,5 +1,7 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/pspinlocktranslatereturncode.c:
+	Include <rtems/posix/spinlock.h> (Missing prototypes).
 	* libfs/src/imfs/imfs_debug.c: Make IMFS_print_jnode, 
 	IMFS_dump_directory static.
 	* libfs/src/imfs/memfile.c: Make memfile_free_blocks_in_table static.

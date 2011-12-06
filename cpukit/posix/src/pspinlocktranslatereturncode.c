@@ -20,6 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/corespinlock.h>
+#include <rtems/posix/spinlock.h>
 
 /*
  *  _POSIX_Spinlock_Translate_core_spinlock_return_code
