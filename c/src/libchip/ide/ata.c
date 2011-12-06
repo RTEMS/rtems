@@ -685,7 +685,7 @@ static void ata_interrupt_handler(rtems_irq_hdl_param handle)
     }
 }
 
-void ata_interrupt_on(const rtems_irq_connect_data *ptr)
+static void ata_interrupt_on(const rtems_irq_connect_data *ptr)
   {
 
     /* enable ATA device interrupt */
@@ -696,7 +696,7 @@ void ata_interrupt_on(const rtems_irq_connect_data *ptr)
   }
 
 
-void ata_interrupt_off(const rtems_irq_connect_data *ptr)
+static void ata_interrupt_off(const rtems_irq_connect_data *ptr)
   {
 
     /* disable ATA device interrupt */
@@ -707,7 +707,7 @@ void ata_interrupt_off(const rtems_irq_connect_data *ptr)
   }
 
 
-int ata_interrupt_isOn(const rtems_irq_connect_data *ptr)
+static int ata_interrupt_isOn(const rtems_irq_connect_data *ptr)
   {
   uint16_t byte; /* emphasize that only 8 low bits is meaningful */
 
