@@ -28,12 +28,16 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+rtems_task_priority Prio[7] = { 0,   2,   2,   2,   2,  100, 1 };
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   uint32_t    index;
   rtems_status_code status;
+
+  Priorities = Prio;
 
   puts( "\n\n*** TEST EDF Scheduler 2 ***" );
 

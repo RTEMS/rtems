@@ -1,3 +1,8 @@
+2011-12-06	Petr Benes <benesp16@fel.cvut.cz>
+
+	PR 1980/testing
+	* spedfsched02/task1.c, spedfsched02/init.c: Fixed initialization.
+
 2011-11-26	Gedare Bloom <gedare@rtems.org>
 
 	PR 1964
