@@ -139,6 +139,9 @@ int serdbg_open
 |    0 on success, -1 and errno otherwise                                   |
 \*=========================================================================*/
 
+
+extern int serdbg_init_dbg(void);
+
 /*
  * Assumed to be provided by the BSP
  */

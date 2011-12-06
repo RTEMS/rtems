@@ -1,5 +1,11 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/serdbg/serdbg.h: Add serdbg_init_dbg.
+	* libmisc/serdbg/serdbgcnf.h:
+	Remove conditional serdbg_init_dbg prototype.
+
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/mouse/serial_mouse.c: Make serial_mouse_l_rint static.
 	* libfs/src/pipe/pipe.c: Include <rtems/pipe.h> (Missing
 	prototypes).

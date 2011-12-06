@@ -73,7 +73,6 @@ serdbg_conf_t serdbg_conf = {
 
 int serdbg_init(void) {
 #ifdef CONFIGURE_USE_SERDBG
-  extern int serdbg_init_dbg(void);
   return serdbg_init_dbg();
 #else
   return 0;
