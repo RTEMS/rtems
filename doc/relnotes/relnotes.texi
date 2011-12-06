@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -76,11 +76,8 @@
 @include status.texi
 @include probrep.texi
 
-@ifinfo
 @node Top, Introduction, (dir), (dir)
-@top relnotes
-
-This is the online version of the RTEMS Release Notes.
+@top RTEMS Release Notes
 
 @menu
 * Introduction::
@@ -90,12 +87,6 @@ This is the online version of the RTEMS Release Notes.
 * Command and Variable Index::
 * Concept Index::
 @end menu
-
-@end ifinfo
-@c 
-@c 
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Command and Variable Index, Concept Index, RTEMS PROBLEM REPORT, Top
 @unnumbered Command and Variable Index

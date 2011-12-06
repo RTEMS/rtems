@@ -1,21 +1,17 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Introduction, Introduction Supporting Tools, Top, Top
-@end ifinfo
 @chapter Introduction
-@ifinfo
 @menu
 * Introduction Supporting Tools::
 * Introduction Documentation::
 @end menu
-@end ifinfo
 
 This document describes the contents, installation
 procedure, and current status of Release @value{VERSION} of the RTEMS
@@ -54,18 +50,14 @@ subscribe rtems_user@@your_email_goes_here.com
 Please replace rtems_user@@your_email_goes_here.com with your
 email address.
 
-@ifinfo
 @node Introduction Supporting Tools, GNU Development Tools, Introduction, Introduction
-@end ifinfo
 @section Supporting Tools
-@ifinfo
 @menu
 * GNU Development Tools::
 * ANSI C Libraries::
 * GNU C Library::
 * Cygnus NEWLIB C Library::
 @end menu
-@end ifinfo
 
 This section discusses the freely available tools and
 libraries which are part of the RTEMS Development Environment.
@@ -90,9 +82,7 @@ Please replace rtems_user@@your_email_goes_here.com with your
 email address.  The FAQ for crossgcc is in the /pub/embedded/crossgcc
 directory on ftp.cygnus.com (205.180.83.42).
 
-@ifinfo
 @node GNU Development Tools, ANSI C Libraries, Introduction Supporting Tools, Introduction Supporting Tools
-@end ifinfo
 @subsection GNU Development Tools
 
 Numerous GNU tools are used in the RTEMS Development
@@ -121,9 +111,7 @@ Cygnus maintains an ftp site -- ftp.cygnus.com
 embedded developers.  Of especial interest on this site are the
 directories /pub/newlib and /pub/embedded.
 
-@ifinfo
 @node ANSI C Libraries, GNU C Library, GNU Development Tools, Introduction Supporting Tools
-@end ifinfo
 @subsection ANSI C Libraries
 
 This section discusses the following freely
@@ -139,9 +127,7 @@ No C Library is included in the standard RTEMS
 distribution.  It is the responsibility of the user to obtain
 and install a C Library separately.
 
-@ifinfo
 @node GNU C Library, Cygnus NEWLIB C Library, ANSI C Libraries, Introduction Supporting Tools
-@end ifinfo
 @subsection GNU C Library
 
 The GNU C Library is a robust and well-documented C
@@ -163,9 +149,7 @@ There is currently no RTEMS support for the GNU C Library.
 The primary ftp site for this library is
 prep.ai.mit.edu (18.71.0.38).
 
-@ifinfo
 @node Cygnus NEWLIB C Library, Introduction Documentation, GNU C Library, Introduction Supporting Tools
-@end ifinfo
 @subsection Cygnus NEWLIB C Library
 
 The Cygnus NEWLIB C Library was specifically designed
@@ -177,9 +161,7 @@ possible placed on the end user.
 
 The primary ftp site for this library is ftp.cygnus.com (205.180.83.42).
 
-@ifinfo
 @node Introduction Documentation, Installation Procedure, Cygnus NEWLIB C Library, Introduction
-@end ifinfo
 @section Documentation
 
 The RTEMS Documentation Set is provided online at 

@@ -1,3 +1,9 @@
+2011-12-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1793/doc
+	* .cvsignore, install.texi, intro.texi, probrep.texi, relnotes.texi,
+	status.texi: Convert from texi2www to texi2html.
+
 2011-12-05	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* version.texi: Update to match when files in directory where last

@@ -1,16 +1,13 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Installation Procedure, Installation Procedure Introduction, Introduction Documentation, Top
-@end ifinfo
 @chapter Installation Procedure
-@ifinfo
 @menu
 * Installation Procedure Introduction::
 * Installation Procedure RTEMS FTP Site Organization::
@@ -18,20 +15,15 @@
 * Installation Procedure Installing a Cross-Development GNU Toolset::
 * Installation Procedure Installing RTEMS::
 @end menu
-@end ifinfo
 
-@ifinfo
 @node Installation Procedure Introduction, Installation Procedure RTEMS FTP Site Organization, Installation Procedure, Installation Procedure
-@end ifinfo
 @section Introduction
 
 This chapter describes the process of installing and
 configuring RTEMS and a cross-development environment based on
 freely available tools and libraries.
 
-@ifinfo
 @node Installation Procedure RTEMS FTP Site Organization, Installation Procedure Unarchiving the RTEMS and GNU Components, Installation Procedure Introduction, Installation Procedure
-@end ifinfo
 @section RTEMS FTP Site Organization
 
 RTEMS is distributed only via anonymous ftp.
@@ -57,9 +49,7 @@ patches which may be required for other tools.
 The complete source code and documentation set for
 the C language implementation of RTEMS is provided.
 
-@ifinfo
 @node Installation Procedure Unarchiving the RTEMS and GNU Components, Installation Procedure Installing a Cross-Development GNU Toolset, Installation Procedure RTEMS FTP Site Organization, Installation Procedure
-@end ifinfo
 @section Unarchiving the RTEMS and GNU Components
 
 Many of the components of the RTEMS release are
@@ -124,9 +114,7 @@ gzcat <file>.tgz | tar tvf -
 @end group
 @end example
 
-@ifinfo
 @node Installation Procedure Installing a Cross-Development GNU Toolset, Installation Procedure Installing RTEMS, Installation Procedure Unarchiving the RTEMS and GNU Components, Installation Procedure
-@end ifinfo
 @section Installing a Cross-Development GNU Toolset
 
 This sections describes how to build and install the
@@ -164,9 +152,7 @@ and supporting tools.
 NOTE: For "UNIX" processors, the native compiler binary utilities
 should be used.
 
-@ifinfo
 @node Installation Procedure Installing RTEMS, Development Environment Status, Installation Procedure Installing a Cross-Development GNU Toolset, Installation Procedure
-@end ifinfo
 @section Installing RTEMS
 
 For instructions on building and installing RTEMS, please refer to 

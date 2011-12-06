@@ -1,29 +1,23 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Development Environment Status, Development Environment Status RTEMS Executive Status, Installation Procedure Installing RTEMS, Top
-@end ifinfo
 @chapter Development Environment Status
-@ifinfo
 @menu
 * Development Environment Status RTEMS Executive Status::
 * Development Environment Status Development Environment Status::
 * Development Environment Status Known Problems::
 @end menu
-@end ifinfo
 
 This chapter will describe the current status of
 release version @value{VERSION} of the RTEMS Development Environment.
 
-@ifinfo
 @node Development Environment Status RTEMS Executive Status, Development Environment Status Development Environment Status, Development Environment Status, Development Environment Status
-@end ifinfo
 @section RTEMS Executive Status
 
 Release @value{VERSION} of the RTEMS Executive contains support
@@ -112,9 +106,7 @@ supported targets.  The BSPs only provide support for console
 I/O only using this library.  Support for the reentrancy
 capabilities of newlib is provided in the RTEMS distribution.
 
-@ifinfo
 @node Development Environment Status Development Environment Status, Development Environment Status Known Problems, Development Environment Status RTEMS Executive Status, Development Environment Status
-@end ifinfo
 @section Development Environment Status
 
 This section details the versions of the tools used
@@ -131,41 +123,31 @@ to develop and maintain RTEMS @value{VERSION}:
 @end itemize
 
 
-@ifinfo
 @node Development Environment Status Known Problems, Executive Problems, Development Environment Status Development Environment Status, Development Environment Status
-@end ifinfo
 @section Known Problems
-@ifinfo
 @menu
 * Executive Problems::
 * Development Environment Problems::
 * RTEMS Problem Reporting::
 @end menu
-@end ifinfo
 
 Problems which are known to exist at the time of
 release are described in the following sections.  These are
 provided as warnings to the user and where possible, workarounds
 are provided until the problem is corrected.
 
-@ifinfo
 @node Executive Problems, Development Environment Problems, Development Environment Status Known Problems, Development Environment Status Known Problems
-@end ifinfo
 @subsection Executive Problems
 
 There are no known bugs in the executive itself.
 
-@ifinfo
 @node Development Environment Problems, RTEMS Problem Reporting, Executive Problems, Development Environment Status Known Problems
-@end ifinfo
 @subsection Development Environment Problems
 
 There are no known major problems with the
 development environment.
 
-@ifinfo
 @node RTEMS Problem Reporting, RTEMS PROBLEM REPORT, Development Environment Problems, Development Environment Status Known Problems
-@end ifinfo
 @subsection RTEMS Problem Reporting
 
 The RTEMS Project uses the GNATS Problem Reporting and Tracking System.
