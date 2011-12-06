@@ -15,11 +15,12 @@
 #include "config.h"
 #endif
 
+#include <unistd.h>
+
 #include <errno.h>
 #include <sys/types.h>
 #include <rtems/seterr.h>
-
-extern int pipe_create(int filsdes[2]);
+#include <rtems/pipe.h>
 
 int pipe(
   int filsdes[2]
