@@ -1,3 +1,13 @@
+2011-12-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/heapiterate.c, score/src/pheapiterate.c: New files.
+	* score/Makefile.am: Reflect changes above.
+	* score/include/rtems/score/heap.h: Declare _Heap_Iterate() and define
+	Heap_Block_visitor.
+	* score/include/rtems/score/protectedheap.h: Declare
+	_Protected_heap_Iterate().
+	* score/src/heapgetinfo.c: Use _Heap_Iterate().
+
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libcsupport/src/flockfile.c, libcsupport/src/ftrylockfile.c,

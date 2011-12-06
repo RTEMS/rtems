@@ -522,6 +522,33 @@ bool _Heap_Walk(
 );
 
 /**
+ * @brief Heap block visitor.
+ *
+ * @see _Heap_Iterate().
+ *
+ * @retval true Stop the iteration.
+ * @retval false Continue the iteration.
+ */
+typedef bool (*Heap_Block_visitor)(
+  const Heap_Block *block,
+  uintptr_t block_size,
+  bool block_is_used,
+  void *visitor_arg
+);
+
+/**
+ * @brief Iterates over all blocks of the heap.
+ *
+ * For each block the @a visitor with the argument @a visitor_arg will be
+ * called.
+ */
+void _Heap_Iterate(
+  Heap_Control *heap,
+  Heap_Block_visitor visitor,
+  void *visitor_arg
+);
+
+/**
  * @brief Returns information about used and free blocks for the heap @a heap
  * in @a info.
  */

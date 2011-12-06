@@ -131,6 +131,15 @@ bool _Protected_heap_Free( Heap_Control *heap, void *addr );
 bool _Protected_heap_Walk( Heap_Control *heap, int source, bool dump );
 
 /**
+ * @brief See _Heap_Iterate().
+ */
+void _Protected_heap_Iterate(
+  Heap_Control *heap,
+  Heap_Block_visitor visitor,
+  void *visitor_arg
+);
+
+/**
  * @brief See _Heap_Get_information().
  *
  * Returns @a true in case of success, and @a false otherwise.

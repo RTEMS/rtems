@@ -181,7 +181,7 @@ endif
 ## HEAP_C_FILES
 libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \
     src/heapfree.c src/heapsizeofuserarea.c src/heapwalk.c src/heapgetinfo.c \
-    src/heapgetfreeinfo.c src/heapresizeblock.c
+    src/heapgetfreeinfo.c src/heapresizeblock.c src/heapiterate.c
 
 ## OBJECT_C_FILES
 libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
@@ -259,7 +259,7 @@ libscore_a_SOURCES += src/schedulercbs.c \
 libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
-    src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
+    src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c src/pheapiterate.c
 
 ## RBTREE_C_FILES
 libscore_a_SOURCES += src/rbtree.c \

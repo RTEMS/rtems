@@ -23,35 +23,32 @@
 
 #include <string.h>
 
-#include <rtems/system.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/heap.h>
+
+static bool _Heap_Get_information_visitor(
+  const Heap_Block *block __attribute__((unused)),
+  uintptr_t block_size,
+  bool block_is_used,
+  void *visitor_arg
+)
+{
+  Heap_Information_block *info_block = visitor_arg;
+  Heap_Information *info = block_is_used ?
+    &info_block->Used : &info_block->Free;
+
+  ++info->number;
+  info->total += block_size;
+  if ( info->largest < block_size )
+    info->largest = block_size;
+
+  return false;
+}
 
 void _Heap_Get_information(
   Heap_Control            *the_heap,
   Heap_Information_block  *the_info
 )
 {
-  Heap_Block *the_block = the_heap->first_block;
-  Heap_Block *const end = the_heap->last_block;
-
-  memset(the_info, 0, sizeof(*the_info));
-
-  while ( the_block != end ) {
-    uintptr_t const     the_size = _Heap_Block_size(the_block);
-    Heap_Block *const  next_block = _Heap_Block_at(the_block, the_size);
-    Heap_Information  *info;
-
-    if ( _Heap_Is_prev_used(next_block) )
-      info = &the_info->Used;
-    else
-      info = &the_info->Free;
-
-    info->number++;
-    info->total += the_size;
-    if ( info->largest < the_size )
-      info->largest = the_size;
-
-    the_block = next_block;
-  }
+  memset( the_info, 0, sizeof(*the_info) );
+  _Heap_Iterate( the_heap, _Heap_Get_information_visitor, the_info );
 }
