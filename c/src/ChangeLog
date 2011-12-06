@@ -1,3 +1,8 @@
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/serial/mc68681.c (mc68681_open): 
+	Var "status" needs to be signed.
+
 2011-12-05	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1975/misc

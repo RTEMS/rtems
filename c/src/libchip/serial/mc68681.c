@@ -279,7 +279,7 @@ MC68681_STATIC int mc68681_open(
   unsigned int           command = 0;
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
-  unsigned int			 status;
+  int			 status;
 
 
   pMC68681      = Console_Port_Tbl[minor]->ulCtrlPort1;
