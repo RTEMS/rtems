@@ -1,5 +1,7 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libmisc/stackchk/check.c: Make Stack_check_Initialize,
+	Stack_check_Dump_threads_usage static.
 	* libfs/src/pipe/pipe.c: Include <rtems/pipe.h> (Missing prototype).
 
 2011-12-06	Sebastian Huber <sebastian.huber@embedded-brains.de>

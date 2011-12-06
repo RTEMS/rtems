@@ -138,7 +138,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
 /*
  *  Stack_check_Initialize
  */
-void Stack_check_Initialize( void )
+static void Stack_check_Initialize( void )
 {
   int       i;
   uint32_t *p;
@@ -382,7 +382,7 @@ static inline void *Stack_check_find_high_water_mark(
 static void                   *print_context;
 static rtems_printk_plugin_t   print_handler;
 
-void Stack_check_Dump_threads_usage(
+static void Stack_check_Dump_threads_usage(
   Thread_Control *the_thread
 )
 {
