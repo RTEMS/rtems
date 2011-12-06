@@ -33,7 +33,7 @@
  *
  *  This routine prints the contents of the specified jnode.
  */
-void IMFS_print_jnode(
+static void IMFS_print_jnode(
   IMFS_jnode_t *the_jnode
 )
 {
@@ -98,7 +98,7 @@ void IMFS_print_jnode(
  *  directory is encountered, then this routine will recurse to process
  *  the subdirectory.
  */
-void IMFS_dump_directory(
+static void IMFS_dump_directory(
   IMFS_jnode_t  *the_directory,
   int            level
 )

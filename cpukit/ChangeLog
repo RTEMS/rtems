@@ -1,5 +1,8 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libfs/src/imfs/imfs_debug.c: Make IMFS_print_jnode, 
+	IMFS_dump_directory static.
+	* libfs/src/imfs/memfile.c: Make memfile_free_blocks_in_table static.
 	* libcsupport/include/rtems/libio.h:
 	Make LIBIO_FLAGS_* defined unsigned (Avoid implicit sign
 	conversions).

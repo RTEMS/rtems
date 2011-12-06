@@ -396,7 +396,7 @@ MEMFILE_STATIC int IMFS_memfile_remove_block(
  *  This is a support routine for IMFS_memfile_remove.  It frees all the
  *  blocks in one of the indirection tables.
  */
-void memfile_free_blocks_in_table(
+static void memfile_free_blocks_in_table(
   block_p **block_table,
   int       entries
 )
