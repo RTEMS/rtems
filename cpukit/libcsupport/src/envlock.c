@@ -10,6 +10,11 @@
 #include "config.h"
 #endif
 
+#if defined(HAVE_ENVLOCK_H) \
+  && defined(HAVE_DECL___ENV_LOCK) && defined(HAVE_DECL___ENV_UNLOCK)
+
+#include <envlock.h>
+
 #include <rtems.h>
 #include <sys/reent.h>
 
@@ -105,4 +110,6 @@ __env_unlock(struct _reent *r __attribute__((unused)))
 {
   rtems_libio_unlock();
 }
-#endif
+#endif /* ENVLOCK_DEDICATED_MUTEX */
+
+#endif /* HAVE_ENVLOCK_H ... */
