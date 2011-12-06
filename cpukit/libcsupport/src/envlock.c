@@ -36,7 +36,7 @@
  *
  */
 
-#if defined(ENVLOCK_DEDIDCATED_MUTEX)
+#if defined(ENVLOCK_DEDICATED_MUTEX)
 static rtems_id envLock=0;
 
 static void
