@@ -1,3 +1,13 @@
+2011-12-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1793/doc
+	* Makefile.am, configure.ac, bmenu/bmenu2.c: Convert from texi2www to
+	texi2html.
+	* texi2www/ChangeLog, texi2www/Makefile.am, texi2www/dir-arrow.gif,
+	texi2www/missing-arrow.gif, texi2www/next-arrow.gif,
+	texi2www/prev-arrow.gif, texi2www/texi2dvi, texi2www/texi2www,
+	texi2www/texi2www.texi, texi2www/up-arrow.gif: Removed.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

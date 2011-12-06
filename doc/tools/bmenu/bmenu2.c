@@ -12,7 +12,7 @@
  *    + previous of the first node
  *    + next of the last node
  *
- *  COPYRIGHT (c) 1988-2002.
+ *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *  All rights reserved.
  *
@@ -777,7 +777,7 @@ void BuildTexinfoNodes( void )
 
       if ( menu_items == 0 ) {
         new_line = AllocateLine();
-        strcpy( new_line->Contents, "@ifinfo" );
+        strcpy( new_line->Contents, "" ); /* "@ifinfo" ); */
         _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
 
         new_line = AllocateLine();
@@ -808,7 +808,7 @@ continue_menu_loop:
       _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
 
       new_line = AllocateLine();
-      strcpy( new_line->Contents, "@end ifinfo" );
+      strcpy( new_line->Contents, "" ); /* "@end ifinfo" ); */
       _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
     }
 

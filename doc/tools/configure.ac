@@ -21,8 +21,8 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl Checks for library functions.
 AC_CHECK_FUNCS(strdup strstr)
 
+# texi2www/Makefile
 AC_CONFIG_FILES([Makefile
 bmenu/Makefile
-texi2www/Makefile
 ])
 AC_OUTPUT
