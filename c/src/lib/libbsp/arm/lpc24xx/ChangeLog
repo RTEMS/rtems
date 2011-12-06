@@ -1,3 +1,7 @@
+2011-12-06	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc24xx.inc: Flags for EABI tool chain.
+
 2011-11-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* include/lpc17xx.h: New file.
