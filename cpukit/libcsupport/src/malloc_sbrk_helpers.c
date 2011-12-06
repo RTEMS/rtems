@@ -25,7 +25,7 @@
 
 size_t  RTEMS_Malloc_Sbrk_amount;
 
-void *malloc_sbrk_initialize(
+static void *malloc_sbrk_initialize(
   void  *starting_address,
   size_t length
 )
@@ -64,7 +64,7 @@ void *malloc_sbrk_initialize(
   return starting_address;
 }
 
-void *malloc_sbrk_extend_and_allocate(
+static void *malloc_sbrk_extend_and_allocate(
   size_t size
 )
 {
@@ -108,5 +108,3 @@ rtems_malloc_sbrk_functions_t rtems_malloc_sbrk_helpers_table = {
   malloc_sbrk_initialize,
   malloc_sbrk_extend_and_allocate
 };
-
-

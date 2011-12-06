@@ -1,5 +1,10 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/malloc_sbrk_helpers.c: Make
+	malloc_sbrk_initialize, malloc_sbrk_extend_and_allocate static.
+
+2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* libmisc/monitor/mon-network.c: Include <rtems/monitor.h>.
 	* libmisc/monitor/mon-object.c:
 	Make rtems_monitor_object_canonical_next_remote,
