@@ -1,5 +1,7 @@
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/ratemonperiod.c: Make _Rate_monotonic_Update_statistics
+	static.
 	* libcsupport/src/pipe.c: Include <unistd.h>.
 	Include <rtems/pipe.h>.
 	* libmisc/stackchk/check.c: Make Stack_check_Initialize,

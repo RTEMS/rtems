@@ -146,7 +146,7 @@ void _Rate_monotonic_Initiate_statistics(
   _Scheduler_Release_job(the_period->owner, the_period->next_length);
 }
 
-void _Rate_monotonic_Update_statistics(
+static void _Rate_monotonic_Update_statistics(
   Rate_monotonic_Control    *the_period
 )
 {
