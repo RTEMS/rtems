@@ -1,14 +1,12 @@
 @c
-@c  COPYRIGHT (c) 1988-2006.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Preface, Port Specific Information, Top, Top
-@end ifinfo
 @unnumbered Preface
 
 The Real Time Executive for Multiprocessor Systems

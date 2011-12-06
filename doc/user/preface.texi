@@ -1,14 +1,12 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Preface, Overview, List of Figures, Top
-@end ifinfo
 @unnumbered Preface
 
 In recent years, the cost required to develop a

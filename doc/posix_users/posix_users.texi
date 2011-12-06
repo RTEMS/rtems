@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -104,11 +104,8 @@
 @include libc.texi
 @include libm.texi
 @include status.texi
-@ifinfo
 @node Top, Preface, (dir), (dir)
-@top posix_users
-
-This is the online version of the RTEMS POSIX API User's Guide
+@top RTEMS POSIX API User's Guide
 
 @menu
 * Preface::
@@ -137,12 +134,6 @@ This is the online version of the RTEMS POSIX API User's Guide
 * Command and Variable Index::
 * Concept Index::
 @end menu
-
-@end ifinfo
-@c
-@c
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index

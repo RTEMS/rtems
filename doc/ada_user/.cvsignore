@@ -26,8 +26,6 @@ Makefile.in
 mdate-sh
 ObjectId-16Bits.pdf
 ObjectId-32Bits.pdf
-rtems_footer.html
-rtems_header.html
 rtemspie.pdf
 semaphore_attributes.pdf
 states.pdf

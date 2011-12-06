@@ -8,6 +8,7 @@ bsp_howto.aux
 bsp_howto.cp
 bsp_howto.dvi
 bsp_howto.fn
+bsp_howto.fns
 bsp_howto*.html
 bsp_howto.info
 bsp_howto.ky
@@ -35,8 +36,6 @@ network.t
 network.texi
 nvmem.texi
 rtc.texi
-rtems_footer.html
-rtems_header.html
 shmsupp.texi
 support.texi
 target.texi

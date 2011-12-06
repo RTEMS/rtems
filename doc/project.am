@@ -42,25 +42,16 @@ MOSTLYCLEANFILES += $(PDF_IMAGES)
 ## HTML 
 SUFFIXES += .html
 
-rtems_header.html: $(top_srcdir)/rtems_header.html.in version.texi
-	@sed -e s%\.\./images/%$(top_builddir)/images/%g \
-	-e s%\@VERSION\@%@VERSION@%g \
-	< $< > $@
-rtems_footer.html: $(top_srcdir)/rtems_footer.html.in version.texi
-	@sed -e s%\.\./images/%$(top_builddir)/%g \
-	-e s%\@VERSION\@%@VERSION@%g \
-	< $< > $@
+$(PROJECT)*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
+	rm -rf $(PROJECT).html
+	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $< $<
+	-rm -rf $(PROJECT)
 
-index.html $(PROJECT)*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS) \
-    rtems_header.html rtems_footer.html 
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -base $(PROJECT) $<
-
-MOSTLYCLEANFILES += index.html $(PROJECT)*.html rtems_header.html \
-   rtems_footer.html
+MOSTLYCLEANFILES += index.html $(PROJECT)*.html 
 
 ## Common installation points
 if USE_HTML
-html_project_DATA = index.html $(PROJECT)*.html
+html_project_DATA = $(PROJECT)*.html
 endif
 
 if USE_DVI

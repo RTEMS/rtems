@@ -1,14 +1,12 @@
 @c
-@c  COPYRIGHT (c) 1989-2007.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Introduction, Directory Structure, Top, Top
-@end ifinfo
 @chapter Introduction
 
 This document describes the RTEMS development

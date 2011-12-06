@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2009.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -71,11 +71,8 @@
 @include sh.texi
 @include sparc.texi
 @include sparc64.texi
-@ifinfo
 @node Top, Preface, (dir), (dir)
-@top cpu_supplement
-
-This is the online version of the RTEMS CPU Architecture Supplement.
+@top RTEMS CPU Architecture Supplement
 
 @menu
 * Preface::
@@ -94,12 +91,6 @@ This is the online version of the RTEMS CPU Architecture Supplement.
 * Command and Variable Index::
 * Concept Index::
 @end menu
-
-@end ifinfo
-@c 
-@c 
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index

@@ -75,8 +75,8 @@ AC_PROG_LN_S
 
 AC_CHECK_PROGS(PERL,perl)
 
-TEXI2WWW='$(PERL) $(top_srcdir)/tools/texi2www/texi2www'
-AC_SUBST(TEXI2WWW)
+AC_CHECK_PROGS(TEXI2HTML,texi2html)
+AC_SUBST(TEXI2HTML)
 
 AC_CHECK_PROGS(GS,gs)
 AM_CONDITIONAL(GS,test x"$GS" != x"")
@@ -168,5 +168,6 @@ relnotes/Makefile
 new_chapters/Makefile
 cpu_supplement/Makefile
 shell/Makefile
+texi2html_init
 ])
 AC_OUTPUT

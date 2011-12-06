@@ -10,7 +10,5 @@ Makefile.in
 mdate-sh
 missing
 mkinstalldirs
-rtems_footer.html
-rtems_header.html
-rtems_support.html
+texi2html_init
 texinfo.tex

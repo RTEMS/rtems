@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -115,11 +115,8 @@
 @include user/dirstat.texi
 @include example.texi
 @include user/glossary.texi
-@ifinfo
 @node Top, List of Figures, (dir), (dir)
-@top ada_user
-
-This is the online version of the RTEMS Ada User's Guide.
+@top RTEMS Applications Ada User's Guide
 
 @menu
 * List of Figures::
@@ -158,12 +155,6 @@ This is the online version of the RTEMS Ada User's Guide.
 * Command and Variable Index::
 * Concept Index::
 @end menu
-
-@end ifinfo
-@c 
-@c 
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Command and Variable Index, Concept Index, Glossary, Top
 @unnumbered Command and Variable Index

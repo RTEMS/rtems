@@ -1,14 +1,12 @@
 @c
-@c  COPYRIGHT (c) 1988-2002.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Preface, Network Task Structure and Data Flow, Top, Top
-@end ifinfo
 @unnumbered Preface
 
 This document describes the RTEMS specific parts of the FreeBSD TCP/IP

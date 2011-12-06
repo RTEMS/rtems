@@ -24,7 +24,5 @@ networking.vr
 networktasks.texi
 PCIreg.pdf
 recvbd.pdf
-rtems_footer.html
-rtems_header.html
 servers.texi
 testing.texi

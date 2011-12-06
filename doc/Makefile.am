@@ -15,7 +15,7 @@ if USE_HTML
 html_DATA = index.html HELP.html
 endif
 
-EXTRA_DIST = HELP.html rtems_header.html.in rtems_footer.html.in
+EXTRA_DIST = HELP.html
 
 EXTRA_DIST += common/cpright.texi common/setup.texi \
     common/treedef.tex common/rtems.texi.in

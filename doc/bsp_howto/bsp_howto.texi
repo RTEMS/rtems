@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2009.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -78,11 +78,8 @@
 @include analog.texi
 @include discrete.texi
 
-@ifinfo
 @node Top, Introduction, (dir), (dir)
-@top bsp_howto
-
-This is the online version of the RTEMS BSP and Device Driver Development Guide.
+@top RTEMS BSP and Device Driver Development Guide
 
 @menu
 * Introduction::
@@ -107,12 +104,6 @@ This is the online version of the RTEMS BSP and Device Driver Development Guide.
 * Command and Variable Index::
 * Concept Index::
 @end menu
-
-@end ifinfo
-@c 
-@c 
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index

@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -72,11 +72,8 @@
 @include memory.texi
 @include rtems.texi
 @include network.texi
-@ifinfo
 @node Top, Preface, (dir), (dir)
-@top shell
-
-This is the online version of the RTEMS Shell User's Guide.
+@top RTEMS Shell User's Guide
 
 @menu
 * Preface::
@@ -90,12 +87,6 @@ This is the online version of the RTEMS Shell User's Guide.
 * Concept Index::
 * Command Index::
 @end menu
-
-@end ifinfo
-@c 
-@c 
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Function and Variable Index, Concept Index, Network Commands route - show or manipulate the ip routing table, Top
 @unnumbered Function and Variable Index

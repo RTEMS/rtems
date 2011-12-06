@@ -1,14 +1,12 @@
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Preface, Configuration and Initialization, Top, Top
-@end ifinfo
 @unnumbered Preface
 
 Real-time embedded systems vary widely based upon their 
@@ -27,7 +25,7 @@ example which hints at some of the capabilities available:
 
 @smallexample
 Welcome to rtems-4.10.99.0(SPARC/w/FPU/sis)
-COPYRIGHT (c) 1989-2008.
+COPYRIGHT (c) 1989-2011.
 On-Line Applications Research Corporation (OAR).
 
 Login into RTEMS

@@ -32,8 +32,6 @@ Makefile.in
 mdate-sh
 mips.texi
 powerpc.texi
-rtems_footer.html
-rtems_header.html
 rtemspie.pdf
 sh.texi
 sparc.texi

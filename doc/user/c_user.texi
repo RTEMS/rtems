@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1988-2011.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
@@ -31,14 +31,14 @@
 @ifset use-ascii
 @dircategory RTEMS On-Line Manual
 @direntry
-* RTEMS C User: (c_user).              The C User's Guide.
+* RTEMS C User: (C Users Guide).              The C User's Guide.
 @end direntry
 @end ifset
 
 @c @syncodeindex fn cp
 @c variable substitution info:
 @c
-@set is-C
+@set is-C 1
 @clear is-Ada
 @set LANGUAGE C
 @set STRUCTURE structure
@@ -114,11 +114,8 @@
 @include dirstat.texi
 @include example.texi
 @include glossary.texi
-@ifinfo
 @node Top, List of Figures, (dir), (dir)
-@top c_user
-
-This is the online version of the RTEMS C User's Guide.
+@top RTEMS Applications C User's Guide
 
 @menu
 * List of Figures::
@@ -157,12 +154,6 @@ This is the online version of the RTEMS C User's Guide.
 * Command and Variable Index::
 * Concept Index::
 @end menu
-
-@end ifinfo
-@c 
-@c 
-@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
-@c
 
 @node Command and Variable Index, Concept Index, Glossary, Top
 @unnumbered Command and Variable Index

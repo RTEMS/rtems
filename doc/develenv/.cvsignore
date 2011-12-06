@@ -18,7 +18,5 @@ index.html
 Makefile
 Makefile.in
 mdate-sh
-rtems_footer.html
-rtems_header.html
 sample.texi
 utils.texi

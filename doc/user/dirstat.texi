@@ -1,14 +1,12 @@
 @c
-@c  COPYRIGHT (c) 1988-2006.
+@c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
 @c  $Id$
 @c
 
-@ifinfo
 @node Directive Status Codes, Example Application, Chains Prepend a Node, Top
-@end ifinfo
 @chapter Directive Status Codes
 @table @b
 @item @code{@value{RPREFIX}SUCCESSFUL} - successful completion

@@ -38,8 +38,6 @@ posix_users.tp
 posix_users.vr
 procenv.texi
 process.texi
-rtems_footer.html
-rtems_header.html
 sched.texi
 semaphores.texi
 signal.texi

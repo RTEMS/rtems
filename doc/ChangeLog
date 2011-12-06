@@ -1,3 +1,26 @@
+2011-12-06	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1793/doc
+	* .cvsignore, Makefile.am, README, configure.ac, index.html.in,
+	main.am, project.am, ada_user/.cvsignore, ada_user/ada_user.texi,
+	ada_user/example.texi, bsp_howto/.cvsignore,
+	bsp_howto/bsp_howto.texi, cpu_supplement/.cvsignore,
+	cpu_supplement/cpu_supplement.texi, cpu_supplement/preface.texi,
+	develenv/.cvsignore, develenv/develenv.texi, develenv/intro.texi,
+	filesystem/.cvsignore, filesystem/filesystem.texi,
+	filesystem/preface.texi, networking/.cvsignore,
+	networking/networking.texi, networking/preface.texi,
+	porting/.cvsignore, porting/porting.texi, porting/preface.texi,
+	posix1003.1/.cvsignore, posix1003.1/posix1003_1.texi,
+	posix_users/.cvsignore, posix_users/posix_users.texi,
+	posix_users/preface.texi, shell/.cvsignore, shell/preface.texi,
+	shell/shell.texi, started/.cvsignore, started/started.texi,
+	user/.cvsignore, user/c_user.texi, user/dirstat.texi,
+	user/example.texi, user/glossary.texi, user/preface.texi: Convert
+	from texi2www to texi2html.
+	* texi2html_init.in: New file.
+	* rtems_footer.html.in, rtems_header.html.in: Removed.
+
 2011-12-05	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* ada_user/version.texi, bsp_howto/version.texi,

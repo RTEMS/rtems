@@ -30,5 +30,3 @@ shell.vr
 Makefile
 Makefile.in
 mdate-sh
-rtems_footer.html
-rtems_header.html
