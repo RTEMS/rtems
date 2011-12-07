@@ -1,3 +1,7 @@
+2011-12-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxtmtests_plan.csv: Add more test cases.
+
 2011-10-19	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxtmbarrier01/init.c, psxtmbarrier02/init.c, psxtmbarrier03/init.c,
