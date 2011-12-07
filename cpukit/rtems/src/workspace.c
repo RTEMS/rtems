@@ -20,6 +20,7 @@
 #include <rtems/score/protectedheap.h>
 #include <rtems/score/interr.h>
 #include <rtems/config.h>
+#include <rtems/rtems/support.h>
 
 #include <string.h>  /* for memset */
 
@@ -37,7 +38,7 @@ bool rtems_workspace_get_information(
  *  _Workspace_Allocate
  */
 bool rtems_workspace_allocate(
-  uintptr_t   bytes,
+  size_t      bytes,
   void      **pointer
 )
 {
@@ -55,7 +56,7 @@ bool rtems_workspace_allocate(
   /*
    * Allocate the memory
    */
-  ptr =  _Protected_heap_Allocate( &_Workspace_Area, (intptr_t) bytes );
+  ptr =  _Protected_heap_Allocate( &_Workspace_Area, bytes );
   if (!ptr)
     return false;
 

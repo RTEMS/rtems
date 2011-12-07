@@ -1,5 +1,10 @@
 2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/workspace.c:
+ 	Include <rtems/rtems/support.h> (Missing prototypes).
+
+2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1983/networking
 	* libnetworking/libc/gethostbyht.c (gethostent_r):
 	Abort if (!hostf).
