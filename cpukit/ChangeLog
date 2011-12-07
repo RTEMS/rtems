@@ -1,5 +1,10 @@
 2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/sup_fs_is_separator.c:
+	Include <rtems/libio_.h> (Missing protypes).
+
+2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/src/workspace.c:
  	Include <rtems/rtems/support.h> (Missing prototypes).
 

@@ -14,6 +14,7 @@
  *  $Id$
  */
 
+#include <rtems/libio_.h>
 
 /*
  *  rtems_filesystem_is_separator
