@@ -1,5 +1,7 @@
 2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libnetworking/libc/ns_parse.c (ns_parserr):
+	Comment out if ( section < 0 ) (type is unsigned). 
 	* libnetworking/libc/gethostbydns.c: Comment out __dns_getanswer
 	(Unused).
 
