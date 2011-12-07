@@ -1,3 +1,9 @@
+2011-12-07	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1984/doc
+	* user/conf.t: Change CONFIGURE_MINIMUM_STACK_SIZE to
+	CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+
 2011-12-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* user/conf.t: Move @findex for CONFIGURE_MICROSECONDS_PER_TICK to

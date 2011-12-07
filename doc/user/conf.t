@@ -260,6 +260,8 @@ system reduces the amount of memory allocated from the RTEMS Workspace.
 By default, RTEMS supports 256 priority levels ranging from 0 to 255 so
 the default value for this field is 255.
 
+@fnindex CONFIGURE_MINIMUM_TASK_STACK_SIZE
+@item @code{CONFIGURE_MINIMUM_TASK_STACK_SIZE} is set to the number of bytes
 @fnindex CONFIGURE_MINIMUM_STACK_SIZE
 @item @code{CONFIGURE_MINIMUM_STACK_SIZE} is set to the number of bytes
 the application wants the minimum stack size to be for every task or 
