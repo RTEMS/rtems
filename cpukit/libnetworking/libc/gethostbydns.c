@@ -456,6 +456,7 @@ gethostanswer(
 	return (NULL);
 }
 
+#if 0
 struct hostent *
 __dns_getanswer(const char *answer, int anslen, const char *qname, int qtype)
 {
@@ -473,6 +474,7 @@ __dns_getanswer(const char *answer, int anslen, const char *qname, int qtype)
 
 	return(gethostanswer((const querybuf *)answer, anslen, qname, qtype));
 }
+#endif
 
 struct hostent *
 _gethostbydnsname(

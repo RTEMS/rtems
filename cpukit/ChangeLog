@@ -1,3 +1,8 @@
+2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/libc/gethostbydns.c: Comment out __dns_getanswer
+	(Unused).
+
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/src/ratemonperiod.c: Make _Rate_monotonic_Update_statistics
