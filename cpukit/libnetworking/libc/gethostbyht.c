@@ -223,7 +223,7 @@ struct hostent* gethostent_r(char* buf, int len)
   int    curlen;
   
    
-  if (hostf<0) return 0;
+  if (!hostf) return 0;
   fseek(hostf,0,SEEK_END);
   curlen=ftell(hostf);
   fseek(hostf,0,SEEK_SET);
