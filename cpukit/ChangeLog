@@ -1,5 +1,8 @@
 2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/rtemsobjectapiminimumclass.c: 
+	Include <rtems/rtems/object.h> (Missing prototype).
+	Adjust rtems_object_api_minimum_class to prototype.
 	* libcsupport/src/sup_fs_is_separator.c:
 	Include <rtems/libio_.h> (Missing prototype).
 

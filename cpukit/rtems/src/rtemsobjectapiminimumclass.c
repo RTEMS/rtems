@@ -18,9 +18,10 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/types.h>
+#include <rtems/rtems/object.h>
 
-uint32_t rtems_object_api_minimum_class(
-  uint32_t api
+int rtems_object_api_minimum_class(
+  int api
 )
 {
   if ( _Objects_Is_api_valid( api ) )
