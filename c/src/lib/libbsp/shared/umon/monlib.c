@@ -313,13 +313,13 @@ monConnect(int (*mon)(int,void *,void *,void *),
  */
 static int ignorelock = 0;
 
-void
+static void
 DisableMonLock(void)
 {
 	ignorelock = 2;
 }
 
-void
+static void
 EnableMonLock(void)
 {
 	ignorelock = 0;

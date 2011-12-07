@@ -30,6 +30,7 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 #include <rtems/bspIo.h>
+#include <rtems/umon.h>
 
 #include <umon/tfs.h>
 #include <umon/monlib.h>
