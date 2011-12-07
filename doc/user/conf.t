@@ -238,6 +238,7 @@ RTEMS "unlimited" objects option.  You will be able to create objects
 until you run out of all available memory rather then just until you
 run out of RTEMS Workspace.
 
+@findex CONFIGURE_MICROSECONDS_PER_TICK
 @item @code{CONFIGURE_MICROSECONDS_PER_TICK} is the length
 of time between clock ticks.  By default, this is set to
 10000 microseconds.
@@ -259,7 +260,6 @@ system reduces the amount of memory allocated from the RTEMS Workspace.
 By default, RTEMS supports 256 priority levels ranging from 0 to 255 so
 the default value for this field is 255.
 
-@findex CONFIGURE_MICROSECONDS_PER_TICK
 @fnindex CONFIGURE_MINIMUM_STACK_SIZE
 @item @code{CONFIGURE_MINIMUM_STACK_SIZE} is set to the number of bytes
 the application wants the minimum stack size to be for every task or 
