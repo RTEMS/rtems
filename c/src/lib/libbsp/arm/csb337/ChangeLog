@@ -1,3 +1,7 @@
+2011-12-07	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* startup/umonsupp.c: Include <rtems/umon.h> (Missing prototype).
+
 2011-11-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1953/bsps

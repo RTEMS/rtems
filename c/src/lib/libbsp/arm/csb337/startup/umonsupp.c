@@ -13,6 +13,7 @@
  */
 
 #include <bsp.h>
+#include <rtems/umon.h>
 
 /*
  * BSP specific routine to help when calling monConnect().  This
