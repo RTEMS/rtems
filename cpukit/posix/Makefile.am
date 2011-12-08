@@ -136,9 +136,9 @@ libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
     src/pthreadattrgetguardsize.c src/pthread.c \
     src/pthreadcreate.c src/pthreaddetach.c src/pthreadequal.c \
     src/pthreadexit.c src/pthreadgetcpuclockid.c \
-    src/pthreadgetcputime.c src/pthreadgetschedparam.c \
+    src/pthreadgetschedparam.c \
     src/pthreadinitthreads.c src/pthreadjoin.c src/pthreadkill.c \
-    src/pthreadonce.c src/pthreadself.c src/pthreadsetcputime.c \
+    src/pthreadonce.c src/pthreadself.c \
     src/pthreadsetschedparam.c src/pthreadsigmask.c \
     src/psxpriorityisvalid.c src/psxtransschedparam.c
 
