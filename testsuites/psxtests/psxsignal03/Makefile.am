@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxsignal03
 psxsignal03_SOURCES = init.c ../include/pmacros.h
@@ -14,13 +13,12 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxsignal03_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -DUSE_USER_SIGNALS_PROCESS
 
-LINK_OBJS = $(psxsignal03_OBJECTS) $(psxsignal03_LDADD)
+LINK_OBJS = $(psxsignal03_OBJECTS)
 LINK_LIBS = $(psxsignal03_LDLIBS)
 
 psxsignal03$(EXEEXT): $(psxsignal03_OBJECTS) $(psxsignal03_DEPENDENCIES)

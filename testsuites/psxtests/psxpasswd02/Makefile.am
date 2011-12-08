@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxpasswd02
 psxpasswd02_SOURCES = init.c ../include/pmacros.h
@@ -18,7 +17,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxpasswd02_OBJECTS) $(psxpasswd02_LDADD)
+LINK_OBJS = $(psxpasswd02_OBJECTS)
 LINK_LIBS = $(psxpasswd02_LDLIBS)
 
 psxpasswd02$(EXEEXT): $(psxpasswd02_OBJECTS) $(psxpasswd02_DEPENDENCIES)

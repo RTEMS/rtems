@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxgetrusage01
 psxgetrusage01_SOURCES = init.c ../../support/src/spin.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxgetrusage01_OBJECTS) $(psxgetrusage01_LDADD)
+LINK_OBJS = $(psxgetrusage01_OBJECTS)
 LINK_LIBS = $(psxgetrusage01_LDLIBS)
 
 psxgetrusage01$(EXEEXT): $(psxgetrusage01_OBJECTS) $(psxgetrusage01_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxcleanup
 psxcleanup_SOURCES = psxcleanup.c system.h ../include/pmacros.h
@@ -13,12 +12,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxcleanup_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxcleanup_OBJECTS) $(psxcleanup_LDADD)
+LINK_OBJS = $(psxcleanup_OBJECTS)
 LINK_LIBS = $(psxcleanup_LDLIBS)
 
 psxcleanup$(EXEEXT): $(psxcleanup_OBJECTS) $(psxcleanup_DEPENDENCIES)

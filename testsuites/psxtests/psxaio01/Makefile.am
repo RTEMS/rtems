@@ -1,5 +1,4 @@
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxaio01
 psxaio01_SOURCES = init.c system.h ../include/pmacros.h
@@ -10,12 +9,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxaio01_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxaio01_OBJECTS) $(psxaio01_LDADD)
+LINK_OBJS = $(psxaio01_OBJECTS)
 LINK_LIBS = $(psxaio01_LDLIBS)
 
 psxaio01$(EXEEXT): $(psxaio01_OBJECTS) $(psxaio01_DEPENDENCIES)

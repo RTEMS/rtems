@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxalarm01
 psxalarm01_SOURCES = init.c ../include/pmacros.h
@@ -14,12 +13,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxalarm01_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxalarm01_OBJECTS) $(psxalarm01_LDADD)
+LINK_OBJS = $(psxalarm01_OBJECTS)
 LINK_LIBS = $(psxalarm01_LDLIBS)
 
 psxalarm01$(EXEEXT): $(psxalarm01_OBJECTS) $(psxalarm01_DEPENDENCIES)

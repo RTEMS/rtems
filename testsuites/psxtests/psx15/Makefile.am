@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psx15
 psx15_SOURCES = init.c ../include/pmacros.h
@@ -13,12 +12,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psx15_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psx15_OBJECTS) $(psx15_LDADD)
+LINK_OBJS = $(psx15_OBJECTS)
 LINK_LIBS = $(psx15_LDLIBS)
 
 psx15$(EXEEXT): $(psx15_OBJECTS) $(psx15_DEPENDENCIES)

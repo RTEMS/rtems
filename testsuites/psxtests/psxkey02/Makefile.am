@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxkey02
 psxkey02_SOURCES = init.c
@@ -14,12 +13,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxkey02_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxkey02_OBJECTS) $(psxkey02_LDADD)
+LINK_OBJS = $(psxkey02_OBJECTS)
 LINK_LIBS = $(psxkey02_LDLIBS)
 
 psxkey02$(EXEEXT): $(psxkey02_OBJECTS) $(psxkey02_DEPENDENCIES)

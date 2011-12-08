@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxpipe01
 psxpipe01_SOURCES = init.c ../include/pmacros.h
@@ -18,7 +17,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxpipe01_OBJECTS) $(psxpipe01_LDADD)
+LINK_OBJS = $(psxpipe01_OBJECTS)
 LINK_LIBS = $(psxpipe01_LDLIBS)
 
 psxpipe01$(EXEEXT): $(psxpipe01_OBJECTS) $(psxpipe01_DEPENDENCIES)

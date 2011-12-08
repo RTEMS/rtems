@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxrdwrv
 psxrdwrv_SOURCES = main.c test.c ../include/pmacros.h
@@ -13,12 +12,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxrdwrv_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxrdwrv_OBJECTS) $(psxrdwrv_LDADD)
+LINK_OBJS = $(psxrdwrv_OBJECTS)
 LINK_LIBS = $(psxrdwrv_LDLIBS)
 
 psxrdwrv$(EXEEXT): $(psxrdwrv_OBJECTS) $(psxrdwrv_DEPENDENCIES)

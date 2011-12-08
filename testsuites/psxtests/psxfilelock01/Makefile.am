@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxfilelock01
 psxfilelock01_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxfilelock01_OBJECTS) $(psxfilelock01_LDADD)
+LINK_OBJS = $(psxfilelock01_OBJECTS)
 LINK_LIBS = $(psxfilelock01_LDLIBS)
 
 psxfilelock01$(EXEEXT): $(psxfilelock01_OBJECTS) $(psxfilelock01_DEPENDENCIES)

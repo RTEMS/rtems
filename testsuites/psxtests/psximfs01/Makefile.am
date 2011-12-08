@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psximfs01
 psximfs01_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psximfs01_OBJECTS) $(psximfs01_LDADD)
+LINK_OBJS = $(psximfs01_OBJECTS)
 LINK_LIBS = $(psximfs01_LDLIBS)
 
 psximfs01$(EXEEXT): $(psximfs01_OBJECTS) $(psximfs01_DEPENDENCIES)

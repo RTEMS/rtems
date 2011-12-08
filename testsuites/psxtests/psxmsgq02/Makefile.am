@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxmsgq02
 psxmsgq02_SOURCES = init.c system.h ../include/pmacros.h \
@@ -14,12 +13,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxmsgq02_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxmsgq02_OBJECTS) $(psxmsgq02_LDADD)
+LINK_OBJS = $(psxmsgq02_OBJECTS)
 LINK_LIBS = $(psxmsgq02_LDLIBS)
 
 psxmsgq02$(EXEEXT): $(psxmsgq02_OBJECTS) $(psxmsgq02_DEPENDENCIES)

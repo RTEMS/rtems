@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxfile02
 psxfile02_SOURCES = init.c ../../support/src/spin.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxfile02_OBJECTS) $(psxfile02_LDADD)
+LINK_OBJS = $(psxfile02_OBJECTS)
 LINK_LIBS = $(psxfile02_LDLIBS)
 
 psxfile02$(EXEEXT): $(psxfile02_OBJECTS) $(psxfile02_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxfatal02
 psxfatal02_SOURCES = ../psxfatal_support/init.c ../psxfatal_support/system.h testcase.h
@@ -13,11 +12,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxfatal02_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxfatal02_OBJECTS) $(psxfatal02_LDADD)
+LINK_OBJS = $(psxfatal02_OBJECTS)
 LINK_LIBS = $(psxfatal02_LDLIBS)
 
 psxfatal02$(EXEEXT): $(psxfatal02_OBJECTS) $(psxfatal02_DEPENDENCIES)

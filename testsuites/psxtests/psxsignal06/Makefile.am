@@ -15,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxsignal06_OBJECTS) $(psxsignal06_LDADD)
+LINK_OBJS = $(psxsignal06_OBJECTS)
 LINK_LIBS = $(psxsignal06_LDLIBS)
 
 psxsignal06$(EXEEXT): $(psxsignal06_OBJECTS) $(psxsignal06_DEPENDENCIES)

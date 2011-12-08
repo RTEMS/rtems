@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxchroot01
 psxchroot01_SOURCES = main.c test.c ../include/pmacros.h
@@ -13,12 +12,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxchroot01_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxchroot01_OBJECTS) $(psxchroot01_LDADD)
+LINK_OBJS = $(psxchroot01_OBJECTS)
 LINK_LIBS = $(psxchroot01_LDLIBS)
 
 psxchroot01$(EXEEXT): $(psxchroot01_OBJECTS) $(psxchroot01_DEPENDENCIES)

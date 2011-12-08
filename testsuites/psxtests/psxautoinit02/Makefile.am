@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxautoinit02
 psxautoinit02_SOURCES = init.c ../include/pmacros.h
@@ -15,12 +14,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxautoinit02_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxautoinit02_OBJECTS) $(psxautoinit02_LDADD)
+LINK_OBJS = $(psxautoinit02_OBJECTS)
 LINK_LIBS = $(psxautoinit02_LDLIBS)
 
 psxautoinit02$(EXEEXT): $(psxautoinit02_OBJECTS) \

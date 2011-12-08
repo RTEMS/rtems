@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxclassic01
 psxclassic01_SOURCES = init.c ../include/pmacros.h
@@ -14,12 +13,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-psxclassic01_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxclassic01_OBJECTS) $(psxclassic01_LDADD)
+LINK_OBJS = $(psxclassic01_OBJECTS)
 LINK_LIBS = $(psxclassic01_LDLIBS)
 
 psxclassic01$(EXEEXT): $(psxclassic01_OBJECTS) $(psxclassic01_DEPENDENCIES)

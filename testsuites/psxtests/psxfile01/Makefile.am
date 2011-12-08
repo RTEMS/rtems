@@ -14,7 +14,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxfile01_OBJECTS) $(psxfile01_LDADD)
+LINK_OBJS = $(psxfile01_OBJECTS)
 LINK_LIBS = $(psxfile01_LDLIBS)
 
 psxfile01$(EXEEXT): $(psxfile01_OBJECTS) $(psxfile01_DEPENDENCIES)
