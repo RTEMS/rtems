@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io rate_monotonic semaphore
 
 rtems_tests_PROGRAMS = tm30
 tm30_SOURCES = init.c ../include/timesys.h \
@@ -19,7 +18,7 @@ OPERATION_COUNT = @OPERATION_COUNT@
 AM_CPPFLAGS += -I$(top_srcdir)/include -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(tm30_OBJECTS) $(tm30_LDADD)
+LINK_OBJS = $(tm30_OBJECTS)
 LINK_LIBS = $(tm30_LDLIBS)
 
 tm30$(EXEEXT): $(tm30_OBJECTS) $(tm30_DEPENDENCIES)
