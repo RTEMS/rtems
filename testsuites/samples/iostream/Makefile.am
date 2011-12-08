@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = cxx_iostream
 cxx_iostream_SOURCES = init.cc system.h
@@ -14,9 +13,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-cxx_iostream_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-LINK_OBJS = $(cxx_iostream_OBJECTS) $(cxx_iostream_LDADD)
+LINK_OBJS = $(cxx_iostream_OBJECTS)
 LINK_LIBS = $(cxx_iostream_LDLIBS)
 
 cxx_iostream$(EXEEXT): $(cxx_iostream_OBJECTS) $(cxx_iostream_DEPENDENCIES)

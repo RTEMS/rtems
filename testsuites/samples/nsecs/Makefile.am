@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = nsecs
 nsecs_SOURCES = init.c empty.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(nsecs_OBJECTS) $(nsecs_LDADD)
+LINK_OBJS = $(nsecs_OBJECTS)
 LINK_LIBS = $(nsecs_LDLIBS)
 
 nsecs$(EXEEXT): $(nsecs_OBJECTS) $(nsecs_DEPENDENCIES)

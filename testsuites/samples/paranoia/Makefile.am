@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = paranoia
 paranoia_SOURCES = init.c paranoia.c system.h
@@ -13,14 +12,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-paranoia_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 #  -DCYGNUS   turns on more verbose msgs
 AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN
 
 paranoia_LDLIBS = -lm
 
-LINK_OBJS = $(paranoia_OBJECTS) $(paranoia_LDADD)
+LINK_OBJS = $(paranoia_OBJECTS)
 LINK_LIBS = $(paranoia_LDLIBS)
 
 paranoia$(EXEEXT): $(paranoia_OBJECTS) $(paranoia_DEPENDENCIES)

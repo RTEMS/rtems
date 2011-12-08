@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = loopback
 loopback_SOURCES = init.c
@@ -13,9 +12,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-loopback_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-LINK_OBJS = $(loopback_OBJECTS) $(loopback_LDADD)
+LINK_OBJS = $(loopback_OBJECTS)
 LINK_LIBS = $(loopback_LDLIBS)
 
 loopback$(EXEEXT): $(loopback_OBJECTS) $(loopback_DEPENDENCIES)

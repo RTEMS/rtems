@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = cdtest
 cdtest_SOURCES = init.c main.cc system.h
@@ -13,13 +12,12 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-cdtest_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 # AM_CPPFLAGS += -DRTEMS_TEST_IO_STREAM
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(cdtest_OBJECTS) $(cdtest_LDADD)
+LINK_OBJS = $(cdtest_OBJECTS)
 LINK_LIBS = $(cdtest_LDLIBS)
 
 cdtest$(EXEEXT): $(cdtest_OBJECTS) $(cdtest_DEPENDENCIES)
