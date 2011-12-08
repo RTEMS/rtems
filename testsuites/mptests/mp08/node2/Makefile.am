@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
-
 rtems_tests_PROGRAMS = mp08-node2
 mp08_node2_SOURCES = ../init.c ../task1.c ../system.h
 
@@ -14,13 +12,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-mp08_node2_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
-
 AM_CPPFLAGS += -DNODE_NUMBER=2 -I$(srcdir)/..
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(mp08_node2_OBJECTS) $(mp08_node2_LDADD)
+LINK_OBJS = 
 LINK_LIBS = $(mp08_node2_LDLIBS)
 
 mp08-node2$(EXEEXT): $(mp08_node2_OBJECTS) $(mp08_node2_DEPENDENCIES)

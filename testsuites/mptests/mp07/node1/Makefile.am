@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
-
 rtems_tests_PROGRAMS = mp07-node1
 mp07_node1_SOURCES = ../init.c ../task1.c ../system.h
 
@@ -14,13 +12,11 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-mp07_node1_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
-
 AM_CPPFLAGS += -DNODE_NUMBER=1 -I$(srcdir)/..
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(mp07_node1_OBJECTS) $(mp07_node1_LDADD)
+LINK_OBJS = 
 LINK_LIBS = $(mp07_node1_LDLIBS)
 
 mp07-node1$(EXEEXT): $(mp07_node1_OBJECTS) $(mp07_node1_DEPENDENCIES)
