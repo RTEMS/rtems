@@ -1,5 +1,10 @@
 2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/termios.c: Make rtems_termios_refill_transmitter
+	static.
+
+2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1981/cpukit
 	* posix/Makefile.am: Reflect changes below.
 	* posix/src/pthreadsetcputime.c, posix/src/pthreadgetcputime.c:

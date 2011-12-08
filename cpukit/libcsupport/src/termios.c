@@ -1247,7 +1247,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
  * in task-driven mode, this function is called in Tx task context
  * in interrupt-driven mode, this function is called in TxIRQ context
  */
-int
+static int
 rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 {
   unsigned int newTail;
