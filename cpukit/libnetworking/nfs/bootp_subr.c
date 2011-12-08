@@ -271,7 +271,7 @@ bootpboot_p_iflist(void)
  * - allocate or reallocate dst, so that string fits in
  * - copy string from src to dest
  */
-void *bootp_strdup_realloc(char *dst,const char *src)
+static void *bootp_strdup_realloc(char *dst,const char *src)
 {
   size_t len;
 

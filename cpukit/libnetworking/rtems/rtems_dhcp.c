@@ -209,7 +209,7 @@ static const char         dhcp_request_parameters[5] = { DHCP_SUBNET,
 /*
  * Format an IP address in dotted decimal.
  */
-void
+static void
 format_ip (unsigned long ip, char* buffer)
 {
   sprintf (buffer,
@@ -842,7 +842,7 @@ dhcp_interface_has_ip (struct ifreq *ireq, struct socket *so, struct proc *procp
  *    0: ok
  *    < 0: failed to startup or configure interface
  */
-int
+static int
 dhcp_init (int update_files)
 {
   struct dhcp_packet   call;
