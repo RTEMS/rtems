@@ -1,3 +1,25 @@
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
+	* block01/Makefile.am, block02/Makefile.am, block03/Makefile.am,
+	block04/Makefile.am, block05/Makefile.am, block06/Makefile.am,
+	block07/Makefile.am, block08/Makefile.am, block09/Makefile.am,
+	block10/Makefile.am, bspcmdline01/Makefile.am, cpuuse/Makefile.am,
+	devfs01/Makefile.am, devfs02/Makefile.am, devfs03/Makefile.am,
+	devfs04/Makefile.am, deviceio01/Makefile.am,
+	devnullfatal01/Makefile.am, dumpbuf01/Makefile.am, ftp01/Makefile.am,
+	gxx01/Makefile.am, heapwalk/Makefile.am, malloc02/Makefile.am,
+	malloc03/Makefile.am, malloc04/Makefile.am, malloc05/Makefile.am,
+	malloctest/Makefile.am, monitor/Makefile.am, monitor02/Makefile.am,
+	mouse01/Makefile.am, putenvtest/Makefile.am, rtems++/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am, stackchk01/Makefile.am,
+	stringto01/Makefile.am, tar01/Makefile.am, tar02/Makefile.am,
+	tar03/Makefile.am, termios/Makefile.am, termios01/Makefile.am,
+	termios02/Makefile.am, termios03/Makefile.am, termios04/Makefile.am,
+	termios05/Makefile.am, termios06/Makefile.am, termios07/Makefile.am,
+	termios08/Makefile.am, tztest/Makefile.am: Remove obsolete optional
+	manager capability.
+
 2011-12-05	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* monitor02/init.c: Remove re-declaration of rtems_shell_main_monitor.

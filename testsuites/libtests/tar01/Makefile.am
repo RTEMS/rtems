@@ -22,7 +22,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(tar01_OBJECTS) $(tar01_LDADD)
+LINK_OBJS = $(tar01_OBJECTS)
 LINK_LIBS = $(tar01_LDLIBS)
 
 tar01$(EXEEXT): $(tar01_OBJECTS) $(tar01_DEPENDENCIES)

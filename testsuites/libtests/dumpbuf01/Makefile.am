@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = dumpbuf01
 dumpbuf01_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(dumpbuf01_OBJECTS) $(dumpbuf01_LDADD)
+LINK_OBJS = $(dumpbuf01_OBJECTS)
 LINK_LIBS = $(dumpbuf01_LDLIBS)
 
 dumpbuf01$(EXEEXT): $(dumpbuf01_OBJECTS) $(dumpbuf01_DEPENDENCIES)

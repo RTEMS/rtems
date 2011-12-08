@@ -8,7 +8,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = block08
 block08_SOURCES = init.c               \
@@ -36,11 +35,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-block08_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(block08_OBJECTS) $(block08_LDADD)
+LINK_OBJS = $(block08_OBJECTS)
 LINK_LIBS = $(block08_LDLIBS)
 
 block08$(EXEEXT): $(block08_OBJECTS) $(block08_DEPENDENCIES)

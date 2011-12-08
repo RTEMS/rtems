@@ -15,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(deviceio01_OBJECTS) $(deviceio01_LDADD)
+LINK_OBJS = $(deviceio01_OBJECTS)
 LINK_LIBS = $(deviceio01_LDLIBS)
 
 deviceio01$(EXEEXT): $(deviceio01_OBJECTS) $(deviceio01_DEPENDENCIES)

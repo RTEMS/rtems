@@ -14,7 +14,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(tar03_OBJECTS) $(tar03_LDADD)
+LINK_OBJS = $(tar03_OBJECTS)
 LINK_LIBS = $(tar03_LDLIBS)
 
 tar03$(EXEEXT): $(tar03_OBJECTS) $(tar03_DEPENDENCIES)

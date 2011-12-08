@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = termios03
 termios03_SOURCES = init.c termios_testdriver_polled.c
@@ -17,7 +16,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(termios03_OBJECTS) $(termios03_LDADD)
+LINK_OBJS = $(termios03_OBJECTS)
 LINK_LIBS = $(termios03_LDLIBS)
 
 termios03$(EXEEXT): $(termios03_OBJECTS) $(termios03_DEPENDENCIES)

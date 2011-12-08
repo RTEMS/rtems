@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = devnullfatal01
 devnullfatal01_SOURCES = ../../sptests/spfatal_support/init.c \
@@ -18,7 +17,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../../sptests/spfatal_support
 
-LINK_OBJS = $(devnullfatal01_OBJECTS) $(devnullfatal01_LDADD)
+LINK_OBJS = $(devnullfatal01_OBJECTS)
 LINK_LIBS = $(devnullfatal01_LDLIBS)
 
 devnullfatal01$(EXEEXT): $(devnullfatal01_OBJECTS) \

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = gxx01
 gxx01_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(gxx01_OBJECTS) $(gxx01_LDADD)
+LINK_OBJS = $(gxx01_OBJECTS)
 LINK_LIBS = $(gxx01_LDLIBS)
 
 gxx01$(EXEEXT): $(gxx01_OBJECTS) $(gxx01_DEPENDENCIES)

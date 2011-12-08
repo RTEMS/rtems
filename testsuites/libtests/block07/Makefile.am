@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io semaphore event
 
 rtems_tests_PROGRAMS = block07
 block07_SOURCES = init.c
@@ -13,11 +12,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-block07_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(block07_OBJECTS) $(block07_LDADD)
+LINK_OBJS = $(block07_OBJECTS)
 LINK_LIBS = $(block07_LDLIBS)
 
 block07$(EXEEXT): $(block07_OBJECTS) $(block07_DEPENDENCIES)

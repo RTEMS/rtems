@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = malloc04
 malloc04_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(malloc04_OBJECTS) $(malloc04_LDADD)
+LINK_OBJS = $(malloc04_OBJECTS)
 LINK_LIBS = $(malloc04_LDLIBS)
 
 malloc04$(EXEEXT): $(malloc04_OBJECTS) $(malloc04_DEPENDENCIES)

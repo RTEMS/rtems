@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = termios05
 termios05_SOURCES = init.c ../termios04/termios_testdriver_intr.c
@@ -18,7 +17,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/termios04
 AM_CPPFLAGS += -DTASK_DRIVEN
 
-LINK_OBJS = $(termios05_OBJECTS) $(termios05_LDADD)
+LINK_OBJS = $(termios05_OBJECTS)
 LINK_LIBS = $(termios05_LDLIBS)
 
 termios05$(EXEEXT): $(termios05_OBJECTS) $(termios05_DEPENDENCIES)

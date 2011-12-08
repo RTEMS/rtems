@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = mouse01
 mouse01_SOURCES = init.c serial_mouse_config.c msmouse.c\
@@ -18,7 +17,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/termios04
 
-LINK_OBJS = $(mouse01_OBJECTS) $(mouse01_LDADD)
+LINK_OBJS = $(mouse01_OBJECTS)
 LINK_LIBS = $(mouse01_LDLIBS)
 
 mouse01$(EXEEXT): $(mouse01_OBJECTS) $(mouse01_DEPENDENCIES)

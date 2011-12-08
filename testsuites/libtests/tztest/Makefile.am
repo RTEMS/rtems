@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = tztest
 tztest_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(tztest_OBJECTS) $(tztest_LDADD)
+LINK_OBJS = $(tztest_OBJECTS)
 LINK_LIBS = $(tztest_LDLIBS)
 
 tztest$(EXEEXT): $(tztest_OBJECTS) $(tztest_DEPENDENCIES)

@@ -14,7 +14,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(devfs03_OBJECTS) $(devfs03_LDADD)
+LINK_OBJS = $(devfs03_OBJECTS)
 LINK_LIBS = $(devfs03_LDLIBS)
 
 devfs03$(EXEEXT): $(devfs03_OBJECTS) $(devfs03_DEPENDENCIES)
