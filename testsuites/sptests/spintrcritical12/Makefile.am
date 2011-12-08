@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spintrcritical12
 spintrcritical12_SOURCES = ../spintrcritical11/init.c \
@@ -15,13 +14,12 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-spintrcritical12_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/spintrcritical_support
 AM_CPPFLAGS += -DEVENT_ALL
 
-LINK_OBJS = $(spintrcritical12_OBJECTS) $(spintrcritical12_LDADD)
+LINK_OBJS = $(spintrcritical12_OBJECTS)
 LINK_LIBS = $(spintrcritical12_LDLIBS)
 
 spintrcritical12$(EXEEXT): $(spintrcritical12_OBJECTS) $(spintrcritical12_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp34
 sp34_SOURCES = changepri.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp34_OBJECTS) $(sp34_LDADD)
+LINK_OBJS = $(sp34_OBJECTS)
 LINK_LIBS = $(sp34_LDLIBS)
 
 sp34$(EXEEXT): $(sp34_OBJECTS) $(sp34_DEPENDENCIES)

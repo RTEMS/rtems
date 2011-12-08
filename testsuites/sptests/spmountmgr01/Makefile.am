@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spmountmgr01
 spmountmgr01_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spmountmgr01_OBJECTS) $(spmountmgr01_LDADD)
+LINK_OBJS = $(spmountmgr01_OBJECTS)
 LINK_LIBS = $(spmountmgr01_LDLIBS)
 
 spmountmgr01$(EXEEXT): $(spmountmgr01_OBJECTS) $(spmountmgr01_DEPENDENCIES)

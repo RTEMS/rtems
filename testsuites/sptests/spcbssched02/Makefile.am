@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spcbssched02
 spcbssched02_SOURCES = init.c task_periodic.c system.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-spcbssched02_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spcbssched02_OBJECTS) $(spcbssched02_LDADD)
+LINK_OBJS = $(spcbssched02_OBJECTS)
 LINK_LIBS = $(spcbssched02_LDLIBS)
 
 spcbssched02$(EXEEXT): $(spcbssched02_OBJECTS) $(spcbssched02_DEPENDENCIES)

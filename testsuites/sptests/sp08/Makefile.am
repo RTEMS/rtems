@@ -14,7 +14,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp08_OBJECTS) $(sp08_LDADD)
+LINK_OBJS = $(sp08_OBJECTS)
 LINK_LIBS = $(sp08_LDLIBS)
 
 sp08$(EXEEXT): $(sp08_OBJECTS) $(sp08_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp31
 sp31_SOURCES = delay.c init.c prtime.c task1.c system.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp31_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp31_OBJECTS) $(sp31_LDADD)
+LINK_OBJS = $(sp31_OBJECTS)
 LINK_LIBS = $(sp31_LDLIBS)
 
 sp31$(EXEEXT): $(sp31_OBJECTS) $(sp31_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io event semaphore clock
 
 rtems_tests_PROGRAMS = sp26
 sp26_SOURCES = init.c task1.c system.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp26_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp26_OBJECTS) $(sp26_LDADD)
+LINK_OBJS = $(sp26_OBJECTS)
 LINK_LIBS = $(sp26_LDLIBS)
 
 sp26$(EXEEXT): $(sp26_OBJECTS) $(sp26_DEPENDENCIES)

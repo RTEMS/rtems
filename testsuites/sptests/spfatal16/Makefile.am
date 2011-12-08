@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spfatal16
 spfatal16_SOURCES = ../spfatal_support/init.c \
@@ -19,7 +18,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -DSEMAPHORES_REMAINING=4
 
-LINK_OBJS = $(spfatal16_OBJECTS) $(spfatal16_LDADD)
+LINK_OBJS = $(spfatal16_OBJECTS)
 LINK_LIBS = $(spfatal16_LDLIBS)
 
 spfatal16$(EXEEXT): $(spfatal16_OBJECTS) $(spfatal16_DEPENDENCIES)

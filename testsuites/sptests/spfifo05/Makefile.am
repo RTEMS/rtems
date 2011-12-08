@@ -14,7 +14,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spfifo05_OBJECTS) $(spfifo05_LDADD)
+LINK_OBJS = $(spfifo05_OBJECTS)
 LINK_LIBS = $(spfifo05_LDLIBS)
 
 spfifo05$(EXEEXT): $(spfifo05_OBJECTS) $(spfifo05_DEPENDENCIES)

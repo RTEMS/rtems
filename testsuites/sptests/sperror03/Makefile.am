@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sperror03
 sperror03_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sperror03_OBJECTS) $(sperror03_LDADD)
+LINK_OBJS = $(sperror03_OBJECTS)
 LINK_LIBS = $(sperror03_LDLIBS)
 
 sperror03$(EXEEXT): $(sperror03_OBJECTS) $(sperror03_DEPENDENCIES)

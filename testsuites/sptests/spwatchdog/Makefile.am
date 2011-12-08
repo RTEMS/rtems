@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spwatchdog
 spwatchdog_SOURCES = init.c task1.c system.h prtime.c delay.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-spwatchdog_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spwatchdog_OBJECTS) $(spwatchdog_LDADD)
+LINK_OBJS = $(spwatchdog_OBJECTS)
 LINK_LIBS = $(spwatchdog_LDLIBS)
 
 spwatchdog$(EXEEXT): $(spwatchdog_OBJECTS) $(spwatchdog_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp56
 sp56_SOURCES = init.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp56_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp56_OBJECTS) $(sp56_LDADD)
+LINK_OBJS = $(sp56_OBJECTS)
 LINK_LIBS = $(sp56_LDLIBS)
 
 sp56$(EXEEXT): $(sp56_OBJECTS) $(sp56_DEPENDENCIES)

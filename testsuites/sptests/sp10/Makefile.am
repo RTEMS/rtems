@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp10
 sp10_SOURCES = init.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp10_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp10_OBJECTS) $(sp10_LDADD)
+LINK_OBJS = $(sp10_OBJECTS)
 LINK_LIBS = $(sp10_LDLIBS)
 
 sp10$(EXEEXT): $(sp10_OBJECTS) $(sp10_DEPENDENCIES)

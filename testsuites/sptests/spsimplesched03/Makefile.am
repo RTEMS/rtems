@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spsimplesched03 
 spsimplesched03_SOURCES = init.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-spsimplesched03_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spsimplesched03_OBJECTS) $(spsimplesched03_LDADD)
+LINK_OBJS = $(spsimplesched03_OBJECTS)
 LINK_LIBS = $(spsimplesched03_LDLIBS)
 
 spsimplesched03$(EXEEXT): $(spsimplesched03_OBJECTS) $(spsimplesched03_DEPENDENCIES)

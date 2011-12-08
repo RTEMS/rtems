@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io semaphore clock
 
 rtems_tests_PROGRAMS = sp19
 sp19_SOURCES = init.c first.c fptask.c task1.c system.h fptest.h inttest.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp19_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp19_OBJECTS) $(sp19_LDADD)
+LINK_OBJS = $(sp19_OBJECTS)
 LINK_LIBS = $(sp19_LDLIBS)
 
 sp19$(EXEEXT): $(sp19_OBJECTS) $(sp19_DEPENDENCIES)

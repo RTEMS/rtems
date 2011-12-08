@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io semaphore clock region
 
 rtems_tests_PROGRAMS = sp25
 sp25_SOURCES = init.c task1.c system.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp25_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp25_OBJECTS) $(sp25_LDADD)
+LINK_OBJS = $(sp25_OBJECTS)
 LINK_LIBS = $(sp25_LDLIBS)
 
 sp25$(EXEEXT): $(sp25_OBJECTS) $(sp25_DEPENDENCIES)

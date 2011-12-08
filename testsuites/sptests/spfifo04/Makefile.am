@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spfifo04
 spfifo04_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spfifo04_OBJECTS) $(spfifo04_LDADD)
+LINK_OBJS = $(spfifo04_OBJECTS)
 LINK_LIBS = $(spfifo04_LDLIBS)
 
 spfifo04$(EXEEXT): $(spfifo04_OBJECTS) $(spfifo04_DEPENDENCIES)

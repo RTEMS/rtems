@@ -14,7 +14,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spprivenv01_OBJECTS) $(spprivenv01_LDADD)
+LINK_OBJS = $(spprivenv01_OBJECTS)
 LINK_LIBS = $(spprivenv01_LDLIBS)
 
 spprivenv01$(EXEEXT): $(spprivenv01_OBJECTS) $(spprivenv01_DEPENDENCIES)

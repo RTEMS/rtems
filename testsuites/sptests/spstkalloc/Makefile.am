@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spstkalloc
 spstkalloc_SOURCES = init.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-spstkalloc_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spstkalloc_OBJECTS) $(spstkalloc_LDADD)
+LINK_OBJS = $(spstkalloc_OBJECTS)
 LINK_LIBS = $(spstkalloc_LDLIBS)
 
 spstkalloc$(EXEEXT): $(spstkalloc_OBJECTS) $(spstkalloc_DEPENDENCIES)

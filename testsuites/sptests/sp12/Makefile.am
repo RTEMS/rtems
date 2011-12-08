@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io semaphore clock
 
 rtems_tests_PROGRAMS = sp12
 sp12_SOURCES = init.c task1.c task2.c task3.c task4.c task5.c pridrv.c \
@@ -15,11 +14,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp12_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp12_OBJECTS) $(sp12_LDADD)
+LINK_OBJS = $(sp12_OBJECTS)
 LINK_LIBS = $(sp12_LDLIBS)
 
 sp12$(EXEEXT): $(sp12_OBJECTS) $(sp12_DEPENDENCIES)

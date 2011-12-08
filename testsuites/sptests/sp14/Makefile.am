@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = io signal timer semaphore clock
 
 rtems_tests_PROGRAMS = sp14
 sp14_SOURCES = init.c asr.c task1.c task2.c system.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp14_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp14_OBJECTS) $(sp14_LDADD)
+LINK_OBJS = $(sp14_OBJECTS)
 LINK_LIBS = $(sp14_LDLIBS)
 
 sp14$(EXEEXT): $(sp14_OBJECTS) $(sp14_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp70
 sp70_SOURCES = init.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp70_OBJECTS) $(sp70_LDADD)
+LINK_OBJS = $(sp70_OBJECTS)
 LINK_LIBS = $(sp70_LDLIBS)
 
 sp70$(EXEEXT): $(sp70_OBJECTS) $(sp70_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp30
 sp30_SOURCES = init.c resume.c task1.c system.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp30_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp30_OBJECTS) $(sp30_LDADD)
+LINK_OBJS = $(sp30_OBJECTS)
 LINK_LIBS = $(sp30_LDLIBS)
 
 sp30$(EXEEXT): $(sp30_OBJECTS) $(sp30_DEPENDENCIES)

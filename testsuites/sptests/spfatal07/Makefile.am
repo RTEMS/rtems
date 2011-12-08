@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = spfatal07
 spfatal07_SOURCES = ../spfatal_support/init.c ../spfatal_support/system.h testcase.h
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-spfatal07_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(spfatal07_OBJECTS) $(spfatal07_LDADD)
+LINK_OBJS = $(spfatal07_OBJECTS)
 LINK_LIBS = $(spfatal07_LDLIBS)
 
 spfatal07$(EXEEXT): $(spfatal07_OBJECTS) $(spfatal07_DEPENDENCIES)

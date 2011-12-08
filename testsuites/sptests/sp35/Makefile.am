@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp35
 sp35_SOURCES = priinv.c
@@ -16,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp35_OBJECTS) $(sp35_LDADD)
+LINK_OBJS = $(sp35_OBJECTS)
 LINK_LIBS = $(sp35_LDLIBS)
 
 sp35$(EXEEXT): $(sp35_OBJECTS) $(sp35_DEPENDENCIES)

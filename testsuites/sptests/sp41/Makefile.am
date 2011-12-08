@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp41
 sp41_SOURCES = init.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp41_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp41_OBJECTS) $(sp41_LDADD)
+LINK_OBJS = $(sp41_OBJECTS)
 LINK_LIBS = $(sp41_LDLIBS)
 
 sp41$(EXEEXT): $(sp41_OBJECTS) $(sp41_DEPENDENCIES)

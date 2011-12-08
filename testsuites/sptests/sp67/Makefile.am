@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp67
 sp67_SOURCES = init.c
@@ -14,11 +13,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp67_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp67_OBJECTS) $(sp67_LDADD)
+LINK_OBJS = $(sp67_OBJECTS)
 LINK_LIBS = $(sp67_LDLIBS)
 
 sp67$(EXEEXT): $(sp67_OBJECTS) $(sp67_DEPENDENCIES)

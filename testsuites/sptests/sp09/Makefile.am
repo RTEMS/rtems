@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = sp09
 sp09_SOURCES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c \
@@ -17,11 +16,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-sp09_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(sp09_OBJECTS) $(sp09_LDADD)
+LINK_OBJS = $(sp09_OBJECTS)
 LINK_LIBS = $(sp09_LDLIBS)
 
 sp09$(EXEEXT): $(sp09_OBJECTS) $(sp09_DEPENDENCIES)
