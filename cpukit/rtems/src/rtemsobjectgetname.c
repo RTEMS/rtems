@@ -17,6 +17,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+#include <rtems/rtems/object.h>
 
 /*
  *  This method obtain the name of an object and returns its name
