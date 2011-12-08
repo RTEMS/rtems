@@ -1,5 +1,6 @@
 2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* ftpd/ftpd.c: Make split_command static.
 	* libnetworking/rtems/rtems_dhcp.c: 
 	Make format_ip, dhcp_init static.
 	* libnetworking/nfs/bootp_subr.c:

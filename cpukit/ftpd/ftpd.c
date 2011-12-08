@@ -1616,7 +1616,7 @@ skip_options(char **p)
  *   opts - string containing all the options
  *   args - string containing all the arguments
  */
-void
+static void
 split_command(char *buf, char **cmd, char **opts, char **args)
 {
   char* eoc;
