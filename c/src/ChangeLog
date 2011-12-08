@@ -1,3 +1,14 @@
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
+	* optman/.cvsignore, optman/Makefile.am, optman/preinstall.am,
+	optman/rtems/no-barrier.c, optman/rtems/no-dpmem.c,
+	optman/rtems/no-event.c, optman/rtems/no-mp.c, optman/rtems/no-msg.c,
+	optman/rtems/no-part.c, optman/rtems/no-region.c,
+	optman/rtems/no-rtmon.c, optman/rtems/no-sem.c,
+	optman/rtems/no-signal.c, optman/rtems/no-timer.c,
+	optman/sapi/no-ext.c, optman/sapi/no-io.c: Removed.
+
 2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/sonic.c: Make sonic_enable_interrupts,
