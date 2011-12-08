@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxtmrwlock07
 psxtmrwlock07_SOURCES  = init.c
@@ -21,7 +20,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/../tmtests/include
 AM_CPPFLAGS += -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxtmrwlock07_OBJECTS) $(psxtmrwlock07_LDADD)
+LINK_OBJS = $(psxtmrwlock07_OBJECTS)
 LINK_LIBS = $(psxtmrwlock07_LDLIBS)
 
 psxtmrwlock07$(EXEEXT): $(psxtmrwlock07_OBJECTS) $(psxtmrwlock07_DEPENDENCIES)

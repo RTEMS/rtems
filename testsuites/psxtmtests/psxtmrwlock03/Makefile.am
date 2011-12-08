@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxtmrwlock03
 psxtmrwlock03_SOURCES = init.c ../../tmtests/include/timesys.h \
@@ -20,7 +19,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/../tmtests/include
 AM_CPPFLAGS += -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxtmrwlock03_OBJECTS) $(psxtmrwlock03_LDADD)
+LINK_OBJS = $(psxtmrwlock03_OBJECTS)
 LINK_LIBS = $(psxtmrwlock03_LDLIBS)
 
 psxtmrwlock03$(EXEEXT): $(psxtmrwlock03_OBJECTS) $(psxtmrwlock03_DEPENDENCIES)

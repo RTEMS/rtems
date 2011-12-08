@@ -1,3 +1,24 @@
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
+	* psxtmbarrier01/Makefile.am, psxtmbarrier02/Makefile.am,
+	psxtmbarrier03/Makefile.am, psxtmkey01/Makefile.am,
+	psxtmkey02/Makefile.am, psxtmmq01/Makefile.am,
+	psxtmmutex01/Makefile.am, psxtmmutex02/Makefile.am,
+	psxtmmutex03/Makefile.am, psxtmmutex04/Makefile.am,
+	psxtmmutex05/Makefile.am, psxtmmutex06/Makefile.am,
+	psxtmmutex07/Makefile.am, psxtmnanosleep01/Makefile.am,
+	psxtmnanosleep02/Makefile.am, psxtmrwlock01/Makefile.am,
+	psxtmrwlock02/Makefile.am, psxtmrwlock03/Makefile.am,
+	psxtmrwlock04/Makefile.am, psxtmrwlock05/Makefile.am,
+	psxtmrwlock06/Makefile.am, psxtmrwlock07/Makefile.am,
+	psxtmsem01/Makefile.am, psxtmsem02/Makefile.am,
+	psxtmsem03/Makefile.am, psxtmsem04/Makefile.am,
+	psxtmsem05/Makefile.am, psxtmsleep01/Makefile.am,
+	psxtmsleep02/Makefile.am, psxtmthread01/Makefile.am,
+	psxtmthread03/Makefile.am: Remove obsolete optional manager
+	capability.
+
 2011-12-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxtmtests_plan.csv: Add more test cases.

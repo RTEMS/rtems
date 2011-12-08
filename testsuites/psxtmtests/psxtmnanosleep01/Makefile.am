@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxtmnanosleep01
 psxtmnanosleep01_SOURCES = init.c ../../tmtests/include/timesys.h \
@@ -20,7 +19,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/../tmtests/include
 AM_CPPFLAGS += -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxtmnanosleep01_OBJECTS) $(psxtmnanosleep01_LDADD)
+LINK_OBJS = $(psxtmnanosleep01_OBJECTS)
 LINK_LIBS = $(psxtmnanosleep01_LDLIBS)
 
 psxtmnanosleep01$(EXEEXT): $(psxtmnanosleep01_OBJECTS) $(psxtmnanosleep01_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = psxtmbarrier02
 psxtmbarrier02_SOURCES = init.c ../../tmtests/include/timesys.h \
@@ -20,7 +19,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/../tmtests/include
 AM_CPPFLAGS += -DOPERATION_COUNT=$(OPERATION_COUNT)
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = $(psxtmbarrier02_OBJECTS) $(psxtmbarrier02_LDADD)
+LINK_OBJS = $(psxtmbarrier02_OBJECTS)
 LINK_LIBS = $(psxtmbarrier02_LDLIBS)
 
 psxtmbarrier02$(EXEEXT): $(psxtmbarrier02_OBJECTS) $(psxtmbarrier02_DEPENDENCIES)
