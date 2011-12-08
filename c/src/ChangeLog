@@ -1,6 +1,11 @@
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build
+	* configure.ac: Remove obsolete optional manager capability.
+
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
 	* optman/.cvsignore, optman/Makefile.am, optman/preinstall.am,
 	optman/rtems/no-barrier.c, optman/rtems/no-dpmem.c,
 	optman/rtems/no-event.c, optman/rtems/no-mp.c, optman/rtems/no-msg.c,

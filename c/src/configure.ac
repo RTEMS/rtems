@@ -4,7 +4,7 @@
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
-AC_CONFIG_SRCDIR([optman])
+AC_CONFIG_SRCDIR([libchip])
 RTEMS_TOP(../..)
 
 RTEMS_ENABLE_CXX
@@ -149,8 +149,6 @@ BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS ada"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
-BSP_SUBDIRS="$BSP_SUBDIRS optman"
-
 AC_ARG_ENABLE([ada],
 [AS_HELP_STRING(--enable-ada,enable ada support)],
 [case "${enable_ada}" in
@@ -218,19 +216,11 @@ AC_CONFIG_FILES([Makefile],
 
 AC_CONFIG_FILES([
 support/Makefile
-
 libchip/Makefile
-
-optman/Makefile
-
 lib/Makefile
-
 lib/libcpu/Makefile
-
 lib/libbsp/Makefile
-
 ada/Makefile
-
 wrapup/Makefile
 ])
 
