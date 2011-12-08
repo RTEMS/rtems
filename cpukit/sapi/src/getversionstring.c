@@ -13,6 +13,7 @@
 #include "config.h"
 #endif
 
+#include <rtems.h>
 #include <rtems/system.h>
 
 const char *rtems_get_version_string(void)

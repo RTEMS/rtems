@@ -1,5 +1,6 @@
 2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* sapi/src/getversionstring.c: Include <rtems.h> (Missing prototype).
 	* libcsupport/src/termios.c: Make rtems_termios_refill_transmitter
 	static.
 
