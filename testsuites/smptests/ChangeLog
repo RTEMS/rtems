@@ -1,3 +1,11 @@
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
+	* smp01/Makefile.am, smp02/Makefile.am, smp03/Makefile.am,
+	smp04/Makefile.am, smp05/Makefile.am, smp06/Makefile.am,
+	smp07/Makefile.am, smp08/Makefile.am, smp09/Makefile.am: Remove
+	obsolete optional manager capability.
+
 2011-09-29	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* smp05/init.c, smp06/init.c, smp07/init.c, smp09/init.c:

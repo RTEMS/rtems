@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = smp07
 smp07_SOURCES = init.c ../../support/src/locked_print.c
@@ -17,7 +16,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -DSMPTEST 
 
-LINK_OBJS = $(smp07_OBJECTS) $(smp07_LDADD)
+LINK_OBJS = $(smp07_OBJECTS)
 LINK_LIBS = $(smp07_LDLIBS)
 
 smp07$(EXEEXT): $(smp07_OBJECTS) $(smp07_DEPENDENCIES)

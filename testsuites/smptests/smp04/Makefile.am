@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = smp04
 smp04_SOURCES = init.c system.h ../../support/src/locked_print.c
@@ -17,9 +16,8 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -DSMPTEST 
 
-smp04_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
-LINK_OBJS = $(smp04_OBJECTS) $(smp04_LDADD)
+LINK_OBJS = $(smp04_OBJECTS)
 LINK_LIBS = $(smp04_LDLIBS)
 
 smp04$(EXEEXT): $(smp04_OBJECTS) $(smp04_DEPENDENCIES)
