@@ -1,3 +1,11 @@
+2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1981/cpukit
+	* configure.ac: Remove checks for pthread_attr_getcputime,
+	pthread_attr_setcputime.
+	* psx07/init.c: Remove references to pthread_attr_getcputime,
+	pthread_attr_setcputime.
+
 2011-10-25	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxmsgq01/init.c: Introduce fatal_posix_mqd.

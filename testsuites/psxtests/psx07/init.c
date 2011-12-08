@@ -16,18 +16,6 @@
 #include <pthread.h>
 #include <sched.h>
 
-#if !HAVE_DECL_PTHREAD_ATTR_GETCPUTIME
-extern int pthread_attr_getcputime(
-  pthread_attr_t  *attr,
-  int             *clock_allowed);
-#endif
-
-#if !HAVE_DECL_PTHREAD_ATTR_SETCPUTIME
-extern int pthread_attr_setcputime(
-  pthread_attr_t  *attr,
-  int             clock_allowed);
-#endif
-
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
@@ -156,47 +144,6 @@ void *POSIX_Init(
 
   status = pthread_attr_init( &attr );
   posix_service_failed( status, " pthread_attr_init");
-
-  /* Check out pthread_attr_settime and pthread_attr_gettime */
-  puts( "Init - pthread_attr_settime - EINVAL ( null attribute )" );
-  status = pthread_attr_setcputime( NULL, CLOCK_ENABLED );
-  fatal_directive_check_status_only( status, EINVAL, "null attribute" );
-
-  puts( "Init - pthread_attr_gettime - EINVAL ( null attribute )" );
-  status = pthread_attr_getcputime( NULL, &clock_allowed );
-  fatal_directive_check_status_only( status, EINVAL, " null attribute" );
-
-  puts( "Init - pthread_attr_settime - EINVAL ( is initialized )" );
-  status = pthread_attr_setcputime( &destroyed_attr, CLOCK_ENABLED );
-  fatal_directive_check_status_only( status, EINVAL, "is initialized" );
-
-  puts( "Init - pthread_attr_gettime - EINVAL ( is initialized )" );
-  status = pthread_attr_getcputime( &destroyed_attr, &clock_allowed  );
-  fatal_directive_check_status_only( status, EINVAL, "is initialized" );
-
-  puts( "Init - pthread_attr_settime - EINVAL ( invalid clock allowed )" );
-  status = pthread_attr_setcputime( &attr, ~(CLOCK_ENABLED | CLOCK_DISABLED) );
-  fatal_directive_check_status_only( status, EINVAL, "invalid clock allowed" );
-
-  puts( "Init - pthread_attr_gettime - EINVAL ( NULL clock allowed )" );
-  status = pthread_attr_getcputime( &attr, NULL );
-  fatal_directive_check_status_only( status, EINVAL, "NULL clock allowed" );
-
-  puts( "Init - validate pthread_attr_setcputime - CLOCK_DISABLED" );
-  status = pthread_attr_setcputime( &attr, CLOCK_DISABLED );
-  posix_service_failed( status, "pthread_attr_setcputime");
-  status = pthread_attr_getcputime( &attr, &clock_allowed );
-  posix_service_failed( status, "pthread_attr_getcputime");
-  if (attr.cputime_clock_allowed != CLOCK_DISABLED)
-    perror("ERROR==> pthread_attr_setcputime to CLOCK_DISABLED failed");
-
-  puts( "Init - validate pthread_attr_setcputime - CLOCK_ENABLED" );
-  status = pthread_attr_setcputime( &attr, CLOCK_ENABLED );
-  posix_service_failed( status, "pthread_attr_setcputime");
-  status = pthread_attr_getcputime( &attr, &clock_allowed );
-  posix_service_failed( status, "pthread_attr_getcputime");
-  if (attr.cputime_clock_allowed != CLOCK_ENABLED)
-    perror("ERROR==> pthread_attr_setcputime to CLOCK_ENABLED failed");
 
   /* must go around pthread_attr_set routines to set a bad value */
   attr.contentionscope = PTHREAD_SCOPE_SYSTEM;

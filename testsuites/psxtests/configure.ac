@@ -38,18 +38,6 @@ AC_CHECK_DECLS([pthread_rwlock_unlock],[],[],[[#include <pthread.h>]])
 # FIXME: newlib should supply declaration of pthread_atfork()
 AC_CHECK_DECLS([pthread_atfork],[],[],[[#include <pthread.h>]])
 
-# FIXME: RTEMS presumes pthread_attr_getcputime to be IEEE Std 1003.1
-# Likely an anachronism in RTEMS.
-AC_CHECK_DECLS([pthread_attr_getcputime],[],[],[[#include <pthread.h>]])
-
-# FIXME: RTEMS presumes pthread_attr_getcputime to be IEEE Std 1003.1
-# Likely an anachronism in RTEMS.
-AC_CHECK_DECLS([pthread_attr_getcputime],[],[],[[#include <pthread.h>]])
-
-# FIXME: RTEMS presumes pthread_attr_setcputime to be IEEE Std 1003.1
-# Likely an anachronism in RTEMS.
-AC_CHECK_DECLS([pthread_attr_setcputime],[],[],[[#include <pthread.h>]])
-
 # Added to pthreads after initial revision.  May not be in toolset
 AC_CHECK_DECLS([pthread_attr_getstack],[],[],[[#include <pthread.h>]])
 
