@@ -261,7 +261,7 @@ void sonic_print_rx_descriptor(
  ******************************************************************
  */
 
-void sonic_enable_interrupts(
+static void sonic_enable_interrupts(
   struct sonic_softc *sc,
   uint32_t    mask
 )
@@ -278,7 +278,7 @@ void sonic_enable_interrupts(
   rtems_interrupt_enable( level );
 }
 
-void sonic_disable_interrupts(
+static void sonic_disable_interrupts(
   struct sonic_softc *sc,
   uint32_t    mask
 )
@@ -295,7 +295,7 @@ void sonic_disable_interrupts(
   rtems_interrupt_enable( level );
 }
 
-void sonic_clear_interrupts(
+static void sonic_clear_interrupts(
   struct sonic_softc *sc,
   uint32_t    mask
 )
@@ -308,7 +308,7 @@ void sonic_clear_interrupts(
   rtems_interrupt_enable( level );
 }
 
-void sonic_command(
+static void sonic_command(
   struct sonic_softc *sc,
   uint32_t    mask
 )

@@ -1,3 +1,9 @@
+2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/network/sonic.c: Make sonic_enable_interrupts,
+	sonic_disable_interrupts, sonic_clear_interrupts,
+	sonic_command static.
+
 2011-12-06	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/ide/ata.c: Make ata_interrupt_on, ata_interrupt_off,
