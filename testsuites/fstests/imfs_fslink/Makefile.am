@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = imfs_fslink
 imfs_fslink_SOURCES  =  ../fslink/test.c
@@ -20,14 +19,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-imfs_fslink_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/support
 AM_CPPFLAGS += -I$(top_srcdir)/imfs_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(imfs_fslink_OBJECTS) $(imfs_fslink_LDADD)
+LINK_OBJS = $(imfs_fslink_OBJECTS)
 LINK_LIBS = $(imfs_fslink_LDLIBS)
 
 imfs_fslink$(EXEEXT): $(imfs_fslink_OBJECTS) $(imfs_fslink_DEPENDENCIES)

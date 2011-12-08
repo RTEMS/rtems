@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = imfs_fsrdwr
 imfs_fsrdwr_SOURCES  = ../fsrdwr/init.c
@@ -20,14 +19,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-imfs_fsrdwr_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/support
 AM_CPPFLAGS += -I$(top_srcdir)/imfs_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(imfs_fsrdwr_OBJECTS) $(imfs_fsrdwr_LDADD)
+LINK_OBJS = $(imfs_fsrdwr_OBJECTS)
 LINK_LIBS = $(imfs_fsrdwr_LDLIBS)
 
 imfs_fsrdwr$(EXEEXT): $(imfs_fsrdwr_OBJECTS) $(imfs_fsrdwr_DEPENDENCIES)

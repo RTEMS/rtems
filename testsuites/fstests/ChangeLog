@@ -1,3 +1,20 @@
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
+	* imfs_fserror/Makefile.am, imfs_fslink/Makefile.am,
+	imfs_fspatheval/Makefile.am, imfs_fspermission/Makefile.am,
+	imfs_fsrdwr/Makefile.am, imfs_fssymlink/Makefile.am,
+	imfs_fstime/Makefile.am, mdosfs_fserror/Makefile.am,
+	mdosfs_fspatheval/Makefile.am, mdosfs_fsrdwr/Makefile.am,
+	mdosfs_fstime/Makefile.am, mimfs_fserror/Makefile.am,
+	mimfs_fslink/Makefile.am, mimfs_fspatheval/Makefile.am,
+	mimfs_fspermission/Makefile.am, mimfs_fsrdwr/Makefile.am,
+	mimfs_fssymlink/Makefile.am, mimfs_fstime/Makefile.am,
+	mrfs_fserror/Makefile.am, mrfs_fslink/Makefile.am,
+	mrfs_fspatheval/Makefile.am, mrfs_fspermission/Makefile.am,
+	mrfs_fsrdwr/Makefile.am, mrfs_fssymlink/Makefile.am,
+	mrfs_fstime/Makefile.am: Remove obsolete optional manager capability.
+
 2011-10-26	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Fix DIST_SUBDIRS.

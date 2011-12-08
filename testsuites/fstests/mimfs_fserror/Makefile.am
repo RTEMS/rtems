@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = mimfs_fserror
 mimfs_fserror_SOURCES  = ../fserror/test.c
@@ -20,14 +19,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-mimfs_fserror_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/support
 AM_CPPFLAGS += -I$(top_srcdir)/mimfs_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(mimfs_fserror_OBJECTS) $(mimfs_fserror_LDADD)
+LINK_OBJS = $(mimfs_fserror_OBJECTS)
 LINK_LIBS = $(mimfs_fserror_LDLIBS)
 
 mimfs_fserror$(EXEEXT): $(mimfs_fserror_OBJECTS) $(mimfs_fserror_DEPENDENCIES)

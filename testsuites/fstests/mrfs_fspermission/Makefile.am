@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = mrfs_fspermission
 mrfs_fspermission_SOURCES  = ../fspermission/test.c
@@ -22,14 +21,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-mrfs_fspermission_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/support
 AM_CPPFLAGS += -I$(top_srcdir)/mrfs_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(mrfs_fspermission_OBJECTS) $(mrfs_fspermission_LDADD)
+LINK_OBJS = $(mrfs_fspermission_OBJECTS)
 LINK_LIBS = $(mrfs_fspermission_LDLIBS)
 
 mrfs_fspermission$(EXEEXT): $(mrfs_fspermission_OBJECTS) $(mrfs_fspermission_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = mimfs_fssymlink
 mimfs_fssymlink_SOURCES  = ../fssymlink/test.c
@@ -20,14 +19,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-mimfs_fssymlink_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/support
 AM_CPPFLAGS += -I$(top_srcdir)/mimfs_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(mimfs_fssymlink_OBJECTS) $(mimfs_fssymlink_LDADD)
+LINK_OBJS = $(mimfs_fssymlink_OBJECTS)
 LINK_LIBS = $(mimfs_fssymlink_LDLIBS)
 
 mimfs_fssymlink$(EXEEXT): $(mimfs_fssymlink_OBJECTS) $(mimfs_fssymlink_DEPENDENCIES)

@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-MANAGERS = all
 
 rtems_tests_PROGRAMS = mrfs_fspatheval
 mrfs_fspatheval_SOURCES  = ../fspatheval/test.c
@@ -22,14 +21,13 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
-mrfs_fspatheval_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 
 AM_CPPFLAGS += -I$(top_srcdir)/support
 AM_CPPFLAGS += -I$(top_srcdir)/mrfs_support
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
 
-LINK_OBJS = $(mrfs_fspatheval_OBJECTS) $(mrfs_fspatheval_LDADD)
+LINK_OBJS = $(mrfs_fspatheval_OBJECTS)
 LINK_LIBS = $(mrfs_fspatheval_LDLIBS)
 
 mrfs_fspatheval$(EXEEXT): $(mrfs_fspatheval_OBJECTS) $(mrfs_fspatheval_DEPENDENCIES)
