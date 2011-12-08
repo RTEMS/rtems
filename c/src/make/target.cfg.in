@@ -45,17 +45,3 @@ XCFLAGS=$(CFLAGS_FOR_TARGET)
 export RTEMS_BSP
 export RTEMS_CUSTOM
 export PROJECT_ROOT
-
-# List (possibly empty) of required managers
-# We require:
-#    region  -- used by lib/libcsupport for malloc()
-#    ext     -- used by libc for libc reentrancy hooks
-
-MANAGERS_REQUIRED=
-
-# Create a RTEMS executable based on MANAGERS which was set in
-#  app's Makefile
-
-MANAGERS_NOT_WANTED=$(filter-out $(MANAGERS) \
-	$(MANAGERS_REQUIRED), $(MANAGER_LIST))
-

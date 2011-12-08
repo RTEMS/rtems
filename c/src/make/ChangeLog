@@ -1,3 +1,9 @@
+2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1589/build
+	* leaf.cfg, target.cfg.in, compilers/gcc-target-default.cfg: Remove
+	obsolete optional manager capability.
+
 2011-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Don't generate host.cfg.in.
