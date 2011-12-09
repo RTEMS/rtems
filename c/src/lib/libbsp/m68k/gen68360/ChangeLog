@@ -1,3 +1,8 @@
+2011-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* make/custom/gen68360.cfg, make/custom/gen68360_040.cfg,
+	make/custom/pgh360.cfg: Simplify and clean up.
+
 2011-02-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* include/bsp.h:
