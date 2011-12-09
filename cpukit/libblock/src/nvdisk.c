@@ -134,7 +134,7 @@ static uint16_t* rtems_nvdisk_crc16_factor;
  * @relval RTEMS_SUCCESSFUL The table was generated.
  * @retval RTEMS_NO_MEMORY The table could not be allocated from the heap.
  */
-rtems_status_code
+static rtems_status_code
 rtems_nvdisk_crc16_gen_factors (uint16_t pattern)
 {
   uint32_t b;

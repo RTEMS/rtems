@@ -1,5 +1,12 @@
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libblock/src/flashdisk.c: 
+	Make rtems_fdisk_crc16_gen_factors static.
+	* libblock/src/nvdisk.c:
+	Make rtems_nvdisk_crc16_gen_factors static.
+
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* rtems/src/rtemsobjectsetname.c:
 	Include <rtems/rtems/object.h> (Missing prototype).
 	* rtems/src/rtemsobjectgetclassicname.c:
