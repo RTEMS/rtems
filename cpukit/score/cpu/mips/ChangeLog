@@ -1,3 +1,7 @@
+2011-12-09	Jennifer Averett
+
+	* cpu.c: Correct typo.
+
 2011-09-27	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1914/cpukit
