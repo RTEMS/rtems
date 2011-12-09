@@ -424,7 +424,44 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
    */
   if (pos < rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (handle),
                                             handle->shared))
+  {
     rtems_rfs_file_set_bpos (handle, pos);
+    
+    /*
+     * If the file has a block check if it maps to the current position and it
+     * does not release it. That will force us to get the block at the new
+     * position when the I/O starts.
+     */
+    if (rtems_rfs_buffer_handle_has_block (&handle->buffer))
+    {
+      rtems_rfs_buffer_block block;
+      int                    rc;
+      
+      rc = rtems_rfs_block_map_find (rtems_rfs_file_fs (handle),
+                                     rtems_rfs_file_map (handle),
+                                     rtems_rfs_file_bpos (handle),
+                                     &block);
+      if (rc > 0)
+        return rc;
+      if (rtems_rfs_buffer_bnum (&handle->buffer) != block)
+      {        
+        rc = rtems_rfs_buffer_handle_release (rtems_rfs_file_fs (handle),
+                                              rtems_rfs_file_buffer (handle));
+        if (rc > 0)
+          return rc;
+      }
+    }
+  }
+  else
+  {
+    /*
+     * The seek is outside the current file so release any buffer. A write will
+     * extend the file.
+     */
+    int rc = rtems_rfs_file_io_release (handle);
+    if (rc > 0)
+      return rc;
+  }
   
   *new_pos = pos;
   return 0;
@@ -441,23 +478,25 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_FILE_IO))
     printf ("rtems-rfs: file-set-size: size=%" PRIu64 "\n", new_size);
 
-  /*
-   * Short cut for the common truncate on open call.
-   */
-  if (new_size == 0)
-  {
-    rc = rtems_rfs_block_map_free_all (rtems_rfs_file_fs (handle), map);
-    if (rc > 0)
-      return rc;
-  }
-  else
-  {
-    size = rtems_rfs_file_size (handle);
+  size = rtems_rfs_file_size (handle);
   
+  /*
+   * If the file is same size do nothing else grow or shrink it ?
+   *
+   * If the file does not change size do not update the times.
+   */
+  if (size != new_size)
+  {
     /*
-     * If the file is same size do nothing else grow or shrink it ?
+     * Short cut for the common truncate on open call.
      */
-    if (size != new_size)
+    if (new_size == 0)
+    {
+      rc = rtems_rfs_block_map_free_all (rtems_rfs_file_fs (handle), map);
+      if (rc > 0)
+        return rc;
+    }
+    else
     {
       if (size < new_size)
       {
@@ -567,13 +606,13 @@ rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
                                          rtems_rfs_file_bpos (handle));
       }
     }
+
+    handle->shared->size.count  = rtems_rfs_block_map_count (map);
+    handle->shared->size.offset = rtems_rfs_block_map_size_offset (map);
+
+    if (rtems_rfs_file_update_mtime (handle))
+      handle->shared->mtime = time (NULL);
   }
-
-  handle->shared->size.count  = rtems_rfs_block_map_count (map);
-  handle->shared->size.offset = rtems_rfs_block_map_size_offset (map);
-
-  if (rtems_rfs_file_update_mtime (handle))
-    handle->shared->mtime = time (NULL);
   
   return 0;
 }

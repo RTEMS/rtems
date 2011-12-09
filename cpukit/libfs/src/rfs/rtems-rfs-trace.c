@@ -92,7 +92,8 @@ rtems_rfs_trace_shell_command (int argc, char *argv[])
     "symlink-read",
     "file-open",
     "file-close",
-    "file-io"
+    "file-io",
+    "file-set"
   };
 
   rtems_rfs_trace_mask set_value = 0;
@@ -140,9 +141,9 @@ rtems_rfs_trace_shell_command (int argc, char *argv[])
           if (strcmp (argv[arg], table[t]) == 0)
           {
             if (set)
-              set_value = 1 << t;
+              set_value = 1ULL << t;
             else
-              clear_value = 1 << t;
+              clear_value = 1ULL << t;
             break;
           }
         }
