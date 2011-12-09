@@ -1,5 +1,6 @@
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* libchip/network/sonic.c: Activate SONIC_STATIC.
 	* libchip/network/if_fxp.c: Add missing initializer.
 
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>

@@ -68,8 +68,7 @@ extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
  *  Use the top line if you want more symbols.
  */
 
-#define SONIC_STATIC
-/* #define SONIC_STATIC static */
+#define SONIC_STATIC static
 
 /*
  * Number of devices supported by this driver
