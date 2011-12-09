@@ -1,3 +1,7 @@
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/pci/pcibios.c: Make pcib_find_by_devid static.
+
 2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1925

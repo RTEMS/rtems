@@ -135,7 +135,7 @@ pci_initialize(void)
  * Find specified device and return its signature: combination
  * of bus number, device number and function number
  */
-int
+static int
 pcib_find_by_devid(int vendorId, int devId, int idx, int *sig)
 {
   if (!pcibInitialized) {
