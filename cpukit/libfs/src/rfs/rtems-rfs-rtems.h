@@ -25,12 +25,12 @@
 #include <errno.h>
 
 /**
- * RTEMS RFS RTEMS Error Enable. Set to 1 to printing of errors. Default is off.
+ * RTEMS RFS RTEMS Error Enable. Set to 1 for printing of errors. Default is off.
  */
 #define RTEMS_RFS_RTEMS_ERROR 0
 
 /**
- * RTEMS RFS RTEMS Trace Enable. Set to 1 to printing of errors. Default is off.
+ * RTEMS RFS RTEMS Trace Enable. Set to 1 for printing of errors. Default is off.
  */
 #define RTEMS_RFS_RTEMS_TRACE 0
 
@@ -72,13 +72,14 @@ int rtems_rfs_rtems_error (const char* mesg, int error);
 #define RTEMS_RFS_RTEMS_DEBUG_READLINK      (1 << 9)
 #define RTEMS_RFS_RTEMS_DEBUG_FCHMOD        (1 << 10)
 #define RTEMS_RFS_RTEMS_DEBUG_STAT          (1 << 11)
-#define RTEMS_RFS_RTEMS_DEBUG_DIR_RMNOD     (1 << 12)
-#define RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN     (1 << 13)
-#define RTEMS_RFS_RTEMS_DEBUG_FILE_CLOSE    (1 << 14)
-#define RTEMS_RFS_RTEMS_DEBUG_FILE_READ     (1 << 15)
-#define RTEMS_RFS_RTEMS_DEBUG_FILE_WRITE    (1 << 16)
-#define RTEMS_RFS_RTEMS_DEBUG_FILE_LSEEK    (1 << 17)
-#define RTEMS_RFS_RTEMS_DEBUG_FILE_FTRUNC   (1 << 18)
+#define RTEMS_RFS_RTEMS_DEBUG_RENAME        (1 << 12)
+#define RTEMS_RFS_RTEMS_DEBUG_DIR_RMNOD     (1 << 13)
+#define RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN     (1 << 14)
+#define RTEMS_RFS_RTEMS_DEBUG_FILE_CLOSE    (1 << 15)
+#define RTEMS_RFS_RTEMS_DEBUG_FILE_READ     (1 << 16)
+#define RTEMS_RFS_RTEMS_DEBUG_FILE_WRITE    (1 << 17)
+#define RTEMS_RFS_RTEMS_DEBUG_FILE_LSEEK    (1 << 18)
+#define RTEMS_RFS_RTEMS_DEBUG_FILE_FTRUNC   (1 << 19)
 
 /**
  * Call to check if this part is bring traced. If RTEMS_RFS_RTEMS_TRACE is

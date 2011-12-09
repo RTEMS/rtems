@@ -1,3 +1,14 @@
+2011-12-09      Chris Johns <chrisj@rtems.org>
+
+	PR 1968/filesystem
+	* libfs/src/rfs/rtems-rfs-file.c: Fix to the seek bug where a seek
+	to 0 after reading the end of the file did not point to the
+	correct block.
+        * libfs/src/rfs/rtems-rfs-rtems.h,
+	libfs/src/rfs/rtems-rfs-trace.c: Fix the trace flags. Used to fix
+	the bug.
+	
+
 2011-12-08	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* rtems/src/rtemsobjectgetname.c:
