@@ -1,0 +1,19 @@
+#
+#  $Id$
+#
+#  Copyright (c) 2011 embedded brains GmbH.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spconfig01
+
+directives:
+
+concepts:
+
++ Ensure that the workspace size estimate is correct

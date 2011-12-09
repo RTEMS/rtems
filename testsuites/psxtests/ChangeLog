@@ -1,3 +1,9 @@
+2011-12-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* psxconfig01/.cvsignore, psxconfig01/Makefile.am, psxconfig01/init.c,
+	psxconfig01/psxconfig01.doc, psxconfig01/psxconfig01.scn: New files.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build

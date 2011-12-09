@@ -1,0 +1,7 @@
+*** POSIX TEST CONFIG 01 ***
+used blocks = 46, largest used block = 8264, used space = 64344
+free blocks = 1, largest free block = 97040, free space = 97040
+object creation done
+used blocks = 204, largest used block = 8264, used space = 160984
+free blocks = 1, largest free block = 400, free space = 400
+*** END OF POSIX TEST CONFIG 01 ***

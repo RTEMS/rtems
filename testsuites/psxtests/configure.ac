@@ -102,6 +102,7 @@ psxcleanup/Makefile
 psxcleanup01/Makefile
 psxclock/Makefile
 psxcond01/Makefile
+psxconfig01/Makefile
 psxeintr_join/Makefile
 psxenosys/Makefile
 psxfatal01/Makefile
