@@ -1,3 +1,8 @@
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* ftp01/Makefile.am: 
+	Re-add ftpd01_LDADD (Fix breakage introduced by previous patch).
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build

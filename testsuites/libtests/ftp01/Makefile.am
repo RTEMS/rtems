@@ -17,7 +17,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/termios04
 
-LINK_OBJS = $(ftp01_OBJECTS)
+LINK_OBJS = $(ftp01_OBJECTS) $(ftp01_LDADD)
 LINK_LIBS = $(ftp01_LDLIBS)
 
 ftp01$(EXEEXT): $(ftp01_OBJECTS) $(ftp01_DEPENDENCIES)
