@@ -1,3 +1,7 @@
+2011-12-09	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* math/init.c, mathf/init.c: Use DEVFS since we do have devices.
+
 2011-02-02	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* cpuuse/tswitch.c: Shrink memory requirements.
