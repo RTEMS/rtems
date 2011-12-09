@@ -1,3 +1,8 @@
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* console/vgacons.c: Add VGACONS_STATIC.
+	* console/vgacons.h: Remove VGACONS_STATIC.
+
 2011-11-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1925

@@ -23,6 +23,8 @@
 #include <bsp.h>
 #include <crt.h>
 
+#define VGACONS_STATIC static
+
 static int isr_is_on(const rtems_irq_connect_data *irq)
 {
   return BSP_irq_enabled_at_i8259s(irq->name);

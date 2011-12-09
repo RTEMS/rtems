@@ -18,8 +18,6 @@
 extern "C" {
 #endif
 
-#define VGACONS_STATIC 
-
 /*
  *  This is the ASCII for "PC" in the upper word and 0386 
  *  in the lower which should be unique enough to
