@@ -1,3 +1,8 @@
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* project.am (MOSTLYCLEANFILES): Remove index.html.
+	* ada_user/Makefile.am (CLEANFILES): Fixup image handling.
+
 2011-12-07	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1984/doc

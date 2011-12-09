@@ -47,7 +47,7 @@ $(PROJECT)*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
 	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $< $<
 	-rm -rf $(PROJECT)
 
-MOSTLYCLEANFILES += index.html $(PROJECT)*.html 
+MOSTLYCLEANFILES += $(PROJECT)*.html 
 
 ## Common installation points
 if USE_HTML

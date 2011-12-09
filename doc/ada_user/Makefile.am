@@ -41,8 +41,7 @@ semaphore_attributes.eps: $(top_srcdir)/user/semaphore_attributes.eps
 	$(LN_S) $<
 states.eps: $(top_srcdir)/user/states.eps
 	$(LN_S) $<
-CLEANFILES += rtrtemspie.eps states.eps rtemsarc.png rtemspie.png states.png \
-    ObjectId-32Bits.png semaphore_attributes.png
+CLEANFILES += ObjectId-16Bits.eps ObjectId-32Bits.eps rtemspie.eps semaphore_attributes.eps states.eps
 
 ObjectId-16Bits.png: $(top_srcdir)/user/ObjectId-16Bits.png
 	$(LN_S) $<
@@ -56,6 +55,7 @@ semaphore_attributes.png: $(top_srcdir)/user/semaphore_attributes.png
 	$(LN_S) $<
 states.png: $(top_srcdir)/user/states.png
 	$(LN_S) $<
+CLEANFILES += ObjectId-16Bits.png ObjectId-32Bits.png rtemsarc.png rtemspie.png semaphore_attributes.png states.png
 
 info_TEXINFOS = ada_user.texi
 ada_user_TEXINFOS = $(FILES) $(COMMON_FILES)
