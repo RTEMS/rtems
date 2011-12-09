@@ -20,6 +20,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/rtems/object.h>
 
 /*
  *  This method will set the object name based upon the user string.

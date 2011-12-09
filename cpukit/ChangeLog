@@ -1,5 +1,7 @@
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* rtems/src/rtemsobjectsetname.c:
+	Include <rtems/rtems/object.h> (Missing prototype).
 	* rtems/src/rtemsobjectgetclassicname.c:
 	Include <rtems/rtems/object.h> (Missing prototype).
 
