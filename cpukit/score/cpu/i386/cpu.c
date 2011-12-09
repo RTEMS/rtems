@@ -119,7 +119,7 @@ struct Frame_ {
 	uintptr_t		pc;
 };
 
-void _defaultExcHandler (CPU_Exception_frame *ctx)
+static void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
   unsigned int faultAddr = 0;
   printk("----------------------------------------------------------\n");
