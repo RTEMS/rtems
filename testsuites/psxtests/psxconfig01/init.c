@@ -97,7 +97,7 @@ static const uint8_t mq_sizes [CONFIGURE_MAXIMUM_MESSAGE_QUEUES] = {
 };
 
 typedef struct {
-  uint32_t data [32];
+  uint64_t data [16];
 } area;
 
 static area partition_areas [CONFIGURE_MAXIMUM_PARTITIONS];
