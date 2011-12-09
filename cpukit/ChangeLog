@@ -1,3 +1,8 @@
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/src/rtemsobjectgetclassicname.c:
+	Include <rtems/rtems/object.h> (Missing prototype).
+
 2011-12-09      Chris Johns <chrisj@rtems.org>
 
 	PR 1968/filesystem

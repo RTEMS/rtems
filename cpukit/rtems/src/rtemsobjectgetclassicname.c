@@ -20,6 +20,7 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/rtems/object.h>
 
 /*
  *  rtems_object_get_classic_name
