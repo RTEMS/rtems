@@ -1,3 +1,9 @@
+2011-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1985/cpukit
+	* telnetd/icmds.c: Removed.
+	All functionality is in shell. Obsolete and unreferenced.
+
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libblock/src/flashdisk.c: 
