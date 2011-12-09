@@ -65,7 +65,7 @@ kd_nosound(unsigned long ignored)
   return;
 }
 
-void
+static void
 _kd_mksound(unsigned int hz, unsigned int ticks)
 {
   unsigned int          count = 0;

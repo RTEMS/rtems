@@ -1,5 +1,12 @@
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* console/vt.c: Make _kd_mksound static.
+	* ide/ide.c: Make pc386_ide_probe, pc386_ide_initialize,
+	pc386_ide_read_reg, pc386_ide_write_reg, pc386_ide_write_block,
+	pc386_ide_control, pc386_ide_config_io_speed static.
+
+2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* console/vgacons.c: Add VGACONS_STATIC.
 	* console/vgacons.h: Remove VGACONS_STATIC.
 
