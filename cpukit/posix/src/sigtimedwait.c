@@ -26,7 +26,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/score/isr.h>
 
-int _POSIX_signals_Get_lowest(
+static int _POSIX_signals_Get_lowest(
   sigset_t   set
 )
 {

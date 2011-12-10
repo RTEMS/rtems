@@ -1,3 +1,7 @@
+2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/src/sigtimedwait.c: Make _POSIX_signals_Get_lowest static.
+
 2011-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1985/cpukit
