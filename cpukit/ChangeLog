@@ -1,5 +1,10 @@
 2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* posix/src/fork.c: Include <unistd.h> for "fork" prototype.
+	Don't include <sys/types.h> (unnecessary).
+
+2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1985/cpukit
 	* telnetd/Makefile.am: Remove icmds.c.
 
@@ -236,8 +241,6 @@
 	Include <rtems/posix/semaphore.h> (Missing prototypes).
 	* posix/src/mqueuenotify.c: Make _POSIX_Message_queue_Notify_handler
 	static.
-	* posix/src/fork.c: Include <unistd.h> for "fork" prototype.
-	Don't include <sys/types.h> (unnecessary).
 	* libcsupport/src/termios.c: Remove unnecessary cast.
 	* libmisc/shell/main_mv.c: Add prototype for main_mv.
 

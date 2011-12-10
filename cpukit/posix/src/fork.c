@@ -15,7 +15,8 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
+#include <unistd.h>
+
 #include <errno.h>
 #include <rtems/seterr.h>
 
