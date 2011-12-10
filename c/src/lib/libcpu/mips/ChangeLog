@@ -1,3 +1,9 @@
+2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* shared/interrupts/vectorexceptions.c: Make 
+	mips_dump_exception_frame, mips_default_exception_code_handler
+	static.
+
 2011-10-18	Jennifer Averett <Jennifer.Averett@OARcorp.com>
 
 	PR 1917/bsps

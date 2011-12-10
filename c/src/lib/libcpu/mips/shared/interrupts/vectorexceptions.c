@@ -67,7 +67,7 @@ static const struct regdef dumpregs[]= {
   { R_EPC,"R_EPC"}, { -1, NULL }
 };
 
-void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
+static void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
 {
   uint32_t *frame_u32;
   int   i, j;
@@ -87,7 +87,7 @@ void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
   printk( "\n" );
 }
 
-void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
+static void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
 {
   uint32_t sr;
   uint32_t cause;
