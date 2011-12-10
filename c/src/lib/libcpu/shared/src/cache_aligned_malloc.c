@@ -12,9 +12,11 @@
  *  $Id$
  */
 
+#include <stdlib.h>
+
 #include <rtems.h>
 #include <cache_.h>
-#include <stdlib.h>
+#include <rtems/rtems/cache.h>
 
 /*
  *  rtems_cache_aligned_malloc
