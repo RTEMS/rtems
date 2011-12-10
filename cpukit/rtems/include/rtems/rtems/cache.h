@@ -147,7 +147,12 @@ void rtems_cache_enable_instruction( void );
  */
 void rtems_cache_disable_instruction( void );
 
-
+/**
+ *  This function is used to allocate storage that spans an
+ *  integral number of cache blocks.
+ */
+void *rtems_cache_aligned_malloc ( size_t nbytes );
+  
 #ifdef __cplusplus
 }
 #endif

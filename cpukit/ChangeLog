@@ -1,5 +1,11 @@
 2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	PR 1986/libcpu
+	* rtems/include/rtems/rtems/cache.h: 
+	Add rtems_cache_aligned_malloc decl.
+
+2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* posix/src/sigtimedwait.c: Make _POSIX_signals_Get_lowest static.
 
 2011-12-09	Joel Sherrill <joel.sherrill@oarcorp.com>
