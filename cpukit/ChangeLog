@@ -1,5 +1,10 @@
 2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	PR 1985/cpukit
+	* telnetd/Makefile.am: Remove icmds.c.
+
+2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	PR 1986/libcpu
 	* rtems/include/rtems/rtems/cache.h: 
 	Add rtems_cache_aligned_malloc decl.
