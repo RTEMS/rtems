@@ -1,3 +1,7 @@
+2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac (CFLAGS): Add -Wmissing-prototypes.
+
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/network/sonic.c: Activate SONIC_STATIC.
