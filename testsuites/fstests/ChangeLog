@@ -1,3 +1,7 @@
+2011-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* imfs_support/fs_supprot.h: Remove (Unused).
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build
