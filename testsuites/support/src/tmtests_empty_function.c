@@ -18,7 +18,7 @@
 
 #include <rtems.h>
 
-rtems_status_code benchmark_timer_empty_function( void );
+#include "tmtests_empty_function.h"
 
 rtems_status_code benchmark_timer_empty_function( void )
 {

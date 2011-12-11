@@ -19,11 +19,7 @@
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 #include "timesys.h"
-
-extern void benchmark_timer_empty_operation(
-  int    iteration,
-  void  *argument
-);
+#include "tmtests_empty_function.h"
 
 void rtems_time_test_measure_operation(
   const char               *description,
