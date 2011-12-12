@@ -67,7 +67,8 @@ Requires:     	%{requirements}
 Requires(post):	/sbin/install-info
 Requires(preun):/sbin/install-info
 
-Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+# Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
+Source0: ftp://alpha.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
 
 
 # remove bogus Automake perl dependencies and provides
