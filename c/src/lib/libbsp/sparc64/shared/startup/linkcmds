@@ -94,6 +94,9 @@ SECTIONS
     *(BOOTSTRAP);
     *(.text*)
 
+    KEEP (*(.init))
+    KEEP (*(.fini))
+
     /*
      * Special FreeBSD sysctl sections.
      */
@@ -142,17 +145,12 @@ SECTIONS
     *(.gnu.linkonce.r*)
     _erodata = ALIGN( 0x10 ) ;
 
-    etext = ALIGN(2);
-    _etext = . ;
-
-    *(.init)
-    PROVIDE (_fini = .);
-    KEEP (*(.fini))
     *(.lit)
     *(.shdata)
 
      . = ALIGN (16);
     _endtext = . ;
+    _etext = . ;
   } > ram 
   
   .data	  : AT (ADDR (.text) + SIZEOF (.text))

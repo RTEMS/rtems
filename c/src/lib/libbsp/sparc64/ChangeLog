@@ -1,3 +1,9 @@
+2011-12-12	Gedare Bloom <gedare@rtems.org>
+
+	PR bsps/1988
+	* shared/startup/linkcmds: Relocate .init and .fini sections closer to
+	.text.
+
 2011-11-06	Gedare Bloom <gedare@rtems.org>
 
 	* shared/console/conscfg.c: Whitespace and style fixes.
