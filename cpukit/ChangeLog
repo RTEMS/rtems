@@ -1,3 +1,10 @@
+2011-12-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/src/wkstringduplicate.c: New file.
+	* score/Makefile.am: Reflect change above.
+	* score/include/rtems/score/wkspace.h: Declare
+	_Workspace_String_duplicate().
+
 2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* posix/src/fork.c: Include <unistd.h> for "fork" prototype.
