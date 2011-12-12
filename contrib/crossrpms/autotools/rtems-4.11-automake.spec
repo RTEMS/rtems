@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define rpmvers 1.11.1
-%define srcvers	1.11.1
+%define rpmvers 1.11.1b
+%define srcvers	1.11.1b
 %define amvers  1.11
 
 %define name			rtems-4.11-automake
@@ -57,7 +57,7 @@ URL:		http://sources.redhat.com/automake
 License:	GPL
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -70,6 +70,10 @@ Requires(preun):/sbin/install-info
 Source0: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
 
 
+# remove bogus Automake perl dependencies and provides
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Automake::
+%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(Automake::
+
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
 files called "Makefile.am". "Makefile.am" is basically a series of
@@ -81,13 +85,14 @@ standards.
 %setup -q -n automake-%{srcvers}
 %{?PATCH0:%patch0 -p1}
 
+%if !%{defined fedora}
 # Work around rpm inserting bogus perl-module deps
 cat << \EOF > %{name}-prov
 #!/bin/sh
 %{__perl_provides} $* |\
     sed -e '/^perl(Automake/d'
 EOF
-%define __perl_provides %{_builddir}/automake-%{srcvers}/%{name}-prov
+%global __perl_provides %{_builddir}/automake-%{srcvers}/%{name}-prov
 chmod +x %{__perl_provides}
 
 cat << \EOF > %{name}-requ
@@ -95,9 +100,9 @@ cat << \EOF > %{name}-requ
 %{__perl_requires} $* |\
     sed -e '/^perl(Automake/d'
 EOF
-%define __perl_requires %{_builddir}/automake-%{srcvers}/%{name}-requ
+%global __perl_requires %{_builddir}/automake-%{srcvers}/%{name}-requ
 chmod +x %{__perl_requires}
-
+%endif
 
 %build
 PATH=%{_bindir}:$PATH

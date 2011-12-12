@@ -58,7 +58,7 @@ License:	GPL
 URL:		http://www.gnu.org/software/autoconf
 Group:		Development/Tools
 Version:	%{rpmvers}
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Tool for automatically generating GNU style Makefile.in's
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -75,6 +75,10 @@ Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.%{?el5:bz2}%{!?e
 
 
 
+
+# remove bogus Autoconf perl dependencies and provides
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Autom4te::
+%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(Autom4te::
 
 %description
 GNU's Autoconf is a tool for configuring source code and Makefiles.
@@ -93,13 +97,14 @@ their use.
 %setup -q -n autoconf-%{srcvers}
 %{?PATCH0:%patch0 -p1}
 
+%if !%{defined fedora}
 # Work around rpm inserting bogus perl-module deps
 cat << \EOF > %{name}-prov
 #!/bin/sh
 %{__perl_provides} $* |\
     sed -e '/^perl(Autom4te/d'
 EOF
-%define __perl_provides %{_builddir}/autoconf-%{srcvers}/%{name}-prov
+%global __perl_provides %{_builddir}/autoconf-%{srcvers}/%{name}-prov
 chmod +x %{__perl_provides}
 
 cat << \EOF > %{name}-requ
@@ -107,8 +112,9 @@ cat << \EOF > %{name}-requ
 %{__perl_requires} $* |\
     sed -e '/^perl(Autom4te/d'
 EOF
-%define __perl_requires %{_builddir}/autoconf-%{srcvers}/%{name}-requ
+%global __perl_requires %{_builddir}/autoconf-%{srcvers}/%{name}-requ
 chmod +x %{__perl_requires}
+%endif
 
 %build
 ./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
