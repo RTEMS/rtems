@@ -1,5 +1,11 @@
 2011-12-12	Gedare Bloom <gedare@rtems.org>
 
+	PR bsps/1989
+	* shared/start/start.S, shared/startup/linkcmds: Boot stack and heap
+	space improvements.
+
+2011-12-12	Gedare Bloom <gedare@rtems.org>
+
 	PR bsps/1988
 	* shared/start/start.S: Add _init and _fini to .init and .fini sections
 

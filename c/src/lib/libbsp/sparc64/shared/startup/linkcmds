@@ -14,8 +14,7 @@
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize = DEFINED(RamSize) ? RamSize : 12M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 1M;
-StackSize = DEFINED(StackSize) ? StackSize : 1M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 2M;
 
 RAM_END = RamBase + RamSize;
 
@@ -24,10 +23,9 @@ OUTPUT_FORMAT("elf64-sparc")
 ENTRY(start)
 
 MEMORY
-        {
-	        ram : ORIGIN = 0x0, LENGTH = 12M
-	}
-
+{
+  ram : ORIGIN = 0x0, LENGTH = 12M
+}
 
 SECTIONS
 {
@@ -151,7 +149,7 @@ SECTIONS
      . = ALIGN (16);
     _endtext = . ;
     _etext = . ;
-  } > ram 
+  } > ram
   
   .data	  : AT (ADDR (.text) + SIZEOF (.text))
   {
@@ -196,9 +194,6 @@ SECTIONS
     . += HeapSize;
     PROVIDE (HeapBase = .);
     . += HeapSize;
-    . += StackSize;
-     PROVIDE (__stack = .);
-     PROVIDE (StackStart = .);
   } > ram
 }
 

@@ -53,20 +53,6 @@
 .register %g6, #scratch
 .register %g7, #scratch
 
-#if 0
-#define _BSP_DEBUG
-#endif
-
-#if _BSP_DEBUG
-/*
- * This is for debug and script support to identify RTEMS app termination
- */
-.section 	.data
-	.align 8
-_end_token_string:
-	.asciz "END_TOKEN\n"
-#endif
-
 .section BOOTSTRAP, "ax"
 
 PUBLIC(_start)
@@ -148,20 +134,20 @@ setstack:
 	call SYM(boot_card)
 	sub	%sp, 0x60, %sp		! make room on stack (necessary?)
 
-#if _BSP_DEBUG
-  /* execution returns here when RTEMS terminates */
-	sethi %hi(_end_token_string), %g1
-	add %g1, %lo(_end_token_string), %o0
-	call SYM(printk)
-	nop
-#endif
-
   call SYM(halt)
   nop
 
 halted:	nop
 	    b SYM(halted)
 
+.section BOOTSTRAP
+  .align CPU_ALIGNMENT
+  .space 32768 - CPU_MINIMUM_STACK_FRAME_SIZE ! 32K boot stack grows down
+  .global StackStart
+  StackStart:
+    .space CPU_MINIMUM_STACK_FRAME_SIZE ! initial stack frame
+
+.section BOOTSTRAP
   .align CPU_ALIGNMENT
   param_space:
   	.space 8
