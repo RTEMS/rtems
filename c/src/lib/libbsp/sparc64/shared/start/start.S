@@ -166,12 +166,16 @@ halted:	nop
   param_space:
   	.space 8
 
-    .global _fini
-    _fini:
+.section .fini
+  .global _fini
+  _fini:
     nop
+    retl
     nop
 
-    .global _init
-    _init:
+.section .init
+  .global _init
+  _init:
     nop
+    retl
     nop

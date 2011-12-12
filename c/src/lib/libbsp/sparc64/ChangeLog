@@ -1,6 +1,11 @@
 2011-12-12	Gedare Bloom <gedare@rtems.org>
 
 	PR bsps/1988
+	* shared/start/start.S: Add _init and _fini to .init and .fini sections
+
+2011-12-12	Gedare Bloom <gedare@rtems.org>
+
+	PR bsps/1988
 	* shared/startup/linkcmds: Relocate .init and .fini sections closer to
 	.text.
 
