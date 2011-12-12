@@ -30,6 +30,14 @@
 #include <bsp/fatal.h>
 #include <apbuart_termios.h>
 
+/* The LEON3 BSP UART driver can rely on the Driver Manager if the
+ * DrvMgr is initialized during startup. Otherwise the classic driver
+ * must be used.
+ *
+ * The DrvMgr APBUART driver is located in the shared/uart directory
+ */
+#ifndef RTEMS_DRVMGR_STARTUP
+
 int syscon_uart_index __attribute__((weak)) = 0;
 
 /* body is in debugputs.c */
@@ -157,3 +165,5 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
+
+#endif

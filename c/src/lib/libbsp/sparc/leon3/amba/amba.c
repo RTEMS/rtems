@@ -26,6 +26,46 @@ int leon3_timer_core_index __attribute__((weak)) = 0;
  */
 struct ambapp_bus ambapp_plb;
 
+/* If RTEMS_DRVMGR_STARTUP is defined extra code is added that
+ * registers the GRLIB AMBA PnP bus driver as root driver.
+ */
+#ifdef RTEMS_DRVMGR_STARTUP
+#include <drvmgr/drvmgr.h>
+#include <drvmgr/ambapp_bus_grlib.h>
+
+extern void gptimer_register_drv (void);
+extern void apbuart_cons_register_drv(void);
+/* All drivers included by BSP, this is overridden by the user by including
+ * the drvmgr_confdefs.h. By default the Timer and UART driver are included.
+ */
+struct drvmgr_drv_reg_func drvmgr_drivers[] __attribute__((weak)) =
+{
+  {gptimer_register_drv},
+  {apbuart_cons_register_drv},
+  {NULL} /* End array with NULL */
+};
+
+/* Driver resources configuration for AMBA root bus. It is declared weak
+ * so that the user may override it, if the defualt settings are not
+ * enough.
+ */
+struct drvmgr_bus_res grlib_drv_resources __attribute__((weak)) =
+{
+  .next = NULL,
+  .resource =
+  {
+    RES_EMPTY,
+  }
+};
+
+/* GRLIB AMBA bus configuration (the LEON3 root bus configuration) */
+struct grlib_config grlib_bus_config =
+{
+  &ambapp_plb,              /* AMBAPP bus setup */
+  &grlib_drv_resources,     /* Driver configuration */
+};
+#endif
+
 rtems_interrupt_lock LEON3_IrqCtrl_Lock =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("LEON3 IrqCtrl");
 
@@ -87,6 +127,12 @@ void amba_initialize(void)
   /* Init Extended IRQ controller if available */
   leon3_ext_irq_init();
 
+  /* If we are running without Driver Manager at startup, we must still
+   * assure that Timer and Console UART is working. So we can not
+   * depend on the DrvMgr capable Timer and Console UART drivers,
+   * instead we use the small-footprint drivers.
+   */
+#ifndef RTEMS_DRVMGR_STARTUP
   /* find GP Timer */
   adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
@@ -110,4 +156,8 @@ void amba_initialize(void)
     if (leon3_timer_prescaler)
       LEON3_Timer_Regs->scaler_reload = leon3_timer_prescaler;
   }
+#else
+  /* Register Root bus, Use GRLIB AMBA PnP bus as root bus for LEON3 */
+  ambapp_grlib_root_register(&grlib_bus_config);
+#endif
 }
