@@ -1,3 +1,7 @@
+2011-12-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* spwkspace/init.c: Test _Workspace_String_duplicate().
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build

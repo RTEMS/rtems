@@ -17,6 +17,41 @@
 
 #include <tmacros.h>
 
+#include <string.h>
+
+#include <rtems/score/wkspace.h>
+
+static void test_workspace_string_duplicate(void)
+{
+  char a [] = "abcd";
+  char b [] = "abc";
+  char c [] = "ab";
+  char d [] = "a";
+  char e [] = "";
+  size_t maxlen = 3;
+  char *dup_a = _Workspace_String_duplicate( a, maxlen );
+  char *dup_b = _Workspace_String_duplicate( b, maxlen );
+  char *dup_c = _Workspace_String_duplicate( c, maxlen );
+  char *dup_d = _Workspace_String_duplicate( d, maxlen );
+  char *dup_e = _Workspace_String_duplicate( e, maxlen );
+
+  rtems_test_assert( dup_a != NULL );
+  rtems_test_assert( dup_b != NULL );
+  rtems_test_assert( dup_c != NULL );
+  rtems_test_assert( dup_d != NULL );
+  rtems_test_assert( dup_e != NULL );
+  rtems_test_assert( strcmp( dup_a, b ) == 0 );
+  rtems_test_assert( strcmp( dup_b, b ) == 0 );
+  rtems_test_assert( strcmp( dup_c, c ) == 0 );
+  rtems_test_assert( strcmp( dup_d, d ) == 0 );
+  rtems_test_assert( strcmp( dup_e, e ) == 0 );
+
+  _Workspace_Free( dup_a );
+  _Workspace_Free( dup_b );
+  _Workspace_Free( dup_c );
+  _Workspace_Free( dup_d );
+  _Workspace_Free( dup_e );
+}
 
 rtems_task Init(
   rtems_task_argument argument
@@ -60,6 +95,9 @@ rtems_task Init(
   puts( "rtems_workspace_free - previous pointer to 42 bytes" );
   retbool = rtems_workspace_free( p1 );
   rtems_test_assert( retbool == true );
+
+  puts( "_Workspace_String_duplicate - samples" );
+  test_workspace_string_duplicate();
 
   puts( "*** END OF TEST WORKSPACE CLASSIC API ***" );
   rtems_test_exit( 0 );
