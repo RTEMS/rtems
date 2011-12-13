@@ -1,3 +1,7 @@
+2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* psxconfig01/init.c: Create more objects.
+
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psx07/init.c: Remove unused var "clock_allowed".
