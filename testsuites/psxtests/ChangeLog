@@ -1,5 +1,9 @@
 2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* psxconfig01/init.c: Create floating point tasks.
+
+2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* psxmsgq04/init.c: Fixed allocation of second message queue.
 
 2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>

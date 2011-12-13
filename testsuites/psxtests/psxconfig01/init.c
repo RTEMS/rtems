@@ -331,7 +331,7 @@ static rtems_task Init(rtems_task_argument argument)
       RTEMS_MINIMUM_PRIORITY,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
+      RTEMS_LOCAL | RTEMS_FLOATING_POINT,
       &id
     );
     directive_failed(sc, "rtems_task_create");
