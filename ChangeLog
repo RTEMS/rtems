@@ -1,3 +1,8 @@
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* compile, depcomp, mdate-sh, texinfo.tex: 
+	Update from automake-1.11.1b.
+
 2011-11-09	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* MAINTAINERS: Rewrite and update.
