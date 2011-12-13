@@ -1,5 +1,9 @@
 2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* sapi/include/confdefs.h: Fixed workspace size estimate of tasks.
+
+2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* posix/src/mqueuenametoid.c,
 	posix/src/semaphorenametoid.c: Removed files.
 	* posix/src/psxnametoid.c: New file.

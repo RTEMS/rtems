@@ -1819,18 +1819,22 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
- ( \
-  _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) + \
-  (_Configure_Max_Objects(_tasks) * \
-    (CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API + \
-    CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB + \
-    CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
-    CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER))  + \
-  _Configure_From_workspace( \
-    _Configure_Max_Objects(_number_FP_tasks) * CONTEXT_FP_SIZE) + \
-  _Configure_From_workspace( \
-          (CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1) * sizeof(void *)) \
- )
+  ( \
+    _Configure_Object_RAM(_tasks, sizeof(Thread_Control)) \
+      + _Configure_Max_Objects(_tasks) \
+        * ( \
+            CONFIGURE_MEMORY_PER_TASK_FOR_CLASSIC_API \
+              + CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB \
+              + CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
+              + CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER \
+              + _Configure_From_workspace( \
+                (CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1) * sizeof(void *) \
+              ) \
+          ) \
+      + _Configure_Max_Objects(_number_FP_tasks) \
+        * _Configure_From_workspace(CONTEXT_FP_SIZE) \
+        * (CONTEXT_FP_SIZE != 0) \
+  )
 
 /**
  *  This defines the amount of memory configured for the multiprocessing
