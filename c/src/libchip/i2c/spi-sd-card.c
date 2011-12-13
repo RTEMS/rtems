@@ -323,7 +323,7 @@ static inline uint32_t sd_card_max_access_time( const uint8_t *csd, uint32_t tra
  * @{
  */
 
-uint8_t sd_card_compute_crc7 (uint8_t *data, size_t len)
+static uint8_t sd_card_compute_crc7 (uint8_t *data, size_t len)
 {
 	uint8_t e, f, crc;
 	size_t i;
@@ -337,7 +337,7 @@ uint8_t sd_card_compute_crc7 (uint8_t *data, size_t len)
 	return crc >> 1;
 }
 
-uint16_t sd_card_compute_crc16 (uint8_t *data, size_t len)
+static uint16_t sd_card_compute_crc16 (uint8_t *data, size_t len)
 {
 	uint8_t s, t;
 	uint16_t crc;

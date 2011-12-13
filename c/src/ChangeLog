@@ -1,3 +1,10 @@
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libchip/i2c/spi-memdrv.c: Make
+	spi_memdrv_minor2param_ptr, spi_memdrv_wait_ms static.
+	* libchip/i2c/spi-sd-card.c: Make
+	sd_card_compute_crc7, sd_card_compute_crc16 static.
+
 2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac (CFLAGS): Add -Wmissing-prototypes.
