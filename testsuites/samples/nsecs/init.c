@@ -30,7 +30,7 @@
 #include "tmacros.h"
 #include "pritime.h"
 
-char *my_ctime( time_t t )
+static char *my_ctime( time_t t )
 {
   static char b[32];
   ctime_r(&t, b);
@@ -38,7 +38,7 @@ char *my_ctime( time_t t )
   return b;
 }
 
-void subtract_em(
+static void subtract_em(
   struct timespec *start,
   struct timespec *stop,
   struct timespec *t

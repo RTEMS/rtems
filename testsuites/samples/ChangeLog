@@ -1,3 +1,11 @@
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* fileio/init.c: Comment out setup_nvdisk (Unused).
+	Make shell_nvdisk_trace, shell_nvdisk_erase, shell_bdbuf_trace,
+	disk_test_set_block_size, disk_test_write_blocks, disk_test_block_sizes,
+	parse_size_arg, create_ramdisk, create_nvdisk static.
+	* nsecs/init.c: Make my_ctime, subtract_em static.
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build

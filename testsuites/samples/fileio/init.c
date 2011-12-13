@@ -128,6 +128,7 @@ rtems_driver_address_table rtems_nvdisk_io_ops = {
   control_entry:        rtems_blkdev_generic_ioctl
 };
 
+#if 0
 int
 setup_nvdisk (const char* mntpath)
 {
@@ -165,6 +166,7 @@ setup_nvdisk (const char* mntpath)
 
   return 0;
 }
+#endif
 
 /*
  * Table of FAT file systems that will be mounted
@@ -228,7 +230,7 @@ fstab_t fs_table[] = {
 
 #ifdef USE_SHELL
 
-int
+static int
 shell_nvdisk_trace (int argc, char* argv[])
 {
   const char* driver;
@@ -261,7 +263,7 @@ shell_nvdisk_trace (int argc, char* argv[])
   return 0;
 }
 
-int
+static int
 shell_nvdisk_erase (int argc, char* argv[])
 {
   const char* driver = NULL;
@@ -309,7 +311,7 @@ shell_nvdisk_erase (int argc, char* argv[])
   return 0;
 }
 
-int
+static int
 shell_bdbuf_trace (int argc, char* argv[])
 {
 #if RTEMS_BDBUF_TRACE
@@ -322,7 +324,7 @@ shell_bdbuf_trace (int argc, char* argv[])
   return 0;
 }
 
-int
+static int
 disk_test_set_block_size (dev_t dev, size_t size)
 {
   rtems_disk_device* dd;
@@ -342,7 +344,7 @@ disk_test_set_block_size (dev_t dev, size_t size)
   return rc;
 }
 
-int
+static int
 disk_test_write_blocks (dev_t dev, int start, int count, size_t size)
 {
   int                 block;
@@ -384,7 +386,7 @@ disk_test_write_blocks (dev_t dev, int start, int count, size_t size)
   return 0;
 }
 
-int
+static int
 disk_test_block_sizes (int argc, char *argv[])
 {
   struct stat st;
@@ -414,7 +416,7 @@ disk_test_block_sizes (int argc, char *argv[])
   return disk_test_write_blocks (st.st_rdev, start, count, size);
 }
 
-size_t
+static size_t
 parse_size_arg (const char* arg)
 {
   size_t size;
@@ -442,7 +444,7 @@ parse_size_arg (const char* arg)
   return size * scalar;
  }
 
-int
+static int
 create_ramdisk (int argc, char *argv[])
 {
   rtems_device_major_number major;
@@ -515,7 +517,7 @@ create_ramdisk (int argc, char *argv[])
   return 0;
 }
 
-int
+static int
 create_nvdisk (int argc, char *argv[])
 {
   rtems_device_major_number major;
