@@ -11,7 +11,6 @@ RTEMS_CPU = powerpc
 RTEMS_CPU_MODEL = qoriq
 
 CPU_CFLAGS = -mcpu=8540 -meabi -msdata -fno-common -mfloat-gprs=double -mstrict-align \
-	-D__ppc_generic \
-	-Wextra -Wno-unused -Wpointer-arith -Wcast-qual -Wconversion -Wmissing-prototypes
+	-D__ppc_generic
 
 CFLAGS_OPTIMIZE_V = -Os -g
