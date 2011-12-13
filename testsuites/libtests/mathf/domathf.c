@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 by
+ * Copyright (c) 2010, 2011 by
  * Ralf Corsepius, Ulm/Germany. All rights reserved.
  *
  * Permission to use, copy, modify, and distribute this software
@@ -24,6 +24,8 @@
 #ifndef M_PI_4
 #define M_PI_4 0.78539816339744830962
 #endif
+
+extern void domathf (void);
 
 void
 domathf (void)

@@ -1,9 +1,15 @@
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* math/init.c, mathf/init.c, mathl/init.c: Move configuration section.
+	* math/domath.c, mathf/domathf.c,  mathl/domathl.c: Regenerate.
+	* math/domath.in: Generate domath* prototype.
+
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* complex/init.c: Move configuration section.
 	* complex/docomplex.c, complex/docomplexf.c, complex/docomplexl.c:
 	Regenerate.
-	* complex/docomplex.in: Generate prototype docomplex* prototype.
+	* complex/docomplex.in: Generate docomplex* prototype.
 
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>
 

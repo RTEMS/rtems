@@ -34,6 +34,19 @@
 extern void domath(void);
 
 #if __rtems__
+/* NOTICE: the clock driver is explicitly disabled */
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS           1
+#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
+#define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+#include <rtems/confdefs.h>
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -49,17 +62,3 @@ int main( void )
   exit( 0 );
 }
 
-#if __rtems__
-/* NOTICE: the clock driver is explicitly disabled */
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-
-#define CONFIGURE_MAXIMUM_TASKS           1
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
-#define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_INIT
-#include <rtems/confdefs.h>
-#endif
