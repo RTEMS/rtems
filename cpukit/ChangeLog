@@ -1,3 +1,8 @@
+2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/wkspace.h, score/src/wkstringduplicate.c:
+	Changed parameter of _Workspace_String_duplicate() to avoid strnlen().
+
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for getrusage.h decl.

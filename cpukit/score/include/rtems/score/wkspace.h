@@ -102,18 +102,15 @@ void *_Workspace_Allocate_or_fatal_error(
 /**
  * @brief Duplicates the @a string with memory from the Workspace.
  *
- * If the @a string length exceeds @a maxlen, then the additional characters
- * will be discarded.
- *
  * @param[in] string Pointer to zero terminated string.
- * @param[in] maxlen Maximum length of the duplicated string.
+ * @param[in] len Length of the string (equal to strlen(string)).
  *
  * @return NULL Not enough memory.
  * @return other Duplicated string.
  */
 char *_Workspace_String_duplicate(
   const char *string,
-  size_t maxlen
+  size_t len
 );
 
 #ifndef __RTEMS_APPLICATION__

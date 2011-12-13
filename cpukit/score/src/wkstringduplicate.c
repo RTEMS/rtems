@@ -24,15 +24,14 @@
 
 char *_Workspace_String_duplicate(
   const char *string,
-  size_t maxlen
+  size_t len
 )
 {
-  size_t n = strnlen(string, maxlen);
-  char *dup = _Workspace_Allocate(n + 1);
+  char *dup = _Workspace_Allocate(len + 1);
 
   if (dup != NULL) {
-    dup [n] = '\0';
-    memcpy(dup, string, n);
+    dup [len] = '\0';
+    memcpy(dup, string, len);
   }
 
   return dup;
