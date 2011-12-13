@@ -1,5 +1,9 @@
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* psx07/init.c: Remove unused var "clock_allowed".
+
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Check for getrusage decl.
 	* psxgetrusage01/init.c:
 	Fix header file inclusion order.

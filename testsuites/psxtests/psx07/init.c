@@ -64,7 +64,6 @@ void *POSIX_Init(
   struct sched_param  schedparam;
   pthread_attr_t      attr;
   pthread_attr_t      destroyed_attr;
-  int                 clock_allowed;
 
   puts( "\n\n*** POSIX TEST 7 ***" );
 
