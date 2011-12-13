@@ -98,6 +98,9 @@ RTEMS_CHECK_FUNC([pthread_attr_setguardsize],[#include <pthread.h>])
 RTEMS_CHECK_FUNC([pthread_attr_setstack],[#include <pthread.h>])
 RTEMS_CHECK_FUNC([pthread_attr_getstack],[#include <pthread.h>])
 
+# Mandated by POSIX, not declared in some versions of newlib.
+AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
+
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([ttyname getcwd])
 # </FIXME>
