@@ -42,9 +42,6 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
-/* pure ANSI mode does not have this prototype */
-size_t strnlen(const char *, size_t);
-
 /*
  *  _POSIX_Message_queue_Create_support
  *
@@ -54,6 +51,7 @@ size_t strnlen(const char *, size_t);
 
 int _POSIX_Message_queue_Create_support(
   const char                    *name_arg,
+  size_t                         name_len,
   int                            pshared,
   struct mq_attr                *attr_ptr,
   POSIX_Message_queue_Control  **message_queue
@@ -63,9 +61,7 @@ int _POSIX_Message_queue_Create_support(
   CORE_message_queue_Attributes *the_mq_attr;
   struct mq_attr                 attr;
   char                          *name;
-  size_t                         n;
 
-  n = strnlen( name_arg, NAME_MAX );
   /* length of name has already been validated */
 
   _Thread_Disable_dispatch();
@@ -99,22 +95,21 @@ int _POSIX_Message_queue_Create_support(
     rtems_set_errno_and_return_minus_one( ENFILE );
   }
 
-  the_mq->process_shared  = pshared;
-  the_mq->named = true;
-  the_mq->open_count = 1;
-  the_mq->linked = true;
-
   /*
    * Make a copy of the user's string for name just in case it was
    * dynamically constructed.
    */
-  name = _Workspace_Allocate(n+1);
-  if (!name) {
+  name = _Workspace_String_duplicate( name_arg, name_len );
+  if ( !name ) {
     _POSIX_Message_queue_Free( the_mq );
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
-  strncpy( name, name_arg, n+1 );
+
+  the_mq->process_shared  = pshared;
+  the_mq->named = true;
+  the_mq->open_count = 1;
+  the_mq->linked = true;
 
   /*
    *  NOTE: That thread blocking discipline should be based on the

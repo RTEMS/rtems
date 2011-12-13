@@ -48,7 +48,7 @@ int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
   size_t              msg_len,
-  uint32_t            msg_prio,
+  unsigned int        msg_prio,
   bool                wait,
   Watchdog_Interval   timeout
 )
@@ -91,7 +91,7 @@ int _POSIX_Message_queue_Send_support(
        */
       msg_status = _CORE_message_queue_Submit(
         &the_mq->Message_queue,
-        (void *)msg_ptr,
+        msg_ptr,
         msg_len,
         mqdes,      /* mqd_t is an object id */
         NULL,

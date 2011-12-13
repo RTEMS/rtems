@@ -25,6 +25,7 @@ extern "C" {
 
 #include <semaphore.h>
 #include <rtems/score/coresem.h>
+#include <rtems/posix/posixapi.h>
 
 /*
  *  Data Structure used to manage a POSIX semaphore
@@ -129,6 +130,7 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_null (
 
 int _POSIX_Semaphore_Create_support(
   const char                *name,
+  size_t                     name_len,
   int                        pshared,
   unsigned int               value,
   POSIX_Semaphore_Control  **the_sem
@@ -159,19 +161,6 @@ int _POSIX_Semaphore_Wait_support(
   sem_t               *sem,
   bool                 blocking,
   Watchdog_Interval    timeout
-);
-
-/*
- *  _POSIX_Semaphore_Name_to_id
- *
- *  DESCRIPTION:
- *
- *  This routine performs name to id translation.
- */
-
-int _POSIX_Semaphore_Name_to_id(
-  const char          *name,
-  sem_t          *id
 );
 
 /*

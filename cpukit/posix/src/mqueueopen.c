@@ -58,6 +58,7 @@ mqd_t mq_open(
   POSIX_Message_queue_Control    *the_mq;
   POSIX_Message_queue_Control_fd *the_mq_fd;
   Objects_Locations               location;
+  size_t                          name_len;
 
   _Thread_Disable_dispatch();
 
@@ -75,7 +76,7 @@ mqd_t mq_open(
   }
   the_mq_fd->oflag = oflag;
 
-  status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
+  status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id, &name_len );
 
   /*
    *  If the name to id translation worked, then the message queue exists
@@ -128,6 +129,7 @@ mqd_t mq_open(
    */
   status = _POSIX_Message_queue_Create_support(
     name,
+    name_len,
     true,         /* shared across processes */
     attr,
     &the_mq

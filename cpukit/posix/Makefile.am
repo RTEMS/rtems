@@ -106,7 +106,7 @@ libposix_a_SOURCES += src/mprotect.c
 ## MESSAGE_QUEUE_C_FILES
 libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
     src/mqueuecreatesupp.c src/mqueuedeletesupp.c src/mqueuegetattr.c \
-    src/mqueuenametoid.c src/mqueuenotify.c src/mqueueopen.c \
+    src/mqueuenotify.c src/mqueueopen.c \
     src/mqueuereceive.c src/mqueuerecvsupp.c src/mqueuesend.c \
     src/mqueuesendsupp.c src/mqueuesetattr.c src/mqueuetimedreceive.c \
     src/mqueuetimedsend.c src/mqueuetranslatereturncode.c \
@@ -170,7 +170,7 @@ libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
 
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
-    src/semaphoredeletesupp.c src/semaphorenametoid.c \
+    src/semaphoredeletesupp.c \
     src/semaphoretranslatereturncode.c src/semaphorewaitsupp.c \
     src/semclose.c src/semdestroy.c src/semgetvalue.c src/seminit.c \
     src/semopen.c src/sempost.c src/semtimedwait.c src/semtrywait.c \
@@ -195,6 +195,7 @@ libposix_a_SOURCES += src/getitimer.c src/setitimer.c
 
 ## SUPPORT_C_FILES
 libposix_a_SOURCES += src/psxpriorityisvalid.c
+libposix_a_SOURCES += src/psxnametoid.c
 
 EXTRA_DIST += src/README.mqueue
 

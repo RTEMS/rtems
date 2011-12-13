@@ -45,19 +45,19 @@ typedef struct {
 } posix_initialization_threads_table;
 
 typedef struct {
-  int                                 maximum_threads;
-  int                                 maximum_mutexes;
-  int                                 maximum_condition_variables;
-  int                                 maximum_keys;
-  int                                 maximum_timers;
-  int                                 maximum_queued_signals;
-  int                                 maximum_message_queues;
-  int                                 maximum_message_queue_descriptors;
-  int                                 maximum_semaphores;
-  int                                 maximum_barriers;
-  int                                 maximum_rwlocks;
-  int                                 maximum_spinlocks;
-  int                                 number_of_initialization_threads;
+  uint32_t                            maximum_threads;
+  uint32_t                            maximum_mutexes;
+  uint32_t                            maximum_condition_variables;
+  uint32_t                            maximum_keys;
+  uint32_t                            maximum_timers;
+  uint32_t                            maximum_queued_signals;
+  uint32_t                            maximum_message_queues;
+  uint32_t                            maximum_message_queue_descriptors;
+  uint32_t                            maximum_semaphores;
+  uint32_t                            maximum_barriers;
+  uint32_t                            maximum_rwlocks;
+  uint32_t                            maximum_spinlocks;
+  uint32_t                            number_of_initialization_threads;
   posix_initialization_threads_table *User_initialization_threads_table;
 } posix_api_configuration_table;
 

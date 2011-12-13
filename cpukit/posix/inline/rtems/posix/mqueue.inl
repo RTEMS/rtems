@@ -127,7 +127,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Submit_types _POSIX_Message_queue_Priori
   unsigned int priority
 )
 {
-  return priority * -1;
+  return (CORE_message_queue_Submit_types) priority * -1;
 }
 
 /*
@@ -143,7 +143,19 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
 )
 {
   /* absolute value without a library dependency */
-  return ((priority >= 0) ? priority : -priority);
+  return (unsigned int) ((priority >= 0) ? priority : -priority);
+}
+
+/**
+ * @see _POSIX_Name_to_id().
+ */
+RTEMS_INLINE_ROUTINE int _POSIX_Message_queue_Name_to_id(
+  const char          *name,
+  Objects_Id          *id,
+  size_t              *len
+)
+{
+  return _POSIX_Name_to_id( &_POSIX_Message_queue_Information, name, id, len );
 }
 
 #endif

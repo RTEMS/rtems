@@ -51,10 +51,11 @@ int mq_unlink(
   int                                   status;
   register POSIX_Message_queue_Control *the_mq;
   Objects_Id                            the_mq_id;
+  size_t                                name_len;
 
   _Thread_Disable_dispatch();
 
-  status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id );
+  status = _POSIX_Message_queue_Name_to_id( name, &the_mq_id, &name_len );
    if ( status != 0 ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( status );

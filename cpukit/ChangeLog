@@ -1,5 +1,27 @@
 2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* posix/src/mqueuenametoid.c,
+	posix/src/semaphorenametoid.c: Removed files.
+	* posix/src/psxnametoid.c: New file.
+	* posix/Makefile.am: Reflect changes above.
+	* posix/include/rtems/posix/config.h: Fixed integer types.
+	* posix/include/rtems/posix/posixapi.h: Declare _POSIX_Name_to_id().
+	* posix/include/rtems/posix/mqueue.h,
+	posix/inline/rtems/posix/mqueue.inl: Changed parameter of
+	_POSIX_Message_queue_Create_support().
+	_POSIX_Message_queue_Name_to_id() is now inline.
+	* posix/include/rtems/posix/semaphore.h,
+	posix/inline/rtems/posix/semaphore.inl: Changed parameter of
+	_POSIX_Semaphore_Create_support().  _POSIX_Semaphore_Name_to_id() is
+	now inline.
+	* posix/src/mqueuecreatesupp.c, posix/src/semaphorecreatesupp.c: Use
+	_Workspace_String_duplicate().
+	* posix/src/mqueuesendsupp.c, posix/src/mqueueopen.c,
+	posix/src/mqueueunlink.c, posix/src/seminit.c, posix/src/semopen.c,
+	posix/src/semunlink.c: Update due to API changes.
+
+2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* sapi/include/confdefs.h: Fixed workspace size estimate of POSIX keys
 	and message queues.
 

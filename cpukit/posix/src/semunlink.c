@@ -42,11 +42,12 @@ int sem_unlink(
 {
   int  status;
   register POSIX_Semaphore_Control *the_semaphore;
-  sem_t                        the_semaphore_id;
+  Objects_Id the_semaphore_id;
+  size_t name_len;
 
   _Thread_Disable_dispatch();
 
-  status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id );
+  status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id, &name_len );
   if ( status != 0 ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( status );

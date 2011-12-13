@@ -23,6 +23,7 @@
 #include <mqueue.h> /* struct mq_attr */
 #include <rtems/score/coremsg.h>
 #include <rtems/score/object.h>
+#include <rtems/posix/posixapi.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,6 +80,7 @@ void _POSIX_Message_queue_Manager_initialization(void);
 
 int _POSIX_Message_queue_Create_support(
   const char                    *name,
+  size_t                         name_len,
   int                            pshared,
   struct mq_attr                *attr,
   POSIX_Message_queue_Control  **message_queue
@@ -126,7 +128,7 @@ int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
   size_t              msg_len,
-  uint32_t            msg_prio,
+  unsigned int        msg_prio,
   bool                wait,
   Watchdog_Interval   timeout
 );
@@ -184,20 +186,6 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get (
 
 RTEMS_INLINE_ROUTINE bool    _POSIX_Message_queue_Is_null (
   POSIX_Message_queue_Control *the_mq
-);
-
-/*
- *  _POSIX_Message_queue_Name_to_id
- *
- *  DESCRIPTION:
- *
- *  This routine looks up the specified name for a message queue and returns the
- *  id of the message queue associated with it.
- */
-
-int _POSIX_Message_queue_Name_to_id(
-  const char          *name,
-  Objects_Id          *id
 );
 
 /*

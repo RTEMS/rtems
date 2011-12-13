@@ -81,6 +81,18 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_null (
   return !the_semaphore;
 }
 
+/**
+ * @see _POSIX_Name_to_id().
+ */
+RTEMS_INLINE_ROUTINE int _POSIX_Semaphore_Name_to_id(
+  const char *name,
+  Objects_Id *id,
+  size_t     *len
+)
+{
+  return _POSIX_Name_to_id( &_POSIX_Semaphore_Information, name, id, len );
+}
+
 #endif
 /*  end of include file */
 

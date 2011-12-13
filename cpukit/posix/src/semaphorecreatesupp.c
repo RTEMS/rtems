@@ -24,12 +24,10 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+#include <rtems/score/wkspace.h>
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
-
-/* pure ANSI mode does not have this prototype */
-size_t strnlen(const char *, size_t);
 
 /*
  *  _POSIX_Semaphore_Create_support
@@ -39,7 +37,8 @@ size_t strnlen(const char *, size_t);
  *  sem_open.
  */
 int _POSIX_Semaphore_Create_support(
-  const char                *name,
+  const char                *name_arg,
+  size_t                     name_len,
   int                        pshared,
   unsigned int               value,
   POSIX_Semaphore_Control  **the_sem
@@ -47,24 +46,33 @@ int _POSIX_Semaphore_Create_support(
 {
   POSIX_Semaphore_Control   *the_semaphore;
   CORE_semaphore_Attributes *the_sem_attr;
-  char                      *name_p = (char *)name;
+  char                      *name;
 
   /* Sharing semaphores among processes is not currently supported */
   if (pshared != 0)
     rtems_set_errno_and_return_minus_one( ENOSYS );
 
-  if ( name ) {
-    if ( strnlen( name, NAME_MAX ) >= NAME_MAX )
-      rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
-  }
-
   _Thread_Disable_dispatch();
 
   the_semaphore = _POSIX_Semaphore_Allocate();
-
   if ( !the_semaphore ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOSPC );
+  }
+
+  /*
+   * Make a copy of the user's string for name just in case it was
+   * dynamically constructed.
+   */
+  if ( name_arg != NULL ) {
+    name = _Workspace_String_duplicate( name_arg, name_len );
+    if ( !name ) {
+      _POSIX_Semaphore_Free( the_semaphore );
+      _Thread_Enable_dispatch();
+      rtems_set_errno_and_return_minus_one( ENOMEM );
+    }
+  } else {
+    name = NULL;
   }
 
   the_semaphore->process_shared  = pshared;
@@ -103,7 +111,7 @@ int _POSIX_Semaphore_Create_support(
   _Objects_Open_string(
     &_POSIX_Semaphore_Information,
     &the_semaphore->Object,
-    name_p
+    name
   );
 
   *the_sem = the_semaphore;

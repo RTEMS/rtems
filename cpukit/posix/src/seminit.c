@@ -45,6 +45,7 @@ int sem_init(
 
   status = _POSIX_Semaphore_Create_support(
     NULL,
+    0,
     pshared,
     value,
     &the_semaphore
