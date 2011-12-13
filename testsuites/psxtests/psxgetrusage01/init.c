@@ -13,14 +13,28 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include "test_support.h"
-
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <errno.h>
 
-int getrusage(int who, struct rusage *usage);
+#if !HAVE_DECL_GETRUSAGE
+extern int getrusage(int who, struct rusage *usage);
+#endif
+
+#include <tmacros.h>
+#include "test_support.h"
+
+/* configuration information */
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
 
 rtems_task Init(
   rtems_task_argument argument
@@ -65,16 +79,3 @@ rtems_task Init(
 
   rtems_test_exit(0);
 }
-
-/* configuration information */
-
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-
-#define CONFIGURE_MAXIMUM_TASKS             1
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_INIT
-
-#include <rtems/confdefs.h>
-/* end of file */

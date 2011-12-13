@@ -50,6 +50,9 @@ AC_CHECK_DECLS([pthread_attr_getguardsize],[],[],[[#include <pthread.h>]])
 # Added to pthreads after initial revision.  May not be in toolset
 AC_CHECK_DECLS([pthread_attr_setguardsize],[],[],[[#include <pthread.h>]])
 
+# Mandated by POSIX, not declared in some versions of newlib.
+AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
+
 # FIXME: adjtime is a non-standardized BSD/Linux extension
 # RTEMS should not rely on adjtime
 AC_CHECK_DECLS([adjtime],[],[],[[#include <sys/time.h>]])
