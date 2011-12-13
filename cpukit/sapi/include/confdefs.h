@@ -1527,17 +1527,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    */
   #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
     _Configure_Object_RAM( (_number), _size ) + \
-    ((_number) + _Configure_From_workspace(NAME_MAX) )
+    ((_number) * _Configure_From_workspace(NAME_MAX) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
     #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
   #endif
 
   #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
-    _Configure_From_workspace( \
-      sizeof (POSIX_API_Control) + \
-     (sizeof (void *) * (CONFIGURE_MAXIMUM_POSIX_KEYS)) \
-    )
+    _Configure_From_workspace(sizeof(POSIX_API_Control))
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
     #define CONFIGURE_MAXIMUM_POSIX_MUTEXES              0
@@ -1561,7 +1558,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) 0
   #else
     #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-      _Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) )
+      (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+        + (_keys) * 3 * _Configure_From_workspace(sizeof(void *) * 2))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
@@ -1598,7 +1596,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #endif
 
     #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
-      _Configure_POSIX_Named_Object_RAM( \
+      _Configure_Object_RAM( \
          _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
   #endif
 

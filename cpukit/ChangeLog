@@ -1,5 +1,10 @@
 2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* sapi/include/confdefs.h: Fixed workspace size estimate of POSIX keys
+	and message queues.
+
+2011-12-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* score/include/rtems/score/wkspace.h, score/src/wkstringduplicate.c:
 	Changed parameter of _Workspace_String_duplicate() to avoid strnlen().
 
