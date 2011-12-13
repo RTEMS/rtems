@@ -44,5 +44,11 @@
   rm -rf ${RPM_BUILD_ROOT}%{_datadir}/@tool_target@-gdb/python
 %endif
 %endif
+
+%if "%{gdb_version}" == "7.3.91"
+# gdb-7.3.91, installs host files, we don't want
+  rm ${RPM_BUILD_ROOT}%{_includedir}/gdb/jit-reader.h
+%endif
+
   cd ..
 
