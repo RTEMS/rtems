@@ -1,5 +1,8 @@
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
+	* complex/init.c: Move configuration section.
+	* complex/docomplex.c, complex/docomplexf.c, complex/docomplexl.c:
+	Regenerate.
 	* complex/docomplex.in: Generate prototype docomplex* prototype.
 
 2011-12-09	Ralf Corsépius <ralf.corsepius@rtems.org>

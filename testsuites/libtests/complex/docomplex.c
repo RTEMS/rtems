@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 by
+ * Copyright (c) 2010, 2011 by
  * Ralf Corsepius, Ulm/Germany. All rights reserved.
  *
  * Permission to use, copy, modify, and distribute this software
@@ -16,6 +16,8 @@
 
 #include <complex.h>
 #include <stdio.h>
+
+extern void docomplex  (void);
 
 void
 docomplex  (void)
