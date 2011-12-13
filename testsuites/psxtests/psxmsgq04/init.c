@@ -87,13 +87,8 @@ void *POSIX_Init(
    */
   puts( "Init - Memory allocation error test" );
 
-  sb = rtems_workspace_get_information( &info );
-
-  attr.mq_maxmsg = 1;
-  attr.mq_msgsize = 200;
-
   name = Get_Longest_Name();
-  while ( attr.mq_msgsize > 0 ) {
+  do {
     sb = rtems_workspace_allocate( to_alloc, &alloced );
     rtems_test_assert( sb );
 
@@ -102,15 +97,8 @@ void *POSIX_Init(
     /* free the memory we snagged, then check the status */
     rtems_workspace_free( alloced );
 
-    if ( second_Queue != (-1) )
-      break;
-
-    /* attr.mq_msgsize -= 48; */
     to_alloc -= 4;
-  }
-
-  if ( second_Queue == -1 )
-    rtems_test_exit(0);
+  } while ( second_Queue == -1 );
 
   puts( "Init - Message Queue created" );
 
@@ -141,7 +129,7 @@ void *POSIX_Init(
 
 /* account for message buffers and string names */
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, sizeof(int))
+    (2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, sizeof(int)))
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS                   1
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES            1
