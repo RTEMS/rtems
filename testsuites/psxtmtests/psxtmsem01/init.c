@@ -27,7 +27,7 @@ sem_t           sem1;
 sem_t           *n_sem1;
 sem_t           *n_sem2;
 
-void benchmark_sem_init(void)
+static void benchmark_sem_init(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -46,7 +46,7 @@ void benchmark_sem_init(void)
   );
 }
 
-void benchmark_sem_destroy(void)
+static void benchmark_sem_destroy(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -65,7 +65,7 @@ void benchmark_sem_destroy(void)
   );
 }
 
-void benchmark_sem_open(bool report_time)
+static void benchmark_sem_open(bool report_time)
 {
   benchmark_timer_t end_time;
 
@@ -84,7 +84,7 @@ void benchmark_sem_open(bool report_time)
   }
 }
 
-void benchmark_sem_close(bool report_time)
+static void benchmark_sem_close(bool report_time)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -105,7 +105,7 @@ void benchmark_sem_close(bool report_time)
   }
 }
 
-void benchmark_sem_unlink(const char *message)
+static void benchmark_sem_unlink(const char *message)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -124,7 +124,7 @@ void benchmark_sem_unlink(const char *message)
   );
 }
 
-void benchmark_sem_open_second(void)
+static void benchmark_sem_open_second(void)
 {
   benchmark_timer_t end_time;
 
@@ -141,7 +141,7 @@ void benchmark_sem_open_second(void)
   );
 }
 
-void benchmark_sem_close_second(void)
+static void benchmark_sem_close_second(void)
 {
   benchmark_timer_t end_time;
   int  status;

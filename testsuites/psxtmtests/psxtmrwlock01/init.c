@@ -20,7 +20,7 @@
 
 pthread_rwlock_t     rwlock;
 
-void benchmark_pthread_rwlock_init(void)
+static void benchmark_pthread_rwlock_init(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -42,7 +42,7 @@ void benchmark_pthread_rwlock_init(void)
 
 }
 
-void benchmark_pthread_rwlock_rdlock(void)
+static void benchmark_pthread_rwlock_rdlock(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -62,7 +62,7 @@ void benchmark_pthread_rwlock_rdlock(void)
 
 }
 
-void benchmark_pthread_rwlock_unlock(int print)
+static void benchmark_pthread_rwlock_unlock(int print)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -82,7 +82,7 @@ void benchmark_pthread_rwlock_unlock(int print)
   }
 }
 
-void benchmark_pthread_rwlock_tryrdlock(void)
+static void benchmark_pthread_rwlock_tryrdlock(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -110,7 +110,7 @@ void benchmark_pthread_rwlock_tryrdlock(void)
   }
 }
 
-void benchmark_pthread_rwlock_timedrdlock(void)
+static void benchmark_pthread_rwlock_timedrdlock(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -130,7 +130,7 @@ void benchmark_pthread_rwlock_timedrdlock(void)
 
 }
 
-void benchmark_pthread_rwlock_wrlock(void)
+static void benchmark_pthread_rwlock_wrlock(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -150,7 +150,7 @@ void benchmark_pthread_rwlock_wrlock(void)
 
 }
 
-void benchmark_pthread_rwlock_trywrlock(void)
+static void benchmark_pthread_rwlock_trywrlock(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -179,7 +179,7 @@ void benchmark_pthread_rwlock_trywrlock(void)
   }
 }
 
-void benchmark_pthread_rwlock_timedwrlock(void)
+static void benchmark_pthread_rwlock_timedwrlock(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -198,7 +198,7 @@ void benchmark_pthread_rwlock_timedwrlock(void)
   );
 }
 
-void benchmark_pthread_rwlock_destroy(void)
+static void benchmark_pthread_rwlock_destroy(void)
 {
   benchmark_timer_t end_time;
   int  status;

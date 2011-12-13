@@ -30,7 +30,7 @@ void *TestThread(
 }
 
 
-void benchmark_pthread_create(
+static void benchmark_pthread_create(
   int    iteration,
   void  *argument
 )

@@ -20,7 +20,7 @@
 
 pthread_barrier_t   barrier;
 
-void benchmark_pthread_barrier_init(void)
+static void benchmark_pthread_barrier_init(void)
 {
   benchmark_timer_t end_time;
   int                   status;
@@ -46,7 +46,7 @@ void benchmark_pthread_barrier_init(void)
   );
 }
 
-void benchmark_pthread_barrier_destroy(void)
+static void benchmark_pthread_barrier_destroy(void)
 {
   benchmark_timer_t end_time;
   int  status;

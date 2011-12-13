@@ -1,3 +1,23 @@
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxtmbarrier01/init.c: Make benchmark_pthread_barrier_init,
+	benchmark_pthread_barrier_destroy static.
+	* psxtmkey01/init.c: Make benchmark_pthread_key_create,
+	benchmark_pthread_key_delete static.
+	* psxtmrwlock01/init.c: Make benchmark_pthread_rwlock_init,
+	benchmark_pthread_rwlock_rdlock, benchmark_pthread_rwlock_unlock,
+	benchmark_pthread_rwlock_tryrdlock,
+	benchmark_pthread_rwlock_timedrdlock,
+	benchmark_pthread_rwlock_wrlock,
+	benchmark_pthread_rwlock_trywrlock,
+	benchmark_pthread_rwlock_timedwrlock,
+	benchmark_pthread_rwlock_destroy static.
+	* psxtmsem01/init.c: Make benchmark_sem_init,
+	benchmark_sem_destroy, benchmark_sem_open, benchmark_sem_close,
+	benchmark_sem_unlink, benchmark_sem_open_second,
+	benchmark_sem_close_second static.
+	* psxtmthread01/init.c: Make benchmark_pthread_create static.
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build
