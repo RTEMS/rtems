@@ -1,3 +1,12 @@
+2011-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Add support/include/tmtests_empty_function.h.
+	* support/include/tmtests_empty_function.h: New.
+	* support/src/tmtests_empty_function.c,
+	support/src/tmtests_support.c:
+	Include "tmtests_empty_function.h".
+	Remove local decls (Missing prototypes).
+
 2011-11-04	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* support/src/test_support.c: Avoid magic numbers.
