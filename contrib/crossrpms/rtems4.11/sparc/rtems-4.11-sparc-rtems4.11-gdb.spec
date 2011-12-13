@@ -45,8 +45,8 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define gdb_version 7.3.1
-%define gdb_rpmvers %{expand:%(echo 7.3.1 | tr - _)} 
+%define gdb_version 7.3.91
+%define gdb_rpmvers %{expand:%(echo 7.3.91 | tr - _)} 
 
 Name:		rtems-4.11-sparc-rtems4.11-gdb
 Summary:	Gdb for target sparc-rtems4.11
@@ -95,6 +95,10 @@ BuildRequires:	/sbin/install-info
 BuildRequires:	texinfo >= 4.2
 Requires:	rtems-4.11-gdb-common
 
+%if "%{gdb_version}" == "7.3.91"
+Source0:  ftp://sourceware.org/pub/gdb/snapshots/branch/gdb/gdb-7.3.91.tar.bz2
+Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.3.91-rtems4.11-20111213.diff
+%endif
 %if "%{gdb_version}" == "7.3.1"
 Source0: ftp://ftp.gnu.org/gnu/gdb/gdb-7.3.1.tar.bz2
 Patch0: ftp://ftp.rtems.org/pub/rtems/SOURCES/4.11/gdb-7.3.1-rtems4.11-20110905.diff
@@ -183,6 +187,12 @@ cd ..
   rm -rf ${RPM_BUILD_ROOT}%{_datadir}/sparc-rtems4.11-gdb/python
 %endif
 %endif
+
+%if "%{gdb_version}" == "7.3.91"
+# gdb-7.3.91, installs host files, we don't want
+  rm ${RPM_BUILD_ROOT}%{_includedir}/gdb/jit-reader.h
+%endif
+
   cd ..
 
 # Extract %%__os_install_post into os_install_post~
