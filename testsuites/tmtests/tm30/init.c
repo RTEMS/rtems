@@ -21,7 +21,7 @@
 
 rtems_id barrier[ OPERATION_COUNT ];
 
-void benchmark_barrier_create(
+static void benchmark_barrier_create(
   int    iteration,
   void  *argument
 )
@@ -37,7 +37,7 @@ void benchmark_barrier_create(
   directive_failed(status, "rtems_barrier_create");
 }
 
-void benchmark_barrier_ident(
+static void benchmark_barrier_ident(
   int    iteration,
   void  *argument
 )
@@ -49,7 +49,7 @@ void benchmark_barrier_ident(
   directive_failed(status, "rtems_barrier_ident");
 }
 
-void benchmark_barrier_delete(
+static void benchmark_barrier_delete(
   int    iteration,
   void  *argument
 )

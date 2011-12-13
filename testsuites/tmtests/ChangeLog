@@ -1,3 +1,8 @@
+2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* tm30/init.c: Make benchmark_barrier_create,
+	benchmark_barrier_ident, benchmark_barrier_delete static.
+
 2011-12-08	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1589/build
