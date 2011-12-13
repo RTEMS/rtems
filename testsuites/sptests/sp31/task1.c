@@ -32,7 +32,7 @@ rtems_timer_service_routine Should_not_fire_TSR(
   TSR_fired = 1;
 }
 
-rtems_timer_service_routine Do_nothing(
+static rtems_timer_service_routine Do_nothing(
   rtems_id  ignored_id,
   void     *ignored_address
 )

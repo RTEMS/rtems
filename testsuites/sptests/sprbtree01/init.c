@@ -27,7 +27,7 @@ typedef struct {
   rtems_rbtree_node Node;
 } test_node;
 
-int test_compare_function (
+static int test_compare_function (
   rtems_rbtree_node* n1,
   rtems_rbtree_node* n2
 )
@@ -44,7 +44,7 @@ int test_compare_function (
  * recursively checks tree. if the tree is built properly it should only 
  * be a depth of 7 function calls for 100 entries in the tree. 
  */
-int rb_assert ( rtems_rbtree_node *root )
+static int rb_assert ( rtems_rbtree_node *root )
 {
   int lh, rh;
 
