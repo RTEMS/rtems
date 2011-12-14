@@ -1,5 +1,9 @@
 2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	* libcsupport/src/termios_setinitialbaud.c: Fixed typo.
+
+2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/include/rtems/termiostypes.h,
 	libcsupport/src/termios_baud2num.c,
 	libcsupport/src/termios_baudtable.c,
