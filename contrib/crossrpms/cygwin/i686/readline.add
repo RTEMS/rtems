@@ -13,7 +13,7 @@ Version:      	%readline_rpmvers
 Summary:      	Cygwin readline Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/readline/readline-%{readline_version}.tar.bz2
-Source1:	ftp://cygwin.com/pub/cygwin/release/readline/libreadline6/libreadline6-%{readline_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/readline/libreadline7/libreadline7-%{readline_version}.tar.bz2
 
 Requires:	@rpmprefix@@tool_target@-libncurses-devel
 Provides:       @rpmprefix@@tool_target@-readline-devel = %{version}-%{release}

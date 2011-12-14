@@ -24,8 +24,8 @@ EXPAT_VERS = 2.0.1-1
 EXPAT_RPMREL = 0.20090903.0%{?dist}
 include ../expat.am
 
-READLINE_VERS = 5.2.14-12
-READLINE_RPMREL = 0.20090827.0%{?dist}
+READLINE_VERS = 6.1.2-2
+READLINE_RPMREL = 0.20111214.0%{?dist}
 include ../readline.am
 
 TERMCAP_VERS = 20050421-1

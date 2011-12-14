@@ -30,11 +30,11 @@
 %define _host_rpmprefix %{nil}
 %endif
 
-%define readline_version 5.2.14-12
-%define readline_rpmvers %{expand:%(echo 5.2.14-12 | tr - _)} 
+%define readline_version 6.1.2-2
+%define readline_rpmvers %{expand:%(echo 6.1.2-2 | tr - _)} 
 
 Name:         i686-pc-cygwin-readline
-Release:      0.20090827.0%{?dist}
+Release:      0.20111214.0%{?dist}
 License:      GPL
 Group:        Development/Tools
 
@@ -45,7 +45,7 @@ Version:      	%readline_rpmvers
 Summary:      	Cygwin readline Libraries
 
 Source0:	ftp://cygwin.com/pub/cygwin/release/readline/readline-%{readline_version}.tar.bz2
-Source1:	ftp://cygwin.com/pub/cygwin/release/readline/libreadline6/libreadline6-%{readline_version}.tar.bz2
+Source1:	ftp://cygwin.com/pub/cygwin/release/readline/libreadline7/libreadline7-%{readline_version}.tar.bz2
 
 Requires:	i686-pc-cygwin-libncurses-devel
 Provides:       i686-pc-cygwin-readline-devel = %{version}-%{release}
