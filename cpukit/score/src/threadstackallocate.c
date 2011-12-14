@@ -46,33 +46,24 @@ size_t _Thread_Stack_Allocate(
 {
   void *stack_addr = 0;
   size_t the_stack_size;
+  rtems_stack_allocate_hook stack_allocate_hook =
+    rtems_configuration_get_stack_allocate_hook();
 
   the_stack_size = _Stack_Ensure_minimum( stack_size );
 
   /*
-   * Call ONLY the CPU table stack allocate hook, _or_ the
-   * the RTEMS workspace allocate.  This is so the stack free
-   * routine can call the correct deallocation routine.
+   *  Pad the requested size so we allocate enough memory
+   *  so the context initialization can align it properly.  The address
+   *  returned the workspace allocate must be directly stored in the
+   *  stack control block because it is later used in the free sequence.
+   *
+   *  Thus it is the responsibility of the CPU dependent code to
+   *  get and keep the stack adjust factor, the stack alignment, and
+   *  the context initialization sequence in sync.
    */
+  the_stack_size = _Stack_Adjust_size( the_stack_size );
 
-  if ( Configuration.stack_allocate_hook ) {
-    stack_addr = (*Configuration.stack_allocate_hook)( the_stack_size );
-  } else {
-
-    /*
-     *  First pad the requested size so we allocate enough memory
-     *  so the context initialization can align it properly.  The address
-     *  returned the workspace allocate must be directly stored in the
-     *  stack control block because it is later used in the free sequence.
-     *
-     *  Thus it is the responsibility of the CPU dependent code to
-     *  get and keep the stack adjust factor, the stack alignment, and
-     *  the context initialization sequence in sync.
-     */
-
-    the_stack_size = _Stack_Adjust_size( the_stack_size );
-    stack_addr = _Workspace_Allocate( the_stack_size );
-  }
+  stack_addr = (*stack_allocate_hook)( the_stack_size );
 
   if ( !stack_addr )
     the_stack_size = 0;

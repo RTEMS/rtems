@@ -1,5 +1,17 @@
 2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
+	PR 1924/cpukit
+	* sapi/include/rtems/config.h: Added stack_allocate_init_hook to
+	rtems_configuration_table.
+	* sapi/include/confdefs.h: Added CONFIGURE_TASK_STACK_FROM_ALLOCATOR
+	and CONFIGURE_TASK_STACK_ALLOCATOR_INIT defines.  Set default stack
+	allocator and free hook to _Workspace_Allocate() and _Workspace_Free()
+	respectively.
+	* score/src/thread.c, score/src/threadstackallocate.c,
+	score/src/threadstackfree.c: Update due to API changes.
+
+2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
 	* libcsupport/src/termios_setinitialbaud.c: Fixed typo.
 
 2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>

@@ -49,29 +49,28 @@
 
 void _Thread_Handler_initialization(void)
 {
-  uint32_t     ticks_per_timeslice;
-  uint32_t     maximum_extensions;
+  uint32_t ticks_per_timeslice =
+    rtems_configuration_get_ticks_per_timeslice();
+  uint32_t maximum_extensions =
+    rtems_configuration_get_maximum_extensions();
+  rtems_stack_allocate_init_hook stack_allocate_init_hook =
+    rtems_configuration_get_stack_allocate_init_hook();
   uint32_t     maximum_internal_threads;
   #if defined(RTEMS_MULTIPROCESSING)
-    uint32_t   maximum_proxies;
+    uint32_t maximum_proxies =
+      _Configuration_MP_table->maximum_proxies;
   #endif
 
-  ticks_per_timeslice = Configuration.ticks_per_timeslice;
-  maximum_extensions  = Configuration.maximum_extensions;
-  #if defined(RTEMS_MULTIPROCESSING)
-    maximum_proxies   =  _Configuration_MP_table->maximum_proxies;
-  #endif
-  /*
-   * BOTH stacks hooks must be set or both must be NULL.
-   * Do not allow mixture.
-   */
-    if ( !( (!Configuration.stack_allocate_hook)
-            == (!Configuration.stack_free_hook) ) )
+  if ( rtems_configuration_get_stack_allocate_hook() == NULL ||
+       rtems_configuration_get_stack_free_hook() == NULL)
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_BAD_STACK_HOOK
     );
+
+  if ( stack_allocate_init_hook != NULL )
+    (*stack_allocate_init_hook)( rtems_configuration_get_stack_space_size() );
 
   _Thread_Dispatch_necessary = false;
   _Thread_Executing         = NULL;

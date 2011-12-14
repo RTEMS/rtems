@@ -84,6 +84,30 @@ typedef struct {
 } rtems_multiprocessing_table;
 #endif
 
+/**
+ * @brief Task stack allocator initialization hook.
+ *
+ * @param[in] stack_space_size Size of the stack space in bytes.
+ */
+typedef void (*rtems_stack_allocate_init_hook)( size_t stack_space_size );
+
+/**
+ * @brief Task stack allocator hook.
+ *
+ * @param[in] stack_size Size of the task stack in bytes.
+ *
+ * @retval NULL Not enough memory.
+ * @retval other Pointer to task stack.
+ */
+typedef void *(*rtems_stack_allocate_hook)( size_t stack_size );
+
+/**
+ * @brief Task stack deallocator hook.
+ *
+ * @param[in] addr Pointer to previously allocated task stack.
+ */
+typedef void (*rtems_stack_free_hook)( void *addr );
+
 /*
  *  The following records define the Configuration Table.  The
  *  information contained in this table is required in all
@@ -139,15 +163,20 @@ typedef struct {
    */
   uint32_t                       interrupt_stack_size;
 
-  /** The BSP may want to provide it's own stack allocation routines.
-   *  In this case, the BSP will provide this stack allocation hook.
+  /**
+   * @brief Optional task stack allocator initialization hook.
    */
-  void *                       (*stack_allocate_hook)( size_t );
+  rtems_stack_allocate_init_hook stack_allocate_init_hook;
 
-  /** The BSP may want to provide it's own stack free routines.
-   *  In this case, the BSP will provide this stack free hook.
+  /**
+   * @brief Optional task stack allocator hook.
    */
-  void                         (*stack_free_hook)( void *);
+  rtems_stack_allocate_hook      stack_allocate_hook;
+
+  /**
+   * @brief Optional task stack free hook.
+   */
+  rtems_stack_free_hook          stack_free_hook;
 
   /** If this element is TRUE, then RTEMS will zero the Executive Workspace.
    *  When this element is FALSE, it is assumed that the BSP or invoking
@@ -267,6 +296,9 @@ extern rtems_configuration_table    Configuration;
 
 #define rtems_configuration_get_interrupt_stack_size() \
         (Configuration.interrupt_stack_size)
+
+#define rtems_configuration_get_stack_allocate_init_hook() \
+        (Configuration.stack_allocate_init_hook)
 
 #define rtems_configuration_get_stack_allocate_hook() \
         (Configuration.stack_allocate_hook)

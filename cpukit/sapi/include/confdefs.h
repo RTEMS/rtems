@@ -44,6 +44,7 @@
  */
 #include <rtems.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/wkspace.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -823,17 +824,24 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  Configure the very much optional task stack allocator
+ *  Configure the very much optional task stack allocator initialization
  */
-#ifndef CONFIGURE_TASK_STACK_ALLOCATOR
-  #define CONFIGURE_TASK_STACK_ALLOCATOR NULL
+#ifndef CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+  #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT NULL
 #endif
 
-/**
- *  Configure the very much optional task stack deallocator
+/*
+ *  Configure the very much optional task stack allocator and deallocator.
  */
-#ifndef CONFIGURE_TASK_STACK_DEALLOCATOR
-  #define CONFIGURE_TASK_STACK_DEALLOCATOR NULL
+#if !defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
+  && !defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
+  #define CONFIGURE_TASK_STACK_ALLOCATOR _Workspace_Allocate
+  #define CONFIGURE_TASK_STACK_DEALLOCATOR _Workspace_Free
+#elif (defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
+  && !defined(CONFIGURE_TASK_STACK_DEALLOCATOR)) \
+    || (!defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
+      && defined(CONFIGURE_TASK_STACK_DEALLOCATOR))
+  #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
 #endif
 
 /**
@@ -869,7 +877,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
   
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
-    #include <rtems/score/wkspace.h>
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
   #else
     Heap_Control   RTEMS_Malloc_Area;
@@ -927,6 +934,19 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #define _Configure_From_workspace(_size) \
   (ssize_t)((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1)
+
+/**
+ *  This is a helper macro used in stack space calculations in this file.  It
+ *  may be provided by the application in case a special task stack allocator
+ *  is used.  The default is allocation from the RTEMS Workspace.
+ */
+#ifdef CONFIGURE_TASK_STACK_FROM_ALLOCATOR
+  #define _Configure_From_stackspace(_stack_size) \
+    CONFIGURE_TASK_STACK_FROM_ALLOCATOR(_stack_size)
+#else
+  #define _Configure_From_stackspace(_stack_size) \
+    _Configure_From_workspace(_stack_size)
+#endif
 
 /**
  *  Do not use the unlimited bit as part of the multiplication
@@ -2051,23 +2071,23 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #define CONFIGURE_IDLE_TASKS_STACK \
   (CONFIGURE_IDLE_TASKS_COUNT * \
-    _Configure_From_workspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
+    _Configure_From_stackspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
 
 #define CONFIGURE_TASKS_STACK \
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_TASKS ) * \
-    _Configure_From_workspace( CONFIGURE_MINIMUM_TASK_STACK_SIZE ) )
+    _Configure_From_stackspace( CONFIGURE_MINIMUM_TASK_STACK_SIZE ) )
 
 #define CONFIGURE_POSIX_THREADS_STACK \
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_POSIX_THREADS ) * \
-    _Configure_From_workspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+    _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
 #define CONFIGURE_GOROUTINES_STACK \
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_GOROUTINES ) * \
-    _Configure_From_workspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+    _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
 #define CONFIGURE_ADA_TASKS_STACK \
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_ADA_TASKS ) * \
-    _Configure_From_workspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
+    _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
 #else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
 
@@ -2180,6 +2200,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
     CONFIGURE_INTERRUPT_STACK_SIZE,           /* interrupt stack size */
+    CONFIGURE_TASK_STACK_ALLOCATOR_INIT,      /* stack allocator init */
     CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
     CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
     CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,   /* true to clear memory */
