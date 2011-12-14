@@ -52,7 +52,7 @@ Name:		rtems-4.11-mips-rtems4.11-gdb
 Summary:	Gdb for target mips-rtems4.11
 Group:		Development/Tools
 Version:	%{gdb_rpmvers}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL/LGPL
 URL: 		http://sources.redhat.com/gdb
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -62,8 +62,15 @@ BuildRequires:  %{_host_rpmprefix}gcc
 %global build_sim --enable-sim
 
 # Whether to build against system readline
-# Default: yes
+# Default: yes, except on EL5
+%if "{gdb_version}" >= "7.3.91"
+# gdb >= 7.3.91 requires readline6
+# EL5's readline is too old
+%{?el5:%bcond_with system_readline}
+%{!?el5:%bcond_without system_readline}
+%else
 %bcond_without system_readline
+%endif
 
 # Whether to build python support
 %if "%{_build}" != "%{_host}"
