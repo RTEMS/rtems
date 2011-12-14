@@ -180,6 +180,7 @@ spsimplesched02/Makefile
 spsimplesched03/Makefile
 spsize/Makefile
 spstkalloc/Makefile
+spstkalloc02/Makefile
 spthreadq01/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile

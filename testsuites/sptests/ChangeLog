@@ -1,3 +1,11 @@
+2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1924/cpukit
+	* spstkalloc02/.cvsignore, spstkalloc02/Makefile.am,
+	spstkalloc02/init.c, spstkalloc02/spstkalloc02.doc,
+	spstkalloc02/spstkalloc02.scn: New files.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* sp31/task1.c: Make Do_nothing static.
