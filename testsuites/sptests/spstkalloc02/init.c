@@ -74,7 +74,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_id id = RTEMS_ID_NONE;
   int i = 0;
 
-  puts("\n\n*** POSIX TEST STKALLOC 02 ***");
+  puts("\n\n*** TEST STKALLOC 02 ***");
 
   print_info();
 
@@ -112,7 +112,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   print_info();
 
-  puts("*** END OF POSIX TEST STKALLOC 02 ***");
+  puts("*** END OF TEST STKALLOC 02 ***");
 
   rtems_test_exit(0);
 }

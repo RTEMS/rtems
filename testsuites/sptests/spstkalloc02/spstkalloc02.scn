@@ -1,6 +1,6 @@
-*** POSIX TEST STKALLOC 02 ***
+*** TEST STKALLOC 02 ***
 used blocks = 2, largest used block = 5120, used space = 10240
 free blocks = 1, largest free block = 20480, free space = 20480
 used blocks = 6, largest used block = 5120, used space = 30720
 free blocks = 0, largest free block = 0, free space = 0
-*** END OF POSIX TEST STKALLOC 02 ***
+*** END OF TEST STKALLOC 02 ***
