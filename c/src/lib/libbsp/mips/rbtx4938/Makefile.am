@@ -32,33 +32,35 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    ../../shared/bsplibc.c ../../shared/bsppost.c startup/bspstart.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
-    startup/inittlb.c ../shared/startup/idttlb.S \
-    ../shared/startup/idtmem.S ../shared/irq/exception.S
-
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/setvec.c
+libbsp_a_SOURCES += startup/inittlb.c
+libbsp_a_SOURCES += ../shared/startup/idttlb.S
+libbsp_a_SOURCES += ../shared/startup/idtmem.S
+libbsp_a_SOURCES += ../shared/irq/exception.S
 # clock
-noinst_PROGRAMS += clock.rel
-clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_SOURCES += ../../shared/clockdrv_shell.h
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+libbsp_a_SOURCES += clock/clockdrv.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
 libbsp_a_SOURCES += console/console-io.c
 # liblnk
-libbsp_a_SOURCES += ../shared/liblnk/lnklib.S ../shared/liblnk/pmon.S \
-    ../shared/liblnk/regs.h
+libbsp_a_SOURCES += ../shared/liblnk/lnklib.S
+libbsp_a_SOURCES += ../shared/liblnk/pmon.S
+libbsp_a_SOURCES += ../shared/liblnk/regs.h
 
-libbsp_a_LIBADD = \
-    clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
-    ../../../libcpu/@RTEMS_CPU@/tx49/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/tx49/vectorisrs.rel
+libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tx49/timer.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tx49/vectorisrs.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

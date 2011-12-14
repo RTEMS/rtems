@@ -30,23 +30,31 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
-    ../../shared/bspreset.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/setvec.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
-libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c
+libbsp_a_SOURCES += ../../shared/console-polled.c
+libbsp_a_SOURCES += console/console-io.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel \
-    ../../../libcpu/@RTEMS_CPU@/tx39/vectorisrs.rel
+libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tx39/vectorisrs.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

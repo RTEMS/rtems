@@ -31,16 +31,24 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c ../../shared/bsppost.c startup/bspreset.c \
-    ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
-    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c ../../shared/setvec.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/setvec.c
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
-libbsp_a_SOURCES += console/console-io.c ../../shared/console-polled.c
+libbsp_a_SOURCES += console/console-io.c
+libbsp_a_SOURCES += ../../shared/console-polled.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
@@ -52,10 +60,9 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_LIBADD = \
-    ../../../libcpu/mips/shared/cache.rel \
-    ../../../libcpu/mips/shared/interrupts.rel \
-    ../../../libcpu/mips/au1x00/vectorisrs.rel
+libbsp_a_LIBADD  = ../../../libcpu/mips/shared/cache.rel
+libbsp_a_LIBADD += ../../../libcpu/mips/shared/interrupts.rel
+libbsp_a_LIBADD += ../../../libcpu/mips/au1x00/vectorisrs.rel
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
