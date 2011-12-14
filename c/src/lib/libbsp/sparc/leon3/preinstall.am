@@ -165,3 +165,7 @@ $(PROJECT_INCLUDE)/i2cmst.h: ../../sparc/shared/include/i2cmst.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cmst.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cmst.h
 
+$(PROJECT_INCLUDE)/watchdog.h: include/watchdog.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/watchdog.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/watchdog.h
+

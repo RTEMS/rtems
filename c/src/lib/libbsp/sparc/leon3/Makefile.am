@@ -125,6 +125,8 @@ libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c
 
 # timer
 libbsp_a_SOURCES += timer/timer.c
+libbsp_a_SOURCES += timer/watchdog.c
+include_HEADERS += include/watchdog.h
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
