@@ -10,24 +10,14 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/termios.h>
 #include <rtems/termiostypes.h>
-#include <rtems/assoc.h>
 
-extern rtems_assoc_t termios_assoc_table[];
-
-int32_t rtems_termios_baud_to_number(
-  int termios_baud
-)
+rtems_termios_baud_t rtems_termios_baud_to_number(tcflag_t c_cflag)
 {
-  int baud;
+  uint32_t remote_value = (uint32_t) (c_cflag & CBAUD);
 
-  baud = rtems_assoc_local_by_remote( termios_assoc_table, termios_baud );
-  if ( baud == 0 && termios_baud != 0 )
-    return -1;
-
-  return baud;
+  return rtems_assoc_local_by_remote(rtems_termios_baud_table, remote_value);
 }

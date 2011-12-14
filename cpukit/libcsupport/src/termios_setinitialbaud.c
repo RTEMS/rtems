@@ -10,24 +10,26 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/termios.h>
 #include <rtems/termiostypes.h>
 
-int  rtems_termios_set_initial_baud(
-  struct rtems_termios_tty *ttyp,
-  int32_t                   baud
+int rtems_termios_set_initial_baud(
+  struct rtems_termios_tty *tty,
+  rtems_termios_baud_t baud
 )
 {
-  int cflags_baud;
+  int rv = 0;
+  tcflag_t c_cflag_baud = rtems_termios_number_to_baud(baud);
 
-  cflags_baud = rtems_termios_number_to_baud(baud);
-  if ( cflags_baud == -1 )
-    return -1;
+  if ( c_cflag_baud == 0 ) {
+    tcflag_t cbaud = CBAUD;
 
-  ttyp->termios.c_cflag = (ttyp->termios.c_cflag & ~CBAUD) | cflags_baud;
+    tty->termios.c_cflag = (tty->termios.c_cflag & ~cbaud) | c_cflag_baud;
+  } else {
+    rv = -1;
+  }
 
-  return 0;
+  return rv;
 }

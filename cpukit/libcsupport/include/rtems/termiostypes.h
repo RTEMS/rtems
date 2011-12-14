@@ -20,7 +20,9 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/assoc.h>
 #include <stdint.h>
+#include <termios.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -181,26 +183,42 @@ extern int   rtems_termios_nlinesw;
 #define MAXLDISC  8
 
 /* baudrate xxx integer type */
-typedef int32_t rtems_termios_baud_t;
+typedef uint32_t rtems_termios_baud_t;
 
-/* convert xxx integer to equivalent Bxxx constant */
-int  rtems_termios_number_to_baud(rtems_termios_baud_t baud);
+extern const rtems_assoc_t rtems_termios_baud_table [];
 
-/* convert Bxxx constant to xxx integer */
-rtems_termios_baud_t rtems_termios_baud_to_number(int termios_baud);
+/**
+ * @brief Converts the integral baud value @a baud to the Termios control flag
+ * representation.
+ *
+ * @retval B0 Invalid baud value or a baud value of 0.
+ * @retval other Baud constant according to @a baud.
+ */
+tcflag_t rtems_termios_number_to_baud(rtems_termios_baud_t baud);
+
+/**
+ * @brief Converts the baud part of the Termios control flags @a c_cflag to an
+ * integral baud value.
+ *
+ * There is no need to mask the @a c_cflag with @c CBAUD.
+ *
+ * @retval 0 Invalid baud value or a baud value of @c B0.
+ * @retval other Integral baud value.
+ */
+rtems_termios_baud_t rtems_termios_baud_to_number(tcflag_t c_cflag);
 
 /* convert Bxxx constant to index */
 int  rtems_termios_baud_to_index(rtems_termios_baud_t termios_baud);
 
-/*
- *  This method is used by a driver to tell termios its
- *  initial baud rate.  This is especially important when
- *  the device driver does not set the baud to the default
- *  of B9600.
+/**
+ * @brief Sets the initial @a baud in the Termios context @a tty.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 Invalid baud value.
  */
-int  rtems_termios_set_initial_baud(
-  struct rtems_termios_tty *ttyp,
-  rtems_termios_baud_t      baud
+int rtems_termios_set_initial_baud(
+  struct rtems_termios_tty *tty,
+  rtems_termios_baud_t baud
 );
 
 #ifdef __cplusplus

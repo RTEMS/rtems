@@ -10,14 +10,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/termios.h>
 #include <rtems/termiostypes.h>
-#include <rtems/assoc.h>
 
-rtems_assoc_t termios_assoc_table[] = {
+const rtems_assoc_t rtems_termios_baud_table [] = {
   { "B0",      0,      B0 },
   { "B50",     50,     B50 },
   { "B75",     75,     B75 },
