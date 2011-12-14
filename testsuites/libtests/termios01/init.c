@@ -27,20 +27,24 @@
  */
 #include "termios_testdriver.h"
 
-rtems_driver_address_table test_driver = TERMIOS_TEST_DRIVER_TABLE_ENTRY;
+static const rtems_driver_address_table test_driver =
+  TERMIOS_TEST_DRIVER_TABLE_ENTRY;
 
 /*
  *  Baud Rate Constant Mapping Entry
  */
 typedef struct {
-  int constant;
+  tcflag_t constant;
   rtems_termios_baud_t baud;
 } termios_baud_test_r;
 
+#define INVALID_CONSTANT ((tcflag_t) -2)
+
+#define INVALID_BAUD ((rtems_termios_baud_t) -2)
 /*
  *  Baud Rate Constant Mapping Table
  */
-termios_baud_test_r baud_table[] = {
+static const termios_baud_test_r baud_table[] = {
   { B0,           0 },
   { B50,         50 },
   { B75,         75 },
@@ -61,81 +65,77 @@ termios_baud_test_r baud_table[] = {
   { B115200, 115200 },
   { B230400, 230400 },
   { B460800, 460800 },
-  { -1,      -1     }
+  { INVALID_CONSTANT, INVALID_BAUD }
 };
 
 /*
  *  Character Size Constant Mapping Entry
  */
 typedef struct {
-  int constant;
+  tcflag_t constant;
   int bits;
 } termios_character_size_test_r;
 
 /*
  *  Character Size Constant Mapping Table
  */
-termios_character_size_test_r char_size_table[] = {
+static const termios_character_size_test_r char_size_table[] = {
   { CS5,      5 },
   { CS6,      6 },
   { CS7,      7 },
   { CS8,      8 },
-  { -1,      -1 }
+  { INVALID_CONSTANT, -1 }
 };
 
 /*
  *  Parity Constant Mapping Entry
  */
 typedef struct {
-  int        constant;
+  tcflag_t constant;
   const char *parity;
 } termios_parity_test_r;
 
 /*
  *  Parity Constant Mapping Table
  */
-termios_parity_test_r parity_table[] = {
+static const termios_parity_test_r parity_table[] = {
   { 0,                "none" },
   { PARENB,           "even" },
   { PARENB | PARODD,  "odd" },
-  { -1,               NULL }
+  { INVALID_CONSTANT, NULL }
 };
 
 /*
  *  Stop Bit Constant Mapping Entry
  */
 typedef struct {
-  int   constant;
-  int   stop;
+  tcflag_t constant;
+  int stop;
 } termios_stop_bits_test_r;
 
 /*
  *  Stop Bit Constant Mapping Table
  */
-termios_stop_bits_test_r stop_bits_table[] = {
+static const termios_stop_bits_test_r stop_bits_table[] = {
   { 0,       1 },
   { CSTOPB,  2 },
-  { -1,     -1 }
+  { INVALID_CONSTANT, -1 }
 };
 
 /*
  *  Test converting baud rate into an index
  */
-void test_termios_baud2index(void)
+static void test_termios_baud2index(void)
 {
   int i;
   int index;
 
   puts( "Test termios_baud2index..." );
   puts( "termios_baud_to_index(-2) - NOT OK" );
-  i = rtems_termios_baud_to_index( -2 );
+  i = rtems_termios_baud_to_index( INVALID_CONSTANT );
   rtems_test_assert( i == -1 );
 
-  puts( "termios_baud_to_index(572) - NOT OK" );
-  i = rtems_termios_baud_to_index( -2 );
-  rtems_test_assert( i == -1 );
-
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
     printf(
       "termios_baud_to_index(B%" PRIdrtems_termios_baud_t ") - OK\n",
       baud_table[i].baud
@@ -151,24 +151,20 @@ void test_termios_baud2index(void)
 /*
  *  Test converting termios baud constant to baud number
  */
-void test_termios_baud2number(void)
+static void test_termios_baud2number(void)
 {
   int i;
-  int number;
+  rtems_termios_baud_t number;
 
   puts(
     "\n"
     "Test termios_baud2number..."
   );
   puts( "termios_baud_to_number(-2) - NOT OK" );
-  i = rtems_termios_baud_to_number( -2 );
-  rtems_test_assert( i == -1 );
+  number = rtems_termios_baud_to_number( INVALID_CONSTANT );
+  rtems_test_assert( number == 0 );
 
-  puts( "termios_baud_to_number(572) - NOT OK" );
-  i = rtems_termios_baud_to_number( -2 );
-  rtems_test_assert( i == -1 );
-
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
     printf(
       "termios_baud_to_number(B%" PRIdrtems_termios_baud_t ") - OK\n",
       baud_table[i].baud
@@ -176,7 +172,8 @@ void test_termios_baud2number(void)
     number = rtems_termios_baud_to_number( baud_table[i].constant );
     if ( number != baud_table[i].baud ) {
       printf(
-        "ERROR - returned %d should be %" PRIdrtems_termios_baud_t "\n",
+        "ERROR - returned %" PRIdrtems_termios_baud_t
+        " should be %" PRIdrtems_termios_baud_t "\n",
         number,
         baud_table[i].baud
       );
@@ -188,24 +185,20 @@ void test_termios_baud2number(void)
 /*
  *  Test converting baud number to termios baud constant
  */
-void test_termios_number_to_baud(void)
+static void test_termios_number_to_baud(void)
 {
   int i;
-  int termios_baud;
+  tcflag_t termios_baud;
 
   puts(
     "\n"
     "Test termios_number_to_baud..."
   );
   puts( "termios_number_to_baud(-2) - NOT OK" );
-  i = rtems_termios_number_to_baud( -2 );
-  rtems_test_assert( i == -1 );
+  termios_baud = rtems_termios_number_to_baud( INVALID_BAUD );
+  rtems_test_assert( termios_baud == 0 );
 
-  puts( "termios_number_to_baud(572) - NOT OK" );
-  i = rtems_termios_number_to_baud( -2 );
-  rtems_test_assert( i == -1 );
-
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
     printf(
       "termios_number_to_baud(B%" PRIdrtems_termios_baud_t ") - OK\n",
       baud_table[i].baud
@@ -225,7 +218,7 @@ void test_termios_number_to_baud(void)
 /*
  *  Test all the baud rate options
  */
-void test_termios_set_baud(
+static void test_termios_set_baud(
   int test
 )
 {
@@ -234,14 +227,16 @@ void test_termios_set_baud(
   struct termios  attr;
 
   puts( "Test termios setting device baud rate..." );
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
+    tcflag_t cbaud = CBAUD;
+
     sc = tcgetattr( test, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
     }
 
-    attr.c_cflag &= ~CBAUD;
+    attr.c_cflag &= ~cbaud;
     attr.c_cflag |= baud_table[i].constant;
 
     printf(
@@ -269,7 +264,7 @@ void test_termios_set_baud(
 /*
  *  Test all the character size options
  */
-void test_termios_set_charsize(
+static void test_termios_set_charsize(
   int test
 )
 {
@@ -281,14 +276,16 @@ void test_termios_set_charsize(
     "\n"
     "Test termios setting device character size ..."
   );
-  for (i=0 ; char_size_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; char_size_table[i].constant != INVALID_CONSTANT ; i++ ) {
+    tcflag_t csize = CSIZE;
+
     sc = tcgetattr( test, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
     }
 
-    attr.c_cflag &= ~CSIZE;
+    attr.c_cflag &= ~csize;
     attr.c_cflag |= char_size_table[i].constant;
 
     printf( "tcsetattr(TCSANOW, CS%d) - OK\n", char_size_table[i].bits );
@@ -310,7 +307,7 @@ void test_termios_set_charsize(
 /*
  *  Test all the parity options
  */
-void test_termios_set_parity(
+static void test_termios_set_parity(
   int test
 )
 {
@@ -322,14 +319,16 @@ void test_termios_set_parity(
     "\n"
     "Test termios setting device parity ..."
   );
-  for (i=0 ; parity_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; parity_table[i].constant != INVALID_CONSTANT ; i++ ) {
+    tcflag_t par = PARENB | PARODD;
+
     sc = tcgetattr( test, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
     }
 
-    attr.c_cflag &= ~(PARENB|PARODD);
+    attr.c_cflag &= ~par;
     attr.c_cflag |= parity_table[i].constant;
 
     printf( "tcsetattr(TCSANOW, %s) - OK\n", parity_table[i].parity );
@@ -351,7 +350,7 @@ void test_termios_set_parity(
 /*
  *  Test all the stop bit options
  */
-void test_termios_set_stop_bits(
+static void test_termios_set_stop_bits(
   int test
 )
 {
@@ -363,14 +362,16 @@ void test_termios_set_stop_bits(
     "\n"
     "Test termios setting device character size ..."
   );
-  for (i=0 ; stop_bits_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; stop_bits_table[i].constant != INVALID_CONSTANT ; i++ ) {
+    tcflag_t cstopb = CSTOPB;
+
     sc = tcgetattr( test, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
     }
 
-    attr.c_cflag &= ~CSTOPB;
+    attr.c_cflag &= ~cstopb;
     attr.c_cflag |= stop_bits_table[i].constant;
 
     printf( "tcsetattr(TCSANOW, %d bit%s) - OK\n",
@@ -392,7 +393,7 @@ void test_termios_set_stop_bits(
   }
 }
 
-void test_termios_cfoutspeed(void)
+static void test_termios_cfoutspeed(void)
 {
   int i;
   int sc;
@@ -407,7 +408,7 @@ void test_termios_cfoutspeed(void)
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
     memset( &term, '\0', sizeof(term) );
     printf(
       "cfsetospeed(B%" PRIdrtems_termios_baud_t ") - OK\n",
@@ -424,7 +425,7 @@ void test_termios_cfoutspeed(void)
   }
 }
 
-void test_termios_cfinspeed(void)
+static void test_termios_cfinspeed(void)
 {
   int             i;
   int             sc;
@@ -439,7 +440,7 @@ void test_termios_cfinspeed(void)
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  for (i=0 ; baud_table[i].constant != -1 ; i++ ) {
+  for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
     memset( &term, '\0', sizeof(term) );
     printf(
       "cfsetispeed(B%" PRIdrtems_termios_baud_t ") - OK\n",
@@ -457,7 +458,7 @@ void test_termios_cfinspeed(void)
   }
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {

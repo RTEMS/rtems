@@ -1,3 +1,8 @@
+2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* termios01/init.c: Update due to API changes.  Fixed integer types.
+	Make functions static.  Added const qualifier.
+
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* math/init.c, mathf/init.c, mathl/init.c: Move configuration section.
