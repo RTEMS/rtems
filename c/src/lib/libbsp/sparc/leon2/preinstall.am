@@ -173,3 +173,16 @@ $(PROJECT_INCLUDE)/i2cmst.h: ../../sparc/shared/include/i2cmst.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cmst.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cmst.h
 
+$(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
+	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+
+$(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h: ../../sparc/shared/include/drvmgr/ambapp_bus.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
+
+$(PROJECT_INCLUDE)/drvmgr/leon2_amba_bus.h: ../../sparc/shared/include/drvmgr/leon2_amba_bus.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/leon2_amba_bus.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/leon2_amba_bus.h
+

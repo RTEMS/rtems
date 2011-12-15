@@ -76,9 +76,11 @@ EXTRA_DIST += shared/include/i2cmst.h
 # Driver Manager
 EXTRA_DIST += shared/drvmgr/ambapp_bus.c
 EXTRA_DIST += shared/drvmgr/ambapp_bus_grlib.c
+EXTRA_DIST += shared/drvmgr/leon2_amba_bus.c
 
 EXTRA_DIST += shared/include/drvmgr/ambapp_bus_grlib.h
 EXTRA_DIST += shared/include/drvmgr/ambapp_bus.h
+EXTRA_DIST += shared/include/drvmgr/leon2_amba_bus.h
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

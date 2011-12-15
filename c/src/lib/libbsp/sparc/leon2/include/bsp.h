@@ -220,6 +220,13 @@ int cchip1_register(void);
 /* AT697 has PCI defined as big endian */
 #define BSP_PCI_BIG_ENDIAN
 
+/* Common driver build-time configurations. On small systems undefine
+ * [DRIVER]_INFO_AVAIL to avoid info routines get dragged in. It is good
+ * for debugging and printing information about the system, but makes the
+ * image bigger.
+ */
+#define AMBAPPBUS_INFO_AVAIL          /* AMBAPP Bus driver */
+
 #ifdef __cplusplus
 }
 #endif
