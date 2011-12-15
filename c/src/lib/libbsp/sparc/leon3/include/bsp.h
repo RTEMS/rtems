@@ -249,6 +249,13 @@ extern const unsigned char LEON3_irq_to_cpu[32];
 #define BSP_PCI_shared_interrupt_mask        BSP_shared_interrupt_mask
 #define BSP_PCI_shared_interrupt_clear       BSP_shared_interrupt_clear
 
+/* Common driver build-time configurations. On small systems undefine
+ * [DRIVER]_INFO_AVAIL to avoid info routines get dragged in. It is good
+ * for debugging and printing information about the system, but makes the
+ * image bigger.
+ */
+#define AMBAPPBUS_INFO_AVAIL          /* AMBAPP Bus driver */
+
 #ifdef __cplusplus
 }
 #endif

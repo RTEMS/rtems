@@ -169,3 +169,15 @@ $(PROJECT_INCLUDE)/watchdog.h: include/watchdog.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/watchdog.h
 
+$(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
+	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+
+$(PROJECT_INCLUDE)/drvmgr/ambapp_bus_grlib.h: ../../sparc/shared/include/drvmgr/ambapp_bus_grlib.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/ambapp_bus_grlib.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/ambapp_bus_grlib.h
+
+$(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h: ../../sparc/shared/include/drvmgr/ambapp_bus.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h

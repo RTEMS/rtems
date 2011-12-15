@@ -133,6 +133,13 @@ libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += include/cache_.h
 libbsp_a_CPPFLAGS = -I$(srcdir)/include
 
+# Driver Manager 
+include_drvmgrdir = $(includedir)/drvmgr
+include_drvmgr_HEADERS = ../../sparc/shared/include/drvmgr/ambapp_bus_grlib.h
+include_drvmgr_HEADERS += ../../sparc/shared/include/drvmgr/ambapp_bus.h
+libbsp_a_SOURCES += ../../sparc/shared/drvmgr/ambapp_bus.c
+libbsp_a_SOURCES += ../../sparc/shared/drvmgr/ambapp_bus_grlib.c
+
 if HAS_SMP
 libbsp_a_SOURCES += startup/bspsmp.c
 endif
