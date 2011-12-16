@@ -28,6 +28,12 @@ EXTRA_DIST += shared/amba/ambapp_names.c
 EXTRA_DIST += shared/amba/ambapp_old.c
 EXTRA_DIST += shared/amba/ambapp_show.c
 
+# Clock Driver and Timer Library
+EXTRA_DIST += shared/include/tlib.h
+EXTRA_DIST += shared/timer/gptimer.c
+EXTRA_DIST += shared/timer/tlib.c
+EXTRA_DIST += shared/timer/tlib_ckinit.c
+
 # PCI bus
 EXTRA_DIST += shared/include/pci.h
 EXTRA_DIST += shared/pci/pcifinddevice.c

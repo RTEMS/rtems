@@ -105,6 +105,10 @@ $(PROJECT_INCLUDE)/grlib.h: ../../sparc/shared/include/grlib.h $(PROJECT_INCLUDE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grlib.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/grlib.h
 
+$(PROJECT_INCLUDE)/tlib.h: ../../sparc/shared/include/tlib.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tlib.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tlib.h
+
 $(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h

@@ -66,14 +66,22 @@ libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_parent.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_old.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_names.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
+
+# Clock Driver and Timer Library
+include_HEADERS += ../../sparc/shared/include/tlib.h
+libbsp_a_SOURCES += ../../sparc/shared/timer/gptimer.c
+libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
+libbsp_a_SOURCES += ../../sparc/shared/timer/tlib_ckinit.c
+# non-Driver Manager Clock Implementation
+libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+
 # console
 libbsp_a_SOURCES += ../../shared/console-termios.c
 libbsp_a_SOURCES += console/console.c
 # debugio
 libbsp_a_SOURCES += console/printk_support.c
-# clock
-libbsp_a_SOURCES += clock/ckinit.c
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+
 # IRQ
 include_bsp_HEADERS += \
     ../../shared/include/irq-generic.h \

@@ -226,6 +226,7 @@ int cchip1_register(void);
  * image bigger.
  */
 #define AMBAPPBUS_INFO_AVAIL          /* AMBAPP Bus driver */
+#define GPTIMER_INFO_AVAIL            /* GPTIMER Timer driver */
 
 #ifdef __cplusplus
 }

@@ -102,6 +102,12 @@ libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_parent.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_old.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_names.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
+
+# Clock Driver and Timer Library
+include_HEADERS += ../../sparc/shared/include/tlib.h
+libbsp_a_SOURCES += ../../sparc/shared/timer/gptimer.c
+libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
+
 # PCI
 libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 # RASTA Kit

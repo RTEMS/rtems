@@ -169,6 +169,10 @@ $(PROJECT_INCLUDE)/grlib.h: ../../sparc/shared/include/grlib.h $(PROJECT_INCLUDE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grlib.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/grlib.h
 
+$(PROJECT_INCLUDE)/tlib.h: ../../sparc/shared/include/tlib.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tlib.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tlib.h
+
 $(PROJECT_INCLUDE)/i2cmst.h: ../../sparc/shared/include/i2cmst.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cmst.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cmst.h

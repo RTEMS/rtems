@@ -255,6 +255,7 @@ extern const unsigned char LEON3_irq_to_cpu[32];
  * image bigger.
  */
 #define AMBAPPBUS_INFO_AVAIL          /* AMBAPP Bus driver */
+#define GPTIMER_INFO_AVAIL            /* GPTIMER Timer driver */
 
 #ifdef __cplusplus
 }
