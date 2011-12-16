@@ -109,10 +109,6 @@ $(PROJECT_INCLUDE)/debug_defs.h: ../../sparc/shared/include/debug_defs.h $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/debug_defs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/debug_defs.h
 
-$(PROJECT_INCLUDE)/pci.h: ../../sparc/shared/include/pci.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci.h
-
 $(PROJECT_INCLUDE)/bspopts.h: include/bspopts.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bspopts.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bspopts.h

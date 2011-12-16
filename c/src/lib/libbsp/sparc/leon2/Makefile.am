@@ -24,7 +24,6 @@ include_HEADERS += ../../sparc/shared/include/b1553brm.h
 include_HEADERS += ../../sparc/shared/include/b1553brm_pci.h
 include_HEADERS += ../../sparc/shared/include/b1553brm_rasta.h
 include_HEADERS += ../../sparc/shared/include/debug_defs.h
-include_HEADERS += ../../sparc/shared/include/pci.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -109,7 +108,13 @@ libbsp_a_SOURCES += ../../sparc/shared/timer/gptimer.c
 libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
 
 # PCI
-libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
+include_HEADERS += ../../sparc/shared/include/grpci2.h
+libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2.c
+libbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_le.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_be.c
+libbsp_a_SOURCES +=  pci/at697_pci.c
+
 # RASTA Kit
 libbsp_a_SOURCES += rasta/rasta.c
 # Companion Chip Kit
