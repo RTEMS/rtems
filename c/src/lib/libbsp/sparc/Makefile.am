@@ -49,7 +49,10 @@ EXTRA_DIST += shared/include/grspw.h
 EXTRA_DIST += shared/include/grspw_pci.h
 EXTRA_DIST += shared/include/grspw_rasta.h
 
-# UART  (APBUART)
+# UART
+EXTRA_DIST += shared/uart/cons.c
+EXTRA_DIST += shared/uart/apbuart_cons.c
+EXTRA_DIST += shared/include/cons.h
 EXTRA_DIST += shared/uart/apbuart.c
 EXTRA_DIST += shared/uart/apbuart_pci.c
 EXTRA_DIST += shared/uart/apbuart_rasta.c

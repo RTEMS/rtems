@@ -28,6 +28,7 @@ extern "C" {
 	DRIVER_ID(DRVMGR_BUS_TYPE_AMBAPP, ((((vendor) & 0xff) << 16) | ((device) & 0xfff)))
 
 /*** Gaisler Hardware Device Driver IDs ***/
+#define DRIVER_AMBAPP_GAISLER_APBUART_ID       DRIVER_AMBAPP_ID(VENDOR_GAISLER, GAISLER_APBUART)
 #define DRIVER_AMBAPP_GAISLER_GPTIMER_ID       DRIVER_AMBAPP_ID(VENDOR_GAISLER, GAISLER_GPTIMER)
 
 struct amba_dev_id {
