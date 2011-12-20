@@ -3,23 +3,20 @@
  * @ingroup sparc_bsp
  * @defgroup 1553 B1553BRM
  * @ingroup 1553
- * @brief Macros used for brm controller
+ * @brief B1553BRM device driver
  */
 
 /*
  *  COPYRIGHT (c) 2006.
- *  Gaisler Research
+ *  Cobham Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
- *
  */
 
 #ifndef __B1553BRM_H__
 #define __B1553BRM_H__
-
-#include <ambapp.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,6 +99,7 @@ struct bc_msg {
 #define BC_RTRT   0x0002
 #define BC_BUSA   0x0004
 #define BC_EOL    0x0020
+#define BC_SKIP   0x0040
 #define BC_BAME   0x8000
 
 #define BRM_MBC_IRQ        1                    /* Monitor Block Counter irq */
@@ -114,7 +112,7 @@ struct bc_msg {
 #define BRM_IXEQ0_IRQ      256                  /* Index Equal Zero irq */
 #define BRM_BDRCV_IRQ      512                  /* Broadcast Command Received irq */
 #define BRM_SUBAD_IRQ      1024                 /* Subaddress Accessed irq */
-#define BRM_MERR_IRQ       4096                 /* Message Error irq */
+#define BRM_MERR_IRQ       2048                 /* Message Error irq */
 #define BRM_TAPF_IRQ       8192                 /* Terminal Address Parity Fail irq */
 #define BRM_WRAPF_IRQ      16384                /* Wrap Fail irq */
 #define BRM_DMAF_IRQ       32768                /* DMA Fail irq */
@@ -144,13 +142,6 @@ struct bc_msg {
 #define BRM_MODE_BM 0x2
 #define BRM_MODE_BM_RT 0x3 /* both RT and BM */
 
-
-/* Register RAMON FPGA BRM driver, calls brm_register */
-int brm_register_leon3_ramon_fpga(void);
-
-/* Register RAMON ASIC BRM driver, calls brm_register */
-int brm_register_leon3_ramon_asic(void);
-
 #define BRM_FREQ_12MHZ 0
 #define BRM_FREQ_16MHZ 1
 #define BRM_FREQ_20MHZ 2
@@ -161,15 +152,11 @@ int brm_register_leon3_ramon_asic(void);
 
 #define CLKSEL_MASK 0x7
 
-/* Register BRM driver
- * See (struct brm_reg).w_ctrl for clksel and clkdiv.
- * See Enhanced register (the least signinficant 2 bits) in BRM Core for brm_freq
- * bus = &ambapp_plb for LEON3. (LEON2 not yet supported for this driver)
- */
-int b1553brm_register(struct ambapp_bus *bus, unsigned int clksel, unsigned int clkdiv, unsigned int brm_freq);
+void b1553brm_register_drv(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* __BRM_H__ */
+

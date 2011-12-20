@@ -3,12 +3,12 @@
  * @ingroup sparc_bsp
  * @defgroup spw SpaceWire
  * @ingroup spw
- * @brief Macros used for Spacewire bus
+ * @brief GRSPW Device Driver
  */
 
 /*
  *  COPYRIGHT (c) 2007.
- *  Gaisler Research
+ *  Cobham Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -32,12 +32,18 @@ typedef struct {
    unsigned int txhsize;
 } spw_ioctl_packetsize;
 
+#define GRSPW_PKTSEND_OPTION_HDR_CRC  0x1
+#define GRSPW_PKTSEND_OPTION_DATA_CRC 0x2
+#define GRSPW_PKTSEND_OPTION_NOCRCLEN(len) ((len & 0xf) << 8)
+#define GRSPW_PKTSEND_OPTION_NOCRCLEN_MASK 0xf00
+
 typedef struct {
    unsigned int hlen;
    char *hdr;
    unsigned int dlen;
    char *data;
    unsigned int sent;
+	 unsigned int options;
 } spw_ioctl_pkt_send;
 
 typedef struct {
@@ -84,6 +90,11 @@ typedef struct {
    unsigned int is_rmapcrc;
 
    unsigned int nodemask;
+	 unsigned int keep_source; /* copy source address to user-buffer in read() operations
+                              * Note that rm_prot_id has no effect when keep_source is
+                              * set.
+                              */
+	 unsigned int rtimeout; /* Read timeout if != 0 */
 } spw_config;
 
 #define SPACEWIRE_IOCTRL_SET_NODEADDR        1
@@ -113,30 +124,42 @@ typedef struct {
 #define SPACEWIRE_IOCTRL_SET_COREFREQ        32
 #define SPACEWIRE_IOCTRL_SET_CLKDIVSTART     33
 #define SPACEWIRE_IOCTRL_SET_NODEMASK        34
+#define SPACEWIRE_IOCTRL_SET_KEEP_SOURCE     35
+#define SPACEWIRE_IOCTRL_SET_TCODE_CTRL      36
+#define SPACEWIRE_IOCTRL_SET_TCODE           37
+#define SPACEWIRE_IOCTRL_GET_TCODE           38
+#define SPACEWIRE_IOCTRL_SET_READ_TIMEOUT    39
 
 #define SPACEWIRE_IOCTRL_START               64
 #define SPACEWIRE_IOCTRL_STOP                65
 
-int grspw_register(struct ambapp_bus *bus);
+/* Defines what register bits that will be touched 
+ * for SPACEWIRE_IOCTRL_SET_TCODE_CTRL
+ */
+#define SPACEWIRE_TCODE_CTRL_IE_MSK          0x001
+#define SPACEWIRE_TCODE_CTRL_TT_MSK          0x004
+#define SPACEWIRE_TCODE_CTRL_TR_MSK          0x008
 
+/* Defines what register bits that should be set
+ * for SPACEWIRE_IOCTRL_SET_TCODE_CTRL
+ */
+#define SPACEWIRE_TCODE_CTRL_IE              0x100
+#define SPACEWIRE_TCODE_CTRL_TT              0x400
+#define SPACEWIRE_TCODE_CTRL_TR              0x800
 
-#if 0
-struct grspw_buf;
+/* SPACEWIRE_IOCTRL_SET_TCODE argument mask */
+#define SPACEWIRE_TCODE_TCODE                0x0ff
+#define SPACEWIRE_TCODE_SET                  0x100 /* Set Timecode register */
+#define SPACEWIRE_TCODE_TX                   0x400
 
-struct grspw_buf {
-  grspw_buf *next;            /* next packet in chain */
+void grspw_register_drv (void);
 
-	/* Always used */
-	unsigned int dlen;          /* data length of '*data' */
-	unsigned int max_dlen;      /* allocated length of '*data' */
-	void *data;                 /* pointer to beginning of cargo data */
+void grspw_print(int options);
 
-	/* Only used when transmitting */
-	unsigned int hlen;          /* length of header '*header' */
-	unsigned int max_hlen;      /* allocated length of '*header' */
-	void *header;               /* pointer to beginning of header data */
-};
-#endif
+/* Global GRSPW Function pointer called upon timecode receive interrupt */
+extern void (*grspw_timecode_callback)
+    (void *pDev, void *regs, int minor, unsigned int tc);
+
 
 #ifdef __cplusplus
 }

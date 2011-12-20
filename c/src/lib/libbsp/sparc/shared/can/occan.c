@@ -1,13 +1,11 @@
 /*  OC_CAN driver
  *
  *  COPYRIGHT (c) 2007.
- *  Gaisler Research.
+ *  Cobham Gaisler AB.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
- *
- *  Author: Daniel Hellström, Gaisler Research AB, www.gaisler.com
  */
 
 #include <rtems/libio.h>
@@ -17,9 +15,8 @@
 #include <bsp.h>
 #include <rtems/bspIo.h> /* printk */
 
-#include <leon.h>
-#include <ambapp.h>
-#include <grlib.h>
+#include <drvmgr/drvmgr.h>
+#include <drvmgr/ambapp_bus.h>
 #include <occan.h>
 
 /* RTEMS -> ERRNO decoding table
@@ -53,27 +50,8 @@ rtems_assoc_t errno_assoc[] = {
  #undef OCCAN_BYTE_REGS
 #endif
 
-#ifndef OCCAN_PREFIX
- #define OCCAN_PREFIX(name) occan##name
-#endif
-
-#if !defined(OCCAN_DEVNAME) || !defined(OCCAN_DEVNAME_NO)
- #undef OCCAN_DEVNAME
- #undef OCCAN_DEVNAME_NO
- #define OCCAN_DEVNAME "/dev/occan0"
- #define OCCAN_DEVNAME_NO(devstr,no) ((devstr)[10]='0'+(no))
-#endif
-
-#ifndef OCCAN_REG_INT
-	#define OCCAN_REG_INT(handler,irq,arg) set_vector(handler,irq+0x10,1)
-  #undef  OCCAN_DEFINE_INTHANDLER
-  #define OCCAN_DEFINE_INTHANDLER
-#endif
-
-/* Default to 40MHz system clock */
-/*#ifndef SYS_FREQ_HZ
- #define SYS_FREQ_HZ 40000000
-#endif*/
+/* Enable Fixup code older OCCAN with a TX IRQ-FLAG bug */
+#define OCCAN_TX_IRQ_FLAG_FIXUP 1
 
 #define OCCAN_WORD_REG_OFS 0x80
 #define OCCAN_NCORE_OFS 0x100
@@ -103,7 +81,7 @@ typedef struct {
 } occan_fifo;
 
 /* PELICAN */
-#ifdef OCCAN_BYTE_REGS
+
 typedef struct {
 	unsigned char
 		mode,
@@ -149,8 +127,8 @@ typedef struct {
 		unsigned char rx_msg_cnt;
 		unsigned char unused1;
 		unsigned char clkdiv;
-} pelican_regs;
-#else
+} pelican8_regs;
+
 typedef struct {
 	unsigned char
 		mode, unused0[3],
@@ -196,8 +174,14 @@ typedef struct {
 		unsigned char rx_msg_cnt,unused16[3];
 		unsigned char unused17[4];
 		unsigned char clkdiv,unused18[3];
-} pelican_regs;
+} pelican32_regs;
+
+#ifdef OCCAN_BYTE_REGS
+#define pelican_regs pelican8_regs
+#else
+#define pelican_regs pelican32_regs
 #endif
+
 
 #define MAX_TSEG2 7
 #define MAX_TSEG1 15
@@ -217,12 +201,17 @@ typedef struct {
 } occan_speed_regs;
 
 typedef struct {
+	struct drvmgr_dev *dev;
+	char devName[32];
+
 	/* hardware shortcuts */
 	pelican_regs *regs;
+	int byte_regs;
 	int irq;
 	occan_speed_regs timing;
 	int channel; /* 0=default, 1=second bus */
 	int single_mode;
+	unsigned int sys_freq_hz;
 
 	/* driver state */
 	rtems_id devsem;
@@ -232,6 +221,7 @@ typedef struct {
 	int started;
 	int rxblk;
 	int txblk;
+	int sending;
 	unsigned int status;
 	occan_stats stats;
 
@@ -266,7 +256,7 @@ static int pelican_start(occan_priv *priv);
 static void pelican_stop(occan_priv *priv);
 static int pelican_send(occan_priv *can, CANMsg *msg);
 static void pelican_set_accept(occan_priv *priv, unsigned char *acode, unsigned char *amask);
-static void occan_interrupt(occan_priv *can);
+void occan_interrupt(void *arg);
 #ifdef DEBUG_PRINT_REGMAP
 static void pelican_regadr_print(pelican_regs *regs);
 #endif
@@ -278,33 +268,41 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 static rtems_device_driver occan_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver occan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg);
-#ifdef OCCAN_DEFINE_INTHANDLER
-static void occan_interrupt_handler(rtems_vector_number v);
-#endif
-static int can_cores;
-static occan_priv *cans;
-static struct ambapp_bus *amba_bus;
-static unsigned int sys_freq_hz;
+
+#define OCCAN_DRIVER_TABLE_ENTRY { occan_initialize, occan_open, occan_close, occan_read, occan_write, occan_ioctl }
+static rtems_driver_address_table occan_driver = OCCAN_DRIVER_TABLE_ENTRY;
 
 
 /* Read byte bypassing */
 
-#ifdef OCCAN_DONT_BYPASS_CACHE
- #define READ_REG(address) (*(volatile unsigned char *)(address))
-#else
- /* Bypass cache */
- #define READ_REG(address) _OCCAN_REG_READ((unsigned int)(address))
- static __inline__ unsigned char _OCCAN_REG_READ(unsigned int addr) {
-        unsigned char tmp;
-        __asm__ (" lduba [%1]1, %0 "
-            : "=r"(tmp)
-            : "r"(addr)
-           );
-        return tmp;
-	}
-#endif
 
-#define WRITE_REG(address,data) (*(volatile unsigned char *)(address) = (data))
+/* Bypass cache */
+#define READ_REG(priv, address) occan_reg_read(priv, (unsigned int)address)
+#define WRITE_REG(priv, address, data) occan_reg_write(priv, (unsigned int)address, data)
+
+unsigned int occan_reg_read(occan_priv *priv, unsigned int address)
+{
+	unsigned int adr;
+	if ( priv->byte_regs ) {
+		adr = address;
+	} else {
+		/* Word accessed registers */
+		adr = (address & (~0x7f)) | ((address & 0x7f)<<2);
+	}
+	return *(volatile unsigned char *)adr;
+}
+
+void occan_reg_write(occan_priv *priv, unsigned int address, unsigned char value)
+{
+	unsigned int adr;
+	if ( priv->byte_regs ) {
+		adr = address;
+	} else {
+		/* Word accessed registers */
+		adr = (address & (~0x7f)) | ((address & 0x7f)<<2);
+	}
+	*(volatile unsigned char *)adr = value;;
+}
 
 /* Mode register bit definitions */
 #define PELICAN_MOD_RESET          0x1
@@ -391,239 +389,255 @@ static unsigned int sys_freq_hz;
 #define PELICAN_S_       0x80
 */
 
-static void pelican_init(occan_priv *priv){
-	/* Reset core */
-	priv->regs->mode = PELICAN_MOD_RESET;
+static int occan_driver_io_registered = 0;
+static rtems_device_major_number occan_driver_io_major = 0;
 
-	/* wait for core to reset complete */
-	/*usleep(1);*/
+/******************* Driver manager interface ***********************/
+
+/* Driver prototypes */
+int occan_register_io(rtems_device_major_number *m);
+int occan_device_init(occan_priv *pDev);
+
+int occan_init2(struct drvmgr_dev *dev);
+int occan_init3(struct drvmgr_dev *dev);
+
+struct drvmgr_drv_ops occan_ops = 
+{
+	.init = {NULL, occan_init2, occan_init3, NULL},
+	.remove = NULL,
+	.info = NULL
+};
+
+struct amba_dev_id occan_ids[] = 
+{
+	{VENDOR_GAISLER, GAISLER_CANAHB},
+	{0, 0}		/* Mark end of table */
+};
+
+struct amba_drv_info occan_drv_info =
+{
+	{
+		DRVMGR_OBJ_DRV,			/* Driver */
+		NULL,				/* Next driver */
+		NULL,				/* Device list */
+		DRIVER_AMBAPP_GAISLER_OCCAN_ID,	/* Driver ID */
+		"OCCAN_DRV",			/* Driver Name */
+		DRVMGR_BUS_TYPE_AMBAPP,		/* Bus Type */
+		&occan_ops,
+		NULL,				/* Funcs */
+		0,				/* No devices yet */
+		0,
+	},
+	&occan_ids[0]
+};
+
+void occan_register_drv (void)
+{
+	DBG("Registering OCCAN driver\n");
+	drvmgr_drv_register(&occan_drv_info.general);
 }
 
-static void pelican_open(occan_priv *priv){
-	/* unsigned char tmp; */
-	int ret;
+int occan_init2(struct drvmgr_dev *dev)
+{
+	occan_priv *priv;
 
-	/* Set defaults */
-	priv->speed = OCCAN_SPEED_250K;
+	DBG("OCCAN[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
+	priv = dev->priv = malloc(sizeof(occan_priv));
+	if ( !priv )
+		return DRVMGR_NOMEM;
+	memset(priv, 0, sizeof(*priv));
+	priv->dev = dev;
 
-	/* set acceptance filters to accept all messages */
-	priv->acode[0] = 0;
-	priv->acode[1] = 0;
-	priv->acode[2] = 0;
-	priv->acode[3] = 0;
-	priv->amask[0] = 0xff;
-	priv->amask[1] = 0xff;
-	priv->amask[2] = 0xff;
-	priv->amask[3] = 0xff;
+	return DRVMGR_OK;
+}
 
-	/* Set clock divider to extended mode, clkdiv not connected
-	 */
-	priv->regs->clkdiv = (1<<PELICAN_CDR_MODE_BITS) | (DEFAULT_CLKDIV & PELICAN_CDR_DIV);
+int occan_init3(struct drvmgr_dev *dev)
+{
+	occan_priv *priv;
+	char prefix[32];
+	rtems_status_code status;
 
-	ret = occan_calc_speedregs(sys_freq_hz,priv->speed,&priv->timing);
-	if ( ret ){
-		/* failed to set speed for this system freq, try with 50K instead */
-		priv->speed = OCCAN_SPEED_50K;
-		occan_calc_speedregs(sys_freq_hz,priv->speed,&priv->timing);
+	priv = dev->priv;
+
+	/* Do initialization */
+
+	if ( occan_driver_io_registered == 0) {
+		/* Register the I/O driver only once for all cores */
+		if ( occan_register_io(&occan_driver_io_major) ) {
+			/* Failed to register I/O driver */
+			dev->priv = NULL;
+			return DRVMGR_FAIL;
+		}
+
+		occan_driver_io_registered = 1;
 	}
 
-	/* disable all interrupts */
-	priv->regs->inten = 0;
+	/* I/O system registered and initialized 
+	 * Now we take care of device initialization.
+	 */
 
-	/* clear pending interrupts by reading */
-	/* tmp = */ READ_REG(&priv->regs->intflags);
+	if ( occan_device_init(priv) ) {
+		return DRVMGR_FAIL;
+	}
+
+	/* Get Filesystem name prefix */
+	prefix[0] = '\0';
+	if ( drvmgr_get_dev_prefix(dev, prefix) ) {
+		/* Failed to get prefix, make sure of a unique FS name
+		 * by using the driver minor.
+		 */
+		sprintf(priv->devName, "/dev/occan%d", dev->minor_drv);
+	} else {
+		/* Got special prefix, this means we have a bus prefix
+		 * And we should use our "bus minor"
+		 */
+		sprintf(priv->devName, "/dev/%soccan%d", prefix, dev->minor_bus);
+	}
+
+	/* Register Device */
+	DBG("OCCAN[%d]: Registering %s\n", dev->minor_drv, priv->devName);
+	status = rtems_io_register_name(priv->devName, occan_driver_io_major, dev->minor_drv);
+	if (status != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
+
+	return DRVMGR_OK;
 }
 
-static int pelican_start(occan_priv *priv){
-	/* unsigned char tmp; */
-	/* Start HW communication */
+/******************* Driver Implementation ***********************/
 
-	if ( !priv->rxfifo || !priv->txfifo )
+int occan_register_io(rtems_device_major_number *m)
+{
+	rtems_status_code r;
+
+	if ((r = rtems_io_register_driver(0, &occan_driver, m)) == RTEMS_SUCCESSFUL) {
+		DBG("OCCAN driver successfully registered, major: %d\n", *m);
+	} else {
+		switch(r) {
+		case RTEMS_TOO_MANY:
+			printk("OCCAN rtems_io_register_driver failed: RTEMS_TOO_MANY\n");
+			return -1;
+		case RTEMS_INVALID_NUMBER:  
+			printk("OCCAN rtems_io_register_driver failed: RTEMS_INVALID_NUMBER\n");
+			return -1;
+		case RTEMS_RESOURCE_IN_USE:
+			printk("OCCAN rtems_io_register_driver failed: RTEMS_RESOURCE_IN_USE\n");
+			return -1;
+		default:
+			printk("OCCAN rtems_io_register_driver failed\n");
+			return -1;
+		}
+	}
+	return 0;
+}
+
+int occan_device_init(occan_priv *pDev)
+{
+	struct amba_dev_info *ambadev;
+	struct ambapp_core *pnpinfo;
+	rtems_status_code status;
+	int minor;
+
+	/* Get device information from AMBA PnP information */
+	ambadev = (struct amba_dev_info *)pDev->dev->businfo;
+	if ( ambadev == NULL ) {
 		return -1;
-
-  /* In case we were started before and stopped we
-   * should empty the TX fifo or try to resend those
-   * messages. We make it simple...
-   */
-  occan_fifo_clr(priv->txfifo);
-
-	/* Clear status bits */
-	priv->status = 0;
-
-	/* clear pending interrupts */
-	/* tmp = */ READ_REG(&priv->regs->intflags);
-
-	/* clear error counters */
-	priv->regs->rx_err_cnt = 0;
-	priv->regs->tx_err_cnt = 0;
-
-#ifdef REDUNDANT_CHANNELS
-	if ( (priv->channel == 0) || (priv->channel >= REDUNDANT_CHANNELS) ){
-		/* Select the first (default) channel */
-		OCCAN_SET_CHANNEL(priv,0);
-	}else{
-		/* set gpio bit, or something */
-		OCCAN_SET_CHANNEL(priv,priv->channel);
 	}
+	pnpinfo = &ambadev->info;
+	pDev->irq = pnpinfo->irq;
+	pDev->regs = (pelican_regs *)(pnpinfo->ahb_slv->start[0] + OCCAN_NCORE_OFS*pnpinfo->index);
+	pDev->byte_regs = 1;
+	minor = pDev->dev->minor_drv;
+
+	/* Get frequency in Hz */
+	if ( drvmgr_freq_get(pDev->dev, DEV_AHB_SLV, &pDev->sys_freq_hz) ) {
+		return -1;
+	}
+
+	DBG("OCCAN frequency: %d Hz\n", pDev->sys_freq_hz);
+
+	/* initialize software */
+	pDev->open = 0;
+	pDev->started = 0; /* Needed for spurious interrupts */
+	pDev->rxfifo = NULL;
+	pDev->txfifo = NULL;
+	status = rtems_semaphore_create(
+			rtems_build_name('C', 'd', 'v', '0'+minor),
+			1,
+			RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
+			RTEMS_NO_PRIORITY_CEILING,
+			0, 
+			&pDev->devsem);
+	if ( status != RTEMS_SUCCESSFUL ){
+		printk("OCCAN[%d]: Failed to create dev semaphore, (%d)\n\r",minor, status);
+		return RTEMS_UNSATISFIED;
+	}
+	status = rtems_semaphore_create(
+			rtems_build_name('C', 't', 'x', '0'+minor),
+			0, 
+			RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
+			RTEMS_NO_PRIORITY_CEILING,
+                        0, 
+			&pDev->txsem);
+	if ( status != RTEMS_SUCCESSFUL ){
+		printk("OCCAN[%d]: Failed to create tx semaphore, (%d)\n\r",minor, status);
+		return RTEMS_UNSATISFIED;
+	}
+	status = rtems_semaphore_create(
+			rtems_build_name('C', 'r', 'x', '0'+minor),
+			0, 
+			RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
+			RTEMS_NO_PRIORITY_CEILING,
+			0,
+			&pDev->rxsem);
+	if ( status != RTEMS_SUCCESSFUL ){
+		printk("OCCAN[%d]: Failed to create rx semaphore, (%d)\n\r",minor, status);
+		return RTEMS_UNSATISFIED;
+	}
+
+	/* hardware init/reset */
+	pelican_init(pDev);
+
+#ifdef DEBUG_PRINT_REGMAP
+	pelican_regadr_print(pDev->regs);
 #endif
-	/* set the speed regs of the CAN core */
-	occan_set_speedregs(priv,&priv->timing);
-
-	DBG("OCCAN: start: set timing regs btr0: 0x%x, btr1: 0x%x\n\r",READ_REG(&priv->regs->bustim0),READ_REG(&priv->regs->bustim1));
-
-	/* Set default acceptance filter */
-	pelican_set_accept(priv,priv->acode,priv->amask);
-
-	/* turn on interrupts */
-	priv->regs->inten = PELICAN_IE_RX | PELICAN_IE_TX | PELICAN_IE_ERRW |
-	                    PELICAN_IE_ERRP | PELICAN_IE_BUS;
-
-#ifdef DEBUG
-	/* print setup before starting */
-	pelican_regs_print(priv->regs);
-	occan_stat_print(&priv->stats);
-#endif
-
-	/* core already in reset mode,
-	 *  ¤ Exit reset mode
-	 *  ¤ Enter Single/Dual mode filtering.
-	 */
-	priv->regs->mode =  (priv->single_mode << 3);
 
 	return 0;
 }
 
-static void pelican_stop(occan_priv *priv){
-	/* stop HW */
 
 #ifdef DEBUG
-	/* print setup before stopping */
-	pelican_regs_print(priv->regs);
-	occan_stat_print(&priv->stats);
-#endif
-
-	/* put core in reset mode */
-	priv->regs->mode = PELICAN_MOD_RESET;
-
-	/* turn off interrupts */
-	priv->regs->inten = 0;
-
-	priv->status |= OCCAN_STATUS_RESET;
-}
-
-
-/* Try to send message "msg", if hardware txfifo is
- * full, then -1 is returned.
- *
- * Be sure to have disabled CAN interrupts when
- * entering this function.
- */
-static int pelican_send(occan_priv *can, CANMsg *msg){
-	unsigned char tmp,status;
-	pelican_regs *regs = can->regs;
-
-	/* is there room in send buffer? */
-	status = READ_REG(&regs->status);
-	if ( !(status & PELICAN_STAT_TXBUF) ){
-		/* tx fifo taken, we have to wait */
-		return -1;
-	}
-
-	tmp = msg->len & 0xf;
-	if ( msg->rtr )
-		tmp |= 0x40;
-
-	if ( msg->extended ){
-		/* Extended Frame */
-		regs->rx_fi_xff = 0x80 | tmp;
-		WRITE_REG(&regs->msg.tx_eff.id[0],(msg->id >> (5+8+8)) & 0xff);
-		WRITE_REG(&regs->msg.tx_eff.id[1],(msg->id >> (5+8)) & 0xff);
-		WRITE_REG(&regs->msg.tx_eff.id[2],(msg->id >> (5)) & 0xff);
-		WRITE_REG(&regs->msg.tx_eff.id[3],(msg->id << 3) & 0xf8);
-		tmp = msg->len;
-		while(tmp--){
-			WRITE_REG(&regs->msg.tx_eff.data[tmp],msg->data[tmp]);
-		}
-	}else{
-		/* Standard Frame */
-		regs->rx_fi_xff = tmp;
-		WRITE_REG(&regs->msg.tx_sff.id[0],(msg->id >> 3) & 0xff);
-		WRITE_REG(&regs->msg.tx_sff.id[1],(msg->id << 5) & 0xe0);
-		tmp = msg->len;
-		while(tmp--){
-			WRITE_REG(&regs->msg.tx_sff.data[tmp],msg->data[tmp]);
-		}
-	}
-
-	/* let HW know of new message */
-	if ( msg->sshot ){
-		regs->cmd = PELICAN_CMD_TXREQ | PELICAN_CMD_ABORT;
-	}else{
-		/* normal case -- try resend until sent */
-		regs->cmd = PELICAN_CMD_TXREQ;
-	}
-
-	return 0;
-}
-
-
-static void pelican_set_accept(occan_priv *priv, unsigned char *acode, unsigned char *amask){
-	unsigned char *acode0, *acode1, *acode2, *acode3;
-	unsigned char *amask0, *amask1, *amask2, *amask3;
-
-	acode0 = &priv->regs->rx_fi_xff;
-	acode1 = (unsigned char *)&priv->regs->msg.rst_accept.code[0];
-	acode2 = (unsigned char *)&priv->regs->msg.rst_accept.code[1];
-	acode3 = (unsigned char *)&priv->regs->msg.rst_accept.code[2];
-
-	amask0 = (unsigned char *)&priv->regs->msg.rst_accept.mask[0];
-	amask1 = (unsigned char *)&priv->regs->msg.rst_accept.mask[1];
-	amask2 = (unsigned char *)&priv->regs->msg.rst_accept.mask[2];
-	amask3 = (unsigned char *)&priv->regs->msg.rst_accept.mask[3];
-
-	/* Set new mask & code */
-	*acode0 = acode[0];
-	*acode1 = acode[1];
-	*acode2 = acode[2];
-	*acode3 = acode[3];
-
-	*amask0 = amask[0];
-	*amask1 = amask[1];
-	*amask2 = amask[2];
-	*amask3 = amask[3];
-}
-
-#ifdef DEBUG
-static void pelican_regs_print(pelican_regs *regs){
+static void pelican_regs_print(occan_priv *pDev){
+	pelican_regs *regs = pDev->regs;
 	printk("--- PELICAN 0x%lx ---\n\r",(unsigned int)regs);
-	printk(" MODE: 0x%02x\n\r",READ_REG(&regs->mode));
-	printk(" CMD: 0x%02x\n\r",READ_REG(&regs->cmd));
-	printk(" STATUS: 0x%02x\n\r",READ_REG(&regs->status));
-	/*printk(" INTFLG: 0x%02x\n\r",READ_REG(&regs->intflags));*/
-	printk(" INTEN: 0x%02x\n\r",READ_REG(&regs->inten));
-	printk(" BTR0: 0x%02x\n\r",READ_REG(&regs->bustim0));
-	printk(" BTR1: 0x%02x\n\r",READ_REG(&regs->bustim1));
-	printk(" ARBCODE: 0x%02x\n\r",READ_REG(&regs->arbcode));
-	printk(" ERRCODE: 0x%02x\n\r",READ_REG(&regs->errcode));
-	printk(" ERRWARN: 0x%02x\n\r",READ_REG(&regs->errwarn));
-	printk(" RX_ERR_CNT: 0x%02x\n\r",READ_REG(&regs->rx_err_cnt));
-	printk(" TX_ERR_CNT: 0x%02x\n\r",READ_REG(&regs->tx_err_cnt));
-	if ( READ_REG(&regs->mode) & PELICAN_MOD_RESET ){
+	printk(" MODE: 0x%02x\n\r",READ_REG(pDev, &regs->mode));
+	printk(" CMD: 0x%02x\n\r",READ_REG(pDev, &regs->cmd));
+	printk(" STATUS: 0x%02x\n\r",READ_REG(pDev, &regs->status));
+	/*printk(" INTFLG: 0x%02x\n\r",READ_REG(pDev, &regs->intflags));*/
+	printk(" INTEN: 0x%02x\n\r",READ_REG(pDev, &regs->inten));
+	printk(" BTR0: 0x%02x\n\r",READ_REG(pDev, &regs->bustim0));
+	printk(" BTR1: 0x%02x\n\r",READ_REG(pDev, &regs->bustim1));
+	printk(" ARBCODE: 0x%02x\n\r",READ_REG(pDev, &regs->arbcode));
+	printk(" ERRCODE: 0x%02x\n\r",READ_REG(pDev, &regs->errcode));
+	printk(" ERRWARN: 0x%02x\n\r",READ_REG(pDev, &regs->errwarn));
+	printk(" RX_ERR_CNT: 0x%02x\n\r",READ_REG(pDev, &regs->rx_err_cnt));
+	printk(" TX_ERR_CNT: 0x%02x\n\r",READ_REG(pDev, &regs->tx_err_cnt));
+	if ( READ_REG(pDev, &regs->mode) & PELICAN_MOD_RESET ){
 		/* in reset mode it is possible to read acceptance filters */
-		printk(" ACR0: 0x%02x (0x%lx)\n\r",READ_REG(&regs->rx_fi_xff),&regs->rx_fi_xff);
-		printk(" ACR1: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.code[0]),(unsigned int)&regs->msg.rst_accept.code[0]);
-		printk(" ACR1: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.code[1]),(unsigned int)&regs->msg.rst_accept.code[1]);
-		printk(" ACR1: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.code[2]),(unsigned int)&regs->msg.rst_accept.code[2]);
-		printk(" AMR0: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.mask[0]),(unsigned int)&regs->msg.rst_accept.mask[0]);
-		printk(" AMR1: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.mask[1]),(unsigned int)&regs->msg.rst_accept.mask[1]);
-		printk(" AMR2: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.mask[2]),(unsigned int)&regs->msg.rst_accept.mask[2]);
-		printk(" AMR3: 0x%02x (0x%lx)\n\r",READ_REG(&regs->msg.rst_accept.mask[3]),(unsigned int)&regs->msg.rst_accept.mask[3]);
-
+		printk(" ACR0: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->rx_fi_xff),&regs->rx_fi_xff);
+		printk(" ACR1: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.code[0]),(unsigned int)&regs->msg.rst_accept.code[0]);
+		printk(" ACR1: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.code[1]),(unsigned int)&regs->msg.rst_accept.code[1]);
+		printk(" ACR1: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.code[2]),(unsigned int)&regs->msg.rst_accept.code[2]);
+		printk(" AMR0: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.mask[0]),(unsigned int)&regs->msg.rst_accept.mask[0]);
+		printk(" AMR1: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.mask[1]),(unsigned int)&regs->msg.rst_accept.mask[1]);
+		printk(" AMR2: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.mask[2]),(unsigned int)&regs->msg.rst_accept.mask[2]);
+		printk(" AMR3: 0x%02x (0x%lx)\n\r",READ_REG(pDev, &regs->msg.rst_accept.mask[3]),(unsigned int)&regs->msg.rst_accept.mask[3]);
+		
 	}else{
-		printk(" RXFI_XFF: 0x%02x\n\r",READ_REG(&regs->rx_fi_xff));
+		printk(" RXFI_XFF: 0x%02x\n\r",READ_REG(pDev, &regs->rx_fi_xff));
 	}
-	printk(" RX_MSG_CNT: 0x%02x\n\r",READ_REG(&regs->rx_msg_cnt));
-	printk(" CLKDIV: 0x%02x\n\r",READ_REG(&regs->clkdiv));
+	printk(" RX_MSG_CNT: 0x%02x\n\r",READ_REG(pDev, &regs->rx_msg_cnt));
+	printk(" CLKDIV: 0x%02x\n\r",READ_REG(pDev, &regs->clkdiv));
 	printk("-------------------\n\r");
 }
 #endif
@@ -646,7 +660,7 @@ static void pelican_regadr_print(pelican_regs *regs){
 
 	/* in reset mode it is possible to read acceptance filters */
 	printk(" RXFI_XFF: 0x%lx\n\r",(unsigned int)&regs->rx_fi_xff);
-
+	
 	/* reset registers */
 	printk(" ACR0: 0x%lx\n\r",(unsigned int)&regs->rx_fi_xff);
 	printk(" ACR1: 0x%lx\n\r",(unsigned int)&regs->msg.rst_accept.code[0]);
@@ -656,7 +670,7 @@ static void pelican_regadr_print(pelican_regs *regs){
 	printk(" AMR1: 0x%lx\n\r",(unsigned int)&regs->msg.rst_accept.mask[1]);
 	printk(" AMR2: 0x%lx\n\r",(unsigned int)&regs->msg.rst_accept.mask[2]);
 	printk(" AMR3: 0x%lx\n\r",(unsigned int)&regs->msg.rst_accept.mask[3]);
-
+	
 	/* TX Extended */
 	printk(" EFFTX_ID[0]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.id[0]);
 	printk(" EFFTX_ID[1]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.id[1]);
@@ -665,12 +679,12 @@ static void pelican_regadr_print(pelican_regs *regs){
 
 	printk(" EFFTX_DATA[0]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[0]);
 	printk(" EFFTX_DATA[1]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[1]);
-	printk(" EFFTX_DATA[2]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[2]);
-	printk(" EFFTX_DATA[3]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[3]);
-	printk(" EFFTX_DATA[4]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[4]);
-	printk(" EFFTX_DATA[5]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[5]);
-	printk(" EFFTX_DATA[6]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[6]);
-	printk(" EFFTX_DATA[7]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[7]);
+	printk(" EFFTX_DATA[2]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[2]);	
+	printk(" EFFTX_DATA[3]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[3]);	
+	printk(" EFFTX_DATA[4]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[4]);	
+	printk(" EFFTX_DATA[5]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[5]);	
+	printk(" EFFTX_DATA[6]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[6]);	
+	printk(" EFFTX_DATA[7]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_eff.data[7]);	
 
 	/* RX Extended */
 	printk(" EFFRX_ID[0]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.id[0]);
@@ -680,12 +694,12 @@ static void pelican_regadr_print(pelican_regs *regs){
 
 	printk(" EFFRX_DATA[0]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[0]);
 	printk(" EFFRX_DATA[1]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[1]);
-	printk(" EFFRX_DATA[2]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[2]);
-	printk(" EFFRX_DATA[3]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[3]);
-	printk(" EFFRX_DATA[4]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[4]);
-	printk(" EFFRX_DATA[5]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[5]);
-	printk(" EFFRX_DATA[6]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[6]);
-	printk(" EFFRX_DATA[7]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[7]);
+	printk(" EFFRX_DATA[2]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[2]);	
+	printk(" EFFRX_DATA[3]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[3]);	
+	printk(" EFFRX_DATA[4]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[4]);	
+	printk(" EFFRX_DATA[5]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[5]);	
+	printk(" EFFRX_DATA[6]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[6]);	
+	printk(" EFFRX_DATA[7]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_eff.data[7]);	
 
 
 	/* RX Extended */
@@ -694,12 +708,12 @@ static void pelican_regadr_print(pelican_regs *regs){
 
 	printk(" SFFRX_DATA[0]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[0]);
 	printk(" SFFRX_DATA[1]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[1]);
-	printk(" SFFRX_DATA[2]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[2]);
-	printk(" SFFRX_DATA[3]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[3]);
-	printk(" SFFRX_DATA[4]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[4]);
-	printk(" SFFRX_DATA[5]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[5]);
-	printk(" SFFRX_DATA[6]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[6]);
-	printk(" SFFRX_DATA[7]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[7]);
+	printk(" SFFRX_DATA[2]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[2]);	
+	printk(" SFFRX_DATA[3]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[3]);	
+	printk(" SFFRX_DATA[4]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[4]);	
+	printk(" SFFRX_DATA[5]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[5]);	
+	printk(" SFFRX_DATA[6]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[6]);	
+	printk(" SFFRX_DATA[7]: 0x%lx\n\r",(unsigned int)&regs->msg.rx_sff.data[7]);	
 
 	/* TX Extended */
 	printk(" SFFTX_ID[0]: 0x%lx\n\r",(unsigned int)&regs->msg.tx_sff.id[0]);
@@ -736,6 +750,235 @@ static void occan_stat_print(occan_stats *stats){
 }
 #endif
 
+static void pelican_init(occan_priv *priv){
+	/* Reset core */
+	WRITE_REG(priv, &priv->regs->mode, PELICAN_MOD_RESET);
+
+	/* wait for core to reset complete */
+	/*usleep(1);*/
+}
+
+static void pelican_open(occan_priv *priv){
+	int ret;
+
+	/* Set defaults */
+	priv->speed = OCCAN_SPEED_250K;
+
+	/* set acceptance filters to accept all messages */
+	priv->acode[0] = 0;
+	priv->acode[1] = 0;
+	priv->acode[2] = 0;
+	priv->acode[3] = 0;
+	priv->amask[0] = 0xff;
+	priv->amask[1] = 0xff;
+	priv->amask[2] = 0xff;
+	priv->amask[3] = 0xff;
+
+	/* Set clock divider to extended mode, clkdiv not connected
+	 */
+	WRITE_REG(priv, &priv->regs->clkdiv, (1<<PELICAN_CDR_MODE_BITS) | (DEFAULT_CLKDIV & PELICAN_CDR_DIV));
+
+	ret = occan_calc_speedregs(priv->sys_freq_hz,priv->speed,&priv->timing);
+	if ( ret ){
+		/* failed to set speed for this system freq, try with 50K instead */
+		priv->speed = OCCAN_SPEED_50K;
+		occan_calc_speedregs(priv->sys_freq_hz, priv->speed,
+			&priv->timing);
+	}
+
+	/* disable all interrupts */
+	WRITE_REG(priv, &priv->regs->inten, 0);
+
+	/* clear pending interrupts by reading */
+	READ_REG(priv, &priv->regs->intflags);
+}
+
+static int pelican_start(occan_priv *priv){
+	/* Start HW communication */
+
+	if ( !priv->rxfifo || !priv->txfifo )
+		return -1;
+
+	/* In case we were started before and stopped we
+	 * should empty the TX fifo or try to resend those
+	 * messages. We make it simple...
+	 */
+	occan_fifo_clr(priv->txfifo);
+
+	/* Clear status bits */
+	priv->status = 0;
+	priv->sending = 0;
+
+	/* clear pending interrupts */
+	READ_REG(priv, &priv->regs->intflags);
+
+	/* clear error counters */
+	WRITE_REG(priv, &priv->regs->rx_err_cnt, 0);
+	WRITE_REG(priv, &priv->regs->tx_err_cnt, 0);
+
+#ifdef REDUNDANT_CHANNELS
+	if ( (priv->channel == 0) || (priv->channel >= REDUNDANT_CHANNELS) ){
+		/* Select the first (default) channel */
+		OCCAN_SET_CHANNEL(priv,0);
+	}else{
+		/* set gpio bit, or something */
+		OCCAN_SET_CHANNEL(priv,priv->channel);
+	}
+#endif
+	/* set the speed regs of the CAN core */
+	occan_set_speedregs(priv,&priv->timing);
+
+	DBG("OCCAN: start: set timing regs btr0: 0x%x, btr1: 0x%x\n\r",
+		READ_REG(priv, &priv->regs->bustim0),
+		READ_REG(priv, &priv->regs->bustim1));
+
+	/* Set default acceptance filter */
+	pelican_set_accept(priv,priv->acode,priv->amask);
+
+	/* Nothing can fail from here, this must be set before interrupts are
+	 * enabled */
+	priv->started = 1;
+
+	/* turn on interrupts */
+	WRITE_REG(priv, &priv->regs->inten,
+		PELICAN_IE_RX | PELICAN_IE_TX | PELICAN_IE_ERRW |
+		PELICAN_IE_ERRP | PELICAN_IE_BUS);
+#ifdef DEBUG
+	/* print setup before starting */
+	pelican_regs_print(priv->regs);
+	occan_stat_print(&priv->stats);
+#endif
+
+	/* core already in reset mode,
+	 *  ¤ Exit reset mode 
+	 *  ¤ Enter Single/Dual mode filtering.
+	 */
+	WRITE_REG(priv, &priv->regs->mode, (priv->single_mode << 3));
+
+	/* Register interrupt routine and unmask IRQ at IRQ controller */
+	drvmgr_interrupt_register(priv->dev, 0, "occan", occan_interrupt, priv);
+
+	return 0;
+}
+
+static void pelican_stop(occan_priv *priv)
+{
+	/* stop HW */
+
+	drvmgr_interrupt_unregister(priv->dev, 0, occan_interrupt, priv);
+
+#ifdef DEBUG
+	/* print setup before stopping */
+	pelican_regs_print(priv->regs);
+	occan_stat_print(&priv->stats);
+#endif
+
+	/* put core in reset mode */
+	WRITE_REG(priv, &priv->regs->mode, PELICAN_MOD_RESET);
+
+	/* turn off interrupts */
+	WRITE_REG(priv, &priv->regs->inten, 0);
+
+	priv->status |= OCCAN_STATUS_RESET;
+}
+
+static inline int pelican_tx_ready(occan_priv *can)
+{
+	unsigned char status;
+	pelican_regs *regs = can->regs;
+
+	/* is there room in send buffer? */
+	status = READ_REG(can, &regs->status);
+	if ( !(status & PELICAN_STAT_TXBUF) ) {
+		/* tx fifo taken, we have to wait */
+		return 0;
+	}
+
+	return 1;
+}
+
+/* Try to send message "msg", if hardware txfifo is
+ * full, then -1 is returned.
+ *
+ * Be sure to have disabled CAN interrupts when
+ * entering this function.
+ */
+static int pelican_send(occan_priv *can, CANMsg *msg){
+	unsigned char tmp;
+	pelican_regs *regs = can->regs;
+
+	/* is there room in send buffer? */
+	if ( !pelican_tx_ready(can) ) {
+		/* tx fifo taken, we have to wait */
+		return -1;
+	}
+
+	tmp = msg->len & 0xf;
+	if ( msg->rtr )
+		tmp |= 0x40;
+
+	if ( msg->extended ){
+		/* Extended Frame */
+		WRITE_REG(can, &regs->rx_fi_xff, 0x80 | tmp);
+		WRITE_REG(can, &regs->msg.tx_eff.id[0],(msg->id >> (5+8+8)) & 0xff);
+		WRITE_REG(can, &regs->msg.tx_eff.id[1],(msg->id >> (5+8)) & 0xff);
+		WRITE_REG(can, &regs->msg.tx_eff.id[2],(msg->id >> (5)) & 0xff);
+		WRITE_REG(can, &regs->msg.tx_eff.id[3],(msg->id << 3) & 0xf8);
+		tmp = msg->len;
+		while(tmp--){
+			WRITE_REG(can, &regs->msg.tx_eff.data[tmp], msg->data[tmp]);
+		}
+	}else{
+		/* Standard Frame */
+		WRITE_REG(can, &regs->rx_fi_xff, tmp);
+		WRITE_REG(can, &regs->msg.tx_sff.id[0],(msg->id >> 3) & 0xff);
+		WRITE_REG(can, &regs->msg.tx_sff.id[1],(msg->id << 5) & 0xe0);
+		tmp = msg->len;
+		while(tmp--){
+			WRITE_REG(can, &regs->msg.tx_sff.data[tmp],msg->data[tmp]);
+		}
+	}
+
+	/* let HW know of new message */
+	if ( msg->sshot ){
+		WRITE_REG(can, &regs->cmd, PELICAN_CMD_TXREQ | PELICAN_CMD_ABORT);
+	}else{
+		/* normal case -- try resend until sent */
+		WRITE_REG(can, &regs->cmd, PELICAN_CMD_TXREQ);
+	}
+
+	return 0;
+}
+
+
+static void pelican_set_accept(occan_priv *priv, unsigned char *acode, unsigned char *amask)
+{
+	unsigned char *acode0, *acode1, *acode2, *acode3;
+	unsigned char *amask0, *amask1, *amask2, *amask3;
+
+	acode0 = &priv->regs->rx_fi_xff;
+	acode1 = (unsigned char *)&priv->regs->msg.rst_accept.code[0];
+	acode2 = (unsigned char *)&priv->regs->msg.rst_accept.code[1];
+	acode3 = (unsigned char *)&priv->regs->msg.rst_accept.code[2];
+
+	amask0 = (unsigned char *)&priv->regs->msg.rst_accept.mask[0];
+	amask1 = (unsigned char *)&priv->regs->msg.rst_accept.mask[1];
+	amask2 = (unsigned char *)&priv->regs->msg.rst_accept.mask[2];
+	amask3 = (unsigned char *)&priv->regs->msg.rst_accept.mask[3];
+
+	/* Set new mask & code */
+	WRITE_REG(priv, acode0, acode[0]);
+	WRITE_REG(priv, acode1, acode[1]);
+	WRITE_REG(priv, acode2, acode[2]);
+	WRITE_REG(priv, acode3, acode[3]);
+
+	WRITE_REG(priv, amask0, amask[0]);
+	WRITE_REG(priv, amask1, amask[1]);
+	WRITE_REG(priv, amask2, amask[2]);
+	WRITE_REG(priv, amask3, amask[3]);
+}
+
+
 /* This function calculates BTR0 and BTR1 values for a given bitrate.
  *
  * Set communication parameters.
@@ -744,7 +987,8 @@ static void occan_stat_print(occan_stats *stats){
  * \param result Pointer to where resulting BTRs will be stored.
  * \return zero if successful to calculate a baud rate.
  */
-static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result){
+static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result)
+{
 	int best_error = 1000000000;
 	int error;
 	int best_tseg=0, best_brp=0, brp=0;
@@ -827,12 +1071,14 @@ static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_
 	return 0;
 }
 
-static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing){
+static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing)
+{
 	if ( !timing || !priv || !priv->regs)
 		return -1;
 
-	priv->regs->bustim0 = timing->btr0;
-	priv->regs->bustim1 = timing->btr1;
+	WRITE_REG(priv, &priv->regs->bustim0, timing->btr0);
+	WRITE_REG(priv, &priv->regs->bustim1, timing->btr1);
+
 	return 0;
 }
 
@@ -861,7 +1107,7 @@ static int pelican_speed_auto(occan_priv *priv){
 	while ( (speed=pelican_speed_auto_steplist[i]) > 0){
 
 		/* Reset core */
-		priv->regs->mode = PELICAN_MOD_RESET;
+		WRITE_REG(priv, &priv->regs->mode, PELICAN_MOD_RESET);
 
 		/* tell int handler about the auto speed detection test */
 
@@ -873,7 +1119,7 @@ static int pelican_speed_auto(occan_priv *priv){
 		pelican_set_accept(priv);
 
 		/* calc timing params for this */
-		if ( occan_calc_speedregs(sys_freq_hz,speed,&timing) ){
+		if ( occan_calc_speedregs(priv->sys_freq_hz,speed,&timing) ){
 			/* failed to get good timings for this frequency
 			 * test with next
 			 */
@@ -887,13 +1133,13 @@ static int pelican_speed_auto(occan_priv *priv){
 
 		/* Empty previous messages in hardware RX fifo */
 		/*
-		while( READ_REG(&priv->regs->) ){
+		while( READ_REG(priv, &priv->regs->) ){
 
 		}
 		*/
 
 		/* Clear pending interrupts */
-		tmp = READ_REG(&priv->regs->intflags);
+		tmp = READ_REG(priv, &priv->regs->intflags);
 
 		/* enable RX & ERR interrupt */
 		priv->regs->inten =
@@ -911,176 +1157,23 @@ static int pelican_speed_auto(occan_priv *priv){
 #endif
 }
 
-
-static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg){
-	int dev_cnt,minor,subcore_cnt,devi,subi,subcores;
-	struct ambapp_ahb_info ambadev;
-	occan_priv *can;
-	char fs_name[20];
-	rtems_status_code status;
-
-	strcpy(fs_name,OCCAN_DEVNAME);
-
-	/* find device on amba bus */
-	dev_cnt = ambapp_get_number_ahbslv_devices(amba_bus, VENDOR_GAISLER,
-                                                   GAISLER_CANAHB);
-	if ( dev_cnt < 1 ){
-		/* Failed to find any CAN cores! */
-		printk("OCCAN: Failed to find any CAN cores\n\r");
-		return -1;
-	}
-
-	/* Detect System Frequency from initialized timer */
-#ifndef SYS_FREQ_HZ
-#if defined(LEON3)
-	/* LEON3: find timer address via AMBA Plug&Play info */
-	{
-		struct ambapp_apb_info gptimer;
-		struct gptimer_regs *tregs;
-
-		if ( ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER,
-                                        GAISLER_GPTIMER, &gptimer) == 1 ){
-			tregs = (struct gptimer_regs *)gptimer.start;
-			sys_freq_hz = (tregs->scaler_reload+1)*1000*1000;
-			DBG("OCCAN: detected %dHZ system frequency\n\r",sys_freq_hz);
-		}else{
-			sys_freq_hz = 40000000; /* Default to 40MHz */
-			printk("OCCAN: Failed to detect system frequency\n\r");
-		}
-
-	}
-#elif defined(LEON2)
-	/* LEON2: use hardcoded address to get to timer */
-	{
-		LEON_Register_Map *regs = (LEON_Register_Map *)0x80000000;
-		sys_freq_hz = (regs->Scaler_Reload+1)*1000*1000;
-	}
-#else
-  #error CPU not supported for OC_CAN driver
-#endif
-#else
-	/* Use hardcoded frequency */
-	sys_freq_hz = SYS_FREQ_HZ;
-#endif
-
-	DBG("OCCAN: Detected %dHz system frequency\n\r",sys_freq_hz);
-
-	/* OCCAN speciality:
-	 *  Mulitple cores are supported through the same amba AHB interface.
-	 *  The number of "sub cores" can be detected by decoding the AMBA
-	 *  Plug&Play version information. verion = ncores. A maximum of 8
-	 *  sub cores are supported, each separeated with 0x100 inbetween.
-	 *
-	 *  Now, lets detect sub cores.
-	 */
-
-	for(subcore_cnt=devi=0; devi<dev_cnt; devi++){
-		ambapp_find_ahbslv_next(amba_bus, VENDOR_GAISLER,
-                                        GAISLER_CANAHB, &ambadev, devi);
-		subcore_cnt += (ambadev.ver & 0x7)+1;
-	}
-
-	printk("OCCAN: Found %d devs, totally %d sub cores\n\r",dev_cnt,subcore_cnt);
-
-	/* allocate memory for cores */
-	can_cores = subcore_cnt;
-	cans = calloc(subcore_cnt*sizeof(occan_priv),1);
-
-	minor=0;
-	for(devi=0; devi<dev_cnt; devi++){
-
-		/* Get AHB device info */
-		ambapp_find_ahbslv_next(amba_bus, VENDOR_GAISLER,
-                                        GAISLER_CANAHB, &ambadev, devi);
-		subcores = (ambadev.ver & 0x7)+1;
-		DBG("OCCAN: on dev %d found %d sub cores\n\r",devi,subcores);
-
-		/* loop all subcores, at least 1 */
-		for(subi=0; subi<subcores; subi++){
-			can = &cans[minor];
-
-#ifdef OCCAN_BYTE_REGS
-			/* regs is byte regs */
-			can->regs = (void *)(ambadev.start[0] + OCCAN_NCORE_OFS*subi);
-#else
-			/* regs is word regs, accessed 0x100 from base address */
-			can->regs = (void *)(ambadev.start[0] + OCCAN_NCORE_OFS*subi+ OCCAN_WORD_REG_OFS);
-#endif
-
-			/* remember IRQ number */
-			can->irq = ambadev.irq+subi;
-
-			/* bind filesystem name to device */
-			OCCAN_DEVNAME_NO(fs_name,minor);
-			printk("OCCAN: Registering %s to [%d %d] @ 0x%lx irq %d\n\r",fs_name,major,minor,(unsigned int)can->regs,can->irq);
-			status = rtems_io_register_name(fs_name, major, minor);
-			if (RTEMS_SUCCESSFUL != status )
-				rtems_fatal_error_occurred(status);
-
-			/* initialize software */
-			can->open = 0;
-			can->rxfifo = NULL;
-			can->txfifo = NULL;
-			status = rtems_semaphore_create(
-                        rtems_build_name('C', 'd', 'v', '0'+minor),
-                        1,
-                        RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
-                        RTEMS_NO_PRIORITY_CEILING,
-                        0,
-                        &can->devsem);
-			if ( status != RTEMS_SUCCESSFUL ){
-				printk("OCCAN: Failed to create dev semaphore for minor %d, (%d)\n\r",minor,status);
-				return RTEMS_UNSATISFIED;
-			}
-			status = rtems_semaphore_create(
-                        rtems_build_name('C', 't', 'x', '0'+minor),
-                        0,
-                        RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
-                        RTEMS_NO_PRIORITY_CEILING,
-                        0,
-                        &can->txsem);
-			if ( status != RTEMS_SUCCESSFUL ){
-				printk("OCCAN: Failed to create tx semaphore for minor %d, (%d)\n\r",minor,status);
-				return RTEMS_UNSATISFIED;
-			}
-			status = rtems_semaphore_create(
-                        rtems_build_name('C', 'r', 'x', '0'+minor),
-                        0,
-                        RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
-                        RTEMS_NO_PRIORITY_CEILING,
-                        0,
-                        &can->rxsem);
-			if ( status != RTEMS_SUCCESSFUL ){
-				printk("OCCAN: Failed to create rx semaphore for minor %d, (%d)\n\r",minor,status);
-				return RTEMS_UNSATISFIED;
-			}
-
-			/* hardware init/reset */
-			pelican_init(can);
-
-			/* Setup interrupt handler for each channel */
-    	OCCAN_REG_INT(OCCAN_PREFIX(_interrupt_handler), can->irq, can);
-
-			minor++;
-#ifdef DEBUG_PRINT_REGMAP
-			pelican_regadr_print(can->regs);
-#endif
-		}
-	}
-
+static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg)
+{
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver occan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
 	occan_priv *can;
+	struct drvmgr_dev *dev;
 
 	DBG("OCCAN: Opening %d\n\r",minor);
 
-	if ( minor >= can_cores )
+	/* get can device */	
+	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
+		DBG("Wrong minor %d\n", minor);
 		return RTEMS_UNSATISFIED; /* NODEV */
-
-	/* get can device */
-	can = &cans[minor];
+	}
+	can = (occan_priv *)dev->priv;
 
 	/* already opened? */
 	rtems_semaphore_obtain(can->devsem,RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -1126,17 +1219,24 @@ static rtems_device_driver occan_open(rtems_device_major_number major, rtems_dev
 	return RTEMS_SUCCESSFUL;
 }
 
-static rtems_device_driver occan_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
-	occan_priv *can = &cans[minor];
+static rtems_device_driver occan_close(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+{
+	occan_priv *can;
+	struct drvmgr_dev *dev;
 
 	DBG("OCCAN: Closing %d\n\r",minor);
+
+	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
+		return RTEMS_INVALID_NAME;
+	}
+	can = (occan_priv *)dev->priv;
 
 	/* stop if running */
 	if ( can->started )
 		pelican_stop(can);
 
 	/* Enter Reset Mode */
-	can->regs->mode = PELICAN_MOD_RESET;
+	WRITE_REG(can, &can->regs->mode, PELICAN_MOD_RESET);
 
 	/* free fifo memory */
 	occan_fifo_free(can->rxfifo);
@@ -1145,15 +1245,23 @@ static rtems_device_driver occan_close(rtems_device_major_number major, rtems_de
 	can->rxfifo = NULL;
 	can->txfifo = NULL;
 
+	can->open = 0;
+
 	return RTEMS_SUCCESSFUL;
 }
 
 static rtems_device_driver occan_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
-	occan_priv *can = &cans[minor];
+	occan_priv *can;
+	struct drvmgr_dev *dev;
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
 	CANMsg *dstmsg, *srcmsg;
 	rtems_interrupt_level oldLevel;
 	int left;
+
+	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
+		return RTEMS_INVALID_NAME;
+	}
+	can = (occan_priv *)dev->priv;
 
 	if ( !can->started ){
 		DBG("OCCAN: cannot read from minor %d when not started\n\r",minor);
@@ -1205,8 +1313,9 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 
 			DBG("OCCAN: Waiting for RX int\n\r");
 
-			/* wait for incomming messages */
-			rtems_semaphore_obtain(can->rxsem,RTEMS_WAIT,RTEMS_NO_TIMEOUT);
+			/* wait for incoming messages */
+			rtems_semaphore_obtain(can->rxsem, RTEMS_WAIT,
+				RTEMS_NO_TIMEOUT);
 
 			/* did we get woken up by a BUS OFF error? */
 			if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
@@ -1244,13 +1353,19 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 }
 
 static rtems_device_driver occan_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
-	occan_priv *can = &cans[minor];
+	occan_priv *can;
+	struct drvmgr_dev *dev;
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
 	CANMsg *msg,*fifo_msg;
 	rtems_interrupt_level oldLevel;
 	int left;
 
 	DBG("OCCAN: Writing %d bytes from 0x%lx (%d)\n\r",rw_args->count,rw_args->buffer,sizeof(CANMsg));
+
+	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
+		return RTEMS_INVALID_NAME;
+	}
+	can = (occan_priv *)dev->priv;
 
 	if ( !can->started )
 		return RTEMS_RESOURCE_IN_USE; /* EBUSY */
@@ -1292,6 +1407,11 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 			 */
 			left -= sizeof(CANMsg);
 			msg++;
+
+#ifdef OCCAN_TX_IRQ_FLAG_FIXUP
+			/* Mark that we have put at least one msg in TX FIFO */
+			can->sending = 1;
+#endif
 
 			/* bump stat counters */
 			can->stats.tx_msgs++;
@@ -1341,10 +1461,15 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 			if ( occan_fifo_empty(can->txfifo) ){
 				if ( !pelican_send(can,msg) ) {
 					/* First message put directly into HW TX fifo
-				   * This will turn TX interrupt on.
-				   */
+					 * This will turn TX interrupt on.
+					 */
 					left -= sizeof(CANMsg);
 					msg++;
+
+#ifdef OCCAN_TX_IRQ_FLAG_FIXUP
+					/* Mark that we have put at least one msg in TX FIFO */
+					can->sending = 1;
+#endif
 
 					/* bump stat counters */
 					can->stats.tx_msgs++;
@@ -1381,14 +1506,20 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
 	int ret;
 	occan_speed_regs timing;
-	occan_priv *can = &cans[minor];
+	occan_priv *can;
+	struct drvmgr_dev *dev;
 	unsigned int speed;
-	rtems_libio_ioctl_args_t	*ioarg = (rtems_libio_ioctl_args_t *) arg;
+	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *) arg;
 	struct occan_afilter *afilter;
 	occan_stats *dststats;
 	unsigned int rxcnt,txcnt;
 
 	DBG("OCCAN: IOCTL %d\n\r",ioarg->command);
+
+	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
+		return RTEMS_INVALID_NAME;
+	}
+	can = (occan_priv *)dev->priv;
 
 	ioarg->ioctl_return = 0;
 	switch(ioarg->command){
@@ -1400,7 +1531,7 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 
 			/* get speed rate from argument */
 			speed = (unsigned int)ioarg->buffer;
-			ret = occan_calc_speedregs(sys_freq_hz,speed,&timing);
+			ret = occan_calc_speedregs(can->sys_freq_hz,speed,&timing);
 			if ( ret )
 				return  RTEMS_INVALID_NAME; /* EINVAL */
 
@@ -1479,8 +1610,8 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 				return  RTEMS_INVALID_NAME; /* EINVAL */
 
 			/* copy data stats into userspace buffer */
-      if ( can->rxfifo )
-        can->stats.rx_sw_dovr = can->rxfifo->ovcnt;
+			if ( can->rxfifo )
+				can->stats.rx_sw_dovr = can->rxfifo->ovcnt;
 			*dststats = can->stats;
 			break;
 
@@ -1543,7 +1674,9 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 				return RTEMS_RESOURCE_IN_USE; /* EBUSY */
 			if ( pelican_start(can) )
 				return RTEMS_NO_MEMORY; /* failed because of no memory, can happen if SET_BUFLEN failed */
-			can->started = 1;
+			/* can->started = 1; -- Is set in pelican_start due to interrupt may occur before we 
+			 * get here.
+			 */
 			break;
 
 		case OCCAN_IOC_STOP:
@@ -1559,7 +1692,9 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 	return RTEMS_SUCCESSFUL;
 }
 
-static void occan_interrupt(occan_priv *can){
+void occan_interrupt(void *arg)
+{
+	occan_priv *can = arg;
 	unsigned char iflags;
 	pelican_regs *regs = can->regs;
 	CANMsg *msg;
@@ -1567,10 +1702,32 @@ static void occan_interrupt(occan_priv *can){
 	unsigned char tmp, errcode, arbcode;
 	int tx_error_cnt,rx_error_cnt;
 
-	can->stats.ints++;
+	if ( !can->started )
+		return; /* Spurious Interrupt, do nothing */
 
-	while ( (iflags = READ_REG(&can->regs->intflags)) != 0 ){
+	while (1) {
+
+		iflags = READ_REG(can, &can->regs->intflags);
+
+#ifdef OCCAN_TX_IRQ_FLAG_FIXUP
+		/* TX IRQ may be cleared when reading regs->intflags due
+		 * to a bug in some chips. Instead of looking at the TX_IRQ_FLAG
+		 * the TX-fifo emoty register is looked at when something has
+		 * been scheduled for transmission.
+		 */
+		if ((iflags & PELICAN_IF_TX) == 0) {
+			if (can->sending && pelican_tx_ready(can)) {
+				can->sending = 0;
+				iflags |= PELICAN_IF_TX;
+			}
+		}
+#endif
+
+		if (iflags == 0)
+			break;
 		/* still interrupts to handle */
+
+		can->stats.ints++;
 
 		if ( iflags & PELICAN_IF_RX ){
 			/* the rx fifo is not empty
@@ -1579,52 +1736,53 @@ static void occan_interrupt(occan_priv *can){
 
 			/* get empty (or make room) message */
 			msg = occan_fifo_put_claim(can->rxfifo,1);
-			tmp = READ_REG(&regs->rx_fi_xff);
+			tmp = READ_REG(can, &regs->rx_fi_xff);
 			msg->extended = tmp >> 7;
 			msg->rtr = (tmp >> 6) & 1;
 			msg->len = tmp = tmp & 0x0f;
 
 			if ( msg->extended ){
 				/* extended message */
-				msg->id =  READ_REG(&regs->msg.rx_eff.id[0])<<(5+8+8) |
-				           READ_REG(&regs->msg.rx_eff.id[1])<<(5+8) |
-				           READ_REG(&regs->msg.rx_eff.id[2])<<5 |
-				           READ_REG(&regs->msg.rx_eff.id[3])>>3;
+				msg->id =  READ_REG(can, &regs->msg.rx_eff.id[0])<<(5+8+8) |
+				           READ_REG(can, &regs->msg.rx_eff.id[1])<<(5+8) |
+				           READ_REG(can, &regs->msg.rx_eff.id[2])<<5 |
+				           READ_REG(can, &regs->msg.rx_eff.id[3])>>3;
+
 				while(tmp--){
-					msg->data[tmp] = READ_REG(&regs->msg.rx_eff.data[tmp]);
+					msg->data[tmp] = READ_REG(can, &regs->msg.rx_eff.data[tmp]);
 				}
 				/*
-				msg->data[0] = READ_REG(&regs->msg.rx_eff.data[0]);
-				msg->data[1] = READ_REG(&regs->msg.rx_eff.data[1]);
-				msg->data[2] = READ_REG(&regs->msg.rx_eff.data[2]);
-				msg->data[3] = READ_REG(&regs->msg.rx_eff.data[3]);
-				msg->data[4] = READ_REG(&regs->msg.rx_eff.data[4]);
-				msg->data[5] = READ_REG(&regs->msg.rx_eff.data[5]);
-				msg->data[6] = READ_REG(&regs->msg.rx_eff.data[6]);
-				msg->data[7] = READ_REG(&regs->msg.rx_eff.data[7]);
+				msg->data[0] = READ_REG(can, &regs->msg.rx_eff.data[0]);
+				msg->data[1] = READ_REG(can, &regs->msg.rx_eff.data[1]);
+				msg->data[2] = READ_REG(can, &regs->msg.rx_eff.data[2]);
+				msg->data[3] = READ_REG(can, &regs->msg.rx_eff.data[3]);
+				msg->data[4] = READ_REG(can, &regs->msg.rx_eff.data[4]);
+				msg->data[5] = READ_REG(can, &regs->msg.rx_eff.data[5]);
+				msg->data[6] = READ_REG(can, &regs->msg.rx_eff.data[6]);
+				msg->data[7] = READ_REG(can, &regs->msg.rx_eff.data[7]);
 				*/
 			}else{
 				/* standard message */
-				msg->id =  READ_REG(&regs->msg.rx_sff.id[0])<<3 |
-				           READ_REG(&regs->msg.rx_sff.id[1])>>5;
+				msg->id = READ_REG(can, &regs->msg.rx_sff.id[0])<<3 |
+				          READ_REG(can, &regs->msg.rx_sff.id[1])>>5;
 
 				while(tmp--){
-					msg->data[tmp] = READ_REG(&regs->msg.rx_sff.data[tmp]);
+					msg->data[tmp] = READ_REG(can, &regs->msg.rx_sff.data[tmp]);
 				}
 				/*
-				msg->data[0] = READ_REG(&regs->msg.rx_sff.data[0]);
-				msg->data[1] = READ_REG(&regs->msg.rx_sff.data[1]);
-				msg->data[2] = READ_REG(&regs->msg.rx_sff.data[2]);
-				msg->data[3] = READ_REG(&regs->msg.rx_sff.data[3]);
-				msg->data[4] = READ_REG(&regs->msg.rx_sff.data[4]);
-				msg->data[5] = READ_REG(&regs->msg.rx_sff.data[5]);
-				msg->data[6] = READ_REG(&regs->msg.rx_sff.data[6]);
-				msg->data[7] = READ_REG(&regs->msg.rx_sff.data[7]);
+				msg->data[0] = READ_REG(can, &regs->msg.rx_sff.data[0]);
+				msg->data[1] = READ_REG(can, &regs->msg.rx_sff.data[1]);
+				msg->data[2] = READ_REG(can, &regs->msg.rx_sff.data[2]);
+				msg->data[3] = READ_REG(can, &regs->msg.rx_sff.data[3]);
+				msg->data[4] = READ_REG(can, &regs->msg.rx_sff.data[4]);
+				msg->data[5] = READ_REG(can, &regs->msg.rx_sff.data[5]);
+				msg->data[6] = READ_REG(can, &regs->msg.rx_sff.data[6]);
+				msg->data[7] = READ_REG(can, &regs->msg.rx_sff.data[7]);
 				*/
 			}
 
 			/* Re-Enable RX buffer for a new message */
-			regs->cmd = PELICAN_CMD_RELRXBUF;
+			WRITE_REG(can, &regs->cmd, PELICAN_CMD_RELRXBUF);
 
 			/* make message available to the user */
 			occan_fifo_put(can->rxfifo);
@@ -1636,7 +1794,8 @@ static void occan_interrupt(occan_priv *can){
 			signal_rx = 1;
 		}
 
-		if ( iflags & PELICAN_IF_TX ){
+		if ( iflags & PELICAN_IF_TX ) {
+
 			/* there is room in tx fifo of HW */
 
 			if ( !occan_fifo_empty(can->txfifo) ){
@@ -1655,6 +1814,9 @@ static void occan_interrupt(occan_priv *can){
 					can->status |= OCCAN_STATUS_QUEUE_ERROR;
 					can->stats.tx_buf_error++;
 				}
+#ifdef OCCAN_TX_IRQ_FLAG_FIXUP
+				can->sending = 1;
+#endif
 
 				/* free software-fifo space taken by sent message */
 				occan_fifo_get(can->txfifo);
@@ -1668,8 +1830,8 @@ static void occan_interrupt(occan_priv *can){
 		}
 
 		if ( iflags & PELICAN_IF_ERRW ){
-			tx_error_cnt = READ_REG(&regs->tx_err_cnt);
-			rx_error_cnt = READ_REG(&regs->rx_err_cnt);
+			tx_error_cnt = READ_REG(can, &regs->tx_err_cnt);
+			rx_error_cnt = READ_REG(can, &regs->rx_err_cnt);
 
 			/* 1. if bus off tx error counter = 127 */
 			if ( (tx_error_cnt > 96) || (rx_error_cnt > 96) ){
@@ -1677,7 +1839,7 @@ static void occan_interrupt(occan_priv *can){
 				can->status |= OCCAN_STATUS_WARN;
 
 				/* check reset bit for reset mode */
-				if ( READ_REG(&regs->mode) & PELICAN_MOD_RESET ){
+				if ( READ_REG(can, &regs->mode) & PELICAN_MOD_RESET ){
 					/* in reset mode ==> bus off */
 					can->status |= OCCAN_STATUS_ERR_BUSOFF | OCCAN_STATUS_RESET;
 
@@ -1685,7 +1847,7 @@ static void occan_interrupt(occan_priv *can){
 					 * turn off interrupts
 					 * enter reset mode (HW already done that for us)
 					 */
-					regs->inten = 0;
+					WRITE_REG(can, &regs->inten,0);
 
 					/* Indicate that we are not started any more.
 					 * This will make write/read return with EBUSY
@@ -1722,8 +1884,8 @@ static void occan_interrupt(occan_priv *can){
 			/* Let the error counters decide what kind of
 			 * interrupt it was. In/Out of EPassive area.
 			 */
-			tx_error_cnt = READ_REG(&regs->tx_err_cnt);
-			rx_error_cnt = READ_REG(&regs->rx_err_cnt);
+			tx_error_cnt = READ_REG(can, &regs->tx_err_cnt);
+			rx_error_cnt = READ_REG(can, &regs->rx_err_cnt);
 
 			if ( (tx_error_cnt > 127) || (rx_error_cnt > 127) ){
 				can->status |= OCCAN_STATUS_ERR_PASSIVE;
@@ -1736,7 +1898,7 @@ static void occan_interrupt(occan_priv *can){
 		}
 
 		if ( iflags & PELICAN_IF_ARB){
-			arbcode = READ_REG(&regs->arbcode);
+			arbcode = READ_REG(can, &regs->arbcode);
 			can->stats.err_arb_bitnum[arbcode & PELICAN_ARB_BITS]++;
 			can->stats.err_arb++;
 			DBG("OCCAN_INT: ARB (0x%x)\n\r",arbcode & PELICAN_ARB_BITS);
@@ -1747,7 +1909,7 @@ static void occan_interrupt(occan_priv *can){
 			 * statistics. Error Register is decoded
 			 * and put into can->stats.
 			 */
-			errcode = READ_REG(&regs->errcode);
+			errcode = READ_REG(can, &regs->errcode);
 			switch( errcode & PELICAN_ECC_CODE ){
 				case PELICAN_ECC_CODE_BIT:
 					can->stats.err_bus_bit++;
@@ -1788,58 +1950,12 @@ static void occan_interrupt(occan_priv *can){
 	}
 }
 
-#ifdef OCCAN_DEFINE_INTHANDLER
-static void occan_interrupt_handler(rtems_vector_number v){
-	int minor;
-
-	/* convert to */
-  for(minor = 0; minor < can_cores; minor++) {
-  	if ( v == (cans[minor].irq+0x10) ) {
-			occan_interrupt(&cans[minor]);
-			return;
-		}
-	}
-}
-#endif
-
-#define OCCAN_DRIVER_TABLE_ENTRY { occan_initialize, occan_open, occan_close, occan_read, occan_write, occan_ioctl }
-
-static rtems_driver_address_table occan_driver = OCCAN_DRIVER_TABLE_ENTRY;
-
-int OCCAN_PREFIX(_register)(struct ambapp_bus *bus);
-
-int OCCAN_PREFIX(_register)(struct ambapp_bus *bus){
-	rtems_status_code r;
-	rtems_device_major_number m;
-
-	amba_bus = bus;
-	if ( !bus )
-		return 1;
-
-  if ((r = rtems_io_register_driver(0, &occan_driver, &m)) == RTEMS_SUCCESSFUL) {
-		DBG("OCCAN driver successfully registered, major: %d\n\r", m);
-	}else{
-		switch(r) {
-			case RTEMS_TOO_MANY:
-				printk("OCCAN rtems_io_register_driver failed: RTEMS_TOO_MANY\n\r"); break;
-			case RTEMS_INVALID_NUMBER:
-				printk("OCCAN rtems_io_register_driver failed: RTEMS_INVALID_NUMBER\n\r"); break;
-			case RTEMS_RESOURCE_IN_USE:
-				printk("OCCAN rtems_io_register_driver failed: RTEMS_RESOURCE_IN_USE\n\r"); break;
-			default:
-				printk("OCCAN rtems_io_register_driver failed\n\r");
-		}
-		return 1;
-	}
-	return 0;
-}
-
-
 /*******************************************************************************
  * FIFO IMPLEMENTATION
  */
 
-static occan_fifo *occan_fifo_create(int cnt){
+static occan_fifo *occan_fifo_create(int cnt)
+{
 	occan_fifo *fifo;
 	fifo = malloc(sizeof(occan_fifo)+cnt*sizeof(CANMsg));
 	if ( fifo ){
@@ -1854,21 +1970,25 @@ static occan_fifo *occan_fifo_create(int cnt){
 	return fifo;
 }
 
-static void occan_fifo_free(occan_fifo *fifo){
+static void occan_fifo_free(occan_fifo *fifo)
+{
 	if ( fifo )
 		free(fifo);
 }
 
-static int occan_fifo_full(occan_fifo *fifo){
+static int occan_fifo_full(occan_fifo *fifo)
+{
 	return fifo->full;
 }
 
-static int occan_fifo_empty(occan_fifo *fifo){
+static int occan_fifo_empty(occan_fifo *fifo)
+{
 	return (!fifo->full) && (fifo->head == fifo->tail);
 }
 
 /* Stage 1 - get buffer to fill (never fails if force!=0) */
-static CANMsg *occan_fifo_put_claim(occan_fifo *fifo, int force){
+static CANMsg *occan_fifo_put_claim(occan_fifo *fifo, int force)
+{
 	if ( !fifo )
 		return NULL;
 
@@ -1886,7 +2006,8 @@ static CANMsg *occan_fifo_put_claim(occan_fifo *fifo, int force){
 }
 
 /* Stage 2 - increment indexes */
-static void occan_fifo_put(occan_fifo *fifo){
+static void occan_fifo_put(occan_fifo *fifo)
+{
 	if ( occan_fifo_full(fifo) )
 		return;
 
@@ -1897,7 +2018,8 @@ static void occan_fifo_put(occan_fifo *fifo){
 		fifo->full = 1;
 }
 
-static CANMsg *occan_fifo_claim_get(occan_fifo *fifo){
+static CANMsg *occan_fifo_claim_get(occan_fifo *fifo)
+{
 	if ( occan_fifo_empty(fifo) )
 		return NULL;
 
@@ -1906,7 +2028,8 @@ static CANMsg *occan_fifo_claim_get(occan_fifo *fifo){
 }
 
 
-static void occan_fifo_get(occan_fifo *fifo){
+static void occan_fifo_get(occan_fifo *fifo)
+{
 	if ( !fifo )
 		return;
 
@@ -1914,14 +2037,16 @@ static void occan_fifo_get(occan_fifo *fifo){
 		return;
 
 	/* increment indexes */
-	fifo->tail = (fifo->tail >= &fifo->base[fifo->cnt-1])? fifo->base : fifo->tail+1;
+	fifo->tail = (fifo->tail >= &fifo->base[fifo->cnt-1]) ?
+	             fifo->base : fifo->tail+1;
 	fifo->full = 0;
 }
 
-static void occan_fifo_clr(occan_fifo *fifo){
-  fifo->full  = 0;
-  fifo->ovcnt = 0;
-  fifo->head  = fifo->tail = fifo->base;
+static void occan_fifo_clr(occan_fifo *fifo)
+{
+	fifo->full  = 0;
+	fifo->ovcnt = 0;
+	fifo->head  = fifo->tail = fifo->base;
 }
 
-/*******************************************************************************/
+/******************************************************************************/

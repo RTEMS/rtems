@@ -7,13 +7,12 @@
  */
 
 /*
- * COPYRIGHT (c) 2007 Gaisler Research
+ * COPYRIGHT (c) 2007 Cobham Gaisler AB
  * with parts from the RTEMS MPC83xx I2C driver (c) 2007 Embedded Brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
- *
  */
 
 #ifndef _I2CMST_H
@@ -55,26 +54,6 @@ typedef struct gr_i2cmst_regs {
 #define GRI2C_STS_IF          0x00000001 /* Interrupt flag */
 
 #define GRI2C_STATUS_IDLE     0x00000000
-
-/* The OC I2C core will perform a write after a start unless the RD bit
-   in the command register has been set. Since the rtems framework has
-   a send_start function we buffer that command and use it when the first
-   data is written. The START is buffered in the sendstart member below */
-typedef struct gr_i2cmst_prv {
-  gr_i2cmst_regs_t    *reg_ptr;
-  unsigned int        sysfreq;     /* System clock frequency in kHz */
-  unsigned char       sendstart;   /* START events are buffered here */
-  /* rtems_irq_number irq_number; */
-  /* rtems_id         irq_sema_id; */
-} gr_i2cmst_prv_t;
-
-typedef struct gr_i2cmst_desc {
-  rtems_libi2c_bus_t  bus_desc;
-  gr_i2cmst_prv_t     prv;
-} gr_i2cmst_desc_t;
-
-/* Scans for I2CMST core and initalizes i2c library */
-rtems_status_code leon_register_i2c(struct ambapp_bus *abus);
 
 #ifdef __cplusplus
 }
