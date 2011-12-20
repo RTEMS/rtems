@@ -45,66 +45,6 @@ $(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
-$(PROJECT_INCLUDE)/rasta.h: include/rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rasta.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rasta.h
-
-$(PROJECT_INCLUDE)/cchip.h: include/cchip.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/cchip.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/cchip.h
-
-$(PROJECT_INCLUDE)/grspw.h: ../../sparc/shared/include/grspw.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw.h
-
-$(PROJECT_INCLUDE)/grspw_pci.h: ../../sparc/shared/include/grspw_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw_pci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw_pci.h
-
-$(PROJECT_INCLUDE)/grspw_rasta.h: ../../sparc/shared/include/grspw_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw_rasta.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw_rasta.h
-
-$(PROJECT_INCLUDE)/occan.h: ../../sparc/shared/include/occan.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/occan.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/occan.h
-
-$(PROJECT_INCLUDE)/occan_pci.h: ../../sparc/shared/include/occan_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/occan_pci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/occan_pci.h
-
-$(PROJECT_INCLUDE)/grcan.h: ../../sparc/shared/include/grcan.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grcan.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/grcan.h
-
-$(PROJECT_INCLUDE)/grcan_rasta.h: ../../sparc/shared/include/grcan_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grcan_rasta.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/grcan_rasta.h
-
-$(PROJECT_INCLUDE)/apbuart.h: ../../sparc/shared/include/apbuart.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart.h
-
-$(PROJECT_INCLUDE)/apbuart_pci.h: ../../sparc/shared/include/apbuart_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart_pci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart_pci.h
-
-$(PROJECT_INCLUDE)/apbuart_rasta.h: ../../sparc/shared/include/apbuart_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart_rasta.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart_rasta.h
-
-$(PROJECT_INCLUDE)/b1553brm.h: ../../sparc/shared/include/b1553brm.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm.h
-
-$(PROJECT_INCLUDE)/b1553brm_pci.h: ../../sparc/shared/include/b1553brm_pci.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm_pci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm_pci.h
-
-$(PROJECT_INCLUDE)/b1553brm_rasta.h: ../../sparc/shared/include/b1553brm_rasta.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm_rasta.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm_rasta.h
-
 $(PROJECT_INCLUDE)/debug_defs.h: ../../sparc/shared/include/debug_defs.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/debug_defs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/debug_defs.h
@@ -168,6 +108,46 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/grlib.h
 $(PROJECT_INCLUDE)/tlib.h: ../../sparc/shared/include/tlib.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tlib.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tlib.h
+
+$(PROJECT_INCLUDE)/grpci2.h: ../../sparc/shared/include/grpci2.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grpci2.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grpci2.h
+
+$(PROJECT_INCLUDE)/gr_701.h: ../../sparc/shared/include/gr_701.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_701.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_701.h
+
+$(PROJECT_INCLUDE)/gr_rasta_adcdac.h: ../../sparc/shared/include/gr_rasta_adcdac.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_rasta_adcdac.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_rasta_adcdac.h
+
+$(PROJECT_INCLUDE)/gr_rasta_io.h: ../../sparc/shared/include/gr_rasta_io.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_rasta_io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_rasta_io.h
+
+$(PROJECT_INCLUDE)/gr_rasta_tmtc.h: ../../sparc/shared/include/gr_rasta_tmtc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_rasta_tmtc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_rasta_tmtc.h
+
+$(PROJECT_INCLUDE)/b1553brm.h: ../../sparc/shared/include/b1553brm.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm.h
+
+$(PROJECT_INCLUDE)/occan.h: ../../sparc/shared/include/occan.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/occan.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/occan.h
+
+$(PROJECT_INCLUDE)/grcan.h: ../../sparc/shared/include/grcan.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grcan.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grcan.h
+
+$(PROJECT_INCLUDE)/grspw.h: ../../sparc/shared/include/grspw.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw.h
+
+$(PROJECT_INCLUDE)/apbuart.h: ../../sparc/shared/include/apbuart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/apbuart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/apbuart.h
 
 $(PROJECT_INCLUDE)/i2cmst.h: ../../sparc/shared/include/i2cmst.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cmst.h

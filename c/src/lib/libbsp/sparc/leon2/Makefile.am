@@ -8,21 +8,6 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
-include_HEADERS += include/rasta.h
-include_HEADERS += include/cchip.h
-include_HEADERS += ../../sparc/shared/include/grspw.h
-include_HEADERS += ../../sparc/shared/include/grspw_pci.h
-include_HEADERS += ../../sparc/shared/include/grspw_rasta.h
-include_HEADERS += ../../sparc/shared/include/occan.h
-include_HEADERS += ../../sparc/shared/include/occan_pci.h
-include_HEADERS += ../../sparc/shared/include/grcan.h
-include_HEADERS += ../../sparc/shared/include/grcan_rasta.h
-include_HEADERS += ../../sparc/shared/include/apbuart.h
-include_HEADERS += ../../sparc/shared/include/apbuart_pci.h
-include_HEADERS += ../../sparc/shared/include/apbuart_rasta.h
-include_HEADERS += ../../sparc/shared/include/b1553brm.h
-include_HEADERS += ../../sparc/shared/include/b1553brm_pci.h
-include_HEADERS += ../../sparc/shared/include/b1553brm_rasta.h
 include_HEADERS += ../../sparc/shared/include/debug_defs.h
 
 nodist_include_HEADERS = include/bspopts.h
@@ -111,30 +96,40 @@ libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
 include_HEADERS += ../../sparc/shared/include/grpci2.h
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2.c
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c
+libbsp_a_SOURCES += ../../sparc/shared/pci/pcif.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_le.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_be.c
 libbsp_a_SOURCES +=  pci/at697_pci.c
 
-# RASTA Kit
-libbsp_a_SOURCES += rasta/rasta.c
-# Companion Chip Kit
-libbsp_a_SOURCES += cchip/cchip.c
+# PCI target devices
+include_HEADERS += ../../sparc/shared/include/gr_701.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_adcdac.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_io.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_tmtc.h
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_701.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_adcdac.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_io.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_spw_router.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_tmtc.c
+
 # B1553BRM
-libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c \
-    ../../sparc/shared/1553/b1553brm_pci.c \
-    ../../sparc/shared/1553/b1553brm_rasta.c
+include_HEADERS += ../../sparc/shared/include/b1553brm.h
+libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c
+
 # CAN
+include_HEADERS += ../../sparc/shared/include/occan.h
+include_HEADERS += ../../sparc/shared/include/grcan.h
 libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
-    ../../sparc/shared/can/occan_pci.c \
-    ../../sparc/shared/can/grcan.c \
-    ../../sparc/shared/can/grcan_rasta.c
+    ../../sparc/shared/can/grcan.c
+
 # SpaceWire
-libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
-    ../../sparc/shared/spw/grspw_pci.c ../../sparc/shared/spw/grspw_rasta.c
+include_HEADERS += ../../sparc/shared/include/grspw.h
+libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c
+
 # UART (RAW)
-libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
-    ../../sparc/shared/uart/apbuart_pci.c \
-    ../../sparc/shared/uart/apbuart_rasta.c
+include_HEADERS += ../../sparc/shared/include/apbuart.h
+libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c
+
 # I2CMST
 include_HEADERS += ../../sparc/shared/include/i2cmst.h
 libbsp_a_SOURCES += ../../sparc/shared/i2c/i2cmst.c

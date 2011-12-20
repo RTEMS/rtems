@@ -109,30 +109,37 @@ libbsp_a_SOURCES +=  ../../sparc/shared/pci/pcif.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_le.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_be.c
 
+# PCI target devices
+include_HEADERS += ../../sparc/shared/include/gr_701.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_adcdac.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_io.h
+include_HEADERS += ../../sparc/shared/include/gr_rasta_tmtc.h
+include_HEADERS += ../../sparc/shared/include/gr_tmtc_1553.h
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_701.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_adcdac.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_io.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_spw_router.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_tmtc.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_tmtc_1553.c
+
 # B1553BRM
-include_HEADERS += ../../sparc/shared/include/b1553brm.h \
-    ../../sparc/shared/include/b1553brm_pci.h
-libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c \
-    ../../sparc/shared/1553/b1553brm_pci.c
+include_HEADERS += ../../sparc/shared/include/b1553brm.h
+libbsp_a_SOURCES += ../../sparc/shared/1553/b1553brm.c
 
 # CAN
 include_HEADERS += ../../sparc/shared/include/occan.h \
-    ../../sparc/shared/include/occan_pci.h ../../sparc/shared/include/grcan.h
+    ../../sparc/shared/include/grcan.h
 libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
-    ../../sparc/shared/can/occan_pci.c  ../../sparc/shared/can/grcan.c
+    ../../sparc/shared/can/grcan.c
 
 # SpaceWire
-include_HEADERS += ../../sparc/shared/include/grspw.h \
-    ../../sparc/shared/include/grspw_pci.h
-libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c \
-    ../../sparc/shared/spw/grspw_pci.c
+include_HEADERS += ../../sparc/shared/include/grspw.h
+libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c
 
 # UART
 include_HEADERS += ../../sparc/shared/include/apbuart.h \
-    ../../sparc/shared/include/apbuart_pci.h \
     ../../sparc/shared/include/apbuart_termios.h
 libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
-    ../../sparc/shared/uart/apbuart_pci.c \
     ../../sparc/shared/uart/apbuart_termios.c
 
 # I2CMST
