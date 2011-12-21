@@ -166,3 +166,7 @@ $(PROJECT_INCLUDE)/drvmgr/leon2_amba_bus.h: ../../sparc/shared/include/drvmgr/le
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/leon2_amba_bus.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/leon2_amba_bus.h
 
+$(PROJECT_INCLUDE)/network_interface_add.h: ../../sparc/shared/include/network_interface_add.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/network_interface_add.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/network_interface_add.h
+endif

@@ -191,6 +191,12 @@ leon_greth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_greth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+# BSP Network configuration
+if HAS_NETWORKING
+include_HEADERS += ../../sparc/shared/include/network_interface_add.h
+libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
+endif
+
 EXTRA_DIST = shmsupp/README
 if HAS_MP
 # shmsupp

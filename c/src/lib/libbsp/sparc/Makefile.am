@@ -83,6 +83,10 @@ EXTRA_DIST += shared/include/b1553brm.h
 EXTRA_DIST += shared/i2c/i2cmst.c
 EXTRA_DIST += shared/include/i2cmst.h
 
+# Network configuration
+EXTRA_DIST += shared/net/network_interface_add.c
+EXTRA_DIST += shared/include/network_interface_add.h
+
 # Driver Manager
 EXTRA_DIST += shared/drvmgr/ambapp_bus.c
 EXTRA_DIST += shared/drvmgr/ambapp_bus_grlib.c

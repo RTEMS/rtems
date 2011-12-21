@@ -166,6 +166,11 @@ leon_open_eth_rel_CPPFLAGS +=  -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
+# BSP Network configuration
+include_HEADERS += ../../sparc/shared/include/network_interface_add.h
+libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
+endif
+
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/access.rel \
     ../../../libcpu/@RTEMS_CPU@/cache.rel \

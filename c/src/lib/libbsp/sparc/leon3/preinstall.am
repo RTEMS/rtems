@@ -193,3 +193,9 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/ambapp_bus_grlib.h
 $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h: ../../sparc/shared/include/drvmgr/ambapp_bus.h $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/ambapp_bus.h
+
+if HAS_NETWORKING
+$(PROJECT_INCLUDE)/network_interface_add.h: ../../sparc/shared/include/network_interface_add.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/network_interface_add.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/network_interface_add.h
+endif
