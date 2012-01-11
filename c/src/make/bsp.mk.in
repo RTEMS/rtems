@@ -1,0 +1,59 @@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+RTEMS_API = @RTEMS_API@
+RTEMS_BSP = @RTEMS_BSP@
+RTEMS_ROOT = @prefix@
+RTEMS_SHARE = $(RTEMS_ROOT)/share/rtems$(RTEMS_API)
+PROJECT_ROOT = @exec_prefix@/@RTEMS_BSP@
+PROJECT_INCLUDE = $(PROJECT_ROOT)/lib/include
+PROJECT_LIB = $(PROJECT_ROOT)/lib
+BUILDDIR = build-$(RTEMS_BSP)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+
+DEPFLAGS = -MT $@ -MD -MP -MF $(basename $@).d
+SYSFLAGS = -B $(PROJECT_LIB) -specs bsp_specs -qrtems
+WARNFLAGS = -Wall -Wextra -Wformat=2 -Wcast-qual -Wconversion -Wno-unused
+OPTFLAGS = $(CFLAGS_OPTIMIZE_V)
+
+CFLAGS = $(DEPFLAGS) $(SYSFLAGS) $(WARNFLAGS) $(CPU_CFLAGS) $(OPTFLAGS)
+CXXFLAGS = $(DEPFLAGS) $(SYSFLAGS) $(WARNFLAGS) $(CPU_CFLAGS) $(OPTFLAGS)
+LINKFLAGS = $(SYSFLAGS) $(CPU_CFLAGS) $(LDFLAGS) $(OPTFLAGS)
+ASFLAGS = $(CPU_CFLAGS)
+
+CCLINK = $(CC) $(LINKFLAGS) -Wl,-Map,$(basename $@).map
+CXXLINK = $(CXX) $(LINKFLAGS) -Wl,-Map,$(basename $@).map
+
+$(BUILDDIR)/%.o: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.S
+	$(CC) $(CPPFLAGS) -DASM $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: %.s
+	$(AS) $(ASFLAGS) $< -o $@
+
+AR = @AR@
+AS = @AS@
+CC = @CC@
+CXX = @CXX@
+LD = @LD@
+NM = @NM@
+OBJCOPY = @OBJCOPY@
+RANLIB = @RANLIB@
+SIZE = @SIZE@
+STRIP = @STRIP@
+export AR
+export AS
+export CC
+export CXX
+export LD
+export NM
+export OBJCOPY
+export RANLIB
+export SIZE
+export STRIP
