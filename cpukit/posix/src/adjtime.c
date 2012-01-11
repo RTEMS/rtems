@@ -40,7 +40,7 @@
  */
 
 int  adjtime(
-  struct timeval *delta,
+  const struct timeval *delta,
   struct timeval *olddelta
 )
 {
