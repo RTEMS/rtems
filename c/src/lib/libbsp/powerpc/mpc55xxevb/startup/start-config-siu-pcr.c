@@ -3,7 +3,7 @@
  *
  * @ingroup mpc55xx
  *
- * @brief MPC55XX SIU PCR configuration.
+ * @brief SIU PCR configuration.
  */
 
 /*
@@ -19,15 +19,15 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id$
+ * $Id: siu-pcr-config.c,v 1.1 2011/08/31 16:03:10 sh Exp $
  */
 
 #include <bsp/mpc55xx-config.h>
 #include <bsp/start.h>
 #include <bsp.h>
 
-const BSP_START_TEXT_SECTION mpc55xx_siu_pcr_config_entry
-mpc55xx_siu_pcr_config [] = {
+BSP_START_TEXT_SECTION const mpc55xx_siu_pcr_config
+  mpc55xx_start_config_siu_pcr [] = {
 #if defined(MPC55XX_BOARD_GWLCFM)
   {  0,16,{.B.PA = 1,           .B.WPE = 0}}, /* PA[ 0..15] analog input */
   { 16, 4,{.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PB[ 0.. 4] LED/CAN_STBN out */
@@ -56,15 +56,15 @@ mpc55xx_siu_pcr_config [] = {
   { 53, 1,{.B.PA = 1,.B.IBE = 1,.B.WPE = 0}}, /* PD[ 5    ] LS_CAN_RX in  */
   { 54, 1,{.B.PA = 1,.B.OBE = 1,.B.WPE = 0}}, /* PD[ 6    ] HS_CAN_TX out */
   { 55, 1,{.B.PA = 1,.B.IBE = 1,.B.WPE = 0}}, /* PD[ 7    ] HS_CAN_RX in  */
-  { 56, 1,{.B.PA = 2,.B.IBE = 1,.B.OBE = 1,.B.WPE = 0}}, 
+  { 56, 1,{.B.PA = 2,.B.IBE = 1,.B.OBE = 1,.B.WPE = 0}},
   /* PD[ 8    ] I2C_SCL in/out */
-  { 57, 1,{.B.PA = 2,.B.IBE = 1,.B.OBE = 1,.B.WPE = 0}}, 
+  { 57, 1,{.B.PA = 2,.B.IBE = 1,.B.OBE = 1,.B.WPE = 0}},
   /* PD[ 9    ] I2C_SDA in/out */
-  
+
   { 58, 1,{.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PD[10] LS_CAN_EN     out*/
-  { 59, 3,{.B.PA = 0,.B.IBE = 1,.B.WPE = 0}}, 
+  { 59, 3,{.B.PA = 0,.B.IBE = 1,.B.WPE = 0}},
   /* PD[11..13] PWO1_OC, MOCO_INT in */
-  
+
   { 62, 4,{.B.PA = 0,.B.IBE = 1,.B.WPE = 0}}, /* PD[14..15] USB_FLGA/B    in */
 
   { 64, 5,{.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PE[ 0.. 4] LED_EXT1-5.   out*/
@@ -99,7 +99,7 @@ mpc55xx_siu_pcr_config [] = {
   {  3, 1,{.B.PA = 1,.B.DSC = 1,.B.WPE=1,.B.WPS=1}}, /* !CS  [3]      */
   {  4,24,{.B.PA = 1,.B.DSC = 1                  }}, /* ADDR [8 : 31] */
   { 28,16,{.B.PA = 1,.B.DSC = 1                  }}, /* DATA [0 : 15] */
-  { 62, 8,{.B.PA = 1,.B.DSC = 1,.B.WPE=1,.B.WPS=1}}, /* RD_!WR, BDIP, 
+  { 62, 8,{.B.PA = 1,.B.DSC = 1,.B.WPE=1,.B.WPS=1}}, /* RD_!WR, BDIP,
 							!WE, !OE, !TS */
   { 89, 2,{.B.PA = 1                             }} /* ESCI_B        */
 #elif defined(MPC55XX_BOARD_MPC5674FEVB)
@@ -110,10 +110,11 @@ mpc55xx_siu_pcr_config [] = {
   { 263, 15, { .B = { .PA = 2, .DSC = 1 } } }, /* D_ADD_DAT16 .. D_ADD_DAT30 */
   { 278, 16, { .B = { .PA = 1, .DSC = 1 } } }, /* D_ADD_DAT0 .. D_ADD_DAT15 */
   { 294,  6, { .B = { .PA = 1, .DSC = 1 } } }, /* D_RD_WR, D_WE0, D_WE1, D_OE, D_TS, D_ALE */
+  { 301,  1, { .B = { .PA = 1, .DSC = 1 } } }, /* D_CS1 */
   { 302,  6, { .B = { .PA = 1, .DSC = 1 } } } /* D_BDIP, D_WE2, D_WE3, D_ADD9 .. D_ADD11 */
 #endif
 };
 
-const BSP_START_TEXT_SECTION size_t mpc55xx_siu_pcr_config_count [] = {
-  sizeof(mpc55xx_siu_pcr_config) / sizeof(mpc55xx_siu_pcr_config [0])
+BSP_START_TEXT_SECTION const size_t mpc55xx_start_config_siu_pcr_count [] = {
+  sizeof(mpc55xx_start_config_siu_pcr) / sizeof(mpc55xx_start_config_siu_pcr [0])
 };

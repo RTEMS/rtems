@@ -58,6 +58,7 @@ typedef enum
   PPC_e300c3  = 0x8085, /* e300c3  core */
   PPC_e200z0  = 0x8170,
   PPC_e200z1  = 0x8140,
+  PPC_e200z4  = 0x8155,
   PPC_e200z6  = 0x8110,
   PPC_e200z7  = 0x8160,
   PPC_PSIM    = 0xfffe,  /* GDB PowerPC simulator -- fake version */

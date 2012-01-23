@@ -77,6 +77,10 @@ $(PROJECT_LIB)/linkcmds.mpc5674fevb_spe: startup/linkcmds.mpc5674fevb_spe $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674fevb_spe
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674fevb_spe
 
+$(PROJECT_LIB)/linkcmds.xkt564levb: startup/linkcmds.xkt564levb $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xkt564levb
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xkt564levb
+
 $(PROJECT_LIB)/linkcmds.phycore_mpc5554: startup/linkcmds.phycore_mpc5554 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.phycore_mpc5554
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.phycore_mpc5554
@@ -100,18 +104,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
-$(PROJECT_INCLUDE)/bsp/mpc55xxevb.h: include/mpc55xxevb.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xxevb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xxevb.h
-
-$(PROJECT_INCLUDE)/bsp/smsc9218i.h: include/smsc9218i.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/smsc9218i.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/smsc9218i.h
-
-$(PROJECT_INCLUDE)/bsp/mpc55xx-config.h: include/mpc55xx-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
 
 $(PROJECT_INCLUDE)/bsp/mpc83xx_i2cdrv.h: ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc83xx_i2cdrv.h
@@ -140,4 +132,28 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/start.h
 $(PROJECT_INCLUDE)/bsp/tictac.h: ../shared/include/tictac.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tictac.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tictac.h
+
+$(PROJECT_INCLUDE)/bsp/mpc55xx-config.h: include/mpc55xx-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
+
+$(PROJECT_INCLUDE)/bsp/mpc55xxevb.h: include/mpc55xxevb.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xxevb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xxevb.h
+
+$(PROJECT_INCLUDE)/bsp/smsc9218i.h: include/smsc9218i.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/smsc9218i.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/smsc9218i.h
+
+$(PROJECT_INCLUDE)/bsp/console-esci.h: include/console-esci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/console-esci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/console-esci.h
+
+$(PROJECT_INCLUDE)/bsp/console-generic.h: include/console-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/console-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/console-generic.h
+
+$(PROJECT_INCLUDE)/bsp/console-linflex.h: include/console-linflex.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/console-linflex.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/console-linflex.h
 

@@ -47,12 +47,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/* Defined in fmpll.S */
-int mpc55xx_get_system_clock(void);
-
-/* Defined in fmpll.S */
-void mpc55xx_system_reset(void);
-
 int mpc55xx_flash_copy(void *dest, const void *src, size_t nbytes);
 int mpc55xx_flash_copy_op(void *rdest, const void *src, size_t nbytes,
   uint32_t opmask, uint32_t *p_fail_addr);

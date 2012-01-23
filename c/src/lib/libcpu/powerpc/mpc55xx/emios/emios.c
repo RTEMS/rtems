@@ -7,28 +7,22 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <mpc55xx/regs.h>
 #include <mpc55xx/emios.h>
-#include <mpc55xx/mpc55xx.h>
 
-#include <bsp/irq.h>
-#include <bsp/utility.h>
-
-#define RTEMS_STATUS_CHECKS_USE_PRINTK
-
-#include <rtems/status-checks.h>
+#ifdef MPC55XX_HAS_EMIOS
 
 /**
  * @brief Initialize the eMIOS module.
@@ -107,3 +101,5 @@ void mpc55xx_emios_set_global_prescaler( unsigned prescaler)
   /* Set MCR */
   EMIOS.MCR.R = mcr.R;
 }
+
+#endif /* MPC55XX_HAS_EMIOS */

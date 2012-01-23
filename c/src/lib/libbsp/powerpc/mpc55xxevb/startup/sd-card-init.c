@@ -28,6 +28,8 @@
 
 #include <rtems/status-checks.h>
 
+#ifdef MPC55XX_BOARD_MPC5566EVB
+
 static rtems_status_code mpc55xx_dspi_init(void)
 {
 	int rv = 0;
@@ -38,10 +40,8 @@ static rtems_status_code mpc55xx_dspi_init(void)
 	rv = rtems_libi2c_initialize();
 	RTEMS_CHECK_RV_SC( rv, "rtems_libi2c_initialize");
 
-#if MPC55XX_CHIP_TYPE / 10 != 551
 	/* DSPI D inputs are taken from DSPI C */
 	SIU.DISR.R = 0x000000FC;
-#endif
 
 	/* DSPI A signals */
 	pcr.B.PA = 1;
@@ -158,3 +158,5 @@ rtems_status_code mpc55xx_sd_card_init( bool mount)
 
 	return RTEMS_SUCCESSFUL;
 }
+
+#endif /* MPC55XX_BOARD_MPC5566EVB */

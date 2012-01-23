@@ -3,7 +3,7 @@
  *
  * @ingroup mpc55xx
  *
- * @brief BSP reset.
+ * @brief Watchdog initialization code.
  */
 
 /*
@@ -18,23 +18,20 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
-#include <stdbool.h>
+#include <bsp.h>
+#include <bsp/start.h>
+#include <bsp/mpc55xx-config.h>
 
-#include <bsp/bootcard.h>
-
-#include <mpc55xx/regs.h>
-
-void bsp_reset(void)
+BSP_START_TEXT_SECTION void mpc55xx_start_watchdog(void)
 {
-  while (true) {
-    #if MPC55XX_CHIP_TYPE / 10 == 564
-      /* TODO */
-    #else
-      SIU.SRCR.R = 1U << (31 - 0);
-    #endif
-  }
+  #ifdef MPC55XX_HAS_SWT
+    /* Write keys to clear soft lock bit */
+    SWT.SR.R = 0x0000c520;
+    SWT.SR.R = 0x0000d928;
+
+    /* Clear watchdog enable (WEN) */
+    SWT.CR.R = 0x8000010A;
+  #endif
 }

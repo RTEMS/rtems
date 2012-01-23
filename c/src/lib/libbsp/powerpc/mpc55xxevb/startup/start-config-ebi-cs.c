@@ -3,7 +3,7 @@
  *
  * @ingroup mpc55xx
  *
- * @brief MPC55XX EBI chip-select configuration.
+ * @brief EBI chip-select configuration.
  */
 
 /*
@@ -19,15 +19,17 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id$
+ * $Id: ebi-cs-config.c,v 1.1 2011/08/31 16:03:09 sh Exp $
  */
 
 #include <bsp/mpc55xx-config.h>
 #include <bsp/start.h>
 #include <bsp.h>
 
-const BSP_START_TEXT_SECTION struct EBI_CS_tag
-mpc55xx_ebi_cs_config [] = {
+#ifdef MPC55XX_HAS_EBI
+
+BSP_START_TEXT_SECTION const struct EBI_CS_tag
+  mpc55xx_start_config_ebi_cs [] = {
 #if defined(MPC55XX_BOARD_GWLCFM)
 	/* CS0: External SRAM (16 bit, 1 wait states, 512kB, no burst) */
 	{
@@ -87,7 +89,7 @@ mpc55xx_ebi_cs_config [] = {
             .B.AD_MUX = 1,
             .B.WEBS = 0,
             .B.TBDIP = 0,
-            .B.BI = 1, 
+            .B.BI = 1,
             .B.V = 1
         },
 
@@ -137,7 +139,7 @@ mpc55xx_ebi_cs_config [] = {
             .B.SCY = 0,
             .B.BSCY = 0
         }
-    }, 
+    },
     { { .R = 0 }, { .R = 0 } },   /* CS1: Unused. */
     { { .R = 0 }, { .R = 0 } },   /* CS2: Unused. */
     {   /* CS3: ethernet? */
@@ -160,6 +162,8 @@ mpc55xx_ebi_cs_config [] = {
 #endif
 };
 
-const BSP_START_TEXT_SECTION size_t mpc55xx_ebi_cs_config_count [] = {
-  sizeof(mpc55xx_ebi_cs_config) / sizeof(mpc55xx_ebi_cs_config [0])
+BSP_START_TEXT_SECTION const size_t mpc55xx_start_config_ebi_cs_count [] = {
+  sizeof(mpc55xx_start_config_ebi_cs) / sizeof(mpc55xx_start_config_ebi_cs [0])
 };
+
+#endif /* MPC55XX_HAS_EBI */

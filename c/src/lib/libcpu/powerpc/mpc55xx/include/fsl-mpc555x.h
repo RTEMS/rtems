@@ -103,6 +103,8 @@
 #ifndef _MPC5554_H_
 #define _MPC5554_H_
 
+#ifndef ASM
+
 #include <stdint.h>
 
 #include <mpc55xx/regs-edma.h>
@@ -3347,6 +3349,7 @@ union EQADC_WRITE_CONFIGURATION_COMMAND_tag {
 #ifdef  __cplusplus
 }
 #endif
+#endif /* ASM */
 #endif                          /* ifdef _MPC5554_H */
 /*********************************************************************
  *

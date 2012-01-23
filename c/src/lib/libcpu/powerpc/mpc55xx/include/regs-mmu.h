@@ -165,6 +165,30 @@ extern "C" {
     } \
   }
 
+#define MPC55XX_MMU_1K 0
+#define MPC55XX_MMU_2K 1
+#define MPC55XX_MMU_4K 2
+#define MPC55XX_MMU_8K 3
+#define MPC55XX_MMU_16K 4
+#define MPC55XX_MMU_32K 5
+#define MPC55XX_MMU_64K 6
+#define MPC55XX_MMU_128K 7
+#define MPC55XX_MMU_256K 8
+#define MPC55XX_MMU_512K 9
+#define MPC55XX_MMU_1M 10
+#define MPC55XX_MMU_2M 11
+#define MPC55XX_MMU_4M 12
+#define MPC55XX_MMU_8M 13
+#define MPC55XX_MMU_16M 14
+#define MPC55XX_MMU_32M 15
+#define MPC55XX_MMU_64M 16
+#define MPC55XX_MMU_128M 17
+#define MPC55XX_MMU_256M 18
+#define MPC55XX_MMU_512M 19
+#define MPC55XX_MMU_1G 20
+#define MPC55XX_MMU_2G 21
+#define MPC55XX_MMU_4G 22
+
 #ifdef  __cplusplus
 }
 #endif /* __cplusplus */

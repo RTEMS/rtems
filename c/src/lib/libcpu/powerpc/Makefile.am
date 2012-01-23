@@ -418,13 +418,13 @@ include_mpc55xx_HEADERS += mpc55xx/include/dspi.h
 include_mpc55xx_HEADERS += mpc55xx/include/edma.h
 include_mpc55xx_HEADERS += mpc55xx/include/emios.h
 include_mpc55xx_HEADERS += mpc55xx/include/mpc55xx.h
-include_mpc55xx_HEADERS += mpc55xx/include/esci.h
 include_mpc55xx_HEADERS += mpc55xx/include/siu.h
 include_mpc55xx_HEADERS += mpc55xx/include/irq.h
 include_mpc55xx_HEADERS += mpc55xx/include/watchdog.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc551x.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc555x.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc556x.h
+include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc564xL.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc567x.h
 include_mpc55xx_HEADERS += mpc55xx/include/regs-edma.h
 include_mpc55xx_HEADERS += mpc55xx/include/regs-mmu.h
@@ -462,11 +462,6 @@ noinst_PROGRAMS += mpc55xx/siu.rel
 mpc55xx_siu_rel_SOURCES = mpc55xx/siu/siu.c
 mpc55xx_siu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-# eSCI
-noinst_PROGRAMS += mpc55xx/esci.rel
-mpc55xx_esci_rel_SOURCES = mpc55xx/esci/esci.c
-mpc55xx_esci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 # DSPI
 noinst_PROGRAMS += mpc55xx/dspi.rel
 mpc55xx_dspi_rel_SOURCES = mpc55xx/dspi/dspi.c
@@ -475,8 +470,6 @@ mpc55xx_dspi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 # Misc
 noinst_PROGRAMS += mpc55xx/misc.rel
 mpc55xx_misc_rel_SOURCES = mpc55xx/misc/copy.S \
-	mpc55xx/misc/fmpll.S \
-	mpc55xx/misc/flash.S \
 	mpc55xx/misc/flash_support.c
 mpc55xx_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

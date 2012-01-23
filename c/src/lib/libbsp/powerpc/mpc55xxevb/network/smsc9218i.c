@@ -22,6 +22,10 @@
  * $Id$
  */
 
+#include <rtems.h>
+
+#ifdef RTEMS_NETWORKING
+
 #define __INSIDE_RTEMS_BSD_TCPIP_STACK__ 1
 #define __BSD_VISIBLE 1
 
@@ -34,7 +38,6 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems_mii_ioctl.h>
 
@@ -1909,3 +1912,5 @@ int smsc9218i_attach_detach(
   /* FIXME: Return value */
   return 0;
 }
+
+#endif /* RTEMS_NETWORKING */

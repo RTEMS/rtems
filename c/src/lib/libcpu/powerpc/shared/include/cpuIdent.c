@@ -53,6 +53,7 @@ const char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_PSIM:		return "PSIM";
     case PPC_e200z0:		return "e200z0";
     case PPC_e200z1:		return "e200z1";
+    case PPC_e200z4:		return "e200z4";
     case PPC_e200z6:		return "e200z6";
     case PPC_e200z7:		return "e200z7";
     case PPC_e500v2:		return "e500v2";
@@ -72,6 +73,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   const uint32_t ppc_cpu_id_version_nibble[] = {
     PPC_e200z0,
     PPC_e200z1,
+    PPC_e200z4,
     PPC_e200z6,
     PPC_e200z7
   };
@@ -122,6 +124,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_8540:
     case PPC_e200z0:
     case PPC_e200z1:
+    case PPC_e200z4:
     case PPC_e200z6:
     case PPC_e200z7:
     case PPC_e300c1:
@@ -182,6 +185,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
   	case PPC_8540:
   	case PPC_e200z0:
   	case PPC_e200z1:
+  	case PPC_e200z4:
   	case PPC_e200z6:
   	case PPC_e200z7:
   	case PPC_e500v2:

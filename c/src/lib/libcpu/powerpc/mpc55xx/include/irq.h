@@ -7,15 +7,17 @@
  */
 
 /*
- * Copyright (c) 2008, 2010
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef LIBBSP_POWERPC_IRQ_H
@@ -109,6 +111,105 @@ extern "C" {
   /* FlexRay */
   #define MPC55XX_IRQ_FLEXRAY_BASE(mod) \
     ((mod) == 0 ? 284U : MPC55XX_IRQ_INVALID)
+#elif MPC55XX_CHIP_TYPE / 10 == 564
+  #define MPC55XX_IRQ_MAX 255U
+
+  /* eDMA */
+  #define MPC55XX_IRQ_EDMA_ERROR(group) \
+    ((group) == 0 ? 10U : MPC55XX_IRQ_INVALID)
+  #define MPC55XX_IRQ_EDMA(ch) \
+    ((unsigned) (ch) < 16U ? 11U + (ch) : MPC55XX_IRQ_INVALID)
+
+  /* SWT */
+  #define MPC55XX_IRQ_SWT_0 28U
+  #define MPC55XX_IRQ_SWT_1 29U
+
+  /* STM */
+  #define MPC55XX_IRQ_STM_CHANNEL(ch) ((ch) + 30U)
+
+  /* ECSM */
+  #define MPC55XX_IRQ_ECSM_FAS 9U
+  #define MPC55XX_IRQ_ECSM_NCE 35U
+  #define MPC55XX_IRQ_ECSM_COR 36U
+
+  /* MC */
+  #define MPC55XX_IRQ_MC_ME_SAFE_MODE 51U
+  #define MPC55XX_IRQ_MC_ME_MODE_TRANSITION 52U
+  #define MPC55XX_IRQ_MC_ME_INVALID_MODE 53U
+  #define MPC55XX_IRQ_MC_ME_INVALID_CONFIG 54U
+  #define MPC55XX_IRQ_MC_RGM_FRAE 56U
+
+  /* XOSC */
+  #define MPC55XX_IRQ_XOSC 57U
+
+  /* PIT */
+  #define MPC55XX_IRQ_PIT_CHANNEL(ch) \
+    ((ch) == 3 ? 127U : ((ch) + 59U))
+
+  /* SIU external interrupts */
+  #define MPC55XX_IRQ_SIU_EXTERNAL_0 41U
+  #define MPC55XX_IRQ_SIU_EXTERNAL_1 42U
+  #define MPC55XX_IRQ_SIU_EXTERNAL_2 43U
+  #define MPC55XX_IRQ_SIU_EXTERNAL_3 44U
+
+  /* ADC */
+  #define MPC55XX_IRQ_ADC_BASE(mod) \
+    ((mod) == 0 ? 62U : \
+      ((mod) == 1 ? 82U : MPC55XX_IRQ_INVALID))
+
+  /* DSPI */
+  #define MPC55XX_IRQ_DSPI_BASE(mod) \
+    ((mod) == 0 ? 74U : \
+      ((mod) == 1 ? 94U : \
+        ((mod) == 2 ? 114U : MPC55XX_IRQ_INVALID)))
+
+  /* FlexCAN */
+  #define MPC55XX_IRQ_CAN_BASE(mod) \
+    ((mod) == 0 ? 65U : \
+      ((mod) == 1 ? 85U : MPC55XX_IRQ_INVALID))
+
+  /* FlexPWM */
+  #define MPC55XX_IRQ_FLEXPWM_BASE(mod) \
+    ((mod) == 0 ? 179U : \
+      ((mod) == 1 ? 233U : MPC55XX_IRQ_INVALID))
+
+  /* FlexRay */
+  #define MPC55XX_IRQ_FLEXRAY_BASE(mod) \
+    ((mod) == 0 ? 131U : MPC55XX_IRQ_INVALID)
+
+  /* LINFlexD */
+  #define MPC55XX_IRQ_LINFLEX_BASE(mod) \
+    ((mod) == 0 ? 79U : \
+      ((mod) == 1 ? 99U : MPC55XX_IRQ_INVALID))
+
+  /* eTimer */
+  #define MPC55XX_IRQ_ETIMER_BASE(mod) \
+    ((mod) == 0 ? 157U : \
+      ((mod) == 1 ? 168U : \
+        ((mod) == 2 ? 222U : MPC55XX_IRQ_INVALID)))
+
+  /* CTU */
+  #define MPC55XX_IRQ_CTU_MRS 193U
+  #define MPC55XX_IRQ_CTU_T(idx) ((idx) + 194U)
+  #define MPC55XX_IRQ_CTU_FIFO(idx) ((idx) + 202U)
+  #define MPC55XX_IRQ_CTU_ADC 206U
+  #define MPC55XX_IRQ_CTU_ERR 207U
+
+  /* SEMA */
+  #define MPC55XX_IRQ_SEMA_0 247U
+  #define MPC55XX_IRQ_SEMA_1 248U
+
+  /* FCCU */
+  #define MPC55XX_IRQ_FCCU_ALRM 250U
+  #define MPC55XX_IRQ_FCCU_CFG_TO 251U
+  #define MPC55XX_IRQ_FCCU_SC_RCC0_F 252U
+  #define MPC55XX_IRQ_FCCU_SC_RCC1_F 253U
+
+  /* PMU */
+  #define MPC55XX_IRQ_PMU 254U
+
+  /* SWG */
+  #define MPC55XX_IRQ_SWG 255U
 #else
   #if MPC55XX_CHIP_TYPE / 10 == 555
     #define MPC55XX_IRQ_MAX 307U
@@ -188,6 +289,22 @@ extern "C" {
 
 #define MPC55XX_IRQ_NUMBER (MPC55XX_IRQ_MAX + 1U)
 
+/* ADC */
+#define MPC55XX_IRQ_ADC_EOC(mod) \
+  (MPC55XX_IRQ_ADC_BASE(mod) + 0U)
+#define MPC55XX_IRQ_ADC_ER(mod) \
+  (MPC55XX_IRQ_ADC_BASE(mod) + 1U)
+#define MPC55XX_IRQ_ADC_WD(mod) \
+  (MPC55XX_IRQ_ADC_BASE(mod) + 2U)
+
+/* eTimer */
+#define MPC55XX_IRQ_ETIMER_TC(mod, ch) \
+  (MPC55XX_IRQ_ETIMER_BASE(mod) + (ch))
+#define MPC55XX_IRQ_ETIMER_WTIF(mod) \
+  (MPC55XX_IRQ_ETIMER_BASE(mod) + 8U)
+#define MPC55XX_IRQ_ETIMER_RCF(mod) \
+  (MPC55XX_IRQ_ETIMER_BASE(mod) + 10U)
+
 /* eTPU */
 #define MPC55XX_IRQ_ETPU(mod) \
   (MPC55XX_IRQ_ETPU_BASE(mod) + 0U)
@@ -219,36 +336,71 @@ extern "C" {
 #define MPC55XX_IRQ_ESCI(mod) (MPC55XX_IRQ_ESCI_BASE(mod) + 0U)
 
 /* FlexCAN */
-#define MPC55XX_IRQ_CAN_BOFF_TWRN_RWRN(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 0U)
-#define MPC55XX_IRQ_CAN_ERR(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 1U)
-#define MPC55XX_IRQ_CAN_BUF_0(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 3U)
-#define MPC55XX_IRQ_CAN_BUF_1(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 4U)
-#define MPC55XX_IRQ_CAN_BUF_2(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 5U)
-#define MPC55XX_IRQ_CAN_BUF_3(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 6U)
-#define MPC55XX_IRQ_CAN_BUF_4(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 7U)
-#define MPC55XX_IRQ_CAN_BUF_5(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 8U)
-#define MPC55XX_IRQ_CAN_BUF_6(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 9U)
-#define MPC55XX_IRQ_CAN_BUF_7(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 10U)
-#define MPC55XX_IRQ_CAN_BUF_8(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 12U)
-#define MPC55XX_IRQ_CAN_BUF_9(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 12U)
-#define MPC55XX_IRQ_CAN_BUF_10(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 13U)
-#define MPC55XX_IRQ_CAN_BUF_11(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 14U)
-#define MPC55XX_IRQ_CAN_BUF_12(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 15U)
-#define MPC55XX_IRQ_CAN_BUF_13(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 16U)
-#define MPC55XX_IRQ_CAN_BUF_14(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 17U)
-#define MPC55XX_IRQ_CAN_BUF_15(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 18U)
-#define MPC55XX_IRQ_CAN_BUF_16_31(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 19U)
-#define MPC55XX_IRQ_CAN_BUF_32_63(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 20U)
+#if MPC55XX_CHIP_TYPE / 10 == 564
+  #define MPC55XX_IRQ_CAN_ERR(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 0U)
+  #define MPC55XX_IRQ_CAN_BOFF_TWRN_RWRN(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 1U)
+  #define MPC55XX_IRQ_CAN_BUF_0_3(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 3U)
+  #define MPC55XX_IRQ_CAN_BUF_4_7(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 4U)
+  #define MPC55XX_IRQ_CAN_BUF_8_11(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 5U)
+  #define MPC55XX_IRQ_CAN_BUF_12_15(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 6U)
+  #define MPC55XX_IRQ_CAN_BUF_16_31(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 7U)
+#else
+  #define MPC55XX_IRQ_CAN_BOFF_TWRN_RWRN(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 0U)
+  #define MPC55XX_IRQ_CAN_ERR(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 1U)
+  #define MPC55XX_IRQ_CAN_BUF_0(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 3U)
+  #define MPC55XX_IRQ_CAN_BUF_1(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 4U)
+  #define MPC55XX_IRQ_CAN_BUF_2(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 5U)
+  #define MPC55XX_IRQ_CAN_BUF_3(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 6U)
+  #define MPC55XX_IRQ_CAN_BUF_4(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 7U)
+  #define MPC55XX_IRQ_CAN_BUF_5(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 8U)
+  #define MPC55XX_IRQ_CAN_BUF_6(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 9U)
+  #define MPC55XX_IRQ_CAN_BUF_7(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 10U)
+  #define MPC55XX_IRQ_CAN_BUF_8(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 12U)
+  #define MPC55XX_IRQ_CAN_BUF_9(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 12U)
+  #define MPC55XX_IRQ_CAN_BUF_10(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 13U)
+  #define MPC55XX_IRQ_CAN_BUF_11(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 14U)
+  #define MPC55XX_IRQ_CAN_BUF_12(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 15U)
+  #define MPC55XX_IRQ_CAN_BUF_13(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 16U)
+  #define MPC55XX_IRQ_CAN_BUF_14(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 17U)
+  #define MPC55XX_IRQ_CAN_BUF_15(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 18U)
+  #define MPC55XX_IRQ_CAN_BUF_16_31(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 19U)
+  #define MPC55XX_IRQ_CAN_BUF_32_63(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 20U)
+#endif
+
+/* FlexPWM */
+#define MPC55XX_IRQ_FLEXPWM_RF(mod, ch) (MPC55XX_IRQ_FLEXPWM_BASE(mod) + 3U * (ch) + 0U)
+#define MPC55XX_IRQ_FLEXPWM_COF(mod, ch) (MPC55XX_IRQ_FLEXPWM_BASE(mod) + 3U * (ch) + 1U)
+#define MPC55XX_IRQ_FLEXPWM_CAF(mod, ch) (MPC55XX_IRQ_FLEXPWM_BASE(mod) + 3U * (ch) + 2U)
+#define MPC55XX_IRQ_FLEXPWM_FFLAG(mod) (MPC55XX_IRQ_FLEXPWM_BASE(mod) + 12U)
+#define MPC55XX_IRQ_FLEXPWM_REF(mod) (MPC55XX_IRQ_FLEXPWM_BASE(mod) + 13U)
 
 /* FlexRay */
-#define MPC55XX_IRQ_FLEXRAY_MIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 0U)
-#define MPC55XX_IRQ_FLEXRAY_PRIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 1U)
-#define MPC55XX_IRQ_FLEXRAY_CHIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 2U)
-#define MPC55XX_IRQ_FLEXRAY_WUP_IF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 3U)
-#define MPC55XX_IRQ_FLEXRAY_FBNE_F(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 4U)
-#define MPC55XX_IRQ_FLEXRAY_FANE_F(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 5U)
-#define MPC55XX_IRQ_FLEXRAY_RBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 6U)
-#define MPC55XX_IRQ_FLEXRAY_TBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 7U)
+#if MPC55XX_CHIP_TYPE / 10 == 564
+  #define MPC55XX_IRQ_FLEXRAY_LRNEIF_DRNEIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 0U)
+  #define MPC55XX_IRQ_FLEXRAY_LRCEIF_DRCEIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 1U)
+  #define MPC55XX_IRQ_FLEXRAY_FAFAIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 2U)
+  #define MPC55XX_IRQ_FLEXRAY_FAFVIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 3U)
+  #define MPC55XX_IRQ_FLEXRAY_WUPIEF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 4U)
+  #define MPC55XX_IRQ_FLEXRAY_PRIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 5U)
+  #define MPC55XX_IRQ_FLEXRAY_CHIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 6U)
+  #define MPC55XX_IRQ_FLEXRAY_TBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 7U)
+  #define MPC55XX_IRQ_FLEXRAY_RBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 8U)
+  #define MPC55XX_IRQ_FLEXRAY_MIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 9U)
+#else
+  #define MPC55XX_IRQ_FLEXRAY_MIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 0U)
+  #define MPC55XX_IRQ_FLEXRAY_PRIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 1U)
+  #define MPC55XX_IRQ_FLEXRAY_CHIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 2U)
+  #define MPC55XX_IRQ_FLEXRAY_WUP_IF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 3U)
+  #define MPC55XX_IRQ_FLEXRAY_FBNE_F(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 4U)
+  #define MPC55XX_IRQ_FLEXRAY_FANE_F(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 5U)
+  #define MPC55XX_IRQ_FLEXRAY_RBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 6U)
+  #define MPC55XX_IRQ_FLEXRAY_TBIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 7U)
+#endif
+
+/* LINFlexD */
+#define MPC55XX_IRQ_LINFLEX_RXI(mod) (MPC55XX_IRQ_LINFLEX_BASE(mod) + 0U)
+#define MPC55XX_IRQ_LINFLEX_TXI(mod) (MPC55XX_IRQ_LINFLEX_BASE(mod) + 1U)
+#define MPC55XX_IRQ_LINFLEX_ERR(mod) (MPC55XX_IRQ_LINFLEX_BASE(mod) + 2U)
 
 /* Checks */
 #define MPC55XX_IRQ_IS_VALID(v) \

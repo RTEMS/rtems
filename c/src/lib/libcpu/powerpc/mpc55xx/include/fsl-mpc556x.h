@@ -70,6 +70,8 @@
 #ifndef _MPC5567_H_
 #define _MPC5567_H_
 
+#ifndef ASM
+
 #include <stdint.h>
 
 #include <mpc55xx/regs-edma.h>
@@ -4527,6 +4529,7 @@ extern "C" {
 #ifdef  __cplusplus
 }
 #endif
+#endif /* ASM */
 #endif                          /* ifdef _MPC5567_H */
 /*********************************************************************
  *

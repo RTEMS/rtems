@@ -747,6 +747,7 @@ mpc55xx_dspi_bus_entry mpc55xx_dspi_bus_table [MPC55XX_DSPI_NUMBER] = {
 		},
 		.idle_char = 0xffffffff,
 		.baud = 0
+#ifdef DSPI_D
 	}, {
 		/* DSPI D */
 		.bus = {
@@ -775,5 +776,6 @@ mpc55xx_dspi_bus_entry mpc55xx_dspi_bus_table [MPC55XX_DSPI_NUMBER] = {
 		},
 		.idle_char = 0xffffffff,
 		.baud = 0
+#endif
 	}
 };

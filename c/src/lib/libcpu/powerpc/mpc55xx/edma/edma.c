@@ -7,15 +7,17 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <mpc55xx/regs.h>
@@ -28,6 +30,8 @@
 #include <bsp/irq.h>
 
 #if MPC55XX_CHIP_TYPE / 10 == 551
+  #define EDMA_CHANNEL_COUNT 16U
+#elif MPC55XX_CHIP_TYPE / 10 == 564
   #define EDMA_CHANNEL_COUNT 16U
 #elif MPC55XX_CHIP_TYPE / 10 == 567
   #define EDMA_CHANNEL_COUNT 96U

@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -22,17 +23,13 @@
 #ifndef LIBCPU_POWERPC_MPC55XX_EMIOS_H
 #define LIBCPU_POWERPC_MPC55XX_EMIOS_H
 
-#include <stdbool.h>
-#include <stdint.h>
-
-#include <rtems.h>
-#include <rtems/chain.h>
-
-#include <bspopts.h>
+#include <mpc55xx/regs.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#ifdef MPC55XX_HAS_EMIOS
 
 /**
  * @name eMIOS - Modes
@@ -190,6 +187,8 @@ void mpc55xx_emios_initialize( unsigned prescaler);
 unsigned mpc55xx_emios_global_prescaler( void);
 
 void mpc55xx_emios_set_global_prescaler( unsigned prescaler);
+
+#endif /* MPC55XX_HAS_EMIOS */
 
 #ifdef __cplusplus
 }

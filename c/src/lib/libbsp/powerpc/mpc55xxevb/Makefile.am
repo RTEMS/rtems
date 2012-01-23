@@ -30,6 +30,7 @@ dist_project_lib_DATA += startup/linkcmds.mpc5566evb
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb_spe
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb_spe
+dist_project_lib_DATA += startup/linkcmds.xkt564levb
 dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
 
 noinst_LIBRARIES += libbsp.a
@@ -41,16 +42,20 @@ include_HEADERS += ../../shared/include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h ../../shared/tod.h \
     ../../shared/include/coverhd.h
-include_bsp_HEADERS = include/mpc55xxevb.h \
-    include/smsc9218i.h \
-    include/mpc55xx-config.h \
-    ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h \
-    ../../shared/include/irq-generic.h \
-    ../../shared/include/irq-info.h \
-    ../../shared/include/utility.h \
-    ../shared/include/linker-symbols.h \
-    ../shared/include/start.h \
-    ../shared/include/tictac.h
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.h
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += ../../shared/include/utility.h
+include_bsp_HEADERS += ../shared/include/linker-symbols.h
+include_bsp_HEADERS += ../shared/include/start.h
+include_bsp_HEADERS += ../shared/include/tictac.h
+include_bsp_HEADERS += include/mpc55xx-config.h
+include_bsp_HEADERS += include/mpc55xxevb.h
+include_bsp_HEADERS += include/smsc9218i.h
+include_bsp_HEADERS += include/console-esci.h
+include_bsp_HEADERS += include/console-generic.h
+include_bsp_HEADERS += include/console-linflex.h
 
 # startup
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -58,24 +63,35 @@ libbsp_a_SOURCES += ../../shared/bspclean.c
 libbsp_a_SOURCES += ../../shared/bsplibc.c
 libbsp_a_SOURCES += ../../shared/bsppost.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
 libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 libbsp_a_SOURCES += ../shared/src/memcpy.c
 libbsp_a_SOURCES += ../shared/src/tictac.c
 libbsp_a_SOURCES += ../shared/startup/bspidle.c
 libbsp_a_SOURCES += startup/bspstart.c
-libbsp_a_SOURCES += startup/fmpll-syncr-vals.c
 libbsp_a_SOURCES += startup/exc-vector-base.S
-libbsp_a_SOURCES += startup/ebi-cs-config.c
-libbsp_a_SOURCES += startup/ebi-cal-cs-config.c
-libbsp_a_SOURCES += startup/mmu-config.c
-libbsp_a_SOURCES += startup/siu-pcr-config.c
-libbsp_a_SOURCES += startup/early-init.c
+libbsp_a_SOURCES += startup/get-system-clock.c
 libbsp_a_SOURCES += startup/reset.c
+libbsp_a_SOURCES += startup/start-config-clock.c
+libbsp_a_SOURCES += startup/start-config-ebi-cs.c
+libbsp_a_SOURCES += startup/start-config-ebi-cs-cal.c
+libbsp_a_SOURCES += startup/start-config-mmu.c
+libbsp_a_SOURCES += startup/start-config-mmu-early.c
+libbsp_a_SOURCES += startup/start-config-siu-pcr.c
+libbsp_a_SOURCES += startup/start-early.c
+libbsp_a_SOURCES += startup/start-cache.S
+libbsp_a_SOURCES += startup/start-clock.c
+libbsp_a_SOURCES += startup/start-flash.S
+libbsp_a_SOURCES += startup/start-watchdog.c
 
 # clock
 libbsp_a_SOURCES += clock/clock-config.c
+
+# console
+libbsp_a_SOURCES += console/console-config.c
+libbsp_a_SOURCES += console/console-esci.c
+libbsp_a_SOURCES += console/console-generic.c
+libbsp_a_SOURCES += console/console-linflex.c
 
 # irq_generic
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
@@ -107,7 +123,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/edma.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/emios.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dspi.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/esci.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel
