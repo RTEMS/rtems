@@ -135,10 +135,25 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
   return _Chain_Head( the_chain );
 }
 
+/** @brief Return pointer to immutable Chain Head
+ *
+ *  This function returns a pointer to the head node on the chain.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the permanent head node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_head(
+  const rtems_chain_control *the_chain
+)
+{
+  return _Chain_Immutable_head( the_chain );
+}
+
 /**
  *  @brief Return pointer to Chain Tail
  *
- *  This function returns a pointer to the last node on the chain.
+ *  This function returns a pointer to the tail node on the chain.
  *
  *  @param[in] the_chain is the chain to be operated upon.
  *
@@ -149,6 +164,21 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
 )
 {
   return _Chain_Tail( the_chain );
+}
+
+/** @brief Return pointer to immutable Chain Tail
+ *
+ *  This function returns a pointer to the tail node on the chain.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the permanent tail node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_tail(
+  const rtems_chain_control *the_chain
+)
+{
+  return _Chain_Immutable_tail( the_chain );
 }
 
 /**
@@ -168,6 +198,22 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
   return _Chain_First( the_chain );
 }
 
+/** @brief Return pointer to immutable Chain's First node
+ *
+ *  This function returns a pointer to the first node on the chain after the
+ *  head.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the first node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_first(
+  const rtems_chain_control *the_chain
+)
+{
+  return _Chain_Immutable_first( the_chain );
+}
+
 /**
  *  @brief Return pointer to Chain's Last node before the permanent tail.
  *
@@ -183,6 +229,22 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
 )
 {
   return _Chain_Last( the_chain );
+}
+
+/** @brief Return pointer to immutable Chain's Last node
+ *
+ *  This function returns a pointer to the last node on the chain just before
+ *  the tail.
+ *
+ *  @param[in] the_chain is the chain to be operated upon.
+ *
+ *  @return This method returns the last node of the chain.
+ */
+RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_last(
+  const rtems_chain_control *the_chain
+)
+{
+  return _Chain_Immutable_last( the_chain );
 }
 
 /**
@@ -201,6 +263,21 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
   return _Chain_Next( the_node );
 }
 
+/** @brief Return pointer the immutable next node from this node
+ *
+ *  This function returns a pointer to the next node after this node.
+ *
+ *  @param[in] the_node is the node to be operated upon.
+ *
+ *  @return This method returns the next node on the chain.
+ */
+RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_next(
+  const rtems_chain_node *the_node
+)
+{
+  return _Chain_Immutable_next( the_node );
+}
+
 /**
  *  @brief Return pointer the previous node from this node
  *
@@ -215,6 +292,21 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_previous(
 )
 {
   return _Chain_Previous( the_node );
+}
+
+/** @brief Return pointer the immutable previous node from this node
+ *
+ *  This function returns a pointer to the previous node on this chain.
+ *
+ *  @param[in] the_node is the node to be operated upon.
+ *
+ *  @return This method returns the previous node on the chain.
+ */
+RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_previous(
+  const rtems_chain_node *the_node
+)
+{
+  return _Chain_Immutable_previous( the_node );
 }
 
 /**
@@ -249,7 +341,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_are_nodes_equal(
  *  false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
-  rtems_chain_control *the_chain
+  const rtems_chain_control *the_chain
 )
 {
   return _Chain_Is_empty( the_chain );
@@ -323,7 +415,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
  *          @a the_chain and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
-  rtems_chain_control    *the_chain,
+  const rtems_chain_control *the_chain,
   const rtems_chain_node *the_node
 )
 {
@@ -340,7 +432,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
  *  @param[in] the_node is the node to check for being the Chain Tail.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
-  rtems_chain_control    *the_chain,
+  const rtems_chain_control *the_chain,
   const rtems_chain_node *the_node
 )
 {
