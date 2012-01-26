@@ -80,6 +80,5 @@ AC_CONFIG_LINKS([leaf.cfg:leaf.cfg])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-bsp.mk
 ])
 AC_OUTPUT
