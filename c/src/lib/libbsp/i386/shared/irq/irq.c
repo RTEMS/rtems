@@ -172,7 +172,7 @@ int BSP_irq_ack_at_i8259s  	(const rtems_irq_number irqLine)
 
 static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
   /*
-   * actual rpiorities for interrupt :
+   * actual priorities for each interrupt source:
    *	0   means that only current interrupt is masked
    *	255 means all other interrupts are masked
    * The second entry has a priority of 255 because
