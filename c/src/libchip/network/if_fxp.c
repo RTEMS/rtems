@@ -586,17 +586,6 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	DBGLVL_PRINTK(3,"fxp_attach: interrupt = 0x%x\n",interrupt);
 	sc->irqInfo.name = (rtems_irq_number)interrupt;
 	/*
-	 * Set up interrupts
-	 */
-	sc->irqInfo.hdl = (rtems_irq_hdl)fxp_intr;
-	sc->irqInfo.on  = nopOn;
-	sc->irqInfo.off = nopOn;
-	sc->irqInfo.isOn = fxpIsOn;
-	s = BSP_install_rtems_irq_handler (&sc->irqInfo);
-	if (!s)
-	  rtems_panic ("Can't attach fxp interrupt handler for irq %d\n",
-		       sc->irqInfo.name);
-	/*
 	 * Reset to a stable state.
 	CSR_WRITE_4(sc, FXP_CSR_PORT, FXP_PORT_SELECTIVE_RESET);
 	 */
@@ -1671,7 +1660,7 @@ fxp_init(void *xsc)
 	struct fxp_cb_config *cbp;
 	struct fxp_cb_ias *cb_ias;
 	struct fxp_cb_tx *txp;
-	int i, prm, s;
+	int i, prm, s, rv;
 
 rtems_task_wake_after(100);
 	DBGLVL_PRINTK(2,"fxp_init called\n");
@@ -1897,7 +1886,20 @@ rtems_task_wake_after(100);
 		 */
 		sc->daemonTid = rtems_bsdnet_newproc ("FXPd", 4096, fxp_daemon, sc);
 
+		/*
+		 * Set up interrupts
+		 */
+		sc->irqInfo.hdl = (rtems_irq_hdl)fxp_intr;
+		sc->irqInfo.on  = nopOn;
+		sc->irqInfo.off = nopOn;
+		sc->irqInfo.isOn = fxpIsOn;
+		rv = BSP_install_rtems_irq_handler (&sc->irqInfo);
+		if (rv != 1) {
+		  rtems_panic ("Can't attach fxp interrupt handler for irq %d\n",
+			       sc->irqInfo.name);
+		}
 	}
+
 	/*
 	 * Enable interrupts.
 	 */
