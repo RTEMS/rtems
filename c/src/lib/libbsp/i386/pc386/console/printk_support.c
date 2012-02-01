@@ -1,19 +1,20 @@
 /*
- *  This file contains a stub for the required printk support.
- *  It is NOT functional!!!
+ * @file
  *
- *  This driver uses the termios pseudo driver.
+ * @ingroup Console
+ *
+ * @brief printk support routines
+ *
+ * This file contains the required printk support.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <rtems.h>
