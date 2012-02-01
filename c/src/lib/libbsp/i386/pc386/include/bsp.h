@@ -134,6 +134,15 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define	TIMER_TICK     1193182  /* The internal tick rate in ticks per second */
 
 /*-------------------------------------------------------------------------+
+| Console Defines
+|      WARNING: These Values MUST match the order in 
+|               Console_Configuration_Ports
++--------------------------------------------------------------------------*/
+#define    BSP_CONSOLE_VGA            0
+#define    BSP_CONSOLE_COM1           1
+#define    BSP_CONSOLE_COM2           2
+
+/*-------------------------------------------------------------------------+
 | Macros
 +--------------------------------------------------------------------------*/
 /* does anyone need this? if so, report it so we can rename this macro */

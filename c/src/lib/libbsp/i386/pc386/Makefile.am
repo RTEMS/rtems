@@ -79,7 +79,7 @@ libbsp_a_SOURCES += console/inch.c console/outch.c \
     console/vgainit.c console/vt.c console/videoAsm.S \
     console/kbd_parser.c console/serial_mouse_config.c \
     ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c \
-    ../../shared/console.c ../../shared/console_select.c \
+    ../../shared/console.c console/console_select.c \
     ../../shared/console_read.c ../../shared/console_write.c \
     console/console_control.c console/conscfg.c console/printk_support.c \
     console/vgacons.c

@@ -22,9 +22,7 @@
 #include <bsp.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
-
-BSP_output_char_function_type     BSP_output_char = _IBMPC_outch;
-BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;
+#include "../../../shared/console_private.h"
 
 rtems_device_minor_number         BSPPrintkPort = 0;
 
@@ -32,26 +30,35 @@ int ns16550_inbyte_nonblocking_polled(
   int minor
 );
 
-void BSP_com_outch(char ch)
+void BSP_outch(char ch);
+int BSP_inch(void);
+
+void BSP_outch(char ch)
 {
-  console_tbl                   *cptr;
+  if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
+    _IBMPC_outch( ch );
+  } else {
+    console_tbl *cptr;
 
-  cptr = &Console_Configuration_Ports[BSPPrintkPort];
-
-  return cptr->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
+    cptr = &Console_Configuration_Ports[BSPPrintkPort];
+    cptr->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
+  }
 }
 
-int BSP_com_inch( void ) 
+int BSP_inch(void) 
 {
   int           result;
-  console_tbl   *cptr;
 
-  cptr = &Console_Configuration_Ports[BSPPrintkPort];
-
-  do {
-    result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
-  } while (result == -1);
-
+  if ( BSPPrintkPort == BSP_CONSOLE_VGA ) {
+    result = BSP_wait_polled_input();
+  } else {
+    do {
+      result = ns16550_inbyte_nonblocking_polled( BSPPrintkPort );
+    } while (result == -1);
+  }
   return result;
 }
+
+BSP_output_char_function_type     BSP_output_char = BSP_outch;
+BSP_polling_getchar_function_type BSP_poll_char = BSP_inch;
 

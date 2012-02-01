@@ -68,7 +68,6 @@ BEGIN_CODE
 	EXTERN (_IBMPC_initVideo)
 	EXTERN (debugPollingGetChar)
 	EXTERN (checkCPUtypeSetCr0)
-	EXTERN (BSP_console_select)
 	EXTERN (printk)
 #ifdef __SSE__
 	EXTERN (x86_capability)
