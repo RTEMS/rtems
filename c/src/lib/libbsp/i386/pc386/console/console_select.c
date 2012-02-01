@@ -4,20 +4,18 @@
  * @ingroup Console
  *
  * @brief Generic libchip console select
+ *
+ * This file contains a routine to select the console based upon a number
+ * of criteria.
  */
 
 /*
- *  This file contains a routine to select the
- *  console based upon a number of criteria.
- *
- *  COPYRIGHT (c) 2011.
+ *  COPYRIGHT (c) 2011-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id: console_select.c,v 1.1 2012/02/01 16:03:14 jennifer Exp $
  */
 
 #include <bsp.h>
@@ -151,7 +149,4 @@ void bsp_console_select(void)
     );
     Console_Port_Minor = bsp_First_Available_Device();
   }
-
-  if (opt != NULL)
-    printk("cmdline==>%s<<==\n", opt);
 }
