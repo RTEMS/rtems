@@ -36,19 +36,17 @@ extern void amba_initialize(void);
  * set_snooping
  *
  * Read the data cache configuration register to determine if
- * bus snooping is available. This is needed for some drivers so
- * that they can select the most efficient copy routines.
- *
+ * bus snooping is available and enabled. This is needed for some
+ * drivers so that they can select the most efficient copy routines.
  */
-
 static inline int set_snooping(void)
 {
   int tmp;
-  asm(" lda [%1] 2, %0 "
+  __asm__ (" lda [%%g0] 2, %0 "
       : "=r"(tmp)
-      : "r"(0xC)
+      :
   );
-  return (tmp >> 27) & 1;
+  return (tmp >> 23) & 1;
 }
 
 /* ASM-function used to get the CPU-Index on calling LEON3 CPUs */
