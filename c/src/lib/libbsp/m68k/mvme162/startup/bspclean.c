@@ -29,12 +29,8 @@ void bsp_return_to_monitor_trap(void)
 {
   page_table_teardown();
 
-  lcsr->intr_ena = 0;               /* disable interrupts */
-#if defined(mvme162lx)
-  m68k_set_vbr(0x00000000);         /* restore 162Bug vectors */
-#else
-  m68k_set_vbr(0xFFE00000);         /* restore 162Bug vectors */
-#endif
+  lcsr->intr_ena = 0;                    /* disable interrupts */
+  m68k_set_vbr(MOT_162BUG_VEC_ADDRESS);  /* restore 162Bug vectors */
 
   __asm__ volatile( "trap   #15"  );    /* trap to 162Bug */
   __asm__ volatile( ".short 0x63" );    /* return to 162Bug (.RETURN) */
