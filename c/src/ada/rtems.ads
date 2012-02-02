@@ -206,8 +206,8 @@ pragma Elaborate_Body (RTEMS);
 
    function Interrupt_Level (
       Level : in     RTEMS.Unsigned32
-   ) return RTEMS.Attribute;
-   pragma Import (C, Interrupt_Level, "rtems_interrupt_level_attribute");
+   ) return RTEMS.Mode;
+   pragma Import (C, Interrupt_Level, "rtems_interrupt_level_body");
 
    Minimum_Stack_Size : RTEMS.Unsigned32;
    pragma Import (C, Minimum_Stack_Size, "rtems_minimum_stack_size");

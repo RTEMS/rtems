@@ -255,7 +255,7 @@ librtems_a_SOURCES += src/dpmemdata.c
 ## WORKSPACE_FILES
 librtems_a_SOURCES += src/workspace.c
 
-librtems_a_SOURCES += src/attr.c
+librtems_a_SOURCES += src/modes.c
 
 librtems_a_SOURCES += src/status.c
 

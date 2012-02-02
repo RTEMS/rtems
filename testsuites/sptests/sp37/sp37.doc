@@ -20,7 +20,7 @@ directives:
   rtems_interrupt_enable (inline/body)
   rtems_interrupt_flash (inline/body)
   RTEMS_INTERRUPT_LEVEL
-  rtems_interrupt_level_attribute
+  rtems_interrupt_level_body
 
 concepts:
 

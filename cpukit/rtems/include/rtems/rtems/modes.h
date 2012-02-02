@@ -96,6 +96,27 @@ typedef uint32_t   Modes_Control;
 #define RTEMS_INTERRUPT_LEVEL( _mode_set ) \
   ( (_mode_set) & RTEMS_INTERRUPT_MASK )
 
+/**
+ *  @brief Interrupt Mask Variable
+ *
+ *  This variable is used by bindings from languages other than C and C++.
+ */
+extern const uint32_t rtems_interrupt_mask;
+
+/**
+ *  @brief Body for RTEMS_INTERRUPT_LEVEL macro.
+ *
+ *  @param[in] level is the desired interrupt level
+ *
+ *  @return This methods returns a mode with the desired interrupt
+ *          @a level in the proper bitfield location.
+ *
+ *  @note This variable is used by bindings from languages other than
+ *        C and C++.
+ */
+Modes_Control rtems_interrupt_level_body(
+  uint32_t   level
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/modes.inl>

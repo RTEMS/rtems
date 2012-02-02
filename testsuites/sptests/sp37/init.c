@@ -1,27 +1,25 @@
-/*
+/**
+ *  @brief Test for Bodies of Macros
+ *
  *  Interrupt Disable/Enable Tests
  *  Clock Tick from task level
- *
- *  COPYRIGHT (c) 1989-2011.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #define CONFIGURE_INIT
 #include "system.h"
-
-/* HACK: API visibilty violation */
-extern rtems_attribute rtems_interrupt_level_attribute(uint32_t level);
 
 /* prototypes */
 void test_interrupt_inline(void);
@@ -48,9 +46,9 @@ rtems_timer_service_routine test_isr_in_progress(
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
-  rtems_attribute level_attribute;
-  rtems_attribute level_attribute_macro;
-  bool            in_isr;
+  rtems_mode            level_mode_body;
+  rtems_mode            level_mode_macro;
+  bool                  in_isr;
 
   puts( "interrupt is in progress (use body)" );
   in_isr = rtems_interrupt_is_in_progress();
@@ -68,10 +66,10 @@ void test_interrupt_inline(void)
   puts( "interrupt enable (use inline)" );
   rtems_interrupt_enable( level );
 
-  puts( "interrupt level attribute (use inline)" );
-  level_attribute = rtems_interrupt_level_attribute( level );
-  level_attribute_macro = RTEMS_INTERRUPT_LEVEL(level);
-  if ( level_attribute_macro == level_attribute ) {
+  puts( "interrupt level mode (use inline)" );
+  level_mode_body = rtems_interrupt_level_body( level );
+  level_mode_macro = RTEMS_INTERRUPT_LEVEL(level);
+  if ( level_mode_macro == level_mode_body ) {
     puts( "test case working.." );
   }
 }
@@ -189,7 +187,8 @@ rtems_task Init(
   rtems_time_of_day     time;
   rtems_status_code     status;
   rtems_interrupt_level level;
-  rtems_attribute level_attribute,level_attribute_macro;
+  rtems_mode            level_mode_body;
+  rtems_mode            level_mode_macro;
   bool                  in_isr;
   rtems_id              timer;
   int                   i;
@@ -296,10 +295,10 @@ rtems_task Init(
   puts( "interrupt enable (use body)" );
   rtems_interrupt_enable( level );
 
-  puts( "interrupt level attribute (use body)" );
-  level_attribute = rtems_interrupt_level_attribute( level );
-  level_attribute_macro = RTEMS_INTERRUPT_LEVEL(level);
-  if ( level_attribute_macro == level_attribute ) {
+  puts( "interrupt level mode (use body)" );
+  level_mode_body = rtems_interrupt_level_body( level );
+  level_mode_macro = RTEMS_INTERRUPT_LEVEL(level);
+  if ( level_mode_macro == level_mode_body ) {
     puts("test seems to work");
   }
 
