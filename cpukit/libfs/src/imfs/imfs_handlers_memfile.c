@@ -33,7 +33,6 @@ const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   IMFS_stat,
   IMFS_fchmod,
   memfile_ftruncate,
-  rtems_filesystem_default_fpathconf,
   IMFS_fdatasync,      /* fsync */
   IMFS_fdatasync,
   rtems_filesystem_default_fcntl,

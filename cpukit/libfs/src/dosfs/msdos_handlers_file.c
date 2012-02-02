@@ -28,7 +28,6 @@ const rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_stat,
     msdos_file_chmod,
     msdos_file_ftruncate,
-    rtems_filesystem_default_fpathconf,
     msdos_file_sync,
     msdos_file_datasync,
     rtems_filesystem_default_fcntl,

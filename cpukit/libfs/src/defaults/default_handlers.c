@@ -31,7 +31,6 @@ const rtems_filesystem_file_handlers_r rtems_filesystem_handlers_default = {
   .fstat_h = rtems_filesystem_default_fstat,
   .fchmod_h = rtems_filesystem_default_fchmod,
   .ftruncate_h = rtems_filesystem_default_ftruncate,
-  .fpathconf_h = rtems_filesystem_default_fpathconf,
   .fsync_h = rtems_filesystem_default_fsync,
   .fdatasync_h = rtems_filesystem_default_fdatasync,
   .fcntl_h = rtems_filesystem_default_fcntl,

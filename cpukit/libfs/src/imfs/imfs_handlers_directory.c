@@ -33,7 +33,6 @@ const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_fstat,
   IMFS_fchmod,
   rtems_filesystem_default_ftruncate,
-  rtems_filesystem_default_fpathconf,
   rtems_filesystem_default_fsync,
   IMFS_fdatasync,
   rtems_filesystem_default_fcntl,

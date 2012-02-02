@@ -50,7 +50,6 @@ rtems_filesystem_file_handlers_r devFS_file_handlers =
     devFS_stat,
     rtems_filesystem_default_fchmod,
     rtems_filesystem_default_ftruncate,
-    rtems_filesystem_default_fpathconf,
     rtems_filesystem_default_fsync,
     rtems_filesystem_default_fdatasync,
     rtems_filesystem_default_fcntl,

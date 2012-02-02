@@ -156,15 +156,6 @@ typedef int (*rtems_filesystem_ftruncate_t)(
 );
 
 /**
- *  This type defines the interface to the fpathconf(2) system call 
- *  support which is provided by a file system implementation.
- */
-typedef int (*rtems_filesystem_fpathconf_t)(
-  rtems_libio_t *iop,
-  int name
-);
-
-/**
  *  This type defines the interface to the fsync(2) system call 
  *  support which is provided by a file system implementation.
  */
@@ -296,17 +287,6 @@ struct _rtems_filesystem_file_handlers_r {
    *  errno to ENOTSUP.
    */
   rtems_filesystem_ftruncate_t    ftruncate_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the fpathconf(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_fpathconf_t    fpathconf_h;
 
   /**
    *  This field points to the file system specific implementation
@@ -444,15 +424,6 @@ int rtems_filesystem_default_fchmod(
 int rtems_filesystem_default_ftruncate(
   rtems_libio_t *iop,
   off_t          length
-);
-
-/**
- *  This method defines the interface to the default fpathconf(2) system call 
- *  support which is provided by a file system implementation.
- */
-int rtems_filesystem_default_fpathconf(
-  rtems_libio_t *iop,
-  int name
 );
 
 /**

@@ -2998,7 +2998,6 @@ struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
 		nfs_fstat,				/* OPTIONAL; may be defaulted */
 		nfs_fchmod,				/* OPTIONAL; may be defaulted */
 		nfs_file_ftruncate,		/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_fpathconf,
 		rtems_filesystem_default_fsync,
 		rtems_filesystem_default_fdatasync,
 		rtems_filesystem_default_fcntl,
@@ -3017,7 +3016,6 @@ struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers = {
 		nfs_fstat,				/* OPTIONAL; may be defaulted */
 		nfs_fchmod,				/* OPTIONAL; may be defaulted */
 		rtems_filesystem_default_ftruncate,
-		rtems_filesystem_default_fpathconf,
 		rtems_filesystem_default_fsync,
 		rtems_filesystem_default_fdatasync,
 		rtems_filesystem_default_fcntl,
@@ -3036,7 +3034,6 @@ struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers = {
 		nfs_fstat,				/* OPTIONAL; may be defaulted */
 		nfs_fchmod,				/* OPTIONAL; may be defaulted */
 		rtems_filesystem_default_ftruncate,
-		rtems_filesystem_default_fpathconf,
 		rtems_filesystem_default_fsync,
 		rtems_filesystem_default_fdatasync,
 		rtems_filesystem_default_fcntl,

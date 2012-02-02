@@ -22,7 +22,7 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_fdatasync.c  src/defaults/default_fstat.c \
     src/defaults/default_ioctl.c src/defaults/default_mount.c \
     src/defaults/default_rename.c src/defaults/default_symlink.c \
-    src/defaults/default_write.c src/defaults/default_fpathconf.c \
+    src/defaults/default_write.c \
     src/defaults/default_unmount.c src/defaults/default_evaluate_link.c \
     src/defaults/default_open.c src/defaults/default_close.c \
     src/defaults/default_fsunmount.c src/defaults/default_mknod.c \
