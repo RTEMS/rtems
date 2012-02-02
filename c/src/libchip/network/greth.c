@@ -82,11 +82,6 @@ extern void ipalign(struct mbuf *m);
  /* event to send when tx buffers become available */
 #define GRETH_TX_WAIT_EVENT  RTEMS_EVENT_3
 
- /* suspend when all TX descriptors exhausted */
- /*
-#define GRETH_SUSPEND_NOTXBUF
- */
-
 #if (MCLBYTES < RBUF_SIZE)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
@@ -118,8 +113,7 @@ struct greth_softc
    greth_regs *regs;
 
    int acceptBroadcast;
-   rtems_id rxDaemonTid;
-   rtems_id txDaemonTid;
+   rtems_id daemonTid;
 
    unsigned int tx_ptr;
    unsigned int tx_dptr;
@@ -132,6 +126,12 @@ struct greth_softc
    struct mbuf **rxmbuf;
    struct mbuf **txmbuf;
    rtems_vector_number vector;
+
+   /* TX descriptor interrupt generation */
+   int tx_int_gen;
+   int tx_int_gen_cur;
+   struct mbuf *next_tx_mbuf;
+   int max_fragsize;
 
    /*Status*/
    struct phy_device_info phydev;
@@ -165,6 +165,9 @@ struct greth_softc
 
 static struct greth_softc greth;
 
+int greth_process_tx_gbit(struct greth_softc *sc);
+int greth_process_tx(struct greth_softc *sc);
+
 static char *almalloc(int sz)
 {
         char *tmp;
@@ -175,33 +178,40 @@ static char *almalloc(int sz)
 
 /* GRETH interrupt handler */
 
-static rtems_isr
+rtems_isr
 greth_interrupt_handler (rtems_vector_number v)
 {
         uint32_t status;
-        /* read and clear interrupt cause */
+        uint32_t ctrl;
+        rtems_event_set events = 0;
 
+        /* read and clear interrupt cause */
         status = greth.regs->status;
         greth.regs->status = status;
+        ctrl = greth.regs->ctrl;
 
         /* Frame received? */
-        if (status & (GRETH_STATUS_RXERR | GRETH_STATUS_RXIRQ))
+        if ((ctrl & GRETH_CTRL_RXIRQ) && (status & (GRETH_STATUS_RXERR | GRETH_STATUS_RXIRQ)))
         {
                 greth.rxInterrupts++;
-                rtems_event_send (greth.rxDaemonTid, INTERRUPT_EVENT);
+                /* Stop RX-Error and RX-Packet interrupts */
+                ctrl &= ~GRETH_CTRL_RXIRQ;
+                events |= INTERRUPT_EVENT;
         }
-#ifdef GRETH_SUSPEND_NOTXBUF
-        if (status & (GRETH_STATUS_TXERR | GRETH_STATUS_TXIRQ))
+        
+        if ( (ctrl & GRETH_CTRL_TXIRQ) && (status & (GRETH_STATUS_TXERR | GRETH_STATUS_TXIRQ)) )
         {
                 greth.txInterrupts++;
-                rtems_event_send (greth.txDaemonTid, GRETH_TX_WAIT_EVENT);
+                ctrl &= ~GRETH_CTRL_TXIRQ;
+                events |= GRETH_TX_WAIT_EVENT;
         }
-#endif
-        /*
-          #ifdef __leon__
-          LEON_Clear_interrupt(v-0x10);
-          #endif
-        */
+        
+        /* Clear interrupt sources */
+        greth.regs->ctrl = ctrl;
+        
+        /* Send the event(s) */
+        if ( events )
+            rtems_event_send (greth.daemonTid, events);
 }
 
 static uint32_t read_mii(uint32_t phy_addr, uint32_t reg_addr)
@@ -228,6 +238,9 @@ static void write_mii(uint32_t phy_addr, uint32_t reg_addr, uint32_t data)
 static void print_init_info(struct greth_softc *sc)
 {
         printf("greth: driver attached\n");
+		if ( sc->auto_neg == -1 ){
+		        printf("Auto negotiation timed out. Selecting default config\n");
+		}
         printf("**** PHY ****\n");
         printf("Vendor: %x   Device: %x   Revision: %d\n",sc->phydev.vendor, sc->phydev.device, sc->phydev.rev);
         printf("Current Operating Mode: ");
@@ -266,7 +279,6 @@ greth_initialize_hardware (struct greth_softc *sc)
     int tmp2;
     unsigned int msecs;
     struct timeval tstart, tnow;
-    int anegtout;
 
     greth_regs *regs;
 
@@ -302,10 +314,6 @@ greth_initialize_hardware (struct greth_softc *sc)
     sc->sp = 0;
     sc->auto_neg = 0;
     sc->auto_neg_time = 0;
-    /* the anegtout variable is needed because print cannot be done before mac has
-       been reconfigured due to a possible deadlock situation if rtems 
-       is run through the edcl with uart polling (-u)*/
-    anegtout = 0;
     if ((phyctrl >> 12) & 1) {
             /*wait for auto negotiation to complete*/
             msecs = 0;
@@ -332,7 +340,7 @@ greth_initialize_hardware (struct greth_softc *sc)
                     msecs = (tnow.tv_sec-tstart.tv_sec)*1000+(tnow.tv_usec-tstart.tv_usec)/1000;
                     if ( msecs > GRETH_AUTONEGO_TIMEOUT_MS ){
                             sc->auto_neg_time = msecs;
-                            anegtout = 1
+                            sc->auto_neg = -1; /* Failed */
                             tmp1 = read_mii(phyaddr, 0);
                             sc->gb = ((phyctrl >> 6) & 1) && !((phyctrl >> 13) & 1);
                             sc->sp = !((phyctrl >> 6) & 1) && ((phyctrl >> 13) & 1);
@@ -381,7 +389,7 @@ auto_neg_done:
     phystatus = read_mii(phyaddr, 1);
 
     /*Read out PHY info if extended registers are available */
-    if (phystatus & 1) {
+    if (phystatus & 1) {  
             tmp1 = read_mii(phyaddr, 2);
             tmp2 = read_mii(phyaddr, 3);
 
@@ -468,28 +476,29 @@ auto_neg_done:
     mac_addr_lsb |= sc->arpcom.ac_enaddr[5];
     regs->mac_addr_lsb = mac_addr_lsb;
 
+    if ( sc->rxbufs < 10 ) {
+        sc->tx_int_gen = sc->tx_int_gen_cur = 1;
+    }else{
+        sc->tx_int_gen = sc->tx_int_gen_cur = sc->txbufs/2;
+    }
+    sc->next_tx_mbuf = NULL;
+    
+    if ( !sc->gbit_mac )
+        sc->max_fragsize = 1;
+
+    /* clear all pending interrupts */
+    regs->status = 0xffffffff;
+    
     /* install interrupt vector */
     set_vector(greth_interrupt_handler, sc->vector, 1);
 
-    /* clear all pending interrupts */
-
-    regs->status = 0xffffffff;
-
-#ifdef GRETH_SUSPEND_NOTXBUF
-    regs->ctrl |= GRETH_CTRL_TXIRQ;
-#endif
-
     regs->ctrl |= GRETH_CTRL_RXEN | (sc->fd << 4) | GRETH_CTRL_RXIRQ | (sc->sp << 7) | (sc->gb << 8);
-    
-    if (anegtout) {
-            printk("Auto negotiation timed out. Selecting default config\n\r");
-    }
-    
+
     print_init_info(sc);
 }
 
-static void
-greth_rxDaemon (void *arg)
+void
+greth_Daemon (void *arg)
 {
     struct ether_header *eh;
     struct greth_softc *dp = (struct greth_softc *) &greth;
@@ -497,16 +506,36 @@ greth_rxDaemon (void *arg)
     struct mbuf *m;
     unsigned int len, len_status, bad;
     rtems_event_set events;
+    rtems_interrupt_level level;
+    int first;
 
     for (;;)
       {
-        rtems_bsdnet_event_receive (INTERRUPT_EVENT,
+        rtems_bsdnet_event_receive (INTERRUPT_EVENT | GRETH_TX_WAIT_EVENT,
                                     RTEMS_WAIT | RTEMS_EVENT_ANY,
                                     RTEMS_NO_TIMEOUT, &events);
+
+        if ( events & GRETH_TX_WAIT_EVENT ){
+            /* TX interrupt.
+             * We only end up here when all TX descriptors has been used,
+             * and 
+             */
+            if ( dp->gbit_mac )
+                greth_process_tx_gbit(dp);
+            else
+                greth_process_tx(dp);
+            
+            /* If we didn't get a RX interrupt we don't process it */
+            if ( (events & INTERRUPT_EVENT) == 0 )
+                continue;
+        }
 
 #ifdef GRETH_ETH_DEBUG
     printf ("r\n");
 #endif
+    first=1;
+    /* Scan for Received packets */
+again:
     while (!((len_status =
 		    dp->rxdesc[dp->rx_ptr].ctrl) & GRETH_RXD_ENABLE))
 	    {
@@ -574,40 +603,50 @@ greth_rxDaemon (void *arg)
                     } else {
                             dp->rxdesc[dp->rx_ptr].ctrl = GRETH_RXD_ENABLE | GRETH_RXD_IRQ;
                     }
+                    rtems_interrupt_disable(level);
                     dp->regs->ctrl |= GRETH_CTRL_RXEN;
+                    rtems_interrupt_enable(level);
                     dp->rx_ptr = (dp->rx_ptr + 1) % dp->rxbufs;
             }
+
+        /* Always scan twice to avoid deadlock */
+        if ( first ){
+            first=0;
+            rtems_interrupt_disable(level);
+            dp->regs->ctrl |= GRETH_CTRL_RXIRQ;
+            rtems_interrupt_enable(level);
+            goto again;
+        }
+
       }
 
 }
 
 static int inside = 0;
-static void
+static int
 sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
     struct greth_softc *dp = ifp->if_softc;
     unsigned char *temp;
     struct mbuf *n;
     unsigned int len;
+    rtems_interrupt_level level;
 
     /*printf("Send packet entered\n");*/
     if (inside) printf ("error: sendpacket re-entered!!\n");
     inside = 1;
-    /*
-     * Waiting for Transmitter ready
-     */
-    n = m;
 
-    while (dp->txdesc[dp->tx_ptr].ctrl & GRETH_TXD_ENABLE)
-      {
-#ifdef GRETH_SUSPEND_NOTXBUF
-        dp->txdesc[dp->tx_ptr].ctrl |= GRETH_TXD_IRQ;
-        rtems_event_set events;
-        rtems_bsdnet_event_receive (GRETH_TX_WAIT_EVENT,
-                                    RTEMS_WAIT | RTEMS_EVENT_ANY,
-                                    TOD_MILLISECONDS_TO_TICKS(500), &events);
-#endif
-      }
+    /*
+     * Is there a free descriptor available?
+     */
+    if ( dp->txdesc[dp->tx_ptr].ctrl & GRETH_TXD_ENABLE ){
+            /* No. */
+            inside = 0;
+            return 1;
+    }
+
+    /* Remember head of chain */
+    n = m;
 
     len = 0;
     temp = (unsigned char *) dp->txdesc[dp->tx_ptr].addr;
@@ -642,179 +681,282 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
                     dp->txdesc[dp->tx_ptr].ctrl =
                             GRETH_TXD_WRAP | GRETH_TXD_ENABLE | len;
             }
-            dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
             dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
+            rtems_interrupt_disable(level);
+            dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
+            rtems_interrupt_enable(level);
+            
     }
     inside = 0;
+    
+    return 0;
 }
 
 
-static void
+int
 sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
 {
         struct greth_softc *dp = ifp->if_softc;
         unsigned int len;
+        
+        unsigned int ctrl;
+        int frags;
+        struct mbuf *mtmp;
+        int int_en;
+        rtems_interrupt_level level;
 
-        /*printf("Send packet entered\n");*/
         if (inside) printf ("error: sendpacket re-entered!!\n");
         inside = 1;
-        /*
-         * Waiting for Transmitter ready
-         */
 
         len = 0;
 #ifdef GRETH_DEBUG
         printf("TXD: 0x%08x\n", (int) m->m_data);
 #endif
+        /* Get number of fragments too see if we have enough
+         * resources.
+         */
+        frags=1;
+        mtmp=m;
+        while(mtmp->m_next){
+            frags++;
+            mtmp = mtmp->m_next;
+        }
+        
+        if ( frags > dp->max_fragsize ) 
+            dp->max_fragsize = frags;
+        
+        if ( frags > dp->txbufs ){
+            inside = 0;
+            printf("GRETH: MBUF-chain cannot be sent. Increase descriptor count.\n");
+            return -1;
+        }
+        
+        if ( frags > (dp->txbufs-dp->tx_cnt) ){
+            inside = 0;
+            /* Return number of fragments */
+            return frags;
+        }
+        
+        
+        /* Enable interrupt from descriptor every tx_int_gen
+         * descriptor. Typically every 16 descriptor. This
+         * is only to reduce the number of interrupts during
+         * heavy load.
+         */
+        dp->tx_int_gen_cur-=frags;
+        if ( dp->tx_int_gen_cur <= 0 ){
+            dp->tx_int_gen_cur = dp->tx_int_gen;
+            int_en = GRETH_TXD_IRQ;
+        }else{
+            int_en = 0;
+        }
+        
+        /* At this stage we know that enough descriptors are available */
         for (;;)
         {
-                while (dp->txdesc[dp->tx_ptr].ctrl & GRETH_TXD_ENABLE)
-                {
-#ifdef GRETH_SUSPEND_NOTXBUF
-                        dp->txdesc[dp->tx_ptr].ctrl |= GRETH_TXD_IRQ;
-                        rtems_event_set events;
-                        rtems_bsdnet_event_receive (GRETH_TX_WAIT_EVENT,
-                                                    RTEMS_WAIT | RTEMS_EVENT_ANY,
-                                                    TOD_MILLISECONDS_TO_TICKS(500), &events);
-#endif
-                }
+                
 #ifdef GRETH_DEBUG
-                int i;
-                printf("MBUF: 0x%08x, Len: %d : ", (int) m->m_data, m->m_len);
-                for (i=0; i<m->m_len; i++)
-                        printf("%x%x", (m->m_data[i] >> 4) & 0x0ff, m->m_data[i] & 0x0ff);
-                printf("\n");
+            int i;
+            printf("MBUF: 0x%08x, Len: %d : ", (int) m->m_data, m->m_len);
+            for (i=0; i<m->m_len; i++)
+                printf("%x%x", (m->m_data[i] >> 4) & 0x0ff, m->m_data[i] & 0x0ff);
+            printf("\n");
 #endif
             len += m->m_len;
             dp->txdesc[dp->tx_ptr].addr = (uint32_t *)m->m_data;
+
+            /* Wrap around? */
             if (dp->tx_ptr < dp->txbufs-1) {
-                    if ((m->m_next) == NULL) {
-                            dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | GRETH_TXD_CS | m->m_len;
-                            break;
-                    } else {
-                            dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | GRETH_TXD_MORE | GRETH_TXD_CS | m->m_len;
-                    }
-            } else {
-                    if ((m->m_next) == NULL) {
-                            dp->txdesc[dp->tx_ptr].ctrl =
-                                    GRETH_TXD_WRAP | GRETH_TXD_ENABLE | GRETH_TXD_CS | m->m_len;
-                            break;
-                    } else {
-                            dp->txdesc[dp->tx_ptr].ctrl =
-                                    GRETH_TXD_WRAP | GRETH_TXD_ENABLE | GRETH_TXD_MORE | GRETH_TXD_CS | m->m_len;
-                    }
+                ctrl = GRETH_TXD_ENABLE | GRETH_TXD_CS;
+            }else{
+                ctrl = GRETH_TXD_ENABLE | GRETH_TXD_CS | GRETH_TXD_WRAP;
             }
+
+            /* Enable Descriptor */
+            if ((m->m_next) == NULL) {
+                dp->txdesc[dp->tx_ptr].ctrl = ctrl | int_en | m->m_len;
+                break;
+            }else{
+                dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_MORE | ctrl | int_en | m->m_len;
+            }
+
+            /* Next */
             dp->txmbuf[dp->tx_ptr] = m;
             dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
             dp->tx_cnt++;
             m = m->m_next;
-
-    }
+        }
         dp->txmbuf[dp->tx_ptr] = m;
-        dp->tx_cnt++;
-        dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
         dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
+        dp->tx_cnt++;
+
+        /* Tell Hardware about newly enabled descriptor */
+        rtems_interrupt_disable(level);
+        dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
+        rtems_interrupt_enable(level);
+
         inside = 0;
+
+        return 0;
 }
 
-/*
- * Driver transmit daemon
- */
-void
-greth_txDaemon (void *arg)
+int greth_process_tx_gbit(struct greth_softc *sc)
 {
-    struct greth_softc *sc = (struct greth_softc *) arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
-    rtems_event_set events;
+    rtems_interrupt_level level;
+    int first=1;
 
-    for (;;)
-    {
+    /*
+     * Send packets till queue is empty
+     */
+    for (;;){
+        /* Reap Sent packets */
+        while((sc->tx_cnt > 0) && !(sc->txdesc[sc->tx_dptr].ctrl) && !(sc->txdesc[sc->tx_dptr].ctrl & GRETH_TXD_ENABLE)) {
+            m_free(sc->txmbuf[sc->tx_dptr]);
+            sc->tx_dptr = (sc->tx_dptr + 1) % sc->txbufs;
+            sc->tx_cnt--;
+        }
+
+        if ( sc->next_tx_mbuf ){
+            /* Get packet we tried but faild to transmit last time */
+            m = sc->next_tx_mbuf;
+            sc->next_tx_mbuf = NULL; /* Mark packet taken */
+        }else{
             /*
-             * Wait for packet
+             * Get the next mbuf chain to transmit from Stack.
              */
-
-            rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
-                                        RTEMS_EVENT_ANY | RTEMS_WAIT,
-                                        RTEMS_NO_TIMEOUT, &events);
-#ifdef GRETH_DEBUG
-            printf ("t\n");
-#endif
-
-            /*
-             * Send packets till queue is empty
-             */
-
-
-            for (;;)
-	    {
-                    /*
-                     * Get the next mbuf chain to transmit.
-                     */
-                    IF_DEQUEUE (&ifp->if_snd, m);
-                    if (!m)
-                            break;
-                    sendpacket(ifp, m);
+            IF_DEQUEUE (&ifp->if_snd, m);
+            if (!m){
+                /* Hardware has sent all schedule packets, this
+                 * makes the stack enter at greth_start next time
+                 * a packet is to be sent.
+                 */
+                ifp->if_flags &= ~IFF_OACTIVE;
+                break;
             }
-            ifp->if_flags &= ~IFF_OACTIVE;
+        }
+
+        /* Are there free descriptors available? */
+        /* Try to send packet, if it a negative number is returned. */
+        if ( (sc->tx_cnt >= sc->txbufs) || sendpacket_gbit(ifp, m) ){
+            /* Not enough resources */
+
+            /* Since we have taken the mbuf out of the "send chain"
+             * we must remember to use that next time we come back.
+             * or else we have dropped a packet.
+             */
+            sc->next_tx_mbuf = m;
+
+            /* Not enough resources, enable interrupt for transmissions
+             * this way we will be informed when more TX-descriptors are 
+             * available.
+             */
+            if ( first ){
+                first = 0;
+                rtems_interrupt_disable(level);
+                ifp->if_flags |= IFF_OACTIVE;
+                sc->regs->ctrl |= GRETH_CTRL_TXIRQ;
+                rtems_interrupt_enable(level);
+
+                /* We must check again to be sure that we didn't 
+                 * miss an interrupt (if a packet was sent just before
+                 * enabling interrupts)
+                 */
+                continue;
+            }
+
+            return -1;
+        }else{
+            /* Sent Ok, proceed to process more packets if available */
+        }
     }
+    return 0;
 }
 
-/*
- * Driver transmit daemon
- */
-void
-greth_txDaemon_gbit (void *arg)
+int greth_process_tx(struct greth_softc *sc)
 {
-    struct greth_softc *sc = (struct greth_softc *) arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
-    rtems_event_set events;
+    rtems_interrupt_level level;
+    int first=1;
 
-    for (;;)
-    {
+    /*
+     * Send packets till queue is empty
+     */
+    for (;;){
+        if ( sc->next_tx_mbuf ){
+            /* Get packet we tried but failed to transmit last time */
+            m = sc->next_tx_mbuf;
+            sc->next_tx_mbuf = NULL; /* Mark packet taken */
+        }else{
             /*
-             * Wait for packet
+             * Get the next mbuf chain to transmit from Stack.
              */
-
-            rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
-                                        RTEMS_EVENT_ANY | RTEMS_WAIT,
-                                        RTEMS_NO_TIMEOUT, &events);
-#ifdef GRETH_DEBUG
-            printf ("t\n");
-#endif
-
-            /*
-             * Send packets till queue is empty
-             */
-            for (;;)
-	    {
-                    while((sc->tx_cnt > 0) && !(sc->txdesc[sc->tx_dptr].ctrl & GRETH_TXD_ENABLE)) {
-                            m_free(sc->txmbuf[sc->tx_dptr]);
-                            sc->tx_dptr = (sc->tx_dptr + 1) % sc->txbufs;
-                            sc->tx_cnt--;
-                    }
-                    /*
-                     * Get the next mbuf chain to transmit.
-                     */
-                    IF_DEQUEUE (&ifp->if_snd, m);
-                    if (!m)
-                            break;
-                    sendpacket_gbit(ifp, m);
+            IF_DEQUEUE (&ifp->if_snd, m);
+            if (!m){
+                /* Hardware has sent all schedule packets, this
+                 * makes the stack enter at greth_start next time
+                 * a packet is to be sent.
+                 */
+                ifp->if_flags &= ~IFF_OACTIVE;
+                break;
             }
-            ifp->if_flags &= ~IFF_OACTIVE;
-    }
-}
+        }
 
+        /* Try to send packet, failed if it a non-zero number is returned. */
+        if ( sendpacket(ifp, m) ){
+            /* Not enough resources */
+
+            /* Since we have taken the mbuf out of the "send chain"
+             * we must remember to use that next time we come back.
+             * or else we have dropped a packet.
+             */
+            sc->next_tx_mbuf = m;
+
+            /* Not enough resources, enable interrupt for transmissions
+             * this way we will be informed when more TX-descriptors are 
+             * available.
+             */
+            if ( first ){
+                first = 0;
+                rtems_interrupt_disable(level);
+                ifp->if_flags |= IFF_OACTIVE;
+                sc->regs->ctrl |= GRETH_CTRL_TXIRQ;
+                rtems_interrupt_enable(level);
+
+                /* We must check again to be sure that we didn't 
+                 * miss an interrupt (if a packet was sent just before
+                 * enabling interrupts)
+                 */
+                continue;
+            }
+
+            return -1;
+        }else{
+            /* Sent Ok, proceed to process more packets if available */
+        }
+    }
+    return 0;
+}
 
 static void
 greth_start (struct ifnet *ifp)
 {
     struct greth_softc *sc = ifp->if_softc;
 
-    ifp->if_flags |= IFF_OACTIVE;
-    rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+    if ( ifp->if_flags & IFF_OACTIVE )
+            return;
 
+    if ( sc->gbit_mac ){
+        /* No use trying to handle this if we are waiting on GRETH
+         * to send the previously scheduled packets.
+         */
+
+        greth_process_tx_gbit(sc);
+    }else{
+        greth_process_tx(sc);
+    }
 }
 
 /*
@@ -826,34 +968,25 @@ greth_init (void *arg)
     struct greth_softc *sc = arg;
     struct ifnet *ifp = &sc->arpcom.ac_if;
 
-    if (sc->txDaemonTid == 0)
-      {
+    if (sc->daemonTid == 0) {
 
-	  /*
-	   * Set up GRETH hardware
-	   */
-          greth_initialize_hardware (sc);
+        /*
+         * Start driver tasks
+         */
+        sc->daemonTid = rtems_bsdnet_newproc ("DCrxtx", 4096,
+                                              greth_Daemon, sc);
 
-	  /*
-	   * Start driver tasks
-	   */
-	  sc->rxDaemonTid = rtems_bsdnet_newproc ("DCrx", 4096,
-						  greth_rxDaemon, sc);
-          if (sc->gbit_mac) {
-                  sc->txDaemonTid = rtems_bsdnet_newproc ("DCtx", 4096,
-                                                          greth_txDaemon_gbit, sc);
-          } else {
-                  sc->txDaemonTid = rtems_bsdnet_newproc ("DCtx", 4096,
-                                                          greth_txDaemon, sc);
-          }
+        /*
+         * Set up GRETH hardware
+         */
+        greth_initialize_hardware (sc);
 
-      }
+    }
 
     /*
      * Tell the world that we're running.
      */
     ifp->if_flags |= IFF_RUNNING;
-
 }
 
 /*
@@ -869,6 +1002,8 @@ greth_stop (struct greth_softc *sc)
     sc->regs->ctrl = 0;		        /* RX/TX OFF */
     sc->regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
     sc->regs->ctrl = 0;	         	/* Reset OFF */
+    
+    sc->next_tx_mbuf = NULL;
 }
 
 
@@ -885,6 +1020,8 @@ greth_stats (struct greth_softc *sc)
   printf ("            Bad CRC:%-8lu", sc->rxBadCRC);
   printf ("         Overrun:%-8lu", sc->rxOverrun);
   printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
+  printf ("      Maximal Frags:%-8d", sc->max_fragsize);
+  printf ("      GBIT MAC:%-8d", sc->gbit_mac);
 }
 
 /*
