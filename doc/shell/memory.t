@@ -1,9 +1,7 @@
 @c
-@c  COPYRIGHT (c) 1988-2008.
+@c  COPYRIGHT (c) 1988-2012.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
 @c
 
 @chapter Memory Commands
@@ -16,6 +14,7 @@ The RTEMS shell has the following memory commands:
 
 @item @code{mdump} - Display contents of memory
 @item @code{wdump} - Display contents of memory (word)
+@item @code{ldump} - Display contents of memory (longword)
 @item @code{medit} - Modify contents of memory
 @item @code{mfill} - File memory with pattern
 @item @code{mmove} - Move contents of memory
@@ -41,13 +40,17 @@ command as well as providing an example usage.
 @subheading SYNOPSYS:
 
 @example
-mdump [address [length]]
+mdump [address [length [size]]]
 @end example
 
 @subheading DESCRIPTION:
 
 This command displays the contents of memory at the @code{address}
-and @code{length} in bytes specified on the command line.  
+and @code{length} in @code{size} byte units specified on the command line.
+
+When @code{size} is not provided, it defaults to @code{1} byte units.
+Values of @code{1}, @code{2}, and @code{4} are valid; all others will
+cause an error to be reported.
 
 When @code{length} is not provided, it defaults to @code{320} which
 is twenty lines of output with sixteen bytes of output per line.
@@ -84,7 +87,7 @@ SHLL [/] $ mdump 0x02001000 32
 @findex CONFIGURE_SHELL_NO_COMMAND_MDUMP
 @findex CONFIGURE_SHELL_COMMAND_MDUMP
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MDUMP} to have this
 command included.
@@ -131,10 +134,12 @@ wdump [address [length]]
 @subheading DESCRIPTION:
 
 This command displays the contents of memory at the @code{address}
-and @code{length} in bytes specified on the command line.  
+and @code{length} in bytes specified on the command line.
+
+This command is equivalent to @code{mdump address length 2}.
 
 When @code{length} is not provided, it defaults to @code{320} which
-is twenty lines of output with sixteen bytes of output per line.
+is twenty lines of output with eight words of output per line.
 
 When @code{address} is not provided, it defaults to @code{0x00000000}.
 
@@ -162,7 +167,7 @@ SHLL [/] $ wdump 0x02010000 32
 @findex CONFIGURE_SHELL_NO_COMMAND_WDUMP
 @findex CONFIGURE_SHELL_COMMAND_WDUMP
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_WDUMP} to have this
 command included.
@@ -190,6 +195,86 @@ following prototype:
 
 @example
 extern rtems_shell_cmd_t rtems_shell_WDUMP_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection ldump - display contents of memory (longword)
+
+@pgindex ldump
+
+@subheading SYNOPSYS:
+
+@example
+ldump [address [length]]
+@end example
+
+@subheading DESCRIPTION:
+
+This command displays the contents of memory at the @code{address}
+and @code{length} in bytes specified on the command line.
+
+This command is equivalent to @code{mdump address length 4}.
+
+When @code{length} is not provided, it defaults to @code{320} which
+is twenty lines of output with four longwords of output per line.
+
+When @code{address} is not provided, it defaults to @code{0x00000000}.
+
+@subheading EXIT STATUS:
+
+This command always returns 0 to indicate success.
+
+@subheading NOTES:
+
+Dumping memory from a non-existent address may result in an unrecoverable
+program fault.
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{ldump}:
+
+@smallexample
+SHLL [/] $ ldump 0x02010000 32
+0x02010000 020108D8 020108C0-020108AC 02010874 ...............t
+0x02010010 020 0894 02010718-02010640 02010798 ...........@....
+@end smallexample
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_LDUMP
+@findex CONFIGURE_SHELL_COMMAND_LDUMP
+
+This command is included in the default shell command set.
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_LDUMP} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_LDUMP} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_ldump
+
+The @code{ldump} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_rtems_main_ldump(
+  int    argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{ldump} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_LDUMP_Command;
 @end example
 
 @c
@@ -240,7 +325,7 @@ SHLL [/] $ mdump 0x02000000 32
 @findex CONFIGURE_SHELL_NO_COMMAND_MEDIT
 @findex CONFIGURE_SHELL_COMMAND_MEDIT
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MEDIT} to have this
 command included.
@@ -303,7 +388,7 @@ space or critical data areas can be fatal as shown in the example.
 @subheading EXAMPLES:
 
 In this example, the address used (@code{0x23d89a0}) as the base
-address of the filled area is the end of the stack for the 
+address of the filled area is the end of the stack for the
 Idle thread.  This address was determined manually using gdb and
 is very specific to this application and BSP.  The first command
 in this example is an @code{mdump} to display the initial contents
@@ -327,7 +412,7 @@ SHLL [/] $ BLOWN STACK!!! Offending task(0x23D4418): id=0x09010001; name=0x0203D
 @findex CONFIGURE_SHELL_NO_COMMAND_MFILL
 @findex CONFIGURE_SHELL_COMMAND_MFILL
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MFILL} to have this
 command included.
@@ -404,7 +489,7 @@ SHLL [/] $ mdump 0x023d99a0 16
 @findex CONFIGURE_SHELL_NO_COMMAND_MMOVE
 @findex CONFIGURE_SHELL_COMMAND_MMOVE
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MMOVE} to have this
 command included.
@@ -473,7 +558,7 @@ be enabled for all of the values to be updated.  The statistics
 available includes the following information:
 
 @itemize @bullet
-@item 
+@item
 @item Currently available memory (in kilobytes)
 @item Currently allocated memory (in kilobytes)
 @item Maximum amount of memory ever allocated (in kilobytes)
@@ -537,7 +622,7 @@ that memory was allocated and freed as a side-effect of the commands.
 @findex CONFIGURE_SHELL_NO_COMMAND_MALLOC
 @findex CONFIGURE_SHELL_COMMAND_MALLOC
 
-This command is included in the default shell command set.  
+This command is included in the default shell command set.
 When building a custom command set, define
 @code{CONFIGURE_SHELL_COMMAND_MALLOC} to have this
 command included.
