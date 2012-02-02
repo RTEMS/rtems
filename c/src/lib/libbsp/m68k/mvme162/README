@@ -11,14 +11,40 @@
 --  $Id$
 --
 
+
 MVME162 Models
 --------------
 
-MVME162 model uses 68040.
+There are three different models of the MVME162 board.  There are many
+variations within each model.
 
-MVME162FX model uses XXX.
+  Model        Variants
+  ---------    --------------------------------------------------
+  MVME162      MVME162-0xx
+  MVME162FX    MVME162-4xx, MVME162-5xx
+  MVME162LX    MVME162-2xx, MVME162-3xx, MVME162-7xx, MVME162-8xx
 
-MVME162LX model uses 68LC040.
+All models use either an MC68040 or MC68LC040 (no FPU) processors.  The
+processor used varies by variant as does the speed, the amount and type
+of memory and the I/O devices (serial, ethernet, SCSI and VME).  See the
+README.models file for details.
+
+
+Configuring the BSP
+-------------------
+The BSP needs to be configured for your specific board.  The following
+files need to be modified.
+
+include/bsp.h
+Change the MOT_162BUG_VEC_ADDRESS define to start of memory for your
+board
+
+make/custom/mvme162.cfg
+If your board has an MC68040 processor
+- change the value of RTEMS_CPU_MODEL
+- remove the -msoft-float flag from CPU_CFLAGS
+
+
 
 MVME162FX and DMA on the IP bus
 -------------------------------

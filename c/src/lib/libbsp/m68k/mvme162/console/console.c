@@ -26,6 +26,14 @@
 
 Ring_buffer_t  Console_Buffer[2];
 
+static bool    Console_Is_Initialized = false;
+
+/* Printk function */
+static void _162Bug_output_char( char c );
+static void _BSP_output_char( char c );
+BSP_output_char_function_type BSP_output_char = _BSP_output_char;
+
+
 /*
  *  Interrupt handler for receiver interrupts
  */
@@ -48,6 +56,44 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
     ZWRITE0(port, 0x30);          /* reset error */
   }
 }
+
+
+/*
+ *  _162Bug_output_char
+ *
+ *  Output a single character using the 162Bug functions.  The character
+ *  will be written to the default output port.
+ */
+
+void _162Bug_output_char( char c )
+{
+  asm volatile( "moveb  %0, -(%%sp)\n\t"   /* char to output */
+                "trap   #15\n\t"           /* Trap to 162Bug */
+                ".short 0x20"              /* Code for .OUTCHR */
+    :: "d" (c) );
+}
+
+
+/*
+ *  _BSP_output_char
+ *
+ *  printk() function prototyped in bspIo.h. Does not use termios.
+ *
+ *  If we have initialized the console device then use it, otherwise
+ *  use the 162Bug routines to send it to the default output port.
+ */
+
+void _BSP_output_char(char c)
+{
+  if (Console_Is_Initialized)
+    putchar(c);
+  else
+    _162Bug_output_char(c);
+
+  if ('\n' == c)
+    _BSP_output_char('\r');
+}
+
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
@@ -117,7 +163,7 @@ bool char_ready(int port, char *ch)
 
   Ring_buffer_Remove_character( &Console_Buffer[port], *ch );
 
-  return false;
+  return true;
 }
 
 /*

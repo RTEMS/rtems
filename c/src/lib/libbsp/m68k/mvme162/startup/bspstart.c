@@ -34,17 +34,7 @@ void bsp_start( void )
   m68k_isr_entry       *monitors_vector_table;
   int                   index;
 
-  /*
-   *  162Bug Vectors are at 0xFFE00000
-   *  162Bug Vectors on LX are at 0x00000000
-   */
-
-#if defined(mvme162lx)
-  monitors_vector_table = (m68k_isr_entry *)0x00000000;
-#else
-  monitors_vector_table = (m68k_isr_entry *)0xFFE00000;
-#endif
-
+  monitors_vector_table = (m68k_isr_entry *)MOT_162BUG_VEC_ADDRESS;
   m68k_set_vbr( monitors_vector_table );
 
   for ( index=2 ; index<=255 ; index++ )

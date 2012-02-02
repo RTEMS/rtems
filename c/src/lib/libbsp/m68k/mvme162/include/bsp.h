@@ -163,6 +163,28 @@ typedef volatile struct {
 #define EXTERN extern
 #endif
 
+
+/*
+ *  This value is the default address location of the 162Bug vector table
+ *  and is also the default start address of the boards DRAM.  This value
+ *  may be different for your specific board based on a number of factors:
+ *
+ *     Default DRAM address:   0x00000000
+ *     Default SRAM address:   0xFFE00000
+ *
+ *  o  If no DRAM can be found by the 162Bug program, it will use SRAM.
+ *  o  The default SRAM address may be different if SRAM mezzanine boards
+ *     are installed on the main board.
+ *  o  Both the DRAM and SRAM addresses can be modified by changing the
+ *     appropriate values in NVRAM using the ENV command at the 162Bug
+ *     prompt.
+ *
+ *  If your board has different values than the defaults, change the value
+ *  of the following define.
+ *
+ */
+#define MOT_162BUG_VEC_ADDRESS  0x00000000
+
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */
