@@ -114,7 +114,7 @@ void Shm_Get_configuration(
   if (LEON3_Cpu_Index == 0) {
     tmp = 0;
     for (i = 1;
-         i < (Configuration.User_multiprocessing_table)->maximum_nodes+1; i++)
+         i < (Configuration.User_multiprocessing_table)->maximum_nodes; i++)
       tmp |= (1 << i);
     LEON3_IrqCtrl_Regs->mpstat = tmp;
   }
