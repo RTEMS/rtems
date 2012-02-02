@@ -2035,6 +2035,13 @@ rtems_initialize_ftpd(void)
 
   ftpd_access = rtems_ftpd_configuration.access;
 
+  ftpd_root = "/";
+  if ( rtems_ftpd_configuration.root &&
+       rtems_ftpd_configuration.root[0] == '/' )
+    ftpd_root = rtems_ftpd_configuration.root;
+
+  rtems_ftpd_configuration.root = ftpd_root;
+
   if (rtems_ftpd_configuration.tasks_count <= 0)
     rtems_ftpd_configuration.tasks_count = 1;
   count = rtems_ftpd_configuration.tasks_count;
@@ -2066,15 +2073,6 @@ rtems_initialize_ftpd(void)
       rtems_status_text(sc));
     return RTEMS_UNSATISFIED;
   }
-
-  ftpd_root = "/";
-  if (
-    rtems_ftpd_configuration.root &&
-    rtems_ftpd_configuration.root[0] == '/'
-  )
-    ftpd_root = rtems_ftpd_configuration.root;
-
-  rtems_ftpd_configuration.root = ftpd_root;
 
   syslog(LOG_INFO, "ftpd: FTP daemon started (%d session%s max)",
     count, ((count > 1) ? "s" : ""));
