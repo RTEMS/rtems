@@ -1,0 +1,233 @@
+MVME162 Models
+==============
+
+There are three different models of the MVME162 board with many variations
+within each model.
+
+  Model        Variants
+  ---------    --------------------------------------------------
+  MVME162      MVME162-0xx
+  MVME162FX    MVME162-4xx, MVME162-5xx
+  MVME162LX    MVME162-2xx, MVME162-3xx, MVME162-7xx, MVME162-8xx
+
+All models use either an MC68040 or MC68LC040 (no FPU) processors.  The
+processor used varies by variant as does the speed, the amount and type
+of memory and the I/O devices (serial, ethernet, SCSI and VME).  See the
+following tables for details.
+
+
+
+MVME162 Variants
+================
+
+Source
+------
+o  MVME162 Embedded Controller User's Manual (MVME162/D2)
+
+
+Common Configuration
+--------------------
+o  One EPROM socket
+o  8Kx8 NVRAM/TOD clock
+o  Two serial ports
+o  1MB Flash memory
+o  Four MVIP Industry Pack interfaces
+o  One or two DRAM/SRAM mezzanine memory boards
+
+
+Model  Processor  Speed  DRAM  SRAM   Other
+-----  ---------  -----  ----  -----  ------------------
+ 001   MC68LC040  25MHz   1MB  512KB
+ 002   MC68040    25MHz   1MB  512KB
+ 003   MC68LC040  25MHz   1MB  512KB  No VMEbus
+ 010   MC68LC040  25MHz   4MB  512KB
+ 011   MC68LC040  25MHz   4MB  512KB  SCSI
+ 012   MC68LC040  25MHz   4MB  512KB  Ethernet
+ 013   MC68LC040  25MHz   4MB  512KB  Ethernet, SCSI
+ 014   MC68LC040  25MHz   4MB    -    Ethernet, No VMEbus
+ 020   MC68040    25MHz   4MB  512KB
+ 021   MC68040    25MHz   4MB  512KB  SCSI
+ 022   MC68040    25MHz   4MB  512KB  Ethernet
+ 023   MC68040    25MHz   4MB  512KB  Ethernet, SCSI
+ 026   MC68040    25MHz   4MB    -    Ethernet, No VMEbus
+ 030   MC68LC040  25MHz   8MB  512KB
+ 031   MC68LC040  25MHz   8MB  512KB  SCSI
+ 032   MC68LC040  25MHz   8MB  512KB  Ethernet
+ 033   MC68LC040  25MHz   8MB  512KB  Ethernet, SCSI
+ 040   MC68040    25MHz   8MB  512KB
+ 041   MC68040    25MHz   8MB  512KB  SCSI
+ 042   MC68040    25MHz   8MB  512KB  Ethernet
+ 043   MC68040    25MHz   8MB  512KB  Ethernet, SCSI
+
+
+Serial Interface Modules
+------------------------
+SIM05  01-W3846B  EIA-232-D  DTE
+SIM06  01-W3865B  EIA-232-D  DCE
+SIM07  01-W3868B  EIA-530    DTE
+SIM08  01-W3867B  EIA-530    DCE
+
+
+DRAM/SRAM Expansion Memory Boards
+---------------------------------
+?
+
+
+
+MVME162FX Variants
+==================
+
+Source
+------
+o  MVME162FX Data Sheet
+o  MVME162FX Embedded Controller Installation and Use (V162FXA/IH3)
+o  MVME162FX Embedded Controller Programmer's Reference Guide (V162FXA/PG1)
+o  MVME162FX 400/500-Series VME Embedded Controller Installation and Use
+     (V162FXA/IH4) Edition of March 2000\Uffffffff
+o  V162FXA/LT2, November 1995
+
+
+Common Configuration
+--------------------
+o  One EPROM socket
+o  8Kx8 NVRAM/TOD clock
+o  Two serial ports
+o  1MB Flash memory with 162Bug installed
+o  512KB SRAM with battery backup
+o  Four IndustryPack interfaces
+o  One or two DRAM/SRAM mezzanine memory boards
+
+
+Uses MC2 Chip, IP2 Chip, 4MB or 12MB mezzanine DRAM board
+
+Model  Processor  Speed  DRAM  Other
+-----  ---------  -----  ----  ------------------
+ 403
+ 410   MC68LC040  25Mhz   4MB
+ 411   MC68LC040  25Mhz   4MB  SCSI
+ 412   MC68LC040  25Mhz   4MB  Ethernet
+ 413   MC68LC040  25Mhz   4MB  Ethernet, SCSI
+ 420   ?
+ 421   ?
+ 422   ?
+ 423   ?
+ 430   MC68LC040  25Mhz   8MB
+ 431   MC68LC040  25Mhz   8MB  SCSI
+ 432   MC68LC040  25Mhz   8MB  Ethernet
+ 433   MC68LC040  25Mhz   8MB  Ethernet, SCSI
+ 440   ?
+ 441   ?
+ 442   ?
+ 443   ?
+ 450   ?
+ 451   ?
+ 452   ?
+ 453   MC68LC040  25Mhz  16MB  Ethernet, SCSI
+ 460   ?
+ 461   ?
+ 462   ?
+ 463   ?
+ 510   MC68040    32MHz   4MB
+ 511   MC68040    32MHz   4MB  SCSI
+ 512   MC68040    32MHz   4MB  Ethernet
+ 513   MC68040    32MHz   4MB  Ethernet, SCSI
+ 520   MC68040    32MHz   8MB
+ 521   MC68040    32MHz   8MB  SCSI
+ 522   MC68040    32MHz   8MB  Ethernet
+ 523   MC68040    32MHz   8MB  Ethernet, SCSI
+ 530   MC68040    32MHz  16MB
+ 531   MC68040    32MHz  16MB  SCSI
+ 532   MC68040    32MHz  16MB  Ethernet
+ 533   MC68040    32MHz  16MB  Ethernet, SCSI
+
+
+Serial Interface Modules
+------------------------
+SIM05  01-W3846B  EIA-232-D    DTE
+SIM06  01-W3865B  EIA-232-D    DCE
+SIM07  01-W3868B  EIA-530      DTE
+SIM08  01-W3867B  EIA-530      DCE
+SIM09  01-W3002F  EIA-485/422  DTE/DCE
+
+
+DRAM/SRAM Expansion Memory Boards
+---------------------------------
+MVME162-502   4MB DRAM
+MVME162-503  12MB DRAM
+?             2MB SRAM
+
+
+
+MVME162LX Variants
+==================
+
+Source
+------
+o  Supplement to MVME162LX Embedded Controller Installation Guide
+    (MVME162LXIG/D1A1) February 1995
+o  MVME162LX Embedded Controller Data Sheet
+o  MVME162LX 200/300 Series Embedded Controller Programmer's Reference
+     Guide (V162LX2-3A/PG2)
+o  MVME162LX 200/300 Series Embedded Controller Installation and Use
+     (V162LX2-3A/IH3)
+o  MVME162LX 700/800 Series Embedded Controller Installation and Use
+     (V162-7A/IH1)
+o  MVME162LX 700/800 Series Embedded Controller Installation and Use
+     (V162-7A/IH2)
+
+
+Common Configuration
+--------------------
+o  One EPROM socket
+o  8Kx8 NVRAM/TOD clock
+o  4 serial ports EIA-232-D DTE (unless otherwise noted)
+o  1MB Flash
+o  2 IP sites (unless otherwise noted)
+
+
+Model  Processor  Speed  DRAM      Other
+-----  ---------  -----  --------  ------------------
+ 200   MC68LC040  25MHz   1MB      No serial(?)
+ 201   MC68LC040  25MHz   1MB
+ 202   MC68LC040  25MHz   1MB
+ 210   MC68LC040  25MHz   4MB
+ 211   MC68LC040  25MHz   4MB      SCSI
+ 212   MC68LC040  25MHz   4MB      Ethernet
+ 213   MC68LC040  25MHz   4MB      Ethernet, SCSI
+ 216   MC68LC040  25MHz   4MB      Ethernet, No VMEbus, No serial(?)
+ 220   MC68040    25MHz   4MB
+ 222   MC68040    25MHz   4MB      Ethernet
+ 223   MC68040    25MHz   4MB      Ethernet, SCSI
+ 233   MC68LC040  25MHz   4MB ECC
+ 233   MC68LC040  25MHz   4MB ECC  Ethernet, SCSI
+ 243   MC68040    25MHz   4MB ECC  Ethernet, SCSI
+ 253   MC68LC040  25MHz  16MB ECC  Ethernet, SCSI
+ 253   MC68LC040  25MHz  16MB ECC  Ethernet, SCSI
+ 262   MC68040    25MHz  16MB ECC  Ethernet
+ 263   MC68040    25MHz  16MB ECC  Ethernet, SCSI
+ 322   MC68LC040  25MHz   8MB ECC  Ethernet
+ 323   MC68LC040  25MHz   8MB ECC  Ethernet, SCSI
+ 333   MC68040    25MHz   8MB ECC  Ethernet, SCSI, No IP sites(?)
+ 353   MC68040    25MHz  32MB ECC  Ethernet, SCSI, 4 IP sites
+ 723   MC68040    32MHz   4MB      Ethernet, SCSI
+ 743   MC68040    32MHz   4MB ECC  Ethernet, SCSI
+ 763   MC68040    32MHz  16MB ECC  Ethernet, SCSI
+ 813   MC68040    32MHz   8MB      Ethernet, SCSI
+ 833   MC68040    32MHz   8MB ECC  Ethernet, SCSI
+ 853   MC68040    32MHz  32MB ECC  Ethernet, SCSI
+ 863   MC68040    32MHz  16MB ECC  Ethernet, SCSI
+
+
+DRAM Expansion Memory Boards
+------------------------------------
+MVME162-202   4MB     (non-stacking)
+MVME162-203  16MB ECC (non-stacking)
+MVME162-204  16MB ECC (stacking)
+MVME162-207   4MB ECC (non-stakcing)
+MVME162-208   4MB ECC (stacking)
+MVME162-209   8MB ECC (non-stacking)
+MVME162-210   8MB ECC (stacking)
+MVME162-211  32MB ECC (non-stacking)
+MVME162-212  32MB ECC (stacking)
+
+
