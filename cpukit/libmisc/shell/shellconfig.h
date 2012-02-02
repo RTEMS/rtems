@@ -5,14 +5,12 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_SHELL_CONFIG_h
@@ -33,6 +31,7 @@ extern rtems_shell_cmd_t rtems_shell_UNSETENV_Command;
 
 extern rtems_shell_cmd_t rtems_shell_MDUMP_Command;
 extern rtems_shell_cmd_t rtems_shell_WDUMP_Command;
+extern rtems_shell_cmd_t rtems_shell_LDUMP_Command;
 extern rtems_shell_cmd_t rtems_shell_MEDIT_Command;
 extern rtems_shell_cmd_t rtems_shell_MFILL_Command;
 extern rtems_shell_cmd_t rtems_shell_MMOVE_Command;
@@ -223,6 +222,11 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_WDUMP)) || \
         defined(CONFIGURE_SHELL_COMMAND_WDUMP)
       &rtems_shell_WDUMP_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_LDUMP)) || \
+        defined(CONFIGURE_SHELL_COMMAND_LDUMP)
+      &rtems_shell_LDUMP_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_MEDIT)) || \
