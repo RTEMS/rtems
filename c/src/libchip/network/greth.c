@@ -266,6 +266,7 @@ greth_initialize_hardware (struct greth_softc *sc)
     int tmp2;
     unsigned int msecs;
     struct timeval tstart, tnow;
+    int anegtout;
 
     greth_regs *regs;
 
@@ -301,6 +302,10 @@ greth_initialize_hardware (struct greth_softc *sc)
     sc->sp = 0;
     sc->auto_neg = 0;
     sc->auto_neg_time = 0;
+    /* the anegtout variable is needed because print cannot be done before mac has
+       been reconfigured due to a possible deadlock situation if rtems 
+       is run through the edcl with uart polling (-u)*/
+    anegtout = 0;
     if ((phyctrl >> 12) & 1) {
             /*wait for auto negotiation to complete*/
             msecs = 0;
@@ -327,7 +332,7 @@ greth_initialize_hardware (struct greth_softc *sc)
                     msecs = (tnow.tv_sec-tstart.tv_sec)*1000+(tnow.tv_usec-tstart.tv_usec)/1000;
                     if ( msecs > GRETH_AUTONEGO_TIMEOUT_MS ){
                             sc->auto_neg_time = msecs;
-                            printk("Auto negotiation timed out. Selecting default config\n\r");
+                            anegtout = 1
                             tmp1 = read_mii(phyaddr, 0);
                             sc->gb = ((phyctrl >> 6) & 1) && !((phyctrl >> 13) & 1);
                             sc->sp = !((phyctrl >> 6) & 1) && ((phyctrl >> 13) & 1);
@@ -475,7 +480,11 @@ auto_neg_done:
 #endif
 
     regs->ctrl |= GRETH_CTRL_RXEN | (sc->fd << 4) | GRETH_CTRL_RXIRQ | (sc->sp << 7) | (sc->gb << 8);
-
+    
+    if (anegtout) {
+            printk("Auto negotiation timed out. Selecting default config\n\r");
+    }
+    
     print_init_info(sc);
 }
 
