@@ -107,7 +107,7 @@ void Shm_Get_configuration(
 
   BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
   BSP_shm_cfgtbl.Intr.address =
-     (vol_u32) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
+     (vol_u32 *) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
   BSP_shm_cfgtbl.Intr.value   = 1 << LEON3_MP_IRQ ;
   BSP_shm_cfgtbl.Intr.length  = 4;
 
