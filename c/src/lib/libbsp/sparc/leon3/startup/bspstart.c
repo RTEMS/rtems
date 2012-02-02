@@ -27,6 +27,9 @@
  */
 int CPU_SPARC_HAS_SNOOPING;
 
+/* Index of CPU, in an AMP system CPU-index may be non-zero */
+int LEON3_Cpu_Index = 0;
+
 extern void amba_initialize(void);
 
 /*
@@ -48,6 +51,14 @@ static inline int set_snooping(void)
   return (tmp >> 27) & 1;
 }
 
+/* ASM-function used to get the CPU-Index on calling LEON3 CPUs */
+static inline unsigned int get_asr17(void)
+{
+  unsigned int reg;
+  __asm__ (" mov %%asr17, %0 " : "=r"(reg) :);
+  return reg;
+}
+
 /*
  *  bsp_start
  *
@@ -56,6 +67,13 @@ static inline int set_snooping(void)
 void bsp_start( void )
 {
   CPU_SPARC_HAS_SNOOPING = set_snooping();
+
+  /* Get the LEON3 CPU index, normally 0, but for MP systems we do 
+   * _not_ assume that this is CPU0. One may run another OS on CPU0
+   * and RTEMS on this CPU, and AMP system with mixed operating
+   * systems
+   */
+  LEON3_Cpu_Index = (get_asr17() >> 28) & 3;
 
   /* Find UARTs */
   amba_initialize();
