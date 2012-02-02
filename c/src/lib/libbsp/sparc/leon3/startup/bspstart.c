@@ -68,7 +68,7 @@ void bsp_start( void )
 {
   CPU_SPARC_HAS_SNOOPING = set_snooping();
 
-  /* Get the LEON3 CPU index, normally 0, but for MP systems we do 
+  /* Get the LEON3 CPU index, normally 0, but for MP systems we do
    * _not_ assume that this is CPU0. One may run another OS on CPU0
    * and RTEMS on this CPU, and AMP system with mixed operating
    * systems
