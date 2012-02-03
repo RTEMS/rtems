@@ -8,8 +8,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -53,7 +51,7 @@ static int rtems_shell_main_medit(
    * Now edit the memory
    */
   n = 0;
-  for (i=2 ; i<=argc ; i++) {
+  for (i=2 ; i<argc ; i++) {
     unsigned char tmpc;
 
     if ( rtems_string_to_unsigned_char(argv[i], &tmpc, NULL, 0) ) {
