@@ -8,8 +8,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -42,7 +40,7 @@ int rtems_shell_main_medit(
   pb = (unsigned char*)rtems_shell_str2int(argv[1]);
   i = 2;
   n = 0;
-  while (i<=argc) {
+  while (i<argc) {
     pb[n++] = rtems_shell_str2int(argv[i++]) % 0x100;
   }
 
