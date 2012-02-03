@@ -55,7 +55,7 @@ int rtems_shell_main_medit(
    * Now edit the memory
    */
   n = 0;
-  for (i=2 ; i<=argc ; i++) {
+  for (i=2 ; i<argc ; i++) {
     unsigned char tmpc;
 
     if ( rtems_string_to_unsigned_char(argv[i], &tmpc, NULL, 0) ) {
