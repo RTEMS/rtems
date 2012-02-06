@@ -58,6 +58,8 @@ extern int rtems_smc91111_driver_attach_leon2(
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH_SMC91111 \
           rtems_smc91111_driver_attach_leon2
 
+#define HAS_SMC91111
+
 /*
  *  The synchronous trap is an arbitrarily chosen software trap.
  */

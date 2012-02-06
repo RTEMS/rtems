@@ -71,6 +71,8 @@ extern int rtems_leon_greth_driver_attach(
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH RTEMS_BSP_NETWORK_DRIVER_ATTACH_GRETH
 #endif
 
+#define HAS_SMC91111
+
 extern int   CPU_SPARC_HAS_SNOOPING;
 
 

@@ -15,11 +15,11 @@
  *
  */
 
-#if defined(__sparc__) || defined(HAS_SMC91111)
+#if defined(HAS_SMC91111)
   #define SMC91111_SUPPORTED
 #endif
 
-#if defined(SMC91111_SUPPORTED)
+#if defined(HAS_SMC91111)
 
 #include <stdlib.h>
 #include <stdio.h>
