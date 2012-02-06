@@ -134,6 +134,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * @{
  */
 
+#if !defined(BSP_INTERRUPT_CUSTOM_VALID_VECTOR)
 /**
  * @brief Returns true if the interrupt vector with number @a vector is valid.
  */
@@ -142,6 +143,7 @@ static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
   return (rtems_vector_number) BSP_INTERRUPT_VECTOR_MIN <= vector
     && vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX;
 }
+#endif
 
 /**
  * @brief Default interrupt handler.

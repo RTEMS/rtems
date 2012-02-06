@@ -72,6 +72,14 @@
   typedef uint8_t bsp_interrupt_handler_index_type;
 #endif
 
+/**
+ * @brief Enable custom vector checking
+ *
+ * If defined the BSP must implement the custom bsp_interrupt_is_valid_vector()
+ * vector validator check routine.
+ */
+#undef BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
 /** @} */
 
 #endif /* LIBBSP_SHARED_IRQ_CONFIG_H */
