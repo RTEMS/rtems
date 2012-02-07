@@ -8,8 +8,7 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 
 RTEMS_CPU = arm
 
-CPU_CFLAGS = -mstructure-size-boundary=8 -march=armv7-m -mthumb \
-	-fno-schedule-insns2 -fno-common
+CPU_CFLAGS = -march=armv7-m -mthumb
 
 CFLAGS_OPTIMIZE_V = -O2 -g
 
