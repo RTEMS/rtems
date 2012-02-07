@@ -18,6 +18,7 @@
 #define RTEMS_SCORE_ARMV7M_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,7 +29,7 @@ typedef struct {
   uint32_t ictr;
   uint32_t actlr;
   uint32_t reserved_1;
-} ARMV7M_Interrupt_type;
+} ARMV7M_ICTAC;
 
 typedef void (*ARMV7M_Exception_handler)(void);
 
@@ -53,9 +54,9 @@ typedef struct {
 #define ARMV7M_SCB_ICSR_PENDSTCLR (1U << 25)
 #define ARMV7M_SCB_ICSR_ISRPREEMPT (1U << 23)
 #define ARMV7M_SCB_ICSR_ISRPENDING (1U << 22)
-#define ARMV7M_SCB_ICSR_VECTPENDING(reg) (((reg) >> 12) & 0x1ffU)
+#define ARMV7M_SCB_ICSR_VECTPENDING_GET(reg) (((reg) >> 12) & 0x1ffU)
 #define ARMV7M_SCB_ICSR_RETTOBASE (1U << 11)
-#define ARMV7M_SCB_ICSR_VECTACTIVE(reg) ((reg) & 0x1ffU)
+#define ARMV7M_SCB_ICSR_VECTACTIVE_GET(reg) ((reg) & 0x1ffU)
   uint32_t icsr;
 
   ARMV7M_Exception_handler *vtor;
@@ -104,19 +105,182 @@ typedef struct {
   uint32_t stir;
 } ARMV7M_NVIC;
 
+typedef struct {
+#define ARMV7M_MPU_TYPE_IREGION_GET(reg) (((reg) >> 16) & 0xffU)
+#define ARMV7M_MPU_TYPE_DREGION_GET(reg) (((reg) >> 8) & 0xffU)
+#define ARMV7M_MPU_TYPE_SEPARATE (1U << 0)
+  uint32_t type;
+
+#define ARMV7M_MPU_CTRL_PRIVDEFENA (1U << 2)
+#define ARMV7M_MPU_CTRL_HFNMIENA (1U << 1)
+#define ARMV7M_MPU_CTRL_ENABLE (1U << 0)
+  uint32_t ctrl;
+
+  uint32_t rnr;
+
+#define ARMV7M_MPU_RBAR_ADDR_SHIFT 5
+#define ARMV7M_MPU_RBAR_ADDR_MASK \
+  ((0x7ffffffU) << ARMV7M_MPU_RBAR_ADDR_SHIFT)
+#define ARMV7M_MPU_RBAR_ADDR(val) \
+  (((val) << ARMV7M_MPU_RBAR_ADDR_SHIFT) & ARMV7M_MPU_RBAR_ADDR_MASK)
+#define ARMV7M_MPU_RBAR_ADDR_GET(reg) \
+  (((val) & ARMV7M_MPU_RBAR_ADDR_MASK) >> ARMV7M_MPU_RBAR_ADDR_SHIFT)
+#define ARMV7M_MPU_RBAR_ADDR_SET(reg, val) \
+  (((reg) & ~ARMV7M_MPU_RBAR_ADDR_MASK) | ARMV7M_MPU_RBAR_ADDR(val))
+#define ARMV7M_MPU_RBAR_VALID (1U << 4)
+#define ARMV7M_MPU_RBAR_REGION_SHIFT 0
+#define ARMV7M_MPU_RBAR_REGION_MASK \
+  ((0xfU) << ARMV7M_MPU_RBAR_REGION_SHIFT)
+#define ARMV7M_MPU_RBAR_REGION(val) \
+  (((val) << ARMV7M_MPU_RBAR_REGION_SHIFT) & ARMV7M_MPU_RBAR_REGION_MASK)
+#define ARMV7M_MPU_RBAR_REGION_GET(reg) \
+  (((val) & ARMV7M_MPU_RBAR_REGION_MASK) >> ARMV7M_MPU_RBAR_REGION_SHIFT)
+#define ARMV7M_MPU_RBAR_REGION_SET(reg, val) \
+  (((reg) & ~ARMV7M_MPU_RBAR_REGION_MASK) | ARMV7M_MPU_RBAR_REGION(val))
+  uint32_t rbar;
+
+#define ARMV7M_MPU_RASR_XN (1U << 28)
+#define ARMV7M_MPU_RASR_AP_SHIFT 24
+#define ARMV7M_MPU_RASR_AP_MASK \
+  ((0x7U) << ARMV7M_MPU_RASR_AP_SHIFT)
+#define ARMV7M_MPU_RASR_AP(val) \
+  (((val) << ARMV7M_MPU_RASR_AP_SHIFT) & ARMV7M_MPU_RASR_AP_MASK)
+#define ARMV7M_MPU_RASR_AP_GET(reg) \
+  (((val) & ARMV7M_MPU_RASR_AP_MASK) >> ARMV7M_MPU_RASR_AP_SHIFT)
+#define ARMV7M_MPU_RASR_AP_SET(reg, val) \
+  (((reg) & ~ARMV7M_MPU_RASR_AP_MASK) | ARMV7M_MPU_RASR_AP(val))
+#define ARMV7M_MPU_RASR_TEX_SHIFT 19
+#define ARMV7M_MPU_RASR_TEX_MASK \
+  ((0x7U) << ARMV7M_MPU_RASR_TEX_SHIFT)
+#define ARMV7M_MPU_RASR_TEX(val) \
+  (((val) << ARMV7M_MPU_RASR_TEX_SHIFT) & ARMV7M_MPU_RASR_TEX_MASK)
+#define ARMV7M_MPU_RASR_TEX_GET(reg) \
+  (((val) & ARMV7M_MPU_RASR_TEX_MASK) >> ARMV7M_MPU_RASR_TEX_SHIFT)
+#define ARMV7M_MPU_RASR_TEX_SET(reg, val) \
+  (((reg) & ~ARMV7M_MPU_RASR_TEX_MASK) | ARMV7M_MPU_RASR_TEX(val))
+#define ARMV7M_MPU_RASR_S (1U << 18)
+#define ARMV7M_MPU_RASR_C (1U << 17)
+#define ARMV7M_MPU_RASR_B (1U << 16)
+#define ARMV7M_MPU_RASR_SRD_SHIFT 8
+#define ARMV7M_MPU_RASR_SRD_MASK \
+  ((0xffU) << ARMV7M_MPU_RASR_SRD_SHIFT)
+#define ARMV7M_MPU_RASR_SRD(val) \
+  (((val) << ARMV7M_MPU_RASR_SRD_SHIFT) & ARMV7M_MPU_RASR_SRD_MASK)
+#define ARMV7M_MPU_RASR_SRD_GET(reg) \
+  (((val) & ARMV7M_MPU_RASR_SRD_MASK) >> ARMV7M_MPU_RASR_SRD_SHIFT)
+#define ARMV7M_MPU_RASR_SRD_SET(reg, val) \
+  (((reg) & ~ARMV7M_MPU_RASR_SRD_MASK) | ARMV7M_MPU_RASR_SRD(val))
+#define ARMV7M_MPU_RASR_SIZE_SHIFT 1
+#define ARMV7M_MPU_RASR_SIZE_MASK \
+  ((0x1fU) << ARMV7M_MPU_RASR_SIZE_SHIFT)
+#define ARMV7M_MPU_RASR_SIZE(val) \
+  (((val) << ARMV7M_MPU_RASR_SIZE_SHIFT) & ARMV7M_MPU_RASR_SIZE_MASK)
+#define ARMV7M_MPU_RASR_SIZE_GET(reg) \
+  (((val) & ARMV7M_MPU_RASR_SIZE_MASK) >> ARMV7M_MPU_RASR_SIZE_SHIFT)
+#define ARMV7M_MPU_RASR_SIZE_SET(reg, val) \
+  (((reg) & ~ARMV7M_MPU_RASR_SIZE_MASK) | ARMV7M_MPU_RASR_SIZE(val))
+#define ARMV7M_MPU_RASR_ENABLE (1U << 0)
+  uint32_t rasr;
+
+  uint32_t rbar_a1;
+  uint32_t rasr_a1;
+  uint32_t rbar_a2;
+  uint32_t rasr_a2;
+  uint32_t rbar_a3;
+  uint32_t rasr_a3;
+} ARMV7M_MPU;
+
+typedef enum {
+  ARMV7M_MPU_AP_PRIV_NO_USER_NO,
+  ARMV7M_MPU_AP_PRIV_RW_USER_NO,
+  ARMV7M_MPU_AP_PRIV_RW_USER_RO,
+  ARMV7M_MPU_AP_PRIV_RW_USER_RW,
+  ARMV7M_MPU_AP_PRIV_RO_USER_NO = 0x5,
+  ARMV7M_MPU_AP_PRIV_RO_USER_RO,
+} ARMV7M_MPU_Access_permissions;
+
+typedef enum {
+  ARMV7M_MPU_ATTR_R = ARMV7M_MPU_RASR_AP(ARMV7M_MPU_AP_PRIV_RO_USER_NO)
+    | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_XN,
+  ARMV7M_MPU_ATTR_RW = ARMV7M_MPU_RASR_AP(ARMV7M_MPU_AP_PRIV_RW_USER_NO)
+    | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_XN | ARMV7M_MPU_RASR_B,
+  ARMV7M_MPU_ATTR_RWX = ARMV7M_MPU_RASR_AP(ARMV7M_MPU_AP_PRIV_RW_USER_NO)
+    | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B,
+  ARMV7M_MPU_ATTR_X = ARMV7M_MPU_RASR_AP(ARMV7M_MPU_AP_PRIV_NO_USER_NO)
+    | ARMV7M_MPU_RASR_C,
+  ARMV7M_MPU_ATTR_RX = ARMV7M_MPU_RASR_AP(ARMV7M_MPU_AP_PRIV_RO_USER_NO)
+    | ARMV7M_MPU_RASR_C,
+  ARMV7M_MPU_ATTR_IO = ARMV7M_MPU_RASR_AP(ARMV7M_MPU_AP_PRIV_RW_USER_NO)
+    | ARMV7M_MPU_RASR_XN,
+} ARMV7M_MPU_Attributes;
+
+typedef enum {
+  ARMV7M_MPU_SIZE_32_B = 0x4,
+  ARMV7M_MPU_SIZE_64_B,
+  ARMV7M_MPU_SIZE_128_B,
+  ARMV7M_MPU_SIZE_256_B,
+  ARMV7M_MPU_SIZE_512_B,
+  ARMV7M_MPU_SIZE_1_KB,
+  ARMV7M_MPU_SIZE_2_KB,
+  ARMV7M_MPU_SIZE_4_KB,
+  ARMV7M_MPU_SIZE_8_KB,
+  ARMV7M_MPU_SIZE_16_KB,
+  ARMV7M_MPU_SIZE_32_KB,
+  ARMV7M_MPU_SIZE_64_KB,
+  ARMV7M_MPU_SIZE_128_KB,
+  ARMV7M_MPU_SIZE_256_KB,
+  ARMV7M_MPU_SIZE_512_KB,
+  ARMV7M_MPU_SIZE_1_MB,
+  ARMV7M_MPU_SIZE_2_MB,
+  ARMV7M_MPU_SIZE_4_MB,
+  ARMV7M_MPU_SIZE_8_MB,
+  ARMV7M_MPU_SIZE_16_MB,
+  ARMV7M_MPU_SIZE_32_MB,
+  ARMV7M_MPU_SIZE_64_MB,
+  ARMV7M_MPU_SIZE_128_MB,
+  ARMV7M_MPU_SIZE_256_MB,
+  ARMV7M_MPU_SIZE_512_MB,
+  ARMV7M_MPU_SIZE_1_GB,
+  ARMV7M_MPU_SIZE_2_GB,
+  ARMV7M_MPU_SIZE_4_GB
+} ARMV7M_MPU_Size;
+
+typedef struct {
+  uint32_t rbar;
+  uint32_t rasr;
+} ARMV7M_MPU_Region;
+
+#define ARMV7M_MPU_REGION_INITIALIZER(idx, addr, size, attr) \
+  { \
+    ((addr) & ARMV7M_MPU_RBAR_ADDR_MASK) \
+      | ARMV7M_MPU_RBAR_VALID \
+      | ARMV7M_MPU_RBAR_REGION(idx), \
+    ARMV7M_MPU_RASR_SIZE(size) | (attr) | ARMV7M_MPU_RASR_ENABLE \
+  }
+
+#define ARMV7M_MPU_REGION_DISABLED_INITIALIZER(idx) \
+  { \
+    ARMV7M_MPU_RBAR_VALID | ARMV7M_MPU_RBAR_REGION(idx), \
+    0 \
+  }
+
 #define ARMV7M_SCS_BASE 0xe000e000
+#define ARMV7M_ICTAC_BASE (ARMV7M_SCS_BASE + 0x0)
 #define ARMV7M_SYSTICK_BASE (ARMV7M_SCS_BASE + 0x10)
 #define ARMV7M_NVIC_BASE (ARMV7M_SCS_BASE + 0x100)
 #define ARMV7M_SCB_BASE (ARMV7M_SCS_BASE + 0xd00)
+#define ARMV7M_MPU_BASE (ARMV7M_SCS_BASE + 0xd90)
 
-#define _ARMV7M_Interrupt_type \
-  ((volatile ARMV7M_Interrupt_type *) ARMV7M_SCS_BASE)
+#define _ARMV7M_ICTAC \
+  ((volatile ARMV7M_ICTAC *) ARMV7M_ICTAC_BASE)
 #define _ARMV7M_SCB \
   ((volatile ARMV7M_SCB *) ARMV7M_SCB_BASE)
 #define _ARMV7M_Systick \
   ((volatile ARMV7M_Systick *) ARMV7M_SYSTICK_BASE)
 #define _ARMV7M_NVIC \
   ((volatile ARMV7M_NVIC *) ARMV7M_NVIC_BASE)
+#define _ARMV7M_MPU \
+  ((volatile ARMV7M_MPU *) ARMV7M_MPU_BASE)
 
 #define ARMV7M_VECTOR_MSP 0
 #define ARMV7M_VECTOR_RESET 1
@@ -129,7 +293,13 @@ typedef struct {
 #define ARMV7M_VECTOR_DEBUG_MONITOR 12
 #define ARMV7M_VECTOR_PENDSV 14
 #define ARMV7M_VECTOR_SYSTICK 15
-#define ARMV7M_VECTOR_IRQ(n) (16 + (n))
+#define ARMV7M_VECTOR_IRQ(n) ((n) + 16)
+#define ARMV7M_IRQ_OF_VECTOR(n) ((n) - 16)
+
+static inline bool _ARMV7M_Is_vector_an_irq( int vector )
+{
+  return vector >= 16;
+}
 
 static inline uint32_t _ARMV7M_Get_basepri(void)
 {
@@ -208,6 +378,72 @@ static inline uint32_t _ARMV7M_Get_XPSR(void)
   uint32_t val;
   __asm__ volatile ("mrs %[val], xpsr\n" : [val] "=&r" (val));
   return val;
+}
+
+static inline bool _ARMV7M_NVIC_Is_enabled( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  return (_ARMV7M_NVIC->iser [index] & bit) != 0;
+}
+
+static inline void _ARMV7M_NVIC_Set_enable( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  _ARMV7M_NVIC->iser [index] = bit;
+}
+
+static inline void _ARMV7M_NVIC_Clear_enable( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  _ARMV7M_NVIC->icer [index] = bit;
+}
+
+static inline bool _ARMV7M_NVIC_Is_pending( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  return (_ARMV7M_NVIC->ispr [index] & bit) != 0;
+}
+
+static inline void _ARMV7M_NVIC_Set_pending( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  _ARMV7M_NVIC->ispr [index] = bit;
+}
+
+static inline void _ARMV7M_NVIC_Clear_pending( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  _ARMV7M_NVIC->icpr [index] = bit;
+}
+
+static inline bool _ARMV7M_NVIC_Is_active( int irq )
+{
+  int index = irq >> 5;
+  uint32_t bit = 1U << (irq & 0x1f);
+
+  return (_ARMV7M_NVIC->iabr [index] & bit) != 0;
+}
+
+static inline void _ARMV7M_NVIC_Set_priority( int irq, int priority )
+{
+  _ARMV7M_NVIC->ipr [irq] = (uint8_t) priority;
+}
+
+static inline int _ARMV7M_NVIC_Get_priority( int irq )
+{
+  return _ARMV7M_NVIC->ipr [irq];
 }
 
 int _ARMV7M_Get_exception_priority( int vector );

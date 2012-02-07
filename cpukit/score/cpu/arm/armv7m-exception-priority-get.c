@@ -24,9 +24,9 @@
 
 int _ARMV7M_Get_exception_priority( int vector )
 {
-  if (vector >= ARMV7M_VECTOR_IRQ(0)) {
-    return _ARMV7M_NVIC->ipr [vector - ARMV7M_VECTOR_IRQ(0)];
-  } else if (vector >= ARMV7M_VECTOR_MEM_MANAGE) {
+  if ( _ARMV7M_Is_vector_an_irq( vector ) ) {
+    return _ARMV7M_NVIC_Get_priority( ARMV7M_IRQ_OF_VECTOR( vector ) );
+  } else if ( vector >= ARMV7M_VECTOR_MEM_MANAGE ) {
     return _ARMV7M_SCB->shpr [vector - 4];
   } else {
     return vector - 4;
