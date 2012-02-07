@@ -48,7 +48,7 @@ static void _ARMV7M_Systick_handler_install(void)
 static void _ARMV7M_Systick_initialize(void)
 {
   volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
-  uint64_t frequency = ARMV7M_SYSTICK_CALIB_TENMS(systick->calib) * 100ULL;
+  uint64_t frequency = ARMV7M_SYSTICK_CALIB_TENMS_GET(systick->calib) * 100ULL;
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint64_t interval = (frequency * us_per_tick) / 1000000ULL;
 

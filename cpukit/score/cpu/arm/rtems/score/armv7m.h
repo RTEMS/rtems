@@ -84,7 +84,7 @@ typedef struct {
 
 #define ARMV7M_SYSTICK_CALIB_NOREF (1U << 31)
 #define ARMV7M_SYSTICK_CALIB_SKEW (1U << 30)
-#define ARMV7M_SYSTICK_CALIB_TENMS(reg) ((reg) & 0xffffffU)
+#define ARMV7M_SYSTICK_CALIB_TENMS_GET(reg) ((reg) & 0xffffffU)
   uint32_t calib;
 } ARMV7M_Systick;
 
