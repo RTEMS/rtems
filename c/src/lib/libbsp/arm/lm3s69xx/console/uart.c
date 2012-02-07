@@ -20,7 +20,7 @@
 
 static volatile lm3s69xx_uart *get_uart_regs(int minor)
 {
-  console_tbl *ct = &Console_Port_Tbl [minor];
+  console_tbl *ct = Console_Port_Tbl [minor];
 
   return (lm3s69xx_uart *) ct->ulCtrlPort1;
 }
@@ -38,7 +38,6 @@ static int first_open(int major, int minor, void *arg)
 {
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
-  console_tbl *ct = &Console_Port_Tbl [minor];
   console_data *cd = &Console_Port_Data [minor];
 
   cd->termios_data = tty;
