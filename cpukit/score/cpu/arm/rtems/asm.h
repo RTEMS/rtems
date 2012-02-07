@@ -148,7 +148,10 @@
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
 
-#ifdef __thumb__
+#if defined(__thumb2__)
+  #define DEFINE_FUNCTION_ARM(name) \
+    .thumb_func ; .globl name ; name:
+#elif defined(__thumb__)
   #define DEFINE_FUNCTION_ARM(name) \
     .thumb_func ; .globl name ; name: ; bx pc ; \
     .arm ; .globl name ## _arm ; name ## _arm:
