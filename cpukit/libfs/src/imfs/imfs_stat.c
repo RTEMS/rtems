@@ -18,6 +18,7 @@
 #endif
 
 #include <errno.h>
+#include <string.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
@@ -47,7 +48,7 @@ int IMFS_stat(
       break;
 
     case IMFS_SYM_LINK:
-      buf->st_size = 0;
+      buf->st_size = strlen( the_jnode->info.sym_link.name );
       break;
 
     case IMFS_FIFO:
