@@ -94,7 +94,7 @@ DIRECTORY_SCAN_C_FILES += src/getcwd.c
 
 ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/getlogin.c src/getpgrp.c src/getpid.c src/getppid.c src/getuid.c \
-    src/seteuid.c src/setgid.c src/setuid.c src/seteuid.c src/setpgid.c \
+    src/seteuid.c src/setgid.c src/setuid.c src/setegid.c src/setpgid.c \
     src/setsid.c
 
 MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
