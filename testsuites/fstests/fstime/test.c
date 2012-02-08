@@ -28,7 +28,7 @@
 #include "fstest.h"
 #include "pmacros.h"
 
-void time_test01 (void)
+static void time_test01 (void)
 {
   struct stat statbuf;
   struct utimbuf timbuf;

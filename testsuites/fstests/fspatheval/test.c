@@ -27,7 +27,7 @@
 
 #define BUF_SIZE 100
 
-void make_multiple_files (char **files,int is_directory)
+static void make_multiple_files (char **files,int is_directory)
 {
   int i;
   int status;
@@ -54,7 +54,7 @@ void make_multiple_files (char **files,int is_directory)
   puts ("");
 }
 
-void remove_multiple_files (char **files,int is_directory)
+static void remove_multiple_files (char **files,int is_directory)
 {
   int i;
   int status;
@@ -83,7 +83,7 @@ void remove_multiple_files (char **files,int is_directory)
   puts ("");
 }
 
-void path_eval_test01 (void)
+static void path_eval_test01 (void)
 {
   char *valid_path[] = {
     "/test1/",
@@ -150,7 +150,7 @@ void path_eval_test01 (void)
   remove_multiple_files(valid_name,0);
 
 }
-void path_eval_test02(void )
+static void path_eval_test02(void )
 {
 
   int status;

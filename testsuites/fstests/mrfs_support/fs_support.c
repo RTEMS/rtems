@@ -23,6 +23,7 @@
 #include "ramdisk_support.h"
 
 #include "fstest.h"
+#include "fstest_support.h"
 
 #define BLOCK_SIZE (512)
 

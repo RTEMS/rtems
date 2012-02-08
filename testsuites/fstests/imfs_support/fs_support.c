@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 
 #include "fstest.h"
+#include "fstest_support.h"
 
 void
 test_initialize_filesystem (void)

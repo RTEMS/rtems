@@ -34,7 +34,7 @@
 
 
 /* Break out of a chroot() environment in C */
-void break_out_of_chroot(void)
+static void break_out_of_chroot(void)
 {
 
   int dir_fd;       /* File descriptor to directory */

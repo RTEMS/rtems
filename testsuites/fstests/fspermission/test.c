@@ -30,7 +30,7 @@
 /*
  *  Test the umask
  */
-void umask_test01(void )
+static void umask_test01(void )
 {
 
   mode_t previous_cmask;
@@ -158,7 +158,7 @@ void umask_test01(void )
 /*
  * Check the file mode in file and directory
  */
-void test_premission01(void )
+static void test_premission01(void )
 {
   mode_t tmp_mode;
   struct stat statbuf;
@@ -196,11 +196,9 @@ void test_premission01(void )
   status=chdir(wd);
   rtems_test_assert(status==0);
 
-  status=setgid(group_id);
-  rtems_test_assert(status==0);
   status=seteuid(user_id);
   rtems_test_assert(status==0);
-  status=seteuid(user_id);
+  status=setegid(group_id);
   rtems_test_assert(status==0);
 
 
@@ -349,7 +347,7 @@ void test_premission01(void )
   status=seteuid(0);
   rtems_test_assert(status==0);
 
-  status=setgid(another_group_id);
+  status=setegid(another_group_id);
   rtems_test_assert(status==0);
 
   status=seteuid(another_user_id);
@@ -376,7 +374,7 @@ void test_premission01(void )
    */
   status=seteuid(0);
   rtems_test_assert(status==0);
-  status=setgid(0);
+  status=setegid(0);
   rtems_test_assert(status==0);
   free(data_buf);
 
@@ -387,7 +385,7 @@ void test_premission01(void )
 /*
  * Test chown and chmod
  */
-void  test_premission02(void )
+static void  test_premission02(void )
 {
   struct stat statbuf;
   int status = 0;
@@ -459,7 +457,7 @@ void  test_premission02(void )
   status=chdir("..");
   rtems_test_assert(status==0);
 }
-void root_test(void )
+static void root_test(void )
 {
   int fd;
   int sc;
@@ -469,7 +467,7 @@ void root_test(void )
   rtems_test_assert(sc==0);
 
   fd=open("test",O_RDONLY);
-  rtems_test_assert(fd!=-1);
+  rtems_test_assert(fd==-1);
 }
 
 void test(void )

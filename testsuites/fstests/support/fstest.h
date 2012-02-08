@@ -50,6 +50,7 @@
      FS_FAIL();\
    } while (0)
 
+void test(void);
 
 #define BASE_FOR_TEST "/mnt"
 #endif

@@ -32,7 +32,7 @@ const char *databuf =
   "4Happy days are here again.5Happy days are here again.6Happy days are here "
   "again.7Happy days are here again.";
 
-void
+static void
 read_write_test (void)
 {
 
@@ -184,7 +184,7 @@ read_write_test (void)
   rtems_test_assert (status == 0);
 }
 
-void
+static void
 truncate_test03 (void)
 {
 
@@ -282,12 +282,12 @@ truncate_test03 (void)
   rtems_test_assert (status == 0);
 }
 
-void
+static void
 lseek_test (void)
 {
   int fd;
   int status;
-  char *name01 = "test_name01";
+  const char *name01 = "test_name01";
   struct stat statbuf;
 
   int n;
@@ -295,7 +295,7 @@ lseek_test (void)
 
   size_t len = strlen (databuf);
   off_t pos;
-  int total_written = 0;
+  ssize_t total_written = 0;
 
   char *readbuf;
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
@@ -366,15 +366,18 @@ lseek_test (void)
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == total_written + 1);
 
-
-  status = close (fd);
-  rtems_test_assert (status == 0);
-
   /*
    * Check the file size
    */
-  status = stat (name01, &statbuf);
-  rtems_test_assert (statbuf.st_size == total_written);
+  status = fstat (fd, &statbuf);
+  rtems_test_assert (status == 0);
+  rtems_test_assert (statbuf.st_size == total_written + 1);
+
+  status = ftruncate (fd, total_written);
+  rtems_test_assert (status == 0);
+
+  status = close (fd);
+  rtems_test_assert (status == 0);
 
   /*
    * Open the file with O_RDONLY and check the lseek
@@ -393,7 +396,7 @@ lseek_test (void)
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
-  pos = lseek (fd, -len, SEEK_CUR);
+  pos = lseek (fd, -(off_t) len, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
@@ -410,7 +413,7 @@ lseek_test (void)
   rtems_test_assert (n == len);
   rtems_test_assert (strncmp (databuf, readbuf, len) != 0);
 
-  pos = lseek (fd, -len, SEEK_END);
+  pos = lseek (fd, -(off_t) len, SEEK_END);
   n = read (fd, readbuf, 2 * len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
@@ -436,7 +439,7 @@ lseek_test (void)
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
 
-  pos = lseek (fd, -len, SEEK_CUR);
+  pos = lseek (fd, -(off_t) len, SEEK_CUR);
   rtems_test_assert (pos == 3 * len);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
@@ -458,7 +461,7 @@ lseek_test (void)
   /*
    * Use SEEK_END
    */
-  pos = lseek (fd, -len, SEEK_END);
+  pos = lseek (fd, -(off_t) len, SEEK_END);
   n = read (fd, readbuf, 2 * len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
@@ -468,14 +471,14 @@ lseek_test (void)
   /*
    * Write the zero to the end of file.
    */
-  pos = lseek (fd, -len, SEEK_END);
-  rtems_test_assert (pos == total_written - len);
+  pos = lseek (fd, -(off_t) len, SEEK_END);
+  rtems_test_assert (pos == (off_t) total_written - (off_t) len);
   n = write (fd, readbuf, len);
   rtems_test_assert (n == len);
   /*
    * Verify it
    */
-  pos = lseek (fd, total_written - len, SEEK_SET);
+  pos = lseek (fd, (off_t) total_written - (off_t) len, SEEK_SET);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   for (i = 0; i < n; i++) {
@@ -485,7 +488,7 @@ lseek_test (void)
   /*
    * Write the zero to the beginning of file.
    */
-  pos = lseek (fd, -total_written, SEEK_END);
+  pos = lseek (fd, -(off_t) total_written, SEEK_END);
   rtems_test_assert (pos == 0);
   n = write (fd, readbuf, len);
   rtems_test_assert (n == len);
@@ -527,4 +530,5 @@ test (void)
 {
   read_write_test ();
   lseek_test ();
+  truncate_test03 ();
 }

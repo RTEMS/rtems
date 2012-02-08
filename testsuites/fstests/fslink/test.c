@@ -30,7 +30,7 @@
 /*
  * Test if the successful call works as expect
  */
-void link_test01 (void)
+static void link_test01 (void)
 {
   char *name0 = "t0";
   char *name1 = "t1";

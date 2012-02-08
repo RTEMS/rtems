@@ -26,7 +26,7 @@
 #include "fstest.h"
 #include "pmacros.h"
 
-void open_mkdir_error (void)
+static void open_mkdir_error (void)
 {
   int fd;
   int status;
@@ -107,7 +107,7 @@ void open_mkdir_error (void)
 
 }
 
-void rename_error (void)
+static void rename_error (void)
 {
 
   int fd;
@@ -192,7 +192,7 @@ void rename_error (void)
   rtems_test_assert (status == 0);
 }
 
-void truncate_error (void)
+static void truncate_error (void)
 {
 
   int fd;
@@ -231,7 +231,7 @@ void truncate_error (void)
 }
 
 
-void rmdir_unlink_error (void)
+static void rmdir_unlink_error (void)
 {
   int status;
   int fd;
@@ -304,7 +304,7 @@ void rmdir_unlink_error (void)
 
 }
 
-void rdwr_error (void)
+static void rdwr_error (void)
 {
 
   int status;

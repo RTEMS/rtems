@@ -32,7 +32,7 @@
  * Test the function of symlink
  */
 
-void symlink_test01(void )
+static void symlink_test01(void )
 {
   int   fd;
   char* file01="file";
@@ -128,7 +128,7 @@ void symlink_test01(void )
 /*
  *  symlink loop error test
  */
-void symlink_loop_error_test(void )
+static void symlink_loop_error_test(void )
 {
   char* file01="file01";
   char* file02="file02";
