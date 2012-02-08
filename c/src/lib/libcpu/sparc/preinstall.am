@@ -22,3 +22,11 @@ $(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 
+$(PROJECT_INCLUDE)/libcpu/byteorder.h: include/libcpu/byteorder.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/byteorder.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/byteorder.h
+
+$(PROJECT_INCLUDE)/libcpu/access.h: include/libcpu/access.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/access.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/access.h
+

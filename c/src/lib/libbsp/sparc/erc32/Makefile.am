@@ -68,7 +68,9 @@ erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(erc32sonic_CPPFLAGS)
 erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/cache.rel \
+libbsp_a_LIBADD  = \
+    ../../../libcpu/@RTEMS_CPU@/access.rel \
+    ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
 if HAS_NETWORKING
