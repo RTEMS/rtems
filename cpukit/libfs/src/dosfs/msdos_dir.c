@@ -500,21 +500,11 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 off_t
 msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
 {
-    switch (whence)
-    {
-        case SEEK_SET:
-        case SEEK_CUR:
-            break;
-        /*
-         * Movement past the end of the directory via lseek is not a
-         * permitted operation
-         */
-        case SEEK_END:
-        default:
-            rtems_set_errno_and_return_minus_one( EINVAL );
-            break;
+    if (iop->offset >= 0 && iop->offset <= iop->size) {
+        return 0;
+    } else {
+        rtems_set_errno_and_return_minus_one(EINVAL);
     }
-    return RC_OK;
 }
 
 /* msdos_dir_stat --

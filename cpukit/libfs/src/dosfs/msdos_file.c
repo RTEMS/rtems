@@ -231,6 +231,10 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
     fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     uint32_t           real_size = 0;
 
+    if (iop->offset < 0 || iop->offset > UINT32_MAX) {
+        rtems_set_errno_and_return_minus_one(EINVAL);
+    }
+
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
