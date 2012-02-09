@@ -641,16 +641,6 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *parent_pathloc,
         rtems_set_errno_and_return_minus_one(EIO);
 
     /*
-     * We deny attempts to delete open directory (if directory is current
-     * directory we assume it is open one)
-     */
-    if (fat_fd->links_num > 1)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        rtems_set_errno_and_return_minus_one(EBUSY);
-    }
-
-    /*
      * You cannot remove a node that still has children
      */
     rc = msdos_dir_is_empty(pathloc->mt_entry, fat_fd, &is_empty);
@@ -664,6 +654,16 @@ msdos_dir_rmnod(rtems_filesystem_location_info_t *parent_pathloc,
     {
         rtems_semaphore_release(fs_info->vol_sema);
         rtems_set_errno_and_return_minus_one(ENOTEMPTY);
+    }
+
+    /*
+     * We deny attempts to delete open directory (if directory is current
+     * directory we assume it is open one)
+     */
+    if (fat_fd->links_num > 1)
+    {
+        rtems_semaphore_release(fs_info->vol_sema);
+        rtems_set_errno_and_return_minus_one(EBUSY);
     }
 
     /*
