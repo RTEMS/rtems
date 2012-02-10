@@ -107,7 +107,8 @@ MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/malloc_statistics_helpers.c src/posix_memalign.c \
     src/rtems_memalign.c src/malloc_deferred.c src/malloc_sbrk_helpers.c \
     src/malloc_dirtier.c src/malloc_p.h src/rtems_malloc.c \
-    src/rtems_heap_extend.c
+    src/rtems_heap_extend.c \
+    src/rtems_heap_greedy.c
 
 PASSWORD_GROUP_C_FILES = src/getpwent.c
 

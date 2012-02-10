@@ -184,6 +184,24 @@ rtems_status_code rtems_heap_extend(
   uintptr_t area_size
 );
 
+/**
+ * @brief Greedy allocate that empties the heap.
+ *
+ * Afterward the heap has at most @a remaining_free_space free space left in
+ * one free block.  All other blocks are used.
+ *
+ * @see rtems_heap_greedy_free().
+ */
+void *rtems_heap_greedy_allocate( size_t remaining_free_space );
+
+/**
+ * @brief Frees space of a greedy allocation.
+ *
+ * The @a opaque argument must be the return value of
+ * rtems_heap_greedy_allocate().
+ */
+void rtems_heap_greedy_free( void *opaque );
+
 #ifdef __cplusplus
 }
 #endif

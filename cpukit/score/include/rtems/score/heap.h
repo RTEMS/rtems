@@ -549,6 +549,29 @@ void _Heap_Iterate(
 );
 
 /**
+ * @brief Greedy allocate that empties the heap.
+ *
+ * Afterward the heap has at most @a remaining_free_space free space left in
+ * one free block.  All other blocks are used.
+ *
+ * @see _Heap_Greedy_free().
+ */
+Heap_Block *_Heap_Greedy_allocate(
+  Heap_Control *heap,
+  uintptr_t remaining_free_space
+);
+
+/**
+ * @brief Frees blocks of a greedy allocation.
+ *
+ * The @a blocks must be the return value of _Heap_Greedy_allocate().
+ */
+void _Heap_Greedy_free(
+  Heap_Control *heap,
+  Heap_Block *blocks
+);
+
+/**
  * @brief Returns information about used and free blocks for the heap @a heap
  * in @a info.
  */
