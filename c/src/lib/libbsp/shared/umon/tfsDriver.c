@@ -731,7 +731,6 @@ rtems_filesystem_file_handlers_r rtems_tfs_handlers = {
   rtems_filesystem_default_fstat,     /* fstat */
   rtems_filesystem_default_fchmod,    /* fchmod */
   rtems_tfs_ftruncate,                /* ftruncate */
-  rtems_filesystem_default_fpathconf, /* fpathconf */
   rtems_filesystem_default_fsync,     /* fsync */
   rtems_filesystem_default_fdatasync, /* fdatasync */
   rtems_filesystem_default_fcntl,     /* fcntl */
