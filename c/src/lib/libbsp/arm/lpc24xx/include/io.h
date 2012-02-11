@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -72,15 +72,24 @@ typedef enum {
   LPC24XX_MODULE_I2S,
   LPC24XX_MODULE_LCD,
   LPC24XX_MODULE_MCI,
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_MCPWM,
+  #endif
   LPC24XX_MODULE_PCB,
   LPC24XX_MODULE_PWM_0,
   LPC24XX_MODULE_PWM_1,
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_QEI,
+  #endif
   LPC24XX_MODULE_RTC,
   #ifdef ARM_MULTILIB_ARCH_V4
     LPC24XX_MODULE_SPI,
   #endif
   LPC24XX_MODULE_SSP_0,
   LPC24XX_MODULE_SSP_1,
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_SSP_2,
+  #endif
   LPC24XX_MODULE_SYSCON,
   LPC24XX_MODULE_TIMER_0,
   LPC24XX_MODULE_TIMER_1,
@@ -90,6 +99,9 @@ typedef enum {
   LPC24XX_MODULE_UART_1,
   LPC24XX_MODULE_UART_2,
   LPC24XX_MODULE_UART_3,
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_UART_4,
+  #endif
   #ifdef ARM_MULTILIB_ARCH_V4
     LPC24XX_MODULE_WDT,
   #endif
@@ -115,6 +127,14 @@ typedef enum {
   LPC24XX_GPIO_RESISTOR_NONE = 0x1U,
   LPC24XX_GPIO_RESISTOR_PULL_DOWN = 0x2U,
   LPC24XX_GPIO_INPUT = 0x0U,
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC17XX_GPIO_REPEATER = 0x3U,
+    LPC17XX_GPIO_HYSTERESIS = IOCON_HYS,
+    LPC17XX_GPIO_INPUT_INVERT = IOCON_INV,
+    LPC17XX_GPIO_FAST_MODE = IOCON_SLEW,
+    LPC17XX_GPIO_OPEN_DRAIN = IOCON_OD,
+    LPC17XX_GPIO_INPUT_FILTER = IOCON_FILTER,
+  #endif
   LPC24XX_GPIO_OUTPUT = 0x8000U
 } lpc24xx_gpio_settings;
 
@@ -226,6 +246,11 @@ typedef enum {
   #define LPC24XX_PIN_WITH_TYPE(p, i, f0, f1, t) { { p, i, f0, t, 0 } }
   #define LPC24XX_PIN_RANGE(p, i, j, f0, f1) \
     { { p, i, f0, 0, 0 } }, { { p, j, f0, 0, 1 } }
+#else
+  #define LPC24XX_PIN(p, i, f0, f1) { { p, i, f1, 0, 0 } }
+  #define LPC24XX_PIN_WITH_TYPE(p, i, f0, f1, t) { { p, i, f1, t, 0 } }
+  #define LPC24XX_PIN_RANGE(p, i, j, f0, f1) \
+    { { p, i, f1, 0, 0 } }, { { p, j, f1, 0, 1 } }
 #endif
 
 #define LPC24XX_PIN_TERMINAL { { 0x7, 0x1f, 0x7, 0xf, 0x1 } }
@@ -796,6 +821,27 @@ rtems_status_code lpc24xx_pin_config(
 
 /** @} */
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
+/**
+ * @name SPI Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_SPI_SCK \
+  LPC24XX_PIN(0, 15, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SPI_SSEL \
+  LPC24XX_PIN(0, 16, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SPI_MISO \
+  LPC24XX_PIN(0, 17, LPC24XX_PIN_FUNCTION_11)
+#define LPC24XX_PIN_SPI_MOSI \
+  LPC24XX_PIN(0, 18, LPC24XX_PIN_FUNCTION_11)
+
+/** @} */
+
+#endif /* ARM_MULTILIB_ARCH_V4 */
+
 /**
  * @name SSP 0 Pins
  *
@@ -867,6 +913,30 @@ rtems_status_code lpc24xx_pin_config(
   LPC24XX_PIN(4, 23, LPC24XX_PIN_FUNCTION_11, 3)
 
 /** @} */
+
+#ifdef ARM_MULTILIB_ARCH_V7M
+
+/**
+ * @name SSP 2 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_SSP_2_SCK_P1_0 \
+  LPC24XX_PIN(1, 0, LPC24XX_PIN_FUNCTION_00, 4)
+
+#define LPC24XX_PIN_SSP_2_SSEL_P1_8 \
+  LPC24XX_PIN(1, 8, LPC24XX_PIN_FUNCTION_00, 4)
+
+#define LPC24XX_PIN_SSP_2_MISO_P1_4 \
+  LPC24XX_PIN(1, 4, LPC24XX_PIN_FUNCTION_00, 4)
+
+#define LPC24XX_PIN_SSP_2_MOSI_P1_1 \
+  LPC24XX_PIN(1, 1, LPC24XX_PIN_FUNCTION_00, 4)
+
+/** @} */
+
+#endif /* ARM_MULTILIB_ARCH_V7M */
 
 /**
  * @name UART 0 Pins
@@ -945,6 +1015,36 @@ rtems_status_code lpc24xx_pin_config(
   LPC24XX_PIN(0, 26, LPC24XX_PIN_FUNCTION_11, 3)
 #define LPC24XX_PIN_UART_3_RXD_P4_29 \
   LPC24XX_PIN(4, 29, LPC24XX_PIN_FUNCTION_11, 2)
+
+/** @} */
+
+#ifdef ARM_MULTILIB_ARCH_V7M
+
+/**
+ * @name UART 4 Pins
+ *
+ * @{
+ */
+
+#define LPC24XX_PIN_UART_4_TXD_P0_22 \
+  LPC24XX_PIN(0, 22, LPC24XX_PIN_FUNCTION_00, 3)
+#define LPC24XX_PIN_UART_4_TXD_P1_29 \
+  LPC24XX_PIN(1, 29, LPC24XX_PIN_FUNCTION_00, 5)
+#define LPC24XX_PIN_UART_4_TXD_P5_4 \
+  LPC24XX_PIN(5, 4, LPC24XX_PIN_FUNCTION_00, 4)
+
+#define LPC24XX_PIN_UART_4_RXD_P2_9 \
+  LPC24XX_PIN(2, 9, LPC24XX_PIN_FUNCTION_00, 3)
+#define LPC24XX_PIN_UART_4_RXD_P5_3 \
+  LPC24XX_PIN(5, 3, LPC24XX_PIN_FUNCTION_00, 4)
+
+#define LPC24XX_PIN_UART_4_OE_P0_21 \
+  LPC24XX_PIN(0, 21, LPC24XX_PIN_FUNCTION_00, 3)
+
+#define LPC24XX_PIN_UART_4_SCLK_P0_21 \
+  LPC24XX_PIN(0, 21, LPC24XX_PIN_FUNCTION_00, 5)
+
+#endif /* ARM_MULTILIB_ARCH_V7M */
 
 /** @} */
 

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -41,5 +41,11 @@ void bsp_restart(void *addr)
       : ARM_SWITCH_OUTPUT
       : [addr] "r" (addr)
     );
+  #else
+    rtems_interrupt_level level;
+    void (*start)(void) = addr;
+
+    rtems_interrupt_disable(level);
+    (*start)();
   #endif
 }

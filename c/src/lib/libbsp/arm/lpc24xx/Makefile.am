@@ -66,6 +66,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
 EXTRA_DIST = 
+EXTRA_DIST += startup/linkcmds.lpc17xx_ea_ram
+EXTRA_DIST += startup/linkcmds.lpc17xx_ea_rom_int
 EXTRA_DIST += startup/linkcmds.lpc2362
 EXTRA_DIST += startup/linkcmds.lpc23xx_tli800
 EXTRA_DIST += startup/linkcmds.lpc24xx_ea
@@ -151,6 +153,7 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += startup/start-config-emc-dynamic.c
 libbsp_a_SOURCES += startup/start-config-emc-static.c
+libbsp_a_SOURCES += startup/start-config-mpu.c
 libbsp_a_SOURCES += startup/start-config-pinsel.c
 
 ###############################################################################

@@ -7,15 +7,17 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <rtems.h>
@@ -37,6 +39,8 @@ BSP_START_TEXT_SECTION __attribute__((flatten)) void bsp_reset(void)
     WDMOD = 0x3;
     WDFEED = 0xaa;
     WDFEED = 0x55;
+  #else
+    printk("reset\n");
   #endif
 
   while (true) {

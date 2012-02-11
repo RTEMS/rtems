@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -20,11 +20,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <stdbool.h>
-
-#include <rtems/score/armv7m.h>
-
-#include <bspopts.h>
+#include <bsp.h>
 #include <bsp/io.h>
 #include <bsp/start.h>
 #include <bsp/lpc24xx.h>
@@ -102,6 +98,13 @@ static BSP_START_TEXT_SECTION void lpc24xx_init_emc_dynamic(void)
         &lpc24xx_start_config_emc_dynamic [0];
       uint32_t dynamiccontrol = EMC_DYN_CTRL_CE | EMC_DYN_CTRL_CS;
 
+      #ifdef ARM_MULTILIB_ARCH_V7M
+        volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+
+        /* Delay control */
+        scb->emcdlyctl = cfg->emcdlyctl;
+      #endif
+
       emc->dynamicreadconfig = cfg->readconfig;
 
       /* Timings */
@@ -165,6 +168,15 @@ static BSP_START_TEXT_SECTION void lpc24xx_init_main_oscillator(void)
     if ((SCS & 0x40) == 0) {
       SCS |= 0x20;
       while ((SCS & 0x40) == 0) {
+        /* Wait */
+      }
+    }
+  #else
+    volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+
+    if ((scb->scs & LPC17XX_SCB_SCS_OSC_STATUS) == 0) {
+      scb->scs |= LPC17XX_SCB_SCS_OSC_ENABLE;
+      while ((scb->scs & LPC17XX_SCB_SCS_OSC_STATUS) == 0) {
         /* Wait */
       }
     }
@@ -252,6 +264,71 @@ static BSP_START_TEXT_SECTION void lpc24xx_set_pll(
   lpc24xx_pll_config(PLLCON_PLLE | PLLCON_PLLC);
 }
 
+#else /* ARM_MULTILIB_ARCH_V4 */
+
+static BSP_START_TEXT_SECTION void lpc17xx_pll_config(
+  volatile lpc17xx_pll *pll,
+  uint32_t val
+)
+{
+  pll->con = val;
+  pll->feed = 0xaa;
+  pll->feed = 0x55;
+}
+
+static BSP_START_TEXT_SECTION void lpc17xx_set_pll(
+  unsigned msel,
+  unsigned psel,
+  unsigned cclkdiv
+)
+{
+  volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+  volatile lpc17xx_pll *pll = &scb->pll_0;
+  uint32_t pllcfg = LPC17XX_PLL_SEL_MSEL(msel)
+    | LPC17XX_PLL_SEL_PSEL(psel);
+  uint32_t pllstat = LPC17XX_PLL_STAT_PLLE
+    | LPC17XX_PLL_STAT_PLOCK | pllcfg;
+  uint32_t cclksel_cclkdiv = LPC17XX_SCB_CCLKSEL_CCLKDIV(cclkdiv);
+  uint32_t cclksel = LPC17XX_SCB_CCLKSEL_CCLKSEL | cclksel_cclkdiv;
+
+  if (
+    pll->stat != pllstat
+      || scb->cclksel != cclksel
+      || scb->clksrcsel != LPC17XX_SCB_CLKSRCSEL_CLKSRC
+  ) {
+    /* Use SYSCLK for CCLK */
+    scb->cclksel = LPC17XX_SCB_CCLKSEL_CCLKDIV(1);
+
+    /* Turn off USB */
+    scb->usbclksel = 0;
+
+    /* Disable PLL */
+    lpc17xx_pll_config(pll, 0);
+
+    /* Select main oscillator as clock source */
+    scb->clksrcsel = LPC17XX_SCB_CLKSRCSEL_CLKSRC;
+
+    /* Set PLL configuration */
+    pll->cfg = pllcfg;
+
+    /* Set the CCLK, PCLK and EMCCLK divider */
+    scb->cclksel = cclksel_cclkdiv;
+    scb->pclksel = LPC17XX_SCB_PCLKSEL_PCLKDIV(LPC24XX_PCLKDIV);
+    scb->emcclksel = LPC24XX_EMCCLKDIV == 1 ? 0 : LPC17XX_SCB_EMCCLKSEL_EMCDIV;
+
+    /* Enable PLL */
+    lpc17xx_pll_config(pll, LPC17XX_PLL_CON_PLLE);
+
+    /* Wait for lock */
+    while ((pll->stat & LPC17XX_PLL_STAT_PLOCK) == 0) {
+      /* Wait */
+    }
+
+    /* Use the PLL clock */
+    scb->cclksel = cclksel;
+  }
+}
+
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
 static BSP_START_TEXT_SECTION void lpc24xx_init_pll(void)
@@ -274,6 +351,22 @@ static BSP_START_TEXT_SECTION void lpc24xx_init_pll(void)
     #else
       #error "unexpected main oscillator frequency"
     #endif
+  #else
+    #if LPC24XX_OSCILLATOR_MAIN == 12000000U
+      #if LPC24XX_CCLK == 120000000U
+        lpc17xx_set_pll(9, 0, 1);
+      #elif LPC24XX_CCLK == 96000000U
+        lpc17xx_set_pll(7, 0, 1);
+      #elif LPC24XX_CCLK == 72000000U
+        lpc17xx_set_pll(5, 1, 1);
+      #elif LPC24XX_CCLK == 48000000U
+        lpc17xx_set_pll(3, 1, 1);
+      #else
+        #error "unexpected CCLK"
+      #endif
+    #else
+      #error "unexpected main oscillator frequency"
+    #endif
   #endif
 }
 
@@ -282,6 +375,10 @@ static BSP_START_TEXT_SECTION void lpc24xx_init_memory_map(void)
   #ifdef ARM_MULTILIB_ARCH_V4
     /* Re-map interrupt vectors to internal RAM */
     MEMMAP = SET_MEMMAP_MAP(MEMMAP, 2);
+  #else
+    volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+
+    scb->memmap = LPC17XX_SCB_MEMMAP_MAP;
   #endif
 
   /* Use normal memory map */
@@ -306,6 +403,22 @@ static BSP_START_TEXT_SECTION void lpc24xx_init_memory_accelerator(void)
 
     /* Enable fast IO for ports 0 and 1 */
     SCS |= 0x1;
+  #else
+    volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+
+    #if LPC24XX_CCLK <= 20000000U
+      scb->flashcfg = LPC17XX_SCB_FLASHCFG_FLASHTIM(0x0);
+    #elif LPC24XX_CCLK <= 40000000U
+      scb->flashcfg = LPC17XX_SCB_FLASHCFG_FLASHTIM(0x1);
+    #elif LPC24XX_CCLK <= 60000000U
+      scb->flashcfg = LPC17XX_SCB_FLASHCFG_FLASHTIM(0x2);
+    #elif LPC24XX_CCLK <= 80000000U
+      scb->flashcfg = LPC17XX_SCB_FLASHCFG_FLASHTIM(0x3);
+    #elif LPC24XX_CCLK <= 100000000U
+      scb->flashcfg = LPC17XX_SCB_FLASHCFG_FLASHTIM(0x4);
+    #else
+      scb->flashcfg = LPC17XX_SCB_FLASHCFG_FLASHTIM(0x5);
+    #endif
   #endif
 }
 
@@ -314,6 +427,9 @@ static BSP_START_TEXT_SECTION void lpc24xx_stop_gpdma(void)
   #ifdef LPC24XX_STOP_GPDMA
     #ifdef ARM_MULTILIB_ARCH_V4
       bool has_power = (PCONP & PCONP_GPDMA) != 0;
+    #else
+      volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+      bool has_power = (scb->pconp & LPC17XX_SCB_PCONP_GPDMA) != 0;
     #endif
 
     if (has_power) {
@@ -321,6 +437,8 @@ static BSP_START_TEXT_SECTION void lpc24xx_stop_gpdma(void)
 
       #ifdef ARM_MULTILIB_ARCH_V4
         PCONP &= ~PCONP_GPDMA;
+      #else
+        scb->pconp &= ~LPC17XX_SCB_PCONP_GPDMA;
       #endif
     }
   #endif
@@ -331,6 +449,9 @@ static BSP_START_TEXT_SECTION void lpc24xx_stop_ethernet(void)
   #ifdef LPC24XX_STOP_ETHERNET
     #ifdef ARM_MULTILIB_ARCH_V4
       bool has_power = (PCONP & PCONP_ETHERNET) != 0;
+    #else
+      volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+      bool has_power = (scb->pconp & LPC17XX_SCB_PCONP_ENET) != 0;
     #endif
 
     if (has_power) {
@@ -340,6 +461,8 @@ static BSP_START_TEXT_SECTION void lpc24xx_stop_ethernet(void)
 
       #ifdef ARM_MULTILIB_ARCH_V4
         PCONP &= ~PCONP_ETHERNET;
+      #else
+        scb->pconp &= ~LPC17XX_SCB_PCONP_ENET;
       #endif
     }
   #endif
@@ -350,6 +473,9 @@ static BSP_START_TEXT_SECTION void lpc24xx_stop_usb(void)
   #ifdef LPC24XX_STOP_USB
     #ifdef ARM_MULTILIB_ARCH_V4
       bool has_power = (PCONP & PCONP_USB) != 0;
+    #else
+      volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+      bool has_power = (scb->pconp & LPC17XX_SCB_PCONP_USB) != 0;
     #endif
 
     if (has_power) {
@@ -357,7 +483,29 @@ static BSP_START_TEXT_SECTION void lpc24xx_stop_usb(void)
 
       #ifdef ARM_MULTILIB_ARCH_V4
         PCONP &= ~PCONP_USB;
+      #else
+        scb->pconp &= ~LPC17XX_SCB_PCONP_USB;
+        scb->usbclksel = 0;
       #endif
+    }
+  #endif
+}
+
+static BSP_START_TEXT_SECTION void lpc24xx_init_mpu(void)
+{
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    volatile ARMV7M_MPU *mpu = _ARMV7M_MPU;
+    size_t n = sizeof(lpc24xx_start_config_mpu_regions)
+      / sizeof(lpc24xx_start_config_mpu_regions [0]);
+    size_t i = 0;
+
+    for (i = 0; i < n; ++i) {
+      mpu->rbar = lpc24xx_start_config_mpu_regions [i].rbar;
+      mpu->rasr = lpc24xx_start_config_mpu_regions [i].rasr;
+    }
+
+    if (n > 0) {
+      mpu->ctrl = ARMV7M_MPU_CTRL_ENABLE;
     }
   #endif
 }
@@ -375,6 +523,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
   lpc24xx_init_memory_map();
   lpc24xx_init_memory_accelerator();
   lpc24xx_init_emc_dynamic();
+  lpc24xx_init_mpu();
   lpc24xx_stop_gpdma();
   lpc24xx_stop_ethernet();
   lpc24xx_stop_usb();

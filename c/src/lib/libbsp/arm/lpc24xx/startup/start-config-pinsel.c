@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -18,8 +18,6 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
 #include <bsp/start-config.h>
@@ -40,6 +38,20 @@ BSP_START_DATA_SECTION const lpc24xx_pin_range
   LPC24XX_PIN_EMC_DQM_1,
   LPC24XX_PIN_EMC_OE,
   LPC24XX_PIN_EMC_CS_1,
+#endif
+#if defined(LPC24XX_EMC_IS42S32800B)
+  LPC24XX_PIN_EMC_A_0_14,
+  LPC24XX_PIN_EMC_D_0_31,
+  LPC24XX_PIN_EMC_RAS,
+  LPC24XX_PIN_EMC_CAS,
+  LPC24XX_PIN_EMC_WE,
+  LPC24XX_PIN_EMC_DYCS_0,
+  LPC24XX_PIN_EMC_CLK_0,
+  LPC24XX_PIN_EMC_CKE_0,
+  LPC24XX_PIN_EMC_DQM_0,
+  LPC24XX_PIN_EMC_DQM_1,
+  LPC24XX_PIN_EMC_DQM_2,
+  LPC24XX_PIN_EMC_DQM_3,
 #endif
 #if defined(LPC24XX_EMC_W9825G2JB75I) \
   && defined(LPC24XX_EMC_SST39VF3201)

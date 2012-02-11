@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -60,6 +60,42 @@ rtems_status_code lpc24xx_gpio_config(
         default:
           return RTEMS_INVALID_NUMBER;
       }
+    #else
+      uint32_t iocon_mask = IOCON_HYS | IOCON_INV
+        | IOCON_SLEW | IOCON_OD | IOCON_FILTER;
+      uint32_t iocon = (settings & iocon_mask) | IOCON_ADMODE;
+      uint32_t iocon_invalid = settings & ~(iocon_mask | LPC24XX_GPIO_OUTPUT);
+
+      /* Get resistor flags */
+      switch (resistor) {
+        case LPC24XX_GPIO_RESISTOR_NONE:
+          resistor = IOCON_MODE(0);
+          break;
+        case LPC24XX_GPIO_RESISTOR_PULL_DOWN:
+          resistor = IOCON_MODE(1);
+          break;
+        case LPC24XX_GPIO_RESISTOR_PULL_UP:
+          resistor = IOCON_MODE(2);
+          break;
+        case LPC17XX_GPIO_HYSTERESIS:
+          resistor = IOCON_MODE(3);
+          break;
+      }
+      iocon |= resistor;
+
+      if (iocon_invalid != 0) {
+        return RTEMS_INVALID_NUMBER;
+      }
+
+      if (output && (settings & LPC17XX_GPIO_INPUT_INVERT) != 0) {
+        return RTEMS_INVALID_NUMBER;
+      }
+
+      if ((settings & LPC17XX_GPIO_INPUT_FILTER) == 0) {
+        iocon |= IOCON_FILTER;
+      } else {
+        iocon &= ~IOCON_FILTER;
+      }
     #endif
 
     rtems_interrupt_disable(level);
@@ -69,6 +105,8 @@ rtems_status_code lpc24xx_gpio_config(
       LPC24XX_PINMODE [select] =
         (LPC24XX_PINMODE [select] & ~(LPC24XX_PIN_SELECT_MASK << shift))
           | ((resistor & LPC24XX_PIN_SELECT_MASK) << shift);
+    #else
+      LPC17XX_IOCON [index] = iocon;
     #endif
 
     rtems_interrupt_flash(level);
@@ -127,15 +165,24 @@ static const lpc24xx_module_entry lpc24xx_module_table [] = {
     LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_LCD, 1, 0, 0),
   #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_MCI, 1, 1, 28),
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_MCPWM, 1, 1, 17),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PCB, 0, 1, 18),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_0, 1, 1, 5),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_PWM_1, 1, 1, 6),
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_QEI, 1, 1, 18),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_RTC, 1, 1, 9),
   #ifdef ARM_MULTILIB_ARCH_V4
     LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SPI, 1, 1, 8),
   #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_0, 1, 1, 21),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_1, 1, 1, 10),
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SSP_2, 1, 1, 20),
+  #endif
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_SYSCON, 0, 1, 30),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_TIMER_0, 1, 1, 1),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_TIMER_1, 1, 1, 2),
@@ -145,6 +192,9 @@ static const lpc24xx_module_entry lpc24xx_module_table [] = {
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_1, 1, 1, 4),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_2, 1, 1, 24),
   LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_3, 1, 1, 25),
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_UART_4, 1, 1, 8),
+  #endif
   #ifdef ARM_MULTILIB_ARCH_V4
     LPC24XX_MODULE_ENTRY(LPC24XX_MODULE_WDT, 0, 1, 0),
   #endif
@@ -161,6 +211,9 @@ static rtems_status_code lpc24xx_module_do_enable(
   bool has_power = false;
   bool has_clock = false;
   unsigned index = 0;
+  #ifdef ARM_MULTILIB_ARCH_V7M
+    volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+  #endif
 
   if ((unsigned) module >= LPC24XX_MODULE_COUNT) {
       return RTEMS_INVALID_ID;
@@ -182,6 +235,10 @@ static rtems_status_code lpc24xx_module_do_enable(
     if ((clock & ~LPC24XX_MODULE_CLOCK_MASK) != 0U) {
       return RTEMS_INVALID_CLOCK;
     }
+  #else
+    if (clock != LPC24XX_MODULE_PCLK_DEFAULT) {
+      return RTEMS_INVALID_CLOCK;
+    }
   #endif
 
   has_power = lpc24xx_module_table [module].power;
@@ -194,6 +251,8 @@ static rtems_status_code lpc24xx_module_do_enable(
       rtems_interrupt_disable(level);
       #ifdef ARM_MULTILIB_ARCH_V4
         PCONP |= 1U << index;
+      #else
+        scb->pconp |= 1U << index;
       #endif
       rtems_interrupt_enable(level);
     }
@@ -229,6 +288,9 @@ static rtems_status_code lpc24xx_module_do_enable(
         }
 
         USBCLKCFG = usbsel;
+      #else
+        /* FIXME */
+        scb->usbclksel = 0;
       #endif
     }
   } else {
@@ -236,6 +298,8 @@ static rtems_status_code lpc24xx_module_do_enable(
       rtems_interrupt_disable(level);
       #ifdef ARM_MULTILIB_ARCH_V4
         PCONP &= ~(1U << index);
+      #else
+        scb->pconp &= ~(1U << index);
       #endif
       rtems_interrupt_enable(level);
     }
@@ -264,6 +328,9 @@ typedef rtems_status_code (*lpc24xx_pin_visitor)(
     volatile uint32_t *pinsel,
     uint32_t pinsel_mask,
     uint32_t pinsel_value,
+  #else
+    volatile uint32_t *iocon,
+    lpc24xx_pin_range pin_range,
   #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
@@ -275,6 +342,9 @@ lpc24xx_pin_set_function(
     volatile uint32_t *pinsel,
     uint32_t pinsel_mask,
     uint32_t pinsel_value,
+  #else
+    volatile uint32_t *iocon,
+    lpc24xx_pin_range pin_range,
   #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
@@ -286,6 +356,9 @@ lpc24xx_pin_set_function(
     rtems_interrupt_disable(level);
     *pinsel = (*pinsel & ~pinsel_mask) | pinsel_value;
     rtems_interrupt_enable(level);
+  #else
+    /* TODO */
+    *iocon = IOCON_FUNC(pin_range.fields.function);
   #endif
 
   return RTEMS_SUCCESSFUL;
@@ -296,6 +369,9 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_function(
     volatile uint32_t *pinsel,
     uint32_t pinsel_mask,
     uint32_t pinsel_value,
+  #else
+    volatile uint32_t *iocon,
+    lpc24xx_pin_range pin_range,
   #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
@@ -307,6 +383,9 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_function(
     } else {
       return RTEMS_IO_ERROR;
     }
+  #else
+    /* TODO */
+    return RTEMS_IO_ERROR;
   #endif
 }
 
@@ -316,6 +395,9 @@ lpc24xx_pin_set_input(
     volatile uint32_t *pinsel,
     uint32_t pinsel_mask,
     uint32_t pinsel_value,
+  #else
+    volatile uint32_t *iocon,
+    lpc24xx_pin_range pin_range,
   #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
@@ -327,6 +409,8 @@ lpc24xx_pin_set_input(
   *fio_dir &= ~fio_bit;
   #ifdef ARM_MULTILIB_ARCH_V4
     *pinsel &= ~pinsel_mask;
+  #else
+    *iocon = IOCON_MODE(2) | IOCON_ADMODE | IOCON_FILTER;
   #endif
   rtems_interrupt_enable(level);
 
@@ -338,6 +422,9 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_input(
     volatile uint32_t *pinsel,
     uint32_t pinsel_mask,
     uint32_t pinsel_value,
+  #else
+    volatile uint32_t *iocon,
+    lpc24xx_pin_range pin_range,
   #endif
   volatile uint32_t *fio_dir,
   uint32_t fio_bit
@@ -349,6 +436,8 @@ static BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_check_input(
   if (is_input) {
     #ifdef ARM_MULTILIB_ARCH_V4
       bool is_gpio = (*pinsel & pinsel_mask) == 0;
+    #else
+      bool is_gpio = IOCON_FUNC_GET(*iocon) == 0;
     #endif
 
     if (is_gpio) {
@@ -405,6 +494,10 @@ BSP_START_TEXT_SECTION rtems_status_code lpc24xx_pin_config(
           uint32_t pinsel_value = (function & LPC24XX_PIN_SELECT_MASK) << shift;
 
           sc = (*visitor)(pinsel, pinsel_mask, pinsel_value, fio_dir, fio_bit);
+        #else
+          volatile uint32_t *iocon = &LPC17XX_IOCON [index];
+
+          sc = (*visitor)(iocon, pin_range, fio_dir, fio_bit);
         #endif
 
         ++port_bit;

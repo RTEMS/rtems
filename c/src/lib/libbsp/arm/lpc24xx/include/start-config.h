@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -24,6 +24,8 @@
 
 #ifndef LIBBSP_ARM_LPC24XX_START_CONFIG_H
 #define LIBBSP_ARM_LPC24XX_START_CONFIG_H
+
+#include <rtems/score/armv7m.h>
 
 #include <bsp.h>
 #include <bsp/io.h>
@@ -89,6 +91,9 @@ extern BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
 
 extern BSP_START_DATA_SECTION const size_t
   lpc24xx_start_config_emc_static_chip_count;
+
+extern BSP_START_DATA_SECTION const ARMV7M_MPU_Region
+  lpc24xx_start_config_mpu_regions [LPC24XX_MPU_REGION_COUNT];
 
 #ifdef __cplusplus
 }

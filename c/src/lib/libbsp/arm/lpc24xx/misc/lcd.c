@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -107,6 +107,14 @@ lpc24xx_lcd_mode lpc24xx_lcd_current_mode(void)
 
     if ((PCONP & BSP_BIT32(20)) != 0 && (pinsel11 & LCD_ENABLE) != 0) {
       return BSP_FLD32GET(pinsel11, 1, 3);
+    } else {
+      return LCD_MODE_DISABLED;
+    }
+  #else
+    volatile lpc17xx_scb *scb = &LPC17XX_SCB;
+
+    if ((scb->pconp & LPC17XX_SCB_PCONP_LCD) != 0) {
+      return LCD_CTRL & 0xae;
     } else {
       return LCD_MODE_DISABLED;
     }

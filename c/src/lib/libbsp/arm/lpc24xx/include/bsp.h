@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -40,6 +40,8 @@ extern "C" {
 #define LPC24XX_PCLK (LPC24XX_CCLK / LPC24XX_PCLKDIV)
 
 #define LPC24XX_EMCCLK (LPC24XX_CCLK / LPC24XX_EMCCLKDIV)
+
+#define LPC24XX_MPU_REGION_COUNT 8
 
 #ifndef ASM
 

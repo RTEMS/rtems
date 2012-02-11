@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -44,5 +44,12 @@ void bsp_interrupt_dispatch(void)
 
     /* Acknowledge interrupt */
     VICVectAddr = 0;
+  #else
+    rtems_vector_number vector =
+      ARMV7M_SCB_ICSR_VECTACTIVE_GET(_ARMV7M_SCB->icsr);
+
+    _ARMV7M_Interrupt_service_enter();
+    bsp_interrupt_handler_dispatch(ARMV7M_IRQ_OF_VECTOR(vector));
+    _ARMV7M_Interrupt_service_leave();
   #endif
 }

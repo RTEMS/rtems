@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -73,7 +73,7 @@ static void initialize_console(void)
 
     lpc24xx_module_enable(LPC24XX_MODULE_UART_0, LPC24XX_MODULE_PCLK_DEFAULT);
     lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
-    BSP_CONSOLE_UART_INIT(lpc24xx_cclk() / 16 / LPC24XX_UART_BAUD);
+    BSP_CONSOLE_UART_INIT(LPC24XX_PCLK / 16 / LPC24XX_UART_BAUD);
   #endif
 }
 

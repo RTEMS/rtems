@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -42,6 +42,8 @@ void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority)
 
     #ifdef ARM_MULTILIB_ARCH_V4
       VICVectPriorityBase [vector] = priority;
+    #else
+      _ARMV7M_NVIC_Set_priority((int) vector, (int) (priority << 3));
     #endif
   }
 }
@@ -51,6 +53,8 @@ unsigned lpc24xx_irq_get_priority(rtems_vector_number vector)
   if (lpc24xx_irq_is_valid(vector)) {
     #ifdef ARM_MULTILIB_ARCH_V4
       return VICVectPriorityBase [vector];
+    #else
+      return (unsigned) (_ARMV7M_NVIC_Get_priority((int) vector) >> 3);
     #endif
   } else {
     return LPC24XX_IRQ_PRIORITY_VALUE_MIN - 1U;
@@ -61,6 +65,8 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   #ifdef ARM_MULTILIB_ARCH_V4
     VICIntEnable = 1U << vector;
+  #else
+    _ARMV7M_NVIC_Set_enable((int) vector);
   #endif
 
   return RTEMS_SUCCESSFUL;
@@ -70,6 +76,8 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   #ifdef ARM_MULTILIB_ARCH_V4
     VICIntEnClear = 1U << vector;
+  #else
+    _ARMV7M_NVIC_Clear_enable((int) vector);
   #endif
 
   return RTEMS_SUCCESSFUL;
@@ -113,6 +121,25 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
     /* Install the IRQ exception handler */
     _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
+  #else
+    rtems_vector_number i = 0;
+    ARMV7M_Exception_handler *vector_table =
+      (ARMV7M_Exception_handler *) bsp_vector_table_begin;
+
+    memcpy(
+      vector_table,
+      bsp_start_vector_table_begin,
+      (size_t) bsp_vector_table_size
+    );
+
+    for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+      vector_table [ARMV7M_VECTOR_IRQ(i)] = bsp_interrupt_dispatch;
+      _ARMV7M_NVIC_Clear_enable(i);
+      _ARMV7M_NVIC_Clear_pending(i);
+      lpc24xx_irq_set_priority(i, LPC24XX_IRQ_PRIORITY_VALUE_MAX - 1);
+    }
+
+    _ARMV7M_SCB->vtor = vector_table;
   #endif
 
   return RTEMS_SUCCESSFUL;
