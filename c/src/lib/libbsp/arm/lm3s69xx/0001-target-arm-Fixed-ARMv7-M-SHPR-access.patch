@@ -1,22 +1,24 @@
-From 403b4e0718a815b425a964cfbf7f4117a9278d88 Mon Sep 17 00:00:00 2001
+From 0c8e700376cec0c7b5a70f999b5e286efc321423 Mon Sep 17 00:00:00 2001
 From: Sebastian Huber <sebastian.huber@embedded-brains.de>
-Date: Sun, 19 Jun 2011 15:33:17 +0200
-Subject: [PATCH 2/6] Fixed system handler priority register access.
+Date: Fri, 16 Dec 2011 19:46:40 +0100
+Subject: [PATCH 1/4] target-arm: Fixed ARMv7-M SHPR access
 
 According to "ARMv7-M Architecture Reference Manual" issue D section
 "B3.2.10 System Handler Prioriy Register 1, SHPR1", "B3.2.11 System
 Handler Prioriy Register 2, SHPR2", and "B3.2.12 System Handler Prioriy
 Register 3, SHPR3".
+
+Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
 ---
  hw/arm_gic.c     |   16 ++++++++++++++--
  hw/armv7m_nvic.c |   19 -------------------
  2 files changed, 14 insertions(+), 21 deletions(-)
 
 diff --git a/hw/arm_gic.c b/hw/arm_gic.c
-index 0e934ec..9f75fcc 100644
+index 9b52119..5139d95 100644
 --- a/hw/arm_gic.c
 +++ b/hw/arm_gic.c
-@@ -341,6 +341,11 @@ static uint32_t gic_dist_readb(void *opaque, target_phys_addr_t offset)
+@@ -356,6 +356,11 @@ static uint32_t gic_dist_readb(void *opaque, target_phys_addr_t offset)
              if (GIC_TEST_TRIGGER(irq + i))
                  res |= (2 << (i * 2));
          }
@@ -28,17 +30,17 @@ index 0e934ec..9f75fcc 100644
  #endif
      } else if (offset < 0xfe0) {
          goto bad_reg;
-@@ -372,7 +377,8 @@ static uint32_t gic_dist_readl(void *opaque, target_phys_addr_t offset)
+@@ -387,7 +392,8 @@ static uint32_t gic_dist_readl(void *opaque, target_phys_addr_t offset)
      gic_state *s = (gic_state *)opaque;
      uint32_t addr;
      addr = offset;
 -    if (addr < 0x100 || addr > 0xd00)
 +    if (addr < 0x100 || (addr > 0xd00 && addr != 0xd18 && addr != 0xd1c
-+        && addr != 0xd20)) {
++        && addr != 0xd20))
          return nvic_readl(s, addr);
  #endif
      val = gic_dist_readw(opaque, offset);
-@@ -507,6 +513,11 @@ static void gic_dist_writeb(void *opaque, target_phys_addr_t offset,
+@@ -528,6 +534,11 @@ static void gic_dist_writeb(void *opaque, target_phys_addr_t offset,
                  GIC_CLEAR_TRIGGER(irq + i);
              }
          }
@@ -50,7 +52,7 @@ index 0e934ec..9f75fcc 100644
  #endif
      } else {
          /* 0xf00 is only handled for 32-bit writes.  */
-@@ -532,7 +543,8 @@ static void gic_dist_writel(void *opaque, target_phys_addr_t offset,
+@@ -553,7 +564,8 @@ static void gic_dist_writel(void *opaque, target_phys_addr_t offset,
  #ifdef NVIC
      uint32_t addr;
      addr = offset;
@@ -61,10 +63,10 @@ index 0e934ec..9f75fcc 100644
          return;
      }
 diff --git a/hw/armv7m_nvic.c b/hw/armv7m_nvic.c
-index d06eec9..a2d1404 100644
+index bf8c3c5..65b575e 100644
 --- a/hw/armv7m_nvic.c
 +++ b/hw/armv7m_nvic.c
-@@ -194,14 +194,6 @@ static uint32_t nvic_readl(void *opaque, uint32_t offset)
+@@ -195,14 +195,6 @@ static uint32_t nvic_readl(void *opaque, uint32_t offset)
      case 0xd14: /* Configuration Control.  */
          /* TODO: Implement Configuration Control bits.  */
          return 0;
@@ -79,7 +81,7 @@ index d06eec9..a2d1404 100644
      case 0xd24: /* System Handler Status.  */
          val = 0;
          if (s->gic.irq_state[ARMV7M_EXCP_MEM].active) val |= (1 << 0);
-@@ -334,17 +326,6 @@ static void nvic_writel(void *opaque, uint32_t offset, uint32_t value)
+@@ -335,17 +327,6 @@ static void nvic_writel(void *opaque, uint32_t offset, uint32_t value)
      case 0xd14: /* Configuration Control.  */
          /* TODO: Implement control registers.  */
          goto bad_reg;

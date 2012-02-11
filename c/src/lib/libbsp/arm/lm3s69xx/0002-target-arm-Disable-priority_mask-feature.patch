@@ -1,17 +1,20 @@
-From 00cf49e35ff83ca3d90caf98339591452b1100e5 Mon Sep 17 00:00:00 2001
+From 5f562d098d84e12d4688272dcf68a2d0318721a7 Mon Sep 17 00:00:00 2001
 From: Sebastian Huber <sebastian.huber@embedded-brains.de>
-Date: Sun, 17 Jul 2011 15:13:42 +0200
-Subject: [PATCH 3/6] Disable priority_mask (unused for NVIC).
+Date: Fri, 16 Dec 2011 20:00:59 +0100
+Subject: [PATCH 2/4] target-arm: Disable priority_mask feature
 
+This is unused for the ARMv7-M NVIC.
+
+Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
 ---
  hw/arm_gic.c |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/hw/arm_gic.c b/hw/arm_gic.c
-index 9f75fcc..a97a318 100644
+index 5139d95..cafcc81 100644
 --- a/hw/arm_gic.c
 +++ b/hw/arm_gic.c
-@@ -642,7 +642,11 @@ static void gic_reset(gic_state *s)
+@@ -707,7 +707,11 @@ static void gic_reset(gic_state *s)
      int i;
      memset(s->irq_state, 0, GIC_NIRQ * sizeof(gic_irq_state));
      for (i = 0 ; i < NUM_CPU(s); i++) {

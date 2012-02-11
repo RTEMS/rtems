@@ -1,0 +1,63 @@
+From 78e85bb79c02b14170c3f39d9bb9cccd4d625890 Mon Sep 17 00:00:00 2001
+From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+Date: Fri, 16 Dec 2011 20:12:29 +0100
+Subject: [PATCH 3/4] target-arm: Evil hack for BASEPRI and BASEPRI_MAX
+
+This is only a quick and dirty fix to get the ARMv7-M BASEPRI and
+BASEPRI_MAX feature working.
+
+Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
+---
+ cpu-exec.c          |    4 ++--
+ target-arm/helper.c |   12 +++++-------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/cpu-exec.c b/cpu-exec.c
+index a9fa608..6ca9aab 100644
+--- a/cpu-exec.c
++++ b/cpu-exec.c
+@@ -408,8 +408,8 @@ int cpu_exec(CPUState *env)
+                        We avoid this by disabling interrupts when
+                        pc contains a magic address.  */
+                     if (interrupt_request & CPU_INTERRUPT_HARD
+-                        && ((IS_M(env) && env->regs[15] < 0xfffffff0)
+-                            || !(env->uncached_cpsr & CPSR_I))) {
++                        && !(env->uncached_cpsr & CPSR_I)
++                        && (!IS_M(env) || env->regs[15] < 0xfffffff0)) {
+                         env->exception_index = EXCP_IRQ;
+                         do_interrupt(env);
+                         next_tb = 0;
+diff --git a/target-arm/helper.c b/target-arm/helper.c
+index 65f4fbf..be2e6db 100644
+--- a/target-arm/helper.c
++++ b/target-arm/helper.c
+@@ -2163,7 +2163,7 @@ uint32_t HELPER(v7m_mrs)(CPUState *env, uint32_t reg)
+         return (env->uncached_cpsr & CPSR_I) != 0;
+     case 17: /* BASEPRI */
+     case 18: /* BASEPRI_MAX */
+-        return env->v7m.basepri;
++        return (env->uncached_cpsr & CPSR_I) != 0;
+     case 19: /* FAULTMASK */
+         return (env->uncached_cpsr & CPSR_F) != 0;
+     case 20: /* CONTROL */
+@@ -2218,13 +2218,11 @@ void HELPER(v7m_msr)(CPUState *env, uint32_t reg, uint32_t val)
+             env->uncached_cpsr &= ~CPSR_I;
+         break;
+     case 17: /* BASEPRI */
+-        env->v7m.basepri = val & 0xff;
+-        break;
+     case 18: /* BASEPRI_MAX */
+-        val &= 0xff;
+-        if (val != 0 && (val < env->v7m.basepri || env->v7m.basepri == 0))
+-            env->v7m.basepri = val;
+-        break;
++        if (val)
++            env->uncached_cpsr |= CPSR_I;
++        else
++            env->uncached_cpsr &= ~CPSR_I;
+     case 19: /* FAULTMASK */
+         if (val & 1)
+             env->uncached_cpsr |= CPSR_F;
+-- 
+1.7.1
+

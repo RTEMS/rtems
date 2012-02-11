@@ -1,0 +1,32 @@
+From e06edd436a336e5db5188eb7ffac594138fc825a Mon Sep 17 00:00:00 2001
+From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+Date: Fri, 16 Dec 2011 20:19:45 +0100
+Subject: [PATCH 4/4] target-arm: Evil hack to increase the RAM size
+
+This increases the RAM of the Stellaris LM3S6965 in a brute force way.
+It would be nice to be able to override the default RAM size with
+command line options.  The default RAM size is to small to run complex
+test suites.
+
+Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
+---
+ hw/stellaris.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/hw/stellaris.c b/hw/stellaris.c
+index ce62a98..dd7b7d7 100644
+--- a/hw/stellaris.c
++++ b/hw/stellaris.c
+@@ -1219,7 +1219,8 @@ static stellaris_board_info stellaris_boards[] = {
+   { "LM3S6965EVB",
+     0x10010002,
+     0x1073402e,
+-    0x00ff007f, /* dc0 */
++    /* FIXME */
++    0xffffffff, /* dc0 */
+     0x001133ff,
+     0x030f5317,
+     0x0f0f87ff,
+-- 
+1.7.1
+
