@@ -37,13 +37,15 @@ void rtems_shell_get_prompt(
   size_t             size
 )
 {
-  char curdir[256];
+  char buf[256];
+  char *cwd;
 
   /* XXX: show_prompt user adjustable */
-  getcwd(curdir,sizeof(curdir));
+  cwd = getcwd(buf,sizeof(buf));
+  cwd = cwd != NULL ? cwd : "?";
   snprintf(prompt, size - 1, "%s%s[%s] %c ",
           ((shell_env->taskname) ? shell_env->taskname : ""),
           ((shell_env->taskname) ? " " : ""),
-          curdir,
+          cwd,
           geteuid()?'$':'#');
 }
