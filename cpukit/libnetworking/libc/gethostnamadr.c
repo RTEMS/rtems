@@ -374,29 +374,40 @@ int gethostbyname_r(const char*      name,
         struct hostent **RESULT, 
         int             *h_errnop) 
 {
-        
+  uintptr_t current = (uintptr_t) buf;
+  uintptr_t end = current + buflen;
   size_t L=strlen(name);
-  result->h_name=buf;
-  if (buflen<L) { *h_errnop=ERANGE; return 1; }
-  strcpy(buf,name);
 
-  result->h_addr_list=(char**)(buf+strlen(name)+1);
-  result->h_addr_list+=sizeof(char*)-((uintptr_t)(result->h_addr_list)&(sizeof(char*)-1));
-  result->h_addr_list[0]=(char*)&result->h_addr_list[2];
+  *RESULT = NULL;
+  *h_errnop = 0;
+
+  result->h_name = (char *) current;
+  current += L + 1;
+  if (current > end) { *h_errnop = ERANGE; return 1; }
+  strcpy(result->h_name, name);
+
+  current += sizeof(char **);
+  current -= current & (sizeof(char **) - 1);
+  result->h_addr_list = (char **) current;
+  current += 2 * sizeof(char **);
+  result->h_aliases = (char **) current;
+  current += sizeof(char **);
+  if (current > end) { *h_errnop = ERANGE; return 1; }
+  result->h_addr_list [0]= (char *) current;
+  current += 16;
+  result->h_addr_list [1] = NULL;
+  result->h_aliases [0] = NULL;
+  if (current > end) { *h_errnop = ERANGE; return 1; }
   if (inet_pton(AF_INET,name,result->h_addr_list[0])) {
     result->h_addrtype=AF_INET;
     result->h_length=4;
-commonip:
-    result->h_aliases=result->h_addr_list+2*sizeof(char**);
-    result->h_aliases[0]=0;
-    result->h_addr_list[1]=0;
     *RESULT=result;
-    *h_errnop=0;
     return 0;
   } else if (inet_pton(AF_INET6,name,result->h_addr_list[0])) {
     result->h_addrtype=AF_INET6;
     result->h_length=16;
-    goto commonip;
+    *RESULT=result;
+    return 0;
   }
 
 
@@ -409,7 +420,6 @@ commonip:
 found:
   memmove(result,r,sizeof(struct hostent));
   *RESULT=result;
-  *h_errnop=0;
   endhostent();
   return 0;
       }
