@@ -591,8 +591,6 @@ static int rtems_tftp_open_worker(
         if (he == NULL)
             return ENOENT;
         memcpy (&farAddress, he->h_addr, sizeof (farAddress));
-    } else {
-        return ENOENT;
     }
     
     /*
