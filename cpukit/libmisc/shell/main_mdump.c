@@ -31,6 +31,7 @@ static int args_parse(int argc, char* argv[], void** addr, int* max, int* sz);
 static void mdumpB(void* addr, int m);
 static void mdumpW(void* addr, int m);
 static void mdumpL(void* addr, int m);
+static void mdumpC(void* addr, int m);
 
 int rtems_mdump(void* addr, int max, int sz);
 
@@ -43,7 +44,7 @@ int rtems_shell_main_mdump(
   int   max;
   int   sz;
 
-  if (args_parse(argc, argv, &addr, &max, &sz)) 
+  if (args_parse(argc, argv, &addr, &max, &sz))
     return -1;
   return rtems_mdump(addr, max, sz);
 }
@@ -114,11 +115,10 @@ int args_parse(int    argc,
 
 int rtems_mdump(void* addr, int max, int sz)
 {
-  unsigned char           n;
-  unsigned char           m;
-  volatile unsigned char *pb;
-  int                     res;
-  int                     cnt;
+  unsigned char  m;
+  unsigned char *pb;
+  int            res;
+  int            cnt;
 
   if (!((sz == 1) || (sz == 2) || (sz == 4))) {
     printf( "Size argument (%d) is not one of 1 (bytes), "
@@ -147,9 +147,7 @@ int rtems_mdump(void* addr, int max, int sz)
     if      (sz == 1)  mdumpB(pb, cnt);
     else if (sz == 2)  mdumpW(pb, cnt);
     else if (sz == 4)  mdumpL(pb, cnt);
-    for (n=0;n<=cnt;n++) {
-      printf("%c", isprint(pb[n]) ? pb[n] : '.');
-    }
+    mdumpC(pb, cnt);
     printf("\n");
     pb += 16;
   }
@@ -188,6 +186,15 @@ void mdumpL(void* addr, int m)
     printf("%08X%c",*pb++,n==4?'-':' ');
   for (;n<=0xf;n+=4)
     printf("        %c", n==4?'-':' ');
+}
+
+
+void mdumpC(void* addr, int m)
+{
+  volatile unsigned char* pb = addr;
+  int n;
+  for (n=0;n<=m;n++)
+    printf("%c", isprint(pb[n]) ? pb[n] : '.');
 }
 
 
