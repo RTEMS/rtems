@@ -1,4 +1,0 @@
-%files
-%defattr(-,root,root,-)
-%{_mingw32_sysroot}/mingw
-%exclude %{_mingw32_sysroot}/mingw/share/info/dir

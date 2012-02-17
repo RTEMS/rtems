@@ -1,9 +1,0 @@
-# cygwin patches can't be directly applied through rpm
-cd gcc-%{gcc_pkgvers}
-%if "%{gcc_version}" < "4.0"
-patch -p1 -t < %{PATCH70} || true
-%else
-patch -p2 -t < %{PATCH70} || true
-%endif
-%{?PATCH71:patch -p1 < %{PATCH71}}
-cd ..

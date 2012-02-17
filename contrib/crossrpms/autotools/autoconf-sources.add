@@ -1,4 +1,0 @@
-Source0: ftp://ftp.gnu.org/gnu/autoconf/autoconf-%{srcvers}.tar.%{?el5:bz2}%{!?el5:xz}
-
-
-

@@ -1,3 +1,0 @@
-# $Id$
-
-SUBDIRS = i686
