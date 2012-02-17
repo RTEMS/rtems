@@ -101,6 +101,24 @@ bool rtems_workspace_free(
   void *pointer
 );
 
+/**
+ * @brief Greedy allocate that empties the workspace.
+ *
+ * Afterward the workspace has at most @a remaining_free_space free space left
+ * in one free block.  All other blocks are used.
+ *
+ * @see rtems_workspace_greedy_free().
+ */
+void *rtems_workspace_greedy_allocate( size_t remaining_free_space );
+
+/**
+ * @brief Frees space of a greedy allocation.
+ *
+ * The @a opaque argument must be the return value of
+ * rtems_workspace_greedy_allocate().
+ */
+void rtems_workspace_greedy_free( void *opaque );
+
 /** @} */
 
 #ifndef __RTEMS_APPLICATION__
