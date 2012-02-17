@@ -16,11 +16,11 @@
 #define FATAL_ERROR_EXPECTED_ERROR       RTEMS_NO_MEMORY
 
 #include <rtems/libio.h>
-#include "test_support.h"
+#include <rtems/malloc.h>
 
 void force_error()
 {
-  Allocate_majority_of_heap( 1 );
+  rtems_heap_greedy_allocate( 0 );
 
   rtems_libio_init();
 }

@@ -17,15 +17,12 @@
 #include "system.h"
 #include <errno.h>
 #include "tmacros.h"
-#include <rtems/score/wkspace.h>
-#include <rtems/score/heap.h>
 #include <mqueue.h>
 #include <sched.h>
 #include <fcntl.h>
 #include <time.h>
 #include <tmacros.h>
 #include <signal.h>   /* signal facilities */
-#include "test_support.h"
 
 pthread_t        Init_id;
 
@@ -48,7 +45,7 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
-  Allocate_majority_of_workspace(NAME_MAX);
+  rtems_workspace_greedy_allocate( 0 );
 
   attr.mq_maxmsg  = MAXMSG;
   attr.mq_msgsize = MSGSIZE;

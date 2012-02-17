@@ -16,7 +16,6 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <tmacros.h>
-#include "test_support.h"
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -70,7 +69,7 @@ rtems_task Init(
 
   /* out of memory error ONLY when POSIX is enabled */
   puts( "INIT - _Objects_Set_name fails - out of memory" );
-  Allocate_majority_of_workspace( 1 );
+  rtems_workspace_greedy_allocate( 0 );
 
   bc = _Objects_Set_name( &TestClass, &_Thread_Executing->Object, name );
   rtems_test_assert( bc == false );

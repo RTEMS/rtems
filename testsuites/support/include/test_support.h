@@ -17,24 +17,6 @@ extern "C" {
 #endif
 
 /*
- *  Allocate a number of small blocks from the workspace
- *  until the largest free block of memory available is
- *  smaller than smallest.
- *
- *  NOTE: The memory CANNOT be freed.
- */
-void Allocate_majority_of_workspace( int smallest );
-
-/*
- *  Allocate a number of small blocks from the heap
- *  until the largest free block of memory available is
- *  smaller than smallest.
- *
- *  NOTE: The memory CANNOT be freed.
- */
-void Allocate_majority_of_heap( int smallest );
-
-/*
  *  Return a pointer to the POSIX name that is slightly
  *  beyond the legal limit.
  */

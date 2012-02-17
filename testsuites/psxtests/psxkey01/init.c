@@ -17,10 +17,6 @@
 #include "system.h"
 #include <errno.h>
 #include "tmacros.h"
-#include <rtems/score/wkspace.h>
-#include <rtems/score/heap.h>
-
-#include "test_support.h"
 
 void Key_destructor(
    void *key_data
@@ -46,7 +42,7 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
-  Allocate_majority_of_workspace(84);
+  rtems_workspace_greedy_allocate( 0 );
 
   puts("Init: pthread_key_create - ENOMEM (Workspace not available)");
   empty_line();
