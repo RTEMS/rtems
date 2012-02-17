@@ -76,8 +76,21 @@ extern rtems_mpci_entry Shm_Send_packet(
 #define INTERRUPT 0        /* XXX: */
 #define POLLING   1        /* XXX: fix me -- is polling ONLY!!! */
 
-
-shm_config_table BSP_shm_cfgtbl;
+/* Let user override this configuration by declaring this a weak variable */
+shm_config_table BSP_shm_cfgtbl __attribute__((weak)) =
+{
+  (vol_u32 *)0x40000000,    /* USER OVERRIDABLE */
+  0x00001000,               /* USER OVERRIDABLE */
+  SHM_BIG,
+  NULL_CONVERT,
+  INTR_MODE,
+  Shm_Cause_interrupt,
+  {
+    NULL,
+    1 << LEON3_MP_IRQ,      /* USER OVERRIDABLE */
+    4,
+  },
+};
 
 void Shm_Get_configuration(
   uint32_t   localnode,
@@ -88,8 +101,6 @@ void Shm_Get_configuration(
   int i;
   unsigned int tmp;
 
-  BSP_shm_cfgtbl.base         = 0x40000000;
-  BSP_shm_cfgtbl.length       = 0x00001000;
   BSP_shm_cfgtbl.format       = SHM_BIG;
 
   /*
@@ -108,7 +119,8 @@ void Shm_Get_configuration(
   BSP_shm_cfgtbl.poll_intr    = INTR_MODE;
   BSP_shm_cfgtbl.Intr.address =
      (vol_u32 *) &(LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index]);
-  BSP_shm_cfgtbl.Intr.value   = 1 << LEON3_MP_IRQ ;
+  if (BSP_shm_cfgtbl.Intr.value == 0)
+    BSP_shm_cfgtbl.Intr.value = 1 << LEON3_MP_IRQ; /* Use default MP-IRQ */
   BSP_shm_cfgtbl.Intr.length  = 4;
 
   if (LEON3_Cpu_Index == 0) {
