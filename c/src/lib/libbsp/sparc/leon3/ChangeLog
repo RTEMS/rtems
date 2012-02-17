@@ -1,3 +1,8 @@
+2012-02-17	Daniel Hellstrom <daniel@gaisler.com>
+
+	PR 2015/bsps
+	* shmsupp/getcfg.c: Make SHM driver configurable using weak symbol.
+
 2011-06-29	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* smp/getcpuid.c: Fix header from accidental and irrelevant copy and
