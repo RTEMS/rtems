@@ -24,15 +24,10 @@
 #if __rtems__
 /**
  * RTEMS_RFS Mutex Attributes
- *
- * @warning Do not configure as inherit priority. If a driver is in the driver
- *          initialisation table this locked semaphore will have the IDLE task
- *          as the holder and a blocking task will raise the priority of the
- *          IDLE task which can cause unsual side effects like not work.
  */
 #define RTEMS_RFS_MUTEX_ATTRIBS \
-  (RTEMS_PRIORITY | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
-   RTEMS_NO_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
+  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | \
+   RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
 #endif
 
 int
