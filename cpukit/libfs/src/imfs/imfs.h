@@ -489,6 +489,21 @@ extern int IMFS_rmnod(
   const rtems_filesystem_location_info_t *loc
 );
 
+static inline void IMFS_add_to_directory(
+  IMFS_jnode_t *dir,
+  IMFS_jnode_t *node
+)
+{
+  node->Parent = dir;
+  rtems_chain_append_unprotected( &dir->info.directory.Entries, &node->Node );
+}
+
+static inline void IMFS_remove_from_directory( IMFS_jnode_t *node )
+{
+  node->Parent = NULL;
+  rtems_chain_extract_unprotected( &node->Node );
+}
+
 /*
  *  Turn on IMFS assertions when RTEMS_DEBUG is defined.
  */

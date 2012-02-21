@@ -22,6 +22,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void IMFS_initialize_directory( IMFS_jnode_t *dir )
+{
+  rtems_chain_initialize_empty( &dir->info.directory.Entries );
+}
+
 /*
  *  Create an IMFS filesystem node of an arbitrary type that is NOT
  *  the root directory node.
@@ -39,8 +44,6 @@ IMFS_jnode_t *IMFS_create_node(
   IMFS_jnode_t        *parent;
   IMFS_fs_info_t      *fs_info;
 
-  IMFS_assert( parent_loc != NULL );
-
   parent = parent_loc->node_access;
   fs_info = parent_loc->mt_entry->fs_info;
 
@@ -55,7 +58,7 @@ IMFS_jnode_t *IMFS_create_node(
    *  Set the type specific information
    */
   if ( type == IMFS_DIRECTORY ) {
-    rtems_chain_initialize_empty(&node->info.directory.Entries);
+    IMFS_initialize_directory( node );
   } else if ( type == IMFS_HARD_LINK ) {
     node->info.hard_link.link_node = info->hard_link.link_node;
   } else if ( type == IMFS_SYM_LINK ) {
@@ -80,10 +83,10 @@ IMFS_jnode_t *IMFS_create_node(
   /*
    *  This node MUST have a parent, so put it in that directory list.
    */
-  node->Parent = parent;
-  node->st_ino = ++fs_info->ino_count;
+  IMFS_assert( parent != NULL );
+  IMFS_add_to_directory( parent, node );
 
-  rtems_chain_append( &parent->info.directory.Entries, &node->Node );
+  node->st_ino = ++fs_info->ino_count;
 
   return node;
 }
@@ -165,7 +168,7 @@ IMFS_jnode_t *IMFS_create_root_node(void)
    *
    *  NOTE: Root node is always a directory.
    */
-  rtems_chain_initialize_empty(&node->info.directory.Entries);
+  IMFS_initialize_directory( node );
 
   return node;
 }

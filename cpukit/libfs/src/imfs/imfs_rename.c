@@ -42,14 +42,8 @@ int IMFS_rename(
       memcpy( node->name, name, namelen );
       node->name [namelen] = '\0';
 
-      rtems_chain_extract( &node->Node );
-
-      node->Parent = new_parent;
-      rtems_chain_append(
-        &new_parent->info.directory.Entries,
-        &node->Node
-      );
-
+      IMFS_remove_from_directory( node );
+      IMFS_add_to_directory( new_parent, node );
       IMFS_update_ctime( node );
     } else {
       errno = ENAMETOOLONG;

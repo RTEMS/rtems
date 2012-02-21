@@ -28,8 +28,7 @@
 void IMFS_create_orphan( IMFS_jnode_t *jnode )
 {
   if ( jnode->Parent != NULL ) {
-    rtems_chain_extract( &jnode->Node );
-    jnode->Parent = NULL;
+    IMFS_remove_from_directory( jnode );
   }
 
   --jnode->st_nlink;
