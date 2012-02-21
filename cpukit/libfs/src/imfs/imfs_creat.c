@@ -45,16 +45,6 @@ IMFS_jnode_t *IMFS_create_node(
   fs_info = parent_loc->mt_entry->fs_info;
 
   /*
-   *  Reject creation of FIFOs if support is disabled.
-   */
-  if ( type == IMFS_FIFO &&
-       fs_info->fifo_handlers == &rtems_filesystem_handlers_default ) {
-    errno = ENOTSUP;
-
-    return NULL;
-  }
-
-  /*
    *  Allocate filesystem node and fill in basic information
    */
   node  = IMFS_allocate_node( type, name, namelen, mode );
