@@ -81,34 +81,29 @@ ssize_t imfs_dir_read(
    int                  last_entry;
    struct dirent        tmp_dirent;
 
+   rtems_filesystem_instance_lock( &iop->pathinfo );
+
    the_jnode = (IMFS_jnode_t *)iop->pathinfo.node_access;
    the_chain = &the_jnode->info.directory.Entries;
 
-   if ( rtems_chain_is_empty( the_chain ) )
-      return 0;
-
    /* Move to the first of the desired directory entries */
-   the_node = rtems_chain_first( the_chain );
 
    bytes_transferred = 0;
    first_entry = iop->offset;
    /* protect against using sizes that are not exact multiples of the */
    /* -dirent- size. These could result in unexpected results          */
-   last_entry = first_entry + (count/sizeof(struct dirent)) * sizeof(struct dirent);
+   last_entry = first_entry
+     + (count / sizeof( struct dirent )) * sizeof( struct dirent );
 
    /* The directory was not empty so try to move to the desired entry in chain*/
    for (
-      current_entry = 0;
-      current_entry < last_entry;
-      current_entry = current_entry + sizeof(struct dirent) ){
-
-      if ( rtems_chain_is_tail( the_chain, the_node ) ){
-         /* We hit the tail of the chain while trying to move to the first */
-         /* entry in the read */
-         return bytes_transferred;  /* Indicate that there are no more */
-                                    /* entries to return */
-      }
-
+      current_entry = 0,
+        the_node = rtems_chain_first( the_chain );
+      current_entry < last_entry
+        && !rtems_chain_is_tail( the_chain, the_node );
+      current_entry +=  sizeof( struct dirent ),
+        the_node = rtems_chain_next( the_node )
+   ) {
       if( current_entry >= first_entry ) {
          /* Move the entry to the return buffer */
          tmp_dirent.d_off = current_entry;
@@ -122,14 +117,13 @@ ssize_t imfs_dir_read(
             (void *)&tmp_dirent,
             sizeof( struct dirent )
          );
-         iop->offset = iop->offset + sizeof(struct dirent);
-         bytes_transferred = bytes_transferred + sizeof( struct dirent );
+         iop->offset += sizeof( struct dirent );
+         bytes_transferred += sizeof( struct dirent );
       }
-
-      the_node = the_node->next;
    }
 
-   /* Success */
+   rtems_filesystem_instance_unlock( &iop->pathinfo );
+
    return bytes_transferred;
 }
 
