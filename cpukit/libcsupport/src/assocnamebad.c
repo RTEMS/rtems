@@ -9,6 +9,8 @@
 #include "config.h"
 #endif
 
+#define INSIDE_ASSOC
+
 #include <rtems.h>
 #include <rtems/assoc.h>
 
