@@ -503,6 +503,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
+    extern const rtems_filesystem_mount_table_t configuration_mount_table;
     const rtems_filesystem_mount_table_t configuration_mount_table = {
       #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
         RTEMS_FILESYSTEM_TYPE_DEVFS,
