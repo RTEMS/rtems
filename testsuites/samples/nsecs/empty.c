@@ -12,6 +12,8 @@
 #include "config.h"
 #endif
 
+#include "system.h"
+
 /* put here hoping it won't get inlined */
 void dummy_function_empty_body_to_force_call(void) {}
 

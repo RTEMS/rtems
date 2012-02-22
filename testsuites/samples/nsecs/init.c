@@ -12,8 +12,6 @@
  *  $Id$
  */
 
-#define CONFIGURE_INIT
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -25,6 +23,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+
+#define CONFIGURE_INIT
+#include "system.h"
+
 #include <rtems/score/timespec.h> /* _Timespec_Substract */
 
 #include "tmacros.h"
@@ -49,8 +51,6 @@ static void subtract_em(
   _Timespec_Subtract( start, stop, t );
 }
 
-/* body below .. hoping it isn't inlined */
-extern void dummy_function_empty_body_to_force_call(void);
 
 rtems_task Init(
   rtems_task_argument argument
@@ -142,16 +142,4 @@ rtems_task Init(
   puts( "*** END OF NANOSECOND CLOCK TEST ***" );
   exit(0);
 }
-
-
-#include <bsp.h> /* for device driver prototypes */
-
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-
-#define CONFIGURE_MICROSECONDS_PER_TICK 1000
-#define CONFIGURE_MAXIMUM_TASKS            1
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#include <rtems/confdefs.h>
 
