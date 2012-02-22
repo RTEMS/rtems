@@ -14,7 +14,6 @@
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtemspppd.h>
 #include "netconfig.h"
-extern int pppdapp_initialize(void);
 #endif
 
 rtems_task Init(rtems_task_argument argument)

@@ -8,6 +8,7 @@
 
 /* functions */
 extern rtems_task Init(rtems_task_argument argument);
+extern int pppdapp_initialize(void);
 
 #include <bsp.h>
 
