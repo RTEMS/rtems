@@ -2,8 +2,4 @@ aclocal.m4
 autom4te.cache
 configure
 config.h.in
-config.guess
-config.sub
-install-sh
 Makefile.in
-missing
