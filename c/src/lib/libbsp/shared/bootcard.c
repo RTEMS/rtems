@@ -227,7 +227,7 @@ uint32_t boot_card(
   );
 
   /*
-   *  All BSP to do any required initialization now that RTEMS
+   *  Let the BSP do any required initialization now that RTEMS
    *  data structures are initialized.  In older BSPs or those
    *  which do not use the shared framework, this is the typical
    *  time when the C Library is initialized so malloc()
