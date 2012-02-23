@@ -263,7 +263,7 @@ rtems_status_code lpc32xx_mlc_read_page(
  * @brief Checks if the block with index @a block_index is valid.
  *
  * The initial valid block information of the manufacturer will be used.
- * Unfortunatly there seems to be no standard for this.  A block will be
+ * Unfortunately there seems to be no standard for this.  A block will be
  * considered as bad if the first or second page of this block does not contain
  * 0xff at the 6th byte of the spare area.  This should work for flashes with
  * small pages and a 8-bit IO width.
