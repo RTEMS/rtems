@@ -1,3 +1,13 @@
+2012-02-23	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* libchip/serial/ns16550.c, libchip/serial/ns16550.h,
+	libchip/serial/ns16550_p.h: With the addition of dynamically
+	registered libchip serial devices, there is the need to be able to
+	use printk() before the console driver has initialized the indirect
+	pointer table. This lets printk() support routines call pass a
+	control structure directly without a lookup through the uninitialized
+	indirect one.
+
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* libchip/i2c/spi-memdrv.c: Make

@@ -1,27 +1,35 @@
-/*
+/**
+ *  @file
+ *  
  *  This file contains the TTY driver for the National Semiconductor NS16550.
  *
  *  This part is widely cloned and second sourced.  It is found in a number
  *  of "Super IO" controllers.
  *
- *  COPYRIGHT (c) 1998 by Radstone Technology
- *
- *
- * THIS FILE IS PROVIDED TO YOU, THE USER, "AS IS", WITHOUT WARRANTY OF ANY
- * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK
- * AS TO THE QUALITY AND PERFORMANCE OF ALL CODE IN THIS FILE IS WITH YOU.
- *
- * You are hereby granted permission to use, copy, modify, and distribute
- * this file, provided that this notice, plus the above copyright notice
- * and disclaimer, appears in all copies. Radstone Technology will provide
- * no support for this code.
- *
  *  This driver uses the termios pseudo driver.
  */
 
 /*
- * $Id$
+ *  COPYRIGHT (c) 1998 by Radstone Technology
+ *
+ *  THIS FILE IS PROVIDED TO YOU, THE USER, "AS IS", WITHOUT WARRANTY OF ANY
+ *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK
+ *  AS TO THE QUALITY AND PERFORMANCE OF ALL CODE IN THIS FILE IS WITH YOU.
+ *
+ *  You are hereby granted permission to use, copy, modify, and distribute
+ *  this file, provided that this notice, plus the above copyright notice
+ *  and disclaimer, appears in all copies. Radstone Technology will provide
+ *  no support for this code.
+ *
+ *  COPYRIGHT (c) 1989-2012.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ * 
+ *  $Id$
  */
 
 #include <stdlib.h>
@@ -101,6 +109,7 @@ NS16550_STATIC void ns16550_init(int minor)
   ns16550_context        *pns16550Context;
   setRegister_f           setReg;
   getRegister_f           getReg;
+  console_tbl             *c = Console_Port_Tbl [minor];
 
   pns16550Context=(ns16550_context *)malloc(sizeof(ns16550_context));
 
@@ -112,9 +121,9 @@ NS16550_STATIC void ns16550_init(int minor)
   Console_Port_Data[minor].pDeviceContext=(void *)pns16550Context;
   pns16550Context->ucModemCtrl=SP_MODEM_IRQ;
 
-  pNS16550 = Console_Port_Tbl[minor]->ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor]->setRegister;
-  getReg   = Console_Port_Tbl[minor]->getRegister;
+  pNS16550 = c->ulCtrlPort1;    
+  setReg   = c->setRegister;
+  getReg   = c->getRegister;
 
   /* Clear the divisor latch, clear all interrupt enables,
    * and reset and
@@ -122,20 +131,23 @@ NS16550_STATIC void ns16550_init(int minor)
    */
 
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, 0x0);
-  ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
+  ns16550_enable_interrupts( c, NS16550_DISABLE_ALL_INTR );
 
   /* Set the divisor latch and set the baud rate. */
 
   ulBaudDivisor = NS16550_Baud(
-    (uint32_t) Console_Port_Tbl[minor]->ulClock,
-    (uint32_t) ((uintptr_t)Console_Port_Tbl[minor]->pDeviceParams)
+    (uint32_t) c->ulClock,
+    (uint32_t) ((uintptr_t)c->pDeviceParams)
   );
   ucDataByte = SP_LINE_DLAB;
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
 
   /* XXX */
-  (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, (uint8_t) (ulBaudDivisor & 0xffU));
-  (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (uint8_t) ((ulBaudDivisor >> 8) & 0xffU));
+  (*setReg)(pNS16550,NS16550_TRANSMIT_BUFFER,(uint8_t)(ulBaudDivisor & 0xffU));
+  (*setReg)(
+    pNS16550,NS16550_INTERRUPT_ENABLE,
+    (uint8_t)(( ulBaudDivisor >> 8 ) & 0xffU )
+  );
 
   /* Clear the divisor latch and set the character size to eight bits */
   /* with one stop bit and no parity checking. */
@@ -149,7 +161,7 @@ NS16550_STATIC void ns16550_init(int minor)
   ucDataByte = SP_FIFO_ENABLE | SP_FIFO_RXRST | SP_FIFO_TXRST;
   (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
 
-  ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
+  ns16550_enable_interrupts(c, NS16550_DISABLE_ALL_INTR);
 
   /* Set data terminal ready. */
   /* And open interrupt tristate line */
@@ -186,7 +198,7 @@ NS16550_STATIC int ns16550_open(
 
   if (c->pDeviceFns->deviceOutputUsesInterrupts) {
     ns16550_initialize_interrupts( minor);
-    ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
+    ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
   }
 
   return RTEMS_SUCCESSFUL;
@@ -211,7 +223,7 @@ NS16550_STATIC int ns16550_close(
     ns16550_negate_DTR(minor);
   }
 
-  ns16550_enable_interrupts(minor, NS16550_DISABLE_ALL_INTR);
+  ns16550_enable_interrupts(c, NS16550_DISABLE_ALL_INTR);
 
   if (c->pDeviceFns->deviceOutputUsesInterrupts) {
     ns16550_cleanup_interrupts(minor);
@@ -223,9 +235,8 @@ NS16550_STATIC int ns16550_close(
 /**
  * @brief Polled write for NS16550.
  */
-NS16550_STATIC void ns16550_write_polled(int minor, char out)
+void ns16550_outch_polled(console_tbl *c, char out)
 {
-  console_tbl *c = Console_Port_Tbl [minor];
   uintptr_t port = c->ulCtrlPort1;
   getRegister_f get = c->getRegister;
   setRegister_f set = c->setRegister;
@@ -236,7 +247,7 @@ NS16550_STATIC void ns16550_write_polled(int minor, char out)
   uint32_t interrupt_mask = get( port, NS16550_INTERRUPT_ENABLE);
 
   /* Disable port interrupts */
-  ns16550_enable_interrupts( minor, NS16550_DISABLE_ALL_INTR);
+  ns16550_enable_interrupts( c, NS16550_DISABLE_ALL_INTR);
 
   while (true) {
     /* Try to transmit the character in a critical section */
@@ -263,6 +274,13 @@ NS16550_STATIC void ns16550_write_polled(int minor, char out)
 
   /* Restore port interrupt mask */
   set( port, NS16550_INTERRUPT_ENABLE, interrupt_mask);
+}
+
+NS16550_STATIC void ns16550_write_polled(int minor, char out)
+{
+  console_tbl *c = Console_Port_Tbl [minor];
+  
+  ns16550_outch_polled( c, out );
 }
 
 /*
@@ -521,7 +539,7 @@ NS16550_STATIC void ns16550_process( int minor)
       if (rtems_termios_dequeue_characters( d->termios_data, chars) == 0) {
         /* Nothing to do */
         d->bActive = false;
-        ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
+        ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
       }
     }
   } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
@@ -558,7 +576,7 @@ NS16550_STATIC ssize_t ns16550_write_support_int(
   if (len > 0) {
     ctx->transmitFifoChars = out;
     d->bActive = true;
-    ns16550_enable_interrupts( minor, NS16550_ENABLE_ALL_INTR);
+    ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR);
   }
 
   return 0;
@@ -570,15 +588,15 @@ NS16550_STATIC ssize_t ns16550_write_support_int(
  *  This routine initializes the port to have the specified interrupts masked.
  */
 NS16550_STATIC void ns16550_enable_interrupts(
-  int minor,
-  int mask
+  console_tbl *c,
+  int         mask
 )
 {
   uint32_t       pNS16550;
   setRegister_f  setReg;
 
-  pNS16550 = Console_Port_Tbl[minor]->ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor]->setRegister;
+  pNS16550 = c->ulCtrlPort1;
+  setReg   = c->setRegister;
 
   (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, mask);
 }
@@ -721,13 +739,10 @@ NS16550_STATIC ssize_t ns16550_write_support_polled(
 }
 
 /*
- *  ns16550_inbyte_nonblocking_polled
- *
- *  Console Termios polling input entry point.
+ *  Debug gets() support
  */
-
-NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
-  int minor
+int ns16550_inch_polled(
+  console_tbl *c
 )
 {
   uint32_t             pNS16550;
@@ -735,14 +750,25 @@ NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
   uint8_t              cChar;
   getRegister_f        getReg;
 
-  pNS16550 = Console_Port_Tbl[minor]->ulCtrlPort1;
-  getReg   = Console_Port_Tbl[minor]->getRegister;
+  pNS16550 = c->ulCtrlPort1;
+  getReg   = c->getRegister;
 
   ucLineStatus = (*getReg)(pNS16550, NS16550_LINE_STATUS);
-  if(ucLineStatus & SP_LSR_RDY) {
+  if (ucLineStatus & SP_LSR_RDY) {
     cChar = (*getReg)(pNS16550, NS16550_RECEIVE_BUFFER);
     return (int)cChar;
-  } else {
-    return -1;
   }
+  return -1;
+}
+
+/*
+ *  ns16550_inbyte_nonblocking_polled
+ *
+ *  Console Termios polling input entry point.
+ */
+NS16550_STATIC int ns16550_inbyte_nonblocking_polled(int minor)
+{
+  console_tbl *c = Console_Port_Tbl [minor];
+  
+  return ns16550_inch_polled( c );
 }

@@ -1,17 +1,29 @@
+/**
+ *  @file
+ *  
+ */
+
 /*
  *  COPYRIGHT (c) 1998 by Radstone Technology
  *
  *
- * THIS FILE IS PROVIDED TO YOU, THE USER, "AS IS", WITHOUT WARRANTY OF ANY
- * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK
- * AS TO THE QUALITY AND PERFORMANCE OF ALL CODE IN THIS FILE IS WITH YOU.
+ *  THIS FILE IS PROVIDED TO YOU, THE USER, "AS IS", WITHOUT WARRANTY OF ANY
+ *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK
+ *  AS TO THE QUALITY AND PERFORMANCE OF ALL CODE IN THIS FILE IS WITH YOU.
  *
- * You are hereby granted permission to use, copy, modify, and distribute
- * this file, provided that this notice, plus the above copyright notice
- * and disclaimer, appears in all copies. Radstone Technology will provide
- * no support for this code.
+ *  You are hereby granted permission to use, copy, modify, and distribute
+ *  this file, provided that this notice, plus the above copyright notice
+ *  and disclaimer, appears in all copies. Radstone Technology will provide
+ *  no support for this code.
  *
+ *  COPYRIGHT (c) 1989-2012.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ * 
  *  $Id$
  */
 
@@ -190,8 +202,8 @@ NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
 );
 
 NS16550_STATIC void ns16550_enable_interrupts(
-  int minor,
-  int mask
+  console_tbl *c,
+  int         mask
 );
 
 NS16550_STATIC int ns16550_set_attributes(
