@@ -705,7 +705,7 @@ void Cause_faults(void)
   status = rmdir( longer_name );
   rtems_test_assert( status == 0 );
 
-  printf("unlink %s\n", Links_to_Dirs[5]);
+  printf("unlink %s\n", Links_to_dirlinks[5]);
   status = unlink( Links_to_dirlinks[5] );
   rtems_test_assert( status == 0 );
 
