@@ -114,28 +114,6 @@ int memfile_open(
 }
 
 /*
- *  memfile_close
- *
- *  This routine processes the close() system call.  Note that there is
- *  nothing to flush or memory to free at this point.
- */
-int memfile_close(
-  rtems_libio_t *iop
-)
-{
-  IMFS_jnode_t   *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
-
-  if (iop->flags & LIBIO_FLAGS_APPEND)
-    iop->offset = the_jnode->info.file.size;
-
-  IMFS_check_node_remove( the_jnode );
-
-  return 0;
-}
-
-/*
  *  memfile_read
  *
  *  This routine processes the read() system call.

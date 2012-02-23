@@ -50,9 +50,6 @@ static int IMFS_fifo_close(
 
   pipe_release(&JNODE2PIPE(jnode), iop);
 
-  iop->flags &= ~LIBIO_FLAGS_OPEN;
-  IMFS_check_node_remove(jnode);
-
   IMFS_FIFO_RETURN(err);
 }
 

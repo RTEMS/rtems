@@ -63,8 +63,9 @@ void IMFS_fsunmount(
 
      if ( jnode->type != IMFS_DIRECTORY || jnode_has_no_children( jnode ) ) {
         result = IMFS_rmnod( NULL, &loc );
-        if (result != 0)
-	  rtems_fatal_error_occurred(0xdeadbeef);
+        if ( result != 0 )
+	  rtems_fatal_error_occurred( 0xdeadbeef );
+        IMFS_node_destroy( jnode );
         jnode = next;
      }
      if ( jnode != NULL ) {

@@ -23,7 +23,7 @@
 
 const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_open,
-  imfs_dir_close,
+  rtems_filesystem_default_close,
   imfs_dir_read,
   rtems_filesystem_default_write,
   rtems_filesystem_default_ioctl,

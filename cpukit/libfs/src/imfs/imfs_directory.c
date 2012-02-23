@@ -127,30 +127,6 @@ ssize_t imfs_dir_read(
    return bytes_transferred;
 }
 
-
-
-/*
- *  imfs_dir_close
- *
- *  This routine will be called by the generic close routine to cleanup any
- *  resources that have been allocated for the management of the file
- */
-
-int imfs_dir_close(
-  rtems_libio_t  *iop
-)
-{
-  /*
-   *  The generic close routine handles the deallocation of the file control
-   *  and associated memory. At present the imfs_dir_close simply
-   *  returns a successful completion status.
-   */
-
-  return 0;
-}
-
-
-
 /*
  *  imfs_dir_lseek
  *

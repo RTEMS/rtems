@@ -80,8 +80,6 @@ int device_close(
     (void *) &args
   );
 
-  IMFS_check_node_remove( the_jnode );
-
   return rtems_deviceio_errno( status );
 }
 

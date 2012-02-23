@@ -23,7 +23,7 @@
 
 const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_open,
-  memfile_close,
+  rtems_filesystem_default_close,
   memfile_read,
   memfile_write,
   memfile_ioctl,

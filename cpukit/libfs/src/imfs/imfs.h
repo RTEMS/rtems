@@ -166,6 +166,7 @@ struct IMFS_jnode_tt {
   IMFS_jnode_t       *Parent;                /* Parent node */
   char                name[IMFS_NAME_MAX+1]; /* "basename" */
   mode_t              st_mode;               /* File mode */
+  unsigned short      reference_count;
   nlink_t             st_nlink;              /* Link count */
   ino_t               st_ino;                /* inode */
 
@@ -274,6 +275,11 @@ extern void IMFS_dump( void );
  */
 extern int IMFS_memfile_maximum_size( void );
 
+extern void IMFS_node_destroy( IMFS_jnode_t *node );
+
+extern int IMFS_node_clone( rtems_filesystem_location_info_t *loc );
+
+extern void IMFS_node_free( const rtems_filesystem_location_info_t *loc );
 
 extern rtems_filesystem_node_types_t IMFS_node_type(
   const rtems_filesystem_location_info_t *loc
@@ -353,10 +359,6 @@ extern int imfs_dir_open(
   mode_t         mode             /* IN  */
 );
 
-extern int imfs_dir_close(
-  rtems_libio_t *iop             /* IN  */
-);
-
 extern ssize_t imfs_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
@@ -374,10 +376,6 @@ extern int memfile_open(
   const char    *pathname,        /* IN  */
   int            oflag,           /* IN  */
   mode_t         mode             /* IN  */
-);
-
-extern int memfile_close(
-  rtems_libio_t *iop             /* IN  */
 );
 
 extern ssize_t memfile_read(
@@ -476,18 +474,21 @@ extern int IMFS_rename(
   size_t namelen
 );
 
-extern void IMFS_create_orphan(
-  IMFS_jnode_t *jnode
-);
-
-extern void IMFS_check_node_remove(
-  IMFS_jnode_t *jnode
-);
-
 extern int IMFS_rmnod(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *loc
 );
+
+/*
+ *  Turn on IMFS assertions when RTEMS_DEBUG is defined.
+ */
+#ifdef RTEMS_DEBUG
+  #include <assert.h>
+
+  #define IMFS_assert(_x) assert(_x)
+#else
+  #define IMFS_assert(_x)
+#endif
 
 static inline void IMFS_add_to_directory(
   IMFS_jnode_t *dir,
@@ -500,20 +501,10 @@ static inline void IMFS_add_to_directory(
 
 static inline void IMFS_remove_from_directory( IMFS_jnode_t *node )
 {
+  IMFS_assert( node->Parent != NULL );
   node->Parent = NULL;
   rtems_chain_extract_unprotected( &node->Node );
 }
-
-/*
- *  Turn on IMFS assertions when RTEMS_DEBUG is defined.
- */
-#ifdef RTEMS_DEBUG
-  #include <assert.h>
-
-  #define IMFS_assert(_x) assert(_x)
-#else
-  #define IMFS_assert(_x)
-#endif
 
 #ifdef __cplusplus
 }

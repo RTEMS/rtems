@@ -106,3 +106,41 @@ int IMFS_initialize_support(
 
   return 0;
 }
+
+int IMFS_node_clone( rtems_filesystem_location_info_t *loc )
+{
+  IMFS_jnode_t *node = loc->node_access;
+
+  ++node->reference_count;
+
+  return 0;
+}
+
+void IMFS_node_destroy( IMFS_jnode_t *node )
+{
+  IMFS_assert( node->reference_count == 0 );
+
+  switch ( node->type ) {
+    case IMFS_MEMORY_FILE:
+      IMFS_memfile_remove( node );
+      break;
+    case IMFS_SYM_LINK:
+      free( node->info.sym_link.name );
+      break;
+    default:
+      break;
+  }
+
+  free( node );
+}
+
+void IMFS_node_free( const rtems_filesystem_location_info_t *loc )
+{
+  IMFS_jnode_t *node = loc->node_access;
+
+  if ( node->reference_count == 1 ) {
+    IMFS_node_destroy( node );
+  } else {
+    --node->reference_count;
+  }
+}

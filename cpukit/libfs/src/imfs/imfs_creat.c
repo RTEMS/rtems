@@ -123,6 +123,7 @@ IMFS_jnode_t *IMFS_allocate_node(
   /*
    *  Fill in the basic information
    */
+  node->reference_count = 1;
   node->st_nlink = 1;
   node->type     = type;
   memcpy( node->name, name, namelen );

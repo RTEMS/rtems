@@ -30,12 +30,15 @@ int IMFS_link(
 {
   IMFS_types_union   info;
   IMFS_jnode_t      *new_node;
+  IMFS_jnode_t      *target;
+
+  target = targetloc->node_access;
+  info.hard_link.link_node = target;
 
   /*
    *  Verify this node can be linked to.
    */
-  info.hard_link.link_node = targetloc->node_access;
-  if ( info.hard_link.link_node->st_nlink >= LINK_MAX )
+  if ( target->st_nlink >= LINK_MAX )
     rtems_set_errno_and_return_minus_one( EMLINK );
 
   /*
@@ -56,8 +59,9 @@ int IMFS_link(
   /*
    * Increment the link count of the node being pointed to.
    */
-  info.hard_link.link_node->st_nlink++;
-  IMFS_update_ctime( info.hard_link.link_node );
+  target->reference_count++;
+  target->st_nlink++;
+  IMFS_update_ctime( target );
 
   return 0;
 }

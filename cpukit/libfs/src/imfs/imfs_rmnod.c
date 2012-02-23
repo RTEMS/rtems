@@ -23,44 +23,13 @@
 
 #include "imfs.h"
 
-#include <stdlib.h>
-
-void IMFS_create_orphan( IMFS_jnode_t *jnode )
-{
-  if ( jnode->Parent != NULL ) {
-    IMFS_remove_from_directory( jnode );
-  }
-
-  --jnode->st_nlink;
-
-  IMFS_update_ctime( jnode );
-}
-
-void IMFS_check_node_remove( IMFS_jnode_t *jnode )
-{
-  if ( jnode->st_nlink < 1 ) {
-    switch ( jnode->type ) {
-      case IMFS_MEMORY_FILE:
-        IMFS_memfile_remove( jnode );
-        break;
-      case IMFS_SYM_LINK:
-        free( jnode->info.sym_link.name );
-        break;
-      default:
-        break;
-    }
-
-    free( jnode );
-  }
-}
-
 static int IMFS_rmnod_directory(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *loc
 )
 {
-  IMFS_jnode_t *node = loc->node_access;
   int rv = 0;
+  IMFS_jnode_t *node = loc->node_access;
 
   if ( !rtems_chain_is_empty( &node->info.directory.Entries ) ) {
     errno = ENOTEMPTY;
@@ -120,8 +89,11 @@ int IMFS_rmnod(
   }
 
   if ( rv == 0 ) {
-    IMFS_create_orphan( node );
-    IMFS_check_node_remove( node );
+    --node->reference_count;
+    --node->st_nlink;
+    if ( node->Parent != NULL ) {
+      IMFS_remove_from_directory( node );
+    }
   }
 
   return rv;

@@ -154,6 +154,8 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
           IMFS_is_mount_point( entry );
 
         if ( fs_root_ptr == NULL ) {
+          --dir->reference_count;
+          ++entry->reference_count;
           currentloc->node_access = entry;
           IMFS_Set_handlers( currentloc );
 
