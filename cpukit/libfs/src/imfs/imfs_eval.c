@@ -18,38 +18,6 @@
 
 #include "imfs.h"
 
-void IMFS_Set_handlers( rtems_filesystem_location_info_t *loc )
-{
-  IMFS_jnode_t *node = loc->node_access;
-  IMFS_fs_info_t *fs_info = loc->mt_entry->fs_info;
-  const rtems_filesystem_file_handlers_r *handlers;
-
-  switch ( node->type ) {
-    case IMFS_DIRECTORY:
-      handlers = &IMFS_directory_handlers;
-      break;
-    case IMFS_DEVICE:
-      handlers = &IMFS_device_handlers;
-      break;
-    case IMFS_HARD_LINK:
-    case IMFS_SYM_LINK:
-      handlers = fs_info->link_handlers;
-      break;
-    case IMFS_MEMORY_FILE:
-    case IMFS_LINEAR_FILE:
-      handlers = &IMFS_memfile_handlers;
-      break;
-    case IMFS_FIFO:
-      handlers = fs_info->fifo_handlers;
-      break;
-    default:
-      IMFS_assert( 0 );
-      break;
-  }
-
-  loc->handlers = handlers;
-}
-
 static bool IMFS_eval_is_directory(
   rtems_filesystem_eval_path_context_t *ctx,
   void *arg

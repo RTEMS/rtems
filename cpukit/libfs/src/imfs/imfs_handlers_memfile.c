@@ -17,11 +17,7 @@
 
 #include "imfs.h"
 
-/*
- *  Set of operations handlers for operations on memfile entities.
- */
-
-const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
+static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_open,
   rtems_filesystem_default_close,
   memfile_read,
@@ -33,4 +29,20 @@ const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   rtems_filesystem_default_fsync_or_fdatasync_success,
   rtems_filesystem_default_fsync_or_fdatasync_success,
   rtems_filesystem_default_fcntl
+};
+
+const IMFS_node_control IMFS_node_control_memfile = {
+  .imfs_type = IMFS_MEMORY_FILE,
+  .handlers = &IMFS_memfile_handlers,
+  .node_initialize = IMFS_node_initialize_default,
+  .node_remove = IMFS_node_remove_default,
+  .node_destroy = IMFS_memfile_remove
+};
+
+const IMFS_node_control IMFS_node_control_linfile = {
+  .imfs_type = IMFS_LINEAR_FILE,
+  .handlers = &IMFS_memfile_handlers,
+  .node_initialize = IMFS_node_initialize_default,
+  .node_remove = IMFS_node_remove_default,
+  .node_destroy = IMFS_node_destroy_default
 };

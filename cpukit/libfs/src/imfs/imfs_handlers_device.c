@@ -17,11 +17,7 @@
 
 #include "imfs.h"
 
-/*
- *  Handler table for IMFS device nodes
- */
-
-const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
+static const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_open,
   device_close,
   device_read,
@@ -33,4 +29,23 @@ const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fcntl
+};
+
+static IMFS_jnode_t *IMFS_node_initialize_device(
+  IMFS_jnode_t *node,
+  const IMFS_types_union *info
+)
+{
+  node->info.device.major = info->device.major;
+  node->info.device.minor = info->device.minor;
+
+  return node;
+}
+
+const IMFS_node_control IMFS_node_control_device = {
+  .imfs_type = IMFS_DEVICE,
+  .handlers = &IMFS_device_handlers,
+  .node_initialize = IMFS_node_initialize_device,
+  .node_remove = IMFS_node_remove_default,
+  .node_destroy = IMFS_node_destroy_default
 };

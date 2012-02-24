@@ -23,7 +23,7 @@
 
 #include "imfs.h"
 
-static const rtems_filesystem_operations_table miniIMFS_ops = {
+const rtems_filesystem_operations_table miniIMFS_ops = {
   .lock_h = rtems_filesystem_default_lock,
   .unlock_h = rtems_filesystem_default_unlock,
   .eval_path_h = IMFS_eval_path,
@@ -47,6 +47,17 @@ static const rtems_filesystem_operations_table miniIMFS_ops = {
   .statvfs_h = rtems_filesystem_default_statvfs
 };
 
+static const IMFS_node_control *const
+  IMFS_mini_node_controls [IMFS_TYPE_COUNT] = {
+  [IMFS_DIRECTORY] = &IMFS_node_control_directory,
+  [IMFS_DEVICE] = &IMFS_node_control_device,
+  [IMFS_HARD_LINK] = &IMFS_node_control_default,
+  [IMFS_SYM_LINK] = &IMFS_node_control_default,
+  [IMFS_MEMORY_FILE] = &IMFS_node_control_memfile,
+  [IMFS_LINEAR_FILE] = &IMFS_node_control_linfile,
+  [IMFS_FIFO] = &IMFS_node_control_default
+};
+
 int miniIMFS_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const void                           *data
@@ -55,7 +66,6 @@ int miniIMFS_initialize(
   return IMFS_initialize_support(
     mt_entry,
     &miniIMFS_ops,
-    &rtems_filesystem_handlers_default, /* for links */
-    &rtems_filesystem_handlers_default  /* for fifos */
+    IMFS_mini_node_controls
   );
 }

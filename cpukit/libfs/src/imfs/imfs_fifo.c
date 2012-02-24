@@ -119,11 +119,7 @@ static off_t IMFS_fifo_lseek(
   IMFS_FIFO_RETURN(err);
 }
 
-/*
- *  Handler table for IMFS FIFO nodes
- */
-
-const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
+static const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   IMFS_fifo_open,
   IMFS_fifo_close,
   IMFS_fifo_read,
@@ -135,4 +131,12 @@ const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fcntl
+};
+
+const IMFS_node_control IMFS_node_control_fifo = {
+  .imfs_type = IMFS_FIFO,
+  .handlers = &IMFS_fifo_handlers,
+  .node_initialize = IMFS_node_initialize_default,
+  .node_remove = IMFS_node_remove_default,
+  .node_destroy = IMFS_node_destroy_default
 };

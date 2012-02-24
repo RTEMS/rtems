@@ -49,6 +49,17 @@ const rtems_filesystem_operations_table fifoIMFS_ops = {
   .statvfs_h = rtems_filesystem_default_statvfs
 };
 
+static const IMFS_node_control *const
+  IMFS_fifo_node_controls [IMFS_TYPE_COUNT] = {
+  [IMFS_DIRECTORY] = &IMFS_node_control_directory,
+  [IMFS_DEVICE] = &IMFS_node_control_device,
+  [IMFS_HARD_LINK] = &IMFS_node_control_hard_link,
+  [IMFS_SYM_LINK] = &IMFS_node_control_sym_link,
+  [IMFS_MEMORY_FILE] = &IMFS_node_control_memfile,
+  [IMFS_LINEAR_FILE] = &IMFS_node_control_linfile,
+  [IMFS_FIFO] = &IMFS_node_control_fifo
+};
+
 int fifoIMFS_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const void *data
@@ -57,7 +68,6 @@ int fifoIMFS_initialize(
   return IMFS_initialize_support(
     mt_entry,
     &fifoIMFS_ops,
-    &IMFS_link_handlers,
-    &IMFS_fifo_handlers
+    IMFS_fifo_node_controls
   );
 }

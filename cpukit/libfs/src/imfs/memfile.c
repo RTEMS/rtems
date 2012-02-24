@@ -97,7 +97,7 @@ int memfile_open(
     uint32_t   count = the_jnode->info.linearfile.size;
     const unsigned char *buffer = the_jnode->info.linearfile.direct;
 
-    the_jnode->type = IMFS_MEMORY_FILE;
+    the_jnode->control = &IMFS_node_control_memfile;
     the_jnode->info.file.size            = 0;
     the_jnode->info.file.indirect        = 0;
     the_jnode->info.file.doubly_indirect = 0;
@@ -420,7 +420,7 @@ static void memfile_free_blocks_in_table(
  *         Regardless until the IMFS implementation is proven, it
  *         is better to stick to simple, easy to understand algorithms.
  */
-int IMFS_memfile_remove(
+IMFS_jnode_t *IMFS_memfile_remove(
  IMFS_jnode_t  *the_jnode
 )
 {
@@ -482,7 +482,7 @@ int IMFS_memfile_remove(
         (block_p **)&info->triply_indirect, to_free );
   }
 
-  return 0;
+  return the_jnode;
 }
 
 /*
