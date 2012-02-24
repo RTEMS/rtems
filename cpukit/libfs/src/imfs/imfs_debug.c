@@ -33,7 +33,7 @@ static void IMFS_print_jnode(
   IMFS_assert( the_jnode );
 
   fprintf(stdout, "%s", the_jnode->name );
-  switch( the_jnode->type ) {
+  switch( IMFS_type( the_jnode ) ) {
     case IMFS_DIRECTORY:
       fprintf(stdout, "/" );
       break;
@@ -78,7 +78,7 @@ static void IMFS_print_jnode(
       return;
 
     default:
-      fprintf(stdout, " bad type %d\n", the_jnode->type );
+      fprintf(stdout, " bad type %d\n", IMFS_type( the_jnode ) );
       return;
   }
   puts("");
@@ -103,7 +103,7 @@ static void IMFS_dump_directory(
 
   IMFS_assert( the_directory );
   IMFS_assert( level >= 0 );
-  IMFS_assert( the_directory->type == IMFS_DIRECTORY );
+  IMFS_assert( IMFS_is_directory( the_directory ) );
 
   the_chain = &the_directory->info.directory.Entries;
 
@@ -116,7 +116,7 @@ static void IMFS_dump_directory(
     for ( i=0 ; i<=level ; i++ )
       fprintf(stdout, "...." );
     IMFS_print_jnode( the_jnode );
-    if ( the_jnode->type == IMFS_DIRECTORY )
+    if ( IMFS_is_directory( the_jnode ) )
       IMFS_dump_directory( the_jnode, level + 1 );
   }
 }

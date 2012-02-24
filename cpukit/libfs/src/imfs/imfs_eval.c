@@ -50,7 +50,7 @@ void IMFS_Set_handlers( rtems_filesystem_location_info_t *loc )
   loc->handlers = handlers;
 }
 
-static bool IMFS_is_directory(
+static bool IMFS_eval_is_directory(
   rtems_filesystem_eval_path_context_t *ctx,
   void *arg
 )
@@ -59,7 +59,7 @@ static bool IMFS_is_directory(
     rtems_filesystem_eval_path_get_currentloc( ctx );
   IMFS_jnode_t *node = currentloc->node_access;
 
-  return node->type == IMFS_DIRECTORY;
+  return IMFS_is_directory( node );
 }
 
 static IMFS_jnode_t *IMFS_search_in_directory(
@@ -96,12 +96,13 @@ static IMFS_jnode_t *IMFS_search_in_directory(
 }
 
 static rtems_filesystem_global_location_t **IMFS_is_mount_point(
-  IMFS_jnode_t *node
+  IMFS_jnode_t *node,
+  IMFS_jnode_types_t type
 )
 {
   rtems_filesystem_global_location_t **fs_root_ptr = NULL;
 
-  if ( node->type == IMFS_DIRECTORY ) {
+  if ( type == IMFS_DIRECTORY ) {
     if ( node->info.directory.mt_fs != NULL ) {
       fs_root_ptr = &node->info.directory.mt_fs->mt_fs_root;
     }
@@ -138,20 +139,21 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
       int eval_flags = rtems_filesystem_eval_path_get_flags( ctx );
       bool follow_hard_link = (eval_flags & RTEMS_FS_FOLLOW_HARD_LINK) != 0;
       bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
+      IMFS_jnode_types_t type = IMFS_type( entry );
 
       rtems_filesystem_eval_path_clear_token( ctx );
 
-      if ( entry->type == IMFS_HARD_LINK && (follow_hard_link || !terminal)) {
+      if ( type == IMFS_HARD_LINK && (follow_hard_link || !terminal)) {
         entry = entry->info.hard_link.link_node;
       }
 
-      if ( entry->type == IMFS_SYM_LINK && (follow_sym_link || !terminal)) {
+      if ( type == IMFS_SYM_LINK && (follow_sym_link || !terminal)) {
         const char *target = entry->info.sym_link.name;
 
         rtems_filesystem_eval_path_recursive( ctx, target, strlen( target ) );
       } else {
         rtems_filesystem_global_location_t **fs_root_ptr =
-          IMFS_is_mount_point( entry );
+          IMFS_is_mount_point( entry, type );
 
         if ( fs_root_ptr == NULL ) {
           --dir->reference_count;
@@ -184,7 +186,7 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
 }
 
 static const rtems_filesystem_eval_path_generic_config IMFS_eval_config = {
-  .is_directory = IMFS_is_directory,
+  .is_directory = IMFS_eval_is_directory,
   .eval_token = IMFS_eval_token
 };
 

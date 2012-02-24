@@ -61,7 +61,7 @@ void IMFS_fsunmount(
      loc.node_access = (void *)jnode;
      IMFS_Set_handlers( &loc );
 
-     if ( jnode->type != IMFS_DIRECTORY || jnode_has_no_children( jnode ) ) {
+     if ( !IMFS_is_directory( jnode ) || jnode_has_no_children( jnode ) ) {
         result = IMFS_rmnod( NULL, &loc );
         if ( result != 0 )
 	  rtems_fatal_error_occurred( 0xdeadbeef );
@@ -69,7 +69,7 @@ void IMFS_fsunmount(
         jnode = next;
      }
      if ( jnode != NULL ) {
-       if ( jnode->type == IMFS_DIRECTORY ) {
+       if ( IMFS_is_directory( jnode ) ) {
          if ( jnode_has_children( jnode ) )
            jnode = jnode_get_first_child( jnode );
        }

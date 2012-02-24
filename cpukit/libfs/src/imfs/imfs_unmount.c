@@ -25,7 +25,7 @@ int IMFS_unmount( rtems_filesystem_mount_table_entry_t *mt_entry )
   int rv = 0;
   IMFS_jnode_t *node = mt_entry->mt_point_node->location.node_access;
 
-  if ( node->type == IMFS_DIRECTORY ) {
+  if ( IMFS_is_directory( node ) ) {
     if ( node->info.directory.mt_fs == mt_entry ) {
       node->info.directory.mt_fs = NULL;
     } else {

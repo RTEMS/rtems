@@ -49,11 +49,11 @@ int IMFS_stat(
   IMFS_jnode_t *the_jnode = loc->node_access;
   IMFS_device_t *io = &the_jnode->info.device;
 
-  if ( the_jnode->type == IMFS_HARD_LINK ) {
+  if ( IMFS_type( the_jnode ) == IMFS_HARD_LINK ) {
     the_jnode = the_jnode->info.hard_link.link_node;
   }
 
-  switch ( the_jnode->type ) {
+  switch ( IMFS_type( the_jnode ) ) {
 
     case IMFS_DEVICE:
       buf->st_rdev = rtems_filesystem_make_dev_t( io->major, io->minor );
@@ -97,7 +97,7 @@ int IMFS_stat(
   buf->st_mtime = the_jnode->stat_mtime;
   buf->st_ctime = the_jnode->stat_ctime;
 
-  if ( the_jnode->type != IMFS_DIRECTORY ) {
+  if ( !IMFS_is_directory( the_jnode ) ) {
     buf->st_blksize = imfs_rq_memfile_bytes_per_block;
   }
 

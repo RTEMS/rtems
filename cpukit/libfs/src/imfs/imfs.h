@@ -499,6 +499,16 @@ static inline void IMFS_remove_from_directory( IMFS_jnode_t *node )
   rtems_chain_extract_unprotected( &node->Node );
 }
 
+static inline IMFS_jnode_types_t IMFS_type( const IMFS_jnode_t *node )
+{
+  return node->type;
+}
+
+static inline bool IMFS_is_directory( const IMFS_jnode_t *node )
+{
+  return node->type == IMFS_DIRECTORY;
+}
+
 #ifdef __cplusplus
 }
 #endif

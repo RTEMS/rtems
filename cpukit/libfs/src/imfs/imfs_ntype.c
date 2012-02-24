@@ -28,12 +28,12 @@ rtems_filesystem_node_types_t IMFS_node_type(
 )
 {
   const IMFS_jnode_t *node = loc->node_access;
-  IMFS_jnode_types_t imfs_type = node->type;
+  IMFS_jnode_types_t imfs_type = IMFS_type( node );
   rtems_filesystem_node_types_t type;
 
   switch ( imfs_type ) {
     case IMFS_HARD_LINK:
-      type = node->info.hard_link.link_node->type;
+      type = IMFS_type( node->info.hard_link.link_node );
       break;
     case IMFS_LINEAR_FILE:
       type = RTEMS_FILESYSTEM_MEMORY_FILE;

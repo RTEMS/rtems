@@ -93,7 +93,7 @@ int memfile_open(
    * Perform 'copy on write' for linear files
    */
   if ((iop->flags & (LIBIO_FLAGS_WRITE | LIBIO_FLAGS_APPEND))
-   && (the_jnode->type == IMFS_LINEAR_FILE)) {
+   && (IMFS_type( the_jnode ) == IMFS_LINEAR_FILE)) {
     uint32_t   count = the_jnode->info.linearfile.size;
     const unsigned char *buffer = the_jnode->info.linearfile.direct;
 
@@ -184,7 +184,7 @@ off_t memfile_lseek(
 
   the_jnode = iop->pathinfo.node_access;
 
-  if (the_jnode->type == IMFS_LINEAR_FILE) {
+  if (IMFS_type( the_jnode ) == IMFS_LINEAR_FILE) {
     if (iop->offset > the_jnode->info.linearfile.size)
       iop->offset = the_jnode->info.linearfile.size;
   }
@@ -259,7 +259,7 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    *  Perform internal consistency checks
    */
   IMFS_assert( the_jnode );
-    IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
+    IMFS_assert( IMFS_type( the_jnode ) == IMFS_MEMORY_FILE );
 
   /*
    *  Verify new file size is supported
@@ -315,7 +315,7 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
   block_p *block_entry_ptr;
 
   IMFS_assert( the_jnode );
-  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
+  IMFS_assert( IMFS_type( the_jnode ) == IMFS_MEMORY_FILE );
 
   /*
    * Obtain the pointer for the specified block number
@@ -434,7 +434,7 @@ int IMFS_memfile_remove(
    *  Perform internal consistency checks
    */
   IMFS_assert( the_jnode );
-  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
+  IMFS_assert( IMFS_type( the_jnode ) == IMFS_MEMORY_FILE );
 
   /*
    *  Eventually this could be set smarter at each call to
@@ -518,8 +518,8 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    *  Perform internal consistency checks
    */
   IMFS_assert( the_jnode );
-  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE ||
-       the_jnode->type == IMFS_LINEAR_FILE );
+  IMFS_assert( IMFS_type( the_jnode ) == IMFS_MEMORY_FILE ||
+    IMFS_type( the_jnode ) == IMFS_LINEAR_FILE );
   IMFS_assert( dest );
 
   /*
@@ -528,7 +528,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_read(
    */
   my_length = length;
 
-  if (the_jnode->type == IMFS_LINEAR_FILE) {
+  if ( IMFS_type( the_jnode ) == IMFS_LINEAR_FILE ) {
     unsigned char  *file_ptr;
 
     file_ptr = (unsigned char *)the_jnode->info.linearfile.direct;
@@ -642,7 +642,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
    */
   IMFS_assert( source );
   IMFS_assert( the_jnode );
-  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
+  IMFS_assert( IMFS_type( the_jnode ) == IMFS_MEMORY_FILE );
 
   my_length = length;
   /*
@@ -787,7 +787,7 @@ block_p *IMFS_memfile_get_block_pointer(
    *  Perform internal consistency checks
    */
   IMFS_assert( the_jnode );
-  IMFS_assert( the_jnode->type == IMFS_MEMORY_FILE );
+  IMFS_assert( IMFS_type( the_jnode ) == IMFS_MEMORY_FILE );
 
   info = &the_jnode->info.file;
   my_block = block;
