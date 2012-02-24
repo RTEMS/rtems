@@ -30,7 +30,7 @@ const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_lseek,
   IMFS_stat,
   rtems_filesystem_default_ftruncate_directory,
-  rtems_filesystem_default_fsync,
-  IMFS_fdatasync,
+  rtems_filesystem_default_fsync_or_fdatasync_success,
+  rtems_filesystem_default_fsync_or_fdatasync_success,
   rtems_filesystem_default_fcntl
 };

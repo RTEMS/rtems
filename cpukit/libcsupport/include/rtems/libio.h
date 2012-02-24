@@ -900,7 +900,8 @@ typedef int (*rtems_filesystem_ftruncate_t)(
  * @retval 0 Successful operation.
  * @retval -1 An error occured.  The errno is set to indicate the error.
  *
- * @see rtems_filesystem_default_fsync().
+ * @see rtems_filesystem_default_fsync_or_fdatasync() and
+ * rtems_filesystem_default_fsync_or_fdatasync_success().
  */
 typedef int (*rtems_filesystem_fsync_t)(
   rtems_libio_t *iop
@@ -914,7 +915,8 @@ typedef int (*rtems_filesystem_fsync_t)(
  * @retval 0 Successful operation.
  * @retval -1 An error occured.  The errno is set to indicate the error.
  *
- * @see rtems_filesystem_default_fdatasync().
+ * @see rtems_filesystem_default_fsync_or_fdatasync() and
+ * rtems_filesystem_default_fsync_or_fdatasync_success().
  */
 typedef int (*rtems_filesystem_fdatasync_t)(
   rtems_libio_t *iop
@@ -1068,20 +1070,20 @@ int rtems_filesystem_default_ftruncate_directory(
 );
 
 /**
- * @retval -1 Always.  The errno is set to ENOTSUP.
+ * @retval -1 Always.  The errno is set to EINVAL.
  *
- * @see rtems_filesystem_fsync_t.
+ * @see rtems_filesystem_fsync_t and rtems_filesystem_fdatasync_t.
  */
-int rtems_filesystem_default_fsync(
+int rtems_filesystem_default_fsync_or_fdatasync(
   rtems_libio_t *iop
 );
 
 /**
- * @retval -1 Always.  The errno is set to ENOTSUP.
+ * @retval 0 Always.
  *
- * @see rtems_filesystem_fdatasync_t.
+ * @see rtems_filesystem_fsync_t and rtems_filesystem_fdatasync_t.
  */
-int rtems_filesystem_default_fdatasync(
+int rtems_filesystem_default_fsync_or_fdatasync_success(
   rtems_libio_t *iop
 );
 

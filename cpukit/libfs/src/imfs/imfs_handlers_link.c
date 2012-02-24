@@ -30,7 +30,7 @@ const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
   rtems_filesystem_default_lseek,
   IMFS_stat,  /* stat */
   rtems_filesystem_default_ftruncate,
-  rtems_filesystem_default_fsync,
-  rtems_filesystem_default_fdatasync,
+  rtems_filesystem_default_fsync_or_fdatasync,
+  rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fcntl
 };

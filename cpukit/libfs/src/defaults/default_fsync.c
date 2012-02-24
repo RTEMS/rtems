@@ -9,13 +9,15 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
 
-int rtems_filesystem_default_fsync(
+#include <rtems/libio_.h>
+
+int rtems_filesystem_default_fsync_or_fdatasync(
   rtems_libio_t *iop
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  rtems_set_errno_and_return_minus_one( EINVAL );
 }

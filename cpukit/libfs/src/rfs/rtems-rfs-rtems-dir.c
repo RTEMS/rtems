@@ -200,7 +200,7 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_dir_handlers = {
   .lseek_h     = rtems_rfs_rtems_dir_lseek,
   .fstat_h     = rtems_rfs_rtems_fstat,
   .ftruncate_h = rtems_filesystem_default_ftruncate_directory,
-  .fsync_h     = rtems_filesystem_default_fsync,
+  .fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
   .fcntl_h     = rtems_filesystem_default_fcntl
 };

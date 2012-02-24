@@ -135,7 +135,7 @@ const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   IMFS_fifo_lseek,
   IMFS_stat,
   rtems_filesystem_default_ftruncate,
-  rtems_filesystem_default_fsync,
-  rtems_filesystem_default_fdatasync,
+  rtems_filesystem_default_fsync_or_fdatasync,
+  rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fcntl
 };

@@ -16,7 +16,9 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_lock_and_unlock.c \
     src/defaults/default_eval_path.c \
     src/defaults/default_fchmod.c src/defaults/default_freenode.c \
-    src/defaults/default_fsync.c src/defaults/default_link.c \
+    src/defaults/default_fsync.c \
+    src/defaults/default_fsync_success.c \
+    src/defaults/default_link.c \
     src/defaults/default_read.c src/defaults/default_rmnod.c \
     src/defaults/default_chown.c \
     src/defaults/default_fcntl.c src/defaults/default_fsmount.c \
@@ -24,7 +26,7 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_lseek_success.c \
     src/defaults/default_readlink.c src/defaults/default_statvfs.c \
     src/defaults/default_utime.c \
-    src/defaults/default_fdatasync.c  src/defaults/default_fstat.c \
+    src/defaults/default_fstat.c \
     src/defaults/default_ioctl.c src/defaults/default_mount.c \
     src/defaults/default_rename.c src/defaults/default_symlink.c \
     src/defaults/default_write.c \
@@ -42,7 +44,7 @@ libimfs_a_SOURCES += src/imfs/deviceerrno.c src/imfs/deviceio.c \
     src/imfs/fifoimfs_init.c src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_creat.c src/imfs/imfs_debug.c src/imfs/imfs_directory.c \
     src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c \
-    src/imfs/imfs_fdatasync.c src/imfs/imfs_fifo.c \
+    src/imfs/imfs_fifo.c \
     src/imfs/imfs_fsunmount.c \
     src/imfs/imfs_handlers_device.c \
     src/imfs/imfs_handlers_directory.c src/imfs/imfs_handlers_link.c \

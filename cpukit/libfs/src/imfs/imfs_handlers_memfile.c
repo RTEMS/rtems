@@ -30,7 +30,7 @@ const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_lseek,
   IMFS_stat,
   memfile_ftruncate,
-  IMFS_fdatasync,      /* fsync */
-  IMFS_fdatasync,
+  rtems_filesystem_default_fsync_or_fdatasync_success,
+  rtems_filesystem_default_fsync_or_fdatasync_success,
   rtems_filesystem_default_fcntl
 };

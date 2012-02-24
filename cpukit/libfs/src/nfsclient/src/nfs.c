@@ -2634,8 +2634,8 @@ struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
 	.lseek_h     = nfs_file_lseek,
 	.fstat_h     = nfs_fstat,
 	.ftruncate_h = nfs_file_ftruncate,
-	.fsync_h     = rtems_filesystem_default_fsync,
-	.fdatasync_h = rtems_filesystem_default_fdatasync,
+	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
+	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h     = rtems_filesystem_default_fcntl
 };
 
@@ -2650,8 +2650,8 @@ struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers = {
 	.lseek_h     = nfs_dir_lseek,
 	.fstat_h     = nfs_fstat,
 	.ftruncate_h = rtems_filesystem_default_ftruncate_directory,
-	.fsync_h     = rtems_filesystem_default_fsync,
-	.fdatasync_h = rtems_filesystem_default_fdatasync,
+	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
+	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h     = rtems_filesystem_default_fcntl
 };
 
@@ -2666,8 +2666,8 @@ struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers = {
 	.lseek_h     = rtems_filesystem_default_lseek,
 	.fstat_h     = nfs_fstat,
 	.ftruncate_h = rtems_filesystem_default_ftruncate,
-	.fsync_h     = rtems_filesystem_default_fsync,
-	.fdatasync_h = rtems_filesystem_default_fdatasync,
+	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,
+	.fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
 	.fcntl_h     = rtems_filesystem_default_fcntl
 };
 

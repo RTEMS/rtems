@@ -1051,7 +1051,7 @@ static const rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
    .lseek_h = rtems_filesystem_default_lseek,
    .fstat_h = rtems_filesystem_default_fstat,
    .ftruncate_h = rtems_tftp_ftruncate,
-   .fsync_h = rtems_filesystem_default_fsync,
-   .fdatasync_h = rtems_filesystem_default_fdatasync,
+   .fsync_h = rtems_filesystem_default_fsync_or_fdatasync,
+   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
    .fcntl_h = rtems_filesystem_default_fcntl
 };
