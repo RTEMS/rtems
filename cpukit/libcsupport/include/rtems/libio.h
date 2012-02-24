@@ -1014,7 +1014,7 @@ int rtems_filesystem_default_ioctl(
 );
 
 /**
- * @retval -1 Always.  The errno is set to ENOTSUP.
+ * @retval -1 Always.  The errno is set to ESPIPE.
  *
  * @see rtems_filesystem_lseek_t.
  */

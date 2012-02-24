@@ -9,15 +9,17 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 off_t rtems_filesystem_default_lseek(
   rtems_libio_t *iop,
-  off_t          length,
+  off_t          offset,
   int            whence
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  rtems_set_errno_and_return_minus_one( ESPIPE );
 }
