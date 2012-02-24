@@ -21,33 +21,6 @@
 #include <dirent.h>
 
 /*
- *  imfs_dir_open
- *
- *  This rountine will verify that the node being opened as a directory is
- *  in fact a directory node. If it is then the offset into the directory
- *  will be set to 0 to position to the first directory entry.
- */
-
-int imfs_dir_open(
-  rtems_libio_t  *iop,
-  const char *pathname,
-  int oflag,
-  mode_t mode
-)
-{
-  IMFS_jnode_t      *the_jnode;
-
-  /* Is the node a directory ? */
-  the_jnode = (IMFS_jnode_t *) iop->pathinfo.node_access;
-
-  if ( the_jnode->type != IMFS_DIRECTORY )
-     return -1;      /* It wasn't a directory --> return error */
-
-  iop->offset = 0;
-  return 0;
-}
-
-/*
  *  imfs_dir_read
  *
  *  This routine will read the next directory entry based on the directory

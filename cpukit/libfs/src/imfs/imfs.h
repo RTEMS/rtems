@@ -352,13 +352,6 @@ extern int memfile_ftruncate(
   off_t          length             /* IN  */
 );
 
-extern int imfs_dir_open(
-  rtems_libio_t *iop,             /* IN  */
-  const char    *pathname,        /* IN  */
-  int            oflag,           /* IN  */
-  mode_t         mode             /* IN  */
-);
-
 extern ssize_t imfs_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
