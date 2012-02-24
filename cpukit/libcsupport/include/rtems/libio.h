@@ -844,13 +844,14 @@ typedef int (*rtems_filesystem_ioctl_t)(
  * @brief Moves the read/write file offset.
  *
  * @param[in, out] iop The IO pointer.
- * @param[in] offset The new offset.
- * @param[in] whence The reference position of the new offset.
+ * @param[in] offset The offset.
+ * @param[in] whence The reference position for the offset.
  *
  * @retval non-negative The new offset from the beginning of the file.
  * @retval -1 An error occured.  The errno is set to indicate the error.
  *
- * @see rtems_filesystem_default_lseek().
+ * @see rtems_filesystem_default_lseek() and
+ * rtems_filesystem_default_lseek_success().
  */
 typedef off_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
@@ -1019,7 +1020,18 @@ int rtems_filesystem_default_ioctl(
  */
 off_t rtems_filesystem_default_lseek(
   rtems_libio_t *iop,
-  off_t          length,
+  off_t          offset,
+  int            whence
+);
+
+/**
+ * @retval 0 Always.
+ *
+ * @see rtems_filesystem_lseek_t.
+ */
+off_t rtems_filesystem_default_lseek_success(
+  rtems_libio_t *iop,
+  off_t          offset,
   int            whence
 );
 

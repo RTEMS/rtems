@@ -21,6 +21,7 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_chown.c \
     src/defaults/default_fcntl.c src/defaults/default_fsmount.c \
     src/defaults/default_ftruncate.c src/defaults/default_lseek.c \
+    src/defaults/default_lseek_success.c \
     src/defaults/default_readlink.c src/defaults/default_statvfs.c \
     src/defaults/default_utime.c \
     src/defaults/default_fdatasync.c  src/defaults/default_fstat.c \
