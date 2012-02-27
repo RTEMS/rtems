@@ -31,7 +31,7 @@
  *      gets sector from the disk
  *
  * PARAMETERS:
- *      dev        - device number
+ *      fd         - file descriptor
  *      sector_num - number of sector to read
  *      sector     - returned pointer to pointer to allocated
  *                   sector_data_t structure
@@ -46,15 +46,24 @@
  *      and does not support devices with sector size other than 512 bytes
  */
 static rtems_status_code
-get_sector(dev_t dev, uint32_t sector_num, rtems_sector_data_t **sector)
+get_sector(int fd,
+           uint32_t sector_num,
+           rtems_sector_data_t **sector)
 {
     rtems_sector_data_t *s;
-    rtems_bdbuf_buffer  *buf;
-    rtems_status_code    rc;
+    ssize_t              n;
+    off_t                off;
+    off_t                new_off;
 
     if (sector == NULL)
     {
         return RTEMS_INTERNAL_ERROR;
+    }
+
+    off = sector_num * RTEMS_IDE_SECTOR_SIZE;
+    new_off = lseek(fd, off, SEEK_SET);
+    if (new_off != off) {
+        return RTEMS_IO_ERROR;
     }
 
     s = (rtems_sector_data_t *) malloc(sizeof(rtems_sector_data_t) + RTEMS_IDE_SECTOR_SIZE);
@@ -63,19 +72,16 @@ get_sector(dev_t dev, uint32_t sector_num, rtems_sector_data_t **sector)
         return RTEMS_NO_MEMORY;
     }
 
-    rc = rtems_bdbuf_read(dev, sector_num, &buf);
-    if (rc != RTEMS_SUCCESSFUL)
+    n = read(fd, s->data, RTEMS_IDE_SECTOR_SIZE);
+    if (n != RTEMS_IDE_SECTOR_SIZE)
     {
         free(s);
-        return rc;
+        return RTEMS_IO_ERROR;
     }
 
-    memcpy(s->data, buf->buffer, RTEMS_IDE_SECTOR_SIZE);
     s->sector_num = sector_num;
 
     *sector = s;
-
-    rtems_bdbuf_release(buf);
 
     return RTEMS_SUCCESSFUL;
 }
@@ -209,6 +215,7 @@ data_to_part_desc(uint8_t *data, rtems_part_desc_t **new_part_desc)
  *      and constructs the partition table tree
  *
  * PARAMETERS:
+ *      fd       - file descriptor
  *      start    - start sector of primary extended partition, used for
  *                 calculation of absolute partition sector address
  *      ext_part - description of extended partition to process
@@ -219,10 +226,9 @@ data_to_part_desc(uint8_t *data, rtems_part_desc_t **new_part_desc)
  *      RTEMS_INTERNAL_ERROR if other error occurs.
  */
 static rtems_status_code
-read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
+read_extended_partition(int fd, uint32_t start, rtems_part_desc_t *ext_part)
 {
     int                  i;
-    dev_t                dev;
     rtems_sector_data_t *sector = NULL;
     uint32_t             here;
     uint8_t             *data;
@@ -234,14 +240,12 @@ read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
         return RTEMS_INTERNAL_ERROR;
     }
 
-    dev = ext_part->disk_desc->dev;
-
     /* get start sector of current extended partition */
     here = ext_part->start;
 
     /* get first extended partition sector */
 
-    rc = get_sector(dev, here, &sector);
+    rc = get_sector(fd, here, &sector);
     if (rc != RTEMS_SUCCESSFUL)
     {
         if (sector)
@@ -285,7 +289,7 @@ read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
         {
             new_part_desc->log_id = EMPTY_PARTITION;
             new_part_desc->start += start;
-            read_extended_partition(start, new_part_desc);
+            read_extended_partition(fd, start, new_part_desc);
         }
         else
         {
@@ -317,17 +321,16 @@ read_extended_partition(uint32_t start, rtems_part_desc_t *ext_part)
  *      RTEMS_INTERNAL_ERROR otherwise
  */
 static rtems_status_code
-read_mbr(rtems_disk_desc_t *disk_desc)
+read_mbr(int fd, rtems_disk_desc_t *disk_desc)
 {
     int                  part_num;
     rtems_sector_data_t *sector = NULL;
     rtems_part_desc_t   *part_desc;
     uint8_t             *data;
     rtems_status_code    rc;
-    dev_t                dev = disk_desc->dev;
 
     /* get MBR sector */
-    rc = get_sector(dev, 0, &sector);
+    rc = get_sector(fd, 0, &sector);
     if (rc != RTEMS_SUCCESSFUL)
     {
         if (sector)
@@ -385,7 +388,7 @@ read_mbr(rtems_disk_desc_t *disk_desc)
         part_desc = disk_desc->partitions[part_num];
         if (part_desc != NULL && is_extended(part_desc->sys_type))
         {
-            read_extended_partition(part_desc->start, part_desc);
+            read_extended_partition(fd, part_desc->start, part_desc);
         }
     }
 
@@ -467,10 +470,18 @@ partition_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc)
 {
     struct stat         dev_stat;
     rtems_status_code   rc;
+    int                 fd;
 
-    rc = stat(dev_name, &dev_stat);
+    fd = open(dev_name, O_RDONLY);
+    if (fd < 0)
+    {
+        return RTEMS_INTERNAL_ERROR;
+    }
+
+    rc = fstat(fd, &dev_stat);
     if (rc != RTEMS_SUCCESSFUL)
     {
+        close(fd);
         return RTEMS_INTERNAL_ERROR;
     }
 
@@ -479,7 +490,9 @@ partition_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc)
     disk_desc->sector_size = (dev_stat.st_blksize) ? dev_stat.st_blksize :
                                               RTEMS_IDE_SECTOR_SIZE;
 
-    rc = read_mbr(disk_desc);
+    rc = read_mbr(fd, disk_desc);
+
+    close(fd);
 
     return rc;
 }
