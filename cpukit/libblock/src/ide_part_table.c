@@ -389,6 +389,8 @@ read_mbr(int fd, rtems_disk_desc_t *disk_desc)
         if (part_desc != NULL && is_extended(part_desc->sys_type))
         {
             read_extended_partition(fd, part_desc->start, part_desc);
+            free(part_desc);
+            disk_desc->partitions[part_num] = NULL;
         }
     }
 
