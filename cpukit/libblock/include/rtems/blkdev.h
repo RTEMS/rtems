@@ -165,6 +165,45 @@ typedef struct rtems_blkdev_request {
 
 /** @} */
 
+static inline int rtems_disk_fd_get_media_block_size(
+  int fd,
+  uint32_t *media_block_size
+)
+{
+  return ioctl(fd, RTEMS_BLKIO_GETMEDIABLKSIZE, media_block_size);
+}
+
+static inline int rtems_disk_fd_get_block_size(int fd, uint32_t *block_size)
+{
+  return ioctl(fd, RTEMS_BLKIO_GETBLKSIZE, block_size);
+}
+
+static inline int rtems_disk_fd_set_block_size(int fd, uint32_t block_size)
+{
+  return ioctl(fd, RTEMS_BLKIO_SETBLKSIZE, &block_size);
+}
+
+static inline int rtems_disk_fd_get_block_count(
+  int fd,
+  rtems_blkdev_bnum *block_count
+)
+{
+  return ioctl(fd, RTEMS_BLKIO_GETSIZE, block_count);
+}
+
+static inline int rtems_disk_fd_get_disk_device(
+  int fd,
+  const rtems_disk_device **dd_ptr
+)
+{
+  return ioctl(fd, RTEMS_BLKIO_GETDISKDEV, dd_ptr);
+}
+
+static inline int rtems_disk_fd_sync(int fd)
+{
+  return ioctl(fd, RTEMS_BLKIO_SYNCDEV);
+}
+
 /**
  * Only consecutive multi-sector buffer requests are supported.
  *

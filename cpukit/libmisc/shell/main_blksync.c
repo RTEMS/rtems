@@ -58,7 +58,7 @@ static int rtems_shell_main_blksync(
     return 1;
   }
 
-  if (ioctl (fd, RTEMS_BLKIO_SYNCDEV) < 0) {
+  if (rtems_disk_fd_sync (fd) < 0) {
     fprintf( stderr, "%s: driver sync failed: %s\n", argv[0], strerror (errno));
     return 1;
   }

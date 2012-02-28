@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -25,7 +26,9 @@
 #include "config.h"
 #endif
 
+#include <sys/stat.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include "tmacros.h"
 
 #include <rtems.h>
@@ -39,6 +42,66 @@
 #define BLOCK_SIZE 512U
 
 #define BLOCK_COUNT 16U
+
+static void test_block_io_control_api(dev_t dev, ramdisk *rd)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_disk_device *dd = NULL;
+  const rtems_disk_device *fd_dd = NULL;
+  int fd = -1;
+  int rv = -1;
+  uint32_t value = 0;
+  rtems_blkdev_bnum block_count = 0;
+
+  sc = rtems_disk_create_phys(dev, BLOCK_SIZE, BLOCK_COUNT, ramdisk_ioctl, rd, "/dev/rda");
+  ASSERT_SC(sc);
+
+  dd = rtems_disk_obtain(dev);
+  rtems_test_assert(dd != NULL);
+
+  fd = open("/dev/rda", O_RDWR);
+  rtems_test_assert(fd >= 0);
+
+  value = 0;
+  rv = rtems_disk_fd_get_media_block_size(fd, &value);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(value == BLOCK_SIZE);
+
+  value = 0;
+  rv = rtems_disk_fd_get_block_size(fd, &value);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(value == BLOCK_SIZE);
+
+  value = 1024;
+  rv = rtems_disk_fd_set_block_size(fd, value);
+  rtems_test_assert(rv == 0);
+
+  value = 0;
+  rv = rtems_disk_fd_get_block_size(fd, &value);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(value == 1024);
+
+  block_count = 0;
+  rv = rtems_disk_fd_get_block_count(fd, &block_count);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(block_count == BLOCK_COUNT);
+
+  rv = rtems_disk_fd_get_disk_device(fd, &fd_dd);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(fd_dd == dd);
+
+  rv = rtems_disk_fd_sync(fd);
+  rtems_test_assert(rv == 0);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+
+  sc = rtems_disk_release(dd);
+  ASSERT_SC(sc);
+
+  sc = rtems_disk_delete(dev);
+  ASSERT_SC(sc);
+}
 
 static void test_diskdevs(void)
 {
@@ -154,6 +217,10 @@ static void test_diskdevs(void)
   sc = rtems_disk_release(logical_dd);
   ASSERT_SC(sc);
 
+  /* Test block IO control API */
+
+  test_block_io_control_api(physical_dev, rd);
+
   /* Cleanup */
 
   sc = rtems_io_unregister_driver(major);
@@ -183,6 +250,7 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_DRIVERS 2
