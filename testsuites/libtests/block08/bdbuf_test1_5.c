@@ -101,7 +101,7 @@ bdbuf_test1_5_thread1(rtems_task_argument arg)
      * Step 1:
      * read blk #N on thread #1
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -133,7 +133,7 @@ bdbuf_test1_5_thread2(rtems_task_argument arg)
      * Try to read block #N. Right now thread #1 owns
      * this buffer, so we will block waiting for buffer.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();

@@ -107,6 +107,7 @@ typedef struct bdbuf_task_control
   rtems_device_major_number major;
   rtems_device_minor_number minor;
   bool                      passed;
+  const rtems_disk_device  *dd;
 } bdbuf_task_control;
 
 #define BDBUF_TEST_TASKS (3)
@@ -188,7 +189,7 @@ bdbuf_disk_unlock (bdbuf_disk* bdd)
 /**
  * BDBUf wait for the wait event.
  */
-rtems_status_code
+static rtems_status_code
 bdbuf_wait (const char* who, unsigned long timeout)
 {
   rtems_status_code sc;
@@ -340,7 +341,8 @@ static void
 bdbuf_task_control_init (int                       task,
                          bdbuf_task_control*       tc,
                          rtems_id                  master,
-                         rtems_device_major_number major)
+                         rtems_device_major_number major,
+                         const rtems_disk_device  *dd)
 {
   char name[6];
   sprintf (name, "bdt%d", task);
@@ -353,6 +355,7 @@ bdbuf_task_control_init (int                       task,
   tc->major  = major;
   tc->minor  = 0;
   tc->passed = false;
+  tc->dd     = dd;
 }
 
 static bool
@@ -608,9 +611,11 @@ static rtems_driver_address_table bdbuf_disk_io_ops = {
  */
 
 static bool
-bdbuf_tests_setup_disk (rtems_device_major_number* major)
+bdbuf_tests_setup_disk (rtems_device_major_number* major,
+                        const rtems_disk_device **dd_ptr)
 {
   rtems_status_code sc;
+  bool ok;
 
   /*
    * Register the disk driver.
@@ -620,8 +625,14 @@ bdbuf_tests_setup_disk (rtems_device_major_number* major)
   sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
                                  &bdbuf_disk_io_ops,
                                  major);
+  ok = sc == RTEMS_SUCCESSFUL;
 
-  return sc == RTEMS_SUCCESSFUL;
+  if (ok) {
+    *dd_ptr = rtems_disk_obtain (rtems_filesystem_make_dev_t (*major, 0));
+    ok = *dd_ptr != NULL;
+  }
+
+  return ok;
 }
 
 static bool
@@ -672,10 +683,8 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 2) && passed; i++)
   {
-    dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
     bdbuf_test_printf ("%s: rtems_bdbuf_get[0]: ", tc->name);
-    sc = rtems_bdbuf_get (device, 0, &bd);
+    sc = rtems_bdbuf_get (tc->dd, 0, &bd);
     if (!bdbuf_test_print_sc (sc, true))
     {
       passed = false;
@@ -722,10 +731,8 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
     bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (device, i, &bd);
+    sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -783,15 +790,12 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
   rtems_status_code   sc;
   bool                passed;
   rtems_bdbuf_buffer* bd;
-  dev_t               device;
 
   /*
    * Set task control's passed to false to handle a timeout.
    */
   tc->passed = false;
   passed = true;
-
-  device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
 
   bdbuf_disk_lock (&bdbuf_disks[tc->minor]);
   bdbuf_disks[tc->minor].driver_action = BDBUF_DISK_NOOP;
@@ -801,7 +805,7 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
    * Read the buffer and then release it.
    */
   bdbuf_test_printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
-  sc = rtems_bdbuf_read (device, 5, &bd);
+  sc = rtems_bdbuf_read (tc->dd, 5, &bd);
   if ((passed = bdbuf_test_print_sc (sc, true)))
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[5]: ", tc->name);
@@ -814,7 +818,7 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
    * be maintained as modified.
    */
   bdbuf_test_printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
-  sc = rtems_bdbuf_read (device, 5, &bd);
+  sc = rtems_bdbuf_read (tc->dd, 5, &bd);
   if ((passed = bdbuf_test_print_sc (sc, true)))
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_release[5]: ", tc->name);
@@ -871,10 +875,8 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
 
   for (i = 0; (i < num) && passed; i++)
   {
-    dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
     bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_read (device, i, &bd);
+    sc = rtems_bdbuf_read (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -991,10 +993,8 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
     bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (device, i, &bd);
+    sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -1030,7 +1030,6 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   int                 i;
   rtems_bdbuf_buffer* bd;
   rtems_chain_control buffers;
-  dev_t               device;
 
   /*
    * Set task control's passed to false to handle a timeout.
@@ -1044,8 +1043,6 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   bdbuf_clear_disk_driver_watch (tc);
   bdbuf_set_disk_driver_action (tc, BDBUF_DISK_NOOP);
 
-  device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
@@ -1054,7 +1051,7 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   for (i = 0; (i < 5) && passed; i++)
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (device, i, &bd);
+    sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -1074,9 +1071,9 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
                        tc->name, i,
-                       rtems_filesystem_dev_major_t (device),
-                       rtems_filesystem_dev_minor_t (device));
-    passed = bdbuf_test_print_sc (rtems_bdbuf_syncdev (device), true);
+                       tc->major,
+                       tc->minor);
+    passed = bdbuf_test_print_sc (rtems_bdbuf_syncdev (tc->dd), true);
   }
 
   tc->passed = passed;
@@ -1093,7 +1090,6 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   rtems_chain_control buffers;
   rtems_chain_node*   node;
   rtems_chain_node*   pnode;
-  dev_t               device;
 
   /*
    * Set task control's passed to false to handle a timeout.
@@ -1107,8 +1103,6 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   bdbuf_clear_disk_driver_watch (tc);
   bdbuf_set_disk_driver_action (tc, BDBUF_DISK_NOOP);
 
-  device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
   /*
    * Get the blocks 0 -> 4 and hold them.
    */
@@ -1117,7 +1111,7 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   for (i = 0; (i < 5) && passed; i++)
   {
     bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (device, i, &bd);
+    sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -1159,13 +1153,13 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
 
     bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: checking order\n",
                        tc->name, i,
-                       rtems_filesystem_dev_major_t (device),
-                       rtems_filesystem_dev_minor_t (device));
-    sc = rtems_bdbuf_syncdev (device);
+                       tc->major,
+                       tc->minor);
+    sc = rtems_bdbuf_syncdev (tc->dd);
     bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
                        tc->name, i,
-                       rtems_filesystem_dev_major_t (device),
-                       rtems_filesystem_dev_minor_t (device));
+                       tc->major,
+                       tc->minor);
     passed = bdbuf_test_print_sc (sc, true);
   }
 
@@ -1259,10 +1253,8 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
 
   for (i = lower; (i < upper) && passed; i++)
   {
-    dev_t device = rtems_filesystem_make_dev_t (tc->major, tc->minor);
-
     bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: blocking ...\n", tc->name, i);
-    sc = rtems_bdbuf_get (device, i, &bd);
+    sc = rtems_bdbuf_get (tc->dd, i, &bd);
     bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
     if (!bdbuf_test_print_sc (sc, true))
     {
@@ -1770,6 +1762,7 @@ bdbuf_tester (void)
   rtems_task_priority       old_priority;
   int                       t;
   bool                      passed = true;
+  const rtems_disk_device *dd;
 
   /*
    * Change priority to a lower one.
@@ -1783,7 +1776,7 @@ bdbuf_tester (void)
   /*
    * This sets up the buffer pools.
    */
-  if (!bdbuf_tests_setup_disk (&major))
+  if (!bdbuf_tests_setup_disk (&major, &dd))
   {
     bdbuf_test_printf ("disk set up failed\n");
     return;
@@ -1804,7 +1797,8 @@ bdbuf_tester (void)
   {
     bdbuf_task_control_init (t, &tasks[t],
                              rtems_task_self (),
-                             major);
+                             major,
+                             dd);
 
     if (!bdbuf_tests_create_task (&tasks[t],
                                   BDBUF_TESTS_PRI_HIGH - t,

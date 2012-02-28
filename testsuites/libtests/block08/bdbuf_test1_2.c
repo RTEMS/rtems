@@ -122,7 +122,7 @@ bdbuf_test1_2_thread1(rtems_task_argument arg)
      * driver will notify about an error, and as the
      * result this call will return an error.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_IO_ERROR || bd != NULL)
     {
         TEST_FAILED();
@@ -152,7 +152,7 @@ bdbuf_test1_2_thread2(rtems_task_argument arg)
      * But main test task will agin tell device driver to return
      * RTEMS_IO_ERROR data transfer result.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_IO_ERROR || bd != NULL)
     {
         TEST_FAILED();

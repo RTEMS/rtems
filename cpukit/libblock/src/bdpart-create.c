@@ -45,7 +45,6 @@ rtems_status_code rtems_bdpart_create(
     dos_compatibility ? RTEMS_BDPART_MBR_CYLINDER_SIZE : 1;
   rtems_blkdev_bnum overhead = 0;
   rtems_blkdev_bnum free_space = 0;
-  dev_t disk = 0;
   size_t i = 0;
 
   /* Check if we have something to do */
@@ -60,7 +59,7 @@ rtems_status_code rtems_bdpart_create(
   }
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &disk, &disk_end);
+  sc = rtems_bdpart_get_disk_data( disk_name, NULL, NULL, &disk_end);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
@@ -142,15 +141,15 @@ rtems_status_code rtems_bdpart_create(
     /* Align partition upwards */
     s += record_space - (s % record_space);
 
+    /* Reserve space for the EBR if necessary */
+    if (count > 4 && i > 2) {
+      pos += record_space;
+    }
+
     /* Partition begin and end */
     p->begin = pos;
     pos += s;
     p->end = pos;
-
-    /* Reserve space for the EBR if necessary */
-    if (count > 4 && i > 2) {
-      p->begin += record_space;
-    }
   }
 
   /* Expand the last partition to the disk end */

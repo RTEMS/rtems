@@ -131,7 +131,7 @@ bdbuf_test1_3_thread1(rtems_task_argument arg)
      * driver will notify about an error, and as the
      * result this call will return an error.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_IO_ERROR || bd != NULL)
     {
         TEST_FAILED();
@@ -160,7 +160,7 @@ bdbuf_test1_3_thread2(rtems_task_argument arg)
      * number, bdbuf library should ask for re-read data again.
      * Time time main task will tell driver to report success.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_SUCCESSFUL || bd == NULL)
     {
         TEST_FAILED();

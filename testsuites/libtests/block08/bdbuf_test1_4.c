@@ -125,7 +125,7 @@ bdbuf_test1_4_thread1(rtems_task_argument arg)
      * date transfer, and as the result this call 
      * will return valid buffer.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -161,7 +161,7 @@ bdbuf_test1_4_thread2(rtems_task_argument arg)
      * On step 4 thread #1 releases buffer and as the result 
      * our read operation should finish with success. 
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();

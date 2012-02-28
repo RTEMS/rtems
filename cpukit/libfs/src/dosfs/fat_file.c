@@ -795,7 +795,7 @@ fat_file_datasync(
         for ( i = 0; i < fs_info->vol.spc; i++ )
         {
             /* ... sync it */
-            sc = rtems_bdbuf_read(fs_info->vol.dev, (sec + i), &block);
+            sc = rtems_bdbuf_read(fs_info->vol.dd, (sec + i), &block);
             if (sc != RTEMS_SUCCESSFUL)
                 rtems_set_errno_and_return_minus_one( EIO );
 

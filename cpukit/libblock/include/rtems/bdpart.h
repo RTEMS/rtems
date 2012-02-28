@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009, 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -398,7 +399,8 @@ static inline uint8_t rtems_bdpart_mbr_partition_type(
 
 rtems_status_code rtems_bdpart_get_disk_data(
   const char *disk_name,
-  dev_t *disk,
+  int *fd_ptr,
+  const rtems_disk_device **dd_ptr,
   rtems_blkdev_bnum *disk_end
 );
 

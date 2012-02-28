@@ -117,7 +117,7 @@ bdbuf_test3_2_thread1(rtems_task_argument arg)
      * Step 1:
      * Call rtems_bdbuf_read(#N) to get a buffer;
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM_N1, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM_N1, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -150,7 +150,7 @@ bdbuf_test3_2_thread2(rtems_task_argument arg)
      * Step 2:
      * In thread #2 call get(#N2)
      */
-    rc = rtems_bdbuf_get(test_dev, TEST_BLK_NUM_N2, &bd);
+    rc = rtems_bdbuf_get(test_dd, TEST_BLK_NUM_N2, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -180,7 +180,7 @@ bdbuf_test3_2_thread3(rtems_task_argument arg)
      * Step 3:
      * In thread #3 call get(#N3)
      */
-    rc = rtems_bdbuf_get(test_dev, TEST_BLK_NUM_N3, &bd);
+    rc = rtems_bdbuf_get(test_dd, TEST_BLK_NUM_N3, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();

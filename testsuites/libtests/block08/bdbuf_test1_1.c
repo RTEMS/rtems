@@ -106,7 +106,7 @@ bdbuf_test1_1_thread1(rtems_task_argument arg)
      * Step 1-2:
      * Successful read operation.
      */
-    rc = rtems_bdbuf_read(test_dev, 0, &bd1);
+    rc = rtems_bdbuf_read(test_dd, 0, &bd1);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -124,7 +124,7 @@ bdbuf_test1_1_thread1(rtems_task_argument arg)
      * Read operation fails with RTEMS_IO_ERROR code.
      * The function shall not update user pointer.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd2);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd2);
     if (rc != RTEMS_IO_ERROR || bd2 != NULL)
     {
         TEST_FAILED();
@@ -137,7 +137,7 @@ bdbuf_test1_1_thread1(rtems_task_argument arg)
      * Read operation fails with RTEMS_IO_ERROR code.
      * The function shall not update user pointer.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM, &bd2);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd2);
     if (rc != RTEMS_IO_ERROR || bd2 != NULL)
     {
         TEST_FAILED();

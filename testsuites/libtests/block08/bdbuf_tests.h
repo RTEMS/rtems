@@ -85,7 +85,7 @@ typedef struct bdbuf_test_msg {
 
     union {
         struct driver_req {
-            dev_t     dev;
+            const rtems_disk_device *dd;
             uint32_t  req;
             void     *argp;
         } driver_req;
@@ -152,7 +152,7 @@ typedef struct test_ctx {
 extern test_ctx g_test_ctx;
 
 /** Device ID used for testing */
-extern dev_t      test_dev;
+extern const rtems_disk_device *test_dd;
 
 /**
  * Create a message queue for test driver that is used for
@@ -259,7 +259,7 @@ extern bool       good_test_result;
     do {                                                                \
         WAIT_DRV_MSG(msg_);                                             \
         if ((msg_)->val.driver_req.req != RTEMS_BLKIO_REQUEST ||        \
-            (msg_)->val.driver_req.dev != test_dev ||                   \
+            (msg_)->val.driver_req.dd != test_dd ||                   \
             ((rtems_blkdev_request *)                                   \
                  ((msg_)->val.driver_req.argp))->req !=                 \
                  RTEMS_BLKDEV_REQ_WRITE)                                \
@@ -267,7 +267,7 @@ extern bool       good_test_result;
             printk("Unexpected message received by disk driver: "       \
                    "req - 0x%x (0x%x), dev - %d (%d)\n",                \
                    (msg_)->val.driver_req.req, RTEMS_BLKIO_REQUEST,     \
-                   (msg_)->val.driver_req.dev, test_dev);               \
+                   (msg_)->val.driver_req.dd, test_dd);               \
             return;                                                     \
         }                                                               \
     } while (0)

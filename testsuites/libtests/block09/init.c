@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -108,7 +109,7 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
   }
 }
 
-rtems_status_code disk_register(
+static rtems_status_code disk_register(
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
   dev_t *dev_ptr
@@ -139,7 +140,7 @@ rtems_status_code disk_register(
 }
 
 static void check_read(
-  dev_t dev,
+  const rtems_disk_device *dd,
   rtems_blkdev_bnum block,
   rtems_status_code expected_sc
 )
@@ -147,7 +148,7 @@ static void check_read(
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  sc = rtems_bdbuf_read(dev, block, &bd);
+  sc = rtems_bdbuf_read(dd, block, &bd);
   assert(sc == expected_sc);
 
   if (sc == RTEMS_SUCCESSFUL) {
@@ -161,6 +162,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
   dev_t dev = 0;
+  rtems_disk_device *dd = NULL;
 
   printk("\n\n*** TEST BLOCK 9 ***\n");
 
@@ -170,14 +172,17 @@ static rtems_task Init(rtems_task_argument argument)
   sc = disk_register(BLOCK_SIZE, BLOCK_COUNT, &dev);
   ASSERT_SC(sc);
 
-  check_read(dev, BLOCK_READ_IO_ERROR, RTEMS_IO_ERROR);
-  check_read(dev, BLOCK_READ_UNSATISFIED, RTEMS_UNSATISFIED);
-  check_read(dev, BLOCK_READ_SUCCESSFUL, RTEMS_SUCCESSFUL);
-  check_read(dev, BLOCK_WRITE_IO_ERROR, RTEMS_SUCCESSFUL);
+  dd = rtems_disk_obtain(dev);
+  assert(dd != NULL);
+
+  check_read(dd, BLOCK_READ_IO_ERROR, RTEMS_IO_ERROR);
+  check_read(dd, BLOCK_READ_UNSATISFIED, RTEMS_UNSATISFIED);
+  check_read(dd, BLOCK_READ_SUCCESSFUL, RTEMS_SUCCESSFUL);
+  check_read(dd, BLOCK_WRITE_IO_ERROR, RTEMS_SUCCESSFUL);
 
   /* Check write IO error */
 
-  sc = rtems_bdbuf_read(dev, BLOCK_WRITE_IO_ERROR, &bd);
+  sc = rtems_bdbuf_read(dd, BLOCK_WRITE_IO_ERROR, &bd);
   ASSERT_SC(sc);
 
   bd->buffer [0] = 1;
@@ -185,7 +190,7 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_bdbuf_sync(bd);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_read(dev, BLOCK_WRITE_IO_ERROR, &bd);
+  sc = rtems_bdbuf_read(dd, BLOCK_WRITE_IO_ERROR, &bd);
   ASSERT_SC(sc);
 
   assert(bd->buffer [0] == 0);
@@ -195,13 +200,16 @@ static rtems_task Init(rtems_task_argument argument)
 
   /* Check write to deleted disk */
 
-  sc = rtems_bdbuf_read(dev, BLOCK_READ_SUCCESSFUL, &bd);
+  sc = rtems_bdbuf_read(dd, BLOCK_READ_SUCCESSFUL, &bd);
   ASSERT_SC(sc);
 
   sc = rtems_disk_delete(dev);
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_sync(bd);
+  ASSERT_SC(sc);
+
+  sc = rtems_disk_release(dd);
   ASSERT_SC(sc);
 
   printk("*** END OF TEST BLOCK 9 ***\n");

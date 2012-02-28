@@ -52,7 +52,7 @@ typedef rtems_bdbuf_buffer *(*access_func)(char task);
 
 typedef void (*release_func)(char task, rtems_bdbuf_buffer *bd);
 
-static dev_t dev;
+static const rtems_disk_device *dd;
 
 static rtems_id task_id_init;
 
@@ -110,7 +110,7 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
   }
 }
 
-rtems_status_code disk_register(
+static rtems_status_code disk_register(
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
   dev_t *dev_ptr
@@ -147,7 +147,7 @@ static rtems_bdbuf_buffer *do_get(char task)
 
   printk("%c: try get\n", task);
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("%c: get\n", task);
@@ -162,13 +162,13 @@ static rtems_bdbuf_buffer *do_get_mod(char task)
 
   printk("%c: try get modified\n", task);
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_release_modified(bd);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("%c: get modified\n", task);
@@ -183,7 +183,7 @@ static rtems_bdbuf_buffer *do_read(char task)
 
   printk("%c: try read\n", task);
 
-  sc = rtems_bdbuf_read(dev, 0, &bd);
+  sc = rtems_bdbuf_read(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("%c: read\n", task);
@@ -203,7 +203,7 @@ static void do_rel(char task, rtems_bdbuf_buffer *bd)
   printk("%c: release done\n", task);
 }
 
-void do_rel_mod(char task, rtems_bdbuf_buffer *bd)
+static void do_rel_mod(char task, rtems_bdbuf_buffer *bd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
@@ -231,7 +231,7 @@ static void purge(char task)
 {
   printk("%c: purge\n", task);
 
-  rtems_bdbuf_purge_dev(dev);
+  rtems_bdbuf_purge_dev(dd);
 }
 
 static void task_purger(rtems_task_argument arg)
@@ -387,6 +387,7 @@ static const char *purger_assoc_table [PURGER_COUNT] = {
 static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  dev_t dev = 0;
   size_t i_w = 0;
   size_t i_ac = 0;
   size_t i_rel = 0;
@@ -401,6 +402,9 @@ static rtems_task Init(rtems_task_argument argument)
 
   sc = disk_register(BLOCK_SIZE, BLOCK_COUNT, &dev);
   ASSERT_SC(sc);
+
+  dd = rtems_disk_obtain(dev);
+  assert(dd != NULL);
 
   sc = rtems_task_create(
     rtems_build_name('P', 'U', 'R', 'G'),

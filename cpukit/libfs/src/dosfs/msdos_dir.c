@@ -532,7 +532,7 @@ msdos_dir_stat(
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    buf->st_dev = fs_info->fat.vol.dev;
+    buf->st_dev = rtems_disk_get_device_identifier(fs_info->fat.vol.dd);
     buf->st_ino = fat_fd->ino;
     buf->st_mode  = S_IFDIR | S_IRWXU | S_IRWXG | S_IRWXO;
     buf->st_rdev = 0ll;

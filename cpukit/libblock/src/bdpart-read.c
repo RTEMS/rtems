@@ -23,6 +23,9 @@
 #include "config.h"
 #endif
 
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <rtems.h>
 #include <rtems/bdbuf.h>
 #include <rtems/bdpart.h>
@@ -64,48 +67,59 @@ bool rtems_bdpart_to_mbr_partition_type(
  */
 rtems_status_code rtems_bdpart_get_disk_data(
   const char *disk_name,
-  dev_t *disk,
+  int *fd_ptr,
+  const rtems_disk_device **dd_ptr,
   rtems_blkdev_bnum *disk_end
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int rv = 0;
+  int fd = -1;
+  const rtems_disk_device *dd = NULL;
   rtems_blkdev_bnum disk_begin = 0;
   rtems_blkdev_bnum block_size = 0;
-  rtems_disk_device *dd = NULL;
-  struct stat st;
+
+  /* Open device file */
+  fd = open( disk_name, O_RDWR);
+  if (fd < 0) {
+    sc = RTEMS_INVALID_NAME;
+    goto error;
+  }
 
   /* Get disk handle */
-  rv = stat( disk_name, &st);
+  rv = rtems_disk_fd_get_disk_device( fd, &dd);
   if (rv != 0) {
-    return RTEMS_INVALID_NAME;
+    sc = RTEMS_INVALID_NAME;
+    goto error;
   }
-  *disk = st.st_rdev;
 
   /* Get disk begin, end and block size */
-  dd = rtems_disk_obtain( *disk);
-  if (dd == NULL) {
-    return RTEMS_INVALID_NAME;
-  }
   disk_begin = dd->start;
   *disk_end = dd->size;
   block_size = dd->block_size;
-  sc = rtems_disk_release( dd);
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
 
   /* Check block size */
   if (block_size < RTEMS_BDPART_BLOCK_SIZE) {
-    return RTEMS_IO_ERROR;
+    sc = RTEMS_IO_ERROR;
+    goto error;
   }
 
   /* Check that we have do not have a logical disk */
   if (disk_begin != 0) {
-    return RTEMS_IO_ERROR;
+    sc = RTEMS_IO_ERROR;
+    goto error;
   }
 
-  return RTEMS_SUCCESSFUL;
+error:
+
+  if (sc == RTEMS_SUCCESSFUL && fd_ptr != NULL && dd_ptr != NULL) {
+    *fd_ptr = fd;
+    *dd_ptr = dd;
+  } else {
+    close( fd);
+  }
+
+  return sc;
 }
 
 static bool rtems_bdpart_is_valid_record( const uint8_t *data)
@@ -171,7 +185,7 @@ static rtems_status_code rtems_bdpart_read_mbr_partition(
 }
 
 static rtems_status_code rtems_bdpart_read_record(
-  dev_t disk,
+  const rtems_disk_device *dd,
   rtems_blkdev_bnum index,
   rtems_bdbuf_buffer **block
 )
@@ -187,7 +201,7 @@ static rtems_status_code rtems_bdpart_read_record(
   }
 
   /* Read the record block */
-  sc = rtems_bdbuf_read( disk, index, block);
+  sc = rtems_bdbuf_read( dd, index, block);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
@@ -220,9 +234,10 @@ rtems_status_code rtems_bdpart_read(
   rtems_blkdev_bnum ep_begin = 0; /* Extended partition begin */
   rtems_blkdev_bnum ebr = 0; /* Extended boot record block index */
   rtems_blkdev_bnum disk_end = 0;
-  dev_t disk = 0;
   size_t i = 0;
   const uint8_t *data = NULL;
+  int fd = -1;
+  const rtems_disk_device *dd = NULL;
 
   /* Check parameter */
   if (format == NULL || pt == NULL || count == NULL) {
@@ -233,13 +248,13 @@ rtems_status_code rtems_bdpart_read(
   *count = 0;
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &disk, &disk_end);
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
 
   /* Read MBR */
-  sc = rtems_bdpart_read_record( disk, 0, &block);
+  sc = rtems_bdpart_read_record( dd, 0, &block);
   if (sc != RTEMS_SUCCESSFUL) {
     esc = sc;
     goto cleanup;
@@ -283,7 +298,7 @@ rtems_status_code rtems_bdpart_read(
     rtems_blkdev_bnum tmp = 0;
 
     /* Read EBR */
-    sc = rtems_bdpart_read_record( disk, ebr, &block);
+    sc = rtems_bdpart_read_record( dd, ebr, &block);
     if (sc != RTEMS_SUCCESSFUL) {
       esc = sc;
       goto cleanup;
@@ -339,6 +354,10 @@ rtems_status_code rtems_bdpart_read(
   *count = (size_t) (p - pt + 1);
 
 cleanup:
+
+  if (fd >= 0) {
+    close( fd);
+  }
 
   if (block != NULL) {
     rtems_bdbuf_release( block);

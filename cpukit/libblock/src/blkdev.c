@@ -46,7 +46,6 @@ rtems_blkdev_generic_read(
     uint32_t count = args->count;
     rtems_blkdev_bnum block = (rtems_blkdev_bnum) (args->offset / block_size);
     uint32_t blkofs = (uint32_t) (args->offset % block_size);
-    dev_t dev = dd->dev;
 
     args->bytes_moved = 0;
 
@@ -55,7 +54,7 @@ rtems_blkdev_generic_read(
         rtems_bdbuf_buffer *diskbuf;
         uint32_t            copy;
 
-        rc = rtems_bdbuf_read(dev, block, &diskbuf);
+        rc = rtems_bdbuf_read(dd, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
             break;
         copy = block_size - blkofs;
@@ -94,7 +93,6 @@ rtems_blkdev_generic_write(
     uint32_t count = args->count;
     rtems_blkdev_bnum block = (rtems_blkdev_bnum) (args->offset / block_size);
     uint32_t blkofs = (uint32_t) (args->offset % block_size);
-    dev_t dev = dd->dev;
 
     args->bytes_moved = 0;
 
@@ -104,9 +102,9 @@ rtems_blkdev_generic_write(
         uint32_t            copy;
 
         if ((blkofs == 0) && (count >= block_size))
-            rc = rtems_bdbuf_get(dev, block, &diskbuf);
+            rc = rtems_bdbuf_get(dd, block, &diskbuf);
         else
-            rc = rtems_bdbuf_read(dev, block, &diskbuf);
+            rc = rtems_bdbuf_read(dd, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
             break;
 
@@ -207,7 +205,7 @@ rtems_blkdev_generic_ioctl(
             break;
 
         case RTEMS_BLKIO_SYNCDEV:
-            rc = rtems_bdbuf_syncdev(dd->dev);
+            rc = rtems_bdbuf_syncdev(dd);
             args->ioctl_return = (uint32_t) (rc == RTEMS_SUCCESSFUL ? 0 : -1);
             break;
 

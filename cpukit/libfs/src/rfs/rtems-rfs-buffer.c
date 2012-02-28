@@ -20,8 +20,10 @@
 #include "config.h"
 #endif
 
+#include <sys/stat.h>
 #include <inttypes.h>
 #include <errno.h>
+#include <fcntl.h>
 
 #include <rtems/rfs/rtems-rfs-buffer.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>
@@ -285,16 +287,27 @@ int
 rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs)
 {
   struct stat st;
+#if RTEMS_RFS_USE_LIBBLOCK
+  int rv;
+#endif
 
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_SYNC))
     printf ("rtems-rfs: buffer-open: opening: %s\n", name);
 
-  if (stat (name, &st) < 0)
+  fs->device = open (name, O_RDWR);
+  if (fs->device < 0)
+  {
+    if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
+      printf ("rtems-rfs: buffer-open: cannot open file\n");
+    return ENXIO;
+  }
+
+  if (fstat (fs->device, &st) < 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
       printf ("rtems-rfs: buffer-open: stat '%s' failed: %s\n",
               name, strerror (errno));
-    return ENOENT;
+    return ENXIO;
   }
 
 #if RTEMS_RFS_USE_LIBBLOCK
@@ -305,26 +318,20 @@ rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
       printf ("rtems-rfs: buffer-open: '%s' is not a block device\n", name);
-    return EIO;
+    return ENXIO;
   }
 
   /*
    * Check that device is registred as a block device and lock it.
    */
-  fs->disk = rtems_disk_obtain (st.st_rdev);
-  if (!fs->disk)
+  rv = rtems_disk_fd_get_disk_device (fs->device, &fs->disk);
+  if (rv != 0)
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
       printf ("rtems-rfs: buffer-open: cannot obtain the disk\n");
-    return EIO;
+    return ENXIO;
   }
 #else
-  fs->device = open (name, O_RDWR);
-  if (fs->device < 0)
-  {
-    if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_OPEN))
-      printf ("rtems-rfs: buffer-open: cannot open file\n");
-  }
   fs->media_size = st.st_size;
   strcat (fs->name, name);
 #endif
@@ -355,9 +362,6 @@ rtems_rfs_buffer_close (rtems_rfs_file_system* fs)
     printf ("rtems-rfs: buffer-close: set media block size failed: %d: %s\n",
             rc, strerror (rc));
 
-#if RTEMS_RFS_USE_LIBBLOCK
-  rtems_disk_release (fs->disk);
-#else
   if (close (fs->device) < 0)
   {
     rc = errno;
@@ -365,7 +369,6 @@ rtems_rfs_buffer_close (rtems_rfs_file_system* fs)
       printf ("rtems-rfs: buffer-close: file close failed: %d: %s\n",
               rc, strerror (rc));
   }
-#endif
 
   return rc;
 }

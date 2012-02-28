@@ -37,9 +37,9 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
     if (fs_info->c.state == FAT_CACHE_EMPTY)
     {
         if (op_type == FAT_OP_TYPE_READ)
-            sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
+            sc = rtems_bdbuf_read(fs_info->vol.dd, blk, &fs_info->c.buf);
         else
-            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
+            sc = rtems_bdbuf_get(fs_info->vol.dd, blk, &fs_info->c.buf);
         if (sc != RTEMS_SUCCESSFUL)
             rtems_set_errno_and_return_minus_one(EIO);
         fs_info->c.blk_num = blk;
@@ -70,7 +70,7 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
 
                 for (i = 1; i < fs_info->vol.fats; i++)
                 {
-                    sc = rtems_bdbuf_get(fs_info->vol.dev,
+                    sc = rtems_bdbuf_get(fs_info->vol.dd,
                                          fs_info->c.blk_num +
                                          fs_info->vol.fat_length * i,
                                          &b);
@@ -92,9 +92,9 @@ fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
 
         }
         if (op_type == FAT_OP_TYPE_READ)
-            sc = rtems_bdbuf_read(fs_info->vol.dev, blk, &fs_info->c.buf);
+            sc = rtems_bdbuf_read(fs_info->vol.dd, blk, &fs_info->c.buf);
         else
-            sc = rtems_bdbuf_get(fs_info->vol.dev, blk, &fs_info->c.buf);
+            sc = rtems_bdbuf_get(fs_info->vol.dd, blk, &fs_info->c.buf);
         if (sc != RTEMS_SUCCESSFUL)
             rtems_set_errno_and_return_minus_one(EIO);
         fs_info->c.blk_num = blk;
@@ -133,7 +133,7 @@ fat_buf_release(fat_fs_info_t *fs_info)
 
             for (i = 1; i < fs_info->vol.fats; i++)
             {
-                sc = rtems_bdbuf_get(fs_info->vol.dev,
+                sc = rtems_bdbuf_get(fs_info->vol.dd,
                                      fs_info->c.blk_num +
                                      fs_info->vol.fat_length * i,
                                      &b);
@@ -362,27 +362,39 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     int                 i = 0;
     rtems_bdbuf_buffer *block = NULL;
 
-    rc = stat(mt_entry->dev, &stat_buf);
-    if (rc == -1)
-        return rc;
+    vol->fd = open(mt_entry->dev, O_RDWR);
+    if (vol->fd < 0)
+    {
+        rtems_set_errno_and_return_minus_one(ENXIO);
+    }
+
+    rc = fstat(vol->fd, &stat_buf);
+    if (rc != 0)
+    {
+        close(vol->fd);
+        rtems_set_errno_and_return_minus_one(ENXIO);
+    }
 
     /* Must be a block device. */
     if (!S_ISBLK(stat_buf.st_mode))
-        rtems_set_errno_and_return_minus_one(ENOTTY);
+    {
+        close(vol->fd);
+        rtems_set_errno_and_return_minus_one(ENXIO);
+    }
 
     /* check that device is registred as block device and lock it */
-    vol->dd = rtems_disk_obtain(stat_buf.st_rdev);
-    if (vol->dd == NULL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    vol->dev = stat_buf.st_rdev;
+    rc = rtems_disk_fd_get_disk_device(vol->fd, &vol->dd);
+    if (rc != 0) {
+        close(vol->fd);
+        rtems_set_errno_and_return_minus_one(ENXIO);
+    }
 
     /* Read boot record */
     /* FIXME: Asserts FAT_MAX_BPB_SIZE < bdbuf block size */
-    sc = rtems_bdbuf_read( vol->dev, 0, &block);
+    sc = rtems_bdbuf_read( vol->dd, 0, &block);
     if (sc != RTEMS_SUCCESSFUL)
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         rtems_set_errno_and_return_minus_one( EIO);
     }
 
@@ -391,7 +403,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     sc = rtems_bdbuf_release( block);
     if (sc != RTEMS_SUCCESSFUL)
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         rtems_set_errno_and_return_minus_one( EIO );
     }
 
@@ -403,7 +415,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
          (vol->bps != 2048) &&
          (vol->bps != 4096))
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
@@ -419,7 +431,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
      */
     if (vol->spc == 0)
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         rtems_set_errno_and_return_minus_one(EINVAL);
     }
 
@@ -431,7 +443,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
      */
     if ((vol->bpc = vol->bps << vol->spc_log2) > MS_BYTES_PER_CLUSTER_LIMIT)
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         rtems_set_errno_and_return_minus_one(EINVAL);
     }
 
@@ -505,7 +517,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         vol->info_sec = FAT_GET_BR_FAT32_FS_INFO_SECTOR(boot_rec);
         if( vol->info_sec == 0 )
         {
-            rtems_disk_release(vol->dd);
+            close(vol->fd);
             rtems_set_errno_and_return_minus_one( EINVAL );
         }
         else
@@ -514,7 +526,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                                   FAT_FSI_LEADSIG_SIZE, fs_info_sector);
             if ( ret < 0 )
             {
-                rtems_disk_release(vol->dd);
+                close(vol->fd);
                 return -1;
             }
 
@@ -522,7 +534,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                 FAT_FSINFO_LEAD_SIGNATURE_VALUE)
             {
                 _fat_block_release(mt_entry);
-                rtems_disk_release(vol->dd);
+                close(vol->fd);
                 rtems_set_errno_and_return_minus_one( EINVAL );
             }
             else
@@ -532,7 +544,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                 if ( ret < 0 )
                 {
                     _fat_block_release(mt_entry);
-                    rtems_disk_release(vol->dd);
+                    close(vol->fd);
                     return -1;
                 }
 
@@ -543,7 +555,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
                 if ( rc != RC_OK )
                 {
                     _fat_block_release(mt_entry);
-                    rtems_disk_release(vol->dd);
+                    close(vol->fd);
                     return rc;
                 }
             }
@@ -566,7 +578,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     fs_info->vhash = calloc(FAT_HASH_SIZE, sizeof(rtems_chain_control));
     if ( fs_info->vhash == NULL )
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         rtems_set_errno_and_return_minus_one( ENOMEM );
     }
 
@@ -576,7 +588,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     fs_info->rhash = calloc(FAT_HASH_SIZE, sizeof(rtems_chain_control));
     if ( fs_info->rhash == NULL )
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         free(fs_info->vhash);
         rtems_set_errno_and_return_minus_one( ENOMEM );
     }
@@ -589,7 +601,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     fs_info->uino = (char *)calloc(fs_info->uino_pool_size, sizeof(char));
     if ( fs_info->uino == NULL )
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         free(fs_info->vhash);
         free(fs_info->rhash);
         rtems_set_errno_and_return_minus_one( ENOMEM );
@@ -597,7 +609,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     fs_info->sec_buf = (uint8_t *)calloc(vol->bps, sizeof(uint8_t));
     if (fs_info->sec_buf == NULL)
     {
-        rtems_disk_release(vol->dd);
+        close(vol->fd);
         free(fs_info->vhash);
         free(fs_info->rhash);
         free(fs_info->uino);
@@ -634,7 +646,7 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
 
     fat_buf_release(fs_info);
 
-    if (rtems_bdbuf_syncdev(fs_info->vol.dev) != RTEMS_SUCCESSFUL)
+    if (rtems_bdbuf_syncdev(fs_info->vol.dd) != RTEMS_SUCCESSFUL)
         rc = -1;
 
     for (i = 0; i < FAT_HASH_SIZE; i++)
@@ -660,7 +672,7 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
 
     free(fs_info->uino);
     free(fs_info->sec_buf);
-    rtems_disk_release(fs_info->vol.dd);
+    close(fs_info->vol.fd);
 
     if (rc)
         errno = EIO;

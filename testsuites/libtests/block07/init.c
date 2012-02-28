@@ -54,7 +54,7 @@
 
 #define BLOCK_COUNT 2
 
-static dev_t dev;
+static rtems_disk_device *dd;
 
 static rtems_id task_id_low;
 
@@ -65,12 +65,11 @@ static rtems_id task_id_high;
 static void change_block_size(void)
 {
   int rv = 0;
-  uint32_t new_block_size = BLOCK_SIZE_B;
   int fd = open("/dev/rda", O_RDWR);
 
   rtems_test_assert(fd >= 0);
 
-  rv = ioctl(fd, RTEMS_BLKIO_SETBLKSIZE, &new_block_size);
+  rv = rtems_disk_fd_set_block_size(fd, BLOCK_SIZE_B);
   rtems_test_assert(rv == 0);
 
   rv = close(fd);
@@ -84,7 +83,7 @@ static void task_low(rtems_task_argument arg)
 
   printk("L: try access: 0\n");
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("L: access: 0\n");
@@ -110,7 +109,7 @@ static void task_mid(rtems_task_argument arg)
 
   printk("M: try access: 0\n");
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("M: access: 0\n");
@@ -136,7 +135,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: try access: 0\n");
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("H: access: 0\n");
@@ -158,6 +157,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_task_priority cur_prio = 0;
   rtems_bdbuf_buffer *bd = NULL;
+  dev_t dev = 0;
 
   printk("\n\n*** TEST BLOCK 7 ***\n");
 
@@ -166,6 +166,9 @@ static rtems_task Init(rtems_task_argument argument)
 
   sc = ramdisk_register(BLOCK_SIZE_A, BLOCK_COUNT, false, "/dev/rda", &dev);
   ASSERT_SC(sc);
+
+  dd = rtems_disk_obtain(dev);
+  rtems_test_assert(dd != NULL);
 
   sc = rtems_task_create(
     rtems_build_name(' ', 'L', 'O', 'W'),
@@ -212,7 +215,7 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_task_suspend(task_id_high);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_get(dev, 1, &bd);
+  sc = rtems_bdbuf_get(dd, 1, &bd);
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_release(bd);
@@ -220,7 +223,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   printk("I: try access: 0\n");
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   printk("I: access: 0\n");

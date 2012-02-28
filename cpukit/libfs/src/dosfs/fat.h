@@ -319,7 +319,7 @@ typedef struct fat_vol_s
     uint8_t            mirror;         /* mirroring enabla/disable */
     uint32_t           afat_loc;       /* active FAT location */
     uint8_t            afat;           /* the number of active FAT */
-    dev_t              dev;            /* device ID */
+    int                fd;             /* the disk device file descriptor */
     rtems_disk_device *dd;             /* disk device (see libblock) */
     void              *private_data;   /* reserved */
 } fat_vol_t;

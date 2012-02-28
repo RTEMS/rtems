@@ -370,7 +370,7 @@ static int msdos_format_determine_fmt_params
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- const rtems_disk_device            *dd,       /* disk device structure          */
+ int fd,                                       /* disk file descriptor */
  const msdos_format_request_param_t *rqdata,   /* requested fmt parameters */
  msdos_format_param_t               *fmt_params/* computed fmt parameters        */
  )
@@ -386,18 +386,24 @@ static int msdos_format_determine_fmt_params
   uint64_t total_size = 0;
 
   memset(fmt_params,0,sizeof(*fmt_params));
+
   /*
    * this one is fixed in this implementation.
    * At least one thing we don't have to magically guess...
    */
   if (ret_val == 0) {
-    fmt_params->bytes_per_sector = dd->block_size;
-    fmt_params->totl_sector_cnt  = dd->size;
-    total_size = dd->block_size * dd->size;
+    ret_val = rtems_disk_fd_get_block_size(fd, &fmt_params->bytes_per_sector);
+  }
+  if (ret_val == 0) {
+    ret_val = rtems_disk_fd_get_block_count(fd, &fmt_params->totl_sector_cnt);
+  }
+  if (ret_val == 0) {
+    total_size = fmt_params->bytes_per_sector * fmt_params->totl_sector_cnt;
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                          "bytes per sector: %d\ntotal sectors: %d\ntotal size: %lu\n",
-                         dd->block_size, dd->size, total_size);
+                         fmt_params->bytes_per_sector, fmt_params->totl_sector_cnt, total_size);
   }
+
   /*
    * determine number of FATs
    */
@@ -889,7 +895,6 @@ int msdos_format
 {
   char                 tmp_sec[FAT_TOTAL_MBR_SIZE];
   int                  rc;
-  rtems_disk_device   *dd        = NULL;
   struct stat          stat_buf;
   int                  ret_val   = 0;
   int                  fd        = -1;
@@ -923,20 +928,11 @@ int msdos_format
     ret_val = -1;
   }
 
-  /* check that  device is registered as block device and lock it */
-  if (ret_val == 0) {
-    dd = rtems_disk_obtain(stat_buf.st_rdev);
-    if (dd == NULL) {
-      errno = ENOTTY;
-      ret_val = -1;
-    }
-  }
-
   /*
    * compute formatting parameters
    */
   if (ret_val == 0) {
-    ret_val = msdos_format_determine_fmt_params(dd,rqdata,&fmt_params);
+    ret_val = msdos_format_determine_fmt_params(fd,rqdata,&fmt_params);
   }
   /*
    * if requested, write whole disk/partition with 0xe5
@@ -1120,8 +1116,6 @@ int msdos_format
   if (fd != -1) {
     close(fd);
   }
-  if (dd != NULL) {
-    rtems_disk_release(dd);
-  }
+
   return ret_val;
 }

@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -56,9 +57,9 @@
 /* In case of trouble change this to 1 or 2 for more output */
 static unsigned output_level = 0;
 
-static dev_t dev_a;
+static const rtems_disk_device *dd_a;
 
-static dev_t dev_b;
+static const rtems_disk_device *dd_b;
 
 static rtems_id task_id_init;
 
@@ -146,24 +147,27 @@ static rtems_bdbuf_buffer *get(enum get_type type, enum blk_kind kind)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
   rtems_blkdev_bnum blk_index = 0;
-  rtems_status_code (*get_bd)(dev_t, rtems_blkdev_bnum, rtems_bdbuf_buffer **)
-    = NULL;
-  dev_t dev = 0;
+  rtems_status_code (*get_bd)(
+    const rtems_disk_device *,
+    rtems_blkdev_bnum,
+    rtems_bdbuf_buffer **
+  ) = NULL;
+  const rtems_disk_device *dd = NULL;
   size_t bds_per_group = 0;
 
   switch (kind) {
     case BLK_A0:
-      dev = dev_a;
+      dd = dd_a;
       blk_index = 0;
       bds_per_group = 2;
       break;
     case BLK_A1:
-      dev = dev_a;
+      dd = dd_a;
       blk_index = 1;
       bds_per_group = 2;
       break;
     case BLK_B0:
-      dev = dev_b;
+      dd = dd_b;
       blk_index = 0;
       bds_per_group = 1;
       break;
@@ -184,10 +188,10 @@ static rtems_bdbuf_buffer *get(enum get_type type, enum blk_kind kind)
       break;
   }
 
-  sc = (*get_bd)(dev, blk_index, &bd);
+  sc = (*get_bd)(dd, blk_index, &bd);
   rtems_test_assert(
     sc == RTEMS_SUCCESSFUL
-      && bd->dev == dev
+      && bd->dd == dd
       && bd->block == blk_index
       && bd->group->bds_per_group == bds_per_group
    );
@@ -313,8 +317,8 @@ static void execute_test(unsigned i)
   sc = rtems_task_resume(task_id_high);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_get(dev_b, 0, &bd);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL && bd->dev == dev_b && bd->block == 0);
+  sc = rtems_bdbuf_get(dd_b, 0, &bd);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL && bd->dd == dd_b && bd->block == 0);
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
@@ -350,10 +354,10 @@ static void execute_test(unsigned i)
 
   print(2, "F\n");
 
-  sc = rtems_bdbuf_syncdev(dev_a);
+  sc = rtems_bdbuf_syncdev(dd_a);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_syncdev(dev_b);
+  sc = rtems_bdbuf_syncdev(dd_b);
   ASSERT_SC(sc);
 }
 
@@ -383,10 +387,10 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
   }
 }
 
-rtems_status_code disk_register(
+static void disk_register(
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
-  dev_t *dev_ptr
+  const rtems_disk_device **dd_ptr
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -408,9 +412,8 @@ rtems_status_code disk_register(
   );
   ASSERT_SC(sc);
 
-  *dev_ptr = dev;
-
-  return RTEMS_SUCCESSFUL;
+  *dd_ptr = rtems_disk_obtain(dev);
+  rtems_test_assert(*dd_ptr!= NULL);
 }
 
 static rtems_task Init(rtems_task_argument argument)
@@ -425,11 +428,9 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_disk_io_initialize();
   ASSERT_SC(sc);
 
-  sc = disk_register(BLOCK_SIZE_A, BLOCK_COUNT_A, &dev_a);
-  ASSERT_SC(sc);
+  disk_register(BLOCK_SIZE_A, BLOCK_COUNT_A, &dd_a);
 
-  sc = disk_register(BLOCK_SIZE_B, BLOCK_COUNT_B, &dev_b);
-  ASSERT_SC(sc);
+  disk_register(BLOCK_SIZE_B, BLOCK_COUNT_B, &dd_b);
 
   sc = rtems_task_create(
     rtems_build_name(' ', 'L', 'O', 'W'),

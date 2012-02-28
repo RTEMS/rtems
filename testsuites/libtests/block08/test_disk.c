@@ -34,7 +34,6 @@ static Objects_Id testq_id = OBJECTS_ID_NONE;
 static int
 test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
-    dev_t             dev = rtems_disk_get_device_identifier(dd);
     rtems_status_code rc;
     bdbuf_test_msg    msg;
     size_t            msg_size;
@@ -66,7 +65,7 @@ test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 
     memset(&msg, 0, sizeof(msg));
     msg.type = BDBUF_TEST_MSG_TYPE_DRIVER_REQ;
-    msg.val.driver_req.dev = dev;
+    msg.val.driver_req.dd = dd;
     msg.val.driver_req.req = req;
     msg.val.driver_req.argp = argp;
 

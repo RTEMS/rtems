@@ -45,7 +45,7 @@ static void rtems_bdpart_write_mbr_partition(
 }
 
 static rtems_status_code rtems_bdpart_new_record(
-  dev_t disk,
+  const rtems_disk_device *dd,
   rtems_blkdev_bnum index,
   rtems_bdbuf_buffer **block
 )
@@ -61,7 +61,7 @@ static rtems_status_code rtems_bdpart_new_record(
   }
 
   /* Read the new record block (this accounts for disk block sizes > 512) */
-  sc = rtems_bdbuf_read( disk, index, block);
+  sc = rtems_bdbuf_read( dd, index, block);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
@@ -99,10 +99,11 @@ rtems_status_code rtems_bdpart_write(
   rtems_blkdev_bnum disk_end = 0;
   rtems_blkdev_bnum record_space =
     dos_compatibility ? RTEMS_BDPART_MBR_CYLINDER_SIZE : 1;
-  dev_t disk = 0;
   size_t ppc = 0; /* Primary partition count */
   size_t i = 0;
   uint8_t *data = NULL;
+  int fd = -1;
+  const rtems_disk_device *dd = NULL;
 
   /* Check if we have something to do */
   if (count == 0) {
@@ -116,7 +117,7 @@ rtems_status_code rtems_bdpart_write(
   }
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &disk, &disk_end);
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
@@ -211,7 +212,7 @@ rtems_status_code rtems_bdpart_write(
   }
 
   /* New MBR */
-  sc = rtems_bdpart_new_record( disk, 0, &block);
+  sc = rtems_bdpart_new_record( dd, 0, &block);
   if (sc != RTEMS_SUCCESSFUL) {
     esc = sc;
     goto cleanup;
@@ -275,7 +276,7 @@ rtems_status_code rtems_bdpart_write(
 
       /* New EBR */
       ebr = p->begin - record_space;
-      sc = rtems_bdpart_new_record( disk, ebr, &block);
+      sc = rtems_bdpart_new_record( dd, ebr, &block);
       if (sc != RTEMS_SUCCESSFUL) {
         esc = sc;
         goto cleanup;
@@ -293,6 +294,10 @@ rtems_status_code rtems_bdpart_write(
   }
 
 cleanup:
+
+  if (fd >= 0) {
+    close( fd);
+  }
 
   if (block != NULL) {
     rtems_bdbuf_sync( block);

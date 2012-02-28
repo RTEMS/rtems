@@ -47,12 +47,16 @@ rtems_status_code rtems_bdpart_register(
   char *logical_disk_marker = NULL;
   size_t disk_name_size = strlen( disk_name);
   size_t i = 0;
+  int fd = -1;
+  const rtems_disk_device *dd = NULL;
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &disk, &disk_end);
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
+  disk = rtems_disk_get_device_identifier( dd);
+  close( fd);
 
   /* Get the disk device identifier */
   rtems_filesystem_split_dev_t( disk, major, minor);
@@ -134,12 +138,16 @@ rtems_status_code rtems_bdpart_unregister(
   dev_t disk = 0;
   dev_t logical_disk = 0;
   size_t i = 0;
+  int fd = -1;
+  const rtems_disk_device *dd = NULL;
 
   /* Get disk data */
-  sc = rtems_bdpart_get_disk_data( disk_name, &disk, &disk_end);
+  sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
+  disk = rtems_disk_get_device_identifier( dd);
+  close( fd);
 
   /* Get the disk device identifier */
   rtems_filesystem_split_dev_t( disk, major, minor);

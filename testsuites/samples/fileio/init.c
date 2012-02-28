@@ -325,23 +325,9 @@ shell_bdbuf_trace (int argc, char* argv[])
 }
 
 static int
-disk_test_set_block_size (dev_t dev, size_t size)
+disk_test_set_block_size (rtems_disk_device *dd, size_t size)
 {
-  rtems_disk_device* dd;
-  int                rc;
-  
-  dd = rtems_disk_obtain (dev);
-  if (!dd)
-  {
-    printf ("error: cannot obtain disk\n");
-    return 1;
-  }
-  
-  rc = dd->ioctl (dd, RTEMS_BLKIO_SETBLKSIZE, &size);
-
-  rtems_disk_release (dd);
-
-  return rc;
+  return dd->ioctl (dd, RTEMS_BLKIO_SETBLKSIZE, &size);
 }
 
 static int
@@ -353,37 +339,50 @@ disk_test_write_blocks (dev_t dev, int start, int count, size_t size)
   int                 i;
   rtems_bdbuf_buffer* bd;
   rtems_status_code   sc;
+  int                 rv = 0;
+  rtems_disk_device* dd;
   
-  if (disk_test_set_block_size (dev, size) < 0)
+  dd = rtems_disk_obtain (dev);
+  if (!dd)
+  {
+    printf ("error: cannot obtain disk\n");
+    rv = 1;
+  }
+  
+  if (rv == 0 && disk_test_set_block_size (dd, size) < 0)
   {
     printf ("error: set block size failed: %s\n", strerror (errno));
-    return 1;
+    rv = 1;
   }
 
-  for (block = start; block < (start + count); block++)
+  for (block = start; rv == 0 && block < (start + count); block++)
   {
-    sc = rtems_bdbuf_read (dev, block, &bd);
-    if (sc != RTEMS_SUCCESSFUL)
+    sc = rtems_bdbuf_read (dd, block, &bd);
+    if (sc == RTEMS_SUCCESSFUL)
+    {
+      ip = (uint32_t*) bd->buffer;
+      for (i = 0; i < (size / sizeof (uint32_t)); i++, ip++, value++)
+        *ip = (size << 16) | value;
+
+      sc = rtems_bdbuf_release_modified (bd);
+      if (sc != RTEMS_SUCCESSFUL)
+      {
+        printf ("error: release block %d bd failed: %s\n",
+                block, rtems_status_text (sc));
+        rv = 1;
+      }
+    }
+    else
     {
       printf ("error: get block %d bd failed: %s\n",
               block, rtems_status_text (sc));
-      return 1;
-    }
-
-    ip = (uint32_t*) bd->buffer;
-    for (i = 0; i < (size / sizeof (uint32_t)); i++, ip++, value++)
-      *ip = (size << 16) | value;
-
-    sc = rtems_bdbuf_release_modified (bd);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-      printf ("error: release block %d bd failed: %s\n",
-              block, rtems_status_text (sc));
-      return 1;
+      rv = 1;
     }
   }
 
-  return 0;
+  rtems_disk_release (dd);
+
+  return rv;
 }
 
 static int

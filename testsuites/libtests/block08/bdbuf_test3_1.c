@@ -116,7 +116,7 @@ bdbuf_test3_1_thread1(rtems_task_argument arg)
      * [An entry is found in AVL tree, removed from modified list and 
      * returned with state ACCESS_MODIFIED]
      */
-    rc = rtems_bdbuf_get(test_dev, TEST_BLK_NUM_N, &bd);
+    rc = rtems_bdbuf_get(test_dd, TEST_BLK_NUM_N, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -128,7 +128,7 @@ bdbuf_test3_1_thread1(rtems_task_argument arg)
         TEST_FAILED();
     }
 
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM_N, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM_N, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -166,7 +166,7 @@ bdbuf_test3_1_thread2(rtems_task_argument arg)
      * this thread blocks on 
      * rtems_bdbuf_wait(pool, &pool->waiting, &pool->wait_waiters)]
      */
-    rc = rtems_bdbuf_get(test_dev, TEST_BLK_NUM_M, &bd);
+    rc = rtems_bdbuf_get(test_dd, TEST_BLK_NUM_M, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();

@@ -109,7 +109,7 @@ bdbuf_test4_2_thread1(rtems_task_argument arg)
      * Step 1:
      * Call rtems_bdbuf_read(#N) in thread #1;
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM_N, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM_N, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();
@@ -143,7 +143,7 @@ bdbuf_test4_2_thread2(rtems_task_argument arg)
      * In thread #2 call read(#N).
      * We will block on this call.
      */
-    rc = rtems_bdbuf_read(test_dev, TEST_BLK_NUM_N, &bd);
+    rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM_N, &bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
         TEST_FAILED();

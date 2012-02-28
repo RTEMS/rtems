@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -44,7 +45,7 @@
 
 #define BLOCK_COUNT 2
 
-static dev_t dev;
+static const rtems_disk_device *dd;
 
 static volatile bool sync_done = false;
 
@@ -61,7 +62,7 @@ static void task_low(rtems_task_argument arg)
 
   printk("L: try access: 0\n");
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   rtems_test_assert(sync_done);
@@ -84,7 +85,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: try access: 0\n");
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   rtems_test_assert(sync_done);
@@ -100,7 +101,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: try access: 1\n");
 
-  sc = rtems_bdbuf_get(dev, 1, &bd);
+  sc = rtems_bdbuf_get(dd, 1, &bd);
   ASSERT_SC(sc);
 
   printk("H: access: 1\n");
@@ -121,6 +122,7 @@ static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
+  dev_t dev = 0;
 
   printk("\n\n*** TEST BLOCK 3 ***\n");
 
@@ -129,6 +131,9 @@ static rtems_task Init(rtems_task_argument argument)
 
   sc = ramdisk_register(BLOCK_SIZE, BLOCK_COUNT, false, "/dev/rda", &dev);
   ASSERT_SC(sc);
+
+  dd = rtems_disk_obtain(dev);
+  rtems_test_assert(dd != NULL);
 
   sc = rtems_task_create(
     rtems_build_name(' ', 'L', 'O', 'W'),
@@ -156,7 +161,7 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_task_start(task_id_high, task_high, 0);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_get(dev, 0, &bd);
+  sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_sync(bd);

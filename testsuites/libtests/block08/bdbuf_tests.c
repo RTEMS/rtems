@@ -49,7 +49,7 @@ struct bdbuf_test_descr {
 #define TEST_SEM_ATTRIBS RTEMS_DEFAULT_ATTRIBUTES
 
 /** Device ID used for testing */
-dev_t      test_dev = (dev_t)-1;
+const rtems_disk_device *test_dd = NULL;
 
 /** Test result variable */
 bool       good_test_result = true;
@@ -108,6 +108,7 @@ run_bdbuf_tests()
     rtems_disk_device  *disk;
     rtems_status_code   sc;
     dev_t               dev = -1;
+    dev_t               test_dev;
     unsigned int        i;
 
     rtems_device_major_number  major;
@@ -150,6 +151,13 @@ run_bdbuf_tests()
     if (test_dev == (dev_t)-1)
     {
         printf("Failed to find %s disk\n", TEST_DISK_NAME);
+        return;
+    }
+
+    test_dd = rtems_disk_obtain(test_dev);
+    if (test_dd == NULL)
+    {
+        printf("Failed to obtain %s disk\n", TEST_DISK_NAME);
         return;
     }
 

@@ -131,6 +131,11 @@ struct _rtems_rfs_file_system
    */
   size_t block_size;
 
+  /**
+   * The file descriptor for device I/O.
+   */
+  int device;
+
 #if RTEMS_RFS_USE_LIBBLOCK
   /**
    * The disk device. This is the data about the block device this file system
@@ -139,11 +144,6 @@ struct _rtems_rfs_file_system
    */
   rtems_disk_device* disk;
 #else
-  /**
-   * The device number which is a the file handle for device I/O.
-   */
-  dev_t device;
-
   /**
    * The number of blocks in the file system.
    */
@@ -284,7 +284,7 @@ struct _rtems_rfs_file_system
  * @param _fs Pointer to the file system.
  */
 #if RTEMS_RFS_USE_LIBBLOCK
-#define rtems_rfs_fs_device(_fs) ((_fs)->disk->dev)
+#define rtems_rfs_fs_device(_fs) ((_fs)->disk)
 #else
 #define rtems_rfs_fs_device(_fs) ((_fs)->device)
 #endif

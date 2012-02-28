@@ -812,15 +812,19 @@ static rtems_status_code disk_detach_worker(
 
   if (state == RTEMS_MEDIA_STATE_READY) {
     dev_t dev = 0;
+    rtems_disk_device *dd = NULL;
 
     sc = rtems_media_get_device_identifier(src, &dev);
     if (sc != RTEMS_SUCCESSFUL) {
       return RTEMS_IO_ERROR;
     }
 
-    sc = rtems_bdbuf_syncdev(dev);
-    if (sc != RTEMS_SUCCESSFUL) {
-      rsc = RTEMS_IO_ERROR;
+    dd = rtems_disk_obtain(dev);
+    if (dd != NULL) {
+      sc = rtems_bdbuf_syncdev(dd);
+      if (sc != RTEMS_SUCCESSFUL) {
+        rsc = RTEMS_IO_ERROR;
+      }
     }
 
     sc = rtems_disk_delete(dev);
@@ -828,7 +832,10 @@ static rtems_status_code disk_detach_worker(
       rsc = RTEMS_IO_ERROR;
     }
 
-    rtems_bdbuf_purge_dev(dev);
+    if (dd != NULL) {
+      rtems_bdbuf_purge_dev(dd);
+      rtems_disk_release(dd);
+    }
 
     if (rtems_filesystem_dev_minor_t(dev) == 0) {
       sc = rtems_io_unregister_driver(rtems_filesystem_dev_major_t(dev));

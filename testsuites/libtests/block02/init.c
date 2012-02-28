@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -48,9 +49,9 @@
 
 #define BLOCK_COUNT_B 1
 
-static dev_t dev_a;
+static const rtems_disk_device *dd_a;
 
-static dev_t dev_b;
+static const rtems_disk_device *dd_b;
 
 static volatile bool sync_done = false;
 
@@ -67,14 +68,14 @@ static void task_low(rtems_task_argument arg)
 
   printk("L: try access: A0\n");
 
-  sc = rtems_bdbuf_get(dev_a, 0, &bd);
+  sc = rtems_bdbuf_get(dd_a, 0, &bd);
   ASSERT_SC(sc);
 
   rtems_test_assert(sync_done);
 
   printk("L: access: A0\n");
 
-  rtems_test_assert(bd->dev == dev_a);
+  rtems_test_assert(bd->dd == dd_a);
 
   printk("*** END OF TEST BLOCK 2 ***\n");
 
@@ -90,7 +91,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: try access: A0\n");
 
-  sc = rtems_bdbuf_get(dev_a, 0, &bd);
+  sc = rtems_bdbuf_get(dd_a, 0, &bd);
   ASSERT_SC(sc);
 
   rtems_test_assert(sync_done);
@@ -106,7 +107,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: try access: B0\n");
 
-  sc = rtems_bdbuf_get(dev_b, 0, &bd);
+  sc = rtems_bdbuf_get(dd_b, 0, &bd);
   ASSERT_SC(sc);
 
   printk("H: access: B0\n");
@@ -127,6 +128,8 @@ static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
+  dev_t dev_a = 0;
+  dev_t dev_b = 0;
 
   printk("\n\n*** TEST BLOCK 2 ***\n");
 
@@ -138,6 +141,12 @@ static rtems_task Init(rtems_task_argument argument)
 
   sc = ramdisk_register(BLOCK_SIZE_B, BLOCK_COUNT_B, false, "/dev/rdb", &dev_b);
   ASSERT_SC(sc);
+
+  dd_a = rtems_disk_obtain(dev_a);
+  rtems_test_assert(dd_a != NULL);
+
+  dd_b = rtems_disk_obtain(dev_b);
+  rtems_test_assert(dd_b != NULL);
 
   sc = rtems_task_create(
     rtems_build_name(' ', 'L', 'O', 'W'),
@@ -165,7 +174,7 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_task_start(task_id_high, task_high, 0);
   ASSERT_SC(sc);
 
-  sc = rtems_bdbuf_get(dev_a, 0, &bd);
+  sc = rtems_bdbuf_get(dd_a, 0, &bd);
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_sync(bd);
