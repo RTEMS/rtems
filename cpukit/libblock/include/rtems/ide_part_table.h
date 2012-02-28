@@ -207,7 +207,7 @@ rtems_status_code rtems_ide_part_table_get(
  * @deprecated Use the @ref rtems_bdpart "block device partition module" instead.
  */
 rtems_status_code rtems_ide_part_table_initialize(
-  char *dev_name
+  const char *dev_name
 ) RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
 
 #ifdef __cplusplus

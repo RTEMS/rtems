@@ -546,7 +546,7 @@ rtems_ide_part_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc)
  *      RTEMS_INTERNAL_ERROR if other error occurs.
  */
 rtems_status_code
-rtems_ide_part_table_initialize(char *dev_name)
+rtems_ide_part_table_initialize(const char *dev_name)
 {
     int                         part_num;
     dev_t                       dev;
