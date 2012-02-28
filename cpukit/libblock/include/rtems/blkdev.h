@@ -161,6 +161,7 @@ typedef struct rtems_blkdev_request {
 #define RTEMS_BLKIO_SYNCDEV         _IO('B', 6)
 #define RTEMS_BLKIO_DELETED         _IO('B', 7)
 #define RTEMS_BLKIO_CAPABILITIES    _IO('B', 8)
+#define RTEMS_BLKIO_GETDISKDEV      _IOR('B', 9, rtems_disk_device *)
 
 /** @} */
 

@@ -211,6 +211,11 @@ rtems_blkdev_generic_ioctl(
             args->ioctl_return = (uint32_t) (rc == RTEMS_SUCCESSFUL ? 0 : -1);
             break;
 
+        case RTEMS_BLKIO_GETDISKDEV:
+            *((rtems_disk_device **) args->buffer) = dd;
+            args->ioctl_return = 0;
+            break;
+
         case RTEMS_BLKIO_REQUEST:
             /*
              * It is not allowed to directly access the driver circumventing
