@@ -15,7 +15,7 @@
  *    issues.
  *    Change to support demand driven variable buffer sizes.
  *
- * Copyright (c) 2009 embedded brains GmbH.
+ * Copyright (c) 2009-2012 embedded brains GmbH.
  *
  * @(#) bdbuf.h,v 1.9 2005/02/02 00:06:18 joel Exp
  */
@@ -443,8 +443,12 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
  * neccessary) buffers. After initialization all blocks is placed into the
  * ready state.
  *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_CALLED_FROM_ISR Called from an interrupt context.
+ * @retval RTEMS_INVALID_NUMBER The buffer maximum is not an integral multiple
+ * of the buffer minimum.
+ * @retval RTEMS_RESOURCE_IN_USE Already initialized.
+ * @retval RTEMS_UNSATISFIED Not enough resources.
  */
 rtems_status_code
 rtems_bdbuf_init (void);
@@ -466,12 +470,15 @@ rtems_bdbuf_init (void);
  * The block number is the linear block number. This is relative to the start
  * of the partition on the media.
  *
- * @param device Device number (constructed of major and minor device number)
- * @param block  Linear media block number
- * @param bd     Reference to the buffer descriptor pointer.
+ * @param device [in] Device number (constructed of major and minor device
+ * number).
+ * @param block [in] Linear media block number.
+ * @param bd [out] Reference to the buffer descriptor pointer.
  *
- * @return       RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *               successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_NOT_CONFIGURED Not initialized.
+ * @retval RTEMS_INVALID_ID No such device.
+ * @retval RTEMS_INVALID_NUMBER Invalid block size.
  */
 rtems_status_code
 rtems_bdbuf_get (dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd);
@@ -491,12 +498,16 @@ rtems_bdbuf_get (dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd)
  * buffer is returned. The highest priority waiter will obtain the buffer
  * first.
  *
- * @param device Device number (constructed of major and minor device number)
- * @param block  Linear media block number
- * @param bd     Reference to the buffer descriptor pointer.
+ * @param device [in] Device number (constructed of major and minor device
+ * number).
+ * @param block [in] Linear media block number.
+ * @param bd [out] Reference to the buffer descriptor pointer.
  *
- * @return       RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *               successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_NOT_CONFIGURED Not initialized.
+ * @retval RTEMS_INVALID_ID No such device.
+ * @retval RTEMS_INVALID_NUMBER Invalid block size.
+ * @retval RTEMS_IO_ERROR IO error.
  */
 rtems_status_code
 rtems_bdbuf_read (dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd);
@@ -509,10 +520,11 @@ rtems_bdbuf_read (dev_t device, rtems_blkdev_bnum block, rtems_bdbuf_buffer** bd
  * the cache and modified before this call it will be returned to the modified
  * queue. The buffers is returned to the end of the LRU list.
  *
- * @param bd Reference to the buffer descriptor.
+ * @param bd [in] Reference to the buffer descriptor.
  *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_NOT_CONFIGURED Not initialized.
+ * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
 rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
@@ -527,10 +539,11 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
  * or a sync call has been made. If the buffer is obtained with a get or read
  * before the hold timer has expired the buffer will be returned to the user.
  *
- * @param bd Reference to the buffer descriptor.
+ * @param bd [in] Reference to the buffer descriptor.
  *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_NOT_CONFIGURED Not initialized.
+ * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
 rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd);
@@ -544,10 +557,11 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd);
  * @note This code does not lock the sync mutex and stop additions to the
  *       modified queue.
 
- * @param bd Reference to the buffer descriptor.
+ * @param bd [in] Reference to the buffer descriptor.
  *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_NOT_CONFIGURED Not initialized.
+ * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
 rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
@@ -561,10 +575,12 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
  * @note Nesting calls to sync multiple devices will be handled sequentially. A
  * nested call will be blocked until the first sync request has complete.
  *
- * @param dev Block device number
+ * @param dev [in] Device number (constructed of major and minor device
+ * number).
  *
- * @return RTEMS status code (RTEMS_SUCCESSFUL if operation completed
- *         successfully or error code if error is occured)
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_NOT_CONFIGURED Not initialized.
+ * @retval RTEMS_INVALID_ID No such device.
  */
 rtems_status_code
 rtems_bdbuf_syncdev (dev_t dev);
