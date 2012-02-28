@@ -106,6 +106,7 @@ mrfs_fssymlink/Makefile
 mrfs_fstime/Makefile
 fsnofs01/Makefile
 fsimfsgeneric01/Makefile
+fsbdpart01/Makefile
 
 ])
 AC_OUTPUT
