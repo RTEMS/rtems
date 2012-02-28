@@ -321,13 +321,13 @@ typedef struct rtems_bdbuf_buffer
 
   unsigned char*    buffer;     /**< Pointer to the buffer memory area */
 
-  volatile rtems_bdbuf_buf_state state;  /**< State of the buffer. */
+  rtems_bdbuf_buf_state state;           /**< State of the buffer. */
 
-  volatile uint32_t  waiters;    /**< The number of threads waiting on this
+  uint32_t waiters;              /**< The number of threads waiting on this
                                   * buffer. */
   rtems_bdbuf_group* group;      /**< Pointer to the group of BDs this BD is
                                   * part of. */
-  volatile uint32_t  hold_timer; /**< Timer to indicate how long a buffer
+  uint32_t hold_timer;           /**< Timer to indicate how long a buffer
                                   * has been held in the cache modified. */
 
   int   references;              /**< Allow reference counting by owner. */

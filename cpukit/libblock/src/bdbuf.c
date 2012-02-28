@@ -74,7 +74,7 @@ typedef struct rtems_bdbuf_swapout_worker
                                           * idle. */
   rtems_id                     id;       /**< The id of the task so we can wake
                                           * it. */
-  volatile bool                enabled;  /**< The worker is enabled. */
+  bool                         enabled;  /**< The worker is enabled. */
   rtems_bdbuf_swapout_transfer transfer; /**< The transfer data for this
                                           * thread. */
 } rtems_bdbuf_swapout_worker;
@@ -83,7 +83,7 @@ typedef struct rtems_bdbuf_swapout_worker
  * Buffer waiters synchronization.
  */
 typedef struct rtems_bdbuf_waiters {
-  volatile unsigned count;
+  unsigned count;
   rtems_id sema;
 } rtems_bdbuf_waiters;
 
@@ -93,7 +93,7 @@ typedef struct rtems_bdbuf_waiters {
 typedef struct rtems_bdbuf_cache
 {
   rtems_id            swapout;           /**< Swapout task ID */
-  volatile bool       swapout_enabled;   /**< Swapout is only running if
+  bool                swapout_enabled;   /**< Swapout is only running if
                                           * enabled. Set to false to kill the
                                           * swap out task. It deletes itself. */
   rtems_chain_control swapout_workers;   /**< The work threads for the swapout
@@ -111,9 +111,9 @@ typedef struct rtems_bdbuf_cache
   rtems_id            lock;              /**< The cache lock. It locks all
                                           * cache data, BD and lists. */
   rtems_id            sync_lock;         /**< Sync calls block writes. */
-  volatile bool       sync_active;       /**< True if a sync is active. */
-  volatile rtems_id   sync_requester;    /**< The sync requester. */
-  volatile dev_t      sync_device;       /**< The device to sync and
+  bool                sync_active;       /**< True if a sync is active. */
+  rtems_id            sync_requester;    /**< The sync requester. */
+  dev_t               sync_device;       /**< The device to sync and
                                           * BDBUF_INVALID_DEV not a device
                                           * sync. */
 
