@@ -35,6 +35,7 @@ static const unsigned char input_firmware[] = {
 
 static int mouse_consume;
 static int keyboard_consume;
+static int midi_consume;
 
 static rtems_id event_q;
 
@@ -58,6 +59,14 @@ static rtems_isr interrupt_handler(rtems_vector_number n)
     rtems_message_queue_send(event_q, msg, 8);
     keyboard_consume = (keyboard_consume + 1) & 0x07;
   }
+
+  while(midi_consume != COMLOC_MIDI_PRODUCE) {
+    for(i=0;i<3;i++)
+      msg[i] = COMLOC_MIDI(4*midi_consume+i+1);
+    rtems_message_queue_send(event_q, msg, 3);
+    midi_consume = (midi_consume + 1) & 0x0f;
+  }
+
 }
 
 rtems_device_driver usbinput_initialize(
@@ -87,6 +96,7 @@ rtems_device_driver usbinput_initialize(
 
   mouse_consume = 0;
   keyboard_consume = 0;
+  midi_consume = 0;
 
   sc = rtems_io_register_name(DEVICE_NAME, major, 0);
   RTEMS_CHECK_SC(sc, "create USB input device");
