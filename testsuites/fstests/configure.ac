@@ -105,6 +105,7 @@ mrfs_fsrdwr/Makefile
 mrfs_fssymlink/Makefile
 mrfs_fstime/Makefile
 fsnofs01/Makefile
+fsimfsgeneric01/Makefile
 
 ])
 AC_OUTPUT

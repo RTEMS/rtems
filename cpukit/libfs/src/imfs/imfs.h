@@ -56,6 +56,10 @@ typedef struct {
   pipe_control_t  *pipe;
 } IMFS_fifo_t;
 
+typedef struct {
+  void *context;
+} IMFS_generic_t;
+
 /*
  *  IMFS "memfile" information
  *
@@ -133,9 +137,11 @@ typedef enum {
   IMFS_MEMORY_FILE = RTEMS_FILESYSTEM_MEMORY_FILE,
   IMFS_LINEAR_FILE,
   IMFS_FIFO,
+  IMFS_GENERIC,
   IMFS_INVALID_NODE
 } IMFS_jnode_types_t;
 
+/* The IMFS_GENERIC does not count */
 #define IMFS_TYPE_COUNT (IMFS_FIFO + 1)
 
 typedef union {
@@ -146,6 +152,7 @@ typedef union {
   IMFS_memfile_t     file;
   IMFS_linearfile_t  linearfile;
   IMFS_fifo_t        fifo;
+  IMFS_generic_t     generic;
 } IMFS_types_union;
 
 typedef IMFS_jnode_t *(*IMFS_node_control_initialize)(
@@ -154,6 +161,11 @@ typedef IMFS_jnode_t *(*IMFS_node_control_initialize)(
 );
 
 IMFS_jnode_t *IMFS_node_initialize_default(
+  IMFS_jnode_t *node,
+  const IMFS_types_union *info
+);
+
+IMFS_jnode_t *IMFS_node_initialize_generic(
   IMFS_jnode_t *node,
   const IMFS_types_union *info
 );
@@ -370,6 +382,17 @@ extern IMFS_jnode_t *IMFS_create_node_with_control(
   const IMFS_types_union *info
 );
 
+extern bool IMFS_is_imfs_instance(
+  const rtems_filesystem_location_info_t *loc
+);
+
+extern int IMFS_make_generic_node(
+  const char *path,
+  mode_t mode,
+  const IMFS_node_control *node_control,
+  void *context
+);
+
 extern int IMFS_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
 );
@@ -571,6 +594,29 @@ static inline IMFS_jnode_t *IMFS_create_node(
     mode,
     info
   );
+}
+
+static inline void *IMFS_generic_get_context_by_node(
+  const IMFS_jnode_t *node
+)
+{
+  return node->info.generic.context;
+}
+
+static inline void *IMFS_generic_get_context_by_location(
+  const rtems_filesystem_location_info_t *loc
+)
+{
+  const IMFS_jnode_t *node = (const IMFS_jnode_t *) loc->node_access;
+
+  return IMFS_generic_get_context_by_node( node );
+}
+
+static inline void *IMFS_generic_get_context_by_iop(
+  const rtems_libio_t *iop
+)
+{
+  return IMFS_generic_get_context_by_location( &iop->pathinfo );
 }
 
 #ifdef __cplusplus

@@ -45,6 +45,7 @@ libimfs_a_SOURCES += src/imfs/deviceerrno.c src/imfs/deviceio.c \
     src/imfs/imfs_creat.c src/imfs/imfs_debug.c src/imfs/imfs_directory.c \
     src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c \
     src/imfs/imfs_fifo.c \
+    src/imfs/imfs_make_generic_node.c \
     src/imfs/imfs_fsunmount.c \
     src/imfs/imfs_handlers_device.c \
     src/imfs/imfs_handlers_directory.c src/imfs/imfs_handlers_link.c \

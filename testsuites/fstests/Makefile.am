@@ -31,6 +31,7 @@ SUBDIRS += mrfs_fsrdwr
 SUBDIRS += mrfs_fssymlink
 SUBDIRS += mrfs_fstime
 SUBDIRS += fsnofs01
+SUBDIRS += fsimfsgeneric01
 
 EXTRA_DIST =
 EXTRA_DIST += support/ramdisk_support.c
