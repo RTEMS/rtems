@@ -37,6 +37,8 @@
 #include "config.h"
 #endif
 
+#if HAVE_DECL_RCMD
+
 #include <sys/param.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
@@ -81,7 +83,7 @@ static int __icheckhost(const struct sockaddr *, socklen_t, const char *);
 int
 rcmd(
 	char **ahost,
-	u_short rport,
+	int rport,
 	const char *locuser,
 	const char *remuser,
 	const char *cmd,
@@ -544,4 +546,5 @@ __icheckhost(raddr, lhost)
 	/* No match. */
 	return (0);
 }
+#endif
 #endif

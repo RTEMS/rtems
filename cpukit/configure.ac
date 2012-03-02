@@ -302,6 +302,7 @@ AC_CHECK_DECLS([LONG_BIT],,,[#include <limits.h>])
 
 ## BSD-ism, excluded from POSIX, but available on most platforms
 AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
+AC_CHECK_DECLS([rcmd],,,[#include <unistd.h>])
 
 ## Check if libc provides BSD's strlcpy/strlcat
 AC_CHECK_FUNCS(strlcpy strlcat)

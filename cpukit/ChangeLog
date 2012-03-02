@@ -1,3 +1,9 @@
+2012-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for rcmd in unistd.h.
+	* libnetworking/libc/rcmd.c: Build iff rcmd is declared in unistd.h.
+	Change rcmd's decl to match with Linux/FreeBSD's decl.
+
 2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1924/cpukit
