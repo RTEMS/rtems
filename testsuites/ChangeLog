@@ -1,3 +1,7 @@
+2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* support/src/spin.c: Include "test_support.h".
+
 2011-12-11	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Add support/include/tmtests_empty_function.h.
