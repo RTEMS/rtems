@@ -242,17 +242,40 @@ int main(
    * Create a directory that passes through the read only file system.
    */
 
-  printf("create c/y/my_mount_point/../../y/my_mount_point/new_dir\n");
-  status = mkdir("c/y/my_mount_point/../../y/my_mount_point/new_dir",S_IRWXU );
+  printf("create c/y/my_mount_point/../../y/new_dir\n");
+  status = mkdir("c/y/my_mount_point/../../y/new_dir",S_IRWXU );
   rtems_test_assert( status == 0 );
-  status = stat("c/y/my_mount_point/../../y/my_mount_point/new_dir",&statbuf );
+  status = stat("c/y/my_mount_point/../../y/new_dir",&statbuf );
   rtems_test_assert( status == 0 );
-  status = stat("c/y/my_mount_point/new_dir/..", &statbuf );
+  status = stat("c/y/new_dir", &statbuf );
   rtems_test_assert( status == 0 );
 
   /*
    * Attempt to mount a second file system at a used mount point.
    */
+
+  printf("Verify a mount point returns EROFS for another mount\n");
+  status = mount(
+    "null",
+    "/c/y/my_mount_point",
+    "imfs",
+     RTEMS_FILESYSTEM_READ_ONLY,
+     NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EROFS);
+
+  printf("Unmount /c/y/my_mount_point\n");
+  status = unmount( "/c/y/my_mount_point" );
+  rtems_test_assert( status == 0 );
+
+  printf("Mount a read-write file system at /c/y/my_mount_point\n");
+  status = mount(
+    "null",
+    "/c/y/my_mount_point",
+    "imfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL );
+  rtems_test_assert( status == 0 );
 
   printf("Verify a mount point returns EBUSY for another mount\n");
   status = mount(
@@ -330,7 +353,7 @@ int main(
     "null",
     "/c/y/my_mount_point",
     "imfs",
-    RTEMS_FILESYSTEM_READ_ONLY,
+    RTEMS_FILESYSTEM_READ_WRITE,
     NULL );
   rtems_test_assert( status == 0 );
 

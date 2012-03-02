@@ -68,26 +68,32 @@ static void check_access(
 )
 {
   const rtems_filesystem_location_info_t *currentloc = &ctx->currentloc;
-  struct stat st;
-  int rv;
+  const rtems_filesystem_mount_table_entry_t *mt_entry = currentloc->mt_entry;
 
-  st.st_mode = 0;
-  st.st_uid = 0;
-  st.st_gid = 0;
-  rv = (*currentloc->handlers->fstat_h)(currentloc, &st);
-  if (rv == 0) {
-    bool access_ok = rtems_filesystem_check_access(
-      eval_flags,
-      st.st_mode,
-      st.st_uid,
-      st.st_gid
-    );
+  if ((eval_flags & RTEMS_LIBIO_PERMS_WRITE) == 0 || mt_entry->writeable) {
+    struct stat st;
+    int rv;
 
-    if (!access_ok) {
-      rtems_filesystem_eval_path_error(ctx, EACCES);
+    st.st_mode = 0;
+    st.st_uid = 0;
+    st.st_gid = 0;
+    rv = (*currentloc->handlers->fstat_h)(currentloc, &st);
+    if (rv == 0) {
+      bool access_ok = rtems_filesystem_check_access(
+        eval_flags,
+        st.st_mode,
+        st.st_uid,
+        st.st_gid
+      );
+
+      if (!access_ok) {
+        rtems_filesystem_eval_path_error(ctx, EACCES);
+      }
+    } else {
+      rtems_filesystem_eval_path_error(ctx, 0);
     }
   } else {
-    rtems_filesystem_eval_path_error(ctx, 0);
+    rtems_filesystem_eval_path_error(ctx, EROFS);
   }
 }
 

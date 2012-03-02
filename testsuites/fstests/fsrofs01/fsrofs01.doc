@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsrofs01
+
+directives:
+
+  TBD
+
+concepts:
+
+  Make sure EROFS is indicated for write operations on a read-only file system.

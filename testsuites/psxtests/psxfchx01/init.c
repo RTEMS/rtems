@@ -184,10 +184,9 @@ rtems_task Init(
   fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRWXU );
   rtems_test_assert( fd != -1 );
   
-  puts( "Init - fchown, with the opened file descriptor - expect EINVAL" );
+  puts( "Init - fchown, with the opened file descriptor - OK" );
   status = fchown( fd, 0, 0 );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( status == 0 );
 
   puts( "Init - close and remove /newfile" );
   status = close( fd );

@@ -28,11 +28,14 @@ int fchown( int fd, uid_t owner, gid_t group )
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
 
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
-
-  rtems_filesystem_instance_lock( &iop->pathinfo );
-  rv = (*iop->pathinfo.ops->chown_h)( &iop->pathinfo, owner, group );
-  rtems_filesystem_instance_unlock( &iop->pathinfo );
+  if (iop->pathinfo.mt_entry->writeable) {
+    rtems_filesystem_instance_lock( &iop->pathinfo );
+    rv = (*iop->pathinfo.ops->chown_h)( &iop->pathinfo, owner, group );
+    rtems_filesystem_instance_unlock( &iop->pathinfo );
+  } else {
+    errno = EROFS;
+    rv = -1;
+  }
 
   return rv;
 }
