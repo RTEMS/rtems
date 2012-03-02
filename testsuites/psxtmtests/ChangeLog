@@ -1,3 +1,16 @@
+2011-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxtmmq01/init.c: Make benchmark_mq_open,
+	benchmark_mq_open_second, benchmark_mq_close,
+	benchmark_mq_close_second, benchmark_mq_unlink, benchmark_mq_notify,
+	benchmark_mq_send, benchmark_mq_receive, benchmark_mq_timedsend,
+	benchmark_mq_timedreceive static.
+	* psxtmmutex01/init.c: Make test_mutex_create, test_mutex_destroy
+	static.
+	* psxtmsem02/init.c: benchmark_sem_getvalue, benchmark_sem_wait,
+	benchmark_sem_post, benchmark_sem_trywait_available,
+	benchmark_sem_trywait_not_available static.
+
 2011-12-13	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* psxtmbarrier01/init.c: Make benchmark_pthread_barrier_init,

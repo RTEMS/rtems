@@ -28,7 +28,7 @@ mqd_t       queue;
 mqd_t       queue2;
 const char *q_name;
 
-void benchmark_mq_open(int printable)
+static void benchmark_mq_open(int printable)
 {
   benchmark_timer_t end_time;
   struct mq_attr  attr;
@@ -52,7 +52,7 @@ void benchmark_mq_open(int printable)
     );
 }
 
-void benchmark_mq_open_second(int printable)
+static void benchmark_mq_open_second(int printable)
 {
   benchmark_timer_t end_time;
   struct mq_attr  attr;
@@ -76,7 +76,7 @@ void benchmark_mq_open_second(int printable)
 
 }
 
-void benchmark_mq_close(int printable)
+static void benchmark_mq_close(int printable)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -96,7 +96,7 @@ void benchmark_mq_close(int printable)
     );
 }
 
-void benchmark_mq_close_second(int printable)
+static void benchmark_mq_close_second(int printable)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -116,7 +116,7 @@ void benchmark_mq_close_second(int printable)
     );
 }
 
-void benchmark_mq_unlink(void)
+static void benchmark_mq_unlink(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -135,7 +135,7 @@ void benchmark_mq_unlink(void)
   );
 }
 
-void benchmark_mq_notify(void)
+static void benchmark_mq_notify(void)
 {
   benchmark_timer_t end_time;
   int             status;
@@ -158,7 +158,7 @@ void benchmark_mq_notify(void)
   );
 }
 
-void benchmark_mq_send(void)
+static void benchmark_mq_send(void)
 {
   benchmark_timer_t end_time;
   int  status;
@@ -178,7 +178,7 @@ void benchmark_mq_send(void)
   );
 }
 
-void benchmark_mq_receive(void)
+static void benchmark_mq_receive(void)
 {
   benchmark_timer_t end_time;
   int           status;
@@ -200,7 +200,7 @@ void benchmark_mq_receive(void)
   );
 }
 
-void benchmark_mq_timedsend(void)
+static void benchmark_mq_timedsend(void)
 {
   benchmark_timer_t end_time;
   int              status;
@@ -224,7 +224,7 @@ void benchmark_mq_timedsend(void)
   );
 }
 
-void benchmark_mq_timedreceive(void)
+static void benchmark_mq_timedreceive(void)
 {
   benchmark_timer_t end_time;
   int              status;
