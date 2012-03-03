@@ -98,9 +98,9 @@ static void set_video_mode(int mode)
       MM_WRITE(MM_VGA_HSYNC_START, 656);
       MM_WRITE(MM_VGA_HSYNC_END, 752);
       MM_WRITE(MM_VGA_HSCAN, 799);
-      MM_WRITE(MM_VGA_VSYNC_START, 491);
-      MM_WRITE(MM_VGA_VSYNC_END, 493);
-      MM_WRITE(MM_VGA_VSCAN, 523);
+      MM_WRITE(MM_VGA_VSYNC_START, 492);
+      MM_WRITE(MM_VGA_VSYNC_END, 494);
+      MM_WRITE(MM_VGA_VSCAN, 524);
       MM_WRITE(MM_VGA_CLKSEL, 0);
       break;
     case 1: // 800x600, pixel clock: 50MHz
@@ -109,9 +109,9 @@ static void set_video_mode(int mode)
       MM_WRITE(MM_VGA_HSYNC_START, 848);
       MM_WRITE(MM_VGA_HSYNC_END, 976);
       MM_WRITE(MM_VGA_HSCAN, 1040);
-      MM_WRITE(MM_VGA_VSYNC_START, 637);
-      MM_WRITE(MM_VGA_VSYNC_END, 643);
-      MM_WRITE(MM_VGA_VSCAN, 666);
+      MM_WRITE(MM_VGA_VSYNC_START, 636);
+      MM_WRITE(MM_VGA_VSYNC_END, 642);
+      MM_WRITE(MM_VGA_VSCAN, 665);
       MM_WRITE(MM_VGA_CLKSEL, 1);
       break;
     case 2: // 1024x768, pixel clock: 65MHz
@@ -120,9 +120,9 @@ static void set_video_mode(int mode)
       MM_WRITE(MM_VGA_HSYNC_START, 1048);
       MM_WRITE(MM_VGA_HSYNC_END, 1184);
       MM_WRITE(MM_VGA_HSCAN, 1344);
-      MM_WRITE(MM_VGA_VSYNC_START, 771);
-      MM_WRITE(MM_VGA_VSYNC_END, 777);
-      MM_WRITE(MM_VGA_VSCAN, 806);
+      MM_WRITE(MM_VGA_VSYNC_START, 772);
+      MM_WRITE(MM_VGA_VSYNC_END, 778);
+      MM_WRITE(MM_VGA_VSCAN, 807);
       MM_WRITE(MM_VGA_CLKSEL, 2);
       break;
   }
