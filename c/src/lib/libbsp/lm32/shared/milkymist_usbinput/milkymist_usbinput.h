@@ -8,7 +8,7 @@
  *
  *  $Id$
  *
- *  COPYRIGHT (c) 2010 Sebastien Bourdeauducq
+ *  COPYRIGHT (c) 2010, 2012 Sebastien Bourdeauducq
  */
 
 #ifndef __MILKYMIST_USBINPUT_H_
@@ -17,6 +17,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Ioctls */
+#define USBINPUT_LOAD_FIRMWARE          0x5500
+
+struct usbinput_firmware_description {
+  const unsigned char *data;
+  int length;
+};
 
 rtems_device_driver usbinput_initialize(
   rtems_device_major_number major,
@@ -36,8 +44,14 @@ rtems_device_driver usbinput_read(
   void *arg
 );
 
+rtems_device_driver usbinput_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+);
+
 #define USBINPUT_DRIVER_TABLE_ENTRY {usbinput_initialize, \
-usbinput_open, NULL, usbinput_read, NULL, NULL}
+usbinput_open, NULL, usbinput_read, NULL, usbinput_control}
 
 #ifdef __cplusplus
 }
