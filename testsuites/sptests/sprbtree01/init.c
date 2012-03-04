@@ -443,13 +443,13 @@ rtems_task Init(
 
   puts( "INIT - Verify rtems_rbtree_predecessor/successor");
   p = rtems_rbtree_predecessor(p);
-  if(p && rtems_rbtree_container_of(p,test_node,Node)->id > 30) {
+  if(p && rtems_rbtree_container_of(p,test_node,Node)->id != 29) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
   p = rtems_rbtree_find(&rbtree1, &search_node.Node);
   p = rtems_rbtree_successor(p);
-  if(p && rtems_rbtree_container_of(p,test_node,Node)->id < 30) {
+  if(p && rtems_rbtree_container_of(p,test_node,Node)->id != 31) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
