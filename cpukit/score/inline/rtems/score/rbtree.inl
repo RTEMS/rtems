@@ -31,6 +31,16 @@
  *  @{
  */
 
+/**
+ * @brief Get the direction opposite to @a the_dir
+ */
+RTEMS_INLINE_ROUTINE RBTree_Direction _RBTree_Opposite_direction(
+  RBTree_Direction the_dir
+)
+{
+  return (!the_dir);
+}
+
 /** @brief Set off rbtree
  *
  *  This function sets the parent and child fields of the @a node to NULL
@@ -435,10 +445,10 @@ RTEMS_INLINE_ROUTINE void _RBTree_Rotate(
 {
   RBTree_Node *c;
   if (the_node == NULL) return;
-  if (the_node->child[(1-dir)] == NULL) return;
+  if (the_node->child[_RBTree_Opposite_direction(dir)] == NULL) return;
 
-  c = the_node->child[(1-dir)];
-  the_node->child[(1-dir)] = c->child[dir];
+  c = the_node->child[_RBTree_Opposite_direction(dir)];
+  the_node->child[_RBTree_Opposite_direction(dir)] = c->child[dir];
 
   if (c->child[dir])
     c->child[dir]->parent = the_node;
