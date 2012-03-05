@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -22,10 +22,11 @@
 
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/bdbuf.h>
-#include <rtems/diskdevs.h>
+#include <rtems/blkdev.h>
 #include <rtems/bdpart.h>
 #include <rtems/libio.h>
 
@@ -37,8 +38,7 @@ typedef struct {
 } partition_table;
 
 typedef struct {
-  dev_t physical_disk;
-  dev_t logical_disk;
+  size_t index;
   rtems_blkdev_bnum begin;
   rtems_blkdev_bnum count;
 } partition;
@@ -577,20 +577,17 @@ static rtems_status_code partition_attach_worker(
 
   if (state == RTEMS_MEDIA_STATE_READY) {
     partition *part = worker_arg;
-    rtems_device_minor_number minor =
-      rtems_filesystem_dev_minor_t(part->logical_disk);
-    char *part_path = rtems_media_append_minor(src, minor);
+    char *part_path = rtems_media_append_minor(src, part->index);
 
     if (part_path == NULL) {
       return RTEMS_IO_ERROR;
     }
 
-    sc = rtems_disk_create_log(
-      part->logical_disk,
-      part->physical_disk,
+    sc = rtems_blkdev_create_partition(
+      part_path,
+      src,
       part->begin,
-      part->count,
-      part_path
+      part->count
     );
     if (sc != RTEMS_SUCCESSFUL) {
       free(part_path);
@@ -606,28 +603,16 @@ static rtems_status_code partition_attach_worker(
 
 static rtems_status_code attach_and_mount_partitions(
   const char *disk_path,
-  rtems_bdpart_partition *partitions,
+  const rtems_bdpart_partition *partitions,
   size_t count
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
-  rtems_device_minor_number minor = 0;
-  dev_t dev = 0;
   size_t i = 0;
 
-  sc = rtems_media_get_device_identifier(disk_path, &dev);
-  if (sc != RTEMS_SUCCESSFUL) {
-    return RTEMS_INVALID_ID;
-  }
-
-  major = rtems_filesystem_dev_major_t(dev);
-  minor = rtems_filesystem_dev_minor_t(dev) + 1;
-
-  for (i = 0; i < count; ++i, ++minor) {
+  for (i = 0; i < count; ++i) {
     partition part_desc = {
-      .physical_disk = dev,
-      .logical_disk = rtems_filesystem_make_dev_t(major, minor),
+      .index = i,
       .begin = partitions [i].begin,
       .count = partitions [i].end - partitions [i].begin
     };
@@ -807,41 +792,13 @@ static rtems_status_code disk_detach_worker(
   void *worker_arg __attribute__((unused))
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code rsc = RTEMS_SUCCESSFUL;
 
   if (state == RTEMS_MEDIA_STATE_READY) {
-    dev_t dev = 0;
-    rtems_disk_device *dd = NULL;
+    int rv = unlink(src);
 
-    sc = rtems_media_get_device_identifier(src, &dev);
-    if (sc != RTEMS_SUCCESSFUL) {
-      return RTEMS_IO_ERROR;
-    }
-
-    dd = rtems_disk_obtain(dev);
-    if (dd != NULL) {
-      sc = rtems_bdbuf_syncdev(dd);
-      if (sc != RTEMS_SUCCESSFUL) {
-        rsc = RTEMS_IO_ERROR;
-      }
-    }
-
-    sc = rtems_disk_delete(dev);
-    if (sc != RTEMS_SUCCESSFUL) {
+    if (rv != 0) {
       rsc = RTEMS_IO_ERROR;
-    }
-
-    if (dd != NULL) {
-      rtems_bdbuf_purge_dev(dd);
-      rtems_disk_release(dd);
-    }
-
-    if (rtems_filesystem_dev_minor_t(dev) == 0) {
-      sc = rtems_io_unregister_driver(rtems_filesystem_dev_major_t(dev));
-      if (sc != RTEMS_SUCCESSFUL) {
-        rsc = RTEMS_IO_ERROR;
-      }
     }
   }
 
