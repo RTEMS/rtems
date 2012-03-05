@@ -136,6 +136,11 @@ typedef struct ramdisk {
    * @brief Trace enable.
    */
   bool trace;
+
+  /**
+   * @brief Free the RAM disk at the block device delete request.
+   */
+  bool free_at_delete_request;
 } ramdisk;
 
 extern const rtems_driver_address_table ramdisk_ops;
@@ -212,6 +217,11 @@ ramdisk *ramdisk_allocate(
 );
 
 void ramdisk_free(ramdisk *rd);
+
+static inline void ramdisk_enable_free_at_delete_request(ramdisk *rd)
+{
+  rd->free_at_delete_request = true;
+}
 
 /**
  * @brief Allocates, initializes and registers a RAM disk.

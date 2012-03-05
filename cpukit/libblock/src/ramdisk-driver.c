@@ -102,12 +102,13 @@ ramdisk_write(struct ramdisk *rd, rtems_blkdev_request *req)
 int
 ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
+    struct ramdisk *rd = rtems_disk_get_driver_data(dd);
+
     switch (req)
     {
         case RTEMS_BLKIO_REQUEST:
         {
             rtems_blkdev_request *r = argp;
-            struct ramdisk *rd = rtems_disk_get_driver_data(dd);
 
             switch (r->req)
             {
@@ -123,6 +124,12 @@ ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
             }
             break;
         }
+
+        case RTEMS_BLKIO_DELETED:
+            if (rd->free_at_delete_request) {
+              ramdisk_free(rd);
+            }
+            break;
 
         default:
             return rtems_blkdev_ioctl (dd, req, argp);
