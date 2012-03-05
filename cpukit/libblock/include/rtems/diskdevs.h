@@ -178,6 +178,27 @@ static inline uint32_t rtems_disk_get_media_block_size(
   return dd->media_block_size;
 }
 
+static inline uint32_t rtems_disk_get_block_size(
+  const rtems_disk_device *dd
+)
+{
+  return dd->block_size;
+}
+
+static inline rtems_blkdev_bnum rtems_disk_get_block_begin(
+  const rtems_disk_device *dd
+)
+{
+  return dd->start;
+}
+
+static inline rtems_blkdev_bnum rtems_disk_get_block_count(
+  const rtems_disk_device *dd
+)
+{
+  return dd->size;
+}
+
 /** @} */
 
 /**
