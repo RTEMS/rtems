@@ -17,6 +17,35 @@
 
 #include "imfs.h"
 
+#include <dirent.h>
+
+static size_t IMFS_directory_size( const IMFS_jnode_t *node )
+{
+  size_t size = 0;
+  const rtems_chain_control *chain = &node->info.directory.Entries;
+  const rtems_chain_node *current = rtems_chain_immutable_first( chain );
+  const rtems_chain_node *tail = rtems_chain_immutable_tail( chain );
+
+  while ( current != tail ) {
+    size += sizeof( struct dirent );
+    current = rtems_chain_immutable_next( current );
+  }
+
+  return size;
+}
+
+static int IMFS_stat_directory(
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
+)
+{
+  const IMFS_jnode_t *node = loc->node_access;
+
+  buf->st_size = IMFS_directory_size( node );
+
+  return IMFS_stat( loc, buf );
+}
+
 static const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   rtems_filesystem_default_open,
   rtems_filesystem_default_close,
@@ -24,7 +53,7 @@ static const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   rtems_filesystem_default_write,
   rtems_filesystem_default_ioctl,
   imfs_dir_lseek,
-  IMFS_stat,
+  IMFS_stat_directory,
   rtems_filesystem_default_ftruncate_directory,
   rtems_filesystem_default_fsync_or_fdatasync_success,
   rtems_filesystem_default_fsync_or_fdatasync_success,

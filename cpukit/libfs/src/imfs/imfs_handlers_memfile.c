@@ -17,6 +17,19 @@
 
 #include "imfs.h"
 
+static int IMFS_stat_file(
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
+)
+{
+  const IMFS_jnode_t *node = loc->node_access;
+
+  buf->st_size = node->info.file.size;
+  buf->st_blksize = imfs_rq_memfile_bytes_per_block;
+
+  return IMFS_stat( loc, buf );
+}
+
 static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_open,
   rtems_filesystem_default_close,
@@ -24,7 +37,7 @@ static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_write,
   memfile_ioctl,
   memfile_lseek,
-  IMFS_stat,
+  IMFS_stat_file,
   memfile_ftruncate,
   rtems_filesystem_default_fsync_or_fdatasync_success,
   rtems_filesystem_default_fsync_or_fdatasync_success,

@@ -17,6 +17,19 @@
 
 #include "imfs.h"
 
+static int IMFS_stat_device(
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
+)
+{
+  const IMFS_jnode_t *node = loc->node_access;
+  const IMFS_device_t *io = &node->info.device;
+
+  buf->st_rdev = rtems_filesystem_make_dev_t( io->major, io->minor );
+
+  return IMFS_stat( loc, buf );
+}
+
 static const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_open,
   device_close,
@@ -24,7 +37,7 @@ static const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_write,
   device_ioctl,
   device_lseek,
-  IMFS_stat,
+  IMFS_stat_device,
   device_ftruncate,
   rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fsync_or_fdatasync,

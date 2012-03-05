@@ -18,6 +18,28 @@
 #include "imfs.h"
 
 #include <stdlib.h>
+#include <string.h>
+
+static int IMFS_stat_link(
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
+)
+{
+  const IMFS_jnode_t *node = loc->node_access;
+
+  if ( IMFS_type( node ) != IMFS_HARD_LINK ) {
+    buf->st_size = strlen( node->info.sym_link.name );
+
+    return IMFS_stat( loc, buf );
+  } else {
+    rtems_filesystem_location_info_t targetloc = *loc;
+
+    targetloc.node_access = node->info.hard_link.link_node;
+    IMFS_Set_handlers( &targetloc );
+
+    return (targetloc.handlers->fstat_h)( &targetloc, buf );
+  }
+}
 
 static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
   rtems_filesystem_default_open,
@@ -26,7 +48,7 @@ static const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
   rtems_filesystem_default_write,
   rtems_filesystem_default_ioctl,
   rtems_filesystem_default_lseek,
-  IMFS_stat,  /* stat */
+  IMFS_stat_link,
   rtems_filesystem_default_ftruncate,
   rtems_filesystem_default_fsync_or_fdatasync,
   rtems_filesystem_default_fsync_or_fdatasync,
