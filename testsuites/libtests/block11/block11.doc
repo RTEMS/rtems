@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: block11
+
+directives:
+
+  rtems_blkdev_create
+  rtems_blkdev_create_partition
+
+concepts:
+
+  TBD
