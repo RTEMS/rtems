@@ -14,6 +14,7 @@ libblock_a_SOURCES = src/bdbuf.c \
     src/ramdisk-driver.c \
     src/ramdisk-init.c \
     src/ramdisk-config.c \
+    src/ramdisk-register.c \
     src/ide_part_table.c \
     src/nvdisk.c \
     src/nvdisk-sram.c \
