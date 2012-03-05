@@ -198,6 +198,8 @@ typedef struct {
  */
 #define IMFS_DEVICE_MAJOR_NUMBER (0xfffe)
 
+#define IMFS_GENERIC_DEVICE_MAJOR_NUMBER (0xfffd)
+
 /*
  *  Maximum length of a "basename" of an IMFS file/node.
  */
@@ -617,6 +619,16 @@ static inline void *IMFS_generic_get_context_by_iop(
 )
 {
   return IMFS_generic_get_context_by_location( &iop->pathinfo );
+}
+
+static inline dev_t IMFS_generic_get_device_identifier_by_node(
+  const IMFS_jnode_t *node
+)
+{
+  return rtems_filesystem_make_dev_t(
+    IMFS_GENERIC_DEVICE_MAJOR_NUMBER,
+    node->st_ino
+  );
 }
 
 #ifdef __cplusplus
