@@ -8,7 +8,7 @@
  *
  *  $Id$
  *
- *  COPYRIGHT (c) 2010, 2011 Sebastien Bourdeauducq
+ *  COPYRIGHT (c) 2010, 2011, 2012 Sebastien Bourdeauducq
  */
 
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
@@ -25,16 +25,13 @@
 #include "../include/system_conf.h"
 #include "milkymist_usbinput.h"
 
-static const unsigned char input_firmware[] = {
-#include "softusb-input.h"
-};
-
 #include "comloc.h"
 
 #define DEVICE_NAME "/dev/usbinput"
 
 static int mouse_consume;
 static int keyboard_consume;
+static int midi_consume;
 
 static rtems_id event_q;
 
@@ -58,6 +55,14 @@ static rtems_isr interrupt_handler(rtems_vector_number n)
     rtems_message_queue_send(event_q, msg, 8);
     keyboard_consume = (keyboard_consume + 1) & 0x07;
   }
+
+  while(midi_consume != COMLOC_MIDI_PRODUCE) {
+    for(i=0;i<3;i++)
+      msg[i] = COMLOC_MIDI(4*midi_consume+i+1);
+    rtems_message_queue_send(event_q, msg, 3);
+    midi_consume = (midi_consume + 1) & 0x0f;
+  }
+
 }
 
 rtems_device_driver usbinput_initialize(
@@ -67,26 +72,13 @@ rtems_device_driver usbinput_initialize(
 )
 {
   rtems_status_code sc;
-  volatile unsigned int *usb_dmem
-    = (volatile unsigned int *)MM_SOFTUSB_DMEM_BASE;
-  volatile unsigned int *usb_pmem
-    = (volatile unsigned int *)MM_SOFTUSB_PMEM_BASE;
-  int i, nwords;
   rtems_isr_entry dummy;
 
   MM_WRITE(MM_SOFTUSB_CONTROL, SOFTUSB_CONTROL_RESET);
-  for(i=0;i<SOFTUSB_DMEM_SIZE/4;i++)
-    usb_dmem[i] = 0;
-  for(i=0;i<SOFTUSB_PMEM_SIZE/2;i++)
-    usb_pmem[i] = 0;
-  nwords = (sizeof(input_firmware)+1)/2;
-  for(i=0;i<nwords;i++)
-    usb_pmem[i] = ((unsigned int)(input_firmware[2*i]))
-      |((unsigned int)(input_firmware[2*i+1]) << 8);
-  MM_WRITE(MM_SOFTUSB_CONTROL, 0);
 
   mouse_consume = 0;
   keyboard_consume = 0;
+  midi_consume = 0;
 
   sc = rtems_io_register_name(DEVICE_NAME, major, 0);
   RTEMS_CHECK_SC(sc, "create USB input device");
@@ -144,6 +136,46 @@ rtems_device_driver usbinput_read(
     return RTEMS_SUCCESSFUL;
   else {
     rw_args->bytes_moved = 0;
+    return RTEMS_UNSATISFIED;
+  }
+}
+
+static void load_firmware(const unsigned char *firmware, int length)
+{
+  int i, nwords;
+  volatile unsigned int *usb_dmem
+    = (volatile unsigned int *)MM_SOFTUSB_DMEM_BASE;
+  volatile unsigned int *usb_pmem
+    = (volatile unsigned int *)MM_SOFTUSB_PMEM_BASE;
+
+  MM_WRITE(MM_SOFTUSB_CONTROL, SOFTUSB_CONTROL_RESET);
+  for(i=0;i<SOFTUSB_DMEM_SIZE/4;i++)
+    usb_dmem[i] = 0;
+  for(i=0;i<SOFTUSB_PMEM_SIZE/2;i++)
+    usb_pmem[i] = 0;
+  nwords = (length+1)/2;
+  for(i=0;i<nwords;i++)
+    usb_pmem[i] = ((unsigned int)(firmware[2*i]))
+      |((unsigned int)(firmware[2*i+1]) << 8);
+  MM_WRITE(MM_SOFTUSB_CONTROL, 0);
+}
+
+rtems_device_driver usbinput_control(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
+{
+  rtems_libio_ioctl_args_t *args = arg;
+  struct usbinput_firmware_description *fd
+    = (struct usbinput_firmware_description *)args->buffer;
+
+  if(args->command == USBINPUT_LOAD_FIRMWARE) {
+    load_firmware(fd->data, fd->length);
+    args->ioctl_return = 0;
+    return RTEMS_SUCCESSFUL;
+  } else {
+    args->ioctl_return = -1;
     return RTEMS_UNSATISFIED;
   }
 }

@@ -50,7 +50,7 @@ static void _RBTree_Extract_validate_unprotected(
       sibling->color = RBT_BLACK;
       dir = the_node != parent->child[0];
       _RBTree_Rotate(parent, dir);
-      sibling = parent->child[!dir];
+      sibling = parent->child[_RBTree_Opposite_direction(dir)];
     }
 
     /* sibling is black, see if both of its children are also black. */
@@ -72,15 +72,15 @@ static void _RBTree_Extract_validate_unprotected(
        * Then switch the sibling and parent colors, and rotate through parent.
        */
       dir = the_node != parent->child[0];
-      if (!_RBTree_Is_red(sibling->child[!dir])) {
+      if (!_RBTree_Is_red(sibling->child[_RBTree_Opposite_direction(dir)])) {
         sibling->color = RBT_RED;
         sibling->child[dir]->color = RBT_BLACK;
-        _RBTree_Rotate(sibling, !dir);
-        sibling = parent->child[!dir];
+        _RBTree_Rotate(sibling, _RBTree_Opposite_direction(dir));
+        sibling = parent->child[_RBTree_Opposite_direction(dir)];
       }
       sibling->color = parent->color;
       parent->color = RBT_BLACK;
-      sibling->child[!dir]->color = RBT_BLACK;
+      sibling->child[_RBTree_Opposite_direction(dir)]->color = RBT_BLACK;
       _RBTree_Rotate(parent, dir);
       break; /* done */
     }

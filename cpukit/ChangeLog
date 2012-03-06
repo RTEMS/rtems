@@ -1,3 +1,14 @@
+2012-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/resolv.h: Partial sync with FreeBSD.
+	Add decls for res_send_setqhook, res_send_setrhook.
+
+2012-03-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Check for rcmd in unistd.h.
+	* libnetworking/libc/rcmd.c: Build iff rcmd is declared in unistd.h.
+	Change rcmd's decl to match with Linux/FreeBSD's decl.
+
 2011-12-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	PR 1924/cpukit

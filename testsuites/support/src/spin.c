@@ -14,6 +14,7 @@
 #endif
 
 #include <rtems.h>
+#include "test_support.h"
 
 /*
  *  Burn CPU for specified number of ticks
