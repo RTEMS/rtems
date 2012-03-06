@@ -155,7 +155,7 @@
 #define MM_SOFTUSB_PMEM_BASE    (0xa0000000)
 #define MM_SOFTUSB_DMEM_BASE    (0xa0020000)
 
-#define SOFTUSB_PMEM_SIZE       (1 << 12)
+#define SOFTUSB_PMEM_SIZE       (1 << 13)
 #define SOFTUSB_DMEM_SIZE       (1 << 13)
 
 /* PFPU */
