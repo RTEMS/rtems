@@ -170,6 +170,10 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 #define IPB_CLOCK (bsp_uboot_board_info.bi_ipbfreq)
 #define XLB_CLOCK (bsp_uboot_board_info.bi_busfreq)
 #define G2_CLOCK  (bsp_uboot_board_info.bi_intfreq)
+#elif defined(BRS5L)
+#define IPB_CLOCK 66000000   /* 66 MHz */
+#define XLB_CLOCK 132000000  /* 132 MHz */
+#define G2_CLOCK  396000000  /* 396 MHz */
 #else
 #define IPB_CLOCK 33000000   /* 33 MHz */
 #define XLB_CLOCK 66000000   /* 66 MHz */
