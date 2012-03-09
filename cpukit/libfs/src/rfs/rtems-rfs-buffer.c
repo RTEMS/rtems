@@ -166,8 +166,6 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
   {
     rc = rtems_rfs_buffer_io_request (fs, block, read, &handle->buffer);
 
-    rtems_chain_set_off_chain (rtems_rfs_buffer_link(handle));
-
     if (rc > 0)
     {
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_BUFFER_HANDLE_REQUEST))
@@ -175,6 +173,8 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
                 block, read ? "read" : "get", rc, strerror (rc));
       return rc;
     }
+
+    rtems_chain_set_off_chain (rtems_rfs_buffer_link(handle));
   }
 
   /*
