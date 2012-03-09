@@ -706,6 +706,7 @@ FPU_init:
 
 	SETBITS r30, r29, MSR_FP
 	mtmsr	r30				/* enable FPU and FPU exceptions */
+	sync
 
 	lfd 	f0, 0(r29)
 	fmr 	f1, f0
