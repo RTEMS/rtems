@@ -1,0 +1,265 @@
+*** TEST FLASHDISK 1 ***
+[00]: start
+[00]: mount: /dev/fdda -> /mnt
+[00]: init root: /mnt
+[00]: create dir: 1804928587
+[00]: create dir: 959030623
+[00]: create dir: 1903590565
+[00]: open file: file
+[00]: sleep: 700 ms
+[00]: close file
+[00]: sleep: 200 ms
+[00]: open dir: 959030623
+[00]: create dir: 838545539
+[00]: create file: 1594243340
+[00]: create file: 162216788
+[00]: create file: 1841205112
+[00]: sleep: 700 ms
+[00]: remove dir: 838545539
+[00]: create dir: 1143741253
+[00]: remove file: 1594243340
+[00]: sleep: 400 ms
+[00]: close dir
+[00]: sleep: 400 ms
+[00]: create file: 832100416
+[00]: open dir: 1903590565
+[00]: create file: 1401208270
+[00]: create dir: 2032315143
+[00]: create dir: 2026989069
+[00]: close dir
+[00]: open dir: 1804928587
+[00]: close dir
+[00]: open dir: 1804928587
+[00]: sleep: 100 ms
+[00]: create dir: 650320721
+[00]: sleep: 500 ms
+[00]: create dir: 1857409239
+[00]: create file: 2060801678
+[00]: create dir: 490998763
+[00]: create dir: 644928527
+[00]: create file: 1758287264
+[00]: close dir
+[00]: sleep: 500 ms
+[00]: open file: file
+[00]: read from file
+[00]: read from file
+[00]: read from file
+[00]: sleep: 700 ms
+[00]: read from file
+[00]: sleep: 200 ms
+[00]: sleep: 300 ms
+[00]: read from file
+[00]: append to file
+[00]: read from file
+[00]: close file
+[00]: remove dir: 1804928587
+[00]: create file: 2073894790
+[00]: sleep: 900 ms
+[00]: create dir: 472737403
+[00]: remove dir: 1903590565
+[00]: create dir: 689486081
+[00]: create dir: 373636079
+[00]: remove file: file
+[00]: create dir: 1506727461
+[00]: open dir: 959030623
+[00]: create dir: 1029668001
+[00]: remove file: 162216788
+[00]: close dir
+[00]: sleep: 400 ms
+[00]: open dir: 959030623
+[00]: remove file: 1841205112
+[00]: create file: 378843792
+[00]: sleep: 1000 ms
+[00]: create file: 1871951748
+[00]: open dir: 1143741253
+[00]: create file: 855915646
+[00]: sleep: 700 ms
+[00]: create file: 2008730550
+[00]: close dir
+[00]: create file: 1327563176
+[00]: remove dir: 1143741253
+[00]: create file: 1384249492
+[00]: close dir
+[00]: remove dir: 959030623
+[00]: open file: 832100416
+[00]: read from file
+[00]: sleep: 400 ms
+[00]: close file
+[00]: open file: 832100416
+[00]: close file
+[00]: create dir: 2025552021
+[00]: remove dir: 959030623
+[00]: create dir: 1178339711
+[00]: remove file: 832100416
+[00]: remove file: 2073894790
+[00]: open dir: 1506727461
+[00]: sleep: 700 ms
+[00]: close dir
+[00]: sleep: 300 ms
+[00]: open dir: 1506727461
+[00]: create dir: 1625748679
+[00]: close dir
+[00]: remove dir: 689486081
+[00]: remove dir: 959030623
+[00]: open dir: 959030623
+[00]: sleep: 1000 ms
+[00]: close dir
+[00]: sleep: 100 ms
+[00]: open dir: 959030623
+[00]: create dir: 1128727833
+[00]: create file: 1203746106
+[00]: open dir: 1128727833
+[00]: create dir: 58221889
+[00]: create file: 611814452
+[00]: create dir: 420219909
+[00]: close dir
+[00]: remove file: 1384249492
+[00]: close dir
+[00]: open dir: 959030623
+[00]: close dir
+[00]: sleep: 800 ms
+[00]: remove dir: 1506727461
+[00]: create file: 550820384
+[00]: create file: 833699694
+[00]: remove dir: 1506727461
+[00]: create dir: 861614531
+[00]: remove dir: 1506727461
+[00]: create dir: 846638047
+[00]: remove dir: 1506727461
+[00]: create dir: 1766470371
+[00]: remove dir: 959030623
+[00]: create file: 1969337196
+[00]: remove dir: 1506727461
+[00]: create file: 1937189238
+[00]: remove dir: 959030623
+[00]: create dir: 1615521955
+[00]: remove dir: 959030623
+[00]: sleep: 500 ms
+[00]: open dir: 1506727461
+[00]: create file: 926653184
+[00]: remove dir: 1625748679
+[00]: close dir
+[00]: create dir: 975747319
+[00]: open dir: 959030623
+[00]: open file: 1871951748
+[00]: sleep: 600 ms
+[00]: close file
+[00]: sleep: 800 ms
+[00]: remove file: 378843792
+[00]: open file: 1203746106
+[00]: read from file
+[00]: append to file
+[00]: sleep: 600 ms
+[00]: close file
+[00]: open file: 1871951748
+[00]: append to file
+[00]: close file
+[00]: remove file: 1871951748
+[00]: sleep: 400 ms
+[00]: create file: 1835979858
+[00]: open dir: 1128727833
+[00]: create dir: 862728993
+[00]: sleep: 700 ms
+[00]: remove dir: 862728993
+[00]: close dir
+[00]: close dir
+[00]: open dir: 975747319
+[00]: sleep: 400 ms
+[00]: create dir: 1840098529
+[00]: create file: 231405798
+[00]: remove dir: 1840098529
+[00]: close dir
+[00]: remove file: 550820384
+[00]: create file: 1020303340
+[00]: create dir: 895068705
+[00]: open dir: 975747319
+[00]: close dir
+[00]: open file: 1020303340
+[00]: read from file
+[00]: close file
+[00]: create dir: 1993404773
+[00]: remove file: 1020303340
+[00]: create dir: 2112395285
+[00]: create dir: 81202983
+[00]: remove dir: 975747319
+[00]: remove dir: 959030623
+[00]: create dir: 467069459
+[00]: open dir: 1506727461
+[00]: create file: 612609068
+[00]: create dir: 1793174441
+[00]: create file: 710808000
+[00]: sleep: 300 ms
+[00]: create file: 897370450
+[00]: create file: 1901152134
+[00]: sleep: 200 ms
+[00]: close dir
+[00]: open dir: 1506727461
+[00]: close dir
+[00]: sleep: 800 ms
+[00]: create file: 906254788
+[00]: remove dir: 467069459
+[00]: remove dir: 1506727461
+[00]: open dir: 895068705
+[00]: close dir
+[00]: create file: 1216543556
+[00]: create file: 37176518
+[00]: open dir: 2112395285
+[00]: close dir
+[00]: create dir: 659416143
+[00]: remove file: 37176518
+[00]: sleep: 500 ms
+[00]: remove dir: 895068705
+[00]: create dir: 1507289677
+[00]: open dir: 959030623
+[00]: create file: 1766335976
+[00]: close dir
+[00]: sleep: 400 ms
+[00]: open dir: 2112395285
+[00]: create dir: 1476817327
+[00]: close dir
+[00]: create dir: 1841667551
+[00]: remove dir: 2112395285
+[00]: open dir: 1507289677
+[00]: close dir
+[00]: create file: 1610238546
+[00]: create file: 220151308
+[00]: remove dir: 1507289677
+[00]: open file: 1216543556
+[00]: append to file
+[00]: append to file
+[00]: close file
+[00]: remove file: 1216543556
+[00]: open dir: 959030623
+[00]: sleep: 500 ms
+[00]: create file: 1508553554
+[00]: create file: 1742399670
+[00]: sleep: 100 ms
+[00]: close dir
+[00]: create dir: 2113094209
+[00]: remove dir: 959030623
+[00]: remove file: 1610238546
+[00]: create dir: 2146380029
+[00]: sleep: 700 ms
+[00]: create file: 1557834172
+[00]: remove dir: 2146380029
+[00]: finish
+fdisk:Flash Disk Driver Status : 2.0
+fdisk:Block count       124
+fdisk:Unavail blocks    32
+fdisk:Starvations       76
+fdisk:Available queue   2 (2)
+fdisk:Used queue        2 (2)
+fdisk:Erase queue       0 (0)
+fdisk:Failed queue      0 (0)
+fdisk:Queue total       4 of 4, ok
+fdisk:Device count      1
+fdisk: Device           0
+fdisk:  Segment count   4
+fdisk:    0 A--- p: 31 a: 30/ 30 u:  0/  0 e:  1/  1 br:30
+fdisk:    1 A--- p: 31 a:  0/  0 u:  0/  0 e: 31/ 31 br:0
+fdisk:    2 -U-- p: 31 a: 31/ 31 u:  0/  0 e:  0/  0 br:31
+fdisk:    3 -U-- p: 31 a: 31/ 31 u:  0/  0 e:  0/  0 br:31
+fdisk:Used List:
+fdisk:    0 00:002 u:  0
+fdisk:    1 00:003 u:  0
+*** END OF TEST FLASHDISK 1 ***
