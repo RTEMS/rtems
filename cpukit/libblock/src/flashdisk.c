@@ -2120,7 +2120,7 @@ rtems_fdisk_write_block (rtems_flashdisk* fd,
  * to inform upper layer that reading is completed.
  *
  * @param req Pointer to the READ block device request info.
- * @retval int The ioctl return value.
+ * @retval 0 Always.  The request done callback contains the status.
  */
 static int
 rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
@@ -2147,7 +2147,7 @@ rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
   req->status = ret ? RTEMS_IO_ERROR : RTEMS_SUCCESSFUL;
   req->req_done (req->done_arg, req->status);
 
-  return ret;
+  return 0;
 }
 
 /**
@@ -2156,7 +2156,7 @@ rtems_fdisk_read (rtems_flashdisk* fd, rtems_blkdev_request* req)
  * upper layer that writing is completed.
  *
  * @param req Pointers to the WRITE block device request info.
- * @retval int The ioctl return value.
+ * @retval 0 Always.  The request done callback contains the status.
  */
 static int
 rtems_fdisk_write (rtems_flashdisk* fd, rtems_blkdev_request* req)
