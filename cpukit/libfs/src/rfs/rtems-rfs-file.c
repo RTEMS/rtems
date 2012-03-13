@@ -31,7 +31,7 @@
 int
 rtems_rfs_file_open (rtems_rfs_file_system*  fs,
                      rtems_rfs_ino           ino,
-                     uint32_t                flags,
+                     int                     oflag,
                      rtems_rfs_file_handle** file)
 {
   rtems_rfs_file_handle* handle;
@@ -132,7 +132,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
       printf ("rtems-rfs: file-open: ino=%" PRId32 " share created\n", ino);
   }
 
-  handle->flags  = flags;
+  handle->flags  = oflag;
   handle->shared = shared;
 
   *file = handle;

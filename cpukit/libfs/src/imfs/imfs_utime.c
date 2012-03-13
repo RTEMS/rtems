@@ -15,24 +15,22 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
-#include <sys/time.h>
-
-#include <rtems/libio_.h>
 #include "imfs.h"
 
+#include <sys/time.h>
+
 int IMFS_utime(
-  rtems_filesystem_location_info_t  *pathloc,       /* IN */
-  time_t                             actime,        /* IN */
-  time_t                             modtime        /* IN */
+  const rtems_filesystem_location_info_t *loc,
+  time_t actime,
+  time_t modtime
 )
 {
   IMFS_jnode_t *the_jnode;
 
-  the_jnode = (IMFS_jnode_t *) pathloc->node_access;
+  the_jnode = (IMFS_jnode_t *) loc->node_access;
 
   the_jnode->stat_atime = actime;
   the_jnode->stat_mtime = modtime;

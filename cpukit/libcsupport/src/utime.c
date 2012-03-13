@@ -12,36 +12,41 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
+/* FIXME: This include is a workaround for a broken <utime.h> in Newlib */
 #include <sys/types.h>
+
 #include <utime.h>
-#include <errno.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int utime(
-  const char           *path,
-  const struct utimbuf *times
-)
+int utime( const char *path, const struct utimbuf *times )
 {
-  rtems_filesystem_location_info_t   temp_loc;
-  int                                result;
-  struct utimbuf                     now;
-
-  if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x00, &temp_loc, true ) )
-    return -1;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  struct utimbuf now_times;
 
   if ( times == NULL ) {
-    now.actime = now.modtime = time( NULL );
-    times = &now;
+    time_t now = time( NULL );
+
+    now_times.actime = now;
+    now_times.modtime = now;
+
+    times = &now_times;
   }
 
-  result = (*temp_loc.ops->utime_h)( &temp_loc, times->actime, times->modtime );
+  rv = (*currentloc->ops->utime_h)(
+    currentloc,
+    times->actime,
+    times->modtime
+  );
 
-  rtems_filesystem_freenode( &temp_loc );
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  return result;
+  return rv;
 }

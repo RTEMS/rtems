@@ -32,8 +32,8 @@ int getdents(
   int   dd_len
 )
 {
-  rtems_libio_t                    *iop;
-  rtems_filesystem_location_info_t  loc;
+  rtems_libio_t *iop;
+  rtems_filesystem_node_types_t type;
 
   /*
    *  Get the file control block structure associated with the file descriptor
@@ -43,8 +43,8 @@ int getdents(
   /*
    *  Make sure we are working on a directory
    */
-  loc = iop->pathinfo;
-  if ( (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY )
+  type = rtems_filesystem_node_type( &iop->pathinfo );
+  if ( type != RTEMS_FILESYSTEM_DIRECTORY )
     rtems_set_errno_and_return_minus_one( ENOTDIR );
 
   /*

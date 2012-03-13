@@ -4,7 +4,12 @@
 
 /* Author: Till Straumann <strauman@slac.stanford.edu> 2002 */
 
-/* Hacked on by others. */
+/*
+ * Hacked on by others.
+ *
+ * Modifications to support reference counting in the file system are
+ * Copyright (c) 2012 embedded brains GmbH.
+ */
 
 /*
  * Authorship
@@ -74,6 +79,7 @@
 #include <mount_prot.h>
 
 #include "rpcio.h"
+#include "librtemsNfs.h"
 
 /* Configurable parameters */
 
@@ -201,6 +207,21 @@ static struct timeval _nfscalltimeout = { 10, 0 };	/* {secs, us } */
 #define UNLOCK(s)	do { rtems_semaphore_release((s)); \
 					} while (0)
 
+static inline char *
+nfs_dupname(const char *name, size_t namelen)
+{
+	char *dupname = malloc(namelen + 1);
+
+	if (dupname != NULL) {
+		memcpy(dupname, name, namelen);
+		dupname [namelen] = '\0';
+	} else {
+		errno = ENOMEM;
+	}
+
+	return dupname;
+}
+
 /*****************************************
 	Types with Associated XDR Routines
  *****************************************/
@@ -213,12 +234,6 @@ typedef struct strbuf {
 	char	*buf;
 	u_int	max;
 } strbuf;
-
-static bool_t
-xdr_strbuf(XDR *xdrs, strbuf *obj)
-{
-	return xdr_string(xdrs, &obj->buf, obj->max);
-}
 
 /* Read 'readlink' results into a 'strbuf'.
  * This is convenient as it avoids
@@ -562,9 +577,9 @@ typedef struct NfsNodeRec_ {
  *****************************************/
 
 static ssize_t nfs_readlink(
-	rtems_filesystem_location_info_t  *loc,     	/* IN  */
-	char				  *buf,		/* OUT */
-	size_t				  len
+	const rtems_filesystem_location_info_t *loc,
+	char *buf,
+	size_t len
 );
 
 static int updateAttr(NfsNode node, int force);
@@ -591,10 +606,10 @@ static int updateAttr(NfsNode node, int force);
 static int
 nfs_sattr(NfsNode node, sattr *arg, u_long mask);
 
-extern struct _rtems_filesystem_operations_table nfs_fs_ops;
-static struct _rtems_filesystem_file_handlers_r	 nfs_file_file_handlers;
-static struct _rtems_filesystem_file_handlers_r	 nfs_dir_file_handlers;
-static struct _rtems_filesystem_file_handlers_r	 nfs_link_file_handlers;
+extern const struct _rtems_filesystem_operations_table nfs_fs_ops;
+static const struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers;
+static const struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers;
+static const struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers;
 static		   rtems_driver_address_table		 drvNfs;
 
 int
@@ -602,64 +617,6 @@ nfsMountsShow(FILE*);
 
 rtems_status_code
 rtems_filesystem_resolve_location(char *buf, int len, rtems_filesystem_location_info_t *loc);
-
-
-/*****************************************
-	Inline Routines
- *****************************************/
-
-
-/* * * * * * * * * * * * * * * * * *
-	Trivial Operations on a NfsNode
- * * * * * * * * * * * * * * * * * */
-
-/* determine if a location 'l' is an NFS root node */
-static inline int
-locIsRoot(rtems_filesystem_location_info_t *l)
-{
-NfsNode me = (NfsNode) l->node_access;
-NfsNode r;
-	r = (NfsNode)l->mt_entry->mt_fs_root.node_access;
-	return SERP_ATTR(r).fileid == SERP_ATTR(me).fileid &&
-		   SERP_ATTR(r).fsid   == SERP_ATTR(me).fsid;
-}
-
-/* determine if a location 'l' is an NFS node */
-static inline int
-locIsNfs(rtems_filesystem_location_info_t *l)
-{
-	return l->ops == &nfs_fs_ops;
-}
-
-/* determine if two locations refer to the
- * same entity. We know that 'nfsloc' is a
- * location inside nfs. However, we needn't
- * know anything about 'anyloc'.
- */
-static inline int
-locAreEqual(
-	rtems_filesystem_location_info_t *nfsloc,
-	rtems_filesystem_location_info_t *anyloc
-)
-{
-NfsNode na = (NfsNode) nfsloc->node_access;
-NfsNode nb;
-
-	if (!locIsNfs(anyloc))
-		return 0;
-
-	nb = (NfsNode) anyloc->node_access;
-
-	if (na->nfs != nb->nfs)
-		return 0;
-
-	updateAttr(nb, 0);
-
-	return SERP_ATTR(na).fileid == SERP_ATTR(nb).fileid &&
-		   SERP_ATTR(na).fsid   == SERP_ATTR(nb).fsid;
-}
-
-
 
 /*****************************************
 	Global Variables
@@ -1326,409 +1283,229 @@ enum clnt_stat		stat = RPC_FAILED;
 	RTEMS File System Operations for NFS
  *****************************************/
 
-#if 0 /* for reference */
-
-struct rtems_filesystem_location_info_tt
-{
-   void                                 *node_access;
-   rtems_filesystem_file_handlers_r     *handlers;
-   rtems_filesystem_operations_table    *ops;
-   rtems_filesystem_mount_table_entry_t *mt_entry;
-};
-
-#endif
-
-/*
- * Evaluate a path letting 'pathloc' travel along.
- *
- * The important semantics of this operation are:
- *
- * If this routine returns -1, the caller assumes
- * pathloc to be _invalid_ and hence it will not
- * invoke rtems_filesystem_freenode() on it.
- *
- * OTOH, if evalpath returns 0,
- * rtems_filesystem_freenode() will eventually be
- * called which results in our freeing the associated
- * NfsNode attached to node_access.
- *
- * Therefore, this routine will _always_ allocate
- * a NfsNode and pass it out to *pathloc (provided
- * that the evaluation succeeds).
- *
- * However, if the evaluation finds that it has to
- * step across FS boundaries (mount point or a symlink
- * pointing outside), the NfsNode is destroyed
- * before passing control to the new FS' evalpath_h()
- *
- */
-
-union nfs_evalpath_arg {
-    int i;
-    const char **c;
-  };
-
-STATIC int nfs_do_evalpath(
-	const char                        *pathname,      /* IN     */
-	int                                pathnamelen,   /* IN     */
-	union nfs_evalpath_arg		  *arg,
-	rtems_filesystem_location_info_t  *pathloc,       /* IN/OUT */
-	int								  forMake
+static bool nfs_is_directory(
+	rtems_filesystem_eval_path_context_t *ctx,
+	void *arg
 )
 {
-char			*del = 0, *part;
-int				e = 0;
-NfsNode			node   = pathloc->node_access;
-char			*p     = malloc(MAXPATHLEN+1);
-Nfs				nfs    = (Nfs)pathloc->mt_entry->fs_info;
-RpcUdpServer	server = nfs->server;
-unsigned long	flags;
-#if DEBUG & DEBUG_COUNT_NODES
-unsigned long	niu,siu;
+	bool is_dir = false;
+	rtems_filesystem_location_info_t *currentloc =
+		rtems_filesystem_eval_path_get_currentloc(ctx);
+	NfsNode node = currentloc->node_access;
+	int force_update = 0;
+
+	if (updateAttr(node, force_update) == 0) {
+		is_dir = SERP_ATTR(node).type == NFDIR;
+	}
+
+	return is_dir;
+}
+
+static NfsNode nfs_search_in_directory(
+	Nfs nfs,
+	NfsNode node,
+	char *part
+)
+{
+	int rv;
+
+	/* lookup one element */
+	SERP_ARGS(node).diroparg.name = part;
+
+	/* remember args / directory fh */
+	memcpy( &node->args, &SERP_FILE(node), sizeof(node->args));
+
+#if DEBUG & DEBUG_EVALPATH
+	fprintf(stderr,"Looking up '%s'\n",part);
 #endif
 
-	if ( !p ) {
-		e = ENOMEM;
-		goto cleanup;
-	}
-	memset(p, 0, MAXPATHLEN+1);
-	memcpy(p, pathname, pathnamelen);
+	rv = nfscall(
+		nfs->server,
+		NFSPROC_LOOKUP,
+		(xdrproc_t) xdr_diropargs, &SERP_FILE(node),
+		(xdrproc_t) xdr_serporid,  &node->serporid
+	);
 
-	LOCK(nfsGlob.lock);
-	node = nfsNodeClone(node);
-	UNLOCK(nfsGlob.lock);
+	if (rv == 0 && node->serporid.status == NFS_OK) {
+		int force_update = 1;
 
-	/* from here on, the NFS is protected from being unmounted
-	 * since the node refcount is > 1
-	 */
-
-	/* clone the node */
-	if ( !node ) {
-		/* nodeClone sets errno */
-		pathloc->node_access = 0;
-		if ( ! (e = errno) ) {
-			/* if we have no node, e must not be zero! */
-			e = ENOMEM;
+		rv = updateAttr(node, force_update);
+		if (rv != 0) {
+			node = NULL;
 		}
-		goto cleanup;
+	} else {
+		node = NULL;
 	}
+
+	return node;
+}
+
+static void nfs_follow_link(rtems_filesystem_eval_path_context_t *ctx)
+{
+	const size_t len = NFS_MAXPATHLEN + 1;
+	char *link = malloc(len);
+
+	if (link != NULL) {
+		rtems_filesystem_location_info_t *currentloc =
+			rtems_filesystem_eval_path_get_currentloc(ctx);
+		ssize_t rv = nfs_readlink(currentloc, link, len);
+
+		if (rv >= 0) {
+			rtems_filesystem_eval_path_recursive(ctx, link, (size_t) rv);
+		} else {
+			rtems_filesystem_eval_path_error(ctx, 0);
+		}
+
+		free(link);
+	} else {
+		rtems_filesystem_eval_path_error(ctx, ENOMEM);
+	}
+}
+
+static bool nfs_update_currentloc(
+	rtems_filesystem_eval_path_context_t *ctx,
+	Nfs nfs,
+	NfsNode node
+)
+{
+	bool ok = true;
+	rtems_filesystem_location_info_t *pathloc =
+		rtems_filesystem_eval_path_get_currentloc(ctx);
 
 	pathloc->node_access = node;
 
-	/* Special case: the RTEMS filesystem code
-	 * may emit '..' on a regular file node to
-	 * find the parent directory :-(.
-	 * (eval.c: rtems_filesystem_evaluate_parent())
-	 * Try to catch this case here:
-	 */
-	if ( NFDIR != SERP_ATTR(node).type && '.'==*p && '.'==*(p+1) ) {
-		for ( part = p+2; '/'==*part; part++ )
-			/* skip trailing '/' */;
-		if ( !*part ) {
-			/* this is it; back out dir and let them look up the dir itself... */
-			memcpy( &SERP_FILE(node),
-					&node->args.dir,
-					sizeof(node->args.dir));
-			*(p+1)=0;
-		}
+	switch (SERP_ATTR(node).type) {
+		case NFDIR:	pathloc->handlers = &nfs_dir_file_handlers;  break;
+		case NFREG:	pathloc->handlers = &nfs_file_file_handlers; break;
+		case NFLNK: pathloc->handlers = &nfs_link_file_handlers; break;
+		default: 	pathloc->handlers = &rtems_filesystem_handlers_default; break;
 	}
 
-	for (part=p; part && *part; part=del) {
+	/* remember the name of this directory entry */
 
-		if ( NFLNK == SERP_ATTR(node).type ) {
-			/* follow midpath link */
-			char *b = malloc(NFS_MAXPATHLEN+1);
-			int	  l;
-
-			if (!b) {
-				e = ENOMEM;
-				goto cleanup;
-			}
-			if (nfs_readlink(pathloc, b, NFS_MAXPATHLEN+1)) {
-				free(b);
-				e = errno;
-				goto cleanup;
-			}
-
-			/* prepend the link value to the rest of the path */
-			if ( (l=strlen(b)) + strlen(part) + 1 > NFS_MAXPATHLEN ) {
-				free(b);
-				e = EINVAL;
-				goto cleanup;
-			}
-			/* swap string buffers and reset delimiter */
-			b[l++] = DELIM;
-			strcpy(b+l,part);
-			part = b;
-			b    = p;
-			p    = del = part;
-
-			free(b);
-
-			/* back up the directory filehandle (only necessary
-			 * if we don't back out to the root
-		 	 */
-			if (! (DELIM == *part) ) {
-				memcpy( &SERP_FILE(node),
-						&node->args.dir,
-						sizeof(node->args.dir));
-
-				if (updateAttr(node, 1 /* force */)) {
-					e = errno;
-					goto cleanup;
-				}
-			}
-		}
-
-		/* find delimiter and eat /// sequences
-		 * (only if we don't restart at the root)
-		 */
-		if ( DELIM != *part && (del = strchr(part, DELIM))) {
-			do {
-				*del++=0;
-			} while (DELIM==*del);
-		}
-
-		/* refuse to backup over the root */
-		if ( 0==strcmp(part,UPDIR)
-			 && locAreEqual(pathloc, &rtems_filesystem_root) ) {
-			part++;
-		}
-
-		/* cross mountpoint upwards */
-		if ( (0==strcmp(part,UPDIR) && locIsRoot(pathloc)) /* cross mountpoint up */
-			|| DELIM == *part                              /* link starts at root */
-			) {
-			int									rval;
-
-#if DEBUG & DEBUG_EVALPATH
-			fprintf(stderr,
-					"Crossing mountpoint upwards\n");
-#endif
-
-			if (DELIM == *part) {
-				*pathloc = rtems_filesystem_root;
-			} else {
-				*pathloc = pathloc->mt_entry->mt_point_node;
-				/* re-append the rest of the path */
-				if (del)
-					while ( 0 == *--del )
-						*del = DELIM;
-			}
-
-			nfsNodeDestroy(node);
-
-#if DEBUG & DEBUG_EVALPATH
-			fprintf(stderr,
-					"Re-evaluating '%s'\n",
-					part);
-#endif
-
-			if (forMake)
-				rval = pathloc->ops->evalformake_h(part, pathloc, arg->c);
-			else
-				rval = pathloc->ops->evalpath_h(part, strlen(part), arg->i, pathloc);
-
-			free(p);
-			return rval;
-		}
-
-		/* lookup one element */
-		SERP_ARGS(node).diroparg.name = part;
-
-		/* remember args / directory fh */
-		memcpy( &node->args, &SERP_FILE(node), sizeof(node->args));
-
-		/* don't lookup the item we want to create */
-		if ( forMake && (!del || !*del) )
-				break;
-
-#if DEBUG & DEBUG_EVALPATH
-		fprintf(stderr,"Looking up '%s'\n",part);
-#endif
-
-		if ( nfscall(server,
-						 NFSPROC_LOOKUP,
-						 (xdrproc_t)xdr_diropargs, &SERP_FILE(node),
-						 (xdrproc_t)xdr_serporid,  &node->serporid) ||
-			NFS_OK != (errno=node->serporid.status) ) {
-			e = errno;
-			goto cleanup;
-		}
-		node->age = nowSeconds();
-
-#if DEBUG & DEBUG_EVALPATH
-		if (NFLNK == SERP_ATTR(node).type && del) {
-			fprintf(stderr,
-					"Following midpath link '%s'\n",
-					part);
-		}
-#endif
-
-	}
-
-	if (forMake) {
-		/* remember the name - do this _before_ copying
-		 * the name to local storage; the caller expects a
-		 * pointer into pathloc
-		 */
-		assert( node->args.name );
-
-		*(arg->c) = pathname + (node->args.name - p);
-
-#if 0
-		/* restore the directory node */
-
-		memcpy( &SERP_FILE(node),
-				&node->args.dir,
-				sizeof(node->args.dir));
-
-		if ( (nfscall(nfs->server,
-						NFSPROC_GETATTR,
-						(xdrproc_t)xdr_nfs_fh,   &SERP_FILE(node),
-						(xdrproc_t)xdr_attrstat, &node->serporid) && !errno && (errno = EIO)) ||
-		     (NFS_OK != (errno=node->serporid.status) ) ) {
-			goto cleanup;
-		}
-#endif
-	}
-
-	if (locIsRoot(pathloc)) {
-
-		/* stupid filesystem code has no 'op' for comparing nodes
-		 * but just compares the 'node_access' pointers.
-		 * Luckily, this is only done for comparing the root nodes.
-		 * Hence, we never give them a copy of the root but always
-		 * the root itself.
-		 */
-		pathloc->node_access = pathloc->mt_entry->mt_fs_root.node_access;
-		/* increment the 'in use' counter since we return one more
-		 * reference to the root node
-		 */
-		rtems_interrupt_disable(flags);
-			nfs->nodesInUse++;
-		rtems_interrupt_enable(flags);
-		nfsNodeDestroy(node);
-
-
-	} else {
-		switch (SERP_ATTR(node).type) {
-			case NFDIR:	pathloc->handlers = &nfs_dir_file_handlers;  break;
-			case NFREG:	pathloc->handlers = &nfs_file_file_handlers; break;
-			case NFLNK: pathloc->handlers = &nfs_link_file_handlers; break;
-			default: 	pathloc->handlers = &rtems_filesystem_handlers_default; break;
-		}
-		pathloc->node_access = node;
-
-		/* remember the name of this directory entry */
-
-		if (node->args.name) {
-			if (node->str) {
+	if (node->args.name) {
+		if (node->str) {
 #if DEBUG & DEBUG_COUNT_NODES
-				rtems_interrupt_disable(flags);
-					nfs->stringsInUse--;
-				rtems_interrupt_enable(flags);
+			rtems_interrupt_level flags;
+			rtems_interrupt_disable(flags);
+				nfs->stringsInUse--;
+			rtems_interrupt_enable(flags);
 #endif
-				free(node->str);
-			}
-			node->args.name = node->str = strdup(node->args.name);
-			if (!node->str) {
-				e = ENOMEM;
-				goto cleanup;
-			}
-
+			free(node->str);
+		}
+		node->args.name = node->str = strdup(node->args.name);
+		if (node->str != NULL) {
 #if DEBUG & DEBUG_COUNT_NODES
+			rtems_interrupt_level flags;
 			rtems_interrupt_disable(flags);
 				nfs->stringsInUse++;
 			rtems_interrupt_enable(flags);
 #endif
+		} else {
+			rtems_filesystem_eval_path_error(ctx, ENOMEM);
+			ok = false;
 		}
-
 	}
-	node = 0;
 
-	e = 0;
+	return ok;
+}
 
-cleanup:
-	free(p);
-#if DEBUG & DEBUG_COUNT_NODES
-	/* cache counters; nfs may be unmounted by other thread after the last
-	 * node is destroyed
-	 */
-	niu = nfs->nodesInUse;
-	siu = nfs->stringsInUse;
-#endif
-	if (node) {
-		nfsNodeDestroy(node);
-		pathloc->node_access = 0;
-	}
-#if DEBUG & DEBUG_COUNT_NODES
-	fprintf(stderr,
-			"leaving evalpath, in use count is %i nodes, %i strings\n",
-			niu,siu);
-#endif
-	if (e) {
-#if DEBUG & DEBUG_EVALPATH
-		perror("Evalpath");
-#endif
-		rtems_set_errno_and_return_minus_one(e);
+static rtems_filesystem_eval_path_generic_status nfs_eval_part(
+	rtems_filesystem_eval_path_context_t *ctx,
+	char *part
+)
+{
+	rtems_filesystem_eval_path_generic_status status =
+		RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
+	rtems_filesystem_location_info_t *currentloc =
+		rtems_filesystem_eval_path_get_currentloc(ctx);
+	Nfs nfs = currentloc->mt_entry->fs_info;
+	NfsNode dir = currentloc->node_access;
+	NfsNode entry = nfs_search_in_directory(nfs, dir, part);
+
+	if (entry != NULL) {
+		rtems_filesystem_eval_path_clear_token(ctx);
+
+		if (nfs_update_currentloc(ctx, nfs, entry)) {
+			int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
+			bool follow_sym_link = (eval_flags & RTEMS_LIBIO_FOLLOW_SYM_LINK) != 0;
+			bool terminal = !rtems_filesystem_eval_path_has_path( ctx );
+
+			if (SERP_ATTR(entry).type == NFLNK && (follow_sym_link || !terminal)) {
+				nfs_follow_link(ctx);
+			} else if (!terminal) {
+				status = RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_CONTINUE;
+			}
+		}
 	} else {
-		return 0;
+		status = RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_NO_ENTRY;
 	}
+
+	return status;
 }
 
-/* MANDATORY; may set errno=ENOSYS and return -1 */
-static int nfs_evalformake(
-	const char                       *path,       /* IN */
-	rtems_filesystem_location_info_t *pathloc,    /* IN/OUT */
-	const char                      **pname       /* OUT    */
+static rtems_filesystem_eval_path_generic_status nfs_eval_token(
+	rtems_filesystem_eval_path_context_t *ctx,
+	void *arg,
+	const char *token,
+	size_t tokenlen
 )
 {
-	union nfs_evalpath_arg args;
-	args.c = pname;
-	                
-	return nfs_do_evalpath(path, strlen(path), &args, pathloc, 1 /*forMake*/);
+	rtems_filesystem_eval_path_generic_status status =
+		RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
+
+	if (rtems_filesystem_is_current_directory(token, tokenlen)) {
+		rtems_filesystem_eval_path_clear_token(ctx);
+		if (rtems_filesystem_eval_path_has_path(ctx)) {
+			status = RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_CONTINUE;
+		}
+	} else {
+		char *part = nfs_dupname(token, tokenlen);
+
+		if (part != NULL) {
+			status = nfs_eval_part(ctx, part);
+			free(part);
+		} else {
+			rtems_filesystem_eval_path_error(ctx, ENOMEM);
+		}
+	}
+
+	return status;
 }
 
-static int nfs_evalpath(
-	const char						 *path,		  /* IN */
-	size_t							 pathlen,		  /* IN */
-	int							 flags,		  /* IN */
-	rtems_filesystem_location_info_t *pathloc    /* IN/OUT */
-)
+static const rtems_filesystem_eval_path_generic_config nfs_eval_config = {
+	.is_directory = nfs_is_directory,
+	.eval_token = nfs_eval_token
+};
+
+static void nfs_eval_path(rtems_filesystem_eval_path_context_t *ctx)
 {
-	union nfs_evalpath_arg args;
-	args.i = flags;
-	return nfs_do_evalpath(path, pathlen, &args, pathloc, 0 /*not forMake*/);
+	rtems_filesystem_eval_path_generic(ctx, NULL, &nfs_eval_config);
 }
-
 
 /* create a hard link */
 
 static int nfs_link(
-	rtems_filesystem_location_info_t  *to_loc,      /* IN */
-	rtems_filesystem_location_info_t  *parent_loc,  /* IN */
-	const char                        *name         /* IN */
+	const rtems_filesystem_location_info_t *parentloc,
+	const rtems_filesystem_location_info_t *targetloc,
+	const char *name,
+	size_t namelen
 )
 {
+int rv = 0;
 NfsNode pNode;
 nfsstat status;
-NfsNode tNode = to_loc->node_access;
+NfsNode tNode = targetloc->node_access;
+char *dupname;
+
+	dupname = nfs_dupname(name, namelen);
+	if (dupname == NULL)
+		return -1;
 
 #if DEBUG & DEBUG_SYSCALLS
-	fprintf(stderr,"Creating link '%s'\n",name);
+	fprintf(stderr,"Creating link '%s'\n",dupname);
 #endif
 
-	if ( !locIsNfs(parent_loc) ) {
-		errno = EXDEV;
-		return -1;
-	}
-
-	pNode = parent_loc->node_access;
-	if ( tNode->nfs != pNode->nfs ) {
-		errno = EXDEV;
-		return -1;
-	}
 	memcpy(&SERP_ARGS(tNode).linkarg.to.dir,
 		   &SERP_FILE(pNode),
 		   sizeof(SERP_FILE(pNode)));
@@ -1744,16 +1521,18 @@ NfsNode tNode = to_loc->node_access;
 #if DEBUG & DEBUG_SYSCALLS
 		perror("nfs_link");
 #endif
-		return -1;
+		rv = -1;
 	}
 
-	return 0;
+	free(dupname);
+
+	return rv;
 
 }
 
 static int nfs_do_unlink(
-	rtems_filesystem_location_info_t  *parent_loc,/* IN */
-  rtems_filesystem_location_info_t  *loc,       /* IN */
+	const rtems_filesystem_location_info_t *parentloc,
+	const rtems_filesystem_location_info_t *loc,
 	int								  proc
 )
 {
@@ -1791,18 +1570,10 @@ char			*name = NFSPROC_REMOVE == proc ?
 	return 0;
 }
 
-static int nfs_unlink(
- rtems_filesystem_location_info_t  *parent_loc, /* IN */
- rtems_filesystem_location_info_t  *loc         /* IN */
-)
-{
-	return nfs_do_unlink(parent_loc, loc, NFSPROC_REMOVE);
-}
-
 static int nfs_chown(
-	rtems_filesystem_location_info_t  *pathloc,       /* IN */
-	uid_t                              owner,         /* IN */
-	gid_t                              group          /* IN */
+	const rtems_filesystem_location_info_t  *pathloc,       /* IN */
+	uid_t                                    owner,         /* IN */
+	gid_t                                    group          /* IN */
 )
 {
 sattr	arg;
@@ -1814,14 +1585,27 @@ sattr	arg;
 
 }
 
+static int nfs_clonenode(rtems_filesystem_location_info_t *loc)
+{
+	NfsNode	node = loc->node_access;
+
+	LOCK(nfsGlob.lock);
+	node = nfsNodeClone(node);
+	UNLOCK(nfsGlob.lock);
+
+	loc->node_access = node;
+
+	return node != NULL ? 0 : -1;
+}
+
 /* Cleanup the FS private info attached to pathloc->node_access */
-static int nfs_freenode(
-	rtems_filesystem_location_info_t      *pathloc       /* IN */
+static void nfs_freenode(
+	const rtems_filesystem_location_info_t      *pathloc       /* IN */
 )
 {
+#if DEBUG & DEBUG_COUNT_NODES
 Nfs	nfs    = ((NfsNode)pathloc->node_access)->nfs;
 
-#if DEBUG & DEBUG_COUNT_NODES
 	/* print counts at entry where they are > 0 so 'nfs' is safe from being destroyed
 	 * and there's no race condition
 	 */
@@ -1831,22 +1615,7 @@ Nfs	nfs    = ((NfsNode)pathloc->node_access)->nfs;
 			nfs->stringsInUse);
 #endif
 
-	/* never destroy the root node; it is released by the unmount
-	 * code
-	 */
-	if (locIsRoot(pathloc)) {
-		unsigned long flags;
-		/* just adjust the references to the root node but
-		 * don't really release it
-		 */
-		rtems_interrupt_disable(flags);
-			nfs->nodesInUse--;
-		rtems_interrupt_enable(flags);
-	} else {
-		nfsNodeDestroy(pathloc->node_access);
-		pathloc->node_access = 0;
-	}
-	return 0;
+	nfsNodeDestroy(pathloc->node_access);
 }
 
 /* NOTE/TODO: mounting on top of NFS is not currently supported
@@ -1982,12 +1751,12 @@ char				*path     = mt_entry->dev;
 
 	/* looks good so far */
 
-	mt_entry->mt_fs_root.node_access = rootNode;
+	mt_entry->mt_fs_root->location.node_access = rootNode;
 
 	rootNode = 0;
 
-	mt_entry->mt_fs_root.ops		 = &nfs_fs_ops;
-	mt_entry->mt_fs_root.handlers	 = &nfs_dir_file_handlers;
+	mt_entry->mt_fs_root->location.ops		 = &nfs_fs_ops;
+	mt_entry->mt_fs_root->location.handlers	 = &nfs_dir_file_handlers;
 	mt_entry->pathconf_limits_and_options = nfs_limits_and_options;
 
 	LOCK(nfsGlob.llock);
@@ -2016,7 +1785,7 @@ cleanup:
 }
 
 /* This op is called when they try to unmount THIS fs */
-STATIC int nfs_fsunmount_me(
+STATIC void nfs_fsunmount_me(
 	rtems_filesystem_mount_table_entry_t *mt_entry    /* in */
 )
 {
@@ -2035,7 +1804,8 @@ LOCK(nfsGlob.llock);
 		fprintf(stderr,
 				"Refuse to unmount; there are still %i nodes in use (1 used by us)\n",
 				nodesInUse);
-		rtems_set_errno_and_return_minus_one(EBUSY);
+                rtems_fatal_error_occurred(0xdeadbeef);
+                return;
 	}
 
 	status = buildIpAddr(&uid, &gid, 0, &saddr, &path);
@@ -2052,20 +1822,17 @@ LOCK(nfsGlob.llock);
 	if (stat) {
 		UNLOCK(nfsGlob.llock);
 		fprintf(stderr,"NFS UMOUNT -- %s\n", clnt_sperrno(stat));
-		errno = EIO;
-		return -1;
+		return;
 	}
 
-	nfsNodeDestroy(mt_entry->mt_fs_root.node_access);
-	mt_entry->mt_fs_root.node_access = 0;
+	nfsNodeDestroy(mt_entry->mt_fs_root->location.node_access);
+	mt_entry->mt_fs_root->location.node_access = 0;
 
 	nfsDestroy(mt_entry->fs_info);
 	mt_entry->fs_info = 0;
 
 	nfsGlob.num_mounted_fs--;
 UNLOCK(nfsGlob.llock);
-
-	return 0;
 }
 
 /* OPTIONAL; may be NULL - BUT: CAUTION; mount() doesn't check
@@ -2073,10 +1840,10 @@ UNLOCK(nfsGlob.llock);
  * //NOTE: (10/25/2002) patch submitted and probably applied
  */
 static rtems_filesystem_node_types_t nfs_node_type(
-	rtems_filesystem_location_info_t    *pathloc      /* in */
+  const rtems_filesystem_location_info_t *loc
 )
 {
-NfsNode node = pathloc->node_access;
+NfsNode node = loc->node_access;
 
 	if (updateAttr(node, 0 /* only if old */))
 		return -1;
@@ -2104,28 +1871,35 @@ NfsNode node = pathloc->node_access;
 }
 
 static int nfs_mknod(
-	const char                        *path,       /* IN */
-	mode_t                             mode,       /* IN */
-	dev_t                              dev,        /* IN */
-	rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
+	const rtems_filesystem_location_info_t *parentloc,
+	const char *name,
+	size_t namelen,
+	mode_t mode,
+	dev_t dev
 )
 {
 
+int					rv = 0;
 struct timeval				now;
 diropres				res;
-NfsNode					node = pathloc->node_access;
+NfsNode					node = parentloc->node_access;
 mode_t					type = S_IFMT & mode;
+char					*dupname;
 
 	if (type != S_IFDIR && type != S_IFREG)
 		rtems_set_errno_and_return_minus_one(ENOTSUP);
 
+	dupname = nfs_dupname(name, namelen);
+	if (dupname == NULL)
+		return -1;
+
 #if DEBUG & DEBUG_SYSCALLS
-	fprintf(stderr,"nfs_mknod: creating %s\n", path);
+	fprintf(stderr,"nfs_mknod: creating %s\n", dupname);
 #endif
 
         rtems_clock_get_tod_timeval(&now);
 
-	SERP_ARGS(node).createarg.name       		= (filename)path;
+	SERP_ARGS(node).createarg.name       		= dupname;
 	SERP_ARGS(node).createarg.attributes.mode	= mode;
 	/* TODO: either use our uid or use the Nfs credentials */
 	SERP_ARGS(node).createarg.attributes.uid	= 0;
@@ -2144,16 +1918,40 @@ mode_t					type = S_IFMT & mode;
 #if DEBUG & DEBUG_SYSCALLS
 		perror("nfs_mknod");
 #endif
-		return -1;
+                rv = -1;
 	}
 
-	return 0;
+	free(dupname);
+
+	return rv;
+}
+
+static int nfs_rmnod(
+	const rtems_filesystem_location_info_t *parentloc,
+	const rtems_filesystem_location_info_t *loc
+)
+{
+	int rv = 0;
+	NfsNode	node  = loc->node_access;
+	int force_update = 0;
+
+	if (updateAttr(node, force_update) == 0) {
+		int proc = SERP_ATTR(node).type == NFDIR
+			? NFSPROC_RMDIR
+				: NFSPROC_REMOVE;
+
+		rv = nfs_do_unlink(parentloc, loc, proc);
+	} else {
+		rv = -1;
+	}
+
+	return rv;
 }
 
 static int nfs_utime(
-	rtems_filesystem_location_info_t  *pathloc,       /* IN */
-	time_t                             actime,        /* IN */
-	time_t                             modtime        /* IN */
+	const rtems_filesystem_location_info_t  *pathloc, /* IN */
+	time_t                                   actime,  /* IN */
+	time_t                                   modtime  /* IN */
 )
 {
 sattr	arg;
@@ -2168,24 +1966,30 @@ sattr	arg;
 }
 
 static int nfs_symlink(
-	rtems_filesystem_location_info_t  *loc,         /* IN */
-	const char                        *link_name,   /* IN */
-	const char                        *node_name
+	const rtems_filesystem_location_info_t *parentloc,
+	const char *name,
+	size_t namelen,
+	const char *target
 )
 {
+int					rv = 0;
 struct timeval				now;
 nfsstat					status;
-NfsNode					node = loc->node_access;
+NfsNode					node = parentloc->node_access;
+char					*dupname;
 
+	dupname = nfs_dupname(name, namelen);
+	if (dupname == NULL)
+		return -1;
 
 #if DEBUG & DEBUG_SYSCALLS
-	fprintf(stderr,"nfs_symlink: creating %s -> %s\n", link_name, node_name);
+	fprintf(stderr,"nfs_symlink: creating %s -> %s\n", dupname, target);
 #endif
 
 	rtems_clock_get_tod_timeval(&now);
 
-	SERP_ARGS(node).symlinkarg.name       		= (filename)link_name;
-	SERP_ARGS(node).symlinkarg.to				= (nfspath) node_name;
+	SERP_ARGS(node).symlinkarg.name       		= dupname;
+	SERP_ARGS(node).symlinkarg.to				= (nfspath) target;
 
 	SERP_ARGS(node).symlinkarg.attributes.mode	= S_IFLNK | S_IRWXU | S_IRWXG | S_IRWXO;
 	/* TODO */
@@ -2205,243 +2009,103 @@ NfsNode					node = loc->node_access;
 #if DEBUG & DEBUG_SYSCALLS
 		perror("nfs_symlink");
 #endif
-		return -1;
+                rv = -1;
 	}
 
-	return 0;
-}
+	free(dupname);
 
-static int nfs_do_readlink(
-	rtems_filesystem_location_info_t  *loc,     	/* IN  */
-	strbuf							  *psbuf		/* IN/OUT */
-)
-{
-NfsNode				node = loc->node_access;
-Nfs					nfs  = node->nfs;
-readlinkres_strbuf	rr;
-int					wasAlloced;
-int					rval;
-
-	rr.strbuf  = *psbuf;
-
-	wasAlloced = (0 == psbuf->buf);
-
-	if ( (rval = nfscall(nfs->server,
-							NFSPROC_READLINK,
-							(xdrproc_t)xdr_nfs_fh,      		&SERP_FILE(node),
-							(xdrproc_t)xdr_readlinkres_strbuf, &rr)) ) {
-		if (wasAlloced)
-			xdr_free( (xdrproc_t)xdr_strbuf, (caddr_t)&rr.strbuf );
-	}
-
-
-	if (NFS_OK != rr.status) {
-		if (wasAlloced)
-			xdr_free( (xdrproc_t)xdr_strbuf, (caddr_t)&rr.strbuf );
-		rtems_set_errno_and_return_minus_one(rr.status);
-	}
-
-	*psbuf = rr.strbuf;
-
-	return 0;
+	return rv;
 }
 
 static ssize_t nfs_readlink(
-	rtems_filesystem_location_info_t  *loc,     	/* IN  */
-	char				  *buf,		/* OUT */
-	size_t				   len
+	const rtems_filesystem_location_info_t *loc,
+	char *buf,
+	size_t len
 )
 {
-strbuf sbuf;
-	sbuf.buf = buf;
-	sbuf.max = len;
+	NfsNode	node = loc->node_access;
+	Nfs nfs = node->nfs;
+	readlinkres_strbuf rr;
 
-	return nfs_do_readlink(loc, &sbuf);
-}
+	rr.strbuf.buf = buf;
+	rr.strbuf.max = len - 1;
 
-/* The semantics of this routine are:
- *
- * The caller submits a valid pathloc, i.e. it has
- * an NfsNode attached to node_access.
- * On return, pathloc points to the target node which
- * may or may not be an NFS node.
- * Hence, the original NFS node is released in either
- * case:
- *   - link evaluation fails; pathloc points to no valid node
- *   - link evaluation success; pathloc points to a new valid
- *     node. If it's an NFS node, a new NfsNode will be attached
- *     to node_access...
- */
-
-#define LINKVAL_BUFLEN				(MAXPATHLEN+1)
-#define RVAL_ERR_BUT_DONT_FREENODE	(-1)
-#define RVAL_ERR_AND_DO_FREENODE	( 1)
-#define RVAL_OK						( 0)
-
-static int nfs_eval_link(
-	rtems_filesystem_location_info_t *pathloc,     /* IN/OUT */
-	int                              flags         /* IN     */
-)
-{
-rtems_filesystem_node_types_t	type;
-char							*buf = malloc(LINKVAL_BUFLEN);
-int	 							rval = RVAL_ERR_AND_DO_FREENODE;
-
-	if (!buf) {
-		errno = ENOMEM;
-		goto cleanup;
-	}
-
-	/* in this loop, we must not use NFS specific ops as we might
-	 * step out of our FS during the process...
-	 * This algorithm should actually be performed by the
-	 * generic's evaluate_path routine :-(
-	 *
-	 * Unfortunately, there is no way of finding the
-	 * directory node who contains 'pathloc', however :-(
-	 */
-	do {
-		/* assume the generics have verified 'pathloc' to be
-		 * a link...
-		 */
-		if ( !pathloc->ops->readlink_h ) {
-			errno = ENOTSUP;
-			goto cleanup;
-		}
-
-		if ( pathloc->ops->readlink_h(pathloc, buf, LINKVAL_BUFLEN) ) {
-			goto cleanup;
-		}
-
-#if DEBUG & DEBUG_EVALPATH
-		fprintf(stderr, "link value is '%s'\n", buf);
+	if ( nfscall(nfs->server,
+							NFSPROC_READLINK,
+							(xdrproc_t)xdr_nfs_fh,      		&SERP_FILE(node),
+							(xdrproc_t)xdr_readlinkres_strbuf, &rr)
+		|| (NFS_OK != (errno = rr.status)) ) {
+#if DEBUG & DEBUG_SYSCALLS
+		perror("nfs_readlink");
 #endif
-
-		/* is the link value an absolute path ? */
-		if ( DELIM != *buf ) {
-			/* NO; a relative path */
-
-			/* we must backup to the link's directory - we
-			 * know only how to do that for NFS, however.
-			 * In this special case, we can avoid recursion.
-			 * Otherwise (i.e. if the link is on another FS),
-			 * we must step into its eval_link_h().
-			 */
-			if (locIsNfs(pathloc)) {
-				NfsNode	node = pathloc->node_access;
-				int		err;
-
-				memcpy( &SERP_FILE(node),
-						&node->args.dir,
-						sizeof(node->args.dir) );
-
-				if (updateAttr(node, 1 /* force */))
-					goto cleanup;
-
-				if (SERP_ATTR(node).type != NFDIR) {
-					errno = ENOTDIR;
-					goto cleanup;
-				}
-
-				pathloc->handlers = &nfs_dir_file_handlers;
-
-				err = nfs_evalpath(buf, strlen(buf), flags, pathloc);
-
-				/* according to its semantics,
-				 * nfs_evalpath cloned the node attached
-				 * to pathloc. Hence we have to
-				 * release the old one (referring to
-				 * the link; the new clone has been
-				 * updated and refers to the link _value_).
-				 */
-				nfsNodeDestroy(node);
-
-				if (err) {
-					/* nfs_evalpath has set errno;
-					 * pathloc->node_access has no
-					 * valid node attached in this case
-					 */
-					rval = RVAL_ERR_BUT_DONT_FREENODE;
-					goto cleanup;
-				}
-
-			} else {
-				if ( ! pathloc->ops->eval_link_h ) {
-					errno = ENOTSUP;
-					goto cleanup;
-				}
-				if (!pathloc->ops->eval_link_h(pathloc, flags)) {
-					/* FS is responsible for freeing its pathloc->node_access
-					 * if necessary
-					 */
-					rval = RVAL_ERR_BUT_DONT_FREENODE;
-					goto cleanup;
-				}
-			}
-		} else {
-			/* link points to an absolute path '/xxx' */
-
-			/* release this node; filesystem_evaluate_path() will
-			 * lookup a new one.
-			 */
-			rtems_filesystem_freenode(pathloc);
-
-			if (rtems_filesystem_evaluate_path(buf, strlen(buf), flags, pathloc, 1)) {
-				/* If evalpath fails then there is no valid node
-				 * attached to pathloc; hence we must not attempt
-				 * to free the node
-				 */
-				rval = RVAL_ERR_BUT_DONT_FREENODE;
-				goto cleanup;
-			}
-		}
-
-		if ( !pathloc->ops->node_type_h ) {
-			errno = ENOTSUP;
-			goto cleanup;
-		}
-
-		type = pathloc->ops->node_type_h(pathloc);
-
-
-		/* I dont know what to do about hard links */
-	} while ( RTEMS_FILESYSTEM_SYM_LINK == type );
-
-	rval = RVAL_OK;
-
-cleanup:
-
-	free(buf);
-
-	if (RVAL_ERR_AND_DO_FREENODE == rval) {
-		rtems_filesystem_freenode(pathloc);
 		return -1;
 	}
 
-	return rval;
+	return (ssize_t) strlen(rr.strbuf.buf);
 }
 
+static void nfs_lock(rtems_filesystem_mount_table_entry_t *mt_entry)
+{
+}
 
-struct _rtems_filesystem_operations_table nfs_fs_ops = {
-		nfs_evalpath,		/* MANDATORY */
-		nfs_evalformake,	/* MANDATORY; may set errno=ENOSYS and return -1 */
-		nfs_link,			/* OPTIONAL; may be defaulted */
-		nfs_unlink,			/* OPTIONAL; may be defaulted */
-		nfs_node_type,		/* OPTIONAL; may be defaulted; BUG in mount - no test!! */
-		nfs_mknod,			/* OPTIONAL; may be defaulted */
-		nfs_chown,			/* OPTIONAL; may be defaulted */
-		nfs_freenode,		/* OPTIONAL; may be defaulted; (release node_access) */
-		rtems_filesystem_default_mount,
-		rtems_nfs_initialize,		/* OPTIONAL; may be defaulted -- not used anymore */
-		rtems_filesystem_default_unmount,
-		nfs_fsunmount_me,	/* OPTIONAL; may be defaulted */
-		nfs_utime,			/* OPTIONAL; may be defaulted */
-		nfs_eval_link,		/* OPTIONAL; may be defaulted */
-		nfs_symlink,		/* OPTIONAL; may be defaulted */
-		nfs_readlink,		/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_rename,	/* OPTIONAL; may be defaulted */
-                rtems_filesystem_default_statvfs	/* OPTIONAL; may be defaulted */
+static void nfs_unlock(rtems_filesystem_mount_table_entry_t *mt_entry)
+{
+}
 
+static bool nfs_are_nodes_equal(
+	const rtems_filesystem_location_info_t *a,
+	const rtems_filesystem_location_info_t *b
+)
+{
+	bool equal = false;
+	NfsNode na = a->node_access;
+
+	if (updateAttr(na, 0) == 0) {
+		NfsNode nb = b->node_access;
+
+		if (updateAttr(nb, 0) == 0) {
+			equal = SERP_ATTR(na).fileid == SERP_ATTR(nb).fileid
+				&& SERP_ATTR(na).fsid == SERP_ATTR(nb).fsid;
+		}
+	}
+
+	return equal;
+}
+
+static int nfs_fchmod(
+	const rtems_filesystem_location_info_t *loc,
+	mode_t mode
+)
+{
+sattr	arg;
+
+	arg.mode = mode;
+	return nfs_sattr(loc->node_access, &arg, SATTR_MODE);
+
+}
+
+const struct _rtems_filesystem_operations_table nfs_fs_ops = {
+	.lock_h         = nfs_lock,
+	.unlock_h       = nfs_unlock,
+	.eval_path_h    = nfs_eval_path,
+	.link_h         = nfs_link,
+	.are_nodes_equal_h = nfs_are_nodes_equal,
+	.node_type_h    = nfs_node_type,
+	.mknod_h        = nfs_mknod,
+	.rmnod_h        = nfs_rmnod,
+	.fchmod_h       = nfs_fchmod,
+	.chown_h        = nfs_chown,
+	.clonenod_h     = nfs_clonenode,
+	.freenod_h      = nfs_freenode,
+	.mount_h        = rtems_filesystem_default_mount,
+	.fsmount_me_h   = rtems_nfs_initialize,
+	.unmount_h      = rtems_filesystem_default_unmount,
+	.fsunmount_me_h = nfs_fsunmount_me,
+	.utime_h        = nfs_utime,
+	.symlink_h      = nfs_symlink,
+	.readlink_h     = nfs_readlink,
+	.rename_h       = rtems_filesystem_default_rename,
+	.statvfs_h      = rtems_filesystem_default_statvfs
 };
 
 /*****************************************
@@ -2472,8 +2136,8 @@ struct _rtems_filesystem_operations_table nfs_fs_ops = {
 static int nfs_file_open(
 	rtems_libio_t *iop,
 	const char    *pathname,
-	uint32_t      flag,
-	uint32_t      mode
+	int           oflag,
+	mode_t        mode
 )
 {
 	return 0;
@@ -2487,8 +2151,8 @@ static int nfs_file_open(
 static int nfs_dir_open(
 	rtems_libio_t *iop,
 	const char    *pathname,
-	uint32_t      flag,
-	uint32_t      mode
+	int           oflag,
+	mode_t        mode
 )
 {
 NfsNode		node = iop->pathinfo.node_access;
@@ -2796,8 +2460,8 @@ struct  stat
 
 /* common for file/dir/link */
 static int nfs_fstat(
-	rtems_filesystem_location_info_t *loc,
-	struct stat                      *buf
+	const rtems_filesystem_location_info_t *loc,
+	struct stat *buf
 )
 {
 NfsNode	node = loc->node_access;
@@ -2939,20 +2603,6 @@ u_int					mode;
 	return 0;
 }
 
-
-/* common for file/dir/link */
-static int nfs_fchmod(
-	rtems_filesystem_location_info_t *loc,
-	mode_t                            mode
-)
-{
-sattr	arg;
-
-	arg.mode = mode;
-	return nfs_sattr(loc->node_access, &arg, SATTR_MODE);
-
-}
-
 /* just set the size attribute to 'length'
  * the server will take care of the rest :-)
  */
@@ -2973,71 +2623,52 @@ sattr					arg;
 					 SATTR_SIZE);
 }
 
-/* files and symlinks are removed
- * by the common nfs_unlink() routine.
- * NFS has a different NFSPROC_RMDIR
- * call, though...
- */
-static int nfs_dir_rmnod(
-	rtems_filesystem_location_info_t      *parentpathloc, /* IN */
-	rtems_filesystem_location_info_t      *pathloc        /* IN */
-)
-{
-	return nfs_do_unlink(parentpathloc, pathloc, NFSPROC_RMDIR);
-}
-
 /* the file handlers table */
-static
+static const
 struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
-		nfs_file_open,			/* OPTIONAL; may be defaulted */
-		nfs_file_close,			/* OPTIONAL; may be defaulted */
-		nfs_file_read,			/* OPTIONAL; may be defaulted */
-		nfs_file_write,			/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_ioctl,
-		nfs_file_lseek,			/* OPTIONAL; may be defaulted */
-		nfs_fstat,				/* OPTIONAL; may be defaulted */
-		nfs_fchmod,				/* OPTIONAL; may be defaulted */
-		nfs_file_ftruncate,		/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_fsync,
-		rtems_filesystem_default_fdatasync,
-		rtems_filesystem_default_fcntl,
-		nfs_unlink,				/* OPTIONAL; may be defaulted */
+	.open_h      = nfs_file_open,
+	.close_h     = nfs_file_close,
+	.read_h      = nfs_file_read,
+	.write_h     = nfs_file_write,
+	.ioctl_h     = rtems_filesystem_default_ioctl,
+	.lseek_h     = nfs_file_lseek,
+	.fstat_h     = nfs_fstat,
+	.ftruncate_h = nfs_file_ftruncate,
+	.fsync_h     = rtems_filesystem_default_fsync,
+	.fdatasync_h = rtems_filesystem_default_fdatasync,
+	.fcntl_h     = rtems_filesystem_default_fcntl
 };
 
 /* the directory handlers table */
-static
+static const
 struct _rtems_filesystem_file_handlers_r nfs_dir_file_handlers = {
-		nfs_dir_open,			/* OPTIONAL; may be defaulted */
-		nfs_dir_close,			/* OPTIONAL; may be defaulted */
-		nfs_dir_read,			/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_write,
-		rtems_filesystem_default_ioctl,
-		nfs_dir_lseek,			/* OPTIONAL; may be defaulted */
-		nfs_fstat,				/* OPTIONAL; may be defaulted */
-		nfs_fchmod,				/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_ftruncate,
-		rtems_filesystem_default_fsync,
-		rtems_filesystem_default_fdatasync,
-		rtems_filesystem_default_fcntl,
-		nfs_dir_rmnod,				/* OPTIONAL; may be defaulted */
+	.open_h      = nfs_dir_open,
+	.close_h     = nfs_dir_close,
+	.read_h      = nfs_dir_read,
+	.write_h     = rtems_filesystem_default_write,
+	.ioctl_h     = rtems_filesystem_default_ioctl,
+	.lseek_h     = nfs_dir_lseek,
+	.fstat_h     = nfs_fstat,
+	.ftruncate_h = rtems_filesystem_default_ftruncate_directory,
+	.fsync_h     = rtems_filesystem_default_fsync,
+	.fdatasync_h = rtems_filesystem_default_fdatasync,
+	.fcntl_h     = rtems_filesystem_default_fcntl
 };
 
 /* the link handlers table */
-static
+static const
 struct _rtems_filesystem_file_handlers_r nfs_link_file_handlers = {
-		rtems_filesystem_default_open,
-		rtems_filesystem_default_close,
-		rtems_filesystem_default_read,
-		rtems_filesystem_default_write,
-		rtems_filesystem_default_ioctl,
-		rtems_filesystem_default_lseek,
-		nfs_fstat,				/* OPTIONAL; may be defaulted */
-		nfs_fchmod,				/* OPTIONAL; may be defaulted */
-		rtems_filesystem_default_ftruncate,
-		rtems_filesystem_default_fsync,
-		rtems_filesystem_default_fdatasync,
-		rtems_filesystem_default_fcntl,
-		nfs_unlink,				/* OPTIONAL; may be defaulted */
+	.open_h      = rtems_filesystem_default_open,
+	.close_h     = rtems_filesystem_default_close,
+	.read_h      = rtems_filesystem_default_read,
+	.write_h     = rtems_filesystem_default_write,
+	.ioctl_h     = rtems_filesystem_default_ioctl,
+	.lseek_h     = rtems_filesystem_default_lseek,
+	.fstat_h     = nfs_fstat,
+	.ftruncate_h = rtems_filesystem_default_ftruncate,
+	.fsync_h     = rtems_filesystem_default_fsync,
+	.fdatasync_h = rtems_filesystem_default_fdatasync,
+	.fcntl_h     = rtems_filesystem_default_fcntl
 };
 
 /* we need a dummy driver entry table to get a
@@ -3096,7 +2727,7 @@ Nfs		nfs;
 
 	for (nfs = nfsGlob.mounted_fs; nfs; nfs=nfs->next) {
 		fprintf(f,"%s on ", nfs->mt_entry->dev);
-		if (rtems_filesystem_resolve_location(mntpt, MAXPATHLEN, &nfs->mt_entry->mt_fs_root))
+		if (rtems_filesystem_resolve_location(mntpt, MAXPATHLEN, &nfs->mt_entry->mt_fs_root->location))
 			fprintf(f,"<UNABLE TO LOOKUP MOUNTPOINT>\n");
 		else
 			fprintf(f,"%s\n",mntpt);
@@ -3236,15 +2867,15 @@ rtems_filesystem_location_info_t	old;
 	/* IMPORTANT: let the helper task have its own libio environment (i.e. cwd) */
 	if (RTEMS_SUCCESSFUL == (rpa->status = rtems_libio_set_private_env())) {
 
-		old = rtems_filesystem_current;
+		old = rtems_filesystem_current->location;
 
-		rtems_filesystem_current = *(rpa->loc);
+		rtems_filesystem_current->location = *(rpa->loc);
 
 		if ( !getcwd(rpa->buf, rpa->len) )
 			rpa->status = RTEMS_UNSATISFIED;
 
 		/* must restore the cwd because 'freenode' will be called on it */
-		rtems_filesystem_current = old;
+		rtems_filesystem_current->location = old;
 	}
 	rtems_semaphore_release(rpa->sync);
 	rtems_task_delete(RTEMS_SELF);

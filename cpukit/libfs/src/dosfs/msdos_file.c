@@ -41,8 +41,8 @@
  *     and errno set appropriately
  */
 int
-msdos_file_open(rtems_libio_t *iop, const char *pathname, uint32_t   flag,
-                uint32_t   mode)
+msdos_file_open(rtems_libio_t *iop, const char *pathname, int oflag,
+                mode_t mode)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
@@ -268,9 +268,9 @@ msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
  */
 int
 msdos_file_stat(
-    rtems_filesystem_location_info_t *loc,
-    struct stat                      *buf
-    )
+    const rtems_filesystem_location_info_t *loc,
+    struct stat *buf
+)
 {
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = loc->mt_entry->fs_info;
@@ -422,84 +422,6 @@ msdos_file_datasync(rtems_libio_t *iop)
 
     /* synchronize file data */
     fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
-}
-
-
-/* msdos_file_ioctl --
- *
- *
- * PARAMETERS:
- *     iop    - file control block
- *     ...
- *
- * RETURNS:
- *
- */
-int
-msdos_file_ioctl(rtems_libio_t *iop,uint32_t   command, void *buffer)
-{
-    int rc = RC_OK;
-
-    return rc;
-}
-
-/* msdos_file_chmod --
- *     Change the attributes of the file. This currently does
- *     nothing and returns no error.
- *
- * PARAMETERS:
- *     pathloc - node description
- *     mode - the new mode
- *
- * RETURNS:
- *     RC_OK always
- */
-int
-msdos_file_chmod(rtems_filesystem_location_info_t *pathloc,
-                 mode_t                            mode)
-{
-  return RC_OK;
-}
-
-/* msdos_file_rmnod --
- *     Remove node associated with a file - set up first name character to
- *     predefined value(and write it to the disk), and mark fat-file which
- *     correspondes to the file as "removed"
- *
- * PARAMETERS:
- *     pathloc - node description
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
- */
-int
-msdos_file_rmnod(rtems_filesystem_location_info_t *parent_pathloc,
-                 rtems_filesystem_location_info_t *pathloc)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = pathloc->node_access;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    /* mark file removed */
-    rc = msdos_set_first_char4file_name(pathloc->mt_entry,
-                                        &fat_fd->dir_pos,
-                                        MSDOS_THIS_DIR_ENTRY_EMPTY);
-    if (rc != RC_OK)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        return rc;
-    }
-
-    fat_file_mark_removed(pathloc->mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;

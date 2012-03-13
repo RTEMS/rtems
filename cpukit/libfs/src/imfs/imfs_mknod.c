@@ -6,6 +6,9 @@
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -14,65 +17,60 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
-
 #include "imfs.h"
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int IMFS_mknod(
-  const char                        *token,      /* IN */
-  mode_t                             mode,       /* IN */
-  dev_t                              dev,        /* IN */
-  rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
+static void get_type_and_info_by_mode_and_dev(
+  mode_t mode,
+  dev_t dev,
+  IMFS_jnode_types_t *type,
+  IMFS_types_union *info
 )
 {
-  IMFS_token_types   type = 0;
-  IMFS_jnode_t      *new_node;
-  int                result;
-  char               new_name[ IMFS_NAME_MAX + 1 ];
-  IMFS_types_union   info;
-
-  IMFS_get_token( token, strlen( token ), new_name, &result );
-
-  /*
-   *  Figure out what type of IMFS node this is.
-   */
-  if ( S_ISDIR(mode) )
-    type = IMFS_DIRECTORY;
-  else if ( S_ISREG(mode) )
-    type = IMFS_MEMORY_FILE;
-  else if ( S_ISBLK(mode) || S_ISCHR(mode) ) {
-    type = IMFS_DEVICE;
-    rtems_filesystem_split_dev_t( dev, info.device.major, info.device.minor );
-  } else if (S_ISFIFO(mode))
-    type = IMFS_FIFO;
-  else
+  if ( S_ISDIR( mode ) ) {
+    *type = IMFS_DIRECTORY;
+  } else if ( S_ISREG( mode ) ) {
+    *type = IMFS_MEMORY_FILE;
+  } else if ( S_ISBLK( mode ) || S_ISCHR( mode ) ) {
+    *type = IMFS_DEVICE;
+    rtems_filesystem_split_dev_t(
+      dev,
+      info->device.major,
+      info->device.minor
+    );
+  } else if (S_ISFIFO( mode )) {
+    *type = IMFS_FIFO;
+  } else {
     IMFS_assert( 0 );
+  }
+}
 
-  /*
-   *  Allocate and fill in an IMFS jnode
-   *
-   *  NOTE: Coverity Id 21 reports this as a leak.
-   *        While technically not a leak, it indicated that IMFS_create_node
-   *        was ONLY passed a NULL when we created the root node.  We
-   *        added a new IMFS_create_root_node() so this path no longer
-   *        existed.  The result was simpler code which should not have
-   *        this path.
-   */
-  new_node = IMFS_create_node( pathloc, type, new_name, mode, &info );
-  if ( !new_node )
-    rtems_set_errno_and_return_minus_one( ENOMEM );
+int IMFS_mknod(
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
+)
+{
+  int rv = 0;
+  IMFS_jnode_types_t type;
+  IMFS_types_union info;
+  IMFS_jnode_t *new_node;
 
-  IMFS_update_ctime(new_node->Parent);
-  IMFS_update_mtime(new_node->Parent);
-  return 0;
+  get_type_and_info_by_mode_and_dev( mode, dev, &type, &info );
+
+  new_node = IMFS_create_node( parentloc, type, name, namelen, mode, &info );
+  if ( new_node != NULL ) {
+    IMFS_jnode_t *parent = parentloc->node_access;
+
+    IMFS_update_ctime( parent );
+    IMFS_update_mtime( parent );
+  } else {
+    rv = -1;
+  }
+
+  return rv;
 }

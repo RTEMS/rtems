@@ -45,7 +45,7 @@ int _lstat_r(struct _reent *, const char *, struct stat *);
  */
 
 char *Files[] = {
-  "/////my_mount_point/dir1/\\//file1\\\\//",
+  "/////my_mount_point/dir1/\\//file1",
   "/my_mount_point/dir1/file2",
   "/my_mount_point/dir1/file3",
   "/my_mount_point/dir1/file4",
@@ -60,7 +60,7 @@ char *Files[] = {
  */
 
 char *Directories[] = {
-  "/my_mount_point/dir1",
+  "/my_mount_point/dir1\\\\//",
   "/my_mount_point/dir2",
   "/my_mount_point/dir3",
   "/my_mount_point/dir4",
@@ -589,15 +589,6 @@ void Cause_faults(void)
   rtems_test_assert( errno == EACCES );
 
   /*
-   * Check stat with a NULL buffer.
-   */
-
-  printf("Stat with a NULL buffer should fail with EFAULT\n");
-  status = stat( Directories[0], NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
-
-  /*
    * Set current to a directory with no owner permissions.
    * Verify it works properly.
    */
@@ -685,13 +676,8 @@ void Cause_faults(void)
    * Check rmdir, rmnod, and unlink
    */
 
-  printf("rmdir %s should fail with ENOTDIR\n", Links_to_Dirs[5] );
+  printf("rmdir %s\n", Links_to_Dirs[5] );
   status = rmdir( Links_to_Dirs[5] );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOTDIR );
-
-  printf("unlink %s\n", Links_to_Dirs[5] );
-  status = unlink( Links_to_Dirs[5] );
   rtems_test_assert( status == 0 );
 
   printf("unlink %s should fail with ENOTEMPTY\n", Links_to_dirlinks[5] );
@@ -757,11 +743,6 @@ void Cause_faults(void)
   printf("Making too many hard links.\n" );
   make_too_many_links( );
 
-  printf( "pass fstat a null pointer should fail with EFAULT\n");
-  status = fstat( fd, NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT);
-
   /*
    * The current directory MUST be restored at the end of this test.
    */
@@ -789,10 +770,10 @@ void test_statvfs( void )
   int status = 0;
   struct statvfs stat;
 
-  puts( "statvfs, with invalid path - expect ENOTSUP" );
+  puts( "statvfs, with invalid path - expect ENOENT" );
   status = statvfs( "" , &stat );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOTSUP );
+  rtems_test_assert( errno == ENOENT );
 
   puts( "create /tmp -- OK" );
   status = mkdir( "/tmp", 0777 );
@@ -943,21 +924,6 @@ int main(
   lchown_multiple_files( SymLinks );
 
   test_statvfs();
-
-  puts( "Exercise the reentrant version - _stat_r - expect EFAULT" );
-  status = _stat_r( NULL, NULL, NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
-
-  puts( "Exercise the reentrant version - _lstat_r - expect EFAULT" );
-  status = _lstat_r( NULL, NULL, NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
-
-  puts( "Try readlink with a bad buffer - expect EFAULT" );
-  status = readlink( "/tmp", NULL, 0 );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
 
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);

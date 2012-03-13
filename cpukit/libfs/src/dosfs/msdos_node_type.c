@@ -32,17 +32,17 @@
 #include "msdos.h"
 
 /* msdos_node_type --
- *     Determine type of the node that the pathloc refers to.
+ *     Determine type of the node that the loc refers to.
  *
  * PARAMETERS:
- *     pathloc - node description
+ *     loc - node description
  *
  * RETURNS:
  *     node type
  *
  */
 rtems_filesystem_node_types_t
-msdos_node_type(rtems_filesystem_location_info_t *pathloc)
+msdos_node_type(const rtems_filesystem_location_info_t *loc)
 {
     fat_file_fd_t *fat_fd;
 
@@ -52,7 +52,7 @@ msdos_node_type(rtems_filesystem_location_info_t *pathloc)
      * hence node_access memory can't be freed during processing node_type_h
      * call
      */
-    fat_fd = pathloc->node_access;
+    fat_fd = loc->node_access;
 
     return fat_fd->fat_file_type;
 }

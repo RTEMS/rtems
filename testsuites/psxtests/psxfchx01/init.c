@@ -47,7 +47,7 @@ rtems_task Init(
   rtems_test_assert( errno == EBADF );
   
   puts( "Init - opening /newfile in write-mode -- OK" );
-  fd = open( "/newfile", O_WRONLY | O_CREAT, S_IWUSR );
+  fd = open( "/newfile", O_WRONLY | O_CREAT, S_IWUSR | S_IXUSR );
   rtems_test_assert( fd != -1 );
 
   puts( "Init - fchdir on the file descriptor - expect ENOTDIR" );
@@ -64,7 +64,7 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   puts( "Init - opening /newfile in read-mode -- OK" );
-  fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRUSR);
+  fd = open( "/newfile", O_RDONLY | O_CREAT, S_IRUSR | S_IXUSR);
   rtems_test_assert( fd != -1 );
   
   puts( "Init - fchdir on the file descriptor - expect ENOTDIR" );

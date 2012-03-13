@@ -42,9 +42,6 @@ ssize_t	recv(int, void *, size_t, int);
  * Hooks to RTEMS I/O system
  */
 static const rtems_filesystem_file_handlers_r socket_handlers;
-int rtems_bsdnet_makeFdForSocket(
-    void *so, const rtems_filesystem_file_handlers_r *h);
-struct socket *rtems_bsdnet_fdToSocket(int fd);
 
 /*
  * Package system call argument into mbuf.
@@ -738,7 +735,7 @@ rtems_bsdnet_ioctl (rtems_libio_t *iop, uint32_t   command, void *buffer)
 }
 
 static int
-rtems_bsdnet_fcntl (int cmd, rtems_libio_t *iop)
+rtems_bsdnet_fcntl (rtems_libio_t *iop, int cmd)
 {
 	struct socket *so;
 
@@ -758,7 +755,7 @@ rtems_bsdnet_fcntl (int cmd, rtems_libio_t *iop)
 }
 
 static int
-rtems_bsdnet_fstat (rtems_filesystem_location_info_t *loc, struct stat *sp)
+rtems_bsdnet_fstat (const rtems_filesystem_location_info_t *loc, struct stat *sp)
 {
 	sp->st_mode = S_IFSOCK;
 	return 0;
@@ -772,10 +769,8 @@ static const rtems_filesystem_file_handlers_r socket_handlers = {
 	rtems_bsdnet_ioctl,			/* ioctl */
 	rtems_filesystem_default_lseek,		/* lseek */
 	rtems_bsdnet_fstat,			/* fstat */
-	rtems_filesystem_default_fchmod,	/* fchmod */
 	rtems_filesystem_default_ftruncate,	/* ftruncate */
 	rtems_filesystem_default_fsync,		/* fsync */
 	rtems_filesystem_default_fdatasync,	/* fdatasync */
-	rtems_bsdnet_fcntl,			/* fcntl */
-	rtems_filesystem_default_rmnod		/* rmnod */
+	rtems_bsdnet_fcntl 			/* fcntl */
 };

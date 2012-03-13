@@ -9,14 +9,18 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int rtems_filesystem_default_fstat(
-  rtems_filesystem_location_info_t *loc,
-  struct stat                      *buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  buf->st_mode = S_IRWXU | S_IRWXG | S_IRWXO;
+
+  return 0;
 }

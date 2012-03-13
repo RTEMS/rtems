@@ -104,6 +104,7 @@ mrfs_fspermission/Makefile
 mrfs_fsrdwr/Makefile
 mrfs_fssymlink/Makefile
 mrfs_fstime/Makefile
+fsnofs01/Makefile
 
 ])
 AC_OUTPUT

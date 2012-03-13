@@ -26,10 +26,8 @@ const rtems_filesystem_file_handlers_r msdos_dir_handlers = {
     rtems_filesystem_default_ioctl,
     msdos_dir_lseek,
     msdos_dir_stat,
-    msdos_dir_chmod,
-    rtems_filesystem_default_ftruncate,
+    rtems_filesystem_default_ftruncate_directory,
     msdos_dir_sync,
     msdos_dir_sync,
-    rtems_filesystem_default_fcntl,
-    msdos_dir_rmnod
+    rtems_filesystem_default_fcntl
 };

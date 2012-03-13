@@ -7,6 +7,9 @@
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -15,18 +18,30 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
 #include "imfs.h"
 
 rtems_filesystem_node_types_t IMFS_node_type(
-   rtems_filesystem_location_info_t    *pathloc         /* IN */
+  const rtems_filesystem_location_info_t *loc
 )
 {
-  IMFS_jnode_t *node;
+  const IMFS_jnode_t *node = loc->node_access;
+  IMFS_jnode_types_t imfs_type = node->type;
+  rtems_filesystem_node_types_t type;
 
-  node = pathloc->node_access;
-  return node->type;
+  switch ( imfs_type ) {
+    case IMFS_HARD_LINK:
+      type = node->info.hard_link.link_node->type;
+      break;
+    case IMFS_LINEAR_FILE:
+      type = RTEMS_FILESYSTEM_MEMORY_FILE;
+      break;
+    default:
+      type = imfs_type;
+      break;
+  }
+
+  return type;
 }

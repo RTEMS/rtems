@@ -1,22 +1,9 @@
 /*
- *  This is a native test to explore how the readdir() family works.
- *  Newlib supports the following readdir() family members:
- *
- *    closedir()   -
- *    readdir()    -
- *    scandir()    -
- *    opendir()    -
- *    rewinddir()  -
- *    telldir()    - BSD not in POSIX
- *    seekdir()    - BSD not in POSIX
- *
- *
- *  seekdir() takes an offset which is a byte offset.  The Linux
- *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
- *  record where DIRENT_SIZE seems to be 12 bytes.
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -40,8 +27,6 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <pmacros.h>
-
-extern rtems_filesystem_location_info_t rtems_filesystem_current;
 
 DIR *directory;
 DIR *directory2;
@@ -100,7 +85,9 @@ int main(
   int status;
   struct stat statbuf;
   static char mount_point_string[25] = { "/c/z/my_mount_point" };
-
+  static const char my_sub_fs_dir [] = "/c/y/my_mount_point/my_sub_fs_dir";
+  static const char my_link [] = "/c/y/my_link";
+  static const char mount_point [] = "/c/y/my_mount_point";
 
   printf( "\n\n*** MOUNT/UNMOUNT TEST ***\n" );
 
@@ -293,7 +280,7 @@ int main(
 
 
   /*
-   * Verify we cannot unmount a file system while we are in it.
+   * Verify we can unmount a file system while we are in it.
    */
 
   printf("Create and chdir to /c/y/my_mount_point/mydir\n");
@@ -303,22 +290,27 @@ int main(
   status = chdir( "/c/y/my_mount_point/mydir" );
   rtems_test_assert( status == 0 );
 
-  printf("unmount of /c/y/my_mount_point should fail with EBUSY\n");
+  printf("unmount of /c/y/my_mount_point\n");
   status = unmount( "/c/y/my_mount_point" );
+  rtems_test_assert( status == 0 );
+
+  printf("chdir to .. should fail with ENXIO\n");
+  status = chdir( ".." );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EBUSY );
+  rtems_test_assert( errno == ENXIO );
 
   /*
-   * Chdir to root and verify we can unmount the file system now.
+   * Chdir to root and verify we unmounted the file system now.
    */
 
   printf("chdir to / and verify we can unmount /c/y/my_mount_point\n");
   status = chdir( "/" );
   rtems_test_assert( status == 0 );
 
-  printf("unmount /c/y/my_mount_point \n");
-  status = unmount( "/c/y/my_mount_point" );
-  rtems_test_assert( status == 0 );
+  printf("chdir to /c/y/my_mount_point/my_dir should fail with ENOENT\n");
+  status = chdir( "/c/y/my_mount_point/mydir" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   /*
    * Attempt to unmount a directory that does not exist.
@@ -344,7 +336,7 @@ int main(
 
   /*
    * Create a file and directory then open the directory.
-   * Verify unmount will return EBUSY while directory is open.
+   * Verify unmount will return successful while directory is open.
    */
 
   printf("Create and open /c/y/my_mount_point/my_file\n");
@@ -353,19 +345,32 @@ int main(
   status = close( fd );
   rtems_test_assert( status == 0 );
 
-  printf("\nmkdir /c/y/my_mount_point/my_dir\n");
-  status = mkdir( "/c/y/my_mount_point/my_dir", 0x1c0 );
-  printf("Open /c/y/my_mount_point/my_dir\n");
-  directory = opendir( "/c/y/my_mount_point/my_dir" );
+  printf("\nmkdir %s\n", my_sub_fs_dir );
+  status = mkdir( my_sub_fs_dir, S_IRWXU );
+
+  printf("open %s\n", my_sub_fs_dir );
+  directory = opendir( my_sub_fs_dir );
   rtems_test_assert( directory );
 
-  printf("Unmount /c/y/my_mount_point should fail with EBUSY\n");
-  status = unmount( "/c/y/my_mount_point" );
+  printf("mkdir %s should fail with EEXIST\n", my_sub_fs_dir );
+  status = mkdir( my_sub_fs_dir, S_IRWXU );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EBUSY );
+  rtems_test_assert( errno == EEXIST );
 
-  printf("Close /c/y/my_mount_point/my_dir\n");
+  printf("unmount %s\n", mount_point );
+  status = unmount( mount_point );
+  rtems_test_assert( status == 0 );
+
+  printf("close %s\n", my_sub_fs_dir );
   status = closedir( directory );
+  rtems_test_assert( status == 0 );
+
+  printf("mkdir %s\n", my_sub_fs_dir );
+  status = mkdir( my_sub_fs_dir, S_IRWXU );
+  rtems_test_assert( status == 0 );
+
+  printf("rmdir %s\n", my_sub_fs_dir );
+  status = rmdir( my_sub_fs_dir );
   rtems_test_assert( status == 0 );
 
   /*
@@ -378,33 +383,27 @@ int main(
   rtems_test_assert( errno == EACCES );
 
   /*
-   * Verify a file system can not be unmounted with a mounted file system
-   * in it.
+   * Mount file system
    */
 
-  printf("Mount a file system at /c/y/my_mount_point/my_dir\n");
+  printf("Mount a file system at %s\n", mount_point);
   status = mount(
      "null",
-     "/c/y/my_mount_point/my_dir",
+     mount_point,
      "imfs",
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL );
   rtems_test_assert( status == 0 );
-
-  printf("unmount /c/y/my_mount_point should fail with EBUSY\n");
-  status = unmount( "/c/y/my_mount_point" );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EBUSY );
 
   /*
    * Verify you cannot create a hard link across mounted file systems.
    */
 
   printf("Verify a hard link across filesystems fails with EXDEV\n");
-  status = mkdir( "/c/y/my_mount_point/my_dir2", S_IRWXU  );
+  status = mkdir( my_sub_fs_dir, S_IRWXU  );
   rtems_test_assert( status == 0 );
 
-  status = link( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
+  status = link( my_sub_fs_dir, my_link );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EXDEV );
 
@@ -413,13 +412,13 @@ int main(
    */
 
   printf("Verify a symbolic link across file systems works\n");
-  status = symlink( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
+  status = symlink( my_sub_fs_dir, my_link );
   rtems_test_assert( status == 0 );
-  status = stat( "/c/y/my_mount_point/my_dir/my_link", &statbuf );
+  status = stat( my_link, &statbuf );
   rtems_test_assert( status == 0 );
 
-  printf("unmount /c/y/my_mount_point/my_dir\n");
-  status = unmount( "/c/y/my_mount_point/my_dir" );
+  printf("unmount %s\n", mount_point);
+  status = unmount( mount_point );
   rtems_test_assert( status == 0 );
 
   /*
@@ -427,12 +426,9 @@ int main(
    */
 
   printf("Verify the symbolic link now fails\n");
-  status = stat( "/c/y/my_mount_point/my_dir/my_link", &statbuf );
-  rtems_test_assert( status != 0 );
-
-  printf("unmount /c/y/my_mount_point\n");
-  status = unmount( "/c/y/my_mount_point" );
-  rtems_test_assert( status == 0 );
+  status = stat( my_link, &statbuf );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   printf( "\n\n*** END OF MOUNT/UNMOUNT TEST ***\n" );
   rtems_test_exit(0);

@@ -224,11 +224,6 @@ int main(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EEXIST );
 
-  /* test rtems_filesystem_evaluate_path by sending NULL path */
-  status = chdir( NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
-
   /*
    *  Now switch gears and exercise rmdir().
    */
@@ -252,11 +247,6 @@ int main(
   status = rmdir( "/tmp/bha" );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOENT );
-
-  puts( "unlink /dev/tty" );
-  status = unlink( "/dev/tty" );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EISDIR );
 
   puts( "mknod /dev/test_console" );
   status = mknod( "/dev/test_console", S_IFCHR, 0LL );

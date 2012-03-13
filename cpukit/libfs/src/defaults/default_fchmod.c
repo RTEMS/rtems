@@ -9,13 +9,16 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_fchmod(
-  rtems_filesystem_location_info_t *loc,
-  mode_t                            mode
+  const rtems_filesystem_location_info_t *loc,
+  mode_t mode
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

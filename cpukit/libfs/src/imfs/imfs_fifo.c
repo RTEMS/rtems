@@ -11,12 +11,8 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
-
-#include <stdlib.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 #include "imfs.h"
 
@@ -35,8 +31,8 @@ do {  \
 static int IMFS_fifo_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  int            oflag,
+  mode_t         mode
 )
 {
   IMFS_jnode_t *jnode = iop->pathinfo.node_access;
@@ -138,10 +134,8 @@ const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   IMFS_fifo_ioctl,
   IMFS_fifo_lseek,
   IMFS_stat,
-  IMFS_fchmod,
   rtems_filesystem_default_ftruncate,
   rtems_filesystem_default_fsync,
   rtems_filesystem_default_fdatasync,
-  rtems_filesystem_default_fcntl,
-  IMFS_rmnod,
+  rtems_filesystem_default_fcntl
 };

@@ -12,75 +12,39 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
+#include <unistd.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int unlink(
-  const char *path
-)
+int unlink( const char *path )
 {
-  int                               parentpathlen;
-  const char                       *name;
-  rtems_filesystem_location_info_t  parentloc;
-  rtems_filesystem_location_info_t  loc;
-  int                               i;
-  int                               result;
-  bool                              free_parentloc = false;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_REJECT_TERMINAL_DOT;
+  rtems_filesystem_location_info_t parentloc;
+  int parent_eval_flags = RTEMS_LIBIO_PERMS_WRITE
+    | RTEMS_LIBIO_PERMS_SEARCH
+    | RTEMS_LIBIO_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start_with_parent(
+      &ctx,
+      path,
+      eval_flags,
+      &parentloc,
+      parent_eval_flags
+    );
 
-  /*
-   * Get the node to be unlinked. Find the parent path first.
-   */
+  rv = (*currentloc->ops->rmnod_h)(
+    &parentloc,
+    currentloc
+  );
 
-  parentpathlen = rtems_filesystem_dirname ( path );
+  rtems_filesystem_eval_path_cleanup_with_parent( &ctx, &parentloc );
 
-  if ( parentpathlen == 0 )
-    rtems_filesystem_get_start_loc( path, &i, &parentloc );
-  else {
-    result = rtems_filesystem_evaluate_path( path, parentpathlen,
-                                             RTEMS_LIBIO_PERMS_WRITE,
-                                             &parentloc,
-                                             false );
-    if ( result != 0 )
-      return -1;
-
-    free_parentloc = true;
-  }
-
-  /*
-   * Start from the parent to find the node that should be under it.
-   */
-
-  loc = parentloc;
-  name = path + parentpathlen;
-  name += rtems_filesystem_prefix_separators( name, strlen( name ) );
-
-  result = rtems_filesystem_evaluate_relative_path( name , strlen( name ),
-                                                    0, &loc, false );
-  if ( result != 0 ) {
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    return -1;
-  }
-
-  if (  (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY ) {
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( EISDIR );
-  }
-
-  result = (*loc.ops->unlink_h)( &parentloc, &loc );
-
-  rtems_filesystem_freenode( &loc );
-  if ( free_parentloc )
-    rtems_filesystem_freenode( &parentloc );
-
-  return result;
+  return rv;
 }
 
 /*

@@ -12,16 +12,52 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
 #include <stdarg.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <errno.h>
 
-#include <rtems.h>
 #include <rtems/libio_.h>
+
+static int duplicate_iop( rtems_libio_t *iop, int fd2 )
+{
+  int rv = 0;
+
+  /*
+   * FIXME: We ignore the start value fd2 for the file descriptor search.  This
+   * is not POSIX conform.
+   */
+  rtems_libio_t *diop = rtems_libio_allocate();
+
+  if (diop != NULL) {
+    int oflag = rtems_libio_to_fcntl_flags( iop->flags );
+
+    oflag &= ~O_CREAT;
+    diop->flags |= rtems_libio_fcntl_flags( oflag );
+
+    rtems_filesystem_instance_lock( &iop->pathinfo );
+    rtems_filesystem_location_clone( &diop->pathinfo, &iop->pathinfo );
+    rtems_filesystem_instance_unlock( &iop->pathinfo );
+
+    /*
+     * XXX: We call the open handler here to have a proper open and close pair.
+     *
+     * FIXME: What to do with the path?
+     */
+    rv = (*diop->pathinfo.handlers->open_h)( diop, NULL, oflag, 0 );
+    if ( rv == 0 ) {
+      rv = diop - rtems_libio_iops;
+    } else {
+      rtems_libio_free( diop );
+    }
+  } else {
+    rv = -1;
+  }
+
+  return rv;
+}
 
 static int vfcntl(
   int fd,
@@ -30,7 +66,6 @@ static int vfcntl(
 )
 {
   rtems_libio_t *iop;
-  rtems_libio_t *diop;
   int            fd2;
   int            flags;
   int            mask;
@@ -51,20 +86,7 @@ static int vfcntl(
   switch ( cmd ) {
     case F_DUPFD:        /* dup */
       fd2 = va_arg( ap, int );
-      if ( fd2 )
-        diop = rtems_libio_iop( fd2 );
-      else {
-        /* allocate a file control block */
-        diop = rtems_libio_allocate();
-        if ( diop == 0 ) {
-          ret = -1;
-          break;
-        }
-      }
-
-      diop->flags      = iop->flags;
-      diop->pathinfo   = iop->pathinfo;
-      ret = (int) (diop - rtems_libio_iops);
+      ret = duplicate_iop( iop, fd2 );
       break;
 
     case F_GETFD:        /* get f_flags */
@@ -138,7 +160,7 @@ static int vfcntl(
    */
 
   if (ret >= 0) {
-    int err = (*iop->pathinfo.handlers->fcntl_h)( cmd, iop );
+    int err = (*iop->pathinfo.handlers->fcntl_h)( iop, cmd );
     if (err) {
       errno = err;
       ret = -1;

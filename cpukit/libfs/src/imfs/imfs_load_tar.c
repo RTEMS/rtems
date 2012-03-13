@@ -21,16 +21,12 @@
  * pointing to addresses in the TAR image.
  */
 
-#include <sys/types.h>
+#include "imfs.h"
+
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <string.h>
 #include <tar.h>
 
-#include <string.h>
-
-#include <rtems.h>
-#include <rtems/libio_.h>
-#include <rtems/imfs.h>
 #include <rtems/untar.h>
 
 /*
@@ -80,13 +76,11 @@
  *    create_node.
  */
 int rtems_tarfs_load(
-  char    *mountpoint,
+  const char *mountpoint,
   uint8_t *tar_image,
-  size_t   tar_size
+  size_t tar_size
 )
 {
-   rtems_filesystem_location_info_t  root_loc;
-   rtems_filesystem_location_info_t  loc;
    const char                       *hdr_ptr;
    char                             filename[100];
    char                             full_filename[256];
@@ -97,26 +91,27 @@ int rtems_tarfs_load(
    int                              offset;
    unsigned long                    nblocks;
    IMFS_jnode_t                    *node;
-   int                              status;
+   int rv = 0;
+   int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+   rtems_filesystem_eval_path_context_t ctx;
+   rtems_filesystem_location_info_t rootloc;
+   rtems_filesystem_location_info_t *currentloc =
+     rtems_filesystem_eval_path_start( &ctx, mountpoint, eval_flags );
 
-   status = rtems_filesystem_evaluate_path(
-      mountpoint,
-      strlen(mountpoint),
-      0,
-      &root_loc,
-      0
+   rtems_filesystem_eval_path_extract_currentloc( &ctx, &rootloc );
+   rtems_filesystem_eval_path_set_flags(
+     &ctx,
+     RTEMS_LIBIO_MAKE | RTEMS_LIBIO_EXCLUSIVE
    );
-   if (status != 0)
-     return -1;
-
-   if (root_loc.ops != &IMFS_ops && root_loc.ops != &fifoIMFS_ops)
-     return -1;
+   if (rootloc.ops != &IMFS_ops && rootloc.ops != &fifoIMFS_ops) {
+     rv = -1;
+   }
 
    /*
     * Create an IMFS node structure pointing to tar image memory.
     */
    offset = 0;
-   while (1) {
+   while ( rv == 0 ) {
     if (offset + 512 > tar_size)
       break;
 
@@ -154,22 +149,23 @@ int rtems_tarfs_load(
     }
     /*
      * Create a LINEAR_FILE node
-     *
-     *  NOTE: Coverity Id 20 reports this as a leak.
-     *        While technically not a leak, it indicated that
-     *        IMFS_create_node was ONLY passed a NULL when we created the
-     *        root node.  We added a new IMFS_create_root_node() so this
-     *        path no longer existed.  The result was simpler code which
-     *        should not have this path.
      */
     else if (linkflag == REGTYPE) {
-      const char  *name;
+      rtems_filesystem_location_free( currentloc );
+      rtems_filesystem_location_clone( currentloc, &rootloc );
+      rtems_filesystem_eval_path_set_path(
+        &ctx,
+        filename,
+        strlen( filename )
+      );
+      rtems_filesystem_eval_path_continue( &ctx );
 
-      loc = root_loc;
-      if (IMFS_evaluate_for_make(filename, &loc, &name) == 0) {
+      if ( !rtems_filesystem_location_is_null( currentloc ) ) {
         node = IMFS_create_node(
-          &loc,
-          IMFS_LINEAR_FILE, (char *)name,
+          currentloc,
+          IMFS_LINEAR_FILE,
+          rtems_filesystem_eval_path_get_token( &ctx ),
+          rtems_filesystem_eval_path_get_tokenlen( &ctx ),
           (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
           NULL
         );
@@ -181,6 +177,10 @@ int rtems_tarfs_load(
       offset += 512 * nblocks;
     }
   }
-  return status;
+
+  rtems_filesystem_location_free( &rootloc );
+  rtems_filesystem_eval_path_cleanup( &ctx );
+
+  return rv;
 }
 

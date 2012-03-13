@@ -180,7 +180,7 @@ typedef struct _rtems_rfs_file_handle
   /**
    * Special flags that can be controlled by the fctrl call.
    */
-  uint32_t flags;
+  int flags;
 
   /**
    * The buffer of data at the file's position.
@@ -298,7 +298,7 @@ typedef struct _rtems_rfs_file_handle
  */
 int rtems_rfs_file_open (rtems_rfs_file_system*  fs,
                          rtems_rfs_ino           ino,
-                         uint32_t                flags,
+                         int                     oflag,
                          rtems_rfs_file_handle** handle);
 
 /**

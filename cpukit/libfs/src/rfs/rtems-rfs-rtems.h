@@ -225,16 +225,6 @@ typedef struct rtems_rfs_rtems_private
   &rtems_rfs_rtems_ ## _h ## _handlers
 
 /**
- * Evaluate the permissions of the inode's mode against the flags.
- *
- * @param inode The inode handler to check the mode, uid and gid.
- * @param flags The flags to check permissions of.
- * @retval true The permissions allow access to the inode.
- * @retval false Access to the inode is not permitted.
- */
-bool rtems_rfs_rtems_eval_perms (rtems_rfs_inode_handle* inode, int flags);
-
-/**
  * Set the handlers in the path location based on the mode of the inode.
  *
  * @param loc Pointer to the path location to set the handlers in.
@@ -292,23 +282,9 @@ extern const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers;
 
 /**
  * The following routine does a stat on a node.
- *
- * @param iop
- * @param buf
- * @return int
  */
-int rtems_rfs_rtems_fstat (rtems_filesystem_location_info_t* pathloc,
-                           struct stat*                      buf);
-
-/**
- * File change mode routine.
- *
- * @param iop
- * @param mode
- * @return int
- */
-int rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
-                            mode_t                            mode);
+int rtems_rfs_rtems_fstat (const rtems_filesystem_location_info_t* pathloc,
+                           struct stat*                            buf);
 
 /**
  * Routine to remove a node from the RFS file system.
@@ -316,8 +292,8 @@ int rtems_rfs_rtems_fchmod (rtems_filesystem_location_info_t* pathloc,
  * @param parent_pathloc
  * @param pathloc
  */
-int rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
-                           rtems_filesystem_location_info_t* pathloc);
+int rtems_rfs_rtems_rmnod (const rtems_filesystem_location_info_t* parent_pathloc,
+                           const rtems_filesystem_location_info_t* pathloc);
 
 /**
  * The following routine does a sync on an inode node. Currently it flushes

@@ -9,15 +9,19 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_mknod(
-   const char                        *path,       /* IN */
-   mode_t                             mode,       /* IN */
-   dev_t                              dev,        /* IN */
-   rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

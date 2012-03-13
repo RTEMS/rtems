@@ -9,16 +9,18 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int rtems_filesystem_default_open(
   rtems_libio_t *iop,
-  const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  return 0;
 }

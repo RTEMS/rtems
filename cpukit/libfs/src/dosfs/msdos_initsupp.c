@@ -141,9 +141,9 @@ msdos_initialize_support(
         rtems_set_errno_and_return_minus_one( EIO );
     }
 
-    temp_mt_entry->mt_fs_root.node_access = fat_fd;
-    temp_mt_entry->mt_fs_root.handlers = directory_handlers;
-    temp_mt_entry->mt_fs_root.ops = op_table;
+    temp_mt_entry->mt_fs_root->location.node_access = fat_fd;
+    temp_mt_entry->mt_fs_root->location.handlers = directory_handlers;
+    temp_mt_entry->mt_fs_root->location.ops = op_table;
 
     return rc;
 }

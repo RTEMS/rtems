@@ -9,15 +9,19 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_rename(
- rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
- rtems_filesystem_location_info_t  *old_loc,         /* IN */
- rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */
- const char                        *name             /* IN */
+  const rtems_filesystem_location_info_t *oldparentloc,
+  const rtems_filesystem_location_info_t *oldloc,
+  const rtems_filesystem_location_info_t *newparentloc,
+  const char *name,
+  size_t namelen
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

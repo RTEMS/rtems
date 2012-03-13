@@ -9,14 +9,17 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_chown(
- rtems_filesystem_location_info_t  *pathloc,       /* IN */
- uid_t                              owner,         /* IN */
- gid_t                              group          /* IN */
+  const rtems_filesystem_location_info_t *loc,
+  uid_t owner,
+  gid_t group
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

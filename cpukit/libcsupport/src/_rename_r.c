@@ -4,6 +4,9 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -16,12 +19,10 @@
 #endif
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__RENAME_R)
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+
+#include <stdio.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int _rename_r(
   struct _reent *ptr __attribute__((unused)),
@@ -29,85 +30,47 @@ int _rename_r(
   const char    *new
 )
 {
-  int                                 old_parent_pathlen;
-  rtems_filesystem_location_info_t    old_loc;
-  rtems_filesystem_location_info_t    old_parent_loc;
-  rtems_filesystem_location_info_t    new_parent_loc;
-  int                                 i;
-  int                                 result;
-  const char                         *name;
-  bool                                free_old_parentloc = false;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t old_ctx;
+  int old_eval_flags = 0;
+  rtems_filesystem_location_info_t old_parentloc;
+  int old_parent_eval_flags = RTEMS_LIBIO_PERMS_WRITE
+    | RTEMS_LIBIO_FOLLOW_HARD_LINK;
+  const rtems_filesystem_location_info_t *old_currentloc =
+    rtems_filesystem_eval_path_start_with_parent(
+      &old_ctx,
+      old,
+      old_eval_flags,
+      &old_parentloc,
+      old_parent_eval_flags
+    );
+  rtems_filesystem_eval_path_context_t new_ctx;
 
-  /*
-   *  Get the parent node of the old path to be renamed. Find the parent path.
-   */
+  /* FIXME: This is not POSIX conform */
+  int new_eval_flags = RTEMS_LIBIO_FOLLOW_HARD_LINK
+    | RTEMS_LIBIO_MAKE
+    | RTEMS_LIBIO_EXCLUSIVE;
 
-  old_parent_pathlen = rtems_filesystem_dirname ( old );
+  const rtems_filesystem_location_info_t *new_currentloc =
+    rtems_filesystem_eval_path_start( &new_ctx, new, new_eval_flags );
 
-  if ( old_parent_pathlen == 0 )
-    rtems_filesystem_get_start_loc( old, &i, &old_parent_loc );
-  else {
-    result = rtems_filesystem_evaluate_path( old, old_parent_pathlen,
-                                             RTEMS_LIBIO_PERMS_WRITE,
-                                             &old_parent_loc,
-                                             false );
-    if ( result != 0 )
-      return -1;
-
-    free_old_parentloc = true;
+  rv = rtems_filesystem_location_exists_in_same_fs_instance_as(
+    old_currentloc,
+    new_currentloc
+  );
+  if ( rv == 0 ) {
+    rv = (*new_currentloc->ops->rename_h)(
+      &old_parentloc,
+      old_currentloc,
+      new_currentloc,
+      rtems_filesystem_eval_path_get_token( &new_ctx ),
+      rtems_filesystem_eval_path_get_tokenlen( &new_ctx )
+    );
   }
 
-  /*
-   * Start from the parent to find the node that should be under it.
-   */
+  rtems_filesystem_eval_path_cleanup_with_parent( &old_ctx, &old_parentloc );
+  rtems_filesystem_eval_path_cleanup( &new_ctx );
 
-  old_loc = old_parent_loc;
-  name = old + old_parent_pathlen;
-  name += rtems_filesystem_prefix_separators( name, strlen( name ) );
-
-  result = rtems_filesystem_evaluate_relative_path( name , strlen( name ),
-                                                    0, &old_loc, false );
-  if ( result != 0 ) {
-    if ( free_old_parentloc )
-      rtems_filesystem_freenode( &old_parent_loc );
-    return -1;
-  }
-  
-  /*
-   * Get the parent of the new node we are renaming to.
-   */
-
-  rtems_filesystem_get_start_loc( new, &i, &new_parent_loc );
-
-  result = (*new_parent_loc.ops->evalformake_h)( &new[i], &new_parent_loc, &name );
-  if ( result != 0 ) {
-    rtems_filesystem_freenode( &new_parent_loc );
-    if ( free_old_parentloc )
-      rtems_filesystem_freenode( &old_parent_loc );
-    rtems_filesystem_freenode( &old_loc );
-    return -1;
-  }
-
-  /*
-   *  Check to see if the caller is trying to rename across file system
-   *  boundaries.
-   */
-
-  if ( old_parent_loc.mt_entry != new_parent_loc.mt_entry ) {
-    rtems_filesystem_freenode( &new_parent_loc );
-    if ( free_old_parentloc )
-      rtems_filesystem_freenode( &old_parent_loc );
-    rtems_filesystem_freenode( &old_loc );
-    rtems_set_errno_and_return_minus_one( EXDEV );
-  }
-
-  result = (*new_parent_loc.ops->rename_h)( &old_parent_loc, &old_loc, &new_parent_loc, name );
-
-  rtems_filesystem_freenode( &new_parent_loc );
-  if ( free_old_parentloc )
-    rtems_filesystem_freenode( &old_parent_loc );
-  rtems_filesystem_freenode( &old_loc );
-
-  return result;
+  return rv;
 }
 #endif

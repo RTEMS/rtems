@@ -22,7 +22,7 @@
 #include <rtems/libio.h>
 
 rtems_filesystem_node_types_t rtems_filesystem_default_node_type(
-  rtems_filesystem_location_info_t *pathloc
+  const rtems_filesystem_location_info_t *loc
 )
 {
   return RTEMS_FILESYSTEM_INVALID_NODE_TYPE;

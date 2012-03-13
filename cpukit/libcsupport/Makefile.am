@@ -57,7 +57,7 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
 
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/mount-mgr.c src/mount-mktgt.c src/libio_init.c \
-    src/eval.c src/privateenv.c \
+    src/privateenv.c \
     src/open_dev_console.c src/__usrenv.c src/rtems_mkdir.c
 
 if LIBNETWORKING
@@ -99,7 +99,7 @@ ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
 
 MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/realloc.c src/_calloc_r.c src/_malloc_r.c \
-    src/free.c src/freenode.c src/_free_r.c \
+    src/free.c src/_free_r.c \
     src/_realloc_r.c src/mallocfreespace.c \
    src/mallocgetheapptr.c src/mallocsetheapptr.c \
     src/mallocinfo.c src/malloc_walk.c src/malloc_get_statistics.c \
@@ -127,8 +127,16 @@ BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c src/issetugid.c
 
 libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/printk_plugin.c src/putk.c src/vprintk.c \
-    src/sup_fs_is_separator.c src/sup_fs_get_start_loc.c \
-    src/sup_fs_get_sym_start_loc.c \
+    src/sup_fs_location.c \
+    src/sup_fs_eval_path.c \
+    src/sup_fs_eval_path_generic.c \
+    src/sup_fs_check_permissions.c \
+    src/sup_fs_next_token.c \
+    src/sup_fs_exist_in_same_instance.c \
+    src/sup_fs_mount_iterate.c \
+    src/sup_fs_node_type.c \
+    src/clonenode.c \
+    src/freenode.c \
     $(BSD_LIBC_C_FILES) $(BASE_FS_C_FILES) $(MALLOC_C_FILES) \
     $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
 

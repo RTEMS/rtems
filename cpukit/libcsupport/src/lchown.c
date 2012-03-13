@@ -12,20 +12,19 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
 #include <unistd.h>
 
-#include <rtems.h>
+#include <rtems/libio_.h>
 
-int _chown_helper( const char *path, uid_t owner, gid_t group, int follow_link);
-
-int lchown(
-  const char *path,
-  uid_t       owner,
-  gid_t       group
-)
+int lchown( const char *path, uid_t owner, gid_t group )
 {
-  return _chown_helper( path, owner, group, false );
+  return rtems_filesystem_chown(
+    path,
+    owner,
+    group,
+    RTEMS_LIBIO_FOLLOW_HARD_LINK
+  );
 }

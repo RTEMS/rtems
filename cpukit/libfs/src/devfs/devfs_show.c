@@ -7,30 +7,38 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/seterr.h>
 #include "devfs.h"
 
-int devFS_Show(void)
+void devFS_Show(void)
 {
-  int                               i;
-  rtems_filesystem_location_info_t *temp_loc;
-  rtems_device_name_t              *device_name_table;
+  rtems_filesystem_location_info_t *rootloc = &rtems_filesystem_root->location;
 
-  temp_loc = &rtems_filesystem_root;
-  device_name_table = (rtems_device_name_t *)temp_loc->node_access;
-  if (!device_name_table)
-    rtems_set_errno_and_return_minus_one( EFAULT );
+  if (rootloc->ops == &devFS_ops) {
+    const devFS_data *data = devFS_get_data(rootloc);
+    size_t i = 0;
+    size_t n = data->count;
+    devFS_node *nodes = data->nodes;
 
-  for (i = 0; i < rtems_device_table_size; i++){
-    if (device_name_table[i].device_name){
-        printk("/%s %d %d\n", device_name_table[i].device_name,
-            device_name_table[i].major, device_name_table[i].minor);
+    for (i = 0; i < n; ++i) {
+      devFS_node *current = nodes + i;
+
+      if (current->name != NULL) {
+        size_t j = 0;
+        size_t m = current->namelen;
+
+        printk("/");
+        for (j = 0; j < m; ++j) {
+          printk("%c", current->name [j]);
+        }
+        printk(
+          " %lu %lu\n",
+          (unsigned long) current->major,
+          (unsigned long) current->minor
+        );
+      }
     }
   }
-  return 0;
 }
-
-

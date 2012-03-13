@@ -38,33 +38,19 @@
  * PARAMETERS:
  *     temp_mt_entry - mount table entry
  *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately).
- *
  */
-int
+void
 msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
 {
-    int              rc = RC_OK;
     msdos_fs_info_t *fs_info = temp_mt_entry->fs_info;
-    fat_file_fd_t   *fat_fd = temp_mt_entry->mt_fs_root.node_access;
+    fat_file_fd_t   *fat_fd = temp_mt_entry->mt_fs_root->location.node_access;
 
     /* close fat-file which correspondes to root directory */
-    if (fat_file_close(temp_mt_entry, fat_fd) != RC_OK)
-    {
-        /* no return - try to free as much as possible */
-        rc = -1;
-    }
+    fat_file_close(temp_mt_entry, fat_fd);
 
-    if (fat_shutdown_drive(temp_mt_entry) != RC_OK)
-    {
-        /* no return - try to free as much as possible */
-        rc = -1;
-    }
+    fat_shutdown_drive(temp_mt_entry);
 
     rtems_semaphore_delete(fs_info->vol_sema);
     free(fs_info->cl_buf);
     free(temp_mt_entry->fs_info);
-
-    return rc;
 }

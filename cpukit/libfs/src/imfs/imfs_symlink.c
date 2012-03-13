@@ -16,54 +16,39 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
 #include "imfs.h"
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
+
+#include <stdlib.h>
 
 int IMFS_symlink(
-  rtems_filesystem_location_info_t  *parent_loc,
-  const char                        *link_name,
-  const char                        *node_name
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  const char *target
 )
 {
   IMFS_types_union   info;
   IMFS_jnode_t      *new_node;
-  char               new_name[ IMFS_NAME_MAX + 1 ];
-  int                i;
-
-  /*
-   * Remove any separators at the end of the string.
-   */
-  IMFS_get_token( node_name, strlen( node_name ), new_name, &i );
 
   /*
    * Duplicate link name
    */
-  info.sym_link.name = strdup(link_name);
+  info.sym_link.name = strdup(target);
   if (info.sym_link.name == NULL) {
     rtems_set_errno_and_return_minus_one(ENOMEM);
   }
 
   /*
    *  Create a new link node.
-   *
-   *  NOTE: Coverity CID 22 notes this as a resource leak.
-   *        While technically not a leak, it indicated that IMFS_create_node
-   *        was ONLY passed a NULL when we created the root node.  We
-   *        added a new IMFS_create_root_node() so this path no longer
-   *        existed.  The result was simpler code which should not have
-   *        this path.
    */
   new_node = IMFS_create_node(
-    parent_loc,
+    parentloc,
     IMFS_SYM_LINK,
-    new_name,
+    name,
+    namelen,
     ( S_IFLNK | ( S_IRWXU | S_IRWXG | S_IRWXO )),
     &info
   );

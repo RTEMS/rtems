@@ -14,7 +14,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
 /*
@@ -25,55 +25,29 @@
 #ifndef _STAT_NAME
 #define _STAT_NAME         stat
 #define _STAT_R_NAME       _stat_r
-#define _STAT_FOLLOW_LINKS true
+#define _STAT_FOLLOW_LINKS RTEMS_LIBIO_FOLLOW_LINK
 #endif
 
-
-#include <rtems.h>
-
-#include <rtems/libio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <string.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int _STAT_NAME(
-  const char  *path,
-  struct stat *buf
-)
+int _STAT_NAME( const char *path, struct stat *buf )
 {
-  int                              status;
-  rtems_filesystem_location_info_t loc;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = _STAT_FOLLOW_LINKS;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
-  /*
-   *  Check to see if we were passed a valid pointer.
-   */
+  memset( buf, 0, sizeof( *buf ) );
 
-  if ( !buf )
-    rtems_set_errno_and_return_minus_one( EFAULT );
+  rv = (*currentloc->handlers->fstat_h)( currentloc, buf );
 
-  status = rtems_filesystem_evaluate_path( path, strlen( path ),
-                                           0, &loc, _STAT_FOLLOW_LINKS );
-  if ( status != 0 )
-    return -1;
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  /*
-   *  Zero out the stat structure so the various support
-   *  versions of stat don't have to.
-   */
-
-  memset( buf, 0, sizeof(struct stat) );
-
-  status =  (*loc.handlers->fstat_h)( &loc, buf );
-
-  rtems_filesystem_freenode( &loc );
-
-  return status;
+  return rv;
 }
 
 /*

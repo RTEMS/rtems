@@ -18,6 +18,7 @@
 
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
+#include <rtems/rtems_bsdnet_internal.h>
 
 /*
  * Convert an RTEMS file descriptor to a BSD socket pointer.
@@ -69,5 +70,7 @@ int rtems_bsdnet_makeFdForSocket(
   iop->data1 = so;
   iop->pathinfo.handlers = h;
   iop->pathinfo.ops = &rtems_filesystem_operations_default;
+  iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
+  rtems_filesystem_location_add_to_mt_entry(&iop->pathinfo);
   return fd;
 }

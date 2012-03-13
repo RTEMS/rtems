@@ -38,30 +38,24 @@
 /**
  * This routine processes the open() system call.  Note that there is nothing
  * special to be done at open() time.
- *
- * @param iop
- * @param pathname
- * @param flag
- * @param mode
- * @return int
  */
 
 static int
 rtems_rfs_rtems_file_open (rtems_libio_t* iop,
                            const char*    pathname,
-                           uint32_t       flag,
-                           uint32_t       mode)
+                           int            oflag,
+                           mode_t         mode)
 {
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
   rtems_rfs_ino          ino;
   rtems_rfs_file_handle* file;
-  uint32_t               flags;
+  int                    flags;
   int                    rc;
 
   flags = 0;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
-    printf("rtems-rfs: file-open: path:%s ino:%" PRId32 " flags:%04" PRIx32 " mode:%04" PRIx32 "\n",
+    printf("rtems-rfs: file-open: path:%s ino:%" PRId32 " flags:%04i mode:%04" PRIu32 "\n",
            pathname, ino, flags, mode);
 
   rtems_rfs_rtems_lock (fs);
@@ -352,10 +346,8 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers = {
   .ioctl_h     = rtems_rfs_rtems_file_ioctl,
   .lseek_h     = rtems_rfs_rtems_file_lseek,
   .fstat_h     = rtems_rfs_rtems_fstat,
-  .fchmod_h    = rtems_rfs_rtems_fchmod,
   .ftruncate_h = rtems_rfs_rtems_file_ftruncate,
   .fsync_h     = rtems_rfs_rtems_fdatasync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
-  .fcntl_h     = rtems_filesystem_default_fcntl,
-  .rmnod_h     = rtems_rfs_rtems_rmnod
+  .fcntl_h     = rtems_filesystem_default_fcntl
 };

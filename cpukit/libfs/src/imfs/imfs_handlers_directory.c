@@ -12,10 +12,8 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
-
-#include <errno.h>
 
 #include "imfs.h"
 
@@ -30,11 +28,9 @@ const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   rtems_filesystem_default_write,
   rtems_filesystem_default_ioctl,
   imfs_dir_lseek,
-  imfs_dir_fstat,
-  IMFS_fchmod,
-  rtems_filesystem_default_ftruncate,
+  IMFS_stat,
+  rtems_filesystem_default_ftruncate_directory,
   rtems_filesystem_default_fsync,
   IMFS_fdatasync,
-  rtems_filesystem_default_fcntl,
-  imfs_dir_rmnod
+  rtems_filesystem_default_fcntl
 };

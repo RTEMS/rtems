@@ -102,10 +102,12 @@ rtems_rfs_get_fs (const char* path, rtems_rfs_file_system** fs)
    * system data.
    */
   {
-    rtems_filesystem_location_info_t pathloc;
-    rc = rtems_filesystem_evaluate_path (path, strlen (path), 0, &pathloc, true);
-    *fs = rtems_rfs_rtems_pathloc_dev (&pathloc);
-    rtems_filesystem_freenode (&pathloc);
+    rtems_filesystem_eval_path_context_t ctx;
+    int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+    const rtems_filesystem_location_info_t *currentloc =
+      rtems_filesystem_eval_path_start (&ctx, path, eval_flags);
+    *fs = rtems_rfs_rtems_pathloc_dev (currentloc);
+    rtems_filesystem_eval_path_cleanup (&ctx);
   }
 #endif
 

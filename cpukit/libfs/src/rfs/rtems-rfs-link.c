@@ -385,8 +385,7 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
 
   if (size < *length)
   {
-    rtems_rfs_inode_close (fs, &inode);
-    return EINVAL;
+    *length = size;
   }
 
   if (rtems_rfs_inode_get_block_count (&inode) == 0)
@@ -449,8 +448,6 @@ rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
       return rc;
     }
   }
-
-  path[*length] = '\0';
 
   rc = rtems_rfs_inode_close (fs, &inode);
 

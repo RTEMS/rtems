@@ -23,9 +23,7 @@ ssize_t devFS_read(
 {
   rtems_libio_rw_args_t   args;
   rtems_status_code       status;
-  rtems_device_name_t     *np;
-
-  np               = (rtems_device_name_t *)iop->pathinfo.node_access;
+  const devFS_node *np = iop->pathinfo.node_access;
 
   args.iop         = iop;
   args.offset      = iop->offset;

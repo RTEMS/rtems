@@ -21,9 +21,7 @@ int devFS_close(
 {
   rtems_libio_open_close_args_t  args;
   rtems_status_code              status;
-  rtems_device_name_t           *np;
-
-  np         = (rtems_device_name_t *)iop->pathinfo.node_access;
+  const devFS_node *np = iop->pathinfo.node_access;
 
   args.iop   = iop;
   args.flags = 0;

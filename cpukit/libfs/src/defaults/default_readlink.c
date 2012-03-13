@@ -9,14 +9,17 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 ssize_t rtems_filesystem_default_readlink(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- char                              *buf,     /* OUT */
- size_t                            bufsize
+  const rtems_filesystem_location_info_t *loc,
+  char *buf,
+  size_t bufsize
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

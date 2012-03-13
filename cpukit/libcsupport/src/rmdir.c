@@ -12,84 +12,44 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/types.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int rmdir(
-  const char *pathname
-)
+int rmdir( const char *path )
 {
-  int                               parentpathlen;
-  const char                       *name;
-  rtems_filesystem_location_info_t  parentloc;
-  rtems_filesystem_location_info_t  loc;
-  int                               i;
-  int                               result;
-  bool                              free_parentloc = false;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_REJECT_TERMINAL_DOT;
+  rtems_filesystem_location_info_t parentloc;
+  int parent_eval_flags = RTEMS_LIBIO_PERMS_WRITE
+    | RTEMS_LIBIO_PERMS_SEARCH
+    | RTEMS_LIBIO_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start_with_parent(
+      &ctx,
+      path,
+      eval_flags,
+      &parentloc,
+      parent_eval_flags
+    );
+  rtems_filesystem_node_types_t type =
+    (*currentloc->ops->node_type_h)( currentloc );
 
-  /*
-   *  Get the parent node of the node we wish to remove. Find the parent path.
-   */
-
-  parentpathlen = rtems_filesystem_dirname ( pathname );
-
-  if ( parentpathlen == 0 )
-    rtems_filesystem_get_start_loc( pathname, &i, &parentloc );
-  else {
-    result = rtems_filesystem_evaluate_path(pathname, parentpathlen,
-                                            RTEMS_LIBIO_PERMS_WRITE,
-                                            &parentloc,
-                                            false );
-    if ( result != 0 )
-      return -1;
-
-    free_parentloc = true;
+  if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
+    rv = (*currentloc->ops->rmnod_h)(
+      &parentloc,
+      currentloc
+    );
+  } else {
+    rtems_filesystem_eval_path_error( &ctx, ENOTDIR );
+    rv = -1;
   }
 
-  /*
-   * Start from the parent to find the node that should be under it.
-   */
+  rtems_filesystem_eval_path_cleanup_with_parent( &ctx, &parentloc );
 
-  loc = parentloc;
-  name = pathname + parentpathlen;
-  name += rtems_filesystem_prefix_separators( name, strlen( name ) );
-
-  result = rtems_filesystem_evaluate_relative_path( name , strlen( name ),
-                                                    0, &loc, false );
-  if ( result != 0 ) {
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    return -1;
-  }
-
-  /*
-   * Verify you can remove this node as a directory.
-   */
-  if ( (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( ENOTDIR );
-  }
-
-  /*
-   * Use the filesystems rmnod to remove the node.
-   */
-
-  result =  (*loc.handlers->rmnod_h)( &parentloc, &loc );
-
-  rtems_filesystem_freenode( &loc );
-  if ( free_parentloc )
-    rtems_filesystem_freenode( &parentloc );
-
-  return result;
+  return rv;
 }

@@ -61,6 +61,7 @@ extern rtems_shell_cmd_t rtems_shell_RM_Command;
 extern rtems_shell_cmd_t rtems_shell_LN_Command;
 extern rtems_shell_cmd_t rtems_shell_MKNOD_Command;
 extern rtems_shell_cmd_t rtems_shell_UMASK_Command;
+extern rtems_shell_cmd_t rtems_shell_LSOF_Command;
 extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
@@ -327,6 +328,11 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_UMASK)) || \
         defined(CONFIGURE_SHELL_COMMAND_UMASK)
       &rtems_shell_UMASK_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_LSOF)) || \
+        defined(CONFIGURE_SHELL_COMMAND_LSOF)
+      &rtems_shell_LSOF_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_MOUNT)) || \

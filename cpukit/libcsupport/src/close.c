@@ -22,16 +22,14 @@ int close(
 )
 {
   rtems_libio_t      *iop;
-  rtems_status_code   rc;
+  int                 rc;
 
   rtems_libio_check_fd(fd);
   iop = rtems_libio_iop(fd);
   rtems_libio_check_is_open(iop);
 
-  rc = RTEMS_SUCCESSFUL;
   rc = (*iop->pathinfo.handlers->close_h)( iop );
 
-  rtems_filesystem_freenode( &iop->pathinfo );
   rtems_libio_free( iop );
 
   return rc;

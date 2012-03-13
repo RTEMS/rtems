@@ -23,13 +23,11 @@ const rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_close,
     msdos_file_read,
     msdos_file_write,
-    msdos_file_ioctl,
+    rtems_filesystem_default_ioctl,
     msdos_file_lseek,
     msdos_file_stat,
-    msdos_file_chmod,
     msdos_file_ftruncate,
     msdos_file_sync,
     msdos_file_datasync,
-    rtems_filesystem_default_fcntl,
-    msdos_file_rmnod
+    rtems_filesystem_default_fcntl
 };

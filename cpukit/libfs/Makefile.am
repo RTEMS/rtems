@@ -11,22 +11,27 @@ EXTRA_DIST = README
 
 noinst_LIBRARIES = libdefaultfs.a
 libdefaultfs_a_SOURCES = \
+    src/defaults/default_clone.c \
+    src/defaults/default_are_nodes_equal.c \
+    src/defaults/default_lock_and_unlock.c \
+    src/defaults/default_eval_path.c \
     src/defaults/default_fchmod.c src/defaults/default_freenode.c \
     src/defaults/default_fsync.c src/defaults/default_link.c \
     src/defaults/default_read.c src/defaults/default_rmnod.c \
-    src/defaults/default_unlink.c src/defaults/default_chown.c \
+    src/defaults/default_chown.c \
     src/defaults/default_fcntl.c src/defaults/default_fsmount.c \
     src/defaults/default_ftruncate.c src/defaults/default_lseek.c \
     src/defaults/default_readlink.c src/defaults/default_statvfs.c \
-    src/defaults/default_utime.c src/defaults/default_evalpath.c \
+    src/defaults/default_utime.c \
     src/defaults/default_fdatasync.c  src/defaults/default_fstat.c \
     src/defaults/default_ioctl.c src/defaults/default_mount.c \
     src/defaults/default_rename.c src/defaults/default_symlink.c \
     src/defaults/default_write.c \
-    src/defaults/default_unmount.c src/defaults/default_evaluate_link.c \
+    src/defaults/default_unmount.c \
     src/defaults/default_open.c src/defaults/default_close.c \
     src/defaults/default_fsunmount.c src/defaults/default_mknod.c \
-    src/defaults/default_node_type.c src/defaults/default_evalformake.c \
+    src/defaults/default_node_type.c \
+    src/defaults/default_ftruncate_directory.c \
     src/defaults/default_handlers.c src/defaults/default_ops.c
 
 noinst_LIBRARIES += libimfs.a
@@ -37,14 +42,14 @@ libimfs_a_SOURCES += src/imfs/deviceerrno.c src/imfs/deviceio.c \
     src/imfs/imfs_creat.c src/imfs/imfs_debug.c src/imfs/imfs_directory.c \
     src/imfs/imfs_eval.c src/imfs/imfs_fchmod.c \
     src/imfs/imfs_fdatasync.c src/imfs/imfs_fifo.c \
-    src/imfs/imfs_fsunmount.c src/imfs/imfs_getchild.c \
-    src/imfs/imfs_gtkn.c src/imfs/imfs_handlers_device.c \
+    src/imfs/imfs_fsunmount.c \
+    src/imfs/imfs_handlers_device.c \
     src/imfs/imfs_handlers_directory.c src/imfs/imfs_handlers_link.c \
     src/imfs/imfs_handlers_memfile.c src/imfs/imfs_init.c \
     src/imfs/imfs_initsupp.c src/imfs/imfs_link.c src/imfs/imfs_load_tar.c \
     src/imfs/imfs_mknod.c src/imfs/imfs_mount.c src/imfs/imfs_ntype.c \
     src/imfs/imfs_readlink.c src/imfs/imfs_rename.c src/imfs/imfs_rmnod.c \
-    src/imfs/imfs_stat.c src/imfs/imfs_symlink.c src/imfs/imfs_unlink.c \
+    src/imfs/imfs_stat.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_unmount.c src/imfs/imfs_utime.c src/imfs/ioman.c \
     src/imfs/memfile.c src/imfs/miniimfs_init.c src/imfs/imfs.h
 
@@ -74,6 +79,7 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_handlers_file.c src/dosfs/msdos_init.c \
     src/dosfs/msdos_initsupp.c src/dosfs/msdos_misc.c \
     src/dosfs/msdos_mknod.c src/dosfs/msdos_node_type.c \
+    src/dosfs/msdos_rmnod.c \
     src/dosfs/msdos_conv.c src/dosfs/msdos.h src/dosfs/msdos_format.c \
     src/dosfs/dosfs.h src/dosfs/msdos_rename.c
 endif

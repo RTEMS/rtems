@@ -7,85 +7,65 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <rtems.h>
-#include <rtems/seterr.h>
-#include <rtems/score/wkspace.h>
 #include "devfs.h"
 
-rtems_filesystem_operations_table devFS_ops =
-{
-    devFS_evaluate_path,
-    devFS_evaluate_for_make,
-    rtems_filesystem_default_link,
-    rtems_filesystem_default_unlink,
-    devFS_node_type,
-    devFS_mknod,
-    rtems_filesystem_default_chown,
-    rtems_filesystem_default_freenode,
-    rtems_filesystem_default_mount,
-    devFS_initialize,
-    rtems_filesystem_default_unmount,
-    rtems_filesystem_default_fsunmount,
-    rtems_filesystem_default_utime,
-    rtems_filesystem_default_evaluate_link,
-    rtems_filesystem_default_symlink,
-    rtems_filesystem_default_readlink,
-    rtems_filesystem_default_rename,
-    rtems_filesystem_default_statvfs
+const rtems_filesystem_operations_table devFS_ops = {
+  .lock_h = rtems_filesystem_default_lock,
+  .unlock_h = rtems_filesystem_default_unlock,
+  .eval_path_h = devFS_eval_path,
+  .link_h = rtems_filesystem_default_link,
+  .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
+  .node_type_h = devFS_node_type,
+  .mknod_h = devFS_mknod,
+  .rmnod_h = rtems_filesystem_default_rmnod,
+  .fchmod_h = rtems_filesystem_default_fchmod,
+  .chown_h = rtems_filesystem_default_chown,
+  .clonenod_h = rtems_filesystem_default_clonenode,
+  .freenod_h = rtems_filesystem_default_freenode,
+  .mount_h = rtems_filesystem_default_mount,
+  .fsmount_me_h = devFS_initialize,
+  .unmount_h = rtems_filesystem_default_unmount,
+  .fsunmount_me_h = rtems_filesystem_default_fsunmount,
+  .utime_h = rtems_filesystem_default_utime,
+  .symlink_h = rtems_filesystem_default_symlink,
+  .readlink_h = rtems_filesystem_default_readlink,
+  .rename_h = rtems_filesystem_default_rename,
+  .statvfs_h = rtems_filesystem_default_statvfs
 };
 
-
-rtems_filesystem_file_handlers_r devFS_file_handlers =
-{
-    devFS_open,
-    devFS_close,
-    devFS_read,
-    devFS_write,
-    devFS_ioctl,
-    rtems_filesystem_default_lseek,
-    devFS_stat,
-    rtems_filesystem_default_fchmod,
-    rtems_filesystem_default_ftruncate,
-    rtems_filesystem_default_fsync,
-    rtems_filesystem_default_fdatasync,
-    rtems_filesystem_default_fcntl,
-    rtems_filesystem_default_rmnod
+const rtems_filesystem_file_handlers_r devFS_file_handlers = {
+  .open_h = devFS_open,
+  .close_h = devFS_close,
+  .read_h = devFS_read,
+  .write_h = devFS_write,
+  .ioctl_h = devFS_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek,
+  .fstat_h = devFS_stat,
+  .ftruncate_h = rtems_filesystem_default_ftruncate,
+  .fsync_h = rtems_filesystem_default_fsync,
+  .fdatasync_h = rtems_filesystem_default_fdatasync,
+  .fcntl_h = rtems_filesystem_default_fcntl
 };
-
-
 
 int devFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry,
-  const void                           *data
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void *data
 )
 {
-  rtems_device_name_t  *device_name_table;
+  int rv = 0;
 
-  /* allocate device only filesystem name table */
-  device_name_table = (rtems_device_name_t *)_Workspace_Allocate(
-        sizeof( rtems_device_name_t ) * ( rtems_device_table_size )
-        );
+  if (data != NULL) {
+    mt_entry->immutable_fs_info = data;
+    mt_entry->mt_fs_root->location.handlers = &devFS_file_handlers;
+    mt_entry->mt_fs_root->location.ops = &devFS_ops;
+  } else {
+    errno = EINVAL;
+    rv = -1;
+  }
 
-  /* no memory for device filesystem */
-  if (!device_name_table)
-      rtems_set_errno_and_return_minus_one( ENOMEM );
-
-  memset(
-    device_name_table, 0,
-    sizeof( rtems_device_name_t ) * ( rtems_device_table_size )
-    );
-
-  /* set file handlers */
-  temp_mt_entry->mt_fs_root.handlers     = &devFS_file_handlers;
-  temp_mt_entry->mt_fs_root.ops          = &devFS_ops;
-
-  /* Set the node_access to device name table */
-  temp_mt_entry->mt_fs_root.node_access = (void *)device_name_table;
-
-  return 0;
+  return rv;
 }
 

@@ -12,31 +12,25 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <unistd.h>
 #include <sys/stat.h>
-#include <errno.h>
 
-#include <rtems.h>
-#include <rtems/libio.h>
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int fchmod(
-  int       fd,
-  mode_t    mode
-)
+int fchmod( int fd, mode_t mode )
 {
+  int rv;
   rtems_libio_t *iop;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
 
-  /*
-   *  Now process the fchmod().
-   */
-  return (*iop->pathinfo.handlers->fchmod_h)( &iop->pathinfo, mode );
+  rtems_filesystem_instance_lock( &iop->pathinfo );
+  rv = (*iop->pathinfo.ops->fchmod_h)( &iop->pathinfo, mode );
+  rtems_filesystem_instance_unlock( &iop->pathinfo );
+
+  return rv;
 }

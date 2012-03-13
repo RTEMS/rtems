@@ -12,35 +12,24 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/libio.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int chmod(
-  const char *path,
-  mode_t      mode
-)
+int chmod( const char *path, mode_t mode )
 {
-  int                              status;
-  rtems_filesystem_location_info_t loc;
-  int                              result;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
-  status = rtems_filesystem_evaluate_path( path, strlen( path ), 0, &loc, true );
-  if ( status != 0 )
-    return -1;
+  rv = (*currentloc->ops->fchmod_h)( currentloc, mode );
 
-  result = (*loc.handlers->fchmod_h)( &loc, mode );
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  rtems_filesystem_freenode( &loc );
-
-  return result;
+  return rv;
 }

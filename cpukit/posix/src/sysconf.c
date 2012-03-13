@@ -45,6 +45,9 @@ long sysconf(
   if ( name == _SC_PAGESIZE )
     return PAGE_SIZE;
 
+  if ( name == _SC_SYMLOOP_MAX )
+    return RTEMS_FILESYSTEM_SYMLOOP_MAX;
+
 #if defined(__sparc__)
   if ( name == 515 ) /* Solaris _SC_STACK_PROT */
    return 0;

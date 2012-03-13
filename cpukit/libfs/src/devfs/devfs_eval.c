@@ -7,79 +7,84 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/seterr.h>
-#include <fcntl.h>
-#include <assert.h>
+#include <string.h>
+
 #include "devfs.h"
 
-/**
- *  The following defines the device-only filesystem operating
- *  handlers.
- */
-
-extern rtems_filesystem_operations_table devFS_ops;
-
-/**
- *  The following defines the device-only filesystem operating
- *  handlers.
- */
-
-extern rtems_filesystem_file_handlers_r  devFS_file_handlers;
-
-int devFS_evaluate_path(
-  const char                        *pathname,
-  size_t                             pathnamelen,
-  int                                flags,
-  rtems_filesystem_location_info_t  *pathloc
+static devFS_node *devFS_search_node(
+  const devFS_data *data,
+  const char *path,
+  size_t pathlen,
+  devFS_node **free_node_ptr
 )
 {
-  int                   i;
-  rtems_device_name_t  *device_name_table;
+  size_t i = 0;
+  size_t n = data->count;
+  devFS_node *nodes = data->nodes;
+  devFS_node *node = NULL;
+  devFS_node *free_node = NULL;
 
-  /* see if 'flags' is valid */
-  if ( !rtems_libio_is_valid_perms( flags ) )
-    rtems_set_errno_and_return_minus_one( EPERM );
+  for (i = 0; (free_node == NULL || node == NULL) && i < n; ++i) {
+    devFS_node *current = nodes + i;
 
-  /* get the device name table */
-  device_name_table = (rtems_device_name_t *)pathloc->node_access;
-  if (!device_name_table)
-    rtems_set_errno_and_return_minus_one( EFAULT );
-
-  for (i = 0; i < rtems_device_table_size; i++) {
-    if (!device_name_table[i].device_name)
-      continue;
-
-    if (strncmp(pathname, device_name_table[i].device_name, pathnamelen) != 0)
-      continue;
-
-    if (device_name_table[i].device_name[pathnamelen] != '\0')
-      continue;
-
-    /* find the device, set proper values */
-    pathloc->node_access = (void *)&device_name_table[i];
-    pathloc->handlers = &devFS_file_handlers;
-    pathloc->ops = &devFS_ops;
-    pathloc->mt_entry = rtems_filesystem_root.mt_entry;
-    return 0;
+    if (current->name != NULL) {
+      if (
+        current->namelen == pathlen
+          && memcmp(current->name, path, pathlen) == 0
+      ) {
+        node = current;
+      }
+    } else {
+      free_node = current;
+    }
   }
 
-  /* no such file or directory */
-  rtems_set_errno_and_return_minus_one( ENOENT );
+  *free_node_ptr = free_node;
+
+  return node;
 }
 
-
-
-int devFS_evaluate_for_make(
-   const char                         *path,
-   rtems_filesystem_location_info_t   *pathloc,
-   const char                        **name
+void devFS_eval_path(
+  rtems_filesystem_eval_path_context_t *ctx
 )
 {
-    /* we do nothing, just set name to path */
-   *name = path;
-    return 0;
-}
+  rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_get_currentloc(ctx);
+  devFS_node *free_node;
+  devFS_node *node = devFS_search_node(
+    devFS_get_data(currentloc),
+    rtems_filesystem_eval_path_get_path(ctx),
+    rtems_filesystem_eval_path_get_pathlen(ctx),
+    &free_node
+  );
+  int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
 
+  if (node != NULL) {
+    if ((eval_flags & RTEMS_LIBIO_EXCLUSIVE) == 0) {
+      currentloc->node_access = node;
+      rtems_filesystem_eval_path_clear_path(ctx);
+    } else {
+      rtems_filesystem_eval_path_error(ctx, EEXIST);
+    }
+  } else {
+    if ((eval_flags & RTEMS_LIBIO_MAKE) != 0) {
+      if (free_node != NULL) {
+        free_node->mode = S_IRWXU | S_IRWXG | S_IRWXO;
+        currentloc->node_access = free_node;
+        rtems_filesystem_eval_path_set_token(
+          ctx,
+          rtems_filesystem_eval_path_get_path(ctx),
+          rtems_filesystem_eval_path_get_pathlen(ctx)
+        );
+        rtems_filesystem_eval_path_clear_path(ctx);
+      } else {
+        rtems_filesystem_eval_path_error(ctx, ENOSPC);
+      }
+    } else {
+      rtems_filesystem_eval_path_error(ctx, ENOENT);
+    }
+  }
+}

@@ -9,16 +9,19 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_link(
- rtems_filesystem_location_info_t  *to_loc,      /* IN */
- rtems_filesystem_location_info_t  *parent_loc,  /* IN */
- const char                        *name         /* IN */
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *targetloc,
+  const char *name,
+  size_t namelen
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
-

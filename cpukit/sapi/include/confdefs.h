@@ -428,9 +428,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  the bsp overwrides this.  In which case the value is set
    *  to BSP_MAXIMUM_DEVICES.
    */
-  #if defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
-    #define CONFIGURE_MEMORY_FOR_DEVFS  0
-  #elif defined(CONFIGURE_FILESYSTEM_DEVFS)
+  #ifdef CONFIGURE_FILESYSTEM_DEVFS
     #ifndef CONFIGURE_MAXIMUM_DEVICES
       #if defined(BSP_MAXIMUM_DEVICES)
         #define CONFIGURE_MAXIMUM_DEVICES BSP_MAXIMUM_DEVICES
@@ -439,12 +437,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       #endif
     #endif
     #include <rtems/devfs.h>
-    uint32_t rtems_device_table_size = CONFIGURE_MAXIMUM_DEVICES;
-    #define CONFIGURE_MEMORY_FOR_DEVFS \
-      _Configure_Object_RAM(CONFIGURE_MAXIMUM_DEVICES, \
-         sizeof (rtems_device_name_t))
-  #else
-    #define CONFIGURE_MEMORY_FOR_DEVFS  0
   #endif
 
 #ifndef RTEMS_SCHEDSIM
@@ -503,23 +495,31 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
-    extern const rtems_filesystem_mount_table_t configuration_mount_table;
-    const rtems_filesystem_mount_table_t configuration_mount_table = {
+    #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+      static devFS_node devFS_root_filesystem_nodes [CONFIGURE_MAXIMUM_DEVICES];
+      static const devFS_data devFS_root_filesystem_data = {
+        devFS_root_filesystem_nodes,
+        CONFIGURE_MAXIMUM_DEVICES
+      };
+    #endif
+    const rtems_filesystem_mount_configuration
+      rtems_filesystem_root_configuration = {
+      NULL,
+      NULL,
       #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
         RTEMS_FILESYSTEM_TYPE_DEVFS,
       #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
         RTEMS_FILESYSTEM_TYPE_MINIIMFS,
-      #else  /* using IMFS as base filesystem */
+      #else
         RTEMS_FILESYSTEM_TYPE_IMFS,
       #endif
       RTEMS_FILESYSTEM_READ_WRITE,
-      NULL,
-      NULL
+      #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+        &devFS_root_filesystem_data
+      #else
+        NULL
+      #endif
     };
-
-    const rtems_filesystem_mount_table_t
-        *rtems_filesystem_mount_table = &configuration_mount_table;
-    const int rtems_filesystem_mount_table_size = 1;
   #endif
 
 #endif
@@ -2020,7 +2020,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 (( \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
-   CONFIGURE_MEMORY_FOR_DEVFS + \
    CONFIGURE_MEMORY_FOR_TASKS( \
      CONFIGURE_TOTAL_TASKS_AND_THREADS, CONFIGURE_TOTAL_TASKS_AND_THREADS) + \
    CONFIGURE_MEMORY_FOR_CLASSIC + \

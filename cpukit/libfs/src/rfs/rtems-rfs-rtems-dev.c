@@ -38,8 +38,8 @@
 static int
 rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
                               const char    *pathname,
-                              uint32_t       flag,
-                              uint32_t       mode)
+                              int            oflag,
+                              mode_t         mode)
 {
   rtems_libio_open_close_args_t args;
   rtems_rfs_file_system*        fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
@@ -257,10 +257,8 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_device_handlers = {
   .ioctl_h     = rtems_rfs_rtems_device_ioctl,
   .lseek_h     = rtems_rfs_rtems_device_lseek,
   .fstat_h     = rtems_rfs_rtems_fstat,
-  .fchmod_h    = rtems_rfs_rtems_fchmod,
   .ftruncate_h = rtems_rfs_rtems_device_ftruncate,
   .fsync_h     = rtems_filesystem_default_fsync,
   .fdatasync_h = rtems_filesystem_default_fdatasync,
-  .fcntl_h     = rtems_filesystem_default_fcntl,
-  .rmnod_h     = rtems_rfs_rtems_rmnod
+  .fcntl_h     = rtems_filesystem_default_fcntl
 };

@@ -16,58 +16,65 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int mknod(
-  const char *pathname,
-  mode_t      mode,
-  dev_t       dev
+int rtems_filesystem_mknod(
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
 )
 {
-  rtems_filesystem_location_info_t    temp_loc;
-  int                                 i;
-  const char                         *name_start;
-  int                                 result;
+  int rv = 0;
 
-  /*
-   * The file type is field within the mode. Check we have a sane mode set.
-   */
-  switch (mode & S_IFMT)
-  {
-    case S_IFDIR:
-    case S_IFCHR:
+  mode &= ~rtems_filesystem_umask;
+
+  switch (mode & S_IFMT) {
     case S_IFBLK:
-    case S_IFREG:
+    case S_IFCHR:
+    case S_IFDIR:
     case S_IFIFO:
+    case S_IFREG:
       break;
     default:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+      errno = EINVAL;
+      rv = -1;
+      break;
   }
   
-  rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
+  if ( rv == 0 ) {
+    rv = (*parentloc->ops->mknod_h)( parentloc, name, namelen, mode, dev );
+  }
 
-  result = (*temp_loc.ops->evalformake_h)(
-    &pathname[i],
-    &temp_loc,
-    &name_start
+  return rv;
+}
+
+int mknod( const char *path, mode_t mode, dev_t dev )
+{
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK
+    | RTEMS_LIBIO_MAKE
+    | RTEMS_LIBIO_EXCLUSIVE
+    | (S_ISDIR(mode) ? RTEMS_LIBIO_ACCEPT_RESIDUAL_DELIMITERS : 0);
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+
+  rv = rtems_filesystem_mknod(
+    currentloc,
+    rtems_filesystem_eval_path_get_token( &ctx ),
+    rtems_filesystem_eval_path_get_tokenlen( &ctx ),
+    mode,
+    dev
   );
-  if ( result != 0 )
-    return -1;
 
-  result =  (*temp_loc.ops->mknod_h)( name_start, mode, dev, &temp_loc );
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  rtems_filesystem_freenode( &temp_loc );
-
-  return result;
+  return rv;
 }

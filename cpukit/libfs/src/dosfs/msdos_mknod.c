@@ -31,31 +31,16 @@
 
 #include "msdos.h"
 
-/* msdos_mknod --
- *     The following function checks spelling and formats name for a new node,
- *     determines type of the node to be created and creates it.
- *
- * PARAMETERS:
- *     name    - file name to create
- *     mode    - node type
- *     dev     - dev
- *     pathloc - parent directory description
- *
- * RETURNS:
- *     RC_OK on succes, or -1 if error occured and set errno
- *
- */
 int msdos_mknod(
-    const char                        *name,
-    mode_t                             mode,
-    dev_t                              dev,
-    rtems_filesystem_location_info_t  *pathloc
+    const rtems_filesystem_location_info_t *parentloc,
+    const char *name,
+    size_t namelen,
+    mode_t mode,
+    dev_t dev
 )
 {
     int                  rc = RC_OK;
-    rtems_status_code    sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t     *fs_info = pathloc->mt_entry->fs_info;
-    msdos_token_types_t  type = 0;
+    msdos_node_type_t    type = 0;
 
     /*
      *  Figure out what type of msdos node this is.
@@ -71,14 +56,8 @@ int msdos_mknod(
     else
         rtems_set_errno_and_return_minus_one(EINVAL);
 
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
     /* Create an MSDOS node */
-    rc = msdos_creat_node(pathloc, type, name, strlen(name), mode, NULL);
+    rc = msdos_creat_node(parentloc, type, name, namelen, mode, NULL);
 
-    rtems_semaphore_release(fs_info->vol_sema);
     return rc;
 }

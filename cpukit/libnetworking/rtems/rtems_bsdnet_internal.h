@@ -13,6 +13,7 @@
 #define _RTEMS_RTEMS_BSDNET_INTERNAL_H
 
 #include <rtems.h>
+#include <rtems/fs.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -197,6 +198,10 @@ int ioctl (int, ioctl_command_t, ...);
 #if (SBWAIT_EVENT & SOSLEEP_EVENT & NETISR_EVENTS)
 # error "Network event conflict"
 #endif
+
+int rtems_bsdnet_makeFdForSocket(
+    void *so, const rtems_filesystem_file_handlers_r *h);
+struct socket *rtems_bsdnet_fdToSocket(int fd);
 
 #ifdef __cplusplus
 }

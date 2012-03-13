@@ -9,16 +9,18 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_utime(
-  rtems_filesystem_location_info_t  *pathloc,       /* IN */
-  time_t                             actime,        /* IN */
-  time_t                             modtime        /* IN */
+  const rtems_filesystem_location_info_t *loc,
+  time_t actime,
+  time_t modtime
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
-

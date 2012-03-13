@@ -9,14 +9,18 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_symlink(
- rtems_filesystem_location_info_t  *loc,         /* IN */
- const char                        *link_name,   /* IN */
- const char                        *node_name
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  const char *target
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

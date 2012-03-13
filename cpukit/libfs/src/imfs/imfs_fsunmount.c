@@ -12,20 +12,10 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
-
-#include <sys/types.h>         /* for mkdir */
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 #include "imfs.h"
-#include <rtems/libio_.h>
-
-#if defined(IMFS_DEBUG)
-#include <stdio.h>
-#endif
 
 /*
  *  IMFS_fsunmount
@@ -43,7 +33,7 @@
 #define jnode_get_first_child( jnode ) \
     ((IMFS_jnode_t *)( rtems_chain_head( jnode_get_control( jnode ) )->next))
 
-int IMFS_fsunmount(
+void IMFS_fsunmount(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 )
 {
@@ -57,29 +47,24 @@ int IMFS_fsunmount(
     * associated memory space
     */
 
-   jnode = (IMFS_jnode_t *)temp_mt_entry->mt_fs_root.node_access;
-   loc = temp_mt_entry->mt_fs_root;
+   loc = temp_mt_entry->mt_fs_root->location;
+   jnode = (IMFS_jnode_t *)loc.node_access;
 
    /*
     *  Set this to null to indicate that it is being unmounted.
     */
 
-   temp_mt_entry->mt_fs_root.node_access = NULL;
+   temp_mt_entry->mt_fs_root->location.node_access = NULL;
 
    do {
      next = jnode->Parent;
      loc.node_access = (void *)jnode;
      IMFS_Set_handlers( &loc );
 
-     if ( jnode->type != IMFS_DIRECTORY ) {
-        result = IMFS_unlink( NULL, &loc );
+     if ( jnode->type != IMFS_DIRECTORY || jnode_has_no_children( jnode ) ) {
+        result = IMFS_rmnod( NULL, &loc );
         if (result != 0)
-          return -1;
-        jnode = next;
-     } else if ( jnode_has_no_children( jnode ) ) {
-        result = IMFS_unlink( NULL, &loc );
-        if (result != 0)
-          return -1;
+	  rtems_fatal_error_occurred(0xdeadbeef);
         jnode = next;
      }
      if ( jnode != NULL ) {
@@ -89,6 +74,4 @@ int IMFS_fsunmount(
        }
      }
    } while (jnode != NULL);
-
-   return 0;
 }

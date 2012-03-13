@@ -12,18 +12,14 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
-
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 #include "imfs.h"
 
 int IMFS_fchmod(
-  rtems_filesystem_location_info_t *loc,
-  mode_t                            mode
+  const rtems_filesystem_location_info_t *loc,
+  mode_t mode
 )
 {
   IMFS_jnode_t  *jnode;

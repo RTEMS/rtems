@@ -20,22 +20,15 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <rtems/chain.h>
-#include <rtems/seterr.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <rtems/libio_.h>
 
-static RTEMS_CHAIN_DEFINE_EMPTY(mount_chain);
+RTEMS_CHAIN_DEFINE_EMPTY(rtems_filesystem_mount_table);
 
 /*
  * Default pathconfs.
@@ -55,14 +48,6 @@ const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf = 
    0     /* posix_vdisable: special char processing, 0=no, 1=yes */
 };
 
-static bool is_node_fs_root(
-  const rtems_filesystem_mount_table_entry_t *mt_entry,
-  void *arg
-)
-{
-  return arg == mt_entry->mt_fs_root.node_access;
-}
-
 static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
   const char *source_or_null,
   const char *target_or_null,
@@ -76,11 +61,15 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
     strlen( source_or_null ) + 1 : 0;
   size_t target_size = strlen( target ) + 1;
   size_t size = sizeof( rtems_filesystem_mount_table_entry_t )
-    + filesystemtype_size + source_size + target_size;
+    + filesystemtype_size + source_size + target_size
+    + sizeof( rtems_filesystem_global_location_t );
   rtems_filesystem_mount_table_entry_t *mt_entry = calloc( 1, size );
 
   if ( mt_entry != NULL ) {
-    char *str = (char *) mt_entry + sizeof( *mt_entry );
+    rtems_filesystem_global_location_t *mt_fs_root =
+      (rtems_filesystem_global_location_t *)
+        ((char *) mt_entry + sizeof( *mt_entry ));
+    char *str = (char *) mt_fs_root + sizeof( *mt_fs_root );
 
     memcpy( str, filesystemtype, filesystemtype_size );
     mt_entry->type = str;
@@ -92,6 +81,23 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
 
     memcpy( str, target, target_size );
     mt_entry->target = str;
+    str += target_size;
+
+    mt_entry->mounted = true;
+    mt_entry->mt_fs_root = mt_fs_root;
+    mt_entry->pathconf_limits_and_options = rtems_filesystem_default_pathconf;
+
+    mt_fs_root->location.mt_entry = mt_entry;
+    mt_fs_root->reference_count = 1;
+
+    rtems_chain_initialize(
+      &mt_entry->location_chain,
+      mt_fs_root,
+      1,
+      sizeof(*mt_fs_root)
+    );
+  } else {
+    free( mt_entry );
   }
 
   *target_length_ptr = target_size - 1;
@@ -99,20 +105,82 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
   return mt_entry;
 }
 
-/*
- *  mount
- *
- *  This routine will attempt to mount a new file system at the specified
- *  mount point. A series of tests will be run to determine if any of the
- *  following reasons exist to prevent the mount operation:
- *
- * 	1) The file system type or options are not valid
- *	2) No new file system root node is specified
- * 	3) The selected file system has already been mounted
- * 	4) The mount point exists with the proper permissions to allow mounting
- *	5) The selected mount point already has a file system mounted to it
- *
- */
+static int register_subordinate_file_system(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const char *target
+)
+{
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_PERMS_RWX
+    | RTEMS_LIBIO_FOLLOW_LINK;
+  rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, target, eval_flags );
+
+  if ( !rtems_filesystem_location_is_root( currentloc ) ) {
+    rtems_filesystem_location_info_t targetloc;
+    rtems_filesystem_global_location_t *mt_point_node;
+
+    rtems_filesystem_eval_path_extract_currentloc( &ctx, &targetloc );
+    mt_point_node = rtems_filesystem_location_transform_to_global( &targetloc );
+    mt_entry->mt_point_node = mt_point_node;
+    rv = (*mt_point_node->location.ops->mount_h)( mt_entry );
+    if ( rv == 0 ) {
+      rtems_filesystem_mt_lock();
+      rtems_chain_append_unprotected(
+        &rtems_filesystem_mount_table,
+        &mt_entry->mt_node
+      );
+      rtems_filesystem_mt_unlock();
+    } else {
+      rtems_filesystem_global_location_release( mt_point_node );
+    }
+  } else {
+    rtems_filesystem_eval_path_error( &ctx, EBUSY );
+    rv = -1;
+  }
+
+  rtems_filesystem_eval_path_cleanup( &ctx );
+
+  return rv;
+}
+
+static int register_root_file_system(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+)
+{
+  int rv = 0;
+
+  rtems_filesystem_mt_lock();
+  if ( rtems_chain_is_empty( &rtems_filesystem_mount_table ) ) {
+    rtems_chain_append_unprotected(
+      &rtems_filesystem_mount_table,
+      &mt_entry->mt_node
+    );
+  } else {
+    errno = EINVAL;
+    rv = -1;
+  }
+  rtems_filesystem_mt_unlock();
+
+  if ( rv == 0 ) {
+    rtems_filesystem_global_location_t *new_fs_root =
+      rtems_filesystem_global_location_obtain( &mt_entry->mt_fs_root );
+    rtems_filesystem_global_location_t *new_fs_current =
+      rtems_filesystem_global_location_obtain( &mt_entry->mt_fs_root );
+
+    rtems_filesystem_global_location_assign(
+      &rtems_filesystem_root,
+      new_fs_root
+    );
+    rtems_filesystem_global_location_assign(
+      &rtems_filesystem_current,
+      new_fs_current
+    );
+  }
+
+  return rv;
+}
 
 int mount(
   const char                 *source,
@@ -122,161 +190,55 @@ int mount(
   const void                 *data
 )
 {
-  rtems_filesystem_fsmount_me_t mount_h = NULL;
-  rtems_filesystem_location_info_t      loc;
-  rtems_filesystem_mount_table_entry_t *mt_entry = NULL;
-  rtems_filesystem_location_info_t     *loc_to_free = NULL;
-  bool has_target = target != NULL;
-  size_t target_length = 0;
+  int rv = 0;
 
-  /*
-   *  Are the file system options valid?
-   */
+  if (
+    options == RTEMS_FILESYSTEM_READ_ONLY
+      || options == RTEMS_FILESYSTEM_READ_WRITE
+  ) {
+    rtems_filesystem_fsmount_me_t fsmount_me_h =
+      rtems_filesystem_get_mount_handler( filesystemtype );
 
-  if ( options != RTEMS_FILESYSTEM_READ_ONLY &&
-       options != RTEMS_FILESYSTEM_READ_WRITE )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    if ( fsmount_me_h != NULL ) {
+      size_t target_length = 0;
+      rtems_filesystem_mount_table_entry_t *mt_entry = alloc_mount_table_entry(
+        source,
+        target,
+        filesystemtype,
+        &target_length
+      );
 
-  /*
-   *  Get mount handler
-   */
-  mount_h = rtems_filesystem_get_mount_handler( filesystemtype );
-  if ( !mount_h )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+      if ( mt_entry != NULL ) {
+        mt_entry->writeable = options == RTEMS_FILESYSTEM_READ_WRITE;
 
-  /*
-   * Allocate a mount table entry
-   */
-  mt_entry = alloc_mount_table_entry(
-    source,
-    target,
-    filesystemtype,
-    &target_length
-  );
-  if ( !mt_entry )
-    rtems_set_errno_and_return_minus_one( ENOMEM );
+        rv = (*fsmount_me_h)( mt_entry, data );
+        if ( rv == 0 ) {
+          if ( target != NULL ) {
+            rv = register_subordinate_file_system( mt_entry, target );
+          } else {
+            rv = register_root_file_system( mt_entry );
+          }
 
-  mt_entry->mt_fs_root.mt_entry = mt_entry;
-  mt_entry->options = options;
-  mt_entry->pathconf_limits_and_options = rtems_filesystem_default_pathconf;
+          if ( rv != 0 ) {
+            (*mt_entry->mt_fs_root->location.ops->fsunmount_me_h)( mt_entry );
+          }
+        }
 
-  /*
-   *  The mount_point should be a directory with read/write/execute
-   *  permissions in the existing tree.
-   */
-
-  if ( has_target ) {
-    if ( rtems_filesystem_evaluate_path(
-           target, target_length, RTEMS_LIBIO_PERMS_RWX, &loc, true ) == -1 )
-      goto cleanup_and_bail;
-
-    loc_to_free = &loc;
-
-    /*
-     *  Test to see if it is a directory
-     */
-
-    if ( loc.ops->node_type_h( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
-      errno = ENOTDIR;
-      goto cleanup_and_bail;
-    }
-
-    /*
-     *  You can only mount one file system onto a single mount point.
-     */
-
-    if ( rtems_filesystem_mount_iterate( is_node_fs_root, loc.node_access ) ) {
-      errno = EBUSY;
-      goto cleanup_and_bail;
-    }
-
-    /*
-     *  This must be a good mount point, so move the location information
-     *  into the allocated mount entry.  Note:  the information that
-     *  may have been allocated in loc should not be sent to freenode
-     *  until the system is unmounted.  It may be needed to correctly
-     *  traverse the tree.
-     */
-
-    mt_entry->mt_point_node.node_access = loc.node_access;
-    mt_entry->mt_point_node.handlers = loc.handlers;
-    mt_entry->mt_point_node.ops = loc.ops;
-    mt_entry->mt_point_node.mt_entry = loc.mt_entry;
-
-    /*
-     *  This link to the parent is only done when we are dealing with system
-     *  below the base file system
-     */
-
-    if ( loc.ops->mount_h( mt_entry ) ) {
-      goto cleanup_and_bail;
+        if ( rv != 0 ) {
+          free( mt_entry );
+        }
+      } else {
+        errno = ENOMEM;
+        rv = -1;
+      }
+    } else {
+      errno = EINVAL;
+      rv = -1;
     }
   } else {
-    /*
-     * Do we already have a base file system ?
-     */
-    if ( !rtems_chain_is_empty( &mount_chain ) ) {
-      errno = EINVAL;
-      goto cleanup_and_bail;
-    }
-
-    /*
-     *  This is a mount of the base file system --> The
-     *  mt_point_node.node_access will be left to null to indicate that this
-     *  is the root of the entire file system.
-     */
+    errno = EINVAL;
+    rv = -1;
   }
 
-  if ( (*mount_h)( mt_entry, data ) ) {
-    /*
-     * Try to undo the mount operation
-     */
-    loc.ops->unmount_h( mt_entry );
-    goto cleanup_and_bail;
-  }
-
-  /*
-   *  Add the mount table entry to the mount table chain
-   */
-  rtems_libio_lock();
-  rtems_chain_append( &mount_chain, &mt_entry->Node );
-  rtems_libio_unlock();
-
-  if ( !has_target )
-    rtems_filesystem_root = mt_entry->mt_fs_root;
-
-  return 0;
-
-cleanup_and_bail:
-
-  free( mt_entry );
-
-  if ( loc_to_free )
-    rtems_filesystem_freenode( loc_to_free );
-
-  return -1;
-}
-
-bool rtems_filesystem_mount_iterate(
-  rtems_per_filesystem_mount_routine routine,
-  void *routine_arg
-)
-{
-  rtems_chain_node *node = NULL;
-  bool stop = false;
-
-  rtems_libio_lock();
-  for (
-    node = rtems_chain_first( &mount_chain );
-    !rtems_chain_is_tail( &mount_chain, node ) && !stop;
-    node = rtems_chain_next( node )
-  ) {
-    const rtems_filesystem_mount_table_entry_t *mt_entry =
-      (rtems_filesystem_mount_table_entry_t *) node;
-
-    stop = (*routine)( mt_entry, routine_arg );
-  }
-  rtems_libio_unlock();
-
-  return stop;
+  return rv;
 }

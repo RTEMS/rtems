@@ -10,6 +10,9 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -37,19 +40,14 @@ extern "C" {
 #endif
 
 /**
- * @defgroup LibIO IO Library
+ * @defgroup LibIOFSOps File System Operations
  *
- * @brief Provides system call and file system interface definitions.
+ * @ingroup LibIO
  *
- * General purpose communication channel for RTEMS to allow UNIX/POSIX
- * system call behavior under RTEMS.  Initially this supported only
- * IO to devices but has since been enhanced to support networking
- * and support for mounted file systems.
+ * @brief File system operations.
  *
  * @{
  */
-
-typedef off_t rtems_off64_t __attribute__((deprecated));
 
 /**
  * @brief File system node types.
@@ -64,33 +62,741 @@ typedef enum {
 } rtems_filesystem_node_types_t;
 
 /**
- * @name File System Node Operations
+ * @brief Locks a file system instance.
+ *
+ * This lock must allow nesting.
+ *
+ * @param[in, out] mt_entry The mount table entry of the file system instance.
+ *
+ * @see rtems_filesystem_default_lock().
+ */
+typedef void (*rtems_filesystem_mt_entry_lock_t)(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Unlocks a file system instance.
+ *
+ * @param[in, out] mt_entry The mount table entry of the file system instance.
+ *
+ * @see rtems_filesystem_default_unlock().
+ */
+typedef void (*rtems_filesystem_mt_entry_unlock_t)(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Path evaluation context.
+ */
+typedef struct {
+  /**
+   * The contents of the remaining path to be evaluated.
+   */
+  const char *path;
+
+  /**
+   * The length of the remaining path to be evaluated.
+   */
+  size_t pathlen;
+
+  /**
+   * The contents of the token to be evaluated with respect to the current
+   * location.
+   */
+  const char *token;
+
+  /**
+   * The length of the token to be evaluated with respect to the current
+   * location.
+   */
+  size_t tokenlen;
+
+  /**
+   * The path evaluation is controlled by the following flags
+   *  - RTEMS_LIBIO_PERMS_READ,
+   *  - RTEMS_LIBIO_PERMS_WRITE,
+   *  - RTEMS_LIBIO_PERMS_EXEC,
+   *  - RTEMS_LIBIO_PERMS_SEARCH,
+   *  - RTEMS_LIBIO_FOLLOW_HARD_LINK,
+   *  - RTEMS_LIBIO_FOLLOW_SYM_LINK,
+   *  - RTEMS_LIBIO_MAKE,
+   *  - RTEMS_LIBIO_EXCLUSIVE,
+   *  - RTEMS_LIBIO_ACCEPT_RESIDUAL_DELIMITERS, and
+   *  - RTEMS_LIBIO_REJECT_TERMINAL_DOT.
+   */
+  int flags;
+
+  /**
+   * Symbolic link evaluation is a recursive operation.  This field helps to
+   * limit the recursion level and thus prevents a stack overflow.  The
+   * recursion level is limited by RTEMS_FILESYSTEM_SYMLOOP_MAX.
+   */
+  int recursionlevel;
+
+  /**
+   * This is the current file system location of the evaluation process.
+   * Tokens are evaluated with respect to the current location.  The token
+   * interpretation may change the current location.  The purpose of the path
+   * evaluation is to change the start location into a final current location
+   * according to the path.
+   */
+  rtems_filesystem_location_info_t currentloc;
+
+  /**
+   * The location of the root directory of the user environment during the
+   * evaluation start.
+   */
+  rtems_filesystem_global_location_t *rootloc;
+
+  /**
+   * The start location of the evaluation process.  The start location my
+   * change during symbolic link evaluation.
+   */
+  rtems_filesystem_global_location_t *startloc;
+} rtems_filesystem_eval_path_context_t;
+
+/**
+ * @brief Path evaluation.
+ *
+ * @param[in, out] ctx The path evaluation context.
+ *
+ * @see rtems_filesystem_default_eval_path().
+ */
+typedef void (*rtems_filesystem_eval_path_t)(
+  rtems_filesystem_eval_path_context_t *ctx
+);
+
+/**
+ * @brief Creates a new link for the existing file.
+ *
+ * @param[in] parentloc The location of the parent of the new link.
+ * @param[in] targetloc The location of the target file.
+ * @param[in] name Name for the new link.
+ * @param[in] namelen Length of the name for the new link in characters.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_link().
+ */
+typedef int (*rtems_filesystem_link_t)(
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *targetloc,
+  const char *name,
+  size_t namelen
+);
+
+/**
+ * @brief Changes the mode of a node.
+ *
+ * @param[in] loc The location of the node.
+ * @param[in] mode The new mode of the node
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_fchmod().
+ */
+typedef int (*rtems_filesystem_fchmod_t)(
+  const rtems_filesystem_location_info_t *loc,
+  mode_t mode
+);
+
+/**
+ * @brief Changes owner and group of a node.
+ *
+ * @param[in] loc The location of the node.
+ * @param[in] owner User ID for the node.
+ * @param[in] group Group ID for the node.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_chown().
+ */
+typedef int (*rtems_filesystem_chown_t)(
+  const rtems_filesystem_location_info_t *loc,
+  uid_t owner,
+  gid_t group
+);
+
+/**
+ * @brief Clones a location.
+ *
+ * The location is initialized with a bitwise copy of an existing location.
+ * The caller must ensure that this location is protected from a release during
+ * the clone operation.  After a successful clone operation the clone will be
+ * added to the location chain of the corresponding mount table entry.
+ *
+ * @param[in, out] loc Location to clone.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_clonenode().
+ */
+typedef int (*rtems_filesystem_clonenode_t)(
+  rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @brief Frees the location of a node.
+ *
+ * @param[in] loc The location of the node.
+ *
+ * @see rtems_filesystem_default_freenode().
+ */
+typedef void (*rtems_filesystem_freenode_t)(
+  const rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @brief Mounts a file system instance in a mount point (directory).
+ *
+ * The mount point belongs to the file system instance of the handler and is
+ * specified by a field of the mount table entry.  The handler must check that
+ * the mount point is capable of mounting a file system instance.  This is the
+ * last step during the mount process.  The file system instance is fully
+ * initialized at this point.
+ *
+ * @param[in] mt_entry The mount table entry.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_mount().
+ */
+typedef int (*rtems_filesystem_mount_t) (
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Initializes a file system instance.
+ *
+ * This function must initialize the file system root node in the mount table
+ * entry.
+ *
+ * @param[in] mt_entry The mount table entry.
+ * @param[in] data The data provided by the user.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ */
+typedef int (*rtems_filesystem_fsmount_me_t)(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void *data
+);
+
+/**
+ * @brief Unmounts a file system instance in a mount point (directory).
+ *
+ * In case this function is successful the file system instance will be marked
+ * as unmounted.  The file system instance will be destroyed when the last
+ * reference to it vanishes.
+ *
+ * @param[in] mt_entry The mount table entry.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_unmount().
+ */
+typedef int (*rtems_filesystem_unmount_t) (
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Destroys a file system instance.
+ *
+ * The mount point node location of the mount table entry is invalid.  This
+ * handler must free the file system root location and all remaining resources
+ * of the file system instance.
+ *
+ * @param[in] mt_entry The mount table entry.
+ *
+ * @see rtems_filesystem_default_fsunmount().
+ */
+typedef void (*rtems_filesystem_fsunmount_me_t)(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Tests if the node of one location is equal to the node of the other
+ * location.
+ *
+ * The caller ensures that both nodes are within the same file system instance.
+ *
+ * @param[in] a The one location.
+ * @param[in] b The other location.
+ *
+ * @retval true The nodes of the locations are equal.
+ * @retval false Otherwise.
+ *
+ * @see rtems_filesystem_default_are_nodes_equal().
+ */
+typedef bool (*rtems_filesystem_are_nodes_equal_t)(
+  const rtems_filesystem_location_info_t *a,
+  const rtems_filesystem_location_info_t *b
+);
+
+/**
+ * @brief Returns the node type.
+ *
+ * @param[in] loc The location of the node.
+ *
+ * @return Type of the node.
+ *
+ * @see rtems_filesystem_default_node_type().
+ */
+typedef rtems_filesystem_node_types_t (*rtems_filesystem_node_type_t)(
+  const rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @brief Creates a new node.
+ *
+ * This handler should create a new node according to the parameters.
+ *
+ * @param[in] parentloc The location of the parent of the new node.
+ * @param[in] name Name for the new node.
+ * @param[in] namelen Length of the name for the new node in characters.
+ * @param[in] mode Mode for the new node.
+ * @param[in] dev Optional device identifier for the new node.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_mknod().
+ */
+typedef int (*rtems_filesystem_mknod_t)(
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
+);
+
+/**
+ * @brief Removes a node.
+ *
+ * @param[in] parentloc The location of the parent of the node.
+ * @param[in] loc The location of the node.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_rmnod().
+ */
+typedef int (*rtems_filesystem_rmnod_t)(
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @brief Set node access and modification times.
+ *
+ * @param[in] loc The location of the node.
+ * @param[in] actime Access time for the node.
+ * @param[in] modtime Modification for the node.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_utime().
+ */
+typedef int (*rtems_filesystem_utime_t)(
+  const rtems_filesystem_location_info_t *loc,
+  time_t actime,
+  time_t modtime
+);
+
+/**
+ * @brief Makes a symbolic link to a node.
+ *
+ * @param[in] parentloc The location of the parent of the new symbolic link.
+ * @param[in] name Name for the new symbolic link.
+ * @param[in] namelen Length of the name for the new symbolic link in
+ * characters.
+ * @param[in] target Contents for the symbolic link.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_symlink().
+ */
+typedef int (*rtems_filesystem_symlink_t)(
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  const char *target
+);
+
+/**
+ * @brief Reads the contents of a symbolic link.
+ *
+ * @param[in] loc The location of the symbolic link.
+ * @param[out] buf The buffer for the contents.
+ * @param[in] bufsize The size of the buffer in characters.
+ *
+ * @retval non-negative Size of the actual contents in characters.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_readlink().
+ */
+typedef ssize_t (*rtems_filesystem_readlink_t)(
+  const rtems_filesystem_location_info_t *loc,
+  char *buf,
+  size_t bufsize
+);
+
+/**
+ * @brief Renames a node.
+ *
+ * @param[in] oldparentloc The location of the parent of the old node.
+ * @param[in] oldloc The location of the old node.
+ * @param[in] newparentloc The location of the parent of the new node.
+ * @param[in] name Name for the new node.
+ * @param[in] namelen Length of the name for the new node in characters.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_rename().
+ */
+typedef int (*rtems_filesystem_rename_t)(
+  const rtems_filesystem_location_info_t *oldparentloc,
+  const rtems_filesystem_location_info_t *oldloc,
+  const rtems_filesystem_location_info_t *newparentloc,
+  const char *name,
+  size_t namelen
+);
+
+/**
+ * @brief Gets file system information.
+ *
+ * @param[in] loc The location of a node.
+ * @param[out] buf Buffer for file system information.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_statvfs().
+ */
+typedef int (*rtems_filesystem_statvfs_t)(
+  const rtems_filesystem_location_info_t *loc,
+  struct statvfs *buf
+);
+
+/**
+ * @brief File system operations table.
+ */
+struct _rtems_filesystem_operations_table {
+  rtems_filesystem_mt_entry_lock_t lock_h;
+  rtems_filesystem_mt_entry_unlock_t unlock_h;
+  rtems_filesystem_eval_path_t eval_path_h;
+  rtems_filesystem_link_t link_h;
+  rtems_filesystem_are_nodes_equal_t are_nodes_equal_h;
+  rtems_filesystem_node_type_t node_type_h;
+  rtems_filesystem_mknod_t mknod_h;
+  rtems_filesystem_rmnod_t rmnod_h;
+  rtems_filesystem_fchmod_t fchmod_h;
+  rtems_filesystem_chown_t chown_h;
+  rtems_filesystem_clonenode_t clonenod_h;
+  rtems_filesystem_freenode_t freenod_h;
+  rtems_filesystem_mount_t mount_h;
+  rtems_filesystem_fsmount_me_t fsmount_me_h;
+  rtems_filesystem_unmount_t unmount_h;
+  rtems_filesystem_fsunmount_me_t fsunmount_me_h;
+  rtems_filesystem_utime_t utime_h;
+  rtems_filesystem_symlink_t symlink_h;
+  rtems_filesystem_readlink_t readlink_h;
+  rtems_filesystem_rename_t rename_h;
+  rtems_filesystem_statvfs_t statvfs_h;
+};
+
+/**
+ * @brief File system operations table with default operations.
+ */
+extern const rtems_filesystem_operations_table
+  rtems_filesystem_operations_default;
+
+/**
+ * @brief Obtains the IO library mutex.
+ *
+ * @see rtems_filesystem_mt_entry_lock_t.
+ */
+void rtems_filesystem_default_lock(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Releases the IO library mutex.
+ *
+ * @see rtems_filesystem_mt_entry_unlock_t.
+ */
+void rtems_filesystem_default_unlock(
+  rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+/**
+ * @brief Terminates the path evaluation and replaces the current location with
+ * the null location.
+ *
+ * @see rtems_filesystem_eval_path_t.
+ */
+void rtems_filesystem_default_eval_path(
+  rtems_filesystem_eval_path_context_t *ctx
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_link_t.
+ */
+int rtems_filesystem_default_link(
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *targetloc,
+  const char *name,
+  size_t namelen
+);
+
+/**
+ * @brief Tests if the node access pointer of one location is equal to
+ * the node access pointer of the other location.
+ *
+ * @param[in] a The one location.
+ * @param[in] b The other location.
+ *
+ * @retval true The node access pointers of the locations are equal.
+ * @retval false Otherwise.
+ *
+ * @see rtems_filesystem_are_nodes_equal_t.
+ */
+bool rtems_filesystem_default_are_nodes_equal(
+  const rtems_filesystem_location_info_t *a,
+  const rtems_filesystem_location_info_t *b
+);
+
+/**
+ * @retval RTEMS_FILESYSTEM_INVALID_NODE_TYPE Always.
+ *
+ * @see rtems_filesystem_node_type_t.
+ */
+rtems_filesystem_node_types_t rtems_filesystem_default_node_type(
+  const rtems_filesystem_location_info_t *pathloc
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_mknod_t.
+ */
+int rtems_filesystem_default_mknod(
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_rmnod_t.
+ */
+int rtems_filesystem_default_rmnod(
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_fchmod_t.
+ */
+int rtems_filesystem_default_fchmod(
+  const rtems_filesystem_location_info_t *loc,
+  mode_t mode
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_chown_t.
+ */
+int rtems_filesystem_default_chown(
+  const rtems_filesystem_location_info_t *loc,
+  uid_t owner,
+  gid_t group
+);
+
+/**
+ * @retval 0 Always.
+ *
+ * @see rtems_filesystem_clonenode_t.
+ */
+int rtems_filesystem_default_clonenode(
+  rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @see rtems_filesystem_freenode_t.
+ */
+void rtems_filesystem_default_freenode(
+  const rtems_filesystem_location_info_t *loc
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_mount_t.
+ */
+int rtems_filesystem_default_mount (
+   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_fsmount_me_t.
+ */
+int rtems_filesystem_default_fsmount(
+  rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
+  const void                           *data          /* IN */
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_unmount_t.
+ */
+int rtems_filesystem_default_unmount(
+  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_fsunmount_me_t.
+ */
+void rtems_filesystem_default_fsunmount(
+   rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_utime_t.
+ */
+int rtems_filesystem_default_utime(
+  const rtems_filesystem_location_info_t *loc,
+  time_t actime,
+  time_t modtime
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_symlink_t.
+ */
+int rtems_filesystem_default_symlink(
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  const char *target
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_readlink_t.
+ */
+ssize_t rtems_filesystem_default_readlink(
+  const rtems_filesystem_location_info_t *loc,
+  char *buf,
+  size_t bufsize
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_rename_t.
+ */
+int rtems_filesystem_default_rename(
+  const rtems_filesystem_location_info_t *oldparentloc,
+  const rtems_filesystem_location_info_t *oldloc,
+  const rtems_filesystem_location_info_t *newparentloc,
+  const char *name,
+  size_t namelen
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_statvfs_t.
+ */
+int rtems_filesystem_default_statvfs(
+  const rtems_filesystem_location_info_t *loc,
+  struct statvfs *buf
+);
+
+/** @} */
+
+/**
+ * @defgroup LibIOFSHandler File System Node Handler
+ *
+ * @ingroup LibIO
+ *
+ * @brief File system node handler.
  *
  * @{
  */
 
 /**
- *  This type defines the interface to the open(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Opens a node.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] path The path.
+ * @param[in] oflag The open flags.
+ * @param[in] mode Optional mode for node creation.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_open().
  */
 typedef int (*rtems_filesystem_open_t)(
   rtems_libio_t *iop,
-  const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 );
 
 /**
- *  This type defines the interface to the close(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Closes a node.
+ *
+ * @param[in, out] iop The IO pointer.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_close().
  */
 typedef int (*rtems_filesystem_close_t)(
   rtems_libio_t *iop
 );
 
 /**
- *  This type defines the interface to the read(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Reads from a node.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[out] buffer The buffer for read data.
+ * @param[in] count The size of the buffer in characters.
+ *
+ * @retval non-negative Count of read characters.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_read().
  */
 typedef ssize_t (*rtems_filesystem_read_t)(
   rtems_libio_t *iop,
@@ -99,8 +805,16 @@ typedef ssize_t (*rtems_filesystem_read_t)(
 );
 
 /**
- *  This type defines the interface to the write(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Writes to a node.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[out] buffer The buffer for write data.
+ * @param[in] count The size of the buffer in characters.
+ *
+ * @retval non-negative Count of written characters.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_write().
  */
 typedef ssize_t (*rtems_filesystem_write_t)(
   rtems_libio_t *iop,
@@ -109,259 +823,166 @@ typedef ssize_t (*rtems_filesystem_write_t)(
 );
 
 /**
- *  This type defines the interface to the ioctl(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief IO control of a node.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] request The IO control request.
+ * @param[in, out] buffer The buffer for IO control request data.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_ioctl().
  */
 typedef int (*rtems_filesystem_ioctl_t)(
   rtems_libio_t *iop,
-  uint32_t       command,
+  uint32_t       request,
   void          *buffer
 );
 
 /**
- *  This type defines the interface to the lseek(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Moves the read/write file offset.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] offset The new offset.
+ * @param[in] whence The reference position of the new offset.
+ *
+ * @retval non-negative The new offset from the beginning of the file.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_lseek().
  */
 typedef off_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
-  off_t          length,
+  off_t          offset,
   int            whence
 );
 
 /**
- *  This type defines the interface to the fstat(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Gets a node status.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[out] stat The buffer to status information.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_fstat().
  */
 typedef int (*rtems_filesystem_fstat_t)(
-  rtems_filesystem_location_info_t *loc,
-  struct stat                      *buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
 /**
- *  This type defines the interface to the fchmod(2) system call 
- *  support which is provided by a file system implementation.
- */
-typedef int (*rtems_filesystem_fchmod_t)(
-  rtems_filesystem_location_info_t *loc,
-  mode_t                            mode
-);
-
-/**
- *  This type defines the interface to the ftruncate(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Truncates a file to a specified length.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] length The new length in characters.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_ftruncate() and
+ * rtems_filesystem_default_ftruncate_directory().
  */
 typedef int (*rtems_filesystem_ftruncate_t)(
   rtems_libio_t *iop,
-  off_t          length
+  off_t length
 );
 
 /**
- *  This type defines the interface to the fsync(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Synchronizes changes to a file.
+ *
+ * @param[in, out] iop The IO pointer.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_fsync().
  */
 typedef int (*rtems_filesystem_fsync_t)(
   rtems_libio_t *iop
 );
 
 /**
- *  This type defines the interface to the fdatasync(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Synchronizes the data of a file.
+ *
+ * @param[in, out] iop The IO pointer.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The errno is set to indicate the error.
+ *
+ * @see rtems_filesystem_default_fdatasync().
  */
 typedef int (*rtems_filesystem_fdatasync_t)(
   rtems_libio_t *iop
 );
 
 /**
- *  This type defines the interface to the fnctl(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief File control.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] cmd Control command.
+ *
+ * @retval 0 Successful operation.
+ * @retval errno An error occured.  This value is assigned to errno.
+ *
+ * @see rtems_filesystem_default_fcntl().
  */
 typedef int (*rtems_filesystem_fcntl_t)(
-  int            cmd,
-  rtems_libio_t *iop
+  rtems_libio_t *iop,
+  int cmd
 );
-
-typedef int (*rtems_filesystem_rmnod_t)(
- rtems_filesystem_location_info_t      *parent_loc,   /* IN */
- rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
-/** @} */
 
 /**
  * @brief File system node operations table.
  */
 struct _rtems_filesystem_file_handlers_r {
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the open(2) system call 
-   *
-   *  @note This method must have a filesystem specific implementation.
-   *
-   *  @note There is no default implementation.
-   */
-  rtems_filesystem_open_t         open_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the close(2) system call 
-   *
-   *  @note This method is REQUIRED by all file systems.
-   *
-   *  @note There is no default implementation.
-   */
-  rtems_filesystem_close_t        close_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the read(2) system call 
-   *
-   *  @note This method must have a filesystem specific implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_read_t         read_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the write(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_write_t        write_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the ioctl(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_ioctl_t        ioctl_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the lseek(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_lseek_t        lseek_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the fstat(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_fstat_t        fstat_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the fchmod(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_fchmod_t       fchmod_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the ftruncate(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_ftruncate_t    ftruncate_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the fsync(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_fsync_t        fsync_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the fdatasync(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_fdatasync_t    fdatasync_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the fcntl(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_fcntl_t        fcntl_h;
-
-  /**
-   *  This field points to the file system specific implementation
-   *  of the support routine for the rmnod(2) system call 
-   *
-   *  @note This method may use a default implementation.
-   *
-   *  @note The default implementation returns -1 and sets
-   *  errno to ENOTSUP.
-   */
-  rtems_filesystem_rmnod_t        rmnod_h;
+  rtems_filesystem_open_t open_h;
+  rtems_filesystem_close_t close_h;
+  rtems_filesystem_read_t read_h;
+  rtems_filesystem_write_t write_h;
+  rtems_filesystem_ioctl_t ioctl_h;
+  rtems_filesystem_lseek_t lseek_h;
+  rtems_filesystem_fstat_t fstat_h;
+  rtems_filesystem_ftruncate_t ftruncate_h;
+  rtems_filesystem_fsync_t fsync_h;
+  rtems_filesystem_fdatasync_t fdatasync_h;
+  rtems_filesystem_fcntl_t fcntl_h;
 };
 
+/**
+ * @brief File system node handler table with default node handlers.
+ */
 extern const rtems_filesystem_file_handlers_r
-rtems_filesystem_handlers_default;
+  rtems_filesystem_handlers_default;
 
 /**
- *  This method defines the interface to the default open(2) 
- *  system call support which is provided by a file system 
- *  implementation.
+ * @retval 0 Always.
+ *
+ * @see rtems_filesystem_open_t.
  */
 int rtems_filesystem_default_open(
   rtems_libio_t *iop,
-  const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  const char    *path,
+  int            oflag,
+  mode_t         mode
 );
 
 /**
- *  This method defines the interface to the default close(2) 
- *  system call support which is provided by a file system 
- *  implementation.
+ * @retval 0 Always.
+ *
+ * @see rtems_filesystem_close_t.
  */
 int rtems_filesystem_default_close(
   rtems_libio_t *iop
 );
 
-
 /**
- *  This method defines the interface to the default read(2) 
- *  system call support which is provided by a file system 
- *  implementation.
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_read_t.
  */
 ssize_t rtems_filesystem_default_read(
   rtems_libio_t *iop,
@@ -370,8 +991,9 @@ ssize_t rtems_filesystem_default_read(
 );
 
 /**
- *  This method defines the interface to the default write(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_write_t.
  */
 ssize_t rtems_filesystem_default_write(
   rtems_libio_t *iop,
@@ -380,8 +1002,9 @@ ssize_t rtems_filesystem_default_write(
 );
 
 /**
- *  This method defines the interface to the default ioctl(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_ioctl_t.
  */
 int rtems_filesystem_default_ioctl(
   rtems_libio_t *iop,
@@ -390,8 +1013,9 @@ int rtems_filesystem_default_ioctl(
 );
 
 /**
- *  This method defines the interface to the default lseek(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_lseek_t.
  */
 off_t rtems_filesystem_default_lseek(
   rtems_libio_t *iop,
@@ -400,637 +1024,81 @@ off_t rtems_filesystem_default_lseek(
 );
 
 /**
- *  This method defines the interface to the default fstat(2) system call 
- *  support which is provided by a file system implementation.
+ * @brief Sets the mode to S_IRWXU | S_IRWXG | S_IRWXO.
+ *
+ * @retval 0 Always.
+ *
+ * @see rtems_filesystem_fstat_t.
  */
 int rtems_filesystem_default_fstat(
-  rtems_filesystem_location_info_t *loc,
-  struct stat                      *buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
 /**
- *  This method defines the interface to the default fchmod(2) system call 
- *  support which is provided by a file system implementation.
- */
-int rtems_filesystem_default_fchmod(
-  rtems_filesystem_location_info_t *loc,
-  mode_t                            mode
-);
-
-/**
- *  This method defines the interface to the default ftruncate(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_ftruncate_t.
  */
 int rtems_filesystem_default_ftruncate(
   rtems_libio_t *iop,
-  off_t          length
+  off_t length
 );
 
 /**
- *  This method defines the interface to the default fsync(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval -1 Always.  The errno is set to EISDIR.
+ *
+ * @see rtems_filesystem_ftruncate_t.
+ */
+int rtems_filesystem_default_ftruncate_directory(
+  rtems_libio_t *iop,
+  off_t length
+);
+
+/**
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_fsync_t.
  */
 int rtems_filesystem_default_fsync(
   rtems_libio_t *iop
 );
 
 /**
- *  This method defines the interface to the default fdatasync(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval -1 Always.  The errno is set to ENOTSUP.
+ *
+ * @see rtems_filesystem_fdatasync_t.
  */
 int rtems_filesystem_default_fdatasync(
   rtems_libio_t *iop
 );
 
 /**
- *  This method defines the interface to the default fnctl(2) system call 
- *  support which is provided by a file system implementation.
+ * @retval 0 Always.
+ *
+ * @see rtems_filesystem_fcntl_t.
  */
 int rtems_filesystem_default_fcntl(
-  int            cmd,
-  rtems_libio_t *iop
-);
-
-/**
- *  This method defines the interface to the default rmnod(2) system call 
- *  support which is provided by a file system implementation.
- */
-int rtems_filesystem_default_rmnod(
- rtems_filesystem_location_info_t      *parent_loc,   /* IN */
- rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
-/**
- * @name File System Operations
- *
- * @{
- */
-
-/**
- *  This type defines the interface to the mknod(2) system call 
- *  support which is provided by a file system implementation.
- *  
- *  @note This routine does not allocate any space and 
- *  rtems_filesystem_freenode_t is not called by the generic 
- *  after calling this routine. ie. node_access does not have 
- *  to contain valid data when the routine returns.
- */
-typedef int (*rtems_filesystem_mknod_t)(
-   const char                        *path,       /* IN */
-   mode_t                             mode,       /* IN */
-   dev_t                              dev,        /* IN */
-   rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
-);
-
-/**
- *  This type defines the interface that allows the  
- *  file system implementation to parse a path and 
- *  allocate any memory necessary for tracking purposes.
- *
- *  @note rtems_filesystem_freenode_t must be called by 
- *  the generic after calling this routine
- */
-typedef int (*rtems_filesystem_evalpath_t)(
-  const char                        *pathname,      /* IN     */
-  size_t                             pathnamelen,   /* IN     */
-  int                                flags,         /* IN     */
-  rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
-);
-
-/**
- *  This type defines the interface that allows the  
- *  file system implementation to parse a path with the
- *  intent of creating a new node and to  
- *  allocate any memory necessary for tracking purposes.
- *
- *  @note rtems_filesystem_freenode_t must be called by 
- *  the generic after calling this routine
- */
-typedef int (*rtems_filesystem_evalmake_t)(
-   const char                       *path,       /* IN */
-   rtems_filesystem_location_info_t *pathloc,    /* IN/OUT */
-   const char                      **name        /* OUT    */
-);
-
-/**
- *  This type defines the interface to the link(2) system call 
- *  support which is provided by a file system implementation.
- */  
-typedef int (*rtems_filesystem_link_t)(
-  rtems_filesystem_location_info_t  *to_loc,      /* IN */
-  rtems_filesystem_location_info_t  *parent_loc,  /* IN */
-  const char                        *name         /* IN */
-);
-
-/**
- *  This type defines the interface to the unlink(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_unlink_t)(
-  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
-  rtems_filesystem_location_info_t  *pathloc         /* IN */
-);
-
-/**
- *  This type defines the interface to the chown(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_chown_t)(
-  rtems_filesystem_location_info_t  *pathloc,       /* IN */
-  uid_t                              owner,         /* IN */
-  gid_t                              group          /* IN */
-);
-
-/**
- *  This type defines the interface to the freenod(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_freenode_t)(
- rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
-/**
- *  This type defines the interface that allows the implemented
- *  filesystem ot mount another filesystem at the given location.
- */ 
-typedef int (* rtems_filesystem_mount_t ) (
-   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
-);
-
-/**
- *  This type defines the interface that allows a file system 
- *  implementation to do any necessary work that is needed when
- *  it is being mounted.
- */  
-typedef int (* rtems_filesystem_fsmount_me_t )(
-  rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
-  const void                           *data          /* IN */
-);
-
-/**
- *  This type defines the interface allow the filesystem to
- *  unmount a filesystem that was mounted at one of its node
- *  locations.
- */ 
-typedef int (* rtems_filesystem_unmount_t ) (
-  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
-);
-
-/**
- *  This type defines the interface that allows a file system 
- *  implementation to do any necessary work that is needed when
- *  it is being unmounted.
- */ 
-typedef int (* rtems_filesystem_fsunmount_me_t ) (
-   rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
-);
-
-/**
- *  This type defines the interface that will return the 
- *  type of a filesystem implementations node.
- */ 
-typedef rtems_filesystem_node_types_t (* rtems_filesystem_node_type_t) (
-  rtems_filesystem_location_info_t    *pathloc      /* IN */
-);
-
-/**
- *  This type defines the interface to the time(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (* rtems_filesystem_utime_t)(
-  rtems_filesystem_location_info_t  *pathloc,       /* IN */
-  time_t                             actime,        /* IN */
-  time_t                             modtime        /* IN */
-);
-
-/**
- *  This type defines the interface to the link(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_evaluate_link_t)(
-  rtems_filesystem_location_info_t *pathloc,     /* IN/OUT */
-  int                               flags        /* IN     */
-);
-
-/**
- *  This type defines the interface to the symlink(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_symlink_t)(
- rtems_filesystem_location_info_t  *loc,         /* IN */
- const char                        *link_name,   /* IN */
- const char                        *node_name
-);
-
-/**
- *  This type defines the interface to the readlink(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef ssize_t (*rtems_filesystem_readlink_t)(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- char                              *buf,     /* OUT */
- size_t                             bufsize
-);
-
-/**
- *  This type defines the interface to the name(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_rename_t)(
- rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
- rtems_filesystem_location_info_t  *old_loc,         /* IN */
- rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */
- const char                        *name             /* IN */
-);
-
-/**
- *  This type defines the interface to the statvfs(2) system call 
- *  support which is provided by a file system implementation.
- */ 
-typedef int (*rtems_filesystem_statvfs_t)(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- struct statvfs                    *buf      /* OUT */
+  rtems_libio_t *iop,
+  int cmd
 );
 
 /** @} */
 
 /**
- * @brief File system operations table.
+ * @defgroup LibIO IO Library
+ *
+ * @brief Provides system call and file system interface definitions.
+ *
+ * General purpose communication channel for RTEMS to allow UNIX/POSIX
+ * system call behavior under RTEMS.  Initially this supported only
+ * IO to devices but has since been enhanced to support networking
+ * and support for mounted file systems.
+ *
+ * @{
  */
-struct _rtems_filesystem_operations_table {
 
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine that evaluates a character path and
-     *  returns the node assocated with the last node in the path. 
-     *
-     *  @note This method must have a filesystem specific implementation.
-     *
-     *  @note There is no default implementation.
-     */
-    rtems_filesystem_evalpath_t      evalpath_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine that evaluates a character path and
-     *  returns the node assocated with next to the last node in 
-     *  the path.  The last node will be the new node to be created.
-     *
-     *  @note This method must have a filesystem specific implementation.
-     *
-     *  @note There is no default implementation.
-     */
-    rtems_filesystem_evalmake_t      evalformake_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the link(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_link_t          link_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the unlink(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_unlink_t        unlink_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of a method that returns the node type of the given node. 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_node_type_t     node_type_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the link(2) system call 
-     *
-     *  @note This method may use a mknod implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_mknod_t         mknod_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the link(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_chown_t         chown_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the freenod(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_freenode_t      freenod_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the mount(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_mount_t         mount_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the fsmount(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_fsmount_me_t    fsmount_me_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the unmount(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_unmount_t       unmount_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the fsunmount(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_fsunmount_me_t  fsunmount_me_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the utime(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_utime_t         utime_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the eval_link(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_evaluate_link_t eval_link_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the sumlink(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_symlink_t       symlink_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the readlink(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_readlink_t      readlink_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the rename(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_rename_t        rename_h;
-
-    /**
-     *  This field points to the file system specific implementation
-     *  of the support routine for the statvfs(2) system call 
-     *
-     *  @note This method may use a default implementation.
-     *
-     *  @note The default implementation returns -1 and sets
-     *  errno to ENOTSUP.
-     */
-    rtems_filesystem_statvfs_t       statvfs_h;
-};
-
-extern const rtems_filesystem_operations_table
-rtems_filesystem_operations_default;
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of path evaluation.
- */
-int rtems_filesystem_default_evalpath(
-  const char *pathname,
-  size_t pathnamelen,
-  int flags,
-  rtems_filesystem_location_info_t *pathloc
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of path evaluation for make.
- */
-int rtems_filesystem_default_evalformake(
-   const char *path,
-   rtems_filesystem_location_info_t *pathloc,
-   const char **name
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a link command.
- */
-int rtems_filesystem_default_link(
- rtems_filesystem_location_info_t  *to_loc,      /* IN */
- rtems_filesystem_location_info_t  *parent_loc,  /* IN */
- const char                        *name         /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a unlink command.
- */
-int rtems_filesystem_default_unlink(
- rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
- rtems_filesystem_location_info_t  *pathloc         /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation to determine the node type.
- */
-rtems_filesystem_node_types_t rtems_filesystem_default_node_type(
-  rtems_filesystem_location_info_t *pathloc
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation to create a new node.
- */
-int rtems_filesystem_default_mknod(
-   const char                        *path,       /* IN */
-   mode_t                             mode,       /* IN */
-   dev_t                              dev,        /* IN */
-   rtems_filesystem_location_info_t  *pathloc     /* IN/OUT */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a chown command.
- */
-int rtems_filesystem_default_chown(
- rtems_filesystem_location_info_t  *pathloc,       /* IN */
- uid_t                              owner,         /* IN */
- gid_t                              group          /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a freenode command.
- */
-int rtems_filesystem_default_freenode(
- rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a mount command.
- */
-int rtems_filesystem_default_mount (
-   rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a fsmount command.
- */
-int rtems_filesystem_default_fsmount(
-  rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
-  const void                           *data          /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a unmount command.
- */
-int rtems_filesystem_default_unmount(
-  rtems_filesystem_mount_table_entry_t *mt_entry     /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a fsunmount command.
- */
-int rtems_filesystem_default_fsunmount(
-   rtems_filesystem_mount_table_entry_t *mt_entry    /* IN */
-);
-
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a utime command.
- */
-int rtems_filesystem_default_utime(
-  rtems_filesystem_location_info_t  *pathloc,       /* IN */
-  time_t                             actime,        /* IN */
-  time_t                             modtime        /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a link command.
- */
-int rtems_filesystem_default_evaluate_link(
-  rtems_filesystem_location_info_t *pathloc,     /* IN/OUT */
-  int                               flags        /* IN     */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a symlink command.
- */
-int rtems_filesystem_default_symlink(
- rtems_filesystem_location_info_t  *loc,         /* IN */
- const char                        *link_name,   /* IN */
- const char                        *node_name
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a readlink command.
- */
-ssize_t rtems_filesystem_default_readlink(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- char                              *buf,     /* OUT */
- size_t                             bufsize
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a rename command.
- */
-int rtems_filesystem_default_rename(
- rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
- rtems_filesystem_location_info_t  *old_loc,         /* IN */
- rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */
- const char                        *name             /* IN */
-);
-
-/**
- * @brief Provides a defualt routine for filesystem
- * implementation of a statvfs command.
- */
-int rtems_filesystem_default_statvfs(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- struct statvfs                    *buf      /* OUT */
-);
+typedef off_t rtems_off64_t __attribute__((deprecated));
 
 /**
  * @brief Gets the mount handler for the file system @a type.
@@ -1067,7 +1135,8 @@ typedef struct {
  *
  * Override in a filesystem.
  */
-extern const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf;
+extern const rtems_filesystem_limits_and_options_t
+  rtems_filesystem_default_pathconf;
 
 /**
  * @brief An open file data structure.
@@ -1194,12 +1263,22 @@ typedef off_t (*rtems_libio_lseek_t)(
  *  used to check permissions.  These are similar in style to the
  *  mode_t bits and should stay compatible with them.
  */
-#define RTEMS_LIBIO_PERMS_READ   S_IROTH
-#define RTEMS_LIBIO_PERMS_WRITE  S_IWOTH
-#define RTEMS_LIBIO_PERMS_RDWR   (S_IROTH|S_IWOTH)
-#define RTEMS_LIBIO_PERMS_EXEC   S_IXOTH
+#define RTEMS_LIBIO_PERMS_READ 0x4
+#define RTEMS_LIBIO_PERMS_WRITE 0x2
+#define RTEMS_LIBIO_PERMS_EXEC 0x1
 #define RTEMS_LIBIO_PERMS_SEARCH RTEMS_LIBIO_PERMS_EXEC
-#define RTEMS_LIBIO_PERMS_RWX    S_IRWXO
+#define RTEMS_LIBIO_PERMS_RDWR \
+  (RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE)
+#define RTEMS_LIBIO_PERMS_RWX \
+  (RTEMS_LIBIO_PERMS_RDWR | RTEMS_LIBIO_PERMS_EXEC)
+#define RTEMS_LIBIO_FOLLOW_HARD_LINK 0x8
+#define RTEMS_LIBIO_FOLLOW_SYM_LINK 0x10
+#define RTEMS_LIBIO_FOLLOW_LINK \
+  (RTEMS_LIBIO_FOLLOW_HARD_LINK | RTEMS_LIBIO_FOLLOW_SYM_LINK)
+#define RTEMS_LIBIO_MAKE 0x20
+#define RTEMS_LIBIO_EXCLUSIVE 0x40
+#define RTEMS_LIBIO_ACCEPT_RESIDUAL_DELIMITERS 0x80
+#define RTEMS_LIBIO_REJECT_TERMINAL_DOT 0x100
 
 /** @} */
 
@@ -1249,12 +1328,6 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
     (_major) = rtems_filesystem_dev_major_t ( _dev ); \
     (_minor) = rtems_filesystem_dev_minor_t( _dev ); \
   } while(0)
-
-/*
- * Verifies that the permission flag is valid.
- */
-#define rtems_libio_is_valid_perms( _perm )     \
- (((~RTEMS_LIBIO_PERMS_RWX) & _perm ) == 0)
 
 /*
  *  Prototypes for filesystem
@@ -1317,12 +1390,14 @@ extern int rtems_mkdir(const char *path, mode_t mode);
  * @brief Mount table entry.
  */
 struct rtems_filesystem_mount_table_entry_tt {
-  rtems_chain_node                       Node;
-  rtems_filesystem_location_info_t       mt_point_node;
-  rtems_filesystem_location_info_t       mt_fs_root;
-  int                                    options;
+  rtems_chain_node                       mt_node;
+  rtems_chain_control                    location_chain;
+  rtems_filesystem_global_location_t    *mt_point_node;
+  rtems_filesystem_global_location_t    *mt_fs_root;
+  bool                                   mounted;
+  bool                                   writeable;
   void                                  *fs_info;
-
+  const void                            *immutable_fs_info;
   rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
 
   /*
@@ -1368,6 +1443,8 @@ typedef struct rtems_filesystem_table_t {
  * Externally defined by confdefs.h or the user.
  */
 extern const rtems_filesystem_table_t rtems_filesystem_table [];
+
+extern rtems_chain_control rtems_filesystem_mount_table;
 
 /**
  * @brief Registers a file system @a type.
@@ -1498,60 +1575,46 @@ bool rtems_filesystem_iterate(
 );
 
 /**
- * @brief Per file system mount routine.
- *
- * @see rtems_filesystem_mount_iterate().
+ * @brief Mount table entry visitor.
  *
  * @retval true Stop the iteration.
  * @retval false Continue the iteration.
+ *
+ * @see rtems_filesystem_mount_iterate().
  */
-typedef bool (*rtems_per_filesystem_mount_routine)(
+typedef bool (*rtems_filesystem_mt_entry_visitor)(
   const rtems_filesystem_mount_table_entry_t *mt_entry,
   void *arg
 );
 
 /**
- * @brief Iterates over all file system mounts.
+ * @brief Iterates over all file system mount entries.
  *
- * For each file system mount the @a routine will be called with the entry and
- * the @a routine_arg parameter.
+ * The iteration is protected by the IO library mutex.  Do not mount or unmount
+ * file systems in the visitor function.
  *
- * Do not mount or unmount file systems in @a routine.
+ * @param[in] visitor For each file system mount entry the visitor function
+ * will be called with the entry and the visitor argument as parameters.
+ * @param[in] visitor_arg The second parameter for the visitor function.
  *
- * The iteration is protected by the IO library mutex.
- *
- * @retval true Iteration stopped due to @a routine return status.
+ * @retval true Iteration stopped due to visitor function return status.
  * @retval false Iteration through all entries.
  */
-bool
-rtems_filesystem_mount_iterate(
-  rtems_per_filesystem_mount_routine routine,
-  void *routine_arg
+bool rtems_filesystem_mount_iterate(
+  rtems_filesystem_mt_entry_visitor visitor,
+  void *visitor_arg
 );
 
-/**
- * @brief Boot time mount table entry.
- */
 typedef struct {
-  const char                              *type;
-  rtems_filesystem_options_t               fsoptions;
-  const char                              *device;
-  const char                              *mount_point;
-} rtems_filesystem_mount_table_t;
+  const char *source;
+  const char *target;
+  const char *filesystemtype;
+  rtems_filesystem_options_t options;
+  const void *data;
+} rtems_filesystem_mount_configuration;
 
-/**
- * @brief Boot time mount table.
- *
- * @todo Only the first entry will be evaluated.  Why do we need a table?
- */
-extern const rtems_filesystem_mount_table_t *rtems_filesystem_mount_table;
-
-/**
- * @brief Boot time mount table entry count.
- *
- * @todo Only the first entry will be evaluated.  Why do we need a table?
- */
-extern const int rtems_filesystem_mount_table_size;
+extern const rtems_filesystem_mount_configuration
+  rtems_filesystem_root_configuration;
 
 /** @} */
 

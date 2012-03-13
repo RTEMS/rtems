@@ -18,15 +18,13 @@
 int devFS_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  int            oflag,
+  mode_t         mode
 )
 {
   rtems_libio_open_close_args_t  args;
   rtems_status_code              status;
-  rtems_device_name_t           *np;
-
-  np         = (rtems_device_name_t *)iop->pathinfo.node_access;
+  const devFS_node *np = iop->pathinfo.node_access;
 
   args.iop   = iop;
   args.flags = iop->flags;

@@ -5,6 +5,9 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -13,43 +16,77 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems.h>
-
 #include <unistd.h>
-#include <errno.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int chroot(
-  const char *pathname
-)
+int chroot( const char *path )
 {
-  int                               result;
-  rtems_filesystem_location_info_t  loc;
+  int rv = 0;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_PERMS_SEARCH
+    | RTEMS_LIBIO_FOLLOW_LINK;
+  rtems_filesystem_location_info_t loc;
+  rtems_filesystem_global_location_t *new_current_loc;
 
-  /* an automatic call to new private env the first time */
-  if (rtems_current_user_env == &rtems_global_user_env) {
-   rtems_libio_set_private_env(); /* try to set a new private env*/
-   if (rtems_current_user_env == &rtems_global_user_env) /* not ok */
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
+  /*
+   * We use the global environment for path evaluation.  This makes it possible
+   * to escape from a chroot environment referencing an unmounted file system.
+   */
+  rtems_filesystem_eval_path_start_with_root_and_current(
+    &ctx,
+    path,
+    eval_flags,
+    &rtems_global_user_env.root_directory,
+    &rtems_global_user_env.current_directory
+  );
+
+  rtems_filesystem_eval_path_extract_currentloc( &ctx, &loc );
+  new_current_loc = rtems_filesystem_location_transform_to_global( &loc );
+  if ( !rtems_filesystem_global_location_is_null( new_current_loc ) ) {
+    rtems_filesystem_global_location_t *new_root_loc =
+      rtems_filesystem_global_location_obtain( &new_current_loc );
+    rtems_filesystem_node_types_t type =
+      (*new_root_loc->location.ops->node_type_h)( &new_root_loc->location );
+
+    if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
+      sc = rtems_libio_set_private_env();
+      if (sc == RTEMS_SUCCESSFUL) {
+        rtems_filesystem_global_location_assign(
+          &rtems_filesystem_root,
+          new_root_loc
+        );
+        rtems_filesystem_global_location_assign(
+          &rtems_filesystem_current,
+          new_current_loc
+        );
+      } else {
+        if (sc != RTEMS_UNSATISFIED) {
+          errno = ENOMEM;
+        }
+        rv = -1;
+      }
+    } else {
+      rtems_filesystem_location_error( &new_root_loc->location, ENOTDIR );
+      rv = -1;
+    }
+
+    if ( rv != 0 ) {
+      rtems_filesystem_global_location_release( new_root_loc );
+    }
+  } else {
+    rv = -1;
   }
 
-  result = chdir(pathname);
-  if (result) {
-    rtems_set_errno_and_return_minus_one( errno );
+  rtems_filesystem_eval_path_cleanup( &ctx );
+
+  if ( rv != 0 ) {
+    rtems_filesystem_global_location_release( new_current_loc );
   }
 
-  /* clone the new root location */
-  if (rtems_filesystem_evaluate_path(".", 1, 0, &loc, 0)) {
-    /* our cwd has changed, though - but there is no easy way of return :-( */
-    rtems_set_errno_and_return_minus_one( errno );
-  }
-  rtems_filesystem_freenode(&rtems_filesystem_root);
-  rtems_filesystem_root = loc;
-
-  return 0;
+  return rv;
 }

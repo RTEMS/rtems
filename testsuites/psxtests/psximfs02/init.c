@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <rtems/libio.h>
+#include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
 
 #if !HAVE_DECL_SETEUID
@@ -34,11 +35,14 @@ rtems_task Init(
 )
 {
   int status = 0;
-  void *alloc_ptr = (void *)0;
+  void *opaque;
   char linkname_n[20] = {0};
   char linkname_p[20] = {0};
   int i;
   struct stat stat_buf;
+  static const char mount_point [] = "dir01";
+  static const char fs_type [] = RTEMS_FILESYSTEM_TYPE_IMFS;
+  static const char slink_2_name [] = "node-slink-2";
 
   puts( "\n\n*** TEST IMFS 02 ***" );
 
@@ -92,26 +96,30 @@ rtems_task Init(
   rtems_test_assert( errno == EACCES );
 
   puts( "Allocate most of heap" );
-  alloc_ptr = malloc( malloc_free_space() - 150 );
+  opaque = rtems_heap_greedy_allocate(
+    sizeof( rtems_filesystem_mount_table_entry_t )
+      + sizeof( fs_type )
+      + sizeof( rtems_filesystem_global_location_t )
+  );
 
-  puts( "Attempt to mount a fs at /dir01 -- expect ENOMEM" );
+  printf( "Attempt to mount a fs at %s -- expect ENOMEM", mount_point );
   status = mount( NULL,
-		  "dir01",
-		  "imfs",
+		  mount_point,
+		  fs_type,
 		  RTEMS_FILESYSTEM_READ_WRITE,
 		  NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOMEM );
 
   puts( "Freeing allocated memory" );
-  free( alloc_ptr );
-
-  puts( "Allocate most of heap" );
-  alloc_ptr = malloc( malloc_free_space() - 4 );
+  rtems_heap_greedy_free( opaque );
 
   puts( "Changing directory to /" );
   status = chdir( "/" );
   rtems_test_assert( status == 0 );
+
+  puts( "Allocate most of heap" );
+  opaque = rtems_heap_greedy_allocate( 0 );
 
   puts( "Attempt to create /node-link-2 for /node -- expect ENOMEM" );
   status = link( "/node", "/node-link-2" );
@@ -124,23 +132,22 @@ rtems_task Init(
   rtems_test_assert( errno == ENOMEM );
 
   puts( "Freeing allocated memory" );
-  free( alloc_ptr );
+  rtems_heap_greedy_free( opaque );
 
   puts( "Allocate most of heap" );
-  alloc_ptr = malloc( malloc_free_space() - 40 );
+  opaque = rtems_heap_greedy_allocate( sizeof( slink_2_name ) );
 
-  puts( "Attempt to create /node-slink-2 for /node -- expect ENOMEM" );
-  status = symlink( "/node", "node-slink-2" );
+  printf( "Attempt to create %s for /node -- expect ENOMEM", slink_2_name );
+  status = symlink( "/node", slink_2_name );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOMEM );
 
   puts( "Freeing allocated memory" );
-  free( alloc_ptr );
+  rtems_heap_greedy_free( opaque );
 
-  puts( "Attempt to stat a hardlink -- expect ENOTSUP" );
+  puts( "Attempt to stat a hardlink" );
   status = lstat( "/node-link", &stat_buf );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOTSUP );
+  rtems_test_assert( status == 0 );
 
   puts( "Changing euid to 10" );
   status = seteuid( 10 );

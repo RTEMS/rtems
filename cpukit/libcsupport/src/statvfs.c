@@ -13,40 +13,27 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
-
 #include <sys/statvfs.h>
+#include <string.h>
 
-int
-statvfs (const char *path, struct statvfs *sb)
+#include <rtems/libio_.h>
+
+int statvfs( const char *path, struct statvfs *buf )
 {
-  rtems_filesystem_location_info_t      loc;
-  rtems_filesystem_location_info_t     *fs_mount_root;
-  rtems_filesystem_mount_table_entry_t *mt_entry;
-  int                                   result;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
-  /*
-   *  Get
-   *    The root node of the mounted filesytem.
-   *    The node for the directory that the fileystem is mounted on.
-   *    The mount entry that is being refered to.
-   */
+  memset( buf, 0, sizeof( *buf ) );
 
-  if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x0, &loc, true ) )
-    return -1;
+  rv = (*currentloc->ops->statvfs_h)( currentloc, buf );
 
-  mt_entry      = loc.mt_entry;
-  fs_mount_root = &mt_entry->mt_fs_root;
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  memset (sb, 0, sizeof (struct statvfs));
-
-  result = ( fs_mount_root->ops->statvfs_h )( fs_mount_root, sb );
-
-  rtems_filesystem_freenode( &loc );
-
-  return result;
+  return rv;
 }

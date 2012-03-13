@@ -12,22 +12,27 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/types.h>
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+
 #include <sys/stat.h>
 
 #include <rtems/libio_.h>
 
-mode_t umask(
-  mode_t cmask
-)
+mode_t umask( mode_t cmask )
 {
   mode_t old_mask;
 
-  old_mask               = rtems_filesystem_umask;
-  rtems_filesystem_umask = cmask;
+  /*
+   * We must use the same protection mechanism as in
+   * rtems_libio_set_private_env().
+   */
+  _Thread_Disable_dispatch();
+  old_mask = rtems_filesystem_umask;
+  rtems_filesystem_umask = cmask & (S_IRWXU | S_IRWXG | S_IRWXO);
+  _Thread_Enable_dispatch();
 
   return old_mask;
 }

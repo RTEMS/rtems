@@ -12,64 +12,74 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <stdio.h>
+#include <unistd.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-off_t lseek(
-  int     fd,
-  off_t   offset,
-  int     whence
-)
+off_t lseek( int fd, off_t offset, int whence )
 {
+  off_t rv = 0;
   rtems_libio_t *iop;
-  off_t          old_offset;
-  off_t          status;
+  off_t reference_offset;
+  off_t old_offset;
+  off_t new_offset;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
 
-  /*
-   *  Now process the lseek().
-   */
-
   old_offset = iop->offset;
   switch ( whence ) {
     case SEEK_SET:
-      iop->offset = offset;
+      reference_offset = 0;
       break;
-
     case SEEK_CUR:
-      iop->offset += offset;
+      reference_offset = old_offset;
       break;
-
     case SEEK_END:
-      iop->offset = iop->size + offset;
+      reference_offset = iop->size;
       break;
-
     default:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+      errno = EINVAL;
+      rv = (off_t) -1;
+      break;
+  }
+  new_offset = reference_offset + offset;
+
+  if ( rv == 0 ) {
+    if (
+      (reference_offset >= 0 && new_offset >= offset)
+        || (reference_offset < 0 && new_offset <= offset)
+    ) {
+      switch ( rtems_filesystem_node_type( &iop->pathinfo ) ) {
+        case RTEMS_FILESYSTEM_DIRECTORY:
+        case RTEMS_FILESYSTEM_MEMORY_FILE:
+          if ( new_offset < 0 ) {
+            errno = EINVAL;
+            rv = (off_t) -1;
+          }
+          break;
+        default:
+          break;
+      }
+
+      if ( rv == 0 ) {
+        iop->offset = new_offset;
+        rv = (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
+        if ( rv == (off_t) -1 ) {
+          iop->offset = old_offset;
+        }
+      }
+    } else {
+      errno = EOVERFLOW;
+      rv = (off_t) -1;
+    }
   }
 
-  /*
-   *  At this time, handlers assume iop->offset has the desired
-   *  new offset.
-   */
-
-  status = (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
-  if ( status == (off_t) -1 )
-    iop->offset = old_offset;
-
-  /*
-   *  So if the operation failed, we have to restore iop->offset.
-   */
-
-  return status;
+  return rv;
 }
 
 /*

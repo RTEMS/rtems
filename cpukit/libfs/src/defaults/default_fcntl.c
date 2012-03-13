@@ -14,8 +14,8 @@
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_fcntl(
-  int            cmd,
-  rtems_libio_t *iop
+  rtems_libio_t *iop,
+  int cmd
 )
 {
   return 0;

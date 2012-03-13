@@ -12,21 +12,12 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
-
-#include <sys/types.h>         /* for mkdir */
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 #include "imfs.h"
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-#if defined(IMFS_DEBUG)
-#include <stdio.h>
-#endif
+#include <stdlib.h>
 
 /*
  *  IMFS_determine_bytes_per_block
@@ -66,8 +57,7 @@ static int IMFS_determine_bytes_per_block(
 int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t        *temp_mt_entry,
    const rtems_filesystem_operations_table    *op_table,
-   const rtems_filesystem_file_handlers_r     *memfile_handlers,
-   const rtems_filesystem_file_handlers_r     *directory_handlers,
+   const rtems_filesystem_file_handlers_r     *link_handlers,
    const rtems_filesystem_file_handlers_r     *fifo_handlers
 )
 {
@@ -87,9 +77,9 @@ int IMFS_initialize_support(
    *
    *  NOTE: UNIX root is 755 and owned by root/root (0/0).
    */
-  temp_mt_entry->mt_fs_root.node_access      = IMFS_create_root_node();
-  temp_mt_entry->mt_fs_root.handlers         = directory_handlers;
-  temp_mt_entry->mt_fs_root.ops              = op_table;
+  temp_mt_entry->mt_fs_root->location.node_access = IMFS_create_root_node();
+  temp_mt_entry->mt_fs_root->location.handlers = &IMFS_directory_handlers;
+  temp_mt_entry->mt_fs_root->location.ops = op_table;
   temp_mt_entry->pathconf_limits_and_options = IMFS_LIMITS_AND_OPTIONS;
 
   /*
@@ -97,7 +87,7 @@ int IMFS_initialize_support(
    */
   fs_info = calloc( 1, sizeof( IMFS_fs_info_t ) );
   if ( !fs_info ) {
-    free(temp_mt_entry->mt_fs_root.node_access);
+    free(temp_mt_entry->mt_fs_root->location.node_access);
     rtems_set_errno_and_return_minus_one(ENOMEM);
   }
   temp_mt_entry->fs_info = fs_info;
@@ -108,11 +98,10 @@ int IMFS_initialize_support(
 
   fs_info->instance              = imfs_instance++;
   fs_info->ino_count             = 1;
-  fs_info->memfile_handlers      = memfile_handlers;
-  fs_info->directory_handlers    = directory_handlers;
+  fs_info->link_handlers         = link_handlers;
   fs_info->fifo_handlers         = fifo_handlers;
 
-  jnode = temp_mt_entry->mt_fs_root.node_access;
+  jnode = temp_mt_entry->mt_fs_root->location.node_access;
   jnode->st_ino = fs_info->ino_count;
 
   return 0;

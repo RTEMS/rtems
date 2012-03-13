@@ -4,6 +4,9 @@
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -12,185 +15,135 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <stdarg.h>
+#include <sys/stat.h>
 #include <fcntl.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
-
+#include <stdarg.h>
 #include <unistd.h>
 
-/*
- *  Returns file descriptor on success or -1 and errno set to one of the
- *  following:
- *
- *    EACCESS  - Seach permission is denied on a component of the path prefix,
- *               or the file exists and the permissions specified by the
- *               flags are denied, or the file does not exist and write
- *               permission is denied for the parent directory of the file
- *               to be created, or O_TRUNC is specified and write permission
- *               is denied.
- *    EEXIST   - O_CREAT and O_EXCL are set and the named file exists.
- *    EINTR    - The open( operation was interrupted by a signal.
- *    EINVAL   - This implementation does not support synchronized IO for this
- *               file.
- *    EISDIR   - The named file is a directory and the flags argument
- *               specified write or read/write access.
- *    EMFILE   - Too many file descriptors are in used by this process.
- *    ENAMETOOLONG -
- *               The length of the path exceeds PATH_MAX or a pathname
- *               component is longer than NAME_MAX while POSIX_NO_TRUNC
- *               is in effect.
- *    ENFILE   - Too many files are open in the system.
- *    ENOENT   - O_CREAT is not set and and the anmed file does not exist,
- *               or O_CREAT is set and either the path prefix does not exist
- *               or the path argument points to an empty string.
- *    ENOSPC   - The directory or file system that would contain the new file
- *               cannot be extended.
- *    ENOTDIR  - A component of the path prefix is not a directory.
- *    ENXIO    - O_NONBLOCK is set, the named file is a FIFO, O_WRONLY is
- *               set, and no process has the file open for reading.
- *    EROFS    - The named file resides on a read-only file system and either
- *               O_WRONLY, O_RDWR, O_CREAT (if the file does not exist), or
- *               O_TRUNC is set in the flags argument.
- */
+#include <rtems/libio_.h>
 
-int open(
-  const char   *pathname,
-  int           flags,
-  ...
+static void create_regular_file(
+  rtems_filesystem_eval_path_context_t *ctx,
+  mode_t mode
 )
 {
-  va_list                             ap;
-  mode_t                              mode;
-  int                                 rc;
-  rtems_libio_t                      *iop = 0;
-  int                                 status;
-  rtems_filesystem_location_info_t    loc;
-  rtems_filesystem_location_info_t   *loc_to_free = NULL;
-  int                                 eval_flags;
+  int rv = 0;
+  const rtems_filesystem_location_info_t *currentloc = 
+    rtems_filesystem_eval_path_get_currentloc( ctx );
+  const char *token = rtems_filesystem_eval_path_get_token( ctx );
+  size_t tokenlen = rtems_filesystem_eval_path_get_tokenlen( ctx );
 
-  /*
-   * Set the Evaluation flags
-   */
-  eval_flags = 0;
-  status = flags + 1;
-  if ( ( status & _FREAD ) == _FREAD )
-    eval_flags |= RTEMS_LIBIO_PERMS_READ;
-  if ( ( status & _FWRITE ) == _FWRITE )
-    eval_flags |= RTEMS_LIBIO_PERMS_WRITE;
+  rv = rtems_filesystem_mknod(
+    currentloc,
+    token,
+    tokenlen,
+    S_IFREG | mode,
+    0
+  );
 
-  va_start(ap, flags);
+  if ( rv == 0 ) {
+    /* The mode only applies to future accesses of the newly created file */
+    rtems_filesystem_eval_path_set_flags( ctx, 0 );
+
+    rtems_filesystem_eval_path_set_path( ctx, token, tokenlen );
+    rtems_filesystem_eval_path_continue( ctx );
+  } else {
+    rtems_filesystem_eval_path_error( ctx, 0 );
+  }
+}
+
+static int do_open(
+  rtems_libio_t *iop,
+  const char *path,
+  int oflag,
+  mode_t mode
+)
+{
+  int rv = 0;
+  int fd = iop - rtems_libio_iops;
+  int rwflag = oflag + 1;
+  bool read_access = (rwflag & _FREAD) == _FREAD;
+  bool write_access = (rwflag & _FWRITE) == _FWRITE;
+  bool make = (oflag & O_CREAT) == O_CREAT;
+  bool exclusive = (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL);
+  bool truncate = (oflag & O_TRUNC) == O_TRUNC;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK
+    | (read_access ? RTEMS_LIBIO_PERMS_READ : 0)
+    | (write_access ? RTEMS_LIBIO_PERMS_WRITE : 0)
+    | (make ? RTEMS_LIBIO_MAKE : 0)
+    | (exclusive ?  RTEMS_LIBIO_EXCLUSIVE : 0);
+  rtems_filesystem_eval_path_context_t ctx;
+
+  rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+
+  if ( rtems_filesystem_eval_path_has_token( &ctx ) ) {
+    create_regular_file( &ctx, mode );
+  }
+
+  if ( write_access ) {
+    const rtems_filesystem_location_info_t *currentloc =
+      rtems_filesystem_eval_path_get_currentloc( &ctx );
+    rtems_filesystem_node_types_t type =
+      (*currentloc->ops->node_type_h)( currentloc );
+
+    if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
+      rtems_filesystem_eval_path_error( &ctx, EISDIR );
+    }
+  }
+
+  iop->flags |= rtems_libio_fcntl_flags( oflag );
+  rtems_filesystem_eval_path_extract_currentloc( &ctx, &iop->pathinfo );
+  rtems_filesystem_eval_path_cleanup( &ctx );
+
+  rv = (*iop->pathinfo.handlers->open_h)( iop, path, oflag, mode );
+
+  if ( rv == 0 ) {
+    if ( truncate ) {
+      rv = ftruncate( fd, 0 );
+      if ( rv != 0 ) {
+        (*iop->pathinfo.handlers->close_h)( iop );
+      }
+    }
+
+    if ( rv == 0 ) {
+      rv = fd;
+    } else {
+      rv = -1;
+    }
+  }
+
+  if ( rv < 0 ) {
+    rtems_libio_free( iop );
+  }
+
+  return rv;
+}
+
+int open( const char *path, int oflag, ... )
+{
+  int rv = 0;
+  va_list ap;
+  mode_t mode = 0;
+  rtems_libio_t *iop = NULL;
+
+  va_start( ap, oflag );
 
   mode = va_arg( ap, mode_t );
 
-  /*
-   * NOTE: This comment is OBSOLETE.  The proper way to do this now
-   *       would be to support a magic mounted file system.
-   *
-   *             Additional external I/O handlers would be supported by adding
-   *             code to pick apart the pathname appropriately. The networking
-   *             code does not require changes here since network file
-   *             descriptors are obtained using socket(), not open().
-   */
-
-  /* allocate a file control block */
   iop = rtems_libio_allocate();
-  if ( iop == 0 ) {
-    rc = ENFILE;
-    goto done;
+  if ( iop != NULL ) {
+    rv = do_open( iop, path, oflag, mode );
+  } else {
+    errno = ENFILE;
+    rv = -1;
   }
 
-  /*
-   *  See if the file exists.
-   */
-  status = rtems_filesystem_evaluate_path(
-    pathname, strlen( pathname ), eval_flags, &loc, true );
+  va_end( ap );
 
-  if ( status == -1 ) {
-    if ( errno != ENOENT ) {
-      rc = errno;
-      goto done;
-    }
-
-    /* If the file does not exist and we are not trying to create it--> error */
-    if ( !(flags & O_CREAT) ) {
-      rc = ENOENT;
-      goto done;
-    }
-
-    /* Create the node for the new regular file */
-    rc = mknod( pathname, S_IFREG | mode, 0LL );
-    if ( rc ) {
-      rc = errno;
-      goto done;
-    }
-
-    /*
-     * After we do the mknod(), we have to evaluate the path to get the
-     * "loc" structure needed to actually have the file itself open.
-     * So we created it, and then we need to have "look it up."
-     */
-    status = rtems_filesystem_evaluate_path(
-      pathname, strlen( pathname ), 0x0, &loc, true );
-    if ( status != 0 ) {   /* The file did not exist */
-      rc = EACCES;
-      goto done;
-    }
-
-  } else if ((flags & (O_EXCL|O_CREAT)) == (O_EXCL|O_CREAT)) {
-    /* We were trying to create a file that already exists */
-    rc = EEXIST;
-    loc_to_free = &loc;
-    goto done;
-  }
-
-  loc_to_free = &loc;
-
-  /*
-   *  Fill in the file control block based on the loc structure
-   *  returned by successful path evaluation.
-   */
-  iop->flags     |= rtems_libio_fcntl_flags( flags );
-  iop->pathinfo   = loc;
-
-  rc = (*iop->pathinfo.handlers->open_h)( iop, pathname, flags, mode );
-  if ( rc ) {
-    rc = errno;
-    goto done;
-  }
-
-  /*
-   *  Optionally truncate the file.
-   */
-  if ( (flags & O_TRUNC) == O_TRUNC ) {
-    rc = ftruncate( iop - rtems_libio_iops, 0 );
-    if ( rc ) {
-      if(errno) rc = errno;
-      close( iop - rtems_libio_iops );
-      /* those are released by close(): */
-      iop = 0;
-      loc_to_free = NULL;
-    }
-  }
-
-  /*
-   *  Single exit and clean up path.
-   */
-done:
-  va_end(ap);
-
-  if ( rc ) {
-    if ( iop )
-      rtems_libio_free( iop );
-    if ( loc_to_free )
-      rtems_filesystem_freenode( loc_to_free );
-    rtems_set_errno_and_return_minus_one( rc );
-  }
-
-  return iop - rtems_libio_iops;
+  return rv;
 }
 
 /*
@@ -206,10 +159,10 @@ done:
 int _open_r(
   struct _reent *ptr __attribute__((unused)),
   const char    *buf,
-  int            flags,
+  int            oflag,
   int            mode
 )
 {
-  return open( buf, flags, mode );
+  return open( buf, oflag, mode );
 }
 #endif

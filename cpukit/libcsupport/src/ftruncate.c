@@ -12,39 +12,30 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
 #include <unistd.h>
-#include <errno.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int ftruncate(
-  int     fd,
-  off_t   length
-)
+int ftruncate( int fd, off_t length )
 {
-  rtems_libio_t                    *iop;
-  rtems_filesystem_location_info_t  loc;
+  int rv = 0;
 
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open(iop);
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
+  if ( length >= 0 ) {
+    rtems_libio_t *iop;
 
-  /*
-   *  Now process the ftruncate() request.
-   */
+    rtems_libio_check_fd( fd );
+    iop = rtems_libio_iop( fd );
+    rtems_libio_check_is_open( iop );
+    rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
-  /*
-   *  Make sure we are not working on a directory
-   */
+    rv = (*iop->pathinfo.handlers->ftruncate_h)( iop, length );
+  } else {
+    errno = EINVAL;
+    rv = -1;
+  }
 
-  loc = iop->pathinfo;
-  if ( (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
-    rtems_set_errno_and_return_minus_one( EISDIR );
-
-  return (*iop->pathinfo.handlers->ftruncate_h)( iop, length );
+  return rv;
 }

@@ -12,21 +12,14 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <string.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <unistd.h>   /* for close */
-#include <inttypes.h>
-
-#include <stdio.h>
-#include <sys/stat.h>
-
 #include "imfs.h"
-#include <rtems/libio_.h>
+
+#include <inttypes.h>
+#include <unistd.h>
+#include <stdio.h>
 
 /*
  *  IMFS_print_jnode
@@ -142,7 +135,7 @@ void IMFS_dump( void )
 {
   fprintf(stdout, "*************** Dump of Entire IMFS ***************\n" );
   fprintf(stdout, "/\n" );
-  IMFS_dump_directory( rtems_filesystem_root.node_access, 0 );
+  IMFS_dump_directory( rtems_filesystem_root->location.node_access, 0 );
   fprintf(stdout, "***************      End of Dump       ***************\n" );
 }
 

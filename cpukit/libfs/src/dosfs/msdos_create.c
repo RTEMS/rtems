@@ -55,12 +55,12 @@
  *
  */
 int
-msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
-                 msdos_node_type_t                  type,
-                 const char                        *name,
-                 int                                name_len,
-                 mode_t                             mode,
-                 const fat_file_fd_t               *link_fd)
+msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
+                 msdos_node_type_t                        type,
+                 const char                              *name,
+                 int                                      name_len,
+                 mode_t                                   mode,
+                 const fat_file_fd_t                     *link_fd)
 {
     int               rc = RC_OK;
     ssize_t           ret = 0;
@@ -83,9 +83,16 @@ msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
     memset(short_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
     memset(dot_dotdot, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2);
 
+    if (name_len > MSDOS_NAME_MAX_LFN_WITH_DOT) {
+        rtems_set_errno_and_return_minus_one(ENAMETOOLONG);
+    }
+
     name_type = msdos_long_to_short (name, name_len,
                                      MSDOS_DIR_NAME(short_node),
                                      MSDOS_NAME_MAX);
+    if (name_type == MSDOS_NAME_INVALID) {
+        rtems_set_errno_and_return_minus_one(EINVAL);
+    }
 
     /* fill reserved field */
     *MSDOS_DIR_NT_RES(short_node) = MSDOS_RES_NT_VALUE;

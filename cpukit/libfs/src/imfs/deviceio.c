@@ -15,14 +15,12 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <rtems/devfs.h>
-
 #include "imfs.h"
+
+#include <rtems/devfs.h>
 
 /*
  *  device_open
@@ -33,8 +31,8 @@
 int device_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  int            oflag,
+  mode_t         mode
 )
 {
   rtems_libio_open_close_args_t  args;

@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2010, 2011
+ * Copyright (c) 2009-2012
  * embedded brains GmbH
  * Obere Lagerstr. 30
  * D-82178 Puchheim
@@ -54,7 +54,7 @@
 #include <rtems.h>
 #include <rtems/ftpfs.h>
 #include <rtems/imfs.h>
-#include <rtems/libio.h>
+#include <rtems/libio_.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/seterr.h>
 
@@ -939,8 +939,8 @@ static int rtems_ftpfs_open_data_connection_passive(
 static int rtems_ftpfs_open(
   rtems_libio_t *iop,
   const char *path,
-  uint32_t flags,
-  uint32_t mode
+  int oflag,
+  mode_t mode
 )
 {
   int eno = 0;
@@ -962,11 +962,6 @@ static int rtems_ftpfs_open(
   /* Invalidate data handle */
   iop->data1 = NULL;
 
-  /* Check location, it was allocated during path evaluation */
-  if (location == NULL) {
-    rtems_set_errno_and_return_minus_one(ENOMEM);
-  }
-
   /* Split location into parts */
   ok = rtems_ftpfs_split_names(
       location,
@@ -976,17 +971,7 @@ static int rtems_ftpfs_open(
       &filename
   );
   if (!ok) {
-    if (strlen(location) == 0) {
-      /*
-       * This is an access to the root node that will be used for file system
-       * option settings.
-       */
-      iop->pathinfo.handlers = &rtems_ftpfs_root_handlers;
-
-      return 0;
-    } else {
-      rtems_set_errno_and_return_minus_one(ENOENT);
-    }
+    rtems_set_errno_and_return_minus_one(ENOENT);
   }
   DEBUG_PRINTF(
     "user = '%s', password = '%s', filename = '%s'\n",
@@ -1154,39 +1139,40 @@ static int rtems_ftpfs_ftruncate(rtems_libio_t *iop, off_t count)
   return 0;
 }
 
-static int rtems_ftpfs_eval_path(
-  const char *pathname,
-  size_t pathnamelen,
-  int flags,
-  rtems_filesystem_location_info_t *pathloc
+static void rtems_ftpfs_eval_path(
+  rtems_filesystem_eval_path_context_t *self
 )
 {
-  /*
-   * The caller of this routine has striped off the mount prefix from the path.
-   * We need to store this path here or otherwise we would have to do this job
-   * again.  The path is used in rtems_ftpfs_open() via iop->pathinfo.node_access.
-   */
-  char *pathname_dup = malloc(pathnamelen + 1);
+  rtems_filesystem_eval_path_eat_delimiter(self);
 
-  if (pathname_dup != NULL) {
-    memcpy(pathname_dup, pathname, pathnamelen);
-    pathname_dup [pathnamelen] = '\0';
+  if (rtems_filesystem_eval_path_has_path(self)) {
+    const char *path = rtems_filesystem_eval_path_get_path(self);
+    size_t pathlen = rtems_filesystem_eval_path_get_pathlen(self);
+    char *pathdup = malloc(pathlen + 1);
+
+    rtems_filesystem_eval_path_clear_path(self);
+
+    if (pathdup != NULL) {
+      rtems_filesystem_location_info_t *currentloc =
+        rtems_filesystem_eval_path_get_currentloc(self);
+
+      memcpy(pathdup, path, pathlen);
+      pathdup [pathlen] = '\0';
+      currentloc->node_access = pathdup;
+      currentloc->handlers = &rtems_ftpfs_handlers;
+    } else {
+      rtems_filesystem_eval_path_error(self, ENOMEM);
+    }
   }
-
-  pathloc->node_access = pathname_dup;
-
-  return 0;
 }
 
-static int rtems_ftpfs_free_node(rtems_filesystem_location_info_t *pathloc)
+static void rtems_ftpfs_free_node(const rtems_filesystem_location_info_t *loc)
 {
-  free(pathloc->node_access);
-
-  return 0;
+  free(loc->node_access);
 }
 
 static rtems_filesystem_node_types_t rtems_ftpfs_node_type(
-  rtems_filesystem_location_info_t *pathloc
+  const rtems_filesystem_location_info_t *loc
 )
 {
   return RTEMS_FILESYSTEM_MEMORY_FILE;
@@ -1209,11 +1195,11 @@ int rtems_ftpfs_initialize(
   me->timeout.tv_usec = 0;
 
   /* Set handler and oparations table */
-  e->mt_fs_root.handlers = &rtems_ftpfs_handlers;
-  e->mt_fs_root.ops = &rtems_ftpfs_ops;
+  e->mt_fs_root->location.handlers = &rtems_ftpfs_root_handlers;
+  e->mt_fs_root->location.ops = &rtems_ftpfs_ops;
 
   /* We maintain no real file system nodes, so there is no real root */
-  e->mt_fs_root.node_access = NULL;
+  e->mt_fs_root->location.node_access = NULL;
 
   /* Just use the limits from IMFS */
   e->pathconf_limits_and_options = IMFS_LIMITS_AND_OPTIONS;
@@ -1221,13 +1207,11 @@ int rtems_ftpfs_initialize(
   return 0;
 }
 
-static int rtems_ftpfs_unmount_me(
+static void rtems_ftpfs_unmount_me(
   rtems_filesystem_mount_table_entry_t *e
 )
 {
   free(e->fs_info);
-
-  return 0;
 }
 
 static int rtems_ftpfs_ioctl(
@@ -1271,13 +1255,11 @@ static int rtems_ftpfs_ioctl(
  * a remote to remote copy.  This is not a very sophisticated method.
  */
 static int rtems_ftpfs_fstat(
-  rtems_filesystem_location_info_t *loc,
+  const rtems_filesystem_location_info_t *loc,
   struct stat *st
 )
 {
   static unsigned ino = 0;
-
-  memset(st, 0, sizeof(*st));
 
   /* FIXME */
   st->st_ino = ++ino;
@@ -1289,22 +1271,27 @@ static int rtems_ftpfs_fstat(
 }
 
 static const rtems_filesystem_operations_table rtems_ftpfs_ops = {
-  .evalpath_h = rtems_ftpfs_eval_path,
-  .evalformake_h = rtems_filesystem_default_evalformake,
+  .lock_h = rtems_filesystem_default_lock,
+  .unlock_h = rtems_filesystem_default_unlock,
+  .eval_path_h = rtems_ftpfs_eval_path,
   .link_h = rtems_filesystem_default_link,
-  .unlink_h = rtems_filesystem_default_unlink,
+  .are_nodes_equal_h = rtems_filesystem_default_are_nodes_equal,
   .node_type_h = rtems_ftpfs_node_type,
   .mknod_h = rtems_filesystem_default_mknod,
+  .rmnod_h = rtems_filesystem_default_rmnod,
+  .fchmod_h = rtems_filesystem_default_fchmod,
   .chown_h = rtems_filesystem_default_chown,
+  .clonenod_h = rtems_filesystem_default_clonenode,
   .freenod_h = rtems_ftpfs_free_node,
   .mount_h = rtems_filesystem_default_mount,
   .fsmount_me_h = rtems_ftpfs_initialize,
   .unmount_h = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_ftpfs_unmount_me,
   .utime_h = rtems_filesystem_default_utime,
-  .eval_link_h = rtems_filesystem_default_evaluate_link,
   .symlink_h = rtems_filesystem_default_symlink,
-  .readlink_h = rtems_filesystem_default_readlink
+  .readlink_h = rtems_filesystem_default_readlink,
+  .rename_h = rtems_filesystem_default_rename,
+  .statvfs_h = rtems_filesystem_default_statvfs
 };
 
 static const rtems_filesystem_file_handlers_r rtems_ftpfs_handlers = {
@@ -1315,12 +1302,10 @@ static const rtems_filesystem_file_handlers_r rtems_ftpfs_handlers = {
   .ioctl_h = rtems_filesystem_default_ioctl,
   .lseek_h = rtems_filesystem_default_lseek,
   .fstat_h = rtems_ftpfs_fstat,
-  .fchmod_h = rtems_filesystem_default_fchmod,
   .ftruncate_h = rtems_ftpfs_ftruncate,
   .fsync_h = rtems_filesystem_default_fsync,
   .fdatasync_h = rtems_filesystem_default_fdatasync,
-  .fcntl_h = rtems_filesystem_default_fcntl,
-  .rmnod_h = rtems_filesystem_default_rmnod
+  .fcntl_h = rtems_filesystem_default_fcntl
 };
 
 static const rtems_filesystem_file_handlers_r rtems_ftpfs_root_handlers = {
@@ -1331,10 +1316,8 @@ static const rtems_filesystem_file_handlers_r rtems_ftpfs_root_handlers = {
   .ioctl_h = rtems_ftpfs_ioctl,
   .lseek_h = rtems_filesystem_default_lseek,
   .fstat_h = rtems_filesystem_default_fstat,
-  .fchmod_h = rtems_filesystem_default_fchmod,
   .ftruncate_h = rtems_filesystem_default_ftruncate,
   .fsync_h = rtems_filesystem_default_fsync,
   .fdatasync_h = rtems_filesystem_default_fdatasync,
-  .fcntl_h = rtems_filesystem_default_fcntl,
-  .rmnod_h = rtems_filesystem_default_rmnod
+  .fcntl_h = rtems_filesystem_default_fcntl
 };

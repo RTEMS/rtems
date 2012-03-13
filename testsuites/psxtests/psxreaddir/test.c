@@ -230,6 +230,8 @@ int main(
 )
 #endif
 {
+  static const char *my_file = "/b/my_file";
+
   int fd;
   int i;
   int status;
@@ -277,14 +279,14 @@ int main(
   d_not = readdir( directory_not );
   rtems_test_assert( d_not == 0 );
 
-  printf("open /b/myfile\n");
-  fd = open ("/b/my_file", O_CREAT, S_IRWXU);
+  printf("open %s\n", my_file);
+  fd = open (my_file, O_CREAT, S_IRWXU);
   rtems_test_assert( fd != -1 );
   close (fd);
 
   printf("scandir a file status: ");
   status = scandir(
-     "/b/my_file",
+     my_file,
      &namelist,
      select1,
      NULL
@@ -303,13 +305,13 @@ int main(
   status = fcntl( fd, F_GETFD, 1 );
   rtems_test_assert( status == 1 );
 
-#if 0
-  printf("fcntl F_DUPFD should return 0\n");
+  printf("fcntl F_DUPFD should return a file descriptor\n");
   status = fcntl( fd, F_DUPFD, 0 );
+  rtems_test_assert ( status >= 0 );
+
+  printf("close duplicate should return 0\n");
+  status = close( status );
   rtems_test_assert ( status == 0 );
-#else
-  printf("fcntl F_DUPFD should return 0 -- skip until implemented\n");
-#endif
 
   printf("fcntl F_GETFL returns current flags\n");
   status = fcntl( fd, F_GETFL, 1 );
@@ -350,16 +352,28 @@ int main(
   printf("Status %d\n",status);
   rtems_test_assert( status == -1 );
 
-  printf("opendir and readdir /b/myfile\n");
-  directory_not = opendir ("/b/my_file");
+  printf("close should return 0\n");
+  status = close( fd );
+  rtems_test_assert ( status == 0 );
+
+  printf("opendir, readdir and closedir %s\n", my_file);
+  directory_not = opendir (my_file);
+  rtems_test_assert( directory_not != NULL );
   d_not = readdir(directory_not);
+  rtems_test_assert( d_not == NULL );
+  status = closedir (directory_not);
+  rtems_test_assert (status == 0);
 
-  printf("opendir and readdir\n");
+  printf("opendir, readdir and closedir\n");
   directory_not = opendir ("/a");
+  rtems_test_assert( directory_not != NULL );
   d_not = readdir (directory_not);
+  rtems_test_assert( d_not == NULL );
+  status = closedir (directory_not);
+  rtems_test_assert (status == 0);
 
-  printf("chdir to /b/myfile\n");
-  status = chdir ("/b/my_file");
+  printf("chdir to %s\n", my_file);
+  status = chdir (my_file);
   rtems_test_assert (status == -1);
 
   printf( "\nPerforming stat of directory /\n");
@@ -499,6 +513,10 @@ int main(
   {
      printf("Selected and Sorted Node Name: %s\n", namelist[i]->d_name );
   }
+
+  printf("unlink %s should return 0\n", my_file);
+  status = unlink( my_file );
+  rtems_test_assert ( status == 0 );
 
   test_across_mount();
   printf( "\n\n*** END OF READDIR TEST ***\n" );

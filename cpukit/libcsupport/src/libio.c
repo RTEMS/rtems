@@ -47,14 +47,14 @@
  *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 
-const rtems_assoc_t access_modes_assoc[] = {
+static const rtems_assoc_t access_modes_assoc[] = {
   { "READ",       LIBIO_FLAGS_READ,  O_RDONLY },
   { "WRITE",      LIBIO_FLAGS_WRITE, O_WRONLY },
   { "READ/WRITE", LIBIO_FLAGS_READ_WRITE, O_RDWR },
   { 0, 0, 0 },
 };
 
-const rtems_assoc_t status_flags_assoc[] = {
+static const rtems_assoc_t status_flags_assoc[] = {
 #ifdef ACCEPT_O_NDELAY_ALIAS
   { "NO DELAY",  LIBIO_FLAGS_NO_DELAY,  O_NDELAY },
 #endif
@@ -64,9 +64,7 @@ const rtems_assoc_t status_flags_assoc[] = {
   { 0, 0, 0 },
 };
 
-uint32_t   rtems_libio_fcntl_flags(
-  uint32_t   fcntl_flags
-)
+uint32_t rtems_libio_fcntl_flags( int fcntl_flags )
 {
   uint32_t   flags = 0;
   uint32_t   access_modes;
@@ -75,7 +73,7 @@ uint32_t   rtems_libio_fcntl_flags(
    * Access mode is a small integer
    */
 
-  access_modes = fcntl_flags & O_ACCMODE;
+  access_modes = (uint32_t) (fcntl_flags & O_ACCMODE);
   fcntl_flags &= ~O_ACCMODE;
   flags = rtems_assoc_local_by_remote( access_modes_assoc, access_modes );
 
@@ -83,8 +81,11 @@ uint32_t   rtems_libio_fcntl_flags(
    * Everything else is single bits
    */
 
-  flags |=
-     rtems_assoc_local_by_remote_bitfield(status_flags_assoc, fcntl_flags);
+  flags |= rtems_assoc_local_by_remote_bitfield(
+    status_flags_assoc,
+    (uint32_t) fcntl_flags
+  );
+
   return flags;
 }
 
@@ -94,11 +95,9 @@ uint32_t   rtems_libio_fcntl_flags(
  *  Convert RTEMS internal flags to UNIX fnctl(2) flags
  */
 
-uint32_t   rtems_libio_to_fcntl_flags(
-  uint32_t   flags
-)
+int rtems_libio_to_fcntl_flags( uint32_t flags )
 {
-  uint32_t   fcntl_flags = 0;
+  int fcntl_flags = 0;
 
   if ( (flags & LIBIO_FLAGS_READ_WRITE) == LIBIO_FLAGS_READ_WRITE ) {
     fcntl_flags |= O_RDWR;
@@ -176,6 +175,8 @@ void rtems_libio_free(
   rtems_libio_t *iop
 )
 {
+  rtems_filesystem_location_free( &iop->pathinfo );
+
   rtems_libio_lock();
 
     if (iop->sem)
@@ -186,93 +187,4 @@ void rtems_libio_free(
     rtems_libio_iop_freelist = iop;
 
   rtems_libio_unlock();
-}
-
-/*
- *  rtems_libio_is_open_files_in_fs
- *
- *  This routine scans the entire file descriptor table to determine if the
- *  are any active file descriptors that refer to the at least one node in the
- *  file system that we are trying to dismount.
- *
- *  If there is at least one node in the file system referenced by the mount
- *  table entry a 1 is returned, otherwise a 0 is returned.
- */
-
-int rtems_libio_is_open_files_in_fs(
-  rtems_filesystem_mount_table_entry_t * fs_mt_entry
-)
-{
-  rtems_libio_t     *iop;
-  int                result = 0;
-  uint32_t           i;
-
-  rtems_libio_lock();
-
-  /*
-   *  Look for any active file descriptor entry.
-   */
-
-  for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){
-
-    if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
-
-       /*
-        *  Check if this node is under the file system that we
-        *  are trying to dismount.
-        */
-
-       if ( iop->pathinfo.mt_entry == fs_mt_entry ) {
-          result = 1;
-          break;
-       }
-    }
-  }
-
-  rtems_libio_unlock();
-
-  return result;
-}
-
-/*
- *  rtems_libio_is_file_open
- *
- *  This routine scans the entire file descriptor table to determine if the
- *  given file refers to an active file descriptor.
- *
- *  If the given file is open a 1 is returned, otherwise a 0 is returned.
- */
-
-int rtems_libio_is_file_open(
-  void         *node_access
-)
-{
-  rtems_libio_t     *iop;
-  int                result=0;
-  uint32_t           i;
-
-  rtems_libio_lock();
-
-  /*
-   *  Look for any active file descriptor entry.
-   */
-
- for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){
-    if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
-
-       /*
-        *  Check if this node is under the file system that we
-        *  are trying to dismount.
-        */
-
-       if ( iop->pathinfo.node_access == node_access ) {
-          result = 1;
-          break;
-       }
-    }
-  }
-
-  rtems_libio_unlock();
-
-  return result;
 }

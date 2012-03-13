@@ -17,23 +17,37 @@ extern "C" {
 /**
  *  This structure define the type of device table
  */
-
-typedef struct
-{
-  /** This member points to device name which is a null-terminated string */
-  const char               *device_name;
+typedef struct {
+  /** This member points to device name which is not a null-terminated string */
+  const char               *name;
   /** This member is the name length of a device */
-  uint32_t                  device_name_length;
+  size_t                    namelen;
   /** major number of a device */
   rtems_device_major_number major;
   /** minor number of a device */
   rtems_device_minor_number minor;
   /** device creation mode, only device file can be created */
   mode_t                    mode;
+} devFS_node;
 
-} rtems_device_name_t;
+typedef struct {
+  devFS_node *nodes;
+  size_t count;
+} devFS_data;
 
+/**
+ *  The following defines the device-only filesystem operating
+ *  operations.
+ */
 
+extern const rtems_filesystem_operations_table devFS_ops;
+
+/**
+ *  The following defines the device-only filesystem operating
+ *  handlers.
+ */
+
+extern const rtems_filesystem_file_handlers_r  devFS_file_handlers;
 
 /**
  *  This routine associates RTEMS status code with errno
@@ -41,14 +55,16 @@ typedef struct
 
 extern int rtems_deviceio_errno(rtems_status_code code);
 
+static inline const devFS_data *devFS_get_data(
+  const rtems_filesystem_location_info_t *loc
+)
+{
+  return loc->mt_entry->immutable_fs_info;
+}
 
-/**
- *  The following defines the device table size. This values
- *  is configured during application configuration time by
- *  the user. The default value is set to 4.
- */
-
-extern uint32_t rtems_device_table_size;
+extern void devFS_eval_path(
+  rtems_filesystem_eval_path_context_t *ctx
+);
 
 /**
  *  This handler maps open operation to rtems_io_open.
@@ -62,8 +78,8 @@ extern uint32_t rtems_device_table_size;
 extern int devFS_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  int            oflag,
+  mode_t         mode
 );
 
 
@@ -142,8 +158,8 @@ extern int devFS_ioctl(
  */
 
 extern int devFS_stat(
-  rtems_filesystem_location_info_t *loc,
-  struct stat                      *buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
 
@@ -153,62 +169,14 @@ extern int devFS_stat(
  *  Since this is a device-only filesystem, so there is only
  *  one node type in the system.
  *
- *  @param pathloc contains filesytem access information, this
+ *  @param loc contains filesytem access information, this
  *         parameter is ignored
  *  @retval always returns RTEMS_FILESYSTEM_DEVICE
  */
 
 extern rtems_filesystem_node_types_t devFS_node_type(
-  rtems_filesystem_location_info_t  *pathloc
+  const rtems_filesystem_location_info_t*loc
 );
-
-
-
-/**
- *  This routine is invoked to determine if 'pathname' exists.
- *  This routine first check access flags, then it searches
- *  the device table to get the information.
- *
- *  @param pathname device name to be searched
- *  @param flags access flags
- *  @param pathloc contains filesystem access information
- *  @retval upon success(pathname exists), this routines
- *  returns 0; if 'flag' is invalid, it returns -1 and errno
- *  is set to EIO; otherwise, it returns -1 and errno is set to ENOENT
- */
-
-extern int devFS_evaluate_path(
-  const char                        *pathname,
-  size_t                             pathnamelen,
-  int                                flags,
-  rtems_filesystem_location_info_t  *pathloc
-);
-
-
-/**
- *  This routine is given a path to evaluate and a valid start
- *  location. It is responsible for finding the parent node for
- *  a requested make command, setting pathloc information to
- *  identify the parent node, and setting the name pointer to
- *  the first character of the name of the new node. In device
- *  only filesystem, devices do not has a tree hierarchy, there
- *  are no parent-child relationship. So this routine is rather
- *  simple, it just set *name to path and returns
- *
- *  @param path device path to be evaluated
- *  @param pathloc contains filesystem access information, this
- *         parameter is ignored
- *  @param name
- *  @retval always returns 0
- */
-
-extern int devFS_evaluate_for_make(
-   const char                         *path,
-   rtems_filesystem_location_info_t   *pathloc,
-   const char                        **name
-);
-
-
 
 /**
  *  This routine is invoked upon registration of a new device
@@ -217,21 +185,15 @@ extern int devFS_evaluate_for_make(
  *  sequential order, when found a empty slot, it fills the slot
  *  with proper values.
  *
- *  @param path the device file name to be registered
- *  @param mode file mode, this parameter is ignored
- *  @param dev  device major and minor number
- *  @param pathloc contains filesystem access information
- *  @retval upon success, this routine returns 0; if 'path'
- *  already exist, it returns -1 and errno is set to EEXIST;
- *  if device table is full, it returns -1 and errno is set
- *  to ENOMEM
+ *  @see rtems_filesystem_mknod_t.
  */
 
 extern int devFS_mknod(
-   const char                        *path,
-   mode_t                             mode,
-   dev_t                              dev,
-   rtems_filesystem_location_info_t  *pathloc
+  const rtems_filesystem_location_info_t *parentloc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
 );
 
 
@@ -266,11 +228,9 @@ extern int devFS_initialize(
  *
  *  This routine is intended for debugging, and can be used by shell
  *  program to provide user with the system information.
- *
- *  @retval 0
  */
 
-extern int devFS_Show(void);
+extern void devFS_Show(void);
 
 #ifdef __cplusplus
 }

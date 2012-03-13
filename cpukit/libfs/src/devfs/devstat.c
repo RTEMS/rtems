@@ -7,40 +7,25 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
-
-#include <rtems.h>
-#include <rtems/io.h>
-#include <rtems/seterr.h>
-#include <rtems/libio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #include "devfs.h"
 
 int devFS_stat(
-  rtems_filesystem_location_info_t *loc,
-  struct stat                      *buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 )
 {
-  rtems_device_name_t *the_dev;
+  int rv = 0;
+  const devFS_node *the_dev = loc->node_access;
 
-  the_dev = (rtems_device_name_t *)loc->node_access;
+  if (the_dev != NULL) {
+    buf->st_rdev = rtems_filesystem_make_dev_t( the_dev->major, the_dev->minor );
+    buf->st_mode = the_dev->mode;
+  } else {
+    rv = rtems_filesystem_default_fstat(loc, buf);
+  }
 
-  /*
-   *  stat() invokes devFS_evaluate_path() which checks that node_access
-   *  is not NULL.  So this should NEVER be NULL unless someone breaks
-   *  other code in this filesystem.
-   */
-  #if defined(RTEMS_DEBUG)
-    if (!the_dev)
-      rtems_set_errno_and_return_minus_one( EFAULT );
-  #endif
-
-  buf->st_rdev  = rtems_filesystem_make_dev_t( the_dev->major, the_dev->minor );
-  buf->st_mode = the_dev->mode;
-  return 0;
+  return rv;
 }
-
-

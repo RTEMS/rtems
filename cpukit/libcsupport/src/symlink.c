@@ -12,31 +12,31 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
+#include <unistd.h>
+
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int symlink(
-  const char *actualpath,
-  const char *sympath
-)
+int symlink( const char *path1, const char *path2 )
 {
-  rtems_filesystem_location_info_t    loc;
-  int                                 i;
-  const char                         *name_start;
-  int                                 result;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_HARD_LINK
+    | RTEMS_LIBIO_MAKE
+    | RTEMS_LIBIO_EXCLUSIVE;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path2, eval_flags );
 
-  rtems_filesystem_get_start_loc( sympath, &i, &loc );
+  rv = (*currentloc->ops->symlink_h)(
+    currentloc,
+    rtems_filesystem_eval_path_get_token( &ctx ),
+    rtems_filesystem_eval_path_get_tokenlen( &ctx ),
+    path1
+  );
 
-  result = (*loc.ops->evalformake_h)( &sympath[i], &loc, &name_start );
-  if ( result != 0 )
-    return -1;
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  result = (*loc.ops->symlink_h)( &loc, actualpath, name_start);
-
-  rtems_filesystem_freenode( &loc );
-
-  return result;
+  return rv;
 }

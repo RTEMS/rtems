@@ -25,60 +25,6 @@
 
 #include "rtems-rfs-rtems.h"
 
-bool
-rtems_rfs_rtems_eval_perms (rtems_rfs_inode_handle* inode, int flags)
-{
-  uid_t    st_uid;
-  gid_t    st_gid;
-  uint16_t uid;
-  uint16_t gid;
-  uint16_t mode;
-  int      flags_to_test;
-
-  uid = rtems_rfs_inode_get_uid (inode);
-  gid = rtems_rfs_inode_get_gid (inode);
-  mode = rtems_rfs_inode_get_mode (inode);
-
-#if defined (RTEMS_POSIX_API)
-  st_uid = geteuid ();
-  st_gid = getegid ();
-#else
-  st_uid = uid;
-  st_gid = gid;
-#endif
-
-  /*
-   * Check if I am owner or a group member or someone else.
-   */
-  flags_to_test = flags;
-
-  if ((st_uid == 0) || (st_uid == uid))
-    flags_to_test |= flags << 6;
-  if ((st_uid == 0) || (st_gid == gid))
-    flags_to_test |= flags << 3;
-  else
-    /* must be other - already set above */;
-
-  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PERMS))
-    printf ("rtems-rfs: eval-perms: uid=%d gid=%d iuid=%d igid=%d " \
-            "flags=%o flags_to_test=%o mode=%o (%o)\n",
-            st_uid, st_gid, uid, gid,
-            flags, flags_to_test, mode & 0777,
-            flags_to_test & (mode & 0777));
-
-  /*
-   * If all of the flags are set we have permission
-   * to do this.
-   */
-  if ((flags_to_test & (mode & 0777)) != 0)
-    return true;
-
-  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_EVAL_PERMS))
-    printf("rtems-rfs: eval-perms: perms failed\n");
-
-  return false;
-}
-
 /*
  * The following sets the handlers based on the type of inode.
  */

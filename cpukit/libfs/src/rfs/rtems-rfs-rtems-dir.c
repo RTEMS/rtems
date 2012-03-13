@@ -36,18 +36,12 @@
  * This rountine will verify that the node being opened as a directory is in
  * fact a directory node. If it is then the offset into the directory will be
  * set to 0 to position to the first directory entry.
- *
- * @param iop
- * @param pathname
- * @param flag
- * @param mode
- * @@return int
  */
 static int
 rtems_rfs_rtems_dir_open (rtems_libio_t* iop,
                           const char*    pathname,
-                          uint32_t       flag,
-                          uint32_t       mode)
+                          int            oflag,
+                          mode_t         mode)
 {
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
   rtems_rfs_ino          ino = rtems_rfs_rtems_get_iop_ino (iop);
@@ -193,36 +187,6 @@ rtems_rfs_rtems_dir_lseek (rtems_libio_t* iop,
   return 0;
 }
 
-static int
-rtems_rfs_rtems_dir_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
-                           rtems_filesystem_location_info_t* pathloc)
-{
-  rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
-  rtems_rfs_ino          parent = rtems_rfs_rtems_get_pathloc_ino (parent_pathloc);
-  rtems_rfs_ino          ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
-  uint32_t               doff = rtems_rfs_rtems_get_pathloc_doff (pathloc);
-  int                    rc;
-
-  if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_DIR_RMNOD))
-    printf ("rtems-rfs: dir-rmnod: parent:%" PRId32 " doff:%" PRIu32 ", ino:%" PRId32 "\n",
-            parent, doff, ino);
-
-  if (ino == RTEMS_RFS_ROOT_INO)
-    return rtems_rfs_rtems_error ("dir_rmnod: root inode", EBUSY);
-
-  rtems_rfs_rtems_lock (fs);
-
-  rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_if_empty);
-  if (rc)
-  {
-    rtems_rfs_rtems_unlock (fs);
-    return rtems_rfs_rtems_error ("dir_rmnod: unlinking", rc);
-  }
-
-  rtems_rfs_rtems_unlock (fs);
-  return 0;
-}
-
 /*
  *  Set of operations handlers for operations on directories.
  */
@@ -235,10 +199,8 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_dir_handlers = {
   .ioctl_h     = rtems_filesystem_default_ioctl,
   .lseek_h     = rtems_rfs_rtems_dir_lseek,
   .fstat_h     = rtems_rfs_rtems_fstat,
-  .fchmod_h    = rtems_rfs_rtems_fchmod,
-  .ftruncate_h = rtems_filesystem_default_ftruncate,
+  .ftruncate_h = rtems_filesystem_default_ftruncate_directory,
   .fsync_h     = rtems_filesystem_default_fsync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
-  .fcntl_h     = rtems_filesystem_default_fcntl,
-  .rmnod_h     = rtems_rfs_rtems_dir_rmnod
+  .fcntl_h     = rtems_filesystem_default_fcntl
 };

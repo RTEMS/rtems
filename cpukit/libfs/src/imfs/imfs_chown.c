@@ -15,18 +15,19 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 #include "imfs.h"
 
+#include <unistd.h>
+
+#include <rtems/libio_.h>
+
 int IMFS_chown(
-  rtems_filesystem_location_info_t  *pathloc,       /* IN */
-  uid_t                              owner,         /* IN */
-  gid_t                              group          /* IN */
+  const rtems_filesystem_location_info_t *loc,
+  uid_t owner,
+  gid_t group
 )
 {
   IMFS_jnode_t  *jnode;
@@ -34,7 +35,7 @@ int IMFS_chown(
   uid_t          st_uid;
 #endif
 
-  jnode = (IMFS_jnode_t *) pathloc->node_access;
+  jnode = (IMFS_jnode_t *) loc->node_access;
 
   /*
    *  Verify I am the owner of the node or the super user.

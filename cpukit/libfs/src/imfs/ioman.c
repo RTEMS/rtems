@@ -5,6 +5,9 @@
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -13,19 +16,13 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <string.h>
 
-#include <rtems.h>
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
-#include "imfs.h"
 
 /*
  *  rtems_io_register_name
@@ -52,42 +49,23 @@ rtems_status_code rtems_io_register_name(
   return RTEMS_SUCCESSFUL;
 }
 
-/*
- *  rtems_io_lookup_name
- *
- *  This version is reentrant.
- *
- *  XXX - This is dependent upon IMFS and should not be.
- *        Suggest adding a filesystem routine to fill in the device_info.
- */
-
 rtems_status_code rtems_io_lookup_name(
   const char           *name,
   rtems_driver_name_t  *device_info
 )
 {
-  IMFS_jnode_t                      *the_jnode;
-  rtems_filesystem_location_info_t   loc;
-  int                                result;
-  rtems_filesystem_node_types_t      node_type;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  struct stat st;
+  int rv = stat( name, &st );
 
-  result = rtems_filesystem_evaluate_path(
-      name, strlen( name ), 0x00, &loc, true );
-  the_jnode = loc.node_access;
-
-  node_type = (*loc.ops->node_type_h)( &loc );
-
-  if ( (result != 0) || node_type != RTEMS_FILESYSTEM_DEVICE ) {
-    rtems_filesystem_freenode( &loc );
-    return RTEMS_UNSATISFIED;
+  if ( rv == 0 && S_ISCHR( st.st_mode ) ) {
+    device_info->device_name = name;
+    device_info->device_name_length = strlen( name );
+    device_info->major = rtems_filesystem_dev_major_t( st.st_rdev );
+    device_info->minor = rtems_filesystem_dev_minor_t( st.st_rdev );
+  } else {
+    sc = RTEMS_UNSATISFIED;
   }
 
-  device_info->device_name        = name;
-  device_info->device_name_length = strlen( name );
-  device_info->major              = the_jnode->info.device.major;
-  device_info->minor              = the_jnode->info.device.minor;
-
-  rtems_filesystem_freenode( &loc );
-
-  return RTEMS_SUCCESSFUL;
+  return sc;
 }

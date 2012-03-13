@@ -257,89 +257,6 @@ msdos_long_to_short(const char *lfn, int lfn_len, char* sfn, int sfn_len)
     return type;
 }
 
-/* msdos_get_token --
- *     Routine to get a token (name or separator) from the path.
- *
- * PARAMETERS:
- *     path      - path to get token from
- *     ret_token - returned token
- *     token_len - length of returned token
- *
- * RETURNS:
- *     token type, token and token length
- *
- */
-msdos_token_types_t
-msdos_get_token(const char  *path,
-                int          pathlen,
-                const char **ret_token,
-                int         *ret_token_len)
-{
-    msdos_token_types_t type = MSDOS_NAME;
-    int                 i = 0;
-
-    *ret_token = NULL;
-    *ret_token_len = 0;
-
-    if (pathlen == 0)
-        return MSDOS_NO_MORE_PATH;
-
-    /*
-     *  Check for a separator.
-     */
-    while (!msdos_is_separator(path[i]) && (i < pathlen))
-    {
-        if ( !msdos_is_valid_name_char(path[i]) )
-            return MSDOS_INVALID_TOKEN;
-        ++i;
-        if ( i == MSDOS_NAME_MAX_LFN_WITH_DOT )
-            return MSDOS_INVALID_TOKEN;
-    }
-
-    *ret_token = path;
-
-    /*
-     *  If it is just a separator then it is the current dir.
-     */
-    if ( i == 0 )
-    {
-      if ( (*path != '\0') && pathlen )
-        {
-            i++;
-            type = MSDOS_CURRENT_DIR;
-        }
-        else
-            type = MSDOS_NO_MORE_PATH;
-    }
-
-    /*
-     *  Set the token and token_len to the token start and length.
-     */
-    *ret_token_len = i;
-
-    /*
-     *  If we copied something that was not a seperator see if
-     *  it was a special name.
-     */
-    if ( type == MSDOS_NAME )
-    {
-        if ((i == 2) && ((*ret_token)[0] == '.') && ((*ret_token)[1] == '.'))
-        {
-            type = MSDOS_UP_DIR;
-            return type;
-        }
-
-        if ((i == 1) && ((*ret_token)[0] == '.'))
-        {
-            type = MSDOS_CURRENT_DIR;
-            return type;
-        }
-    }
-
-    return type;
-}
-
-
 /* msdos_find_name --
  *     Find the node which correspondes to the name, open fat-file which
  *     correspondes to the found node and close fat-file which correspondes
@@ -491,13 +408,13 @@ msdos_find_name(
  */
 int
 msdos_get_name_node(
-    rtems_filesystem_location_info_t *parent_loc,
-    bool                              create_node,
-    const char                       *name,
-    int                               name_len,
-    msdos_name_type_t                 name_type,
-    fat_dir_pos_t                    *dir_pos,
-    char                             *name_dir_entry
+    const rtems_filesystem_location_info_t *parent_loc,
+    bool                                    create_node,
+    const char                             *name,
+    int                                     name_len,
+    msdos_name_type_t                       name_type,
+    fat_dir_pos_t                          *dir_pos,
+    char                                   *name_dir_entry
     )
 {
     int              rc = RC_OK;

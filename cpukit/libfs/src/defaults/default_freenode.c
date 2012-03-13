@@ -9,14 +9,15 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
 
-int rtems_filesystem_default_freenode(
- rtems_filesystem_location_info_t      *pathloc       /* IN */
+#include <rtems/libio_.h>
+
+void rtems_filesystem_default_freenode(
+  const rtems_filesystem_location_info_t *loc
 )
 {
-  return 0;
+  /* Do nothing */
 }
-

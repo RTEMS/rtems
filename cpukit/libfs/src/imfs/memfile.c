@@ -18,18 +18,13 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
+
+#include "imfs.h"
 
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
-
-#include <rtems.h>
-#include <rtems/libio.h>
-#include "imfs.h"
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 #define MEMFILE_STATIC
 
@@ -86,8 +81,8 @@ void memfile_free_block(
 int memfile_open(
   rtems_libio_t *iop,
   const char    *pathname,
-  uint32_t       flag,
-  uint32_t       mode
+  int            oflag,
+  mode_t         mode
 )
 {
   IMFS_jnode_t  *the_jnode;

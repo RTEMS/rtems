@@ -15,40 +15,50 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
 #include "imfs.h"
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int IMFS_rename(
-  rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
-  rtems_filesystem_location_info_t  *old_loc,         /* IN */
-  rtems_filesystem_location_info_t  *new_parent_loc,  /* IN */
-  const char                        *new_name         /* IN */
+  const rtems_filesystem_location_info_t *oldparentloc,
+  const rtems_filesystem_location_info_t *oldloc,
+  const rtems_filesystem_location_info_t *newparentloc,
+  const char *name,
+  size_t namelen
 )
 {
-  IMFS_jnode_t *the_jnode;
-  IMFS_jnode_t *new_parent;
-
-  the_jnode = old_loc->node_access;
-
-  strncpy( the_jnode->name, new_name, IMFS_NAME_MAX );
-
-  if ( the_jnode->Parent != NULL )
-    rtems_chain_extract( (rtems_chain_node *) the_jnode );
-
-  new_parent = new_parent_loc->node_access;
-  the_jnode->Parent = new_parent;
-
-  rtems_chain_append( &new_parent->info.directory.Entries, &the_jnode->Node );
+  int rv = 0;
+  IMFS_jnode_t *node = oldloc->node_access;
+  IMFS_jnode_t *new_parent = newparentloc->node_access;
 
   /*
-   * Update the time.
+   * FIXME: Due to insufficient checks we can create inaccessible nodes with
+   * this operation.
    */
-  IMFS_update_ctime( the_jnode );
 
-  return 0;
+  if ( node->Parent != NULL ) {
+    if ( namelen < IMFS_NAME_MAX ) {
+      memcpy( node->name, name, namelen );
+      node->name [namelen] = '\0';
+
+      rtems_chain_extract( &node->Node );
+
+      node->Parent = new_parent;
+      rtems_chain_append(
+        &new_parent->info.directory.Entries,
+        &node->Node
+      );
+
+      IMFS_update_ctime( node );
+    } else {
+      errno = ENAMETOOLONG;
+      rv = -1;
+    }
+  } else {
+    errno = EINVAL;
+    rv = -1;
+  }
+
+  return rv;
 }

@@ -15,18 +15,15 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
 #include "imfs.h"
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 ssize_t IMFS_readlink(
-  rtems_filesystem_location_info_t  *loc,
-  char                              *buf,         /* OUT */
-  size_t                             bufsize
+  const rtems_filesystem_location_info_t *loc,
+  char *buf,
+  size_t bufsize
 )
 {
   IMFS_jnode_t      *node;

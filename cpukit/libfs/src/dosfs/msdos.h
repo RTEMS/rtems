@@ -168,7 +168,6 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 /*
  *  Macros for names parsing and formatting
  */
-#define msdos_is_separator(_ch)          rtems_filesystem_is_separator(_ch)
 
 #define MSDOS_SHORT_BASE_LEN             8  /* 8 characters */
 #define MSDOS_SHORT_EXT_LEN              3  /* 3 characters */
@@ -224,44 +223,40 @@ typedef enum msdos_token_types_e
 #define MSDOS_DPS512_NUM    16
 
 /* Prototypes */
-int msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
+void msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
-int msdos_eval_path(
-  const char                       *pathname,    /* IN */
-  size_t                            pathnamelen, /* IN */
-  int                               flags,       /* IN */
-  rtems_filesystem_location_info_t *pathloc      /* IN/OUT */
+void msdos_eval_path(rtems_filesystem_eval_path_context_t *ctx);
+
+void msdos_free_node_info(const rtems_filesystem_location_info_t *pathloc);
+
+rtems_filesystem_node_types_t msdos_node_type(
+  const rtems_filesystem_location_info_t *loc
 );
-
-int msdos_eval4make(
-  const char                       *path,     /* IN */
-  rtems_filesystem_location_info_t *pathloc,  /* IN/OUT */
-  const char                       **name     /* OUT    */
-);
-
-int msdos_unlink(rtems_filesystem_location_info_t *pathloc /* IN */);
-
-int msdos_free_node_info(rtems_filesystem_location_info_t *pathloc /* IN */);
-
-rtems_filesystem_node_types_t msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
 
 int msdos_mknod(
-  const char                       *path,   /* IN */
-  mode_t                            mode,   /* IN */
-  dev_t                             dev,    /* IN */
-  rtems_filesystem_location_info_t *pathloc /* IN/OUT */
+  const rtems_filesystem_location_info_t *loc,
+  const char *name,
+  size_t namelen,
+  mode_t mode,
+  dev_t dev
 );
 
-int msdos_utime(
-  rtems_filesystem_location_info_t *pathloc, /* IN */
-  time_t                            actime,  /* IN */
-  time_t                            modtime  /* IN */
+int msdos_rmnod(
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *loc
 );
 
-int msdos_rename(rtems_filesystem_location_info_t  *old_parent_loc,
-                 rtems_filesystem_location_info_t  *old_loc,
-                 rtems_filesystem_location_info_t  *new_parent_loc,
-                 const char                        *new_name);
+int msdos_rename(
+  const rtems_filesystem_location_info_t *old_parent_loc,
+  const rtems_filesystem_location_info_t *old_loc,
+  const rtems_filesystem_location_info_t *new_parent_loc,
+  const char *new_name,
+  size_t new_namelen
+);
+
+void msdos_lock(rtems_filesystem_mount_table_entry_t *mt_entry);
+
+void msdos_unlock(rtems_filesystem_mount_table_entry_t *mt_entry);
 
 int msdos_initialize_support(
   rtems_filesystem_mount_table_entry_t    *temp_mt_entry,
@@ -273,8 +268,8 @@ int msdos_initialize_support(
 int msdos_file_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
-  uint32_t       flag,            /* IN  */
-  uint32_t       mode             /* IN  */
+  int            oflag,           /* IN  */
+  mode_t         mode             /* IN  */
 );
 
 int msdos_file_close(rtems_libio_t *iop /* IN  */);
@@ -298,8 +293,8 @@ off_t msdos_file_lseek(
 );
 
 int msdos_file_stat(
-  rtems_filesystem_location_info_t *loc, /* IN  */
-  struct stat                      *buf  /* OUT */
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
 int
@@ -312,26 +307,11 @@ int msdos_file_sync(rtems_libio_t *iop);
 
 int msdos_file_datasync(rtems_libio_t *iop);
 
-int msdos_file_ioctl(
-  rtems_libio_t *iop,             /* IN  */
-  uint32_t       command,         /* IN  */
-  void          *buffer           /* IN  */
-);
-
-int
-msdos_dir_chmod(
-  rtems_filesystem_location_info_t *pathloc, /* IN */
-  mode_t                            mode     /* IN */
-);
-
-int msdos_file_rmnod(rtems_filesystem_location_info_t *parent_pathloc, /* IN */
-                     rtems_filesystem_location_info_t *pathloc /* IN */);
-
 int msdos_dir_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
-  uint32_t       flag,            /* IN  */
-  uint32_t       mode             /* IN  */
+  int            oflag,           /* IN  */
+  mode_t         mode             /* IN  */
 );
 
 int msdos_dir_close(rtems_libio_t *iop /* IN  */);
@@ -348,34 +328,21 @@ off_t msdos_dir_lseek(
   int                   whence            /* IN  */
 );
 
-int
-msdos_file_chmod(
-  rtems_filesystem_location_info_t *pathloc, /* IN */
-  mode_t                            mode     /* IN */
-);
-
-int msdos_dir_rmnod(rtems_filesystem_location_info_t *parent_pathloc, /* IN */
-                    rtems_filesystem_location_info_t *pathloc /* IN */);
-
 int msdos_dir_sync(rtems_libio_t *iop);
 
 int msdos_dir_stat(
-  rtems_filesystem_location_info_t *loc,         /* IN  */
-  struct stat                      *buf          /* OUT */
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
-int msdos_creat_node(rtems_filesystem_location_info_t  *parent_loc,
-                     msdos_node_type_t                  type,
-                     const char                        *name,
-                     int                                name_len,
-                     mode_t                             mode,
-                     const fat_file_fd_t               *link_fd);
+int msdos_creat_node(const rtems_filesystem_location_info_t *parent_loc,
+                     msdos_node_type_t                       type,
+                     const char                             *name,
+                     int                                     name_len,
+                     mode_t                                  mode,
+                     const fat_file_fd_t                    *link_fd);
 
 /* Misc prototypes */
-msdos_token_types_t msdos_get_token(const char  *path,
-                                    int          pathlen,
-                                    const char **token,
-                                    int         *token_len);
 
 int msdos_find_name(
   rtems_filesystem_location_info_t *parent_loc,
@@ -384,13 +351,13 @@ int msdos_find_name(
 );
 
 int msdos_get_name_node(
-  rtems_filesystem_location_info_t *parent_loc,
-  bool                              create_node,
-  const char                       *name,
-  int                               name_len,
-  msdos_name_type_t                 name_type,
-  fat_dir_pos_t                    *dir_pos,
-  char                             *name_dir_entry
+  const rtems_filesystem_location_info_t *parent_loc,
+  bool                                    create_node,
+  const char                             *name,
+  int                                     name_len,
+  msdos_name_type_t                       name_type,
+  fat_dir_pos_t                          *dir_pos,
+  char                                   *name_dir_entry
 );
 
 int msdos_dir_info_remove(rtems_filesystem_location_info_t *pathloc);

@@ -16,6 +16,7 @@
 #include <tmacros.h>
 #include "test_support.h"
 #include <rtems/libio_.h>
+#include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
 
 rtems_task task_routine( rtems_task_argument not_used )
@@ -36,8 +37,7 @@ rtems_task Init(
 )
 {
   rtems_status_code       sc;
-  bool                    status;
-  void                   *alloc_ptr;
+  void                   *opaque;
   rtems_id                current_task_id;
   rtems_id                task_id;
   rtems_name              another_task_name;
@@ -46,29 +46,24 @@ rtems_task Init(
   puts( "\n\n*** TEST USER ENVIRONMENT ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );
-  alloc_ptr = malloc( malloc_free_space() - 4 );
-  rtems_test_assert( alloc_ptr != NULL );
+  opaque = rtems_heap_greedy_allocate( 0 );
 
   puts( "Init - attempt to reset env - expect RTEMS_NO_MEMORY" );
   sc = rtems_libio_set_private_env();
   rtems_test_assert( sc == RTEMS_NO_MEMORY );
 
   puts( "Init - freeing the allocated memory" );
-  free( alloc_ptr );
+  rtems_heap_greedy_free( opaque );
 
   puts( "Init - allocating most of workspace memory" );
-  status = rtems_workspace_get_information( &Info );
-  rtems_test_assert( status == true );
-  status = rtems_workspace_allocate( Info.Free.largest - 4, &alloc_ptr );
-  rtems_test_assert( status == true );
+  opaque = rtems_workspace_greedy_allocate( 0 );
   
-  puts( "Init - attempt to reset env - expect RTEMS_NO_MEMORY" );
+  puts( "Init - attempt to reset env - expect RTEMS_TOO_MANY" );
   sc = rtems_libio_set_private_env();
-  rtems_test_assert( sc == RTEMS_NO_MEMORY );
+  rtems_test_assert( sc == RTEMS_TOO_MANY );
 
   puts( "Init - freeing the workspace memory" );
-  status = rtems_workspace_free( alloc_ptr );
-  rtems_test_assert( status == true );
+  rtems_workspace_greedy_free( opaque );
 
   puts( "Init - creating a task name and a task -- OK" );
 
@@ -84,12 +79,12 @@ rtems_task Init(
 			  );
 
   puts( "Init - starting the task_routine, to set its private environment" );
-  status = rtems_task_start( task_id, task_routine, 0);
-  rtems_test_assert(status == 0);
+  sc = rtems_task_start( task_id, task_routine, 0);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - attempt to share the env with another task -- Expect error" );
   sc = rtems_libio_share_private_env( task_id );
-  rtems_test_assert( sc == RTEMS_INVALID_ADDRESS );
+  rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
   sleep( 1 );
 

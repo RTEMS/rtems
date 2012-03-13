@@ -14,35 +14,32 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
+
+#include "imfs.h"
 
 #include <stdlib.h>
 #include <string.h>
-#include "imfs.h"
-#include <rtems/libio_.h>
 
 /*
  *  Create an IMFS filesystem node of an arbitrary type that is NOT
  *  the root directory node.
  */
 IMFS_jnode_t *IMFS_create_node(
-  rtems_filesystem_location_info_t *parent_loc,
-  IMFS_jnode_types_t                type,
-  const char                       *name,
-  mode_t                            mode,
-  const IMFS_types_union           *info
+  const rtems_filesystem_location_info_t *parent_loc,
+  IMFS_jnode_types_t                      type,
+  const char                             *name,
+  size_t                                  namelen,
+  mode_t                                  mode,
+  const IMFS_types_union                 *info
 )
 {
   IMFS_jnode_t        *node;
   IMFS_jnode_t        *parent;
   IMFS_fs_info_t      *fs_info;
 
-  /*
-   *  MUST have a parent node to call this routine.
-   */
-  if ( parent_loc == NULL )
-    return NULL;
+  IMFS_assert( parent_loc != NULL );
 
   parent = parent_loc->node_access;
   fs_info = parent_loc->mt_entry->fs_info;
@@ -51,13 +48,16 @@ IMFS_jnode_t *IMFS_create_node(
    *  Reject creation of FIFOs if support is disabled.
    */
   if ( type == IMFS_FIFO &&
-       fs_info->fifo_handlers == &rtems_filesystem_handlers_default )
+       fs_info->fifo_handlers == &rtems_filesystem_handlers_default ) {
+    errno = ENOTSUP;
+
     return NULL;
+  }
 
   /*
    *  Allocate filesystem node and fill in basic information
    */
-  node  = IMFS_allocate_node( type, name, mode & ~rtems_filesystem_umask );
+  node  = IMFS_allocate_node( type, name, namelen, mode );
   if ( !node )
     return NULL;
 
@@ -104,25 +104,36 @@ IMFS_jnode_t *IMFS_create_node(
 IMFS_jnode_t *IMFS_allocate_node(
   IMFS_jnode_types_t                type,
   const char                       *name,
+  size_t                            namelen,
   mode_t                            mode
 )
 {
   IMFS_jnode_t        *node;
   struct timeval       tv;
 
+  if ( namelen > IMFS_NAME_MAX ) {
+    errno = ENAMETOOLONG;
+
+    return NULL;
+  }
+
   /*
    *  Allocate an IMFS jnode
    */
   node = calloc( 1, sizeof( IMFS_jnode_t ) );
-  if ( !node )
+  if ( !node ) {
+    errno = ENOMEM;
+
     return NULL;
+  }
 
   /*
    *  Fill in the basic information
    */
   node->st_nlink = 1;
   node->type     = type;
-  strncpy( node->name, name, IMFS_NAME_MAX );
+  memcpy( node->name, name, namelen );
+  node->name [namelen] = '\0';
 
   /*
    *  Fill in the mode and permission information for the jnode structure.
@@ -155,7 +166,7 @@ IMFS_jnode_t *IMFS_create_root_node(void)
   /*
    *  Allocate filesystem node and fill in basic information
    */
-  node = IMFS_allocate_node( IMFS_DIRECTORY, "", (S_IFDIR | 0755) );
+  node = IMFS_allocate_node( IMFS_DIRECTORY, "", 0, (S_IFDIR | 0755) );
   if ( !node )
     return NULL;
 

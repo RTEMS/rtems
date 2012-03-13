@@ -9,13 +9,16 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_rmnod(
- rtems_filesystem_location_info_t      *parent_loc,   /* IN */
- rtems_filesystem_location_info_t      *pathloc       /* IN */
+  const rtems_filesystem_location_info_t *parentloc,
+  const rtems_filesystem_location_info_t *loc
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

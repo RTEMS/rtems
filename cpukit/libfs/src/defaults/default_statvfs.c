@@ -9,13 +9,16 @@
  *  $Id$
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_statvfs(
- rtems_filesystem_location_info_t  *loc,     /* IN  */
- struct statvfs                    *buf      /* OUT */
+  const rtems_filesystem_location_info_t *loc,
+  struct statvfs *buf
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

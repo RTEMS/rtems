@@ -2,6 +2,9 @@
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -21,15 +24,17 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <rtems/score/heap.h>
 
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   int status;
-  void *alloc_ptr = (void *)0;
-  Heap_Information_block Info;
+  devFS_node nodes [1];
+  devFS_data data = {
+    .nodes = nodes,
+    .count = 1
+  };
 
   puts( "\n\n*** TEST DEVFS03 ***" );
 
@@ -37,24 +42,31 @@ rtems_task Init(
   status = mkdir( "/dir01", S_IRWXU );
   rtems_test_assert( status == 0 );
 
-  puts( "Init - allocating most of workspace memory" );
-  status = rtems_workspace_get_information( &Info );
-  rtems_test_assert( status == true );
-  status = rtems_workspace_allocate( Info.Free.largest - 4, &alloc_ptr );
-  rtems_test_assert( status == true );
-
-  puts( "Init - mount a new fs at /dir01 - expect ENOMEM" );
+  puts( "Init - mount a new fs at /dir01 - expect EINVAL" );
   status = mount( NULL, 
 		  "/dir01", 
 		  "devfs", 
 		  RTEMS_FILESYSTEM_READ_WRITE,
 		  NULL );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOMEM );
+  rtems_test_assert( errno == EINVAL );
 
-  puts( "Init - freeing the workspace memory" );
-  status = rtems_workspace_free( alloc_ptr );
-  rtems_test_assert( status == true );
+  puts( "Init - mount a new fs at /dir01 - OK" );
+  status = mount( NULL, 
+		  "/dir01", 
+		  "devfs", 
+		  RTEMS_FILESYSTEM_READ_WRITE,
+		  &data );
+  rtems_test_assert( status == 0 );
+
+  puts( "Init - make file /dir01/dev -- expect ENOTSUP" );
+  status = creat( "/dir01/dev", S_IRWXU );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+
+  puts( "Init - unmount fs at /dir01 - OK" );
+  status = unmount( "/dir01" );
+  rtems_test_assert( status == 0 );
 
   status = rmdir( "/dir01" );
   rtems_test_assert( status == 0 );
@@ -69,6 +81,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

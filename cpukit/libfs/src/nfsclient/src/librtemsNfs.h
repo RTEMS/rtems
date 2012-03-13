@@ -123,7 +123,7 @@ rpcUdpCleanup(void);
  * 			Supply zero values to have the
  * 			driver chose reasonable defaults.
  */
-int
+void
 nfsInit(int smallPoolDepth, int bigPoolDepth);
 
 /* Driver cleanup code

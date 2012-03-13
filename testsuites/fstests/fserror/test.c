@@ -312,7 +312,11 @@ static void rdwr_error (void)
   char *file01 = "name01";
   char *databuf = "test";
   char *readbuf[10];
-
+  int shift = sizeof(off_t) * 8 - 1;
+  off_t one = 1;
+  off_t tiny = one << shift;
+  off_t huge = tiny - 1;
+  off_t off;
 
   mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
   const char *wd = __func__;
@@ -342,7 +346,11 @@ static void rdwr_error (void)
   fd = open (file01, O_RDONLY, mode);
 
   EXPECT_ERROR (EBADF, write, fd, databuf, 10);
-  EXPECT_ERROR (EBADF, write, 100, readbuf, 10);
+
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  EXPECT_ERROR (EBADF, write, fd, readbuf, 10);
 
   /*
    * The whence argument is not a proper value,
@@ -350,14 +358,25 @@ static void rdwr_error (void)
    * block special file, or directory.
    */
 
+  fd = open (file01, O_RDWR, mode);
+
   EXPECT_ERROR (EINVAL, lseek, fd, -100, SEEK_END);
   EXPECT_ERROR (EINVAL, lseek, fd, -100, SEEK_CUR);
   EXPECT_ERROR (EINVAL, lseek, fd, -100, SEEK_SET);
 
+  status = ftruncate (fd, 1);
+  rtems_test_assert (status == 0);
+  EXPECT_ERROR (EOVERFLOW, lseek, fd, huge, SEEK_END);
+
+  off = lseek (fd, 1, SEEK_SET);
+  rtems_test_assert (off == 1);
+  EXPECT_ERROR (EOVERFLOW, lseek, fd, huge, SEEK_CUR);
+
   status = close (fd);
   rtems_test_assert (status == 0);
 
-  EXPECT_ERROR (EBADF, lseek, fd, -100, SEEK_SET);
+  EXPECT_ERROR (EBADF, lseek, fd, 0, SEEK_SET);
+
   /*
    * Go back to parent directory
    */

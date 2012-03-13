@@ -12,65 +12,44 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <errno.h>
+#include <unistd.h>
 
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-int link(
-  const char *existing,
-  const char *new
-)
+int link( const char *path1, const char *path2 )
 {
-  rtems_filesystem_location_info_t    existing_loc;
-  rtems_filesystem_location_info_t    parent_loc;
-  int                                 i;
-  int                                 result;
-  const char                         *name_start;
+  int rv = 0;
+  rtems_filesystem_eval_path_context_t ctx_1;
+  rtems_filesystem_eval_path_context_t ctx_2;
+  int eval_flags_1 = RTEMS_LIBIO_FOLLOW_LINK;
+  int eval_flags_2 = RTEMS_LIBIO_FOLLOW_LINK
+    | RTEMS_LIBIO_MAKE
+    | RTEMS_LIBIO_EXCLUSIVE;
+  const rtems_filesystem_location_info_t *currentloc_1 =
+    rtems_filesystem_eval_path_start( &ctx_1, path1, eval_flags_1 );
+  const rtems_filesystem_location_info_t *currentloc_2 =
+    rtems_filesystem_eval_path_start( &ctx_2, path2, eval_flags_2 );
 
-  /*
-   * Get the node we are linking to.
-   */
-
-  result = rtems_filesystem_evaluate_path( existing, strlen( existing ),
-                                           0, &existing_loc, true );
-  if ( result != 0 )
-     return -1;
-
-  /*
-   * Get the parent of the node we are creating.
-   */
-
-  rtems_filesystem_get_start_loc( new, &i, &parent_loc );
-
-  result = (*parent_loc.ops->evalformake_h)( &new[i], &parent_loc, &name_start );
-  if ( result != 0 ) {
-    rtems_filesystem_freenode( &existing_loc );
-    return -1;
+  rv = rtems_filesystem_location_exists_in_same_fs_instance_as(
+    currentloc_1,
+    currentloc_2
+  );
+  if ( rv == 0 ) {
+    rv = (*currentloc_2->ops->link_h)(
+      currentloc_2,
+      currentloc_1,
+      rtems_filesystem_eval_path_get_token( &ctx_2 ),
+      rtems_filesystem_eval_path_get_tokenlen( &ctx_2 )
+    );
   }
 
-  /*
-   *  Check to see if the caller is trying to link across file system
-   *  boundaries.
-   */
+  rtems_filesystem_eval_path_cleanup( &ctx_1 );
+  rtems_filesystem_eval_path_cleanup( &ctx_2 );
 
-  if ( parent_loc.mt_entry != existing_loc.mt_entry ) {
-    rtems_filesystem_freenode( &existing_loc );
-    rtems_filesystem_freenode( &parent_loc );
-    rtems_set_errno_and_return_minus_one( EXDEV );
-  }
-
-  result = (*parent_loc.ops->link_h)( &existing_loc, &parent_loc, name_start );
-
-  rtems_filesystem_freenode( &existing_loc );
-  rtems_filesystem_freenode( &parent_loc );
-
-  return result;
+  return rv;
 }
 
 /*
@@ -85,10 +64,10 @@ int link(
 
 int _link_r(
   struct _reent *ptr __attribute__((unused)),
-  const char    *existing,
-  const char    *new
+  const char    *path1,
+  const char    *path2
 )
 {
-  return link( existing, new );
+  return link( path1, path2 );
 }
 #endif

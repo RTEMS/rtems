@@ -12,37 +12,31 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
+#include <unistd.h>
+
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
-ssize_t readlink(
-  const char *pathname,
-  char       *buf,
-  size_t      bufsize
-)
+ssize_t readlink( const char *path, char *buf, size_t bufsize )
 {
-  rtems_filesystem_location_info_t  loc;
-  int                               result;
+  ssize_t rv = 0;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_LIBIO_FOLLOW_HARD_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  rtems_filesystem_node_types_t type =
+    (*currentloc->ops->node_type_h)( currentloc );
 
-  if (!buf)
-    rtems_set_errno_and_return_minus_one( EFAULT );
-
-  result = rtems_filesystem_evaluate_path( pathname, strlen( pathname ),
-                                           0, &loc, false );
-  if ( result != 0 )
-     return -1;
-
-  if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  if ( type == RTEMS_FILESYSTEM_SYM_LINK ) {
+    rv = (*currentloc->ops->readlink_h)( currentloc, buf, bufsize );
+  } else {
+    rtems_filesystem_eval_path_error( &ctx, EINVAL );
+    rv = -1;
   }
 
-  result =  (*loc.ops->readlink_h)( &loc, buf, bufsize );
+  rtems_filesystem_eval_path_cleanup( &ctx );
 
-  rtems_filesystem_freenode( &loc );
-
-  return result;
+  return rv;
 }

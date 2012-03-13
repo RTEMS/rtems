@@ -1,22 +1,9 @@
 /*
- *  This is a native test to explore how the readdir() family works.
- *  Newlib supports the following readdir() family members:
- *
- *    closedir()   -
- *    readdir()    -
- *    scandir()    -
- *    opendir()    -
- *    rewinddir()  -
- *    telldir()    - BSD not in POSIX
- *    seekdir()    - BSD not in POSIX
- *
- *
- *  seekdir() takes an offset which is a byte offset.  The Linux
- *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
- *  record where DIRENT_SIZE seems to be 12 bytes.
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Modifications to support reference counting in the file system are
+ *  Copyright (c) 2012 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -37,10 +24,11 @@
 #include <errno.h>
 #include <rtems/libio.h>
 #include <rtems/userenv.h>
+#include <rtems/malloc.h>
 #include <pmacros.h>
 #include <rtems/libcsupport.h>
 
-void touch( char *file )
+static void touch( char *file )
 {
   int fd;
 
@@ -51,7 +39,7 @@ void touch( char *file )
   close( fd );
 }
 
-int fileexists( char *file )
+static int fileexists( char *file )
 {
   int         status;
   struct stat statbuf;
@@ -77,7 +65,7 @@ int main(
 #endif
 {
   int status;
-  void *alloc_ptr = (void *)0;
+  void *opaque;
 /*
  *  This test is the C equivalent of this sequence.
 #mkdir /one
@@ -108,21 +96,27 @@ int main(
   touch( "/one/one.test" );
   touch( "/one/two/two.test" );
 
-  puts( "allocate most of memory - attempt to fail chroot - expect ENOTSUP" );
-  alloc_ptr = malloc( malloc_free_space() - 4 );
-  rtems_test_assert( alloc_ptr != NULL );
+  puts( "chroot with bad path - expect ENOENT" );
+  status = chroot( "/three" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOENT );
+
+  puts( "chroot with file - expect ENOTDIR" );
+  status = chroot( "/one/one.test" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTDIR );
+
+  puts( "allocate most of memory - attempt to fail chroot - expect ENOMEM" );
+  opaque = rtems_heap_greedy_allocate(
+    sizeof(rtems_filesystem_global_location_t)
+  );
 
   status = chroot( "/one" );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOTSUP );
+  rtems_test_assert( errno == ENOMEM );
 
   puts( "freeing the allocated memory" );
-  free( alloc_ptr );
-
-  puts( "chroot with bad path - expect EFAULT" );
-  status = chroot( NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
+  rtems_heap_greedy_free( opaque );
 
   status = chroot( "/one" );
   rtems_test_assert( status == 0 );
@@ -133,8 +127,8 @@ int main(
   status = fileexists( "/two/two.test" );
   printf( "%s on /two/two.test\n", (status) ? "SUCCESS" : "FAILURE" );
 
-  puts( "Reset the private environment" );
-  rtems_libio_set_private_env();
+  puts( "Go back to global environment" );
+  rtems_libio_use_global_env();
 
   status = fileexists( "/one/one.test" );
   printf( "%s on /one/one.test\n", ( status) ? "SUCCESS" : "FAILURE" );

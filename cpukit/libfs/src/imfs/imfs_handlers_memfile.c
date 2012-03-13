@@ -12,10 +12,8 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
-
-#include <errno.h>
 
 #include "imfs.h"
 
@@ -31,10 +29,8 @@ const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_ioctl,
   memfile_lseek,
   IMFS_stat,
-  IMFS_fchmod,
   memfile_ftruncate,
   IMFS_fdatasync,      /* fsync */
   IMFS_fdatasync,
-  rtems_filesystem_default_fcntl,
-  IMFS_rmnod
+  rtems_filesystem_default_fcntl
 };
