@@ -252,6 +252,7 @@ typedef struct rtems_flashdisk
                                                 mappings. */
   uint32_t block_count;                    /**< The number of avail. blocks. */
   uint32_t unavail_blocks;                 /**< The number of unavail blocks. */
+  uint32_t erased_blocks;                  /**< The number of erased blocks. */
 
   rtems_fdisk_device_ctl* devices;         /**< The flash devices for this
                                                 disk. */
@@ -968,6 +969,7 @@ rtems_fdisk_seg_write_page (rtems_flashdisk*         fd,
     if (ret)
       return ret;
   }
+  --fd->erased_blocks;
   return rtems_fdisk_seg_write (fd, sc,
                                 page * fd->block_size, buffer, fd->block_size);
 }
@@ -1145,6 +1147,7 @@ rtems_fdisk_erase_segment (rtems_flashdisk* fd, rtems_fdisk_segment_ctl* sc)
     return ret;
   }
 
+  fd->erased_blocks += sc->pages;
   sc->erased++;
 
   memset (sc->page_descriptors, 0xff, sc->pages_desc * fd->block_size);
@@ -1608,7 +1611,11 @@ rtems_fdisk_recover_block_mappings (rtems_flashdisk* fd)
           ret = rtems_fdisk_seg_blank_check_page (fd, sc,
                                                   page + sc->pages_desc);
 
-          if (ret)
+          if (ret == 0)
+          {
+            ++fd->erased_blocks;
+          }
+          else
           {
 #if RTEMS_FDISK_TRACE
             rtems_fdisk_warning (fd, "page not blank: %d-%d-%d",
