@@ -63,14 +63,14 @@ void devFS_eval_path(
   int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
 
   if (node != NULL) {
-    if ((eval_flags & RTEMS_LIBIO_EXCLUSIVE) == 0) {
+    if ((eval_flags & RTEMS_FS_EXCLUSIVE) == 0) {
       currentloc->node_access = node;
       rtems_filesystem_eval_path_clear_path(ctx);
     } else {
       rtems_filesystem_eval_path_error(ctx, EEXIST);
     }
   } else {
-    if ((eval_flags & RTEMS_LIBIO_MAKE) != 0) {
+    if ((eval_flags & RTEMS_FS_MAKE) != 0) {
       if (free_node != NULL) {
         free_node->mode = S_IRWXU | S_IRWXG | S_IRWXO;
         currentloc->node_access = free_node;

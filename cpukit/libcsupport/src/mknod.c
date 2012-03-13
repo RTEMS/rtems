@@ -59,10 +59,10 @@ int mknod( const char *path, mode_t mode, dev_t dev )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK
-    | RTEMS_LIBIO_MAKE
-    | RTEMS_LIBIO_EXCLUSIVE
-    | (S_ISDIR(mode) ? RTEMS_LIBIO_ACCEPT_RESIDUAL_DELIMITERS : 0);
+  int eval_flags = RTEMS_FS_FOLLOW_LINK
+    | RTEMS_FS_MAKE
+    | RTEMS_FS_EXCLUSIVE
+    | (S_ISDIR(mode) ? RTEMS_FS_ACCEPT_RESIDUAL_DELIMITERS : 0);
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 

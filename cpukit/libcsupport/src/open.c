@@ -70,11 +70,11 @@ static int do_open(
   bool make = (oflag & O_CREAT) == O_CREAT;
   bool exclusive = (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL);
   bool truncate = (oflag & O_TRUNC) == O_TRUNC;
-  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK
-    | (read_access ? RTEMS_LIBIO_PERMS_READ : 0)
-    | (write_access ? RTEMS_LIBIO_PERMS_WRITE : 0)
-    | (make ? RTEMS_LIBIO_MAKE : 0)
-    | (exclusive ?  RTEMS_LIBIO_EXCLUSIVE : 0);
+  int eval_flags = RTEMS_FS_FOLLOW_LINK
+    | (read_access ? RTEMS_FS_PERMS_READ : 0)
+    | (write_access ? RTEMS_FS_PERMS_WRITE : 0)
+    | (make ? RTEMS_FS_MAKE : 0)
+    | (exclusive ?  RTEMS_FS_EXCLUSIVE : 0);
   rtems_filesystem_eval_path_context_t ctx;
 
   rtems_filesystem_eval_path_start( &ctx, path, eval_flags );

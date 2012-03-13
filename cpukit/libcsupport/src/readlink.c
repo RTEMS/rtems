@@ -23,7 +23,7 @@ ssize_t readlink( const char *path, char *buf, size_t bufsize )
 {
   ssize_t rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_FOLLOW_HARD_LINK;
+  int eval_flags = RTEMS_FS_FOLLOW_HARD_LINK;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
   rtems_filesystem_node_types_t type =

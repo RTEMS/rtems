@@ -24,10 +24,10 @@ int link( const char *path1, const char *path2 )
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx_1;
   rtems_filesystem_eval_path_context_t ctx_2;
-  int eval_flags_1 = RTEMS_LIBIO_FOLLOW_LINK;
-  int eval_flags_2 = RTEMS_LIBIO_FOLLOW_LINK
-    | RTEMS_LIBIO_MAKE
-    | RTEMS_LIBIO_EXCLUSIVE;
+  int eval_flags_1 = RTEMS_FS_FOLLOW_LINK;
+  int eval_flags_2 = RTEMS_FS_FOLLOW_LINK
+    | RTEMS_FS_MAKE
+    | RTEMS_FS_EXCLUSIVE;
   const rtems_filesystem_location_info_t *currentloc_1 =
     rtems_filesystem_eval_path_start( &ctx_1, path1, eval_flags_1 );
   const rtems_filesystem_location_info_t *currentloc_2 =

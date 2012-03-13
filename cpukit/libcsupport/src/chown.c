@@ -48,5 +48,5 @@ int rtems_filesystem_chown(
 
 int chown( const char *path, uid_t owner, gid_t group )
 {
-  return rtems_filesystem_chown( path, owner, group, RTEMS_LIBIO_FOLLOW_LINK );
+  return rtems_filesystem_chown( path, owner, group, RTEMS_FS_FOLLOW_LINK );
 }

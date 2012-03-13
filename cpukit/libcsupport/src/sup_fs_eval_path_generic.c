@@ -60,7 +60,7 @@ void rtems_filesystem_eval_path_generic(
           } else {
             int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
 
-            if ((eval_flags & RTEMS_LIBIO_REJECT_TERMINAL_DOT) == 0) {
+            if ((eval_flags & RTEMS_FS_REJECT_TERMINAL_DOT) == 0) {
               status = (*config->eval_token)(ctx, arg, ".", 1);
             } else {
               rtems_filesystem_eval_path_error(ctx, EINVAL);
@@ -100,7 +100,7 @@ void rtems_filesystem_eval_path_generic(
             rtems_filesystem_eval_path_eat_delimiter(ctx);
             eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
             if (
-              (eval_flags & RTEMS_LIBIO_ACCEPT_RESIDUAL_DELIMITERS) == 0
+              (eval_flags & RTEMS_FS_ACCEPT_RESIDUAL_DELIMITERS) == 0
                 || rtems_filesystem_eval_path_has_path(ctx)
             ) {
               rtems_filesystem_eval_path_error(ctx, ENOENT);

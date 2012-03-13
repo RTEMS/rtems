@@ -112,8 +112,8 @@ static int register_subordinate_file_system(
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_PERMS_RWX
-    | RTEMS_LIBIO_FOLLOW_LINK;
+  int eval_flags = RTEMS_FS_PERMS_RWX
+    | RTEMS_FS_FOLLOW_LINK;
   rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, target, eval_flags );
 

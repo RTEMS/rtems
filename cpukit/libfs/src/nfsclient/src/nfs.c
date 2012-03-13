@@ -1428,7 +1428,7 @@ static rtems_filesystem_eval_path_generic_status nfs_eval_part(
 
 		if (nfs_update_currentloc(ctx, nfs, entry)) {
 			int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
-			bool follow_sym_link = (eval_flags & RTEMS_LIBIO_FOLLOW_SYM_LINK) != 0;
+			bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
 			bool terminal = !rtems_filesystem_eval_path_has_path( ctx );
 
 			if (SERP_ATTR(entry).type == NFLNK && (follow_sym_link || !terminal)) {

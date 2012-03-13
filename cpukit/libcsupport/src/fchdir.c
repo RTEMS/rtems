@@ -41,7 +41,7 @@ int fchdir( int fd )
   rv = (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, &st );
   if ( rv == 0 ) {
     bool access_ok = rtems_filesystem_check_access(
-      RTEMS_LIBIO_PERMS_EXEC,
+      RTEMS_FS_PERMS_EXEC,
       st.st_mode,
       st.st_uid,
       st.st_gid

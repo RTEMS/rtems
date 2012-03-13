@@ -25,6 +25,6 @@ int lchown( const char *path, uid_t owner, gid_t group )
     path,
     owner,
     group,
-    RTEMS_LIBIO_FOLLOW_HARD_LINK
+    RTEMS_FS_FOLLOW_HARD_LINK
   );
 }

@@ -28,7 +28,7 @@ int unmount( const char *path )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+  int eval_flags = RTEMS_FS_FOLLOW_LINK;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
   rtems_filesystem_mount_table_entry_t *mt_entry = currentloc->mt_entry;

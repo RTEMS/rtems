@@ -23,11 +23,11 @@ int rmdir( const char *path )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_REJECT_TERMINAL_DOT;
+  int eval_flags = RTEMS_FS_REJECT_TERMINAL_DOT;
   rtems_filesystem_location_info_t parentloc;
-  int parent_eval_flags = RTEMS_LIBIO_PERMS_WRITE
-    | RTEMS_LIBIO_PERMS_SEARCH
-    | RTEMS_LIBIO_FOLLOW_LINK;
+  int parent_eval_flags = RTEMS_FS_PERMS_WRITE
+    | RTEMS_FS_PERMS_EXEC
+    | RTEMS_FS_FOLLOW_LINK;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start_with_parent(
       &ctx,

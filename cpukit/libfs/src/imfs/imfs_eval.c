@@ -124,7 +124,7 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
   IMFS_jnode_t *dir = currentloc->node_access;
   bool access_ok = rtems_filesystem_eval_path_check_access(
     ctx,
-    RTEMS_LIBIO_PERMS_SEARCH,
+    RTEMS_FS_PERMS_EXEC,
     dir->st_mode,
     dir->st_uid,
     dir->st_gid
@@ -136,8 +136,8 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
     if ( entry != NULL ) {
       bool terminal = !rtems_filesystem_eval_path_has_path( ctx );
       int eval_flags = rtems_filesystem_eval_path_get_flags( ctx );
-      bool follow_hard_link = (eval_flags & RTEMS_LIBIO_FOLLOW_HARD_LINK) != 0;
-      bool follow_sym_link = (eval_flags & RTEMS_LIBIO_FOLLOW_SYM_LINK) != 0;
+      bool follow_hard_link = (eval_flags & RTEMS_FS_FOLLOW_HARD_LINK) != 0;
+      bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
 
       rtems_filesystem_eval_path_clear_token( ctx );
 
@@ -163,7 +163,7 @@ static rtems_filesystem_eval_path_generic_status IMFS_eval_token(
         } else {
           access_ok = rtems_filesystem_eval_path_check_access(
             ctx,
-            RTEMS_LIBIO_PERMS_EXEC,
+            RTEMS_FS_PERMS_EXEC,
             entry->st_mode,
             entry->st_uid,
             entry->st_gid

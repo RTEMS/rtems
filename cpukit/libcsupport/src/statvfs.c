@@ -25,7 +25,7 @@ int statvfs( const char *path, struct statvfs *buf )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+  int eval_flags = RTEMS_FS_FOLLOW_LINK;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 

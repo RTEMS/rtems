@@ -191,8 +191,8 @@ static void rtems_tfs_eval_path(rtems_filesystem_eval_path_context_t *self)
 {
   int eval_flags = rtems_filesystem_eval_path_get_flags(self);
 
-  if ((eval_flags & RTEMS_LIBIO_MAKE) == 0) {
-    int rw = RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE;
+  if ((eval_flags & RTEMS_FS_MAKE) == 0) {
+    int rw = RTEMS_FS_PERMS_READ | RTEMS_FS_PERMS_WRITE;
 
     if ((eval_flags & rw) != rw) {
       rtems_filesystem_location_info_t *currentloc =

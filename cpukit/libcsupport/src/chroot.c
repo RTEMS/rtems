@@ -28,8 +28,8 @@ int chroot( const char *path )
   int rv = 0;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_PERMS_SEARCH
-    | RTEMS_LIBIO_FOLLOW_LINK;
+  int eval_flags = RTEMS_FS_PERMS_EXEC
+    | RTEMS_FS_FOLLOW_LINK;
   rtems_filesystem_location_info_t loc;
   rtems_filesystem_global_location_t *new_current_loc;
 

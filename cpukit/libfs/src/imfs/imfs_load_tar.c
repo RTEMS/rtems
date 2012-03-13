@@ -92,7 +92,7 @@ int rtems_tarfs_load(
    unsigned long                    nblocks;
    IMFS_jnode_t                    *node;
    int rv = 0;
-   int eval_flags = RTEMS_LIBIO_FOLLOW_LINK;
+   int eval_flags = RTEMS_FS_FOLLOW_LINK;
    rtems_filesystem_eval_path_context_t ctx;
    rtems_filesystem_location_info_t rootloc;
    rtems_filesystem_location_info_t *currentloc =
@@ -101,7 +101,7 @@ int rtems_tarfs_load(
    rtems_filesystem_eval_path_extract_currentloc( &ctx, &rootloc );
    rtems_filesystem_eval_path_set_flags(
      &ctx,
-     RTEMS_LIBIO_MAKE | RTEMS_LIBIO_EXCLUSIVE
+     RTEMS_FS_MAKE | RTEMS_FS_EXCLUSIVE
    );
    if (rootloc.ops != &IMFS_ops && rootloc.ops != &fifoIMFS_ops) {
      rv = -1;

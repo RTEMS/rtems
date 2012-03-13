@@ -34,8 +34,8 @@ int _rename_r(
   rtems_filesystem_eval_path_context_t old_ctx;
   int old_eval_flags = 0;
   rtems_filesystem_location_info_t old_parentloc;
-  int old_parent_eval_flags = RTEMS_LIBIO_PERMS_WRITE
-    | RTEMS_LIBIO_FOLLOW_HARD_LINK;
+  int old_parent_eval_flags = RTEMS_FS_PERMS_WRITE
+    | RTEMS_FS_FOLLOW_HARD_LINK;
   const rtems_filesystem_location_info_t *old_currentloc =
     rtems_filesystem_eval_path_start_with_parent(
       &old_ctx,
@@ -47,9 +47,9 @@ int _rename_r(
   rtems_filesystem_eval_path_context_t new_ctx;
 
   /* FIXME: This is not POSIX conform */
-  int new_eval_flags = RTEMS_LIBIO_FOLLOW_HARD_LINK
-    | RTEMS_LIBIO_MAKE
-    | RTEMS_LIBIO_EXCLUSIVE;
+  int new_eval_flags = RTEMS_FS_FOLLOW_HARD_LINK
+    | RTEMS_FS_MAKE
+    | RTEMS_FS_EXCLUSIVE;
 
   const rtems_filesystem_location_info_t *new_currentloc =
     rtems_filesystem_eval_path_start( &new_ctx, new, new_eval_flags );

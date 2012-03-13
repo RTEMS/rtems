@@ -48,8 +48,8 @@ int chdir( const char *path )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_PERMS_EXEC
-    | RTEMS_LIBIO_FOLLOW_LINK;
+  int eval_flags = RTEMS_FS_PERMS_EXEC
+    | RTEMS_FS_FOLLOW_LINK;
   rtems_filesystem_location_info_t pathloc;
 
   rtems_filesystem_eval_path_start( &ctx, path, eval_flags );

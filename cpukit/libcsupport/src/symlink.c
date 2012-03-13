@@ -23,9 +23,9 @@ int symlink( const char *path1, const char *path2 )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_LIBIO_FOLLOW_HARD_LINK
-    | RTEMS_LIBIO_MAKE
-    | RTEMS_LIBIO_EXCLUSIVE;
+  int eval_flags = RTEMS_FS_FOLLOW_HARD_LINK
+    | RTEMS_FS_MAKE
+    | RTEMS_FS_EXCLUSIVE;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path2, eval_flags );
 

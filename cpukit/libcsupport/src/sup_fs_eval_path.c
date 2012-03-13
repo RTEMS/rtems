@@ -70,7 +70,7 @@ static void check_access(
   const rtems_filesystem_location_info_t *currentloc = &ctx->currentloc;
   const rtems_filesystem_mount_table_entry_t *mt_entry = currentloc->mt_entry;
 
-  if ((eval_flags & RTEMS_LIBIO_PERMS_WRITE) == 0 || mt_entry->writeable) {
+  if ((eval_flags & RTEMS_FS_PERMS_WRITE) == 0 || mt_entry->writeable) {
     struct stat st;
     int rv;
 
@@ -109,15 +109,15 @@ void rtems_filesystem_eval_path_continue(
 
   eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
   if (rtems_filesystem_eval_path_has_token(ctx)) {
-    bool make = (eval_flags & RTEMS_LIBIO_MAKE) != 0;
+    bool make = (eval_flags & RTEMS_FS_MAKE) != 0;
 
     if (make) {
-      check_access(ctx, RTEMS_LIBIO_PERMS_WRITE);
+      check_access(ctx, RTEMS_FS_PERMS_WRITE);
     } else {
       rtems_filesystem_eval_path_error(ctx, ENOENT);
     }
   } else {
-    bool exclusive = (eval_flags & RTEMS_LIBIO_EXCLUSIVE) != 0;
+    bool exclusive = (eval_flags & RTEMS_FS_EXCLUSIVE) != 0;
 
     if (!exclusive) {
       check_access(ctx, ctx->flags);

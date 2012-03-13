@@ -25,7 +25,7 @@
 #ifndef _STAT_NAME
 #define _STAT_NAME         stat
 #define _STAT_R_NAME       _stat_r
-#define _STAT_FOLLOW_LINKS RTEMS_LIBIO_FOLLOW_LINK
+#define _STAT_FOLLOW_LINKS RTEMS_FS_FOLLOW_LINK
 #endif
 
 #include <sys/stat.h>

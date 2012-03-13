@@ -137,7 +137,7 @@ rtems_rfs_rtems_eval_token(
   rtems_filesystem_eval_path_generic_status status =
     RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_DONE;
   rtems_rfs_inode_handle* inode = arg;
-  bool access_ok = rtems_rfs_rtems_eval_perms (ctx, RTEMS_LIBIO_PERMS_SEARCH, inode);
+  bool access_ok = rtems_rfs_rtems_eval_perms (ctx, RTEMS_FS_PERMS_EXEC, inode);
 
   if (access_ok) {
     if (rtems_filesystem_is_current_directory (token, tokenlen)) {
@@ -179,7 +179,7 @@ rtems_rfs_rtems_eval_token(
         bool is_sym_link = rtems_rfs_rtems_node_type_by_inode (inode)
           == RTEMS_FILESYSTEM_SYM_LINK;
         int eval_flags = rtems_filesystem_eval_path_get_flags (ctx);
-        bool follow_sym_link = (eval_flags & RTEMS_LIBIO_FOLLOW_SYM_LINK) != 0;
+        bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
         bool terminal = !rtems_filesystem_eval_path_has_path (ctx);
 
         rtems_filesystem_eval_path_clear_token (ctx);

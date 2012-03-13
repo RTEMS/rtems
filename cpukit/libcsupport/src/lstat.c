@@ -17,6 +17,6 @@
 
 #define _STAT_NAME         lstat
 #define _STAT_R_NAME       _lstat_r
-#define _STAT_FOLLOW_LINKS RTEMS_LIBIO_FOLLOW_HARD_LINK
+#define _STAT_FOLLOW_LINKS RTEMS_FS_FOLLOW_HARD_LINK
 
 #include "stat.c"
