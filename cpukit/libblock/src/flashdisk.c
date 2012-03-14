@@ -196,6 +196,8 @@ typedef struct rtems_flashdisk
   uint8_t* copy_buffer;                    /**< Copy buf used during compacting */
 
   uint32_t info_level;                     /**< The info trace level. */
+
+  uint32_t starvations;                    /**< Erased blocks starvations counter. */
 } rtems_flashdisk;
 
 /**
@@ -276,9 +278,14 @@ rtems_fdisk_printf (const rtems_flashdisk* fd, const char *format, ...)
 }
 
 static bool
-rtems_fdisk_is_erased_blocks_starvation (const rtems_flashdisk* fd)
+rtems_fdisk_is_erased_blocks_starvation (rtems_flashdisk* fd)
 {
-  return fd->erased_blocks < fd->unavail_blocks;
+  bool starvation = fd->erased_blocks < fd->unavail_blocks;
+
+  if (starvation)
+    fd->starvations++;
+
+  return starvation;
 }
 
 /**
@@ -2218,6 +2225,7 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
 
   rtems_fdisk_printf (fd, "Block count\t%d", fd->block_count);
   rtems_fdisk_printf (fd, "Unavail blocks\t%d", fd->unavail_blocks);
+  rtems_fdisk_printf (fd, "Starvations\t%d", fd->starvations);
   count = rtems_fdisk_segment_count_queue (&fd->available);
   total = count;
   rtems_fdisk_printf (fd, "Available queue\t%ld (%ld)",
