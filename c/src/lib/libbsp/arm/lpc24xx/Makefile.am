@@ -74,6 +74,7 @@ EXTRA_DIST += startup/linkcmds.lpc24xx_ea
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_ram
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
+EXTRA_DIST += startup/linkcmds.lpc24xx_plx800_ram
 EXTRA_DIST += startup/linkcmds.lpc24xx_plx800_rom_int
 
 ###############################################################################

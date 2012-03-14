@@ -69,6 +69,48 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     /* Load mode register to active or refresh command period 2 tCK */
     .tmrd = 1
   }
+#elif defined(LPC24XX_EMC_IS42S32800D7)
+  /* Dynamic Memory 0: ISSI IS42S32800D7 at 51612800Hz (tCK = 19.4ns) */
+  {
+    /* (n * 16) clock cycles -> 15.5us <= 15.6 us */
+    .refresh = 50,
+
+    /* Use command delayed strategy */
+    .readconfig = 1,
+
+    /* (n + 1) clock cycles -> 38.8ns >= 20ns */
+    .trp = 1,
+
+    /* (n + 1) clock cycles -> 58.1ns >= 45ns */
+    .tras = 2,
+
+    /* (n + 1) clock cycles -> 77.5ns >= 70ns (tXSR) */
+    .tsrex = 3,
+
+    /* (n + 1) clock cycles -> 38.8ns >= 20ns (tRCD) */
+    .tapr = 1,
+
+    /* n clock cycles -> 38.8ns >= 35ns */
+    .tdal = 2,
+
+    /* (n + 1) clock cycles = 19.4ns >= 14ns (tDPL) */
+    .twr = 0,
+
+    /* (n + 1) clock cycles = 77.5ns >= 67.5ns */
+    .trc = 3,
+
+    /* (n + 1) clock cycles = 77.5ns >= 67.5ns (tRC) */
+    .trfc = 3,
+
+    /* (n + 1) clock cycles = 77.5ns >= 70ns */
+    .txsr = 3,
+
+    /* (n + 1) clock cycles = 19.4ns >= 14ns */
+    .trrd = 0,
+
+    /* (n + 1) clock cycles = 19.4ns >= 14ns */
+    .tmrd = 0
+  }
 #elif defined(LPC24XX_EMC_W9825G2JB75I)
   /* Dynamic Memory 0: Winbond W9825G2JB75I at 51612800Hz (tCK = 19.4ns) */
   {
@@ -211,18 +253,19 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
     .rascas = EMC_DYN_RASCAS_RAS(2) | EMC_DYN_RASCAS_CAS(2, 0),
     .mode = 0xa0000000 | (0x23 << (1 + 2 + 8))
   }
-#elif defined(LPC24XX_EMC_W9825G2JB75I)
+#elif defined(LPC24XX_EMC_W9825G2JB75I) \
+  || defined(LPC24XX_EMC_IS42S32800D7)
   {
     .chip_select = (volatile lpc_emc_dynamic *) &EMC_DYN_CFG0,
 
     /* 32-bit data bus, 4 banks, 12 row lines, 9 column lines, RBC */
-    .config = 0x4280,
+    .config = 0x4480,
 
     /* RAS based on tRCD = 20ns */
     .rascas = EMC_DYN_RASCAS_RAS(2) | EMC_DYN_RASCAS_CAS(2, 0),
 
-    /* CAS 2, burst length 8, */
-    .mode = 0xa0000000 | (0x23 << (2 + 2 + 9))
+    /* CAS 2, burst length 4 */
+    .mode = 0xa0000000 | (0x22 << (2 + 2 + 9))
   }
 #elif defined(LPC24XX_EMC_K4S561632E)
   {

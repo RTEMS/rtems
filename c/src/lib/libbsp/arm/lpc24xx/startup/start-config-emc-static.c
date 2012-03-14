@@ -27,7 +27,7 @@
 
 BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
    lpc24xx_start_config_emc_static_chip [] = {
-#if defined(LPC24XX_EMC_NUMONYX_M29W160E)
+#if defined(LPC24XX_EMC_M29W160E)
   /*
    * Static Memory 1: Numonyx M29W160EB
    *
@@ -66,8 +66,38 @@ BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
       .waitrun = 0xf
     }
   }
+#elif defined(LPC24XX_EMC_M29W320E70)
+  /* Static Memory 0: M29W320E70 at 51612800Hz (tCK = 19.4ns) */
+  {
+    .chip_select = (volatile lpc_emc_static *) EMC_STA_BASE_0,
+    .config = {
+      /*
+       * 16 bit, page mode disabled, active LOW chip select, extended wait
+       * disabled, writes not protected, byte lane state LOW/LOW.
+       */
+      .config = 0x81,
+
+      /* (n + 1) clock cycles -> 38.8ns >= 30ns (tWHWL) */
+      .waitwen = 1,
+
+      /* (n + 1) clock cycles -> 19.4ns >= 0ns */
+      .waitoen = 0,
+
+      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tAVQV, tELQV) */
+      .waitrd = 3,
+
+      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tAVQV, tELQV) */
+      .waitpage = 3,
+
+      /* (n + 2) clock cycles -> 58.1ns >= 45ns (tWLWH) */
+      .waitwr = 1,
+
+      /* (n + 1) clock cycles -> 38.8ns >= 25ns (tEHQZ) */
+      .waitrun = 1
+    }
+  }
 #elif defined(LPC24XX_EMC_SST39VF3201)
-  /* Static Memory 1: SST SST39VF3201 at 51612800Hz (tCK = 19.4ns) */
+  /* Static Memory 0: SST39VF3201 at 51612800Hz (tCK = 19.4ns) */
   {
     .chip_select = (volatile lpc_emc_static *) EMC_STA_BASE_0,
     .config = {
