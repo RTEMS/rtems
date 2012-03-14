@@ -519,6 +519,7 @@ typedef struct {
   uint64_t                 o5;
   uint64_t                 o6_sp;
   uint64_t                 o7;
+  uint64_t                 tvec;
 } CPU_Interrupt_frame;
 
 #endif /* ASM */
@@ -548,7 +549,7 @@ typedef struct {
 #define ISF_O5_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x88
 #define ISF_O6_SP_OFFSET       CPU_MINIMUM_STACK_FRAME_SIZE + 0x90
 #define ISF_O7_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x98
-#define ISF_TVEC_NUM		CPU_MINIMUM_STACK_FRAME_SIZE + 0xA0
+#define ISF_TVEC_OFFSET        CPU_MINIMUM_STACK_FRAME_SIZE + 0xA0
 
 #define CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE CPU_MINIMUM_STACK_FRAME_SIZE + 0xA8 
 #ifndef ASM

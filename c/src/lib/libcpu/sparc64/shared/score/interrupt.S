@@ -118,7 +118,7 @@ PUBLIC(_ISR_Handler)
     stx   %g3, [%sp + STACK_BIAS + ISF_PIL_OFFSET]
     stx   %g4, [%sp + STACK_BIAS + ISF_TPC_OFFSET]
     stx   %g5, [%sp + STACK_BIAS + ISF_TNPC_OFFSET]
-    stx   %g2, [%sp + STACK_BIAS + ISF_TVEC_NUM]
+    stx   %g2, [%sp + STACK_BIAS + ISF_TVEC_OFFSET]
 
     rd  %y, %g4        ! save y
     stx   %g4, [%sp + STACK_BIAS + ISF_Y_OFFSET]
@@ -522,7 +522,7 @@ dispatchAgain:
   ldx   [%sp + STACK_BIAS + ISF_TPC_OFFSET], %g4
   ldx   [%sp + STACK_BIAS + ISF_TNPC_OFFSET], %g5
   ldx   [%sp + STACK_BIAS + ISF_TSTATE_OFFSET], %g1
-  ldx   [%sp + STACK_BIAS + ISF_TVEC_NUM], %g2
+  ldx   [%sp + STACK_BIAS + ISF_TVEC_OFFSET], %g2
   wrpr  %g0, %g3, %pil
   wrpr  %g0, %g4, %tpc
   wrpr  %g0, %g5, %tnpc
