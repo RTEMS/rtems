@@ -9,86 +9,11 @@
  *
  * $Id$
  */
-/**
- * @file
- *
- * Flash disk driver for RTEMS provides support for block based
- * file systems on flash devices. The driver is not a flash file
- * system nor does it try to compete with flash file systems. It
- * currently does not journal how-ever block sequence numbering
- * could be added to allow recovery of a past positions if
- * a power down occurred while being updated.
- *
- * This flash driver provides block device support for most flash
- * devices. The driver has been tested on NOR type devices such
- * as the AMLV160 or M28W160. Support for NAND type devices may
- * require driver changes to allow speedy recover of the block
- * mapping data and to also handle the current use of word programming.
- * Currently the page descriptors are stored in the first few pages
- * of each segment.
- *
- * The driver supports devices, segments and pages. You provide
- * to the driver the device descriptions as a table of device
- * descriptors. Each device descriptor contain a table of
- * segment descriptions or segment descriptors. The driver uses
- * this information to manage the devices.
- *
- * A device is made up of segments. These are also called
- * sectors or blocks. It is the smallest erasable part of a device.
- * A device can have differing size segments at different
- * offsets in the device. The segment descriptors support repeating
- * segments that are continous in the device. The driver breaks the
- * segments up into pages. The first pages of a segment contain
- * the page descriptors. A page descriptor hold the page flags,
- * a CRC for the page of data and the block number the page
- * holds. The block can appear in any order in the devices. A
- * page is active if it hold a current block of data. If the
- * used bit is set the page is counted as used. A page moves
- * from erased to active to used then back to erased. If a block
- * is written that is already in a page, the block is written to
- * a new page the old page is flagged as used.
- *
- * At initialisation time each segment's page descriptors are
- * read into memory and scanned to determine the active pages,
- * the used pages and the bad pages. If a segment has any erased
- * pages it is queue on the available queue. If the segment has
- * no erased pages it is queue on the used queue.
- *
- * The available queue is sorted from the least number available
- * to the most number of available pages. A segment that has just
- * been erased will placed at the end of the queue. A segment that
- * has only a few available pages will be used sooner and once
- * there are no available pages it is queued on the used queue.
- * The used queue hold segments that have no available pages and
- * is sorted from the least number of active pages to the most
- * number of active pages.
- *
- * The driver is required to compact segments. Compacting takes
- * the segment with the most number of available pages from the
- * available queue then takes segments with the least number of
- * active pages from the used queue until it has enough pages
- * to fill the empty segment. As the active pages are moved
- * they flagged as used and once the segment has only used pages
- * it is erased.
- *
- * A flash block driver like this never knows if a page is not
- * being used by the file-system. A typical file system is not
- * design with the idea of erasing a block on a disk once it is
- * not being used. The file-system will normally use a flag
- * or a location as a marker to say that part of the disk is
- * no longer in use. This means a number of blocks could be
- * held in active pages but are no in use by the file system.
- * The file system may also read blocks that have never been
- * written to disk. This complicates the driver and may make
- * the wear, usage and erase patterns harsher than a flash
- * file system. The driver may also suffer from problems if
- * power is lost.
- *
- * @note
- *
+
+/*
  * The use of pages can vary. The rtems_fdisk_seg_*_page set
  * routines use an absolute page number relative to the segment
- * while all other page numbera are relative to the number of
+ * while all other page numbers are relative to the number of
  * page descriptor pages a segment has. You need to add the
  * number of page descriptor pages (pages_desc) to the page number
  * when call the rtems_fdisk_seg_*_page functions.
