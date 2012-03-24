@@ -94,10 +94,12 @@ libbsp_a_SOURCES += console/console-generic.c
 libbsp_a_SOURCES += console/console-linflex.c
 
 # irq_generic
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
-    ../../shared/src/irq-legacy.c \
-    ../../shared/src/irq-info.c \
-    ../../shared/src/irq-shell.c
+libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c
+libbsp_a_SOURCES += ../../shared/src/irq-info.c
+libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+libbsp_a_SOURCES += ../../shared/src/irq-server.c
+libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 
 # Misc
 libbsp_a_SOURCES += startup/sd-card-init.c

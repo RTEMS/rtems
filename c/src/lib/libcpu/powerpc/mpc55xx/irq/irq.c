@@ -170,8 +170,3 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector)
 		return RTEMS_SUCCESSFUL;
 	}
 }
-
-void bsp_interrupt_handler_default( rtems_vector_number vector)
-{
-	/* Do nothing */
-}

@@ -30,8 +30,3 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   lm32_interrupt_mask(1 << vector);
   return RTEMS_SUCCESSFUL;
 }
-
-void bsp_interrupt_handler_default(rtems_vector_number vector)
-{
-  printk("spurious interrupt: %u\n", vector);
-}

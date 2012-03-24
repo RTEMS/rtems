@@ -46,10 +46,14 @@ console_SOURCES = ../../shared/console-polled.c console/console-io.c
 # irq
 include_bsp_HEADERS = irq/irq.h \
     ../../shared/include/irq-generic.h
-
-irq_SOURCES = irq/irq_init.c \
-	../../shared/src/irq-generic.c \
-	../../shared/src/irq-legacy.c
+irq_SOURCES =
+irq_SOURCES += ../../shared/src/irq-default-handler.c
+irq_SOURCES += ../../shared/src/irq-generic.c
+irq_SOURCES += ../../shared/src/irq-info.c
+irq_SOURCES += ../../shared/src/irq-legacy.c
+irq_SOURCES += ../../shared/src/irq-server.c
+irq_SOURCES += ../../shared/src/irq-shell.c
+irq_SOURCES += irq/irq_init.c
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \

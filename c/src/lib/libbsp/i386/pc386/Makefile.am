@@ -105,6 +105,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/bspinit.c ../../shared/sbrk.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S \
+    ../../shared/src/irq-default-handler.c \
     ../../shared/src/irq-generic.c \
     ../../shared/src/irq-legacy.c \
     ../../shared/src/irq-info.c \

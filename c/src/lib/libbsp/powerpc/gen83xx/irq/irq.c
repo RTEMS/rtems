@@ -584,8 +584,3 @@ rtems_status_code bsp_interrupt_facility_initialize()
 	/* Initialize the interrupt controller */
 	return mpc83xx_ipic_initialize();
 }
-
-void bsp_interrupt_handler_default( rtems_vector_number vector)
-{
-	printk( "Spurious interrupt: 0x%08x\n", vector);
-}
