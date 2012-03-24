@@ -1,12 +1,7 @@
 Tested only on Qemu simulator with git (git://git.qemu.org/qemu.git) version
 1.0.50.
 
-You have to apply the patches:
-
-0001-target-arm-Fixed-ARMv7-M-SHPR-access.patch
-0002-target-arm-Disable-priority_mask-feature.patch
-0003-target-arm-Evil-hack-for-BASEPRI-and-BASEPRI_MAX.patch
-0004-target-arm-Evil-hack-to-increase-the-RAM-size.patch
+You have to apply the patches contained in this directory.
 
 Command line:
 
