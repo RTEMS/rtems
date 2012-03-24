@@ -320,7 +320,11 @@ rtems_status_code lpc24xx_module_disable(
   lpc24xx_module module
 )
 {
-  return lpc24xx_module_do_enable(module, 0U, false);
+  return lpc24xx_module_do_enable(
+    module,
+    LPC24XX_MODULE_PCLK_DEFAULT,
+    false
+  );
 }
 
 typedef rtems_status_code (*lpc24xx_pin_visitor)(
