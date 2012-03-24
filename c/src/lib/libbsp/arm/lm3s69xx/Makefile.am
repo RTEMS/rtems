@@ -45,7 +45,7 @@ include_HEADERS += ../../shared/include/tm27.h
 
 noinst_LIBRARIES = libbspstart.a
 
-libbspstart_a_SOURCES = start/start.S
+libbspstart_a_SOURCES = ../shared/start/start.S
 
 project_lib_DATA = start.$(OBJEXT)
 
@@ -75,9 +75,11 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/src/stackalloc.c
 
 # Startup
-libbsp_a_SOURCES += startup/bspstart.c \
-	startup/bspstarthook.c \
-	startup/bspreset.c
+libbsp_a_SOURCES += ../shared/startup/bsp-start-copy-sections.c
+libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/bspstarthook.c
+libbsp_a_SOURCES += startup/bspreset.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
