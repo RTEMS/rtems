@@ -101,6 +101,10 @@ $(PROJECT_INCLUDE)/bsp/lpc-lcd.h: ../shared/lpc/include/lpc-lcd.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lpc-lcd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lpc-lcd.h
 
+$(PROJECT_INCLUDE)/bsp/armv7m-irq.h: ../shared/armv7m/include/armv7m-irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/armv7m-irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/armv7m-irq.h
+
 $(PROJECT_INCLUDE)/bsp/dma.h: include/dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/dma.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/dma.h

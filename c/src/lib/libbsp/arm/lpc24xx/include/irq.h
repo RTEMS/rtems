@@ -133,8 +133,6 @@ void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority);
 
 unsigned lpc24xx_irq_get_priority(rtems_vector_number vector);
 
-void bsp_interrupt_dispatch(void);
-
 #endif /* ASM */
 
 /** @} */

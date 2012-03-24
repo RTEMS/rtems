@@ -61,86 +61,61 @@ unsigned lpc24xx_irq_get_priority(rtems_vector_number vector)
   }
 }
 
+#ifdef ARM_MULTILIB_ARCH_V4
+
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  #ifdef ARM_MULTILIB_ARCH_V4
-    VICIntEnable = 1U << vector;
-  #else
-    _ARMV7M_NVIC_Set_enable((int) vector);
-  #endif
+  VICIntEnable = 1U << vector;
 
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  #ifdef ARM_MULTILIB_ARCH_V4
-    VICIntEnClear = 1U << vector;
-  #else
-    _ARMV7M_NVIC_Clear_enable((int) vector);
-  #endif
+  VICIntEnClear = 1U << vector;
 
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
-  #ifdef ARM_MULTILIB_ARCH_V4
-    volatile uint32_t *addr = VICVectAddrBase;
-    volatile uint32_t *prio = VICVectPriorityBase;
-    rtems_vector_number i = 0;
+  volatile uint32_t *addr = VICVectAddrBase;
+  volatile uint32_t *prio = VICVectPriorityBase;
+  rtems_vector_number i = 0;
 
-    /* Disable all interrupts */
-    VICIntEnClear = 0xffffffff;
+  /* Disable all interrupts */
+  VICIntEnClear = 0xffffffff;
 
-    /* Clear all software interrupts */
-    VICSoftIntClear = 0xffffffff;
+  /* Clear all software interrupts */
+  VICSoftIntClear = 0xffffffff;
 
-    /* Use IRQ category */
-    VICIntSelect = 0;
+  /* Use IRQ category */
+  VICIntSelect = 0;
 
-    for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
-      /* Use the vector address register to store the vector number */
-      addr [i] = i;
+  for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+    /* Use the vector address register to store the vector number */
+    addr [i] = i;
 
-      /* Give vector lowest priority */
-      prio [i] = 15;
-    }
+    /* Give vector lowest priority */
+    prio [i] = 15;
+  }
 
-    /* Reset priority mask register */
-    VICSWPrioMask = 0xffff;
+  /* Reset priority mask register */
+  VICSWPrioMask = 0xffff;
 
-    /* Acknowledge interrupts for all priorities */
-    for (
-      i = LPC24XX_IRQ_PRIORITY_VALUE_MIN;
-      i <= LPC24XX_IRQ_PRIORITY_VALUE_MAX;
-      ++i
-    ) {
-      VICVectAddr = 0;
-    }
+  /* Acknowledge interrupts for all priorities */
+  for (
+    i = LPC24XX_IRQ_PRIORITY_VALUE_MIN;
+    i <= LPC24XX_IRQ_PRIORITY_VALUE_MAX;
+    ++i
+  ) {
+    VICVectAddr = 0;
+  }
 
-    /* Install the IRQ exception handler */
-    _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
-  #else
-    rtems_vector_number i = 0;
-    ARMV7M_Exception_handler *vector_table =
-      (ARMV7M_Exception_handler *) bsp_vector_table_begin;
-
-    memcpy(
-      vector_table,
-      bsp_start_vector_table_begin,
-      (size_t) bsp_vector_table_size
-    );
-
-    for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
-      vector_table [ARMV7M_VECTOR_IRQ(i)] = bsp_interrupt_dispatch;
-      _ARMV7M_NVIC_Clear_enable(i);
-      _ARMV7M_NVIC_Clear_pending(i);
-      lpc24xx_irq_set_priority(i, LPC24XX_IRQ_PRIORITY_VALUE_MAX - 1);
-    }
-
-    _ARMV7M_SCB->vtor = vector_table;
-  #endif
+  /* Install the IRQ exception handler */
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
 
   return RTEMS_SUCCESSFUL;
 }
+
+#endif /* ARM_MULTILIB_ARCH_V4 */

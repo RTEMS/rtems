@@ -42,6 +42,7 @@ include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/stackalloc.h
 include_bsp_HEADERS += ../../shared/tod.h
 include_bsp_HEADERS += ../shared/include/start.h
+include_bsp_HEADERS += ../shared/armv7m/include/armv7m-irq.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h
 include_bsp_HEADERS += include/lm3s69xx.h
@@ -82,7 +83,8 @@ libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+libbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
+libbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
 
 # Console
 libbsp_a_SOURCES += ../../shared/console.c
