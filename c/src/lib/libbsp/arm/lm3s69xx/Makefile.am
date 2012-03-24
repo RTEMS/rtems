@@ -103,7 +103,7 @@ libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # Timer
-libbsp_a_SOURCES += timer/timer.c
+libbsp_a_SOURCES += ../../shared/timerstub.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c \
