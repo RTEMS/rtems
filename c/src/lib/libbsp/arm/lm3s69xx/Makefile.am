@@ -97,8 +97,8 @@ libbsp_a_SOURCES += console/console-config.c
 libbsp_a_SOURCES += console/uart.c
 
 # Clock
-libbsp_a_SOURCES += clock/clock-config.c \
-	../../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # Timer
 libbsp_a_SOURCES += timer/timer.c

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011-2012 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -10,17 +10,27 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
 #include <rtems.h>
 #include <rtems/score/armv7m.h>
 
-/* This is defined in ../../../shared/clockdrv_shell.h */
+#include <bsp.h>
+
+#ifdef ARM_MULTILIB_ARCH_V7M
+
+/* This is defined in clockdrv_shell.h */
 rtems_isr Clock_isr(rtems_vector_number vector);
 
-static uint64_t _ARMV7M_Systick_factor;
+#define _ARMV7M_Systick_get_factor(freq) \
+  ((1000000000ULL << 32) / (freq))
+
+#ifdef BSP_ARMV7M_SYSTICK_FREQUENCY
+  #define _ARMV7M_Systick_factor \
+    _ARMV7M_Systick_get_factor(BSP_ARMV7M_SYSTICK_FREQUENCY)
+#else
+  static uint64_t _ARMV7M_Systick_factor;
+#endif
 
 static void _ARMV7M_Systick_at_tick(void)
 {
@@ -39,6 +49,10 @@ static void _ARMV7M_Systick_handler(void)
 
 static void _ARMV7M_Systick_handler_install(void)
 {
+  _ARMV7M_Set_exception_priority(
+    ARMV7M_VECTOR_SYSTICK,
+    ARMV7M_EXCEPTION_PRIORITY_LOWEST
+  );
   _ARMV7M_Set_exception_handler(
     ARMV7M_VECTOR_SYSTICK,
     _ARMV7M_Systick_handler
@@ -48,15 +62,23 @@ static void _ARMV7M_Systick_handler_install(void)
 static void _ARMV7M_Systick_initialize(void)
 {
   volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
-  uint64_t frequency = ARMV7M_SYSTICK_CALIB_TENMS_GET(systick->calib) * 100ULL;
+  #ifdef BSP_ARMV7M_SYSTICK_FREQUENCY
+    uint64_t freq = BSP_ARMV7M_SYSTICK_FREQUENCY;
+  #else
+    uint64_t freq = ARMV7M_SYSTICK_CALIB_TENMS_GET(systick->calib) * 100ULL;
+  #endif
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
-  uint64_t interval = (frequency * us_per_tick) / 1000000ULL;
+  uint64_t interval = (freq * us_per_tick) / 1000000ULL;
 
-  _ARMV7M_Systick_factor = (1000000000ULL << 32) / frequency;
+  #ifndef BSP_ARMV7M_SYSTICK_FREQUENCY
+    _ARMV7M_Systick_factor = _ARMV7M_Systick_get_factor(freq);
+  #endif
 
   systick->rvr = (uint32_t) interval;
   systick->cvr = 0;
-  systick->csr = ARMV7M_SYSTICK_CSR_TICKINT | ARMV7M_SYSTICK_CSR_ENABLE;
+  systick->csr = ARMV7M_SYSTICK_CSR_ENABLE
+    | ARMV7M_SYSTICK_CSR_TICKINT
+    | ARMV7M_SYSTICK_CSR_CLKSOURCE;
 }
 
 static void _ARMV7M_Systick_cleanup(void)
@@ -99,4 +121,6 @@ static uint32_t _ARMV7M_Systick_nanoseconds_since_last_tick(void)
   _ARMV7M_Systick_nanoseconds_since_last_tick
 
 /* Include shared source clock driver code */
-#include "../../../shared/clockdrv_shell.h"
+#include "../../../../shared/clockdrv_shell.h"
+
+#endif /* ARM_MULTILIB_ARCH_V7M */

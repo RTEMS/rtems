@@ -121,8 +121,9 @@ libbsp_a_SOURCES += ../../shared/console.c \
     ../../shared/console_control.c
 
 # Clock
-libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
+libbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c \

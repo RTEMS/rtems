@@ -43,6 +43,8 @@ extern "C" {
 
 #define LPC24XX_MPU_REGION_COUNT 8
 
+#define BSP_ARMV7M_SYSTICK_FREQUENCY LPC24XX_CCLK
+
 #ifndef ASM
 
 struct rtems_bsdnet_ifconfig;
