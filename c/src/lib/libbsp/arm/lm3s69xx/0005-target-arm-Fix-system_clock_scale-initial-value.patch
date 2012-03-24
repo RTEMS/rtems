@@ -1,0 +1,29 @@
+From bb7192082be2be0acfda61cd46d2b2c3677f8337 Mon Sep 17 00:00:00 2001
+From: Sebastian Huber <sebastian.huber@embedded-brains.de>
+Date: Sat, 24 Mar 2012 19:58:44 +0100
+Subject: [PATCH] target-arm: Fix system_clock_scale initial value
+
+This variable should be initilized somewhere.  This default value avoids
+a division by zero.
+
+Signed-off-by: Sebastian Huber <sebastian.huber@embedded-brains.de>
+---
+ hw/armv7m_nvic.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/hw/armv7m_nvic.c b/hw/armv7m_nvic.c
+index 65b575e..b3a1b3d 100644
+--- a/hw/armv7m_nvic.c
++++ b/hw/armv7m_nvic.c
+@@ -51,7 +51,7 @@ typedef struct {
+ #define SYSTICK_CLKSOURCE (1 << 2)
+ #define SYSTICK_COUNTFLAG (1 << 16)
+ 
+-int system_clock_scale;
++int system_clock_scale = SYSTICK_SCALE;
+ 
+ /* Conversion factor from qemu timer to SysTick frequencies.  */
+ static inline int64_t systick_scale(nvic_state *s)
+-- 
+1.7.1
+
