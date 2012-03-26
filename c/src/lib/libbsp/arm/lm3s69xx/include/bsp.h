@@ -29,6 +29,8 @@ extern "C" {
 
 #define BSP_ARMV7M_IRQ_PRIORITY_DEFAULT (5 << 5)
 
+#define BSP_ARMV7M_SYSTICK_PRIORITY (6 << 5)
+
 #ifndef ASM
 
 #endif /* ASM */

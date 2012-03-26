@@ -49,12 +49,9 @@ static void _ARMV7M_Systick_handler(void)
 
 static void _ARMV7M_Systick_handler_install(void)
 {
-  _ARMV7M_Set_exception_priority(
+  _ARMV7M_Set_exception_priority_and_handler(
     ARMV7M_VECTOR_SYSTICK,
-    ARMV7M_EXCEPTION_PRIORITY_LOWEST
-  );
-  _ARMV7M_Set_exception_handler(
-    ARMV7M_VECTOR_SYSTICK,
+    BSP_ARMV7M_SYSTICK_PRIORITY,
     _ARMV7M_Systick_handler
   );
 }
