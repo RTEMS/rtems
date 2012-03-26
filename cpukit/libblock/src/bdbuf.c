@@ -1056,14 +1056,14 @@ rtems_bdbuf_remove_from_tree_and_lru_list (rtems_bdbuf_buffer *bd)
       rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_10);
   }
 
-  rtems_chain_extract (&bd->link);
+  rtems_chain_extract_unprotected (&bd->link);
 }
 
 static void
 rtems_bdbuf_make_free_and_add_to_lru_list (rtems_bdbuf_buffer *bd)
 {
   rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_FREE);
-  rtems_chain_prepend (&bdbuf_cache.lru, &bd->link);
+  rtems_chain_prepend_unprotected (&bdbuf_cache.lru, &bd->link);
 }
 
 static void
@@ -1076,7 +1076,7 @@ static void
 rtems_bdbuf_make_cached_and_add_to_lru_list (rtems_bdbuf_buffer *bd)
 {
   rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_CACHED);
-  rtems_chain_append (&bdbuf_cache.lru, &bd->link);
+  rtems_chain_append_unprotected (&bdbuf_cache.lru, &bd->link);
 }
 
 static void
@@ -1123,7 +1123,7 @@ rtems_bdbuf_add_to_modified_list_after_access (rtems_bdbuf_buffer *bd)
     bd->hold_timer = bdbuf_config.swap_block_hold;
 
   rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_MODIFIED);
-  rtems_chain_append (&bdbuf_cache.modified, &bd->link);
+  rtems_chain_append_unprotected (&bdbuf_cache.modified, &bd->link);
 
   if (bd->waiters)
     rtems_bdbuf_wake (&bdbuf_cache.access_waiters);
@@ -1428,7 +1428,7 @@ rtems_bdbuf_init (void)
     bd->group  = group;
     bd->buffer = buffer;
 
-    rtems_chain_append (&bdbuf_cache.lru, &bd->link);
+    rtems_chain_append_unprotected (&bdbuf_cache.lru, &bd->link);
 
     if ((b % bdbuf_cache.max_bds_per_group) ==
         (bdbuf_cache.max_bds_per_group - 1))
@@ -1525,7 +1525,7 @@ rtems_bdbuf_wait_for_access (rtems_bdbuf_buffer *bd)
         rtems_bdbuf_group_release (bd);
         /* Fall through */
       case RTEMS_BDBUF_STATE_CACHED:
-        rtems_chain_extract (&bd->link);
+        rtems_chain_extract_unprotected (&bd->link);
         /* Fall through */
       case RTEMS_BDBUF_STATE_EMPTY:
         return;
@@ -1550,8 +1550,8 @@ static void
 rtems_bdbuf_request_sync_for_modified_buffer (rtems_bdbuf_buffer *bd)
 {
   rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_SYNC);
-  rtems_chain_extract (&bd->link);
-  rtems_chain_append (&bdbuf_cache.sync, &bd->link);
+  rtems_chain_extract_unprotected (&bd->link);
+  rtems_chain_append_unprotected (&bdbuf_cache.sync, &bd->link);
   rtems_bdbuf_wake_swapper ();
 }
 
@@ -1645,7 +1645,7 @@ rtems_bdbuf_sync_after_access (rtems_bdbuf_buffer *bd)
 {
   rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_SYNC);
 
-  rtems_chain_append (&bdbuf_cache.sync, &bd->link);
+  rtems_chain_append_unprotected (&bdbuf_cache.sync, &bd->link);
 
   if (bd->waiters)
     rtems_bdbuf_wake (&bdbuf_cache.access_waiters);
@@ -2030,7 +2030,7 @@ rtems_bdbuf_read (const rtems_disk_device *dd,
     sc = rtems_bdbuf_execute_transfer_request (dd, req, true);
     if (sc == RTEMS_SUCCESSFUL)
     {
-      rtems_chain_extract (&bd->link);
+      rtems_chain_extract_unprotected (&bd->link);
       rtems_bdbuf_group_obtain (bd);
     }
   }
@@ -2428,7 +2428,7 @@ rtems_bdbuf_swapout_modified_processing (const rtems_disk_device **dd_ptr,
 
         rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
 
-        rtems_chain_extract (node);
+        rtems_chain_extract_unprotected (node);
 
         tnode = tnode->previous;
 
@@ -2498,7 +2498,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   else
   {
     worker = (rtems_bdbuf_swapout_worker*)
-      rtems_chain_get (&bdbuf_cache.swapout_workers);
+      rtems_chain_get_unprotected (&bdbuf_cache.swapout_workers);
     if (worker)
       transfer = &worker->transfer;
   }
@@ -2628,7 +2628,7 @@ rtems_bdbuf_swapout_worker_task (rtems_task_argument arg)
     rtems_chain_initialize_empty (&worker->transfer.bds);
     worker->transfer.dd = BDBUF_INVALID_DEV;
 
-    rtems_chain_append (&bdbuf_cache.swapout_workers, &worker->link);
+    rtems_chain_append_unprotected (&bdbuf_cache.swapout_workers, &worker->link);
 
     rtems_bdbuf_unlock_cache ();
   }
@@ -2658,7 +2658,7 @@ rtems_bdbuf_swapout_workers_open (void)
     if (!worker)
       rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM);
 
-    rtems_chain_append (&bdbuf_cache.swapout_workers, &worker->link);
+    rtems_chain_append_unprotected (&bdbuf_cache.swapout_workers, &worker->link);
     worker->enabled = true;
     worker->transfer.write_req = rtems_bdbuf_swapout_writereq_alloc ();
 
@@ -2805,7 +2805,7 @@ rtems_bdbuf_purge_list (rtems_chain_control *purge_list)
   bool wake_buffer_waiters = false;
   rtems_chain_node *node = NULL;
 
-  while ((node = rtems_chain_get (purge_list)) != NULL)
+  while ((node = rtems_chain_get_unprotected (purge_list)) != NULL)
   {
     rtems_bdbuf_buffer *bd = (rtems_bdbuf_buffer *) node;
 
@@ -2847,8 +2847,8 @@ rtems_bdbuf_gather_for_purge (rtems_chain_control *purge_list,
           rtems_bdbuf_group_release (cur);
           /* Fall through */
         case RTEMS_BDBUF_STATE_CACHED:
-          rtems_chain_extract (&cur->link);
-          rtems_chain_append (purge_list, &cur->link);
+          rtems_chain_extract_unprotected (&cur->link);
+          rtems_chain_append_unprotected (purge_list, &cur->link);
           break;
         case RTEMS_BDBUF_STATE_TRANSFER:
           rtems_bdbuf_set_state (cur, RTEMS_BDBUF_STATE_TRANSFER_PURGED);
