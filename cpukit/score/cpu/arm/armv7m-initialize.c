@@ -31,14 +31,14 @@ void _CPU_Initialize( void )
    * also "ARMv7-M Architecture Reference Manual, Issue D" section B1.5.4
    * "Exception priorities and preemption".
    */
-  _ARMV7M_Set_exception_priority( ARMV7M_VECTOR_SVC, 0xff );
-  _ARMV7M_Set_exception_priority( ARMV7M_VECTOR_PENDSV, 0xff );
-  _ARMV7M_Set_exception_handler(
+  _ARMV7M_Set_exception_priority_and_handler(
     ARMV7M_VECTOR_SVC,
+    ARMV7M_EXCEPTION_PRIORITY_LOWEST,
     _ARMV7M_Supervisor_call
   );
-  _ARMV7M_Set_exception_handler(
+  _ARMV7M_Set_exception_priority_and_handler(
     ARMV7M_VECTOR_PENDSV,
+    ARMV7M_EXCEPTION_PRIORITY_LOWEST,
     _ARMV7M_Pendable_service_call
   );
 }
