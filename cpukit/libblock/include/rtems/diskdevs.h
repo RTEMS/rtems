@@ -109,7 +109,9 @@ struct rtems_disk_device {
   /**
    * @brief Device block size in bytes.
    *
-   * This is the minimum transfer unit. It can be any size.
+   * This is the minimum transfer unit.  It must be positive.
+   *
+   * @see rtems_bdbuf_set_block_size().
    */
   uint32_t block_size;
 
@@ -119,6 +121,24 @@ struct rtems_disk_device {
    * This is the media transfer unit the hardware defaults to.
    */
   uint32_t media_block_size;
+
+  /**
+   * @brief Block to media block shift.
+   *
+   * In case this value is non-negative the media block of a block can be
+   * calculated as media block = block << block_to_media_block_shift, otherwise
+   * a 64-bit operation will be used.
+   *
+   * @see rtems_bdbuf_set_block_size().
+   */
+  int block_to_media_block_shift;
+
+  /**
+   * @brief Buffer descriptors per group count.
+   *
+   * @see rtems_bdbuf_set_block_size().
+   */
+  size_t bds_per_group;
 
   /**
    * @brief IO control handler for this disk.
@@ -222,7 +242,7 @@ static inline rtems_blkdev_bnum rtems_disk_get_block_count(
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
  * @retval RTEMS_INVALID_ADDRESS IO control handler is @c NULL.
- * @retval RTEMS_INVALID_NUMBER Block size is zero.
+ * @retval RTEMS_INVALID_NUMBER Block size is invalid.
  * @retval RTEMS_NO_MEMORY Not enough memory.
  * @retval RTEMS_RESOURCE_IN_USE Disk device descriptor is already in use.
  * @retval RTEMS_UNSATISFIED Cannot create device node.

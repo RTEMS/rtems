@@ -479,7 +479,7 @@ rtems_bdbuf_init (void);
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_INVALID_NUMBER Invalid block size.
+ * @retval RTEMS_INVALID_ID Invalid block number.
  */
 rtems_status_code
 rtems_bdbuf_get (
@@ -512,7 +512,7 @@ rtems_bdbuf_get (
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_INVALID_NUMBER Invalid block size.
+ * @retval RTEMS_INVALID_ID Invalid block number.
  * @retval RTEMS_IO_ERROR IO error.
  */
 rtems_status_code
@@ -624,6 +624,25 @@ rtems_bdbuf_syncdev (const rtems_disk_device *dd);
  */
 void
 rtems_bdbuf_purge_dev (const rtems_disk_device *dd);
+
+/**
+ * @brief Sets the block size of a disk device.
+ *
+ * This will also change the block_to_media_block_shift and bds_per_group
+ * fields of the disk device.
+ *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
+ * @param dd [in, out] The disk device.
+ * @param dd [in] The new block size.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation. 
+ * @retval RTEMS_INVALID_NUMBER Invalid block size.
+ */
+rtems_status_code
+rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size);
 
 /** @} */
 

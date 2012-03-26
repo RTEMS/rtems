@@ -268,19 +268,17 @@ rtems_status_code rtems_blkdev_create(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  if (block_size > 0 && block_count > 0) {
+  if (block_count > 0) {
     rtems_blkdev_imfs_context *ctx = calloc(1, sizeof(*ctx));
 
     if (ctx != NULL) {
       rtems_disk_device *dd = &ctx->dd;
-      int rv;
 
       ctx->fd = -1;
 
       dd->phys_dev = dd;
       dd->size = block_count;
       dd->media_block_size = block_size;
-      dd->block_size = block_size;
       dd->ioctl = handler;
       dd->driver_data = driver_data;
 
@@ -288,16 +286,21 @@ rtems_status_code rtems_blkdev_create(
         dd->capabilities = 0;
       }
 
-      rv = IMFS_make_generic_node(
-        device,
-        S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO,
-        &rtems_blkdev_imfs_control,
-        ctx
-      );
+      sc = rtems_bdbuf_set_block_size(dd, block_size);
+      if (sc == RTEMS_SUCCESSFUL) {
+        int rv = IMFS_make_generic_node(
+          device,
+          S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO,
+          &rtems_blkdev_imfs_control,
+          ctx
+        );
 
-      if (rv != 0) {
+        if (rv != 0) {
+          free(ctx);
+          sc = RTEMS_UNSATISFIED;
+        }
+      } else {
         free(ctx);
-        sc = RTEMS_UNSATISFIED;
       }
     } else {
       sc = RTEMS_NO_MEMORY;
