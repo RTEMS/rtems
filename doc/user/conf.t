@@ -2135,7 +2135,7 @@ parameters the application developer can specify to
 help @code{<rtems/confdefs.h>} in its calculations.  Correctly
 specifying the application requirements via parameters
 such as @code{CONFIGURE_EXTRA_TASK_STACKS} and
-@code{CONFIGURE_MAXIMUM_TASKS} is critical.
+@code{CONFIGURE_MAXIMUM_TASKS} is critical for production software.
 
 The allocation of objects can operate in two modes. The default mode
 has an object number ceiling. No more than the specified number of
@@ -2144,27 +2144,18 @@ specified in the particular API Configuration table fields are
 allocated at initialisation. The second mode allows the number of
 objects to grow to use the available free memory in the RTEMS RAM Workspace.
 
-The auto-extending mode can be enabled individually for each object
-type by using the macro @code{rtems_resource_unlimited}. This takes a value
-as a parameter, and is used to set the object maximum number field in
-an API Configuration table. The value is an allocation unit size. When
-RTEMS is required to grow the object table it is grown by this
-size. The kernel will return the object memory back to the RTEMS RAM Workspace
-when an object is destroyed. The kernel will only return an allocated
-block of objects to the RTEMS RAM Workspace if at least half the allocation
-size of free objects remain allocated. RTEMS always keeps one
-allocation block of objects allocated. Here is an example of using 
-@code{rtems_resource_unlimited}:
+See @ref{Configuring a System Unlimited Objects} for more details
+about the second mode, which allows for dynamic allocation of objects
+and therefore does not provide determinism.
+This mode is useful mostly for when the number of objects cannot be
+determined ahead of time or when porting software for which you do not
+know the object requirements.
 
-@example
-#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(5)
-@end example
-
-The user is cautioned that future versions of RTEMS may not have the
+Note that future versions of RTEMS may not have the
 same memory requirements per object. Although the value calculated is
-suficient for a particular target processor and release of RTEMS,
+sufficient for a particular target processor and release of RTEMS,
 memory usage is subject to change across versions and target
-processors.  To avoid problems, the user should accurately 
+processors.  To avoid problems, users should accurately 
 specify each configuration parameter and allow
 @code{<rtems/confdefs.h>} to calculate the memory requirements.
 The memory requirements are likely to change each
@@ -2182,3 +2173,67 @@ Failure to provide enough space in the RTEMS RAM
 Workspace will result in the 
 @code{@value{DIRPREFIX}fatal_error_occurred} directive
 being invoked with the appropriate error code.
+
+@subsection Unlimited Objects
+
+In real-time embedded systems the RAM is normally a limited, critical resource
+and dynamic allocation is avoided as much as possible to ensure predictable,
+deterministic execution times. For such cases,
+see @ref{Configuring a System Sizing the RTEMS RAM Workspace}
+for an overview of how to tune the size of the workspace.
+Frequently when users are porting software to RTEMS the precise resource
+requirements of the software is unknown. In these situations users do not
+need to control the size of the workspace very tightly because they just
+want to get the new software to run; later they can tune the workspace size
+as needed.
+
+When the number of objects is not known ahead of time, RTEMS provides an
+auto-extending mode that can be enabled individually for each object
+type by using the macro @code{rtems_resource_unlimited}. This takes a value
+as a parameter, and is used to set the object maximum number field in
+an API Configuration table. The value is an allocation unit size. When
+RTEMS is required to grow the object table it is grown by this
+size. The kernel will return the object memory back to the RTEMS RAM Workspace
+when an object is destroyed. The kernel will only return an allocated
+block of objects to the RTEMS RAM Workspace if at least half the allocation
+size of free objects remain allocated. RTEMS always keeps one
+allocation block of objects allocated. Here is an example of using 
+@code{rtems_resource_unlimited}:
+
+@example
+#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(5)
+@end example
+
+To ease the burden of developers who are porting new software RTEMS also
+provides the following macros:
+@itemize @bullet
+
+@findex CONFIGURE_OBJECTS_UNLIMITED
+@item @code{CONFIGURE_OBJECTS_UNLIMITED}
+uses @code{rtems_resource_unlimited} for classic and posix objects that
+do not already have a maximum limit defined.
+
+@findex CONFIGURE_OBJECTS_ALLOCATION_SIZE
+@item @code{CONFIGURE_OBJECTS_ALLOCATION_SIZE}
+provides an allocation size to use for @code{rtems_resource_unlimited} when
+using @code{CONFIGURE_OBJECTS_UNLIMITED}; the default value is 8.
+
+@end itemize
+
+By allowing users to declare all resources as being unlimited the user
+can avoid identifying and limiting the resources used.
+@code{CONFIGURE_OBJECTS_UNLIMITED} does not support varying
+the allocation sizes for different objects; users who want that
+much control can define the @code{rtems_resource_unlimited} macros themselves.
+
+@example
+#define CONFIGURE_OBJECTS_UNLIMITED
+#define CONFIGURE_OBJECTS_ALLOCATION_SIZE 5
+@end example
+
+Due to how the posix object memory requirements are configured the
+unlimited object support does not provide unlimited size declarations
+for posix keys or queued signals.
+
+Users are cautioned that using unlimited objects is not recommended for
+production software unless the dynamic growth is absolutely required.

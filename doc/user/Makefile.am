@@ -161,7 +161,7 @@ conf.texi: conf.t
 	    -n "Multiprocessing Manager" < $< > $@
 
 mp.texi: mp.t
-	$(BMENU2) -p "Configuring a System Sizing the RTEMS RAM Workspace" \
+	$(BMENU2) -p "Configuring a System Unlimited Objects" \
 	    -u "Top" \
 	    -n "Stack Bounds Checker" < $< > $@
 

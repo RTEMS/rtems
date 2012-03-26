@@ -1344,6 +1344,112 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 
+/**
+ * This macro specifies that the user wants to use unlimited objects for any
+ * classic or posix objects that have not already been given resource limits.
+ */
+#if defined(CONFIGURE_UNLIMITED_OBJECTS)
+  #if !defined(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  /**
+   * This macro specifies a default allocation size for when auto-extending
+   * unlimited objects if none was given by the user.
+   */
+    #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE 8
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_TASKS)
+    #define CONFIGURE_MAXIMUM_TASKS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_TIMERS)
+    #define CONFIGURE_MAXIMUM_TIMERS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_SEMAPHORES)
+    #define CONFIGURE_MAXIMUM_SEMAPHORES \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_MESSAGE_QUEUES)
+    #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_PARTITIONS)
+    #define CONFIGURE_MAXIMUM_PARTITIONS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_REGIONS)
+    #define CONFIGURE_MAXIMUM_REGIONS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_PORTS)
+    #define CONFIGURE_MAXIMUM_PORTS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_PERIODS)
+    #define CONFIGURE_MAXIMUM_PERIODS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+  #if !defined(CONFIGURE_MAXIMUM_BARRIERS)
+    #define CONFIGURE_MAXIMUM_BARRIERS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
+
+  #ifdef RTEMS_POSIX_API
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
+      #define CONFIGURE_MAXIMUM_POSIX_THREADS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_MUTEXES)
+      #define CONFIGURE_MAXIMUM_POSIX_MUTEXES \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES)
+      #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+/*
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_KEYS)
+      #define CONFIGURE_MAXIMUM_POSIX_KEYS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+*/
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_TIMERS)
+      #define CONFIGURE_MAXIMUM_POSIX_TIMERS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+/*
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS)
+      #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+*/
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES)
+      #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS)
+      #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_SEMAPHORES)
+      #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_BARRIERS)
+      #define CONFIGURE_MAXIMUM_POSIX_BARRIERS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_RWLOCKS)
+      #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+    #if !defined(CONFIGURE_MAXIMUM_POSIX_SPINLOCKS)
+      #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS \
+        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+    #endif
+  #endif /* RTEMS_POSIX_API */
+#endif /* CONFIGURE_UNLIMITED_OBJECTS */
+
+
 /*
  *  Default Configuration Table.
  */
@@ -1548,7 +1654,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    */
   #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
     _Configure_Object_RAM( (_number), _size ) + \
-    ((_number) * _Configure_From_workspace(NAME_MAX) )
+    (_Configure_Max_Objects(_number) * _Configure_From_workspace(NAME_MAX) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
     #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
