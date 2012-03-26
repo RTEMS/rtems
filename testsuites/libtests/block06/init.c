@@ -1845,6 +1845,8 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_MAXIMUM_DRIVERS 3
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
+#define CONFIGURE_INIT_TASK_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>
