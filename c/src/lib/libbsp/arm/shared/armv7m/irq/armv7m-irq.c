@@ -52,7 +52,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     vector_table [ARMV7M_VECTOR_IRQ(i)] = _ARMV7M_NVIC_Interrupt_dispatch;
     _ARMV7M_NVIC_Clear_enable(i);
     _ARMV7M_NVIC_Clear_pending(i);
-    _ARMV7M_NVIC_Set_priority(i, ARMV7M_EXCEPTION_PRIORITY_LOWEST);
+    _ARMV7M_NVIC_Set_priority(i, BSP_ARMV7M_IRQ_PRIORITY_DEFAULT);
   }
 
   _ARMV7M_SCB->vtor = vector_table;
