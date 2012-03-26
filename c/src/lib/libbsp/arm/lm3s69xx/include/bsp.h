@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011-2012 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -26,6 +26,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define BSP_FEATURE_IRQ_EXTENSION
+
+#define BSP_ARMV7M_IRQ_PRIORITY_DEFAULT (5 << 5)
 
 #ifndef ASM
 
