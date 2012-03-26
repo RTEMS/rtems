@@ -27,6 +27,7 @@ libscorecpu_a_SOURCES += armv7m-context-switch.c
 libscorecpu_a_SOURCES += armv7m-exception-handler-get.c
 libscorecpu_a_SOURCES += armv7m-exception-handler-set.c
 libscorecpu_a_SOURCES += armv7m-exception-priority-get.c
+libscorecpu_a_SOURCES += armv7m-exception-priority-handler.c
 libscorecpu_a_SOURCES += armv7m-exception-priority-set.c
 libscorecpu_a_SOURCES += armv7m-initialize.c
 libscorecpu_a_SOURCES += armv7m-isr-dispatch.c
