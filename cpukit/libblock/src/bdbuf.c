@@ -1741,9 +1741,6 @@ rtems_bdbuf_obtain_disk (const rtems_disk_device *dd,
                          rtems_blkdev_bnum  *media_block_ptr,
                          size_t             *bds_per_group_ptr)
 {
-  if (!bdbuf_cache.initialised)
-    return RTEMS_NOT_CONFIGURED;
-
   if (media_block_ptr != NULL)
   {
     /*
@@ -2069,8 +2066,6 @@ rtems_bdbuf_read (const rtems_disk_device *dd,
 static rtems_status_code
 rtems_bdbuf_check_bd_and_lock_cache (rtems_bdbuf_buffer *bd, const char *kind)
 {
-  if (!bdbuf_cache.initialised)
-    return RTEMS_NOT_CONFIGURED;
   if (bd == NULL)
     return RTEMS_INVALID_ADDRESS;
   if (rtems_bdbuf_tracer)
@@ -2184,14 +2179,8 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer *bd)
 rtems_status_code
 rtems_bdbuf_syncdev (const rtems_disk_device *dd)
 {
-  rtems_status_code  sc = RTEMS_SUCCESSFUL;
-
   if (rtems_bdbuf_tracer)
     printf ("bdbuf:syncdev: %08x\n", (unsigned) dd->dev);
-
-  sc = rtems_bdbuf_obtain_disk (dd, 0, NULL, NULL);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
 
   /*
    * Take the sync lock before locking the cache. Once we have the sync lock we

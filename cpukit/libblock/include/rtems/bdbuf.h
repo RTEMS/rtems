@@ -475,8 +475,6 @@ rtems_bdbuf_init (void);
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
- * @retval RTEMS_INVALID_ID No such device.
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  */
 rtems_status_code
@@ -506,8 +504,6 @@ rtems_bdbuf_get (
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
- * @retval RTEMS_INVALID_ID No such device.
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  * @retval RTEMS_IO_ERROR IO error.
  */
@@ -529,7 +525,6 @@ rtems_bdbuf_read (
  * @param bd [in] Reference to the buffer descriptor.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
@@ -548,7 +543,6 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
  * @param bd [in] Reference to the buffer descriptor.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
@@ -566,7 +560,6 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd);
  * @param bd [in] Reference to the buffer descriptor.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
@@ -584,8 +577,6 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
  * @param dd [in] The disk device.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
- * @retval RTEMS_INVALID_ID No such device.
  */
 rtems_status_code
 rtems_bdbuf_syncdev (const rtems_disk_device *dd);
