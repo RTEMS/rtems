@@ -2269,7 +2269,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
     transfer->write_req->status = RTEMS_RESOURCE_IN_USE;
     transfer->write_req->bufnum = 0;
 
-    while ((node = rtems_chain_get(&transfer->bds)) != NULL)
+    while ((node = rtems_chain_get_unprotected(&transfer->bds)) != NULL)
     {
       rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
       bool                write = false;
@@ -2291,7 +2291,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
           transfer->write_req->bufnum &&
           (bd->block != (last_block + bufs_per_bd)))
       {
-        rtems_chain_prepend (&transfer->bds, &bd->link);
+        rtems_chain_prepend_unprotected (&transfer->bds, &bd->link);
         write = true;
       }
       else
@@ -2438,7 +2438,7 @@ rtems_bdbuf_swapout_modified_processing (const rtems_disk_device **dd_ptr,
 
           if (bd->block > tbd->block)
           {
-            rtems_chain_insert (tnode, node);
+            rtems_chain_insert_unprotected (tnode, node);
             node = NULL;
           }
           else
@@ -2446,7 +2446,7 @@ rtems_bdbuf_swapout_modified_processing (const rtems_disk_device **dd_ptr,
         }
 
         if (node)
-          rtems_chain_prepend (transfer, node);
+          rtems_chain_prepend_unprotected (transfer, node);
 
         node = next_node;
       }
