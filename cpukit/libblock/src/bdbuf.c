@@ -815,22 +815,18 @@ rtems_bdbuf_set_state (rtems_bdbuf_buffer *bd, rtems_bdbuf_buf_state state)
   bd->state = state;
 }
 
-/**
- * Change the block number for the block size to the block number for the media
- * block size. We have to use 64bit maths. There is no short cut here.
- *
- * @param block The logical block number in the block size terms.
- * @param block_size The block size.
- * @param media_block_size The block size of the media.
- * @return rtems_blkdev_bnum The media block number.
- */
 static rtems_blkdev_bnum
-rtems_bdbuf_media_block (rtems_blkdev_bnum block,
-                         size_t            block_size,
-                         size_t            media_block_size)
+rtems_bdbuf_media_block (const rtems_disk_device *dd, rtems_blkdev_bnum block)
 {
-  return (rtems_blkdev_bnum)
-    ((((uint64_t) block) * block_size) / media_block_size);
+  if (dd->block_to_media_block_shift >= 0)
+    return block << dd->block_to_media_block_shift;
+  else
+    /*
+     * Change the block number for the block size to the block number for the media
+     * block size. We have to use 64bit maths. There is no short cut here.
+     */
+    return (rtems_blkdev_bnum)
+      ((((uint64_t) block) * dd->block_size) / dd->media_block_size);
 }
 
 /**
@@ -1736,40 +1732,22 @@ rtems_bdbuf_get_buffer_for_access (const rtems_disk_device *dd,
 }
 
 static rtems_status_code
-rtems_bdbuf_obtain_disk (const rtems_disk_device *dd,
-                         rtems_blkdev_bnum   block,
-                         rtems_blkdev_bnum  *media_block_ptr,
-                         size_t             *bds_per_group_ptr)
+rtems_bdbuf_get_media_block (const rtems_disk_device *dd,
+                             rtems_blkdev_bnum        block,
+                             rtems_blkdev_bnum       *media_block_ptr)
 {
-  if (media_block_ptr != NULL)
+  /*
+   * Compute the media block number. Drivers work with media block number not
+   * the block number a BD may have as this depends on the block size set by
+   * the user.
+   */
+  rtems_blkdev_bnum mb = rtems_bdbuf_media_block (dd, block);
+  if (mb >= dd->size)
   {
-    /*
-     * Compute the media block number. Drivers work with media block number not
-     * the block number a BD may have as this depends on the block size set by
-     * the user.
-     */
-    rtems_blkdev_bnum mb = rtems_bdbuf_media_block (block,
-                                                    dd->block_size,
-                                                    dd->media_block_size);
-    if (mb >= dd->size)
-    {
-      return RTEMS_INVALID_NUMBER;
-    }
-
-    *media_block_ptr = mb + dd->start;
+    return RTEMS_INVALID_NUMBER;
   }
 
-  if (bds_per_group_ptr != NULL)
-  {
-    size_t bds_per_group = rtems_bdbuf_bds_per_group (dd->block_size);
-
-    if (bds_per_group == 0)
-    {
-      return RTEMS_INVALID_NUMBER;
-    }
-
-    *bds_per_group_ptr = bds_per_group;
-  }
+  *media_block_ptr = mb + dd->start;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -1782,9 +1760,8 @@ rtems_bdbuf_get (const rtems_disk_device *dd,
   rtems_status_code   sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
   rtems_blkdev_bnum   media_block = 0;
-  size_t              bds_per_group = 0;
 
-  sc = rtems_bdbuf_obtain_disk (dd, block, &media_block, &bds_per_group);
+  sc = rtems_bdbuf_get_media_block (dd, block, &media_block);
   if (sc != RTEMS_SUCCESSFUL)
     return sc;
 
@@ -1797,7 +1774,7 @@ rtems_bdbuf_get (const rtems_disk_device *dd,
     printf ("bdbuf:get: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
             media_block, block, (unsigned) dd->dev);
 
-  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block, bds_per_group);
+  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block, dd->bds_per_group);
 
   switch (bd->state)
   {
@@ -1863,7 +1840,9 @@ rtems_bdbuf_create_read_request (const rtems_disk_device *dd,
 {
   rtems_bdbuf_buffer *bd = NULL;
   rtems_blkdev_bnum   media_block_end = dd->start + dd->size;
-  rtems_blkdev_bnum   media_block_count = dd->block_size / dd->media_block_size;
+  rtems_blkdev_bnum   media_block_count = dd->block_to_media_block_shift >= 0 ?
+    dd->block_size >> dd->block_to_media_block_shift
+      : dd->block_size / dd->media_block_size;
   uint32_t            block_size = dd->block_size;
   uint32_t            transfer_index = 1;
   uint32_t            transfer_count = bdbuf_config.max_read_ahead_blocks + 1;
@@ -2000,9 +1979,8 @@ rtems_bdbuf_read (const rtems_disk_device *dd,
   rtems_blkdev_request *req = NULL;
   rtems_bdbuf_buffer   *bd = NULL;
   rtems_blkdev_bnum     media_block = 0;
-  size_t                bds_per_group = 0;
 
-  sc = rtems_bdbuf_obtain_disk (dd, block, &media_block, &bds_per_group);
+  sc = rtems_bdbuf_get_media_block (dd, block, &media_block);
   if (sc != RTEMS_SUCCESSFUL)
     return sc;
 
@@ -2020,7 +1998,7 @@ rtems_bdbuf_read (const rtems_disk_device *dd,
             media_block + dd->start, block, (unsigned) dd->dev);
 
   rtems_bdbuf_lock_cache ();
-  rtems_bdbuf_create_read_request (dd, media_block, bds_per_group, req, &bd);
+  rtems_bdbuf_create_read_request (dd, media_block, dd->bds_per_group, req, &bd);
 
   if (req->bufnum > 0)
   {
@@ -2894,4 +2872,48 @@ rtems_bdbuf_purge_dev (const rtems_disk_device *dd)
   rtems_bdbuf_gather_for_purge (&purge_list, dd);
   rtems_bdbuf_purge_list (&purge_list);
   rtems_bdbuf_unlock_cache ();
+}
+
+rtems_status_code
+rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  rtems_bdbuf_lock_cache ();
+
+  if (block_size > 0)
+  {
+    size_t bds_per_group = rtems_bdbuf_bds_per_group (block_size);
+
+    if (bds_per_group != 0)
+    {
+      int block_to_media_block_shift = 0;
+      uint32_t media_blocks_per_block = block_size / dd->media_block_size;
+      uint32_t one = 1;
+
+      while ((one << block_to_media_block_shift) < media_blocks_per_block)
+      {
+        ++block_to_media_block_shift;
+      }
+
+      if ((dd->media_block_size << block_to_media_block_shift) != block_size)
+        block_to_media_block_shift = -1;
+
+      dd->block_size = block_size;
+      dd->block_to_media_block_shift = block_to_media_block_shift;
+      dd->bds_per_group = bds_per_group;
+    }
+    else
+    {
+      sc = RTEMS_INVALID_NUMBER;
+    }
+  }
+  else
+  {
+    sc = RTEMS_INVALID_NUMBER;
+  }
+
+  rtems_bdbuf_unlock_cache ();
+
+  return sc;
 }

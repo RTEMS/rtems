@@ -220,6 +220,15 @@ create_disk(dev_t dev, const char *name, rtems_disk_device **dd_ptr)
   return RTEMS_SUCCESSFUL;
 }
 
+static int null_handler(
+  rtems_disk_device *dd,
+  uint32_t req,
+  void *argp
+)
+{
+  return -1;
+}
+
 rtems_status_code rtems_disk_create_phys(
   dev_t dev,
   uint32_t block_size,
@@ -234,10 +243,6 @@ rtems_status_code rtems_disk_create_phys(
 
   if (handler == NULL) {
     return RTEMS_INVALID_ADDRESS;
-  }
-
-  if (block_size == 0) {
-    return RTEMS_INVALID_NUMBER;
   }
 
   sc = disk_lock();
@@ -255,12 +260,21 @@ rtems_status_code rtems_disk_create_phys(
   dd->phys_dev = dd;
   dd->start = 0;
   dd->size = block_count;
-  dd->block_size = dd->media_block_size = block_size;
+  dd->media_block_size = block_size;
   dd->ioctl = handler;
   dd->driver_data = driver_data;
 
   if ((*handler)(dd, RTEMS_BLKIO_CAPABILITIES, &dd->capabilities) < 0) {
     dd->capabilities = 0;
+  }
+
+  sc = rtems_bdbuf_set_block_size(dd, block_size);
+  if (sc != RTEMS_SUCCESSFUL) {
+    dd->ioctl = null_handler;
+    rtems_disk_delete(dev);
+    disk_unlock();
+
+    return sc;
   }
 
   disk_unlock();
@@ -319,7 +333,10 @@ rtems_status_code rtems_disk_create_log(
   dd->phys_dev = physical_disk;
   dd->start = begin_block;
   dd->size = block_count;
-  dd->block_size = dd->media_block_size = physical_disk->block_size;
+  dd->block_size = physical_disk->block_size;
+  dd->media_block_size = physical_disk->media_block_size;
+  dd->block_to_media_block_shift = physical_disk->block_to_media_block_shift;
+  dd->bds_per_group = physical_disk->bds_per_group;
   dd->ioctl = physical_disk->ioctl;
   dd->driver_data = physical_disk->driver_data;
 

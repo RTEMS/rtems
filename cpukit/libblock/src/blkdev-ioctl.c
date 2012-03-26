@@ -23,43 +23,42 @@
 int
 rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
-    size_t            *arg_size = argp;
+    rtems_status_code  sc;
     int                rc = 0;
 
     switch (req)
     {
         case RTEMS_BLKIO_GETMEDIABLKSIZE:
-            *arg_size = dd->media_block_size;
+            *(uint32_t *) argp = dd->media_block_size;
             break;
 
         case RTEMS_BLKIO_GETBLKSIZE:
-            *arg_size = dd->block_size;
+            *(uint32_t *) argp = dd->block_size;
             break;
 
         case RTEMS_BLKIO_SETBLKSIZE:
-            dd->block_size = *arg_size;
-            break;
-
-        case RTEMS_BLKIO_GETSIZE:
-            *arg_size = dd->size;
-            break;
-
-        case RTEMS_BLKIO_SYNCDEV:
-        {
-            rtems_status_code sc = rtems_bdbuf_syncdev(dd);
+            sc = rtems_bdbuf_set_block_size(dd, *(uint32_t *) argp);
             if (sc != RTEMS_SUCCESSFUL) {
                 errno = EIO;
                 rc = -1;
             }
             break;
-        }
+
+        case RTEMS_BLKIO_GETSIZE:
+            *(rtems_blkdev_bnum *) argp = dd->size;
+            break;
+
+        case RTEMS_BLKIO_SYNCDEV:
+            sc = rtems_bdbuf_syncdev(dd);
+            if (sc != RTEMS_SUCCESSFUL) {
+                errno = EIO;
+                rc = -1;
+            }
+            break;
 
         case RTEMS_BLKIO_GETDISKDEV:
-        {
-            rtems_disk_device **dd_ptr = argp;
-            *dd_ptr = dd;
+            *(rtems_disk_device **) argp = dd;
             break;
-        }
 
         default:
             errno = EINVAL;
