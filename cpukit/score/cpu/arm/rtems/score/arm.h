@@ -76,7 +76,6 @@ extern "C" {
 
 #elif defined(__ARM_ARCH_6M__)
 #  define CPU_MODEL_NAME  "ARMv6M"
-#  define ARM_MULTILIB_ARCH_V7M
 
 #elif defined(__ARM_ARCH_7__)
 #  define CPU_MODEL_NAME  "ARMv7"

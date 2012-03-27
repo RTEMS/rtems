@@ -246,6 +246,8 @@ typedef struct {
   void *register_lr;
   void *register_sp;
   uint32_t isr_nest_level;
+#else
+  void *register_sp;
 #endif
 } Context_Control;
 
@@ -259,9 +261,10 @@ extern uint32_t arm_cpu_mode;
 
 static inline uint32_t arm_interrupt_disable( void )
 {
+  uint32_t level;
+
 #if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t arm_switch_reg;
-  uint32_t level;
 
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
@@ -271,10 +274,7 @@ static inline uint32_t arm_interrupt_disable( void )
     ARM_SWITCH_BACK
     : [arm_switch_reg] "=&r" (arm_switch_reg), [level] "=&r" (level)
   );
-
-  return level;
 #elif defined(ARM_MULTILIB_ARCH_V7M)
-  uint32_t level;
   uint32_t basepri = 0x80;
 
   __asm__ volatile (
@@ -283,9 +283,11 @@ static inline uint32_t arm_interrupt_disable( void )
     : [level] "=&r" (level)
     : [basepri] "r" (basepri)
   );
+#else
+  level = 0;
+#endif
 
   return level;
-#endif
 }
 
 static inline void arm_interrupt_enable( uint32_t level )
@@ -564,11 +566,11 @@ typedef struct {
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;
 
-#elif defined(ARM_MULTILIB_ARCH_V7M)
+#else /* !defined(ARM_MULTILIB_ARCH_V4) */
 
 typedef void CPU_Interrupt_frame;
 
-#endif /* defined(ARM_MULTILIB_ARCH_V7M) */
+#endif /* !defined(ARM_MULTILIB_ARCH_V4) */
 
 #ifdef __cplusplus
 }
