@@ -177,6 +177,7 @@ typedef struct rtems_flashdisk
                                                 mappings. */
   uint32_t block_count;                    /**< The number of avail. blocks. */
   uint32_t unavail_blocks;                 /**< The number of unavail blocks. */
+  uint32_t starvation_threshold;           /**< Erased blocks starvation threshold. */
   uint32_t erased_blocks;                  /**< The number of erased blocks. */
 
   rtems_fdisk_device_ctl* devices;         /**< The flash devices for this
@@ -280,7 +281,7 @@ rtems_fdisk_printf (const rtems_flashdisk* fd, const char *format, ...)
 static bool
 rtems_fdisk_is_erased_blocks_starvation (rtems_flashdisk* fd)
 {
-  bool starvation = fd->erased_blocks < fd->unavail_blocks;
+  bool starvation = fd->erased_blocks < fd->starvation_threshold;
 
   if (starvation)
     fd->starvations++;
@@ -1405,6 +1406,10 @@ rtems_fdisk_compact (rtems_flashdisk* fd)
 
   if (rtems_fdisk_is_erased_blocks_starvation (fd))
   {
+#if RTEMS_FDISK_TRACE
+    rtems_fdisk_printf (fd, " resolve starvation");
+#endif
+
     ssc = rtems_fdisk_segment_queue_pop_head (&fd->used);
     if (!ssc)
       ssc = rtems_fdisk_segment_queue_pop_head (&fd->available);
@@ -1482,7 +1487,12 @@ rtems_fdisk_compact (rtems_flashdisk* fd)
      */
 
     if (!ssc || (pages == 0) || ((compacted_segs + segments) == 1))
+    {
+#if RTEMS_FDISK_TRACE
+      rtems_fdisk_printf (fd, " nothing to compact");
+#endif
       break;
+    }
 
 #if RTEMS_FDISK_TRACE
     rtems_fdisk_printf (fd, " ssc scan: %d-%d: p=%ld, seg=%ld",
@@ -1539,6 +1549,7 @@ rtems_fdisk_recover_block_mappings (rtems_flashdisk* fd)
    * Scan each segment or each device recovering the valid pages.
    */
   fd->erased_blocks = 0;
+  fd->starvation_threshold = 0;
   for (device = 0; device < fd->device_count; device++)
   {
     uint32_t segment;
@@ -1557,6 +1568,8 @@ rtems_fdisk_recover_block_mappings (rtems_flashdisk* fd)
       sc->pages_desc = rtems_fdisk_page_desc_pages (sd, fd->block_size);
       sc->pages =
         rtems_fdisk_pages_in_segment (sd, fd->block_size) - sc->pages_desc;
+      if (sc->pages > fd->starvation_threshold)
+        fd->starvation_threshold = sc->pages;
 
       sc->pages_active = 0;
       sc->pages_used   = 0;
@@ -2225,6 +2238,7 @@ rtems_fdisk_print_status (rtems_flashdisk* fd)
 
   rtems_fdisk_printf (fd, "Block count\t%d", fd->block_count);
   rtems_fdisk_printf (fd, "Unavail blocks\t%d", fd->unavail_blocks);
+  rtems_fdisk_printf (fd, "Starvation threshold\t%d", fd->starvation_threshold);
   rtems_fdisk_printf (fd, "Starvations\t%d", fd->starvations);
   count = rtems_fdisk_segment_count_queue (&fd->available);
   total = count;
