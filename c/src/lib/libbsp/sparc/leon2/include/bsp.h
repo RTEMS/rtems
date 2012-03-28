@@ -15,8 +15,6 @@
  *
  *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
- *
- *  $Id$
  */
 
 #ifndef _BSP_H
@@ -99,6 +97,13 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 void BSP_fatal_return( void );
 
 void bsp_spurious_initialize( void );
+
+/* Allocate 8-byte aligned non-freeable pre-malloc() memory. The function
+ * can be called at any time. The work-area will shrink when called before
+ * bsp_get_work_area(). malloc() is called to get memory when this function
+ * is called after bsp_get_work_area().
+ */
+void *bsp_early_malloc(int size);
 
 #ifdef __cplusplus
 }
