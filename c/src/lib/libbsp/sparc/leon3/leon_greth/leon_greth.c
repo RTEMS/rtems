@@ -41,19 +41,19 @@ int rtems_leon_greth_driver_attach(
   if (device_found == 1)
   {
 		base_addr = apbgreth.start;
-		eth_irq = apbgreth.irq + 0x10;
+		eth_irq = apbgreth.irq;
 
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;
     *(volatile int *) base_addr = GRETH_CTRL_RST;
     *(volatile int *) base_addr = 0;
     leon_greth_configuration.base_address = base_addr;
-    leon_greth_configuration.vector = eth_irq;
+    leon_greth_configuration.vector = eth_irq + 0x10;
     leon_greth_configuration.txd_count = TDA_COUNT;
     leon_greth_configuration.rxd_count = RDA_COUNT;
     if (rtems_greth_driver_attach( config, &leon_greth_configuration )) {
-      LEON_Clear_interrupt(leon_greth_configuration.vector);
-      LEON_Unmask_interrupt(leon_greth_configuration.vector);
+      LEON_Clear_interrupt(eth_irq);
+      LEON_Unmask_interrupt(eth_irq);
     }
   }
   return 0;
