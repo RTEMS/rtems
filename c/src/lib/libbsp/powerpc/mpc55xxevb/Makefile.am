@@ -72,6 +72,7 @@ libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/exc-vector-base.S
 libbsp_a_SOURCES += startup/get-system-clock.c
 libbsp_a_SOURCES += startup/reset.c
+libbsp_a_SOURCES += startup/restart.c
 libbsp_a_SOURCES += startup/start-config-clock.c
 libbsp_a_SOURCES += startup/start-config-ebi-cs.c
 libbsp_a_SOURCES += startup/start-config-ebi-cs-cal.c

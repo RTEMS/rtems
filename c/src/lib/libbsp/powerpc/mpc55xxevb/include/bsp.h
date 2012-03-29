@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -71,6 +71,8 @@ int smsc9218i_attach_detach(
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "eth0"
 
 rtems_status_code bsp_register_i2c(void);
+
+void bsp_restart(void *addr);
 
 #endif /* ASM */
 
