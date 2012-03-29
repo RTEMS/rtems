@@ -895,42 +895,6 @@ int _rtems_smc91111_driver_attach (struct rtems_bsdnet_ifconfig *config,
 	int mtu;
 	DEBUG_FUNCTION();
 
-#if 0
- 	/* activate io area */
- 	switch (sparc_leon23_get_psr_version()) {
- 	case 0:
- 	case 2:
- 		db_printf("Activating Leon2 io port\n");
- 		/*configure pio */
- 		*((volatile unsigned int *)0x80000000) |= 0x10f80000;
- 		*((volatile unsigned int *)0x800000A8) |=
- 		    (0xe0 | chip->vector) << (8 * (chip->pio - 4));
- 		break;
- 	default:
- 		{
- 			unsigned long irq_pio, irq_mctrl, addr_pio, addr_mctrl;
- 			if ((addr_pio = amba_find_apbslv_addr(VENDOR_GAISLER,
- 						   GAISLER_PIOPORT, &irq_pio))
- 			    && (addr_mctrl =
- 				amba_find_apbslv_addr(VENDOR_ESA, ESA_MCTRL, &irq_mctrl))) {
- 				LEON3_IOPORT_Regs_Map *io =
- 				    (LEON3_IOPORT_Regs_Map *) addr_pio;
- 				db_printf
- 				    ("Activating Leon3 io port for smsc_lan91cxx (pio:%x mctrl:%x)\n",
- 				     (unsigned int)addr_pio,
- 				     (unsigned int)addr_mctrl);
- 				*((volatile unsigned int *)addr_mctrl) |= 0x10f80000;	/*mctrl ctrl 1 */
- 				io->irqmask |= (1 << chip->pio);
- 				io->irqpol |= (1 << chip->pio);
- 				io->irqedge |= (1 << chip->pio);
- 				io->iodir &= ~(1 << chip->pio);
- 			} else {
- 				return 0;
- 			}
- 		}
- 	}
-#endif
-
 	/* parse driver name */
 	if ((unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) < 0) {
 		db_printf("Unitnumber < 0: %d\n", unitNumber);
