@@ -67,7 +67,7 @@ static int clkirq;
     if ( cnt > 0 ){ \
       /* Found APB GPTIMER Timer */ \
       LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start; \
-      clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3; \
+      clkirq = (LEON3_Timer_Regs->status & 0xf8) >> 3; \
       \
       Adjust_clkirq_for_node(); \
     } \
