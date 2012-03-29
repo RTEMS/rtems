@@ -97,6 +97,10 @@ extern void ipalign(struct mbuf *m);
 #ifndef GRETH_AUTONEGO_TIMEOUT_MS
 #define GRETH_AUTONEGO_TIMEOUT_MS 4000
 #endif
+const struct timespec greth_tan = {
+   GRETH_AUTONEGO_TIMEOUT_MS/1000,
+   GRETH_AUTONEGO_TIMEOUT_MS*1000000
+};
 
 /* For optimizing the autonegotiation time */
 #define GRETH_AUTONEGO_PRINT_TIME
@@ -147,7 +151,7 @@ struct greth_softc
    int gb;
    int gbit_mac;
    int auto_neg;
-   unsigned int auto_neg_time;
+   struct timespec auto_neg_time;
 
    /*
     * Statistics
@@ -264,8 +268,9 @@ static void print_init_info(struct greth_softc *sc)
                 printf("Half Duplex\n");
         }
 #ifdef GRETH_AUTONEGO_PRINT_TIME
-        if ( sc->auto_neg ){
-          printf("Autonegotiation Time: %dms\n",sc->auto_neg_time);
+        if ( sc->auto_neg ) {
+          printf("Autonegotiation Time: %dms\n", sc->auto_neg_time.tv_sec*1000 +
+                 sc->auto_neg_time.tv_nsec/1000000);
         }
 #endif
 }
@@ -284,8 +289,7 @@ greth_initialize_hardware (struct greth_softc *sc)
     int phystatus;
     int tmp1;
     int tmp2;
-    unsigned int msecs;
-    struct timeval tstart, tnow;
+    struct timespec tstart, tnow;
 
     greth_regs *regs;
 
@@ -320,33 +324,17 @@ greth_initialize_hardware (struct greth_softc *sc)
     sc->fd = 0;
     sc->sp = 0;
     sc->auto_neg = 0;
-    sc->auto_neg_time = 0;
+    _Timespec_Set_to_zero(&sc->auto_neg_time);
     if ((phyctrl >> 12) & 1) {
             /*wait for auto negotiation to complete*/
-            msecs = 0;
             sc->auto_neg = 1;
-            if ( rtems_clock_get_tod_timeval(&tstart) == RTEMS_NOT_DEFINED){
-                /* Not inited, set to epoch */
-                rtems_time_of_day time;
-                time.year   = 1988;
-                time.month  = 1;
-                time.day    = 1;
-                time.hour   = 0;
-                time.minute = 0;
-                time.second = 0;
-                time.ticks  = 0;
-                rtems_clock_set(&time);
-
-                tstart.tv_sec = 0;
-                tstart.tv_usec = 0;
-                rtems_clock_get_tod_timeval(&tstart);
-            }
+            if (rtems_clock_get_uptime(&tstart) != RTEMS_SUCCESSFUL)
+                    printk("rtems_clock_get_uptime failed\n");
             while (!(((phystatus = read_mii(phyaddr, 1)) >> 5) & 1)) {
-                    if ( rtems_clock_get_tod_timeval(&tnow) != RTEMS_SUCCESSFUL )
-                      printk("rtems_clock_get_tod_timeval failed\n\r");
-                    msecs = (tnow.tv_sec-tstart.tv_sec)*1000+(tnow.tv_usec-tstart.tv_usec)/1000;
-                    if ( msecs > GRETH_AUTONEGO_TIMEOUT_MS ){
-                            sc->auto_neg_time = msecs;
+                    if (rtems_clock_get_uptime(&tnow) != RTEMS_SUCCESSFUL)
+                            printk("rtems_clock_get_uptime failed\n");
+                    _Timespec_Subtract(&tstart, &tnow, &sc->auto_neg_time);
+                    if (_Timespec_Greater_than(&sc->auto_neg_time, &greth_tan)) {
                             sc->auto_neg = -1; /* Failed */
                             tmp1 = read_mii(phyaddr, 0);
                             sc->gb = ((phyctrl >> 6) & 1) && !((phyctrl >> 13) & 1);
@@ -354,8 +342,9 @@ greth_initialize_hardware (struct greth_softc *sc)
                             sc->fd = (phyctrl >> 8) & 1;
                             goto auto_neg_done;
                     }
+                    /* Wait about 30ms, time is PHY dependent */
+                    rtems_task_wake_after(rtems_clock_get_ticks_per_second()/32);
             }
-            sc->auto_neg_time = msecs;
             sc->phydev.adv = read_mii(phyaddr, 4);
             sc->phydev.part = read_mii(phyaddr, 5);
             if ((phystatus >> 8) & 1) {
