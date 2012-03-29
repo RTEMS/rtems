@@ -73,6 +73,14 @@ $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 
+$(PROJECT_INCLUDE)/bsp/rtd316.h: console/rtd316.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/rtd316.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/rtd316.h
+
+$(PROJECT_INCLUDE)/bsp/exar17d15x.h: console/exar17d15x.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/exar17d15x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/exar17d15x.h
+
 if HAS_SMP
 $(PROJECT_INCLUDE)/bsp/apic.h: ../../i386/shared/irq/apic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/apic.h

@@ -25,10 +25,13 @@ noinst_PROGRAMS =
 
 SUBDIRS = . tools
 
-include_bsp_HEADERS = ../../i386/shared/irq/irq.h \
-    ../../i386/shared/irq/irq_asm.h ../../i386/shared/comm/tty_drv.h \
-    ../../shared/include/irq-generic.h \
-    ../../shared/include/irq-info.h
+include_bsp_HEADERS  = ../../i386/shared/irq/irq.h
+include_bsp_HEADERS += ../../i386/shared/irq/irq_asm.h
+include_bsp_HEADERS += ../../i386/shared/comm/tty_drv.h
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += console/rtd316.h
+include_bsp_HEADERS += console/exar17d15x.h
 
 if HAS_SMP
 include_bsp_HEADERS += ../../i386/shared/irq/apic.h
@@ -63,30 +66,49 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # clock
-libbsp_a_SOURCES += clock/ckinit.c clock/todcfg.c ../../shared/tod.c
+libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += clock/todcfg.c
+libbsp_a_SOURCES += ../../shared/tod.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS = console/keyboard.h console/kd.h console/ps2_drv.h \
-    ../../shared/console_private.h console/vgacons.h
+include_rtems_HEADERS = console/keyboard.h
+include_rtems_HEADERS += console/kd.h
+include_rtems_HEADERS += console/ps2_drv.h
+include_rtems_HEADERS += ../../shared/console_private.h
+include_rtems_HEADERS += console/vgacons.h
 
 include_HEADERS += ../../i386/shared/comm/i386_io.h
 # console
-libbsp_a_SOURCES += console/inch.c console/outch.c \
-    console/defkeymap.c console/fb_vga.c console/keyboard.c \
-    console/pc_keyb.c console/ps2_mouse.c \
-    console/vgainit.c console/vt.c console/videoAsm.S \
-    console/kbd_parser.c console/serial_mouse_config.c \
-    ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c \
-    ../../shared/console.c console/console_select.c \
-    ../../shared/console_read.c ../../shared/console_write.c \
-    console/console_control.c console/conscfg.c console/printk_support.c \
-    console/vgacons.c
+libbsp_a_SOURCES += console/inch.c
+libbsp_a_SOURCES += console/outch.c
+libbsp_a_SOURCES += console/defkeymap.c
+libbsp_a_SOURCES += console/fb_vga.c
+libbsp_a_SOURCES += console/keyboard.c
+libbsp_a_SOURCES += console/pc_keyb.c
+libbsp_a_SOURCES += console/ps2_mouse.c
+libbsp_a_SOURCES += console/vgainit.c
+libbsp_a_SOURCES += console/vt.c
+libbsp_a_SOURCES += console/videoAsm.S
+libbsp_a_SOURCES += console/kbd_parser.c
+libbsp_a_SOURCES += console/serial_mouse_config.c
+libbsp_a_SOURCES += ../../i386/shared/comm/uart.c
+libbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
+libbsp_a_SOURCES += ../../shared/console.c
+libbsp_a_SOURCES += console/console_select.c
+libbsp_a_SOURCES += ../../shared/console_read.c
+libbsp_a_SOURCES += ../../shared/console_write.c
+libbsp_a_SOURCES += console/console_control.c
+libbsp_a_SOURCES += console/conscfg.c
+libbsp_a_SOURCES += console/printk_support.c
+libbsp_a_SOURCES += console/vgacons.c
+libbsp_a_SOURCES += console/exar17d15x.c
+libbsp_a_SOURCES += console/rtd316.c
 
 # gdb
-libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c \
-    ../../i386/shared/comm/i386-stub-glue.c \
-    ../../i386/shared/comm/gdb_glue.c
+libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
+libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub-glue.c
+libbsp_a_SOURCES += ../../i386/shared/comm/gdb_glue.c
 
 # gnat
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
@@ -98,19 +120,29 @@ libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c \
 
 include_HEADERS += ../../i386/shared/comm/uart.h
 # startup
-libbsp_a_SOURCES += ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/bsppredriverhook.c startup/bspgetworkarea.c \
-    ../../shared/bsppretaskinghook.c startup/bspstart.c startup/bspcmdline.c \
-    ../../shared/bspclean.c startup/bspreset.c ../../i386/shared/irq/idt.c \
-    ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
-    ../../shared/bootcard.c ../../shared/bspinit.c ../../shared/sbrk.c \
-    startup/ldsegs.S ../../i386/shared/irq/irq_asm.S \
-    ../../shared/src/irq-default-handler.c \
-    ../../shared/src/irq-generic.c \
-    ../../shared/src/irq-legacy.c \
-    ../../shared/src/irq-info.c \
-    ../../shared/src/irq-shell.c \
-    ../../shared/src/irq-server.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += startup/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/bspcmdline.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += ../../i386/shared/irq/idt.c
+libbsp_a_SOURCES += ../../i386/shared/irq/irq.c
+libbsp_a_SOURCES += ../../i386/shared/irq/irq_init.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/bspinit.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += startup/ldsegs.S
+libbsp_a_SOURCES += ../../i386/shared/irq/irq_asm.S
+libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c
+libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+libbsp_a_SOURCES += ../../shared/src/irq-info.c
+libbsp_a_SOURCES += ../../shared/src/irq-shell.c
+libbsp_a_SOURCES += ../../shared/src/irq-server.c
 
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
@@ -149,7 +181,8 @@ include_HEADERS += include/wd80x3.h
 
 wd8003_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += wd8003.rel
-wd8003_rel_SOURCES = wd8003/wd8003.c include/wd80x3.h
+wd8003_rel_SOURCES = wd8003/wd8003.c
+wd8003_rel_SOURCES += include/wd80x3.h
 wd8003_rel_CPPFLAGS = $(AM_CPPFLAGS) $(wd8003_CPPFLAGS)
 wd8003_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -157,14 +190,17 @@ endif
 if HAS_NETWORKING
 3c509_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += 3c509.rel
-3c509_rel_SOURCES = 3c509/3c509.c 3c509/3c509.h 3c509/elink.c 3c509/elink.h
+3c509_rel_SOURCES = 3c509/3c509.c
+3c509_rel_SOURCES += 3c509/3c509.h
+3c509_rel_SOURCES += 3c509/elink.c
+3c509_rel_SOURCES += 3c509/elink.h
 3c509_rel_CPPFLAGS = $(AM_CPPFLAGS) $(3c509_CPPFLAGS)
 3c509_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/page.rel \
-    ../../../libcpu/@RTEMS_CPU@/score.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/page.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/score.rel
 
 if HAS_SMP
 libbsp_a_LIBADD += appstart.$(OBJEXT)
@@ -173,10 +209,16 @@ endif
 # We only build the Network library if HAS_NETWORKING was defined
 # dec21140 is supported via libchip
 if HAS_NETWORKING
-libbsp_a_LIBADD += ne2000.rel wd8003.rel 3c509.rel
+libbsp_a_LIBADD += ne2000.rel
+libbsp_a_LIBADD += wd8003.rel
+libbsp_a_LIBADD += 3c509.rel
 endif
 
-EXTRA_DIST += HOWTO README.dec21140 STATUS times_i486dx times_p5
+EXTRA_DIST += HOWTO
+EXTRA_DIST += README.dec21140
+EXTRA_DIST += STATUS
+EXTRA_DIST += times_i486dx
+EXTRA_DIST += times_p5
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
