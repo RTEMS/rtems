@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -25,7 +25,6 @@
 #include <mpc55xx/mpc55xx.h>
 
 #include <assert.h>
-#include <string.h>
 
 #include <bsp/irq.h>
 
@@ -65,7 +64,7 @@ static uint32_t edma_channel_occupation [EDMA_GROUP_COUNT];
 
 static RTEMS_CHAIN_DEFINE_EMPTY(edma_channel_chain);
 
-volatile struct EDMA_tag *edma_get_regs_by_channel(unsigned channel)
+static volatile struct EDMA_tag *edma_get_regs_by_channel(unsigned channel)
 {
 #if EDMA_MODULE_COUNT == 1
   return &EDMA;
@@ -76,7 +75,7 @@ volatile struct EDMA_tag *edma_get_regs_by_channel(unsigned channel)
 #endif
 }
 
-volatile struct EDMA_tag *edma_get_regs_by_module(unsigned module)
+static volatile struct EDMA_tag *edma_get_regs_by_module(unsigned module)
 {
 #if EDMA_MODULE_COUNT == 1
   return &EDMA;
@@ -211,15 +210,30 @@ void mpc55xx_edma_init(void)
 
     channel_remaining -= channel_count;
 
+    /* Disable requests */
+    edma->CERQR.B.CERQ = 0x40;
+
     /* Arbitration mode: group round robin, channel fixed */
     edma->CR.B.ERGA = 1;
     edma->CR.B.ERCA = 0;
     for (channel = 0; channel < channel_count; ++channel) {
+      volatile struct tcd_t *tcd = &edma->TCD [channel];
       edma->CPR [channel].R = 0x80U | (channel & 0xfU);
+
+      /* Initialize TCD, stop channel first */
+      tcd->BMF.R = 0;
+      tcd->SADDR = 0;
+      tcd->SDF.R = 0;
+      tcd->NBYTES = 0;
+      tcd->SLAST = 0;
+      tcd->DADDR = 0;
+      tcd->CDF.R = 0;
+      tcd->DLAST_SGA = 0;
     }
 
-    /* Clear TCDs */
-    memset((void *) &edma->TCD [0], 0, channel_count * sizeof(edma->TCD [0]));
+    /* Clear interrupt requests */
+    edma->CIRQR.B.CINT = 0x40;
+    edma->CER.B.CERR = 0x40;
   }
 
   for (group = 0; group < EDMA_GROUP_COUNT; ++group) {
