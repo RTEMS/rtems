@@ -38,7 +38,7 @@ RTEMS_INLINE_ROUTINE RBTree_Direction _RBTree_Opposite_direction(
   RBTree_Direction the_dir
 )
 {
-  return (!the_dir);
+  return (RBTree_Direction) !((int) the_dir);
 }
 
 /** @brief Set off rbtree
@@ -368,7 +368,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
         break;
     }
 
-    RBTree_Direction dir = _RBTree_Is_greater( compare_result );
+    RBTree_Direction dir =
+      (RBTree_Direction) _RBTree_Is_greater( compare_result );
     iter_node = iter_node->child[dir];
   } /* while(iter_node) */
 
