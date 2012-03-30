@@ -20,8 +20,8 @@
 
 static int _Scheduler_EDF_RBTree_compare_function
 (
-  RBTree_Node* n1,
-  RBTree_Node* n2
+  const RBTree_Node* n1,
+  const RBTree_Node* n2
 )
 {
   Priority_Control value1 = _RBTree_Container_of
@@ -33,7 +33,7 @@ static int _Scheduler_EDF_RBTree_compare_function
    * This function compares only numbers for the red-black tree,
    * but priorities have an opposite sense.
    */
-  return (-1)*_Scheduler_Is_priority_higher_than(value1, value2);
+  return (-1)*_Scheduler_Priority_compare(value1, value2);
 }
 
 void _Scheduler_EDF_Initialize(void)
