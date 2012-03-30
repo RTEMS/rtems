@@ -48,8 +48,11 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 libbsp_a_SOURCES += console/console-io.c console/consupp.S
 
 # irq
-include_bsp_HEADERS = irq/irq.h ../shared/openpic/openpic.h
-libbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c ../shared/openpic/openpic.c
+include_bsp_HEADERS = irq/irq.h ../shared/openpic/openpic.h \
+    ../../shared/include/irq-generic.h
+libbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c \
+    ../shared/openpic/openpic.c ../../shared/src/irq-server.c  \
+    ../../shared/src/irq-generic.c ../../shared/src/irq-default-handler.c
 
 EXTRA_DIST = vectors/README
 # vectors

@@ -81,6 +81,10 @@ $(PROJECT_INCLUDE)/bsp/openpic.h: ../shared/openpic/openpic.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/openpic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/openpic.h
 
+$(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
+
 $(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h

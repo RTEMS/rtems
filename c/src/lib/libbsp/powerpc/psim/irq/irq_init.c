@@ -89,3 +89,34 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     printk("RTEMS IRQ management is now operationnal\n");
   #endif
 }
+
+int psim_exception_handler( BSP_Exception_frame *frame, unsigned exception_number)
+{
+  BSP_panic("Unexpected interrupt occured");
+  return 0;
+}
+
+/*
+ * functions to enable/disable a source at the ipic
+ */
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
+{
+  /* FIXME: do something */
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
+{
+  /* FIXME: do something */
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+  /* Install exception handler */
+  if (ppc_exc_set_handler( ASM_EXT_VECTOR, psim_exception_handler)) {
+    return RTEMS_IO_ERROR;
+  }
+  
+  return RTEMS_SUCCESSFUL;
+}
