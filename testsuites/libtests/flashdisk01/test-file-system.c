@@ -596,17 +596,15 @@ static test_state do_file_append(unsigned index, fs_state *fs)
 
   if (pos != (off_t) -1) {
     size_t buf_size = sizeof(fs->buf);
+    size_t offset = HEADER_SIZE + 1;
     long random = lrand48();
-    size_t out = get_bucket_with_random(buf_size, random) + 1;
+    size_t out = get_bucket_with_random(buf_size - offset, random) + offset;
     ssize_t out_actual = 0;
     uint8_t *buf = fs->buf;
     uint32_t value = (uint32_t) random;
     uint32_t *words = (uint32_t *) &buf [0];
     size_t word_count = 0;
     size_t w = 0;
-
-    /* Must be big enough for the header */
-    out = out >= HEADER_SIZE ? out : HEADER_SIZE;
 
     /*
      * In case out is not an integral multiple of four we will write a bit to
