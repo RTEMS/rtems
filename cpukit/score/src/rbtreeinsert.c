@@ -97,9 +97,9 @@ RBTree_Node *_RBTree_Insert_unprotected(
     /* typical binary search tree insert, descend tree to leaf and insert */
     while (iter_node) {
       compare_result = the_rbtree->compare_function(the_node, iter_node);
-      if ( the_rbtree->is_unique && !compare_result )
+      if ( the_rbtree->is_unique && _RBTree_Is_equal( compare_result ) )
         return iter_node;
-      RBTree_Direction dir = (compare_result != -1);
+      RBTree_Direction dir = !_RBTree_Is_lesser( compare_result );
       if (!iter_node->child[dir]) {
         the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
         the_node->color = RBT_RED;

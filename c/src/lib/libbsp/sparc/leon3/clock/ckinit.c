@@ -54,7 +54,7 @@ static int clkirq;
       } \
     } while(0)
 #else
-  #define Adjust_clkirq_for_node()
+  #define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
 #endif
 
 #define Clock_driver_support_find_timer() \
@@ -67,7 +67,7 @@ static int clkirq;
     if ( cnt > 0 ){ \
       /* Found APB GPTIMER Timer */ \
       LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start; \
-      clkirq = (LEON3_Timer_Regs->status & 0xfc) >> 3; \
+      clkirq = (LEON3_Timer_Regs->status & 0xf8) >> 3; \
       \
       Adjust_clkirq_for_node(); \
     } \
@@ -102,10 +102,10 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
   if ( !LEON3_Timer_Regs )
     return 0;
 
-  clicks = LEON3_Timer_Regs->timer[0].value;
+  clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
 
   if ( LEON_Is_interrupt_pending( clkirq ) ) {
-    clicks = LEON3_Timer_Regs->timer[0].value;
+    clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
     usecs = (2*rtems_configuration_get_microseconds_per_tick() - clicks);
   } else {
     usecs = (rtems_configuration_get_microseconds_per_tick() - clicks);

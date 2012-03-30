@@ -37,6 +37,7 @@ libscorecpu_a_SOURCES += nios2-isr-install-raw-handler.c
 libscorecpu_a_SOURCES += nios2-isr-install-vector.c
 libscorecpu_a_SOURCES += nios2-isr-is-in-progress.c
 libscorecpu_a_SOURCES += nios2-isr-set-level.c
+libscorecpu_a_SOURCES += nios2-mpu-add-region.c
 libscorecpu_a_SOURCES += nios2-mpu-configuration.c
 libscorecpu_a_SOURCES += nios2-mpu-descriptor.c
 libscorecpu_a_SOURCES += nios2-mpu-disable-protected.c
