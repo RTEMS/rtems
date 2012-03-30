@@ -105,7 +105,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_null_node(
  *  This function returns a pointer to the root node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
-  rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return _RBTree_Root( the_rbtree );
@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
  *  This function returns a pointer to the minimum node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
-  rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return _RBTree_First( the_rbtree, RBT_LEFT );
@@ -129,7 +129,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
  *  This function returns a pointer to the maximum node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
-  rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return _RBTree_First( the_rbtree, RBT_RIGHT );
@@ -141,7 +141,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
  *  This function returns a pointer to the left child node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_left(
-  rtems_rbtree_node *the_node
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Left( the_node );
@@ -153,7 +153,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_left(
  *  This function returns a pointer to the right child node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
-  rtems_rbtree_node *the_node
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Right( the_node );
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
  *  This function returns a pointer to the parent node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_parent(
-  rtems_rbtree_node *the_node
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Parent( the_node );
@@ -192,7 +192,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_are_nodes_equal(
  *  false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_empty(
-  rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return _RBTree_Is_empty( the_rbtree );
@@ -205,7 +205,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_empty(
  *  and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
-  rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_control *the_rbtree,
   const rtems_rbtree_node *the_node
 )
 {
@@ -219,7 +219,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
  *  and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
-  rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_control *the_rbtree,
   const rtems_rbtree_node *the_node
 )
 {
@@ -247,7 +247,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_has_only_one_node(
  *  false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
-  rtems_rbtree_control    *the_rbtree,
+  const rtems_rbtree_control *the_rbtree,
   const rtems_rbtree_node *the_node
 )
 {
@@ -346,7 +346,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
  *  It disables interrupts to ensure the atomicity of the peek operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
-  rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return _RBTree_Peek( the_rbtree, RBT_LEFT );
@@ -361,7 +361,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
  *  It disables interrupts to ensure the atomicity of the peek operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
-  rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return _RBTree_Peek( the_rbtree, RBT_RIGHT );
@@ -404,7 +404,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(
 /** @brief Determines whether the tree is unique
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_unique rtems_rbtree_is_unique(
-    rtems_rbtree_control *the_rbtree
+  const rtems_rbtree_control *the_rbtree
 )
 {
   return( _RBTree_Is_unique(the_rbtree) );

@@ -107,8 +107,8 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_null_node(
  *  This function returns a pointer to the root node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Root(
-    RBTree_Control *the_rbtree
-    )
+  const RBTree_Control *the_rbtree
+)
 {
   return the_rbtree->root;
 }
@@ -119,9 +119,9 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Root(
  *  where @a dir specifies whether to return the minimum (0) or maximum (1).
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_First(
-    RBTree_Control *the_rbtree,
-    RBTree_Direction dir
-    )
+  const RBTree_Control *the_rbtree,
+  RBTree_Direction dir
+)
 {
   return the_rbtree->first[dir];
 }
@@ -131,8 +131,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_First(
  *  This function returns a pointer to the parent node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent(
-    RBTree_Node *the_node
-    )
+  const RBTree_Node *the_node
+)
 {
   if (!the_node->parent->parent) return NULL;
   return the_node->parent;
@@ -147,8 +147,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent(
  *  @return This method returns the left node on the rbtree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Left(
-    RBTree_Node *the_node
-    )
+  const RBTree_Node *the_node
+)
 {
   return the_node->child[RBT_LEFT];
 }
@@ -162,8 +162,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Left(
  *  @return This method returns the right node on the rbtree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Right(
-    RBTree_Node *the_node
-    )
+  const RBTree_Node *the_node
+)
 {
   return the_node->child[RBT_RIGHT];
 }
@@ -179,8 +179,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Right(
  *  @a the_rbtree and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_empty(
-    RBTree_Control *the_rbtree
-    )
+  const RBTree_Control *the_rbtree
+)
 {
   return (the_rbtree->root == NULL);
 }
@@ -193,10 +193,10 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_empty(
  *
  */
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_first(
-    RBTree_Control *the_rbtree,
-    const RBTree_Node *the_node,
-    RBTree_Direction dir
-    )
+  const RBTree_Control *the_rbtree,
+  const RBTree_Node *the_node,
+  RBTree_Direction dir
+)
 {
   return (the_node == _RBTree_First(the_rbtree, dir));
 }
@@ -233,9 +233,9 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Has_only_one_node(
  *  false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
-    RBTree_Control *the_rbtree,
-    const RBTree_Node    *the_node
-    )
+  const RBTree_Control *the_rbtree,
+  const RBTree_Node    *the_node
+)
 {
   return (the_node == _RBTree_Root(the_rbtree));
 }
@@ -265,8 +265,8 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
  *  
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Grandparent(
-    RBTree_Node *the_node
-    )
+  const RBTree_Node *the_node
+)
 {
   if(!the_node) return NULL;
   if(!(the_node->parent)) return NULL;
@@ -281,8 +281,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Grandparent(
  *  exists, and NULL if not. 
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Sibling(
-    RBTree_Node *the_node
-    )
+  const RBTree_Node *the_node
+)
 {
   if(!the_node) return NULL;
   if(!(the_node->parent)) return NULL;
@@ -300,8 +300,8 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Sibling(
  *  @a the_node if it exists, and NULL if not. 
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent_sibling(
-    RBTree_Node *the_node
-    )
+  const RBTree_Node *the_node
+)
 {
   if(!the_node) return NULL;
   if(_RBTree_Grandparent(the_node) == NULL) return NULL;
@@ -446,9 +446,9 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get_unprotected(
  *  @retval NULL if @a the_rbtree is empty.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Peek_unprotected(
-    RBTree_Control *the_rbtree,
-    RBTree_Direction dir
-    )
+  const RBTree_Control *the_rbtree,
+  RBTree_Direction dir
+)
 {
   return(the_rbtree->first[dir]);
 }
@@ -484,7 +484,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Rotate(
 /** @brief Determines whether the tree is unique
  */
 RTEMS_INLINE_ROUTINE bool _RBTree_Is_unique(
-    RBTree_Control *the_rbtree
+  const RBTree_Control *the_rbtree
 )
 {
   return( the_rbtree && the_rbtree->is_unique );

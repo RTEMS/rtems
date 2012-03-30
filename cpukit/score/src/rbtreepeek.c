@@ -36,7 +36,7 @@
  */
 
 RBTree_Node *_RBTree_Peek(
-  RBTree_Control *the_rbtree,
+  const RBTree_Control *the_rbtree,
   RBTree_Direction dir
 )
 {
