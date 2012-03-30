@@ -36,6 +36,10 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([ss555]);;
   tqm8xx )
     AC_CONFIG_SUBDIRS([tqm8xx]);;
+  virtex4 )
+    AC_CONFIG_SUBDIRS([virtex4]);;
+  virtex5 )
+    AC_CONFIG_SUBDIRS([virtex5]);;
   virtex )
     AC_CONFIG_SUBDIRS([virtex]);;
   *)

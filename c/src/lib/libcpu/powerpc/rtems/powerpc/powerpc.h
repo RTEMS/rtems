@@ -137,6 +137,17 @@ extern "C" {
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
 
+#elif defined (ppc440)
+
+#define PPC_CACHE_ALIGNMENT         32
+#define PPC_HAS_RI                   0
+#define PPC_HAS_RFCI                 1
+#define PPC_USE_MULTIPLE             1
+#define PPC_I_CACHE              32768
+#define PPC_D_CACHE              32768
+#define PPC_HAS_EXCEPTION_PREFIX     0
+#define PPC_HAS_EVPR                 1
+
 #elif defined(mpc555)
 
 /* Copied from mpc505 */
@@ -380,7 +391,7 @@ extern "C" {
 
 #define PPC_IRQ_FIRST           PPC_IRQ_SYSTEM_RESET
 
-#if defined(ppc403) || defined(ppc405)
+#if defined(ppc403) || defined(ppc405) || defined(ppc440)
 
 #define PPC_IRQ_CRIT     PPC_IRQ_SYSTEM_RESET /*0x00100- Critical int. pin */
 #define PPC_IRQ_PIT      (PPC_STD_IRQ_LAST+1) /*0x01000- Pgm interval timer*/

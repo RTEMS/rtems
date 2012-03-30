@@ -25,7 +25,7 @@
  *  COPYRIGHT (c) 1994.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  $Id$
+ *  $Id:$
  */
 
 #ifndef _RTEMS_ASM_H
@@ -204,6 +204,83 @@
 #define br5     0x085   /* DCR: memory bank register 5             */
 #define br6     0x086   /* DCR: memory bank register 6             */
 #define br7     0x087   /* DCR: memory bank register 7             */
+
+#elif defined(ppc440)
+#define xer     0x001   /* SPR: Integer Exception Register                */
+#define lr      0x008   /* SPR: Link Register                             */
+#define ctr     0x009   /* SPR: Count Register                            */
+#define pid     0x030   /* SPR: Process ID                                */
+#define decar   0x036   /* SPR: Decrementer Auto-Reload                   */
+#define dear    0x03d   /* SPR: Data Exception Address Register           */
+#define esr     0x03e   /* SPR: Exception Syndrome Register               */
+#define ivpr    0x03f   /* SPR: Interrupt Vector Prefix Register          */
+#define sprg4_w 0x104   /* SPR: Special Purpose Register General 4 (WO)   */
+#define sprg5_w 0x105   /* SPR: Special Purpose Register General 5 (WO)   */
+#define sprg6_w 0x107   /* SPR: Special Purpose Register General 6 (WO)   */
+#define sprg7_w 0x108   /* SPR: Special Purpose Register General 7 (WO)   */
+#define tbl     0x10c   /* SPR: Time Base Lower                           */
+#define tbu     0x10d   /* SPR: Time Base Upper                           */
+#define pir     0x11e   /* SPR: Processor ID Register                     */
+#define pvr     0x11f   /* SPR: Processor Version Register                */
+#define dbsr    0x130   /* SPR: Debug Status Register                     */
+#define dbcr0   0x134   /* SPR: Debug Control Register 0                  */
+#define dbcr1   0x135   /* SPR: Debug Control Register 1                  */
+#define dbcr2   0x136   /* SPR: Debug Control Register 2                  */
+#define iac1    0x138   /* SPR: Instruction Address Compare 1             */
+#define iac2    0x139   /* SPR: Instruction Address Compare 2             */
+#define iac3    0x13a   /* SPR: Instruction Address Compare 3             */
+#define iac4    0x13b   /* SPR: Instruction Address Compare 4             */
+#define dac1    0x13c   /* SPR: Data Address Compare 1                    */
+#define dac2    0x13d   /* SPR: Data Address Compare 2                    */
+#define dvc1    0x13e   /* SPR: Data Value Compare 1                      */
+#define dvc2    0x13f   /* SPR: Data Value Compare 2                      */
+#define tsr     0x150   /* SPR: Timer Status Register                     */
+#define tcr     0x154   /* SPR: Timer Control Register                    */
+#define ivor0   0x190   /* SPR: Interrupt Vector Offset Register 0        */
+#define ivor1   0x191   /* SPR: Interrupt Vector Offset Register 1        */
+#define ivor2   0x192   /* SPR: Interrupt Vector Offset Register 2        */
+#define ivor3   0x193   /* SPR: Interrupt Vector Offset Register 3        */
+#define ivor4   0x194   /* SPR: Interrupt Vector Offset Register 4        */
+#define ivor5   0x195   /* SPR: Interrupt Vector Offset Register 5        */
+#define ivor6   0x196   /* SPR: Interrupt Vector Offset Register 6        */
+#define ivor7   0x197   /* SPR: Interrupt Vector Offset Register 7        */
+#define ivor8   0x198   /* SPR: Interrupt Vector Offset Register 8        */
+#define ivor9   0x199   /* SPR: Interrupt Vector Offset Register 9        */
+#define ivor10  0x19a   /* SPR: Interrupt Vector Offset Register 10       */
+#define ivor11  0x19b   /* SPR: Interrupt Vector Offset Register 11       */
+#define ivor12  0x19c   /* SPR: Interrupt Vector Offset Register 12       */
+#define ivor13  0x19d   /* SPR: Interrupt Vector Offset Register 13       */
+#define ivor14  0x19e   /* SPR: Interrupt Vector Offset Register 14       */
+#define ivor15  0x19f   /* SPR: Interrupt Vector Offset Register 15       */
+#define mcsr    0x23c   /* SPR: Machine Check Status Register             */
+#define inv0    0x370   /* SPR: Instruction Cache Normal Victim 0         */
+#define inv1    0x371   /* SPR: Instruction Cache Normal Victim 1         */
+#define inv2    0x372   /* SPR: Instruction Cache Normal Victim 2         */
+#define inv3    0x373   /* SPR: Instruction Cache Normal Victim 3         */
+#define itv0    0x374   /* SPR: Instruction Cache Transient Victim 0      */
+#define itv1    0x375   /* SPR: Instruction Cache Transient Victim 1      */
+#define itv2    0x376   /* SPR: Instruction Cache Transient Victim 2      */
+#define itv3    0x377   /* SPR: Instruction Cache Transient Victim 3      */
+#define ccr1    0x378   /* SPR: Core Configuration Register 1             */
+#define dnv0    0x390   /* SPR: Data Cache Normal Victim 0                */
+#define dnv1    0x391   /* SPR: Data Cache Normal Victim 1                */
+#define dnv2    0x392   /* SPR: Data Cache Normal Victim 2                */
+#define dnv3    0x393   /* SPR: Data Cache Normal Victim 3                */
+#define dtv0    0x394   /* SPR: Data Cache Transient Victim 0             */
+#define dtv1    0x395   /* SPR: Data Cache Transient Victim 1             */
+#define dtv2    0x396   /* SPR: Data Cache Transient Victim 2             */
+#define dtv3    0x397   /* SPR: Data Cache Transient Victim 3             */
+#define dvlim   0x398   /* SPR: Data Cache Victim Limit                   */
+#define ivlim   0x399   /* SPR: Instruction Cache Victim Limit            */
+#define rstcfg  0x39b   /* SPR: Reset Configuration                       */
+#define dcdbtrl 0x39c   /* SPR: Data Cache Debug Tag Register Low         */
+#define dcdbtrh 0x39d   /* SPR: Data Cache Debug Tag Register High        */
+#define icdbtrl 0x39e   /* SPR: Instruction Cache Debug Tag Register Low  */
+#define icdbtrh 0x39f   /* SPR: Instruction Cache Debug Tag Register High */
+#define mmucr   0x3b2   /* SPR: Memory Management Unit Control Register   */
+#define ccr0    0x3b3   /* SPR: Core Configuration Register 0             */
+#define icdbdr  0x3d3   /* SPR: Instruction Cache Debug Data Register     */
+#define dbdr    0x3f3   /* SPR: Debug Data Register                       */
 /* end of IBM400 series register definitions */
 
 #elif defined(mpc555)

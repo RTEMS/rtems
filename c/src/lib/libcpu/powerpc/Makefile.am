@@ -94,7 +94,7 @@ include_libcpu_HEADERS += shared/src/stackTrace.h
 endif
 
 EXTRA_DIST += ppc403/README ppc403/vectors/README
-if ppc403
+if ppc4xx
 # ppc403/clock
 noinst_PROGRAMS += ppc403/clock.rel
 ppc403_clock_rel_SOURCES = ppc403/clock/clock.c
@@ -132,7 +132,7 @@ ppc403_tty_drv_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_tty_drv_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-endif # ppc403
+endif # ppc4xx
 
 if ppc405
 

@@ -56,9 +56,9 @@ static const ppc_exc_categories ppc_405_category_table = {
   [ASM_PROG_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_FLOAT_VECTOR] = PPC_EXC_CLASSIC,
 
-  [ASM_PPC405_APU_UNAVAIL_VECTOR] = PPC_EXC_CLASSIC,
-
   [ASM_SYS_VECTOR] = PPC_EXC_CLASSIC,
+
+  [ASM_PPC405_APU_UNAVAIL_VECTOR] = PPC_EXC_CLASSIC,
 
   [ASM_BOOKE_DEC_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ASM_BOOKE_FIT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
@@ -66,6 +66,25 @@ static const ppc_exc_categories ppc_405_category_table = {
   [ASM_BOOKE_DTLBMISS_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_BOOKE_ITLBMISS_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_TRACE_VECTOR] = PPC_EXC_405_CRITICAL,
+};
+
+static const ppc_exc_categories ppc_booke_category_table = {
+  [ASM_BOOKE_CRIT_VECTOR] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
+  [ASM_MACH_VECTOR] = PPC_EXC_E500_MACHCHK,
+  [ASM_PROT_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_ISI_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_EXT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ASM_ALIGN_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_PROG_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_FLOAT_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_SYS_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_BOOKE_APU_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_BOOKE_DEC_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ASM_BOOKE_FIT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
+  [ASM_BOOKE_WDOG_VECTOR] = PPC_EXC_BOOKE_CRITICAL | PPC_EXC_ASYNC,
+  [ASM_BOOKE_DTLBMISS_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_BOOKE_ITLBMISS_VECTOR] = PPC_EXC_CLASSIC,
+  [ASM_BOOKE_DEBUG_VECTOR] = PPC_EXC_BOOKE_CRITICAL,
 };
 
 static const ppc_exc_categories mpc_5xx_category_table = {
@@ -286,6 +305,8 @@ const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
     case PPC_405GP:
     case PPC_405EX:
       return &ppc_405_category_table;
+    case PPC_440:
+      return &ppc_booke_category_table;
     default:
       break;
   }

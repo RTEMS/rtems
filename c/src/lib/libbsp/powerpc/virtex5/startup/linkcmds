@@ -1,0 +1,264 @@
+/*
+ *  This file contains directives for the GNU linker which are specific to the
+ *  Virtex 5 PPC 440.  No assumptions are made on the firmware in the FPGA.
+ *  This file is intended to be used together with start.S to generate
+ *  downloadable code.
+ */
+
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
+OUTPUT_ARCH(powerpc)
+
+ENTRY(download_entry)
+
+MsgAreaSize       = DEFINED(MsgAreaSize)   ? MsgAreaSize   : 1M;
+RamBase           = DEFINED(RamBase)       ? RamBase       : 0x0;
+RamSize           = DEFINED(RamSize)       ? RamSize       : 2048M - MsgAreaSize;
+IntrStackSize     = DEFINED(IntrStackSize) ? IntrStackSize : 16K;
+StackSize         = DEFINED(StackSize)     ? StackSize     : 64K;
+HeapSize          = DEFINED(HeapSize)      ? HeapSize      : 0; /* 0=Use def */
+
+
+MEMORY
+{
+  VECTORS         : ORIGIN = 0x00000000, LENGTH = 8K
+  RAM             : ORIGIN = 0x00002000, LENGTH = 2048M - 8K
+}
+
+
+SECTIONS
+{
+  __exeentry      = download_entry;
+  __exestart      = 0x100;
+  .vectors __exestart : { *(.vectors)                           } > VECTORS
+
+  /* Read-only sections, merged into text segment: */
+  .interp         : { *(.interp)                                } > RAM
+  .hash           : { *(.hash)                                  } > RAM
+  .dynsym         : { *(.dynsym)                                } > RAM
+  .dynstr         : { *(.dynstr)                                } > RAM
+  .gnu.version    : { *(.gnu.version)                           } > RAM
+  .gnu.version_d  : { *(.gnu.version_d)                         } > RAM
+  .gnu.version_r  : { *(.gnu.version_r)                         } > RAM
+  .rela.text      : { *(.rela.text) *(.rela.gnu.linkonce.t*)    } > RAM
+  .rela.data      : { *(.rela.data) *(.rela.gnu.linkonce.d*)    } > RAM
+  .rela.rodata    : { *(.rela.rodata*) *(.rela.gnu.linkonce.r*) } > RAM
+  .rela.got       : { *(.rela.got)                              } > RAM
+  .rela.got1      : { *(.rela.got1)                             } > RAM
+  .rela.got2      : { *(.rela.got2)                             } > RAM
+  .rela.ctors     : { *(.rela.ctors)                            } > RAM
+  .rela.dtors     : { *(.rela.dtors)                            } > RAM
+  .rela.init      : { *(.rela.init)                             } > RAM
+  .rela.fini      : { *(.rela.fini)                             } > RAM
+  .rela.bss       : { *(.rela.bss)                              } > RAM
+  .rela.plt       : { *(.rela.plt)                              } > RAM
+  .rela.sdata     : { *(.rela.sdata)                            } > RAM
+  .rela.sbss      : { *(.rela.sbss)                             } > RAM
+  .rela.sdata2    : { *(.rela.sdata2)                           } > RAM
+  .rela.sbss2     : { *(.rela.sbss2)                            } > RAM
+  .rela.dyn       : { *(.rela.dyn)                              } > RAM
+
+  /* Initialization code */
+  .init           : { PROVIDE (_init = .);
+                      *ecrti.o(.init)
+                      KEEP(*(.init))
+                      *ecrtn.o(.init)
+                    } > RAM
+
+  .text           : { *(.entry)
+                      *(.text)
+                      *(.text.*)
+
+                      /* Special FreeBSD sysctl sections */
+                      . = ALIGN (16);
+                      __start_set_sysctl_set = .;
+                      *(set_sysctl_*);
+                      __stop_set_sysctl_set = ABSOLUTE(.);
+                      *(set_domain_*);
+                      *(set_pseudo_*);
+
+                      /* .gnu.warning sections are handled specially by elf32.em
+                       */
+                      *(.gnu.warning)
+                      *(.gnu.linkonce.t*)
+                    } > RAM
+
+  /* Finalization code */
+  .fini           : { PROVIDE (_fini = .);
+                      *ecrti.o(.fini)
+                      KEEP(*(.fini))
+                      *ecrtn.o(.fini)
+                    } > RAM
+
+  /* Miscellaneous read-only data */
+  .rodata         : { *(.rodata.* .gnu.linkonce.r*)                    } > RAM
+  .rodata1        : { *(.rodata1)                                      } > RAM
+
+  /* Initialised small data addressed as offsets from r2 */
+_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
+  .sdata2         : { *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)          } > RAM
+
+  /* Zeroed small data addressed as offsets from r2 */
+  .sbss2          : { *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+
+                      /* Avoid empty sdata2/sbss2 area: __eabi would not set up
+                       * r2 which may be important if run-time loading is used
+                       */
+                      . += 1;
+
+                      PROVIDE (__SBSS2_END__ = .);
+                    } > RAM
+
+  /* Exception frame info */
+  .eh_frame       : { *(.eh_frame .eh_frame.*)                         } > RAM
+  .eh_frame_hdr   : { *(.eh_frame_hdr)                                 } > RAM
+
+  /*  Declares where the .text section ends */
+  _etext          = .;
+  PROVIDE (etext  = .);
+
+  /* Initialized R/W Data section goes in RAM */
+  .data           : { PROVIDE(__DATA_START__ = ABSOLUTE(.) );
+                      *(.data)
+                      *(.data.*)
+                      *(.gnu.linkonce.d*)
+                    } > RAM
+
+  .data1          : { *(.data1)                                        } > RAM
+
+                        PROVIDE (__EXCEPT_START__ = .);
+  .gcc_except_table : { *(.gcc_except_table .gcc_except_table.*)       } > RAM
+                        PROVIDE (__EXCEPT_END__ = .);
+
+  .got1           : { *(.got1)                                         } > RAM
+
+  /* Put .ctors and .dtors next to the .got2 section, so that the pointers
+   * get relocated with -mrelocatable. Also put in the .fixup pointers.
+   * The current compiler no longer needs this, but keep it around for 2.7.2.
+   */
+                      PROVIDE (_GOT2_START_ = .);
+  .got2           : { *(.got2)                                         } > RAM
+
+  .dynamic        : { *(.dynamic)                                      } > RAM
+
+  .ctors          : { /* gcc uses crtbegin.o to find the start of
+                       * the constructors, so we make sure it is
+                       * first.  Because this is a wildcard, it
+                       * doesn't matter if the user does not
+                       * actually link against crtbegin.o; the
+                       * linker won't look for a file to match a
+                       * wildcard.  The wildcard also means that it
+                       * doesn't matter which directory crtbegin.o
+                       * is in.
+                       */
+                      KEEP (*crtbegin.o(.ctors))
+                      /* We don't want to include the .ctor section from
+                       * the crtend.o file until after the sorted ctors.
+                       * The .ctor section from the crtend file contains the
+                       * end of ctors marker and it must be last.
+                       */
+                      KEEP (*(EXCLUDE_FILE (*crtend.o ) .ctors))
+                      KEEP (*(SORT(.ctors.*)))
+                      KEEP (*(.ctors))
+                    } > RAM
+
+  .dtors          : { KEEP (*crtbegin.o(.dtors))
+                      KEEP (*(EXCLUDE_FILE (*crtend.o ) .dtors))
+                      KEEP (*(SORT(.dtors.*)))
+                      KEEP (*(.dtors))
+                    } > RAM
+
+                      PROVIDE (_FIXUP_START_ = .);
+  .fixup          : { *(.fixup)                                        } > RAM
+                      PROVIDE (_FIXUP_END_ = .);
+
+                      PROVIDE (_GOT2_END_ = .);
+
+                      PROVIDE (_GOT_START_ = .);
+  .got            : { __got_start = .;
+                      *(.got)
+                    } > RAM
+
+  .got.plt        : { *(.got.plt)                                      } > RAM
+                      PROVIDE (_GOT_END_ = .);
+
+  .jcr            : { KEEP (*(.jcr))                                   } > RAM
+
+  /* We want the small data sections together, so single-instruction offsets
+   * can access them all, and initialized data all before uninitialized, so
+   * we can shorten the on-disk segment size.
+   */
+  /* Initialised small data addressed as offsets from r13 */
+_SDA_BASE_ = __SDATA_START__ + 0x8000;
+  .sdata          : { *(.sdata* .gnu.linkonce.s.*)                     } > RAM
+
+  _edata          = .;
+  PROVIDE (edata  = .);
+
+  /* Zeroed small data addressed as offsets from r13 */
+  .sbss           : { PROVIDE (__sbss_start = .);
+                      *(.dynsbss)
+                      *(.sbss*)
+                      *(.gnu.linkonce.sb.*)
+                      *(.scommon)
+
+                      /* Avoid empty sdata/sbss area: __eabi would not set up
+                       * r13, which may be important if run-time loading is used
+                       */
+                      . += 1;
+
+                      PROVIDE (__SBSS_END__ = .);
+                      PROVIDE (__sbss_end   = .);
+                    } > RAM
+
+  .plt            : { *(.plt)                                          } > RAM
+  .iplt           : { *(.iplt)                                         } > RAM
+
+  /* Zeroed large data */
+  .bss            : { PROVIDE (__bss_start = .);
+                      *(.dynbss)
+                      *(.bss)
+                      *(.bss.*)
+                      *(.gnu.linkonce.b*)
+                      *(COMMON)
+
+                      PROVIDE (__bss_end = ALIGN(4));
+                      __bss_size = __bss_end - __bss_start;
+                    } > RAM
+
+  __exeend        = ALIGN(4);
+  __rtems_end     = .;
+  .               = ALIGN(0x20);        /* Align to a cache-line boundary */
+  PROVIDE(__bsp_ram_start = .);
+
+  /* Interrupt stack: aligned on a cache-line boundary */
+  .              += IntrStackSize;
+  __intrStack     = .;
+
+  /* Main stack lives here */
+  _stack          = ALIGN(0x20); 	/* Align to a cache-line boundary */
+  .              += StackSize;
+  __stack_base    = .;                  /* Initial stack builds downwards */
+
+  /* RTEMS workspace: size specified by application */
+  WorkAreaBase    = ALIGN(0x20); 	/* Align to a cache-line boundary */
+
+  /* The heap comes after the work space */
+
+   .              = RamBase + RamSize;
+  PROVIDE(__bsp_ram_end = .);
+
+  /* Message area for capturing early printk output */
+  /* Placed here to be easily findable with a debugger */
+  MsgAreaBase     = __bsp_ram_end;
+  .              += MsgAreaSize;
+
+  __phy_ram_end   = .;                  /* True end of physical memory */
+
+  /DISCARD/ :
+  {
+    *(.comment)
+  }
+
+  /* Some configuration constants */
+  __vectors       = 0;
+}

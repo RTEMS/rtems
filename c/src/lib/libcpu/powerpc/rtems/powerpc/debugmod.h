@@ -78,7 +78,7 @@ extern "C" {
 #define PPC_DEBUG_MODEL_SINGLE_STEP_ONLY 2
 #define PPC_DEBUG_MODEL_IBM4xx           3
 
-#elif defined(ppc403) || defined(ppc405)
+#elif defined(ppc403) || defined(ppc405) || defined(ppc440)
 
 #define PPC_DEBUG_MODEL          PPC_DEBUG_MODEL_IBM4xx
 

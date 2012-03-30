@@ -41,6 +41,7 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "ppc603e" \
 || test "$RTEMS_CPU_MODEL" = "ppc403" \
 || test "$RTEMS_CPU_MODEL" = "ppc405" \
+|| test "$RTEMS_CPU_MODEL" = "ppc440" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
 || test "$RTEMS_CPU_MODEL" = "mpc6xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc8xx" \
@@ -74,10 +75,13 @@ AM_CONDITIONAL(mpc8260, test "$RTEMS_CPU_MODEL" = "mpc8260")
 AM_CONDITIONAL(mpc83xx, test "$RTEMS_CPU_MODEL" = "mpc83xx")
 AM_CONDITIONAL(qoriq, test "$RTEMS_CPU_MODEL" = "qoriq")
 
-# the ppc405 shares files with the ppc403
-AM_CONDITIONAL(ppc403,[test "$RTEMS_CPU_MODEL" = "ppc403" \
-|| test "$RTEMS_CPU_MODEL" = "ppc405"])
+# the ppc405 and ppc440 share files with the ppc403
+AM_CONDITIONAL(ppc403, test "$RTEMS_CPU_MODEL" = "ppc403")
 AM_CONDITIONAL(ppc405, test "$RTEMS_CPU_MODEL" = "ppc405")
+AM_CONDITIONAL(ppc440, test "$RTEMS_CPU_MODEL" = "ppc440")
+AM_CONDITIONAL(ppc4xx, test "$RTEMS_CPU_MODEL" = "ppc403" \
+|| test "$RTEMS_CPU_MODEL" = "ppc405" \
+|| test "$RTEMS_CPU_MODEL" = "ppc440")
 
 AM_CONDITIONAL(e500, test "$RTEMS_CPU_MODEL" = "e500" \
 || test "$RTEMS_CPU_MODEL" = "qoriq" )

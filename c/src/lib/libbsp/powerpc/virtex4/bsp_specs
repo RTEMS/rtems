@@ -1,0 +1,16 @@
+%rename startfile old_startfile
+%rename link      old_link
+%rename endfile   old_endfile
+
+
+*startfile:
+%{!qrtems: %(old_startfile)} \
+%{!nostdlib: %{qrtems:  ecrti%O%s rtems_crti%O%s crtbegin.o%s }}
+
+*link:
+%{!qrtems: %(old_link)} \
+%{qrtems: -dc -dp -Bstatic -u __vectors -u download_entry -N }
+
+*endfile:
+%{!qrtems: %(old_endfile)} \
+%{qrtems: crtend.o%s ecrtn.o%s}

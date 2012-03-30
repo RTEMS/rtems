@@ -96,13 +96,13 @@ $(PROJECT_INCLUDE)/libcpu/stackTrace.h: shared/src/stackTrace.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/stackTrace.h
 endif
-if ppc403
+if ppc4xx
 if ppc405
 $(PROJECT_INCLUDE)/tty_drv.h: ppc403/tty_drv/tty_drv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tty_drv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tty_drv.h
 endif
-endif # ppc403
+endif # ppc4xx
 if ppc405
 $(PROJECT_INCLUDE)/ppc4xx/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/ppc4xx

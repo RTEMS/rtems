@@ -33,6 +33,7 @@ const char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_405:		return "PPC405";
 	case PPC_405GP:		return "PPC405GP";
 	case PPC_405EX:		return "PPC405EX";
+    case PPC_440:               return "PPC440";
     case PPC_601:		return "MPC601";
     case PPC_5XX:		return "MPC5XX";
     case PPC_603:		return "MPC603";
@@ -104,6 +105,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_405:
     case PPC_405GP:
     case PPC_405EX:
+    case PPC_440:
     case PPC_601:
     case PPC_5XX:
     case PPC_603:
@@ -150,7 +152,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_7400:
 	/* NOTE: PSIM PVR doesn't tell us anything (its
      *       contents are not set based on what model
-	 *       the uses chooses but has to be programmed via
+       *       the user chooses but has to be programmed via
 	 *       the device file with the special value 0xfffe
 	 *       telling us that we have a 'psim cpu').
 	 *
@@ -182,6 +184,8 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
  	case PPC_405EX:
 		current_ppc_features.is_bookE			= PPC_BOOKE_405;
 	break;
+    case PPC_440:
+      current_ppc_features.is_bookE          = PPC_BOOKE_STD;
   	case PPC_8540:
   	case PPC_e200z0:
   	case PPC_e200z1:
