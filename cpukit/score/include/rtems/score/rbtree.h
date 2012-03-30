@@ -109,8 +109,8 @@ typedef enum {
  * the order in a red-black tree.
  */
 typedef int (*RBTree_Compare_function)(
-    RBTree_Node *node1,
-    RBTree_Node *node2
+  const RBTree_Node *node1,
+  const RBTree_Node *node2
 );
 
 /**

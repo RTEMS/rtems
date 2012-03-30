@@ -28,16 +28,14 @@ typedef struct {
 } test_node;
 
 static int test_compare_function (
-  rtems_rbtree_node* n1,
-  rtems_rbtree_node* n2
+  const rtems_rbtree_node *n1,
+  const rtems_rbtree_node *n2
 )
 {
   int key1 = rtems_rbtree_container_of( n1, test_node, Node )->key;
   int key2 = rtems_rbtree_container_of( n2, test_node, Node )->key;
 
-  if (key1 > key2) return 1;
-  else if (key1 < key2) return -1;
-  else return 0;
+  return key1 - key2;
 }
 
 /* 

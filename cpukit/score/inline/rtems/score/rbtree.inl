@@ -324,6 +324,25 @@ RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header_unprotected(
   return (RBTree_Control*)the_node;
 }
 
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_equal( int compare_result )
+{
+  return compare_result == 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_greater(
+  int compare_result
+)
+{
+  return compare_result > 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_lesser(
+  int compare_result
+)
+{
+  return compare_result < 0;
+}
+
 /** @brief Find the node with given key in the tree
  *
  *  This function returns a pointer to the node in @a the_rbtree 
@@ -343,13 +362,13 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
   int compare_result;
   while (iter_node) {
     compare_result = the_rbtree->compare_function(the_node, iter_node);
-    if (compare_result == 0) {
+    if ( _RBTree_Is_equal( compare_result ) ) {
       found = iter_node;
       if ( the_rbtree->is_unique )
         break;
     }
 
-    RBTree_Direction dir = (compare_result == 1);
+    RBTree_Direction dir = _RBTree_Is_greater( compare_result );
     iter_node = iter_node->child[dir];
   } /* while(iter_node) */
 
