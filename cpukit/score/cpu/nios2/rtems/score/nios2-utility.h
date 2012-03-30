@@ -169,13 +169,10 @@ extern char _Nios2_ISR_Status_mask [];
  */
 extern char _Nios2_ISR_Status_bits [];
 
-/**
- * @brief This global variable indicates that the Nios2 MPU is active
- *
- * This global variable is set to 1 when the board support package
- * initializes the MPU during startup.
- */
-extern uint32_t _Nios2_Mpu_active;
+static inline void _Nios2_Flush_pipeline( void )
+{
+  __asm__ volatile ("flushp");
+}
 
 static inline uint32_t _Nios2_Get_ctlreg_status( void )
 {
@@ -377,11 +374,63 @@ typedef struct {
     true, false, false, true \
   }
 
+static inline int _Nios2_MPU_Get_region_count(
+  const Nios2_MPU_Configuration *config,
+  bool data
+)
+{
+  return data ?
+    config->data_region_count
+      : config->instruction_region_count;
+}
+
+static inline bool _Nios2_MPU_Is_valid_index(
+  const Nios2_MPU_Configuration *config,
+  bool data,
+  int index
+)
+{
+  return 0 <= index
+    && index < _Nios2_MPU_Get_region_count( config, data );
+}
+
 bool _Nios2_MPU_Setup_region_registers(
   const Nios2_MPU_Configuration *config,
   const Nios2_MPU_Region_descriptor *desc,
   uint32_t *mpubase,
   uint32_t *mpuacc
+);
+
+/**
+ * @brief Seaches the region table part for a disabled region.
+ *
+ * The table will be searched between indices @a begin and @a end.  The @a end
+ * index is not part of the search range.  If @a end is negative, then the
+ * region count will be used.  Thus a @a begin of 0 and a @a end of -1 will
+ * specifiy the complete table.
+ *
+ * @retval -1 No disabled region is available.
+ * @retval other Index of disabled region.
+ */
+int _Nios2_MPU_Get_disabled_region_index(
+  const Nios2_MPU_Configuration *config,
+  bool data,
+  int begin,
+  int end
+);
+
+/**
+ * @brief Adds a region according to region descriptor @a desc.
+ *
+ * If @a force is true, then an enabled region will be overwritten.
+ *
+ * @retval true Successful operation.
+ * @retval false Invalid region descriptor or region already in use.
+ */
+bool _Nios2_MPU_Add_region(
+  const Nios2_MPU_Configuration *config,
+  const Nios2_MPU_Region_descriptor *desc,
+  bool force
 );
 
 static inline void _Nios2_MPU_Get_region_registers(
@@ -397,6 +446,7 @@ static inline void _Nios2_MPU_Get_region_registers(
 
   _Nios2_Set_ctlreg_mpubase( base );
   _Nios2_Set_ctlreg_mpuacc( NIOS2_MPUACC_RD );
+  _Nios2_Flush_pipeline();
   *mpubase = _Nios2_Get_ctlreg_mpubase() | base;
   *mpuacc = _Nios2_Get_ctlreg_mpuacc();
 }

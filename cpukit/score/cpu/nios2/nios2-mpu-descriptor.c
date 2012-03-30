@@ -60,19 +60,6 @@ static bool _Nios2_Is_valid_base_and_end(
   return ok;
 }
 
-static bool _Nios2_Is_valid_index(
-  const Nios2_MPU_Configuration *config,
-  bool data,
-  int index
-)
-{
-  int count = data ?
-    config->data_region_count
-      : config->instruction_region_count;
-
-  return 0 <= index && index < count;
-}
-
 static bool _Nios2_Is_valid_permission(
   bool data,
   int perm
@@ -101,7 +88,7 @@ bool _Nios2_MPU_Setup_region_registers(
     &mask_or_limit
   );
   bool ok = is_valid_base_and_end
-    && _Nios2_Is_valid_index( config, desc->data, desc->index )
+    && _Nios2_MPU_Is_valid_index( config, desc->data, desc->index )
     && _Nios2_Is_valid_permission( desc->data, desc->perm )
     && !(!desc->data && desc->cacheable)
     && !(desc->read && desc->write);
