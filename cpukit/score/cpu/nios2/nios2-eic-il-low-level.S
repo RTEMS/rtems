@@ -70,6 +70,9 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	/* Load Nios II specific thread dispatch disabled */
 	ldw	r13, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
 
+	/* Read status */
+	rdctl	r14, status
+
 	/* Fix return address */
 	subi	ea, ea, 4
 
@@ -88,7 +91,7 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	beq	r12, zero, no_thread_dispatch
 
 	/* Is outermost interrupt? */
-	andhi	r14, sstatus, 0x3f
+	andhi	r14, r14, 0x3f
 	bne	r14, zero, no_thread_dispatch
 
 	/* Is Nios II specific thread dispatch allowed? */
