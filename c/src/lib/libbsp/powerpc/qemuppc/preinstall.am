@@ -77,3 +77,7 @@ $(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
 
+$(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
+
