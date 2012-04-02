@@ -251,7 +251,11 @@ void cpu_init( void)
     #else /* HAS_UBOOT */
       (uint32_t) IMMRBAR,
     #endif /* HAS_UBOOT */
-    1024 * 1024,
+    #if MPC83XX_CHIP_TYPE / 10 == 830
+      2 * 1024 * 1024,
+    #else
+      1024 * 1024,
+    #endif
     false,
     true,
     false,
