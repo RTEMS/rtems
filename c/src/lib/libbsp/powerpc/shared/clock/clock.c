@@ -132,25 +132,6 @@ static int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsign
 	return 0;
 }
 
-static int ppc_clock_exception_handler_e300( BSP_Exception_frame *frame, unsigned number)
-{
-	uint32_t msr;
-
-	/* Increment clock ticks */
-	Clock_driver_ticks += 1;
-
-	/* Enable external exceptions */
-	msr = ppc_external_exceptions_enable();
-
-	/* Call clock ticker  */
-	ppc_clock_tick();
-
-	/* Restore machine state */
-	ppc_external_exceptions_disable( msr);
-
-	return 0;
-}
-
 static uint32_t ppc_clock_nanoseconds_since_last_tick(void)
 {
 	uint64_t k = ppc_clock_factor;
@@ -218,14 +199,6 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 
 		/* Enable decrementer and auto-reload */
 		PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( BOOKE_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
-	} else if (cpu_type == PPC_e300c2 || cpu_type == PPC_e300c3) {
-		/* TODO: Not tested for e300c2 */
-
-		/* Enable auto-reload */
-		PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, 0x00000040);
-
-		/* Install exception handler */
-		ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler_e300);
 	} else {
 		/* Here the decrementer value is actually the interval */
 		++ppc_clock_decrementer_value;
