@@ -40,8 +40,12 @@
 /* Configuration parameters for console driver, ... */
 uint32_t BSP_bus_frequency;
 
-/* Configuration parameters for clock driver, ... */
+/* Configuration parameter for clock driver */
+uint32_t bsp_time_base_frequency;
+
+/* Legacy */
 uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK */
+
 /* for timer: */
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
@@ -173,7 +177,8 @@ void bsp_start( void)
     BSP_panic("Cannot determine BUS frequency\n");
   }
 
-  bsp_clicks_per_usec = BSP_bus_frequency/1000000/16;
+  bsp_time_base_frequency = BSP_bus_frequency / 16;
+  bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
   bsp_timer_least_valid = 3;
   bsp_timer_average_overhead = 3;
 

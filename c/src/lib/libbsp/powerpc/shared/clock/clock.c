@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -32,9 +32,9 @@
 
 /*
  * This variable must be defined in the BSP and valid before clock driver
- * initialization.  The clicks refer to the decrementer and time base.
+ * initialization.
  */
-extern uint32_t bsp_clicks_per_usec;
+extern uint32_t bsp_time_base_frequency;
 
 #define PPC_CLOCK_DECREMENTER_MAX UINT32_MAX
 
@@ -46,7 +46,9 @@ rtems_device_minor_number rtems_clock_minor = UINT32_MAX;
 
 static uint32_t ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
 
-static uint32_t ppc_clock_next_time_base = 0;
+static uint32_t ppc_clock_next_time_base;
+
+static uint64_t ppc_clock_factor;
 
 static void ppc_clock_no_tick(void)
 {
@@ -151,7 +153,11 @@ static int ppc_clock_exception_handler_e300( BSP_Exception_frame *frame, unsigne
 
 static uint32_t ppc_clock_nanoseconds_since_last_tick(void)
 {
-	return ((ppc_clock_decrementer_value - ppc_decrementer_register()) * 1000) / bsp_clicks_per_usec;
+	uint64_t k = ppc_clock_factor;
+	uint32_t c = ppc_decrementer_register();
+	uint32_t i = ppc_clock_decrementer_value + 1;
+
+	return (uint32_t) (((i - c) * k) >> 32);
 }
 
 void Clock_exit(void)
@@ -165,6 +171,10 @@ void Clock_exit(void)
 
 rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
+	uint64_t frequency = bsp_time_base_frequency;
+	uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
+	uint32_t interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
+
 	/* Current CPU type */
 	ppc_cpu_id_t cpu_type = get_ppc_cpu_type();
 
@@ -184,8 +194,11 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 	/* Set the decrementer to the maximum value */
 	ppc_set_decrementer_register( PPC_CLOCK_DECREMENTER_MAX);
 
+	/* Factor for nano seconds extension */
+	ppc_clock_factor = (1000000000ULL << 32) / frequency;
+
 	/* Decrementer value */
-	ppc_clock_decrementer_value = bsp_clicks_per_usec * rtems_configuration_get_microseconds_per_tick() - 1;
+	ppc_clock_decrementer_value = interval - 1;
 
 	/* Check decrementer value */
 	if (ppc_clock_decrementer_value == 0) {

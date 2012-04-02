@@ -43,7 +43,7 @@ LINKER_SYMBOL(bsp_exc_vector_base);
 /* Configuration parameters for console driver, ... */
 unsigned int BSP_bus_frequency;
 
-/* Configuration parameters for clock driver, ... */
+/* Configuration parameter for clock driver, ... */
 uint32_t bsp_clicks_per_usec;
 
 void BSP_panic(char *s)

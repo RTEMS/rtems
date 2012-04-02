@@ -105,10 +105,11 @@
 #include <bsp/irq-generic.h>
 #include <bsp/mpc5200.h>
 
-/*
- *  Driver configuration parameters
- */
-uint32_t   bsp_clicks_per_usec;
+/* Configuration parameter for clock driver */
+uint32_t bsp_time_base_frequency;
+
+/* Legacy */
+uint32_t bsp_clicks_per_usec;
 
 void BSP_panic(char *s)
 {
@@ -157,6 +158,7 @@ void bsp_start(void)
     mpc5200.config = xlb_cfg;
   }
 
+  bsp_time_base_frequency = XLB_CLOCK / 4;
   bsp_clicks_per_usec    = (XLB_CLOCK/4000000);
 
   /*
