@@ -32,10 +32,11 @@
  */
 unsigned int BSP_bus_frequency;
 
-/*
- *  Driver configuration parameters
- */
-uint32_t   bsp_clicks_per_usec;
+/* Configuration parameter for clock driver */
+uint32_t bsp_time_base_frequency;
+
+/* Legacy */
+uint32_t bsp_clicks_per_usec;
 
 /*
  * Memory on this board.
@@ -78,6 +79,7 @@ void bsp_start( void )
    * this should speed up some tests :-)
    */
   BSP_bus_frequency        = 20;
+  bsp_time_base_frequency  = 20000000;
   bsp_clicks_per_usec      = BSP_bus_frequency;
 
   /*

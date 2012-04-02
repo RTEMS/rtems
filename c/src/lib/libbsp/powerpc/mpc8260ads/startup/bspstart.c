@@ -58,6 +58,7 @@ SPR_RW(SPRG1)
  *  Driver configuration parameters
  */
 uint32_t   bsp_clock_speed;
+uint32_t   bsp_time_base_frequency;
 uint32_t   bsp_clicks_per_usec;
 uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
 bool       bsp_serial_external_clock;
@@ -207,6 +208,7 @@ void bsp_start(void)
   /*
    *  initialize the device driver parameters
    */
+  bsp_time_base_frequency    = 10000000;
   bsp_clicks_per_usec 	     = 10;  /* for 40MHz extclk */
   bsp_serial_per_sec  	     = 40000000;
   bsp_serial_external_clock  = 0;
