@@ -123,7 +123,7 @@ void bsp_start( void)
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
 
   /* Initialize some console parameters */
-  for (i = 0; i < Console_Port_Count; ++i) {
+  for (i = 0; i < Console_Configuration_Count; ++i) {
     Console_Configuration_Ports [i].ulClock = BSP_bus_frequency;
 
     #ifdef HAS_UBOOT
