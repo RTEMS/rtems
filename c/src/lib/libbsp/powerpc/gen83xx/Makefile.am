@@ -17,6 +17,18 @@ nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += ../../shared/include/u-boot.h
+include_bsp_HEADERS += ../../shared/include/utility.h
+include_bsp_HEADERS += ../shared/include/tictac.h
+include_bsp_HEADERS += ../shared/include/u-boot-board-info.h
+include_bsp_HEADERS += include/hwreg_vals.h
+include_bsp_HEADERS += include/irq.h
+include_bsp_HEADERS += include/tsec-config.h
+include_bsp_HEADERS += include/u-boot-config.h
+
 noinst_PROGRAMS =
 
 include_HEADERS += ../../shared/include/coverhd.h
@@ -63,16 +75,6 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 
 # clock
 libbsp_a_SOURCES += ../shared/clock/clock.c
-
-include_bsp_HEADERS = include/irq.h \
-	../../shared/include/irq-generic.h \
-	../../shared/include/irq-info.h \
-	../../shared/include/u-boot.h \
-	../shared/include/u-boot-board-info.h \
-	../shared/include/tictac.h \
-	include/hwreg_vals.h \
-	include/tsec-config.h \
-	include/u-boot-config.h
 
 # irq
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
