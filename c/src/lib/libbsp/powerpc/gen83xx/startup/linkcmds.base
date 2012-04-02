@@ -101,6 +101,16 @@ SECTIONS {
 		*(.gnu.version_r)
 		*(.eh_frame_hdr)
 
+		. = ALIGN (4);
+
+		_bsd__start_set_modmetadata_set = .;
+		*(_bsd_set_modmetadata_set);
+		_bsd__stop_set_modmetadata_set = .;
+
+		_bsd__start_set_sysctl_set = .;
+		*(_bsd_set_sysctl_set);
+		_bsd__stop_set_sysctl_set = .;
+
 		/*
 		 * BSP: Magic PPC stuff
 		 */
