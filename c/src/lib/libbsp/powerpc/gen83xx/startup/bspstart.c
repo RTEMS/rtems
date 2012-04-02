@@ -96,11 +96,11 @@ void bsp_start( void)
    * Enable instruction and data caches. Do not force writethrough mode.
    */
 
-#if BSP_INSTRUCTION_CACHE_ENABLED
+#ifdef BSP_INSTRUCTION_CACHE_ENABLED
   rtems_cache_enable_instruction();
 #endif
 
-#if BSP_DATA_CACHE_ENABLED
+#ifdef BSP_DATA_CACHE_ENABLED
   rtems_cache_enable_data();
 #endif
 
@@ -130,6 +130,9 @@ void bsp_start( void)
   }
 
   /* Initialize exception handler */
+#ifndef BSP_DATA_CACHE_ENABLED
+  ppc_exc_cache_wb_check = 0;
+#endif
   sc = ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     interrupt_stack_start,
