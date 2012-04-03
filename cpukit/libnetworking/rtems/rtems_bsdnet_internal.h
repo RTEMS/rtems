@@ -199,8 +199,6 @@ int ioctl (int, ioctl_command_t, ...);
 # error "Network event conflict"
 #endif
 
-int rtems_bsdnet_makeFdForSocket(
-    void *so, const rtems_filesystem_file_handlers_r *h);
 struct socket *rtems_bsdnet_fdToSocket(int fd);
 
 #ifdef __cplusplus

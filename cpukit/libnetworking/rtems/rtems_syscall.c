@@ -13,7 +13,7 @@
 #include <errno.h>
 
 #include <rtems.h>
-#include <rtems/libio.h>
+#include <rtems/libio_.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
@@ -42,6 +42,61 @@ ssize_t	recv(int, void *, size_t, int);
  * Hooks to RTEMS I/O system
  */
 static const rtems_filesystem_file_handlers_r socket_handlers;
+
+/*
+ * Convert an RTEMS file descriptor to a BSD socket pointer.
+ */
+struct socket *
+rtems_bsdnet_fdToSocket (int fd)
+{
+  rtems_libio_t *iop;
+
+  /* same as rtems_libio_check_fd(_fd) but different return */
+  if ((uint32_t)fd >= rtems_libio_number_iops) {
+    errno = EBADF;
+    return NULL;
+  }
+  iop = &rtems_libio_iops[fd];
+
+  /* same as rtems_libio_check_is_open(iop) but different return */
+  if ((iop->flags & LIBIO_FLAGS_OPEN) == 0) {
+    errno = EBADF;
+    return NULL;
+  }
+
+  if (iop->pathinfo.handlers != &socket_handlers) {
+    errno = ENOTSOCK;
+    return NULL;
+  }
+
+  if (iop->data1 == NULL)
+    errno = EBADF;
+  return iop->data1;
+}
+
+/*
+ * Create an RTEMS file descriptor for a socket
+ */
+static int
+rtems_bsdnet_makeFdForSocket (void *so)
+{
+  rtems_libio_t *iop;
+  int fd;
+
+  iop = rtems_libio_allocate();
+  if (iop == 0)
+      rtems_set_errno_and_return_minus_one( ENFILE );
+
+  fd = iop - rtems_libio_iops;
+  iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
+  iop->data0 = fd;
+  iop->data1 = so;
+  iop->pathinfo.handlers = &socket_handlers;
+  iop->pathinfo.ops = &rtems_filesystem_operations_default;
+  iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
+  rtems_filesystem_location_add_to_mt_entry(&iop->pathinfo);
+  return fd;
+}
 
 /*
  * Package system call argument into mbuf.
@@ -82,7 +137,7 @@ socket (int domain, int type, int protocol)
 	rtems_bsdnet_semaphore_obtain ();
 	error = socreate(domain, &so, type, protocol, NULL);
 	if (error == 0) {
-		fd = rtems_bsdnet_makeFdForSocket (so, &socket_handlers);
+		fd = rtems_bsdnet_makeFdForSocket (so);
 		if (fd < 0)
 			soclose (so);
 	}
@@ -233,7 +288,7 @@ accept (int s, struct sockaddr *name, int *namelen)
 	TAILQ_REMOVE(&head->so_comp, so, so_list);
 	head->so_qlen--;
 
-	fd = rtems_bsdnet_makeFdForSocket (so, &socket_handlers);
+	fd = rtems_bsdnet_makeFdForSocket (so);
 	if (fd < 0) {
 		TAILQ_INSERT_HEAD(&head->so_comp, so, so_list);
 		head->so_qlen++;
