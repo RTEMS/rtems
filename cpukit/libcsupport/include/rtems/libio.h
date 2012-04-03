@@ -1201,7 +1201,7 @@ typedef struct {
   rtems_libio_t          *iop;
   uint32_t                command;
   void                   *buffer;
-  uint32_t                ioctl_return;
+  int                     ioctl_return;
 } rtems_libio_ioctl_args_t;
 
 /**

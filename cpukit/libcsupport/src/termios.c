@@ -517,10 +517,9 @@ rtems_termios_ioctl (void *arg)
   struct ttywakeup         *wakeup = (struct ttywakeup *)args->buffer;
   rtems_status_code sc;
 
-   args->ioctl_return = 0;
+  args->ioctl_return = 0;
   sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   if (sc != RTEMS_SUCCESSFUL) {
-    args->ioctl_return = sc;
     return sc;
   }
   switch (args->command) {
@@ -619,7 +618,6 @@ rtems_termios_ioctl (void *arg)
   }
 
   rtems_semaphore_release (tty->osem);
-  args->ioctl_return = sc;
   return sc;
 }
 
