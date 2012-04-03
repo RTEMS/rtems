@@ -1788,6 +1788,33 @@ static void smsc9218i_interface_stats(smsc9218i_driver_entry *e)
   printf("frame compact count:       %u\n", jc->frame_compact_count);
 }
 
+static void smsc9218i_interface_off(struct ifnet *ifp)
+{
+  smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) ifp->if_softc;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_interrupt_level level;
+  union SIU_DIRER_tag direr = MPC55XX_ZERO_FLAGS;
+
+  /* remove interrupt handler */
+  sc = rtems_interrupt_handler_remove(
+    MPC55XX_IRQ_SIU_EXTERNAL_0,
+    smsc9218i_interrupt_handler,
+    e
+  );
+  ASSERT_SC(sc);
+
+  mpc55xx_edma_release_channel(
+    &e->edma_receive
+  );
+
+  mpc55xx_edma_release_channel(
+    &e->edma_transmit
+  );
+
+  /* set in reset state */
+  smsc9218i_reset_signal(false);
+}
+
 static int smsc9218i_interface_ioctl(
   struct ifnet *ifp,
   ioctl_command_t command,
@@ -1808,12 +1835,11 @@ static int smsc9218i_interface_ioctl(
       ether_ioctl(ifp, command, data);
       break;
     case SIOCSIFFLAGS:
-      if (ifp->if_flags & IFF_RUNNING) {
-        /* TODO: off */
-      }
       if (ifp->if_flags & IFF_UP) {
         ifp->if_flags |= IFF_RUNNING;
         /* TODO: init */
+      } else {
+    	smsc9218i_interface_off(ifp);
       }
       break;
     case SIO_RTEMS_SHOW_STATS:
