@@ -21,6 +21,7 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
 
 if NETTESTS
 SUBDIRS += ftp01
+SUBDIRS += syscall01
 endif
 
 include $(top_srcdir)/../automake/subdirs.am
