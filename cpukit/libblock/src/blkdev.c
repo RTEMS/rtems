@@ -183,7 +183,7 @@ rtems_blkdev_generic_ioctl(
 
     if (args->command != RTEMS_BLKIO_REQUEST)
     {
-        args->ioctl_return = (uint32_t) dd->ioctl(dd,
+        args->ioctl_return = dd->ioctl(dd,
                                                   args->command,
                                                   args->buffer);
     }
@@ -193,7 +193,7 @@ rtems_blkdev_generic_ioctl(
          * It is not allowed to directly access the driver circumventing the
          * cache.
          */
-        args->ioctl_return = (uint32_t) -1;
+        args->ioctl_return = -1;
     }
 
     return RTEMS_SUCCESSFUL;
