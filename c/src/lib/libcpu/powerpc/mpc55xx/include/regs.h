@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -34,6 +34,7 @@
   #define MPC55XX_HAS_ESCI
   #define MPC55XX_HAS_EMIOS
   #define MPC55XX_HAS_FMPLL_ENHANCED
+  #define MPC55XX_HAS_SIU
 #elif MPC55XX_CHIP_TYPE / 10 == 555
   #include <mpc55xx/fsl-mpc555x.h>
   #define MPC55XX_HAS_EBI
@@ -41,6 +42,7 @@
   #define MPC55XX_HAS_EMIOS
   #define MPC55XX_HAS_FMPLL
   #define MPC55XX_HAS_UNIFIED_CACHE
+  #define MPC55XX_HAS_SIU
 #elif MPC55XX_CHIP_TYPE / 10 == 556
   #include <mpc55xx/fsl-mpc556x.h>
   #define MPC55XX_HAS_EBI
@@ -48,6 +50,7 @@
   #define MPC55XX_HAS_EMIOS
   #define MPC55XX_HAS_FMPLL
   #define MPC55XX_HAS_UNIFIED_CACHE
+  #define MPC55XX_HAS_SIU
 #elif MPC55XX_CHIP_TYPE / 10 == 564
   #include <mpc55xx/fsl-mpc564xL.h>
   #define MPC55XX_HAS_STM
@@ -56,6 +59,7 @@
   #define MPC55XX_HAS_INSTRUCTION_CACHE
   #define MPC55XX_HAS_LINFLEX
   #define MPC55XX_HAS_SECOND_INTERNAL_RAM_AREA
+  #define MPC55XX_HAS_SIU_LITE
 #elif MPC55XX_CHIP_TYPE / 10 == 567
   #include <mpc55xx/fsl-mpc567x.h>
   #define MPC55XX_HAS_EBI
@@ -64,6 +68,7 @@
   #define MPC55XX_HAS_FMPLL_ENHANCED
   #define MPC55XX_HAS_INSTRUCTION_CACHE
   #define MPC55XX_HAS_DATA_CACHE
+  #define MPC55XX_HAS_SIU
 #else
   #error "unsupported chip type"
 #endif

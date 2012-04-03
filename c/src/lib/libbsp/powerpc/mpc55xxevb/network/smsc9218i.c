@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -24,12 +24,12 @@
 
 #include <rtems.h>
 
-#ifdef RTEMS_NETWORKING
+#include <mpc55xx/regs.h>
+
+#if defined(RTEMS_NETWORKING) && defined(MPC55XX_HAS_SIU)
 
 #define __INSIDE_RTEMS_BSD_TCPIP_STACK__ 1
 #define __BSD_VISIBLE 1
-
-#include <mpc55xx/regs.h>
 
 #include <errno.h>
 #include <assert.h>
@@ -1913,4 +1913,4 @@ int smsc9218i_attach_detach(
   return 0;
 }
 
-#endif /* RTEMS_NETWORKING */
+#endif /* defined(RTEMS_NETWORKING) && defined(MPC55XX_HAS_SIU) */
