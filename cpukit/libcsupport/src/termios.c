@@ -509,6 +509,73 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
   }
 }
 
+static bool
+rtems_termios_can_read (const struct rtems_termios_tty *tty)
+{
+  if (tty->cindex == tty->ccount) {
+    if (tty->device.outputUsesInterrupts == TERMIOS_IRQ_DRIVEN) {
+      return tty->rawInBuf.Head != tty->rawInBuf.Tail;
+    } else {
+      return true;
+    }
+  } else {
+    return tty->cindex < tty->ccount;
+  }
+}
+
+static bool
+rtems_termios_can_write (const struct rtems_termios_tty *tty)
+{
+  /*
+   * Termios has no non-blocking writes.  In case the raw output buffer is
+   * full, we wait for the interrupt or poll.
+   */
+  return true;
+}
+
+static void
+rtems_termios_select_wakeup (struct termios *tty, void *arg)
+{
+  rtems_id task_id = (rtems_id) arg;
+  rtems_status_code sc = rtems_event_send (task_id, RTEMS_IOCTL_SELECT_EVENT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (sc);
+}
+
+static int
+rtems_termios_select (struct rtems_termios_tty *tty,
+                      const rtems_ioctl_select_request *request)
+{
+  int rv = 0;
+
+  rtems_interrupt_level level;
+  rtems_interrupt_disable(level);
+  switch (request->kind) {
+    case RTEMS_IOCTL_SELECT_READ:
+      if (rtems_termios_can_read (tty)) {
+        rv = 1;
+      } else {
+        tty->tty_rcvwakeup = 0;
+        tty->tty_rcv.sw_pfn = rtems_termios_select_wakeup;
+        tty->tty_rcv.sw_arg = (void *) request->request_task_id;
+      }
+      break;
+    case RTEMS_IOCTL_SELECT_WRITE:
+      if (rtems_termios_can_write (tty)) {
+        rv = 1;
+      } else {
+        tty->tty_snd.sw_pfn = rtems_termios_select_wakeup;
+        tty->tty_snd.sw_arg = (void *) request->request_task_id;
+      }
+      break;
+    default:
+      break;
+  }
+  rtems_interrupt_enable(level);
+
+  return rv;
+}
+
 rtems_status_code
 rtems_termios_ioctl (void *arg)
 {
@@ -530,6 +597,10 @@ rtems_termios_ioctl (void *arg)
     else {
       sc = RTEMS_INVALID_NUMBER;
     }
+    break;
+
+  case RTEMS_IOCTL_SELECT:
+    args->ioctl_return = rtems_termios_select (tty, args->buffer);
     break;
 
   case RTEMS_IO_GET_ATTRIBUTES:

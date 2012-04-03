@@ -30,6 +30,11 @@
 #include <net/if.h>
 #include <net/route.h>
 
+RTEMS_STATIC_ASSERT(RTEMS_IOCTL_SELECT_OTHER == 0, other);
+RTEMS_STATIC_ASSERT(RTEMS_IOCTL_SELECT_READ == FREAD, fread);
+RTEMS_STATIC_ASSERT(RTEMS_IOCTL_SELECT_WRITE == FWRITE, fwrite);
+RTEMS_STATIC_ASSERT(RTEMS_IOCTL_SELECT_EVENT == SBWAIT_EVENT, sbwait_event);
+
 /*
  *********************************************************************
  *            RTEMS implementation of select() system call           *
@@ -88,6 +93,11 @@ selscan (rtems_id tid, fd_mask **ibits, fd_mask **obits, int nfd, int *retval)
 	fd_mask bits, bit;
 	int n = 0;
 	static int flag[3] = { FREAD, FWRITE, 0 };
+	int update_obits;
+	int rv;
+	rtems_ioctl_select_request select_request;
+
+	select_request.request_task_id = tid;
 
 	for (msk = 0; msk < 3; msk++) {
 		if (ibits[msk] == NULL)
@@ -98,10 +108,26 @@ selscan (rtems_id tid, fd_mask **ibits, fd_mask **obits, int nfd, int *retval)
 				if ((bits & bit) == 0)
 					continue;
 				bits &= ~bit;
+				update_obits = 0;
 				so = rtems_bsdnet_fdToSocket (fd);
-				if (so == NULL)
-					return (EBADF);
-				if (socket_select (so, flag[msk], tid)) {
+				if (so != NULL) {
+					if (socket_select (so, flag[msk], tid)) {
+						update_obits = 1;
+					}
+				} else {
+					select_request.kind = flag[msk];
+
+					rtems_bsdnet_semaphore_release();
+					rv = ioctl (fd, RTEMS_IOCTL_SELECT, &select_request);
+					rtems_bsdnet_semaphore_obtain();
+					if (rv == 1) {
+						update_obits = 1;
+					} else if (rv != 0) {
+						return (EBADF);
+					}
+				}
+
+				if (update_obits) {
 					obits[msk][fd/NFDBITS] |=
 							(1 << (fd % NFDBITS));
 					n++;

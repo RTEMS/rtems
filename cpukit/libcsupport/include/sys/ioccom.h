@@ -36,7 +36,7 @@
 #ifndef	_SYS_IOCCOM_H_
 #define	_SYS_IOCCOM_H_
 
-#include <sys/types.h>
+#include <rtems.h>
 
 /*
  * Ioctl's have the command encoded in the lower word, and the size of
@@ -75,6 +75,29 @@
 #define       RTEMS_IO_TCDRAIN        3
 #define       RTEMS_IO_RCVWAKEUP      4
 #define       RTEMS_IO_SNDWAKEUP      5
+
+typedef enum {
+  RTEMS_IOCTL_SELECT_OTHER,
+  RTEMS_IOCTL_SELECT_READ,
+  RTEMS_IOCTL_SELECT_WRITE
+} rtems_ioctl_select_kind;
+
+/**
+ * @brief IO control request for select() support.
+ *
+ * The driver shall return
+ *   - 1, when the request can be fullfilled immediately,
+ *   - 0, when the request task must wait, and
+ *   - -1, in case of an error.
+ */
+typedef struct {
+  rtems_ioctl_select_kind kind;
+  rtems_id request_task_id;
+} rtems_ioctl_select_request;
+
+#define RTEMS_IOCTL_SELECT _IOW('R', 0, rtems_ioctl_select_request)
+
+#define RTEMS_IOCTL_SELECT_EVENT RTEMS_EVENT_24
 
 /* copied from libnetworking/sys/filio.h and commented out there */
 /* Generic file-descriptor ioctl's. */
