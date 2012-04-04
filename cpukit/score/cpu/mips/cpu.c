@@ -1,4 +1,6 @@
-/*
+/**
+ *  @file
+ *  
  *  Mips CPU Dependent Source
  *
  *  2002:       Greg Menke (gregory.menke@gsfc.nasa.gov)
@@ -17,7 +19,9 @@
  *    wrote the JMR3904 BSP so this could be tested.  Joel also
  *    added the new interrupt vectoring support in libcpu and
  *    tried to better support the various interrupt controllers.
- *
+ */
+
+/*
  *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
  *           COPYRIGHT (c) 1996 by Transition Networks Inc.
  *
@@ -32,13 +36,13 @@
  *             Transition Networks makes no representations about the
  *             suitability of this software for any purpose.
  *
- *  COPYRIGHT (c) 1989-2001.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
@@ -168,74 +172,6 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
   mips_set_sr( sr );
-}
-
-
-
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
- */
-
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /*
-   *  This is where we install the interrupt handler into the "raw" interrupt
-   *  table used by the CPU to dispatch interrupt handlers.
-   *
-   *  Because all interrupts are vectored through the same exception handler
-   *  this is not necessary on this port.
-   */
-}
-
-/*
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
- */
-
-void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-   *old_handler = _ISR_Vector_table[ vector ];
-
-   /*
-    *  If the interrupt vector table is a table of pointer to isr entry
-    *  points, then we need to install the appropriate RTEMS interrupt
-    *  handler for this vector number.
-    */
-
-   _CPU_ISR_install_raw_handler( vector, _ISR_Handler, old_handler );
-
-   /*
-    *  We put the actual user ISR address in '_ISR_vector_table'.  This will
-    *  be used by the _ISR_Handler so the user gets control.
-    */
-
-    _ISR_Vector_table[ vector ] = new_handler;
 }
 
 /*

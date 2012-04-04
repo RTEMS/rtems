@@ -1,3 +1,22 @@
+2012-03-08	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* include/bsp.h: Added define for BSP_SHARED_HANDLER_SUPPORT.
+
+2012-03-06	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* clock/clockdrv.c, include/bsp.h,
+	include/irq.h, irq/vectorisrs.c, startup/bspstart.c:
+	Changed interrupt call, removed warnings and did cleanup.
+
+2012-02-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* Makefile.am, clock/clockdrv.c, include/irq.h,
+	irq/vectorisrs.c, preinstall.am, startup/bspstart.c:
+	Mips conversion to PIC IRQ model.
+	* include/irq.h, irq/vectorisrs.c: New files.
+
 2011-12-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* Makefile.am: Change to one file per line. Clean up.

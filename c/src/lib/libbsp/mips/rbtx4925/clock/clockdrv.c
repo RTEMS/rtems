@@ -1,11 +1,22 @@
-/*
+/**
+ *  @file
+ *  
  *  Instantiate the clock driver shell.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
+ *  On-Line Applications Research Corporation (OAR).
  *
- *  clockdrv.c,v 1.5 2001/01/09 17:05:57 joel Exp
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ * 
+ *  $Id$
  */
 
 #include <rtems.h>
-#include <libcpu/tx4925.h>
+#include <bsp/irq.h>
 #include <bsp.h>
 
 /* #define CLOCK_DRIVER_USE_FAST_IDLE */
@@ -31,8 +42,14 @@
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
-  } while(0)
+    rtems_interrupt_handler_install( \
+      CLOCK_VECTOR, \
+      "clock", \
+      0, \
+      _new, \
+      NULL \
+    ); \
+ } while(0)
 
 
 #define Clock_driver_support_at_tick() \

@@ -1,5 +1,10 @@
+/**
+ *  @file
+ *  
+ */
+
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,6 +32,9 @@ extern "C" {
 extern void WriteDisplay( char * string );
 
 extern uint32_t mips_get_timer( void );
+
+#define BSP_FEATURE_IRQ_EXTENSION
+#define BSP_SHARED_HANDLER_SUPPORT      1
 
 #define CPU_CLOCK_RATE_MHZ     (200)
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ ) /* equivalent to CPU clock speed in MHz */

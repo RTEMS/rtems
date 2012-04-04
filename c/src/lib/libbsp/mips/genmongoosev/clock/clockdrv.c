@@ -1,18 +1,22 @@
-/*
+/**
+ *  @file
+ *  
  *  Instantiate the clock driver shell for the Mongoose-V's on-CPU timer.
- *
- *  COPYRIGHT (c) 1989-2001.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
 #include <rtems.h>
-#include <libcpu/mongoose-v.h>
+#include <bsp/irq.h>
 #include <bsp.h>
 
 #if defined(USE_TIMER2_FOR_CLOCK)
@@ -33,7 +37,13 @@
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
+    rtems_interrupt_handler_install( \
+      CLOCK_VECTOR, \
+      "clock", \
+      0, \
+      _new, \
+      NULL \
+    ); \
   } while(0)
 
 #define Clock_driver_support_initialize_hardware() \

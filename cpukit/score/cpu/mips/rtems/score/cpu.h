@@ -1,4 +1,6 @@
-/*
+/**
+ *  @file
+ *  
  *  Mips CPU Dependent Header File
  *
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
@@ -12,6 +14,9 @@
  *    added the new interrupt vectoring support in libcpu and
  *    tried to better support the various interrupt controllers.
  *
+ */
+
+/*
  *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
  *           COPYRIGHT (c) 1996 by Transition Networks Inc.
  *
@@ -26,13 +31,13 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
@@ -124,7 +129,7 @@ extern "C" {
  *
  *  XXX document implementation including references if appropriate
  */
-#define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
+#define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
 
 /*
  *  Does this CPU have hardware support for a dedicated interrupt stack?
@@ -201,9 +206,13 @@ extern "C" {
  *  In this case, this option should be TRUE.
  *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
+ *
+ *  Mips Note: It appears the GCC can implicitly generate FPU
+ *  and Altivec instructions when you least expect them.  So make
+ *  all tasks floating point.
  */
 
-#define CPU_ALL_TASKS_ARE_FP    FALSE
+#define CPU_ALL_TASKS_ARE_FP CPU_HARDWARE_FP 
 
 /*
  *  Should the IDLE task have a floating point context?
