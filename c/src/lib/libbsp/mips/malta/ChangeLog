@@ -1,0 +1,23 @@
+2012-03-08	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* include/bsp.h: Added define for BSP_SHARED_HANDLER_SUPPORT.
+
+2012-03-06	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* malta/include/bsp.h:
+	Changed interrupt call, removed warnings and did cleanup.
+
+2012-02-27	Jennifer Averett <jennifer.averett@oarcorp.com>
+
+	* MIPS malta initial BSP.  This version was tested using
+	the qemu simulator and may require modifications to work with
+	actual hardware.
+	* ChangeLog, Makefile.am, STATUS, bsp_specs, configure.ac,
+	console/conscfg.c, console/printk_support.c, include/bsp.h,
+	include/irq.h, include/pci.h, irq/interruptmask.c,
+	irq/maxvectors.c, irq/vectorisrs.c, make/custom/malta.cfg,
+	pci/pci.c, pci/pcifinddevice.c, pci/pcilistdevices.c,
+	preinstall.am, start/start.S, startup/bspreset.c,
+	startup/bspstart.c, startup/inittlb.c, startup/linkcmds,
+	startup/simple_access.c: New files.
