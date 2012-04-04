@@ -1,9 +1,20 @@
-/*
+/**
+ *  @file
+ *  
  *  Common Code for Vectoring MIPS Exceptions
  *
  *  The actual decoding of the cause register and vector number assignment
  *  is CPU model specific.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
+ *  On-Line Applications Research Corporation (OAR).
  *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ * 
  *  $Id$
  */
 
@@ -13,6 +24,9 @@
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #include <rtems/bspIo.h>
+#include <bsp/irq-generic.h>
+
+void mips_vector_exceptions( CPU_Interrupt_frame *frame );
 
 static const char *cause_strings[32] =
 {
@@ -87,30 +101,6 @@ static void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
   printk( "\n" );
 }
 
-static void mips_default_exception_code_handler( int exc, CPU_Interrupt_frame *frame )
-{
-  uint32_t sr;
-  uint32_t cause;
-
-  mips_get_sr( sr );
-  mips_get_cause( cause );
-
-  printk( "Unhandled exception %d\n", exc );
-  printk( "sr: 0x%08x  cause: 0x%08x --> %s\n", sr, cause,
-     cause_strings[(cause >> 2) &0x1f] );
-  mips_dump_exception_frame( frame );
-
-  rtems_fatal_error_occurred(1);
-}
-
-#define CALL_EXC(_vector,_frame) \
-   do { \
-        if ( _ISR_Vector_table[_vector] ) \
-             (_ISR_Vector_table[_vector])(_vector,_frame); \
-          else \
-             mips_default_exception_code_handler( _vector, _frame ); \
-   } while(0)
-
 /*
  *  There are constants defined for these but they should basically
  *  all be close to the same set.
@@ -124,5 +114,5 @@ void mips_vector_exceptions( CPU_Interrupt_frame *frame )
   mips_get_cause( cause );
   exc = (cause >> 2) & 0x1f;
 
-  CALL_EXC( exc, frame );
+  bsp_interrupt_handler_dispatch( exc );
 }

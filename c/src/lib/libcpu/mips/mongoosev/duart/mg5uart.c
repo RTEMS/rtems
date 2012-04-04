@@ -1,14 +1,18 @@
-/*
+/**
+ *  @file
+ *  
  *  This file contains the termios TTY driver for the UART found
  *  on the Synova Mongoose-V.
- *
- *  COPYRIGHT (c) 1989-2001.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
@@ -21,7 +25,8 @@
 #include <libchip/sersupp.h>
 #include <libcpu/mongoose-v.h>
 
-extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+#include <bsp/irq.h>
+#include <bsp.h>
 
 /*
  *  Indices of registers
@@ -68,6 +73,48 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
   int minor,
   int mask
 );
+
+/*
+ *  mg5uart_isr_XXX
+ *
+ *  This is the single interrupt entry point which parcels interrupts
+ *  out to the handlers for specific sources and makes sure that the
+ *  shared handler gets the right arguments.
+ *
+ *  NOTE: Yes .. this is ugly but it provides 5 interrupt source
+ *  wrappers which are nearly functionally identical.
+ */
+
+
+extern void mips_default_isr(int vector);
+
+#define __ISR(_TYPE, _OFFSET) \
+  MG5UART_STATIC void mg5uart_process_isr_ ## _TYPE ( \
+    int  minor \
+  ); \
+  \
+  MG5UART_STATIC rtems_isr mg5uart_isr_ ## _TYPE ( \
+    void *arg \
+  ) \
+  { \
+    rtems_vector_number vector = (rtems_vector_number) arg; \
+    int   minor; \
+    \
+    for(minor=0 ; minor<Console_Port_Count ; minor++) { \
+      if( Console_Port_Tbl[minor]->deviceType == SERIAL_MG5UART && \
+          vector == Console_Port_Tbl[minor]->ulIntVector + _OFFSET ) { \
+        mg5uart_process_isr_ ## _TYPE (minor); \
+	return; \
+      } \
+    } \
+    mips_default_isr( vector ); \
+  }
+
+__ISR(rx_frame_error, MG5UART_IRQ_RX_FRAME_ERROR)
+__ISR(rx_overrun_error, MG5UART_IRQ_RX_OVERRUN_ERROR)
+__ISR(tx_empty, MG5UART_IRQ_TX_EMPTY)
+__ISR(tx_ready, MG5UART_IRQ_TX_READY)
+__ISR(rx_ready, MG5UART_IRQ_RX_READY)
 
 /*
  *  mg5uart_set_attributes
@@ -425,51 +472,6 @@ MG5UART_STATIC void mg5uart_write_polled(
   MG5UART_SETREG(pMG5UART_port, MG5UART_TX_BUFFER, c);
 }
 
-
-
-
-/*
- *  mg5uart_isr_XXX
- *
- *  This is the single interrupt entry point which parcels interrupts
- *  out to the handlers for specific sources and makes sure that the
- *  shared handler gets the right arguments.
- *
- *  NOTE: Yes .. this is ugly but it provides 5 interrupt source
- *  wrappers which are nearly functionally identical.
- */
-
-
-extern void mips_default_isr(int vector);
-
-#define __ISR(_TYPE, _OFFSET) \
-  MG5UART_STATIC void mg5uart_process_isr_ ## _TYPE ( \
-    int  minor \
-  ); \
-  \
-  MG5UART_STATIC rtems_isr mg5uart_isr_ ## _TYPE ( \
-    rtems_vector_number vector \
-  ) \
-  { \
-    int   minor; \
-    \
-    for(minor=0 ; minor<Console_Port_Count ; minor++) { \
-      if( Console_Port_Tbl[minor]->deviceType == SERIAL_MG5UART && \
-          vector == Console_Port_Tbl[minor]->ulIntVector + _OFFSET ) { \
-        mg5uart_process_isr_ ## _TYPE (minor); \
-	return; \
-      } \
-    } \
-    mips_default_isr( vector ); \
-  }
-
-__ISR(rx_frame_error, MG5UART_IRQ_RX_FRAME_ERROR)
-__ISR(rx_overrun_error, MG5UART_IRQ_RX_OVERRUN_ERROR)
-__ISR(tx_empty, MG5UART_IRQ_TX_EMPTY)
-__ISR(tx_ready, MG5UART_IRQ_TX_READY)
-__ISR(rx_ready, MG5UART_IRQ_RX_READY)
-
-
 MG5UART_STATIC void mg5uart_process_isr_rx_error(
    int  minor,
    uint32_t   mask
@@ -591,9 +593,50 @@ MG5UART_STATIC void mg5uart_process_isr_rx_ready(
      &c, 1 );
 }
 
+static rtems_irq_connect_data mg5uart_rx_frame_error_cd  = {  \
+  0,                             /* filled in at initialization */
+  mg5uart_isr_rx_frame_error,   /* filled in at initialization */
+  NULL,   /* (void *) minor */
+  NULL,
+  NULL,
+  NULL
+};
 
+static rtems_irq_connect_data mg5uart_rx_overrun_error_cd  = {  \
+  0,                             /* filled in at initialization */
+  mg5uart_isr_rx_overrun_error,   /* filled in at initialization */
+  NULL,   /* (void *) minor */
+  NULL,
+  NULL,
+  NULL
+};
 
+static rtems_irq_connect_data mg5uart_tx_empty_cd  = {  \
+  0,                             /* filled in at initialization */
+  mg5uart_isr_tx_empty,   /* filled in at initialization */
+  NULL,   /* (void *) minor */
+  NULL,
+  NULL,
+  NULL
+};
 
+static rtems_irq_connect_data mg5uart_tx_ready_cd  = {  \
+  0,                             /* filled in at initialization */
+  mg5uart_isr_tx_ready,   /* filled in at initialization */
+  NULL,   /* (void *) minor */
+  NULL,
+  NULL,
+  NULL
+};
+
+static rtems_irq_connect_data mg5uart_rx_ready_cd  = {  \
+  0,                             /* filled in at initialization */
+  mg5uart_isr_rx_ready,   /* filled in at initialization */
+  NULL,   /* (void *) minor */
+  NULL,
+  NULL,
+  NULL
+};
 
 
 /*
@@ -611,18 +654,27 @@ MG5UART_STATIC void mg5uart_initialize_interrupts(int minor)
   Console_Port_Data[minor].bActive = FALSE;
   v = Console_Port_Tbl[minor]->ulIntVector;
 
-  set_vector(mg5uart_isr_rx_frame_error,   v + MG5UART_IRQ_RX_FRAME_ERROR, 1);
-  set_vector(mg5uart_isr_rx_overrun_error, v + MG5UART_IRQ_RX_OVERRUN_ERROR, 1);
-  set_vector(mg5uart_isr_tx_empty,         v + MG5UART_IRQ_TX_EMPTY, 1);
-  set_vector(mg5uart_isr_tx_ready,         v + MG5UART_IRQ_TX_READY, 1);
-  set_vector(mg5uart_isr_rx_ready,         v + MG5UART_IRQ_RX_READY, 1);
+  mg5uart_rx_frame_error_cd.name    =  v + MG5UART_IRQ_RX_FRAME_ERROR;
+  mg5uart_rx_overrun_error_cd.name  =  v + MG5UART_IRQ_RX_OVERRUN_ERROR; 
+  mg5uart_tx_empty_cd.name          =  v + MG5UART_IRQ_TX_EMPTY;  
+  mg5uart_tx_ready_cd.name          =  v + MG5UART_IRQ_TX_READY; 
+  mg5uart_rx_ready_cd.name          =  v + MG5UART_IRQ_RX_READY; 
+
+  mg5uart_rx_frame_error_cd.handle    =  (void *)mg5uart_rx_frame_error_cd.name;
+  mg5uart_rx_overrun_error_cd.handle  =  (void *)mg5uart_rx_overrun_error_cd.name; 
+  mg5uart_tx_empty_cd.handle          =  (void *)mg5uart_tx_empty_cd.name;  
+  mg5uart_tx_ready_cd.handle          =  (void *)mg5uart_tx_ready_cd.name; 
+  mg5uart_rx_ready_cd.handle          =  (void *)mg5uart_rx_ready_cd.name; 
+
+ 
+  BSP_install_rtems_irq_handler( &mg5uart_rx_frame_error_cd );
+  BSP_install_rtems_irq_handler( &mg5uart_rx_overrun_error_cd );
+  BSP_install_rtems_irq_handler( &mg5uart_tx_empty_cd );
+  BSP_install_rtems_irq_handler( &mg5uart_tx_ready_cd );
+  BSP_install_rtems_irq_handler( &mg5uart_rx_ready_cd );
 
   mg5uart_enable_interrupts(minor, MG5UART_ENABLE_ALL_EXCEPT_TX);
 }
-
-
-
-
 
 /*
  *  mg5uart_write_support_int

@@ -1,3 +1,28 @@
+2012-03-07	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* shared/irq/irq.c: Fixed unhandled interrupts to print
+	the registers and shutdown. This prevents a loop of 
+	unusable information from occuring.
+
+2012-03-06	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* shared/clock/clockdrv.c, shared/irq/vectorexceptions.c,
+	../shared/clockdrv_shell.h: Changed interrupt call, removed warnings
+	and did cleanup.
+
+2012-02-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* shared/irq/interruptmask.c, 
+	shared/irq/interruptmask_TX49.c,
+	shared/irq/irq.c, shared/irq/maxvectors.c,
+	shared/irq/vectorexceptions.c:
+	Mips conversion to PIC IRQ model.
+	* shared/irq/interruptmask.c, 
+	shared/irq/interruptmask_TX49.c, 
+	shared/irq/irq.c: New files.
+
 2011-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Require autoconf-2.68, automake-1.11.1.

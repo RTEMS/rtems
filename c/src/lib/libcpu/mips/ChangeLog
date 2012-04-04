@@ -1,3 +1,16 @@
+2012-02-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* Makefile.am, au1x00/include/au1x00.h,
+	mongoosev/duart/mg5uart.c, mongoosev/include/mongoose-v.h,
+	rm52xx/include/rm5231.h, shared/interrupts/isr_entries.h,
+	tx39/include/tx3904.h, tx49/include/tx4925.h,
+	tx49/include/tx4938.h:
+	Mips conversion to PIC IRQ model.
+	* au1x00/vectorisrs/maxvectors.c,mongoosev/vectorisrs/maxvectors.c
+	rm52xx/vectorisrs/maxvectors.c, tx39/vectorisrs/maxvectors.c,
+	tx49/vectorisrs/maxvectors.c: Removed.
+
 2011-12-10	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* shared/interrupts/vectorexceptions.c: Make 

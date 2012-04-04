@@ -1,8 +1,10 @@
-
-/*  ckinit.c
- *
+/**
+ *  @file
+ *  
  *  This file contains the clock driver initialization for the Hurricane BSP.
- *
+ */
+
+/*
  *  Author:     Craig Lebakken <craigl@transition.com>
  *
  *  COPYRIGHT (c) 1996 by Transition Networks Inc.
@@ -18,15 +20,15 @@
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/clock/ckinit.c:
+ *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/clock/ckinit.c
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
@@ -41,6 +43,8 @@
 #include <stdlib.h>
 
 #include <rtems.h>
+#include <bsp.h>
+#include <bsp/irq.h>
 
 extern uint32_t bsp_clicks_per_microsecond;
 
@@ -48,18 +52,18 @@ extern uint32_t bsp_clicks_per_microsecond;
 
 #include "clock.h"
 
-/* to avoid including the bsp */
-mips_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
+rtems_isr USC_isr(void *unused);
 
-void USC_isr( void );
 void reset_wdt(void);
 void enable_wdi(void);
 void init_hbt(void);
 void enable_hbi(void);
 void disable_hbi(void);
 
-void Clock_exit( void );
-rtems_isr Clock_isr( rtems_vector_number vector );
+void Clock_exit(void);
+rtems_isr Clock_isr(rtems_vector_number vector);
+rtems_isr User_Clock_isr(rtems_vector_number vector);
+void Install_clock(rtems_isr_entry clock_isr);
 
 
 /*
@@ -86,13 +90,6 @@ volatile uint32_t Clock_driver_ticks;
  */
 
 uint32_t Clock_isrs;              /* ISRs until next tick */
-
-/*
- * These are set by clock driver during its init
- */
-
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
 
 /*
  *  The previous ISR on this clock tick interrupt vector.
@@ -167,8 +164,14 @@ void Install_clock(
   /* Set up USC heartbeat timer to generate interrupts */
   disable_hbi();      /* Disable heartbeat interrupt in USC */
 
-              /* Install interrupt handler */
-  Old_ticker = (rtems_isr_entry) set_vector( USC_isr, CLOCK_VECTOR, 1 );
+  /* Install interrupt handler */
+  rtems_interrupt_handler_install( 
+    CLOCK_VECTOR,
+    "clock",
+    0,
+    USC_isr,
+    NULL
+  );
 
   init_hbt();        /* Initialize heartbeat timer */
 
@@ -211,13 +214,6 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
-
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
-
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
 
   return RTEMS_SUCCESSFUL;
 }

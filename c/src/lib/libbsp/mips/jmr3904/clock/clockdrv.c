@@ -1,20 +1,24 @@
-/*
+/**
+ *  @file
+ *  
  *  Instantiate the clock driver shell.
  *
  *  The TX3904 simulator in gdb counts instructions.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
 #include <rtems.h>
-#include <libcpu/tx3904.h>
+#include <bsp/irq.h>
 #include <bsp.h>
 
 #define CLOCK_DRIVER_USE_FAST_IDLE
@@ -26,10 +30,17 @@
  */
 
 #define CLICKS 5000
+
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
-  } while(0)
+    rtems_interrupt_handler_install( \
+      CLOCK_VECTOR, \
+      "clock", \
+      0, \
+      _new, \
+      NULL \
+    ); \
+ } while(0)
 
 #define Clock_driver_support_initialize_hardware() \
   do { \

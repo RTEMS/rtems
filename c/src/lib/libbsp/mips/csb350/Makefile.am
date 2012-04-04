@@ -13,6 +13,10 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 include_bsp_HEADERS = ../shared/liblnk/regs.h
+#isr
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += include/irq.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -41,8 +45,6 @@ libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/setvec.c
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
@@ -51,6 +53,17 @@ libbsp_a_SOURCES += console/console-io.c
 libbsp_a_SOURCES += ../../shared/console-polled.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
+#isr
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c
+libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+libbsp_a_SOURCES += ../../shared/src/irq-info.c
+libbsp_a_SOURCES += ../../shared/src/irq-shell.c
+libbsp_a_SOURCES += ../../shared/src/irq-server.c
+libbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
+libbsp_a_SOURCES += ../shared/irq/irq.c
+libbsp_a_SOURCES += ../shared/irq/maxvectors.c
+libbsp_a_SOURCES += irq/vectorisrs.c
+libbsp_a_SOURCES += ../shared/irq/interruptmask.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
@@ -62,7 +75,7 @@ endif
 
 libbsp_a_LIBADD  = ../../../libcpu/mips/shared/cache.rel
 libbsp_a_LIBADD += ../../../libcpu/mips/shared/interrupts.rel
-libbsp_a_LIBADD += ../../../libcpu/mips/au1x00/vectorisrs.rel
+
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif

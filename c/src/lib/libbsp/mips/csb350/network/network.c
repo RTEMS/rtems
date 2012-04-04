@@ -1,13 +1,17 @@
-/*
+/**
+ *  @file
+ *  
  *  Au1x00 ethernet driver
- *
+ */
+
+/*
  *  Copyright (c) 2005 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
@@ -16,6 +20,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <libcpu/au1x00.h>
+#include <bsp/irq.h>
 
 #include <stdio.h>
 #include <string.h>

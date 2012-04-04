@@ -1,9 +1,12 @@
-/*  bsp.h
- *
+/**
+ *  @file
+ *  
  *  This include file contains some definitions specific to a board
  *  based upon the generic capabilities of a Mongoose-V.
- *
- *  COPYRIGHT (c) 1989-2001.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,6 +30,9 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 #include <libcpu/mongoose-v.h>
+
+#define BSP_FEATURE_IRQ_EXTENSION
+#define BSP_SHARED_HANDLER_SUPPORT      1
 
 #ifndef CPU_CLOCK_RATE
 #define CLOCK_RATE	12000000

@@ -13,6 +13,10 @@ dist_project_lib_DATA = bsp_specs
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 include_bsp_HEADERS = ../shared/liblnk/regs.h
+#isr
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += include/irq.h
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -39,8 +43,6 @@ libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/setvec.c
 libbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 libbsp_a_SOURCES += clock/clockdrv.c
@@ -50,11 +52,20 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 libbsp_a_SOURCES += console/console-io.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
+#isr
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c
+libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+libbsp_a_SOURCES += ../../shared/src/irq-info.c
+libbsp_a_SOURCES += ../../shared/src/irq-shell.c
+libbsp_a_SOURCES += ../../shared/src/irq-server.c
+libbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
+libbsp_a_SOURCES += ../shared/irq/irq.c
+libbsp_a_SOURCES += ../shared/irq/maxvectors.c
+libbsp_a_SOURCES += irq/vectorisrs.c
+libbsp_a_SOURCES += ../shared/irq/interruptmask.c
 
 libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tx39/vectorisrs.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

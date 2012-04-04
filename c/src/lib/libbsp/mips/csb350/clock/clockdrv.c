@@ -1,25 +1,31 @@
-/*
+/**
+ *  @file
+ *  
  *  Instantiate the clock driver shell.
  *
  *  This uses the TOY (Time of Year) timer to implement the clock.
- *
+ */
+
+/*
  *  Copyright (c) 2005 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
  */
 
 #include <rtems.h>
 #include <bsp.h>
-#include <libcpu/au1x00.h>
+#include <bsp/irq.h>
 #include <rtems/bspIo.h>
 
 uint32_t tick_interval;
 uint32_t last_match;
+
+void au1x00_clock_init(void);
 
 #define CLOCK_VECTOR AU1X00_IRQ_TOY_MATCH2
 
@@ -34,13 +40,19 @@ uint32_t last_match;
 /* Set for rising edge interrupt */
 #define Clock_driver_support_install_isr( _new, _old )  \
   do {                                                  \
-        _old = set_vector( _new, AU1X00_IRQ_TOY_MATCH2, 1 );     \
-        AU1X00_IC_MASKCLR(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
-        AU1X00_IC_SRCSET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
-        AU1X00_IC_CFG0SET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
-        AU1X00_IC_CFG1CLR(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
-        AU1X00_IC_CFG2CLR(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
-        AU1X00_IC_ASSIGNSET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
+    rtems_interrupt_handler_install( \
+      CLOCK_VECTOR, \
+      "clock", \
+      0, \
+      _new, \
+      NULL \
+    ); \
+    AU1X00_IC_MASKCLR(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
+    AU1X00_IC_SRCSET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
+    AU1X00_IC_CFG0SET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
+    AU1X00_IC_CFG1CLR(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
+    AU1X00_IC_CFG2CLR(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
+    AU1X00_IC_ASSIGNSET(AU1X00_IC0_ADDR) = AU1X00_IC_IRQ_TOY_MATCH2; \
   } while(0)
 
 void au1x00_clock_init(void)

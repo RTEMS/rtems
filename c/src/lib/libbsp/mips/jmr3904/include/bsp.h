@@ -1,9 +1,12 @@
-/*  bsp.h
- *
+/**
+ *  @file
+ *  
  *  This include file contains some definitions specific to the
  *  JMR3904 simulator in gdb.
- *
- *  COPYRIGHT (c) 1989-2000.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,6 +30,9 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 #include <libcpu/tx3904.h>
+
+#define BSP_FEATURE_IRQ_EXTENSION
+#define BSP_SHARED_HANDLER_SUPPORT      1
 
 /* functions */
 

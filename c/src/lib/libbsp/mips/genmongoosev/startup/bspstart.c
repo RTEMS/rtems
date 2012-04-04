@@ -1,29 +1,36 @@
-/*
+/**
+ *  @file
+ *  
  *  This routine starts the application.  It includes application,
  *  board, and monitor specific initialization and configuration.
  *  The generic CPU dependent initialization has been performed
  *  before this routine is invoked.
  *
- *  COPYRIGHT (c) 1989-2001.
+ *  Modification History:
+ *        12/10/01  A.Ferrer, NASA/GSFC, Code 582
+ *           Set interrupt mask to 0xAF00 (Line 139).
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
+ * 
  *  $Id$
- *
- * Modification History:
- *        12/10/01  A.Ferrer, NASA/GSFC, Code 582
- *           Set interrupt mask to 0xAF00 (Line 139).
  */
-
+ 
 #include <string.h>
 
 #include <bsp.h>
 #include <libcpu/mongoose-v.h>
 #include <libcpu/isr_entries.h>
+#include <bsp/irq-generic.h>
 
+void bsp_start( void );
+void clear_cache( void );
 extern void _sys_exit(int);
 extern void mips_gdb_stub_install(void);
 
@@ -82,7 +89,7 @@ void bsp_start( void )
    */
   mips_set_sr( (SR_CU0 | 0x400) );
 
-  mips_install_isr_entries();
+  bsp_interrupt_initialize();
 }
 
 void clear_cache( void )

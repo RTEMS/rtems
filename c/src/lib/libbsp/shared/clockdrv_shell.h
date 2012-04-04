@@ -1,7 +1,11 @@
-/*
+/**
+ *  @file
+ *  
  *  Clock Tick Device Driver Shell
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -52,10 +56,17 @@ void Clock_exit( void );
  *
  *  Return values:      NONE
  */
+#ifdef BSP_FEATURE_IRQ_EXTENSION
+rtems_isr Clock_isr(void *arg);
+rtems_isr Clock_isr(void *arg)
+{
+#else 
+rtems_isr Clock_isr(rtems_vector_number vector);
 rtems_isr Clock_isr(
   rtems_vector_number vector
 )
 {
+#endif
   /*
    *  Accurate count of ISRs
    */

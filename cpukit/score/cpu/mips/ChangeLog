@@ -1,3 +1,15 @@
+2012-03-07	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* rtems/score/cpu.h: In order to handle a issue in the 
+	compilation of printk all tasks should be defined as 
+	floating point for the MIPS processor.
+
+2012-02-23	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	PR 1993/bsps
+	* cpu.c, rtems/score/cpu.h:
+	Mips conversion to PIC IRQ model.
+
 2011-12-09	Jennifer Averett
 
 	* cpu.c: Correct typo.
