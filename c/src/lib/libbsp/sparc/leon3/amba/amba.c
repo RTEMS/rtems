@@ -44,12 +44,17 @@ void amba_initialize(void)
   /* Scan the AMBA Plug&Play info at the default LEON3 area */
   amba_scan(&amba_conf,LEON3_IO_AREA,NULL);
 
-  /* Find LEON3 Interrupt controler */
+  /* Find LEON3 Interrupt controller */
   i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_IRQMP,&dev);
-  if ( i > 0 ){
-    /* Found APB IRQ_MP Interrupt Controller */
-    LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
+  if (i <= 0){
+    /* PANIC IRQ controller not found!
+     *
+     *  What else can we do but stop ...
+     */
+    asm volatile( "mov 1, %g1; ta 0x0" );
   }
+
+  LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
 
   /* Init Extended IRQ controller if available */
   leon3_ext_irq_init();
