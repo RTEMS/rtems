@@ -24,6 +24,15 @@
 #include <rtems/bspIo.h>
 #include <amba.h>
 
+/* Let user override which on-chip APBUART will be debug UART
+ * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
+ * 1 = APBUART[0]
+ * 2 = APBUART[1]
+ * 3 = APBUART[2]
+ * ...
+ */
+int syscon_uart_index __attribute__((weak)) = 0;
+
 /*
  *  Should we use a polled or interrupt drived console?
  *
@@ -44,12 +53,12 @@ void console_outbyte_polled(
 /* body is in debugputs.c */
 
 /*
- *  console_inbyte_nonblocking
+ *  apbuart_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
 
-int console_inbyte_nonblocking( int port );
+int apbuart_inbyte_nonblocking(int port);
 
 /* body is in debugputs.c */
 
@@ -61,15 +70,31 @@ int console_inbyte_nonblocking( int port );
 
 ssize_t console_write_support (int minor, const char *buf, size_t len)
 {
-  int nwrite = 0;
+  int nwrite = 0, port;
+
+  if (minor == 0)
+    port = syscon_uart_index;
+  else
+    port = minor - 1;
 
   while (nwrite < len) {
-    console_outbyte_polled( minor, *buf++ );
+    console_outbyte_polled(port, *buf++);
     nwrite++;
   }
   return nwrite;
 }
 
+int console_inbyte_nonblocking(int minor)
+{
+  int port;
+
+  if (minor == 0)
+    port = syscon_uart_index;
+  else
+    port = minor - 1;
+
+  return apbuart_inbyte_nonblocking(port);
+}
 
 /*
  *  Console Device Driver Entry Points
@@ -85,45 +110,47 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_status_code status;
-  int i, uart0;
+  int i;
   char console_name[16];
 
   rtems_termios_initialize();
 
-  /* default console to zero and override if multiprocessing */
-  uart0 = 0;
-  #if defined(RTEMS_MULTIPROCESSING)
-    if (rtems_configuration_get_user_multiprocessing_table() != NULL)
-      uart0 =  LEON3_Cpu_Index;
-  #endif
+  /* Update syscon_uart_index to index used as /dev/console
+   * Let user select System console by setting syscon_uart_index. If the
+   * BSP is to provide the default UART (syscon_uart_index==0):
+   *   non-MP: APBUART[0] is system console
+   *   MP: LEON CPU index select UART
+   */
+  if (syscon_uart_index == 0) {
+#if defined(RTEMS_MULTIPROCESSING)
+    syscon_uart_index = LEON3_Cpu_Index;
+#else
+    syscon_uart_index = 0;
+#endif
+  } else {
+    syscon_uart_index = syscon_uart_index - 1; /* User selected sys-console */
+  }
 
-  /*  Register Device Names */
-  if (uarts && (uart0 < uarts)) {
+  /*  Register Device Names
+   *
+   *  0 /dev/console   - APBUART[USER-SELECTED, DEFAULT=APBUART[0]]
+   *  1 /dev/console_a - APBUART[0] (by default not present because is console)
+   *  2 /dev/console_b - APBUART[1]
+   *  ...
+   *
+   * On a MP system one should not open UARTs that other OS instances use.
+   */
+  if (syscon_uart_index < uarts) {
     status = rtems_io_register_name( "/dev/console", major, 0 );
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
-
-    strcpy(console_name,"/dev/console_a");
-    for (i = uart0+1; i < uarts; i++) {
-      console_name[13]++;
-      status = rtems_io_register_name( console_name, major, i);
-    }
   }
-
-  /*
-   *  Initialize Hardware if ONLY CPU or first CPU in MP system
-   */
-
-  #if defined(RTEMS_MULTIPROCESSING)
-    if (rtems_configuration_get_user_multiprocessing_table()->node == 1)
-  #endif
-  {
-    for (i = uart0; i < uarts; i++)
-    {
-      LEON3_Console_Uart[i]->ctrl |=
-        LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-      LEON3_Console_Uart[i]->status = 0;
-    }
+  strcpy(console_name,"/dev/console_a");
+  for (i = 0; i < uarts; i++) {
+    if (i == syscon_uart_index)
+      continue; /* skip UART that is registered as /dev/console */
+    console_name[13] = 'a' + i;
+    status = rtems_io_register_name( console_name, major, i+1);
   }
 
   return RTEMS_SUCCESSFUL;
@@ -136,6 +163,7 @@ rtems_device_driver console_open(
 )
 {
   rtems_status_code sc;
+  int port;
 
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                        /* firstOpen */
@@ -148,13 +176,23 @@ rtems_device_driver console_open(
     0                            /* outputUsesInterrupts */
   };
 
-
-  assert( minor <= LEON3_APBUARTS );
-  if ( minor > LEON3_APBUARTS )
+  assert(minor <= uarts);
+  if (minor > uarts || minor == (syscon_uart_index + 1))
     return RTEMS_INVALID_NUMBER;
 
   sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
+  if (sc != RTEMS_SUCCESSFUL)
+    return sc;
 
+  if (minor == 0)
+    port = syscon_uart_index;
+  else
+    port = minor - 1;
+
+  /* Initialize UART on opening */
+  LEON3_Console_Uart[port]->ctrl |= LEON_REG_UART_CTRL_RE |
+                                     LEON_REG_UART_CTRL_TE;
+  LEON3_Console_Uart[port]->status = 0;
 
   return RTEMS_SUCCESSFUL;
 }

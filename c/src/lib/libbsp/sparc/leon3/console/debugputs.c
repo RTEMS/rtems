@@ -7,8 +7,8 @@
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modified for LEON3 BSP.
- *  COPYRIGHT (c) 2004.
- *  Gaisler Research.
+ *  COPYRIGHT (c) 2011.
+ *  Aeroflex Gaisler.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -29,6 +29,15 @@ extern int uarts;
 
 static int isinit = 0;
 
+/* Let user override which on-chip APBUART will be debug UART
+ * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
+ * 1 = APBUART[0]
+ * 2 = APBUART[1]
+ * 3 = APBUART[2]
+ * ...
+ */
+int debug_uart_index __attribute__((weak)) = 0;
+
 /*
  *  Scan for UARTS in configuration
  */
@@ -47,11 +56,27 @@ int scan_uarts(void)
       LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
     }
 
-    /* initialize uart 0 if present for printk */
-    if ( uarts ) {
-      LEON3_Console_Uart[0]->ctrl |=
-        LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-      LEON3_Console_Uart[0]->status = 0;
+    /* Update debug_uart_index to index used as debug console.
+     * Let user select Debug console by setting debug_uart_index. If the
+     * BSP is to provide the default UART (debug_uart_index==0):
+     *   non-MP: APBUART[0] is debug console
+     *   MP: LEON CPU index select UART
+     */
+    if (debug_uart_index == 0) {
+#if defined(RTEMS_MULTIPROCESSING)
+      debug_uart_index = LEON3_Cpu_Index;
+#else
+      debug_uart_index = 0;
+#endif
+    } else {
+      debug_uart_index = debug_uart_index - 1; /* User selected dbg-console */
+    }
+
+    /* initialize debug uart if present for printk */
+    if (debug_uart_index < uarts) {
+      LEON3_Console_Uart[debug_uart_index]->ctrl |= LEON_REG_UART_CTRL_RE |
+                                                    LEON_REG_UART_CTRL_TE;
+      LEON3_Console_Uart[debug_uart_index]->status = 0;
     }
     isinit = 1;
   }
@@ -70,10 +95,10 @@ void console_outbyte_polled(
 )
 {
   if ((port >= 0) && (port < uarts)) {
-    int u = LEON3_Cpu_Index+port;
-    while ( (LEON3_Console_Uart[u]->status & LEON_REG_UART_STATUS_THE) == 0 );
-    LEON3_Console_Uart[u]->data = (unsigned int) ch;
-  }
+    return;
+
+  while ( (LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_THE) == 0 );
+  LEON3_Console_Uart[port]->data = (unsigned int) ch;
 }
 
 /*
@@ -81,26 +106,27 @@ void console_outbyte_polled(
  *
  *  This routine polls for a character.
  */
-int console_inbyte_nonblocking( int port )
+int apbuart_inbyte_nonblocking(int port)
 {
   if ((port >= 0) && (port < uarts)) {
-    int u = LEON3_Cpu_Index+port;
-    if (LEON3_Console_Uart[u]->status & LEON_REG_UART_STATUS_ERR)
-      LEON3_Console_Uart[u]->status = ~LEON_REG_UART_STATUS_ERR;
-
-    if ((LEON3_Console_Uart[u]->status & LEON_REG_UART_STATUS_DR) == 0)
-      return -1;
-    return (int) LEON3_Console_Uart[u]->data;
-  } else {
     assert( 0 );
+    return -1;
   }
-  return -1;
+
+  /* Clear errors */
+  if (LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_ERR)
+    LEON3_Console_Uart[port]->status = ~LEON_REG_UART_STATUS_ERR;
+
+  if ((LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_DR) == 0)
+    return -1;
+  else
+    return (int) LEON3_Console_Uart[port]->data;
 }
 
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)
 {
-  console_outbyte_polled(0, c);
+  console_outbyte_polled(debug_uart_index, c);
 }
 
 /*
@@ -115,7 +141,8 @@ static int bsp_in_char(void)
 {
   int tmp;
 
-  while ((tmp = console_inbyte_nonblocking(0)) < 0);
+  while ((tmp = apbuart_inbyte_nonblocking(debug_uart_index)) < 0)
+    ;
   return tmp;
 }
 
