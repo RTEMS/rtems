@@ -262,9 +262,8 @@ typedef struct {
   volatile unsigned int notused01;
   volatile unsigned int notused02;
   volatile unsigned int notused03;
-  volatile unsigned int notused10;
-  volatile unsigned int notused11;
-  volatile unsigned int notused12;
+  volatile unsigned int ampctrl;
+  volatile unsigned int icsel[2];
   volatile unsigned int notused13;
   volatile unsigned int notused20;
   volatile unsigned int notused21;
@@ -274,6 +273,8 @@ typedef struct {
   volatile unsigned int force[16];
   /* Extended IRQ registers */
   volatile unsigned int intid[16];
+  /* 0x100, align to 4Kb boundary */
+  volatile unsigned int resv1[(0x1000-0x100)/4];
 } LEON3_IrqCtrl_Regs_Map;
 
 /*****************************/
