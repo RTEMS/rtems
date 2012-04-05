@@ -39,6 +39,7 @@ extern int scan_uarts(void);
 void amba_initialize(void)
 {
   int i;
+  int icsel;
   amba_apb_device dev;
 
   /* Scan the AMBA Plug&Play info at the default LEON3 area */
@@ -55,6 +56,19 @@ void amba_initialize(void)
   }
 
   LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
+  if ((LEON3_IrqCtrl_Regs->ampctrl >> 28) > 0) {
+    /* IRQ Controller has support for multiple IRQ Controllers, each
+     * CPU can be routed to different Controllers, we find out which
+     * controller by looking at the IRQCTRL Select Register for this CPU.
+     * Each Controller is located at a 4KByte offset.
+     */
+    icsel = LEON3_IrqCtrl_Regs->icsel[LEON3_Cpu_Index/8];
+    icsel = (icsel >> ((7 - (LEON3_Cpu_Index & 0x7)) * 4)) & 0xf;
+    LEON3_IrqCtrl_Regs += icsel;
+    LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = 0;
+    LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index] = 0;
+    LEON3_IrqCtrl_Regs->iclear = 0xffffffff;
+  }
 
   /* Init Extended IRQ controller if available */
   leon3_ext_irq_init();
