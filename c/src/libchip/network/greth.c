@@ -42,15 +42,6 @@
 #undef free
 #endif
 
-#if defined(__m68k__)
-extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-#elif defined(__lm32__)
-extern lm32_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-#else
-extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-#endif
-
-
 /* #define GRETH_DEBUG */
 
 #ifdef CPU_U32_FIX
@@ -189,22 +180,22 @@ static char *almalloc(int sz)
 
 /* GRETH interrupt handler */
 
-rtems_isr
-greth_interrupt_handler (rtems_vector_number v)
+void greth_interrupt_handler (void *arg)
 {
         uint32_t status;
         uint32_t ctrl;
         rtems_event_set events = 0;
+        struct greth_softc *greth = arg;
 
         /* read and clear interrupt cause */
-        status = greth.regs->status;
-        greth.regs->status = status;
-        ctrl = greth.regs->ctrl;
+        status = greth->regs->status;
+        greth->regs->status = status;
+        ctrl = greth->regs->ctrl;
 
         /* Frame received? */
         if ((ctrl & GRETH_CTRL_RXIRQ) && (status & (GRETH_STATUS_RXERR | GRETH_STATUS_RXIRQ)))
         {
-                greth.rxInterrupts++;
+                greth->rxInterrupts++;
                 /* Stop RX-Error and RX-Packet interrupts */
                 ctrl &= ~GRETH_CTRL_RXIRQ;
                 events |= INTERRUPT_EVENT;
@@ -212,17 +203,17 @@ greth_interrupt_handler (rtems_vector_number v)
         
         if ( (ctrl & GRETH_CTRL_TXIRQ) && (status & (GRETH_STATUS_TXERR | GRETH_STATUS_TXIRQ)) )
         {
-                greth.txInterrupts++;
+                greth->txInterrupts++;
                 ctrl &= ~GRETH_CTRL_TXIRQ;
                 events |= GRETH_TX_WAIT_EVENT;
         }
-        
+
         /* Clear interrupt sources */
-        greth.regs->ctrl = ctrl;
-        
+        greth->regs->ctrl = ctrl;
+
         /* Send the event(s) */
         if ( events )
-            rtems_event_send (greth.daemonTid, events);
+                rtems_event_send (greth->daemonTid, events);
 }
 
 static uint32_t read_mii(uint32_t phy_addr, uint32_t reg_addr)
@@ -485,8 +476,9 @@ auto_neg_done:
     /* clear all pending interrupts */
     regs->status = 0xffffffff;
     
-    /* install interrupt vector */
-    set_vector(greth_interrupt_handler, sc->vector, 1);
+    /* install interrupt handler */
+    rtems_interrupt_handler_install(sc->vector, "greth", RTEMS_INTERRUPT_SHARED,
+                                    greth_interrupt_handler, sc);
 
     regs->ctrl |= GRETH_CTRL_RXEN | (sc->fd << 4) | GRETH_CTRL_RXIRQ | (sc->sp << 7) | (sc->gb << 8);
 
