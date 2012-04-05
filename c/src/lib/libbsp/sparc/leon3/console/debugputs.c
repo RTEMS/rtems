@@ -21,6 +21,7 @@
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
 
 /*
  * Number of uarts on AMBA bus
@@ -37,6 +38,7 @@ static int isinit = 0;
  * ...
  */
 int debug_uart_index __attribute__((weak)) = 0;
+ambapp_apb_uart *dbg_uart = NULL;
 
 /*
  *  Scan for UARTS in configuration
@@ -74,9 +76,9 @@ int scan_uarts(void)
 
     /* initialize debug uart if present for printk */
     if (debug_uart_index < uarts) {
-      LEON3_Console_Uart[debug_uart_index]->ctrl |= LEON_REG_UART_CTRL_RE |
-                                                    LEON_REG_UART_CTRL_TE;
-      LEON3_Console_Uart[debug_uart_index]->status = 0;
+      dbg_uart = (ambapp_apb_uart *)LEON3_Console_Uart[debug_uart_index];
+      dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+      dbg_uart->status = 0;
     }
     isinit = 1;
   }
@@ -85,48 +87,43 @@ int scan_uarts(void)
 }
 
 /*
- *  console_outbyte_polled
+ *  apbuart_outbyte_polled
  *
  *  This routine transmits a character using polling.
  */
-void console_outbyte_polled(
-  int           port,
+void apbuart_outbyte_polled(
+  ambapp_apb_uart *regs,
   unsigned char ch
 )
 {
-  if ((port >= 0) && (port < uarts)) {
-    return;
-
-  while ( (LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_THE) == 0 );
-  LEON3_Console_Uart[port]->data = (unsigned int) ch;
+  while ( (regs->status & LEON_REG_UART_STATUS_THE) == 0 );
+  regs->data = (unsigned int) ch;
 }
 
 /*
- *  console_inbyte_nonblocking
+ *  apbuart_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
-int apbuart_inbyte_nonblocking(int port)
+int apbuart_inbyte_nonblocking(ambapp_apb_uart *regs)
 {
-  if ((port >= 0) && (port < uarts)) {
-    assert( 0 );
-    return -1;
-  }
-
   /* Clear errors */
-  if (LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_ERR)
-    LEON3_Console_Uart[port]->status = ~LEON_REG_UART_STATUS_ERR;
+  if (regs->status & LEON_REG_UART_STATUS_ERR)
+    regs->status = ~LEON_REG_UART_STATUS_ERR;
 
-  if ((LEON3_Console_Uart[port]->status & LEON_REG_UART_STATUS_DR) == 0)
-    return -1;
+  if ((regs->status & LEON_REG_UART_STATUS_DR) == 0)
+    return EOF;
   else
-    return (int) LEON3_Console_Uart[port]->data;
+    return (int) regs->data;
 }
 
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)
 {
-  console_outbyte_polled(debug_uart_index, c);
+  if (dbg_uart == NULL)
+    return;
+
+  apbuart_outbyte_polled(dbg_uart, c);
 }
 
 /*
@@ -141,7 +138,10 @@ static int bsp_in_char(void)
 {
   int tmp;
 
-  while ((tmp = apbuart_inbyte_nonblocking(debug_uart_index)) < 0)
+  if (dbg_uart == NULL)
+    return EOF;
+
+  while ((tmp = apbuart_inbyte_nonblocking(dbg_uart)) < 0)
     ;
   return tmp;
 }

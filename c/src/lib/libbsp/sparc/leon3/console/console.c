@@ -40,13 +40,13 @@ int syscon_uart_index __attribute__((weak)) = 0;
  */
 
 /*
- *  console_outbyte_polled
+ *  apbuart_outbyte_polled
  *
  *  This routine transmits a character using polling.
  */
 
-void console_outbyte_polled(
-  int  port,
+extern void apbuart_outbyte_polled(
+  ambapp_apb_uart *regs,
   char ch
 );
 
@@ -58,7 +58,7 @@ void console_outbyte_polled(
  *  This routine polls for a character.
  */
 
-int apbuart_inbyte_nonblocking(int port);
+extern int apbuart_inbyte_nonblocking(ambapp_apb_uart *regs);
 
 /* body is in debugputs.c */
 
@@ -78,13 +78,13 @@ ssize_t console_write_support (int minor, const char *buf, size_t len)
     port = minor - 1;
 
   while (nwrite < len) {
-    console_outbyte_polled(port, *buf++);
+    apbuart_outbyte_polled((ambapp_apb_uart*)LEON3_Console_Uart[port], *buf++);
     nwrite++;
   }
   return nwrite;
 }
 
-int console_inbyte_nonblocking(int minor)
+int console_pollRead(int minor)
 {
   int port;
 
@@ -93,7 +93,7 @@ int console_inbyte_nonblocking(int minor)
   else
     port = minor - 1;
 
-  return apbuart_inbyte_nonblocking(port);
+  return apbuart_inbyte_nonblocking((ambapp_apb_uart*)LEON3_Console_Uart[port]);
 }
 
 /*
@@ -168,7 +168,7 @@ rtems_device_driver console_open(
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                        /* firstOpen */
     NULL,                        /* lastClose */
-    console_inbyte_nonblocking,  /* pollRead */
+    console_pollRead,            /* pollRead */
     console_write_support,       /* write */
     NULL,                        /* setAttributes */
     NULL,                        /* stopRemoteTx */
