@@ -61,12 +61,6 @@
 
 #ifdef BSP_FEATURE_IRQ_EXTENSION
   #include <rtems/irq-extension.h>
-#else
-  #if defined(__m68k__)
-    extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-  #else
-    extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-  #endif
 #endif
 
 struct lan91cxx_priv_data smc91111;
@@ -92,9 +86,9 @@ static void lan91cxx_phy_configure(struct lan91cxx_priv_data *cpd);
 #define max(l,r) ((l) > (r) ? (l) : (r))
 
 /* \ ------------- Interrupt ------------- \ */
-rtems_isr lan91cxx_interrupt_handler(rtems_vector_number v)
+void lan91cxx_interrupt_handler(void *arg)
 {
-	struct lan91cxx_priv_data *cpd = &smc91111;
+	struct lan91cxx_priv_data *cpd = arg;
 	unsigned short irq, event;
 	unsigned short oldbase;
 	unsigned short oldpointer;
@@ -1029,7 +1023,7 @@ static void smc91111_stop(struct lan91cxx_priv_data *cpd)
 int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 {
 	unsigned short val;
-	int i;
+	int i, rc;
 
 	DEBUG_FUNCTION();
 
@@ -1053,8 +1047,11 @@ int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 		}
 	}
 #else
-	db_printf("Install lan91cxx irqvector at %d\n", cpd->config.vector);
-	set_vector(lan91cxx_interrupt_handler, cpd->config.vector, 1);
+	db_printf("Install lan91cxx isr at vec/irq %d\n", cpd->config.vector);
+	rc = rtems_interrupt_handler_install(cpd->config.vector, "smc91cxx",
+		RTEMS_INTERRUPT_SHARED, lan91cxx_interrupt_handler, cpd);
+	if (rc != RTEMS_SUCCESSFUL)
+		return 0;
 #endif
 
 	/* Reset chip */
