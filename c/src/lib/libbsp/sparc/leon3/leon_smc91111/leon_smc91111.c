@@ -13,9 +13,9 @@
 
 scmv91111_configuration_t leon_scmv91111_configuration = {
   SMC91111_BASE_ADDR,                 /* base address */
-    LEON_TRAP_TYPE (SMC91111_BASE_IRQ),	/* vector number */
+  SMC91111_BASE_IRQ,                  /* IRQ number (on LEON vector is irq) */
   SMC91111_BASE_PIO,                  /* PIO */
-    100,			/* 100b */
+  100,                                /* 100b */
   1,                                  /* fulldx */
   1                                   /* autoneg */
 };

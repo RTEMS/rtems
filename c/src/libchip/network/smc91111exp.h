@@ -9,7 +9,7 @@
 
 typedef struct scmv91111_configuration {
   void                     *baseaddr;
-  unsigned int              vector;
+  rtems_vector_number       vector;
   unsigned int              pio;
   unsigned int              ctl_rspeed;
   unsigned int              ctl_rfduplx;
