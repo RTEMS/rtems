@@ -64,7 +64,7 @@ static int clkirq;
     \
     /* Find LEON3 GP Timer */ \
     cnt = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&dev); \
-    if ( cnt > 0 ){ \
+    if ( cnt > 0 ) { \
       /* Found APB GPTIMER Timer */ \
       LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start; \
       clkirq = (LEON3_Timer_Regs->status & 0xf8) >> 3; \
