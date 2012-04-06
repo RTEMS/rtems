@@ -33,7 +33,7 @@ libbsp_a_SOURCES =
 
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
-    ../../shared/bsppredriverhook.c ../../sparc/shared/bspgetworkarea.c \
+    startup/bsppredriver.c ../../sparc/shared/bspgetworkarea.c \
     ../../sparc/shared/bsppretaskinghook.c ../../shared/bsppost.c \
     ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/bspinit.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c \
@@ -54,6 +54,20 @@ libbsp_a_SOURCES += clock/ckinit.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # timer
 libbsp_a_SOURCES += timer/timer.c
+
+# IRQ
+include_bsp_HEADERS = \
+    ../../shared/include/irq-generic.h \
+    ../../shared/include/irq-info.h \
+    include/bsp/irq.h
+libbsp_a_SOURCES += \
+    ../../sparc/shared/irq/irq-shared.c \
+    ../../shared/src/irq-default-handler.c \
+    ../../shared/src/irq-generic.c \
+    ../../shared/src/irq-info.c \
+    ../../shared/src/irq-legacy.c \
+    ../../shared/src/irq-server.c \
+    ../../shared/src/irq-shell.c
 
 if HAS_SMP
 libbsp_a_SOURCES += ../../shared/smp/getcpuid.c ../../shared/smp/smp_stub.c \

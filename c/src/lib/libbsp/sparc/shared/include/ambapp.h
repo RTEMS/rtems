@@ -272,6 +272,8 @@ typedef struct {
   volatile unsigned int notused23;
   volatile unsigned int mask[16];
   volatile unsigned int force[16];
+  /* Extended IRQ registers */
+  volatile unsigned int intid[16];
 } LEON3_IrqCtrl_Regs_Map;
 
 /*****************************/

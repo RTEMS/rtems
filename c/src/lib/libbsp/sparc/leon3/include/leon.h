@@ -152,6 +152,23 @@ extern volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 /* LEON3 CPU Index of boot CPU */
 extern int LEON3_Cpu_Index;
 
+/* The external IRQ number, -1 if not external interrupts */
+extern int LEON3_IrqCtrl_EIrq;
+
+static __inline__ int bsp_irq_fixup(int irq)
+{
+       int eirq;
+
+       if (LEON3_IrqCtrl_EIrq != 0 && irq == LEON3_IrqCtrl_EIrq) {
+               /* Get interrupt number from IRQ controller */
+               eirq = LEON3_IrqCtrl_Regs->intid[LEON3_Cpu_Index] & 0x1f;
+               if (eirq & 0x10)
+                       irq = eirq;
+       }
+
+       return irq;
+}
+
 /* Macros used for manipulating bits in LEON3 GP Timer Control Register */
 
 #define LEON3_GPTIMER_EN 1
@@ -232,6 +249,17 @@ extern int LEON3_Cpu_Index;
     sparc_enable_interrupts( _level ); \
   } while (0)
 
+/* Make all SPARC BSPs have common macros for interrupt handling */
+#define BSP_Clear_interrupt(_source) LEON_Clear_interrupt(_source)
+#define BSP_Force_interrupt(_source) LEON_Force_interrupt(_source)
+#define BSP_Is_interrupt_pending(_source) LEON_Is_interrupt_pending(_source)
+#define BSP_Is_interrupt_masked(_source) LEON_Is_interrupt_masked(_source)
+#define BSP_Unmask_interrupt(_source) LEON_Unmask_interrupt(_source)
+#define BSP_Mask_interrupt(_source) LEON_Mask_interrupt(_source)
+#define BSP_Disable_interrupt(_source, _previous) \
+        LEON_Disable_interrupt(_source, _prev)
+#define BSP_Restore_interrupt(_source, _previous) \
+        LEON_Restore_interrupt(_source, _previous)
 
 /*
  *  Each timer control register is organized as follows:

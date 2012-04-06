@@ -30,6 +30,7 @@ extern "C" {
 #include <leon.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
+#include <rtems/irq-extension.h>
 
 /* SPARC CPU variant: LEON2 */
 #define LEON2 1
@@ -104,6 +105,79 @@ void bsp_spurious_initialize( void );
  * is called after bsp_get_work_area().
  */
 void *bsp_early_malloc(int size);
+
+/* Interrupt Service Routine (ISR) pointer */
+typedef void (*bsp_shared_isr)(void *arg);
+
+/* Initializes the Shared System Interrupt service */
+extern int BSP_shared_interrupt_init(void);
+
+/* Registers a shared IRQ handler, and enable it at IRQ controller. Multiple
+ * interrupt handlers may use the same IRQ number, all ISRs will be called
+ * when an interrupt on that line is fired.
+ *
+ * Arguments
+ *  irq       System IRQ number
+ *  info      Optional Name of IRQ source
+ *  isr       Function pointer to the ISR
+ *  arg       Second argument to function isr
+ */
+static __inline__ int BSP_shared_interrupt_register
+       (
+       int irq,
+       const char *info,
+       bsp_shared_isr isr,
+       void *arg
+       )
+{
+       return rtems_interrupt_handler_install(irq, info,
+                                       RTEMS_INTERRUPT_SHARED, isr, arg);
+}
+
+/* Unregister previously registered shared IRQ handler.
+ *
+ * Arguments
+ *  irq       System IRQ number
+ *  isr       Function pointer to the ISR
+ *  arg       Second argument to function isr
+ */
+static __inline__ int BSP_shared_interrupt_unregister
+       (
+       int irq,
+       bsp_shared_isr isr,
+       void *arg
+       )
+{
+       return rtems_interrupt_handler_remove(irq, isr, arg);
+}
+
+/* Clear interrupt pending on IRQ controller, this is typically done on a
+ * level triggered interrupt source such as PCI to avoid taking double IRQs.
+ * In such a case the interrupt source must be cleared first on LEON, before
+ * acknowledging the IRQ with this function.
+ *
+ * Arguments
+ *  irq       System IRQ number
+ */
+extern void BSP_shared_interrupt_clear(int irq);
+
+/* Enable Interrupt. This function will unmask the IRQ at the interrupt
+ * controller. This is normally done by _register(). Note that this will
+ * affect all ISRs on this IRQ.
+ *
+ * Arguments
+ *  irq       System IRQ number
+ */
+extern void BSP_shared_interrupt_unmask(int irq);
+
+/* Disable Interrupt. This function will mask one IRQ at the interrupt
+ * controller. This is normally done by _unregister().  Note that this will
+ * affect all ISRs on this IRQ.
+ *
+ * Arguments
+ *  irq         System IRQ number
+ */
+extern void BSP_shared_interrupt_mask(int irq);
 
 #ifdef __cplusplus
 }

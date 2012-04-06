@@ -12,6 +12,9 @@ EXTRA_DIST =
 EXTRA_DIST += shared/gnatcommon.c
 EXTRA_DIST += shared/start.S
 
+# Interrupt
+EXTRA_DIST += shared/irq/irq-shared.c
+
 # AMBA Plug&Play bus
 EXTRA_DIST += shared/include/ambapp.h
 EXTRA_DIST += shared/amba/ambapp.c
