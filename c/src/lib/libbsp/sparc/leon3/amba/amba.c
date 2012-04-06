@@ -18,6 +18,9 @@
 /* Structure containing address to devices found on the Amba Plug&Play bus */
 amba_confarea_type amba_conf;
 
+/* GRLIB extended IRQ controller register */
+extern void leon3_ext_irq_init(void);
+
 /* Pointers to Interrupt Controller configuration registers */
 volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
 
@@ -47,6 +50,9 @@ void amba_initialize(void)
     /* Found APB IRQ_MP Interrupt Controller */
     LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
   }
+
+  /* Init Extended IRQ controller if available */
+  leon3_ext_irq_init();
 
   /* find GP Timer */
   i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&dev);
