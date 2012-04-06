@@ -75,7 +75,7 @@ void amba_initialize(void)
 
   /* find GP Timer */
   i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&dev);
-  if ( i > 0 ){
+  if ( i > 0 ) {
     LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start;
   }
 
