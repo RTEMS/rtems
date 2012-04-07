@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -28,8 +28,8 @@
 #include <bsp/qoriq.h>
 #include <bsp/irq.h>
 
-/* This is defined in ../../../shared/clockdrv_shell.h */
-rtems_isr Clock_isr(rtems_vector_number vector);
+/* This is defined in clockdrv_shell.h */
+static rtems_isr Clock_isr(void *arg);
 
 static uint32_t qoriq_clock_nanoseconds_per_timer_tick;
 
@@ -69,7 +69,7 @@ static void qoriq_clock_handler_install(rtems_isr_entry *old_isr)
     CLOCK_INTERRUPT,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) Clock_isr,
+    Clock_isr,
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
@@ -98,7 +98,7 @@ static void qoriq_clock_cleanup(void)
 
   sc = rtems_interrupt_handler_remove(
     CLOCK_INTERRUPT,
-    (rtems_interrupt_handler) Clock_isr,
+    Clock_isr,
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
