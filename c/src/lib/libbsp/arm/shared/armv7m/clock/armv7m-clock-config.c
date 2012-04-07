@@ -20,7 +20,7 @@
 #ifdef ARM_MULTILIB_ARCH_V7M
 
 /* This is defined in clockdrv_shell.h */
-rtems_isr Clock_isr(rtems_vector_number vector);
+static rtems_isr Clock_isr(void *arg);
 
 #define _ARMV7M_Systick_get_factor(freq) \
   ((1000000000ULL << 32) / (freq))
@@ -43,7 +43,7 @@ static void _ARMV7M_Systick_at_tick(void)
 static void _ARMV7M_Systick_handler(void)
 {
   _ARMV7M_Interrupt_service_enter();
-  Clock_isr(ARMV7M_VECTOR_SYSTICK);
+  Clock_isr(NULL);
   _ARMV7M_Interrupt_service_leave();
 }
 
