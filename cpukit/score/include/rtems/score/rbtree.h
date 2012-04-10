@@ -321,6 +321,33 @@ void _RBTree_Extract(
   RBTree_Node    *the_node
 );
 
+/**
+ * @brief Returns the in-order next node of a node.
+ *
+ * @param[in] rbtree The red-black tree.
+ * @param[in] node The node.
+ * @param[in] dir The direction.
+ *
+ * @retval NULL The in-order next node does not exist.
+ * @retval otherwise The next node.
+ */
+RBTree_Node *_RBTree_Next_unprotected(
+  const RBTree_Control *rbtree,
+  const RBTree_Node *node,
+  RBTree_Direction dir
+);
+
+/**
+ * @copydoc _RBTree_Next_unprotected()
+ *
+ * The function disables the interrupts protect the operation.
+ */
+RBTree_Node *_RBTree_Next(
+  const RBTree_Control *rbtree,
+  const RBTree_Node *node,
+  RBTree_Direction dir
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/rbtree.inl>
 #endif

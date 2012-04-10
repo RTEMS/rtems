@@ -271,28 +271,48 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
   return _RBTree_Find( the_rbtree, the_node );
 }
 
-/** @brief Find the node's in-order predecessor 
- *
- * This function returns a pointer to the in-order predecessor 
- * of @a the_node if it exists, and NULL if not. 
+/**
+ * @copydoc _RBTree_Predecessor_unprotected()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor(
-  rtems_rbtree_node *the_node
+RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor_unprotected(
+  const rtems_rbtree_control *rbtree,
+  const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Predecessor( the_node );
+  return _RBTree_Predecessor_unprotected( rbtree, node );
 }
 
-/** @brief Find the node's in-order successor 
- *
- *  This function returns a pointer to the in-order successor  
- *  of @a the_node if it exists, and NULL if not. 
+/**
+ * @copydoc _RBTree_Predecessor()
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor(
-  rtems_rbtree_node *the_node
+RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor(
+  const rtems_rbtree_control *rbtree,
+  const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Successor( the_node );
+  return _RBTree_Predecessor( rbtree, node );
+}
+
+/**
+ * @copydoc _RBTree_Successor_unprotected()
+ */
+RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor_unprotected(
+  const rtems_rbtree_control *rbtree,
+  const rtems_rbtree_node *node
+)
+{
+  return _RBTree_Successor_unprotected( rbtree, node );
+}
+
+/**
+ * @copydoc _RBTree_Successor()
+ */
+RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor(
+  const rtems_rbtree_control *rbtree,
+  const rtems_rbtree_node *node
+)
+{
+  return _RBTree_Successor( rbtree, node );
 }
 
 /**
