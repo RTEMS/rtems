@@ -376,42 +376,64 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
   return found;
 }
 
-/** @brief Find the nodes in-order predecessor
+/**
+ * @brief Returns the predecessor of a node.
  *
- *  This function returns a pointer to the in-order predecessor 
- *  of @a the_node if it exists, and NULL if not. 
+ * @param[in] rbtree The red-black tree.
+ * @param[in] node The node.
+ *
+ * @retval NULL The predecessor does not exist.
+ * @retval otherwise The predecessor node.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
-    RBTree_Node *the_node
-    )
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
+  const RBTree_Control *rbtree,
+  const RBTree_Node *node
+)
 {
-  RBTree_Node* iter_node;
-  if (!the_node) return NULL;
-  iter_node = the_node->child[RBT_LEFT];
-  if (!iter_node) return NULL;
-  while (iter_node->child[RBT_RIGHT]) {
-    iter_node = iter_node->child[RBT_RIGHT];
-  } 
-  return iter_node;
+  return _RBTree_Next_unprotected( rbtree, node, RBT_LEFT );
 }
 
-/** @brief Find the nodes in-order successor
+/**
+ * @copydoc _RBTree_Predecessor_unprotected()
  *
- *  This function returns a pointer to the in-order successor  
- *  of @a the_node if it exists, and NULL if not. 
+ * The function disables the interrupts protect the operation.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
+  const RBTree_Control *rbtree,
+  const RBTree_Node *node
+)
+{
+  return _RBTree_Next( rbtree, node, RBT_LEFT );
+}
+
+/**
+ * @brief Returns the successor of a node.
+ *
+ * @param[in] rbtree The red-black tree.
+ * @param[in] node The node.
+ *
+ * @retval NULL The successor does not exist.
+ * @retval otherwise The successor node.
+ */
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
+  const RBTree_Control *rbtree,
+  const RBTree_Node *node
+)
+{
+  return _RBTree_Next_unprotected( rbtree, node, RBT_RIGHT );
+}
+
+/**
+ * @copydoc _RBTree_Successor_unprotected()
+ *
+ * The function disables the interrupts protect the operation.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
-    RBTree_Node *the_node
-    )
+  const RBTree_Control *rbtree,
+  const RBTree_Node *node
+)
 {
-  RBTree_Node* iter_node;
-  if (!the_node) return NULL;
-  iter_node = the_node->child[RBT_RIGHT];
-  if (!iter_node) return NULL;
-  while (iter_node->child[RBT_LEFT]) {
-    iter_node = iter_node->child[RBT_LEFT];
-  } 
-  return iter_node;
+  return _RBTree_Next( rbtree, node, RBT_RIGHT );
 }
 
 /** @brief Get the First Node (unprotected)
