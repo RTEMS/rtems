@@ -64,6 +64,10 @@ $(PROJECT_INCLUDE)/rtems/cbs.h: include/rtems/cbs.h $(PROJECT_INCLUDE)/rtems/$(d
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cbs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cbs.h
 
+$(PROJECT_INCLUDE)/rtems/rbheap.h: include/rtems/rbheap.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbheap.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbheap.h
+
 $(PROJECT_INCLUDE)/rtems/rbtree.h: include/rtems/rbtree.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.h

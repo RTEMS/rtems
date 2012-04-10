@@ -5,6 +5,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = POSIX
+SUBDIRS += rbheap01
 SUBDIRS += flashdisk01
 
 SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \

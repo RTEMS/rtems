@@ -16,6 +16,7 @@ include_rtems_HEADERS += include/rtems/init.h
 include_rtems_HEADERS += include/rtems/io.h
 include_rtems_HEADERS += include/rtems/mptables.h
 include_rtems_HEADERS += include/rtems/cbs.h
+include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/sptables.h
 
@@ -38,7 +39,7 @@ libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/iounregisterdriver.c src/iowrite.c src/posixapi.c  \
     src/rtemsapi.c src/extensiondata.c src/getversionstring.c \
     src/chainappendnotify.c src/chaingetnotify.c src/chaingetwait.c \
-    src/chainprependnotify.c
+    src/chainprependnotify.c src/rbheap.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am
