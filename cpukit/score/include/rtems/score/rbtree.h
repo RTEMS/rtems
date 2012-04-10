@@ -348,6 +348,39 @@ RBTree_Node *_RBTree_Next(
   RBTree_Direction dir
 );
 
+/**
+ * @brief Red-black tree visitor.
+ *
+ * @param[in] node The node.
+ * @param[in] dir The direction.
+ * @param[in] visitor_arg The visitor argument.
+ *
+ * @retval true Stop the iteration.
+ * @retval false Continue the iteration.
+ *
+ * @see _RBTree_Iterate_unprotected().
+ */
+typedef bool (*RBTree_Visitor)(
+  const RBTree_Node *node,
+  RBTree_Direction dir,
+  void *visitor_arg
+);
+
+/**
+ * @brief Red-black tree iteration.
+ *
+ * @param[in] rbtree The red-black tree.
+ * @param[in] dir The direction.
+ * @param[in] visitor The visitor.
+ * @param[in] visitor_arg The visitor argument.
+ */
+void _RBTree_Iterate_unprotected(
+  const RBTree_Control *rbtree,
+  RBTree_Direction dir,
+  RBTree_Visitor visitor,
+  void *visitor_arg
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/rbtree.inl>
 #endif
