@@ -386,8 +386,8 @@ static inline int _Nios2_MPU_Get_region_count(
 
 static inline bool _Nios2_MPU_Is_valid_index(
   const Nios2_MPU_Configuration *config,
-  bool data,
-  int index
+  int index,
+  bool data
 )
 {
   return 0 <= index

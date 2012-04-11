@@ -80,7 +80,7 @@ bool _Nios2_MPU_Add_region(
   uint32_t mpubase = 0;
   uint32_t mpuacc = 0;
 
-  if ( _Nios2_MPU_Is_valid_index( config, data, index ) ) {
+  if ( _Nios2_MPU_Is_valid_index( config, index, data ) ) {
     if ( !force ) {
       _Nios2_MPU_Get_region_registers( index, data, &mpubase, &mpuacc );
       ok = _Nios2_MPU_Is_region_disabled( config, mpubase, mpuacc );
