@@ -88,7 +88,7 @@ bool _Nios2_MPU_Setup_region_registers(
     &mask_or_limit
   );
   bool ok = is_valid_base_and_end
-    && _Nios2_MPU_Is_valid_index( config, desc->data, desc->index )
+    && _Nios2_MPU_Is_valid_index( config, desc->index, desc->data )
     && _Nios2_Is_valid_permission( desc->data, desc->perm )
     && !(!desc->data && desc->cacheable)
     && !(desc->read && desc->write);
