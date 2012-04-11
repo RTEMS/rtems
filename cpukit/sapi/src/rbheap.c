@@ -209,7 +209,7 @@ static rtems_rbheap_page *get_next(
 )
 {
   return rtems_rbheap_page_of_node(
-    _RBTree_Next(page_tree, &page->tree_node, dir)
+    _RBTree_Next_unprotected(page_tree, &page->tree_node, dir)
   );
 }
 
