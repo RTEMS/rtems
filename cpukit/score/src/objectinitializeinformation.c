@@ -62,7 +62,7 @@ void _Objects_Initialize_information(
 {
   static Objects_Control *null_local_table = NULL;
   uint32_t                minimum_index;
-  uint32_t                maximum_per_allocation;
+  Objects_Maximum         maximum_per_allocation;
   #if defined(RTEMS_MULTIPROCESSING)
     uint32_t              index;
   #endif
@@ -92,9 +92,8 @@ void _Objects_Initialize_information(
   /*
    *  Are we operating in limited or unlimited (e.g. auto-extend) mode.
    */
-  information->auto_extend =
-        (maximum & OBJECTS_UNLIMITED_OBJECTS) ? true : false;
-  maximum_per_allocation = maximum & ~OBJECTS_UNLIMITED_OBJECTS;
+  information->auto_extend = _Objects_Is_unlimited( maximum );
+  maximum_per_allocation = _Objects_Maximum_per_allocation( maximum );
 
   /*
    *  Unlimited and maximum of zero is illogical.

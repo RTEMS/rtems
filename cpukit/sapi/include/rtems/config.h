@@ -37,6 +37,12 @@ extern "C" {
 #define rtems_resource_unlimited(resource) \
   ( resource | RTEMS_UNLIMITED_OBJECTS )
 
+#define rtems_resource_is_unlimited(resource) \
+  _Objects_Is_unlimited(resource)
+
+#define rtems_resource_maximum_per_allocation(resource) \
+  _Objects_Maximum_per_allocation(resource)
+
 /*
  *  This is kind of kludgy but it allows targets to totally ignore the
  *  optional APIs like POSIX safely.

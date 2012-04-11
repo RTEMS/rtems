@@ -954,7 +954,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  for memory usage.
  */
 #define _Configure_Max_Objects(_max) \
-  ((_max) & ~RTEMS_UNLIMITED_OBJECTS)
+  rtems_resource_maximum_per_allocation(_max)
 
 /**
  *  This macro accounts for how memory for a set of configured objects is

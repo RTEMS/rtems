@@ -352,5 +352,25 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   #endif
 }
 
+/**
+ *  Returns if the object maximum specifies unlimited objects.
+ *
+ *  @param[in] maximum The object maximum specification.
+ *
+ *  @retval true Unlimited objects are available.
+ *  @retval false The object count is fixed.
+ */
+RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
+{
+  return (maximum & OBJECTS_UNLIMITED_OBJECTS) != 0;
+}
+
+/*
+ * We cannot use an inline function for this since it may be evaluated at
+ * compile time.
+ */
+#define _Objects_Maximum_per_allocation( maximum ) \
+  ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
+
 #endif
 /* end of include file */
