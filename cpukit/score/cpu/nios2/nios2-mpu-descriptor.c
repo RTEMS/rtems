@@ -106,3 +106,35 @@ bool _Nios2_MPU_Setup_region_registers(
 
   return ok;
 }
+
+bool _Nios2_MPU_Get_region_descriptor(
+  const Nios2_MPU_Configuration *config,
+  int index,
+  bool data,
+  Nios2_MPU_Region_descriptor *desc
+)
+{
+  bool ok = _Nios2_MPU_Is_valid_index( config, index, data );
+
+  if ( ok ) {
+    uint32_t mpubase;
+    uint32_t mpuacc;
+
+    _Nios2_MPU_Get_region_registers( index, data, &mpubase, &mpuacc );
+
+    desc->index = index;
+    desc->base = (void *) (mpubase & NIOS2_MPUBASE_BASE_MASK);
+    if ( config->region_uses_limit ) {
+      desc->end = (void *) (mpuacc & NIOS2_MPUACC_LIMIT_MASK);
+    } else {
+      desc->end = (void *) ((mpuacc & NIOS2_MPUACC_MASK_MASK) + 1);
+    }
+    desc->perm = (mpuacc & NIOS2_MPUACC_PERM_MASK) >> NIOS2_MPUACC_PERM_OFFSET;
+    desc->data = data;
+    desc->cacheable = (mpuacc & NIOS2_MPUACC_C) != 0;
+    desc->read = (mpuacc & NIOS2_MPUACC_RD) != 0;
+    desc->write = (mpuacc & NIOS2_MPUACC_WR) != 0;
+  }
+
+  return ok;
+}
