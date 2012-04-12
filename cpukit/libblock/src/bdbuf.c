@@ -154,10 +154,17 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_10      RTEMS_BLKDEV_FATAL_ERROR(8)
 #define RTEMS_BLKDEV_FATAL_BDBUF_TREE_RM       RTEMS_BLKDEV_FATAL_ERROR(9)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SWAPOUT       RTEMS_BLKDEV_FATAL_ERROR(10)
+
+/*
+ * The lock/unlock fatal errors occur in case the bdbuf is not initialized with
+ * rtems_bdbuf_init().  General system corruption like stack overflow etc. may
+ * also trigger these fatal errors.
+ */
 #define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_LOCK     RTEMS_BLKDEV_FATAL_ERROR(11)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK   RTEMS_BLKDEV_FATAL_ERROR(12)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_LOCK    RTEMS_BLKDEV_FATAL_ERROR(13)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_UNLOCK  RTEMS_BLKDEV_FATAL_ERROR(14)
+
 #define RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_DIS   RTEMS_BLKDEV_FATAL_ERROR(15)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_2  RTEMS_BLKDEV_FATAL_ERROR(16)
 #define RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_RST   RTEMS_BLKDEV_FATAL_ERROR(17)
@@ -1741,9 +1748,6 @@ rtems_bdbuf_obtain_disk (const rtems_disk_device *dd,
                          rtems_blkdev_bnum  *media_block_ptr,
                          size_t             *bds_per_group_ptr)
 {
-  if (!bdbuf_cache.initialised)
-    return RTEMS_NOT_CONFIGURED;
-
   if (media_block_ptr != NULL)
   {
     /*
@@ -2069,8 +2073,6 @@ rtems_bdbuf_read (const rtems_disk_device *dd,
 static rtems_status_code
 rtems_bdbuf_check_bd_and_lock_cache (rtems_bdbuf_buffer *bd, const char *kind)
 {
-  if (!bdbuf_cache.initialised)
-    return RTEMS_NOT_CONFIGURED;
   if (bd == NULL)
     return RTEMS_INVALID_ADDRESS;
   if (rtems_bdbuf_tracer)
@@ -2184,14 +2186,8 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer *bd)
 rtems_status_code
 rtems_bdbuf_syncdev (const rtems_disk_device *dd)
 {
-  rtems_status_code  sc = RTEMS_SUCCESSFUL;
-
   if (rtems_bdbuf_tracer)
     printf ("bdbuf:syncdev: %08x\n", (unsigned) dd->dev);
-
-  sc = rtems_bdbuf_obtain_disk (dd, 0, NULL, NULL);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
 
   /*
    * Take the sync lock before locking the cache. Once we have the sync lock we

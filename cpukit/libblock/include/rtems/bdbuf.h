@@ -470,13 +470,15 @@ rtems_bdbuf_init (void);
  * The block number is the linear block number. This is relative to the start
  * of the partition on the media.
  *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
  * @param dd [in] The disk device.
  * @param block [in] Linear media block number.
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
- * @retval RTEMS_INVALID_ID No such device.
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  */
 rtems_status_code
@@ -501,13 +503,15 @@ rtems_bdbuf_get (
  * buffer is returned. The highest priority waiter will obtain the buffer
  * first.
  *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
  * @param dd [in] The disk device.
  * @param block [in] Linear media block number.
  * @param bd [out] Reference to the buffer descriptor pointer.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
- * @retval RTEMS_INVALID_ID No such device.
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  * @retval RTEMS_IO_ERROR IO error.
  */
@@ -526,10 +530,15 @@ rtems_bdbuf_read (
  * the cache and modified before this call it will be returned to the modified
  * queue. The buffers is returned to the end of the LRU list.
  *
- * @param bd [in] Reference to the buffer descriptor.
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
+ * @param bd [in] Reference to the buffer descriptor.  The buffer descriptor
+ * reference must not be @c NULL and must be obtained via rtems_bdbuf_get() or
+ * rtems_bdbuf_read().
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
@@ -545,10 +554,15 @@ rtems_bdbuf_release (rtems_bdbuf_buffer* bd);
  * or a sync call has been made. If the buffer is obtained with a get or read
  * before the hold timer has expired the buffer will be returned to the user.
  *
- * @param bd [in] Reference to the buffer descriptor.
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
+ * @param bd [in] Reference to the buffer descriptor.  The buffer descriptor
+ * reference must not be @c NULL and must be obtained via rtems_bdbuf_get() or
+ * rtems_bdbuf_read().
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
@@ -562,11 +576,16 @@ rtems_bdbuf_release_modified (rtems_bdbuf_buffer* bd);
  *
  * @note This code does not lock the sync mutex and stop additions to the
  *       modified queue.
-
- * @param bd [in] Reference to the buffer descriptor.
+ *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
+ * @param bd [in] Reference to the buffer descriptor.  The buffer descriptor
+ * reference must not be @c NULL and must be obtained via rtems_bdbuf_get() or
+ * rtems_bdbuf_read().
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
  * @retval RTEMS_INVALID_ADDRESS The reference is NULL.
  */
 rtems_status_code
@@ -581,11 +600,13 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
  * @note Nesting calls to sync multiple devices will be handled sequentially. A
  * nested call will be blocked until the first sync request has complete.
  *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
  * @param dd [in] The disk device.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
- * @retval RTEMS_NOT_CONFIGURED Not initialized.
- * @retval RTEMS_INVALID_ID No such device.
  */
 rtems_status_code
 rtems_bdbuf_syncdev (const rtems_disk_device *dd);
@@ -594,6 +615,12 @@ rtems_bdbuf_syncdev (const rtems_disk_device *dd);
  * @brief Purges all buffers corresponding to the disk device @a dd.
  *
  * This may result in loss of data.
+ *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize the cache, otherwise a fatal error will
+ * occur.
+ *
+ * @param dd [in] The disk device.
  */
 void
 rtems_bdbuf_purge_dev (const rtems_disk_device *dd);
