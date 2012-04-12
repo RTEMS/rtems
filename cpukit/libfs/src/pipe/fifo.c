@@ -68,6 +68,21 @@ static rtems_id pipe_semaphore = RTEMS_ID_NONE;
 #include <rtems/rtems/barrier.h>
 #include <rtems/score/thread.h>
 
+static void pipe_select_wakeup(rtems_id *id_ptr)
+{
+  rtems_id id = *id_ptr;
+
+  *id_ptr = 0;
+
+  if (id != 0) {
+    rtems_status_code sc = rtems_event_send(id, RTEMS_IOCTL_SELECT_EVENT);
+
+    if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred(sc);
+    }
+  }
+}
+
 /* Set barriers to be interruptible by signals. */
 static void pipe_interruptible(pipe_control_t *pipe)
 {
@@ -94,10 +109,9 @@ static int pipe_alloc(
   pipe_control_t *pipe;
   int err = -ENOMEM;
 
-  pipe = malloc(sizeof(pipe_control_t));
+  pipe = calloc(1, sizeof(pipe_control_t));
   if (pipe == NULL)
     return err;
-  memset(pipe, 0, sizeof(pipe_control_t));
 
   pipe->Size = PIPE_BUF;
   pipe->Buffer = malloc(pipe->Size);
@@ -447,6 +461,7 @@ ssize_t pipe_read(
     if (PIPE_EMPTY(pipe))
       pipe->Start = 0;
 
+    pipe_select_wakeup(&pipe->select_write_task_id);
     if (pipe->waitingWriters > 0)
       PIPE_WAKEUPWRITERS(pipe);
     read += chunk;
@@ -525,6 +540,7 @@ ssize_t pipe_write(
       memcpy(pipe->Buffer + PIPE_WSTART(pipe), buffer + written, chunk);
 
     pipe->Length += chunk;
+    pipe_select_wakeup(&pipe->select_read_task_id);
     if (pipe->waitingReaders > 0)
       PIPE_WAKEUPREADERS(pipe);
     written += chunk;
@@ -547,6 +563,53 @@ out_nolock:
   return ret;
 }
 
+static int pipe_register_select_wakeup(
+  rtems_id *id_ptr,
+  const rtems_ioctl_select_request *request
+)
+{
+  int rv = 0;
+  rtems_id current_id = *id_ptr;
+  rtems_id request_id = request->request_task_id;
+
+  if (current_id == 0 || current_id == request_id) {
+    *id_ptr = request_id;
+  } else {
+    rv = -EINVAL;
+  }
+
+  return rv;
+}
+
+static int pipe_select(
+  pipe_control_t *pipe,
+  const rtems_ioctl_select_request *request
+)
+{
+  int rv = 0;
+
+  switch (request->kind) {
+    case RTEMS_IOCTL_SELECT_READ:
+      if (!PIPE_EMPTY(pipe)) {
+        rv = 1;
+      } else {
+        rv = pipe_register_select_wakeup(&pipe->select_read_task_id, request);
+      }
+      break;
+    case RTEMS_IOCTL_SELECT_WRITE:
+      if (PIPE_SPACE(pipe) > 0) {
+        rv = 1;
+      } else {
+        rv = pipe_register_select_wakeup(&pipe->select_write_task_id, request);
+      }
+      break;
+    default:
+      break;
+  }
+
+  return rv;
+}
+
 /*
  * Interface to file system ioctl.
  */
@@ -557,20 +620,29 @@ int pipe_ioctl(
   rtems_libio_t  *iop
 )
 {
-  if (cmd == FIONREAD) {
-    if (buffer == NULL)
-      return -EFAULT;
+  int rv = 0;
 
-    if (! PIPE_LOCK(pipe))
-      return -EINTR;
+  if (buffer != NULL) {
+    if (PIPE_LOCK(pipe)) {
+      switch (cmd) {
+        case RTEMS_IOCTL_SELECT:
+          rv = pipe_select(pipe, buffer);
+          break;
+        case FIONREAD:
+          /* Return length of pipe */
+          *(unsigned int *) buffer = pipe->Length;
+          break;
+      }
 
-    /* Return length of pipe */
-    *(unsigned int *)buffer = pipe->Length;
-    PIPE_UNLOCK(pipe);
-    return 0;
+      PIPE_UNLOCK(pipe);
+    } else {
+      rv = -EINTR;
+    }
+  } else {
+    rv = -EFAULT;
   }
 
-  return -EINVAL;
+  return rv;
 }
 
 /*

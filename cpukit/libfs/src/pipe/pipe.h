@@ -39,6 +39,8 @@ typedef struct pipe_control {
   rtems_id Semaphore;
   rtems_id readBarrier;   /* wait queues */
   rtems_id writeBarrier;
+  rtems_id select_read_task_id;
+  rtems_id select_write_task_id;
 #if 0
   boolean Anonymous;      /* anonymous pipe or FIFO */
 #endif
