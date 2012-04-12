@@ -154,10 +154,17 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_10      RTEMS_BLKDEV_FATAL_ERROR(8)
 #define RTEMS_BLKDEV_FATAL_BDBUF_TREE_RM       RTEMS_BLKDEV_FATAL_ERROR(9)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SWAPOUT       RTEMS_BLKDEV_FATAL_ERROR(10)
+
+/*
+ * The lock/unlock fatal errors occur in case the bdbuf is not initialized with
+ * rtems_bdbuf_init().  General system corruption like stack overflow etc. may
+ * also trigger these fatal errors.
+ */
 #define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_LOCK     RTEMS_BLKDEV_FATAL_ERROR(11)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SYNC_UNLOCK   RTEMS_BLKDEV_FATAL_ERROR(12)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_LOCK    RTEMS_BLKDEV_FATAL_ERROR(13)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_UNLOCK  RTEMS_BLKDEV_FATAL_ERROR(14)
+
 #define RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_DIS   RTEMS_BLKDEV_FATAL_ERROR(15)
 #define RTEMS_BLKDEV_FATAL_BDBUF_CACHE_WAIT_2  RTEMS_BLKDEV_FATAL_ERROR(16)
 #define RTEMS_BLKDEV_FATAL_BDBUF_PREEMPT_RST   RTEMS_BLKDEV_FATAL_ERROR(17)
@@ -1744,7 +1751,7 @@ rtems_bdbuf_get_media_block (const rtems_disk_device *dd,
   rtems_blkdev_bnum mb = rtems_bdbuf_media_block (dd, block);
   if (mb >= dd->size)
   {
-    return RTEMS_INVALID_NUMBER;
+    return RTEMS_INVALID_ID;
   }
 
   *media_block_ptr = mb + dd->start;

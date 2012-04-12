@@ -2187,6 +2187,7 @@ need to control the size of the workspace very tightly because they just
 want to get the new software to run; later they can tune the workspace size
 as needed.
 
+@findex rtems_resource_unlimited
 When the number of objects is not known ahead of time, RTEMS provides an
 auto-extending mode that can be enabled individually for each object
 type by using the macro @code{rtems_resource_unlimited}. This takes a value
@@ -2203,6 +2204,12 @@ allocation block of objects allocated. Here is an example of using
 @example
 #define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(5)
 @end example
+
+@findex rtems_resource_is_unlimited
+@findex rtems_resource_maximum_per_allocation
+Object maximum specifications can be evaluated with the
+@code{rtems_resource_is_unlimited} and
+@code{rtems_resource_maximum_per_allocation} macros.
 
 To ease the burden of developers who are porting new software RTEMS also
 provides the following macros:
