@@ -105,3 +105,11 @@ $(PROJECT_INCLUDE)/bsp/stm32f4.h: include/stm32f4.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4.h
 
+$(PROJECT_INCLUDE)/bsp/io.h: include/io.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/io.h
+
+$(PROJECT_INCLUDE)/bsp/rcc.h: include/rcc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/rcc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/rcc.h
+

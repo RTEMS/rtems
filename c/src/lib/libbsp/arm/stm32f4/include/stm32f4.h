@@ -20,48 +20,45 @@
 #define STM32F4_BASE 0x00
 
 typedef struct {
-	uint32_t reserved_00 [16];
-	uint32_t apb1enr;
-#define STM32F4_RCC_APB1ENR_DAC_EN BSP_BIT32(29)
-#define STM32F4_RCC_APB1ENR_PWR_EN BSP_BIT32(28)
-#define STM32F4_RCC_APB1ENR_CAN2_EN BSP_BIT32(26)
-#define STM32F4_RCC_APB1ENR_CAN1_EN BSP_BIT32(25)
-#define STM32F4_RCC_APB1ENR_I2C3_EN BSP_BIT32(23)
-#define STM32F4_RCC_APB1ENR_I2C2_EN BSP_BIT32(22)
-#define STM32F4_RCC_APB1ENR_I2C1_EN BSP_BIT32(21)
-#define STM32F4_RCC_APB1ENR_UART5_EN BSP_BIT32(20)
-#define STM32F4_RCC_APB1ENR_UART4_EN BSP_BIT32(19)
-#define STM32F4_RCC_APB1ENR_USART3_EN BSP_BIT32(18)
-#define STM32F4_RCC_APB1ENR_USART2_EN BSP_BIT32(17)
-#define STM32F4_RCC_APB1ENR_SPI3_EN BSP_BIT32(15)
-#define STM32F4_RCC_APB1ENR_SPI2_EN BSP_BIT32(14)
-#define STM32F4_RCC_APB1ENR_WWDG_EN BSP_BIT32(11)
-#define STM32F4_RCC_APB1ENR_TIM14_EN BSP_BIT32(8)
-#define STM32F4_RCC_APB1ENR_TIM13_EN BSP_BIT32(7)
-#define STM32F4_RCC_APB1ENR_TIM12_EN BSP_BIT32(6)
-#define STM32F4_RCC_APB1ENR_TIM7_EN BSP_BIT32(5)
-#define STM32F4_RCC_APB1ENR_TIM6_EN BSP_BIT32(4)
-#define STM32F4_RCC_APB1ENR_TIM5_EN BSP_BIT32(3)
-#define STM32F4_RCC_APB1ENR_TIM4_EN BSP_BIT32(2)
-#define STM32F4_RCC_APB1ENR_TIM3_EN BSP_BIT32(1)
-#define STM32F4_RCC_APB1ENR_TIM2_EN BSP_BIT32(0)
-	uint32_t apb2enr;
-#define STM32F4_RCC_APB2ENR_TIM11 BSP_BIT32(18)
-#define STM32F4_RCC_APB2ENR_TIM10_EN BSP_BIT32(17)
-#define STM32F4_RCC_APB2ENR_TIM9_EN BSP_BIT32(16)
-#define STM32F4_RCC_APB2ENR_SYSCFG_EN BSP_BIT32(14)
-#define STM32F4_RCC_APB2ENR_SPI1_EN BSP_BIT32(12)
-#define STM32F4_RCC_APB2ENR_SDIO_EN BSP_BIT32(11)
-#define STM32F4_RCC_APB2ENR_ADC3_EN BSP_BIT32(10)
-#define STM32F4_RCC_APB2ENR_ADC2_EN BSP_BIT32(9)
-#define STM32F4_RCC_APB2ENR_ADC1_EN BSP_BIT32(8)
-#define STM32F4_RCC_APB2ENR_USART6_EN BSP_BIT32(5)
-#define STM32F4_RCC_APB2ENR_USART1_EN BSP_BIT32(4)
-#define STM32F4_RCC_APB2ENR_TIM8_EN BSP_BIT32(1)
-#define STM32F4_RCC_APB2ENR_TIM1_EN BSP_BIT32(0)
+	uint32_t moder;
+	uint32_t otyper;
+	uint32_t ospeedr;
+	uint32_t pupdr;
+	uint32_t idr;
+	uint32_t odr;
+	uint32_t bsrr;
+	uint32_t lckr;
+	uint32_t afr [2];
+	uint32_t reserved_28 [246];
+} stm32f4_gpio;
+
+#define STM32F4_GPIO(i) ((volatile stm32f4_gpio *) (STM32F4_BASE + 0x40020000) + (i))
+
+typedef struct {
+	uint32_t cr;
+	uint32_t pllcfgr;
+	uint32_t cfgr;
+	uint32_t cir;
+	uint32_t ahbrstr [3];
+	uint32_t reserved_1c;
+	uint32_t apbrstr [2];
+	uint32_t reserved_28 [2];
+	uint32_t ahbenr [3];
+	uint32_t reserved_3c;
+	uint32_t apbenr [2];
+	uint32_t reserved_48 [2];
+	uint32_t ahblpenr [3];
+	uint32_t reserved_5c;
+	uint32_t apblpenr [2];
+	uint32_t reserved_68 [2];
+	uint32_t bdcr;
+	uint32_t csr;
+	uint32_t reserved_78 [2];
+	uint32_t sscgr;
+	uint32_t plli2scfgr;
 } stm32f4_rcc;
 
-#define STM32F4_RCC (*(volatile stm32f4_rcc *) (STM32F4_BASE + 0x40023800))
+#define STM32F4_RCC ((volatile stm32f4_rcc *) (STM32F4_BASE + 0x40023800))
 
 typedef struct {
 	uint32_t sr;
@@ -138,12 +135,12 @@ typedef struct {
 #define STM32F4_USART_GTPR_PSC_SET(reg, val) BSP_FLD32SET(reg, val, 0, 7)
 } stm32f4_usart;
 
-#define STM32F4_USART_1 (*(volatile stm32f4_usart *) (STM32F4_BASE + 0x40011000))
-#define STM32F4_USART_2 (*(volatile stm32f4_usart *) (STM32F4_BASE + 0x40004400))
-#define STM32F4_USART_3 (*(volatile stm32f4_usart *) (STM32F4_BASE + 0x40004800))
-#define STM32F4_USART_4 (*(volatile stm32f4_usart *) (STM32F4_BASE + 0x40004c00))
-#define STM32F4_USART_5 (*(volatile stm32f4_usart *) (STM32F4_BASE + 0x40005000))
-#define STM32F4_USART_6 (*(volatile stm32f4_usart *) (STM32F4_BASE + 0x40011400))
+#define STM32F4_USART_1 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40011000))
+#define STM32F4_USART_2 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40004400))
+#define STM32F4_USART_3 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40004800))
+#define STM32F4_USART_4 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40004c00))
+#define STM32F4_USART_5 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40005000))
+#define STM32F4_USART_6 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40011400))
 
 typedef struct {
 	uint32_t reserved_00 [268439808];
@@ -158,7 +155,9 @@ typedef struct {
 	stm32f4_usart usart_1;
 	uint32_t reserved_4001101c [249];
 	stm32f4_usart usart_6;
-	uint32_t reserved_4001141c [18681];
+	uint32_t reserved_4001141c [15097];
+	stm32f4_gpio gpio [9];
+	uint32_t reserved_40022400 [1280];
 	stm32f4_rcc rcc;
 } stm32f4;
 
