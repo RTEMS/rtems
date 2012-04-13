@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
   void                          *starting_address,
   size_t                         number_nodes,
   size_t                         node_size,
-  rtems_rbtree_unique            is_unique
+  bool                           is_unique
 )
 {
   _RBTree_Initialize( the_rbtree, compare_function, starting_address,
@@ -55,7 +55,7 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
   rtems_rbtree_control          *the_rbtree,
   rtems_rbtree_compare_function  compare_function,
-  rtems_rbtree_unique            is_unique
+  bool                           is_unique
 )
 {
   _RBTree_Initialize_empty( the_rbtree, compare_function, is_unique );
@@ -423,7 +423,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(
 
 /** @brief Determines whether the tree is unique
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_unique rtems_rbtree_is_unique(
+RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_unique(
   const rtems_rbtree_control *the_rbtree
 )
 {
