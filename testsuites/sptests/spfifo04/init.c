@@ -52,11 +52,6 @@ rtems_task Init(
   rtems_test_assert( offset == -1 );
   rtems_test_assert( errno == ESPIPE );
 
-  puts( "Init - ioctl: FIONBIO -- Expected EFAULT" );
-  status = ioctl( fd, FIONBIO, NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
-
   puts( "Init - ioctl: FIONBIO -- OK" );
   status = ioctl( fd, FIONBIO, &flag );
   rtems_test_assert( status == 0 );
@@ -67,14 +62,9 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   puts( "Init - ioctl: Dummy Command -- Expected EINVAL" );
-  status = ioctl( fd, -1, NULL );
+  status = ioctl( fd, -1 );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
-
-  puts( "Init - ioctl: FIONREAD -- Expected EFAULT" );
-  status = ioctl( fd, FIONREAD, NULL );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == EFAULT );
 
   puts( "Init - ioctl: FIONREAD -- OK" );
   status = ioctl( fd, FIONREAD, &pipe_length );

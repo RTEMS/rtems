@@ -622,24 +622,23 @@ int pipe_ioctl(
 {
   int rv = 0;
 
-  if (buffer != NULL) {
-    if (PIPE_LOCK(pipe)) {
-      switch (cmd) {
-        case RTEMS_IOCTL_SELECT:
-          rv = pipe_select(pipe, buffer);
-          break;
-        case FIONREAD:
-          /* Return length of pipe */
-          *(unsigned int *) buffer = pipe->Length;
-          break;
-      }
-
-      PIPE_UNLOCK(pipe);
-    } else {
-      rv = -EINTR;
+  if (PIPE_LOCK(pipe)) {
+    switch (cmd) {
+      case RTEMS_IOCTL_SELECT:
+        rv = pipe_select(pipe, buffer);
+        break;
+      case FIONREAD:
+        /* Return length of pipe */
+        *(unsigned int *) buffer = pipe->Length;
+        break;
+      default:
+        rv = -EINVAL;
+        break;
     }
+
+    PIPE_UNLOCK(pipe);
   } else {
-    rv = -EFAULT;
+    rv = -EINTR;
   }
 
   return rv;
