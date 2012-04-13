@@ -102,8 +102,7 @@ rtems_task Init(
   puts( "\n\n*** TEST OF RTEMS RBTREE API ***" );
 
   puts( "Init - Initialize rbtree empty" );
-  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function,
-                                 RTEMS_RBTREE_UNIQUE );
+  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function, true );
 
   if ( !rtems_rbtree_is_unique( &rbtree1 ) )
     puts( "INIT - FAILED IS UNIQUE CHECK" );
@@ -542,7 +541,7 @@ rtems_task Init(
   }
   rtems_rbtree_initialize( &rbtree1, &test_compare_function,
                            &node_array[0].Node, 100,
-                           sizeof(test_node), RTEMS_RBTREE_UNIQUE );
+                           sizeof(test_node), true );
 
   puts( "INIT - Removing 100 nodes" );
 
@@ -570,8 +569,7 @@ rtems_task Init(
 
   /* Initialize the tree for duplicate keys */
   puts( "Init - Initialize duplicate rbtree empty" );
-  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function,
-                                 RTEMS_RBTREE_DUPLICATE );
+  rtems_rbtree_initialize_empty( &rbtree1, &test_compare_function, false );
 
   if ( rtems_rbtree_is_unique( &rbtree1 ) )
     puts( "INIT - FAILED IS UNIQUE CHECK" );

@@ -52,20 +52,6 @@ typedef RBTree_Control rtems_rbtree_control;
 typedef RBTree_Compare_function rtems_rbtree_compare_function;
 
 /**
- * @typedef rtems_rbtree_unique
- *
- * This enum type defines whether the tree can contain nodes with
- * duplicate keys.
- */
-typedef enum {
-  /** The tree is not unique, insertion of duplicate keys is performed
-   *  in a FIFO manner. */
-  RTEMS_RBTREE_DUPLICATE = false,
-  /** The tree is unique, insertion of duplicate key is refused. */
-  RTEMS_RBTREE_UNIQUE    = true
-} rtems_rbtree_unique;
-
-/**
  *  @brief RBTree initializer for an empty rbtree with designator @a name.
  */
 #define RTEMS_RBTREE_INITIALIZER_EMPTY(name) \
