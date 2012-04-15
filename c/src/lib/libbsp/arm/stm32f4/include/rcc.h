@@ -88,11 +88,11 @@ typedef enum {
   STM32F4_RCC_TIM1 = STM32F4_RCC_INDEX(5, 0),
 } stm32f4_rcc_index;
 
-void stm32f4_rcc_reset(stm32f4_rcc_index index, bool set);
+void stm32f4_rcc_reset(stm32f4_rcc_index index);
+
+void stm32f4_rcc_set_reset(stm32f4_rcc_index index, bool set);
 
 void stm32f4_rcc_set_clock(stm32f4_rcc_index index, bool set);
-
-void stm32f4_rcc_set_gpio_clock(int pin, bool set);
 
 void stm32f4_rcc_set_low_power_clock(stm32f4_rcc_index index, bool set);
 
