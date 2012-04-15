@@ -6,7 +6,7 @@
 @c  $Id$
 @c
 
-@node Directive Status Codes, Example Application, Chains Prepend a Node, Top
+@node Directive Status Codes, Example Application, Constant Bandwidth Server Scheduler API CBS_GET_APPROVED_BUDGET - Get scheduler approved execution time, Top
 @chapter Directive Status Codes
 @table @b
 @item @code{@value{RPREFIX}SUCCESSFUL} - successful completion
