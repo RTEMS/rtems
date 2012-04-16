@@ -25,13 +25,13 @@
 #include <rtems.h>
 #include <bsp.h>
 
-no_cpu_isr_entry set_vector(                    /* returns old vector */
+rtems_isr_entry set_vector(                     /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 )
 {
-  no_cpu_isr_entry previous_isr;
+  rtems_isr_entry previous_isr;
 
   if ( type )
     rtems_interrupt_catch( handler, vector, (rtems_isr_entry *) &previous_isr );
