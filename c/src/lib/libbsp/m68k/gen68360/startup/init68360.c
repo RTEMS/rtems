@@ -45,7 +45,7 @@ void M360ExecuteRISC(uint16_t         command)
 void _Init68360 (void)
 {
 	int i;
-	m68k_isr_entry *vbr;
+	rtems_isr_entry *vbr;
 	unsigned long ramSize;
 	volatile unsigned long *RamBase_p;
 

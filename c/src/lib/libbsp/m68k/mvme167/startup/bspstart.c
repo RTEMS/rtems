@@ -26,7 +26,7 @@
 rtems_extensions_table user_extension_table;
 
 void M68KFPSPInstallExceptionHandlers (void);
-extern m68k_isr_entry  M68Kvec[];
+extern rtems_isr_entry  M68Kvec[];
 
 /*
  *  bsp_start()
@@ -57,13 +57,13 @@ extern m68k_isr_entry  M68Kvec[];
  */
 void bsp_start( void )
 {
-  m68k_isr_entry *rom_monitor_vector_table;
+  rtems_isr_entry *rom_monitor_vector_table;
   int index;
 
   /*
    *  167Bug Vectors are at 0xFFE00000
    */
-  rom_monitor_vector_table = (m68k_isr_entry *)0xFFE00000;
+  rom_monitor_vector_table = (rtems_isr_entry *)0xFFE00000;
   m68k_set_vbr( rom_monitor_vector_table );
 
   /*

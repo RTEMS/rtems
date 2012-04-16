@@ -120,7 +120,7 @@ END_CODE
    * Initialize vector table.
    */
   {
-    m68k_isr_entry *monitors_vector_table;
+    rtems_isr_entry *monitors_vector_table;
 
     m68k_get_vbr(monitors_vector_table);
 

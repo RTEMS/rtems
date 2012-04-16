@@ -64,7 +64,7 @@ extern "C" {
 
 uint32_t bsp_get_CPU_clock_speed(void);
 
-m68k_isr_entry set_vector(
+rtems_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type

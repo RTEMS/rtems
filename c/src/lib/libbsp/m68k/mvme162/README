@@ -114,7 +114,7 @@ configured for the board in use
 
 - bspstart.c was modified as follows:
 
-         monitors_vector_table = (m68k_isr *)0xFFE00000;
+         monitors_vector_table = (rtems_isr *)0xFFE00000;
 
 was made to point to the power-up location of MVME162 interrupt vector
 table.  

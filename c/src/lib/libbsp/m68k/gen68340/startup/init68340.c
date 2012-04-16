@@ -22,7 +22,7 @@ extern void _CopyDataClearBSSAndStart (void);
  */
 void _Init68340 (void)
 {
-	m68k_isr_entry *vbr;
+	rtems_isr_entry *vbr;
 	int i;
 
 	/*

@@ -27,11 +27,11 @@
  */
 void bsp_start( void )
 {
-  m68k_isr_entry       *monitors_vector_table;
+  rtems_isr_entry       *monitors_vector_table;
   int                   index;
   uint8_t               node_number;
 
-  monitors_vector_table = (m68k_isr_entry *)0;   /* 147Bug Vectors are at 0 */
+  monitors_vector_table = (rtems_isr_entry *)0;   /* 147Bug Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
 
   for ( index=2 ; index<=255 ; index++ )

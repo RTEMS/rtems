@@ -20,7 +20,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-m68k_isr_entry set_vector(                      /* returns old vector */
+rtems_isr_entry set_vector(                      /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
@@ -33,5 +33,5 @@ m68k_isr_entry set_vector(                      /* returns old vector */
   else {
     _CPU_ISR_install_raw_handler( vector, handler, (void *)&previous_isr );
   }
-  return (m68k_isr_entry) previous_isr;
+  return (rtems_isr_entry) previous_isr;
 }

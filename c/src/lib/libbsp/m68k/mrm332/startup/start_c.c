@@ -7,8 +7,8 @@
 #define __START_C__
 #include "bsp.h"
 
-m68k_isr_entry M68Kvec[256];
-m68k_isr_entry vectors[256];
+rtems_isr_entry M68Kvec[256];
+rtems_isr_entry vectors[256];
 
 void  boot_card(const char *cmdline);
 
@@ -94,7 +94,7 @@ void start_c(void) {
    * Initialize vector table.
    */
   {
-    m68k_isr_entry *monitors_vector_table;
+    rtems_isr_entry *monitors_vector_table;
 
     m68k_get_vbr(monitors_vector_table);
 
