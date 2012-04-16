@@ -37,12 +37,6 @@ extern "C" {
 /** This defines the type for a priority bit map entry. */
 typedef uint16_t Priority_bit_map_Control;
 
-/** This defines the return type for an ISR entry point. */
-typedef void lm32_isr;
-
-/** This defines the prototype for an ISR entry point. */
-typedef lm32_isr ( *lm32_isr_entry )( void );
-
 #ifdef __cplusplus
 }
 #endif
