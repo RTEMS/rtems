@@ -118,48 +118,6 @@ static uint32_t usart_get_bbr(
     | STM32F4_USART_BBR_DIV_FRACTION(div_fraction);
 }
 
-#define USART_CFG(port, idx, altfunc) \
-  { \
-    .pin = STM32F4_GPIO_PIN(port, idx), \
-    .mode = STM32F4_GPIO_MODE_AF, \
-    .otype = STM32F4_GPIO_OTYPE_PUSH_PULL, \
-    .ospeed = STM32F4_GPIO_OSPEED_2_MHZ, \
-    .pupd = STM32F4_GPIO_PULL_UP, \
-    .af = altfunc \
-  }
-
-static const stm32f4_gpio_config usart_gpio_config [] [2] = {
-  {
-    USART_CFG(0, 9, STM32F4_GPIO_AF_USART1),
-    USART_CFG(0, 10, STM32F4_GPIO_AF_USART1)
-  }, {
-    USART_CFG(0, 2, STM32F4_GPIO_AF_USART2),
-    USART_CFG(0, 3, STM32F4_GPIO_AF_USART2)
-  }, {
-    USART_CFG(3, 8, STM32F4_GPIO_AF_USART3),
-    USART_CFG(3, 9, STM32F4_GPIO_AF_USART3)
-  }, {
-    USART_CFG(0, 1, STM32F4_GPIO_AF_UART4),
-    USART_CFG(0, 2, STM32F4_GPIO_AF_UART4)
-  }, {
-    USART_CFG(2, 11, STM32F4_GPIO_AF_UART5),
-    USART_CFG(2, 12, STM32F4_GPIO_AF_UART5)
-  }, {
-    USART_CFG(2, 6, STM32F4_GPIO_AF_USART6),
-    USART_CFG(2, 7, STM32F4_GPIO_AF_USART6)
-  }
-};
-
-static void usart_set_gpio_config(const console_tbl *ct)
-{
-  const stm32f4_gpio_config *config = usart_gpio_config [ct->ulCtrlPort2];
-
-  stm32f4_rcc_set_gpio_clock(config [0].pin, true);
-  stm32f4_gpio_set_config(&config [0]);
-  stm32f4_rcc_set_gpio_clock(config [1].pin, true);
-  stm32f4_gpio_set_config(&config [1]);
-}
-
 static void usart_initialize(int minor)
 {
   const console_tbl *ct = Console_Port_Tbl [minor];
@@ -169,7 +127,6 @@ static void usart_initialize(int minor)
   stm32f4_rcc_index rcc_index = usart_get_rcc_index(ct);
 
   stm32f4_rcc_set_clock(rcc_index, true);
-  usart_set_gpio_config(ct);
 
   usart->cr1 = 0;
   usart->cr2 = 0;

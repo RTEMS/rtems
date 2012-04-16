@@ -111,6 +111,7 @@
 @include cpuuse.texi
 @include object.texi
 @include chains.texi
+@include cbs.texi
 @include dirstat.texi
 @include example.texi
 @include glossary.texi
@@ -148,6 +149,7 @@
 * CPU Usage Statistics::
 * Object Services::
 * Chains::
+* Constant Bandwidth Server Scheduler API::
 * Directive Status Codes::
 * Example Application::
 * Glossary::

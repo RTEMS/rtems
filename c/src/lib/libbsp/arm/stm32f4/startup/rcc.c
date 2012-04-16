@@ -13,7 +13,6 @@
  */
 
 #include <bsp/rcc.h>
-#include <bsp/io.h>
 
 #include <rtems.h>
 
@@ -40,7 +39,13 @@ static void rcc_set(
   rtems_interrupt_enable(level);
 }
 
-void stm32f4_rcc_reset(stm32f4_rcc_index index, bool set)
+void stm32f4_rcc_reset(stm32f4_rcc_index index)
+{
+  stm32f4_rcc_set_reset(index, true);
+  stm32f4_rcc_set_reset(index, false);
+}
+
+void stm32f4_rcc_set_reset(stm32f4_rcc_index index, bool set)
 {
   volatile stm32f4_rcc *rcc = STM32F4_RCC;
 
@@ -52,14 +57,6 @@ void stm32f4_rcc_set_clock(stm32f4_rcc_index index, bool set)
   volatile stm32f4_rcc *rcc = STM32F4_RCC;
 
   rcc_set(index, set, &rcc->ahbenr [0]);
-}
-
-void stm32f4_rcc_set_gpio_clock(int pin, bool set)
-{
-  int port = STM32F4_GPIO_PORT_OF_PIN(pin);
-  stm32f4_rcc_index index = STM32F4_RCC_GPIOA + port;
-
-  stm32f4_rcc_set_clock(index, set);
 }
 
 void stm32f4_rcc_set_low_power_clock(stm32f4_rcc_index index, bool set)

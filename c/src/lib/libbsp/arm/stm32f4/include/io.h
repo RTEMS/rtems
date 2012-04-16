@@ -92,20 +92,79 @@ typedef enum {
 
 #define STM32F4_GPIO_INDEX_OF_PIN(pin) ((pin) & 0xf)
 
-typedef struct {
-  uint32_t pin : 8;
-  uint32_t mode : 2;
-  uint32_t otype : 1;
-  uint32_t ospeed : 2;
-  uint32_t pupd : 2;
-  uint32_t af : 4;
+typedef union {
+  struct {
+    uint32_t pin_first : 8;
+    uint32_t pin_last : 8;
+    uint32_t mode : 2;
+    uint32_t otype : 1;
+    uint32_t ospeed : 2;
+    uint32_t pupd : 2;
+    uint32_t output : 1;
+    uint32_t af : 4;
+    uint32_t reserved : 4;
+  } fields;
+
+  uint32_t value;
 } stm32f4_gpio_config;
 
+extern const stm32f4_gpio_config stm32f4_start_config_gpio [];
+
+void stm32f4_gpio_set_clock(int pin, bool set);
+
 void stm32f4_gpio_set_config(const stm32f4_gpio_config *config);
+
+#define STM32F4_GPIO_CONFIG_TERMINAL \
+  { { 0xff, 0xff, 0x3, 0x1, 0x3, 0x3, 0x1, 0xf, 0xf } }
+
+/**
+ * @brief Sets the GPIO configuration of an array terminated by
+ * STM32F4_GPIO_CONFIG_TERMINAL.
+ */
+void stm32f4_gpio_set_config_array(const stm32f4_gpio_config *configs);
 
 void stm32f4_gpio_set_output(int pin, bool set);
 
 bool stm32f4_gpio_get_input(int pin);
+
+#define STM32F4_PIN_USART(port, idx, altfunc) \
+  { \
+    { \
+      .pin_first = STM32F4_GPIO_PIN(port, idx), \
+      .pin_last = STM32F4_GPIO_PIN(port, idx), \
+      .mode = STM32F4_GPIO_MODE_AF, \
+      .otype = STM32F4_GPIO_OTYPE_PUSH_PULL, \
+      .ospeed = STM32F4_GPIO_OSPEED_2_MHZ, \
+      .pupd = STM32F4_GPIO_PULL_UP, \
+      .af = altfunc \
+    } \
+  }
+
+#define STM32F4_PIN_USART1_TX_PA9 STM32F4_PIN_USART(0, 9, STM32F4_GPIO_AF_USART1)
+#define STM32F4_PIN_USART1_TX_PB6 STM32F4_PIN_USART(1, 6, STM32F4_GPIO_AF_USART1)
+#define STM32F4_PIN_USART1_RX_PA10 STM32F4_PIN_USART(0, 10, STM32F4_GPIO_AF_USART1)
+#define STM32F4_PIN_USART1_RX_PB7 STM32F4_PIN_USART(1, 7, STM32F4_GPIO_AF_USART1)
+
+#define STM32F4_PIN_USART2_TX_PA2 STM32F4_PIN_USART(0, 2, STM32F4_GPIO_AF_USART2)
+#define STM32F4_PIN_USART2_TX_PD5 STM32F4_PIN_USART(3, 5, STM32F4_GPIO_AF_USART2)
+#define STM32F4_PIN_USART2_RX_PA3 STM32F4_PIN_USART(0, 3, STM32F4_GPIO_AF_USART2)
+#define STM32F4_PIN_USART2_RX_PD6 STM32F4_PIN_USART(3, 6, STM32F4_GPIO_AF_USART2)
+
+#define STM32F4_PIN_USART3_TX_PC10 STM32F4_PIN_USART(2, 10, STM32F4_GPIO_AF_USART3)
+#define STM32F4_PIN_USART3_TX_PD8 STM32F4_PIN_USART(3, 8, STM32F4_GPIO_AF_USART3)
+#define STM32F4_PIN_USART3_RX_PC11 STM32F4_PIN_USART(2, 11, STM32F4_GPIO_AF_USART3)
+#define STM32F4_PIN_USART3_RX_PD9 STM32F4_PIN_USART(3, 9, STM32F4_GPIO_AF_USART3)
+
+#define STM32F4_PIN_UART4_TX_PA0 STM32F4_PIN_USART(0, 0, STM32F4_GPIO_AF_UART4)
+#define STM32F4_PIN_UART4_TX_PC10 STM32F4_PIN_USART(2, 10, STM32F4_GPIO_AF_UART4)
+#define STM32F4_PIN_UART4_RX_PA1 STM32F4_PIN_USART(0, 1, STM32F4_GPIO_AF_UART4)
+#define STM32F4_PIN_UART4_RX_PC11 STM32F4_PIN_USART(2, 11, STM32F4_GPIO_AF_UART4)
+
+#define STM32F4_PIN_UART5_TX_PC12 STM32F4_PIN_USART(2, 12, STM32F4_GPIO_AF_UART5)
+#define STM32F4_PIN_UART5_RX_PD2 STM32F4_PIN_USART(3, 2, STM32F4_GPIO_AF_UART5)
+
+#define STM32F4_PIN_USART6_TX_PC6 STM32F4_PIN_USART(2, 6, STM32F4_GPIO_AF_USART6)
+#define STM32F4_PIN_USART6_RX_PC7 STM32F4_PIN_USART(2, 7, STM32F4_GPIO_AF_USART6)
 
 #ifdef __cplusplus
 }

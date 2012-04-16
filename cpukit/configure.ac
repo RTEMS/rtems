@@ -384,6 +384,7 @@ librpc/Makefile
 libmisc/Makefile
 libi2c/Makefile
 libmd/Makefile
+libqos/Makefile
 zlib/Makefile
 ftpd/Makefile
 telnetd/Makefile

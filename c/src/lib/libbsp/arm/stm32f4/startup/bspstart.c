@@ -13,13 +13,15 @@
  */
 
 #include <bsp.h>
+#include <bsp/io.h>
+#include <bsp/irq.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
-#include <bsp/irq.h>
-#include <bsp/linker-symbols.h>
 
 void bsp_start(void)
 {
+  stm32f4_gpio_set_config_array(&stm32f4_start_config_gpio [0]);
+
   if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
     _CPU_Fatal_halt(0xe);
   }

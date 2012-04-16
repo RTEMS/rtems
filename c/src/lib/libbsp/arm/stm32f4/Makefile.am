@@ -79,6 +79,7 @@ libbsp_a_SOURCES += startup/bspstarthook.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/io.c
 libbsp_a_SOURCES += startup/rcc.c
+libbsp_a_SOURCES += startup/start-config-io.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c

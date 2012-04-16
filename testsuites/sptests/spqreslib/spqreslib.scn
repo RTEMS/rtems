@@ -1,0 +1,30 @@
+*** TEST QRES LIBRARY ***
+Init: Initializing the qres library
+Init: Create server and Destroy server
+Init: Attach thread
+Init: Detach thread
+Init: Set params and Get params
+Init: Get server id
+Init: Get approved budget
+Init: Get current budget
+Init: Get execution time
+Init: Cleaning up QRES
+Init: Initializing the QRES
+Init: Starting periodic task
+Periodic task: Create server and Attach thread
+Periodic task: ID and Get parameters
+Periodic task: Detach thread and Destroy server
+Periodic task: Current budget and Execution time
+Periodic task: Set parameters
+Periodic task: Approved budget
+Periodic task: Starting periodic behavior
+P1-S ticks:1
+P1-F ticks:11
+P1-S ticks:31
+P1-F ticks:41
+P1-S ticks:61
+P1-F ticks:71
+P1-S ticks:91
+P1-F ticks:101
+P1-S ticks:121
+*** END OF TEST QRES LIBRARY ***

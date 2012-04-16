@@ -27,7 +27,7 @@ COMMON_FILES += \
     $(top_builddir)/user/task.texi $(top_builddir)/user/timer.texi \
     $(top_builddir)/user/userext.texi $(top_builddir)/user/stackchk.texi \
     $(top_builddir)/user/cpuuse.texi $(top_srcdir)/common/cpright.texi \
-    $(top_builddir)/user/object.texi
+    $(top_builddir)/user/object.texi $(top_builddir)/user/cbs.texi
 
 FILES = example.texi
 
