@@ -34,7 +34,7 @@ libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c startup/bspreset.c
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     startup/init5282.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c ../../m68k/shared/setvec.c \
+    ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 # clock
 libbsp_a_SOURCES += clock/clock.c ../../../clockdrv_shell.h

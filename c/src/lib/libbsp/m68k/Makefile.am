@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 ## Descend into the @RTEMS_BSP_FAMILY@ directory
 SUBDIRS = @RTEMS_BSP_FAMILY@
 
-EXTRA_DIST = shared/m68kpretaskinghook.c shared/setvec.c shared/start.S
+EXTRA_DIST = shared/m68kpretaskinghook.c ../shared/setvec.c shared/start.S
 
 EXTRA_DIST += shared/bspspuriousinit.c shared/m68000spurious.c
 

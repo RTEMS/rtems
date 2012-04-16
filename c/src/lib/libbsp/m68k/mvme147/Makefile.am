@@ -34,7 +34,7 @@ libbsp_a_SOURCES += startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppretaskinghook.c ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c ../../shared/sbrk.c \
-    ../../m68k/shared/setvec.c ../../shared/gnatinstallhandler.c
+    ../../shared/setvec.c ../../shared/gnatinstallhandler.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console

@@ -35,7 +35,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += startup/start_c.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c startup/bsppredriverhook.c \
     ../../shared/bspclean.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../m68k/shared/setvec.c ../../shared/bsppretaskinghook.c \
+    ../../shared/setvec.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c \
     startup/except_vect_332_ROM.S
 # clock
