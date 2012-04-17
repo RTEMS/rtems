@@ -14,7 +14,6 @@ include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 include_HEADERS += include/rasta.h
 include_HEADERS += include/cchip.h
-include_HEADERS += ../../sparc/shared/include/ambapp.h
 include_HEADERS += ../../sparc/shared/include/grspw.h
 include_HEADERS += ../../sparc/shared/include/grspw_pci.h
 include_HEADERS += ../../sparc/shared/include/grspw_rasta.h
@@ -79,8 +78,20 @@ libbsp_a_SOURCES += \
     ../../shared/src/irq-legacy.c \
     ../../shared/src/irq-server.c \
     ../../shared/src/irq-shell.c
-# AMBA PnP Scanning
+
+# AMBA bus
+include_HEADERS += ../../sparc/shared/include/ambapp.h
+include_HEADERS += ../../sparc/shared/include/ambapp_ids.h
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_alloc.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_count.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_depth.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_find_by_idx.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_freq.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_parent.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_old.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_names.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
 # PCI
 libbsp_a_SOURCES += pci/pci.c ../../sparc/shared/pci/pcifinddevice.c
 # RASTA Kit
