@@ -47,12 +47,6 @@ extern "C" {
     (_trap) <= 0x1F )
 
 typedef struct {
-  volatile unsigned int data;
-  volatile unsigned int status;
-  volatile unsigned int ctrl;
-} LEON3_UART_Regs_Map;
-
-typedef struct {
   volatile unsigned int value;
   volatile unsigned int reload;
   volatile unsigned int conf;
@@ -147,7 +141,6 @@ typedef struct {
 
 extern volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;  /* LEON3 Interrupt Controller */
 extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs; /* LEON3 GP Timer */
-extern volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
 /* LEON3 CPU Index of boot CPU */
 extern int LEON3_Cpu_Index;

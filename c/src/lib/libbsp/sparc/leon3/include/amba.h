@@ -25,7 +25,6 @@
 #define LEON3_AHB_MASTERS 64
 #define LEON3_AHB_SLAVES 64
 #define LEON3_APB_SLAVES 16
-#define LEON3_APBUARTS 8
 
 #include <ambapp.h>
 

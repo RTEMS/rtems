@@ -41,6 +41,9 @@ extern "C" {
 void *bsp_idle_thread( uintptr_t ignored );
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
+/* Maximum supported APBUARTs by BSP */
+#define BSP_NUMBER_OF_TERMIOS_PORTS 8
+
 /*
  * Network driver configuration
  */

@@ -62,6 +62,12 @@ extern int apbuart_inbyte_nonblocking(ambapp_apb_uart *regs);
 
 /* body is in debugputs.c */
 
+struct apbuart_priv {
+  ambapp_apb_uart *regs;
+  unsigned int freq_hz;
+};
+static struct apbuart_priv apbuarts[BSP_NUMBER_OF_TERMIOS_PORTS];
+static int uarts = 0;
 
 /*
  *  Console Termios Support Entry Points
@@ -78,7 +84,7 @@ ssize_t console_write_support (int minor, const char *buf, size_t len)
     port = minor - 1;
 
   while (nwrite < len) {
-    apbuart_outbyte_polled((ambapp_apb_uart*)LEON3_Console_Uart[port], *buf++);
+    apbuart_outbyte_polled(apbuarts[port].regs, *buf++);
     nwrite++;
   }
   return nwrite;
@@ -93,15 +99,44 @@ int console_pollRead(int minor)
   else
     port = minor - 1;
 
-  return apbuart_inbyte_nonblocking((ambapp_apb_uart*)LEON3_Console_Uart[port]);
+  return apbuart_inbyte_nonblocking(apbuarts[port].regs);
+}
+
+/* AMBA PP find routine. Extract AMBA PnP information into data structure. */
+int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
+{
+  struct ambapp_apb_info *apb = (struct ambapp_apb_info *)dev->devinfo;
+
+  /* Extract needed information of one APBUART */
+  apbuarts[uarts].regs = (ambapp_apb_uart *)apb->start;
+  /* Get APBUART core frequency, it is assumed that it is the same
+   * as Bus frequency where the UART is situated
+   */
+  apbuarts[uarts].freq_hz = ambapp_freq_get(&ambapp_plb, dev);
+  uarts++;
+
+  if (uarts >= BSP_NUMBER_OF_TERMIOS_PORTS)
+    return 1; /* Satisfied number of UARTs, stop search */
+  else
+    return 0; /* Continue searching for more UARTs */
+}
+
+/* Find all UARTs */
+int console_scan_uarts(void)
+{
+  memset(apbuarts, 0, sizeof(apbuarts));
+
+  /* Find APBUART cores */
+  ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS), VENDOR_GAISLER,
+                  GAISLER_APBUART, find_matching_apbuart, NULL);
+
+  return uarts;
 }
 
 /*
  *  Console Device Driver Entry Points
  *
  */
-int uarts = 0;
-volatile LEON3_UART_Regs_Map *LEON3_Console_Uart[LEON3_APBUARTS];
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
@@ -114,6 +149,9 @@ rtems_device_driver console_initialize(
   char console_name[16];
 
   rtems_termios_initialize();
+
+  /* Find UARTs */
+  console_scan_uarts();
 
   /* Update syscon_uart_index to index used as /dev/console
    * Let user select System console by setting syscon_uart_index. If the
@@ -190,9 +228,8 @@ rtems_device_driver console_open(
     port = minor - 1;
 
   /* Initialize UART on opening */
-  LEON3_Console_Uart[port]->ctrl |= LEON_REG_UART_CTRL_RE |
-                                     LEON_REG_UART_CTRL_TE;
-  LEON3_Console_Uart[port]->status = 0;
+  apbuarts[port]->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+  apbuarts[port]->regs->status = 0;
 
   return RTEMS_SUCCESSFUL;
 }

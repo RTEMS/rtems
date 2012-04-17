@@ -39,8 +39,6 @@ volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
  *  amba_ahb_masters, amba_ahb_slaves and amba.
  */
 
-extern int scan_uarts(void);
-
 void amba_initialize(void)
 {
   int icsel;
@@ -95,7 +93,4 @@ void amba_initialize(void)
     ambapp_freq_init(&ambapp_plb, adev,
                      (LEON3_Timer_Regs->scaler_reload + 1) * 1000000);
   }
-
-  /* find UARTS */
-  scan_uarts();
 }
