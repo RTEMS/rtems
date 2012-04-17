@@ -24,7 +24,7 @@ void apbuartpci_interrupt_handler(int irq, void *arg);
 
 #include "apbuart.c"
 
-int apbuart_pci_register(amba_confarea_type *bus)
+int apbuart_pci_register(struct ambapp_bus *bus)
 {
 	/* Setup configuration */
 

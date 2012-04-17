@@ -23,7 +23,7 @@ extern "C" {
  * bus = pointer to AMBA bus description used to search for OC_CAN contrller(s).
  */
 
-int occan_pci_register(amba_confarea_type *bus);
+int occan_pci_register(struct ambapp_bus *bus);
 
 /* This function must be called on OC_CAN interrupt. Called from the
  * PCI interrupt handler. irq = AMBA IRQ assigned to the OC_CAN device,

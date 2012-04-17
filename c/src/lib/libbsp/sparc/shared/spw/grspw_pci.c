@@ -79,7 +79,7 @@ int grspwpci_interrupt_handler(int irq, void *arg);
  */
 
 int grspw_pci_register(
- amba_confarea_type *bus,
+ struct ambapp_bus *bus,
  unsigned int memarea,
  unsigned int hw_address
  )

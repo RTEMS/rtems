@@ -20,14 +20,14 @@ extern "C" {
 #endif
 
 /* Register GRSPW Driver
- * bus = &amba_conf for LEON3
+ * bus = &ambapp_plb for LEON3
  *
  * Memory setup:
  * ram_base = 128k aligned pointer to memory (as the CPU sees it)
  */
 
 int grspw_rasta_register(
- amba_confarea_type *bus,
+ struct ambapp_bus *bus,
  unsigned int ram_base
  );
 

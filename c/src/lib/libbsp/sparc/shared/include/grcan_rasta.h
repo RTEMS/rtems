@@ -13,7 +13,7 @@ extern "C" {
  * rambase is address of the first GRCAN core has it's TX buffer, followed by
  * it's RX buffer
  */
-int grcan_rasta_ram_register(amba_confarea_type *abus, int rambase);
+int grcan_rasta_ram_register(struct ambapp_bus *abus, int rambase);
 
 extern void (*grcan_rasta_int_reg)(void *handler, int irq, void *arg);
 

@@ -285,7 +285,7 @@ static gr_i2cmst_desc_t gr_i2cmst_desc = {
 };
 
 /* Scans for I2CMST core and initalizes i2c library */
-rtems_status_code leon_register_i2c(amba_confarea_type *abus)
+rtems_status_code leon_register_i2c(struct ambapp_bus *abus)
 {
 #if defined(DEBUG)
   printk("leon_register_i2c called...");
@@ -293,11 +293,11 @@ rtems_status_code leon_register_i2c(amba_confarea_type *abus)
 
   int rc;
   int device_found = 0;
-  amba_apb_device apbi2cmst;
+  struct ambapp_apb_info apbi2cmst;
 
   /* Scan AMBA bus for I2CMST core */
-  device_found = amba_find_apbslv(abus, VENDOR_GAISLER, GAISLER_I2CMST,
-				  &apbi2cmst);
+  device_found = ambapp_find_apbslv(abus, VENDOR_GAISLER, GAISLER_I2CMST,
+				    &apbi2cmst);
 
   if (device_found == 1) {
 
@@ -317,11 +317,11 @@ rtems_status_code leon_register_i2c(amba_confarea_type *abus)
 #if defined(LEON3)
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
-	  amba_apb_device gptimer;
+	  struct ambapp_apb_info gptimer;
 	  LEON3_Timer_Regs_Map *tregs;
 
-	  if (amba_find_apbslv(abus,VENDOR_GAISLER,
-			       GAISLER_GPTIMER,&gptimer) == 1 ) {
+	  if (ambapp_find_apbslv(abus, VENDOR_GAISLER,
+				 GAISLER_GPTIMER, &gptimer) == 1 ) {
 	    tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
 	    gr_i2cmst_desc.prv.sysfreq = (tregs->scaler_reload+1)*1000;
 	  } else {

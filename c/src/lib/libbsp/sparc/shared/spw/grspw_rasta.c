@@ -88,7 +88,7 @@ unsigned int grspw_rasta_memarea_address;
  */
 
 int grspw_rasta_register(
- amba_confarea_type *bus,
+ struct ambapp_bus *bus,
  unsigned int ram_base
  )
 {

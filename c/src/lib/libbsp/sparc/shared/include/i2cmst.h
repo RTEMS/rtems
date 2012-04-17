@@ -68,7 +68,7 @@ typedef struct gr_i2cmst_desc {
 } gr_i2cmst_desc_t;
 
 /* Scans for I2CMST core and initalizes i2c library */
-rtems_status_code leon_register_i2c(amba_confarea_type *abus);
+rtems_status_code leon_register_i2c(struct ambapp_bus *abus);
 
 #ifdef __cplusplus
 }

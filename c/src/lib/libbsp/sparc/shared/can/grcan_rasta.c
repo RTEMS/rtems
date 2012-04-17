@@ -77,7 +77,7 @@ unsigned int grcan_rasta_rambase;
 #include "grcan.c"
 
 
-int grcan_rasta_ram_register(amba_confarea_type *abus, int rambase)
+int grcan_rasta_ram_register(struct ambapp_bus *abus, int rambase)
 {
   grcan_rasta_rambase = rambase;
 

@@ -212,7 +212,7 @@ struct grcan_priv {
 
 static int grcan_core_cnt;
 struct grcan_priv *grcans;
-static amba_confarea_type *amba_bus;
+static struct ambapp_bus *amba_bus;
 struct grcan_device_info *grcan_cores;
 static int grcan_core_cnt;
 
@@ -1050,7 +1050,7 @@ static rtems_device_driver grcan_initialize(
 {
   int minor;
   struct grcan_priv *pDev;
-  amba_apb_device dev;
+  struct ambapp_apb_info dev;
   rtems_status_code status;
   char fs_name[20];
   unsigned int sys_freq_hz;
@@ -1062,10 +1062,12 @@ static rtems_device_driver grcan_initialize(
 
   /* find GRCAN cores */
   if ( !grcan_cores ) {
-    grcan_core_cnt = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,deviceid);
+    grcan_core_cnt = ambapp_get_number_apbslv_devices(amba_bus, VENDOR_GAISLER,
+                                                      deviceid);
     if ( grcan_core_cnt < 1 ){
       deviceid = GAISLER_GRCAN;
-      grcan_core_cnt = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,deviceid);
+      grcan_core_cnt = ambapp_get_number_apbslv_devices(amba_bus, VENDOR_GAISLER,
+                                                        deviceid);
       if ( grcan_core_cnt < 1 ) {
         DBG("GRCAN: Using AMBA Plug&Play, found %d cores\n",grcan_core_cnt);
         return RTEMS_UNSATISFIED;
@@ -1094,10 +1096,10 @@ static rtems_device_driver grcan_initialize(
 #if defined(LEON3)
   /* LEON3: find timer address via AMBA Plug&Play info */
   {
-    amba_apb_device gptimer;
+    struct ambapp_apb_info gptimer;
     LEON3_Timer_Regs_Map *tregs;
 
-    if (amba_find_apbslv (&amba_conf, VENDOR_GAISLER, GAISLER_GPTIMER, &gptimer)
+    if (ambapp_find_apbslv (&ambapp_plb, VENDOR_GAISLER, GAISLER_GPTIMER, &gptimer)
         == 1) {
       tregs = (LEON3_Timer_Regs_Map *) gptimer.start;
       sys_freq_hz = (tregs->scaler_reload + 1) * 1000 * 1000;
@@ -1132,7 +1134,7 @@ static rtems_device_driver grcan_initialize(
 
     /* Find core address & IRQ */
     if ( !grcan_cores ) {
-      amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,deviceid,&dev,minor);
+      ambapp_find_apbslv_next(amba_bus, VENDOR_GAISLER, deviceid, &dev, minor);
       pDev->irq = dev.irq;
       pDev->regs = (struct grcan_regs *)dev.start;
     }else{
@@ -1799,7 +1801,7 @@ int GRCAN_PREFIX(_register_abs)(struct grcan_device_info *devices, int dev_cnt)
 }
 
 /* Use prescanned AMBA Plug&Play information to find all GRCAN cores */
-int GRCAN_PREFIX(_register)(amba_confarea_type *abus)
+int GRCAN_PREFIX(_register)(struct ambapp_bus *abus)
 {
   FUNCDBG();
 
