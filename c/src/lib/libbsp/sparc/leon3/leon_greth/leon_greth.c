@@ -31,17 +31,19 @@ int rtems_leon_greth_driver_attach(
   int attach
 )
 {
-  int device_found = 0;
   unsigned int base_addr = 0; /* avoid warnings */
   unsigned int eth_irq = 0;   /* avoid warnings */
-	amba_apb_device apbgreth;
+  struct ambapp_dev *adev;
+  struct ambapp_apb_info *apb;
 
   /* Scan for MAC AHB slave interface */
-	device_found = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_ETHMAC,&apbgreth);
-  if (device_found == 1)
-  {
-		base_addr = apbgreth.start;
-		eth_irq = apbgreth.irq;
+  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+                                 VENDOR_GAISLER, GAISLER_ETHMAC,
+                                 ambapp_find_by_idx, NULL);
+  if (adev) {
+    apb = DEV_TO_APB(adev);
+    base_addr = apb->start;
+    eth_irq = apb->irq;
 
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;

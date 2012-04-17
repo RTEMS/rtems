@@ -1,11 +1,14 @@
-/*
- *  $Id$
+/*  LEON3 BSP SMC91111 registration and low-level initialization
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #include <bsp.h>
 #include <libchip/smc91111exp.h>
 #include <rtems/bspIo.h>
-
+#include <ambapp.h>
 
 #define SMC91111_BASE_ADDR (void*)0x20000300
 #define SMC91111_BASE_IRQ  4
@@ -32,21 +35,29 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
 {
   unsigned long addr_mctrl = 0;
   LEON3_IOPORT_Regs_Map *io;
+  struct ambapp_apb_info apbpio;
+  struct ambapp_apb_info apbmctrl;
 
-  amba_apb_device apbpio;
-  amba_ahb_device apbmctrl;
-
-  if ( amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_PIOPORT,&apbpio) != 1 ){
+  if (ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_GPIO, &apbpio)
+      != 1) {
     printk("SMC9111_leon3: didn't find PIO\n");
     return 0;
   }
 
-  /* Find LEON2 memory controller */
-  if ( amba_find_ahbslv(&amba_conf,VENDOR_ESA,ESA_MCTRL,&apbmctrl) != 1 ){
-    /* LEON2 memory controller not found, search for fault tolerant memory controller */
-    if ( amba_find_ahbslv(&amba_conf,VENDOR_GAISLER,GAISLER_FTMCTRL,&apbmctrl) != 1 ) {
-      printk("SMC9111_leon3: didn't find any memory controller\n");
-      return 0;
+  /* In order to access the SMC controller the memory controller must have
+   * I/O bus enabled. Find first memory controller.
+   */
+  if (ambapp_find_apbslv(&ambapp_plb, VENDOR_ESA, ESA_MCTRL, &apbmctrl) != 1) {
+    if (ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_FTMCTRL,
+                           &apbmctrl) != 1) {
+      if (ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_FTSRCTRL,
+                             &apbmctrl) != 1) {
+        if (ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_FTSRCTRL8,
+                               &apbmctrl) != 1) {
+          printk("SMC9111_leon3: didn't find any memory controller\n");
+          return 0;
+        }
+      }
     }
   }
 
@@ -68,6 +79,5 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
   /* Setup memory controller I/O waitstates */
   *((volatile unsigned int *) addr_mctrl) |= 0x10f80000;	/* enable I/O area access */
 
-    return _rtems_smc91111_driver_attach (config,
-            &leon_scmv91111_configuration);
+  return _rtems_smc91111_driver_attach(config, &leon_scmv91111_configuration);
 };
