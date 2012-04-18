@@ -134,6 +134,29 @@ SECTIONS
       *(.rela.got)
       *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
     } >ram
+  .robsdsets : {
+    /* Special FreeBSD linker set sections */
+    __start_set_sysctl_set = .;
+    *(set_sysctl_*);
+    __stop_set_sysctl_set = .;
+    *(set_domain_*);
+    *(set_pseudo_*);
+    _bsd__start_set_modmetadata_set = .;
+    *(_bsd_set_modmetadata_set);
+    _bsd__stop_set_modmetadata_set = .;
+    _bsd__start_set_sysctl_set = .;
+    *(_bsd_set_sysctl_set);
+    _bsd__stop_set_sysctl_set = .;
+    __start_pcpu_set = .;
+    *(set_pcpu);
+    __stop_pcpu_set = .;
+  } >ram
+  .rwbsdsets : {
+    /* Special FreeBSD linker set sections */
+    _bsd__start_set_sysinit_set = .;
+    *(_bsd_set_sysinit_set);
+    _bsd__stop_set_sysinit_set = .;
+  } >ram
   .data :
   {
     data_start = .;
