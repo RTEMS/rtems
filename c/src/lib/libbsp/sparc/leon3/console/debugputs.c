@@ -33,6 +33,14 @@ static int isinit = 0;
 int debug_uart_index __attribute__((weak)) = 0;
 ambapp_apb_uart *dbg_uart = NULL;
 
+/* Before UART driver has registered (or when no UART is available), calls to
+ * printk that gets to bsp_out_char() will be filling data into the
+ * pre_printk_dbgbuf[] buffer, hopefully the buffer can help debugging the
+ * early BSP boot.. At least the last printk() will be caught.
+ */
+char pre_printk_dbgbuf[32] = {0};
+int pre_printk_pos = 0;
+
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
  */
@@ -122,8 +130,12 @@ int apbuart_inbyte_nonblocking(ambapp_apb_uart *regs)
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)
 {
-  if (dbg_uart == NULL)
+  if (dbg_uart == NULL) {
+    /* Local debug buffer when UART driver has not registered */
+    pre_printk_dbgbuf[pre_printk_pos++] = c;
+    pre_printk_pos = pre_printk_pos & (sizeof(pre_printk_dbgbuf)-1);
     return;
+  }
 
   apbuart_outbyte_polled(dbg_uart, c);
 }
