@@ -50,8 +50,11 @@ int syscon_uart_index __attribute__((weak)) = 0;
 
 extern void apbuart_outbyte_polled(
   ambapp_apb_uart *regs,
-  char ch
-);
+  unsigned char ch,
+  int do_cr_on_newline,
+  int wait_sent
+  );
+
 
 /* body is in debugputs.c */
 
@@ -156,7 +159,7 @@ ssize_t console_write_polled(int minor, const char *buf, size_t len)
     port = minor - 1;
 
   while (nwrite < len) {
-    apbuart_outbyte_polled(apbuarts[port].regs, *buf++);
+    apbuart_outbyte_polled(apbuarts[port].regs, *buf++, 1, 0);
     nwrite++;
   }
   return nwrite;
@@ -323,7 +326,7 @@ rtems_device_driver console_initialize(
    * On a MP system one should not open UARTs that other OS instances use.
    */
   if (syscon_uart_index < uarts) {
-    status = rtems_io_register_name( "/dev/console", major, 0 );
+    status = rtems_io_register_name("/dev/console", major, 0);
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
   }
