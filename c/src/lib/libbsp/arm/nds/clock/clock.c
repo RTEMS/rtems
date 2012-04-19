@@ -16,25 +16,21 @@
 #include <rtems/irq.h>
 #include <nds.h>
 
-#define CLOCK_VECTOR  IRQ_TIMER0
-
 /*
  * forward declaration for clock isr in clockdrv_shell.h
  */
-
-rtems_isr Clock_isr (rtems_vector_number vector);
+void Clock_isr(rtems_irq_hdl_param arg);
 
 /*
  * isr registration variables.
  */
-
 static rtems_irq_connect_data clock_isr_data = {
-  IRQ_TIMER0,
-  (rtems_irq_hdl) Clock_isr,
-  NULL,
-  NULL,
-  NULL,
-  NULL
+  .name   = IRQ_TIMER0,
+  .hdl    = Clock_isr,
+  .handle = NULL,
+  .on     = clock_isr_on,
+  .off    = clock_isr_off,
+  .isOn   = clock_isr_is_on,
 };
 
 void update_touchscreen (void);
@@ -43,23 +39,21 @@ void update_touchscreen (void);
  * function called on every ticks.
  * NOTE: replaced by macro to avoid empty function call.
  */
-
 #define Clock_driver_support_at_tick()					\
   update_touchscreen();
 
 /*
  * install isr for clock driver.
  */
-
 #define Clock_driver_support_install_isr( _new, _old ) \
   do {						       \
     _old = NULL;				       \
     BSP_install_rtems_irq_handler(&clock_isr_data);    \
   } while (0)
+
 /*
  * disable clock.
  */
-
 void
 Clock_driver_support_shutdown_hardware (void)
 {
@@ -70,7 +64,6 @@ Clock_driver_support_shutdown_hardware (void)
 /*
  * initialize clock on timer 0.
  */
-
 void
 Clock_driver_support_initialize_hardware (void)
 {
