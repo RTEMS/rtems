@@ -13,8 +13,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <bsp.h>
@@ -94,7 +92,13 @@ void apbuart_outbyte_polled(
   unsigned char ch
 )
 {
-  while ( (regs->status & LEON_REG_UART_STATUS_THE) == 0 );
+  while ( (regs->status & LEON_REG_UART_STATUS_THE) == 0 ) {
+    /* Lower bus utilization while waiting for UART */
+    asm volatile ("nop"::); asm volatile ("nop"::);
+    asm volatile ("nop"::); asm volatile ("nop"::);
+    asm volatile ("nop"::); asm volatile ("nop"::);
+    asm volatile ("nop"::); asm volatile ("nop"::);
+  }
   regs->data = (unsigned int) ch;
 }
 
