@@ -3,6 +3,7 @@
  *
  *  Game Boy Advance Clock driver.
  */
+
 /*
  *  RTEMS GBA BSP
  *
@@ -11,8 +12,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <rtems.h>
@@ -21,44 +20,41 @@
 #include <gba.h>
 
 
-/*-------------------------------------------------------------------------+
-| Clock isr variables
-+--------------------------------------------------------------------------*/
-rtems_isr Clock_isr(rtems_vector_number vector);
+void Clock_isr(rtems_irq_hdl_param arg);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
 static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 
-rtems_irq_connect_data clock_isr_data = {BSP_IRQ_TIMER3,
-                                        (rtems_irq_hdl)Clock_isr,
-					 NULL,
-                                         clock_isr_on,
-                                         clock_isr_off,
-                                         clock_isr_is_on};
-
-#define CLOCK_VECTOR  0
+rtems_irq_connect_data clock_isr_data = {
+  .name   = BSP_IRQ_TIMER3,
+  .hdl    = Clock_isr,
+  .handle = NULL,
+  .on     = clock_isr_on,
+  .off    = clock_isr_off,
+  .isOn   = clock_isr_is_on,
+};
 
 #define Clock_driver_support_at_tick()
 
 #define Clock_driver_support_install_isr( _new, _old )  \
   do {                                                  \
-        BSP_install_rtems_irq_handler(&clock_isr_data); \
-	_old = NULL;					\
-     } while(0)
+    BSP_install_rtems_irq_handler(&clock_isr_data);     \
+    _old = NULL;                                        \
+  } while(0)
 
-#define Clock_driver_support_shutdown_hardware()        \
-  do {                                                  \
-  	BSP_remove_rtems_irq_handler(&clock_isr_data);  \
-     } while (0)
+#define Clock_driver_support_shutdown_hardware()    \
+  do {                                              \
+    BSP_remove_rtems_irq_handler(&clock_isr_data);  \
+  } while (0)
 
 
-/*-------------------------------------------------------------------------+
-| Calculate Tick Times
-|    1 / 16.78Mhz  => 59.595 ns
-|   64 / 16.78Mhz  =>  3.814 us
-|  256 / 16.78Mhz  => 15.256 us
-| 1024 / 16.78Mhz  => 61.025 us
-+--------------------------------------------------------------------------*/
+/*
+ * Calculate Tick Times
+ *    1 / 16.78Mhz  => 59.595 ns
+ *   64 / 16.78Mhz  =>  3.814 us
+ *  256 / 16.78Mhz  => 15.256 us
+ * 1024 / 16.78Mhz  => 61.025 us
+ */
 #define  __TimTickTime_us   ((1000000L/__ClockFrequency)*__TimPreScaler)
 #define  __TimTickTime_ns   ((1000000000L/__ClockFrequency)*__TimPreScaler)
 
@@ -98,7 +94,6 @@ void Clock_driver_support_initialize_hardware(void)
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
-    return;
 }
 
 /**
@@ -109,7 +104,6 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
  */
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
-    return;
 }
 
 /**
@@ -120,8 +114,7 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
-    return 1;
+  return 1;
 }
-
 
 #include "../../../shared/clockdrv_shell.h"
