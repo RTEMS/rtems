@@ -5,12 +5,9 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *
  *  http://www.rtems.com/license/LICENSE.
- *
- *
- *  $Id$
-*/
+ */
+
 #include <rtems.h>
 #include <ep7312.h>
 #include <bsp.h>
@@ -20,19 +17,19 @@
   #define CLOCK_DRIVER_USE_FAST_IDLE
 #endif
 
-rtems_isr Clock_isr(rtems_vector_number vector);
+void Clock_isr(rtems_irq_hdl_param arg);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
 static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 
-rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
-                                         (rtems_irq_hdl)Clock_isr,
-					 NULL,
-                                         clock_isr_on,
-                                         clock_isr_off,
-                                         clock_isr_is_on};
-
-#define CLOCK_VECTOR 0
+rtems_irq_connect_data clock_isr_data = {
+  .name   = BSP_TC1OI,
+  .hdl    = Clock_isr,
+  .handle = NULL,
+  .on     = clock_isr_on,
+  .off    = clock_isr_off,
+  .isOn   = clock_isr_is_on,
+};
 
 #define Clock_driver_support_at_tick()                \
   do {                                                \
@@ -41,8 +38,8 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do {                                                 \
-      (_old) = NULL; /* avoid warning */;              \
-      BSP_install_rtems_irq_handler(&clock_isr_data);  \
+    (_old) = NULL; /* avoid warning */;                \
+    BSP_install_rtems_irq_handler(&clock_isr_data);    \
   } while(0)
 
 /*
@@ -81,17 +78,15 @@ uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
 
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
-    return;
 }
 
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
-    return;
 }
 
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
-    return 1;
+  return 1;
 }
 
 #include "../../../shared/clockdrv_shell.h"
