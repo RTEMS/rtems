@@ -31,31 +31,27 @@ int rtems_leon_open_eth_driver_attach(
   int attach
 )
 {
-  int device_found = 0;
-  int i;
-  unsigned int conf, iobar;
   unsigned int base_addr = 0; /* avoid warnings */
   unsigned int eth_irq = 0;   /* avoid warnings */
-
+  struct ambapp_dev *adev;
+  struct ambapp_ahb_info *ahb;
 
   /* Scan for MAC AHB slave interface */
-  for (i = 0; i < amba_conf.ahbslv.devnr; i++)
-  {
-    conf = amba_get_confword(amba_conf.ahbslv, i, 0);
-    if (((amba_vendor(conf) == VENDOR_OPENCORES) && (amba_device(conf) == OPENCORES_ETHMAC)) ||
-        ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_ETHAHB)))
-    {
-      iobar = amba_ahb_get_membar(amba_conf.ahbslv, i, 0);
-      base_addr = amba_iobar_start(LEON3_IO_AREA, iobar);
-      eth_irq = amba_irq(conf);
-      device_found = 1;
-      break;
-    }
+  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_AHB_SLVS),
+                                 VENDOR_OPENCORES, OPENCORES_ETHMAC,
+                                 ambapp_find_by_idx, NULL);
+  if (!adev) {
+    adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_AHB_SLVS),
+                                   VENDOR_GAISLER, GAISLER_ETHAHB,
+                                   ambapp_find_by_idx, NULL);
   }
 
-
-  if (device_found)
+  if (adev)
   {
+    ahb = DEV_TO_AHB(adev);
+    base_addr = ahb->start[0];
+    eth_irq = ahb->irq;
+
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;
     *(volatile int *) base_addr = 0x800;
@@ -65,7 +61,8 @@ int rtems_leon_open_eth_driver_attach(
     leon_open_eth_configuration.txd_count = TDA_COUNT;
     leon_open_eth_configuration.rxd_count = RDA_COUNT;
     /* enable 100 MHz operation only if cpu frequency >= 50 MHz */
-    if (LEON3_Timer_Regs->scaler_reload >= 49) leon_open_eth_configuration.en100MHz = 1;
+    if (LEON3_Timer_Regs->scaler_reload >= 49)
+      leon_open_eth_configuration.en100MHz = 1;
     if (rtems_open_eth_driver_attach( config, &leon_open_eth_configuration )) {
       LEON_Clear_interrupt(eth_irq);
       LEON_Unmask_interrupt(eth_irq);

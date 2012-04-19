@@ -30,7 +30,7 @@ void led_putnum(void);
  */
 void bsp_start( void )
 {
-  m68k_isr_entry       *monitors_vector_table;
+  rtems_isr_entry       *monitors_vector_table;
   int                   index;
 
   /* RAM size set in linker script */
@@ -39,7 +39,7 @@ void bsp_start( void )
   /*
    *  Set the VBR here to the monitor's default.
    */
-  monitors_vector_table = (m68k_isr_entry *)0;
+  monitors_vector_table = (rtems_isr_entry *)0;
    /* This is where you set vector base register = 0 */
   m68k_set_vbr( monitors_vector_table );
 

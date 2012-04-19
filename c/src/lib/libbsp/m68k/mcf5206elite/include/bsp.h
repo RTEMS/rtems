@@ -162,13 +162,13 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
   }
 
 
-extern m68k_isr_entry M68Kvec[];   /* vector table address */
+extern rtems_isr_entry M68Kvec[];   /* vector table address */
 
 extern rtems_isr (*rtems_clock_hook)(rtems_vector_number);
 
 /* functions */
 
-m68k_isr_entry set_vector(
+rtems_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type

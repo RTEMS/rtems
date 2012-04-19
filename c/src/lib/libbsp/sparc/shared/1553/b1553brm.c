@@ -279,7 +279,7 @@ typedef struct {
 static int brm_cores;
 static unsigned int allbrm_memarea;
 static brm_priv *brms;
-static amba_confarea_type *amba_bus;
+static struct ambapp_bus *amba_bus;
 static unsigned int	allbrm_cfg_clksel;
 static unsigned int allbrm_cfg_clkdiv;
 static unsigned int allbrm_cfg_freq;
@@ -325,7 +325,7 @@ int brm_register_leon3_ramon_fpga(void){
 	 * The BRM is always clocked with 24MHz.
 	 * 3 in BRM enhanced register will select 24MHz
 	 */
-	return b1553brm_register(&amba_conf,0,0,3);
+	return b1553brm_register(&ambapp_plb, 0, 0, 3);
 }
 
 int brm_register_leon3_ramon_asic(void){
@@ -335,12 +335,12 @@ int brm_register_leon3_ramon_asic(void){
 	 *
 	 * 3 in BRM enhanced register will select 24MHz
 	 */
-	return b1553brm_register(&amba_conf,2,0,3);
+	return b1553brm_register(&ambapp_plb, 2, 0, 3);
 }
 #endif
 #endif
 
-int B1553BRM_PREFIX(_register)(amba_confarea_type *bus, unsigned int clksel, unsigned int clkdiv, unsigned int brm_freq)
+int B1553BRM_PREFIX(_register)(struct ambapp_bus *bus, unsigned int clksel, unsigned int clkdiv, unsigned int brm_freq)
 {
     rtems_status_code r;
     rtems_device_major_number m;
@@ -568,7 +568,7 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 	int dev_cnt;
 	char fs_name[20];
 	brm_priv *brm;
-	amba_ahb_device ambadev;
+	struct ambapp_ahb_info ambadev;
 	char *mem;
 
 	FUNCDBG("brm_initialize\n");
@@ -577,7 +577,7 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 	strcpy(fs_name,B1553BRM_DEVNAME);
 
 	/* Find all BRM devices */
-	dev_cnt = amba_get_number_ahbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_BRM);
+	dev_cnt = ambapp_get_number_ahbslv_devices(amba_bus, VENDOR_GAISLER, GAISLER_B1553BRM);
 	if ( dev_cnt < 1 ){
 		/* Failed to find any CAN cores! */
 		printk("BRM: Failed to find any BRM cores\n\r");
@@ -619,7 +619,8 @@ static rtems_device_driver brm_initialize(rtems_device_major_number major, rtems
 		brm = &brms[minor];
 
 		/* Get AMBA AHB device info from Plug&Play */
-		amba_find_next_ahbslv(amba_bus,VENDOR_GAISLER,GAISLER_BRM,&ambadev,minor);
+		ambapp_find_ahbslv_next(amba_bus, VENDOR_GAISLER,
+		                        GAISLER_B1553BRM, &ambadev, minor);
 
 		/* Copy Basic HW info */
 		brm->regs = (void *)ambadev.start[0];

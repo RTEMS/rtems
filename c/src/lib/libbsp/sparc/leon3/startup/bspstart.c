@@ -31,6 +31,7 @@ int CPU_SPARC_HAS_SNOOPING;
 int LEON3_Cpu_Index = 0;
 
 extern void amba_initialize(void);
+extern void bsp_debug_uart_init(void);
 
 /*
  * set_snooping
@@ -75,6 +76,12 @@ void bsp_start( void )
    */
   LEON3_Cpu_Index = (get_asr17() >> 28) & 3;
 
-  /* Find UARTs */
+  /* Scan AMBA Plug&Play and parse it into a RAM description (ambapp_plb),
+   * find GPTIMER for bus frequency, find IRQ Controller and initialize
+   * interrupt support
+   */
   amba_initialize();
+
+  /* find debug UART for printk() */
+  bsp_debug_uart_init();
 }

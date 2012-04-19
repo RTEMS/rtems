@@ -24,7 +24,7 @@ extern "C" {
  *
  */
 
-int apbuart_rasta_register(amba_confarea_type *bus);
+int apbuart_rasta_register(struct ambapp_bus *bus);
 
 /* This function must be called on APBUART interrupt. Called from the
  * RASTA interrupt handler.

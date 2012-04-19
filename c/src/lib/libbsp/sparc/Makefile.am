@@ -17,7 +17,17 @@ EXTRA_DIST += shared/irq/irq-shared.c
 
 # AMBA Plug&Play bus
 EXTRA_DIST += shared/include/ambapp.h
+EXTRA_DIST += shared/include/ambapp_ids.h
 EXTRA_DIST += shared/amba/ambapp.c
+EXTRA_DIST += shared/amba/ambapp_alloc.c
+EXTRA_DIST += shared/amba/ambapp_count.c
+EXTRA_DIST += shared/amba/ambapp_depth.c
+EXTRA_DIST += shared/amba/ambapp_find_by_idx.c
+EXTRA_DIST += shared/amba/ambapp_freq.c
+EXTRA_DIST += shared/amba/ambapp_parent.c
+EXTRA_DIST += shared/amba/ambapp_names.c
+EXTRA_DIST += shared/amba/ambapp_old.c
+EXTRA_DIST += shared/amba/ambapp_show.c
 
 # PCI bus
 EXTRA_DIST += shared/include/pci.h

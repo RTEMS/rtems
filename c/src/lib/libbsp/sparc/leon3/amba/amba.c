@@ -1,10 +1,10 @@
 /*
- *  AMBA Plag & Play Bus Driver
+ *  AMBA Plug & Play Bus Driver
  *
  *  This driver hook performs bus scanning.
  *
- *  COPYRIGHT (c) 2004.
- *  Gaisler Research
+ *  COPYRIGHT (c) 2011.
+ *  Aeroflex Gaisler
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -14,9 +14,14 @@
  */
 
 #include <bsp.h>
+#include <ambapp.h>
 
-/* Structure containing address to devices found on the Amba Plug&Play bus */
-amba_confarea_type amba_conf;
+/* AMBA Plug&Play information description.
+ *
+ * After software has scanned AMBA PnP it builds a tree to make
+ * it easier for drivers to work with the bus architecture.
+ */
+struct ambapp_bus ambapp_plb;
 
 /* GRLIB extended IRQ controller register */
 extern void leon3_ext_irq_init(void);
@@ -34,20 +39,23 @@ volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
  *  amba_ahb_masters, amba_ahb_slaves and amba.
  */
 
-extern int scan_uarts(void);
-
 void amba_initialize(void)
 {
-  int i;
   int icsel;
-  amba_apb_device dev;
+  struct ambapp_dev *adev;
 
-  /* Scan the AMBA Plug&Play info at the default LEON3 area */
-  amba_scan(&amba_conf,LEON3_IO_AREA,NULL);
+  /* Scan AMBA Plug&Play read-only information. The routine builds a PnP
+   * tree into ambapp_plb in RAM, after this we never access the PnP
+   * information in hardware directly any more.
+   * Since on Processor Local Bus (PLB) memory mapping is 1:1
+   */
+  ambapp_scan(&ambapp_plb, LEON3_IO_AREA, NULL, NULL);
 
   /* Find LEON3 Interrupt controller */
-  i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_IRQMP,&dev);
-  if (i <= 0){
+  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+                                 VENDOR_GAISLER, GAISLER_IRQMP,
+                                 ambapp_find_by_idx, NULL);
+  if (adev == NULL) {
     /* PANIC IRQ controller not found!
      *
      *  What else can we do but stop ...
@@ -55,7 +63,8 @@ void amba_initialize(void)
     asm volatile( "mov 1, %g1; ta 0x0" );
   }
 
-  LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *) dev.start;
+  LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *)
+                       DEV_TO_APB(adev)->start;
   if ((LEON3_IrqCtrl_Regs->ampctrl >> 28) > 0) {
     /* IRQ Controller has support for multiple IRQ Controllers, each
      * CPU can be routed to different Controllers, we find out which
@@ -74,11 +83,14 @@ void amba_initialize(void)
   leon3_ext_irq_init();
 
   /* find GP Timer */
-  i = amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&dev);
-  if ( i > 0 ) {
-    LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) dev.start;
-  }
+  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+                                 VENDOR_GAISLER, GAISLER_GPTIMER,
+                                 ambapp_find_by_idx, NULL);
+  if (adev) {
+    LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)DEV_TO_APB(adev)->start;
 
-  /* find UARTS */
-  scan_uarts();
+    /* Register AMBA Bus Frequency */
+    ambapp_freq_init(&ambapp_plb, adev,
+                     (LEON3_Timer_Regs->scaler_reload + 1) * 1000000);
+  }
 }

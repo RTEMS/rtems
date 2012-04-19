@@ -32,8 +32,6 @@ extern "C" {
  */
 
 typedef uint16_t     Priority_bit_map_Control;
-typedef void m68k_isr;
-typedef void ( *m68k_isr_entry )( void );
 
 #ifdef __cplusplus
 }

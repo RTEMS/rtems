@@ -370,9 +370,9 @@ static rtems_device_driver grspw_control(
     grspw_control }
 
 static rtems_driver_address_table grspw_driver = GRSPW_DRIVER_TABLE_ENTRY;
-static amba_confarea_type *amba_bus;
+static struct ambapp_bus *amba_bus;
 
-int GRSPW_PREFIX(_register)(amba_confarea_type *bus)
+int GRSPW_PREFIX(_register)(struct ambapp_bus *bus)
 {
         rtems_status_code r;
         rtems_device_major_number m;
@@ -389,10 +389,11 @@ int GRSPW_PREFIX(_register)(amba_confarea_type *bus)
 #ifdef LEON3
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
-		amba_apb_device gptimer;
+		struct ambapp_apb_info gptimer;
 		LEON3_Timer_Regs_Map *tregs;
 
-		if ( amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&gptimer) == 1 ){
+		if ( ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER,
+                                        GAISLER_GPTIMER, &gptimer) == 1 ) {
 			tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
 			sys_freq_khz = (tregs->scaler_reload+1)*1000;
 			SPACEWIRE_DBG("GRSPW: detected %dkHZ system frequency\n\r",sys_freq_khz);
@@ -609,7 +610,7 @@ static rtems_device_driver grspw_initialize(
         char c;
         GRSPW_DEV *pDev;
         char console_name[20];
-				amba_apb_device dev;
+        struct ambapp_apb_info dev;
 
         SPACEWIRE_DBG2("spacewire driver initialization\n");
 
@@ -620,19 +621,10 @@ static rtems_device_driver grspw_initialize(
         i=0; spw_cores = 0; spw_cores2 = 0;
 
         /* get number of GRSPW cores */
-        spw_cores = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_SPACEWIRE);
-        spw_cores2 = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_GRSPW2);
-#if 0
-				if ( spw_cores > SPACEWIRE_MAX_CORENR )
-					spw_cores = SPACEWIRE_MAX_CORENR;
-
-        while (i < amba_conf.apbslv.devnr) {
-                conf = amba_get_confword(amba_conf.apbslv, i, 0);
-                if ((amba_vendor(conf) == VENDOR_GAISLER) && (amba_device(conf) == GAISLER_SPACEWIRE))
-                        spw_cores++;
-                i++;
-        }
-#endif
+        spw_cores = ambapp_get_number_apbslv_devices(amba_bus, VENDOR_GAISLER,
+                                                     GAISLER_SPW);
+        spw_cores2 = ambapp_get_number_apbslv_devices(amba_bus, VENDOR_GAISLER,
+                                                      GAISLER_SPW2);
 
         if ( (spw_cores+spw_cores2) < 1 ){
                 /* No GRSPW cores around... */
@@ -653,10 +645,13 @@ static rtems_device_driver grspw_initialize(
 
                 /* Get device */
                 if ( spw_cores > minor ) {
-                        amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_SPACEWIRE,&dev,minor);
+                        ambapp_find_apbslv_next(amba_bus, VENDOR_GAISLER,
+                                                GAISLER_SPW, &dev, minor);
                         pDev->core_ver = 1;
                 } else {
-                        amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_GRSPW2,&dev,minor-spw_cores);
+                        ambapp_find_apbslv_next(amba_bus, VENDOR_GAISLER,
+                                                GAISLER_SPW2, &dev,
+                                                minor - spw_cores);
                         pDev->core_ver = 2;
                 }
 

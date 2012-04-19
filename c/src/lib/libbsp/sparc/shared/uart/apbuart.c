@@ -116,7 +116,7 @@ static unsigned int sys_freq_hz;
 #define APBUART_DRIVER_TABLE_ENTRY { apbuart_initialize, apbuart_open, apbuart_close, apbuart_read, apbuart_write, apbuart_control }
 
 static rtems_driver_address_table apbuart_driver = APBUART_DRIVER_TABLE_ENTRY;
-static amba_confarea_type *amba_bus;
+static struct ambapp_bus *amba_bus;
 
 static void apbuart_interrupt(apbuart_priv *uart);
 #ifdef APBUART_DEFINE_INTHANDLER
@@ -322,7 +322,7 @@ static void apbuart_interrupt(apbuart_priv *uart){
 	}
 }
 
-int APBUART_PREFIX(_register)(amba_confarea_type *bus) {
+int APBUART_PREFIX(_register)(struct ambapp_bus *bus) {
 	rtems_status_code r;
 	rtems_device_major_number m;
 
@@ -353,13 +353,14 @@ static rtems_device_driver apbuart_initialize(rtems_device_major_number  major, 
 
 	rtems_status_code status;
 	int i;
-	amba_apb_device dev;
+	struct ambapp_apb_info dev;
 	char fs_name[20];
 
 	FUNCDBG("apbuart_initialize\n");
 
 	/* Find all APB UART devices */
-	dev_cnt = amba_get_number_apbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_APBUART);
+	dev_cnt = ambapp_get_number_apbslv_devices(amba_bus, VENDOR_GAISLER,
+	                                           GAISLER_APBUART);
 	if ( dev_cnt < 1 ){
 		/* Failed to find any CAN cores! */
 		printk("APBUART: Failed to find any APBUART cores\n\r");
@@ -384,10 +385,11 @@ static rtems_device_driver apbuart_initialize(rtems_device_major_number  major, 
 #if defined(LEON3)
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
-		amba_apb_device gptimer;
+		struct ambapp_apb_info gptimer;
 		LEON3_Timer_Regs_Map *tregs;
 
-		if ( amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&gptimer) == 1 ){
+		if ( ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER,
+		                        GAISLER_GPTIMER, &gptimer) == 1 ){
 			tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
 			sys_freq_hz = (tregs->scaler_reload+1)*1000*1000;
 			DBG("APBUART: detected %dHZ system frequency\n\r",sys_freq_hz);
@@ -413,7 +415,7 @@ static rtems_device_driver apbuart_initialize(rtems_device_major_number  major, 
 
 	for(i=0; i<dev_cnt; i++){
 		/* Get AMBA AHB device info from Plug&Play */
-		amba_find_next_apbslv(amba_bus,VENDOR_GAISLER,GAISLER_APBUART,&dev,i);
+		ambapp_find_apbslv_next(amba_bus,VENDOR_GAISLER,GAISLER_APBUART,&dev,i);
 
 		printk("APBUART[%d]: at 0x%x irq %d (0x%x)\n\r",i,dev.start,dev.irq,(unsigned int)&apbuarts[i]);
 

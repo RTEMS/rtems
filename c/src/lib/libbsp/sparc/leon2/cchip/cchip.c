@@ -1,5 +1,9 @@
 /*
- * $Id$
+ *  GR-701 (Companion Chip) PCI board driver
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #include <bsp.h>
@@ -83,8 +87,8 @@ typedef struct {
 	int bus, dev, fun;
 
 	/* AMBA bus */
-	amba_confarea_type amba_bus;
-	struct amba_mmap amba_maps[2];
+	struct ambapp_bus amba_bus;
+	struct ambapp_mmap amba_maps[2];
 
 	/* FT AHB SRAM */
 	int ftsram_size; /* kb */
@@ -100,8 +104,7 @@ int init_pcif(void){
 	int i,bus,dev,fun;
 	pci_bridge_regs *pcib;
 	amba_bridge_regs *ambab;
-	int amba_master_cnt;
-	amba_confarea_type *abus;
+	struct ambapp_bus *abus;
 
   if ( BSP_pciFindDevice(0x1AC8, 0x0701, 0, &bus, &dev, &fun) == 0 ) {
     ;
@@ -136,13 +139,13 @@ int init_pcif(void){
 
 	/* AMBA MAP cc1.bars[1] (in CPU) ==> 0xf0000000(remote amba address) */
 	cc1.amba_maps[0].size = 0x04000000;
-	cc1.amba_maps[0].cpu_adr = cc1.bars[1];
-	cc1.amba_maps[0].remote_amba_adr = 0xfc000000;
+	cc1.amba_maps[0].local_adr = cc1.bars[1];
+	cc1.amba_maps[0].remote_adr = 0xfc000000;
 
 	/* Mark end of table */
 	cc1.amba_maps[1].size=0;
-	cc1.amba_maps[1].cpu_adr = 0;
-	cc1.amba_maps[1].remote_amba_adr = 0;
+	cc1.amba_maps[1].local_adr = 0;
+	cc1.amba_maps[1].remote_adr = 0;
 
 	/* Enable I/O and Mem accesses */
 	pci_read_config_dword(bus, dev, fun, 0x4, &com1);
@@ -161,16 +164,14 @@ int init_pcif(void){
 
 	/* Scan bus for AMBA devices */
 	abus = &cc1.amba_bus;
-	memset(abus,0,sizeof(amba_confarea_type));
-	amba_scan(abus,cc1.bars[1]+0x3f00000,&cc1.amba_maps[0]);
+	memset(abus,0,sizeof(*abus));
+	ambapp_scan(abus, cc1.bars[1]+0x3f00000, NULL, &cc1.amba_maps[0]);
 
-	/* Get number of amba masters */
-	amba_master_cnt = abus->ahbmst.devnr;
-#ifdef BOARD_INFO
-	printk("Found %d AMBA masters\n\r",amba_master_cnt);
-#endif
-	for(i=1; i<amba_master_cnt; i++){
+	/* Init all msters, max 16 */
+	for(i=1; i<16; i++) {
 		ambab->ambabars[i] = 0x40000000;
+		if (READ_REG(&ambab->ambabars[i]) != 0x40000000)
+			break;
 	}
 
 	/* Enable PCI Master */
@@ -192,20 +193,22 @@ int init_pcif(void){
  #define GAISLER_FTAHBRAM 0x50
 #endif
 int init_onboard_sram(void){
-	amba_ahb_device ahb;
-	amba_apb_device apb;
+	struct ambapp_ahb_info ahb;
+	struct ambapp_apb_info apb;
 	unsigned int conf, size;
 
 	/* Find SRAM controller
 	 * 1. AHB slave interface
 	 * 2. APB slave interface
 	 */
-	if ( amba_find_apbslv(&cc1.amba_bus,VENDOR_GAISLER,GAISLER_FTAHBRAM,&apb) != 1 ){
+	if ( ambapp_find_apbslv(&cc1.amba_bus, VENDOR_GAISLER, GAISLER_FTAHBRAM,
+                                &apb) != 1 ){
 		printk("On Board FT SRAM not found (APB)\n");
 		return -1;
 	}
 
-	if ( amba_find_ahbslv(&cc1.amba_bus,VENDOR_GAISLER,GAISLER_FTAHBRAM,&ahb) != 1 ){
+	if ( ambapp_find_ahbslv(&cc1.amba_bus, VENDOR_GAISLER, GAISLER_FTAHBRAM,
+                                &ahb) != 1 ){
 		printk("On Board FT SRAM not found (AHB)\n");
 		return -1;
 	}

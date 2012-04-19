@@ -72,9 +72,9 @@ typedef struct {
 
 /* Register APBUART driver
  * bus =  pointer to AMBA bus description used to search for APBUART(s).
- *        (&amba_conf for LEON3), (LEON2: see amba_scan)
+ *        (&ambapp_plb for LEON3), (LEON2: see amba_scan)
  */
-int apbuart_register (amba_confarea_type * bus);
+int apbuart_register (struct ambapp_bus *bus);
 
 #ifdef __cplusplus
 }

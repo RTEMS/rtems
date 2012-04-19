@@ -34,7 +34,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bspstart.c ../../shared/bootcard.c \
     startup/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bspgetworkarea.c ../../shared/sbrk.c \
-    ../../m68k/shared/setvec.c ../../shared/gnatinstallhandler.c \
+    ../../shared/setvec.c ../../shared/gnatinstallhandler.c \
     ../../m68k/shared/bspspuriousinit.c ../../m68k/shared/m68000spurious.c \
     startup/spurious_assistant.c
 # clock

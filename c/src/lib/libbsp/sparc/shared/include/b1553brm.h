@@ -158,9 +158,9 @@ int brm_register_leon3_ramon_asic(void);
 /* Register BRM driver
  * See (struct brm_reg).w_ctrl for clksel and clkdiv.
  * See Enhanced register (the least signinficant 2 bits) in BRM Core for brm_freq
- * bus = &amba_conf for LEON3. (LEON2 not yet supported for this driver)
+ * bus = &ambapp_plb for LEON3. (LEON2 not yet supported for this driver)
  */
-int b1553brm_register(amba_confarea_type *bus, unsigned int clksel, unsigned int clkdiv, unsigned int brm_freq);
+int b1553brm_register(struct ambapp_bus *bus, unsigned int clksel, unsigned int clkdiv, unsigned int brm_freq);
 
 #ifdef __cplusplus
 }

@@ -111,7 +111,7 @@ typedef struct {
 #define SPACEWIRE_IOCTRL_START               64
 #define SPACEWIRE_IOCTRL_STOP                65
 
-int grspw_register(amba_confarea_type *bus);
+int grspw_register(struct ambapp_bus *bus);
 
 
 #if 0

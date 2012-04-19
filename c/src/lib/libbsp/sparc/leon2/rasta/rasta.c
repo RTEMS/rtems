@@ -1,5 +1,9 @@
 /*
- *  $Id$
+ *  GR-RASTA-IO PCI board driver
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #include <rtems/bspIo.h>
@@ -209,16 +213,18 @@ void rasta_interrrupt_register(void *handler, int irqno, void *arg)
 }
 
 
-int rasta_get_gpio(amba_confarea_type *abus, int index, struct gpio_reg **regs, int *irq)
+int rasta_get_gpio(struct ambapp_bus *abus, int index, struct gpio_reg **regs,
+                   int *irq)
 {
-  amba_apb_device dev;
+  struct ambapp_apb_info dev;
   int cores;
 
   if ( !abus )
     return -1;
 
   /* Scan PnP info for GPIO port number 'index' */
-  cores = amba_find_next_apbslv(abus,VENDOR_GAISLER,GAISLER_PIOPORT,&dev,index);
+  cores = ambapp_find_apbslv_next(abus, VENDOR_GAISLER, GAISLER_GPIO, &dev,
+                                  index);
   if ( cores < 1 )
     return -1;
 
@@ -232,8 +238,8 @@ int rasta_get_gpio(amba_confarea_type *abus, int index, struct gpio_reg **regs, 
 }
 
 /* AMBA Plug&Play information */
-static amba_confarea_type abus;
-static struct amba_mmap amba_maps[3];
+static struct ambapp_bus abus;
+static struct ambapp_mmap amba_maps[3];
 
 int rasta_register(void)
 {
@@ -316,23 +322,24 @@ int rasta_register(void)
 
     /* AMBA MAP bar0 (in CPU) ==> 0x80000000(remote amba address) */
     amba_maps[0].size = 0x10000000;
-    amba_maps[0].cpu_adr = bar0;
-    amba_maps[0].remote_amba_adr = 0x80000000;
+    amba_maps[0].local_adr = bar0;
+    amba_maps[0].remote_adr = 0x80000000;
 
     /* AMBA MAP bar1 (in CPU) ==> 0x40000000(remote amba address) */
     amba_maps[1].size = 0x10000000;
-    amba_maps[1].cpu_adr = bar1;
-    amba_maps[1].remote_amba_adr = 0x40000000;
+    amba_maps[1].local_adr = bar1;
+    amba_maps[1].remote_adr = 0x40000000;
 
     /* Mark end of table */
     amba_maps[2].size=0;
-    amba_maps[2].cpu_adr = 0;
-    amba_maps[2].remote_amba_adr = 0;
+    amba_maps[2].local_adr = 0;
+    amba_maps[2].remote_adr = 0;
 
     memset(&abus,0,sizeof(abus));
 
     /* Start AMBA PnP scan at first AHB bus */
-    amba_scan(&abus,bar0+(AHB1_IOAREA_BASE_ADDR&~0xf0000000),&amba_maps[0]);
+    ambapp_scan(&abus, bar0 + (AHB1_IOAREA_BASE_ADDR & ~0xf0000000), NULL,
+                &amba_maps[0]);
 
     printk("Registering RASTA GRCAN driver\n\r");
 

@@ -44,10 +44,21 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
-# amba
+# AMBA bus
 include_HEADERS += include/amba.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
-libbsp_a_SOURCES += amba/amba.c ../../sparc/shared/amba/ambapp.c
+include_HEADERS += ../../sparc/shared/include/ambapp_ids.h
+libbsp_a_SOURCES += amba/amba.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_alloc.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_count.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_depth.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_find_by_idx.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_freq.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_parent.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_old.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_names.c
+libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
 # console
 libbsp_a_SOURCES += console/console.c
 # debugio

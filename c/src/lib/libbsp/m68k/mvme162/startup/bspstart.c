@@ -31,10 +31,10 @@
  */
 void bsp_start( void )
 {
-  m68k_isr_entry       *monitors_vector_table;
+  rtems_isr_entry       *monitors_vector_table;
   int                   index;
 
-  monitors_vector_table = (m68k_isr_entry *)MOT_162BUG_VEC_ADDRESS;
+  monitors_vector_table = (rtems_isr_entry *)MOT_162BUG_VEC_ADDRESS;
   m68k_set_vbr( monitors_vector_table );
 
   for ( index=2 ; index<=255 ; index++ )

@@ -134,7 +134,7 @@ static inline void tsmacregwrite(unsigned int reg, uint16_t value)
 
 rtems_isr tsmac_interrupt_handler(rtems_vector_number vector);
 
-extern lm32_isr_entry set_vector(rtems_isr_entry handler,
+extern rtems_isr_entry set_vector(rtems_isr_entry handler,
 				 rtems_vector_number vector, int type);
 
 /*

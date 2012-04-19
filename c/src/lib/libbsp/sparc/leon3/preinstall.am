@@ -85,6 +85,10 @@ $(PROJECT_INCLUDE)/ambapp.h: ../../sparc/shared/include/ambapp.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ambapp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ambapp.h
 
+$(PROJECT_INCLUDE)/ambapp_ids.h: ../../sparc/shared/include/ambapp_ids.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ambapp_ids.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ambapp_ids.h
+
 $(PROJECT_INCLUDE)/bsp/irq-generic.h: ../../shared/include/irq-generic.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-generic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h

@@ -82,7 +82,7 @@ static void b1553brmrasta_interrupt_handler(int irq, void *arg);
  */
 
 int b1553brm_rasta_register(
- amba_confarea_type *bus,
+ struct ambapp_bus *bus,
  unsigned int clksel,
  unsigned int clkdiv,
  unsigned int brm_freq,

@@ -46,7 +46,7 @@ static void inline occanpci_set_channel(occan_priv *priv, int channel){
 		*chan_sel = 0xffffffff;
 }
 
-int occan_pci_register(amba_confarea_type *bus)
+int occan_pci_register(struct ambapp_bus *bus)
 {
 	/* Setup configuration */
 

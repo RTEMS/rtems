@@ -147,7 +147,7 @@ struct occan_afilter {
 #define OCCAN_BLK_MODE_RX 0x1
 #define OCCAN_BLK_MODE_TX 0x2
 
-int occan_register(amba_confarea_type *bus);
+int occan_register(struct ambapp_bus *bus);
 
 
 #define OCCAN_SPEED_500K 500000

@@ -54,7 +54,7 @@ libbsp_a_SOURCES += startup/cpuboot.c startup/crc.c startup/debugport.c \
     startup/trace.c ../../shared/gnatinstallhandler.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppost.c \
     ../../shared/bspstart.c ../../shared/bspclean.c ../../shared/sbrk.c \
-    ../../m68k/shared/setvec.c
+    ../../shared/setvec.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console

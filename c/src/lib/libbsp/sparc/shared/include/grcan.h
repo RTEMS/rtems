@@ -190,7 +190,7 @@ struct grcan_device_info {
 int grcan_register_abs(struct grcan_device_info *devices, int dev_cnt);
 
 /* Use prescanned AMBA Plug&Play information to find all GRFIFO cores */
-int grcan_register(amba_confarea_type *abus);
+int grcan_register(struct ambapp_bus *abus);
 #if 0
 void grcan_register(unsigned int baseaddr, unsigned int ram_base);
 void grcan_interrupt_handler(rtems_vector_number v);

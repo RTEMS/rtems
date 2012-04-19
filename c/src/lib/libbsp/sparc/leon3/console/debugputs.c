@@ -23,11 +23,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-/*
- * Number of uarts on AMBA bus
- */
-extern int uarts;
-
 static int isinit = 0;
 
 /* Let user override which on-chip APBUART will be debug UART
@@ -40,24 +35,16 @@ static int isinit = 0;
 int debug_uart_index __attribute__((weak)) = 0;
 ambapp_apb_uart *dbg_uart = NULL;
 
-/*
- *  Scan for UARTS in configuration
+/* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
+ * for a debug APBUART and enable RX/TX for that UART.
  */
-int scan_uarts(void)
+int bsp_debug_uart_init(void)
 {
   int i;
-  amba_apb_device apbuarts[LEON3_APBUARTS];
+  struct ambapp_dev *adev;
+  struct ambapp_apb_info *apb;
 
   if (isinit == 0) {
-    i = 0;
-    uarts = 0;
-
-    uarts = amba_find_apbslvs(
-      &amba_conf, VENDOR_GAISLER, GAISLER_APBUART, apbuarts, LEON3_APBUARTS);
-    for(i=0; i<uarts; i++) {
-      LEON3_Console_Uart[i] = (volatile LEON3_UART_Regs_Map *)apbuarts[i].start;
-    }
-
     /* Update debug_uart_index to index used as debug console.
      * Let user select Debug console by setting debug_uart_index. If the
      * BSP is to provide the default UART (debug_uart_index==0):
@@ -74,16 +61,27 @@ int scan_uarts(void)
       debug_uart_index = debug_uart_index - 1; /* User selected dbg-console */
     }
 
-    /* initialize debug uart if present for printk */
-    if (debug_uart_index < uarts) {
-      dbg_uart = (ambapp_apb_uart *)LEON3_Console_Uart[debug_uart_index];
+    /* Find APBUART core for System Debug Console */
+    i = debug_uart_index;
+    adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+                                   VENDOR_GAISLER, GAISLER_APBUART,
+                                   ambapp_find_by_idx, (void *)&i);
+    if (adev) {
+      /* Found a matching debug console, initialize debug uart if present
+       * for printk
+       */
+      apb = (struct ambapp_apb_info *)adev->devinfo;
+      dbg_uart = (ambapp_apb_uart *)apb->start;
       dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
       dbg_uart->status = 0;
     }
     isinit = 1;
   }
 
-  return uarts;
+  if (dbg_uart == NULL)
+    return 0;
+  else
+    return 1;
 }
 
 /*

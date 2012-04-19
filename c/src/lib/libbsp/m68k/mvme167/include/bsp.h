@@ -296,7 +296,7 @@ typedef volatile struct cd2401_regs_ {
 
 /* BSP-wide functions */
 
-m68k_isr_entry set_vector(
+rtems_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type
@@ -310,7 +310,7 @@ m68k_isr_entry set_vector(
 #define EXTERN extern
 #endif
 
-extern m68k_isr_entry M68Kvec[];   /* vector table address */
+extern rtems_isr_entry M68Kvec[];   /* vector table address */
 
 #ifdef __cplusplus
 }

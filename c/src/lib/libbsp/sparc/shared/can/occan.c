@@ -282,7 +282,7 @@ static void occan_interrupt_handler(rtems_vector_number v);
 #endif
 static int can_cores;
 static occan_priv *cans;
-static amba_confarea_type *amba_bus;
+static struct ambapp_bus *amba_bus;
 static unsigned int sys_freq_hz;
 
 
@@ -914,7 +914,7 @@ static int pelican_speed_auto(occan_priv *priv){
 
 static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg){
 	int dev_cnt,minor,subcore_cnt,devi,subi,subcores;
-	amba_ahb_device ambadev;
+	struct ambapp_ahb_info ambadev;
 	occan_priv *can;
 	char fs_name[20];
 	rtems_status_code status;
@@ -922,7 +922,8 @@ static rtems_device_driver occan_initialize(rtems_device_major_number major, rte
 	strcpy(fs_name,OCCAN_DEVNAME);
 
 	/* find device on amba bus */
-	dev_cnt = amba_get_number_ahbslv_devices(amba_bus,VENDOR_GAISLER,GAISLER_OCCAN);
+	dev_cnt = ambapp_get_number_ahbslv_devices(amba_bus, VENDOR_GAISLER,
+                                                   GAISLER_CANAHB);
 	if ( dev_cnt < 1 ){
 		/* Failed to find any CAN cores! */
 		printk("OCCAN: Failed to find any CAN cores\n\r");
@@ -934,10 +935,11 @@ static rtems_device_driver occan_initialize(rtems_device_major_number major, rte
 #if defined(LEON3)
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
-		amba_apb_device gptimer;
+		struct ambapp_apb_info gptimer;
 		LEON3_Timer_Regs_Map *tregs;
 
-		if ( amba_find_apbslv(&amba_conf,VENDOR_GAISLER,GAISLER_GPTIMER,&gptimer) == 1 ){
+		if ( ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER,
+                                        GAISLER_GPTIMER, &gptimer) == 1 ){
 			tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
 			sys_freq_hz = (tregs->scaler_reload+1)*1000*1000;
 			DBG("OCCAN: detected %dHZ system frequency\n\r",sys_freq_hz);
@@ -973,7 +975,8 @@ static rtems_device_driver occan_initialize(rtems_device_major_number major, rte
 	 */
 
 	for(subcore_cnt=devi=0; devi<dev_cnt; devi++){
-		amba_find_next_ahbslv(amba_bus,VENDOR_GAISLER,GAISLER_OCCAN,&ambadev,devi);
+		ambapp_find_ahbslv_next(amba_bus, VENDOR_GAISLER,
+                                        GAISLER_CANAHB, &ambadev, devi);
 		subcore_cnt += (ambadev.ver & 0x7)+1;
 	}
 
@@ -987,7 +990,8 @@ static rtems_device_driver occan_initialize(rtems_device_major_number major, rte
 	for(devi=0; devi<dev_cnt; devi++){
 
 		/* Get AHB device info */
-		amba_find_next_ahbslv(amba_bus,VENDOR_GAISLER,GAISLER_OCCAN,&ambadev,devi);
+		ambapp_find_ahbslv_next(amba_bus, VENDOR_GAISLER,
+                                        GAISLER_CANAHB, &ambadev, devi);
 		subcores = (ambadev.ver & 0x7)+1;
 		DBG("OCCAN: on dev %d found %d sub cores\n\r",devi,subcores);
 
@@ -1802,7 +1806,7 @@ static void occan_interrupt_handler(rtems_vector_number v){
 
 static rtems_driver_address_table occan_driver = OCCAN_DRIVER_TABLE_ENTRY;
 
-int OCCAN_PREFIX(_register)(amba_confarea_type *bus){
+int OCCAN_PREFIX(_register)(struct ambapp_bus *bus){
 	rtems_status_code r;
 	rtems_device_major_number m;
 

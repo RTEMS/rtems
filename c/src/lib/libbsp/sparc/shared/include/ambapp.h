@@ -1,10 +1,8 @@
 /*
- *  AMBA Plag & Play Bus Driver Macros for LEON2
+ *  AMBA Plug & Play routines
  *
- *  Macros used for AMBA Plug & Play bus scanning
- *
- *  COPYRIGHT (c) 2007.
- *  Gaisler Research
+ *  COPYRIGHT (c) 2009.
+ *  Aeroflex Gaisler.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -16,224 +14,345 @@
 #ifndef __AMBAPP_H__
 #define __AMBAPP_H__
 
+/* Include VENDOR and DEVICE definitions */
+#include <ambapp_ids.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define AMBA_CONF_AREA 0xff000
-#define AMBA_AHB_SLAVE_CONF_AREA (1 << 11)
+/* Max supported AHB buses */
+#define AHB_BUS_MAX 6
 
-#define AMBA_AHB_CONF_WORDS 8
-#define AMBA_APB_CONF_WORDS 2
-#define AMBA_AHB_MASTERS 16
-#define AMBA_AHB_SLAVES 16
-#define AMBA_APB_SLAVES 16
-#define AMBA_APBUARTS 8
+struct ambapp_dev;
+struct ambapp_core;
+struct ambapp_apb_info;
+struct ambapp_ahb_info;
 
-/* Vendor codes */
-#define VENDOR_GAISLER   1
-#define VENDOR_PENDER    2
-#define VENDOR_ESA       4
-#define VENDOR_OPENCORES 8
+struct ambapp_dev {
+	struct ambapp_dev *next;	/* Next */
+	struct ambapp_dev *prev;	/* Previous Device. If (this == 
+					 * rev->child) prev is bus bridge */
+	struct ambapp_dev *children;	/* Points to first device on sub-bus */
+	void *owner;			/* Owner of this AMBA device */
+	unsigned char dev_type;		/* AHB MST, AHB SLV or APB SLV*/
+	unsigned char vendor;		/* Vendor ID */
+	unsigned short device;		/* Device ID */
+	int devinfo[0];			/* Device info (APB/AHB dep. on type) */
+};
 
-/* Gaisler Research device id's */
-#define GAISLER_LEON3     0x03
-#define GAISLER_LEON3DSU  0x04
-#define GAISLER_ETHAHB    0x05
-#define GAISLER_APBMST    0x06
-#define GAISLER_AHBUART   0x07
-#define GAISLER_SRCTRL    0x08
-#define GAISLER_SDCTRL    0x09
-#define GAISLER_APBUART   0x0C
-#define GAISLER_IRQMP     0x0D
-#define GAISLER_AHBRAM    0x0E
-#define GAISLER_GPTIMER   0x11
-#define GAISLER_PCITRG    0x12
-#define GAISLER_PCISBRG   0x13
-#define GAISLER_PCIFBRG   0x14
-#define GAISLER_PCITRACE  0x15
-#define GAISLER_DMACTRL   0x16
-#define GAISLER_OCCAN     0x19
-#define GAISLER_PIOPORT   0x1A
-#define GAISLER_ETHMAC    0x1D
-#define GAISLER_SPACEWIRE 0x1f
-#define GAISLER_AHB2AHB   0x20
-#define GAISLER_I2CMST    0x28
-#define GAISLER_GRSPW2    0x29
-#define GAISLER_GRCAN     0x34
-#define GAISLER_GRHCAN    0x3d
-#define GAISLER_GRFIFO    0x35
-#define GAISLER_GRADCDAC  0x36
-#define GAISLER_GRPULSE   0x37
-#define GAISLER_GRTIMER   0x38
-#define GAISLER_FTAHBRAM  0x50
-#define GAISLER_FTMCTRL   0x54
-#define GAISLER_BRM       0x72
+#define AMBAPP_FLAG_FFACT_DIR	0x100	/* Frequency factor direction, 0=down, 1=up */
+#define AMBAPP_FLAG_FFACT	0x0f0	/* Frequency factor against top bus */
+#define AMBAPP_FLAG_MBUS	0x00c
+#define AMBAPP_FLAG_SBUS	0x003
 
+/* Get APB or AHB information from a AMBA device */
+#define DEV_TO_APB(adev) ((struct ambapp_apb_info *)((adev)->devinfo))
+#define DEV_TO_AHB(adev) ((struct ambapp_ahb_info *)((adev)->devinfo))
+#define DEV_TO_COMMON(adev) ((struct ambapp_common_info *)((adev)->devinfo))
+/* Convert address of ambapp_apb_info/ambapp_ahb_info into ambapp_dev */
+#define APB_TO_DEV(apb_info) ((struct ambapp_dev *)(unsigned int(apb_info) - \
+				offsetof(struct ambapp_dev, devinfo)))
+#define AHB_TO_DEV(ahb_info) ((struct ambapp_dev *)(unsigned int(ahb_info) - \
+				offsetof(struct ambapp_dev, devinfo)))
 
-/* European Space Agency device id's */
-#define ESA_LEON2        0x2
-#define ESA_MCTRL        0xF
-#define ESA_SPW2         0x12
+struct ambapp_common_info {
+	unsigned char irq;
+	unsigned char ver;
+	unsigned char ahbidx;	/* AHB Bus Index */
+};
 
-/* Opencores device id's */
-#define OPENCORES_PCIBR  0x4
-#define OPENCORES_ETHMAC 0x5
+struct ambapp_apb_info {
+	/* COMMON */
+	unsigned char irq;
+	unsigned char ver;
+	unsigned char ahbidx;	/* AHB Bus Index */
 
-/*
- *
- * Macros for manipulating Configuration registers
- *
+	/* APB SPECIFIC */
+	unsigned int start;
+	unsigned int mask;
+};
+
+struct ambapp_ahb_info {
+	/* COMMON */
+	unsigned char irq;
+	unsigned char ver;
+	unsigned char ahbidx;	/* AHB Bus Index */
+
+	/* AHB SPECIFIC */
+	unsigned int start[4];
+	unsigned int mask[4];
+	char type[4];		/* type[N] Determine type of start[N]-mask[N],
+				 * 2=AHB Memory Space, 3=AHB I/O Space */
+	unsigned int custom[3];
+};
+
+/* Describes a complete AMBA Core. Each device may consist of 3 interfaces */
+struct ambapp_core {
+	char			irq;		/* irq=-1 indicate no IRQ */
+	unsigned char		vendor;
+	unsigned short		device;
+	int			index;		/* Core index */
+	struct ambapp_ahb_info	*ahb_mst;
+	struct ambapp_ahb_info	*ahb_slv;
+	struct ambapp_apb_info	*apb_slv;
+};
+
+struct ambapp_ahb_bus {
+	unsigned int ioarea;	/* AHB Bus IOAREA */
+	unsigned int freq_hz;	/* Frequency of AHB Bus */
+	struct ambapp_dev *bridge;/* Bridge Device on Parent AHB Bus */
+	struct ambapp_dev *dev;	/* First Device on AHB Bus */
+};
+
+struct ambapp_mmap {
+	unsigned int		size;
+	unsigned int		local_adr;
+	unsigned int		remote_adr;
+};
+
+/* Complete AMBA PnP information */
+struct ambapp_bus {
+	struct ambapp_dev	*root;			/* AHB/APB Device Tree*/
+	struct ambapp_mmap	*mmaps;			/* Memory MAP Array */
+	struct ambapp_ahb_bus	ahbs[AHB_BUS_MAX];	/* AHB Buses */
+};
+
+/* 
+ * Return values
+ *  0 - continue
+ *  1 - stop scanning
  */
-#define amba_get_confword(tab, index, word) (*((tab).addr[(index)]+(word)))
+typedef int (*ambapp_func_t)(struct ambapp_dev *dev, int index, void *arg);
 
-#define amba_vendor(x) (((x) >> 24) & 0xff)
+#define DEV_IS_FREE(dev) (dev->owner == NULL)
+#define DEV_IS_ALLOCATED(dev) (dev->owner != NULL)
 
-#define amba_device(x) (((x) >> 12) & 0xfff)
+/* Options to ambapp_for_each */
+#define OPTIONS_AHB_MSTS	0x00000001
+#define OPTIONS_AHB_SLVS	0x00000002
+#define OPTIONS_APB_SLVS	0x00000004
+#define OPTIONS_ALL_DEVS	(OPTIONS_AHB_MSTS|OPTIONS_AHB_SLVS|OPTIONS_APB_SLVS)
 
-#define amba_ahb_get_membar(tab, index, nr) (*((tab).addr[(index)]+4+(nr)))
+#define OPTIONS_FREE		0x00000010
+#define OPTIONS_ALLOCATED	0x00000020
+#define OPTIONS_ALL		(OPTIONS_FREE|OPTIONS_ALLOCATED)
 
-#define amba_ahb_get_custom(tab, index, nr) (*((tab).addr[(index)]+1+(nr)))
+/* Depth first search, Defualt is breath first search. */
+#define OPTIONS_DEPTH_FIRST	0x00000100
 
-#define amba_apb_get_membar(tab, index) (*((tab).addr[(index)]+1))
+#define DEV_AHB_NONE 0
+#define DEV_AHB_MST  1
+#define DEV_AHB_SLV  2
+#define DEV_APB_SLV 3
 
-#define amba_membar_start(mbar) (((mbar) & 0xfff00000) & (((mbar) & 0xfff0) << 16))
+/* Structures used to access Plug&Play information directly */
+struct ambapp_pnp_ahb {
+	const unsigned int	id;		/* VENDOR, DEVICE, VER, IRQ, */
+	const unsigned int	custom[3];
+	const unsigned int	mbar[4];	/* MASK, ADDRESS, TYPE, CACHABLE/PREFETCHABLE */
+};
 
-#define amba_iobar_start(base, iobar) ((base) | ((((iobar) & 0xfff00000)>>12) & (((iobar) & 0xfff0)<<4)) )
+struct ambapp_pnp_apb {
+	const unsigned int	id;		/* VENDOR, DEVICE, VER, IRQ, */
+	const unsigned int	iobar;		/* MASK, ADDRESS, TYPE, CACHABLE/PREFETCHABLE */
+};
 
-#define amba_irq(conf) ((conf) & 0x1f)
+#define ambapp_pnp_vendor(id) (((id) >> 24) & 0xff)
+#define ambapp_pnp_device(id) (((id) >> 12) & 0xfff)
+#define ambapp_pnp_ver(id) (((id)>>5) & 0x1f)
+#define ambapp_pnp_irq(id) ((id) & 0x1f)
 
-#define amba_ver(conf) (((conf)>>5) & 0x1f)
+#define ambapp_pnp_start(mbar)  (((mbar) & 0xfff00000) & (((mbar) & 0xfff0) << 16)) 
+#define ambapp_pnp_mbar_mask(mbar) (((mbar)>>4) & 0xfff)
+#define ambapp_pnp_mbar_type(mbar) ((mbar) & 0xf)
 
-#define amba_membar_type(mbar) ((mbar) & 0xf)
+#define ambapp_pnp_apb_start(iobar, base) ((base) | ((((iobar) & 0xfff00000)>>12) & (((iobar) & 0xfff0)<<4)) )
+#define ambapp_pnp_apb_mask(iobar) ((~(ambapp_pnp_mbar_mask(iobar)<<8) & 0x000fffff) + 1)
+
+#define AMBA_TYPE_AHBIO_ADDR(addr,base_ioarea) ((unsigned int)(base_ioarea) | ((addr) >> 12))
 
 #define AMBA_TYPE_APBIO 0x1
 #define AMBA_TYPE_MEM   0x2
 #define AMBA_TYPE_AHBIO 0x3
 
-#define AMBA_TYPE_AHBIO_ADDR(addr,base_ioarea) ((unsigned int)(base_ioarea) | ((addr) >> 12))
+/* Copy Data from AMBA PnP I/O Area */
+typedef void *(*ambapp_memcpy_t)(
+	void *dest,		/* Destination RAM copy */
+	const void *src,	/* Source AMBA PnP Address to copy from */
+	int n,			/* Number of bytes to be copied */
+	struct ambapp_bus *abus	/* Optional AMBA Bus pointer */
+	);
 
-/*
- *  Types and structure used for AMBA Plug & Play bus scanning
+/* Scan a AMBA Plug & Play bus and create all device structures describing the 
+ * the devices. The devices will form a tree, where every node describes one
+ * interface. The resulting tree is placed in the location pointed to by root.
+ *
+ * Since it the tree is located in RAM it is easier to work with AMBA buses
+ * that is located over PCI and SpaceWire etc.
+ *
+ * \param ioarea   The IO-AREA where Plug & Play information can be found.
+ * \param parent   Used internally when recursing down a bridge. Set to NULL.
+ * \param mmaps    Is used to perform address translation if needed.
+ * \param root     Resulting device node tree root is stored here.
  *
  */
-typedef struct amba_device_table {
-  int devnr;                    /* numbrer of devices on AHB or APB bus */
-  unsigned int *addr[16];       /* addresses to the devices configuration tables */
-} amba_device_table;
+extern int ambapp_scan(
+	struct ambapp_bus *abus,
+	unsigned int ioarea,
+	ambapp_memcpy_t memfunc,
+	struct ambapp_mmap *mmaps
+	);
 
-typedef struct {
-  int devnr;
-  unsigned int *addr[AMBA_APB_SLAVES];  /* addresses to the devices configuration tables */
-  unsigned int apbmst[AMBA_APB_SLAVES]; /* pointer to AHB slave (which is a APB master) */
-} amba_apb_dev;
-
-struct amba_mmap {
-  unsigned int cpu_adr;
-  unsigned int size;
-  unsigned int remote_amba_adr;
-};
-
-typedef struct _amba_confarea_type amba_confarea_type;
-
-struct _amba_confarea_type {
-  amba_confarea_type  *next;   /* next bus in chain */
-  int                 notroot; /* is root of a bus (mother AHB has 64 masters/slaves rest 16) */
-	unsigned int        ioarea;
-  struct amba_mmap    *mmaps;
-  amba_device_table   ahbmst;
-  amba_device_table   ahbslv;
-  amba_apb_dev        apbslv;
-};
-
-typedef struct {
-  unsigned int start, irq, bus_id;
-} amba_apb_device;
-
-typedef struct {
-  unsigned int start[4], irq, ver;
-} amba_ahb_device;
-
-/* Scans AMBA Plug&Play Information and convers that information
- * to a more readable format in RAM.
- *
- * Will scan for - AHB Masters
- *               - AHB Slaves
- *               - APB Slaves (if a AHB/APB bridge is found)
- *
- * \param amba_conf AMBA P&P device info is placed here.
- * \param ioarea address of AMBA Plug&Play information,
- *             on LEON3 systems default is 0xfff00000
- * \param mmaps Memory mmap specific to this amba bus,
- *              if NULL no translation will be made (default).
- *              A array of maps, ending with a entry with size=0.
+/* Initialize the frequency [Hz] of all AHB Buses from knowing the frequency
+ * of one particular APB/AHB Device.
  */
-void amba_scan (amba_confarea_type * amba_conf, unsigned int ioarea,
-                struct amba_mmap *mmaps);
+extern void ambapp_freq_init(
+	struct ambapp_bus *abus,
+	struct ambapp_dev *dev,
+	unsigned int freq);
 
-/* Print AMBA Plug&Play info on terminal */
-void amba_print_conf (amba_confarea_type * amba_conf);
+/* Returns the frequency [Hz] of a AHB/APB device */
+extern unsigned int ambapp_freq_get(
+	struct ambapp_bus *abus,
+	struct ambapp_dev *dev);
 
+/* Iterates through all AMBA devices previously found, it calls func 
+ * once for every device that match the search arguments.
+ *
+ * SEARCH OPTIONS
+ * All search options must be fulfilled, type of devices searched (options)
+ * and AMBA Plug&Play ID [VENDOR,DEVICE], before func() is called. The options
+ * can be use to search only for AMBA APB or AHB Slaves or AHB Masters for
+ * example. Note that when VENDOR=-1 or DEVICE=-1 it will match any vendor or
+ * device ID, this means setting both VENDOR and DEVICE to -1 will result in
+ * calling all devices matches the options argument.
+ *
+ * \param abus     AMBAPP Bus to search
+ * \param options  Search options, see OPTIONS_* above
+ * \param vendor   AMBAPP VENDOR ID to search for
+ * \param device   AMBAPP DEVICE ID to search for
+ * \param func     Function called for every device matching search options
+ * \param arg      Optional argument passed on to func
+ *
+ * func return value affects the search, returning a non-zero value will
+ * stop the search and ambapp_for_each will return immediately returning the
+ * same non-zero value.
+ *
+ * Return Values
+ *  0 - all devices was scanned
+ *  non-zero - stopped by user function returning the non-zero value
+ */
+extern int ambapp_for_each(
+	struct ambapp_bus *abus,
+	unsigned int options,
+	int vendor,
+	int device,
+	ambapp_func_t func,
+	void *arg);
 
+/* Helper function for ambapp_for_each(), find a device by index. If pcount
+ * is NULL the first device is returned, else pcount is interpreted as index
+ * by decrementing the value until zero is reaced: *count=0 first device,
+ * *count=1 second device etc.
+ *
+ * The matching device is returned, which will stop the ambapp_for_each search.
+ * If zero is returned from ambapp_for_each no device matching the index was
+ * found
+ */
+extern int ambapp_find_by_idx(struct ambapp_dev *dev, int index, void *pcount);
 
+/* Get number of devices matching the options/vendor/device arguments, the
+ * arguments are passed onto ambapp_for_each().
+ */
+extern int ambapp_dev_count(struct ambapp_bus *abus, unsigned int options,
+				int vendor, int device);
 
-/***** APB SLAVES *****/
+/* Print short information about devices on the AMBA bus onto the console */
+extern void ambapp_print(struct ambapp_bus *abus, int show_depth);
 
-/* Return number of APB Slave devices which has given vendor and device */
-int amba_get_number_apbslv_devices (amba_confarea_type * amba_conf, int vendor,
-                                    int device);
+/* Mark a device taken (allocate), Owner field is set with owner Data. Returns
+ * -1 if device has already been allocated.
+ */
+extern int ambapp_alloc_dev(struct ambapp_dev *dev, void *owner);
 
-/* Get First APB Slave device of this vendor&device id */
-int amba_find_apbslv (amba_confarea_type * amba_conf, int vendor, int device,
-                      amba_apb_device * dev);
+/* Owner field is cleared, which indicates that device is not allocated */
+extern void ambapp_free_dev(struct ambapp_dev *dev);
 
-/* Get APB Slave device of this vendor&device id. (setting nr to 0 is eqivalent to calling amba_find_apbslv() ) */
-int amba_find_next_apbslv (amba_confarea_type * amba_conf, int vendor,
-                           int device, amba_apb_device * dev, int index);
+/* Find AHB/APB Bridge or AHB/AHB Bridge Parent */
+extern struct ambapp_dev *ambapp_find_parent(struct ambapp_dev *dev);
 
-/* Get first nr APB Slave devices, put them into dev (which is an array of nr length) */
-int amba_find_apbslvs (amba_confarea_type * amba_conf, int vendor, int device,
-                       amba_apb_device * devs, int maxno);
+/* Returns bus depth (number of sub AHB buses) of device from root bus */
+extern int ambapp_depth(struct ambapp_dev *dev);
 
+/* Get Device Name from AMBA PnP name database */
+extern char *ambapp_device_id2str(int vendor, int id);
 
+/* Get Vendor Name from AMBA PnP name database */
+extern char *ambapp_vendor_id2str(int vendor);
 
-/***** AHB SLAVES *****/
+/* Set together VENDOR_DEVICE Name from AMBA PnP name database. Return length
+ * of C-string stored in buf not including string termination '\0'.
+ */
+extern int ambapp_vendev_id2str(int vendor, int id, char *buf);
 
-/* Return number of AHB Slave devices which has given vendor and device */
-int amba_get_number_ahbslv_devices (amba_confarea_type * amba_conf, int vendor,
-                                    int device);
+/* Help functions for backwards compability */
 
-/* Get First AHB Slave device of this vendor&device id */
-int amba_find_ahbslv (amba_confarea_type * amba_conf, int vendor, int device,
-                      amba_ahb_device * dev);
+extern int ambapp_find_apbslv(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_apb_info *dev);
 
-/* Get AHB Slave device of this vendor&device id. (setting nr to 0 is eqivalent to calling amba_find_ahbslv() ) */
-int amba_find_next_ahbslv (amba_confarea_type * amba_conf, int vendor,
-                           int device, amba_ahb_device * dev, int index);
+extern int ambapp_find_apbslv_next(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_apb_info *dev,
+	int index);
 
-/* Get first nr AHB Slave devices, put them into dev (which is an array of nr length) */
-int amba_find_ahbslvs (amba_confarea_type * amba_conf, int vendor, int device,
-                       amba_ahb_device * devs, int maxno);
+extern int ambapp_find_apbslvs_next(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_apb_info *dev,
+	int index,
+	int maxno);
 
+extern int ambapp_find_apbslvs(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_apb_info *dev,
+	int maxno);
 
+extern int ambapp_find_ahbslv(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_ahb_info *dev);
 
-/***** AHB MASTERS *****/
+extern int ambapp_find_ahbslv_next(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_ahb_info *dev,
+	int index);
 
-/* Return number of AHB Master devices which has given vendor and device */
-int amba_get_number_ahbmst_devices (amba_confarea_type * amba_conf, int vendor,
-                                    int device);
+extern int ambapp_find_ahbslvs_next(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_ahb_info *dev,
+	int index,
+	int maxno);
 
-/* Get First AHB Master device of this vendor&device id */
-int amba_find_ahbmst (amba_confarea_type * amba_conf, int vendor, int device,
-                      amba_ahb_device * dev);
-
-/* Get AHB Master device of this vendor&device id. (setting nr to 0 is eqivalent to calling amba_find_ahbmst() ) */
-int amba_find_next_ahbmst (amba_confarea_type * amba_conf, int vendor,
-                           int device, amba_ahb_device * dev, int index);
-
-/* Get first nr AHB Master devices, put them into dev (which is an array of nr length) */
-int amba_find_ahbmsts (amba_confarea_type * amba_conf, int vendor, int device,
-                       amba_ahb_device * devs, int maxno);
+extern int ambapp_find_ahbslvs(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device,
+	struct ambapp_ahb_info *dev,
+	int maxno);
 
 
 /******** AMBA DEVICES *******/

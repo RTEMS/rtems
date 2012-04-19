@@ -61,7 +61,7 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
                   : "0"  (_tmp), "1"  (_delay) ); \
   }
 
-extern m68k_isr_entry M68Kvec[];   /* vector table address */
+extern rtems_isr_entry M68Kvec[];   /* vector table address */
 
 /* functions */
 
@@ -72,7 +72,7 @@ extern char M360DefaultWatchdogFeeder;
 
 extern int m360_clock_rate; /* BRG clock rate, defined in console.c */
 
-m68k_isr_entry set_vector(
+rtems_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type
