@@ -21,8 +21,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-static int isinit = 0;
-
 /* Let user override which on-chip APBUART will be debug UART
  * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
  * 1 = APBUART[0]
@@ -50,44 +48,38 @@ int bsp_debug_uart_init(void)
   struct ambapp_dev *adev;
   struct ambapp_apb_info *apb;
 
-  if (isinit == 0) {
-    /* Update debug_uart_index to index used as debug console.
-     * Let user select Debug console by setting debug_uart_index. If the
-     * BSP is to provide the default UART (debug_uart_index==0):
-     *   non-MP: APBUART[0] is debug console
-     *   MP: LEON CPU index select UART
-     */
-    if (debug_uart_index == 0) {
+  /* Update debug_uart_index to index used as debug console.
+   * Let user select Debug console by setting debug_uart_index. If the
+   * BSP is to provide the default UART (debug_uart_index==0):
+   *   non-MP: APBUART[0] is debug console
+   *   MP: LEON CPU index select UART
+   */
+  if (debug_uart_index == 0) {
 #if defined(RTEMS_MULTIPROCESSING)
-      debug_uart_index = LEON3_Cpu_Index;
+    debug_uart_index = LEON3_Cpu_Index;
 #else
-      debug_uart_index = 0;
+    debug_uart_index = 0;
 #endif
-    } else {
-      debug_uart_index = debug_uart_index - 1; /* User selected dbg-console */
-    }
-
-    /* Find APBUART core for System Debug Console */
-    i = debug_uart_index;
-    adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
-                                   VENDOR_GAISLER, GAISLER_APBUART,
-                                   ambapp_find_by_idx, (void *)&i);
-    if (adev) {
-      /* Found a matching debug console, initialize debug uart if present
-       * for printk
-       */
-      apb = (struct ambapp_apb_info *)adev->devinfo;
-      dbg_uart = (ambapp_apb_uart *)apb->start;
-      dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-      dbg_uart->status = 0;
-    }
-    isinit = 1;
+  } else {
+    debug_uart_index = debug_uart_index - 1; /* User selected dbg-console */
   }
 
-  if (dbg_uart == NULL)
-    return 0;
-  else
+  /* Find APBUART core for System Debug Console */
+  i = debug_uart_index;
+  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+                                 VENDOR_GAISLER, GAISLER_APBUART,
+                                 ambapp_find_by_idx, (void *)&i);
+  if (adev) {
+    /* Found a matching debug console, initialize debug uart if present
+     * for printk
+     */
+    apb = (struct ambapp_apb_info *)adev->devinfo;
+    dbg_uart = (ambapp_apb_uart *)apb->start;
+    dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+    dbg_uart->status = 0;
     return 1;
+  } else
+    return 0;
 }
 
 /*
