@@ -13,8 +13,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <bsp.h>
@@ -100,6 +98,73 @@ int console_pollRead(int minor)
     port = minor - 1;
 
   return apbuart_inbyte_nonblocking(apbuarts[port].regs);
+}
+
+int console_set_attributes(int minor, const struct termios *t)
+{
+  unsigned int scaler;
+  unsigned int ctrl;
+  int baud;
+  struct apbuart_priv *uart;
+
+  switch (t->c_cflag & CSIZE) {
+    default:
+    case CS5:
+    case CS6:
+    case CS7:
+      /* Hardware doesn't support other than CS8 */
+      return -1;
+    case CS8:
+      break;
+  }
+
+  if (minor == 0)
+    uart = &apbuarts[syscon_uart_index];
+  else
+    uart = &apbuarts[minor - 1];
+
+  /* Read out current value */
+  ctrl = uart->regs->ctrl;
+
+  switch (t->c_cflag & (PARENB|PARODD)) {
+    case (PARENB|PARODD):
+      /* Odd parity */
+      ctrl |= LEON_REG_UART_CTRL_PE|LEON_REG_UART_CTRL_PS;
+      break;
+
+    case PARENB:
+      /* Even parity */
+      ctrl &= ~LEON_REG_UART_CTRL_PS;
+      ctrl |= LEON_REG_UART_CTRL_PE;
+      break;
+
+    default:
+    case 0:
+    case PARODD:
+      /* No Parity */
+      ctrl &= ~(LEON_REG_UART_CTRL_PS|LEON_REG_UART_CTRL_PE);
+  }
+
+  if (!(t->c_cflag & CLOCAL)) {
+    ctrl |= LEON_REG_UART_CTRL_FL;
+  } else {
+    ctrl &= ~LEON_REG_UART_CTRL_FL;
+  }
+
+  /* Update new settings */
+  uart->regs->ctrl = ctrl;
+
+  /* Baud rate */
+  baud = rtems_termios_baud_to_number(t->c_cflag);
+  if (baud > 0) {
+    /* Calculate Baud rate generator "scaler" number */
+    scaler = (((uart->freq_hz * 10) / (baud * 8)) - 5) / 10;
+
+    /* Set new baud rate by setting scaler */
+    uart->regs->scaler = scaler;
+  }
+
+  return 0;
 }
 
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
@@ -208,7 +273,7 @@ rtems_device_driver console_open(
     NULL,                        /* lastClose */
     console_pollRead,            /* pollRead */
     console_write_support,       /* write */
-    NULL,                        /* setAttributes */
+    console_set_attributes,      /* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
     0                            /* outputUsesInterrupts */
