@@ -26,6 +26,7 @@ RTEMS_BSPOPTS_HELP([BSP_CPU_CLOCK_SPEED],
 [The bus clock to be used inside the mcf54xx])
 
 RTEMS_BSPOPTS_SET([M5484FIREENGINE],[m5484FireEngine],[1])
+RTEMS_BSPOPTS_SET([M5484FIREENGINE],[*],[])
 RTEMS_BSPOPTS_HELP([M5484FIREENGINE],
 [If defined, use custom settings for the m5484FireEngine BSP.])
 
@@ -34,13 +35,13 @@ RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[9600])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[initial baudrate for UARTs])
 
 RTEMS_BSPOPTS_SET([HAS_DBUG],[COBRA5475],[1])
-RTEMS_BSPOPTS_SET([HAS_DBUG],[*],[0])
+RTEMS_BSPOPTS_SET([HAS_DBUG],[*],[])
 RTEMS_BSPOPTS_HELP([HAS_DBUG],
 [If defined, we will not boot from RESET, but from Freescale DBug monitor.])
 
 RTEMS_BSPOPTS_SET([HAS_LOW_LEVEL_INIT],[m5484FireEngine],[1])
-RTEMS_BSPOPTS_SET([HAS_LOW_LEVEL_INIT],[*],[0])
-RTEMS_BSPOPTS_HELP([HAS_DBUG],
+RTEMS_BSPOPTS_SET([HAS_LOW_LEVEL_INIT],[*],[])
+RTEMS_BSPOPTS_HELP([HAS_LOW_LEVEL_INIT],
 [If defined, we will do all the low level init of the chip (like bus/memory...).])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
