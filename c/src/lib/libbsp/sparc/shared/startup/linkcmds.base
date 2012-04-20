@@ -150,6 +150,12 @@ SECTIONS
     __start_pcpu_set = .;
     *(set_pcpu);
     __stop_pcpu_set = .;
+    _bsd__start_set_ieee80211_ioctl_getset = .;
+    *(_bsd_set_ieee80211_ioctl_getset);
+    _bsd__stop_set_ieee80211_ioctl_getset = .;
+    _bsd__start_set_ieee80211_ioctl_setset = .;
+    *(_bsd_set_ieee80211_ioctl_setset);
+    _bsd__stop_set_ieee80211_ioctl_setset = .;
   } >ram
   .rwbsdsets : {
     /* Special FreeBSD linker set sections */

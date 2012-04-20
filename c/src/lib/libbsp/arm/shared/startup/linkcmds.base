@@ -306,6 +306,15 @@ SECTIONS {
 		_bsd__start_set_sysctl_set = .;
 		*(_bsd_set_sysctl_set);
 		_bsd__stop_set_sysctl_set = .;
+		__start_pcpu_set = .;
+		*(set_pcpu);
+		__stop_pcpu_set = .;
+		_bsd__start_set_ieee80211_ioctl_getset = .;
+		*(_bsd_set_ieee80211_ioctl_getset);
+		_bsd__stop_set_ieee80211_ioctl_getset = .;
+		_bsd__start_set_ieee80211_ioctl_setset = .;
+		*(_bsd_set_ieee80211_ioctl_setset);
+		_bsd__stop_set_ieee80211_ioctl_setset = .;
 
 		bsp_section_rodata_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
