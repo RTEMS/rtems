@@ -70,8 +70,10 @@ extern char WorkAreaBase [];
 #define m68k_set_acr3(_acr3) __asm__ volatile ("movec %0,#0x0007" : : "d" (_acr3))
 
 /*
- * Set initial cacr mode, mainly enables branch/intruction/data cache and
- * switch off FPU.
+ * Set initial CACR mode, mainly enables branch/instruction/data cache.  The
+ * FPU must be switched on in the BSP startup code since the
+ * _Thread_Start_multitasking() will restore the floating-point context of the
+ * initialization task if necessary.
  */
 static const uint32_t BSP_CACR_INIT = MCF548X_CACR_DEC /* enable data cache */
   | MCF548X_CACR_BEC /* enable branch cache */
@@ -80,8 +82,7 @@ static const uint32_t BSP_CACR_INIT = MCF548X_CACR_DEC /* enable data cache */
       /* set data cache mode to write-through */
   | MCF548X_CACR_DESB /* enable data store buffer */
   | MCF548X_CACR_DDSP /* data access only in supv. mode */
-  | MCF548X_CACR_IDSP /* instr. access only in supv. mode */
-  | MCF548X_CACR_DF; /* disable FPU */
+  | MCF548X_CACR_IDSP; /* instr. access only in supv. mode */
 
 /*
  * CACR maintenance functions
@@ -272,15 +273,6 @@ void bsp_start( void )
 {
   /* Initialize CACR shadow register */
   _CPU_cacr_shadow = BSP_CACR_INIT;
-
-  /* Switch on FPU in CACR shadow register if necessary */
-  if ((Configuration_POSIX_API.number_of_initialization_threads > 0) ||
-      ((Configuration_RTEMS_API.number_of_initialization_tasks > 0) &&
-       (Configuration_RTEMS_API.User_initialization_tasks_table
-	->attribute_set & RTEMS_FLOATING_POINT) != 0)
-      ) {
-    _CPU_cacr_shadow &= ~MCF548X_CACR_DF;
-  }
 
   /*
    * Load the shadow variable of CACR with initial mode and write it to the
