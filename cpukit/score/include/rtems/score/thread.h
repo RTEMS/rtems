@@ -776,6 +776,9 @@ Thread_Control *_Thread_Get (
  *  satisfied from an ISR while the thread executing was in the
  *  process of blocking.
  *
+ *  This method will restore the previous ISR disable level during the cancel
+ *  operation.  Thus it is an implicit _ISR_Enable().
+ *
  *  @param[in] sync_state is the synchronization state
  *  @param[in] the_thread is the thread whose blocking is canceled
  *  @param[in] level is the previous ISR disable level
