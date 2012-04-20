@@ -62,7 +62,7 @@ libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_show.c
 # console
 libbsp_a_SOURCES += console/console.c
 # debugio
-libbsp_a_SOURCES += console/debugputs.c
+libbsp_a_SOURCES += console/printk_support.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h

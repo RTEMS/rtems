@@ -7,8 +7,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <rtems.h>
@@ -71,7 +69,6 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
   XSCALE_OS_TIMER_TSR = 0x1;
   /* disable timer interrupt*/
   XSCALE_OS_TIMER_IER &= ~0x1;
-  return;
 }
 
 /**
@@ -82,22 +79,20 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
-    /* check timer interrupt */
+  /* check timer interrupt */
   return XSCALE_OS_TIMER_IER & 0x1;
 }
 
-rtems_isr Clock_isr(rtems_vector_number vector);
+void Clock_isr(rtems_irq_hdl_param arg);
 
-/* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data clock_isr_data = {
-  XSCALE_IRQ_OS_TIMER,
-  (rtems_irq_hdl)Clock_isr,
-  NULL,
-  clock_isr_on,
-  clock_isr_off,
-  clock_isr_is_on
+  .name   = XSCALE_IRQ_OS_TIMER,
+  .hdl    = Clock_isr,
+  .handle = NULL,
+  .on     = clock_isr_on,
+  .off    = clock_isr_off,
+  .isOn   = clock_isr_is_on,
 };
-
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do {						       \
@@ -113,9 +108,6 @@ void Clock_driver_support_initialize_hardware(void)
   period_num = (TIMER_RATE* Configuration.microseconds_per_tick)/10000;
 #endif
 }
-
-
-#define CLOCK_VECTOR 0
 
 #define Clock_driver_support_at_tick() \
   do { \

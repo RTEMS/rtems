@@ -6,36 +6,27 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *
  *  http://www.rtems.com/license/LICENSE.
- *
- *
- *  $Id$
-*/
+ */
+
 #include <rtems.h>
 #include <bsp/irq.h>
 #include <bsp.h>
 #include <s3c24xx.h>
 
-/* this is defined in ../../../shared/clockdrv_shell.h */
-rtems_isr Clock_isr(rtems_vector_number vector);
+void Clock_isr(rtems_irq_hdl_param arg);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
 static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 
-/* Replace the first value with the clock's interrupt name. */
-rtems_irq_connect_data clock_isr_data = {BSP_INT_TIMER4,
-                                         (rtems_irq_hdl)Clock_isr,
-					 NULL,
-                                         clock_isr_on,
-                                         clock_isr_off,
-                                         clock_isr_is_on
+rtems_irq_connect_data clock_isr_data = {
+  .name   = BSP_INT_TIMER4,
+  .hdl    = Clock_isr,
+  .handle = NULL,
+  .on     = clock_isr_on,
+  .off    = clock_isr_off,
+  .isOn   = clock_isr_is_on,
 };
-
-/* If you follow the code, this is never used, so any value
- * should work
- */
-#define CLOCK_VECTOR 0
 
 /**
  *  Return the nanoseconds since last tick
@@ -55,7 +46,7 @@ uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
  */
 #define Clock_driver_support_at_tick()                \
   do {                                                \
-        ClearPending(BIT_TIMER4);                                 \
+        ClearPending(BIT_TIMER4);                     \
   } while(0)
 
 
@@ -118,7 +109,6 @@ uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
-    return;
 }
 
 /**
@@ -139,9 +129,7 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
-    return 1;
 }
-
 
 /* Make sure to include this, and only at the end of the file */
 #include "../../../../libbsp/shared/clockdrv_shell.h"

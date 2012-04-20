@@ -20,7 +20,7 @@
 #ifdef ARM_MULTILIB_ARCH_V7M
 
 /* This is defined in clockdrv_shell.h */
-static rtems_isr Clock_isr(void *arg);
+void Clock_isr(rtems_irq_hdl_param arg);
 
 #define _ARMV7M_Systick_get_factor(freq) \
   ((1000000000ULL << 32) / (freq))

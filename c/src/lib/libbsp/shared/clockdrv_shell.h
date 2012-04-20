@@ -57,8 +57,8 @@ void Clock_exit( void );
  *  Return values:      NONE
  */
 #ifdef BSP_FEATURE_IRQ_EXTENSION
-rtems_isr Clock_isr(void *arg);
-rtems_isr Clock_isr(void *arg)
+void Clock_isr(rtems_irq_hdl_param arg);
+void Clock_isr(rtems_irq_hdl_param arg)
 {
 #else 
 rtems_isr Clock_isr(rtems_vector_number vector);

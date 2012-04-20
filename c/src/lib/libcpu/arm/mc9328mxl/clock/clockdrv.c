@@ -11,10 +11,8 @@
  *  found in the file LICENSE in this distribution or at
  *
  *  http://www.rtems.com/license/LICENSE.
- *
- *
- *  $Id$
-*/
+ */
+
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -22,26 +20,20 @@
 #include <rtems/bspIo.h>  /* for printk */
 
 /* this is defined in ../../../shared/clockdrv_shell.h */
-rtems_isr Clock_isr(rtems_vector_number vector);
+void Clock_isr(rtems_irq_hdl_param arg);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
 static void clock_isr_off(const rtems_irq_connect_data *unused);
 static int clock_isr_is_on(const rtems_irq_connect_data *irq);
 
 /* Replace the first value with the clock's interrupt name. */
 rtems_irq_connect_data clock_isr_data = {
-    .name   = BSP_INT_TIMER1,
-    .hdl    = (rtems_irq_hdl)Clock_isr,
-    .handle = (void *)BSP_INT_TIMER1,
-    .on     = clock_isr_on,
-    .off    = clock_isr_off,
-    .isOn   = clock_isr_is_on,
+  .name   = BSP_INT_TIMER1,
+  .hdl    = Clock_isr,
+  .handle = (void *)BSP_INT_TIMER1,
+  .on     = clock_isr_on,
+  .off    = clock_isr_off,
+  .isOn   = clock_isr_is_on,
 };
-
-/* If you follow the code, this is never used, so any value
- * should work
- */
-#define CLOCK_VECTOR 0
-
 
 /**
  * When we get the clock interrupt
@@ -54,7 +46,6 @@ rtems_irq_connect_data clock_isr_data = {
         reg = MC9328MXL_TMR1_TSTAT;                   \
         MC9328MXL_TMR1_TSTAT = 0;                     \
   } while(0)
-
 
 /**
  * Installs the clock ISR. You shouldn't need to change this.
@@ -102,10 +93,10 @@ rtems_irq_connect_data clock_isr_data = {
  */
 #define Clock_driver_support_shutdown_hardware()                        \
   do {                                                                  \
-        /* Disable timer */ \
-        MC9328MXL_TMR1_TCTL = 0; \
-	BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
-     } while (0)
+    /* Disable timer */ \
+    MC9328MXL_TMR1_TCTL = 0; \
+    BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
+  } while (0)
 
 /**
  * Enables clock interrupt.
@@ -114,10 +105,8 @@ rtems_irq_connect_data clock_isr_data = {
  */
 static void clock_isr_on(const rtems_irq_connect_data *unused)
 {
-    MC9328MXL_TMR1_TCTL |= MC9328MXL_TMR_TCTL_IRQEN;
-    MC9328MXL_AITC_INTENNUM = MC9328MXL_INT_TIMER1;
-
-    return;
+  MC9328MXL_TMR1_TCTL |= MC9328MXL_TMR_TCTL_IRQEN;
+  MC9328MXL_AITC_INTENNUM = MC9328MXL_INT_TIMER1;
 }
 
 /**
@@ -127,9 +116,8 @@ static void clock_isr_on(const rtems_irq_connect_data *unused)
  */
 static void clock_isr_off(const rtems_irq_connect_data *unused)
 {
-    MC9328MXL_TMR1_TCTL &= ~MC9328MXL_TMR_TCTL_IRQEN;
-    MC9328MXL_AITC_INTDISNUM = MC9328MXL_INT_TIMER1;
-    return;
+  MC9328MXL_TMR1_TCTL &= ~MC9328MXL_TMR_TCTL_IRQEN;
+  MC9328MXL_AITC_INTDISNUM = MC9328MXL_INT_TIMER1;
 }
 
 /**
@@ -140,9 +128,8 @@ static void clock_isr_off(const rtems_irq_connect_data *unused)
  */
 static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
-    return MC9328MXL_TMR1_TCTL & MC9328MXL_TMR_TCTL_IRQEN;
+  return MC9328MXL_TMR1_TCTL & MC9328MXL_TMR_TCTL_IRQEN;
 }
-
 
 /* Make sure to include this, and only at the end of the file */
 #include "../../../../libbsp/shared/clockdrv_shell.h"
