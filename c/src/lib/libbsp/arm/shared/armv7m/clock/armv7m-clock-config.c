@@ -16,7 +16,6 @@
 #include <rtems/score/armv7m.h>
 
 #include <bsp.h>
-#include <bsp/irq.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
 
