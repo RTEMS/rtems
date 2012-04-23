@@ -67,9 +67,9 @@ typedef time_t qres_atime_t;
 /** Server parameters. */
 typedef struct {
   /** Relative deadline of the server. */
-  uint32_t P;
+  qres_time_t P;
   /** Budget (computation time) of the server. */
-  uint32_t Q;
+  qres_time_t Q;
 } qres_params_t;
 
 /**
