@@ -67,7 +67,8 @@ enum auth_stat {
 	 * failed locally
 	*/
 	AUTH_INVALIDRESP=6,		/* bogus response verifier */
-	AUTH_FAILED=7			/* some unknown reason */
+	AUTH_FAILED=7,			/* some unknown reason */
+	_AUTH_STAT = 0xffffffff
 };
 
 union des_block {

@@ -72,7 +72,8 @@
 enum xprt_stat {
 	XPRT_DIED,
 	XPRT_MOREREQS,
-	XPRT_IDLE
+	XPRT_IDLE,
+	_XPRT_STAT = 0xffffffff
 };
 
 struct rpc_msg;
