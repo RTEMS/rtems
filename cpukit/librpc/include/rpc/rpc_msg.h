@@ -56,12 +56,14 @@
 
 enum msg_type {
 	CALL=0,
-	REPLY=1
+	REPLY=1,
+	_MSG_TYPE = 0xffffffff
 };
 
 enum reply_stat {
 	MSG_ACCEPTED=0,
-	MSG_DENIED=1
+	MSG_DENIED=1,
+	_REPLY_STAT = 0xffffffff
 };
 
 enum accept_stat {
@@ -70,12 +72,14 @@ enum accept_stat {
 	PROG_MISMATCH=2,
 	PROC_UNAVAIL=3,
 	GARBAGE_ARGS=4,
-	SYSTEM_ERR=5
+	SYSTEM_ERR=5,
+	_ACCEPT_STAT = 0xffffffff
 };
 
 enum reject_stat {
 	RPC_MISMATCH=0,
-	AUTH_ERROR=1
+	AUTH_ERROR=1,
+	_REJECT_STAT = 0xffffffff
 };
 
 /*
