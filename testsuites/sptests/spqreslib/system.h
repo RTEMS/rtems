@@ -48,7 +48,7 @@ rtems_task Task_Periodic(
 #include <rtems/rtems/clock.h>
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
-#include <qreslib.h>
+#include <rtems/qreslib.h>
 
 /* global variables */
 

@@ -126,7 +126,8 @@ void _Event_Seize(
    *  An interrupt completed the thread's blocking request.
    *  The blocking thread was satisfied by an ISR or timed out.
    *
-   *  WARNING! Returning with interrupts disabled!
+   *  WARNING! Entering with interrupts disabled and returning with interrupts
+   *  enabled!
    */
   _Thread_blocking_operation_Cancel( sync_state, executing, level );
 }

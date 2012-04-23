@@ -337,6 +337,10 @@ $(PROJECT_INCLUDE)/rtems/serial_mouse.h: libmisc/mouse/serial_mouse.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/serial_mouse.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/serial_mouse.h
 
+$(PROJECT_INCLUDE)/rtems/qreslib.h: libqos/qreslib.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/qreslib.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/qreslib.h
+
 if LIBSHELL
 $(PROJECT_INCLUDE)/rtems/shell.h: libmisc/shell/shell.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/shell.h

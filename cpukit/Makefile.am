@@ -15,7 +15,6 @@ SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += libmd
 SUBDIRS += libgnat
-SUBDIRS += libqos
 SUBDIRS += wrapup
 
 SUBDIRS += zlib
@@ -166,6 +165,9 @@ include_rtems_HEADERS += libmisc/fb/mw_uid.h
 ## mouse
 include_rtems_HEADERS += libmisc/mouse/mouse_parser.h
 include_rtems_HEADERS += libmisc/mouse/serial_mouse.h
+
+## libqos
+include_rtems_HEADERS += libqos/qreslib.h
 
 ## shell
 if LIBSHELL

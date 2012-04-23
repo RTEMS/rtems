@@ -1188,8 +1188,8 @@ int		len;
 		}
 		chpt++;
 	} else {
-		*puid = RPCIOD_DEFAULT_ID;
-		*pgid = RPCIOD_DEFAULT_ID;
+		*puid = geteuid();
+		*pgid = getegid();
 		chpt  = *pPath;
 	}
 	if ( pHost )
@@ -1883,6 +1883,7 @@ int					rv = 0;
 struct timeval				now;
 diropres				res;
 NfsNode					node = parentloc->node_access;
+Nfs					nfs  = node->nfs;
 mode_t					type = S_IFMT & mode;
 char					*dupname;
 
@@ -1901,16 +1902,15 @@ char					*dupname;
 
 	SERP_ARGS(node).createarg.name       		= dupname;
 	SERP_ARGS(node).createarg.attributes.mode	= mode;
-	/* TODO: either use our uid or use the Nfs credentials */
-	SERP_ARGS(node).createarg.attributes.uid	= 0;
-	SERP_ARGS(node).createarg.attributes.gid	= 0;
+	SERP_ARGS(node).createarg.attributes.uid	= nfs->uid;
+	SERP_ARGS(node).createarg.attributes.gid	= nfs->gid;
 	SERP_ARGS(node).createarg.attributes.size	= 0;
 	SERP_ARGS(node).createarg.attributes.atime.seconds	= now.tv_sec;
 	SERP_ARGS(node).createarg.attributes.atime.useconds	= now.tv_usec;
 	SERP_ARGS(node).createarg.attributes.mtime.seconds	= now.tv_sec;
 	SERP_ARGS(node).createarg.attributes.mtime.useconds	= now.tv_usec;
 
-	if ( nfscall( node->nfs->server,
+	if ( nfscall( nfs->server,
 						(type == S_IFDIR) ? NFSPROC_MKDIR : NFSPROC_CREATE,
 						(xdrproc_t)xdr_createargs,	&SERP_FILE(node),
 						(xdrproc_t)xdr_diropres,	&res)
@@ -1976,6 +1976,7 @@ int					rv = 0;
 struct timeval				now;
 nfsstat					status;
 NfsNode					node = parentloc->node_access;
+Nfs					nfs  = node->nfs;
 char					*dupname;
 
 	dupname = nfs_dupname(name, namelen);
@@ -1992,16 +1993,15 @@ char					*dupname;
 	SERP_ARGS(node).symlinkarg.to				= (nfspath) target;
 
 	SERP_ARGS(node).symlinkarg.attributes.mode	= S_IFLNK | S_IRWXU | S_IRWXG | S_IRWXO;
-	/* TODO */
-	SERP_ARGS(node).symlinkarg.attributes.uid	= 0;
-	SERP_ARGS(node).symlinkarg.attributes.gid	= 0;
+	SERP_ARGS(node).symlinkarg.attributes.uid	= nfs->uid;
+	SERP_ARGS(node).symlinkarg.attributes.gid	= nfs->gid;
 	SERP_ARGS(node).symlinkarg.attributes.size	= 0;
 	SERP_ARGS(node).symlinkarg.attributes.atime.seconds  = now.tv_sec;
 	SERP_ARGS(node).symlinkarg.attributes.atime.useconds = now.tv_usec;
 	SERP_ARGS(node).symlinkarg.attributes.mtime.seconds  = now.tv_sec;
 	SERP_ARGS(node).symlinkarg.attributes.mtime.useconds = now.tv_usec;
 
-	if ( nfscall( node->nfs->server,
+	if ( nfscall( nfs->server,
 						NFSPROC_SYMLINK,
 						(xdrproc_t)xdr_symlinkargs,	&SERP_FILE(node),
 						(xdrproc_t)xdr_nfsstat,		&status)
@@ -2200,20 +2200,17 @@ static int nfs_dir_close(
 	return 0;
 }
 
-static ssize_t nfs_file_read(
-	rtems_libio_t *iop,
-	void          *buffer,
-	size_t        count
+static ssize_t nfs_file_read_chunk(
+	NfsNode node,
+	uint32_t offset,
+	void *buffer,
+	size_t count
 )
 {
 readres	rr;
-NfsNode node = iop->pathinfo.node_access;
 Nfs		nfs  = node->nfs;
 
-	if (count > NFS_MAXDATA)
-		count = NFS_MAXDATA;
-
-	SERP_ARGS(node).readarg.offset		= iop->offset;
+	SERP_ARGS(node).readarg.offset		= offset;
 	SERP_ARGS(node).readarg.count	  	= count;
 	SERP_ARGS(node).readarg.totalcount	= UINT32_C(0xdeadbeef);
 
@@ -2242,6 +2239,37 @@ Nfs		nfs  = node->nfs;
 
 
 	return rr.readres_u.reply.data.data_len;
+}
+
+static ssize_t nfs_file_read(
+	rtems_libio_t *iop,
+	void *buffer,
+	size_t count
+)
+{
+	ssize_t rv = 0;
+	NfsNode node = iop->pathinfo.node_access;
+	uint32_t offset = iop->offset;
+	char *in = buffer;
+
+	do {
+		size_t chunk = count <= NFS_MAXDATA ? count : NFS_MAXDATA;
+		ssize_t done = nfs_file_read_chunk(node, offset, in, chunk);
+
+		if (done > 0) {
+			offset += (uint32_t) done;
+			in += done;
+			count -= (size_t) done;
+			rv += done;
+		} else {
+			count = 0;
+			if (done < 0) {
+				rv = -1;
+			}
+		}
+	} while (count > 0);
+
+	return rv;
 }
 
 /* this is called by readdir() / getdents() */
