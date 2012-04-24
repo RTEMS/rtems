@@ -121,6 +121,10 @@ $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
 
+$(PROJECT_INCLUDE)/bsp/stackalloc.h: ../../shared/include/stackalloc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stackalloc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stackalloc.h
+
 $(PROJECT_INCLUDE)/bsp/utility.h: ../../shared/include/utility.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/utility.h
