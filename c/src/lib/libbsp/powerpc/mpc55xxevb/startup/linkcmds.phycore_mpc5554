@@ -2,26 +2,14 @@
  * Debug RAM is the top 4MB of external RAM and is swapped with the
  * FLASH for development.
  */
-MEMORY
-{
-	ROM (RX)       : ORIGIN = 0x00000000, LENGTH = 2M
-	RAM (AIW)      : ORIGIN = 0x40000000, LENGTH = 64K
-	RAM_EXT (AIW)  : ORIGIN = 0x21000000, LENGTH = 4M
-	DEBUG_RAM (AIW): ORIGIN = 0x21400000, LENGTH = 4M
-	NIRVANA        : ORIGIN = 0x00000000, LENGTH = 0
+MEMORY {
+	ROM : ORIGIN = 0x00000000, LENGTH = 2M
+	RAM : ORIGIN = 0x40000000, LENGTH = 64K
+	RAM_EXT : ORIGIN = 0x21000000, LENGTH = 4M
+	DEBUG_RAM : ORIGIN = 0x21400000, LENGTH = 4M
+	NOCACHE : ORIGIN = 0x0, LENGTH = 0
+	NIRVANA : ORIGIN = 0x00000000, LENGTH = 0
 }
-
-bsp_ram_start = ORIGIN (RAM);
-bsp_ram_end = ORIGIN (RAM) + LENGTH (RAM);
-bsp_ram_size = LENGTH (RAM);
-
-bsp_rom_start = ORIGIN (ROM);
-bsp_rom_end = ORIGIN (ROM) + LENGTH (ROM);
-bsp_rom_size = LENGTH (ROM);
-
-bsp_external_ram_start = ORIGIN (RAM_EXT);
-bsp_external_ram_end = ORIGIN (RAM_EXT) + LENGTH (RAM_EXT);
-bsp_external_ram_size = LENGTH (RAM_EXT);
 
 bsp_debug_ram_start = ORIGIN (DEBUG_RAM);
 bsp_debug_ram_end = ORIGIN (DEBUG_RAM) + LENGTH (DEBUG_RAM);
@@ -41,6 +29,7 @@ REGION_ALIAS ("REGION_DATA_LOAD", ROM);
 REGION_ALIAS ("REGION_BSS", RAM_EXT);
 REGION_ALIAS ("REGION_RWEXTRA", RAM_EXT);
 REGION_ALIAS ("REGION_WORK", RAM_EXT);
-REGION_ALIAS ("REGION_STACK", RAM_EXT);
+REGION_ALIAS ("REGION_STACK", RAM);
+REGION_ALIAS ("REGION_NOCACHE", NOCACHE);
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.mpc55xx

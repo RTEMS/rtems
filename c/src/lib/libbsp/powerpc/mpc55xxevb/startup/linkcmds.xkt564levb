@@ -2,20 +2,14 @@ MEMORY {
 	ROM : ORIGIN = 0x0, LENGTH = 1M
 	RAM_0 : ORIGIN = 0x40000000, LENGTH = 64K
 	RAM_1 : ORIGIN = 0x50000000, LENGTH = 64K
+	RAM_EXT : ORIGIN = 0x0, LENGTH = 0
+	NOCACHE : ORIGIN = 0x0, LENGTH = 0
 	NIRVANA : ORIGIN = 0x0, LENGTH = 0
 }
-
-bsp_ram_start = ORIGIN (RAM_0);
-bsp_ram_size = LENGTH (RAM_0);
-bsp_ram_end = bsp_ram_start + bsp_ram_size;
 
 bsp_ram_1_start = ORIGIN (RAM_1);
 bsp_ram_1_size = LENGTH (RAM_1);
 bsp_ram_1_end = bsp_ram_1_start + bsp_ram_1_size;
-
-bsp_rom_start = ORIGIN (ROM);
-bsp_rom_size = LENGTH (ROM);
-bsp_rom_end = bsp_rom_start + bsp_rom_size;
 
 REGION_ALIAS ("REGION_START", ROM);
 REGION_ALIAS ("REGION_FAST_TEXT", RAM_0);
@@ -32,5 +26,6 @@ REGION_ALIAS ("REGION_BSS", RAM_0);
 REGION_ALIAS ("REGION_RWEXTRA", RAM_0);
 REGION_ALIAS ("REGION_WORK", RAM_1);
 REGION_ALIAS ("REGION_STACK", RAM_1);
+REGION_ALIAS ("REGION_NOCACHE", NOCACHE);
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.mpc55xx

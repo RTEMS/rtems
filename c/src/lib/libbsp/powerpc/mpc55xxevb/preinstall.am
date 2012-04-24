@@ -57,6 +57,10 @@ $(PROJECT_LIB)/linkcmds.base: ../shared/startup/linkcmds.base $(PROJECT_LIB)/$(d
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.base
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.base
 
+$(PROJECT_LIB)/linkcmds.mpc55xx: startup/linkcmds.mpc55xx $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc55xx
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc55xx
+
 $(PROJECT_LIB)/linkcmds.gwlcfm: startup/linkcmds.gwlcfm $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.gwlcfm
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.gwlcfm
@@ -116,6 +120,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
 $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
+
+$(PROJECT_INCLUDE)/bsp/stackalloc.h: ../../shared/include/stackalloc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stackalloc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stackalloc.h
 
 $(PROJECT_INCLUDE)/bsp/utility.h: ../../shared/include/utility.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/utility.h

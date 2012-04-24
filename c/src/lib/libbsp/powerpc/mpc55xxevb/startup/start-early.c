@@ -166,8 +166,8 @@ BSP_START_TEXT_SECTION void mpc55xx_start_early(void)
   #if defined(BSP_DATA_CACHE_ENABLED) || defined(BSP_INSTRUCTION_CACHE_ENABLED)
     mpc55xx_start_cache();
   #endif
-  mpc55xx_start_mmu();
   mpc55xx_start_internal_ram();
+  mpc55xx_start_mmu();
   mpc55xx_start_mode_change();
   mpc55xx_start_siu();
   mpc55xx_start_ebi_chip_select();

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -323,6 +323,13 @@ SECTIONS {
 		bsp_section_stack_end = .;
 	} > REGION_STACK AT > REGION_STACK
 	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_begin;
+
+	.nocache : {
+		bsp_section_nocache_begin = .;
+		*(.bsp_nocache)
+		bsp_section_nocache_end = .;
+	} > REGION_NOCACHE AT > REGION_NOCACHE
+	bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
 
 	/* FIXME */
 	RamBase = ORIGIN (REGION_WORK);

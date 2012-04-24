@@ -1,0 +1,13 @@
+bsp_ram_start = ORIGIN (RAM);
+bsp_ram_size = LENGTH (RAM) + LENGTH (NOCACHE);
+bsp_ram_end = bsp_ram_start + bsp_ram_size;
+
+bsp_rom_start = ORIGIN (ROM);
+bsp_rom_size = LENGTH (ROM);
+bsp_rom_end = bsp_rom_start + bsp_rom_size;
+
+bsp_external_ram_start = ORIGIN (RAM_EXT);
+bsp_external_ram_size = LENGTH (RAM_EXT);
+bsp_external_ram_end = bsp_external_ram_start + bsp_external_ram_size;
+
+INCLUDE linkcmds.base

@@ -28,7 +28,6 @@
 #include <bsp/irq.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/lpc24xx.h>
-#include <bsp/stackalloc.h>
 #include <bsp/system-clocks.h>
 #include <bsp/uart-output-char.h>
 
@@ -94,12 +93,4 @@ void bsp_start(void)
 
   /* DMA */
   lpc24xx_dma_initialize();
-
-  /* Task stacks */
-  #ifdef LPC24XX_SPECIAL_TASK_STACKS_SUPPORT
-    bsp_stack_initialize(
-      bsp_section_stack_begin,
-      (uintptr_t) bsp_section_stack_size
-    );
-  #endif
 }
