@@ -1,14 +1,16 @@
-/*
- *  Scheduler Simple SMP Handler / Schedule
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 2011.
+ *  Scheduler Simple SMP Handler / Schedule
+ */
+
+/*
+ *  COPYRIGHT (c) 2011- 2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -36,6 +38,11 @@
 #define D(format,...)
 #endif
 
+/* Declaration to avoid warnings */
+bool _Scheduler_simple_smp_Assign(
+  Thread_Control *consider
+);
+
 /**
  *  @brief Assign Heir Thread to CPU
  *
@@ -56,7 +63,6 @@
  *          false, there is no point in attempting to place an heir of
  *          of lower priority.
  */
-
 bool _Scheduler_simple_smp_Assign(
   Thread_Control *consider
 )
@@ -134,7 +140,12 @@ bool _Scheduler_simple_smp_Assign(
     }
 
     /*
-     *  Past this point, found is true.
+     *  ASSERTION: (found == true)
+     *
+     *  Past this point, we have found a potential heir and are considering
+     *  whether the thread is better placed on another core. It is desirable
+     *  to preempt the lowest priority thread using time on core and
+     *  preemptibility as additional factors.
      */
 
     /*
@@ -155,8 +166,20 @@ bool _Scheduler_simple_smp_Assign(
       continue;
     }
 
-    if ( h->current_priority > pheir->current_priority )
+    /*
+     *  If the current heir is more important than the potential
+     *  heir, then we should not consider it further in scheduling.
+     */
+    if ( h->current_priority < pheir->current_priority )
       continue;
+
+    /*
+     *  ASSERTION: (h->current_priority == pheir->current_priority).
+     *
+     *  Past this point, this means we are considering the length of time
+     *  the thread has spent on the time on the CPU core and if it is
+     *  preemptible.
+     */
 
     /*
      *  If heir of potential CPU and of the current CPU are of the SAME
