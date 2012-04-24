@@ -25,6 +25,7 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 # Link commands
 project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base	
+dist_project_lib_DATA += startup/linkcmds.mpc55xx
 dist_project_lib_DATA += startup/linkcmds.gwlcfm
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb_spe
