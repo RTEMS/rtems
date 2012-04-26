@@ -52,6 +52,12 @@ extern "C" {
  */
 
 /**
+ * @brief Task stack allocator initialization for
+ * @ref CONFIGURE_TASK_STACK_ALLOCATOR_INIT.
+ */
+void bsp_stack_allocate_init(size_t stack_space_size);
+
+/**
  * @brief Task stack allocator for @ref CONFIGURE_TASK_STACK_ALLOCATOR.
  *
  * In case the designated task stack space from bsp_stack_initialize() is
@@ -63,6 +69,11 @@ void *bsp_stack_allocate(size_t size);
  * @brief Task stack free function for @ref CONFIGURE_TASK_STACK_DEALLOCATOR.
  */
 void bsp_stack_free(void *stack);
+
+/**
+ * @brief Task stack allocator initialization configuration option.
+ */
+#define CONFIGURE_TASK_STACK_ALLOCATOR_INIT bsp_stack_allocate_init
 
 /**
  * @brief Task stack allocator configuration option.

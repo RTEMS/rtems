@@ -27,29 +27,25 @@
 
 #include <bsp/linker-symbols.h>
 
-#define BSP_STACK_MAGIC 0xdeadbeef
+static Heap_Control bsp_stack_heap;
 
-static Heap_Control bsp_stack_heap = {
-  .page_size = BSP_STACK_MAGIC
-};
+void bsp_stack_allocate_init(size_t stack_space_size)
+{
+  _Heap_Initialize(
+    &bsp_stack_heap,
+    bsp_section_stack_begin,
+    (uintptr_t) bsp_section_stack_size,
+    CPU_STACK_ALIGNMENT
+  );
+}
 
 void *bsp_stack_allocate(size_t size)
 {
   void *stack = NULL;
 
-  if (bsp_stack_heap.page_size == BSP_STACK_MAGIC) {
-    uintptr_t rv = _Heap_Initialize(
-      &bsp_stack_heap,
-      bsp_section_stack_begin,
-      (uintptr_t) bsp_section_stack_size,
-      CPU_STACK_ALIGNMENT
-    );
-    if (rv == 0) {
-      return NULL;
-    }
+  if (bsp_stack_heap.area_begin != 0) {
+    stack = _Heap_Allocate(&bsp_stack_heap, size);
   }
-
-  stack = _Heap_Allocate(&bsp_stack_heap, size);
 
   if (stack == NULL) {
     stack = _Workspace_Allocate(size);
