@@ -131,36 +131,19 @@ int rtems_libio_to_fcntl_flags( uint32_t flags )
 
 rtems_libio_t *rtems_libio_allocate( void )
 {
-  rtems_libio_t *iop, *next;
-  rtems_status_code rc;
-  rtems_id sema;
+  rtems_libio_t *iop = NULL;
 
   rtems_libio_lock();
 
   if (rtems_libio_iop_freelist) {
-    rc = rtems_semaphore_create(
-      RTEMS_LIBIO_IOP_SEM(rtems_libio_iop_freelist - rtems_libio_iops),
-      1,
-      RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-      0,
-      &sema
-    );
-    if (rc != RTEMS_SUCCESSFUL)
-      goto failed;
     iop = rtems_libio_iop_freelist;
-    next = iop->data1;
-    (void) memset( iop, 0, sizeof(rtems_libio_t) );
+    rtems_libio_iop_freelist = iop->data1;
+    memset( iop, 0, sizeof(*iop) );
     iop->flags = LIBIO_FLAGS_OPEN;
-    iop->sem = sema;
-    rtems_libio_iop_freelist = next;
-    goto done;
   }
 
-failed:
-  iop = 0;
-
-done:
   rtems_libio_unlock();
+
   return iop;
 }
 
@@ -178,9 +161,6 @@ void rtems_libio_free(
   rtems_filesystem_location_free( &iop->pathinfo );
 
   rtems_libio_lock();
-
-    if (iop->sem)
-      rtems_semaphore_delete(iop->sem);
 
     iop->flags &= ~LIBIO_FLAGS_OPEN;
     iop->data1 = rtems_libio_iop_freelist;

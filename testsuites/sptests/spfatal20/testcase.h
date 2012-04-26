@@ -9,10 +9,6 @@
  *  $Id$
  */
 
-/* generate fatal errors in termios.c 
- *    rtems_semaphore_create( rtems_build_name ('T', 'R', 'r', c),...);
- */
-
 #define FATAL_ERROR_TEST_NAME            "20"
 #define FATAL_ERROR_DESCRIPTION  \
   "rtems_termios_initialize cannot create semaphore"

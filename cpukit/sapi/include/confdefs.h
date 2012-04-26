@@ -119,11 +119,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  From the number of file descriptors, we can determine how many
- *  semaphores the implementation will require.
+ *  Semaphore count used by the IO library.
  */
-#define CONFIGURE_LIBIO_SEMAPHORES \
-  (CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS + 1)
+#define CONFIGURE_LIBIO_SEMAPHORES 1
 
 #ifdef CONFIGURE_INIT
   /**

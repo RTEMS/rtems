@@ -24,5 +24,7 @@
 
 void force_error()
 {
-  /* we will not run this far */
+  /* This fatal error depends on the Termios device configuration */
+  printk( "*** END OF TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
+  rtems_test_exit(0);
 }
