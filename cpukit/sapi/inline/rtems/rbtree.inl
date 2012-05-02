@@ -5,17 +5,14 @@
  *  with the RBTree API in RTEMS. The rbtree is a Red Black Tree that
  *  is part of the Super Core. This is the published interface to that
  *  code.
- *
  */
  
 /*
- *  Copyright (c) 2010 Gedare Bloom.
+ *  Copyright (c) 2010-2012 Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_RBTREE_H
@@ -254,6 +251,17 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
   return _RBTree_Is_root( the_rbtree, the_node );
 }
 
+/**
+ * @copydoc _RBTree_Find_unprotected()
+ */
+RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find_unprotected(
+    rtems_rbtree_control *the_rbtree,
+    rtems_rbtree_node *the_node
+)
+{
+  return _RBTree_Find_unprotected( the_rbtree, the_node );
+}
+
 /** @brief Find the node with given key in the tree
  *
  *  This function returns a pointer to the node having key equal to the key
@@ -316,6 +324,17 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor(
 }
 
 /**
+ * @copydoc _RBTree_Extract_unprotected()
+ */
+RTEMS_INLINE_ROUTINE void rtems_rbtree_extract_unprotected(
+  rtems_rbtree_control *the_rbtree,
+  rtems_rbtree_node *the_node
+)
+{
+  _RBTree_Extract_unprotected( the_rbtree, the_node );
+}
+
+/**
  *  @brief Extract the specified node from a rbtree
  *
  *  This routine extracts @a the_node from @a the_rbtree on which it resides.
@@ -334,6 +353,20 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_extract(
  *
  *  This function removes the min node from @a the_rbtree and returns
  *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ */
+
+RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min_unprotected(
+  rtems_rbtree_control *the_rbtree
+)
+{
+  return _RBTree_Get_unprotected( the_rbtree, RBT_LEFT );
+}
+
+/**
+ *  @brief Obtain the min node on a rbtree
+ *
+ *  This function removes the min node from @a the_rbtree and returns
+ *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
  *  It disables interrupts to ensure the atomicity of the get operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
@@ -341,6 +374,20 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
 )
 {
   return _RBTree_Get( the_rbtree, RBT_LEFT );
+}
+
+/**
+ *  @brief Obtain the max node on a rbtree
+ *
+ *  This function removes the max node from @a the_rbtree and returns
+ *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ */
+
+RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max_unprotected(
+  rtems_rbtree_control *the_rbtree
+)
+{
+  return _RBTree_Get_unprotected( the_rbtree, RBT_RIGHT );
 }
 
 /**
@@ -363,13 +410,12 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
  *  This function returns a pointer to the min node from @a the_rbtree 
  *  without changing the tree.  If @a the_rbtree is empty, 
  *  then NULL is returned.
- *  It disables interrupts to ensure the atomicity of the peek operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_Peek( the_rbtree, RBT_LEFT );
+  return _RBTree_First( the_rbtree, RBT_LEFT );
 }
 
 /**
@@ -378,15 +424,23 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
  *  This function returns a pointer to the max node from @a the_rbtree 
  *  without changing the tree.  If @a the_rbtree is empty, 
  *  then NULL is returned.
- *  It disables interrupts to ensure the atomicity of the peek operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return _RBTree_Peek( the_rbtree, RBT_RIGHT );
+  return _RBTree_First( the_rbtree, RBT_RIGHT );
 }
 
+/**
+ * @copydoc _RBTree_Find_header_unprotected()
+ */
+RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_header_unprotected(
+  rtems_rbtree_node *the_node
+)
+{
+  return _RBTree_Find_header_unprotected( the_node );
+}
 
 /**
  *  @brief Find the control header of the tree containing a given node.
@@ -399,7 +453,18 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_header(
   rtems_rbtree_node *the_node
 )
 {
-  return(_RBTree_Find_header( the_node ));
+  return _RBTree_Find_header( the_node );
+}
+
+/**
+ * @copydoc _RBTree_Insert_unprotected()
+ */
+RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert_unprotected(
+  rtems_rbtree_control *the_rbtree,
+  rtems_rbtree_node *the_node
+)
+{
+  return _RBTree_Insert_unprotected( the_rbtree, the_node );
 }
 
 /**
@@ -427,7 +492,7 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_unique(
   const rtems_rbtree_control *the_rbtree
 )
 {
-  return( _RBTree_Is_unique(the_rbtree) );
+  return _RBTree_Is_unique(the_rbtree);
 }
 
 #endif
