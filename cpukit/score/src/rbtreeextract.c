@@ -108,25 +108,17 @@ void _RBTree_Extract_unprotected(
 
   /* check if min needs to be updated */
   if (the_node == the_rbtree->first[RBT_LEFT]) {
-    if (the_node->child[RBT_RIGHT])
-      the_rbtree->first[RBT_LEFT] = the_node->child[RBT_RIGHT];
-    else {
-      the_rbtree->first[RBT_LEFT] = the_node->parent;
-      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree,
-            the_rbtree->first[RBT_LEFT]))
-        the_rbtree->first[RBT_LEFT] = NULL;
-    }
+    RBTree_Node *next;
+    next = _RBTree_Successor_unprotected(the_rbtree, the_node);
+    the_rbtree->first[RBT_LEFT] = next;
   }
-  /* check if max needs to be updated: note, min can equal max (1 element) */
+
+  /* Check if max needs to be updated. min=max for 1 element trees so
+   * do not use else if here. */
   if (the_node == the_rbtree->first[RBT_RIGHT]) {
-    if (the_node->child[RBT_LEFT])
-      the_rbtree->first[RBT_RIGHT] = the_node->child[RBT_LEFT];
-    else {
-      the_rbtree->first[RBT_RIGHT] = the_node->parent;
-      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree,
-            the_rbtree->first[RBT_RIGHT]))
-        the_rbtree->first[RBT_RIGHT] = NULL;
-    }
+    RBTree_Node *previous;
+    previous = _RBTree_Predecessor_unprotected(the_rbtree, the_node);
+    the_rbtree->first[RBT_RIGHT] = previous;
   }
 
   /* if the_node has at most one non-null child then it is safe to proceed
