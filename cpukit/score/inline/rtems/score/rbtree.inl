@@ -10,13 +10,11 @@
  */
 
 /*
- *  Copyright (c) 2010 Gedare Bloom.
+ *  Copyright (c) 2010-2012 Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_SCORE_RBTREE_H
@@ -457,22 +455,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get_unprotected(
   RBTree_Node *the_node = the_rbtree->first[dir];
   _RBTree_Extract_unprotected(the_rbtree, the_node);
   return the_node;
-}
-
-/** @brief Peek at the First Node (unprotected)
- *
- *  This function returns a pointer to the first node, minimum if @a dir is 0 
- *  or maximum if @a dir is 1, from @a the_rbtree without extracting it.  
- *  It does NOT disable interrupts to ensure the atomicity of the peek.
- *
- *  @retval NULL if @a the_rbtree is empty.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Peek_unprotected(
-  const RBTree_Control *the_rbtree,
-  RBTree_Direction dir
-)
-{
-  return(the_rbtree->first[dir]);
 }
 
 /** @brief Rotate the_node in the direction passed as second argument

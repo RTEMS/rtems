@@ -1,11 +1,9 @@
 /*
- *  Copyright (c) 2010 Gedare Bloom.
+ *  Copyright (c) 2010-2012 Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -45,7 +43,7 @@ RBTree_Node *_RBTree_Peek(
 
   return_node = NULL;
   _ISR_Disable( level );
-      return_node = _RBTree_Peek_unprotected( the_rbtree, dir );
+      return_node = _RBTree_First( the_rbtree, dir );
   _ISR_Enable( level );
   return return_node;
 }
