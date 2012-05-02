@@ -220,23 +220,6 @@ RBTree_Node *_RBTree_Get(
 );
 
 /**
- *  @brief Check the min or max node on a rbtree
- *
- *  This function returns a pointer to the min or max node of @a the_rbtree.
- *  If @a the_rbtree is empty, then NULL is returned. @a dir specifies
- *  whether to return the min (0) or max (1).
- *
- *  @return This method returns a pointer to a node.
- *          If @a the_rbtree was empty, then NULL is returned.
- *
- *  @note It disables interrupts to ensure the atomicity of the get operation.
- */
-RBTree_Node *_RBTree_Peek(
-  const RBTree_Control *the_rbtree,
-  RBTree_Direction dir
-);
-
-/**
  * @brief Find the node with given key in the tree
  *
  *  This function returns a pointer to the node with key equal to a key
