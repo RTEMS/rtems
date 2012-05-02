@@ -1,5 +1,17 @@
+/**
+ *  @file
+ *
+ *  MRM332 Assembly Start Up Code
+ */
+
 /*
- *  $Id
+ *  COPYRIGHT (c) 2000.
+ *  Matt Cross <profesor@gweep.net>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
  */
 
 #include "mrm332.h"
