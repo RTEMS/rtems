@@ -12,9 +12,7 @@
 +-----------------------------------------------------------------+
 | The license and distribution terms for this file may be         |
 | found in the file LICENSE in this distribution or at            |
-|                                                                 |
 | http://www.rtems.com/license/LICENSE.                           |
-|                                                                 |
 +-----------------------------------------------------------------+
 | this file contains the SPI based driver for a HCMS29xx 4 digit  |
 | alphanumeric LED display                                        |
