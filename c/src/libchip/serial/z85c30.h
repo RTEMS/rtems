@@ -1,7 +1,11 @@
-/*
+/**
+ *  @file
+ *
  *  This include file contains all console driver definitions for the
  *  Zilog z85c30.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1998 by Radstone Technology
  *
  *
@@ -21,8 +25,6 @@
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id:
  */
 
 #ifndef __Z85C30_H
