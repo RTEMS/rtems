@@ -1,7 +1,5 @@
 /*
  * This file was machine-generated from the tmoverhd.exe output
- *
- *  $Id$
  */
 #define CALLING_OVERHEAD_INITIALIZE_EXECUTIVE	4
 #define CALLING_OVERHEAD_SHUTDOWN_EXECUTIVE	4

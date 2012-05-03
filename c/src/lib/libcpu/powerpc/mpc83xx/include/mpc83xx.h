@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #ifndef _MPC83XX_MPC83XX_H
 #define _MPC83XX_MPC83XX_H
 

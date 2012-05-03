@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp30
 sp30_SOURCES = init.c resume.c task1.c system.h

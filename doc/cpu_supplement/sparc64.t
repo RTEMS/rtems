@@ -2,9 +2,6 @@
 @c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @ifinfo
 @end ifinfo
@@ -99,9 +96,6 @@ XXX
 @c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @section Calling Conventions
 
@@ -505,9 +499,6 @@ adhere to these calling conventions.
 @c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @section Memory Model
 
@@ -600,9 +591,6 @@ involving the SPARC are not supported.
 @c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @section Interrupt Processing
 
@@ -762,9 +750,6 @@ the interrupt stack before invoking the installed handler.
 @c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @section Default Fatal Error Processing
 
@@ -793,9 +778,6 @@ loop to simulate a halt processor instruction.
 @c  COPYRIGHT (c) 1988-2002.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @section Board Support Packages
 

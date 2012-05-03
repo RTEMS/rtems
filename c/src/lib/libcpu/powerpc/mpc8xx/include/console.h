@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #ifndef _MPC8XX_CONSOLE_H
 #define _MPC8XX_CONSOLE_H
 

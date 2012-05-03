@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/raw_cb.h,v 1.19 2005/01/07 01:45:35 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NET_RAW_CB_H_
 #define _NET_RAW_CB_H_

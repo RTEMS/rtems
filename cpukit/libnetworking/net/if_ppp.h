@@ -19,9 +19,6 @@
  * $FreeBSD: src/sys/net/if_ppp.h,v 1.15 2005/01/07 01:45:34 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _IF_PPP_H_
 #define _IF_PPP_H_

@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = imfs_fsrdwr
 imfs_fsrdwr_SOURCES  = ../fsrdwr/init.c

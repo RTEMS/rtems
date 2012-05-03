@@ -30,7 +30,6 @@
 
 /* avr/iom644p.h - definitions for ATmega644P */
 
-/* $Id$ */
 
 #ifndef _AVR_IOM644P_H_
 #define _AVR_IOM644P_H_ 1

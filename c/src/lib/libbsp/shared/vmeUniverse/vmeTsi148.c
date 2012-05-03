@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Driver for the Tundra Tsi148 pci-vme bridge */
 
 /*

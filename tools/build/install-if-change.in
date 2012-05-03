@@ -14,9 +14,6 @@
 #   large variability across systems and we also need to support ou
 #   -V option.
 #   So we just copy and chmod by hand.
-#
-# $Id$
-#
 
 progname=`basename $0`
 #progname=${0##*/}        # fast basename hack for ksh, bash

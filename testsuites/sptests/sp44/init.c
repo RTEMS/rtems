@@ -3,8 +3,6 @@
  *
  *  This example shows a possible blocking of timeslicing if task mode is
  *  changed to timeslicing in the middle of its executing.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

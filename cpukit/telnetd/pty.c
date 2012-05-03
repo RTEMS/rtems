@@ -17,8 +17,6 @@
  *     is closed. Rather let 'read()' return a 0 count so
  *     they may cleanup. Some magic hack works around termios
  *     limitation.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

@@ -34,8 +34,6 @@
  *
  *  Further mods for PPC405EX/EXr by Michael Hamel
  *
- *  $Id$
- *
  */
 
 #include <rtems.h>

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Trivial i2c driver for reading "2-byte eeproms".
  * On 'open' the read-pointer is reset to 0, subsequent
  * read operations slurp data from there...

@@ -31,8 +31,6 @@
  */
 
 /*
- * $Id$
- *
  * Modifications are made to compile for RTEMS. Remove strncpy() and atoi() 
  *
  */

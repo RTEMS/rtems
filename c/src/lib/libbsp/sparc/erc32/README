@@ -1,8 +1,6 @@
 #
 #  Description of SIS as related to this BSP
 #
-#  $Id$
-#
 
 BSP NAME:           sis
 BOARD:              any based on the European Space Agency's ERC32

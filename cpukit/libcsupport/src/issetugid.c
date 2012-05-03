@@ -1,7 +1,5 @@
 /*
  *  Dummy version of BSD routine
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

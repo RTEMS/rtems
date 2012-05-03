@@ -1,11 +1,4 @@
 # Process this file with autoconf to produce a configure script.
-#
-# @file
-#
-# @ingroup mpc55xx_config
-#
-# @brief Configure script of LibCPU for PowerPC.
-#
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libcpu-powerpc],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])

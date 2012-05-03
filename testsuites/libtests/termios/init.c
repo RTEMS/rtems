@@ -18,8 +18,6 @@
  * Institute for Information Technology
  * National Research Council of Canada
  * charles.gauthier@nrc.ca
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

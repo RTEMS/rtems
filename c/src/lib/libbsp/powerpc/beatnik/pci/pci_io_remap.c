@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Adjust a PCI bus range's I/O address space by adding an offset */
 
 /* 

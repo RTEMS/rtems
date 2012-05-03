@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/raw_usrreq.c,v 1.44 2006/11/06 13:42:02 rwatson Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

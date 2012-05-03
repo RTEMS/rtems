@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Author: T. Straumann <strauman@slac.stanford.edu>; see ../../LICENSE */
 #include "rtemscompat.h"
 #include "gtethreg.h"

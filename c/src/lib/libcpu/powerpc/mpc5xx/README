@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Various non-BSP-dependent support routines.
 
 timer -		Support for the RTEMS timer tick, using the Programmable

@@ -16,8 +16,6 @@
  *
  *  Modified and FrameBuffer Console Device Support added by
  *  Joel Sherrill, 2009.
- *
- *  $Id$
  */
 
 #include <bsp.h>

@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Board Support Package library
 
 This directory contains the source for the libbsp.a library.

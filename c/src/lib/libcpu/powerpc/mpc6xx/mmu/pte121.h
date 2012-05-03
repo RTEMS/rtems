@@ -1,6 +1,5 @@
 #ifndef _LIBCPU_PTE121_H
 #define _LIBCPU_PTE121_H
-/* $Id$ */
 
 /*
  * Authorship

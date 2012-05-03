@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Driver for the Tundra Universe II pci-vme bridge */
 
 /*

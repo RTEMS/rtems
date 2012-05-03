@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spwkspace
 spwkspace_SOURCES = init.c

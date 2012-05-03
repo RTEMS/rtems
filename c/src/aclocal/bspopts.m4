@@ -1,4 +1,3 @@
-dnl $Id$
 dnl
 
 dnl RTEMS_BSPOPTS_* - some autoconf voodoo to handle default values and

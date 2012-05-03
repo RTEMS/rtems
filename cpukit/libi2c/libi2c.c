@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* libi2c Implementation */
 
 /*

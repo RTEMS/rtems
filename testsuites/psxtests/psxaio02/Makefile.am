@@ -1,5 +1,4 @@
 
-
 rtems_tests_PROGRAMS = psxaio02
 psxaio02_SOURCES = init.c system.h ../include/pmacros.h
 

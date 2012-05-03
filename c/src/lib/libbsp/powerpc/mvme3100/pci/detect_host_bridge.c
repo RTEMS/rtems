@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* PCI Initialization */
 
 /*

@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This file discusses SPARC specific issues which are important to
 this port.  The primary topics in this file are:
 

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/raw_ip.c,v 1.147 2005/01/07 01:45:45 imp Exp $
  */
 
-/*
- *	$Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

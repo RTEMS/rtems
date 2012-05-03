@@ -33,8 +33,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Modifications for PPC405GP by Dennis Ehlin
- *
- *  $Id: clock.c 63 2011-04-26 00:23:51Z claus $
  */
 
 #include <rtems.h>

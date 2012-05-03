@@ -7,8 +7,6 @@
  */
 
 /*
- * $Id$
- *
  *  This include file contains information pertaining to the ARM
  *  processor.
  *

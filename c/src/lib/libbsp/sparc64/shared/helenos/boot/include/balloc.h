@@ -27,8 +27,6 @@
  */
 
 /*
- * $Id$
- *
  * Modifications are made to compile for RTEMS. Move BALLOC_MAX_SIZE from 
  * asm.h to here.
  *

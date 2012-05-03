@@ -28,7 +28,6 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
 
 /** \defgroup avr_version <avr/version.h>: avr-libc version macros
     \code #include <avr/version.h> \endcode

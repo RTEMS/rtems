@@ -4,9 +4,6 @@
  * Defines and externs for rtems error reporting
  */
 
-/*
- *  $Id$
- */
 
 #ifndef _RTEMS_RTEMS_ERROR_H
 #define _RTEMS_RTEMS_ERROR_H

@@ -2,9 +2,6 @@
  * @file rtems/rtems_bsdnet.h
  */
 
-/*
- *  $Id$
- */
 
 #ifndef _RTEMS_BSDNET_H
 #define _RTEMS_BSDNET_H

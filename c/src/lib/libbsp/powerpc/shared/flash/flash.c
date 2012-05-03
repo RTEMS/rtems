@@ -1,5 +1,3 @@
-/* $Id$         */
-
 /* Trivial Flash Programmer                                  */
 
 /* Author: Till Straumann <strauman@slac.stanford.edu>, 2006 */

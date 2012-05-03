@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/if_ether.h,v 1.32 2005/02/22 13:04:03 glebius Exp $
  */
 
-/*
- *	$Id$
- */
 
 #ifndef _NETINET_IF_ETHER_H_
 #define _NETINET_IF_ETHER_H_

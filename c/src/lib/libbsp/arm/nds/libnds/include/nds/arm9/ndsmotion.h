@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	DS Motion Card/DS Motion Pak functionality
 
 	Copyright (C) 2007

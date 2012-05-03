@@ -1,7 +1,5 @@
 /*  start.S
  *
- *  $Id$
- *
  *  Modified for the Motorola PQII ADS board by
  *  Andy Dachs <a.dachs@sstl.co.uk> 23-11-00.
  *  Surrey Satellite Technology Limited

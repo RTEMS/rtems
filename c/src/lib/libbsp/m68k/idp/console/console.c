@@ -5,8 +5,6 @@
  *  Based off of the board support packages of RTEMS
  *
  *  Updated to RTEMS 3.2.0 by Joel Sherrill.
- *
- *  $Id$
  */
 
 #define MIDP_INIT

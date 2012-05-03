@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 The following files were developed by  Erich Boleyn  <erich@uruk.org>.
 The original files were copied from http://www.uruk.org/mps/ and committed
 into cvs as is.  These files will be modified for RTEMS smp support,

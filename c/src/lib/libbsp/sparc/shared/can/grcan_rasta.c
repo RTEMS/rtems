@@ -1,4 +1,3 @@
-
 #include <rasta.h>
 
 /* PCI frequency */

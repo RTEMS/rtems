@@ -1,5 +1,3 @@
-## $Id$
-
 SUBDIRS =
 SUBDIRS += mp01
 SUBDIRS += mp02

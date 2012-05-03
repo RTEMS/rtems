@@ -6,8 +6,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
- *
  *  Both the ne2000 and the wd80x3 are based on the National Semiconductor
  *  8390 chip, so there is a fair amount of overlap between the two
  *  drivers.  It would be possible in principle to combine some code into

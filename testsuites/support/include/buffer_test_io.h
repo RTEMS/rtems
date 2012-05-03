@@ -1,7 +1,5 @@
 /*
  *  Support for running the test output through a buffer
- *
- *  $Id$
  */
 
 #ifndef __BUFFER_TEST_IO_h

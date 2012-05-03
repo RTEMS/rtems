@@ -1,6 +1,4 @@
 /*  mrm332.h
- *
- *  $Id$
  */
 
 #ifndef _MRM332_H_

@@ -39,8 +39,6 @@
  * Modifications for the RTEMS executive are 
  *   COPYRIGHT (c) 2010 Gedare Bloom.
  *   COPYRIGHT (c) 2010 Eugen Leontie.
- *
- * $Id$
  */
 
 #include <rtems/asm.h>

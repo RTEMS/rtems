@@ -10,8 +10,6 @@
  *  http://www.rtems.com/license/LICENSE.
  * 
  *  This code defines the space for the trap table used by sun4u.
- *
- * $Id$
  */
 
 #include <rtems/asm.h>

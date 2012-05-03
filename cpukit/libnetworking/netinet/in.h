@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/in.h,v 1.91 2005/08/22 16:13:07 andre Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef _NETINET_IN_H_
 #define _NETINET_IN_H_

@@ -28,9 +28,6 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **
 **************************************************************************/
 
-/*
- * $Id$
- */
 
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>

@@ -10,8 +10,6 @@
  *
  *  Originally written by rob@cygnus.com (Rob Savoye) for the libgloss
  *    IDP support.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_MOTOROLA_MC68681_H

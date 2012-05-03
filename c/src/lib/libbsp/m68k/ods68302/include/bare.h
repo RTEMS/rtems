@@ -1,7 +1,5 @@
 /*****************************************************************************/
 /*
-  $Id$
-
   Card Definition for a bare board.
 
   This is an example file which actually builds a BSP for a 68302 card

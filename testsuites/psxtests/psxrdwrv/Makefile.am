@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxrdwrv
 psxrdwrv_SOURCES = main.c test.c ../include/pmacros.h

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if_var.h,v 1.107 2006/06/19 22:20:44 mlaier Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef	_NET_IF_VAR_H_
 #define	_NET_IF_VAR_H_

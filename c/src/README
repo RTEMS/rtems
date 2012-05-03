@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This is the top level directory of the C RTEMS environment.  The
 following is a description of the contents of each file and
 subdirectory directly in this directory:

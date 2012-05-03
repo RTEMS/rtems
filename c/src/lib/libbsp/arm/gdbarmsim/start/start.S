@@ -1,8 +1,6 @@
 /*
  *  Copied from libgloss 1 Oct 2009.
  *  Minor modifications to work with RTEMS.
- *
- *  $Id$
  */
 
 #include <newlib.h>

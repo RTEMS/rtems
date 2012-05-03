@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxitimer
 psxitimer_SOURCES = init.c ../include/pmacros.h

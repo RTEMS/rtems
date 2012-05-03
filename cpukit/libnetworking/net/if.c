@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if.c,v 1.226 2005/04/15 01:51:26 cperciva Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -2,9 +2,6 @@
 @c  COPYRIGHT (c) 1989-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @ifinfo
 @end ifinfo
@@ -476,9 +473,6 @@ involving the PowerPC  are not supported.
 @c  COPYRIGHT (c) 1989-2007.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @section Interrupt Processing
 

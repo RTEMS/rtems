@@ -3,8 +3,6 @@
  * Each routine returns the number of characters it output.
  *
  * TODO:
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

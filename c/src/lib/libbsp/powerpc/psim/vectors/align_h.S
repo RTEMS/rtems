@@ -39,8 +39,6 @@
  *      software without specific, written prior permission.
  *      i-cubed limited makes no representations about the suitability
  *      of this software for any purpose.
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

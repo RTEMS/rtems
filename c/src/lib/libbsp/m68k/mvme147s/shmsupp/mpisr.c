@@ -13,8 +13,6 @@
  *  MVME147 port for TNI - Telecom Bretagne
  *  by Dominique LE CAMPION (Dominique.LECAMPION@enst-bretagne.fr)
  *  June 1996
- *
- *  $Id$
  */
 
 #include <rtems.h>

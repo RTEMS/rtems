@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/in_pcb.h,v 1.89 2006/07/18 22:34:27 ups Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NETINET_IN_PCB_H_
 #define _NETINET_IN_PCB_H_

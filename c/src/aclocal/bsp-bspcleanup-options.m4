@@ -1,4 +1,3 @@
-dnl $Id$
 dnl
 
 dnl BSP_CLEANUP_OPTIONS - some autoconf voodoo to provide each BSPs'

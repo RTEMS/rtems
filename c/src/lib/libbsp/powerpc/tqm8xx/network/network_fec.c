@@ -46,8 +46,6 @@
  *  Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>
  *  and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>
  *  Copyright (c) 1999, National Research Council of Canada
- *
- *  $Id$
  */
 #include <bsp.h>
 #include <stdio.h>

@@ -1,8 +1,6 @@
 /*
  * leds.c -- control the led's on a Motorola mc68ec0x0 board.
  *           Written by rob@cygnus.com (Rob Savoye)
- *
- *  $Id$
  */
 
 #ifndef __LEDS_H__

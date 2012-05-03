@@ -16,8 +16,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Adapted for the mvme3100 BSP by T. Straumann, 2007.
- *
- *  $Id$
  */
 
 #ifndef BSP_POWERPC_IRQ_H

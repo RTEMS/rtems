@@ -3,8 +3,6 @@
  *
  *  Since there is no clock source on the simulator, we fake
  *  it with a special IDLE task.
- *
- *  $Id$
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__

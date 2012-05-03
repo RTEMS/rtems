@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 BSP NAME:           gen83xx
 BOARD:              Freescale MPC8349 board MPC8349EAMDS
 BUS:                PCI (unused)

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp31
 sp31_SOURCES = delay.c init.c prtime.c task1.c system.h

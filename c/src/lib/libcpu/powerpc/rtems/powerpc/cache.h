@@ -1,7 +1,3 @@
-/*
- * $Id$
- */
-
 #ifndef _RTEMS_POWERPC_CACHE_H
 #define _RTEMS_POWERPC_CACHE_H
 

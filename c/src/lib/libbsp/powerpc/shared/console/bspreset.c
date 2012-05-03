@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #include "console.inl"
 #include <rtems/bspIo.h>
 #include <libcpu/stackTrace.h>

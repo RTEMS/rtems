@@ -1,8 +1,6 @@
 /*
  *  This file contains directives for the GNU linker that are specific
  *  to the MBX860-2 board.
- *
- *  $Id$
  */
 
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")

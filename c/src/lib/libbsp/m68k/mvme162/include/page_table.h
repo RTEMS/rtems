@@ -1,6 +1,4 @@
 /*
- *  $Id$
- *
  *  This file was submitted by Eric Vaitl <vaitl@viasat.com> and
  *  supports page table initialization.
  *

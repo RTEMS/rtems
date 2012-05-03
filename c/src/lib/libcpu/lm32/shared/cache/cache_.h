@@ -1,7 +1,5 @@
 /*
  *  LM32 Cache Manager Support
- *
- *  $Id$
  */
 
 #ifndef __LM32_CACHE_h

@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef VME_TSI148_DMA_H
 #define VME_TSI148_DMA_H
 

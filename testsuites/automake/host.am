@@ -1,5 +1,3 @@
-## $Id$
-
 ## NOTE: This is a temporary work-around to keep
 ## RTEMS's non automake standard make targets working.
 ## Once automake is fully integrated these make targets

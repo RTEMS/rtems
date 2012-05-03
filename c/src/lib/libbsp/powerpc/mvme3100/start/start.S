@@ -9,8 +9,6 @@
  *
  *  Modified for mvme3100 by T. Straumann, 2007.
  *
- *  $Id$
- *
  */
 
 #include <rtems/asm.h>

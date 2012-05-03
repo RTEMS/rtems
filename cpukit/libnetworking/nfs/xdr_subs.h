@@ -33,9 +33,6 @@
  * $FreeBSD: src/sys/nfs/xdr_subs.h,v 1.15 2005/01/07 01:45:50 imp Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef _NFS_XDR_SUBS_H_
 #define _NFS_XDR_SUBS_H_

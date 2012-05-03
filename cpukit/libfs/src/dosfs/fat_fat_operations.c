@@ -5,8 +5,6 @@
  *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
- *
- *  @(#) $Id$
  */
 
 #if HAVE_CONFIG_H

@@ -95,8 +95,6 @@
  *      * various bug-fixes, e.g., use of PF_INET in socket() instead of
  *        AF_INET, use snprintf() instead of sprintf() everywhere for safety,
  *        etc.
- *
- *  $Id$
  */
 
 /*************************************************************************

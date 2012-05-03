@@ -1,8 +1,6 @@
 #
 #  Timing Test Suite Results for the pc386 BSP using a Pentium
 #
-#  $Id$
-#
 
 NOTE:  To obtain the execution time in microseconds, divide the number of
        cycles by the clock speed.  For example, if rtems_semaphore create 

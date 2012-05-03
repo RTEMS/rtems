@@ -15,8 +15,6 @@
  *
  *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
- *
- *  $Id$
  */
 
 

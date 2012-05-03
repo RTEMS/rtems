@@ -11,8 +11,6 @@
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *
  * Copyright (c) 2009 embedded brains GmbH.
- *
- * @(#) $Id$
  */
 
 #if HAVE_CONFIG_H

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/rtsock.c,v 1.122 2005/03/26 21:49:43 sam Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

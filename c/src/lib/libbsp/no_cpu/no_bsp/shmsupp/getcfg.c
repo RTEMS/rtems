@@ -27,8 +27,6 @@ XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <rtems.h>

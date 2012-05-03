@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 if HAS_CXX
 rtems_tests_PROGRAMS = rtems++

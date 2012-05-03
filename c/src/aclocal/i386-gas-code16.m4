@@ -1,5 +1,3 @@
-dnl
-dnl  $Id$
 dnl 
 
 dnl check for i386 gas supporting 16 bit mode

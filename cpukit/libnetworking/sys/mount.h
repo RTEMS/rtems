@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/mount.h,v 1.198 2005/08/06 01:42:04 ssouhlal Exp $
  */
 
-/*
- * $Id$
- */
  
 #ifndef _SYS_MOUNT_H_
 #define _SYS_MOUNT_H_

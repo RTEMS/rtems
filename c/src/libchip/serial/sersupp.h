@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #ifndef __LIBCHIP_SERIAL_SUPPORT_h
 #define __LIBCHIP_SERIAL_SUPPORT_h
 

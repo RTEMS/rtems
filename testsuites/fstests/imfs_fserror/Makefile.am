@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = imfs_fserror
 imfs_fserror_SOURCES  =  ../fserror/test.c

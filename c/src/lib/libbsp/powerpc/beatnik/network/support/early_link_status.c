@@ -1,4 +1,3 @@
-/* $Id$ */
 #include <rtems.h>
 #include <bsp/early_enet_link_status.h>
 #include <rtems/bspIo.h>

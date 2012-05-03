@@ -21,8 +21,6 @@
  *
  *  COPYRIGHT (c) 1994-2006.
  *  On-Line Applications Research Corporation (OAR).
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_ASM_H

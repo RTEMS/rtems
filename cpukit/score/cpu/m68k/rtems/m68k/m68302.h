@@ -26,9 +26,6 @@
  * implied warranties of merchantability, title and fitness for a
  * particular purpose.
  *
- *
- *  $Id$
- *
  *------------------------------------------------------------------
  */
 

@@ -1,8 +1,6 @@
 /*
  *  Linker script for Mongoose-V prototyping board.
  *  See README for address map details.
- *
- *  $Id$
  */
 
 /*    . = 0x80020000; */

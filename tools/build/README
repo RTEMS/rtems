@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Misc. support tools for RTEMS workspaces.
 
 install-if-change

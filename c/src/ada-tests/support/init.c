@@ -1,8 +1,6 @@
 /*
  *  COPYRIGHT (c) 1989-2007
  *  On-Line Applications Research Corporation (OAR).
- *
- *  $Id$
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__

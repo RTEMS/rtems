@@ -6,8 +6,6 @@
  *    + sections commented out marked with "XXX commented out --joel"
  *    + addition of m_hdr section
  *    + addition of FreeBSD sysctl sections
- *
- *  $Id$
  */
 
 /* 

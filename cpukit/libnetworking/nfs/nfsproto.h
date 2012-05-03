@@ -33,9 +33,6 @@
  * $FreeBSD: src/sys/nfs/nfsproto.h,v 1.11 2005/01/07 01:45:50 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NFS_NFSPROTO_H_
 #define _NFS_NFSPROTO_H_

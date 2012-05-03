@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This TULIP driver can be used on BSPs that support PCI bus.
 
 It can handle any DEC21140 and DEC21143 based Ethernet controller

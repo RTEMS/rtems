@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxchroot01
 psxchroot01_SOURCES = main.c test.c ../include/pmacros.h

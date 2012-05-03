@@ -1,6 +1,4 @@
 /*
- *  $Id$
- *
  *  This file contains all assembly code for the
  *  NIOS2 implementation of RTEMS.
  *

@@ -9,8 +9,6 @@
 /*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
- *
- * @(#) $Id$
  */
 
 #ifndef _RTEMS_RAMDISK_H

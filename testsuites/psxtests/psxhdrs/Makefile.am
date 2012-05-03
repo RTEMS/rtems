@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     cond01.c cond02.c cond03.c cond04.c cond05.c cond06.c cond07.c cond08.c \

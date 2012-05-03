@@ -1,7 +1,5 @@
 /*
  *  Cache Management Support Routines for the MC68040
- *
- *  $Id$
  */
 
 #include <rtems.h>

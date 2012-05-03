@@ -1,4 +1,3 @@
-
 /*
  * RTEMS/TCPIP driver for MCF5329 Fast Ethernet Controller
  *

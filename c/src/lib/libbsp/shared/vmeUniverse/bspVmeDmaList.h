@@ -1,7 +1,6 @@
 #ifndef BSP_VME_DMA_LIST_H
 #define BSP_VME_DMA_LIST_H
 
-/* $Id$ */
 
 
 /* The bspVmeDmaList utility implements part of the API defined by

@@ -20,8 +20,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Moved from file 'cpukit/score/cpu/arm/cpu.c'.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

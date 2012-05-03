@@ -1,6 +1,4 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl $Id$
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-haleakala],[_RTEMS_VERSION],[rtems-bugs@rtems.com])

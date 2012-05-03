@@ -2,8 +2,6 @@
  *  boardinit.s
  *
  *  Initialise various ERC32 registers
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

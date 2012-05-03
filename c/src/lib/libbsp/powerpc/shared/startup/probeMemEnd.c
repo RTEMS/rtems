@@ -1,4 +1,3 @@
-/* $Id$ */
 #include <rtems.h>
 #include <libcpu/spr.h>
 #include <libcpu/cpuIdent.h>

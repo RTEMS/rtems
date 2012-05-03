@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Standard VME bridge configuration for MVME5500, MVME6100 */
 
 /* 

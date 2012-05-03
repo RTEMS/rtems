@@ -1,7 +1,5 @@
 /*
  *  Information about the DP8390 Ethernet controller.
- *
- *  $Id$
  */
 
 #ifndef __BSP_WD80x3_h

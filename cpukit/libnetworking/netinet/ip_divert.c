@@ -29,9 +29,6 @@
  * $FreeBSD: src/sys/netinet/ip_divert.c,v 1.113 2005/05/13 11:44:37 glebius Exp $
  */
 
-/*
- *	$Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

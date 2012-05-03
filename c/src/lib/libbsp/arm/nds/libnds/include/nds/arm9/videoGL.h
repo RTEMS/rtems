@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	videoGL.h -- Video API vaguely similar to OpenGL
 
 	Copyright (C) 2005

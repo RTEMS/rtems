@@ -1,8 +1,6 @@
 /*
  * mc68ec.c -- Low level support for the Motorola mc68ec0x0 board.
  *             Written by rob@cygnus.com (Rob Savoye)
- *
- *  $Id$
  */
 
 #include "leds.h"

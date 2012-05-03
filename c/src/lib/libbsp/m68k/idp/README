@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This board support package has not been tested with multiprocessor
 or the timing support.  The uniprocessor IDP package was tested though
 with a fairly large application (although bugs may exist).  The

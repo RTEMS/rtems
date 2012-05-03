@@ -1,8 +1,6 @@
 /*  bsp.h
  *
  *  This include file contains all Motorola 680x0 IDP board IO definitions.
- *
- *  $Id$
  */
 
 #ifndef _BSP_H

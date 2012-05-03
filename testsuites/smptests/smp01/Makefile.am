@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = smp01
 smp01_SOURCES = init.c tasks.c system.h ../../support/src/locked_print.c

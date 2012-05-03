@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxclock
 psxclock_SOURCES = init.c ../include/pmacros.h

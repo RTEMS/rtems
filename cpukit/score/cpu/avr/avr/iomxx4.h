@@ -30,7 +30,6 @@
 
 /* avr/iomXX4.h - definitions for ATmega164P/324P/644P and ATmega644 */
 
-/* $Id$ */
 
 #ifndef _AVR_IOMXX4_H_
 #define _AVR_IOMXX4_H_ 1

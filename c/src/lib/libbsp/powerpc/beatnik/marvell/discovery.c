@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* 
  * Acknowledgements:
  * Valuable information was obtained from the following drivers

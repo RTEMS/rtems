@@ -1,7 +1,3 @@
-/*
- *  $Id: interruptmask.c,v 1.0 2006/04/04 05:18:49
- */
-
 #include <rtems.h>
 
 /*

@@ -29,9 +29,6 @@
  *	@(#)in_systm.h	8.1 (Berkeley) 6/10/93
  * $FreeBSD: src/sys/netinet/in_systm.h,v 1.13 2009/02/13 15:14:43 luigi Exp $
  */
-/*
- * $Id$
- */
 
 #ifndef _NETINET_IN_SYSTM_H_
 #define _NETINET_IN_SYSTM_H_

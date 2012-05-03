@@ -27,8 +27,6 @@
  */
 
 /*
- * $Id$
- *
  * Modifications are made to compile for RTEMS. Removes asm.h and printf.h.
  * Adds asm.h (rtems bsp). Adds ofw_read() and ofw_stdin variable. Uses 
  * printk instead of puts for error messages.

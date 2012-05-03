@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* BSP specific wrapper for rtems_bsdnet_attach(). This wrapper
  * dispatches to the correct driver attach routine depending on
  * the board type, boot parameters, link status etc.

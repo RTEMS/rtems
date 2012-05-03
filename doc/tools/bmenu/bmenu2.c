@@ -15,8 +15,6 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *  All rights reserved.
- *
- *  $Id$
  */
 
 #include <assert.h>

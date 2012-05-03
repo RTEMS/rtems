@@ -1,4 +1,3 @@
-
 --  RTEMS / Specification
 --
 --  DESCRIPTION:
@@ -17,8 +16,6 @@
 --  The license and distribution terms for this file may in
 --  the file LICENSE in this distribution or at
 --  http://www.rtems.com/license/LICENSE.
---
---  $Id$
 --
 
 with System;

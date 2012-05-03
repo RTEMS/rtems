@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* RTEMS driver for the mv643xx gigabit ethernet chip */
 
 /* Acknowledgement:

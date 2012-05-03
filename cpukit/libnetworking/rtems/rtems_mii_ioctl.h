@@ -2,8 +2,6 @@
  * to be used by ethernet drivers [from their ioctl].
  *
  * NOTE: This much simpler than the BSD ifmedia API
- *
- *  $Id$
  */
 
 /*

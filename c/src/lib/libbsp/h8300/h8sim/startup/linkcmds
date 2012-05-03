@@ -1,8 +1,4 @@
 /*
- *  $Id$
- */
-
-/*
  * Declare some sizes.
  */
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x0;

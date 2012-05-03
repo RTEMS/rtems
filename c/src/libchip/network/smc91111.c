@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <rtems.h>
 #include <errno.h>
 

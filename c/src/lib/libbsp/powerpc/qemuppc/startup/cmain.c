@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 static void
 __outb(int port, unsigned char v)
 {

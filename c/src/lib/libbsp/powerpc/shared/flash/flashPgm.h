@@ -1,6 +1,5 @@
 #ifndef BSP_FLASH_PGM_API_H
 #define BSP_FLASH_PGM_API_H
-/* $Id$         */
 
 /* Trivial Flash Programmer                                  */
 

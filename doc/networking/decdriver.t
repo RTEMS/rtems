@@ -3,9 +3,6 @@
 @c
 @c  Written by: Emmanuel Raguet <raguet@crf.canon.fr>
 @c
-@c
-@c  $Id$
-@c
 
 @chapter DEC 21140 Driver
 

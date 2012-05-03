@@ -36,9 +36,6 @@
  * $FreeBSD: src/sys/kern/kern_mib.c,v 1.74 2005/02/28 21:42:56 wes Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef __rtems__
 #include "opt_posix.h"

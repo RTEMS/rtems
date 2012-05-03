@@ -35,8 +35,6 @@
  *  Modifications for PPC405GP by Dennis Ehlin
  *
  * Further modifications for PPC405GP/EX by Michael Hamel
- *
- *  $Id$
  */
 
 #include <rtems.h>

@@ -2,8 +2,6 @@
  *  Multi UART console serial I/O.
  *
  *  TO DO: Add DMA input/output
- *
- *  $Id$
  */
 
 #include <stdio.h>

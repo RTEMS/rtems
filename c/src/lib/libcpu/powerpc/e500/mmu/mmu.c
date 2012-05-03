@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
  * Routines to manipulate e500 TLBs; TLB0 (fixed 4k page size)
  * is not very useful so we mostly focus on TLB1 (variable page size).

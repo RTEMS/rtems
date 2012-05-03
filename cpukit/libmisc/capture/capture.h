@@ -7,8 +7,6 @@
 
 /*
   ------------------------------------------------------------------------
-  $Id$
-  ------------------------------------------------------------------------
 
   Copyright Objective Design Systems Pty Ltd, 2002
   All rights reserved Objective Design Systems Pty Ltd, 2002

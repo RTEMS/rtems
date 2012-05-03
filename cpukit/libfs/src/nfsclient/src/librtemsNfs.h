@@ -1,6 +1,5 @@
 #ifndef LIB_RTEMS_NFS_CLIENT_H
 #define LIB_RTEMS_NFS_CLIENT_H
-/* $Id$ */
 
 /* public interface to the NFS client library for RTEMS */
 

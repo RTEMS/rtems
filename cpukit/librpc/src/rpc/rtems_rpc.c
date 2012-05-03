@@ -1,7 +1,5 @@
 /*
  * RTEMS multi-tasking support
- *
- * $Id$
  */
 
 #ifdef HAVE_CONFIG_H

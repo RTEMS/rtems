@@ -60,9 +60,6 @@
  * $FreeBSD: src/sys/vm/vm_kern.h,v 1.28 2005/01/07 02:29:27 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _VM_VM_KERN_H_
 #define _VM_VM_KERN_H_ 1

@@ -1,11 +1,8 @@
-
 /* inline routines for console i/o
  *
  * The purpose of this file is to provide generic inline functions,
  * i.e. not using hardcoded base addresses. These are provided by
  * the BSP header.
- *
- * $Id$
  */
 
 #include <bsp.h>

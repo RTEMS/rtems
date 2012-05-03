@@ -1,8 +1,6 @@
 #
 #  Config file for LPC24XX.
 #
-#  $Id$
-#
 
 include $(RTEMS_ROOT)/make/custom/default.cfg
 

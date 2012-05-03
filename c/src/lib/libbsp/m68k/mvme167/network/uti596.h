@@ -1,10 +1,7 @@
-
 /* uti596.h: Contains the defines and structures used by the uti596 driver */
 
 /*
  * EII: March 11: Created v. 0.0
- *
- *  $Id$
  */
 
 #ifndef UTI596_H

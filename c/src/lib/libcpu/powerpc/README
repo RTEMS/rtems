@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This hierarchy contains support routines for some of
 the varied and quite numerous PowerPC processors
 available from IBM and Motorola.

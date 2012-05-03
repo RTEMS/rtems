@@ -10,8 +10,6 @@
  * - added minCompression parameter to deflateInit2
  * - added Z_PACKET_FLUSH (see zlib.h for details)
  * - added inflateIncomp
- *
- * $Id$
  */
 
 /*+++++*/

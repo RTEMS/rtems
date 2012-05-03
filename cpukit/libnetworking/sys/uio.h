@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/uio.h,v 1.40 2006/11/29 19:08:45 alfred Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _SYS_UIO_H_
 #define	_SYS_UIO_H_

@@ -1,4 +1,3 @@
-## $Id$
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
 EXTRA_DIST = word-replace2

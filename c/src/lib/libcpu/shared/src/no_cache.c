@@ -1,7 +1,5 @@
 /*
  *  STUB Cache Management Support Routines
- *
- *  $Id$
  */
 
 #include <rtems.h>

@@ -1,7 +1,5 @@
 /*
  *  Author: Till Straumann <strauman@slac.stanford.edu>, 3/2002
- *
- *  $Id$
  */
 
 /* provide locking for the global environment 'environ' */

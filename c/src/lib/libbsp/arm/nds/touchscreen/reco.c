@@ -1,4 +1,3 @@
-
 #include <nds.h>
 #include "reco.h"
 

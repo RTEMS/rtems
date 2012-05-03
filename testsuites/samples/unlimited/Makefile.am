@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = unlimited
 unlimited_SOURCES = init.c test1.c test2.c test3.c system.h

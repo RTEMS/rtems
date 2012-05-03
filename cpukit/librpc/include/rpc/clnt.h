@@ -57,9 +57,6 @@
  * All rights reserved.
  */
 
-/*
- * $Id$
- */ 
 
 #ifndef _RPC_CLNT_H_
 #define _RPC_CLNT_H_

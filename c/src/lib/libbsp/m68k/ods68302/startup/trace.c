@@ -1,7 +1,5 @@
 /*****************************************************************************/
 /*
-  $Id$
-
   Trace Exception dumps a back trace to the debug serial port
 
  */

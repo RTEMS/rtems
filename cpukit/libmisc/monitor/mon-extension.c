@@ -1,7 +1,5 @@
 /*
  * RTEMS Monitor extension support
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

@@ -1,4 +1,3 @@
-
 #ifndef NETCONFIG_H_
 #define NETCONFIG_H_
 

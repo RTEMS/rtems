@@ -11,8 +11,6 @@
  * University of Saskatchewan
  * Saskatoon, Saskatchewan, CANADA
  * eric@cls.usask.ca
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

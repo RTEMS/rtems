@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Register i2c bus driver & devices */
 
 /*

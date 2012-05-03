@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	Trig_lut.h provides access to external precompiled trig look up tables
 
 	Copyright (C) 2005

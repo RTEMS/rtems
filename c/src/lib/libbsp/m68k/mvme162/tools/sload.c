@@ -15,8 +15,6 @@
  *  read/write mode for loading and in mmap mode for accessing MVME registers.
  *  See mvme162.h for #define's dependent on the MVME162 setup.
  *
- *  $Id$
- *
  */
 
 #include <stdio.h>

@@ -52,8 +52,6 @@
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modifications for PPC405GP by Dennis Ehlin
- *
- *  $Id$
  */
 
 #include <string.h>

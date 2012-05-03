@@ -53,9 +53,6 @@
  * $FreeBSD: src/include/arpa/nameser.h,v 1.16 2002/03/23 17:24:55 imp Exp $
  */
 
-/*
- *	$Id$
- */
 
 #ifndef _ARPA_NAMESER_H_
 #define _ARPA_NAMESER_H_

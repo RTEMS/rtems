@@ -1,8 +1,6 @@
 /*
  *  Implements the Motorola 68302 multi-protocol chip parameter
  *  definition header.
- *
- *  $Id$
  */
 
 #ifndef __M302_INT_h

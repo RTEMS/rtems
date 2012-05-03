@@ -1,6 +1,5 @@
 #ifndef PPC_MOTLOAD_VPD_H
 #define PPC_MOTLOAD_VPD_H
-/* $Id$ */
 
 /* MotLoad VPD format */
 

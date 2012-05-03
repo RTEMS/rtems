@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/libkern.h,v 1.48 2005/02/10 20:39:39 glebius Exp $
  */
 
-/*
- * $Id$
- */
  
 #ifndef _SYS_LIBKERN_H_
 #define	_SYS_LIBKERN_H_

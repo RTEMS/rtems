@@ -27,8 +27,6 @@
  */
 
 /*
- * $Id$
- *
  * Modifications are made to compile for RTEMS. Removes asm.h and replaces 
  * the necessary defines in-line
  *

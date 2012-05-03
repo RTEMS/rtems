@@ -1,5 +1,3 @@
-# $Id$
-#
 # Some hacks for handling special config subdirectories
 #
 # Note: Consider this file a temporary band-aid until a better, more general

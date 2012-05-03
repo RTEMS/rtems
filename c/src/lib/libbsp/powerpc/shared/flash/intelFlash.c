@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
  * Trivial driver for 16-bit intel flash present on the
  * MVME5500/MVME6100 boards.

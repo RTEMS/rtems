@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp13
 sp13_SOURCES = init.c fillbuff.c putbuff.c task1.c task2.c task3.c system.h

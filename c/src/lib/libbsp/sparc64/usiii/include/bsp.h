@@ -16,8 +16,6 @@
  *    COPYRIGHT (c) 2010. 
  *    Eugen Leontie
  *    Gedare Bloom
- *
- *  $Id$
  */
 
 #ifndef _BSP_H

@@ -1,4 +1,3 @@
-
 /*  cpu_asm.s	1.1 - 95/12/04
  *
  *  This file contains the assembly code for the PowerPC implementation
@@ -29,8 +28,6 @@
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

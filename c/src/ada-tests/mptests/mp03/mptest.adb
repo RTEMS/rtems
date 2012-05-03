@@ -13,8 +13,6 @@
 --  the file LICENSE in this distribution or at
 --  http://www.rtems.com/license/LICENSE.
 --
---  $Id$
---
 
 with INTERFACES; use INTERFACES;
 with RTEMS;

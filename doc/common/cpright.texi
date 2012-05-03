@@ -2,9 +2,6 @@
 @c  COPYRIGHT (c) 1988-2012.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @c
 @c  The following puts a space somewhere on an otherwise empty page so we

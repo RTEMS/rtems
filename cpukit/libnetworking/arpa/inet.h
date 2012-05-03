@@ -55,9 +55,6 @@
  * $FreeBSD: src/include/arpa/inet.h,v 1.33 2010/07/06 03:48:46 maxim Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _ARPA_INET_H_
 #define	_ARPA_INET_H_

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/tcp_subr.c,v 1.226 2005/05/07 00:41:36 cperciva Exp $
  */
  
-/*
- *	$Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

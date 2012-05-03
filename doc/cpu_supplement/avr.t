@@ -2,9 +2,6 @@
 @c  COPYRIGHT (c) 1988-2009.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @ifinfo
 @end ifinfo

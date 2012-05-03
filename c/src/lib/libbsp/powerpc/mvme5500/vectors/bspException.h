@@ -1,6 +1,5 @@
 #ifndef BSP_EXCEPTION_HANDLER_H
 #define BSP_EXCEPTION_HANDLER_H
-/* $Id$ */
 
 /* A slightly improved exception 'default' exception handler for RTEMS / SVGM */
 

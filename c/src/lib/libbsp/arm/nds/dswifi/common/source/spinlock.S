@@ -1,4 +1,3 @@
-
 	.text
 
 	.code 32

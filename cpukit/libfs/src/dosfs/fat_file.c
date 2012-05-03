@@ -6,8 +6,6 @@
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
- * @(#) $Id$
- *
  */
 
 #define MSDOS_TRACE 1

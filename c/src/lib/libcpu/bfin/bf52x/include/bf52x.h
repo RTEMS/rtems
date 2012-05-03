@@ -19,8 +19,6 @@
  *         (kangralkar.r@husky.neu.edu)
  *
  * LastChange:
- * $Id$
- *
  */
 
 #ifndef _BF52X_H_

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/tcp_seq.h,v 1.26 2006/06/18 14:24:12 andre Exp $
  */
  
-/*
- *	$Id$
- */
 
 #ifndef _NETINET_TCP_SEQ_H_
 #define _NETINET_TCP_SEQ_H_

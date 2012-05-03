@@ -19,8 +19,6 @@
  *         (kangralkar.r@husky.neu.edu)
  *
  * LastChange:
- * $Id$
- *
  */
 
 #ifndef _BFIN_INTERRUPT_H_

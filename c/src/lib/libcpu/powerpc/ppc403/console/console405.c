@@ -48,8 +48,6 @@
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modifications for PPC405GP by Dennis Ehlin
- *
- * $Id$
  */
 
 #define NO_BSP_INIT

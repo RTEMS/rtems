@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #ifndef _SMC91111_H_
 #define _SMC91111_H_
 

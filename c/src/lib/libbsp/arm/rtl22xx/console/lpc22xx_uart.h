@@ -1,7 +1,5 @@
 /*
  *  Definitions for LPC22xx/LPC21xx
- *
- *  $Id$
  */
 
 #ifndef LPC22XX_UART_H

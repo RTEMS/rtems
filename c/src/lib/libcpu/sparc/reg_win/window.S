@@ -19,8 +19,6 @@
  *  COPYRIGHT (c) 1995. European Space Agency.
  *
  *  This terms of the RTEMS license apply to this file.
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

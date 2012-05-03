@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* NFS client implementation for RTEMS; hooks into the RTEMS filesystem */
 
 /* Author: Till Straumann <strauman@slac.stanford.edu> 2002 */

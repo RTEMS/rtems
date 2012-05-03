@@ -1,4 +1,3 @@
-
 /* Author: Till Straumann <strauman@slac.stanford.edu>, 2001 */
 
 /* find a particular PCI device

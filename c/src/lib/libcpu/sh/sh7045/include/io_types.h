@@ -26,8 +26,6 @@
  *      developmental purposes without any warranty nor representation
  *      by the authors or by TGA Technologies.
  *
- *  $Id$
- *
  *
  ************************************************************************/
 

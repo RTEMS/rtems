@@ -1,5 +1,3 @@
-dnl $Id$
-
 AC_DEFUN([RTEMS_ENABLE_MULTIPROCESSING],
 [
 AC_ARG_ENABLE(multiprocessing,

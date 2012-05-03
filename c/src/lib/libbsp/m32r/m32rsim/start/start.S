@@ -1,7 +1,5 @@
 /*
  *  From Newlib 1.16.0
- *
- *  $Id$
  */
 
 	.text

@@ -1,7 +1,5 @@
 /*
  * RTEMS Monitor semaphore support
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

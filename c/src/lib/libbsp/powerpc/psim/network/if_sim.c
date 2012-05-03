@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Trivial driver for PSIM's emulated ethernet device 'hw_ethtap'.
  *
  * NOTE: At the time of this writing (2009/1) 'hw_ethtap' requires

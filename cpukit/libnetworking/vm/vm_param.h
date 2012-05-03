@@ -60,9 +60,6 @@
  * $FreeBSD: src/sys/vm/vm_param.h,v 1.21 2005/01/07 02:29:27 imp Exp $
  */
 
-/*
- * $Id$
- */
  
 /*
  *	Machine independent virtual memory parameters.

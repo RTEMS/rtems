@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Driver for discovery timers and watchdog */
 
 /* 

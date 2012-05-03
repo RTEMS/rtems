@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxobj01
 psxobj01_SOURCES = init.c ../../support/src/test_support.c

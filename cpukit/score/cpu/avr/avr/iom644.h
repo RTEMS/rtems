@@ -30,7 +30,6 @@
 
 /* avr/iom644.h - definitions for ATmega644 */
 
-/* $Id$ */
 
 #ifndef _AVR_IOM644_H_
 #define _AVR_IOM644_H_ 1

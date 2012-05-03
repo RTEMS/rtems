@@ -17,8 +17,6 @@
  *
  *  Modifications of respective RTEMS file: COPYRIGHT (c) 1994.
  *  Copyright (c) 1998, National Research Council of Canada
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

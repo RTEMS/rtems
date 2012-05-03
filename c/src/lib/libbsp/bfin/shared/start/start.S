@@ -1,5 +1,4 @@
 
-
 #include <rtems/bfin/bfin.h>
 
 #include <bspopts.h>

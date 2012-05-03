@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	bin2s: convert a binary file to a gcc asm-module
 	for gfx/foo.bin it'll write foo_bin (an array of char)
 	foo_bin_end, and foo_bin_len (an unsigned int)

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if.h,v 1.95 2005/02/25 19:46:41 brooks Exp $
  */
 
-/*
- * $Id$
- */
  
 #ifndef _NET_IF_H_
 #define	_NET_IF_H_

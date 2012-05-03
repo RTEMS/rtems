@@ -14,8 +14,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id: i8259.h,v 1.1 2012/02/06 14:19:07 jennifer Exp $
  */
 
 #ifndef I8259_H

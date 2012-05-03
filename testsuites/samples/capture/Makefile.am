@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = capture
 capture_SOURCES = init.c test1.c system.h

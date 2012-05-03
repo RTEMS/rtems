@@ -1,5 +1,3 @@
-/*$Id$*/
-
 /* Implementation of the VME.h and VMEDMA.h APIs for the BSP using the
  * vmeUniverse/vmeTsi148 drivers
  *

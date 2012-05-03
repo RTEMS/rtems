@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * page.c :- This file contains implementation of C function to
  *           Instanciate paging. More detailled information
  *	     can be found on Intel site and more precisely in

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spmountmgr01
 spmountmgr01_SOURCES = init.c

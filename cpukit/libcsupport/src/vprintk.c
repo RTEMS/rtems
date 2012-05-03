@@ -12,8 +12,6 @@
  * expressed or implied.
  *
  * This code is based on code by: Jose Rufino - IST
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

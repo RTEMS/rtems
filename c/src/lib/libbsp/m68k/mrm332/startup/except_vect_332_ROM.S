@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 /* Exception Vector definitions follow */
 
 	/* !!! Warning !!! This table is not tested, and

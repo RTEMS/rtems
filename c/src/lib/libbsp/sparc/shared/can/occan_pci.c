@@ -1,4 +1,3 @@
-
 /* PCI cannot do byte accesses to addresses aligned byte wise
  * Use alternative reg map.
  */

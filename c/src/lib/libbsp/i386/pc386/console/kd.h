@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  *  by: Rosimildo da Silva:  rdasilva@connecttel.com
  *
  *

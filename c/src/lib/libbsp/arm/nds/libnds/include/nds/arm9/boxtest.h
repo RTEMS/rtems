@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-$Id$
-
 BoxTest.h -- Code for performing hardware box test against viewing frustrum
 
 Copyright (C) 2005

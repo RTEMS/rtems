@@ -1,6 +1,3 @@
-dnl
-dnl $Id$
-dnl
 dnl Check whether the target compiler accepts -pipe
 dnl
 

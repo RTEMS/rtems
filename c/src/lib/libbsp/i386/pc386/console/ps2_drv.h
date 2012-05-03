@@ -2,8 +2,6 @@
 #define __paux_drv__
 /***************************************************************************
  *
- * $Id$
- *
  * Copyright (c) 1999 ConnectTel, Inc. All Rights Reserved.
  *
  * MODULE DESCRIPTION: Prototype routines for the paux driver.

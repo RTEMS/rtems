@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/route.h,v 1.65 2006/03/15 19:39:09 andre Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NET_ROUTE_H_
 #define _NET_ROUTE_H_

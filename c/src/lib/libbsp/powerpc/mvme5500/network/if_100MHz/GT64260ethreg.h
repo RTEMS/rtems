@@ -1,5 +1,4 @@
 /*	$NetBSD: GT64260ethreg.h,v 1.2 2003/03/17 16:41:16 matt Exp $	*/
-/*  $Id$ */
 
 /*
  * Copyright (c) 2002 Allegro Networks, Inc., Wasabi Systems, Inc.

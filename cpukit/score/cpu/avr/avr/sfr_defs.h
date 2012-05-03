@@ -30,7 +30,6 @@
 
 /* avr/sfr_defs.h - macros for accessing AVR special function registers */
 
-/* $Id$ */
 
 #ifndef _AVR_SFR_DEFS_H_
 #define _AVR_SFR_DEFS_H_ 1

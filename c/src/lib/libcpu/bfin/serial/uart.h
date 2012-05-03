@@ -9,9 +9,6 @@
  *  http://www.rtems.com/license/LICENSE.
  */
  
-/*
- *  $Id$
- */
 
 #ifndef _UART_H_
 #define _UART_H_

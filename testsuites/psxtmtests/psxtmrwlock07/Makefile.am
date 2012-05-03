@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxtmrwlock07
 psxtmrwlock07_SOURCES  = init.c

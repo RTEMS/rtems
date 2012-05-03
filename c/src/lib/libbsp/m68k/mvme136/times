@@ -1,8 +1,6 @@
 #
 #  Timing Test Suite Results for the Motorola MVME136 BSP
 #
-#  $Id$
-#
 
 Board:                Motorola MVME136
 CPU:                  Motorola MC68020 + MC68881 FPU

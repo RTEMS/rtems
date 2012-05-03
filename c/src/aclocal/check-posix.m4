@@ -1,4 +1,3 @@
-dnl $Id$
 dnl
 AC_DEFUN([RTEMS_CHECK_POSIX_API],
 [dnl

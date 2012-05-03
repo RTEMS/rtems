@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxautoinit02
 psxautoinit02_SOURCES = init.c ../include/pmacros.h

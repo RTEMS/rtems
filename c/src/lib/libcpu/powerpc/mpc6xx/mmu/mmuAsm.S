@@ -1,8 +1,6 @@
 /*
  *  mmuAsm.S
  *
- *  $Id$
- *
  *  Copyright (C) 1999 Eric Valette (valette@crf.canon.fr)
  *
  *  This file contains the low-level support for various MMU

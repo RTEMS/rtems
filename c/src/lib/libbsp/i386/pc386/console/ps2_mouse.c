@@ -10,8 +10,6 @@
  * C. Scott Ananian <cananian@alumni.princeton.edu> 1999-01-29.
  *
  *  RTEMS port: by Rosimildo da Silva.
- *
- *  $Id$
  */
 
 #include <stdlib.h>

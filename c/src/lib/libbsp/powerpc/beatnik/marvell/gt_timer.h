@@ -1,6 +1,5 @@
 #ifndef BSP_GT_TIMER_H
 #define BSP_GT_TIMER_H
-/* $Id$ */
 
 /* Support for hardware timers in the discovery bridge */
 

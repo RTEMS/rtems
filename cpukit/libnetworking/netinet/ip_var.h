@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/ip_var.h,v 1.94 2005/01/07 01:45:44 imp Exp $
  */
  
-/*
- *	$Id$
- */
 
 #ifndef _NETINET_IP_VAR_H_
 #define	_NETINET_IP_VAR_H_

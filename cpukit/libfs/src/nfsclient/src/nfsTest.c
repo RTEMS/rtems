@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Test program for evaluating NFS read throughput */
 
 /* Author: Till Straumann <strauman@slac.stanford.edu>, 2006 */

@@ -1,7 +1,5 @@
 /*
  *  Cache Management Support Routines for the i386
- *
- *  $Id$
  */
 
 #include <rtems.h>

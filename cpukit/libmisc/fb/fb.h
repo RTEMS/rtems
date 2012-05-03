@@ -8,8 +8,6 @@
  *
  * MODULE DESCRIPTION:
  * Micro FrameBuffer interface for Embedded Systems.
- *
- * $Id$
  */
 
 #ifndef _MW_FB_H

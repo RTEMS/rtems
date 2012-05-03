@@ -12,8 +12,6 @@
  *
  *   Thanks at:
  *    Chris Johns
- *
- *  $Id$
  */
 
 #ifndef __RTEMS_SHELL_H__

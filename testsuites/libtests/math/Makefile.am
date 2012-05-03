@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 rtems_tests_PROGRAMS = math
 math_SOURCES = init.c domath.c
 EXTRA_DIST = $(srcdir)/../math/domath.in

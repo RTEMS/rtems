@@ -1,7 +1,5 @@
 /*
  *  Submitted by: Rosimildo da Silva:  rdasilva@connecttel.com
- *
- *  $Id$
  */
 
 #ifndef __RTEMS_KEYBOARD_H

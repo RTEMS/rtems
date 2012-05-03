@@ -6,8 +6,6 @@
  *  This is where the real hardware setup is done. A minimal stack
  *  has been provided by the start.S code. No normal C or RTEMS
  *  functions can be called from here.
- *
- *  $Id$
  */
 
 #include <stdint.h>

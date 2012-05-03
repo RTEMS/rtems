@@ -21,8 +21,6 @@
  *
  *  COPYRIGHT (c) 1994-1997.
  *  On-Line Applications Research Corporation (OAR).
- *
- *  $Id$
  */
 /* @(#)asm.h       03/15/96     1.1 */
 

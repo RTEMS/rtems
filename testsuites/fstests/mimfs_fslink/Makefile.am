@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = mimfs_fslink
 mimfs_fslink_SOURCES  = ../fslink/test.c

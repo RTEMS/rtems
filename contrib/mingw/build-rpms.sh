@@ -1,7 +1,4 @@
 #! /bin/sh
-#
-# $Id$
-#
 # RTEMS Build RPM script.
 #
 # This script builds the RTEMS tools into RPM packages on a Linux Fedora host,

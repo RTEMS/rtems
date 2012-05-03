@@ -1,4 +1,3 @@
-
 /*
  * Simplyfied version of original bin2boot
  */

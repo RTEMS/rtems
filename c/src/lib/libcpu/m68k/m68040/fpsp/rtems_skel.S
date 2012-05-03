@@ -1,5 +1,4 @@
 //
-//      $Id$
 //
 //	skeleton.sa 3.2 4/26/91
 //
@@ -36,7 +35,6 @@
 //	The copyright notice above does not evidence any
 //	actual or intended publication of such source code.
 
-//  $Id$
 
 //
 //	Modified for Linux-1.3.x by Jes Sorensen (jds@kom.auc.dk)

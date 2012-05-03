@@ -1,7 +1,5 @@
 /*
  *  LEON2 Opencores Ethernet MAC Configuration Information
- *
- *  $Id$
  */
 
 

@@ -16,8 +16,6 @@
  *      software without specific, written prior permission.
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
- *
- *  $Id$
  */
 /* @(#)clock.S       08/20/96     1.2 */
 

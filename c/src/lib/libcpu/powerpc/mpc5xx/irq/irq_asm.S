@@ -20,8 +20,6 @@
  *  Till Straumann <strauman@slac.stanford.edu>, 2003/7:
  *    - store isr nesting level in _ISR_Nest_level rather than
  *      SPRG0 - RTEMS relies on that variable.
- *
- * $Id$
  */
 
 #include <rtems/asm.h>

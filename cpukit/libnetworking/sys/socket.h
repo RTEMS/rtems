@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/socket.h,v 1.88 2005/04/13 00:01:46 mdodd Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _SYS_SOCKET_H_
 #define	_SYS_SOCKET_H_

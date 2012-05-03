@@ -1,4 +1,3 @@
-
 /*
  * A collection of structures, addresses, and values associated with
  * the Motorola MBX boards.  This was originally created for the

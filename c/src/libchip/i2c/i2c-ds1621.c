@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Trivial i2c driver for the maxim DS1621 temperature sensor;
  * just implements reading constant conversions with 8-bit
  * resolution.

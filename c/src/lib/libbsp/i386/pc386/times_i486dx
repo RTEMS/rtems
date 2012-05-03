@@ -1,8 +1,6 @@
 #
 #  Timing Test Suite Results for the pc386 BSP using an i486DX
 #
-#  $Id$
-#
 
 Board:                PC/AT clone
 CPU:                  Intel i486DX

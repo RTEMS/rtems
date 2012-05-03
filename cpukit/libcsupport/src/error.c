@@ -1,8 +1,6 @@
 /*
  *  report errors and panics to RTEMS' stderr.
  *  Currently just used by RTEMS monitor.
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

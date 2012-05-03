@@ -2,8 +2,6 @@
  *
  * Support for gnat/rtems interrupts and exception handling.
  * Jiri Gaisler, ESA/ESTEC, 17-02-1999.
- *
- *  $Id$
  */
 
 void __gnat_install_handler_common (int t1, int t2);

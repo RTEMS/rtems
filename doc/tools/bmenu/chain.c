@@ -4,8 +4,6 @@
  *  COPYRIGHT (c) 1988-2002.
  *  On-Line Applications Research Corporation (OAR).
  *  All rights reserved.
- *
- *  $Id$
  */
 
 #include "system.h"

@@ -4,9 +4,6 @@
  *
  *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
- *
- *
- *  $Id$
  */
 
 #include <bsp.h>

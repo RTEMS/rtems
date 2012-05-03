@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	Interrupt registers and vector pointers
 
 	Copyright (C) 2005

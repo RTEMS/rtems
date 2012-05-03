@@ -11,8 +11,6 @@
     REGARD TO THIS SOFTWARE INCLUDING BUT NOT LIMITED TO THE WARRANTIES
     OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-    $Id$
-
 ********************************************************************************
 *
 *   r46kstub.c -- target debugging stub for the IDT R4600 Orion processor

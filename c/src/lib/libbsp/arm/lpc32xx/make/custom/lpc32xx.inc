@@ -1,8 +1,6 @@
 #
 #  Config file for LPC32XX.
 #
-#  $Id$
-#
 
 include $(RTEMS_ROOT)/make/custom/default.cfg
 

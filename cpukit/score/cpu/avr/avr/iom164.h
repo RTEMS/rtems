@@ -30,7 +30,6 @@
 
 /* avr/iom164.h - definitions for ATmega164 */
 
-/* $Id$ */
 
 #ifndef _AVR_IOM164_H_
 #define _AVR_IOM164_H_ 1

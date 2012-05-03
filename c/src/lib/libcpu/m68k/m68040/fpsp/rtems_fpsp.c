@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <rtems/system.h>
 /*
 #include <rtems/score/isr.h>

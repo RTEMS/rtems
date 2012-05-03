@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 /*#########################################################
 #
 # This code is a modified version of what you will find at the

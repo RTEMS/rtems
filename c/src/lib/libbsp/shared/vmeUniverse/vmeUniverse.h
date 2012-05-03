@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef VME_UNIVERSE_UTIL_H
 #define VME_UNIVERSE_UTIL_H
 

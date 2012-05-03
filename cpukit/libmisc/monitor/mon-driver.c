@@ -15,8 +15,6 @@
  *
  *  Drivers are displayed with 'driver' command.
  *  Names are displayed with 'name' command.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

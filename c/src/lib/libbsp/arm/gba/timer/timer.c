@@ -23,8 +23,6 @@
  *
  *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
- *
- *  $Id$
  */
 
 #include <rtems.h>

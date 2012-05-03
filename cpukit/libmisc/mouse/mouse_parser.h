@@ -29,8 +29,6 @@
  * a PS/2 driver or a serial port.
  *
  * It was moved to cpukit/libmisc/mouse by Joel Sherrill.
- *
- * $Id$
  */
 
 #ifndef __MOUSE_PARSER_h__

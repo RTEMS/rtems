@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* remap the zero-based PCI IO spaces of both hoses to a single
  * address space
  *

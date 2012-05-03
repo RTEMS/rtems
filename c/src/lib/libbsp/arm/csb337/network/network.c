@@ -8,8 +8,6 @@
  *
  *  July 2009: Joel Sherrill merged csb637 PHY differences from
  *             MicroMonitor 1.17.
- *
- *  $Id$
  */
 
 #include <rtems.h>

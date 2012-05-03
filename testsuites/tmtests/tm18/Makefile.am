@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = tm18
 tm18_SOURCES = task1.c system.h ../include/timesys.h \

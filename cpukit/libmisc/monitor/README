@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 monitor task
 
 The monitor task is an optional task that knows about RTEMS

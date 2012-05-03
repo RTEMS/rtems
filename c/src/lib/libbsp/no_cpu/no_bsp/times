@@ -3,9 +3,6 @@
 #
 #  NOTE: This is just a template.  The times are irrelevant since this BSP
 #        can only be compiled -- not executed.
-#
-#  $Id$
-#
 
 Board:  
 CPU: include coprocessor if applicable

@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 OUTPUT_FORMAT("elf32-bfin", "elf32-bfin",
             "elf32-bfin")
 

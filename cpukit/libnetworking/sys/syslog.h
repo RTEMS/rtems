@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/syslog.h,v 1.26 2005/01/07 02:29:24 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _SYS_SYSLOG_H_
 #define _SYS_SYSLOG_H_

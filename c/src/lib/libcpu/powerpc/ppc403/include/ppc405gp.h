@@ -1,5 +1,4 @@
 
-
 /* SDRAM DCRs */
 enum {
 	SDRAM0_BESR0	=	0,

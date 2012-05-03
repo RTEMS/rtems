@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sprbtree01
 sprbtree01_SOURCES = init.c

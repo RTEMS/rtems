@@ -8,8 +8,6 @@
  *  usage:  cklength  [ -v ] [ arg ... ] files...
  *           -l length   -- maximum line length
  *           -v          -- verbose
- *
- * $Id$
  */
 
 #define GETOPTARGS "l:nNv"

@@ -8,9 +8,6 @@
  *  http://www.rtems.com/license/LICENSE.
  */
  
-/*
- *  $Id$
- */
 
 #include <rtems.h>
 #include <rtems/libio.h>

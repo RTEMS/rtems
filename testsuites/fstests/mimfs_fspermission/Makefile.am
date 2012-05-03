@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = mimfs_fspermission
 mimfs_fspermission_SOURCES  = ../fspermission/test.c

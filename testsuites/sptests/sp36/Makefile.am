@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp36
 sp36_SOURCES = strict_order_mut.c

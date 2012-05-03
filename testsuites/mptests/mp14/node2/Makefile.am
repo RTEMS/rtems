@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 rtems_tests_PROGRAMS = mp14-node2
 mp14_node2_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
     ../pttask1.c ../smtask1.c ../msgtask1.c ../system.h

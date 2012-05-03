@@ -8,8 +8,6 @@
  *  handlers that map them onto POSIX signals so they can be
  *  propagated to the GNAT run-time.  See the sparc/erc32 BSP
  *  for an example.
- *
- *  $Id$
  */
 
 /*

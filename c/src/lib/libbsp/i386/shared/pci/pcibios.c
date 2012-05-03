@@ -3,8 +3,6 @@
  * It is provided in to the public domain "as is", can be freely modified
  * as far as this copyight notice is kept unchanged, but does not imply
  * an endorsement by T.sqware of the product in which it is included.
- *
- *  $Id$
  */
 
 #include <rtems.h>

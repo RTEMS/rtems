@@ -1,7 +1,5 @@
 /*
  *  Copied from newlib 1.8.2
- *
- *  $Id$
  */
 
 typedef void (*pfunc) (void);

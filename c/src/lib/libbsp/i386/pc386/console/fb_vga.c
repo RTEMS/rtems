@@ -5,8 +5,6 @@
  * This module implements FB driver for "Bare VGA". It uses the
  * routines for "bare hardware" found in vgainit.c.
  *
- *  $Id$
- *
  */
 
 #include <stdlib.h>

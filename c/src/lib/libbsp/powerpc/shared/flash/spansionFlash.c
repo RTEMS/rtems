@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
  * Trivial driver for spansion flash present on the
  * MVME3100 board.

@@ -25,8 +25,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Modified to reflect dummy isp entries for GDB SH simulator by Joel.
- *
- *  $Id$
  */
 
 #include <rtems/system.h>

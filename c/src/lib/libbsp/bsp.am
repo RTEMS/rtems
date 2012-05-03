@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 ## Explicitly set CPPASCOMPILE
 # to be able to use it for compilation of *.S even if automake
 # doesn't generate this variable. (automake-1.8.2+ only generates

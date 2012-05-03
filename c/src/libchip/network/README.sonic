@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This SONIC driver does not make any attempt to support the SONIC chip
 in any of the following modes:
 
@@ -30,8 +26,6 @@ the 4.6 release series so the code is included here.
  *
  *  1) SVME/DMV-171 Single Board Computer Documentation Package, #805905,
  *     DY 4 Systems Inc., Kanata, Ontario, September, 1996.
- *
- *  $Id$
  */
 
 #include <bsp.h>

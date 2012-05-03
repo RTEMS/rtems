@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <rtems.h>
 #include <rtems/mips/idtcpu.h>
 #include <stdlib.h>

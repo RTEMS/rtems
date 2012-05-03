@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxcancel01
 psxcancel01_SOURCES = init.c ../include/pmacros.h

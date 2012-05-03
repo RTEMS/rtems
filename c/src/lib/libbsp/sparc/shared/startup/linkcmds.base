@@ -1,6 +1,4 @@
 /*  linkcmds
- *
- *  $Id$
  */
 
 OUTPUT_ARCH(sparc)

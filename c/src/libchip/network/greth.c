@@ -6,8 +6,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
- *
  * 2007-09-07, Ported GBIT support from 4.6.5
  */
 

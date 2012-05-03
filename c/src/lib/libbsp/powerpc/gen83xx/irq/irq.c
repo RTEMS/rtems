@@ -17,9 +17,6 @@
 | this file integrates the IPIC irq controller                    |
 \*===============================================================*/
 
-/*
- *  $Id$
- */
 
 #include <mpc83xx/mpc83xx.h>
 

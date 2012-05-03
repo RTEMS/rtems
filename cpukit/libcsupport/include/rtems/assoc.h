@@ -5,9 +5,6 @@
  * one space to another (eg: our errno's to host errno's and vice-versa)
  */
 
-/*
- *  $Id$
- */
 
 #ifndef _RTEMS_RTEMS_ASSOC_H
 #define _RTEMS_RTEMS_ASSOC_H

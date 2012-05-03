@@ -35,9 +35,6 @@
  * $FreeBSD: src/sys/sys/ioctl.h,v 1.13 2004/06/11 11:16:26 phk Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef	_SYS_IOCTL_H_
 #define	_SYS_IOCTL_H_

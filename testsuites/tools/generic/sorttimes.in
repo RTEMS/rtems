@@ -3,9 +3,6 @@
 #  This script takes the output from the Timing Test Suite, reorders
 #  it, and adds headers so it is in the same order as is printed in
 #  the supplement.
-#
-#  $Id$
-#
 
 usage()
 {

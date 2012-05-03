@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 rtems_tests_PROGRAMS = mp08-node1
 mp08_node1_SOURCES = ../init.c ../task1.c ../system.h
 

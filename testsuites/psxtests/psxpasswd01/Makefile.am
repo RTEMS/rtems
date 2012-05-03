@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxpasswd01
 psxpasswd01_SOURCES = init.c ../include/pmacros.h

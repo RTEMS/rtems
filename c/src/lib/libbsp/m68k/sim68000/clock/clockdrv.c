@@ -1,7 +1,5 @@
 /*
  *  Instantiate the clock driver shell.
- *
- *  $Id$
  */
 
 #include <bsp.h>

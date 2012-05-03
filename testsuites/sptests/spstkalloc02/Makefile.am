@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spstkalloc02
 spstkalloc02_SOURCES = init.c

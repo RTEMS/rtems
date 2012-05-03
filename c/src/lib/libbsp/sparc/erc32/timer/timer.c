@@ -16,8 +16,6 @@
  *
  *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
- *
- *  $Id$
  */
 
 #include <bsp.h>

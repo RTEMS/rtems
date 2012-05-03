@@ -16,8 +16,6 @@
  *
  *  The API for the RTEMS Cache Manager can be found in
  *  c/src/exec/rtems/include/rtems/rtems/cache.h
- *
- *  $Id$
  */
 
 #ifndef __LIBCPU_CACHE_h

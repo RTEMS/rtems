@@ -5,9 +5,6 @@
  *
  */
 
-/*
- * $Id$
- */
  
 #ifndef _NET_ETHERNET_H_
 #define _NET_ETHERNET_H_

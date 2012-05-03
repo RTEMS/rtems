@@ -1,5 +1,3 @@
-/*	$Id$	*/
-
 /*
  * This file is derived from zlib.h and zconf.h from the zlib-0.95
  * distribution by Jean-loup Gailly and Mark Adler, with some additions

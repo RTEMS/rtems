@@ -1,5 +1,3 @@
-## $Id$
-
 if MULTILIB
 MULTISRCTOP =
 MULTIDIRS =

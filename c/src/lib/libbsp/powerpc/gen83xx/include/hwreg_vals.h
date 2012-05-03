@@ -17,9 +17,6 @@
 | this file contains board specific definitions                   |
 \*===============================================================*/
 
-/*
- *  $Id$
- */
 
 #ifndef __GEN83xx_HWREG_VALS_h
 #define __GEN83xx_HWREG_VALS_h

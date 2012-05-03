@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifdef __ALTIVEC__
 
 /* Altivec support for RTEMS; vector register context management.  */

@@ -5,8 +5,6 @@
 #include <bsp.h>
 #if !BSP_SMALL_MEMORY
 /*
- *  $Id$
- *
  *      A C version of Kahan's Floating Point Test "Paranoia"
  *
  *                      Thos Sumner, UCSF, Feb. 1985

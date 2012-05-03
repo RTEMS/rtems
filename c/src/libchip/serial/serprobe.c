@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <rtems.h>
 #include <libchip/serial.h>
 #include <libchip/sersupp.h>

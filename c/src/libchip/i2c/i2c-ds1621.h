@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef I2C_DS_1621_DRIVER_H
 #define I2C_DS_1621_DRIVER_H
 

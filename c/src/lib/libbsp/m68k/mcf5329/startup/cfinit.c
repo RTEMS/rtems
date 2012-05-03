@@ -1,4 +1,3 @@
-
 /*********************************************************************
 * Initialisation Code for ColdFire MCF5329 Processor                 *
 **********************************************************************
@@ -10,8 +9,6 @@
  no liability for any loss arising out of its use. The person or
  persons making use of this file must make the final evaluation
  as to its suitability and correctness for a particular application.
-
- $Id$
 
 */
 

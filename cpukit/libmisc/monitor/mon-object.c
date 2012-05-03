@@ -11,8 +11,6 @@
  *
  * TODO:
  *     should allow for non-numeric id's???
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

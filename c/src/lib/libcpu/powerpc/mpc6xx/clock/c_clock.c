@@ -15,8 +15,6 @@
  *
  *  Modified to support the MPC750.
  *  Modifications Copyright (c) 1999 Eric Valette valette@crf.canon.fr
- *
- *  $Id$
  */
 
 #include <rtems/system.h>

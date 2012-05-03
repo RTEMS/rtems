@@ -1,6 +1,5 @@
 #ifndef RTEMS_BSP_VME_API_H
 #define RTEMS_BSP_VME_API_H
-/* $Id$ */
 
 /* SVGM et al. BSP's VME support */
 

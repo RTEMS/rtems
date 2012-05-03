@@ -33,9 +33,6 @@
  * $FreeBSD: src/sys/nfs/rpcv2.h,v 1.14 2005/01/07 01:45:50 imp Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef _NFS_RPCV2_H_
 #define _NFS_RPCV2_H_

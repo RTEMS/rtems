@@ -29,8 +29,6 @@
  *      i-cubed limited makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  $Id$
- *
  *  derived from "helas403/dlentry.S":
  *
  *  Further changes to derive for the PPC405CR/GP/GPr/EX/EXr

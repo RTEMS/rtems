@@ -8,8 +8,6 @@
  * found in the file LICENSE in this distribution.
  *
  * To read information of the EEPROM via the I2C
- *
- * $Id$
  */
 
 #include <rtems/bspIo.h>	    /* printk */

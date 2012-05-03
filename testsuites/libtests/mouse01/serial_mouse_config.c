@@ -1,7 +1,5 @@
 /*
  *
- * $Id$
- *
  * MODULE DESCRIPTION:
  * This module implements the RTEMS drivers for the PC serial ports
  * as /dev/ttyS1 for COM1 and /dev/ttyS2 as COM2. If one of the ports

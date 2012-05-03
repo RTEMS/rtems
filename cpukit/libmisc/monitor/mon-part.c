@@ -1,7 +1,5 @@
 /*
  * RTEMS Monitor partition support
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

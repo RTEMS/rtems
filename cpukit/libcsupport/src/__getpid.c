@@ -1,8 +1,6 @@
 /*
  *  Some C Libraries reference this routine since they think getpid is
  *  a real system call.
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

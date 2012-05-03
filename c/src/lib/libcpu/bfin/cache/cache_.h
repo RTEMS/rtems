@@ -1,7 +1,5 @@
 /*
  *  Blackfin Cache Manager Support
- *
- *  $Id$
  */
 
 #ifndef _cache__h_

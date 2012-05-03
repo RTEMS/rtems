@@ -1,8 +1,6 @@
 /*
  * RTEMS monitor server (handles requests for info from RTEMS monitors
  *             running on other nodes)
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

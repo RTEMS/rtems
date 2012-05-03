@@ -3,8 +3,6 @@
  *  2008 By Yang Xi <hiyangxi@gmail.com>
  *  Copyright (c) 2004 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
- *
- *  $Id$
  */
 
 #include <rtems.h>

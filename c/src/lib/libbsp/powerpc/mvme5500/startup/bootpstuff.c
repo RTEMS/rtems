@@ -1,4 +1,3 @@
-
 #define FLAG_MAND	1
 #define FLAG_NOUSE	2	/* dont put into the commandline at all */
 #define FLAG_CLRBP  4	/* field needs to be cleared for bootp  */
