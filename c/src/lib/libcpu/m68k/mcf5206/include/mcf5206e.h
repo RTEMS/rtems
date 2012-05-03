@@ -1,17 +1,14 @@
 /*
- * Coldfire MCF5206e on-chip peripherial definitions.
- * Contents of this file based on information provided in
- * Motorola MCF5206e User's Manual
+ *  Coldfire MCF5206e on-chip peripherial definitions.
+ *  Contents of this file based on information provided in
+ *  Motorola MCF5206e User's Manual
  *
- * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
- * Author: Victor V. Vengerov <vvv@oktet.ru>
+ *  Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
+ *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- *
- * http://www.rtems.com/license/LICENSE.
- *
- * @(#) $Id$
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef __MCF5206E_H__
