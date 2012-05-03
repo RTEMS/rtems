@@ -307,7 +307,6 @@ void _RBTree_Extract(
 /**
  * @brief Returns the in-order next node of a node.
  *
- * @param[in] rbtree The red-black tree.
  * @param[in] node The node.
  * @param[in] dir The direction.
  *
@@ -315,7 +314,6 @@ void _RBTree_Extract(
  * @retval otherwise The next node.
  */
 RBTree_Node *_RBTree_Next_unprotected(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node,
   RBTree_Direction dir
 );
@@ -326,7 +324,6 @@ RBTree_Node *_RBTree_Next_unprotected(
  * The function disables the interrupts protect the operation.
  */
 RBTree_Node *_RBTree_Next(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node,
   RBTree_Direction dir
 );

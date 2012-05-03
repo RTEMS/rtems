@@ -28,7 +28,6 @@
 #include <rtems/score/isr.h>
 
 RBTree_Node *_RBTree_Next_unprotected(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node,
   RBTree_Direction dir
 )
@@ -43,18 +42,17 @@ RBTree_Node *_RBTree_Next_unprotected(
       next = current;
     }
   } else {
-    const RBTree_Node *null = (const RBTree_Node *) rbtree;
     RBTree_Node *parent = node->parent;
 
-    if ( parent != null && node == parent->child [opp_dir] ) {
+    if ( parent->parent && node == parent->child [opp_dir] ) {
       next = parent;
     } else {
-      while ( parent != null && node == parent->child [dir] ) {
+      while ( parent->parent && node == parent->child [dir] ) {
         node = parent;
-        parent = node->parent;
+        parent = parent->parent;
       }
 
-      if ( parent != null ) {
+      if ( parent->parent ) {
         next = parent;
       }
     }
@@ -64,7 +62,6 @@ RBTree_Node *_RBTree_Next_unprotected(
 }
 
 RBTree_Node *_RBTree_Next(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node,
   RBTree_Direction dir
 )
@@ -73,7 +70,7 @@ RBTree_Node *_RBTree_Next(
   ISR_Level level;
 
   _ISR_Disable( level );
-  next = _RBTree_Next_unprotected( rbtree,  node, dir );
+  next = _RBTree_Next_unprotected( node, dir );
   _ISR_Enable( level );
 
   return next;

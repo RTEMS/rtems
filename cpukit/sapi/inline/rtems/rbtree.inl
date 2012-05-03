@@ -283,44 +283,40 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
  * @copydoc _RBTree_Predecessor_unprotected()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor_unprotected(
-  const rtems_rbtree_control *rbtree,
   const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Predecessor_unprotected( rbtree, node );
+  return _RBTree_Predecessor_unprotected( node );
 }
 
 /**
  * @copydoc _RBTree_Predecessor()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_predecessor(
-  const rtems_rbtree_control *rbtree,
   const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Predecessor( rbtree, node );
+  return _RBTree_Predecessor( node );
 }
 
 /**
  * @copydoc _RBTree_Successor_unprotected()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor_unprotected(
-  const rtems_rbtree_control *rbtree,
   const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Successor_unprotected( rbtree, node );
+  return _RBTree_Successor_unprotected( node );
 }
 
 /**
  * @copydoc _RBTree_Successor()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_successor(
-  const rtems_rbtree_control *rbtree,
   const rtems_rbtree_node *node
 )
 {
-  return _RBTree_Successor( rbtree, node );
+  return _RBTree_Successor( node );
 }
 
 /**

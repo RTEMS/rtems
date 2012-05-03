@@ -384,11 +384,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
  * @retval otherwise The predecessor node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next_unprotected( rbtree, node, RBT_LEFT );
+  return _RBTree_Next_unprotected( node, RBT_LEFT );
 }
 
 /**
@@ -397,11 +396,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
  * The function disables the interrupts protect the operation.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next( rbtree, node, RBT_LEFT );
+  return _RBTree_Next( node, RBT_LEFT );
 }
 
 /**
@@ -414,11 +412,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
  * @retval otherwise The successor node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next_unprotected( rbtree, node, RBT_RIGHT );
+  return _RBTree_Next_unprotected( node, RBT_RIGHT );
 }
 
 /**
@@ -427,11 +424,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
  * The function disables the interrupts protect the operation.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next( rbtree, node, RBT_RIGHT );
+  return _RBTree_Next( node, RBT_RIGHT );
 }
 
 /** @brief Get the First Node (unprotected)

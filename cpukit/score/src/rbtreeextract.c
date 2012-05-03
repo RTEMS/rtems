@@ -109,7 +109,7 @@ void _RBTree_Extract_unprotected(
   /* check if min needs to be updated */
   if (the_node == the_rbtree->first[RBT_LEFT]) {
     RBTree_Node *next;
-    next = _RBTree_Successor_unprotected(the_rbtree, the_node);
+    next = _RBTree_Successor_unprotected(the_node);
     the_rbtree->first[RBT_LEFT] = next;
   }
 
@@ -117,7 +117,7 @@ void _RBTree_Extract_unprotected(
    * do not use else if here. */
   if (the_node == the_rbtree->first[RBT_RIGHT]) {
     RBTree_Node *previous;
-    previous = _RBTree_Predecessor_unprotected(the_rbtree, the_node);
+    previous = _RBTree_Predecessor_unprotected(the_node);
     the_rbtree->first[RBT_RIGHT] = previous;
   }
 
