@@ -1,8 +1,7 @@
 #
 # RTEMS tools setup
 #
-# $Id$
-#
+
 binutils_version=2.18.91
 # binutils_patch_version=
 binutils_suffix=.tar.bz2

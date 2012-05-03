@@ -51,7 +51,6 @@
 
 /*%
  *	@(#)inet.h	8.1 (Berkeley) 6/2/93
- *	$Id$
  * $FreeBSD: src/include/arpa/inet.h,v 1.33 2010/07/06 03:48:46 maxim Exp $
  */
 

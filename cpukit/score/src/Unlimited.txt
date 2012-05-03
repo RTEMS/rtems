@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This document explains how the unlimited objects support works.  This was
 written by Chris Johns <ccj@acm.org> of Objective Design Systems as a
 design document.  This was submitted as part of the patch which added

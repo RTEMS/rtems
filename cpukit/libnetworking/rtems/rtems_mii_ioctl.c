@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Simple (default) implementation for SIOCGIFMEDIA/SIOCSIFMEDIA
  * to be used by ethernet drivers [from their ioctl].
  *

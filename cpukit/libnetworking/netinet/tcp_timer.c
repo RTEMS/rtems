@@ -27,7 +27,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_timer.c	8.2 (Berkeley) 5/24/95
- *	$Id$
  */
 
 #ifdef HAVE_CONFIG_H

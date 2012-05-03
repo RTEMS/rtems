@@ -1,5 +1,5 @@
 #
-#  $Id$
+#  Example Makefile for a directory
 #
 
 include $(RTEMS_MAKEFILE_PATH)/Makefile.inc

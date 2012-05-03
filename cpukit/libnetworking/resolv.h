@@ -46,7 +46,6 @@
 
 /*%
  *	@(#)resolv.h	8.1 (Berkeley) 6/2/93
- *	$Id: resolv.h,v 1.19.18.4 2008/04/03 23:15:15 marka Exp $
  * $FreeBSD: release/9.0.0/include/resolv.h 203964 2010-02-16 19:39:50Z imp $
  */
 

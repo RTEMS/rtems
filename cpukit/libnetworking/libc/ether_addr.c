@@ -34,10 +34,7 @@
  * Written by Bill Paul <wpaul@ctr.columbia.edu>
  * Center for Telecommunications Research
  * Columbia University, New York City
- *
- *	$Id$
  */
-
 
 #if HAVE_CONFIG_H
 #include "config.h"

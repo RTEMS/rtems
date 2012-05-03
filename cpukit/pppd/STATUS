@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The pppd application seems to very stable.  It has been tested using
 the example application with the i386/pc586 and m68k/sbc5206e BSPs.
 The tests were executed using a null modem serial cable to connect

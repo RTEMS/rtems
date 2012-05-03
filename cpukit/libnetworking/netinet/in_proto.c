@@ -27,7 +27,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_proto.c	8.2 (Berkeley) 2/9/95
- *	$Id$
  */
 
 #ifdef HAVE_CONFIG_H

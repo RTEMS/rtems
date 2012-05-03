@@ -156,8 +156,6 @@ echo "@c  COPYRIGHT (c) 1988-2002."
 echo "@c  On-Line Applications Research Corporation (OAR)."
 echo "@c  All rights reserved. "
 echo "@c"
-echo "@c  \$Id\$"
-echo "@c"
 echo ""
 echo "@chapter ${CHAPTER_CAPS}" Manager
 echo ""

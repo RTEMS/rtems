@@ -29,10 +29,10 @@
  * 2550 Garcia Avenue
  * Mountain View, California  94043
  */
+
 /*
  * Copyright (c) 1986 - 1991 by Sun Microsystems, Inc.
  */
-
  
 /*
  * rpc_com.h, Common definitions for both the server and client side.

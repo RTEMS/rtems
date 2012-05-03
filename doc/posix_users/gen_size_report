@@ -5,9 +5,6 @@
 #  This script must be modified by the user to tailor it for their
 #  environment.  This is VERY ugly and could be replaced by something
 #  nicer in the future if this report style is useful.
-#
-#  $Id$
-# 
 
 #cpu=sparc
 #bsp=erc32

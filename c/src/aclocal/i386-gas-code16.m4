@@ -1,5 +1,3 @@
-dnl 
-
 dnl check for i386 gas supporting 16 bit mode
 dnl     - binutils 2.9.1.0.7 and higher
 

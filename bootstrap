@@ -3,12 +3,10 @@
 # helps bootstrapping, when checked out from CVS
 # requires GNU autoconf and GNU automake
 #
-# $Id$
-
 # this is not meant to be exported outside the source tree
-
+#
 # NOTE: Inspired by libtool's autogen script
-
+#
 # to be run from the toplevel directory of RTEMS'
 # source tree
 

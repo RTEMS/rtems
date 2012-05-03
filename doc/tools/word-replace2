@@ -1,7 +1,4 @@
 #!/usr/bin/perl
-#
-#  $Id$
-#
 
 eval "exec /usr/local/bin/perl -S $0 $*"
     if $running_under_some_shell;

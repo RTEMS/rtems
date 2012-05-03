@@ -2,8 +2,6 @@
 #
 #  Generate the summary chapter
 #
-#  $Id$
-#
 
 echo "@c"
 echo "@c DO NOT EDIT -- AUTOMATICALLY GENERATED!!!"

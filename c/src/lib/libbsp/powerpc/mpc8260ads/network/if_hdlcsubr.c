@@ -45,7 +45,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)if_ethersubr.c	8.1 (Berkeley) 6/10/93
- * $Id$
  */
 
 #include <rtems/rtems_bsdnet.h>

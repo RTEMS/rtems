@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# $Id$
-
 version=0.1
 verbose=0
 target=

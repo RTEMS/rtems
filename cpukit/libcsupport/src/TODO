@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 + newlib 1.8.0 has the wrong prototype for at least read() and write().
 
 + There should be a "eat it" stub for all system calls which are

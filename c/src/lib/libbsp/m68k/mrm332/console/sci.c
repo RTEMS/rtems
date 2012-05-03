@@ -33,8 +33,6 @@
 *
 * Note:     See bsp.h,confdefs.h,system.h for installing drivers into RTEMS.
 *
-* $Id$
-*
 *****************************************************************************/
 
 /*****************************************************************************
@@ -231,13 +229,6 @@ BSP_output_char_function_type      BSP_output_char = SCI_output_char;
 BSP_polling_getchar_function_type  BSP_poll_char   = NULL;
 
 #endif
-
-/* cvs id string so you can use the unix ident command on the object */
-
-#ifdef ID_STRINGS
-static const char SciIdent[]="$Id$";
-#endif
-
 
 /*****************************************************************************
   Section G - A circular buffer for rcv chars when the driver interface is used.

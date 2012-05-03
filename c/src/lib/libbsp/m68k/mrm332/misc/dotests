@@ -1,7 +1,4 @@
 #! /bin/bash
-#
-#  $Id$
-#
 
 mkdir MyTests
 find -name MyTests -prune -or -name "*.nxe" -exec cp {} MyTests \;

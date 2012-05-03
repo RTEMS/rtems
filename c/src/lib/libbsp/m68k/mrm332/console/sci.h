@@ -5,7 +5,6 @@
 *
 * Note:     See bsp.h,confdefs.h,system.h for installing drivers into RTEMS.
 *
-* $Id$
 ****************************************************************************/
 
 #ifndef _sci_h_

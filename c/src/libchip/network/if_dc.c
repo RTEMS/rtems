@@ -1,5 +1,4 @@
-/* $Id$
- *
+/*
  * Ported from FreeBSD --> RTEMS, december 03.
  * 	Daron Chabot <daron@nucleus.usask.ca>
  * 	-- only tested with i386 bsp.

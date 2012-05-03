@@ -1,5 +1,4 @@
 dnl
-
 dnl RTEMS_BSPOPTS_* - some autoconf voodoo to handle default values and
 dnl help-strings for per-BSP-environment variables.
 
