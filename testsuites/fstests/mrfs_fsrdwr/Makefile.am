@@ -1,8 +1,3 @@
-##
-##  $Id$
-##
-
-
 rtems_tests_PROGRAMS = mrfs_fsrdwr
 mrfs_fsrdwr_SOURCES  = ../fsrdwr/init.c
 mrfs_fsrdwr_SOURCES += ../support/ramdisk_support.c
