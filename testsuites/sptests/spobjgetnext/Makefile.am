@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = spobjgetnext
 spobjgetnext_SOURCES = init.c system.h
 

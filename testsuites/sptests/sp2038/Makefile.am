@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = sp2038
 sp2038_SOURCES = init.c
 

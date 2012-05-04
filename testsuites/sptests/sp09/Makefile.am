@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = sp09
 sp09_SOURCES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c \
     screen05.c screen06.c screen07.c screen08.c screen09.c screen10.c \

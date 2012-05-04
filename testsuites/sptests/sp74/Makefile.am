@@ -1,8 +1,3 @@
-##
-##  $Id$
-##
-
-
 rtems_tests_PROGRAMS = sp74 
 sp74_SOURCES = init.c
 

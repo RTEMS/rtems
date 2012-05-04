@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = spedfsched01
 spedfsched01_SOURCES = init.c task1.c system.h
 

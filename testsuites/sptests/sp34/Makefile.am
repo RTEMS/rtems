@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = sp34
 sp34_SOURCES = changepri.c
 
