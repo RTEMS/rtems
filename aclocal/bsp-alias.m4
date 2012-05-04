@@ -1,7 +1,3 @@
-dnl
-dnl  $Id$
-dnl 
-
 dnl _RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)
 dnl Internal subroutine to RTEMS_BSP_ALIAS
 AC_DEFUN([_RTEMS_BSP_ALIAS],
