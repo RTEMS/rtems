@@ -1,4 +1,3 @@
-## $Id$
 ## 
 ## Some hacks to set up RTEMS_*FLAGS
 ## Internal macro, not supposed to be explictly used in configure.ac's

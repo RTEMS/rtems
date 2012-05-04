@@ -1,8 +1,4 @@
 ## Process this file with autoconf to produce a configure script.
-##
-## $Id$
-
-##
 ## This script configures the configuration files below make/
 ##
 
