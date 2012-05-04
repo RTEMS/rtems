@@ -1493,7 +1493,7 @@ static int nfs_link(
 )
 {
 int rv = 0;
-NfsNode pNode;
+NfsNode pNode = parentloc->node_access;
 nfsstat status;
 NfsNode tNode = targetloc->node_access;
 char *dupname;
