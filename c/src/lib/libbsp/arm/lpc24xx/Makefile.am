@@ -5,8 +5,6 @@
 # @brief Makefile of LibBSP for the LPC24XX boards.
 #
 
-# $Id$
-
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am

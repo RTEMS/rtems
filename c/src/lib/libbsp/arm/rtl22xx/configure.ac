@@ -1,6 +1,4 @@
 ## Process this file with autoconf to produce a configure script.
-##
-## $Id$
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libbsp-arm-rtl22xx],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
