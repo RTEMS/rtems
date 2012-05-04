@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = psxintrcritical01
 psxintrcritical01_SOURCES = init.c \
     ../../sptests/spintrcritical_support/intrcritical.c

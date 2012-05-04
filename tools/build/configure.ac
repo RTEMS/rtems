@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 AC_PREREQ([2.68])
 AC_INIT([rtems-tools-build],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([install-if-change.in])

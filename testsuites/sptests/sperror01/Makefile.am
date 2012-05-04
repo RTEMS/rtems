@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = sperror01
 sperror01_SOURCES = init.c
 

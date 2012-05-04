@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = spclockget
 spclockget_SOURCES = init.c
 

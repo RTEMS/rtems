@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 rtems_tests_PROGRAMS = psxsignal06
 psxsignal06_SOURCES = init.c
 

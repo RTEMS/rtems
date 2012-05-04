@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = tmoverhd
 tmoverhd_SOURCES = testtask.c empty.c system.h dumrtems.h \
     ../include/timesys.h ../../support/src/tmtests_empty_function.c

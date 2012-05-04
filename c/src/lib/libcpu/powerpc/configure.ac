@@ -1,9 +1,5 @@
 # Process this file with autoconf to produce a configure script.
 #
-# $Id$
-
-##
-#
 # @file
 #
 # @ingroup mpc55xx_config

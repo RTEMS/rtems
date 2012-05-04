@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = bspcmdline01
 bspcmdline01_SOURCES = init.c
 

@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = spfatal19
 spfatal19_SOURCES = ../spfatal_support/init.c \
     ../spfatal_support/consume_sems.c \
@@ -16,7 +11,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CPPFLAGS += -DSEMAPHORES_REMAINING=2
+AM_CPPFLAGS += -DSEMAPHORES_REMAINING=1
 
 LINK_OBJS = $(spfatal19_OBJECTS)
 LINK_LIBS = $(spfatal19_LDLIBS)

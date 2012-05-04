@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 include $(top_srcdir)/automake/compile.am
 
 CLEANFILES =

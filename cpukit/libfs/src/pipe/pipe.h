@@ -106,16 +106,6 @@ extern int pipe_ioctl(
   rtems_libio_t  *iop
 );
 
-/*
- * Interface to file system lseek.
- */
-extern int pipe_lseek(
-  pipe_control_t *pipe,
-  off_t           offset,
-  int             whence,
-  rtems_libio_t  *iop
-);
-
 #ifdef __cplusplus
 }
 #endif

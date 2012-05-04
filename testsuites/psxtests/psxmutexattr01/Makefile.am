@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = psxmutexattr01
 psxmutexattr01_SOURCES = init.c
 

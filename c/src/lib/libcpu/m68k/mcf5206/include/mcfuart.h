@@ -1,16 +1,12 @@
 /*
- * Generic UART Serial driver for Motorola Coldfire processors definitions
+ *  Generic UART Serial driver for Motorola Coldfire processors definitions
  *
- * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russian Fed.
- * Author: Victor V. Vengerov <vvv@oktet.ru>
+ *  Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russian Fed.
+ *  Author: Victor V. Vengerov <vvv@oktet.ru>
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- *
- * http://www.rtems.com/license/LICENSE.
- *
- * @(#) $Id$
- *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef __MCFUART_H__

@@ -1,4 +1,3 @@
-# $Id$
 #
 # Some hacks for handling powerpc-exception subdirectories
 #

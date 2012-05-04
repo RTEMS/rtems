@@ -3,7 +3,6 @@
  *  Ray 2007 <rayx.cn@gmail.com> to support LPC ARM
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *
  *  http://www.rtems.com/license/LICENSE.
  *
  *

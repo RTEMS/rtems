@@ -1,16 +1,29 @@
-*** CLOCK TICK TEST ***
-TA1 - clock_get_tod - 09:00:00   12/31/1988
-TA2 - clock_get_tod - 09:00:00   12/31/1988
-TA3 - clock_get_tod - 09:00:00   12/31/1988
-TA1 - clock_get_tod - 09:00:05   12/31/1988
-TA1 - clock_get_tod - 09:00:10   12/31/1988
-TA2 - clock_get_tod - 09:00:10   12/31/1988
-TA1 - clock_get_tod - 09:00:15   12/31/1988
-TA3 - clock_get_tod - 09:00:15   12/31/1988
-TA1 - clock_get_tod - 09:00:20   12/31/1988
-TA2 - clock_get_tod - 09:00:20   12/31/1988
-TA1 - clock_get_tod - 09:00:25   12/31/1988
-TA1 - clock_get_tod - 09:00:30   12/31/1988
-TA2 - clock_get_tod - 09:00:30   12/31/1988
-TA3 - clock_get_tod - 09:00:30   12/31/1988
-*** END OF CLOCK TICK TEST ***
+*** SMP08 TEST ***
+  CPU 0 running task Init - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA04 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA05 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA06 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA07 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA08 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA09 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA10 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA11 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 0 running task TA12 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 1 running task TA01 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 2 running task TA02 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 3 running task TA03 - rtems_clock_get_tod 09:00:00   12/31/1988
+  CPU 2 running task TA01 - rtems_clock_get_tod 09:00:05   12/31/1988
+  CPU 3 running task TA01 - rtems_clock_get_tod 09:00:10   12/31/1988
+  CPU 0 running task TA02 - rtems_clock_get_tod 09:00:10   12/31/1988
+  CPU 2 running task TA01 - rtems_clock_get_tod 09:00:15   12/31/1988
+  CPU 3 running task TA03 - rtems_clock_get_tod 09:00:15   12/31/1988
+  CPU 2 running task TA04 - rtems_clock_get_tod 09:00:20   12/31/1988
+  CPU 3 running task TA01 - rtems_clock_get_tod 09:00:20   12/31/1988
+  CPU 2 running task TA02 - rtems_clock_get_tod 09:00:20   12/31/1988
+  CPU 3 running task TA05 - rtems_clock_get_tod 09:00:25   12/31/1988
+  CPU 2 running task TA01 - rtems_clock_get_tod 09:00:25   12/31/1988
+  CPU 1 running task TA06 - rtems_clock_get_tod 09:00:30   12/31/1988
+  CPU 0 running task TA01 - rtems_clock_get_tod 09:00:30   12/31/1988
+  CPU 1 running task TA02 - rtems_clock_get_tod 09:00:30   12/31/1988
+  CPU 2 running task TA03 - rtems_clock_get_tod 09:00:30   12/31/1988
+*** END OF SMP08 TEST ***

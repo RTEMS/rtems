@@ -1,17 +1,19 @@
-/*  PCI.h
+/**
+ *  @file
  *
  *  This include file contains prototypes for chips attached to the
  *  PCI bus.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id:
  */
+
 #ifndef __PCI_h
 #define __PCI_h
 

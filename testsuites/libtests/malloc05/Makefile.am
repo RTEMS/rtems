@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = malloc05
 malloc05_SOURCES = init.c
 

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 rtems_tests_PROGRAMS = devfs02
 devfs02_SOURCES = init.c
 

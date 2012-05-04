@@ -12,15 +12,12 @@
 +-----------------------------------------------------------------+
 | The license and distribution terms for this file may be         |
 | found in the file LICENSE in this distribution or at            |
-|                                                                 |
 | http://www.rtems.com/license/LICENSE.                           |
-|                                                                 |
 +-----------------------------------------------------------------+
 | this file declares the SPI based driver for a HCMS29xx 4 digit  |
 | alphanumeric LED display                                        |
-+-----------------------------------------------------------------+
-|  $Id$
 \*===============================================================*/
+
 #ifndef _DISP_HCMS29XX_H
 #define _DISP_HCMS29XX_H
 #include <rtems.h>

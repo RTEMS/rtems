@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = ftp01
 ftp01_SOURCES = init.c
 ftp01_LDADD = -lftpd

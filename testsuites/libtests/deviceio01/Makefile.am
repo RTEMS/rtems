@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 rtems_tests_PROGRAMS = deviceio01
 deviceio01_SOURCES = init.c test_driver.c
 deviceio01_SOURCES += test_driver.h

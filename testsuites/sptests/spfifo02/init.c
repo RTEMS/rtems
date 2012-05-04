@@ -145,11 +145,7 @@ rtems_task Init(
 
   puts( "Creating FIFO" );
   create_fifo();
-  
-  puts( "Opening FIFO.. expect ENFILE (semaphore @ open could not be created)" );
-  open_fifo(ENFILE, O_RDWR);
 
-  delete_semaphore();
   puts( "Opening FIFO.. expect ENOMEM (semaphore for pipe could not be created)" );
   open_fifo(ENOMEM, O_RDWR);
 

@@ -1,16 +1,13 @@
 /*
- * Coldfire MCF5272 definitions.
- * Contents of this file based on information provided in
- * Motorola MCF5272 User's Manual.
+ *  Coldfire MCF5272 definitions.
+ *  Contents of this file based on information provided in
+ *  Motorola MCF5272 User's Manual.
  *
- * Copyright (C) 2004 Jay Monkman <jtm@lopingdog.com>
+ *  Copyright (C) 2004 Jay Monkman <jtm@lopingdog.com>
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- *
- * http://www.rtems.com/license/LICENSE.
- *
- * @(#) mcf5206e.h,v 1.1 2001/10/26 19:32:40 joel Exp
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef __MCF5272_H__

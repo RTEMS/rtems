@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = tm12
 tm12_SOURCES = task1.c system.h ../include/timesys.h \
     ../../support/src/tmtests_empty_function.c

@@ -1,8 +1,3 @@
-##
-##  $Id$
-##
-
-
 rtems_tests_PROGRAMS = mrfs_fspermission
 mrfs_fspermission_SOURCES  = ../fspermission/test.c
 mrfs_fspermission_SOURCES += ../support/ramdisk_support.c

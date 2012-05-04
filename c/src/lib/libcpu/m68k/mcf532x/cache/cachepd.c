@@ -1,7 +1,7 @@
-/*
- *  Cache Management Support Routines for the MCF532x
+/**
+ *  @file
  *
- *  $Id:
+ *  Cache Management Support Routines for the MCF532x
  */
 
 #include <rtems.h>

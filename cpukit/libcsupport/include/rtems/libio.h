@@ -1165,7 +1165,6 @@ struct rtems_libio_tt {
   off_t                                   offset;    /* current offset into file */
   uint32_t                                flags;
   rtems_filesystem_location_info_t        pathinfo;
-  rtems_id                                sem;
   uint32_t                                data0;     /* private to "driver" */
   void                                   *data1;     /* ... */
 };

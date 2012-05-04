@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = putenvtest
 putenvtest_SOURCES = init.c
 

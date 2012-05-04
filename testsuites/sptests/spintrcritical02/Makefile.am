@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = spintrcritical02
 spintrcritical02_SOURCES = ../spintrcritical01/init.c \
     ../spintrcritical_support/intrcritical.c
