@@ -12,7 +12,7 @@ AM_CPPFLAGS += -DNODE_NUMBER=1 -I$(srcdir)/..
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = 
+LINK_OBJS = $(mp08_node1_OBJECTS)
 LINK_LIBS = $(mp08_node1_LDLIBS)
 
 mp08-node1$(EXEEXT): $(mp08_node1_OBJECTS) $(mp08_node1_DEPENDENCIES)

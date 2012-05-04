@@ -11,7 +11,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -DNODE_NUMBER=1 -I$(srcdir)/..
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = 
+LINK_OBJS = $(mp01_node1_OBJECTS)
 LINK_LIBS = $(mp01_node1_LDLIBS)
 
 mp01-node1$(EXEEXT): $(mp01_node1_OBJECTS) $(mp01_node1_DEPENDENCIES)

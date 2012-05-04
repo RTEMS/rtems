@@ -12,7 +12,7 @@ AM_CPPFLAGS += -DNODE_NUMBER=2 -I$(srcdir)/..
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = 
+LINK_OBJS = $(mp05_node2_OBJECTS)
 LINK_LIBS = $(mp05_node2_LDLIBS)
 
 mp05-node2$(EXEEXT): $(mp05_node2_OBJECTS) $(mp05_node2_DEPENDENCIES)
