@@ -1,6 +1,3 @@
-##
-##  $Id$
-##
 ##  build and install "glommed" librtemsbsp.a
 ##
 
