@@ -1,5 +1,3 @@
-## $Id$
-
 EXTRA_DIST =
 EXTRA_DIST += address_io.adb
 EXTRA_DIST += address_io.ads
