@@ -1,5 +1,3 @@
-# $Id$
-
 # Check whether FUNCTION is declared in INCLUDES
 # and whether rtems_stub_FUNCTION or FUNCTION is supplied.
 

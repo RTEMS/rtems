@@ -1,5 +1,3 @@
-## $Id$
-
 AC_DEFUN([RTEMS_CHECK_RTEMS_DEBUG],
 [AC_REQUIRE([RTEMS_ENABLE_RTEMS_DEBUG])
 AS_IF([test x"${enable_rtems_debug}" = x"yes"],
