@@ -2044,6 +2044,50 @@ static ssize_t nfs_readlink(
 	return (ssize_t) strlen(rr.strbuf.buf);
 }
 
+static int nfs_rename(
+	const rtems_filesystem_location_info_t *oldparentloc,
+	const rtems_filesystem_location_info_t *oldloc,
+	const rtems_filesystem_location_info_t *newparentloc,
+	const char *name,
+	size_t namelen
+)
+{
+	int rv = 0;
+	char *dupname = nfs_dupname(name, namelen);
+
+	if (dupname != NULL) {
+		NfsNode oldParentNode = oldparentloc->node_access;
+		NfsNode oldNode = oldloc->node_access;
+		NfsNode newParentNode = newparentloc->node_access;
+		Nfs nfs = oldParentNode->nfs;
+		const nfs_fh *toDirSrc = &SERP_FILE(newParentNode);
+		nfs_fh *toDirDst = &SERP_ARGS(oldParentNode).renamearg.to.dir;
+		nfsstat	status;
+
+		SERP_ARGS(oldParentNode).renamearg.name = oldNode->str;
+		SERP_ARGS(oldParentNode).renamearg.to.name = dupname;
+		memcpy(toDirDst, toDirSrc, sizeof(*toDirDst));
+
+		rv = nfscall(
+			nfs->server,
+			NFSPROC_RENAME,
+			(xdrproc_t) xdr_renameargs,
+			&SERP_FILE(oldParentNode),
+			(xdrproc_t) xdr_nfsstat,
+			&status
+		);
+		if (rv == 0 && (errno = status) != NFS_OK) {
+			rv = -1;
+		}
+
+		free(dupname);
+	} else {
+		rv = -1;
+	}
+
+	return rv;
+}
+
 static void nfs_lock(rtems_filesystem_mount_table_entry_t *mt_entry)
 {
 }
@@ -2104,7 +2148,7 @@ const struct _rtems_filesystem_operations_table nfs_fs_ops = {
 	.utime_h        = nfs_utime,
 	.symlink_h      = nfs_symlink,
 	.readlink_h     = nfs_readlink,
-	.rename_h       = rtems_filesystem_default_rename,
+	.rename_h       = nfs_rename,
 	.statvfs_h      = rtems_filesystem_default_statvfs
 };
 
