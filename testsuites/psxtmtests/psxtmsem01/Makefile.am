@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = psxtmsem01
 psxtmsem01_SOURCES = init.c ../../tmtests/include/timesys.h \
     ../../support/src/tmtests_empty_function.c \
