@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = psxmsgq03
 psxmsgq03_SOURCES = init.c system.h ../include/pmacros.h \
      ../../support/src/test_support.c

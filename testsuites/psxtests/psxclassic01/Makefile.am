@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = psxclassic01
 psxclassic01_SOURCES = init.c ../include/pmacros.h
 
