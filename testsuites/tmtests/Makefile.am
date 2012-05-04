@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = tmck tmoverhd tm01 tm02 tm03 tm04 tm05 tm06 tm07 tm08 tm09 tm10 \
