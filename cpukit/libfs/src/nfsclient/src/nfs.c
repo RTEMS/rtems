@@ -1510,7 +1510,7 @@ char *dupname;
 		   &SERP_FILE(pNode),
 		   sizeof(SERP_FILE(pNode)));
 
-	SERP_ARGS(tNode).linkarg.to.name = (filename)name;
+	SERP_ARGS(tNode).linkarg.to.name = dupname;
 
 	if ( nfscall(tNode->nfs->server,
 					  NFSPROC_LINK,
