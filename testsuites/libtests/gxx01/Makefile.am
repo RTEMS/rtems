@@ -1,8 +1,3 @@
-##
-## $Id$
-##
-
-
 rtems_tests_PROGRAMS = gxx01
 gxx01_SOURCES = init.c
 
