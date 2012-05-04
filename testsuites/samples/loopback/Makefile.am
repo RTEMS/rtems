@@ -1,8 +1,3 @@
-##
-##  $Id$
-##
-
-
 rtems_tests_PROGRAMS = loopback
 loopback_SOURCES = init.c
 
