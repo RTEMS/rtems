@@ -158,6 +158,7 @@ fat_file_write(rtems_filesystem_mount_table_entry_t *mt_entry,
 int
 fat_file_extend(rtems_filesystem_mount_table_entry_t *mt_entry,
                 fat_file_fd_t                        *fat_fd,
+                bool                                  zero_fill,
                 uint32_t                              new_length,
                 uint32_t                             *a_length);
 

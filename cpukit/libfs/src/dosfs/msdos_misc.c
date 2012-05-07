@@ -1411,8 +1411,8 @@ int msdos_find_name_in_fat_file(
 #if MSDOS_FIND_PRINT
             printf ("MSFS:[9.2] extending file:%li\n", empty_space_offset);
 #endif
-            ret = fat_file_extend (mt_entry, fat_fd, empty_space_offset * bts2rd,
-                                   &new_length);
+            ret = fat_file_extend (mt_entry, fat_fd, false,
+                                   empty_space_offset * bts2rd, &new_length);
 
             if (ret != RC_OK)
               return ret;

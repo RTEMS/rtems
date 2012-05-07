@@ -46,7 +46,8 @@ fat_scan_fat_for_free_clusters(
     uint32_t                             *chain,
     uint32_t                              count,
     uint32_t                             *cls_added,
-    uint32_t                             *last_cl
+    uint32_t                             *last_cl,
+    bool                                  zero_fill
     )
 {
     int            rc = RC_OK;
@@ -113,14 +114,16 @@ fat_scan_fat_for_free_clusters(
 
                 rc = fat_set_fat_cluster(mt_entry, save_cln, cl4find);
                 if ( rc != RC_OK )
-                {
-                    /* cleanup activity */
-                    fat_free_fat_clusters_chain(mt_entry, (*chain));
-                    /* trying to save last allocated cluster for future use */
-                    fat_set_fat_cluster(mt_entry, cl4find, FAT_GENFAT_FREE);
-                    fat_buf_release(fs_info);
-                    return rc;
-                }
+                    goto cleanup;
+            }
+
+            if (zero_fill) {
+                uint32_t sec = fat_cluster_num_to_sector_num(mt_entry,
+                                                             cl4find);
+
+                rc = _fat_block_zero(mt_entry, sec, 0, fs_info->vol.bpc);
+                if ( rc != RC_OK )
+                    goto cleanup;
             }
 
             save_cln = cl4find;
@@ -150,6 +153,15 @@ fat_scan_fat_for_free_clusters(
     *last_cl = save_cln;
     fat_buf_release(fs_info);
     return RC_OK;
+
+cleanup:
+
+    /* cleanup activity */
+    fat_free_fat_clusters_chain(mt_entry, (*chain));
+    /* trying to save last allocated cluster for future use */
+    fat_set_fat_cluster(mt_entry, cl4find, FAT_GENFAT_FREE);
+    fat_buf_release(fs_info);
+    return rc;
 }
 
 /* fat_free_fat_clusters_chain --

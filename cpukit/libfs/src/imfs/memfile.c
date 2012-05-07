@@ -33,6 +33,7 @@
  */
 MEMFILE_STATIC int IMFS_memfile_extend(
    IMFS_jnode_t  *the_jnode,
+   bool           zero_fill,
    off_t          new_length
 );
 
@@ -195,7 +196,7 @@ int memfile_ftruncate(
    */
 
   if ( length > the_jnode->info.file.size )
-    return IMFS_memfile_extend( the_jnode, length );
+    return IMFS_memfile_extend( the_jnode, true, length );
 
   /*
    *  The in-memory files do not currently reclaim memory until the file is
@@ -218,12 +219,14 @@ int memfile_ftruncate(
  */
 MEMFILE_STATIC int IMFS_memfile_extend(
    IMFS_jnode_t  *the_jnode,
+   bool           zero_fill,
    off_t          new_length
 )
 {
   unsigned int   block;
   unsigned int   new_blocks;
   unsigned int   old_blocks;
+  unsigned int   offset;
 
   /*
    *  Perform internal consistency checks
@@ -248,12 +251,22 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    */
   new_blocks = new_length / IMFS_MEMFILE_BYTES_PER_BLOCK;
   old_blocks = the_jnode->info.file.size / IMFS_MEMFILE_BYTES_PER_BLOCK;
+  offset = the_jnode->info.file.size - old_blocks * IMFS_MEMFILE_BYTES_PER_BLOCK;
 
   /*
    *  Now allocate each of those blocks.
    */
   for ( block=old_blocks ; block<=new_blocks ; block++ ) {
-    if ( IMFS_memfile_addblock( the_jnode, block ) ) {
+    if ( !IMFS_memfile_addblock( the_jnode, block ) ) {
+       if ( zero_fill ) {
+          size_t count = IMFS_MEMFILE_BYTES_PER_BLOCK - offset;
+          block_p *block_ptr =
+            IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
+
+          memset( &(*block_ptr) [offset], 0, count);
+          offset = 0;
+       }
+    } else {
        for ( ; block>=old_blocks ; block-- ) {
          IMFS_memfile_remove_block( the_jnode, block );
        }
@@ -622,7 +635,9 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
 
   last_byte = start + my_length;
   if ( last_byte > the_jnode->info.file.size ) {
-    status = IMFS_memfile_extend( the_jnode, last_byte );
+    bool zero_fill = start > the_jnode->info.file.size;
+
+    status = IMFS_memfile_extend( the_jnode, zero_fill, last_byte );
     if ( status )
       return status;
   }

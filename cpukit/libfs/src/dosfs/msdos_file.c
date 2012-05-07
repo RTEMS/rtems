@@ -203,7 +203,7 @@ msdos_file_stat(
 }
 
 /* msdos_file_ftruncate --
- *     Truncate the file (if new length is greater then current do nothing).
+ *     Truncate the file.
  *
  * PARAMETERS:
  *     iop    - file control block
@@ -219,31 +219,38 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-
-    if (length >= fat_fd->fat_file_size)
-        return RC_OK;
+    uint32_t old_length;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    rc = fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, length);
-    if (rc != RC_OK)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        return rc;
+    old_length = fat_fd->fat_file_size;
+    if (length < old_length) {
+        rc = fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, length);
+    } else {
+        uint32_t new_length;
+
+        rc = fat_file_extend(iop->pathinfo.mt_entry,
+                             fat_fd,
+                             true,
+                             length,
+                             &new_length);
+        if (rc == RC_OK && length != new_length) {
+            fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, old_length);
+            errno = ENOSPC;
+            rc = -1;
+        }
     }
 
-    /*
-     * fat_file_truncate do nothing if new length >= fat-file size, so update
-     * file size only if length < fat-file size
-     */
-    if (length < fat_fd->fat_file_size)
+    if (rc == RC_OK) {
         fat_fd->fat_file_size = length;
+    }
 
     rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
+
+    return rc;
 }
 
 /* msdos_file_sync --
