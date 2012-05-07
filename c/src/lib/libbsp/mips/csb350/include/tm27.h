@@ -1,11 +1,11 @@
+/**
+ *  @file
+ */
+
 /*
- *  tm27.h
- *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_TMTEST27
@@ -14,6 +14,8 @@
 
 #ifndef __tm27_h
 #define __tm27_h
+
+#include <bsp/irq.h>
 
 /*
  *  Define the interrupt mechanism for Time Test 27
@@ -25,7 +27,8 @@ int negate_sw_irw(uint32_t irqnum);
 #define MUST_WAIT_FOR_INTERRUPT 0
 
 #define Install_tm27_vector( handler ) \
-   (void) set_vector(handler, AU1X00_IRQ_SW0, 1);
+   rtems_interrupt_handler_install( \
+      AU1X00_IRQ_SW0, "benchmark", 0, (rtems_interrupt_handler)handler, NULL );
 
 #define Cause_tm27_intr() \
   do { \
@@ -37,14 +40,9 @@ int negate_sw_irw(uint32_t irqnum);
      negate_sw_irq(0); \
   } while(0)
 
-#if 0
-#define Lower_tm27_intr() \
-  mips_enable_in_interrupt_mask( 0xff01 );
-#else
 #define Lower_tm27_intr() \
   do { \
      continue;\
   } while(0)
-#endif
 
 #endif
