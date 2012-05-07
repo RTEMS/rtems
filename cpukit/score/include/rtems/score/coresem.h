@@ -40,7 +40,7 @@
 extern "C" {
 #endif
 
-#if defined(RTEMS_POSIX_API)
+#if defined(RTEMS_POSIX_API) || defined(RTEMS_MULTIPROCESSING)
   #define RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY
 #endif
 
