@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -50,6 +50,11 @@ typedef uint32_t   ISR_Vector_number;
  */
 typedef void ISR_Handler;
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE)
+
+typedef void * ISR_Handler_entry; 
+
+#else
 /**
  *  Pointer to an ISR Handler
  */
@@ -76,7 +81,6 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
  */
 #define ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER  CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**
  *  The following declares the Vector Table.  Application
  *  interrupt service routines are vectored by the ISR Handler via this table.
