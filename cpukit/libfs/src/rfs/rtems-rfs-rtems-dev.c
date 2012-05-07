@@ -214,24 +214,6 @@ rtems_rfs_rtems_device_ioctl (rtems_libio_t* iop,
 }
 
 /**
- * This handler eats all lseek() operations and does not create an error. It
- * assumes all devices can handle the seek. The writes fail.
- *
- * @param iop
- * @param offset
- * @param whence
- * @return off_t
- */
-
-static off_t
-rtems_rfs_rtems_device_lseek (rtems_libio_t* iop,
-                              off_t          offset,
-                              int            whence)
-{
-  return offset;
-}
-
-/**
  * The consumes the truncate call. You cannot truncate device files.
  *
  * @param iop
@@ -255,7 +237,7 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_device_handlers = {
   .read_h      = rtems_rfs_rtems_device_read,
   .write_h     = rtems_rfs_rtems_device_write,
   .ioctl_h     = rtems_rfs_rtems_device_ioctl,
-  .lseek_h     = rtems_rfs_rtems_device_lseek,
+  .lseek_h     = rtems_filesystem_default_lseek_file,
   .fstat_h     = rtems_rfs_rtems_fstat,
   .ftruncate_h = rtems_rfs_rtems_device_ftruncate,
   .fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,

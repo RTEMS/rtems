@@ -465,38 +465,6 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
  *     no write for directory
  */
 
-/* msdos_dir_lseek --
- *
- *  This routine will behave in one of three ways based on the state of
- *  argument whence. Based on the state of its value the offset argument will
- *  be interpreted using one of the following methods:
- *
- *     SEEK_SET - offset is the absolute byte offset from the start of the
- *                logical start of the dirent sequence that represents the
- *                directory
- *     SEEK_CUR - offset is used as the relative byte offset from the current
- *                directory position index held in the iop structure
- *     SEEK_END - N/A --> This will cause an assert.
- *
- * PARAMETERS:
- *     iop    - file control block
- *     offset - offset
- *     whence - predefine directive
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno
- *     set apropriately).
- */
-off_t
-msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
-{
-    if (iop->offset >= 0 && iop->offset <= iop->size) {
-        return 0;
-    } else {
-        rtems_set_errno_and_return_minus_one(EINVAL);
-    }
-}
-
 /* msdos_dir_stat --
  *
  * This routine will obtain the following information concerning the current

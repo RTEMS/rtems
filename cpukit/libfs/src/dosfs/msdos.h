@@ -286,12 +286,6 @@ ssize_t msdos_file_write(
   size_t         count            /* IN  */
 );
 
-off_t msdos_file_lseek(
-  rtems_libio_t        *iop,              /* IN  */
-  off_t                 offset,           /* IN  */
-  int                   whence            /* IN  */
-);
-
 int msdos_file_stat(
   const rtems_filesystem_location_info_t *loc,
   struct stat *buf
@@ -320,12 +314,6 @@ ssize_t msdos_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
   size_t         count             /* IN  */
-);
-
-off_t msdos_dir_lseek(
-  rtems_libio_t        *iop,              /* IN  */
-  off_t                 offset,           /* IN  */
-  int                   whence            /* IN  */
 );
 
 int msdos_dir_sync(rtems_libio_t *iop);

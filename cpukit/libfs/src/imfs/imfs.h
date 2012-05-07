@@ -418,12 +418,6 @@ extern ssize_t imfs_dir_read(
   size_t         count             /* IN  */
 );
 
-extern off_t imfs_dir_lseek(
-  rtems_libio_t        *iop,              /* IN  */
-  off_t                 offset,           /* IN  */
-  int                   whence            /* IN  */
-);
-
 extern int memfile_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
@@ -447,12 +441,6 @@ extern int memfile_ioctl(
   rtems_libio_t *iop,             /* IN  */
   uint32_t       command,         /* IN  */
   void          *buffer           /* IN  */
-);
-
-extern off_t memfile_lseek(
-  rtems_libio_t        *iop,        /* IN  */
-  off_t                 offset,     /* IN  */
-  int                   whence      /* IN  */
 );
 
 extern int device_open(
@@ -482,12 +470,6 @@ extern int device_ioctl(
   rtems_libio_t *iop,               /* IN  */
   uint32_t       command,           /* IN  */
   void          *buffer             /* IN  */
-);
-
-extern off_t device_lseek(
-  rtems_libio_t *iop,               /* IN  */
-  off_t          offset,            /* IN  */
-  int            whence             /* IN  */
 );
 
 extern int device_ftruncate(

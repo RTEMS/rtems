@@ -24,7 +24,7 @@ const rtems_filesystem_file_handlers_r msdos_dir_handlers = {
     msdos_dir_read,
     rtems_filesystem_default_write,
     rtems_filesystem_default_ioctl,
-    msdos_dir_lseek,
+    rtems_filesystem_default_lseek_directory,
     msdos_dir_stat,
     rtems_filesystem_default_ftruncate_directory,
     msdos_dir_sync,

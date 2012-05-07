@@ -64,8 +64,6 @@ msdos_file_open(rtems_libio_t *iop, const char *pathname, int oflag,
     if (iop->flags & LIBIO_FLAGS_APPEND)
         iop->offset = fat_fd->fat_file_size;
 
-    iop->size = fat_fd->fat_file_size;
-
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
 }
@@ -203,58 +201,8 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
     if (iop->offset + ret > fat_fd->fat_file_size)
         fat_fd->fat_file_size = iop->offset + ret;
 
-    iop->size = fat_fd->fat_file_size;
-
     rtems_semaphore_release(fs_info->vol_sema);
     return ret;
-}
-
-/* msdos_file_lseek --
- *     Process lseek call to the file: extend file if lseek is up to the end
- *     of the file.
- *
- * PARAMETERS:
- *     iop    - file control block
- *     offset - new offset
- *     whence - predefine directive
- *
- * RETURNS:
- *     new offset on success, or -1 if error occured (errno set
- *     appropriately).
- */
-off_t
-msdos_file_lseek(rtems_libio_t *iop, off_t offset, int whence)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-    uint32_t           real_size = 0;
-
-    if (iop->offset < 0 || iop->offset > UINT32_MAX) {
-        rtems_set_errno_and_return_minus_one(EINVAL);
-    }
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    rc = fat_file_extend(iop->pathinfo.mt_entry, fat_fd, iop->offset,
-                         &real_size);
-    if (rc != RC_OK)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        return rc;
-    }
-
-    if (real_size > fat_fd->fat_file_size)
-        fat_fd->fat_file_size = iop->offset = real_size;
-
-    iop->size = fat_fd->fat_file_size;
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return iop->offset;
 }
 
 /* msdos_file_stat --
@@ -332,7 +280,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
      * file size only if length < fat-file size
      */
     if (length < fat_fd->fat_file_size)
-        iop->size = fat_fd->fat_file_size = length;
+        fat_fd->fat_file_size = length;
 
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;

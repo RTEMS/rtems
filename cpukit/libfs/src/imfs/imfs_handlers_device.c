@@ -36,7 +36,7 @@ static const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   device_read,
   device_write,
   device_ioctl,
-  device_lseek,
+  rtems_filesystem_default_lseek_file,
   IMFS_stat_device,
   device_ftruncate,
   rtems_filesystem_default_fsync_or_fdatasync,

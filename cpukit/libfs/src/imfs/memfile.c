@@ -109,7 +109,6 @@ int memfile_open(
   if (iop->flags & LIBIO_FLAGS_APPEND)
     iop->offset = the_jnode->info.file.size;
 
-  iop->size = the_jnode->info.file.size;
   return 0;
 }
 
@@ -148,7 +147,6 @@ ssize_t memfile_write(
   the_jnode = iop->pathinfo.node_access;
 
   status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
-  iop->size = the_jnode->info.file.size;
 
   return status;
 }
@@ -167,34 +165,6 @@ int memfile_ioctl(
 )
 {
   return 0;
-}
-
-/*
- *  memfile_lseek
- *
- *  This routine processes the lseek() system call.
- */
-off_t memfile_lseek(
-  rtems_libio_t   *iop,
-  off_t            offset,
-  int              whence
-)
-{
-  IMFS_jnode_t   *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
-
-  if (IMFS_type( the_jnode ) == IMFS_LINEAR_FILE) {
-    if (iop->offset > the_jnode->info.linearfile.size)
-      iop->offset = the_jnode->info.linearfile.size;
-  }
-  else {  /* Must be a block file (IMFS_MEMORY_FILE). */
-    if (IMFS_memfile_extend( the_jnode, iop->offset ))
-      rtems_set_errno_and_return_minus_one( ENOSPC );
-
-    iop->size = the_jnode->info.file.size;
-  }
-  return iop->offset;
 }
 
 /*
@@ -232,7 +202,6 @@ int memfile_ftruncate(
    *  future use and just set the length.
    */
   the_jnode->info.file.size = length;
-  iop->size = the_jnode->info.file.size;
 
   IMFS_update_atime( the_jnode );
 
@@ -265,7 +234,7 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    *  Verify new file size is supported
    */
   if ( new_length >= IMFS_MEMFILE_MAXIMUM_SIZE )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EFBIG );
 
   /*
    *  Verify new file size is actually larger than current size
@@ -654,7 +623,7 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
   if ( last_byte > the_jnode->info.file.size ) {
     status = IMFS_memfile_extend( the_jnode, last_byte );
     if ( status )
-      rtems_set_errno_and_return_minus_one( ENOSPC );
+      return status;
   }
 
   copied = 0;

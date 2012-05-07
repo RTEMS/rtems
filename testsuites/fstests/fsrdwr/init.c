@@ -371,7 +371,7 @@ lseek_test (void)
    */
   status = fstat (fd, &statbuf);
   rtems_test_assert (status == 0);
-  rtems_test_assert (statbuf.st_size == total_written + 1);
+  rtems_test_assert (statbuf.st_size == total_written);
 
   status = ftruncate (fd, total_written);
   rtems_test_assert (status == 0);
