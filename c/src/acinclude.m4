@@ -1,3 +1,4 @@
+# $Id$
 #
 # Some hacks for handling special config subdirectories
 #

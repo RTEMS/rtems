@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = sp27a
 sp27a_SOURCES = ../sp27/init.c
 

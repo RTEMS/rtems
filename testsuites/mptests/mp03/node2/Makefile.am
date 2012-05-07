@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = mp03-node2
 mp03_node2_SOURCES = ../init.c ../delay.c ../task1.c ../system.h
 

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxusleep
 psxusleep_SOURCES = init.c ../include/pmacros.h
 

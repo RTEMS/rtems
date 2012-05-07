@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = sp64
 sp64_SOURCES = init.c
 

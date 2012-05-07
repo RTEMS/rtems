@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = mp13-node1
 mp13_node1_SOURCES = ../init.c ../task1.c ../task2.c ../system.h
 

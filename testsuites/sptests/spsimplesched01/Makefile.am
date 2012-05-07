@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = spsimplesched01 
 spsimplesched01_SOURCES = init.c
 

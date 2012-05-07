@@ -1,3 +1,5 @@
+## $Id$
+
 AC_DEFUN([RTEMS_ENABLE_RTEMS_DEBUG],
 [
 AC_ARG_ENABLE(rtems-debug,

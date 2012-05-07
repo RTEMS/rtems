@@ -1,3 +1,5 @@
+dnl $Id$
+dnl
 dnl RTEMS_BSP_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 dnl 
 dnl Accept --enable-FEATURE=<RTEMS_BSP>:<bsp-value> and 

@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = minimum
 minimum_SOURCES = init.c
 

@@ -1,3 +1,7 @@
+#
+#  $Id$
+#
+
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 # NOTE: The order of the directories is essential.

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxstat
 psxstat_SOURCES = main.c test.c ../include/pmacros.h
 

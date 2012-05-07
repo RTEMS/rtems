@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spcbssched03
 spcbssched03_SOURCES = init.c tasks_periodic.c tasks_aperiodic.c system.h \
     cbsparams.h

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = dumpbuf01
 dumpbuf01_SOURCES = init.c
 

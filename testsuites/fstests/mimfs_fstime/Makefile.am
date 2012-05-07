@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mimfs_fstime
 mimfs_fstime_SOURCES  = ../fstime/test.c
 mimfs_fstime_SOURCES += ../support/fstest_support.c

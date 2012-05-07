@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 include $(top_srcdir)/automake/compile.am
 
 include_libchipdir = $(includedir)/libchip

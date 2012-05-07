@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 rtems_tests_PROGRAMS = base_mp-node1
 base_mp_node1_SOURCES = ../init.c ../apptask.c ../system.h
 

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxkey01
 psxkey01_SOURCES = init.c task.c system.h ../include/pmacros.h \
      ../../support/src/test_support.c

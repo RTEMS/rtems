@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mrfs_fstime
 mrfs_fstime_SOURCES  = ../fstime/test.c
 mrfs_fstime_SOURCES += ../support/ramdisk_support.c

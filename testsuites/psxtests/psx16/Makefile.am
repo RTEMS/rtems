@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psx16
 psx16_SOURCES = init.c ../include/pmacros.h
 

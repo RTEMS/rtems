@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
 bin_PROGRAMS = cklength eolstrip packhex unhex rtems-bin2c

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = sp43
 sp43_SOURCES = init.c
 sp43_SOURCES += system.h

@@ -1,6 +1,9 @@
 #
 # top level directory for RTEMS build tree
 #
+##
+## $Id$
+##
 
 ACLOCAL_AMFLAGS = -I aclocal
 

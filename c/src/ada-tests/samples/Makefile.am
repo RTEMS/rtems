@@ -1,3 +1,5 @@
+## $Id$
+
 SUBDIRS = hello ticker base_sp nsecs
 
 if HAS_MP

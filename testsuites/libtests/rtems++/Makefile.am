@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 if HAS_CXX
 rtems_tests_PROGRAMS = rtems++
 rtems___SOURCES = Init.cc Task1.cc Task2.cc Task3.cc System.h

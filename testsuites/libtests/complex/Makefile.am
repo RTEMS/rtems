@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 if HAS_COMPLEX
 rtems_tests_PROGRAMS = complex
 complex_SOURCES = init.c docomplex.c docomplexf.c docomplexl.c

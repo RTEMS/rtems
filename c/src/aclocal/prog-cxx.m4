@@ -1,3 +1,6 @@
+dnl
+dnl $Id$
+dnl 
 dnl Check for target g++
 dnl 
 

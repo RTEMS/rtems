@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = devfs04
 devfs04_SOURCES = init.c test_driver.c
 devfs04_SOURCES += test_driver.h

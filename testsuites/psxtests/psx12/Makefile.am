@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psx12
 psx12_SOURCES = init.c task.c system.h ../include/pmacros.h
 

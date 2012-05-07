@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = sp26
 sp26_SOURCES = init.c task1.c system.h
 

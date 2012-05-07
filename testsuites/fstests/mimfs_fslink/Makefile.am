@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mimfs_fslink
 mimfs_fslink_SOURCES  = ../fslink/test.c
 mimfs_fslink_SOURCES += ../support/fstest_support.c

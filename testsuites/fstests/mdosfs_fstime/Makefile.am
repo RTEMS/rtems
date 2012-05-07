@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mdosfs_fstime
 mdosfs_fstime_SOURCES  = ../fstime/test.c
 mdosfs_fstime_SOURCES += ../support/ramdisk_support.c

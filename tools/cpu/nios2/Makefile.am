@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 noinst_PROGRAMS = nios2gen

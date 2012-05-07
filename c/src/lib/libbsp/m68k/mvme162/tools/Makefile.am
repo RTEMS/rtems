@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
 sload_SOURCES = sload.c

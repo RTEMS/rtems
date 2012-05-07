@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = imfs_fspermission
 imfs_fspermission_SOURCES  = ../fspermission/test.c
 imfs_fspermission_SOURCES += ../support/fstest_support.c

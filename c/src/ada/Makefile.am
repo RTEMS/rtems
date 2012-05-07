@@ -1,3 +1,7 @@
+#
+# $Id$
+#
+
 if RTEMS_ADA
 include_adadir = $(includedir)/adainclude
 include_ada_HEADERS = rtems.adb rtems.ads

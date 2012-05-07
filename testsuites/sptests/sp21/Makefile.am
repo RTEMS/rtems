@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = sp21
 sp21_SOURCES = init.c
 

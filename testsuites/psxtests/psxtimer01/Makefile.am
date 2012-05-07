@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxtimer01
 psxtimer01_SOURCES = psxtimer.c system.h ../include/pmacros.h
 

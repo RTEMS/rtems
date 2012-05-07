@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxpasswd02
 psxpasswd02_SOURCES = init.c ../include/pmacros.h
 

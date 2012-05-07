@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spcbssched01
 spcbssched01_SOURCES = init.c task1.c system.h
 

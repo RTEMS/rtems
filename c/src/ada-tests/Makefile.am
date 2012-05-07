@@ -1,3 +1,5 @@
+## $Id$
+
 ACLOCAL_AMFLAGS = -I aclocal -I ../../../testsuites/aclocal
 
 SUBDIRS = support samples sptests tmtests

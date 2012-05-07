@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = cpuuse
 cpuuse_SOURCES = init.c task1.c task2.c task3.c tswitch.c system.h
 

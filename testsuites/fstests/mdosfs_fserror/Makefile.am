@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mdosfs_fserror
 mdosfs_fserror_SOURCES  = ../fserror/test.c
 mdosfs_fserror_SOURCES += ../support/ramdisk_support.c

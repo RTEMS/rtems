@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = nsecs
 nsecs_SOURCES = init.c empty.c
 

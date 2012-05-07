@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = tm10
 tm10_SOURCES = task1.c system.h ../include/timesys.h \
     ../../support/src/tmtests_empty_function.c

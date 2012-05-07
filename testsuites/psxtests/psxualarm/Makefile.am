@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxualarm
 psxualarm_SOURCES = init.c system.h ../include/pmacros.h
 

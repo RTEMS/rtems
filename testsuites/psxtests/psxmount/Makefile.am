@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxmount
 psxmount_SOURCES = main.c test.c ../include/pmacros.h
 

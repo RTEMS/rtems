@@ -1,3 +1,7 @@
+#
+# $Id$
+#
+
 include $(top_srcdir)/automake/compile.am
 
 project_lib_LIBRARIES = libz.a

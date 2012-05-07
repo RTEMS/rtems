@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxtmbarrier03
 psxtmbarrier03_SOURCES = init.c ../../tmtests/include/timesys.h \
     ../../support/src/tmtests_empty_function.c \

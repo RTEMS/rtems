@@ -1,4 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
+##
+## $Id$
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])

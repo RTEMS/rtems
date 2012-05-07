@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxgetrusage01
 psxgetrusage01_SOURCES = init.c ../../support/src/spin.c
 

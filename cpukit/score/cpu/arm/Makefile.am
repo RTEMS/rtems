@@ -1,3 +1,6 @@
+##
+## $Id$
+##
 include $(top_srcdir)/automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = rtems/asm.h

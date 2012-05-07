@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = smp05
 smp05_SOURCES = init.c ../../support/src/locked_print.c
 

@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = psxtimes01
 psxtimes01_SOURCES = init.c ../../support/src/spin.c
 
