@@ -422,7 +422,7 @@ rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
    * This means the file needs to set the file size to the pos only when a
    * write occurs.
    */
-  if (pos < rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (handle),
+  if (pos <= rtems_rfs_file_shared_get_size (rtems_rfs_file_fs (handle),
                                             handle->shared))
   {
     rtems_rfs_file_set_bpos (handle, pos);

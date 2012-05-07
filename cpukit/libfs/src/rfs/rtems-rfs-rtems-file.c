@@ -185,6 +185,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
 {
   rtems_rfs_file_handle* file = rtems_rfs_rtems_get_iop_file_handle (iop);
   rtems_rfs_pos          pos;
+  rtems_rfs_pos          file_size;
   const uint8_t*         data = buffer;
   ssize_t                write = 0;
   int                    rc;
@@ -195,26 +196,34 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 
   pos = iop->offset;
-
-  /*
-   * If the iop position is past the physical end of the file we need to set
-   * the file size to the new length before writing. If the position equals the
-   * size of file we are still past the end of the file as positions number
-   * from 0. For a specific position we need a file that has a length of one
-   * more.
-   */
-
-  if (pos >= rtems_rfs_file_size (file))
+  file_size = rtems_rfs_file_size (file);
+  if (pos > file_size)
   {
-    rc = rtems_rfs_file_set_size (file, pos + 1);
+    /*
+     * If the iop position is past the physical end of the file we need to set
+     * the file size to the new length before writing.  The
+     * rtems_rfs_file_io_end() will grow the file subsequently.
+     */
+    rc = rtems_rfs_file_set_size (file, pos);
     if (rc)
     {
       rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
       return rtems_rfs_rtems_error ("file-write: write extend", rc);
     }
-  }
 
-  rtems_rfs_file_set_bpos (file, pos);
+    rtems_rfs_file_set_bpos (file, pos);
+  }
+  else if (pos < file_size && (iop->flags & LIBIO_FLAGS_APPEND) != 0)
+  {
+    pos = file_size;
+    rc = rtems_rfs_file_seek (file, pos, &pos);
+    if (rc)
+    {
+      rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
+      return rtems_rfs_rtems_error ("file-write: write append seek", rc);
+    }
+    iop->offset = pos;
+  }
 
   while (count)
   {

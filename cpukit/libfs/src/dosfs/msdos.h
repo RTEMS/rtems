@@ -265,13 +265,6 @@ int msdos_initialize_support(
   const rtems_filesystem_file_handlers_r  *directory_handlers
 );
 
-int msdos_file_open(
-  rtems_libio_t *iop,             /* IN  */
-  const char    *pathname,        /* IN  */
-  int            oflag,           /* IN  */
-  mode_t         mode             /* IN  */
-);
-
 int msdos_file_close(rtems_libio_t *iop /* IN  */);
 
 ssize_t msdos_file_read(
@@ -300,15 +293,6 @@ msdos_file_ftruncate(
 int msdos_file_sync(rtems_libio_t *iop);
 
 int msdos_file_datasync(rtems_libio_t *iop);
-
-int msdos_dir_open(
-  rtems_libio_t *iop,             /* IN  */
-  const char    *pathname,        /* IN  */
-  int            oflag,           /* IN  */
-  mode_t         mode             /* IN  */
-);
-
-int msdos_dir_close(rtems_libio_t *iop /* IN  */);
 
 ssize_t msdos_dir_read(
   rtems_libio_t *iop,              /* IN  */

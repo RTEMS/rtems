@@ -27,47 +27,6 @@
 
 #include "msdos.h"
 
-/* msdos_file_open --
- *     Open fat-file which correspondes to the file
- *
- * PARAMETERS:
- *     iop        - file control block
- *     pathname   - name
- *     flag       - flags
- *     mode       - mode
- *
- * RETURNS:
- *     RC_OK, if file opened successfully, or -1 if error occured
- *     and errno set appropriately
- */
-int
-msdos_file_open(rtems_libio_t *iop, const char *pathname, int oflag,
-                mode_t mode)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    rc = fat_file_reopen(fat_fd);
-    if (rc != RC_OK)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        return rc;
-    }
-
-    if (iop->flags & LIBIO_FLAGS_APPEND)
-        iop->offset = fat_fd->fat_file_size;
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
-}
-
 /* msdos_file_close --
  *     Close fat-file which correspondes to the file. If fat-file descriptor
  *     which correspondes to the file is not marked "removed", synchronize
@@ -120,8 +79,6 @@ msdos_file_close(rtems_libio_t *iop)
             return rc;
         }
     }
-
-    rc = fat_file_close(iop->pathinfo.mt_entry, fat_fd);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;
@@ -185,6 +142,9 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
+
+    if ((iop->flags & LIBIO_FLAGS_APPEND) != 0)
+        iop->offset = fat_fd->fat_file_size;
 
     ret = fat_file_write(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
                          buffer);

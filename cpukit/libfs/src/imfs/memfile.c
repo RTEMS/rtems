@@ -92,7 +92,7 @@ int memfile_open(
   /*
    * Perform 'copy on write' for linear files
    */
-  if ((iop->flags & (LIBIO_FLAGS_WRITE | LIBIO_FLAGS_APPEND))
+  if ((iop->flags & LIBIO_FLAGS_WRITE)
    && (IMFS_type( the_jnode ) == IMFS_LINEAR_FILE)) {
     uint32_t   count = the_jnode->info.linearfile.size;
     const unsigned char *buffer = the_jnode->info.linearfile.direct;
@@ -106,8 +106,6 @@ int memfile_open(
      && (IMFS_memfile_write(the_jnode, 0, buffer, count) == -1))
         return -1;
   }
-  if (iop->flags & LIBIO_FLAGS_APPEND)
-    iop->offset = the_jnode->info.file.size;
 
   return 0;
 }
@@ -145,6 +143,9 @@ ssize_t memfile_write(
   ssize_t         status;
 
   the_jnode = iop->pathinfo.node_access;
+
+  if ((iop->flags & LIBIO_FLAGS_APPEND) != 0)
+    iop->offset = the_jnode->info.file.size;
 
   status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
 

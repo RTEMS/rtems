@@ -112,6 +112,12 @@ read_write_test (void)
   rtems_test_assert (n == len);
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 2 * len);
+  pos = lseek (fd, 0, SEEK_SET);
+  rtems_test_assert (pos == 0);
+  n = write (fd, databuf, len);
+  rtems_test_assert (n == len);
+  pos = lseek (fd, 0, SEEK_CUR);
+  rtems_test_assert (pos == 3 * len);
   status = close (fd);
   rtems_test_assert (status == 0);
 
@@ -123,7 +129,9 @@ read_write_test (void)
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
-
+  n = read (fd, readbuf, len);
+  rtems_test_assert (n == len);
+  rtems_test_assert (!strncmp (databuf, readbuf, len));
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));

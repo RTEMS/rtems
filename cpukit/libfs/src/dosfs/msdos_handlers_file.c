@@ -19,7 +19,7 @@
 #include "msdos.h"
 
 const rtems_filesystem_file_handlers_r msdos_file_handlers = {
-    msdos_file_open,
+    rtems_filesystem_default_open,
     msdos_file_close,
     msdos_file_read,
     msdos_file_write,
