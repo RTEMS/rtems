@@ -1,11 +1,11 @@
+/**
+ *  @file 
+ */
+
 /*
- *  tm27.h
- *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_TMTEST27
@@ -19,32 +19,18 @@
  *  Define the interrupt mechanism for Time Test 27
  */
 
+#include <bsp/irq.h>
+
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#if 1
-
 #define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 );
+   rtems_interrupt_handler_install( \
+      MONGOOSEV_IRQ_SOFTWARE_1, "benchmark", 0, \
+      (rtems_interrupt_handler)handler, NULL );
 
 #define Cause_tm27_intr()   assertSoftwareInterrupt(0);
 
 #define Clear_tm27_intr() /* empty */
 #define Lower_tm27_intr() /* empty */
-
-#else
-
-#define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_TIMER1, 1 );
-
-#define Cause_tm27_intr() \
-  do { \
-    ; \
-  } while(0)
-
-#define Clear_tm27_intr() /* empty */
-
-#define Lower_tm27_intr() /* empty */
-
-#endif
 
 #endif
