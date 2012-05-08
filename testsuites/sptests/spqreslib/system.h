@@ -52,11 +52,10 @@ rtems_task Task_Periodic(
 
 /* global variables */
 
-rtems_id   Task_id;
-rtems_name Task_name;
-rtems_task_priority Priority;
-time_t  Period;
-time_t  Execution;
-time_t  Phase;
+extern rtems_id   Task_id;
+extern rtems_task_priority Priority;
+extern time_t  Period;
+extern time_t  Execution;
+extern time_t  Phase;
 
 /* end of include file */
