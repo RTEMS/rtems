@@ -67,11 +67,6 @@ extern uint32_t mips_get_timer( void );
 #define RAM_START 0
 #define RAM_END   0x100000
 
-/* functions */
-
-rtems_isr_entry set_vector(
-  rtems_isr_entry, rtems_vector_number, int );
-
 #ifdef __cplusplus
 }
 #endif
