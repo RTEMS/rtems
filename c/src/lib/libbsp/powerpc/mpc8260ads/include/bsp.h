@@ -81,12 +81,6 @@ void *M8260AllocateRiscTimers( int count );
 extern char M8260DefaultWatchdogFeeder;
 #endif
 
-rtems_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-
 #ifdef __cplusplus
 }
 #endif
