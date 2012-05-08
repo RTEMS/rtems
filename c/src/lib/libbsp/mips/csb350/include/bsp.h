@@ -44,11 +44,6 @@ int rtems_au1x00_emac_attach(struct rtems_bsdnet_ifconfig *config,
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_au1x00_emac_attach
 
-/* functions */
-
-rtems_isr_entry set_vector(
-  rtems_isr_entry, rtems_vector_number, int );
-
 #ifdef __cplusplus
 }
 #endif
