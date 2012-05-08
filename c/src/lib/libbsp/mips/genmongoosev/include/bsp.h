@@ -56,11 +56,6 @@ extern void assertSoftwareInterrupt(uint32_t);
 
 #define CLOCK_VECTOR	MONGOOSEV_IRQ_TIMER1
 
-/* functions */
-
-rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-
-
 /* from start.S */
 extern void promCopyIcacheFlush(void);
 extern void promCopyDcacheFlush(void);
