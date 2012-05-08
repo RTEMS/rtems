@@ -443,7 +443,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   int i;
   unsigned char *hwaddr;
   rtems_status_code status;
-  rtems_isr_entry old_handler;
 
   /*
    * Issue reset to FEC
