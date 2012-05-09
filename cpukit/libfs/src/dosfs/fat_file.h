@@ -168,11 +168,6 @@ fat_file_truncate(rtems_filesystem_mount_table_entry_t *mt_entry,
                   uint32_t                              new_length);
 
 int
-fat_file_datasync(rtems_filesystem_mount_table_entry_t *mt_entry,
-                  fat_file_fd_t                        *fat_fd);
-
-
-int
 fat_file_ioctl(rtems_filesystem_mount_table_entry_t *mt_entry,
                fat_file_fd_t                        *fat_fd,
                int                                   cmd,

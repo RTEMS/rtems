@@ -399,6 +399,10 @@ int msdos_get_dotdot_dir_info_cluster_num_and_offset(
     char                                 *dir_entry
 );
 
+int msdos_sync_unprotected(msdos_fs_info_t *fs_info);
+
+int msdos_sync(rtems_libio_t *iop);
+
 #ifdef __cplusplus
 }
 #endif

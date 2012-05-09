@@ -457,34 +457,3 @@ msdos_dir_stat(
  * RETURNS:
  *
  */
-
-/* msdos_dir_sync --
- *     The following routine does a syncronization on a MSDOS directory node.
- *     DIR_WrtTime, DIR_WrtDate and DIR_fileSize fields of 32 Bytes Directory
- *     Entry Structure should not be updated for directories, so only call
- *     to corresponding fat-file routine.
- *
- * PARAMETERS:
- *     iop - file control block
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately).
- */
-int
-msdos_dir_sync(rtems_libio_t *iop)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return rc;
-}

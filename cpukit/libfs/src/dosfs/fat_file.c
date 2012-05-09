@@ -774,65 +774,6 @@ fat_file_mark_removed(
     fat_fd->flags |= FAT_FILE_REMOVED;
 }
 
-/* fat_file_datasync --
- *     Synchronize fat-file -  flush all buffered data to the media.
- *
- * PARAMETERS:
- *     mt_entry - mount table entry
- *     fat_fd   - fat-file descriptor
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured and errno set appropriately
- */
-int
-fat_file_datasync(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
-    fat_file_fd_t                        *fat_fd
-    )
-{
-    int                 rc = RC_OK;
-    rtems_status_code   sc = RTEMS_SUCCESSFUL;
-    fat_fs_info_t      *fs_info = mt_entry->fs_info;
-    uint32_t            cur_cln = fat_fd->cln;
-    rtems_bdbuf_buffer *block = NULL;
-    uint32_t            sec = 0;
-    uint32_t            i = 0;
-
-    if (fat_fd->fat_file_size == 0)
-        return RC_OK;
-
-    /*
-     * we can use only one bdbuf :( and we also know that cache is useless
-     * for sync operation, so don't use it
-     */
-    rc = fat_buf_release(fs_info);
-    if (rc != RC_OK)
-        return rc;
-
-    /* for each cluster of the file ... */
-    while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
-    {
-        sec = fat_cluster_num_to_sector_num(mt_entry, cur_cln);
-        /* for each sector in cluster ... */
-        for ( i = 0; i < fs_info->vol.spc; i++ )
-        {
-            /* ... sync it */
-            sc = rtems_bdbuf_read(fs_info->vol.dd, (sec + i), &block);
-            if (sc != RTEMS_SUCCESSFUL)
-                rtems_set_errno_and_return_minus_one( EIO );
-
-            sc = rtems_bdbuf_sync(block);
-            if ( sc != RTEMS_SUCCESSFUL )
-                rtems_set_errno_and_return_minus_one( EIO );
-        }
-
-        rc = fat_get_fat_cluster(mt_entry, cur_cln, &cur_cln);
-        if ( rc != RC_OK )
-            return rc;
-    }
-    return rc;
-}
-
 /* fat_file_size --
  *     Calculate fat-file size - fat-file is nothing that clusters chain, so
  *     go through all clusters in the chain and count it. Only

@@ -28,6 +28,6 @@ const rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_stat,
     msdos_file_ftruncate,
     msdos_file_sync,
-    msdos_file_datasync,
+    msdos_sync,
     rtems_filesystem_default_fcntl
 };

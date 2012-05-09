@@ -27,6 +27,40 @@
 
 #include "msdos.h"
 
+static int
+msdos_file_update(rtems_libio_t *iop)
+{
+    int              rc = RC_OK;
+    fat_file_fd_t   *fat_fd = iop->pathinfo.node_access;
+
+    /*
+     * if fat-file descriptor is not marked as "removed", synchronize
+     * size, first cluster number, write time and date fields of the file
+     */
+    if (!FAT_FILE_IS_REMOVED(fat_fd))
+    {
+        rc = msdos_set_first_cluster_num(iop->pathinfo.mt_entry, fat_fd);
+        if (rc != RC_OK)
+        {
+            return rc;
+        }
+
+        rc = msdos_set_file_size(iop->pathinfo.mt_entry, fat_fd);
+        if (rc != RC_OK)
+        {
+            return rc;
+        }
+
+        rc = msdos_set_dir_wrt_time_and_date(iop->pathinfo.mt_entry, fat_fd);
+        if (rc != RC_OK)
+        {
+            return rc;
+        }
+    }
+
+    return rc;
+}
+
 /* msdos_file_close --
  *     Close fat-file which correspondes to the file. If fat-file descriptor
  *     which correspondes to the file is not marked "removed", synchronize
@@ -45,40 +79,13 @@ msdos_file_close(rtems_libio_t *iop)
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
                                 MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    /*
-     * if fat-file descriptor is not marked as "removed", synchronize
-     * size, first cluster number, write time and date fields of the file
-     */
-    if (!FAT_FILE_IS_REMOVED(fat_fd))
-    {
-        rc = msdos_set_first_cluster_num(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            rtems_semaphore_release(fs_info->vol_sema);
-            return rc;
-        }
-
-        rc = msdos_set_file_size(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            rtems_semaphore_release(fs_info->vol_sema);
-            return rc;
-        }
-
-        rc = msdos_set_dir_wrt_time_and_date(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            rtems_semaphore_release(fs_info->vol_sema);
-            return rc;
-        }
-    }
+    rc = msdos_file_update(iop);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;
@@ -276,67 +283,14 @@ msdos_file_sync(rtems_libio_t *iop)
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    /* synchronize file data */
-    rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
+    rc = msdos_file_update(iop);
     if (rc != RC_OK)
     {
         rtems_semaphore_release(fs_info->vol_sema);
         return rc;
     }
 
-    /*
-     * if fat-file descriptor is not marked "removed" - synchronize file
-     * metadata
-     */
-    if (!FAT_FILE_IS_REMOVED(fat_fd))
-    {
-        rc = msdos_set_first_cluster_num(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            rtems_semaphore_release(fs_info->vol_sema);
-            return rc;
-        }
-        rc = msdos_set_file_size(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            rtems_semaphore_release(fs_info->vol_sema);
-            return rc;
-        }
-        rc = msdos_set_dir_wrt_time_and_date(iop->pathinfo.mt_entry, fat_fd);
-        if (rc != RC_OK)
-        {
-            rtems_semaphore_release(fs_info->vol_sema);
-            return rc;
-        }
-    }
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
-}
-
-/* msdos_file_datasync --
- *     Synchronize file - synchronize only file data (metadata is letf intact).
- *
- * PARAMETERS:
- *     iop - file control block
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
- */
-int
-msdos_file_datasync(rtems_libio_t *iop)
-{
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    /* synchronize file data */
-    fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
+    rc = msdos_sync_unprotected(fs_info);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;

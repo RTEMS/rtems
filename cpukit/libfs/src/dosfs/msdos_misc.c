@@ -1646,3 +1646,34 @@ int msdos_find_node_by_cluster_num_in_fat_file(
     }
     return MSDOS_NAME_NOT_FOUND_ERR;
 }
+
+int
+msdos_sync_unprotected(msdos_fs_info_t *fs_info)
+{
+    int rc = fat_buf_release(&fs_info->fat);
+    rtems_status_code sc = rtems_bdbuf_syncdev(fs_info->fat.vol.dd);
+    if (sc != RTEMS_SUCCESSFUL) {
+	errno = EIO;
+	rc = -1;
+    }
+
+    return rc;
+}
+
+int
+msdos_sync(rtems_libio_t *iop)
+{
+    int                rc = RC_OK;
+    rtems_status_code  sc = RTEMS_SUCCESSFUL;
+    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
+
+    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
+                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
+    if (sc != RTEMS_SUCCESSFUL)
+        rtems_set_errno_and_return_minus_one(EIO);
+
+    rc = msdos_sync_unprotected(fs_info);
+
+    rtems_semaphore_release(fs_info->vol_sema);
+    return rc;
+}
