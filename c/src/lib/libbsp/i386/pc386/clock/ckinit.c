@@ -1,4 +1,6 @@
-/*
+/**
+ *  @file
+ *
  *  Clock Tick Device Driver
  *
  *  History:
@@ -10,8 +12,10 @@
  *    + Reworked by Joel Sherrill to use clock driver template.
  *      This removes all boilerplate and leave original hardware
  *      code I developed for the go32 BSP.
- *
- *  COPYRIGHT (c) 1989-2008.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,6 +35,18 @@
 volatile uint32_t pc386_microseconds_per_isr;
 volatile uint32_t pc386_isrs_per_tick;
 uint32_t pc386_clock_click_count;
+
+/* forward declaration */
+void Clock_isr(void *param);
+void Clock_driver_support_at_tick_tsc(void);
+void Clock_driver_support_at_tick_empty(void);
+uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void);
+uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void);
+void Clock_isr_handler(rtems_irq_hdl_param param);
+int clockIsOn(const rtems_irq_connect_data* unused);
+void clockOff(const rtems_irq_connect_data* unused);
+void Clock_driver_install_handler(void);
+void Clock_driver_support_initialize_hardware(void);
 
 /*
  * Roughly the number of cycles per tick and per nanosecond. Note that these
@@ -96,12 +112,11 @@ void Clock_driver_support_at_tick_empty(void)
 
 extern volatile uint32_t Clock_driver_isrs;
 
+/*
+ * Get nanoseconds using Pentium-compatible TSC register
+ */
 uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
 {
-  /******
-   * Get nanoseconds using Pentium-compatible TSC register
-   ******/
-
   uint64_t                 diff_nsec;
 
   diff_nsec = rdtsc() - pc586_tsc_at_tick;
@@ -124,13 +139,11 @@ uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
   return (uint32_t)diff_nsec;
 }
 
+/*
+ * Get nanoseconds using 8254 timer chip
+ */
 uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void)
 {
-
-  /******
-   * Get nanoseconds using 8254 timer chip
-   ******/
-
   uint32_t                 usecs, clicks, isrs;
   uint32_t                 usecs1, usecs2;
   uint8_t                  lsb, msb;
@@ -269,18 +282,13 @@ int clockIsOn(const rtems_irq_connect_data* unused)
   return ((i8259s_cache & 0x1) == 0);
 }
 
-/* a bit of a hack since the ISR models do not match */
-rtems_isr Clock_isr(
-  rtems_vector_number vector
-);
-
 bool Clock_isr_enabled = false;
 void Clock_isr_handler(
   rtems_irq_hdl_param param 
 )
 {
   if ( Clock_isr_enabled )
-    Clock_isr( 0 );
+    Clock_isr( param );
 }
 
 static rtems_irq_connect_data clockIrqData = {
