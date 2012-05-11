@@ -94,7 +94,7 @@ read_write_test (void)
    * Write data to the empty file
    */
   fd = open (name01, O_WRONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
 
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
@@ -113,7 +113,7 @@ read_write_test (void)
   rtems_test_assert (readbuf);
 
   fd = open (name01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
@@ -142,7 +142,7 @@ read_write_test (void)
    * Read the data and verify it
    */
   fd = open (name01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
@@ -195,7 +195,7 @@ read_write_test (void)
   status = mkdir (name02, mode);
   rtems_test_assert (status == 0);
   fd = open (name02, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
 
   status = close (fd);
   rtems_test_assert (status == 0);
@@ -255,7 +255,7 @@ truncate_test03 (void)
    * Fill a file with data
    */
   fd = open (name01, O_WRONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
 
@@ -272,7 +272,7 @@ truncate_test03 (void)
   readbuf = (char *) malloc (len / 2);
   rtems_test_assert (readbuf);
   fd = open (name01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len / 2);
   rtems_test_assert (n == len / 2);
   rtems_test_assert (!strncmp (databuf, readbuf, len / 2));
@@ -314,7 +314,7 @@ lseek_test (void)
    */
   puts ("Create a new file");
   fd = creat (name01, mode);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
 
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 0);
@@ -329,7 +329,7 @@ lseek_test (void)
   printf ("Writing %zd bytes to file\n", len * 10);
   for (i = 0; i < 10; i++) {
     n = write (fd, databuf, len);
-    rtems_test_assert (n != -1);
+    rtems_test_assert (n == (ssize_t) len);
     total_written += n;
   }
   printf ("Successfully wrote %d\n", total_written);
