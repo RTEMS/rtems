@@ -549,6 +549,199 @@ truncate_to_zero (void)
   test_case_leave ();
 }
 
+static void
+random_fill (char *dst, size_t n)
+{
+  static uint32_t u = 0x12345678;
+  uint32_t v = u;
+  uint32_t w;
+  size_t i = 0;
+  int j = 0;
+
+  while (i < n) {
+    if (j == 0) {
+      v *= 1664525;
+      v += 1013904223;
+      w = v;
+    } else {
+      w >>= 8;
+    }
+
+    dst [i] = (char) w;
+
+    ++i;
+    j = (j + 1) % 4;
+  }
+
+  u = v;
+}
+
+static void
+block_rw_lseek (int fd, size_t pos)
+{
+  off_t actual;
+
+  actual = lseek (fd, pos, SEEK_SET);
+  rtems_test_assert (actual == pos);
+}
+
+static void
+block_rw_write (int fd, char *out, size_t pos, size_t size)
+{
+  ssize_t n;
+
+  random_fill (out + pos, size);
+
+  block_rw_lseek (fd, pos);
+
+  n = write (fd, out + pos, size);
+  rtems_test_assert (n == (ssize_t) size);
+}
+
+static void
+block_rw_write_cont (int fd, char *out, size_t *pos, size_t size)
+{
+  ssize_t n;
+
+  random_fill (out + *pos, size);
+
+  n = write (fd, out + *pos, size);
+  rtems_test_assert (n == (ssize_t) size);
+
+  *pos += size;
+}
+
+static void
+block_rw_check (int fd, const char *out, char *in, size_t size)
+{
+  ssize_t n;
+  off_t file_size;
+
+  file_size = lseek (fd, 0, SEEK_END);
+  rtems_test_assert (file_size == size);
+
+  block_rw_lseek (fd, 0);
+
+  n = read (fd, in, size);
+  rtems_test_assert (n == (ssize_t) size);
+
+  rtems_test_assert (memcmp (out, in, size) == 0);
+}
+
+static void
+block_rw_prepare (const char *t, int fd, char *out, size_t size)
+{
+  int status;
+
+  printf ("test case: %s\n", t);
+
+  memset (out, 0, size);
+
+  status = ftruncate (fd, 0);
+  rtems_test_assert (status == 0);
+
+  block_rw_lseek (fd, 0);
+}
+
+static void
+block_rw_case_0 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 3 * block_size + 1;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, 0, size);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_1 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 2 * block_size;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, block_size, block_size);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_2 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = (5 * block_size) / 2;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, (3 * block_size) / 2, block_size);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_3 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 2 * block_size;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, block_size, block_size / 3);
+  block_rw_write (fd, out, 2 * block_size - block_size / 3, block_size / 3);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_4 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 3 * block_size + 1;
+  size_t pos = 0;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write_cont (fd, out, &pos, block_size);
+  block_rw_write_cont (fd, out, &pos, block_size / 2);
+  block_rw_write_cont (fd, out, &pos, block_size);
+  block_rw_write_cont (fd, out, &pos, block_size / 2);
+  block_rw_write_cont (fd, out, &pos, 1);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_read_and_write (void)
+{
+  int fd;
+  struct stat st;
+  int status;
+  size_t block_size;
+  size_t size;
+  char *out;
+  char *in;
+
+  test_case_enter (__func__);
+
+  fd = open ("file", O_RDWR | O_CREAT | O_TRUNC, mode);
+  rtems_test_assert (fd >= 0);
+
+  status = fstat (fd, &st);
+  rtems_test_assert (status == 0);
+
+  block_size = st.st_blksize;
+  size = 3 * block_size + 1;
+
+  out = malloc (size);
+  rtems_test_assert (out != NULL);
+
+  in = malloc (size);
+  rtems_test_assert (in != NULL);
+
+  block_rw_case_0 (fd, block_size, out, in);
+  block_rw_case_1 (fd, block_size, out, in);
+  block_rw_case_2 (fd, block_size, out, in);
+  block_rw_case_3 (fd, block_size, out, in);
+  block_rw_case_4 (fd, block_size, out, in);
+
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  free (out);
+  free (in);
+
+  test_case_leave ();
+}
+
 void
 test (void)
 {
@@ -556,4 +749,5 @@ test (void)
   lseek_test ();
   truncate_test03 ();
   truncate_to_zero ();
+  block_read_and_write ();
 }
