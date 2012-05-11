@@ -1,6 +1,11 @@
+##
+## $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = 
+SUBDIRS += fsdosfssync01
 SUBDIRS += imfs_fserror
 SUBDIRS += imfs_fslink
 SUBDIRS += imfs_fspatheval

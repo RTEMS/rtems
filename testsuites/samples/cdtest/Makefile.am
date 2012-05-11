@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = cdtest
 cdtest_SOURCES = init.c main.cc system.h
 

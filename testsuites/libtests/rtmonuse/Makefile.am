@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = rtmonuse
 rtmonuse_SOURCES = init.c getall.c task1.c system.h
 

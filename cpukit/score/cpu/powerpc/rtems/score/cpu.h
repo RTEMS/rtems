@@ -3,7 +3,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  COPYRIGHT (c) 1995 i-cubed ltd.
@@ -624,10 +624,12 @@ SCORE_EXTERN struct {
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
  *  by RTEMS.
+ *
+ *  NOTE: CPU_INTERRUPT_NUMBER_OF_VECTORS and 
+ *        CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER are only used on
+ *        Simple Vectored Architectures and thus are not defined
+ *        for this architecture.
  */
-
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS     (0)
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER (UINT32_MAX)
 
 /*
  *  This is defined if the port has a special way to report the ISR nesting

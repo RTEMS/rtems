@@ -40,6 +40,6 @@ void _RBTree_Iterate_unprotected(
   while ( !stop && current != NULL ) {
     stop = (*visitor)( current, dir, visitor_arg );
 
-    current = _RBTree_Next_unprotected( rbtree, current, dir );
+    current = _RBTree_Next_unprotected( current, dir );
   }
 }

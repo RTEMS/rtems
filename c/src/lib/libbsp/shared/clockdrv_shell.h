@@ -20,7 +20,7 @@
 #include <bsp.h>
 
 #if defined(CLOCK_DRIVER_USE_FAST_IDLE) && defined(CLOCK_DRIVER_ISRS_PER_TICK)
-#error "clockdrv_shell.c: fast idle and N ISRs per tick is not supported"
+#error "clockdrv_shell.h: Fast Idle PLUS n ISRs per tick is not supported"
 #endif
 
 /*
@@ -56,7 +56,8 @@ void Clock_exit( void );
  *
  *  Return values:      NONE
  */
-#ifdef BSP_FEATURE_IRQ_EXTENSION
+#if defined(BSP_FEATURE_IRQ_EXTENSION) || \
+    (CPU_SIMPLE_VECTORED_INTERRUPTS != TRUE)
 void Clock_isr(void *arg)
 {
 #else 

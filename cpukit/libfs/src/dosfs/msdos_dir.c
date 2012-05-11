@@ -30,70 +30,6 @@
 
 #include "msdos.h"
 
-/* msdos_dir_open --
- *     Open fat-file which correspondes to the directory being opened and
- *     set offset field of file control block to zero.
- */
-int
-msdos_dir_open(rtems_libio_t *iop, const char *pathname, int oflag,
-               mode_t mode)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one( EIO );
-
-    rc = fat_file_reopen(fat_fd);
-    if (rc != RC_OK)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        return rc;
-    }
-
-    iop->offset = 0;
-    rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
-}
-
-/* msdos_dir_close --
- *     Close  fat-file which correspondes to the directory being closed
- *
- * PARAMETERS:
- *     iop - file control block
- *
- * RETURNS:
- *     RC_OK, if directory closed successfully, or -1 if error occured (errno
- *     set apropriately.
- */
-int
-msdos_dir_close(rtems_libio_t *iop)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one( EIO );
-
-    rc = fat_file_close(iop->pathinfo.mt_entry, fat_fd);
-    if (rc != RC_OK)
-    {
-        rtems_semaphore_release(fs_info->vol_sema);
-        return rc;
-    }
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return RC_OK;
-}
-
 /*  msdos_format_dirent_with_dot --
  *      This routine convert a (short) MSDOS filename as present on disk
  *      (fixed 8+3 characters, filled with blanks, without separator dot)
@@ -465,38 +401,6 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
  *     no write for directory
  */
 
-/* msdos_dir_lseek --
- *
- *  This routine will behave in one of three ways based on the state of
- *  argument whence. Based on the state of its value the offset argument will
- *  be interpreted using one of the following methods:
- *
- *     SEEK_SET - offset is the absolute byte offset from the start of the
- *                logical start of the dirent sequence that represents the
- *                directory
- *     SEEK_CUR - offset is used as the relative byte offset from the current
- *                directory position index held in the iop structure
- *     SEEK_END - N/A --> This will cause an assert.
- *
- * PARAMETERS:
- *     iop    - file control block
- *     offset - offset
- *     whence - predefine directive
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno
- *     set apropriately).
- */
-off_t
-msdos_dir_lseek(rtems_libio_t *iop, off_t offset, int whence)
-{
-    if (iop->offset >= 0 && iop->offset <= iop->size) {
-        return 0;
-    } else {
-        rtems_set_errno_and_return_minus_one(EINVAL);
-    }
-}
-
 /* msdos_dir_stat --
  *
  * This routine will obtain the following information concerning the current
@@ -553,34 +457,3 @@ msdos_dir_stat(
  * RETURNS:
  *
  */
-
-/* msdos_dir_sync --
- *     The following routine does a syncronization on a MSDOS directory node.
- *     DIR_WrtTime, DIR_WrtDate and DIR_fileSize fields of 32 Bytes Directory
- *     Entry Structure should not be updated for directories, so only call
- *     to corresponding fat-file routine.
- *
- * PARAMETERS:
- *     iop - file control block
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately).
- */
-int
-msdos_dir_sync(rtems_libio_t *iop)
-{
-    int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
-    msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
-
-    rc = fat_file_datasync(iop->pathinfo.mt_entry, fat_fd);
-
-    rtems_semaphore_release(fs_info->vol_sema);
-    return rc;
-}

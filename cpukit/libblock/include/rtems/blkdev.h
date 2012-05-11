@@ -162,6 +162,7 @@ typedef struct rtems_blkdev_request {
 #define RTEMS_BLKIO_DELETED         _IO('B', 7)
 #define RTEMS_BLKIO_CAPABILITIES    _IO('B', 8)
 #define RTEMS_BLKIO_GETDISKDEV      _IOR('B', 9, rtems_disk_device *)
+#define RTEMS_BLKIO_PURGEDEV        _IO('B', 10)
 
 /** @} */
 
@@ -202,6 +203,11 @@ static inline int rtems_disk_fd_get_disk_device(
 static inline int rtems_disk_fd_sync(int fd)
 {
   return ioctl(fd, RTEMS_BLKIO_SYNCDEV);
+}
+
+static inline int rtems_disk_fd_purge(int fd)
+{
+  return ioctl(fd, RTEMS_BLKIO_PURGEDEV);
 }
 
 /**

@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = hello capture ticker base_sp unlimited minimum fileio

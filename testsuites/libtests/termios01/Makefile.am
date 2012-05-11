@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = termios01
 termios01_SOURCES = init.c termios_testdriver.c
 termios01_SOURCES += termios_testdriver.h

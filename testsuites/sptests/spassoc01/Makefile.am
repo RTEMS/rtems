@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = spassoc01
 spassoc01_SOURCES = init.c
 

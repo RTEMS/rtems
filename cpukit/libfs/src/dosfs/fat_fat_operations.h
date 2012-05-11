@@ -43,7 +43,8 @@ fat_scan_fat_for_free_clusters(
     uint32_t                             *chain,
     uint32_t                              count,
     uint32_t                             *cls_added,
-    uint32_t                             *last_cl
+    uint32_t                             *last_cl,
+    bool                                  zero_fill
 );
 
 int

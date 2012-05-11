@@ -1,3 +1,5 @@
+dnl $Id$
+
 dnl Pass a single BSP via an environment variable
 dnl used by per BSP configure scripts
 AC_DEFUN([RTEMS_ENV_RTEMSBSP],

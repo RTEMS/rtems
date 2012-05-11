@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = termios05
 termios05_SOURCES = init.c ../termios04/termios_testdriver_intr.c
 

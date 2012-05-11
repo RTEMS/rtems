@@ -33,6 +33,7 @@
  */
 MEMFILE_STATIC int IMFS_memfile_extend(
    IMFS_jnode_t  *the_jnode,
+   bool           zero_fill,
    off_t          new_length
 );
 
@@ -92,7 +93,7 @@ int memfile_open(
   /*
    * Perform 'copy on write' for linear files
    */
-  if ((iop->flags & (LIBIO_FLAGS_WRITE | LIBIO_FLAGS_APPEND))
+  if ((iop->flags & LIBIO_FLAGS_WRITE)
    && (IMFS_type( the_jnode ) == IMFS_LINEAR_FILE)) {
     uint32_t   count = the_jnode->info.linearfile.size;
     const unsigned char *buffer = the_jnode->info.linearfile.direct;
@@ -106,10 +107,7 @@ int memfile_open(
      && (IMFS_memfile_write(the_jnode, 0, buffer, count) == -1))
         return -1;
   }
-  if (iop->flags & LIBIO_FLAGS_APPEND)
-    iop->offset = the_jnode->info.file.size;
 
-  iop->size = the_jnode->info.file.size;
   return 0;
 }
 
@@ -147,8 +145,10 @@ ssize_t memfile_write(
 
   the_jnode = iop->pathinfo.node_access;
 
+  if ((iop->flags & LIBIO_FLAGS_APPEND) != 0)
+    iop->offset = the_jnode->info.file.size;
+
   status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
-  iop->size = the_jnode->info.file.size;
 
   return status;
 }
@@ -167,34 +167,6 @@ int memfile_ioctl(
 )
 {
   return 0;
-}
-
-/*
- *  memfile_lseek
- *
- *  This routine processes the lseek() system call.
- */
-off_t memfile_lseek(
-  rtems_libio_t   *iop,
-  off_t            offset,
-  int              whence
-)
-{
-  IMFS_jnode_t   *the_jnode;
-
-  the_jnode = iop->pathinfo.node_access;
-
-  if (IMFS_type( the_jnode ) == IMFS_LINEAR_FILE) {
-    if (iop->offset > the_jnode->info.linearfile.size)
-      iop->offset = the_jnode->info.linearfile.size;
-  }
-  else {  /* Must be a block file (IMFS_MEMORY_FILE). */
-    if (IMFS_memfile_extend( the_jnode, iop->offset ))
-      rtems_set_errno_and_return_minus_one( ENOSPC );
-
-    iop->size = the_jnode->info.file.size;
-  }
-  return iop->offset;
 }
 
 /*
@@ -224,7 +196,7 @@ int memfile_ftruncate(
    */
 
   if ( length > the_jnode->info.file.size )
-    return IMFS_memfile_extend( the_jnode, length );
+    return IMFS_memfile_extend( the_jnode, true, length );
 
   /*
    *  The in-memory files do not currently reclaim memory until the file is
@@ -232,7 +204,6 @@ int memfile_ftruncate(
    *  future use and just set the length.
    */
   the_jnode->info.file.size = length;
-  iop->size = the_jnode->info.file.size;
 
   IMFS_update_atime( the_jnode );
 
@@ -248,12 +219,14 @@ int memfile_ftruncate(
  */
 MEMFILE_STATIC int IMFS_memfile_extend(
    IMFS_jnode_t  *the_jnode,
+   bool           zero_fill,
    off_t          new_length
 )
 {
   unsigned int   block;
   unsigned int   new_blocks;
   unsigned int   old_blocks;
+  unsigned int   offset;
 
   /*
    *  Perform internal consistency checks
@@ -265,7 +238,7 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    *  Verify new file size is supported
    */
   if ( new_length >= IMFS_MEMFILE_MAXIMUM_SIZE )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EFBIG );
 
   /*
    *  Verify new file size is actually larger than current size
@@ -278,12 +251,22 @@ MEMFILE_STATIC int IMFS_memfile_extend(
    */
   new_blocks = new_length / IMFS_MEMFILE_BYTES_PER_BLOCK;
   old_blocks = the_jnode->info.file.size / IMFS_MEMFILE_BYTES_PER_BLOCK;
+  offset = the_jnode->info.file.size - old_blocks * IMFS_MEMFILE_BYTES_PER_BLOCK;
 
   /*
    *  Now allocate each of those blocks.
    */
   for ( block=old_blocks ; block<=new_blocks ; block++ ) {
-    if ( IMFS_memfile_addblock( the_jnode, block ) ) {
+    if ( !IMFS_memfile_addblock( the_jnode, block ) ) {
+       if ( zero_fill ) {
+          size_t count = IMFS_MEMFILE_BYTES_PER_BLOCK - offset;
+          block_p *block_ptr =
+            IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
+
+          memset( &(*block_ptr) [offset], 0, count);
+          offset = 0;
+       }
+    } else {
        for ( ; block>=old_blocks ; block-- ) {
          IMFS_memfile_remove_block( the_jnode, block );
        }
@@ -652,9 +635,11 @@ MEMFILE_STATIC ssize_t IMFS_memfile_write(
 
   last_byte = start + my_length;
   if ( last_byte > the_jnode->info.file.size ) {
-    status = IMFS_memfile_extend( the_jnode, last_byte );
+    bool zero_fill = start > the_jnode->info.file.size;
+
+    status = IMFS_memfile_extend( the_jnode, zero_fill, last_byte );
     if ( status )
-      rtems_set_errno_and_return_minus_one( ENOSPC );
+      return status;
   }
 
   copied = 0;

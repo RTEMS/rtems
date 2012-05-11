@@ -1,3 +1,7 @@
+dnl
+dnl $Id$
+dnl
+
 dnl canonicalize target cpu
 dnl NOTE: Most rtems targets do not fullfil autoconf's
 dnl target naming conventions "processor-vendor-os"

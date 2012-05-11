@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxspin01
 psxspin01_SOURCES = main.c test.c ../include/pmacros.h
 

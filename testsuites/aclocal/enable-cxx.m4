@@ -1,3 +1,5 @@
+dnl $Id$
+
 AC_DEFUN([RTEMS_ENABLE_CXX],
 [
 AC_ARG_ENABLE(cxx,

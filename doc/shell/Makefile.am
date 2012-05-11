@@ -2,6 +2,9 @@
 #  COPYRIGHT (c) 1988-2007
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
+#
+#  $Id$
+#
 
 PROJECT = shell
 

@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 rtems_tests_PROGRAMS = mathf
 mathf_SOURCES = init.c domathf.c
 EXTRA_DIST = $(srcdir)/../math/domath.in

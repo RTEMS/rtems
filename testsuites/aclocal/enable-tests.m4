@@ -1,3 +1,5 @@
+dnl $Id$
+
 AC_DEFUN([RTEMS_ENABLE_TESTS],
 [
 AC_ARG_ENABLE(tests,

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxtime
 psxtime_SOURCES = main.c test.c
 

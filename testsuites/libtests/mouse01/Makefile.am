@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = mouse01
 mouse01_SOURCES = init.c serial_mouse_config.c msmouse.c\
     ../termios04/termios_testdriver_intr.c

@@ -77,13 +77,6 @@ extern xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 
 #define BSP_PPC403_CLOCK_HOOK_EXCEPTION ASM_BOOKE_DEC_VECTOR
 
-/* functions */
-
-rtems_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
 #endif /* ASM */
 
 #ifdef __cplusplus

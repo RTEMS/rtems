@@ -1,3 +1,5 @@
+dnl $Id$
+
 # AC_DISABLE_OPTION_CHECKING is not available before 2.62
 AC_PREREQ(2.62)
 

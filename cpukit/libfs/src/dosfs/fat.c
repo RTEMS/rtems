@@ -263,6 +263,42 @@ _fat_block_write(
     return cmpltd;
 }
 
+int
+_fat_block_zero(
+    rtems_filesystem_mount_table_entry_t *mt_entry,
+    uint32_t                              start,
+    uint32_t                              offset,
+    uint32_t                              count)
+{
+    int                 rc = RC_OK;
+    fat_fs_info_t      *fs_info = mt_entry->fs_info;
+    uint32_t            blk  = start;
+    uint32_t            ofs = offset;
+    rtems_bdbuf_buffer *block = NULL;
+    uint32_t            c = 0;
+
+    while(count > 0)
+    {
+        c = MIN(count, (fs_info->vol.bps - ofs));
+
+        if (c == fs_info->vol.bps)
+            rc = fat_buf_access(fs_info, blk, FAT_OP_TYPE_GET, &block);
+        else
+            rc = fat_buf_access(fs_info, blk, FAT_OP_TYPE_READ, &block);
+        if (rc != RC_OK)
+            return -1;
+
+        memset((block->buffer + ofs), 0, c);
+
+        fat_buf_mark_modified(fs_info);
+
+        count -= c;
+        blk++;
+        ofs = 0;
+    }
+    return 0;
+}
+
 /* _fat_block_release --
  *     This function works around the hack that hold a bdbuf and does
  *     not release it.

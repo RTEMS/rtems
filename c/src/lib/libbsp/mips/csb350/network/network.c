@@ -337,9 +337,21 @@ void au1x00_emac_init(void *arg)
 
         /* install the interrupt handler */
         if (sc->unitnumber == 0) {
-            set_vector(au1x00_emac_isr, AU1X00_IRQ_MAC0, 1);
+            rtems_interrupt_handler_install(
+              AU1X00_IRQ_MAC0,
+              "NIC0",
+              0,
+              (rtems_interrupt_handler)au1x00_emac_isr,
+              NULL
+            );
         } else {
-            set_vector(au1x00_emac_isr, AU1X00_IRQ_MAC1, 1);
+            rtems_interrupt_handler_install(
+              AU1X00_IRQ_MAC1,
+              "NIC1",
+              0,
+              (rtems_interrupt_handler)au1x00_emac_isr,
+              NULL
+            );
         }
         AU1X00_IC_MASKCLR(sc->int_ctrlr) = sc->int_mask;
         au_sync();

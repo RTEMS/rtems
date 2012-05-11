@@ -1,3 +1,8 @@
+dnl
+dnl $Id$
+dnl 
+
+dnl
 dnl PROJECT_TOPdir     .. relative path to the top of the build-tree
 dnl PROJECT_ROOT       .. relative path to the top of the temporary
 dnl                       installation directory inside the build-tree

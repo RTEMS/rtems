@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = psximfs02
 psximfs02_SOURCES = init.c
 

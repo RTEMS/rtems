@@ -192,23 +192,6 @@ int device_ioctl(
 }
 
 /*
- *  device_lseek
- *
- *  This handler eats all lseek() operations and does not create
- *  an error. It assumes all devices can handle the seek. The
- *  writes fail.
- */
-
-off_t device_lseek(
-  rtems_libio_t *iop,
-  off_t          offset,
-  int            whence
-)
-{
-  return offset;
-}
-
-/*
  *  device_stat
  *
  *  The IMFS_stat() is used.

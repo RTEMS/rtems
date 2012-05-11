@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxpipe01
 psxpipe01_SOURCES = init.c ../include/pmacros.h
 

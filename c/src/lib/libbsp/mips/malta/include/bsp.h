@@ -98,9 +98,6 @@ uint32_t simple_in_32( uint32_t base, uint32_t addr );
 void simple_out_le16( uint32_t base, uint32_t addr, uint16_t val );
 void simple_out_16( uint32_t base, uint32_t addr, uint16_t val );
 
-rtems_isr_entry set_vector(
-  rtems_isr_entry, rtems_vector_number, int );
-
 #ifdef __cplusplus
 }
 #endif

@@ -10,13 +10,11 @@
  */
 
 /*
- *  Copyright (c) 2010 Gedare Bloom.
+ *  Copyright (c) 2010-2012 Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_SCORE_RBTREE_H
@@ -386,11 +384,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Find_unprotected(
  * @retval otherwise The predecessor node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next_unprotected( rbtree, node, RBT_LEFT );
+  return _RBTree_Next_unprotected( node, RBT_LEFT );
 }
 
 /**
@@ -399,11 +396,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
  * The function disables the interrupts protect the operation.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next( rbtree, node, RBT_LEFT );
+  return _RBTree_Next( node, RBT_LEFT );
 }
 
 /**
@@ -416,11 +412,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
  * @retval otherwise The successor node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next_unprotected( rbtree, node, RBT_RIGHT );
+  return _RBTree_Next_unprotected( node, RBT_RIGHT );
 }
 
 /**
@@ -429,11 +424,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
  * The function disables the interrupts protect the operation.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
-  const RBTree_Control *rbtree,
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next( rbtree, node, RBT_RIGHT );
+  return _RBTree_Next( node, RBT_RIGHT );
 }
 
 /** @brief Get the First Node (unprotected)
@@ -457,22 +451,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get_unprotected(
   RBTree_Node *the_node = the_rbtree->first[dir];
   _RBTree_Extract_unprotected(the_rbtree, the_node);
   return the_node;
-}
-
-/** @brief Peek at the First Node (unprotected)
- *
- *  This function returns a pointer to the first node, minimum if @a dir is 0 
- *  or maximum if @a dir is 1, from @a the_rbtree without extracting it.  
- *  It does NOT disable interrupts to ensure the atomicity of the peek.
- *
- *  @retval NULL if @a the_rbtree is empty.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Peek_unprotected(
-  const RBTree_Control *the_rbtree,
-  RBTree_Direction dir
-)
-{
-  return(the_rbtree->first[dir]);
 }
 
 /** @brief Rotate the_node in the direction passed as second argument

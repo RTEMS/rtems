@@ -1,3 +1,5 @@
+## $Id$
+
 SUBDIRS =
 SUBDIRS += sp01
 SUBDIRS += sp02

@@ -106,7 +106,12 @@ RBTree_Node *_RBTree_Insert_unprotected(
         iter_node->child[dir] = the_node;
         the_node->parent = iter_node;
         /* update min/max */
-        if (_RBTree_Is_first(the_rbtree, iter_node, dir)) {
+        compare_result = the_rbtree->compare_function(
+            the_node,
+            _RBTree_First(the_rbtree, dir)
+        );
+        if ( (!dir && _RBTree_Is_lesser(compare_result)) ||
+              (dir && _RBTree_Is_greater(compare_result)) ) {
           the_rbtree->first[dir] = the_node;
         }
         break;

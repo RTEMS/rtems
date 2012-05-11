@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mrfs_fssymlink
 mrfs_fssymlink_SOURCES  = ../fssymlink/test.c
 mrfs_fssymlink_SOURCES += ../support/ramdisk_support.c

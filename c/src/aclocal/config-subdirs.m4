@@ -1,3 +1,6 @@
+dnl $Id$
+
+dnl
 dnl Misc utility macros for subdir handling to work around missing abilities
 dnl in autoconf, automake and structural issues with RTEMS
 dnl

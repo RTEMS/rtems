@@ -21,6 +21,12 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+rtems_id   Task_id;
+rtems_task_priority Priority;
+time_t  Period;
+time_t  Execution;
+time_t  Phase;
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -46,10 +52,9 @@ rtems_task Init(
 
   puts( "\n\n*** TEST QRES LIBRARY ***" );
 
-  Task_name = rtems_build_name( 'P', 'T', '1', ' ' );
 
   status = rtems_task_create(
-    Task_name,
+    rtems_build_name( 'P', 'T', '1', ' ' ),
     Priority,
     RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,

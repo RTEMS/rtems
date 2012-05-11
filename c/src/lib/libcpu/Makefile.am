@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 include_libcpudir = $(includedir)/libcpu
 
 EXTRA_DIST =

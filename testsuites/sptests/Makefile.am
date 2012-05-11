@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 ## Test names are spaced to indicate gaps in numbering from tests being

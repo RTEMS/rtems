@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 SUBDIRS = @RTEMS_CPU@
 
 DIST_SUBDIRS =

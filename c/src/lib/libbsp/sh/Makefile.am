@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 # Descend into the @RTEMS_BSP_FAMILY@ directory

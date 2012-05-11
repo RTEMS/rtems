@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = smp04
 smp04_SOURCES = init.c system.h ../../support/src/locked_print.c
 

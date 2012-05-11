@@ -52,7 +52,7 @@ void _RBTree_Initialize(
   count = number_nodes;
   next  = starting_address;
   while ( count-- ) {
-    _RBTree_Insert(the_rbtree, next);
+    _RBTree_Insert_unprotected(the_rbtree, next);
     next           = (RBTree_Node *)
                         _Addresses_Add_offset( (void *) next, node_size );
   }

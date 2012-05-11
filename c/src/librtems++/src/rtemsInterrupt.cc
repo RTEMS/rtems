@@ -38,6 +38,9 @@ static bool initialised = false;
 
 #include <cstdlib>
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+
+typedef void * ISR_Handler void *;
 rtemsInterrupt::rtemsInterrupt()
   : vector(0),
     caught(false),
@@ -123,3 +126,4 @@ void rtemsInterrupt::redirector(rtems_vector_number vector)
   if (interrupt_table[vector])
     interrupt_table[vector]->handler();
 }
+#endif

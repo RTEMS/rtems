@@ -72,7 +72,6 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
     printf("rtems-rfs: file-open: handle:%p\n", file);
 
-  iop->size = rtems_rfs_file_size (file);
   rtems_rfs_rtems_set_iop_file_handle (iop, file);
 
   rtems_rfs_rtems_unlock (fs);
@@ -186,6 +185,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
 {
   rtems_rfs_file_handle* file = rtems_rfs_rtems_get_iop_file_handle (iop);
   rtems_rfs_pos          pos;
+  rtems_rfs_pos          file_size;
   const uint8_t*         data = buffer;
   ssize_t                write = 0;
   int                    rc;
@@ -196,26 +196,34 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 
   pos = iop->offset;
-
-  /*
-   * If the iop position is past the physical end of the file we need to set
-   * the file size to the new length before writing. If the position equals the
-   * size of file we are still past the end of the file as positions number
-   * from 0. For a specific position we need a file that has a length of one
-   * more.
-   */
-
-  if (pos >= rtems_rfs_file_size (file))
+  file_size = rtems_rfs_file_size (file);
+  if (pos > file_size)
   {
-    rc = rtems_rfs_file_set_size (file, pos + 1);
+    /*
+     * If the iop position is past the physical end of the file we need to set
+     * the file size to the new length before writing.  The
+     * rtems_rfs_file_io_end() will grow the file subsequently.
+     */
+    rc = rtems_rfs_file_set_size (file, pos);
     if (rc)
     {
       rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
       return rtems_rfs_rtems_error ("file-write: write extend", rc);
     }
-  }
 
-  rtems_rfs_file_set_bpos (file, pos);
+    rtems_rfs_file_set_bpos (file, pos);
+  }
+  else if (pos < file_size && (iop->flags & LIBIO_FLAGS_APPEND) != 0)
+  {
+    pos = file_size;
+    rc = rtems_rfs_file_seek (file, pos, &pos);
+    if (rc)
+    {
+      rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
+      return rtems_rfs_rtems_error ("file-write: write append seek", rc);
+    }
+    iop->offset = pos;
+  }
 
   while (count)
   {
@@ -244,8 +252,6 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
       break;
     }
   }
-
-  iop->size = rtems_rfs_file_size (file);
 
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
 
@@ -282,26 +288,32 @@ rtems_rfs_rtems_file_lseek (rtems_libio_t* iop,
                             int            whence)
 {
   rtems_rfs_file_handle* file = rtems_rfs_rtems_get_iop_file_handle (iop);
-  rtems_rfs_pos          pos;
-  int                    rc;
+  off_t                  old_offset;
+  off_t                  new_offset;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_LSEEK))
     printf("rtems-rfs: file-lseek: handle:%p offset:%" PRIdoff_t "\n", file, offset);
 
   rtems_rfs_rtems_lock (rtems_rfs_file_fs (file));
 
-  pos = iop->offset;
-
-  rc = rtems_rfs_file_seek (file, pos, &pos);
-  if (rc)
+  old_offset = iop->offset;
+  new_offset = rtems_filesystem_default_lseek_file (iop, offset, whence);
+  if (new_offset != -1)
   {
-    rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
-    return rtems_rfs_rtems_error ("file_lseek: lseek", rc);
+    rtems_rfs_pos pos = iop->offset;
+    int           rc = rtems_rfs_file_seek (file, pos, &pos);
+
+    if (rc)
+    {
+      rtems_rfs_rtems_error ("file_lseek: lseek", rc);
+      iop->offset = old_offset;
+      new_offset = -1;
+    }
   }
 
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
 
-  return iop->offset;
+  return new_offset;
 }
 
 /**
@@ -326,8 +338,6 @@ rtems_rfs_rtems_file_ftruncate (rtems_libio_t* iop,
   rc = rtems_rfs_file_set_size (file, length);
   if (rc)
     rc = rtems_rfs_rtems_error ("file_ftruncate: set size", rc);
-
-  iop->size = rtems_rfs_file_size (file);
 
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
 

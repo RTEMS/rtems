@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spfatal04
 spfatal04_SOURCES = ../spfatal_support/init.c ../spfatal_support/system.h testcase.h
 

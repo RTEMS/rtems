@@ -48,8 +48,13 @@ typedef ISR_Vector_number rtems_vector_number;
 /**
  *  @brief Return type for interrupt handler.
  */
-typedef void rtems_isr;
+typedef ISR_Handler rtems_isr;
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE)
+
+typedef ISR_Handler_entry rtems_isr_entry;
+
+#else
 /**
  *  @brief Interrupt handler type.
  *
@@ -59,7 +64,6 @@ typedef rtems_isr ( *rtems_isr_entry )(
                  rtems_vector_number
              );
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**
  *  @brief Implementation of the rtems_interrupt_catch directive.
  *

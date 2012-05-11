@@ -1,3 +1,7 @@
+##
+##  $Id$
+##
+
 rtems_tests_PROGRAMS = base_mp-node1
 base_mp_node1_SOURCES = ../init.c ../apptask.c ../system.h
 
@@ -11,7 +15,7 @@ include $(top_srcdir)/../automake/leaf.am
 AM_CPPFLAGS += -DNODE_NUMBER=1 -I.
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = 
+LINK_OBJS = $(base_mp_node1_OBJECTS)
 LINK_LIBS = $(base_mp_node1_LDLIBS)
 
 base_mp-node1$(EXEEXT): $(base_mp_node1_OBJECTS) $(base_mp_node1_DEPENDENCIES)

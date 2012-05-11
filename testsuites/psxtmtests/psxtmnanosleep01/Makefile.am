@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxtmnanosleep01
 psxtmnanosleep01_SOURCES = init.c ../../tmtests/include/timesys.h \
     ../../support/src/tmtests_empty_function.c \

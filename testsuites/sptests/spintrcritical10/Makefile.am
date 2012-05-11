@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spintrcritical10
 spintrcritical10_SOURCES = init.c ../spintrcritical_support/intrcritical.c
 spintrcritical10_SOURCES += ../spintrcritical_support/intrcritical.h

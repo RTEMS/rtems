@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 if TARTESTS
 rtems_tests_PROGRAMS = tar02
 tar02_SOURCES = init.c ../../psxtests/psxfile01/test_cat.c \

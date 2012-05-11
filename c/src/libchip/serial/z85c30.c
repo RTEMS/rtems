@@ -80,7 +80,9 @@ console_fns z85c30_fns_polled = {
   false                              /* deviceOutputUsesInterrupts */
 };
 
-extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
+  extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
+#endif
 
 /*
  *  z85c30_initialize_port
@@ -722,7 +724,9 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
     z85c30_negate_RTS(minor);
   }
 
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
   set_vector(z85c30_isr, Console_Port_Tbl[minor]->ulIntVector, 1);
+#endif
 
   z85c30_enable_interrupts(minor, SCC_ENABLE_ALL_INTR_EXCEPT_TX);
 

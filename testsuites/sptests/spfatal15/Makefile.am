@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spfatal15
 spfatal15_SOURCES = ../spfatal_support/init.c \
     ../spfatal_support/consume_sems.c \

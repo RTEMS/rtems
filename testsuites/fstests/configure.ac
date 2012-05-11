@@ -1,4 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
+##
+## $Id$
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-tests-fstests],
@@ -77,6 +79,7 @@ AC_CHECK_SIZEOF([blkcnt_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+fsdosfssync01/Makefile
 imfs_fserror/Makefile
 imfs_fslink/Makefile
 imfs_fspatheval/Makefile

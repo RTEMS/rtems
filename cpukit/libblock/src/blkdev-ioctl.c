@@ -60,6 +60,10 @@ rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
             *(rtems_disk_device **) argp = dd;
             break;
 
+        case RTEMS_BLKIO_PURGEDEV:
+            rtems_bdbuf_purge_dev(dd);
+            break;
+
         default:
             errno = EINVAL;
             rc = -1;

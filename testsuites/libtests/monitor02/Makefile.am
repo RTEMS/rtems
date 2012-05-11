@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = monitor02
 monitor02_SOURCES = init.c system.h
 

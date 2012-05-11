@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spheapprot
 spheapprot_SOURCES = init.c
 

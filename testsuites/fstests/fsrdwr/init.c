@@ -26,11 +26,38 @@
 #include "fstest.h"
 #include "pmacros.h"
 
-const char *databuf =
+static const mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+
+static const char databuf [] =
   "Happy days are here again.  Happy days are here again.1Happy "
   "days are here again.2Happy days are here again.3Happy days are here again."
   "4Happy days are here again.5Happy days are here again.6Happy days are here "
   "again.7Happy days are here again.";
+
+static const size_t len = sizeof (databuf) - 1;
+
+static void
+test_case_enter (const char *wd)
+{
+  int status;
+
+  printf ("test case: %s\n", wd);
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+}
+
+static void
+test_case_leave (void)
+{
+  int status;
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+}
 
 static void
 read_write_test (void)
@@ -42,22 +69,12 @@ read_write_test (void)
   char *name02 = "name02";
   struct stat statbuf;
   char *readbuf;
-  size_t len = strlen (databuf);
   off_t pos = 0;
 
   int n;
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
+  test_case_enter (__func__);
 
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to  this
-   */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
   /*
    * Create an empty file
    */
@@ -77,7 +94,7 @@ read_write_test (void)
    * Write data to the empty file
    */
   fd = open (name01, O_WRONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
 
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
@@ -96,7 +113,7 @@ read_write_test (void)
   rtems_test_assert (readbuf);
 
   fd = open (name01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
@@ -112,6 +129,12 @@ read_write_test (void)
   rtems_test_assert (n == len);
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 2 * len);
+  pos = lseek (fd, 0, SEEK_SET);
+  rtems_test_assert (pos == 0);
+  n = write (fd, databuf, len);
+  rtems_test_assert (n == len);
+  pos = lseek (fd, 0, SEEK_CUR);
+  rtems_test_assert (pos == 3 * len);
   status = close (fd);
   rtems_test_assert (status == 0);
 
@@ -119,11 +142,13 @@ read_write_test (void)
    * Read the data and verify it
    */
   fd = open (name01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
-
+  n = read (fd, readbuf, len);
+  rtems_test_assert (n == len);
+  rtems_test_assert (!strncmp (databuf, readbuf, len));
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
   rtems_test_assert (!strncmp (databuf, readbuf, len));
@@ -170,18 +195,14 @@ read_write_test (void)
   status = mkdir (name02, mode);
   rtems_test_assert (status == 0);
   fd = open (name02, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
 
   status = close (fd);
   rtems_test_assert (status == 0);
 
   free (readbuf);
 
-  /*
-   * Go back to parent directory
-   */
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  test_case_leave ();
 }
 
 static void
@@ -197,22 +218,10 @@ truncate_test03 (void)
   int n;
   int i;
 
-  size_t len = strlen (databuf);
-
   char *readbuf;
   off_t good_size = 100;
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to  this
-   */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  test_case_enter (__func__);
 
   /*
    * Create an empty file
@@ -246,7 +255,7 @@ truncate_test03 (void)
    * Fill a file with data
    */
   fd = open (name01, O_WRONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
 
@@ -263,7 +272,7 @@ truncate_test03 (void)
   readbuf = (char *) malloc (len / 2);
   rtems_test_assert (readbuf);
   fd = open (name01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
   n = read (fd, readbuf, len / 2);
   rtems_test_assert (n == len / 2);
   rtems_test_assert (!strncmp (databuf, readbuf, len / 2));
@@ -290,34 +299,22 @@ lseek_test (void)
   const char *name01 = "test_name01";
   struct stat statbuf;
 
-  int n;
+  ssize_t n;
   int i;
 
-  size_t len = strlen (databuf);
   off_t pos;
   ssize_t total_written = 0;
 
   char *readbuf;
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-
-
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to this
-   */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  test_case_enter (__func__);
 
   /*
    * Create a file and fill with the data.
    */
   puts ("Create a new file");
   fd = creat (name01, mode);
-  rtems_test_assert (fd != -1);
+  rtems_test_assert (fd >= 0);
 
   pos = lseek (fd, 0, SEEK_CUR);
   rtems_test_assert (pos == 0);
@@ -332,7 +329,7 @@ lseek_test (void)
   printf ("Writing %zd bytes to file\n", len * 10);
   for (i = 0; i < 10; i++) {
     n = write (fd, databuf, len);
-    rtems_test_assert (n != -1);
+    rtems_test_assert (n == (ssize_t) len);
     total_written += n;
   }
   printf ("Successfully wrote %d\n", total_written);
@@ -371,7 +368,7 @@ lseek_test (void)
    */
   status = fstat (fd, &statbuf);
   rtems_test_assert (status == 0);
-  rtems_test_assert (statbuf.st_size == total_written + 1);
+  rtems_test_assert (statbuf.st_size == total_written);
 
   status = ftruncate (fd, total_written);
   rtems_test_assert (status == 0);
@@ -517,12 +514,232 @@ lseek_test (void)
 
   status = close (fd);
   rtems_test_assert (status == 0);
-  /*
-   * Go back to parent directory
-   */
-  status = chdir ("..");
+
+  test_case_leave ();
+}
+
+static void
+truncate_to_zero (void)
+{
+  int fd;
+  ssize_t n;
+  int status;
+  off_t pos;
+
+  test_case_enter (__func__);
+
+  fd = creat ("file", mode);
+  rtems_test_assert (fd >= 0);
+
+  n = write (fd, databuf, len);
+  rtems_test_assert (n == (ssize_t) len);
+
+  pos = lseek (fd, 0, SEEK_END);
+  rtems_test_assert (pos == len);
+
+  status = ftruncate (fd, 0);
   rtems_test_assert (status == 0);
 
+  pos = lseek (fd, 0, SEEK_END);
+  rtems_test_assert (pos == 0);
+
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  test_case_leave ();
+}
+
+static void
+random_fill (char *dst, size_t n)
+{
+  static uint32_t u = 0x12345678;
+  uint32_t v = u;
+  uint32_t w;
+  size_t i = 0;
+  int j = 0;
+
+  while (i < n) {
+    if (j == 0) {
+      v *= 1664525;
+      v += 1013904223;
+      w = v;
+    } else {
+      w >>= 8;
+    }
+
+    dst [i] = (char) w;
+
+    ++i;
+    j = (j + 1) % 4;
+  }
+
+  u = v;
+}
+
+static void
+block_rw_lseek (int fd, size_t pos)
+{
+  off_t actual;
+
+  actual = lseek (fd, pos, SEEK_SET);
+  rtems_test_assert (actual == pos);
+}
+
+static void
+block_rw_write (int fd, char *out, size_t pos, size_t size)
+{
+  ssize_t n;
+
+  random_fill (out + pos, size);
+
+  block_rw_lseek (fd, pos);
+
+  n = write (fd, out + pos, size);
+  rtems_test_assert (n == (ssize_t) size);
+}
+
+static void
+block_rw_write_cont (int fd, char *out, size_t *pos, size_t size)
+{
+  ssize_t n;
+
+  random_fill (out + *pos, size);
+
+  n = write (fd, out + *pos, size);
+  rtems_test_assert (n == (ssize_t) size);
+
+  *pos += size;
+}
+
+static void
+block_rw_check (int fd, const char *out, char *in, size_t size)
+{
+  ssize_t n;
+  off_t file_size;
+
+  file_size = lseek (fd, 0, SEEK_END);
+  rtems_test_assert (file_size == size);
+
+  block_rw_lseek (fd, 0);
+
+  n = read (fd, in, size);
+  rtems_test_assert (n == (ssize_t) size);
+
+  rtems_test_assert (memcmp (out, in, size) == 0);
+}
+
+static void
+block_rw_prepare (const char *t, int fd, char *out, size_t size)
+{
+  int status;
+
+  printf ("test case: %s\n", t);
+
+  memset (out, 0, size);
+
+  status = ftruncate (fd, 0);
+  rtems_test_assert (status == 0);
+
+  block_rw_lseek (fd, 0);
+}
+
+static void
+block_rw_case_0 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 3 * block_size + 1;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, 0, size);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_1 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 2 * block_size;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, block_size, block_size);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_2 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = (5 * block_size) / 2;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, (3 * block_size) / 2, block_size);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_3 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 2 * block_size;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write (fd, out, block_size, block_size / 3);
+  block_rw_write (fd, out, 2 * block_size - block_size / 3, block_size / 3);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_rw_case_4 (int fd, size_t block_size, char *out, char *in)
+{
+  const size_t size = 3 * block_size + 1;
+  size_t pos = 0;
+
+  block_rw_prepare (__func__, fd, out, size);
+  block_rw_write_cont (fd, out, &pos, block_size);
+  block_rw_write_cont (fd, out, &pos, block_size / 2);
+  block_rw_write_cont (fd, out, &pos, block_size);
+  block_rw_write_cont (fd, out, &pos, block_size / 2);
+  block_rw_write_cont (fd, out, &pos, 1);
+  block_rw_check (fd, out, in, size);
+}
+
+static void
+block_read_and_write (void)
+{
+  int fd;
+  struct stat st;
+  int status;
+  size_t block_size;
+  size_t size;
+  char *out;
+  char *in;
+
+  test_case_enter (__func__);
+
+  fd = open ("file", O_RDWR | O_CREAT | O_TRUNC, mode);
+  rtems_test_assert (fd >= 0);
+
+  status = fstat (fd, &st);
+  rtems_test_assert (status == 0);
+
+  block_size = st.st_blksize;
+  size = 3 * block_size + 1;
+
+  out = malloc (size);
+  rtems_test_assert (out != NULL);
+
+  in = malloc (size);
+  rtems_test_assert (in != NULL);
+
+  block_rw_case_0 (fd, block_size, out, in);
+  block_rw_case_1 (fd, block_size, out, in);
+  block_rw_case_2 (fd, block_size, out, in);
+  block_rw_case_3 (fd, block_size, out, in);
+  block_rw_case_4 (fd, block_size, out, in);
+
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  free (out);
+  free (in);
+
+  test_case_leave ();
 }
 
 void
@@ -531,4 +748,6 @@ test (void)
   read_write_test ();
   lseek_test ();
   truncate_test03 ();
+  truncate_to_zero ();
+  block_read_and_write ();
 }

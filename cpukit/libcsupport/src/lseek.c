@@ -21,65 +21,13 @@
 
 off_t lseek( int fd, off_t offset, int whence )
 {
-  off_t rv = 0;
   rtems_libio_t *iop;
-  off_t reference_offset;
-  off_t old_offset;
-  off_t new_offset;
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
 
-  old_offset = iop->offset;
-  switch ( whence ) {
-    case SEEK_SET:
-      reference_offset = 0;
-      break;
-    case SEEK_CUR:
-      reference_offset = old_offset;
-      break;
-    case SEEK_END:
-      reference_offset = iop->size;
-      break;
-    default:
-      errno = EINVAL;
-      rv = (off_t) -1;
-      break;
-  }
-  new_offset = reference_offset + offset;
-
-  if ( rv == 0 ) {
-    if (
-      (reference_offset >= 0 && new_offset >= offset)
-        || (reference_offset < 0 && new_offset <= offset)
-    ) {
-      switch ( rtems_filesystem_node_type( &iop->pathinfo ) ) {
-        case RTEMS_FILESYSTEM_DIRECTORY:
-        case RTEMS_FILESYSTEM_MEMORY_FILE:
-          if ( new_offset < 0 ) {
-            errno = EINVAL;
-            rv = (off_t) -1;
-          }
-          break;
-        default:
-          break;
-      }
-
-      if ( rv == 0 ) {
-        iop->offset = new_offset;
-        rv = (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
-        if ( rv == (off_t) -1 ) {
-          iop->offset = old_offset;
-        }
-      }
-    } else {
-      errno = EOVERFLOW;
-      rv = (off_t) -1;
-    }
-  }
-
-  return rv;
+  return (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
 }
 
 /*

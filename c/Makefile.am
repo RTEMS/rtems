@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 ## NOTE: This Makefile.am is rather fragile to the value of RTEMS_BSP

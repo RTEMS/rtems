@@ -1,3 +1,5 @@
+## $Id$
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../testsuites/automake/compile.am
 

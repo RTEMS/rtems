@@ -1,3 +1,5 @@
+dnl $Id$
+
 AC_DEFUN([RTEMS_PATH_KSH],
 [
 dnl NOTE: prefer bash over ksh over sh

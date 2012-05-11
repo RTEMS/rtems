@@ -849,8 +849,9 @@ typedef int (*rtems_filesystem_ioctl_t)(
  * @retval non-negative The new offset from the beginning of the file.
  * @retval -1 An error occured.  The errno is set to indicate the error.
  *
- * @see rtems_filesystem_default_lseek() and
- * rtems_filesystem_default_lseek_success().
+ * @see rtems_filesystem_default_lseek(),
+ * rtems_filesystem_default_lseek_file(), and
+ * rtems_filesystem_default_lseek_directory().
  */
 typedef off_t (*rtems_filesystem_lseek_t)(
   rtems_libio_t *iop,
@@ -1026,11 +1027,51 @@ off_t rtems_filesystem_default_lseek(
 );
 
 /**
+ * @brief An offset 0 with a whence of SEEK_SET will perform a directory rewind
+ * operation.
+ *
+ * This function has no protection against concurrent access.
+ *
+ * @retval -1 The offset is not zero or the whence is not SEEK_SET.
+ * @retval 0 Successful rewind operation.
+ *
+ * @see rtems_filesystem_lseek_t.
+ */
+off_t rtems_filesystem_default_lseek_directory(
+  rtems_libio_t *iop,
+  off_t offset,
+  int whence
+);
+
+/**
+ * @brief Default lseek() handler for files.
+ *
+ * The fstat() handler will be used to obtain the file size in case whence is
+ * SEEK_END.
+ *
+ * This function has no protection against concurrent access.
+ *
+ * @retval -1 An error occured.  In case an integer overflow occured, then the
+ * errno will be set to EOVERFLOW.  In case the new offset is negative, then
+ * the errno will be set to EINVAL.  In case the whence is SEEK_END and the
+ * fstat() handler to obtain the current file size returned an error status,
+ * then the errno will be set by the fstat() handler.
+ * @retval offset The new offset.
+ *
+ * @see rtems_filesystem_lseek_t.
+ */
+off_t rtems_filesystem_default_lseek_file(
+  rtems_libio_t *iop,
+  off_t offset,
+  int whence
+);
+
+/**
  * @retval 0 Always.
  *
  * @see rtems_filesystem_lseek_t.
  */
-off_t rtems_filesystem_default_lseek_success(
+off_t rtems_filesystem_default_lseek_file(
   rtems_libio_t *iop,
   off_t          offset,
   int            whence
@@ -1157,11 +1198,10 @@ extern const rtems_filesystem_limits_and_options_t
  * It will be indexed by 'fd'.
  *
  * @todo Should really have a separate per/file data structure that this points
- * to (eg: size, offset, driver, pathname should be in that)
+ * to (eg: offset, driver, pathname should be in that)
  */
 struct rtems_libio_tt {
   rtems_driver_name_t                    *driver;
-  off_t                                   size;      /* size of file */
   off_t                                   offset;    /* current offset into file */
   uint32_t                                flags;
   rtems_filesystem_location_info_t        pathinfo;

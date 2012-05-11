@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = stackchk01
 stackchk01_SOURCES = init.c
 

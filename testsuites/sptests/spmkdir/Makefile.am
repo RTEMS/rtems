@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spmkdir
 spmkdir_SOURCES = init.c
 

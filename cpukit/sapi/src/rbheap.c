@@ -203,13 +203,12 @@ static rtems_rbheap_chunk *find(rtems_rbtree_control *chunk_tree, uintptr_t key)
 }
 
 static rtems_rbheap_chunk *get_next(
-  const rtems_rbtree_control *chunk_tree,
   const rtems_rbheap_chunk *chunk,
   RBTree_Direction dir
 )
 {
   return rtems_rbheap_chunk_of_node(
-    _RBTree_Next_unprotected(chunk_tree, &chunk->tree_node, dir)
+    _RBTree_Next_unprotected(&chunk->tree_node, dir)
   );
 }
 
@@ -246,8 +245,8 @@ rtems_status_code rtems_rbheap_free(rtems_rbheap_control *control, void *ptr)
 
     if (chunk != NULL_PAGE) {
       if (!rtems_rbheap_is_chunk_free(chunk)) {
-        rtems_rbheap_chunk *pred = get_next(chunk_tree, chunk, RBT_LEFT);
-        rtems_rbheap_chunk *succ = get_next(chunk_tree, chunk, RBT_RIGHT);
+        rtems_rbheap_chunk *pred = get_next(chunk, RBT_LEFT);
+        rtems_rbheap_chunk *succ = get_next(chunk, RBT_RIGHT);
 
         check_and_merge(free_chain, chunk_tree, chunk, succ);
         add_to_chain(free_chain, chunk);

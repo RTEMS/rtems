@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = stackchk
 stackchk_SOURCES = blow.c init.c task1.c system.h
 

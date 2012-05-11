@@ -2424,63 +2424,25 @@ int			e;
 	return count;
 }
 
-static off_t nfs_file_lseek(
-	rtems_libio_t *iop,
-	off_t          length,
-	int            whence
-)
-{
-#if DEBUG & DEBUG_SYSCALLS
-	fprintf(stderr,
-			"lseek to %i (length %i, whence %i)\n",
-			iop->offset,
-			length,
-			whence);
-#endif
-	if ( SEEK_END == whence ) {
-		/* rtems (4.6.2) libcsupport code 'lseek' uses iop->size to
-		 * compute the offset. We don't want to track the file size
-	 	 * by updating 'iop->size' constantly.
-		 * Since lseek is the only place using iop->size, we work
-		 * around this by tweaking the offset here...
-		 */
-		NfsNode	node = iop->pathinfo.node_access;
-		fattr	*fa  = &SERP_ATTR(node);
-
-		if (updateAttr(node, 0 /* only if old */)) {
-			return -1;
-		}
-		iop->offset = fa->size;
-	}
-
-	/* this is particularly easy :-) */
-	return iop->offset;
-}
-
 static off_t nfs_dir_lseek(
 	rtems_libio_t *iop,
 	off_t          length,
 	int            whence
 )
 {
-DirInfo di = iop->pathinfo.node_access_2;
+	off_t rv = rtems_filesystem_default_lseek_directory(iop, length, whence);
 
-	/* we don't support anything other than
-	 * rewinding
-	 */
-	if (SEEK_SET != whence || 0 != length) {
-		errno = ENOTSUP;
-		return -1;
+	if (rv == 0) {
+		DirInfo di = iop->pathinfo.node_access_2;
+		nfscookie *cookie = &di->readdirargs.cookie;
+
+		di->eofreached = FALSE;
+
+		/* rewind cookie */
+		memset(cookie, 0, sizeof(*cookie));
 	}
 
-	/* rewind cookie */
-	memset( &di->readdirargs.cookie,
-	        0,
-	        sizeof(di->readdirargs.cookie) );
-
-	di->eofreached = FALSE;
-
-	return iop->offset;
+	return rv;
 }
 
 #if 0	/* structure types for reference */
@@ -2703,7 +2665,7 @@ struct _rtems_filesystem_file_handlers_r nfs_file_file_handlers = {
 	.read_h      = nfs_file_read,
 	.write_h     = nfs_file_write,
 	.ioctl_h     = rtems_filesystem_default_ioctl,
-	.lseek_h     = nfs_file_lseek,
+	.lseek_h     = rtems_filesystem_default_lseek_file,
 	.fstat_h     = nfs_fstat,
 	.ftruncate_h = nfs_file_ftruncate,
 	.fsync_h     = rtems_filesystem_default_fsync_or_fdatasync,

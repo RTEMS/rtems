@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = tar03
 tar03_SOURCES = init.c
 

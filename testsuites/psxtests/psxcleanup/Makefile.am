@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxcleanup
 psxcleanup_SOURCES = psxcleanup.c system.h ../include/pmacros.h
 

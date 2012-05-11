@@ -381,18 +381,18 @@ fat_file_write(
     uint32_t       sec = 0;
     uint32_t       byte = 0;
     uint32_t       c = 0;
+    bool           zero_fill = start > fat_fd->fat_file_size;
 
     if ( count == 0 )
         return cmpltd;
 
-    if ( start > fat_fd->fat_file_size )
-        rtems_set_errno_and_return_minus_one( EIO );
+    if (start >= fat_fd->size_limit)
+        rtems_set_errno_and_return_minus_one(EFBIG);
 
-    if ((count > fat_fd->size_limit) ||
-        (start > fat_fd->size_limit - count))
-        rtems_set_errno_and_return_minus_one( EIO );
+    if (count > fat_fd->size_limit - start)
+        count = fat_fd->size_limit - start;
 
-    rc = fat_file_extend(mt_entry, fat_fd, start + count, &c);
+    rc = fat_file_extend(mt_entry, fat_fd, zero_fill, start + count, &c);
     if (rc != RC_OK)
         return rc;
 
@@ -475,6 +475,7 @@ int
 fat_file_extend(
     rtems_filesystem_mount_table_entry_t *mt_entry,
     fat_file_fd_t                        *fat_fd,
+    bool                                  zero_fill,
     uint32_t                              new_length,
     uint32_t                             *a_length
     )
@@ -509,6 +510,27 @@ fat_file_extend(
     else
         bytes2add = 0;
 
+    if (zero_fill && bytes_remain > 0) {
+        uint32_t start = fat_fd->fat_file_size;
+        uint32_t cl_start = start >> fs_info->vol.bpc_log2;
+        uint32_t ofs = start & (fs_info->vol.bpc - 1);
+        uint32_t cur_cln;
+        uint32_t sec;
+        uint32_t byte;
+
+        rc = fat_file_lseek(mt_entry, fat_fd, cl_start, &cur_cln);
+        if (rc != RC_OK)
+            return rc;
+
+        sec = fat_cluster_num_to_sector_num(mt_entry, cur_cln);
+        sec += ofs >> fs_info->vol.sec_log2;
+        byte = ofs & (fs_info->vol.bps - 1);
+
+        rc = _fat_block_zero(mt_entry, sec, byte, bytes_remain);
+        if (rc != RC_OK)
+            return rc;
+    }
+
     /*
      * if in last cluster allocated for the file there is enough room to
      * handle extention (hence we don't need to add even one cluster to the
@@ -520,7 +542,7 @@ fat_file_extend(
     cls2add = ((bytes2add - 1) >> fs_info->vol.bpc_log2) + 1;
 
     rc = fat_scan_fat_for_free_clusters(mt_entry, &chain, cls2add,
-                                        &cls_added, &last_cl);
+                                        &cls_added, &last_cl, zero_fill);
 
     /* this means that low level I/O error occured */
     if (rc != RC_OK)
@@ -750,65 +772,6 @@ fat_file_mark_removed(
     _hash_insert(fs_info->rhash, key, fat_fd->ino, fat_fd);
 
     fat_fd->flags |= FAT_FILE_REMOVED;
-}
-
-/* fat_file_datasync --
- *     Synchronize fat-file -  flush all buffered data to the media.
- *
- * PARAMETERS:
- *     mt_entry - mount table entry
- *     fat_fd   - fat-file descriptor
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured and errno set appropriately
- */
-int
-fat_file_datasync(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
-    fat_file_fd_t                        *fat_fd
-    )
-{
-    int                 rc = RC_OK;
-    rtems_status_code   sc = RTEMS_SUCCESSFUL;
-    fat_fs_info_t      *fs_info = mt_entry->fs_info;
-    uint32_t            cur_cln = fat_fd->cln;
-    rtems_bdbuf_buffer *block = NULL;
-    uint32_t            sec = 0;
-    uint32_t            i = 0;
-
-    if (fat_fd->fat_file_size == 0)
-        return RC_OK;
-
-    /*
-     * we can use only one bdbuf :( and we also know that cache is useless
-     * for sync operation, so don't use it
-     */
-    rc = fat_buf_release(fs_info);
-    if (rc != RC_OK)
-        return rc;
-
-    /* for each cluster of the file ... */
-    while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
-    {
-        sec = fat_cluster_num_to_sector_num(mt_entry, cur_cln);
-        /* for each sector in cluster ... */
-        for ( i = 0; i < fs_info->vol.spc; i++ )
-        {
-            /* ... sync it */
-            sc = rtems_bdbuf_read(fs_info->vol.dd, (sec + i), &block);
-            if (sc != RTEMS_SUCCESSFUL)
-                rtems_set_errno_and_return_minus_one( EIO );
-
-            sc = rtems_bdbuf_sync(block);
-            if ( sc != RTEMS_SUCCESSFUL )
-                rtems_set_errno_and_return_minus_one( EIO );
-        }
-
-        rc = fat_get_fat_cluster(mt_entry, cur_cln, &cur_cln);
-        if ( rc != RC_OK )
-            return rc;
-    }
-    return rc;
 }
 
 /* fat_file_size --

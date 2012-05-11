@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *
@@ -19,11 +18,20 @@
 
 #include <rtems/libio_.h>
 
-off_t rtems_filesystem_default_lseek_success(
+off_t rtems_filesystem_default_lseek_directory(
   rtems_libio_t *iop,
   off_t offset,
   int whence
 )
 {
-  return 0;
+  off_t rv = 0;
+
+  if ( offset == 0 && whence == SEEK_SET ) {
+    iop->offset = 0;
+  } else {
+    errno = EINVAL;
+    rv = -1;
+  }
+
+  return rv;
 }

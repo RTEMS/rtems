@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = mp14-node2
 mp14_node2_SOURCES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
     ../pttask1.c ../smtask1.c ../msgtask1.c ../system.h
@@ -14,7 +18,7 @@ AM_CPPFLAGS += -DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION)
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = 
+LINK_OBJS = $(mp14_node2_OBJECTS)
 LINK_LIBS = $(mp14_node2_LDLIBS)
 
 mp14-node2$(EXEEXT): $(mp14_node2_OBJECTS) $(mp14_node2_DEPENDENCIES)

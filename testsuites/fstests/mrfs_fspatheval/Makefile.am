@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mrfs_fspatheval
 mrfs_fspatheval_SOURCES  = ../fspatheval/test.c
 mrfs_fspatheval_SOURCES += ../support/ramdisk_support.c

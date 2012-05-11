@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spcoverage
 spcoverage_SOURCES = init.c
 

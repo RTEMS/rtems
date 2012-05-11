@@ -56,7 +56,7 @@ void write_helper(void)
   do {
     written = write( TestFd, Buffer, sizeof(Buffer) );
     if ( written == -1 ) {
-      if ( errno == ENOSPC ) {
+      if ( errno == EFBIG ) {
         printf( "Total written = %zd\n", TotalWritten );
         return;
       }
@@ -93,22 +93,21 @@ void read_helper(void)
         rtems_test_exit(0);
       }
       i++;
-      continue;
+    } else if ( sc != 0 ) {
+      fprintf(
+        stderr,
+        "ERROR - at offset %d - returned %zd and error=%s\n",
+        i,
+        sc,
+        strerror( errno )
+      );
+      rtems_test_exit(0);
     }
-    /* Unsure if ENOSPC is the write error to be returned */
-    if ( errno == ENOSPC && i == TotalWritten ) {
-      puts( "File correctly read until ENOSPC returned\n" );
-      return;
-    }
-    fprintf(
-      stderr,
-      "ERROR - at offset %d - returned %zd and error=%s\n",
-      i,
-      sc,
-      strerror( errno )
-    );
-    rtems_test_exit(0);
-  } while (1);
+  } while ( sc > 0 );
+
+  if ( i == TotalWritten ) {
+    puts( "File correctly read until EOF returned\n" );
+  }
 }
 
 void truncate_helper(void)
@@ -143,7 +142,7 @@ void truncate_helper(void)
   } while (new > 0);
 }
 
-void extend_helper(void)
+void extend_helper(int eno)
 {
   off_t position;
   off_t new;
@@ -164,18 +163,11 @@ void extend_helper(void)
   new = position;
   do {
     sc = lseek( TestFd, new, SEEK_SET );
-    if( sc == -1 ) {
-      if( errno == ENOSPC ) {
-	break;
-      }
-      else {
-	rtems_test_assert( 0 );
-      }
-    }
+    rtems_test_assert( sc == new );
 
     rc = ftruncate( TestFd, new );
     if ( rc != 0 ) {
-      if( errno != ENOSPC ) {
+      if( errno != eno ) {
 	fprintf(
 	  stderr,
 	  "ERROR - at offset %d - returned %d and error=%s\n",
@@ -218,8 +210,10 @@ rtems_task Init(
 {
   int i;
   void *alloc_ptr = (void *)0;
-  int position = 0;
-  int status = 0;
+  off_t position;
+  off_t new_position;
+  char buf [1];
+  ssize_t n;
 
   puts( "\n\n*** TEST IMFS 01 ***" );
 
@@ -244,18 +238,21 @@ rtems_task Init(
    */
   alloc_ptr = malloc( malloc_free_space() - 4 );
 
-  extend_helper();
+  extend_helper(ENOSPC);
 
   /* 
    * free the allocated heap memory
    */
   free(alloc_ptr);
 
-  extend_helper();
+  extend_helper(EFBIG);
   position = lseek( TestFd , 0, SEEK_END );
-  status = lseek( TestFd, position+2, SEEK_SET );
-  rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENOSPC );
+  new_position = lseek( TestFd, position + 2, SEEK_SET );
+  rtems_test_assert( new_position == position + 2 );
+
+  n = write( TestFd, buf, sizeof(buf) );
+  rtems_test_assert( n == -1 );
+  rtems_test_assert( errno == EFBIG );
 
   close_it();
   unlink_it();

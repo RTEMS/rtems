@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = mp01-node2
 mp01_node2_SOURCES = ../init.c ../task1.c ../system.h
 
@@ -12,7 +16,7 @@ AM_CPPFLAGS += -DNODE_NUMBER=2 -I$(srcdir)/..
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 
-LINK_OBJS = 
+LINK_OBJS = $(mp01_node2_OBJECTS)
 LINK_LIBS = $(mp01_node2_LDLIBS)
 
 mp01-node2$(EXEEXT): $(mp01_node2_OBJECTS) $(mp01_node2_DEPENDENCIES)

@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = stringto01
 stringto01_SOURCES = init.c
 stringto01_SOURCES += stringto_test_template.h

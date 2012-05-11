@@ -1,3 +1,8 @@
+##
+##  $Id$
+##
+
+
 rtems_tests_PROGRAMS = mimfs_fssymlink
 mimfs_fssymlink_SOURCES  = ../fssymlink/test.c
 mimfs_fssymlink_SOURCES += ../support/fstest_support.c

@@ -1,3 +1,5 @@
+dnl $Id$
+dnl
 AC_DEFUN([RTEMS_CHECK_SMP],
 [dnl
 AC_REQUIRE([RTEMS_ENABLE_SMP])dnl

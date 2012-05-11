@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 ## NOTE: This Makefile.am does not apply RTEMS's compilation rules.
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 

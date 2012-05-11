@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = spthreadq01
 spthreadq01_SOURCES = init.c
 

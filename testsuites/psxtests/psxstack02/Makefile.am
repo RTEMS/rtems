@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = psxstack02
 psxstack02_SOURCES = init.c
 

@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 rtems_tests_PROGRAMS = sp08
 sp08_SOURCES = init.c
 

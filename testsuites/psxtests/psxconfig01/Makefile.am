@@ -1,3 +1,8 @@
+##
+## $Id$
+##
+
+
 rtems_tests_PROGRAMS = psxconfig01
 psxconfig01_SOURCES = init.c ../include/pmacros.h
 

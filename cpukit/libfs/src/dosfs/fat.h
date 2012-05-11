@@ -465,6 +465,12 @@ _fat_block_write(rtems_filesystem_mount_table_entry_t *mt_entry,
                  const void                           *buff);
 
 int
+_fat_block_zero(rtems_filesystem_mount_table_entry_t *mt_entry,
+                 uint32_t                              start,
+                 uint32_t                              offset,
+                 uint32_t                              count);
+
+int
 _fat_block_release(rtems_filesystem_mount_table_entry_t *mt_entry);
 
 ssize_t
