@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,13 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void test_gid(void);
+void test_uid(void);
+void test_pid(void);
+void test_getlogin(void);
 
 void test_gid(void)
 {
@@ -125,8 +132,6 @@ void test_getlogin(void)
   puts( "getlogin_r(buffer, 0) -- ERANGE" );
   sc = getlogin_r( &ch, 0 );
   rtems_test_assert( sc == ERANGE );
-
-  
 }
 
 rtems_task Init(

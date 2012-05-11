@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,10 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 #include <time.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument ignored);
+rtems_timer_service_routine test_release_from_isr(rtems_id timer, void *arg);
 
 #define TEST_NAME          "01"
 #define TEST_STRING        "POSIX Timer"

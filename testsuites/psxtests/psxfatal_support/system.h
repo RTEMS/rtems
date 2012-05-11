@@ -1,9 +1,11 @@
-/*  system.h
+/**
  *
  *  This include file contains information that is included in every
  *  function in the test set.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,11 +16,20 @@
 /*
  *  Some of the fatal error cases require the ability to peek inside RTEMS
  */
+
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <tmacros.h>
 
 /* functions */
+void force_error(void);
+
+void Put_Source(uint32_t source);
+
+void Put_Error(
+  uint32_t source,
+  uint32_t error
+);
 
 void *POSIX_Init(
   void *argument

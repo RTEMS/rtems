@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -28,6 +28,10 @@
 
 #include <tmacros.h>
 #include "test_support.h"
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void do_with_fd(int fd, const char *description);
 
 void do_with_fd(
   int         fd,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +16,11 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <grp.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument ignored);
+void print_passwd(struct passwd *pw);
+void print_group(struct group *gr);
 
 void print_passwd(
   struct passwd *pw

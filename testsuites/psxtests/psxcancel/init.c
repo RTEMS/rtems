@@ -22,6 +22,12 @@
   #include <pmacros.h>
 #endif
 
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void countTask_cancel_handler(void *ignored);
+void *countTaskDeferred(void *ignored);
+void *countTaskAsync(void *ignored);
+
 volatile bool countTask_handler;
 
 void countTask_cancel_handler(void *ignored)

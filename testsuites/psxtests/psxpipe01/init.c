@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,8 +20,11 @@
 #include <errno.h>
 #include <rtems/libcsupport.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument ignored);
+
 rtems_task Init(
-  rtems_task_argument not_used
+  rtems_task_argument ignored
 )
 {
   int fd[2] = {0,0};

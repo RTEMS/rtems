@@ -23,6 +23,10 @@
 #include <fcntl.h>
 #include <rtems/chain.h>
 
+/* forward declarations to avoid warnings */
+struct aiocb *create_aiocb(int fd);
+void free_aiocb(struct aiocb *aiocbp);
+
 #define BUFSIZE 32
 #define MAX 10
 #define WRONG_FD 666

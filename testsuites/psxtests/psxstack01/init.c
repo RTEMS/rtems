@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,6 +18,10 @@
 #include <sched.h>
 
 #include <rtems/posix/pthread.h> /* for PTHREAD_MINIMUM_STACK_SIZE */
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void *Test_Thread(void *argument);
 
 void *Stack_Low;
 void *Stack_High;

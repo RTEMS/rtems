@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modifications to support reference counting in the file system are
@@ -25,6 +25,9 @@
 #include <rtems/malloc.h>
 #include <pmacros.h>
 #include <rtems/libcsupport.h>
+
+/* forward declarations to avoid warnings */
+int test_main(void);
 
 static void touch( char *file )
 {

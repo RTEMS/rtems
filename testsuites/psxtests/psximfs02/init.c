@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,7 +27,10 @@
 extern int seteuid(uid_t euid);
 #endif
 
-void IMFS_dump( void );
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void IMFS_dump(void);
+
 rtems_task Init(
   rtems_task_argument argument
 )

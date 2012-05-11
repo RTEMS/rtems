@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,16 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <rtems/libcsupport.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void open_it(bool readOnly, bool create);
+void write_helper(void);
+void read_helper(void);
+void truncate_helper(void);
+void extend_helper(int eno);
+void close_it(void);
+void unlink_it(void);
 
 int TestFd;
 uint8_t Buffer[256];

@@ -1,7 +1,11 @@
-/*
- *  This test exercises the POSIX Spinlock manager.
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  This test exercises the POSIX Spinlock manager.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,6 +25,10 @@
 #include <pthread.h>
 
 #include <rtems.h>  /* for task creation */
+
+/* forward declarations to avoid warnings */
+int test_main(void);
+rtems_task SpinlockThread(rtems_task_argument arg);
 
 pthread_spinlock_t Spinlock;
 

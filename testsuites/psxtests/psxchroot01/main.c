@@ -11,7 +11,9 @@
 #include <bsp.h>
 #include <pmacros.h>
 
-void test_main( void );
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+int test_main(void);
 
 rtems_task Init(
   rtems_task_argument ignored

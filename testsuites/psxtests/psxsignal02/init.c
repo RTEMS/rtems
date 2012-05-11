@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +16,12 @@
 #include <errno.h>
 #include <pthread.h>
 #include <sched.h>
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void *Test_Thread(void *arg);
+void Signal_handler(int signo);
+void Install_Signal_Handler(const char *task_name);
 
 volatile bool      Signal_occurred;
 volatile pthread_t Signal_thread;

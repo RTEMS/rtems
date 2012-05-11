@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,9 @@
 
 #include "test_support.h"
 
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+
 void *POSIX_Init(
   void *argument
 )
@@ -30,7 +33,6 @@ void *POSIX_Init(
   mqd_t                   Queue, second_Queue;
   int                     sc;
   Heap_Information_block  start;
-  Heap_Information_block  info;
   size_t                  to_alloc;
   void                   *alloced;
   bool                    sb;

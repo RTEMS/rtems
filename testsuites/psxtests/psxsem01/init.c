@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,9 @@
 #include <tmacros.h>
 #include <pmacros.h>
 #include "test_support.h"
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
 
 #define fatal_posix_sem( _ptr, _msg ) \
   if ( (_ptr != SEM_FAILED) ) { \

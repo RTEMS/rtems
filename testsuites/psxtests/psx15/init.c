@@ -23,6 +23,9 @@
 
 #include "tmacros.h"
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 /*
  * This test case shows that post switch extension handlers must cope with
  * already deleted resources (e.g. _POSIX_signals_Post_switch_extension()).

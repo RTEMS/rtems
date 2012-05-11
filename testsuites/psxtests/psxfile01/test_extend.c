@@ -1,12 +1,16 @@
-/*
+/**
+ *  @file
+ *
  *  A test support function which extends the file to the specified
  *  length.  This handles the implied open(), lseek(), write(), and close()
  *  operations.
  *
  *  The defined behavior is a seek() followed by a write() extends the file
  *  and zero fills the new length part.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,10 +34,12 @@
 
 #include <pmacros.h>
 
+/* forward declarations to avoid warnings */
+void test_extend(char *file, off_t  offset);
+
 /*
  *  test_extend routine
  */
-
 void test_extend(
   char   *file,
   off_t  offset
