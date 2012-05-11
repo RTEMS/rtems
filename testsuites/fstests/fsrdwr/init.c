@@ -518,10 +518,42 @@ lseek_test (void)
   test_case_leave ();
 }
 
+static void
+truncate_to_zero (void)
+{
+  int fd;
+  ssize_t n;
+  int status;
+  off_t pos;
+
+  test_case_enter (__func__);
+
+  fd = creat ("file", mode);
+  rtems_test_assert (fd >= 0);
+
+  n = write (fd, databuf, len);
+  rtems_test_assert (n == (ssize_t) len);
+
+  pos = lseek (fd, 0, SEEK_END);
+  rtems_test_assert (pos == len);
+
+  status = ftruncate (fd, 0);
+  rtems_test_assert (status == 0);
+
+  pos = lseek (fd, 0, SEEK_END);
+  rtems_test_assert (pos == 0);
+
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  test_case_leave ();
+}
+
 void
 test (void)
 {
   read_write_test ();
   lseek_test ();
   truncate_test03 ();
+  truncate_to_zero ();
 }
