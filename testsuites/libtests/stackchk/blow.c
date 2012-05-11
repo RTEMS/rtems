@@ -3,7 +3,7 @@
  *  This set of three tasks do some simple task switching for about
  *  15 seconds and then call a routine to "blow the stack".
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,14 +18,21 @@
 #include <rtems.h>
 #include <rtems/stackchk.h>
 
-void b(void) {}
+/* forward declarations to avoid warnings */
+void b(void);
+void blow_stack(void);
 
-void blow_stack( void )
+void b(void)
+{
+}
+
+void blow_stack(void)
 {
   volatile uint32_t   *low, *high;
   unsigned char *area;
 
-b();
+  b();
+
   /*
    *  Destroy the first and last 16 bytes of our stack... Hope it
    *  does not cause problems :)

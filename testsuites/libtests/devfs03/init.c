@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modifications to support reference counting in the file system are
@@ -22,6 +22,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 rtems_task Init(
   rtems_task_argument argument

@@ -31,6 +31,9 @@
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 #define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
 
 #define BLOCK_SIZE sizeof(char)

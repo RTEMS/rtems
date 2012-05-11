@@ -29,6 +29,9 @@
 #include <rtems/error.h>
 #include <rtems/bdbuf.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 #define BDBUF_DISKS 2
 #define BDBUF_SIZE  1024
 

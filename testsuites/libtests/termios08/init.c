@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,15 @@
 #include <sys/ioctl.h>
 #include <rtems/dumpbuf.h>
 #include <rtems/termiostypes.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void open_it(void);
+void close_it(void);
+void write_it(void);
+void change_lflag( const char *desc, int mask, int new );
+void change_vmin_vtime( const char *desc, int min, int time );
+void read_it(ssize_t expected);
 
 int Test_fd;
 
@@ -86,9 +95,7 @@ void change_vmin_vtime( const char *desc, int min, int time )
   rtems_test_assert( rc == 0 );
 }
 
-void read_it(
-  ssize_t expected
-)
+void read_it( ssize_t expected )
 {
   ssize_t rc;
   char    buf[32];

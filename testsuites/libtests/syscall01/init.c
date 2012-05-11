@@ -27,6 +27,9 @@
 #include <rtems/libio.h>
 #include <rtems/rtems_bsdnet.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 static const char open_driver_path [] = "/dev/open_driver";
 
 struct rtems_bsdnet_config rtems_bsdnet_config;

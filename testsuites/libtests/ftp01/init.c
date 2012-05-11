@@ -27,6 +27,9 @@
 #include <rtems/ftpd.h>
 #include <rtems/ftpfs.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 struct rtems_bsdnet_config rtems_bsdnet_config;
 
 #define FTP_WORKER_TASK_COUNT 2

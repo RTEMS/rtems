@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,19 @@
 #include <sys/ioctl.h>
 #include <rtems/dumpbuf.h>
 #include <rtems/termiostypes.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void open_it(void);
+void Rx_Wake(struct termios *tty, void *arg);
+void Tx_Wake(struct termios *tty, void *arg);
+void set_wakeups(void);
+void set_discipline(void);
+void ioctl_it(void);
+void close_it(void);
+void write_it(void);
+void read_helper(int fd, const char *expected);
+void read_it(void);
 
 void pppasyncattach(void);
 void ppp_test_driver_set_rx( const char *expected, size_t len );

@@ -21,6 +21,9 @@
 #include <rtems.h>
 #include <rtems/rbheap.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 #define PAGE_SIZE 1024
 
 #define PAGE_COUNT 8

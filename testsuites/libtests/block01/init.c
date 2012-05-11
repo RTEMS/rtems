@@ -33,6 +33,9 @@
 #include <rtems/ramdisk.h>
 #include <rtems/diskdevs.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define ASSERT_SC_EQ(sc, sc_expected) rtems_test_assert((sc) == (sc_expected))
