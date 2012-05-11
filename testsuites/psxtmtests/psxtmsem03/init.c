@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,11 @@
 #include "test_support.h"
 #include <pthread.h>
 #include <sched.h>
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void *Middle(void *argument);
+void *Low(void *argument);
 
 #define MAX_SEMS  2
 

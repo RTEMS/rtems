@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +16,9 @@
 #include <errno.h>
 #include <pthread.h>
 #include "test_support.h"
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
 
 pthread_mutex_t MutexId;
 
