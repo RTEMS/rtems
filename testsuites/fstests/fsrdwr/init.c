@@ -26,11 +26,38 @@
 #include "fstest.h"
 #include "pmacros.h"
 
-const char *databuf =
+static const mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+
+static const char databuf [] =
   "Happy days are here again.  Happy days are here again.1Happy "
   "days are here again.2Happy days are here again.3Happy days are here again."
   "4Happy days are here again.5Happy days are here again.6Happy days are here "
   "again.7Happy days are here again.";
+
+static const size_t len = sizeof (databuf) - 1;
+
+static void
+test_case_enter (const char *wd)
+{
+  int status;
+
+  printf ("test case: %s\n", wd);
+
+  status = mkdir (wd, mode);
+  rtems_test_assert (status == 0);
+
+  status = chdir (wd);
+  rtems_test_assert (status == 0);
+}
+
+static void
+test_case_leave (void)
+{
+  int status;
+
+  status = chdir ("..");
+  rtems_test_assert (status == 0);
+}
 
 static void
 read_write_test (void)
@@ -42,22 +69,12 @@ read_write_test (void)
   char *name02 = "name02";
   struct stat statbuf;
   char *readbuf;
-  size_t len = strlen (databuf);
   off_t pos = 0;
 
   int n;
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
+  test_case_enter (__func__);
 
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to  this
-   */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
   /*
    * Create an empty file
    */
@@ -185,11 +202,7 @@ read_write_test (void)
 
   free (readbuf);
 
-  /*
-   * Go back to parent directory
-   */
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
+  test_case_leave ();
 }
 
 static void
@@ -205,22 +218,10 @@ truncate_test03 (void)
   int n;
   int i;
 
-  size_t len = strlen (databuf);
-
   char *readbuf;
   off_t good_size = 100;
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to  this
-   */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  test_case_enter (__func__);
 
   /*
    * Create an empty file
@@ -298,27 +299,15 @@ lseek_test (void)
   const char *name01 = "test_name01";
   struct stat statbuf;
 
-  int n;
+  ssize_t n;
   int i;
 
-  size_t len = strlen (databuf);
   off_t pos;
   ssize_t total_written = 0;
 
   char *readbuf;
-  mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
 
-
-
-  const char *wd = __func__;
-
-  /*
-   * Create a new directory and change the current directory to this
-   */
-  status = mkdir (wd, mode);
-  rtems_test_assert (status == 0);
-  status = chdir (wd);
-  rtems_test_assert (status == 0);
+  test_case_enter (__func__);
 
   /*
    * Create a file and fill with the data.
@@ -525,12 +514,8 @@ lseek_test (void)
 
   status = close (fd);
   rtems_test_assert (status == 0);
-  /*
-   * Go back to parent directory
-   */
-  status = chdir ("..");
-  rtems_test_assert (status == 0);
 
+  test_case_leave ();
 }
 
 void
