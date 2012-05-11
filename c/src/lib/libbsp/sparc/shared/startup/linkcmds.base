@@ -122,6 +122,9 @@ SECTIONS
   } > ram
   .rela.dyn       :
     {
+      data_start = .;
+      _data_start = .;
+      _sdata = . ;
       *(.rela.init)
       *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
       *(.rela.fini)
@@ -165,9 +168,6 @@ SECTIONS
   } >ram
   .data :
   {
-    data_start = .;
-    _data_start = .;
-    _sdata = . ;
     *(.data*)
     *(.gnu.linkonce.d*)
     *(.gcc_except_table*)
