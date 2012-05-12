@@ -1,7 +1,7 @@
 /*
  *  Test for rtems_semaphore_flush
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,11 +16,14 @@
 #include <bsp.h>
 #include <tmacros.h>
 
-void starttask(int arg);
-rtems_task subtask(rtems_task_argument arg);
-
 #include <stdio.h>
 #include <stdlib.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void starttask(int arg);
+rtems_task subtask(rtems_task_argument arg);
+void doTest(void);
 
 #define NTASK 4
 

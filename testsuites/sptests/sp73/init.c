@@ -1,5 +1,5 @@
 /* 
- *  COPYRIGHT (c) 2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,10 @@
 #include <bsp.h>
 #include <inttypes.h>
 #include "tmacros.h"
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task Test_task(rtems_task_argument argument);
 
 rtems_id   Task_id[ 4 ];         /* array of task ids */
 rtems_name Task_name[ 4 ];       /* array of task names */

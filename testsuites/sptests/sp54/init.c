@@ -1,7 +1,12 @@
-/*  Odd Id Cases where API configured but No Threads
- *    + Possibly Valid Id passed to directive
+/**
+ *  @@file
  *
- *  COPYRIGHT (c) 1989-2011.
+ *  Odd Id Cases where API configured but No Threads
+ *    + Possibly Valid Id passed to directive
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +19,9 @@
 #endif
 
 #include <tmacros.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 rtems_task Init(
   rtems_task_argument ignored

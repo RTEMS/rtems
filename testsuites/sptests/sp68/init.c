@@ -25,6 +25,9 @@
 
 #include <tmacros.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 #define TIMER_COUNT 6
 
 #define OBTAIN 0

@@ -19,6 +19,9 @@
 
 #include "tmacros.h"
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 #define FIFO_PATH "/fifo01"
 
 static void test_main(void)

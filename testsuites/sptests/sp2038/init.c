@@ -23,6 +23,9 @@
 
 #include <rtems.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 #define TEST_APPLICABLE \
   (CPU_TIMESTAMP_USE_INT64 == TRUE || CPU_TIMESTAMP_USE_INT64_INLINE == TRUE)
 

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,10 @@
 #include <tmacros.h>
 #include <unistd.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task Task_1(rtems_task_argument arg);
+
 #if defined(INHERIT_CEILING)
   #define TEST_NAME                "66"
   #define TASK_PRIORITY            2
@@ -21,10 +25,6 @@
   #define TEST_NAME                "65"
   #define TASK_PRIORITY            1
 #endif
-
-rtems_task Task_1(
-  rtems_task_argument arg
-);
 
 rtems_task Init(
   rtems_task_argument ignored

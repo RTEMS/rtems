@@ -1,15 +1,5 @@
-/*  Init
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility
- *  of invoking the test routine
- *
- *  Input parameters:
- *    not_used
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-1999.
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -32,6 +22,11 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task read_task(rtems_task_argument not_used);
+void test_main(void);
 
 #define SEND_RCV_BUFSIZ 12
 rtems_id Barrier;
@@ -91,8 +86,7 @@ rtems_task read_task(rtems_task_argument not_used)
   rtems_task_delete( RTEMS_SELF );
 }
 
-
-void test_main(void) //Also acts as the write task
+void test_main(void) /* Also acts as the write task */
 {
 
   rtems_id readTaskID;

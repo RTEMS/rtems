@@ -17,7 +17,11 @@
 #include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
 
-rtems_task task_routine( rtems_task_argument not_used )
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task task_routine(rtems_task_argument not_used);
+
+rtems_task task_routine(rtems_task_argument not_used)
 {
   rtems_status_code sc;
 
@@ -39,8 +43,7 @@ rtems_task Init(
   rtems_id                current_task_id;
   rtems_id                task_id;
   rtems_name              another_task_name;
-  Heap_Information_block  Info;
-  
+
   puts( "\n\n*** TEST USER ENVIRONMENT ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );

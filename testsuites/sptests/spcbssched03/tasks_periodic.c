@@ -19,7 +19,10 @@
 
 #include "system.h"
 
-void overrun_handler_task_4 (
+/* forward declarations to avoid warnings */
+void overrun_handler_task_4(rtems_cbs_server_id server_id);
+
+void overrun_handler_task_4(
   rtems_cbs_server_id server_id
 )
 {

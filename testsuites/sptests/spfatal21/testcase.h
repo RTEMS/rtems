@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +15,7 @@
 
 #include <rtems/libcsupport.h>
 #include <rtems/malloc.h>
+#include <unistd.h>
 
 /* Safe information on real heap */
 extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;

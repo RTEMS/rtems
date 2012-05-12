@@ -13,6 +13,9 @@
 
 #include <tmacros.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 #define MAXIMUM_STACKS 3
 
 typedef struct {

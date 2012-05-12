@@ -16,6 +16,13 @@
 #include <sys/types.h>
 #include <rtems/score/threadq.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void threadq_first_empty(
+  const char               *discipline_string,
+  Thread_queue_Disciplines  discipline
+);
+
 void threadq_first_empty(
   const char               *discipline_string,
   Thread_queue_Disciplines  discipline

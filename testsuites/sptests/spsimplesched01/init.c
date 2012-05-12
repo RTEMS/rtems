@@ -13,6 +13,10 @@
 
 #include <tmacros.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task Test_task(rtems_task_argument unused);
+
 /*
  *  Keep the names and IDs in global variables so another task can use them.
  */

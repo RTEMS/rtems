@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,11 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include <tmacros.h>
 #include <intrcritical.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
+rtems_rate_monotonic_period_states getState(void);
 
 rtems_id Main_task;
 rtems_id Period;

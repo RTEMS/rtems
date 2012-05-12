@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,6 +20,15 @@
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/libcsupport.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void create_all_barriers(void);
+void create_all_semaphores(void);
+void delete_barrier(void);
+void delete_semaphore(void);
+void create_fifo(void);
+void open_fifo(int expected, int flags);
 
 #define MAXIMUM 10
 #define NUM_OPEN_REQ 26

@@ -19,6 +19,9 @@
 
 #include <rtems/score/wkspace.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 static void test_workspace_string_duplicate(void)
 {
   char a [] = "abcd";
