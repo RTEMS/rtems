@@ -1,6 +1,11 @@
-/*  Minimum Size Application Initialization
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  Minimum Size Application Initialization
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +21,9 @@
 
 #include <bsp.h>
 #include <rtems/score/thread.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 rtems_task Init(
   rtems_task_argument ignored
