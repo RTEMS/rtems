@@ -2935,7 +2935,8 @@ rtems_bdbuf_gather_for_purge (rtems_chain_control *purge_list,
     }
     else
     {
-      while (*prev != NULL && cur == (*prev)->avl.right)
+      while (*prev != NULL
+             && (cur == (*prev)->avl.right || (*prev)->avl.right == NULL))
       {
         /* Up */
         cur = *prev;

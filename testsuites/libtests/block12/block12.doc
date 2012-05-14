@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: block12
+
+directives:
+
+  rtems_bdbuf_purge_dev
+
+concepts:
+
+  Ensures that the purge operation traverses the complete block tree

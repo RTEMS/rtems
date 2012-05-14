@@ -5,6 +5,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = POSIX
+SUBDIRS += block12
 SUBDIRS += flashdisk01
 
 SUBDIRS += bspcmdline01 cpuuse malloctest heapwalk putenvtest monitor \

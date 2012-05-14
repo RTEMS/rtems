@@ -33,6 +33,7 @@ AM_CONDITIONAL(HAS_CXX,test "$rtems_cv_HAS_CPLUSPLUS" = "yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+block12/Makefile
 flashdisk01/Makefile
 block01/Makefile
 block02/Makefile
