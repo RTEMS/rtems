@@ -5,13 +5,12 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/io.h>
-
 #include "devfs.h"
+
+#include <rtems/deviceio.h>
 
 int devFS_open(
   rtems_libio_t *iop,
@@ -20,19 +19,14 @@ int devFS_open(
   mode_t         mode
 )
 {
-  rtems_libio_open_close_args_t  args;
-  rtems_status_code              status;
   const devFS_node *np = iop->pathinfo.node_access;
 
-  args.iop   = iop;
-  args.flags = iop->flags;
-  args.mode  = mode;
-
-  status = rtems_io_open(
+  return rtems_deviceio_open(
+    iop,
+    pathname,
+    oflag,
+    mode,
     np->major,
-    np->minor,
-    (void *) &args
+    np->minor
   );
-
-  return rtems_deviceio_errno(status);
 }

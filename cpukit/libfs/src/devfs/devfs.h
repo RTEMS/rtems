@@ -49,12 +49,6 @@ extern const rtems_filesystem_operations_table devFS_ops;
 
 extern const rtems_filesystem_file_handlers_r  devFS_file_handlers;
 
-/**
- *  This routine associates RTEMS status code with errno
- */
-
-extern int rtems_deviceio_errno(rtems_status_code code);
-
 static inline const devFS_data *devFS_get_data(
   const rtems_filesystem_location_info_t *loc
 )

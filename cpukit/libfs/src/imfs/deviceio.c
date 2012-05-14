@@ -4,7 +4,7 @@
  *  This file contains the set of handlers used to map operations on
  *  IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,13 +18,7 @@
 
 #include "imfs.h"
 
-#include <rtems/devfs.h>
-
-/*
- *  device_open
- *
- *  This handler maps an open() operation onto rtems_io_open().
- */
+#include <rtems/deviceio.h>
 
 int device_open(
   rtems_libio_t *iop,
@@ -33,59 +27,34 @@ int device_open(
   mode_t         mode
 )
 {
-  rtems_libio_open_close_args_t  args;
-  rtems_status_code              status;
   IMFS_jnode_t                  *the_jnode;
 
   the_jnode  = iop->pathinfo.node_access;
 
-  args.iop   = iop;
-  args.flags = iop->flags;
-  args.mode  = mode;
-
-  status = rtems_io_open(
+  return rtems_deviceio_open(
+    iop,
+    pathname,
+    oflag,
+    mode,
     the_jnode->info.device.major,
-    the_jnode->info.device.minor,
-    (void *) &args
+    the_jnode->info.device.minor
   );
-
-  return rtems_deviceio_errno( status );
 }
-
-/*
- *  device_close
- *
- *  This handler maps a close() operation onto rtems_io_close().
- */
 
 int device_close(
   rtems_libio_t *iop
 )
 {
-  rtems_libio_open_close_args_t  args;
-  rtems_status_code              status;
   IMFS_jnode_t                  *the_jnode;
 
   the_jnode = iop->pathinfo.node_access;
 
-  args.iop   = iop;
-  args.flags = 0;
-  args.mode  = 0;
-
-  status = rtems_io_close(
+  return rtems_deviceio_close(
+    iop,
     the_jnode->info.device.major,
-    the_jnode->info.device.minor,
-    (void *) &args
+    the_jnode->info.device.minor
   );
-
-  return rtems_deviceio_errno( status );
 }
-
-/*
- *  device_read
- *
- *  This handler maps a read() operation onto rtems_io_read().
- */
 
 ssize_t device_read(
   rtems_libio_t *iop,
@@ -93,36 +62,18 @@ ssize_t device_read(
   size_t         count
 )
 {
-  rtems_libio_rw_args_t   args;
-  rtems_status_code       status;
   IMFS_jnode_t           *the_jnode;
 
   the_jnode = iop->pathinfo.node_access;
 
-  args.iop         = iop;
-  args.offset      = iop->offset;
-  args.buffer      = buffer;
-  args.count       = count;
-  args.flags       = iop->flags;
-  args.bytes_moved = 0;
-
-  status = rtems_io_read(
+  return rtems_deviceio_read(
+    iop,
+    buffer,
+    count,
     the_jnode->info.device.major,
-    the_jnode->info.device.minor,
-    (void *) &args
+    the_jnode->info.device.minor
   );
-
-  if ( status )
-    return rtems_deviceio_errno(status);
-
-  return (ssize_t) args.bytes_moved;
 }
-
-/*
- *  device_write
- *
- *  This handler maps a write() operation onto rtems_io_write().
- */
 
 ssize_t device_write(
   rtems_libio_t *iop,
@@ -130,36 +81,18 @@ ssize_t device_write(
   size_t         count
 )
 {
-  rtems_libio_rw_args_t   args;
-  rtems_status_code       status;
   IMFS_jnode_t           *the_jnode;
 
   the_jnode = iop->pathinfo.node_access;
 
-  args.iop         = iop;
-  args.offset      = iop->offset;
-  args.buffer      = (void *) buffer;
-  args.count       = count;
-  args.flags       = iop->flags;
-  args.bytes_moved = 0;
-
-  status = rtems_io_write(
+  return rtems_deviceio_write(
+    iop,
+    buffer,
+    count,
     the_jnode->info.device.major,
-    the_jnode->info.device.minor,
-    (void *) &args
+    the_jnode->info.device.minor
   );
-
-  if ( status )
-    return rtems_deviceio_errno(status);
-
-  return (ssize_t) args.bytes_moved;
 }
-
-/*
- *  device_ioctl
- *
- *  This handler maps an ioctl() operation onto rtems_io_ioctl().
- */
 
 int device_ioctl(
   rtems_libio_t   *iop,
@@ -167,39 +100,18 @@ int device_ioctl(
   void            *buffer
 )
 {
-  rtems_libio_ioctl_args_t  args;
-  rtems_status_code         status;
   IMFS_jnode_t             *the_jnode;
-
-  args.iop     = iop;
-  args.command = command;
-  args.buffer  = buffer;
 
   the_jnode = iop->pathinfo.node_access;
 
-  status = rtems_io_control(
+  return rtems_deviceio_control(
+    iop,
+    command,
+    buffer,
     the_jnode->info.device.major,
-    the_jnode->info.device.minor,
-    (void *) &args
+    the_jnode->info.device.minor
   );
-
-  if ( status )
-    return rtems_deviceio_errno(status);
-
-  return args.ioctl_return;
 }
-
-/*
- *  device_stat
- *
- *  The IMFS_stat() is used.
- */
-
-/*
- *  device_rmnod
- *
- *  The IMFS_rmnod() is used.
- */
 
 int device_ftruncate(
   rtems_libio_t *iop,

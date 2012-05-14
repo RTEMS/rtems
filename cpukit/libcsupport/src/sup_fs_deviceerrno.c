@@ -13,14 +13,12 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <errno.h>
+#include <rtems/deviceio.h>
 
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <rtems/devfs.h>
+#include <errno.h>
 
 static const int status_code_to_errno [RTEMS_STATUS_CODES_LAST + 1] = {
   [RTEMS_SUCCESSFUL]               = 0,
