@@ -786,6 +786,8 @@ typedef int (*rtems_filesystem_close_t)(
 /**
  * @brief Reads from a node.
  *
+ * This handler is responsible to update the offset field of the IO descriptor.
+ *
  * @param[in, out] iop The IO pointer.
  * @param[out] buffer The buffer for read data.
  * @param[in] count The size of the buffer in characters.
@@ -803,6 +805,8 @@ typedef ssize_t (*rtems_filesystem_read_t)(
 
 /**
  * @brief Writes to a node.
+ *
+ * This handler is responsible to update the offset field of the IO descriptor.
  *
  * @param[in, out] iop The IO pointer.
  * @param[out] buffer The buffer for write data.

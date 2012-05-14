@@ -2311,6 +2311,10 @@ static ssize_t nfs_file_read(
 		}
 	} while (count > 0);
 
+	if (rv > 0) {
+		iop->offset = offset;
+	}
+
 	return rv;
 }
 
@@ -2418,6 +2422,8 @@ int			e;
 	}
 
 	node->age = nowSeconds();
+
+	iop->offset += count;
 
 	return count;
 }

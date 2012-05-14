@@ -121,10 +121,16 @@ ssize_t memfile_read(
 )
 {
   IMFS_jnode_t   *the_jnode;
+  ssize_t         status;
 
   the_jnode = iop->pathinfo.node_access;
 
-  return IMFS_memfile_read( the_jnode, iop->offset, buffer, count );
+  status = IMFS_memfile_read( the_jnode, iop->offset, buffer, count );
+
+  if ( status > 0 )
+    iop->offset += status;
+
+  return status;
 }
 
 /*
@@ -147,6 +153,9 @@ ssize_t memfile_write(
     iop->offset = the_jnode->info.file.size;
 
   status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
+
+  if ( status > 0 )
+    iop->offset += status;
 
   return status;
 }

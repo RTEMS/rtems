@@ -117,6 +117,8 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, size_t count)
 
     ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
                         buffer);
+    if (ret > 0)
+        iop->offset += ret;
 
     rtems_semaphore_release(fs_info->vol_sema);
     return ret;
@@ -163,8 +165,9 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
      * update file size in both fat-file descriptor and file control block if
      * file was extended
      */
-    if (iop->offset + ret > fat_fd->fat_file_size)
-        fat_fd->fat_file_size = iop->offset + ret;
+    iop->offset += ret;
+    if (iop->offset > fat_fd->fat_file_size)
+        fat_fd->fat_file_size = iop->offset;
 
     rtems_semaphore_release(fs_info->vol_sema);
     return ret;

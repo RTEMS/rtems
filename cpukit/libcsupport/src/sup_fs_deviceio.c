@@ -72,6 +72,8 @@ ssize_t rtems_deviceio_read(
 
   status = rtems_io_read( major, minor, &args );
   if ( status == RTEMS_SUCCESSFUL ) {
+    iop->offset += args.bytes_moved;
+
     return (ssize_t) args.bytes_moved;
   } else {
     return rtems_deviceio_errno( status );
@@ -98,6 +100,8 @@ ssize_t rtems_deviceio_write(
 
   status = rtems_io_write( major, minor, &args );
   if ( status == RTEMS_SUCCESSFUL ) {
+    iop->offset += args.bytes_moved;
+
     return (ssize_t) args.bytes_moved;
   } else {
     return rtems_deviceio_errno( status );

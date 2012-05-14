@@ -163,6 +163,9 @@ rtems_rfs_rtems_file_read (rtems_libio_t* iop,
     }
   }
 
+  if (read >= 0)
+    iop->offset = pos + read;
+
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
 
   return read;
@@ -220,7 +223,6 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
       rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
       return rtems_rfs_rtems_error ("file-write: write append seek", rc);
     }
-    iop->offset = pos;
   }
 
   while (count)
@@ -250,6 +252,9 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
       break;
     }
   }
+
+  if (write >= 0)
+    iop->offset = pos + write;
 
   rtems_rfs_rtems_unlock (rtems_rfs_file_fs (file));
 

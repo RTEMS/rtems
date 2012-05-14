@@ -29,7 +29,6 @@ ssize_t write(
   size_t      count
 )
 {
-  ssize_t  rc;
   rtems_libio_t     *iop;
 
   rtems_libio_check_fd( fd );
@@ -42,10 +41,5 @@ ssize_t write(
   /*
    *  Now process the write() request.
    */
-  rc = (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
-
-  if ( rc > 0 )
-    iop->offset += rc;
-
-  return rc;
+  return (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
 }
