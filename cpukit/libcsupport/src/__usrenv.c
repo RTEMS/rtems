@@ -51,7 +51,7 @@ const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers = {
 };
 
 static void null_op_lock_or_unlock(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 )
 {
   /* Do nothing */

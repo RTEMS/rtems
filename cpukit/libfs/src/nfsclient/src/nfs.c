@@ -2086,11 +2086,11 @@ static int nfs_rename(
 	return rv;
 }
 
-static void nfs_lock(rtems_filesystem_mount_table_entry_t *mt_entry)
+static void nfs_lock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
 }
 
-static void nfs_unlock(rtems_filesystem_mount_table_entry_t *mt_entry)
+static void nfs_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
 }
 

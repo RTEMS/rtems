@@ -69,7 +69,7 @@ typedef enum {
  * @see rtems_filesystem_default_lock().
  */
 typedef void (*rtems_filesystem_mt_entry_lock_t)(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -80,7 +80,7 @@ typedef void (*rtems_filesystem_mt_entry_lock_t)(
  * @see rtems_filesystem_default_unlock().
  */
 typedef void (*rtems_filesystem_mt_entry_unlock_t)(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -523,7 +523,7 @@ extern const rtems_filesystem_operations_table
  * @see rtems_filesystem_mt_entry_lock_t.
  */
 void rtems_filesystem_default_lock(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -532,7 +532,7 @@ void rtems_filesystem_default_lock(
  * @see rtems_filesystem_mt_entry_unlock_t.
  */
 void rtems_filesystem_default_unlock(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**

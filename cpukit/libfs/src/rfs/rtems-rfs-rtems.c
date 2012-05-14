@@ -73,7 +73,9 @@ rtems_rfs_rtems_node_type_by_inode (rtems_rfs_inode_handle* inode)
 }
 
 static void
-rtems_rfs_rtems_lock_by_mt_entry (rtems_filesystem_mount_table_entry_t *mt_entry)
+rtems_rfs_rtems_lock_by_mt_entry (
+  const rtems_filesystem_mount_table_entry_t *mt_entry
+)
 {
   rtems_rfs_file_system* fs = mt_entry->fs_info;
 
@@ -81,7 +83,9 @@ rtems_rfs_rtems_lock_by_mt_entry (rtems_filesystem_mount_table_entry_t *mt_entry
 }
 
 static void
-rtems_rfs_rtems_unlock_by_mt_entry (rtems_filesystem_mount_table_entry_t *mt_entry)
+rtems_rfs_rtems_unlock_by_mt_entry (
+  const rtems_filesystem_mount_table_entry_t *mt_entry
+)
 {
   rtems_rfs_file_system* fs = mt_entry->fs_info;
 
