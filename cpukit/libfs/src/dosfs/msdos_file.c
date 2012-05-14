@@ -273,7 +273,6 @@ msdos_file_sync(rtems_libio_t *iop)
 {
     int                rc = RC_OK;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
-    fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
