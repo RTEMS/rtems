@@ -549,10 +549,10 @@ out_nolock:
  * Interface to file system ioctl.
  */
 int pipe_ioctl(
-  pipe_control_t *pipe,
-  uint32_t        cmd,
-  void           *buffer,
-  rtems_libio_t  *iop
+  pipe_control_t  *pipe,
+  ioctl_command_t  cmd,
+  void            *buffer,
+  rtems_libio_t   *iop
 )
 {
   if (cmd == FIONREAD) {

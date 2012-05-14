@@ -96,10 +96,10 @@ extern ssize_t pipe_write(
  * Interface to file system ioctl.
  */
 extern int pipe_ioctl(
-  pipe_control_t *pipe,
-  uint32_t        cmd,
-  void           *buffer,
-  rtems_libio_t  *iop
+  pipe_control_t  *pipe,
+  ioctl_command_t  cmd,
+  void            *buffer,
+  rtems_libio_t   *iop
 );
 
 #ifdef __cplusplus

@@ -33,7 +33,7 @@ static const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   rtems_filesystem_default_close,
   memfile_read,
   memfile_write,
-  memfile_ioctl,
+  rtems_filesystem_default_ioctl,
   rtems_filesystem_default_lseek_file,
   IMFS_stat_file,
   memfile_ftruncate,

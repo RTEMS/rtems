@@ -83,14 +83,11 @@
 #define FIOSETOWN       _IOW('f', 124, int)     /* set owner */
 #define FIOGETOWN       _IOR('f', 123, int)     /* get owner */
 
+typedef uint32_t ioctl_command_t;
+
 #ifndef _KERNEL
 
 #include <sys/cdefs.h>
-
-#ifndef __ioctl_command_defined
-typedef u_int32_t ioctl_command_t;
-#define __ioctl_command_defined
-#endif
 
 __BEGIN_DECLS
 int	ioctl(int, ioctl_command_t, ...);

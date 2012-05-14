@@ -832,9 +832,9 @@ typedef ssize_t (*rtems_filesystem_write_t)(
  * @see rtems_filesystem_default_ioctl().
  */
 typedef int (*rtems_filesystem_ioctl_t)(
-  rtems_libio_t *iop,
-  uint32_t       request,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  request,
+  void            *buffer
 );
 
 /**
@@ -1008,9 +1008,9 @@ ssize_t rtems_filesystem_default_write(
  * @see rtems_filesystem_ioctl_t.
  */
 int rtems_filesystem_default_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  request,
+  void            *buffer
 );
 
 /**
@@ -1225,7 +1225,7 @@ typedef struct {
  */
 typedef struct {
   rtems_libio_t          *iop;
-  uint32_t                command;
+  ioctl_command_t         command;
   void                   *buffer;
   int                     ioctl_return;
 } rtems_libio_ioctl_args_t;

@@ -152,22 +152,6 @@ ssize_t memfile_write(
 }
 
 /*
- *  memfile_ioctl
- *
- *  This routine processes the ioctl() system call.
- *
- *  NOTE:  No ioctl()'s are supported for in-memory files.
- */
-int memfile_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
-)
-{
-  return 0;
-}
-
-/*
  *  memfile_stat
  *
  *  This IMFS_stat() can be used.

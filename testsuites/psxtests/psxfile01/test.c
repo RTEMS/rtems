@@ -334,9 +334,7 @@ int main(
   puts("create /tmp/john");
   fd = open( "/tmp/john", O_RDWR|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO );
   rtems_test_assert( fd != -1 );
-
-  puts("tcdrain /tmp/john" );
-  status = tcdrain( fd );
+  status = close( fd );
   rtems_test_assert( status == 0 );
 
   /* 

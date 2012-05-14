@@ -257,22 +257,6 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
 }
 
 /**
- * This routine processes the ioctl() system call.
- *
- * @note  No ioctl()'s are currently supported for RFS files.
- *
- * @param iop
- * @param command
- * @param buffer
- */
-
-static int
-rtems_rfs_rtems_file_ioctl (rtems_libio_t* iop, uint32_t command, void* buffer)
-{
-  return 0;
-}
-
-/**
  * This routine processes the lseek() system call.
  *
  * @param iop
@@ -351,7 +335,7 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers = {
   .close_h     = rtems_rfs_rtems_file_close,
   .read_h      = rtems_rfs_rtems_file_read,
   .write_h     = rtems_rfs_rtems_file_write,
-  .ioctl_h     = rtems_rfs_rtems_file_ioctl,
+  .ioctl_h     = rtems_filesystem_default_ioctl,
   .lseek_h     = rtems_rfs_rtems_file_lseek,
   .fstat_h     = rtems_rfs_rtems_fstat,
   .ftruncate_h = rtems_rfs_rtems_file_ftruncate,

@@ -14,9 +14,9 @@
 #include "devfs.h"
 
 int devFS_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  command,
+  void            *buffer
 )
 {
   rtems_libio_ioctl_args_t  args;

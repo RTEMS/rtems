@@ -83,9 +83,9 @@ static ssize_t IMFS_fifo_write(
 }
 
 static int IMFS_fifo_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  command,
+  void            *buffer
 )
 {
   int err;
