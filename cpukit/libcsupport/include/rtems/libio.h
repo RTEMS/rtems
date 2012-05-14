@@ -1065,17 +1065,6 @@ off_t rtems_filesystem_default_lseek_file(
 );
 
 /**
- * @retval 0 Always.
- *
- * @see rtems_filesystem_lseek_t.
- */
-off_t rtems_filesystem_default_lseek_file(
-  rtems_libio_t *iop,
-  off_t          offset,
-  int            whence
-);
-
-/**
  * @brief Sets the mode to S_IRWXU | S_IRWXG | S_IRWXO.
  *
  * @retval 0 Always.
