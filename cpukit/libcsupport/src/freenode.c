@@ -21,7 +21,7 @@
 void rtems_filesystem_location_free( rtems_filesystem_location_info_t *loc )
 {
   rtems_filesystem_instance_lock( loc );
-  (*loc->ops->freenod_h)( loc );
+  (*loc->mt_entry->ops->freenod_h)( loc );
   rtems_filesystem_instance_unlock( loc );
   rtems_filesystem_location_remove_from_mt_entry( loc );
 }

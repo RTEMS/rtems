@@ -79,9 +79,9 @@ int IMFS_initialize_support(
     );
     if ( root_node != NULL ) {
       mt_entry->fs_info = fs_info;
+      mt_entry->ops = op_table;
       mt_entry->pathconf_limits_and_options = IMFS_LIMITS_AND_OPTIONS;
       mt_entry->mt_fs_root->location.node_access = root_node;
-      mt_entry->mt_fs_root->location.ops = op_table;
       IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
     } else {
       errno = ENOMEM;

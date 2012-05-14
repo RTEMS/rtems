@@ -32,12 +32,9 @@ int rtems_filesystem_chown(
   int eval_flags = eval_follow_link;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+  const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
 
-  rv = (*currentloc->ops->chown_h)(
-    currentloc,
-    owner,
-    group
-  );
+  rv = (*ops->chown_h)( currentloc, owner, group );
 
   rtems_filesystem_eval_path_cleanup( &ctx );
 

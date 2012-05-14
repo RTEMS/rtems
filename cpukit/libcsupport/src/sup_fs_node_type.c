@@ -25,7 +25,7 @@ rtems_filesystem_node_types_t rtems_filesystem_node_type(
   rtems_filesystem_node_types_t type;
 
   rtems_filesystem_instance_lock(loc);
-  type = (*loc->ops->node_type_h)(loc);
+  type = (*loc->mt_entry->ops->node_type_h)(loc);
   rtems_filesystem_instance_unlock(loc);
 
   return type;

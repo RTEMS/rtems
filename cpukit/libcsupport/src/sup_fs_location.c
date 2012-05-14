@@ -33,7 +33,6 @@ rtems_filesystem_location_info_t *rtems_filesystem_location_copy(
   dst->node_access = src->node_access;
   dst->node_access_2 = src->node_access_2;
   dst->handlers = src->handlers;
-  dst->ops = src->ops;
   dst->mt_entry = src->mt_entry;
   rtems_filesystem_location_add_to_mt_entry(dst);
 
@@ -213,6 +212,6 @@ void rtems_filesystem_do_unmount(
   rtems_chain_extract_unprotected(&mt_entry->mt_node);
   rtems_filesystem_mt_unlock();
   rtems_filesystem_global_location_release(mt_entry->mt_point_node);
-  (*mt_entry->mt_fs_root->location.ops->fsunmount_me_h)(mt_entry);
+  (*mt_entry->ops->fsunmount_me_h)(mt_entry);
   free(mt_entry);
 }

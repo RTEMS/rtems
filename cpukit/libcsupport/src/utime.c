@@ -38,7 +38,7 @@ int utime( const char *path, const struct utimbuf *times )
     times = &now_times;
   }
 
-  rv = (*currentloc->ops->utime_h)(
+  rv = (*currentloc->mt_entry->ops->utime_h)(
     currentloc,
     times->actime,
     times->modtime

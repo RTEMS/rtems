@@ -28,7 +28,11 @@ int fchown( int fd, uid_t owner, gid_t group )
 
   if (iop->pathinfo.mt_entry->writeable) {
     rtems_filesystem_instance_lock( &iop->pathinfo );
-    rv = (*iop->pathinfo.ops->chown_h)( &iop->pathinfo, owner, group );
+    rv = (*iop->pathinfo.mt_entry->ops->chown_h)(
+      &iop->pathinfo,
+      owner,
+      group
+    );
     rtems_filesystem_instance_unlock( &iop->pathinfo );
   } else {
     errno = EROFS;

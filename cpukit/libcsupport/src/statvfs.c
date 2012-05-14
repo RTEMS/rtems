@@ -29,7 +29,7 @@ int statvfs( const char *path, struct statvfs *buf )
 
   memset( buf, 0, sizeof( *buf ) );
 
-  rv = (*currentloc->ops->statvfs_h)( currentloc, buf );
+  rv = (*currentloc->mt_entry->ops->statvfs_h)( currentloc, buf );
 
   rtems_filesystem_eval_path_cleanup( &ctx );
 

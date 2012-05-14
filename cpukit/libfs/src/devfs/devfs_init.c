@@ -56,9 +56,9 @@ int devFS_initialize(
   int rv = 0;
 
   if (data != NULL) {
+    mt_entry->ops = &devFS_ops;
     mt_entry->immutable_fs_info = data;
     mt_entry->mt_fs_root->location.handlers = &devFS_file_handlers;
-    mt_entry->mt_fs_root->location.ops = &devFS_ops;
   } else {
     errno = EINVAL;
     rv = -1;

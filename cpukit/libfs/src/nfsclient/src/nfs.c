@@ -1753,7 +1753,7 @@ char				*path     = mt_entry->dev;
 
 	rootNode = 0;
 
-	mt_entry->mt_fs_root->location.ops		 = &nfs_fs_ops;
+	mt_entry->ops = &nfs_fs_ops;
 	mt_entry->mt_fs_root->location.handlers	 = &nfs_dir_file_handlers;
 	mt_entry->pathconf_limits_and_options = nfs_limits_and_options;
 

@@ -1431,13 +1431,14 @@ extern int rtems_mkdir(const char *path, mode_t mode);
  */
 struct rtems_filesystem_mount_table_entry_tt {
   rtems_chain_node                       mt_node;
+  void                                  *fs_info;
+  const rtems_filesystem_operations_table *ops;
+  const void                            *immutable_fs_info;
   rtems_chain_control                    location_chain;
   rtems_filesystem_global_location_t    *mt_point_node;
   rtems_filesystem_global_location_t    *mt_fs_root;
   bool                                   mounted;
   bool                                   writeable;
-  void                                  *fs_info;
-  const void                            *immutable_fs_info;
   rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
 
   /*

@@ -918,11 +918,10 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
     return rtems_rfs_rtems_error ("initialise: open", rc);
   }
 
-  mt_entry->fs_info = fs;
-
+  mt_entry->fs_info                          = fs;
+  mt_entry->ops                              = &rtems_rfs_ops;
   mt_entry->mt_fs_root->location.node_access = (void*) RTEMS_RFS_ROOT_INO;
   mt_entry->mt_fs_root->location.handlers    = &rtems_rfs_rtems_dir_handlers;
-  mt_entry->mt_fs_root->location.ops         = &rtems_rfs_ops;
 
   rtems_rfs_rtems_unlock (fs);
 

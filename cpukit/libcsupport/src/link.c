@@ -36,7 +36,7 @@ int link( const char *path1, const char *path2 )
     currentloc_2
   );
   if ( rv == 0 ) {
-    rv = (*currentloc_2->ops->link_h)(
+    rv = (*currentloc_2->mt_entry->ops->link_h)(
       currentloc_2,
       currentloc_1,
       rtems_filesystem_eval_path_get_token( &ctx_2 ),

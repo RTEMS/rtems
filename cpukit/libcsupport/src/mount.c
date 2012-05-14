@@ -122,7 +122,7 @@ static int register_subordinate_file_system(
     rtems_filesystem_eval_path_extract_currentloc( &ctx, &targetloc );
     mt_point_node = rtems_filesystem_location_transform_to_global( &targetloc );
     mt_entry->mt_point_node = mt_point_node;
-    rv = (*mt_point_node->location.ops->mount_h)( mt_entry );
+    rv = (*mt_point_node->location.mt_entry->ops->mount_h)( mt_entry );
     if ( rv == 0 ) {
       rtems_filesystem_mt_lock();
       rtems_chain_append_unprotected(
@@ -218,7 +218,7 @@ int mount(
           }
 
           if ( rv != 0 ) {
-            (*mt_entry->mt_fs_root->location.ops->fsunmount_me_h)( mt_entry );
+            (*mt_entry->ops->fsunmount_me_h)( mt_entry );
           }
         }
 

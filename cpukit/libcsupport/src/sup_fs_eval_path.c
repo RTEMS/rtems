@@ -104,7 +104,7 @@ void rtems_filesystem_eval_path_continue(
   int eval_flags;
 
   while (ctx->pathlen > 0) {
-    (*ctx->currentloc.ops->eval_path_h)(ctx);
+    (*ctx->currentloc.mt_entry->ops->eval_path_h)(ctx);
   }
 
   eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
@@ -260,7 +260,7 @@ void rtems_filesystem_eval_path_recursive(
 
       ++ctx->recursionlevel;
       while (ctx->pathlen > 0) {
-        (*ctx->currentloc.ops->eval_path_h)(ctx);
+        (*ctx->currentloc.mt_entry->ops->eval_path_h)(ctx);
       }
       --ctx->recursionlevel;
 
@@ -297,7 +297,7 @@ static void free_location(rtems_filesystem_location_info_t *loc)
 {
   rtems_filesystem_mt_entry_declare_lock_context(lock_context);
 
-  (*loc->ops->freenod_h)(loc);
+  (*loc->mt_entry->ops->freenod_h)(loc);
 
   rtems_filesystem_mt_entry_lock(lock_context);
   rtems_chain_extract_unprotected(&loc->mt_entry_node);

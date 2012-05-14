@@ -14,7 +14,7 @@ void devFS_Show(void)
 {
   rtems_filesystem_location_info_t *rootloc = &rtems_filesystem_root->location;
 
-  if (rootloc->ops == &devFS_ops) {
+  if (rootloc->mt_entry->ops == &devFS_ops) {
     const devFS_data *data = devFS_get_data(rootloc);
     size_t i = 0;
     size_t n = data->count;

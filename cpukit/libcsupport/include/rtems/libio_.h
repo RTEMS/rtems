@@ -250,14 +250,18 @@ static inline void rtems_filesystem_instance_lock(
   const rtems_filesystem_location_info_t *loc
 )
 {
-  (*loc->ops->lock_h)( loc->mt_entry );
+  const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
+
+  (*mt_entry->ops->lock_h)( mt_entry );
 }
 
 static inline void rtems_filesystem_instance_unlock(
   const rtems_filesystem_location_info_t *loc
 )
 {
-  (*loc->ops->unlock_h)( loc->mt_entry );
+  const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
+
+  (*mt_entry->ops->unlock_h)( mt_entry );
 }
 
 /*
@@ -582,9 +586,11 @@ static inline bool rtems_filesystem_location_is_root(
   const rtems_filesystem_location_info_t *loc
 )
 {
-  return (*loc->ops->are_nodes_equal_h)(
+  const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
+
+  return (*mt_entry->ops->are_nodes_equal_h)(
     loc,
-    &loc->mt_entry->mt_fs_root->location
+    &mt_entry->mt_fs_root->location
   );
 }
 

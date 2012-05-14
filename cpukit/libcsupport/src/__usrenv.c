@@ -220,6 +220,7 @@ rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry = {
       .fill = &rtems_filesystem_global_location_null.location.mt_entry_node,
     }
   },
+  .ops = &null_ops,
   .mt_point_node = &rtems_filesystem_global_location_null,
   .mt_fs_root = &rtems_filesystem_global_location_null,
   .mounted = false,
@@ -233,7 +234,6 @@ rtems_filesystem_global_location_t rtems_filesystem_global_location_null = {
       .previous = &rtems_filesystem_null_mt_entry.location_chain.Head.Node
     },
     .handlers = &rtems_filesystem_null_handlers,
-    .ops = &null_ops,
     .mt_entry = &rtems_filesystem_null_mt_entry
   },
 

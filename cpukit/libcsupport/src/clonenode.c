@@ -26,7 +26,7 @@ void rtems_filesystem_location_clone(
   int rv = 0;
 
   clone = rtems_filesystem_location_copy( clone, master );
-  rv = (*clone->ops->clonenod_h)( clone );
+  rv = (*clone->mt_entry->ops->clonenod_h)( clone );
   if ( rv != 0 ) {
     rtems_filesystem_location_remove_from_mt_entry( clone );
     rtems_filesystem_location_initialize_to_null( clone );

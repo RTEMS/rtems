@@ -88,7 +88,6 @@ rtems_bsdnet_makeFdForSocket (void *so)
   iop->data0 = fd;
   iop->data1 = so;
   iop->pathinfo.handlers = &socket_handlers;
-  iop->pathinfo.ops = &rtems_filesystem_operations_default;
   iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
   rtems_filesystem_location_add_to_mt_entry(&iop->pathinfo);
   return fd;

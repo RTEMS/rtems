@@ -101,7 +101,11 @@ int rtems_tarfs_load(
      &ctx,
      RTEMS_FS_MAKE | RTEMS_FS_EXCLUSIVE
    );
-   if (rootloc.ops != &IMFS_ops && rootloc.ops != &fifoIMFS_ops) {
+
+   if (
+     rootloc.mt_entry->ops != &IMFS_ops
+       && rootloc.mt_entry->ops != &fifoIMFS_ops
+   ) {
      rv = -1;
    }
 

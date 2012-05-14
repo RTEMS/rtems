@@ -34,14 +34,11 @@ int rmdir( const char *path )
       &parentloc,
       parent_eval_flags
     );
-  rtems_filesystem_node_types_t type =
-    (*currentloc->ops->node_type_h)( currentloc );
+  const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
+  rtems_filesystem_node_types_t type = (*ops->node_type_h)( currentloc );
 
   if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
-    rv = (*currentloc->ops->rmnod_h)(
-      &parentloc,
-      currentloc
-    );
+    rv = (*ops->rmnod_h)( &parentloc, currentloc );
   } else {
     rtems_filesystem_eval_path_error( &ctx, ENOTDIR );
     rv = -1;
