@@ -34,8 +34,6 @@
  *
  * Note:
  *      This file is included by both C and assembler code ( -DASM )
- *
- *  $Id$
  */
 
 /*

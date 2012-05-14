@@ -18,8 +18,6 @@
  *  from ftp.cygnus.com.  The file which was used had no copyright
  *  notice.  This file is freely distributable as long as the source
  *  of the file is noted.
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_ASM_H

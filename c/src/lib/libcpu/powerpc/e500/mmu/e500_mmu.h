@@ -1,6 +1,5 @@
 #ifndef RTEMS_E500_MMU_DRIVER_H
 #define RTEMS_E500_MMU_DRIVER_H
-/* $Id$ */
 
 /*
  * Routines to manipulate e500 TLBs; TLB0 (fixed 4k page size)

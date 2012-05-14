@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef BSP_BSDNET_ATTACH_INFO_H
 #define BSP_BSDNET_ATTACH_INFO_H
 

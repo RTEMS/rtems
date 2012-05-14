@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This directory contains three useful packages related to the termios I/O
 system:
 

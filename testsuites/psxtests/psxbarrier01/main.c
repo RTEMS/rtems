@@ -1,14 +1,10 @@
 /*
- *  Simple test program -- simplified version of sample test hello.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #define CONFIGURE_INIT
@@ -19,6 +15,9 @@
 
 #include <bsp.h>
 #include <pmacros.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 void test_main( void );
 

@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = pppd
 pppd_SOURCES = init.c pppdapp.c netconfig.h system.h

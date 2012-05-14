@@ -15,8 +15,6 @@
  *  Gaisler Research.
  *
  *  This terms of the RTEMS license apply to this file.
- *
- *  $Id$
  */
 
 #include <bsp.h>

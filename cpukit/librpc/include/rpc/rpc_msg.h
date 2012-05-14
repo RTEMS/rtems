@@ -38,10 +38,6 @@
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
-/*
- * $Id$
- */
-
 #ifndef _RPC_RPC_MSG_H
 #define _RPC_RPC_MSG_H
 

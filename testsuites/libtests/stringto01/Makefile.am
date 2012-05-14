@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = stringto01
 stringto01_SOURCES = init.c

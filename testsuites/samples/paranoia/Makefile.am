@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = paranoia
 paranoia_SOURCES = init.c paranoia.c system.h

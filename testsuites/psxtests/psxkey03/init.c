@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -17,6 +15,11 @@
 #include <errno.h>
 #include "tmacros.h"
 #include "pmacros.h"
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void destructor(void *value);
+void *Test_Thread(void *key_value);
 
 pthread_key_t Key;
 volatile bool destructor_ran;

@@ -1,17 +1,19 @@
-/*
+/**
+ *  @file
+ *
  *  This test exercises the following routines:
  *
  *    + readv
  *    + writev
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 
@@ -41,8 +43,13 @@
   #define rtems_test_exit(_s) exit(_s)
 #endif
 
-#define TESTFILE "testfile1.tst"
+/* forward declarations to avoid warnings */
+int test_main(void);
+int fillPatternBuffer(void);
+int doFunctionalTest(void);
+int doErrorTest(void);
 
+#define TESTFILE "testfile1.tst"
 
 /* This buffer size is assumed in the iovec initialization below */
 #define MAX_BUFFER 1000
@@ -58,7 +65,6 @@ unsigned char ReadBuffer[MAX_BUFFER];
  *          FALSE if buffer failed to fill
  *
  */
-
 int fillPatternBuffer(void)
 {
   int retval = TRUE;
@@ -81,8 +87,8 @@ int fillPatternBuffer(void)
  *          FALSE if an operation did not work as expected.
  *
  */
-
-int doFunctionalTest(void) {
+int doFunctionalTest(void)
+{
   FILE         *fp;
   int           fd;
   struct iovec  rdvec[4];
@@ -167,7 +173,6 @@ int doFunctionalTest(void) {
  *          FALSE if an operation did not work as expected.
  *
  */
-
 int doErrorTest(void)
 {
   FILE         *fp;

@@ -55,8 +55,6 @@
  *
  *  Further modified for the PPC405EX Haleakala board by
  *  Michael Hamel ADInstruments Ltd May 2008
- *
- *  $Id$
  */
 #include <string.h>
 #include <fcntl.h>

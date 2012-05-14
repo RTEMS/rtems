@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = tm26
 tm26_SOURCES = task1.c system.h fptest.h ../include/timesys.h \

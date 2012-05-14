@@ -9,7 +9,6 @@
  * Modified by Bill Fenner, PARC, April 1995
  *
  * MROUTING Revision: 3.5
- * $Id$
  */
 
 #ifdef HAVE_CONFIG_H

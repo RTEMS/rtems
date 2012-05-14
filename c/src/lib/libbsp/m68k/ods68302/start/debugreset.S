@@ -1,6 +1,4 @@
 /*
- *  $Id$
- *
  *  Re-written the gen68302 start-up code.
  *
  *  Uses gas syntax only, removed the OAR asm.h.

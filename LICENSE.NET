@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The RTEMS TCP/IP stack is a port of the FreeBSD TCP/IP stack.  The following
 copyright and licensing information applies to this code.
 

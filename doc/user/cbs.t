@@ -2,9 +2,6 @@
 @c  COPYRIGHT (c) 2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id:$
-@c
 
 @chapter Constant Bandwidth Server Scheduler API
 

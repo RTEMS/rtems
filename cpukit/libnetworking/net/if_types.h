@@ -31,9 +31,6 @@
  * $NetBSD: if_types.h,v 1.16 2000/04/19 06:30:53 itojun Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NET_IF_TYPES_H_
 #define _NET_IF_TYPES_H_

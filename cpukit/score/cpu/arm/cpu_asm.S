@@ -7,8 +7,6 @@
  */
 
 /*
- *  $Id$
- *
  *  This file contains all assembly code for the ARM implementation
  *  of RTEMS.
  *

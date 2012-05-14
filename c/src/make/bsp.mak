@@ -1,6 +1,4 @@
 #
-# $Id$
-#
 # Makefile fragment to convert <bsp>.cfgs into <bsp>.cache
 #
 

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spsize
 spsize_SOURCES = init.c getint.c size.c system.h

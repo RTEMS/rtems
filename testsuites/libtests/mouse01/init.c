@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -28,6 +26,19 @@
 #include "tmacros.h"
 
 #define UID_MESSAGE_COUNT 10
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+bool enqueue_next_action(
+  const unsigned char *actions,
+  size_t               max,
+  size_t               to_enqueue
+);
+void open_it(void);
+void register_it(void);
+void printf_uid_message(struct MW_UID_MESSAGE *uid);
+void receive_uid_message(void);
+void close_it(void);
 
 extern const char *Mouse_Type_Long;
 extern const char *Mouse_Type_Short;

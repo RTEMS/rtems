@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Trivial page table setup for RTEMS
  * Purpose: allow write protection of text/ro-data
  */

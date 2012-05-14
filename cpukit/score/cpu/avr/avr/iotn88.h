@@ -29,7 +29,6 @@
   POSSIBILITY OF SUCH DAMAGE. 
 */
 
-/* $Id$ */
 
 /* avr/iotn88.h - definitions for ATtiny88 */
 

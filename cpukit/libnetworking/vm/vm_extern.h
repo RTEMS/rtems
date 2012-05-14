@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/vm/vm_extern.h,v 1.78 2006/05/29 21:28:56 tegge Exp $
  */
 
-/*
- * $Id$
- */
 #ifndef _VM_EXTERN_H_
 #define	_VM_EXTERN_H_
 

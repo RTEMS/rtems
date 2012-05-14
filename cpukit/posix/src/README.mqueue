@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This program should print out the default attribute settings for a 
 POSIX message queue.
 

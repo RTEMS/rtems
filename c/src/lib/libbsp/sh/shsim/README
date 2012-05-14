@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Simple BSP for the SH simulator built into gdb.
 
 Simulator Invocation

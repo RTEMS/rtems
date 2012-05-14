@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Simple BSP for the TX3904 simulator built into gdb.
 
 Simulator Invocation

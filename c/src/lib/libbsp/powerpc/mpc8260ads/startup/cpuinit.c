@@ -2,8 +2,6 @@
  *  cpuinit.c - this file contains functions for initializing the CPU
  *
  *  Written by Jay Monkman (jmonkman@frasca.com)
- *
- *  $Id$
  */
 
 #include <bsp.h>

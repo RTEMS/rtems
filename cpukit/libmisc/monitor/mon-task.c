@@ -1,7 +1,5 @@
 /*
  * RTEMS Monitor task support
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

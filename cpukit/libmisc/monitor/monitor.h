@@ -4,9 +4,6 @@
  * The RTEMS monitor task.
  */
 
-/*
- *  $Id$
- */
 
 #ifndef __MONITOR_H
 #define __MONITOR_H

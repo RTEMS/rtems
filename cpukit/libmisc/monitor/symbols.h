@@ -7,8 +7,6 @@
  *
  *
  *  TODO:
- *
- *  $Id$
  */
 
 #ifndef _INCLUDE_SYMBOLS_H

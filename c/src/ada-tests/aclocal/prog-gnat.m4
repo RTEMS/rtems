@@ -1,4 +1,3 @@
-## $Id$
 ##
 ## Partially borrowed from gcc-3.2
 ##

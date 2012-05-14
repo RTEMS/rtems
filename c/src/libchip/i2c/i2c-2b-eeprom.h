@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef I2C_2B_EEPROM_DRIVER_H
 #define I2C_2B_EEPROM_DRIVER_H
 

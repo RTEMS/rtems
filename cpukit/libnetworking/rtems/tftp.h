@@ -1,8 +1,4 @@
 /*
- *  $Id$
- */
-
-/*
  * Trivial File Transfer Protocol (TFTP)
  *
  * Transfer file to/from remote host

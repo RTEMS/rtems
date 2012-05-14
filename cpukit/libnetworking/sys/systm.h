@@ -35,9 +35,6 @@
  * $FreeBSD: src/sys/sys/systm.h,v 1.248 2007/01/15 15:06:27 rrs Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _SYS_SYSTM_H_
 #define	_SYS_SYSTM_H_

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #include <rtems.h>
 #include <libcpu/mmu.h>
 #include <libcpu/page.h>

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = tm30
 tm30_SOURCES = init.c ../include/timesys.h \

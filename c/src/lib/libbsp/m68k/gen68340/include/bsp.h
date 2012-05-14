@@ -3,8 +3,6 @@
  *
  * Based on the `gen68360' board support package, and covered by the
  * original distribution terms.
- *
- *  $Id$
  */
 
 /*  bsp.h

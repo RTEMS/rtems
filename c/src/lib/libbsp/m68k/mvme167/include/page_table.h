@@ -15,8 +15,6 @@
  *
  *  Modifications of respective RTEMS files:
  *  Copyright (c) 1998, National Research Council of Canada
- *
- *  $Id$
  */
 
 #ifndef __PAGE_TABLE_H

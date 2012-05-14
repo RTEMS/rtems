@@ -4,8 +4,6 @@
  *
  *  This file contains the entry point vector needed by some bootloaders
  *  derived from "vectors.S"
- *
- * $Id$
  */
 
 #include <rtems/asm.h>

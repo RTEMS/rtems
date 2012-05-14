@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * RTEMS CS8900 Driver Setup for the DIMM-PC/i386 made by Kontron.
  *
  * Port to the DIMM PC copyright (c) 2004 Angelo Fraietta
@@ -8,7 +6,7 @@
  *   through the Australia Council, its arts funding and advisory body.
  *
  * Port performed by Chris Johns, Cybertec Pty Ltd, Jan 2004.
- *  Based on the Cybertec CS8900 driver setup for the SFP-101.
+ * Based on the Cybertec CS8900 driver setup for the SFP-101.
  *
  */
 

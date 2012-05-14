@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 
 There are a wide range of PC configurations.  This BSP has been tested 
 on only a handful.  There are configurations which do not yet work.  The

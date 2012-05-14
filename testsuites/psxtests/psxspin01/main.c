@@ -1,14 +1,16 @@
-/*
- *  Simple test program wrapper for Spinlocks
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  Simple test program wrapper for Spinlocks
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #define CONFIGURE_INIT
@@ -19,8 +21,10 @@
 
 #include <bsp.h>
 #include <pmacros.h>
-
-void test_main( void );
+ 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument ignored);
+void test_main(void);
 
 rtems_task Init(
   rtems_task_argument ignored

@@ -33,8 +33,6 @@
  */
 
 /*
- * $Id$
- *
  * Modifications are made to compile for RTEMS. Removes asm.h and printf.h.
  * Removes write().
  *

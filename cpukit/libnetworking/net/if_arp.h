@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if_arp.h,v 1.21 2005/01/07 01:45:34 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NET_IF_ARP_H_
 #define	_NET_IF_ARP_H_

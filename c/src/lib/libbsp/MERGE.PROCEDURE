@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 When adding a BSP to the RTEMS tree, there is usually some cleanup
 to be done. 
 

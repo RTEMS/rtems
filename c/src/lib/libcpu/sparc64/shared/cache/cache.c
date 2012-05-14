@@ -1,7 +1,5 @@
 /*
  *  Cache Management Support Routines for the SPARC 64
- *
- *  $Id$
  */
 
 #include <rtems.h>

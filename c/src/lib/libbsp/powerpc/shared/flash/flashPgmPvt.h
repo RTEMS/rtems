@@ -1,7 +1,6 @@
 #ifndef FLASH_GLUE_INTERFACE_H
 #define FLASH_GLUE_INTERFACE_H
 
-/* $Id$         */
 
 /* Trivial flash programmer (for restrictions see below)     */
 

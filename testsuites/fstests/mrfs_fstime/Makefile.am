@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = mrfs_fstime
 mrfs_fstime_SOURCES  = ../fstime/test.c

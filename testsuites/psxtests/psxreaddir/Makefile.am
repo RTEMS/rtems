@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxreaddir
 psxreaddir_SOURCES = main.c test.c ../include/pmacros.h

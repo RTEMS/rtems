@@ -1,6 +1,4 @@
 ## Process this file with autoconf to produce a configure script.
-##
-## $Id$
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libbsp-no_cpu-no_bsp],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])

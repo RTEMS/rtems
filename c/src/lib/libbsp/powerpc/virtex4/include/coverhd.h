@@ -20,8 +20,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id: coverhd.h 63 2011-04-26 00:23:51Z claus $
  */
 
 /*

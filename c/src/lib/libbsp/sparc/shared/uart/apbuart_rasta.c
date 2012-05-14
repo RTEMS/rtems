@@ -1,4 +1,3 @@
-
 #undef DEBUG
 
 /* Set registered device name */

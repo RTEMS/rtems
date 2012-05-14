@@ -1,8 +1,6 @@
 /*
  *  PSIM addresses and constants based upon the configuration
  *  of devices used in the script provided by RTEMS.
- *
- *  $Id$
  */
 
 #ifndef __PSIM_h

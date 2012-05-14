@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Ported by Rosimildo da Silva.
  * ConnectTel,Inc.
  * e-mail: rdasilva@connecttel.com

@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This BSP is designed to support multiple Motorola PowerPC boards.  The
 following extract from some email from Eric Valette should provide
 the basic information required to use this BSP on other models.

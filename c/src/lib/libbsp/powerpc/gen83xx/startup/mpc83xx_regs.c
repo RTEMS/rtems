@@ -20,9 +20,6 @@
 | this file places the mpc83xx registers into a special section   |
 \*===============================================================*/
 
-/*
- *  $Id$
- */
 
 #include <mpc83xx/mpc83xx.h>
 

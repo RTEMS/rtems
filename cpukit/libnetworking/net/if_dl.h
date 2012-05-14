@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if_dl.h,v 1.14 2005/01/07 01:45:34 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NET_IF_DL_H_
 #define _NET_IF_DL_H_

@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +20,10 @@
 #include <sched.h>
 
 #include <rtems/posix/pthread.h> /* for PTHREAD_MINIMUM_STACK_SIZE */
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void *Test_Thread(void *arg);
 
 void *Stack_Low;
 void *Stack_High;
@@ -48,9 +50,7 @@ void *Test_Thread(void *arg)
   return NULL;
 }
 
-void *POSIX_Init(
-  rtems_task_argument argument
-)
+void *POSIX_Init(void *argument)
 {
 #if HAVE_DECL_PTHREAD_ATTR_SETSTACK
   int                 sc;

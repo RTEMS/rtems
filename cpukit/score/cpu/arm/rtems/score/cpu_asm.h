@@ -7,8 +7,6 @@
  */
 
 /*
- *  $Id$
- *
  *  COPYRIGHT (c) 2002 by Advent Networks, Inc.
  *          Jay Monkman <jmonkman@adventnetworks.com>
  *

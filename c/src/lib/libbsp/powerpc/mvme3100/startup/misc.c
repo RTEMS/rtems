@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Miscellaneous small BSP routines; reboot, board CSR, ... */
 
 /*

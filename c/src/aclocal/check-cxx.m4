@@ -1,5 +1,3 @@
-dnl $Id$
-dnl
 AC_DEFUN([RTEMS_CHECK_CXX],
 [dnl
 AC_REQUIRE([RTEMS_PROG_CC_FOR_TARGET])dnl

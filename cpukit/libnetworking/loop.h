@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #ifndef _RTEMS_BSDNET_LOOP_H
 #define _RTEMS_BSDNET_LOOP_H
 

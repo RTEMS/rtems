@@ -2,8 +2,6 @@
  * RTEMS MPCI Config display support
  *
  * TODO
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

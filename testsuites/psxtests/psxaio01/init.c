@@ -4,8 +4,6 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -26,6 +24,10 @@
 
 #define BUFSIZE 512
 #define WRONG_FD 404
+
+/* forward declarations to avoid warnings */
+struct aiocb *create_aiocb(int fd);
+void free_aiocb(struct aiocb *aiocbp);
 
 struct aiocb *
 create_aiocb (int fd)

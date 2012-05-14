@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* very crude and basic fs utilities for testing the NFS */
 
 /* Till Straumann, <strauman@slac.stanford.edu>, 10/2002 */

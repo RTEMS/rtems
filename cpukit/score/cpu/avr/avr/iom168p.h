@@ -29,7 +29,6 @@
   POSSIBILITY OF SUCH DAMAGE. 
 */
 
-/* $Id$ */
 
 /* avr/iom168p.h - definitions for ATmega168P. */
 

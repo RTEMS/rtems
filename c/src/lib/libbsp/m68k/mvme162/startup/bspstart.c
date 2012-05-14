@@ -17,8 +17,6 @@
  *  This material is a part of the MVME162 Board Support Package
  *  for the RTEMS executive. Its licensing policies are those of the
  *  RTEMS above.
- *
- *  $Id$
  */
 
 #include <bsp.h>

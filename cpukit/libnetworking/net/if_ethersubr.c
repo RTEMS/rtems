@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if_ethersubr.c,v 1.189 2005/03/06 22:59:40 sobomax Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

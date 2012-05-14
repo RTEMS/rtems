@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = devnullfatal01
 devnullfatal01_SOURCES = ../../sptests/spfatal_support/init.c \

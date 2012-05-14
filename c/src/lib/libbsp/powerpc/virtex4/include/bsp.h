@@ -36,8 +36,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: bsp.h 63 2011-04-26 00:23:51Z claus $
- *
  */
 
 #ifndef _BSP_H

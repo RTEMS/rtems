@@ -1,6 +1,4 @@
 /*------------------------------------------------------------------------------
-	$Id$
-
 	key input code -- provides slightly higher level input forming
 
 	Copyright (C) 2005

@@ -30,7 +30,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)nfsdiskless.h	8.1 (Berkeley) 6/10/93
- * $Id$
  */
 
 #ifndef _NFS_NFSDISKLESS_H_

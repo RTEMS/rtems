@@ -1,6 +1,5 @@
 /* lr33000.h - LSI LR33000 CPU header */
 
-/* $Id$ */
 
 /*
 modification history

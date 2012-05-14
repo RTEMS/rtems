@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This is the BSP for Nintendo's GBA and GBA SP.  The RTEMS Wiki
 has more detailed information on this BSP.
 

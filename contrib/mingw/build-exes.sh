@@ -1,7 +1,4 @@
 #! /bin/sh
-#
-# $Id$
-#
 # RTEMS Build Executable Installers script.
 #
 # This script takes the RPM files built using the mingw/build-rpms.sh

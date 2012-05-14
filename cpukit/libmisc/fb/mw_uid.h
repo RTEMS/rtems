@@ -7,8 +7,6 @@
 
 /*
  * Copyright (c) 2000 - Rosimildo da Silva
- *
- * $Id$
  */
 
 #ifndef _MW_UID_H

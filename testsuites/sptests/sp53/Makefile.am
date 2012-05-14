@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp53
 sp53_SOURCES = ../sp52/init.c

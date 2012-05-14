@@ -16,8 +16,6 @@
  *      software without specific, written prior permission.
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
- *
- *  $Id: mips_timer.S,v 1.1 2011/12/09 18:06:08 joel Exp $
  */
 /* @(#)clock.S       08/20/96     1.2 */
 

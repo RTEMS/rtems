@@ -1,9 +1,6 @@
 @c  COPYRIGHT (c) 1988-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @c The following macros from confdefs.h have not been discussed in this
 @c chapter:

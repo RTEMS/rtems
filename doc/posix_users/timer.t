@@ -1,9 +1,6 @@
 @c
 @c  This is the chapter from the RTEMS POSIX 1003.1b API User's Guide that
 @c  documents the services provided by the timer @c  manager.
-@c
-@c  $Id$
-@c
 
 @chapter Timer Manager
 

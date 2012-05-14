@@ -20,9 +20,6 @@
  *  by Rosimildo da Silva:
  *  Modified the test a bit to indicate when an instance is
  *  global or not, and added code to test C++ exception.
- *
- *
- *  $Id$
  */
 
 #include <rtems.h>

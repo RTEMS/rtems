@@ -16,8 +16,6 @@
  *
  *  Eric sent some e-mail in the rtems-list as a start point for this
  *  module implementation.
- *
- *  $Id$
  */
 
 #ifndef __GCC_WRAPPERS_h 

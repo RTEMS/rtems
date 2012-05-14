@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spfifo02
 spfifo02_SOURCES = init.c

@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -18,6 +16,9 @@
 #include <rtems/termiostypes.h>
 #include <rtems/dumpbuf.h>
 
+/* forward declarations to avoid warnings */
+void ppp_test_driver_set_rx(const char *expected, size_t len);
+void pppasyncattach(void);
 int  pppopen(struct rtems_termios_tty *tty);
 int  pppclose(struct rtems_termios_tty *tty);
 int  pppread(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args);

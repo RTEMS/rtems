@@ -2,9 +2,6 @@
 #  Timing Test Suite Results for the SPARC Instruction Simulator BSP
 #
 #  NOTE:  The ERC32 is derived from the Cypress 601/602 chip set.
-#
-#  $Id$
-#
 
 Board:                SPARC Instruction Simulator v1.8
 CPU:                  include coprocessor if applicable

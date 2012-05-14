@@ -1,14 +1,16 @@
-/*
- *  This file contains a test fixture termios device driver
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2011.
+ *  This file contains a test fixture termios device driver
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +24,19 @@
 #include <rtems/termiostypes.h>
 #include <rtems/dumpbuf.h>
 #include "termios_testdriver_polled.h"
+
+/* forward declarations to avoid warnings */
+int termios_test_driver_inbyte_nonblocking(int port);
+void termios_test_driver_outbyte_polled(int port, char ch);
+ssize_t termios_test_driver_write_support(
+  int         minor,
+  const char *buf,
+  size_t      len
+);
+int termios_test_driver_set_attributes(
+  int                   minor,
+  const struct termios *t
+);
 
 #define TX_MAX 1024
 uint8_t Tx_Buffer[TX_MAX];

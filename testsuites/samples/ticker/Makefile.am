@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = ticker
 ticker_SOURCES = init.c tasks.c system.h

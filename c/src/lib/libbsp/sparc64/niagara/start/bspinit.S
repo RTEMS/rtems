@@ -11,8 +11,6 @@
  * 
  *  This code defines start code specific to the sun4v BSP
  *
- *  $Id$
- *
  */
 
 #include <rtems/asm.h>

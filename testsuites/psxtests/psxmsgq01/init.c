@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +20,46 @@
 #include <signal.h>   /* signal facilities */
 #include "test_support.h"
 
+/* forward declarations to avoid warnings */
+void Start_Test(char *description);
+void Validate_attributes(mqd_t mq, int oflag, int msg_count);
+char *Build_Queue_Name(int i);
+void open_test_queues(void);
+void validate_mq_open_error_codes(void);
+void validate_mq_unlink_error_codes(void);
+void validate_mq_close_error_codes(void);
+void validate_mq_getattr_error_codes(void);
+void Send_msg_to_que(int que, int msg);
+void Show_send_msg_to_que(char *task_name, int que, int msg);
+void verify_queues_full(char *task_name);
+void verify_queues_empty(char *task_name);
+int empty_message_queues(char *task_name);
+int fill_message_queues(char *task_name);
+void Read_msg_from_que(int que, int msg);
+int validate_mq_send_error_codes(void);
+void validate_mq_receive_error_codes(void);
+void verify_open_functionality(void);
+void verify_unlink_functionality(void);
+void verify_close_functionality(void);
+void verify_timed_send_queue(int que, int is_blocking);
+void verify_timed_send(void);
+void verify_timed_receive_queue(char *task_name, int que, int is_blocking);
+void verify_timed_receive(void);
+void wait_for_signal(sigset_t *waitset, int sec, int expect_signal);
+void verify_notify(void);
+void verify_with_threads(void);
+void verify_timedout_mq_timedreceive(
+        char *task_name, int que, int is_blocking);;
+void verify_timedout_mq_timedsend(int que, int is_blocking);
+void verify_timed_receive(void);
+void validate_mq_setattr(void);
+void verify_timedout_mq_timedreceive(
+  char *task_name, int que, int is_blocking);
+void verify_mq_receive(void);
+void verify_timedout_mq_timedsend(int que, int is_blocking);
+void verify_mq_send(void);
+void verify_timed_receive(void);
+
 #define fatal_posix_mqd( _ptr, _msg ) \
   if ( (_ptr != (mqd_t) -1) ) { \
     check_dispatch_disable_level( 0 ); \
@@ -31,12 +69,12 @@
     rtems_test_exit( -1 ); \
   }
 
-
 typedef struct {
   char         msg[ 50 ];
   int          size;
   unsigned int priority;
-}Test_Message_t;
+} Test_Message_t;
+
 Test_Message_t Predefined_Msgs[MAXMSG+1];
 Test_Message_t Predefined_Msgs[MAXMSG+1] = {
   { "12345678",   9, MQ_PRIO_MAX-1 },  /* Max Length Message med  */
@@ -95,9 +133,9 @@ void Start_Test(
 
 
 void Validate_attributes(
-    mqd_t  mq,
-    int    oflag,
-    int    msg_count
+  mqd_t  mq,
+  int    oflag,
+  int    msg_count
 )
 {
   int             status;
@@ -116,8 +154,8 @@ void Validate_attributes(
 }
 
 #define Get_Queue_Name( i )  Test_q[i].name
-char *Build_Queue_Name( int i ) {
-
+char *Build_Queue_Name(int i)
+{
   static char Queue_Name[PATH_MAX + 2];
 
   sprintf(Queue_Name,"mq%d", i+1 );
@@ -530,7 +568,6 @@ int empty_message_queues(
  * Returns the number of messages queued after the test on the
  * first queue.
  */
-
 int validate_mq_send_error_codes(void)
 {
   int             status;
@@ -1369,22 +1406,6 @@ void *Task_5 (
   print_current_time( "Task_5: ", "" );
 
   puts( "Task_5: pthread_exit" );
-  pthread_exit( NULL );
-
-     /* switch to Init */
-
-  return NULL; /* just so the compiler thinks we returned something */
-
-}
-
-void *Task_ (
-  void *argument
-)
-{
-
-  print_current_time( "Task_: ", "" );
-
-  puts( "Task_: pthread_exit" );
   pthread_exit( NULL );
 
      /* switch to Init */

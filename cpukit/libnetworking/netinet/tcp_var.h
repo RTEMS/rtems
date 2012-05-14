@@ -30,10 +30,6 @@
  * $FreeBSD: src/sys/netinet/tcp_var.h,v 1.121 2005/04/21 20:11:01 ps Exp $
  */
  
-/*
- * 	$Id$
- */
-
 #ifndef _NETINET_TCP_VAR_H_
 #define _NETINET_TCP_VAR_H_
 

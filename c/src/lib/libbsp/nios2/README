@@ -1,6 +1,3 @@
-#
-#  $Id$
-#
 #  Goal is to have BSPs build almost completely automatically from a template
 #  and information that comes from SOPC Builder as a .PTF file. Most of the
 #  code will go to a shared/ BSP directory.

@@ -1,7 +1,5 @@
 /*
  *  MC68681 Default Baud Rate Table
- *
- *  $Id$
  */
 
 #include <rtems.h>

@@ -32,8 +32,6 @@
  *
  *  Copied from newlib 1.8.1.  RTEMS can not build all of the contents
  *  of the UNIX directory but we need this routine.
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

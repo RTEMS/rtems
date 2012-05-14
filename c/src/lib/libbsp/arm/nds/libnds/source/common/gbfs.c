@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	access object in a GBFS file
 
 	Copyright 2002-2005 Damian Yerrick

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spfatal10
 spfatal10_SOURCES = ../spfatal_support/init.c ../spfatal_support/system.h \

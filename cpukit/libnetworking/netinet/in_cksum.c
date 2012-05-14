@@ -27,7 +27,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)in_cksum.c	8.1 (Berkeley) 6/10/93
- * $Id$
  */
 
 #ifdef HAVE_CONFIG_H

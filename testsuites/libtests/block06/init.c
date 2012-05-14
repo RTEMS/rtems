@@ -4,8 +4,6 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
 /**
@@ -30,6 +28,9 @@
 #include <rtems/chain.h>
 #include <rtems/error.h>
 #include <rtems/bdbuf.h>
+
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
 
 #define BDBUF_DISKS 2
 #define BDBUF_SIZE  1024

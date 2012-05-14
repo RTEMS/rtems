@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/netisr.h,v 1.33 2005/01/07 01:45:35 imp Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NET_NETISR_H_
 #define _NET_NETISR_H_

@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	jtypes.h -- Common types (and a few useful macros)
 
 	Copyright (C) 2005

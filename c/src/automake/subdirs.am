@@ -1,5 +1,3 @@
-## $Id$
-
 ## Borrowed from automake-1.4 and adapted to RTEMS
 
 ## NOTE: This is a temporary work-around to keep

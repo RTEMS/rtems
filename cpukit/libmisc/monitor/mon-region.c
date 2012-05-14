@@ -1,7 +1,5 @@
 /*
  * RTEMS Monitor region support
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

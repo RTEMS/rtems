@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Altivec support for RTEMS; vector register context management.  */
 
 /*

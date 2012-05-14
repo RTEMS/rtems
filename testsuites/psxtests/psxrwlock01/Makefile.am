@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxrwlock01
 psxrwlock01_SOURCES = main.c test.c ../include/pmacros.h

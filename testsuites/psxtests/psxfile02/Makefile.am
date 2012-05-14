@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxfile02
 psxfile02_SOURCES = init.c ../../support/src/spin.c

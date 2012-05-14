@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* MotLoad VPD format */
 
 /*

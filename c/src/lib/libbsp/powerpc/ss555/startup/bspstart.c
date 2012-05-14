@@ -19,8 +19,6 @@
  *
  *  Modifications for MBX860:
  *  Copyright (c) 1999, National Research Council of Canada
- *
- *  $Id$
  */
 
 #warning The interrupt disable mask is now stored in SPRG0, please verify that this is compatible to this BSP (see also bootcard.c).

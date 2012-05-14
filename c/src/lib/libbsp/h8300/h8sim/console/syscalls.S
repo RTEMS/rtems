@@ -1,8 +1,6 @@
 /*
  *  System call support for simulator in gdb.
  *  Copied from newlib 1.16.0.
- *
- *  $Id$
  */
 
 ;;;; libc/machine/h8300/setarch.h

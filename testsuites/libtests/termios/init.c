@@ -18,8 +18,6 @@
  * Institute for Information Technology
  * National Research Council of Canada
  * charles.gauthier@nrc.ca
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -28,21 +26,6 @@
 
 #include <bsp.h>
 
-
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-
-#define CONFIGURE_MAXIMUM_TASKS       1
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_MICROSECONDS_PER_TICK 1000
-
-#define CONFIGURE_INIT
-
-rtems_task Init (rtems_task_argument argument);
-
-#include <rtems/confdefs.h>
 #include <rtems/shell.h>
 
 #include <stdio.h>
@@ -52,6 +35,24 @@ rtems_task Init (rtems_task_argument argument);
 #include <string.h>
 
 #include <tmacros.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void print_32bits(unsigned long bits, unsigned char size, char * names[]);
+void print_c_iflag(struct termios * tp);
+void print_c_oflag(struct termios * tp);
+void print_c_lflag(struct termios * tp);
+void print_c_cflag(struct termios * tp);
+void print_c_cc(struct termios * tp);
+void print_termios(struct termios *tp);
+unsigned long get_baud_rate(void);
+unsigned long get_parity(void);
+unsigned long get_stop_bits(void);
+unsigned long get_data_bits(void);
+void change_line_settings(struct termios *tp);
+void canonical_input(struct termios *tp);
+void do_raw_input(int vmin, int vtime);
+void usage(void);
 
 #if !defined(fileno)
 int fileno( FILE *stream); /* beyond ANSI */
@@ -440,7 +441,7 @@ void print_termios( struct termios *tp )
 }
 
 
-unsigned long get_baud_rate( void )
+unsigned long get_baud_rate(void)
 {
   unsigned long baud_rate;
 
@@ -797,3 +798,19 @@ Init (rtems_task_argument ignored)
     rtems_test_exit( 0 );
   }
 }
+
+/* application configuration */
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS       1
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_MICROSECONDS_PER_TICK 1000
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+/* end of configuration */
+

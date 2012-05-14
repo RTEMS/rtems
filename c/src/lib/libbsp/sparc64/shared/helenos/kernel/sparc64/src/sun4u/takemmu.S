@@ -27,8 +27,6 @@
 #
 
 /*
- * $Id$
- *
  * This file originally is sparc64/src/sun4u/start.S
  * A lot of changes are made to the code, because we only need the relevant 
  * portions for taking over the D- and I-MMUs.

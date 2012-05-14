@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxcleanup01
 psxcleanup01_SOURCES = init.c ../include/pmacros.h

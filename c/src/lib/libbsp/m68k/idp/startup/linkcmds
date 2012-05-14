@@ -2,8 +2,6 @@
  * for the idp.ld file.  That file, it appears, was originally written by
  * Rob Savoye.  Other ideas came from Joel Sherrill for the RTEMS linkcmds
  * file (this is basically a mixture of the two).
- *
- *  $Id$
  */
 
 /*

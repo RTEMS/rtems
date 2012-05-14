@@ -1,15 +1,17 @@
-/*
+/**
+ *  @file
+ *
  *  A test support function which performs a write() and
  *  handles implied open(), lseek(), write(), and close() operations.
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,10 +29,12 @@
 
 #include <pmacros.h>
 
+/* forward declarations to avoid warnings */
+void test_write(char *file, off_t offset, char *buffer);
+
 /*
  *  test_write routine
  */
-
 void test_write(
   char   *file,
   off_t  offset,

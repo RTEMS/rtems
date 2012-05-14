@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psx06
 psx06_SOURCES = init.c task.c task2.c system.h ../include/pmacros.h

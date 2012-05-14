@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 BSP NAME:           eZKit533
 BOARD:              ADSP-BF533 EzKit Lite 
 CPU FAMILY:         Blackfin

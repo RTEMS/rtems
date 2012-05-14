@@ -1,19 +1,17 @@
-/*-------------------------------------------------------------------------+
-| bsp.h - ARM BSP
-+--------------------------------------------------------------------------+
-| This include file contains definitions related to the ARM BSP.
-+--------------------------------------------------------------------------+
-|
-| Copyright (c) Canon Research France SA.]
-| Emmanuel Raguet, mailto:raguet@crf.canon.fr
-|
-|  The license and distribution terms for this file may be
-|  found in the file LICENSE in this distribution or at
-|  http://www.rtems.com/license/LICENSE.
-|
-|  $Id$
-+--------------------------------------------------------------------------*/
+/**
+ *  @file
+ * 
+ * This include file contains definitions related to the GP32 BSP.
+ */
 
+/*
+ * Copyright (c) Canon Research France SA.]
+ * Emmanuel Raguet, mailto:raguet@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
 
 #ifndef _BSP_H
 #define _BSP_H

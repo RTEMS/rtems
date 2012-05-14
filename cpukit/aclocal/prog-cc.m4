@@ -1,5 +1,3 @@
-dnl
-dnl $Id$
 dnl 
 dnl Check for target gcc
 dnl

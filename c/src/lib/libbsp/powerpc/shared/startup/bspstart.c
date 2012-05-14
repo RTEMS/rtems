@@ -13,8 +13,6 @@
  *
  *  Modified to support the MCP750.
  *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
- *
- *  $Id$
  */
 
 #include <string.h>

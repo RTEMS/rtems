@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -20,6 +18,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument ignored);
 
 rtems_task Init(
   rtems_task_argument ignored

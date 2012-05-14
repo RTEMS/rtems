@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spnsext01
 spnsext01_SOURCES = init.c

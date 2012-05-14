@@ -4,8 +4,6 @@
 #
 #  Author: Jake Janovetz 7.6.1999
 #
-#  $Id$
-#
 
 untar.c contains two procedures for extracting files from a UNIX
 tar file:

@@ -5,8 +5,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -60,27 +58,27 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  rtems_name                 name;
+  rtems_name                 name RTEMS_GCC_NOWARN_UNUSED;
   uint32_t                   index RTEMS_GCC_NOWARN_UNUSED;
   rtems_id                   id RTEMS_GCC_NOWARN_UNUSED;
-  rtems_task_priority        in_priority;
+  rtems_task_priority        in_priority RTEMS_GCC_NOWARN_UNUSED;
   rtems_task_priority        out_priority RTEMS_GCC_NOWARN_UNUSED;
-  rtems_mode                 in_mode;
-  rtems_mode                 mask;
+  rtems_mode                 in_mode RTEMS_GCC_NOWARN_UNUSED;
+  rtems_mode                 mask RTEMS_GCC_NOWARN_UNUSED;
   rtems_mode                 out_mode RTEMS_GCC_NOWARN_UNUSED;
-  uint32_t                   note;
+  uint32_t                   note RTEMS_GCC_NOWARN_UNUSED;
   rtems_time_of_day          time RTEMS_GCC_NOWARN_UNUSED;
-  rtems_interval             timeout;
-  rtems_signal_set           signals;
+  rtems_interval             timeout RTEMS_GCC_NOWARN_UNUSED;
+  rtems_signal_set           signals RTEMS_GCC_NOWARN_UNUSED;
   void                      *address_1 RTEMS_GCC_NOWARN_UNUSED;
   rtems_event_set            events RTEMS_GCC_NOWARN_UNUSED;
   long                       buffer[ 4 ] RTEMS_GCC_NOWARN_UNUSED;
   uint32_t                   count RTEMS_GCC_NOWARN_UNUSED;
-  rtems_device_major_number  major;
-  rtems_device_minor_number  minor;
+  rtems_device_major_number  major RTEMS_GCC_NOWARN_UNUSED;
+  rtems_device_minor_number  minor RTEMS_GCC_NOWARN_UNUSED;
   uint32_t                   io_result RTEMS_GCC_NOWARN_UNUSED;
-  uint32_t                   error;
-  rtems_clock_get_options    options;
+  uint32_t                   error RTEMS_GCC_NOWARN_UNUSED;
+  rtems_clock_get_options    options RTEMS_GCC_NOWARN_UNUSED;
 
   name        = rtems_build_name( 'N', 'A', 'M', 'E' );
   in_priority = 250;

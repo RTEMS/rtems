@@ -1,6 +1,3 @@
-#
-#  $Id$
-#
 echo Setting up the environment for mrm debuging.\n
 
 target bdm /dev/bdmcpu320

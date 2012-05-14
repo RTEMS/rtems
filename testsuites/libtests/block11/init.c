@@ -37,6 +37,9 @@
 #include <rtems/diskdevs.h>
 #include <rtems/malloc.h>
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define CHUNK_MAX 32U

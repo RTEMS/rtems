@@ -34,9 +34,6 @@
  * $FreeBSD: src/sys/netinet/ip_mroute.h,v 1.31 2007/02/08 23:05:08 bms Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NETINET_IP_MROUTE_H_
 #define _NETINET_IP_MROUTE_H_

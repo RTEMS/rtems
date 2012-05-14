@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/tcp.h,v 1.30 2005/01/07 01:45:45 imp Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef _NETINET_TCP_H_
 #define _NETINET_TCP_H_

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 rtems_tests_PROGRAMS = psxeintr_join
 psxeintr_join_SOURCES = init.c
 

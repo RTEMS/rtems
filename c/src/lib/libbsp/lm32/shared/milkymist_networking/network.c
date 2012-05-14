@@ -5,8 +5,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
- *
  *  COPYRIGHT (c) Yann Sionneau <yann.sionneau@telecom-sudparis.eu> (GSoC 2010)
  *  Telecom SudParis, France
  *  Copyright (C) 2011 Sebastien Bourdeauducq

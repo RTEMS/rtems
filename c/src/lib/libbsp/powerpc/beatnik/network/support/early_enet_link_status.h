@@ -1,4 +1,3 @@
-/*$Id$*/
 #ifndef BSP_EARLY_ENET_LINK_STATUS_H
 #define BSP_EARLY_ENET_LINK_STATUS_H
 

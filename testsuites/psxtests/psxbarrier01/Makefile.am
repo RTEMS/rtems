@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxbarrier01
 psxbarrier01_SOURCES = main.c test.c ../include/pmacros.h

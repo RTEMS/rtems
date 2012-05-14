@@ -1,6 +1,3 @@
-;
-; $Id$
-;
 ; RTEMS Tools Installer.
 ;
 ; Copyright Chris Johns (chrisj@rtems.org)

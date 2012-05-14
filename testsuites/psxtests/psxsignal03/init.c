@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -47,7 +45,6 @@
 
 #else
   #error "Test Mode not defined"
-
 #endif
 
 #include <pmacros.h>
@@ -55,6 +52,12 @@
 #include <errno.h>
 #include <pthread.h>
 #include <sched.h>
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void *Test_Thread(void *arg);
+void Signal_handler(int signo, siginfo_t *info, void *arg);
+const char *signal_name(int signo);
 
 volatile bool      Signal_occurred;
 volatile pthread_t Signal_thread;

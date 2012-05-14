@@ -13,8 +13,6 @@
  *  May 1996
  *
  *  This file was taken from the DMV152 bsp
- *
- *  $Id$
  */
 
 #define M147_INIT

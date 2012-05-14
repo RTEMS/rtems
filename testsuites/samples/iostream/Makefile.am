@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = cxx_iostream
 cxx_iostream_SOURCES = init.cc system.h

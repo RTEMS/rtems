@@ -18,8 +18,6 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id: ebi-cs-config.c,v 1.1 2011/08/31 16:03:09 sh Exp $
  */
 
 #include <bsp/mpc55xx-config.h>

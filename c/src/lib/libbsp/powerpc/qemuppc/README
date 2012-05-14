@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 This BSP is designed to operate on the PPC simulator provided by qemu.
 We are using the Courverture Project's qemu source tree.
 

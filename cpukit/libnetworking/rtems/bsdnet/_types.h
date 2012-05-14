@@ -26,9 +26,6 @@
  * $FreeBSD: src/sys/sys/_types.h,v 1.21 2005/03/22 01:19:17 das Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _RTEMS_BSDNET__TYPES_H_
 #define _RTEMS_BSDNET__TYPES_H_

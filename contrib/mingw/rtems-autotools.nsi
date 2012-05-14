@@ -1,6 +1,3 @@
-;
-; $Id$
-;
 ; RTEMS Autotools Installer.
 ;
 ; Copyright Chris Johns (chrisj@rtems.org)

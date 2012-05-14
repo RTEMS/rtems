@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 /*****************************************************/
 
 Debugged this stub against the MongooseV bsp.  Relies on putting break

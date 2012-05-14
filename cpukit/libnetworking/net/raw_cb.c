@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/raw_cb.c,v 1.34 2006/06/02 08:27:15 rwatson Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

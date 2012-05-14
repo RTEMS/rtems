@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* RPC multiplexor for a multitasking environment */
 
 /* Author: Till Straumann <strauman@slac.stanford.edu>, 2002 */

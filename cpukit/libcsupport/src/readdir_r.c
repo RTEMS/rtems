@@ -1,7 +1,5 @@
 /*
  *  readdir_r - reentrant version of readdir()
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

@@ -1,4 +1,3 @@
-/* $Id$ */
 #include <rtemscompat.h>
 
 /* Template for driver task, setup and attach routines. To be instantiated

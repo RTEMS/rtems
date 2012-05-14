@@ -5,8 +5,6 @@
  *
  *  The routine is placed in this source directory to ensure that it
  *  is picked up by all applications.
- *
- *  $Id$
  */
 
 #include <string.h>

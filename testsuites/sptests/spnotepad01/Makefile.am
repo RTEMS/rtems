@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spnotepad01
 spnotepad01_SOURCES = init.c

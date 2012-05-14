@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The mpci.h file provided in here is too simple for an MPCI with
 multiple ways to get to a node.
 

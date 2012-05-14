@@ -1,8 +1,4 @@
-dnl
-dnl $Id$
-dnl
 dnl Check whether the target compiler accepts -specs
-dnl
 
 AC_DEFUN([RTEMS_GCC_SPECS],
 [AC_REQUIRE([RTEMS_PROG_CC])

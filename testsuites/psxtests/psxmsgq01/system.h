@@ -1,16 +1,17 @@
-/*  system.h
+/**
+ *  @file
  *
  *  This include file contains information that is included in every
  *  function in the test set.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 /* functions */
@@ -21,13 +22,10 @@
 #include <sched.h>
 #include <tmacros.h>
 
-void *POSIX_Init(
-  void *argument
-);
-
-void *Task_1_through_3(
-  void *argument
-);
+void *POSIX_Init(void *argument);
+void *Task_1_through_3(void *argument);
+void *Task_4(void *argument);
+void *Task_5(void *argument);
 
 /* configuration information */
 

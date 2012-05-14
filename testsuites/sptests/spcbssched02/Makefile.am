@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spcbssched02
 spcbssched02_SOURCES = init.c task_periodic.c system.h

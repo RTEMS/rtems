@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/ip_output.c,v 1.271 2007/03/23 09:43:36 bms Exp $
  */
 
-/*
- *	$Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

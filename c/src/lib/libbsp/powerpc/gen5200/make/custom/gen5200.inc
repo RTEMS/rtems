@@ -1,8 +1,6 @@
 #
 #  Shared base config file for GEN5200 BSPs
 #
-#  $Id$
-#
 
 include $(RTEMS_ROOT)/make/custom/default.cfg
 

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxspin02
 psxspin02_SOURCES = main.c test.c ../include/pmacros.h

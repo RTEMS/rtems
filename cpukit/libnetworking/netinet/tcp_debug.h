@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/tcp_debug.h,v 1.17 2009/02/13 15:14:43 luigi Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NETINET_TCP_DEBUG_H_
 #define	_NETINET_TCP_DEBUG_H_

@@ -11,8 +11,6 @@
  * occur during the measured time period.
  *
  * An external counter, Timer_interrupts, is incremented.
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

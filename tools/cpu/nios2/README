@@ -1,5 +1,3 @@
-$Id$
-
 nios2gen:
   Tool to generate BSP data for boards utilizing NIOS2 soft core processor.
 

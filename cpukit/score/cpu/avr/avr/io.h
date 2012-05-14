@@ -29,7 +29,6 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
 
 /** \file */
 /** \defgroup avr_io <avr/io.h>: AVR device-specific IO definitions

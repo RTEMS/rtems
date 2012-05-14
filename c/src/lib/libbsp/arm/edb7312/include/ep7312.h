@@ -14,8 +14,6 @@
  *        or write only. The data sheet says not to write the read
  *        only one or read the write only one. I'm not sure what will
  *        happen if you do.
- *
- *  $Id$
 */
 #ifndef __EP7312_H__
 #define __EP7312_H__

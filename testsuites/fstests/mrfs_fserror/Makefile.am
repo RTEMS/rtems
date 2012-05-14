@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = mrfs_fserror
 mrfs_fserror_SOURCES  = ../fserror/test.c

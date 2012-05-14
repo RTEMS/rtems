@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # doxygen input filter
-# $Id$
 
 # usage: doxy-filter <input-file-name>
 # Reads <input-file> and writes to stdout.

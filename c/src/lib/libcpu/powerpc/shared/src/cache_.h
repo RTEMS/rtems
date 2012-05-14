@@ -10,8 +10,6 @@
  *  Cache Management Support Routines for the MC68040
  * Modified for MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
  * Surrey Satellite Technology Limited (SSTL), 2001
- *
- *  $Id$
  */
 
 #ifndef LIBCPU_POWERPC_CACHE_H

@@ -33,9 +33,6 @@
  * $FreeBSD: src/sys/nfsclient/nfsargs.h,v 1.67 2005/01/07 01:45:51 imp Exp $
  */
 
-/*
- * $Id$
- */
  
 #ifndef _NFSCLIENT_NFSARGS_H_
 #define _NFSCLIENT_NFSARGS_H_

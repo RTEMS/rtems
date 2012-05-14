@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = heapwalk
 heapwalk_SOURCES = init.c system.h

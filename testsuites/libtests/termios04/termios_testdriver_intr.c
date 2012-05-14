@@ -1,14 +1,16 @@
-/*
- *  This file contains a test fixture termios device driver
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2011.
+ *  This file contains a test fixture termios device driver
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -23,6 +25,30 @@
 #include <rtems/dumpbuf.h>
 #include "termios_testdriver_intr.h"
 
+/* forward declarations to avoid warnings */
+void termios_test_driver_wait_for_tx_to_complete(void);
+rtems_timer_service_routine Rx_ISR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
+rtems_timer_service_routine Tx_ISR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
+ssize_t termios_test_driver_write_helper(
+  int         port,
+  const char *buf,
+  size_t      len
+);
+int termios_test_driver_set_attributes(
+  int                   minor,
+  const struct termios *t
+);
+#if defined(TASK_DRIVEN)
+  int termios_test_driver_inbyte_nonblocking(int port);
+#endif
+
+/* global variables */
 rtems_id Rx_Timer;
 rtems_id Tx_Timer;
 

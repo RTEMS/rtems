@@ -7,8 +7,6 @@
  */
 
 /*
- *  $Id$
- *
  *  Copyright (c) 2007 by Ray Xu, <Rayx.cn@gmail.com>
  *          Thumb support added.
  *

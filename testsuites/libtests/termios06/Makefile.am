@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = termios06
 termios06_SOURCES = init.c ../termios03/termios_testdriver_polled.c test_pppd.c

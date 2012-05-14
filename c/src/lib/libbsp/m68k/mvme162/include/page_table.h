@@ -1,27 +1,6 @@
 /*
- *  $Id$
- *
  *  This file was submitted by Eric Vaitl <vaitl@viasat.com> and
  *  supports page table initialization.
- *
- *  $Log$
- *  Revision 1.2  1995/12/19 20:10:12  joel
- *  changes remerged after disk crash -- history lost
- *
- * Revision 1.1  1995/12/19  19:22:36  joel
- * file lost in crash and re-added
- *
- * Revision 1.1  1995/12/05  15:29:19  joel
- * added.. submitted by  Eric Vaitl <vaitl@viasat.com>
- *
- * Revision 1.2  1995/10/27  21:00:33  vaitl
- * Modified page table routines so application code can map
- * VME space.
- *
- * Revision 1.1  1995/10/25  17:16:06  vaitl
- * Working on page table. Caching partially set up, but can't currently
- * set tc register.
- *
  */
 
 #ifndef PAGE_TABLE_H

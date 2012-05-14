@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 This BSP is designed to operate on the AVR Mega128 variants.
 
 It has been run on AVRTEST and SIMULAVRXX simulators.

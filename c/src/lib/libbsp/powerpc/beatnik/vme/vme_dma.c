@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Setup/glue to attach VME DMA driver to the beatnik BSP */
 
 /* 

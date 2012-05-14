@@ -29,7 +29,6 @@
   POSSIBILITY OF SUCH DAMAGE. 
 */
 
-/* $Id$ */
 
 /* avr/iom32hvb.h - definitions for ATmega32HVB. */
 

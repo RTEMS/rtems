@@ -8,7 +8,6 @@
 
 #ifndef _RTEMS_LIBI2C_H
 #define _RTEMS_LIBI2C_H
-/*$Id$*/
 
 /*
  * Authorship

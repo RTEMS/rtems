@@ -1,7 +1,5 @@
 /*
  *  newlib-1.8.2/newlib/libc/sys/sh/trap.S
- *
- *  $Id$
  */
         .text
         .global ___trap34

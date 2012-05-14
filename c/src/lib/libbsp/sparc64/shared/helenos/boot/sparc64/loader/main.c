@@ -28,8 +28,6 @@
  */
 
 /*
- * $Id$
- *
  * Modifications are made to switch to using printk rather than printf,
  * and to remove portions of the HelenOS bootstrap process that are 
  * unnecessary on RTEMS.  The removed code is elided with #if 0 ... #endif

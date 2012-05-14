@@ -6,8 +6,6 @@
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
  *
- *  $Id$
- *
  * Modify for Motorola 68en320 Ethernet Controller
  * CXR S.A. France - 2000/09/14  - franckj@cxr.fr
  */

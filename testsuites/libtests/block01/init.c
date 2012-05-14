@@ -18,8 +18,6 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -34,6 +32,9 @@
 #include <rtems.h>
 #include <rtems/ramdisk.h>
 #include <rtems/diskdevs.h>
+
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
 
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 

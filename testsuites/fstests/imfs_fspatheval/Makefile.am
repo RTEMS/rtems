@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = imfs_fspatheval
 imfs_fspatheval_SOURCES  = ../fspatheval/test.c

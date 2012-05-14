@@ -29,7 +29,6 @@
   POSSIBILITY OF SUCH DAMAGE. 
 */
 
-/* $Id$ */
 
 /* avr/iom328p.h - definitions for ATmega328P. */
 

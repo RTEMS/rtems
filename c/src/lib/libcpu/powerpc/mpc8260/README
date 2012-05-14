@@ -1,5 +1,3 @@
-#
-#  $Id$
 #  Modified from mpc860 version by A. Dachs, 28-4-00
 
 Various non BSP dependant support routines.

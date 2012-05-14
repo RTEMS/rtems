@@ -4,9 +4,6 @@
  *  This file provides simple ring buffer functionality.
  */
 
-/*
- *  $Id$
- */
 
 #ifndef _RTEMS_RINGBUF_H
 #define _RTEMS_RINGBUF_H

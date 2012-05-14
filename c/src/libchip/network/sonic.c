@@ -21,8 +21,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
- *
  *  This driver was originally written and tested on a DY-4 DMV177,
  *  which had a 100 Mhz PPC603e.
  *

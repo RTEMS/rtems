@@ -1,6 +1,4 @@
 /*  network.c: An 82596 ethernet driver for rtems-bsd.
- *
- *  $Id$
  */
 
 #define KERNEL

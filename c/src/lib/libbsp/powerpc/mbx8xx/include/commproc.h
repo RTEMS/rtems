@@ -1,4 +1,3 @@
-
 /*
  * MPC8xx Communication Processor Module.
  * Copyright (c) 1997 Dan Malek (dmalek@jlc.net)

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if_loop.c,v 1.104 2005/02/24 01:34:01 sam Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

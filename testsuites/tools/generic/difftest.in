@@ -2,8 +2,6 @@
 #
 #  Check test results against official output from the src tree
 #
-#  $Id$
-#
 
 # XXX: do not run size.exe with this; it asks questions we don't answer
 

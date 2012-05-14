@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/net/if_llc.h,v 1.13 2006/12/01 17:50:11 imp Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef _NET_IF_LLC_H_
 #define _NET_IF_LLC_H_

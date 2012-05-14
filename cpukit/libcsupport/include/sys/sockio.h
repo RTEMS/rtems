@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/sockio.h,v 1.31 2006/07/09 06:04:00 sam Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef	_SYS_SOCKIO_H_
 #define	_SYS_SOCKIO_H_

@@ -29,7 +29,6 @@
   POSSIBILITY OF SUCH DAMAGE. 
 */
 
-/* $Id$ */
 
 /* avr/iotn43u.h - definitions for ATtiny43U */
 

@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/ip_icmp.h,v 1.26 2005/05/04 13:09:19 andre Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _NETINET_IP_ICMP_H_
 #define _NETINET_IP_ICMP_H_

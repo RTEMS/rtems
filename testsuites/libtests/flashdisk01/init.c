@@ -32,6 +32,9 @@
 
 #include "test-file-system.h"
 
+/* forward declarations to avoid warnings */
+static rtems_task Init(rtems_task_argument argument);
+
 #define FLASHDISK_CONFIG_COUNT 1
 
 #define FLASHDISK_DEVICE_COUNT 1

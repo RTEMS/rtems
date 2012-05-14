@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -18,6 +16,14 @@
 #include <errno.h>
 #include <pthread.h>
 #include "test_support.h"
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void benchmark_mutex_lock_available(void);
+void benchmark_mutex_unlock_no_threads_waiting(void);
+void benchmark_mutex_trylock_available(void);
+void benchmark_mutex_trylock_not_available(void);
+void benchmark_mutex_timedlock_available(void);
 
 pthread_mutex_t MutexId;
 
@@ -77,7 +83,6 @@ void benchmark_mutex_trylock_available(void)
     0
   );
 }
-
 
 void benchmark_mutex_trylock_not_available(void)
 {

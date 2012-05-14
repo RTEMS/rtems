@@ -1,6 +1,5 @@
 #ifndef RPCIO_H
 #define RPCIO_H
-/* $Id$ */
 
 /* A multihreaded RPC/UDP multiplexor */
 

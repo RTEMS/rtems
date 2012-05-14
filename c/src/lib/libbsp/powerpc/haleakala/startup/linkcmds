@@ -7,8 +7,6 @@
  *  Modifications for gen405 by Dennis Ehlin
  *  Modifications for virtex by Keith, Greg, and Bob
  *  Modifications for 405GP/EX by Michael Hamel
- *
- *  $Id$
  */
 
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")

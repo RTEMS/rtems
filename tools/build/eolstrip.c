@@ -6,8 +6,6 @@
  *
  *  usage:  eolstrip  [ -v ] [ arg ... ] files...
  *           -v          -- verbose
- *
- * $Id$
  */
 
 #define GETOPTARGS "vt"

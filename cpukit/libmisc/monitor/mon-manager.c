@@ -1,8 +1,6 @@
 /*
  * RTEMS Monitor "manager" support.
  * Used to traverse object (chain) lists and print them out.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

@@ -16,8 +16,6 @@
  *       10..x      data bytes in ascii-hex
  *       x+1..x+2   cksum (2's compl of (len+addr+data))
  *       x+3        \n -- newline
- *
- *  $Id$
  */
 
 char *USAGE = "\

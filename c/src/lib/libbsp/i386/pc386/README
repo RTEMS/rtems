@@ -1,8 +1,4 @@
 #
-#  $Id$
-#
-
-#
 # This board support package works with a target PC
 #
 # Decisions to be made a link-edit time are:

@@ -14,8 +14,6 @@
  *
  *  Modifications for MBX860:
  *  Copyright (c) 1999, National Research Council of Canada
- *
- *  $Id$
  */
 
 #include <bsp.h>

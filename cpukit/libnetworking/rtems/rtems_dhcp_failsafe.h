@@ -1,6 +1,4 @@
 /*
-  $Id$
-
   Description: Wrapper around DHCP client to restart it when the interface
                moves to another network.
 

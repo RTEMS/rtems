@@ -3,10 +3,6 @@
 #  This script supports the cut_release by performing module specific
 #  answers and answering module specific questions.
 #
-#  Module: RTEMS
-#
-#  $Id$
-#
 
 usage()
 {

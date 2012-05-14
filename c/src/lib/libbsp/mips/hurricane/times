@@ -3,9 +3,6 @@
 #
 #  NOTE: This is just a template.  The times are irrelevant since this BSP
 #        can only be compiled -- not executed.
-#
-#  $Id$
-#
 
 NOTE:  To obtain the execution time in microseconds, divide the number of
        cycles by the clock speed.  For example, if rtems_semaphore create

@@ -30,7 +30,6 @@
 
 /* avr/iom324.h - definitions for ATmega324 */
 
-/* $Id$ */
 
 #ifndef _AVR_IOM324_H_
 #define _AVR_IOM324_H_ 1

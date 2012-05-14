@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The following are targets for the GNU tools (gcc, binutils, newlib, and gdb)
 that are for RTEMS, their object format, and status notes
 

@@ -1,6 +1,4 @@
 /*---------------------------------------------------------------------------------
-	$Id$
-
 	Power control, keys, and HV clock registers
 
 	Copyright (C) 2005

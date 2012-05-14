@@ -1,7 +1,5 @@
 /*
  * Classic API Init task create failure
- *
- *  $Id$
  */
 
 /*

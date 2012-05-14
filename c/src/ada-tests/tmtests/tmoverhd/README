@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This test is of marginal usefulness in testing the bindings.  It
 shows how much overhead is required to call the Ada binding
 routine but does not give any indication of how much overhead the

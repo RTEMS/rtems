@@ -1,7 +1,3 @@
-##
-##  $Id$
-##
-
 
 rtems_tests_PROGRAMS = imfs_fssymlink
 imfs_fssymlink_SOURCES  = ../fssymlink/test.c

@@ -28,7 +28,6 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
 
 /* avr/iomx8.h - definitions for ATmega48, ATmega88 and ATmega168 */
 

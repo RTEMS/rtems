@@ -51,9 +51,6 @@
  * expanded.  printf is now a builtin of netbsd's sh and csh.
  */
 
-/*
- *  $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

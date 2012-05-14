@@ -22,8 +22,6 @@
  *    - Discovery GT64260 interrupt controller instead of 8259.
  *    - Added support for software IRQ priority levels.
  *    - modified to optimize the IRQ latency and handling
- *
- *  $Id$
  */
 
 #ifndef LIBBSP_POWERPC_MVME5500_IRQ_IRQ_H

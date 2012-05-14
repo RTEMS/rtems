@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The following files really should be made generic and allowed to
 be shared between BSPs:
 

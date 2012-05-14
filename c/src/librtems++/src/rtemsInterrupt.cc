@@ -1,7 +1,5 @@
 /*
   ------------------------------------------------------------------------
-  $Id$
-  ------------------------------------------------------------------------
 
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
@@ -19,6 +17,8 @@
 */
 
 #include <rtems++/rtemsInterrupt.h>
+
+#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 
 /* ----
    Interrupt Table
@@ -38,9 +38,6 @@ static bool initialised = false;
 
 #include <cstdlib>
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-
-typedef void * ISR_Handler void *;
 rtemsInterrupt::rtemsInterrupt()
   : vector(0),
     caught(false),

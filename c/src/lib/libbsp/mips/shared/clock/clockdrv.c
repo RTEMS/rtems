@@ -5,8 +5,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id: clockdrv.c,v 1.2 2012/02/06 14:17:28 jennifer Exp $
  */
 
 #include <bsp.h>

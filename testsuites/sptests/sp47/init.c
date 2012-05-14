@@ -1,7 +1,5 @@
 /*
  *  Submitted as part of PR1357
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

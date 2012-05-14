@@ -18,8 +18,6 @@
  *           interrupt stack location, direction and size
  *           floating point config stuff
  *           interrupt config stuff
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

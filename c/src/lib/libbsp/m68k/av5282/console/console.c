@@ -1,10 +1,8 @@
- /*
-  *  Multi UART console serial I/O.
-  *
-  *  TO DO: Add DMA input/output
-  *
-  *  $Id$
-  */
+/*
+ *  Multi UART console serial I/O.
+ *
+ *  TO DO: Add DMA input/output
+ */
 
 #include <stdio.h>
 #include <fcntl.h>

@@ -2,8 +2,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -23,6 +21,12 @@
   #include <bsp.h>
   #include <pmacros.h>
 #endif
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void countTask_cancel_handler(void *ignored);
+void *countTaskDeferred(void *ignored);
+void *countTaskAsync(void *ignored);
 
 volatile bool countTask_handler;
 

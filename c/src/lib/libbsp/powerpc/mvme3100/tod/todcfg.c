@@ -6,8 +6,6 @@
  * http://www.rtems.com/license/LICENSE.
  *
  * Modified for mvme3100 by T. Straumann, 2007
- *
- * $Id$
  */
 
 #include <bsp.h>

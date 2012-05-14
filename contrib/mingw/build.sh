@@ -1,7 +1,4 @@
 #! /bin/sh
-#
-# $Id$
-#
 # RTEMS Build script.
 #
 # This script builds the RPM files then the Windows executables.

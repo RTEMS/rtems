@@ -1,6 +1,5 @@
 /* lr333x0.h - LSI LR333x0 CPU header */
 
-/* $Id$ */
 
 #ifndef __INClr333x0h
 #define __INClr333x0h

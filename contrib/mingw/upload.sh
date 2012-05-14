@@ -1,7 +1,5 @@
 #! /bin/sh
 
-# $Id$
-#
 # RTEMS Installers and Source Upload script.
 #
 # This script copies the executable and source to the RTEMS FTP server. It is for

@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The location of the vectors file object is critical.
 
 From the comments at the head of vectors.s:

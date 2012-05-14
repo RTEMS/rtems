@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 BSP supporting the on-CPU capabilities of the Synova Mongoose-V.
 This BSP assumes that basic HW initialization is performed by
 PMON.

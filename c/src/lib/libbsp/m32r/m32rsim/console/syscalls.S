@@ -1,8 +1,6 @@
 /*
  *  System call support for simulator in gdb.
  *  Adapted from newlib 1.16.0.
- *
- *  $Id$
  */
 
 #define SYS_exit        1

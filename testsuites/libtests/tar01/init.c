@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -26,6 +24,11 @@
 #include <unistd.h>
 
 #include "initial_filesystem_tar.h"
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void test_untar_from_memory(void);
+void test_untar_from_file(void);
 
 #define TARFILE_START initial_filesystem_tar
 #define TARFILE_SIZE  initial_filesystem_tar_size

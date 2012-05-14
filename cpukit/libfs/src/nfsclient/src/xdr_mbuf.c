@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* xdr_mbuf is derived from xdr_mem */
 
 /* Author (mbuf specifica): Till Straumann <strauman@slac.stanford.edu>, 10/2002 */

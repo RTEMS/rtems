@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxsignal03
 psxsignal03_SOURCES = init.c ../include/pmacros.h

@@ -1,8 +1,6 @@
 /*
  *  This file contains directives for the GNU linker which are specific
  *  to the MPC8260ADS Board
- *
- *  $Id$
  */
 
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",

@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -18,14 +16,10 @@
 #include <sys/times.h>
 #include <errno.h>
 
-clock_t _times_r(
-   struct _reent *ptr,
-   struct tms  *ptms
-);
-
-clock_t _times(
-   struct tms  *ptms
-);
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+clock_t _times_r(struct _reent *ptr, struct tms  *ptms);
+clock_t _times(struct tms  *ptms);
 
 rtems_task Init(
   rtems_task_argument argument

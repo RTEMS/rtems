@@ -12,8 +12,6 @@
  * Modifications to support reference counting in the file system are
  * Copyright (c) 2012 embedded brains GmbH.
  *
- *  $Id$
- *
  */
 
 #ifdef HAVE_CONFIG_H

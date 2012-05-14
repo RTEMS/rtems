@@ -20,8 +20,6 @@
  *  Modified to support the MVME5500 board.
  *  Also, the settings of L1, L2, and L3 caches is not necessary here.
  *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003-2009
- *
- *  $Id$
  */
 
 #include <string.h>

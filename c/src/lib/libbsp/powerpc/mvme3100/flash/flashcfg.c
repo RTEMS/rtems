@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* BSP-specific bits of flash programmer support */
 
 /*

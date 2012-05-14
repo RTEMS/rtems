@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <bsp.h>
 
 #ifdef HAS_SMC91111M

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #ifndef BSP_VME_DMA_H
 #define BSP_VME_DMA_H
 

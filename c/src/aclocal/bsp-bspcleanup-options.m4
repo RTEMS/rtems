@@ -1,6 +1,4 @@
-dnl $Id$
 dnl
-
 dnl BSP_CLEANUP_OPTIONS - some autoconf voodoo to provide each BSPs'
 dnl configure script with the standard options supported by the shared
 dnl implementation of bsp_cleanup().

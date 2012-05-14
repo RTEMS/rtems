@@ -1,14 +1,16 @@
-/*
- *  This test exercises the POSIX RWLock manager.
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2010.
+ *  This test exercises the POSIX RWLock manager.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +24,11 @@
 
 /* #define __USE_XOPEN2K XXX already defined on GNU/Linux */
 #include <pthread.h>
+
+/* forward declarations to avoid warnings */
+void *ReadLockThread(void *arg);
+void *WriteLockThread(void *arg);
+int test_main(void);
 
 #if !HAVE_DECL_PTHREAD_RWLOCK_UNLOCK
 /* FIXME: Newlib should provide the decl. */

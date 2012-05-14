@@ -1,5 +1,3 @@
-dnl $Id$
-
 ## HACK: Work-around to structural issue with RTEMS
 ## The macros below violate most autoconf and canonicalization standards
 AC_DEFUN([RTEMS_CONFIG_BUILD_SUBDIRS],

@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #ifndef __GT64260TWSI_h
 #define __GT64260TWSI_h
 

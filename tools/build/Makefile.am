@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
 bin_PROGRAMS = cklength eolstrip packhex unhex rtems-bin2c
@@ -17,8 +13,8 @@ rtems_bin2c_SOURCES = rtems-bin2c.c
 
 bin_SCRIPTS = install-if-change
 
-noinst_SCRIPTS = search-id.sh multigen cvsignore-add.sh
-EXTRA_DIST = search-id.sh multigen cvsignore-add.sh
+noinst_SCRIPTS = multigen cvsignore-add.sh
+EXTRA_DIST = multigen cvsignore-add.sh
 
 noinst_SCRIPTS += doxy-filter
 EXTRA_DIST += doxy-filter

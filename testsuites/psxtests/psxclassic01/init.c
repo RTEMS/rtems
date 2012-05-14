@@ -1,14 +1,16 @@
-/*
- *  Based upon user code supplied in conjunction with PR1759
+/**
+ *  @file
  *
- *  COPYRIGHT (c) 1989-2011.
+ *  Based upon user code supplied in conjunction with PR1759
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -25,6 +27,12 @@
 
 int       Caught_signo = -1;
 siginfo_t Caught_siginfo = { -1, -1, };
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument arg);
+void handler(int signo);
+void handler_info(int signo, siginfo_t *info, void *context);
+rtems_task test_task(rtems_task_argument arg);
 
 void handler(int signo)
 {

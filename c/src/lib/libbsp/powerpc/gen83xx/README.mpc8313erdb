@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 SPI:
 
 In master mode SCS (SPI_D) cannot be used as GPIO[31].  Unfortunately this pin

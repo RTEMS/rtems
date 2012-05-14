@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -15,6 +13,25 @@
 
 #include <pmacros.h>
 #include <errno.h>
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+rtems_timer_service_routine Cancel_duringISR_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
+rtems_timer_service_routine SetState_duringISR_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
+rtems_timer_service_routine SetType_duringISR_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
+void doit(
+  rtems_timer_service_routine (*TSR)(rtems_id, void *),
+  const char                   *method
+);
 
 volatile int TSR_occurred;
 volatile int TSR_status;

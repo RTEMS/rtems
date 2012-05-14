@@ -42,9 +42,6 @@
  * $FreeBSD: src/sys/net/if_pppvar.h,v 1.26 2006/12/05 18:54:21 ume Exp $
  */
 
-/*
- * $Id$
- */
  
 #ifndef _NET_IF_PPPVAR_H_
 #define _NET_IF_PPPVAR_H_

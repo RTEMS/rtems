@@ -27,7 +27,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)route.c	8.2 (Berkeley) 11/15/93
- *	$Id$
  */
 
 #ifdef HAVE_CONFIG_H

@@ -11,8 +11,6 @@
  * FRANCE
  *
  * e-mail: g_montel@yahoo.com
- *
- *  $Id$
  */
 
 /*

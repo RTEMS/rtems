@@ -6,8 +6,6 @@
 # Copyright 2001 Cybertec Pty Limited
 # All rights reserved.
 #
-#  $Id$
-#
 
 #
 # We need one parameter, the file to add.

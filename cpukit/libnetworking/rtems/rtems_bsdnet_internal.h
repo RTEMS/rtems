@@ -5,8 +5,6 @@
  *                            WARNING                              *
  * This file should *never* be included by any application program *
  *******************************************************************
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_RTEMS_BSDNET_INTERNAL_H

@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <libcpu/bf537.h>
 #include <libcpu/sicRegs.h>
 #include <libcpu/cecRegs.h>

@@ -1,7 +1,5 @@
 /*
  * Use the last periodic interval timer (PIT3) as the system clock.
- *
- *  $Id$
  */
 
 #include <rtems.h>

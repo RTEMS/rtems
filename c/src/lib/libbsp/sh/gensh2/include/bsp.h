@@ -29,8 +29,6 @@
  *  the above-referenced license. It is provided for critique and
  *  developmental purposes without any warranty nor representation
  *  by the authors or by TGA Technologies.
- *
- *  $Id$
  */
 
 #ifndef _BSP_H

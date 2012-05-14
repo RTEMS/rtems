@@ -15,8 +15,6 @@
  *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
  *  Modified for mvme3100 by T. Straumann
- *
- *  $Id$
  */
 
 #include <string.h>

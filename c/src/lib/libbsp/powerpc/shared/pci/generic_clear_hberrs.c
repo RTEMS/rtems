@@ -1,7 +1,3 @@
-/*
- *  $Id$
- */
-
 #include <libcpu/io.h>
 #include <libcpu/spr.h>
 

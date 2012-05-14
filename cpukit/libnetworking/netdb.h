@@ -58,9 +58,6 @@
  * $FreeBSD: src/include/netdb.h,v 1.34 2005/02/14 11:33:11 phantom Exp $
  */
  
-/*
- *	$Id$
- */
 
 #ifndef _NETDB_H_
 #define _NETDB_H_

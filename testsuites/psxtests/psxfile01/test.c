@@ -1,4 +1,6 @@
-/*
+/**
+ *  @file
+ *
  *  Simple test program to exercise some of the basic functionality of
  *  POSIX Files and Directories Support.
  *
@@ -9,15 +11,15 @@
  *    /
  *    /dev
  *    /dev/XXX   [where XXX includes at least console]
- *
- *  COPYRIGHT (c) 1989-2011.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -42,7 +44,11 @@
 
 #include "primode.h"
 
+/* forward declarations to avoid warnings */
 void test_case_reopen_append(void);
+void dump_statbuf(struct stat *buf);
+void stat_a_file(const char *file);
+int test_main(void);
 
 char test_write_buffer[ 1024 ];
 rtems_filesystem_operations_table  IMFS_ops_no_evalformake;
@@ -72,7 +78,6 @@ void test_extend(
 /*
  *  dump_statbuf
  */
-
 void dump_statbuf( struct stat *buf )
 {
   int         major1;

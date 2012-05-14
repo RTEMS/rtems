@@ -1,8 +1,4 @@
-dnl
-dnl $Id$
-dnl
 dnl Set target tools
-dnl
 
 AC_DEFUN([RTEMS_CANONICALIZE_TOOLS],
 [AC_REQUIRE([RTEMS_PROG_CC])dnl

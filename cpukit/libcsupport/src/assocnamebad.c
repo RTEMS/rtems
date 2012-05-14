@@ -1,8 +1,6 @@
 /*
  * assoc.c
  *      rtems assoc routines
- *
- *  $Id$
  */
 
 #if HAVE_CONFIG_H

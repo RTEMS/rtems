@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -18,18 +16,19 @@
 #include <errno.h>
 #include "tmacros.h"
 
-void Key_destructor(
-   void *key_data
-)
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void Key_destructor(void *key_data);
+
+void Key_destructor(void *key_data)
 {
 }
-
 
 void *POSIX_Init(
   void *argument
 )
 {
-  int                    status;
+  int    status;
 
   puts( "\n\n*** POSIX KEY 01 TEST ***" );
 

@@ -27,8 +27,6 @@
   section has been intialised and the bss section set to 0. This phase
   performs any special card initialisation and then calls boot card.
 
-  $Id$
-
 */
 /*****************************************************************************/
 

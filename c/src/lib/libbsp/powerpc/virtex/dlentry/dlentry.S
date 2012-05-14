@@ -29,8 +29,6 @@
  *      i-cubed limited makes no representations about the suitability
  *      of this software for any purpose.
  *
- *  $Id$
- *
  *  derived from "helas403/dlentry.S":
  *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp
  */

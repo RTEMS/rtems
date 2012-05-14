@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxfatal01
 psxfatal01_SOURCES = ../psxfatal_support/init.c ../psxfatal_support/system.h testcase.h

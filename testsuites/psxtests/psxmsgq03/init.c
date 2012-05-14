@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -21,6 +19,9 @@
 #include <mqueue.h>
 
 #include "test_support.h"
+
+/* forward declarations to avoid warnings */
+rtems_timer_service_routine mq_send_timer(rtems_id timer, void *arg);
 
 mqd_t Queue;
 volatile bool tsr_fired;

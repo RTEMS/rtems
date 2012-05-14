@@ -1,18 +1,20 @@
-/*
+/**
+ *  @file
+ *
  *  This test exercises stat() via fstat() and generates as many of the
  *  path evaluation cases as possible.
  *
  *  This test also exercises lstat() and lchown() when symlinks are
  *  involved.
- *
- *  COPYRIGHT (c) 1989-2010.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -34,6 +36,27 @@
 #include <pmacros.h>
 
 #include "primode.h"
+
+/* forward declarations to avoid warnings */
+int test_main(void);
+void stat_a_file_helper(const char *file, int follow_link);
+void stat_a_file(const char *file);
+void lstat_a_file(const char *file);
+void stat_multiple_files(char **files);
+void chown_multiple_files_helper(char **files, int follow_link);
+void chown_multiple_files(char **files);
+void lchown_multiple_files(char **files);
+void make_multiple_files(char **files);
+void make_multiple_bad_files(char **files);
+void make_multiple_links(char **existing, char **new);
+void make_too_many_links(void);
+void make_a_symlink(char *existing, char *new);
+void make_multiple_symlinks(void);
+void make_many_symlinks(char  *real_file, int link_count);
+void make_multiple_directories(char **files);
+void Cause_faults(void);
+void Show_Time(void);
+void test_statvfs(void);
 
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
 #define TIMEOUT_VALUE  ( 5 * rtems_clock_get_ticks_per_second() )
@@ -177,7 +200,6 @@ char *Good_relative_paths[] = {
 /*
  *  Do a stat/lstat on a single file and report the status.
  */
-
 void stat_a_file_helper(
   const char *file,
   int         follow_link
@@ -250,7 +272,6 @@ void lstat_a_file(
 /*
  *  stat() multiple files at a time
  */
-
 void stat_multiple_files(
   char **files
 )
@@ -326,7 +347,6 @@ void lchown_multiple_files(
 /*
  *  mknod() multiple files at a time
  */
-
 void make_multiple_files(
   char **files
 )
@@ -386,7 +406,6 @@ void make_multiple_links(
   rtems_test_assert( status == -1 );
 }
 
-
 void make_too_many_links(void)
 {
   int    i;
@@ -408,7 +427,6 @@ void make_too_many_links(void)
 
   }
 }
-
 
 void make_a_symlink(
   char *existing,
@@ -477,6 +495,7 @@ void make_too_many_symlinks()
   }
 }
 */
+
 void make_many_symlinks(
   char  *real_file,
   int    link_count
@@ -506,7 +525,6 @@ void make_many_symlinks(
 /*
  *  mkdir() multiple directories at a time
  */
-
 void make_multiple_directories(
   char **files
 )
@@ -527,8 +545,6 @@ void make_multiple_directories(
 /*
  * Cause faults.
  */
-
-
 void Cause_faults(void)
 {
   int                                   fd;
@@ -764,7 +780,7 @@ void Show_Time(void)
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 }
 
-void test_statvfs( void )
+void test_statvfs(void)
 {
 
   int status = 0;

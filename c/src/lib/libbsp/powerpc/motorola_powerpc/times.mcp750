@@ -1,8 +1,6 @@
 #
 #  Timing Test Suite Results for this BSP on the MCP750
 #
-#  $Id$
-#
 
 Thanks to Eric Valette <valette@crf.canon.fr> for running the timing
 tests and reporting this information.

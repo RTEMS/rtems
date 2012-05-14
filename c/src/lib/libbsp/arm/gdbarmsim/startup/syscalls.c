@@ -1,8 +1,6 @@
 /*
  *  Copied from libgloss 1 Oct 2009.
  *  Minor modifications to work with RTEMS.
- *
- *  $Id$
  */
 
 /* Support files for GNU libc.  Files in the system namespace go here.

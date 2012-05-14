@@ -1,8 +1,4 @@
 /*
- *  $Id$
- */
-
-/*
  * Declare some sizes.
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x000000;

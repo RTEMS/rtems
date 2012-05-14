@@ -14,8 +14,6 @@
  *  Ported to Simics Niagara version of SPARC64 
  *  Niagara modifications of respective RTEMS file: COPYRIGHT (c) 2010.
  *  Eugen Leontie.
- *
- *  $Id$
  */
 
 #ifndef _BSP_H

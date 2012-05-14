@@ -5,8 +5,6 @@
  */
 
 /*
- * $Id$
- *
  * 2001-01-30 KJO (vac4050@cae597.rsc.raytheon.com):
  *  Fixed rtems_monitor_command_lookup() to accept partial
  *  commands to uniqeness.  Added support for setting

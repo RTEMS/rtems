@@ -14,7 +14,6 @@
  *  - added handling of basic escape sequences (cursor movement
  *    and erasing; just enough for the line editor 'libtecla' to
  *    work...)
- * $Id$
  */
 
 #include <bsp.h>

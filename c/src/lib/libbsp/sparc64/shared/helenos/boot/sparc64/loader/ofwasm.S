@@ -28,8 +28,6 @@
 #
 
 /*
- * $Id$
- *
  * This code is originally in asm.S. This is the only function used from that
  * file, so it has been relocated to this new file ofw.S which is not actually
  * located in the HelenOS code base.

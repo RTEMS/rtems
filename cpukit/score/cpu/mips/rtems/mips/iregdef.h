@@ -20,8 +20,6 @@ two paragraphs in the transferred software.
 COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
-  $Id$
-*/
 
 /*
 **	iregdef.h - IDT R3000 register structure header file

@@ -5,8 +5,6 @@
  * code and should be modified for each CPU to be as fast as possible.
  *
  * This implementation is 386 version.
- *
- *  $Id$
  */
 
 #include <stdio.h>                /* for puts */

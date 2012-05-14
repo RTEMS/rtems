@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp69
 sp69_SOURCES = init.c ../../support/src/spin.c

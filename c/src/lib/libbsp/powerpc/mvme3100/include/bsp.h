@@ -8,8 +8,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Adapted for the mvme3100 BSP by T. Straumann, 2007.
- *
- * $Id$
  */
 #ifndef _BSP_H
 #define _BSP_H

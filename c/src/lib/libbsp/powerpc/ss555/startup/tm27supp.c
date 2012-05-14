@@ -1,7 +1,5 @@
 /*
  *  Support routines for TM27
- *
- *  $Id$
  */
 
 #include <bsp.h>

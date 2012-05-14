@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
  
 This port was done by Philip Quaife <philip@qs.co.nz> of Q Solutions
 using RTEMS 3.5.1 under DOS and Hiview.   Philip used an H8300H

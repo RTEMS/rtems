@@ -17,7 +17,6 @@
 | this file contains the startup assembly code                    |
 | it is based on the gen83xx BSP                                  |
 \*===============================================================*/
-/* $Id$ */
 
 #include <libcpu/powerpc-utility.h>
 #include <rtems/powerpc/cache.h>

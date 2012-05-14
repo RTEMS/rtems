@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -20,6 +18,9 @@
 #include <tmacros.h>
 #include <mqueue.h>
 #include <signal.h>   /* signal facilities */
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
 
 #define MQ_MAXMSG     1
 #define MQ_MSGSIZE    sizeof(int)

@@ -2,9 +2,6 @@
 @c  COPYRIGHT (c) 1989-2011.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
-@c
-@c  $Id$
-@c
 
 @node Directive Status Codes, Example Application, Constant Bandwidth Server Scheduler API CBS_GET_APPROVED_BUDGET - Get scheduler approved execution time, Top
 @chapter Directive Status Codes

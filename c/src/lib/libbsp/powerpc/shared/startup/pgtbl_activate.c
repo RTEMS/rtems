@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #include <rtems.h>
 #include <libcpu/pte121.h>
 #include <libcpu/bat.h>

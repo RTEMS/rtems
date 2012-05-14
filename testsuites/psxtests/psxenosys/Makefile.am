@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxenosys
 psxenosys_SOURCES = init.c system.h ../include/pmacros.h

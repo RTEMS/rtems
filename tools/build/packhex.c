@@ -1,4 +1,3 @@
-
 /*****  P A C K H E X . C  ************************************************
  *
  *   Packhex is a hex-file compaction utility.  It attempts to concatenate
@@ -18,9 +17,6 @@
  *
  *   Compiler:    Microsoft C 6.0
  *                cl /F 1000 packhex.c
- *
- *
- *   $Id$
  *
  **************************************************************************/
 

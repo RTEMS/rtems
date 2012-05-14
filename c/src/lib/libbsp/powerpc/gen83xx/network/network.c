@@ -18,9 +18,6 @@
 | of the network interface driver                                 |
 \*===============================================================*/
 
-/*
- *  $Id$
- */
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>

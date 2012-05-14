@@ -10,9 +10,6 @@
 /*             i.e. only one bit is on for each enum                          */
 /* Reserved fields must be filled with zeros.                                */
 
-/*
- * $Id$
- */
 
 #ifndef _RESIDUAL_
 #define _RESIDUAL_

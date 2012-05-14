@@ -17,9 +17,6 @@
 | this file declares constants of the interrupt controller        |
 \*===============================================================*/
 
-/*
- *  $Id$
- */
 
 #ifndef GEN83xx_IRQ_IRQ_H
 #define GEN83xx_IRQ_IRQ_H

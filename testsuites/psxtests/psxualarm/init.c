@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -18,6 +16,14 @@
 #include <signal.h>
 #include <unistd.h>
 #include <errno.h>
+
+/* forward declarations to avoid warnings */
+void Signal_handler(int signo);
+rtems_timer_service_routine Signal_duringISR_TSR(
+  rtems_id  ignored_id,
+  void     *ignored_address
+);
+
 typedef void (*sighandler_t)(int);
 sighandler_t signal(int signum, sighandler_t handler);
 extern void _POSIX_signals_Abnormal_termination_handler( int signo );

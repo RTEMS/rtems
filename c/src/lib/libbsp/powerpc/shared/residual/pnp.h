@@ -14,9 +14,6 @@
 /* For enum's: if given in hex then they are bit significant, i.e.            */
 /* only one bit is on for each enum                                           */
 
-/*
- * $Id$
- */
 
 #ifndef _PNP_
 #define _PNP_

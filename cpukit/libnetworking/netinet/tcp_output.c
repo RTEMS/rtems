@@ -27,7 +27,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)tcp_output.c	8.4 (Berkeley) 5/24/95
- *	$Id$
  */
 
 #ifdef HAVE_CONFIG_H

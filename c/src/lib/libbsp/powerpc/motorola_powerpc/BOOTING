@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This file documents the on board monitor (PPCBUG) configuration used
 to be able to boot the archives located in powerpc-rtems/c/mcp750/bin.
 This information was provided by Eric Valette <valette@crf.canon.fr>

@@ -12,8 +12,6 @@
  *
  *  Modifications of respective RTEMS files:
  *  Copyright (c) 1998, National Research Council of Canada
- *
- *  $Id$
  */
 
 #include <rtems.h>

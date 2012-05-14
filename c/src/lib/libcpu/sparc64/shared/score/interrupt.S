@@ -21,8 +21,6 @@
  *  Ported to Niagara and UltraSPARC III (US3) implementations of the SPARC-v9.
  *  Niagara and US3 modifications of respective RTEMS file: 
  *    COPYRIGHT (c) 2010. Gedare Bloom.
- *
- *  $Id$
  */
 
 #include <rtems/asm.h>

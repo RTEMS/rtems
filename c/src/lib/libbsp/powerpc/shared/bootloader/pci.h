@@ -1,6 +1,4 @@
 /*
- *	$Id$
- *
  *	PCI defines and function prototypes
  *	Copyright 1994, Drew Eckhardt
  *	Copyright 1997, 1998 Martin Mares <mj@atrey.karlin.mff.cuni.cz>

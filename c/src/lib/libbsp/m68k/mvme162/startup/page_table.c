@@ -1,6 +1,4 @@
 /*
- *  $Id$
- *
  *  This file was submitted by Eric Vaitl <vaitl@viasat.com>.
  *  The manipulation of the page table has a very positive impact on
  *  the performance of the MVME162.

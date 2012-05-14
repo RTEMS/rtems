@@ -1,4 +1,6 @@
-/*
+/**
+ *  @file
+ *
  *  This is a native test to explore how the readdir() family works.
  *  Newlib supports the following readdir() family members:
  *
@@ -14,15 +16,15 @@
  *  seekdir() takes an offset which is a byte offset.  The Linux
  *  implementation of this appears to seek to the ((off/DIRENT_SIZE) + 1)
  *  record where DIRENT_SIZE seems to be 12 bytes.
- *
- *  COPYRIGHT (c) 1989-2011.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -37,6 +39,17 @@
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/imfs.h>
+
+/* forward declarations to avoid warnings */
+int test_main(void);
+void printdir(DIR *directory);
+void complete_printdir(char *path);
+int select1(const struct dirent *entry);
+int select2(const struct dirent *entry);
+int compare_ascending(const struct dirent **a, const struct dirent **b);
+int compare_descending( const struct dirent **a, const struct dirent **b);
+void test_across_mount(void);
+void test_across_mount(void);
 
 DIR *directory;
 DIR *directory2;
@@ -173,7 +186,6 @@ int compare_ascending(const struct dirent **a, const struct dirent **b )
    );
    return i;
 }
-
 
 int compare_descending( const struct dirent **a, const struct dirent **b )
 {

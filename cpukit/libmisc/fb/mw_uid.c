@@ -6,8 +6,6 @@
  * This module implements the input devices interface used by MicroWindows
  * in an embedded system environment.  It uses the RTEMS message queue as
  * the repository for the messages posted by the devices registered.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H

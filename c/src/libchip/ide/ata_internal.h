@@ -11,8 +11,6 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id$
- *
  */
 #ifndef __ATA_INTERNAL_H__
 #define __ATA_INTERNAL_H__

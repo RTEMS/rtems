@@ -28,7 +28,6 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
 
 /* avr/iom325.h - definitions for ATmega325 and ATmega325P.  */
 

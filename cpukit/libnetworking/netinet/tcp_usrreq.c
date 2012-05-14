@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/tcp_usrreq.c,v 1.120 2005/05/01 14:01:38 rwatson Exp $
  */
  
-/*
- *	$Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

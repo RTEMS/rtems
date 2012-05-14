@@ -11,8 +11,6 @@
  *	PCI Local Bus Specification
  *	PCI to PCI Bridge Specification
  *	PCI System Design Guide
- *
- * $Id$
  */
 
 #ifndef BSP_POWERPC_PCI_H

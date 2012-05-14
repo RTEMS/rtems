@@ -1,8 +1,6 @@
 #
 #  Shared base config file for QorIQ BSPs
 #
-#  $Id$
-#
 
 include $(RTEMS_ROOT)/make/custom/default.cfg
 

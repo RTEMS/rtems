@@ -1,21 +1,19 @@
-/*  Task_1
+/**
+ *  @file
+ *
+ *  Task_1
  *
  *  This routine serves as a test task.  It verifies the basic task
  *  switching capabilities of the executive.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -25,6 +23,13 @@
 #include "system.h"
 #include <time.h>
 #include <sched.h>
+
+/* forward declarations to avoid warnings */
+void diff_timespec(
+  struct timespec *start,
+  struct timespec *stop,
+  struct timespec *result
+);
 
 void diff_timespec(
   struct timespec *start,

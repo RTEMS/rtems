@@ -3,8 +3,6 @@
  *
  *  Copyright (c) 2004 by Cogent Computer Systems
  *  Written by Jay Monkman <jtm@lopingdog.com>
- *
- *  $Id$
  */
 #ifndef __MMU_H__
 #define __MMU_H__

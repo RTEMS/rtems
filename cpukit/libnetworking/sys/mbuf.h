@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/mbuf.h,v 1.169 2005/03/17 19:34:57 jmg Exp $
  */
 
-/*
- * $Id$
- */
  
 #ifndef _SYS_MBUF_H_
 #define _SYS_MBUF_H_

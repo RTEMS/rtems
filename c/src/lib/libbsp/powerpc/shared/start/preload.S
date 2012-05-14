@@ -1,8 +1,6 @@
 /*
  * Mini-loader for the SVGM BSP.
  *
- * $Id$
- *
  * Author: Till Straumann, 10/2001 <strauman@slac.stanford.edu>
  *
  * Some ideas are borrowed from the powerpc/shared/bootloader

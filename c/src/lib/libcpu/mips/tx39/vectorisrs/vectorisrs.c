@@ -1,7 +1,5 @@
 /*
  *  TX3904 Interrupt Vectoring
- *
- *  $Id$
  */
 
 #include <rtems.h>

@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 Simple test of kernel network code.
 Requires no network hardware since only the loopback network address is used.
 

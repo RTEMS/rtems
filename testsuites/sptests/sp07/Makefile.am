@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = sp07
 sp07_SOURCES = init.c buffered_io.c task1.c task2.c task3.c task4.c \

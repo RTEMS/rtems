@@ -1,5 +1,3 @@
-## $Id$
-
 m4_define([M4_RTEMS_API],[4.7])
 m4_define([M4_RTEMS_VERSION],[4.6.99.3])
 m4_define([M4_RTEMS_RELEASE],[0])

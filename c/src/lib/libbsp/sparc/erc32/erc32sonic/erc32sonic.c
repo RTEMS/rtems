@@ -5,8 +5,6 @@
  *
  *  1) SVME/DMV-171 Single Board Computer Documentation Package, #805905,
  *     DY 4 Systems Inc., Kanata, Ontario, September, 1996.
- *
- *  $Id$
  */
 
 #include <bsp.h>

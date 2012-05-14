@@ -6,8 +6,6 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Middleware support for PPC405 by M.Hamel ADInstruments Ltd 2008
- *
- *  $Id$
  */
 
 #include <rtems.h>

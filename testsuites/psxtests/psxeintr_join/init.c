@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -24,6 +22,13 @@
 
 #define SIG_SUSPEND SIGUSR1
 #define SIG_THR_RESTART SIGUSR2
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+static void print_sig_mask(const char * str);
+void GC_suspend_handler(int sig);
+void GC_restart_handler(int sig);
+void *run(void *arg);
 
 sem_t GC_suspend_ack_sem;
 
@@ -55,7 +60,7 @@ void GC_restart_handler( int sig )
   puts( "run in GC_restart_handler" );
 }
 
-void* run( void *arg )
+void *run( void *arg )
 {
   int       status;
   pthread_t id = *(pthread_t *)arg;

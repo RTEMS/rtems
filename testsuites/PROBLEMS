@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 The tests were designed to operate in a very controlled environment.  If
 one uses interrupt-driven console output, then tasks will block unexpectedly 
 when a buffer filles and interrupts will perturb with the task execution order.

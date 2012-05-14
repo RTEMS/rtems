@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -17,6 +15,11 @@
 #include "test_support.h"
 #include <pthread.h>
 #include <errno.h>
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void Handler(int signo);
+void *TestThread(void *argument);
 
 pthread_t       ThreadId;
 pthread_cond_t  CondVarId;
@@ -65,9 +68,7 @@ void *TestThread(
   return NULL;
 }
 
-void *POSIX_Init(
-  rtems_task_argument argument
-)
+void *POSIX_Init(void *argument)
 {
   int status;
 

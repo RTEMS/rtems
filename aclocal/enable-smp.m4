@@ -1,5 +1,3 @@
-dnl $Id$
-
 AC_DEFUN([RTEMS_ENABLE_SMP],
 [
 ## AC_BEFORE([$0], [RTEMS_CHECK_SMP])dnl

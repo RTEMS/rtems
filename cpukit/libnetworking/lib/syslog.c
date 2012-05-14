@@ -1,7 +1,5 @@
 /*
  * RTEMS version of syslog and associated routines
- *
- * $Id$
  */
 
 #ifdef HAVE_CONFIG_H

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -DRTEMS_BSP=\"@RTEMS_BSP@\"

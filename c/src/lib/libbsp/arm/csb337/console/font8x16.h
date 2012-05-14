@@ -33,8 +33,6 @@
  *  Fernando Nicodemos <fgnicodemos@terra.com.br> from NCB - Sistemas
  *  Embarcados Ltda. (Brazil) to be more compliant with RTEMS coding
  *  standards and to eliminate C++ style comments.
- *
- *  $Id$
  */
 
 #define FONT_WIDTH		8

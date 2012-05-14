@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* bspVmeDmaList.c:
  * implementation of generic parts of the 'linked-list VME DMA' API.
  */

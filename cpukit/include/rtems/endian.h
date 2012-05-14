@@ -4,9 +4,6 @@
  * This include file provides endian information about the target.
  */
 
-/*
- *  $Id$
- */
 
 #ifndef _RTEMS_ENDIAN_H
 #define _RTEMS_ENDIAN_H

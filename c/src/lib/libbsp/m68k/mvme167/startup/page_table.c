@@ -41,8 +41,6 @@
  *  NOT enabled. If jumper J1-6 is removed, the instruction cache is not enabled.
  *
  *  Copyright (c) 1998, National Research Council of Canada
- *
- *  $Id$
  */
 
 #include <bsp.h>

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Default VME bridge configuration - note that this file
  * is independent of the bridge driver/chip
  */

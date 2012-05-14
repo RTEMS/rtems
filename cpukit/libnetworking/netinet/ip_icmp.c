@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/ip_icmp.c,v 1.101 2005/05/04 13:23:54 andre Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

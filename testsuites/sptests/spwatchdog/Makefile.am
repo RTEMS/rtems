@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = spwatchdog
 spwatchdog_SOURCES = init.c task1.c system.h prtime.c delay.c

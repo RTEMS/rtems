@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Various non BSP dependant support routines.
 
 clock - Uses the MPC860/MPC821 PIT (Programmable interval timer) to

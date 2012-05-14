@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 This BSP is designed to operate on a variety of M16C and M32C variants.
 It is expected that this BSP will also be able to support R8C variants.
 

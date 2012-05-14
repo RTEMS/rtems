@@ -1,12 +1,10 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http:www.rtems.com/license/LICENSE.
- *
- *  $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -18,6 +16,11 @@
 #include <errno.h>
 #include <pthread.h>
 #include "test_support.h"
+
+/* forward declarations to avoid warnings */
+void *POSIX_Init(void *argument);
+void benchmark_pthread_setspecific(void *value_p);
+void benchmark_pthread_getspecific( void *expected );
 
 pthread_key_t Key;
 int           Value1;

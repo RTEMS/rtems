@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 The MVME2100 is a Motorola VMEbus board which is similar to the other
 Motorola PowerPC boards supported by this BSP.  But it does not support
 the Motorola CPU Configuration Register.  This makes it impossible to

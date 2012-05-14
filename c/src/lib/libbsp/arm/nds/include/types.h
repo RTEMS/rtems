@@ -5,8 +5,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE
- *
- * $Id$
  */
 
 #ifndef BSP_NDS_TYPES_H_

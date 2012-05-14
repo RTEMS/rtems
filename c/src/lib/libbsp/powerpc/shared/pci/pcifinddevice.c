@@ -1,8 +1,5 @@
-
 /* find a particular PCI device
  * (we assume, the firmware configured the PCI bus[es] for us)
- *
- * $Id$
  */
 
 /*

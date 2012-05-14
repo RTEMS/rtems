@@ -37,9 +37,6 @@
  * $FreeBSD: src/sys/sys/conf.h,v 1.231 2007/02/02 22:27:45 bms Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _SYS_CONF_H_
 #define	_SYS_CONF_H_

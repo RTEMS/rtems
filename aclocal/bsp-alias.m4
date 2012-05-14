@@ -1,5 +1,3 @@
-dnl
-dnl  $Id$
 dnl 
 
 dnl _RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)

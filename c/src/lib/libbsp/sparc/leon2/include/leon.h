@@ -28,8 +28,6 @@
  *
  *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
- *
- *  $Id$
  */
 
 #ifndef _INCLUDE_LEON_h

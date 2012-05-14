@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = monitor
 monitor_SOURCES = init.c system.h

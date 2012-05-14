@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/in_pcb.c,v 1.158 2005/01/07 01:45:44 imp Exp $
  */
  
-/*
- *	$Id$
- */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,7 +1,5 @@
 /*
  *  FTP Server Information
- *
- *  $Id$
  */
 
 #ifndef _RTEMS_FTPD_H

@@ -1,7 +1,3 @@
-##
-## $Id$
-##
-
 
 rtems_tests_PROGRAMS = psxtmthread03
 psxtmthread03_SOURCES = init.c ../../tmtests/include/timesys.h \

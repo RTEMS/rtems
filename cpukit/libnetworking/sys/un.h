@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/un.h,v 1.29 2005/04/13 00:01:46 mdodd Exp $
  */
 
-/*
- * $Id$
- */
 
 #ifndef _SYS_UN_H_
 #define _SYS_UN_H_

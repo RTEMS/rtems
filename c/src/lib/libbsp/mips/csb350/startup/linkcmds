@@ -1,7 +1,5 @@
 /*
  *  Linker script for CSB350 AU1100 based board
- *
- *  $Id$
  */
 
 /*    . = 0x80020000; */

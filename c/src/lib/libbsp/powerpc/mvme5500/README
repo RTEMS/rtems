@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 Please reference README.booting for the boot/load process.
 
 For the priority setting of the Interrupt Requests (IRQs), please

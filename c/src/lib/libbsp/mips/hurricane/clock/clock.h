@@ -16,8 +16,6 @@
  *      software without specific, written prior permission.
  *      Transition Networks makes no representations about the suitability
  *      of this software for any purpose.
- *
- *  $Id$
  */
 
 extern void mips_set_timer( uint32_t timer_clock_interval );

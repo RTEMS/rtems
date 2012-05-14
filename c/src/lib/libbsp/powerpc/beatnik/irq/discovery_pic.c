@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /* Interrupt driver + dispatcher for the discovery host controller */
 
 /* Author: T. Straumann, 2005-2007

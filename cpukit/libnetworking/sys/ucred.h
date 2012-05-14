@@ -31,7 +31,6 @@
  * SUCH DAMAGE.
  *
  *	@(#)ucred.h	8.4 (Berkeley) 1/9/95
- * $Id$
  */
 
 #ifndef _SYS_UCRED_H_

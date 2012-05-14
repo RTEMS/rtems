@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/sys/signalvar.h,v 1.91 2010/07/08 19:15:26 jhb Exp $
  */
  
-/*
- * $Id$
- */
 
 #ifndef	_SYS_SIGNALVAR_H_
 #define	_SYS_SIGNALVAR_H_

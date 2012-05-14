@@ -30,9 +30,6 @@
  * $FreeBSD: src/sys/netinet/if_ether.c,v 1.136 2005/03/13 11:23:22 glebius Exp $
  */
  
-/*
- * $Id$
- */
 
 /*
  * Ethernet address resolution protocol.

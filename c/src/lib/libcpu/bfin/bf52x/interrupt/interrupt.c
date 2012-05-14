@@ -19,8 +19,6 @@
  *         (kangralkar.r@husky.neu.edu)
  *
  * LastChange:
- * $Id$
- *
  */
 
 #include <rtems.h>

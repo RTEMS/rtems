@@ -6,8 +6,6 @@
  *  COPYRIGHT (c) 1988-2002.
  *  On-Line Applications Research Corporation (OAR).
  *  All rights reserved.
- *
- *  $Id$
  */
 
 #ifndef __INLINE_CHAIN_inl

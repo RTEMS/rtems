@@ -1,7 +1,5 @@
 /*
  * This file based on output of tmoverhd test.
- *
- * $Id$
  */
 
 #ifndef __COVERHD_H__

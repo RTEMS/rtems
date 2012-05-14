@@ -1,7 +1,3 @@
-#
-#  $Id$
-#
-
 This is the network interface controller portion of the libchip library.
 This directory contains the source code for reusable TCP/IP network driver
 support code.  Each driver has its own configuration table and its

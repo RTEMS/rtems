@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright (c) 2000 - Rosimildo da Silva.  All Rights Reserved.
  *
  * MODULE DESCRIPTION:

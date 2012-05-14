@@ -1,7 +1,3 @@
-#
-# $Id$
-#
-
 This should describe how to use SHM in a multiprocessor LEON3
 configuration.
 
