@@ -59,7 +59,7 @@ static inline const devFS_data *devFS_get_data(
   const rtems_filesystem_location_info_t *loc
 )
 {
-  return loc->mt_entry->immutable_fs_info;
+  return (const devFS_data *) loc->mt_entry->immutable_fs_info;
 }
 
 extern void devFS_eval_path(
