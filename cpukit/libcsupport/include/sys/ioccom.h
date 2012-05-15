@@ -34,6 +34,7 @@
 #define	_SYS_IOCCOM_H_
 
 #include <sys/types.h>
+#include <stdint.h>
 
 /*
  * Ioctl's have the command encoded in the lower word, and the size of
