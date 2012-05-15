@@ -121,10 +121,16 @@ ssize_t memfile_read(
 )
 {
   IMFS_jnode_t   *the_jnode;
+  ssize_t         status;
 
   the_jnode = iop->pathinfo.node_access;
 
-  return IMFS_memfile_read( the_jnode, iop->offset, buffer, count );
+  status = IMFS_memfile_read( the_jnode, iop->offset, buffer, count );
+
+  if ( status > 0 )
+    iop->offset += status;
+
+  return status;
 }
 
 /*
@@ -148,23 +154,10 @@ ssize_t memfile_write(
 
   status = IMFS_memfile_write( the_jnode, iop->offset, buffer, count );
 
-  return status;
-}
+  if ( status > 0 )
+    iop->offset += status;
 
-/*
- *  memfile_ioctl
- *
- *  This routine processes the ioctl() system call.
- *
- *  NOTE:  No ioctl()'s are supported for in-memory files.
- */
-int memfile_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
-)
-{
-  return 0;
+  return status;
 }
 
 /*

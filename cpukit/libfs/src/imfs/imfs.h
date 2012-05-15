@@ -435,12 +435,6 @@ extern ssize_t memfile_write(
   size_t         count            /* IN  */
 );
 
-extern int memfile_ioctl(
-  rtems_libio_t *iop,             /* IN  */
-  uint32_t       command,         /* IN  */
-  void          *buffer           /* IN  */
-);
-
 extern int device_open(
   rtems_libio_t *iop,            /* IN  */
   const char    *pathname,       /* IN  */
@@ -465,9 +459,9 @@ extern ssize_t device_write(
 );
 
 extern int device_ioctl(
-  rtems_libio_t *iop,               /* IN  */
-  uint32_t       command,           /* IN  */
-  void          *buffer             /* IN  */
+  rtems_libio_t   *iop,
+  ioctl_command_t  command,
+  void            *buffer
 );
 
 extern int device_ftruncate(

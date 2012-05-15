@@ -1753,7 +1753,7 @@ char				*path     = mt_entry->dev;
 
 	rootNode = 0;
 
-	mt_entry->mt_fs_root->location.ops		 = &nfs_fs_ops;
+	mt_entry->ops = &nfs_fs_ops;
 	mt_entry->mt_fs_root->location.handlers	 = &nfs_dir_file_handlers;
 	mt_entry->pathconf_limits_and_options = nfs_limits_and_options;
 
@@ -2086,11 +2086,11 @@ static int nfs_rename(
 	return rv;
 }
 
-static void nfs_lock(rtems_filesystem_mount_table_entry_t *mt_entry)
+static void nfs_lock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
 }
 
-static void nfs_unlock(rtems_filesystem_mount_table_entry_t *mt_entry)
+static void nfs_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
 }
 
@@ -2311,6 +2311,10 @@ static ssize_t nfs_file_read(
 		}
 	} while (count > 0);
 
+	if (rv > 0) {
+		iop->offset = offset;
+	}
+
 	return rv;
 }
 
@@ -2418,6 +2422,8 @@ int			e;
 	}
 
 	node->age = nowSeconds();
+
+	iop->offset += count;
 
 	return count;
 }

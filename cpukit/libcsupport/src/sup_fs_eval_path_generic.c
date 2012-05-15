@@ -20,10 +20,11 @@
 
 static bool is_fs_root( const rtems_filesystem_location_info_t *loc )
 {
+  const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
   const rtems_filesystem_location_info_t *mt_fs_root =
-    &loc->mt_entry->mt_fs_root->location;
+    &mt_entry->mt_fs_root->location;
 
-  return (*loc->ops->are_nodes_equal_h)( loc, mt_fs_root );
+  return (*mt_entry->ops->are_nodes_equal_h)( loc, mt_fs_root );
 }
 
 static bool is_eval_path_root(
@@ -31,10 +32,11 @@ static bool is_eval_path_root(
   const rtems_filesystem_location_info_t *loc
 )
 {
+  const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
   const rtems_filesystem_location_info_t *rootloc = &ctx->rootloc->location;
 
-  return loc->mt_entry == rootloc->mt_entry
-    && (*loc->ops->are_nodes_equal_h)( loc, rootloc );
+  return mt_entry == rootloc->mt_entry
+    && (*mt_entry->ops->are_nodes_equal_h)( loc, rootloc );
 }
 
 void rtems_filesystem_eval_path_generic(

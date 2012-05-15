@@ -49,17 +49,11 @@ extern const rtems_filesystem_operations_table devFS_ops;
 
 extern const rtems_filesystem_file_handlers_r  devFS_file_handlers;
 
-/**
- *  This routine associates RTEMS status code with errno
- */
-
-extern int rtems_deviceio_errno(rtems_status_code code);
-
 static inline const devFS_data *devFS_get_data(
   const rtems_filesystem_location_info_t *loc
 )
 {
-  return loc->mt_entry->immutable_fs_info;
+  return (const devFS_data *) loc->mt_entry->immutable_fs_info;
 }
 
 extern void devFS_eval_path(
@@ -137,9 +131,9 @@ extern ssize_t devFS_write(
  */
 
 extern int devFS_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  command,
+  void            *buffer
 );
 
 

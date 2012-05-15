@@ -1194,7 +1194,7 @@ int rtems_ftpfs_initialize(
 
   /* Set handler and oparations table */
   e->mt_fs_root->location.handlers = &rtems_ftpfs_root_handlers;
-  e->mt_fs_root->location.ops = &rtems_ftpfs_ops;
+  e->ops = &rtems_ftpfs_ops;
 
   /* We maintain no real file system nodes, so there is no real root */
   e->mt_fs_root->location.node_access = NULL;

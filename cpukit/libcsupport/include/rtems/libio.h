@@ -69,7 +69,7 @@ typedef enum {
  * @see rtems_filesystem_default_lock().
  */
 typedef void (*rtems_filesystem_mt_entry_lock_t)(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -80,7 +80,7 @@ typedef void (*rtems_filesystem_mt_entry_lock_t)(
  * @see rtems_filesystem_default_unlock().
  */
 typedef void (*rtems_filesystem_mt_entry_unlock_t)(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -523,7 +523,7 @@ extern const rtems_filesystem_operations_table
  * @see rtems_filesystem_mt_entry_lock_t.
  */
 void rtems_filesystem_default_lock(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -532,7 +532,7 @@ void rtems_filesystem_default_lock(
  * @see rtems_filesystem_mt_entry_unlock_t.
  */
 void rtems_filesystem_default_unlock(
-  rtems_filesystem_mount_table_entry_t *mt_entry
+  const rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
@@ -786,6 +786,8 @@ typedef int (*rtems_filesystem_close_t)(
 /**
  * @brief Reads from a node.
  *
+ * This handler is responsible to update the offset field of the IO descriptor.
+ *
  * @param[in, out] iop The IO pointer.
  * @param[out] buffer The buffer for read data.
  * @param[in] count The size of the buffer in characters.
@@ -803,6 +805,8 @@ typedef ssize_t (*rtems_filesystem_read_t)(
 
 /**
  * @brief Writes to a node.
+ *
+ * This handler is responsible to update the offset field of the IO descriptor.
  *
  * @param[in, out] iop The IO pointer.
  * @param[out] buffer The buffer for write data.
@@ -832,9 +836,9 @@ typedef ssize_t (*rtems_filesystem_write_t)(
  * @see rtems_filesystem_default_ioctl().
  */
 typedef int (*rtems_filesystem_ioctl_t)(
-  rtems_libio_t *iop,
-  uint32_t       request,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  request,
+  void            *buffer
 );
 
 /**
@@ -1008,9 +1012,9 @@ ssize_t rtems_filesystem_default_write(
  * @see rtems_filesystem_ioctl_t.
  */
 int rtems_filesystem_default_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  request,
+  void            *buffer
 );
 
 /**
@@ -1062,17 +1066,6 @@ off_t rtems_filesystem_default_lseek_file(
   rtems_libio_t *iop,
   off_t offset,
   int whence
-);
-
-/**
- * @retval 0 Always.
- *
- * @see rtems_filesystem_lseek_t.
- */
-off_t rtems_filesystem_default_lseek_file(
-  rtems_libio_t *iop,
-  off_t          offset,
-  int            whence
 );
 
 /**
@@ -1236,7 +1229,7 @@ typedef struct {
  */
 typedef struct {
   rtems_libio_t          *iop;
-  uint32_t                command;
+  ioctl_command_t         command;
   void                   *buffer;
   int                     ioctl_return;
 } rtems_libio_ioctl_args_t;
@@ -1438,13 +1431,14 @@ extern int rtems_mkdir(const char *path, mode_t mode);
  */
 struct rtems_filesystem_mount_table_entry_tt {
   rtems_chain_node                       mt_node;
+  void                                  *fs_info;
+  const rtems_filesystem_operations_table *ops;
+  const void                            *immutable_fs_info;
   rtems_chain_control                    location_chain;
   rtems_filesystem_global_location_t    *mt_point_node;
   rtems_filesystem_global_location_t    *mt_fs_root;
   bool                                   mounted;
   bool                                   writeable;
-  void                                  *fs_info;
-  const void                            *immutable_fs_info;
   rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
 
   /*

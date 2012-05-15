@@ -24,11 +24,11 @@ ssize_t readlink( const char *path, char *buf, size_t bufsize )
   int eval_flags = RTEMS_FS_FOLLOW_HARD_LINK;
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
-  rtems_filesystem_node_types_t type =
-    (*currentloc->ops->node_type_h)( currentloc );
+  const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
+  rtems_filesystem_node_types_t type = (*ops->node_type_h)( currentloc );
 
   if ( type == RTEMS_FILESYSTEM_SYM_LINK ) {
-    rv = (*currentloc->ops->readlink_h)( currentloc, buf, bufsize );
+    rv = (*ops->readlink_h)( currentloc, buf, bufsize );
   } else {
     rtems_filesystem_eval_path_error( &ctx, EINVAL );
     rv = -1;

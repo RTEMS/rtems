@@ -7,14 +7,16 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/libio.h>
+#if HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include <rtems/libio_.h>
-#include <rtems/seterr.h>
 
 int rtems_filesystem_default_ioctl(
-  rtems_libio_t *iop,
-  uint32_t       command,
-  void          *buffer
+  rtems_libio_t   *iop,
+  ioctl_command_t  request,
+  void            *buffer
 )
 {
   rtems_set_errno_and_return_minus_one( ENOTSUP );

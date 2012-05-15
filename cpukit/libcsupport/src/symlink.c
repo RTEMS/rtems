@@ -27,7 +27,7 @@ int symlink( const char *path1, const char *path2 )
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path2, eval_flags );
 
-  rv = (*currentloc->ops->symlink_h)(
+  rv = (*currentloc->mt_entry->ops->symlink_h)(
     currentloc,
     rtems_filesystem_eval_path_get_token( &ctx ),
     rtems_filesystem_eval_path_get_tokenlen( &ctx ),

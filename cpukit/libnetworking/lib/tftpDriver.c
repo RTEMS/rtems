@@ -205,7 +205,7 @@ int rtems_tftpfs_initialize(
   mt_entry->fs_info = fs;
   mt_entry->mt_fs_root->location.node_access = root_path;
   mt_entry->mt_fs_root->location.handlers = &rtems_tftp_handlers;
-  mt_entry->mt_fs_root->location.ops = &rtems_tftp_ops;
+  mt_entry->ops = &rtems_tftp_ops;
   
   /*
    *  Now allocate a semaphore for mutual exclusion.

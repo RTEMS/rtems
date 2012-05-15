@@ -92,8 +92,8 @@ static int rtems_tfs_mount_me(
     rtems_set_errno_and_return_minus_one(ENOMEM);
   }
 
+  mt_entry->ops = &rtems_tfs_ops;
   mt_entry->mt_fs_root->location.handlers = &rtems_tfs_handlers;
-  mt_entry->mt_fs_root->location.ops = &rtems_tfs_ops;
   mt_entry->mt_fs_root->location.node_access = root_path;
 
   return 0;

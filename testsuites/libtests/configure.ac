@@ -55,6 +55,7 @@ block08/Makefile
 block09/Makefile
 block10/Makefile
 block11/Makefile
+block12/Makefile
 bspcmdline01/Makefile
 cpuuse/Makefile
 devfs01/Makefile

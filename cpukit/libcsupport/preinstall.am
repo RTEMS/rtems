@@ -71,6 +71,10 @@ $(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/assoc.h
 
+$(PROJECT_INCLUDE)/rtems/deviceio.h: include/rtems/deviceio.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/deviceio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/deviceio.h
+
 $(PROJECT_INCLUDE)/rtems/error.h: include/rtems/error.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/error.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/error.h

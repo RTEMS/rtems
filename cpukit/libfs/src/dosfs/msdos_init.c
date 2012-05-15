@@ -51,7 +51,7 @@ const rtems_filesystem_operations_table  msdos_ops = {
   .statvfs_h      =  rtems_filesystem_default_statvfs
 };
 
-void msdos_lock(rtems_filesystem_mount_table_entry_t *mt_entry)
+void msdos_lock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
   msdos_fs_info_t *fs_info = mt_entry->fs_info;
   rtems_status_code sc = rtems_semaphore_obtain(
@@ -64,7 +64,7 @@ void msdos_lock(rtems_filesystem_mount_table_entry_t *mt_entry)
   }
 }
 
-void msdos_unlock(rtems_filesystem_mount_table_entry_t *mt_entry)
+void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
   msdos_fs_info_t *fs_info = mt_entry->fs_info;
   rtems_status_code sc = rtems_semaphore_release(fs_info->vol_sema);

@@ -18,11 +18,21 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/devfs.h>
 #include "rtems-rfs-rtems.h"
+
+#include <rtems/deviceio.h>
+
+static void
+rtems_rfs_rtems_device_get_major_and_minor ( const rtems_libio_t       *iop,
+                                             rtems_device_major_number *major,
+                                             rtems_device_minor_number *minor)
+{
+  *major = iop->data0;
+  *minor = (rtems_device_minor_number) iop->data1;
+}
 
 /**
  * This handler maps an open() operation onto rtems_io_open().
@@ -39,13 +49,11 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
                               int            oflag,
                               mode_t         mode)
 {
-  rtems_libio_open_close_args_t args;
   rtems_rfs_file_system*        fs = rtems_rfs_rtems_pathloc_dev (&iop->pathinfo);
   rtems_rfs_ino                 ino = rtems_rfs_rtems_get_iop_ino (iop);
   rtems_rfs_inode_handle        inode;
-  int                           major;
-  int                           minor;
-  rtems_status_code             status;
+  rtems_device_major_number     major;
+  rtems_device_minor_number     minor;
   int                           rc;
 
   rtems_rfs_rtems_lock (fs);
@@ -70,15 +78,9 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
   rtems_rfs_rtems_unlock (fs);
 
   iop->data0 = major;
-  iop->data1 = (void*)((intptr_t) minor);
+  iop->data1 = (void *) minor;
 
-  args.iop   = iop;
-  args.flags = iop->flags;
-  args.mode  = mode;
-
-  status = rtems_io_open (major, minor, (void *) &args);
-
-  return rtems_deviceio_errno (status);
+  return rtems_deviceio_open (iop, pathname, oflag, mode, minor, major);
 }
 
 /**
@@ -91,21 +93,12 @@ rtems_rfs_rtems_device_open ( rtems_libio_t *iop,
 static int
 rtems_rfs_rtems_device_close (rtems_libio_t* iop)
 {
-  rtems_libio_open_close_args_t args;
-  rtems_status_code             status;
-  int                           major;
-  int                           minor;
+  rtems_device_major_number     major;
+  rtems_device_minor_number     minor;
 
-  major = (int) iop->data0;
-  minor = (intptr_t) iop->data1;
+  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
 
-  args.iop   = iop;
-  args.flags = 0;
-  args.mode  = 0;
-
-  status = rtems_io_close (major, minor, (void *) &args);
-
-  return rtems_deviceio_errno (status);
+  return rtems_deviceio_close (iop, major, minor);
 }
 
 /**
@@ -120,26 +113,12 @@ rtems_rfs_rtems_device_close (rtems_libio_t* iop)
 static ssize_t
 rtems_rfs_rtems_device_read (rtems_libio_t* iop, void* buffer, size_t count)
 {
-  rtems_libio_rw_args_t args;
-  rtems_status_code     status;
-  int                   major;
-  int                   minor;
+  rtems_device_major_number major;
+  rtems_device_minor_number minor;
 
-  major = (int) iop->data0;
-  minor = (intptr_t) iop->data1;
+  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
 
-  args.iop         = iop;
-  args.offset      = iop->offset;
-  args.buffer      = buffer;
-  args.count       = count;
-  args.flags       = iop->flags;
-  args.bytes_moved = 0;
-
-  status = rtems_io_read (major, minor, (void *) &args);
-  if (status)
-    return rtems_deviceio_errno (status);
-
-  return (ssize_t) args.bytes_moved;
+  return rtems_deviceio_read (iop, buffer, count, major, minor);
 }
 
 /*
@@ -156,26 +135,12 @@ rtems_rfs_rtems_device_write (rtems_libio_t* iop,
                               const void*    buffer,
                               size_t         count)
 {
-  rtems_libio_rw_args_t args;
-  rtems_status_code     status;
-  int                   major;
-  int                   minor;
+  rtems_device_major_number major;
+  rtems_device_minor_number minor;
 
-  major = (int) iop->data0;
-  minor = (intptr_t) iop->data1;
+  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
 
-  args.iop         = iop;
-  args.offset      = iop->offset;
-  args.buffer      = (void *) buffer;
-  args.count       = count;
-  args.flags       = iop->flags;
-  args.bytes_moved = 0;
-
-  status = rtems_io_write (major, minor, (void *) &args);
-  if (status)
-    return rtems_deviceio_errno (status);
-
-  return (ssize_t) args.bytes_moved;
+  return rtems_deviceio_write (iop, buffer, count, major, minor);
 }
 
 /**
@@ -188,27 +153,16 @@ rtems_rfs_rtems_device_write (rtems_libio_t* iop,
  */
 
 static int
-rtems_rfs_rtems_device_ioctl (rtems_libio_t* iop,
-                              uint32_t       command,
-                              void*          buffer)
+rtems_rfs_rtems_device_ioctl (rtems_libio_t*  iop,
+                              ioctl_command_t command,
+                              void*           buffer)
 {
-  rtems_libio_ioctl_args_t args;
-  rtems_status_code        status;
-  int                      major;
-  int                      minor;
+  rtems_device_major_number major;
+  rtems_device_minor_number minor;
 
-  major = (int) iop->data0;
-  minor = (intptr_t) iop->data1;
+  rtems_rfs_rtems_device_get_major_and_minor (iop, &major, &minor);
 
-  args.iop     = iop;
-  args.command = command;
-  args.buffer  = buffer;
-
-  status = rtems_io_control (major, minor, (void *) &args);
-  if (status)
-    return rtems_deviceio_errno (status);
-
-  return args.ioctl_return;
+  return rtems_deviceio_control (iop, command, buffer, major, minor);
 }
 
 /**

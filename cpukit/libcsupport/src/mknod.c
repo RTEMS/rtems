@@ -47,7 +47,9 @@ int rtems_filesystem_mknod(
   }
   
   if ( rv == 0 ) {
-    rv = (*parentloc->ops->mknod_h)( parentloc, name, namelen, mode, dev );
+    const rtems_filesystem_operations_table *ops = parentloc->mt_entry->ops;
+
+    rv = (*ops->mknod_h)( parentloc, name, namelen, mode, dev );
   }
 
   return rv;

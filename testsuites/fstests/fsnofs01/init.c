@@ -53,7 +53,6 @@ static void rtems_test_assert_equal_to_null_loc(
   rtems_test_assert(null_loc->location.node_access == local_loc->node_access);
   rtems_test_assert(null_loc->location.node_access_2 == local_loc->node_access_2);
   rtems_test_assert(null_loc->location.handlers == local_loc->handlers);
-  rtems_test_assert(null_loc->location.ops == local_loc->ops);
   rtems_test_assert(null_loc->location.mt_entry == local_loc->mt_entry);
 }
 

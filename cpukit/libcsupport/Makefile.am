@@ -24,6 +24,7 @@ include_rtems_motorola_HEADERS += include/motorola/mc68681.h
 
 ## rtems
 include_rtems_HEADERS += include/rtems/assoc.h
+include_rtems_HEADERS += include/rtems/deviceio.h
 include_rtems_HEADERS += include/rtems/error.h
 include_rtems_HEADERS += include/rtems/libcsupport.h
 include_rtems_HEADERS += include/rtems/libio.h
@@ -127,6 +128,8 @@ libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/sup_fs_exist_in_same_instance.c \
     src/sup_fs_mount_iterate.c \
     src/sup_fs_node_type.c \
+    src/sup_fs_deviceio.c \
+    src/sup_fs_deviceerrno.c \
     src/clonenode.c \
     src/freenode.c \
     $(BSD_LIBC_C_FILES) $(BASE_FS_C_FILES) $(MALLOC_C_FILES) \

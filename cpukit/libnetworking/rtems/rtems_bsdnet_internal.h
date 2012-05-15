@@ -22,12 +22,6 @@ typedef	long long		vm_ooffset_t;
 typedef	unsigned int		vm_pindex_t;
 typedef	unsigned int		vm_size_t;
 
-#ifndef __ioctl_command_defined
-typedef u_int32_t ioctl_command_t;
-#define __ioctl_command_defined
-#endif
-
-
 #define _BSD_OFF_T_	int32_t
 #define _BSD_PID_T_	rtems_id
 #define _BSD_VA_LIST_	char *
@@ -38,6 +32,7 @@ typedef u_int32_t ioctl_command_t;
 #include <sys/cdefs.h>
 
 #include <sys/time.h>
+#include <sys/ioctl.h>
 
 struct mdproc {
 	int	md_flags;

@@ -85,7 +85,7 @@ static int do_open(
     const rtems_filesystem_location_info_t *currentloc =
       rtems_filesystem_eval_path_get_currentloc( &ctx );
     rtems_filesystem_node_types_t type =
-      (*currentloc->ops->node_type_h)( currentloc );
+      (*currentloc->mt_entry->ops->node_type_h)( currentloc );
 
     if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
       rtems_filesystem_eval_path_error( &ctx, EISDIR );

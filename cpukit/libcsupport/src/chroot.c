@@ -49,7 +49,9 @@ int chroot( const char *path )
     rtems_filesystem_global_location_t *new_root_loc =
       rtems_filesystem_global_location_obtain( &new_current_loc );
     rtems_filesystem_node_types_t type =
-      (*new_root_loc->location.ops->node_type_h)( &new_root_loc->location );
+      (*new_root_loc->location.mt_entry->ops->node_type_h)(
+        &new_root_loc->location
+      );
 
     if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
       sc = rtems_libio_set_private_env();

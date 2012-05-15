@@ -11,7 +11,7 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     termios termios01 termios02 termios03 termios04 termios05 \
     termios06 termios07 termios08 \
     rtems++ tztest block01 block02 block03 block04 block05 block06 block07 \
-    block08 block09 block10 block11 stringto01 \
+    block08 block09 block10 block11 block12 stringto01 \
     tar01 tar02 tar03 \
     math mathf mathl complex \
     mouse01

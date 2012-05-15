@@ -106,7 +106,6 @@ ssize_t readv(
       return -1;
 
     if ( bytes > 0 ) {
-      iop->offset += bytes;
       total       += bytes;
     }
 

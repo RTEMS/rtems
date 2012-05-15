@@ -141,7 +141,7 @@ msdos_initialize_support(
 
     temp_mt_entry->mt_fs_root->location.node_access = fat_fd;
     temp_mt_entry->mt_fs_root->location.handlers = directory_handlers;
-    temp_mt_entry->mt_fs_root->location.ops = op_table;
+    temp_mt_entry->ops = op_table;
 
     return rc;
 }

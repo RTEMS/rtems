@@ -73,7 +73,9 @@ rtems_rfs_rtems_node_type_by_inode (rtems_rfs_inode_handle* inode)
 }
 
 static void
-rtems_rfs_rtems_lock_by_mt_entry (rtems_filesystem_mount_table_entry_t *mt_entry)
+rtems_rfs_rtems_lock_by_mt_entry (
+  const rtems_filesystem_mount_table_entry_t *mt_entry
+)
 {
   rtems_rfs_file_system* fs = mt_entry->fs_info;
 
@@ -81,7 +83,9 @@ rtems_rfs_rtems_lock_by_mt_entry (rtems_filesystem_mount_table_entry_t *mt_entry
 }
 
 static void
-rtems_rfs_rtems_unlock_by_mt_entry (rtems_filesystem_mount_table_entry_t *mt_entry)
+rtems_rfs_rtems_unlock_by_mt_entry (
+  const rtems_filesystem_mount_table_entry_t *mt_entry
+)
 {
   rtems_rfs_file_system* fs = mt_entry->fs_info;
 
@@ -914,11 +918,10 @@ rtems_rfs_rtems_initialise (rtems_filesystem_mount_table_entry_t* mt_entry,
     return rtems_rfs_rtems_error ("initialise: open", rc);
   }
 
-  mt_entry->fs_info = fs;
-
+  mt_entry->fs_info                          = fs;
+  mt_entry->ops                              = &rtems_rfs_ops;
   mt_entry->mt_fs_root->location.node_access = (void*) RTEMS_RFS_ROOT_INO;
   mt_entry->mt_fs_root->location.handlers    = &rtems_rfs_rtems_dir_handlers;
-  mt_entry->mt_fs_root->location.ops         = &rtems_rfs_ops;
 
   rtems_rfs_rtems_unlock (fs);
 

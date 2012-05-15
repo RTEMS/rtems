@@ -252,9 +252,9 @@ int msdos_rename(
   size_t new_namelen
 );
 
-void msdos_lock(rtems_filesystem_mount_table_entry_t *mt_entry);
+void msdos_lock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
-void msdos_unlock(rtems_filesystem_mount_table_entry_t *mt_entry);
+void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
 int msdos_initialize_support(
   rtems_filesystem_mount_table_entry_t    *temp_mt_entry,

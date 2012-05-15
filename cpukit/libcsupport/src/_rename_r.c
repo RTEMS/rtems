@@ -57,7 +57,7 @@ int _rename_r(
     new_currentloc
   );
   if ( rv == 0 ) {
-    rv = (*new_currentloc->ops->rename_h)(
+    rv = (*new_currentloc->mt_entry->ops->rename_h)(
       &old_parentloc,
       old_currentloc,
       new_currentloc,

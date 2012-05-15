@@ -28,7 +28,7 @@ int fchmod( int fd, mode_t mode )
 
   if (iop->pathinfo.mt_entry->writeable) {
     rtems_filesystem_instance_lock( &iop->pathinfo );
-    rv = (*iop->pathinfo.ops->fchmod_h)( &iop->pathinfo, mode );
+    rv = (*iop->pathinfo.mt_entry->ops->fchmod_h)( &iop->pathinfo, mode );
     rtems_filesystem_instance_unlock( &iop->pathinfo );
   } else {
     errno = EROFS;

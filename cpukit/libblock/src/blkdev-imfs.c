@@ -75,6 +75,7 @@ static ssize_t rtems_blkdev_imfs_read(
   }
 
   if (remaining >= 0) {
+    iop->offset += count;
     rv = (ssize_t) count;
   } else {
     errno = EIO;
@@ -134,6 +135,7 @@ static ssize_t rtems_blkdev_imfs_write(
   }
 
   if (remaining >= 0) {
+    iop->offset += count;
     rv = (ssize_t) count;
   } else {
     errno = EIO;
