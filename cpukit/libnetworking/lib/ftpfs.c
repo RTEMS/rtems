@@ -51,7 +51,6 @@
 
 #include <rtems.h>
 #include <rtems/ftpfs.h>
-#include <rtems/imfs.h>
 #include <rtems/libio_.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/seterr.h>
@@ -1198,9 +1197,6 @@ int rtems_ftpfs_initialize(
 
   /* We maintain no real file system nodes, so there is no real root */
   e->mt_fs_root->location.node_access = NULL;
-
-  /* Just use the limits from IMFS */
-  e->pathconf_limits_and_options = IMFS_LIMITS_AND_OPTIONS;
 
   return 0;
 }

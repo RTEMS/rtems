@@ -26,7 +26,7 @@ long fpathconf(
 {
   long                                    return_value;
   rtems_libio_t                          *iop;
-  rtems_filesystem_limits_and_options_t  *the_limits;
+  const rtems_filesystem_limits_and_options_t *the_limits;
 
   rtems_libio_check_fd(fd);
   iop = rtems_libio_iop(fd);
@@ -36,7 +36,7 @@ long fpathconf(
    *  Now process the information request.
    */
 
-  the_limits = &iop->pathinfo.mt_entry->pathconf_limits_and_options;
+  the_limits = iop->pathinfo.mt_entry->pathconf_limits_and_options;
 
   switch ( name ) {
     case _PC_LINK_MAX:

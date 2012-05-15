@@ -622,7 +622,7 @@ rtems_filesystem_resolve_location(char *buf, int len, rtems_filesystem_location_
 
 /* These are (except for MAXNAMLEN/MAXPATHLEN) copied from IMFS */
 
-static rtems_filesystem_limits_and_options_t
+static const rtems_filesystem_limits_and_options_t
 nfs_limits_and_options = {
    5, 				/* link_max */
    6, 				/* max_canon */
@@ -1755,7 +1755,7 @@ char				*path     = mt_entry->dev;
 
 	mt_entry->ops = &nfs_fs_ops;
 	mt_entry->mt_fs_root->location.handlers	 = &nfs_dir_file_handlers;
-	mt_entry->pathconf_limits_and_options = nfs_limits_and_options;
+	mt_entry->pathconf_limits_and_options = &nfs_limits_and_options;
 
 	LOCK(nfsGlob.llock);
 		nfsGlob.num_mounted_fs++;
