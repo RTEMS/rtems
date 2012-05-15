@@ -83,7 +83,7 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
 
     mt_entry->mounted = true;
     mt_entry->mt_fs_root = mt_fs_root;
-    mt_entry->pathconf_limits_and_options = rtems_filesystem_default_pathconf;
+    mt_entry->pathconf_limits_and_options = &rtems_filesystem_default_pathconf;
 
     mt_fs_root->location.mt_entry = mt_entry;
     mt_fs_root->reference_count = 1;

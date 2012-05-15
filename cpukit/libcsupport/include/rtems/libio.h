@@ -1439,7 +1439,7 @@ struct rtems_filesystem_mount_table_entry_tt {
   rtems_filesystem_global_location_t    *mt_fs_root;
   bool                                   mounted;
   bool                                   writeable;
-  rtems_filesystem_limits_and_options_t  pathconf_limits_and_options;
+  const rtems_filesystem_limits_and_options_t *pathconf_limits_and_options;
 
   /*
    * The target or mount point of the file system.
