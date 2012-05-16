@@ -57,9 +57,6 @@
 #define PCI_CONFIG_DATA			0xcfc
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
-
 /* define a shortcut */
 #define pci	BSP_pci_configuration
 
@@ -103,7 +100,7 @@ BSP_pci_read_config_dword(
   unsigned char slot,
   unsigned char function,
   unsigned char offset,
-  unsigned int *val
+  uint32_t     *val
 )
 {
     volatile unsigned int *pci_conf;
@@ -136,7 +133,7 @@ BSP_pci_read_config_dword(
 
 static int
 BSP_pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short *val) {
-    unsigned int v;
+    uint32_t v;
 
     if (offset & 1) return PCIBIOS_BAD_REGISTER_NUMBER;
 
@@ -149,7 +146,7 @@ BSP_pci_read_config_word(unsigned char bus, unsigned char slot, unsigned char fu
 
 static int
 BSP_pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char *val) {
-    unsigned int v;
+    uint32_t v;
 
     pci_read_config_dword(bus, slot, function, offset&~3, &v);
 
@@ -160,7 +157,7 @@ BSP_pci_read_config_byte(unsigned char bus, unsigned char slot, unsigned char fu
 
 
 static int
-BSP_pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned int val) {
+BSP_pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, uint32_t val) {
 
     volatile unsigned int *pci_conf;
     unsigned int value;
@@ -187,7 +184,7 @@ BSP_pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char 
 
 static int
 BSP_pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned short val) {
-    unsigned int v;
+    uint32_t v;
 
     if (offset & 1) return PCIBIOS_BAD_REGISTER_NUMBER;
 
@@ -201,7 +198,7 @@ BSP_pci_write_config_word(unsigned char bus, unsigned char slot, unsigned char f
 
 static int
 BSP_pci_write_config_byte(unsigned char bus, unsigned char slot, unsigned char function, unsigned char offset, unsigned char val) {
-    unsigned int v;
+    uint32_t v;
 
     pci_read_config_dword(bus, slot, function, offset&~3, &v);
 
@@ -231,7 +228,10 @@ rtems_pci_config_t BSP_pci_configuration = {
 int init_grpci(void) {
 
     volatile unsigned int *page0 =  (unsigned volatile int *) PCI_MEM_START;
-    unsigned int data, addr;
+    uint32_t data;
+#ifndef BT_ENABLED
+    uint32_t addr;
+#endif
 
 #ifndef BT_ENABLED
     pci_write_config_dword(0,0,0,0x10, 0xffffffff);
@@ -301,7 +301,7 @@ int dma_from_pci(unsigned int ahb_addr, unsigned int pci_addr, unsigned int len)
 
 
 void pci_mem_enable(unsigned char bus, unsigned char slot, unsigned char function) {
-    unsigned int data;
+    uint32_t data;
 
     pci_read_config_dword(0, slot, function, PCI_COMMAND, &data);
     pci_write_config_dword(0, slot, function, PCI_COMMAND, data | PCI_COMMAND_MEMORY);
@@ -309,7 +309,7 @@ void pci_mem_enable(unsigned char bus, unsigned char slot, unsigned char functio
 }
 
 void pci_master_enable(unsigned char bus, unsigned char slot, unsigned char function) {
-    unsigned int data;
+    uint32_t data;
 
     pci_read_config_dword(0, slot, function, PCI_COMMAND, &data);
     pci_write_config_dword(0, slot, function, PCI_COMMAND, data | PCI_COMMAND_MASTER);
@@ -337,7 +337,8 @@ static inline void swap_res(struct pci_res **p1, struct pci_res **p2) {
 */
 void pci_allocate_resources(void) {
 
-    unsigned int slot, numfuncs, func, id, pos, size, tmp, i, swapped, addr, dev, fn;
+    unsigned int slot, numfuncs, func, pos, i, swapped, addr, dev, fn;
+    uint32_t id, tmp, size;
     unsigned char header;
     struct pci_res **res;
 
@@ -362,7 +363,7 @@ void pci_allocate_resources(void) {
 
         pci_read_config_byte(0, slot, 0, PCI_HEADER_TYPE, &header);
 
-        if(header & PCI_MULTI_FUNCTION)	{
+        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)	{
             numfuncs = PCI_MAX_FUNCTIONS;
         }
         else {
@@ -453,7 +454,7 @@ done:
 
         pci_read_config_byte(0, slot, 0, PCI_HEADER_TYPE, &header);
 
-        if(header & PCI_MULTI_FUNCTION)	{
+        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)	{
             numfuncs = PCI_MAX_FUNCTIONS;
         }
         else {
@@ -503,7 +504,7 @@ int init_pci(void)
     unsigned char ucSlotNumber, ucFnNumber, ucNumFuncs;
     unsigned char ucHeader;
     unsigned char ucMaxSubordinate;
-    unsigned int  ulClass, ulDeviceID;
+    uint32_t      ulClass, ulDeviceID;
 
     DBG("Initializing PCI\n");
     if ( init_grpci() ) {
@@ -531,7 +532,7 @@ int init_pci(void)
                                    0,
                                    PCI_HEADER_TYPE,
                                    &ucHeader);
-        if(ucHeader&PCI_MULTI_FUNCTION)	{
+        if(ucHeader&PCI_HEADER_TYPE_MULTI_FUNCTION)	{
             ucNumFuncs=PCI_MAX_FUNCTIONS;
         }
         else {

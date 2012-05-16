@@ -10,10 +10,6 @@
  *
  */
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION			0x80
-
-
 #include <bsp/pci.h>
 #include <rtems/bspIo.h>
 #include <bsp.h>
@@ -42,7 +38,7 @@ int pci_find_device( unsigned short vendorid, unsigned short deviceid,
   for (bus=0; bus<BSP_MAX_PCI_BUS;  bus++) {
       for (dev=0; dev<PCI_MAX_DEVICES; dev++) {
 	  pci_read_config_byte(bus, dev, 0, PCI_HEADER_TYPE, &hd);
-	  hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
+	  hd = (hd & PCI_HEADER_TYPE_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
      	  for (fun=0; fun<hd; fun++) {
 	      /*
 	       * The last devfn id/slot is special; must skip it

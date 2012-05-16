@@ -44,9 +44,6 @@
 #define PCI_CONFIG_DATA			0xcfc
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
-
 /* define a shortcut */
 #define pci	BSP_pci_configuration
 
@@ -442,7 +439,7 @@ void pci_allocate_resources(void) {
 
         pci_read_config_byte(0, slot, 0, PCI_HEADER_TYPE, &header);
 
-        if(header & PCI_MULTI_FUNCTION)	{
+        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)	{
             numfuncs = PCI_MAX_FUNCTIONS;
         }
         else {
@@ -535,7 +532,7 @@ done:
 
         pci_read_config_byte(0, slot, 0, PCI_HEADER_TYPE, &header);
 
-        if(header & PCI_MULTI_FUNCTION)	{
+        if(header & PCI_HEADER_TYPE_MULTI_FUNCTION)	{
             numfuncs = PCI_MAX_FUNCTIONS;
         }
         else {
@@ -617,7 +614,7 @@ int init_pci(void)
                                    0,
                                    PCI_HEADER_TYPE,
                                    &ucHeader);
-        if(ucHeader&PCI_MULTI_FUNCTION)	{
+        if(ucHeader&PCI_HEADER_TYPE_MULTI_FUNCTION)	{
             ucNumFuncs=PCI_MAX_FUNCTIONS;
         }
         else {

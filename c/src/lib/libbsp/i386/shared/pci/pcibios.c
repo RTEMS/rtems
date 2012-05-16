@@ -220,8 +220,6 @@ pcib_find_by_class(int classCode, int idx, int *sig)
   return PCIB_ERR_SUCCESS;
 }
 
-#define PCI_MULTI_FUNCTION      0x80
-
 static uint8_t ucBusCount = 0xff;
 
 unsigned char
