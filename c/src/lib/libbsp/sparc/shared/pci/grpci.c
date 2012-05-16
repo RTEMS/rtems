@@ -442,7 +442,7 @@ int grpci_hw_init(struct grpci_priv *priv)
 	priv->bar1_size = (~(addr & ~0xf)) + 1;
 
 	/* and map system RAM at pci address 0x40000000 */
-	priv->bar1_pci_adr &= priv->bar1_size - 1; /* Fix alignment of BAR1 */
+	priv->bar1_pci_adr &= ~(priv->bar1_size - 1); /* Fix alignment of BAR1 */
 	grpci_cfg_w32(host, PCI_BASE_ADDRESS_1, priv->bar1_pci_adr);
 	priv->regs->page1 = priv->bar1_pci_adr;
 
