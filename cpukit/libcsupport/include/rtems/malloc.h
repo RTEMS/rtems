@@ -18,6 +18,7 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
+#include <rtems/libcsupport.h> /* for malloc_walk() */
 
 #include <stdint.h>
 

@@ -18,9 +18,9 @@
 
 #include <stdlib.h>
 
-void malloc_walk(size_t source, size_t printf_enabled)
+bool malloc_walk(int source, bool printf_enabled)
 {
-  _Protected_heap_Walk( RTEMS_Malloc_Heap, (int) source, printf_enabled );
+  return _Protected_heap_Walk( RTEMS_Malloc_Heap, source, printf_enabled );
 }
 
 #endif

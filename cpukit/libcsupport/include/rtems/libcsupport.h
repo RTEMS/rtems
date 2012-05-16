@@ -34,7 +34,7 @@ void RTEMS_Malloc_Initialize(
 );
 
 extern void malloc_dump(void);
-extern void malloc_walk(size_t source, size_t printf_enabled);
+extern bool malloc_walk(int source, bool printf_enabled);
 void malloc_set_heap_pointer(Heap_Control *new_heap);
 Heap_Control *malloc_get_heap_pointer( void );
 extern void libc_init(void);
