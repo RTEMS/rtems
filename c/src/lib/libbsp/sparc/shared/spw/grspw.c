@@ -83,6 +83,7 @@
 #include <ctype.h>
 #include <rtems/bspIo.h>
 #include <ambapp.h>
+#include <grlib.h>
 #include <grspw.h>
 
 #define DBGSPW_IOCALLS 1
@@ -390,11 +391,11 @@ int GRSPW_PREFIX(_register)(struct ambapp_bus *bus)
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
 		struct ambapp_apb_info gptimer;
-		LEON3_Timer_Regs_Map *tregs;
+		struct gptimer_regs *tregs;
 
 		if ( ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER,
                                         GAISLER_GPTIMER, &gptimer) == 1 ) {
-			tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
+			tregs = (struct gptimer_regs *)gptimer.start;
 			sys_freq_khz = (tregs->scaler_reload+1)*1000;
 			SPACEWIRE_DBG("GRSPW: detected %dkHZ system frequency\n\r",sys_freq_khz);
 		}else{

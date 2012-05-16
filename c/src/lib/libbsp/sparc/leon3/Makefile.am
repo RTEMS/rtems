@@ -44,6 +44,7 @@ libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 include_HEADERS += include/amba.h
 include_HEADERS += ../../sparc/shared/include/ambapp.h
 include_HEADERS += ../../sparc/shared/include/ambapp_ids.h
+include_HEADERS += ../../sparc/shared/include/grlib.h
 libbsp_a_SOURCES += amba/amba.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_alloc.c

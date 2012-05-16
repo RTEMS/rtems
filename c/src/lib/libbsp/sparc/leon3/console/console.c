@@ -49,14 +49,14 @@ int syscon_uart_index __attribute__((weak)) = 0;
  */
 
 extern void apbuart_outbyte_polled(
-  ambapp_apb_uart *regs,
+  struct apbuart_regs *regs,
   unsigned char ch,
   int do_cr_on_newline,
   int wait_sent
   );
 
 
-/* body is in debugputs.c */
+/* body is in printk_support.c */
 
 /*
  *  apbuart_inbyte_nonblocking
@@ -64,12 +64,12 @@ extern void apbuart_outbyte_polled(
  *  This routine polls for a character.
  */
 
-extern int apbuart_inbyte_nonblocking(ambapp_apb_uart *regs);
+extern int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 
 /* body is in debugputs.c */
 
 struct apbuart_priv {
-  ambapp_apb_uart *regs;
+  struct apbuart_regs *regs;
   unsigned int freq_hz;
 #if CONSOLE_USE_INTERRUPTS
   int irq;
@@ -252,7 +252,7 @@ int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
   struct ambapp_apb_info *apb = (struct ambapp_apb_info *)dev->devinfo;
 
   /* Extract needed information of one APBUART */
-  apbuarts[uarts].regs = (ambapp_apb_uart *)apb->start;
+  apbuarts[uarts].regs = (struct apbuart_regs *)apb->start;
 #if CONSOLE_USE_INTERRUPTS
   apbuarts[uarts].irq = apb->irq;
 #endif

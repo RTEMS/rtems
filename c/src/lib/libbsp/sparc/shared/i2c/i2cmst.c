@@ -17,6 +17,7 @@
 #include <bsp.h>
 #include <i2cmst.h>
 #include <ambapp.h>
+#include <grlib.h>
 #include <rtems/libi2c.h>
 
 /* Enable debug printks? */
@@ -318,11 +319,11 @@ rtems_status_code leon_register_i2c(struct ambapp_bus *abus)
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
 	  struct ambapp_apb_info gptimer;
-	  LEON3_Timer_Regs_Map *tregs;
+	  struct gptimer_regs *tregs;
 
 	  if (ambapp_find_apbslv(abus, VENDOR_GAISLER,
 				 GAISLER_GPTIMER, &gptimer) == 1 ) {
-	    tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
+	    tregs = (struct gptimer_regs *)gptimer.start;
 	    gr_i2cmst_desc.prv.sysfreq = (tregs->scaler_reload+1)*1000;
 	  } else {
 	    gr_i2cmst_desc.prv.sysfreq = 40000; /* Default to 40MHz */

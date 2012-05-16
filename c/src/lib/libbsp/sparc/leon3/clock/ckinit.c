@@ -38,7 +38,7 @@
 #endif
 
 
-volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs = 0;
+volatile struct gptimer_regs *LEON3_Timer_Regs = 0;
 static int clkirq;
 
 #define CLOCK_VECTOR LEON_TRAP_TYPE( clkirq )
@@ -65,9 +65,9 @@ static int clkirq;
               VENDOR_GAISLER, GAISLER_GPTIMER, ambapp_find_by_idx, NULL); \
     if (adev) { \
       /* Found APB GPTIMER Timer */ \
-      LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *) \
+      LEON3_Timer_Regs = (volatile struct gptimer_regs *) \
                          DEV_TO_APB(adev)->start; \
-      clkirq = (LEON3_Timer_Regs->status & 0xf8) >> 3; \
+      clkirq = (LEON3_Timer_Regs->cfg & 0xf8) >> 3; \
       \
       Adjust_clkirq_for_node(); \
     } \
@@ -83,7 +83,7 @@ static int clkirq;
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload = \
       rtems_configuration_get_microseconds_per_tick() - 1; \
     \
-    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].conf = \
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = \
       LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | \
         LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN; \
   } while (0)
@@ -91,7 +91,7 @@ static int clkirq;
 #define Clock_driver_support_shutdown_hardware() \
   do { \
     LEON_Mask_interrupt(LEON_TRAP_TYPE(clkirq)); \
-    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].conf = 0; \
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = 0; \
   } while (0)
 
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)

@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <ambapp.h>
+#include <grlib.h>
 #include <apbuart.h>
 
 #ifndef DEFAULT_TXBUF_SIZE
@@ -79,7 +80,7 @@ static rtems_device_driver apbuart_write(rtems_device_major_number major, rtems_
 static rtems_device_driver apbuart_control(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 
 typedef struct {
-	ambapp_apb_uart *regs;
+	struct apbuart_regs *regs;
 	int irq;
 	int minor;
 	int scaler;
@@ -153,7 +154,7 @@ static void apbuart_hw_open(apbuart_priv *uart);
 #endif
 
 #if 0
-static int apbuart_outbyte_try(ambapp_apb_uart *regs,  unsigned char ch)
+static int apbuart_outbyte_try(struct apbuart_regs *regs, unsigned char ch)
 {
 	if ( (READ_REG(&regs->status) & LEON_REG_UART_STATUS_THE) == 0 )
 		return -1; /* Failed */
@@ -164,7 +165,7 @@ static int apbuart_outbyte_try(ambapp_apb_uart *regs,  unsigned char ch)
 }
 
 
-static int apbuart_inbyte_try(ambapp_apb_uart *regs)
+static int apbuart_inbyte_try(struct apbuart_regs *regs)
 {
 	unsigned int status;
 	/* Clear errors if any */
@@ -386,11 +387,11 @@ static rtems_device_driver apbuart_initialize(rtems_device_major_number  major, 
 	/* LEON3: find timer address via AMBA Plug&Play info */
 	{
 		struct ambapp_apb_info gptimer;
-		LEON3_Timer_Regs_Map *tregs;
+		struct gptimer_regs *tregs;
 
 		if ( ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER,
 		                        GAISLER_GPTIMER, &gptimer) == 1 ){
-			tregs = (LEON3_Timer_Regs_Map *)gptimer.start;
+			tregs = (struct gptimer_regs *)gptimer.start;
 			sys_freq_hz = (tregs->scaler_reload+1)*1000*1000;
 			DBG("APBUART: detected %dHZ system frequency\n\r",sys_freq_hz);
 		}else{
@@ -419,7 +420,7 @@ static rtems_device_driver apbuart_initialize(rtems_device_major_number  major, 
 
 		printk("APBUART[%d]: at 0x%x irq %d (0x%x)\n\r",i,dev.start,dev.irq,(unsigned int)&apbuarts[i]);
 
-		apbuarts[i].regs = (ambapp_apb_uart *)dev.start;
+		apbuarts[i].regs = (struct apbuart_regs *)dev.start;
 		apbuarts[i].irq = dev.irq;
 		apbuarts[i].minor = i;
 

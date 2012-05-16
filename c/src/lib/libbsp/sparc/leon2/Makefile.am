@@ -78,6 +78,7 @@ libbsp_a_SOURCES += \
 # AMBA bus
 include_HEADERS += ../../sparc/shared/include/ambapp.h
 include_HEADERS += ../../sparc/shared/include/ambapp_ids.h
+include_HEADERS += ../../sparc/shared/include/grlib.h
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_alloc.c
 libbsp_a_SOURCES += ../../sparc/shared/amba/ambapp_count.c

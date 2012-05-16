@@ -33,7 +33,7 @@ bool benchmark_timer_find_average_overhead;
 
 bool benchmark_timer_is_initialized = false;
 
-extern volatile LEON3_Timer_Regs_Map *LEON3_Timer_Regs;
+extern volatile struct gptimer_regs *LEON3_Timer_Regs;
 
 void benchmark_timer_initialize(void)
 {
@@ -48,7 +48,7 @@ void benchmark_timer_initialize(void)
     } else {
       benchmark_timer_is_initialized = true;
     }
-    LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].conf = LEON3_GPTIMER_EN | LEON3_GPTIMER_LD;
+    LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].ctrl = LEON3_GPTIMER_EN | LEON3_GPTIMER_LD;
   }
 }
 

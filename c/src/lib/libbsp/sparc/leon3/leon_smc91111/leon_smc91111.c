@@ -34,7 +34,7 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
 				    int attach)
 {
   unsigned long addr_mctrl = 0;
-  LEON3_IOPORT_Regs_Map *io;
+  struct grgpio_regs *io;
   struct ambapp_apb_info apbpio;
   struct ambapp_apb_info apbmctrl;
 
@@ -63,7 +63,7 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
 
   /* Get  controller address */
   addr_mctrl = (unsigned long) apbmctrl.start;
-  io = (LEON3_IOPORT_Regs_Map *) apbpio.start;
+  io = (struct grgpio_regs *) apbpio.start;
 
   printk(
         "Activating Leon3 io port for smsc_lan91cxx (pio:%x mctrl:%x)\n",
@@ -71,10 +71,10 @@ rtems_smc91111_driver_attach_leon3 (struct rtems_bsdnet_ifconfig *config,
         (unsigned int)addr_mctrl);
 
   /* Setup PIO IRQ */
-  io->irqmask |= (1 << leon_scmv91111_configuration.pio);
-  io->irqpol |= (1 << leon_scmv91111_configuration.pio);
-  io->irqedge |= (1 << leon_scmv91111_configuration.pio);
-  io->iodir &= ~(1 << leon_scmv91111_configuration.pio);
+  io->imask |= (1 << leon_scmv91111_configuration.pio);
+  io->ipol |= (1 << leon_scmv91111_configuration.pio);
+  io->iedge |= (1 << leon_scmv91111_configuration.pio);
+  io->dir &= ~(1 << leon_scmv91111_configuration.pio);
 
   /* Setup memory controller I/O waitstates */
   *((volatile unsigned int *) addr_mctrl) |= 0x10f80000;	/* enable I/O area access */
