@@ -34,10 +34,7 @@
 #include <inttypes.h>
 #include <errno.h>
 #include <rtems/score/protectedheap.h>
-
-/* HACK: Blatant visibility violations */
-extern int malloc_info(Heap_Information_block *the_info);
-extern void malloc_walk(size_t source, size_t printf_enabled);
+#include <rtems/malloc.h>
 
 /*
  *  A simple test of realloc
@@ -47,6 +44,7 @@ static void test_realloc(void)
   void *p1, *p2, *p3, *p4;
   size_t i;
   int sc;
+  bool malloc_walk_ok;
 
   /* Test growing reallocation "in place" */
   p1 = malloc(1);
@@ -103,11 +101,13 @@ static void test_realloc(void)
    * Walk the C Program Heap
    */
   puts( "malloc_walk - normal path" );
-  malloc_walk( 1234, 0 );
+  malloc_walk_ok = malloc_walk( 1234, false );
+  rtems_test_assert( malloc_walk_ok );
 
   puts( "malloc_walk - in critical section path" );
   _Thread_Disable_dispatch();
-  malloc_walk( 1234, 0 );
+  malloc_walk_ok = malloc_walk( 1234, false );
+  rtems_test_assert( malloc_walk_ok );
   _Thread_Enable_dispatch();
 
   /*

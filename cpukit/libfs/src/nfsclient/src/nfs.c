@@ -574,8 +574,8 @@ typedef struct NfsNodeRec_ {
 	Forward Declarations
  *****************************************/
 
-static ssize_t nfs_readlink(
-	const rtems_filesystem_location_info_t *loc,
+static ssize_t nfs_readlink_with_node(
+	NfsNode node,
 	char *buf,
 	size_t len
 );
@@ -1299,19 +1299,24 @@ static bool nfs_is_directory(
 	return is_dir;
 }
 
-static NfsNode nfs_search_in_directory(
+static int nfs_search_in_directory(
 	Nfs nfs,
-	NfsNode node,
-	char *part
+	const NfsNode dir,
+	char *part,
+	NfsNode entry
 )
 {
 	int rv;
 
+	entry->nfs = nfs;
+
 	/* lookup one element */
-	SERP_ARGS(node).diroparg.name = part;
+	SERP_ATTR(entry) = SERP_ATTR(dir);
+	SERP_FILE(entry) = SERP_FILE(dir);
+	SERP_ARGS(entry).diroparg.name = part;
 
 	/* remember args / directory fh */
-	memcpy( &node->args, &SERP_FILE(node), sizeof(node->args));
+	memcpy(&entry->args, &SERP_FILE(dir), sizeof(dir->args));
 
 #if DEBUG & DEBUG_EVALPATH
 	fprintf(stderr,"Looking up '%s'\n",part);
@@ -1320,92 +1325,100 @@ static NfsNode nfs_search_in_directory(
 	rv = nfscall(
 		nfs->server,
 		NFSPROC_LOOKUP,
-		(xdrproc_t) xdr_diropargs, &SERP_FILE(node),
-		(xdrproc_t) xdr_serporid,  &node->serporid
+		(xdrproc_t) xdr_diropargs, &SERP_FILE(entry),
+		(xdrproc_t) xdr_serporid,  &entry->serporid
 	);
 
-	if (rv == 0 && node->serporid.status == NFS_OK) {
+	if (rv == 0 && entry->serporid.status == NFS_OK) {
 		int force_update = 1;
 
-		rv = updateAttr(node, force_update);
-		if (rv != 0) {
-			node = NULL;
-		}
+		rv = updateAttr(entry, force_update);
 	} else {
-		node = NULL;
+		rv = -1;
 	}
 
-	return node;
+	return rv;
 }
 
-static void nfs_follow_link(rtems_filesystem_eval_path_context_t *ctx)
+static void nfs_eval_follow_link(
+	rtems_filesystem_eval_path_context_t *ctx,
+	NfsNode link
+)
 {
 	const size_t len = NFS_MAXPATHLEN + 1;
-	char *link = malloc(len);
+	char *buf = malloc(len);
 
-	if (link != NULL) {
-		rtems_filesystem_location_info_t *currentloc =
-			rtems_filesystem_eval_path_get_currentloc(ctx);
-		ssize_t rv = nfs_readlink(currentloc, link, len);
+	if (buf != NULL) {
+		ssize_t rv = nfs_readlink_with_node(link, buf, len);
 
 		if (rv >= 0) {
-			rtems_filesystem_eval_path_recursive(ctx, link, (size_t) rv);
+			rtems_filesystem_eval_path_recursive(ctx, buf, (size_t) rv);
 		} else {
 			rtems_filesystem_eval_path_error(ctx, 0);
 		}
 
-		free(link);
+		free(buf);
 	} else {
 		rtems_filesystem_eval_path_error(ctx, ENOMEM);
 	}
 }
 
-static bool nfs_update_currentloc(
+static void nfs_eval_set_handlers(
 	rtems_filesystem_eval_path_context_t *ctx,
-	Nfs nfs,
-	NfsNode node
+	ftype type
 )
 {
-	bool ok = true;
-	rtems_filesystem_location_info_t *pathloc =
+	rtems_filesystem_location_info_t *currentloc =
 		rtems_filesystem_eval_path_get_currentloc(ctx);
 
-	pathloc->node_access = node;
+	switch (type) {
+		case NFDIR:
+			currentloc->handlers = &nfs_dir_file_handlers;
+			break;
+		case NFREG:
+			currentloc->handlers = &nfs_file_file_handlers;
+			break;
+		case NFLNK:
+			currentloc->handlers = &nfs_link_file_handlers;
+			break;
+		default:
+			currentloc->handlers = &rtems_filesystem_handlers_default;
+			break;
+	}
+}
 
-	switch (SERP_ATTR(node).type) {
-		case NFDIR:	pathloc->handlers = &nfs_dir_file_handlers;  break;
-		case NFREG:	pathloc->handlers = &nfs_file_file_handlers; break;
-		case NFLNK: pathloc->handlers = &nfs_link_file_handlers; break;
-		default: 	pathloc->handlers = &rtems_filesystem_handlers_default; break;
+static int nfs_move_node(NfsNode dst, const NfsNode src)
+{
+	int rv = 0;
+
+	if (dst->str != NULL) {
+#if DEBUG & DEBUG_COUNT_NODES
+		rtems_interrupt_level flags;
+		rtems_interrupt_disable(flags);
+			dst->nfs->stringsInUse--;
+		rtems_interrupt_enable(flags);
+#endif
+		free(dst->str);
 	}
 
-	/* remember the name of this directory entry */
+	*dst = *src;
+	dst->str = NULL;
 
-	if (node->args.name) {
-		if (node->str) {
+	if (src->args.name != NULL) {
+		dst->str = dst->args.name = strdup(src->args.name);
+		if (dst->str != NULL) {
 #if DEBUG & DEBUG_COUNT_NODES
 			rtems_interrupt_level flags;
 			rtems_interrupt_disable(flags);
-				nfs->stringsInUse--;
-			rtems_interrupt_enable(flags);
-#endif
-			free(node->str);
-		}
-		node->args.name = node->str = strdup(node->args.name);
-		if (node->str != NULL) {
-#if DEBUG & DEBUG_COUNT_NODES
-			rtems_interrupt_level flags;
-			rtems_interrupt_disable(flags);
-				nfs->stringsInUse++;
+				dst->nfs->stringsInUse++;
 			rtems_interrupt_enable(flags);
 #endif
 		} else {
-			rtems_filesystem_eval_path_error(ctx, ENOMEM);
-			ok = false;
+			rv = -1;
 		}
 	}
 
-	return ok;
+	return rv;
 }
 
 static rtems_filesystem_eval_path_generic_status nfs_eval_part(
@@ -1419,20 +1432,28 @@ static rtems_filesystem_eval_path_generic_status nfs_eval_part(
 		rtems_filesystem_eval_path_get_currentloc(ctx);
 	Nfs nfs = currentloc->mt_entry->fs_info;
 	NfsNode dir = currentloc->node_access;
-	NfsNode entry = nfs_search_in_directory(nfs, dir, part);
+	NfsNodeRec entry;
+	int rv = nfs_search_in_directory(nfs, dir, part, &entry);
 
-	if (entry != NULL) {
+	if (rv == 0) {
+		bool terminal = !rtems_filesystem_eval_path_has_path(ctx);
+		int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
+		bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
+		ftype type = SERP_ATTR(&entry).type;
+
 		rtems_filesystem_eval_path_clear_token(ctx);
 
-		if (nfs_update_currentloc(ctx, nfs, entry)) {
-			int eval_flags = rtems_filesystem_eval_path_get_flags(ctx);
-			bool follow_sym_link = (eval_flags & RTEMS_FS_FOLLOW_SYM_LINK) != 0;
-			bool terminal = !rtems_filesystem_eval_path_has_path( ctx );
-
-			if (SERP_ATTR(entry).type == NFLNK && (follow_sym_link || !terminal)) {
-				nfs_follow_link(ctx);
-			} else if (!terminal) {
-				status = RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_CONTINUE;
+		if (type == NFLNK && (follow_sym_link || !terminal)) {
+			nfs_eval_follow_link(ctx, &entry);
+		} else {
+			rv = nfs_move_node(dir, &entry);
+			if (rv == 0) {
+				nfs_eval_set_handlers(ctx, type);
+				if (!terminal) {
+					status = RTEMS_FILESYSTEM_EVAL_PATH_GENERIC_CONTINUE;
+				}
+			} else {
+				rtems_filesystem_eval_path_error(ctx, ENOMEM);
 			}
 		}
 	} else {
@@ -2015,13 +2036,12 @@ char					*dupname;
 	return rv;
 }
 
-static ssize_t nfs_readlink(
-	const rtems_filesystem_location_info_t *loc,
+static ssize_t nfs_readlink_with_node(
+	NfsNode node,
 	char *buf,
 	size_t len
 )
 {
-	NfsNode	node = loc->node_access;
 	Nfs nfs = node->nfs;
 	readlinkres_strbuf rr;
 
@@ -2034,12 +2054,23 @@ static ssize_t nfs_readlink(
 							(xdrproc_t)xdr_readlinkres_strbuf, &rr)
 		|| (NFS_OK != (errno = rr.status)) ) {
 #if DEBUG & DEBUG_SYSCALLS
-		perror("nfs_readlink");
+		perror("nfs_readlink_with_node");
 #endif
 		return -1;
 	}
 
 	return (ssize_t) strlen(rr.strbuf.buf);
+}
+
+static ssize_t nfs_readlink(
+	const rtems_filesystem_location_info_t *loc,
+	char *buf,
+	size_t len
+)
+{
+	NfsNode	node = loc->node_access;
+
+	return nfs_readlink_with_node(node, buf, len);
 }
 
 static int nfs_rename(

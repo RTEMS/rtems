@@ -20,9 +20,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-/* HACK: Blatant visibility violation */
-extern void malloc_walk(size_t source, size_t printf_enabled);
-
 #define NUM_PASSES 100
 
 rtems_task Task_1_through_5(
@@ -42,6 +39,8 @@ rtems_task Task_1_through_5(
 
   while (TRUE)
   {
+    bool malloc_walk_ok;
+
     if ( passes++ > NUM_PASSES ) {
 	puts("*** END OF MALLOC TEST ***");
         rtems_test_exit(0);
@@ -61,7 +60,8 @@ rtems_task Task_1_through_5(
     printf("mallocing %d bytes\n",mem_amt);
     memset( mem_ptr, mem_amt, mem_amt );
     malloc_report_statistics();
-    malloc_walk(1,FALSE);
+    malloc_walk_ok = malloc_walk( 1, false );
+    rtems_test_assert( malloc_walk_ok );
     status = rtems_task_wake_after(
       task_number( tid ) * 1 * rtems_clock_get_ticks_per_second()/4 );
     for (i=0; i < mem_amt; i++)
