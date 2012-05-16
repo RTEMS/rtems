@@ -73,7 +73,7 @@ $(PROJECT_INCLUDE)/bsp/gtpcireg.h: pci/gtpcireg.h $(PROJECT_INCLUDE)/bsp/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gtpcireg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gtpcireg.h
 
-$(PROJECT_INCLUDE)/bsp/pci.h: pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/pci.h: ../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
 

@@ -411,7 +411,7 @@ int pci_initialize(void)
   return(0);
 }
 
-void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
+void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
 }
 

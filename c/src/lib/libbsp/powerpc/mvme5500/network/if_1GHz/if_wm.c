@@ -309,7 +309,7 @@ int rtems_i82544EI_driver_attach(struct rtems_bsdnet_ifconfig *config, int attac
 
   sprintf(sc->dv_xname, "%s%d", name, unit);
 
-  if (pci_find_device(PCI_VENDOR_ID_INTEL,PCI_DEVICE_INTEL_82544EI_COPPER,
+  if (pci_find_device(PCI_VENDOR_ID_INTEL,PCI_DEVICE_ID_INTEL_82544EI_COPPER,
 			unit-1,&b, &d, &f))
     rtems_panic("i82544EI device ID not found\n");
 
