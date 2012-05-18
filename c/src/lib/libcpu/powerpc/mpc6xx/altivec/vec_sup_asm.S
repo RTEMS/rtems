@@ -623,17 +623,6 @@ _CPU_load_altivec_volatile:
 #endif
 	blr
 
-	.global _CPU_Context_restore_altivec
-_CPU_Context_restore_altivec:
-	/* Restore is like 'switch' but we don't have
-	 * to save an old context.
-	 * Move argument to second arg and load NULL pointer
-	 * to first one, then jump to 'switch' routine.
-	 */
-	mr	r4, r3
-	li  r3,  0
-	b _CPU_Context_switch_altivec
-
 	.global _CPU_Context_switch_altivec
 _CPU_Context_switch_altivec:
 

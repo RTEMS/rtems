@@ -233,7 +233,7 @@ unsigned          pvr;
 	 * for use by assembly code.
 	 * Therefore, we compute it here and store it in memory...
 	 */
-	_CPU_altivec_ctxt_off  = (uint32_t) &((Context_Control*)0)->altivec;
+	_CPU_altivec_ctxt_off  = offsetof(ppc_context, altivec);
 	/* 
 	 * Add space possibly needed for alignment
 	 */

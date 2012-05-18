@@ -65,6 +65,7 @@ void _CPU_Context_Initialize(
   bool              is_fp
 )
 {
+  ppc_context *the_ppc_context;
   uint32_t   msr_value;
   uint32_t   sp;
 
@@ -122,35 +123,10 @@ void _CPU_Context_Initialize(
 
   memset( the_context, 0, sizeof( *the_context ) );
 
-  PPC_CONTEXT_SET_SP( the_context, sp );
-  PPC_CONTEXT_SET_PC( the_context, (uint32_t) entry_point );
-  PPC_CONTEXT_SET_MSR( the_context, msr_value );
-
-#ifndef __SPE__
-#if (PPC_ABI == PPC_ABI_SVR4)
-  /*
-   * SVR4 says R2 is for 'system-reserved' use; it cannot hurt to
-   * propagate R2 to all task contexts.
-   */
-  { uint32_t    r2 = 0;
-    unsigned    r13 = 0;
-    __asm__ volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
-
-    the_context->gpr2 = r2;
-    the_context->gpr13 = r13;
-  }
-#elif (PPC_ABI == PPC_ABI_EABI)
-  { uint32_t    r2 = 0;
-    unsigned    r13 = 0;
-    __asm__ volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
-
-    the_context->gpr2 = r2;
-    the_context->gpr13 = r13;
-  }
-#else
-#error unsupported PPC_ABI
-#endif
-#endif /* __SPE__ */
+  the_ppc_context = ppc_get_context( the_context );
+  the_ppc_context->gpr1 = sp;
+  the_ppc_context->msr = msr_value;
+  the_ppc_context->lr = (uint32_t) entry_point;
 
 #ifdef __ALTIVEC__
   _CPU_Context_initialize_altivec(the_context);
