@@ -4,7 +4,7 @@ AC_PREREQ(2.62)
 dnl
 dnl RTEMS_TOP($1)
 dnl 
-dnl $1 .. relative path from this configure.in to the toplevel configure.in
+dnl $1 .. relative path from this configure.ac to the toplevel configure.ac
 dnl
 AC_DEFUN([RTEMS_TOP],
 [dnl
