@@ -25,7 +25,6 @@ AC_PROG_CXXCPP
      [Inconsistency in compiler configuration:]
      [Target C compiler and target C++ compiler]
      [must both either be cross compilers or native compilers]
-     [Hint: If building a posix bsp: LD_LIBRARY_PATH?] )
   fi
 else
 ## Work-around to a bug in automake
