@@ -33,6 +33,8 @@ extern "C" {
 #define PCI_VENDOR_ID      0x00  /* 16 bits */
 #define PCI_DEVICE_ID      0x02  /* 16 bits */
 
+#define PCI_INVALID_VENDORDEVICEID 0xffffffff
+
 #define PCI_COMMAND             0x04    /* 16 bits */
 #define PCI_COMMAND_IO          0x0001  /* Enable response in I/O space */
 #define PCI_COMMAND_MEMORY      0x0002  /* Enable response in Memory space */
@@ -67,10 +69,11 @@ extern "C" {
 #define PCI_CACHE_LINE_SIZE  0x0c /* 8 bits */
 #define PCI_LATENCY_TIMER    0x0d /* 8 bits */
 
-#define PCI_HEADER_TYPE         0x0e /* 8 bits */
-#define PCI_HEADER_TYPE_NORMAL  0
-#define PCI_HEADER_TYPE_BRIDGE  1
-#define PCI_HEADER_TYPE_CARDBUS 2
+#define PCI_HEADER_TYPE                  0x0e /* 8 bits */
+#define PCI_HEADER_TYPE_NORMAL           0x00
+#define PCI_HEADER_TYPE_BRIDGE           0x01
+#define PCI_HEADER_TYPE_CARDBUS          0x02
+#define PCI_HEADER_TYPE_MULTI_FUNCTION   0x80
 
 #define PCI_BIST            0x0f  /* 8 bits */
 #define PCI_BIST_CODE_MASK  0x0f  /* Return result */
@@ -105,11 +108,14 @@ extern "C" {
 #define PCI_CARDBUS_CIS         0x28
 #define PCI_SUBSYSTEM_VENDOR_ID 0x2c
 #define PCI_SUBSYSTEM_ID        0x2e
-#define PCI_ROM_ADDRESS         0x30/* Bits 31..11 address, 10..1 reserved */
+#define PCI_ROM_ADDRESS         0x30 /* Bits 31..11 address, 10..1 reserved */
 #define PCI_ROM_ADDRESS_ENABLE  0x01
 #define PCI_ROM_ADDRESS_MASK    (~0x7ffUL)
 
-/* 0x34-0x3b are reserved */
+/* upper 24 bits are reserved */
+#define PCI_CAPABILITY_LIST_POINTER    0x34
+
+/* 0x38-0x3b are reserved */
 #define PCI_INTERRUPT_LINE  0x3c  /* 8 bits */
 #define PCI_INTERRUPT_PIN   0x3d  /* 8 bits */
 #define PCI_MIN_GNT         0x3e  /* 8 bits */
@@ -372,6 +378,7 @@ extern "C" {
 #define PCI_DEVICE_ID_DEC_FDDI                     0x000F
 #define PCI_DEVICE_ID_DEC_TULIP_PLUS               0x0014
 #define PCI_DEVICE_ID_DEC_21142                    0x0019
+#define PCI_DEVICE_ID_DEC_21143                    0x0019
 #define PCI_DEVICE_ID_DEC_21052                    0x0021
 #define PCI_DEVICE_ID_DEC_21150                    0x0022
 #define PCI_DEVICE_ID_DEC_21152                    0x0024
@@ -628,6 +635,9 @@ extern "C" {
 #define PCI_DEVICE_ID_PLX_9060SD                   0x906D
 #define PCI_DEVICE_ID_PLX_9080                     0x9080
 
+#define PCI_VENDOR_ID_PLX2                         0x3388
+#define PCI_DEVICE_ID_PLX2_PCI6154_HB2             0x0026
+
 #define PCI_VENDOR_ID_MADGE                        0x10b6
 #define PCI_DEVICE_ID_MADGE_MK2                    0x0002
 #define PCI_DEVICE_ID_MADGE_C155S                  0x1001
@@ -850,6 +860,9 @@ extern "C" {
 #define PCI_VENDOR_ID_OMEGA                        0x119b
 #define PCI_DEVICE_ID_OMEGA_82C092G                0x1221
 
+#define PCI_VENDOR_ID_MARVELL                      0x11ab
+#define PCI_DEVICE_ID_MARVELL_GT6426xAB            0x6430
+
 #define PCI_VENDOR_ID_LITEON                       0x11ad
 #define PCI_DEVICE_ID_LITEON_LNE100TX              0x0002
 
@@ -1002,6 +1015,7 @@ extern "C" {
 #define PCI_DEVICE_ID_INTEL_82378                  0x0484
 #define PCI_DEVICE_ID_INTEL_82430                  0x0486
 #define PCI_DEVICE_ID_INTEL_82434                  0x04a3
+#define PCI_DEVICE_ID_INTEL_82544EI_COPPER         0x1008
 #define PCI_DEVICE_ID_INTEL_82092AA_0              0x1221
 #define PCI_DEVICE_ID_INTEL_82092AA_1              0x1222
 #define PCI_DEVICE_ID_INTEL_7116                   0x1223

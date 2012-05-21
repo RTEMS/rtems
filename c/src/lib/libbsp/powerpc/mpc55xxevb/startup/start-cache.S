@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -35,7 +35,8 @@ mpc55xx_start_cache:
 	li	r3, 0x2
 	li	r4, 0x4
 
-#ifdef MPC55XX_HAS_INSTRUCTION_CACHE
+#if defined(BSP_INSTRUCTION_CACHE_ENABLED) \
+  && defined(MPC55XX_HAS_INSTRUCTION_CACHE)
 
 start_instruction_cache_invalidation:
 
@@ -64,9 +65,12 @@ get_instruction_cache_invalidation_status:
 	msync
 	mtspr	FSL_EIS_L1CSR1, r6
 
-#endif /* MPC55XX_HAS_INSTRUCTION_CACHE */
+#endif
 
-#if defined(MPC55XX_HAS_DATA_CACHE) || defined(MPC55XX_HAS_UNIFIED_CACHE)
+#if (defined(BSP_DATA_CACHE_ENABLED) && defined(MPC55XX_HAS_DATA_CACHE)) \
+  || ((defined(BSP_DATA_CACHE_ENABLED) \
+    || defined(BSP_INSTRUCTION_CACHE_ENABLED)) \
+      && defined(MPC55XX_HAS_UNIFIED_CACHE))
 
 start_data_cache_invalidation:
 
@@ -100,7 +104,7 @@ get_data_cache_invalidation_status:
 	msync
 	mtspr	FSL_EIS_L1CSR0, r6
 
-#endif /* defined(MPC55XX_HAS_DATA_CACHE) || defined(MPC55XX_HAS_UNIFIED_CACHE) */
+#endif
 
 	/* Return */
 	blr

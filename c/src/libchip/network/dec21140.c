@@ -99,7 +99,6 @@
 #define DEC_DEBUG
 
 /* note: the 21143 isn't really a DEC, it's an Intel chip */
-#define PCI_INVALID_VENDORDEVICEID      0xffffffff
 #define PCI_VENDOR_ID_DEC               0x1011
 #define PCI_DEVICE_ID_DEC_21140         0x0009
 #define PCI_DEVICE_ID_DEC_21143         0x0019

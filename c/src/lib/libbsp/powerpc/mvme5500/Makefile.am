@@ -51,7 +51,8 @@ include_bsp_HEADERS += ../../powerpc/shared/console/consoleIo.h
 libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c
 
-include_bsp_HEADERS += pci/gtpcireg.h pci/pci.h
+include_bsp_HEADERS += pci/gtpcireg.h
+include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
 # pci
 libbsp_a_SOURCES += pci/pci.c pci/pci_interface.c pci/detect_host_bridge.c \
     pci/pcifinddevice.c

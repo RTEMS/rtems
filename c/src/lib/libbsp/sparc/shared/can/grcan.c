@@ -26,6 +26,7 @@
 
 #include <grcan.h>
 #include <ambapp.h>
+#include <grlib.h>
 
 #define WRAP_AROUND_TX_MSGS 1
 #define WRAP_AROUND_RX_MSGS 2
@@ -1097,11 +1098,11 @@ static rtems_device_driver grcan_initialize(
   /* LEON3: find timer address via AMBA Plug&Play info */
   {
     struct ambapp_apb_info gptimer;
-    LEON3_Timer_Regs_Map *tregs;
+    struct gptimer_regs *tregs;
 
     if (ambapp_find_apbslv (&ambapp_plb, VENDOR_GAISLER, GAISLER_GPTIMER, &gptimer)
         == 1) {
-      tregs = (LEON3_Timer_Regs_Map *) gptimer.start;
+      tregs = (struct gptimer_regs *) gptimer.start;
       sys_freq_hz = (tregs->scaler_reload + 1) * 1000 * 1000;
       DBG("GRCAN: detected %dHZ system frequency\n\r", sys_freq_hz);
     } else {

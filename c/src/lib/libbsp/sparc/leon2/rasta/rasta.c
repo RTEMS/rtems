@@ -10,6 +10,7 @@
 #include <pci.h>
 #include <rasta.h>
 #include <ambapp.h>
+#include <grlib.h>
 #include <grcan_rasta.h>
 #include <grspw_rasta.h>
 #include <b1553brm_rasta.h>
@@ -41,32 +42,10 @@
 #define DBG(x...)
 #endif
 
-/*
-typedef struct {
-  volatile unsigned int ilevel;
-  volatile unsigned int ipend;
-  volatile unsigned int iforce;
-  volatile unsigned int iclear;
-  volatile unsigned int mpstat;
-  volatile unsigned int notused01;
-  volatile unsigned int notused02;
-  volatile unsigned int notused03;
-  volatile unsigned int notused10;
-  volatile unsigned int notused11;
-  volatile unsigned int notused12;
-  volatile unsigned int notused13;
-  volatile unsigned int notused20;
-  volatile unsigned int notused21;
-  volatile unsigned int notused22;
-  volatile unsigned int notused23;
-  volatile unsigned int mask[16];
-  volatile unsigned int force[16];
-} LEON3_IrqCtrl_Regs_Map;
-*/
 static int bus, dev, fun;
 
-LEON3_IrqCtrl_Regs_Map *irq = NULL;
-LEON_Register_Map      *regs = (LEON_Register_Map *)0x80000000;
+struct irqmp_regs *irq = NULL;
+LEON_Register_Map *regs = (LEON_Register_Map *)0x80000000;
 
 struct gpio_reg *gpio0, *gpio1;
 
@@ -291,7 +270,7 @@ int rasta_register(void)
     apb_base[2] = 0x000e8000;
 #endif
     /* Set up rasta irq controller */
-    irq = (LEON3_IrqCtrl_Regs_Map *) (bar0+IRQ_OFFSET);
+    irq = (struct irqmp_regs *) (bar0+IRQ_OFFSET);
     irq->iclear = 0xffff;
     irq->ilevel = 0;
     irq->mask[0] = 0xffff & ~(UART0_IRQ|UART1_IRQ|SPW0_IRQ|SPW1_IRQ|SPW2_IRQ|GRCAN_IRQ|BRM_IRQ);

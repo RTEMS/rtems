@@ -14,6 +14,7 @@ EXTRA_DIST += shared/irq/irq-shared.c
 # AMBA Plug&Play bus
 EXTRA_DIST += shared/include/ambapp.h
 EXTRA_DIST += shared/include/ambapp_ids.h
+EXTRA_DIST += shared/include/grlib.h
 EXTRA_DIST += shared/amba/ambapp.c
 EXTRA_DIST += shared/amba/ambapp_alloc.c
 EXTRA_DIST += shared/amba/ambapp_count.c

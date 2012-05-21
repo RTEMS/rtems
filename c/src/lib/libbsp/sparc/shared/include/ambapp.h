@@ -353,49 +353,6 @@ extern int ambapp_find_ahbslvs(
 	int maxno);
 
 
-/******** AMBA DEVICES *******/
-
-/* ESA MEMORY CONTROLLER */
-typedef struct {
-  unsigned int mcfg1;
-  unsigned int mcfg2;
-  unsigned int mcfg3;
-} ambapp_regmap_mctrl;
-
-/* APB UART */
-typedef struct {
-  volatile unsigned int data;
-  volatile unsigned int status;
-  volatile unsigned int ctrl;
-  volatile unsigned int scaler;
-} ambapp_apb_uart;
-
-typedef struct {
-  volatile unsigned int ilevel;
-  volatile unsigned int ipend;
-  volatile unsigned int iforce;
-  volatile unsigned int iclear;
-  volatile unsigned int mpstat;
-  volatile unsigned int notused01;
-  volatile unsigned int notused02;
-  volatile unsigned int notused03;
-  volatile unsigned int ampctrl;
-  volatile unsigned int icsel[2];
-  volatile unsigned int notused13;
-  volatile unsigned int notused20;
-  volatile unsigned int notused21;
-  volatile unsigned int notused22;
-  volatile unsigned int notused23;
-  volatile unsigned int mask[16];
-  volatile unsigned int force[16];
-  /* Extended IRQ registers */
-  volatile unsigned int intid[16];
-  /* 0x100, align to 4Kb boundary */
-  volatile unsigned int resv1[(0x1000-0x100)/4];
-} LEON3_IrqCtrl_Regs_Map;
-
-/*****************************/
-
 #ifdef __cplusplus
 }
 #endif

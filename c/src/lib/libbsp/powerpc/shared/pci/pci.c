@@ -34,9 +34,6 @@
 #define PCI_CONFIG_DATA      0xcfc
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID  0xffffffff
-#define PCI_MULTI_FUNCTION    0x80
-
 /* define a shortcut */
 #define pci  BSP_pci_configuration
 
@@ -411,7 +408,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 
 	  /* got a device */
 	  pci_read_config_byte(pbus, pslot, 0, PCI_HEADER_TYPE, &cvalue);
-	  nfuns = cvalue & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1;
+	  nfuns = cvalue & PCI_HEADER_TYPE_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1;
 
 	  for (pfun=0; pfun< nfuns; pfun++) {
 		pci_read_config_word(pbus, pslot, pfun, PCI_DEVICE_ID, &devid);
@@ -604,7 +601,7 @@ int pci_initialize(void)
       continue;
     }
     pci_read_config_byte(0, ucSlotNumber, 0, PCI_HEADER_TYPE, &ucHeader);
-    if (ucHeader&PCI_MULTI_FUNCTION)  {
+    if (ucHeader&PCI_HEADER_TYPE_MULTI_FUNCTION)  {
       ucNumFuncs=PCI_MAX_FUNCTIONS;
     } else {
       ucNumFuncs=1;

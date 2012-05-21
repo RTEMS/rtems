@@ -21,8 +21,6 @@
 
 #define PCI_DEBUG 0
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
 #define HOSTBRIDGET_ERROR               0xf0000000
 
 unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet)

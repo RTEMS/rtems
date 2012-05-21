@@ -46,8 +46,6 @@
  *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
-#define PCI_INVALID_VENDORDEVICEID  0xffffffff
-#define PCI_MULTI_FUNCTION      0x80
 
 #include <inttypes.h>
 #include <bsp/pci.h>
@@ -188,7 +186,7 @@ BSP_pciScan(
 
          if ( 0 == fun ) {
            pci_read_config_byte(bus,dev,0, PCI_HEADER_TYPE, &hd);
-           hd = (hd & PCI_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
+           hd = (hd & PCI_HEADER_TYPE_MULTI_FUNCTION ? PCI_MAX_FUNCTIONS : 1);
 		 }
 
         (void)pci_read_config_dword(bus,dev,fun,PCI_VENDOR_ID,&d);

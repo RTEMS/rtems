@@ -25,7 +25,7 @@ struct ambapp_bus ambapp_plb;
 extern void leon3_ext_irq_init(void);
 
 /* Pointers to Interrupt Controller configuration registers */
-volatile LEON3_IrqCtrl_Regs_Map *LEON3_IrqCtrl_Regs;
+volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
 
 /*
  *  amba_initialize
@@ -61,8 +61,7 @@ void amba_initialize(void)
     asm volatile( "mov 1, %g1; ta 0x0" );
   }
 
-  LEON3_IrqCtrl_Regs = (volatile LEON3_IrqCtrl_Regs_Map *)
-                       DEV_TO_APB(adev)->start;
+  LEON3_IrqCtrl_Regs = (volatile struct irqmp_regs *)DEV_TO_APB(adev)->start;
   if ((LEON3_IrqCtrl_Regs->ampctrl >> 28) > 0) {
     /* IRQ Controller has support for multiple IRQ Controllers, each
      * CPU can be routed to different Controllers, we find out which
@@ -85,7 +84,7 @@ void amba_initialize(void)
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
                                  ambapp_find_by_idx, NULL);
   if (adev) {
-    LEON3_Timer_Regs = (volatile LEON3_Timer_Regs_Map *)DEV_TO_APB(adev)->start;
+    LEON3_Timer_Regs = (volatile struct gptimer_regs *)DEV_TO_APB(adev)->start;
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(&ambapp_plb, adev,

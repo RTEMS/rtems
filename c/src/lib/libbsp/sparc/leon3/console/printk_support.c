@@ -29,7 +29,7 @@
  * ...
  */
 int debug_uart_index __attribute__((weak)) = 0;
-ambapp_apb_uart *dbg_uart = NULL;
+struct apbuart_regs *dbg_uart = NULL;
 
 /* Before UART driver has registered (or when no UART is available), calls to
  * printk that gets to bsp_out_char() will be filling data into the
@@ -74,7 +74,7 @@ int bsp_debug_uart_init(void)
      * for printk
      */
     apb = (struct ambapp_apb_info *)adev->devinfo;
-    dbg_uart = (ambapp_apb_uart *)apb->start;
+    dbg_uart = (struct apbuart_regs *)apb->start;
     dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
     dbg_uart->status = 0;
     return 1;
@@ -88,7 +88,7 @@ int bsp_debug_uart_init(void)
  *  This routine transmits a character using polling.
  */
 void apbuart_outbyte_polled(
-  ambapp_apb_uart *regs,
+  struct apbuart_regs *regs,
   unsigned char ch,
   int do_cr_on_newline,
   int wait_sent
@@ -121,7 +121,7 @@ send:
  *
  *  This routine polls for a character.
  */
-int apbuart_inbyte_nonblocking(ambapp_apb_uart *regs)
+int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)
 {
   /* Clear errors */
   if (regs->status & LEON_REG_UART_STATUS_ERR)

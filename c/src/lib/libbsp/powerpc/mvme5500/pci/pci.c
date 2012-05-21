@@ -54,8 +54,6 @@
 #define PCI1_CONFIG_DATA	        0xc7c
 #endif
 
-#define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_MULTI_FUNCTION		0x80
 #define HOSTBRIDGET_ERROR               0xf0000000
 
 #define GT64x60_PCI_CONFIG_ADDR         GT64x60_REG_BASE + PCI_CONFIG_ADDR
@@ -367,7 +365,7 @@ int pci_initialize(void)
 			  0,
 			  PCI_CACHE_LINE_SIZE,
 			  &ulHeader);
-      if ((ulHeader>>16)&PCI_MULTI_FUNCTION)
+      if ((ulHeader>>16)&PCI_HEADER_TYPE_MULTI_FUNCTION)
          ucNumFuncs=PCI_MAX_FUNCTIONS;
       else
          ucNumFuncs=1;
@@ -411,7 +409,7 @@ int pci_initialize(void)
   return(0);
 }
 
-void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
+void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
 }
 

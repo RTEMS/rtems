@@ -3,7 +3,7 @@ dnl Misc utility macros for subdir handling to work around missing abilities
 dnl in autoconf, automake and structural issues with RTEMS
 dnl
 dnl Contains parts derived from autoconf-2.13 AC_OUTPUT_SUBDIRS and Cygnus'
-dnl configure.in.
+dnl configure.ac.
 dnl
 
 dnl

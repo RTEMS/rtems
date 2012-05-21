@@ -161,6 +161,10 @@ $(PROJECT_INCLUDE)/ambapp_ids.h: ../../sparc/shared/include/ambapp_ids.h $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ambapp_ids.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ambapp_ids.h
 
+$(PROJECT_INCLUDE)/grlib.h: ../../sparc/shared/include/grlib.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grlib.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grlib.h
+
 $(PROJECT_INCLUDE)/i2cmst.h: ../../sparc/shared/include/i2cmst.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i2cmst.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cmst.h
