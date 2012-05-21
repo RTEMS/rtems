@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -92,7 +92,7 @@ void bsp_start(void)
   #endif /* HAS_UBOOT */
 
   /* Initialize some console parameters */
-  for (i = 0; i < Console_Port_Count; ++i) {
+  for (i = 0; i < Console_Configuration_Count; ++i) {
     console_tbl *ct = &Console_Configuration_Ports[i];
 
     ct->ulClock = BSP_bus_frequency;
