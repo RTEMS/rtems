@@ -27,6 +27,9 @@
 /* If defined, reset the board when the application exits. */
 #undef BSP_RESET_BOARD_AT_EXIT
 
+/* if defined use dcbt instruction */
+#undef BSP_USE_DATA_CACHE_BLOCK_TOUCH
+
 /* enable usage of interrupts for the UART modules */
 #undef BSP_USE_UART_INTERRUPTS
 
