@@ -25,9 +25,10 @@ dist_project_lib_DATA += startup/linkcmds.mpc55xx
 dist_project_lib_DATA += startup/linkcmds.gwlcfm
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb_spe
+dist_project_lib_DATA += startup/linkcmds.mpc5643l_evb
+dist_project_lib_DATA += startup/linkcmds.mpc5643l_dpu
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb_spe
-dist_project_lib_DATA += startup/linkcmds.xkt564levb
 dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
 
 noinst_LIBRARIES += libbsp.a

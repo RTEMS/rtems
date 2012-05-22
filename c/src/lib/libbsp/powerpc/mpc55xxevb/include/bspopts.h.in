@@ -36,9 +36,6 @@
 /* if defined, use custom settings for phyCORE MPC5554 board */
 #undef MPC55XX_BOARD_PHYCORE_MPC5554
 
-/* if defined, use custom settings for XKT564LEVB board */
-#undef MPC55XX_BOARD_XKT564LEVB
-
 /* if defined, builds in bootflags above the RCHW for setup in a debugger to
    avoid startup MMU setup */
 #undef MPC55XX_BOOTFLAGS
@@ -78,7 +75,7 @@
 
 /* Must be defined to be the external reference clock (in Hz) for clock
    generation */
-#undef MPC55XX_FMPLL_REF_CLOCK
+#undef MPC55XX_REFERENCE_CLOCK
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
