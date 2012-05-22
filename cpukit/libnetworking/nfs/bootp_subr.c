@@ -74,6 +74,8 @@
 #include <rtems/bsdnet/servers.h>
 #include <inttypes.h>
 
+#include "rtems/bootp.h"
+
 #define BOOTP_MIN_LEN		300	/* Minimum size of bootp udp packet */
 
 /*
@@ -137,20 +139,6 @@ void bootpboot_p_tree(struct radix_node *rn);
 void bootpboot_p_rtlist(void);
 void bootpboot_p_iflist(void);
 #endif
-
-int  bootpc_call(struct bootp_packet *call,
-		 struct bootp_packet *reply,
-		 struct proc *procp);
-
-int bootpc_fakeup_interface(struct ifreq *ireq,struct socket *so,
-			struct proc *procp);
-
-int 
-bootpc_adjust_interface(struct ifreq *ireq,struct socket *so,
-			struct sockaddr_in *myaddr,
-			struct sockaddr_in *netmask,
-			struct sockaddr_in *gw,
-			struct proc *procp);
 
 #ifdef BOOTP_DEBUG
 void
