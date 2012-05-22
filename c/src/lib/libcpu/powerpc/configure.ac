@@ -20,7 +20,8 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 AM_CONDITIONAL(shared, \
-   test "$RTEMS_CPU_MODEL" = "mpc750" \
+   test "$RTEMS_CPU_MODEL" = "" \
+|| test "$RTEMS_CPU_MODEL" = "mpc750" \
 || test "$RTEMS_CPU_MODEL" = "mpc7400" \
 || test "$RTEMS_CPU_MODEL" = "mpc7455" \
 || test "$RTEMS_CPU_MODEL" = "mpc7457" \

@@ -1,0 +1,19 @@
+; Set CPU
+system.cpu mpc8540
+system.up
+
+; Set PVR
+per.s spr:0x11f %long %be 0x80200000
+
+; Load application
+Data.LOAD.Elf /home/sh/build/t32mppc/powerpc-rtems4.11/c/t32mppc/testsuites/samples/ticker/ticker.exe
+
+; Configure memory-based terminal
+term.reset
+term.method buffere v.address("messagebufferout") v.address("messagebufferin") 
+term.gate
+ 
+; Initialize RTOS support
+task.config ~~/demo/powerpc/kernel/rtems/rtems.t32
+menu.reprogram ~~/demo/powerpc/kernel/rtems/rtems.men
+task.stack.pattern 0xa5
