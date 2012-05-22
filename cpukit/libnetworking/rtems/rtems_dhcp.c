@@ -205,6 +205,35 @@ static const char         dhcp_request_parameters[5] = { DHCP_SUBNET,
                                                          DHCP_DNS,
                                                          DHCP_HOST,
                                                          DHCP_DOMAIN_NAME };
+#define NUM_NAMESERVERS \
+  (sizeof rtems_bsdnet_config.name_server / sizeof rtems_bsdnet_config.name_server[0])
+static struct in_addr rtems_dhcpd_nameserver[NUM_NAMESERVERS];
+static int rtems_dhcpd_nameserver_count = 0;
+
+/*
+ * Clean any DNS entries add by a DHCP request.
+ */
+static void
+clean_dns_entries (void)
+{
+  int e;
+  for (e = 0; e < rtems_dhcpd_nameserver_count; ++e)
+  {
+    int n;
+    for (n = 0; n < rtems_bsdnet_nameserver_count; ++ n)
+    {
+      if (memcmp (&rtems_dhcpd_nameserver[e], &rtems_bsdnet_nameserver[n], 4) == 0)
+      {
+        if (n < (NUM_NAMESERVERS - 1))
+          memmove (&rtems_bsdnet_nameserver[n],
+                   &rtems_bsdnet_nameserver[n + 1],
+                   (NUM_NAMESERVERS - n - 1) * 4);
+        --rtems_bsdnet_nameserver_count;
+      }
+    }
+  }
+  rtems_dhcpd_nameserver_count = 0;
+}
 
 /*
  * Format an IP address in dotted decimal.
@@ -363,10 +392,12 @@ process_options (unsigned char *optbuf, int optbufSize)
         {
           int dlen = 0;
           while ((dlen < len) &&
-                 (rtems_bsdnet_nameserver_count <
-                  sizeof rtems_bsdnet_config.name_server /
-                  sizeof rtems_bsdnet_config.name_server[0]))
+                 (rtems_dhcpd_nameserver_count < NUM_NAMESERVERS) &&
+                 (rtems_bsdnet_nameserver_count < NUM_NAMESERVERS))
           {
+            memcpy (&rtems_dhcpd_nameserver
+                    [rtems_dhcpd_nameserver_count], p + dlen, 4);
+            rtems_dhcpd_nameserver_count++;
             memcpy (&rtems_bsdnet_nameserver
                     [rtems_bsdnet_nameserver_count], p + dlen, 4);
             rtems_bsdnet_nameserver_count++;
@@ -743,6 +774,15 @@ dhcp_task (rtems_task_argument _sdl)
         continue;
       }
 
+      /*
+       * We have an ack. Clear the DNS entries that have been assigned by a previous
+       * DHCP request.
+       */
+      clean_dns_entries ();
+
+      /*
+       * Process this requests options.
+       */
       process_options (&dhcp_req.vend[4], sizeof (dhcp_req.vend) - 4);
 
       if (dhcp_message_type != DHCP_ACK)
@@ -857,6 +897,8 @@ dhcp_init (int update_files)
   struct sockaddr_dl   *sdl = NULL;
   struct proc          *procp = NULL;
 
+  clean_dns_entries();
+  
   /*
    * If we are to update the files create the root
    * file structure.
