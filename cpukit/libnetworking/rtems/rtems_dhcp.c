@@ -99,6 +99,7 @@
 #include <rtems/mkrootfs.h>
 
 #include "rtems/dhcp.h"
+#include "rtems/bootp.h"
 
 #ifndef EALEN
 #define EALEN 6
@@ -165,25 +166,6 @@ struct dhcp_packet
   char           file[128];
   unsigned char  vend[312];
 };
-
-/*
- * External Declarations for Functions found in
- * rtems/c/src/libnetworking/nfs/
- */
-extern int bootpc_call (struct dhcp_packet *call,
-                        struct dhcp_packet *reply,
-                        struct proc *procp);
-extern int bootpc_fakeup_interface (struct ifreq *ireq,
-                                    struct socket *so,
-                                    struct proc *procp);
-extern int bootpc_adjust_interface (struct ifreq *ireq,
-                                    struct socket *so,
-                                    struct sockaddr_in *myaddr,
-                                    struct sockaddr_in *netmask,
-                                    struct sockaddr_in *gw,
-                                    struct proc *procp);
-extern void *bootp_strdup_realloc (char *dst,
-                                   const char *src);
 
 /*
  * Variables
@@ -755,7 +737,7 @@ dhcp_task (rtems_task_argument _sdl)
       /*
        * Send the Request.
        */
-      error = bootpc_call (&call, &dhcp_req, procp);
+      error = bootpc_call ((struct bootp_packet *)&call, (struct bootp_packet *)&dhcp_req, procp);
       if (error) {
         rtems_bsdnet_semaphore_release ();
         printf ("DHCP call failed -- error %d", error);
@@ -960,7 +942,7 @@ dhcp_init (int update_files)
   /*
    * Send the Discover.
    */
-  error = bootpc_call (&call, &reply, procp);
+  error = bootpc_call ((struct bootp_packet *)&call, (struct bootp_packet *)&reply, procp);
   if (error) {
     printf ("BOOTP call failed -- %s\n", strerror(error));
     soclose (so);
@@ -989,7 +971,7 @@ dhcp_init (int update_files)
    */
   dhcp_request_req (&call, &reply, sdl, true);
 
-  error = bootpc_call (&call, &reply, procp);
+  error = bootpc_call ((struct bootp_packet *)&call, (struct bootp_packet *)&reply, procp);
   if (error) {
     printf ("BOOTP call failed -- %s\n", strerror(error));
     soclose (so);

@@ -4,6 +4,7 @@ include $(top_srcdir)/automake/compile.am
 AM_CPPFLAGS += -I$(srcdir)
 
 EXTRA_DIST = README
+EXTRA_DIST += rtems/bootp.h
 
 # poll is not supported
 UNUSED_FILES = poll.h

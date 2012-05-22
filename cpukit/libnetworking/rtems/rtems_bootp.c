@@ -8,6 +8,8 @@
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems_bsdnet_internal.h>
 
+#include "rtems/bootp.h"
+
 /*
  * Perform a BOOTP request
  */
