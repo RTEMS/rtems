@@ -314,21 +314,33 @@ int main(
   status = chdir( "/c/y/my_mount_point/mydir" );
   rtems_test_assert( status == 0 );
 
-  printf("unmount of /c/y/my_mount_point\n");
+  printf("unmount of /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EBUSY );
+
+  status = chdir( "/" );
   rtems_test_assert( status == 0 );
 
-  printf("chdir to .. should fail with ENXIO\n");
-  status = chdir( ".." );
+  printf("chroot to /c/y/my_mount_point\n");
+  status = chroot( "/c/y/my_mount_point" );
+  rtems_test_assert( status == 0 );
+
+  printf("unmount of . should fail with EBUSY\n");
+  status = unmount( "." );
   rtems_test_assert( status == -1 );
-  rtems_test_assert( errno == ENXIO );
+  rtems_test_assert( errno == EBUSY );
 
   /*
    * Chdir to root and verify we unmounted the file system now.
    */
 
-  printf("chdir to / and verify we can unmount /c/y/my_mount_point\n");
-  status = chdir( "/" );
+  printf("chroot to / and verify we can unmount /c/y/my_mount_point\n");
+  status = chroot( "/" );
+  rtems_test_assert( status == 0 );
+
+  printf("unmount of /c/y/my_mount_point\n");
+  status = unmount( "/c/y/my_mount_point" );
   rtems_test_assert( status == 0 );
 
   printf("chdir to /c/y/my_mount_point/my_dir should fail with ENOENT\n");
@@ -376,6 +388,10 @@ int main(
   directory = opendir( my_sub_fs_dir );
   rtems_test_assert( directory );
 
+  printf("close %s\n", my_sub_fs_dir );
+  status = closedir( directory );
+  rtems_test_assert( status == 0 );
+
   printf("mkdir %s should fail with EEXIST\n", my_sub_fs_dir );
   status = mkdir( my_sub_fs_dir, S_IRWXU );
   rtems_test_assert( status == -1 );
@@ -383,10 +399,6 @@ int main(
 
   printf("unmount %s\n", mount_point );
   status = unmount( mount_point );
-  rtems_test_assert( status == 0 );
-
-  printf("close %s\n", my_sub_fs_dir );
-  status = closedir( directory );
   rtems_test_assert( status == 0 );
 
   printf("mkdir %s\n", my_sub_fs_dir );

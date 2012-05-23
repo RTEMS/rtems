@@ -213,5 +213,14 @@ void rtems_filesystem_do_unmount(
   rtems_filesystem_mt_unlock();
   rtems_filesystem_global_location_release(mt_entry->mt_point_node);
   (*mt_entry->ops->fsunmount_me_h)(mt_entry);
+
+  if (mt_entry->unmount_task != 0) {
+    rtems_status_code sc =
+      rtems_event_send(mt_entry->unmount_task, RTEMS_FILESYSTEM_UNMOUNT_EVENT);
+    if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred(0xdeadbeef);
+    }
+  }
+
   free(mt_entry);
 }

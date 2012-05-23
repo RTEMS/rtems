@@ -256,13 +256,17 @@ truncate_test03 (void)
   rtems_test_assert (fd >= 0);
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
+  status = close (fd);
+  rtems_test_assert (status == 0);
 
   /*
    * Truncate it to the half size
    */
 
   status = truncate (name01, len / 2);
+  rtems_test_assert (status == 0);
   status = truncate (name01, len);
+  rtems_test_assert (status == 0);
 
   /*
    * verify the data

@@ -1459,6 +1459,13 @@ struct rtems_filesystem_mount_table_entry_tt {
    *  string.
    */
   char                                  *dev;
+
+  /**
+   * The task that initiated the unmount process.  After unmount process
+   * completion this task will be notified via the
+   * @ref RTEMS_FILESYSTEM_UNMOUNT_EVENT.
+   */
+  rtems_id                               unmount_task;
 };
 
 /**
@@ -1513,9 +1520,18 @@ int rtems_filesystem_unregister(
 /**
  * @brief Unmounts the file system at @a mount_path.
  *
- * @todo Due to file system implementation shortcomings it is possible to
- * unmount file systems in use.  This likely leads to heap corruption.  Unmount
- * only file systems which are not in use by the application.
+ * The function waits for the unmount process completion.  In case the calling
+ * thread uses resources of the unmounted file system the function may never
+ * return.  In case the calling thread has its root or current directory in the
+ * unmounted file system the function returns with an error status and errno is
+ * set to EBUSY.
+ *
+ * The unmount process completion notification uses the RTEMS classic API
+ * event @ref RTEMS_FILESYSTEM_UNMOUNT_EVENT.  It is a fatal error to terminate
+ * the calling thread while waiting for this event.
+ *
+ * A concurrent unmount request for the same file system instance has
+ * unpredictable effects.
  *
  * @retval 0 Successful operation.
  * @retval -1 An error occured.  The @c errno indicates the error.
