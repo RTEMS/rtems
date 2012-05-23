@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#include <stdio.h>
+
 #include <rtems/libio_.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
@@ -35,7 +37,8 @@ static void lsof(void)
     rtems_chain_control *mt_entry_chain = &mt_entry->location_chain;
     rtems_chain_node *mt_entry_node = NULL;
 
-    printk(
+    fprintf(
+      stdout,
       "%c %c %s %s -> %s root 0x%08x -> 0x%08x\n",
       mt_entry->mounted ? 'M' : 'U',
       mt_entry->writeable ? 'W' : 'R',
@@ -54,7 +57,8 @@ static void lsof(void)
       const rtems_filesystem_location_info_t *loc =
         (rtems_filesystem_location_info_t *) mt_entry_node;
 
-      printk(
+      fprintf(
+        stdout,
         "\t0x%08x -> 0x%08x\n",
         loc,
         loc->node_access
