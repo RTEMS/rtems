@@ -4,7 +4,14 @@ EXTRA_DIST = $(srcdir)/../math/domath.in
 
 # FIXME: Skip long double, not yet supported in newlib
 # => This test currently is a nop
-mathl_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)/math -DNO_LONG_DOUBLE
+mathl_CPPFLAGS = $(AM_CPPFLAGS) -DNO_LONG_DOUBLE
+
+$(srcdir)/domathl.c: $(srcdir)/../math/domath.in
+	sed -e 's,[@]FTYPE[@],long double,' \
+	-e 's,[@]FSUFFIX[@],l,g' \
+	-e 's,%f,%Lf,g' \
+	-e 's,[@]FGUARD[@],NO_LONG_DOUBLE,' \
+	$(srcdir)/../math/domath.in > $(srcdir)/domathl.c
 
 dist_rtems_tests_DATA = mathl.scn
 
