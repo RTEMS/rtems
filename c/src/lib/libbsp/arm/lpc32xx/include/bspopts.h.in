@@ -1,0 +1,100 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* disable testsuite samples with high memory demands */
+#undef BSP_SMALL_MEMORY
+
+/* reset vector address for BSP start */
+#undef BSP_START_RESET_VECTOR
+
+/* clock configuration for UART 3 */
+#undef LPC32XX_CONFIG_U3CLK
+
+/* clock configuration for UART 4 */
+#undef LPC32XX_CONFIG_U4CLK
+
+/* clock configuration for UART 5 */
+#undef LPC32XX_CONFIG_U5CLK
+
+/* clock configuration for UART 6 */
+#undef LPC32XX_CONFIG_U6CLK
+
+/* clock mode configuration for UARTs */
+#undef LPC32XX_CONFIG_UART_CLKMODE
+
+/* disable MMU */
+#undef LPC32XX_DISABLE_MMU
+
+/* disable MMU protection of read-only sections */
+#undef LPC32XX_DISABLE_READ_ONLY_PROTECTION
+
+/* disable cache for read-write data sections */
+#undef LPC32XX_DISABLE_READ_WRITE_DATA_CACHE
+
+/* bsp_reset() will use the watchdog to reset the chip */
+#undef LPC32XX_ENABLE_WATCHDOG_RESET
+
+/* enable RMII for Ethernet */
+#undef LPC32XX_ETHERNET_RMII
+
+/* main oscillator frequency in Hz */
+#undef LPC32XX_OSCILLATOR_MAIN
+
+/* RTC oscillator frequency in Hz */
+#undef LPC32XX_OSCILLATOR_RTC
+
+/* peripheral clock in Hz */
+#undef LPC32XX_PERIPH_CLK
+
+/* size of scratch area */
+#undef LPC32XX_SCRATCH_AREA_SIZE
+
+/* stop Ethernet controller at start-up to avoid DMA interference */
+#undef LPC32XX_STOP_ETHERNET
+
+/* stop general purpose DMA at start-up to avoid DMA interference */
+#undef LPC32XX_STOP_GPDMA
+
+/* stop USB controller at start-up to avoid DMA interference */
+#undef LPC32XX_STOP_USB
+
+/* baud for UART 1 */
+#undef LPC32XX_UART_1_BAUD
+
+/* baud for UART 2 */
+#undef LPC32XX_UART_2_BAUD
+
+/* baud for UART 7 */
+#undef LPC32XX_UART_7_BAUD
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* tests use printk() for output */
+#undef TESTS_USE_PRINTK

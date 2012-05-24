@@ -1,0 +1,115 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* disable testsuite samples with high memory demands */
+#undef BSP_SMALL_MEMORY
+
+/* reset vector address for BSP start */
+#undef BSP_START_RESET_VECTOR
+
+/* CPU clock in Hz */
+#undef LPC24XX_CCLK
+
+/* configuration for console (UART 0) */
+#undef LPC24XX_CONFIG_CONSOLE
+
+/* configuration for I2C 0 */
+#undef LPC24XX_CONFIG_I2C_0
+
+/* configuration for I2C 1 */
+#undef LPC24XX_CONFIG_I2C_1
+
+/* configuration for I2C 2 */
+#undef LPC24XX_CONFIG_I2C_2
+
+/* configuration for UART 1 */
+#undef LPC24XX_CONFIG_UART_1
+
+/* configuration for UART 2 */
+#undef LPC24XX_CONFIG_UART_2
+
+/* configuration for UART 3 */
+#undef LPC24XX_CONFIG_UART_3
+
+/* peripheral clock divider for default EMCCLK (EMCCLK = CCLK / EMCCLKDIV) */
+#undef LPC24XX_EMCCLKDIV
+
+/* enable ISSI IS42S32800B configuration for EMC */
+#undef LPC24XX_EMC_IS42S32800B
+
+/* enable ISSI IS42S32800D7 configuration for EMC */
+#undef LPC24XX_EMC_IS42S32800D7
+
+/* enable M29W160E configuration for EMC */
+#undef LPC24XX_EMC_M29W160E
+
+/* enable M29W320E70 configuration for EMC */
+#undef LPC24XX_EMC_M29W320E70
+
+/* enable Micron MT48LC4M16A2 configuration for EMC */
+#undef LPC24XX_EMC_MT48LC4M16A2
+
+/* enable SST39VF3201 configuration for EMC */
+#undef LPC24XX_EMC_SST39VF3201
+
+/* enable tests for EMC */
+#undef LPC24XX_EMC_TEST
+
+/* enable Winbond W9825G2JB75I configuration for EMC */
+#undef LPC24XX_EMC_W9825G2JB75I
+
+/* enable RMII for Ethernet */
+#undef LPC24XX_ETHERNET_RMII
+
+/* enable heap extend by Ethernet and USB regions */
+#undef LPC24XX_HEAP_EXTEND
+
+/* main oscillator frequency in Hz */
+#undef LPC24XX_OSCILLATOR_MAIN
+
+/* RTC oscillator frequency in Hz */
+#undef LPC24XX_OSCILLATOR_RTC
+
+/* peripheral clock divider for default PCLK (PCLK = CCLK / PCLKDIV) */
+#undef LPC24XX_PCLKDIV
+
+/* stop Ethernet controller at start-up to avoid DMA interference */
+#undef LPC24XX_STOP_ETHERNET
+
+/* stop general purpose DMA at start-up to avoid DMA interference */
+#undef LPC24XX_STOP_GPDMA
+
+/* stop USB controller at start-up to avoid DMA interference */
+#undef LPC24XX_STOP_USB
+
+/* baud for UARTs */
+#undef LPC24XX_UART_BAUD
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION

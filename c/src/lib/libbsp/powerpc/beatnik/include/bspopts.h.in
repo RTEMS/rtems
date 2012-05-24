@@ -1,0 +1,38 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* enables the data cache, if defined to a value other than zero */
+#undef BSP_DATA_CACHE_ENABLED
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* enables the instruction cache, if defined to a value other than zero */
+#undef BSP_INSTRUCTION_CACHE_ENABLED
+
+/* If defined then the BSP may reduce the available memory size initially.
+   This can be useful for debugging (reduce the core size) or dynamic loading
+   (std gcc text offsets/jumps are < +/-32M). Note that the policy can still
+   be defined by the application (see sbrk.c, BSP_sbrk_policy). By undefining
+   CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK this feature is removed and a little
+   memory is saved. */
+#undef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION

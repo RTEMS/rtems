@@ -1,0 +1,107 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* enables the data cache, if defined to a value other than zero */
+#undef BSP_DATA_CACHE_ENABLED
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* enables the instruction cache, if defined to a value other than zero */
+#undef BSP_INSTRUCTION_CACHE_ENABLED
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* If defined, then the BSP will use the Fast Ethernet Controller for
+   10/100MBit networking and used as primary networking interface. */
+#undef BSP_USE_NETWORK_FEC
+
+/* If defined, then the BSP will use the Serial Communications Controller
+   (SCC1) for 10MBit networking. */
+#undef BSP_USE_NETWORK_SCC
+
+/* (BSP--console driver) Must be defined to be one of CONS_CHN_SMC1,
+   CONS_CHN_SMC2, CONS_CHN_SCC1, CONS_CHN_SCC2, CONS_CHN_SCC3, or
+   CONS_CHN_SCC4. Determines which device will be registered as /dev/console.
+   */
+#undef CONSOLE_CHN
+
+/* (BSP--SCC1 UART IF mode) Must be defined if SCC1 is used as a tty (UART)
+   channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
+   interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not
+   used */
+#undef CONS_SCC1_MODE
+
+/* (BSP--SCC2 UART IF mode) Must be defined if SCC2 is used as a tty (UART)
+   channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
+   interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not
+   used */
+#undef CONS_SCC2_MODE
+
+/* (BSP--SCC3 UART IF mode) Must be defined if SCC3 is used as a tty (UART)
+   channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
+   interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not
+   used */
+#undef CONS_SCC3_MODE
+
+/* (BSP--SCC4 UART IF mode) Must be defined if SCC4 is used as a tty (UART)
+   channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
+   interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not
+   used */
+#undef CONS_SCC4_MODE
+
+/* (BSP--SMC1 UART IF mode) Must be defined if SMC1 is used as a tty (UART)
+   channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
+   interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not
+   used */
+#undef CONS_SMC1_MODE
+
+/* (BSP--SMC2 UART IF mode) Must be defined if SMC2 is used as a tty (UART)
+   channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for
+   interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not
+   used */
+#undef CONS_SMC2_MODE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* (BSP--console driver) Must be defined to be one of CONS_CHN_SMC1,
+   CONS_CHN_SMC2, CONS_CHN_SCC2, CONS_CHN_SCC3, or CONS_CHN_SCC4. Determines
+   which device is used for output by printk(). If the port that printk() uses
+   is also used for other I/O (e.g. if PRINTK_CHN == CONSOLE_CHN), then both
+   ports should use the same type of I/O, otherwise the drivers will likely
+   conflict with each other. */
+#undef PRINTK_CHN
+
+/* (BSP--SPI board init function) Specify the function that inits the board
+   port lines and further devices. */
+#undef SPI_BOARD_INIT_FNC
+
+/* (BSP--SPI send address function) Specify the function that addresses SPI
+   devices. Set to bsp_dummy_spi_sel_addr for dummy implementation */
+#undef SPI_SEND_ADDR_FNC
+
+/* (BSP--SPI send stop function) Specify the function that deaddresses SPI
+   devices. Set to bsp_dummy_spi_send_stop for dummy implementation */
+#undef SPI_SEND_STOP_FNC

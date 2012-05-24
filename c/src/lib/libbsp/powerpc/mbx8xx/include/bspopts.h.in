@@ -1,0 +1,93 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* enables the data cache, if defined to a value other than zero */
+#undef BSP_DATA_CACHE_ENABLED
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* enables the instruction cache, if defined to a value other than zero */
+#undef BSP_INSTRUCTION_CACHE_ENABLED
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* (BSP--console driver) Must be defined to be one of SMC1_MINOR, SMC2_MINOR,
+   SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR. Determines which device will be
+   registered as /dev/console. */
+#undef CONSOLE_MINOR
+
+/* used by irq/irq.c */
+#undef DISPATCH_HANDLER_STAT
+
+/* (BSP--console driver) If defined, SMC1 is in use by EPPC-Bug. The console
+   driver will not re-initialize that port. */
+#undef EPPCBUG_SMC1
+
+/* (BSP--RTEMS) If defined, vectors branch to EPPCBug, except the following:
+   0x500 (external interrupt), 0x900 (decrementer). */
+#undef EPPCBUG_VECTORS
+
+/* Define to 1 if you want the console driver, network driver and caches
+   configured at boot time from parameters stored in NVRAM. If set to 1, most
+   parameters below are ignored during the build. If not set to 1, then the
+   console driver is configured at build time, the network host information is
+   obtained from application supplied data structures, and the caches are
+   configured at boot time based on the information supplied in this file. */
+#undef NVRAM_CONFIGURE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* (BSP--console driver) Define to 0 or 1 if you want polled I/O performed by
+   RTEMS. Define to 2 if you want polled I/O performed by EPPCBug. The
+   printk() port is not configured to use termios. With EPPCBug 1.1, if mode 2
+   is selected, PRINTK_MINOR must be set to SMC1_MINOR. This is a deficiency
+   of the firmware: it does not perform serial I/O on any port other than its
+   default debug port, which must be SMC1. Printk always uses polled output.
+   */
+#undef PRINTK_IO_MODE
+
+/* (BSP--console driver) Must be defined to be one of SMC1_MINOR, SMC2_MINOR,
+   SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR. Determines which device is used for
+   output by printk(). If the port that printk() uses is also used for other
+   I/O (e.g. if PRINTK_MINOR == \$CONSOLE_MINOR), then both ports should use
+   the same type of I/O, otherwise the drivers will likely conflict with each
+   other. */
+#undef PRINTK_MINOR
+
+/* (BSP--console driver) Define to 0 or 1 if you want polled I/O performed by
+   RTEMS. Define to 1 if you want interrupt-driven performed by RTEMS. Define
+   to 2 if you want polled I/O performed by EPPCBug. There is no provision to
+   have a mix of interrupt-driven and polled I/O ports, except that the printk
+   port may use a different mode from the other ports. If this is done, do not
+   open the printk port from an RTEMS application. With EPPCBug 1.1, if mode 2
+   is selected, CONSOLE_MINOR must be set to SMC1_MINOR. This is a deficiency
+   of the firmware: it does not perform serial I/O on any port other than its
+   default debug port, which must be SMC1. */
+#undef UARTS_IO_MODE
+
+/* Define to 1 if you want termios support for every port. Termios support is
+   independent of the choice of UART I/O mode. */
+#undef UARTS_USE_TERMIOS

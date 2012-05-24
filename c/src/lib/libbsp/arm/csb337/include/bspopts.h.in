@@ -1,0 +1,56 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* If defined, enable use of the SED1356 controller and LCD. */
+#undef ENABLE_LCD
+
+/* If defined, enable use of the uMon console. */
+#undef ENABLE_UMON
+
+/* If defined, enable use of the MicroMonitor console device. */
+#undef ENABLE_UMON_CONSOLE
+
+/* If defined, enable use of the USART 0. */
+#undef ENABLE_USART0
+
+/* If defined, enable use of the USART 1. */
+#undef ENABLE_USART1
+
+/* If defined, enable use of the USART 2. */
+#undef ENABLE_USART2
+
+/* If defined, enable use of the USART 3. */
+#undef ENABLE_USART3
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* If defined, this indicates that the BSP is being built for the csb637
+   variant. */
+#undef csb637
