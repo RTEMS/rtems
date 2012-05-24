@@ -1848,7 +1848,7 @@ rtems_bdbuf_create_read_request (const rtems_disk_device *dd,
   rtems_bdbuf_buffer *bd = NULL;
   rtems_blkdev_bnum   media_block_end = dd->start + dd->size;
   rtems_blkdev_bnum   media_block_count = dd->block_to_media_block_shift >= 0 ?
-    dd->block_size >> dd->block_to_media_block_shift
+    1U << dd->block_to_media_block_shift
       : dd->block_size / dd->media_block_size;
   uint32_t            block_size = dd->block_size;
   uint32_t            transfer_index = 1;
