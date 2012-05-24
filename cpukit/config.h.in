@@ -1,0 +1,495 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 if you have the `bcmp' function. */
+#undef HAVE_BCMP
+
+/* Define to 1 if you have the `bcopy' function. */
+#undef HAVE_BCOPY
+
+/* Define to 1 if you have the `closedir' function. */
+#undef HAVE_CLOSEDIR
+
+/* Define to 1 if you have the `creat' function. */
+#undef HAVE_CREAT
+
+/* Define to 1 if you have the declaration of `CHAR_BIT', and to 0 if you
+   don't. */
+#undef HAVE_DECL_CHAR_BIT
+
+/* Define to 1 if you have the declaration of `flockfile', and to 0 if you
+   don't. */
+#undef HAVE_DECL_FLOCKFILE
+
+/* Define to 1 if you have the declaration of `ftrylockfile', and to 0 if you
+   don't. */
+#undef HAVE_DECL_FTRYLOCKFILE
+
+/* Define to 1 if you have the declaration of `funlockfile', and to 0 if you
+   don't. */
+#undef HAVE_DECL_FUNLOCKFILE
+
+/* Define to 1 if you have the declaration of `getegid', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETEGID
+
+/* Define to 1 if you have the declaration of `geteuid', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETEUID
+
+/* Define to 1 if you have the declaration of `getgid', and to 0 if you don't.
+   */
+#undef HAVE_DECL_GETGID
+
+/* Define to 1 if you have the declaration of `getpgid', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETPGID
+
+/* Define to 1 if you have the declaration of `getpgrp', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETPGRP
+
+/* Define to 1 if you have the declaration of `getrusage', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETRUSAGE
+
+/* Define to 1 if you have the declaration of `getsid', and to 0 if you don't.
+   */
+#undef HAVE_DECL_GETSID
+
+/* Define to 1 if you have the declaration of `getuid', and to 0 if you don't.
+   */
+#undef HAVE_DECL_GETUID
+
+/* Define to 1 if you have the declaration of `LONG_BIT', and to 0 if you
+   don't. */
+#undef HAVE_DECL_LONG_BIT
+
+/* Define to 1 if you have the declaration of `pthread_attr_getguardsize', and
+   to 0 if you don't. */
+#undef HAVE_DECL_PTHREAD_ATTR_GETGUARDSIZE
+
+/* Define to 1 if you have the declaration of `pthread_attr_getstack', and to
+   0 if you don't. */
+#undef HAVE_DECL_PTHREAD_ATTR_GETSTACK
+
+/* Define to 1 if you have the declaration of `pthread_attr_setguardsize', and
+   to 0 if you don't. */
+#undef HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
+
+/* Define to 1 if you have the declaration of `pthread_attr_setstack', and to
+   0 if you don't. */
+#undef HAVE_DECL_PTHREAD_ATTR_SETSTACK
+
+/* Define to 1 if you have the declaration of `rcmd', and to 0 if you don't.
+   */
+#undef HAVE_DECL_RCMD
+
+/* Define to 1 if you have the declaration of `sbrk', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SBRK
+
+/* Define to 1 if you have the declaration of `setegid', and to 0 if you
+   don't. */
+#undef HAVE_DECL_SETEGID
+
+/* Define to 1 if you have the declaration of `seteuid', and to 0 if you
+   don't. */
+#undef HAVE_DECL_SETEUID
+
+/* Define to 1 if you have the declaration of `setgid', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SETGID
+
+/* Define to 1 if you have the declaration of `setpgid', and to 0 if you
+   don't. */
+#undef HAVE_DECL_SETPGID
+
+/* Define to 1 if you have the declaration of `setpgrp', and to 0 if you
+   don't. */
+#undef HAVE_DECL_SETPGRP
+
+/* Define to 1 if you have the declaration of `setsid', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SETSID
+
+/* Define to 1 if you have the declaration of `setuid', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SETUID
+
+/* Define to 1 if you have the declaration of `utime', and to 0 if you don't.
+   */
+#undef HAVE_DECL_UTIME
+
+/* Define to 1 if you have the declaration of `utimes', and to 0 if you don't.
+   */
+#undef HAVE_DECL_UTIMES
+
+/* Define to 1 if you have the declaration of `WORD_BIT', and to 0 if you
+   don't. */
+#undef HAVE_DECL_WORD_BIT
+
+/* Define to 1 if you have the declaration of `_POSIX_LOGIN_NAME_MAX', and to
+   0 if you don't. */
+#undef HAVE_DECL__POSIX_LOGIN_NAME_MAX
+
+/* Define to 1 if you have the declaration of `__env_lock', and to 0 if you
+   don't. */
+#undef HAVE_DECL___ENV_LOCK
+
+/* Define to 1 if you have the declaration of `__env_unlock', and to 0 if you
+   don't. */
+#undef HAVE_DECL___ENV_UNLOCK
+
+/* Define to 1 if you have the <envlock.h> header file. */
+#undef HAVE_ENVLOCK_H
+
+/* Define to 1 if you have the <errno.h> header file. */
+#undef HAVE_ERRNO_H
+
+/* Define to 1 if you have the `execl' function. */
+#undef HAVE_EXECL
+
+/* Define to 1 if you have the `execle' function. */
+#undef HAVE_EXECLE
+
+/* Define to 1 if you have the `execlp' function. */
+#undef HAVE_EXECLP
+
+/* Define to 1 if you have the `execv' function. */
+#undef HAVE_EXECV
+
+/* Define to 1 if you have the `execve' function. */
+#undef HAVE_EXECVE
+
+/* Define to 1 if you have the `execvp' function. */
+#undef HAVE_EXECVP
+
+/* Define to 1 if you have the `fileno' function. */
+#undef HAVE_FILENO
+
+/* Define to 1 if you have the `flockfile' function. */
+#undef HAVE_FLOCKFILE
+
+/* Define to 1 if you have the `ftrylockfile' function. */
+#undef HAVE_FTRYLOCKFILE
+
+/* Define to 1 if you have the `funlockfile' function. */
+#undef HAVE_FUNLOCKFILE
+
+/* Define to 1 if you have the `getcwd' function. */
+#undef HAVE_GETCWD
+
+/* Define to 1 if you have the `getegid' function. */
+#undef HAVE_GETEGID
+
+/* Define to 1 if you have the `geteuid' function. */
+#undef HAVE_GETEUID
+
+/* Define to 1 if you have the `getgid' function. */
+#undef HAVE_GETGID
+
+/* Define to 1 if you have the `getpgid' function. */
+#undef HAVE_GETPGID
+
+/* Define to 1 if you have the `getpgrp' function. */
+#undef HAVE_GETPGRP
+
+/* Define to 1 if you have the `getsid' function. */
+#undef HAVE_GETSID
+
+/* Define to 1 if you have the `getuid' function. */
+#undef HAVE_GETUID
+
+/* Define to 1 if the system has the type `int16_t'. */
+#undef HAVE_INT16_T
+
+/* Define to 1 if the system has the type `int32_t'. */
+#undef HAVE_INT32_T
+
+/* Define to 1 if the system has the type `int64_t'. */
+#undef HAVE_INT64_T
+
+/* Define to 1 if the system has the type `int8_t'. */
+#undef HAVE_INT8_T
+
+/* Define to 1 if the system has the type `intmax_t'. */
+#undef HAVE_INTMAX_T
+
+/* Define to 1 if the system has the type `intptr_t'. */
+#undef HAVE_INTPTR_T
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `isascii' function. */
+#undef HAVE_ISASCII
+
+/* Define to 1 if you have the `isatty' function. */
+#undef HAVE_ISATTY
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `opendir' function. */
+#undef HAVE_OPENDIR
+
+/* Define to 1 if you have the `pthread_attr_getguardsize' function. */
+#undef HAVE_PTHREAD_ATTR_GETGUARDSIZE
+
+/* Define to 1 if you have the `pthread_attr_getstack' function. */
+#undef HAVE_PTHREAD_ATTR_GETSTACK
+
+/* Define to 1 if you have the `pthread_attr_setguardsize' function. */
+#undef HAVE_PTHREAD_ATTR_SETGUARDSIZE
+
+/* Define to 1 if you have the `pthread_attr_setstack' function. */
+#undef HAVE_PTHREAD_ATTR_SETSTACK
+
+/* Define to 1 if the system has the type `pthread_barrier_t'. */
+#undef HAVE_PTHREAD_BARRIER_T
+
+/* Define to 1 if the system has the type `pthread_rwlock_t'. */
+#undef HAVE_PTHREAD_RWLOCK_T
+
+/* Define to 1 if the system has the type `pthread_spinlock_t'. */
+#undef HAVE_PTHREAD_SPINLOCK_T
+
+/* Define to 1 if you have the `readdir' function. */
+#undef HAVE_READDIR
+
+/* Define to 1 if you have the `readdir_r' function. */
+#undef HAVE_READDIR_R
+
+/* Define to 1 if you have the `regcomp' function. */
+#undef HAVE_REGCOMP
+
+/* Define to 1 if you have the `regerror' function. */
+#undef HAVE_REGERROR
+
+/* Define to 1 if you have the `regexec' function. */
+#undef HAVE_REGEXEC
+
+/* Define to 1 if you have the `regfree' function. */
+#undef HAVE_REGFREE
+
+/* Define to 1 if you have the `rewinddir' function. */
+#undef HAVE_REWINDDIR
+
+/* Define to 1 if you have the `scandir' function. */
+#undef HAVE_SCANDIR
+
+/* Define to 1 if you have the <sched.h> header file. */
+#undef HAVE_SCHED_H
+
+/* Define to 1 if you have the `seekdir' function. */
+#undef HAVE_SEEKDIR
+
+/* Define to 1 if you have the `setegid' function. */
+#undef HAVE_SETEGID
+
+/* Define to 1 if you have the `seteuid' function. */
+#undef HAVE_SETEUID
+
+/* Define to 1 if you have the `setgid' function. */
+#undef HAVE_SETGID
+
+/* Define to 1 if you have the `setpgid' function. */
+#undef HAVE_SETPGID
+
+/* Define to 1 if you have the `setpgrp' function. */
+#undef HAVE_SETPGRP
+
+/* Define to 1 if you have the `setsid' function. */
+#undef HAVE_SETSID
+
+/* Define to 1 if you have the `setuid' function. */
+#undef HAVE_SETUID
+
+/* Define to 1 if the system has the type `sighandler_t'. */
+#undef HAVE_SIGHANDLER_T
+
+/* Define to 1 if you have the `sleep' function. */
+#undef HAVE_SLEEP
+
+/* Define to 1 if you have the `snprintf' function. */
+#undef HAVE_SNPRINTF
+
+/* Define to 1 if stdbool.h conforms to C99. */
+#undef HAVE_STDBOOL_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strcasecmp' function. */
+#undef HAVE_STRCASECMP
+
+/* Define to 1 if you have the `strdup' function. */
+#undef HAVE_STRDUP
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strlcat' function. */
+#undef HAVE_STRLCAT
+
+/* Define to 1 if you have the `strlcpy' function. */
+#undef HAVE_STRLCPY
+
+/* Define to 1 if you have the `strncasecmp' function. */
+#undef HAVE_STRNCASECMP
+
+/* Define to 1 if you have the `strndup' function. */
+#undef HAVE_STRNDUP
+
+/* Define to 1 if you have the `strsep' function. */
+#undef HAVE_STRSEP
+
+/* Define to 1 if you have the <sys/cdefs.h> header file. */
+#undef HAVE_SYS_CDEFS_H
+
+/* Define to 1 if you have the <sys/queue.h> header file. */
+#undef HAVE_SYS_QUEUE_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <tar.h> header file. */
+#undef HAVE_TAR_H
+
+/* Define to 1 if you have the `telldir' function. */
+#undef HAVE_TELLDIR
+
+/* Define to 1 if you have the `ttyname' function. */
+#undef HAVE_TTYNAME
+
+/* Define to 1 if the system has the type `uint16_t'. */
+#undef HAVE_UINT16_T
+
+/* Define to 1 if the system has the type `uint32_t'. */
+#undef HAVE_UINT32_T
+
+/* Define to 1 if the system has the type `uint64_t'. */
+#undef HAVE_UINT64_T
+
+/* Define to 1 if the system has the type `uint8_t'. */
+#undef HAVE_UINT8_T
+
+/* Define to 1 if the system has the type `uintmax_t'. */
+#undef HAVE_UINTMAX_T
+
+/* Define to 1 if the system has the type `uintptr_t'. */
+#undef HAVE_UINTPTR_T
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the `usleep' function. */
+#undef HAVE_USLEEP
+
+/* Define to 1 if the system has the type `_Bool'. */
+#undef HAVE__BOOL
+
+/* Define to 1 if you have the `__assert' function. */
+#undef HAVE___ASSERT
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* if RTEMS_DEBUG is enabled */
+#undef RTEMS_DEBUG
+
+/* if multiprocessing is enabled */
+#undef RTEMS_MULTIPROCESSING
+
+/* if networking is enabled */
+#undef RTEMS_NETWORKING
+
+/* if using newlib */
+#undef RTEMS_NEWLIB
+
+/* if posix api is supported */
+#undef RTEMS_POSIX_API
+
+/* if SMP is enabled */
+#undef RTEMS_SMP
+
+/* RTEMS version string */
+#undef RTEMS_VERSION
+
+/* The size of `mode_t', as computed by sizeof. */
+#undef SIZEOF_MODE_T
+
+/* The size of `off_t', as computed by sizeof. */
+#undef SIZEOF_OFF_T
+
+/* The size of `time_t', as computed by sizeof. */
+#undef SIZEOF_TIME_T
+
+/* The size of `void *', as computed by sizeof. */
+#undef SIZEOF_VOID_P
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Define to 1 if ada/gnat bindings are built-in */
+#undef __RTEMS_ADA__
+
+/* disable inlining _Thread_Enable_dispatch */
+#undef __RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__
+
+/* disable inlining _Thread_Enable_dispatch */
+#undef __RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__
+
+/* disable inlining _Thread_queue_Enqueue_priority */
+#undef __RTEMS_DO_NOT_UNROLL_THREADQ_ENQUEUE_PRIORITY__
+
+/* major version portion of an RTEMS release */
+#undef __RTEMS_MAJOR__
+
+/* minor version portion of an RTEMS release */
+#undef __RTEMS_MINOR__
+
+/* revision version portion of an RTEMS release */
+#undef __RTEMS_REVISION__
+
+/* Size of a void * pointer */
+#undef __RTEMS_SIZEOF_VOID_P__
+
+/* disable strict order mutex */
+#undef __RTEMS_STRICT_ORDER_MUTEX__
+
+/* disable nanosecond granularity for cpu usage statistics */
+#undef __RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__
+
+/* disable nanosecond granularity for statistics */
+#undef __RTEMS_USE_TICKS_FOR_STATISTICS__
+
+/* disable nanosecond granularity for period statistics */
+#undef __RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__

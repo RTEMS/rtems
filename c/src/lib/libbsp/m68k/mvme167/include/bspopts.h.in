@@ -1,0 +1,55 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* Interrupt level for the CD2401(when CD2401_IO_MODE == 1). */
+#undef CD2401_INT_LEVEL
+
+/* 0 for polled I/O, 1 for interrupt-driven. */
+#undef CD2401_IO_MODE
+
+/* 1 for using termios based console. */
+#undef CD2401_USE_TERMIOS
+
+/* Port to use for the RTEMS console. 0 - /dev/tty0, Serial Port 1/Console on
+   the MVME712M. 1 - /dev/tty1, Serial Port 2/TTY01 on the MVME712M. 2 -
+   /dev/tty2, Serial Port 3 on the MVME712M. 3 - /dev/tty3, Serial Port 4 on
+   the MVME712M. */
+#undef CONSOLE_MINOR
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Port to use for printk debugging output. 0 - /dev/tty0, Serial Port
+   1/Console on the MVME712M. 1 - /dev/tty1, Serial Port 2/TTY01 on the
+   MVME712M. 2 - /dev/tty2, Serial Port 3 on the MVME712M. 3 - /dev/tty3,
+   Serial Port 4 on the MVME712M. */
+#undef PRINTK_MINOR
+
+/* If building the mvme167 BSP */
+#undef mvme167

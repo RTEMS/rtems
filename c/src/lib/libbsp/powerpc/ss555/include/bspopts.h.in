@@ -1,0 +1,52 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* Must be defined to be one of SCI1_MINOR or SCI2_MINOR. Determines which
+   device will be registered as /dev/console. */
+#undef CONSOLE_MINOR
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Must be defined to be one of SCI1_MINOR or SCI2_MINOR. Determines which
+   device is used for output by printk(). The printk port always uses polled
+   I/O. Don't open the printk port from RTEMS unless also using polled I/O for
+   the SCI ports. */
+#undef PRINTK_MINOR
+
+/* Define to 1 if you want interrupt-driven I/O for the SCI ports. */
+#undef UARTS_IO_MODE
+
+/* Define to 1 if you want termios support for every port. Termios support is
+   independent of the choice of UART I/O mode. */
+#undef UARTS_USE_TERMIOS
+
+/* Define to the desired timeout (in steps of 1/20 msec) to enable the
+   watchdog. Default is to disable the watchdog entirely. */
+#undef WATCHDOG_TIMEOUT

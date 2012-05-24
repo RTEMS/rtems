@@ -1,0 +1,67 @@
+/* include/bspopts.h.in.  Generated from configure.ac by autoheader.  */
+
+/* default baud for console and other serial devices */
+#undef BSP_CONSOLE_BAUD
+
+/* enables the data cache, if defined to a value other than zero */
+#undef BSP_DATA_CACHE_ENABLED
+
+/* If defined, then the BSP Framework will put a non-zero pattern into the
+   RTEMS Workspace and C program heap. This should assist in finding code that
+   assumes memory starts set to zero. */
+#undef BSP_DIRTY_MEMORY
+
+/* enables the instruction cache, if defined to a value other than zero */
+#undef BSP_INSTRUCTION_CACHE_ENABLED
+
+/* If defined, print a message and wait until pressed before resetting board
+   when application exits. */
+#undef BSP_PRESS_KEY_FOR_RESET
+
+/* If defined, reset the board when the application exits. */
+#undef BSP_RESET_BOARD_AT_EXIT
+
+/* if defined, enables UART2 */
+#undef BSP_USE_UART2
+
+/* enable usage of interrupts for the UART modules */
+#undef BSP_USE_UART_INTERRUPTS
+
+/* enable interrupt nesting */
+#undef GEN83XX_ENABLE_INTERRUPT_NESTING
+
+/* if defined, enables U-Boot support */
+#undef HAS_UBOOT
+
+/* if defined, then use settings for the HSC_CM01 board */
+#undef MPC83XX_BOARD_HSC_CM01
+
+/* if defined, then use settings for the MPC8309SOM board */
+#undef MPC83XX_BOARD_MPC8309SOM
+
+/* if defined, then use settings for the MPC8313ERDB board */
+#undef MPC83XX_BOARD_MPC8313ERDB
+
+/* if defined, then use settings for the MPC8349EAMDS board */
+#undef MPC83XX_BOARD_MPC8349EAMDS
+
+/* chip type of the MPC83XX family */
+#undef MPC83XX_CHIP_TYPE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
