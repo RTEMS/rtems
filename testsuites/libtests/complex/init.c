@@ -31,9 +31,7 @@
 
 extern void docomplex(void);
 extern void docomplexf(void);
-#ifndef NO_LONG_DOUBLE
 extern void docomplexl(void);
-#endif
 
 #if __rtems__
 /* NOTICE: the clock driver is explicitly disabled */
@@ -60,9 +58,7 @@ int main( void )
 
   docomplex();
   docomplexf();  
-#ifndef NO_LONG_DOUBLE
   docomplexl();
-#endif
   fprintf( stdout, "*** END OF COMPLEX MATH TEST ***\n" );
   exit( 0 );
 }
