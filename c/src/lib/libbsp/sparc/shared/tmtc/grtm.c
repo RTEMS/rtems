@@ -761,8 +761,7 @@ static int grtm_start(struct grtm_priv *pDev)
 	struct grtm_regs *regs = pDev->regs;
 	int i;
 	struct grtm_ioc_config *cfg = &pDev->config;
-	volatile unsigned int *txrdy_reg;
-	unsigned int txrdy_mask;
+	unsigned int txrdy;
 
 	/* Clear Descriptors */
 	memset(pDev->bds,0,0x400);
@@ -818,21 +817,23 @@ static int grtm_start(struct grtm_priv *pDev)
 		i--;
 	}
 
-	/* Location of TXRDY Bit is different for different revisions */
-	if ( pDev->subrev == 0 ) {
-		txrdy_reg = &regs->dma_ctrl;
-		txrdy_mask = GRTM_REV0_DMA_CTRL_TXRDY;
-	} else {
-		txrdy_reg = &regs->dma_status;
-		txrdy_mask = GRTM_REV1_DMA_STS_TXRDY;
-	}
-
 	/* Check transmitter startup OK */
-	i=0;
-	while( !(READ_REG(txrdy_reg) & txrdy_mask) && (i<1000000) ){
-		i++;
-	}
-	if ( !(READ_REG(txrdy_reg) & txrdy_mask) ){
+	i = 1000000;
+	do {
+		/* Location of TXRDY Bit is different for different revisions */
+		if ( pDev->subrev == 0 ) {
+			txrdy = READ_REG(&regs->dma_ctrl) &
+				GRTM_REV0_DMA_CTRL_TXRDY;
+		} else {
+			txrdy = READ_REG(&regs->dma_status) &
+				GRTM_REV1_DMA_STS_TXRDY;
+		}
+		if (txrdy != 0)
+			break;
+
+		asm volatile ("nop"::);
+	} while ( --i > 0 );
+	if ( i == 0 ) {
 		/* Reset Failed */
 		DBG("GRTM: start: Reseting transmitter failed (%d)\n",i);
 		return RTEMS_IO_ERROR;
