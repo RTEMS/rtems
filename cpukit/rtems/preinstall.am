@@ -127,6 +127,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/types.h: include/rtems/rtems/types.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/types.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/atomic.h: include/rtems/rtems/atomic.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/atomic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/atomic.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/mainpage.h: mainpage.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/mainpage.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/mainpage.h
