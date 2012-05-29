@@ -38,6 +38,16 @@ extern "C" {
 #define RTEMS_LIBIO_SEM         rtems_build_name('L', 'B', 'I', 'O')
 #define RTEMS_LIBIO_IOP_SEM(n)  rtems_build_name('L', 'B', 'I', n)
 
+/**
+ * @brief Event to signal an unmount process completion.
+ *
+ * This event should equal the RTEMS_BDBUF_TRANSFER_SYNC event to avoid too
+ * many events reserved for the file system.
+ *
+ * @see rtems_filesystem_do_unmount() and unmount().
+ */
+#define RTEMS_FILESYSTEM_UNMOUNT_EVENT RTEMS_EVENT_1
+
 extern rtems_id                          rtems_libio_semaphore;
 
 /*
