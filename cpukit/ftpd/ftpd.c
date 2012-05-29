@@ -1890,7 +1890,6 @@ session(rtems_task_argument arg)
       &set);
 
     chroot_made = chroot_made || chroot(ftpd_root) == 0;
-    chdir("/");
 
     errno = 0;
 
@@ -1926,6 +1925,8 @@ session(rtems_task_argument arg)
     free(info->user);
     free(info->pass);
     task_pool_release(info);
+
+    chdir("/");
   }
 }
 

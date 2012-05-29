@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 #include <rtems/libio_.h>
 
@@ -400,7 +401,7 @@ static int msdos_format_determine_fmt_params
   if (ret_val == 0) {
     total_size = fmt_params->bytes_per_sector * fmt_params->totl_sector_cnt;
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
-                         "bytes per sector: %d\ntotal sectors: %d\ntotal size: %lu\n",
+                         "bytes per sector: %" PRIu32 "\ntotal sectors: %" PRIu32 "\ntotal size: %" PRIu64 "\n",
                          fmt_params->bytes_per_sector, fmt_params->totl_sector_cnt, total_size);
   }
 
