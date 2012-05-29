@@ -363,14 +363,16 @@ typedef struct rtems_bdbuf_config {
                                                 * at once. */
   rtems_task_priority swapout_priority;        /**< Priority of the swap out
                                                 * task. */
-  uint32_t            swapout_period;          /**< Period swapout checks buf
+  uint32_t            swapout_period;          /**< Period swap-out checks buf
                                                 * timers. */
   uint32_t            swap_block_hold;         /**< Period a buffer is held. */
   size_t              swapout_workers;         /**< The number of worker
-                                                * threads for the swapout
+                                                * threads for the swap-out
                                                 * task. */
   rtems_task_priority swapout_worker_priority; /**< Priority of the swap out
                                                 * task. */
+  size_t              task_stack_size;         /**< Task stack size for swap-out
+                                                * task and worker threads. */
   size_t              size;                    /**< Size of memory in the
                                                 * cache */
   uint32_t            buffer_min;              /**< Minimum buffer size. */
@@ -418,10 +420,15 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
 #define RTEMS_BDBUF_SWAPOUT_WORKER_TASKS_DEFAULT     0
 
 /**
- * Default swap-out worker task priority. The same as the swapout task.
+ * Default swap-out worker task priority. The same as the swap-out task.
  */
 #define RTEMS_BDBUF_SWAPOUT_WORKER_TASK_PRIORITY_DEFAULT \
                              RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT
+
+/**
+ * Default task stack size for swap-out and worker tasks.
+ */
+#define RTEMS_BDBUF_TASK_STACK_SIZE_DEFAULT RTEMS_MINIMUM_STACK_SIZE
 
 /**
  * Default size of memory allocated to the cache.

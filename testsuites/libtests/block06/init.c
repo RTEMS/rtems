@@ -113,6 +113,8 @@ typedef struct bdbuf_task_control
 
 #define BDBUF_TEST_TASKS (3)
 
+#define BDBUF_TEST_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+
 /**
  * Seconds as milli-seconds.
  */
@@ -649,7 +651,7 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
   sc = rtems_task_create (rtems_build_name (tc->name[0], tc->name[1],
                                             tc->name[2], tc->name[3]),
                           priority,
-                          8 * 1024,
+                          BDBUF_TEST_STACK_SIZE,
                           RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR,
                           &tc->task);
@@ -1842,12 +1844,14 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
-#define CONFIGURE_MAXIMUM_TASKS 8
+#define CONFIGURE_MAXIMUM_TASKS (1 + BDBUF_TEST_TASKS)
 #define CONFIGURE_MAXIMUM_DRIVERS 3
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS \
+  (BDBUF_TEST_TASKS * BDBUF_TEST_STACK_SIZE)
 
+#define CONFIGURE_INIT_TASK_STACK_SIZE BDBUF_TEST_STACK_SIZE
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

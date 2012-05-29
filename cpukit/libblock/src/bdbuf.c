@@ -173,7 +173,6 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_BDBUF_SO_WAKE       RTEMS_BLKDEV_FATAL_ERROR(20)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM      RTEMS_BLKDEV_FATAL_ERROR(21)
 #define RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_CREATE  RTEMS_BLKDEV_FATAL_ERROR(22)
-#define RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_START   RTEMS_BLKDEV_FATAL_ERROR(23)
 #define BLKDEV_FATAL_BDBUF_SWAPOUT_RE          RTEMS_BLKDEV_FATAL_ERROR(24)
 #define BLKDEV_FATAL_BDBUF_SWAPOUT_TS          RTEMS_BLKDEV_FATAL_ERROR(25)
 #define RTEMS_BLKDEV_FATAL_BDBUF_WAIT_EVNT     RTEMS_BLKDEV_FATAL_ERROR(26)
@@ -188,12 +187,6 @@ typedef struct rtems_bdbuf_cache
  */
 #define RTEMS_BDBUF_TRANSFER_SYNC  RTEMS_EVENT_1
 #define RTEMS_BDBUF_SWAPOUT_SYNC   RTEMS_EVENT_2
-
-/**
- * The swap out task size. Should be more than enough for most drivers with
- * tracing turned on.
- */
-#define SWAPOUT_TASK_STACK_SIZE (8 * 1024)
 
 /**
  * Lock semaphore attributes. This is used for locking type mutexes.
@@ -1287,6 +1280,35 @@ rtems_bdbuf_get_buffer_from_lru_list (const rtems_disk_device *dd,
   return NULL;
 }
 
+static rtems_status_code
+rtems_bdbuf_create_task(
+  rtems_name name,
+  rtems_task_priority priority,
+  rtems_task_priority default_priority,
+  rtems_task_entry entry,
+  rtems_task_argument arg,
+  rtems_id *id
+)
+{
+  rtems_status_code sc;
+  size_t stack_size = bdbuf_config.task_stack_size ?
+    bdbuf_config.task_stack_size : RTEMS_BDBUF_TASK_STACK_SIZE_DEFAULT;
+
+  priority = priority != 0 ? priority : default_priority;
+
+  sc = rtems_task_create (name,
+                          priority,
+                          stack_size,
+                          RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR,
+                          RTEMS_LOCAL | RTEMS_NO_FLOATING_POINT,
+                          id);
+
+  if (sc == RTEMS_SUCCESSFUL)
+    sc = rtems_task_start (*id, entry, arg);
+
+  return sc;
+}
+
 /**
  * Initialise the cache.
  *
@@ -1456,20 +1478,12 @@ rtems_bdbuf_init (void)
    */
   bdbuf_cache.swapout_enabled = true;
 
-  sc = rtems_task_create (rtems_build_name('B', 'S', 'W', 'P'),
-                          bdbuf_config.swapout_priority ?
-                            bdbuf_config.swapout_priority :
-                            RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT,
-                          SWAPOUT_TASK_STACK_SIZE,
-                          RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR,
-                          RTEMS_LOCAL | RTEMS_NO_FLOATING_POINT,
-                          &bdbuf_cache.swapout);
-  if (sc != RTEMS_SUCCESSFUL)
-    goto error;
-
-  sc = rtems_task_start (bdbuf_cache.swapout,
-                         rtems_bdbuf_swapout_task,
-                         (rtems_task_argument) &bdbuf_cache);
+  sc = rtems_bdbuf_create_task (rtems_build_name('B', 'S', 'W', 'P'),
+                                bdbuf_config.swapout_priority,
+                                RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT,
+                                rtems_bdbuf_swapout_task,
+                                0,
+                                &bdbuf_cache.swapout);
   if (sc != RTEMS_SUCCESSFUL)
     goto error;
 
@@ -2639,22 +2653,14 @@ rtems_bdbuf_swapout_workers_open (void)
     rtems_chain_initialize_empty (&worker->transfer.bds);
     worker->transfer.dd = BDBUF_INVALID_DEV;
 
-    sc = rtems_task_create (rtems_build_name('B', 'D', 'o', 'a' + w),
-                            (bdbuf_config.swapout_priority ?
-                             bdbuf_config.swapout_priority :
-                             RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT),
-                            SWAPOUT_TASK_STACK_SIZE,
-                            RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR,
-                            RTEMS_LOCAL | RTEMS_NO_FLOATING_POINT,
-                            &worker->id);
+    sc = rtems_bdbuf_create_task (rtems_build_name('B', 'D', 'o', 'a' + w),
+                                  bdbuf_config.swapout_worker_priority,
+                                  RTEMS_BDBUF_SWAPOUT_WORKER_TASK_PRIORITY_DEFAULT,
+                                  rtems_bdbuf_swapout_worker_task,
+                                  (rtems_task_argument) worker,
+                                  &worker->id);
     if (sc != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_CREATE);
-
-    sc = rtems_task_start (worker->id,
-                           rtems_bdbuf_swapout_worker_task,
-                           (rtems_task_argument) worker);
-    if (sc != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SO_WK_START);
   }
 
   rtems_bdbuf_unlock_cache ();
