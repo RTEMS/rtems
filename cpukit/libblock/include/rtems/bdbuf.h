@@ -141,7 +141,7 @@ extern "C" {
  * A block being accessed is given to the file system layer and not accessible
  * to another requester until released back to the cache.  The same goes to a
  * buffer in the transfer state.  The transfer state means being read or
- * written.  If the file system has modifed the block and releases it as
+ * written.  If the file system has modified the block and releases it as
  * modified it placed on the cache's modified list and a hold timer
  * initialised.  The buffer is held for the hold time before being written to
  * disk.  Buffers are held for a configurable period of time on the modified
@@ -462,7 +462,7 @@ rtems_bdbuf_init (void);
 
 /**
  * Get block buffer for data to be written into. The buffers is set to the
- * access or modifed access state. If the buffer is in the cache and modified
+ * access or modified access state. If the buffer is in the cache and modified
  * the state is access modified else the state is access. This buffer contents
  * are not initialised if the buffer is not already in the cache. If the block
  * is already resident in memory it is returned how-ever if not in memory the
@@ -498,7 +498,7 @@ rtems_bdbuf_get (
 /**
  * Get the block buffer and if not already in the cache read from the disk. If
  * specified block already cached return. The buffer is set to the access or
- * modifed access state. If the buffer is in the cache and modified the state
+ * modified access state. If the buffer is in the cache and modified the state
  * is access modified else the state is access. If block is already being read
  * from disk for being written to disk this call blocks. If the buffer is
  * waiting to be written it is removed from modified queue and returned to the
@@ -601,7 +601,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
 /**
  * Synchronize all modified buffers for this device with the disk and wait
  * until the transfers have completed. The sync mutex for the cache is locked
- * stopping the addition of any further modifed buffers. It is only the
+ * stopping the addition of any further modified buffers. It is only the
  * currently modified buffers that are written.
  *
  * @note Nesting calls to sync multiple devices will be handled sequentially. A
@@ -635,8 +635,7 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd);
 /**
  * @brief Sets the block size of a disk device.
  *
- * This will also change the block_to_media_block_shift and bds_per_group
- * fields of the disk device.
+ * This will set the block size derived fields of the disk device.
  *
  * Before you can use this function, the rtems_bdbuf_init() routine must be
  * called at least once to initialize the cache, otherwise a fatal error will

@@ -1754,20 +1754,23 @@ rtems_bdbuf_get_media_block (const rtems_disk_device *dd,
                              rtems_blkdev_bnum        block,
                              rtems_blkdev_bnum       *media_block_ptr)
 {
-  /*
-   * Compute the media block number. Drivers work with media block number not
-   * the block number a BD may have as this depends on the block size set by
-   * the user.
-   */
-  rtems_blkdev_bnum mb = rtems_bdbuf_media_block (dd, block);
-  if (mb >= dd->size)
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (block < dd->block_count)
   {
-    return RTEMS_INVALID_ID;
+    /*
+     * Compute the media block number. Drivers work with media block number not
+     * the block number a BD may have as this depends on the block size set by
+     * the user.
+     */
+    *media_block_ptr = rtems_bdbuf_media_block (dd, block) + dd->start;
+  }
+  else
+  {
+    sc = RTEMS_INVALID_ID;
   }
 
-  *media_block_ptr = mb + dd->start;
-
-  return RTEMS_SUCCESSFUL;
+  return sc;
 }
 
 rtems_status_code
@@ -2909,6 +2912,8 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size)
         block_to_media_block_shift = -1;
 
       dd->block_size = block_size;
+      dd->block_count = dd->size / media_blocks_per_block;
+      dd->media_blocks_per_block = media_blocks_per_block;
       dd->block_to_media_block_shift = block_to_media_block_shift;
       dd->bds_per_group = bds_per_group;
     }

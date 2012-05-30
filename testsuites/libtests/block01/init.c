@@ -183,7 +183,7 @@ static void test_diskdevs(void)
   sc = rtems_disk_create_log(logical_dev, physical_dev, 0, 1, "/dev/rda1");
   ASSERT_SC_EQ(sc, RTEMS_RESOURCE_IN_USE);
 
-  sc = rtems_disk_create_log(logical_2_dev, logical_dev, 0, 1, "/dev/rda1");
+  sc = rtems_disk_create_log(logical_2_dev, logical_dev, 0, 1, "/dev/rda2");
   ASSERT_SC_EQ(sc, RTEMS_INVALID_ID);
 
   sc = rtems_disk_delete(logical_dev);

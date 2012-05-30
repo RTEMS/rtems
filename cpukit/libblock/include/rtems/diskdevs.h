@@ -92,33 +92,48 @@ struct rtems_disk_device {
   unsigned uses;
 
   /**
-   * @brief Start block number.
+   * @brief Start media block number.
    *
-   * Equals zero for physical devices.  It is a block offset to the related
-   * physical device for logical device.
+   * Equals zero for physical devices.  It is a media block offset to the
+   * related physical device for logical device.
    */
   rtems_blkdev_bnum start;
 
   /**
-   * @brief Size of the physical or logical disk in blocks.
+   * @brief Size of the physical or logical disk in media blocks.
    */
   rtems_blkdev_bnum size;
 
   /**
-   * @brief Device block size in bytes.
+   * @brief Media block size in bytes.
    *
-   * This is the minimum transfer unit.  It must be positive.
+   * This is the media transfer unit the hardware defaults to.
+   */
+  uint32_t media_block_size;
+
+  /**
+   * @brief Block size in bytes.
+   *
+   * This is the minimum transfer unit.  It may be a multiple of the media
+   * block size. It must be positive.
    *
    * @see rtems_bdbuf_set_block_size().
    */
   uint32_t block_size;
 
   /**
-   * @brief Device media block size in bytes.
+   * @brief Block count.
    *
-   * This is the media transfer unit the hardware defaults to.
+   * @see rtems_bdbuf_set_block_size().
    */
-  uint32_t media_block_size;
+  rtems_blkdev_bnum block_count;
+
+  /**
+   * @brief Media blocks per device blocks.
+   *
+   * @see rtems_bdbuf_set_block_size().
+   */
+  uint32_t media_blocks_per_block;
 
   /**
    * @brief Block to media block shift.
@@ -259,7 +274,7 @@ rtems_status_code rtems_disk_create_phys(
  *
  * A logical disk manages a subset of consecutive blocks contained in the
  * physical disk with identifier @a phys.  The start block index of the logical
- * disk device is @a begin_block.  The block count of the logcal disk will be
+ * disk device is @a block_begin.  The block count of the logcal disk will be
  * @a block_count.  The blocks must be within the range of blocks managed by
  * the associated physical disk device.  A device node will be registered in
  * the file system with absolute path @a name, if @a name is not @c NULL.  The
@@ -278,7 +293,7 @@ rtems_status_code rtems_disk_create_phys(
 rtems_status_code rtems_disk_create_log(
   dev_t dev,
   dev_t phys,
-  rtems_blkdev_bnum begin_block,
+  rtems_blkdev_bnum block_begin,
   rtems_blkdev_bnum block_count,
   const char *name
 );
@@ -372,6 +387,23 @@ rtems_status_code rtems_disk_io_done(void);
  * @endcode
  */
 rtems_disk_device *rtems_disk_next(dev_t dev);
+
+/* Internal function, do not use */
+rtems_status_code rtems_disk_init_phys(
+  rtems_disk_device *dd,
+  uint32_t block_size,
+  rtems_blkdev_bnum block_count,
+  rtems_block_device_ioctl handler,
+  void *driver_data
+);
+
+/* Internal function, do not use */
+rtems_status_code rtems_disk_init_log(
+  rtems_disk_device *dd,
+  rtems_disk_device *phys_dd,
+  rtems_blkdev_bnum block_begin,
+  rtems_blkdev_bnum block_count
+);
 
 #ifdef __cplusplus
 }
