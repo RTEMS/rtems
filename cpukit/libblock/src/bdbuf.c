@@ -1780,57 +1780,57 @@ rtems_bdbuf_get (rtems_disk_device   *dd,
 {
   rtems_status_code   sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
-  rtems_blkdev_bnum   media_block = 0;
-
-  sc = rtems_bdbuf_get_media_block (dd, block, &media_block);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
+  rtems_blkdev_bnum   media_block;
 
   rtems_bdbuf_lock_cache ();
 
-  /*
-   * Print the block index relative to the physical disk.
-   */
-  if (rtems_bdbuf_tracer)
-    printf ("bdbuf:get: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
-            media_block, block, (unsigned) dd->dev);
-
-  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
-
-  switch (bd->state)
+  sc = rtems_bdbuf_get_media_block (dd, block, &media_block);
+  if (sc == RTEMS_SUCCESSFUL)
   {
-    case RTEMS_BDBUF_STATE_CACHED:
-      rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
-      break;
-    case RTEMS_BDBUF_STATE_EMPTY:
-      rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_EMPTY);
-      break;
-    case RTEMS_BDBUF_STATE_MODIFIED:
-      /*
-       * To get a modified buffer could be considered a bug in the caller
-       * because you should not be getting an already modified buffer but user
-       * may have modified a byte in a block then decided to seek the start and
-       * write the whole block and the file system will have no record of this
-       * so just gets the block to fill.
-       */
-      rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
-      break;
-    default:
-      rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_2);
-      break;
-  }
+    /*
+     * Print the block index relative to the physical disk.
+     */
+    if (rtems_bdbuf_tracer)
+      printf ("bdbuf:get: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
+              media_block, block, (unsigned) dd->dev);
 
-  if (rtems_bdbuf_tracer)
-  {
-    rtems_bdbuf_show_users ("get", bd);
-    rtems_bdbuf_show_usage ();
+    bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
+
+    switch (bd->state)
+    {
+      case RTEMS_BDBUF_STATE_CACHED:
+        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
+        break;
+      case RTEMS_BDBUF_STATE_EMPTY:
+        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_EMPTY);
+        break;
+      case RTEMS_BDBUF_STATE_MODIFIED:
+        /*
+         * To get a modified buffer could be considered a bug in the caller
+         * because you should not be getting an already modified buffer but
+         * user may have modified a byte in a block then decided to seek the
+         * start and write the whole block and the file system will have no
+         * record of this so just gets the block to fill.
+         */
+        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
+        break;
+      default:
+        rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_2);
+        break;
+    }
+
+    if (rtems_bdbuf_tracer)
+    {
+      rtems_bdbuf_show_users ("get", bd);
+      rtems_bdbuf_show_usage ();
+    }
   }
 
   rtems_bdbuf_unlock_cache ();
 
   *bd_ptr = bd;
 
-  return RTEMS_SUCCESSFUL;
+  return sc;
 }
 
 /**
@@ -1997,11 +1997,7 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
   rtems_status_code     sc = RTEMS_SUCCESSFUL;
   rtems_blkdev_request *req = NULL;
   rtems_bdbuf_buffer   *bd = NULL;
-  rtems_blkdev_bnum     media_block = 0;
-
-  sc = rtems_bdbuf_get_media_block (dd, block, &media_block);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
+  rtems_blkdev_bnum     media_block;
 
   /*
    * TODO: This type of request structure is wrong and should be removed.
@@ -2012,50 +2008,57 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
                      sizeof (rtems_blkdev_sg_buffer) *
                       (bdbuf_config.max_read_ahead_blocks + 1));
 
-  if (rtems_bdbuf_tracer)
-    printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
-            media_block + dd->start, block, (unsigned) dd->dev);
-
   rtems_bdbuf_lock_cache ();
-  rtems_bdbuf_create_read_request (dd, media_block, req, &bd);
 
-  if (req->bufnum > 0)
-  {
-    sc = rtems_bdbuf_execute_transfer_request (dd, req, true);
-    if (sc == RTEMS_SUCCESSFUL)
-    {
-      rtems_chain_extract_unprotected (&bd->link);
-      rtems_bdbuf_group_obtain (bd);
-    }
-  }
-
+  sc = rtems_bdbuf_get_media_block (dd, block, &media_block);
   if (sc == RTEMS_SUCCESSFUL)
   {
-    switch (bd->state)
-    {
-      case RTEMS_BDBUF_STATE_CACHED:
-        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
-        break;
-      case RTEMS_BDBUF_STATE_MODIFIED:
-        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
-        break;
-      default:
-        rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_4);
-        break;
-    }
-
     if (rtems_bdbuf_tracer)
+      printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
+              media_block + dd->start, block, (unsigned) dd->dev);
+
+    rtems_bdbuf_create_read_request (dd, media_block, req, &bd);
+
+    if (req->bufnum > 0)
     {
-      rtems_bdbuf_show_users ("read", bd);
-      rtems_bdbuf_show_usage ();
+      sc = rtems_bdbuf_execute_transfer_request (dd, req, true);
+      if (sc == RTEMS_SUCCESSFUL)
+      {
+        rtems_chain_extract_unprotected (&bd->link);
+        rtems_bdbuf_group_obtain (bd);
+      }
     }
 
-    *bd_ptr = bd;
+    if (sc == RTEMS_SUCCESSFUL)
+    {
+      switch (bd->state)
+      {
+        case RTEMS_BDBUF_STATE_CACHED:
+          rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
+          break;
+        case RTEMS_BDBUF_STATE_MODIFIED:
+          rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
+          break;
+        default:
+          rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_4);
+          break;
+      }
+
+      if (rtems_bdbuf_tracer)
+      {
+        rtems_bdbuf_show_users ("read", bd);
+        rtems_bdbuf_show_usage ();
+      }
+    }
+    else
+    {
+      bd = NULL;
+    }
   }
-  else
-    *bd_ptr = NULL;
 
   rtems_bdbuf_unlock_cache ();
+
+  *bd_ptr = bd;
 
   return sc;
 }
