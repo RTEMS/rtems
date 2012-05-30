@@ -1236,8 +1236,7 @@ rtems_bdbuf_setup_empty_buffer (rtems_bdbuf_buffer *bd,
 
 static rtems_bdbuf_buffer *
 rtems_bdbuf_get_buffer_from_lru_list (const rtems_disk_device *dd,
-                                      rtems_blkdev_bnum block,
-                                      size_t            bds_per_group)
+                                      rtems_blkdev_bnum block)
 {
   rtems_chain_node *node = rtems_chain_first (&bdbuf_cache.lru);
 
@@ -1250,21 +1249,21 @@ rtems_bdbuf_get_buffer_from_lru_list (const rtems_disk_device *dd,
       printf ("bdbuf:next-bd: %tu (%td:%" PRId32 ") %zd -> %zd\n",
               bd - bdbuf_cache.bds,
               bd->group - bdbuf_cache.groups, bd->group->users,
-              bd->group->bds_per_group, bds_per_group);
+              bd->group->bds_per_group, dd->bds_per_group);
 
     /*
      * If nobody waits for this BD, we may recycle it.
      */
     if (bd->waiters == 0)
     {
-      if (bd->group->bds_per_group == bds_per_group)
+      if (bd->group->bds_per_group == dd->bds_per_group)
       {
         rtems_bdbuf_remove_from_tree_and_lru_list (bd);
 
         empty_bd = bd;
       }
       else if (bd->group->users == 0)
-        empty_bd = rtems_bdbuf_group_realloc (bd->group, bds_per_group);
+        empty_bd = rtems_bdbuf_group_realloc (bd->group, dd->bds_per_group);
     }
 
     if (empty_bd != NULL)
@@ -1688,8 +1687,7 @@ rtems_bdbuf_sync_after_access (rtems_bdbuf_buffer *bd)
 
 static rtems_bdbuf_buffer *
 rtems_bdbuf_get_buffer_for_read_ahead (const rtems_disk_device *dd,
-                                       rtems_blkdev_bnum block,
-                                       size_t            bds_per_group)
+                                       rtems_blkdev_bnum block)
 {
   rtems_bdbuf_buffer *bd = NULL;
 
@@ -1697,7 +1695,7 @@ rtems_bdbuf_get_buffer_for_read_ahead (const rtems_disk_device *dd,
 
   if (bd == NULL)
   {
-    bd = rtems_bdbuf_get_buffer_from_lru_list (dd, block, bds_per_group);
+    bd = rtems_bdbuf_get_buffer_from_lru_list (dd, block);
 
     if (bd != NULL)
       rtems_bdbuf_group_obtain (bd);
@@ -1714,8 +1712,7 @@ rtems_bdbuf_get_buffer_for_read_ahead (const rtems_disk_device *dd,
 
 static rtems_bdbuf_buffer *
 rtems_bdbuf_get_buffer_for_access (const rtems_disk_device *dd,
-                                   rtems_blkdev_bnum block,
-                                   size_t            bds_per_group)
+                                   rtems_blkdev_bnum block)
 {
   rtems_bdbuf_buffer *bd = NULL;
 
@@ -1725,7 +1722,7 @@ rtems_bdbuf_get_buffer_for_access (const rtems_disk_device *dd,
 
     if (bd != NULL)
     {
-      if (bd->group->bds_per_group != bds_per_group)
+      if (bd->group->bds_per_group != dd->bds_per_group)
       {
         if (rtems_bdbuf_wait_for_recycle (bd))
         {
@@ -1738,7 +1735,7 @@ rtems_bdbuf_get_buffer_for_access (const rtems_disk_device *dd,
     }
     else
     {
-      bd = rtems_bdbuf_get_buffer_from_lru_list (dd, block, bds_per_group);
+      bd = rtems_bdbuf_get_buffer_from_lru_list (dd, block);
 
       if (bd == NULL)
         rtems_bdbuf_wait_for_buffer ();
@@ -1795,7 +1792,7 @@ rtems_bdbuf_get (rtems_disk_device   *dd,
     printf ("bdbuf:get: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
             media_block, block, (unsigned) dd->dev);
 
-  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block, dd->bds_per_group);
+  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
 
   switch (bd->state)
   {
@@ -1855,7 +1852,6 @@ rtems_bdbuf_transfer_done (void* arg, rtems_status_code status)
 static void
 rtems_bdbuf_create_read_request (const rtems_disk_device *dd,
                                  rtems_blkdev_bnum        media_block,
-                                 size_t                   bds_per_group,
                                  rtems_blkdev_request    *req,
                                  rtems_bdbuf_buffer     **bd_ptr)
 {
@@ -1878,7 +1874,7 @@ rtems_bdbuf_create_read_request (const rtems_disk_device *dd,
   req->status = RTEMS_RESOURCE_IN_USE;
   req->bufnum = 0;
 
-  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block, bds_per_group);
+  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
 
   *bd_ptr = bd;
 
@@ -1907,8 +1903,7 @@ rtems_bdbuf_create_read_request (const rtems_disk_device *dd,
   {
     media_block += media_block_count;
 
-    bd = rtems_bdbuf_get_buffer_for_read_ahead (dd, media_block,
-                                                bds_per_group);
+    bd = rtems_bdbuf_get_buffer_for_read_ahead (dd, media_block);
 
     if (bd == NULL)
       break;
@@ -2019,7 +2014,7 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
             media_block + dd->start, block, (unsigned) dd->dev);
 
   rtems_bdbuf_lock_cache ();
-  rtems_bdbuf_create_read_request (dd, media_block, dd->bds_per_group, req, &bd);
+  rtems_bdbuf_create_read_request (dd, media_block, req, &bd);
 
   if (req->bufnum > 0)
   {
