@@ -38,8 +38,8 @@ static ssize_t rtems_blkdev_imfs_read(
 )
 {
   int rv;
-  const rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
+  rtems_disk_device *dd = &ctx->dd;
   ssize_t remaining = (ssize_t) count;
   off_t offset = iop->offset;
   ssize_t block_size = (ssize_t) rtems_disk_get_block_size(dd);
@@ -92,8 +92,8 @@ static ssize_t rtems_blkdev_imfs_write(
 )
 {
   int rv;
-  const rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
+  rtems_disk_device *dd = &ctx->dd;
   ssize_t remaining = (ssize_t) count;
   off_t offset = iop->offset;
   ssize_t block_size = (ssize_t) rtems_disk_get_block_size(dd);
@@ -174,9 +174,9 @@ static int rtems_blkdev_imfs_fstat(
   struct stat *buf
 )
 {
-  const rtems_blkdev_imfs_context *ctx =
+  rtems_blkdev_imfs_context *ctx =
     IMFS_generic_get_context_by_location(loc);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_disk_device *dd = &ctx->dd;
 
   buf->st_rdev = rtems_disk_get_device_identifier(dd);
   buf->st_blksize = rtems_disk_get_block_size(dd);
@@ -190,8 +190,8 @@ static int rtems_blkdev_imfs_fsync_or_fdatasync(
 )
 {
   int rv = 0;
-  const rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
+  rtems_disk_device *dd = &ctx->dd;
   rtems_status_code sc = rtems_bdbuf_syncdev(dd);
 
   if (sc != RTEMS_SUCCESSFUL) {
@@ -332,7 +332,7 @@ rtems_status_code rtems_blkdev_create_partition(
     if (rv == 0 && S_ISBLK(st.st_mode)) {
       rtems_disk_device *dd;
 
-      rv = ioctl(fd, RTEMS_BLKIO_GETDISKDEV, &dd);
+      rv = rtems_disk_fd_get_disk_device(fd, &dd);
       if (rv == 0) {
         rtems_blkdev_bnum device_block_count = rtems_disk_get_block_count(dd);
 

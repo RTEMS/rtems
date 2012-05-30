@@ -48,7 +48,7 @@ static void test_block_io_control_api(dev_t dev, ramdisk *rd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_disk_device *dd = NULL;
-  const rtems_disk_device *fd_dd = NULL;
+  rtems_disk_device *fd_dd = NULL;
   int fd = -1;
   int rv = -1;
   uint32_t value = 0;

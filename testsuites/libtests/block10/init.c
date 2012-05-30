@@ -55,7 +55,7 @@ typedef rtems_bdbuf_buffer *(*access_func)(char task);
 
 typedef void (*release_func)(char task, rtems_bdbuf_buffer *bd);
 
-static const rtems_disk_device *dd;
+static rtems_disk_device *dd;
 
 static rtems_id task_id_init;
 

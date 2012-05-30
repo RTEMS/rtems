@@ -490,7 +490,7 @@ rtems_bdbuf_init (void);
  */
 rtems_status_code
 rtems_bdbuf_get (
-  const rtems_disk_device *dd,
+  rtems_disk_device *dd,
   rtems_blkdev_bnum block,
   rtems_bdbuf_buffer** bd
 );
@@ -524,7 +524,7 @@ rtems_bdbuf_get (
  */
 rtems_status_code
 rtems_bdbuf_read (
-  const rtems_disk_device *dd,
+  rtems_disk_device *dd,
   rtems_blkdev_bnum block,
   rtems_bdbuf_buffer** bd
 );
@@ -616,7 +616,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer* bd);
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  */
 rtems_status_code
-rtems_bdbuf_syncdev (const rtems_disk_device *dd);
+rtems_bdbuf_syncdev (rtems_disk_device *dd);
 
 /**
  * @brief Purges all buffers corresponding to the disk device @a dd.
@@ -630,7 +630,7 @@ rtems_bdbuf_syncdev (const rtems_disk_device *dd);
  * @param dd [in] The disk device.
  */
 void
-rtems_bdbuf_purge_dev (const rtems_disk_device *dd);
+rtems_bdbuf_purge_dev (rtems_disk_device *dd);
 
 /**
  * @brief Sets the block size of a disk device.

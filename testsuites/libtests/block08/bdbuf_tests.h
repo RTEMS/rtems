@@ -150,7 +150,7 @@ typedef struct test_ctx {
 extern test_ctx g_test_ctx;
 
 /** Device ID used for testing */
-extern const rtems_disk_device *test_dd;
+extern rtems_disk_device *test_dd;
 
 /**
  * Create a message queue for test driver that is used for

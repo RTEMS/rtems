@@ -1774,7 +1774,7 @@ rtems_bdbuf_get_media_block (const rtems_disk_device *dd,
 }
 
 rtems_status_code
-rtems_bdbuf_get (const rtems_disk_device *dd,
+rtems_bdbuf_get (rtems_disk_device   *dd,
                  rtems_blkdev_bnum    block,
                  rtems_bdbuf_buffer **bd_ptr)
 {
@@ -1992,7 +1992,7 @@ rtems_bdbuf_execute_transfer_request (const rtems_disk_device *dd,
 }
 
 rtems_status_code
-rtems_bdbuf_read (const rtems_disk_device *dd,
+rtems_bdbuf_read (rtems_disk_device   *dd,
                   rtems_blkdev_bnum    block,
                   rtems_bdbuf_buffer **bd_ptr)
 {
@@ -2176,7 +2176,7 @@ rtems_bdbuf_sync (rtems_bdbuf_buffer *bd)
 }
 
 rtems_status_code
-rtems_bdbuf_syncdev (const rtems_disk_device *dd)
+rtems_bdbuf_syncdev (rtems_disk_device *dd)
 {
   if (rtems_bdbuf_tracer)
     printf ("bdbuf:syncdev: %08x\n", (unsigned) dd->dev);
@@ -2877,7 +2877,7 @@ rtems_bdbuf_gather_for_purge (rtems_chain_control *purge_list,
 }
 
 void
-rtems_bdbuf_purge_dev (const rtems_disk_device *dd)
+rtems_bdbuf_purge_dev (rtems_disk_device *dd)
 {
   rtems_chain_control purge_list;
 

@@ -143,7 +143,7 @@ static rtems_status_code disk_register(
 }
 
 static void check_read(
-  const rtems_disk_device *dd,
+  rtems_disk_device *dd,
   rtems_blkdev_bnum block,
   rtems_status_code expected_sc
 )

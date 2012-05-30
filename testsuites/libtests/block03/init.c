@@ -48,7 +48,7 @@ static rtems_task Init(rtems_task_argument argument);
 
 #define BLOCK_COUNT 2
 
-static const rtems_disk_device *dd;
+static rtems_disk_device *dd;
 
 static volatile bool sync_done = false;
 

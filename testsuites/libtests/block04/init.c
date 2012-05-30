@@ -48,7 +48,7 @@ static rtems_task Init(rtems_task_argument argument);
 
 #define BLOCK_COUNT 1
 
-static const rtems_disk_device *dd;
+static rtems_disk_device *dd;
 
 static rtems_id task_id_low;
 

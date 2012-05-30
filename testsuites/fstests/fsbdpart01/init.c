@@ -80,7 +80,7 @@ static void test_logical_disks(const char *const *rdax, bool exists)
     int fd = open(rdax [i], O_RDONLY);
 
     if (exists) {
-      const rtems_disk_device *dd = NULL;
+      rtems_disk_device *dd = NULL;
       int rv = 0;
 
       rtems_test_assert(fd >= 0);

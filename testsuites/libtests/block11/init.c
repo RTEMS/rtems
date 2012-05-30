@@ -157,7 +157,7 @@ static void test_blkdev_imfs_parameters(void)
   int rv;
   ramdisk *rd;
   int fd;
-  const rtems_disk_device *dd;
+  rtems_disk_device *dd;
   struct stat st;
 
   rd = ramdisk_allocate(NULL, BLOCK_SIZE, BLOCK_COUNT, false);

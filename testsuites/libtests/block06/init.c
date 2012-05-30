@@ -108,7 +108,7 @@ typedef struct bdbuf_task_control
   rtems_device_major_number major;
   rtems_device_minor_number minor;
   bool                      passed;
-  const rtems_disk_device  *dd;
+  rtems_disk_device        *dd;
 } bdbuf_task_control;
 
 #define BDBUF_TEST_TASKS (3)
@@ -345,7 +345,7 @@ bdbuf_task_control_init (int                       task,
                          bdbuf_task_control*       tc,
                          rtems_id                  master,
                          rtems_device_major_number major,
-                         const rtems_disk_device  *dd)
+                         rtems_disk_device        *dd)
 {
   char name[6];
   sprintf (name, "bdt%d", task);
@@ -614,8 +614,8 @@ static rtems_driver_address_table bdbuf_disk_io_ops = {
  */
 
 static bool
-bdbuf_tests_setup_disk (rtems_device_major_number* major,
-                        const rtems_disk_device **dd_ptr)
+bdbuf_tests_setup_disk (rtems_device_major_number *major,
+                        rtems_disk_device        **dd_ptr)
 {
   rtems_status_code sc;
   bool ok;
@@ -1765,7 +1765,7 @@ bdbuf_tester (void)
   rtems_task_priority       old_priority;
   int                       t;
   bool                      passed = true;
-  const rtems_disk_device *dd;
+  rtems_disk_device        *dd;
 
   /*
    * Change priority to a lower one.

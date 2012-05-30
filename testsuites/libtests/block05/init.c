@@ -60,9 +60,9 @@ static rtems_task Init(rtems_task_argument argument);
 /* In case of trouble change this to 1 or 2 for more output */
 static unsigned output_level = 0;
 
-static const rtems_disk_device *dd_a;
+static rtems_disk_device *dd_a;
 
-static const rtems_disk_device *dd_b;
+static rtems_disk_device *dd_b;
 
 static rtems_id task_id_init;
 
@@ -393,7 +393,7 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 static void disk_register(
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
-  const rtems_disk_device **dd_ptr
+  rtems_disk_device **dd_ptr
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
