@@ -33,64 +33,182 @@ extern "C" {
 /**@{*/
 
 /**
- * @brief Atomically load an unsigned integer from address @a p
+ * @brief Atomically load an atomic type value from address @a address without
+ * any memory barrier.
  */
-#define _Atomic_Load_acq_int(p)  \
-        _CPU_Atomic_Load_acq_int((volatile ATOMIC_int *)(p))
+ATOMIC_int _Atomic_Load_int(
+  volatile ATOMIC_int *address
+);
+ATOMIC_long _Atomic_Load_long(
+  volatile ATOMIC_long *address
+);
+ATOMIC_ptr _Atomic_Load_ptr(
+  volatile ATOMIC_ptr *address
+);
+ATOMIC_32 _Atomic_Load_32(
+  volatile ATOMIC_32 *address
+);
+ATOMIC_64 _Atomic_Load_64(
+  volatile ATOMIC_64 *address
+);
 
 /**
- * @brief Atomically load an unsigned long integer from address @a p
+ * @brief Atomically load an atomic type value from address @a address with 
+ * a read memory barrier.
+ *
+ * Those routines guarantee that the effects of load operation are completed
+ * before the effects of any later data accesses.
  */
-#define _Atomic_Load_acq_long(p)  \
-        _CPU_Atomic_Load_acq_long((volatile ATOMIC_long *)(p))
+ATOMIC_int _Atomic_Load_acq_int(
+  volatile ATOMIC_int *address
+);
+ATOMIC_long _Atomic_Load_acq_long(
+  volatile ATOMIC_long *address
+);
+ATOMIC_ptr _Atomic_Load_acq_ptr(
+  volatile ATOMIC_ptr *address
+);
+ATOMIC_32 _Atomic_Load_acq_32(
+  volatile ATOMIC_32 *address
+);
+ATOMIC_64 _Atomic_Load_acq_64(
+  volatile ATOMIC_64 *address
+);
 
 /**
- * @brief Atomically load an unsigned integer pointer from address @a p
+ * @brief Atomically store an atomic type value @a value into address @a 
+ * address without any memory barrier.
  */
-#define _Atomic_Load_acq_ptr(p)  \
-        _CPU_Atomic_Load_acq_ptr((volatile ATOMIC_ptr *)(p))
+void _Atomic_Store_int(
+  volatile ATOMIC_int *address,
+  ATOMIC_int value
+);
+void _Atomic_Store_long(
+  volatile ATOMIC_long *address,
+  ATOMIC_long value
+);
+void _Atomic_Store_ptr(
+  volatile ATOMIC_ptr *address,
+  ATOMIC_ptr value
+);
+void _Atomic_Store_32(
+  volatile ATOMIC_32 *address,
+  ATOMIC_32 value
+);
+void _Atomic_Store_64(
+  volatile ATOMIC_64 *address,
+  ATOMIC_64 value
+);
 
 /**
- * @brief Atomically load an unsigned 32-bit integer from address @a p
+ * @brief Atomically store an atomic type value @a value into address @a 
+ * address with a write memory barrier.
+ *
+ * Those routines guarantee that all effects of all previous data accesses
+ * are completed before the store operation takes place.
  */
-#define _Atomic_Load_acq_32(p)  \
-        _CPU_Atomic_Load_acq_32((volatile ATOMIC_32 *)(p)) 
+
+void _Atomic_Store_rel_int(
+  volatile ATOMIC_int *address,
+  ATOMIC_int value
+);
+void _Atomic_Store_rel_long(
+  volatile ATOMIC_long *address,
+  ATOMIC_long value
+);
+void _Atomic_Store_rel_ptr(
+  volatile ATOMIC_ptr *address,
+  ATOMIC_ptr value
+);
+void _Atomic_Store_rel_32(
+  volatile ATOMIC_32 *address,
+  ATOMIC_32 value
+);
+void _Atomic_Store_rel_64(
+  volatile ATOMIC_64 *address,
+  ATOMIC_64 value
+);
 
 /**
- * @brief Atomically load an unsigned 64-bit integer from address @a p
+ * @brief Atomically load-add-store an atomic type value @a value into address
+ * @a address without any memory barrier.
  */
-#define _Atomic_Load_acq_64(p)  \
-        _CPU_Atomic_Load_acq_64((volatile ATOMIC_64 *)(p))
+void _Atomic_Fetch_Add_int(
+  volatile ATOMIC_int *address,
+  ATOMIC_int value
+);
+void _Atomic_Fetch_Add_long(
+  volatile ATOMIC_long *address,
+  ATOMIC_long value
+);
+void _Atomic_Fetch_Add_ptr(
+  volatile ATOMIC_ptr *address,
+  ATOMIC_ptr value
+);
+void _Atomic_Fetch_Add_32(
+  volatile ATOMIC_32 *address,
+  ATOMIC_32 value
+);
+void _Atomic_Fetch_Add_64(
+  volatile ATOMIC_64 *address,
+  ATOMIC_64 value
+);
 
 /**
- * @brief Atomically store an unsigned integer @a v into address @a p
+ * @brief Atomically load-add-store an atomic type value @a value into address
+ * @a address with a read memory barrier.
+ *
+ * Those routines guarantee that the effects of this operation are completed
+ * before the effects of any later data accesses.
  */
-#define _Atomic_Store_rel_int(p, v)  \
-        _CPU_Atomic_Store_rel_int((volatile ATOMIC_int *)(p), (ATOMIC_int)(v))
+void _Atomic_Fetch_Add_acq_int(
+  volatile ATOMIC_int *address,
+  ATOMIC_int value
+);
+void _Atomic_Fetch_Add_acq_long(
+  volatile ATOMIC_long *address, 
+  ATOMIC_long value
+);
+void _Atomic_Fetch_Add_acq_ptr(
+  volatile ATOMIC_ptr *address, 
+  ATOMIC_ptr value
+);
+void _Atomic_Fetch_Add_acq_32(
+  volatile ATOMIC_32 *address, 
+  ATOMIC_32 value
+);
+void _Atomic_Fetch_Add_acq_64(
+  volatile ATOMIC_64 *address, 
+  ATOMIC_64 value
+);
 
 /**
- * @brief Atomically store an unsigned long integer @a v into address @a p
+ * @brief Atomically load-add-store an atomic type value @a value into address
+ * @a address with a write memory barrier.
+ *
+ * Those routines guarantee that all effects of all previous data accesses
+ * are completed before this operation takes place.
  */
-#define _Atomic_Store_rel_long(p, v)  \
-     _CPU_Atomic_Store_rel_long((volatile ATOMIC_long *)(p), (ATOMIC_long)(v))
-
-/**
- * @brief Atomically store an unsigned integer pointer @a v into address @a p
- */
-#define _Atomic_Store_rel_ptr(p, v)  \
-        _CPU_Atomic_Store_rel_ptr((volatile ATOMIC_ptr *)(p), (ATOMIC_ptr)(v))
-
-/**
- * @brief Atomically store an unsigned 32-bit integer @a v into address @a p
- */
-#define _Atomic_Store_rel_32(p, v)  \
-        _CPU_Atomic_Store_rel_32((volatile ATOMIC_32 *)(p), (ATOMIC_32)(v)) 
-
-/**
- * @brief Atomically store an unsigned 64-bit integer @a v into address @a p
- */
-#define _Atomic_Store_rel_64(p, v)  \
-        _CPU_Atomic_Store_rel_64((volatile ATOMIC_64 *)(p), (ATOMIC_64)(v)) 
+void _Atomic_Fetch_Add_rel_int(
+  volatile ATOMIC_int *address,
+  ATOMIC_int value
+);
+void _Atomic_Fetch_Add_rel_long(
+  volatile ATOMIC_long *address,
+  ATOMIC_long value
+);
+void _Atomic_Fetch_Add_rel_ptr(
+  volatile ATOMIC_ptr *address,
+  ATOMIC_ptr value
+);
+void _Atomic_Fetch_Add_rel_32(
+  volatile ATOMIC_32 *address,
+  ATOMIC_32 value
+);
+void _Atomic_Fetch_Add_rel_64(
+  volatile ATOMIC_64 *address,
+  ATOMIC_64 value
+);
 
 #ifdef __cplusplus
 }
