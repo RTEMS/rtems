@@ -36,6 +36,7 @@ rtems_status_code rtems_disk_init_phys(
   dd->media_block_size = block_size;
   dd->ioctl = handler;
   dd->driver_data = driver_data;
+  dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
 
   if (block_count > 0) {
     if ((*handler)(dd, RTEMS_BLKIO_CAPABILITIES, &dd->capabilities) != 0) {
@@ -67,6 +68,7 @@ rtems_status_code rtems_disk_init_log(
   dd->media_block_size = phys_dd->media_block_size;
   dd->ioctl = phys_dd->ioctl;
   dd->driver_data = phys_dd->driver_data;
+  dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
 
   if (phys_dd->phys_dev == phys_dd) {
     rtems_blkdev_bnum phys_block_count = phys_dd->size;

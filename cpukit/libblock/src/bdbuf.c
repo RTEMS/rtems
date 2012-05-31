@@ -134,6 +134,9 @@ typedef struct rtems_bdbuf_cache
 
   size_t              group_count;       /**< The number of groups. */
   rtems_bdbuf_group*  groups;            /**< The groups. */
+  rtems_id            read_ahead_task;   /**< Read-ahead task */
+  rtems_chain_control read_ahead_chain;  /**< Read-ahead request chain */
+  bool                read_ahead_enabled; /**< Read-ahead enabled */
 
   bool                initialised;       /**< Initialised state. */
 } rtems_bdbuf_cache;
@@ -180,6 +183,7 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_0       RTEMS_BLKDEV_FATAL_ERROR(28)
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_1       RTEMS_BLKDEV_FATAL_ERROR(29)
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_2       RTEMS_BLKDEV_FATAL_ERROR(30)
+#define RTEMS_BLKDEV_FATAL_BDBUF_RA_WAKE_UP    RTEMS_BLKDEV_FATAL_ERROR(31)
 
 /**
  * The events used in this code. These should be system events rather than
@@ -187,6 +191,7 @@ typedef struct rtems_bdbuf_cache
  */
 #define RTEMS_BDBUF_TRANSFER_SYNC  RTEMS_EVENT_1
 #define RTEMS_BDBUF_SWAPOUT_SYNC   RTEMS_EVENT_2
+#define RTEMS_BDBUF_READ_AHEAD_WAKE_UP RTEMS_EVENT_1
 
 /**
  * Lock semaphore attributes. This is used for locking type mutexes.
@@ -219,10 +224,9 @@ typedef struct rtems_bdbuf_cache
   (TOD_MICROSECONDS_TO_TICKS (20000000))
 #endif
 
-/*
- * The swap out task.
- */
 static rtems_task rtems_bdbuf_swapout_task(rtems_task_argument arg);
+
+static rtems_task rtems_bdbuf_read_ahead_task(rtems_task_argument arg);
 
 /**
  * The Buffer Descriptor cache.
@@ -1365,6 +1369,7 @@ rtems_bdbuf_init (void)
   rtems_chain_initialize_empty (&bdbuf_cache.lru);
   rtems_chain_initialize_empty (&bdbuf_cache.modified);
   rtems_chain_initialize_empty (&bdbuf_cache.sync);
+  rtems_chain_initialize_empty (&bdbuf_cache.read_ahead_chain);
 
   /*
    * Create the locks for the cache.
@@ -1486,11 +1491,27 @@ rtems_bdbuf_init (void)
   if (sc != RTEMS_SUCCESSFUL)
     goto error;
 
+  if (bdbuf_config.max_read_ahead_blocks > 0)
+  {
+    bdbuf_cache.read_ahead_enabled = true;
+    sc = rtems_bdbuf_create_task (rtems_build_name('B', 'R', 'D', 'A'),
+                                  bdbuf_config.read_ahead_priority,
+                                  RTEMS_BDBUF_READ_AHEAD_TASK_PRIORITY_DEFAULT,
+                                  rtems_bdbuf_read_ahead_task,
+                                  0,
+                                  &bdbuf_cache.read_ahead_task);
+    if (sc != RTEMS_SUCCESSFUL)
+      goto error;
+  }
+
   rtems_bdbuf_unlock_cache ();
 
   return RTEMS_SUCCESSFUL;
 
 error:
+
+  if (bdbuf_cache.read_ahead_task != 0)
+    rtems_task_delete (bdbuf_cache.read_ahead_task);
 
   if (bdbuf_cache.swapout != 0)
     rtems_task_delete (bdbuf_cache.swapout);
@@ -1852,81 +1873,6 @@ rtems_bdbuf_transfer_done (void* arg, rtems_status_code status)
   rtems_event_send (req->io_task, RTEMS_BDBUF_TRANSFER_SYNC);
 }
 
-static void
-rtems_bdbuf_create_read_request (const rtems_disk_device *dd,
-                                 rtems_blkdev_bnum        media_block,
-                                 rtems_blkdev_request    *req,
-                                 rtems_bdbuf_buffer     **bd_ptr)
-{
-  rtems_bdbuf_buffer *bd = NULL;
-  rtems_blkdev_bnum   media_block_end = dd->start + dd->size;
-  rtems_blkdev_bnum   media_block_count = dd->block_to_media_block_shift >= 0 ?
-    1U << dd->block_to_media_block_shift
-      : dd->block_size / dd->media_block_size;
-  uint32_t            block_size = dd->block_size;
-  uint32_t            transfer_index = 1;
-  uint32_t            transfer_count = bdbuf_config.max_read_ahead_blocks + 1;
-
-  if (media_block_end - media_block < transfer_count)
-    transfer_count = media_block_end - media_block;
-
-  req->req = RTEMS_BLKDEV_REQ_READ;
-  req->req_done = rtems_bdbuf_transfer_done;
-  req->done_arg = req;
-  req->io_task = rtems_task_self ();
-  req->status = RTEMS_RESOURCE_IN_USE;
-  req->bufnum = 0;
-
-  bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
-
-  *bd_ptr = bd;
-
-  req->bufs [0].user   = bd;
-  req->bufs [0].block  = media_block;
-  req->bufs [0].length = block_size;
-  req->bufs [0].buffer = bd->buffer;
-
-  if (rtems_bdbuf_tracer)
-    rtems_bdbuf_show_users ("read", bd);
-
-  switch (bd->state)
-  {
-    case RTEMS_BDBUF_STATE_CACHED:
-    case RTEMS_BDBUF_STATE_MODIFIED:
-      return;
-    case RTEMS_BDBUF_STATE_EMPTY:
-      rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
-      break;
-    default:
-      rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_1);
-      break;
-  }
-
-  while (transfer_index < transfer_count)
-  {
-    media_block += media_block_count;
-
-    bd = rtems_bdbuf_get_buffer_for_read_ahead (dd, media_block);
-
-    if (bd == NULL)
-      break;
-
-    rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
-
-    req->bufs [transfer_index].user   = bd;
-    req->bufs [transfer_index].block  = media_block;
-    req->bufs [transfer_index].length = block_size;
-    req->bufs [transfer_index].buffer = bd->buffer;
-
-    if (rtems_bdbuf_tracer)
-      rtems_bdbuf_show_users ("read-ahead", bd);
-
-    ++transfer_index;
-  }
-
-  req->bufnum = transfer_index;
-}
-
 static rtems_status_code
 rtems_bdbuf_execute_transfer_request (const rtems_disk_device *dd,
                                       rtems_blkdev_request    *req,
@@ -1989,15 +1935,16 @@ rtems_bdbuf_execute_transfer_request (const rtems_disk_device *dd,
     return RTEMS_IO_ERROR;
 }
 
-rtems_status_code
-rtems_bdbuf_read (rtems_disk_device   *dd,
-                  rtems_blkdev_bnum    block,
-                  rtems_bdbuf_buffer **bd_ptr)
+static rtems_status_code
+rtems_bdbuf_execute_read_request (const rtems_disk_device *dd,
+                                  rtems_bdbuf_buffer      *bd,
+                                  uint32_t                 transfer_count)
 {
-  rtems_status_code     sc = RTEMS_SUCCESSFUL;
   rtems_blkdev_request *req = NULL;
-  rtems_bdbuf_buffer   *bd = NULL;
-  rtems_blkdev_bnum     media_block;
+  rtems_blkdev_bnum media_block = bd->block;
+  uint32_t media_blocks_per_block = dd->media_blocks_per_block;
+  uint32_t block_size = dd->block_size;
+  uint32_t transfer_index = 1;
 
   /*
    * TODO: This type of request structure is wrong and should be removed.
@@ -2005,8 +1952,113 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
 #define bdbuf_alloc(size) __builtin_alloca (size)
 
   req = bdbuf_alloc (sizeof (rtems_blkdev_request) +
-                     sizeof (rtems_blkdev_sg_buffer) *
-                      (bdbuf_config.max_read_ahead_blocks + 1));
+                     sizeof (rtems_blkdev_sg_buffer) * transfer_count);
+
+  req->req = RTEMS_BLKDEV_REQ_READ;
+  req->req_done = rtems_bdbuf_transfer_done;
+  req->done_arg = req;
+  req->io_task = rtems_task_self ();
+  req->status = RTEMS_RESOURCE_IN_USE;
+  req->bufnum = 0;
+
+  rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
+
+  req->bufs [0].user   = bd;
+  req->bufs [0].block  = media_block;
+  req->bufs [0].length = block_size;
+  req->bufs [0].buffer = bd->buffer;
+
+  if (rtems_bdbuf_tracer)
+    rtems_bdbuf_show_users ("read", bd);
+
+  while (transfer_index < transfer_count)
+  {
+    media_block += media_blocks_per_block;
+
+    bd = rtems_bdbuf_get_buffer_for_read_ahead (dd, media_block);
+
+    if (bd == NULL)
+      break;
+
+    rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
+
+    req->bufs [transfer_index].user   = bd;
+    req->bufs [transfer_index].block  = media_block;
+    req->bufs [transfer_index].length = block_size;
+    req->bufs [transfer_index].buffer = bd->buffer;
+
+    if (rtems_bdbuf_tracer)
+      rtems_bdbuf_show_users ("read", bd);
+
+    ++transfer_index;
+  }
+
+  req->bufnum = transfer_index;
+
+  return rtems_bdbuf_execute_transfer_request (dd, req, true);
+}
+
+static bool
+rtems_bdbuf_is_read_ahead_active (const rtems_disk_device *dd)
+{
+  return !rtems_chain_is_node_off_chain (&dd->read_ahead.node);
+}
+
+static void
+rtems_bdbuf_read_ahead_cancel (rtems_disk_device *dd)
+{
+  if (rtems_bdbuf_is_read_ahead_active (dd))
+  {
+    rtems_chain_extract_unprotected (&dd->read_ahead.node);
+    rtems_chain_set_off_chain (&dd->read_ahead.node);
+  }
+}
+
+static void
+rtems_bdbuf_read_ahead_reset (rtems_disk_device *dd)
+{
+  rtems_bdbuf_read_ahead_cancel (dd);
+  dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
+}
+
+static void
+rtems_bdbuf_check_read_ahead_trigger (rtems_disk_device *dd,
+                                      rtems_blkdev_bnum  block)
+{
+  if (dd->read_ahead.trigger == block
+      && !rtems_bdbuf_is_read_ahead_active (dd))
+  {
+    rtems_status_code sc;
+    rtems_chain_control *chain = &bdbuf_cache.read_ahead_chain;
+
+    rtems_chain_append_unprotected (chain, &dd->read_ahead.node);
+    sc = rtems_event_send (bdbuf_cache.read_ahead_task,
+                           RTEMS_BDBUF_READ_AHEAD_WAKE_UP);
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_RA_WAKE_UP);
+  }
+}
+
+static void
+rtems_bdbuf_set_read_ahead_trigger (rtems_disk_device *dd,
+                                    rtems_blkdev_bnum  block)
+{
+  if (dd->read_ahead.trigger != block)
+  {
+    rtems_bdbuf_read_ahead_cancel (dd);
+    dd->read_ahead.trigger = block + 1;
+    dd->read_ahead.next = block + 2;
+  }
+}
+
+rtems_status_code
+rtems_bdbuf_read (rtems_disk_device   *dd,
+                  rtems_blkdev_bnum    block,
+                  rtems_bdbuf_buffer **bd_ptr)
+{
+  rtems_status_code     sc = RTEMS_SUCCESSFUL;
+  rtems_bdbuf_buffer   *bd = NULL;
+  rtems_blkdev_bnum     media_block;
 
   rtems_bdbuf_lock_cache ();
 
@@ -2017,42 +2069,33 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
       printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
               media_block + dd->start, block, (unsigned) dd->dev);
 
-    rtems_bdbuf_create_read_request (dd, media_block, req, &bd);
-
-    if (req->bufnum > 0)
+    rtems_bdbuf_check_read_ahead_trigger (dd, block);
+    bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
+    switch (bd->state)
     {
-      sc = rtems_bdbuf_execute_transfer_request (dd, req, true);
-      if (sc == RTEMS_SUCCESSFUL)
-      {
-        rtems_chain_extract_unprotected (&bd->link);
-        rtems_bdbuf_group_obtain (bd);
-      }
-    }
-
-    if (sc == RTEMS_SUCCESSFUL)
-    {
-      switch (bd->state)
-      {
-        case RTEMS_BDBUF_STATE_CACHED:
+      case RTEMS_BDBUF_STATE_CACHED:
+        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
+        break;
+      case RTEMS_BDBUF_STATE_MODIFIED:
+        rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
+        break;
+      case RTEMS_BDBUF_STATE_EMPTY:
+        rtems_bdbuf_set_read_ahead_trigger (dd, block);
+        sc = rtems_bdbuf_execute_read_request (dd, bd, 1);
+        if (sc == RTEMS_SUCCESSFUL)
+        {
           rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
-          break;
-        case RTEMS_BDBUF_STATE_MODIFIED:
-          rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
-          break;
-        default:
-          rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_4);
-          break;
-      }
-
-      if (rtems_bdbuf_tracer)
-      {
-        rtems_bdbuf_show_users ("read", bd);
-        rtems_bdbuf_show_usage ();
-      }
-    }
-    else
-    {
-      bd = NULL;
+          rtems_chain_extract_unprotected (&bd->link);
+          rtems_bdbuf_group_obtain (bd);
+        }
+        else
+        {
+          bd = NULL;
+        }
+        break;
+      default:
+        rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_4);
+        break;
     }
   }
 
@@ -2884,6 +2927,7 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd)
 
   rtems_chain_initialize_empty (&purge_list);
   rtems_bdbuf_lock_cache ();
+  rtems_bdbuf_read_ahead_reset (dd);
   rtems_bdbuf_gather_for_purge (&purge_list, dd);
   rtems_bdbuf_purge_list (&purge_list);
   rtems_bdbuf_unlock_cache ();
@@ -2919,6 +2963,8 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size)
       dd->media_blocks_per_block = media_blocks_per_block;
       dd->block_to_media_block_shift = block_to_media_block_shift;
       dd->bds_per_group = bds_per_group;
+
+      rtems_bdbuf_read_ahead_reset (dd);
     }
     else
     {
@@ -2933,4 +2979,63 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size)
   rtems_bdbuf_unlock_cache ();
 
   return sc;
+}
+
+static rtems_task
+rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
+{
+  rtems_chain_control *chain = &bdbuf_cache.read_ahead_chain;
+
+  while (bdbuf_cache.read_ahead_enabled)
+  {
+    rtems_chain_node *node;
+
+    rtems_bdbuf_wait_for_event (RTEMS_BDBUF_READ_AHEAD_WAKE_UP);
+    rtems_bdbuf_lock_cache ();
+
+    while ((node = rtems_chain_get_unprotected (chain)) != NULL)
+    {
+      rtems_disk_device *dd = (rtems_disk_device *)
+        ((char *) node - offsetof (rtems_disk_device, read_ahead.node));
+      rtems_blkdev_bnum block = dd->read_ahead.next;
+      rtems_blkdev_bnum media_block = 0;
+      rtems_status_code sc =
+        rtems_bdbuf_get_media_block (dd, block, &media_block);
+
+      rtems_chain_set_off_chain (&dd->read_ahead.node);
+
+      if (sc == RTEMS_SUCCESSFUL)
+      {
+        rtems_bdbuf_buffer *bd =
+          rtems_bdbuf_get_buffer_for_read_ahead (dd, media_block);
+
+        if (bd != NULL)
+        {
+          uint32_t transfer_count = dd->block_count - block;
+          uint32_t max_transfer_count = bdbuf_config.max_read_ahead_blocks;
+
+          if (transfer_count >= max_transfer_count)
+          {
+            transfer_count = max_transfer_count;
+            dd->read_ahead.trigger += max_transfer_count / 2 + 1;
+            dd->read_ahead.next += max_transfer_count;
+          }
+          else
+          {
+            dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
+          }
+
+          rtems_bdbuf_execute_read_request (dd, bd, transfer_count);
+        }
+      }
+      else
+      {
+        dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
+      }
+    }
+
+    rtems_bdbuf_unlock_cache ();
+  }
+
+  rtems_task_delete (RTEMS_SELF);
 }
