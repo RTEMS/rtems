@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -23,6 +23,14 @@
 #include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/mpc55xx-config.h>
+#include <bsp/linker-symbols.h>
+
+/* This function is defined in start.S */
+BSP_START_TEXT_SECTION void mpc55xx_start_load_section(
+  void *dst,
+  const void *src,
+  size_t n
+);
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_mmu(void)
 {
@@ -51,6 +59,19 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_internal_ram(void)
   #ifdef MPC55XX_HAS_SECOND_INTERNAL_RAM_AREA
     bsp_start_zero(&bsp_ram_1_start [0], (size_t) bsp_ram_1_size);
   #endif
+}
+
+static BSP_START_TEXT_SECTION void mpc55xx_start_load_nocache_section(void)
+{
+  mpc55xx_start_load_section(
+    bsp_section_nocache_begin,
+    bsp_section_nocache_load_begin,
+    (size_t) bsp_section_nocache_size
+  );
+  rtems_cache_flush_multiple_data_lines(
+    bsp_section_nocache_begin,
+    (size_t) bsp_section_nocache_size
+  );
 }
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_mode_change(void)
@@ -167,6 +188,7 @@ BSP_START_TEXT_SECTION void mpc55xx_start_early(void)
     mpc55xx_start_cache();
   #endif
   mpc55xx_start_internal_ram();
+  mpc55xx_start_load_nocache_section();
   mpc55xx_start_mmu();
   mpc55xx_start_mode_change();
   mpc55xx_start_siu();

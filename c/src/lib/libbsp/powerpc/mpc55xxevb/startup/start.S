@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -21,7 +21,7 @@
  */
 
 #include <bspopts.h>
-
+#include <bsp/linker-symbols.h>
 #include <libcpu/powerpc-utility.h>
 
 #if MPC55XX_CHIP_TYPE / 10 != 551
@@ -41,20 +41,12 @@
 	.extern	__eabi
 	.extern	boot_card
 	.extern	bsp_ram_start
-	.extern	bsp_section_data_begin
-	.extern	bsp_section_data_load_begin
-	.extern	bsp_section_data_size
-	.extern	bsp_section_fast_data_begin
-	.extern	bsp_section_fast_data_load_begin
-	.extern	bsp_section_fast_data_size
-	.extern	bsp_section_fast_text_begin
-	.extern	bsp_section_fast_text_load_begin
-	.extern	bsp_section_fast_text_size
 	.extern	mpc55xx_start_config_mmu_early
 	.extern	mpc55xx_start_config_mmu_early_count
 	.extern	mpc55xx_start_early
 
 	.globl	_start
+	.globl	mpc55xx_start_load_section
 	.globl	mpc55xx_start_mmu_apply_config
 
 #ifdef MPC55XX_BOOTFLAGS
@@ -225,15 +217,15 @@ zero_intermediate_stack_loop:
 	LA	r3, bsp_section_fast_text_begin
 	LA	r4, bsp_section_fast_text_load_begin
 	LA	r5, bsp_section_fast_text_size
-	bl	load_section
+	bl	mpc55xx_start_load_section
 	LA	r3, bsp_section_fast_data_begin
 	LA	r4, bsp_section_fast_data_load_begin
 	LA	r5, bsp_section_fast_data_size
-	bl	load_section
+	bl	mpc55xx_start_load_section
 	LA	r3, bsp_section_data_begin
 	LA	r4, bsp_section_data_load_begin
 	LA	r5, bsp_section_data_size
-	bl	load_section
+	bl	mpc55xx_start_load_section
 
 	/* Set up EABI and SYSV environment */
 	bl	__eabi
@@ -270,7 +262,7 @@ mmu_init_loop:
 	bdnz	mmu_init_loop
 	blr
 
-load_section:
+mpc55xx_start_load_section:
 	cmpw	cr7, r3, r4
 	beqlr	cr7
 	b	memcpy

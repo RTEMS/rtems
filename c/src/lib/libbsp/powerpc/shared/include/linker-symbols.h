@@ -96,6 +96,8 @@ LINKER_SYMBOL(bsp_section_stack_size)
 LINKER_SYMBOL(bsp_section_nocache_begin)
 LINKER_SYMBOL(bsp_section_nocache_end)
 LINKER_SYMBOL(bsp_section_nocache_size)
+LINKER_SYMBOL(bsp_section_nocache_load_begin)
+LINKER_SYMBOL(bsp_section_nocache_load_end)
 
 #define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
 
