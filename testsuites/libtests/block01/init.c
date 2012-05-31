@@ -48,7 +48,7 @@ static void test_block_io_control_api(dev_t dev, ramdisk *rd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_disk_device *dd = NULL;
-  const rtems_disk_device *fd_dd = NULL;
+  rtems_disk_device *fd_dd = NULL;
   int fd = -1;
   int rv = -1;
   uint32_t value = 0;
@@ -183,7 +183,7 @@ static void test_diskdevs(void)
   sc = rtems_disk_create_log(logical_dev, physical_dev, 0, 1, "/dev/rda1");
   ASSERT_SC_EQ(sc, RTEMS_RESOURCE_IN_USE);
 
-  sc = rtems_disk_create_log(logical_2_dev, logical_dev, 0, 1, "/dev/rda1");
+  sc = rtems_disk_create_log(logical_2_dev, logical_dev, 0, 1, "/dev/rda2");
   ASSERT_SC_EQ(sc, RTEMS_INVALID_ID);
 
   sc = rtems_disk_delete(logical_dev);
@@ -253,9 +253,8 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
-#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_DRIVERS 2
-#define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

@@ -38,8 +38,8 @@ static ssize_t rtems_blkdev_imfs_read(
 )
 {
   int rv;
-  const rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
+  rtems_disk_device *dd = &ctx->dd;
   ssize_t remaining = (ssize_t) count;
   off_t offset = iop->offset;
   ssize_t block_size = (ssize_t) rtems_disk_get_block_size(dd);
@@ -92,8 +92,8 @@ static ssize_t rtems_blkdev_imfs_write(
 )
 {
   int rv;
-  const rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
+  rtems_disk_device *dd = &ctx->dd;
   ssize_t remaining = (ssize_t) count;
   off_t offset = iop->offset;
   ssize_t block_size = (ssize_t) rtems_disk_get_block_size(dd);
@@ -174,9 +174,9 @@ static int rtems_blkdev_imfs_fstat(
   struct stat *buf
 )
 {
-  const rtems_blkdev_imfs_context *ctx =
+  rtems_blkdev_imfs_context *ctx =
     IMFS_generic_get_context_by_location(loc);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_disk_device *dd = &ctx->dd;
 
   buf->st_rdev = rtems_disk_get_device_identifier(dd);
   buf->st_blksize = rtems_disk_get_block_size(dd);
@@ -190,8 +190,8 @@ static int rtems_blkdev_imfs_fsync_or_fdatasync(
 )
 {
   int rv = 0;
-  const rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
-  const rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx = IMFS_generic_get_context_by_iop(iop);
+  rtems_disk_device *dd = &ctx->dd;
   rtems_status_code sc = rtems_bdbuf_syncdev(dd);
 
   if (sc != RTEMS_SUCCESSFUL) {
@@ -269,46 +269,36 @@ rtems_status_code rtems_blkdev_create(
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_blkdev_imfs_context *ctx = malloc(sizeof(*ctx));
 
-  if (block_count > 0) {
-    rtems_blkdev_imfs_context *ctx = calloc(1, sizeof(*ctx));
+  if (ctx != NULL) {
+    sc = rtems_disk_init_phys(
+      &ctx->dd,
+      block_size,
+      block_count,
+      handler,
+      driver_data
+    );
 
-    if (ctx != NULL) {
-      rtems_disk_device *dd = &ctx->dd;
+    ctx->fd = -1;
 
-      ctx->fd = -1;
+    if (sc == RTEMS_SUCCESSFUL) {
+      int rv = IMFS_make_generic_node(
+        device,
+        S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO,
+        &rtems_blkdev_imfs_control,
+        ctx
+      );
 
-      dd->phys_dev = dd;
-      dd->size = block_count;
-      dd->media_block_size = block_size;
-      dd->ioctl = handler;
-      dd->driver_data = driver_data;
-
-      if ((*handler)(dd, RTEMS_BLKIO_CAPABILITIES, &dd->capabilities) != 0) {
-        dd->capabilities = 0;
-      }
-
-      sc = rtems_bdbuf_set_block_size(dd, block_size);
-      if (sc == RTEMS_SUCCESSFUL) {
-        int rv = IMFS_make_generic_node(
-          device,
-          S_IFBLK | S_IRWXU | S_IRWXG | S_IRWXO,
-          &rtems_blkdev_imfs_control,
-          ctx
-        );
-
-        if (rv != 0) {
-          free(ctx);
-          sc = RTEMS_UNSATISFIED;
-        }
-      } else {
+      if (rv != 0) {
         free(ctx);
+        sc = RTEMS_UNSATISFIED;
       }
     } else {
-      sc = RTEMS_NO_MEMORY;
+      free(ctx);
     }
   } else {
-    sc = RTEMS_INVALID_NUMBER;
+    sc = RTEMS_NO_MEMORY;
   }
 
   return sc;
@@ -330,24 +320,21 @@ rtems_status_code rtems_blkdev_create_partition(
 
     rv = fstat(fd, &st);
     if (rv == 0 && S_ISBLK(st.st_mode)) {
-      rtems_disk_device *dd;
+      rtems_disk_device *phys_dd;
 
-      rv = ioctl(fd, RTEMS_BLKIO_GETDISKDEV, &dd);
+      rv = rtems_disk_fd_get_disk_device(fd, &phys_dd);
       if (rv == 0) {
-        rtems_blkdev_bnum device_block_count = rtems_disk_get_block_count(dd);
+        rtems_blkdev_imfs_context *ctx = malloc(sizeof(*ctx));
 
-        if (
-          block_begin < device_block_count
-            && block_count > 0
-            && block_count <= device_block_count - block_begin
-        ) {
-          rtems_blkdev_imfs_context *ctx = malloc(sizeof(*ctx));
+        if (ctx != NULL) {
+          sc = rtems_disk_init_log(
+            &ctx->dd,
+            phys_dd,
+            block_begin,
+            block_count
+          );
 
-          if (ctx != NULL) {
-            memcpy(&ctx->dd, dd, sizeof(ctx->dd));
-
-            ctx->dd.start = block_begin;
-            ctx->dd.size = block_count;
+          if (sc == RTEMS_SUCCESSFUL) {
             ctx->fd = fd;
 
             rv = IMFS_make_generic_node(
@@ -362,10 +349,10 @@ rtems_status_code rtems_blkdev_create_partition(
               sc = RTEMS_UNSATISFIED;
             }
           } else {
-            sc = RTEMS_NO_MEMORY;
+            free(ctx);
           }
         } else {
-          sc = RTEMS_INVALID_NUMBER;
+          sc = RTEMS_NO_MEMORY;
         }
       } else {
         sc = RTEMS_NOT_IMPLEMENTED;

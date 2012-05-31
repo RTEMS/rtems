@@ -10,7 +10,7 @@
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
  *
- * Copyright (c) 2009 embedded brains GmbH.
+ * Copyright (c) 2009-2012 embedded brains GmbH.
  */
 
 #if HAVE_CONFIG_H
@@ -170,7 +170,12 @@ create_disk_table_entry(dev_t dev)
 }
 
 static rtems_status_code
-create_disk(dev_t dev, const char *name, rtems_disk_device **dd_ptr)
+create_disk(
+  dev_t dev,
+  const char *name,
+  rtems_disk_device **dd_ptr,
+  char **alloc_name_ptr
+)
 {
   rtems_disk_device **dd_entry = create_disk_table_entry(dev);
   rtems_disk_device *dd = NULL;
@@ -207,13 +212,9 @@ create_disk(dev_t dev, const char *name, rtems_disk_device **dd_ptr)
     }
   }
 
-  dd->dev = dev;
-  dd->name = alloc_name;
-  dd->uses = 0;
-  dd->deleted = false;
-
   *dd_entry = dd;
   *dd_ptr = dd;
+  *alloc_name_ptr = alloc_name;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -238,6 +239,7 @@ rtems_status_code rtems_disk_create_phys(
 {
   rtems_disk_device *dd = NULL;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  char *alloc_name = NULL;
 
   if (handler == NULL) {
     return RTEMS_INVALID_ADDRESS;
@@ -248,25 +250,24 @@ rtems_status_code rtems_disk_create_phys(
     return sc;
   }
 
-  sc = create_disk(dev, name, &dd);
+  sc = create_disk(dev, name, &dd, &alloc_name);
   if (sc != RTEMS_SUCCESSFUL) {
     disk_unlock();
 
     return sc;
   }
 
-  dd->phys_dev = dd;
-  dd->start = 0;
-  dd->size = block_count;
-  dd->media_block_size = block_size;
-  dd->ioctl = handler;
-  dd->driver_data = driver_data;
+  sc = rtems_disk_init_phys(
+    dd,
+    block_size,
+    block_count,
+    handler,
+    driver_data
+  );
 
-  if ((*handler)(dd, RTEMS_BLKIO_CAPABILITIES, &dd->capabilities) < 0) {
-    dd->capabilities = 0;
-  }
+  dd->dev = dev;
+  dd->name = alloc_name;
 
-  sc = rtems_bdbuf_set_block_size(dd, block_size);
   if (sc != RTEMS_SUCCESSFUL) {
     dd->ioctl = null_handler;
     rtems_disk_delete(dev);
@@ -289,56 +290,54 @@ is_physical_disk(const rtems_disk_device *dd)
 rtems_status_code rtems_disk_create_log(
   dev_t dev,
   dev_t phys,
-  rtems_blkdev_bnum begin_block,
+  rtems_blkdev_bnum block_begin,
   rtems_blkdev_bnum block_count,
   const char *name
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_disk_device *physical_disk = NULL;
+  rtems_disk_device *phys_dd = NULL;
   rtems_disk_device *dd = NULL;
-  rtems_blkdev_bnum end_block = begin_block + block_count;
+  char *alloc_name = NULL;
 
   sc = disk_lock();
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
 
-  physical_disk = get_disk_entry(phys, true);
-  if (physical_disk == NULL || !is_physical_disk(physical_disk)) {
+  phys_dd = get_disk_entry(phys, true);
+  if (phys_dd == NULL) {
     disk_unlock();
 
     return RTEMS_INVALID_ID;
   }
 
-  if (
-    begin_block >= physical_disk->size
-      || end_block <= begin_block
-      || end_block > physical_disk->size
-  ) {
-    disk_unlock();
-
-    return RTEMS_INVALID_NUMBER;
-  }
-
-  sc = create_disk(dev, name, &dd);
+  sc = create_disk(dev, name, &dd, &alloc_name);
   if (sc != RTEMS_SUCCESSFUL) {
     disk_unlock();
 
     return sc;
   }
 
-  dd->phys_dev = physical_disk;
-  dd->start = begin_block;
-  dd->size = block_count;
-  dd->block_size = physical_disk->block_size;
-  dd->media_block_size = physical_disk->media_block_size;
-  dd->block_to_media_block_shift = physical_disk->block_to_media_block_shift;
-  dd->bds_per_group = physical_disk->bds_per_group;
-  dd->ioctl = physical_disk->ioctl;
-  dd->driver_data = physical_disk->driver_data;
+  sc = rtems_disk_init_log(
+    dd,
+    phys_dd,
+    block_begin,
+    block_count
+  );
 
-  ++physical_disk->uses;
+  dd->dev = dev;
+  dd->name = alloc_name;
+
+  ++phys_dd->uses;
+
+  if (sc != RTEMS_SUCCESSFUL) {
+    dd->ioctl = null_handler;
+    rtems_disk_delete(dev);
+    disk_unlock();
+
+    return sc;
+  }
 
   disk_unlock();
 

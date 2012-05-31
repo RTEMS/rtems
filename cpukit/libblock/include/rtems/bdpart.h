@@ -400,7 +400,7 @@ static inline uint8_t rtems_bdpart_mbr_partition_type(
 rtems_status_code rtems_bdpart_get_disk_data(
   const char *disk_name,
   int *fd_ptr,
-  const rtems_disk_device **dd_ptr,
+  rtems_disk_device **dd_ptr,
   rtems_blkdev_bnum *disk_end
 );
 

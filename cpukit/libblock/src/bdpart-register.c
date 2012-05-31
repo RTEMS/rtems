@@ -48,7 +48,7 @@ rtems_status_code rtems_bdpart_register(
   size_t disk_name_size = strlen( disk_name);
   size_t i = 0;
   int fd = -1;
-  const rtems_disk_device *dd = NULL;
+  rtems_disk_device *dd = NULL;
 
   /* Get disk data */
   sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);
@@ -139,7 +139,7 @@ rtems_status_code rtems_bdpart_unregister(
   dev_t logical_disk = 0;
   size_t i = 0;
   int fd = -1;
-  const rtems_disk_device *dd = NULL;
+  rtems_disk_device *dd = NULL;
 
   /* Get disk data */
   sc = rtems_bdpart_get_disk_data( disk_name, &fd, &dd, &disk_end);

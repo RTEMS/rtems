@@ -8,6 +8,7 @@ libblock_a_SOURCES = src/bdbuf.c \
     src/blkdev-ioctl.c \
     src/blkdev-ops.c \
     src/diskdevs.c \
+    src/diskdevs-init.c \
     src/flashdisk.c \
     src/ramdisk-driver.c \
     src/ramdisk-init.c \

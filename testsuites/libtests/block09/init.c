@@ -143,7 +143,7 @@ static rtems_status_code disk_register(
 }
 
 static void check_read(
-  const rtems_disk_device *dd,
+  rtems_disk_device *dd,
   rtems_blkdev_bnum block,
   rtems_status_code expected_sc
 )
@@ -228,7 +228,7 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
-#define CONFIGURE_MAXIMUM_TASKS 3
+#define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_DRIVERS 4
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

@@ -45,7 +45,7 @@ static void rtems_bdpart_write_mbr_partition(
 }
 
 static rtems_status_code rtems_bdpart_new_record(
-  const rtems_disk_device *dd,
+  rtems_disk_device *dd,
   rtems_blkdev_bnum index,
   rtems_bdbuf_buffer **block
 )
@@ -103,7 +103,7 @@ rtems_status_code rtems_bdpart_write(
   size_t i = 0;
   uint8_t *data = NULL;
   int fd = -1;
-  const rtems_disk_device *dd = NULL;
+  rtems_disk_device *dd = NULL;
 
   /* Check if we have something to do */
   if (count == 0) {

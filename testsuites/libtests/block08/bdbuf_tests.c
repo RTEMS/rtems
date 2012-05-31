@@ -47,7 +47,7 @@ struct bdbuf_test_descr {
 #define TEST_SEM_ATTRIBS RTEMS_DEFAULT_ATTRIBUTES
 
 /** Device ID used for testing */
-const rtems_disk_device *test_dd = NULL;
+rtems_disk_device *test_dd = NULL;
 
 /** Test result variable */
 bool       good_test_result = true;

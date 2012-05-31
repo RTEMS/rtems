@@ -192,7 +192,7 @@ static inline int rtems_disk_fd_get_block_count(
 
 static inline int rtems_disk_fd_get_disk_device(
   int fd,
-  const rtems_disk_device **dd_ptr
+  rtems_disk_device **dd_ptr
 )
 {
   return ioctl(fd, RTEMS_BLKIO_GETDISKDEV, dd_ptr);

@@ -79,6 +79,17 @@ SECTIONS
     __stop_set_sysctl_set = ABSOLUTE(.);
     *(set_domain_*);
     *(set_pseudo_*);
+    _bsd__start_set_modmetadata_set = .;
+    *(_bsd_set_modmetadata_set);
+    _bsd__stop_set_modmetadata_set = .;
+    _bsd__start_set_sysctl_set = .;
+    *(_bsd_set_sysctl_set);
+    _bsd__stop_set_sysctl_set = .;
+    _bsd__start_set_sysinit_set = .;
+    *(_bsd_set_sysinit_*);
+    _bsd__stop_set_sysinit_set = .;
+
+    bsp_section_rodata_end = .;
 
   } =0x90909090
 

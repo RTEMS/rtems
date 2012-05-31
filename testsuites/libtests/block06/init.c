@@ -108,10 +108,12 @@ typedef struct bdbuf_task_control
   rtems_device_major_number major;
   rtems_device_minor_number minor;
   bool                      passed;
-  const rtems_disk_device  *dd;
+  rtems_disk_device        *dd;
 } bdbuf_task_control;
 
 #define BDBUF_TEST_TASKS (3)
+
+#define BDBUF_TEST_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
 
 /**
  * Seconds as milli-seconds.
@@ -343,7 +345,7 @@ bdbuf_task_control_init (int                       task,
                          bdbuf_task_control*       tc,
                          rtems_id                  master,
                          rtems_device_major_number major,
-                         const rtems_disk_device  *dd)
+                         rtems_disk_device        *dd)
 {
   char name[6];
   sprintf (name, "bdt%d", task);
@@ -612,8 +614,8 @@ static rtems_driver_address_table bdbuf_disk_io_ops = {
  */
 
 static bool
-bdbuf_tests_setup_disk (rtems_device_major_number* major,
-                        const rtems_disk_device **dd_ptr)
+bdbuf_tests_setup_disk (rtems_device_major_number *major,
+                        rtems_disk_device        **dd_ptr)
 {
   rtems_status_code sc;
   bool ok;
@@ -649,7 +651,7 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
   sc = rtems_task_create (rtems_build_name (tc->name[0], tc->name[1],
                                             tc->name[2], tc->name[3]),
                           priority,
-                          8 * 1024,
+                          BDBUF_TEST_STACK_SIZE,
                           RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_NO_TIMESLICE | RTEMS_NO_ASR,
                           &tc->task);
@@ -1763,7 +1765,7 @@ bdbuf_tester (void)
   rtems_task_priority       old_priority;
   int                       t;
   bool                      passed = true;
-  const rtems_disk_device *dd;
+  rtems_disk_device        *dd;
 
   /*
    * Change priority to a lower one.
@@ -1842,12 +1844,14 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
-#define CONFIGURE_MAXIMUM_TASKS 8
+#define CONFIGURE_MAXIMUM_TASKS (1 + BDBUF_TEST_TASKS)
 #define CONFIGURE_MAXIMUM_DRIVERS 3
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
-#define CONFIGURE_INIT_TASK_STACK_SIZE (2 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_EXTRA_TASK_STACKS \
+  (BDBUF_TEST_TASKS * BDBUF_TEST_STACK_SIZE)
 
+#define CONFIGURE_INIT_TASK_STACK_SIZE BDBUF_TEST_STACK_SIZE
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs.h>

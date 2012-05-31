@@ -55,7 +55,7 @@ typedef rtems_bdbuf_buffer *(*access_func)(char task);
 
 typedef void (*release_func)(char task, rtems_bdbuf_buffer *bd);
 
-static const rtems_disk_device *dd;
+static rtems_disk_device *dd;
 
 static rtems_id task_id_init;
 
@@ -473,7 +473,7 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 
-#define CONFIGURE_MAXIMUM_TASKS 5
+#define CONFIGURE_MAXIMUM_TASKS 3
 #define CONFIGURE_MAXIMUM_DRIVERS 4
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

@@ -157,7 +157,7 @@ static void test_blkdev_imfs_parameters(void)
   int rv;
   ramdisk *rd;
   int fd;
-  const rtems_disk_device *dd;
+  rtems_disk_device *dd;
   struct stat st;
 
   rd = ramdisk_allocate(NULL, BLOCK_SIZE, BLOCK_COUNT, false);
@@ -396,9 +396,8 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
-#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_DRIVERS 2
-#define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

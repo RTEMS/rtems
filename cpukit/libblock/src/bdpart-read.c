@@ -68,14 +68,14 @@ bool rtems_bdpart_to_mbr_partition_type(
 rtems_status_code rtems_bdpart_get_disk_data(
   const char *disk_name,
   int *fd_ptr,
-  const rtems_disk_device **dd_ptr,
+  rtems_disk_device **dd_ptr,
   rtems_blkdev_bnum *disk_end
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int rv = 0;
   int fd = -1;
-  const rtems_disk_device *dd = NULL;
+  rtems_disk_device *dd = NULL;
   rtems_blkdev_bnum disk_begin = 0;
   rtems_blkdev_bnum block_size = 0;
 
@@ -185,7 +185,7 @@ static rtems_status_code rtems_bdpart_read_mbr_partition(
 }
 
 static rtems_status_code rtems_bdpart_read_record(
-  const rtems_disk_device *dd,
+  rtems_disk_device *dd,
   rtems_blkdev_bnum index,
   rtems_bdbuf_buffer **block
 )
@@ -237,7 +237,7 @@ rtems_status_code rtems_bdpart_read(
   size_t i = 0;
   const uint8_t *data = NULL;
   int fd = -1;
-  const rtems_disk_device *dd = NULL;
+  rtems_disk_device *dd = NULL;
 
   /* Check parameter */
   if (format == NULL || pt == NULL || count == NULL) {
