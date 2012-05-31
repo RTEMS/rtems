@@ -248,7 +248,7 @@ spiPollRead (int minor)
 {
 
   /* Wait for character */
-  while ((port->LSR & LSR_RSR)==0);;
+  while ((port->LSR & LSR_RSR)==0);
 
   return port->RBR;
 }
@@ -259,7 +259,7 @@ spiPollWrite(int minor, const char *buf, size_t len)
 {
 
   while (len-- > 0) {
-    while (!(port->LSR & LSR_THE));;
+    while (!(port->LSR & LSR_THE));
     port->THR = *buf++;
   }
   return 0;

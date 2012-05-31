@@ -233,7 +233,7 @@ loop_exit:
     tmp = ELCRS_INT9_LVL | ELCRS_INT10_LVL | ELCRS_INT11_LVL;
     outb(tmp, ISA8259_S_ELCR);
     tmp = ELCRM_INT5_LVL;
-    outb(tmp, ISA8259_M_ELCR);;
+    outb(tmp, ISA8259_M_ELCR);
     /*
      * Set the Interrupt inputs to non-inverting level interrupt
      */

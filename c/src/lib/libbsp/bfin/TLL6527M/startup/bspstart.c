@@ -140,7 +140,7 @@ void Init_PLL (void)
   *((uint32_t*)SIC_IWR) = 0x1;
 
   /* Configure PLL registers */
-  *((uint16_t*)PLL_DIV) = ssel;;
+  *((uint16_t*)PLL_DIV) = ssel;
   msel = msel<<9;
   *((uint16_t*)PLL_CTL) = msel;
 

@@ -479,7 +479,7 @@ fec_rxDaemon (void *arg)
              * FIXME: Packet filtering hook could be done here.
              */
             struct ether_header *eh;
-            int len = rxBd->length - sizeof(uint32_t);;
+            int len = rxBd->length - sizeof(uint32_t);
 
             m = sc->rxMbuf[rxBdIndex];
 #ifdef RTEMS_MCF5282_BSP_ENABLE_DATA_CACHE

@@ -44,7 +44,7 @@ static Heap_Resize_status _Heap_Resize_block_checked(
 
   Heap_Block *next_block = _Heap_Block_at( block, block_size );
   uintptr_t next_block_size = _Heap_Block_size( next_block );
-  bool next_block_is_free = _Heap_Is_free( next_block );;
+  bool next_block_is_free = _Heap_Is_free( next_block );
 
   _HAssert( _Heap_Is_block_in_heap( heap, next_block ) );
   _HAssert( _Heap_Is_prev_used( next_block ) );

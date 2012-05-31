@@ -179,7 +179,7 @@ volatile union bconv *p;
 uint32_t              rval;
 
 	if ( 1 == b->width )
-		off <<= 1;;
+		off <<= 1;
 
 	a = ADDR32(b, a, off);
 

@@ -227,7 +227,7 @@ static int flashdisk_blank(
 {
   int eno = 0;
   const uint8_t *current = get_data_pointer(sd, segment, offset);
-  const uint8_t *end = current + size;;
+  const uint8_t *end = current + size;
 
   while (eno == 0 && current != end) {
     if (*current != 0xff) {

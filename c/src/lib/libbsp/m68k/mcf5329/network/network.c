@@ -415,7 +415,7 @@ static void fec_rxDaemon(void *arg)
        * FIXME: Packet filtering hook could be done here.
        */
       struct ether_header *eh;
-      int len = rxBd->length - sizeof(uint32_t);;
+      int len = rxBd->length - sizeof(uint32_t);
 
       m = sc->rxMbuf[rxBdIndex];
 

@@ -85,7 +85,7 @@ uint32_t   _CORE_message_queue_Flush_support(
 
   _ISR_Disable( level );
     inactive_head = _Chain_Head( &the_message_queue->Inactive_messages );
-    inactive_first = inactive_head->next;;
+    inactive_first = inactive_head->next;
     message_queue_first = _Chain_First( &the_message_queue->Pending_messages );
     message_queue_last = _Chain_Last( &the_message_queue->Pending_messages );
 

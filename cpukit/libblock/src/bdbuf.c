@@ -2701,7 +2701,7 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
 {
   rtems_bdbuf_swapout_transfer transfer;
   uint32_t                     period_in_ticks;
-  const uint32_t               period_in_msecs = bdbuf_config.swapout_period;;
+  const uint32_t               period_in_msecs = bdbuf_config.swapout_period;
   uint32_t                     timer_delta;
 
   transfer.write_req = rtems_bdbuf_swapout_writereq_alloc ();

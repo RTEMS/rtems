@@ -44,7 +44,7 @@ void cardWriteCommand(const uint8 * command) {
 //---------------------------------------------------------------------------------
 void cardPolledTransfer(uint32 flags, uint32 * destination, uint32 length, const uint8 * command) {
 //---------------------------------------------------------------------------------
-	u32 data;;
+	u32 data;
 	cardWriteCommand(command);
 	CARD_CR2 = flags;
 	uint32 * target = destination + length;
@@ -68,7 +68,7 @@ void cardStartTransfer(const uint8 * command, uint32 * destination, int channel,
 	// Set up a DMA channel to transfer a word every time the card makes one
 	DMA_SRC(channel) = (uint32)&CARD_DATA_RD;
 	DMA_DEST(channel) = (uint32)destination;
-	DMA_CR(channel) = DMA_ENABLE | DMA_START_CARD | DMA_32_BIT | DMA_REPEAT | DMA_SRC_FIX | 0x0001;;
+	DMA_CR(channel) = DMA_ENABLE | DMA_START_CARD | DMA_32_BIT | DMA_REPEAT | DMA_SRC_FIX | 0x0001;
 
 	CARD_CR2 = flags;
 }
