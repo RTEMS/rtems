@@ -252,8 +252,7 @@ int _Atomic_Compare_Exchange_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr old_value,
   ATOMIC_ptr new_value,
-  ATOMIC_memory_barrier memory_barrier
-  
+  ATOMIC_memory_barrier memory_barrier  
 );
 int _Atomic_Compare_Exchange_32(
   volatile ATOMIC_32 *address,
