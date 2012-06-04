@@ -800,7 +800,7 @@ msdos_set_first_char4file_name(
     {
       uint32_t sec = (fat_cluster_num_to_sector_num(mt_entry, start.cln) +
                       (start.ofs >> fs_info->fat.vol.sec_log2));
-      uint32_t byte = (start.ofs & (fs_info->fat.vol.bps - 1));;
+      uint32_t byte = (start.ofs & (fs_info->fat.vol.bps - 1));
 
       ret = _fat_block_write(mt_entry, sec, byte + MSDOS_FILE_NAME_OFFSET, 1,
                              &fchar);

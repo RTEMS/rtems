@@ -1,7 +1,7 @@
 /*
  *  IO Manager Dynamic Registration
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2009 embedded brains GmbH.
@@ -18,6 +18,9 @@
 #endif
 
 #include <tmacros.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 static rtems_device_driver test_open(
      rtems_device_major_number  minor,

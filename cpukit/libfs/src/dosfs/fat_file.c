@@ -552,9 +552,10 @@ fat_file_extend(
 
     /*  check wether we satisfied request for 'cls2add' clusters */
     if (cls2add != cls_added)
-        *a_length = new_length -
-                    ((cls2add - cls_added - 1) << fs_info->vol.bpc_log2) -
-                    (bytes2add & (fs_info->vol.bpc - 1));
+    {
+        new_length -= bytes2add & (fs_info->vol.bpc - 1);
+        new_length -= (cls2add - cls_added) << fs_info->vol.bpc_log2;
+    }
 
     /* add new chain to the end of existed */
     if ( fat_fd->fat_file_size == 0 )
@@ -603,6 +604,7 @@ fat_file_extend(
         }
     }
 
+    *a_length = new_length;
     fat_fd->fat_file_size = new_length;
 
     return RC_OK;

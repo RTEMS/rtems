@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +15,12 @@
 #include <rtems/devnull.h>
 #include <rtems/devzero.h>
 #include <rtems/libio.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void do_test_io_manager(void);
+void do_test_io_lookup_name(void);
+void do_test_zero_driver(void);
 
 #define PRIurtems_device_major_number PRIu32
 

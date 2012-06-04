@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,9 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include <tmacros.h>
 #include <intrcritical.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 rtems_id Main_task;
 

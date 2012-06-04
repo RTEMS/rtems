@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,8 @@
 #include <rtems/error.h>
 #include <stdio.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 rtems_task subtask(rtems_task_argument arg);
 rtems_task Task_variable_deleter(rtems_task_argument ignored);
 void starttask(int arg);

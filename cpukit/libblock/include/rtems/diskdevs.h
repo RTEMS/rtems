@@ -16,6 +16,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/chain.h>
 #include <stdlib.h>
 
 #ifdef __cplusplus
@@ -53,6 +54,37 @@ typedef int (*rtems_block_device_ioctl)(
   uint32_t req,
   void *argp
 );
+
+/**
+ * @brief Trigger value to disable further read-ahead requests.
+ */
+#define RTEMS_DISK_READ_AHEAD_NO_TRIGGER ((rtems_blkdev_bnum) -1)
+
+/**
+ * @brief Read-ahead control.
+ */
+typedef struct {
+  /**
+   * @brief Chain node for the read-ahead request queue of the read-ahead task.
+   */
+  rtems_chain_node node;
+
+  /**
+   * @brief Block value to trigger the read-ahead request.
+   *
+   * A value of @ref RTEMS_DISK_READ_AHEAD_NO_TRIGGER will disable further
+   * read-ahead requests since no valid block can have this value.
+   */
+  rtems_blkdev_bnum trigger;
+
+  /**
+   * @brief Start block for the next read-ahead request.
+   *
+   * In case the trigger value is out of range of valid blocks, this value my
+   * be arbitrary.
+   */
+  rtems_blkdev_bnum next;
+} rtems_disk_read_ahread;
 
 /**
  * @brief Description of a disk device (logical and physical disks).
@@ -168,6 +200,11 @@ struct rtems_disk_device {
    * releases this disk.
    */
   bool deleted;
+
+  /**
+   * @brief Read-ahead control for this disk.
+   */
+  rtems_disk_read_ahread read_ahead;
 };
 
 /**

@@ -23,7 +23,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010-2011 embedded brains GmbH.
+ *  Copyright (c) 2010-2012 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -249,159 +249,110 @@ extern "C" {
  *  a debugger such as gdb.  But that is another problem.
  */
 
+#ifndef __SPE__
+  #define PPC_GPR_TYPE uint32_t
+  #define PPC_GPR_SIZE 4
+  #define PPC_GPR_LOAD lwz
+  #define PPC_GPR_STORE stw
+#else
+  #define PPC_GPR_TYPE uint64_t
+  #define PPC_GPR_SIZE 8
+  #define PPC_GPR_LOAD evldd
+  #define PPC_GPR_STORE evstdd
+#endif
+
+#define PPC_DEFAULT_CACHE_LINE_SIZE 32
+
 #ifndef ASM
 
+/* Non-volatile context according to E500ABIUG and EABI */
 typedef struct {
-  #ifndef __SPE__
-    uint32_t   gpr1;	/* Stack pointer for all */
-    uint32_t   gpr2;	/* Reserved SVR4, section ptr EABI + */
-    uint32_t   gpr13;	/* Section ptr SVR4/EABI */
-    uint32_t   gpr14;	/* Non volatile for all */
-    uint32_t   gpr15;	/* Non volatile for all */
-    uint32_t   gpr16;	/* Non volatile for all */
-    uint32_t   gpr17;	/* Non volatile for all */
-    uint32_t   gpr18;	/* Non volatile for all */
-    uint32_t   gpr19;	/* Non volatile for all */
-    uint32_t   gpr20;	/* Non volatile for all */
-    uint32_t   gpr21;	/* Non volatile for all */
-    uint32_t   gpr22;	/* Non volatile for all */
-    uint32_t   gpr23;	/* Non volatile for all */
-    uint32_t   gpr24;	/* Non volatile for all */
-    uint32_t   gpr25;	/* Non volatile for all */
-    uint32_t   gpr26;	/* Non volatile for all */
-    uint32_t   gpr27;	/* Non volatile for all */
-    uint32_t   gpr28;	/* Non volatile for all */
-    uint32_t   gpr29;	/* Non volatile for all */
-    uint32_t   gpr30;	/* Non volatile for all */
-    uint32_t   gpr31;	/* Non volatile for all */
-    uint32_t   cr;	/* PART of the CR is non volatile for all */
-    uint32_t   pc;	/* Program counter/Link register */
-    uint32_t   msr;	/* Initial interrupt level */
-    #ifdef __ALTIVEC__
-      /*
-       * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
-       * and padding to ensure cache-alignment.  Unfortunately, we can't verify
-       * the cache line size here in the cpukit but altivec support code will
-       * produce an error if this is ever different from 32 bytes.
-       * 
-       * Note: it is the BSP/CPU-support's responsibility to save/restore
-       *       volatile vregs across interrupts and exceptions.
-       */
-      uint8_t altivec[16*12 + 32 + 32];
-    #endif
-  #else
-    /* Non-volatile context according to E500ABIUG and EABI */
-    uint32_t context [
-      8 /* Cache line padding */
-      + 1 /* Stack pointer */
-      + 1 /* MSR */
-      + 1 /* LR */
-      + 1 /* CR */
-      + 18 * 2 /* GPR 14 to GPR 31 */
-    ];
+  uint32_t gpr1;
+  uint32_t msr;
+  uint32_t lr;
+  uint32_t cr;
+  PPC_GPR_TYPE gpr14;
+  PPC_GPR_TYPE gpr15;
+  PPC_GPR_TYPE gpr16;
+  PPC_GPR_TYPE gpr17;
+  PPC_GPR_TYPE gpr18;
+  PPC_GPR_TYPE gpr19;
+  PPC_GPR_TYPE gpr20;
+  PPC_GPR_TYPE gpr21;
+  PPC_GPR_TYPE gpr22;
+  PPC_GPR_TYPE gpr23;
+  PPC_GPR_TYPE gpr24;
+  PPC_GPR_TYPE gpr25;
+  PPC_GPR_TYPE gpr26;
+  PPC_GPR_TYPE gpr27;
+  PPC_GPR_TYPE gpr28;
+  PPC_GPR_TYPE gpr29;
+  PPC_GPR_TYPE gpr30;
+  PPC_GPR_TYPE gpr31;
+  #ifdef __ALTIVEC__
+    /*
+     * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
+     * and padding to ensure cache-alignment.  Unfortunately, we can't verify
+     * the cache line size here in the cpukit but altivec support code will
+     * produce an error if this is ever different from 32 bytes.
+     * 
+     * Note: it is the BSP/CPU-support's responsibility to save/restore
+     *       volatile vregs across interrupts and exceptions.
+     */
+    uint8_t altivec[16*12 + 32 + PPC_DEFAULT_CACHE_LINE_SIZE];
   #endif
+} ppc_context;
+
+typedef struct {
+  uint8_t context [
+    PPC_DEFAULT_CACHE_LINE_SIZE
+      + sizeof(ppc_context)
+      + (sizeof(ppc_context) % PPC_DEFAULT_CACHE_LINE_SIZE == 0
+        ? 0
+          : PPC_DEFAULT_CACHE_LINE_SIZE
+            - sizeof(ppc_context) % PPC_DEFAULT_CACHE_LINE_SIZE)
+  ];
 } Context_Control;
+
+static inline ppc_context *ppc_get_context( Context_Control *context )
+{
+  uintptr_t clsz = PPC_DEFAULT_CACHE_LINE_SIZE;
+  uintptr_t mask = clsz - 1;
+  uintptr_t addr = (uintptr_t) context;
+
+  return (ppc_context *) ((addr & ~mask) + clsz);
+}
+
+#define _CPU_Context_Get_SP( _context ) \
+  ppc_get_context(_context)->gpr1
 #endif /* ASM */
 
-#ifndef __SPE__
-  #define PPC_CONTEXT_SET_SP( _context, _sp ) \
-    do { \
-      (_context)->gpr1 = _sp; \
-    } while (0)
+#define PPC_CONTEXT_OFFSET_GPR1 32
+#define PPC_CONTEXT_OFFSET_MSR 36
+#define PPC_CONTEXT_OFFSET_LR 40
+#define PPC_CONTEXT_OFFSET_CR 44
 
-  #define PPC_CONTEXT_GET_CR( _context ) \
-    (_context)->cr
+#define PPC_CONTEXT_GPR_OFFSET( gpr ) \
+  (((gpr) - 14) * PPC_GPR_SIZE + 48)
 
-  #define PPC_CONTEXT_GET_MSR( _context ) \
-    (_context)->msr
-
-  #define PPC_CONTEXT_SET_MSR( _context, _msr ) \
-    do { \
-      (_context)->msr = _msr; \
-    } while (0)
-
-  #define PPC_CONTEXT_FIRST_SAVED_GPR 13
-
-  #define PPC_CONTEXT_GET_FIRST_SAVED( _context ) \
-    (_context)->gpr13
-
-  #define PPC_CONTEXT_GET_PC( _context ) \
-    (_context)->pc
-
-  #define PPC_CONTEXT_SET_PC( _context, _pc ) \
-    do { \
-      (_context)->pc = _pc; \
-    } while (0)
-
-  #define _CPU_Context_Get_SP( _context ) \
-    (_context)->gpr1
-#else
-  #define PPC_CONTEXT_CACHE_LINE_0 32
-  #define PPC_CONTEXT_OFFSET_SP 32
-  #define PPC_CONTEXT_OFFSET_MSR 36
-  #define PPC_CONTEXT_OFFSET_LR 40
-  #define PPC_CONTEXT_OFFSET_CR 44
-  #define PPC_CONTEXT_OFFSET_GPR14 48
-  #define PPC_CONTEXT_OFFSET_GPR15 56
-  #define PPC_CONTEXT_CACHE_LINE_1 64
-  #define PPC_CONTEXT_OFFSET_GPR16 64
-  #define PPC_CONTEXT_OFFSET_GPR17 72
-  #define PPC_CONTEXT_OFFSET_GPR18 80
-  #define PPC_CONTEXT_OFFSET_GPR19 88
-  #define PPC_CONTEXT_CACHE_LINE_2 96
-  #define PPC_CONTEXT_OFFSET_GPR20 96
-  #define PPC_CONTEXT_OFFSET_GPR21 104
-  #define PPC_CONTEXT_OFFSET_GPR22 112
-  #define PPC_CONTEXT_OFFSET_GPR23 120
-  #define PPC_CONTEXT_CACHE_LINE_3 128
-  #define PPC_CONTEXT_OFFSET_GPR24 128
-  #define PPC_CONTEXT_OFFSET_GPR25 136
-  #define PPC_CONTEXT_OFFSET_GPR26 144
-  #define PPC_CONTEXT_OFFSET_GPR27 152
-  #define PPC_CONTEXT_CACHE_LINE_4 160
-  #define PPC_CONTEXT_OFFSET_GPR28 160
-  #define PPC_CONTEXT_OFFSET_GPR29 168
-  #define PPC_CONTEXT_OFFSET_GPR30 176
-  #define PPC_CONTEXT_OFFSET_GPR31 184
-
-  #define PPC_CONTEXT_AREA( _context ) \
-    ((uint32_t *) (((uintptr_t) (_context)) & ~0x1fU))
-
-  #define PPC_CONTEXT_FIELD( _context, _offset ) \
-    PPC_CONTEXT_AREA( _context ) [(_offset) / 4]
-
-  #define PPC_CONTEXT_SET_SP( _context, _sp ) \
-    do { \
-      PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_SP ) = _sp; \
-    } while (0)
-
-  #define PPC_CONTEXT_GET_CR( _context ) \
-    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_CR )
-
-  #define PPC_CONTEXT_GET_MSR( _context ) \
-    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_MSR )
-
-  #define PPC_CONTEXT_SET_MSR( _context, _msr ) \
-    do { \
-      PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_MSR ) = _msr; \
-    } while (0)
-
-  #define PPC_CONTEXT_FIRST_SAVED_GPR 14
-
-  #define PPC_CONTEXT_GET_FIRST_SAVED( _context ) \
-    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_GPR14 )
-
-  #define PPC_CONTEXT_GET_PC( _context ) \
-    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_LR )
-
-  #define PPC_CONTEXT_SET_PC( _context, _pc ) \
-    do { \
-      PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_LR ) = _pc; \
-    } while (0)
-
-  #define _CPU_Context_Get_SP( _context ) \
-    PPC_CONTEXT_FIELD( _context, PPC_CONTEXT_OFFSET_SP )
-#endif
+#define PPC_CONTEXT_OFFSET_GPR14 PPC_CONTEXT_GPR_OFFSET( 14 )
+#define PPC_CONTEXT_OFFSET_GPR15 PPC_CONTEXT_GPR_OFFSET( 15 )
+#define PPC_CONTEXT_OFFSET_GPR16 PPC_CONTEXT_GPR_OFFSET( 16 )
+#define PPC_CONTEXT_OFFSET_GPR17 PPC_CONTEXT_GPR_OFFSET( 17 )
+#define PPC_CONTEXT_OFFSET_GPR18 PPC_CONTEXT_GPR_OFFSET( 18 )
+#define PPC_CONTEXT_OFFSET_GPR19 PPC_CONTEXT_GPR_OFFSET( 19 )
+#define PPC_CONTEXT_OFFSET_GPR20 PPC_CONTEXT_GPR_OFFSET( 20 )
+#define PPC_CONTEXT_OFFSET_GPR21 PPC_CONTEXT_GPR_OFFSET( 21 )
+#define PPC_CONTEXT_OFFSET_GPR22 PPC_CONTEXT_GPR_OFFSET( 22 )
+#define PPC_CONTEXT_OFFSET_GPR23 PPC_CONTEXT_GPR_OFFSET( 23 )
+#define PPC_CONTEXT_OFFSET_GPR24 PPC_CONTEXT_GPR_OFFSET( 24 )
+#define PPC_CONTEXT_OFFSET_GPR25 PPC_CONTEXT_GPR_OFFSET( 25 )
+#define PPC_CONTEXT_OFFSET_GPR26 PPC_CONTEXT_GPR_OFFSET( 26 )
+#define PPC_CONTEXT_OFFSET_GPR27 PPC_CONTEXT_GPR_OFFSET( 27 )
+#define PPC_CONTEXT_OFFSET_GPR28 PPC_CONTEXT_GPR_OFFSET( 28 )
+#define PPC_CONTEXT_OFFSET_GPR29 PPC_CONTEXT_GPR_OFFSET( 29 )
+#define PPC_CONTEXT_OFFSET_GPR30 PPC_CONTEXT_GPR_OFFSET( 30 )
+#define PPC_CONTEXT_OFFSET_GPR31 PPC_CONTEXT_GPR_OFFSET( 31 )
 
 #ifndef ASM
 typedef struct {

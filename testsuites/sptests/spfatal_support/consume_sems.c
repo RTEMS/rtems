@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,6 +12,13 @@
 #endif
 
 #include <rtems.h>
+
+/* forward declarations to avoid warnings */
+rtems_device_driver consume_semaphores_initialize(
+  rtems_device_major_number major __attribute__((unused)),
+  rtems_device_minor_number minor __attribute__((unused)),
+  void *pargp __attribute__((unused))
+);
 
 #define MAXIMUM 20
 rtems_id Semaphores[MAXIMUM];

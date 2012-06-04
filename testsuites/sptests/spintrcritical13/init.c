@@ -26,8 +26,12 @@
 
 #else
   #error "Test Mode not defined"
-
 #endif
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
+rtems_timer_service_routine TimerMethod(rtems_id  timer, void *arg);
 
 rtems_id Main_task;
 rtems_id Timer;

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,9 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
 
 #define SEND_RCV_BUFSIZ 12
 

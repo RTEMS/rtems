@@ -1047,7 +1047,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp __attribu
   }
   else
   {
-    capture_extension_index = rtems_object_id_get_index (capture_id);;
+    capture_extension_index = rtems_object_id_get_index (capture_id);
   }
 
   /*

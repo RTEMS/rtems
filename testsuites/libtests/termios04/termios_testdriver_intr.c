@@ -189,11 +189,11 @@ rtems_device_driver termios_test_driver_initialize(
 
   status = rtems_timer_create(rtems_build_name('T', 'M', 'R', 'X'), &Rx_Timer);
   if ( status )
-    rtems_fatal_error_occurred(1);;
+    rtems_fatal_error_occurred(1);
 
   status = rtems_timer_create(rtems_build_name('T', 'M', 'T', 'X'), &Tx_Timer);
   if ( status )
-    rtems_fatal_error_occurred(1);;
+    rtems_fatal_error_occurred(1);
 
   return RTEMS_SUCCESSFUL;
 }

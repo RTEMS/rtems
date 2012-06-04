@@ -18,6 +18,9 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 #define TIMER_COUNT 4
 
 #define TIMER_TRIGGER 0

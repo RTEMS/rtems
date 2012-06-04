@@ -16,6 +16,13 @@
 #include <tmacros.h>
 #include <rtems/bspIo.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+int test_getchar(void);
+void do_getchark(void);
+void do_putk(void);
+void do_printk(void);
+
 int test_getchar(void)
 {
   return 0x35;

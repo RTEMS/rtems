@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,10 +14,14 @@
 #include <tmacros.h>
 #include "pritime.h"
 
+/* forward declarations to avoid warnings */
+rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored);
+rtems_task Init(rtems_task_argument argument);
+
 volatile int   Fired;
 volatile bool  timerRan;
 
-rtems_timer_service_routine Timer_Routine( rtems_id id, void *ignored )
+rtems_timer_service_routine Timer_Routine(rtems_id id, void *ignored)
 {
   rtems_status_code status;
 

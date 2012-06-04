@@ -1458,7 +1458,7 @@ vmeUniverseDmaStartXX(volatile LERegister *base, int channel, uint32_t pci_addr,
 
 	{
 	/* help the compiler allocate registers */
-	register volatile LERegister *b=base;;
+	register volatile LERegister *b=base;
 	register unsigned long dgcsoff=UNIV_REGOFF_DGCS,dgcs;
 
 	dgcs=READ_LE(b, dgcsoff);

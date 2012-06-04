@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,10 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task read_task(rtems_task_argument not_used);
+
 #define SEND_RCV_BUFSIZ       (PIPE_BUF+20)
 
 rtems_id rBarrier;
@@ -32,7 +36,7 @@ rtems_id wBarrier;
 char recvBuf[SEND_RCV_BUFSIZ] = {0};
 char sendBuf[SEND_RCV_BUFSIZ] = {0};
 
-rtems_task read_task( rtems_task_argument not_used )
+rtems_task read_task(rtems_task_argument not_used)
 {
   int fd = 0;
   int status = -1;
@@ -116,8 +120,6 @@ rtems_task read_task( rtems_task_argument not_used )
 
   rtems_task_delete( RTEMS_SELF );
 }
-
-
 
 rtems_task Init(
   rtems_task_argument not_used

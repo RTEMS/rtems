@@ -1471,7 +1471,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
         if ((CInvrse * Q) != ((CInvrse * Y) * S)) {
             UfThold = Y;
             BadCond (Failure, "Either accuracy deteriorates as numbers\n");
-            printf ("approach a threshold = %.17e\n", UfThold);;
+            printf ("approach a threshold = %.17e\n", UfThold);
             printf (" coming down from %.17e\n", C);
             printf (" or else multiplication gets too many last digits wrong.\n");
         }
@@ -1526,7 +1526,7 @@ or  1/3  and  3/9  and  9/27 may disagree");
             printf ("yet X - Z yields %.17e .\n", Z9);
             printf ("    Should this NOT signal Underflow, ");
             printf ("this is a SERIOUS DEFECT\nthat causes ");
-            printf ("confusion when innocent statements like\n");;
+            printf ("confusion when innocent statements like\n");
             printf ("    if (X == Z)  ...  else");
             printf ("  ... (f(X) - f(Z)) / (X - Z) ...\n");
             printf ("encounter Division by Zero although actually\n");

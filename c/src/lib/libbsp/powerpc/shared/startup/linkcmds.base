@@ -328,8 +328,10 @@ SECTIONS {
 		bsp_section_nocache_begin = .;
 		*(.bsp_nocache)
 		bsp_section_nocache_end = .;
-	} > REGION_NOCACHE AT > REGION_NOCACHE
+	} > REGION_NOCACHE AT > REGION_NOCACHE_LOAD
 	bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
+	bsp_section_nocache_load_begin = LOADADDR (.nocache);
+	bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
 
 	/* FIXME */
 	RamBase = ORIGIN (REGION_WORK);

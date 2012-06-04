@@ -17,8 +17,17 @@
 #include <rtems/libio_.h>
 #include <rtems/libcsupport.h>
 
-int fs_mount( rtems_filesystem_mount_table_entry_t *mt_entry,
-	      const void                           *data )
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+int fs_mount(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
+);
+
+int fs_mount(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
+)
 {
   return 0;
 }
@@ -29,7 +38,7 @@ rtems_task Init(
 {
   int status = 0;
   void *alloc_ptr = (void *)0;
- 
+
   puts( "\n\n*** TEST MOUNT MANAGER ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );
@@ -50,25 +59,24 @@ rtems_task Init(
 
   puts( "Init - attempt to make target(NULL) and mount - expect EINVAL" );
   status = mount_and_make_target_path(
-	     NULL,
-	     NULL,
-	     "fs",
-	     0,
-	     NULL );
+             NULL,
+             NULL,
+             "fs",
+             0,
+             NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init - attempt to make target and mount - expect EINVAL" );
   status = mount_and_make_target_path(
-	     NULL,
-	     "/tmp",
-	     "fs",
-	     2,
-	     NULL );
+             NULL,
+             "/tmp",
+             "fs",
+             2,
+             NULL );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
-	     
   puts( "Init - register filesystem fs - expect EINVAL" );
   status = rtems_filesystem_register( "fs", fs_mount );
   rtems_test_assert( status == -1 );
@@ -82,7 +90,7 @@ rtems_task Init(
   status = rtems_filesystem_register( "bfs", fs_mount );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
-  
+
   puts( "Init - attempt to unregister with bad args - expect EINVAL" );
   status = rtems_filesystem_unregister( NULL );
   rtems_test_assert( status == -1 );
@@ -91,7 +99,7 @@ rtems_task Init(
   puts( "Init - attempt to unregister fs -- OK" );
   status = rtems_filesystem_unregister( "fs" );
   rtems_test_assert( status == 0 );
-  
+
   puts( "Init - attempt to unregister fs again - expect ENOENT" );
   status = rtems_filesystem_unregister( "fs" );
   rtems_test_assert( status == -1 );
@@ -100,7 +108,7 @@ rtems_task Init(
   puts( "Init - attempt to unregister bfs -- OK" );
   status = rtems_filesystem_unregister( "bfs" );
   rtems_test_assert( status == 0 );
-  
+
   puts( "Init - attempt to unregister bfs again - expect ENOENT" );
   status = rtems_filesystem_unregister( "bfs" );
   rtems_test_assert( status == -1 );

@@ -29,7 +29,7 @@
  */
 struct taskSwitchLog taskSwitchLog[25];
 int taskSwitchLogIndex;
-volatile int testsFinished;;
+volatile int testsFinished;
 
 void Task_switch(
   rtems_tcb *unused,

@@ -531,7 +531,7 @@ void uart_exit(void)
  */
 rtems_device_driver bfin_uart_open(rtems_device_major_number major,
     rtems_device_minor_number minor, void *arg) {
-  rtems_status_code             sc    = RTEMS_NOT_DEFINED;;
+  rtems_status_code             sc    = RTEMS_NOT_DEFINED;
   rtems_libio_open_close_args_t *args = NULL;
 
   /**

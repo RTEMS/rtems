@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,6 +13,10 @@
 
 #include <tmacros.h>
 #include <unistd.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task Blocker(rtems_task_argument ignored);
 
 rtems_id      Region;
 uint32_t      Region_Memory[256] CPU_STRUCTURE_ALIGNMENT;

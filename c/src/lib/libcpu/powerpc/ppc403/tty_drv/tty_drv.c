@@ -212,7 +212,7 @@ tty0PollRead (int minor)
 {
 
   /* Wait for character */
-  while ((tty0port->LSR & LSR_RSR)==0);;
+  while ((tty0port->LSR & LSR_RSR)==0);
 
   return tty0port->RBR;
 }
@@ -223,7 +223,7 @@ tty0PollWrite(int minor, const char *buf, size_t len)
 {
 
   while (len-- > 0) {
-    while (!(tty0port->LSR & LSR_THE));;
+    while (!(tty0port->LSR & LSR_THE));
     tty0port->THR = *buf++;
   }
   return 0;

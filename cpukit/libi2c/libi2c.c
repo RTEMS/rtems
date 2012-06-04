@@ -450,7 +450,7 @@ rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
         /* initialization failed */
         i = -err;
       } else {
-        busses[i].name = nmcpy;;
+        busses[i].name = nmcpy;
         nmcpy = 0;
       }
 

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +14,11 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+void create_helper(int task);
+void delete_helper(int task);
+ 
 rtems_id          TaskID[10];
 
 void create_helper(int task)
@@ -32,7 +37,7 @@ void create_helper(int task)
   directive_failed( status, "rtems_task_create" );
 }
 
-void delete_helper( int task )
+void delete_helper(int task)
 {
   rtems_status_code status;
 

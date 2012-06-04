@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -12,6 +12,11 @@
 #endif
 
 #include <tmacros.h>
+
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task Test_task(rtems_task_argument argument);
+void ObtainRelease(bool suspendIdle);
 
 /*
  *  Keep the names and IDs in global variables so another task can use them.
@@ -37,7 +42,7 @@ rtems_task Test_task(
   }
 }
 
-void ObtainRelease( bool suspendIdle ) 
+void ObtainRelease( bool suspendIdle )
 {
   rtems_status_code   status;
 
@@ -128,7 +133,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             3 
+#define CONFIGURE_MAXIMUM_TASKS             3
 #define CONFIGURE_MAXIMUM_SEMAPHORES        2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

@@ -14,6 +14,10 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_task Secondary_task(rtems_task_argument ignored);
+
 #define TEST_NAME          "15"
 #define INIT_PRIORITY      2
 #define BLOCKER_PRIORITY   1
@@ -29,7 +33,6 @@ rtems_task Secondary_task(
   rtems_status_code     sc;
 
   while (1) {
-
     sc = rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
     fatal_directive_status( sc, RTEMS_TIMEOUT, "rtems_semaphore_obtain" );
   }

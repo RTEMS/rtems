@@ -13,6 +13,9 @@
 #include <tmacros.h>
 #include <rtems/rbtree.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+
 int numbers[20] = {
 52, 99, 0, 85, 43, 44, 10, 60, 50, 19, 8, 68, 48, 57, 17, 67, 90, 12, 77, 71};
 

@@ -143,7 +143,7 @@ unsigned char	hwp = 0, swp;
 		if ( enbl ) {
 			*p |= swp;
 		} else {
-			*p &= ~swp;;
+			*p &= ~swp;
 		}
 	}
 	return 0;

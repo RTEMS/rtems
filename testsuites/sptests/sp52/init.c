@@ -27,6 +27,13 @@
 
 #include <tmacros.h>
 
+/* forward declarations to avoid warnings */
+rtems_task Init(rtems_task_argument argument);
+rtems_timer_service_routine TIMER_service_routine(
+  rtems_id  ignored_id,
+  void     *user_data
+);
+
 #define INITIAL_SECOND 10
 volatile bool _timer_passage = FALSE;
 

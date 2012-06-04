@@ -48,8 +48,7 @@ void verify_timed_receive(void);
 void wait_for_signal(sigset_t *waitset, int sec, int expect_signal);
 void verify_notify(void);
 void verify_with_threads(void);
-void verify_timedout_mq_timedreceive(
-        char *task_name, int que, int is_blocking);;
+void verify_timedout_mq_timedreceive(char *task_name, int que, int is_blocking);
 void verify_timedout_mq_timedsend(int que, int is_blocking);
 void verify_timed_receive(void);
 void validate_mq_setattr(void);
