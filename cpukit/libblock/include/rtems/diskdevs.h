@@ -61,7 +61,7 @@ typedef int (*rtems_block_device_ioctl)(
 #define RTEMS_DISK_READ_AHEAD_NO_TRIGGER ((rtems_blkdev_bnum) -1)
 
 /**
- * @brief Read-ahead control.
+ * @brief Block device read-ahead control.
  */
 typedef struct {
   /**
@@ -84,7 +84,7 @@ typedef struct {
    * be arbitrary.
    */
   rtems_blkdev_bnum next;
-} rtems_disk_read_ahread;
+} rtems_blkdev_read_ahead;
 
 /**
  * @brief Description of a disk device (logical and physical disks).
@@ -204,7 +204,7 @@ struct rtems_disk_device {
   /**
    * @brief Read-ahead control for this disk.
    */
-  rtems_disk_read_ahread read_ahead;
+  rtems_blkdev_read_ahead read_ahead;
 };
 
 /**

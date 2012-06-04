@@ -64,6 +64,8 @@ extern void putk(const char *s);
  */
 extern int printk_plugin(void *context, const char *fmt, ...);
 
+extern int rtems_printf_plugin(void *context, const char *fmt, ...);
+
 /*
  *  Type definition for function which can be plugged in to
  *  certain reporting routines to redirect the output

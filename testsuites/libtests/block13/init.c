@@ -45,7 +45,7 @@ static const int action_sequence [READ_COUNT] = {
 
 #define UNUSED_LINE { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 
-static int expected_block_access_counts [READ_COUNT] [BLOCK_COUNT] = {
+static const int expected_block_access_counts [READ_COUNT] [BLOCK_COUNT] = {
    { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
    { 1, 0, 1, 0, 0, 0, 0, 0, 0 },
    { 1, 0, 1, 1, 1, 1, 0, 0, 0 },

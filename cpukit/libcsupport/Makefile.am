@@ -120,6 +120,7 @@ BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c src/issetugid.c
 
 libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/printk_plugin.c src/putk.c src/vprintk.c \
+    src/printf_plugin.c \
     src/sup_fs_location.c \
     src/sup_fs_eval_path.c \
     src/sup_fs_eval_path_generic.c \

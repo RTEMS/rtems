@@ -1,7 +1,5 @@
 PBI=SIM
-
 SCREEN=
+HEADER=Simulator
 FONT=DEC
 FONT=SMALL
-
-HEADER=Simulator
