@@ -151,11 +151,11 @@ static rtems_bdbuf_buffer *get(enum get_type type, enum blk_kind kind)
   rtems_bdbuf_buffer *bd = NULL;
   rtems_blkdev_bnum blk_index = 0;
   rtems_status_code (*get_bd)(
-    const rtems_disk_device *,
+    rtems_disk_device *,
     rtems_blkdev_bnum,
     rtems_bdbuf_buffer **
   ) = NULL;
-  const rtems_disk_device *dd = NULL;
+  rtems_disk_device *dd = NULL;
   size_t bds_per_group = 0;
 
   switch (kind) {
