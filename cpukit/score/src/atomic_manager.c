@@ -30,6 +30,10 @@ ATOMIC_int _Atomic_Load_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Load_acq_int(address);
+  else
+    return _CPU_Atomic_Load_int(address);
 }
 
 ATOMIC_long _Atomic_Load_long(
@@ -37,6 +41,10 @@ ATOMIC_long _Atomic_Load_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Load_acq_long(address);
+  else
+    return _CPU_Atomic_Load_long(address);
 }
 
 ATOMIC_ptr _Atomic_Load_ptr(
@@ -44,6 +52,10 @@ ATOMIC_ptr _Atomic_Load_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Load_acq_ptr(address);
+  else
+    return _CPU_Atomic_Load_ptr(address);
 }
 
 ATOMIC_32 _Atomic_Load_32(
@@ -51,6 +63,10 @@ ATOMIC_32 _Atomic_Load_32(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Load_acq_32(address);
+  else
+    return _CPU_Atomic_Load_32(address);
 }
 
 ATOMIC_64 _Atomic_Load_64(
@@ -58,6 +74,10 @@ ATOMIC_64 _Atomic_Load_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Load_acq_64(address);
+  else
+    return _CPU_Atomic_Load_64(address);
 }
 
 
@@ -67,6 +87,10 @@ void _Atomic_Store_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Store_rel_int(address, value);
+  else
+    return _CPU_Atomic_Store_int(address, value);
 }
 
 void _Atomic_Store_long(
@@ -75,6 +99,10 @@ void _Atomic_Store_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Store_rel_long(address, value);
+  else
+    return _CPU_Atomic_Store_long(address, value);
 }
 
 void _Atomic_Store_ptr(
@@ -83,6 +111,10 @@ void _Atomic_Store_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Store_rel_ptr(address, value);
+  else
+    return _CPU_Atomic_Store_ptr(address, value);
 }
 
 void _Atomic_Store_32(
@@ -91,6 +123,10 @@ void _Atomic_Store_32(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Store_rel_32(address, value);
+  else
+    return _CPU_Atomic_Store_32(address, value);
 }
 
 void _Atomic_Store_64(
@@ -99,6 +135,10 @@ void _Atomic_Store_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Store_rel_64(address, value);
+  else
+    return _CPU_Atomic_Store_64(address, value);
 }
 
 void _Atomic_Fetch_Add_int(
@@ -107,6 +147,12 @@ void _Atomic_Fetch_Add_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_acq_int(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_rel_int(address, value);
+  else
+    return _CPU_Atomic_Fetch_Add_int(address, value);
 }
 
 void _Atomic_Fetch_Add_long(
@@ -115,6 +161,12 @@ void _Atomic_Fetch_Add_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_acq_long(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_rel_long(address, value);
+  else
+    return _CPU_Atomic_Fetch_Add_long(address, value);
 }
 
 void _Atomic_Fetch_Add_ptr(
@@ -123,6 +175,12 @@ void _Atomic_Fetch_Add_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_acq_ptr(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_rel_ptr(address, value);
+  else
+    return _CPU_Atomic_Fetch_Add_ptr(address, value);
 }
 
 void _Atomic_Fetch_Add_32(
@@ -131,6 +189,12 @@ void _Atomic_Fetch_Add_32(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_acq_32(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_rel_32(address, value);
+  else
+    return _CPU_Atomic_Fetch_Add_32(address, value);
 }
 
 void _Atomic_Fetch_Add_64(
@@ -139,6 +203,12 @@ void _Atomic_Fetch_Add_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_acq_64(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Add_rel_64(address, value);
+  else
+    return _CPU_Atomic_Fetch_Add_64(address, value);
 }
 
 void _Atomic_Fetch_Sub_int(
@@ -147,6 +217,12 @@ void _Atomic_Fetch_Sub_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_acq_int(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_rel_int(address, value);
+  else
+    return _CPU_Atomic_Fetch_Sub_int(address, value);
 }
 
 void _Atomic_Fetch_Sub_long(
@@ -155,6 +231,12 @@ void _Atomic_Fetch_Sub_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_acq_long(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_rel_long(address, value);
+  else
+    return _CPU_Atomic_Fetch_Sub_long(address, value);
 }
 
 void _Atomic_Fetch_Sub_ptr(
@@ -163,6 +245,12 @@ void _Atomic_Fetch_Sub_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_acq_ptr(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_rel_ptr(address, value);
+  else
+    return _CPU_Atomic_Fetch_Sub_ptr(address, value);
 }
 
 void _Atomic_Fetch_Sub_32(
@@ -171,6 +259,12 @@ void _Atomic_Fetch_Sub_32(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_acq_32(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_rel_32(address, value);
+  else
+    return _CPU_Atomic_Fetch_Sub_32(address, value);
 }
 
 void _Atomic_Fetch_Sub_64(
@@ -179,6 +273,12 @@ void _Atomic_Fetch_Sub_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_acq_64(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Sub_rel_64(address, value);
+  else
+    return _CPU_Atomic_Fetch_Sub_64(address, value);
 }
 
 void _Atomic_Fetch_Or_int(
@@ -187,6 +287,12 @@ void _Atomic_Fetch_Or_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_acq_int(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_rel_int(address, value);
+  else
+    return _CPU_Atomic_Fetch_Or_int(address, value);
 }
 
 void _Atomic_Fetch_Or_long(
@@ -195,6 +301,12 @@ void _Atomic_Fetch_Or_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_acq_long(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_rel_long(address, value);
+  else
+    return _CPU_Atomic_Fetch_Or_long(address, value);
 }
 
 void _Atomic_Fetch_Or_ptr(
@@ -203,6 +315,12 @@ void _Atomic_Fetch_Or_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_acq_ptr(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_rel_ptr(address, value);
+  else
+    return _CPU_Atomic_Fetch_Or_ptr(address, value);
 }
 
 void _Atomic_Fetch_Or_32(
@@ -211,6 +329,12 @@ void _Atomic_Fetch_Or_32(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_acq_32(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_rel_32(address, value);
+  else
+    return _CPU_Atomic_Fetch_Or_32(address, value);
 }
 
 void _Atomic_Fetch_Or_64(
@@ -219,6 +343,12 @@ void _Atomic_Fetch_Or_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_acq_64(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_Or_rel_64(address, value);
+  else
+    return _CPU_Atomic_Fetch_Or_64(address, value);
 }
 
 void _Atomic_Fetch_And_int(
@@ -227,6 +357,12 @@ void _Atomic_Fetch_And_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_acq_int(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_rel_int(address, value);
+  else
+    return _CPU_Atomic_Fetch_And_int(address, value);
 }
 
 void _Atomic_Fetch_And_long(
@@ -235,6 +371,12 @@ void _Atomic_Fetch_And_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_acq_long(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_rel_long(address, value);
+  else
+    return _CPU_Atomic_Fetch_And_long(address, value);
 }
 
 void _Atomic_Fetch_And_ptr(
@@ -243,6 +385,12 @@ void _Atomic_Fetch_And_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_acq_ptr(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_rel_ptr(address, value);
+  else
+    return _CPU_Atomic_Fetch_And_ptr(address, value);
 }
 
 void _Atomic_Fetch_And_32(
@@ -250,7 +398,13 @@ void _Atomic_Fetch_And_32(
   ATOMIC_32 value,
   ATOMIC_memory_barrier memory_barrier
 )
-{
+{
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_acq_32(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_rel_32(address, value);
+  else
+    return _CPU_Atomic_Fetch_And_32(address, value);
 }
 
 void _Atomic_Fetch_And_64(
@@ -259,6 +413,12 @@ void _Atomic_Fetch_And_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_acq_64(address, value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Fetch_And_rel_64(address, value);
+  else
+    return _CPU_Atomic_Fetch_And_64(address, value);
 }
 
 int _Atomic_Compare_Exchange_int(
@@ -268,6 +428,12 @@ int _Atomic_Compare_Exchange_int(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_acq_int(address, old_value, new_value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_rel_int(address, old_value, new_value);
+  else
+    return _CPU_Atomic_Compare_Exchange_int(address, old_value, new_value);
 }
 
 int _Atomic_Compare_Exchange_long(
@@ -277,6 +443,12 @@ int _Atomic_Compare_Exchange_long(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_acq_long(address, old_value, new_value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_rel_long(address, old_value, new_value);
+  else
+    return _CPU_Atomic_Compare_Exchange_long(address, old_value, new_value);
 }
 
 int _Atomic_Compare_Exchange_ptr(
@@ -286,6 +458,12 @@ int _Atomic_Compare_Exchange_ptr(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_acq_ptr(address, old_value, new_value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_rel_ptr(address, old_value, new_value);
+  else
+    return _CPU_Atomic_Compare_Exchange_ptr(address, old_value, new_value);
 }
 
 int _Atomic_Compare_Exchange_32(
@@ -295,6 +473,12 @@ int _Atomic_Compare_Exchange_32(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_acq_32(address, old_value, new_value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_rel_32(address, old_value, new_value);
+  else
+    return _CPU_Atomic_Compare_Exchange_32(address, old_value, new_value);
 }
 
 int _Atomic_Compare_Exchange_64(
@@ -304,4 +488,10 @@ int _Atomic_Compare_Exchange_64(
   ATOMIC_memory_barrier memory_barrier
 )
 {
+  if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_acq_64(address, old_value, new_value);
+  else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
+    return _CPU_Atomic_Compare_Exchange_rel_64(address, old_value, new_value);
+  else
+    return _CPU_Atomic_Compare_Exchange_64(address, old_value, new_value);
 }
