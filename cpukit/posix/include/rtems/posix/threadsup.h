@@ -19,6 +19,7 @@
 #include <sys/signal.h>
 #include <rtems/score/coresem.h>
 #include <rtems/score/tqdata.h>
+#include <rtems/score/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,6 +70,9 @@ typedef struct {
   int                     cancelation_requested;
   /** This is the set of cancelation handlers. */
   Chain_Control           Cancellation_Handlers;
+  
+  /** This is the thread key value chain's control */
+  Chain_Control          *the_chain;
 
 } POSIX_API_Control;
 

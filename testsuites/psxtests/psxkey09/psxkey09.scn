@@ -1,0 +1,9 @@
+*** TEST KEY 09 ***
+Init - pthread key create with destructor - OK
+Init - pthread create - OK
+Init - sleep - let thread run - OK
+Test_Thread - key pthread_setspecific - OK
+Test_Thread - pthread_exit to run key destructors - OK
+Init - verify destructor run - OK
+Init - pthread key delete - OK
+*** END OF TEST KEY 09 ***

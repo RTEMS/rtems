@@ -1,0 +1,23 @@
+
+rtems_tests_PROGRAMS = psxkey10
+psxkey10_SOURCES = init.c
+
+dist_rtems_tests_DATA = psxkey10.scn
+dist_rtems_tests_DATA += psxkey10.doc
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/leaf.am
+
+
+AM_CPPFLAGS += -I$(top_srcdir)/include
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
+LINK_OBJS = $(psxkey10_OBJECTS)
+LINK_LIBS = $(psxkey10_LDLIBS)
+
+psxkey10$(EXEEXT): $(psxkey10_OBJECTS) $(psxkey10_DEPENDENCIES)
+	@rm -f psxkey10$(EXEEXT)
+	$(make-exe)
+
+include $(top_srcdir)/../automake/local.am

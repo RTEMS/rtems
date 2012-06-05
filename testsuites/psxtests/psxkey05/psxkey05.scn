@@ -1,0 +1,10 @@
+*** TEST KEY 05 ***
+Init - pthread key1 create - OK
+Init - pthread key2 create - OK
+Init - key1 pthread_setspecific - OK
+Init - key1 pthread_getspecific - OK
+Init - key2 pthread_setspecific - OK
+Init - key2 pthread_getspecific - OK
+Init - pthread key1 delete - OK
+Init - pthread key2 delete - OK
+*** END OF TEST KEY 05 ***

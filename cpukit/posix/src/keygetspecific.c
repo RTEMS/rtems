@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/rbtree.h>
 #include <rtems/posix/key.h>
 
 /*
@@ -29,21 +30,24 @@ void *pthread_getspecific(
   pthread_key_t  key
 )
 {
-  register POSIX_Keys_Control *the_key;
-  uint32_t                     api;
-  uint32_t                     index;
   Objects_Locations            location;
-  void                        *key_data;
+  POSIX_Keys_Rbtree_node       search_node;
+  RBTree_Node                 *p; 
 
-  the_key = _POSIX_Keys_Get( key, &location );
+  _POSIX_Keys_Get( key, &location );
   switch ( location ) {
-
+    
     case OBJECTS_LOCAL:
-      api      = _Objects_Get_API( _Thread_Executing->Object.id );
-      index    = _Objects_Get_index( _Thread_Executing->Object.id );
-      key_data = (void *) the_key->Values[ api ][ index ];
+      /** TODO: search the node in TCB's chain(maybe the rbtree) to speed up the search */
+      search_node.key = key;
+      search_node.thread_id = _Thread_Executing->Object.id;
+      p = _RBTree_Find_unprotected( &_POSIX_Keys_Rbtree, &search_node.rb_node);
+      if ( !p ) {
+	_Thread_Enable_dispatch();
+	return NULL;
+      }
       _Thread_Enable_dispatch();
-      return key_data;
+      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, rb_node )->value;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */
