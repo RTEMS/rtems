@@ -18,6 +18,7 @@
 #define _RTEMS_POSIX_KEY_H
 
 #include <rtems/score/object.h>
+#include <rtems/score/rbtree.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +39,22 @@ typedef struct {
    void              **Values[ OBJECTS_APIS_LAST + 1 ];
 }  POSIX_Keys_Control;
 
+/**
+ *  This is the data Structure used to manage a POSIX key and value
+ *  in the rbtree structure
+ *  
+ */
+typdef struct {
+  /** This field is the rbtree node structure. */
+  RBTree_Node Node;
+  /** This field is the POSIX key used as an rbtree key */
+  pthread_key_t Key;
+  /** This field is the Thread id also used as an rbtree key */
+  Object_Id Thread_id;
+  /** This field points to the POSIX key value of specific thread */
+  void *Value;
+} POSIX_Keys_Node;
+  
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.
