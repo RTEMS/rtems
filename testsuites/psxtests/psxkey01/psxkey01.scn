@@ -1,5 +1,5 @@
 *** POSIX KEY 01 TEST ***
 Init's ID is 0x0b010001
-Allocate_majority_of_workspace: 
-Init: pthread_key_create - ENOMEM (Workspace not available)
+Init: pthread_key_create - OK
+
 *** END OF POSIX KEY 01 TEST ***

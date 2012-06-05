@@ -1,0 +1,10 @@
+
+*** TEST KEY 10 ***
+Init - pthread key create with destructor - OK
+Init - pthread create - OK
+Init - sleep - let thread run - OK
+Test_Thread - key pthread_setspecific - OK
+Test_Thread - pthread key delete - OK
+Test_Thread - pthread exit, but don't run key destructors - OK
+Init - verify destructor did NOT run - OK
+*** END OF TEST KEY 10 ***
