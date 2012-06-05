@@ -73,6 +73,14 @@ $(PROJECT_LIB)/linkcmds.mpc5566evb_spe: startup/linkcmds.mpc5566evb_spe $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5566evb_spe
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5566evb_spe
 
+$(PROJECT_LIB)/linkcmds.mpc5643l_evb: startup/linkcmds.mpc5643l_evb $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5643l_evb
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5643l_evb
+
+$(PROJECT_LIB)/linkcmds.mpc5643l_dpu: startup/linkcmds.mpc5643l_dpu $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5643l_dpu
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5643l_dpu
+
 $(PROJECT_LIB)/linkcmds.mpc5674fevb: startup/linkcmds.mpc5674fevb $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674fevb
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674fevb
@@ -80,10 +88,6 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674fevb
 $(PROJECT_LIB)/linkcmds.mpc5674fevb_spe: startup/linkcmds.mpc5674fevb_spe $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674fevb_spe
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674fevb_spe
-
-$(PROJECT_LIB)/linkcmds.xkt564levb: startup/linkcmds.xkt564levb $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xkt564levb
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xkt564levb
 
 $(PROJECT_LIB)/linkcmds.phycore_mpc5554: startup/linkcmds.phycore_mpc5554 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.phycore_mpc5554

@@ -47,7 +47,7 @@ BSP_START_TEXT_SECTION const mpc55xx_clock_config
   #ifdef MPC55XX_HAS_FMPLL_ENHANCED
     #define EPREDIV_VAL (MPC55XX_FMPLL_PREDIV-1)
     #define EMFD_VAL    (MPC55XX_FMPLL_MFD-16)
-    #define VCO_CLK_REF (MPC55XX_FMPLL_REF_CLOCK/(EPREDIV_VAL+1))
+    #define VCO_CLK_REF (MPC55XX_REFERENCE_CLOCK/(EPREDIV_VAL+1))
     #define VCO_CLK_OUT (VCO_CLK_REF*(EMFD_VAL+16))
     #define ERFD_VAL    ((VCO_CLK_OUT/MPC55XX_FMPLL_CLK_OUT)-1)
 
@@ -90,7 +90,13 @@ BSP_START_TEXT_SECTION const mpc55xx_clock_config
     .fmpll = {
       {
         .cr = {
-          .B = { .IDF = 3, .ODF = 1, .NDIV = 48, .I_LOCK = 1, .PLL_ON = 1 }
+          #if MPC55XX_REFERENCE_CLOCK == 8000000
+            .B = { .IDF = 0, .ODF = 1, .NDIV = 60, .I_LOCK = 1, .PLL_ON = 1 }
+          #elif MPC55XX_REFERENCE_CLOCK == 40000000
+            .B = { .IDF = 3, .ODF = 1, .NDIV = 48, .I_LOCK = 1, .PLL_ON = 1 }
+          #else
+            #error "unexpected reference clock"
+          #endif
         }
       },
       {
@@ -103,6 +109,10 @@ BSP_START_TEXT_SECTION const mpc55xx_clock_config
       .B = { .SELDIV = 2, .SELCTL = 2 }
     },
     .auxclk = {
+      [0] = {
+        .AC_SC = { .B = { .SELCTL = 4 } },
+        .AC_DC0_3 = { .B = { .DE0 = 1, .DIV0 = 0 } }
+      },
       [1] = {
         .AC_SC = { .B = { .SELCTL = 4 } },
         .AC_DC0_3 = { .B = { .DE0 = 1, .DIV0 = 11 } }

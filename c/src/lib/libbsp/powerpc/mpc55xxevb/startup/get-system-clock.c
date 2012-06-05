@@ -31,7 +31,7 @@ uint32_t mpc55xx_get_system_clock(void)
   #ifdef MPC55XX_HAS_FMPLL
     volatile struct FMPLL_tag *fmpll = &FMPLL;
     union FMPLL_SYNSR_tag synsr = { .R = fmpll->SYNSR.R };
-    uint32_t reference_clock = MPC55XX_FMPLL_REF_CLOCK;
+    uint32_t reference_clock = MPC55XX_REFERENCE_CLOCK;
     bool pll_clock_mode = synsr.B.MODE != 0;
     bool crystal_or_external_reference_mode = synsr.B.PLLSEL != 0;
 
@@ -54,7 +54,7 @@ uint32_t mpc55xx_get_system_clock(void)
   #ifdef MPC55XX_HAS_FMPLL_ENHANCED
     volatile struct FMPLL_tag *fmpll = &FMPLL;
     union FMPLL_ESYNCR1_tag esyncr1 = { .R = fmpll->ESYNCR1.R };
-    uint32_t reference_clock = MPC55XX_FMPLL_REF_CLOCK;
+    uint32_t reference_clock = MPC55XX_REFERENCE_CLOCK;
     bool normal_mode = (esyncr1.B.CLKCFG & 0x4U) != 0;
 
     if (normal_mode) {
@@ -73,7 +73,7 @@ uint32_t mpc55xx_get_system_clock(void)
   #ifdef MPC55XX_HAS_MODE_CONTROL
     /* FIXME: Assumes normal mode and external oscillator */
     PLLD_CR_32B_tag cr = { . R = CGM.FMPLL [0].CR.R };
-    uint32_t xosc = MPC55XX_FMPLL_REF_CLOCK;
+    uint32_t xosc = MPC55XX_REFERENCE_CLOCK;
     uint32_t ldf = cr.B.NDIV;
     uint32_t idf = cr.B.IDF + 1;
     uint32_t odf = 2U << cr.B.ODF;
