@@ -43,10 +43,10 @@ void *POSIX_Init(
 
   rtems_workspace_greedy_allocate( NULL, 0 );
 
-  puts("Init: pthread_key_create - ENOMEM (Workspace not available)");
+  puts("Init: pthread_key_create - OK");
   empty_line();
   status = pthread_key_create( &Key_id[0], Key_destructor );
-  fatal_directive_check_status_only( status, ENOMEM, "no workspace available" );
+  fatal_directive_check_status_only( status, 0, "OK" );
 
   puts( "*** END OF POSIX KEY 01 TEST ***" );
   rtems_test_exit( 0 );

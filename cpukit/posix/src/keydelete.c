@@ -35,9 +35,9 @@ int pthread_key_delete(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
-
       _POSIX_Keys_Free_memory( the_key );
+      /* problem: should it done before _POSIX_Keys_Free_memory? */
+      _Objects_Close( &_POSIX_Keys_Information, &the_key->object );
 
       /*
        *  NOTE:  The destructor is not called and it is the responsibility
