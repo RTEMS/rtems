@@ -42,7 +42,7 @@
 /* configuration for UART 3 */
 #undef LPC24XX_CONFIG_UART_3
 
-/* peripheral clock divider for default EMCCLK (EMCCLK = CCLK / EMCCLKDIV) */
+/* clock divider for EMCCLK (EMCCLK = CCLK / EMCCLKDIV) */
 #undef LPC24XX_EMCCLKDIV
 
 /* enable ISSI IS42S32800B configuration for EMC */
@@ -81,7 +81,7 @@
 /* RTC oscillator frequency in Hz */
 #undef LPC24XX_OSCILLATOR_RTC
 
-/* peripheral clock divider for default PCLK (PCLK = CCLK / PCLKDIV) */
+/* clock divider for default PCLK (PCLK = CCLK / PCLKDIV) */
 #undef LPC24XX_PCLKDIV
 
 /* stop Ethernet controller at start-up to avoid DMA interference */
