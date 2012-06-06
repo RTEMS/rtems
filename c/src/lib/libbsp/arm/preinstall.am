@@ -35,7 +35,7 @@ $(PROJECT_LIB)/linkcmds.armv4: shared/startup/linkcmds.armv4 $(PROJECT_LIB)/$(di
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.armv4
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.armv4
 
-$(PROJECT_LIB)/linkcmds.armv7: shared/startup/linkcmds.armv7 $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.armv7
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.armv7
+$(PROJECT_LIB)/linkcmds.armv7m: shared/startup/linkcmds.armv7m $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.armv7m
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.armv7m
 
