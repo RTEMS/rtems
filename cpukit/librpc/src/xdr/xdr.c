@@ -458,16 +458,14 @@ xdr_enum(
 	enum_t *ep)
 {
 #ifndef lint
-	enum sizecheck { SIZEVAL };	/* used to find the size of an enum */
-
 	/*
 	 * enums are treated as ints
 	 */
-	if (sizeof (enum sizecheck) == sizeof (long)) {
+	if (sizeof (enum_t) == sizeof (long)) {
 		return (xdr_long(xdrs, (long *)ep));
-	} else if (sizeof (enum sizecheck) == sizeof (int)) {
+	} else if (sizeof (enum_t) == sizeof (int)) {
 		return (xdr_int(xdrs, (int *)ep));
-	} else if (sizeof (enum sizecheck) == sizeof (short)) {
+	} else if (sizeof (enum_t) == sizeof (short)) {
 		return (xdr_short(xdrs, (short *)ep));
 	} else {
 		return (FALSE);
