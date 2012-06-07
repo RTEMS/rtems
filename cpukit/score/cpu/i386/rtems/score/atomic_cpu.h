@@ -33,27 +33,27 @@ extern "C" {
 /**
  * @brief atomic operation unsigned integer type
  */
-typedef unsigned int ATOMIC_int;
+typedef unsigned int Atomic_int;
 
 /**
  * @brief atomic operation unsigned long integer type
  */
-typedef unsigned long ATOMIC_long;
+typedef unsigned long Atomic_long;
 
 /**
  * @brief atomic operation unsigned 32-bit integer type
  */
-typedef uint32_t ATOMIC_32;
+typedef uint32_t Atomic_32;
 
 /**
  * @brief atomic operation unsigned 64-bit integer type
  */
-typedef uint64_t ATOMIC_64;
+typedef uint64_t Atomic_64;
 
 /**
  * @brief atomic operation unsigned integer the size of a pointer type
  */
-typedef unsigned int ATOMIC_ptr;
+typedef unsigned int Atomic_ptr;
 
 #ifdef __cplusplus
 }
