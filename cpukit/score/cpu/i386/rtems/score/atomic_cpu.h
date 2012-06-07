@@ -53,7 +53,7 @@ typedef uint64_t Atomic_64;
 /**
  * @brief atomic operation unsigned integer the size of a pointer type
  */
-typedef unsigned int Atomic_ptr;
+typedef uintptr_t Atomic_ptr;
 
 #ifdef __cplusplus
 }
