@@ -27,17 +27,12 @@ extern "C" {
 /**
  *  This is the data Structure used to manage a POSIX key.
  *
- *  @note The Values is a table indexed by the index portion of the
- *        ID of the currently executing thread.
+ *  @note
  */
 typedef struct {
    /** This field is the Object control structure. */
    Objects_Control     Object;
-   /** This field points to the optional destructor method. */
-   void              (*destructor)( void * );
-   /** This field points to the values per thread. */
-   void              **Values[ OBJECTS_APIS_LAST + 1 ];
-}  POSIX_Keys_Control;
+ }  POSIX_Keys_Control;
 
 /**
  *  This is the data Structure used to manage a POSIX key and value
@@ -53,7 +48,7 @@ typdef struct {
   Object_Id Thread_id;
   /** This field points to the POSIX key value of specific thread */
   void *Value;
-} POSIX_Keys_Node;
+ }  POSIX_Keys_Rbtree_Node;
   
 /**
  *  The following defines the information control block used to manage
@@ -62,11 +57,31 @@ typdef struct {
 POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 
 /**
+ * The following defines the rbtree control block used to manage
+ * all key value
+ * 
+ * problem: is it a proper way to define a global variable? what's the
+ * exactly function of POSIX_EXTERN?
+ */
+POSIX_EXTERN RBTree_Control _POSIX_Keys_Rbtree;
+
+/**
  *  @brief _POSIX_Keys_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
 void _POSIX_Key_Manager_initialization(void);
+
+/**
+ * @brief _POSIX_Key_Rbtree_Compare_Function
+ *
+ * This routine compares the rbtree node
+ */
+
+int _POSIX_Key_Rbtree_Compare_Function(
+  const POSIX_Keys_Rbtree_Node *node1,
+  const POSIX_Keys_Rbtree_Node *node2
+);
 
 /**
  *  @brief _POSIX_Keys_Run_destructors
