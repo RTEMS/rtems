@@ -22,6 +22,46 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
+#include <rtems/score/rbtree.h>
+
+/*
+ * _POSIX_Key_Rbtree_Compare_Function
+ *
+ * DESCRIPTION:
+ * This routine compares the rbtree node
+ * by comparing POSIX key first and comparing thread id second 
+ *
+ * Input parameters: two rbtree node
+ *
+ * Output parameters: return 1 if first node
+ * has higher key than second, -1 if lower, 0 if equal,
+ * and for all the thread id is unique, then return 0 is impossible
+ */
+
+int _POSIX_Key_Rbtree_Compare_Function(
+  const Rbtree_Node *node1,
+  const Rbtree_Node *node2
+)
+{
+  pthread_key_t key1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_Node, Node)->Key;
+  pthread_key_t key2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_Node, Node)->Key;
+
+  Object_Id thread_id1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_Node, Node)->Thread_id;
+  Object_Id thread_id2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_Node, Node)->Thread_id;
+  
+  if ( key1 == key2 )
+    {
+      if (thread_id1 > thread_id2)
+	return 1;
+      else
+	return -1;
+    }
+  else if ( key1 > key2 )
+    return 1;
+  else
+    return -1;
+}
+  
 
 /*
  *  _POSIX_Key_Manager_initialization
@@ -52,5 +92,12 @@ void _POSIX_Key_Manager_initialization(void)
     false,                      /* true if this is a global object class */
     NULL                        /* Proxy extraction support callout */
 #endif
+  );
+
+  _RBTree_Initialize_empty( 
+    _POSIX_Keys_Rbtree,     /* the rbtree control block */
+    _POSIX_Key_Rbtree_Compare_Function,
+                            /* the rbtree compare function */
+    true                    /* true if each rbtree node is unique */
   );
 }
