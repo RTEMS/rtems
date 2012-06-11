@@ -1,8 +1,11 @@
+/**
+ *  @file
+ *
+ *  ISR Handler Initialization
+ */
+
 /*
- *  ISR Handler
- *
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,9 +41,9 @@ void _ISR_Handler_initialization( void )
   _ISR_Vector_table = _Workspace_Allocate_or_fatal_error(
      sizeof(ISR_Handler_entry) * ISR_NUMBER_OF_VECTORS
   );
-#endif
 
   _CPU_Initialize_vectors();
+#endif
 
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
 
