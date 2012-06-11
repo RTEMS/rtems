@@ -48,7 +48,7 @@ typdef struct {
   Object_Id Thread_id;
   /** This field points to the POSIX key value of specific thread */
   void *Value;
- }  POSIX_Keys_Rbtree_Node;
+ }  POSIX_Keys_Rbtree_node;
   
 /**
  *  The following defines the information control block used to manage
@@ -70,7 +70,7 @@ POSIX_EXTERN RBTree_Control _POSIX_Keys_Rbtree;
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _POSIX_Key_Manager_initialization(void);
+void _POSIX_Keys_Manager_initialization(void);
 
 /**
  * @brief _POSIX_Key_Rbtree_Compare_Function
@@ -79,8 +79,8 @@ void _POSIX_Key_Manager_initialization(void);
  */
 
 int _POSIX_Key_Rbtree_Compare_Function(
-  const POSIX_Keys_Rbtree_Node *node1,
-  const POSIX_Keys_Rbtree_Node *node2
+  const POSIX_Keys_Rbtree_node *node1,
+  const POSIX_Keys_Rbtree_node *node2
 );
 
 /**
