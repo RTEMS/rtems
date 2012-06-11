@@ -38,7 +38,7 @@
  * and for all the thread id is unique, then return 0 is impossible
  */
 
-int _POSIX_Key_Rbtree_Compare_Function(
+int _POSIX_Keys_Rbtree_compare_function(
   const Rbtree_Node *node1,
   const Rbtree_Node *node2
 )
@@ -96,7 +96,7 @@ void _POSIX_Keys_Manager_initialization(void)
 
   _RBTree_Initialize_empty( 
     _POSIX_Keys_Rbtree,     /* the rbtree control block */
-    _POSIX_Key_Rbtree_Compare_Function,
+    _POSIX_Keys_Rbtree_compare_function,
                             /* the rbtree compare function */
     true                    /* true if each rbtree node is unique */
   );

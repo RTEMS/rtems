@@ -32,6 +32,7 @@ extern "C" {
 typedef struct {
    /** This field is the Object control structure. */
    Objects_Control     Object;
+  void (*destructor) (void *);
  }  POSIX_Keys_Control;
 
 /**
@@ -78,7 +79,7 @@ void _POSIX_Keys_Manager_initialization(void);
  * This routine compares the rbtree node
  */
 
-int _POSIX_Key_Rbtree_Compare_Function(
+int _POSIX_Keys_Rbtree_compare_function(
   const POSIX_Keys_Rbtree_node *node1,
   const POSIX_Keys_Rbtree_node *node2
 );
