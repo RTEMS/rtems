@@ -366,6 +366,7 @@ score/cpu/powerpc/Makefile
 score/cpu/sh/Makefile
 score/cpu/sparc/Makefile
 score/cpu/sparc64/Makefile
+score/cpu/v850/Makefile
 score/cpu/no_cpu/Makefile
 posix/Makefile
 libblock/Makefile
