@@ -120,6 +120,11 @@
 
 #define CPU_UNROLL_ENQUEUE_PRIORITY TRUE
 
+/*
+ *  The ARM uses the PIC interrupt model.
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
+
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
 
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
@@ -387,8 +392,6 @@ void _CPU_Context_Initialize(
    } while (0);
 
 void _CPU_Initialize( void );
-
-#define _CPU_Initialize_vectors()
 
 void _CPU_ISR_install_vector(
   uint32_t vector,
