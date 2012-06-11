@@ -34,6 +34,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @brief Pico seconds @a ps to clock ticks for clock frequency @a f.
+ */
+#define LPC24XX_PS_TO_CLK(ps, f) \
+  (((((uint64_t) (ps)) * ((uint64_t) (f))) + 1000000000000ULL - 1ULL) \
+    / 1000000000000ULL)
+
+/**
+ * @brief Pico seconds @a ps to EMCCLK clock ticks adjusted by @a m.
+ */
+#define LPC24XX_PS_TO_EMCCLK(ps, m) \
+  (LPC24XX_PS_TO_CLK(ps, LPC24XX_EMCCLK) > (m) ? \
+    LPC24XX_PS_TO_CLK(ps, LPC24XX_EMCCLK) - (m) : 0)
+
 typedef struct {
   uint32_t refresh;
   uint32_t readconfig;
