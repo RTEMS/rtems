@@ -405,6 +405,20 @@ typedef struct CPU_Interrupt_frame {
 #endif /* ASM */
 
 /*
+ *  Does the CPU follow the simple vectored interrupt model?
+ *
+ *  If TRUE, then RTEMS allocates the vector table it internally manages.
+ *  If FALSE, then the BSP is assumed to allocate and manage the vector
+ *  table
+ *
+ *  PowerPC Specific Information:
+ *
+ *  The PowerPC and x86 were the first to use the PIC interrupt model.
+ *  They do not use the simple vectored interrupt model.
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
+
+/*
  *  Does RTEMS manage a dedicated interrupt stack in software?
  *
  *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
@@ -592,8 +606,6 @@ SCORE_EXTERN struct {
 /*
  *  ISR handler macros
  */
-
-#define _CPU_Initialize_vectors()
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
