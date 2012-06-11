@@ -23,6 +23,18 @@
 #include <bsp/start-config.h>
 #include <bsp/lpc24xx.h>
 
+/*
+ * FIXME: The NXP example code uses different values for the follwing two
+ * defines.  In the NXP example code they depend on the EMCCLK.  It is unclear
+ * how these values are determined.  The values from the NXP example code do
+ * not work.
+ */
+
+/* Use command delayed strategy */
+#define LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT 0x1
+
+#define LPC24XX_EMCDLYCTL_DEFAULT 0x1112
+
 BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
   lpc24xx_start_config_emc_dynamic [] = {
 #if defined(LPC24XX_EMC_MT48LC4M16A2)
@@ -31,8 +43,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     /* 15.6 us */
     .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
     /* Precharge command period 20 ns */
     .trp = 1,
@@ -73,8 +84,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     /* 15.6 us */
     .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
     /* 20ns */
     .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
@@ -107,7 +117,9 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .trrd = LPC24XX_PS_TO_EMCCLK(14000, 1),
 
     /* 14ns */
-    .tmrd = LPC24XX_PS_TO_EMCCLK(14000, 1)
+    .tmrd = LPC24XX_PS_TO_EMCCLK(14000, 1),
+
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #elif defined(LPC24XX_EMC_W9825G2JB75I)
   /* Dynamic Memory 0: Winbond W9825G2JB75I */
@@ -115,8 +127,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     /* 15.6 us */
     .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
     /* 20ns */
     .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
@@ -149,12 +160,14 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .trrd = 1,
 
     /* (n + 1) clock cycles == 2 * tCK (tRSC)*/
-    .tmrd = 1
+    .tmrd = 1,
+
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #elif defined(LPC24XX_EMC_K4S561632E)
   {
     .refresh = 35,
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
     .trp = 2,
     .tras = 4,
     .tsrex = 5,
@@ -172,8 +185,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     /* 15.6us */
     .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
     /* 20ns */
     .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
@@ -208,8 +220,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     /* (n + 1) clock cycles == 2 * tCK */
     .tmrd = 1,
 
-    /* FIXME */
-    .emcdlyctl = 0x1112
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #endif
 };
