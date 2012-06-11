@@ -39,6 +39,20 @@ extern "C" {
 #define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
 
 /*
+ *  Does the CPU follow the simple vectored interrupt model?
+ *
+ *  If TRUE, then RTEMS allocates the vector table it internally manages.
+ *  If FALSE, then the BSP is assumed to allocate and manage the vector
+ *  table
+ *
+ *  PowerPC Specific Information:
+ *
+ *  The PowerPC and x86 were the first to use the PIC interrupt model.
+ *  They do not use the simple vectored interrupt model.
+ */
+#define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
+
+/*
  *  i386 has an RTEMS allocated and managed interrupt stack.
  */
 
@@ -341,8 +355,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *     + temporarily restore interrupts (flash)
  *     + set a particular level
  */
-
-#define _CPU_Initialize_vectors()
 
 #define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
 
