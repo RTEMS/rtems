@@ -125,7 +125,8 @@ extern "C" {
  *
  *  MIPS Specific Information:
  *
- *  XXX document implementation including references if appropriate
+ *  Up to and including RTEMS 4.10, the MIPS port used simple vectored
+ *  interrupts. But this was changed to the PIC model after 4.10.
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
 
@@ -703,12 +704,6 @@ extern unsigned int mips_interrupt_number_of_vectors;
 /*
  *  ISR handler macros
  */
-
-/*
- *  Support routine to initialize the RTEMS vector table after it is allocated.
- */
-
-#define _CPU_Initialize_vectors()
 
 /*
  *  Declare the function that is present in the shared libcpu directory,

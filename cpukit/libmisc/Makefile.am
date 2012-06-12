@@ -104,6 +104,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_setenv.c shell/main_getenv.c shell/main_unsetenv.c \
     shell/main_mkrfs.c shell/main_debugrfs.c \
     shell/main_lsof.c \
+    shell/main_blkstats.c \
     shell/shell-wait-for-input.c
 
 if LIBNETWORKING

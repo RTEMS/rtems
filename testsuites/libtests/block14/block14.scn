@@ -1,0 +1,21 @@
+*** TEST BLOCK 14 ***
+action 0
+action 1
+action 2
+action 3
+action 4
+action 5
+action 6
+-------------------------------------------------------------------------------
+                               DEVICE STATISTICS
+----------------------+--------------------------------------------------------
+ READ HITS            | 2
+ READ MISSES          | 3
+ READ AHEAD TRANSFERS | 2
+ READ BLOCKS          | 5
+ READ ERRORS          | 1
+ WRITE TRANSFERS      | 2
+ WRITE BLOCKS         | 2
+ WRITE ERRORS         | 1
+----------------------+--------------------------------------------------------
+*** END OF TEST BLOCK 14 ***

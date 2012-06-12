@@ -1,8 +1,11 @@
+/**
+ *  @file
+ *
+ *  Initialization Wrapper for all Threads.
+ */
+
 /*
- *  Thread Handler
- *
- *
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -49,7 +52,7 @@
 #endif
 
 #if defined(__USE__MAIN__)
-  extern void _main(void);
+  extern void __main(void);
   #define INIT_NAME __main
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif

@@ -58,7 +58,7 @@
 typedef struct rtems_bdbuf_swapout_transfer
 {
   rtems_chain_control   bds;         /**< The transfer list of BDs. */
-  const rtems_disk_device *dd;       /**< The device the transfer is for. */
+  rtems_disk_device    *dd;          /**< The device the transfer is for. */
   bool                  syncing;     /**< The data is a sync'ing. */
   rtems_blkdev_request* write_req;   /**< The write request array. */
   uint32_t              bufs_per_bd; /**< Number of buffers per bd. */
@@ -113,7 +113,7 @@ typedef struct rtems_bdbuf_cache
   rtems_id            sync_lock;         /**< Sync calls block writes. */
   bool                sync_active;       /**< True if a sync is active. */
   rtems_id            sync_requester;    /**< The sync requester. */
-  const rtems_disk_device *sync_device;  /**< The device to sync and
+  rtems_disk_device  *sync_device;       /**< The device to sync and
                                           * BDBUF_INVALID_DEV not a device
                                           * sync. */
 
@@ -1223,7 +1223,7 @@ rtems_bdbuf_group_realloc (rtems_bdbuf_group* group, size_t new_bds_per_group)
 
 static void
 rtems_bdbuf_setup_empty_buffer (rtems_bdbuf_buffer *bd,
-                                const rtems_disk_device *dd,
+                                rtems_disk_device  *dd,
                                 rtems_blkdev_bnum   block)
 {
   bd->dd        = dd ;
@@ -1239,8 +1239,8 @@ rtems_bdbuf_setup_empty_buffer (rtems_bdbuf_buffer *bd,
 }
 
 static rtems_bdbuf_buffer *
-rtems_bdbuf_get_buffer_from_lru_list (const rtems_disk_device *dd,
-                                      rtems_blkdev_bnum block)
+rtems_bdbuf_get_buffer_from_lru_list (rtems_disk_device *dd,
+                                      rtems_blkdev_bnum  block)
 {
   rtems_chain_node *node = rtems_chain_first (&bdbuf_cache.lru);
 
@@ -1707,8 +1707,8 @@ rtems_bdbuf_sync_after_access (rtems_bdbuf_buffer *bd)
 }
 
 static rtems_bdbuf_buffer *
-rtems_bdbuf_get_buffer_for_read_ahead (const rtems_disk_device *dd,
-                                       rtems_blkdev_bnum block)
+rtems_bdbuf_get_buffer_for_read_ahead (rtems_disk_device *dd,
+                                       rtems_blkdev_bnum  block)
 {
   rtems_bdbuf_buffer *bd = NULL;
 
@@ -1732,8 +1732,8 @@ rtems_bdbuf_get_buffer_for_read_ahead (const rtems_disk_device *dd,
 }
 
 static rtems_bdbuf_buffer *
-rtems_bdbuf_get_buffer_for_access (const rtems_disk_device *dd,
-                                   rtems_blkdev_bnum block)
+rtems_bdbuf_get_buffer_for_access (rtems_disk_device *dd,
+                                   rtems_blkdev_bnum  block)
 {
   rtems_bdbuf_buffer *bd = NULL;
 
@@ -1874,9 +1874,9 @@ rtems_bdbuf_transfer_done (void* arg, rtems_status_code status)
 }
 
 static rtems_status_code
-rtems_bdbuf_execute_transfer_request (const rtems_disk_device *dd,
-                                      rtems_blkdev_request    *req,
-                                      bool                     cache_locked)
+rtems_bdbuf_execute_transfer_request (rtems_disk_device    *dd,
+                                      rtems_blkdev_request *req,
+                                      bool                  cache_locked)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int result = 0;
@@ -1898,6 +1898,21 @@ rtems_bdbuf_execute_transfer_request (const rtems_disk_device *dd,
     sc = RTEMS_IO_ERROR;
 
   rtems_bdbuf_lock_cache ();
+
+  /* Statistics */
+  if (req->req == RTEMS_BLKDEV_REQ_READ)
+  {
+    dd->stats.read_blocks += req->bufnum;
+    if (sc != RTEMS_SUCCESSFUL)
+      ++dd->stats.read_errors;
+  }
+  else
+  {
+    dd->stats.write_blocks += req->bufnum;
+    ++dd->stats.write_transfers;
+    if (sc != RTEMS_SUCCESSFUL)
+      ++dd->stats.write_errors;
+  }
 
   for (transfer_index = 0; transfer_index < req->bufnum; ++transfer_index)
   {
@@ -1936,9 +1951,9 @@ rtems_bdbuf_execute_transfer_request (const rtems_disk_device *dd,
 }
 
 static rtems_status_code
-rtems_bdbuf_execute_read_request (const rtems_disk_device *dd,
-                                  rtems_bdbuf_buffer      *bd,
-                                  uint32_t                 transfer_count)
+rtems_bdbuf_execute_read_request (rtems_disk_device  *dd,
+                                  rtems_bdbuf_buffer *bd,
+                                  uint32_t            transfer_count)
 {
   rtems_blkdev_request *req = NULL;
   rtems_blkdev_bnum media_block = bd->block;
@@ -2074,12 +2089,15 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
     switch (bd->state)
     {
       case RTEMS_BDBUF_STATE_CACHED:
+        ++dd->stats.read_hits;
         rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
         break;
       case RTEMS_BDBUF_STATE_MODIFIED:
+        ++dd->stats.read_hits;
         rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
         break;
       case RTEMS_BDBUF_STATE_EMPTY:
+        ++dd->stats.read_misses;
         rtems_bdbuf_set_read_ahead_trigger (dd, block);
         sc = rtems_bdbuf_execute_read_request (dd, bd, 1);
         if (sc == RTEMS_SUCCESSFUL)
@@ -2285,7 +2303,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
      */
     uint32_t bufs_per_bd = 0;
 
-    const rtems_disk_device *dd = transfer->dd;
+    rtems_disk_device *dd = transfer->dd;
 
     bufs_per_bd = dd->block_size / bdbuf_config.buffer_min;
 
@@ -2384,7 +2402,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
  *                    amount.
  */
 static void
-rtems_bdbuf_swapout_modified_processing (const rtems_disk_device **dd_ptr,
+rtems_bdbuf_swapout_modified_processing (rtems_disk_device  **dd_ptr,
                                          rtems_chain_control* chain,
                                          rtems_chain_control* transfer,
                                          bool                 sync_active,
@@ -3025,6 +3043,7 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
             dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
           }
 
+          ++dd->stats.read_ahead_transfers;
           rtems_bdbuf_execute_read_request (dd, bd, transfer_count);
         }
       }
@@ -3038,4 +3057,19 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
   }
 
   rtems_task_delete (RTEMS_SELF);
+}
+
+void rtems_bdbuf_get_device_stats (const rtems_disk_device *dd,
+                                   rtems_blkdev_stats      *stats)
+{
+  rtems_bdbuf_lock_cache ();
+  *stats = dd->stats;
+  rtems_bdbuf_unlock_cache ();
+}
+
+void rtems_bdbuf_reset_device_stats (rtems_disk_device *dd)
+{
+  rtems_bdbuf_lock_cache ();
+  memset (&dd->stats, 0, sizeof(dd->stats));
+  rtems_bdbuf_unlock_cache ();
 }

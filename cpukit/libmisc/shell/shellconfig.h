@@ -65,6 +65,7 @@ extern rtems_shell_cmd_t rtems_shell_LSOF_Command;
 extern rtems_shell_cmd_t rtems_shell_MOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_UNMOUNT_Command;
 extern rtems_shell_cmd_t rtems_shell_BLKSYNC_Command;
+extern rtems_shell_cmd_t rtems_shell_BLKSTATS_Command;
 extern rtems_shell_cmd_t rtems_shell_FDISK_Command;
 extern rtems_shell_cmd_t rtems_shell_DD_Command;
 extern rtems_shell_cmd_t rtems_shell_HEXDUMP_Command;
@@ -348,6 +349,11 @@ extern rtems_shell_alias_t *rtems_shell_Initial_aliases[];
          !defined(CONFIGURE_SHELL_NO_COMMAND_BLKSYNC)) || \
         defined(CONFIGURE_SHELL_COMMAND_BLKSYNC)
       &rtems_shell_BLKSYNC_Command,
+    #endif
+    #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
+         !defined(CONFIGURE_SHELL_NO_COMMAND_BLKSTATS)) || \
+        defined(CONFIGURE_SHELL_COMMAND_BLKSTATS)
+      &rtems_shell_BLKSTATS_Command,
     #endif
     #if (defined(CONFIGURE_SHELL_COMMANDS_ALL) && \
          !defined(CONFIGURE_SHELL_NO_COMMAND_FDISK)) || \
