@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/rbtree.h>
 #include <rtems/posix/key.h>
 
 /*
@@ -31,17 +32,23 @@ int pthread_setspecific(
 )
 {
   register POSIX_Keys_Control *the_key;
-  uint32_t                     api;
-  uint32_t                     index;
   Objects_Locations            location;
+  POSIX_Keys_Rbtree_node node;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      api   = _Objects_Get_API( _Thread_Executing->Object.id );
-      index = _Objects_Get_index( _Thread_Executing->Object.id );
-      the_key->Values[ api ][ index ] = (void *) value;
+      node = _Workspace_Allocate(sizeof(POSIX_Keys_Rbtree_node));
+      node.Key = key;
+      node.Thread_id = _Thread_Executing->Object.id;
+      node.Value = value;
+      /**
+       *  it disables interrupts to  ensure the atomicity
+       *  of the extract operation.
+       */
+      _RBTree_Insert(&_POSIX_Keys_Rbtree, &node.Node);
+      /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
       return 0;
 

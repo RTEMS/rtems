@@ -32,7 +32,7 @@ extern "C" {
 typedef struct {
    /** This field is the Object control structure. */
    Objects_Control     Object;
-  void (*destructor) (void *);
+   void (*destructor) (void *);
  }  POSIX_Keys_Control;
 
 /**
