@@ -57,23 +57,23 @@ typedef enum {
  * a type of ATOMIC_memory_barrier @a memory_barrier. The @a memory_barrier
  * shall not be ATOMIC_RELEASE_BARRIER.
  */
-Atomic_int _Atomic_Load_int(
+RTEMS_INLINE_ROUTINE Atomic_int _Atomic_Load_int(
   volatile Atomic_int *address,
   Atomic_Memory_barrier memory_barrier
 );
-Atomic_long _Atomic_Load_long(
+RTEMS_INLINE_ROUTINE Atomic_long _Atomic_Load_long(
   volatile Atomic_long *address,
   Atomic_Memory_barrier memory_barrier
 );
-Atomic_ptr _Atomic_Load_ptr(
+RTEMS_INLINE_ROUTINE Atomic_ptr _Atomic_Load_ptr(
   volatile Atomic_ptr *address,
   Atomic_Memory_barrier memory_barrier
 );
-Atomic_32 _Atomic_Load_32(
+RTEMS_INLINE_ROUTINE Atomic_32 _Atomic_Load_32(
   volatile Atomic_32 *address,
   Atomic_Memory_barrier memory_barrier
 );
-Atomic_64 _Atomic_Load_64(
+RTEMS_INLINE_ROUTINE Atomic_64 _Atomic_Load_64(
   volatile Atomic_64 *address,
   Atomic_Memory_barrier memory_barrier
 );
@@ -83,27 +83,27 @@ Atomic_64 _Atomic_Load_64(
  * address with a type of ATOMIC_memory_barrier @a memory_barrier. The @a 
  * memory_barrier shall not be ATOMIC_ACQUIRE_BARRIER.
  */
-void _Atomic_Store_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
   volatile Atomic_int *address,
   Atomic_int value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Store_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Store_long(
   volatile Atomic_long *address,
   Atomic_long value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Store_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Store_ptr(
   volatile Atomic_ptr *address,
   Atomic_ptr value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Store_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Store_32(
   volatile Atomic_32 *address,
   Atomic_32 value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Store_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Store_64(
   volatile Atomic_64 *address,
   Atomic_64 value,
   Atomic_Memory_barrier memory_barrier
@@ -113,27 +113,27 @@ void _Atomic_Store_64(
  * @brief Atomically load-add-store an atomic type value @a value into address
  * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
  */
-void _Atomic_Fetch_add_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_int(
   volatile Atomic_int *address,
   Atomic_int value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_add_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_long(
   volatile Atomic_long *address,
   Atomic_long value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_add_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_ptr(
   volatile Atomic_ptr *address,
   Atomic_ptr value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_add_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_32(
   volatile Atomic_32 *address,
   Atomic_32 value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_add_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_64(
   volatile Atomic_64 *address,
   Atomic_64 value,
   Atomic_Memory_barrier memory_barrier
@@ -143,27 +143,27 @@ void _Atomic_Fetch_add_64(
  * @brief Atomically load-sub-store an atomic type value @a value into address
  * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
  */
-void _Atomic_Fetch_sub_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_int(
   volatile Atomic_int *address,
   Atomic_int value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_sub_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_long(
   volatile Atomic_long *address,
   Atomic_long value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_sub_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_ptr(
   volatile Atomic_ptr *address,
   Atomic_ptr value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_sub_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_32(
   volatile Atomic_32 *address,
   Atomic_32 value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_sub_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_64(
   volatile Atomic_64 *address,
   Atomic_64 value,
   Atomic_Memory_barrier memory_barrier
@@ -173,27 +173,27 @@ void _Atomic_Fetch_sub_64(
  * @brief Atomically load-or-store an atomic type value @a value into address
  * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
  */
-void _Atomic_Fetch_or_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_int(
   volatile Atomic_int *address,
   Atomic_int value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_or_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_long(
   volatile Atomic_long *address,
   Atomic_long value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_or_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_ptr(
   volatile Atomic_ptr *address,
   Atomic_ptr value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_or_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_32(
   volatile Atomic_32 *address,
   Atomic_32 value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_or_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_64(
   volatile Atomic_64 *address,
   Atomic_64 value,
   Atomic_Memory_barrier memory_barrier
@@ -203,27 +203,27 @@ void _Atomic_Fetch_or_64(
  * @brief Atomically load-and-store an atomic type value @a value into address
  * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
  */
-void _Atomic_Fetch_and_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_int(
   volatile Atomic_int *address,
   Atomic_int value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_and_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_long(
   volatile Atomic_long *address,
   Atomic_long value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_and_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_ptr(
   volatile Atomic_ptr *address,
   Atomic_ptr value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_and_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_32(
   volatile Atomic_32 *address,
   Atomic_32 value,
   Atomic_Memory_barrier memory_barrier
 );
-void _Atomic_Fetch_and_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_64(
   volatile Atomic_64 *address,
   Atomic_64 value,
   Atomic_Memory_barrier memory_barrier
@@ -236,36 +236,38 @@ void _Atomic_Fetch_and_64(
  * nonzero otherwise. The operation uses a type of ATOMIC_memory_barrier
  * @a memory_barrier.
  */
-int _Atomic_Compare_exchange_int(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_int(
   volatile Atomic_int *address,
   Atomic_int old_value,
   Atomic_int new_value,
   Atomic_Memory_barrier memory_barrier
 );
-int _Atomic_Compare_exchange_long(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_long(
   volatile Atomic_long *address,
   Atomic_long old_value,
   Atomic_long new_value,
   Atomic_Memory_barrier memory_barrier
 );
-int _Atomic_Compare_exchange_ptr(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_ptr(
   volatile Atomic_ptr *address,
   Atomic_ptr old_value,
   Atomic_ptr new_value,
   Atomic_Memory_barrier memory_barrier  
 );
-int _Atomic_Compare_exchange_32(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_32(
   volatile Atomic_32 *address,
   Atomic_32 old_value,
   Atomic_32 new_value,
   Atomic_Memory_barrier memory_barrier
 );
-int _Atomic_Compare_exchange_64(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_64(
   volatile Atomic_64 *address,
   Atomic_64 old_value,
   Atomic_64 new_value,
   Atomic_Memory_barrier memory_barrier
 );
+
+#include <rtems/score/atomic.inl>
 
 #ifdef __cplusplus
 }
