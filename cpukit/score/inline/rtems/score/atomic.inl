@@ -29,7 +29,7 @@
 
 RTEMS_INLINE_ROUTINE ATOMIC_int _Atomic_Load_int(
   volatile ATOMIC_int *address,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE ATOMIC_int _Atomic_Load_int(
 
 RTEMS_INLINE_ROUTINE ATOMIC_long _Atomic_Load_long(
   volatile ATOMIC_long *address,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE ATOMIC_long _Atomic_Load_long(
 
 RTEMS_INLINE_ROUTINE ATOMIC_ptr _Atomic_Load_ptr(
   volatile ATOMIC_ptr *address,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
@@ -62,7 +62,7 @@ RTEMS_INLINE_ROUTINE ATOMIC_ptr _Atomic_Load_ptr(
 
 RTEMS_INLINE_ROUTINE ATOMIC_32 _Atomic_Load_32(
   volatile ATOMIC_32 *address,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE ATOMIC_32 _Atomic_Load_32(
 
 RTEMS_INLINE_ROUTINE ATOMIC_64 _Atomic_Load_64(
   volatile ATOMIC_64 *address,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
@@ -86,7 +86,7 @@ RTEMS_INLINE_ROUTINE ATOMIC_64 _Atomic_Load_64(
 RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
   volatile ATOMIC_int *address,
   ATOMIC_int value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_RELEASE_BARRIER == memory_barrier)
@@ -98,7 +98,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
 RTEMS_INLINE_ROUTINE void _Atomic_Store_long(
   volatile ATOMIC_long *address,
   ATOMIC_long value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_RELEASE_BARRIER == memory_barrier)
@@ -110,7 +110,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_long(
 RTEMS_INLINE_ROUTINE void _Atomic_Store_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_RELEASE_BARRIER == memory_barrier)
@@ -122,7 +122,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_ptr(
 RTEMS_INLINE_ROUTINE void _Atomic_Store_32(
   volatile ATOMIC_32 *address,
   ATOMIC_32 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_RELEASE_BARRIER == memory_barrier)
@@ -134,7 +134,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_32(
 RTEMS_INLINE_ROUTINE void _Atomic_Store_64(
   volatile ATOMIC_64 *address,
   ATOMIC_64 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_RELEASE_BARRIER == memory_barrier)
@@ -143,357 +143,357 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_64(
     return _CPU_Atomic_Store_64(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Add_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_int(
   volatile ATOMIC_int *address,
   ATOMIC_int value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_acq_int(address, value);
+    return _CPU_Atomic_Fetch_add_acq_int(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_rel_int(address, value);
+    return _CPU_Atomic_Fetch_add_rel_int(address, value);
   else
-    return _CPU_Atomic_Fetch_Add_int(address, value);
+    return _CPU_Atomic_Fetch_add_int(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Add_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_long(
   volatile ATOMIC_long *address,
   ATOMIC_long value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_acq_long(address, value);
+    return _CPU_Atomic_Fetch_add_acq_long(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_rel_long(address, value);
+    return _CPU_Atomic_Fetch_add_rel_long(address, value);
   else
-    return _CPU_Atomic_Fetch_Add_long(address, value);
+    return _CPU_Atomic_Fetch_add_long(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Add_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_acq_ptr(address, value);
+    return _CPU_Atomic_Fetch_add_acq_ptr(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_rel_ptr(address, value);
+    return _CPU_Atomic_Fetch_add_rel_ptr(address, value);
   else
-    return _CPU_Atomic_Fetch_Add_ptr(address, value);
+    return _CPU_Atomic_Fetch_add_ptr(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Add_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_32(
   volatile ATOMIC_32 *address,
   ATOMIC_32 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_acq_32(address, value);
+    return _CPU_Atomic_Fetch_add_acq_32(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_rel_32(address, value);
+    return _CPU_Atomic_Fetch_add_rel_32(address, value);
   else
-    return _CPU_Atomic_Fetch_Add_32(address, value);
+    return _CPU_Atomic_Fetch_add_32(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Add_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_64(
   volatile ATOMIC_64 *address,
   ATOMIC_64 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_acq_64(address, value);
+    return _CPU_Atomic_Fetch_add_acq_64(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Add_rel_64(address, value);
+    return _CPU_Atomic_Fetch_add_rel_64(address, value);
   else
-    return _CPU_Atomic_Fetch_Add_64(address, value);
+    return _CPU_Atomic_Fetch_add_64(address, value);
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_int(
   volatile ATOMIC_int *address,
   ATOMIC_int value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_acq_int(address, value);
+    return _CPU_Atomic_Fetch_sub_acq_int(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_rel_int(address, value);
+    return _CPU_Atomic_Fetch_sub_rel_int(address, value);
   else
-    return _CPU_Atomic_Fetch_Sub_int(address, value);
+    return _CPU_Atomic_Fetch_sub_int(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_long(
   volatile ATOMIC_long *address,
   ATOMIC_long value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_acq_long(address, value);
+    return _CPU_Atomic_Fetch_sub_acq_long(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_rel_long(address, value);
+    return _CPU_Atomic_Fetch_sub_rel_long(address, value);
   else
-    return _CPU_Atomic_Fetch_Sub_long(address, value);
+    return _CPU_Atomic_Fetch_sub_long(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_acq_ptr(address, value);
+    return _CPU_Atomic_Fetch_sub_acq_ptr(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_rel_ptr(address, value);
+    return _CPU_Atomic_Fetch_sub_rel_ptr(address, value);
   else
-    return _CPU_Atomic_Fetch_Sub_ptr(address, value);
+    return _CPU_Atomic_Fetch_sub_ptr(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_32(
   volatile ATOMIC_32 *address,
   ATOMIC_32 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_acq_32(address, value);
+    return _CPU_Atomic_Fetch_sub_acq_32(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_rel_32(address, value);
+    return _CPU_Atomic_Fetch_sub_rel_32(address, value);
   else
-    return _CPU_Atomic_Fetch_Sub_32(address, value);
+    return _CPU_Atomic_Fetch_sub_32(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_64(
   volatile ATOMIC_64 *address,
   ATOMIC_64 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_acq_64(address, value);
+    return _CPU_Atomic_Fetch_sub_acq_64(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Sub_rel_64(address, value);
+    return _CPU_Atomic_Fetch_sub_rel_64(address, value);
   else
-    return _CPU_Atomic_Fetch_Sub_64(address, value);
+    return _CPU_Atomic_Fetch_sub_64(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Or_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_int(
   volatile ATOMIC_int *address,
   ATOMIC_int value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_acq_int(address, value);
+    return _CPU_Atomic_Fetch_or_acq_int(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_rel_int(address, value);
+    return _CPU_Atomic_Fetch_or_rel_int(address, value);
   else
-    return _CPU_Atomic_Fetch_Or_int(address, value);
+    return _CPU_Atomic_Fetch_or_int(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Or_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_long(
   volatile ATOMIC_long *address,
   ATOMIC_long value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_acq_long(address, value);
+    return _CPU_Atomic_Fetch_or_acq_long(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_rel_long(address, value);
+    return _CPU_Atomic_Fetch_or_rel_long(address, value);
   else
-    return _CPU_Atomic_Fetch_Or_long(address, value);
+    return _CPU_Atomic_Fetch_or_long(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Or_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_acq_ptr(address, value);
+    return _CPU_Atomic_Fetch_or_acq_ptr(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_rel_ptr(address, value);
+    return _CPU_Atomic_Fetch_or_rel_ptr(address, value);
   else
-    return _CPU_Atomic_Fetch_Or_ptr(address, value);
+    return _CPU_Atomic_Fetch_or_ptr(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Or_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_32(
   volatile ATOMIC_32 *address,
   ATOMIC_32 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_acq_32(address, value);
+    return _CPU_Atomic_Fetch_or_acq_32(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_rel_32(address, value);
+    return _CPU_Atomic_Fetch_or_rel_32(address, value);
   else
-    return _CPU_Atomic_Fetch_Or_32(address, value);
+    return _CPU_Atomic_Fetch_or_32(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Or_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_64(
   volatile ATOMIC_64 *address,
   ATOMIC_64 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_acq_64(address, value);
+    return _CPU_Atomic_Fetch_or_acq_64(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_Or_rel_64(address, value);
+    return _CPU_Atomic_Fetch_or_rel_64(address, value);
   else
-    return _CPU_Atomic_Fetch_Or_64(address, value);
+    return _CPU_Atomic_Fetch_or_64(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_And_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_int(
   volatile ATOMIC_int *address,
   ATOMIC_int value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_acq_int(address, value);
+    return _CPU_Atomic_Fetch_and_acq_int(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_rel_int(address, value);
+    return _CPU_Atomic_Fetch_and_rel_int(address, value);
   else
-    return _CPU_Atomic_Fetch_And_int(address, value);
+    return _CPU_Atomic_Fetch_and_int(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_And_long(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_long(
   volatile ATOMIC_long *address,
   ATOMIC_long value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_acq_long(address, value);
+    return _CPU_Atomic_Fetch_and_acq_long(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_rel_long(address, value);
+    return _CPU_Atomic_Fetch_and_rel_long(address, value);
   else
-    return _CPU_Atomic_Fetch_And_long(address, value);
+    return _CPU_Atomic_Fetch_and_long(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_And_ptr(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_acq_ptr(address, value);
+    return _CPU_Atomic_Fetch_and_acq_ptr(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_rel_ptr(address, value);
+    return _CPU_Atomic_Fetch_and_rel_ptr(address, value);
   else
-    return _CPU_Atomic_Fetch_And_ptr(address, value);
+    return _CPU_Atomic_Fetch_and_ptr(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_And_32(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_32(
   volatile ATOMIC_32 *address,
   ATOMIC_32 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_acq_32(address, value);
+    return _CPU_Atomic_Fetch_and_acq_32(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_rel_32(address, value);
+    return _CPU_Atomic_Fetch_and_rel_32(address, value);
   else
-    return _CPU_Atomic_Fetch_And_32(address, value);
+    return _CPU_Atomic_Fetch_and_32(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_And_64(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_64(
   volatile ATOMIC_64 *address,
   ATOMIC_64 value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_acq_64(address, value);
+    return _CPU_Atomic_Fetch_and_acq_64(address, value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Fetch_And_rel_64(address, value);
+    return _CPU_Atomic_Fetch_and_rel_64(address, value);
   else
-    return _CPU_Atomic_Fetch_And_64(address, value);
+    return _CPU_Atomic_Fetch_and_64(address, value);
 }
 
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_Exchange_int(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_int(
   volatile ATOMIC_int *address,
   ATOMIC_int old_value,
   ATOMIC_int new_value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_acq_int(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_acq_int(address, old_value, new_value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_rel_int(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_rel_int(address, old_value, new_value);
   else
-    return _CPU_Atomic_Compare_Exchange_int(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_int(address, old_value, new_value);
 }
 
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_Exchange_long(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_long(
   volatile ATOMIC_long *address,
   ATOMIC_long old_value,
   ATOMIC_long new_value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_acq_long(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_acq_long(address, old_value, new_value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_rel_long(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_rel_long(address, old_value, new_value);
   else
-    return _CPU_Atomic_Compare_Exchange_long(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_long(address, old_value, new_value);
 }
 
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_Exchange_ptr(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_ptr(
   volatile ATOMIC_ptr *address,
   ATOMIC_ptr old_value,
   ATOMIC_ptr new_value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_acq_ptr(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_acq_ptr(address, old_value, new_value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_rel_ptr(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_rel_ptr(address, old_value, new_value);
   else
-    return _CPU_Atomic_Compare_Exchange_ptr(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_ptr(address, old_value, new_value);
 }
 
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_Exchange_32(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_32(
   volatile ATOMIC_32 *address,
   ATOMIC_32 old_value,  
   ATOMIC_32 new_value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_acq_32(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_acq_32(address, old_value, new_value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_rel_32(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_rel_32(address, old_value, new_value);
   else
-    return _CPU_Atomic_Compare_Exchange_32(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_32(address, old_value, new_value);
 }
 
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_Exchange_64(
+RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_64(
   volatile ATOMIC_64 *address,
   ATOMIC_64 old_value,
   ATOMIC_64 new_value,
-  ATOMIC_memory_barrier memory_barrier
+  Atomic_Memory_barrier memory_barrier
 )
 {
   if(ATOMIC_ACQUIRE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_acq_64(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_acq_64(address, old_value, new_value);
   else if(ATOMIC_RELEASE_BARRIER == memory_barrier)
-    return _CPU_Atomic_Compare_Exchange_rel_64(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_rel_64(address, old_value, new_value);
   else
-    return _CPU_Atomic_Compare_Exchange_64(address, old_value, new_value);
+    return _CPU_Atomic_Compare_exchange_64(address, old_value, new_value);
 }
