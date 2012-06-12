@@ -27,6 +27,9 @@
 
 #include <rtems/score/types.h>
 
+#ifndef _RTEMS_ATOMIC_INL
+#define _RTEMS_ATOMIC_INL
+
 RTEMS_INLINE_ROUTINE unsigned int _Atomic_Load_int(
   volatile unsigned int *address,
   Atomic_Memory_barrier memory_barrier
@@ -497,3 +500,6 @@ RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_64(
   else
     return _CPU_Atomic_Compare_exchange_64(address, old_value, new_value);
 }
+
+#endif
+/* end of include file */
