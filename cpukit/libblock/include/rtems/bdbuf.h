@@ -318,7 +318,7 @@ typedef struct rtems_bdbuf_buffer
     signed char                bal;    /**< The balance of the sub-tree */
   } avl;
 
-  const rtems_disk_device *dd;  /**< disk device */
+  rtems_disk_device *dd;        /**< disk device */
 
   rtems_blkdev_bnum block;      /**< block number on the device */
 
