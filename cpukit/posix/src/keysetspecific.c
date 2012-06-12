@@ -33,21 +33,31 @@ int pthread_setspecific(
 {
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
-  POSIX_Keys_Rbtree_node node;
+  POSIX_Keys_Rbtree_node *node;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      node = _Workspace_Allocate(sizeof(POSIX_Keys_Rbtree_node));
-      node.Key = key;
-      node.Thread_id = _Thread_Executing->Object.id;
-      node.Value = value;
+      node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
+      if ( !node )
+	/* problem: what should pthread_setspecific return? */
+	return ENOMEM;
+      
+      node->Key = key;
+      node->Thread_id = _Thread_Executing->Object.id;
+      node->Value = value;
       /**
        *  it disables interrupts to  ensure the atomicity
-       *  of the extract operation.
+       *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      _RBTree_Insert(&_POSIX_Keys_Rbtree, &node.Node);
+      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &node.Node ) )
+	{
+	  _Workspace_Free( node );
+	  /* problem: what should pthread_setspecific return? */
+	  return EAGAIN;
+	}
+      
       /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
       return 0;
