@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/rbtree.h>
 #include <rtems/posix/key.h>
 
 /*
@@ -31,17 +32,19 @@ void *pthread_getspecific(
 {
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
-  void                        *key_data;
+  POSIX_Keys_Rbtree_node      search_node;
+  POSIX_Keys_Rbtree_node     *p; 
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      
-      key_data = (void *) the_key->Values[ api ][ index ];
+      search_node.Key = key;
+      search_node.Thread_id = _Thread_Executing->Object.id;
+      p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.Node);
       /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
-      return key_data;
+      return p->Value;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */
