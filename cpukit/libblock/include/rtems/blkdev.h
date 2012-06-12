@@ -16,7 +16,9 @@
 
 #include <rtems.h>
 #include <rtems/diskdevs.h>
+#include <rtems/bspIo.h>
 #include <sys/ioctl.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -161,6 +163,8 @@ typedef struct rtems_blkdev_request {
 #define RTEMS_BLKIO_CAPABILITIES    _IO('B', 8)
 #define RTEMS_BLKIO_GETDISKDEV      _IOR('B', 9, rtems_disk_device *)
 #define RTEMS_BLKIO_PURGEDEV        _IO('B', 10)
+#define RTEMS_BLKIO_GETDEVSTATS     _IOR('B', 11, rtems_blkdev_stats *)
+#define RTEMS_BLKIO_RESETDEVSTATS   _IO('B', 12)
 
 /** @} */
 
@@ -206,6 +210,19 @@ static inline int rtems_disk_fd_sync(int fd)
 static inline int rtems_disk_fd_purge(int fd)
 {
   return ioctl(fd, RTEMS_BLKIO_PURGEDEV);
+}
+
+static inline int rtems_disk_fd_get_device_stats(
+  int fd,
+  rtems_blkdev_stats *stats
+)
+{
+  return ioctl(fd, RTEMS_BLKIO_GETDEVSTATS, stats);
+}
+
+static inline int rtems_disk_fd_reset_device_stats(int fd)
+{
+  return ioctl(fd, RTEMS_BLKIO_RESETDEVSTATS);
 }
 
 /**
@@ -359,6 +376,24 @@ rtems_status_code rtems_blkdev_create_partition(
   const char *device,
   rtems_blkdev_bnum block_begin,
   rtems_blkdev_bnum block_count
+);
+
+/**
+ * @brief Prints the block device statistics.
+ */
+void rtems_blkdev_print_stats(
+  const rtems_blkdev_stats *stats,
+  rtems_printk_plugin_t print,
+  void *print_arg
+);
+
+/**
+ * @brief Block device statistics command.
+ */
+void rtems_blkstats(
+  FILE *output,
+  const char *device,
+  bool reset
 );
 
 /** @} */

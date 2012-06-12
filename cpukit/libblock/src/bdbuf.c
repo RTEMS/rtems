@@ -1899,6 +1899,21 @@ rtems_bdbuf_execute_transfer_request (rtems_disk_device    *dd,
 
   rtems_bdbuf_lock_cache ();
 
+  /* Statistics */
+  if (req->req == RTEMS_BLKDEV_REQ_READ)
+  {
+    dd->stats.read_blocks += req->bufnum;
+    if (sc != RTEMS_SUCCESSFUL)
+      ++dd->stats.read_errors;
+  }
+  else
+  {
+    dd->stats.write_blocks += req->bufnum;
+    ++dd->stats.write_transfers;
+    if (sc != RTEMS_SUCCESSFUL)
+      ++dd->stats.write_errors;
+  }
+
   for (transfer_index = 0; transfer_index < req->bufnum; ++transfer_index)
   {
     rtems_bdbuf_buffer *bd = req->bufs [transfer_index].user;
@@ -2074,12 +2089,15 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
     switch (bd->state)
     {
       case RTEMS_BDBUF_STATE_CACHED:
+        ++dd->stats.read_hits;
         rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_CACHED);
         break;
       case RTEMS_BDBUF_STATE_MODIFIED:
+        ++dd->stats.read_hits;
         rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_ACCESS_MODIFIED);
         break;
       case RTEMS_BDBUF_STATE_EMPTY:
+        ++dd->stats.read_misses;
         rtems_bdbuf_set_read_ahead_trigger (dd, block);
         sc = rtems_bdbuf_execute_read_request (dd, bd, 1);
         if (sc == RTEMS_SUCCESSFUL)
@@ -3025,6 +3043,7 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
             dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
           }
 
+          ++dd->stats.read_ahead_transfers;
           rtems_bdbuf_execute_read_request (dd, bd, transfer_count);
         }
       }
@@ -3038,4 +3057,19 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
   }
 
   rtems_task_delete (RTEMS_SELF);
+}
+
+void rtems_bdbuf_get_device_stats (const rtems_disk_device *dd,
+                                   rtems_blkdev_stats      *stats)
+{
+  rtems_bdbuf_lock_cache ();
+  *stats = dd->stats;
+  rtems_bdbuf_unlock_cache ();
+}
+
+void rtems_bdbuf_reset_device_stats (rtems_disk_device *dd)
+{
+  rtems_bdbuf_lock_cache ();
+  memset (&dd->stats, 0, sizeof(dd->stats));
+  rtems_bdbuf_unlock_cache ();
 }

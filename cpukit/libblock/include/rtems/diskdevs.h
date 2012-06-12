@@ -87,6 +87,68 @@ typedef struct {
 } rtems_blkdev_read_ahead;
 
 /**
+ * @brief Block device statistics.
+ *
+ * Integer overflows in the statistic counters may happen.
+ */
+typedef struct {
+  /**
+   * @brief Read hit count.
+   * 
+   * A read hit occurs in the rtems_bdbuf_read() function in case the block is
+   * in the cached or modified state.
+   */
+  uint32_t read_hits;
+
+  /**
+   * @brief Read miss count.
+   * 
+   * A read miss occurs in the rtems_bdbuf_read() function in case the block is
+   * in the empty state and a read transfer must be initiated to read the data
+   * from the device.
+   */
+  uint32_t read_misses;
+
+  /**
+   * @brief Read-ahead transfer count.
+   *
+   * Each read-ahead transfer may read multiple blocks.
+   */
+  uint32_t read_ahead_transfers;
+
+  /**
+   * @brief Count of blocks transfered from the device.
+   */
+  uint32_t read_blocks;
+
+  /**
+   * @brief Read error count.
+   *
+   * Error count of transfers issued by the read or read-ahead requests.
+   */
+  uint32_t read_errors;
+
+  /**
+   * @brief Write transfer count.
+   *
+   * Each write transfer may write multiple blocks.
+   */
+  uint32_t write_transfers;
+
+  /**
+   * @brief Count of blocks transfered to the device.
+   */
+  uint32_t write_blocks;
+
+  /**
+   * @brief Write error count.
+   *
+   * Error count of transfers issued by write requests.
+   */
+  uint32_t write_errors;
+} rtems_blkdev_stats;
+
+/**
  * @brief Description of a disk device (logical and physical disks).
  *
  * An array of pointer tables to rtems_disk_device structures is maintained.
@@ -200,6 +262,11 @@ struct rtems_disk_device {
    * releases this disk.
    */
   bool deleted;
+
+  /**
+   * @brief Device statistics for this disk.
+   */
+  rtems_blkdev_stats stats;
 
   /**
    * @brief Read-ahead control for this disk.

@@ -662,6 +662,19 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd);
 rtems_status_code
 rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size);
 
+/**
+ * @brief Returns the block device statistics.
+ */
+void
+rtems_bdbuf_get_device_stats (const rtems_disk_device *dd,
+                              rtems_blkdev_stats      *stats);
+
+/**
+ * @brief Resets the block device statistics.
+ */
+void
+rtems_bdbuf_reset_device_stats (rtems_disk_device *dd);
+
 /** @} */
 
 #ifdef __cplusplus
