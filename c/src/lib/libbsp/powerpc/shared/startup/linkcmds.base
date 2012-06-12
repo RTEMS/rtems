@@ -34,6 +34,10 @@ bsp_section_xbarrier_align = DEFINED (bsp_section_xbarrier_align) ? bsp_section_
 bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
 bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1;
 
+MEMORY {
+	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
+}
+
 SECTIONS {
 	.start : {
 		bsp_section_start_begin = .;
@@ -379,6 +383,13 @@ SECTIONS {
 	.PPC.EMB.apuinfo 0 : { *(.PPC.EMB.apuinfo) }
 	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 
-	/* Catch all unknown sections */
-	.nirvana : { *(*) } > NIRVANA
+	/*
+	 * This is a RTEMS specific section to catch all unexpected input
+	 * sections.  In case you get an error like
+	 *   "section `.unexpected_sections' will not fit in region
+	 *   `UNEXPECTED_SECTIONS'"
+	 * you have to figure out the offending input section and add it to the
+	 * appropriate output section definition above.
+	 */
+	.unexpected_sections : { *(*) } > UNEXPECTED_SECTIONS
 }
