@@ -30,8 +30,6 @@ void *pthread_getspecific(
 )
 {
   register POSIX_Keys_Control *the_key;
-  uint32_t                     api;
-  uint32_t                     index;
   Objects_Locations            location;
   void                        *key_data;
 
@@ -39,9 +37,9 @@ void *pthread_getspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      api      = _Objects_Get_API( _Thread_Executing->Object.id );
-      index    = _Objects_Get_index( _Thread_Executing->Object.id );
+      
       key_data = (void *) the_key->Values[ api ][ index ];
+      /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
       return key_data;
 
