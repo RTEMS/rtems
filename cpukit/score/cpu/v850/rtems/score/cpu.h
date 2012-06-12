@@ -1154,10 +1154,23 @@ static inline uint32_t CPU_swap_u32(
   uint32_t value
 )
 {
-  unsigned int v, swapped;
+  unsigned int swapped;
 
-  v = value;
-  __asm__ __volatile__ ("bsw %0, %1" : "=r" (v), "=&r" (swapped) );
+  #if (V850_HAS_BYTE_SWAP_INSTRUCTION == 1)
+    unsigned int v;
+
+    v = value;
+    __asm__ __volatile__ ("bsw %0, %1" : "=r" (v), "=&r" (swapped) );
+  #else
+    uint32_t byte1, byte2, byte3, byte4;
+
+    byte4 = (value >> 24) & 0xff;
+    byte3 = (value >> 16) & 0xff;
+    byte2 = (value >> 8)  & 0xff;
+    byte1 =  value        & 0xff;
+
+    swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+  #endif
   return swapped;
 }
 
@@ -1174,10 +1187,16 @@ static inline uint32_t CPU_swap_u32(
  */
 static inline uint16_t CPU_swap_u16( uint16_t value )
 {
-  unsigned int v, swapped;
+  unsigned int swapped;
 
-  v = value;
-  __asm__ __volatile__ ("bsh %0, %1" : "=r" (v), "=&r" (swapped) );
+  #if (V850_HAS_BYTE_SWAP_INSTRUCTION == 1)
+    unsigned int v;
+
+    v = value;
+    __asm__ __volatile__ ("bsh %0, %1" : "=r" (v), "=&r" (swapped) );
+  #else
+    swapped = ((value & 0xff) << 8) | ((value >> 8) & 0xff);
+  #endif
   return swapped;
 }
 
