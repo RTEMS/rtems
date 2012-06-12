@@ -42,6 +42,8 @@ void *pthread_getspecific(
       search_node.Key = key;
       search_node.Thread_id = _Thread_Executing->Object.id;
       p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.Node);
+      if ( !p )
+	return NULL;
       /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
       return p->Value;
