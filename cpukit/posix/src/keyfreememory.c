@@ -20,8 +20,22 @@ void _POSIX_Keys_Free_memory(
   POSIX_Keys_Control *the_key
 )
 {
-  uint32_t            the_api;
+  POSIX_Keys_List_node *i;
 
-  for ( the_api = 1; the_api <= OBJECTS_APIS_LAST; the_api++ )
-    _Workspace_Free( the_key->Values[ the_api ] );
+  /** delete node both from rbtree and list.
+   *  can't use i = i->Next in the for loop, because i
+   *  is deallocated in the for body.
+   */
+  for ( i = the_key->Head ; i != NULL; i = the_key->Head )
+    {
+      /** problem: _RBTree_Extract() has no return, then can't check
+       *  wheck the deletion is successful.
+       */
+      _RBTree_Extract(&_POSIX_Keys_Rbtree, i->Rbnode->Node);
+      _Workspace_Free(i->Rbnode);
+
+      /** delete this node from node list */
+      the_key->Head = i->Next;
+      _Workspace_Free(i);
+    }
 }

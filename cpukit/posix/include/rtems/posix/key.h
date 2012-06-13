@@ -25,17 +25,6 @@ extern "C" {
 #endif
 
 /**
- *  This is the data Structure used to manage a POSIX key.
- *
- *  @note
- */
-typedef struct {
-   /** This field is the Object control structure. */
-   Objects_Control     Object;
-   void (*destructor) (void *);
- }  POSIX_Keys_Control;
-
-/**
  *  This is the data Structure used to manage a POSIX key and value
  *  in the rbtree structure
  *  
@@ -50,6 +39,31 @@ typdef struct {
   /** This field points to the POSIX key value of specific thread */
   void *Value;
  }  POSIX_Keys_Rbtree_node;
+  
+/**
+ * This is the data Structure used to manage a node of
+ * single list
+ */
+typedef struct POSIX_Keys_List_node_ {
+  /** This field is the pointer which points to the next node in the list */
+  struct POSIX_Keys_List_node_ *Next;
+  /** This field is the key of list node */
+  POSIX_Keys_Rbtree_node *Rbnode;
+ }  POSIX_Keys_List_node;
+    
+/**
+ *  This is the data Structure used to manage a POSIX key.
+ *
+ *  @note
+ */
+typedef struct {
+   /** This field is the Object control structure. */
+   Objects_Control     Object;
+   /** This field is the data destructor. */
+   void (*destructor) (void *);
+   /** This field is the head of key's node list */
+   POSIX_Keys_List_node *Head;
+ }  POSIX_Keys_Control;
   
 /**
  *  The following defines the information control block used to manage

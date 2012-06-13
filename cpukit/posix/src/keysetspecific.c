@@ -33,30 +33,38 @@ int pthread_setspecific(
 {
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
-  POSIX_Keys_Rbtree_node *node;
+  POSIX_Keys_Rbtree_node      *rb_node;
+  POSIX_Keys_List_node        *l_node;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
-      if ( !node )
+      rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
+      l_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
+      if ( !rb_node || !l_node )
 	/* problem: what should pthread_setspecific return? */
 	return ENOMEM;
       
-      node->Key = key;
-      node->Thread_id = _Thread_Executing->Object.id;
-      node->Value = value;
+      rb_node->Key = key;
+      rb_node->Thread_id = _Thread_Executing->Object.id;
+      rb_node->Value = value;
       /**
        *  it disables interrupts to  ensure the atomicity
        *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &node.Node ) )
+      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &rb_node.Node ) )
 	{
-	  _Workspace_Free( node );
+	  _Workspace_Free( rb_node );
+	  _Workspace_Free( l_node );
 	  /* problem: what should pthread_setspecific return? */
 	  return EAGAIN;
 	}
+
+      l_node->Rbnode = rb_node;
+      /** insert l_node to the list */
+      l_node->Next = the_key->Head;
+      the_key->Head = l_node;
       
       /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
