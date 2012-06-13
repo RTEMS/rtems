@@ -137,6 +137,15 @@ typedef struct {
   Timestamp_Control uptime;
 
   /**
+   * @brief Time of day seconds trigger.
+   *
+   * This value specifies the nanoseconds since the last time of day second.
+   * It is updated and evaluated in _TOD_Tickle_ticks().  It is set in
+   * _TOD_Set_with_timestamp().
+   */
+  uint32_t seconds_trigger;
+
+  /**
    *  @brief Indicates if the time of day is set.
    *
    *  This is true if the application has set the current

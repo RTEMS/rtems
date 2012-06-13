@@ -25,6 +25,7 @@ void _TOD_Set_with_timestamp(
   const Timestamp_Control *tod
 )
 {
+  uint32_t nanoseconds = _Timestamp_Get_nanoseconds( tod );
   Watchdog_Interval seconds_next = _Timestamp_Get_seconds( tod );
   Watchdog_Interval seconds_now;
 
@@ -39,6 +40,7 @@ void _TOD_Set_with_timestamp(
     _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, seconds_next - seconds_now );
 
   _TOD.now = *tod;
+  _TOD.seconds_trigger = nanoseconds;
   _TOD.is_set = true;
 
   _TOD_Activate();

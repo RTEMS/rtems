@@ -209,36 +209,6 @@ static inline void _Timestamp64_implementation_Add_to(
 #endif
 
 /**
- *  @brief Add to a Timestamp (At Clock Tick)
- *
- *  This routine adds two timestamps.  The second argument is added
- *  to the first.
- *
- *  @node This routine places a special requirement on the addition
- *        operation.  It must return the number of units that the
- *        seconds field changed as the result of the addition.  Since this
- *        operation is ONLY used as part of processing a clock tick,
- *        it is generally safe to assume that only one second changed.
- *
- *  @param[in] _time points to the base time to be added to
- *  @param[in] _add points to the timestamp to add to the first argument
- *
- *  @return This method returns the number of seconds @a time increased by.
- */
-static inline uint32_t _Timestamp64_Add_to_at_tick(
-  Timestamp64_Control *_time,
-  const Timestamp64_Control *_add
-)
-{
-  Timestamp64_Control _start = *_time / 1000000000L;
-  *_time += *_add;
-  if ( ((*_time) / 1000000000L) != _start ) {
-    return 1;
-  }
-  return 0;
-}
-
-/**
  *  @brief Convert Timestamp to Number of Ticks
  *
  *  This routine convert the @a time timestamp to the corresponding number
