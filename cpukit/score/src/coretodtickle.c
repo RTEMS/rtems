@@ -44,11 +44,11 @@ void _TOD_Tickle_ticks( void )
   _Watchdog_Ticks_since_boot += 1;
 
   /* Update the timespec format uptime */
-  _Timestamp_Add_to( &_TOD_Uptime, &tick );
+  _Timestamp_Add_to( &_TOD.uptime, &tick );
   /* we do not care how much the uptime changed */
 
   /* Update the timespec format TOD */
-  seconds = _Timestamp_Add_to_at_tick( &_TOD_Now, &tick );
+  seconds = _Timestamp_Add_to_at_tick( &_TOD.now, &tick );
   while ( seconds ) {
     _Watchdog_Tickle_seconds();
     seconds--;

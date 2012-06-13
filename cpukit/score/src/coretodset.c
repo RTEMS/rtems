@@ -38,8 +38,8 @@ void _TOD_Set_with_timestamp(
   else
     _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, seconds_next - seconds_now );
 
-  _TOD_Now = *tod;
-  _TOD_Is_set = true;
+  _TOD.now = *tod;
+  _TOD.is_set = true;
 
   _TOD_Activate();
   _Thread_Enable_dispatch();

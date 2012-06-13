@@ -28,7 +28,7 @@ rtems_status_code rtems_clock_get_seconds_since_epoch(
   if ( !the_interval )
     return RTEMS_INVALID_ADDRESS;
 
-  if ( !_TOD_Is_set )
+  if ( !_TOD.is_set )
     return RTEMS_NOT_DEFINED;
 
   *the_interval = _TOD_Seconds_since_epoch();

@@ -123,26 +123,29 @@ extern "C" {
 /**@{*/
 
 /**
- *  @brief Is the Time Of Day Set
- *
- *  This is true if the application has set the current
- *  time of day, and false otherwise.
+ *  @brief TOD control.
  */
-SCORE_EXTERN bool _TOD_Is_set;
+typedef struct {
+  /**
+   *  @brief Current time of day value.
+   */
+  Timestamp_Control now;
 
-/**
- *  @brief Current Time of Day (Timespec)
- *
- *  The following contains the current time of day.
- */
-SCORE_EXTERN Timestamp_Control _TOD_Now;
+  /**
+   *  @brief System uptime.
+   */
+  Timestamp_Control uptime;
 
-/**
- *  @brief Current Time of Day (Timespec)
- *
- *  The following contains the running uptime.
- */
-SCORE_EXTERN Timestamp_Control _TOD_Uptime;
+  /**
+   *  @brief Indicates if the time of day is set.
+   *
+   *  This is true if the application has set the current
+   *  time of day, and false otherwise.
+   */
+  bool is_set;
+} TOD_Control;
+
+SCORE_EXTERN TOD_Control _TOD;
 
 /**
  *  @brief Seconds Since RTEMS Epoch
@@ -151,7 +154,7 @@ SCORE_EXTERN Timestamp_Control _TOD_Uptime;
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
 #define _TOD_Seconds_since_epoch() \
-  _Timestamp_Get_seconds(&_TOD_Now)
+  _Timestamp_Get_seconds(&_TOD.now)
 
 /**
  *  @brief _TOD_Handler_initialization

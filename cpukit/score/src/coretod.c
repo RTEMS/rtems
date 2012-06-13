@@ -33,12 +33,12 @@
 void _TOD_Handler_initialization(void)
 {
   /* POSIX format TOD (timespec) */
-  _Timestamp_Set( &_TOD_Now, TOD_SECONDS_1970_THROUGH_1988, 0 );
+  _Timestamp_Set( &_TOD.now, TOD_SECONDS_1970_THROUGH_1988, 0 );
 
   /* Uptime (timespec) */
-  _Timestamp_Set_to_zero( &_TOD_Uptime );
+  _Timestamp_Set_to_zero( &_TOD.uptime );
 
   /* TOD has not been set */
-  _TOD_Is_set = false;
+  _TOD.is_set = false;
   _TOD_Activate();
 }
