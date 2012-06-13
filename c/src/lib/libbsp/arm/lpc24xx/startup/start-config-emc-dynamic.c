@@ -241,7 +241,8 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
     .mode = 0xa0000000 | (0x23 << (1 + 2 + 8))
   }
 #elif defined(LPC24XX_EMC_W9825G2JB75I) \
-  || defined(LPC24XX_EMC_IS42S32800D7)
+  || defined(LPC24XX_EMC_IS42S32800D7) \
+  || defined(LPC24XX_EMC_IS42S32800B)
   {
     .chip_select = (volatile lpc_emc_dynamic *) &EMC_DYN_CFG0,
 
@@ -260,23 +261,6 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
     .config = 0x680,
     .rascas = EMC_DYN_RASCAS_RAS(3) | EMC_DYN_RASCAS_CAS(3, 0),
     .mode = 0xa0000000 | (0x33 << 12)
-  }
-#elif defined(LPC24XX_EMC_IS42S32800B)
-  {
-    .chip_select = (volatile lpc_emc_dynamic *) &EMC_DYN_CFG0,
-
-    /* 256MBit, 8Mx32, 4 banks, row = 12, column = 9, RBC */
-    .config = 0x4480,
-
-    #if LPC24XX_EMCCLK == 72000000U
-      .rascas = EMC_DYN_RASCAS_RAS(3) | EMC_DYN_RASCAS_CAS(3, 0),
-      .mode = 0xa0000000 | (0x32 << (2 + 2 + 9))
-    #elif LPC24XX_EMCCLK == 60000000U
-      .rascas = EMC_DYN_RASCAS_RAS(2) | EMC_DYN_RASCAS_CAS(2, 0),
-      .mode = 0xa0000000 | (0x22 << (2 + 2 + 9))
-    #else
-      #error "unexpected EMCCLK"
-    #endif
   }
 #endif
 };
