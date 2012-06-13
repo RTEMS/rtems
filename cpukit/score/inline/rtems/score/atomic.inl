@@ -30,8 +30,8 @@
 #ifndef _RTEMS_ATOMIC_INL
 #define _RTEMS_ATOMIC_INL
 
-RTEMS_INLINE_ROUTINE unsigned int _Atomic_Load_int(
-  volatile unsigned int *address,
+RTEMS_INLINE_ROUTINE u_int _Atomic_Load_int(
+  volatile u_int *address,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -41,8 +41,8 @@ RTEMS_INLINE_ROUTINE unsigned int _Atomic_Load_int(
     return _CPU_Atomic_Load_int(address);
 }
 
-RTEMS_INLINE_ROUTINE unsigned long _Atomic_Load_long(
-  volatile unsigned long *address,
+RTEMS_INLINE_ROUTINE u_long _Atomic_Load_long(
+  volatile u_long *address,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -87,8 +87,8 @@ RTEMS_INLINE_ROUTINE uint64_t _Atomic_Load_64(
 
 
 RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
-  volatile unsigned int *address,
-  unsigned int value,
+  volatile u_int *address,
+  u_int value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -99,8 +99,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Store_long(
-  volatile unsigned long *address,
-  unsigned long value,
+  volatile u_long *address,
+  u_long value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -147,8 +147,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_64(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_int(
-  volatile unsigned int *address,
-  unsigned int value,
+  volatile u_int *address,
+  u_int value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -161,8 +161,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_int(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_long(
-  volatile unsigned long *address,
-  unsigned long value,
+  volatile u_long *address,
+  u_long value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -217,8 +217,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_64(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_int(
-  volatile unsigned int *address,
-  unsigned int value,
+  volatile u_int *address,
+  u_int value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -231,8 +231,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_int(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_long(
-  volatile unsigned long *address,
-  unsigned long value,
+  volatile u_long *address,
+  u_long value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -287,8 +287,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_64(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_int(
-  volatile unsigned int *address,
-  unsigned int value,
+  volatile u_int *address,
+  u_int value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -301,8 +301,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_int(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_long(
-  volatile unsigned long *address,
-  unsigned long value,
+  volatile u_long *address,
+  u_long value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -357,8 +357,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_64(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_int(
-  volatile unsigned int *address,
-  unsigned int value,
+  volatile u_int *address,
+  u_int value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -371,8 +371,8 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_int(
 }
 
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_long(
-  volatile unsigned long *address,
-  unsigned long value,
+  volatile u_long *address,
+  u_long value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -427,9 +427,9 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_64(
 }
 
 RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_int(
-  volatile unsigned int *address,
-  unsigned int old_value,
-  unsigned int new_value,
+  volatile u_int *address,
+  u_int old_value,
+  u_int new_value,
   Atomic_Memory_barrier memory_barrier
 )
 {
@@ -442,9 +442,9 @@ RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_int(
 }
 
 RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_long(
-  volatile unsigned long *address,
-  unsigned long old_value,
-  unsigned long new_value,
+  volatile u_long *address,
+  u_long old_value,
+  u_long new_value,
   Atomic_Memory_barrier memory_barrier
 )
 {
