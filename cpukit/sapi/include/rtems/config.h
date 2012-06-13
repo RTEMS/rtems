@@ -146,6 +146,13 @@ typedef struct {
    */
   uint32_t                       microseconds_per_tick;
 
+  /** This field specifies the number of nanoseconds which elapse
+   *  between clock ticks.  This value is derived from the
+   *  microseconds_per_tick field and provided to avoid calculation at
+   *  run-time.
+   */
+  uint32_t                       nanoseconds_per_tick;
+
   /** This field specifies the number of ticks in each task's timeslice.
    */
   uint32_t                       ticks_per_timeslice;
@@ -281,7 +288,13 @@ extern rtems_configuration_table  Configuration;
 #define rtems_configuration_get_milliseconds_per_tick() \
         (Configuration.microseconds_per_tick / 1000)
 #define rtems_configuration_get_nanoseconds_per_tick() \
-      (Configuration.microseconds_per_tick * 1000)
+        (Configuration.nanoseconds_per_tick)
+#define rtems_configuration_set_microseconds_per_tick( _us ) \
+        do { \
+          Configuration.microseconds_per_tick = (_us); \
+          Configuration.nanoseconds_per_tick = \
+            1000 * Configuration.microseconds_per_tick; \
+        } while (0)
 
 #define rtems_configuration_get_ticks_per_timeslice() \
         (Configuration.ticks_per_timeslice)
