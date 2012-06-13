@@ -21,14 +21,14 @@
  *  CPU dependent routine does nothing (but does exist).
  */
 
-#ifndef _RTEMS_ATOMIC_H
+#ifndef _RTEMS_SCORE_ATOMIC_H
 # error "Never use <rtems/score/atomic.inl> directly; include <rtems/score/atomic.h> instead."
 #endif
 
 #include <rtems/score/types.h>
 
-#ifndef _RTEMS_ATOMIC_INL
-#define _RTEMS_ATOMIC_INL
+#ifndef _RTEMS_SCORE_ATOMIC_INL
+#define _RTEMS_SCORE_ATOMIC_INL
 
 RTEMS_INLINE_ROUTINE u_int _Atomic_Load_int(
   volatile u_int *address,

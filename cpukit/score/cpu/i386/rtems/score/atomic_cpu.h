@@ -16,8 +16,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_ATOMIC_CPU_H
-#define _RTEMS_ATOMIC_CPU_H
+#ifndef _RTEMS_SCORE_ATOMIC_CPU_H
+#define _RTEMS_SCORE_ATOMIC_CPU_H
 
 #ifdef __cplusplus
 extern "C" {

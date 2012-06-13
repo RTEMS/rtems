@@ -16,8 +16,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_ATOMIC_H
-#define _RTEMS_ATOMIC_H
+#ifndef _RTEMS_SCORE_ATOMIC_H
+#define _RTEMS_SCORE_ATOMIC_H
 
 #include <rtems/score/atomic_cpu.h>
 
