@@ -40,30 +40,37 @@ extern "C" {
  */
 #define CPU_MODEL_NAME  "rtems_multilib"
 #define V850_HAS_FPU 0
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 0
 
 #elif defined(__v850e2v3__)
 #define CPU_MODEL_NAME  "v850e2v3"
 #define V850_HAS_FPU 1
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 1
 
 #elif defined(__v850e2__)
 #define CPU_MODEL_NAME  "v850e2"
 #define V850_HAS_FPU 0
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 1
 
 #elif defined(__v850es__)
 #define CPU_MODEL_NAME  "v850es"
 #define V850_HAS_FPU 0
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 1
 
 #elif defined(__v850e1__)
 #define CPU_MODEL_NAME  "v850e1"
 #define V850_HAS_FPU 0
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 1
 
 #elif defined(__v850e__)
 #define CPU_MODEL_NAME  "v850e"
 #define V850_HAS_FPU 0
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 1
 
 #else
 #define CPU_MODEL_NAME  "v850"
-#define V850_HAS_FPU     0
+#define V850_HAS_FPU 0
+#define V850_HAS_BYTE_SWAP_INSTRUCTION 0
 
 #endif
 

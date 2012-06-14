@@ -51,7 +51,7 @@ rtems_status_code rtems_task_wake_when(
 {
   Watchdog_Interval   seconds;
 
-  if ( !_TOD_Is_set )
+  if ( !_TOD.is_set )
     return RTEMS_NOT_DEFINED;
 
   if ( !time_buffer )

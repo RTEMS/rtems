@@ -18,6 +18,10 @@ bsp_rom_size = LENGTH (ROM);
 
 bsp_section_align = 32;
 
+MEMORY {
+	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
+}
+
 SECTIONS {
 
 	dpram : 
@@ -306,11 +310,14 @@ SECTIONS {
 	/DISCARD/ : {
 		*(.note.GNU-stack) *(.gnu_debuglink)
 	}
-
+        
 	/*
-	 * BSP: Catch all unknown sections
+	 * This is a RTEMS specific section to catch all unexpected input
+	 * sections.  In case you get an error like
+	 *   "section `.unexpected_sections' will not fit in region
+	 *   `UNEXPECTED_SECTIONS'"
+	 * you have to figure out the offending input section and add it to the
+	 * appropriate output section definition above.
 	 */
-	.nirvana : {
-		*(*)
-	} > NIRVANA
+	.unexpected_sections : { *(*) } > UNEXPECTED_SECTIONS
 }

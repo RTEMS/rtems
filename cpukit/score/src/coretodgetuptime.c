@@ -42,9 +42,9 @@ void _TOD_Get_uptime(
 
   /* assume time checked for NULL by caller */
 
-  /* _TOD_Uptime is in native timestamp format */
+  /* _TOD.uptime is in native timestamp format */
   _ISR_Disable( level );
-    up = _TOD_Uptime;
+    up = _TOD.uptime;
     nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 

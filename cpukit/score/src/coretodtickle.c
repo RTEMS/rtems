@@ -35,23 +35,27 @@
 void _TOD_Tickle_ticks( void )
 {
   Timestamp_Control tick;
-  uint32_t          seconds;
+  uint32_t          nanoseconds_per_tick;
+
+  nanoseconds_per_tick = rtems_configuration_get_nanoseconds_per_tick();
 
   /* Convert the tick quantum to a timestamp */
-  _Timestamp_Set( &tick, 0, rtems_configuration_get_nanoseconds_per_tick() );
+  _Timestamp_Set( &tick, 0, nanoseconds_per_tick );
 
   /* Update the counter of ticks since boot */
   _Watchdog_Ticks_since_boot += 1;
 
-  /* Update the timespec format uptime */
-  _Timestamp_Add_to( &_TOD_Uptime, &tick );
+  /* Update the uptime */
+  _Timestamp_Add_to( &_TOD.uptime, &tick );
   /* we do not care how much the uptime changed */
 
-  /* Update the timespec format TOD */
-  seconds = _Timestamp_Add_to_at_tick( &_TOD_Now, &tick );
-  while ( seconds ) {
+  /* Update the current TOD */
+  _Timestamp_Add_to( &_TOD.now, &tick );
+
+  _TOD.seconds_trigger += nanoseconds_per_tick;
+  if ( _TOD.seconds_trigger >= 1000000000UL ) {
+    _TOD.seconds_trigger -= 1000000000UL;
     _Watchdog_Tickle_seconds();
-    seconds--;
   }
 }
 

@@ -43,7 +43,7 @@ void bsp_start (void)
   arm_cpu_mode = 0x1f;
 
   /* configure clock period */
-  Configuration.microseconds_per_tick = 10000;  /* us */
+  rtems_configuration_set_microseconds_per_tick (10000);
 
   defaultExceptionHandler ();
 }

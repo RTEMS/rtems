@@ -50,7 +50,7 @@ rtems_status_code rtems_timer_fire_when(
   Objects_Locations    location;
   rtems_interval       seconds;
 
-  if ( !_TOD_Is_set )
+  if ( !_TOD.is_set )
     return RTEMS_NOT_DEFINED;
 
   if ( !_TOD_Validate( wall_time ) )

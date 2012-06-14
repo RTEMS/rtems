@@ -26,6 +26,10 @@ RamBase = bsp_ram_start;
 RamSize = bsp_ram_size;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
+MEMORY {
+	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
+}
+
 SECTIONS {
 	/*
 	 * BSP: MPC5200 registers
@@ -320,9 +324,12 @@ SECTIONS {
 	}
 
 	/*
-	 * BSP: Catch all unknown sections
+	 * This is a RTEMS specific section to catch all unexpected input
+	 * sections.  In case you get an error like
+	 *   "section `.unexpected_sections' will not fit in region
+	 *   `UNEXPECTED_SECTIONS'"
+	 * you have to figure out the offending input section and add it to the
+	 * appropriate output section definition above.
 	 */
-	.nirvana : {
-		*(*)
-	} > NIRVANA
+	.unexpected_sections : { *(*) } > UNEXPECTED_SECTIONS
 }

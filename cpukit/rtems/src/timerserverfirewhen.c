@@ -55,7 +55,7 @@ rtems_status_code rtems_timer_server_fire_when(
   if ( !timer_server )
     return RTEMS_INCORRECT_STATE;
 
-  if ( !_TOD_Is_set )
+  if ( !_TOD.is_set )
     return RTEMS_NOT_DEFINED;
 
   if ( !routine )

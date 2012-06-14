@@ -31,9 +31,9 @@ void _TOD_Get_as_timestamp(
 
   /* assume time checked for NULL by caller */
 
-  /* _TOD_Now is the native current time */
+  /* _TOD.now is the native current time */
   _ISR_Disable( level );
-    now = _TOD_Now;
+    now = _TOD.now;
     nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
   _ISR_Enable( level );
 
