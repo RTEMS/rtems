@@ -93,7 +93,7 @@ console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC24XX_CONFIG_CONSOLE
     {
       .sDeviceName = "/dev/ttyS0",
-      .deviceType = SERIAL_NS16550,
+      .deviceType = SERIAL_NS16550_WITH_FDR,
       .pDeviceFns = &ns16550_fns,
       .deviceProbe = NULL,
       .pDeviceFlow = NULL,
@@ -114,7 +114,7 @@ console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC24XX_CONFIG_UART_1
     {
       .sDeviceName = "/dev/ttyS1",
-      .deviceType = SERIAL_NS16550,
+      .deviceType = SERIAL_NS16550_WITH_FDR,
       .pDeviceFns = &ns16550_fns,
       .deviceProbe = lpc24xx_uart_probe_1,
       .pDeviceFlow = NULL,
@@ -135,7 +135,7 @@ console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC24XX_CONFIG_UART_2
     {
       .sDeviceName = "/dev/ttyS2",
-      .deviceType = SERIAL_NS16550,
+      .deviceType = SERIAL_NS16550_WITH_FDR,
       .pDeviceFns = &ns16550_fns,
       .deviceProbe = lpc24xx_uart_probe_2,
       .pDeviceFlow = NULL,
@@ -156,7 +156,7 @@ console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC24XX_CONFIG_UART_3
     {
       .sDeviceName = "/dev/ttyS3",
-      .deviceType = SERIAL_NS16550,
+      .deviceType = SERIAL_NS16550_WITH_FDR,
       .pDeviceFns = &ns16550_fns,
       .deviceProbe = lpc24xx_uart_probe_3,
       .pDeviceFlow = NULL,
