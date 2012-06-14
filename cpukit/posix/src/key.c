@@ -39,15 +39,15 @@
  */
 
 int _POSIX_Keys_Rbtree_compare_function(
-  const Rbtree_Node *node1,
-  const Rbtree_Node *node2
+  const RBTree_Node *node1,
+  const RBTree_Node *node2
 )
 {
   pthread_key_t key1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, Node)->Key;
   pthread_key_t key2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, Node)->Key;
 
-  Object_Id thread_id1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, Node)->Thread_id;
-  Object_Id thread_id2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, Node)->Thread_id;
+  Objects_Id thread_id1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, Node)->Thread_id;
+  Objects_Id thread_id2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, Node)->Thread_id;
   
   if ( key1 == key2 )
     {
@@ -95,7 +95,7 @@ void _POSIX_Keys_Manager_initialization(void)
   );
 
   _RBTree_Initialize_empty( 
-    _POSIX_Keys_Rbtree,     /* the rbtree control block */
+    &_POSIX_Keys_Rbtree,     /* the rbtree control block */
     _POSIX_Keys_Rbtree_compare_function,
                             /* the rbtree compare function */
     true                    /* true if each rbtree node is unique */

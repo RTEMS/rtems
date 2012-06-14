@@ -31,9 +31,9 @@ void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
 )
 {
-  Objects_Maximum thread_index = _Objects_Get_index( thread->Object.id );
-  Objects_APIs thread_api = _Objects_Get_API( thread->Object.id );
-  bool done = false;
+  //Objects_Maximum thread_index = _Objects_Get_index( thread->Object.id );
+  //Objects_APIs thread_api = _Objects_Get_API( thread->Object.id );
+  //bool done = false;
 
   /*
    *  The standard allows one to avoid a potential infinite loop and limit the
@@ -42,25 +42,26 @@ void _POSIX_Keys_Run_destructors(
    *
    *  Reference: 17.1.1.2 P1003.1c/Draft 10, p. 163, line 99.
    */
-  while ( !done ) {
-    Objects_Maximum index = 0;
-    Objects_Maximum max = _POSIX_Keys_Information.maximum;
+  
+  //while ( !done ) {
+  //Objects_Maximum index = 0;
+  //Objects_Maximum max = _POSIX_Keys_Information.maximum;
 
-    done = true;
+  //done = true;
 
-    for ( index = 1 ; index <= max ; ++index ) {
-      POSIX_Keys_Control *key = (POSIX_Keys_Control *)
-        _POSIX_Keys_Information.local_table [ index ];
+  //for ( index = 1 ; index <= max ; ++index ) {
+  //  POSIX_Keys_Control *key = (POSIX_Keys_Control *)
+  //    _POSIX_Keys_Information.local_table [ index ];
 
-      if ( key != NULL && key->destructor != NULL ) {
-        void *value = key->Values [ thread_api ][ thread_index ];
+  //  if ( key != NULL && key->destructor != NULL ) {
+	//        void *value = key->Values [ thread_api ][ thread_index ];
 
-        if ( value != NULL ) {
-          key->Values [ thread_api ][ thread_index ] = NULL;
-          (*key->destructor)( value );
-          done = false;
-        }
-      }
-    }
-  }
+	//        if ( value != NULL ) {
+	//          key->Values [ thread_api ][ thread_index ] = NULL;
+	//          (*key->destructor)( value );
+	//          done = false;
+	//}
+  //  }
+  //}
+  //  }
 }
