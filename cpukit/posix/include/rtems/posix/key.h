@@ -29,16 +29,18 @@ extern "C" {
  *  in the rbtree structure
  *  
  */
-typdef struct {
+ 
+typedef struct {
   /** This field is the rbtree node structure. */
   RBTree_Node Node;
   /** This field is the POSIX key used as an rbtree key */
   pthread_key_t Key;
   /** This field is the Thread id also used as an rbtree key */
-  Object_Id Thread_id;
+  Objects_Id Thread_id;
   /** This field points to the POSIX key value of specific thread */
   void *Value;
  }  POSIX_Keys_Rbtree_node;
+
   
 /**
  * This is the data Structure used to manage a node of
@@ -94,8 +96,8 @@ void _POSIX_Keys_Manager_initialization(void);
  */
 
 int _POSIX_Keys_Rbtree_compare_function(
-  const POSIX_Keys_Rbtree_node *node1,
-  const POSIX_Keys_Rbtree_node *node2
+  const RBTree_Node *node1,
+  const RBTree_Node *node2
 );
 
 /**

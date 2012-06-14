@@ -53,7 +53,7 @@ int pthread_setspecific(
        *  it disables interrupts to  ensure the atomicity
        *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &rb_node.Node ) )
+      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->Node) ) )
 	{
 	  _Workspace_Free( rb_node );
 	  _Workspace_Free( l_node );

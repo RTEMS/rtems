@@ -31,11 +31,11 @@ void _POSIX_Keys_Free_memory(
       /** problem: _RBTree_Extract() has no return, then can't check
        *  wheck the deletion is successful.
        */
-      _RBTree_Extract(&_POSIX_Keys_Rbtree, i->Rbnode->Node);
-      _Workspace_Free(i->Rbnode);
+      _RBTree_Extract( &_POSIX_Keys_Rbtree, &(i->Rbnode->Node) );
+      _Workspace_Free( i->Rbnode );
 
       /** delete this node from node list */
       the_key->Head = i->Next;
-      _Workspace_Free(i);
+      _Workspace_Free( i );
     }
 }

@@ -30,12 +30,11 @@ void *pthread_getspecific(
   pthread_key_t  key
 )
 {
-  register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
-  POSIX_Keys_Rbtree_node      search_node;
-  POSIX_Keys_Rbtree_node     *p; 
+  POSIX_Keys_Rbtree_node       search_node;
+  RBTree_Node                 *p; 
 
-  the_key = _POSIX_Keys_Get( key, &location );
+  _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -46,7 +45,7 @@ void *pthread_getspecific(
 	return NULL;
       /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
-      return p->Value;
+      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, Node )->Value;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */
