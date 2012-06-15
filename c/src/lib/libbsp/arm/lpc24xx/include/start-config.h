@@ -105,7 +105,10 @@ extern BSP_START_DATA_SECTION const size_t
   lpc24xx_start_config_emc_static_chip_count;
 
 extern BSP_START_DATA_SECTION const ARMV7M_MPU_Region
-  lpc24xx_start_config_mpu_regions [LPC24XX_MPU_REGION_COUNT];
+  lpc24xx_start_config_mpu_region [];
+
+extern BSP_START_DATA_SECTION const size_t
+  lpc24xx_start_config_mpu_region_count;
 
 #ifdef __cplusplus
 }
