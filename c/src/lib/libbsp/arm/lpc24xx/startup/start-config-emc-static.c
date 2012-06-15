@@ -87,8 +87,8 @@ BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
       /* 70ns (tAVQV, tELQV) */
       .waitpage = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* 45ns (tWLWH) */
-      .waitwr = LPC24XX_PS_TO_EMCCLK(45000, 2),
+      /* max(30ns (tWHWL) + 45ns (tWLWH), 70ns (tAVAV)) */
+      .waitwr = LPC24XX_PS_TO_EMCCLK(75000, 2),
 
       /* 25ns (tEHQZ) */
       .waitrun = LPC24XX_PS_TO_EMCCLK(25000, 1)
