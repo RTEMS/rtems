@@ -327,6 +327,30 @@ rtems_status_code lpc24xx_module_disable(
   );
 }
 
+bool lpc24xx_module_is_enabled(lpc24xx_module module)
+{
+  bool enabled = false;
+
+  if ((unsigned) module < LPC24XX_MODULE_COUNT) {
+    bool has_power = lpc24xx_module_table [module].power;
+
+    if (has_power) {
+      unsigned index = lpc24xx_module_table [module].index;
+      #ifdef ARM_MULTILIB_ARCH_V4
+        uint32_t pconp = PCONP;
+      #else
+        uint32_t pconp = LPC17XX_SCB.pconp;
+      #endif
+
+      enabled = (pconp & (1U << index)) != 0;
+    } else {
+      enabled = true;
+    }
+  }
+
+  return enabled;
+}
+
 typedef rtems_status_code (*lpc24xx_pin_visitor)(
   #ifdef ARM_MULTILIB_ARCH_V4
     volatile uint32_t *pinsel,

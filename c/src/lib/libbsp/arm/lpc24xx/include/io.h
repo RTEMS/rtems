@@ -147,6 +147,8 @@ rtems_status_code lpc24xx_module_disable(
   lpc24xx_module module
 );
 
+bool lpc24xx_module_is_enabled(lpc24xx_module module);
+
 rtems_status_code lpc24xx_gpio_config(
   unsigned index,
   lpc24xx_gpio_settings settings
