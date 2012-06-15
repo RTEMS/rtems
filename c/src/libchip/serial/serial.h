@@ -104,6 +104,8 @@ typedef struct _console_flow {
 typedef enum {
   SERIAL_MC68681,              /* Motorola MC68681 or Exar 88681 */
   SERIAL_NS16550,              /* National Semiconductor NS16550 */
+  SERIAL_NS16550_WITH_FDR,     /* National Semiconductor NS16550
+                                  with Fractional Divider Register (FDR) */
   SERIAL_Z85C30,               /* Zilog Z85C30 */
   SERIAL_CUSTOM                /* BSP specific driver */
 } console_devs;

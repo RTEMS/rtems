@@ -495,16 +495,15 @@ static BSP_START_TEXT_SECTION void lpc24xx_init_mpu(void)
 {
   #ifdef ARM_MULTILIB_ARCH_V7M
     volatile ARMV7M_MPU *mpu = _ARMV7M_MPU;
-    size_t n = sizeof(lpc24xx_start_config_mpu_regions)
-      / sizeof(lpc24xx_start_config_mpu_regions [0]);
+    size_t region_count = lpc24xx_start_config_mpu_region_count;
     size_t i = 0;
 
-    for (i = 0; i < n; ++i) {
-      mpu->rbar = lpc24xx_start_config_mpu_regions [i].rbar;
-      mpu->rasr = lpc24xx_start_config_mpu_regions [i].rasr;
+    for (i = 0; i < region_count; ++i) {
+      mpu->rbar = lpc24xx_start_config_mpu_region [i].rbar;
+      mpu->rasr = lpc24xx_start_config_mpu_region [i].rasr;
     }
 
-    if (n > 0) {
+    if (region_count > 0) {
       mpu->ctrl = ARMV7M_MPU_CTRL_ENABLE;
     }
   #endif

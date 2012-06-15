@@ -49,6 +49,7 @@ extern "C" {
 #define NS16550_LINE_STATUS      5
 #define NS16550_MODEM_STATUS     6
 #define NS16550_SCRATCH_PAD      7
+#define NS16550_FRACTIONAL_DIVIDER 10
 
 /*
  * Define serial port interrupt enable register structure.
@@ -104,13 +105,6 @@ extern "C" {
 #define SIX_BITS 0x1                    /* six bits per character */
 #define SEVEN_BITS 0x2                  /* seven bits per character */
 #define EIGHT_BITS 0x3                  /* eight bits per character */
-
-/*
- * Line speed divisor definition.
- */
-
-#define NS16550_Baud(_clock, _baud_rate) \
-  ((((_clock) == 0) ? 115200 : (_clock))/(_baud_rate*16))
 
 /*
  * Define serial port modem control register structure.

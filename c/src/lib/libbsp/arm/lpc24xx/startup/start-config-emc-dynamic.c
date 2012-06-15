@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -23,16 +23,27 @@
 #include <bsp/start-config.h>
 #include <bsp/lpc24xx.h>
 
+/*
+ * FIXME: The NXP example code uses different values for the follwing two
+ * defines.  In the NXP example code they depend on the EMCCLK.  It is unclear
+ * how these values are determined.  The values from the NXP example code do
+ * not work.
+ */
+
+/* Use command delayed strategy */
+#define LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT 0x1
+
+#define LPC24XX_EMCDLYCTL_DEFAULT 0x1112
+
 BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
   lpc24xx_start_config_emc_dynamic [] = {
 #if defined(LPC24XX_EMC_MT48LC4M16A2)
   /* Dynamic Memory 0: Micron M T48LC 4M16 A2 P 75 IT */
   {
-    /* Auto-refresh command every 15.6 us */
-    .refresh = 0x46,
+    /* 15.6 us */
+    .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
     /* Precharge command period 20 ns */
     .trp = 1,
@@ -68,93 +79,95 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .tmrd = 1
   }
 #elif defined(LPC24XX_EMC_IS42S32800D7)
-  /* Dynamic Memory 0: ISSI IS42S32800D7 at 51612800Hz (tCK = 19.4ns) */
+  /* Dynamic Memory 0: ISSI IS42S32800D7 */
   {
-    /* (n * 16) clock cycles -> 15.5us <= 15.6 us */
-    .refresh = 50,
+    /* 15.6 us */
+    .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
-    /* (n + 1) clock cycles -> 38.8ns >= 20ns */
-    .trp = 1,
+    /* 20ns */
+    .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
-    /* (n + 1) clock cycles -> 58.1ns >= 45ns */
-    .tras = 2,
+    /* 45ns */
+    .tras = LPC24XX_PS_TO_EMCCLK(45000, 1),
 
-    /* (n + 1) clock cycles -> 77.5ns >= 70ns (tXSR) */
-    .tsrex = 3,
+    /* 70ns (tXSR) */
+    .tsrex = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-    /* (n + 1) clock cycles -> 38.8ns >= 20ns (tRCD) */
-    .tapr = 1,
+    /* 20ns (tRCD) */
+    .tapr = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
     /* n clock cycles -> 38.8ns >= 35ns */
-    .tdal = 2,
+    .tdal = LPC24XX_PS_TO_EMCCLK(35000, 0),
 
-    /* (n + 1) clock cycles = 19.4ns >= 14ns (tDPL) */
-    .twr = 0,
+    /* 14ns (tDPL) */
+    .twr = LPC24XX_PS_TO_EMCCLK(14000, 1),
 
-    /* (n + 1) clock cycles = 77.5ns >= 67.5ns */
-    .trc = 3,
+    /* 67.5ns */
+    .trc = LPC24XX_PS_TO_EMCCLK(67500, 1),
 
-    /* (n + 1) clock cycles = 77.5ns >= 67.5ns (tRC) */
-    .trfc = 3,
+    /* 67.5ns (tRC) */
+    .trfc = LPC24XX_PS_TO_EMCCLK(67500, 1),
 
-    /* (n + 1) clock cycles = 77.5ns >= 70ns */
-    .txsr = 3,
+    /* 70ns */
+    .txsr = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-    /* (n + 1) clock cycles = 19.4ns >= 14ns */
-    .trrd = 0,
+    /* 14ns */
+    .trrd = LPC24XX_PS_TO_EMCCLK(14000, 1),
 
-    /* (n + 1) clock cycles = 19.4ns >= 14ns */
-    .tmrd = 0
+    /* 14ns */
+    .tmrd = LPC24XX_PS_TO_EMCCLK(14000, 1),
+
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #elif defined(LPC24XX_EMC_W9825G2JB75I)
-  /* Dynamic Memory 0: Winbond W9825G2JB75I at 51612800Hz (tCK = 19.4ns) */
+  /* Dynamic Memory 0: Winbond W9825G2JB75I */
   {
-    /* (n * 16) clock cycles -> 15.5us <= 15.6 us */
-    .refresh = 50,
+    /* 15.6 us */
+    .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-    /* Use command delayed strategy */
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
-    /* (n + 1) clock cycles -> 38.8ns >= 20ns */
-    .trp = 1,
+    /* 20ns */
+    .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
-    /* (n + 1) clock cycles -> 58.1ns >= 45ns */
-    .tras = 2,
+    /* 45ns */
+    .tras = LPC24XX_PS_TO_EMCCLK(45000, 1),
 
-    /* (n + 1) clock cycles -> 77.5ns >= 75ns (tXSR) */
-    .tsrex = 3,
+    /* 75ns (tXSR) */
+    .tsrex = LPC24XX_PS_TO_EMCCLK(75000, 1),
 
-    /* (n + 1) clock cycles -> 38.8ns >= 20ns (tRCD) */
-    .tapr = 1,
+    /* 20ns (tRCD) */
+    .tapr = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
-    /* n clock cycles -> 77.5ns >= tWR + tRP -> 2 * tCK + 20ns */
-    .tdal = 4,
+    /* tWR + tRP -> 2 * tCK + 20ns */
+    .tdal = 2 + LPC24XX_PS_TO_EMCCLK(20000, 0),
 
     /* (n + 1) clock cycles == 2 * tCK */
     .twr = 1,
 
-    /* (n + 1) clock cycles = 77.5ns >= 65ns */
-    .trc = 3,
+    /* 65ns */
+    .trc = LPC24XX_PS_TO_EMCCLK(65000, 1),
 
-    /* (n + 1) clock cycles = 77.5ns >= 65ns (tRC) */
-    .trfc = 3,
+    /* 65ns (tRC) */
+    .trfc = LPC24XX_PS_TO_EMCCLK(65000, 1),
 
-    /* (n + 1) clock cycles = 77.5ns >= 75ns */
-    .txsr = 3,
+    /* 75ns */
+    .txsr = LPC24XX_PS_TO_EMCCLK(50000, 1),
 
     /* (n + 1) clock cycles == 2 * tCK */
     .trrd = 1,
 
     /* (n + 1) clock cycles == 2 * tCK (tRSC)*/
-    .tmrd = 1
+    .tmrd = 1,
+
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #elif defined(LPC24XX_EMC_K4S561632E)
   {
     .refresh = 35,
-    .readconfig = 1,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
     .trp = 2,
     .tras = 4,
     .tsrex = 5,
@@ -168,71 +181,47 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .tmrd = 2
   }
 #elif defined(LPC24XX_EMC_IS42S32800B)
-  #if LPC24XX_EMCCLK == 72000000U
-    {
-      /* tCK = 13.888ns at 72MHz */
+  {
+    /* 15.6us */
+    .refresh = LPC24XX_PS_TO_EMCCLK(15600000, 0) / 16,
 
-      /* (n * 16) clock cycles -> 15.556us <= 15.6us */
-      .refresh = 70,
+    .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
-      .readconfig = 1,
+    /* 20ns */
+    .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
-      /* (n + 1) clock cycles -> 27.8ns >= 20ns */
-      .trp = 1,
+    /* 45ns */
+    .tras = LPC24XX_PS_TO_EMCCLK(45000, 1),
 
-      /* (n + 1) clock cycles -> 55.5ns >= 45ns */
-      .tras = 3,
+    /* 70ns (tRC) */
+    .tsrex = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 1) clock cycles -> 69.4ns >= 70ns (tRC) */
-      .tsrex = 5,
+    /* FIXME */
+    .tapr = LPC24XX_PS_TO_EMCCLK(40000, 1),
 
-      /* (n + 1) clock cycles -> 41.7ns >= FIXME */
-      .tapr = 2,
+    /* tWR + tRP -> 2 * tCK + 20ns */
+    .tdal = 2 + LPC24XX_PS_TO_EMCCLK(20000, 0),
 
-      /* n clock cycles -> 55.5ns >= tWR + tRP = 47.8ns */
-      .tdal = 4,
+    /* (n + 1) clock cycles == 2 * tCK */
+    .twr = 1,
 
-      /* (n + 1) clock cycles == 2 * tCK */
-      .twr = 1,
+    /* 70ns */
+    .trc = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 1) clock cycles -> 83.3ns >= 70ns */
-      .trc = 5,
+    /* 70ns */
+    .trfc = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 1) clock cycles -> 83.3ns >= 70ns */
-      .trfc = 5,
+    /* 70ns (tRC) */
+    .txsr = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 1) clock cycles -> 69.4ns >= 70ns (tRC) */
-      .txsr = 5,
+    /* 14ns */
+    .trrd = LPC24XX_PS_TO_EMCCLK(14000, 1),
 
-      /* (n + 1) clock cycles -> 27.8ns >= 14ns */
-      .trrd = 1,
+    /* (n + 1) clock cycles == 2 * tCK */
+    .tmrd = 1,
 
-      /* (n + 1) clock cycles == 2 * tCK */
-      .tmrd = 1,
-
-      /* FIXME */
-      .emcdlyctl = 0x1112
-    }
-  #elif LPC24XX_EMCCLK == 60000000U
-    {
-      .refresh = 0x3a,
-      .readconfig = 1,
-      .trp = 1,
-      .tras = 3,
-      .tsrex = 5,
-      .tapr = 2,
-      .tdal = 3,
-      .twr = 1,
-      .trc = 4,
-      .trfc = 4,
-      .txsr = 5,
-      .trrd = 1,
-      .tmrd = 1,
-      .emcdlyctl = 0x1112
-    }
-  #else
-    #error "unexpected EMCCLK"
-  #endif
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
+  }
 #endif
 };
 
@@ -252,7 +241,8 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
     .mode = 0xa0000000 | (0x23 << (1 + 2 + 8))
   }
 #elif defined(LPC24XX_EMC_W9825G2JB75I) \
-  || defined(LPC24XX_EMC_IS42S32800D7)
+  || defined(LPC24XX_EMC_IS42S32800D7) \
+  || defined(LPC24XX_EMC_IS42S32800B)
   {
     .chip_select = (volatile lpc_emc_dynamic *) &EMC_DYN_CFG0,
 
@@ -271,23 +261,6 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
     .config = 0x680,
     .rascas = EMC_DYN_RASCAS_RAS(3) | EMC_DYN_RASCAS_CAS(3, 0),
     .mode = 0xa0000000 | (0x33 << 12)
-  }
-#elif defined(LPC24XX_EMC_IS42S32800B)
-  {
-    .chip_select = (volatile lpc_emc_dynamic *) &EMC_DYN_CFG0,
-
-    /* 256MBit, 8Mx32, 4 banks, row = 12, column = 9, RBC */
-    .config = 0x4480,
-
-    #if LPC24XX_EMCCLK == 72000000U
-      .rascas = EMC_DYN_RASCAS_RAS(3) | EMC_DYN_RASCAS_CAS(3, 0),
-      .mode = 0xa0000000 | (0x32 << (2 + 2 + 9))
-    #elif LPC24XX_EMCCLK == 60000000U
-      .rascas = EMC_DYN_RASCAS_RAS(2) | EMC_DYN_RASCAS_CAS(2, 0),
-      .mode = 0xa0000000 | (0x22 << (2 + 2 + 9))
-    #else
-      #error "unexpected EMCCLK"
-    #endif
   }
 #endif
 };

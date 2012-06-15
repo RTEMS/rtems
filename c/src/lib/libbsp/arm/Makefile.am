@@ -10,7 +10,7 @@ include_bsp_HEADERS = shared/include/linker-symbols.h
 
 dist_project_lib_DATA = shared/startup/linkcmds.base
 dist_project_lib_DATA += shared/startup/linkcmds.armv4
-dist_project_lib_DATA += shared/startup/linkcmds.armv7
+dist_project_lib_DATA += shared/startup/linkcmds.armv7m
 
 EXTRA_DIST =
 

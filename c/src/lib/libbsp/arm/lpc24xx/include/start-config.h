@@ -34,6 +34,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @brief Pico seconds @a ps to clock ticks for clock frequency @a f.
+ */
+#define LPC24XX_PS_TO_CLK(ps, f) \
+  (((((uint64_t) (ps)) * ((uint64_t) (f))) + 1000000000000ULL - 1ULL) \
+    / 1000000000000ULL)
+
+/**
+ * @brief Pico seconds @a ps to EMCCLK clock ticks adjusted by @a m.
+ */
+#define LPC24XX_PS_TO_EMCCLK(ps, m) \
+  (LPC24XX_PS_TO_CLK(ps, LPC24XX_EMCCLK) > (m) ? \
+    LPC24XX_PS_TO_CLK(ps, LPC24XX_EMCCLK) - (m) : 0)
+
 typedef struct {
   uint32_t refresh;
   uint32_t readconfig;
@@ -91,7 +105,10 @@ extern BSP_START_DATA_SECTION const size_t
   lpc24xx_start_config_emc_static_chip_count;
 
 extern BSP_START_DATA_SECTION const ARMV7M_MPU_Region
-  lpc24xx_start_config_mpu_regions [LPC24XX_MPU_REGION_COUNT];
+  lpc24xx_start_config_mpu_region [];
+
+extern BSP_START_DATA_SECTION const size_t
+  lpc24xx_start_config_mpu_region_count;
 
 #ifdef __cplusplus
 }

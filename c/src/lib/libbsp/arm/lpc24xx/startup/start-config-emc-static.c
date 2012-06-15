@@ -65,7 +65,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
     }
   }
 #elif defined(LPC24XX_EMC_M29W320E70)
-  /* Static Memory 0: M29W320E70 at 51612800Hz (tCK = 19.4ns) */
+  /* Static Memory 0: M29W320E70 */
   {
     .chip_select = (volatile lpc_emc_static *) EMC_STA_BASE_0,
     .config = {
@@ -75,27 +75,27 @@ BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
        */
       .config = 0x81,
 
-      /* (n + 1) clock cycles -> 38.8ns >= 30ns (tWHWL) */
-      .waitwen = 1,
+      /* 30ns (tWHWL) */
+      .waitwen = LPC24XX_PS_TO_EMCCLK(30000, 1),
 
-      /* (n + 1) clock cycles -> 19.4ns >= 0ns */
-      .waitoen = 0,
+      /* 0ns */
+      .waitoen = LPC24XX_PS_TO_EMCCLK(0, 1),
 
-      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tAVQV, tELQV) */
-      .waitrd = 3,
+      /* 70ns (tAVQV, tELQV) */
+      .waitrd = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tAVQV, tELQV) */
-      .waitpage = 3,
+      /* 70ns (tAVQV, tELQV) */
+      .waitpage = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 2) clock cycles -> 58.1ns >= 45ns (tWLWH) */
-      .waitwr = 1,
+      /* max(30ns (tWHWL) + 45ns (tWLWH), 70ns (tAVAV)) */
+      .waitwr = LPC24XX_PS_TO_EMCCLK(75000, 2),
 
-      /* (n + 1) clock cycles -> 38.8ns >= 25ns (tEHQZ) */
-      .waitrun = 1
+      /* 25ns (tEHQZ) */
+      .waitrun = LPC24XX_PS_TO_EMCCLK(25000, 1)
     }
   }
 #elif defined(LPC24XX_EMC_SST39VF3201)
-  /* Static Memory 0: SST39VF3201 at 51612800Hz (tCK = 19.4ns) */
+  /* Static Memory 0: SST39VF3201 */
   {
     .chip_select = (volatile lpc_emc_static *) EMC_STA_BASE_0,
     .config = {
@@ -105,23 +105,23 @@ BSP_START_DATA_SECTION const lpc24xx_emc_static_chip_config
        */
       .config = 0x81,
 
-      /* (n + 1) clock cycles -> 19.4ns >= 0ns (tCS, tAS) */
-      .waitwen = 0,
+      /* 0ns (tCS, tAS) */
+      .waitwen = LPC24XX_PS_TO_EMCCLK(0, 1),
 
-      /* (n + 1) clock cycles -> 19.4ns >= 0ns (tOES) */
-      .waitoen = 0,
+      /* 0ns (tOES) */
+      .waitoen = LPC24XX_PS_TO_EMCCLK(0, 1),
 
-      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tRC) */
-      .waitrd = 2,
+      /* 70ns (tRC) */
+      .waitrd = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 1) clock cycles -> 77.5ns >= 70ns (tRC) */
-      .waitpage = 2,
+      /* 70ns (tRC) */
+      .waitpage = LPC24XX_PS_TO_EMCCLK(70000, 1),
 
-      /* (n + 2) clock cycles -> 38.8ns >= 20ns (tCHZ, TOHZ) */
-      .waitwr = 0,
+      /* 20ns (tCHZ, TOHZ) */
+      .waitwr = LPC24XX_PS_TO_EMCCLK(20000, 2),
 
-      /* (n + 1) clock cycles -> 38.8ns >= 20ns (tCHZ, TOHZ) */
-      .waitrun = 1
+      /* 20ns (tCHZ, TOHZ) */
+      .waitrun = LPC24XX_PS_TO_EMCCLK(20000, 1)
     }
   }
 #endif

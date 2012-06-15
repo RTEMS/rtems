@@ -95,6 +95,40 @@ console_fns ns16550_fns_polled = {
   false                                /* deviceOutputUsesInterrupts */
 };
 
+static uint32_t NS16550_GetBaudDivisor(const console_tbl *c, uint32_t baud)
+{
+  uint32_t clock = c->ulClock;
+  uint32_t baudDivisor = (clock != 0 ? clock : 115200) / (baud * 16);
+
+  if (c->deviceType == SERIAL_NS16550_WITH_FDR) {
+    uint32_t fractionalDivider = 0x10;
+    uint32_t err = baud;
+    uint32_t mulVal;
+    uint32_t divAddVal;
+
+    clock /= 16 * baudDivisor;
+    for (mulVal = 1; mulVal < 16; ++mulVal) {
+      for (divAddVal = 0; divAddVal < mulVal; ++divAddVal) {
+        uint32_t actual = (mulVal * clock) / (mulVal + divAddVal);
+        uint32_t newErr = actual > baud ? actual - baud : baud - actual;
+
+        if (newErr < err) {
+          err = newErr;
+          fractionalDivider = (mulVal << 4) | divAddVal;
+        }
+      }
+    }
+
+    (*c->setRegister)(
+      c->ulCtrlPort1,
+      NS16550_FRACTIONAL_DIVIDER,
+      fractionalDivider
+    );
+  }
+
+  return baudDivisor;
+}
+
 /*
  *  ns16550_init
  */
@@ -133,10 +167,7 @@ NS16550_STATIC void ns16550_init(int minor)
 
   /* Set the divisor latch and set the baud rate. */
 
-  ulBaudDivisor = NS16550_Baud(
-    (uint32_t) c->ulClock,
-    (uint32_t) ((uintptr_t)c->pDeviceParams)
-  );
+  ulBaudDivisor = NS16550_GetBaudDivisor(c, (uintptr_t) c->pDeviceParams);
   ucDataByte = SP_LINE_DLAB;
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
 
@@ -413,23 +444,18 @@ NS16550_STATIC int ns16550_set_attributes(
   setRegister_f           setReg;
   getRegister_f           getReg;
   uint32_t                Irql;
+  const console_tbl      *c = Console_Port_Tbl [minor];
 
-  pNS16550 = Console_Port_Tbl[minor]->ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor]->setRegister;
-  getReg   = Console_Port_Tbl[minor]->getRegister;
+  pNS16550 = c->ulCtrlPort1;
+  setReg   = c->setRegister;
+  getReg   = c->getRegister;
 
   /*
    *  Calculate the baud rate divisor
    */
 
-  baud_requested = t->c_cflag & CBAUD;
-  if (!baud_requested)
-    baud_requested = B9600;              /* default to 9600 baud */
-
-  ulBaudDivisor = NS16550_Baud(
-    (uint32_t) Console_Port_Tbl[minor]->ulClock,
-    rtems_termios_baud_to_number(baud_requested)
-  );
+  baud_requested = rtems_termios_baud_to_number(t->c_cflag);
+  ulBaudDivisor = NS16550_GetBaudDivisor(c, baud_requested);
 
   ucLineControl = 0;
 
