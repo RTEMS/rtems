@@ -30,7 +30,30 @@ extern "C" {
 
 /**@{*/
 
+/**
+ * @brief atomic operation unsigned integer type
+ */
+typedef unsigned int Atomic_int;
 
+/**
+ * @brief atomic operation unsigned long integer type
+ */
+typedef unsigned long Atomic_long;
+
+/**
+ * @brief atomic operation unsigned 32-bit integer type
+ */
+typedef uint32_t Atomic_32;
+
+/**
+ * @brief atomic operation unsigned 64-bit integer type
+ */
+typedef uint64_t Atomic_64;
+
+/**
+ * @brief atomic operation unsigned integer the size of a pointer type
+ */
+typedef uintptr_t Atomic_ptr;
 
 #ifdef __cplusplus
 }
