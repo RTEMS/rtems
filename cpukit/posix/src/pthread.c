@@ -227,6 +227,9 @@ static bool _POSIX_Threads_Create_extension(
     created
   );
 
+  /** initialize thread's key vaule node list head */
+  api->Head = NULL;
+  
   return true;
 }
 

@@ -21,6 +21,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/posix/key.h>
+#include <rtems/posix/threadsup.h>
 
 /*
  *  17.1.2 Thread-Specific Data Management, P1003.1c/Draft 10, p. 165
@@ -34,17 +35,29 @@ int pthread_setspecific(
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
   POSIX_Keys_Rbtree_node      *rb_node;
-  POSIX_Keys_List_node        *l_node;
+  POSIX_Keys_List_node        *lt_node1, *lt_node2;
 
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
-      l_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
-      if ( !rb_node || !l_node )
+      if ( !rb_node )
+	return ENOMEM;
+      
+      lt_node1 = _Workspace_Allocate( sizeof( POSIX_Keys_List_node ) );
+      if ( !lt_node1 ) {
+	_Workspace_Free( rb_node );
+	return ENOMEM;
+      }
+       
+      lt_node2 = _Workspace_Allocate( sizeof( POSIX_Keys_List_node ) );
+      if ( !lt_node2 ) {
+	_Workspace_Free( rb_node );
+	_Workspace_Free( lt_node1 );
 	/* problem: what should pthread_setspecific return? */
 	return ENOMEM;
+      }
       
       rb_node->Key = key;
       rb_node->Thread_id = _Thread_Executing->Object.id;
@@ -53,21 +66,24 @@ int pthread_setspecific(
        *  it disables interrupts to  ensure the atomicity
        *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->Node) ) )
-	{
+      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->Node) ) ) {
 	  _Workspace_Free( rb_node );
-	  _Workspace_Free( l_node );
+	  _Workspace_Free( lt_node1 );
+	  _Workspace_Free( lt_node2 );
 	  /* problem: what should pthread_setspecific return? */
 	  return EAGAIN;
 	}
-
-      l_node->Rbnode = rb_node;
-      /** insert l_node to the list */
-      l_node->Next = the_key->Head;
-      the_key->Head = l_node;
       
-      /* problem: where is the corresponding _Thread_Disable_dispatch()? */
-      _Thread_Enable_dispatch();
+      /** insert lt_node1 to the POSIX key control's list */
+      lt_node1->Rbnode = rb_node;
+      lt_node1->Next = the_key->Head;
+      the_key->Head = lt_node1;
+      
+      /** insert lt_node2 to the thread API extension's list */
+      lt_node2->Rbnode = rb_node;
+      lt_node2->Next = ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->Head;
+      ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->Head = lt_node2;
+       
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
