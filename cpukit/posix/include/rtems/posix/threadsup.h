@@ -19,6 +19,7 @@
 #include <sys/signal.h>
 #include <rtems/score/coresem.h>
 #include <rtems/score/tqdata.h>
+#include <rtems/posix/key.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,6 +70,9 @@ typedef struct {
   int                     cancelation_requested;
   /** This is the set of cancelation handlers. */
   Chain_Control           Cancellation_Handlers;
+  
+  /** This is the thread's key vaule node list head */
+  POSIX_Keys_List_node   *Head;
 
 } POSIX_API_Control;
 

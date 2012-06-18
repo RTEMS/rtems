@@ -20,22 +20,20 @@ void _POSIX_Keys_Free_memory(
   POSIX_Keys_Control *the_key
 )
 {
-  POSIX_Keys_List_node *i;
+  POSIX_Keys_List_node *p, *q;
 
   /** delete node both from rbtree and list.
-   *  can't use i = i->Next in the for loop, because i
-   *  is deallocated in the for body.
    */
-  for ( i = the_key->Head ; i != NULL; i = the_key->Head )
+  for ( p = the_key->Head ; p != NULL; p = q )
     {
       /** problem: _RBTree_Extract() has no return, then can't check
        *  wheck the deletion is successful.
        */
-      _RBTree_Extract( &_POSIX_Keys_Rbtree, &(i->Rbnode->Node) );
-      _Workspace_Free( i->Rbnode );
+      _RBTree_Extract( &_POSIX_Keys_Rbtree, &(p->Rbnode->Node) );
+      _Workspace_Free( p->Rbnode );
 
       /** delete this node from node list */
-      the_key->Head = i->Next;
-      _Workspace_Free( i );
+      q = p->Next;
+      _Workspace_Free( p );
     }
 }

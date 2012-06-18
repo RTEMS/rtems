@@ -16,7 +16,9 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
+#include <rtems/posix/threadsup.h>
 
 /*
  *  _POSIX_Keys_Run_destructors
@@ -31,37 +33,27 @@ void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
 )
 {
-  //Objects_Maximum thread_index = _Objects_Get_index( thread->Object.id );
-  //Objects_APIs thread_api = _Objects_Get_API( thread->Object.id );
-  //bool done = false;
-
-  /*
-   *  The standard allows one to avoid a potential infinite loop and limit the
-   *  number of iterations.  An infinite loop may happen if destructors set
-   *  thread specific data.  This can be considered dubious.
-   *
-   *  Reference: 17.1.1.2 P1003.1c/Draft 10, p. 163, line 99.
-   */
+  POSIX_Keys_List_node *p, *q;
+  void *value;
+  void (*destructor) (void *);
+  POSIX_Keys_Control *the_key;
+  Objects_Locations location;
   
-  //while ( !done ) {
-  //Objects_Maximum index = 0;
-  //Objects_Maximum max = _POSIX_Keys_Information.maximum;
+  p = ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->Head;
 
-  //done = true;
+  while ( p != NULL ) {
+    value = p->Rbnode->Value;
+    /** problem: this operation should take time...*/
+    the_key = _POSIX_Keys_Get( p->Rbnode->Key, &location );
+    destructor = the_key->destructor;
+    if ( destructor != NULL )
+      (*destructor)( value );
 
-  //for ( index = 1 ; index <= max ; ++index ) {
-  //  POSIX_Keys_Control *key = (POSIX_Keys_Control *)
-  //    _POSIX_Keys_Information.local_table [ index ];
+    /** delete the node from list */
+    q = p->Next;
+    _Workspace_Free( p );
+    p = q;
+  }
 
-  //  if ( key != NULL && key->destructor != NULL ) {
-	//        void *value = key->Values [ thread_api ][ thread_index ];
-
-	//        if ( value != NULL ) {
-	//          key->Values [ thread_api ][ thread_index ] = NULL;
-	//          (*key->destructor)( value );
-	//          done = false;
-	//}
-  //  }
-  //}
-  //  }
+  ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->Head = NULL;
 }
