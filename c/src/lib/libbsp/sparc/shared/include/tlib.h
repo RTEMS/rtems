@@ -35,6 +35,7 @@ struct tlib_drv {
 	void	(*restart)(struct tlib_dev *hand);
 	void	(*get_counter)(struct tlib_dev *hand, unsigned int *counter);
 	int	(*custom)(struct tlib_dev *hand, int cmd, void *arg);
+	int	(*int_pend)(struct tlib_dev *hand, int ack);
 };
 
 struct tlib_dev {
@@ -166,4 +167,11 @@ static inline void tlib_custom(void *hand, int cmd, void *arg)
 	struct tlib_dev *dev = hand;
 
 	dev->drv->custom(dev, cmd, arg);
+}
+
+static inline int tlib_interrupt_pending(void *hand, int ack)
+{
+	struct tlib_dev *dev = hand;
+
+	return dev->drv->int_pend(dev, ack);
 }

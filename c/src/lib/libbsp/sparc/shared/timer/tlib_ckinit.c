@@ -75,6 +75,14 @@ rtems_device_minor_number rtems_clock_minor;
 void Clock_isr(void *arg_unused)
 {
   /*
+   * Support for shared interrupts. Ack IRQ at source, only handle 
+   * interrupts generated from the tick-timer. Clearing pending bit
+   * is also needed for Clock_nanoseconds_since_last_tick() to work.
+   */
+  if ( tlib_interrupt_pending(Clock_handle, 1) == 0 )
+    return;
+
+  /*
    *  Accurate count of ISRs
    */
 
@@ -147,22 +155,30 @@ void Clock_exit( void )
 uint32_t Clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
+  int ip;
+
   if ( !Clock_handle )
     return 0;
 
   tlib_get_counter(Clock_handle, (unsigned int *)&clicks);
+  /* protect against timer counter underflow/overflow */
+  ip = tlib_interrupt_pending(Clock_handle, 0);
+  if (ip)
+    tlib_get_counter(Clock_handle, (unsigned int *)&clicks);
 
 #ifdef CLOCK_DRIVER_DONT_ASSUME_PRESCALER_1MHZ
   {
     /* Down counter. Calc from BaseFreq. */
     uint64_t tmp;
+    if (ip)
+      clicks += Clock_basefreq;
     tmp = ((uint64_t)clicks * 1000000000) / ((uint64_t)Clock_basefreq);
     return (uint32_t)tmp;
   }
 #else
   /* Down counter. Timer base frequency is initialized to 1 MHz */
   return (uint32_t)
-     (rtems_configuration_get_microseconds_per_tick() - clicks) * 1000;
+     ((rtems_configuration_get_microseconds_per_tick() << ip) - clicks) * 1000;
 #endif
 }
 
