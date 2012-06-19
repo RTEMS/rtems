@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsfseeko01
+
+directives:
+
+  TBD
+
+concepts:
+
+  - Ensure that fseeko() and ftello() can use huge positive off_t values.
