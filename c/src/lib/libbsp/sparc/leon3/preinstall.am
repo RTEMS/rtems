@@ -197,6 +197,10 @@ $(PROJECT_INCLUDE)/grspw.h: ../../sparc/shared/include/grspw.h $(PROJECT_INCLUDE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw.h
 
+$(PROJECT_INCLUDE)/grspw_pkt.h: ../../sparc/shared/include/grspw_pkt.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw_pkt.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw_pkt.h
+
 $(PROJECT_INCLUDE)/grspw_router.h: ../../sparc/shared/include/grspw_router.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/grspw_router.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/grspw_router.h

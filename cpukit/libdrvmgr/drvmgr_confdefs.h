@@ -42,6 +42,9 @@ extern void greth_register_drv(void);
 #define DRIVER_AMBAPP_GAISLER_GRSPW_REG {grspw_register_drv}
 extern void grspw_register_drv(void);
 
+#define DRIVER_AMBAPP_GAISLER_GRSPW2_REG {grspw2_register_drv}
+extern void grspw2_register_drv(void);
+
 #define DRIVER_AMBAPP_GAISLER_GRCAN_REG {grcan_register_drv}
 extern void grcan_register_drv(void);
 
@@ -154,6 +157,9 @@ struct drvmgr_drv_reg_func drvmgr_drivers[] = {
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRSPW
 	DRIVER_AMBAPP_GAISLER_GRSPW_REG,
+#endif
+#ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRSPW2
+	DRIVER_AMBAPP_GAISLER_GRSPW2_REG,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRCAN
 	DRIVER_AMBAPP_GAISLER_GRCAN_REG,
