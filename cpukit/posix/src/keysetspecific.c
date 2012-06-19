@@ -37,16 +37,20 @@ int pthread_setspecific(
   POSIX_Keys_Rbtree_node      *rb_node;
   POSIX_Keys_List_node        *lt_node1, *lt_node2;
 
+  /** _POSIX_Keys_Get() would call _Thread_Disable_dispatch()*/
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
-      if ( !rb_node )
+      if ( !rb_node ) {
+	_Thread_Enable_dispatch;
 	return ENOMEM;
+      }
       
       lt_node1 = _Workspace_Allocate( sizeof( POSIX_Keys_List_node ) );
       if ( !lt_node1 ) {
+	_Thread_Enable_dispatch;
 	_Workspace_Free( rb_node );
 	return ENOMEM;
       }
@@ -55,7 +59,7 @@ int pthread_setspecific(
       if ( !lt_node2 ) {
 	_Workspace_Free( rb_node );
 	_Workspace_Free( lt_node1 );
-	/* problem: what should pthread_setspecific return? */
+	_Thread_Enable_dispatch;
 	return ENOMEM;
       }
       
@@ -66,11 +70,12 @@ int pthread_setspecific(
        *  it disables interrupts to  ensure the atomicity
        *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      if (!_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->Node) ) ) {
+      if (_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->Node) ) ) {
 	  _Workspace_Free( rb_node );
 	  _Workspace_Free( lt_node1 );
 	  _Workspace_Free( lt_node2 );
 	  /* problem: what should pthread_setspecific return? */
+	  _Thread_Enable_dispatch;
 	  return EAGAIN;
 	}
       
@@ -83,7 +88,7 @@ int pthread_setspecific(
       lt_node2->Rbnode = rb_node;
       lt_node2->Next = ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->Head;
       ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->Head = lt_node2;
-       
+      _Thread_Enable_dispatch();
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

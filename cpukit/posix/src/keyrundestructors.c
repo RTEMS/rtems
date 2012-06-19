@@ -56,4 +56,5 @@ void _POSIX_Keys_Run_destructors(
   }
 
   ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->Head = NULL;
+  _Thread_Enable_dispatch();
 }
