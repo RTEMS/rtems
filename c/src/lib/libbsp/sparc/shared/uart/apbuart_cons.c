@@ -197,18 +197,30 @@ int apbuart_init1(struct drvmgr_dev *dev)
 
 	/* Clear HW regs, leave baudrate register as it is */
 	priv->regs->status = 0;
-	/* leave debug bit, and Transmitter/receiver if this is the debug UART */
+	/* leave debug bit, and Transmitter/receiver if this is the debug UART.
+	 * With old APBUARTs debug is enabled by setting LB and FL, since LB is
+	 * not reset we can not trust is, however since FL is reset we guess
+	 * that we are debugging old UART if both FL and LB is already set.
+	 */
 #ifdef LEON3
 	if (priv->regs == dbg_uart) {
 		db = priv->regs->ctrl & (LEON_REG_UART_CTRL_DB |
 					LEON_REG_UART_CTRL_RE |
 					LEON_REG_UART_CTRL_TE |
 					LEON_REG_UART_CTRL_FL |
+					LEON_REG_UART_CTRL_LB |
 					LEON_REG_UART_CTRL_PE |
 					LEON_REG_UART_CTRL_PS);
 	} else
 #endif
-		db = priv->regs->ctrl & LEON_REG_UART_CTRL_DB;
+	{
+		if (priv->regs->ctrl & (LEON_REG_UART_CTRL_FL |
+					LEON_REG_UART_CTRL_LB))
+			db = priv->regs->ctrl & (LEON_REG_UART_CTRL_FL |
+					LEON_REG_UART_CTRL_LB);
+		else					
+			db = priv->regs->ctrl & LEON_REG_UART_CTRL_DB;
+	}
 
 	priv->regs->ctrl = db;
 
