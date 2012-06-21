@@ -38,14 +38,14 @@ void *pthread_getspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      search_node.Key = key;
-      search_node.Thread_id = _Thread_Executing->Object.id;
-      p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.Node);
+      search_node.key = key;
+      search_node.thread_id = _Thread_Executing->Object.id;
+      p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.node);
       if ( !p )
 	return NULL;
       /* problem: where is the corresponding _Thread_Disable_dispatch()? */
       _Thread_Enable_dispatch();
-      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, Node )->Value;
+      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, node )->value;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */

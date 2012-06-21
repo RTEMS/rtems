@@ -72,7 +72,7 @@ typedef struct {
   Chain_Control           Cancellation_Handlers;
   
   /** This is the thread's key vaule node list head */
-  POSIX_Keys_List_node   *Head;
+  POSIX_Keys_List_node   *head;
 
 } POSIX_API_Control;
 
