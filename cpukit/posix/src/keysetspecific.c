@@ -63,14 +63,14 @@ int pthread_setspecific(
 	return ENOMEM;
       }
       
-      rb_node->Key = key;
-      rb_node->Thread_id = _Thread_Executing->Object.id;
-      rb_node->Value = value;
+      rb_node->key = key;
+      rb_node->thread_id = _Thread_Executing->Object.id;
+      rb_node->value = value;
       /**
        *  it disables interrupts to  ensure the atomicity
        *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      if (_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->Node) ) ) {
+      if (_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->node) ) ) {
 	  _Workspace_Free( rb_node );
 	  _Workspace_Free( lt_node1 );
 	  _Workspace_Free( lt_node2 );
@@ -80,14 +80,14 @@ int pthread_setspecific(
 	}
       
       /** insert lt_node1 to the POSIX key control's list */
-      lt_node1->Rbnode = rb_node;
-      lt_node1->Next = the_key->Head;
-      the_key->Head = lt_node1;
+      lt_node1->rbnode = rb_node;
+      lt_node1->next = the_key->head;
+      the_key->head = lt_node1;
       
       /** insert lt_node2 to the thread API extension's list */
-      lt_node2->Rbnode = rb_node;
-      lt_node2->Next = ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->Head;
-      ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->Head = lt_node2;
+      lt_node2->rbnode = rb_node;
+      lt_node2->next = ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->head;
+      ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->head = lt_node2;
       _Thread_Enable_dispatch();
       return 0;
 

@@ -24,16 +24,16 @@ void _POSIX_Keys_Free_memory(
 
   /** delete node both from rbtree and list.
    */
-  for ( p = the_key->Head ; p != NULL; p = q )
+  for ( p = the_key->head ; p != NULL; p = q )
     {
       /** problem: _RBTree_Extract() has no return, then can't check
        *  wheck the deletion is successful.
        */
-      _RBTree_Extract( &_POSIX_Keys_Rbtree, &(p->Rbnode->Node) );
-      _Workspace_Free( p->Rbnode );
+      _RBTree_Extract( &_POSIX_Keys_Rbtree, &(p->rbnode->node) );
+      _Workspace_Free( p->rbnode );
 
       /** delete this node from node list */
-      q = p->Next;
+      q = p->next;
       _Workspace_Free( p );
     }
 }

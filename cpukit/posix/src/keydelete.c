@@ -35,7 +35,7 @@ int pthread_key_delete(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
+      _Objects_Close( &_POSIX_Keys_Information, &the_key->object );
 
       _POSIX_Keys_Free_memory( the_key );
 

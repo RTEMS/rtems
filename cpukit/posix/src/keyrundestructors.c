@@ -39,22 +39,22 @@ void _POSIX_Keys_Run_destructors(
   POSIX_Keys_Control *the_key;
   Objects_Locations location;
   
-  p = ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->Head;
+  p = ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->head;
 
   while ( p != NULL ) {
-    value = p->Rbnode->Value;
+    value = p->rbnode->value;
     /** problem: this operation should take time...*/
-    the_key = _POSIX_Keys_Get( p->Rbnode->Key, &location );
+    the_key = _POSIX_Keys_Get( p->rbnode->key, &location );
     destructor = the_key->destructor;
     if ( destructor != NULL && value != NULL )
       (*destructor)( value );
 
     /** delete the node from list */
-    q = p->Next;
+    q = p->next;
     _Workspace_Free( p );
     p = q;
   }
 
-  ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->Head = NULL;
+  ((POSIX_API_Control *)(thread->API_Extensions[ THREAD_API_POSIX ]))->head = NULL;
   _Thread_Enable_dispatch();
 }

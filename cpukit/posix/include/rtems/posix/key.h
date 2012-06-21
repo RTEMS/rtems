@@ -32,13 +32,13 @@ extern "C" {
  
 typedef struct {
   /** This field is the rbtree node structure. */
-  RBTree_Node Node;
+  RBTree_Node node;
   /** This field is the POSIX key used as an rbtree key */
-  pthread_key_t Key;
+  pthread_key_t key;
   /** This field is the Thread id also used as an rbtree key */
-  Objects_Id Thread_id;
+  Objects_Id thread_id;
   /** This field points to the POSIX key value of specific thread */
-  void *Value;
+  void *value;
  }  POSIX_Keys_Rbtree_node;
 
   
@@ -48,9 +48,9 @@ typedef struct {
  */
 typedef struct POSIX_Keys_List_node_ {
   /** This field is the pointer which points to the next node in the list */
-  struct POSIX_Keys_List_node_ *Next;
+  struct POSIX_Keys_List_node_ *next;
   /** This field is the key of list node */
-  POSIX_Keys_Rbtree_node *Rbnode;
+  POSIX_Keys_Rbtree_node *rbnode;
  }  POSIX_Keys_List_node;
     
 /**
@@ -60,11 +60,11 @@ typedef struct POSIX_Keys_List_node_ {
  */
 typedef struct {
    /** This field is the Object control structure. */
-   Objects_Control     Object;
+   Objects_Control     object;
    /** This field is the data destructor. */
    void (*destructor) (void *);
    /** This field is the head of key's node list */
-   POSIX_Keys_List_node *Head;
+   POSIX_Keys_List_node *head;
  }  POSIX_Keys_Control;
   
 /**
