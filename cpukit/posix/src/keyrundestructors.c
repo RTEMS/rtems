@@ -46,7 +46,7 @@ void _POSIX_Keys_Run_destructors(
     /** problem: this operation should take time...*/
     the_key = _POSIX_Keys_Get( p->Rbnode->Key, &location );
     destructor = the_key->destructor;
-    if ( destructor != NULL )
+    if ( destructor != NULL && value != NULL )
       (*destructor)( value );
 
     /** delete the node from list */
