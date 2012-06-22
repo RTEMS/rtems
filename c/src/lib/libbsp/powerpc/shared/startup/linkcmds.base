@@ -85,6 +85,7 @@ SECTIONS {
 
 	.rodata : {
 		bsp_section_rodata_begin = .;
+		*(SORT(.bsp_rodata*))
 		*(.rodata .rodata.* .gnu.linkonce.r.*)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.rodata1 : {
@@ -250,7 +251,7 @@ SECTIONS {
 
 	.fast_data : {
 		bsp_section_fast_data_begin = .;
-		*(.bsp_fast_data)
+		*(SORT(.bsp_fast_data*))
 		bsp_section_fast_data_end = .;
 	} > REGION_FAST_DATA AT > REGION_FAST_DATA_LOAD
 	bsp_section_fast_data_size = bsp_section_fast_data_end - bsp_section_fast_data_begin;
@@ -259,6 +260,7 @@ SECTIONS {
 
 	.data : {
 		bsp_section_data_begin = .;
+		*(SORT(.bsp_data*))
 		*(.data .data.* .gnu.linkonce.d.*)
 		SORT(CONSTRUCTORS)
 	} > REGION_DATA AT > REGION_DATA_LOAD
@@ -330,7 +332,7 @@ SECTIONS {
 
 	.nocache : {
 		bsp_section_nocache_begin = .;
-		*(.bsp_nocache)
+		*(SORT(.bsp_nocache*))
 		bsp_section_nocache_end = .;
 	} > REGION_NOCACHE AT > REGION_NOCACHE_LOAD
 	bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
