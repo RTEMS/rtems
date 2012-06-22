@@ -1,0 +1,6 @@
+*** TEST FSFSEEKO 1 ***
+fopen: Success
+fseeko: Success
+ftello: Success
+fclose: Success
+*** END OF TEST FSFSEEKO 1 ***
