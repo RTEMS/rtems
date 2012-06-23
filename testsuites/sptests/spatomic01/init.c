@@ -14,23 +14,23 @@
 
 #define TEST_REPEAT 200000
 
-#define ATOMIC_LOAD_NO_BARRIER(TYPE)                  \
-{                                                     \
-  Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;         \
-  unsigned int i;                                     \
-  printf("_Atomic_Load_" #TYPE ": ");                 \
-                                                      \
-  a = _Atomic_Load_##TYPE(&t);                        \
-                                                      \
-  rtems_test_assert(a == t);                          \
-                                                      \
-  for (i = 0; i < TEST_REPEAT; i++){                  \
-    t = (Atomic_##TYPE)random();                      \
-    a = _Atomic_Load_##TYPE(&t);                      \
-    rtems_test_assert(a == t);                        \			
-  }                                                   \ 
-                                                      \
-  printf(" SUCCESS\n");                                 \
+#define ATOMIC_LOAD_NO_BARRIER(TYPE)                     \
+{                                                        \
+  Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
+  unsigned int i;                                        \
+  printf("_Atomic_Load_" #TYPE ": ");                    \
+                                                         \
+  a = _Atomic_Load_##TYPE(&t, ATOMIC_RELAXED_BARRIER);   \
+                                                         \
+  rtems_test_assert(a == t);                             \
+                                                         \
+  for (i = 0; i < TEST_REPEAT; i++){                     \
+    t = (Atomic_##TYPE)random();                         \
+    a = _Atomic_Load_##TYPE(&t, ATOMIC_RELAXED_BARRIER); \
+    rtems_test_assert(a == t);                           \			
+  }                                                      \ 
+                                                         \
+  printf(" SUCCESS\n");                                  \
 }
 
 rtems_task Init(
