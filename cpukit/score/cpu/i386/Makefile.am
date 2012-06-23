@@ -10,6 +10,7 @@ include_rtems_score_HEADERS += rtems/score/types.h
 include_rtems_score_HEADERS += rtems/score/interrupts.h
 include_rtems_score_HEADERS += rtems/score/registers.h
 include_rtems_score_HEADERS += rtems/score/idtr.h
+include_rtems_score_HEADERS += rtems/score/atomic_cpu.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S
