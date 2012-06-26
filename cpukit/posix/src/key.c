@@ -51,10 +51,12 @@ int _POSIX_Keys_Rbtree_compare_function(
   
   if ( key1 == key2 )
     {
-      if (thread_id1 > thread_id2)
+      if ( thread_id1 > thread_id2 )
 	return 1;
-      else
+      else if ( thread_id1 < thread_id2 )
 	return -1;
+      else
+	return 0;
     }
   else if ( key1 > key2 )
     return 1;
