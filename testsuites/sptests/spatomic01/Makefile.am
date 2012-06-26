@@ -1,6 +1,6 @@
 
 rtems_tests_PROGRAMS = spatomic01
-sprbtree01_SOURCES = init.c
+spatomic01_SOURCES = init.c tasks.c system.h ../../support/src/locked_print.c
 
 dist_rtems_tests_DATA = spatomic01.scn
 dist_rtems_tests_DATA += spatomic01.doc

@@ -216,7 +216,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_64(
     return _CPU_Atomic_Fetch_add_64(address, value);
 }
 
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_Sub_int(
+RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_int(
   volatile Atomic_int *address,
   Atomic_int value,
   Atomic_Memory_barrier memory_barrier

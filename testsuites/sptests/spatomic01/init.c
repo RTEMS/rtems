@@ -8,69 +8,77 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <tmacros.h>
-#include <rtems/atomic.h>
+#define CONFIGURE_INIT
+#include "system.h"
 
-#define TEST_REPEAT 200000
+void Loop() {
+  volatile int i;
 
-#define ATOMIC_LOAD_NO_BARRIER(TYPE)                     \
-{                                                        \
-  Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
-  unsigned int i;                                        \
-  printf("_Atomic_Load_" #TYPE ": ");                    \
-                                                         \
-  a = _Atomic_Load_##TYPE(&t, ATOMIC_RELAXED_BARRIER);   \
-                                                         \
-  rtems_test_assert(a == t);                             \
-                                                         \
-  for (i = 0; i < TEST_REPEAT; i++){                     \
-    t = (Atomic_##TYPE)random();                         \
-    a = _Atomic_Load_##TYPE(&t, ATOMIC_RELAXED_BARRIER); \
-    rtems_test_assert(a == t);                           \			
-  }                                                      \ 
-                                                         \
-  printf(" SUCCESS\n");                                  \
+  for (i=0; i<300000; i++);
 }
 
 rtems_task Init(
-    rtems_task_argument argument
-    )
+  rtems_task_argument argument
+)
 {
-  rtems_rbtree_control  rbtree1;
-  rtems_rbtree_node    *p;
-  test_node            node1, node2;
-  test_node            node_array[100];
-  int                  id;
-  int i;
+  int                i;
+  char               ch;
+  int                cpu_num;
+  rtems_id           id;
+  rtems_status_code  status;
+  bool               allDone;
 
-  puts( "\n\n*** TEST OF RTEMS ATOMIC LOAD API WITHOUT ANY MEMORY BARRIER***" );
+  /* XXX - Delay a bit to allow debug messages from
+ *    * startup to print.  This may need to go away when
+ *       * debug messages go away.
+ *          */
+  Loop();
+  locked_print_initialize();
 
-  ATOMIC_LOAD_NO_BARRIER(int);
+  /* Put start of test message */
+  locked_printf( "\n\n***  SMPatomic01 TEST ***\n" );
 
-  ATOMIC_LOAD_NO_BARRIER(long);
+  /* Initialize the TaskRan array */
+  for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+    TaskRan[i] = false;
+  }
 
-  ATOMIC_LOAD_NO_BARRIER(ptr);
+  /* Create and start tasks for each processor */
+  for ( i=1; i< rtems_smp_get_number_of_processors() ; i++ ) {
+    ch = '0' + i;
 
-  ATOMIC_LOAD_NO_BARRIER(32);
+    status = rtems_task_create(
+      rtems_build_name( 'T', 'A', ch, ' ' ),
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    directive_failed( status, "task create" );
 
-  ATOMIC_LOAD_NO_BARRIER(64);
+    cpu_num = bsp_smp_processor_id();
+    locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
+    status = rtems_task_start( id, Test_task, i+1 );
+    directive_failed( status, "task start" );
 
-  puts( "*** END OF RTEMS ATOMIC LOAD API WITHOUT ANY MEMORY BARRIER TEST ***" );
+    Loop();
+  }
 
-  rtems_test_exit(0);
+  /* Wait on the all tasks to run */
+  while (1) {
+    allDone = true;
+    for ( i=1; i<rtems_smp_get_number_of_processors() ; i++ ) {
+      if (TaskRan[i] == false)
+        allDone = false;
+    }
+    if (allDone) {
+      locked_printf( "*** END OF TEST SMPatomic01 ***\n" );
+      rtems_test_exit( 0 );
+    }
+  }
 }
-
-/* configuration information */
-
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS 1
-
-#define CONFIGURE_INIT
-#include <rtems/confdefs.h>
-
-/* global variables */
-
