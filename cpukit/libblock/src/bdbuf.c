@@ -61,7 +61,6 @@ typedef struct rtems_bdbuf_swapout_transfer
   rtems_disk_device    *dd;          /**< The device the transfer is for. */
   bool                  syncing;     /**< The data is a sync'ing. */
   rtems_blkdev_request* write_req;   /**< The write request array. */
-  uint32_t              bufs_per_bd; /**< Number of buffers per bd. */
 } rtems_bdbuf_swapout_transfer;
 
 /**
