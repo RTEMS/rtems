@@ -157,10 +157,10 @@ int mg_write(struct mg_connection *, const void *buf, size_t len);
 
 // Send data to the browser using printf() semantics.
 //
-// Works exactly like mg_write(), but allows to do message formatting.
-// Note that mg_printf() uses internal buffer of size IO_BUF_SIZE
-// (8 Kb by default) as temporary message storage for formatting. Do not
-// print data that is bigger than that, otherwise it will be truncated.
+// Works exactly like mg_write(), but allows to do message formatting.  Note
+// that mg_printf() uses internal buffer of size BUFSIZ defined in <stdio.h>
+// (8 KiB on most Linux systems) as temporary message storage for formatting.
+// Do not print data that is bigger than that, otherwise it will be truncated.
 int mg_printf(struct mg_connection *, const char *fmt, ...)
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
