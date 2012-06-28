@@ -33,8 +33,8 @@
  *
  * Input parameters: two rbtree node
  *
- * Output parameters: return 1 if first node
- * has higher key than second, -1 if lower, 0 if equal,
+ * Output parameters: return positive if first node
+ * has higher key than second, negative if lower, 0 if equal,
  * and for all the thread id is unique, then return 0 is impossible
  */
 
@@ -43,25 +43,22 @@ int _POSIX_Keys_Rbtree_compare_function(
   const RBTree_Node *node2
 )
 {
-  pthread_key_t key1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, node)->key;
-  pthread_key_t key2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, node)->key;
+  pthread_key_t key1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, rb_node)->key;
+  pthread_key_t key2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, rb_node)->key;
 
-  Objects_Id thread_id1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, node)->thread_id;
-  Objects_Id thread_id2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, node)->thread_id;
-  
-  if ( key1 == key2 )
-    {
-      if ( thread_id1 > thread_id2 )
-	return 1;
-      else if ( thread_id1 < thread_id2 )
-	return -1;
-      else
-	return 0;
-    }
-  else if ( key1 > key2 )
-    return 1;
-  else
-    return -1;
+  Objects_Id thread_id1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, rb_node)->thread_id;
+  Objects_Id thread_id2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, rb_node)->thread_id;
+
+  int diff = key1 - key2;
+  if ( diff )
+    return diff;
+  /**
+   * if thread_id1 or thread_id2 equals to 0, only key1 and key2 is valued.
+   * it enables us search node only by pthread_key_t type key.
+   */
+  if ( thread_id1 && thread_id2 )
+    return thread_id1 - thread_id2;
+  return 0;
 }
   
 

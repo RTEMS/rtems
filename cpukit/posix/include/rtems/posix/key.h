@@ -19,6 +19,7 @@
 
 #include <rtems/score/object.h>
 #include <rtems/score/rbtree.h>
+#include <rtems/score/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,8 +32,10 @@ extern "C" {
  */
  
 typedef struct {
+  /** This field is the chain node structure. */
+  Chain_Node ch_node;
   /** This field is the rbtree node structure. */
-  RBTree_Node node;
+  RBTree_Node rb_node;
   /** This field is the POSIX key used as an rbtree key */
   pthread_key_t key;
   /** This field is the Thread id also used as an rbtree key */
@@ -41,18 +44,6 @@ typedef struct {
   void *value;
  }  POSIX_Keys_Rbtree_node;
 
-  
-/**
- * This is the data Structure used to manage a node of
- * single list
- */
-typedef struct POSIX_Keys_List_node_ {
-  /** This field is the pointer which points to the next node in the list */
-  struct POSIX_Keys_List_node_ *next;
-  /** This field is the key of list node */
-  POSIX_Keys_Rbtree_node *rbnode;
- }  POSIX_Keys_List_node;
-    
 /**
  *  This is the data Structure used to manage a POSIX key.
  *
@@ -63,8 +54,6 @@ typedef struct {
    Objects_Control     object;
    /** This field is the data destructor. */
    void (*destructor) (void *);
-   /** This field is the head of key's node list */
-   POSIX_Keys_List_node *head;
  }  POSIX_Keys_Control;
   
 /**
