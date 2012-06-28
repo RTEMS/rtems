@@ -38,15 +38,16 @@ void *pthread_getspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      /** TODO: search the node in TCB's chain(maybe the rbtree) to speed up the search */
       search_node.key = key;
       search_node.thread_id = _Thread_Executing->Object.id;
-      p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.node);
+      p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.rb_node);
       if ( !p ) {
 	_Thread_Enable_dispatch();
 	return NULL;
       }
       _Thread_Enable_dispatch();
-      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, node )->value;
+      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, rb_node )->value;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */

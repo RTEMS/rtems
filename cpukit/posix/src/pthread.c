@@ -227,8 +227,8 @@ static bool _POSIX_Threads_Create_extension(
     created
   );
 
-  /** initialize thread's key vaule node list head */
-  api->head = NULL;
+  /** initialize thread's key vaule node chain */
+  _Chain_Initialize_empty( &api->the_chain );
   
   return true;
 }

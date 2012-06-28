@@ -35,7 +35,7 @@ int pthread_setspecific(
   register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
   POSIX_Keys_Rbtree_node      *rb_node;
-  POSIX_Keys_List_node        *lt_node1, *lt_node2;
+  POSIX_API_Control           *api;
 
   /** _POSIX_Keys_Get() would call _Thread_Disable_dispatch()*/
   the_key = _POSIX_Keys_Get( key, &location );
@@ -44,22 +44,7 @@ int pthread_setspecific(
     case OBJECTS_LOCAL:
       rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
       if ( !rb_node ) {
-	_Thread_Enable_dispatch;
-	return ENOMEM;
-      }
-      
-      lt_node1 = _Workspace_Allocate( sizeof( POSIX_Keys_List_node ) );
-      if ( !lt_node1 ) {
-	_Thread_Enable_dispatch;
-	_Workspace_Free( rb_node );
-	return ENOMEM;
-      }
-       
-      lt_node2 = _Workspace_Allocate( sizeof( POSIX_Keys_List_node ) );
-      if ( !lt_node2 ) {
-	_Workspace_Free( rb_node );
-	_Workspace_Free( lt_node1 );
-	_Thread_Enable_dispatch;
+	_Thread_Enable_dispatch();
 	return ENOMEM;
       }
       
@@ -70,24 +55,16 @@ int pthread_setspecific(
        *  it disables interrupts to  ensure the atomicity
        *  of the extract operation. There also is a _RBTree_Insert_unprotected()
        */
-      if (_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->node) ) ) {
+      if (_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->rb_node) ) ) {
 	  _Workspace_Free( rb_node );
-	  _Workspace_Free( lt_node1 );
-	  _Workspace_Free( lt_node2 );
-	  /* problem: what should pthread_setspecific return? */
-	  _Thread_Enable_dispatch;
+	  _Thread_Enable_dispatch();
 	  return EAGAIN;
 	}
       
-      /** insert lt_node1 to the POSIX key control's list */
-      lt_node1->rbnode = rb_node;
-      lt_node1->next = the_key->head;
-      the_key->head = lt_node1;
+      /** append rb_node to the thread API extension's chain */
+      api = (POSIX_API_Control *)(_Thread_Executing->API_Extensions[THREAD_API_POSIX]);
+      _Chain_Append( &api->the_chain, &rb_node->ch_node );
       
-      /** insert lt_node2 to the thread API extension's list */
-      lt_node2->rbnode = rb_node;
-      lt_node2->next = ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->head;
-      ((POSIX_API_Control *)(_Thread_Executing->API_Extensions[ THREAD_API_POSIX ]))->head = lt_node2;
       _Thread_Enable_dispatch();
       return 0;
 

@@ -42,7 +42,6 @@ int pthread_key_create(
   }
 
   the_key->destructor = destructor;
-  the_key->head = NULL;
   /*problem: not clear about _Objects_Open_u32() */
   _Objects_Open_u32( &_POSIX_Keys_Information, &the_key->object, 0 );
   *key = the_key->object.id;
