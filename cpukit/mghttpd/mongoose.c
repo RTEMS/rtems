@@ -424,6 +424,7 @@ enum {
   ENABLE_KEEP_ALIVE, ACCESS_CONTROL_LIST, MAX_REQUEST_SIZE,
   EXTRA_MIME_TYPES, LISTENING_PORTS,
   DOCUMENT_ROOT, SSL_CERTIFICATE, NUM_THREADS, RUN_AS_USER, REWRITE,
+  THREAD_STACK_SIZE, THREAD_PRIORITY, THREAD_POLICY,
   NUM_OPTIONS
 };
 
@@ -451,6 +452,9 @@ static const char *config_options[] = {
   "t", "num_threads", "10",
   "u", "run_as_user", NULL,
   "w", "url_rewrite_patterns", NULL,
+  "x", "thread_stack_size", NULL,
+  "y", "thread_priority", NULL,
+  "z", "thread_policy", NULL,
   NULL
 };
 #define ENTRIES_PER_CONFIG_OPTION 3
@@ -1277,11 +1281,61 @@ static int start_thread(struct mg_context *ctx, mg_thread_func_t func,
   pthread_t thread_id;
   pthread_attr_t attr;
   int retval;
+  char* stacksize = ctx->config[THREAD_STACK_SIZE];
+  char* priority = ctx->config[THREAD_PRIORITY];
+  char* policy = ctx->config[THREAD_POLICY];
+  int noinheritsched = 0;
 
   (void) pthread_attr_init(&attr);
   (void) pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   // TODO(lsm): figure out why mongoose dies on Linux if next line is enabled
   // (void) pthread_attr_setstacksize(&attr, sizeof(struct mg_connection) * 5);
+
+  if (stacksize != NULL) {
+    size_t size = atoi(stacksize);
+    (void) pthread_attr_setstacksize(&attr, size);
+  }
+
+  if (priority != NULL) {
+    struct sched_param sched_param;
+    memset(&sched_param, 0, sizeof(sched_param));
+    sched_param.sched_priority = atoi(priority);
+    (void) pthread_attr_setschedparam(&attr, &sched_param);
+    noinheritsched = 1;
+  }
+
+  if (policy != NULL) {
+    int p_policy;
+    (void) pthread_attr_getschedpolicy(&attr, &p_policy);
+
+    switch (policy[0]) {
+      case 'o':
+        p_policy = SCHED_OTHER;
+        break;
+      case 'f':
+        p_policy = SCHED_FIFO;
+        break;
+      case 'r':
+        p_policy = SCHED_RR;
+        break;
+#if defined(_POSIX_SPORADIC_SERVER) || defined(_POSIX_THREAD_SPORADIC_SERVER)
+      case 's':
+        p_policy = SCHED_SPORADIC;
+        break;
+#endif
+      default:
+        cry(fc(ctx), "%s: Unknown scheduler: %s", __func__, policy);
+        break;
+    }
+
+    (void) pthread_attr_setschedpolicy(&attr, p_policy);
+
+    noinheritsched = 1;
+  }
+
+  if (noinheritsched != 0) {
+    (void) pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+  }
 
   if ((retval = pthread_create(&thread_id, &attr, func, param)) != 0) {
     cry(fc(ctx), "%s: %s", __func__, strerror(retval));

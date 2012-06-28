@@ -143,6 +143,18 @@ will serve all URLs that start with "/config" from the "/etc" directory, and
 call handle_doc.cgi script for .doc and .rtf file requests. If some pattern
 matches, no further matching/substitution is performed
 (first matching pattern wins). Use full paths in substitutions. Default: ""
+.It Fl x Ar thread_stack_size
+Use the given amount of stack for each thread. Default: ""
+.It Fl y Ar thread_priority
+Use the given priority for all posix threads. If this option is used without the
+thread_policy option, the systems default scheduling policy will be used for the
+threads instead of inheriting the policy of the creating thread. Default: ""
+.It Fl z Ar thread_policy
+Select the posix scheduling policy for the threads.  Possible Values are 's' for
+sporadic (not on all systems available), 'r' for round robin, 'f' for fifo or
+'o' for other scheduling strategie. If this option is used without the
+thread_priority option, the systems default priority will be used for the
+threads instead of inheriting the priority of the creating thread. Default: ""
 .El
 .Pp
 .Sh EMBEDDING
