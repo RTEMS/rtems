@@ -22,6 +22,11 @@
   #include "config.h"
 #endif
 
+#if defined(__rtems__)
+#include <md5.h>
+#define HAVE_MD5
+#endif // __rtems__
+
 #if defined(_WIN32)
 #define _CRT_SECURE_NO_WARNINGS // Disable deprecation warning in VS2005
 #else
