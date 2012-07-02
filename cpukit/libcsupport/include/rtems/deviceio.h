@@ -12,6 +12,10 @@
 
 #include <rtems/libio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 int rtems_deviceio_errno( rtems_status_code status );
 
 int rtems_deviceio_open(
@@ -52,5 +56,9 @@ int rtems_deviceio_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor
 );
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* _RTEMS_DEVICEIO_H */
