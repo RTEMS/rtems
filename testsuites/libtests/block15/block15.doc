@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: block15
+
+directives:
+
+  TBD
+
+concepts:
+
+  - Ensure that write requests are continuous and do not exceed the maximum
+    write transfer block count
