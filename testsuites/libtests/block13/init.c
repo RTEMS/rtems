@@ -42,7 +42,7 @@ static const int action_sequence [READ_COUNT] = {
   RESET_CACHE,
   7, 8,
   RESET_CACHE,
-  6, 7, 10
+  6, 7, 9
 };
 
 #define UNUSED_LINE { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
@@ -52,10 +52,10 @@ static const int expected_block_access_counts [READ_COUNT] [BLOCK_COUNT] = {
    { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
    { 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
    { 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-   { 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
    { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
    { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
    { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
    { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
    { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
    UNUSED_LINE,
@@ -78,7 +78,7 @@ static const int expected_block_access_counts [READ_COUNT] [BLOCK_COUNT] = {
 #define TRIGGER_AFTER_RESET RTEMS_DISK_READ_AHEAD_NO_TRIGGER
 
 static const rtems_blkdev_bnum trigger [READ_COUNT] = {
-  1, 3, 6, 6, 6, 9, 9, 9, NO_TRIGGER, NO_TRIGGER,
+  1, 3, 5, 5, 8, 8, 8, NO_TRIGGER, NO_TRIGGER, NO_TRIGGER,
   TRIGGER_AFTER_RESET,
   11,
   TRIGGER_AFTER_RESET,
@@ -88,13 +88,13 @@ static const rtems_blkdev_bnum trigger [READ_COUNT] = {
   TRIGGER_AFTER_RESET,
   8, NO_TRIGGER,
   TRIGGER_AFTER_RESET,
-  7, 10, NO_TRIGGER
+  7, 9, NO_TRIGGER
 };
 
 #define NOT_CHANGED_BY_RESET(i) (i)
 
 static const rtems_blkdev_bnum next [READ_COUNT] = {
-  2, 4, 7, 7, 7, 10, 10, 10, 10, 10,
+  2, 4, 7, 7, 10, 10, 10, 10, 10, 10,
   NOT_CHANGED_BY_RESET(10),
   12,
   NOT_CHANGED_BY_RESET(12),
