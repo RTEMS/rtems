@@ -3027,8 +3027,8 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
           if (transfer_count >= max_transfer_count)
           {
             transfer_count = max_transfer_count;
-            dd->read_ahead.trigger += max_transfer_count / 2 + 1;
-            dd->read_ahead.next += max_transfer_count;
+            dd->read_ahead.trigger = block + (transfer_count + 1) / 2;
+            dd->read_ahead.next = block + transfer_count;
           }
           else
           {
