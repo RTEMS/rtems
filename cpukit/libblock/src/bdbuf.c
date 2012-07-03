@@ -2083,7 +2083,6 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
       printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
               media_block + dd->start, block, (unsigned) dd->dev);
 
-    rtems_bdbuf_check_read_ahead_trigger (dd, block);
     bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
     switch (bd->state)
     {
@@ -2114,6 +2113,8 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
         rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_4);
         break;
     }
+
+    rtems_bdbuf_check_read_ahead_trigger (dd, block);
   }
 
   rtems_bdbuf_unlock_cache ();
