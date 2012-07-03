@@ -20,6 +20,7 @@ SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
     mouse01
 
 if NETTESTS
+SUBDIRS += mghttpd01
 SUBDIRS += ftp01
 SUBDIRS += syscall01
 endif
