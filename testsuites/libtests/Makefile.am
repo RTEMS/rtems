@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = POSIX
+SUBDIRS += block15
 SUBDIRS += block14
 SUBDIRS += block13
 SUBDIRS += rbheap01

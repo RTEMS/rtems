@@ -24,47 +24,53 @@
 #include <rtems/blkdev.h>
 #include <rtems/bdbuf.h>
 
-#define BLOCK_COUNT 9
-#define READ_COUNT 19
+#define BLOCK_COUNT 11
+#define READ_COUNT 23
 
 static int block_access_counts [BLOCK_COUNT];
 
 #define RESET_CACHE (-1)
 
 static const int action_sequence [READ_COUNT] = {
-  0, 2, 3, 4, 5, 6, 7, 8,
+  0, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  RESET_CACHE,
+  10,
+  RESET_CACHE,
+  9,
   RESET_CACHE,
   8,
   RESET_CACHE,
-  7,
+  7, 8,
   RESET_CACHE,
-  6, 7,
-  RESET_CACHE,
-  5, 6, 8
+  6, 7, 9
 };
 
-#define UNUSED_LINE { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+#define UNUSED_LINE { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 
 static const int expected_block_access_counts [READ_COUNT] [BLOCK_COUNT] = {
-   { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-   { 1, 0, 1, 0, 0, 0, 0, 0, 0 },
-   { 1, 0, 1, 1, 1, 1, 0, 0, 0 },
-   { 1, 0, 1, 1, 1, 1, 0, 0, 0 },
-   { 1, 0, 1, 1, 1, 1, 1, 1, 0 },
-   { 1, 0, 1, 1, 1, 1, 1, 1, 0 },
-   { 1, 0, 1, 1, 1, 1, 1, 1, 1 },
-   { 1, 0, 1, 1, 1, 1, 1, 1, 1 },
+   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+   { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+   { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
    UNUSED_LINE,
-   { 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
    UNUSED_LINE,
-   { 0, 0, 0, 0, 0, 0, 0, 1, 0 },
+   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
    UNUSED_LINE,
-   { 0, 0, 0, 0, 0, 0, 1, 0, 0 },
-   { 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+   { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 },
    UNUSED_LINE,
-   { 0, 0, 0, 0, 0, 1, 0, 0, 0 },
-   { 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-   { 0, 0, 0, 0, 0, 1, 1, 1, 1 }
+   { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+   { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+   UNUSED_LINE,
+   { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
+   { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 },
+   { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 }
 };
 
 #define NO_TRIGGER RTEMS_DISK_READ_AHEAD_NO_TRIGGER
@@ -72,29 +78,33 @@ static const int expected_block_access_counts [READ_COUNT] [BLOCK_COUNT] = {
 #define TRIGGER_AFTER_RESET RTEMS_DISK_READ_AHEAD_NO_TRIGGER
 
 static const rtems_blkdev_bnum trigger [READ_COUNT] = {
-  1, 3, 5, 5, 7, 7, NO_TRIGGER, NO_TRIGGER,
+  1, 3, 5, 5, 8, 8, 8, NO_TRIGGER, NO_TRIGGER, NO_TRIGGER,
+  TRIGGER_AFTER_RESET,
+  11,
+  TRIGGER_AFTER_RESET,
+  10,
   TRIGGER_AFTER_RESET,
   9,
   TRIGGER_AFTER_RESET,
-  8,
+  8, NO_TRIGGER,
   TRIGGER_AFTER_RESET,
-  7, NO_TRIGGER,
-  TRIGGER_AFTER_RESET,
-  6, 8, NO_TRIGGER
+  7, 9, NO_TRIGGER
 };
 
 #define NOT_CHANGED_BY_RESET(i) (i)
 
 static const rtems_blkdev_bnum next [READ_COUNT] = {
-  2, 4, 6, 6, 8, 8, 8, 8,
-  NOT_CHANGED_BY_RESET(8),
+  2, 4, 7, 7, 10, 10, 10, 10, 10, 10,
+  NOT_CHANGED_BY_RESET(10),
+  12,
+  NOT_CHANGED_BY_RESET(12),
+  11,
+  NOT_CHANGED_BY_RESET(11),
   10,
   NOT_CHANGED_BY_RESET(10),
-  9,
+  9, 9,
   NOT_CHANGED_BY_RESET(9),
-  8, 8,
-  NOT_CHANGED_BY_RESET(8),
-  7, 9, 9
+  8, 11, 11
 };
 
 static int test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
@@ -215,7 +225,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_BDBUF_BUFFER_MIN_SIZE 1
 #define CONFIGURE_BDBUF_BUFFER_MAX_SIZE 1
 #define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE BLOCK_COUNT
-#define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS 2
+#define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS 3
 #define CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY 1
 
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM

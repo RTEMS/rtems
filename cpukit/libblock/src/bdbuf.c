@@ -61,7 +61,6 @@ typedef struct rtems_bdbuf_swapout_transfer
   rtems_disk_device    *dd;          /**< The device the transfer is for. */
   bool                  syncing;     /**< The data is a sync'ing. */
   rtems_blkdev_request* write_req;   /**< The write request array. */
-  uint32_t              bufs_per_bd; /**< Number of buffers per bd. */
 } rtems_bdbuf_swapout_transfer;
 
 /**
@@ -2084,7 +2083,6 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
       printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
               media_block + dd->start, block, (unsigned) dd->dev);
 
-    rtems_bdbuf_check_read_ahead_trigger (dd, block);
     bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
     switch (bd->state)
     {
@@ -2115,6 +2113,8 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
         rtems_bdbuf_fatal (bd->state, RTEMS_BLKDEV_FATAL_BDBUF_STATE_4);
         break;
     }
+
+    rtems_bdbuf_check_read_ahead_trigger (dd, block);
   }
 
   rtems_bdbuf_unlock_cache ();
@@ -2297,15 +2297,10 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
      */
     uint32_t last_block = 0;
 
-    /*
-     * Number of buffers per bd. This is used to detect the next
-     * block.
-     */
-    uint32_t bufs_per_bd = 0;
-
     rtems_disk_device *dd = transfer->dd;
-
-    bufs_per_bd = dd->block_size / bdbuf_config.buffer_min;
+    uint32_t media_blocks_per_block = dd->media_blocks_per_block;
+    bool need_continuous_blocks =
+      (dd->phys_dev->capabilities & RTEMS_BLKDEV_CAP_MULTISECTOR_CONT) != 0;
 
     /*
      * Take as many buffers as configured and pass to the driver. Note, the
@@ -2334,12 +2329,10 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
       if (rtems_bdbuf_tracer)
         printf ("bdbuf:swapout write: bd:%" PRIu32 ", bufnum:%" PRIu32 " mode:%s\n",
                 bd->block, transfer->write_req->bufnum,
-                dd->phys_dev->capabilities &
-                RTEMS_BLKDEV_CAP_MULTISECTOR_CONT ? "MULIT" : "SCAT");
+                need_continuous_blocks ? "MULTI" : "SCAT");
 
-      if ((dd->phys_dev->capabilities & RTEMS_BLKDEV_CAP_MULTISECTOR_CONT) &&
-          transfer->write_req->bufnum &&
-          (bd->block != (last_block + bufs_per_bd)))
+      if (need_continuous_blocks && transfer->write_req->bufnum &&
+          bd->block != last_block + media_blocks_per_block)
       {
         rtems_chain_prepend_unprotected (&transfer->bds, &bd->link);
         write = true;
@@ -3035,8 +3028,8 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
           if (transfer_count >= max_transfer_count)
           {
             transfer_count = max_transfer_count;
-            dd->read_ahead.trigger += max_transfer_count / 2 + 1;
-            dd->read_ahead.next += max_transfer_count;
+            dd->read_ahead.trigger = block + transfer_count / 2;
+            dd->read_ahead.next = block + transfer_count;
           }
           else
           {
