@@ -54,6 +54,5 @@ int pthread_key_delete(
       break;
   }
 
-  _Thread_Enable_dispatch();
   return EINVAL;
 }
