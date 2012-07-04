@@ -27,17 +27,17 @@ void _POSIX_Keys_Free_memory(
 
   search_node.key = the_key->object.id;
   search_node.thread_id = 0;
-  iter = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.rb_node);
+  iter = _RBTree_Find_unprotected( &_POSIX_Keys_Rbtree, &search_node.rb_node);
   if ( !iter )
     return;
   /**
    * find the smallest thread_id node in the rbtree.
    */
-  next = _RBTree_Next( iter, RBT_LEFT );
+  next = _RBTree_Next_unprotected( iter, RBT_LEFT );
   p = _RBTree_Container_of( next, POSIX_Keys_Rbtree_node, rb_node );
   while ( p->key == the_key->object.id) {
     iter = next;
-    next = _RBTree_Next( iter, RBT_LEFT );
+    next = _RBTree_Next_unprotected( iter, RBT_LEFT );
     p = _RBTree_Container_of( next, POSIX_Keys_Rbtree_node, rb_node );
   }
     
@@ -46,9 +46,9 @@ void _POSIX_Keys_Free_memory(
    */
   p = _RBTree_Container_of( iter, POSIX_Keys_Rbtree_node, rb_node );
   while ( p->key == the_key->object.id ) {
-    next = _RBTree_Next( iter, RBT_RIGHT );
-    _RBTree_Extract( &_POSIX_Keys_Rbtree, iter );
-    _Chain_Extract( &p->ch_node );
+    next = _RBTree_Next_unprotected( iter, RBT_RIGHT );
+    _RBTree_Extract_unprotected( &_POSIX_Keys_Rbtree, iter );
+    _Chain_Extract_unprotected( &p->ch_node );
     _Workspace_Free( p );
     iter = next;
     p = _RBTree_Container_of( iter, POSIX_Keys_Rbtree_node, rb_node );

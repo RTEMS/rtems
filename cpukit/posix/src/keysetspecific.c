@@ -37,7 +37,7 @@ int pthread_setspecific(
   POSIX_Keys_Rbtree_node      *rb_node;
   POSIX_API_Control           *api;
 
-  /** _POSIX_Keys_Get() would call _Thread_Disable_dispatch()*/
+  /** _POSIX_Keys_Get() would call _Thread_Disable_dispatch() implicitly*/
   the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
@@ -51,11 +51,7 @@ int pthread_setspecific(
       rb_node->key = key;
       rb_node->thread_id = _Thread_Executing->Object.id;
       rb_node->value = value;
-      /**
-       *  it disables interrupts to  ensure the atomicity
-       *  of the extract operation. There also is a _RBTree_Insert_unprotected()
-       */
-      if (_RBTree_Insert( &_POSIX_Keys_Rbtree, &(rb_node->rb_node) ) ) {
+      if (_RBTree_Insert_unprotected( &_POSIX_Keys_Rbtree, &(rb_node->rb_node) ) ) {
 	  _Workspace_Free( rb_node );
 	  _Thread_Enable_dispatch();
 	  return EAGAIN;
@@ -63,7 +59,7 @@ int pthread_setspecific(
       
       /** append rb_node to the thread API extension's chain */
       api = (POSIX_API_Control *)(_Thread_Executing->API_Extensions[THREAD_API_POSIX]);
-      _Chain_Append( &api->the_chain, &rb_node->ch_node );
+      _Chain_Append_unprotected( &api->the_chain, &rb_node->ch_node );
       
       _Thread_Enable_dispatch();
       return 0;

@@ -36,12 +36,12 @@ void *pthread_getspecific(
 
   _POSIX_Keys_Get( key, &location );
   switch ( location ) {
-
+    
     case OBJECTS_LOCAL:
       /** TODO: search the node in TCB's chain(maybe the rbtree) to speed up the search */
       search_node.key = key;
       search_node.thread_id = _Thread_Executing->Object.id;
-      p = _RBTree_Find( &_POSIX_Keys_Rbtree, &search_node.rb_node);
+      p = _RBTree_Find_unprotected( &_POSIX_Keys_Rbtree, &search_node.rb_node);
       if ( !p ) {
 	_Thread_Enable_dispatch();
 	return NULL;
