@@ -40,6 +40,8 @@ void _POSIX_Keys_Run_destructors(
   void (*destructor) (void *);
   POSIX_Keys_Control *the_key;
   Objects_Locations location;
+
+  _Thread_Disable_dispatch();
   
   chain = &((POSIX_API_Control *)thread->API_Extensions[ THREAD_API_POSIX ])->the_chain;
   iter = _Chain_First( chain );
@@ -49,8 +51,8 @@ void _POSIX_Keys_Run_destructors(
      * here Chain_Node *iter can be convert to POSIX_Keys_Rbtree_node *,
      * because Chain_Node is the first member of POSIX_Keys_Rbtree_node structure.
      */
-    _RBTree_Extract( &_POSIX_Keys_Rbtree, &((POSIX_Keys_Rbtree_node *)iter)->rb_node );
-    _Chain_Extract( iter );
+    _RBTree_Extract_unprotected( &_POSIX_Keys_Rbtree, &((POSIX_Keys_Rbtree_node *)iter)->rb_node );
+    _Chain_Extract_unprotected( iter );
     
     the_key = _POSIX_Keys_Get( ((POSIX_Keys_Rbtree_node *)iter)->key, &location);
     destructor = the_key->destructor;
@@ -61,6 +63,6 @@ void _POSIX_Keys_Run_destructors(
     _Workspace_Free( (POSIX_Keys_Rbtree_node *)iter );
     iter = next;
   }
-  /* problem: should _Thread_Enable_dispatch be placed in while? */
+
   _Thread_Enable_dispatch();
 }
