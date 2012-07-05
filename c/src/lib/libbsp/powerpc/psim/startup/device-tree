@@ -1,4 +1,4 @@
 #/openprom/init/register/pc 0
 #/openprom/options/smp 2
 #/openprom/options/oea-memory-size 4194304
-/openprom/options/oea-memory-size 8388608
+/openprom/options/oea-memory-size 67108864

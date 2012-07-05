@@ -10,6 +10,7 @@ SUBDIRS += libnetworking librpc
 SUBDIRS += libi2c
 SUBDIRS += libmisc
 SUBDIRS += libmd
+SUBDIRS += libmm
 SUBDIRS += libgnat
 SUBDIRS += wrapup
 
@@ -156,6 +157,9 @@ include_rtems_HEADERS += libmisc/monitor/monitor.h
 ## fb
 include_rtems_HEADERS += libmisc/fb/fb.h
 include_rtems_HEADERS += libmisc/fb/mw_uid.h
+
+## mm
+include_rtems_HEADERS += libmm/libmmu.h
 
 ## mouse
 include_rtems_HEADERS += libmisc/mouse/mouse_parser.h

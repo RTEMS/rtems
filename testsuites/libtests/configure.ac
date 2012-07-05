@@ -43,6 +43,7 @@ AM_CONDITIONAL(NETTESTS,test "$rtems_cv_RTEMS_NETWORKING" = "yes")
 AC_CONFIG_FILES([Makefile
 rbheap01/Makefile
 syscall01/Makefile
+mmutest1/Makefile
 flashdisk01/Makefile
 block01/Makefile
 block02/Makefile

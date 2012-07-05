@@ -329,6 +329,10 @@ $(PROJECT_INCLUDE)/rtems/mw_uid.h: libmisc/fb/mw_uid.h $(PROJECT_INCLUDE)/rtems/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mw_uid.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mw_uid.h
 
+$(PROJECT_INCLUDE)/rtems/libmmu.h: libmm/libmmu.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/libmmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/libmmu.h
+
 $(PROJECT_INCLUDE)/rtems/mouse_parser.h: libmisc/mouse/mouse_parser.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mouse_parser.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mouse_parser.h
