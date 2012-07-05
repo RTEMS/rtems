@@ -43,8 +43,6 @@ rtems_task Test_task(
 
 TEST_EXTERN volatile bool TaskRan[ CONFIGURE_SMP_MAXIMUM_PROCESSORS ];
 
-void Loop( void );
-
 /*
  *  Handy macros and static inline functions
  */

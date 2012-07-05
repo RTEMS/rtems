@@ -15,12 +15,6 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-void Loop() {
-  volatile int i;
-
-  for (i=0; i<300000; i++);
-}
-
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -33,10 +27,9 @@ rtems_task Init(
   bool               allDone;
 
   /* XXX - Delay a bit to allow debug messages from
- *    * startup to print.  This may need to go away when
- *       * debug messages go away.
- *          */
-  Loop();
+   * startup to print.  This may need to go away when
+   * debug messages go away.
+   */
   locked_print_initialize();
 
   /* Put start of test message */
@@ -62,11 +55,8 @@ rtems_task Init(
     directive_failed( status, "task create" );
 
     cpu_num = bsp_smp_processor_id();
-    locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
     status = rtems_task_start( id, Test_task, i+1 );
     directive_failed( status, "task start" );
-
-    Loop();
   }
 
   /* Wait on the all tasks to run */
@@ -77,7 +67,7 @@ rtems_task Init(
         allDone = false;
     }
     if (allDone) {
-      locked_printf( "*** END OF TEST SMPatomic01 ***\n" );
+      locked_printf( "\n\n*** END OF TEST SMPatomic01 ***\n" );
       rtems_test_exit( 0 );
     }
   }

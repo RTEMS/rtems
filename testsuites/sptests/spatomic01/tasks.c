@@ -20,19 +20,18 @@
 
 #define TEST_REPEAT 200000
 
-#define ATOMIC_LOAD_NO_BARRIER(TYPE)                     \
+#define ATOMIC_LOAD_NO_BARRIER(TYPE, cpuid)              \
 {                                                        \
   Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
   unsigned int i;                                        \
-  printf("_Atomic_Load_" #TYPE ": ");                    \
   a = _Atomic_Load_##TYPE(&t, ATOMIC_RELAXED_BARRIER);   \
   rtems_test_assert(a == t);                             \
   for (i = 0; i < TEST_REPEAT; i++){                     \
-    t = (Atomic_##TYPE)rand();                         \
+    t = (Atomic_##TYPE)rand();                           \
     a = _Atomic_Load_##TYPE(&t, ATOMIC_RELAXED_BARRIER); \
     rtems_test_assert(a == t);                           \
   }                                                      \
-  printf(" SUCCESS\n");                                  \
+  locked_printf("\nCPU%d _Atomic_Load_" #TYPE ": SUCCESS\n", cpuid); \
 }
 
 rtems_task Test_task(
@@ -51,26 +50,21 @@ rtems_task Test_task(
   cpu_num = bsp_smp_processor_id();
 
   /* Print that the task is up and running. */
-  Loop();
-  locked_printf(" \n\n CPU %d RUN TEST OF RTEMS ATOMIC LOAD API WITHOUT ANY MEMORY BARRIER***", cpu_num);
+  ATOMIC_LOAD_NO_BARRIER(int, cpu_num);
 
-  ATOMIC_LOAD_NO_BARRIER(int);
+  ATOMIC_LOAD_NO_BARRIER(long, cpu_num);
 
-  ATOMIC_LOAD_NO_BARRIER(long);
+  ATOMIC_LOAD_NO_BARRIER(ptr, cpu_num);
 
-  ATOMIC_LOAD_NO_BARRIER(ptr);
+  ATOMIC_LOAD_NO_BARRIER(32, cpu_num);
 
-  ATOMIC_LOAD_NO_BARRIER(32);
+//  ATOMIC_LOAD_NO_BARRIER(64, cpu_num);
 
-//  ATOMIC_LOAD_NO_BARRIER(64);
-
-  locked_printf(" \n\n CPU %d END OF RTEMS ATOMIC LOAD API WITHOUT ANY MEMORY BARRIER TEST***", cpu_num);
-
-    /* Set the flag that the task is up and running */
+  /* Set the flag that the task is up and running */
   TaskRan[cpu_num] = true;
 
   /* Drop into a loop which will keep this task on
- *    * running on the cpu.
- *       */
+   * running on the cpu.
+   */
   while(1);
 }
