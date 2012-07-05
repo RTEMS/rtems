@@ -25,157 +25,262 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include <rtems/libmmu.h>
-#include <libcpu/mmu_support.h>
+//#include <libcpu/mmu_support.h>
 #include <rtems/libmmu.h>
+/* FIXME: Get some useful memory regions that are well-defined in RTEMS */
 
 rtems_task Init(
   rtems_task_argument ignored
-)
+ )
 {
   rtems_status_code status;
-  uint32_t access;
   size_t  blocksize;
   int i;
+  volatile unsigned char a;
   unsigned char* a1;
   unsigned char* a2;
-  unsigned char* ppteg_addr;
-  unsigned char* spteg_addr;
-  void * alut_search_addr1;
-  void * alut_search_addr2;
-  rtems_memory_protect_entry *mp_entry;
-  a1 = (unsigned char *)0x01A10008;
-  a2 = (unsigned char *)0x01A00008;
+  void * good_address;
+  void * bad_address;
+  rtems_mm_entry *mp_entry;
+  rtems_mm_permission permission;
+  rtems_mm_domain *protection_domain, *another_domain;
+  void *blob;
+  rtems_mm_domain p1, p2;
   
-  alut_search_addr1 = (char*) 0x00008111;
-  alut_search_addr2 = (char*) 0x00708111;
-  
-  ppteg_addr = (unsigned char *) 0x00FF8000;
-  spteg_addr = (unsigned char *) 0x00FF7FC0;
-  
+  protection_domain = &p1;
+  another_domain = &p2;
 
+  rtems_mm_region_descriptor r1 = {
+    .name = "faulty",
+    .base = 0x00,
+    .bounds = 2096
+  };
+  rtems_mm_region_descriptor r2 = {
+    .name = "read-only",
+    .base = 0x00,
+    .bounds = 0x2000
+  };
+  rtems_mm_region_descriptor r3 = {
+    .name = "stringy",
+    .base = 0x00,
+    .bounds = 0x2000
+  };
+   rtems_mm_region_descriptor r4 = {
+    .name = "big",
+    .base = 0x00,
+    .bounds = 0x2000
+  };
 
+  blob = malloc(2*r2.bounds + r3.bounds + r4.bounds);
+  if (!blob) {
+    printf("Failed allocation!\n");
+  }
+#define ALIGN_UP(s, a)  (((s) + ((a) - 1)) & ~((a) - 1))
+  r2.base = ALIGN_UP((uintptr_t)blob+r2.bounds,0x2000);
+  r3.base = ALIGN_UP((uintptr_t)blob+2*r2.bounds,0x2000);
+  r4.base = ALIGN_UP((uintptr_t)blob+2*r2.bounds+r3.bounds,0x2000);
+
+  good_address = r4.base + 0x1000;
+  bad_address = r4.base + 0x4000;
 
   puts( "\n\n*** MMU ALUT TEST 1 BEGINS ***\n" );
   puts( "initialize the memory protect manager\n");
-  status = rtems_memory_protect_init ( );
-
-  if(status != RTEMS_SUCCESSFUL)
+  status = rtems_mm_initialize();
+  if ( status != RTEMS_SUCCESSFUL )
   {
-    printf("Failed:initialize the memory protect manager failed; status = %d\n",status);
+    puts("Failed: initialize the memory protect manager; status "
+        );
     exit(0);
   }
-  printf("ALUT created\n");
 
+  status = rtems_mm_initialize_domain( protection_domain, 64 );
+  if ( status != RTEMS_SUCCESSFUL )
+  {
+    printf("Failed: create protection domain; status = %d\n",
+        status);
+    exit(0);
+  }
+  printf("Protection domain created\n");
 
-  printf("Test 1 : Adding entry with block size less than 4K\n");
-  status = rtems_memory_protect_create(0, 2096, 0x705, &mp_entry);
-  if(status == RTEMS_SUCCESSFUL){
-    printf("Failed : Invalid block size and still entry added\n");
+  status = rtems_mm_initialize_domain( another_domain, 8 );
+  if ( status != RTEMS_SUCCESSFUL )
+  {
+    printf("Failed: create protection domain; status = %d\n",
+        status);
+    exit(0);
   }
-  else{
-    printf("Passed : Entry addition failed, status = %d\n",status);
-  }
-      
-  printf("Test 2 : Adding entry with block size not a multiple of 4K\n");  
-  status = rtems_memory_protect_create(0, 0x00008FFF, 0x705, &mp_entry);
-  if(status == RTEMS_SUCCESSFUL){
-    printf("Failed : Invalid block size and still entry successfully added\n");
-  }
-  else{
-    printf("Passed : Entry adding failed, status = %d\n",status);
-  }
-    
-  printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
-  status = rtems_memory_protect_create((void*)0x01A00000, 0x8000, 0x705, &mp_entry); 
-  if(status == RTEMS_SUCCESSFUL){
-    printf("Passed : Entry Added\n");
-  }
-  else{
-    printf("Failed : Entry addition failed, status = %d\n",status);
-  }
+  printf("Another protection domain created\n");
 
-  printf("Test 4 : Adding overlapping  address value\n");
-  status = rtems_memory_protect_create((void*)0x01A07000, 0x4000, 0x70f, &mp_entry); 
-  if(status == RTEMS_SUCCESSFUL){
-    printf("Failed : Addition passed inspite of address overlap\n");
-  }
-  else{
-    printf("Passed : Successful detection of address overlap and ignored, status = %d\n",status);
-  }
-
-  printf("Test 5 : Adding valid entry\n");
-  status = rtems_memory_protect_create((void*)0x01F00000, 0x8000, 0x705, &mp_entry); 
-  if(status == RTEMS_SUCCESSFUL){
-    printf("Passed: Entry successfully added, status = %d\n",status);
-  }
-  else{
-    printf("Failed : Entry adding failed, status = %d\n",status);
-  }
-
-  printf("Test 6 : Adding valid entry\n");
-  status = rtems_memory_protect_create((void*)0x00008000, 0x8000, 0x705, &mp_entry); 
-  if(status == RTEMS_SUCCESSFUL){
-      printf("Passed : Entry successfully added, status = %d\n",status);
-  }
-  else{
-    printf("Failed : Entry adding failed, status = %d\n",status);
-  }
-
-  /* Now that the ALUT is created and populated, start testing for 
-   *  search operations over particular address values 
-   */
-  printf("Test 7 : Get access attrbute for address 0x%x\n", alut_search_addr1);
-  status = rtems_memory_protect_search(alut_search_addr1, &mp_entry); 
-  if(status != RTEMS_SUCCESSFUL){
-    printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
-  }
-  status = rtems_memory_protect_get_attr(mp_entry,&access);
-  if(status != RTEMS_SUCCESSFUL){
-    printf("Failed : Access Attribute not found, status = %d\n",status);
+  /* FIXME: 4K magic */
+  printf("Test 1: Adding entry with block size less than 4K\n");
+  status = rtems_mm_create_entry(
+      protection_domain,
+      &r1,
+      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      &mp_entry
+  );
+  if ( status == RTEMS_SUCCESSFUL ) {
+    printf("Failed: Invalid block size and still entry added\n");
   }
   else {
-    printf("Passed : Access Attribute for the request is 0x%x\n", access);
+    printf("Passed: Entry addition failed\n");
   }
-  status = rtems_memory_protect_get_size(mp_entry,&blocksize);
-  if(status != RTEMS_SUCCESSFUL){
-    printf("Failed : Access Attribute not found, status = %d\n",status);
+
+  r1.bounds = 0x00008FFF;
+  /* FIXME: 4K magic */
+  printf("Test 2: Adding entry with block size not a multiple of 4K\n");
+  status = rtems_mm_create_entry(
+      protection_domain,
+      &r1,
+      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      &mp_entry
+  );
+  if ( status == RTEMS_SUCCESSFUL ) {
+    printf("Failed: Invalid block size and still entry successfully added\n");
   }
   else {
-    printf("Passed :the size of the entry including the request address is 0x%x\n", blocksize);
-  }
-
-
-  printf("Test 8 : Get attrbute for unmapped address 0x%x\n", alut_search_addr2);
-  status = rtems_memory_protect_search(alut_search_addr2, &mp_entry); 
-  if(status == RTEMS_SUCCESSFUL){
-    printf("Failed : Find the entry including this address in ALUT, status = %d\n",status);
-  }
-  else printf("Passed : Failed to find unmapped address in ALUT, status = %d\n",status);
-
-  printf("Checking MMU exception 1:Read from Unmapped block \n");
-  for(i=0;i<16;i++){
-   printf("0x%x,  ",*a1++);
-   if(i%8 == 7)
-        printf("\n");
+    printf("Passed: Entry adding failed\n");
   }
   
-  printf("Checking MMU exception 2: Write to Unmapped block  \n"); 
-  for(i=0;i<16;i++){
+  printf("Test 3: Adding valid entry to first domain\n");
+  status = rtems_mm_create_entry(
+      protection_domain,
+      &r2,
+      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      &mp_entry
+  ); 
+  if ( status == RTEMS_SUCCESSFUL ) {
+    printf("Passed: Entry Added\n");
+  }
+  else {
+    printf("Failed: Entry addition failed, status = %d\n",status);
+  }
+
+  printf("Test 4: Adding overlapping address value\n");
+  status = rtems_mm_create_entry(
+      protection_domain,
+      &r2,
+      RTEMS_MEMORY_PROTECTION_READ_PERMISSION|RTEMS_MEMORY_PROTECTION_WRITE_PERMISSION,
+      &mp_entry); 
+  if ( status == RTEMS_SUCCESSFUL ) {
+    printf("Failed: Addition passed inspite of address overlap\n");
+  }
+  else {
+    printf("Passed: Successful detection of address overlap\n");
+  }
+
+  printf("Test 5: Adding valid entry to first domain\n");
+  status = rtems_mm_create_entry(
+      protection_domain,
+      &r3,
+      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      &mp_entry);
+  if ( status == RTEMS_SUCCESSFUL ) {
+    printf("Passed: Entry successfully added\n");
+  }
+  else {
+    printf("Failed: Entry adding failed\n");
+  }
+
+  printf("Test 6: Adding valid entry to second domain\n");
+  status = rtems_mm_create_entry(
+      another_domain,
+      &r4,
+      RTEMS_MEMORY_PROTECTION_READ_PERMISSION|RTEMS_MEMORY_PROTECTION_WRITE_PERMISSION,
+      &mp_entry
+  ); 
+  if ( status == RTEMS_SUCCESSFUL ) {
+      printf("Passed: Entry successfully added, status = %d\n",status);
+  }
+  else {
+    printf("Failed: Entry adding failed\n");
+  }
+
+  printf("Test 7: Find valid address in second domain\n");
+  status = rtems_mm_find_entry(
+      another_domain,
+      good_address
+     // &mp_entry
+  ); 
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printf("Failed: Cannot find address, status = %d\n",status);
+  }
+
+  printf("Test 8: Install second domain\n");
+  status = rtems_mm_install_domain(another_domain);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printf("Failed: unable to install domain, status = %d\n",status);
+  } else {
+    printf("Passed: installed domain\n");
+  }
+
+  printf("Test 9: Switch from second to first domain\n");
+  status = rtems_mm_uninstall_domain(another_domain);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printf("Failed: unable to install domain, status = %d\n",status);
+  }
+  status = rtems_mm_install_domain(protection_domain);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printf("Failed: unable to install domain, status = %d\n",status);
+  } else {
+    printf("Passed: installed domain\n");
+  }
+
+  printf("Test 10: delete entry from second domain\n");
+  status = rtems_mm_delete_entry(another_domain, mp_entry);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printf("Failed: unable to delete, status = %d\n",status);
+  } else {
+    printf("Passed: deleted entry\n");
+  }
+
+  printf("Test 11: release second domain\n");
+  status = rtems_mm_finalize_domain(another_domain);
+  if ( status != RTEMS_SUCCESSFUL ) {
+    printf("Failed: unable to release domain, status = %d\n",status);
+  } else {
+    printf("Passed: released domain\n");
+  }
+
+  printf("Test 12: Find invalid address in first domain\n");
+  status = rtems_mm_find_entry(
+      protection_domain,
+      bad_address 
+     // &mp_entry
+  ); 
+  if ( status == RTEMS_SUCCESSFUL ) {
+    printf("Failed: Found invalid address, status = %d\n",status);
+  }
+  else printf("Passed: Failed to find invalid address\n");
+
+  // TODO: make these fatal tests
+  a1 = bad_address;
+  printf("Checking MMU exception 1:Read from Unmapped block\n");
+  for ( i=0;i<16;i++ ) {
+   a = *a1++; 
+  }
+  
+  a1 = bad_address + 0x2000;
+  printf("Checking MMU exception 2: Write to Unmapped block\n"); 
+  for ( i=0;i<16;i++ ) {
    *a1++ = 0xCC;
   }
-  
-  printf("Checking MMU exception 3: Read from readonly block  \n");
-  for(i=0;i<16;i++){
-   printf("0x%x,  ",*a2++);
-   if(i%8 == 7)
-        printf("\n");
-  }
 
+  // this one isn't an exception.
+  a2 = r2.base;
+  printf("Checking MMU exception 3: Read from readonly block\n");
+  for ( i=0;i<16;i++ ) {
+    a = *a2++;
+  }
+  
   printf("Checking MMU exception 4: Write to readonly block  \n");
-  for(i=0;i<16;i++){
+  for ( i=0;i<16;i++ ) {
    *a2++ = 0xCC;
   }
 
-  printf("Failed: this line should never be printed!!");
+  /* TODO: test execution permissions */
+
+  printf("Failed: this line should never be printed!!\n");
   rtems_task_delete(RTEMS_SELF);
 }
+

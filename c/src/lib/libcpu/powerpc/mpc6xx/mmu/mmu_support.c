@@ -33,7 +33,11 @@ SPR_RO(DSISR);
 #define LD_PI_SIZE              16
 #define LD_VSID_SIZE            24
 #define LD_HASH_SIZE            19
-#define MMUS_DEBUG
+/*define MMUS_DEBUG will make the mmu_handle_dsi_exception method
+  * print a debug info line each time the method was called
+  */
+//#define MMUS_DEBUG
+
 /* Primary and secondary PTE hash functions */
 
 /* Compute the primary hash from a VSID and a PI */
@@ -43,6 +47,8 @@ SPR_RO(DSISR);
 #define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
 
 static int pte_counter = 5;
+
+
 
 static int
 search_empty_pte_slot(libcpu_mmu_pte *pteg){
@@ -154,13 +160,13 @@ get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
 
 static int
 mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
-  volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,alut_access_attrb;
+  volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,domain_access_attrb;
   volatile int ppteg_search_status, spteg_search_status;
   int status, pp, wimg;
   libcpu_mmu_pte* ppteg;
   libcpu_mmu_pte* spteg;
   volatile unsigned long cause, msr;
-  rtems_memory_protect_entry* alut_entry;
+  rtems_mm_entry* domain_entry;
   
   /* Switch MMU and other Interrupts off */
   msr = _read_MSR();
@@ -207,17 +213,12 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-      status = rtems_memory_protect_search((void *)ea, &alut_entry);
+      status = rtems_mm_find_entry((void *)ea, &domain_entry);
       if(status == RTEMS_SUCCESSFUL){
-        status = rtems_memory_protect_get_attr(alut_entry, &alut_access_attrb);
-        if(status != RTEMS_SUCCESSFUL){
-          printk("Unexpected Error happened when get attibute from ALUT! RTEMS delete self");
-          rtems_task_delete(RTEMS_SELF); 
-        }
       }
       else
-        alut_access_attrb = rtems_memory_protect_get_default_attr();
-      translate_access_attr(alut_access_attrb, &wimg, &pp);
+       domain_access_attrb = 0x0000070f;
+      //translate_access_attr(domain_access_attrb, &wimg, &pp);
       BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
     } else {
       /* PTE found in second group */
@@ -290,7 +291,7 @@ mmu_irq_init(void){
   /* Set up SDR1 register for page table address */
   _write_SDR1((unsigned long) 0x00FF0000);
 
-  _CPU_Pagetable_Initialize();
+  _CPU_Memory_protection_Initialize();
   /*mmu_init();*/
 
 }
@@ -310,3 +311,5 @@ void
 mmu_handle_isi_exception(void){
 
 }
+
+

@@ -1,8 +1,26 @@
-
 #include <rtems.h>
+#include <libcpu/memoryprotection.h>
 #include <libcpu/spr.h>
 #include <rtems/rtems/status.h>
 #include "mmu_support.h"
+
+/* Macro for clearing BAT Arrays in ASM */
+
+#define CLRBAT_ASM(batu,r)      \
+  "  sync                 \n"  \
+  "  isync                \n"  \
+  "  li      "#r",    0   \n"  \
+  "  mtspr  "#batu", "#r"\n"  \
+  "  sync                 \n"  \
+  "  isync                \n"
+
+#define  CLRBAT(bat)        \
+  asm volatile(        \
+    CLRBAT_ASM(%0, 0)    \
+    :        \
+    :"i"(bat##U)      \
+    :"0")
+
 SPR_RW(SDR1);
 
 /* Compute the primary hash from a VSID and a PI */
@@ -44,32 +62,34 @@ get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
 
 /*attribute check,  to make sure the attribute in ALUT is available 
 */
-rtems_status_code _CPU_Pagetable_attr_Check(uint32_t attr )
+static rtems_status_code pagetable_attr_check(uint32_t attr )
 {
   int pp,wimg;
   pp= attr&0xff;
-  if(pp != 0xa &&pp != 0xc &&pp != 0xe && pp != 0xf )
+  /*it is not a good way to use the attribute number derictly here*/
+  if(pp != 0x5 &&pp != 0xc &&pp != 0xd && pp != 0xf )
     return RTEMS_UNSATISFIED;
 
   wimg = attr&0xff00;
-  /*The combinations where WIM = 11x are not supported.*/
-  if( (wimg& 0x3) ==0 )
+  /*The combinations where WIM = 11x are not supported.
+   *can not set as writethrough when disable cache block
+   */
+  if( (wimg& 0x300) ==0x200 )
     return RTEMS_UNSATISFIED;
     
   return RTEMS_SUCCESSFUL;
 }
 
-int
-translate_access_attr(uint32_t attr, int * wimg, int * pp){
+static int translate_access_attr(uint32_t attr, int * wimg, int * pp){
   int temp;
-  temp = attr&0xff;
-  if(  temp  == 0xa )
+  temp = attr&0x0f;
+  if(  temp  == 0x05 )
     *pp= _PPC_MMU_ACCESS_READ_ONLY;
-  else if( temp == 0xc )
+  else if( temp == 0x0c )
     *pp= _PPC_MMU_ACCESS_SUPERVISOR_ONLY;
-  else if( temp == 0xe )
+  else if( temp == 0x0d )
     *pp= _PPC_MMU_ACCESS_SUPERVISOR_WRITE_ONLY;
-  else if( temp == 0xf )
+  else if( temp == 0x0f )
     *pp= _PPC_MMU_ACCESS_NO_PROT;
 
   temp = (attr&0xff00)>8;
@@ -78,46 +98,7 @@ translate_access_attr(uint32_t attr, int * wimg, int * pp){
   return 0;
 }
 
-void  _CPU_Pagetable_Initialize( void )
-{
-  uint32_t pt_base,pt_end,cache_line_size;
-  libcpu_mmu_pte* pte;
-  unsigned long msr;
-  void *ea;
-
-  pt_base = _read_SDR1() & 0xffff0000;
-  pt_end = pt_base + (( ( _read_SDR1() & 0x000001ff)+1 )<<16);
-
-  /* Switch MMU and other Interrupts off */
-  msr = _read_MSR();
-  _write_MSR(msr & ~ (MSR_EE | MSR_DR | MSR_IR)); 
-
-  asm volatile ("sync":::"memory");
-   /*rtems_cache_flush_entire_data for mpc6XX is not actually implemented*/
-  /*rtems_cache_flush_entire_data();*/
-  
-  /*I am not quite sure is it proper to flush each line of entire address*
-   * space for flushing cache.*/
-  rtems_cache_flush_multiple_data_lines((void*)RamBase, (size_t)RamSize);
-
-  for(pte = (libcpu_mmu_pte*)pt_base; pte < (libcpu_mmu_pte*)pt_end; pte+=1){
-    pte->ptew0 &= ~0x80000000;
-  }
-
-  asm volatile(  \
-    " sync ;  isync; \n"  \
-    " tlbia ;  eieio;  \n"  \
-    " tlbsync ;        \n"  \
-    " sync ; isync;  \n"  \
-    : : :"0");
-
-  /* restore, i.e., switch MMU and IRQs back on */
-  _write_MSR( msr );
-
-  return ;
-}
-
-rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
+static rtems_status_code update_attribute( uint32_t  ea,  int wimg, int pp)
 {
   libcpu_mmu_pte* pt_entry, * ppteg,*spteg;
   unsigned long msr;
@@ -187,3 +168,113 @@ rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
 
   return RTEMS_SUCCESSFUL;
 }
+
+rtems_status_code  _CPU_Memory_protection_Initialize( void )
+{
+  uint32_t pt_base,pt_end,cache_line_size;
+  libcpu_mmu_pte* pte;
+  unsigned long msr;
+  void *ea;
+
+  pt_base = _read_SDR1() & 0xffff0000;
+  pt_end = pt_base + (( ( _read_SDR1() & 0x000001ff)+1 )<<16);
+
+  /* Switch MMU and other Interrupts off */
+  msr = _read_MSR();
+  _write_MSR(msr & ~ (MSR_EE | MSR_DR | MSR_IR)); 
+
+  asm volatile ("sync":::"memory");
+   /*rtems_cache_flush_entire_data for mpc6XX is not actually implemented*/
+  /*rtems_cache_flush_entire_data();*/
+  
+
+  rtems_cache_flush_multiple_data_lines((void*)RamBase, (size_t)RamSize);
+
+  for(pte = (libcpu_mmu_pte*)pt_base; pte < (libcpu_mmu_pte*)pt_end; pte+=1){
+    pte->ptew0 &= ~0x80000000;
+  }
+
+  asm volatile(  \
+    " sync ;  isync; \n"  \
+    " tlbia ;  eieio;  \n"  \
+    " tlbsync ;        \n"  \
+    " sync ; isync;  \n"  \
+    : : :"0");
+
+  /* restore, i.e., switch MMU and IRQs back on */
+  _write_MSR( msr );
+  
+  /* Clear BAT registers*/
+  //CLRBAT (DBAT0);
+  //CLRBAT (DBAT1);
+  //CLRBAT (DBAT2);
+  //CLRBAT (DBAT3);   
+
+  return ;
+}
+
+rtems_status_code _CPU_Memory_protection_Verify_permission(
+    rtems_mm_permission attribute
+) {
+  return pagetable_attr_check((uint32_t)attribute);
+}
+
+rtems_status_code _CPU_Memory_protection_Install_MPE(
+    rtems_mm_entry *mpe
+) {
+  uintptr_t ea, block_end;
+  uint32_t attr;
+  int pagesize, wimg, pp;
+
+  rtems_status_code retval = RTEMS_SUCCESSFUL;
+
+  //ea = (uintptr_t)mpe->base;
+  ea = (uintptr_t) mpe->region.base;
+
+  //block_end = (uintptr_t)(mpe->base + mpe->bounds);
+  block_end = (uintptr_t)(mpe->region.base + mpe->region.bounds);
+  pagesize = 0x1000; /* FIXME: 4K page */
+
+  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
+
+  //attr = mpe->access_attribute;
+  attr = mpe->permissions;
+  translate_access_attr(attr, &wimg, &pp);
+
+  for ( ; ea < block_end; ea += pagesize ) {
+    if ( (retval = update_attribute(ea, wimg, pp)) != RTEMS_SUCCESSFUL )
+      break;
+  }
+  return retval;
+}
+
+rtems_status_code _CPU_Memory_protection_Verify_size(
+    size_t size
+) {
+    return RTEMS_SUCCESSFUL;
+}
+
+// FIXME : implement hardware uninstall
+rtems_status_code _CPU_Memory_protection_Uninstall_MPE(
+    rtems_mm_entry *mpe
+) {
+    return RTEMS_SUCCESSFUL;
+}
+// FIXME : implement set write 
+rtems_status_code _CPU_Memory_protection_Set_write(
+   rtems_mm_entry *mpe
+) {
+   return RTEMS_SUCCESSFUL;
+} 
+
+rtems_status_code _CPU_Memory_protection_Set_read(
+   rtems_mm_entry *mpe
+) {
+   return RTEMS_SUCCESSFUL;
+} 
+
+rtems_status_code _CPU_Memory_protection_Set_execute(
+   rtems_mm_entry *mpe
+) {
+   return RTEMS_SUCCESSFUL;
+} 

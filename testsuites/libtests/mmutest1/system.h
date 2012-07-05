@@ -33,8 +33,10 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_INIT_TASK_STACK_SIZE    (RTEMS_MINIMUM_STACK_SIZE * 2)
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 
 #include <rtems/confdefs.h>
 
 /* end of include file */
+
