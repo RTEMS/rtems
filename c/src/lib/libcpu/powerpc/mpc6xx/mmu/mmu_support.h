@@ -5,17 +5,13 @@
 *  The license and distribution terms for this file may be
 *  found in the file LICENSE in this distribution or at
 *  http://www.rtems.com/license/LICENSE.
-*
-*  $Id$
 */
 #ifndef _LIBCPU_MMU_SUPPORT_H
 #define _LIBCPU_MMU_SUPPORT_H
 
-
 #ifdef __cplusplus
   extern "C" {
 #endif
-
 
 /* Access definition macros below */
 #define _PPC_MMU_ACCESS_SUPERVISOR_ONLY     0
@@ -68,9 +64,6 @@ mmu_init(void);
 
 void
 mmu_irq_init(void);
-
-
-
 
 #ifdef __cplusplus
   }

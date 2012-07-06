@@ -59,7 +59,6 @@ get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
   *pteg = (libcpu_mmu_pte *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
 }
 
-
 /*attribute check,  to make sure the attribute in ALUT is available 
 */
 static rtems_status_code pagetable_attr_check(uint32_t attr )
@@ -105,7 +104,6 @@ static rtems_status_code update_attribute( uint32_t  ea,  int wimg, int pp)
   volatile uint32_t   sr_data, vsid, pi, hash1, hash2, api;
   volatile int ppteg_search_status, spteg_search_status;
 
-  
   if (wimg < 0 && pp < 0)
     return RTEMS_UNSATISFIED;
 
@@ -187,7 +185,6 @@ rtems_status_code  _CPU_Memory_protection_Initialize( void )
    /*rtems_cache_flush_entire_data for mpc6XX is not actually implemented*/
   /*rtems_cache_flush_entire_data();*/
   
-
   rtems_cache_flush_multiple_data_lines((void*)RamBase, (size_t)RamSize);
 
   for(pte = (libcpu_mmu_pte*)pt_base; pte < (libcpu_mmu_pte*)pt_end; pte+=1){
@@ -205,10 +202,10 @@ rtems_status_code  _CPU_Memory_protection_Initialize( void )
   _write_MSR( msr );
   
   /* Clear BAT registers*/
-  //CLRBAT (DBAT0);
-  //CLRBAT (DBAT1);
-  //CLRBAT (DBAT2);
-  //CLRBAT (DBAT3);   
+  CLRBAT (DBAT0);
+  CLRBAT (DBAT1);
+  CLRBAT (DBAT2);
+  CLRBAT (DBAT3);   
 
   return ;
 }
@@ -260,6 +257,7 @@ rtems_status_code _CPU_Memory_protection_Uninstall_MPE(
 ) {
     return RTEMS_SUCCESSFUL;
 }
+
 // FIXME : implement set write 
 rtems_status_code _CPU_Memory_protection_Set_write(
    rtems_mm_entry *mpe

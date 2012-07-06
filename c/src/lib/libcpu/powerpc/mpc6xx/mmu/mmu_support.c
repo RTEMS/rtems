@@ -5,8 +5,6 @@
 *  The license and distribution terms for this file may be
 *  found in the file LICENSE in this distribution or at
 *  http://www.rtems.com/license/LICENSE.
-*
-*  $Id$
 */
 
 #include <rtems.h>
@@ -48,8 +46,6 @@ SPR_RO(DSISR);
 
 static int pte_counter = 5;
 
-
-
 static int
 search_empty_pte_slot(libcpu_mmu_pte *pteg){
   int i;
@@ -62,7 +58,6 @@ search_empty_pte_slot(libcpu_mmu_pte *pteg){
   /* No PTE  free entry found, so rotate count and select a PTE */
   return -1;
 }
-
 
 static int
 search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
@@ -84,7 +79,6 @@ search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
   }
   return -1;  /* Failed search */
 }
-
 
 static int
 BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
@@ -148,7 +142,6 @@ get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
   masked_hash = ((htaborg >> 16) & 0x000001ff) | ((hash >> 10) & htabmask);
   *pteg = (libcpu_mmu_pte *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
 }
-
 
 /* THis function shall be called upon exception on the DSISR
    register. depending on the type of exception appropriate action
@@ -260,7 +253,6 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   /* Before returning turn on MMU */
   _write_MSR( msr );
   return 0;
-
 }
 
 static int
@@ -268,7 +260,6 @@ mmu_handle_tlb_dlmiss_exception(BSP_Exception_frame *f, unsigned vector){
   printk("DL TLB MISS Exception hit\n");
   return 0;
 }
-
 
 static int
 mmu_handle_tlb_dsmiss_exception(BSP_Exception_frame *f, unsigned vector){
@@ -283,7 +274,6 @@ mmu_irq_init(void){
   ppc_exc_set_handler(ASM_60X_DLMISS_VECTOR, mmu_handle_tlb_dlmiss_exception);
   ppc_exc_set_handler(ASM_60X_DSMISS_VECTOR, mmu_handle_tlb_dsmiss_exception);
   
-
   /* Initialise segment registers */
   for (i=0; i<16; i++) 
     _write_SR(i|0x60000000 , (void *)(i<<28 ));
@@ -293,7 +283,6 @@ mmu_irq_init(void){
 
   _CPU_Memory_protection_Initialize();
   /*mmu_init();*/
-
 }
 
 
@@ -301,15 +290,10 @@ mmu_irq_init(void){
    would be EA, PA, Block Length, Access Bits */
 void
 mmu_make_bat_entry(void){
-
 }
-
-
 
 /* Same thing as above but for Instruction access */
 void
 mmu_handle_isi_exception(void){
-
 }
-
 

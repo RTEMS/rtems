@@ -4,8 +4,6 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
- *
- * $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -74,7 +72,7 @@ rtems_status_code rtems_mm_finalize_domain(
 ) {
   ISR_Level                      level;
 
-  _ISR_Disable( level );
+ //_ISR_Disable( level );
 
   if ( 0 == the_domain ) {
     _ISR_Enable( level );
@@ -85,7 +83,7 @@ rtems_status_code rtems_mm_finalize_domain(
   if (the_domain->mpe_array)
     _Workspace_Free(the_domain->mpe_array);
 
-  _ISR_Enable( level );
+  //_ISR_Enable( level );
 
   return RTEMS_SUCCESSFUL;
 }
@@ -101,7 +99,7 @@ rtems_status_code rtems_mm_install_domain(
   rtems_status_code              status;
   ISR_Level          level;
 
-  _ISR_Disable( level );
+  //_ISR_Disable( level );
 
   status = RTEMS_SUCCESSFUL;
 
@@ -120,7 +118,7 @@ rtems_status_code rtems_mm_install_domain(
   }
 
 out:
-  _ISR_Enable( level );
+  //_ISR_Enable( level );
   return status;
 }
 
@@ -137,7 +135,7 @@ rtems_status_code rtems_mm_uninstall_domain(
   rtems_status_code              status;
   ISR_Level          level;
 
-  _ISR_Disable( level );
+  //_ISR_Disable( level );
 
   status = RTEMS_SUCCESSFUL;
 
@@ -155,7 +153,7 @@ rtems_status_code rtems_mm_uninstall_domain(
   }
 
 out:
-  _ISR_Enable( level );
+  //_ISR_Enable( level );
   return status;
 }
 
@@ -177,7 +175,7 @@ rtems_status_code rtems_mm_create_entry(
   const size_t                      size = region->bounds;
   ISR_Level             level;
 
-  _ISR_Disable( level );
+  //_ISR_Disable( level );
 
   status = RTEMS_SUCCESSFUL;
 
@@ -247,7 +245,7 @@ rtems_status_code rtems_mm_delete_entry(
   rtems_status_code              status;
   ISR_Level          level;
 
-  _ISR_Disable( level );
+  //_ISR_Disable( level );
   status = RTEMS_SUCCESSFUL;
 
   if ( 0 == mpe ) {
@@ -283,7 +281,7 @@ rtems_status_code rtems_mm_find_entry(
   rtems_status_code              status;
   ISR_Level          level;
 
-  _ISR_Disable( level );
+  //_ISR_Disable( level );
   status = RTEMS_SUCCESSFUL;
 
   /*if( 0 == p_ret ) {
@@ -308,7 +306,7 @@ rtems_status_code rtems_mm_find_entry(
   status = RTEMS_UNSATISFIED;
 
 out:
-  _ISR_Enable( level );
+  //_ISR_Enable( level );
   return status;
 }
 
@@ -325,7 +323,7 @@ rtems_status_code rtems_mm_set_permission(
   rtems_status_code              status;
   ISR_Level          level;
 
-  _ISR_Disable( level );
+  //_ISR_Disable( level );
   status = RTEMS_SUCCESSFUL;
 
   if ( 0 == mpe ) {
@@ -360,8 +358,6 @@ rtems_status_code rtems_mm_set_permission(
   }
 
 out: 
-  _ISR_Enable( level );
+  //_ISR_Enable( level );
   return status;
 }
-
-
