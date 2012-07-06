@@ -14,12 +14,12 @@
 /**
  *  @brief Initialize the memory protection manager and the hardware.
  */
-rtems_status_code rtems_mm_initialize( )
+rtems_status_code rtems_memory_management_initialize( )
 {
   rtems_status_code status;
   //ISR_Level         level;
   //_ISR_Disable( level );
-    status = _CPU_Memory_protection_Initialize();
+    status = _CPU_Memory_management_Initialize();
   //_ISR_Enable( level );
   return status;
 }
@@ -27,13 +27,13 @@ rtems_status_code rtems_mm_initialize( )
 /**
  *  Verify that @a perms is valid for the underlying architecture
  */
-rtems_status_code rtems_mm_verify_permission(
-    rtems_mm_permission perms
+rtems_status_code rtems_memory_management_verify_permission(
+    rtems_memory_management_permission perms
 ) {
   rtems_status_code status;
   ISR_Level         level;
   _ISR_Disable( level );
-    status = _CPU_Memory_protection_Verify_permission(perms);
+    status = _CPU_Memory_management_Verify_permission(perms);
   _ISR_Enable( level );
   return status;
 }
@@ -41,13 +41,13 @@ rtems_status_code rtems_mm_verify_permission(
 /**
  *  Verify that @a size is valid for the underlying architecture
  */
-rtems_status_code rtems_mm_verify_size(
+rtems_status_code rtems_memory_management_verify_size(
     size_t size
 ) {
   rtems_status_code status;
   ISR_Level         level;
   _ISR_Disable( level );
-    status = _CPU_Memory_protection_Verify_size(size);
+    status = _CPU_Memory_management_Verify_size(size);
   _ISR_Enable( level );
   return status;
 }
@@ -55,13 +55,13 @@ rtems_status_code rtems_mm_verify_size(
 /**
  * @brief Install the memory protection entry to the enforcement mechanism.
  */
-rtems_status_code rtems_mm_install_entry(
-  rtems_mm_entry *mpe
+rtems_status_code rtems_memory_management_install_entry(
+  rtems_memory_management_entry *mpe
 ) {
   rtems_status_code status;
   ISR_Level         level;
   _ISR_Disable( level );
-    status = _CPU_Memory_protection_Install_MPE(mpe);
+    status = _CPU_Memory_management_Install_MPE(mpe);
     if ( status == RTEMS_SUCCESSFUL ) {
       mpe->installed = true;
     }
@@ -72,13 +72,13 @@ rtems_status_code rtems_mm_install_entry(
 /**
  * @brief Uninstall the memory protection entry from the enforcement mechanism.
  */
-rtems_status_code rtems_mm_uninstall_entry(
-  rtems_mm_entry *mpe
+rtems_status_code rtems_memory_management_uninstall_entry(
+  rtems_memory_management_entry *mpe
 ) {
   rtems_status_code status;
   ISR_Level         level;
   _ISR_Disable( level );
-  status = _CPU_Memory_protection_Uninstall_MPE(mpe);
+  status = _CPU_Memory_management_Uninstall_MPE(mpe);
   if ( status == RTEMS_SUCCESSFUL ) {
     mpe->installed = false;
   }
@@ -86,14 +86,14 @@ rtems_status_code rtems_mm_uninstall_entry(
   return status;
 }
 
-rtems_status_code rtems_mm_set_write
+rtems_status_code rtems_memory_management_set_write
 (
-  rtems_mm_entry *mpe
+  rtems_memory_management_entry *mpe
 ) {
   rtems_status_code status;
   ISR_Level         level;
   _ISR_Disable( level );
-  status ==  _CPU_Memory_protection_Set_write(mpe);
+  status ==  _CPU_Memory_management_Set_write(mpe);
   if ( status == RTEMS_SUCCESSFUL ) {
     /* To edit the new permission opaque type
  *     with enabled write permission */

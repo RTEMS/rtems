@@ -159,7 +159,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   libcpu_mmu_pte* ppteg;
   libcpu_mmu_pte* spteg;
   volatile unsigned long cause, msr;
-  rtems_mm_entry* domain_entry;
+  rtems_memory_management_entry* domain_entry;
   
   /* Switch MMU and other Interrupts off */
   msr = _read_MSR();
@@ -206,7 +206,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-      status = rtems_mm_find_entry((void *)ea, &domain_entry);
+      status = rtems_memory_management_find_entry((void *)ea, &domain_entry);
       if(status == RTEMS_SUCCESSFUL){
       }
       else
@@ -281,7 +281,7 @@ mmu_irq_init(void){
   /* Set up SDR1 register for page table address */
   _write_SDR1((unsigned long) 0x00FF0000);
 
-  _CPU_Memory_protection_Initialize();
+  _CPU_Memory_management_Initialize();
   /*mmu_init();*/
 }
 

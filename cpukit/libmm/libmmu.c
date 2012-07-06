@@ -17,20 +17,20 @@
  *  Initialize the protection domain the_domain with preallocated
  *  array of max_number_of_mpes memory protection entries.
  */
-rtems_status_code rtems_mm_initialize_domain(
-    rtems_mm_domain* the_domain,
+rtems_status_code rtems_memory_management_initialize_domain(
+    rtems_memory_management_domain* the_domain,
     size_t max_number_of_mpes
 ) {
   int i;
-  rtems_mm_region_descriptor *the_region;
-  rtems_mm_entry             *the_mpe;
+  rtems_memory_management_region_descriptor *the_region;
+  rtems_memory_management_entry             *the_mpe;
   ISR_Level                      level;
 
   //_ISR_Disable( level );
 
   // TODO: configure space from workspace
   the_domain->mpe_array = _Workspace_Allocate(
-      max_number_of_mpes * sizeof(rtems_mm_entry)
+      max_number_of_mpes * sizeof(rtems_memory_management_entry)
   );
   if ( ! the_domain->mpe_array ) {
     return RTEMS_NO_MEMORY;
@@ -43,7 +43,7 @@ rtems_status_code rtems_mm_initialize_domain(
       &(the_domain->idle_mpe_chain),
       the_domain->mpe_array,
       max_number_of_mpes,
-      sizeof(rtems_mm_entry)
+      sizeof(rtems_memory_management_entry)
   );
 
   _Chain_Initialize_empty( &(the_domain->active_mpe_chain) );
@@ -56,7 +56,7 @@ rtems_status_code rtems_mm_initialize_domain(
     the_region->base      = NULL;
     the_region->bounds    = 0;
     the_mpe->installed    = false;
-    the_mpe->permissions  = RTEMS_MEMORY_PROTECTION_NO_PERMISSION;
+    the_mpe->permissions  = RTEMS_MEMORY_MANAGEMENT_NO_PERMISSION;
   }
  
   //_ISR_Enable( level );
@@ -67,8 +67,8 @@ rtems_status_code rtems_mm_initialize_domain(
 /**
  *  Release any resources associated with the_domain
  */
-rtems_status_code rtems_mm_finalize_domain(
-    rtems_mm_domain* the_domain
+rtems_status_code rtems_memory_management_finalize_domain(
+    rtems_memory_management_domain* the_domain
 ) {
   ISR_Level                      level;
 
@@ -79,7 +79,7 @@ rtems_status_code rtems_mm_finalize_domain(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  rtems_mm_uninstall_domain(the_domain);
+  rtems_memory_management_uninstall_domain(the_domain);
   if (the_domain->mpe_array)
     _Workspace_Free(the_domain->mpe_array);
 
@@ -91,10 +91,10 @@ rtems_status_code rtems_mm_finalize_domain(
 /**
  * Install all mpes in the protection domain the_domain.
  */
-rtems_status_code rtems_mm_install_domain(
-    rtems_mm_domain* the_domain
+rtems_status_code rtems_memory_management_install_domain(
+    rtems_memory_management_domain* the_domain
 ) {
-  rtems_mm_entry *mpe;
+  rtems_memory_management_entry *mpe;
   rtems_chain_node              *node;
   rtems_status_code              status;
   ISR_Level          level;
@@ -105,10 +105,10 @@ rtems_status_code rtems_mm_install_domain(
 
   node = rtems_chain_first( &the_domain->active_mpe_chain );
   while ( ! rtems_chain_is_tail( &the_domain->active_mpe_chain, node ) ) {
-    mpe = (rtems_mm_entry*)node;
+    mpe = (rtems_memory_management_entry*)node;
     
     if ( ! mpe->installed ) {
-      status = rtems_mm_install_entry( mpe );
+      status = rtems_memory_management_install_entry( mpe );
       if ( status != RTEMS_SUCCESSFUL ) {
         goto out;
       }
@@ -127,10 +127,10 @@ out:
  *  FIXME: for CPUs that cannot do individual MPE uninstall this 
  *  function should just make one call to uninstall_entry?
  */
-rtems_status_code rtems_mm_uninstall_domain(
-    rtems_mm_domain* the_domain
+rtems_status_code rtems_memory_management_uninstall_domain(
+    rtems_memory_management_domain* the_domain
 ) {
-  rtems_mm_entry *mpe;
+  rtems_memory_management_entry *mpe;
   rtems_chain_node              *node;
   rtems_status_code              status;
   ISR_Level          level;
@@ -141,10 +141,10 @@ rtems_status_code rtems_mm_uninstall_domain(
 
   node = rtems_chain_first( &the_domain->active_mpe_chain );
   while ( ! rtems_chain_is_tail( &the_domain->active_mpe_chain, node ) ) {
-    mpe = (rtems_mm_entry*)node;
+    mpe = (rtems_memory_management_entry*)node;
 
     if ( mpe->installed ) {
-      status = rtems_mm_uninstall_entry( mpe );
+      status = rtems_memory_management_uninstall_entry( mpe );
       if ( status != RTEMS_SUCCESSFUL )
         goto out;
     }
@@ -162,13 +162,13 @@ out:
  * permissions in perms. This function adds the newly created mpe
  * to the active chain of the domain but does not install it. 
  */
-rtems_status_code rtems_mm_create_entry(
-  rtems_mm_domain* the_domain,
-  rtems_mm_region_descriptor * const region,
-  const rtems_mm_permission perms,
-  rtems_mm_entry** p_ret)
+rtems_status_code rtems_memory_management_create_entry(
+  rtems_memory_management_domain* the_domain,
+  rtems_memory_management_region_descriptor * const region,
+  const rtems_memory_management_permission perms,
+  rtems_memory_management_entry** p_ret)
 { 
-  rtems_mm_entry    *current;
+  rtems_memory_management_entry    *current;
   rtems_chain_node                 *node;
   rtems_status_code                 status;
   void* const                       base = region->base;
@@ -186,13 +186,13 @@ rtems_status_code rtems_mm_create_entry(
   *p_ret = NULL;
 
   /* Check for invalid block size */
-  status = rtems_mm_verify_size(size);
+  status = rtems_memory_management_verify_size(size);
   if( status != RTEMS_SUCCESSFUL )
     goto out;
 
   /*advanced permission check , need to make sure the permission of the *
   * new block is available. the check is a CPU related function.*/
-  status = rtems_mm_verify_permission(perms);
+  status = rtems_memory_management_verify_permission(perms);
   if( status != RTEMS_SUCCESSFUL)
     goto out;
 
@@ -205,7 +205,7 @@ rtems_status_code rtems_mm_create_entry(
   /* Check for address map overlaps */
   node = rtems_chain_first( &the_domain->active_mpe_chain );
   while ( ! rtems_chain_is_tail(&the_domain->active_mpe_chain, node) ) {
-    current = (rtems_mm_entry*)node;
+    current = (rtems_memory_management_entry*)node;
     if ( !((current->region.base >= ( base + size) ) ||
           ((current->region.base + current->region.bounds ) <= base) )
     ) {
@@ -217,7 +217,7 @@ rtems_status_code rtems_mm_create_entry(
   
   /* get an empty node */
   node = rtems_chain_get_unprotected(&(the_domain->idle_mpe_chain));
-  current = (rtems_mm_entry*)node;
+  current = (rtems_memory_management_entry*)node;
 
   /* Append entry to the active chain */
   current->region.base = base;
@@ -236,11 +236,11 @@ out:
  * Delete memory protection entry mpe from the protection
  * domain the_domain. 
  */
-rtems_status_code rtems_mm_delete_entry(
-  rtems_mm_domain* the_domain,
-  rtems_mm_entry* const mpe
+rtems_status_code rtems_memory_management_delete_entry(
+  rtems_memory_management_domain* the_domain,
+  rtems_memory_management_entry* const mpe
 ) {
-  rtems_mm_entry *current;
+  rtems_memory_management_entry *current;
   rtems_chain_node              *node;
   rtems_status_code              status;
   ISR_Level          level;
@@ -256,7 +256,7 @@ rtems_status_code rtems_mm_delete_entry(
   rtems_chain_extract_unprotected( &mpe->node );
 
   if ( mpe->installed )
-    status = rtems_mm_uninstall_entry(mpe);
+    status = rtems_memory_management_uninstall_entry(mpe);
 
   mpe->region.bounds = 0;
   mpe->region.base = 0;
@@ -271,12 +271,12 @@ out:
  * Find the memory protection entry in the_domain that contains
  * the_address.
  */
-rtems_status_code rtems_mm_find_entry(
-  rtems_mm_domain* the_domain,
+rtems_status_code rtems_memory_management_find_entry(
+  rtems_memory_management_domain* the_domain,
   void* const the_address 
   )
 {
-  rtems_mm_entry* current;
+  rtems_memory_management_entry* current;
   rtems_chain_node *node;
   rtems_status_code              status;
   ISR_Level          level;
@@ -293,7 +293,7 @@ rtems_status_code rtems_mm_find_entry(
   node = rtems_chain_first( &the_domain->active_mpe_chain );
 
   while ( ! rtems_chain_is_tail( &(the_domain->active_mpe_chain), node ) ) {
-    current = (rtems_mm_entry*)node;
+    current = (rtems_memory_management_entry*)node;
     if ( (current->region.base <= the_address) &&
          ((current->region.base + current->region.bounds)>the_address) 
        ) {
@@ -315,10 +315,10 @@ out:
  * not change whether mpe is installed or not: if the mpe is installed then
  * it will be re-installed with the new permissions.
  */
-rtems_status_code rtems_mm_set_permission(
-  rtems_mm_entry* const mpe,
-  const rtems_mm_permission new_permission,
-  rtems_mm_permission* old_permission )
+rtems_status_code rtems_memory_management_set_permission(
+  rtems_memory_management_entry* const mpe,
+  const rtems_memory_management_permission new_permission,
+  rtems_memory_management_permission* old_permission )
 {
   rtems_status_code              status;
   ISR_Level          level;
@@ -339,7 +339,7 @@ rtems_status_code rtems_mm_set_permission(
   /* advanced permission check to make sure the permission of the
    * new block is available. the check is a CPU related function.
    */
-  status = rtems_mm_verify_permission(new_permission);
+  status = rtems_memory_management_verify_permission(new_permission);
   if( status != RTEMS_SUCCESSFUL)
     goto out;
 
@@ -353,8 +353,8 @@ rtems_status_code rtems_mm_set_permission(
     // FIXME: on some architecture it might be better to replace an entry.
     // Not sure how often this would happen though. and some architectures
     // might not even allow fine-grained removal / installation of entries.
-    rtems_mm_uninstall_entry(mpe);
-    rtems_mm_install_entry(mpe);
+    rtems_memory_management_uninstall_entry(mpe);
+    rtems_memory_management_install_entry(mpe);
   }
 
 out: 

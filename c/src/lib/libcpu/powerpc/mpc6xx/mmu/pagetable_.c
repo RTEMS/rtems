@@ -167,7 +167,7 @@ static rtems_status_code update_attribute( uint32_t  ea,  int wimg, int pp)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code  _CPU_Memory_protection_Initialize( void )
+rtems_status_code  _CPU_Memory_management_Initialize( void )
 {
   uint32_t pt_base,pt_end,cache_line_size;
   libcpu_mmu_pte* pte;
@@ -210,14 +210,14 @@ rtems_status_code  _CPU_Memory_protection_Initialize( void )
   return ;
 }
 
-rtems_status_code _CPU_Memory_protection_Verify_permission(
-    rtems_mm_permission attribute
+rtems_status_code _CPU_Memory_management_Verify_permission(
+    rtems_memory_management_permission attribute
 ) {
   return pagetable_attr_check((uint32_t)attribute);
 }
 
-rtems_status_code _CPU_Memory_protection_Install_MPE(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Install_MPE(
+    rtems_memory_management_entry *mpe
 ) {
   uintptr_t ea, block_end;
   uint32_t attr;
@@ -245,34 +245,34 @@ rtems_status_code _CPU_Memory_protection_Install_MPE(
   return retval;
 }
 
-rtems_status_code _CPU_Memory_protection_Verify_size(
+rtems_status_code _CPU_Memory_management_Verify_size(
     size_t size
 ) {
     return RTEMS_SUCCESSFUL;
 }
 
 // FIXME : implement hardware uninstall
-rtems_status_code _CPU_Memory_protection_Uninstall_MPE(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Uninstall_MPE(
+    rtems_memory_management_entry *mpe
 ) {
     return RTEMS_SUCCESSFUL;
 }
 
 // FIXME : implement set write 
-rtems_status_code _CPU_Memory_protection_Set_write(
-   rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Set_write(
+   rtems_memory_management_entry *mpe
 ) {
    return RTEMS_SUCCESSFUL;
 } 
 
-rtems_status_code _CPU_Memory_protection_Set_read(
-   rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Set_read(
+   rtems_memory_management_entry *mpe
 ) {
    return RTEMS_SUCCESSFUL;
 } 
 
-rtems_status_code _CPU_Memory_protection_Set_execute(
-   rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Set_execute(
+   rtems_memory_management_entry *mpe
 ) {
    return RTEMS_SUCCESSFUL;
 } 

@@ -30,46 +30,46 @@ extern "C" {
 /*
  * Initialize the hardware to prepare for memory protection directives.
  */
-rtems_status_code _CPU_Memory_protection_Initialize( void );
+rtems_status_code _CPU_Memory_management_Initialize( void );
 
 /*
  * Make sure memory protection @a permission is valid for this CPU
  */
-rtems_status_code _CPU_Memory_protection_Verify_permission(
-    rtems_mm_permission permission
+rtems_status_code _CPU_Memory_management_Verify_permission(
+    rtems_memory_management_permission permission
 );
 
 /*
  * Check if memory protection region @a size is valid for this CPU
  */
-rtems_status_code _CPU_Memory_protection_Verify_size(
+rtems_status_code _CPU_Memory_management_Verify_size(
     size_t size
 );
 
 /*
  * Install (enforce) the memory protection entry @a mpe
  */
-rtems_status_code _CPU_Memory_protection_Install_MPE(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Install_MPE(
+    rtems_memory_management_entry *mpe
 );
 
 /*
  * Uninstall the memory protection entry @a mpe
  */
-rtems_status_code _CPU_Memory_protection_Uninstall_MPE(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Uninstall_MPE(
+    rtems_memory_management_entry *mpe
 );
 
-rtems_status_code _CPU_Memory_protection_Set_write(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Set_write(
+    rtems_memory_management_entry *mpe
 );
 
-rtems_status_code _CPU_Memory_protection_Set_read(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Set_read(
+    rtems_memory_management_entry *mpe
 );
 
-rtems_status_code _CPU_Memory_protection_Set_execute(
-    rtems_mm_entry *mpe
+rtems_status_code _CPU_Memory_management_Set_execute(
+    rtems_memory_management_entry *mpe
 );
 #ifdef __cplusplus
   }

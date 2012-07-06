@@ -39,31 +39,31 @@ rtems_task Init(
   unsigned char* a2;
   void * good_address;
   void * bad_address;
-  rtems_mm_entry *mp_entry;
-  rtems_mm_permission permission;
-  rtems_mm_domain *protection_domain, *another_domain;
+  rtems_memory_management_entry *mp_entry;
+  rtems_memory_management_permission permission;
+  rtems_memory_management_domain *protection_domain, *another_domain;
   void *blob;
-  rtems_mm_domain p1, p2;
+  rtems_memory_management_domain p1, p2;
   
   protection_domain = &p1;
   another_domain = &p2;
 
-  rtems_mm_region_descriptor r1 = {
+  rtems_memory_management_region_descriptor r1 = {
     .name = "faulty",
     .base = 0x00,
     .bounds = 2096
   };
-  rtems_mm_region_descriptor r2 = {
+  rtems_memory_management_region_descriptor r2 = {
     .name = "read-only",
     .base = 0x00,
     .bounds = 0x2000
   };
-  rtems_mm_region_descriptor r3 = {
+  rtems_memory_management_region_descriptor r3 = {
     .name = "stringy",
     .base = 0x00,
     .bounds = 0x2000
   };
-   rtems_mm_region_descriptor r4 = {
+   rtems_memory_management_region_descriptor r4 = {
     .name = "big",
     .base = 0x00,
     .bounds = 0x2000
@@ -83,7 +83,7 @@ rtems_task Init(
 
   puts( "\n\n*** MMU ALUT TEST 1 BEGINS ***\n" );
   puts( "initialize the memory protect manager\n");
-  status = rtems_mm_initialize();
+  status = rtems_memory_management_initialize();
   if ( status != RTEMS_SUCCESSFUL )
   {
     puts("Failed: initialize the memory protect manager; status "
@@ -91,7 +91,7 @@ rtems_task Init(
     exit(0);
   }
 
-  status = rtems_mm_initialize_domain( protection_domain, 64 );
+  status = rtems_memory_management_initialize_domain( protection_domain, 64 );
   if ( status != RTEMS_SUCCESSFUL )
   {
     printf("Failed: create protection domain; status = %d\n",
@@ -100,7 +100,7 @@ rtems_task Init(
   }
   printf("Protection domain created\n");
 
-  status = rtems_mm_initialize_domain( another_domain, 8 );
+  status = rtems_memory_management_initialize_domain( another_domain, 8 );
   if ( status != RTEMS_SUCCESSFUL )
   {
     printf("Failed: create protection domain; status = %d\n",
@@ -111,10 +111,10 @@ rtems_task Init(
 
   /* FIXME: 4K magic */
   printf("Test 1: Adding entry with block size less than 4K\n");
-  status = rtems_mm_create_entry(
+  status = rtems_memory_management_create_entry(
       protection_domain,
       &r1,
-      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      RTEMS_MEMORY_MANAGEMENT_READ_PERMISSION,
       &mp_entry
   );
   if ( status == RTEMS_SUCCESSFUL ) {
@@ -127,10 +127,10 @@ rtems_task Init(
   r1.bounds = 0x00008FFF;
   /* FIXME: 4K magic */
   printf("Test 2: Adding entry with block size not a multiple of 4K\n");
-  status = rtems_mm_create_entry(
+  status = rtems_memory_management_create_entry(
       protection_domain,
       &r1,
-      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      RTEMS_MEMORY_MANAGEMENT_READ_PERMISSION,
       &mp_entry
   );
   if ( status == RTEMS_SUCCESSFUL ) {
@@ -141,10 +141,10 @@ rtems_task Init(
   }
   
   printf("Test 3: Adding valid entry to first domain\n");
-  status = rtems_mm_create_entry(
+  status = rtems_memory_management_create_entry(
       protection_domain,
       &r2,
-      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      RTEMS_MEMORY_MANAGEMENT_READ_PERMISSION,
       &mp_entry
   ); 
   if ( status == RTEMS_SUCCESSFUL ) {
@@ -155,10 +155,10 @@ rtems_task Init(
   }
 
   printf("Test 4: Adding overlapping address value\n");
-  status = rtems_mm_create_entry(
+  status = rtems_memory_management_create_entry(
       protection_domain,
       &r2,
-      RTEMS_MEMORY_PROTECTION_READ_PERMISSION|RTEMS_MEMORY_PROTECTION_WRITE_PERMISSION,
+      RTEMS_MEMORY_MANAGEMENT_READ_PERMISSION|RTEMS_MEMORY_MANAGEMENT_WRITE_PERMISSION,
       &mp_entry); 
   if ( status == RTEMS_SUCCESSFUL ) {
     printf("Failed: Addition passed inspite of address overlap\n");
@@ -168,10 +168,10 @@ rtems_task Init(
   }
 
   printf("Test 5: Adding valid entry to first domain\n");
-  status = rtems_mm_create_entry(
+  status = rtems_memory_management_create_entry(
       protection_domain,
       &r3,
-      RTEMS_MEMORY_PROTECTION_READ_PERMISSION,
+      RTEMS_MEMORY_MANAGEMENT_READ_PERMISSION,
       &mp_entry);
   if ( status == RTEMS_SUCCESSFUL ) {
     printf("Passed: Entry successfully added\n");
@@ -181,10 +181,10 @@ rtems_task Init(
   }
 
   printf("Test 6: Adding valid entry to second domain\n");
-  status = rtems_mm_create_entry(
+  status = rtems_memory_management_create_entry(
       another_domain,
       &r4,
-      RTEMS_MEMORY_PROTECTION_READ_PERMISSION|RTEMS_MEMORY_PROTECTION_WRITE_PERMISSION,
+      RTEMS_MEMORY_MANAGEMENT_READ_PERMISSION|RTEMS_MEMORY_MANAGEMENT_WRITE_PERMISSION,
       &mp_entry
   ); 
   if ( status == RTEMS_SUCCESSFUL ) {
@@ -195,7 +195,7 @@ rtems_task Init(
   }
 
   printf("Test 7: Find valid address in second domain\n");
-  status = rtems_mm_find_entry(
+  status = rtems_memory_management_find_entry(
       another_domain,
       good_address
      // &mp_entry
@@ -205,7 +205,7 @@ rtems_task Init(
   }
 
   printf("Test 8: Install second domain\n");
-  status = rtems_mm_install_domain(another_domain);
+  status = rtems_memory_management_install_domain(another_domain);
   if ( status != RTEMS_SUCCESSFUL ) {
     printf("Failed: unable to install domain, status = %d\n",status);
   } else {
@@ -213,11 +213,11 @@ rtems_task Init(
   }
 
   printf("Test 9: Switch from second to first domain\n");
-  status = rtems_mm_uninstall_domain(another_domain);
+  status = rtems_memory_management_uninstall_domain(another_domain);
   if ( status != RTEMS_SUCCESSFUL ) {
     printf("Failed: unable to install domain, status = %d\n",status);
   }
-  status = rtems_mm_install_domain(protection_domain);
+  status = rtems_memory_management_install_domain(protection_domain);
   if ( status != RTEMS_SUCCESSFUL ) {
     printf("Failed: unable to install domain, status = %d\n",status);
   } else {
@@ -225,7 +225,7 @@ rtems_task Init(
   }
 
   printf("Test 10: delete entry from second domain\n");
-  status = rtems_mm_delete_entry(another_domain, mp_entry);
+  status = rtems_memory_management_delete_entry(another_domain, mp_entry);
   if ( status != RTEMS_SUCCESSFUL ) {
     printf("Failed: unable to delete, status = %d\n",status);
   } else {
@@ -233,7 +233,7 @@ rtems_task Init(
   }
 
   printf("Test 11: release second domain\n");
-  status = rtems_mm_finalize_domain(another_domain);
+  status = rtems_memory_management_finalize_domain(another_domain);
   if ( status != RTEMS_SUCCESSFUL ) {
     printf("Failed: unable to release domain, status = %d\n",status);
   } else {
@@ -241,7 +241,7 @@ rtems_task Init(
   }
 
   printf("Test 12: Find invalid address in first domain\n");
-  status = rtems_mm_find_entry(
+  status = rtems_memory_management_find_entry(
       protection_domain,
       bad_address 
      // &mp_entry
