@@ -18,9 +18,9 @@ rtems_status_code rtems_mm_initialize( )
 {
   rtems_status_code status;
   //ISR_Level         level;
- // _ISR_Disable( level );
+  //_ISR_Disable( level );
     status = _CPU_Memory_protection_Initialize();
- // _ISR_Enable( level );
+  //_ISR_Enable( level );
   return status;
 }
 
@@ -32,9 +32,9 @@ rtems_status_code rtems_mm_verify_permission(
 ) {
   rtems_status_code status;
   ISR_Level         level;
-  //_ISR_Disable( level );
+  _ISR_Disable( level );
     status = _CPU_Memory_protection_Verify_permission(perms);
-  //_ISR_Enable( level );
+  _ISR_Enable( level );
   return status;
 }
 
@@ -46,9 +46,9 @@ rtems_status_code rtems_mm_verify_size(
 ) {
   rtems_status_code status;
   ISR_Level         level;
-  //_ISR_Disable( level );
+  _ISR_Disable( level );
     status = _CPU_Memory_protection_Verify_size(size);
-  //_ISR_Enable( level );
+  _ISR_Enable( level );
   return status;
 }
 
@@ -60,12 +60,12 @@ rtems_status_code rtems_mm_install_entry(
 ) {
   rtems_status_code status;
   ISR_Level         level;
-  //_ISR_Disable( level );
+  _ISR_Disable( level );
     status = _CPU_Memory_protection_Install_MPE(mpe);
     if ( status == RTEMS_SUCCESSFUL ) {
       mpe->installed = true;
     }
-  //_ISR_Enable( level );
+  _ISR_Enable( level );
   return status;
 }
 
@@ -77,12 +77,12 @@ rtems_status_code rtems_mm_uninstall_entry(
 ) {
   rtems_status_code status;
   ISR_Level         level;
-  //_ISR_Disable( level );
+  _ISR_Disable( level );
   status = _CPU_Memory_protection_Uninstall_MPE(mpe);
   if ( status == RTEMS_SUCCESSFUL ) {
     mpe->installed = false;
   }
-  //_ISR_Enable( level );
+  _ISR_Enable( level );
   return status;
 }
 
@@ -92,13 +92,13 @@ rtems_status_code rtems_mm_set_write
 ) {
   rtems_status_code status;
   ISR_Level         level;
-  //_ISR_Disable( level );
+  _ISR_Disable( level );
   status ==  _CPU_Memory_protection_Set_write(mpe);
   if ( status == RTEMS_SUCCESSFUL ) {
     /* To edit the new permission opaque type
  *     with enabled write permission */
   }
 
-  //_ISR_Enable( level );
+  _ISR_Enable( level );
   return status;
 }

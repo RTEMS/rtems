@@ -139,5 +139,4 @@ void bsp_start( void )
    _write_MSR(_read_MSR() | MSR_DR | MSR_IR);
 
   __asm__ volatile("sync; isync");
-
 }

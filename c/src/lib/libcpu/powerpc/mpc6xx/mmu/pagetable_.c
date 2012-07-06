@@ -202,10 +202,10 @@ rtems_status_code  _CPU_Memory_protection_Initialize( void )
   _write_MSR( msr );
   
   /* Clear BAT registers*/
-  CLRBAT (DBAT0);
-  CLRBAT (DBAT1);
-  CLRBAT (DBAT2);
-  CLRBAT (DBAT3);   
+  //CLRBAT (DBAT0);
+  //CLRBAT (DBAT1);
+  //CLRBAT (DBAT2);
+  //CLRBAT (DBAT3);   
 
   return ;
 }
