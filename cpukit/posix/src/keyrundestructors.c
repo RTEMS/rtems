@@ -41,7 +41,7 @@ void _POSIX_Keys_Run_destructors(
   POSIX_Keys_Control *the_key;
   Objects_Locations location;
 
-  _Thread_Disable_dispatch();
+  //_Thread_Disable_dispatch();
   
   chain = &((POSIX_API_Control *)thread->API_Extensions[ THREAD_API_POSIX ])->the_chain;
   iter = _Chain_First( chain );
