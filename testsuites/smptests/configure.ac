@@ -41,5 +41,7 @@ smp06/Makefile
 smp07/Makefile
 smp08/Makefile
 smp09/Makefile
+smpatomic01/Makefile
+smpatomic02/Makefile
 ])
 AC_OUTPUT

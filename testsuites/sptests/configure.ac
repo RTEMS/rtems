@@ -105,7 +105,6 @@ sp75/Makefile
 sp76/Makefile
 sp2038/Makefile
 spassoc01/Makefile
-spatomic01/Makefile
 spcbssched01/Makefile
 spcbssched02/Makefile
 spcbssched03/Makefile
