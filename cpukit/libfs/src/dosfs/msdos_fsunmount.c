@@ -44,9 +44,9 @@ msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
     fat_file_fd_t   *fat_fd = temp_mt_entry->mt_fs_root->location.node_access;
 
     /* close fat-file which correspondes to root directory */
-    fat_file_close(temp_mt_entry, fat_fd);
+    fat_file_close(&fs_info->fat, fat_fd);
 
-    fat_shutdown_drive(temp_mt_entry);
+    fat_shutdown_drive(&fs_info->fat);
 
     rtems_semaphore_delete(fs_info->vol_sema);
     free(fs_info->cl_buf);

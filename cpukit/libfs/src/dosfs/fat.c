@@ -161,7 +161,7 @@ fat_buf_release(fat_fs_info_t *fs_info)
  *     boundary; in this case assumed we want to read sequential sector(s))
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     start    - sector num to start read from
  *     offset   - offset inside sector 'start'
  *     count    - count of bytes to read
@@ -173,7 +173,7 @@ fat_buf_release(fat_fs_info_t *fs_info)
  */
 ssize_t
 _fat_block_read(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              start,
     uint32_t                              offset,
     uint32_t                              count,
@@ -181,7 +181,6 @@ _fat_block_read(
     )
 {
     int                     rc = RC_OK;
-    register fat_fs_info_t *fs_info = mt_entry->fs_info;
     ssize_t                 cmpltd = 0;
     uint32_t                blk = start;
     uint32_t                ofs = offset;
@@ -212,7 +211,7 @@ _fat_block_read(
  *     boundary; in this case assumed we want to write sequential sector(s))
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     start    - sector num to start read from
  *     offset   - offset inside sector 'start'
  *     count    - count of bytes to write
@@ -224,14 +223,13 @@ _fat_block_read(
  */
 ssize_t
 _fat_block_write(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              start,
     uint32_t                              offset,
     uint32_t                              count,
     const void                           *buff)
 {
     int                 rc = RC_OK;
-    fat_fs_info_t      *fs_info = mt_entry->fs_info;
     ssize_t             cmpltd = 0;
     uint32_t            blk  = start;
     uint32_t            ofs = offset;
@@ -263,13 +261,12 @@ _fat_block_write(
 
 int
 _fat_block_zero(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              start,
     uint32_t                              offset,
     uint32_t                              count)
 {
     int                 rc = RC_OK;
-    fat_fs_info_t      *fs_info = mt_entry->fs_info;
     uint32_t            blk  = start;
     uint32_t            ofs = offset;
     rtems_bdbuf_buffer *block = NULL;
@@ -302,16 +299,14 @@ _fat_block_zero(
  *     not release it.
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *
  * RETURNS:
  *     0 on success, or -1 if error occured and errno set appropriately
  */
 int
-_fat_block_release(
-    rtems_filesystem_mount_table_entry_t *mt_entry)
+_fat_block_release(fat_fs_info_t *fs_info)
 {
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
     return fat_buf_release(fs_info);
 }
 
@@ -319,7 +314,7 @@ _fat_block_release(
  *     wrapper for reading a whole cluster at once
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     cln      - number of cluster to read
  *     buff     - buffer provided by user
  *
@@ -329,17 +324,16 @@ _fat_block_release(
  */
 ssize_t
 fat_cluster_read(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              cln,
     void                                 *buff
     )
 {
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t       fsec = 0;
 
-    fsec = fat_cluster_num_to_sector_num(mt_entry, cln);
+    fsec = fat_cluster_num_to_sector_num(fs_info, cln);
 
-    return _fat_block_read(mt_entry, fsec, 0,
+    return _fat_block_read(fs_info, fsec, 0,
                            fs_info->vol.spc << fs_info->vol.sec_log2, buff);
 }
 
@@ -347,7 +341,7 @@ fat_cluster_read(
  *     wrapper for writting a whole cluster at once
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     cln      - number of cluster to write
  *     buff     - buffer provided by user
  *
@@ -357,17 +351,16 @@ fat_cluster_read(
  */
 ssize_t
 fat_cluster_write(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              cln,
     const void                           *buff
     )
 {
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t       fsec = 0;
 
-    fsec = fat_cluster_num_to_sector_num(mt_entry, cln);
+    fsec = fat_cluster_num_to_sector_num(fs_info, cln);
 
-    return _fat_block_write(mt_entry, fsec, 0,
+    return _fat_block_write(fs_info, fsec, 0,
                           fs_info->vol.spc << fs_info->vol.sec_log2, buff);
 }
 
@@ -375,18 +368,17 @@ fat_cluster_write(
  *     Get inforamtion about volume on which filesystem is mounted on
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *
  * RETURNS:
  *     RC_OK on success, or -1 if error occured
  *     and errno set appropriately
  */
 int
-fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
+fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
 {
     rtems_status_code   sc = RTEMS_SUCCESSFUL;
     int                 rc = RC_OK;
-    fat_fs_info_t      *fs_info = mt_entry->fs_info;
     register fat_vol_t *vol = &fs_info->vol;
     uint32_t            data_secs = 0;
     char                boot_rec[FAT_MAX_BPB_SIZE];
@@ -396,7 +388,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
     int                 i = 0;
     rtems_bdbuf_buffer *block = NULL;
 
-    vol->fd = open(mt_entry->dev, O_RDWR);
+    vol->fd = open(device, O_RDWR);
     if (vol->fd < 0)
     {
         rtems_set_errno_and_return_minus_one(ENXIO);
@@ -556,7 +548,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         }
         else
         {
-            ret = _fat_block_read(mt_entry, vol->info_sec , 0,
+            ret = _fat_block_read(fs_info, vol->info_sec , 0,
                                   FAT_FSI_LEADSIG_SIZE, fs_info_sector);
             if ( ret < 0 )
             {
@@ -567,28 +559,28 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
             if (FAT_GET_FSINFO_LEAD_SIGNATURE(fs_info_sector) !=
                 FAT_FSINFO_LEAD_SIGNATURE_VALUE)
             {
-                _fat_block_release(mt_entry);
+                _fat_block_release(fs_info);
                 close(vol->fd);
                 rtems_set_errno_and_return_minus_one( EINVAL );
             }
             else
             {
-                ret = _fat_block_read(mt_entry, vol->info_sec , FAT_FSI_INFO,
+                ret = _fat_block_read(fs_info, vol->info_sec , FAT_FSI_INFO,
                                       FAT_USEFUL_INFO_SIZE, fs_info_sector);
                 if ( ret < 0 )
                 {
-                    _fat_block_release(mt_entry);
+                    _fat_block_release(fs_info);
                     close(vol->fd);
                     return -1;
                 }
 
                 vol->free_cls = FAT_GET_FSINFO_FREE_CLUSTER_COUNT(fs_info_sector);
                 vol->next_cl = FAT_GET_FSINFO_NEXT_FREE_CLUSTER(fs_info_sector);
-                rc = fat_fat32_update_fsinfo_sector(mt_entry, 0xFFFFFFFF,
+                rc = fat_fat32_update_fsinfo_sector(fs_info, 0xFFFFFFFF,
                                                     0xFFFFFFFF);
                 if ( rc != RC_OK )
                 {
-                    _fat_block_release(mt_entry);
+                    _fat_block_release(fs_info);
                     close(vol->fd);
                     return rc;
                 }
@@ -604,7 +596,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         vol->next_cl = 0xFFFFFFFF;
     }
 
-    _fat_block_release(mt_entry);
+    _fat_block_release(fs_info);
 
     vol->afat_loc = vol->fat_loc + vol->fat_length * vol->afat;
 
@@ -657,22 +649,21 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
  *     Free all allocated resources and synchronize all necessary data
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *
  * RETURNS:
  *     RC_OK on success, or -1 if error occured
  *     and errno set appropriately
  */
 int
-fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
+fat_shutdown_drive(fat_fs_info_t *fs_info)
 {
     int            rc = RC_OK;
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
     int            i = 0;
 
     if (fs_info->vol.type & FAT_FAT32)
     {
-        rc = fat_fat32_update_fsinfo_sector(mt_entry, fs_info->vol.free_cls,
+        rc = fat_fat32_update_fsinfo_sector(fs_info, fs_info->vol.free_cls,
                                             fs_info->vol.next_cl);
         if ( rc != RC_OK )
             rc = -1;
@@ -717,7 +708,7 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
  *     Zeroing contents of all clusters in the chain
  *
  * PARAMETERS:
- *     mt_entry          - mount table entry
+ *     fs_info           - FS info
  *     start_cluster_num - num of first cluster in the chain
  *
  * RETURNS:
@@ -726,13 +717,12 @@ fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry)
  */
 int
 fat_init_clusters_chain(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              start_cln
     )
 {
     int                     rc = RC_OK;
     ssize_t                 ret = 0;
-    register fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t                cur_cln = start_cln;
     char                   *buf;
 
@@ -742,14 +732,14 @@ fat_init_clusters_chain(
 
     while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
-        ret = fat_cluster_write(mt_entry, cur_cln, buf);
+        ret = fat_cluster_write(fs_info, cur_cln, buf);
         if ( ret == -1 )
         {
             free(buf);
             return -1;
         }
 
-        rc  = fat_get_fat_cluster(mt_entry, cur_cln, &cur_cln);
+        rc  = fat_get_fat_cluster(fs_info, cur_cln, &cur_cln);
         if ( rc != RC_OK )
         {
             free(buf);
@@ -776,7 +766,7 @@ fat_init_clusters_chain(
  *     Allocate unique ino from unique ino pool
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *
  * RETURNS:
  *     unique inode number on success, or 0 if there is no free unique inode
@@ -787,9 +777,8 @@ fat_init_clusters_chain(
  *
  */
 uint32_t
-fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
+fat_get_unique_ino(fat_fs_info_t *fs_info)
 {
-    register fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t                j = 0;
     bool                    resrc_unsuff = false;
 
@@ -826,7 +815,7 @@ fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
  *     Return unique ino to unique ino pool
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     ino      - inode number to free
  *
  * RETURNS:
@@ -834,12 +823,10 @@ fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry)
  */
 void
 fat_free_unique_ino(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              ino
     )
 {
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
-
     FAT_SET_UNIQ_INO_FREE((ino - fs_info->uino_base), fs_info->uino);
 }
 
@@ -847,7 +834,7 @@ fat_free_unique_ino(
  *     Test whether ino is from unique ino pool
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     ino   - ino to be tested
  *
  * RETURNS:
@@ -855,11 +842,10 @@ fat_free_unique_ino(
  */
 inline bool
 fat_ino_is_unique(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              ino
     )
 {
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
 
     return (ino >= fs_info->uino_base);
 }
@@ -868,7 +854,7 @@ fat_ino_is_unique(
  *     Synchronize fsinfo sector for FAT32 volumes
  *
  * PARAMETERS:
- *     mt_entry   - mount table entry
+ *     fs_info    - FS info
  *     free_count - count of free clusters
  *     next_free  - the next free cluster num
  *
@@ -877,26 +863,25 @@ fat_ino_is_unique(
  */
 int
 fat_fat32_update_fsinfo_sector(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              free_count,
     uint32_t                              next_free
     )
 {
     ssize_t                 ret1 = 0, ret2 = 0;
-    register fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t                le_free_count = 0;
     uint32_t                le_next_free = 0;
 
     le_free_count = CT_LE_L(free_count);
     le_next_free = CT_LE_L(next_free);
 
-    ret1 = _fat_block_write(mt_entry,
+    ret1 = _fat_block_write(fs_info,
                             fs_info->vol.info_sec,
                             FAT_FSINFO_FREE_CLUSTER_COUNT_OFFSET,
                             4,
                             (char *)(&le_free_count));
 
-    ret2 = _fat_block_write(mt_entry,
+    ret2 = _fat_block_write(fs_info,
                             fs_info->vol.info_sec,
                             FAT_FSINFO_NEXT_FREE_CLUSTER_OFFSET,
                             4,

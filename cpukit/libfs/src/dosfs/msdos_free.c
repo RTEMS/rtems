@@ -31,5 +31,7 @@
 void
 msdos_free_node_info(const rtems_filesystem_location_info_t *pathloc)
 {
-    fat_file_close(pathloc->mt_entry, pathloc->node_access);
+    msdos_fs_info_t *fs_info = pathloc->mt_entry->fs_info;
+
+    fat_file_close(&fs_info->fat, pathloc->node_access);
 }

@@ -122,12 +122,12 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
       /*
        * read the original directory entry
        */
-      sec = fat_cluster_num_to_sector_num(parent_loc->mt_entry,
+      sec = fat_cluster_num_to_sector_num(&fs_info->fat,
                                           link_fd->dir_pos.sname.cln);
       sec += (link_fd->dir_pos.sname.ofs >> fs_info->fat.vol.sec_log2);
       byte = (link_fd->dir_pos.sname.ofs & (fs_info->fat.vol.bps - 1));
 
-      ret = _fat_block_read(parent_loc->mt_entry,
+      ret = _fat_block_read(&fs_info->fat,
                             sec, byte, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
                             link_node);
       if (ret < 0) {
@@ -175,7 +175,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
     if (type == MSDOS_DIRECTORY)
     {
         /* open new directory as fat-file */
-        rc = fat_file_open(parent_loc->mt_entry, &dir_pos, &fat_fd);
+        rc = fat_file_open(&fs_info->fat, &dir_pos, &fat_fd);
         if (rc != RC_OK)
             goto err;
 
@@ -225,7 +225,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
          * correspondes to a new node is zero length, so it will be extended
          * by one cluster and entries will be written
          */
-        ret = fat_file_write(parent_loc->mt_entry, fat_fd, 0,
+        ret = fat_file_write(&fs_info->fat, fat_fd, 0,
                              MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2,
                              (uint8_t *)dot_dotdot);
         if (ret < 0)
@@ -244,7 +244,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
                 CT_LE_W((uint16_t  )(((fat_fd->cln) & 0xFFFF0000) >> 16));
 
         /* rewrite dot entry */
-        ret = fat_file_write(parent_loc->mt_entry, fat_fd, 0,
+        ret = fat_file_write(&fs_info->fat, fat_fd, 0,
                              MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
                              (uint8_t *)DOT_NODE_P(dot_dotdot));
         if (ret < 0)
@@ -258,12 +258,12 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
         if (rc != RC_OK)
             goto error;
 
-        fat_file_close(parent_loc->mt_entry, fat_fd);
+        fat_file_close(&fs_info->fat, fat_fd);
     }
     return RC_OK;
 
 error:
-    fat_file_close(parent_loc->mt_entry, fat_fd);
+    fat_file_close(&fs_info->fat, fat_fd);
 
 err:
     /* mark the used 32bytes structure on the disk as free */

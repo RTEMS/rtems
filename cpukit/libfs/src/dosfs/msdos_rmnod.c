@@ -20,6 +20,7 @@ msdos_rmnod(const rtems_filesystem_location_info_t *parent_pathloc,
             const rtems_filesystem_location_info_t *pathloc)
 {
     int                rc = RC_OK;
+    msdos_fs_info_t   *fs_info = pathloc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = pathloc->node_access;
 
     if (fat_fd->fat_file_type == MSDOS_DIRECTORY)
@@ -71,7 +72,7 @@ msdos_rmnod(const rtems_filesystem_location_info_t *parent_pathloc,
         return rc;
     }
 
-    fat_file_mark_removed(pathloc->mt_entry, fat_fd);
+    fat_file_mark_removed(&fs_info->fat, fat_fd);
 
     return rc;
 }

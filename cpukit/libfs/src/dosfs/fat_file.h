@@ -111,24 +111,24 @@ typedef struct fat_file_fd_s
  * PARAMETERS:
  *     cl       - cluster number
  *     ofs      - offset inside cluster 'cl'
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *
  * RETURNS:
  *     constructed key
  */
 static inline uint32_t
 fat_construct_key(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    const fat_fs_info_t                  *fs_info,
     fat_pos_t                            *pos)
 {
-    return ( ((fat_cluster_num_to_sector512_num(mt_entry, pos->cln) +
+    return ( ((fat_cluster_num_to_sector512_num(fs_info, pos->cln) +
               (pos->ofs >> FAT_SECTOR512_BITS)) << 4)              +
               ((pos->ofs >> 5) & (FAT_DIRENTRIES_PER_SEC512 - 1)) );
 }
 
 /* Prototypes for "fat-file" operations */
 int
-fat_file_open(rtems_filesystem_mount_table_entry_t  *mt_entry,
+fat_file_open(fat_fs_info_t                         *fs_info,
               fat_dir_pos_t                         *dir_pos,
               fat_file_fd_t                        **fat_fd);
 
@@ -136,47 +136,47 @@ int
 fat_file_reopen(fat_file_fd_t *fat_fd);
 
 int
-fat_file_close(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_close(fat_fs_info_t                        *fs_info,
                fat_file_fd_t                        *fat_fd);
 
 ssize_t
-fat_file_read(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_read(fat_fs_info_t                        *fs_info,
               fat_file_fd_t                        *fat_fd,
               uint32_t                              start,
               uint32_t                              count,
               uint8_t                              *buf);
 
 ssize_t
-fat_file_write(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_write(fat_fs_info_t                        *fs_info,
                fat_file_fd_t                        *fat_fd,
                uint32_t                              start,
                uint32_t                              count,
                const uint8_t                        *buf);
 
 int
-fat_file_extend(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_extend(fat_fs_info_t                        *fs_info,
                 fat_file_fd_t                        *fat_fd,
                 bool                                  zero_fill,
                 uint32_t                              new_length,
                 uint32_t                             *a_length);
 
 int
-fat_file_truncate(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_truncate(fat_fs_info_t                        *fs_info,
                   fat_file_fd_t                        *fat_fd,
                   uint32_t                              new_length);
 
 int
-fat_file_ioctl(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_ioctl(fat_fs_info_t                        *fs_info,
                fat_file_fd_t                        *fat_fd,
                int                                   cmd,
                ...);
 
 int
-fat_file_size(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_size(fat_fs_info_t                        *fs_info,
               fat_file_fd_t                        *fat_fd);
 
 void
-fat_file_mark_removed(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_file_mark_removed(fat_fs_info_t                        *fs_info,
                       fat_file_fd_t                        *fat_fd);
 
 #ifdef __cplusplus

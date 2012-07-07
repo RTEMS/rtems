@@ -115,7 +115,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, size_t count)
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
+    ret = fat_file_read(&fs_info->fat, fat_fd, iop->offset, count,
                         buffer);
     if (ret > 0)
         iop->offset += ret;
@@ -153,7 +153,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
     if ((iop->flags & LIBIO_FLAGS_APPEND) != 0)
         iop->offset = fat_fd->fat_file_size;
 
-    ret = fat_file_write(iop->pathinfo.mt_entry, fat_fd, iop->offset, count,
+    ret = fat_file_write(&fs_info->fat, fat_fd, iop->offset, count,
                          buffer);
     if (ret < 0)
     {
@@ -236,17 +236,17 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
 
     old_length = fat_fd->fat_file_size;
     if (length < old_length) {
-        rc = fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, length);
+        rc = fat_file_truncate(&fs_info->fat, fat_fd, length);
     } else {
         uint32_t new_length;
 
-        rc = fat_file_extend(iop->pathinfo.mt_entry,
+        rc = fat_file_extend(&fs_info->fat,
                              fat_fd,
                              true,
                              length,
                              &new_length);
         if (rc == RC_OK && length != new_length) {
-            fat_file_truncate(iop->pathinfo.mt_entry, fat_fd, old_length);
+            fat_file_truncate(&fs_info->fat, fat_fd, old_length);
             errno = ENOSPC;
             rc = -1;
         }
