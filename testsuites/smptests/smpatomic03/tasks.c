@@ -58,7 +58,7 @@ rtems_task Test_task(
 
   ATOMIC_FETCH_ADD_NO_BARRIER(32, cpu_num);
 
-//  ATOMIC_LOAD_NO_BARRIER(64, cpu_num);
+//  ATOMIC_FETCH_ADD_NO_BARRIER(64, cpu_num);
 
   /* Set the flag that the task is up and running */
   TaskRan[cpu_num] = true;
