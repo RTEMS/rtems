@@ -314,6 +314,7 @@ static rtems_status_code ioctl_read_channel(void *buf,
   unsigned int chan, int mono)
 {
   unsigned int *val = (unsigned int *)buf;
+  int mic_boost;
   int codec;
   int left, right;
 
@@ -326,12 +327,14 @@ static rtems_status_code ioctl_read_channel(void *buf,
     return RTEMS_SUCCESSFUL;
   }
   if (mono) {
-    right = left = 100-(((codec & 0x1f) + 1)*100)/32;
+    left = 100-(((codec & 0x1f) + 1)*100)/32;
+    mic_boost = (codec & (1 << 6)) >> 6;
+    *val = left | mic_boost << 8;
   } else {
     right = 100-(((codec & 0x1f) + 1)*100)/32;
     left = 100-((((codec & 0x1f00) >> 8) + 1)*100)/32;
+    *val = left | (right << 8);
   }
-  *val = left | (right << 8);
   return RTEMS_SUCCESSFUL;
 }
 
@@ -339,21 +342,23 @@ static rtems_status_code ioctl_write_channel(void *buf,
   unsigned int chan, int mono)
 {
   unsigned int *val = (unsigned int *)buf;
+  int mic_boost;
   int left, right;
   int codec;
   rtems_status_code sc;
 
   left = *val & 0xff;
   left = (left*32)/100 - 1;
-  if(left < 0)
+  if (left < 0)
     left = 0;
 
-  if (mono)
+  if (mono) {
+    mic_boost = *val >> 8;
     right = 31;
-  else {
+  } else {
     right = (*val >> 8) & 0xff;
     right = (right*32)/100 - 1;
-    if(right < 0)
+    if (right < 0)
       right = 0;
   }
 
@@ -362,6 +367,13 @@ static rtems_status_code ioctl_write_channel(void *buf,
     codec = 0x8000;
   else
     codec = (31-left) | ((31-right) << 8);
+
+  if (mono) {
+    if (mic_boost)
+      codec |= (1 << 6);
+    else
+      codec &= ~(1 << 6);
+  }
 
   if (!write_cr(chan, codec))
     sc = RTEMS_UNSATISFIED;

@@ -2039,17 +2039,22 @@ static void
 rtems_bdbuf_check_read_ahead_trigger (rtems_disk_device *dd,
                                       rtems_blkdev_bnum  block)
 {
-  if (dd->read_ahead.trigger == block
+  if (bdbuf_cache.read_ahead_task != 0
+      && dd->read_ahead.trigger == block
       && !rtems_bdbuf_is_read_ahead_active (dd))
   {
     rtems_status_code sc;
     rtems_chain_control *chain = &bdbuf_cache.read_ahead_chain;
 
+    if (rtems_chain_is_empty (chain))
+    {
+      sc = rtems_event_send (bdbuf_cache.read_ahead_task,
+                             RTEMS_BDBUF_READ_AHEAD_WAKE_UP);
+      if (sc != RTEMS_SUCCESSFUL)
+        rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_RA_WAKE_UP);
+    }
+
     rtems_chain_append_unprotected (chain, &dd->read_ahead.node);
-    sc = rtems_event_send (bdbuf_cache.read_ahead_task,
-                           RTEMS_BDBUF_READ_AHEAD_WAKE_UP);
-    if (sc != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_RA_WAKE_UP);
   }
 }
 
