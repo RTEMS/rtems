@@ -25,8 +25,8 @@
   Atomic_##TYPE t = 0, a = 0, b = 0;                     \
   unsigned int i;                                        \
   for (i = 0; i < TEST_REPEAT; i++){                     \
-    a = (Atomic_##TYPE)(random() % ((Atomic_##TYPE)-1 / 2));  \
-    b = (Atomic_##TYPE)(random() % ((Atomic_##TYPE)-1 / 2));  \
+    a = (Atomic_##TYPE)(rand() % ((Atomic_##TYPE)-1 / 2));  \
+    b = (Atomic_##TYPE)(rand() % ((Atomic_##TYPE)-1 / 2));  \
     t = a;                                               \
     _Atomic_Fetch_sub_##TYPE(&t, b, ATOMIC_RELAXED_BARRIER);  \
     rtems_test_assert(t == (Atomic_##TYPE)(a - b));      \
