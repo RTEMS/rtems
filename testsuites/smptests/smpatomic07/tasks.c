@@ -20,31 +20,33 @@
 
 #define TEST_REPEAT 200000
 
-#define AND(TYPE, x) (Atomic_##TYPE((x) & (Atomic_##TYPE)~0)
-
-#define CK_PR_CAS_T(TYPE, v, c, s)                                      \
-{                                                                       \
-  Atomic_##TYPE t = v;                                                  \
-  bool r;                                                               \
-  r = _Atomic_Compare_exchange_##TYPE(&t, c, s);                        \
-  if (((c == v) && (r == 0)) || ((c != v) && (r != 0)) ||               \
-      ((r != 0) && (AND(TYPE, s) != t))) {                              \
-      locked_printf("FAIL [%" Atomic_##TYPE " (% -> %) -> %]\n",              \
-      (Atomic_##TYPE)(v), (Atomic_##TYPE)(c), AND(TYPE, s), (Atomic_##TYPE)(t));	\
-  }                                                                     \
-}
-
 #define ATOMIC_CAS_NO_BARRIER(TYPE, cpuid)              \
 {                                                       \
-  Atomic_##TYPE a = 0;                           \
-  unsigned int i;                                        \
-  for (i = 0; i < TEST_REPEAT; i++){                     \
-     a = random() % (Atomic_##TYPE)-1;     \
-     CK_PR_CAS_T(TYPE, a, a + 1, (a - 1));              \
-     CK_PR_CAS_T(TYPE, a, a, (a - 1));                  \
-     CK_PR_CAS_T(TYPE, a, a + 1, a);                 \
-  }                                                      \
-  locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": SUCCESS\n", cpuid); \
+  Atomic_##TYPE a = 0, b = 0;                           \
+  unsigned int i;                                       \
+  int r;                                                \
+  for (i = 0; i < TEST_REPEAT; i++){                    \
+    a = rand() % (Atomic_##TYPE)-1;                     \
+    b = a;                                              \
+    r = _Atomic_Compare_exchange_##TYPE(&b, a + 1, a - 1, ATOMIC_RELAXED_BARRIER);  \
+    if(r != 0){                                                                     \
+      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": FAILED\n", cpuid); \
+      rtems_test_exit( 0 );                                                         \
+    }                                                                               \
+    b = a;                                                                          \
+    r = _Atomic_Compare_exchange_##TYPE(&b, a, a - 1, ATOMIC_RELAXED_BARRIER);      \
+    if((r == 0) ||((r != 0) && ((a - 1) != b))){                                    \
+      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": FAILED\n", cpuid); \
+      rtems_test_exit( 0 );                                                         \
+    }                                                                               \
+    b = a;                                                                          \
+    r = _Atomic_Compare_exchange_##TYPE(&b, a + 1, a, ATOMIC_RELAXED_BARRIER);      \
+    if(r != 0){                                                                     \
+      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": FAILED\n", cpuid); \
+      rtems_test_exit( 0 );                                                         \
+    }                                                                               \
+  }                                                                                 \
+  locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": SUCCESS\n", cpuid);    \
 }
 
 rtems_task Test_task(

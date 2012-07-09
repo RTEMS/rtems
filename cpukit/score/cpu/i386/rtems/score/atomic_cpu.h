@@ -219,19 +219,19 @@ _CPU_Atomic_Fetch_##NAME##_barr_##TYPE(volatile Atomic_##TYPE *p, Atomic_##TYPE 
 static inline int
 _CPU_Atomic_Compare_exchange_int(volatile Atomic_int *dst, Atomic_int expect, Atomic_int src)
 {
-  int res;
+  unsigned char res;
 
   __asm __volatile(
-  "	" MPLOCKED "		"
-  "	cmpxchgl %2,%1 ;	"
-  "       sete	%0 ;		"
-  "1:				"
-  "# atomic_compare_exchange_int"
-  : "=a" (res),			/* 0 */
-    "=m" (*dst)			/* 1 */
-  : "r" (src),			/* 2 */
-    "a" (expect),		/* 3 */
-    "m" (*dst)			/* 4 */
+  "    " MPLOCKED "    "
+  "    cmpxchgl %2,%1 ;    "
+  "    sete	%0 ;       "
+  "1:                      "
+  "# atomic_cmpset_int"
+  : "=a" (res),              /* 0 */
+    "=m" (*dst)              /* 1 */
+  : "r" (src),               /* 2 */
+    "a" (expect),            /* 3 */
+    "m" (*dst)               /* 4 */
   : "memory", "cc");
 
   return (res);
