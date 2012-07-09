@@ -41,28 +41,36 @@ void _POSIX_Keys_Run_destructors(
   POSIX_Keys_Control *the_key;
   Objects_Locations location;
 
-  //_Thread_Disable_dispatch();
+  _Thread_Disable_dispatch();
   
   chain = &((POSIX_API_Control *)thread->API_Extensions[ THREAD_API_POSIX ])->the_chain;
   iter = _Chain_First( chain );
   while ( !_Chain_Is_tail( chain, iter ) ) {
     next = _Chain_Next( iter );
+    
     /**
+     * remove key from rbtree and chain.
      * here Chain_Node *iter can be convert to POSIX_Keys_Rbtree_node *,
      * because Chain_Node is the first member of POSIX_Keys_Rbtree_node structure.
      */
     _RBTree_Extract_unprotected( &_POSIX_Keys_Rbtree, &((POSIX_Keys_Rbtree_node *)iter)->rb_node );
     _Chain_Extract_unprotected( iter );
-    
+
+    /**
+     * run key value's destructor if destructor and value are both non-null.
+     */
     the_key = _POSIX_Keys_Get( ((POSIX_Keys_Rbtree_node *)iter)->key, &location);
     destructor = the_key->destructor;
     value = ((POSIX_Keys_Rbtree_node *)iter)->value;
     if ( destructor != NULL && value != NULL )
       (*destructor)( value );
+    /**
+     * disable dispatch is nested here
+     */
+    _Thread_Enable_dispatch();
     
     _Workspace_Free( (POSIX_Keys_Rbtree_node *)iter );
     iter = next;
   }
-
   _Thread_Enable_dispatch();
 }
