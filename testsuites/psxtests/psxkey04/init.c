@@ -107,7 +107,7 @@ void *POSIX_Init(
   sc = pthread_key_delete( Key );
   rtems_test_assert( sc == 0 );
 
-  puts( "*** END OF TEST KEY 05 ***" );
+  puts( "*** END OF TEST KEY 04 ***" );
   rtems_test_exit(0);
 }
 
