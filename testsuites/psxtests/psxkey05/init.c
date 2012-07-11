@@ -44,14 +44,14 @@ void *POSIX_Init(
   sc = pthread_setspecific( key1, &Data_array[0] );
   rtems_test_assert( !sc );
 
-  puts( "Init - key1 pthread_getspecific - OK" );
-  value = pthread_getspecific( key1 );
-  rtems_test_assert( *value == Data_array[0] );
-
   puts( "Init - key2 pthread_setspecific - OK" );
   sc = pthread_setspecific( key2, &Data_array[1] );
   rtems_test_assert( !sc );
-
+  
+  puts( "Init - key1 pthread_getspecific - OK" );
+  value = pthread_getspecific( key1 );
+  rtems_test_assert( *value == Data_array[0] );
+  
   puts( "Init - key2 pthread_getspecific - OK" );
   value = pthread_getspecific( key2 );
   rtems_test_assert( *value == Data_array[1] );
