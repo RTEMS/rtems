@@ -170,7 +170,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
          * directories feature :( - we should count elements currently
          * present in the directory because there may be holes :)
          */
-        ret = fat_file_read(iop->pathinfo.mt_entry, fat_fd, (j * bts2rd),
+        ret = fat_file_read(&fs_info->fat, fat_fd, (j * bts2rd),
                             bts2rd, fs_info->cl_buf);
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
@@ -314,7 +314,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                  */
 
                 /* get number of cluster we are working with */
-                rc = fat_file_ioctl(iop->pathinfo.mt_entry, fat_fd, F_CLU_NUM,
+                rc = fat_file_ioctl(&fs_info->fat, fat_fd, F_CLU_NUM,
                                     j * bts2rd, &cur_cln);
                 if (rc != RC_OK)
                 {
@@ -325,7 +325,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 fat_dir_pos_init(&dir_pos);
                 dir_pos.sname.cln = cur_cln;
                 dir_pos.sname.ofs = i;
-                rc = fat_file_open(iop->pathinfo.mt_entry, &dir_pos, &tmp_fat_fd);
+                rc = fat_file_open(&fs_info->fat, &dir_pos, &tmp_fat_fd);
                 if (rc != RC_OK)
                 {
                     rtems_semaphore_release(fs_info->vol_sema);
@@ -377,7 +377,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 count -= (sizeof(struct dirent));
 
                 /* inode number extracted, close fat-file */
-                rc = fat_file_close(iop->pathinfo.mt_entry, tmp_fat_fd);
+                rc = fat_file_close(&fs_info->fat, tmp_fat_fd);
                 if (rc != RC_OK)
                 {
                     rtems_semaphore_release(fs_info->vol_sema);

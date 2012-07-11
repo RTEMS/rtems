@@ -63,7 +63,7 @@ msdos_initialize_support(
 
     temp_mt_entry->fs_info = fs_info;
 
-    rc = fat_init_volume_info(temp_mt_entry);
+    rc = fat_init_volume_info(&fs_info->fat, temp_mt_entry->dev);
     if (rc != RC_OK)
     {
         free(fs_info);
@@ -79,10 +79,10 @@ msdos_initialize_support(
      */
     fat_dir_pos_init(&root_pos);
     root_pos.sname.cln = FAT_ROOTDIR_CLUSTER_NUM;
-    rc = fat_file_open(temp_mt_entry, &root_pos, &fat_fd);
+    rc = fat_file_open(&fs_info->fat, &root_pos, &fat_fd);
     if (rc != RC_OK)
     {
-        fat_shutdown_drive(temp_mt_entry);
+        fat_shutdown_drive(&fs_info->fat);
         free(fs_info);
         return rc;
     }
@@ -105,11 +105,11 @@ msdos_initialize_support(
     }
     else
     {
-        rc = fat_file_size(temp_mt_entry, fat_fd);
+        rc = fat_file_size(&fs_info->fat, fat_fd);
         if ( rc != RC_OK )
         {
-            fat_file_close(temp_mt_entry, fat_fd);
-            fat_shutdown_drive(temp_mt_entry);
+            fat_file_close(&fs_info->fat, fat_fd);
+            fat_shutdown_drive(&fs_info->fat);
             free(fs_info);
             return rc;
         }
@@ -119,8 +119,8 @@ msdos_initialize_support(
     fs_info->cl_buf = (uint8_t *)calloc(cl_buf_size, sizeof(char));
     if (fs_info->cl_buf == NULL)
     {
-        fat_file_close(temp_mt_entry, fat_fd);
-        fat_shutdown_drive(temp_mt_entry);
+        fat_file_close(&fs_info->fat, fat_fd);
+        fat_shutdown_drive(&fs_info->fat);
         free(fs_info);
         rtems_set_errno_and_return_minus_one(ENOMEM);
     }
@@ -132,8 +132,8 @@ msdos_initialize_support(
                                 &fs_info->vol_sema);
     if (sc != RTEMS_SUCCESSFUL)
     {
-        fat_file_close(temp_mt_entry, fat_fd);
-        fat_shutdown_drive(temp_mt_entry);
+        fat_file_close(&fs_info->fat, fat_fd);
+        fat_shutdown_drive(&fs_info->fat);
         free(fs_info->cl_buf);
         free(fs_info);
         rtems_set_errno_and_return_minus_one( EIO );

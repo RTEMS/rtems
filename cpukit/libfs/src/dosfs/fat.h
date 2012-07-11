@@ -407,12 +407,10 @@ fat_dir_pos_init(
 
 static inline uint32_t
 fat_cluster_num_to_sector_num(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
-    uint32_t                              cln
+    const fat_fs_info_t *fs_info,
+    uint32_t             cln
     )
 {
-    register fat_fs_info_t *fs_info = mt_entry->fs_info;
-
     if ( (cln == 0) && (fs_info->vol.type & (FAT_FAT12 | FAT_FAT16)) )
         return fs_info->vol.rdir_loc;
 
@@ -422,16 +420,14 @@ fat_cluster_num_to_sector_num(
 
 static inline uint32_t
 fat_cluster_num_to_sector512_num(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
-    uint32_t                              cln
+    const fat_fs_info_t *fs_info,
+    uint32_t             cln
     )
 {
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
-
     if (cln == 1)
         return 1;
 
-    return (fat_cluster_num_to_sector_num(mt_entry, cln) <<
+    return (fat_cluster_num_to_sector_num(fs_info, cln) <<
             fs_info->vol.sec_mul);
 }
 
@@ -449,67 +445,63 @@ int
 fat_buf_release(fat_fs_info_t *fs_info);
 
 ssize_t
-_fat_block_read(rtems_filesystem_mount_table_entry_t *mt_entry,
+_fat_block_read(fat_fs_info_t                        *fs_info,
                 uint32_t                              start,
                 uint32_t                              offset,
                 uint32_t                              count,
                 void                                 *buff);
 
 ssize_t
-_fat_block_write(rtems_filesystem_mount_table_entry_t *mt_entry,
+_fat_block_write(fat_fs_info_t                        *fs_info,
                  uint32_t                              start,
                  uint32_t                              offset,
                  uint32_t                              count,
                  const void                           *buff);
 
 int
-_fat_block_zero(rtems_filesystem_mount_table_entry_t *mt_entry,
+_fat_block_zero(fat_fs_info_t                         *fs_info,
                  uint32_t                              start,
                  uint32_t                              offset,
                  uint32_t                              count);
 
 int
-_fat_block_release(rtems_filesystem_mount_table_entry_t *mt_entry);
+_fat_block_release(fat_fs_info_t *fs_info);
 
 ssize_t
-fat_cluster_read(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_cluster_read(fat_fs_info_t                        *fs_info,
                   uint32_t                             cln,
                   void                                *buff);
 
 ssize_t
-fat_cluster_write(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_cluster_write(fat_fs_info_t                        *fs_info,
                    uint32_t                             cln,
                    const void                          *buff);
 
 int
-fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry);
+fat_init_volume_info(fat_fs_info_t *fs_info, const char *device);
 
 int
-fat_init_clusters_chain(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_init_clusters_chain(fat_fs_info_t                        *fs_info,
                         uint32_t                              start_cln);
 
-uint32_t
-fat_cluster_num_to_sector_num(rtems_filesystem_mount_table_entry_t *mt_entry,
-                              uint32_t                              cln);
-
 int
-fat_shutdown_drive(rtems_filesystem_mount_table_entry_t *mt_entry);
+fat_shutdown_drive(fat_fs_info_t *fs_info);
 
 
 uint32_t
-fat_get_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry);
+fat_get_unique_ino(fat_fs_info_t *fs_info);
 
 bool
-fat_ino_is_unique(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_ino_is_unique(fat_fs_info_t                        *fs_info,
                   uint32_t                              ino);
 
 void
-fat_free_unique_ino(rtems_filesystem_mount_table_entry_t *mt_entry,
+fat_free_unique_ino(fat_fs_info_t                        *fs_info,
                     uint32_t                              ino);
 
 int
 fat_fat32_update_fsinfo_sector(
-  rtems_filesystem_mount_table_entry_t *mt_entry,
+  fat_fs_info_t                        *fs_info,
   uint32_t                              free_count,
   uint32_t                              next_free
   );

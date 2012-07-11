@@ -27,7 +27,7 @@
  *     Allocate chain of free clusters from Files Allocation Table
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     chain    - the number of the first allocated cluster (first cluster
  *                in  the chain)
  *     count    - count of clusters to allocate (chain length)
@@ -40,7 +40,7 @@
  */
 int
 fat_scan_fat_for_free_clusters(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                             *chain,
     uint32_t                              count,
     uint32_t                             *cls_added,
@@ -49,7 +49,6 @@ fat_scan_fat_for_free_clusters(
     )
 {
     int            rc = RC_OK;
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t       cl4find = 2;
     uint32_t       next_cln = 0;
     uint32_t       save_cln = 0;
@@ -71,11 +70,11 @@ fat_scan_fat_for_free_clusters(
      */
     while (i < data_cls_val)
     {
-        rc = fat_get_fat_cluster(mt_entry, cl4find, &next_cln);
+        rc = fat_get_fat_cluster(fs_info, cl4find, &next_cln);
         if ( rc != RC_OK )
         {
             if (*cls_added != 0)
-                fat_free_fat_clusters_chain(mt_entry, (*chain));
+                fat_free_fat_clusters_chain(fs_info, (*chain));
             return rc;
         }
 
@@ -89,7 +88,7 @@ fat_scan_fat_for_free_clusters(
             if (*cls_added == 0)
             {
                 *chain = cl4find;
-                rc = fat_set_fat_cluster(mt_entry, cl4find, FAT_GENFAT_EOC);
+                rc = fat_set_fat_cluster(fs_info, cl4find, FAT_GENFAT_EOC);
                 if ( rc != RC_OK )
                 {
                     /*
@@ -102,24 +101,24 @@ fat_scan_fat_for_free_clusters(
             else
             {
                 /* set EOC value to new allocated cluster */
-                rc = fat_set_fat_cluster(mt_entry, cl4find, FAT_GENFAT_EOC);
+                rc = fat_set_fat_cluster(fs_info, cl4find, FAT_GENFAT_EOC);
                 if ( rc != RC_OK )
                 {
                     /* cleanup activity */
-                    fat_free_fat_clusters_chain(mt_entry, (*chain));
+                    fat_free_fat_clusters_chain(fs_info, (*chain));
                     return rc;
                 }
 
-                rc = fat_set_fat_cluster(mt_entry, save_cln, cl4find);
+                rc = fat_set_fat_cluster(fs_info, save_cln, cl4find);
                 if ( rc != RC_OK )
                     goto cleanup;
             }
 
             if (zero_fill) {
-                uint32_t sec = fat_cluster_num_to_sector_num(mt_entry,
+                uint32_t sec = fat_cluster_num_to_sector_num(fs_info,
                                                              cl4find);
 
-                rc = _fat_block_zero(mt_entry, sec, 0, fs_info->vol.bpc);
+                rc = _fat_block_zero(fs_info, sec, 0, fs_info->vol.bpc);
                 if ( rc != RC_OK )
                     goto cleanup;
             }
@@ -155,9 +154,9 @@ fat_scan_fat_for_free_clusters(
 cleanup:
 
     /* cleanup activity */
-    fat_free_fat_clusters_chain(mt_entry, (*chain));
+    fat_free_fat_clusters_chain(fs_info, (*chain));
     /* trying to save last allocated cluster for future use */
-    fat_set_fat_cluster(mt_entry, cl4find, FAT_GENFAT_FREE);
+    fat_set_fat_cluster(fs_info, cl4find, FAT_GENFAT_FREE);
     fat_buf_release(fs_info);
     return rc;
 }
@@ -166,7 +165,7 @@ cleanup:
  *     Free chain of clusters in Files Allocation Table.
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     chain    - number of the first cluster in  the chain
  *
  * RETURNS:
@@ -174,19 +173,18 @@ cleanup:
  */
 int
 fat_free_fat_clusters_chain(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              chain
     )
 {
     int            rc = RC_OK, rc1 = RC_OK;
-    fat_fs_info_t *fs_info = mt_entry->fs_info;
     uint32_t       cur_cln = chain;
     uint32_t       next_cln = 0;
     uint32_t       freed_cls_cnt = 0;
 
     while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
-        rc = fat_get_fat_cluster(mt_entry, cur_cln, &next_cln);
+        rc = fat_get_fat_cluster(fs_info, cur_cln, &next_cln);
         if ( rc != RC_OK )
         {
               if(fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
@@ -196,7 +194,7 @@ fat_free_fat_clusters_chain(
             return rc;
         }
 
-        rc = fat_set_fat_cluster(mt_entry, cur_cln, FAT_GENFAT_FREE);
+        rc = fat_set_fat_cluster(fs_info, cur_cln, FAT_GENFAT_FREE);
         if ( rc != RC_OK )
             rc1 = rc;
 
@@ -220,7 +218,7 @@ fat_free_fat_clusters_chain(
  *     from Files Allocation Table.
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     cln      - number of cluster to fetch the contents from
  *     ret_val  - contents of the cluster 'cln' (link to next cluster in
  *                the chain)
@@ -231,13 +229,12 @@ fat_free_fat_clusters_chain(
  */
 int
 fat_get_fat_cluster(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              cln,
     uint32_t                             *ret_val
     )
 {
     int                     rc = RC_OK;
-    register fat_fs_info_t *fs_info = mt_entry->fs_info;
     rtems_bdbuf_buffer     *block0 = NULL;
     uint32_t                sec = 0;
     uint32_t                ofs = 0;
@@ -305,7 +302,7 @@ fat_get_fat_cluster(
  *     from Files Allocation Table.
  *
  * PARAMETERS:
- *     mt_entry - mount table entry
+ *     fs_info  - FS info
  *     cln      - number of cluster to set contents to
  *     in_val   - value to set
  *
@@ -315,13 +312,12 @@ fat_get_fat_cluster(
  */
 int
 fat_set_fat_cluster(
-    rtems_filesystem_mount_table_entry_t *mt_entry,
+    fat_fs_info_t                        *fs_info,
     uint32_t                              cln,
     uint32_t                              in_val
     )
 {
     int                 rc = RC_OK;
-    fat_fs_info_t      *fs_info = mt_entry->fs_info;
     uint32_t            sec = 0;
     uint32_t            ofs = 0;
     uint16_t            fat16_clv = 0;
