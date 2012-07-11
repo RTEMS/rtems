@@ -18,33 +18,54 @@
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
-void destructor(void *value);
-void *Test_Thread(void *key_value);
+void *Test_Thread1(void *argument);
+void *Test_Thread2(void *argument);
+
+int Data_array[2] = {1, 2};
 
 pthread_key_t Key;
-volatile bool destructor_ran;
 
-void destructor(void *value)
-{
-  destructor_ran = true;
-}
-
-void *Test_Thread(
-  void *key_value
+void *Test_Thread1(
+  void *argument
 )
 {
   int sc;
-
+  int *value;
   /*
    * Detach ourselves so we don't wait for a join that won't happen.
    */
   pthread_detach( pthread_self() );
 
-  puts( "Test_Thread - pthread_setspecific - OK" );
-  sc = pthread_setspecific( Key, key_value );
+  puts( "Test_Thread 1 - pthread_setspecific - OK" );
+  sc = pthread_setspecific( Key, &Data_array[0] );
   rtems_test_assert( !sc );
 
-  puts( "Test_Thread - pthread_exit to run key destructors - OK" );
+  puts( "Test_Thread 1 - pthread_getspecific - OK" );
+  value = pthread_getspecific( Key );
+  rtems_test_assert( *value == Data_array[0] );
+  
+  return NULL;
+}
+
+void *Test_Thread2(
+  void *argument
+)
+{
+  int sc;
+  int *value;
+  /*
+   * Detach ourselves so we don't wait for a join that won't happen.
+   */
+  pthread_detach( pthread_self() );
+
+  puts( "Test_Thread 2 - pthread_setspecific - OK" );
+  sc = pthread_setspecific( Key, &Data_array[1] );
+  rtems_test_assert( !sc );
+
+  puts( "Test_Thread 2 - pthread_getspecific - OK" );
+  value = pthread_getspecific( Key );
+  rtems_test_assert( *value == Data_array[1] );
+
   return NULL;
 }
 
@@ -58,19 +79,16 @@ void *POSIX_Init(
 
   puts( "\n\n*** TEST KEY 04 ***" );
 
-  /*
-   *  Key with NULL destructor
-   */
-  puts( "Init - pthread_key_create with NULL destructor - OK" );
+  puts( "Init - pthread_key_create - OK" );
   sc = pthread_key_create( &Key, NULL );
   rtems_test_assert( !sc );
 
   puts( "Init - pthread_create - OK" );
-  sc = pthread_create( &thread1, NULL, Test_Thread, &sc );
+  sc = pthread_create( &thread1, NULL, Test_Thread1, NULL );
   rtems_test_assert( !sc );
 
-  //sc = pthread_create( &thread2, NULL, Test_Thread, &sc );
-  //rtems_test_assert( !sc );
+  sc = pthread_create( &thread2, NULL, Test_Thread2, NULL );
+  rtems_test_assert( !sc );
 
   puts( "Init - sleep - let thread run - OK" );
   delay_request.tv_sec = 0;
