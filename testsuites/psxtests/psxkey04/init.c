@@ -42,7 +42,7 @@ void *Test_Thread1(
   sc = pthread_setspecific( Key, &Data_array[0] );
   rtems_test_assert( !sc );
 
-  puts( "Init - sleep - let thread 2 run - OK" );
+  puts( "Test_Thread 1 - sleep - let thread 2 run - OK" );
   delay_request.tv_sec = 0;
   delay_request.tv_nsec = 4 * 100000000;
   sc = nanosleep( &delay_request, NULL );
