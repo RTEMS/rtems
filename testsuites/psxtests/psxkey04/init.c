@@ -22,6 +22,7 @@ void *Test_Thread1(void *argument);
 void *Test_Thread2(void *argument);
 
 int Data_array[2] = {1, 2};
+pthread_t        thread1, thread2;
 
 pthread_key_t Key;
 
@@ -31,6 +32,7 @@ void *Test_Thread1(
 {
   int sc;
   int *value;
+  struct timespec  delay_request;
   /*
    * Detach ourselves so we don't wait for a join that won't happen.
    */
@@ -40,6 +42,12 @@ void *Test_Thread1(
   sc = pthread_setspecific( Key, &Data_array[0] );
   rtems_test_assert( !sc );
 
+  puts( "Init - sleep - let thread 2 run - OK" );
+  delay_request.tv_sec = 0;
+  delay_request.tv_nsec = 4 * 100000000;
+  sc = nanosleep( &delay_request, NULL );
+  rtems_test_assert( !sc );
+  
   puts( "Test_Thread 1 - pthread_getspecific - OK" );
   value = pthread_getspecific( Key );
   rtems_test_assert( *value == Data_array[0] );
@@ -73,7 +81,6 @@ void *POSIX_Init(
   void *ignored
 )
 {
-  pthread_t        thread1, thread2;
   int              sc;
   struct timespec  delay_request;
 
@@ -92,7 +99,7 @@ void *POSIX_Init(
 
   puts( "Init - sleep - let thread run - OK" );
   delay_request.tv_sec = 0;
-  delay_request.tv_nsec = 5 * 100000000;
+  delay_request.tv_nsec = 8 * 100000000;
   sc = nanosleep( &delay_request, NULL );
   rtems_test_assert( !sc );
 
@@ -100,7 +107,7 @@ void *POSIX_Init(
   sc = pthread_key_delete( Key );
   rtems_test_assert( sc == 0 );
 
-  puts( "*** END OF TEST KEY 05 ***" );
+  puts( "*** END OF TEST KEY 04 ***" );
   rtems_test_exit(0);
 }
 
