@@ -8,7 +8,7 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  psxkey05
+test set name:  psxkey06
 
 directives:
 
@@ -19,5 +19,5 @@ directives:
 
 concepts:
 
-+ Ensure that key data's operation(create, set, get and delete) under multikeys work.
++ Ensure that key data's operation(create, set, get and delete) under multikeys and multi threads work.
 
