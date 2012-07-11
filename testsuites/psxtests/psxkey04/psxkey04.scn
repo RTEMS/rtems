@@ -1,15 +1,10 @@
-*** TEST KEY 03 ***
-Init - pthread_key_create with NULL destructor - OK
+*** TEST KEY 04 ***
+Init - pthread_key_create - OK
 Init - pthread_create - OK
 Init - sleep - let thread run - OK
-Test_Thread - pthread_setspecific - OK
-Test_Thread - pthread_exit to run key destructors - OK
+Test_Thread 1 - pthread_setspecific - OK
+Test_Thread 1 - pthread_getspecific - OK
+Test_Thread 2 - pthread_setspecific - OK
+Test_Thread 2 - pthread_getspecific - OK
 Init - pthread_key_delete - OK
-Init - pthread_key_create with non-NULL destructor - OK
-Init - pthread_create - OK
-Init - sleep - let thread run - OK
-Test_Thread - pthread_setspecific - OK
-Test_Thread - pthread_exit to run key destructors - OK
-Init - verify destructor did NOT ran
-Init - pthread_key_delete - OK
-*** END OF TEST KEY 03 ***
+*** END OF TEST KEY 04 ***
