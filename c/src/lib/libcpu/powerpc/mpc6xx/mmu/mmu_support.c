@@ -160,7 +160,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   libcpu_mmu_pte* ppteg;
   libcpu_mmu_pte* spteg;
   volatile unsigned long cause, msr;
-  rtems_memory_protect_entry* alut_entry;
+  rtems_memory_management_entry* alut_entry;
   
   /* Switch MMU and other Interrupts off */
   msr = _read_MSR();
@@ -207,16 +207,16 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-      status = rtems_memory_protect_search((void *)ea, &alut_entry);
+      status = rtems_memory_management_search_entry((void *)ea, &alut_entry);
       if(status == RTEMS_SUCCESSFUL){
-        status = rtems_memory_protect_get_attr(alut_entry, &alut_access_attrb);
+        status = rtems_memory_management_get_attr(alut_entry, &alut_access_attrb);
         if(status != RTEMS_SUCCESSFUL){
           printk("Unexpected Error happened when get attibute from ALUT! RTEMS delete self");
           rtems_task_delete(RTEMS_SELF); 
         }
       }
       else
-        alut_access_attrb = rtems_memory_protect_get_default_attr();
+        alut_access_attrb = rtems_memory_management_get_default_attr();
       translate_access_attr(alut_access_attrb, &wimg, &pp);
       BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
     } else {

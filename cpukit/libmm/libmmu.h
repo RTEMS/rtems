@@ -14,12 +14,12 @@
 
 #include <inttypes.h>
 #include <rtems/rtems/status.h>
-
+#include <rtems/chain.h>
 #ifdef __cplusplus
   extern "C" {
 #endif
+#define RTEMS_MPROT_ALUT_SIZE 64
 #define RTEMS_MPROT_PAGE_SIZE 0x1000
-
 /*!
  *  * \brief  Access attribute definition below
  *   *  The attribute, especially the cache attribute macro definition is mainly 
@@ -30,7 +30,7 @@
  *        *  with the hardware. Users need to implement several other methods in libcpu
  *         *  to check whether attributes are legal or to translate the  cache and access 
  *          *  attributes to the attribute bit mode defined by hardware  
- *           *  These methods used by rtems_memory_protect_XXX APIs are defined in 
+ *           *  These methods used by rtems_memory_management_XXX APIs are defined in 
  *            *  /libcpu/shared/src/page_table_manager.c
  *             */
 #define RTEMS_MPROT_READ_ENABLE                             0x1
@@ -66,47 +66,87 @@
 #endif
 
 
-#ifndef _RTEMS_LIBMMU_INTERNAL_H
-typedef struct memory_protect_entry rtems_memory_protect_entry;
-#endif
 /*!
  *  *  \brief  
  *   *
  *    * typedef struct mprot_alut rtems_mprot_alut;
  *     */
+/*write buffer is valid in arm*/
+#if 0
+#define RTEMS_MPROT_WRITEBUFFER_ENABLE                          0x800
+#define RTEMS_MPROT_WRITEBUFFER_DISABLE                 0x000
+#endif
 
-rtems_status_code rtems_memory_protect_init ( void );
+#define RTEMS_MPROT_MAP_FIXED              0x10000
+#define RTEMS_MPROT_MAP_PRIVATE          0x20000
 
-rtems_status_code rtems_memory_protect_create(
+
+/*!
+ *  *  *  \brief  the default access attribute of the address blocks not included in ALUT
+ *   *   */
+#define RTEMS_MPROT_DEFAULT_ATTRIBUTE            0x0000071f
+
+
+typedef struct
+{
+  rtems_chain_node node;  /**< The mapping chain's node */
+  void* start_addr;
+  size_t block_size;
+  uint32_t access_attribute;
+} rtems_memory_management_entry;
+
+/*!
+ *  *  *  \brief  for now , the ALUT is just an array, we can optimize  this by some
+ *   *   *  kind of advanced data structure , such as hash table, or chain maybe
+ *    *    */
+typedef struct mprot_alut
+{
+  rtems_memory_management_entry entries[RTEMS_MPROT_ALUT_SIZE];
+  rtems_chain_control ALUT_mappings;
+  rtems_chain_control ALUT_idle;
+  uint32_t rtems_mprot_default_attribute;
+} rtems_mprot_alut;
+
+
+/**
+ *  *  * Mmap chain of mappings.
+ *   *   */
+//rtems_mprot_alut the_rtems_mprot_alut;
+
+rtems_status_code rtems_memory_management_initialize ( void );
+
+void rtems_management_update_entry(rtems_memory_management_entry*  mpe);
+
+rtems_status_code rtems_memory_management_create_entry(
   void* const start_addr, 
   const size_t size, 
   const uint32_t attr,
-  rtems_memory_protect_entry** p_ret);
+  rtems_memory_management_entry** p_ret);
 
-rtems_status_code rtems_memory_protect_delete(
-  rtems_memory_protect_entry* const p_entry);
+rtems_status_code rtems_memory_management_delete_entry(
+  rtems_memory_management_entry* const p_entry);
 
-rtems_status_code rtems_memory_protect_search(
+rtems_status_code rtems_memory_management_search_entry(
   void* const addr,
-  rtems_memory_protect_entry** p_ret);
+  rtems_memory_management_entry** p_ret);
 
-rtems_status_code rtems_memory_protect_set_attr(
-  rtems_memory_protect_entry* const p_entry,
+rtems_status_code rtems_memory_management_set_attr(
+  rtems_memory_management_entry* const p_entry,
   const uint32_t new_attribute,
   uint32_t*  old_attribute );
 
-rtems_status_code rtems_memory_protect_get_attr(
- rtems_memory_protect_entry* const p_entry,
+rtems_status_code rtems_memory_management_get_attr(
+ rtems_memory_management_entry* const p_entry,
  uint32_t*  attr);
 
-rtems_status_code rtems_memory_protect_get_size(
- rtems_memory_protect_entry* const p_entry,
+rtems_status_code rtems_memory_management_get_size(
+ rtems_memory_management_entry* const p_entry,
  size_t * size);
 
-uint32_t rtems_memory_protect_get_default_attr( void );
+uint32_t rtems_memory_management_get_default_attr( void );
 
 rtems_status_code 
-rtems_memory_protect_set_default_attr(
+rtems_memory_management_set_default_attr(
   const uint32_t new_attribute,
   uint32_t* old_attribute );
 #ifdef __cplusplus

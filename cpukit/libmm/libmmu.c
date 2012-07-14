@@ -24,7 +24,7 @@
 #include <rtems/error.h>
 #include <rtems/rtems/cache.h>
 #include <libcpu/memoryprotection.h>
-#include "libmmu-internal.h"
+#include "libmmu.h"
 
 
 /* create a alut table instance */
@@ -33,22 +33,22 @@
 
 
 /*****************************************************
- * * flush  the cache and tlb, update the pagetable of the p_entry *
+ * * flush  the cache and tlb, update the pagetable of the mpe *
  * *  block address space*
  * *****************************************************/
-void rtems_mprot_update(rtems_memory_protect_entry*  p_entry)
+void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
 {
   void * ea, *block_end;
   int pagesize, cache_attr, mprot_attr;
-  ea=p_entry->start_addr;
-  block_end = p_entry->start_addr+ p_entry->block_size;
+  ea=mpe->start_addr;
+  block_end = mpe->start_addr+ mpe->block_size;
   pagesize = RTEMS_MPROT_PAGE_SIZE;
 
   
-  rtems_cache_flush_multiple_data_lines(p_entry->start_addr, p_entry->block_size);
+  rtems_cache_flush_multiple_data_lines(mpe->start_addr, mpe->block_size);
   asm volatile(" sync; isync");
   
-  translate_access_attr(p_entry->access_attribute, &cache_attr, &mprot_attr);
+  translate_access_attr(mpe->access_attribute, &cache_attr, &mprot_attr);
   for(  ; ea<block_end;ea+=pagesize)
     rtems_pagetable_update_attribute((uint32_t)ea, cache_attr, mprot_attr);
   
@@ -58,13 +58,13 @@ void rtems_mprot_update(rtems_memory_protect_entry*  p_entry)
 /*****************************************************
  * * initialization of the ALUT (Access Look up Table )  *
  * *****************************************************/
-rtems_status_code rtems_memory_protect_init ( void)
+rtems_status_code rtems_memory_management_initialize ( void)
 {
   rtems_mprot_alut* the_alut= &the_rtems_mprot_alut;
   int i;
 
   _Chain_Initialize(&(the_alut->ALUT_idle), the_alut->entries, 
-    RTEMS_MPROT_ALUT_SIZE, sizeof(rtems_memory_protect_entry) );
+    RTEMS_MPROT_ALUT_SIZE, sizeof(rtems_memory_management_entry) );
 
   _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
   
@@ -86,25 +86,25 @@ rtems_status_code rtems_memory_protect_init ( void)
  * * Linear search for the element emtry in the alut for*
  * * the address range under which it falls             *
  * *****************************************************/
-rtems_status_code rtems_memory_protect_search(
+rtems_status_code rtems_memory_management_search_entry(
   void* const addr, 
-  rtems_memory_protect_entry** p_ret)
+  rtems_memory_management_entry** p_ret)
 {
   rtems_mprot_alut* alut_p;
-  rtems_memory_protect_entry* current;
+  rtems_memory_management_entry* current;
   alut_p = &the_rtems_mprot_alut;
 
   if( 0==p_ret   )   
     return RTEMS_INVALID_ADDRESS;
 
-  current = (rtems_memory_protect_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
+  current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
   while(!rtems_chain_is_tail(&(alut_p->ALUT_mappings),&current->node)){
     if( (current->start_addr <= addr ) && \
       ((current->start_addr+current->block_size )>addr) ){
       *p_ret = current;
       return RTEMS_SUCCESSFUL;
     }
-    current = (rtems_memory_protect_entry* )rtems_chain_next(&current->node);
+    current = (rtems_memory_management_entry* )rtems_chain_next(&current->node);
   }
   return RTEMS_UNSATISFIED;
 }
@@ -112,13 +112,13 @@ rtems_status_code rtems_memory_protect_search(
 /****************************************************
  * * Add a ALUT new entry to ALUT
  * ****************************************************/
-rtems_status_code rtems_memory_protect_create(
+rtems_status_code rtems_memory_management_create_entry(
   void* const start_addr, 
   const size_t size, 
   const uint32_t attr,
-  rtems_memory_protect_entry** p_ret)
+  rtems_memory_management_entry** p_ret)
 {
-  rtems_memory_protect_entry* current;
+  rtems_memory_management_entry* current;
   rtems_mprot_alut* alut_p;
   rtems_status_code status;
   alut_p = &the_rtems_mprot_alut;
@@ -135,14 +135,14 @@ rtems_status_code rtems_memory_protect_create(
 
   _Thread_Disable_dispatch();
   /* Check for address map overlaps */
-  current = (rtems_memory_protect_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
+  current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
   while(!rtems_chain_is_tail(&alut_p->ALUT_mappings,&current->node)){
     if( !((current->start_addr >= ( start_addr + size) ) ||\
       ((current->start_addr+current->block_size ) <= start_addr) )){
         _Thread_Enable_dispatch();
         return RTEMS_INVALID_ADDRESS;
       }
-    current = (rtems_memory_protect_entry* )rtems_chain_next(&current->node);
+    current = (rtems_memory_management_entry* )rtems_chain_next(&current->node);
   }
   
    /* Check for ALUT full condition and get a valid empty entry */
@@ -152,7 +152,7 @@ rtems_status_code rtems_memory_protect_create(
     return RTEMS_TOO_MANY;
   }
   
-  current = (rtems_memory_protect_entry* )rtems_chain_get_unprotected(&(alut_p->ALUT_idle));
+  current = (rtems_memory_management_entry* )rtems_chain_get_unprotected(&(alut_p->ALUT_idle));
   
  /* Append entry to the ALUT */
   current->start_addr = start_addr;
@@ -162,7 +162,7 @@ rtems_status_code rtems_memory_protect_create(
   
   /* for the new entry block , the attribute may be different from the previous value*
  *   *  so update the related cache tlb and pagetable entry*/
-  rtems_mprot_update(current);
+  rtems_memory_management_update_entry(current);
 
   _Thread_Enable_dispatch();
   
@@ -173,39 +173,40 @@ rtems_status_code rtems_memory_protect_create(
 /*****************************************************
  * * Delete an ALUT entry                                         *
  * *****************************************************/
-rtems_status_code rtems_memory_protect_delete(
-  rtems_memory_protect_entry* const p_entry)
+rtems_status_code rtems_memory_management_delete_entry(
+  rtems_memory_management_entry* const mpe)
 {
   rtems_mprot_alut* alut_p;
-  rtems_memory_protect_entry*  current;
+  rtems_memory_management_entry*  current;
   alut_p = &the_rtems_mprot_alut;
 
   _Thread_Disable_dispatch();
-  if( 0 == p_entry || p_entry < alut_p->entries ||\
-    p_entry > (alut_p->entries+ sizeof(alut_p->entries) ))
+  if( 0 == mpe || mpe < alut_p->entries ||\
+    mpe > (alut_p->entries+ sizeof(alut_p->entries) ))
     return RTEMS_INVALID_ADDRESS;
 
-  /*make sure the p_entry point to a mapped entry */
-  current = (rtems_memory_protect_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
+  /*make sure the mpe point to a mapped entry */
+  current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
   while(!rtems_chain_is_tail(&alut_p->ALUT_mappings, &current->node)){
-    if( rtems_chain_are_nodes_equal(&current->node,&p_entry->node )){
+    if( rtems_chain_are_nodes_equal(&current->node,&mpe->node )){
 
-      rtems_chain_extract_unprotected( &p_entry->node );
+      rtems_chain_extract_unprotected( &mpe->node );
 
       /* for the delete entry block , the attribute should be changed default access attribute*
  *        *  so  update the related cache tlb and pagetable entry*/
-      p_entry->access_attribute = rtems_memory_protect_get_default_attr();
-      rtems_mprot_update(p_entry);
+      mpe->access_attribute = rtems_memory_management_get_default_attr();
+      rtems_memory_management_update_entry(mpe);
+
       
-      p_entry->block_size = 0;
-      p_entry->start_addr = 0;
-      p_entry->access_attribute = 0;
+      mpe->block_size = 0;
+      mpe->start_addr = 0;
+      mpe->access_attribute = 0;
       rtems_chain_append_unprotected( &alut_p->ALUT_idle, &current->node);
 
       _Thread_Enable_dispatch();  
       return RTEMS_SUCCESSFUL;
     }else
-      current = (rtems_memory_protect_entry* )rtems_chain_next(&current->node);
+      current = (rtems_memory_management_entry* )rtems_chain_next(&current->node);
   }
   
    _Thread_Enable_dispatch();
@@ -215,8 +216,8 @@ rtems_status_code rtems_memory_protect_delete(
 /*****************************************************
  * * reset the attribute of the specific  ALUT entry        *
  * *****************************************************/
-rtems_status_code rtems_memory_protect_set_attr(
-  rtems_memory_protect_entry* const p_entry,
+rtems_status_code rtems_memory_management_set_attr(
+  rtems_memory_management_entry* const mpe,
   const uint32_t new_attribute,
   uint32_t* old_attribute )
 {
@@ -224,12 +225,12 @@ rtems_status_code rtems_memory_protect_set_attr(
   alut_p = &the_rtems_mprot_alut;
   rtems_status_code status;
 
-  if( 0 == p_entry || p_entry < alut_p->entries ||\
-    p_entry > (alut_p->entries+ sizeof(alut_p->entries) ))
+  if( 0 == mpe || mpe < alut_p->entries ||\
+    mpe > (alut_p->entries+ sizeof(alut_p->entries) ))
     return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();
-  if(0 == p_entry->block_size )
+  if(0 == mpe->block_size )
   {
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
@@ -241,16 +242,16 @@ rtems_status_code rtems_memory_protect_set_attr(
   if( status != RTEMS_SUCCESSFUL)
     return RTEMS_INVALID_NUMBER;
 
-  *old_attribute = p_entry->access_attribute;
+  *old_attribute = mpe->access_attribute;
   if( *old_attribute == new_attribute)
   {
     _Thread_Enable_dispatch();
     return RTEMS_SUCCESSFUL;
   }
 
-  p_entry->access_attribute = new_attribute;
+  mpe->access_attribute = new_attribute;
   
-  rtems_mprot_update(p_entry);
+  rtems_memory_management_update_entry(mpe);
   
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
@@ -262,25 +263,25 @@ rtems_status_code rtems_memory_protect_set_attr(
  * * this method may be used by the Exception handler function. *
  * *****************************************************/
 
-rtems_status_code rtems_memory_protect_get_attr(
-  rtems_memory_protect_entry* const p_entry,
+rtems_status_code rtems_memory_management_get_attr(
+  rtems_memory_management_entry* const mpe,
   uint32_t*  attr)
 {
   rtems_mprot_alut* alut_p;
   alut_p = &the_rtems_mprot_alut;
 
-  if( 0 == p_entry || p_entry < alut_p->entries ||\
-    p_entry > (alut_p->entries+ sizeof(alut_p->entries) ))
+  if( 0 == mpe || mpe < alut_p->entries ||\
+    mpe > (alut_p->entries+ sizeof(alut_p->entries) ))
     return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();
-  if(0 == p_entry->block_size )
+  if(0 == mpe->block_size )
   {
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
   }
 
-  *attr = p_entry->access_attribute;
+  *attr = mpe->access_attribute;
   _Thread_Enable_dispatch();
   
   return RTEMS_SUCCESSFUL;
@@ -289,25 +290,25 @@ rtems_status_code rtems_memory_protect_get_attr(
 /*****************************************************
  * * get  the size of the specific mapped ALUT entry                        *
  * *****************************************************/
-rtems_status_code rtems_memory_protect_get_size(
-  rtems_memory_protect_entry* const p_entry,
+rtems_status_code rtems_memory_management_get_size(
+  rtems_memory_management_entry* const mpe,
   size_t * size)
 {
   rtems_mprot_alut* alut_p;
   alut_p = &the_rtems_mprot_alut;
 
-  if( 0 == p_entry || p_entry < alut_p->entries ||\
-    p_entry > (alut_p->entries+ sizeof(alut_p->entries) ))
+  if( 0 == mpe || mpe < alut_p->entries ||\
+    mpe > (alut_p->entries+ sizeof(alut_p->entries) ))
     return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();
-  if(0 == p_entry->block_size )
+  if(0 == mpe->block_size )
   {
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
   }
 
-  *size = p_entry->block_size;
+  *size = mpe->block_size;
   _Thread_Enable_dispatch();
   
   return RTEMS_SUCCESSFUL;
@@ -315,13 +316,13 @@ rtems_status_code rtems_memory_protect_get_size(
 
 
 uint32_t
-rtems_memory_protect_get_default_attr( void )
+rtems_memory_management_get_default_attr( void )
 {
   return the_rtems_mprot_alut.rtems_mprot_default_attribute;
 }
 
 rtems_status_code 
-rtems_memory_protect_set_default_attr(
+rtems_memory_management_set_default_attr(
   const uint32_t new_attribute,
   uint32_t* old_attribute )
 {

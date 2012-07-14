@@ -42,7 +42,7 @@ rtems_task Init(
   unsigned char* spteg_addr;
   void * alut_search_addr1;
   void * alut_search_addr2;
-  rtems_memory_protect_entry *mp_entry;
+  rtems_memory_management_entry *mpe;
   a1 = (unsigned char *)0x01A10008;
   a2 = (unsigned char *)0x01A00008;
   
@@ -57,7 +57,7 @@ rtems_task Init(
 
   puts( "\n\n*** MMU ALUT TEST 1 BEGINS ***\n" );
   puts( "initialize the memory protect manager\n");
-  status = rtems_memory_protect_init ( );
+  status = rtems_memory_management_initialize ( );
 
   if(status != RTEMS_SUCCESSFUL)
   {
@@ -68,7 +68,7 @@ rtems_task Init(
 
 
   printf("Test 1 : Adding entry with block size less than 4K\n");
-  status = rtems_memory_protect_create(0, 2096, 0x705, &mp_entry);
+  status = rtems_memory_management_create_entry(0, 2096, 0x705, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry added\n");
   }
@@ -77,7 +77,7 @@ rtems_task Init(
   }
       
   printf("Test 2 : Adding entry with block size not a multiple of 4K\n");  
-  status = rtems_memory_protect_create(0, 0x00008FFF, 0x705, &mp_entry);
+  status = rtems_memory_management_create_entry(0, 0x00008FFF, 0x705, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry successfully added\n");
   }
@@ -86,7 +86,7 @@ rtems_task Init(
   }
     
   printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
-  status = rtems_memory_protect_create((void*)0x01A00000, 0x8000, 0x705, &mp_entry); 
+  status = rtems_memory_management_create_entry((void*)0x01A00000, 0x8000, 0x705, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed : Entry Added\n");
   }
@@ -95,7 +95,7 @@ rtems_task Init(
   }
 
   printf("Test 4 : Adding overlapping  address value\n");
-  status = rtems_memory_protect_create((void*)0x01A07000, 0x4000, 0x70f, &mp_entry); 
+  status = rtems_memory_management_create_entry((void*)0x01A07000, 0x4000, 0x70f, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Addition passed inspite of address overlap\n");
   }
@@ -104,7 +104,7 @@ rtems_task Init(
   }
 
   printf("Test 5 : Adding valid entry\n");
-  status = rtems_memory_protect_create((void*)0x01F00000, 0x8000, 0x705, &mp_entry); 
+  status = rtems_memory_management_create_entry((void*)0x01F00000, 0x8000, 0x705, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed: Entry successfully added, status = %d\n",status);
   }
@@ -113,7 +113,7 @@ rtems_task Init(
   }
 
   printf("Test 6 : Adding valid entry\n");
-  status = rtems_memory_protect_create((void*)0x00008000, 0x8000, 0x705, &mp_entry); 
+  status = rtems_memory_management_create_entry((void*)0x00008000, 0x8000, 0x705, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
       printf("Passed : Entry successfully added, status = %d\n",status);
   }
@@ -125,18 +125,18 @@ rtems_task Init(
    *  search operations over particular address values 
    */
   printf("Test 7 : Get access attrbute for address 0x%x\n", alut_search_addr1);
-  status = rtems_memory_protect_search(alut_search_addr1, &mp_entry); 
+  status = rtems_memory_management_search_entry(alut_search_addr1, &mpe); 
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
   }
-  status = rtems_memory_protect_get_attr(mp_entry,&access);
+  status = rtems_memory_management_get_attr(mpe,&access);
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Access Attribute not found, status = %d\n",status);
   }
   else {
     printf("Passed : Access Attribute for the request is 0x%x\n", access);
   }
-  status = rtems_memory_protect_get_size(mp_entry,&blocksize);
+  status = rtems_memory_management_get_size(mpe,&blocksize);
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Access Attribute not found, status = %d\n",status);
   }
@@ -146,7 +146,7 @@ rtems_task Init(
 
 
   printf("Test 8 : Get attrbute for unmapped address 0x%x\n", alut_search_addr2);
-  status = rtems_memory_protect_search(alut_search_addr2, &mp_entry); 
+  status = rtems_memory_management_search_entry(alut_search_addr2, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Find the entry including this address in ALUT, status = %d\n",status);
   }
