@@ -87,12 +87,21 @@
 #define RTEMS_MPROT_DEFAULT_ATTRIBUTE            0x0000071f
 
 
+/**
+ *  * A region of contiguous memory
+ *   */
 typedef struct
 {
-  rtems_chain_node node;  /**< The mapping chain's node */
-  void* start_addr;
-  size_t block_size;
-  uint32_t access_attribute;
+  char  *name;
+  void  *base;
+  size_t bounds;
+} rtems_memory_management_region_descriptor;
+
+typedef struct
+{
+  rtems_chain_node 				node;  /**< The mapping chain's node */
+  rtems_memory_management_region_descriptor 	region;
+  uint32_t 					permissions;
 } rtems_memory_management_entry;
 
 /*!
@@ -118,8 +127,7 @@ rtems_status_code rtems_memory_management_initialize ( void );
 void rtems_management_update_entry(rtems_memory_management_entry*  mpe);
 
 rtems_status_code rtems_memory_management_create_entry(
-  void* const start_addr, 
-  const size_t size, 
+  rtems_memory_management_region_descriptor region, 
   const uint32_t attr,
   rtems_memory_management_entry** p_ret);
 

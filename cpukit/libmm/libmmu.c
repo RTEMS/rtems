@@ -40,15 +40,15 @@ void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
 {
   void * ea, *block_end;
   int pagesize, cache_attr, mprot_attr;
-  ea=mpe->start_addr;
-  block_end = mpe->start_addr+ mpe->block_size;
+  ea = mpe->region.base;
+  block_end = mpe->region.base+ mpe->region.bounds;
   pagesize = RTEMS_MPROT_PAGE_SIZE;
 
   
-  rtems_cache_flush_multiple_data_lines(mpe->start_addr, mpe->block_size);
+  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
   asm volatile(" sync; isync");
   
-  translate_access_attr(mpe->access_attribute, &cache_attr, &mprot_attr);
+  translate_access_attr(mpe->permissions, &cache_attr, &mprot_attr);
   for(  ; ea<block_end;ea+=pagesize)
     rtems_pagetable_update_attribute((uint32_t)ea, cache_attr, mprot_attr);
   
@@ -70,9 +70,9 @@ rtems_status_code rtems_memory_management_initialize ( void)
   
   for(i=0;i<RTEMS_MPROT_ALUT_SIZE; i++)
   {
-    the_alut->entries[i].block_size = 0;
-    the_alut->entries[i].start_addr = (void*)0;
-    the_alut->entries[i].access_attribute = 0;
+    the_alut->entries[i].region.bounds = 0;
+    the_alut->entries[i].region.base = (void*)0;
+    the_alut->entries[i].permissions = 0;
   }
 
   the_alut->rtems_mprot_default_attribute = RTEMS_MPROT_DEFAULT_ATTRIBUTE;
@@ -99,8 +99,8 @@ rtems_status_code rtems_memory_management_search_entry(
 
   current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
   while(!rtems_chain_is_tail(&(alut_p->ALUT_mappings),&current->node)){
-    if( (current->start_addr <= addr ) && \
-      ((current->start_addr+current->block_size )>addr) ){
+    if( (current->region.base <= addr ) && \
+      ((current->region.base+current->region.bounds )>addr) ){
       *p_ret = current;
       return RTEMS_SUCCESSFUL;
     }
@@ -113,8 +113,7 @@ rtems_status_code rtems_memory_management_search_entry(
  * * Add a ALUT new entry to ALUT
  * ****************************************************/
 rtems_status_code rtems_memory_management_create_entry(
-  void* const start_addr, 
-  const size_t size, 
+  rtems_memory_management_region_descriptor region,
   const uint32_t attr,
   rtems_memory_management_entry** p_ret)
 {
@@ -124,7 +123,7 @@ rtems_status_code rtems_memory_management_create_entry(
   alut_p = &the_rtems_mprot_alut;
 
   /* Check for invalid block size */
-  if( (0 != size % RTEMS_MPROT_PAGE_SIZE) ||  0 == size)
+  if( (0 != region.bounds % RTEMS_MPROT_PAGE_SIZE) ||  0 == region.bounds)
     return RTEMS_INVALID_SIZE;
 
   /*advanced attribute check , need to make sure the attribute of the *
@@ -137,8 +136,8 @@ rtems_status_code rtems_memory_management_create_entry(
   /* Check for address map overlaps */
   current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
   while(!rtems_chain_is_tail(&alut_p->ALUT_mappings,&current->node)){
-    if( !((current->start_addr >= ( start_addr + size) ) ||\
-      ((current->start_addr+current->block_size ) <= start_addr) )){
+    if( !((current->region.base >= ( region.base + region.bounds) ) ||\
+      ((current->region.base +current->region.bounds ) <= region.base) )){
         _Thread_Enable_dispatch();
         return RTEMS_INVALID_ADDRESS;
       }
@@ -155,9 +154,9 @@ rtems_status_code rtems_memory_management_create_entry(
   current = (rtems_memory_management_entry* )rtems_chain_get_unprotected(&(alut_p->ALUT_idle));
   
  /* Append entry to the ALUT */
-  current->start_addr = start_addr;
-  current->block_size = size;
-  current->access_attribute = attr;
+  current->region.base = region.base;
+  current->region.bounds = region.bounds;
+  current->permissions = attr;
   rtems_chain_append_unprotected( &alut_p->ALUT_mappings, &current->node);
   
   /* for the new entry block , the attribute may be different from the previous value*
@@ -194,13 +193,13 @@ rtems_status_code rtems_memory_management_delete_entry(
 
       /* for the delete entry block , the attribute should be changed default access attribute*
  *        *  so  update the related cache tlb and pagetable entry*/
-      mpe->access_attribute = rtems_memory_management_get_default_attr();
+      mpe->permissions = rtems_memory_management_get_default_attr();
       rtems_memory_management_update_entry(mpe);
 
       
-      mpe->block_size = 0;
-      mpe->start_addr = 0;
-      mpe->access_attribute = 0;
+      mpe->region.bounds = 0;
+      mpe->region.base = 0;
+      mpe->permissions = 0;
       rtems_chain_append_unprotected( &alut_p->ALUT_idle, &current->node);
 
       _Thread_Enable_dispatch();  
@@ -230,7 +229,7 @@ rtems_status_code rtems_memory_management_set_attr(
     return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();
-  if(0 == mpe->block_size )
+  if(0 == mpe->region.bounds )
   {
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
@@ -242,14 +241,14 @@ rtems_status_code rtems_memory_management_set_attr(
   if( status != RTEMS_SUCCESSFUL)
     return RTEMS_INVALID_NUMBER;
 
-  *old_attribute = mpe->access_attribute;
+  *old_attribute = mpe->permissions;
   if( *old_attribute == new_attribute)
   {
     _Thread_Enable_dispatch();
     return RTEMS_SUCCESSFUL;
   }
 
-  mpe->access_attribute = new_attribute;
+  mpe->permissions = new_attribute;
   
   rtems_memory_management_update_entry(mpe);
   
@@ -275,13 +274,13 @@ rtems_status_code rtems_memory_management_get_attr(
     return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();
-  if(0 == mpe->block_size )
+  if(0 == mpe->region.bounds )
   {
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
   }
 
-  *attr = mpe->access_attribute;
+  *attr = mpe->permissions;
   _Thread_Enable_dispatch();
   
   return RTEMS_SUCCESSFUL;
@@ -302,13 +301,13 @@ rtems_status_code rtems_memory_management_get_size(
     return RTEMS_INVALID_ADDRESS;
 
   _Thread_Disable_dispatch();
-  if(0 == mpe->block_size )
+  if(0 == mpe->region.bounds )
   {
     _Thread_Enable_dispatch();
     return RTEMS_INVALID_ADDRESS;
   }
 
-  *size = mpe->block_size;
+  *size = mpe->region.bounds;
   _Thread_Enable_dispatch();
   
   return RTEMS_SUCCESSFUL;

@@ -52,7 +52,11 @@ rtems_task Init(
   ppteg_addr = (unsigned char *) 0x00FF8000;
   spteg_addr = (unsigned char *) 0x00FF7FC0;
   
-
+  rtems_memory_management_region_descriptor r1 = {
+    .name = "test",
+    .base = 0x00,
+    .bounds = 2096
+  };
 
 
   puts( "\n\n*** MMU ALUT TEST 1 BEGINS ***\n" );
@@ -68,7 +72,7 @@ rtems_task Init(
 
 
   printf("Test 1 : Adding entry with block size less than 4K\n");
-  status = rtems_memory_management_create_entry(0, 2096, 0x705, &mpe);
+  status = rtems_memory_management_create_entry(r1, 0x705, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry added\n");
   }
@@ -77,7 +81,8 @@ rtems_task Init(
   }
       
   printf("Test 2 : Adding entry with block size not a multiple of 4K\n");  
-  status = rtems_memory_management_create_entry(0, 0x00008FFF, 0x705, &mpe);
+  r1.bounds = 0x00008FFF;
+  status = rtems_memory_management_create_entry(r1, 0x705, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry successfully added\n");
   }
@@ -86,7 +91,9 @@ rtems_task Init(
   }
     
   printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
-  status = rtems_memory_management_create_entry((void*)0x01A00000, 0x8000, 0x705, &mpe); 
+  r1.base = (void*)0x01A00000;
+  r1.bounds = 0x8000; 
+  status = rtems_memory_management_create_entry(r1, 0x705, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed : Entry Added\n");
   }
@@ -95,7 +102,9 @@ rtems_task Init(
   }
 
   printf("Test 4 : Adding overlapping  address value\n");
-  status = rtems_memory_management_create_entry((void*)0x01A07000, 0x4000, 0x70f, &mpe); 
+  r1.base = (void*)0x01A07000;
+  r1.bounds = 0x4000;
+  status = rtems_memory_management_create_entry(r1, 0x70f, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Addition passed inspite of address overlap\n");
   }
@@ -104,7 +113,9 @@ rtems_task Init(
   }
 
   printf("Test 5 : Adding valid entry\n");
-  status = rtems_memory_management_create_entry((void*)0x01F00000, 0x8000, 0x705, &mpe); 
+  r1.base = (void*)0x01F00000;
+  r1.bounds = 0x8000;
+  status = rtems_memory_management_create_entry(r1, 0x705, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed: Entry successfully added, status = %d\n",status);
   }
@@ -113,7 +124,9 @@ rtems_task Init(
   }
 
   printf("Test 6 : Adding valid entry\n");
-  status = rtems_memory_management_create_entry((void*)0x00008000, 0x8000, 0x705, &mpe); 
+  r1.base = (void*)0x00008000;
+  r1.bounds = 0x8000;
+  status = rtems_memory_management_create_entry(r1, 0x705, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
       printf("Passed : Entry successfully added, status = %d\n",status);
   }
