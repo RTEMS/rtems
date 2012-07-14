@@ -1,0 +1,33 @@
+*** TEST MGHTTPD 01 ***
+Loading tarfs image ... successful
+=== Get the index.html from second Mongoose instance:
+HTTP/1.1 200 OK
+Date: Fri, 01 Jan 1988 00:00:01 GMT
+Last-Modified: Fri, 01 Jan 1988 00:00:01 GMT
+Etag: "21dae501.a2"
+Content-Type: text/html
+Content-Length: 162
+Connection: close
+Accept-Ranges: bytes
+
+<html>
+<head>
+<title>Second Instance</title>
+</head>
+
+<body>
+<h1>Second Instance</h1>
+A test page for the Mongoose web server on RTEMS.
+</body>
+</html>
+
+=== OK
+=== Get a page generated from a callback function from first Mongoose instance:
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 47
+
+This is a message from the callback function.
+
+=== OK
+*** END OF TEST MGHTTPD 01 ***
