@@ -48,6 +48,7 @@
 #define SR_KS                  0x40000000                                           
 #define SR_KP                  0x20000000  
 
+#define RTEMS_MPE_PAGE_SIZE    0x1000
 /* Splitting the 64 bit PTE into two 32 bit words. As shown in the OEA
  *    Manual of PowerPC */
 

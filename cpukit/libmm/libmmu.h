@@ -19,7 +19,6 @@
   extern "C" {
 #endif
 #define RTEMS_MPROT_ALUT_SIZE 64
-#define RTEMS_MPROT_PAGE_SIZE 0x1000
 /*!
  *  * \brief  Access attribute definition below
  *   *  The attribute, especially the cache attribute macro definition is mainly 
@@ -113,7 +112,7 @@ typedef struct mprot_alut
   rtems_memory_management_entry entries[RTEMS_MPROT_ALUT_SIZE];
   rtems_chain_control ALUT_mappings;
   rtems_chain_control ALUT_idle;
-  uint32_t rtems_mprot_default_attribute;
+  uint32_t rtems_mprot_default_permissions;
 } rtems_mprot_alut;
 
 
@@ -128,7 +127,7 @@ void rtems_management_update_entry(rtems_memory_management_entry*  mpe);
 
 rtems_status_code rtems_memory_management_create_entry(
   rtems_memory_management_region_descriptor region, 
-  const uint32_t attr,
+  const uint32_t premissions,
   rtems_memory_management_entry** p_ret);
 
 rtems_status_code rtems_memory_management_delete_entry(
@@ -138,25 +137,37 @@ rtems_status_code rtems_memory_management_find_entry(
   void* const addr,
   rtems_memory_management_entry** p_ret);
 
-rtems_status_code rtems_memory_management_set_attr(
-  rtems_memory_management_entry* const p_entry,
-  const uint32_t new_attribute,
-  uint32_t*  old_attribute );
+rtems_status_code rtems_memory_management_verify_permission(
+  uint32_t perms;
+);
 
-rtems_status_code rtems_memory_management_get_attr(
+rtems_status_code rtems_memory_management_verify_size(
+  size_t size
+);
+
+rtems_status_code rtems_memory_management_set_permissions(
+  rtems_memory_management_entry* const p_entry,
+  const uint32_t new_permissions,
+  uint32_t*  old_permissions );
+
+rtems_status_code rtems_memory_management_get_permissions(
  rtems_memory_management_entry* const p_entry,
- uint32_t*  attr);
+ uint32_t*  permissions);
 
 rtems_status_code rtems_memory_management_get_size(
  rtems_memory_management_entry* const p_entry,
  size_t * size);
 
-uint32_t rtems_memory_management_get_default_attr( void );
+uint32_t rtems_memory_management_get_default_permissions( void );
 
 rtems_status_code 
-rtems_memory_management_set_default_attr(
-  const uint32_t new_attribute,
-  uint32_t* old_attribute );
+rtems_memory_management_set_default_permissions(
+  const uint32_t new_permissions,
+  uint32_t* old_permissions );
+
+rtems_status_code rtems_memory_management_verify_permissions(uint32_t);
+
+rtems_status_code rtems_pagetable_update_permissions(uint32_t, int, int);
 #ifdef __cplusplus
   }
 #endif

@@ -18,7 +18,6 @@
 #include <rtems/irq.h>
 #include <stdio.h> 
 #include <rtems/asm.h>
-#include <rtems/libmmu.h>
 #include <rtems/rtems/status.h>
 #include <libcpu/memoryprotection.h>
 #include "mmu_support.h"
@@ -209,14 +208,14 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
       /* PTE not found in second PTEG also */
       status = rtems_memory_management_find_entry((void *)ea, &alut_entry);
       if(status == RTEMS_SUCCESSFUL){
-        status = rtems_memory_management_get_attr(alut_entry, &alut_access_attrb);
+        status = rtems_memory_management_get_permissions(alut_entry, &alut_access_attrb);
         if(status != RTEMS_SUCCESSFUL){
           printk("Unexpected Error happened when get attibute from ALUT! RTEMS delete self");
           rtems_task_delete(RTEMS_SELF); 
         }
       }
       else
-        alut_access_attrb = rtems_memory_management_get_default_attr();
+        alut_access_attrb = rtems_memory_management_get_default_permissions();
       translate_access_attr(alut_access_attrb, &wimg, &pp);
       BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
     } else {

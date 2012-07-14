@@ -23,7 +23,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/error.h>
 #include <rtems/rtems/cache.h>
-#include <libcpu/memoryprotection.h>
+//#include <libcpu/memoryprotection.h>
 #include "libmmu.h"
 
 
@@ -42,7 +42,7 @@ void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
   int pagesize, cache_attr, mprot_attr;
   ea = mpe->region.base;
   block_end = mpe->region.base+ mpe->region.bounds;
-  pagesize = RTEMS_MPROT_PAGE_SIZE;
+  pagesize = 0x1000;
 
   
   rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
@@ -50,7 +50,7 @@ void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
   
   translate_access_attr(mpe->permissions, &cache_attr, &mprot_attr);
   for(  ; ea<block_end;ea+=pagesize)
-    rtems_pagetable_update_attribute((uint32_t)ea, cache_attr, mprot_attr);
+    rtems_pagetable_update_permissions((uint32_t)ea, cache_attr, mprot_attr);
   
   return ;
 }
@@ -75,7 +75,7 @@ rtems_status_code rtems_memory_management_initialize ( void)
     the_alut->entries[i].permissions = 0;
   }
 
-  the_alut->rtems_mprot_default_attribute = RTEMS_MPROT_DEFAULT_ATTRIBUTE;
+  the_alut->rtems_mprot_default_permissions = RTEMS_MPROT_DEFAULT_ATTRIBUTE;
   
   rtems_pagetable_initialize();
   return RTEMS_SUCCESSFUL;
@@ -114,7 +114,7 @@ rtems_status_code rtems_memory_management_find_entry(
  * ****************************************************/
 rtems_status_code rtems_memory_management_create_entry(
   rtems_memory_management_region_descriptor region,
-  const uint32_t attr,
+  const uint32_t permissions,
   rtems_memory_management_entry** p_ret)
 {
   rtems_memory_management_entry* current;
@@ -123,12 +123,14 @@ rtems_status_code rtems_memory_management_create_entry(
   alut_p = &the_rtems_mprot_alut;
 
   /* Check for invalid block size */
-  if( (0 != region.bounds % RTEMS_MPROT_PAGE_SIZE) ||  0 == region.bounds)
-    return RTEMS_INVALID_SIZE;
+
+  status = rtems_memory_management_verify_size(region.bounds);
+  if( status != RTEMS_SUCCESSFUL )
+    return RTEMS_INVALID_NUMBER;
 
   /*advanced attribute check , need to make sure the attribute of the *
  *   * new block is available. the check is a CPU related function.*/
-  status = rtems_pagetable_attribute_check( attr);
+  status = rtems_memory_management_verify_permissions( permissions);
   if( status != RTEMS_SUCCESSFUL)
     return RTEMS_INVALID_NUMBER;
 
@@ -156,7 +158,7 @@ rtems_status_code rtems_memory_management_create_entry(
  /* Append entry to the ALUT */
   current->region.base = region.base;
   current->region.bounds = region.bounds;
-  current->permissions = attr;
+  current->permissions = permissions;
   rtems_chain_append_unprotected( &alut_p->ALUT_mappings, &current->node);
   
   /* for the new entry block , the attribute may be different from the previous value*
@@ -193,7 +195,7 @@ rtems_status_code rtems_memory_management_delete_entry(
 
       /* for the delete entry block , the attribute should be changed default access attribute*
  *        *  so  update the related cache tlb and pagetable entry*/
-      mpe->permissions = rtems_memory_management_get_default_attr();
+      mpe->permissions = rtems_memory_management_get_default_permissions();
       rtems_memory_management_update_entry(mpe);
 
       
@@ -215,10 +217,10 @@ rtems_status_code rtems_memory_management_delete_entry(
 /*****************************************************
  * * reset the attribute of the specific  ALUT entry        *
  * *****************************************************/
-rtems_status_code rtems_memory_management_set_attr(
+rtems_status_code rtems_memory_management_set_permissions(
   rtems_memory_management_entry* const mpe,
-  const uint32_t new_attribute,
-  uint32_t* old_attribute )
+  const uint32_t new_permissions,
+  uint32_t* old_permissions )
 {
   rtems_mprot_alut* alut_p;
   alut_p = &the_rtems_mprot_alut;
@@ -237,18 +239,18 @@ rtems_status_code rtems_memory_management_set_attr(
 
   /*advanced attribute check , need to make sure the attribute of the *
  *   * new block is available. the check is a CPU related function.*/
-  status = rtems_pagetable_attribute_check( new_attribute);
+  status = rtems_memory_management_verify_permissions( new_permissions);
   if( status != RTEMS_SUCCESSFUL)
     return RTEMS_INVALID_NUMBER;
 
-  *old_attribute = mpe->permissions;
-  if( *old_attribute == new_attribute)
+  *old_permissions = mpe->permissions;
+  if( *old_permissions == new_permissions)
   {
     _Thread_Enable_dispatch();
     return RTEMS_SUCCESSFUL;
   }
 
-  mpe->permissions = new_attribute;
+  mpe->permissions = new_permissions;
   
   rtems_memory_management_update_entry(mpe);
   
@@ -262,9 +264,9 @@ rtems_status_code rtems_memory_management_set_attr(
  * * this method may be used by the Exception handler function. *
  * *****************************************************/
 
-rtems_status_code rtems_memory_management_get_attr(
+rtems_status_code rtems_memory_management_get_permissions(
   rtems_memory_management_entry* const mpe,
-  uint32_t*  attr)
+  uint32_t*  permissions)
 {
   rtems_mprot_alut* alut_p;
   alut_p = &the_rtems_mprot_alut;
@@ -280,7 +282,7 @@ rtems_status_code rtems_memory_management_get_attr(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  *attr = mpe->permissions;
+  *permissions = mpe->permissions;
   _Thread_Enable_dispatch();
   
   return RTEMS_SUCCESSFUL;
@@ -315,18 +317,17 @@ rtems_status_code rtems_memory_management_get_size(
 
 
 uint32_t
-rtems_memory_management_get_default_attr( void )
+rtems_memory_management_get_default_permissions( void )
 {
-  return the_rtems_mprot_alut.rtems_mprot_default_attribute;
+  return the_rtems_mprot_alut.rtems_mprot_default_permissions;
 }
 
-rtems_status_code 
-rtems_memory_management_set_default_attr(
-  const uint32_t new_attribute,
-  uint32_t* old_attribute )
+rtems_status_code rtems_memory_management_set_default_permissions(
+  const uint32_t new_permissions,
+  uint32_t* old_permissions )
 {
-  *old_attribute = the_rtems_mprot_alut.rtems_mprot_default_attribute;
-  the_rtems_mprot_alut.rtems_mprot_default_attribute = new_attribute;
+  *old_permissions = the_rtems_mprot_alut.rtems_mprot_default_permissions;
+  the_rtems_mprot_alut.rtems_mprot_default_permissions = new_permissions;
 
   /*Once the default attribute is changed, all of the related cache,tlb,and page table *
  *    * need to be updated. But because the ALUT is unsorted, it will spend much time to *

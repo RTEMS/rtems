@@ -187,3 +187,17 @@ rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
 
   return RTEMS_SUCCESSFUL;
 }
+
+rtems_status_code _CPU_Memory_management_Verify_size(
+    size_t size
+) {
+   /* Check for invalid block size */
+  if( (0 != size % RTEMS_MPE_PAGE_SIZE) ||  0 == size)
+    return RTEMS_INVALID_SIZE; 
+}
+
+rtems_status_code _CPU_Memory_protection_Verify_permission(
+   uint32_t permissions 
+) {
+return  _CPU_Pagetable_attr_Check(permissions);
+}

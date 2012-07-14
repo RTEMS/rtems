@@ -142,7 +142,7 @@ rtems_task Init(
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
   }
-  status = rtems_memory_management_get_attr(mpe,&access);
+  status = rtems_memory_management_get_permissions(mpe,&access);
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Access Attribute not found, status = %d\n",status);
   }
