@@ -1,17 +1,20 @@
-/*
-*  COPYRIGHT (c) 1989-2009.
+/*COPYRIGHT (c) 1989-2009.
 *  On-Line Applications Research Corporation (OAR).
-*
-*  The license and distribution terms for this file may be
-*  found in the file LICENSE in this distribution or at
-*  http://www.rtems.com/license/LICENSE.
-*/
+*  *
+*  *  The license and distribution terms for this file may be
+*  *  found in the file LICENSE in this distribution or at
+*  *  http://www.rtems.com/license/LICENSE.
+*  *
+*  *  $Id$
+*  */
 #ifndef _LIBCPU_MMU_SUPPORT_H
 #define _LIBCPU_MMU_SUPPORT_H
+
 
 #ifdef __cplusplus
   extern "C" {
 #endif
+
 
 /* Access definition macros below */
 #define _PPC_MMU_ACCESS_SUPERVISOR_ONLY     0
@@ -29,7 +32,7 @@
 #define _PPC_CACHE_UNGUARDED                      0x0
 
 /* Defining masks for the various bits of the PTE
-   Referenced from OEA PowerPC Manual */
+ *    Referenced from OEA PowerPC Manual */
 
 #define PTEW0_VALID            0x80000000
 #define PTEW0_VSID             0x7fffff80
@@ -46,7 +49,7 @@
 #define SR_KP                  0x20000000  
 
 /* Splitting the 64 bit PTE into two 32 bit words. As shown in the OEA
-   Manual of PowerPC */
+ *    Manual of PowerPC */
 
 typedef struct
 {
@@ -58,12 +61,15 @@ extern char RamBase[];
 extern char RamSize[];
 
 /* Function prototypes that can be shared with high
-   level modules go in here */
+ *    level modules go in here */
 void
 mmu_init(void);
 
 void
 mmu_irq_init(void);
+
+
+
 
 #ifdef __cplusplus
   }

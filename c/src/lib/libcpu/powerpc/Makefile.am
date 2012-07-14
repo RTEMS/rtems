@@ -217,15 +217,17 @@ endif
 if mpc6xx
 
 # mpc6xx/mmu
-include_libcpu_HEADERS += mpc6xx/mmu/bat.h mpc6xx/mmu/mmu_support.h mpc6xx/mmu/pte121.h ../shared/include/memoryprotection.h \
+include_libcpu_HEADERS += mpc6xx/mmu/bat.h mpc6xx/mmu/mmu_support.h mpc6xx/mmu/pte121.h \
+    mpc6xx/mmu/mmu_permissions.h \
+    ../shared/include/memoryprotection.h \
+    
     mpc6xx/mmu/mmu_support.c mpc6xx/mmu/pagetable_.c
 
 noinst_PROGRAMS += mpc6xx/mmu.rel
 mpc6xx_mmu_rel_SOURCES = mpc6xx/mmu/bat.c mpc6xx/mmu/bat.h \
     mpc6xx/mmu/pte121.c mpc6xx/mmu/pte121.h \
     mpc6xx/mmu/mmuAsm.S mpc6xx/mmu/mmu_support.h mpc6xx/mmu/mmu_support.c mpc6xx/mmu/pagetable_.c \
-    ../shared/include/memoryprotection.h ../shared/src/memoryprotection_manager.c 
-
+    ../shared/include/memoryprotection.h ../shared/src/memoryprotection_manager.c mpc6xx/mmu/mmu_permissions.h
 mpc6xx_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

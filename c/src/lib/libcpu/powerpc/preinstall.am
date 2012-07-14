@@ -161,17 +161,13 @@ $(PROJECT_INCLUDE)/libcpu/pte121.h: mpc6xx/mmu/pte121.h $(PROJECT_INCLUDE)/libcp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/pte121.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/pte121.h
 
+$(PROJECT_INCLUDE)/libcpu/mmu_permissions.h: mpc6xx/mmu/mmu_permissions.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu_permissions.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu_permissions.h
+
 $(PROJECT_INCLUDE)/libcpu/memoryprotection.h: ../shared/include/memoryprotection.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/memoryprotection.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/memoryprotection.h
-
-$(PROJECT_INCLUDE)/libcpu/mmu_support.c: mpc6xx/mmu/mmu_support.c $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu_support.c
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu_support.c
-
-$(PROJECT_INCLUDE)/libcpu/pagetable_.c: mpc6xx/mmu/pagetable_.c $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/pagetable_.c
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/pagetable_.c
 
 $(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h

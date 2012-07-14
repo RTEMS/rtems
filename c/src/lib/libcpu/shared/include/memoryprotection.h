@@ -1,78 +1,27 @@
-/*
- * libcpu Memory Protection Support
- *
- * Copyright (C) 2011. Gedare Bloom.
- *
- * The functions declared in this file can be implemented for
- * each processor in the memoryprotection.c file under libcpu/CPU/ 
- * or with the stub implementation under libcpu/shared
- *
- * These functions provide the processor specific implementations for
- * most of the RTEMS Memory Protection directives,
- * and should only ever be called by these directives.
- *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.com/license/LICENSE.
- */
+
 
 #ifndef __LIBCPU_PAGETABLE_h
 #define __LIBCPU_PAGETABLE_h
 
-#include <rtems/libmmu.h>
+#include <sys/types.h>
 #include <rtems/rtems/status.h>
 
 #ifdef __cplusplus
-extern "C" {
+  extern "C" {
 #endif
 
-/* TODO: documentation*/
-/*
- * Initialize the hardware to prepare for memory protection directives.
- */
-rtems_status_code _CPU_Memory_management_Initialize( void );
+rtems_status_code rtems_pagetable_attribute_check( int attr);
 
-/*
- * Make sure memory protection @a permission is valid for this CPU
- */
-rtems_status_code _CPU_Memory_management_Verify_permission(
-    rtems_memory_management_permission permission
-);
+int translate_access_attr( uint32_t attr, int * wimg, int * pp);
 
-/*
- * Check if memory protection region @a size is valid for this CPU
- */
-rtems_status_code _CPU_Memory_management_Verify_size(
-    size_t size
-);
+void rtems_pagetable_initialize( void );
 
-/*
- * Install (enforce) the memory protection entry @a mpe
- */
-rtems_status_code _CPU_Memory_management_Install_MPE(
-    rtems_memory_management_entry *mpe
-);
+rtems_status_code rtems_pagetable_update_attribute(
+  uint32_t ea, 
+  int cache_attr, 
+  int mprot);
 
-/*
- * Uninstall the memory protection entry @a mpe
- */
-rtems_status_code _CPU_Memory_management_Uninstall_MPE(
-    rtems_memory_management_entry *mpe
-);
-
-rtems_status_code _CPU_Memory_management_Set_write(
-    rtems_memory_management_entry *mpe
-);
-
-rtems_status_code _CPU_Memory_management_Set_read(
-    rtems_memory_management_entry *mpe
-);
-
-rtems_status_code _CPU_Memory_management_Set_execute(
-    rtems_memory_management_entry *mpe
-);
 #ifdef __cplusplus
   }
 #endif
 #endif
-

@@ -5,6 +5,8 @@
 *  The license and distribution terms for this file may be
 *  found in the file LICENSE in this distribution or at
 *  http://www.rtems.com/license/LICENSE.
+*
+*  $Id$
 */
 
 #include <rtems.h>
@@ -31,11 +33,7 @@ SPR_RO(DSISR);
 #define LD_PI_SIZE              16
 #define LD_VSID_SIZE            24
 #define LD_HASH_SIZE            19
-/*define MMUS_DEBUG will make the mmu_handle_dsi_exception method
-  * print a debug info line each time the method was called
-  */
-//#define MMUS_DEBUG
-
+#define MMUS_DEBUG
 /* Primary and secondary PTE hash functions */
 
 /* Compute the primary hash from a VSID and a PI */
@@ -59,6 +57,7 @@ search_empty_pte_slot(libcpu_mmu_pte *pteg){
   return -1;
 }
 
+
 static int
 search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
 
@@ -79,6 +78,7 @@ search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
   }
   return -1;  /* Failed search */
 }
+
 
 static int
 BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
@@ -143,6 +143,7 @@ get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
   *pteg = (libcpu_mmu_pte *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
 }
 
+
 /* THis function shall be called upon exception on the DSISR
    register. depending on the type of exception appropriate action
    will be taken in this function. Most likely parameters for this
@@ -153,13 +154,13 @@ get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
 
 static int
 mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
-  volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,domain_access_attrb;
+  volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,alut_access_attrb;
   volatile int ppteg_search_status, spteg_search_status;
   int status, pp, wimg;
   libcpu_mmu_pte* ppteg;
   libcpu_mmu_pte* spteg;
   volatile unsigned long cause, msr;
-  rtems_memory_management_entry* domain_entry;
+  rtems_memory_protect_entry* alut_entry;
   
   /* Switch MMU and other Interrupts off */
   msr = _read_MSR();
@@ -206,12 +207,17 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-      status = rtems_memory_management_find_entry((void *)ea, &domain_entry);
+      status = rtems_memory_protect_search((void *)ea, &alut_entry);
       if(status == RTEMS_SUCCESSFUL){
+        status = rtems_memory_protect_get_attr(alut_entry, &alut_access_attrb);
+        if(status != RTEMS_SUCCESSFUL){
+          printk("Unexpected Error happened when get attibute from ALUT! RTEMS delete self");
+          rtems_task_delete(RTEMS_SELF); 
+        }
       }
       else
-       domain_access_attrb = 0x0000070f;
-      //translate_access_attr(domain_access_attrb, &wimg, &pp);
+        alut_access_attrb = rtems_memory_protect_get_default_attr();
+      translate_access_attr(alut_access_attrb, &wimg, &pp);
       BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
     } else {
       /* PTE found in second group */
@@ -253,6 +259,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   /* Before returning turn on MMU */
   _write_MSR( msr );
   return 0;
+
 }
 
 static int
@@ -260,6 +267,7 @@ mmu_handle_tlb_dlmiss_exception(BSP_Exception_frame *f, unsigned vector){
   printk("DL TLB MISS Exception hit\n");
   return 0;
 }
+
 
 static int
 mmu_handle_tlb_dsmiss_exception(BSP_Exception_frame *f, unsigned vector){
@@ -274,6 +282,7 @@ mmu_irq_init(void){
   ppc_exc_set_handler(ASM_60X_DLMISS_VECTOR, mmu_handle_tlb_dlmiss_exception);
   ppc_exc_set_handler(ASM_60X_DSMISS_VECTOR, mmu_handle_tlb_dsmiss_exception);
   
+
   /* Initialise segment registers */
   for (i=0; i<16; i++) 
     _write_SR(i|0x60000000 , (void *)(i<<28 ));
@@ -281,8 +290,9 @@ mmu_irq_init(void){
   /* Set up SDR1 register for page table address */
   _write_SDR1((unsigned long) 0x00FF0000);
 
-  _CPU_Memory_management_Initialize();
+  _CPU_Pagetable_Initialize();
   /*mmu_init();*/
+
 }
 
 
@@ -290,10 +300,13 @@ mmu_irq_init(void){
    would be EA, PA, Block Length, Access Bits */
 void
 mmu_make_bat_entry(void){
+
 }
+
+
 
 /* Same thing as above but for Instruction access */
 void
 mmu_handle_isi_exception(void){
-}
 
+}
