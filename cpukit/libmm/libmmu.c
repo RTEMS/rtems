@@ -86,7 +86,7 @@ rtems_status_code rtems_memory_management_initialize ( void)
  * * Linear search for the element emtry in the alut for*
  * * the address range under which it falls             *
  * *****************************************************/
-rtems_status_code rtems_memory_management_search_entry(
+rtems_status_code rtems_memory_management_find_entry(
   void* const addr, 
   rtems_memory_management_entry** p_ret)
 {

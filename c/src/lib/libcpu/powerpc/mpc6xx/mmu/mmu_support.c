@@ -207,7 +207,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-      status = rtems_memory_management_search_entry((void *)ea, &alut_entry);
+      status = rtems_memory_management_find_entry((void *)ea, &alut_entry);
       if(status == RTEMS_SUCCESSFUL){
         status = rtems_memory_management_get_attr(alut_entry, &alut_access_attrb);
         if(status != RTEMS_SUCCESSFUL){

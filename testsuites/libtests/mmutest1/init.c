@@ -138,7 +138,7 @@ rtems_task Init(
    *  search operations over particular address values 
    */
   printf("Test 7 : Get access attrbute for address 0x%x\n", alut_search_addr1);
-  status = rtems_memory_management_search_entry(alut_search_addr1, &mpe); 
+  status = rtems_memory_management_find_entry(alut_search_addr1, &mpe); 
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
   }
@@ -159,7 +159,7 @@ rtems_task Init(
 
 
   printf("Test 8 : Get attrbute for unmapped address 0x%x\n", alut_search_addr2);
-  status = rtems_memory_management_search_entry(alut_search_addr2, &mpe); 
+  status = rtems_memory_management_find_entry(alut_search_addr2, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Find the entry including this address in ALUT, status = %d\n",status);
   }

@@ -134,7 +134,7 @@ rtems_status_code rtems_memory_management_create_entry(
 rtems_status_code rtems_memory_management_delete_entry(
   rtems_memory_management_entry* const p_entry);
 
-rtems_status_code rtems_memory_management_search_entry(
+rtems_status_code rtems_memory_management_find_entry(
   void* const addr,
   rtems_memory_management_entry** p_ret);
 
