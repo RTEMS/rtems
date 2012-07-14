@@ -70,27 +70,31 @@ SECTIONS
     KEEP (*(.text.*personality*))
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
-    /*
-     * Special FreeBSD sysctl sections.
-     */
-    . = ALIGN (16);
+
+  } =0x90909090
+
+  .robsdsets : {
+    /* for pre rtems-libbsd FreeBSD code */
     __start_set_sysctl_set = .;
     *(set_sysctl_*);
-    __stop_set_sysctl_set = ABSOLUTE(.);
+    __stop_set_sysctl_set = .;
     *(set_domain_*);
     *(set_pseudo_*);
+
+    /* for rtems-libbsd FreeBSD code */
     _bsd__start_set_modmetadata_set = .;
     *(_bsd_set_modmetadata_set);
     _bsd__stop_set_modmetadata_set = .;
+
     _bsd__start_set_sysctl_set = .;
     *(_bsd_set_sysctl_set);
     _bsd__stop_set_sysctl_set = .;
+
     _bsd__start_set_sysinit_set = .;
     *(_bsd_set_sysinit_*);
     _bsd__stop_set_sysinit_set = .;
 
     bsp_section_rodata_end = .;
-
   } =0x90909090
 
   .init           :
