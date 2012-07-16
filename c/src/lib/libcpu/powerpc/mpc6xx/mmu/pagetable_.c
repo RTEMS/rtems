@@ -78,13 +78,14 @@ translate_access_attr(uint32_t attr, int * wimg, int * pp){
   return 0;
 }
 
-void  _CPU_Pagetable_Initialize( void )
+rtems_status_code _CPU_Memory_management_Initialize(void)
 {
+  
   uint32_t pt_base,pt_end,cache_line_size;
   libcpu_mmu_pte* pte;
   unsigned long msr;
   void *ea;
-
+  
   pt_base = _read_SDR1() & 0xffff0000;
   pt_end = pt_base + (( ( _read_SDR1() & 0x000001ff)+1 )<<16);
 
@@ -114,7 +115,7 @@ void  _CPU_Pagetable_Initialize( void )
   /* restore, i.e., switch MMU and IRQs back on */
   _write_MSR( msr );
 
-  return ;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)

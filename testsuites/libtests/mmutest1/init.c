@@ -61,6 +61,9 @@ rtems_task Init(
 
   puts( "\n\n*** MMU ALUT TEST 1 BEGINS ***\n" );
   puts( "initialize the memory protect manager\n");
+
+  rtems_memory_management_install_alut();
+
   status = rtems_memory_management_initialize ( );
 
   if(status != RTEMS_SUCCESSFUL)

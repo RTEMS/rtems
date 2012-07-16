@@ -27,15 +27,32 @@
 #include "libmmu.h"
 
 
-/* create a alut table instance */
-  rtems_mprot_alut the_rtems_mprot_alut;
-
-
-
 /*****************************************************
  * * flush  the cache and tlb, update the pagetable of the mpe *
  * *  block address space*
  * *****************************************************/
+/* TODO: rename ALUT to Arena */
+rtems_status_code rtems_memory_management_install_alut(void) {
+    
+  rtems_mprot_alut* the_alut= &the_rtems_mprot_alut;
+  int i;
+
+  _Chain_Initialize(&(the_alut->ALUT_idle), the_alut->entries,
+    RTEMS_MPROT_ALUT_SIZE, sizeof(rtems_memory_management_entry) );
+
+  _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
+
+  for(i=0;i<RTEMS_MPROT_ALUT_SIZE; i++)
+  {
+    the_alut->entries[i].region.bounds = 0;
+    the_alut->entries[i].region.base = (void*)0;
+    the_alut->entries[i].permissions = 0;
+  }
+
+  the_alut->rtems_mprot_default_permissions = RTEMS_MPROT_DEFAULT_ATTRIBUTE;
+  return RTEMS_SUCCESSFUL;
+}
+
 void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
 {
   void * ea, *block_end;
@@ -53,32 +70,6 @@ void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
     rtems_pagetable_update_permissions((uint32_t)ea, cache_attr, mprot_attr);
   
   return ;
-}
-
-/*****************************************************
- * * initialization of the ALUT (Access Look up Table )  *
- * *****************************************************/
-rtems_status_code rtems_memory_management_initialize ( void)
-{
-  rtems_mprot_alut* the_alut= &the_rtems_mprot_alut;
-  int i;
-
-  _Chain_Initialize(&(the_alut->ALUT_idle), the_alut->entries, 
-    RTEMS_MPROT_ALUT_SIZE, sizeof(rtems_memory_management_entry) );
-
-  _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
-  
-  for(i=0;i<RTEMS_MPROT_ALUT_SIZE; i++)
-  {
-    the_alut->entries[i].region.bounds = 0;
-    the_alut->entries[i].region.base = (void*)0;
-    the_alut->entries[i].permissions = 0;
-  }
-
-  the_alut->rtems_mprot_default_permissions = RTEMS_MPROT_DEFAULT_ATTRIBUTE;
-  
-  rtems_pagetable_initialize();
-  return RTEMS_SUCCESSFUL;
 }
 
 
@@ -334,7 +325,7 @@ rtems_status_code rtems_memory_management_set_default_permissions(
  *       * check whether each page is mapped in ALUT. So here we just flush the entire cache *
  *          * and initiliaze th pagetable and tlb*/
   _Thread_Disable_dispatch();
-  rtems_pagetable_initialize();
+  rtems_memory_management_initialize();
   _Thread_Enable_dispatch();
   
   return RTEMS_SUCCESSFUL;

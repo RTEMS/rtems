@@ -289,7 +289,7 @@ mmu_irq_init(void){
   /* Set up SDR1 register for page table address */
   _write_SDR1((unsigned long) 0x00FF0000);
 
-  _CPU_Pagetable_Initialize();
+  _CPU_Memory_management_Initialize();
   /*mmu_init();*/
 
 }

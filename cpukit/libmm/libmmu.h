@@ -121,6 +121,10 @@ typedef struct mprot_alut
  *   *   */
 //rtems_mprot_alut the_rtems_mprot_alut;
 
+/* create a alut table instance */
+  rtems_mprot_alut the_rtems_mprot_alut;
+
+
 rtems_status_code rtems_memory_management_initialize ( void );
 
 void rtems_management_update_entry(rtems_memory_management_entry*  mpe);
