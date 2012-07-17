@@ -65,7 +65,7 @@ int main(
 )
 #endif
 {
-  static const uintptr_t global_location_size = {
+  static const uintptr_t global_location_size [] = {
     sizeof(rtems_filesystem_global_location_t)
   };
 
