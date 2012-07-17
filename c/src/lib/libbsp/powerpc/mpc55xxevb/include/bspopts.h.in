@@ -73,6 +73,9 @@
 /* Must be defined to be the PLL predivider factor for clock generation */
 #undef MPC55XX_FMPLL_PREDIV
 
+/* if defined, do low level initialization */
+#undef MPC55XX_NEEDS_LOW_LEVEL_INIT
+
 /* Must be defined to be the external reference clock (in Hz) for clock
    generation */
 #undef MPC55XX_REFERENCE_CLOCK

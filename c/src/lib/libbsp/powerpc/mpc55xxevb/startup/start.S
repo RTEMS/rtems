@@ -80,6 +80,8 @@ mpc55xx_bootflag_1:
 
 _start:
 
+#ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+
 	/* Enable SPE */
 #ifdef HAS_SPE
 	mfmsr	r3
@@ -203,6 +205,8 @@ zero_intermediate_stack_loop:
 	cmpw	cr7, r3, r4
 	bne	cr7, zero_intermediate_stack_loop
 	subi	r1, r3, 16
+
+#endif /* MPC55XX_NEEDS_LOW_LEVEL_INIT */
 
 	/* Next steps in C */
 	bl	mpc55xx_start_early

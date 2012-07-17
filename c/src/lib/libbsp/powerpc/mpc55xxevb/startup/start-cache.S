@@ -30,6 +30,8 @@
 
 mpc55xx_start_cache:
 
+#ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+
 	/* Load zero, CINV, and CABT) */
 	li	r0, 0
 	li	r3, 0x2
@@ -105,6 +107,8 @@ get_data_cache_invalidation_status:
 	mtspr	FSL_EIS_L1CSR0, r6
 
 #endif
+
+#endif /* MPC55XX_NEEDS_LOW_LEVEL_INIT */
 
 	/* Return */
 	blr

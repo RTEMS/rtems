@@ -51,13 +51,24 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_mmu(void)
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_internal_ram(void)
 {
-  /* Initialize internal SRAM to zero (ECC) */
-  bsp_start_zero(
-    (char *) bsp_ram_start + MPC55XX_EARLY_STACK_SIZE,
-    (size_t) bsp_ram_size - MPC55XX_EARLY_STACK_SIZE
-  );
-  #ifdef MPC55XX_HAS_SECOND_INTERNAL_RAM_AREA
-    bsp_start_zero(&bsp_ram_1_start [0], (size_t) bsp_ram_1_size);
+  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+    /* Initialize internal SRAM to zero (ECC) */
+    bsp_start_zero(
+      (char *) bsp_ram_start + MPC55XX_EARLY_STACK_SIZE,
+      (size_t) bsp_ram_size - MPC55XX_EARLY_STACK_SIZE
+    );
+    #ifdef MPC55XX_HAS_SECOND_INTERNAL_RAM_AREA
+      bsp_start_zero(&bsp_ram_1_start [0], (size_t) bsp_ram_1_size);
+    #endif
+  #else
+    bsp_start_zero(
+      bsp_section_sbss_begin,
+      (size_t) bsp_section_sbss_size
+    );
+    bsp_start_zero(
+      bsp_section_bss_begin,
+      (size_t) bsp_section_bss_size
+    );
   #endif
 }
 
@@ -76,40 +87,42 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_load_nocache_section(void)
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_mode_change(void)
 {
-  #ifdef MPC55XX_HAS_MODE_CONTROL
-    uint32_t mctl_key1 = 0x5af0;
-    uint32_t mctl_key2 = 0xa50f;
-    int i = 0;
+  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+    #ifdef MPC55XX_HAS_MODE_CONTROL
+      uint32_t mctl_key1 = 0x5af0;
+      uint32_t mctl_key2 = 0xa50f;
+      int i = 0;
 
-    /* Clear any pending RGM status */
-    RGM.FES.R = 0xffff;
-    RGM.DES.R = 0xffff;
+      /* Clear any pending RGM status */
+      RGM.FES.R = 0xffff;
+      RGM.DES.R = 0xffff;
 
-    /* Make sure XOSC and PLLs are on in RUN0 state */
-    ME.DRUN_MC.R = 0x001f0074;
-    ME.RUN_MC [0].R = 0x001f0074;
+      /* Make sure XOSC and PLLs are on in RUN0 state */
+      ME.DRUN_MC.R = 0x001f0074;
+      ME.RUN_MC [0].R = 0x001f0074;
 
-    /*
-     * Make sure all peripherals are active in DRUN and RUN0 state.
-     *
-     * FIXME: This might be optimized to reduce power consumtion.
-     */
-    for (i = 0; i < 8; ++i) {
-      ME_RUN_PC_32B_tag run_pc = { .R = ME.RUN_PC [i].R };
+      /*
+       * Make sure all peripherals are active in DRUN and RUN0 state.
+       *
+       * FIXME: This might be optimized to reduce power consumtion.
+       */
+      for (i = 0; i < 8; ++i) {
+	ME_RUN_PC_32B_tag run_pc = { .R = ME.RUN_PC [i].R };
 
-      run_pc.B.DRUN = 1;
-      run_pc.B.RUN0 = 1;
+	run_pc.B.DRUN = 1;
+	run_pc.B.RUN0 = 1;
 
-      ME.RUN_PC [i].R = run_pc.R;
-    }
+	ME.RUN_PC [i].R = run_pc.R;
+      }
 
-    /* Switch to RUN0 state */
-    ME.MCTL.R = 0x40000000 | mctl_key1;
-    ME.MCTL.R = 0x40000000 | mctl_key2;
+      /* Switch to RUN0 state */
+      ME.MCTL.R = 0x40000000 | mctl_key1;
+      ME.MCTL.R = 0x40000000 | mctl_key2;
 
-    while (ME.GS.B.S_MTRANS) {
-      /* Wait for mode switch to be completed */
-    }
+      while (ME.GS.B.S_MTRANS) {
+	/* Wait for mode switch to be completed */
+      }
+    #endif
   #endif
 }
 
@@ -134,44 +147,48 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_siu(void)
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_ebi_chip_select(void)
 {
-  #ifdef MPC55XX_HAS_EBI
-    size_t i = 0;
+  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+    #ifdef MPC55XX_HAS_EBI
+      size_t i = 0;
 
-    for (i = 0; i < mpc55xx_start_config_ebi_cs_count [0]; ++i) {
-       EBI.CS [i] = mpc55xx_start_config_ebi_cs [i];
-    }
+      for (i = 0; i < mpc55xx_start_config_ebi_cs_count [0]; ++i) {
+	 EBI.CS [i] = mpc55xx_start_config_ebi_cs [i];
+      }
 
-    for (i = 0; i < mpc55xx_start_config_ebi_cal_cs_count [0]; ++i) {
-       EBI.CAL_CS [i] = mpc55xx_start_config_ebi_cal_cs [i];
-    }
+      for (i = 0; i < mpc55xx_start_config_ebi_cal_cs_count [0]; ++i) {
+	 EBI.CAL_CS [i] = mpc55xx_start_config_ebi_cal_cs [i];
+      }
+    #endif
   #endif
 }
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_ebi(void)
 {
-  #if defined(MPC55XX_BOARD_GWLCFM)
-    /*
-     * init EBI for Muxed AD bus
-     */
-    EBI.MCR.B.DBM = 1;
-    EBI.MCR.B.AD_MUX = 1; /* use multiplexed bus */
-    EBI.MCR.B.D16_31 = 1; /* use lower AD bus    */
+  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+    #if defined(MPC55XX_BOARD_GWLCFM)
+      /*
+       * init EBI for Muxed AD bus
+       */
+      EBI.MCR.B.DBM = 1;
+      EBI.MCR.B.AD_MUX = 1; /* use multiplexed bus */
+      EBI.MCR.B.D16_31 = 1; /* use lower AD bus    */
 
-    SIU.ECCR.B.EBDF = 3;  /* use CLK/4 as bus clock */
-  #elif defined(MPC55XX_BOARD_MPC5674FEVB)
-    struct EBI_tag ebi = {
-      .MCR = {
-        .B = {
-          .ACGE = 0,
-          .MDIS = 0,
-          .D16_31 = 0,
-          .AD_MUX = 0,
-          .DBM = 0
-        }
-      }
-    };
+      SIU.ECCR.B.EBDF = 3;  /* use CLK/4 as bus clock */
+    #elif defined(MPC55XX_BOARD_MPC5674FEVB)
+      struct EBI_tag ebi = {
+	.MCR = {
+	  .B = {
+	    .ACGE = 0,
+	    .MDIS = 0,
+	    .D16_31 = 0,
+	    .AD_MUX = 0,
+	    .DBM = 0
+	  }
+	}
+      };
 
-    EBI.MCR.R = ebi.MCR.R;
+      EBI.MCR.R = ebi.MCR.R;
+    #endif
   #endif
 }
 

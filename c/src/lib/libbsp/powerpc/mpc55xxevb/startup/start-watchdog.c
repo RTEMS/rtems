@@ -26,12 +26,14 @@
 
 BSP_START_TEXT_SECTION void mpc55xx_start_watchdog(void)
 {
-  #ifdef MPC55XX_HAS_SWT
-    /* Write keys to clear soft lock bit */
-    SWT.SR.R = 0x0000c520;
-    SWT.SR.R = 0x0000d928;
+  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
+    #ifdef MPC55XX_HAS_SWT
+      /* Write keys to clear soft lock bit */
+      SWT.SR.R = 0x0000c520;
+      SWT.SR.R = 0x0000d928;
 
-    /* Clear watchdog enable (WEN) */
-    SWT.CR.R = 0x8000010A;
+      /* Clear watchdog enable (WEN) */
+      SWT.CR.R = 0x8000010A;
+    #endif
   #endif
 }

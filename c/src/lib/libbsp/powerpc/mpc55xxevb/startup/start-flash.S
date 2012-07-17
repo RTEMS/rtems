@@ -38,7 +38,7 @@
  * @warning Code will be copied and executed on the stack.
  */
 GLOBAL_FUNCTION mpc55xx_start_flash
-#if MPC55XX_CHIP_TYPE / 10 == 564
+#if !defined(MPC55XX_NEEDS_LOW_LEVEL_INIT) || MPC55XX_CHIP_TYPE / 10 == 564
 	blr
 #else
 	.equ	stack_size, 20
