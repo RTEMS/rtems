@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/libcsupport.h>
+#include <rtems/malloc.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument ignored);
@@ -30,7 +31,7 @@ rtems_task Init(
   int fd[2] = {0,0};
   int dummy_fd[2] = {0,0};
   int status = 0;
-  void *alloc_ptr = (void *)0;
+  void *opaque = NULL;
 
   puts( "*** TEST POSIX PIPE CREATION - 01 ***" );
 
@@ -55,7 +56,7 @@ rtems_task Init(
   status |= close( fd[1] );
   rtems_test_assert( status == 0 );
 
-  alloc_ptr = malloc( malloc_free_space() - 4 );
+  opaque = rtems_heap_greedy_allocate( NULL, 0 );
 
   /* case where mkfifo fails */
   puts( "Init - attempt to create pipe -- expect ENOMEM" );
@@ -63,7 +64,7 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOMEM );
 
-  free( alloc_ptr );
+  rtems_heap_greedy_free( opaque );
   
   dummy_fd[0] = open( "/file01", O_RDONLY | O_CREAT, S_IRWXU );
   rtems_test_assert( dummy_fd[0] != -1 );
