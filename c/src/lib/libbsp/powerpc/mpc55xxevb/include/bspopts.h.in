@@ -127,3 +127,6 @@
 
 /* enable LED outputs for SMSC9218I network interface */
 #undef SMSC9218I_ENABLE_LED_OUTPUTS
+
+/* reset pin for SMSC9218I network interface */
+#undef SMSC9218I_RESET_PIN

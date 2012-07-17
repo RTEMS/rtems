@@ -1600,7 +1600,7 @@ static void smsc9218i_interrupt_init(
 
 static void smsc9218i_reset_signal(bool signal)
 {
-  SIU.GPDO [186].R = signal ? 1 : 0;
+  SIU.GPDO [SMSC9218I_RESET_PIN].R = signal ? 1 : 0;
 }
 
 static void smsc9218i_reset_signal_init(void)
@@ -1617,11 +1617,11 @@ static void smsc9218i_reset_signal_init(void)
 #endif
   pcr.B.ODE = 0;
   pcr.B.HYS = 0;
-  pcr.B.SRC = 3;
+  pcr.B.SRC = 0;
   pcr.B.WPE = 1;
   pcr.B.WPS = 1;
 
-  SIU.PCR [186].R = pcr.R;
+  SIU.PCR [SMSC9218I_RESET_PIN].R = pcr.R;
 }
 
 static void smsc9218i_hardware_reset(volatile smsc9218i_registers *regs)
