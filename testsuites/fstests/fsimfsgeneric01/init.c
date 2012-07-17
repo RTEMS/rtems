@@ -367,7 +367,7 @@ static void test_imfs_make_generic_node_errors(void)
   rtems_test_assert(errno == ENOTSUP);
   mt_entry->type = type;
 
-  opaque = rtems_heap_greedy_allocate(0);
+  opaque = rtems_heap_greedy_allocate(NULL, 0);
   errno = 0;
   rv = IMFS_make_generic_node(
     path,

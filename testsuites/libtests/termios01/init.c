@@ -473,7 +473,7 @@ static rtems_task Init(
   test_termios_baud2number();
   test_termios_number_to_baud();
 
-  sc = rtems_termios_bufsize( 256, 138, 64 );
+  sc = rtems_termios_bufsize( 256, 128, 64 );
   directive_failed( sc, "rtems_termios_bufsize" );
 
   /*

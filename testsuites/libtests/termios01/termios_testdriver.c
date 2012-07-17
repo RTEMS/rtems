@@ -23,6 +23,7 @@
 #include <termios.h>
 #include <rtems/termiostypes.h>
 #include <rtems/libcsupport.h>
+#include <rtems/malloc.h>
 #include "termios_testdriver.h"
 
 /* forward declarations to avoid warnings */
@@ -162,9 +163,7 @@ rtems_device_driver termios_test_driver_open(
   rtems_status_code sc;
   int               rc;
   rtems_libio_open_close_args_t *args = arg;
-  void *alloc_ptr = (void *)0;
-  static int test = 0;
-  size_t freeMemory;
+  static bool firstCall = true;
   
   static const rtems_termios_callbacks Callbacks = {
     NULL,                                    /* firstOpen */
@@ -182,39 +181,26 @@ rtems_device_driver termios_test_driver_open(
     rtems_test_exit(0);
   }
 
-  freeMemory = malloc_free_space();
-  if( test == 0 ) {
-    alloc_ptr = malloc( freeMemory - 4 );
+  if( firstCall ) {
+    static const uintptr_t allocSizes [] = {
+      sizeof( struct rtems_termios_tty ),
+      128,
+      64,
+      256
+    };
+
+    size_t i;
+
+    firstCall = false;
     
-    sc = rtems_termios_open (major, minor, arg, &Callbacks);
-    rtems_test_assert( sc == RTEMS_NO_MEMORY );
-    
-    free( alloc_ptr );
-    alloc_ptr = malloc( freeMemory - 4 - 10 -
-			sizeof( struct rtems_termios_tty ) );
-    
-    sc = rtems_termios_open (major, minor, arg, &Callbacks);
-    rtems_test_assert( sc == RTEMS_NO_MEMORY );
-    
-    free( alloc_ptr );
-    alloc_ptr = malloc( freeMemory - 4 - 20 -
-			sizeof( struct rtems_termios_tty ) -
-			128 );
-    
-    sc = rtems_termios_open (major, minor, arg, &Callbacks);
-    rtems_test_assert( sc == RTEMS_NO_MEMORY );
-    
-    free( alloc_ptr );
-    alloc_ptr = malloc( freeMemory - 4 - 20 -
-			sizeof( struct rtems_termios_tty ) -
-			128 -
-			80 );
-    
-    sc = rtems_termios_open (major, minor, arg, &Callbacks);
-    rtems_test_assert( sc == RTEMS_NO_MEMORY );
-    
-    free( alloc_ptr );
-    test = 1;
+    for (i = 0; i < sizeof( allocSizes ) / sizeof( allocSizes [0] ); ++i) {
+      void *opaque = rtems_heap_greedy_allocate( allocSizes, i );
+
+      sc = rtems_termios_open( major, minor, arg, &Callbacks );
+      rtems_test_assert( sc == RTEMS_NO_MEMORY );
+
+      rtems_heap_greedy_free( opaque );
+    }
   }
   
   sc = rtems_termios_open (major, minor, arg, &Callbacks);

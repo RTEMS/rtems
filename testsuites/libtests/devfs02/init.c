@@ -62,7 +62,7 @@ rtems_task Init(
   puts( "Init - restore device table size" );
   rootloc->mt_entry->immutable_fs_info = data;
 
-  opaque = rtems_heap_greedy_allocate( 0 );
+  opaque = rtems_heap_greedy_allocate( NULL, 0 );
 
   puts( "Init - attempt to create a node - expect ENOMEM" );
   status = mknod( "/node", S_IFBLK, 0LL );

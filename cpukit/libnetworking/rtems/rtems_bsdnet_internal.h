@@ -47,7 +47,7 @@ extern int soconnsleep (struct socket *so);
 extern void soconnwakeup (struct socket *so);
 #define splnet()	0
 #define splimp()	0
-#define splx(_s)	do { (_s) = 0; } while(0)
+#define splx(_s)	do { (_s) = 0; (void) (_s); } while(0)
 
 /* to avoid warnings */
 void *memcpy(void *dest, const void *src, size_t n);

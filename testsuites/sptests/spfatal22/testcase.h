@@ -18,7 +18,7 @@
 
 void force_error()
 {
-  rtems_heap_greedy_allocate( 0 );
+  rtems_heap_greedy_allocate( NULL, 0 );
 
   rtems_libio_init();
 }

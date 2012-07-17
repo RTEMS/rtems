@@ -65,6 +65,10 @@ int main(
 )
 #endif
 {
+  static const uintptr_t global_location_size [] = {
+    sizeof(rtems_filesystem_global_location_t)
+  };
+
   int status;
   void *opaque;
 /*
@@ -108,9 +112,7 @@ int main(
   rtems_test_assert( errno == ENOTDIR );
 
   puts( "allocate most of memory - attempt to fail chroot - expect ENOMEM" );
-  opaque = rtems_heap_greedy_allocate(
-    sizeof(rtems_filesystem_global_location_t)
-  );
+  opaque = rtems_heap_greedy_allocate( global_location_size, 1 );
 
   status = chroot( "/one" );
   rtems_test_assert( status == -1 );

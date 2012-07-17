@@ -18,12 +18,15 @@
 
 #include "malloc_p.h"
 
-void *rtems_heap_greedy_allocate( size_t remaining_free_space )
+void *rtems_heap_greedy_allocate(
+  const uintptr_t *block_sizes,
+  size_t block_count
+)
 {
   void *opaque;
 
   _RTEMS_Lock_allocator();
-  opaque = _Heap_Greedy_allocate( RTEMS_Malloc_Heap, remaining_free_space );
+  opaque = _Heap_Greedy_allocate( RTEMS_Malloc_Heap, block_sizes, block_count );
   _RTEMS_Unlock_allocator();
 
   return opaque;

@@ -41,7 +41,7 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
-  rtems_workspace_greedy_allocate( 0 );
+  rtems_workspace_greedy_allocate( NULL, 0 );
 
   puts("Init: pthread_key_create - ENOMEM (Workspace not available)");
   empty_line();

@@ -74,7 +74,7 @@ rtems_task Init(
 
   /* out of memory error ONLY when POSIX is enabled */
   puts( "INIT - _Objects_Set_name fails - out of memory" );
-  rtems_workspace_greedy_allocate( 0 );
+  rtems_workspace_greedy_allocate( NULL, 0 );
 
   bc = _Objects_Set_name( &TestClass, &_Thread_Executing->Object, name );
   rtems_test_assert( bc == false );

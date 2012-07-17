@@ -19,12 +19,15 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/wkspace.h>
 
-void *rtems_workspace_greedy_allocate( size_t remaining_free_space )
+void *rtems_workspace_greedy_allocate(
+  const uintptr_t *block_sizes,
+  size_t block_count
+)
 {
   void *opaque;
 
   _Thread_Disable_dispatch();
-  opaque = _Heap_Greedy_allocate( &_Workspace_Area, remaining_free_space );
+  opaque = _Heap_Greedy_allocate( &_Workspace_Area, block_sizes, block_count );
   _Thread_Enable_dispatch();
 
   return opaque;

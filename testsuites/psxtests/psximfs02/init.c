@@ -35,15 +35,24 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  static const char mount_point [] = "dir01";
+  static const char fs_type [] = RTEMS_FILESYSTEM_TYPE_IMFS;
+  static const char slink_2_name [] = "node-slink-2";
+  static const uintptr_t mount_table_entry_size [] = {
+    sizeof( rtems_filesystem_mount_table_entry_t )
+      + sizeof( fs_type )
+      + sizeof( rtems_filesystem_global_location_t )
+  };
+  static const uintptr_t slink_2_name_size [] = {
+    sizeof( slink_2_name )
+  };
+
   int status = 0;
   void *opaque;
   char linkname_n[20] = {0};
   char linkname_p[20] = {0};
   int i;
   struct stat stat_buf;
-  static const char mount_point [] = "dir01";
-  static const char fs_type [] = RTEMS_FILESYSTEM_TYPE_IMFS;
-  static const char slink_2_name [] = "node-slink-2";
 
   puts( "\n\n*** TEST IMFS 02 ***" );
 
@@ -97,11 +106,7 @@ rtems_task Init(
   rtems_test_assert( errno == EACCES );
 
   puts( "Allocate most of heap" );
-  opaque = rtems_heap_greedy_allocate(
-    sizeof( rtems_filesystem_mount_table_entry_t )
-      + sizeof( fs_type )
-      + sizeof( rtems_filesystem_global_location_t )
-  );
+  opaque = rtems_heap_greedy_allocate( mount_table_entry_size, 1 );
 
   printf( "Attempt to mount a fs at %s -- expect ENOMEM", mount_point );
   status = mount( NULL,
@@ -120,7 +125,7 @@ rtems_task Init(
   rtems_test_assert( status == 0 );
 
   puts( "Allocate most of heap" );
-  opaque = rtems_heap_greedy_allocate( 0 );
+  opaque = rtems_heap_greedy_allocate( NULL, 0 );
 
   puts( "Attempt to create /node-link-2 for /node -- expect ENOMEM" );
   status = link( "/node", "/node-link-2" );
@@ -136,7 +141,7 @@ rtems_task Init(
   rtems_heap_greedy_free( opaque );
 
   puts( "Allocate most of heap" );
-  opaque = rtems_heap_greedy_allocate( sizeof( slink_2_name ) );
+  opaque = rtems_heap_greedy_allocate( slink_2_name_size, 1 );
 
   printf( "Attempt to create %s for /node -- expect ENOMEM", slink_2_name );
   status = symlink( "/node", slink_2_name );

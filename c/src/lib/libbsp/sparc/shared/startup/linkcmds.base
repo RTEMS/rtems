@@ -128,9 +128,9 @@ SECTIONS
     *(_bsd_set_sysinit_*);
     _bsd__stop_set_sysinit_set = .;
 
-    bsp_section_rodata_end = .;
+    . = ALIGN (16);
+    _endtext = .;
   } >ram
-  _endtext = .;
   .rela.dyn       :
     {
       *(.rela.init)

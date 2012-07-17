@@ -47,7 +47,7 @@ rtems_task Init(
   puts( "\n\n*** TEST USER ENVIRONMENT ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );
-  opaque = rtems_heap_greedy_allocate( 0 );
+  opaque = rtems_heap_greedy_allocate( NULL, 0 );
 
   puts( "Init - attempt to reset env - expect RTEMS_NO_MEMORY" );
   sc = rtems_libio_set_private_env();
@@ -57,7 +57,7 @@ rtems_task Init(
   rtems_heap_greedy_free( opaque );
 
   puts( "Init - allocating most of workspace memory" );
-  opaque = rtems_workspace_greedy_allocate( 0 );
+  opaque = rtems_workspace_greedy_allocate( NULL, 0 );
   
   puts( "Init - attempt to reset env - expect RTEMS_TOO_MANY" );
   sc = rtems_libio_set_private_env();

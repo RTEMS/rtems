@@ -549,14 +549,16 @@ void _Heap_Iterate(
 /**
  * @brief Greedy allocate that empties the heap.
  *
- * Afterward the heap has at most @a remaining_free_space free space left in
- * one free block.  All other blocks are used.
+ * Afterward the heap has at most @a block_count allocateable blocks of sizes
+ * specified by @a block_sizes.  The @a block_sizes must point to an array with
+ * @a block_count members.  All other blocks are used.
  *
  * @see _Heap_Greedy_free().
  */
 Heap_Block *_Heap_Greedy_allocate(
   Heap_Control *heap,
-  uintptr_t remaining_free_space
+  const uintptr_t *block_sizes,
+  size_t block_count
 );
 
 /**
