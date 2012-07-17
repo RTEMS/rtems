@@ -64,7 +64,7 @@ extern "C" {
 /*                          MODULE : eDMA                                   */
 /****************************************************************************/
     struct EDMA_tag {
-        union {
+        union EDMA_CR_tag {
             uint32_t R;
             struct {
 #if MPC55XX_CHIP_TYPE / 10 == 567
