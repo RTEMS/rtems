@@ -20,17 +20,31 @@
 
 Heap_Block *_Heap_Greedy_allocate(
   Heap_Control *heap,
-  uintptr_t remaining_free_space
+  const uintptr_t *block_sizes,
+  size_t block_count
 )
 {
-  void *free_space = remaining_free_space > 0 ?
-    _Heap_Allocate( heap, remaining_free_space )
-      : NULL;
   Heap_Block *const free_list_tail = _Heap_Free_list_tail( heap );
-  Heap_Block *current = _Heap_Free_list_first( heap );
+  Heap_Block *allocated_blocks = NULL;
   Heap_Block *blocks = NULL;
+  Heap_Block *current;
+  size_t i;
 
-  while ( current != free_list_tail ) {
+  for (i = 0; i < block_count; ++i) {
+    void *next = _Heap_Allocate( heap, block_sizes [i] );
+
+    if ( next != NULL ) {
+      Heap_Block *next_block = _Heap_Block_of_alloc_area(
+        (uintptr_t) next,
+        heap->page_size
+      );
+
+      next_block->next = allocated_blocks;
+      allocated_blocks = next_block;
+    }
+  }
+
+  while ( (current = _Heap_Free_list_first( heap )) != free_list_tail ) {
     _Heap_Block_allocate(
       heap,
       current,
@@ -40,10 +54,13 @@ Heap_Block *_Heap_Greedy_allocate(
 
     current->next = blocks;
     blocks = current;
-    current = _Heap_Free_list_first( heap );
   }
 
-  _Heap_Free( heap, free_space );
+  while ( allocated_blocks != NULL ) {
+    current = allocated_blocks;
+    allocated_blocks = allocated_blocks->next;
+    _Heap_Free( heap, (void *) _Heap_Alloc_area_of_block( current ) );
+  }
 
   return blocks;
 }

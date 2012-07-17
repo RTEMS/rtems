@@ -229,6 +229,8 @@ static void test_blkdev_imfs_parameters(void)
 
 static void test_blkdev_imfs_errors(void)
 {
+  static uintptr_t disk_size [] = { sizeof(rtems_disk_device) + sizeof(int) };
+
   rtems_status_code sc;
   int rv;
   ramdisk *rd;
@@ -257,7 +259,7 @@ static void test_blkdev_imfs_errors(void)
   );
   rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
 
-  opaque = rtems_heap_greedy_allocate(0);
+  opaque = rtems_heap_greedy_allocate(NULL, 0);
   sc = rtems_blkdev_create(
     rda,
     BLOCK_SIZE,
@@ -268,7 +270,7 @@ static void test_blkdev_imfs_errors(void)
   rtems_test_assert(sc == RTEMS_NO_MEMORY);
   rtems_heap_greedy_free(opaque);
 
-  opaque = rtems_heap_greedy_allocate(sizeof(rtems_disk_device) + sizeof(int));
+  opaque = rtems_heap_greedy_allocate(disk_size, 1);
   sc = rtems_blkdev_create(
     rda,
     BLOCK_SIZE,
@@ -342,7 +344,7 @@ static void test_blkdev_imfs_errors(void)
   );
   rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
 
-  opaque = rtems_heap_greedy_allocate(0);
+  opaque = rtems_heap_greedy_allocate(NULL, 0);
   sc = rtems_blkdev_create_partition(
     rda1,
     rda,
@@ -352,7 +354,7 @@ static void test_blkdev_imfs_errors(void)
   rtems_test_assert(sc == RTEMS_NO_MEMORY);
   rtems_heap_greedy_free(opaque);
 
-  opaque = rtems_heap_greedy_allocate(sizeof(rtems_disk_device) + sizeof(int));
+  opaque = rtems_heap_greedy_allocate(disk_size, 1);
   sc = rtems_blkdev_create_partition(
     rda1,
     rda,
