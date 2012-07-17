@@ -20,15 +20,15 @@
 
 #define TEST_REPEAT 200000
 
-#define ATOMIC_STORE_NO_BARRIER(TYPE, cpuid)             \
+#define ATOMIC_STORE_NO_BARRIER(TYPE, cpuid, mem_bar)    \
 {                                                        \
   Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
   unsigned int i;                                        \
-  _Atomic_Store_##TYPE(&a, t, ATOMIC_RELAXED_BARRIER);   \
+  _Atomic_Store_##TYPE(&a, t, mem_bar);                  \
   rtems_test_assert(a == t);                             \
   for (i = 0; i < TEST_REPEAT; i++){                     \
     t = (Atomic_##TYPE)rand();                           \
-    _Atomic_Store_##TYPE(&a, t, ATOMIC_RELAXED_BARRIER); \
+    _Atomic_Store_##TYPE(&a, t, mem_bar);                \
     rtems_test_assert(a == t);                           \
   }                                                      \
   locked_printf("\nCPU%d _Atomic_Store_" #TYPE ": SUCCESS\n", cpuid); \
@@ -50,13 +50,23 @@ rtems_task Test_task(
   cpu_num = bsp_smp_processor_id();
 
   /* Print that the task is up and running. */
-  ATOMIC_STORE_NO_BARRIER(int, cpu_num);
+  /* test relaxed barrier */
+  ATOMIC_STORE_NO_BARRIER(int, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(long, cpu_num);
+  ATOMIC_STORE_NO_BARRIER(long, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(ptr, cpu_num);
+  ATOMIC_STORE_NO_BARRIER(ptr, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(32, cpu_num);
+  ATOMIC_STORE_NO_BARRIER(32, cpu_num, ATOMIC_RELAXED_BARRIER);
+
+  /* test release barrier */
+  ATOMIC_STORE_NO_BARRIER(int, cpu_num, ATOMIC_RELEASE_BARRIER);
+
+  ATOMIC_STORE_NO_BARRIER(long, cpu_num, ATOMIC_RELEASE_BARRIER);
+
+  ATOMIC_STORE_NO_BARRIER(ptr, cpu_num, ATOMIC_RELEASE_BARRIER);
+
+  ATOMIC_STORE_NO_BARRIER(32, cpu_num, ATOMIC_RELEASE_BARRIER);
 
 //  ATOMIC_STORE_NO_BARRIER(64, cpu_num);
 
