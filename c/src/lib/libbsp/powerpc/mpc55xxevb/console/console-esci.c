@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -29,10 +29,25 @@ mpc55xx_esci_context mpc55xx_esci_devices [] = {
   {
     .regs = &ESCI_A,
     .irq = MPC55XX_IRQ_ESCI(0)
-  }, {
-    .regs = &ESCI_B,
-    .irq = MPC55XX_IRQ_ESCI(1)
   }
+  #ifdef ESCI_B
+    , {
+      .regs = &ESCI_B,
+      .irq = MPC55XX_IRQ_ESCI(1)
+    }
+  #endif
+  #ifdef ESCI_C
+    , {
+      .regs = &ESCI_C,
+      .irq = MPC55XX_IRQ_ESCI(2)
+    }
+  #endif
+  #ifdef ESCI_D
+    , {
+      .regs = &ESCI_D,
+      .irq = MPC55XX_IRQ_ESCI(3)
+    }
+  #endif
 };
 
 static void mpc55xx_esci_poll_write(int minor, char c)
