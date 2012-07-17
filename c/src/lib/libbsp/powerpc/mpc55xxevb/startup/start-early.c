@@ -174,7 +174,7 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_ebi(void)
       EBI.MCR.B.D16_31 = 1; /* use lower AD bus    */
 
       SIU.ECCR.B.EBDF = 3;  /* use CLK/4 as bus clock */
-    #elif defined(MPC55XX_BOARD_MPC5674FEVB)
+    #elif defined(MPC55XX_BOARD_MPC5674FEVB) || defined(MPC55XX_BOARD_MPC5674F_ECU508)
       struct EBI_tag ebi = {
 	.MCR = {
 	  .B = {

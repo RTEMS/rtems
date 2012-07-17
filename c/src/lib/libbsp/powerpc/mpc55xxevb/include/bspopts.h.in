@@ -33,6 +33,9 @@
 /* if defined, use custom settings for MPC5674FEVB board */
 #undef MPC55XX_BOARD_MPC5674FEVB
 
+/* if defined, use custom settings for ECU508 board */
+#undef MPC55XX_BOARD_MPC5674F_ECU508
+
 /* if defined, use custom settings for phyCORE MPC5554 board */
 #undef MPC55XX_BOARD_PHYCORE_MPC5554
 
