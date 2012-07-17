@@ -37,8 +37,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct {
-  uint16_t index;
-  uint16_t count;
+  uint32_t index : 10;
+  uint32_t count : 10;
+  uint32_t output : 1;
   union SIU_PCR_tag pcr;
 } mpc55xx_siu_pcr_config;
 

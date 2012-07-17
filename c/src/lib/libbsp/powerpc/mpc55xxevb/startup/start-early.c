@@ -117,19 +117,15 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_siu(void)
 {
   size_t i = 0;
 
-  #ifdef MPC55XX_BOARD_GWLCFM
-    SIU.GPDO[122].B.PDO=1; /* make sure USB reset is kept high */
-    SIU.GPDO[121].B.PDO=1; /* make sure Ethernet reset is kept high */
-    SIU.GPDO[113].B.PDO=1; /* make sure MOST Companion reset is kept high */
-  #endif
-
   for (i = 0; i < mpc55xx_start_config_siu_pcr_count [0]; ++i) {
      const mpc55xx_siu_pcr_config *e = &mpc55xx_start_config_siu_pcr [i];
      int j = e->index;
      int n = j + e->count;
+     uint8_t gpdo = e->output;
      uint16_t pcr = e->pcr.R;
 
      while (j < n) {
+       SIU.GPDO [j].R = gpdo;
        SIU.PCR [j].R = pcr;
        ++j;
      }
