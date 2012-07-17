@@ -1669,6 +1669,12 @@ static void smsc9218i_interface_init(void *arg)
       ANAR_TX_FD | ANAR_TX | ANAR_10_FD | ANAR_10 | ANAR_CSMA
     );
 
+#ifdef SMSC9218I_ENABLE_LED_OUTPUTS
+    regs->gpio_cfg = SMSC9218I_HW_CFG_LED_1
+      | SMSC9218I_HW_CFG_LED_2
+      | SMSC9218I_HW_CFG_LED_3;
+#endif
+
     /* Initialize interrupts */
     smsc9218i_interrupt_init(e, regs);
 

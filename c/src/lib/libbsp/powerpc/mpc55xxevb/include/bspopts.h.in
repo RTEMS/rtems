@@ -124,3 +124,6 @@
 
 /* transmit eDMA channel for SMSC9218I network interface */
 #undef SMSC9218I_EDMA_TX_CHANNEL
+
+/* enable LED outputs for SMSC9218I network interface */
+#undef SMSC9218I_ENABLE_LED_OUTPUTS
