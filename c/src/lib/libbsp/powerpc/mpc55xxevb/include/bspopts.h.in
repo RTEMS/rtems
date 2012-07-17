@@ -116,6 +116,9 @@
 /* If defined the SMC91111 chip has the ethernet address loaded at reset. */
 #undef SMC91111_ENADDR_IS_SETUP
 
+/* enable big endian support for SMSC9218I network interface */
+#undef SMSC9218I_BIG_ENDIAN_SUPPORT
+
 /* receive eDMA channel for SMSC9218I network interface */
 #undef SMSC9218I_EDMA_RX_CHANNEL
 

@@ -7,17 +7,20 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  */
+
+#include <bsp.h>
 
 /**
  * @name Memory Map
@@ -61,14 +64,28 @@ typedef struct {
   uint32_t e2p_data;
 } smsc9218i_registers;
 
-volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *) 0x3fff8000;
+/*
+ * SMSC9218 registers are accessed little-endian (address 0x3fff8000, A22 used
+ * as END_SEL).
+ */
+#ifdef SMSC9218I_BIG_ENDIAN_SUPPORT
+  volatile smsc9218i_registers *const smsc9218i =
+    (volatile smsc9218i_registers *) 0x3fff8200;
+#else
+  volatile smsc9218i_registers *const smsc9218i =
+    (volatile smsc9218i_registers *) 0x3fff8000;
+#endif
 
 /** @} */
 
-#define SMSC9218I_BIT_POS(pos) \
-  ((pos) > 15 ? \
-    ((pos) > 23 ? (pos) - 24 : (pos) - 8) \
-      : ((pos) > 7 ? (pos) + 8 : (pos) + 24))
+#ifdef SMSC9218I_BIG_ENDIAN_SUPPORT
+  #define SMSC9218I_BIT_POS(pos) \
+    ((pos) > 15 ? \
+      ((pos) > 23 ? (pos) - 24 : (pos) - 8) \
+        : ((pos) > 7 ? (pos) + 8 : (pos) + 24))
+#else
+  #define SMSC9218I_BIT_POS(pos) (pos)
+#endif
 
 #define SMSC9218I_FLAG(pos) \
   (1U << SMSC9218I_BIT_POS(pos))
@@ -87,11 +104,15 @@ volatile smsc9218i_registers *const smsc9218i = (volatile smsc9218i_registers *)
   ((SMSC9218I_GET_FIELD_8(reg, (pos) + 8) << 8) \
     | SMSC9218I_GET_FIELD_8(reg, pos))
 
-#define SMSC9218I_SWAP(val) \
-  ((((val) >> 24) & 0xff) \
-    | ((((val) >> 16) & 0xff) << 8) \
-    | ((((val) >> 8) & 0xff) << 16) \
-    | (((val) & 0xff) << 24))
+#ifdef SMSC9218I_BIG_ENDIAN_SUPPORT
+  #define SMSC9218I_SWAP(val) \
+    ((((val) >> 24) & 0xff) \
+      | ((((val) >> 16) & 0xff) << 8) \
+      | ((((val) >> 8) & 0xff) << 16) \
+      | (((val) & 0xff) << 24))
+#else
+  #define SMSC9218I_SWAP(val) (val)
+#endif
 
 /**
  * @name Receive Status
