@@ -1529,10 +1529,10 @@ static void smsc9218i_interrupt_init(
 #endif
   pcr.B.ODE = 0;
   pcr.B.HYS = 0;
-  pcr.B.SRC = 3;
+  pcr.B.SRC = 0;
   pcr.B.WPE = 0;
   pcr.B.WPS = 1;
-  SIU.PCR [193].R = pcr.R;
+  SIU.PCR [SMSC9218I_IRQ_PIN].R = pcr.R;
 
   /* DMA/Interrupt Request Select */
   rtems_interrupt_disable(level);
