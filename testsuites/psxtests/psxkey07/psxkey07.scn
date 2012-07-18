@@ -1,0 +1,8 @@
+*** TEST KEY 07 ***
+Init - pthread Key create - OK
+Init - 380 pthreads have been created - OK
+Init - 380 pthreads have been setted key data - OK
+Init - sleep - let threads run - OK
+Init - 380 pthreads have been got key data - OK
+Init - pthread Key delete - OK
+*** END OF TEST KEY 07 ***

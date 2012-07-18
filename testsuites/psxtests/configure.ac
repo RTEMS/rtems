@@ -125,6 +125,7 @@ psxkey03/Makefile
 psxkey04/Makefile
 psxkey05/Makefile
 psxkey06/Makefile
+psxkey07/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
 psxmsgq02/Makefile
