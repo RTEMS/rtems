@@ -83,6 +83,9 @@
    generation */
 #undef MPC55XX_REFERENCE_CLOCK
 
+/* system clock divider */
+#undef MPC55XX_SYSTEM_CLOCK_DIVIDER
+
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 

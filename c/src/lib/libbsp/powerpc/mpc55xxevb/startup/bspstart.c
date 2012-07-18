@@ -95,11 +95,6 @@ void bsp_start(void)
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	ppc_cpu_id_t myCpu;
 	ppc_cpu_revision_t myCpuRevision;
-#if defined(MPC55XX_BOARD_MPC5674FEVB)
-        unsigned system_clock_divider = 2;
-#else
-        unsigned system_clock_divider = 1;
-#endif
 
         null_pointer_protection();
 
@@ -119,7 +114,7 @@ void bsp_start(void)
 	/*
 	 * determine clock speed
 	 */
-	bsp_clock_speed = mpc55xx_get_system_clock() / system_clock_divider;
+	bsp_clock_speed = mpc55xx_get_system_clock() / MPC55XX_SYSTEM_CLOCK_DIVIDER;
 
 	/* Time reference value */
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
