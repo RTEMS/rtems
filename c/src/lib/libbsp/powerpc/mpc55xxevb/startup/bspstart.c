@@ -78,7 +78,7 @@ void _BSP_Fatal_error( unsigned n)
 
 static void null_pointer_protection(void)
 {
-#if defined(MPC55XX_BOARD_MPC5674FEVB) || defined(MPC55XX_BOARD_MPC5566EVB)
+#ifdef MPC55XX_NULL_POINTER_PROTECTION
 	struct MMU_tag mmu = { .MAS0 = { .B = { .TLBSEL = 1, .ESEL = 1 } } };
 
 	PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, mmu.MAS0.R);

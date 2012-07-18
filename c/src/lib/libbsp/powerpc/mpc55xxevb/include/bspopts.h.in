@@ -76,6 +76,9 @@
 /* if defined, do low level initialization */
 #undef MPC55XX_NEEDS_LOW_LEVEL_INIT
 
+/* enable NULL pointer protection */
+#undef MPC55XX_NULL_POINTER_PROTECTION
+
 /* Must be defined to be the external reference clock (in Hz) for clock
    generation */
 #undef MPC55XX_REFERENCE_CLOCK
