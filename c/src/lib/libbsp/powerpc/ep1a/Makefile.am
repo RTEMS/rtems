@@ -1,7 +1,3 @@
-##
-## Makefile.am,v 1.8.4.1 2003/02/20 21:55:34 joel Exp
-##
-
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am

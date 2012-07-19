@@ -1,6 +1,4 @@
 ## Process this file with autoconf to produce a configure script.
-##
-## configure.ac,v 1.5.2.2 2003/08/11 14:37:57 ralf Exp
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-mips-hurricane],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])

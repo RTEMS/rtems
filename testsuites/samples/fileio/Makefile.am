@@ -1,8 +1,3 @@
-##
-##  Makefile.am,v 1.9 2002/08/11 05:18:59 ralf Exp
-##
-
-
 rtems_tests_PROGRAMS = fileio
 fileio_SOURCES = init.c system.h
 
