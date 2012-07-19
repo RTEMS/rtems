@@ -12,6 +12,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <bsp/console-generic.h>
 #include <bsp/console-esci.h>
 #include <bsp/console-linflex.h>
@@ -37,4 +38,4 @@ CONSOLE_GENERIC_INFO_TABLE = {
 
 CONSOLE_GENERIC_INFO_COUNT;
 
-CONSOLE_GENERIC_MINOR(0);
+CONSOLE_GENERIC_MINOR(MPC55XX_CONSOLE_MINOR);

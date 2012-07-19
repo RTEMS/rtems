@@ -54,14 +54,14 @@
    channel) */
 #undef MPC55XX_CLOCK_PIT_CHANNEL
 
+/* determines which serial device will be registered as /dev/console */
+#undef MPC55XX_CONSOLE_MINOR
+
 /* size of the early initialization stack in bytes */
 #undef MPC55XX_EARLY_STACK_SIZE
 
 /* Must be defined to set the EMIOS prescaler */
 #undef MPC55XX_EMIOS_PRESCALER
-
-/* determines which eSCI device will be registered as /dev/console */
-#undef MPC55XX_ESCI_CONSOLE_MINOR
 
 /* define to zero or one to disable or enable interrupts for the eSCI devices
    */
