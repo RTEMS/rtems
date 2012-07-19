@@ -107,12 +107,12 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_mode_change(void)
        * FIXME: This might be optimized to reduce power consumtion.
        */
       for (i = 0; i < 8; ++i) {
-	ME_RUN_PC_32B_tag run_pc = { .R = ME.RUN_PC [i].R };
+        ME_RUN_PC_32B_tag run_pc = { .R = ME.RUN_PC [i].R };
 
-	run_pc.B.DRUN = 1;
-	run_pc.B.RUN0 = 1;
+        run_pc.B.DRUN = 1;
+        run_pc.B.RUN0 = 1;
 
-	ME.RUN_PC [i].R = run_pc.R;
+        ME.RUN_PC [i].R = run_pc.R;
       }
 
       /* Switch to RUN0 state */
@@ -120,7 +120,7 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_mode_change(void)
       ME.MCTL.R = 0x40000000 | mctl_key2;
 
       while (ME.GS.B.S_MTRANS) {
-	/* Wait for mode switch to be completed */
+        /* Wait for mode switch to be completed */
       }
     #endif
   #endif
@@ -152,11 +152,11 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_ebi_chip_select(void)
       size_t i = 0;
 
       for (i = 0; i < mpc55xx_start_config_ebi_cs_count [0]; ++i) {
-	 EBI.CS [i] = mpc55xx_start_config_ebi_cs [i];
+        EBI.CS [i] = mpc55xx_start_config_ebi_cs [i];
       }
 
       for (i = 0; i < mpc55xx_start_config_ebi_cal_cs_count [0]; ++i) {
-	 EBI.CAL_CS [i] = mpc55xx_start_config_ebi_cal_cs [i];
+        EBI.CAL_CS [i] = mpc55xx_start_config_ebi_cal_cs [i];
       }
     #endif
   #endif
