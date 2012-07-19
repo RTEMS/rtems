@@ -118,7 +118,7 @@ BSP_START_TEXT_SECTION const struct EBI_CAL_CS_tag
     .OR = {
       .B = {
         .AM = 0xffff8000 >> 15,
-        .SCY = 0,
+        .SCY = 1,
         .BSCY = 0
       }
     }

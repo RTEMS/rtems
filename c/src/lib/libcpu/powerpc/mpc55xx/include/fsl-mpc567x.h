@@ -584,7 +584,7 @@ extern "C" {
 
     struct EBI_tag {
 
-        union {                 /* Module Configuration Register */
+        union EBI_MCR_tag {     /* Module Configuration Register */
             uint32_t R;
             struct {
                 uint32_t:16;

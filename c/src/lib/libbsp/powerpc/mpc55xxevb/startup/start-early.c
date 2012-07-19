@@ -175,19 +175,17 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_ebi(void)
 
       SIU.ECCR.B.EBDF = 3;  /* use CLK/4 as bus clock */
     #elif defined(MPC55XX_BOARD_MPC5674FEVB) || defined(MPC55XX_BOARD_MPC5674F_ECU508)
-      struct EBI_tag ebi = {
-	.MCR = {
-	  .B = {
-	    .ACGE = 0,
-	    .MDIS = 0,
-	    .D16_31 = 0,
-	    .AD_MUX = 0,
-	    .DBM = 0
-	  }
-	}
+      union EBI_MCR_tag mcr = {
+        .B = {
+          .ACGE = 0,
+          .MDIS = 0,
+          .D16_31 = 1,
+          .AD_MUX = 0,
+          .DBM = 0
+        }
       };
 
-      EBI.MCR.R = ebi.MCR.R;
+      EBI.MCR.R = mcr.R;
     #endif
   #endif
 }
