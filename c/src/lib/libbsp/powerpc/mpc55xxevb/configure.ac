@@ -7,7 +7,7 @@
 # @brief Configure script of LibBSP for the MPC55xx evaluation boards.
 #
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-mpc55xxevb],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)

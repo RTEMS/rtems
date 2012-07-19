@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libcpu-lm32],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 RTEMS_TOP([../../../../..],[../../..])
 

@@ -2,7 +2,7 @@
 ##
 ## configure.ac,v 1.5 2003/03/11 09:39:07 ralf Exp
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-arm-gp32],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)

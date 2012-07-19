@@ -5,7 +5,7 @@
 # @brief Configure script of LibBSP for the LM3S39XX boards.
 #
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-arm-lm3s69xx],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)

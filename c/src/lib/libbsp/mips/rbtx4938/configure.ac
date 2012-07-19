@@ -2,7 +2,7 @@
 ##
 ## configure.ac,v 1.6.2.2 2003/08/11 14:38:01 ralf Exp
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-mips-rbtx4938],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)

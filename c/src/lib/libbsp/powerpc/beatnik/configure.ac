@@ -2,7 +2,7 @@
 ## 
 ## configure.ac,v 1.9.2.3 2003/08/11 14:37:22 ralf Exp
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-beatnik],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)

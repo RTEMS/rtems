@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-tools-cpu-nios2],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([nios2gen.c])
 RTEMS_TOP(../../..)

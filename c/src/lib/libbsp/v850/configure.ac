@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-v850],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([gdbv850sim])
 RTEMS_TOP(../../../../..)

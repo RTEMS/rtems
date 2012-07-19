@@ -1,7 +1,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-librtems++],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla],[rtems-c-src-librtems++])
 AC_CONFIG_SRCDIR([include/rtems++])
 RTEMS_TOP(../../..)
