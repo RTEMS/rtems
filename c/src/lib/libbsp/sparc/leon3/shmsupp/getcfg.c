@@ -27,8 +27,6 @@ XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  getcfg.c,v 1.7.8.1 2003/09/04 18:44:56 joel Exp
  */
 
 #include <rtems.h>

@@ -7,8 +7,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE.
- *
- * @(#) i2c.c,v 1.5 2004/04/21 16:01:34 ralf Exp
  */
 
 #include <bsp.h>

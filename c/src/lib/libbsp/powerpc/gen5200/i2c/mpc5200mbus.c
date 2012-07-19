@@ -29,8 +29,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE.
- *
- * @(#) mcfmbus.c,v 1.4 2004/03/31 01:59:32 ralf Exp
  */
 #include "mpc5200mbus.h"
 #include "../include/mpc5200.h"

@@ -1,5 +1,5 @@
 /*
- *  lnklib.S,v 1.4 1999/03/31 23:21:19 joel Exp
+ *  lnklib.S
  */
 
 #include <rtems/mips/iregdef.h>

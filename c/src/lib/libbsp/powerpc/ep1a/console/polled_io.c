@@ -11,8 +11,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- * polled_io.c,v 1.4.2.3 2003/09/04 18:45:20 joel Exp
  */
 
 #include <rtems/system.h>

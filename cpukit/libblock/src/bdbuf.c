@@ -20,8 +20,6 @@
  *    issues.
  *
  * Copyright (c) 2009-2012 embedded brains GmbH.
- *
- * @(#) bdbuf.c,v 1.14 2004/04/17 08:15:17 ralf Exp
  */
 
 /**

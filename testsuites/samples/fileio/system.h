@@ -9,8 +9,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  system.h,v 1.13 2000/06/12 15:00:12 joel Exp
  */
 
 #include <rtems.h>

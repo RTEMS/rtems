@@ -33,9 +33,6 @@
  *
  *  Further changes to derive for the PPC405CR/GP/GPr/EX/EXr
  *  by Michael Hamel ADInstruments Ltd 2008
- *
- *
- *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp
  */
 
 #include <rtems/asm.h>

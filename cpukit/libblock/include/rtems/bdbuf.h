@@ -16,8 +16,6 @@
  *    Change to support demand driven variable buffer sizes.
  *
  * Copyright (c) 2009-2012 embedded brains GmbH.
- *
- * @(#) bdbuf.h,v 1.9 2005/02/02 00:06:18 joel Exp
  */
 
 #ifndef _RTEMS_BDBUF_H

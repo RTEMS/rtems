@@ -11,8 +11,6 @@
  *	PCI Local Bus Specification
  *	PCI to PCI Bridge Specification
  *	PCI System Design Guide
- *
- * pci.h,v 1.2.4.2 2004/11/10 22:15:01 joel Exp
  */
 
 #ifndef RTEMS_PCI_H

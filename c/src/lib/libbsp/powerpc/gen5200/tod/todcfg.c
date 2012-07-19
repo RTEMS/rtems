@@ -30,8 +30,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE.
- *
- * @(#) todcfg.c,v 1.4 2005/01/22 04:12:39 ralf Exp
  */
 
 #include <bsp.h>

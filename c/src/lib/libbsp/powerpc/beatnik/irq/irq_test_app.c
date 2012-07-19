@@ -19,8 +19,6 @@
  *
  *  OAR init.c Template modified by T. Straumann who provided
  *  the implementation of this application.
- *
- *  init.c,v 1.12.4.1 2003/09/04 18:46:30 joel Exp
  */
 
 #define CONFIGURE_INIT

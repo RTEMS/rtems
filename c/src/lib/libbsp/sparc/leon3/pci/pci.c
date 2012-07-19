@@ -13,8 +13,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  pci.c,v 1.2.4.4 2004/11/10 22:15:01 joel Exp
- *
  *  Till Straumann, <strauman@slac.stanford.edu>, 1/2002
  *   - separated bridge detection code out of this file
  *

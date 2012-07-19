@@ -19,8 +19,6 @@ two paragraphs in the transferred software.
 
 COPYRIGHT IDT CORPORATION 1996
 LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
-
-  idttlb.S,v 1.3 2000/10/24 21:50:37 joel Exp
 */
 
 

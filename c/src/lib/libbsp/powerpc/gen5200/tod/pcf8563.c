@@ -38,8 +38,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE.
- *
- * @(#) ds1307.c,v 1.5 2004/04/21 10:42:52 ralf Exp
  */
 
 #include <rtems.h>

@@ -4,8 +4,6 @@
 #
 #  Author: Thomas Doerfler 02/07/2003
 #
-#  README,v 1.1 1999/07/09 17:23:15 joel Exp
-#
 
 fsmount.c contains the function fsmount. It processes the 
 fs table given as an parameter to create the listed mount points

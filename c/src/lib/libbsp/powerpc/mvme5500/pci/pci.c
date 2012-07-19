@@ -13,8 +13,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/rtems/license.html.
  *
- *  pci.c,v 1.2 2002/05/14 17:10:16 joel Exp
- *
  *  Copyright 2004, 2008 Brookhaven National Laboratory and
  *                  Shuchen K. Feng, <feng1@bnl.gov>
  *

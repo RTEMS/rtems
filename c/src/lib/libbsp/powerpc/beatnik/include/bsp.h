@@ -10,8 +10,6 @@
  *  S. Kate Feng 2003-2007 : Modified it to support the mvme5500 BSP.
  *
  *  Modified for the 'beatnik' BSP by T. Straumann, 2005-2007.
- *
- * bsp.h,v 1.9.4.2 2003/09/04 18:45:20 joel Exp
  */
 #ifndef LIBBSP_BEATNIK_BSP_H
 #define LIBBSP_BEATNIK_BSP_H

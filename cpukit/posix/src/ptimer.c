@@ -5,8 +5,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  ptimer.c,v 1.1 1996/06/03 16:29:58 joel Exp
  */
 
 #if HAVE_CONFIG_H

@@ -13,8 +13,6 @@
  * found in the file LICENSE in this distribution or at
  *
  * http://www.rtems.com/license/LICENSE.
- *
- *  bsp.h,v 1.1 2001/10/26 19:30:10 joel Exp
  */
 
 #ifndef _BSP_H

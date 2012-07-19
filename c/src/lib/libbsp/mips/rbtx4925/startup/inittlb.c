@@ -1,5 +1,5 @@
 /*
- *  inittlb.c,v 1.2 1999/03/31 23:21:19 joel Exp
+ *  inittlb.c
  */
 
 #include <rtems/mips/idtcpu.h>

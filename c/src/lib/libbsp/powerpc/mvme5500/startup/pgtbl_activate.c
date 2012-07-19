@@ -1,5 +1,3 @@
-/* pgtbl_activate.c,v 1.1.2.1 2003/02/20 21:45:49 joel Exp */
-
 #include <rtems.h>
 #include <libcpu/pte121.h>
 #include <libcpu/bat.h>

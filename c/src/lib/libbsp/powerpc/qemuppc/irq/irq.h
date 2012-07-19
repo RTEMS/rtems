@@ -14,8 +14,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- *
- *  irq.h,v 1.2.4.2 2003/09/04 18:45:20 joel Exp
  */
 
 #ifndef LIBBSP_POWERPC_IRQ_H

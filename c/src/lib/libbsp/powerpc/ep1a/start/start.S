@@ -28,8 +28,6 @@
  * and need not follow the licensing terms described here, provided that
  * the new terms are clearly indicated on the first page of each file where
  * they apply.
- *
- *  start.S,v 1.4 2002/04/19 13:25:27 joel Exp
  */
 /*
 #include <ppc-asm.h>
