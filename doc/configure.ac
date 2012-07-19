@@ -6,7 +6,7 @@ AC_INIT([rtems-doc],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([project.am])
 RTEMS_TOP([..])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.11.1])
+AM_INIT_AUTOMAKE([no-define foreign 1.12.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_RPMPREFIX

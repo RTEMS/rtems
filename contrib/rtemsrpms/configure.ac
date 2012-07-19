@@ -10,7 +10,7 @@ AC_CANONICAL_HOST
 
 AC_PREFIX_DEFAULT([/opt/rtems-][M4_RTEMS_API])
 
-AM_INIT_AUTOMAKE([1.11.1])
+AM_INIT_AUTOMAKE([1.12.2])
 
 rpmprefix="[rtems-]M4_RTEMS_API[-]"
 

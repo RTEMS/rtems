@@ -11,7 +11,7 @@ RTEMS_ENABLE_NETWORKING
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.11.1])
+AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.12.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB
