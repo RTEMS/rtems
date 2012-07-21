@@ -69,7 +69,13 @@ mmu_init(void);
 void
 mmu_irq_init(void);
 
-
+static int BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
+    libcpu_mmu_pte *spteg,
+    uint32_t vsid,
+    uint32_t pi, 
+    uint32_t wimg,
+    uint32_t protp
+);
 
 
 #ifdef __cplusplus

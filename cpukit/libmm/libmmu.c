@@ -89,7 +89,7 @@ rtems_status_code rtems_memory_management_find_entry(
   rtems_memory_management_entry* current;
   alut_p = &the_rtems_mprot_alut;
 
-  if( 0==p_ret   )   
+  if( p_ret == 0 )   
     return RTEMS_INVALID_ADDRESS;
 
   current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);

@@ -1,7 +1,7 @@
 #include <rtems.h>
 #include <libcpu/spr.h>
 #include <rtems/rtems/status.h>
-#include "mmu_support.h"
+#include <libcpu/mmu_support.h>
 #include <libcpu/memoryprotection.h>
 SPR_RW(SDR1);
 
@@ -10,6 +10,74 @@ SPR_RW(SDR1);
 
 /* Compute the secondary hash from a primary hash */
 #define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
+
+static int pte_counter = 5;
+
+static int
+search_empty_pte_slot(libcpu_mmu_pte *pteg){
+  int i;
+  for(i = 0; i < 8; i++) {
+    if((pteg[i].ptew0 & PTEW0_VALID) != 0x80000000) {
+      /* Found empty pte slot */
+      return i;
+    }
+  }
+  /* No PTE  free entry found, so rotate count and select a PTE */
+  return -1;
+}
+
+
+BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
+    libcpu_mmu_pte *spteg,
+                uint32_t vsid,
+                uint32_t pi, 
+                uint32_t wimg,
+                uint32_t protp)
+{
+  int index;
+  uint32_t hash, rpn, api;
+  libcpu_mmu_pte* pteg;
+  
+  /* Search empty PTE slot in PPTEG */
+  index = search_empty_pte_slot(ppteg);
+  if (index != -1){
+    pteg = ppteg;
+    hash = 0;
+  } else {
+    /* Search Empty slot in  SPTEG */
+    index = search_empty_pte_slot(spteg);
+    if (index == -1) {
+      /* Replace random pte entry depending on a counter */
+      index = pte_counter;
+      if (pte_counter == 7){ 
+  pte_counter = 0;
+      }   
+      pte_counter++;
+      pteg = ppteg;
+      hash = 0;
+    } else {
+      pteg = spteg;
+      hash = 1;
+    }   
+  }
+    
+  api = pi >> 10; 
+  rpn = pi; 
+
+  /* Clear the pte first . Invalidate */
+  pteg[index].ptew0 = 0x00000000;
+  pteg[index].ptew1 = 0x00000000;
+
+  /* Update the PTE with new entry */
+  pteg[index].ptew0 |= (vsid << 7) & PTEW0_VSID;
+  pteg[index].ptew0 |= (hash << 6) & PTEW0_HASHF;
+  pteg[index].ptew0 |= (api & PTEW0_API);
+  pteg[index].ptew1 |= (rpn << 12);
+  pteg[index].ptew1 |= (wimg << 3) & (PTEW1_WIMG);
+  pteg[index].ptew1 |= (protp & PTEW1_PROTP);
+  pteg[index].ptew0 |= PTEW0_VALID;
+  return 0;
+}
 
 struct rtems_mm_attributes_struct { 
   uint32_t attr1;
@@ -124,13 +192,17 @@ rtems_status_code _CPU_Memory_management_Initialize(void)
 rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
 {
   libcpu_mmu_pte* pt_entry, * ppteg,*spteg;
+  int status;
   unsigned long msr;
   volatile uint32_t   sr_data, vsid, pi, hash1, hash2, api;
   volatile int ppteg_search_status, spteg_search_status;
-
-  
+  volatile int alut_access_attrb;
+  rtems_memory_management_entry* mpe; 
   if (wimg < 0 && pp < 0)
     return RTEMS_UNSATISFIED;
+
+  /* get effective address from DAR */
+  //ea = _read_PPC_DAR();
 
   /* Read corresponding SR Data */
   sr_data = _read_SR((void *) ea);
@@ -149,6 +221,7 @@ rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
   get_pteg_addr(&ppteg, hash1);
 
   /* Search for PTE in group */
+  search_ppteg:
   ppteg_search_status = search_valid_pte(ppteg, vsid, api);
 
   if (ppteg_search_status == -1){
@@ -156,11 +229,24 @@ rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
     hash2 = PTE_HASH_FUNC2(hash1);
     get_pteg_addr(&spteg, hash2);
     spteg_search_status = search_valid_pte(spteg, vsid, api);
-    if (ppteg_search_status == -1)
-      return RTEMS_SUCCESSFUL;
-
+    if (ppteg_search_status == -1){
+       /* PTE not found in second PTEG also */
+      status = rtems_memory_management_find_entry((void *)ea, &mpe);
+      if(status == RTEMS_SUCCESSFUL){
+        /* Install MPE at CPU */
+        status = BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
+	/* go back and search again */
+        goto search_ppteg;
+        }
+      else{
+        printf("Unmapped Address when Installing MPE !!");
+   
+      }
+    }
+    else{ 
     //PTE found in SPTEG
     pt_entry = &spteg[spteg_search_status];
+    }
   }else{
     pt_entry = &ppteg[ppteg_search_status];
   }
@@ -209,11 +295,8 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
   pagesize = 0x1000; /* FIXME: 4K page */
   //
   rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
-  //
-  //            //attr = mpe->access_attribute;
   attr = mpe->permissions;
   translate_access_attr(attr, &wimg, &pp);
-  //
    for( ; ea < block_end; ea += pagesize ) {
      if ( (retval = _CPU_Pte_Change_Attributes(ea, wimg, pp)) != RTEMS_SUCCESSFUL )
         break;
