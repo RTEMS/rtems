@@ -43,8 +43,8 @@ rtems_task Init(
   void * alut_search_addr1;
   void * alut_search_addr2;
   rtems_memory_management_entry *mpe;
-  a1 = (unsigned char *)0x01A10008;
-  a2 = (unsigned char *)0x01A00008;
+  a1 = (unsigned char *)0x00A10008;
+  a2 = (unsigned char *)0x000f0008; 
   
   alut_search_addr1 = (char*) 0x00008111;
   alut_search_addr2 = (char*) 0x00708111;
@@ -94,17 +94,16 @@ rtems_task Init(
   }
     
   printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
-  r1.base = (void*)0x01A00000;
+  r1.base = (void*)0x000f0000;
   r1.bounds = 0x8000; 
-  status = rtems_memory_management_create_entry(r1, 0x70c, &mpe); 
+  status = rtems_memory_management_create_entry(r1, 0x70a, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed : Entry Added\n");
   }
   else{
     printf("Failed : Entry addition failed, status = %d\n",status);
   }
-
- rtems_memory_management_install_entry(mpe);
+rtems_memory_management_install_entry(mpe);
 
   printf("Test 4 : Adding overlapping  address value\n");
   r1.base = (void*)0x01A07000;
@@ -117,12 +116,10 @@ rtems_task Init(
     printf("Passed : Successful detection of address overlap and ignored, status = %d\n",status);
   }
 
-rtems_memory_management_install_entry(mpe);
-
   printf("Test 5 : Adding valid entry\n");
-  r1.base = (void*)0x01F00000;
+  r1.base = (void*)0x001f0000;
   r1.bounds = 0x8000;
-  status = rtems_memory_management_create_entry(r1, 0x70c, &mpe); 
+  //status = rtems_memory_management_create_entry(r1, 0x70f, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed: Entry successfully added, status = %d\n",status);
   }
@@ -130,7 +127,7 @@ rtems_memory_management_install_entry(mpe);
     printf("Failed : Entry adding failed, status = %d\n",status);
   }
 
-rtems_memory_management_install_entry(mpe);
+//rtems_memory_management_install_entry(mpe);
 
   printf("Test 6 : Adding valid entry\n");
   r1.base = (void*)0x00008000;
@@ -143,6 +140,7 @@ rtems_memory_management_install_entry(mpe);
     printf("Failed : Entry adding failed, status = %d\n",status);
   }
 
+//rtems_memory_management_install_entry(mpe);
   /* Now that the ALUT is created and populated, start testing for 
    *  search operations over particular address values 
    */
@@ -187,11 +185,11 @@ rtems_memory_management_install_entry(mpe);
   }*/
   
   printf("Checking MMU exception 3: Read from readonly block  \n");
-  /*for(i=0;i<16;i++){
+  for(i=0;i<16;i++){
    printf("0x%x,  ",*a2++);
    if(i%8 == 7)
         printf("\n");
-  }*/
+  }
 
   printf("Checking MMU exception 4: Write to readonly block  \n");
   for(i=0;i<16;i++){
