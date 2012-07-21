@@ -11,7 +11,7 @@
 #endif
 
 
-int translate_access_attr( uint32_t attr, int * wimg, int * pp);
+//int translate_access_attr( uint32_t attr, int * wimg, int * pp);
 
 void rtems_pagetable_initialize( void );
 
@@ -28,6 +28,12 @@ rtems_status_code _CPU_Memory_management_Verify_permission(
     uint32_t permissions
 );
 
+/*
+ *  * Install (enforce) the memory protection entry @a mpe
+ *   */
+rtems_status_code _CPU_Memory_management_Install_MPE(
+    rtems_memory_management_entry *mpe
+);
 
 /*
  *  * Check if memory protection region @a size is valid for this CPU

@@ -1,8 +1,8 @@
-
 #include <rtems.h>
 #include <libcpu/spr.h>
 #include <rtems/rtems/status.h>
 #include "mmu_support.h"
+#include <libcpu/memoryprotection.h>
 SPR_RW(SDR1);
 
 /* Compute the primary hash from a VSID and a PI */
@@ -11,6 +11,9 @@ SPR_RW(SDR1);
 /* Compute the secondary hash from a primary hash */
 #define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
 
+struct rtems_mm_attributes_struct { 
+  uint32_t attr1;
+ };
 static int
 search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
   register int i;
@@ -48,7 +51,7 @@ rtems_status_code _CPU_Pagetable_attr_Check(uint32_t attr )
 {
   int pp,wimg;
   pp= attr&0xff;
-  if(pp != 0xa &&pp != 0xc &&pp != 0xe && pp != 0xf )
+  if(pp != 0xa && pp != 0xc && pp != 0xe && pp != 0xf )
     return RTEMS_UNSATISFIED;
 
   wimg = attr&0xff00;
@@ -189,16 +192,59 @@ rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp)
   return RTEMS_SUCCESSFUL;
 }
 
+rtems_status_code _CPU_Memory_management_Install_MPE(
+    rtems_memory_management_entry *mpe
+) {
+  uintptr_t ea, block_end;
+  uint32_t attr;
+  int pagesize, wimg, pp;
+
+  rtems_status_code retval = RTEMS_SUCCESSFUL;
+
+  //ea = (uintptr_t)mpe->base;
+  ea = (uintptr_t) mpe->region.base;
+  //
+  //    //block_end = (uintptr_t)(mpe->base + mpe->bounds);
+  block_end = (uintptr_t)(mpe->region.base + mpe->region.bounds);
+  pagesize = 0x1000; /* FIXME: 4K page */
+  //
+  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
+  //
+  //            //attr = mpe->access_attribute;
+  attr = mpe->permissions;
+  translate_access_attr(attr, &wimg, &pp);
+  //
+   for( ; ea < block_end; ea += pagesize ) {
+     if ( (retval = _CPU_Pte_Change_Attributes(ea, wimg, pp)) != RTEMS_SUCCESSFUL )
+        break;
+   }  
+	
+  return retval;
+}
+                                  
 rtems_status_code _CPU_Memory_management_Verify_size(
     size_t size
 ) {
    /* Check for invalid block size */
-  if( (0 != size % RTEMS_MPE_PAGE_SIZE) ||  0 == size)
+  if(((size % 0x1000) != 0) ||  (size == 0))
     return RTEMS_INVALID_SIZE; 
+
+  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code _CPU_Memory_protection_Verify_permission(
+rtems_status_code _CPU_Memory_management_Verify_permission(
    uint32_t permissions 
 ) {
-return  _CPU_Pagetable_attr_Check(permissions);
+  int pp,wimg;
+  pp= permissions&0xff;
+  if(pp != 0xa && pp != 0xc && pp != 0xe && pp != 0xf )
+    return RTEMS_UNSATISFIED;
+
+  wimg = permissions&0xff00;
+  /*The combinations where WIM = 11x are not supported.*/
+  if( (wimg& 0x3) ==0 )
+    return RTEMS_UNSATISFIED;
+    
+  return RTEMS_SUCCESSFUL;
 }
+

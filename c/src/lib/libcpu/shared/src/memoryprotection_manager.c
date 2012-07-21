@@ -20,8 +20,27 @@ rtems_status_code rtems_memory_management_initialize(void)
 
 rtems_status_code rtems_memory_management_verify_permissions( uint32_t attr)
 {
-  return  _CPU_Memory_protection_Verify_permission(attr);
+  return _CPU_Memory_management_Verify_permission(attr);
 }
+
+
+/**
+ *  * @brief Install the memory protection entry to the enforcement mechanism.
+ *   */
+rtems_status_code rtems_memory_management_install_entry(
+  rtems_memory_management_entry *mpe
+) {
+  rtems_status_code status;
+  ISR_Level         level;
+  _ISR_Disable( level );
+    status = _CPU_Memory_management_Install_MPE(mpe);
+    if ( status == RTEMS_SUCCESSFUL ) {
+      mpe->installed = true;
+    }
+  _ISR_Enable( level );
+  return status;
+}
+
 
 rtems_status_code rtems_memory_management_verify_size(
     size_t size

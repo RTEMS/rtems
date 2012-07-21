@@ -32,11 +32,11 @@
  *           *  These methods used by rtems_memory_management_XXX APIs are defined in 
  *            *  /libcpu/shared/src/page_table_manager.c
  *             */
-#define RTEMS_MPROT_READ_ENABLE                             0x1
+#define RTEMS_MPROT_READ_ONLY                             0x1
 #define RTEMS_MPROT_WRITE_ENABLE                           0x2
+#define RTEMS_MPROT_EXE_ENABLE                                0x3
 #define RTEMS_MPROT_SUPERVISOR_READ_ENABLE       0x4
-#define RTEMS_MPROT_SUPERVISOR_WRITE_ENABLE     0x8
-#define RTEMS_MPROT_EXE_ENABLE                                0x10
+#define RTEMS_MPROT_SUPERVISOR_WRITE_ENABLE     0x5
 
 #define RTEMS_MPROT_WRITE_DISABLE                          0x0
 #define RTEMS_MPROT_READ_DISABLE                            0x0
@@ -100,6 +100,7 @@ typedef struct
 {
   rtems_chain_node 				node;  /**< The mapping chain's node */
   rtems_memory_management_region_descriptor 	region;
+  bool						installed;
   uint32_t 					permissions;
 } rtems_memory_management_entry;
 
@@ -116,13 +117,6 @@ typedef struct mprot_alut
 } rtems_mprot_alut;
 
 
-/**
- *  *  * Mmap chain of mappings.
- *   *   */
-//rtems_mprot_alut the_rtems_mprot_alut;
-
-/* create a alut table instance */
-  rtems_mprot_alut the_rtems_mprot_alut;
 
 
 rtems_status_code rtems_memory_management_initialize ( void );
@@ -133,6 +127,16 @@ rtems_status_code rtems_memory_management_create_entry(
   rtems_memory_management_region_descriptor region, 
   const uint32_t premissions,
   rtems_memory_management_entry** p_ret);
+
+/**
+ *  * @brief rtems_memory_management_install_entry
+ *   *
+ *    * Calls _CPU_Memory_management_Install_MPE to enforce the permissions
+ *     * on @a mpe. Implemented in libcpu/shared/
+ *      */
+rtems_status_code rtems_memory_management_install_entry(
+  rtems_memory_management_entry *mpe
+);
 
 rtems_status_code rtems_memory_management_delete_entry(
   rtems_memory_management_entry* const p_entry);

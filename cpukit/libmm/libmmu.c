@@ -32,6 +32,10 @@
  * *  block address space*
  * *****************************************************/
 /* TODO: rename ALUT to Arena */
+
+/* create a alut table instance */
+  rtems_mprot_alut the_rtems_mprot_alut;
+
 rtems_status_code rtems_memory_management_install_alut(void) {
     
   rtems_mprot_alut* the_alut= &the_rtems_mprot_alut;
@@ -53,7 +57,7 @@ rtems_status_code rtems_memory_management_install_alut(void) {
   return RTEMS_SUCCESSFUL;
 }
 
-void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
+/*void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
 {
   void * ea, *block_end;
   int pagesize, cache_attr, mprot_attr;
@@ -71,7 +75,7 @@ void rtems_memory_management_update_entry(rtems_memory_management_entry*  mpe)
   
   return ;
 }
-
+*/
 
 /*****************************************************
  * * Linear search for the element emtry in the alut for*
@@ -119,12 +123,6 @@ rtems_status_code rtems_memory_management_create_entry(
   if( status != RTEMS_SUCCESSFUL )
     return RTEMS_INVALID_NUMBER;
 
-  /*advanced attribute check , need to make sure the attribute of the *
- *   * new block is available. the check is a CPU related function.*/
-  status = rtems_memory_management_verify_permissions( permissions);
-  if( status != RTEMS_SUCCESSFUL)
-    return RTEMS_INVALID_NUMBER;
-
   _Thread_Disable_dispatch();
   /* Check for address map overlaps */
   current = (rtems_memory_management_entry* )rtems_chain_first( &alut_p->ALUT_mappings);
@@ -154,7 +152,7 @@ rtems_status_code rtems_memory_management_create_entry(
   
   /* for the new entry block , the attribute may be different from the previous value*
  *   *  so update the related cache tlb and pagetable entry*/
-  rtems_memory_management_update_entry(current);
+  //rtems_memory_management_update_entry(current);
 
   _Thread_Enable_dispatch();
   
@@ -187,7 +185,7 @@ rtems_status_code rtems_memory_management_delete_entry(
       /* for the delete entry block , the attribute should be changed default access attribute*
  *        *  so  update the related cache tlb and pagetable entry*/
       mpe->permissions = rtems_memory_management_get_default_permissions();
-      rtems_memory_management_update_entry(mpe);
+      rtems_memory_management_install_entry(mpe);
 
       
       mpe->region.bounds = 0;
@@ -243,7 +241,7 @@ rtems_status_code rtems_memory_management_set_permissions(
 
   mpe->permissions = new_permissions;
   
-  rtems_memory_management_update_entry(mpe);
+  rtems_memory_management_install_entry(mpe);
   
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
