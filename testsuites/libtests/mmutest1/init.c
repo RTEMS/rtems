@@ -96,7 +96,7 @@ rtems_task Init(
   printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
   r1.base = (void*)0x000f0000;
   r1.bounds = 0x8000; 
-  status = rtems_memory_management_create_entry(r1, 0x70a, &mpe); 
+  status = rtems_memory_management_create_entry(r1, 0x700, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed : Entry Added\n");
   }
@@ -119,7 +119,7 @@ rtems_memory_management_install_entry(mpe);
   printf("Test 5 : Adding valid entry\n");
   r1.base = (void*)0x001f0000;
   r1.bounds = 0x8000;
-  //status = rtems_memory_management_create_entry(r1, 0x70f, &mpe); 
+  status = rtems_memory_management_create_entry(r1, 0x700, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed: Entry successfully added, status = %d\n",status);
   }
@@ -127,12 +127,19 @@ rtems_memory_management_install_entry(mpe);
     printf("Failed : Entry adding failed, status = %d\n",status);
   }
 
-//rtems_memory_management_install_entry(mpe);
+rtems_memory_management_install_entry(mpe);
 
+status = rtems_memory_management_set_read_only(mpe);
+if(status == RTEMS_SUCCESSFUL){
+     printf("Passed: Setting Read only permissions = %d\n",status);
+   }
+   else{
+     printf("Failed : to set Read only permissions = %d\n",status);
+   }
   printf("Test 6 : Adding valid entry\n");
   r1.base = (void*)0x00008000;
   r1.bounds = 0x8000;
-  status = rtems_memory_management_create_entry(r1, 0x70c, &mpe); 
+  status = rtems_memory_management_create_entry(r1, 0x700, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
       printf("Passed : Entry successfully added, status = %d\n",status);
   }
@@ -140,7 +147,7 @@ rtems_memory_management_install_entry(mpe);
     printf("Failed : Entry adding failed, status = %d\n",status);
   }
 
-//rtems_memory_management_install_entry(mpe);
+rtems_memory_management_install_entry(mpe);
   /* Now that the ALUT is created and populated, start testing for 
    *  search operations over particular address values 
    */

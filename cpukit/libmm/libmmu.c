@@ -328,3 +328,20 @@ rtems_status_code rtems_memory_management_set_default_permissions(
   
   return RTEMS_SUCCESSFUL;
 }
+
+rtems_status_code rtems_memory_management_set_write
+(
+  rtems_memory_management_entry* const mpe
+) {
+   mpe->permissions = RTEMS_MPROT_WRITE_ENABLE;
+   return rtems_memory_management_install_entry(mpe);
+}
+
+rtems_status_code rtems_memory_management_set_read_only
+(
+  rtems_memory_management_entry* const mpe
+) {
+   mpe->permissions = RTEMS_MPROT_READ_ONLY;
+   return rtems_memory_management_install_entry(mpe);
+}
+

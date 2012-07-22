@@ -32,6 +32,7 @@
  *           *  These methods used by rtems_memory_management_XXX APIs are defined in 
  *            *  /libcpu/shared/src/page_table_manager.c
  *             */
+#define RTEMS_MPROT_LOCKED				0x0
 #define RTEMS_MPROT_READ_ONLY                             0x1
 #define RTEMS_MPROT_WRITE_ENABLE                           0x2
 #define RTEMS_MPROT_EXE_ENABLE                                0x3
@@ -176,6 +177,17 @@ rtems_memory_management_set_default_permissions(
 rtems_status_code rtems_memory_management_verify_permissions(uint32_t);
 
 rtems_status_code rtems_pagetable_update_permissions(uint32_t, int, int);
+
+
+rtems_status_code rtems_memory_management_set_write
+(
+  rtems_memory_management_entry* const mpe;
+);
+
+rtems_status_code rtems_memory_management_set_read_only
+(
+  rtems_memory_management_entry* const mpe;
+);
 #ifdef __cplusplus
   }
 #endif

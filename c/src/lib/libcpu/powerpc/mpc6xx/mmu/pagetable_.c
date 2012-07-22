@@ -11,6 +11,14 @@ SPR_RW(SDR1);
 /* Compute the secondary hash from a primary hash */
 #define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
 
+/* define translation table for attributes */
+
+uint32_t attr_translation[3] = { 
+        _PPC_MMU_ACCESS_SUPERVISOR_ONLY,
+	_PPC_MMU_ACCESS_READ_ONLY,
+	_PPC_MMU_ACCESS_NO_PROT
+       };
+
 static int pte_counter = 5;
 
 static int
@@ -79,9 +87,6 @@ BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
   return 0;
 }
 
-struct rtems_mm_attributes_struct { 
-  uint32_t attr1;
- };
 static int
 search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
   register int i;
@@ -119,7 +124,7 @@ rtems_status_code _CPU_Pagetable_attr_Check(uint32_t attr )
 {
   int pp,wimg;
   pp= attr&0xff;
-  if(pp != 0xa && pp != 0xc && pp != 0xe && pp != 0xf )
+  if(pp != 0x0 && pp != 0x1 && pp != 0x2 && pp != 0x3 )
     return RTEMS_UNSATISFIED;
 
   wimg = attr&0xff00;
@@ -134,15 +139,10 @@ int
 translate_access_attr(uint32_t attr, int * wimg, int * pp){
   int temp;
   temp = attr&0xff;
-  if(  temp  == 0xa )
-    *pp= _PPC_MMU_ACCESS_READ_ONLY;
-  else if( temp == 0xc )
-    *pp= _PPC_MMU_ACCESS_SUPERVISOR_ONLY;
-  else if( temp == 0xe )
-    *pp= _PPC_MMU_ACCESS_SUPERVISOR_WRITE_ONLY;
-  else if( temp == 0xf )
-    *pp= _PPC_MMU_ACCESS_NO_PROT;
-
+  *pp = attr_translation[temp];
+  if (*pp == 0 ) {
+    printf("This feature is not supported by CPU");
+  } 
   temp = (attr&0xff00)>8;
   *wimg = ((temp&1)<2) | ((temp&2)<2) | ((temp&4)>1) |((temp&8)>3) ; 
     
