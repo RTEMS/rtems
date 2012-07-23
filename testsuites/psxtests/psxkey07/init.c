@@ -34,7 +34,7 @@ void *Test_Thread(
   int *value_p, *value_p2;
   
   value_p = malloc( sizeof( int ) );
-  printf( "Test_Thread%d  - Key pthread_setspecific - OK\n", (int)pthread_self() );
+  //printf( "Test_Thread%d  - Key pthread_setspecific - OK\n", (int)pthread_self() );
   sc = pthread_setspecific( Key, value_p );
   rtems_test_assert( !sc );
   ++setted_thread_count;
@@ -49,7 +49,7 @@ void *Test_Thread(
   pthread_cond_wait( &create_condition_var, &mutex2 );
   pthread_mutex_unlock( &mutex2 );
   
-  printf( "Test_Thread%d  - Key pthread_getspecific - OK\n", (int)pthread_self() );
+  //printf( "Test_Thread%d  - Key pthread_getspecific - OK\n", (int)pthread_self() );
   value_p2 = pthread_getspecific( Key );
   rtems_test_assert( value_p == value_p2 );
   ++got_thread_count;
