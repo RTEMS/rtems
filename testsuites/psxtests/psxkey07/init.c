@@ -34,7 +34,7 @@ void *Test_Thread(
   int *value_p, *value_p2;
   
   value_p = malloc( sizeof( int ) );
-  //printf( "Test_Thread%d  - Key pthread_setspecific - OK\n", (int)pthread_self() );
+  printf( "Test_Thread%d  - Key pthread_setspecific - OK\n", (int)pthread_self() );
   sc = pthread_setspecific( Key, value_p );
   rtems_test_assert( !sc );
   ++setted_thread_count;
@@ -49,7 +49,7 @@ void *Test_Thread(
   pthread_cond_wait( &create_condition_var, &mutex2 );
   pthread_mutex_unlock( &mutex2 );
   
-  //printf( "Test_Thread%d  - Key pthread_getspecific - OK\n", (int)pthread_self() );
+  printf( "Test_Thread%d  - Key pthread_getspecific - OK\n", (int)pthread_self() );
   value_p2 = pthread_getspecific( Key );
   rtems_test_assert( value_p == value_p2 );
   ++got_thread_count;
@@ -70,7 +70,7 @@ void *POSIX_Init(
   sc = pthread_mutex_init( &mutex2, NULL );
   rtems_test_assert( !sc );
   sc = pthread_cond_init( &create_condition_var, NULL );
-   rtems_test_assert( !sc );
+  rtems_test_assert( !sc );
   sc = pthread_cond_init( &set_condition_var, NULL );
   rtems_test_assert( !sc );
   
@@ -84,6 +84,7 @@ void *POSIX_Init(
     {
       thread_p = malloc( sizeof( pthread_t ) );
       rtems_test_assert( thread_p );
+      pthread_mutex_lock( &mutex1 );
       sc = pthread_create( thread_p, NULL, Test_Thread, NULL );
       rtems_test_assert( ( sc == 0 ) || ( sc == EAGAIN ) );
       /**
@@ -94,7 +95,6 @@ void *POSIX_Init(
 	break;
       ++created_thread_count;
       /* wait for test thread set key */
-      pthread_mutex_lock( &mutex1 );
       while ( created_thread_count > setted_thread_count )
 	pthread_cond_wait( &set_condition_var, &mutex1 );
       pthread_mutex_unlock( &mutex1 );
