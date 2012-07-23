@@ -43,7 +43,7 @@ void *Test_Thread(
   pthread_mutex_unlock( &mutex1 );
 
   /**
-   * wait for all thread have been created.
+   * blocked untill all threads have been created.
    */
   pthread_mutex_lock( &mutex2 );
   pthread_cond_wait( &create_condition_var, &mutex2 );
@@ -95,15 +95,16 @@ void *POSIX_Init(
 	break;
       ++created_thread_count;
       /* wait for test thread set key */
-      while ( created_thread_count > setted_thread_count )
-	pthread_cond_wait( &set_condition_var, &mutex1 );
+      pthread_cond_wait( &set_condition_var, &mutex1 );
       pthread_mutex_unlock( &mutex1 );
     }
   printf( "Init - %d pthreads have been created - OK\n", created_thread_count );
+  printf( "Init - %d pthreads have been setted key data - OK\n", setted_thread_count );
+  rtems_test_assert( created_thread_count == setted_thread_count );
+  /* unblock all created pthread to let them set key data.*/
   pthread_mutex_lock( &mutex2 );
   pthread_cond_broadcast( &create_condition_var );
   pthread_mutex_unlock( &mutex2 );
-  printf( "Init - %d pthreads have been setted key data - OK\n", setted_thread_count );
   
   puts( "Init - sleep - let threads run - OK" );
   delay_request.tv_sec = 0;
@@ -112,6 +113,7 @@ void *POSIX_Init(
   rtems_test_assert( !sc );
   
   printf( "Init - %d pthreads have been got key data - OK\n", got_thread_count );
+  rtems_test_assert( created_thread_count == got_thread_count );
   puts( "Init - pthread Key delete - OK" );
   sc = pthread_key_delete( Key );
   rtems_test_assert( sc == 0 );
