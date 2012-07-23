@@ -23,6 +23,7 @@ void *Test_Thread(void *argument);
 
 pthread_key_t Key;
 int created_thread_count, setted_thread_count, got_thread_count;
+int all_thread_created;
 pthread_mutex_t mutex1, mutex2;
 pthread_cond_t create_condition_var, set_condition_var;
 
@@ -46,7 +47,8 @@ void *Test_Thread(
    * blocked untill all threads have been created.
    */
   pthread_mutex_lock( &mutex2 );
-  pthread_cond_wait( &create_condition_var, &mutex2 );
+  while( !all_thread_created )
+    pthread_cond_wait( &create_condition_var, &mutex2 );
   pthread_mutex_unlock( &mutex2 );
   
   //printf( "Test_Thread%d  - Key pthread_getspecific - OK\n", (int)pthread_self() );
@@ -64,6 +66,7 @@ void *POSIX_Init(
   pthread_t        *thread_p;
   int              sc;
   struct timespec  delay_request;
+  all_thread_created = 0;
   
   sc = pthread_mutex_init( &mutex1, NULL );
   rtems_test_assert( !sc );
@@ -94,8 +97,12 @@ void *POSIX_Init(
       if ( sc == EAGAIN )
 	break;
       ++created_thread_count;
-      /* wait for test thread set key */
-      pthread_cond_wait( &set_condition_var, &mutex1 );
+      /**
+       * wait for test thread set key, the while loop here is used to
+       * avoid suprious wakeup. 
+       */
+      while( created_thread_count > setted_thread_count )
+	pthread_cond_wait( &set_condition_var, &mutex1 );
       pthread_mutex_unlock( &mutex1 );
     }
   printf( "Init - %d pthreads have been created - OK\n", created_thread_count );
@@ -103,6 +110,7 @@ void *POSIX_Init(
   rtems_test_assert( created_thread_count == setted_thread_count );
   /* unblock all created pthread to let them set key data.*/
   pthread_mutex_lock( &mutex2 );
+  all_thread_created = 1;
   pthread_cond_broadcast( &create_condition_var );
   pthread_mutex_unlock( &mutex2 );
   
