@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Wenjie Zhang.
+ * Copyright (c) 2012 Deng Hengyi.
  *
  *  This test case is to test atomic store operation.
  *
