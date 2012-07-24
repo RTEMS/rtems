@@ -18,7 +18,8 @@
 #ifndef _RTEMS_SCORE_ATOMIC_H
 #define _RTEMS_SCORE_ATOMIC_H
 
-#include <rtems/score/atomic_cpu.h>
+#include <rtems/score/genericcpuatomic.h>
+#include <rtems/score/cpuatomic.h>
 
 #ifdef __cplusplus
 extern "C" {

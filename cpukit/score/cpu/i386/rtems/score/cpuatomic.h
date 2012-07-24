@@ -57,26 +57,6 @@ extern "C" {
 /**@{*/
 
 /**
- * @brief atomic operation unsigned integer type
- */
-typedef unsigned int Atomic_Int;
-
-/**
- * @brief atomic operation unsigned long integer type
- */
-typedef unsigned long Atomic_Long;
-
-/**
- * @brief atomic operation unsigned 32-bit integer type
- */
-typedef uint32_t Atomic_Int32;
-
-/**
- * @brief atomic operation unsigned 64-bit integer type
- */
-typedef uint64_t Atomic_Int64;
-
-/**
  * @brief atomic operation unsigned integer the size of a pointer type
  */
 typedef uintptr_t Atomic_Pointer;
