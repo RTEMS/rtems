@@ -38,8 +38,8 @@ void *Test_Thread(
   //printf( "Test_Thread%d  - Key pthread_setspecific - OK\n", (int)pthread_self() );
   sc = pthread_setspecific( Key, value_p );
   rtems_test_assert( !sc );
-  ++setted_thread_count;
   pthread_mutex_lock( &mutex1 );
+  ++setted_thread_count;
   pthread_cond_signal( &set_condition_var );
   pthread_mutex_unlock( &mutex1 );
 
