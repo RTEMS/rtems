@@ -104,7 +104,10 @@ rtems_task Init(rtems_task_argument arg)
        * enough source to create task.
        */
       if ( (sc == RTEMS_TOO_MANY) || (sc == RTEMS_UNSATISFIED) )
-	break;
+	{
+	  pthread_mutex_unlock( &mutex1 );
+	  break;
+	}
       ++created_task_count;
       pthread_mutex_lock( &mutex1 );
       sc = rtems_task_start( *task_id_p,  test_task, 0 );
