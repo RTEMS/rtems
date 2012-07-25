@@ -68,16 +68,20 @@ void *POSIX_Init(
   struct timespec  delay_request;
   all_thread_created = 0;
   
+  puts( "\n\n*** TEST KEY 07 ***" );
+  
+  puts( "Init - Mutex 1 create - OK" );
   sc = pthread_mutex_init( &mutex1, NULL );
   rtems_test_assert( !sc );
+  puts( "Init - Mutex 2 create - OK" );
   sc = pthread_mutex_init( &mutex2, NULL );
   rtems_test_assert( !sc );
+  puts( "Init - Condition variable 1 create - OK" );
   sc = pthread_cond_init( &create_condition_var, NULL );
   rtems_test_assert( !sc );
+  puts( "Init - Condition variable 2 create - OK" );
   sc = pthread_cond_init( &set_condition_var, NULL );
   rtems_test_assert( !sc );
-  
-  puts( "\n\n*** TEST KEY 07 ***" );
 
   puts( "Init - pthread Key create - OK" );
   sc = pthread_key_create( &Key, NULL );
@@ -95,7 +99,10 @@ void *POSIX_Init(
        * have been exhausted.
        */ 
       if ( sc == EAGAIN )
-	break;
+	{
+	  pthread_mutex_unlock( &mutex1 );
+	  break;
+	}
       ++created_thread_count;
       /**
        * wait for test thread set key, the while loop here is used to
@@ -125,6 +132,19 @@ void *POSIX_Init(
   puts( "Init - pthread Key delete - OK" );
   sc = pthread_key_delete( Key );
   rtems_test_assert( sc == 0 );
+
+  puts( "Init - Mutex1 delete - OK" );
+  sc = pthread_mutex_destroy( &mutex1 );
+  rtems_test_assert( !sc );
+  puts( "Init - Mutex2 delete - OK" );
+  sc = pthread_mutex_destroy( &mutex2 );
+  rtems_test_assert( !sc );
+  puts( "Init - Condition variable 1 delete - OK" );
+  sc = pthread_cond_destroy( &create_condition_var );
+  rtems_test_assert( !sc );
+  puts( "Init - Condition variable 2 delete - OK" );
+  sc = pthread_cond_destroy( &set_condition_var );
+  rtems_test_assert( !sc );
 
   puts( "*** END OF TEST KEY 07 ***" );
   rtems_test_exit(0);
