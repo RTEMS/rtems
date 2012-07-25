@@ -136,6 +136,7 @@ libbsp_a_SOURCES += misc/nand-mlc-write-blocks.c
 libbsp_a_SOURCES += misc/restart.c
 libbsp_a_SOURCES += misc/system-clocks.c
 libbsp_a_SOURCES += misc/timer.c
+libbsp_a_SOURCES += misc/nand-select.c
 
 # SSP
 

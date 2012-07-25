@@ -138,6 +138,14 @@ uint32_t lpc32xx_arm_clk(void);
 
 uint32_t lpc32xx_dram_clk(void);
 
+typedef enum {
+  LPC32XX_NAND_CONTROLLER_NONE,
+  LPC32XX_NAND_CONTROLLER_MLC,
+  LPC32XX_NAND_CONTROLLER_SLC
+} lpc32xx_nand_controller;
+
+void lpc32xx_select_nand_controller(lpc32xx_nand_controller nand_controller);
+
 void bsp_restart(void *addr);
 
 #define BSP_CONSOLE_UART_BASE LPC32XX_BASE_UART_5
