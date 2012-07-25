@@ -4318,21 +4318,23 @@ extern "C" {
 
         uint32_t eQADC_reserved0048[2];  /* 0x0048-0x004F */
 
-        union {              /* CFIFO Control Registers */
+        union EQADC_CFCR_tag { /* CFIFO Control Registers */
             uint16_t R;
             struct {
-                uint16_t:5;
+                uint16_t:3;
+                uint16_t CFEEE0:1;
+                uint16_t STRME0:1;
                 uint16_t SSE:1;
                 uint16_t CFINV:1;
                 uint16_t:1;
                 uint16_t MODE:4;
-                uint16_t:4;
+                uint16_t AMODE0:4;
             } B;
         } CFCR[6];
 
         uint32_t eQADC_reserved005C;  /* 0x005C-0x005F */
 
-        union {              /* Interrupt and DMA Control Registers */
+        union EQADC_IDCR_tag { /* Interrupt and DMA Control Registers */
             uint16_t R;
             struct {
                 uint16_t NCIE:1;
