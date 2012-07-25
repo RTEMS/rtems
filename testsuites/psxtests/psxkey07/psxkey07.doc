@@ -19,7 +19,7 @@ directives:
 
 concepts:
 
-+ Ensure that key data's operation(create, set, get and delete) under unlimited configuration.
++ Ensure that key data's operation(create, set, get and delete) under unlimited configuration in POSIX API.
 + this test workflow is:
   1. create thread and set thread's key data one by one until exhausting workspace RAM
   2. when step 1 finished, let all thread created thread run the getspecific function to 
