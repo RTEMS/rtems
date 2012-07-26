@@ -3,7 +3,7 @@
 ## configure.ac,v 1.9.2.2 2003/03/06 10:42:42 ralf Exp
 
 AC_PREREQ([2.68])
-AC_INIT([rtems-c-src-lib-libbsp-powerpc-mvme5500],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-c-src-lib-libbsp-powerpc-mvme5500],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 

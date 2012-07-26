@@ -6,7 +6,7 @@
 #
 
 AC_PREREQ([2.68])
-AC_INIT([rtems-c-src-lib-libbsp-arm-lpc24xx],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
+AC_INIT([rtems-c-src-lib-libbsp-arm-lpc24xx],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 
