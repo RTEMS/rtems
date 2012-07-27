@@ -16,6 +16,7 @@ top_srcdir=`dirname $0`
 verbose="";
 quiet="false"
 mode="autoreconf"
+force=0
 
 usage()
 {
@@ -80,6 +81,9 @@ case $1 in
   shift;;
 -c|--cl|--cle|--clea|--clean)
   mode="clean";
+  shift;;
+-f|--fo|--for|--forc|--force)
+  force=`expr $force + 1`
   shift;;
 -p|--pr|--pre|--prei|--prein|--preins|--preinst)
   mode="preinstall";
@@ -189,27 +193,58 @@ autoreconf)
 clean)
   test "$quiet" = "true" || echo "removing automake generated Makefile.in files"
   files=`find . -name 'Makefile.am' -print | sed -e 's%\.am%\.in%g'` ;
-  for i in $files; do if test -f $i; then
-    rm -f $i
-    test "$verbose" = "-v" && echo "$i"    
-  fi; done
+  for i in $files; do 
+    if test -f $i; then
+      rm -f $i
+      test "$verbose" = "-v" && echo "$i"    
+    fi; 
+  done
 
   test "$quiet" = "true" || echo "removing configure files"
   files=`find . -name 'configure' -print` ;
-  test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
-  for i in $files; do if test -f $i; then
-    rm -f $i config.sub config.guess install-sh missing mkinstalldirs
-# rm -f depcomp compile texinfo.tex mdate-sh
-    test "$verbose" = "-v" && echo "$i"    
-  fi; done
+  for i in $files; do 
+    if test -f $i; then
+      rm -f $i
+      test "$verbose" = "-v" && echo "$i"
+    fi;
+  done
   
+  if test $force -gt 0; then
+    needles=""
+    if test $force -gt 1; then
+      # Manually maintained
+      needles="$needles config.sub"
+      needles="$needles config.guess"
+    fi
+    if test $force -gt 0; then
+      # Inherited from automake
+      needles="$needles compile"
+      needles="$needles depcomp"
+      needles="$needles install-sh"
+      needles="$needles missing"
+      needles="$needles mdate-sh"
+      needles="$needles texinfo.tex"
+    fi
+    for j in $needles; do
+      files=`find . -name "$j" -print`
+      for i in $files; do 
+        if test -f $i; then
+          rm -f $i
+          test "$verbose" = "-v" && echo "$i"
+        fi;
+      done
+    done
+  fi
+
   test "$quiet" = "true" || echo "removing aclocal.m4 files"
   files=`find . -name 'aclocal.m4' -print` ;
   test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
-  for i in $files; do if test -f $i; then
-    rm -f $i
-    test "$verbose" = "-v" && echo "$i"    
-  fi; done
+  for i in $files; do 
+    if test -f $i; then
+      rm -f $i
+      test "$verbose" = "-v" && echo "$i"    
+    fi; 
+  done
 
   find . -name '*~' -print | xargs rm -f
   find . -name 'bspopts.h.in' -print | xargs rm -f
