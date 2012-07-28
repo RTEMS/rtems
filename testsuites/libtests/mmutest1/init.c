@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include <rtems/libmmu.h>
-#include <libcpu/mmu_support.h>
 #include <rtems/libmmu.h>
 
 rtems_task Init(
@@ -75,7 +74,7 @@ rtems_task Init(
 
 
   printf("Test 1 : Adding entry with block size less than 4K\n");
-  status = rtems_memory_management_create_entry(r1, 0x70c, &mpe);
+  status = rtems_memory_management_create_entry(r1, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry added\n");
   }
@@ -85,7 +84,7 @@ rtems_task Init(
       
   printf("Test 2 : Adding entry with block size not a multiple of 4K\n");  
   r1.bounds = 0x00008FFF;
-  status = rtems_memory_management_create_entry(r1, 0x70c, &mpe);
+  status = rtems_memory_management_create_entry(r1, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry successfully added\n");
   }
@@ -96,19 +95,27 @@ rtems_task Init(
   printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
   r1.base = (void*)0x000f0000;
   r1.bounds = 0x8000; 
-  status = rtems_memory_management_create_entry(r1, 0x700, &mpe); 
+  status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed : Entry Added\n");
   }
   else{
     printf("Failed : Entry addition failed, status = %d\n",status);
   }
-rtems_memory_management_install_entry(mpe);
+  
+  rtems_memory_management_install_entry(mpe);
 
+  status = rtems_memory_management_set_read_only(mpe);
+  if(status == RTEMS_SUCCESSFUL){
+     printf("Passed: Setting Read only permissions = %d\n",status);
+   }   
+   else{
+     printf("Failed : to set Read only permissions = %d\n",status);
+   } 
   printf("Test 4 : Adding overlapping  address value\n");
   r1.base = (void*)0x01A07000;
   r1.bounds = 0x4000;
-  status = rtems_memory_management_create_entry(r1, 0x70f, &mpe); 
+  status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Addition passed inspite of address overlap\n");
   }
@@ -119,7 +126,7 @@ rtems_memory_management_install_entry(mpe);
   printf("Test 5 : Adding valid entry\n");
   r1.base = (void*)0x001f0000;
   r1.bounds = 0x8000;
-  status = rtems_memory_management_create_entry(r1, 0x700, &mpe); 
+  status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed: Entry successfully added, status = %d\n",status);
   }
@@ -127,19 +134,12 @@ rtems_memory_management_install_entry(mpe);
     printf("Failed : Entry adding failed, status = %d\n",status);
   }
 
-rtems_memory_management_install_entry(mpe);
+  rtems_memory_management_install_entry(mpe);
 
-status = rtems_memory_management_set_read_only(mpe);
-if(status == RTEMS_SUCCESSFUL){
-     printf("Passed: Setting Read only permissions = %d\n",status);
-   }
-   else{
-     printf("Failed : to set Read only permissions = %d\n",status);
-   }
   printf("Test 6 : Adding valid entry\n");
   r1.base = (void*)0x00008000;
   r1.bounds = 0x8000;
-  status = rtems_memory_management_create_entry(r1, 0x700, &mpe); 
+  status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
       printf("Passed : Entry successfully added, status = %d\n",status);
   }
@@ -155,13 +155,6 @@ rtems_memory_management_install_entry(mpe);
   status = rtems_memory_management_find_entry(alut_search_addr1, &mpe); 
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
-  }
-  status = rtems_memory_management_get_permissions(mpe,&access);
-  if(status != RTEMS_SUCCESSFUL){
-    printf("Failed : Access Attribute not found, status = %d\n",status);
-  }
-  else {
-    printf("Passed : Access Attribute for the request is 0x%x\n", access);
   }
   status = rtems_memory_management_get_size(mpe,&blocksize);
   if(status != RTEMS_SUCCESSFUL){
@@ -180,16 +173,16 @@ rtems_memory_management_install_entry(mpe);
   else printf("Passed : Failed to find unmapped address in ALUT, status = %d\n",status);
 
   printf("Checking MMU exception 1:Read from Unmapped block \n");
-  /*for(i=0;i<16;i++){
+  for(i=0;i<16;i++){
    printf("0x%x,  ",*a1++);
    if(i%8 == 7)
         printf("\n");
-  }*/
+  }
   
   printf("Checking MMU exception 2: Write to Unmapped block  \n"); 
- /* for(i=0;i<16;i++){
+  for(i=0;i<16;i++){
    *a1++ = 0xCC;
-  }*/
+  }
   
   printf("Checking MMU exception 3: Read from readonly block  \n");
   for(i=0;i<16;i++){

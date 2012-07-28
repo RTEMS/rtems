@@ -41,10 +41,9 @@ SPR_RO(DSISR);
 /* Compute the secondary hash from a primary hash */
 #define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
 
-static int pte_counter = 5;
+  int pte_counter = 5;
 
-static int
-search_empty_pte_slot(libcpu_mmu_pte *pteg){
+ int search_empty_pte_slot(struct libcpu_mmu_pte *pteg){
   int i;
   for(i = 0; i < 8; i++) {
     if((pteg[i].ptew0 & PTEW0_VALID) != 0x80000000) {
@@ -57,8 +56,8 @@ search_empty_pte_slot(libcpu_mmu_pte *pteg){
 }
 
 
-static int
-search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
+
+  int search_valid_pte(struct libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
 
   register int i;
   register uint32_t temp_vsid;
@@ -79,9 +78,9 @@ search_valid_pte(libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
 }
 
 
-static int
-BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
-    libcpu_mmu_pte *spteg,
+struct libcpu_mmu_pte*
+BSP_ppc_add_pte(struct libcpu_mmu_pte *ppteg,
+    struct libcpu_mmu_pte *spteg,
                 uint32_t vsid,
                 uint32_t pi,
                 uint32_t wimg,
@@ -89,7 +88,7 @@ BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
 {
   int index;
   uint32_t hash, rpn, api;
-  libcpu_mmu_pte* pteg;
+  struct libcpu_mmu_pte* pteg;
   
   /* Search empty PTE slot in PPTEG */
   index = search_empty_pte_slot(ppteg);
@@ -129,17 +128,17 @@ BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
   pteg[index].ptew1 |= (wimg << 3) & (PTEW1_WIMG);
   pteg[index].ptew1 |= (protp & PTEW1_PROTP);
   pteg[index].ptew0 |= PTEW0_VALID;
-  return 0;
+  return &pteg[index];
 }
 
-static void
-get_pteg_addr(libcpu_mmu_pte** pteg, uint32_t hash){
+void
+get_pteg_addr(struct libcpu_mmu_pte** pteg, uint32_t hash){
   uint32_t masked_hash = 0x0;
   uint32_t htaborg, htabmask;
   htabmask = _read_SDR1() & 0x000001ff;
   htaborg = _read_SDR1() & 0xffff0000;
   masked_hash = ((htaborg >> 16) & 0x000001ff) | ((hash >> 10) & htabmask);
-  *pteg = (libcpu_mmu_pte *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
+  *pteg = (struct libcpu_mmu_pte *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
 }
 
 
@@ -156,8 +155,8 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,alut_access_attrb;
   volatile int ppteg_search_status, spteg_search_status;
   int status, pp, wimg;
-  libcpu_mmu_pte* ppteg;
-  libcpu_mmu_pte* spteg;
+  struct libcpu_mmu_pte* ppteg;
+  struct libcpu_mmu_pte* spteg;
   volatile unsigned long cause, msr;
   rtems_memory_management_entry* alut_entry;
   
@@ -206,18 +205,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-      status = rtems_memory_management_find_entry((void *)ea, &alut_entry);
-      if(status == RTEMS_SUCCESSFUL){
-        status = rtems_memory_management_get_permissions(alut_entry, &alut_access_attrb);
-        if(status != RTEMS_SUCCESSFUL){
-          printk("Unexpected Error happened when get attibute from ALUT! RTEMS delete self");
-          rtems_task_delete(RTEMS_SELF); 
-        }
-      }
-      else
-        alut_access_attrb = rtems_memory_management_get_default_permissions();
-      translate_access_attr(alut_access_attrb, &wimg, &pp);
-      BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
+          printk("No CPU MPE found for this address");
     } else {
       /* PTE found in second group */
       /* Code for determining access attribute goes here */

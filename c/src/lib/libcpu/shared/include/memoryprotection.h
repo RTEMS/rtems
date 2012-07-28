@@ -21,14 +21,6 @@ void rtems_pagetable_initialize( void );
 rtems_status_code _CPU_Memory_management_Initialize(void);
 
 /*
- *  * Make sure memory protection @a permission is valid for this CPU
- *   */
-
-rtems_status_code _CPU_Memory_management_Verify_permission(
-    uint32_t permissions
-);
-
-/*
  *  * Install (enforce) the memory protection entry @a mpe
  *   */
 rtems_status_code _CPU_Memory_management_Install_MPE(
@@ -49,7 +41,20 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
     rtems_memory_management_entry *mpe
 );
 
-rtems_status_code _CPU_Pte_Change_Attributes( uint32_t  ea,  int wimg, int pp);
+rtems_status_code _CPU_Memory_management_Set_read_only(
+    rtems_memory_management_entry *mpe
+);
+
+rtems_status_code _CPU_Memory_management_Set_write(
+    rtems_memory_management_entry *mpe
+);
+
+rtems_status_code _CPU_Pte_Change_Attributes(
+    rtems_memory_management_entry *mpe,
+    uint32_t wimg,
+    uint32_t pp
+);
+
 
 #ifdef __cplusplus
   }

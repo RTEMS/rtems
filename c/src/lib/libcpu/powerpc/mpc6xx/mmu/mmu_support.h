@@ -52,11 +52,12 @@
 /* Splitting the 64 bit PTE into two 32 bit words. As shown in the OEA
  *    Manual of PowerPC */
 
-typedef struct
+struct libcpu_mmu_pte
 {
   uint32_t ptew0; /* Word 0 */
   uint32_t ptew1; /* Word 1 */
-} libcpu_mmu_pte;
+};
+
 
 extern char RamBase[];
 extern char RamSize[];
@@ -69,15 +70,17 @@ mmu_init(void);
 void
 mmu_irq_init(void);
 
-static int BSP_ppc_add_pte(libcpu_mmu_pte *ppteg,
-    libcpu_mmu_pte *spteg,
+extern struct libcpu_mmu_pte* BSP_ppc_add_pte(struct libcpu_mmu_pte *ppteg,
+    struct libcpu_mmu_pte *spteg,
     uint32_t vsid,
     uint32_t pi, 
     uint32_t wimg,
     uint32_t protp
 );
 
+int search_valid_pte(struct libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api);
 
+void get_pteg_addr(struct libcpu_mmu_pte** pteg, uint32_t hash);
 #ifdef __cplusplus
   }
 #endif

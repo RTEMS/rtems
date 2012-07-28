@@ -17,13 +17,6 @@ rtems_status_code rtems_memory_management_initialize(void)
   return  _CPU_Memory_management_Initialize();
 }
 
-
-rtems_status_code rtems_memory_management_verify_permissions( uint32_t attr)
-{
-  return _CPU_Memory_management_Verify_permission(attr);
-}
-
-
 /**
  *  * @brief Install the memory protection entry to the enforcement mechanism.
  *   */
@@ -53,12 +46,27 @@ rtems_status_code rtems_memory_management_verify_size(
   return status;
 }
 
-rtems_status_code rtems_pagetable_update_permissions(
-  uint32_t ea, 
-  int cache_attr, 
-  int mprot)
-{
-  return _CPU_Pte_Change_Attributes( ea, cache_attr, mprot);
+rtems_status_code rtems_memory_management_set_write
+(
+  rtems_memory_management_entry* const mpe
+){
+  rtems_status_code status;
+  ISR_Level         level;
+  _ISR_Disable( level );
+    status = _CPU_Memory_management_Set_write(mpe);
+  _ISR_Enable( level );
+  return status;
+
 }
 
-
+rtems_status_code rtems_memory_management_set_read_only
+(
+  rtems_memory_management_entry* const mpe
+){
+  rtems_status_code status;
+  ISR_Level         level;
+  _ISR_Disable( level );
+    status = _CPU_Memory_management_Set_read_only(mpe);
+  _ISR_Enable( level );
+  return status;
+}
