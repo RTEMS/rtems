@@ -26,24 +26,9 @@ SPR_RO(PPC_DAR);
 SPR_RW(SDR1);
 SPR_RO(DSISR);
 
-#define KEY_SUP      (1<<30) /* supervisor mode key */
-#define KEY_USR      (1<<29) /* user mode key */
-#define LD_PG_SIZE              12 /* In logarithm base */
-#define LD_PI_SIZE              16
-#define LD_VSID_SIZE            24
-#define LD_HASH_SIZE            19
-#define MMUS_DEBUG
-/* Primary and secondary PTE hash functions */
+static int pte_counter = 5;
 
-/* Compute the primary hash from a VSID and a PI */
-#define PTE_HASH_FUNC1(vsid, pi) (((vsid)^(pi))&(0x0007FFFF))
-
-/* Compute the secondary hash from a primary hash */
-#define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
-
-  int pte_counter = 5;
-
- int search_empty_pte_slot(struct libcpu_mmu_pte *pteg){
+static int search_empty_pte_slot(ppc_bsp_mm_mpe *pteg){
   int i;
   for(i = 0; i < 8; i++) {
     if((pteg[i].ptew0 & PTEW0_VALID) != 0x80000000) {
@@ -55,9 +40,7 @@ SPR_RO(DSISR);
   return -1;
 }
 
-
-
-  int search_valid_pte(struct libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api){
+static int search_valid_pte(ppc_bsp_mm_mpe *pteg, uint32_t vsid, uint32_t api){
 
   register int i;
   register uint32_t temp_vsid;
@@ -77,18 +60,18 @@ SPR_RO(DSISR);
   return -1;  /* Failed search */
 }
 
-
-struct libcpu_mmu_pte*
-BSP_ppc_add_pte(struct libcpu_mmu_pte *ppteg,
-    struct libcpu_mmu_pte *spteg,
-                uint32_t vsid,
-                uint32_t pi,
-                uint32_t wimg,
-                uint32_t protp)
+ppc_bsp_mm_mpe*
+BSP_ppc_add_pte(
+  ppc_bsp_mm_mpe *ppteg,
+  ppc_bsp_mm_mpe *spteg,
+  uint32_t vsid,
+  uint32_t pi, 
+  uint32_t wimg,
+  uint32_t protp)
 {
   int index;
   uint32_t hash, rpn, api;
-  struct libcpu_mmu_pte* pteg;
+  ppc_bsp_mm_mpe* pteg;
   
   /* Search empty PTE slot in PPTEG */
   index = search_empty_pte_slot(ppteg);
@@ -132,15 +115,14 @@ BSP_ppc_add_pte(struct libcpu_mmu_pte *ppteg,
 }
 
 void
-get_pteg_addr(struct libcpu_mmu_pte** pteg, uint32_t hash){
+get_pteg_addr(ppc_bsp_mm_mpe** pteg, uint32_t hash){
   uint32_t masked_hash = 0x0;
   uint32_t htaborg, htabmask;
   htabmask = _read_SDR1() & 0x000001ff;
   htaborg = _read_SDR1() & 0xffff0000;
   masked_hash = ((htaborg >> 16) & 0x000001ff) | ((hash >> 10) & htabmask);
-  *pteg = (struct libcpu_mmu_pte *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
+  *pteg = (ppc_bsp_mm_mpe *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
 }
-
 
 /* THis function shall be called upon exception on the DSISR
    register. depending on the type of exception appropriate action
@@ -155,8 +137,8 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,alut_access_attrb;
   volatile int ppteg_search_status, spteg_search_status;
   int status, pp, wimg;
-  struct libcpu_mmu_pte* ppteg;
-  struct libcpu_mmu_pte* spteg;
+  ppc_bsp_mm_mpe* ppteg;
+  ppc_bsp_mm_mpe* spteg;
   volatile unsigned long cause, msr;
   rtems_memory_management_entry* alut_entry;
   
@@ -246,7 +228,6 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   /* Before returning turn on MMU */
   _write_MSR( msr );
   return 0;
-
 }
 
 static int
@@ -279,9 +260,7 @@ mmu_irq_init(void){
 
   _CPU_Memory_management_Initialize();
   /*mmu_init();*/
-
 }
-
 
 /* Make a BAT entry (either IBAT or DBAT entry) Parameters to pass
    would be EA, PA, Block Length, Access Bits */

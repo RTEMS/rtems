@@ -49,15 +49,29 @@
 #define SR_KP                  0x20000000  
 
 #define RTEMS_MPE_PAGE_SIZE    0x1000
+
 /* Splitting the 64 bit PTE into two 32 bit words. As shown in the OEA
  *    Manual of PowerPC */
+#define KEY_SUP      (1<<30) /* supervisor mode key */
+#define KEY_USR      (1<<29) /* user mode key */
+#define LD_PG_SIZE              12 /* In logarithm base */
+#define LD_PI_SIZE              16
+#define LD_VSID_SIZE            24
+#define LD_HASH_SIZE            19
+#define MMUS_DEBUG
+/* Primary and secondary PTE hash functions */
 
-struct libcpu_mmu_pte
+/* Compute the primary hash from a VSID and a PI */
+#define PTE_HASH_FUNC1(vsid, pi) (((vsid)^(pi))&(0x0007FFFF))
+
+/* Compute the secondary hash from a primary hash */
+#define PTE_HASH_FUNC2(hash1) ((~(hash1))&(0x0007FFFF))
+
+typedef struct  
 {
   uint32_t ptew0; /* Word 0 */
   uint32_t ptew1; /* Word 1 */
-};
-
+} ppc_bsp_mm_mpe;
 
 extern char RamBase[];
 extern char RamSize[];
@@ -70,17 +84,15 @@ mmu_init(void);
 void
 mmu_irq_init(void);
 
-extern struct libcpu_mmu_pte* BSP_ppc_add_pte(struct libcpu_mmu_pte *ppteg,
-    struct libcpu_mmu_pte *spteg,
+extern ppc_bsp_mm_mpe* BSP_ppc_add_pte(ppc_bsp_mm_mpe *ppteg,
+    ppc_bsp_mm_mpe *spteg,
     uint32_t vsid,
     uint32_t pi, 
     uint32_t wimg,
     uint32_t protp
 );
 
-int search_valid_pte(struct libcpu_mmu_pte *pteg, uint32_t vsid, uint32_t api);
-
-void get_pteg_addr(struct libcpu_mmu_pte** pteg, uint32_t hash);
+void get_pteg_addr(ppc_bsp_mm_mpe** pteg, uint32_t hash);
 #ifdef __cplusplus
   }
 #endif

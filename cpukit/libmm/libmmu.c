@@ -34,19 +34,19 @@
 /* TODO: rename ALUT to Arena */
 
 /* create a alut table instance */
-  rtems_mprot_alut the_rtems_mprot_alut;
+static rtems_memory_management_alut the_rtems_memory_management_alut;
 
 rtems_status_code rtems_memory_management_install_alut(void) {
     
-  rtems_mprot_alut* the_alut= &the_rtems_mprot_alut;
+  rtems_memory_management_alut* the_alut= &the_rtems_memory_management_alut;
   int i;
 
   _Chain_Initialize(&(the_alut->ALUT_idle), the_alut->entries,
-    RTEMS_MPROT_ALUT_SIZE, sizeof(rtems_memory_management_entry) );
+    RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE, sizeof(rtems_memory_management_entry) );
 
   _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
 
-  for(i=0;i<RTEMS_MPROT_ALUT_SIZE; i++)
+  for(i=0;i<RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE; i++)
   {
     the_alut->entries[i].region.bounds = 0;
     the_alut->entries[i].region.base = (void*)0;
@@ -63,9 +63,9 @@ rtems_status_code rtems_memory_management_find_entry(
   void* const addr, 
   rtems_memory_management_entry** p_ret)
 {
-  rtems_mprot_alut* alut_p;
+  rtems_memory_management_alut* alut_p;
   rtems_memory_management_entry* current;
-  alut_p = &the_rtems_mprot_alut;
+  alut_p = &the_rtems_memory_management_alut;
 
   if( p_ret == 0 )   
     return RTEMS_INVALID_ADDRESS;
@@ -90,9 +90,9 @@ rtems_status_code rtems_memory_management_create_entry(
   rtems_memory_management_entry** p_ret)
 {
   rtems_memory_management_entry* current;
-  rtems_mprot_alut* alut_p;
+  rtems_memory_management_alut* alut_p;
   rtems_status_code status;
-  alut_p = &the_rtems_mprot_alut;
+  alut_p = &the_rtems_memory_management_alut;
 
   /* Check for invalid block size */
 
@@ -142,9 +142,9 @@ rtems_status_code rtems_memory_management_create_entry(
 rtems_status_code rtems_memory_management_delete_entry(
   rtems_memory_management_entry* const mpe)
 {
-  rtems_mprot_alut* alut_p;
+  rtems_memory_management_alut* alut_p;
   rtems_memory_management_entry*  current;
-  alut_p = &the_rtems_mprot_alut;
+  alut_p = &the_rtems_memory_management_alut;
 
   _Thread_Disable_dispatch();
   if( 0 == mpe || mpe < alut_p->entries ||\
@@ -183,8 +183,8 @@ rtems_status_code rtems_memory_management_get_size(
   rtems_memory_management_entry* const mpe,
   size_t * size)
 {
-  rtems_mprot_alut* alut_p;
-  alut_p = &the_rtems_mprot_alut;
+  rtems_memory_management_alut* alut_p;
+  alut_p = &the_rtems_memory_management_alut;
 
   if( 0 == mpe || mpe < alut_p->entries ||\
     mpe > (alut_p->entries+ sizeof(alut_p->entries) ))
@@ -202,5 +202,4 @@ rtems_status_code rtems_memory_management_get_size(
   
   return RTEMS_SUCCESSFUL;
 }
-
 

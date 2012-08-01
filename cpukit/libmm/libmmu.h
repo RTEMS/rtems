@@ -18,11 +18,10 @@
 #ifdef __cplusplus
   extern "C" {
 #endif
-#define RTEMS_MPROT_ALUT_SIZE 64
-#define RTEMS_MPROT_DEFAULT_ATTRIBUTE            0x0000071f
+#define RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE 64
 
-typedef libcpu_mmu_mpe;
-typedef rtems_memory_management_permissions;
+typedef rtems_bsp_mm_mpe;
+
 /**
  *  * A region of contiguous memory
  *   */
@@ -38,19 +37,19 @@ typedef struct
   rtems_chain_node 				node;  /**< The mapping chain's node */
   rtems_memory_management_region_descriptor 	region;
   bool						installed;
-  libcpu_mmu_mpe			       *cpu_mpe;
+  rtems_bsp_mm_mpe			       *cpu_mpe;
 } rtems_memory_management_entry;
 
 /*!
  *  *  *  \brief  for now , the ALUT is just an array, we can optimize  this by some
  *   *   *  kind of advanced data structure , such as hash table, or chain maybe
  *    *    */
-typedef struct mprot_alut
+typedef struct
 {
-  rtems_memory_management_entry entries[RTEMS_MPROT_ALUT_SIZE];
+  rtems_memory_management_entry entries[RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE];
   rtems_chain_control ALUT_mappings;
   rtems_chain_control ALUT_idle;
-} rtems_mprot_alut;
+} rtems_memory_management_alut;
 
 
 

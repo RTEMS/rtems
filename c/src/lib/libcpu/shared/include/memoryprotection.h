@@ -49,13 +49,6 @@ rtems_status_code _CPU_Memory_management_Set_write(
     rtems_memory_management_entry *mpe
 );
 
-rtems_status_code _CPU_Pte_Change_Attributes(
-    rtems_memory_management_entry *mpe,
-    uint32_t wimg,
-    uint32_t pp
-);
-
-
 #ifdef __cplusplus
   }
 #endif
