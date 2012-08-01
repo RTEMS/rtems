@@ -65,9 +65,6 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 /**
  * The following defines the rbtree control block used to manage
  * all key value
- * 
- * problem: is it a proper way to define a global variable? what's the
- * exactly function of POSIX_EXTERN?
  */
 POSIX_EXTERN RBTree_Control _POSIX_Keys_Rbtree;
 
