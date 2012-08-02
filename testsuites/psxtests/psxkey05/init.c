@@ -1,4 +1,8 @@
 /*
+<<<<<<< HEAD
+=======
+ *  Copyright (c) 2012 Zhongwei Yao.  
+>>>>>>> one_rbtree
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,8 +22,6 @@
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
-
-
 
 void *POSIX_Init(
   void *ignored

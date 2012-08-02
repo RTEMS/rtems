@@ -25,11 +25,15 @@
 #include <rtems/score/rbtree.h>
 
 /*
- * _POSIX_Key_Rbtree_Compare_Function
+ * _POSIX_Keys_Rbtree_compare_function
  *
  * DESCRIPTION:
  * This routine compares the rbtree node
- * by comparing POSIX key first and comparing thread id second 
+ * by comparing POSIX key first and comparing thread id second.
+ * And if either of the input nodes's thread_id member is 0, then
+ * it will only compare the pthread_key_t member. That is when we
+ * pass thread_id = 0 node as a search node, the search is done only
+ * by pthread_key_t.
  *
  * Input parameters: two rbtree node
  *
