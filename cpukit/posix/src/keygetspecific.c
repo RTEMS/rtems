@@ -32,7 +32,8 @@ void *pthread_getspecific(
 {
   Objects_Locations            location;
   POSIX_Keys_Rbtree_node       search_node;
-  RBTree_Node                 *p; 
+  RBTree_Node                 *p;
+  void                        *key_data;
 
   _POSIX_Keys_Get( key, &location );
   switch ( location ) {
@@ -42,12 +43,12 @@ void *pthread_getspecific(
       search_node.key = key;
       search_node.thread_id = _Thread_Executing->Object.id;
       p = _RBTree_Find_unprotected( &_POSIX_Keys_Rbtree, &search_node.rb_node);
-      if ( !p ) {
-	_Thread_Enable_dispatch();
-	return NULL;
+      key_data = NULL;
+      if ( p ) {
+	key_data = _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, rb_node )->value;
       }
       _Thread_Enable_dispatch();
-      return _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, rb_node )->value;
+      return key_data;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:   /* should never happen */

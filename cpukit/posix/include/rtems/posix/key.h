@@ -30,7 +30,6 @@ extern "C" {
  *  in the rbtree structure
  *  
  */
- 
 typedef struct {
   /** This field is the chain node structure. */
   Chain_Node ch_node;
@@ -80,7 +79,6 @@ void _POSIX_Keys_Manager_initialization(void);
  *
  * This routine compares the rbtree node
  */
-
 int _POSIX_Keys_Rbtree_compare_function(
   const RBTree_Node *node1,
   const RBTree_Node *node2

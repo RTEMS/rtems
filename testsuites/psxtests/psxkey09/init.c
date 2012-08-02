@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2012 Zhongwei Yao.  
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
