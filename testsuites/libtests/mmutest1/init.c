@@ -24,7 +24,6 @@
 #include "system.h"
 #include <stdio.h>
 #include <stdlib.h>
-//#include <rtems/libmmu.h>
 #include <rtems/libmmu.h>
 
 rtems_task Init(
@@ -113,7 +112,7 @@ rtems_task Init(
      printf("Failed : to set Read only permissions = %d\n",status);
    } 
   printf("Test 4 : Adding overlapping  address value\n");
-  r1.base = (void*)0x01A07000;
+  r1.base = (void*)0x000f1000;
   r1.bounds = 0x4000;
   status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){

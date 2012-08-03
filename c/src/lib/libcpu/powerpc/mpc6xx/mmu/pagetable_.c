@@ -44,7 +44,7 @@ rtems_status_code _CPU_Memory_management_Initialize(void)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code _CPU_Pte_Change_Attributes(rtems_memory_management_entry *mpe, uint32_t wimg, uint32_t pp)
+static rtems_status_code ppc_pte_change_attributes(rtems_memory_management_entry *mpe, uint32_t wimg, uint32_t pp)
 {
   ppc_bsp_mm_mpe* pt_entry;
   uintptr_t ea, block_end;
@@ -154,7 +154,7 @@ rtems_status_code _CPU_Memory_management_Set_read_only(
 
   pp = _PPC_MMU_ACCESS_READ_ONLY;
  
-  status = _CPU_Pte_Change_Attributes(mpe,0x0,pp);
+  status = ppc_pte_change_attributes(mpe,0x0,pp);
   if(status != RTEMS_SUCCESSFUL) 
    return RTEMS_UNSATISFIED;
 
@@ -169,7 +169,7 @@ rtems_status_code _CPU_Memory_management_Set_write(
 
   pp = _PPC_MMU_ACCESS_NO_PROT;
 
-  status = _CPU_Pte_Change_Attributes(mpe,0x0,pp);
+  status = ppc_pte_change_attributes(mpe,0x0,pp);
   if(status != RTEMS_SUCCESSFUL)
    return RTEMS_UNSATISFIED;
 
