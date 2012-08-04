@@ -29,7 +29,7 @@ RamSize = DEFINED(RamSize) ? RamSize : 16M;
 
 MEMORY
   {
-        RAM       : ORIGIN = 0, LENGTH = 16M
+        RAM       : ORIGIN = 0, LENGTH = 32M
 	PSIM_REGS : ORIGIN = 0x0c000000, LENGTH = 16M
         VECTORS   : ORIGIN = 0xFFF00000, LENGTH = 0x20000
   }

@@ -1,8 +1,8 @@
 include $(top_srcdir)/automake/compile.am
 
-noinst_LIBRARIES = libmmu.a
+noinst_LIBRARIES = libmm.a
 
-libmmu_a_SOURCES = libmmu.c libmmu.h 
+libmm_a_SOURCES = libmm.c libmm.h 
 
 
 include $(top_srcdir)/automake/local.am

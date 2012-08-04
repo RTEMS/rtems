@@ -28,7 +28,7 @@ TMP_LIBS += ../libfs/libdevfs.a
 TMP_LIBS += ../libfs/libimfs.a
 TMP_LIBS += ../libfs/librfs.a
 
-TMP_LIBS += ../libmm/libmmu.a
+TMP_LIBS += ../libmm/libmm.a
 TMP_LIBS += ../libmisc/libmonitor.a
 TMP_LIBS += ../libmisc/libuntar.a
 TMP_LIBS += ../libmisc/libstackchk.a

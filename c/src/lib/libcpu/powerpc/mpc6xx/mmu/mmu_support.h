@@ -4,32 +4,28 @@
 *  *  The license and distribution terms for this file may be
 *  *  found in the file LICENSE in this distribution or at
 *  *  http://www.rtems.com/license/LICENSE.
-*  *
-*  *  $Id$
 *  */
 #ifndef _LIBCPU_MMU_SUPPORT_H
 #define _LIBCPU_MMU_SUPPORT_H
-
 
 #ifdef __cplusplus
   extern "C" {
 #endif
 
-
 /* Access definition macros below */
-#define _PPC_MMU_ACCESS_SUPERVISOR_ONLY     0
+#define _PPC_MMU_ACCESS_SUPERVISOR_ONLY     	0
 #define _PPC_MMU_ACCESS_SUPERVISOR_WRITE_ONLY   1
-#define _PPC_MMU_ACCESS_NO_PROT        2//no protection
-#define _PPC_MMU_ACCESS_READ_ONLY      3
+#define _PPC_MMU_ACCESS_NO_PROT        		2//no protection
+#define _PPC_MMU_ACCESS_READ_ONLY      		3
 
-#define _PPC_CACHE_WRITETHROUGH                0x8
-#define _PPC_CACHE_WRITEBACK                       0x0
-#define _PPC_CACHE_ALLOW                               0x0
-#define _PPC_CACHE_DISABLE                            0x4
-#define _PPC_CACHE_MEM_COHERENCY              0x2
-#define _PPC_CACHE_MEM_NONCOHERENCY       0x0
-#define _PPC_CACHE_GUARDED                          0x1
-#define _PPC_CACHE_UNGUARDED                      0x0
+#define _PPC_CACHE_WRITETHROUGH                 0x8
+#define _PPC_CACHE_WRITEBACK                    0x0
+#define _PPC_CACHE_ALLOW                        0x0
+#define _PPC_CACHE_DISABLE                      0x4
+#define _PPC_CACHE_MEM_COHERENCY                0x2
+#define _PPC_CACHE_MEM_NONCOHERENCY             0x0
+#define _PPC_CACHE_GUARDED                      0x1
+#define _PPC_CACHE_UNGUARDED                    0x0
 
 /* Defining masks for the various bits of the PTE
  *    Referenced from OEA PowerPC Manual */
@@ -52,8 +48,8 @@
 
 /* Splitting the 64 bit PTE into two 32 bit words. As shown in the OEA
  *    Manual of PowerPC */
-#define KEY_SUP      (1<<30) /* supervisor mode key */
-#define KEY_USR      (1<<29) /* user mode key */
+#define KEY_SUP      		(1<<30) /* supervisor mode key */
+#define KEY_USR      		(1<<29) /* user mode key */
 #define LD_PG_SIZE              12 /* In logarithm base */
 #define LD_PI_SIZE              16
 #define LD_VSID_SIZE            24
@@ -78,8 +74,6 @@ extern char RamSize[];
 
 /* Function prototypes that can be shared with high
  *    level modules go in here */
-void
-mmu_init(void);
 
 void
 mmu_irq_init(void);

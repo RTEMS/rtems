@@ -5,21 +5,18 @@
 *  The license and distribution terms for this file may be
 *  found in the file LICENSE in this distribution or at
 *  http://www.rtems.com/license/LICENSE.
-*
-*  $Id$
 */
 
 #include <rtems.h>
 #include <libcpu/bat.h>
 #include <libcpu/spr.h>
-/*#include <bsp/ppc_exc_bspsupp.h> replaced by irq_supp.h*/
 #include <bsp/irq_supp.h>
 #include <rtems/powerpc/powerpc.h>
 #include <rtems/irq.h>
 #include <stdio.h> 
 #include <rtems/asm.h>
 #include <rtems/rtems/status.h>
-#include <libcpu/memoryprotection.h>
+#include <libcpu/memorymanagement.h>
 #include "mmu_support.h"
 
 SPR_RO(PPC_DAR);
@@ -53,7 +50,7 @@ static int search_valid_pte(ppc_bsp_mm_mpe *pteg, uint32_t vsid, uint32_t api){
       temp_vsid = (pteg[i].ptew0 & PTEW0_VSID) >> 7;
     
       if(temp_api == api && temp_vsid == vsid) { /* hit */
-  return i;
+  	    return i;
       }  
     }
   }
@@ -85,12 +82,12 @@ BSP_ppc_add_pte(
       /* Replace random pte entry depending on a counter */
       index = pte_counter;
       if (pte_counter == 7){
-  pte_counter = 0;
+  	    pte_counter = 0;
       }
       pte_counter++;
       pteg = ppteg;
       hash = 0;
-    } else {
+    }else {
       pteg = spteg;
       hash = 1;
     }
@@ -124,14 +121,13 @@ get_pteg_addr(ppc_bsp_mm_mpe** pteg, uint32_t hash){
   *pteg = (ppc_bsp_mm_mpe *)(htaborg | (masked_hash << 16) | (hash & 0x000003ff) << 6);
 }
 
-/* THis function shall be called upon exception on the DSISR
+/* This function shall be called upon exception on the DSISR
    register. depending on the type of exception appropriate action
    will be taken in this function. Most likely parameters for this
    function are
    - Exception Type (depending on DSISR[0..n]
    - address for which the transaltion failed
    - Anything else? */
-
 static int
 mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
   volatile uint32_t  ea, sr_data, vsid, pi, hash1, hash2, key, api,alut_access_attrb;
@@ -166,8 +162,8 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
 
   if(ea > (int)RamSize)
   {
-  printk("Unexpected address 0x%x, RamSize = 0x%x\n",(unsigned int)ea,(unsigned int)RamSize);
-   rtems_task_delete(RTEMS_SELF);
+    printk("Unexpected address 0x%x, RamSize = 0x%x\n",(unsigned int)ea,(unsigned int)RamSize);
+    rtems_task_delete(RTEMS_SELF);
   }
 
   /* Compute HASH 1 */
@@ -187,7 +183,7 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     spteg_search_status = search_valid_pte(spteg, vsid, api);
     if (spteg_search_status == -1){
       /* PTE not found in second PTEG also */
-          printk("No CPU MPE found for this address");
+      printk("No CPU MPE found for this address");
     } else {
       /* PTE found in second group */
       /* Code for determining access attribute goes here */
@@ -196,11 +192,13 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
       if (((key && (pp == 1 || pp == 0 || pp == 3)) ||
         (~(key) && (pp == 3)) ) &&(cause & 0x02000000)){
         /* Write access denied */
-        printk("Error:Write access denied. Please check the access attribute of address 0x%x! RTEMS delete self\n", ea);
+        printk("Error:Write access denied. Please check the access\
+        	attribute of address 0x%x! RTEMS delete self\n", ea);
         rtems_task_delete(RTEMS_SELF); 
       } else if ((key && (pp == 0)) && (~cause & 0x02000000)) {
         /* Read access denied */
-        printk("Error:Read access denied. Please check the access attribute of address 0x%x! RTEMS delete self\n", ea);
+        printk("Error:Read access denied. Please check the access\
+                attribute of address 0x%x! RTEMS delete self\n", ea);
         rtems_task_delete(RTEMS_SELF); 
       } else {
         /* Access permitted */
@@ -214,11 +212,13 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
     if (((key && (pp == 1 || pp == 0 || pp == 3)) ||
       (~(key) && (pp == 3))) &&(cause & 0x02000000)){
         /* Write access denied */
-         printk("Error:Write access denied. Please check the access attribute of address 0x%x! RTEMS delete self\n", ea);
+         printk("Error:Write access denied. Please check the access\
+	            	 attribute of address 0x%x! RTEMS delete self\n", ea);
         rtems_task_delete(RTEMS_SELF); 
     } else if ((key && (pp == 0)) && (~cause & 0x02000000)) {
       /* Read access denied */
-      printk("Error:Read access denied. Please check the access attribute of address 0x%x! RTEMS delete self\n", ea);
+      printk("Error:Read access denied. Please check the access\
+	            attribute of address 0x%x! RTEMS delete self\n", ea);
       rtems_task_delete(RTEMS_SELF); 
     } else {
       /* Access permitted */
@@ -232,14 +232,13 @@ mmu_handle_dsi_exception(BSP_Exception_frame *f, unsigned vector){
 
 static int
 mmu_handle_tlb_dlmiss_exception(BSP_Exception_frame *f, unsigned vector){
-  printk("DL TLB MISS Exception hit\n");
+  printk("DL TLB MISS Exception \n");
   return 0;
 }
 
-
 static int
 mmu_handle_tlb_dsmiss_exception(BSP_Exception_frame *f, unsigned vector){
-  printk("DS TLB MISS Exception hit\n");
+  printk("DS TLB MISS Exception \n");
   return 0;
 }
 
@@ -249,7 +248,6 @@ mmu_irq_init(void){
   ppc_exc_set_handler(ASM_PROT_VECTOR, mmu_handle_dsi_exception);
   ppc_exc_set_handler(ASM_60X_DLMISS_VECTOR, mmu_handle_tlb_dlmiss_exception);
   ppc_exc_set_handler(ASM_60X_DSMISS_VECTOR, mmu_handle_tlb_dsmiss_exception);
-  
 
   /* Initialise segment registers */
   for (i=0; i<16; i++) 
@@ -259,7 +257,6 @@ mmu_irq_init(void){
   _write_SDR1((unsigned long) 0x00FF0000);
 
   _CPU_Memory_management_Initialize();
-  /*mmu_init();*/
 }
 
 /* Make a BAT entry (either IBAT or DBAT entry) Parameters to pass
@@ -268,8 +265,6 @@ void
 mmu_make_bat_entry(void){
 
 }
-
-
 
 /* Same thing as above but for Instruction access */
 void

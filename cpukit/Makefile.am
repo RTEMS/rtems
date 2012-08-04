@@ -159,7 +159,7 @@ include_rtems_HEADERS += libmisc/fb/fb.h
 include_rtems_HEADERS += libmisc/fb/mw_uid.h
 
 ## mm
-include_rtems_HEADERS += libmm/libmmu.h
+include_rtems_HEADERS += libmm/libmm.h
 
 ## mouse
 include_rtems_HEADERS += libmisc/mouse/mouse_parser.h

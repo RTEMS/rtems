@@ -1,8 +1,16 @@
+/*COPYRIGHT (c) 1989-2009.
+ * *  On-Line Applications Research Corporation (OAR).
+ * *  *
+ * *  *  The license and distribution terms for this file may be
+ * *  *  found in the file LICENSE in this distribution or at
+ * *  *  http://www.rtems.com/license/LICENSE.
+ * *  */
+
 #include <rtems.h>
 #include <libcpu/spr.h>
 #include <rtems/rtems/status.h>
 #include <libcpu/mmu_support.h>
-#include <libcpu/memoryprotection.h>
+#include <libcpu/memorymanagement.h>
 SPR_RW(SDR1);
 
 rtems_status_code _CPU_Memory_management_Initialize(void)
@@ -11,7 +19,7 @@ rtems_status_code _CPU_Memory_management_Initialize(void)
   ppc_bsp_mm_mpe* pte;
   unsigned long msr;
   void *ea;
-  
+
   pt_base = _read_SDR1() & 0xffff0000;
   pt_end = pt_base + (( ( _read_SDR1() & 0x000001ff)+1 )<<16);
 
@@ -44,8 +52,11 @@ rtems_status_code _CPU_Memory_management_Initialize(void)
   return RTEMS_SUCCESSFUL;
 }
 
-static rtems_status_code ppc_pte_change_attributes(rtems_memory_management_entry *mpe, uint32_t wimg, uint32_t pp)
-{
+static rtems_status_code ppc_pte_change_attributes(
+  rtems_memory_management_entry *mpe,
+  uint32_t wimg,
+  uint32_t pp
+){
   ppc_bsp_mm_mpe* pt_entry;
   uintptr_t ea, block_end;
   unsigned long msr;
@@ -59,8 +70,8 @@ static rtems_status_code ppc_pte_change_attributes(rtems_memory_management_entry
     return RTEMS_UNSATISFIED;
 
   ea = (uintptr_t) mpe->region.base;
-  block_end = (uintptr_t)(mpe->region.base + mpe->region.bounds);
-  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
+  block_end = (uintptr_t)(mpe->region.base + mpe->region.size);
+  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.size);
   pt_entry = (ppc_bsp_mm_mpe *) mpe->cpu_mpe;
 
   /* Switch MMU and other Interrupts off */
@@ -103,36 +114,36 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
   rtems_status_code retval = RTEMS_SUCCESSFUL;
 
   ea = (uintptr_t) mpe->region.base;
-  block_end = (uintptr_t)(mpe->region.base + mpe->region.bounds);
-  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.bounds);
+  block_end = (uintptr_t)(mpe->region.base + mpe->region.size);
+  rtems_cache_flush_multiple_data_lines(mpe->region.base, mpe->region.size);
 
   for( ; ea < block_end; ea += RTEMS_MPE_PAGE_SIZE ) {
      
-   /* Read corresponding SR Data */
-  sr_data = _read_SR((void *) ea);
+    /* Read corresponding SR Data */
+    sr_data = _read_SR((void *) ea);
 
-  /* Extract VSID */
-  vsid = sr_data & SR_VSID;
+    /* Extract VSID */
+    vsid = sr_data & SR_VSID;
 
-  /* get page index (PI) from EA */
-  pi = (ea >> 12) & 0x0000ffff;
-  api = pi >> 10;
+    /* get page index (PI) from EA */
+    pi = (ea >> 12) & 0x0000ffff;
+    api = pi >> 10;
 
-  /* Compute HASH 1 */
-  hash1 = PTE_HASH_FUNC1(vsid, pi);
+    /* Compute HASH 1 */
+    hash1 = PTE_HASH_FUNC1(vsid, pi);
 
-  /* Compute PTEG Address from the hash 1 value */
-  get_pteg_addr(&ppteg, hash1);
+    /* Compute PTEG Address from the hash 1 value */
+    get_pteg_addr(&ppteg, hash1);
 
-  /* setting default permissions to no protection*/ 
-  pp = _PPC_MMU_ACCESS_NO_PROT;
-  mpe->cpu_mpe = BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
+    /* setting default permissions to no protection*/ 
+    pp = _PPC_MMU_ACCESS_NO_PROT;
+    mpe->cpu_mpe = BSP_ppc_add_pte(ppteg, spteg, vsid, pi, wimg, pp);
 
-  if ( mpe->cpu_mpe == NULL ){
-	retval = RTEMS_UNSATISFIED;
-        break;
-     }
-   }  
+    if ( mpe->cpu_mpe == NULL ){
+      retval = RTEMS_UNSATISFIED;
+      break;
+    }
+  }  
   return retval;
 }
                                   
@@ -156,7 +167,7 @@ rtems_status_code _CPU_Memory_management_Set_read_only(
  
   status = ppc_pte_change_attributes(mpe,0x0,pp);
   if(status != RTEMS_SUCCESSFUL) 
-   return RTEMS_UNSATISFIED;
+    return RTEMS_UNSATISFIED;
 
   return RTEMS_SUCCESSFUL;
 }
@@ -171,7 +182,7 @@ rtems_status_code _CPU_Memory_management_Set_write(
 
   status = ppc_pte_change_attributes(mpe,0x0,pp);
   if(status != RTEMS_SUCCESSFUL)
-   return RTEMS_UNSATISFIED;
+    return RTEMS_UNSATISFIED;
 
   return RTEMS_SUCCESSFUL;
 }

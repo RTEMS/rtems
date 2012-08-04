@@ -1,25 +1,31 @@
+/* COPYRIGHT (c) 1989-2009.
+ * On-Line Applications Research Corporation (OAR).
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
 
 #include <rtems.h>
 #include <sys/types.h>
 #include <rtems/rtems/status.h>
-#include <libcpu/memoryprotection.h>
+#include <libcpu/memorymanagement.h>
 
 
 /*this is a mid level API used to operate page table 
  *mainly used by memory protect manager
  */
 
-/*****************************************************
- *  * * initialization of the ALUT (Access Look up Table )  *
- *   * *****************************************************/
+/**
+ * @brief initialization of the ALUT (Access Look up Table )  
+ */
 rtems_status_code rtems_memory_management_initialize(void)
 {
   return  _CPU_Memory_management_Initialize();
 }
 
 /**
- *  * @brief Install the memory protection entry to the enforcement mechanism.
- *   */
+ * @brief Install the memory protection entry to the enforcement mechanism.  
+ */
 rtems_status_code rtems_memory_management_install_entry(
   rtems_memory_management_entry *mpe
 ) {
@@ -33,7 +39,6 @@ rtems_status_code rtems_memory_management_install_entry(
   _ISR_Enable( level );
   return status;
 }
-
 
 rtems_status_code rtems_memory_management_verify_size(
     size_t size
@@ -56,7 +61,6 @@ rtems_status_code rtems_memory_management_set_write
     status = _CPU_Memory_management_Set_write(mpe);
   _ISR_Enable( level );
   return status;
-
 }
 
 rtems_status_code rtems_memory_management_set_read_only

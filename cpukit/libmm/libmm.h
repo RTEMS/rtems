@@ -1,5 +1,5 @@
-#ifndef _RTEMS_LIBMMU_H
-#define _RTEMS_LIBMMU_H
+#ifndef _RTEMS_LIBMM_H
+#define _RTEMS_LIBMM_H
 /*
  * *  COPYRIGHT (c) 1989-2011.
  * *  On-Line Applications Research Corporation (OAR).
@@ -7,9 +7,6 @@
  * *  The license and distribution terms for this file may be
  * *  found in the file LICENSE in this distribution or at
  * *  http://www.rtems.com/license/LICENSE.
- * *
- * *
- * *  $Id$
  * */
 
 #include <inttypes.h>
@@ -29,7 +26,7 @@ typedef struct
 {
   char  *name;
   void  *base;
-  size_t bounds;
+  size_t size;
 } rtems_memory_management_region_descriptor;
 
 typedef struct
