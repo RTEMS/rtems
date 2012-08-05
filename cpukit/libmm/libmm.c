@@ -188,5 +188,3 @@ rtems_status_code rtems_memory_management_get_size(
   
   return RTEMS_SUCCESSFUL;
 }
-
-#endif
