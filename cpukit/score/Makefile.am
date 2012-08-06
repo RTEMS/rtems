@@ -238,6 +238,7 @@ libscore_a_SOURCES += src/scheduleredf.c \
 
 ## SCHEDULERCBS_C_FILES
 libscore_a_SOURCES += src/schedulercbs.c \
+    src/schedulercbsallocate.c \
     src/schedulercbsattachthread.c \
     src/schedulercbscleanup.c \
     src/schedulercbscreateserver.c \
