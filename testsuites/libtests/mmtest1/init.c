@@ -17,7 +17,6 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.15 2008/01/11 22:50:10 joel Exp $
  */
 
 #define CONFIGURE_INIT

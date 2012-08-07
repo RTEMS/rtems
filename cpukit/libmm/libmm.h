@@ -28,8 +28,16 @@
   extern "C" {
 #endif
 
+/**
+ * This should be configurable 
+ */
 #define RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE 64
 
+/**
+ * Define incomplete pointer to point to
+ * bsp_mm_mpe defined at CPU code, the address 
+ * is installed at CPU code when Installing an mpe 
+ */
 typedef rtems_bsp_mm_mpe;
 
 /*
@@ -50,7 +58,7 @@ typedef struct
   rtems_bsp_mm_mpe			                      *cpu_mpe;
 } rtems_memory_management_entry;
 
-/*
+/**
  * @brief  for now , the ALUT is just an array, we can optimize  this by some
  * kind of advanced data structure , such as hash table, or chain maybe
  */
@@ -75,7 +83,8 @@ rtems_status_code rtems_memory_management_initialize ( void );
  */
 rtems_status_code rtems_memory_management_create_entry(
   rtems_memory_management_region_descriptor region, 
-  rtems_memory_management_entry** p_ret);
+  rtems_memory_management_entry** p_ret
+);
 
 /**
  * @brief rtems_memory_management_install_entry
@@ -86,8 +95,12 @@ rtems_status_code rtems_memory_management_install_entry(
   rtems_memory_management_entry *mpe
 );
 
+/**
+ * @brief deleting entry from ALUT as well as HW entries
+ */
 rtems_status_code rtems_memory_management_delete_entry(
-  rtems_memory_management_entry* const p_entry);
+  rtems_memory_management_entry* const p_entry
+);
 
 /**
  * @brief Linear search for the element emtry in the alut for
@@ -95,15 +108,20 @@ rtems_status_code rtems_memory_management_delete_entry(
  */
 rtems_status_code rtems_memory_management_find_entry(
   void* const addr,
-  rtems_memory_management_entry** p_ret);
+  rtems_memory_management_entry** p_ret
+);
 
 rtems_status_code rtems_memory_management_verify_size(
   size_t size
 );
 
+/**
+ * @brief check if size is supported by the CPU. 
+ * this method is implemented at CPU code*/
 rtems_status_code rtems_memory_management_get_size(
  rtems_memory_management_entry* const p_entry,
- size_t * size);
+ size_t * size
+);
 
 /** 
  * @brief set HW write AP for that mpe 
@@ -121,6 +139,6 @@ rtems_status_code rtems_memory_management_set_read_only
   rtems_memory_management_entry* const mpe;
 );
 #ifdef __cplusplus
-  }
+}
 #endif
 #endif

@@ -32,7 +32,6 @@
 #include <rtems/rtems/cache.h>
 #include "libmm.h"
 
-
 /* TODO: rename ALUT to Arena */
 
 static rtems_memory_management_alut the_rtems_memory_management_alut;
