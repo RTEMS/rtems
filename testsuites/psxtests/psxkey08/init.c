@@ -68,17 +68,17 @@ rtems_task Init(rtems_task_argument arg)
   puts( "Init - Semaphore 1 create - OK" );
   name1 = rtems_build_name('S', 'E', 'M', '1');
   sc = rtems_semaphore_create( name1, 0,
-			       RTEMS_SIMPLE_BINARY_SEMAPHORE |
-			       RTEMS_FIFO,
-			       0, &sema1 );
+                               RTEMS_SIMPLE_BINARY_SEMAPHORE |
+                               RTEMS_FIFO,
+                               0, &sema1 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - Semaphore 2 create - OK" );
   name2 = rtems_build_name('S', 'E', 'M', '2');
   sc = rtems_semaphore_create( name2, 0,
-			       RTEMS_SIMPLE_BINARY_SEMAPHORE |
-			       RTEMS_FIFO,
-			       0, &sema2 );
+                               RTEMS_SIMPLE_BINARY_SEMAPHORE |
+                               RTEMS_FIFO,
+                               0, &sema2 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - pthread Key create - OK" );
@@ -90,22 +90,22 @@ rtems_task Init(rtems_task_argument arg)
       task_id_p = malloc( sizeof( rtems_id ) );
       rtems_test_assert( task_id_p );
       sc = rtems_task_create(
-	     rtems_build_name('T','A',created_task_count, ' '),
-	     1,
-	     RTEMS_MINIMUM_STACK_SIZE,
-	     RTEMS_DEFAULT_MODES,
-	     RTEMS_DEFAULT_ATTRIBUTES,
-	     task_id_p
-	     );
+             rtems_build_name('T','A',created_task_count, ' '),
+             1,
+             RTEMS_MINIMUM_STACK_SIZE,
+             RTEMS_DEFAULT_MODES,
+             RTEMS_DEFAULT_ATTRIBUTES,
+             task_id_p
+             );
       rtems_test_assert( (sc == RTEMS_SUCCESSFUL) || (sc == RTEMS_UNSATISFIED) );
       /**
        * when return is RTEMS_TOO_MANY or RTEMS_UNSATISFIED, there is not
        * enough source to create task.
        */
       if ( (sc == RTEMS_TOO_MANY) || (sc == RTEMS_UNSATISFIED) )
-	{
-	  break;
-	}
+        {
+          break;
+        }
       ++created_task_count;
       sc = rtems_task_start( *task_id_p,  test_task, 0 );
       rtems_test_assert( sc == RTEMS_SUCCESSFUL );
