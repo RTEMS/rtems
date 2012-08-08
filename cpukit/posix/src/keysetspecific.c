@@ -44,18 +44,18 @@ int pthread_setspecific(
     case OBJECTS_LOCAL:
       rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
       if ( !rb_node ) {
-	_Thread_Enable_dispatch();
-	return ENOMEM;
+        _Thread_Enable_dispatch();
+        return ENOMEM;
       }
       
       rb_node->key = key;
       rb_node->thread_id = _Thread_Executing->Object.id;
       rb_node->value = value;
       if (_RBTree_Insert_unprotected( &_POSIX_Keys_Rbtree, &(rb_node->rb_node) ) ) {
-	  _Workspace_Free( rb_node );
-	  _Thread_Enable_dispatch();
-	  return EAGAIN;
-	}
+          _Workspace_Free( rb_node );
+          _Thread_Enable_dispatch();
+          return EAGAIN;
+        }
       
       /** append rb_node to the thread API extension's chain */
       api = (POSIX_API_Control *)(_Thread_Executing->API_Extensions[THREAD_API_POSIX]);

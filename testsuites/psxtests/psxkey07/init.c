@@ -100,17 +100,17 @@ void *POSIX_Init(
        * have been exhausted.
        */ 
       if ( sc == EAGAIN )
-	{
-	  pthread_mutex_unlock( &mutex1 );
-	  break;
-	}
+        {
+          pthread_mutex_unlock( &mutex1 );
+          break;
+        }
       ++created_thread_count;
       /**
        * wait for test thread set key, the while loop here is used to
        * avoid suprious wakeup. 
        */
       while( created_thread_count > setted_thread_count )
-	pthread_cond_wait( &set_condition_var, &mutex1 );
+        pthread_cond_wait( &set_condition_var, &mutex1 );
       pthread_mutex_unlock( &mutex1 );
     }
   printf( "Init - %d pthreads have been created - OK\n", created_thread_count );
