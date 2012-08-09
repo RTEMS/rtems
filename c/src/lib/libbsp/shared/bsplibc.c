@@ -9,14 +9,8 @@
 
 #include <bsp/bootcard.h>
 
-void bsp_libc_init(
-  void *heap_begin,
-  uintptr_t heap_size,
-  size_t sbrk_amount
-)
+void bsp_libc_init(void)
 {
-    RTEMS_Malloc_Initialize( heap_begin, heap_size, sbrk_amount );
-
     /*
      *  Init the RTEMS libio facility to provide UNIX-like system
      *  calls for use by newlib (ie: provide open, close, etc)

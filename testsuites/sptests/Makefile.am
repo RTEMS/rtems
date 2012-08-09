@@ -17,7 +17,7 @@ SUBDIRS = \
     sperror01 sperror02 sperror03 \
     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
     spfatal08 spfatal09 spfatal10 spfatal11 spfatal12 spfatal13 spfatal14 \
-    spfatal15 spfatal16 spfatal17 spfatal18 spfatal19 spfatal20 spfatal21 \
+    spfatal15 spfatal16 spfatal17 spfatal18 spfatal19 spfatal20 \
     spfatal22 spfatal23 spfatal24 spfatal25 \
     spfifo01 spfifo02 spfifo03 spfifo04 spfifo05 \
     spintrcritical01 spintrcritical02 spintrcritical03 spintrcritical04 \

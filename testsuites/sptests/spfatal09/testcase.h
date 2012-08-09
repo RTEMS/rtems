@@ -14,15 +14,12 @@
 
 #define FATAL_ERROR_TEST_NAME            "9"
 #define FATAL_ERROR_DESCRIPTION          "Bad heap address to malloc"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
-#define FATAL_ERROR_EXPECTED_ERROR       RTEMS_NO_MEMORY
-
-char Malloc_Heap[ 1 ] CPU_STRUCTURE_ALIGNMENT;
+#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
+#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
+#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_NO_MEMORY_FOR_HEAP
 
 void force_error()
 {
-  RTEMS_Malloc_Initialize( Malloc_Heap, sizeof(Malloc_Heap), 0 );
-
+  RTEMS_Malloc_Initialize( NULL, 0, NULL );
   /* we will not run this far */
 }

@@ -14,12 +14,8 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#include <rtems.h>
-#include <rtems/libcsupport.h>
+#include <rtems/malloc.h>
 #include <rtems/score/protectedheap.h>
-
-extern Heap_Control  *RTEMS_Malloc_Heap;
 
 /*
  *  Find amount of free heap remaining

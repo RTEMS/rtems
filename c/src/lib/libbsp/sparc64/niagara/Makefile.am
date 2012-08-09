@@ -42,7 +42,7 @@ startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppost.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../shared/startup/bspgetworkarea.c \
+    ../../shared/bspgetworkarea.c \
     ../shared/startup/bspstart.c \
     ../shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c  \

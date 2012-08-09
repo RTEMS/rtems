@@ -27,12 +27,6 @@
 extern "C" {
 #endif
 
-void RTEMS_Malloc_Initialize(
-  void *heap_begin,
-  uintptr_t heap_size,
-  size_t sbrk_amount
-);
-
 extern void malloc_dump(void);
 extern bool malloc_walk(int source, bool printf_enabled);
 void malloc_set_heap_pointer(Heap_Control *new_heap);

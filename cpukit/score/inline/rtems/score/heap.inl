@@ -108,20 +108,6 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned(
   return (value % alignment) == 0;
 }
 
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
-  uintptr_t value,
-  uintptr_t alignment
-)
-{
-  uintptr_t remainder = value % alignment;
-
-  if ( remainder != 0 ) {
-    return value - remainder + alignment;
-  } else {
-    return value;
-  }
-}
-
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_down(
   uintptr_t value,
   uintptr_t alignment

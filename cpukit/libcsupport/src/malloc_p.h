@@ -23,11 +23,6 @@
 #include <rtems/chain.h>
 
 /*
- * Basic management data
- */
-extern Heap_Control  *RTEMS_Malloc_Heap;
-
-/*
  *  Malloc Statistics Structure
  */
 extern rtems_malloc_statistics_t rtems_malloc_statistics;

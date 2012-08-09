@@ -26,6 +26,20 @@
 extern "C" {
 #endif
 
+/**
+ *  @brief C program heap control.
+ *
+ *  This is the pointer to the heap control structure used to manage the C
+ *  program heap.
+ */
+extern Heap_Control *RTEMS_Malloc_Heap;
+
+void RTEMS_Malloc_Initialize(
+  const Heap_Area *areas,
+  size_t area_count,
+  Heap_Initialization_or_extend_handler extend
+);
+
 /*
  *  Malloc Statistics Structure
  */
@@ -54,16 +68,29 @@ extern rtems_malloc_statistics_functions_t
   rtems_malloc_statistics_helpers_table;
 extern rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers;
 
-/*
- *  Malloc Heap Extension (sbrk) plugin
- */
-typedef struct {
-  void *(*initialize)(void *, size_t);
-  void *(*extend)(size_t);
-} rtems_malloc_sbrk_functions_t;
+extern ptrdiff_t RTEMS_Malloc_Sbrk_amount;
 
-extern rtems_malloc_sbrk_functions_t rtems_malloc_sbrk_helpers_table;
-extern rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers;
+static inline void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount )
+{
+  RTEMS_Malloc_Sbrk_amount = sbrk_amount;
+}
+
+typedef void *(*rtems_heap_extend_handler)(
+  Heap_Control *heap,
+  size_t alloc_size
+);
+
+void *rtems_heap_extend_via_sbrk(
+  Heap_Control *heap,
+  size_t alloc_size
+);
+
+void *rtems_heap_null_extend(
+  Heap_Control *heap,
+  size_t alloc_size
+);
+
+extern const rtems_heap_extend_handler rtems_malloc_extend_handler;
 
 /*
  * Malloc Plugin to Dirty Memory at Allocation Time

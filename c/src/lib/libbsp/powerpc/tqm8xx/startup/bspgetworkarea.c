@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -24,17 +25,11 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
-void bsp_get_work_area(
-  void      **work_area_start,
-  uintptr_t  *work_area_size,
-  void      **heap_start,
-  uintptr_t  *heap_size
-)
+void bsp_work_area_initialize(void)
 {
   char *ram_end = (char *) (TQM_BD_INFO.sdram_size - (uint32_t)TopRamReserved);
+  void *area_start = bsp_work_area_start;
+  uintptr_t area_size = (uintptr_t) ram_end - (uintptr_t) bsp_work_area_start;
 
-  *work_area_start = bsp_work_area_start;
-  *work_area_size = ram_end - bsp_work_area_start;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
+  bsp_work_area_initialize_default( area_start, area_size );
 }

@@ -1,5 +1,5 @@
 /*
- *  This routine is an implementation of the bsp_get_work_area()
+ *  This routine is an implementation of the bsp_work_area_initialize()
  *  that can be used by all m68k BSPs following linkcmds conventions
  *  regarding heap, stack, and workspace allocation.
  *
@@ -120,30 +120,10 @@ void bsp_size_memory(void)
   bsp_mem_size = topAddr;
 }
 
-/*
- *  This method returns the base address and size of the area which
- *  is to be allocated between the RTEMS Workspace and the C Program
- *  Heap.
- */
-void bsp_get_work_area(
-  void      **work_area_start,
-  uintptr_t  *work_area_size,
-  void      **heap_start,
-  uintptr_t  *heap_size
-)
+void bsp_work_area_initialize(void)
 {
-  *work_area_start = (void *) rtemsWorkAreaStart;
-  *work_area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
-  *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size       = (uintptr_t) HeapSize;
+  void *area_start = (void *) rtemsWorkAreaStart;
+  uintptr_t work_area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
 
-  #ifdef BSP_GET_WORK_AREA_DEBUG
-    printk( "bsp_mem_size = 0x%08x\n", bsp_mem_size );
-    printk( "rtemsWorkAreaStart = 0x%08x\n", rtemsWorkAreaStart );
-    printk( "WorkArea Base = %p\n", *work_area_start );
-    printk( "WorkArea Size = 0x%08x\n", *work_area_size );
-    printk( "C Program Heap Base = %p\n", *heap_start );
-    printk( "C Program Heap Size = 0x%08x\n", *heap_size );
-    printk( "End of WorkArea = %p\n", *work_area_start +  *work_area_size );
-  #endif
+  bsp_work_area_initialize_default( area_start, area_size );
 }

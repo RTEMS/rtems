@@ -901,11 +901,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  RAM to the malloc family implementation so sbrk()'ing to get
    *  more memory would always fail anyway.
    */
-  rtems_malloc_sbrk_functions_t *rtems_malloc_sbrk_helpers =
-    #ifndef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-      NULL;
+  const rtems_heap_extend_handler rtems_malloc_extend_handler =
+    #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+      rtems_heap_extend_via_sbrk;
     #else
-      &rtems_malloc_sbrk_helpers_table;
+      rtems_heap_null_extend;
     #endif
 #endif
 
@@ -2318,7 +2318,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  This is the primary Configuration Table for this application.
    */
   rtems_configuration_table Configuration = {
-    NULL,                                     /* filled in by BSP */
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     CONFIGURE_STACK_SPACE_SIZE,               /* required stack space */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */

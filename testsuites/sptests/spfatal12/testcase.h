@@ -17,9 +17,8 @@
 
 void force_error()
 {
-  rtems_configuration_set_work_space_size( sizeof(void *) );
-  rtems_configuration_set_stack_space_size( 0 );
-  rtems_initialize_data_structures();
+  Heap_Area area = { .begin = NULL, .size = 0 };
 
+  _Workspace_Handler_initialization( &area, 1, NULL );
   /* we will not run this far */
 }

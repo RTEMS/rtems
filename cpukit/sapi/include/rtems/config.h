@@ -124,10 +124,6 @@ typedef void (*rtems_stack_free_hook)( void *addr );
  *     + required number of each object type for each API configured
  */
 typedef struct {
-  /** This field specifies the base address of the RTEMS Workspace.
-   */
-  void                          *work_space_start;
-
   /** This field specifies the size in bytes of the RTEMS Workspace.
    */
   uintptr_t                      work_space_size;
@@ -265,12 +261,6 @@ extern rtems_configuration_table  Configuration;
 
 #define rtems_configuration_set_stack_space_size( _size ) \
         do { Configuration.stack_space_size = (_size); } while (0)
-
-#define rtems_configuration_get_work_space_start() \
-        (Configuration.work_space_start)
-
-#define rtems_configuration_set_work_space_start( _start ) \
-        do { Configuration.work_space_start = (_start); } while (0)
 
 #define rtems_configuration_get_work_space_size() \
         (Configuration.work_space_size + \

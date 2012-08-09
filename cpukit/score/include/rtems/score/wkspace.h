@@ -36,19 +36,23 @@ extern "C" {
 #include <rtems/score/interr.h>
 
 /**
- * @brief Executive Workspace Control
+ *  @brief Executive workspace control.
  *
- *  The is the heap control structure that used to manage the
- *  RTEMS Executive Workspace.
+ *  This is the heap control structure used to manage the RTEMS Executive
+ *  Workspace.
  */
-SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
+SCORE_EXTERN Heap_Control _Workspace_Area;
 
 /**
  * @brief Workspace Handler Initialization
  *
  *  This routine performs the initialization necessary for this handler.
  */
-void _Workspace_Handler_initialization(void);
+void _Workspace_Handler_initialization(
+  Heap_Area *areas,
+  size_t area_count,
+  Heap_Initialization_or_extend_handler extend
+);
 
 /**
  * @brief Allocate Memory from Workspace

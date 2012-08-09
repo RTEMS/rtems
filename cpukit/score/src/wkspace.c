@@ -28,28 +28,69 @@
 /*
  *  _Workspace_Handler_initialization
  */
-void _Workspace_Handler_initialization(void)
+void _Workspace_Handler_initialization(
+  Heap_Area *areas,
+  size_t area_count,
+  Heap_Initialization_or_extend_handler extend
+)
 {
-  uintptr_t memory_available = 0;
-  void *starting_address = rtems_configuration_get_work_space_start();
-  uintptr_t size = rtems_configuration_get_work_space_size();
+  Heap_Initialization_or_extend_handler init_or_extend = _Heap_Initialize;
+  uintptr_t remaining = rtems_configuration_get_work_space_size();
+  bool do_zero = rtems_configuration_get_do_zero_of_workspace();
+  bool unified = rtems_configuration_get_unified_work_area();
+  uintptr_t page_size = CPU_HEAP_ALIGNMENT;
+  uintptr_t overhead = _Heap_Area_overhead( page_size );
+  size_t i;
 
-  if ( rtems_configuration_get_do_zero_of_workspace() )
-    memset( starting_address, 0, size );
+  for (i = 0; i < area_count; ++i) {
+    Heap_Area *area = &areas [i];
 
-  memory_available = _Heap_Initialize(
-    &_Workspace_Area,
-    starting_address,
-    size,
-    CPU_HEAP_ALIGNMENT
-  );
+    if ( do_zero ) {
+      memset( area->begin, 0, area->size );
+    }
 
-  if ( memory_available == 0 )
+    if ( area->size > overhead ) {
+      uintptr_t space_available;
+      uintptr_t size;
+
+      if ( unified ) {
+        size = area->size;
+      } else {
+        if ( remaining > 0 ) {
+          size = remaining < area->size - overhead ?
+            remaining + overhead : area->size;
+        } else {
+          size = 0;
+        }
+      }
+
+      space_available = (*init_or_extend)(
+        &_Workspace_Area,
+        area->begin,
+        size,
+        page_size
+      );
+
+      area->begin = (char *) area->begin + size;
+      area->size -= size;
+
+      if ( space_available < remaining ) {
+        remaining -= space_available;
+      } else {
+        remaining = 0;
+      }
+
+      init_or_extend = extend;
+    }
+  }
+
+  if ( remaining > 0 ) {
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
       true,
       INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
     );
+  }
 }
 
 /*

@@ -55,8 +55,7 @@ void *malloc(
   return_this = _Protected_heap_Allocate( RTEMS_Malloc_Heap, size );
 
   if ( !return_this ) {
-    if (rtems_malloc_sbrk_helpers)
-      return_this = (*rtems_malloc_sbrk_helpers->extend)( size );
+    return_this = (*rtems_malloc_extend_handler)( RTEMS_Malloc_Heap, size );
     if ( !return_this ) {
       errno = ENOMEM;
       return (void *) 0;

@@ -61,15 +61,15 @@
  *        for module code.
  */
 
-#include <rtems.h>
-
-#include <signal.h>
 #include <errno.h>
-#include <sys/types.h>
 #include <unistd.h>
 
-static void *           remaining_start=(void*)-1LL;
-static uintptr_t        remaining_size=0;
+#include <bsp/bootcard.h>
+
+#define INVALID_REMAINING_START ((uintptr_t) -1)
+
+static uintptr_t remaining_start = INVALID_REMAINING_START;
+static uintptr_t remaining_size = 0;
 
 /* App. may provide a value by defining the BSP_sbrk_policy
  * variable.
@@ -81,24 +81,24 @@ static uintptr_t        remaining_size=0;
  */
 extern uintptr_t        BSP_sbrk_policy __attribute__((weak));
 
-#define LIMIT_32M  ((void*)0x02000000)
+#define LIMIT_32M  0x02000000
 
-uintptr_t bsp_sbrk_init(
-  void              *heap_start,
-  uintptr_t         *heap_size_p
-)
+ptrdiff_t bsp_sbrk_init(Heap_Area *area, uintptr_t min_size)
 {
-  uintptr_t         rval=0;
+  uintptr_t         rval = 0;
   uintptr_t         policy;
+  uintptr_t         remaining_end;
 
-  remaining_start =  heap_start;
-  remaining_size  = *heap_size_p;
+  remaining_start = (uintptr_t) area->begin;
+  remaining_size  = area->size;
+  remaining_end   = remaining_start + remaining_size;
 
   if (remaining_start < LIMIT_32M &&
-      remaining_start + remaining_size > LIMIT_32M) {
+      remaining_end > LIMIT_32M &&
+      min_size <= LIMIT_32M - remaining_start) {
     /* clip at LIMIT_32M */
-    rval = remaining_start + remaining_size - LIMIT_32M;
-    *heap_size_p = LIMIT_32M - remaining_start;
+    rval = remaining_end - LIMIT_32M;
+    area->size = LIMIT_32M - remaining_start;
     remaining_start = LIMIT_32M;
     remaining_size  = rval;
   }
@@ -106,8 +106,8 @@ uintptr_t bsp_sbrk_init(
   policy = (0 == &BSP_sbrk_policy ? (uintptr_t)(-1) : BSP_sbrk_policy);
   switch ( policy ) {
       case (uintptr_t)(-1):
-        *heap_size_p    += rval;
-        remaining_start  = heap_start + *heap_size_p;
+        area->size      += rval;
+        remaining_start  = (uintptr_t) area->begin + area->size;
         remaining_size   = 0;
       break;
 
@@ -121,7 +121,7 @@ uintptr_t bsp_sbrk_init(
       break;
   }
 
-  return rval;
+  return (ptrdiff_t) (rval <= PTRDIFF_MAX ? rval : rval / 2);
 }
 
 /*
@@ -129,14 +129,13 @@ uintptr_t bsp_sbrk_init(
  * should just use the default implementation in this file.
  */
 void *sbrk(ptrdiff_t incr) __attribute__ (( weak, alias("bsp_sbrk") ));
-void *bsp_sbrk(ptrdiff_t incr)
+static void *bsp_sbrk(ptrdiff_t incr)
 {
   void *rval=(void*)-1;
 
-  /* FIXME: BEWARE if size >2G */
-  if ( remaining_start != (void*)-1LL && incr <= remaining_size) {
+  if ( remaining_start != INVALID_REMAINING_START && incr <= remaining_size) {
     remaining_size-=incr;
-    rval = remaining_start;
+    rval = (void *) remaining_start;
     remaining_start += incr;
   } else {
     errno = ENOMEM;

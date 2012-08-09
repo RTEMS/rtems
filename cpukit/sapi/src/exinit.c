@@ -111,12 +111,6 @@ void rtems_initialize_data_structures(void)
 
   _Thread_Dispatch_initialization();
 
-  /*
-   *  Before this is called, we are not allowed to allocate memory
-   *  from the Workspace because it is not initialized.
-   */
-  _Workspace_Handler_initialization();
-
   #if defined(RTEMS_SMP)
     _SMP_Handler_initialize();
   #endif

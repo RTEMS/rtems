@@ -64,41 +64,6 @@
 const char *bsp_boot_cmdline;
 
 /*
- *  These are the prototypes and helper routines which are used
- *  when the BSP lets the framework handle RAM allocation between
- *  the RTEMS Workspace and C Program Heap.
- */
-static void bootcard_bsp_libc_helper(
-  void      *work_area_start,
-  uintptr_t  work_area_size,
-  void      *heap_start,
-  uintptr_t  heap_size,
-  uintptr_t  sbrk_amount
-)
-{
-  if ( heap_start == BSP_BOOTCARD_HEAP_USES_WORK_AREA ) {
-    if ( !rtems_configuration_get_unified_work_area() ) {
-      uintptr_t work_space_size = rtems_configuration_get_work_space_size();
-
-      heap_start = (char *) work_area_start + work_space_size;
-
-      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
-        uintptr_t heap_size_default = work_area_size - work_space_size;
-
-        heap_size = heap_size_default;
-      }
-    } else {
-      heap_start = work_area_start;
-      if (heap_size == BSP_BOOTCARD_HEAP_SIZE_DEFAULT) {
-        heap_size = work_area_size;
-      }
-    }
-  }
-
-  bsp_libc_init(heap_start, heap_size, sbrk_amount);
-}
-
-/*
  *  This is the initialization framework routine that weaves together
  *  calls to RTEMS and the BSP in the proper sequence to initialize
  *  the system while maximizing shared code and keeping BSP code in C
@@ -109,12 +74,6 @@ uint32_t boot_card(
 )
 {
   rtems_interrupt_level  bsp_isr_level;
-  void                  *work_area_start = NULL;
-  uintptr_t              work_area_size = 0;
-  void                  *heap_start = NULL;
-  uintptr_t              heap_size = 0;
-  uintptr_t              sbrk_amount = 0;
-  uintptr_t              work_space_size = 0;
   uint32_t               status = 0;
 
   /*
@@ -138,74 +97,9 @@ uint32_t boot_card(
   bsp_start();
 
   /*
-   *  Find out where the block of memory the BSP will use for
-   *  the RTEMS Workspace and the C Program Heap is.
+   *  Initialize the RTEMS Workspace and the C Program Heap.
    */
-  bsp_get_work_area(&work_area_start, &work_area_size,
-                    &heap_start, &heap_size);
-
-#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-  /* This routine may reduce the work area size with the
-   * option to extend it later via sbrk(). If the application
-   * was configured w/o CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK then
-   * omit this step.
-   */
-  if ( rtems_malloc_sbrk_helpers ) {
-    sbrk_amount = bsp_sbrk_init(work_area_start, &work_area_size);
-    work_space_size = rtems_configuration_get_work_space_size();
-    if ( work_area_size <  work_space_size && sbrk_amount > 0 ) {
-      /* Need to use sbrk right now */
-      uintptr_t sbrk_now;
-
-      sbrk_now = (work_space_size - work_area_size) / sbrk_amount;
-      sbrk( sbrk_now * sbrk_amount );
-    }
-  }
-#else
-  if ( rtems_malloc_sbrk_helpers ) {
-    printk("Configuration error!\n"
-           "Application was configured with CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK\n"
-           "but BSP was configured w/o sbrk support\n");
-    status = 1;
-    bsp_cleanup( status );
-    return status;
-  }
-#endif
-
-  /*
-   *  If the user has configured a set of objects which will require more
-   *  workspace than is actually available, print a message indicating
-   *  such and return to the invoking initialization code.
-   *
-   *  NOTE: Output from printk() may not work at this point on some BSPs.
-   *
-   *  NOTE: Use cast to (void *) and %p since these are uintptr_t types.
-   */
-  work_space_size = rtems_configuration_get_work_space_size();
-  if ( work_area_size <= work_space_size ) {
-    printk(
-      "bootcard: work space too big for work area: %p >= %p\n",
-      (void *) work_space_size,
-      (void *) work_area_size
-    );
-    status = 1;
-    bsp_cleanup( status );
-    return status;
-  }
-
-  if ( !rtems_configuration_get_unified_work_area() ) {
-    rtems_configuration_set_work_space_start( work_area_start );
-  } else {
-    rtems_configuration_set_work_space_start( work_area_start );
-    rtems_configuration_set_work_space_size( work_area_size );
-    if ( !rtems_configuration_get_stack_allocator_avoids_work_space() ) {
-      rtems_configuration_set_stack_space_size( 0 );
-    }
-  }
-
-  #if (BSP_DIRTY_MEMORY == 1)
-    memset( work_area_start, 0xCF,  work_area_size );
-  #endif
+  bsp_work_area_initialize();
 
   /*
    *  Initialize RTEMS data structures
@@ -216,13 +110,7 @@ uint32_t boot_card(
    *  Initialize the C library for those BSPs using the shared
    *  framework.
    */
-  bootcard_bsp_libc_helper(
-    work_area_start,
-    work_area_size,
-    heap_start,
-    heap_size,
-    sbrk_amount
-  );
+  bsp_libc_init();
 
   /*
    *  Let the BSP do any required initialization now that RTEMS

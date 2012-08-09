@@ -9,6 +9,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/score/wkspace.h>
+
 /*
  *  Way too much stack space.  Should generate a fatal error
  *  on the init task create.
@@ -39,10 +41,16 @@ char Workspace[ 256 ] CPU_STRUCTURE_ALIGNMENT;
 
 void force_error()
 {
-  rtems_configuration_set_work_space_start( Workspace );
-  rtems_configuration_set_work_space_size( sizeof(Workspace) );
+  Heap_Area area = {
+    .begin = Workspace,
+    .size = sizeof( Workspace )
+  };
+
+  rtems_configuration_set_work_space_size( 0 );
   rtems_configuration_set_stack_space_size( 0 );
 
-  rtems_initialize_data_structures();;
+  _Workspace_Handler_initialization( &area, 1, NULL );
+
+  _Workspace_Allocate_or_fatal_error( 2 * sizeof( Workspace ) );
   /* we will not run this far */
 }

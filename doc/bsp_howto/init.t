@@ -147,34 +147,29 @@ The @code{boot_card()} routine performs the following functions:
 
 @item It disables processor interrupts.
 
-@item It sets the global program name and command line argument variables
+@item It sets the command line argument variables
 for later use by the application.
-
-@item If the macro is BSP_BOOTCARD_HANDLES_RAM_ALLOCATION is defined, it
-will invoke the BSP specific @code{bsp_get_work_area} function to obtain
-information on the amount and location of BSP RAM that is available to
-be allocated to the C Program Heap and RTEMS Workspace.  If the amount
-of memory available for the RTEMS Workspace is less than that required
-by the application (e.g. @code{rtems_configuration_get_work_space_size()},
-then a message is printed using @code{printk}, @code{bsp_cleanup} is
-invoked, and -1 is return to the assembly language start code.  BSPs which
-use this memory allocation functionality in @code{bootcard.c}
-must invoke the RTEMS specific autoconf macro
-@code{RTEMS_BSP_BOOTCARD_HANDLES_RAM_ALLOCATION} in the BSP's
-@code{configure.ac} file.
 
 @item It invokes the BSP specific routine @code{bsp_start()} which is
 written in C and thus able to perform more advanced initialization.
 Often MMU and bus initialization occurs here.
+
+@item It invokes the BSP specific routine @code{bsp_work_area_initialize()}
+which is supposed to initialize the RTEMS Workspace and the C Program Heap.
+Usually the default implementation in
+@code{c/src/lib/libbsp/shared/bspgetworkarea.c} should be sufficient.  Custom
+implementations can use @code{bsp_work_area_initialize_default()} or
+@code{bsp_work_area_initialize_with_table()} available as inline functions from
+@code{#include <bsp/bootcard.h>}.
 
 @item It invokes the RTEMS directive
 @code{rtems_initialize_data_structures()} to initialize the RTEMS
 executive to a state where objects can be created but tasking is not
 enabled.
 
-@item If the macro is BSP_BOOTCARD_HANDLES_RAM_ALLOCATION is defined,
-it will calculate the memory available for the C Program Heap and invoke
-the initialization routine for the C Library with this information.
+@item It invokes the BSP specific routine @code{bsp_libc_init()} to initialize
+the C Library.  Usually the default implementation in
+@code{c/src/lib/libbsp/shared/bsplibc.c} should be sufficient.
 
 @item It invokes the BSP specific routine @code{bsp_pretasking_hook}. On
 most BSPs which utilize the framework, this routine does nothing.
@@ -188,9 +183,7 @@ thread in a multiprocessor configuration and execute API specific
 extensions.
 
 @item It invokes the BSP specific routine @code{bsp_predriver_hook}. For
-most BSPs, the implementation of this routine does nothing.  However,
-on some BSPs, required subsystems which utilize the C Library
-(e.g. @code{malloc} in particular) may be initialized at this point.
+most BSPs, the implementation of this routine does nothing.
 
 @item It invokes the RTEMS directive
 @code{rtems_initialize_device_drivers()} to initialize the statically
@@ -255,28 +248,13 @@ routine.
 
 @subsection RTEMS Pretasking Callback
 
-The method @code{bsp_pretasking_hook()} is the BSP specific routine
-invoked once RTEMS API initialization is complete but before interrupts
-and tasking are enabled.  No tasks -- not even the IDLE task -- have
-been created when this hook is invoked.  The pretasking hook is optional
+The method @code{bsp_pretasking_hook()} is the BSP specific routine invoked
+once RTEMS API initialization is complete but before interrupts and tasking are
+enabled.  The idle thread exists at this time.  The pretasking hook is optional
 and the user may use the shared version.
 
-The @code{bsp_pretasking_hook()} routine is the appropriate place to
-initialize any support components which depend on the RTEMS APIs.
-Older BSPs that do not take full advantage of @code{boot_card()}
-may initialize the RTEMS C Library in their implementation of
-@code{bsp_pretasking_hook()}.  This initialization includes the
-application heap used by the @code{malloc} family of routines as well
-as the reentrancy support for the C Library.
-
-The routine @code{bsp_libc_init} routine invoked from the
-either @code{boot_card()} or (less preferable) the BSP specific
-@code{bsp_pretasking_hook()} routine is passed the starting address,
-length, and growth amount passed to @code{sbrk}.  This "sbrk amount"
-is only used if the heap runs out of memory.  In this case, the RTEMS
-malloc implementation will invoked @code{sbrk} to obtain more memory.
-See @ref{Miscellaneous Support Files sbrk() Implementation} for more
-details.
+The @code{bsp_pretasking_hook()} routine is the appropriate place to initialize
+any BSP specific support components which depend on the RTEMS APIs.
 
 @subsection RTEMS Predriver Callback
 

@@ -30,13 +30,19 @@
 #include <rtems/confdefs.h>
 /* end of configuration */
 
+#ifndef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+void *rtems_heap_null_extend(
+  Heap_Control *heap,
+  size_t alloc_size
+)
+{
+  return rtems_heap_extend_via_sbrk( heap, alloc_size );
+}
+#endif
+
 char Malloc_Heap[ 128 ] CPU_STRUCTURE_ALIGNMENT;
 int sbrk_count;
-Heap_Control Heap_Holder;
 Heap_Control TempHeap;
-
-/* Heap variables we need to peek and poke at */
-extern size_t  RTEMS_Malloc_Sbrk_amount;
 
 size_t offset;
 
@@ -66,7 +72,8 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  Heap_Control *TempHeap;
+  Heap_Control *real_heap;
+  Heap_Area area;
 
   sbrk_count = 0;
   offset     = 0;
@@ -74,21 +81,26 @@ rtems_task Init(
   puts( "\n\n*** TEST MALLOC 04 ***" );
 
   /* Safe information on real heap */
-  TempHeap = malloc_get_heap_pointer();
-  Heap_Holder = *TempHeap;
-  rtems_malloc_sbrk_helpers = &rtems_malloc_sbrk_helpers_table;
+  real_heap = malloc_get_heap_pointer();
+  malloc_set_heap_pointer( &TempHeap );
+
+  rtems_heap_set_sbrk_amount( 64 );
 
   puts( "Initialize heap with some memory" );
   offset     = 64;
   sbrk_count = 0;
-  RTEMS_Malloc_Initialize( Malloc_Heap, 64, 64 );
+  area.begin = &Malloc_Heap [0];
+  area.size = 64;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
   p1 = malloc(64);
   p2 = malloc(64);
   p3 = malloc(48);
   p4 = malloc(48);
   
   puts( "Initialize heap with some memory - return address out of heap" );
-  RTEMS_Malloc_Initialize( &Malloc_Heap[1], 64, 64 );
+  area.begin = &Malloc_Heap [1];
+  area.size = 64;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
   offset     = 64;
   sbrk_count = -1;
   p1 = malloc( 127 );
@@ -96,18 +108,21 @@ rtems_task Init(
   rtems_test_assert( errno == ENOMEM );
   
 
-  RTEMS_Malloc_Initialize( Malloc_Heap, 64, 64 );
+  area.begin = &Malloc_Heap [0];
+  area.size = 64;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
   puts( "Initialize heap with some unaligned memory" );
   offset     = 65;
   sbrk_count = 0;
-  RTEMS_Malloc_Initialize( &Malloc_Heap[1], 64, 64 );
+  area.begin = &Malloc_Heap [1];
+  area.size = 64;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
   p1 = malloc(64);
   p2 = malloc(64);
   p3 = malloc(48);
 
   /* Restore information on real heap */
-  malloc_set_heap_pointer( TempHeap );
-  rtems_malloc_sbrk_helpers = NULL;
+  malloc_set_heap_pointer( real_heap );
 
   puts( "*** END OF TEST MALLOC 04 ***" );
 
