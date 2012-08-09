@@ -71,12 +71,6 @@ void _BSP_Fatal_error(unsigned int v)
   __asm__ __volatile ("sc");
 }
 
-/*
- *  Use the shared implementations of the following routines
- */
-
-void bsp_libc_init( void *, uint32_t, int );
-
 /*PAGE
  *
  *  bsp_predriver_hook
