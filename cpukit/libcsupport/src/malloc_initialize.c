@@ -49,11 +49,6 @@ void RTEMS_Malloc_Initialize(
   }
 
   /*
-   *  Initialize the garbage collection list to start with nothing on it.
-   */
-  malloc_deferred_frees_initialize();
-
-  /*
    *  Initialize the optional sbrk support for extending the heap
    */
   if ( rtems_malloc_sbrk_helpers != NULL ) {

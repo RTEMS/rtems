@@ -38,6 +38,5 @@ extern rtems_malloc_statistics_t rtems_malloc_statistics;
  *  Process deferred free operations
  */
 bool malloc_is_system_state_OK(void);
-void malloc_deferred_frees_initialize(void);
 void malloc_deferred_frees_process(void);
 void malloc_deferred_free(void *);
