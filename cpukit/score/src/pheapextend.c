@@ -28,12 +28,11 @@ bool _Protected_heap_Extend(
   uintptr_t     size
 )
 {
-  bool      extend_ok;
   uintptr_t amount_extended;
 
   _RTEMS_Lock_allocator();
-    extend_ok = _Heap_Extend(the_heap, starting_address, size, &amount_extended);
+    amount_extended = _Heap_Extend( the_heap, starting_address, size, 0 );
   _RTEMS_Unlock_allocator();
-  return extend_ok;
-}
 
+  return amount_extended != 0;
+}

@@ -984,6 +984,12 @@ static void test_heap_extend(void)
   test_heap_assert( ret, true );
 }
 
+static void test_heap_no_extend(void)
+{
+  uintptr_t extended_space = _Heap_No_extend( NULL, 0, 0, 0 );
+  rtems_test_assert( extended_space == 0 );
+}
+
 static void test_heap_info(void)
 {
   size_t                  s1, s2;
@@ -1142,6 +1148,7 @@ rtems_task Init(
   test_realloc();
   test_heap_cases_1();
   test_heap_extend();
+  test_heap_no_extend();
   test_heap_info();
   test_protected_heap_info();
   test_rtems_heap_allocate_aligned_with_boundary();

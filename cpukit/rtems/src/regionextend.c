@@ -46,7 +46,6 @@ rtems_status_code rtems_region_extend(
 )
 {
   uintptr_t           amount_extended;
-  bool                extend_ok;
   Objects_Locations   location;
   rtems_status_code   return_status;
   Region_Control     *the_region;
@@ -61,14 +60,14 @@ rtems_status_code rtems_region_extend(
 
       case OBJECTS_LOCAL:
 
-        extend_ok = _Heap_Extend(
+        amount_extended = _Heap_Extend(
           &the_region->Memory,
           starting_address,
           length,
-          &amount_extended
+          0
         );
 
-        if ( extend_ok ) {
+        if ( amount_extended > 0 ) {
           the_region->length                += amount_extended;
           the_region->maximum_segment_size  += amount_extended;
           return_status = RTEMS_SUCCESSFUL;

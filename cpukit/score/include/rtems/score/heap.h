@@ -388,6 +388,33 @@ typedef enum {
 } Heap_Resize_status;
 
 /**
+ * @brief Heap area structure for table based heap initialization and
+ * extension.
+ *
+ * @see Heap_Initialization_or_extend_handler.
+ */
+typedef struct {
+  void *begin;
+  uintptr_t size;
+} Heap_Area;
+
+/**
+ * @brief Heap initialization and extend handler type.
+ *
+ * This helps to do a table based heap initialization and extension.  Create a
+ * table of Heap_Area elements and iterate through it.  Set the handler to
+ * _Heap_Initialize() in the first iteration and then to _Heap_Extend().
+ *
+ * @see Heap_Area, _Heap_Initialize(), _Heap_Extend(), or _Heap_No_extend().
+ */
+typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
+  Heap_Control *heap,
+  void *area_begin,
+  uintptr_t area_size,
+  uintptr_t page_size_or_unused
+);
+
+/**
  * @brief Gets the first and last block for the heap area with begin
  * @a heap_area_begin and size @a heap_area_size.
  *
@@ -419,6 +446,8 @@ bool _Heap_Get_first_and_last_block(
  * @c CPU_ALIGNMENT, it is aligned up to the nearest @c CPU_ALIGNMENT boundary.
  *
  * Returns the maximum memory available, or zero in case of failure.
+ *
+ * @see Heap_Initialization_or_extend_handler.
  */
 uintptr_t _Heap_Initialize(
   Heap_Control *heap,
@@ -431,22 +460,40 @@ uintptr_t _Heap_Initialize(
  * @brief Extends the memory available for the heap @a heap using the memory
  * area starting at @a area_begin of size @a area_size bytes.
  *
- * The extended space available for allocation will be returned in
- * @a amount_extended.  This pointer may be @c NULL.
- *
  * There are no alignment requirements.  The memory area must be big enough to
  * contain some maintainance blocks.  It must not overlap parts of the current
  * heap areas.  Disconnected subordinate heap areas will lead to used blocks
  * which cover the gaps.  Extending with an inappropriate memory area will
  * corrupt the heap.
  *
- * Returns @c true in case of success, and @c false otherwise.
+ * The unused fourth parameter is provided to have the same signature as
+ * _Heap_Initialize().
+ *
+ * Returns the extended space available for allocation, or zero in case of failure.
+ *
+ * @see Heap_Initialization_or_extend_handler.
  */
-bool _Heap_Extend(
+uintptr_t _Heap_Extend(
   Heap_Control *heap,
   void *area_begin,
   uintptr_t area_size,
-  uintptr_t *amount_extended
+  uintptr_t unused
+);
+
+/**
+ * @brief This function returns always zero.
+ *
+ * This function only returns zero and does nothing else.
+ *
+ * Returns always zero.
+ *
+ * @see Heap_Initialization_or_extend_handler.
+ */
+uintptr_t _Heap_No_extend(
+  Heap_Control *unused_0,
+  void *unused_1,
+  uintptr_t unused_2,
+  uintptr_t unused_3
 );
 
 /**
