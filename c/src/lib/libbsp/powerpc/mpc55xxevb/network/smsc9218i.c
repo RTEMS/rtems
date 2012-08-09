@@ -583,8 +583,6 @@ static void smsc9218i_receive_dma_done(
   ASSERT_SC(sc);
 
   jc->done = jc->produce;
-
-  smsc9218i_setup_receive_dma(e, regs, jc);
 }
 
 static void smsc9218i_transmit_dma_done(
@@ -655,11 +653,11 @@ static void smsc9218i_interrupt_handler(void *arg)
 
   /* Check receive interrupts */
   if ((int_sts & SMSC9218I_INT_RSFL) != 0) {
-    smsc9218i_receive_job_control *jc = &smsc_rx_jc;
-
     int_en &= ~SMSC9218I_INT_RSFL;
     ++e->receive_interrupts;
-    smsc9218i_setup_receive_dma(e, regs, jc);
+
+    sc = rtems_event_send(e->receive_task, SMSC9218I_EVENT_RX);
+    ASSERT_SC(sc);
   }
 
   /* Check PHY interrupts */
@@ -878,12 +876,16 @@ static void smsc9218i_receive_task(void *arg)
     rtems_event_set events;
 
     sc = rtems_bsdnet_event_receive(
-      SMSC9218I_EVENT_DMA | SMSC9218I_EVENT_PHY,
+      SMSC9218I_EVENT_DMA | SMSC9218I_EVENT_PHY | SMSC9218I_EVENT_RX,
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
     );
     ASSERT_SC(sc);
+
+    if ((events & (SMSC9218I_EVENT_RX | SMSC9218I_EVENT_DMA)) != 0) {
+      smsc9218i_setup_receive_dma(e, regs, jc);
+    }
 
     if ((events & SMSC9218I_EVENT_DMA) != 0) {
       smsc9218i_ether_input(e, regs, jc);
