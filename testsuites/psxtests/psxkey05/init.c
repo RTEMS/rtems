@@ -26,7 +26,6 @@ void *POSIX_Init(
 {
   pthread_key_t    key1, key2;
   int              sc, *value;
-  struct timespec  delay_request;
   int Data_array[2] = {1, 2};
 
   puts( "\n\n*** TEST KEY 05 ***" );

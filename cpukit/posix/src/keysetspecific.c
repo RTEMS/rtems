@@ -32,13 +32,12 @@ int pthread_setspecific(
   const void    *value
 )
 {
-  register POSIX_Keys_Control *the_key;
   Objects_Locations            location;
   POSIX_Keys_Rbtree_node      *rb_node;
   POSIX_API_Control           *api;
 
   /** _POSIX_Keys_Get() would call _Thread_Disable_dispatch() implicitly*/
-  the_key = _POSIX_Keys_Get( key, &location );
+  _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
