@@ -165,6 +165,14 @@ $(PROJECT_INCLUDE)/libcpu/memorymanagement.h: ../shared/include/memorymanagement
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/memorymanagement.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/memorymanagement.h
 
+$(PROJECT_INCLUDE)/libcpu/mmu_support.c: mpc6xx/mmu/mmu_support.c $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu_support.c
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu_support.c
+
+$(PROJECT_INCLUDE)/libcpu/pagetable_.c: mpc6xx/mmu/pagetable_.c $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/pagetable_.c
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/pagetable_.c
+
 $(PROJECT_INCLUDE)/libcpu/c_clock.h: mpc6xx/clock/c_clock.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/c_clock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/c_clock.h

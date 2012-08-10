@@ -10,9 +10,9 @@
 #include <rtems/rtems/status.h>
 #include <libcpu/memorymanagement.h>
 
-
-/*this is a mid level API used to operate page table 
- *mainly used by memory protect manager
+/* 
+ * this is a mid level API used to operate page table 
+ * mainly used by memory protect manager
  */
 
 /**

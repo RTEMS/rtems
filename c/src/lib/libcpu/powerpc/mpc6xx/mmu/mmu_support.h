@@ -1,10 +1,12 @@
-/*COPYRIGHT (c) 1989-2009.
-*  On-Line Applications Research Corporation (OAR).
-*  *
-*  *  The license and distribution terms for this file may be
-*  *  found in the file LICENSE in this distribution or at
-*  *  http://www.rtems.com/license/LICENSE.
-*  */
+/* 
+ * COPYRIGHT (c) 1989-2009.
+ * On-Line Applications Research Corporation (OAR).
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
+
 #ifndef _LIBCPU_MMU_SUPPORT_H
 #define _LIBCPU_MMU_SUPPORT_H
 
@@ -28,7 +30,8 @@
 #define _PPC_CACHE_UNGUARDED                    0x0
 
 /* Defining masks for the various bits of the PTE
- *    Referenced from OEA PowerPC Manual */
+ *    Referenced from OEA PowerPC Manual
+ */
 
 #define PTEW0_VALID            0x80000000
 #define PTEW0_VSID             0x7fffff80
@@ -72,11 +75,11 @@ typedef struct
 extern char RamBase[];
 extern char RamSize[];
 
-/* Function prototypes that can be shared with high
- *    level modules go in here */
-
-void
-mmu_irq_init(void);
+/* 
+ * @brief Function prototypes that can be shared with high
+ * level modules go in here 
+ * */
+void mmu_irq_init(void);
 
 extern ppc_bsp_mm_mpe* BSP_ppc_add_pte(ppc_bsp_mm_mpe *ppteg,
     ppc_bsp_mm_mpe *spteg,
@@ -88,7 +91,7 @@ extern ppc_bsp_mm_mpe* BSP_ppc_add_pte(ppc_bsp_mm_mpe *ppteg,
 
 void get_pteg_addr(ppc_bsp_mm_mpe** pteg, uint32_t hash);
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif
