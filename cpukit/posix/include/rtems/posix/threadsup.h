@@ -72,7 +72,7 @@ typedef struct {
   Chain_Control           Cancellation_Handlers;
   
   /** This is the thread key value chain's control */
-  Chain_Control          *the_chain;
+  Chain_Control          the_chain;
 
 } POSIX_API_Control;
 

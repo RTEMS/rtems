@@ -37,7 +37,6 @@ void *Test_Thread(
 )
 {
   int sc;
-  int *value;
 
   /**
    * Detach ourselves to release test thread's resource after thread exit.
