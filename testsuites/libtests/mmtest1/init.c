@@ -35,28 +35,39 @@ rtems_task Init(
   int i;
   unsigned char* a1;
   unsigned char* a2;
-  unsigned char* ppteg_addr;
-  unsigned char* spteg_addr;
   void * alut_search_addr1;
   void * alut_search_addr2;
   rtems_memory_management_entry *mpe;
-  a1 = (unsigned char *)0x00A10008;
-  a2 = (unsigned char *)0x000f0008; 
   
-  alut_search_addr1 = (char*) 0x00008111;
-  alut_search_addr2 = (char*) 0x00708111;
+  alut_search_addr1 = (char*) 0x00018000;
+  alut_search_addr2 = (char*) 0x01000000;
   
-  ppteg_addr = (unsigned char *) 0x00FF8000;
-  spteg_addr = (unsigned char *) 0x00FF7FC0;
-  
-  rtems_memory_management_region_descriptor r1 = {
-    .name = "test",
-    .base = 0x00,
-    .size = 2096
+  rtems_memory_management_region_descriptor r1 = { 
+    .name = "Valid Entry-1",
+    .base = 0x00010000,
+    .size = 0x200000
+  };
+  rtems_memory_management_region_descriptor r2 = {
+    .name = "Valid Entry-2",
+    .base = 0x00040000,
+    .size = 0x100000
+  };
+
+  rtems_memory_management_region_descriptor r3 = { 
+    .name = "faulty - size",
+    .base = 0x00050000,
+    .size = 0x00001001
+  };
+
+  rtems_memory_management_region_descriptor r4 = { 
+    .name = "faulty - overlapping",
+    .base = 0x00010000,
+    .size = 0x00010000
   };
 
 
-  puts( "\n\n*** mm ALUT TEST 1 BEGINS ***\n" );
+
+  puts( "\n\n*** LIBMM HIGH/MID LEVEL TEST BEGINS ***\n" );
   puts( "initialize the memory protect manager\n");
 
   rtems_memory_management_install_alut();
@@ -71,8 +82,8 @@ rtems_task Init(
   printf("ALUT created\n");
 
 
-  printf("Test 1 : Adding entry with block size less than 4K\n");
-  status = rtems_memory_management_create_entry(r1, &mpe);
+  printf("Test 1 : Adding entry with invalid block size\n");
+  status = rtems_memory_management_create_entry(r3, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry added\n");
   }
@@ -80,9 +91,8 @@ rtems_task Init(
     printf("Passed : Entry addition failed, status = %d\n",status);
   }
       
-  printf("Test 2 : Adding entry with block size not a multiple of 4K\n");  
-  r1.size = 0x00008FFF;
-  status = rtems_memory_management_create_entry(r1, &mpe);
+  printf("Test 2 : Adding entry with block size not a multiple of 2\n");  
+  status = rtems_memory_management_create_entry(r3, &mpe);
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Invalid block size and still entry successfully added\n");
   }
@@ -90,9 +100,7 @@ rtems_task Init(
     printf("Passed : Entry adding failed, status = %d\n",status);
   }
     
-  printf("Test 3 : Adding valid entry into ALUT with Read only attr\n");
-  r1.base = (void*)0x000f0000;
-  r1.size = 0x8000; 
+  printf("Test 3 : Adding valid Entry-1 into ALUT\n");
   status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Passed : Entry Added\n");
@@ -101,19 +109,28 @@ rtems_task Init(
     printf("Failed : Entry addition failed, status = %d\n",status);
   }
   
-  rtems_memory_management_install_entry(mpe);
+  printf("Test 4 : Installing Entry-1 into HW\n");
+  status = rtems_memory_management_install_entry(mpe);
 
-  status = rtems_memory_management_set_read_only(mpe);
   if(status == RTEMS_SUCCESSFUL){
-     printf("Passed: Setting Read only permissions = %d\n",status);
+     printf("Passed : Installing Entry-1 into HW = %d\n",status);
    }   
    else{
-     printf("Failed : to set Read only permissions = %d\n",status);
-   } 
-  printf("Test 4 : Adding overlapping  address value\n");
-  r1.base = (void*)0x000f1000;
-  r1.size = 0x4000;
-  status = rtems_memory_management_create_entry(r1, &mpe); 
+     printf("Failed : to Install Entry-1 into HW = %d\n",status);
+   }
+
+  printf("Test 5 : Set Read only for installed Entry-1 permissions \n");
+  status = rtems_memory_management_set_read_only(mpe); 
+
+  if(status == RTEMS_SUCCESSFUL){
+     printf("Passed : Set Read only permissions = %d\n",status);
+   }
+   else{
+     printf("Failed : to Set Read only permissions = %d\n",status);
+   }
+
+  printf("Test 6 : Adding overlapping  address value\n");
+  status = rtems_memory_management_create_entry(r4, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Addition passed inspite of address overlap\n");
   }
@@ -121,35 +138,39 @@ rtems_task Init(
     printf("Passed : Successful detection of address overlap and ignored, status = %d\n",status);
   }
 
-  printf("Test 5 : Adding valid entry\n");
-  r1.base = (void*)0x001f0000;
-  r1.size = 0x8000;
-  status = rtems_memory_management_create_entry(r1, &mpe); 
+  printf("Test 7 : Adding another valid Entry-2\n");
+
+  status = rtems_memory_management_create_entry(r2, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
-    printf("Passed: Entry successfully added, status = %d\n",status);
+    printf("Passed : Entry-2 successfully added, status = %d\n",status);
   }
   else{
     printf("Failed : Entry adding failed, status = %d\n",status);
   }
+  printf("Test 8 : Installing Entry-2 into HW\n");
+  status = rtems_memory_management_install_entry(mpe);
 
-  rtems_memory_management_install_entry(mpe);
-
-  printf("Test 6 : Adding valid entry\n");
-  r1.base = (void*)0x00008000;
-  r1.size = 0x8000;
-  status = rtems_memory_management_create_entry(r1, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
-      printf("Passed : Entry successfully added, status = %d\n",status);
-  }
-  else{
-    printf("Failed : Entry adding failed, status = %d\n",status);
-  }
+     printf("Passed : Installing Entry into HW = %d\n",status);
+   }
+   else{
+     printf("Failed : to Install Entry into HW = %d\n",status);
+   }
+  status = rtems_memory_management_install_entry(mpe);
 
-rtems_memory_management_install_entry(mpe);
+  printf("Test 9 : Set Write permission for installed Entry-2 \n");
+  status = rtems_memory_management_set_write(mpe);
+
+  if(status == RTEMS_SUCCESSFUL){
+     printf("Passed : Set Write permissions = %d\n",status);
+   }
+   else{
+     printf("Failed : to Set Write permissions = %d\n",status);
+   }
   /* Now that the ALUT is created and populated, start testing for 
    *  search operations over particular address values 
    */
-  printf("Test 7 : Get access attrbute for address 0x%x\n", alut_search_addr1);
+  printf("Test 10: Get access attributes for address 0x%x\n", alut_search_addr1);
   status = rtems_memory_management_find_entry(alut_search_addr1, &mpe); 
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
@@ -163,37 +184,13 @@ rtems_memory_management_install_entry(mpe);
   }
 
 
-  printf("Test 8 : Get attrbute for unmapped address 0x%x\n", alut_search_addr2);
+  printf("Test 11: Get attribute for unmapped address 0x%x\n", alut_search_addr2);
   status = rtems_memory_management_find_entry(alut_search_addr2, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Find the entry including this address in ALUT, status = %d\n",status);
   }
   else printf("Passed : Failed to find unmapped address in ALUT, status = %d\n",status);
-
-  printf("Checking mm exception 1:Read from Unmapped block \n");
-  for(i=0;i<16;i++){
-   printf("0x%x,  ",*a1++);
-   if(i%8 == 7)
-        printf("\n");
-  }
-  
-  printf("Checking mm exception 2: Write to Unmapped block  \n"); 
-  for(i=0;i<16;i++){
-   *a1++ = 0xCC;
-  }
-  
-  printf("Checking mm exception 3: Read from readonly block  \n");
-  for(i=0;i<16;i++){
-   printf("0x%x,  ",*a2++);
-   if(i%8 == 7)
-        printf("\n");
-  }
-
-  printf("Checking mm exception 4: Write to readonly block  \n");
-  for(i=0;i<16;i++){
-   *a2++ = 0xCC;
-  }
-
-  printf("Failed: this line should never be printed!!");
-  rtems_task_delete(RTEMS_SELF);
+  printf(  "\n\n*** LIBMM HIGH/MID LEVEL TEST ENDS ***\n" );
+  exit( 0 ); 
 }
+

@@ -1,22 +1,30 @@
-*** MMU ALUT TEST BEGINS ***
+*** LIBMM HIGH/MID LEVEL TEST BEGINS ***
 
+initialize the memory protect manager
 
-Installing TLB Miss Exception handler
 ALUT created
-Adding entry with block size less than 4K
-Entry addition failed
-Adding entry with block size not a multiple of 4K
-Entry adding failed
-Adding valid entry into ALUT
-Entry Added
-Adding overlapping  address value
-Successful detection of address overlap and ignored
-Adding entry
-Entry successfully added
-Searching for access attrbute for address 0x00008111...
-Access Attribute for the request is 1
-Searching for access attrbute for address 0x00708111...
-Unmapped address' access requested
+Test 1 : Adding entry with invalid block size
+Passed : Entry addition failed, status = 10
+Test 2 : Adding entry with block size not a multiple of 2
+Passed : Entry adding failed, status = 10
+Test 3 : Adding valid Entry-1 into ALUT
+Passed : Entry Added
+Test 4 : Installing Entry-1 into HW
+Passed : Installing Entry-1 into HW = 0
+Test 5 : Set Read only for installed Entry-1 permissions 
+Passed : Set Read only permissions = 0
+Test 6 : Adding overlapping  address value
+Passed : Successful detection of address overlap and ignored, status = 9
+Test 7 : Adding another valid Entry-2
+Failed : Entry adding failed, status = 9
+Test 8 : Installing Entry-2 into HW
+Passed : Installing Entry into HW = 0
+Test 9 : Set Write permission for installed Entry-2 
+Passed : Set Write permissions = 0
+Test 10: Get access attributes for address 0x18000
+Passed :the size of the entry including the request address is 0x200000
+Test 11: Get attribute for unmapped address 0x1000000
+Passed : Failed to find unmapped address in ALUT, status = 13
 
 
-*** MMU ALUT TEST ENDS ***
+*** LIBMM HIGH/MID LEVEL TEST ENDS ***
