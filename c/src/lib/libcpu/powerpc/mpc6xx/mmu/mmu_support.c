@@ -23,6 +23,8 @@ SPR_RO(PPC_DAR);
 SPR_RW(SDR1);
 SPR_RO(DSISR);
 
+uint32_t BSP_MAX_ARENA = 64;
+
 static int pte_counter = 5;
 
 static int search_empty_pte_slot(ppc_bsp_mm_mpe *pteg){

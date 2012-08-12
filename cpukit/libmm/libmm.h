@@ -29,11 +29,6 @@
 #endif
 
 /**
- * This should be configurable 
- */
-#define RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE 64
-
-/**
  * Define incomplete pointer to point to
  * bsp_mm_mpe defined at CPU code, the address 
  * is installed at CPU code when Installing an mpe 
@@ -64,7 +59,7 @@ typedef struct
  */
 typedef struct
 {
-  rtems_memory_management_entry entries[RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE];
+  rtems_memory_management_entry *entries;
   rtems_chain_control ALUT_mappings;
   rtems_chain_control ALUT_idle;
 } rtems_memory_management_alut;
