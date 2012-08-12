@@ -4,7 +4,7 @@
  *  This include file provides the application interface
  *  to atomic operations.
  *
- *  The low lever layer of the atomic interface is hidden from the application
+ *  The low-level layer of the atomic interface is hidden from the application
  *  and exists between the BSP and RTEMS.
  */
 

@@ -20,18 +20,18 @@
 
 #define TEST_REPEAT 200000
 
-#define ATOMIC_STORE_NO_BARRIER(TYPE, cpuid, mem_bar)    \
+#define ATOMIC_STORE_NO_BARRIER(NAME, TYPE, cpuid, mem_bar)    \
 {                                                        \
   Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
   unsigned int i;                                        \
-  _Atomic_Store_##TYPE(&a, t, mem_bar);                  \
+  _Atomic_Store_##NAME(&a, t, mem_bar);                  \
   rtems_test_assert(a == t);                             \
   for (i = 0; i < TEST_REPEAT; i++){                     \
     t = (Atomic_##TYPE)rand();                           \
-    _Atomic_Store_##TYPE(&a, t, mem_bar);                \
+    _Atomic_Store_##NAME(&a, t, mem_bar);                \
     rtems_test_assert(a == t);                           \
   }                                                      \
-  locked_printf("\nCPU%d _Atomic_Store_" #TYPE ": SUCCESS\n", cpuid); \
+  locked_printf("\nCPU%d _Atomic_Store_" #NAME ": SUCCESS\n", cpuid); \
 }
 
 rtems_task Test_task(
@@ -51,22 +51,22 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_STORE_NO_BARRIER(Int, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(Long, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(Pointer, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(Int32, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELAXED_BARRIER);
 
   /* test release barrier */
-  ATOMIC_STORE_NO_BARRIER(Int, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELEASE_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(Long, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELEASE_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(Pointer, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELEASE_BARRIER);
 
-  ATOMIC_STORE_NO_BARRIER(Int32, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELEASE_BARRIER);
 
 //  ATOMIC_STORE_NO_BARRIER(64, cpu_num);
 

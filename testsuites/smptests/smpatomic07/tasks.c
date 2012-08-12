@@ -20,7 +20,7 @@
 
 #define TEST_REPEAT 200000
 
-#define ATOMIC_CAS_NO_BARRIER(TYPE, cpuid, mem_bar)     \
+#define ATOMIC_CAS_NO_BARRIER(NAME, TYPE, cpuid, mem_bar)     \
 {                                                       \
   Atomic_##TYPE a = 0, b = 0;                           \
   unsigned int i;                                       \
@@ -28,25 +28,25 @@
   for (i = 0; i < TEST_REPEAT; i++){                    \
     a = rand() % (Atomic_##TYPE)-1;                     \
     b = a;                                              \
-    r = _Atomic_Compare_exchange_##TYPE(&b, a + 1, a - 1, mem_bar);                 \
+    r = _Atomic_Compare_exchange_##NAME(&b, a + 1, a - 1, mem_bar);                 \
     if(r != 0){                                                                     \
-      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": FAILED\n", cpuid); \
+      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #NAME ": FAILED\n", cpuid); \
       rtems_test_exit( 0 );                                                         \
     }                                                                               \
     b = a;                                                                          \
-    r = _Atomic_Compare_exchange_##TYPE(&b, a, a - 1, mem_bar);                     \
+    r = _Atomic_Compare_exchange_##NAME(&b, a, a - 1, mem_bar);                     \
     if((r == 0) ||((r != 0) && ((a - 1) != b))){                                    \
-      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": FAILED\n", cpuid); \
+      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #NAME ": FAILED\n", cpuid); \
       rtems_test_exit( 0 );                                                         \
     }                                                                               \
     b = a;                                                                          \
-    r = _Atomic_Compare_exchange_##TYPE(&b, a + 1, a, mem_bar);                     \
+    r = _Atomic_Compare_exchange_##NAME(&b, a + 1, a, mem_bar);                     \
     if(r != 0){                                                                     \
-      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": FAILED\n", cpuid); \
+      locked_printf("\nCPU%d _Atomic_Compare_exchange_" #NAME ": FAILED\n", cpuid); \
       rtems_test_exit( 0 );                                                         \
     }                                                                               \
   }                                                                                 \
-  locked_printf("\nCPU%d _Atomic_Compare_exchange_" #TYPE ": SUCCESS\n", cpuid);    \
+  locked_printf("\nCPU%d _Atomic_Compare_exchange_" #NAME ": SUCCESS\n", cpuid);    \
 }
 
 rtems_task Test_task(
@@ -66,31 +66,31 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_CAS_NO_BARRIER(Int, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Long, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Pointer, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELAXED_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Int32, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELAXED_BARRIER);
 
   /* test acquire barrier */
-  ATOMIC_CAS_NO_BARRIER(Int, cpu_num, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(int, Int, cpu_num, ATOMIC_ACQUIRE_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Long, cpu_num, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(long, Long, cpu_num, ATOMIC_ACQUIRE_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Pointer, cpu_num, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_ACQUIRE_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Int32, cpu_num, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(32, Int32, cpu_num, ATOMIC_ACQUIRE_BARRIER);
 
   /* test release barrier */
-  ATOMIC_CAS_NO_BARRIER(Int, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELEASE_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Long, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELEASE_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Pointer, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELEASE_BARRIER);
 
-  ATOMIC_CAS_NO_BARRIER(Int32, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELEASE_BARRIER);
 
 //  ATOMIC_CAS_NO_BARRIER(64, cpu_num);
 

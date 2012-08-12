@@ -18,7 +18,6 @@
 #ifndef _RTEMS_SCORE_ATOMIC_H
 #define _RTEMS_SCORE_ATOMIC_H
 
-#include <rtems/score/genericcpuatomic.h>
 #include <rtems/score/cpuatomic.h>
 
 #ifdef __cplusplus
@@ -33,7 +32,7 @@ extern "C" {
 /**@{*/
 
 /**
- * @brief the enumeration ATOMIC_memory_barrier specifies the detailed regular
+ * @brief the enumeration Atomic_Memory_barrier specifies the detailed regular
  * memory synchronization operations used in the atomic operation API 
  * definitions.  
  */
@@ -54,7 +53,7 @@ typedef enum {
 
 /**
  * @brief Atomically load an atomic type value from address @a address with
- * a type of ATOMIC_memory_barrier @a memory_barrier. The @a memory_barrier
+ * a type of Atomic_Memory_barrier @a memory_barrier. The @a memory_barrier
  * shall not be ATOMIC_RELEASE_BARRIER.
  */
 RTEMS_INLINE_ROUTINE Atomic_Int _Atomic_Load_int(
@@ -80,7 +79,7 @@ RTEMS_INLINE_ROUTINE Atomic_Int64 _Atomic_Load_64(
 
 /**
  * @brief Atomically store an atomic type value @a value into address @a 
- * address with a type of ATOMIC_memory_barrier @a memory_barrier. The @a 
+ * address with a type of Atomic_Memory_barrier @a memory_barrier. The @a 
  * memory_barrier shall not be ATOMIC_ACQUIRE_BARRIER.
  */
 RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
@@ -111,7 +110,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Store_64(
 
 /**
  * @brief Atomically load-add-store an atomic type value @a value into address
- * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
+ * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
  */
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_int(
   volatile Atomic_Int *address,
@@ -141,7 +140,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_64(
 
 /**
  * @brief Atomically load-sub-store an atomic type value @a value into address
- * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
+ * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
  */
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_int(
   volatile Atomic_Int *address,
@@ -171,7 +170,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_64(
 
 /**
  * @brief Atomically load-or-store an atomic type value @a value into address
- * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
+ * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
  */
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_int(
   volatile Atomic_Int *address,
@@ -201,7 +200,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_64(
 
 /**
  * @brief Atomically load-and-store an atomic type value @a value into address
- * @a address with a type of ATOMIC_memory_barrier @a memory_barrier.
+ * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
  */
 RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_int(
   volatile Atomic_Int *address,
@@ -233,7 +232,7 @@ RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_64(
  * @brief Atomically compare the value stored at @a address with @a 
  * old_value and if the two values are equal, update the value of @a 
  * address with @a new_value. Returns zero if the compare failed, 
- * nonzero otherwise. The operation uses a type of ATOMIC_memory_barrier
+ * nonzero otherwise. The operation uses a type of Atomic_Memory_barrier
  * @a memory_barrier.
  */
 RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_int(

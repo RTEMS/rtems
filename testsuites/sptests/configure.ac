@@ -105,6 +105,13 @@ sp75/Makefile
 sp76/Makefile
 sp2038/Makefile
 spassoc01/Makefile
+spatomic01/Makefile
+spatomic02/Makefile
+spatomic03/Makefile
+spatomic04/Makefile
+spatomic05/Makefile
+spatomic06/Makefile
+spatomic07/Makefile
 spcbssched01/Makefile
 spcbssched02/Makefile
 spcbssched03/Makefile

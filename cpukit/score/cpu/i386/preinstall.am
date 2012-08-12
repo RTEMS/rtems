@@ -51,7 +51,7 @@ $(PROJECT_INCLUDE)/rtems/score/idtr.h: rtems/score/idtr.h $(PROJECT_INCLUDE)/rte
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/idtr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/idtr.h
 
-$(PROJECT_INCLUDE)/rtems/score/atomic_cpu.h: rtems/score/atomic_cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic_cpu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic_cpu.h
+$(PROJECT_INCLUDE)/rtems/score/cpuatomic.h: rtems/score/cpuatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
 

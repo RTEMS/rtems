@@ -21,7 +21,6 @@ rtems_task Init(
 {
   int                i;
   char               ch;
-  int                cpu_num;
   rtems_id           id;
   rtems_status_code  status;
   bool               allDone;
@@ -54,7 +53,6 @@ rtems_task Init(
     );
     directive_failed( status, "task create" );
 
-    cpu_num = bsp_smp_processor_id();
     status = rtems_task_start( id, Test_task, i+1 );
     directive_failed( status, "task start" );
   }

@@ -8,7 +8,7 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  spatomic01
+test set name:  smpatomic01
 
 directives:
 
