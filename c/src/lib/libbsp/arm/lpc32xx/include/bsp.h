@@ -136,7 +136,7 @@ uint32_t lpc32xx_hclk(void);
 
 uint32_t lpc32xx_arm_clk(void);
 
-uint32_t lpc32xx_dram_clk(void);
+uint32_t lpc32xx_ddram_clk(void);
 
 typedef enum {
   LPC32XX_NAND_CONTROLLER_NONE,

@@ -118,23 +118,23 @@ uint32_t lpc32xx_arm_clk(void)
   return arm_clk;
 }
 
-uint32_t lpc32xx_dram_clk(void)
+uint32_t lpc32xx_ddram_clk(void)
 {
   uint32_t hclkdiv_ctrl = LPC32XX_HCLKDIV_CTRL;
   uint32_t div = HCLK_DIV_DDRAM_CLK_GET(hclkdiv_ctrl);
-  uint32_t dram_clk = 0;
+  uint32_t ddram_clk = 0;
 
   if (div != 0) {
     uint32_t pwr_ctrl = LPC32XX_PWR_CTRL;
 
     if ((pwr_ctrl & PWR_NORMAL_RUN_MODE) != 0) {
-      dram_clk = lpc32xx_hclkpll_clk();
+      ddram_clk = lpc32xx_hclkpll_clk();
     } else {
-      dram_clk = lpc32xx_sysclk();
+      ddram_clk = lpc32xx_sysclk();
     }
 
-    dram_clk /= div;
+    ddram_clk /= div;
   }
 
-  return dram_clk;
+  return ddram_clk;
 }
