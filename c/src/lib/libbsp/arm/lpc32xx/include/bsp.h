@@ -115,7 +115,7 @@ static inline void lpc32xx_micro_seconds_delay(unsigned us)
   #define LPC32XX_HCLKPLL_CTRL_INIT_VALUE \
     (HCLK_PLL_POWER | HCLK_PLL_DIRECT | HCLK_PLL_M(16 - 1))
   #define LPC32XX_HCLKDIV_CTRL_INIT_VALUE \
-    (HCLK_DIV_HCLK(2 - 1) | HCLK_DIV_PERIPH_CLK(16 - 1) | HCLK_DIV_DDRAM_CLK(1))
+    (HCLK_DIV_HCLK(2 - 1) | HCLK_DIV_PERIPH_CLK(16 - 1) | HCLK_DIV_DDRAM_CLK(0))
 #else
   #error "unexpected main oscillator frequency"
 #endif
