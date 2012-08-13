@@ -177,7 +177,8 @@ extern uint32_t lpc32xx_magic_zero_size [];
    *
    * The usage is application specific.
    */
-  extern uint8_t lpc32xx_scratch_area [LPC32XX_SCRATCH_AREA_SIZE];
+  extern uint8_t lpc32xx_scratch_area [LPC32XX_SCRATCH_AREA_SIZE]
+    __attribute__((aligned(32)));
 #endif
 
 #define LPC32XX_DO_STOP_GPDMA \
