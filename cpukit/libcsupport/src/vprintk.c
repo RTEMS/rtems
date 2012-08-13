@@ -55,7 +55,7 @@ void vprintk(
     char c;
 
     if (*fmt != '%') {
-      BSP_output_char(*fmt);
+      rtems_putc(*fmt);
       continue;
     }
     fmt++;
@@ -80,7 +80,7 @@ void vprintk(
     if ( c == 'c' ) {
       /* need a cast here since va_arg() only takes fully promoted types */
       char chr = (char) va_arg(ap, int);
-      BSP_output_char(chr);
+      rtems_putc(chr);
       continue;
     }
     if ( c == 's' ) {
@@ -100,7 +100,7 @@ void vprintk(
       /* leading spaces */
       if ( !minus )
         for ( i=len ; i<width ; i++ )
-          BSP_output_char(' ');
+          rtems_putc(' ');
 
       /* no width option */
       if (width == 0) {
@@ -109,12 +109,12 @@ void vprintk(
 
       /* output the string */
       for ( i=0 ; i<width && *str ; str++ )
-        BSP_output_char(*str);
+        rtems_putc(*str);
 
       /* trailing spaces */
       if ( minus )
         for ( i=len ; i<width ; i++ )
-          BSP_output_char(' ');
+          rtems_putc(' ');
 
       continue;
     }
@@ -132,7 +132,7 @@ void vprintk(
     } else if ( c == 'p' ) {
       base = 16; sign = false; lflag = true;
     } else {
-      BSP_output_char(c);
+      rtems_putc(c);
       continue;
     }
 
@@ -166,7 +166,7 @@ static void printNum(
   char toPrint[20];
 
   if ( sign && (num <  0) ) {
-    BSP_output_char('-');
+    rtems_putc('-');
     unsigned_num = (unsigned long) -num;
     if (maxwidth) maxwidth--;
   } else {
@@ -181,9 +181,9 @@ static void printNum(
   toPrint[count++] = (char) unsigned_num;
 
   for (n=maxwidth ; n > count; n-- )
-    BSP_output_char(lead);
+    rtems_putc(lead);
 
   for (n = 0; n < count; n++) {
-    BSP_output_char("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
+    rtems_putc("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
   }
 }

@@ -53,6 +53,7 @@ extern int getchark(void);
 extern void vprintk(const char *fmt, va_list ap);
 extern void printk(const char *fmt, ...);
 extern void putk(const char *s);
+extern void rtems_putc(char c);
 
 /*
  *  This routine is passed into RTEMS reporting functions
