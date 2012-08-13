@@ -53,7 +53,7 @@ rtems_status_code rtems_memory_management_install_alut(void) {
   _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
   
   int i;
-  for( i = 0; i < RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE; i++)
+  for( i = 0; i < BSP_MAX_ARENA; i++)
   {
     the_alut->entries[i].region.size = 0;
     the_alut->entries[i].region.base = (void*)0;
