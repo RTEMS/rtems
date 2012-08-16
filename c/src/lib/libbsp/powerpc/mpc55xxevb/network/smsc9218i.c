@@ -776,6 +776,7 @@ static void smsc9218i_new_mbuf(
 static void smsc9218i_init_receive_jobs(
   smsc9218i_driver_entry *e,
   volatile smsc9218i_registers *regs,
+  volatile smsc9218i_registers *regs_dma,
   smsc9218i_receive_job_control *jc
 )
 {
@@ -795,7 +796,7 @@ static void smsc9218i_init_receive_jobs(
     struct tcd_t *tcd = &jc->tcd_table [i];
     struct tcd_t *next_tcd = &jc->tcd_table [(i + 1) % SMSC9218I_RX_JOBS];
 
-    tcd->SADDR = (uint32_t) &regs->rx_fifo_data;
+    tcd->SADDR = (uint32_t) &regs_dma->rx_fifo_data;
     tcd->SDF.B.SSIZE = 0x2;
     tcd->SDF.B.DSIZE = 0x2;
     tcd->CDF.B.CITER = 1;
@@ -846,9 +847,10 @@ static void smsc9218i_receive_task(void *arg)
   smsc9218i_receive_job_control *jc = &smsc_rx_jc;
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) arg;
   volatile smsc9218i_registers *const regs = smsc9218i;
+  volatile smsc9218i_registers *const regs_dma = smsc9218i_dma;
   uint32_t mac_cr = 0;
 
-  smsc9218i_init_receive_jobs(e, regs, jc);
+  smsc9218i_init_receive_jobs(e, regs, regs_dma, jc);
 
   /* Configure receiver */
   regs->rx_cfg = SMSC9218I_RX_CFG_END_ALIGN_4
@@ -1335,6 +1337,7 @@ static void smsc9218i_transmit_task(void *arg)
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) arg;
   struct ifnet *ifp = &e->arpcom.ac_if;
   volatile smsc9218i_registers *const regs = smsc9218i;
+  volatile smsc9218i_registers *const regs_dma = smsc9218i_dma;
   uint32_t mac_cr = 0;
   smsc9218i_transmit_job_control *jc = &smsc_tx_jc;
   unsigned i = 0;
@@ -1362,11 +1365,12 @@ static void smsc9218i_transmit_task(void *arg)
     tcd.SDF.B.DSIZE = 2;
     tcd.CDF.B.CITER = 1;
     tcd.BMF.R = SMSC9218I_TCD_BMF_LINK;
-    tcd.DADDR = (uint32_t) &regs->tx_fifo_data;
 
+    tcd.DADDR = (uint32_t) &regs_dma->tx_fifo_data;
     tcd.DLAST_SGA = (int32_t) next_command_tcd;
     *data_tcd = tcd;
 
+    tcd.DADDR = (uint32_t) &regs->tx_fifo_data;
     tcd.SADDR = (uint32_t) &jc->command_table [i].a;
     tcd.NBYTES = 8;
     tcd.DLAST_SGA = (int32_t) data_tcd;

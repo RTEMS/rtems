@@ -70,21 +70,25 @@ typedef struct {
  */
 #ifdef SMSC9218I_BIG_ENDIAN_SUPPORT
   volatile smsc9218i_registers *const smsc9218i =
+    (volatile smsc9218i_registers *) 0x3fff8000;
+  volatile smsc9218i_registers *const smsc9218i_dma =
     (volatile smsc9218i_registers *) 0x3fff8200;
 #else
   volatile smsc9218i_registers *const smsc9218i =
+    (volatile smsc9218i_registers *) 0x3fff8000;
+  volatile smsc9218i_registers *const smsc9218i_dma =
     (volatile smsc9218i_registers *) 0x3fff8000;
 #endif
 
 /** @} */
 
 #ifdef SMSC9218I_BIG_ENDIAN_SUPPORT
+  #define SMSC9218I_BIT_POS(pos) (pos)
+#else
   #define SMSC9218I_BIT_POS(pos) \
     ((pos) > 15 ? \
       ((pos) > 23 ? (pos) - 24 : (pos) - 8) \
         : ((pos) > 7 ? (pos) + 8 : (pos) + 24))
-#else
-  #define SMSC9218I_BIT_POS(pos) (pos)
 #endif
 
 #define SMSC9218I_FLAG(pos) \
@@ -105,13 +109,13 @@ typedef struct {
     | SMSC9218I_GET_FIELD_8(reg, pos))
 
 #ifdef SMSC9218I_BIG_ENDIAN_SUPPORT
+  #define SMSC9218I_SWAP(val) (val)
+#else
   #define SMSC9218I_SWAP(val) \
     ((((val) >> 24) & 0xff) \
       | ((((val) >> 16) & 0xff) << 8) \
       | ((((val) >> 8) & 0xff) << 16) \
       | (((val) & 0xff) << 24))
-#else
-  #define SMSC9218I_SWAP(val) (val)
 #endif
 
 /**
