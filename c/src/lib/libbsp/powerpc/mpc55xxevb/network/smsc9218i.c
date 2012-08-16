@@ -133,6 +133,13 @@ typedef enum {
   SMSC9218I_RUNNING
 } smsc9218i_state;
 
+static const char *const state_to_string [] = {
+  "NOT INITIALIZED",
+  "CONFIGURED",
+  "STARTED",
+  "RUNNING"
+};
+
 typedef struct {
   struct arpcom arpcom;
   struct rtems_mdio_info mdio;
@@ -223,69 +230,122 @@ static smsc9218i_driver_entry smsc9218i_driver_data = {
   }
 };
 
-static void smsc9218i_mac_wait(volatile smsc9218i_registers *regs)
+static rtems_interval smsc9218i_timeout_init(void)
 {
-  while ((regs->mac_csr_cmd & SMSC9218I_MAC_CSR_CMD_BUSY) != 0) {
-    /* Wait */
-  }
+  return rtems_clock_get_ticks_since_boot();
 }
 
-static void smsc9218i_mac_write(
+static bool smsc9218i_timeout_not_expired(rtems_interval start)
+{
+  rtems_interval elapsed = rtems_clock_get_ticks_since_boot() - start;
+
+  return elapsed < rtems_clock_get_ticks_per_second();
+}
+
+static bool smsc9218i_mac_wait(volatile smsc9218i_registers *regs)
+{
+  rtems_interval start = smsc9218i_timeout_init();
+  bool busy;
+
+  while (
+    (busy = (regs->mac_csr_cmd & SMSC9218I_MAC_CSR_CMD_BUSY) != 0)
+      && smsc9218i_timeout_not_expired(start)
+  ) {
+    /* Wait */
+  }
+
+  return !busy;
+}
+
+static bool smsc9218i_mac_write(
   volatile smsc9218i_registers *regs,
   uint32_t address,
   uint32_t data
 )
 {
-  smsc9218i_mac_wait(regs);
-  regs->mac_csr_data = SMSC9218I_SWAP(data);
-  regs->mac_csr_cmd = SMSC9218I_MAC_CSR_CMD_BUSY
-    | SMSC9218I_MAC_CSR_CMD_ADDR(address);
-  smsc9218i_mac_wait(regs);
+  bool ok = smsc9218i_mac_wait(regs);
+
+  if (ok) {
+    regs->mac_csr_data = SMSC9218I_SWAP(data);
+    regs->mac_csr_cmd = SMSC9218I_MAC_CSR_CMD_BUSY
+      | SMSC9218I_MAC_CSR_CMD_ADDR(address);
+    ok = smsc9218i_mac_wait(regs);
+  }
+
+  return ok;
 }
 
 static uint32_t smsc9218i_mac_read(
   volatile smsc9218i_registers *regs,
-  uint32_t address
+  uint32_t address,
+  bool *ok_ptr
 )
 {
   uint32_t mac_csr_data = 0;
+  bool ok = smsc9218i_mac_wait(regs);
 
-  smsc9218i_mac_wait(regs);
-  regs->mac_csr_cmd = SMSC9218I_MAC_CSR_CMD_BUSY
-    | SMSC9218I_MAC_CSR_CMD_READ
-    | SMSC9218I_MAC_CSR_CMD_ADDR(address);
-  smsc9218i_mac_wait(regs);
-  mac_csr_data = regs->mac_csr_data;
+  if (ok) {
+    regs->mac_csr_cmd = SMSC9218I_MAC_CSR_CMD_BUSY
+      | SMSC9218I_MAC_CSR_CMD_READ
+      | SMSC9218I_MAC_CSR_CMD_ADDR(address);
+    ok = smsc9218i_mac_wait(regs);
+
+    if (ok) {
+      mac_csr_data = regs->mac_csr_data;
+    }
+  }
+
+  if (ok_ptr != NULL) {
+    *ok_ptr = ok;
+  }
 
   return SMSC9218I_SWAP(mac_csr_data);
 }
 
-static void smsc9218i_phy_wait(volatile smsc9218i_registers *regs)
+static bool smsc9218i_phy_wait(volatile smsc9218i_registers *regs)
 {
-  uint32_t mac_mii_acc = 0;
+  rtems_interval start = smsc9218i_timeout_init();
+  uint32_t mac_mii_acc;
+  bool busy;
 
   do {
-    mac_mii_acc = smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_ACC);
-  } while ((mac_mii_acc & SMSC9218I_MAC_MII_ACC_BUSY) != 0);
+    mac_mii_acc = smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_ACC, NULL);
+  } while (
+    (busy = (mac_mii_acc & SMSC9218I_MAC_MII_ACC_BUSY) != 0)
+      && smsc9218i_timeout_not_expired(start)
+  );
+
+  return !busy;
 }
 
-static void smsc9218i_phy_write(
+static bool smsc9218i_phy_write(
   volatile smsc9218i_registers *regs,
   uint32_t address,
   uint32_t data
 )
 {
-  smsc9218i_phy_wait(regs);
-  smsc9218i_mac_write(regs, SMSC9218I_MAC_MII_DATA, data);
-  smsc9218i_mac_write(
-    regs,
-    SMSC9218I_MAC_MII_ACC,
-    SMSC9218I_MAC_MII_ACC_PHY_DEFAULT
-      | SMSC9218I_MAC_MII_ACC_BUSY
-      | SMSC9218I_MAC_MII_ACC_WRITE
-      | SMSC9218I_MAC_MII_ACC_ADDR(address)
-  );
-  smsc9218i_phy_wait(regs);
+  bool ok = smsc9218i_phy_wait(regs);
+
+  if (ok) {
+    ok = smsc9218i_mac_write(regs, SMSC9218I_MAC_MII_DATA, data);
+
+    if (ok) {
+      ok = smsc9218i_mac_write(
+        regs,
+        SMSC9218I_MAC_MII_ACC,
+        SMSC9218I_MAC_MII_ACC_PHY_DEFAULT
+          | SMSC9218I_MAC_MII_ACC_BUSY
+          | SMSC9218I_MAC_MII_ACC_WRITE
+          | SMSC9218I_MAC_MII_ACC_ADDR(address)
+      );
+
+      if (ok) {
+        ok = smsc9218i_phy_wait(regs);
+      }
+    }
+  }
+
+  return ok;
 }
 
 static uint32_t smsc9218i_phy_read(
@@ -302,24 +362,30 @@ static uint32_t smsc9218i_phy_read(
       | SMSC9218I_MAC_MII_ACC_ADDR(address)
   );
   smsc9218i_phy_wait(regs);
-  return smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_DATA);
+  return smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_DATA, NULL);
 }
 
-static void smsc9218i_enable_promiscous_mode(
+static bool smsc9218i_enable_promiscous_mode(
   volatile smsc9218i_registers *regs,
   bool enable
 )
 {
-  uint32_t flags = SMSC9218I_MAC_CR_RXALL | SMSC9218I_MAC_CR_PRMS;
-  uint32_t mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR);
+  bool ok;
+  uint32_t mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR, &ok);
 
-  if (enable) {
-    mac_cr |= flags;
-  } else {
-    mac_cr &= ~flags;
+  if (ok) {
+    uint32_t flags = SMSC9218I_MAC_CR_RXALL | SMSC9218I_MAC_CR_PRMS;
+
+    if (enable) {
+      mac_cr |= flags;
+    } else {
+      mac_cr &= ~flags;
+    }
+
+    ok = smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
   }
 
-  smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
+  return ok;
 }
 
 #if defined(DEBUG)
@@ -565,7 +631,6 @@ static void smsc9218i_receive_dma_done(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   smsc9218i_driver_entry *e = &smsc9218i_driver_data;
-  volatile smsc9218i_registers *const regs = smsc9218i;
   smsc9218i_receive_job_control *jc = &smsc_rx_jc;
 
   SMSC9218I_PRINTK(
@@ -736,7 +801,7 @@ static void smsc9218i_media_status_change(
   smsc9218i_enable_phy_interrupts(regs);
 
   media_ok = smsc9218i_media_status(e, &media);
-  mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR);
+  mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR, NULL);
   if (media_ok && (IFM_OPTIONS(media) & IFM_FDX) == 0) {
     mac_cr &= ~SMSC9218I_MAC_CR_FDPX;
   } else {
@@ -857,7 +922,7 @@ static void smsc9218i_receive_task(void *arg)
     | SMSC9218I_RX_CFG_DOFF(SMSC9218I_RX_DATA_OFFSET);
 
   /* Enable MAC receiver */
-  mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR);
+  mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR, NULL);
   mac_cr |= SMSC9218I_MAC_CR_RXEN;
   smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
 
@@ -1390,7 +1455,7 @@ static void smsc9218i_transmit_task(void *arg)
   regs->tx_cfg = SMSC9218I_TX_CFG_SAO | SMSC9218I_TX_CFG_ON;
 
   /* Enable MAC transmitter */
-  mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR) | SMSC9218I_MAC_CR_TXEN;
+  mac_cr = smsc9218i_mac_read(regs, SMSC9218I_MAC_CR, NULL) | SMSC9218I_MAC_CR_TXEN;
   smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
 
   /* Main event loop */
@@ -1467,36 +1532,51 @@ static void smsc9218i_test_macros(void)
 }
 #endif
 
-static void smsc9218i_wait_for_eeprom_access(volatile smsc9218i_registers *regs)
+static bool smsc9218i_wait_for_eeprom_access(
+  volatile smsc9218i_registers *regs
+)
 {
-  while ((regs->e2p_cmd & SMSC9218I_E2P_CMD_EPC_BUSY) != 0) {
+  rtems_interval start = smsc9218i_timeout_init();
+  bool busy;
+
+  while (
+    (busy = (regs->e2p_cmd & SMSC9218I_E2P_CMD_EPC_BUSY) != 0)
+      && smsc9218i_timeout_not_expired(start)
+  ) {
     /* Wait */
   }
+
+  return !busy;
 }
 
-static void smsc9218i_set_mac_address(
+static bool smsc9218i_set_mac_address(
   volatile smsc9218i_registers *regs,
   unsigned char address [6]
 )
 {
-  smsc9218i_mac_write(
+  bool ok = smsc9218i_mac_write(
     regs,
     SMSC9218I_MAC_ADDRL,
     ((uint32_t) address [3] << 24) | ((uint32_t) address [2] << 16)
       | ((uint32_t) address [1] << 8) | (uint32_t) address [0]
   );
-  smsc9218i_mac_write(
-    regs,
-    SMSC9218I_MAC_ADDRH,
-    ((uint32_t) address [5] << 8) | (uint32_t) address [4]
-  );
+
+  if (ok) {
+    ok = smsc9218i_mac_write(
+      regs,
+      SMSC9218I_MAC_ADDRH,
+      ((uint32_t) address [5] << 8) | (uint32_t) address [4]
+    );
+  }
+
+  return ok;
 }
 
 #if defined(DEBUG)
 static void smsc9218i_mac_address_dump(volatile smsc9218i_registers *regs)
 {
-  uint32_t low = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRL);
-  uint32_t high = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRH);
+  uint32_t low = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRL, NULL);
+  uint32_t high = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRH, NULL);
 
   printf(
     "MAC address: %02" PRIx32 ":%02" PRIx32 ":%02" PRIx32
@@ -1630,16 +1710,24 @@ static void smsc9218i_reset_signal_init(void)
   SIU.PCR [SMSC9218I_RESET_PIN].R = pcr.R;
 }
 
-static void smsc9218i_hardware_reset(volatile smsc9218i_registers *regs)
+static bool smsc9218i_hardware_reset(volatile smsc9218i_registers *regs)
 {
+  rtems_interval start = smsc9218i_timeout_init();
+  bool not_ready;
+
   smsc9218i_reset_signal_init();
   smsc9218i_reset_signal(false);
   rtems_bsp_delay(200);
   smsc9218i_reset_signal(true);
 
-  while ((regs->pmt_ctrl & SMSC9218I_PMT_CTRL_READY) == 0) {
+  while (
+    (not_ready = (regs->pmt_ctrl & SMSC9218I_PMT_CTRL_READY) == 0)
+      && smsc9218i_timeout_not_expired(start)
+  ) {
     /* Wait */
   }
+
+  return !not_ready;
 }
 
 static void smsc9218i_interface_init(void *arg)
@@ -1647,91 +1735,105 @@ static void smsc9218i_interface_init(void *arg)
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) arg;
   struct ifnet *ifp = &e->arpcom.ac_if;
   volatile smsc9218i_registers *const regs = smsc9218i;
+  bool ok = true;
 
   SMSC9218I_PRINTF("%s\n", __func__);
 
   if (e->state == SMSC9218I_CONFIGURED) {
-    smsc9218i_hardware_reset(regs);
+    ok = smsc9218i_hardware_reset(regs);
+    if (ok) {
+      e->state = SMSC9218I_NOT_INITIALIZED;
+    }
+  }
 
+  if (e->state == SMSC9218I_NOT_INITIALIZED) {
 #if defined(DEBUG)
-    /* Register dump */
     smsc9218i_register_dump(regs);
 #endif
 
     /* Set hardware configuration */
     regs->hw_cfg = SMSC9218I_HW_CFG_MBO | SMSC9218I_HW_CFG_TX_FIF_SZ(5);
 
-    /* MAC address */
-    smsc9218i_wait_for_eeprom_access(regs);
-    smsc9218i_set_mac_address(regs, e->arpcom.ac_enaddr);
+    ok = smsc9218i_wait_for_eeprom_access(regs);
+
+    if (ok) {
+      ok = smsc9218i_set_mac_address(regs, e->arpcom.ac_enaddr);
+
+      if (ok) {
 #if defined(DEBUG)
-    smsc9218i_mac_address_dump(regs);
+        smsc9218i_mac_address_dump(regs);
 #endif
 
-    /* Auto-negotiation advertisment */
-    smsc9218i_phy_write(
-      regs,
-      MII_ANAR,
-      ANAR_TX_FD | ANAR_TX | ANAR_10_FD | ANAR_10 | ANAR_CSMA
-    );
+        /* Auto-negotiation advertisment */
+        ok = smsc9218i_phy_write(
+          regs,
+          MII_ANAR,
+          ANAR_TX_FD | ANAR_TX | ANAR_10_FD | ANAR_10 | ANAR_CSMA
+        );
 
+        if (ok) {
 #ifdef SMSC9218I_ENABLE_LED_OUTPUTS
-    regs->gpio_cfg = SMSC9218I_HW_CFG_LED_1
-      | SMSC9218I_HW_CFG_LED_2
-      | SMSC9218I_HW_CFG_LED_3;
+          regs->gpio_cfg = SMSC9218I_HW_CFG_LED_1
+            | SMSC9218I_HW_CFG_LED_2
+            | SMSC9218I_HW_CFG_LED_3;
 #endif
 
-    /* Initialize interrupts */
-    smsc9218i_interrupt_init(e, regs);
+          smsc9218i_interrupt_init(e, regs);
 
-    /* Set MAC control */
-    smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, SMSC9218I_MAC_CR_FDPX);
+          /* Set MAC control */
+          ok = smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, SMSC9218I_MAC_CR_FDPX);
+          if (ok) {
+            /* Set FIFO interrupts */
+            regs->fifo_int = SMSC9218I_FIFO_INT_TDAL(32);
 
-    /* Set FIFO interrupts */
-    regs->fifo_int = SMSC9218I_FIFO_INT_TDAL(32);
+            /* Clear receive drop counter */
+            regs->rx_drop;
 
-    /* Clear receive drop counter */
-    regs->rx_drop;
+            /* Start receive task */
+            if (e->receive_task == RTEMS_ID_NONE) {
+              e->receive_task = rtems_bsdnet_newproc(
+                "ntrx",
+                4096,
+                smsc9218i_receive_task,
+                e
+              );
+            }
 
-    /* Start receive task */
-    if (e->receive_task == RTEMS_ID_NONE) {
-      e->receive_task = rtems_bsdnet_newproc(
-        "ntrx",
-        4096,
-        smsc9218i_receive_task,
-        e
-      );
-    }
+            /* Start transmit task */
+            if (e->transmit_task == RTEMS_ID_NONE) {
+              e->transmit_task = rtems_bsdnet_newproc(
+                "nttx",
+                4096,
+                smsc9218i_transmit_task,
+                e
+              );
+            }
 
-    /* Start transmit task */
-    if (e->transmit_task == RTEMS_ID_NONE) {
-      e->transmit_task = rtems_bsdnet_newproc(
-        "nttx",
-        4096,
-        smsc9218i_transmit_task,
-        e
-      );
-    }
-
-    /* Change state */
-    if (e->receive_task != RTEMS_ID_NONE
-      && e->transmit_task != RTEMS_ID_NONE) {
-      e->state = SMSC9218I_STARTED;
+            /* Change state */
+            if (e->receive_task != RTEMS_ID_NONE
+              && e->transmit_task != RTEMS_ID_NONE) {
+              e->state = SMSC9218I_STARTED;
+            }
+          }
+        }
+      }
     }
   }
 
   if (e->state == SMSC9218I_STARTED) {
     /* Enable promiscous mode */
-    smsc9218i_enable_promiscous_mode(
+    ok = smsc9218i_enable_promiscous_mode(
       regs,
       (ifp->if_flags & IFF_PROMISC) != 0
     );
 
-    /* Set interface to running state */
-    ifp->if_flags |= IFF_RUNNING;
+    if (ok) {
+      /* Set interface to running state */
+      ifp->if_flags |= IFF_RUNNING;
 
-    /* Change state */
-    e->state = SMSC9218I_RUNNING;
+      /* Change state */
+      e->state = SMSC9218I_RUNNING;
+    }
   }
 }
 
@@ -1798,14 +1900,13 @@ static void smsc9218i_interface_stats(smsc9218i_driver_entry *e)
   printf("transmit frame errors:     %u\n", e->transmit_frame_errors);
   printf("transmit DMA errors:       %u\n", e->transmit_dma_errors);
   printf("frame compact count:       %u\n", jc->frame_compact_count);
+  printf("interface state:           %s\n", state_to_string [e->state]);
 }
 
 static void smsc9218i_interface_off(struct ifnet *ifp)
 {
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) ifp->if_softc;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_interrupt_level level;
-  union SIU_DIRER_tag direr = MPC55XX_ZERO_FLAGS;
 
   /* remove interrupt handler */
   sc = rtems_interrupt_handler_remove(
@@ -1848,10 +1949,9 @@ static int smsc9218i_interface_ioctl(
       break;
     case SIOCSIFFLAGS:
       if (ifp->if_flags & IFF_UP) {
-        ifp->if_flags |= IFF_RUNNING;
         /* TODO: init */
       } else {
-    	smsc9218i_interface_off(ifp);
+        smsc9218i_interface_off(ifp);
       }
       break;
     case SIO_RTEMS_SHOW_STATS:
