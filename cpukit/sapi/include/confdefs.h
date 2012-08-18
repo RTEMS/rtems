@@ -1927,6 +1927,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifndef CONFIGURE_EXTRA_TASK_STACKS
   #define CONFIGURE_EXTRA_TASK_STACKS 0
 #endif
+/**
+ *  This is the default alut size for libmm 
+ */
+#ifndef CONFIGURE_LIBMM_ALUT_SIZE 
+  #define CONFIGURE_LIBMM_ALUT_SIZE 64
+#endif
 
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
@@ -2289,6 +2295,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    */
   uint8_t rtems_maximum_priority = CONFIGURE_MAXIMUM_PRIORITY;
 
+  /** This variable specifies the number of entries for libmm alut 
+   */
+  uint32_t libmm_alut_size  = CONFIGURE_LIBMM_ALUT_SIZE; 
+ 
   /**
    *  This is the primary Configuration Table for this application.
    */

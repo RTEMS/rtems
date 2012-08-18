@@ -34,7 +34,7 @@
 
 /* TODO: rename ALUT to Arena */
 
-extern uint32_t BSP_MAX_ARENA;
+extern uint32_t libmm_alut_size;
 
 static rtems_memory_management_alut the_rtems_memory_management_alut;
 
@@ -43,9 +43,9 @@ rtems_status_code rtems_memory_management_install_alut(void) {
   rtems_memory_management_alut* the_alut= &the_rtems_memory_management_alut;
 
   the_alut->entries = (rtems_memory_management_entry *) \
-   malloc(sizeof(rtems_memory_management_entry) * BSP_MAX_ARENA);
+   malloc(sizeof(rtems_memory_management_entry) * libmm_alut_size);
   _Chain_Initialize(&(the_alut->ALUT_idle), the_alut->entries,
-    BSP_MAX_ARENA, sizeof(rtems_memory_management_entry) );
+    libmm_alut_size, sizeof(rtems_memory_management_entry) );
 
   if( the_alut->entries == NULL)
     return RTEMS_NO_MEMORY;
@@ -53,7 +53,7 @@ rtems_status_code rtems_memory_management_install_alut(void) {
   _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
   
   int i;
-  for( i = 0; i < BSP_MAX_ARENA; i++)
+  for( i = 0; i < libmm_alut_size; i++)
   {
     the_alut->entries[i].region.size = 0;
     the_alut->entries[i].region.base = (void*)0;

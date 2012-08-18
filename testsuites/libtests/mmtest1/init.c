@@ -44,25 +44,30 @@ rtems_task Init(
   
   rtems_memory_management_region_descriptor r1 = { 
     .name = "Valid Entry-1",
-    .base = 0x00010000,
+    .base = 0x00100000,
     .size = 0x200000
   };
   rtems_memory_management_region_descriptor r2 = {
     .name = "Valid Entry-2",
-    .base = 0x00040000,
+    .base = 0x00400000,
     .size = 0x100000
   };
 
+  rtems_memory_management_region_descriptor r5 = {
+    .name = "Valid entry",
+    .base = 0x00600000,
+    .size = 0x100000
+  };
   rtems_memory_management_region_descriptor r3 = { 
     .name = "faulty - size",
-    .base = 0x00050000,
+    .base = 0x00500000,
     .size = 0x00001001
   };
 
   rtems_memory_management_region_descriptor r4 = { 
     .name = "faulty - overlapping",
-    .base = 0x00010000,
-    .size = 0x00010000
+    .base = 0x00100000,
+    .size = 0x00100000
   };
 
 
@@ -167,10 +172,23 @@ rtems_task Init(
    else{
      printf("Failed : to Set Write permissions = %d\n",status);
    }
+
+   /* Adding a new entry to alut when it's full */
+
+  printf("Test 10 : Adding an entry to a full alut \n");
+  status = rtems_memory_management_create_entry(r5, &mpe); 
+  if(status == RTEMS_SUCCESSFUL){
+    printf("Failed : Entry-3 successfully added despite exceeding alut \
+        size, status = %d\n",status);
+  }
+  else{
+    printf("Passed : Entry adding failed because alut is full \
+, status = %d\n",status);
+  }
   /* Now that the ALUT is created and populated, start testing for 
    *  search operations over particular address values 
    */
-  printf("Test 10: Get access attributes for address 0x%x\n", alut_search_addr1);
+  printf("Test 11: Get access attributes for address 0x%x\n", alut_search_addr1);
   status = rtems_memory_management_find_entry(alut_search_addr1, &mpe); 
   if(status != RTEMS_SUCCESSFUL){
     printf("Failed : Cannot find the entry including this address in ALUT, status = %d\n",status);
@@ -180,11 +198,11 @@ rtems_task Init(
     printf("Failed : Access Attribute not found, status = %d\n",status);
   }
   else {
-    printf("Passed :the size of the entry including the request address is 0x%x\n", blocksize);
+    printf("Passed : the size of the entry including the request address is 0x%x\n", blocksize);
   }
 
 
-  printf("Test 11: Get attribute for unmapped address 0x%x\n", alut_search_addr2);
+  printf("Test 12: Get attribute for unmapped address 0x%x\n", alut_search_addr2);
   status = rtems_memory_management_find_entry(alut_search_addr2, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Find the entry including this address in ALUT, status = %d\n",status);
