@@ -217,12 +217,15 @@ endif
 if mpc6xx
 
 # mpc6xx/mmu
-include_libcpu_HEADERS += mpc6xx/mmu/bat.h mpc6xx/mmu/pte121.h
+include_libcpu_HEADERS += mpc6xx/mmu/bat.h mpc6xx/mmu/mmu_support.h mpc6xx/mmu/pte121.h \
+    ../shared/include/memorymanagement.h \
+    mpc6xx/mmu/mmu_support.c mpc6xx/mmu/pagetable_.c
 
 noinst_PROGRAMS += mpc6xx/mmu.rel
 mpc6xx_mmu_rel_SOURCES = mpc6xx/mmu/bat.c mpc6xx/mmu/bat.h \
     mpc6xx/mmu/pte121.c mpc6xx/mmu/pte121.h \
-    mpc6xx/mmu/mmuAsm.S
+    mpc6xx/mmu/mmuAsm.S mpc6xx/mmu/mmu_support.h mpc6xx/mmu/mmu_support.c mpc6xx/mmu/pagetable_.c \
+    ../shared/include/memorymanagement.h ../shared/src/memorymanagement_manager.c 
 mpc6xx_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -495,3 +498,4 @@ endif
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am
+

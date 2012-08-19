@@ -33,6 +33,14 @@ $(PROJECT_INCLUDE)/libcpu/mmu.h: shared/include/mmu.h $(PROJECT_INCLUDE)/libcpu/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h
 
+$(PROJECT_INCLUDE)/libcpu/memorymanagement.h: ../shared/include/memorymanagement.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/memorymanagement.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/memorymanagement.h
+
+$(PROJECT_INCLUDE)/libcpu/mmu_support.h: shared/arm920/mmu_support.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu_support.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu_support.h
+
 $(PROJECT_INCLUDE)/libcpu/arm-cp15.h: shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
