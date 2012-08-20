@@ -39,7 +39,7 @@ rtems_task Init(
   void * alut_search_addr2;
   rtems_memory_management_entry *mpe;
   
-  alut_search_addr1 = (char*) 0x00018000;
+  alut_search_addr1 = (char*) 0x00180000;
   alut_search_addr2 = (char*) 0x01000000;
   
   rtems_memory_management_region_descriptor r1 = { 
@@ -175,11 +175,11 @@ rtems_task Init(
 
    /* Adding a new entry to alut when it's full */
 
-  printf("Test 10 : Adding an entry to a full alut \n");
+  printf("Test 10: Adding an entry to a full alut \n");
   status = rtems_memory_management_create_entry(r5, &mpe); 
   if(status == RTEMS_SUCCESSFUL){
     printf("Failed : Entry-3 successfully added despite exceeding alut \
-        size, status = %d\n",status);
+ size, status = %d\n",status);
   }
   else{
     printf("Passed : Entry adding failed because alut is full \
@@ -209,6 +209,10 @@ rtems_task Init(
   }
   else printf("Passed : Failed to find unmapped address in ALUT, status = %d\n",status);
   printf(  "\n\n*** LIBMM HIGH/MID LEVEL TEST ENDS ***\n" );
+  
+  char *a = (char *) 0x00100008;
+  char b;
+  *a = 5;
   exit( 0 ); 
 }
 

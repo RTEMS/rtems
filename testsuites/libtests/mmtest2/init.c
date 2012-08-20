@@ -39,17 +39,17 @@ rtems_task Init(
   void * alut_search_addr2;
   rtems_memory_management_entry *mpe;
   
-  alut_search_addr1 = (char*) 0x00018000;
-  alut_search_addr2 = (char*) 0x01000000;
+  alut_search_addr1 = (char*) 0xffffffff;
+  alut_search_addr2 = (char*) 0x00100000;
   
   rtems_memory_management_region_descriptor r1 = { 
     .name = "Valid Entry-1",
-    .base = 0x00010000,
+    .base = 0x00100000,
     .size = 0x200000
   };
   rtems_memory_management_region_descriptor r2 = {
     .name = "Valid Entry-2",
-    .base = 0x00040000,
+    .base = 0x00400000,
     .size = 0x100000
   };
 
@@ -127,11 +127,11 @@ rtems_task Init(
    }
 
   char a;
-  a1 = alut_search_addr2;
+  a1 = alut_search_addr1;
   printf("Checking MMU exception 1:Read from Unmapped block\n"); 
   a = *a1++; 
   
-  a1 = alut_search_addr2 + 0x2000;
+  a1 = alut_search_addr1 + 0x2000;
   printf("Checking MMU exception 2: Write to Unmapped block\n");  
   //*a1++ = 0xCC;
 
@@ -142,10 +142,6 @@ rtems_task Init(
   
   printf("Checking MMU exception 4: Write to readonly block  \n");
    *a2++ = 0xCC;
-
-  printf("Failed: this line should never be printed!!\n");
-  rtems_task_delete(RTEMS_SELF);
-
 
   printf(  "\n\n*** LIBMM LOW LEVEL (BSP) TEST ENDS ***\n" );
   exit( 0 ); 

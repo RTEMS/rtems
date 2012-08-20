@@ -1,0 +1,40 @@
+*** LIBMM LOW LEVEL (BSP) TEST BEGINS ***
+
+initialize the memory protect manager
+
+ALUT created
+Test 1 : Adding valid Entry-1 into ALUT
+Passed : Entry Added
+Test 2 : Installing Entry-1 into HW
+ ~~~ Debug : Entered _CPU_Memory_management_Install_MPE function succesfully and 
+           installed the first PTE for region starting at base address 100000 with assigned 
+           pagetable address at address A0000008 is 20001A ~~~ 
+Passed : Installing Entry-1 into HW = 0
+Test 3 : Set Read only for installed Entry-1 permissions 
+ ~~~ Debug : Entered arm_Region_Change_Attr function succesfully and 
+      changed the first PTE for region starting at base address 100000 with assigned 
+     pagetable address at address A0000008 is 10081A ~~~ 
+Passed : Set Read only permissions = 0
+Test 4 : Adding another valid Entry-2
+Passed : Entry-2 successfully added, status = 0
+Test 5 : Installing Entry-2 into HW
+ ~~~ Debug : Entered _CPU_Memory_management_Install_MPE function succesfully and 
+           installed the first PTE for region starting at base address 400000 with assigned 
+           pagetable address at address A0000004 is 40001A ~~~ 
+Passed : Installing Entry into HW = 0
+ ~~~ Debug : Entered _CPU_Memory_management_Install_MPE function succesfully and 
+           installed the first PTE for region starting at base address 400000 with assigned 
+           pagetable address at address A0000004 is 40001A ~~~ 
+Test 6 : Set Write permission for installed Entry-2 
+ ~~~ Debug : Entered arm_Region_Change_Attr function succesfully and 
+      changed the first PTE for region starting at base address 400000 with assigned 
+     pagetable address at address A0000004 is 400C1A ~~~ 
+Passed : Set Write permissions = 0
+Checking MMU exception 1:Read from Unmapped block
+Checking MMU exception 2: Write to Unmapped block
+Checking MMU exception 3: Read from readonly block
+Checking MMU exception 4: Write to readonly block  
+Read-only ram
+
+
+*** LIBMM LOW LEVEL (BSP) TEST ENDS ***
