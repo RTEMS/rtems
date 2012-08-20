@@ -88,6 +88,16 @@ static pty_t *telnet_ptys;
 
 static rtems_device_major_number pty_major;
 
+static
+int send_iac(int minor,unsigned char mode,unsigned char option)
+{
+  unsigned char buf[3];
+
+  buf[0]=IAC_ESC;
+  buf[1]=mode;
+  buf[2]=option;
+  return write(telnet_ptys[minor].socket,buf,sizeof(buf));
+}
 
 /* This procedure returns the devname for a pty slot free.
  * If not slot availiable (field socket>=0)
@@ -118,6 +128,10 @@ char *  telnet_get_pty(int socket)
         t.tv_usec=00000;
         setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &t, sizeof(t));
         telnet_ptys[ndx].socket=socket;
+
+        /* inform the client that we will echo */
+        send_iac(ndx, IAC_WILL, 1);
+
         return telnet_ptys[ndx].devname;
       };
     };
@@ -137,17 +151,6 @@ char *  telnet_get_pty(int socket)
 static const char IAC_AYT_RSP[]="\r\nAYT? Yes, RTEMS-SHELL is here\r\n";
 static const char IAC_BRK_RSP[]="<*Break*>";
 static const char IAC_IP_RSP []="<*Interrupt*>";
-
-static
-int send_iac(int minor,unsigned char mode,unsigned char option)
-{
-  unsigned char buf[3];
-
-  buf[0]=IAC_ESC;
-  buf[1]=mode;
-  buf[2]=option;
-  return write(telnet_ptys[minor].socket,buf,sizeof(buf));
-}
 
 static int
 handleSB(pty_t *pty)
@@ -284,7 +287,7 @@ static int read_pty(int minor)
            if (value==3) {
               send_iac(minor,IAC_WILL,    3);  /* GO AHEAD*/
            } else  if (value==1) {
-              /* ECHO */
+              send_iac(minor,IAC_WILL,    1);  /* ECHO */
            } else {
               send_iac(minor,IAC_WONT,value);
            };
