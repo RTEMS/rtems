@@ -88,6 +88,13 @@ static inline rtems_status_code arm_Region_Change_Attr(arm_bsp_mm_mpe *mpe,uint3
                                             b);
   }
 
+  PTEIndex = ((mpe->vAddress & 0xfff00000) >> 20);
+  uint32_t *PTE_debug = ((uint32_t *) ((mpe->ptAddress) + (mpe->pagesNumber * 4)));
+  printk(" ~~~ Debug : Entered arm_Region_Change_Attr function succesfully and \n\
+      changed the first PTE for region starting at base address %x with assigned \n\
+     pagetable address at address %x is %x ~~~ \n",mpe->vAddress, mpe->ptAddress + (mpe->pagesNumber *4),\
+     lvl1_pt[PTEIndex]);  
+
   mpe->ap = AP; /* Default when installing entry */
   mpe->cb = CB; /* Default */
 
@@ -213,6 +220,7 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
                                             1,
                                             0);
   }
+
   arm_mpe->vAddress = mpe->region.base;
   /* for level 1 page table ptAddress is the same as ptlvl1Address */
   arm_mpe->ptAddress = lvl1_pt;
@@ -239,6 +247,13 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
                        MMU_CTRL_ALIGN_FAULT_EN |
                        MMU_CTRL_LITTLE_ENDIAN |
                        MMU_CTRL_MMU_EN);
+
+  PTEIndex = ((arm_mpe->vAddress & 0xfff00000) >> 20);
+    uint32_t *PTE_debug = ((uint32_t *) ((arm_mpe->ptAddress) + (arm_mpe->pagesNumber * 4)));
+          printk(" ~~~ Debug : Entered _CPU_Memory_management_Install_MPE function succesfully and \n\
+           installed the first PTE for region starting at base address %x with assigned \n\
+           pagetable address at address %x is %x ~~~ \n",arm_mpe->vAddress, arm_mpe->ptAddress + (arm_mpe->pagesNumber *4),\
+           lvl1_pt[PTEIndex + arm_mpe->pagesNumber - 1]);
   return RTEMS_SUCCESSFUL;
 }
 

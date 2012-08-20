@@ -32,22 +32,28 @@
 #include <rtems/rtems/cache.h>
 #include "libmm.h"
 
-
 /* TODO: rename ALUT to Arena */
+
+extern uint32_t libmm_alut_size;
 
 static rtems_memory_management_alut the_rtems_memory_management_alut;
 
 rtems_status_code rtems_memory_management_install_alut(void) {
     
   rtems_memory_management_alut* the_alut= &the_rtems_memory_management_alut;
-  int i;
 
+  the_alut->entries = (rtems_memory_management_entry *) \
+   malloc(sizeof(rtems_memory_management_entry) * libmm_alut_size);
   _Chain_Initialize(&(the_alut->ALUT_idle), the_alut->entries,
-    RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE, sizeof(rtems_memory_management_entry) );
+    libmm_alut_size, sizeof(rtems_memory_management_entry) );
+
+  if( the_alut->entries == NULL)
+    return RTEMS_NO_MEMORY;
 
   _Chain_Initialize_empty(&(the_alut->ALUT_mappings));
-
-  for( i = 0; i < RTEMS_MEMORY_MANAGEMENT_ALUT_SIZE; i++)
+  
+  int i;
+  for( i = 0; i < libmm_alut_size; i++)
   {
     the_alut->entries[i].region.size = 0;
     the_alut->entries[i].region.base = (void*)0;
