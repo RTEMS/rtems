@@ -306,10 +306,9 @@ static int read_pty(int minor)
            } else {
               result=value;
               if ( 0
-#if 0               /* pass CRLF through - they should use termios to handle it */
-                 ||  ((value=='\n') && (pty->last_cr))
-#endif
-                /* but map telnet CRNUL to CR down here */
+                /* map CRLF to CR for symmetry */
+                 || ((value=='\n') && pty->last_cr)
+                /* map telnet CRNUL to CR down here */
                  || ((value==0) && pty->last_cr)
                 ) result=-1;
                pty->last_cr=(value=='\r');
