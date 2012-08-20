@@ -42,6 +42,7 @@ dist_project_lib_DATA += startup/linkcmds \
     startup/linkcmds.base \
     startup/linkcmds.mpc8309som \
     startup/linkcmds.mpc8313erdb \
+    startup/linkcmds.br_uid \
     startup/linkcmds.mpc8349eamds \
     startup/linkcmds.hsc_cm01
 

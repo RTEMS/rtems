@@ -920,6 +920,14 @@ extern m83xxRegisters_t mpc83xx;
                                           /* Core PLL mult. factor   */
 #define RCWLR_COREPLL(n) (((n)&0xff)<<(31-15))
 
+/* for MPC8309: */
+#define RCWLR_CEVCOD_1_4 (0<<(31-25))     /* QUICC internal PLL divider 1:4 */
+#define RCWLR_CEVCOD_1_2 (2<<(31-25))     /* QUICC internal PLL divider 1:2 */
+                                          /* QUICC Engine PLL mult. factor */
+#define RCWLR_CEPDF_2     (1<<(31-26))    /* QUICC Engine divide PLL out by 2*/
+                                          /* QUICC Engine PLL mult. factor */
+#define RCWLR_CEPMF(n) (((n)&0x1f)<<(31-31))
+
                                            /* PCI host mode          */
 #define RCWHR_PCI_AGENT  (0 << (31- 0))    /* agent mode             */
 #define RCWHR_PCI_HOST   (1 << (31- 0))    /* host mode              */
@@ -974,4 +982,11 @@ extern m83xxRegisters_t mpc83xx;
 #define RCWHR_LDP_PAR     (0 << (31-30))   /* LDP0-3 are parity pins  */
 #define RCWHR_LDP_SPC     (1 << (31-30))   /* LDP0-3 are special pins */
 
+/*
+ * For MPC8309:
+ */
+#define RCWHR_RLEXT_LGCY  (0 << (31-13))  /* Boot ROM loc. extension: Legacy */
+#define RCWHR_RLEXT_NAND  (1 << (31-13))  /* Boot ROM loc. extension: NAND Fl.*/
+#define RCWHR_RLEXT_RSV2  (2 << (31-13))  /* Boot ROM loc. extension: resrvd */
+#define RCWHR_RLEXT_RSV3  (3 << (31-13))  /* Boot ROM loc. extension: resrvd */
 #endif /* _MPC83XX_MPC83XX_H */

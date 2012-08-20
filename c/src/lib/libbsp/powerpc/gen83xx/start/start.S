@@ -368,6 +368,7 @@ start_rom_skip1:
 	mtlr	r29
 	blr                     /* now further execution RAM */
 copy_rest_of_text:
+	LWI  r31,IMMRBAR
 #ifdef LCRR_VAL
 	SET_IMM_REGW r31,r30,LCRR_OFF,LCRR_VAL
 #endif

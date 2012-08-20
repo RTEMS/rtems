@@ -125,6 +125,10 @@ $(PROJECT_LIB)/linkcmds.mpc8313erdb: startup/linkcmds.mpc8313erdb $(PROJECT_LIB)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc8313erdb
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc8313erdb
 
+$(PROJECT_LIB)/linkcmds.br_uid: startup/linkcmds.br_uid $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.br_uid
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.br_uid
+
 $(PROJECT_LIB)/linkcmds.mpc8349eamds: startup/linkcmds.mpc8349eamds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc8349eamds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc8349eamds

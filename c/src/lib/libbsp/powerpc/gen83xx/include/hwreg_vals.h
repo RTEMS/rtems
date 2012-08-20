@@ -106,6 +106,46 @@
 			  RCWHR_LALE_EARLY   |	\
 			  RCWHR_LDP_SPC)
 
+#elif defined(MPC83XX_BOARD_BR_UID)
+/*
+ * for BR UID
+ */
+/*
+ * one DUART channel (UART1) supported
+ */
+#define GEN83xx_DUART_AVAIL_MASK 0x01
+
+/* we need the low level initialization in start.S*/
+#define NEED_LOW_LEVEL_INIT
+/*
+ * clocking infos
+ */
+#define BSP_CLKIN_FRQ 25000000L
+#define RCFG_SYSPLL_MF  5
+#define RCFG_COREPLL_MF 5
+/*
+ * Reset configuration words
+ */
+#define RESET_CONF_WRD_L \
+  (RCWLR_LBIUCM_1_1							\
+   | RCWLR_DDRCM_2_1							\
+   | RCWLR_SPMF(RCFG_SYSPLL_MF)    					\
+   | RCWLR_COREPLL(RCFG_COREPLL_MF)					\
+   | RCWLR_CEVCOD_1_2 							\
+   | RCWLR_CEPMF(8)							\
+   )
+
+#define RESET_CONF_WRD_H (RCWHR_PCI_HOST     |	\
+			  RCWHR_PCI_32       |	\
+			  RCWHR_PCI1ARB_DIS  |	\
+			  RCWHR_CORE_EN      |	\
+			  RCWHR_BMS_LOW      |	\
+			  RCWHR_BOOTSEQ_NONE |	\
+			  RCWHR_SW_DIS       |	\
+			  RCWHR_ROMLOC_LB16  |	\
+			  RCWHR_RLEXT_LGCY   |	\
+			  RCWHR_ENDIAN_BIG)
+
 #elif defined( HAS_UBOOT)
 
 /* TODO */
@@ -257,6 +297,55 @@
 #define DDR_SDRAM_DATA_INIT_VAL      0xC01DCAFE
 #define DDR_SDRAM_INIT_ADDR_VAL      0
 #define DDR_SDRAM_INTERVAL_VAL       0x05080000
+
+#elif defined(MPC83XX_BOARD_BR_UID)
+/**************************
+ * for BR UID
+ */
+
+/*
+ * working values for various registers, used in start/start.S
+ */
+
+/*
+ * Local Access Windows
+ * FIXME: decode bit settings
+ */
+
+#define LBLAWBAR0_VAL  bsp_rom_start
+#define LBLAWAR0_VAL   0x80000018
+#define DDRLAWBAR0_VAL bsp_ram_start
+#define DDRLAWAR0_VAL  0x8000001B
+
+
+/*
+ * clocking for local bus:
+ * ALE active for 1 clock
+ * local bus clock = 1/2 csb clock
+ */
+#define LCRR_VAL  0x80010002
+
+/*
+ * DDR-SDRAM registers
+ * FIXME: decode bit settings
+ */
+#define DDRCDR_VAL                   0x00000001
+#define CS0_BNDS_VAL                 0x0000000F
+#define CS0_CONFIG_VAL               0x80014202
+#define TIMING_CFG_0_VAL             0x00220802
+#define TIMING_CFG_1_VAL             0x26259222
+#define TIMING_CFG_2_VAL             0x111048C7
+#define DDR_SDRAM_CFG_2_VAL          0x00401000
+#define DDR_SDRAM_MODE_VAL           0x200F1632
+#define DDR_SDRAM_MODE_2_VAL         0x40006000
+#define DDR_SDRAM_CLK_CNTL_VAL       0x01800000
+#define DDR_SDRAM_CFG_VAL            0x43100008
+
+#define DDR_ERR_DISABLE_VAL          0x0000008D
+#define DDR_ERR_DISABLE_VAL2         0x00000089
+#define DDR_SDRAM_DATA_INIT_VAL      0xC01DCAFE
+#define DDR_SDRAM_INIT_ADDR_VAL      0
+#define DDR_SDRAM_INTERVAL_VAL       0x01E8222E
 
 #elif defined( HAS_UBOOT)
 
