@@ -379,6 +379,7 @@ librpc/Makefile
 libmisc/Makefile
 libi2c/Makefile
 libmd/Makefile
+libmm/Makefile
 zlib/Makefile
 ftpd/Makefile
 telnetd/Makefile
