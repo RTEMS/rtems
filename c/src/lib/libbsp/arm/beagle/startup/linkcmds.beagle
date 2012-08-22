@@ -1,0 +1,54 @@
+/**
+ * @file
+ *
+ * @ingroup beagle_linker
+ *
+ * @brief Memory map.
+ */
+
+/**
+ * @defgroup beagle_linker BeagleBoard Application Memory Map
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief BeagleBoard application memory map.
+ *
+ */
+
+MEMORY {
+  RAM : ORIGIN = 0x80000000, LENGTH = 32M
+  NIRVANA : ORIGIN = 0, LENGTH = 0
+}
+
+REGION_ALIAS ("REGION_START", RAM);
+REGION_ALIAS ("REGION_VECTOR", RAM);
+REGION_ALIAS ("REGION_TEXT", RAM);
+REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_RODATA", RAM);
+REGION_ALIAS ("REGION_RODATA_LOAD", RAM);
+REGION_ALIAS ("REGION_DATA", RAM);
+REGION_ALIAS ("REGION_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_DATA", RAM);
+REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_BSS", RAM);
+REGION_ALIAS ("REGION_WORK", RAM);
+REGION_ALIAS ("REGION_STACK", RAM);
+
+//beagle_scratch_area = ORIGIN (RAM_SCRATCH);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;
+
+beagle = 0x20020000;
+
+beagle_magic_zero_begin = 0x05000000;
+beagle_magic_zero_end = 0x07000000;
+beagle_magic_zero_size = beagle_magic_zero_end - beagle_magic_zero_end;
+
+INCLUDE linkcmds.armv4
+
+HeapSize = 1024 * 1024;

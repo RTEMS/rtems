@@ -1,0 +1,63 @@
+#
+#  ARM/BeagleBoard Qemu Support
+#
+
+bspUsesGDBSimulator="no"
+# bspGeneratesGDBCommands="yes"
+# bspSupportsGDBServerMode="yes"
+runBSP=NOT_OVERRIDDEN
+if [ ! -r ${runBSP} ] ; then
+  runBSP=qemu-system-arm
+fi
+bspNeedsDos2Unix="yes"
+bspGeneratesDeviceTree="yes"
+bspInputDevice=qemu-gumstix.cmds
+bspTreeFile=qemu-gumstix.cmds
+bspRedirectInput=yes
+
+runARGS()
+{
+# qemu-system-arm -M connex -m 289 -nographic -monitor null -pflash connex-flash.img <cmds >log
+
+  UBOOT=${HOME}/qemu/u-boot-connex-400-r1604.bin
+  FLASH=connex-flash.img
+  ( dd of=${FLASH} bs=128k count=128 if=/dev/zero ;
+    dd of=${FLASH} bs=128k conv=notrunc if=${UBOOT} ;
+    dd of=${FLASH} bs=1k conv=notrunc seek=4096 if=${1} ) >/dev/null 2>&1
+
+  if [ ${coverage} = yes ] ; then
+     rm -f trace ${1}.tra
+     COVERAGE_ARG="-trace ${1}.tra"
+  fi
+
+  echo "-M connex -m 289 -nographic -monitor null \
+         -pflash ${FLASH} ${COVERAGE_ARG}"
+}
+
+checkBSPFaults()
+{
+  return 0
+}
+
+bspLimit()
+{
+  testname=$1
+  case ${testname} in
+    *stackchk*)limit=5 ;;
+    *fatal*)   limit=1 ;;
+    *minimum*) limit=1 ;;
+    *psxtime*) limit=180 ;;
+    *)         limit=60 ;;
+  esac
+  echo ${limit}
+}
+
+### Generate the commands we boot with
+bspGenerateDeviceTree()
+{
+cat >qemu-gumstix.cmds <<EOF
+
+bootelf 0x400000
+
+EOF
+}

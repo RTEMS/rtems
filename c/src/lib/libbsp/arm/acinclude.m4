@@ -4,6 +4,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
   case "$1" in
   altera-cyclone-v )
     AC_CONFIG_SUBDIRS([altera-cyclone-v]);;
+  beagle )
+    AC_CONFIG_SUBDIRS([beagle]);;
   csb336 )
     AC_CONFIG_SUBDIRS([csb336]);;
   csb337 )
