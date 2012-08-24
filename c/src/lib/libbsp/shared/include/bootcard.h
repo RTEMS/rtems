@@ -192,6 +192,15 @@ static inline void bsp_work_area_initialize_default(
   RTEMS_Malloc_Initialize(&area, 1, NULL);
 }
 
+static inline void bsp_work_area_initialize_with_table(
+  Heap_Area *areas,
+  size_t area_count
+)
+{
+  _Workspace_Handler_initialization(areas, area_count, _Heap_Extend);
+  RTEMS_Malloc_Initialize(areas, area_count, _Heap_Extend);
+}
+
 void bsp_work_area_initialize(void);
 
 void bsp_libc_init(void);
