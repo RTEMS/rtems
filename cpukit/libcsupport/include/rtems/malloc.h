@@ -146,7 +146,7 @@ int rtems_memalign(
  * memory area will begin at an address aligned by this value.
  *
  * If the boundary parameter @a boundary is not equal to zero, the allocated
- * memory area will fulfill a boundary constraint.  The boundary value
+ * memory area will comply with a boundary constraint.  The boundary value
  * specifies the set of addresses which are aligned by the boundary value.  The
  * interior of the allocated memory area will not contain an element of this
  * set.  The begin or end address of the area may be a member of the set.
@@ -170,7 +170,7 @@ void *rtems_heap_allocate_aligned_with_boundary(
  * starting at @a area_begin of size @a area_size bytes.
  *
  * There are no alignment requirements.  The memory area must be big enough to
- * contain some maintainance blocks.  It must not overlap parts of the current
+ * contain some maintenance blocks.  It must not overlap parts of the current
  * heap areas.  Disconnected subordinate heap areas will lead to used blocks
  * which cover the gaps.  Extending with an inappropriate memory area will
  * corrupt the heap.
@@ -186,7 +186,7 @@ rtems_status_code rtems_heap_extend(
 /**
  * @brief Greedy allocate that empties the heap.
  *
- * Afterward the heap has at most @a block_count allocateable blocks of sizes
+ * Afterward the heap has at most @a block_count allocatable blocks of sizes
  * specified by @a block_sizes.  The @a block_sizes must point to an array with
  * @a block_count members.  All other blocks are used.
  *
