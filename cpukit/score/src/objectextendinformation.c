@@ -142,11 +142,14 @@ void _Objects_Extend_information(
     block_size = block_count *
            (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) +
           ((maximum + minimum_index) * sizeof(Objects_Control *));
-    object_blocks = (void**) _Workspace_Allocate( block_size );
-
-    if ( !object_blocks ) {
-      _Workspace_Free( new_object_block );
-      return;
+    if ( information->auto_extend ) {
+      object_blocks = _Workspace_Allocate( block_size );
+      if ( !object_blocks ) {
+        _Workspace_Free( new_object_block );
+        return;
+      }
+    } else {
+      object_blocks = _Workspace_Allocate_or_fatal_error( block_size );
     }
 
     /*
