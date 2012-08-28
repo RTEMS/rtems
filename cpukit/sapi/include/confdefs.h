@@ -1702,11 +1702,23 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
     #define CONFIGURE_MAXIMUM_POSIX_KEYS           0
+    #define CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS      0
     #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) 0
   #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-      (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
-        + (_keys) * 3 * _Configure_From_workspace(sizeof(void *) * 2))
+    #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS
+      #define CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS \
+        CONFIGURE_MAXIMUM_POSIX_KEYS \
+        * (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS)
+      #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
+        (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+         + CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS \
+         * _Configure_From_workspace(sizeof(POSIX_Keys_Rbtree_node)))
+    #else
+      #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
+        (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+         + CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS                       \
+         * _Configure_From_workspace(sizeof(POSIX_Keys_Rbtree_node)))
+    #endif
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
@@ -2280,6 +2292,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS +
         CONFIGURE_GO_INIT_CONDITION_VARIABLES + CONFIGURE_MAXIMUM_GO_CHANNELS,
       CONFIGURE_MAXIMUM_POSIX_KEYS,
+      CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS,
       CONFIGURE_MAXIMUM_POSIX_TIMERS,
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,

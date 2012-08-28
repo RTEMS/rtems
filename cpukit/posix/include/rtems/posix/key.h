@@ -31,15 +31,23 @@ extern "C" {
  *  
  */
 typedef struct {
-  /** This field is the chain node structure. */
+  /**
+   * This field is the chain node, which is 
+   *  used in thread's key node chain. 
+   */
   Chain_Node ch_node;
-  /** This field is the rbtree node structure. */
+  /**
+   * This field is the chain node, which is 
+   * used in pre-allocated key node chain.
+   */
+  Chain_Node pre_ch_node;
+  /* This field is the rbtree node structure. */
   RBTree_Node rb_node;
-  /** This field is the POSIX key used as an rbtree key */
+  /* This field is the POSIX key used as an rbtree key */
   pthread_key_t key;
-  /** This field is the Thread id also used as an rbtree key */
+  /* This field is the Thread id also used as an rbtree key */
   Objects_Id thread_id;
-  /** This field points to the POSIX key value of specific thread */
+  /* This field points to the POSIX key value of specific thread */
   void *value;
  }  POSIX_Keys_Rbtree_node;
 
@@ -49,9 +57,9 @@ typedef struct {
  *  @note
  */
 typedef struct {
-   /** This field is the Object control structure. */
+   /* This field is the Object control structure. */
    Objects_Control     object;
-   /** This field is the data destructor. */
+   /* This field is the data destructor. */
    void (*destructor) (void *);
  }  POSIX_Keys_Control;
   
@@ -66,6 +74,12 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
  * all key value
  */
 POSIX_EXTERN RBTree_Control _POSIX_Keys_Rbtree;
+
+/**
+ * This chain is used in _POSIX_Keys_Preallocation, it contains all
+ * pre-allocated RBTree_Nodes.
+ */
+POSIX_EXTERN Chain_Control _POSIX_Keys_Preallocation_chain;
 
 /**
  *  @brief _POSIX_Keys_Manager_initialization

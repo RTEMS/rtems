@@ -49,7 +49,11 @@ void _POSIX_Keys_Free_memory(
     next = _RBTree_Next_unprotected( iter, RBT_RIGHT );
     _RBTree_Extract_unprotected( &_POSIX_Keys_Rbtree, iter );
     _Chain_Extract_unprotected( &p->ch_node );
-    _Workspace_Free( p );
+    /** 
+     * append the node to pre-allocated POSIX_Keys_Rbtree_node 
+     * chain(namely, the POSIX_Keys_Rbtree_node pool
+     */ 
+    _Chain_Append_unprotected( &_POSIX_Keys_Preallocation_chain, &p->pre_ch_node );
     iter = next;
     p = _RBTree_Container_of( iter, POSIX_Keys_Rbtree_node, rb_node );
   }

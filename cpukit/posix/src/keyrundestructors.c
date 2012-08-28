@@ -69,7 +69,14 @@ void _POSIX_Keys_Run_destructors(
      */
     _Thread_Enable_dispatch();
     
-    _Workspace_Free( (POSIX_Keys_Rbtree_node *)iter );
+    /** 
+     * append the node to pre-allocated POSIX_Keys_Rbtree_node 
+     * chain(namely, the POSIX_Keys_Rbtree_node pool
+     */ 
+    _Chain_Append_unprotected( 
+      &_POSIX_Keys_Preallocation_chain, 
+      &((POSIX_Keys_Rbtree_node *)iter)->pre_ch_node
+    );
     iter = next;
   }
   _Thread_Enable_dispatch();

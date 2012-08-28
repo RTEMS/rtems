@@ -23,6 +23,10 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
 #include <rtems/score/rbtree.h>
+#include <rtems/score/chain.h>
+
+/* forward declarations to avoid warnings */
+void _POSIX_Keys_Preallocation(void);
 
 /*
  * _POSIX_Keys_Rbtree_compare_function
@@ -64,7 +68,31 @@ int _POSIX_Keys_Rbtree_compare_function(
     return thread_id1 - thread_id2;
   return 0;
 }
-  
+
+/*
+ * _POSIX_Keys_Preallocation
+ *
+ * DESCRIPTION:
+ * 
+ * This routine pre-allocates the memory used for all key data.
+ *
+ * Input parameters: NONE
+ *
+ * Output parameters: NONE
+ */
+
+void _POSIX_Keys_Preallocation(void)
+{
+  POSIX_Keys_Rbtree_node *rb_node;
+  int i;
+
+  _Chain_Initialize_empty( &_POSIX_Keys_Preallocation_chain );
+
+  for ( i = 0; i < Configuration_POSIX_API.maximum_key_pairs; ++i ) {
+    rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
+    _Chain_Append( &_POSIX_Keys_Preallocation_chain, &rb_node->pre_ch_node );
+  }
+}
 
 /*
  *  _POSIX_Key_Manager_initialization
@@ -98,9 +126,11 @@ void _POSIX_Keys_Manager_initialization(void)
   );
 
   _RBTree_Initialize_empty( 
-    &_POSIX_Keys_Rbtree,     /* the rbtree control block */
+    &_POSIX_Keys_Rbtree,        /* the rbtree control block */
     _POSIX_Keys_Rbtree_compare_function,
-                            /* the rbtree compare function */
-    true                    /* true if each rbtree node is unique */
+                                /* the rbtree compare function */
+    true                        /* true if each rbtree node is unique */
   );
+
+  _POSIX_Keys_Preallocation();
 }

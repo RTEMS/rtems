@@ -15,6 +15,7 @@
 #include <limits.h>
 #include <pthread.h>
 #include <string.h>
+#include <stddef.h>
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
@@ -34,6 +35,7 @@ int pthread_setspecific(
 {
   Objects_Locations            location;
   POSIX_Keys_Rbtree_node      *rb_node;
+  Chain_Node                  *ch_node;
   POSIX_API_Control           *api;
 
   /** _POSIX_Keys_Get() would call _Thread_Disable_dispatch() implicitly*/
@@ -41,7 +43,10 @@ int pthread_setspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
+      ch_node = _Chain_Get_unprotected( &_POSIX_Keys_Preallocation_chain );
+      /* there is no _Chain_Container_of in RTEMS Chain API */
+      rb_node = ( POSIX_Keys_Rbtree_node * ) \
+        ( ( uintptr_t )( ch_node ) - offsetof( POSIX_Keys_Rbtree_node, pre_ch_node ) );
       if ( !rb_node ) {
         _Thread_Enable_dispatch();
         return ENOMEM;
@@ -51,7 +56,7 @@ int pthread_setspecific(
       rb_node->thread_id = _Thread_Executing->Object.id;
       rb_node->value = value;
       if (_RBTree_Insert_unprotected( &_POSIX_Keys_Rbtree, &(rb_node->rb_node) ) ) {
-          _Workspace_Free( rb_node );
+          _Chain_Append_unprotected( &_POSIX_Keys_Preallocation_chain, ch_node );
           _Thread_Enable_dispatch();
           return EAGAIN;
         }
