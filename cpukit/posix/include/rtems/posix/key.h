@@ -18,26 +18,51 @@
 #define _RTEMS_POSIX_KEY_H
 
 #include <rtems/score/object.h>
+#include <rtems/score/rbtree.h>
+#include <rtems/score/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- *  This is the data Structure used to manage a POSIX key.
- *
- *  @note The Values is a table indexed by the index portion of the
- *        ID of the currently executing thread.
+ *  This is the data Structure used to manage a POSIX key and value
+ *  in the rbtree structure
+ *  
  */
 typedef struct {
-   /** This field is the Object control structure. */
-   Objects_Control     Object;
-   /** This field points to the optional destructor method. */
-   void              (*destructor)( void * );
-   /** This field points to the values per thread. */
-   void              **Values[ OBJECTS_APIS_LAST + 1 ];
-}  POSIX_Keys_Control;
+  /**
+   * This field is the chain node, which is 
+   *  used in thread's key node chain. 
+   */
+  Chain_Node ch_node;
+  /**
+   * This field is the chain node, which is 
+   * used in pre-allocated key node chain.
+   */
+  Chain_Node pre_ch_node;
+  /* This field is the rbtree node structure. */
+  RBTree_Node rb_node;
+  /* This field is the POSIX key used as an rbtree key */
+  pthread_key_t key;
+  /* This field is the Thread id also used as an rbtree key */
+  Objects_Id thread_id;
+  /* This field points to the POSIX key value of specific thread */
+  void *value;
+ }  POSIX_Keys_Rbtree_node;
 
+/**
+ *  This is the data Structure used to manage a POSIX key.
+ *
+ *  @note
+ */
+typedef struct {
+   /* This field is the Object control structure. */
+   Objects_Control     object;
+   /* This field is the data destructor. */
+   void (*destructor) (void *);
+ }  POSIX_Keys_Control;
+  
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.
@@ -45,11 +70,33 @@ typedef struct {
 POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 
 /**
+ * The following defines the rbtree control block used to manage
+ * all key value
+ */
+POSIX_EXTERN RBTree_Control _POSIX_Keys_Rbtree;
+
+/**
+ * This chain is used in _POSIX_Keys_Preallocation, it contains all
+ * pre-allocated RBTree_Nodes.
+ */
+POSIX_EXTERN Chain_Control _POSIX_Keys_Preallocation_chain;
+
+/**
  *  @brief _POSIX_Keys_Manager_initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-void _POSIX_Key_Manager_initialization(void);
+void _POSIX_Keys_Manager_initialization(void);
+
+/**
+ * @brief _POSIX_Key_Rbtree_Compare_Function
+ *
+ * This routine compares the rbtree node
+ */
+int _POSIX_Keys_Rbtree_compare_function(
+  const RBTree_Node *node1,
+  const RBTree_Node *node2
+);
 
 /**
  *  @brief _POSIX_Keys_Run_destructors

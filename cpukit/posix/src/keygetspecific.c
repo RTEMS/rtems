@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/rbtree.h>
 #include <rtems/posix/key.h>
 
 /*
@@ -29,19 +30,22 @@ void *pthread_getspecific(
   pthread_key_t  key
 )
 {
-  register POSIX_Keys_Control *the_key;
-  uint32_t                     api;
-  uint32_t                     index;
   Objects_Locations            location;
+  POSIX_Keys_Rbtree_node       search_node;
+  RBTree_Node                 *p;
   void                        *key_data;
 
-  the_key = _POSIX_Keys_Get( key, &location );
+  _POSIX_Keys_Get( key, &location );
   switch ( location ) {
-
+    
     case OBJECTS_LOCAL:
-      api      = _Objects_Get_API( _Thread_Executing->Object.id );
-      index    = _Objects_Get_index( _Thread_Executing->Object.id );
-      key_data = (void *) the_key->Values[ api ][ index ];
+      search_node.key = key;
+      search_node.thread_id = _Thread_Executing->Object.id;
+      p = _RBTree_Find_unprotected( &_POSIX_Keys_Rbtree, &search_node.rb_node);
+      key_data = NULL;
+      if ( p ) {
+        key_data = _RBTree_Container_of( p, POSIX_Keys_Rbtree_node, rb_node )->value;
+      }
       _Thread_Enable_dispatch();
       return key_data;
 

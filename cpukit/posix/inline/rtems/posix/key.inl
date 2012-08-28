@@ -43,7 +43,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
 )
 {
-  _Objects_Free( &_POSIX_Keys_Information, &the_key->Object );
+  _Objects_Free( &_POSIX_Keys_Information, &the_key->object );
 }
  
 /**

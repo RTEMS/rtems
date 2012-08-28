@@ -22,6 +22,77 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
+#include <rtems/score/rbtree.h>
+#include <rtems/score/chain.h>
+
+/* forward declarations to avoid warnings */
+void _POSIX_Keys_Preallocation(void);
+
+/*
+ * _POSIX_Keys_Rbtree_compare_function
+ *
+ * DESCRIPTION:
+ * This routine compares the rbtree node
+ * by comparing POSIX key first and comparing thread id second.
+ * And if either of the input nodes's thread_id member is 0, then
+ * it will only compare the pthread_key_t member. That is when we
+ * pass thread_id = 0 node as a search node, the search is done only
+ * by pthread_key_t.
+ *
+ * Input parameters: two rbtree node
+ *
+ * Output parameters: return positive if first node
+ * has higher key than second, negative if lower, 0 if equal,
+ * and for all the thread id is unique, then return 0 is impossible
+ */
+
+int _POSIX_Keys_Rbtree_compare_function(
+  const RBTree_Node *node1,
+  const RBTree_Node *node2
+)
+{
+  pthread_key_t key1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, rb_node)->key;
+  pthread_key_t key2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, rb_node)->key;
+
+  Objects_Id thread_id1 = _RBTree_Container_of(node1, POSIX_Keys_Rbtree_node, rb_node)->thread_id;
+  Objects_Id thread_id2 = _RBTree_Container_of(node2, POSIX_Keys_Rbtree_node, rb_node)->thread_id;
+
+  int diff = key1 - key2;
+  if ( diff )
+    return diff;
+  /**
+   * if thread_id1 or thread_id2 equals to 0, only key1 and key2 is valued.
+   * it enables us search node only by pthread_key_t type key.
+   */
+  if ( thread_id1 && thread_id2 )
+    return thread_id1 - thread_id2;
+  return 0;
+}
+
+/*
+ * _POSIX_Keys_Preallocation
+ *
+ * DESCRIPTION:
+ * 
+ * This routine pre-allocates the memory used for all key data.
+ *
+ * Input parameters: NONE
+ *
+ * Output parameters: NONE
+ */
+
+void _POSIX_Keys_Preallocation(void)
+{
+  POSIX_Keys_Rbtree_node *rb_node;
+  int i;
+
+  _Chain_Initialize_empty( &_POSIX_Keys_Preallocation_chain );
+
+  for ( i = 0; i < Configuration_POSIX_API.maximum_key_pairs; ++i ) {
+    rb_node = _Workspace_Allocate( sizeof( POSIX_Keys_Rbtree_node ) );
+    _Chain_Append( &_POSIX_Keys_Preallocation_chain, &rb_node->pre_ch_node );
+  }
+}
 
 /*
  *  _POSIX_Key_Manager_initialization
@@ -35,7 +106,7 @@
  *  Output parameters:  NONE
  */
 
-void _POSIX_Key_Manager_initialization(void)
+void _POSIX_Keys_Manager_initialization(void)
 {
   _Objects_Initialize_information(
     &_POSIX_Keys_Information,   /* object information table */
@@ -53,4 +124,13 @@ void _POSIX_Key_Manager_initialization(void)
     NULL                        /* Proxy extraction support callout */
 #endif
   );
+
+  _RBTree_Initialize_empty( 
+    &_POSIX_Keys_Rbtree,        /* the rbtree control block */
+    _POSIX_Keys_Rbtree_compare_function,
+                                /* the rbtree compare function */
+    true                        /* true if each rbtree node is unique */
+  );
+
+  _POSIX_Keys_Preallocation();
 }
