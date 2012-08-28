@@ -1709,16 +1709,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       #define CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS \
         CONFIGURE_MAXIMUM_POSIX_KEYS \
         * (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS)
-      #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-        (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
-         + CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS \
-         * _Configure_From_workspace(sizeof(POSIX_Keys_Rbtree_node)))
-    #else
-      #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-        (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
-         + CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS                       \
-         * _Configure_From_workspace(sizeof(POSIX_Keys_Rbtree_node)))
     #endif
+    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys)               \
+      (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+      + CONFIGURE_MAXIMUM_POSIX_KEY_PAIRS                        \
+      * _Configure_From_workspace(sizeof(POSIX_Keys_Rbtree_node)))
   #endif
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
