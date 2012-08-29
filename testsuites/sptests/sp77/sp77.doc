@@ -1,0 +1,21 @@
+#  COPYRIGHT (c) 2012.
+#  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp77
+
+directives:
+
+  rtems_message_queue_create
+
+concepts:
+
++ test to check if rtems_message_queue_create work as supposed when 
+maximum_message_size is too large and cause overflow in 
+_core_message_queue_initialize symbol in coremsg.c file
