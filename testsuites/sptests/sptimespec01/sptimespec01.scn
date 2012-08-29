@@ -1,0 +1,13 @@
+*** TEST sptimespec01 ***
+
+ rtems_timespec_add_to test PASSED 
+ rtems_timespace_divide test -part1- divide by non-zero PASSED
+ rtems_timespace_divide test -part2- divide by zero PASSED
+ rtems_timespec_divide_by_integer test PASSED
+ rtems_timespec_less_than PASSED 
+ rtems_timespec_is_valid test PASSED
+ rtems_timespec_subtract test PASSED
+ rtems_timespec_from_ticks PASSED 
+ rtems_timespec_from_ticks and rtems_timespec_to_ticks test PASSED
+
+*** END OF TEST sptimespec01 ***

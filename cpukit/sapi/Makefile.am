@@ -15,6 +15,7 @@ include_rtems_HEADERS += include/rtems/cbs.h
 include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/sptables.h
+include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
 
@@ -22,6 +23,7 @@ include_rtems_HEADERS += inline/rtems/chain.inl
 include_rtems_HEADERS += inline/rtems/extension.inl
 include_rtems_HEADERS += inline/rtems/cbs.inl
 include_rtems_HEADERS += inline/rtems/rbtree.inl
+include_rtems_HEADERS += inline/rtems/timespec.inl
 
 ## src
 AM_CPPFLAGS += -D__RTEMS_INSIDE__

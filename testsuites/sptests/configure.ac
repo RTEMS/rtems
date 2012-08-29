@@ -182,6 +182,7 @@ spsize/Makefile
 spstkalloc/Makefile
 spstkalloc02/Makefile
 spthreadq01/Makefile
+sptimespec01/Makefile
 spwatchdog/Makefile
 spwkspace/Makefile
 ])

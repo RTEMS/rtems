@@ -1,0 +1,30 @@
+#  COPYRIGHT (c) 1989-2011.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  Copyright (c) 2012
+#  Krzysztof Miesowicz
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sp78
+
+directives:
+
+  + rtems_timespec_is_valid
+  + rtems_timespec_less_than
+  + rtems_timespec_add_to
+  + rtems_timespec_to_ticks
+  + rtems_timespec_from_ticks
+  + rtems_timespec_subtract
+  + rtems_timespec_divide_by_integer
+  + rtems_timespec_divide
+
+concepts:
+
+ This test's goal is to ensure if all timespec's related directives work as 
+ expected.
