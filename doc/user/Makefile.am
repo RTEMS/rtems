@@ -14,7 +14,8 @@ GENERATED_FILES = overview.texi concepts.texi datatypes.texi init.texi \
     task.texi intr.texi clock.texi timer.texi sem.texi msg.texi event.texi \
     signal.texi part.texi region.texi dpmem.texi io.texi fatal.texi \
     schedule.texi rtmon.texi barrier.texi bsp.texi userext.texi conf.texi \
-    mp.texi stackchk.texi cpuuse.texi object.texi chains.texi cbs.texi
+    mp.texi stackchk.texi cpuuse.texi object.texi chains.texi timespec.texi \
+    cbs.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
@@ -180,10 +181,15 @@ object.texi: object.t
 chains.texi: chains.t
 	$(BMENU2) -p "Object Services OBJECT_GET_CLASS_INFORMATION - Obtain Class Information" \
 	    -u "Top" \
+	    -n "Timespec Helpers" < $< > $@
+
+timespec.texi: timespec.t
+	$(BMENU2) -p "Chains Prepend a Node" \
+	    -u "Top" \
 	    -n "Constant Bandwidth Server Scheduler API" < $< > $@
 
 cbs.texi: cbs.t
-	$(BMENU2) -p "Chains Prepend a Node" \
+	$(BMENU2) -p "Timespec Helpers TIMESPEC_FROM_TICKS - Convert Ticks to struct timespec Representation" \
 	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 
