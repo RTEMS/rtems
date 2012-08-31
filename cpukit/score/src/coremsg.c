@@ -82,16 +82,22 @@ bool _CORE_message_queue_Initialize(
   the_message_queue->maximum_message_size       = maximum_message_size;
   _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
 
-  /*
-   *  Round size up to multiple of a pointer for chain init and
-   *  check for overflow on adding overhead to each message.
-   */
   allocated_message_size = maximum_message_size;
-  if (allocated_message_size & (sizeof(uint32_t) - 1)) {
-    allocated_message_size += sizeof(uint32_t);
-    allocated_message_size &= ~(sizeof(uint32_t) - 1);
+
+  /* 
+   * Check if allocated_message_size is aligned to uintptr-size boundary. 
+   * If not, it will increase allocated_message_size to multiplicity of pointer
+   * size.
+   */
+  if (allocated_message_size & (sizeof(uintptr_t) - 1)) {
+    allocated_message_size += sizeof(uintptr_t);
+    allocated_message_size &= ~(sizeof(uintptr_t) - 1);
   }
 
+  /* 
+   * Check for an overflow. It can occur while increasing allocated_message_size
+   * to multiplicity of uintptr_t above.
+   */
   if (allocated_message_size < maximum_message_size)
     return false;
 
