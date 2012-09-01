@@ -104,6 +104,7 @@ mrfs_fspermission/Makefile
 mrfs_fsrdwr/Makefile
 mrfs_fssymlink/Makefile
 mrfs_fstime/Makefile
+mrfs_fsfpathconf/Makefile
 fsnofs01/Makefile
 fsimfsgeneric01/Makefile
 fsbdpart01/Makefile
