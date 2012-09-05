@@ -92,7 +92,7 @@ summary(rtems_shell_dd_globals* globals)
 
 /* ARGSUSED */
 void
-summaryx(rtems_shell_dd_globals* globals, int __unused)
+summaryx(rtems_shell_dd_globals* globals, int __unused_arg)
 {
 	int save_errno = errno;
 
