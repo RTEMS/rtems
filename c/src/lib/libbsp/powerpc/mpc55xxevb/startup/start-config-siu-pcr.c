@@ -83,8 +83,8 @@ BSP_START_TEXT_SECTION const mpc55xx_siu_pcr_config
   {116, 2, 0, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PH[ 4.. 5] FR/HC_TERM    out*/
   {118, 1, 0, {.B.PA = 2,.B.OBE = 1,.B.WPE = 0}}, /* PH[ 6.. 6] LIN_Tx        out*/
   {119, 1, 0, {.B.PA = 2,.B.IBE = 1,.B.WPE = 0}}, /* PH[ 7.. 7] LIN_Rx        in */
-  {120, 1, 0, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}} /* PH[ 8..11] LIN_SLP,RST   out*/
-  {121, 2, 1, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}} /* PH[ 8..11] LIN_SLP,RST   out*/
+  {120, 1, 0, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PH[ 8..11] LIN_SLP,RST   out*/
+  {121, 2, 1, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PH[ 8..11] LIN_SLP,RST   out*/
   {120, 1, 0, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}} /* PH[ 8..11] LIN_SLP,RST   out*/
 #elif defined(MPC55XX_BOARD_PHYCORE_MPC5554)
   {  0, 4, 0, {.B.PA = 1,          .B.DSC = 1,.B.WPE=1,.B.WPS=1}}, /* !CS  [0:3]    */
