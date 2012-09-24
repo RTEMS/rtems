@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -23,6 +23,7 @@
 #ifndef LIBBSP_ARM_SHARED_LPC_DMA_H
 #define LIBBSP_ARM_SHARED_LPC_DMA_H
 
+#include <bspopts.h>
 #include <bsp/utility.h>
 
 #ifdef __cplusplus
@@ -78,7 +79,7 @@ typedef struct {
   uint32_t cfg;
   uint32_t sync;
   uint32_t reserved [50];
-  lpc_dma_channel channels [];
+  lpc_dma_channel channels [LPC_DMA_CHANNEL_COUNT];
 } lpc_dma;
 
 /**
