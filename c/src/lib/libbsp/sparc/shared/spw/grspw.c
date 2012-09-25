@@ -112,6 +112,7 @@ typedef struct {
    /* statistics */
    spw_stats stat;
 
+   unsigned int _ptr_rxbuf0;
    char *ptr_rxbuf0;
    char *ptr_txdbuf0;
    char *ptr_txhbuf0;
@@ -522,6 +523,7 @@ int grspw_device_init(GRSPW_DEV *pDev)
 	pDev->txbufcnt = SPACEWIRE_TXBUFS_NR;
 	pDev->rxbufcnt = SPACEWIRE_RXBUFS_NR;
 
+	pDev->_ptr_rxbuf0 = 0;
 	pDev->ptr_rxbuf0 = 0;
 	pDev->ptr_txdbuf0 = 0;
 	pDev->ptr_txhbuf0 = 0;
@@ -617,10 +619,11 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 			pDev->ptr_rxbuf0 = pDev->rx_dma_area;
 		}
 	} else {
-		if (pDev->ptr_rxbuf0) {
-			free(pDev->ptr_rxbuf0);
+		if (pDev->_ptr_rxbuf0) {
+			free(pDev->_ptr_rxbuf0);
 		}
-		pDev->ptr_rxbuf0 = (char *) malloc(pDev->rxbufsize * pDev->rxbufcnt);
+		pDev->_ptr_rxbuf0 = (unsigned int) malloc(pDev->rxbufsize * pDev->rxbufcnt+4);
+		pDev->ptr_rxbuf0 = (char *)((pDev->_ptr_rxbuf0+7)&~7);
 		if ( !pDev->ptr_rxbuf0 )
 			return 1;
 	}
@@ -1242,7 +1245,7 @@ static rtems_device_driver grspw_control(
 			}
 
 			/* Save new buffer sizes */
-			pDev->rxbufsize = ps->rxsize;
+			pDev->rxbufsize = ((ps->rxsize+7)&~7);
 			pDev->txdbufsize = ps->txdsize;
 			pDev->txhbufsize = ps->txhsize;
 			pDev->config.rxmaxlen = pDev->rxbufsize;
