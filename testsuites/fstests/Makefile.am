@@ -29,6 +29,7 @@ SUBDIRS += mrfs_fsrdwr
 SUBDIRS += mrfs_fssymlink
 SUBDIRS += mrfs_fstime
 SUBDIRS += mrfs_fsfpathconf
+SUBDIRS += mrfs_fsrfsbitmap01
 SUBDIRS += fsnofs01
 SUBDIRS += fsimfsgeneric01
 SUBDIRS += fsbdpart01

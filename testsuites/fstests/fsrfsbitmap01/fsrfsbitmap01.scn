@@ -1,0 +1,142 @@
+*** FILE SYSTEM TEST ( MOUNTED RFS ) ***
+Initializing filesystem MOUNTED RFS
+
+ START of RFS Bitmap Unit Test
+ Bit set value       : 0
+ Bit clear value     : 1
+ Num bit per element : 32
+
+RFS Bitmap Test : size = 4096 (128)
+  1. Find bit with seed > size: pass (Success)
+  2. Find bit with seed = size: pass (Success)
+  3. Find bit 0 with seed = 0: pass (Success): bit = 0
+  4. Find bit (size - 1) with seed = (size - 1) (4095): pass (Success): bit = 4095
+  5. Test bit 0: pass (Success)
+  6. Test bit (size - 1) (4095): pass (Success)
+  7. Test bit range (1,4094] all clear: pass
+  8. Set all bits: PASS (Success)
+  9. Clear bit 3232: PASS (Success)
+ 10. Find bit with seed = 0: pass (Success): bit = 3232
+ 11. Fail to find bit with seed = 0: pass (Success): bit = 2048
+ 12. Clear bit 0: pass (Success)
+ 13. Find bit with seed = (size - 1): pass (Success): bit = 0
+ 14. Clear bit (size - 1) (4095): pass (Success)
+ 15. Find bit with seed = 0: pass (Success): bit = 4095
+ 16. Clear bit 0: pass (Success)
+ 17. Find bit with seed = (size / 2) (2048): pass (Success): bit = 0
+ 18. Clear bit (size - 1) (4095): pass, (Success)
+ 19. Find bit with seed = (size / 2) (2048): pass (Success): bit = 4095
+ 20. Clear bit 0: pass (Success)
+ 21. Find bit with seed = ((size / 2) - 1) (2047): pass (Success): bit = 0
+ 22. Clear bit (size - 1) (4095): pass (Success)
+ 23. Find bit with seed = ((size / 2) - 1) (2047): pass (Success): bit = 4095
+ 23. Set all bits
+ 23. Cleared bits (1432, 1463] (32)
+ 23. Alloc'ed all bits (1463, 1494] (32)
+ 24. Set all bits
+ 24. Cleared bits (660, 716] (57)
+ 24. Alloc'ed all bits (716, 772] (57)
+ 25. Set all bits: PASS (Success)
+ 26. Clear bit (1321, 2070]: PASS (Success)
+ 27. Check free count is 749: 749: pass (Success)
+ 28. Create search check free count is 749: 749: pass (Success)
+ 29. Map set check with bit (4098) larger than size (4096)
+ 30. Map clear check with bit (4098) larger than size (4096)
+ 31. Map test check with bit (4098) larger than size (4096)
+ 32. Set all bits in the map, then clear bit (2048) and set this bit once again:  PASSED
+ 33. Attempt to find bit when all bits are set (expected FAILED): FAILED
+ 34. Clear all bits in the map.
+
+RFS Bitmap Test : size = 2048 (64)
+  1. Find bit with seed > size: pass (Success)
+  2. Find bit with seed = size: pass (Success)
+  3. Find bit 0 with seed = 0: pass (Success): bit = 0
+  4. Find bit (size - 1) with seed = (size - 1) (2047): pass (Success): bit = 2047
+  5. Test bit 0: pass (Success)
+  6. Test bit (size - 1) (2047): pass (Success)
+  7. Test bit range (1,2046] all clear: pass
+  8. Set all bits: PASS (Success)
+  9. Clear bit 449: PASS (Success)
+ 10. Find bit with seed = 0: pass (Success): bit = 449
+ 11. Fail to find bit with seed = 0: pass (Success): bit = 0
+ 12. Clear bit 0: pass (Success)
+ 13. Find bit with seed = (size - 1): pass (Success): bit = 0
+ 14. Clear bit (size - 1) (2047): pass (Success)
+ 15. Find bit with seed = 0: pass (Success): bit = 2047
+ 16. Clear bit 0: pass (Success)
+ 17. Find bit with seed = (size / 2) (1024): pass (Success): bit = 0
+ 18. Clear bit (size - 1) (2047): pass, (Success)
+ 19. Find bit with seed = (size / 2) (1024): pass (Success): bit = 2047
+ 20. Clear bit 0: pass (Success)
+ 21. Find bit with seed = ((size / 2) - 1) (1023): pass (Success): bit = 0
+ 22. Clear bit (size - 1) (2047): pass (Success)
+ 23. Find bit with seed = ((size / 2) - 1) (1023): pass (Success): bit = 2047
+ 23. Set all bits
+ 23. Cleared bits (960, 991] (32)
+ 23. Alloc'ed all bits (991, 1022] (32)
+ 24. Set all bits
+ 24. Cleared bits (166, 222] (57)
+ 24. Alloc'ed all bits (222, 278] (57)
+ 25. Set all bits: PASS (Success)
+ 26. Clear bit (177, 770]: PASS (Success)
+ 27. Check free count is 593: 593: pass (Success)
+ 28. Create search check free count is 593: 593: pass (Success)
+ 29. Map set check with bit (2050) larger than size (2048)
+ 30. Map clear check with bit (2050) larger than size (2048)
+ 31. Map test check with bit (2050) larger than size (2048)
+ 32. Set all bits in the map, then clear bit (1024) and set this bit once again:  PASSED
+ 33. Attempt to find bit when all bits are set (expected FAILED): FAILED
+ 34. Clear all bits in the map.
+
+RFS Bitmap Test : size = 420 (14)
+  1. Find bit with seed > size: pass (Success)
+  2. Find bit with seed = size: pass (Success)
+  3. Find bit 0 with seed = 0: pass (Success): bit = 0
+  4. Find bit (size - 1) with seed = (size - 1) (419): pass (Success): bit = 419
+  5. Test bit 0: pass (Success)
+  6. Test bit (size - 1) (419): pass (Success)
+  7. Test bit range (1,418] all clear: pass
+  8. Set all bits: PASS (Success)
+  9. Clear bit 215: PASS (Success)
+ 10. Find bit with seed = 0: pass (Success): bit = 215
+ 11. Fail to find bit with seed = 0: pass (Success): bit = 0
+ 12. Clear bit 0: pass (Success)
+ 13. Find bit with seed = (size - 1): pass (Success): bit = 0
+ 14. Clear bit (size - 1) (419): pass (Success)
+ 15. Find bit with seed = 0: pass (Success): bit = 419
+ 16. Clear bit 0: pass (Success)
+ 17. Find bit with seed = (size / 2) (210): pass (Success): bit = 0
+ 18. Clear bit (size - 1) (419): pass, (Success)
+ 19. Find bit with seed = (size / 2) (210): pass (Success): bit = 419
+ 20. Clear bit 0: pass (Success)
+ 21. Find bit with seed = ((size / 2) - 1) (209): pass (Success): bit = 0
+ 22. Clear bit (size - 1) (419): pass (Success)
+ 23. Find bit with seed = ((size / 2) - 1) (209): pass (Success): bit = 419
+ 23. Set all bits
+ 23. Cleared bits (127, 158] (32)
+ 23. Alloc'ed all bits (158, 189] (32)
+ 24. Set all bits
+ 24. Cleared bits (83, 139] (57)
+ 24. Alloc'ed all bits (139, 195] (57)
+ 25. Set all bits: PASS (Success)
+ 26. Clear bit (94, 174]: PASS (Success)
+ 27. Check free count is 80: 80: pass (Success)
+ 28. Create search check free count is 80: 80: pass (Success)
+ 29. Map set check with bit (422) larger than size (420)
+ 30. Map clear check with bit (422) larger than size (420)
+ 31. Map test check with bit (422) larger than size (420)
+ 32. Set all bits in the map, then clear bit (210) and set this bit once again:  PASSED
+ 33. Attempt to find bit when all bits are set (expected FAILED): FAILED
+ 34. Clear all bits in the map.
+
+ Testing bitmap_map functions with NULL bitmap control pointer
+
+ Allocate most of memory - attempt to fail while open bitmap - expect ENOMEM
+ Attempt to open bitmap returned: Not enough space
+ Freeing the allocated memory
+
+ END of RFS Bitmap Unit Test
+
+
+Shutting down filesystem MOUNTED RFS
+*** END OF FILE SYSTEM TEST ( MOUNTED RFS ) ***

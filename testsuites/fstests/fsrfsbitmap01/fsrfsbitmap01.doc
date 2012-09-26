@@ -1,0 +1,29 @@
+#  COPYRIGHT (c) 2012-. 
+#  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  fsrfsbitmap01
+
+directives:
+
+  + rtems_rfs_bitmap_open
+  + rtems_rfs_bitmap_close
+  + rtems_rfs_bitmap_load_map
+  + rtems_rfs_bitmap_map_alloc
+  + rtems_rfs_bitmap_map_clear
+  + rtems_rfs_bitmap_map_clear_all
+  + rtems_rfs_bitmap_map_set
+  + rtems_rfs_bitmap_map_set_all
+  + rtems_rfs_bitmap_map_test
+ 
+
+concepts:
+
+  + exercise all rfs bitmap directives
+
