@@ -74,6 +74,14 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_8254],
  - you do not mind adding roughly 5 microseconds to each context switch.
 ])
 
+RTEMS_BSPOPTS_SET([USE_CIRRUS_GD5446],[*],[0])
+RTEMS_BSPOPTS_HELP([USE_CIRRUS_GD5446],
+[If defined, enable use of the Cirrus GD5446 controller rather than the very basic
+ VGA driver for frame buffer support.
+
+ NOTE: This has only been tested on Qemu.])
+AM_CONDITIONAL(USE_CIRRUS_GD5446,test "$USE_CIRRUS_GD5446" = "1")
+
 if test X${CLOCK_DRIVER_USE_TSC} = X1 -a X${CLOCK_DRIVER_USE_8254} = X1 ; then
   AC_MSG_ERROR([pc386 both TSC and 8254 specified for clock driver])
 fi

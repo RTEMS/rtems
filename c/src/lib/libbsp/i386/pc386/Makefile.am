@@ -83,7 +83,6 @@ include_HEADERS += ../../i386/shared/comm/i386_io.h
 libbsp_a_SOURCES += console/inch.c
 libbsp_a_SOURCES += console/outch.c
 libbsp_a_SOURCES += console/defkeymap.c
-libbsp_a_SOURCES += console/fb_vga.c
 libbsp_a_SOURCES += console/keyboard.c
 libbsp_a_SOURCES += console/pc_keyb.c
 libbsp_a_SOURCES += console/ps2_mouse.c
@@ -104,6 +103,11 @@ libbsp_a_SOURCES += console/printk_support.c
 libbsp_a_SOURCES += console/vgacons.c
 libbsp_a_SOURCES += console/exar17d15x.c
 libbsp_a_SOURCES += console/rtd316.c
+if USE_CIRRUS_GD5446
+libbsp_a_SOURCES += console/fb_cirrus.c
+else
+libbsp_a_SOURCES += console/fb_vga.c
+endif
 
 # gdb
 libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
