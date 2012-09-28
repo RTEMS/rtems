@@ -6,8 +6,17 @@ bsp_rom_start = ORIGIN (ROM);
 bsp_rom_size = LENGTH (ROM);
 bsp_rom_end = bsp_rom_start + bsp_rom_size;
 
-bsp_external_ram_start = ORIGIN (RAM_EXT);
-bsp_external_ram_size = LENGTH (RAM_EXT);
-bsp_external_ram_end = bsp_external_ram_start + bsp_external_ram_size;
-
 INCLUDE linkcmds.base
+
+SECTIONS {
+	.work_bonus : {
+		/*
+		 * This section will occupy the remaining RAM_EXT region and may
+		 * contain parts of the RTEMS work space and heap.
+		 */
+		bsp_section_work_bonus_begin = .;
+		. += ORIGIN (RAM_EXT) + LENGTH (RAM_EXT) - ABSOLUTE (.);
+		bsp_section_work_bonus_end = .;
+	} > RAM_EXT AT > RAM_EXT
+	bsp_section_work_bonus_size = bsp_section_work_bonus_end - bsp_section_work_bonus_begin;
+}

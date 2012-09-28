@@ -41,8 +41,6 @@
 #include <bsp/start.h>
 #include <bsp/mpc55xx-config.h>
 
-extern Heap_Control *RTEMS_Malloc_Heap;
-
 /* Symbols defined in linker command file */
 LINKER_SYMBOL(mpc55xx_exc_vector_base);
 
@@ -140,18 +138,5 @@ void bsp_start(void)
 	mpc55xx_edma_init();
 	#ifdef MPC55XX_EMIOS_PRESCALER
 		mpc55xx_emios_initialize(MPC55XX_EMIOS_PRESCALER);
-	#endif
-}
-
-void bsp_pretasking_hook(void)
-{
-	#if MPC55XX_CHIP_FAMILY == 564
-		_Heap_Extend(
-			RTEMS_Malloc_Heap,
-			bsp_section_rwextra_end,
-			(uintptr_t) bsp_ram_end
-				- (uintptr_t) bsp_section_rwextra_end,
-			NULL
-		);
 	#endif
 }
