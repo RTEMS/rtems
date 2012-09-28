@@ -74,6 +74,19 @@ rtems_status_code bsp_register_i2c(void);
 
 void bsp_restart(void *addr);
 
+#if MPC55XX_CHIP_TYPE / 10 == 567
+  static void *mpc55xx_idle_task(uintptr_t arg)
+  {
+    while (true) {
+      __asm__ volatile ("wait");
+    }
+
+    return NULL;
+  }
+  
+  #define BSP_IDLE_TASK_BODY mpc55xx_idle_task
+#endif
+
 #endif /* ASM */
 
 #ifdef __cplusplus
