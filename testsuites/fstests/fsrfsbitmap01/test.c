@@ -376,17 +376,17 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   rtems_rfs_bitmap_bit mybit = control.size +2;
 
   printf (" 29. Map set check with bit (%d) larger than size (%d)\n",
-	(int)mybit, (int)control.size);
+          (int)mybit, (int)control.size);
   rc = rtems_rfs_bitmap_map_set(&control, mybit);
   rtems_test_assert( rc == EINVAL );
 
   printf (" 30. Map clear check with bit (%d) larger than size (%d)\n",
-	(int)mybit, (int)control.size);
+          (int)mybit, (int)control.size);
   rc = rtems_rfs_bitmap_map_clear(&control, mybit);
   rtems_test_assert( rc == EINVAL );
 
   printf (" 31. Map test check with bit (%d) larger than size (%d)\n",
-	(int)mybit, (int)control.size);
+          (int)mybit, (int)control.size);
   rc = rtems_rfs_bitmap_map_test(&control, mybit ,&result);
   rtems_test_assert( rc == EINVAL );
 
@@ -448,12 +448,13 @@ void nullpointer_test(void){
 
   rtems_rfs_bitmap_control* control=NULL;
   rtems_rfs_bitmap_control  notnullcontrol;
-  rtems_rfs_bitmap_bit	bit = 0;
-  rtems_rfs_bitmap_bit	seed_bit = 0;
+  rtems_rfs_bitmap_bit  bit = 0;
+  rtems_rfs_bitmap_bit  seed_bit = 0;
   int rc;
   bool result;
 
-  printf("\n Testing bitmap_map functions with NULL bitmap control " 			"pointer\n");
+  printf("\n Testing bitmap_map functions with NULL bitmap control "
+         "pointer\n");
   /* Invoke all functions with NULL control */
   rc = rtems_rfs_bitmap_map_set(control, bit);
   rtems_test_assert(rc>0);
@@ -476,7 +477,7 @@ void nullpointer_test(void){
    * coverage
    */
   rc = rtems_rfs_bitmap_map_set(&notnullcontrol, bit);
-  rtems_test_assert(rc > 0);		
+  rtems_test_assert(rc > 0);
 }
 
 void open_failure(void){
