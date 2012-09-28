@@ -1351,7 +1351,7 @@ static int lpc_eth_interface_ioctl(
   switch (cmd)  {
     case SIOCGIFMEDIA:
     case SIOCSIFMEDIA:
-      rtems_mii_ioctl(&e->mdio, e, cmd, (int *) data);
+      rtems_mii_ioctl(&e->mdio, e, cmd, &ifr->ifr_media);
       break;
     case SIOCGIFADDR:
     case SIOCSIFADDR:
