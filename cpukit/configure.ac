@@ -200,16 +200,6 @@ RTEMS_CPUOPT([__RTEMS_USE_TICKS_FOR_STATISTICS__],
   [1],
   [disable nanosecond granularity for statistics])
 
-RTEMS_CPUOPT([__RTEMS_USE_TICKS_CPU_USAGE_STATISTICS__],
-  [test x"${USE_TICKS_FOR_CPU_USAGE_STATISTICS}" = x"1"],
-  [1],
-  [disable nanosecond granularity for cpu usage statistics])
-
-RTEMS_CPUOPT([__RTEMS_USE_TICKS_RATE_MONOTONIC_STATISTICS__],
-  [test x"${USE_TICKS_FOR_RATE_MONOTONIC_STATISTICS}" = x"1"],
-  [1],
-  [disable nanosecond granularity for period statistics])
-
 ## This improves both the size and coverage analysis.
 RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
   [test x"${RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH}" = x"1"],
