@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 2012-. 
+#  COPYRIGHT (c) 2012-.
 #  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
 #
 #  The license and distribution terms for this file may be
@@ -13,7 +13,6 @@ test set name:  fsfpathconf
 directives:
 
   + fpathconf
- 
 
 concepts:
 

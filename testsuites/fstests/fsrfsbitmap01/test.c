@@ -4,7 +4,7 @@
  *
  *  This test is extended version of rtems-rfs-bimaps-ut.c . Most of this code
  *  was written by Chris Johns in rtems-rfs-bitmaps-ut.c and is copied
- *  and pasted here. Rest of this test was written by Krzysztof Miesowicz to 
+ *  and pasted here. Rest of this test was written by Krzysztof Miesowicz to
  *  completely cover rtems_rfs_bitmap_* symbols.
  *
  *  The license and distribution terms for this file may be
@@ -191,7 +191,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
     free (buffer.buffer);
     return;
   }
-  
+
   /*
    * This is a new bitmap with no bits set. Try and find a bit with a few
    * seeds.
@@ -233,7 +233,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
 
   if (!rtems_rfs_bitmap_ut_test_range (&control, 7, false, 1, size - 2))
     rtems_rfs_exit_on_error (0, !result, &control, buffer.buffer);
-  
+
   /*
    * Set all bits then clear one and find it.
    */
@@ -452,7 +452,7 @@ void nullpointer_test(void){
   rtems_rfs_bitmap_bit	seed_bit = 0;
   int rc;
   bool result;
-  
+
   printf("\n Testing bitmap_map functions with NULL bitmap control " 			"pointer\n");
   /* Invoke all functions with NULL control */
   rc = rtems_rfs_bitmap_map_set(control, bit);
@@ -469,10 +469,10 @@ void nullpointer_test(void){
   rtems_test_assert(rc>0);
   rc = rtems_rfs_bitmap_map_alloc(control, seed_bit, &result, &bit);
   rtems_test_assert(!result);
-  /* 
+  /*
    * Invoke map_alloc with not-null pointer to control, but with
    * control uninitialized. It is to cover check in rtems_rfs_bitmap_load_map.
-   * We can't check directly if it goes this path, but we will see this in 
+   * We can't check directly if it goes this path, but we will see this in
    * coverage
    */
   rc = rtems_rfs_bitmap_map_set(&notnullcontrol, bit);
@@ -492,7 +492,7 @@ void open_failure(void){
   printf("\n Allocate most of memory - attempt to fail while open bitmap - expect ENOMEM\n" );
   void *opaque;
   static const uintptr_t location_size [] = {
-    sizeof(rtems_filesystem_global_location_t)    
+    sizeof(rtems_filesystem_global_location_t)
   };
 
   size_t size = location_size[0]*rtems_rfs_bitmap_search_element_bits();
@@ -526,12 +526,10 @@ void open_failure(void){
 
 void test(void){
   puts("\n START of RFS Bitmap Unit Test");
-  
+
   rtems_rfs_bitmap_unit_test();
   nullpointer_test();
   open_failure();
 
   puts("\n END of RFS Bitmap Unit Test");
 }
-
-

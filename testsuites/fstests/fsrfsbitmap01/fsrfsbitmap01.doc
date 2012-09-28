@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 2012-. 
+#  COPYRIGHT (c) 2012-.
 #  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
 #
 #  The license and distribution terms for this file may be
@@ -21,7 +21,6 @@ directives:
   + rtems_rfs_bitmap_map_set
   + rtems_rfs_bitmap_map_set_all
   + rtems_rfs_bitmap_map_test
- 
 
 concepts:
 

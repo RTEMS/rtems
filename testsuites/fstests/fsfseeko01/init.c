@@ -32,7 +32,7 @@ static void test(void)
     ? INT64_MAX
     : (sizeof(off_t) == sizeof(int32_t) ? INT32_MAX : 1);
   off_t actual_off;
- 
+
   errno = 0;
   file = fopen("file", "w+");
   perror("fopen");

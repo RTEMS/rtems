@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = 
+SUBDIRS =
 SUBDIRS += fsfseeko01
 SUBDIRS += fsdosfssync01
 SUBDIRS += imfs_fserror

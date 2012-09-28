@@ -1,7 +1,7 @@
-/* 
+/*
  *  COPYRIGHT (c) 2012 - .
  *  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
- *  
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -23,7 +23,7 @@
 #include <rtems/error.h>
 #include <ctype.h>
 #include <rtems/libcsupport.h>
- 
+
 #include "fstest.h"
 #include "tmacros.h"
 
@@ -77,7 +77,7 @@ static void fpathconf_test(void){
 
     close(fd);
     fd = open("testfile.test", O_WRONLY);
-    
+
     rv = fpathconf(fd, _PC_LINK_MAX);
   }
 }
@@ -87,7 +87,6 @@ void test(void){
   puts("\n\n*** FPATHCONF TEST ***" );
   fpathconf_test();
   puts( "\n*** END OF FPATHCONF TEST ***" );
-
 }
 
 /* end of file */
