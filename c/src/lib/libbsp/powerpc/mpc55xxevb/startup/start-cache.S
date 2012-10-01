@@ -96,7 +96,7 @@ get_data_cache_invalidation_status:
 	bne	get_data_cache_invalidation_status
 
 	/* Save data cache settings */
-#if MPC55XX_CHIP_TYPE / 10 != 567
+#if MPC55XX_CHIP_FAMILY != 567
 	/* FIXME: CORG??? 0x00180011 */
 	LWI	r6, 0x00100001
 #else

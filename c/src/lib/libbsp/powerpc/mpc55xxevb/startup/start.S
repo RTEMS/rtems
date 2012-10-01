@@ -24,11 +24,11 @@
 #include <bsp/linker-symbols.h>
 #include <libcpu/powerpc-utility.h>
 
-#if MPC55XX_CHIP_TYPE / 10 != 551
+#if MPC55XX_CHIP_FAMILY != 551
   #define HAS_SPE
 #endif
 
-#if MPC55XX_CHIP_TYPE / 10 == 564
+#if MPC55XX_CHIP_FAMILY == 564
   #define INIT_REGISTERS_FOR_LSM
 #endif
 

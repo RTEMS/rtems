@@ -145,7 +145,7 @@ void bsp_start(void)
 
 void bsp_pretasking_hook(void)
 {
-	#if MPC55XX_CHIP_TYPE / 10 == 564
+	#if MPC55XX_CHIP_FAMILY == 564
 		_Heap_Extend(
 			RTEMS_Malloc_Heap,
 			bsp_section_rwextra_end,

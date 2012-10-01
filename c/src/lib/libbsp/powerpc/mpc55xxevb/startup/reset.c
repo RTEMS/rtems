@@ -29,7 +29,7 @@
 void bsp_reset(void)
 {
   while (true) {
-    #if MPC55XX_CHIP_TYPE / 10 == 564
+    #if MPC55XX_CHIP_FAMILY == 564
       /* TODO */
     #else
       SIU.SRCR.R = 1U << (31 - 0);

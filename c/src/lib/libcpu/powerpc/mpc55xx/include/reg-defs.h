@@ -25,7 +25,7 @@
 
 #include <bspopts.h>
 
-#if MPC55XX_CHIP_TYPE / 10 == 551
+#if MPC55XX_CHIP_FAMILY == 551
   #define FLASH_BIUCR   0xFFFF801C
 #else
   #define FLASH_BIUCR 0xC3F8801C

@@ -147,7 +147,7 @@ BSP_START_TEXT_SECTION const struct MMU_tag
   MPC55XX_MMU_TAG_INITIALIZER(17, 0x3ffc0000,               MPC55XX_MMU_1K,   0, 1, 1, 1)
   /* Peripheral Bridge A-Registers on MMU-table pos 4 */
   /* Peripheral Bridge B-Registers on MMU-table pos 0 */
-#elif MPC55XX_CHIP_TYPE / 10 == 564
+#elif MPC55XX_CHIP_FAMILY == 564
   /* Internal flash 1M */
   MPC55XX_MMU_TAG_INITIALIZER(0, 0x00000000, MPC55XX_MMU_1M, 1, 0, 1, 0),
   /* IO */

@@ -1610,7 +1610,7 @@ static void smsc9218i_interrupt_init(
   pcr.B.PA = 2;
   pcr.B.OBE = 0;
   pcr.B.IBE = 1;
-#if MPC55XX_CHIP_TYPE / 10 != 551
+#if MPC55XX_CHIP_FAMILY != 551
   pcr.B.DSC = 0;
 #endif
   pcr.B.ODE = 0;
@@ -1623,7 +1623,7 @@ static void smsc9218i_interrupt_init(
   /* DMA/Interrupt Request Select */
   rtems_interrupt_disable(level);
   dirsr.R = SIU.DIRSR.R;
-#if MPC55XX_CHIP_TYPE / 10 != 551
+#if MPC55XX_CHIP_FAMILY != 551
   dirsr.B.DIRS0 = 0;
 #endif
   SIU.DIRSR.R = dirsr.R;
@@ -1698,7 +1698,7 @@ static void smsc9218i_reset_signal_init(void)
   pcr.B.PA = 0;
   pcr.B.OBE = 1;
   pcr.B.IBE = 0;
-#if MPC55XX_CHIP_TYPE / 10 != 551
+#if MPC55XX_CHIP_FAMILY != 551
   pcr.B.DSC = 0;
 #endif
   pcr.B.ODE = 0;

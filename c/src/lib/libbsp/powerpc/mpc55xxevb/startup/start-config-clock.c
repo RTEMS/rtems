@@ -71,7 +71,7 @@ BSP_START_TEXT_SECTION const mpc55xx_clock_config
         .LOLIRQ = 0,
         .LOCIRQ = 0,
         .ERATE = 0,
-        #if MPC55XX_CHIP_TYPE / 10  == 567
+        #if MPC55XX_CHIP_FAMILY  == 567
           .CLKCFG_DIS = 1,
         #endif
         .EDEPTH = 0,

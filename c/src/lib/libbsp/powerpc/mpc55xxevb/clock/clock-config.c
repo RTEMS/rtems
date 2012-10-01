@@ -98,7 +98,7 @@ static void mpc55xx_clock_initialize(void)
   regs->CADR.R = (uint32_t) interval - 1;
 
   /* Set control register */
-  #if MPC55XX_CHIP_TYPE / 10 == 551
+  #if MPC55XX_CHIP_FAMILY == 551
     ccr.B.MODE = MPC55XX_EMIOS_MODE_MCB_UP_INT_CLK;
   #else
     ccr.B.MODE = MPC55XX_EMIOS_MODE_MC_UP_INT_CLK;

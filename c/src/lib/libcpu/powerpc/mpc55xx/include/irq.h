@@ -46,7 +46,7 @@ extern "C" {
 #define MPC55XX_IRQ_SOFTWARE_GET_REQUEST(i) (i)
 #define MPC55XX_IRQ_SOFTWARE_NUMBER (MPC55XX_IRQ_SOFTWARE_MAX + 1U)
 
-#if MPC55XX_CHIP_TYPE / 10 == 551
+#if MPC55XX_CHIP_FAMILY == 551
   #define MPC55XX_IRQ_MAX 293U
 
   /* eDMA */
@@ -111,7 +111,7 @@ extern "C" {
   /* FlexRay */
   #define MPC55XX_IRQ_FLEXRAY_BASE(mod) \
     ((mod) == 0 ? 284U : MPC55XX_IRQ_INVALID)
-#elif MPC55XX_CHIP_TYPE / 10 == 564
+#elif MPC55XX_CHIP_FAMILY == 564
   #define MPC55XX_IRQ_MAX 255U
 
   /* eDMA */
@@ -211,11 +211,11 @@ extern "C" {
   /* SWG */
   #define MPC55XX_IRQ_SWG 255U
 #else
-  #if MPC55XX_CHIP_TYPE / 10 == 555
+  #if MPC55XX_CHIP_FAMILY == 555
     #define MPC55XX_IRQ_MAX 307U
-  #elif MPC55XX_CHIP_TYPE / 10 == 556
+  #elif MPC55XX_CHIP_FAMILY == 556
     #define MPC55XX_IRQ_MAX 360U
-  #elif MPC55XX_CHIP_TYPE / 10 == 567
+  #elif MPC55XX_CHIP_FAMILY == 567
     #define MPC55XX_IRQ_MAX 479U
   #else
     #error "unsupported chip type"
@@ -336,7 +336,7 @@ extern "C" {
 #define MPC55XX_IRQ_ESCI(mod) (MPC55XX_IRQ_ESCI_BASE(mod) + 0U)
 
 /* FlexCAN */
-#if MPC55XX_CHIP_TYPE / 10 == 564
+#if MPC55XX_CHIP_FAMILY == 564
   #define MPC55XX_IRQ_CAN_ERR(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 0U)
   #define MPC55XX_IRQ_CAN_BOFF_TWRN_RWRN(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 1U)
   #define MPC55XX_IRQ_CAN_BUF_0_3(mod) (MPC55XX_IRQ_CAN_BASE(mod) + 3U)
@@ -375,7 +375,7 @@ extern "C" {
 #define MPC55XX_IRQ_FLEXPWM_REF(mod) (MPC55XX_IRQ_FLEXPWM_BASE(mod) + 13U)
 
 /* FlexRay */
-#if MPC55XX_CHIP_TYPE / 10 == 564
+#if MPC55XX_CHIP_FAMILY == 564
   #define MPC55XX_IRQ_FLEXRAY_LRNEIF_DRNEIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 0U)
   #define MPC55XX_IRQ_FLEXRAY_LRCEIF_DRCEIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 1U)
   #define MPC55XX_IRQ_FLEXRAY_FAFAIF(mod) (MPC55XX_IRQ_FLEXRAY_BASE(mod) + 2U)

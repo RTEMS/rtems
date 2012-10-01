@@ -23,7 +23,7 @@
 #include <bsp/irq.h>
 #include <bsp/mpc83xx_i2cdrv.h>
 
-#if MPC55XX_CHIP_TYPE / 10 == 551
+#if MPC55XX_CHIP_FAMILY == 551
   static mpc83xx_i2c_desc_t mpc55xx_i2c_bus = {
     .bus_desc = {
       .ops = &mpc83xx_i2c_ops,

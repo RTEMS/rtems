@@ -143,6 +143,10 @@ RTEMS_BSPOPTS_SET([MPC55XX_CHIP_TYPE],[*],[5554])
 RTEMS_BSPOPTS_HELP([MPC55XX_CHIP_TYPE],
 [specifies the chip type in use (e.g. 5554 for MPC5554)])
 
+RTEMS_BSPOPTS_SET([MPC55XX_CHIP_FAMILY],[*],[(MPC55XX_CHIP_TYPE / 10)])
+RTEMS_BSPOPTS_HELP([MPC55XX_CHIP_FAMILY],
+[specifies the chip family in use (e.g. 555 for MPC5554)])
+
 RTEMS_BSPOPTS_SET([MPC55XX_EARLY_STACK_SIZE],[*],[1024])
 RTEMS_BSPOPTS_HELP([MPC55XX_EARLY_STACK_SIZE],
 [size of the early initialization stack in bytes])
