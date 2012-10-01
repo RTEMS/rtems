@@ -30,59 +30,12 @@ BSP_START_TEXT_SECTION const struct MMU_tag
   /* External Ethernet Controller 64k */
   MPC55XX_MMU_TAG_INITIALIZER(5, 0x3fff8000, MPC55XX_MMU_64K, 0, 1, 1, 1)
 #elif defined(MPC55XX_BOARD_PHYCORE_MPC5554)
-    /* XXX I'm not using TLB1 entry 2 the same way as
-	 * in the BAM.
-     */
-    /*  Set up MMU TLB1 entry 2 for external ram. */
-    /*  Effective Base address = 0x2100_0000 XXX NOT LIKE BAM */
-    /*       Real Base address = 0x2100_0000 XXX NOT LIKE BAM */
-    /*  Page Size            6 =  4MB XXX Not like BAM */
-    /*  Not Guarded, Cache Enable, All Access (0, 3F) */
-    {
-        { .R = 0x10020000},     /* MAS0 */
-        { .R = 0xC0000600},     /* MAS1 */
-        { .R = 0x21000000},     /* MAS2 */
-        { .R = 0x2100003F}      /* MAS3 */
-    },
-
-    /*  Set up MMU TLB1 entry 5 for second half of SRAM (debug RAM) */
-    /*  Effective Base address = 0x2140_0000 */
-    /*       Real Base address = 0x2140_0000 */
-    /*  Page Size            6 = 4MB */
-    /*  Not Guarded, Cache Enable, All Access (0, 3F) */
-    {
-        { .R =  0x10050000 },   /* MAS0 */
-        { .R =  0xC0000600 },   /* MAS1 */
-        { .R =  0x21400000 },   /* MAS2 */
-        { .R =  0x2140003F }    /* MAS3 */
-    },
-    /*  Set up MMU TLB1 entry 6 for External LAN91C111 */
-    /*  Effective Base address = 0x2200_0000 */
-    /*       Real Base address = 0x2200_0000 */
-    /*  Page Size            7 = 16MB */
-    /*  Write-through, Guarded, Cache Inhibit, All Access (E, 3F) */
-    {
-        { .R = 0x10060000},     /* MAS0 */
-        { .R = 0xC0000700},     /* MAS1 */
-        { .R = 0x2200000E},     /* MAS2 */
-        { .R = 0x2200003F}      /* MAS3 */
-    },
-
-    /*  Set up MMU TLB1 entry 7 for External FPGA */
-    /*  Effective Base address = 0x2300_0000 */
-    /*       Real Base address = 0x2300_0000 */
-    /*  Page Size            7 = 16MB */
-    /*  Write-through, Guarded, Cache Inhibit, All Access (E, 3F) */
-    {
-        { .R = 0x10070000},     /* MAS0 */
-        { .R = 0xC0000700},     /* MAS1 */
-        { .R = 0x2300000E},     /* MAS2 */
-        { .R = 0x2300003F},     /* MAS3 */
-    },
-
-	/* Should also set up maps for the debug RAM and the
-	 * external flash.
-	 */
+  /* Arguments macro:       idx,  addr,      size,              x, w, r, io */
+  MPC55XX_MMU_TAG_INITIALIZER(8, 0x20000000, MPC55XX_MMU_8M,    1, 0, 1, 0), /* External FLASH 8M */
+  MPC55XX_MMU_TAG_INITIALIZER(2, 0x21000000, MPC55XX_MMU_4M,    0, 1, 1, 0), /* Lower half SRAM */
+  MPC55XX_MMU_TAG_INITIALIZER(5, 0x21400000, MPC55XX_MMU_4M,    1, 1, 1, 0), /* Upper half SRAM ("debug") */
+  MPC55XX_MMU_TAG_INITIALIZER(6, 0x22000000, MPC55XX_MMU_16M,   0, 1, 1, 1), /* LAN91C111 */
+  MPC55XX_MMU_TAG_INITIALIZER(7, 0x23000000, MPC55XX_MMU_16M,   0, 1, 1, 1), /* FPGA */
 #elif defined(MPC55XX_BOARD_MPC5566EVB)
   /* Internal flash 3M */
   MPC55XX_MMU_TAG_INITIALIZER(1, 0x00000000, MPC55XX_MMU_64K, 1, 0, 1, 0),
