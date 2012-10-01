@@ -18,12 +18,15 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <sys/cdefs.h>
+
+#include <bsp.h>
 #include <bsp/console-generic.h>
 
 #include <rtems/console.h>
 
 static const struct termios console_generic_termios = {
-  .c_cflag = CS8 | CREAD | CLOCAL | B115200
+  .c_cflag = CS8 | CREAD | CLOCAL | __CONCAT(B, BSP_DEFAULT_BAUD_RATE)
 };
 
 static void console_generic_char_out(char c)

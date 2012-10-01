@@ -44,6 +44,10 @@ RTEMS_BSPOPTS_SET([MPC55XX_CONSOLE_MINOR],[*],[0])
 RTEMS_BSPOPTS_HELP([MPC55XX_CONSOLE_MINOR],
 [determines which serial device will be registered as /dev/console])
 
+RTEMS_BSPOPTS_SET([BSP_DEFAULT_BAUD_RATE],[*],[115200])
+RTEMS_BSPOPTS_HELP([BSP_DEFAULT_BAUD_RATE],
+[default console baud])
+
 RTEMS_BSPOPTS_SET([MPC55XX_ESCI_USE_INTERRUPTS],[*],[1])
 RTEMS_BSPOPTS_HELP([MPC55XX_ESCI_USE_INTERRUPTS],
 [define to zero or one to disable or enable interrupts for the eSCI devices])

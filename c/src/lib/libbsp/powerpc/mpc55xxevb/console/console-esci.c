@@ -266,7 +266,7 @@ static int mpc55xx_esci_first_open(int major, int minor, void *arg)
 
   self->tty = tty;
 
-  rv = rtems_termios_set_initial_baud(tty, 115200);
+  rv = rtems_termios_set_initial_baud(tty, BSP_DEFAULT_BAUD_RATE);
   if (rv != 0) {
     rtems_fatal_error_occurred(0xdeadbeef);
   }
