@@ -1387,7 +1387,7 @@ static void nfs_eval_set_handlers(
 	}
 }
 
-static int nfs_move_node(NfsNode dst, const NfsNode src)
+static int nfs_move_node(NfsNode dst, const NfsNode src, const char *part)
 {
 	int rv = 0;
 
@@ -1402,20 +1402,17 @@ static int nfs_move_node(NfsNode dst, const NfsNode src)
 	}
 
 	*dst = *src;
-	dst->str = NULL;
 
-	if (src->args.name != NULL) {
-		dst->str = dst->args.name = strdup(src->args.name);
-		if (dst->str != NULL) {
+	dst->str = dst->args.name = strdup(part);
+	if (dst->str != NULL) {
 #if DEBUG & DEBUG_COUNT_NODES
-			rtems_interrupt_level flags;
-			rtems_interrupt_disable(flags);
-				dst->nfs->stringsInUse++;
-			rtems_interrupt_enable(flags);
+		rtems_interrupt_level flags;
+		rtems_interrupt_disable(flags);
+			dst->nfs->stringsInUse++;
+		rtems_interrupt_enable(flags);
 #endif
-		} else {
-			rv = -1;
-		}
+	} else {
+		rv = -1;
 	}
 
 	return rv;
@@ -1446,7 +1443,7 @@ static rtems_filesystem_eval_path_generic_status nfs_eval_part(
 		if (type == NFLNK && (follow_sym_link || !terminal)) {
 			nfs_eval_follow_link(ctx, &entry);
 		} else {
-			rv = nfs_move_node(dir, &entry);
+			rv = nfs_move_node(dir, &entry, part);
 			if (rv == 0) {
 				nfs_eval_set_handlers(ctx, type);
 				if (!terminal) {
