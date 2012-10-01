@@ -1,6 +1,6 @@
 #include <bsp.h>
 
-#ifdef HAS_SMC91111M
+#ifdef HAS_SMC91111
 
 #include <mpc55xx/mpc55xx.h>
 #include <mpc55xx/regs.h>
@@ -38,18 +38,17 @@
 #define SMC91111_BASE_IRQ  MPC55XX_IRQ_SIU_EXTERNAL_2
 #define SMC91111_BASE_PIO  4
 
-extern rtems_isr lan91cxx_interrupt_handler(rtems_vector_number v);
+extern void lan91cxx_interrupt_handler(void *arg);
 
 static const union SIU_EISR_tag clear_eisr_2 = {.B.EIF2 = 1};
 
-static void rtems_smc91111_interrupt_wrapper(rtems_vector_number v, void *arg)
+static void rtems_smc91111_interrupt_wrapper(void *arg)
 {
     /* Clear external interrupt status */
 
     SIU.EISR = clear_eisr_2;
 
-    lan91cxx_interrupt_handler(v);
-
+    lan91cxx_interrupt_handler(arg);
 }
 
 scmv91111_configuration_t mpc5554_scmv91111_configuration = {
@@ -164,4 +163,4 @@ int rtems_smc91111_driver_attach_mpc5554(struct rtems_bsdnet_ifconfig *config)
     return _rtems_smc91111_driver_attach(config,&mpc5554_scmv91111_configuration);
 };
 
-#endif /* HAS_SMC91111M */
+#endif /* HAS_SMC91111 */

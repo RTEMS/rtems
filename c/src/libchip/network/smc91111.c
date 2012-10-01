@@ -962,7 +962,7 @@ int _rtems_smc91111_driver_attach (struct rtems_bsdnet_ifconfig *config,
 	if_attach(ifp);
 	ether_ifattach(ifp);
 
-#ifdef DEBUG
+#if DEBUG
 	printf("SMC91111 : driver has been attached\n");
 #endif
 
@@ -1035,7 +1035,7 @@ int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 			cpd->config.info,
 			cpd->config.options,
 			cpd->config.interrupt_wrapper,
-			cpd->config.arg
+			cpd
 		);
 		if (sc != RTEMS_SUCCESSFUL) {
 			printf("rtems_interrupt_handler_install returned %d.\n", sc);
