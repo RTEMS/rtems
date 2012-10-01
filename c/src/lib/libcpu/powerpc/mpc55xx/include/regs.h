@@ -67,6 +67,7 @@
   #define MPC55XX_HAS_INSTRUCTION_CACHE
   #define MPC55XX_HAS_DATA_CACHE
   #define MPC55XX_HAS_SIU
+  #define MPC55XX_HAS_WAIT_INSTRUCTION
 #else
   #error "unsupported chip type"
 #endif
