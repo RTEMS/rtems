@@ -1054,7 +1054,7 @@ procedure Task_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - task deleted successfully@*
 @code{@value{RPREFIX}INVALID_ID} - task id invalid@*
 @code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot restart remote task
 
@@ -1114,7 +1114,7 @@ procedure Task_Suspend (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - task suspended successfully@*
 @code{@value{RPREFIX}INVALID_ID} - task id invalid@*
 @code{@value{RPREFIX}ALREADY_SUSPENDED} - task already suspended
 
@@ -1166,7 +1166,7 @@ procedure Task_Resume (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - task restarted successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - task resumed successfully@*
 @code{@value{RPREFIX}INVALID_ID} - task id invalid@*
 @code{@value{RPREFIX}INCORRECT_STATE} - task not suspended
 
@@ -1811,7 +1811,7 @@ procedure Task_Variable_Get (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - per task variable obtained successfully@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is NULL@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable_value} is NULL@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is not found@*
@@ -1863,7 +1863,7 @@ procedure Task_Variable_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - per task variable deleted successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
 @code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
 @code{@value{RPREFIX}INVALID_ADDRESS} - @code{task_variable} is NULL@*

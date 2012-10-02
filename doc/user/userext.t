@@ -603,7 +603,7 @@ procedure Extension_Create (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  extension set created successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - extension set created successfully@*
 @code{@value{RPREFIX}INVALID_NAME} - invalid extension set name@*
 @code{@value{RPREFIX}TOO_MANY} - too many extension sets created
 
@@ -653,7 +653,7 @@ procedure Extension_Ident (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  extension set identified successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - extension set identified successfully@*
 @code{@value{RPREFIX}INVALID_NAME} - extension set name not found
 
 @subheading DESCRIPTION:
@@ -700,7 +700,7 @@ procedure Extension_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  extension set deleted successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - extension set deleted successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid extension set id
 
 @subheading DESCRIPTION:

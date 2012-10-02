@@ -18,7 +18,7 @@ exclusion capabilities.  The directives provided by the
 semaphore manager are:
 
 @itemize @bullet
-@item @code{@value{DIRPREFIX}semaphore_create} -  Create a semaphore
+@item @code{@value{DIRPREFIX}semaphore_create} - Create a semaphore
 @item @code{@value{DIRPREFIX}semaphore_ident} - Get ID of a semaphore
 @item @code{@value{DIRPREFIX}semaphore_delete} - Delete a semaphore
 @item @code{@value{DIRPREFIX}semaphore_obtain} - Acquire a semaphore
@@ -605,10 +605,10 @@ procedure Semaphore_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  semaphore deleted successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - semaphore deleted successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid semaphore id@*
-@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote semaphore@*
-@code{@value{RPREFIX}RESOURCE_IN_USE} - binary semaphore is in use
+@code{@value{RPREFIX}RESOURCE_IN_USE} - binary semaphore is in use@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - cannot delete remote semaphore
 
 @subheading DESCRIPTION:
 

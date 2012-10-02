@@ -15,7 +15,7 @@ and be unblocked as a set.  The directives provided by the
 barrier manager are:
 
 @itemize @bullet
-@item @code{@value{DIRPREFIX}barrier_create} -  Create a barrier
+@item @code{@value{DIRPREFIX}barrier_create} - Create a barrier
 @item @code{@value{DIRPREFIX}barrier_ident} - Get ID of a barrier
 @item @code{@value{DIRPREFIX}barrier_delete} - Delete a barrier
 @item @code{@value{DIRPREFIX}barrier_wait} - Wait at a barrier
@@ -324,7 +324,7 @@ procedure Barrier_Delete (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} -  barrier deleted successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - barrier deleted successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid barrier id@
 
 @subheading DESCRIPTION:
@@ -379,7 +379,7 @@ procedure Barrier_Wait (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{@value{RPREFIX}SUCCESSFUL} - barrier obtained successfully@*
+@code{@value{RPREFIX}SUCCESSFUL} - barrier released and task unblocked@*
 @code{@value{RPREFIX}UNSATISFIED} - barrier not available@*
 @code{@value{RPREFIX}TIMEOUT} - timed out waiting for barrier@*
 @code{@value{RPREFIX}OBJECT_WAS_DELETED} - barrier deleted while waiting@*
