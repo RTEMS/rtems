@@ -175,8 +175,8 @@ void _TOD_Handler_initialization(void);
 /**
  *  @brief Sets the time of day according to @a tod_as_timestamp.
  *
- *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.  The watchdog
- *  seconds chain will be adjusted.
+ *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
+ *  The watchdog seconds chain will be adjusted.
  */
 void _TOD_Set_with_timestamp(
   const Timestamp_Control *tod_as_timestamp
