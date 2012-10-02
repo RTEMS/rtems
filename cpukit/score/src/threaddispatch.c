@@ -109,7 +109,7 @@ void _Thread_Dispatch( void )
       }
     #else
       {
-        TOD_Get_uptime( &_Thread_Time_of_last_context_switch );
+        _TOD_Get_uptime( &_Thread_Time_of_last_context_switch );
         heir->cpu_time_used++;
       }
     #endif
