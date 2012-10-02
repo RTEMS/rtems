@@ -260,11 +260,8 @@ void _Per_CPU_Initialize(void);
   _Per_CPU_Information[bsp_smp_processor_id()].interrupt_stack_high
 #define _Thread_Dispatch_necessary \
   _Per_CPU_Information[bsp_smp_processor_id()].dispatch_necessary
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #define _Thread_Time_of_last_context_switch \
-    _Per_CPU_Information[bsp_smp_processor_id()].time_of_last_context_switch
-#endif
-
+#define _Thread_Time_of_last_context_switch \
+  _Per_CPU_Information[bsp_smp_processor_id()].time_of_last_context_switch
 
 #endif  /* ASM */
 
