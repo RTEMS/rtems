@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spintrcritical18
+
+directives:
+
+  _Thread_Dispatch()
+
+concepts:
+
+  Ensure that thread dispatching works if interrupts happen in the meantime.
