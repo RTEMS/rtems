@@ -74,14 +74,13 @@ static bool IMFS_is_mount_point( const IMFS_jnode_t *node )
 }
 
 static IMFS_jnode_t *IMFS_node_remove_directory(
-  IMFS_jnode_t *node,
-  const IMFS_jnode_t *root_node
+  IMFS_jnode_t *node
 )
 {
   if ( !rtems_chain_is_empty( &node->info.directory.Entries ) ) {
     errno = ENOTEMPTY;
     node = NULL;
-  } else if ( node == root_node || IMFS_is_mount_point( node ) ) {
+  } else if ( IMFS_is_mount_point( node ) ) {
     errno = EBUSY;
     node = NULL;
   }

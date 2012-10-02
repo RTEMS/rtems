@@ -34,9 +34,15 @@ int unlink( const char *path )
       &parentloc,
       parent_eval_flags
     );
-  const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
 
-  rv = (*ops->rmnod_h)( &parentloc, currentloc );
+  if ( !rtems_filesystem_location_is_root( currentloc ) ) {
+    const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
+
+    rv = (*ops->rmnod_h)( &parentloc, currentloc );
+  } else {
+    rtems_filesystem_eval_path_error( &ctx, EBUSY );
+    rv = -1;
+  }
 
   rtems_filesystem_eval_path_cleanup_with_parent( &ctx, &parentloc );
 

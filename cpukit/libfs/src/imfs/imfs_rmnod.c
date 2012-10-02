@@ -29,10 +29,7 @@ int IMFS_rmnod(
   int rv = 0;
   IMFS_jnode_t *node = loc->node_access;
 
-  node = (*node->control->node_remove)(
-    node,
-    loc->mt_entry->mt_fs_root->location.node_access
-  );
+  node = (*node->control->node_remove)( node );
   if ( node != NULL ) {
     --node->reference_count;
     --node->st_nlink;

@@ -51,14 +51,6 @@ msdos_rmnod(const rtems_filesystem_location_info_t *parent_pathloc,
         }
 
         /*
-         * You cannot remove the file system root node.
-         */
-        if (rtems_filesystem_location_is_root(pathloc))
-        {
-            rtems_set_errno_and_return_minus_one(EBUSY);
-        }
-
-        /*
          * You cannot remove a mountpoint.
          * not used - mount() not implemenetd yet.
          */

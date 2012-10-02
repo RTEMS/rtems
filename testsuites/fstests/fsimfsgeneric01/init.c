@@ -233,10 +233,7 @@ static IMFS_jnode_t *node_initialize(
   return node;
 }
 
-static IMFS_jnode_t *node_remove(
-  IMFS_jnode_t *node,
-  const IMFS_jnode_t *root_node
-)
+static IMFS_jnode_t *node_remove(IMFS_jnode_t *node)
 {
   test_state *state = IMFS_generic_get_context_by_node(node);
 

@@ -64,14 +64,13 @@ static IMFS_jnode_t *IMFS_node_initialize_hard_link(
 }
 
 static IMFS_jnode_t *IMFS_node_remove_hard_link(
-  IMFS_jnode_t *node,
-  const IMFS_jnode_t *root_node
+  IMFS_jnode_t *node
 )
 {
   IMFS_jnode_t *target = node->info.hard_link.link_node;
 
   if ( target->st_nlink == 1) {
-    target = (*target->control->node_remove)( target, root_node );
+    target = (*target->control->node_remove)( target );
     if ( target == NULL ) {
       node = NULL;
     }

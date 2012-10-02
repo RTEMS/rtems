@@ -169,13 +169,11 @@ IMFS_jnode_t *IMFS_node_initialize_generic(
 );
 
 typedef IMFS_jnode_t *(*IMFS_node_control_remove)(
-  IMFS_jnode_t *node,
-  const IMFS_jnode_t *root_node
+  IMFS_jnode_t *node
 );
 
 IMFS_jnode_t *IMFS_node_remove_default(
-  IMFS_jnode_t *node,
-  const IMFS_jnode_t *root_node
+  IMFS_jnode_t *node
 );
 
 typedef IMFS_jnode_t *(*IMFS_node_control_destroy)( IMFS_jnode_t *node );

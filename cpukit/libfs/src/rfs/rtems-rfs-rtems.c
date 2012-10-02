@@ -678,9 +678,6 @@ rtems_rfs_rtems_rmnod (const rtems_filesystem_location_info_t* parent_pathloc,
     printf ("rtems-rfs: rmnod: parent:%" PRId32 " doff:%" PRIu32 ", ino:%" PRId32 "\n",
             parent, doff, ino);
 
-  if (ino == RTEMS_RFS_ROOT_INO)
-    return rtems_rfs_rtems_error ("rmnod: root inode", EBUSY);
-
   rc = rtems_rfs_unlink (fs, parent, ino, doff, rtems_rfs_unlink_dir_if_empty);
   if (rc)
   {
