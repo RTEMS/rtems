@@ -48,7 +48,7 @@ enum nfsstat {
 	NFSERR_DQUOT = 69,
 	NFSERR_STALE = 70,
 	NFSERR_WFLUSH = 99,
-  _NFSSTAT = 0xffffffff
+	_NFSSTAT = 0xffffffff
 };
 typedef enum nfsstat nfsstat;
 
@@ -62,7 +62,7 @@ enum ftype {
 	NFSOCK = 6,
 	NFBAD = 7,
 	NFFIFO = 8,
-  _FTYPE = 0xffffffff
+	_FTYPE = 0xffffffff
 };
 typedef enum ftype ftype;
 
