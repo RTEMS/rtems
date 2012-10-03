@@ -24,6 +24,7 @@ $(PROJECT_LIB)/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 if LIBNETWORKING
+if HAS_PTHREADS
 $(PROJECT_INCLUDE)/mghttpd/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/mghttpd
 	@: > $(PROJECT_INCLUDE)/mghttpd/$(dirstamp)
@@ -36,4 +37,5 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/libmghttpd.a
 $(PROJECT_INCLUDE)/mghttpd/mongoose.h: mongoose.h $(PROJECT_INCLUDE)/mghttpd/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mghttpd/mongoose.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mghttpd/mongoose.h
+endif
 endif
