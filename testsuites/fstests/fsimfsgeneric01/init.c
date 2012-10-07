@@ -46,8 +46,6 @@ typedef enum {
   TEST_DESTROYED
 } test_state;
 
-static test_state global_state = TEST_NEW;
-
 static int handler_open(
   rtems_libio_t *iop,
   const char *path,
@@ -263,6 +261,7 @@ static const IMFS_node_control node_control = {
 
 static void test_imfs_make_generic_node(void)
 {
+  test_state state = TEST_NEW;
   int rv = 0;
   int fd = 0;
   const char *path = "generic";
@@ -274,7 +273,7 @@ static void test_imfs_make_generic_node(void)
     path,
     S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
     &node_control,
-    &global_state
+    &state
   );
   rtems_test_assert(rv == 0);
 
@@ -311,7 +310,7 @@ static void test_imfs_make_generic_node(void)
   rv = unlink(path);
   rtems_test_assert(rv == 0);
 
-  rtems_test_assert(global_state == TEST_DESTROYED);
+  rtems_test_assert(state == TEST_DESTROYED);
 }
 
 static const IMFS_node_control node_invalid_control = {
