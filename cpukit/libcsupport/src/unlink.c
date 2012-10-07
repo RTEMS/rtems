@@ -35,7 +35,7 @@ int unlink( const char *path )
       parent_eval_flags
     );
 
-  if ( !rtems_filesystem_location_is_root( currentloc ) ) {
+  if ( !rtems_filesystem_location_is_instance_root( currentloc ) ) {
     const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
 
     rv = (*ops->rmnod_h)( &parentloc, currentloc );

@@ -38,7 +38,7 @@ int rmdir( const char *path )
   rtems_filesystem_node_types_t type = (*ops->node_type_h)( currentloc );
 
   if ( type == RTEMS_FILESYSTEM_DIRECTORY ) {
-    if ( !rtems_filesystem_location_is_root( currentloc ) ) {
+    if ( !rtems_filesystem_location_is_instance_root( currentloc ) ) {
       rv = (*ops->rmnod_h)( &parentloc, currentloc );
     } else {
       rtems_filesystem_eval_path_error( &ctx, EBUSY );

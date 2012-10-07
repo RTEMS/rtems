@@ -43,7 +43,7 @@ int unmount( const char *path )
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
   rtems_filesystem_mount_table_entry_t *mt_entry = currentloc->mt_entry;
 
-  if ( rtems_filesystem_location_is_root( currentloc ) ) {
+  if ( rtems_filesystem_location_is_instance_root( currentloc ) ) {
     if ( !contains_root_or_current_directory( mt_entry ) ) {
       const rtems_filesystem_operations_table *mt_point_ops =
         mt_entry->mt_point_node->location.mt_entry->ops;

@@ -115,7 +115,7 @@ static int register_subordinate_file_system(
   rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, target, eval_flags );
 
-  if ( !rtems_filesystem_location_is_root( currentloc ) ) {
+  if ( !rtems_filesystem_location_is_instance_root( currentloc ) ) {
     rtems_filesystem_location_info_t targetloc;
     rtems_filesystem_global_location_t *mt_point_node;
 

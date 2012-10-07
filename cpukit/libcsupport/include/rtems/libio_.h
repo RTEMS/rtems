@@ -592,7 +592,7 @@ void rtems_filesystem_do_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
-static inline bool rtems_filesystem_location_is_root(
+static inline bool rtems_filesystem_location_is_instance_root(
   const rtems_filesystem_location_info_t *loc
 )
 {
