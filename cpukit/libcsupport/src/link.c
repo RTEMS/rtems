@@ -31,7 +31,7 @@ int link( const char *path1, const char *path2 )
   const rtems_filesystem_location_info_t *currentloc_2 =
     rtems_filesystem_eval_path_start( &ctx_2, path2, eval_flags_2 );
 
-  rv = rtems_filesystem_location_exists_in_same_fs_instance_as(
+  rv = rtems_filesystem_location_exists_in_same_instance_as(
     currentloc_1,
     currentloc_2
   );

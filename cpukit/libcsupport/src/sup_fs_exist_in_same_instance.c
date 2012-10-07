@@ -18,7 +18,7 @@
 
 #include <rtems/libio_.h>
 
-int rtems_filesystem_location_exists_in_same_fs_instance_as(
+int rtems_filesystem_location_exists_in_same_instance_as(
   const rtems_filesystem_location_info_t *a,
   const rtems_filesystem_location_info_t *b
 )

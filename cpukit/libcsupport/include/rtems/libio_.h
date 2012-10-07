@@ -769,7 +769,7 @@ void rtems_filesystem_eval_path_error(
  * @retval 0 The locations exist and are in the same file system instance.
  * @retval -1 An error occured.  The @c errno indicates the error.
  */
-int rtems_filesystem_location_exists_in_same_fs_instance_as(
+int rtems_filesystem_location_exists_in_same_instance_as(
   const rtems_filesystem_location_info_t *a,
   const rtems_filesystem_location_info_t *b
 );
