@@ -113,7 +113,7 @@ static void mpci_receive_packet(rtems_packet_prefix **prefix_ptr)
 
 rtems_mpci_table qoriq_intercom_mpci = {
 	.default_timeout = UINT32_MAX,
-	.maximum_packet_size = 512 - sizeof(rtems_packet_prefix),
+	.maximum_packet_size = 512,
 	.initialization = mpci_init,
 	.get_packet = mpci_get_packet,
 	.return_packet = mpci_return_packet,
