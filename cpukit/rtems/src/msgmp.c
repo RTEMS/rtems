@@ -53,8 +53,8 @@ void _Message_queue_MP_Send_process_packet (
 
       the_packet                    = _Message_queue_MP_Get_packet();
       the_packet->Prefix.the_class  = MP_PACKET_MESSAGE_QUEUE;
-      the_packet->Prefix.length     = sizeof ( Message_queue_MP_Packet );
-      the_packet->Prefix.to_convert = sizeof ( Message_queue_MP_Packet );
+      the_packet->Prefix.length     = MESSAGE_QUEUE_MP_PACKET_SIZE;
+      the_packet->Prefix.to_convert = MESSAGE_QUEUE_MP_PACKET_SIZE;
       the_packet->operation         = operation;
       the_packet->Prefix.id         = message_queue_id;
       the_packet->name              = name;
