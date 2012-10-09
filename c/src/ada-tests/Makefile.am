@@ -10,4 +10,4 @@ DIST_SUBDIRS = support samples sptests tmtests mptests
 EXTRA_DIST = ada.am
 
 include $(top_srcdir)/../../../testsuites/automake/subdirs.am
-include $(top_srcdir)/../../../testsuites//automake/local.am
+include $(top_srcdir)/../../../testsuites/automake/local.am
