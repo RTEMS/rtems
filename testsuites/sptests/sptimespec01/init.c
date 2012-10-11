@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2012-.
- *  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
+ *  Copyright (c) 2012.
+ *  Krzysztof Miesowicz <krzysztof.miesowicz@gmail.com>
  *  
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).

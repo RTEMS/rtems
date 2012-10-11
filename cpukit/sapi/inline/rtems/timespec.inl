@@ -7,8 +7,8 @@
  */
  
 /*
- *  Copyright (c) 2012-.
- *  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
+ *  Copyright (c) 2012.
+ *  Krzysztof Miesowicz <krzysztof.miesowicz@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

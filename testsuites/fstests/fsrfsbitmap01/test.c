@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2012-.
- *  Krzysztof Miesowicz krzysztof.miesowicz@gmail.com
+ *  Copyright (c) 2012.
+ *  Krzysztof Miesowicz <krzysztof.miesowicz@gmail.com>
  *
  *  This test is extended version of rtems-rfs-bimaps-ut.c . Most of this code
  *  was written by Chris Johns in rtems-rfs-bitmaps-ut.c and is copied
