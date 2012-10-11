@@ -391,7 +391,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   rtems_test_assert( rc == EINVAL );
 
   /* Set all bits, clear one and then set this cleared bit once again */
-  printf (" 32. Set all bits in the map, then clear bit (%lu) and set this bit once again:",control.size/2);
+  printf (" 32. Set all bits in the map, then clear bit (%zu) and set this bit once again:",control.size/2);
   rc = rtems_rfs_bitmap_map_set_all(&control);
   rtems_test_assert( rc == 0 );
   rc = rtems_rfs_bitmap_map_clear(&control, control.size/2);
