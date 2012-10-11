@@ -1,6 +1,3 @@
-Could not open '/dev/kqemu' - QEMU acceleration layer not activated: No such file or directory
-
-
 *** TEST 14 ***
 TA1 - rtems_signal_catch - RTEMS_INTERRUPT_LEVEL( 3 )
 TA1 - rtems_signal_send - RTEMS_SIGNAL_16 to self

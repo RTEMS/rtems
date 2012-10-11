@@ -18,8 +18,9 @@
  * access function for Device Control Registers inspired by "ppc405common.h"
  * from Michael Hamel ADInstruments May 2008
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 /**
