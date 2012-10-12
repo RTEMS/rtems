@@ -87,6 +87,19 @@ RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_after(
   next->prev = new_block;
 }
 
+RTEMS_INLINE_ROUTINE void _Heap_Free_list_insert_before(
+  Heap_Block *block_next,
+  Heap_Block *new_block
+)
+{
+  Heap_Block *prev = block_next->prev;
+
+  new_block->next = block_next;
+  new_block->prev = prev;
+  prev->next = new_block;
+  block_next->prev = new_block;
+}
+
 RTEMS_INLINE_ROUTINE bool _Heap_Is_aligned(
   uintptr_t value,
   uintptr_t alignment

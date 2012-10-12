@@ -28,12 +28,21 @@
 static void _Heap_Free_block( Heap_Control *heap, Heap_Block *block )
 {
   Heap_Statistics *const stats = &heap->stats;
+  Heap_Block *first_free;
 
   /* Statistics */
   ++stats->used_blocks;
   --stats->frees;
 
-  _Heap_Free( heap, (void *) _Heap_Alloc_area_of_block( block ));
+  /*
+   * The _Heap_Free() will place the block to the head of free list.  We want
+   * the new block at the end of the free list.  So that initial and earlier
+   * areas are consumed first.
+   */
+  _Heap_Free( heap, (void *) _Heap_Alloc_area_of_block( block ) );
+  first_free = _Heap_Free_list_first( heap );
+  _Heap_Free_list_remove( first_free );
+  _Heap_Free_list_insert_before( _Heap_Free_list_tail( heap ), first_free );
 }
 
 static void _Heap_Merge_below(

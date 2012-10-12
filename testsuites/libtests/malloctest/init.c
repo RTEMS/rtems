@@ -984,6 +984,46 @@ static void test_heap_extend(void)
   test_heap_assert( ret, true );
 }
 
+static void test_heap_extend_allocation_order(void)
+{
+  Heap_Control *heap = &TestHeap;
+  uintptr_t size = 256;
+  uintptr_t gap = 256;
+  uint8_t *init_area_begin = TestHeapMemory;
+  uint8_t *extend_area_begin = init_area_begin + size + gap;
+  bool ret;
+  uint8_t *p;
+
+  _Heap_Initialize( heap, init_area_begin, size, 0 );
+
+  ret = _Protected_heap_Extend( heap, extend_area_begin, size );
+  test_heap_assert( ret, true );
+
+  p = _Heap_Allocate( heap, 1 );
+  rtems_test_assert( (uintptr_t) (p - init_area_begin) < size );
+}
+
+static void test_heap_extend_allocation_order_with_empty_heap(void)
+{
+  Heap_Control *heap = &TestHeap;
+  uintptr_t size = 256;
+  uintptr_t gap = 256;
+  uint8_t *init_area_begin = TestHeapMemory;
+  uint8_t *extend_area_begin = init_area_begin + size + gap;
+  bool ret;
+  uint8_t *p;
+
+  _Heap_Initialize( heap, init_area_begin, size, 0 );
+
+  _Heap_Greedy_allocate( heap, NULL, 0 );
+
+  ret = _Protected_heap_Extend( heap, extend_area_begin, size );
+  test_heap_assert( ret, true );
+
+  p = _Heap_Allocate( heap, 1 );
+  rtems_test_assert( (uintptr_t) (p - extend_area_begin) < size );
+}
+
 static void test_heap_no_extend(void)
 {
   uintptr_t extended_space = _Heap_No_extend( NULL, 0, 0, 0 );
@@ -1148,6 +1188,8 @@ rtems_task Init(
   test_realloc();
   test_heap_cases_1();
   test_heap_extend();
+  test_heap_extend_allocation_order();
+  test_heap_extend_allocation_order_with_empty_heap();
   test_heap_no_extend();
   test_heap_info();
   test_protected_heap_info();
