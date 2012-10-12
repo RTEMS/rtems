@@ -289,8 +289,17 @@ static rtems_status_code lpc24xx_module_do_enable(
 
         USBCLKCFG = usbsel;
       #else
-        /* FIXME */
-        scb->usbclksel = 0;
+        uint32_t pllclk = lpc24xx_pllclk();
+        uint32_t usbclk = 48000000U;
+
+        if (pllclk % usbclk == 0U) {
+          uint32_t usbdiv = pllclk / usbclk;
+
+          scb->usbclksel = LPC17XX_SCB_USBCLKSEL_USBDIV(usbdiv)
+            | LPC17XX_SCB_USBCLKSEL_USBSEL(1);
+        } else {
+          return RTEMS_INCORRECT_STATE;
+        }
       #endif
     }
   } else {
