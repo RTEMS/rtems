@@ -313,7 +313,7 @@ static BSP_START_TEXT_SECTION void lpc17xx_set_pll(
 
     /* Set the CCLK, PCLK and EMCCLK divider */
     scb->cclksel = cclksel_cclkdiv;
-    scb->pclksel = LPC17XX_SCB_PCLKSEL_PCLKDIV(LPC24XX_PCLKDIV);
+    scb->pclksel = LPC17XX_SCB_PCLKSEL_PCLKDIV(cclkdiv * LPC24XX_PCLKDIV);
     scb->emcclksel = LPC24XX_EMCCLKDIV == 1 ? 0 : LPC17XX_SCB_EMCCLKSEL_EMCDIV;
 
     /* Enable PLL */
