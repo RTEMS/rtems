@@ -394,8 +394,21 @@ lpc24xx_pin_set_function(
     *pinsel = (*pinsel & ~pinsel_mask) | pinsel_value;
     rtems_interrupt_enable(level);
   #else
+    uint32_t iocon_extra = 0;
+
     /* TODO */
-    *iocon = IOCON_FUNC(pin_range.fields.function);
+    switch (pin_range.fields.type) {
+      case LPC17XX_PIN_TYPE_I2C_FAST_PLUS:
+        iocon_extra |= IOCON_HS;
+        break;
+      case LPC17XX_PIN_TYPE_OPEN_DRAIN:
+        iocon_extra |= IOCON_OD;
+        break;
+      default:
+        break;
+    }
+
+    *iocon = IOCON_FUNC(pin_range.fields.function) | iocon_extra;
   #endif
 
   return RTEMS_SUCCESSFUL;
