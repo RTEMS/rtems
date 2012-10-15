@@ -15,13 +15,13 @@
 #ifndef TEST_WEB_CLIENT_H
 #define TEST_WEB_CLIENT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 typedef struct
 {
