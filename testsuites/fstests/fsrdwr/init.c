@@ -334,7 +334,7 @@ lseek_test (void)
     rtems_test_assert (n == (ssize_t) len);
     total_written += n;
   }
-  printf ("Successfully wrote %d\n", total_written);
+  printf ("Successfully wrote %zd\n", total_written);
 
   /*
    * Check the current position
