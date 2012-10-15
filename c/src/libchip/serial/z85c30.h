@@ -57,12 +57,12 @@ extern console_flow z85c30_flow_DTRCTS;
  */
 
 uint8_t   z85c30_get_register(   /* registers are byte-wide */
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum
 );
 
 void z85c30_set_register(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 );
