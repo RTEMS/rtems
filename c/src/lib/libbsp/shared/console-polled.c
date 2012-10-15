@@ -88,7 +88,6 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
-  rtems_status_code sc;
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                        /* firstOpen */
     NULL,                        /* lastClose */
@@ -104,7 +103,7 @@ rtems_device_driver console_open(
   if ( minor > 1 )
     return RTEMS_INVALID_NUMBER;
 
-  sc = rtems_termios_open( major, minor, arg, &pollCallbacks );
+  rtems_termios_open( major, minor, arg, &pollCallbacks );
 
   return RTEMS_SUCCESSFUL;
 }
