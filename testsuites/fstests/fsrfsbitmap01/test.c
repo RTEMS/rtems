@@ -31,7 +31,7 @@
 #define rtems_rfs_exit_on_error(_rc, _r, _c, _b)                         \
   if ((_rc > 0) || _r) { free (_b); rtems_rfs_bitmap_close (_c); return; }
 
-bool
+static bool
 rtems_rfs_bitmap_ut_test_range (rtems_rfs_bitmap_control* control,
                                 int                       test,
                                 bool                      set,
@@ -67,7 +67,7 @@ rtems_rfs_bitmap_ut_test_range (rtems_rfs_bitmap_control* control,
   return true;
 }
 
-bool
+static bool
 rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
                                     int                       test,
                                     rtems_rfs_bitmap_bit      bit,
@@ -131,7 +131,7 @@ rtems_rfs_bitmap_ut_alloc_seq_test (rtems_rfs_bitmap_control* control,
   return true;
 }
 
-void
+static void
 rtems_rfs_bitmap_ut_test_bitmap (size_t size)
 {
   rtems_rfs_file_system    fs;
@@ -428,7 +428,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   free (buffer.buffer);
 }
 
-void rtems_rfs_bitmap_unit_test (void)
+static void rtems_rfs_bitmap_unit_test (void)
 {
   printf (" Bit set value       : %d\n", RTEMS_RFS_BITMAP_BIT_SET);
   printf (" Bit clear value     : %d\n", RTEMS_RFS_BITMAP_BIT_CLEAR);
@@ -444,7 +444,7 @@ void rtems_rfs_bitmap_unit_test (void)
   rtems_rfs_bitmap_ut_test_bitmap (420);
 }
 
-void nullpointer_test(void){
+static void nullpointer_test(void){
 
   rtems_rfs_bitmap_control* control=NULL;
   rtems_rfs_bitmap_control  notnullcontrol;
@@ -480,7 +480,7 @@ void nullpointer_test(void){
   rtems_test_assert(rc > 0);
 }
 
-void open_failure(void){
+static void open_failure(void){
 
   rtems_rfs_file_system    fs;
   rtems_rfs_bitmap_control control;
