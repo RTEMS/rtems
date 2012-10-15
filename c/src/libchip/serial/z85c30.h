@@ -30,6 +30,10 @@
 #ifndef __Z85C30_H
 #define __Z85C30_H
 
+#include <stdint.h>
+
+#include <libchip/serial.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
