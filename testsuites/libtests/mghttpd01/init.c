@@ -172,7 +172,6 @@ static void test_mg_callback(void)
 
 static void test_mongoose(void)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   const char *options[] = {
     "listening_ports", "80",
     "document_root", "/www/",
