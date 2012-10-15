@@ -18,6 +18,7 @@
 #include <rtems/libio.h>
 
 #include <rtems/fb.h>
+#include <rtems/framebuffer.h>
 
 /* these routines are defined in vgainit.c.*/
 extern void ega_hwinit( void );
