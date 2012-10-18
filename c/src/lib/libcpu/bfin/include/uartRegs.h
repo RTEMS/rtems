@@ -68,4 +68,3 @@
 #define UART_GCTL_UCEN                                  0x01
 
 #endif /* _uartRegs_h_ */
-

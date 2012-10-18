@@ -133,4 +133,3 @@
 #define SIC_WATCHDOG_VECTOR                               23
 
 #endif /* _bf533_h_ */
-

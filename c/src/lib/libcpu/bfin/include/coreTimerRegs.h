@@ -27,4 +27,3 @@
 #define TCNTL_TMPWR                               0x00000001
 
 #endif /* _coreTimerRegs_h_ */
-

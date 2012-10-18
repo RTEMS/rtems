@@ -41,4 +41,3 @@
 
 
 #endif /* _sicRegs_h_ */
-

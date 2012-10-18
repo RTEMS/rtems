@@ -43,4 +43,3 @@
 
 
 #endif /* _timerRegs_h_ */
-

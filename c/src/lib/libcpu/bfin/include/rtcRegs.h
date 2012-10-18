@@ -63,4 +63,3 @@
 #define RTC_PREN_PREN                                 0x0001
 
 #endif /* _rtcRegs_h_ */
-

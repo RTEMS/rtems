@@ -67,4 +67,3 @@
 
 
 #endif /* _spiRegs_h_ */
-

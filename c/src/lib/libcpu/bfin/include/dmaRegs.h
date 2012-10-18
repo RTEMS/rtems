@@ -95,4 +95,3 @@
 #define HMDMA_CONTROL_HMDMAEN                         0x0001
 
 #endif /* _dmaRegs_h_ */
-

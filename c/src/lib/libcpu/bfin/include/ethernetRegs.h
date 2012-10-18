@@ -417,4 +417,3 @@
 
 
 #endif /* _ethernetRegs_h_ */
-

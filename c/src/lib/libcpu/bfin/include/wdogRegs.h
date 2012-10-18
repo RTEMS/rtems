@@ -31,4 +31,3 @@
 
 
 #endif /* _wdogRegs_h_ */
-
