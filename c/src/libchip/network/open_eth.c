@@ -517,7 +517,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 /*
  * Driver transmit daemon
  */
-void
+static void
 open_eth_txDaemon (void *arg)
 {
     struct open_eth_softc *sc = (struct open_eth_softc *) arg;
