@@ -82,7 +82,7 @@ clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += rtc.rel
-rtc_rel_SOURCES = clock/rtc.c
+rtc_rel_SOURCES = clock/rtc.c clock/rtc.h
 rtc_rel_CPPFLAGS = $(AM_CPPFLAGS)
 rtc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
