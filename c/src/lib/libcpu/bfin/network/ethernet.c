@@ -728,14 +728,10 @@ static void ethernetInit(void *arg) {
   struct bfin_ethernetSoftc *sc;
   struct ifnet *ifp;
   void *ethBase;
-  void *rxdmaBase;
-  void *txdmaBase;
 
   sc = arg;
   ifp = &sc->arpcom.ac_if;
   ethBase = sc->ethBase;
-  rxdmaBase = sc->rxdmaBase;
-  txdmaBase = sc->txdmaBase;
 
   if (sc->txDaemonTid == 0) {
     initializeHardware(sc);
