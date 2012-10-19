@@ -94,7 +94,7 @@ librfs_a_SOURCES = \
     src/rfs/rtems-rfs-group.c src/rfs/rtems-rfs-inode.c \
     src/rfs/rtems-rfs-rtems-dev.c src/rfs/rtems-rfs-rtems-utils.c \
     src/rfs/rtems-rfs-rtems.c src/rfs/rtems-rfs-shell.c \
-    src/rfs/rtems-rfs-bitmaps-ut.c src/rfs/rtems-rfs-dir.c \
+    src/rfs/rtems-rfs-dir.c \
     src/rfs/rtems-rfs-file-system.c src/rfs/rtems-rfs-format.c \
     src/rfs/rtems-rfs-link.c src/rfs/rtems-rfs-mutex.c \
     src/rfs/rtems-rfs-rtems-dir.c src/rfs/rtems-rfs-rtems-file.c \
