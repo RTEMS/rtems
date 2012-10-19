@@ -31,6 +31,7 @@
 
 #if __rtems__
 #include "rtems-rfs-rtems.h"
+#include "rtems-rfs-shell.h"
 #endif
 
 /**
@@ -587,7 +588,7 @@ rtems_rfs_shell_group (rtems_rfs_file_system* fs, int argc, char *argv[])
 }
 
 
-void
+static void
 rtems_rfs_shell_usage (const char* arg)
 {
   printf ("%s: RFS debugger\n", arg);
