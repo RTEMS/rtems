@@ -181,12 +181,12 @@ typedef struct rtems_bdbuf_cache
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_1       RTEMS_BLKDEV_FATAL_ERROR(29)
 #define RTEMS_BLKDEV_FATAL_BDBUF_STATE_2       RTEMS_BLKDEV_FATAL_ERROR(30)
 #define RTEMS_BLKDEV_FATAL_BDBUF_RA_WAKE_UP    RTEMS_BLKDEV_FATAL_ERROR(31)
+#define RTEMS_BLKDEV_FATAL_BDBUF_WAIT_TRANS_EVNT RTEMS_BLKDEV_FATAL_ERROR(32)
 
 /**
  * The events used in this code. These should be system events rather than
  * application events.
  */
-#define RTEMS_BDBUF_TRANSFER_SYNC  RTEMS_EVENT_1
 #define RTEMS_BDBUF_SWAPOUT_SYNC   RTEMS_EVENT_2
 #define RTEMS_BDBUF_READ_AHEAD_WAKE_UP RTEMS_EVENT_1
 
@@ -1549,6 +1549,16 @@ rtems_bdbuf_wait_for_event (rtems_event_set event)
 }
 
 static void
+rtems_bdbuf_wait_for_transient_event (void)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  sc = rtems_event_transient_receive (RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_WAIT_TRANS_EVNT);
+}
+
+static void
 rtems_bdbuf_wait_for_access (rtems_bdbuf_buffer *bd)
 {
   while (true)
@@ -1867,7 +1877,7 @@ rtems_bdbuf_transfer_done (void* arg, rtems_status_code status)
 
   req->status = status;
 
-  rtems_event_send (req->io_task, RTEMS_BDBUF_TRANSFER_SYNC);
+  rtems_event_transient_send (req->io_task);
 }
 
 static rtems_status_code
@@ -1888,7 +1898,7 @@ rtems_bdbuf_execute_transfer_request (rtems_disk_device    *dd,
 
   if (result == 0)
   {
-    rtems_bdbuf_wait_for_event (RTEMS_BDBUF_TRANSFER_SYNC);
+    rtems_bdbuf_wait_for_transient_event ();
     sc = req->status;
   }
   else
@@ -2268,7 +2278,7 @@ rtems_bdbuf_syncdev (rtems_disk_device *dd)
 
   rtems_bdbuf_wake_swapper ();
   rtems_bdbuf_unlock_cache ();
-  rtems_bdbuf_wait_for_event (RTEMS_BDBUF_TRANSFER_SYNC);
+  rtems_bdbuf_wait_for_transient_event ();
   rtems_bdbuf_unlock_sync ();
 
   return RTEMS_SUCCESSFUL;
@@ -2617,7 +2627,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
     bdbuf_cache.sync_requester = 0;
     rtems_bdbuf_unlock_cache ();
     if (sync_requester)
-      rtems_event_send (sync_requester, RTEMS_BDBUF_TRANSFER_SYNC);
+      rtems_event_transient_send (sync_requester);
   }
 
   return transfered_buffers;
