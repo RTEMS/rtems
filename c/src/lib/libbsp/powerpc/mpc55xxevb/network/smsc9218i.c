@@ -1908,6 +1908,12 @@ static void smsc9218i_interface_off(struct ifnet *ifp)
   smsc9218i_driver_entry *e = (smsc9218i_driver_entry *) ifp->if_softc;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
+  sc = rtems_task_suspend(e->receive_task);
+  ASSERT_SC(sc);
+
+  sc = rtems_task_suspend(e->transmit_task);
+  ASSERT_SC(sc);
+
   /* remove interrupt handler */
   sc = rtems_interrupt_handler_remove(
     MPC55XX_IRQ_SIU_EXTERNAL_0,
