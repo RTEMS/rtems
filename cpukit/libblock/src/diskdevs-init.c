@@ -43,7 +43,7 @@ rtems_status_code rtems_disk_init_phys(
       dd->capabilities = 0;
     }
 
-    sc = rtems_bdbuf_set_block_size(dd, block_size);
+    sc = rtems_bdbuf_set_block_size(dd, block_size, false);
   } else {
     sc = RTEMS_INVALID_NUMBER;
   }
@@ -78,7 +78,7 @@ rtems_status_code rtems_disk_init_log(
         && block_count > 0
         && block_count <= phys_block_count - block_begin
     ) {
-      sc = rtems_bdbuf_set_block_size(dd, phys_dd->media_block_size);
+      sc = rtems_bdbuf_set_block_size(dd, phys_dd->media_block_size, false);
     } else {
       sc = RTEMS_INVALID_NUMBER;
     }

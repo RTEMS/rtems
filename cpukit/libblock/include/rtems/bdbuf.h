@@ -644,21 +644,31 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd);
 /**
  * @brief Sets the block size of a disk device.
  *
- * This will set the block size derived fields of the disk device.  The
- * read-ahead state of this device is reset.
+ * This will set the block size derived fields of the disk device.  If
+ * requested the disk device is synchronized before the block size change
+ * occurs.  Since the cache is unlocked during the synchronization operation
+ * some tasks may access the disk device in the meantime.  This may result in
+ * loss of data.  After the synchronization the disk device is purged to ensure
+ * a consistent cache state and the block size change occurs.  This also resets
+ * the read-ahead state of this disk device.  Due to the purge operation this
+ * may result in loss of data.
  *
  * Before you can use this function, the rtems_bdbuf_init() routine must be
  * called at least once to initialize the cache, otherwise a fatal error will
  * occur.
  *
  * @param dd [in, out] The disk device.
- * @param dd [in] The new block size.
+ * @param block_size [in] The new block size.
+ * @param sync [in] If @c true, then synchronize the disk device before the
+ * block size change.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_INVALID_NUMBER Invalid block size.
  */
 rtems_status_code
-rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size);
+rtems_bdbuf_set_block_size (rtems_disk_device *dd,
+                            uint32_t           block_size,
+                            bool               sync);
 
 /**
  * @brief Returns the block device statistics.

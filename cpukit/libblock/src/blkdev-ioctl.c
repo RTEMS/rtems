@@ -37,7 +37,7 @@ rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
             break;
 
         case RTEMS_BLKIO_SETBLKSIZE:
-            sc = rtems_bdbuf_set_block_size(dd, *(uint32_t *) argp);
+            sc = rtems_bdbuf_set_block_size(dd, *(uint32_t *) argp, true);
             if (sc != RTEMS_SUCCESSFUL) {
                 errno = EIO;
                 rc = -1;

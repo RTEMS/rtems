@@ -92,7 +92,7 @@ static void test(void)
     rtems_test_assert(media_bd [i]->buffer [0] == buf [i] + media_block_count);
   }
 
-  sc = rtems_bdbuf_set_block_size(dd, media_size);
+  sc = rtems_bdbuf_set_block_size(dd, media_size, true);
   ASSERT_SC(sc);
 
   for (i = 0; i < media_block_count; i += 2) {

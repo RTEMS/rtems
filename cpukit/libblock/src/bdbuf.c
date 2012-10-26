@@ -2948,9 +2948,18 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd)
 }
 
 rtems_status_code
-rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size)
+rtems_bdbuf_set_block_size (rtems_disk_device *dd,
+                            uint32_t           block_size,
+                            bool               sync)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  /*
+   * We do not care about the synchronization status since we will purge the
+   * device later.
+   */
+  if (sync)
+    rtems_bdbuf_syncdev (dd);
 
   rtems_bdbuf_lock_cache ();
 
@@ -2978,7 +2987,7 @@ rtems_bdbuf_set_block_size (rtems_disk_device *dd, uint32_t block_size)
       dd->block_to_media_block_shift = block_to_media_block_shift;
       dd->bds_per_group = bds_per_group;
 
-      rtems_bdbuf_read_ahead_reset (dd);
+      rtems_bdbuf_purge_dev (dd);
     }
     else
     {

@@ -100,7 +100,7 @@ static void test_write_requests(rtems_disk_device *dd)
   rtems_status_code sc;
   int i;
 
-  sc = rtems_bdbuf_set_block_size(dd, BLOCK_SIZE);
+  sc = rtems_bdbuf_set_block_size(dd, BLOCK_SIZE, true);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   for (i = 0; i < ACTION_COUNT; ++i) {
