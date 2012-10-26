@@ -33,8 +33,8 @@ const rtems_driver_address_table ramdisk_ops = {
 };
 
 rtems_status_code ramdisk_register(
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  uint32_t media_block_size,
+  rtems_blkdev_bnum media_block_count,
   bool trace,
   const char *disk,
   dev_t *dev_ptr
@@ -50,7 +50,7 @@ rtems_status_code ramdisk_register(
     return RTEMS_UNSATISFIED;
   }
 
-  rd = ramdisk_allocate(NULL, block_size, block_count, trace);
+  rd = ramdisk_allocate(NULL, media_block_size, media_block_count, trace);
   if (rd == NULL) {
     rtems_io_unregister_driver(major);
 
@@ -61,8 +61,8 @@ rtems_status_code ramdisk_register(
 
   sc = rtems_disk_create_phys(
     dev,
-    block_size,
-    block_count,
+    media_block_size,
+    media_block_count,
     ramdisk_ioctl,
     rd,
     disk

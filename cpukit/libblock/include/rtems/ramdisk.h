@@ -66,8 +66,8 @@ typedef struct rtems_ramdisk_config {
 extern rtems_ramdisk_config rtems_ramdisk_configuration [];
 
 /**
- * @brief External reference the size of the RAM disk configuration table @ref
- * rtems_ramdisk_configuration.
+ * @brief External reference the size of the RAM disk configuration table
+ * @ref rtems_ramdisk_configuration.
  *
  * The configuration table size is provided by the application.
  */
@@ -148,9 +148,9 @@ int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
 /**
  * @brief Allocates and initializes a RAM disk descriptor.
  *
- * The block size will be @a block_size.  The block count will be @a
- * block_count.  The disk storage area begins at @a area_begin.  If @a
- * area_begin is @c NULL, the memory will be allocated and zeroed.  Sets the
+ * The block size will be @a media_block_size.  The block count will be
+ * @a media_block_count.  The disk storage area begins at @a area_begin.  If
+ * @a area_begin is @c NULL, the memory will be allocated and zeroed.  Sets the
  * trace enable to @a trace.
  *
  * @return Pointer to allocated and initialized ramdisk structure, or @c NULL
@@ -159,58 +159,38 @@ int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
  * @note
  * Runtime configuration example:
  * @code
- * #include <rtems.h>
- * #include <rtems/libio.h>
  * #include <rtems/ramdisk.h>
  *
  * rtems_status_code create_ramdisk(
- *   const char *disk_name_path,
- *   uint32_t block_size,
- *   rtems_blkdev_bnum block_count
+ *   const char *device,
+ *   uint32_t media_block_size,
+ *   rtems_blkdev_bnum media_block_count
  * )
  * {
- *   rtems_status_code sc = RTEMS_SUCCESSFUL;
- *   rtems_device_major_number major = 0;
- *   ramdisk *rd = NULL;
- *   dev_t dev = 0;
+ *   rtems_status_code sc;
+ *   ramdisk *rd;
  *
- *   sc = rtems_io_register_driver(0, &ramdisk_ops, &major);
- *   if (sc != RTEMS_SUCCESSFUL) {
- *     return RTEMS_UNSATISFIED;
+ *   rd = ramdisk_allocate(NULL, media_block_size, media_block_count, false);
+ *   if (rd != NULL) {
+ *     sc = rtems_blkdev_create(
+ *       device,
+ *       media_block_size,
+ *       media_block_count,
+ *       ramdisk_ioctl,
+ *       rd
+ *     );
+ *   } else {
+ *     sc = RTEMS_UNSATISFIED;
  *   }
  *
- *   rd = ramdisk_allocate(NULL, block_size, block_count, false);
- *   if (rd == NULL) {
- *     rtems_io_unregister_driver(major);
- *
- *     return RTEMS_UNSATISFIED;
- *   }
- *
- *   dev = rtems_filesystem_make_dev_t(major, 0);
- *
- *   sc = rtems_disk_create_phys(
- *     dev,
- *     block_size,
- *     block_count,
- *     ramdisk_ioctl,
- *     rd,
- *     disk_name_path
- *   );
- *   if (sc != RTEMS_SUCCESSFUL) {
- *     ramdisk_free(rd);
- *     rtems_io_unregister_driver(major);
- *
- *     return RTEMS_UNSATISFIED;
- *   }
- *
- *   return RTEMS_SUCCESSFUL;
+ *   return sc;
  * }
  * @endcode
  */
 ramdisk *ramdisk_allocate(
   void *area_begin,
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  uint32_t media_block_size,
+  rtems_blkdev_bnum media_block_count,
   bool trace
 );
 
@@ -224,17 +204,17 @@ static inline void ramdisk_enable_free_at_delete_request(ramdisk *rd)
 /**
  * @brief Allocates, initializes and registers a RAM disk.
  *
- * The block size will be @a block_size.  The block count will be @a
- * block_count.  The disk storage will be allocated.  Sets the trace enable to
- * @a trace.  Registers a device node with disk name path @a disk.  The
- * registered device number will be returned in @a dev.
+ * The block size will be @a media_block_size.  The block count will be
+ * @a media_block_count.  The disk storage will be allocated.  Sets the trace
+ * enable to @a trace.  Registers a device node with disk name path @a disk.
+ * The registered device number will be returned in @a dev.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_UNSATISFIED Something is wrong.
  */
 rtems_status_code ramdisk_register(
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  uint32_t media_block_size,
+  rtems_blkdev_bnum media_block_count,
   bool trace,
   const char *disk,
   dev_t *dev
