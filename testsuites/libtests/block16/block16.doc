@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: block16
+
+directives:
+
+  TBD
+
+concepts:
+
+  - Ensure that set block size will synchronize and purge the disk
