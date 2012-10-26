@@ -28,6 +28,8 @@ SUBDIRS = \
     spsimplesched01 spsimplesched02 spsimplesched03 spnsext01 \
     spedfsched01 spedfsched02 spedfsched03 \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01
+SUBDIRS += speventtransient01
+SUBDIRS += speventsystem01
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

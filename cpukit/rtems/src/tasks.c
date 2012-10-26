@@ -65,6 +65,7 @@ static bool _RTEMS_tasks_Create_extension(
   created->API_Extensions[ THREAD_API_RTEMS ] = api;
 
   _Event_Initialize( &api->Event );
+  _Event_Initialize( &api->System_event );
   _ASR_Initialize( &api->Signal );
   created->task_variables = NULL;
 
@@ -93,6 +94,7 @@ static void _RTEMS_tasks_Start_extension(
   api = started->API_Extensions[ THREAD_API_RTEMS ];
 
   _Event_Initialize( &api->Event );
+  _Event_Initialize( &api->System_event );
 }
 
 /*

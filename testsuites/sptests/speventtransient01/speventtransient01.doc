@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: speventtransient01
+
+directives:
+
+  - rtems_event_transient_send()
+  - rtems_event_transient_receive()
+  - rtems_event_transient_clear()
+
+concepts:
+
+  Ensure that the Classic Transient Event works.

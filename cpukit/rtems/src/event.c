@@ -34,6 +34,7 @@
 void _Event_Manager_initialization( void )
 {
   _Event_Sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+  _System_event_Sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
 
   /*
    *  Register the MP Process Packet routine.

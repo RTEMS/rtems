@@ -213,6 +213,21 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_event (
 }
 
 /**
+ *  This function returns true if the WAITING_FOR_SYSTEM_EVENT state is set in
+ *  the_states, and false otherwise.
+ *
+ *  @param[in] the_states is the task state set to test
+ *
+ *  @return This method returns true if the desired state condition is set.
+ */
+RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_system_event (
+  States_Control the_states
+)
+{
+   return (the_states & STATES_WAITING_FOR_SYSTEM_EVENT);
+}
+
+/**
  *  This function returns true if the WAITING_FOR_MUTEX state
  *  is set in the_states, and false otherwise.
  *

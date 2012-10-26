@@ -207,6 +207,207 @@ rtems_status_code rtems_event_receive (
 /** @} */
 
 /**
+ * @defgroup ClassicEventSystem System Events
+ *
+ * @ingroup ClassicEvent
+ *
+ * System events are similar to normal events.  They offer a second set of
+ * events.  These events are intended for internal RTEMS use and should not be
+ * used by applications (with the exception of the transient system event).
+ *
+ * The event @ref RTEMS_EVENT_SYSTEM_TRANSIENT is used for transient usage.
+ * See also @ref ClassicEventTransient.  This event may be used by every entity
+ * that fulfils its usage pattern.
+ *
+ * @{
+ */
+
+/**
+ * @brief Reserved system event for transient usage.
+ */
+#define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_0
+
+/**
+ * @brief See rtems_event_send().
+ */
+rtems_status_code rtems_event_system_send(
+  rtems_id id,
+  rtems_event_set event_in
+);
+
+/**
+ * @brief See rtems_event_receive().
+ */
+rtems_status_code rtems_event_system_receive(
+  rtems_event_set event_in,
+  rtems_option option_set,
+  rtems_interval ticks,
+  rtems_event_set *event_out
+);
+
+/** @} */
+
+/**
+ * @defgroup ClassicEventTransient Transient Event
+ *
+ * @ingroup ClassicEvent
+ *
+ * The transient event can be used by a client task to issue a request to
+ * another task or interrupt service (server).  The server can send the
+ * transient event to the client task to notify about a request completion, see
+ * rtems_event_transient_send().  The client task can wait for the transient
+ * event reception with rtems_event_transient_receive().
+ *
+ * The user of the transient event must ensure that this event is not pending
+ * once the request is finished or cancelled.  A successful reception of the
+ * transient event with rtems_event_transient_receive() will clear the
+ * transient event.  If a reception with timeout is used the transient event
+ * state is undefined after a timeout return status.  The transient event can
+ * be cleared unconditionally with the non-blocking
+ * rtems_event_transient_clear().
+ *
+ * @msc
+ *   hscale="1.6";
+ *   M [label="Main Task"], IDLE [label="Idle Task"], S [label="Server"], TIME [label="System Tick Handler"];
+ *   |||;
+ *   --- [label="sequence with request completion"];
+ *   M box M [label="prepare request\nissue request\ncall rtems_event_transient_receive()"];
+ *   M=>>IDLE [label="blocking operation"];
+ *   IDLE=>>S [label="request completion"];
+ *   S box S [label="call rtems_event_transient_send()"];
+ *   S=>>M [label="task is ready again"];
+ *   M box M [label="finish request"];
+ *   |||;
+ *   --- [label="sequence with early request completion"];
+ *   M box M [label="prepare request\nissue request"];
+ *   M=>>S [label="request completion"];
+ *   S box S [label="call rtems_event_transient_send()"];
+ *   S=>>M [label="transient event is now pending"];
+ *   M box M [label="call rtems_event_transient_receive()\nfinish request"];
+ *   |||;
+ *   --- [label="sequence with timeout event"];
+ *   M box M [label="prepare request\nissue request\ncall rtems_event_transient_receive()"];
+ *   M=>>IDLE [label="blocking operation"];
+ *   IDLE=>>TIME [label="timeout expired"];
+ *   TIME box TIME [label="cancel blocking operation"];
+ *   TIME=>>M [label="task is ready again"];
+ *   M box M [label="cancel request\ncall rtems_event_transient_clear()"];
+ * @endmsc
+ *
+ * Suppose you have a task that wants to issue a certain request and then waits
+ * for request completion.  It can create a request structure and store its
+ * task identifier there.  Now it can place the request on a work queue of
+ * another task (or interrupt handler).  Afterwards the task waits for the
+ * reception of the transient event.  Once the server task is finished with the
+ * request it can send the transient event to the waiting task and wake it up.
+ *
+ * @code
+ * #include <assert.h>
+ * #include <rtems.h>
+ *
+ * typedef struct {
+ *   rtems_id task_id;
+ *   bool work_done;
+ * } request;
+ *
+ * void server(rtems_task_argument arg)
+ * {
+ *   rtems_status_code sc;
+ *   request *req = (request *) arg;
+ *
+ *   req->work_done = true;
+ *
+ *   sc = rtems_event_transient_send(req->task_id);
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ *
+ *   sc = rtems_task_delete(RTEMS_SELF);
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ * }
+ *
+ * void issue_request_and_wait_for_completion(void)
+ * {
+ *   rtems_status_code sc;
+ *   rtems_id id;
+ *   request req;
+ *
+ *   req.task_id = rtems_task_self();
+ *   req.work_done = false;
+ *
+ *   sc = rtems_task_create(
+ *     rtems_build_name('S', 'E', 'R', 'V'),
+ *     1,
+ *     RTEMS_MINIMUM_STACK_SIZE,
+ *     RTEMS_DEFAULT_MODES,
+ *     RTEMS_DEFAULT_ATTRIBUTES,
+ *     &id
+ *   );
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ *
+ *   sc = rtems_task_start(id, server, (rtems_task_argument) &req);
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ *
+ *   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+ *   assert(sc == RTEMS_SUCCESSFUL);
+ *
+ *   assert(req.work_done);
+ * }
+ * @endcode
+ *
+ * @{
+ */
+
+/**
+ * @brief See rtems_event_system_send().
+ *
+ * The system event @ref RTEMS_EVENT_SYSTEM_TRANSIENT will be sent.
+ */
+RTEMS_INLINE_ROUTINE rtems_status_code rtems_event_transient_send(
+  rtems_id id
+)
+{
+  return rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_TRANSIENT );
+}
+
+/**
+ * @brief See rtems_event_system_receive().
+ *
+ * The system event @ref RTEMS_EVENT_SYSTEM_TRANSIENT will be received.
+ */
+RTEMS_INLINE_ROUTINE rtems_status_code rtems_event_transient_receive(
+  rtems_option option_set,
+  rtems_interval ticks
+)
+{
+  rtems_event_set event_out;
+
+  return rtems_event_system_receive(
+    RTEMS_EVENT_SYSTEM_TRANSIENT,
+    RTEMS_EVENT_ALL | option_set,
+    ticks,
+    &event_out
+  );
+}
+
+/**
+ * @brief See rtems_event_system_receive().
+ *
+ * The system event @ref RTEMS_EVENT_SYSTEM_TRANSIENT will be cleared.
+ */
+RTEMS_INLINE_ROUTINE void rtems_event_transient_clear( void )
+{
+  rtems_event_set event_out;
+
+  rtems_event_system_receive(
+    RTEMS_EVENT_SYSTEM_TRANSIENT,
+    RTEMS_EVENT_ALL | RTEMS_NO_WAIT,
+    0,
+    &event_out
+  );
+}
+
+/** @} */
+
+/**
  *  @defgroup ScoreEvent Event Handler
  *
  *  @ingroup Score
@@ -251,6 +452,8 @@ void _Event_Timeout(
 );
 
 RTEMS_EVENT_EXTERN Thread_blocking_operation_States _Event_Sync_state;
+
+RTEMS_EVENT_EXTERN Thread_blocking_operation_States _System_event_Sync_state;
 
 /** @} */
 

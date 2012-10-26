@@ -212,6 +212,8 @@ typedef struct {
 typedef struct {
   /** This field contains the event control for this task. */
   Event_Control            Event;
+  /** This field contains the system event control for this task. */
+  Event_Control            System_event;
   /** This field contains the Classic API Signal information for this task. */
   ASR_Information          Signal;
   /**

@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: speventsystem01
+
+directives:
+
+  - rtems_event_send()
+  - rtems_event_receive()
+  - rtems_event_system_send()
+  - rtems_event_system_receive()
+
+concepts:
+
+  Ensure that the Classic System Events work.
