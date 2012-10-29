@@ -123,7 +123,7 @@ void bsp_size_memory(void)
 void bsp_work_area_initialize(void)
 {
   void *area_start = (void *) rtemsWorkAreaStart;
-  uintptr_t work_area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
+  uintptr_t area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
 
   bsp_work_area_initialize_default( area_start, area_size );
 }
