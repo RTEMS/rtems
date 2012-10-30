@@ -20,7 +20,6 @@
 #define _RTEMS_RTEMS_EVENTSET_INL
 
 #include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
-#include <rtems/score/isr.h> /* ISR_Level */
 
 /**
  *  @addtogroup ScoreEvent
@@ -51,11 +50,7 @@ RTEMS_INLINE_ROUTINE void _Event_sets_Post(
   rtems_event_set *the_event_set
 )
 {
-  ISR_Level level;
-
-  _ISR_Disable( level );
-    *the_event_set |= the_new_events;
-  _ISR_Enable( level );
+  *the_event_set |= the_new_events;
 }
 
 /**

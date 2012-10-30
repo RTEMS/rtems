@@ -10,35 +10,11 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/event.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
-
-/*
- *  rtems_event_receive
- *
- *  This directive allows a thread to receive a set of events.
- *
- *  Input parameters:
- *    event_in   - input event condition
- *    option_set - options
- *    ticks      - number of ticks to wait (0 means wait forever)
- *    event_out  - pointer to output event set
- *
- *  Output parameters:
- *    event out         - event set
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_event_receive(
   rtems_event_set  event_in,
@@ -47,20 +23,35 @@ rtems_status_code rtems_event_receive(
   rtems_event_set *event_out
 )
 {
-  RTEMS_API_Control       *api;
+  rtems_status_code sc;
 
-  if ( !event_out )
-    return RTEMS_INVALID_ADDRESS;
+  if ( event_out != NULL ) {
+    Thread_Control    *executing = _Thread_Executing;
+    RTEMS_API_Control *api = executing->API_Extensions[ THREAD_API_RTEMS ];
+    Event_Control     *event = &api->Event;
 
-  api = _Thread_Executing->API_Extensions[ THREAD_API_RTEMS ];
+    if ( !_Event_sets_Is_empty( event_in ) ) {
+      _Thread_Disable_dispatch();
+      _Event_Seize(
+        event_in,
+        option_set,
+        ticks,
+        event_out,
+        executing,
+        event,
+        &_Event_Sync_state,
+        STATES_WAITING_FOR_EVENT
+      );
+      _Thread_Enable_dispatch();
 
-  if ( _Event_sets_Is_empty( event_in ) ) {
-    *event_out = api->pending_events;
-    return RTEMS_SUCCESSFUL;
+      sc = executing->Wait.return_code;
+    } else {
+      *event_out = event->pending_events;
+      sc = RTEMS_SUCCESSFUL;
+    }
+  } else {
+    sc = RTEMS_INVALID_ADDRESS;
   }
 
-  _Thread_Disable_dispatch();
-  _Event_Seize( event_in, option_set, ticks, event_out );
-  _Thread_Enable_dispatch();
-  return( _Thread_Executing->Wait.return_code );
+  return sc;
 }

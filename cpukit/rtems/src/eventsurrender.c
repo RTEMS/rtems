@@ -10,29 +10,12 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/event.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/tasks.h>
 
 /*
- *  _Event_Surrender
- *
- *  This routines remove a thread from the specified threadq.
- *
- *  Input parameters:
- *    the_thread - pointer to thread to be dequeued
- *
- *  Output parameters: NONE
- *
  *  INTERRUPT LATENCY:
  *    before flash
  *    after flash
@@ -40,23 +23,25 @@
  */
 
 void _Event_Surrender(
-  Thread_Control *the_thread
+  Thread_Control                   *the_thread,
+  rtems_event_set                   event_in,
+  Event_Control                    *event,
+  Thread_blocking_operation_States *sync_state,
+  States_Control                    wait_state
 )
 {
-  ISR_Level           level;
-  rtems_event_set     pending_events;
-  rtems_event_set     event_condition;
-  rtems_event_set     seized_events;
-  rtems_option        option_set;
-  RTEMS_API_Control  *api;
+  ISR_Level       level;
+  rtems_event_set pending_events;
+  rtems_event_set event_condition;
+  rtems_event_set seized_events;
+  rtems_option    option_set;
 
-  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
-
-  option_set = (rtems_option) the_thread->Wait.option;
+  option_set = the_thread->Wait.option;
 
   _ISR_Disable( level );
-  pending_events  = api->pending_events;
-  event_condition = (rtems_event_set) the_thread->Wait.count;
+  _Event_sets_Post( event_in, &event->pending_events );
+  pending_events  = event->pending_events;
+  event_condition = the_thread->Wait.count;
 
   seized_events = _Event_sets_Get( pending_events, event_condition );
 
@@ -74,13 +59,16 @@ void _Event_Surrender(
    */
   if ( _ISR_Is_in_progress() &&
        _Thread_Is_executing( the_thread ) &&
-       ((_Event_Sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
-        (_Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED)) ) {
+       ((*sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
+        (*sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED)) ) {
     if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
-      api->pending_events = _Event_sets_Clear( pending_events,seized_events );
+      event->pending_events = _Event_sets_Clear(
+        pending_events,
+        seized_events
+      );
       the_thread->Wait.count = 0;
       *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
-      _Event_Sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
+      *sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
     }
     _ISR_Enable( level );
     return;
@@ -89,9 +77,12 @@ void _Event_Surrender(
   /*
    *  Otherwise, this is a normal send to another thread
    */
-  if ( _States_Is_waiting_for_event( the_thread->current_state ) ) {
+  if ( _States_Are_set( the_thread->current_state, wait_state ) ) {
     if ( seized_events == event_condition || _Options_Is_any( option_set ) ) {
-      api->pending_events = _Event_sets_Clear( pending_events, seized_events );
+      event->pending_events = _Event_sets_Clear(
+        pending_events,
+        seized_events
+      );
       the_thread->Wait.count = 0;
       *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
 

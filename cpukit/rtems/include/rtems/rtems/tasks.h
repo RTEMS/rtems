@@ -38,7 +38,7 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/types.h>
-#include <rtems/rtems/eventset.h>
+#include <rtems/rtems/event.h>
 #include <rtems/rtems/asr.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
@@ -210,8 +210,8 @@ typedef struct {
  *        notespads are disabled by the application configuration.
  */
 typedef struct {
-  /** This field contains the pending events for this task. */
-  rtems_event_set          pending_events;
+  /** This field contains the event control for this task. */
+  Event_Control            Event;
   /** This field contains the Classic API Signal information for this task. */
   ASR_Information          Signal;
   /**

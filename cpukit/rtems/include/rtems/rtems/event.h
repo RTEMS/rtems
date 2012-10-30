@@ -214,63 +214,43 @@ rtems_status_code rtems_event_receive (
  *  @{
  */
 
+typedef struct {
+  rtems_event_set pending_events;
+} Event_Control;
+
 /**
  *  This constant is passed as the event_in to the
  *  rtems_event_receive directive to determine which events are pending.
  */
 #define EVENT_CURRENT  0
 
-/**
- *  @brief Event_Manager_initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
 void _Event_Manager_initialization( void );
 
-/**
- *  @brief Event_Seize
- *
- *  This routine determines if the event condition event_in is
- *  satisfied.  If so or if the no_wait option is enabled in option_set,
- *  then the procedure returns immediately.  If neither of these
- *  conditions is true, then the calling task is blocked with an
- *  optional timeout of ticks clock ticks.
- */
-void _Event_Seize (
-  rtems_event_set  event_in,
-  rtems_option     option_set,
-  rtems_interval   ticks,
-  rtems_event_set *event_out
+void _Event_Seize(
+  rtems_event_set                   event_in,
+  rtems_option                      option_set,
+  rtems_interval                    ticks,
+  rtems_event_set                  *event_out,
+  Thread_Control                   *executing,
+  Event_Control                    *event,
+  Thread_blocking_operation_States *sync_state,
+  States_Control                    wait_state
 );
 
-/**
- *  @brief Event_Surrender
- *
- *  This routine determines if the event condition of the_thread
- *  has been satisfied.  If so, it unblocks the_thread.
- */
-void _Event_Surrender (
-  Thread_Control *the_thread
+void _Event_Surrender(
+  Thread_Control                   *the_thread,
+  rtems_event_set                   event_in,
+  Event_Control                    *event,
+  Thread_blocking_operation_States *sync_state,
+  States_Control                    wait_state
 );
 
-/**
- *  @brief Event_Timeout
- *
- *  This routine is invoked when a task's event receive request
- *  has not been satisfied after the specified timeout interval.
- *  The task represented by ID will be unblocked and its status
- *  code will be set in it's control block to indicate that a timeout
- *  has occurred.
- */
-void _Event_Timeout (
+void _Event_Timeout(
   Objects_Id  id,
   void       *ignored
 );
 
-/**
- *  @brief he following defines the synchronization flag used by the
- */
-RTEMS_EVENT_EXTERN volatile Thread_blocking_operation_States _Event_Sync_state;
+RTEMS_EVENT_EXTERN Thread_blocking_operation_States _Event_Sync_state;
 
 /** @} */
 

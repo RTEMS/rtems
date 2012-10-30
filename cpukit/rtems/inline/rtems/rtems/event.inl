@@ -25,6 +25,11 @@
  *  @{
  */
 
+RTEMS_INLINE_ROUTINE void _Event_Initialize( Event_Control *event )
+{
+  event->pending_events = EVENT_SETS_NONE_PENDING;
+}
+
 /**@}*/
 
 #endif
