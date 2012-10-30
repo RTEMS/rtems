@@ -470,7 +470,7 @@ cs8900_interrupt (rtems_vector_number v, void *csp)
             if (cs->rx_loaded_len == 1)
             {
               cs8900_trace (cs, CS8900_T_RX_OK, cs->rx_loaded_len);
-              rtems_event_send (cs->rx_task, CS8900_RX_OK_EVENT);
+              rtems_bsdnet_event_send (cs->rx_task, CS8900_RX_OK_EVENT);
             }
           }
           else
@@ -480,7 +480,7 @@ cs8900_interrupt (rtems_vector_number v, void *csp)
             cs8900_trace (cs, CS8900_T_RX_DROPPED, cs->rx_loaded_len);
 
             if (cs->rx_loaded_len == 0)
-              rtems_event_send (cs->rx_task, CS8900_RX_OK_EVENT);
+              rtems_bsdnet_event_send (cs->rx_task, CS8900_RX_OK_EVENT);
           }
         }
         else
@@ -511,7 +511,7 @@ cs8900_interrupt (rtems_vector_number v, void *csp)
 
           cs->tx_active = 0;
 
-          rtems_event_send (cs->tx_task, CS8900_TX_OK_EVENT);
+          rtems_bsdnet_event_send (cs->tx_task, CS8900_TX_OK_EVENT);
         }
         break;
 
@@ -526,14 +526,14 @@ cs8900_interrupt (rtems_vector_number v, void *csp)
           if (cs->tx_active)
           {
             ++cs->eth_stats.tx_rdy4tx;
-            rtems_event_send (cs->tx_task, CS8900_TX_WAIT_EVENT);
+            rtems_bsdnet_event_send (cs->tx_task, CS8900_TX_WAIT_EVENT);
           }
         }
         else if (isq & CS8900_BUFFER_EVENT_TX_UNDERRUN)
         {
           ++cs->eth_stats.tx_underrun_errors;
           if (cs->tx_active)
-            rtems_event_send (cs->tx_task, CS8900_TX_OK_EVENT);
+            rtems_bsdnet_event_send (cs->tx_task, CS8900_TX_OK_EVENT);
         }
         else if (isq & CS8900_BUFFER_EVENT_SW_INT)
         {
@@ -871,7 +871,7 @@ cs8900_start (struct ifnet *ifp)
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  rtems_event_send (cs->tx_task, CS8900_TX_START_EVENT);
+  rtems_bsdnet_event_send (cs->tx_task, CS8900_TX_START_EVENT);
 }
 
 static void

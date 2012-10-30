@@ -850,7 +850,7 @@ struct ifnet *ifp
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
 }
 
 /*=========================================================================*\
@@ -1168,7 +1168,7 @@ static void tsec_tx_irq_handler
   /*
    * wake up tx Daemon
    */
-  rtems_event_send(sc->txDaemonTid, INTERRUPT_EVENT);
+  rtems_bsdnet_event_send(sc->txDaemonTid, INTERRUPT_EVENT);
 }
 
 /*=========================================================================*\
@@ -1211,7 +1211,7 @@ static void tsec_rx_irq_handler
   /*
    * wake up rx Daemon<
    */
-  rtems_event_send(sc->rxDaemonTid, INTERRUPT_EVENT);
+  rtems_bsdnet_event_send(sc->rxDaemonTid, INTERRUPT_EVENT);
 }
 
 

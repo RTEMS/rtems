@@ -507,7 +507,7 @@ void au1x00_emac_start(struct ifnet *ifp)
 {
     au1x00_emac_softc_t *sc = ifp->if_softc;
 
-    rtems_event_send(sc->tx_daemon_tid, START_TX_EVENT);
+    rtems_bsdnet_event_send(sc->tx_daemon_tid, START_TX_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
 
@@ -872,7 +872,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
         }
     }
     if (rx_flag != 0) {
-        rtems_event_send(sc->rx_daemon_tid, START_RX_EVENT);
+        rtems_bsdnet_event_send(sc->rx_daemon_tid, START_RX_EVENT);
     }
 
     /* transmit interrupt */
@@ -901,7 +901,7 @@ rtems_isr au1x00_emac_isr (rtems_vector_number v)
         }
     }
     if (tx_flag != 0) {
-        rtems_event_send(sc->tx_daemon_tid, START_TX_EVENT);
+        rtems_bsdnet_event_send(sc->tx_daemon_tid, START_TX_EVENT);
     }
 }
 

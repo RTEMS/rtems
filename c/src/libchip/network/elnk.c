@@ -1930,7 +1930,7 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
          printk("etherlink : unit elnk%d rx\n", sc->xl_unit );
 #endif
          /* received packets */
-         rtems_event_send(rxDaemonTid, sc->ioevent);
+         rtems_bsdnet_event_send(rxDaemonTid, sc->ioevent);
       }
 
       if( (status & XL_STAT_DOWN_COMPLETE) || (status & XL_STAT_TX_COMPLETE) )
@@ -2013,7 +2013,7 @@ elnk_interrupt_handler ( struct elnk_softc *sc )
 
             /* wake up the tx daemon once so we're sure this last chain
                will be freed */
-            rtems_event_send( txDaemonTid, sc->ioevent );
+            rtems_bsdnet_event_send( txDaemonTid, sc->ioevent );
 #if 0
             printk("unit elnk%d tx done\n", sc->xl_unit );
 #endif
@@ -2338,10 +2338,10 @@ elnk_rxDaemon (void *arg)
          /*
          ** If more events are pending, service them before we go back to sleep
          */
-         if( rtems_event_receive( RTEMS_ALL_EVENTS,
-                                  RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
-                                  0,
-                                  &events ) == RTEMS_UNSATISFIED ) break;
+         if( rtems_event_system_receive( RTEMS_ALL_EVENTS,
+                                         RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+                                         0,
+                                         &events ) == RTEMS_UNSATISFIED ) break;
       }
    }
 }
@@ -2612,7 +2612,7 @@ elnk_start (struct ifnet *ifp)
    printk("unit %i tx signaled\n", sc->xl_unit );
 #endif
    ifp->if_flags |= IFF_OACTIVE;
-   rtems_event_send( txDaemonTid, sc->ioevent );
+   rtems_bsdnet_event_send( txDaemonTid, sc->ioevent );
 }
 
 

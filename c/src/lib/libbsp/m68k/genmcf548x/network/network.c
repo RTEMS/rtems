@@ -691,7 +691,7 @@ void mcf548x_fec_irq_handler(rtems_vector_number vector)
    */
   if (ievent & (MCF548X_FEC_EIR_RFERR | MCF548X_FEC_EIR_XFERR)) {
     MCF548X_FEC_EIMR(chan) &=~(MCF548X_FEC_EIMR_RFERR | MCF548X_FEC_EIMR_XFERR);
-    rtems_event_send(sc->rxDaemonTid, FATAL_INT_EVENT);
+    rtems_bsdnet_event_send(sc->rxDaemonTid, FATAL_INT_EVENT);
   }
 }
 
@@ -707,7 +707,7 @@ void mcf548x_mcdma_rx_irq_handler(void * param)
 
     mcdma_glue_irq_disable(sc->rxDmaChan);/*Disable receive ints*/
     sc->rxInterrupts++; 		/* Rx int has occurred */
-    rtems_event_send(sc->rxDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send(sc->rxDaemonTid, INTERRUPT_EVENT);
   }
 }
 
@@ -727,7 +727,7 @@ void mcf548x_mcdma_tx_irq_handler(void * param)
 
     sc->txInterrupts++; /* Tx int has occurred */
 
-    rtems_event_send(sc->txDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send(sc->txDaemonTid, INTERRUPT_EVENT);
   }
 }
 
@@ -1167,7 +1167,7 @@ static void mcf548x_fec_tx_start(struct ifnet *ifp)
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
 
   }
 

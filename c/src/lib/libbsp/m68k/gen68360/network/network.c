@@ -119,7 +119,7 @@ m360Enet_interrupt_handler (rtems_vector_number v)
 		m360.scc1.scce = 0x8;
 		m360.scc1.sccm &= ~0x8;
 		scc_softc[0].rxInterrupts++;
-		rtems_event_send (scc_softc[0].rxDaemonTid, INTERRUPT_EVENT);
+		rtems_bsdnet_event_send (scc_softc[0].rxDaemonTid, INTERRUPT_EVENT);
 	}
 
 	/*
@@ -129,7 +129,7 @@ m360Enet_interrupt_handler (rtems_vector_number v)
 		m360.scc1.scce = 0x12;
 		m360.scc1.sccm &= ~0x12;
 		scc_softc[0].txInterrupts++;
-		rtems_event_send (scc_softc[0].txDaemonTid, INTERRUPT_EVENT);
+		rtems_bsdnet_event_send (scc_softc[0].txDaemonTid, INTERRUPT_EVENT);
 	}
 	m360.cisr = 1UL << 30;	/* Clear SCC1 interrupt-in-service bit */
 }
@@ -796,7 +796,7 @@ scc_start (struct ifnet *ifp)
 {
 	struct scc_softc *sc = ifp->if_softc;
 
-	rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+	rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
 	ifp->if_flags |= IFF_OACTIVE;
 }
 

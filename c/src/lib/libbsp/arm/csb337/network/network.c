@@ -561,7 +561,7 @@ void at91rm9200_emac_start(struct ifnet *ifp)
 {
     at91rm9200_emac_softc_t *sc = ifp->if_softc;
 
-    rtems_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
+    rtems_bsdnet_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
 
@@ -866,7 +866,7 @@ static void at91rm9200_emac_isr (rtems_irq_hdl_param unused)
                               EMAC_INT_RBNA |  /* Receive buf not available */
                               EMAC_INT_ROVR);  /* Receive overrun */
 
-        rtems_event_send (softc.rxDaemonTid, START_RECEIVE_EVENT);
+        rtems_bsdnet_event_send (softc.rxDaemonTid, START_RECEIVE_EVENT);
     }
 
     if (status32 & EMAC_INT_TCOM) {      /* Transmit buffer register empty */
@@ -874,7 +874,7 @@ static void at91rm9200_emac_isr (rtems_irq_hdl_param unused)
         /* disable the TX interrupts */
         EMAC_REG(EMAC_IDR) = EMAC_INT_TCOM;
 
-        rtems_event_send (softc.txDaemonTid, START_TRANSMIT_EVENT);
+        rtems_bsdnet_event_send (softc.txDaemonTid, START_TRANSMIT_EVENT);
     }
 }
 

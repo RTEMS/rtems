@@ -242,7 +242,7 @@ struct NET_SOFTC *sc = thesc;
 	/* disable interrupts */
 	NET_DISABLE_IRQS(sc);
 
-	rtems_event_send( sc->tid, EX_EVENT );
+	rtems_bsdnet_event_send( sc->tid, EX_EVENT );
 }
 
 static void net_daemon(void *arg)

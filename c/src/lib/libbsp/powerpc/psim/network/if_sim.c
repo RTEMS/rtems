@@ -303,7 +303,7 @@ struct ifsim_softc *sc = arg;
 #endif
 
 	ifsim_out(sc, IFSIM_IEN_REG, 0);
-	rtems_event_send(ifsim_tid, (1<<(sc-theIfSims)));
+	rtems_bsdnet_event_send(ifsim_tid, (1<<(sc-theIfSims)));
 }
 
 static void

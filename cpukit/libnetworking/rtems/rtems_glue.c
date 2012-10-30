@@ -405,7 +405,7 @@ sbwait(struct sockbuf *sb)
 	 * The sleep/wakeup synchronization in the FreeBSD
 	 * kernel has no memory.
 	 */
-	rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
+	rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
 
 	/*
 	 * Set this task as the target of the wakeup operation.
@@ -426,7 +426,7 @@ sbwait(struct sockbuf *sb)
 	/*
 	 * Wait for the wakeup event.
 	 */
-	sc = rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, sb->sb_timeo, &events);
+	sc = rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, sb->sb_timeo, &events);
 
 	/*
 	 * Reobtain the network semaphore.
@@ -454,7 +454,7 @@ sowakeup(
 {
 	if (sb->sb_flags & SB_WAIT) {
 		sb->sb_flags &= ~SB_WAIT;
-		rtems_event_send (sb->sb_sel.si_pid, SBWAIT_EVENT);
+		rtems_event_system_send (sb->sb_sel.si_pid, SBWAIT_EVENT);
 	}
 	if (sb->sb_wakeup) {
 		(*sb->sb_wakeup) (so, sb->sb_wakeuparg);
@@ -491,7 +491,7 @@ soconnsleep (struct socket *so)
 	 * The sleep/wakeup synchronization in the FreeBSD
 	 * kernel has no memory.
 	 */
-	rtems_event_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
+	rtems_event_system_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
 
 	/*
 	 * Set this task as the target of the wakeup operation.
@@ -525,7 +525,7 @@ void
 soconnwakeup (struct socket *so)
 {
 	if (so->so_pgid)
-		rtems_event_send (so->so_pgid, SOSLEEP_EVENT);
+		rtems_event_system_send (so->so_pgid, SOSLEEP_EVENT);
 }
 
 /*
@@ -535,7 +535,7 @@ soconnwakeup (struct socket *so)
 void
 rtems_bsdnet_schednetisr (int n)
 {
-	rtems_event_send (networkDaemonTid, 1 << n);
+	rtems_event_system_send (networkDaemonTid, 1 << n);
 }
 
 /*
@@ -680,7 +680,7 @@ rtems_status_code rtems_bsdnet_event_receive (
 	rtems_status_code sc;
 
 	rtems_bsdnet_semaphore_release ();
-	sc = rtems_event_receive (event_in, option_set, ticks, event_out);
+	sc = rtems_event_system_receive (event_in, option_set, ticks, event_out);
 	rtems_bsdnet_semaphore_obtain ();
 	return sc;
 }

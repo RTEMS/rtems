@@ -118,13 +118,13 @@ void lan91cxx_interrupt_handler(void *arg)
 			put_reg(cpd, LAN91CXX_INTERRUPT,
 				(irq & 0xff00) | LAN91CXX_INTERRUPT_TX_INT);
 
-			/*rtems_event_send (cpd->txDaemonTid, SMC91111_INTERRUPT_EVENT); */
+			/*rtems_bsdnet_event_send (cpd->txDaemonTid, SMC91111_INTERRUPT_EVENT); */
 			/*put_reg(cpd, LAN91CXX_INTERRUPT, (irq & 0xff00) | LAN91CXX_INTERRUPT_TX_INT); */
-			/*rtems_event_send (cpd->txDaemonTid, SMC91111_TX_WAIT_EVENT); */
+			/*rtems_bsdnet_event_send (cpd->txDaemonTid, SMC91111_TX_WAIT_EVENT); */
 		}
 		if (event & LAN91CXX_INTERRUPT_RCV_INT) {
 			db_printf("#*rx irq\n");
-			rtems_event_send(cpd->rxDaemonTid,
+			rtems_bsdnet_event_send(cpd->rxDaemonTid,
 					 SMC91111_INTERRUPT_EVENT);
 		}
 		if (event &
@@ -699,7 +699,7 @@ static void smc91111_start(struct ifnet *ifp)
 	if ((ifp->if_flags & (IFF_RUNNING | IFF_OACTIVE)) != IFF_RUNNING)
 		return;
 
-	rtems_event_send(cpd->txDaemonTid, START_TRANSMIT_EVENT);
+	rtems_bsdnet_event_send(cpd->txDaemonTid, START_TRANSMIT_EVENT);
 	ifp->if_flags |= IFF_OACTIVE;
 
 }

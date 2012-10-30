@@ -126,7 +126,7 @@ m302Enet_interrupt_handler (rtems_vector_number v)
 		M68en302imp_intr_event = INTR_EVENT_BIT_RFINT;
 		M68en302imp_intr_mask &= ~INTR_MASK_BIT_RFIEN;
 		scc_softc[0].rxInterrupts++;
-		rtems_event_send (scc_softc[0].rxDaemonTid, INTERRUPT_EVENT);
+		rtems_bsdnet_event_send (scc_softc[0].rxDaemonTid, INTERRUPT_EVENT);
 	}
 
 	/*
@@ -137,7 +137,7 @@ m302Enet_interrupt_handler (rtems_vector_number v)
 		M68en302imp_intr_event = INTR_EVENT_BIT_TFINT | INTR_EVENT_BIT_TXB;
 		M68en302imp_intr_mask &= ~(INTR_MASK_BIT_TFIEN | INTR_MASK_BIT_TXIEN);
 		scc_softc[0].txInterrupts++;
-		rtems_event_send (scc_softc[0].txDaemonTid, INTERRUPT_EVENT);
+		rtems_bsdnet_event_send (scc_softc[0].txDaemonTid, INTERRUPT_EVENT);
 	}
 }
 
@@ -746,7 +746,7 @@ scc_start (struct ifnet *ifp)
 {
 	struct scc_softc *sc = ifp->if_softc;
 
-	rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+	rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
 	ifp->if_flags |= IFF_OACTIVE;
 }
 

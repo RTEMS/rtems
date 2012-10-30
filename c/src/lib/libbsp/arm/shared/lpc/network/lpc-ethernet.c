@@ -388,7 +388,7 @@ static void lpc_eth_interrupt_handler(void *arg)
   /* Send events to receive task */
   if (re != 0) {
     ++e->receive_interrupts;
-    (void) rtems_event_send(e->receive_task, re);
+    (void) rtems_bsdnet_event_send(e->receive_task, re);
   }
 
   /* Check transmit interrupts */
@@ -403,7 +403,7 @@ static void lpc_eth_interrupt_handler(void *arg)
   /* Send events to transmit task */
   if (te != 0) {
     ++e->transmit_interrupts;
-    (void) rtems_event_send(e->transmit_task, te);
+    (void) rtems_bsdnet_event_send(e->transmit_task, te);
   }
 
   LPC_ETH_PRINTK("interrupt: rx = 0x%08x, tx = 0x%08x\n", re, te);
@@ -1210,7 +1210,7 @@ static void lpc_eth_interface_init(void *arg)
         lpc_eth_receive_task,
         e
       );
-      sc = rtems_event_send(e->receive_task, LPC_ETH_EVENT_INITIALIZE);
+      sc = rtems_bsdnet_event_send(e->receive_task, LPC_ETH_EVENT_INITIALIZE);
       RTEMS_SYSLOG_ERROR_SC(sc, "send receive initialize event");
     }
 
@@ -1222,7 +1222,7 @@ static void lpc_eth_interface_init(void *arg)
         lpc_eth_transmit_task,
         e
       );
-      sc = rtems_event_send(e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
+      sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
       RTEMS_SYSLOG_ERROR_SC(sc, "send transmit initialize event");
     }
 
@@ -1388,7 +1388,7 @@ static void lpc_eth_interface_start(struct ifnet *ifp)
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  sc = rtems_event_send(e->transmit_task, LPC_ETH_EVENT_START);
+  sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_START);
   RTEMS_SYSLOG_ERROR_SC(sc, "send transmit start event");
 }
 

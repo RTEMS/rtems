@@ -198,7 +198,7 @@ rtems_isr enet_rx_isr(rtems_vector_number vector)
         cp;
         g_enet_regs->eir = MCF5272_ENET_EIR_RXF;
         enet_driver[0].rxInterrupts++;
-        rtems_event_send (enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
+        rtems_bsdnet_event_send (enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
     }
     cp;
 }
@@ -213,7 +213,7 @@ rtems_isr enet_tx_isr(rtems_vector_number vector)
         cp;
         g_enet_regs->eir = MCF5272_ENET_EIR_TXF;
         enet_driver[0].txInterrupts++;
-        rtems_event_send (enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
+        rtems_bsdnet_event_send (enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
     }
     cp;
 }
@@ -746,7 +746,7 @@ mcf5272_enet_start (struct ifnet *ifp)
     struct mcf5272_enet_struct *sc = ifp->if_softc;
 
     cp;
-    rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+    rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
     cp;
     ifp->if_flags |= IFF_OACTIVE;
 }

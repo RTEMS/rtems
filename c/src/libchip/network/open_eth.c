@@ -176,13 +176,13 @@ open_eth_interrupt_handler (rtems_vector_number v)
     if (status & (OETH_INT_RXF | OETH_INT_RXE))
       {
 	  oc.rxInterrupts++;
-	  rtems_event_send (oc.rxDaemonTid, INTERRUPT_EVENT);
+	  rtems_bsdnet_event_send (oc.rxDaemonTid, INTERRUPT_EVENT);
       }
 #ifdef OETH_SUSPEND_NOTXBUF
     if (status & (OETH_INT_MASK_TXB | OETH_INT_MASK_TXC | OETH_INT_MASK_TXE))
       {
 	  oc.txInterrupts++;
-	  rtems_event_send (oc.txDaemonTid, OPEN_ETH_TX_WAIT_EVENT);
+	  rtems_bsdnet_event_send (oc.txDaemonTid, OPEN_ETH_TX_WAIT_EVENT);
       }
 #endif
       /*
@@ -561,7 +561,7 @@ open_eth_start (struct ifnet *ifp)
 {
     struct open_eth_softc *sc = ifp->if_softc;
 
-    rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+    rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
 

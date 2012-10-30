@@ -164,7 +164,7 @@ wd8003Enet_interrupt_handler (void *unused)
   if (status & (MSK_PRX+MSK_RXE)) {
     outport_byte(tport+ISR, status & (MSK_PRX+MSK_RXE));
     wd_softc[0].rxInterrupts++;
-    rtems_event_send (wd_softc[0].rxDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send (wd_softc[0].rxDaemonTid, INTERRUPT_EVENT);
   }
 
 }
@@ -435,7 +435,7 @@ wd_start (struct ifnet *ifp)
 {
 	struct wd_softc *sc = ifp->if_softc;
 
-	rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+	rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
 	ifp->if_flags |= IFF_OACTIVE;
 }
 

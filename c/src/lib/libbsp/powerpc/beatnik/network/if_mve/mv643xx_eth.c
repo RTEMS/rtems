@@ -1094,7 +1094,7 @@ static void mveth_isr(rtems_irq_hdl_param arg)
 unsigned unit = (unsigned)arg;
 	mveth_disable_irqs(&theMvEths[unit].pvt, -1);
 	theMvEths[unit].pvt.stats.irqs++;
-	rtems_event_send( theMvEths[unit].pvt.tid, 1<<unit );
+	rtems_bsdnet_event_send( theMvEths[unit].pvt.tid, 1<<unit );
 }
 
 static void mveth_isr_1(rtems_irq_hdl_param arg)

@@ -373,7 +373,7 @@ dec21140Enet_interrupt_handler ( struct dec21140_softc *sc )
    if( status & 0x000000c0 )
    {
       sc->rxInterrupts++;
-      rtems_event_send(rxDaemonTid, sc->ioevent);
+      rtems_bsdnet_event_send(rxDaemonTid, sc->ioevent);
    }
 }
 
@@ -718,7 +718,7 @@ static void
 dec21140_start (struct ifnet *ifp)
 {
    struct dec21140_softc *sc = ifp->if_softc;
-   rtems_event_send( txDaemonTid, sc->ioevent );
+   rtems_bsdnet_event_send( txDaemonTid, sc->ioevent );
    ifp->if_flags |= IFF_OACTIVE;
 }
 

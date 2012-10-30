@@ -458,7 +458,7 @@ static rtems_isr ap_interrupt_handler( rtems_vector_number v )
    * to process all events required by this interrupt.
    */
   outw( BASE + EP_COMMAND, SET_INTR_MASK ); 	/* disable all Ints */
-  rtems_event_send( sc->rxDaemonTid, INTERRUPT_EVENT );
+  rtems_bsdnet_event_send( sc->rxDaemonTid, INTERRUPT_EVENT );
 }
 
 /**********************************************************************************
@@ -586,7 +586,7 @@ static void _3c509_start (struct ifnet *ifp)
 	struct ep_softc *sc = ifp->if_softc;
 	/*    printk ("S");  */
 	ifp->if_flags |= IFF_OACTIVE;
-	rtems_event_send( sc->txDaemonTid, START_TRANSMIT_EVENT );
+	rtems_bsdnet_event_send( sc->txDaemonTid, START_TRANSMIT_EVENT );
 }
 
 /**********************************************************************************

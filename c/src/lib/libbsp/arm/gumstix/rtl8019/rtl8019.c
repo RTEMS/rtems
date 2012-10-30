@@ -300,14 +300,14 @@ ne_check_status (struct ne_softc *sc, int from_irq_handler)
       --sc->inuse;
       sc->transmitting = 0;
       if (sc->inuse > 0 || (sc->arpcom.ac_if.if_flags & IFF_OACTIVE) != 0)
-        rtems_event_send (sc->tx_daemon_tid, START_TRANSMIT_EVENT);
+        rtems_bsdnet_event_send (sc->tx_daemon_tid, START_TRANSMIT_EVENT);
     }
 
     /* Check for received packet.  */
     if ((status & (MSK_PRX | MSK_RXE)) != 0)
     {
       ++sc->stats.rx_acks;
-      rtems_event_send (sc->rx_daemon_tid, INTERRUPT_EVENT);
+      rtems_bsdnet_event_send (sc->rx_daemon_tid, INTERRUPT_EVENT);
     }
 
     /* Check for counter change.  */
@@ -921,7 +921,7 @@ ne_start (struct ifnet *ifp)
   printk("S");
 #endif
   /* Tell the transmit daemon to wake up and send a packet.  */
-  rtems_event_send (sc->tx_daemon_tid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (sc->tx_daemon_tid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
 

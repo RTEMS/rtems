@@ -158,7 +158,7 @@ mcf5282_fec_rx_interrupt_handler( rtems_vector_number v )
     MCF5282_FEC_EIR = MCF5282_FEC_EIR_RXF;
     MCF5282_FEC_EIMR &= ~MCF5282_FEC_EIMR_RXF;
     enet_driver[0].rxInterrupts++;
-    rtems_event_send(enet_driver[0].rxDaemonTid, RX_INTERRUPT_EVENT);
+    rtems_bsdnet_event_send(enet_driver[0].rxDaemonTid, RX_INTERRUPT_EVENT);
 }
 
 static rtems_isr
@@ -167,7 +167,7 @@ mcf5282_fec_tx_interrupt_handler( rtems_vector_number v )
     MCF5282_FEC_EIR = MCF5282_FEC_EIR_TXF;
     MCF5282_FEC_EIMR &= ~MCF5282_FEC_EIMR_TXF;
     enet_driver[0].txInterrupts++;
-    rtems_event_send(enet_driver[0].txDaemonTid, TX_INTERRUPT_EVENT);
+    rtems_bsdnet_event_send(enet_driver[0].txDaemonTid, TX_INTERRUPT_EVENT);
 }
 
 static rtems_isr
@@ -688,7 +688,7 @@ mcf5282_enet_start(struct ifnet *ifp)
 {
     struct mcf5282_enet_struct *sc = ifp->if_softc;
 
-    rtems_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
+    rtems_bsdnet_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
 

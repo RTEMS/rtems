@@ -144,7 +144,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 #undef getbits
 
 	rtems_task_ident (RTEMS_SELF, 0, &tid);
-	rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
+	rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
 	for (;;) {
 		rtems_bsdnet_semaphore_obtain ();
 		error = selscan(tid, ibits, obits, nfds, &retval);
@@ -158,7 +158,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 				break;
 			then = now;
 		}
-		rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, timo, &events);
+		rtems_event_system_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, timo, &events);
 	}
 
 #define putbits(name,i) if (name) *name = ob[i]

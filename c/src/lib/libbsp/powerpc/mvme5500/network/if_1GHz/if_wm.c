@@ -528,7 +528,7 @@ i82544EI_ifstart(struct ifnet *ifp)
   }
 
   ifp->if_flags |= IFF_OACTIVE;
-  rtems_event_send (sc->daemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (sc->daemonTid, START_TRANSMIT_EVENT);
 #ifdef WM_DEBUG
   printk(")\n");
 #endif
@@ -628,7 +628,7 @@ static void i82544EI_isr(rtems_irq_hdl_param handle)
   if (icr & ICR_LSC) sc->stats.linkStatusChng++;
   if (icr & ICR_RXCFG) sc->stats.rxC_ordered++;
 
-  rtems_event_send(sc->daemonTid, events);
+  rtems_bsdnet_event_send(sc->daemonTid, events);
 }
 
 /*

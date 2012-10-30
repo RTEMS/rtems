@@ -223,6 +223,16 @@ rtems_status_code rtems_event_receive (
  */
 
 /**
+ * @brief Reserved system event for network SBWAIT usage.
+ */
+#define RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT RTEMS_EVENT_24
+
+/**
+ * @brief Reserved system event for network SOSLEEP usage.
+ */
+#define RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP RTEMS_EVENT_25
+
+/**
  * @brief Reserved system event for transient usage.
  */
 #define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31

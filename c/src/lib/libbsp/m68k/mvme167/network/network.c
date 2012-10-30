@@ -1136,7 +1136,7 @@ void uti596_reset_hardware(
    */
   if ( sc->txDaemonTid && pCmd != I596_NULL ) {
     printk(("****RESET: wakes transmitter!\n"))
-    status_code = rtems_event_send (sc->txDaemonTid,
+    status_code = rtems_bsdnet_event_send (sc->txDaemonTid,
                            INTERRUPT_EVENT);
 
     if ( status_code != RTEMS_SUCCESSFUL ) {
@@ -1799,7 +1799,7 @@ static void uti596_start(
   printk(("uti596_start: begins\n"))
 	#endif
 
-  rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
 
@@ -2272,7 +2272,7 @@ int fullStatus;
 				#ifdef DBG_ISR
         printk(("uti596_DynamicInterruptHandler: Wake %#x\n",uti596_softc.rxDaemonTid))
 				#endif
-        sc = rtems_event_send(uti596_softc.rxDaemonTid, INTERRUPT_EVENT);
+        sc = rtems_bsdnet_event_send(uti596_softc.rxDaemonTid, INTERRUPT_EVENT);
         if ( sc != RTEMS_SUCCESSFUL ) {
           rtems_panic("Can't notify rxDaemon: %s\n",
                     rtems_status_text (sc));
@@ -2367,7 +2367,7 @@ int fullStatus;
 					#endif
           if ( uti596_softc.txDaemonTid ) {
             /* Ensure that the transmitter is present */
-            sc = rtems_event_send (uti596_softc.txDaemonTid,
+            sc = rtems_bsdnet_event_send (uti596_softc.txDaemonTid,
                                  INTERRUPT_EVENT);
 
             if ( sc != RTEMS_SUCCESSFUL ) {
@@ -2432,7 +2432,7 @@ int fullStatus;
         uti596_softc.nic_reset = 1;
         if ( uti596_softc.txDaemonTid) {
           /* Ensure that a transmitter is present */
-          sc = rtems_event_send (uti596_softc.txDaemonTid,
+          sc = rtems_bsdnet_event_send (uti596_softc.txDaemonTid,
                                  INTERRUPT_EVENT);
           if ( sc != RTEMS_SUCCESSFUL ) {
             printk(("****ERROR:Could NOT send event to tid 0x%x : %s\n",
@@ -2584,7 +2584,7 @@ int fullStatus;
  /* Do this last, to ensure that the reset is called at the right time. */
   if ( uti596_softc.nic_reset ) {
     uti596_softc.nic_reset = 0;
-    sc = rtems_event_send(uti596_softc.resetDaemonTid, NIC_RESET_EVENT);
+    sc = rtems_bsdnet_event_send(uti596_softc.resetDaemonTid, NIC_RESET_EVENT);
     if ( sc != RTEMS_SUCCESSFUL )
       rtems_panic ("Can't notify resetDaemon: %s\n", rtems_status_text (sc));
   }

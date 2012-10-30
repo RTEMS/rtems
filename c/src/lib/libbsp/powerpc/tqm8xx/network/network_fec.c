@@ -330,7 +330,7 @@ static void m8xx_fec_interrupt_handler (void *unused)
   if (m8xx.fec.ievent & M8xx_FEC_IEVENT_RFINT) {
     m8xx.fec.ievent = M8xx_FEC_IEVENT_RFINT;
     enet_driver[0].rxInterrupts++;
-    rtems_event_send (enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send (enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
   }
 
   /*
@@ -339,7 +339,7 @@ static void m8xx_fec_interrupt_handler (void *unused)
   if (m8xx.fec.ievent & M8xx_FEC_IEVENT_TFINT) {
     m8xx.fec.ievent = M8xx_FEC_IEVENT_TFINT;
     enet_driver[0].txInterrupts++;
-    rtems_event_send (enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send (enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
   }
 }
 
@@ -920,7 +920,7 @@ m8xx_fec_enet_start (struct ifnet *ifp)
 {
   struct m8xx_fec_enet_struct *sc = ifp->if_softc;
 
-  rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
 

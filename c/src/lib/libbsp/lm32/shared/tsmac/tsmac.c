@@ -560,7 +560,7 @@ void tsmac_init(void *arg)
   /*
    * Wake up receive task to receive packets in queue
    */
-  rtems_event_send(tsmac->rxDaemonTid, INTERRUPT_EVENT);
+  rtems_bsdnet_event_send(tsmac->rxDaemonTid, INTERRUPT_EVENT);
 }
 
 void tsmac_stop(struct ifnet *ifp)
@@ -585,7 +585,7 @@ void tsmac_start(struct ifnet *ifp)
 {
   struct tsmac_softc *tsmac = ifp->if_softc;
 
-  rtems_event_send (tsmac->txDaemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send (tsmac->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
 
@@ -797,13 +797,13 @@ rtems_isr tsmac_interrupt_handler(rtems_vector_number vector)
   if (irq_stat & INTR_RX_PKT_RDY)
     {
       tsmac->rxInterrupts++;
-      rtems_event_send(tsmac->rxDaemonTid, INTERRUPT_EVENT);
+      rtems_bsdnet_event_send(tsmac->rxDaemonTid, INTERRUPT_EVENT);
     }
 
   if (irq_stat & INTR_TX_PKT_SENT)
     {
       tsmac->txInterrupts++;
-      rtems_event_send(tsmac->txDaemonTid, INTERRUPT_EVENT);
+      rtems_bsdnet_event_send(tsmac->txDaemonTid, INTERRUPT_EVENT);
     }
 
   rx_stat = tsmacread(LM32_TSMAC_RX_STATUS);

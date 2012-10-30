@@ -454,7 +454,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
 
         newipier &= ~XTE_IPXR_RECV_DONE_MASK;
 
-        rtems_event_send(gXilRxThread, xilTemac->iIoEvent);
+        rtems_bsdnet_event_send(gXilRxThread, xilTemac->iIoEvent);
       }
       if(pending & XTE_IPXR_XMIT_DONE_MASK) {
         /* We've transmitted a packet.  This interrupt is only ever enabled in
@@ -469,7 +469,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
 
         newipier &= ~XTE_IPXR_XMIT_DONE_MASK;
 
-        rtems_event_send(gXilTxThread, xilTemac->iIoEvent);
+        rtems_bsdnet_event_send(gXilTxThread, xilTemac->iIoEvent);
       }
       if(pending & XTE_IPXR_RECV_DROPPED_MASK) {
         /* A packet was dropped (because it was invalid, or receiving it
@@ -608,7 +608,7 @@ void xilTemacSend(struct ifnet* ifp)
   struct XilTemac* xilTemac = ifp->if_softc;
 
   /* wake up tx thread w/ outbound interface's signal */
-  rtems_event_send( gXilTxThread, xilTemac->iIoEvent );
+  rtems_bsdnet_event_send( gXilTxThread, xilTemac->iIoEvent );
 
   ifp->if_flags |= IFF_OACTIVE;
 }

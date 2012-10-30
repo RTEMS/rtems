@@ -732,7 +732,7 @@ i82586_intr(rtems_vector_number vec, void *arg)
    * Wake the task to handle the interrupt. It will
    * enabled the interrupts when it has finished.
    */
-  rtems_event_send (sc->intr_task, i82586_WAKE_EVENT);
+  rtems_bsdnet_event_send (sc->intr_task, i82586_WAKE_EVENT);
 }
 
 /*
@@ -1310,7 +1310,7 @@ i82586_start(struct ifnet *ifp)
   I82586_TRACE(sc, I82586_TX_REQ, sc->xmit_busy);
 #endif
 
-  rtems_event_send (sc->tx_task, i82586_TX_EVENT);
+  rtems_bsdnet_event_send (sc->tx_task, i82586_TX_EVENT);
 }
 
 static void

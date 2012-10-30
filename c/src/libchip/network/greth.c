@@ -211,7 +211,7 @@ void greth_interrupt_handler (void *arg)
 
         /* Send the event(s) */
         if ( events )
-                rtems_event_send (greth->daemonTid, events);
+                rtems_bsdnet_event_send (greth->daemonTid, events);
 }
 
 static uint32_t read_mii(uint32_t phy_addr, uint32_t reg_addr)

@@ -152,6 +152,14 @@ rtems_status_code rtems_bsdnet_event_receive (
   rtems_event_set *event_out
 );
 
+static inline rtems_status_code rtems_bsdnet_event_send (
+  rtems_id        task_id,
+  rtems_event_set event_in
+)
+{
+  return rtems_event_system_send (task_id, event_in);
+}
+
 /*
  * Network configuration
  */
@@ -182,8 +190,8 @@ int ioctl (int, ioctl_command_t, ...);
  * tries to use these events or if the `sleep'
  * events are equal to any of the NETISR * events.
  */
-#define SBWAIT_EVENT   RTEMS_EVENT_24
-#define SOSLEEP_EVENT  RTEMS_EVENT_25
+#define SBWAIT_EVENT   RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT
+#define SOSLEEP_EVENT  RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP
 #define NETISR_IP_EVENT        (1L << NETISR_IP)
 #define NETISR_ARP_EVENT       (1L << NETISR_ARP)
 #define NETISR_EVENTS  (NETISR_IP_EVENT|NETISR_ARP_EVENT)

@@ -120,7 +120,7 @@ int rtems_minimac_driver_attach(struct rtems_bsdnet_ifconfig *config,
     tx_buffer[i] = 0x55;
   tx_buffer[7] = 0xd5;
   MM_WRITE(MM_MINIMAC_SETUP, 0);
-  rtems_event_send(tx_daemon_id, CTS_EVENT);
+  rtems_bsdnet_event_send(tx_daemon_id, CTS_EVENT);
   
   bsp_interrupt_vector_enable(MM_IRQ_ETHRX);
   bsp_interrupt_vector_enable(MM_IRQ_ETHTX);
@@ -130,7 +130,7 @@ int rtems_minimac_driver_attach(struct rtems_bsdnet_ifconfig *config,
 
 static void minimac_start(struct ifnet *ifp)
 {
-  rtems_event_send(tx_daemon_id, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send(tx_daemon_id, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
 
@@ -193,7 +193,7 @@ static rtems_isr rx_interrupt_handler(rtems_vector_number vector)
   if(MM_READ(MM_MINIMAC_STATE1) == MINIMAC_STATE_PENDING)
     MM_WRITE(MM_MINIMAC_STATE1, MINIMAC_STATE_EMPTY);
 
-  rtems_event_send(rx_daemon_id, RX_EVENT);
+  rtems_bsdnet_event_send(rx_daemon_id, RX_EVENT);
 
   lm32_interrupt_ack(1 << MM_IRQ_ETHRX);
 }
@@ -291,7 +291,7 @@ static void send_packet(struct ifnet *ifp, struct mbuf *m)
 static rtems_isr tx_interrupt_handler(rtems_vector_number vector)
 {
   lm32_interrupt_ack(1 << MM_IRQ_ETHTX);
-  rtems_event_send(tx_daemon_id, CTS_EVENT);
+  rtems_bsdnet_event_send(tx_daemon_id, CTS_EVENT);
 }
 
 static void tx_daemon(void *arg)

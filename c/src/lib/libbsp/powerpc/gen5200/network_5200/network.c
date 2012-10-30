@@ -213,7 +213,7 @@ static mpc5200_fec_context enet_driver[NIFACES];
 
 static void mpc5200_fec_send_event(rtems_id task)
 {
-  rtems_event_send(task, FEC_EVENT);
+  rtems_bsdnet_event_send(task, FEC_EVENT);
 }
 
 static void mpc5200_fec_wait_for_event(void)

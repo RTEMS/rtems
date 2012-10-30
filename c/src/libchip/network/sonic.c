@@ -426,7 +426,7 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
   if (imr & isr & (IMR_PRXEN | IMR_RBAEEN)) {
     imr &= ~(IMR_PRXEN | IMR_RBAEEN);
     sc->rxInterrupts++;
-    rtems_event_send (sc->rxDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send (sc->rxDaemonTid, INTERRUPT_EVENT);
     (*sc->write_register)( rp, SONIC_REG_IMR, imr );
     (*sc->write_register)( rp, SONIC_REG_ISR, isr & ISR_PKTRX );
   }
@@ -438,7 +438,7 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
    */
   if (imr & isr & (IMR_PINTEN | IMR_TXEREN)) {
     sc->txInterrupts++;
-    rtems_event_send (sc->txDaemonTid, INTERRUPT_EVENT);
+    rtems_bsdnet_event_send (sc->txDaemonTid, INTERRUPT_EVENT);
     (*sc->write_register)( rp, SONIC_REG_ISR, ISR_PINT | ISR_TXDN | ISR_TXER );
   }
 
@@ -1416,7 +1416,7 @@ SONIC_STATIC void sonic_start(struct ifnet *ifp)
 {
   struct sonic_softc *sc = ifp->if_softc;
 
-  rtems_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
+  rtems_bsdnet_event_send(sc->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
 

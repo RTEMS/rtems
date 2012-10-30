@@ -3122,7 +3122,7 @@ dc_intr(void* arg)
 	/* Disable interrupts. */
 	CSR_WRITE_4(sc, DC_IMR, 0x00000000);
 
-	rtems_event_send(sc->daemontid, IRQ_EVENT);
+	rtems_bsdnet_event_send(sc->daemontid, IRQ_EVENT);
 #if 0
 	if (sc->suspended) {
 		return;

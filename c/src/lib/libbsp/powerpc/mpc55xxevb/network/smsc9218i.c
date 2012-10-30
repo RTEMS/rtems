@@ -644,7 +644,7 @@ static void smsc9218i_receive_dma_done(
     ++e->receive_dma_errors;
   }
 
-  sc = rtems_event_send(channel_entry->id, SMSC9218I_EVENT_DMA);
+  sc = rtems_bsdnet_event_send(channel_entry->id, SMSC9218I_EVENT_DMA);
   ASSERT_SC(sc);
 
   jc->done = jc->produce;
@@ -668,7 +668,7 @@ static void smsc9218i_transmit_dma_done(
 
   ++e->transmit_dma_interrupts;
 
-  sc = rtems_event_send(channel_entry->id, event);
+  sc = rtems_bsdnet_event_send(channel_entry->id, event);
   ASSERT_SC(sc);
 }
 
@@ -721,7 +721,7 @@ static void smsc9218i_interrupt_handler(void *arg)
     int_en &= ~SMSC9218I_INT_RSFL;
     ++e->receive_interrupts;
 
-    sc = rtems_event_send(e->receive_task, SMSC9218I_EVENT_RX);
+    sc = rtems_bsdnet_event_send(e->receive_task, SMSC9218I_EVENT_RX);
     ASSERT_SC(sc);
   }
 
@@ -730,7 +730,7 @@ static void smsc9218i_interrupt_handler(void *arg)
     SMSC9218I_PRINTK("interrupt: phy\n");
     int_en &= ~SMSC9218I_INT_PHY;
     ++e->phy_interrupts;
-    sc = rtems_event_send(e->receive_task, SMSC9218I_EVENT_PHY);
+    sc = rtems_bsdnet_event_send(e->receive_task, SMSC9218I_EVENT_PHY);
     ASSERT_SC(sc);
   }
 
@@ -739,7 +739,7 @@ static void smsc9218i_interrupt_handler(void *arg)
     SMSC9218I_PRINTK("interrupt: transmit\n");
     int_en &= ~SMSC9218I_INT_TDFA;
     ++e->transmit_interrupts;
-    sc = rtems_event_send(e->transmit_task, SMSC9218I_EVENT_TX);
+    sc = rtems_bsdnet_event_send(e->transmit_task, SMSC9218I_EVENT_TX);
     ASSERT_SC(sc);
   }
 
@@ -1979,7 +1979,7 @@ static void smsc9218i_interface_start(struct ifnet *ifp)
   /* Interface is now active */
   ifp->if_flags |= IFF_OACTIVE;
 
-  sc = rtems_event_send(e->transmit_task, SMSC9218I_EVENT_TX_START);
+  sc = rtems_bsdnet_event_send(e->transmit_task, SMSC9218I_EVENT_TX_START);
   ASSERT_SC(sc);
 }
 

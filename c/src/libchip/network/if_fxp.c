@@ -1282,7 +1282,7 @@ static rtems_isr fxp_intr(rtems_vector_number v)
   /*
    * send event to deamon
    */
-  rtems_event_send (sc->daemonTid, INTERRUPT_EVENT);
+  rtems_bsdnet_event_send (sc->daemonTid, INTERRUPT_EVENT);
 }
 
 static void fxp_daemon(void *xsc)

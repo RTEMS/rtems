@@ -342,7 +342,7 @@ void mc9328mxl_enet_start(struct ifnet *ifp)
 {
     mc9328mxl_enet_softc_t *sc = ifp->if_softc;
 
-    rtems_event_send(sc->tx_task, START_TRANSMIT_EVENT);
+    rtems_bsdnet_event_send(sc->tx_task, START_TRANSMIT_EVENT);
     ifp->if_flags |= IFF_OACTIVE;
 }
 
@@ -691,7 +691,7 @@ static void enet_isr(rtems_irq_hdl_param unused)
         /* Disable the interrupt */
         int_reg &= ~LAN91C11X_INT_RXMASK;
 
-        rtems_event_send (softc.rx_task, START_RECEIVE_EVENT);
+        rtems_bsdnet_event_send (softc.rx_task, START_RECEIVE_EVENT);
     }
 
     /* Handle TX Empty interrupts */
@@ -704,7 +704,7 @@ static void enet_isr(rtems_irq_hdl_param unused)
         /* Acknowledge the interrupt */
         int_reg |= LAN91C11X_INT_TXE;
 
-        rtems_event_send(softc.tx_task, START_TRANSMIT_EVENT);
+        rtems_bsdnet_event_send(softc.tx_task, START_TRANSMIT_EVENT);
 
     }
 
