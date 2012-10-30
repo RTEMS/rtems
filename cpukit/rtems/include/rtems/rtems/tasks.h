@@ -212,8 +212,6 @@ typedef struct {
 typedef struct {
   /** This field contains the pending events for this task. */
   rtems_event_set          pending_events;
-  /** This field contains the event wait condition for this task. */
-  rtems_event_set          event_condition;
   /** This field contains the Classic API Signal information for this task. */
   ASR_Information          Signal;
   /**
