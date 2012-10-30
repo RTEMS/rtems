@@ -658,7 +658,7 @@ rtems_bdbuf_purge_dev (rtems_disk_device *dd);
  * occur.
  *
  * @param dd [in, out] The disk device.
- * @param block_size [in] The new block size.
+ * @param block_size [in] The new block size in bytes.
  * @param sync [in] If @c true, then synchronize the disk device before the
  * block size change.
  *
