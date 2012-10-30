@@ -70,12 +70,9 @@ int unmount( const char *path )
   rtems_filesystem_eval_path_cleanup( &ctx );
 
   if ( rv == 0 ) {
-    rtems_event_set out;
-    rtems_status_code sc = rtems_event_receive(
-      RTEMS_FILESYSTEM_UNMOUNT_EVENT,
-      RTEMS_EVENT_ALL | RTEMS_WAIT,
-      RTEMS_NO_TIMEOUT,
-      &out
+    rtems_status_code sc = rtems_event_transient_receive(
+      RTEMS_WAIT,
+      RTEMS_NO_TIMEOUT
     );
 
     if ( sc != RTEMS_SUCCESSFUL ) {
