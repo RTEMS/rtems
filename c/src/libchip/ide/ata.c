@@ -185,7 +185,8 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
     areq = malloc(sizeof(ata_req_t));
     if (areq == NULL)
     {
-        return RTEMS_NO_MEMORY;
+        rtems_blkdev_request_done(req, RTEMS_NO_MEMORY);
+        return RTEMS_SUCCESSFUL;
     }
 
     areq->breq = req;

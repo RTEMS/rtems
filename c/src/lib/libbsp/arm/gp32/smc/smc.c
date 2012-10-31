@@ -544,7 +544,7 @@ int sm_ECCEncode(const uint8_t * p_buf, uint8_t * p_ecc)
 */
 static int smc_write(rtems_blkdev_request *req)
 {
-	req->req_done(req->done_arg, RTEMS_SUCCESSFUL);
+	rtems_blkdev_request_done(req, RTEMS_SUCCESSFUL);
 	return 0;
 }
 
@@ -573,7 +573,7 @@ smc_read(rtems_blkdev_request *req)
 	smc_read_page(sg->block,sg->buffer);
         remains -= count;
     }
-    req->req_done(req->done_arg, RTEMS_SUCCESSFUL);
+    rtems_blkdev_request_done(req, RTEMS_SUCCESSFUL);
     return 0;
 }
 

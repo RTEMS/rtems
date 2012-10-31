@@ -488,7 +488,7 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
         {
           case RTEMS_BLKDEV_REQ_READ:
             if (!bdbuf_disk_ioctl_process (bdd, r))
-              errno = EIO;
+              rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
             else
             {
               rtems_blkdev_sg_buffer* sg = r->bufs;
@@ -511,15 +511,16 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
                 remains -= length;
               }
 
-              r->req_done (r->done_arg, RTEMS_SUCCESSFUL);
+              rtems_blkdev_request_done (r, RTEMS_SUCCESSFUL);
             }
             bdbuf_disk_ioctl_leave (bdd, r->bufnum);
             break;
 
           case RTEMS_BLKDEV_REQ_WRITE:
             if (!bdbuf_disk_ioctl_process (bdd, r))
-              errno = EIO;
-            r->req_done (r->done_arg, RTEMS_SUCCESSFUL);
+              rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
+            else
+              rtems_blkdev_request_done(r, RTEMS_SUCCESSFUL);
             bdbuf_disk_ioctl_leave (bdd, r->bufnum);
             break;
 

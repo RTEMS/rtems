@@ -53,18 +53,15 @@ typedef enum rtems_blkdev_request_op {
   RTEMS_BLKDEV_REQ_SYNC        /**< Sync any data with the media. */
 } rtems_blkdev_request_op;
 
+struct rtems_blkdev_request;
+
 /**
  * @brief Block device request done callback function type.
- *
- * The first parameter @a arg must be the argument provided by the block device
- * request structure @ref rtems_blkdev_request.
- *
- * The second parameter @a status should contain the status of the operation:
- *  - @c RTEMS_SUCCESSFUL Operation was successful.
- *  - @c RTEMS_IO_ERROR Some sort of input or output error.
- *  - @c RTEMS_UNSATISFIED Media no more present.
  */
-typedef void (*rtems_blkdev_request_cb)(void *arg, rtems_status_code status);
+typedef void (*rtems_blkdev_request_cb)(
+  struct rtems_blkdev_request *req,
+  rtems_status_code status
+);
 
 /**
  * Block device scatter or gather buffer structure.
@@ -92,15 +89,16 @@ typedef struct rtems_blkdev_sg_buffer {
 } rtems_blkdev_sg_buffer;
 
 /**
- * The block device request structure is used to read or write a number of
- * blocks from or to the device.
+ * @brief The block device transfer request is used to read or write a number
+ * of blocks from or to the device.
  *
- * TODO: The use of these req blocks is not a great design. The req is a
- *       struct with a single 'bufs' declared in the req struct and the
- *       others are added in the outer level struct. This relies on the
- *       structs joining as a single array and that assumes the compiler
- *       packs the structs. Why not just place on a list ? The BD has a
- *       node that can be used.
+ * Transfer requests are issued to the disk device driver with the
+ * @ref RTEMS_BLKIO_REQUEST IO control.  The transfer request completion status
+ * must be signalled with rtems_blkdev_request_done().  This function must be
+ * called exactly once per request.  The return value of the IO control will be
+ * ignored for transfer requests.
+ *
+ * @see rtems_blkdev_create().
  */
 typedef struct rtems_blkdev_request {
   /**
@@ -111,7 +109,7 @@ typedef struct rtems_blkdev_request {
   /**
    * Request done callback function.
    */
-  rtems_blkdev_request_cb req_done;
+  rtems_blkdev_request_cb done;
 
   /**
    * Argument to be passed to callback function.
@@ -133,11 +131,39 @@ typedef struct rtems_blkdev_request {
    */
   rtems_id io_task;
 
+  /*
+   * TODO: The use of these req blocks is not a great design. The req is a
+   *       struct with a single 'bufs' declared in the req struct and the
+   *       others are added in the outer level struct. This relies on the
+   *       structs joining as a single array and that assumes the compiler
+   *       packs the structs. Why not just place on a list ? The BD has a
+   *       node that can be used.
+   */
+
   /**
    * List of scatter or gather buffers.
    */
   rtems_blkdev_sg_buffer bufs[0];
 } rtems_blkdev_request;
+
+/**
+ * @brief Signals transfer request completion status.
+ *
+ * This function must be called exactly once per request.
+ *
+ * @param[in,out] req The transfer request.
+ * @param[in] status The status of the operation should be
+ *  - @c RTEMS_SUCCESSFUL, if the operation was successful,
+ *  - @c RTEMS_IO_ERROR, if some sort of input or output error occured, or
+ *  - @c RTEMS_UNSATISFIED, if media is no more present.
+ */
+static inline void rtems_blkdev_request_done(
+  rtems_blkdev_request *req,
+  rtems_status_code status
+)
+{
+  (*req->done)(req, status);
+}
 
 /**
  * The start block in a request.
@@ -341,6 +367,8 @@ extern const rtems_driver_address_table rtems_blkdev_generic_ops;
  * @retval RTEMS_INVALID_NUMBER Block size or block count is not positive.
  * @retval RTEMS_NO_MEMORY Not enough memory.
  * @retval RTEMS_UNSATISFIED Cannot create generic device node.
+ *
+ * @see rtems_blkdev_create_partition() and rtems_blkdev_request.
  */
 rtems_status_code rtems_blkdev_create(
   const char *device,
@@ -370,6 +398,8 @@ rtems_status_code rtems_blkdev_create(
  * @retval RTEMS_INVALID_NUMBER Block begin or block count is invalid.
  * @retval RTEMS_NO_MEMORY Not enough memory.
  * @retval RTEMS_UNSATISFIED Cannot create generic device node.
+ *
+ * @see rtems_blkdev_create().
  */
 rtems_status_code rtems_blkdev_create_partition(
   const char *partition,

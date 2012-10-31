@@ -32,17 +32,19 @@ static Objects_Id testq_id = OBJECTS_ID_NONE;
 static int
 test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
-    rtems_status_code rc;
-    bdbuf_test_msg    msg;
-    size_t            msg_size;
+    rtems_status_code     rc;
+    bdbuf_test_msg        msg;
+    size_t                msg_size;
+    rtems_blkdev_request *r;
 
     switch (req)
     {
         case RTEMS_BLKIO_REQUEST:
         {
-            rtems_blkdev_request   *r = argp;
             rtems_blkdev_sg_buffer *sg;
             unsigned int            i;
+
+            r = argp;
 
             printk("DISK_DRV: %s ",
                    r->req == RTEMS_BLKDEV_REQ_READ ? "R" :
@@ -71,7 +73,8 @@ test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
     if (rc != RTEMS_SUCCESSFUL)
     {
         printf("Error while sending a message to Test task: %u\n", rc);
-        return -1;
+        rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
+        return 0;
     }
 
     /* Wait for a reply from the test task */
@@ -81,27 +84,27 @@ test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
     if (rc != RTEMS_SUCCESSFUL)
     {
         printf("Error while reading a message from Test task: %u\n", rc);
-        return rc;
+        rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
+        return 0;
     }
     if (msg.type != BDBUF_TEST_MSG_TYPE_DRIVER_REPLY)
     {
         printf("Unexpected message comes to test disk driver: %d\n",
                msg.type);
-        return -1;
+        rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
+        return 0;
     }
 
     if (msg.val.driver_reply.ret_val != 0)
     {
-        errno = msg.val.driver_reply.ret_errno;
+        rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
     }
     else
     {
-        rtems_blkdev_request *r = (rtems_blkdev_request *)argp;
-
-        r->req_done(r->done_arg, msg.val.driver_reply.res_status);
+        rtems_blkdev_request_done(r, msg.val.driver_reply.res_status);
     }
 
-    return msg.val.driver_reply.ret_val;
+    return 0;
 }
 
 rtems_device_driver

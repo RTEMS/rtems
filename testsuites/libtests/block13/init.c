@@ -126,7 +126,7 @@ static int test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
       ++block_access_counts [block];
     }
 
-    (*breq->req_done)(breq->done_arg, RTEMS_SUCCESSFUL);
+    rtems_blkdev_request_done(breq, RTEMS_SUCCESSFUL);
   } else {
     errno = EINVAL;
     rv = -1;

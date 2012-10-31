@@ -1871,10 +1871,8 @@ rtems_bdbuf_get (rtems_disk_device   *dd,
  * @param status I/O completion status
  */
 static void
-rtems_bdbuf_transfer_done (void* arg, rtems_status_code status)
+rtems_bdbuf_transfer_done (rtems_blkdev_request* req, rtems_status_code status)
 {
-  rtems_blkdev_request* req = (rtems_blkdev_request*) arg;
-
   req->status = status;
 
   rtems_event_transient_send (req->io_task);
@@ -1886,7 +1884,6 @@ rtems_bdbuf_execute_transfer_request (rtems_disk_device    *dd,
                                       bool                  cache_locked)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  int result = 0;
   uint32_t transfer_index = 0;
   bool wake_transfer_waiters = false;
   bool wake_buffer_waiters = false;
@@ -1894,15 +1891,12 @@ rtems_bdbuf_execute_transfer_request (rtems_disk_device    *dd,
   if (cache_locked)
     rtems_bdbuf_unlock_cache ();
 
-  result = dd->ioctl (dd->phys_dev, RTEMS_BLKIO_REQUEST, req);
+  /* The return value will be ignored for transfer requests */
+  dd->ioctl (dd->phys_dev, RTEMS_BLKIO_REQUEST, req);
 
-  if (result == 0)
-  {
-    rtems_bdbuf_wait_for_transient_event ();
-    sc = req->status;
-  }
-  else
-    sc = RTEMS_IO_ERROR;
+  /* Wait for transfer request completion */
+  rtems_bdbuf_wait_for_transient_event ();
+  sc = req->status;
 
   rtems_bdbuf_lock_cache ();
 
@@ -1977,10 +1971,8 @@ rtems_bdbuf_execute_read_request (rtems_disk_device  *dd,
                      sizeof (rtems_blkdev_sg_buffer) * transfer_count);
 
   req->req = RTEMS_BLKDEV_REQ_READ;
-  req->req_done = rtems_bdbuf_transfer_done;
-  req->done_arg = req;
+  req->done = rtems_bdbuf_transfer_done;
   req->io_task = rtems_task_self ();
-  req->status = RTEMS_RESOURCE_IN_USE;
   req->bufnum = 0;
 
   rtems_bdbuf_set_state (bd, RTEMS_BDBUF_STATE_TRANSFER);
@@ -2655,8 +2647,7 @@ rtems_bdbuf_swapout_writereq_alloc (void)
     rtems_fatal_error_occurred (RTEMS_BLKDEV_FATAL_BDBUF_SO_NOMEM);
 
   write_req->req = RTEMS_BLKDEV_REQ_WRITE;
-  write_req->req_done = rtems_bdbuf_transfer_done;
-  write_req->done_arg = write_req;
+  write_req->done = rtems_bdbuf_transfer_done;
   write_req->io_task = rtems_task_self ();
 
   return write_req;

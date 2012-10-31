@@ -197,14 +197,16 @@ static int memcard_disk_block_read(rtems_blkdev_request *r)
       return -RTEMS_IO_ERROR;
   }
 
-  r->req_done(r->done_arg, RTEMS_SUCCESSFUL);
+  rtems_blkdev_request_done(r, RTEMS_SUCCESSFUL);
 
   return 0;
 }
 
 static int memcard_disk_block_write(rtems_blkdev_request *r)
 {
-  return -RTEMS_IO_ERROR;
+  rtems_blkdev_request_done(r, RTEMS_IO_ERROR);
+
+  return 0;
 }
 
 static rtems_status_code memcard_init(void)

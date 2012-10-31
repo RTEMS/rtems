@@ -105,7 +105,7 @@ static int test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
       }
     }
 
-    (*breq->req_done)(breq->done_arg, sc);
+    rtems_blkdev_request_done(breq, sc);
   } else {
     errno = EINVAL;
     rv = -1;

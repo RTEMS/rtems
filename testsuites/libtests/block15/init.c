@@ -84,7 +84,7 @@ static int test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
       }
     }
 
-    (*breq->req_done)(breq->done_arg, RTEMS_SUCCESSFUL);
+    rtems_blkdev_request_done(breq, RTEMS_SUCCESSFUL);
   } else if (req == RTEMS_BLKIO_CAPABILITIES) {
     *(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
   } else {

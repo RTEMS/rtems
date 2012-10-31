@@ -64,47 +64,50 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
       rtems_blkdev_sg_buffer *sg = &r->bufs [i];
       char *buf = sg->buffer;
 
-      if (sg->length != 1) {
-        return -1;
-      }
-
-      switch (r->req) {
-        case RTEMS_BLKDEV_REQ_READ:
-          switch (sg->block) {
-            case BLOCK_READ_IO_ERROR:
-              sc = RTEMS_IO_ERROR;
-              break;
-            case BLOCK_READ_UNSATISFIED:
-              sc = RTEMS_UNSATISFIED;
-              break;
-            case BLOCK_READ_SUCCESSFUL:
-            case BLOCK_WRITE_IO_ERROR:
-              *buf = disk_data [sg->block];
-              break;
-            default:
-              return -1;
-          }
-          break;
-        case RTEMS_BLKDEV_REQ_WRITE:
-          switch (sg->block) {
-            case BLOCK_READ_IO_ERROR:
-            case BLOCK_READ_UNSATISFIED:
-            case BLOCK_READ_SUCCESSFUL:
-              disk_data [sg->block] = *buf;
-              break;
-            case BLOCK_WRITE_IO_ERROR:
-              sc = RTEMS_IO_ERROR;
-              break;
-            default:
-              return -1;
-          }
-          break;
-        default:
-          return -1;
+      if (sg->length == 1) {
+        switch (r->req) {
+          case RTEMS_BLKDEV_REQ_READ:
+            switch (sg->block) {
+              case BLOCK_READ_IO_ERROR:
+                sc = RTEMS_IO_ERROR;
+                break;
+              case BLOCK_READ_UNSATISFIED:
+                sc = RTEMS_UNSATISFIED;
+                break;
+              case BLOCK_READ_SUCCESSFUL:
+              case BLOCK_WRITE_IO_ERROR:
+                *buf = disk_data [sg->block];
+                break;
+              default:
+                sc = RTEMS_IO_ERROR;
+                break;
+            }
+            break;
+          case RTEMS_BLKDEV_REQ_WRITE:
+            switch (sg->block) {
+              case BLOCK_READ_IO_ERROR:
+              case BLOCK_READ_UNSATISFIED:
+              case BLOCK_READ_SUCCESSFUL:
+                disk_data [sg->block] = *buf;
+                break;
+              case BLOCK_WRITE_IO_ERROR:
+                sc = RTEMS_IO_ERROR;
+                break;
+              default:
+                sc = RTEMS_IO_ERROR;
+                break;
+            }
+            break;
+          default:
+            sc = RTEMS_IO_ERROR;
+            break;
+        }
+      } else {
+        sc = RTEMS_IO_ERROR;
       }
     }
 
-    r->req_done(r->done_arg, sc);
+    rtems_blkdev_request_done(r, sc);
 
     return 0;
   } else {

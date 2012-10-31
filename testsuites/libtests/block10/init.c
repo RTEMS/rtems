@@ -105,7 +105,7 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
       set_task_prio(RTEMS_SELF, PRIORITY_SWAPOUT);
     }
 
-    r->req_done(r->done_arg, sc);
+    rtems_blkdev_request_done(r, sc);
 
     return 0;
   } else {
