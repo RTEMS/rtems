@@ -262,8 +262,8 @@ static const IMFS_node_control rtems_blkdev_imfs_control = {
 
 rtems_status_code rtems_blkdev_create(
   const char *device,
-  uint32_t block_size,
-  rtems_blkdev_bnum block_count,
+  uint32_t media_block_size,
+  rtems_blkdev_bnum media_block_count,
   rtems_block_device_ioctl handler,
   void *driver_data
 )
@@ -274,8 +274,8 @@ rtems_status_code rtems_blkdev_create(
   if (ctx != NULL) {
     sc = rtems_disk_init_phys(
       &ctx->dd,
-      block_size,
-      block_count,
+      media_block_size,
+      media_block_count,
       handler,
       driver_data
     );
@@ -306,13 +306,13 @@ rtems_status_code rtems_blkdev_create(
 
 rtems_status_code rtems_blkdev_create_partition(
   const char *partition,
-  const char *device,
-  rtems_blkdev_bnum block_begin,
-  rtems_blkdev_bnum block_count
+  const char *parent_block_device,
+  rtems_blkdev_bnum media_block_begin,
+  rtems_blkdev_bnum media_block_count
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  int fd = open(device, O_RDWR);
+  int fd = open(parent_block_device, O_RDWR);
 
   if (fd >= 0) {
     int rv;
@@ -330,8 +330,8 @@ rtems_status_code rtems_blkdev_create_partition(
           sc = rtems_disk_init_log(
             &ctx->dd,
             phys_dd,
-            block_begin,
-            block_count
+            media_block_begin,
+            media_block_count
           );
 
           if (sc == RTEMS_SUCCESSFUL) {
