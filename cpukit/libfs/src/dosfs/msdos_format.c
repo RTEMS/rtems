@@ -1063,7 +1063,7 @@ int msdos_format
    * write FAT entry 1 as EOC
    * allocate directory in a FAT32 FS
    */
-  if ((ret_val == 0) && fmt_params.VolLabel_present){
+  if (ret_val == 0) {
     /*
      * empty sector: all clusters are free/do not link further on
      */
