@@ -81,7 +81,7 @@ void _Event_Seize(
       &executing->Timer,
       _Event_Timeout,
       executing->Object.id,
-      NULL
+      sync_state
     );
     _Watchdog_Insert_ticks( &executing->Timer, ticks );
   }

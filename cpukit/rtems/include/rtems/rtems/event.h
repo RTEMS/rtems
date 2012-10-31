@@ -448,7 +448,7 @@ void _Event_Surrender(
 
 void _Event_Timeout(
   Objects_Id  id,
-  void       *ignored
+  void       *arg
 );
 
 RTEMS_EVENT_EXTERN Thread_blocking_operation_States _Event_Sync_state;

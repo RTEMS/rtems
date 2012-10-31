@@ -10,39 +10,22 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/event.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/tasks.h>
-
-/*
- *  _Event_Timeout
- *
- *  This routine processes a thread which timeouts while waiting to
- *  receive an event_set. It is called by the watchdog handler.
- *
- *  Input parameters:
- *    id - thread id
- *
- *  Output parameters: NONE
- */
 
 void _Event_Timeout(
   Objects_Id  id,
-  void       *ignored
+  void       *arg
 )
 {
-  Thread_Control    *the_thread;
-  Objects_Locations  location;
-  ISR_Level          level;
+  Thread_Control                   *the_thread;
+  Objects_Locations                 location;
+  ISR_Level                         level;
+  Thread_blocking_operation_States *sync_state;
+
+  sync_state = arg;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -71,8 +54,8 @@ void _Event_Timeout(
 
         the_thread->Wait.count = 0;
         if ( _Thread_Is_executing( the_thread ) ) {
-          if ( _Event_Sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
-            _Event_Sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
+          if ( *sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED )
+            *sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
         }
 
         the_thread->Wait.return_code = RTEMS_TIMEOUT;
