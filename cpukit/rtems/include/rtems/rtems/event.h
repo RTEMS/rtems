@@ -225,7 +225,7 @@ rtems_status_code rtems_event_receive (
 /**
  * @brief Reserved system event for transient usage.
  */
-#define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_0
+#define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31
 
 /**
  * @brief See rtems_event_send().
