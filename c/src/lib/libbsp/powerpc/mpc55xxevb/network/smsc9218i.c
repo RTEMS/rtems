@@ -810,23 +810,37 @@ static void smsc9218i_media_status_change(
   smsc9218i_mac_write(regs, SMSC9218I_MAC_CR, mac_cr);
 }
 
-static void smsc9218i_new_mbuf(
+static bool smsc9218i_new_mbuf(
   struct ifnet *ifp,
   smsc9218i_receive_job_control *jc,
-  int i
+  int i,
+  struct mbuf *old_m
 )
 {
-  struct mbuf *m = m_gethdr(M_WAIT, MT_DATA);
+  bool ok = false;
+  int wait = old_m != NULL ? M_DONTWAIT : M_WAIT;
+  struct mbuf *new_m = m_gethdr(wait, MT_DATA);
   struct tcd_t *tcd = &jc->tcd_table [i];
   char *data = NULL;
 
-  m->m_pkthdr.rcvif = ifp;
-  MCLGET(m, M_WAIT);
+  if (new_m != NULL ) {
+    new_m->m_pkthdr.rcvif = ifp;
+    MCLGET(new_m, wait);
 
-  data = mtod(m, char *);
-  m->m_data = data + SMSC9218I_RX_DATA_OFFSET + ETHER_HDR_LEN;
+    if ((new_m->m_flags & M_EXT) != 0) {
+      ok = true;
+    } else {
+      m_free(new_m);
+      new_m = old_m;
+    }
+  } else {
+    new_m = old_m;
+  }
 
-  jc->mbuf_table [i] = m;
+  data = mtod(new_m, char *);
+  new_m->m_data = data + SMSC9218I_RX_DATA_OFFSET + ETHER_HDR_LEN;
+
+  jc->mbuf_table [i] = new_m;
 
   tcd->DADDR = (uint32_t) data;
   tcd->BMF.R = SMSC9218I_TCD_BMF_LINK;
@@ -836,6 +850,8 @@ static void smsc9218i_new_mbuf(
     data,
     SMSC9218I_RX_DATA_OFFSET + ETHER_HDR_LEN + ETHERMTU + ETHER_CRC_LEN
   );
+
+  return ok;
 }
 
 static void smsc9218i_init_receive_jobs(
@@ -868,7 +884,7 @@ static void smsc9218i_init_receive_jobs(
     tcd->CDF.B.DOFF = 4;
     tcd->DLAST_SGA = (int32_t) next_tcd;
 
-    smsc9218i_new_mbuf(ifp, jc, i);
+    smsc9218i_new_mbuf(ifp, jc, i, NULL);
   }
 }
 
@@ -889,8 +905,9 @@ static void smsc9218i_ether_input(
       (mtod(m, char *) - ETHER_HDR_LEN);
 
     ++e->received_frames;
-    ether_input(ifp, eh, m);
-    smsc9218i_new_mbuf(ifp, jc, c);
+    if (smsc9218i_new_mbuf(ifp, jc, c, m)) {
+      ether_input(ifp, eh, m);
+    }
 
     c = (c + 1) % SMSC9218I_RX_JOBS;
   }
