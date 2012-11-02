@@ -123,6 +123,7 @@ static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wseg",   STATES_WAITING_FOR_SEGMENT, 0 },
     { "Wmsg" ,  STATES_WAITING_FOR_MESSAGE, 0 },
     { "Wevnt",  STATES_WAITING_FOR_EVENT, 0 },
+    { "Wsysev", STATES_WAITING_FOR_SYSTEM_EVENT, 0 },
     { "Wsem",   STATES_WAITING_FOR_SEMAPHORE, 0 },
     { "Wmutex", STATES_WAITING_FOR_MUTEX, 0 },
     { "Wcvar",  STATES_WAITING_FOR_CONDITION_VARIABLE, 0 },
