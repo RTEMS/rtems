@@ -111,6 +111,33 @@ rtems_bsdnet_initialize_sockaddr_in(struct sockaddr_in *addr)
 	memcpy(addr, &address_template, sizeof(*addr));
 }
 
+static uint32_t
+rtems_bsdnet_semaphore_release_recursive(void)
+{
+#ifdef RTEMS_FAST_MUTEX
+	uint32_t nest_count = the_networkSemaphore->Core_control.mutex.nest_count;
+	uint32_t i;
+
+	for (i = 0; i < nest_count; ++i) {
+		rtems_bsdnet_semaphore_release();
+	}
+
+	return nest_count;
+#else
+	#error "not implemented"
+#endif
+}
+
+static void
+rtems_bsdnet_semaphore_obtain_recursive(uint32_t nest_count)
+{
+	uint32_t i;
+
+	for (i = 0; i < nest_count; ++i) {
+		rtems_bsdnet_semaphore_obtain();
+	}
+}
+
 /*
  * Perform FreeBSD memory allocation.
  * FIXME: This should be modified to keep memory allocation statistics.
@@ -126,16 +153,18 @@ rtems_bsdnet_malloc (size_t size, int type, int flags)
 	int try = 0;
 
 	for (;;) {
+		uint32_t nest_count;
+
 		p = malloc (size);
 		if (p || (flags & M_NOWAIT))
 			return p;
-		rtems_bsdnet_semaphore_release ();
+		nest_count = rtems_bsdnet_semaphore_release_recursive ();
 		if (++try >= 30) {
 			rtems_bsdnet_malloc_starvation();
 			try = 0;
 		}
-        rtems_task_wake_after (rtems_bsdnet_ticks_per_second);
-		rtems_bsdnet_semaphore_obtain ();
+		rtems_task_wake_after (rtems_bsdnet_ticks_per_second);
+		rtems_bsdnet_semaphore_obtain_recursive (nest_count);
 	}
 }
 
@@ -1259,9 +1288,9 @@ m_mballoc(int nmb, int nowait)
 
 		mbstat.m_wait++;
 		for (;;) {
-			rtems_bsdnet_semaphore_release ();
+			uint32_t nest_count = rtems_bsdnet_semaphore_release_recursive ();
 			rtems_task_wake_after (1);
-			rtems_bsdnet_semaphore_obtain ();
+			rtems_bsdnet_semaphore_obtain_recursive (nest_count);
 			if (mmbfree)
 				break;
 			if (++try >= print_limit) {
@@ -1288,9 +1317,9 @@ m_clalloc(int ncl, int nowait)
 
 		mbstat.m_wait++;
 		for (;;) {
-			rtems_bsdnet_semaphore_release ();
+			uint32_t nest_count = rtems_bsdnet_semaphore_release_recursive ();
 			rtems_task_wake_after (1);
-			rtems_bsdnet_semaphore_obtain ();
+			rtems_bsdnet_semaphore_obtain_recursive (nest_count);
 			if (mclfree)
 				break;
 			if (++try >= print_limit) {
