@@ -399,8 +399,11 @@ udp_output(struct inpcb *inp, struct mbuf *m, struct mbuf *addr,
 	M_PREPEND(m, sizeof(struct udpiphdr), M_DONTWAIT);
 	if (m == 0) {
 		error = ENOBUFS;
-		if (addr)
+		if (addr) {
+			in_pcbdisconnect(inp);
+			inp->inp_laddr = laddr;
 			splx(s);
+		}
 		goto release;
 	}
 
