@@ -696,6 +696,8 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 #define CPU_STACK_MINIMUM_SIZE  (1024*8)
 
+#define CPU_SIZEOF_POINTER 8
+
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.

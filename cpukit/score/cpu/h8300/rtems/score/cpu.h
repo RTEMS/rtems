@@ -497,6 +497,12 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define CPU_STACK_MINIMUM_SIZE          (1536)
 
+#if defined(__H8300H__) || defined(__H8300S__) || defined(__H8300SX__)
+  #define CPU_SIZEOF_POINTER 4
+#else
+  #define CPU_SIZEOF_POINTER 2
+#endif
+
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.

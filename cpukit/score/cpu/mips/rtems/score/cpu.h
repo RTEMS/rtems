@@ -343,6 +343,8 @@ extern "C" {
 
 #define CPU_MODES_INTERRUPT_MASK   0x000000ff
 
+#define CPU_SIZEOF_POINTER 4
+
 /*
  *  Processor defined structures
  *

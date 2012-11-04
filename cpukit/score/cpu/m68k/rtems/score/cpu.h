@@ -380,6 +380,8 @@ SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
  */
 #define CPU_PRIORITY_MAXIMUM             M68K_CPU_PRIORITY_MAXIMUM
 
+#define CPU_SIZEOF_POINTER 4
+
 /*
  *  m68k is pretty tolerant of alignment.  Just put things on 4 byte boundaries.
  */

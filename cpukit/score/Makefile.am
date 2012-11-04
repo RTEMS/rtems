@@ -158,6 +158,7 @@ libscore_a_SOURCES += src/coremutex.c src/coremutexflush.c \
 
 ## CORE_PERCPU_C_FILES
 libscore_a_SOURCES += src/percpu.c
+libscore_a_SOURCES += src/percpuasm.c
 
 ## CORE_RWLOCK_C_FILES
 if HAS_PTHREADS

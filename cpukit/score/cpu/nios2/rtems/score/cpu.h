@@ -73,6 +73,8 @@ extern "C" {
 
 #define CPU_STACK_MINIMUM_SIZE (4 * 1024)
 
+#define CPU_SIZEOF_POINTER 4
+
 /*
  * Alignment value according to "Nios II Processor Reference" chapter 7
  * "Application Binary Interface" section "Memory Alignment".

@@ -527,6 +527,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  */
 #define CPU_PRIORITY_MAXIMUM             15
 
+#define CPU_SIZEOF_POINTER 2
+
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.

@@ -150,7 +150,7 @@ typedef struct {
 } Per_CPU_Control;
 #endif
 
-#if defined(ASM)
+#if defined(ASM) || defined(_RTEMS_PERCPU_DEFINE_OFFSETS)
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
     (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
@@ -161,9 +161,9 @@ typedef struct {
   #define PER_CPU_INTERRUPT_STACK_LOW \
     0
   #define PER_CPU_INTERRUPT_STACK_HIGH \
-    PER_CPU_INTERRUPT_STACK_LOW + __RTEMS_SIZEOF_VOID_P__
+    PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
   #define PER_CPU_END_STACK             \
-    PER_CPU_INTERRUPT_STACK_HIGH + __RTEMS_SIZEOF_VOID_P__
+    PER_CPU_INTERRUPT_STACK_HIGH + CPU_SIZEOF_POINTER
 
   #define INTERRUPT_STACK_LOW \
     (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
@@ -187,7 +187,7 @@ typedef struct {
 #define DISPATCH_NEEDED \
   (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
 
-#endif /* defined(ASM) */
+#endif /* defined(ASM) || defined(_RTEMS_PERCPU_DEFINE_OFFSETS) */
 
 #ifndef ASM
 

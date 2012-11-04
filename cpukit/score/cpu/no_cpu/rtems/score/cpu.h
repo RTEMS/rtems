@@ -684,6 +684,15 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 #define CPU_STACK_MINIMUM_SIZE          (1024*4)
 
 /**
+ *  Size of a pointer.
+ *
+ *  This must be an integer literal that can be used by the assembler.  This
+ *  value will be used to calculate offsets of structure members.  These
+ *  offsets will be used in assembler code.
+ */
+#define CPU_SIZEOF_POINTER         4
+
+/**
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
  *

@@ -323,6 +323,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 #define CPU_STACK_MINIMUM_SIZE          4096
 
+#define CPU_SIZEOF_POINTER 4
+
 /*
  *  i386 is pretty tolerant of alignment.  Just put things on 4 byte boundaries.
  */

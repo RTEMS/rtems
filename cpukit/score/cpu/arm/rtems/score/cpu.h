@@ -189,6 +189,9 @@
 #define CPU_STACK_MINIMUM_SIZE (1024 * 4)
 
 /* AAPCS, section 4.1, Fundamental Data Types */
+#define CPU_SIZEOF_POINTER 4
+
+/* AAPCS, section 4.1, Fundamental Data Types */
 #define CPU_ALIGNMENT 8
 
 #define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT

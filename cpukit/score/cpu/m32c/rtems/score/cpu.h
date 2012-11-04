@@ -575,6 +575,12 @@ typedef struct {
  */
 #define CPU_STACK_MINIMUM_SIZE          (2048L)
 
+#ifdef __m32cm_cpu__
+  #define CPU_SIZEOF_POINTER 4
+#else
+  #define CPU_SIZEOF_POINTER 2
+#endif
+
 /**
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
