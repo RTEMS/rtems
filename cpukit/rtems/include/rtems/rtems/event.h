@@ -281,27 +281,27 @@ rtems_status_code rtems_event_system_receive(
  *   M [label="Main Task"], IDLE [label="Idle Task"], S [label="Server"], TIME [label="System Tick Handler"];
  *   |||;
  *   --- [label="sequence with request completion"];
- *   M box M [label="prepare request\nissue request\ncall rtems_event_transient_receive()"];
+ *   M box M [label="prepare request\nissue request\nrtems_event_transient_receive()"];
  *   M=>>IDLE [label="blocking operation"];
  *   IDLE=>>S [label="request completion"];
- *   S box S [label="call rtems_event_transient_send()"];
+ *   S box S [label="rtems_event_transient_send()"];
  *   S=>>M [label="task is ready again"];
  *   M box M [label="finish request"];
  *   |||;
  *   --- [label="sequence with early request completion"];
  *   M box M [label="prepare request\nissue request"];
  *   M=>>S [label="request completion"];
- *   S box S [label="call rtems_event_transient_send()"];
+ *   S box S [label="rtems_event_transient_send()"];
  *   S=>>M [label="transient event is now pending"];
- *   M box M [label="call rtems_event_transient_receive()\nfinish request"];
+ *   M box M [label="rtems_event_transient_receive()\nfinish request"];
  *   |||;
  *   --- [label="sequence with timeout event"];
- *   M box M [label="prepare request\nissue request\ncall rtems_event_transient_receive()"];
+ *   M box M [label="prepare request\nissue request\nrtems_event_transient_receive()"];
  *   M=>>IDLE [label="blocking operation"];
  *   IDLE=>>TIME [label="timeout expired"];
  *   TIME box TIME [label="cancel blocking operation"];
  *   TIME=>>M [label="task is ready again"];
- *   M box M [label="cancel request\ncall rtems_event_transient_clear()"];
+ *   M box M [label="cancel request\nrtems_event_transient_clear()"];
  * @endmsc
  *
  * Suppose you have a task that wants to issue a certain request and then waits
