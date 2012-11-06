@@ -320,6 +320,9 @@ extern rtems_configuration_table    Configuration;
 #define rtems_configuration_get_do_zero_of_workspace() \
    (Configuration.do_zero_of_workspace)
 
+#define rtems_configuration_get_maximum_drivers() \
+        (Configuration.maximum_drivers)
+
 #define rtems_configuration_get_number_of_device_drivers() \
         (Configuration.number_of_device_drivers)
 

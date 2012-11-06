@@ -40,7 +40,7 @@ void _IO_Manager_initialization(void)
 
   driver_table      = Configuration.Device_driver_table;
   drivers_in_table  = Configuration.number_of_device_drivers;
-  number_of_drivers = Configuration.maximum_drivers;
+  number_of_drivers = rtems_configuration_get_maximum_drivers();
 
   /*
    *  If the user claims there are less drivers than are actually in
