@@ -247,9 +247,6 @@ extern rtems_configuration_table  Configuration;
  *  or the exact format of the configuration table.
  */
 
-#define rtems_configuration_get_table() \
-        (&Configuration)
-
 #define rtems_configuration_get_unified_work_area() \
         (Configuration.unified_work_area)
 
@@ -259,16 +256,10 @@ extern rtems_configuration_table  Configuration;
 #define rtems_configuration_get_stack_space_size() \
         (Configuration.stack_space_size)
 
-#define rtems_configuration_set_stack_space_size( _size ) \
-        do { Configuration.stack_space_size = (_size); } while (0)
-
 #define rtems_configuration_get_work_space_size() \
         (Configuration.work_space_size + \
           (rtems_configuration_get_stack_allocator_avoids_work_space() ? \
             0 : rtems_configuration_get_stack_space_size()))
-
-#define rtems_configuration_set_work_space_size( _size ) \
-        do { Configuration.work_space_size = (_size); } while (0)
 
 #define rtems_configuration_get_maximum_extensions() \
         (Configuration.maximum_extensions)
@@ -279,12 +270,6 @@ extern rtems_configuration_table  Configuration;
         (Configuration.microseconds_per_tick / 1000)
 #define rtems_configuration_get_nanoseconds_per_tick() \
         (Configuration.nanoseconds_per_tick)
-#define rtems_configuration_set_microseconds_per_tick( _us ) \
-        do { \
-          Configuration.microseconds_per_tick = (_us); \
-          Configuration.nanoseconds_per_tick = \
-            1000 * Configuration.microseconds_per_tick; \
-        } while (0)
 
 #define rtems_configuration_get_ticks_per_timeslice() \
         (Configuration.ticks_per_timeslice)
