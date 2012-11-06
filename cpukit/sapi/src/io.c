@@ -38,7 +38,7 @@ void _IO_Manager_initialization(void)
   uint32_t                    drivers_in_table;
   uint32_t                    number_of_drivers;
 
-  driver_table      = Configuration.Device_driver_table;
+  driver_table      = rtems_configuration_get_device_driver_table();
   drivers_in_table  = rtems_configuration_get_number_of_device_drivers();
   number_of_drivers = rtems_configuration_get_maximum_drivers();
 
