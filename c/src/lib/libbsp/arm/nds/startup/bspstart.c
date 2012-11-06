@@ -42,9 +42,6 @@ void bsp_start (void)
   /* set the cpu mode to system user */
   arm_cpu_mode = 0x1f;
 
-  /* configure clock period */
-  rtems_configuration_set_microseconds_per_tick (10000);
-
   defaultExceptionHandler ();
 }
 
