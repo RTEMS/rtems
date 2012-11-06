@@ -21,9 +21,11 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <bsp/irq-generic.h>
+
 #include <stdlib.h>
 
-#include <bsp/irq-generic.h>
+#include <rtems/score/apimutex.h>
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
   bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table
@@ -36,8 +38,6 @@ bsp_interrupt_handler_entry bsp_interrupt_handler_table
 /* The last entry indicates if everything is initialized */
 static uint8_t bsp_interrupt_handler_unique_table
   [(BSP_INTERRUPT_HANDLER_TABLE_SIZE + 7 + 1) / 8];
-
-static rtems_id bsp_interrupt_mutex = RTEMS_ID_NONE;
 
 static void bsp_interrupt_handler_empty(void *arg)
 {
@@ -141,59 +141,17 @@ static void bsp_interrupt_free_handler_entry(bsp_interrupt_handler_entry *e)
   #endif
 }
 
-static rtems_status_code bsp_interrupt_lock(void)
+static void bsp_interrupt_lock(void)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   if (_System_state_Is_up(_System_state_Get())) {
-    if (bsp_interrupt_mutex == RTEMS_ID_NONE) {
-      rtems_id mutex = RTEMS_ID_NONE;
-      rtems_interrupt_level level;
-
-      /* Create a mutex */
-      sc = rtems_semaphore_create (
-        rtems_build_name('I', 'N', 'T', 'R'),
-        1,
-        RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-        0,
-        &mutex
-      );
-      if (sc != RTEMS_SUCCESSFUL) {
-        return sc;
-      }
-
-      /* Assign the mutex */
-      rtems_interrupt_disable(level);
-      if (bsp_interrupt_mutex == RTEMS_ID_NONE) {
-        /* Nobody else assigned the mutex in the meantime */
-
-        bsp_interrupt_mutex = mutex;
-        rtems_interrupt_enable(level);
-      } else {
-        /* Somebody else won */
-
-        rtems_interrupt_enable(level);
-        sc = rtems_semaphore_delete(mutex);
-        if (sc != RTEMS_SUCCESSFUL) {
-          return sc;
-        }
-      }
-    }
-    return rtems_semaphore_obtain(
-      bsp_interrupt_mutex,
-      RTEMS_WAIT,
-      RTEMS_NO_TIMEOUT
-    );
-  } else {
-    return RTEMS_SUCCESSFUL;
+    _RTEMS_Lock_allocator();
   }
 }
 
-static rtems_status_code bsp_interrupt_unlock(void)
+static void bsp_interrupt_unlock(void)
 {
-  if (bsp_interrupt_mutex != RTEMS_ID_NONE) {
-    return rtems_semaphore_release(bsp_interrupt_mutex);
-  } else {
-    return RTEMS_SUCCESSFUL;
+  if (_System_state_Is_up(_System_state_Get())) {
+    _RTEMS_Unlock_allocator();
   }
 }
 
@@ -202,16 +160,7 @@ rtems_status_code bsp_interrupt_initialize(void)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   size_t i = 0;
 
-  sc = bsp_interrupt_lock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
-
-  /* We need one semaphore */
-  if (_System_state_Is_before_initialization(_System_state_Get())) {
-    Configuration.work_space_size += sizeof(Semaphore_Control);
-    ++Configuration_RTEMS_API.maximum_semaphores;
-  }
+  bsp_interrupt_lock();
 
   if (bsp_interrupt_is_initialized()) {
     bsp_interrupt_unlock();
@@ -232,10 +181,7 @@ rtems_status_code bsp_interrupt_initialize(void)
 
   bsp_interrupt_set_initialized();
 
-  sc = bsp_interrupt_unlock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_unlock();
 
   return RTEMS_SUCCESSFUL;
 }
@@ -282,10 +228,7 @@ static rtems_status_code bsp_interrupt_handler_install(
   }
 
   /* Lock */
-  sc = bsp_interrupt_lock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_lock();
 
   /* Get handler table index */
   index = bsp_interrupt_handler_index(vector);
@@ -382,10 +325,7 @@ static rtems_status_code bsp_interrupt_handler_install(
   }
 
   /* Unlock */
-  sc = bsp_interrupt_unlock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_unlock();
 
   return RTEMS_SUCCESSFUL;
 }
@@ -426,10 +366,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
   }
 
   /* Lock */
-  sc = bsp_interrupt_lock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_lock();
 
   /* Get handler table index */
   index = bsp_interrupt_handler_index(vector);
@@ -508,10 +445,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
   }
 
   /* Unlock */
-  sc = bsp_interrupt_unlock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_unlock();
 
   return RTEMS_SUCCESSFUL;
 }
@@ -532,7 +466,6 @@ static rtems_status_code bsp_interrupt_handler_iterate(
   void *arg
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   bsp_interrupt_handler_entry *current = NULL;
   rtems_option options = 0;
   rtems_vector_number index = 0;
@@ -547,10 +480,7 @@ static rtems_status_code bsp_interrupt_handler_iterate(
   }
 
   /* Lock */
-  sc = bsp_interrupt_lock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_lock();
 
   /* Interate */
   index = bsp_interrupt_handler_index(vector);
@@ -565,10 +495,7 @@ static rtems_status_code bsp_interrupt_handler_iterate(
   }
 
   /* Unlock */
-  sc = bsp_interrupt_unlock();
-  if (sc != RTEMS_SUCCESSFUL) {
-    return sc;
-  }
+  bsp_interrupt_unlock();
 
   return RTEMS_SUCCESSFUL;
 }
