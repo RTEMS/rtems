@@ -60,7 +60,7 @@ static inline void _Thread_Create_idle_helper(
     &_Thread_Internal_information,
     idle,
     NULL,        /* allocate the stack */
-    _Stack_Ensure_minimum( Configuration.idle_task_stack_size ),
+    _Stack_Ensure_minimum( rtems_configuration_get_idle_task_stack_size() ),
     CPU_IDLE_TASK_IS_FP,
     PRIORITY_MAXIMUM,
     true,        /* preemptable */
