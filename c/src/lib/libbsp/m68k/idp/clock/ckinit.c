@@ -30,7 +30,6 @@ volatile uint32_t         Clock_driver_ticks;
                                     /* ticks since initialization */
 rtems_isr_entry  Old_ticker;
 
-extern rtems_configuration_table Configuration;
 extern void led_putnum(void);
 void Disable_clock(void);
 

@@ -130,13 +130,6 @@ char BSP_serialNumber[20] = {0};
 char BSP_enetAddr0[7] = {0};
 char BSP_enetAddr1[7] = {0};
 
-/*
- *  The original table from the application and our copy of it with
- *  some changes.
- */
-
-extern rtems_configuration_table Configuration;
-
 char *rtems_progname;
 
 /*

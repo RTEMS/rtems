@@ -50,7 +50,6 @@ extern "C" {
 
 extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
-extern rtems_configuration_table        Configuration;
 #if defined(RTEMS_MULTIPROCESSING)
   extern rtems_multiprocessing_table      Multiprocessing_configuration;
 #endif
