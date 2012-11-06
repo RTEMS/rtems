@@ -63,7 +63,7 @@ void bsp_start( void )
 
 #if defined(RTEMS_MULTIPROCESSING)
   node_number = (uint8_t)
-    (Configuration.User_multiprocessing_table->node - 1) & 0xF;
+    (rtems_configuration_get_user_multiprocessing_table()->node - 1) & 0xF;
 #else
    node_number = 1;
 #endif

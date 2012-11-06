@@ -79,7 +79,7 @@ void rtems_initialize_data_structures(void)
      *  In an MP configuration, internally we view single processor
      *  systems as a very restricted multiprocessor system.
      */
-    _Configuration_MP_table = Configuration.User_multiprocessing_table;
+    _Configuration_MP_table = rtems_configuration_get_user_multiprocessing_table();
 
     if ( _Configuration_MP_table == NULL ) {
       _Configuration_MP_table =
