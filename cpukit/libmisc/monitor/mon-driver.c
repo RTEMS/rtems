@@ -37,10 +37,10 @@
 void
 rtems_monitor_driver_canonical(
     rtems_monitor_driver_t *canonical_driver,
-    void                   *driver_void
+    const void             *driver_void
 )
 {
-    rtems_driver_address_table *d = (rtems_driver_address_table *) driver_void;
+    const rtems_driver_address_table *d = (const rtems_driver_address_table *) driver_void;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_driver->initialization,
                                             (void *) d->initialization_entry);
@@ -58,14 +58,14 @@ rtems_monitor_driver_canonical(
 }
 
 
-void *
+const void *
 rtems_monitor_driver_next(
     void                  *object_info __attribute__((unused)),
     rtems_monitor_driver_t *canonical_driver,
     rtems_id              *next_id
 )
 {
-    rtems_configuration_table *c = &Configuration;
+    const rtems_configuration_table *c = &Configuration;
     uint32_t   n = rtems_object_id_get_index(*next_id);
 
     if (n >= c->number_of_device_drivers)
@@ -81,7 +81,7 @@ rtems_monitor_driver_next(
     canonical_driver->name = rtems_build_name('-', '-', '-', '-');
 
     *next_id += 1;
-    return (void *) (c->Device_driver_table + n);
+    return (const void *) (c->Device_driver_table + n);
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

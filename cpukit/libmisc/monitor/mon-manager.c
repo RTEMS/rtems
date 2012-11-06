@@ -16,7 +16,7 @@
  * "next" routine for all objects that are RTEMS manager objects
  */
 
-void *
+const void *
 rtems_monitor_manager_next(
     void      *table_void,
     void      *canonical,

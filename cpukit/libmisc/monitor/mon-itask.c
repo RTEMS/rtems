@@ -19,10 +19,10 @@
 void
 rtems_monitor_init_task_canonical(
     rtems_monitor_init_task_t *canonical_itask,
-    void                  *itask_void
+    const void                *itask_void
 )
 {
-    rtems_initialization_tasks_table *rtems_itask = itask_void;
+    const rtems_initialization_tasks_table *rtems_itask = itask_void;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_itask->entry,
                                             (void *) rtems_itask->entry_point);
@@ -34,7 +34,7 @@ rtems_monitor_init_task_canonical(
     canonical_itask->attributes = rtems_itask->attribute_set;
 }
 
-void *
+const void *
 rtems_monitor_init_task_next(
     void                  *object_info __attribute__((unused)),
     rtems_monitor_init_task_t *canonical_init_task,
@@ -59,7 +59,7 @@ rtems_monitor_init_task_next(
     canonical_init_task->name = itask->name;
 
     *next_id += 1;
-    return (void *) itask;
+    return (const void *) itask;
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

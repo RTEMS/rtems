@@ -15,10 +15,10 @@
 void
 rtems_monitor_sema_canonical(
     rtems_monitor_sema_t  *canonical_sema,
-    void                  *sema_void
+    const void            *sema_void
 )
 {
-    Semaphore_Control       *rtems_sema = (Semaphore_Control *) sema_void;
+    const Semaphore_Control *rtems_sema = (const Semaphore_Control *) sema_void;
 
     canonical_sema->attribute = rtems_sema->attribute_set;
     canonical_sema->priority_ceiling =

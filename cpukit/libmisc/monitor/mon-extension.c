@@ -14,11 +14,11 @@
 void
 rtems_monitor_extension_canonical(
     rtems_monitor_extension_t *canonical_extension,
-    void                  *extension_void
+    const void                *extension_void
 )
 {
-    Extension_Control     *rtems_extension = (Extension_Control *) extension_void;
-    rtems_extensions_table *e = &rtems_extension->Extension.Callouts;
+    const Extension_Control *rtems_extension = (const Extension_Control *) extension_void;
+    const rtems_extensions_table *e = &rtems_extension->Extension.Callouts;
 
     rtems_monitor_symbol_canonical_by_value(&canonical_extension->e_create,
                                             (void *) e->thread_create);

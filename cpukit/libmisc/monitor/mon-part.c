@@ -15,10 +15,10 @@
 void
 rtems_monitor_part_canonical(
     rtems_monitor_part_t  *canonical_part,
-    void                  *part_void
+    const void            *part_void
 )
 {
-    Partition_Control *rtems_part = (Partition_Control *) part_void;
+    const Partition_Control *rtems_part = (const Partition_Control *) part_void;
 
     canonical_part->attribute = rtems_part->attribute_set;
     canonical_part->start_addr = rtems_part->starting_address;

@@ -15,10 +15,10 @@
 void
 rtems_monitor_task_canonical(
     rtems_monitor_task_t  *canonical_task,
-    void                  *thread_void
+    const void            *thread_void
 )
 {
-    Thread_Control       *rtems_thread = (Thread_Control *) thread_void;
+    const Thread_Control *rtems_thread = (const Thread_Control *) thread_void;
     RTEMS_API_Control    *api;
 
     api = rtems_thread->API_Extensions[ THREAD_API_RTEMS ];

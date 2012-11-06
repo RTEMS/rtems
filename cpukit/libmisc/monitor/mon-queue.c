@@ -10,10 +10,10 @@
 void
 rtems_monitor_queue_canonical(
     rtems_monitor_queue_t *canonical_queue,
-    void                  *queue_void
+    const void            *queue_void
 )
 {
-    Message_queue_Control *rtems_queue = (Message_queue_Control *) queue_void;
+    const Message_queue_Control *rtems_queue = (const Message_queue_Control *) queue_void;
 
     canonical_queue->attributes = rtems_queue->attribute_set;
     canonical_queue->maximum_message_size = rtems_queue->message_queue.maximum_message_size;

@@ -234,8 +234,8 @@ rtems_monitor_object_canonical_next(
     void                        *canonical
 )
 {
-  rtems_id  next_id;
-  void     *raw_item;
+  rtems_id    next_id;
+  const void *raw_item;
 
 #if defined(RTEMS_MULTIPROCESSING)
     if ( ! _Objects_Is_local_id(id) ) {
@@ -249,7 +249,7 @@ rtems_monitor_object_canonical_next(
     {
       next_id = id;
 
-      raw_item = (void *) info->next(
+      raw_item = info->next(
         info->object_information,
         canonical,
         &next_id

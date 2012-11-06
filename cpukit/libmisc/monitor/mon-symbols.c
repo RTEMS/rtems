@@ -139,9 +139,9 @@ static int
 rtems_symbol_compare(const void *e1,
                      const void *e2)
 {
-    rtems_symbol_t *s1, *s2;
-    s1 = (rtems_symbol_t *) e1;
-    s2 = (rtems_symbol_t *) e2;
+    const rtems_symbol_t *s1, *s2;
+    s1 = (const rtems_symbol_t *) e1;
+    s2 = (const rtems_symbol_t *) e2;
 
     if (s1->value < s2->value)
         return -1;
@@ -297,7 +297,7 @@ rtems_symbol_name_lookup(
     return NULL;
 }
 
-void *
+const void *
 rtems_monitor_symbol_next(
     void                   *object_info,
     rtems_monitor_symbol_t *canonical __attribute__((unused)),
@@ -322,7 +322,7 @@ rtems_monitor_symbol_next(
     _Thread_Disable_dispatch();
 
     *next_id += 1;
-    return (void *) (table->addresses + n);
+    return (const void *) (table->addresses + n);
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

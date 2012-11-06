@@ -15,10 +15,10 @@
 void
 rtems_monitor_region_canonical(
     rtems_monitor_region_t  *canonical_region,
-    void                  *region_void
+    const void              *region_void
 )
 {
-    Region_Control *rtems_region = (Region_Control *) region_void;
+    const Region_Control *rtems_region = (const Region_Control *) region_void;
 
     canonical_region->attribute = rtems_region->attribute_set;
     canonical_region->start_addr = rtems_region->starting_address;

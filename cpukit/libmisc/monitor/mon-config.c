@@ -27,10 +27,11 @@
 void
 rtems_monitor_config_canonical(
     rtems_monitor_config_t *canonical_config,
-    void                   *config_void
+    const void             *config_void
 )
 {
-    rtems_configuration_table *c = (rtems_configuration_table *) config_void;
+    const rtems_configuration_table *c =
+        (const rtems_configuration_table *) config_void;
     rtems_api_configuration_table *r = &Configuration_RTEMS_API;
 
     canonical_config->work_space_size = c->work_space_size;
@@ -53,14 +54,14 @@ rtems_monitor_config_canonical(
  *    other nodes...)
  */
 
-void *
+const void *
 rtems_monitor_config_next(
     void                  *object_info __attribute__((unused)),
     rtems_monitor_config_t *canonical_config __attribute__((unused)),
     rtems_id              *next_id
 )
 {
-    rtems_configuration_table *c = &Configuration;
+    const rtems_configuration_table *c = &Configuration;
     int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)
@@ -69,7 +70,7 @@ rtems_monitor_config_next(
     _Thread_Disable_dispatch();
 
     *next_id += 1;
-    return (void *) c;
+    return (const void *) c;
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

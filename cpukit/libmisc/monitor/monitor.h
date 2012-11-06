@@ -350,8 +350,8 @@ struct rtems_monitor_command_entry_s {
 };
 
 
-typedef void *(*rtems_monitor_object_next_fn)(void *, void *, rtems_id *);
-typedef void (*rtems_monitor_object_canonical_fn)(void *, void *);
+typedef const void *(*rtems_monitor_object_next_fn)(void *, void *, rtems_id *);
+typedef void (*rtems_monitor_object_canonical_fn)(void *, const void *);
 typedef void (*rtems_monitor_object_dump_header_fn)(bool);
 typedef void (*rtems_monitor_object_dump_fn)(void *, bool);
 
@@ -418,66 +418,66 @@ rtems_id   rtems_monitor_id_fixup(rtems_id, uint32_t  , rtems_monitor_object_typ
 const rtems_monitor_object_info_t *rtems_monitor_object_lookup(rtems_monitor_object_type_t type);
 rtems_id   rtems_monitor_object_canonical_get(rtems_monitor_object_type_t, rtems_id, void *, size_t *size_p);
 rtems_id   rtems_monitor_object_canonical_next(const rtems_monitor_object_info_t *, rtems_id, void *);
-void      *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
-rtems_id   rtems_monitor_object_canonical(rtems_id, void *);
+const void *rtems_monitor_object_next(void *, void *, rtems_id, rtems_id *);
+rtems_id   rtems_monitor_object_canonical(rtems_id, const void *);
 void       rtems_monitor_object_cmd(int, char **, const rtems_monitor_command_arg_t*, bool);
 
 /* manager.c */
-void      *rtems_monitor_manager_next(void *, void *, rtems_id *);
+const void *rtems_monitor_manager_next(void *, void *, rtems_id *);
 
 /* config.c */
-void       rtems_monitor_config_canonical(rtems_monitor_config_t *, void *);
-void      *rtems_monitor_config_next(void *, rtems_monitor_config_t *, rtems_id *);
+void       rtems_monitor_config_canonical(rtems_monitor_config_t *, const void *);
+const void *rtems_monitor_config_next(void *, rtems_monitor_config_t *, rtems_id *);
 void       rtems_monitor_config_dump_header(bool);
 int        rtems_monitor_config_dump(rtems_monitor_config_t *, bool verbose);
 
 /* mpci.c */
 #if defined(RTEMS_MULTIPROCESSING)
-void       rtems_monitor_mpci_canonical(rtems_monitor_mpci_t *, void *);
-void      *rtems_monitor_mpci_next(void *, rtems_monitor_mpci_t *, rtems_id *);
+void       rtems_monitor_mpci_canonical(rtems_monitor_mpci_t *, const void *);
+const void *rtems_monitor_mpci_next(void *, rtems_monitor_mpci_t *, rtems_id *);
 void       rtems_monitor_mpci_dump_header(bool);
 void       rtems_monitor_mpci_dump(rtems_monitor_mpci_t *, bool verbose);
 #endif
 
 /* itask.c */
-void       rtems_monitor_init_task_canonical(rtems_monitor_init_task_t *, void *);
-void      *rtems_monitor_init_task_next(void *, rtems_monitor_init_task_t *, rtems_id *);
+void       rtems_monitor_init_task_canonical(rtems_monitor_init_task_t *, const void *);
+const void *rtems_monitor_init_task_next(void *, rtems_monitor_init_task_t *, rtems_id *);
 void       rtems_monitor_init_task_dump_header(bool);
 void       rtems_monitor_init_task_dump(rtems_monitor_init_task_t *, bool verbose);
 
 /* extension.c */
-void       rtems_monitor_extension_canonical(rtems_monitor_extension_t *, void *);
+void       rtems_monitor_extension_canonical(rtems_monitor_extension_t *, const void *);
 void       rtems_monitor_extension_dump_header(bool verbose);
 void       rtems_monitor_extension_dump(rtems_monitor_extension_t *, bool);
 
 /* task.c */
-void    rtems_monitor_task_canonical(rtems_monitor_task_t *, void *);
+void    rtems_monitor_task_canonical(rtems_monitor_task_t *, const void *);
 void    rtems_monitor_task_dump_header(bool verbose);
 void    rtems_monitor_task_dump(rtems_monitor_task_t *, bool);
 
 /* sema.c */
-void    rtems_monitor_sema_canonical(rtems_monitor_sema_t *, void *);
+void    rtems_monitor_sema_canonical(rtems_monitor_sema_t *, const void *);
 void    rtems_monitor_sema_dump_header(bool verbose);
 void    rtems_monitor_sema_dump(rtems_monitor_sema_t *, bool);
 
 /* queue.c */
-void    rtems_monitor_queue_canonical(rtems_monitor_queue_t *, void *);
+void    rtems_monitor_queue_canonical(rtems_monitor_queue_t *, const void *);
 void    rtems_monitor_queue_dump_header(bool verbose);
 void    rtems_monitor_queue_dump(rtems_monitor_queue_t *, bool);
 
 /* region.c */
-void    rtems_monitor_region_canonical(rtems_monitor_region_t *, void *);
+void    rtems_monitor_region_canonical(rtems_monitor_region_t *, const void *);
 void    rtems_monitor_region_dump_header(bool verbose);
 void    rtems_monitor_region_dump(rtems_monitor_region_t *, bool);
 
 /* partition.c */
-void    rtems_monitor_part_canonical(rtems_monitor_part_t *, void *);
+void    rtems_monitor_part_canonical(rtems_monitor_part_t *, const void *);
 void    rtems_monitor_part_dump_header(bool verbose);
 void    rtems_monitor_part_dump(rtems_monitor_part_t *, bool);
 
 /* driver.c */
-void    *rtems_monitor_driver_next(void *, rtems_monitor_driver_t *, rtems_id *);
-void     rtems_monitor_driver_canonical(rtems_monitor_driver_t *, void *);
+const void *rtems_monitor_driver_next(void *, rtems_monitor_driver_t *, rtems_id *);
+void     rtems_monitor_driver_canonical(rtems_monitor_driver_t *, const void *);
 void     rtems_monitor_driver_dump_header(bool);
 void     rtems_monitor_driver_dump(rtems_monitor_driver_t *, bool);
 
@@ -489,7 +489,7 @@ rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, const char *, uint32
 rtems_symbol_t *rtems_symbol_value_lookup(rtems_symbol_table_t *, uint32_t);
 const rtems_symbol_t *rtems_symbol_value_lookup_exact(rtems_symbol_table_t *, uint32_t);
 rtems_symbol_t *rtems_symbol_name_lookup(rtems_symbol_table_t *, const char *);
-void   *rtems_monitor_symbol_next(void *object_info, rtems_monitor_symbol_t *, rtems_id *);
+const void *rtems_monitor_symbol_next(void *object_info, rtems_monitor_symbol_t *, rtems_id *);
 void    rtems_monitor_symbol_canonical(rtems_monitor_symbol_t *, rtems_symbol_t *);
 void    rtems_monitor_symbol_canonical_by_name(rtems_monitor_symbol_t *, const char *);
 void    rtems_monitor_symbol_canonical_by_value(rtems_monitor_symbol_t *, void *);
