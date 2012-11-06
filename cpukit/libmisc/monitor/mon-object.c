@@ -184,6 +184,7 @@ rtems_monitor_object_lookup(
     return 0;
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
 static rtems_id
 rtems_monitor_object_canonical_next_remote(
     rtems_monitor_object_type_t type,
@@ -223,6 +224,7 @@ failed:
     return RTEMS_OBJECT_ID_FINAL;
 
 }
+#endif
 
 
 rtems_id
