@@ -36,7 +36,7 @@ void _Extension_Manager_initialization(void)
     &_Extension_Information,
     OBJECTS_CLASSIC_API,                 /* object API */
     OBJECTS_RTEMS_EXTENSIONS,
-    Configuration.maximum_extensions,
+    rtems_configuration_get_maximum_extensions(),
     sizeof( Extension_Control ),
     false,                     /* true if the name is a string */
     RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
