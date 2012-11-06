@@ -350,7 +350,10 @@ void bsp_start( void )
   bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("Configuration.work_space_size = %x\n", Configuration.work_space_size); 
+  printk(
+    "Configuration.work_space_size = %x\n",
+    rtems_configuration_get_work_space_size()
+  );
 #endif
 
   /* Activate the page table mappings only after
