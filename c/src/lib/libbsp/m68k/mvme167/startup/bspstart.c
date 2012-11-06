@@ -20,9 +20,6 @@
 #include <page_table.h>
 #include <fatal.h>
 
-/* XXX If RTEMS let the BSP replace the default fatal error handler... */
-rtems_extensions_table user_extension_table;
-
 void M68KFPSPInstallExceptionHandlers (void);
 extern rtems_isr_entry  M68Kvec[];
 
@@ -92,14 +89,4 @@ void bsp_start( void )
    *  Initialize address translation
    */
   page_table_init();
-
-  /*
-   *  If the application has not overriden the default User_extension_table,
-   *  supply one with our own fatal error handler that returns control to
-   *  167Bug.
-   */
-  if ( Configuration.User_extension_table == NULL ) {
-    user_extension_table.fatal = bsp_fatal_error_occurred;
-    Configuration.User_extension_table = &user_extension_table;
-  }
 }
