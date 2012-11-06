@@ -58,16 +58,11 @@
  *  is mapped to the physical address range 0xFF000000--0xFFFFFFFF as
  *  caching disabled, serialized access.
  *
- *  Input parameters:
- *    config_table - ignored for now
- *
  *  Output parameters: NONE
  *
  *  Return values: NONE
  */
-void page_table_init(
-  rtems_configuration_table *config_table
-)
+void page_table_init( void )
 {
   unsigned char j1;               /* State of J1 jumpers */
   register unsigned long dtt0;    /* Content of dtt0 */

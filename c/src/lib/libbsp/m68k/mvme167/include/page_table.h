@@ -23,7 +23,7 @@
 #include <rtems.h>
 
 void page_table_teardown( void );
-void page_table_init( rtems_configuration_table *config_table );
+void page_table_init( void );
 
 enum {
   CACHE_WRITE_THROUGH,

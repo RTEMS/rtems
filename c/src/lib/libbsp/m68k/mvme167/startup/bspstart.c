@@ -90,9 +90,8 @@ void bsp_start( void )
 
   /*
    *  Initialize address translation
-   *  May need to pass the multiprocessor configuration table.
    */
-  page_table_init( &Configuration );
+  page_table_init();
 
   /*
    *  If the application has not overriden the default User_extension_table,
