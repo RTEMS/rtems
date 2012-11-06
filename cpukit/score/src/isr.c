@@ -46,22 +46,25 @@ void _ISR_Handler_initialization( void )
 #endif
 
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
+  {
+    size_t stack_size = rtems_configuration_get_interrupt_stack_size();
 
-  if ( !_Stack_Is_enough(Configuration.interrupt_stack_size) )
-    _Internal_error_Occurred(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
+    if ( !_Stack_Is_enough( stack_size ) )
+      _Internal_error_Occurred(
+        INTERNAL_ERROR_CORE,
+        true,
+        INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
+      );
+
+    _CPU_Interrupt_stack_low = _Workspace_Allocate_or_fatal_error(
+      stack_size
     );
 
-  _CPU_Interrupt_stack_low = _Workspace_Allocate_or_fatal_error(
-    Configuration.interrupt_stack_size
-  );
-
-  _CPU_Interrupt_stack_high = _Addresses_Add_offset(
-    _CPU_Interrupt_stack_low,
-    Configuration.interrupt_stack_size
-  );
+    _CPU_Interrupt_stack_high = _Addresses_Add_offset(
+      _CPU_Interrupt_stack_low,
+      stack_size
+    );
+  }
 
 #if (CPU_STACK_ALIGNMENT != 0)
   _CPU_Interrupt_stack_high = (void *)

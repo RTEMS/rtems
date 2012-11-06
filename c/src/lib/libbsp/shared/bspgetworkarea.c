@@ -51,7 +51,7 @@ void bsp_work_area_initialize(void)
   #endif
 
   #ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-    work_base += Configuration.interrupt_stack_size;
+    work_base += rtems_configuration_get_interrupt_stack_size();
   #endif
 
   bsp_work_area_initialize_default( (void *) work_base, ram_end - work_base );

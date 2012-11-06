@@ -38,8 +38,12 @@ void bsp_work_area_initialize(void)
   };
 
   #ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-    areas [0].begin = (char *) areas [0].begin + Configuration.interrupt_stack_size;
-    areas [0].size -= Configuration.interrupt_stack_size;
+    {
+      uint32_t stack_size = rtems_configuration_get_interrupt_stack_size();
+
+      areas [0].begin = (char *) areas [0].begin + stack_size;
+      areas [0].size -= stack_size;
+    }
   #endif
 
   bsp_work_area_initialize_with_table(

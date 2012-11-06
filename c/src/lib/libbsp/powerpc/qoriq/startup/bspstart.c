@@ -112,7 +112,7 @@ void bsp_start(void)
   sc = ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_section_work_begin,
-    Configuration.interrupt_stack_size
+    rtems_configuration_get_interrupt_stack_size()
   );
   if (sc != RTEMS_SUCCESSFUL) {
     BSP_panic("cannot initialize exceptions");
