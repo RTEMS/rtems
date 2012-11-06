@@ -32,7 +32,7 @@ void _User_extensions_Handler_initialization(void)
   uint32_t                 number_of_extensions;
   User_extensions_Table   *initial_extensions;
 
-  number_of_extensions = Configuration.number_of_initial_extensions;
+  number_of_extensions = rtems_configuration_get_number_of_initial_extensions();
   initial_extensions   = rtems_configuration_get_user_extension_table();
 
   _Chain_Initialize_empty( &_User_extensions_List );
