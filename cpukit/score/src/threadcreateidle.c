@@ -83,7 +83,7 @@ static inline void _Thread_Create_idle_helper(
   _Thread_Start(
     idle,
     THREAD_START_NUMERIC,
-    Configuration.idle_task,
+    rtems_configuration_get_idle_task(),
     NULL,
     0
   );
