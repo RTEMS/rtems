@@ -2316,7 +2316,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   /**
    *  This is the primary Configuration Table for this application.
    */
-  rtems_configuration_table Configuration = {
+  const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     CONFIGURE_STACK_SPACE_SIZE,               /* required stack space */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
