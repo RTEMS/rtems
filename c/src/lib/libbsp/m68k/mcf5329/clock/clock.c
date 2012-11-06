@@ -59,7 +59,7 @@ static void Clock_driver_support_shutdown_hardware(void)
 /*
  * Set up the clock hardware
  *
- * We need to have 1 interrupt every BSP_Configuration.microseconds_per_tick
+ * We need to have 1 interrupt every rtems_configuration_get_microseconds_per_tick()
  */
 static void Clock_driver_support_initialize_hardware(void)
 {
@@ -67,7 +67,7 @@ static void Clock_driver_support_initialize_hardware(void)
   uint32_t pmr;
   uint32_t preScaleCode = 0;
   uint32_t clk = bsp_get_BUS_clock_speed();
-  uint32_t tps = 1000000 / Configuration.microseconds_per_tick;
+  uint32_t tps = 1000000 / rtems_configuration_get_microseconds_per_tick();
 
   while (preScaleCode < 15) {
     pmr = (clk >> preScaleCode) / tps;

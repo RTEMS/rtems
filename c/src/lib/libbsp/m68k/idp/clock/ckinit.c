@@ -90,7 +90,7 @@ void Install_clock(
   rtems_isr_entry clock_isr )
 {
   Clock_driver_ticks = 0;
-  Clock_isrs = (int)(Configuration.microseconds_per_tick / 1000);
+  Clock_isrs = (int)(rtems_configuration_get_microseconds_per_tick() / 1000);
 
 /*    led_putnum('c'); * for debugging purposes */
     Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
