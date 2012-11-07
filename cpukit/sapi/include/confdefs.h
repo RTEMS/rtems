@@ -594,11 +594,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #include <rtems/score/scheduler.h>
 
-#if defined(CONFIGURE_SCHEDULER_USER) && \
-    !defined(CONFIGURE_SCHEDULER_USER_ENTRY_POINTS)
-  #error "CONFIGURE_ERROR: CONFIGURE_SCHEDULER_USER requires CONFIGURE_SCHEDULER_USER_ENTRY_POINTS"
-#endif
-
 #if !defined(RTEMS_SMP)
   #undef CONFIGURE_SCHEDULER_SIMPLE_SMP
 #endif
@@ -708,14 +703,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         sizeof(Scheduler_CBS_Server*)) * CONFIGURE_CBS_MAXIMUM_SERVERS))
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
-#endif
-
-#if defined(CONFIGURE_SCHEDULER_USER)
-  #define CONFIGURE_SCHEDULER_ENTRY_POINTS \
-          CONFIGURE_SCHEDULER_USER_ENTRY_POINTS
-
-  #define CONFIGURE_SCHEDULER_MEMORY_FOR_SCHEDULER \
-          CONFIGURE_SCHEDULER_USER_MEMORY_FOR_SCHEDULER
 #endif
 
 /* 
