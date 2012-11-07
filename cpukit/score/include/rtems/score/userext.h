@@ -234,12 +234,12 @@ typedef struct {
 /**
  * @brief List of active extensions.
  */
-SCORE_EXTERN Chain_Control _User_extensions_List;
+extern Chain_Control _User_extensions_List;
 
 /**
  * @brief List of active task switch extensions.
  */
-SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
+extern Chain_Control _User_extensions_Switches_list;
 
 /**
  * @name Extension Maintainance

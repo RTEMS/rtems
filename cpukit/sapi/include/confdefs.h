@@ -2090,11 +2090,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  user extensions.
  */
 #define CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS \
-     ((CONFIGURE_NEWLIB_EXTENSION * \
-        _Configure_From_workspace( sizeof(User_extensions_Control))) + \
-      (CONFIGURE_STACK_CHECKER_EXTENSION * \
-        _Configure_From_workspace( sizeof(User_extensions_Control))) \
-     )
+  (CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS == 0 ? 0 : \
+    _Configure_From_workspace( \
+      CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
+        * sizeof(User_extensions_Switch_control) \
+    ))
 
 /**
  *  This macro provides a summation of the memory required by the

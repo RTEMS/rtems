@@ -16,7 +16,10 @@
   #include "config.h"
 #endif
 
+#include <rtems/config.h>
 #include <rtems/score/userext.h>
+
+CHAIN_DEFINE_EMPTY( _User_extensions_List );
 
 void _User_extensions_Thread_create_visitor(
   Thread_Control              *executing,
@@ -118,10 +121,22 @@ void _User_extensions_Iterate(
   User_extensions_Visitor  visitor
 )
 {
-  const Chain_Node *node = _Chain_Immutable_first( &_User_extensions_List );
-  const Chain_Node *tail = _Chain_Immutable_tail( &_User_extensions_List );
   Thread_Control   *executing = _Thread_Executing;
+  const User_extensions_Table *callouts_current =
+    rtems_configuration_get_user_extension_table();
+  const User_extensions_Table *callouts_end =
+    callouts_current + rtems_configuration_get_number_of_initial_extensions();
+  const Chain_Node *node;
+  const Chain_Node *tail;
 
+  while ( callouts_current != callouts_end ) {
+    (*visitor)( executing, arg, callouts_current );
+
+    ++callouts_current;
+  }
+
+  node = _Chain_Immutable_first( &_User_extensions_List );
+  tail = _Chain_Immutable_tail( &_User_extensions_List );
   while ( node != tail ) {
     const User_extensions_Control *extension =
       (const User_extensions_Control *) node;
