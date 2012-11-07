@@ -39,6 +39,8 @@ rtems_task Init(
 
   puts( "\n\n*** TEST DEVFS03 ***" );
 
+  memset(nodes, 0, sizeof(nodes));
+
   puts( "Init - attempt to create /dir01 -- OK" );
   status = mkdir( "/dir01", S_IRWXU );
   rtems_test_assert( status == 0 );
