@@ -18,6 +18,10 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userext.h>
 
+System_state_Codes _System_state_Current;
+
+Internal_errors_Information _Internal_errors_What_happened;
+
 /*
  *  _Internal_error_Occurred
  *

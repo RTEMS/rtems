@@ -93,7 +93,7 @@ typedef struct {
 /**
  *  When a fatal error occurs, the error information is stored here.
  */
-SCORE_EXTERN Internal_errors_Information _Internal_errors_What_happened;
+extern Internal_errors_Information _Internal_errors_What_happened;
 
 /**
  * @brief  Internal error Occurred
