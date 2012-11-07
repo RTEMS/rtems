@@ -33,6 +33,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
 
+#include <bsp/default-initial-extension.h>
+
 /*
  *  BSP provides its own Idle thread body
  */

@@ -32,6 +32,8 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
 
+#include <bsp/default-initial-extension.h>
+
 /* SPARC CPU variant: LEON3 */
 #define LEON3 1
 
