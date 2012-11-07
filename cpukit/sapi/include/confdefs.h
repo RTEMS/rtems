@@ -1605,7 +1605,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 #include <rtems/libcsupport.h>
 
-#if defined(CONFIGURE_INITIAL_EXTENSIONS) || \
+#if defined(BSP_INITIAL_EXTENSION) || \
+    defined(CONFIGURE_INITIAL_EXTENSIONS) || \
     defined(CONFIGURE_STACK_CHECKER_ENABLED) || \
     (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
   static const rtems_extensions_table Configuration_Initial_Extensions[] = {
@@ -1617,6 +1618,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #endif
     #if defined(CONFIGURE_INITIAL_EXTENSIONS)
       CONFIGURE_INITIAL_EXTENSIONS,
+    #endif
+    #if defined(BSP_INITIAL_EXTENSION)
+      BSP_INITIAL_EXTENSION
     #endif
   };
 
