@@ -469,7 +469,7 @@ The pluggable scheduler interface enables the user to provide their own scheduli
 First, you must define @code{CONFIGURE_SCHEDULER_USER} to indicate the application provides its own scheduling algorithm. If @code{CONFIGURE_SCHEDULER_USER} is defined then the following additional macros must be defined:
 
 @itemize @bullet
-@item @code{CONFIGURE_SCHEDULER_USER_ENTRY_POINTS} must be defined with the set of methods which implement this scheduler.  
+@item @code{CONFIGURE_SCHEDULER_ENTRY_POINTS} must be defined with the set of methods which implement this scheduler.  
 
 @item @code{CONFIGURE_MEMORY_FOR_SCHEDULER} must be defined with the
 amount of memory required as a base amount for the scheduler.
