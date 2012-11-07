@@ -211,11 +211,11 @@ package body RTEMS.Message_Queue is
         (C,
          Get_Number_Pending_Base,
          "rtems_message_queue_get_number_pending");
-      COUNT_Base : aliased RTEMS.Unsigned32;
+      Count_Base : aliased RTEMS.Unsigned32;
    begin
 
-      Result := Get_Number_Pending_Base (ID, COUNT_Base'Access);
-      Count  := COUNT_Base;
+      Result := Get_Number_Pending_Base (ID, Count_Base'Access);
+      Count  := Count_Base;
 
    end Get_Number_Pending;
 
@@ -232,11 +232,11 @@ package body RTEMS.Message_Queue is
         (C,
          Flush_Base,
          "rtems_message_queue_flush");
-      COUNT_Base : aliased RTEMS.Unsigned32;
+      Count_Base : aliased RTEMS.Unsigned32;
    begin
 
-      Result := Flush_Base (ID, COUNT_Base'Access);
-      Count  := COUNT_Base;
+      Result := Flush_Base (ID, Count_Base'Access);
+      Count  := Count_Base;
 
    end Flush;
 
