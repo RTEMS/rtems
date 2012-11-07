@@ -213,7 +213,7 @@ typedef struct {
   uint32_t                       number_of_device_drivers;
   rtems_driver_address_table    *Device_driver_table;
   uint32_t                       number_of_initial_extensions;
-  rtems_extensions_table        *User_extension_table;
+  const rtems_extensions_table  *User_extension_table;
   #if defined(RTEMS_MULTIPROCESSING)
     rtems_multiprocessing_table   *User_multiprocessing_table;
   #endif

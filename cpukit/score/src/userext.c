@@ -27,10 +27,10 @@
 
 void _User_extensions_Handler_initialization(void)
 {
-  User_extensions_Control *extension;
-  uint32_t                 i;
-  uint32_t                 number_of_extensions;
-  User_extensions_Table   *initial_extensions;
+  User_extensions_Control     *extension;
+  uint32_t                     i;
+  uint32_t                     number_of_extensions;
+  const User_extensions_Table *initial_extensions;
 
   number_of_extensions = rtems_configuration_get_number_of_initial_extensions();
   initial_extensions   = rtems_configuration_get_user_extension_table();

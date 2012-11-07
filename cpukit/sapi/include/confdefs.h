@@ -1608,7 +1608,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if defined(CONFIGURE_INITIAL_EXTENSIONS) || \
     defined(CONFIGURE_STACK_CHECKER_ENABLED) || \
     (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  rtems_extensions_table Configuration_Initial_Extensions[] = {
+  static const rtems_extensions_table Configuration_Initial_Extensions[] = {
     #if !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
       RTEMS_NEWLIB_EXTENSION,
     #endif
