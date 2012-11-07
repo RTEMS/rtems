@@ -29,5 +29,11 @@ EXTRA_DIST += shared/include/coverhd.h
 EXTRA_DIST += shared/gdbstub/rtems-stub-glue.c
 EXTRA_DIST += shared/include/bootcard.h
 
+include_bspdir = $(includedir)/bsp
+
+include_bsp_HEADERS =
+include_bsp_HEADERS += shared/include/default-initial-extension.h
+
+include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
