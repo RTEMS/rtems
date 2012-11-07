@@ -1022,7 +1022,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
 
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
-  sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
+  RTEMS_ARRAY_SIZE(CONFIGURE_INIT_TASK_TABLE)
 
 #endif    /* CONFIGURE_HAS_OWN_INIT_TASK_TABLE */
 
@@ -1150,7 +1150,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 
 #define CONFIGURE_NUMBER_OF_DRIVERS \
-  ((sizeof(Device_drivers) / sizeof(rtems_driver_address_table)))
+  RTEMS_ARRAY_SIZE(Device_drivers)
 
 /**
  *  This specifies the maximum number of device drivers that
@@ -1622,8 +1622,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #define CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
-    ((sizeof(Configuration_Initial_Extensions) / \
-      sizeof(rtems_extensions_table)))
+    RTEMS_ARRAY_SIZE(Configuration_Initial_Extensions)
 #else
   #define CONFIGURE_INITIAL_EXTENSION_TABLE NULL
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
@@ -1797,8 +1796,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
               POSIX_Initialization_threads
 
       #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
-        sizeof(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME) / \
-            sizeof(posix_initialization_threads_table)
+              RTEMS_ARRAY_SIZE(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME)
 
     #endif    /* CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
 

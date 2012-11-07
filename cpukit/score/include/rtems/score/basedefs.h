@@ -174,6 +174,8 @@
     typedef int rtems_static_assert_ ## msg [(cond) ? 1 : -1]
 #endif
 
+#define RTEMS_ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
+
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
     typedef bool boolean;
