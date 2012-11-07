@@ -318,9 +318,7 @@ libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
 
 ## USEREXT_C_FILES
 libscore_a_SOURCES += src/userextaddset.c \
-    src/userext.c src/userextremoveset.c src/userextthreadbegin.c \
-    src/userextthreadcreate.c src/userextthreaddelete.c \
-    src/userextthreadrestart.c src/userextthreadstart.c \
+    src/userext.c src/userextremoveset.c src/userextiterate.c \
     src/userextthreadswitch.c
 
 ## STD_C_FILES

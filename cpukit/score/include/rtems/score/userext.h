@@ -274,6 +274,83 @@ void _User_extensions_Remove_set(
   User_extensions_Control *extension
 );
 
+/**
+ * @brief User extension visitor.
+ *
+ * @param[in, out] executing The currently executing thread.
+ * @param[in, out] arg The argument passed to _User_extensions_Iterate().
+ * @param[in] callouts The current callouts.
+ */
+typedef void (*User_extensions_Visitor)(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+typedef struct {
+  Thread_Control *created;
+  bool            ok;
+} User_extensions_Thread_create_context;
+
+void _User_extensions_Thread_create_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+void _User_extensions_Thread_delete_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+void _User_extensions_Thread_start_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+void _User_extensions_Thread_restart_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+void _User_extensions_Thread_begin_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+void _User_extensions_Thread_exitted_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+typedef struct {
+  Internal_errors_Source source;
+  bool                   is_internal;
+  Internal_errors_t      error;
+} User_extensions_Fatal_context;
+
+void _User_extensions_Fatal_visitor(
+  Thread_Control              *executing,
+  void                        *arg,
+  const User_extensions_Table *callouts
+);
+
+/**
+ * @brief Iterates through all user extensions and calls the visitor for each.
+ *
+ * @param[in, out] arg The argument passed to the visitor.
+ * @param[in] visitor The visitor for each extension.
+ */
+void _User_extensions_Iterate(
+  void                    *arg,
+  User_extensions_Visitor  visitor
+);
+
 /** @} */
 
 /**
@@ -282,40 +359,70 @@ void _User_extensions_Remove_set(
  * @{
  */
 
-bool _User_extensions_Thread_create(
-  Thread_Control *created
-);
+static inline bool _User_extensions_Thread_create( Thread_Control *created )
+{
+  User_extensions_Thread_create_context ctx = { created, true };
 
-void _User_extensions_Thread_delete(
-  Thread_Control *deleted
-);
+  _User_extensions_Iterate( &ctx, _User_extensions_Thread_create_visitor );
 
-void _User_extensions_Thread_start(
-  Thread_Control *started
-);
+  return ctx.ok;
+}
 
-void _User_extensions_Thread_restart(
-  Thread_Control *restarted
-);
+static inline void _User_extensions_Thread_delete( Thread_Control *deleted )
+{
+  _User_extensions_Iterate(
+    deleted,
+    _User_extensions_Thread_delete_visitor
+  );
+}
 
-void _User_extensions_Thread_begin(
-  Thread_Control *executing
-);
+static inline void _User_extensions_Thread_start( Thread_Control *started )
+{
+  _User_extensions_Iterate(
+    started,
+    _User_extensions_Thread_start_visitor
+  );
+}
+
+static inline void _User_extensions_Thread_restart( Thread_Control *restarted )
+{
+  _User_extensions_Iterate(
+    restarted,
+    _User_extensions_Thread_restart_visitor
+  );
+}
+
+static inline void _User_extensions_Thread_begin( Thread_Control *executing )
+{
+  _User_extensions_Iterate(
+    executing,
+    _User_extensions_Thread_begin_visitor
+  );
+}
 
 void _User_extensions_Thread_switch(
   Thread_Control *executing,
   Thread_Control *heir
 );
 
-void _User_extensions_Thread_exitted(
-  Thread_Control *executing
-);
+static inline void _User_extensions_Thread_exitted( Thread_Control *executing )
+{
+  _User_extensions_Iterate(
+    executing,
+    _User_extensions_Thread_exitted_visitor
+  );
+}
 
-void _User_extensions_Fatal(
+static inline void _User_extensions_Fatal(
   Internal_errors_Source source,
   bool                   is_internal,
   Internal_errors_t      error
-);
+)
+{
+  User_extensions_Fatal_context ctx = { source, is_internal, error };
+
+  _User_extensions_Iterate( &ctx, _User_extensions_Fatal_visitor );
+}
 
 /** @} */
 
