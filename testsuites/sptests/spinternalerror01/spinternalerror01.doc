@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spinternalerror01
+
+directives:
+
+  _Internal_error_Occurred()
+
+concepts:
+
+  - Ensure that _Internal_error_Occurred() works right after low-level start.

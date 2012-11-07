@@ -30,6 +30,7 @@ SUBDIRS = \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01
 SUBDIRS += speventtransient01
 SUBDIRS += speventsystem01
+SUBDIRS += spinternalerror01
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

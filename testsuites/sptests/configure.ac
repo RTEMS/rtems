@@ -27,6 +27,7 @@ AC_CHECK_SIZEOF([time_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+spinternalerror01/Makefile
 speventsystem01/Makefile
 speventtransient01/Makefile
 spintrcritical18/Makefile
