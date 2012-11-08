@@ -313,7 +313,11 @@ typedef struct fat_vol_s
     uint32_t           rdir_cl;        /* first cluster of the root directory */
     uint16_t           info_sec;       /* FSInfo Sector Structure location */
     uint32_t           free_cls;       /* last known free clusters count */
+    uint32_t           free_cls_in_fs_info; /* last known free clusters count
+                                               in FS info sector */
     uint32_t           next_cl;        /* next free cluster number */
+    uint32_t           next_cl_in_fs_info; /* next free cluster number in FS
+                                              info sector */
     uint8_t            mirror;         /* mirroring enabla/disable */
     uint32_t           afat_loc;       /* active FAT location */
     uint8_t            afat;           /* the number of active FAT */
@@ -500,11 +504,7 @@ fat_free_unique_ino(fat_fs_info_t                        *fs_info,
                     uint32_t                              ino);
 
 int
-fat_fat32_update_fsinfo_sector(
-  fat_fs_info_t                        *fs_info,
-  uint32_t                              free_count,
-  uint32_t                              next_free
-  );
+fat_sync(fat_fs_info_t *fs_info);
 
 #ifdef __cplusplus
 }

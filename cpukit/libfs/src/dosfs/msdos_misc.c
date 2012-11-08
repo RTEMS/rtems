@@ -1646,19 +1646,6 @@ int msdos_find_node_by_cluster_num_in_fat_file(
 }
 
 int
-msdos_sync_unprotected(msdos_fs_info_t *fs_info)
-{
-    int rc = fat_buf_release(&fs_info->fat);
-    rtems_status_code sc = rtems_bdbuf_syncdev(fs_info->fat.vol.dd);
-    if (sc != RTEMS_SUCCESSFUL) {
-	errno = EIO;
-	rc = -1;
-    }
-
-    return rc;
-}
-
-int
 msdos_sync(rtems_libio_t *iop)
 {
     int                rc = RC_OK;
@@ -1670,7 +1657,7 @@ msdos_sync(rtems_libio_t *iop)
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    rc = msdos_sync_unprotected(fs_info);
+    rc = fat_sync(&fs_info->fat);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return rc;

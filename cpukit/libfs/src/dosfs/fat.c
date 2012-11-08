@@ -574,16 +574,12 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
                     return -1;
                 }
 
-                vol->free_cls = FAT_GET_FSINFO_FREE_CLUSTER_COUNT(fs_info_sector);
-                vol->next_cl = FAT_GET_FSINFO_NEXT_FREE_CLUSTER(fs_info_sector);
-                rc = fat_fat32_update_fsinfo_sector(fs_info, FAT_UNDEFINED_VALUE,
-                                                    FAT_UNDEFINED_VALUE);
-                if ( rc != RC_OK )
-                {
-                    _fat_block_release(fs_info);
-                    close(vol->fd);
-                    return rc;
-                }
+                vol->free_cls_in_fs_info =
+                  FAT_GET_FSINFO_FREE_CLUSTER_COUNT(fs_info_sector);
+                vol->free_cls = vol->free_cls_in_fs_info;
+                vol->next_cl_in_fs_info =
+                  FAT_GET_FSINFO_NEXT_FREE_CLUSTER(fs_info_sector);
+                vol->next_cl = vol->next_cl_in_fs_info;
             }
         }
     }
@@ -645,6 +641,75 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
     return RC_OK;
 }
 
+/* fat_fat32_update_fsinfo_sector --
+ *     Synchronize fsinfo sector for FAT32 volumes
+ *
+ * PARAMETERS:
+ *     fs_info    - FS info
+ *
+ * RETURNS:
+ *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ */
+static int
+fat_fat32_update_fsinfo_sector(fat_fs_info_t *fs_info)
+{
+    ssize_t ret1 = 0, ret2 = 0;
+
+    if (fs_info->vol.type == FAT_FAT32)
+    {
+        uint32_t free_count = fs_info->vol.free_cls;
+        uint32_t next_free = fs_info->vol.next_cl;
+
+        if (free_count != fs_info->vol.free_cls_in_fs_info)
+        {
+            uint32_t le_free_count = CT_LE_L(free_count);
+
+            fs_info->vol.free_cls_in_fs_info = free_count;
+
+            ret1 = _fat_block_write(fs_info,
+                                    fs_info->vol.info_sec,
+                                    FAT_FSINFO_FREE_CLUSTER_COUNT_OFFSET,
+                                    sizeof(le_free_count),
+                                    &le_free_count);
+        }
+
+        if (next_free != fs_info->vol.next_cl_in_fs_info)
+        {
+            uint32_t le_next_free = CT_LE_L(next_free);
+
+            fs_info->vol.next_cl_in_fs_info = next_free;
+
+            ret2 = _fat_block_write(fs_info,
+                                    fs_info->vol.info_sec,
+                                    FAT_FSINFO_NEXT_FREE_CLUSTER_OFFSET,
+                                    sizeof(le_next_free),
+                                    &le_next_free);
+        }
+    }
+
+    if ( (ret1 < 0) || (ret2 < 0) )
+        return -1;
+
+    return RC_OK;
+}
+
+int
+fat_sync(fat_fs_info_t *fs_info)
+{
+    int rc = RC_OK;
+
+    rc = fat_fat32_update_fsinfo_sector(fs_info);
+    if ( rc != RC_OK )
+        rc = -1;
+
+    fat_buf_release(fs_info);
+
+    if (rtems_bdbuf_syncdev(fs_info->vol.dd) != RTEMS_SUCCESSFUL)
+        rc = -1;
+
+    return rc;
+}
+
 /* fat_shutdown_drive --
  *     Free all allocated resources and synchronize all necessary data
  *
@@ -661,17 +726,8 @@ fat_shutdown_drive(fat_fs_info_t *fs_info)
     int            rc = RC_OK;
     int            i = 0;
 
-    if (fs_info->vol.type & FAT_FAT32)
-    {
-        rc = fat_fat32_update_fsinfo_sector(fs_info, fs_info->vol.free_cls,
-                                            fs_info->vol.next_cl);
-        if ( rc != RC_OK )
-            rc = -1;
-    }
-
-    fat_buf_release(fs_info);
-
-    if (rtems_bdbuf_syncdev(fs_info->vol.dd) != RTEMS_SUCCESSFUL)
+    rc = fat_sync(fs_info);
+    if ( rc != RC_OK )
         rc = -1;
 
     for (i = 0; i < FAT_HASH_SIZE; i++)
@@ -848,47 +904,4 @@ fat_ino_is_unique(
 {
 
     return (ino >= fs_info->uino_base);
-}
-
-/* fat_fat32_update_fsinfo_sector --
- *     Synchronize fsinfo sector for FAT32 volumes
- *
- * PARAMETERS:
- *     fs_info    - FS info
- *     free_count - count of free clusters
- *     next_free  - the next free cluster num
- *
- * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
- */
-int
-fat_fat32_update_fsinfo_sector(
-    fat_fs_info_t                        *fs_info,
-    uint32_t                              free_count,
-    uint32_t                              next_free
-    )
-{
-    ssize_t                 ret1 = 0, ret2 = 0;
-    uint32_t                le_free_count = 0;
-    uint32_t                le_next_free = 0;
-
-    le_free_count = CT_LE_L(free_count);
-    le_next_free = CT_LE_L(next_free);
-
-    ret1 = _fat_block_write(fs_info,
-                            fs_info->vol.info_sec,
-                            FAT_FSINFO_FREE_CLUSTER_COUNT_OFFSET,
-                            4,
-                            (char *)(&le_free_count));
-
-    ret2 = _fat_block_write(fs_info,
-                            fs_info->vol.info_sec,
-                            FAT_FSINFO_NEXT_FREE_CLUSTER_OFFSET,
-                            4,
-                            (char *)(&le_next_free));
-
-    if ( (ret1 < 0) || (ret2 < 0) )
-        return -1;
-
-    return RC_OK;
 }

@@ -290,7 +290,7 @@ msdos_file_sync(rtems_libio_t *iop)
         return rc;
     }
 
-    rc = msdos_sync_unprotected(fs_info);
+    rc = fat_sync(&fs_info->fat);
 
     rtems_semaphore_release(fs_info->vol_sema);
     return RC_OK;
