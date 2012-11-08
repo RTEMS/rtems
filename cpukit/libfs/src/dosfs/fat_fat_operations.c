@@ -130,7 +130,7 @@ fat_scan_fat_for_free_clusters(
             if (*cls_added == count)
             {
                     fs_info->vol.next_cl = save_cln;
-                    if (fs_info->vol.free_cls != 0xFFFFFFFF)
+                    if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
                         fs_info->vol.free_cls -= (*cls_added);
                 *last_cl = save_cln;
                 fat_buf_release(fs_info);
@@ -144,7 +144,7 @@ fat_scan_fat_for_free_clusters(
     }
 
         fs_info->vol.next_cl = save_cln;
-        if (fs_info->vol.free_cls != 0xFFFFFFFF)
+        if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
             fs_info->vol.free_cls -= (*cls_added);
 
     *last_cl = save_cln;

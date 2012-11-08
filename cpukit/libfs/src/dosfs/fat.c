@@ -576,8 +576,8 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
 
                 vol->free_cls = FAT_GET_FSINFO_FREE_CLUSTER_COUNT(fs_info_sector);
                 vol->next_cl = FAT_GET_FSINFO_NEXT_FREE_CLUSTER(fs_info_sector);
-                rc = fat_fat32_update_fsinfo_sector(fs_info, 0xFFFFFFFF,
-                                                    0xFFFFFFFF);
+                rc = fat_fat32_update_fsinfo_sector(fs_info, FAT_UNDEFINED_VALUE,
+                                                    FAT_UNDEFINED_VALUE);
                 if ( rc != RC_OK )
                 {
                     _fat_block_release(fs_info);
@@ -592,8 +592,8 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
         vol->rdir_cl = 0;
         vol->mirror = 0;
         vol->afat = 0;
-        vol->free_cls = 0xFFFFFFFF;
-        vol->next_cl = 0xFFFFFFFF;
+        vol->free_cls = FAT_UNDEFINED_VALUE;
+        vol->next_cl = FAT_UNDEFINED_VALUE;
     }
 
     _fat_block_release(fs_info);
