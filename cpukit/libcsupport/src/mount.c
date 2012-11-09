@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2010 embedded brains GmbH.
+ *  Copyright (c) 2010-2012 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -73,9 +73,11 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
     mt_entry->type = str;
     str += filesystemtype_size;
 
-    memcpy( str, source_or_null, source_size );
-    mt_entry->dev = str;
-    str += source_size;
+    if ( source_or_null != NULL ) {
+      memcpy( str, source_or_null, source_size );
+      mt_entry->dev = str;
+      str += source_size;
+    }
 
     memcpy( str, target, target_size );
     mt_entry->target = str;
