@@ -97,6 +97,42 @@ typedef enum {
  *  This structure is used to hold per core state information.
  */
 typedef struct {
+  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
+      (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
+    /**
+     * This contains a pointer to the lower range of the interrupt stack for
+     * this CPU.  This is the address allocated and freed.
+     */
+    void  *interrupt_stack_low;
+
+    /**
+     * This contains a pointer to the interrupt stack pointer for this CPU.
+     * It will be loaded at the beginning on an ISR.
+     */
+    void  *interrupt_stack_high;
+  #endif
+
+  /**
+   *  This contains the current interrupt nesting level on this
+   *  CPU.
+   */
+  uint32_t isr_nest_level;
+
+  /** This is set to true when this CPU needs to run the dispatcher. */
+  volatile bool dispatch_necessary;
+
+  /** This is the thread executing on this CPU. */
+  Thread_Control *executing;
+
+  /** This is the heir thread for this this CPU. */
+  Thread_Control *heir;
+
+  /** This is the idle thread for this CPU. */
+  Thread_Control *idle;
+
+  /** This is the time of the last context switch on this CPU. */
+  Timestamp_Control time_of_last_context_switch;
+
   #if defined(RTEMS_SMP)
     /** This element is used to lock this structure */
     SMP_lock_spinlock_simple_Control  lock;
@@ -111,101 +147,47 @@ typedef struct {
      */
     uint32_t                          message;
   #endif
-
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
-    (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  /**
-   * This contains a pointer to the lower range of the interrupt stack for
-   * this CPU.  This is the address allocated and freed.
-   */
-  void  *interrupt_stack_low;
-
-  /**
-   * This contains a pointer to the interrupt stack pointer for this CPU.
-   * It will be loaded at the beginning on an ISR.
-   */
-  void  *interrupt_stack_high;
-#endif
-
-  /**
-   *  This contains the current interrupt nesting level on this
-   *  CPU.
-   */
-  uint32_t isr_nest_level;
-
-  /** This is the thread executing on this CPU. */
-  Thread_Control *executing;
-
-  /** This is the heir thread for this this CPU. */
-  Thread_Control *heir;
-
-  /** This is the idle thread for this CPU. */
-  Thread_Control *idle;
-
-  /** This is set to true when this CPU needs to run the dispatcher. */
-  volatile bool dispatch_necessary;
-
-  /** This is the time of the last context switch on this CPU. */
-  Timestamp_Control time_of_last_context_switch;
 } Per_CPU_Control;
 #endif
 
-#ifdef ASM
-#if defined(RTEMS_SMP)
-  #define PER_CPU_LOCK     0
-  #define PER_CPU_STATE    (1 * __RTEMS_SIZEOF_VOID_P__)
-  #define PER_CPU_MESSAGE  (2 * __RTEMS_SIZEOF_VOID_P__)
-  #define PER_CPU_END_SMP  (3 * __RTEMS_SIZEOF_VOID_P__)
-#else
-  #define PER_CPU_END_SMP  0
-#endif
+#if defined(ASM)
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
     (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   /*
    *  If this CPU target lets RTEMS allocates the interrupt stack, then
-   *  we need to have places in the per cpu table to hold them.
+   *  we need to have places in the per CPU table to hold them.
    */
-  #define PER_CPU_INTERRUPT_STACK_LOW   PER_CPU_END_SMP
-  #define PER_CPU_INTERRUPT_STACK_HIGH  \
-          PER_CPU_INTERRUPT_STACK_LOW + (1 * __RTEMS_SIZEOF_VOID_P__)
+  #define PER_CPU_INTERRUPT_STACK_LOW \
+    0
+  #define PER_CPU_INTERRUPT_STACK_HIGH \
+    PER_CPU_INTERRUPT_STACK_LOW + __RTEMS_SIZEOF_VOID_P__
   #define PER_CPU_END_STACK             \
-          PER_CPU_INTERRUPT_STACK_HIGH + (1 * __RTEMS_SIZEOF_VOID_P__)
+    PER_CPU_INTERRUPT_STACK_HIGH + __RTEMS_SIZEOF_VOID_P__
+
+  #define INTERRUPT_STACK_LOW \
+    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
+  #define INTERRUPT_STACK_HIGH \
+    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
 #else
-  #define PER_CPU_END_STACK             PER_CPU_END_SMP
+  #define PER_CPU_END_STACK \
+    0
 #endif
 
 /*
  *  These are the offsets of the required elements in the per CPU table.
  */
 #define PER_CPU_ISR_NEST_LEVEL \
-          PER_CPU_END_STACK + 0
-#define PER_CPU_EXECUTING \
-          PER_CPU_END_STACK + (1 * __RTEMS_SIZEOF_VOID_P__)
-#define PER_CPU_HEIR \
-          PER_CPU_END_STACK + (2 * __RTEMS_SIZEOF_VOID_P__)
-#define PER_CPU_IDLE \
-          PER_CPU_END_STACK + (3 * __RTEMS_SIZEOF_VOID_P__)
+  PER_CPU_END_STACK
 #define PER_CPU_DISPATCH_NEEDED \
-	  PER_CPU_END_STACK + (4 * __RTEMS_SIZEOF_VOID_P__)
+  PER_CPU_ISR_NEST_LEVEL + 4
 
 #define ISR_NEST_LEVEL \
-         (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
+  (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
 #define DISPATCH_NEEDED \
-	 (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
+  (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
 
-/*
- * Do not define these offsets if they are not in the table.
- */
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
-    (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  #define INTERRUPT_STACK_LOW \
-      (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
-  #define INTERRUPT_STACK_HIGH \
-      (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
-#endif
-
-#endif
+#endif /* defined(ASM) */
 
 #ifndef ASM
 
