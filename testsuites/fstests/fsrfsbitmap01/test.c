@@ -446,79 +446,56 @@ static void rtems_rfs_bitmap_unit_test (void)
 
 static void nullpointer_test(void){
 
-  rtems_rfs_bitmap_control* control=NULL;
-  rtems_rfs_bitmap_control  notnullcontrol;
+  rtems_rfs_bitmap_control control;
   rtems_rfs_bitmap_bit  bit = 0;
   rtems_rfs_bitmap_bit  seed_bit = 0;
   int rc;
   bool result;
 
-  printf("\n Testing bitmap_map functions with NULL bitmap control "
-         "pointer\n");
-  /* Invoke all functions with NULL control */
-  rc = rtems_rfs_bitmap_map_set(control, bit);
-  rtems_test_assert(rc>0);
-  rc = rtems_rfs_bitmap_map_clear(control, bit);
-  rtems_test_assert(rc>0);
-  rc = rtems_rfs_bitmap_map_test(control, bit, &result);
-  rtems_test_assert(rc>0);
-  rc = rtems_rfs_bitmap_map_set_all(control);
-  rtems_test_assert(rc>0);
-  rc = rtems_rfs_bitmap_map_clear_all(control);
-  rtems_test_assert(rc>0);
-  rc = rtems_rfs_bitmap_create_search(control);
-  rtems_test_assert(rc>0);
-  rc = rtems_rfs_bitmap_map_alloc(control, seed_bit, &result, &bit);
+  memset(&control, 0, sizeof(control));
+
+  printf ("\n Testing bitmap_map functions with zero "
+            "initialized bitmap control pointer\n");
+
+  /* Invoke all functions with control initialized to zero */
+  rc = rtems_rfs_bitmap_map_set(&control, bit);
+  rtems_test_assert(rc == ENXIO);
+  rc = rtems_rfs_bitmap_map_clear(&control, bit);
+  rtems_test_assert(rc == ENXIO);
+  rc = rtems_rfs_bitmap_map_test(&control, bit, &result);
+  rtems_test_assert(rc == ENXIO);
+  rc = rtems_rfs_bitmap_map_set_all(&control);
+  rtems_test_assert(rc == ENXIO);
+  rc = rtems_rfs_bitmap_map_clear_all(&control);
+  rtems_test_assert(rc == ENXIO);
+  rc = rtems_rfs_bitmap_create_search(&control);
+  rtems_test_assert(rc == ENXIO);
+  rc = rtems_rfs_bitmap_map_alloc(&control, seed_bit, &result, &bit);
+  rtems_test_assert(rc == 0);
   rtems_test_assert(!result);
-  /*
-   * Invoke map_alloc with not-null pointer to control, but with
-   * control uninitialized. It is to cover check in rtems_rfs_bitmap_load_map.
-   * We can't check directly if it goes this path, but we will see this in
-   * coverage
-   */
-  rc = rtems_rfs_bitmap_map_set(&notnullcontrol, bit);
-  rtems_test_assert(rc > 0);
+  rc = rtems_rfs_bitmap_map_set(&control, bit);
+  rtems_test_assert(rc == ENXIO);
 }
 
 static void open_failure(void){
 
-  rtems_rfs_file_system    fs;
-  rtems_rfs_bitmap_control control;
-  rtems_rfs_buffer_handle  handle;
-  rtems_rfs_buffer         buffer;
-  size_t                   bytes;
-  int                      rc;
+  rtems_rfs_file_system     fs;
+  rtems_rfs_bitmap_control  control;
+  rtems_rfs_buffer_handle   handle;
+  int                       rc;
+  void                     *opaque;
 
   /* Attempt to get ENOMEM while open bitmap */
   printf("\n Allocate most of memory - attempt to fail while open bitmap - expect ENOMEM\n" );
-  void *opaque;
-  static const uintptr_t location_size [] = {
-    sizeof(rtems_filesystem_global_location_t)
-  };
 
-  size_t size = location_size[0]*rtems_rfs_bitmap_search_element_bits();
-  bytes = (rtems_rfs_bitmap_elements (size) *
-           sizeof (rtems_rfs_bitmap_element));
-
-  opaque = rtems_heap_greedy_allocate( location_size, 1 );
+  opaque = rtems_heap_greedy_allocate( NULL, 0 );
 
   memset (&fs, 0, sizeof (fs));
-  memset (&buffer, 0, sizeof (buffer));
-
-  buffer.buffer = malloc (bytes);
-  buffer.block = 1;
-
-#if RTEMS_RFS_BITMAP_CLEAR_ZERO
-  memset (buffer.buffer, 0, bytes);
-#else
-  memset (buffer.buffer, 0xff, bytes);
-#endif
 
   rc = rtems_rfs_buffer_handle_open (&fs, &handle);
-  handle.buffer = &buffer;
-  handle.bnum = 1;
+  rtems_test_assert( rc == 0 );
 
-  rc = rtems_rfs_bitmap_open (&control, &fs, &handle, size, 1);
+  rc = rtems_rfs_bitmap_open (&control, &fs, &handle, 0, 0);
   rtems_test_assert( rc == ENOMEM );
   printf( " Attempt to open bitmap returned: %s\n", strerror(rc));
   puts( " Freeing the allocated memory" );

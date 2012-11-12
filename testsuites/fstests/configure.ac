@@ -105,7 +105,7 @@ mrfs_fsrdwr/Makefile
 mrfs_fssymlink/Makefile
 mrfs_fstime/Makefile
 mrfs_fsfpathconf/Makefile
-mrfs_fsrfsbitmap01/Makefile
+fsrfsbitmap01/Makefile
 fsnofs01/Makefile
 fsimfsgeneric01/Makefile
 fsbdpart01/Makefile

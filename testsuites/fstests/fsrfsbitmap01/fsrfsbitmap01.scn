@@ -129,7 +129,7 @@ RFS Bitmap Test : size = 420 (14)
  33. Attempt to find bit when all bits are set (expected FAILED): FAILED
  34. Clear all bits in the map.
 
- Testing bitmap_map functions with NULL bitmap control pointer
+ Testing bitmap_map functions with zero initialized bitmap control pointer
 
  Allocate most of memory - attempt to fail while open bitmap - expect ENOMEM
  Attempt to open bitmap returned: Not enough space
