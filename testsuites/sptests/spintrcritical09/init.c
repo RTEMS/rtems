@@ -15,16 +15,10 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
-Thread_blocking_operation_States getState(void);
+static rtems_id Semaphore;
+static bool case_hit;
 
-rtems_id Main_task;
-rtems_id Semaphore;
-volatile bool case_hit;
-
-Thread_blocking_operation_States getState(void)
+static Thread_blocking_operation_States getState(void)
 {
   Objects_Locations  location;
   Semaphore_Control *sem;
@@ -40,17 +34,33 @@ Thread_blocking_operation_States getState(void)
   return sem->Core_control.semaphore.Wait_queue.sync_state;
 }
 
-rtems_timer_service_routine test_release_from_isr(
+static rtems_timer_service_routine test_release_from_isr(
   rtems_id  timer,
   void     *arg
 )
 {
-  if ( getState() == THREAD_BLOCKING_OPERATION_TIMEOUT ) {
-    case_hit = true;
+  Chain_Control *chain = &_Watchdog_Ticks_chain;
+
+  if ( !_Chain_Is_empty( chain ) ) {
+    Watchdog_Control *watchdog = _Watchdog_First( chain );
+
+    if (
+      watchdog->delta_interval == 0
+        && watchdog->routine == _Thread_queue_Timeout
+    ) {
+      Watchdog_States state = _Watchdog_Remove( watchdog );
+
+      rtems_test_assert( state == WATCHDOG_ACTIVE );
+      (*watchdog->routine)( watchdog->id, watchdog->user_data );
+
+      if ( getState() == THREAD_BLOCKING_OPERATION_TIMEOUT ) {
+        case_hit = true;
+      }
+    }
   }
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {
@@ -63,14 +73,12 @@ rtems_task Init(
   puts( "Init - Trying to generate timeout from ISR while blocking" );
   sc = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', ' ' ),
-    1,
+    0,
     RTEMS_DEFAULT_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
     &Semaphore
   );
   directive_failed( sc, "rtems_semaphore_create of SM1" );
-
-  Main_task = rtems_task_self();
 
   interrupt_critical_section_test_support_initialize( test_release_from_isr );
 
@@ -97,7 +105,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS       2
+#define CONFIGURE_MAXIMUM_TASKS       1
 #define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MAXIMUM_SEMAPHORES  1
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
