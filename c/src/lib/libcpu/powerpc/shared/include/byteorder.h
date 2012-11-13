@@ -21,35 +21,31 @@
 extern "C" {
 #endif
 
-#ifdef __GNUC__
-
-extern __inline__ unsigned ld_le16(volatile uint16_t *addr)
+static inline unsigned ld_le16(volatile uint16_t *addr)
 {
 	unsigned val;
 
-	__asm__ __volatile__ ("lhbrx %0,0,%1" : "=r" (val) : "r" (addr), "m" (*addr));
+	__asm__ volatile ("lhbrx %0,0,%1" : "=r" (val) : "r" (addr), "m" (*addr));
 	return val;
 }
 
-extern __inline__ void st_le16(volatile uint16_t *addr, unsigned val)
+static inline void st_le16(volatile uint16_t *addr, unsigned val)
 {
-	__asm__ __volatile__ ("sthbrx %1,0,%2" : "=m" (*addr) : "r" (val), "r" (addr));
+	__asm__ volatile ("sthbrx %1,0,%2" : "=m" (*addr) : "r" (val), "r" (addr));
 }
 
-extern __inline__ unsigned ld_le32(volatile uint32_t *addr)
+static inline unsigned ld_le32(volatile uint32_t *addr)
 {
 	unsigned val;
 
-	__asm__ __volatile__ ("lwbrx %0,0,%1" : "=r" (val) : "r" (addr), "m" (*addr));
+	__asm__ volatile ("lwbrx %0,0,%1" : "=r" (val) : "r" (addr), "m" (*addr));
 	return val;
 }
 
-extern __inline__ void st_le32(volatile uint32_t *addr, unsigned val)
+static inline void st_le32(volatile uint32_t *addr, unsigned val)
 {
-	__asm__ __volatile__ ("stwbrx %1,0,%2" : "=m" (*addr) : "r" (val), "r" (addr));
+	__asm__ volatile ("stwbrx %1,0,%2" : "=m" (*addr) : "r" (val), "r" (addr));
 }
-
-#endif /* __GNUC__ */
 
 #ifdef __cplusplus
 }
