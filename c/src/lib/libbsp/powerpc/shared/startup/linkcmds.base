@@ -51,15 +51,6 @@ SECTIONS {
 		. = ALIGN (bsp_section_xbarrier_align);
 	} > REGION_TEXT
 
-	.fast_text : {
-		bsp_section_fast_text_begin = .;
-		*(.bsp_fast_text)
-		bsp_section_fast_text_end = .;
-	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
-	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
-	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
-	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
-
 	.text : {
 		bsp_section_text_begin = .;
 		*(.text.unlikely .text.*_unlikely)
@@ -78,6 +69,15 @@ SECTIONS {
 	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
 	bsp_section_text_load_begin = LOADADDR (.text);
 	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
+
+	.fast_text : {
+		bsp_section_fast_text_begin = .;
+		*(.bsp_fast_text)
+		bsp_section_fast_text_end = .;
+	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
+	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
+	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
+	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
 
 	.robarrier : {
 		. = ALIGN (bsp_section_robarrier_align);
