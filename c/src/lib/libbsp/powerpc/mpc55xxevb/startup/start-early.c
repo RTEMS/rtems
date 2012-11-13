@@ -20,8 +20,6 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <bsp/start.h>
 #include <bsp/mpc55xx-config.h>
 #include <bsp/linker-symbols.h>
 

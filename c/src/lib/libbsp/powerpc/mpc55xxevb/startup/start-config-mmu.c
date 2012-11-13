@@ -20,12 +20,9 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <bsp/start.h>
 #include <bsp/mpc55xx-config.h>
 
-BSP_START_TEXT_SECTION const struct MMU_tag
-  mpc55xx_start_config_mmu [] = {
+const struct MMU_tag mpc55xx_start_config_mmu [] = {
 #if defined(MPC55XX_BOARD_GWLCFM)
   /* External Ethernet Controller 64k */
   MPC55XX_MMU_TAG_INITIALIZER(5, 0x3fff8000, MPC55XX_MMU_64K, 0, 1, 1, 1)
@@ -120,6 +117,6 @@ BSP_START_TEXT_SECTION const struct MMU_tag
 #endif
 };
 
-BSP_START_TEXT_SECTION const size_t mpc55xx_start_config_mmu_count [] = {
+const size_t mpc55xx_start_config_mmu_count [] = {
   sizeof(mpc55xx_start_config_mmu) / sizeof(mpc55xx_start_config_mmu [0])
 };

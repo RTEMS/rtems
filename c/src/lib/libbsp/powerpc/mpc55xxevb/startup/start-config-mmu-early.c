@@ -20,11 +20,9 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <bsp/start.h>
 #include <bsp/mpc55xx-config.h>
 
-BSP_START_TEXT_SECTION const struct MMU_tag
-  mpc55xx_start_config_mmu_early [] = {
+const struct MMU_tag mpc55xx_start_config_mmu_early [] = {
 #if defined(MPC55XX_BOARD_MPC5674F_ECU508) \
   && !defined(MPC55XX_NEEDS_LOW_LEVEL_INIT)
   /* Used as cache-inhibited area later (ADC, DSPI queues) */
@@ -51,7 +49,7 @@ BSP_START_TEXT_SECTION const struct MMU_tag
 #endif
 };
 
-BSP_START_TEXT_SECTION const size_t mpc55xx_start_config_mmu_early_count [] = {
+const size_t mpc55xx_start_config_mmu_early_count [] = {
   sizeof(mpc55xx_start_config_mmu_early)
     / sizeof(mpc55xx_start_config_mmu_early [0])
 };

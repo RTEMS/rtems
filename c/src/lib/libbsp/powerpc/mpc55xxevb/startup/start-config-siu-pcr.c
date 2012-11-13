@@ -21,11 +21,8 @@
  */
 
 #include <bsp/mpc55xx-config.h>
-#include <bsp/start.h>
-#include <bsp.h>
 
-BSP_START_TEXT_SECTION const mpc55xx_siu_pcr_config
-  mpc55xx_start_config_siu_pcr [] = {
+const mpc55xx_siu_pcr_config mpc55xx_start_config_siu_pcr [] = {
 #if defined(MPC55XX_BOARD_GWLCFM)
   {  0,16, 0, {.B.PA = 1,           .B.WPE = 0}}, /* PA[ 0..15] analog input */
   { 16, 4, 0, {.B.PA = 0,.B.OBE = 1,.B.WPE = 0}}, /* PB[ 0.. 4] LED/CAN_STBN out */
@@ -133,6 +130,6 @@ BSP_START_TEXT_SECTION const mpc55xx_siu_pcr_config
 #endif
 };
 
-BSP_START_TEXT_SECTION const size_t mpc55xx_start_config_siu_pcr_count [] = {
+const size_t mpc55xx_start_config_siu_pcr_count [] = {
   sizeof(mpc55xx_start_config_siu_pcr) / sizeof(mpc55xx_start_config_siu_pcr [0])
 };

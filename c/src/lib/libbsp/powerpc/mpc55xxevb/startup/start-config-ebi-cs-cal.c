@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -21,13 +21,10 @@
  */
 
 #include <bsp/mpc55xx-config.h>
-#include <bsp/start.h>
-#include <bsp.h>
 
 #ifdef MPC55XX_HAS_EBI
 
-BSP_START_TEXT_SECTION const struct EBI_CAL_CS_tag
-  mpc55xx_start_config_ebi_cal_cs [] = {
+const struct EBI_CAL_CS_tag mpc55xx_start_config_ebi_cal_cs [] = {
 #if defined(MPC55XX_BOARD_MPC5674FEVB)
   /* External SRAM */
   {
@@ -175,7 +172,7 @@ BSP_START_TEXT_SECTION const struct EBI_CAL_CS_tag
 #endif
 };
 
-BSP_START_TEXT_SECTION const size_t mpc55xx_start_config_ebi_cal_cs_count [] = {
+const size_t mpc55xx_start_config_ebi_cal_cs_count [] = {
   sizeof(mpc55xx_start_config_ebi_cal_cs) / sizeof(mpc55xx_start_config_ebi_cal_cs [0])
 };
 

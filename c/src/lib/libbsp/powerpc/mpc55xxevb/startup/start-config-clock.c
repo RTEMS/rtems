@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -22,8 +22,7 @@
 
 #include <bsp/mpc55xx-config.h>
 
-BSP_START_TEXT_SECTION const mpc55xx_clock_config
-  mpc55xx_start_config_clock [1] = { {
+const mpc55xx_clock_config mpc55xx_start_config_clock [1] = { {
   #ifdef MPC55XX_HAS_FMPLL
     .syncr_tmp = {
       .B = {
