@@ -129,7 +129,7 @@ constants, usage, and status codes.
 @ifset is-C
 @findex rtems_fatal_error_occurred
 @example
-void volatile rtems_fatal_error_occurred(
+void rtems_fatal_error_occurred(
   uint32_t  the_error
 );
 @end example
@@ -167,3 +167,30 @@ NOT RETURN to the caller.
 
 The user-defined extension for this directive may
 wish to initiate a global shutdown.
+
+@c
+@c
+@c
+@page
+@subsection INTERNAL_ERROR_DESCRIPTION - Returns a description for an internal error code
+
+@cindex fatal error
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_internal_error_description
+@example
+const char *rtems_internal_error_description(
+  rtems_fatal_code error
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+The error code description or "?" in case the passed error code is invalid.
+
+@subheading DESCRIPTION:
+
+Returns a description for an internal error code.

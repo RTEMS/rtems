@@ -31,6 +31,7 @@ SUBDIRS = \
 SUBDIRS += speventtransient01
 SUBDIRS += speventsystem01
 SUBDIRS += spinternalerror01
+SUBDIRS += spinternalerror02
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

@@ -23,6 +23,7 @@
 #define _RTEMS_FATAL_H
 
 #include <rtems/score/basedefs.h> /* RTEMS_COMPILER_NO_RETURN_ATTRIBUTE */
+#include <rtems/extension.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,6 +42,16 @@ extern "C" {
 void rtems_fatal_error_occurred(
   uint32_t   the_error
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+/**
+ * @brief Returns a description for an internal error code.
+ *
+ * @param[in] error The error code.
+ *
+ * @return The error code description or "?" in case the passed error code is
+ * invalid.
+ */
+const char *rtems_internal_error_description( rtems_fatal_code error );
 
 #ifdef __cplusplus
 }

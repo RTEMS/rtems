@@ -26,49 +26,6 @@ void BSP_panic(char *s)
 #define ISITNL _Internal_errors_What_happened.is_internal
 #define THEERR _Internal_errors_What_happened.the_error
 
-char *score_status_text(rtems_status_code sc)
-{
-  switch (sc) {
-    case INTERNAL_ERROR_NO_CONFIGURATION_TABLE:
-      return "INTERNAL_ERROR_NO_CONFIGURATION_TABLE";
-    case INTERNAL_ERROR_NO_CPU_TABLE:
-      return "INTERNAL_ERROR_NO_CPU_TABLE";
-    case INTERNAL_ERROR_TOO_LITTLE_WORKSPACE:
-      return "INTERNAL_ERROR_TOO_LITTLE_WORKSPACE";
-    case INTERNAL_ERROR_WORKSPACE_ALLOCATION:
-      return "INTERNAL_ERROR_WORKSPACE_ALLOCATION";
-    case INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL:
-      return "INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL";
-    case INTERNAL_ERROR_THREAD_EXITTED:
-      return "INTERNAL_ERROR_THREAD_EXITTED";
-    case INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION:
-      return "INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION";
-    case INTERNAL_ERROR_INVALID_NODE:
-      return "INTERNAL_ERROR_INVALID_NODE";
-    case INTERNAL_ERROR_NO_MPCI:
-      return "INTERNAL_ERROR_NO_MPCI";
-    case INTERNAL_ERROR_BAD_PACKET:
-      return "INTERNAL_ERROR_BAD_PACKET";
-    case INTERNAL_ERROR_OUT_OF_PACKETS:
-      return "INTERNAL_ERROR_OUT_OF_PACKETS";
-    case INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS:
-      return "INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS";
-    case INTERNAL_ERROR_OUT_OF_PROXIES:
-      return "INTERNAL_ERROR_OUT_OF_PROXIES";
-    case INTERNAL_ERROR_INVALID_GLOBAL_ID:
-      return "INTERNAL_ERROR_INVALID_GLOBAL_ID";
-    case INTERNAL_ERROR_BAD_STACK_HOOK:
-      return "INTERNAL_ERROR_BAD_STACK_HOOK";
-    case INTERNAL_ERROR_BAD_ATTRIBUTES:
-      return "INTERNAL_ERROR_BAD_ATTRIBUTES";
-    case 18: /* not in header (yet) :-( */
-      return "INTERNAL_ERROR_CALLED_FROM_WRONG_ENVIRONMENT";
-    default:
-      break;
-  }
-  return 0;
-}
-
 void _BSP_Fatal_error(unsigned int v)
 {
   unsigned long flags;
@@ -82,7 +39,7 @@ void _BSP_Fatal_error(unsigned int v)
   switch (THESRC) {
     case INTERNAL_ERROR_CORE:
       printk(" RTEMS Core\n");
-      err = score_status_text(THEERR);
+      err = rtems_internal_error_description(THEERR);
     break;
 
       case INTERNAL_ERROR_RTEMS_API:

@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spinternalerror02
+
+directives:
+
+  rtems_internal_error_description()
+
+concepts:
+
+  - Ensure that rtems_internal_error_description() works for some values.
