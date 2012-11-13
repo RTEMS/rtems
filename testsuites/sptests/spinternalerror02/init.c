@@ -33,7 +33,7 @@ static void test(void)
     puts( desc );
   } while ( desc != desc_last );
 
-  rtems_test_assert( error - 3 == INTERNAL_ERROR_NO_MEMORY_FOR_HEAP );
+  rtems_test_assert( error - 3 == INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR );
 }
 
 static void Init(rtems_task_argument arg)
