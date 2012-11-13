@@ -135,14 +135,21 @@ static int mpc55xx_external_exception_handler( BSP_Exception_frame *frame, unsig
 	return 0;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize()
+rtems_status_code bsp_interrupt_facility_initialize(void)
 {
+	rtems_vector_number vector;
+
 	/* Install exception handler */
 	if (ppc_exc_set_handler( ASM_EXT_VECTOR, mpc55xx_external_exception_handler)) {
 		return RTEMS_IO_ERROR;
 	}
 
 	/* Initialize interrupt controller */
+
+	/* Disable all interrupts */
+	for (vector = MPC55XX_IRQ_MIN; vector <= MPC55XX_IRQ_MAX; ++vector) {
+		INTC.PSR [vector].B.PRI = MPC55XX_INTC_DISABLED_PRIORITY;
+	}
 
 	/* Software vector mode */
 	INTC.MCR.B.VTES = 0;
