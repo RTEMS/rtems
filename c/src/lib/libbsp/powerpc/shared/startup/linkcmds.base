@@ -53,6 +53,7 @@ SECTIONS {
 
 	.text : {
 		bsp_section_text_begin = .;
+		*(SORT(.bsp_text*))
 		*(.text.unlikely .text.*_unlikely)
 		*(.text .stub .text.* .gnu.linkonce.t.*)
 		*(.gnu.warning)

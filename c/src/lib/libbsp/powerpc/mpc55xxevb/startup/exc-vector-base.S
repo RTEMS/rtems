@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -32,7 +32,7 @@
 
 	.globl mpc55xx_exc_vector_base
 
-	.section ".bsp_start_data", "ax"
+	.section ".bsp_text", "ax"
 
 #if 5510 <= MPC55XX_CHIP_TYPE && MPC55XX_CHIP_TYPE <= 5517
 	.align 12
