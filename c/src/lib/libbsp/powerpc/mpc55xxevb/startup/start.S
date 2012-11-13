@@ -174,10 +174,14 @@ _start:
 	LWI	r3, FSL_EIS_BUCSR_BBFI | FSL_EIS_BUCSR_BPEN
 	mtspr	FSL_EIS_BUCSR, r3
 
+#endif /* MPC55XX_NEEDS_LOW_LEVEL_INIT */
+
 	/* MMU early initialization */
 	LA	r3, mpc55xx_start_config_mmu_early
 	LW	r4, mpc55xx_start_config_mmu_early_count
 	bl	mpc55xx_start_mmu_apply_config
+
+#ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
 
 	/* Initialize intermediate stack (ECC) */
 

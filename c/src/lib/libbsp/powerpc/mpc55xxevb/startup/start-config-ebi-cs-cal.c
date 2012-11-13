@@ -75,7 +75,8 @@ BSP_START_TEXT_SECTION const struct EBI_CAL_CS_tag
       }
     }
   }
-#elif defined(MPC55XX_BOARD_MPC5674F_ECU508)
+#elif defined(MPC55XX_BOARD_MPC5674F_ECU508) \
+  && defined(MPC55XX_NEEDS_LOW_LEVEL_INIT)
   /* D_CS0 for external SRAM */
   {
     .BR = {
