@@ -945,17 +945,6 @@ void _CPU_ISR_install_vector(
 );
 
 /*
- *  _CPU_Install_interrupt_stack
- *
- *  This routine installs the hardware interrupt stack pointer.
- *
- *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
- *         is TRUE.
- */
-
-void _CPU_Install_interrupt_stack( void );
-
-/*
  *  _CPU_Context_switch
  *
  *  This routine switches from the run context to the heir context.

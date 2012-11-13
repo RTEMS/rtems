@@ -133,15 +133,6 @@ void _CPU_Context_Initialize(
 #endif
 }
 
-/*PAGE
- *
- *  _CPU_Install_interrupt_stack
- */
-
-void _CPU_Install_interrupt_stack( void )
-{
-}
-
 /*  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
