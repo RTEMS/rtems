@@ -18,6 +18,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
