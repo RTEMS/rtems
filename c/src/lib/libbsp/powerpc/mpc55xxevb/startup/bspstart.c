@@ -130,10 +130,7 @@ void bsp_start(void)
 	ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
 	/* Initialize interrupts */
-	sc = bsp_interrupt_initialize();
-	if (sc != RTEMS_SUCCESSFUL) {
-		BSP_panic( "Cannot initialize interrupts");
-	}
+	bsp_interrupt_initialize();
 
 	mpc55xx_edma_init();
 	#ifdef MPC55XX_EMIOS_PRESCALER

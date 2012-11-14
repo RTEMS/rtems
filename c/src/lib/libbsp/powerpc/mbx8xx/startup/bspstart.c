@@ -123,10 +123,7 @@ void bsp_start(void)
   }
 
   /* Initalize interrupt support */
-  sc = bsp_interrupt_initialize();
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    BSP_panic( "cannot initialize interrupts" );
-  }
+  bsp_interrupt_initialize();
 
   /*
    *  initialize the device driver parameters

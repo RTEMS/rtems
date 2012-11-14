@@ -51,6 +51,13 @@ extern "C" {
  */
 
 /**
+ * @brief Generic BSP fatal error codes.
+ */
+typedef enum {
+  BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION
+} bsp_generic_fatal_code;
+
+/**
  * @brief Global pointer to the command line of boot_card().
  */
 extern const char *bsp_boot_cmdline;

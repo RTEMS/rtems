@@ -25,7 +25,7 @@ static void BSP_ISR_handler(rtems_vector_number vector)
 }
 
 /* Initialize interrupts */
-int BSP_shared_interrupt_init(void)
+void BSP_shared_interrupt_init(void)
 {
        rtems_vector_number vector;
        rtems_isr_entry previous_isr;
@@ -37,11 +37,7 @@ int BSP_shared_interrupt_init(void)
        }
 
        /* Initalize interrupt support */
-       sc = bsp_interrupt_initialize();
-       if (sc != RTEMS_SUCCESSFUL)
-               return -1;
-
-       return 0;
+       bsp_interrupt_initialize();
 }
 
 /* Callback from bsp_interrupt_initialize() */

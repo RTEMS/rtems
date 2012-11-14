@@ -9,12 +9,13 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2008-2012 embedded brains GmbH.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -22,6 +23,7 @@
  */
 
 #include <bsp/irq-generic.h>
+#include <bsp/bootcard.h>
 
 #include <stdlib.h>
 
@@ -155,17 +157,10 @@ static void bsp_interrupt_unlock(void)
   }
 }
 
-rtems_status_code bsp_interrupt_initialize(void)
+void bsp_interrupt_initialize(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   size_t i = 0;
-
-  bsp_interrupt_lock();
-
-  if (bsp_interrupt_is_initialized()) {
-    bsp_interrupt_unlock();
-    return RTEMS_INTERNAL_ERROR;
-  }
 
   /* Initialize handler table */
   for (i = 0; i < BSP_INTERRUPT_HANDLER_TABLE_SIZE; ++i) {
@@ -175,15 +170,13 @@ rtems_status_code bsp_interrupt_initialize(void)
 
   sc = bsp_interrupt_facility_initialize();
   if (sc != RTEMS_SUCCESSFUL) {
-    bsp_interrupt_unlock();
-    return sc;
+    rtems_fatal(
+      RTEMS_FATAL_SOURCE_BSP_GENERIC,
+      BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION
+    );
   }
 
   bsp_interrupt_set_initialized();
-
-  bsp_interrupt_unlock();
-
-  return RTEMS_SUCCESSFUL;
 }
 
 /**

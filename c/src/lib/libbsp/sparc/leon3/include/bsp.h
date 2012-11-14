@@ -126,7 +126,7 @@ void *bsp_early_malloc(int size);
 typedef void (*bsp_shared_isr)(void *arg);
 
 /* Initializes the Shared System Interrupt service */
-extern int BSP_shared_interrupt_init(void);
+extern void BSP_shared_interrupt_init(void);
 
 /* Registers a shared IRQ handler, and enable it at IRQ controller. Multiple
  * interrupt handlers may use the same IRQ number, all ISRs will be called

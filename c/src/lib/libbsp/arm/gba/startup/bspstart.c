@@ -46,9 +46,7 @@ void bsp_start_default( void )
   /* rtems_exception_init_mngt(); */
 
   /* Init rtems interrupt management */
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    _CPU_Fatal_halt(0xe);
-  }
+  bsp_interrupt_initialize();
 }
 
 /**

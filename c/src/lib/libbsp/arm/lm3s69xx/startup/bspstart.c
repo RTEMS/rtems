@@ -20,7 +20,5 @@
 
 void bsp_start(void)
 {
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    _CPU_Fatal_halt(0xe);
-  }
+  bsp_interrupt_initialize();
 }

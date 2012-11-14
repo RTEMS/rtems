@@ -87,9 +87,7 @@ void bsp_start(void)
   initialize_console();
 
   /* Interrupts */
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    _CPU_Fatal_halt(0xe);
-  }
+  bsp_interrupt_initialize();
 
   /* DMA */
   lpc24xx_dma_initialize();

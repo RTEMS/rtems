@@ -158,13 +158,7 @@ void  rtems_irq_mngt_init(void)
     /*
      * Init initial Interrupt management config
      */
-    if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-      /*
-       * put something here that will show the failure...
-       */
-      printk("Unable to initialize RTEMS interrupt Management!!! System locked\n");
-      while (1);
-    }
+    bsp_interrupt_initialize();
 
     /*
      * #define DEBUG

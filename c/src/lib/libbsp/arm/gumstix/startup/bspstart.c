@@ -34,9 +34,7 @@ void bsp_start_default( void )
   /* disable interrupts */
   XSCALE_INT_ICMR = 0x0;
   rtems_exception_init_mngt();
-  if (bsp_interrupt_initialize() != RTEMS_SUCCESSFUL) {
-    _CPU_Fatal_halt(0xe);
-  }
+  bsp_interrupt_initialize();
 } /* bsp_start */
 
 /*

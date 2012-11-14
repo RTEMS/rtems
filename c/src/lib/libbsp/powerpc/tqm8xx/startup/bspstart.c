@@ -192,10 +192,7 @@ void bsp_start( void)
   }
 
   /* Initalize interrupt support */
-  sc = bsp_interrupt_initialize();
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot intitialize interrupts");
-  }
+  bsp_interrupt_initialize();
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");

@@ -184,10 +184,7 @@ void bsp_start(void)
   ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
   /* Initalize interrupt support */
-  sc = bsp_interrupt_initialize();
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot intitialize interrupts");
-  }
+  bsp_interrupt_initialize();
 
   /*
    *  If the BSP was built with IRQ benchmarking enabled,

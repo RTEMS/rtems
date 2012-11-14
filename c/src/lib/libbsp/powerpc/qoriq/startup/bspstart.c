@@ -126,10 +126,7 @@ void bsp_start(void)
   );
 
   /* Initalize interrupt support */
-  sc = bsp_interrupt_initialize();
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot intitialize interrupts\n");
-  }
+  bsp_interrupt_initialize();
 
   /* Disable boot page translation */
   qoriq.lcc.bptr &= ~BPTR_EN;
