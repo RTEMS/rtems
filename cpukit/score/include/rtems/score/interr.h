@@ -37,13 +37,21 @@ extern "C" {
 #endif
 
 /**
- *  This type lists the possible sources from which an error
+ *  @brief This type lists the possible sources from which an error
  *  can be reported.
  */
 typedef enum {
   INTERNAL_ERROR_CORE,
   INTERNAL_ERROR_RTEMS_API,
-  INTERNAL_ERROR_POSIX_API
+  INTERNAL_ERROR_POSIX_API,
+
+  /**
+   * @brief The last available fatal source.
+   *
+   * This enum value ensures that the enum type needs at least 32-bits for
+   * architectures with short enums.
+   */
+  RTEMS_FATAL_SOURCE_LAST = 0xffffffff
 } Internal_errors_Source;
 
 /**
