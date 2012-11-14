@@ -67,6 +67,16 @@ typedef enum {
   RTEMS_FATAL_SOURCE_EXIT,
 
   /**
+   * @brief Fatal source for generic BSP errors.
+   *
+   * The fatal codes are defined in <bsp/bootcard.h>.  Examples are interrupt
+   * and exception initialization.
+   *
+   * @see bsp_generic_fatal_code.
+   */
+  RTEMS_FATAL_SOURCE_BSP_GENERIC,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
