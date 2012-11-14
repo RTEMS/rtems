@@ -46,6 +46,13 @@ typedef enum {
   INTERNAL_ERROR_POSIX_API,
 
   /**
+   * @brief Fatal source for the block device cache.
+   *
+   * @see rtems_bdbuf_fatal_code.
+   */
+  RTEMS_FATAL_SOURCE_BDBUF,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
