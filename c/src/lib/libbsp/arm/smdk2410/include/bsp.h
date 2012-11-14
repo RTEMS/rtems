@@ -13,6 +13,7 @@
 #define _BSP_H
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #ifdef __cplusplus
 extern "C" {

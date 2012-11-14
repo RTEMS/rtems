@@ -32,6 +32,7 @@ extern "C" {
 #include <rtems/console.h>
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #define BSP_SMALL_MEMORY 1
 

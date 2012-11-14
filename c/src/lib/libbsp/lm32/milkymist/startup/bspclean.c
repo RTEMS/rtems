@@ -45,10 +45,19 @@ static void reconf(void)
   icap_write(0, 0xffff); /* dummy word */
 }
 
-void bsp_cleanup(uint32_t status)
+void bsp_fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code error
+)
 {
-  if (status)
+  if (source == RTEMS_FATAL_SOURCE_EXIT && error)
     reconf();
   else
     reboot();
+}
+
+void bsp_cleanup(uint32_t status)
+{
+  rtems_fatal(RTEMS_FATAL_SOURCE_EXIT, status);
 }

@@ -36,6 +36,8 @@ extern "C" {
 
 #include <bspopts.h>
 
+#define BSP_RESET_BOARD_AT_EXIT 1
+
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140
@@ -47,6 +49,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/iosupp.h>
 #include <bsp/vectors.h>
+#include <bsp/default-initial-extension.h>
 
 /* Constants */
 

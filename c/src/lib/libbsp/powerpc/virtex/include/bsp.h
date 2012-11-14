@@ -59,6 +59,7 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
+#include <bsp/default-initial-extension.h>
 
 /* miscellaneous stuff assumed to exist */
 extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */

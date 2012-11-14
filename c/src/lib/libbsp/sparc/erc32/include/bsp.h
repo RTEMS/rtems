@@ -25,6 +25,7 @@ extern "C" {
 #endif
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 #include <rtems/iosupp.h>
@@ -32,8 +33,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
-
-#include <bsp/default-initial-extension.h>
 
 /*
  *  BSP provides its own Idle thread body
@@ -52,6 +51,8 @@ extern int rtems_erc32_sonic_driver_attach(
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_erc32_sonic_driver_attach
 
 /* Constants */
+
+#define BSP_RESET_BOARD_AT_EXIT 1
 
 /*
  *  Information placed in the linkcmds file.

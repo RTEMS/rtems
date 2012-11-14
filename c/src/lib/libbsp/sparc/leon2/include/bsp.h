@@ -25,14 +25,13 @@ extern "C" {
 #endif
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 #include <leon.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
-
-#include <bsp/default-initial-extension.h>
 
 /* SPARC CPU variant: LEON2 */
 #define LEON2 1
@@ -72,6 +71,8 @@ extern int rtems_smc91111_driver_attach_leon2(
 extern int   CPU_SPARC_HAS_SNOOPING;
 
 /* Constants */
+
+#define BSP_RESET_BOARD_AT_EXIT 1
 
 /*
  *  Information placed in the linkcmds file.

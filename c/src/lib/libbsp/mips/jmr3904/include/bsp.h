@@ -22,6 +22,7 @@ extern "C" {
 #endif
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 #include <rtems/iosupp.h>
@@ -31,6 +32,7 @@ extern "C" {
 
 #define BSP_FEATURE_IRQ_EXTENSION
 #define BSP_SHARED_HANDLER_SUPPORT      1
+#define BSP_RESET_BOARD_AT_EXIT 1
 
 #ifdef __cplusplus
 }

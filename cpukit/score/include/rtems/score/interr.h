@@ -60,6 +60,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_APPLICATION,
 
   /**
+   * @brief Fatal source of exit().
+   *
+   * The fatal code is the exit() status code.
+   */
+  RTEMS_FATAL_SOURCE_EXIT,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for

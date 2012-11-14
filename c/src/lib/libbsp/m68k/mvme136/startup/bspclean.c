@@ -30,8 +30,10 @@ void bsp_return_to_monitor_trap(void)
 
 #define TIMER   0xfffb0000
 
-void bsp_cleanup(
-  uint32_t status
+void bsp_fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code error
 )
 {
    Z8x36_WRITE( TIMER, MASTER_INTR,    0x62 );   /* redo timer */
@@ -41,4 +43,11 @@ void bsp_cleanup(
 
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
    __asm__ volatile( "trap #13" );  /* insures SUPV mode */
+}
+
+void bsp_cleanup(
+  uint32_t status
+)
+{
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

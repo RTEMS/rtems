@@ -127,6 +127,7 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
 #include <rtems/rtc.h>
+#include <bsp/default-initial-extension.h>
 
 #include "i2c.h"
 

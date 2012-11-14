@@ -13,8 +13,10 @@
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 
-void bsp_cleanup(
-  uint32_t status
+void bsp_fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code error
 )
 {
   #if (BSP_PRESS_KEY_FOR_RESET)
@@ -36,4 +38,9 @@ void bsp_cleanup(
   #if (BSP_PRESS_KEY_FOR_RESET) || (BSP_RESET_BOARD_AT_EXIT)
     bsp_reset();
   #endif
+}
+
+void bsp_cleanup( uint32_t status )
+{
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

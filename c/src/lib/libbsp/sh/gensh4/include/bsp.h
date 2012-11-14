@@ -46,6 +46,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include "rtems/score/sh7750_regs.h"
 

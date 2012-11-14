@@ -20,6 +20,7 @@ extern "C" {
 #define BSP_ZERO_WORKSPACE_AUTOMATICALLY TRUE
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 #include <rtems.h>
 #include <rtems/console.h>
 #include <libcpu/io.h>

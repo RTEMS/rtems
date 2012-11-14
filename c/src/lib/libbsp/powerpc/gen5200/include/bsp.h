@@ -122,6 +122,7 @@ extern "C" {
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 #include <bsp/u-boot.h>
+#include <bsp/default-initial-extension.h>
 
 /*
  * Network driver configuration

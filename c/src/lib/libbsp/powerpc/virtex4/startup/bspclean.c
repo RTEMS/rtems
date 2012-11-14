@@ -40,10 +40,21 @@ static void _noopfun(void) {}
 void app_bsp_cleanup(void)
 __attribute__(( weak, alias("_noopfun") ));
 
-void bsp_cleanup( uint32_t status )
+void bsp_fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code error
+)
 {
-  app_bsp_cleanup();
+  if ( source == RTEMS_FATAL_SOURCE_EXIT ) {
+    app_bsp_cleanup();
+  }
 
   /* All done.  Hang out. */
   BSP_ask_for_reset();
+}
+
+void bsp_cleanup( uint32_t status )
+{
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

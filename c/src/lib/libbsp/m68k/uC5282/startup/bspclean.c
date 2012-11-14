@@ -16,9 +16,18 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+void bsp_fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code error
+)
+{
+  bsp_reset();
+}
+
 void bsp_cleanup(
   uint32_t status
 )
 {
-  bsp_reset();
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

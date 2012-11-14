@@ -110,6 +110,7 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <rtems/clockdrv.h>
+#include <bsp/default-initial-extension.h>
 
 struct rtems_bsdnet_ifconfig;
 extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);

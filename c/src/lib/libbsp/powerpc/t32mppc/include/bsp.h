@@ -21,6 +21,8 @@
 
 #include <rtems.h>
 
+#include <bsp/default-initial-extension.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

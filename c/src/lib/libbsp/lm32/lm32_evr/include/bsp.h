@@ -20,6 +20,7 @@
 
 #include <stdint.h>
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 #include <rtems/console.h>

@@ -133,8 +133,5 @@ void Fatal_extension(
   ) {
     printk( "*** END OF TEST POSIX FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
   }
-
-  if ( _System_state_Is_up( _System_state_Get() ) )
-    _Thread_Stop_multitasking();
 }
 

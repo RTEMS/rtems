@@ -17,14 +17,6 @@
 
 #include <bspopts.h>
 
-#include <rtems.h>
-#include <rtems/console.h>
-#include <rtems/clockdrv.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #define BSP_FEATURE_IRQ_EXTENSION
 
 #define BSP_ARMV7M_IRQ_PRIORITY_DEFAULT (5 << 5)
@@ -33,10 +25,20 @@ extern "C" {
 
 #ifndef ASM
 
-#endif /* ASM */
+#include <bsp/default-initial-extension.h>
+
+#include <rtems.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#endif /* ASM */
 
 #endif /* LIBBSP_ARM_LM3S69XX_BSP_H */

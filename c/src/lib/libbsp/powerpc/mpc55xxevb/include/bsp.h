@@ -23,19 +23,7 @@
 #ifndef LIBBSP_POWERPC_MPC55XXEVB_BSP_H
 #define LIBBSP_POWERPC_MPC55XXEVB_BSP_H
 
-#include <stdint.h>
-
-#include <rtems.h>
-#include <rtems/console.h>
-#include <rtems/clockdrv.h>
-
 #include <bspopts.h>
-
-#include <bsp/tictac.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 
 #define BSP_SMALL_MEMORY 1
 
@@ -44,6 +32,17 @@ extern "C" {
 #define BSP_FEATURE_IRQ_EXTENSION
 
 #ifndef ASM
+
+#include <rtems.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+
+#include <bsp/tictac.h>
+#include <bsp/default-initial-extension.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /** @brief System clock frequency */
 extern unsigned int bsp_clock_speed;
@@ -78,10 +77,10 @@ void *bsp_idle_thread(uintptr_t arg);
 
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
-#endif /* ASM */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#endif /* ASM */
 
 #endif /* LIBBSP_POWERPC_MPC55XXEVB_BSP_H */

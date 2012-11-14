@@ -16,6 +16,7 @@
 #define LIBBSP_ARM_STM32F4_BSP_H
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 #include <rtems/console.h>

@@ -67,6 +67,7 @@ extern "C" {
   #include <rtems/iosupp.h>
   #include <bsp/irq.h>
   #include <bsp/vectors.h>
+  #include <bsp/default-initial-extension.h>
 
   /* Network Defines */
   #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"

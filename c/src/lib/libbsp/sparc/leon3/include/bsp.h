@@ -25,14 +25,13 @@ extern "C" {
 #endif
 
 #include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 #include <leon.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
 #include <rtems/irq-extension.h>
-
-#include <bsp/default-initial-extension.h>
 
 /* SPARC CPU variant: LEON3 */
 #define LEON3 1
@@ -45,6 +44,8 @@ void *bsp_idle_thread( uintptr_t ignored );
 
 /* Maximum supported APBUARTs by BSP */
 #define BSP_NUMBER_OF_TERMIOS_PORTS 8
+
+#define BSP_RESET_BOARD_AT_EXIT 1
 
 /*
  * Network driver configuration

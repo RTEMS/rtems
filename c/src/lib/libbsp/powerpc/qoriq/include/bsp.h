@@ -29,6 +29,8 @@
 
 #include <rtems.h>
 
+#include <bsp/default-initial-extension.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -57,10 +59,10 @@ int qoriq_if_intercom_attach_detach(
 #define RTEMS_BSP_NETWORK_DRIVER_NAME3 "tsec3"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME4 "intercom1"
 
-#endif /* ASM */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#endif /* ASM */
 
 #endif /* LIBBSP_POWERPC_QORIQ_BSP_H */
