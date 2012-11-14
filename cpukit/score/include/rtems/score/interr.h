@@ -91,6 +91,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_ASSERT,
 
   /**
+   * @brief Fatal source of the stack checker.
+   *
+   * The fatal code is the object name of the executing task.
+   */
+  RTEMS_FATAL_SOURCE_STACK_CHECKER,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for

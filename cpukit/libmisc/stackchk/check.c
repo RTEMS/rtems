@@ -260,7 +260,10 @@ void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
     }
   #endif
 
-  rtems_fatal_error_occurred(0x81);
+  rtems_fatal(
+    RTEMS_FATAL_SOURCE_STACK_CHECKER,
+    running->Object.name.name_u32
+  );
 }
 
 /*
