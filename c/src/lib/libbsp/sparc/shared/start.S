@@ -364,7 +364,9 @@ zerobss:
         nop
 
         PUBLIC(BSP_fatal_return)
+        PUBLIC(bsp_reset)
 SYM(BSP_fatal_return):
+SYM(bsp_reset):
 	mov	1, %g1
         ta      0                       ! Halt if _main returns ...
         nop
