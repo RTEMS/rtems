@@ -77,6 +77,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_BSP_GENERIC,
 
   /**
+   * @brief Fatal source for BSP specific errors.
+   *
+   * The fatal code is BSP specific.
+   */
+  RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
