@@ -96,10 +96,17 @@ typedef struct {
 extern Internal_errors_Information _Internal_errors_What_happened;
 
 /**
- * @brief  Internal error Occurred
+ * @brief An internal or fatal error occurred.
  *
- *  This routine is invoked when the application or the executive itself
- *  determines that a fatal error has occurred.
+ * This routine is invoked when the application or the executive itself
+ * determines that a fatal error has occurred.
+ *
+ * This function can be called in every system state provided the following
+ * conditions are true
+ * - the stack pointer is valid,
+ * - the code memory is valid,
+ * - the read-only data is valid, and
+ * - the read-write data is accessible.
  */
 void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
