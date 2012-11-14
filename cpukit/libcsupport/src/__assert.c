@@ -34,7 +34,7 @@ void __assert_func(
     (func) ? ", function: " : "",
     (func) ? func : ""
   );
-  rtems_fatal_error_occurred(0);
+  rtems_fatal( RTEMS_FATAL_SOURCE_ASSERT, (rtems_fatal_code) func );
 }
 #endif
 

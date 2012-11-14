@@ -10,15 +10,17 @@
 
 #include <assert.h>
 
+static const char func [] = "Init";
+
 #define FATAL_ERROR_TEST_NAME            "10"
 #define FATAL_ERROR_DESCRIPTION          "asserting with non-NULL strings..."
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
+#define FATAL_ERROR_EXPECTED_SOURCE      RTEMS_FATAL_SOURCE_ASSERT
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
-#define FATAL_ERROR_EXPECTED_ERROR       0
+#define FATAL_ERROR_EXPECTED_ERROR       ((rtems_fatal_code) func)
 
 void force_error()
 {
-  __assert_func( __FILE__, __LINE__, "Init", "forced" );
+  __assert_func( __FILE__, __LINE__, func, "forced" );
 
   /* we will not run this far */
 }

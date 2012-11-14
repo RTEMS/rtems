@@ -84,6 +84,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_BSP_SPECIFIC,
 
   /**
+   * @brief Fatal source of assert().
+   *
+   * The fatal code is the pointer value of the function string.
+   */
+  RTEMS_FATAL_SOURCE_ASSERT,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
