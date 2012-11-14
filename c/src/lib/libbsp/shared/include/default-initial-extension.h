@@ -22,9 +22,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 void bsp_fatal_extension(
-  Internal_errors_Source source,
+  rtems_fatal_source source,
   bool is_internal,
-  Internal_errors_t error
+  rtems_fatal_code error
 );
 
 #define BSP_INITIAL_EXTENSION \

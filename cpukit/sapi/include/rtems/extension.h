@@ -182,6 +182,10 @@ typedef User_extensions_fatal_extension           rtems_fatal_extension;
 
 typedef User_extensions_Table                     rtems_extensions_table;
 
+typedef Internal_errors_Source rtems_fatal_source;
+
+typedef Internal_errors_t rtems_fatal_code;
+
 /**
  * @brief Creates an extension set object.
  *
