@@ -15,6 +15,7 @@ manager is:
 
 @itemize @bullet
 @item @code{@value{DIRPREFIX}fatal_error_occurred} - Invoke the fatal error handler
+@item @code{@value{DIRPREFIX}fatal} - Invoke the fatal error handler with error source
 @end itemize
 
 @section Background
@@ -167,6 +168,36 @@ NOT RETURN to the caller.
 
 The user-defined extension for this directive may
 wish to initiate a global shutdown.
+
+@c
+@c
+@c
+@page
+@subsection FATAL - Invoke the fatal error handler with error source
+
+@cindex announce fatal error
+@cindex fatal error, announce
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_fatal
+@example
+void rtems_fatal(
+  rtems_fatal_source source,
+  rtems_fatal_code error
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive invokes the internal error handler with is internal set to
+false.  See also @code{@value{DIRPREFIX}fatal_error_occurred}.
 
 @c
 @c

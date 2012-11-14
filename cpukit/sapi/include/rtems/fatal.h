@@ -1,13 +1,9 @@
 /**
- * @file rtems/fatal.h
+ * @file
  *
- * This include file contains constants and prototypes related
- * to the Fatal Error Manager.  This manager processes all fatal or
- * irrecoverable errors.
+ * @ingroup ClassicFatal
  *
- * This manager provides directives to:
- *
- *   - announce a fatal error has occurred
+ * @brief Fatal API.
  */
 
 /*
@@ -29,18 +25,44 @@
 extern "C" {
 #endif
 
-/*
- *  rtems_fatal_error_occurred
+/**
+ * @defgroup ClassicFatal Fatal
  *
- *  DESCRIPTION:
+ * @ingroup ClassicRTEMS
  *
- *  This is the routine which implements the rtems_fatal_error_occurred
- *  directive.  It is invoked when the application or RTEMS
- *  determines that a fatal error has occurred.
+ * @brief The Fatal Manager provides functions for fatal system states and or
+ * irrecoverable errors.
+ *
+ * @{
  */
 
+/**
+ * @brief Invokes the internal error handler with a source of
+ * INTERNAL_ERROR_RTEMS_API and is internal set to false.
+ *
+ * @param[in] the_error A 32-bit fatal error code.
+ *
+ * @return This function will not return.
+ *
+ * @see _Internal_error_Occurred().
+ */
 void rtems_fatal_error_occurred(
   uint32_t   the_error
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+/**
+ * @brief Invokes the internal error handler with is internal set to false.
+ *
+ * @param[in] source The fatal source.
+ * @param[in] error The fatal code.
+ *
+ * @return This function will not return.
+ *
+ * @see _Internal_error_Occurred().
+ */
+void rtems_fatal(
+  rtems_fatal_source source,
+  rtems_fatal_code error
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
@@ -52,6 +74,8 @@ void rtems_fatal_error_occurred(
  * invalid.
  */
 const char *rtems_internal_error_description( rtems_fatal_code error );
+
+/** @} */
 
 #ifdef __cplusplus
 }
