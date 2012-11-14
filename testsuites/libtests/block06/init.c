@@ -29,6 +29,8 @@
 #include <rtems/error.h>
 #include <rtems/bdbuf.h>
 
+#include <bsp.h>
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 

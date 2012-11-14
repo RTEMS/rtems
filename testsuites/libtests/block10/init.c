@@ -30,6 +30,8 @@
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 
+#include <bsp.h>
+
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 

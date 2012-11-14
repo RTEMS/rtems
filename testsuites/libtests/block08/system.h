@@ -14,6 +14,8 @@
 #include <rtems.h>
 #include "rtems/blkdev.h"
 
+#include <bsp.h>
+
 rtems_task Init(
   rtems_task_argument argument
 );

@@ -24,6 +24,8 @@
 
 #include <rtems.h>
 
+#include <bsp.h>
+
 #ifdef HEAP_PROTECTION
   static void test_heap_block_error(Heap_Control *heap, Heap_Block *block)
   {
