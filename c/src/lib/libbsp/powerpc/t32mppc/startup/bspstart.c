@@ -60,21 +60,16 @@ void _BSP_Fatal_error(unsigned n)
 
 void bsp_start(void)
 {
-  rtems_status_code sc;
-
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
 
   /* Initialize exception handler */
   ppc_exc_vector_base = (uint32_t) bsp_exc_vector_base;
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_section_work_begin,
     rtems_configuration_get_interrupt_stack_size()
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   /* Initalize interrupt support */
   bsp_interrupt_initialize();

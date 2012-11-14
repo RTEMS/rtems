@@ -12,7 +12,7 @@
  *
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (C) 2009 embedded brains GmbH.
+ * Copyright (C) 2009-2012 embedded brains GmbH.
  *
  * Derived from file "libcpu/powerpc/new-exceptions/bspsupport/vectors_init.c".
  * Derived from file "libcpu/powerpc/new-exceptions/e500_raw_exc_init.c".
@@ -25,6 +25,7 @@
 #include <rtems.h>
 
 #include <bsp/vectors.h>
+#include <bsp/bootcard.h>
 
 uint32_t ppc_exc_cache_wb_check = 1;
 
@@ -71,7 +72,15 @@ static void ppc_exc_initialize_booke(void)
   }
 }
 
-rtems_status_code ppc_exc_initialize(
+static void ppc_exc_fatal_error(void)
+{
+  rtems_fatal(
+    RTEMS_FATAL_SOURCE_BSP_GENERIC,
+    BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION
+  );
+}
+
+void ppc_exc_initialize(
   uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
   uintptr_t interrupt_stack_size
@@ -86,7 +95,7 @@ rtems_status_code ppc_exc_initialize(
   uint32_t r13 = 0;
 
   if (categories == NULL) {
-    return RTEMS_NOT_IMPLEMENTED;
+    ppc_exc_fatal_error();
   }
 
   /* Assembly code needs SDA_BASE in r13 (SVR4 or EABI). Make sure
@@ -100,7 +109,7 @@ rtems_status_code ppc_exc_initialize(
   );
 
   if (sda_base != r13) {
-    return RTEMS_NOT_CONFIGURED;
+    ppc_exc_fatal_error();
   }
 
   /* Ensure proper interrupt stack alignment */
@@ -137,7 +146,7 @@ rtems_status_code ppc_exc_initialize(
 
       sc = ppc_exc_make_prologue(vector, category, prologue, &prologue_size);
       if (sc != RTEMS_SUCCESSFUL) {
-        return RTEMS_INTERNAL_ERROR;
+        ppc_exc_fatal_error();
       }
 
       ppc_code_copy(vector_address, prologue, prologue_size);
@@ -175,6 +184,4 @@ rtems_status_code ppc_exc_initialize(
     __asm__ volatile ("dcbz 0, %0"::"b" (p));
     /* If we make it thru here then things seem to be OK */
   }
-
-  return RTEMS_SUCCESSFUL;
 }

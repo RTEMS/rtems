@@ -170,7 +170,6 @@ BSP_polling_getchar_function_type BSP_poll_char = NULL;
  */
 void bsp_start( void )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
@@ -203,14 +202,11 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers.
    */
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) intrStack_start,
     (uintptr_t) intrStack_size
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   /*
    * Install our own set of exception vectors

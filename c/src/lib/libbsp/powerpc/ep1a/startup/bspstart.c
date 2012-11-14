@@ -275,7 +275,6 @@ void Read_ep1a_config_registers( ppc_cpu_id_t myCpu ) {
 
 void bsp_start( void )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   uintptr_t intrStackStart;
   uintptr_t intrStackSize;
   ppc_cpu_id_t myCpu;
@@ -320,14 +319,11 @@ ShowBATS();
   /*
    * Initialize default raw exception hanlders.
    */
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   /*
    * Init MMU block address translation to enable hardware

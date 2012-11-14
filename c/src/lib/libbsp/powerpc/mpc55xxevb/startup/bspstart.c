@@ -90,7 +90,6 @@ static void null_pointer_protection(void)
 
 void bsp_start(void)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
 	ppc_cpu_id_t myCpu;
 	ppc_cpu_revision_t myCpuRevision;
 
@@ -119,14 +118,11 @@ void bsp_start(void)
 
 	/* Initialize exceptions */
 	ppc_exc_vector_base = (uint32_t) mpc55xx_exc_vector_base;
-	sc = ppc_exc_initialize(
+	ppc_exc_initialize(
 		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
                 (uintptr_t) bsp_section_work_begin,
                 rtems_configuration_get_interrupt_stack_size()
 	);
-	if (sc != RTEMS_SUCCESSFUL) {
-		BSP_panic( "Cannot initialize exceptions");
-	}
 	ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
 	/* Initialize interrupts */

@@ -77,7 +77,6 @@ void _BSP_Fatal_error(unsigned int v)
  */
 void bsp_start( void )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   uintptr_t intrStackStart;
   uintptr_t intrStackSize;
 
@@ -110,14 +109,11 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers.
    */
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   /*
    * Initalize RTEMS IRQ system

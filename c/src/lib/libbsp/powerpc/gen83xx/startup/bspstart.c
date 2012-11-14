@@ -134,14 +134,11 @@ void bsp_start( void)
 #ifndef BSP_DATA_CACHE_ENABLED
   ppc_exc_cache_wb_check = 0;
 #endif
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     interrupt_stack_start,
     interrupt_stack_size
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   /* Install default handler for the decrementer exception */
   sc = ppc_exc_set_handler( ASM_DEC_VECTOR, mpc83xx_decrementer_exception_handler);

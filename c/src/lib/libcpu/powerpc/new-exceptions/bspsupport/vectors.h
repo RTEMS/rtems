@@ -428,13 +428,17 @@ rtems_status_code ppc_exc_make_prologue(
 /**
  * @brief Initializes the exception handling.
  *
- * @retval RTEMS_SUCCESSFUL Successful initialization.
- * @retval RTEMS_NOT_IMPLEMENTED No category set available for the current CPU.
- * @retval RTEMS_NOT_CONFIGURED Register r13 does not point to the small data
- * area anchor required by SVR4/EABI.
- * @retval RTEMS_INTERNAL_ERROR Minimal prologue creation failed.
+ * If the initialization fails, then this is a fatal error.  The fatal error
+ * source is RTEMS_FATAL_SOURCE_BSP_GENERIC and the fatal error code is
+ * BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION.
+ *
+ * Possible error reasons are
+ * - no category set available for the current CPU,
+ * - the register r13 does not point to the small data area anchor required by
+ *   SVR4/EABI, or
+ * - the minimal prologue creation failed.
  */
-rtems_status_code ppc_exc_initialize(
+void ppc_exc_initialize(
   uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
   uintptr_t interrupt_stack_size

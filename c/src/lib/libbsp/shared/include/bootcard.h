@@ -54,6 +54,7 @@ extern "C" {
  * @brief Generic BSP fatal error codes.
  */
 typedef enum {
+  BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION,
   BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION
 } bsp_generic_fatal_code;
 

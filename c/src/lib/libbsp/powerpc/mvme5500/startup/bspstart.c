@@ -187,7 +187,6 @@ save_boot_params(
 
 void bsp_start( void )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
 #ifdef CONF_VPD
   int i;
 #endif
@@ -245,14 +244,11 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers.
    */
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   /*
    * Init MMU block address translation to enable hardware

@@ -104,7 +104,6 @@ LINKER_SYMBOL(__phy_ram_end);
 static void _noopfun(void) {}
 static void _bsp_start(void)
 {
-  rtems_status_code sc             = RTEMS_SUCCESSFUL;
   uintptr_t         intrStackStart = CPU_UP_ALIGN((uint32_t)__bsp_ram_start);
   uintptr_t         intrStackSize  = rtems_configuration_get_interrupt_stack_size();
 
@@ -115,10 +114,9 @@ static void _bsp_start(void)
    * FPGA, so the external interrupt should not be enabled in order to avoid
    * spurious interrupts.
    */
-  sc = ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT & ~MSR_EE,
-                          intrStackStart,
-                          intrStackSize);
-  if (sc != RTEMS_SUCCESSFUL)  BSP_panic("Cannot initialize exceptions");
+  ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT & ~MSR_EE,
+                     intrStackStart,
+                     intrStackSize);
 
   /* Install our own set of exception vectors */
   BSP_rtems_irq_mngt_init(0);

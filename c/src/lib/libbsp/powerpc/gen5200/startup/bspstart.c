@@ -125,7 +125,6 @@ void _BSP_Fatal_error(unsigned int v)
 
 void bsp_start(void)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
@@ -173,14 +172,11 @@ void bsp_start(void)
 
   /* Initialize exception handler */
   ppc_exc_cache_wb_check = 0;
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_interrupt_stack_start,
     (uintptr_t) bsp_interrupt_stack_size
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
   ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
   /* Initalize interrupt support */

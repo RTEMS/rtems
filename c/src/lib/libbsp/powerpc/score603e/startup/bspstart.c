@@ -150,7 +150,6 @@ void initialize_PMC(void) {
 
 void bsp_start( void )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   unsigned int         msr_value = 0x0000;
   uintptr_t            intrStackStart;
   uintptr_t            intrStackSize;
@@ -194,14 +193,11 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers.
    */
-  sc = ppc_exc_initialize(
+  ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     intrStackStart,
     intrStackSize
   );
-  if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot initialize exceptions");
-  }
 
   msr_value = 0x2030;
   _CPU_MSR_SET( msr_value );
