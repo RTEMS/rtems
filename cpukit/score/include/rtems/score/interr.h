@@ -53,6 +53,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_BDBUF,
 
   /**
+   * @brief Fatal source for application specific errors.
+   *
+   * The fatal code is application specific.
+   */
+  RTEMS_FATAL_SOURCE_APPLICATION,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
