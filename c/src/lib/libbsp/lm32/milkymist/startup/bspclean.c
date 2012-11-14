@@ -9,7 +9,7 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
+#include <bsp/bootcard.h>
 #include "../include/system_conf.h"
 
 static void reboot(void)

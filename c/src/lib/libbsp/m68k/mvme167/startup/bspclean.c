@@ -14,8 +14,8 @@
  *  Copyright (c) 1998, National Research Council of Canada
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <page_table.h>
 
 extern void start( void );

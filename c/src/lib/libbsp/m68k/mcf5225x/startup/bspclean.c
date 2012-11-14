@@ -15,8 +15,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 
 void  __attribute__((weak)) bsp_cleanup(

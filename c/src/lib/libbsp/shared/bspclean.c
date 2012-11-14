@@ -9,11 +9,9 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
-#include <rtems/bspIo.h>
 #include <bsp.h>
-#include <bspopts.h>
 #include <bsp/bootcard.h>
+#include <rtems/bspIo.h>
 
 void bsp_cleanup(
   uint32_t status

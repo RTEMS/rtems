@@ -1,4 +1,5 @@
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 
 void bsp_cleanup(

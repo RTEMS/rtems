@@ -16,8 +16,8 @@
  *  RTEMS above.
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/zilog/z8036.h>
 #include <page_table.h>
 

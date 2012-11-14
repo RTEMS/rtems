@@ -13,15 +13,12 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
-#include <rtems/bspIo.h>
-
-extern void bsp_reset(int);
+#include <bsp/bootcard.h>
 
 void bsp_cleanup(
   uint32_t status
 )
 {
-  bsp_reset(0);
+  bsp_reset();
 }

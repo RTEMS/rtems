@@ -32,15 +32,15 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 static void _noopfun(void) {}
 
 void app_bsp_cleanup(void)
 __attribute__(( weak, alias("_noopfun") ));
 
-void bsp_cleanup( void )
+void bsp_cleanup( uint32_t status )
 {
   app_bsp_cleanup();
 

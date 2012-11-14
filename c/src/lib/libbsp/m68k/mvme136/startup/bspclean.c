@@ -9,9 +9,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <bsp.h>
-#include <rtems/clockdrv.h>
+#include <bsp/bootcard.h>
 #include <rtems/zilog/z8036.h>
 
 extern void start( void  );

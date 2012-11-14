@@ -13,9 +13,8 @@
  *  May 1996
  */
 
-#include <rtems.h>
 #include <bsp.h>
-#include <rtems/clockdrv.h>
+#include <bsp/bootcard.h>
 
 extern void start( void  );
 
