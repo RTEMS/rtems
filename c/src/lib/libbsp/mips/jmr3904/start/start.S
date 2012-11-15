@@ -177,6 +177,8 @@ init:
  *          executables that contain a complete world to be linked with
  *          just the crt0.o object.
  */
+	.globl	bsp_reset
+bsp_reset:
 	.globl	_sys_exit
 	.ent _sys_exit
 _sys_exit:
