@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include "../include/system_conf.h"
 #include "../console/uart.h"
 #include <rtems/score/heap.h>
