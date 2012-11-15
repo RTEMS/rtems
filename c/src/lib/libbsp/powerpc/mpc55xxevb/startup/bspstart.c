@@ -48,19 +48,6 @@ unsigned int bsp_clock_speed = 0;
 
 uint32_t bsp_clicks_per_usec = 0;
 
-void BSP_panic( char *s)
-{
-	rtems_interrupt_level level;
-
-	rtems_interrupt_disable( level);
-
-	printk( "%s PANIC %s\n", _RTEMS_version, s);
-
-	while (1) {
-		/* Do nothing */
-	}
-}
-
 void _BSP_Fatal_error(unsigned n)
 {
 	rtems_interrupt_level level;
