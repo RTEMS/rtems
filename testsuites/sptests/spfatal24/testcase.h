@@ -8,6 +8,7 @@
  */
 
 #include <rtems/gxx_wrappers.h>
+#include <rtems/malloc.h>
 
 #define FATAL_ERROR_TEST_NAME            "GXX KEY ADD FAILURE"
 #define FATAL_ERROR_DESCRIPTION          "GXX KEY ADD FAILURE"
@@ -17,16 +18,9 @@
 
 void force_error()
 {
-  void *alloc_ptr = NULL;
-  Heap_Information_block info;
-  __gthread_key_t key = 0;
-  bool ok = false;
+  __gthread_key key;
 
-  ok = rtems_workspace_get_information( &info );
-  rtems_test_assert( ok );
+  rtems_workspace_greedy_allocate( NULL, 0 );
 
-  ok = rtems_workspace_allocate( info.Free.largest - 4, &alloc_ptr );
-  rtems_test_assert( ok );
-
-  rtems_gxx_getspecific( key );
+  rtems_gxx_getspecific( &key );
 }
