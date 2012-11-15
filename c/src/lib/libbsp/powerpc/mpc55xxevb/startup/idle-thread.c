@@ -22,14 +22,12 @@
 
 #include <bsp.h>
 
-#include <mpc55xx/regs.h>
+#include <mpc55xx/mpc55xx.h>
 
 void *bsp_idle_thread(uintptr_t arg)
 {
   while (true) {
-    #ifdef MPC55XX_HAS_WAIT_INSTRUCTION
-      __asm__ volatile ("wait");
-    #endif
+    mpc55xx_wait_for_interrupt();
   }
 
   return NULL;

@@ -61,16 +61,14 @@ void BSP_panic( char *s)
 	}
 }
 
-void _BSP_Fatal_error( unsigned n)
+void _BSP_Fatal_error(unsigned n)
 {
 	rtems_interrupt_level level;
 
 	rtems_interrupt_disable( level);
 
-	printk( "%s PANIC ERROR %u\n", _RTEMS_version, n);
-
-	while (1) {
-		/* Do nothing */
+	while (true) {
+		mpc55xx_wait_for_interrupt();
 	}
 }
 

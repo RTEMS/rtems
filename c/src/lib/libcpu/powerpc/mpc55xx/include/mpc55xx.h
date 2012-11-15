@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -43,7 +43,12 @@
 #define LIBCPU_POWERPC_MPC55XX_H
 
 #include <stddef.h>
-#include <stdint.h>
+
+#include <mpc55xx/regs.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 int mpc55xx_flash_copy(void *dest, const void *src, size_t nbytes);
 int mpc55xx_flash_copy_op(void *rdest, const void *src, size_t nbytes,
@@ -123,5 +128,18 @@ static inline uint32_t mpc55xx_count_leading_zeros( uint32_t value)
 	);
 	return count;
 }
+
+static inline mpc55xx_wait_for_interrupt(void)
+{
+  #ifdef MPC55XX_HAS_WAIT_INSTRUCTION
+    __asm__ volatile ("wait");
+  #else
+    __asm__ volatile ("");
+  #endif
+}
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* LIBCPU_POWERPC_MPC55XX_H */
