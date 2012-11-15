@@ -1566,9 +1566,31 @@ static bool smsc9218i_wait_for_eeprom_access(
   return !busy;
 }
 
+static bool smsc9218i_get_mac_address(
+  volatile smsc9218i_registers *regs,
+  uint8_t address [6]
+)
+{
+  bool ok = false;
+
+  uint32_t low = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRL, &ok);
+  address [0] = (uint8_t) low;
+  address [1] = (uint8_t) (low >> 8) & 0xff;
+  address [2] = (uint8_t) (low >> 16);
+  address [3] = (uint8_t) (low >> 24);
+
+  if (ok) {
+    uint32_t high = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRH, &ok);
+    address [4] = (uint8_t) high;
+    address [5] = (uint8_t) (high >> 8);
+  }
+
+  return ok;
+}
+
 static bool smsc9218i_set_mac_address(
   volatile smsc9218i_registers *regs,
-  unsigned char address [6]
+  const uint8_t address [6]
 )
 {
   bool ok = smsc9218i_mac_write(
@@ -1589,22 +1611,48 @@ static bool smsc9218i_set_mac_address(
   return ok;
 }
 
+/* Sometimes the write of the MAC address was not reliable */
+static bool smsc9218i_set_and_verify_mac_address(
+  volatile smsc9218i_registers *regs,
+  const uint8_t address [6]
+)
+{
+  bool ok = true;
+  int i;
+
+  for (i = 0; ok && i < 3; ++i) {
+    ok = smsc9218i_set_mac_address(regs, address);
+
+    if (ok) {
+      uint8_t actual_address [6];
+
+      ok = smsc9218i_get_mac_address(regs, actual_address)
+        && memcmp(address, actual_address, sizeof(actual_address)) == 0;
+    }
+  }
+
+  return ok;
+}
+
 #if defined(DEBUG)
 static void smsc9218i_mac_address_dump(volatile smsc9218i_registers *regs)
 {
-  uint32_t low = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRL, NULL);
-  uint32_t high = smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRH, NULL);
+  uint8_t mac_address [6];
+  bool ok = smsc9218i_get_mac_address(regs, mac_address);
 
-  printf(
-    "MAC address: %02" PRIx32 ":%02" PRIx32 ":%02" PRIx32
-      ":%02" PRIx32 ":%02" PRIx32 ":%02" PRIx32 "\n",
-    low & 0xff,
-    (low >> 8) & 0xff,
-    (low >> 16) & 0xff,
-    (low >> 24) & 0xff,
-    high & 0xff,
-    (high >> 8) & 0xff
-  );
+  if (ok) {
+    printf(
+      "MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+      mac_address [0],
+      mac_address [1],
+      mac_address [2],
+      mac_address [3],
+      mac_address [4],
+      mac_address [5]
+    );
+  } else {
+    printf("cannot read MAC address\n");
+  }
 }
 #endif
 
@@ -1774,7 +1822,7 @@ static void smsc9218i_interface_init(void *arg)
     ok = smsc9218i_wait_for_eeprom_access(regs);
 
     if (ok) {
-      ok = smsc9218i_set_mac_address(regs, e->arpcom.ac_enaddr);
+      ok = smsc9218i_set_and_verify_mac_address(regs, e->arpcom.ac_enaddr);
 
       if (ok) {
 #if defined(DEBUG)
