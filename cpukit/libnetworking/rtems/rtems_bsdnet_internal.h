@@ -139,7 +139,11 @@ void rtems_bsdnet_semaphore_release (void);
 void rtems_bsdnet_schednetisr (int n);
 int rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char **namep);
 
-unsigned long rtems_bsdnet_seconds_since_boot (void);
+static inline unsigned long rtems_bsdnet_seconds_since_boot(void)
+{
+  return (unsigned long) rtems_clock_get_uptime_seconds() + 1UL;
+}
+
 unsigned long rtems_bsdnet_random (void);
 
 rtems_id rtems_bsdnet_newproc (

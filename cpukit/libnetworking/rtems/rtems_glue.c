@@ -336,12 +336,6 @@ rtems_bsdnet_initialize (void)
 		1000000 / rtems_bsdnet_ticks_per_second;
 
 	/*
-	 * Ensure that `seconds' is greater than 0
-	 */
-    while (rtems_bsdnet_seconds_since_boot() == 0)
-        rtems_task_wake_after(1);
-
-	/*
 	 * Set up BSD-style sockets
 	 */
 	if (bsd_init () < 0)
@@ -712,15 +706,6 @@ rtems_status_code rtems_bsdnet_event_receive (
 	sc = rtems_event_system_receive (event_in, option_set, ticks, event_out);
 	rtems_bsdnet_semaphore_obtain ();
 	return sc;
-}
-
-unsigned long
-rtems_bsdnet_seconds_since_boot (void)
-{
-	rtems_interval now;
-
-	now = rtems_clock_get_ticks_since_boot();
-	return now / rtems_bsdnet_ticks_per_second;
 }
 
 /*
