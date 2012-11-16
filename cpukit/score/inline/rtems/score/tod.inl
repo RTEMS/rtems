@@ -56,19 +56,12 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   struct timeval *time
 )
 {
-  ISR_Level       level;
-  struct timespec now;
-  suseconds_t     useconds;
+  Timestamp_Control  snapshot_as_timestamp;
+  Timestamp_Control *snapshot_as_timestamp_ptr;
 
-  _ISR_Disable(level);
-    _TOD_Get( &now );
-  _ISR_Enable(level);
-
-  useconds = (suseconds_t)now.tv_nsec;
-  useconds /= (suseconds_t)TOD_NANOSECONDS_PER_MICROSECOND;
-
-  time->tv_sec  = now.tv_sec;
-  time->tv_usec = useconds;
+  snapshot_as_timestamp_ptr =
+    _TOD_Get_with_nanoseconds( &snapshot_as_timestamp, &_TOD.now );
+  _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
 }
 
 /**@}*/

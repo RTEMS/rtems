@@ -197,22 +197,30 @@ static inline void _TOD_Set(
 }
 
 /**
- *  @brief Returns the time of day in @a tod_as_timestamp.
+ *  @brief Returns a snapshot of a clock.
  *
- *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
+ *  This function invokes the nanoseconds extension.
+ *
+ *  @param[out] snapshot The snapshot.
+ *  @param[in] source The clock.
+ *
+ *  @return The snapshot.
  */
-void _TOD_Get_as_timestamp(
-  Timestamp_Control *tod_as_timestamp
+Timestamp_Control *_TOD_Get_with_nanoseconds(
+  Timestamp_Control *snapshot,
+  const Timestamp_Control *clock
 );
 
 static inline void _TOD_Get(
   struct timespec *tod_as_timespec
 )
 {
-  Timestamp_Control tod_as_timestamp;
+  Timestamp_Control  tod_as_timestamp;
+  Timestamp_Control *tod_as_timestamp_ptr;
 
-  _TOD_Get_as_timestamp( &tod_as_timestamp );
-  _Timestamp_To_timespec( &tod_as_timestamp, tod_as_timespec );
+  tod_as_timestamp_ptr =
+    _TOD_Get_with_nanoseconds( &tod_as_timestamp, &_TOD.now );
+  _Timestamp_To_timespec( tod_as_timestamp_ptr, tod_as_timespec );
 }
 
 /**
@@ -223,9 +231,12 @@ static inline void _TOD_Get(
  *
  *  @param[in] time is a pointer to the uptime to be returned
  */
-void _TOD_Get_uptime(
+static inline void _TOD_Get_uptime(
   Timestamp_Control *time
-);
+)
+{
+  _TOD_Get_with_nanoseconds( time, &_TOD.uptime );
+}
 
 /**
  *  @brief _TOD_Get_uptime_as_timespec

@@ -307,7 +307,7 @@ libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
-    src/coretodgetuptime.c src/coretodgetuptimetimespec.c src/coretodtickle.c \
+    src/coretodgetuptimetimespec.c src/coretodtickle.c \
     src/coretodmsecstoticks.c src/coretodtickspersec.c src/coretodusectoticks.c
 
 ## WATCHDOG_C_FILES

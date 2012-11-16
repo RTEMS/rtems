@@ -10,35 +10,31 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/timespec.h>
-#include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 
-void _TOD_Get_as_timestamp(
-  Timestamp_Control *tod
+Timestamp_Control *_TOD_Get_with_nanoseconds(
+  Timestamp_Control *snapshot,
+  const Timestamp_Control *clock
 )
 {
   ISR_Level         level;
   Timestamp_Control offset;
   Timestamp_Control now;
-  long              nanoseconds;
+  uint32_t          nanoseconds;
 
-  /* assume time checked for NULL by caller */
-
-  /* _TOD.now is the native current time */
   _ISR_Disable( level );
-    now = _TOD.now;
     nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
+    now = *clock;
   _ISR_Enable( level );
 
   _Timestamp_Set( &offset, 0, nanoseconds );
   _Timestamp_Add_to( &now, &offset );
 
-  *tod = now;
+  *snapshot = now;
+
+  return snapshot;
 }
