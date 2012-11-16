@@ -221,7 +221,10 @@ zero_intermediate_stack_loop:
 	li	r0, 0
 	stw	r0, 0(r1)
 
-	/* Load sections */
+	/*
+	 * Load sections.  This must be performed after the stack switch
+	 * because it may overwrite the initial stack.
+	 */
 	LA	r3, bsp_section_fast_text_begin
 	LA	r4, bsp_section_fast_text_load_begin
 	LA	r5, bsp_section_fast_text_size
