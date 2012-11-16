@@ -61,7 +61,11 @@ void *memset(void *s, int c, size_t n);
 #define panic	rtems_panic
 #define suser(a,b)	0
 
-void	microtime (struct timeval *tv);
+static inline void microtime(struct timeval *tv)
+{
+  rtems_clock_get_uptime_timeval(tv);
+}
+
 #define hz rtems_bsdnet_ticks_per_second
 #define tick rtems_bsdnet_microseconds_per_tick
 

@@ -714,19 +714,6 @@ rtems_status_code rtems_bsdnet_event_receive (
 	return sc;
 }
 
-/*
- * Return time since startup
- */
-void
-microtime (struct timeval *t)
-{
-	rtems_interval now;
-
-	now = rtems_clock_get_ticks_since_boot();
-	t->tv_sec = now / rtems_bsdnet_ticks_per_second;
-	t->tv_usec = (now % rtems_bsdnet_ticks_per_second) * rtems_bsdnet_microseconds_per_tick;
-}
-
 unsigned long
 rtems_bsdnet_seconds_since_boot (void)
 {
