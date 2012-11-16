@@ -154,6 +154,7 @@ librtems_a_SOURCES += src/clockgettickssinceboot.c
 librtems_a_SOURCES += src/clockgettod.c
 librtems_a_SOURCES += src/clockgettodtimeval.c
 librtems_a_SOURCES += src/clockgetuptime.c
+librtems_a_SOURCES += src/clockgetuptimetimeval.c
 librtems_a_SOURCES += src/clockset.c
 librtems_a_SOURCES += src/clocksetnsecshandler.c
 librtems_a_SOURCES += src/clocktick.c

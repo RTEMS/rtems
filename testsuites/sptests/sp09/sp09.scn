@@ -31,6 +31,7 @@ TA1 - rtems_clock_get_tod - RTEMS_NOT_DEFINED
 TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_INVALID_ADDRESS
 TA1 - rtems_clock_get_seconds_since_epoch - RTEMS_NOT_DEFINED
 TA1 - rtems_clock_get_uptime - RTEMS_INVALID_ADDRESS
+TA1 - rtems_clock_get_uptime_timeval
 TA1 - rtems_clock_get_tod_timeval - RTEMS_INVALID_ADDRESS
 TA1 - rtems_clock_get_tod_timeval - RTEMS_NOT_DEFINED
 TA1 - rtems_clock_set_nanoseconds_extension - RTEMS_INVALID_ADDRESS

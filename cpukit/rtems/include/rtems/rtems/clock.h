@@ -228,6 +228,13 @@ rtems_status_code rtems_clock_get_uptime(
 );
 
 /**
+ *  @brief Gets the system uptime in the struct timeval format.
+ *
+ *  @param[out] Returns the system uptime.  Pointer must not be NULL.
+ */
+void rtems_clock_get_uptime_timeval( struct timeval *uptime );
+
+/**
  *  @brief _TOD_Validate
  *
  *  This support function returns true if @a the_tod contains
