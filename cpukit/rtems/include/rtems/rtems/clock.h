@@ -235,6 +235,13 @@ rtems_status_code rtems_clock_get_uptime(
 void rtems_clock_get_uptime_timeval( struct timeval *uptime );
 
 /**
+ *  @brief Returns the system uptime in seconds.
+ *
+ *  @return The system uptime in seconds.
+ */
+time_t rtems_clock_get_uptime_seconds( void );
+
+/**
  *  @brief _TOD_Validate
  *
  *  This support function returns true if @a the_tod contains

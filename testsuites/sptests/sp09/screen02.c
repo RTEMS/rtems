@@ -86,6 +86,9 @@ void Screen2()
   puts( "TA1 - rtems_clock_get_uptime_timeval" );
   rtems_clock_get_uptime_timeval( &tv );
 
+  puts( "TA1 - rtems_clock_get_uptime_seconds" );
+  rtems_clock_get_uptime_seconds();
+
   puts( "TA1 - rtems_clock_get_tod_timeval - RTEMS_INVALID_ADDRESS" );
   status = rtems_clock_get_tod_timeval( NULL );
   fatal_directive_status(
