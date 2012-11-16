@@ -38,6 +38,8 @@
  */
 /**@{*/
 
+#include <sys/time.h>
+
 #include <rtems/score/cpu.h>
 #include <rtems/score/timespec.h>
 
@@ -340,6 +342,23 @@ extern "C" {
 #else
   #define _Timestamp_To_timespec( _timestamp, _timespec  ) \
 	  _Timestamp64_To_timespec( _timestamp, _timespec  )
+#endif
+
+/**
+ *  @brief Convert Timestamp to struct timeval
+ *
+ *  @param[in] _timestamp points to the timestamp
+ *  @param[in] _timeval points to the timeval
+ */
+#if CPU_TIMESTAMP_USE_STRUCT_TIMESPEC == TRUE
+  #define _Timestamp_To_timeval( _timestamp, _timeval  ) \
+    do { \
+      (_timeval)->tv_sec = (_timestamp)->tv_sec; \
+      (_timeval)->tv_usec = (_timestamp)->tv_nsec / 1000; \
+    } while (0)
+#else
+  #define _Timestamp_To_timeval( _timestamp, _timeval  ) \
+	  _Timestamp64_To_timeval( _timestamp, _timeval  )
 #endif
 
 #ifdef __cplusplus

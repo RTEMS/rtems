@@ -303,7 +303,7 @@ libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \
     src/ts64getnanoseconds.c src/ts64getseconds.c \
     src/ts64lessthan.c \
     src/ts64set.c src/ts64settozero.c src/ts64subtract.c \
-    src/ts64toticks.c src/ts64totimespec.c
+    src/ts64toticks.c src/ts64totimespec.c src/ts64totimeval.c
 
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \

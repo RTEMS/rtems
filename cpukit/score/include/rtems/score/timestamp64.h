@@ -393,6 +393,33 @@ static inline void _Timestamp64_implementation_To_timespec(
   );
 #endif
 
+static inline void _Timestamp64_implementation_To_timeval(
+  const Timestamp64_Control *_timestamp,
+  struct timeval            *_timeval
+)
+{
+  _timeval->tv_sec = (time_t) (*_timestamp / 1000000000U);
+  _timeval->tv_usec = (suseconds_t) ((*_timestamp % 1000000000U) / 1000U);
+}
+
+/**
+ *  @brief Convert Timestamp to struct timeval
+ *
+ *  This method returns the seconds portion of the specified timestamp
+ *
+ *  @param[in] _timestamp points to the timestamp
+ *  @param[out] _timeval points to the timeval
+ */
+#if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
+  #define _Timestamp64_To_timeval( _timestamp, _timeval  ) \
+    _Timestamp64_implementation_To_timeval( _timestamp, _timeval )
+#else
+  void _Timestamp64_To_timeval(
+    const Timestamp64_Control *_timestamp,
+    struct timeval            *_timeval
+  );
+#endif
+
 #ifdef __cplusplus
 }
 #endif
