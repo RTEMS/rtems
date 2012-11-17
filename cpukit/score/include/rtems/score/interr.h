@@ -98,6 +98,15 @@ typedef enum {
   RTEMS_FATAL_SOURCE_STACK_CHECKER,
 
   /**
+   * @brief Fatal source of the PowerPC exceptions.
+   *
+   * The fatal code is the pointer value of the exception frame pointer.
+   *
+   * @see BSP_Exception_frame.
+   */
+  RTEMS_FATAL_SOURCE_POWERPC_EXCEPTION,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for

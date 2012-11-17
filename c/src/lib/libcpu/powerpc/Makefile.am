@@ -36,6 +36,7 @@ new_exceptions_exc_bspsupport_rel_SOURCES = \
     new-exceptions/bspsupport/ppc_exc_hdl.c \
     new-exceptions/bspsupport/ppc_exc_initialize.c \
     new-exceptions/bspsupport/ppc_exc_global_handler.c \
+    new-exceptions/bspsupport/ppc_exc_print.c \
     new-exceptions/bspsupport/ppc_exc_categories.c \
     new-exceptions/bspsupport/ppc_exc_address.c \
     new-exceptions/bspsupport/ppc_exc_alignment.c \
