@@ -158,13 +158,6 @@ typedef struct {
   bool                    is_internal;
   /** This is the error code. */
   Internal_errors_t       the_error;
-
-  /**
-   * @brief The internal error nest level.
-   *
-   * This helps to detect recursive calls to _Internal_error_Occurred().
-   */
-  uint32_t                nest_level;
 } Internal_errors_Information;
 
 /**
