@@ -147,7 +147,11 @@
 
 #define CPU_USE_DEFERRED_FP_SWITCH FALSE
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY FALSE
+#if defined(ARM_MULTILIB_ARCH_V7M)
+  #define CPU_PROVIDES_IDLE_THREAD_BODY TRUE
+#else
+  #define CPU_PROVIDES_IDLE_THREAD_BODY FALSE
+#endif
 
 #define CPU_STACK_GROWS_UP FALSE
 
@@ -460,6 +464,10 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
   return (uint16_t) (((value & 0xffU) << 8) | ((value >> 8) & 0xffU));
 #endif
 }
+
+#if CPU_PROVIDES_IDLE_THREAD_BODY == TRUE
+  void *_CPU_Thread_Idle_body( uintptr_t ignored );
+#endif
 
 /** @} */
 

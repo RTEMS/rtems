@@ -33,6 +33,7 @@ libscorecpu_a_SOURCES += armv7m-isr-level-get.c
 libscorecpu_a_SOURCES += armv7m-isr-level-set.c
 libscorecpu_a_SOURCES += armv7m-isr-vector-install.c
 libscorecpu_a_SOURCES += armv7m-multitasking-start-stop.c
+libscorecpu_a_SOURCES += armv7m-thread-idle.c
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
