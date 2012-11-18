@@ -50,12 +50,11 @@ void _Internal_error_Occurred(
   Internal_errors_t       the_error
 )
 {
+  _User_extensions_Fatal( the_source, is_internal, the_error );
 
   _Internal_errors_What_happened.the_source  = the_source;
   _Internal_errors_What_happened.is_internal = is_internal;
   _Internal_errors_What_happened.the_error   = the_error;
-
-  _User_extensions_Fatal( the_source, is_internal, the_error );
 
   _System_state_Set( SYSTEM_STATE_FAILED );
 

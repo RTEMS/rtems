@@ -9,9 +9,9 @@
 
 @section Introduction
 
-The fatal error manager processes all fatal or
-irrecoverable errors.  The directive provided by the fatal error
-manager is:
+The fatal error manager processes all fatal or irrecoverable errors and other
+sources of system termination (for example after exit()).  The directives
+provided by the fatal error manager are:
 
 @itemize @bullet
 @item @code{@value{DIRPREFIX}fatal_error_occurred} - Invoke the fatal error handler
@@ -40,7 +40,7 @@ upon detection of an error it considers to be fatal.  Similarly,
 the user should invoke the fatal error manager upon detection of
 a fatal error.
 
-Each status or dynamic user extension set may include
+Each static or dynamic user extension set may include
 a fatal error handler.  The fatal error handler in the static
 extension set can be used to provide access to debuggers and
 monitors which may be present on the target hardware.  If any

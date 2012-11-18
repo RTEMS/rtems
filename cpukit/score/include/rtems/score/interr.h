@@ -166,17 +166,32 @@ typedef struct {
 extern Internal_errors_Information _Internal_errors_What_happened;
 
 /**
- * @brief An internal or fatal error occurred.
+ * @brief Initiates system termination.
  *
  * This routine is invoked when the application or the executive itself
- * determines that a fatal error has occurred.
+ * determines that a fatal error has occurred or a final system state is
+ * reached (for example after exit()).
  *
- * This function can be called in every system state provided the following
- * conditions are true
- * - the stack pointer is valid,
- * - the code memory is valid,
- * - the read-only data is valid, and
- * - the read-write data is accessible.
+ * The first action of this function is to call the fatal handler of the user
+ * extensions.  For the initial extensions the following conditions are
+ * required
+ * - a valid stack pointer and enough stack space,
+ * - a valid code memory, and
+ * - valid read-only data.
+ * For the initial extensions the read-write data (including BSS segment) is
+ * not required.
+ *
+ * Non-initial extensions require in addition valid read-write data.  The BSP
+ * may install an initial extension that performs a system reset.  In this case
+ * the non-initial extensions will be not called.
+ *
+ * Once all fatal handler executed the error information will be stored to
+ * _Internal_errors_What_happened and the system state is set to
+ * SYSTEM_STATE_FAILED.
+ *
+ * The final step is to call the CPU specific _CPU_Fatal_halt().
+ *
+ * @see rtems_fatal_error_occurred() and rtems_fatal().
  */
 void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
