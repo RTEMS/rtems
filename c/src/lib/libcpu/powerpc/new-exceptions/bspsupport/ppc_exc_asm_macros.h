@@ -279,6 +279,8 @@ TEST_LOCK_crit_done_\_FLVR:
 /* Standard*/
 	.macro	RECOVER_CHECK_std _FLVR
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 	/* Check if exception is recoverable */
 	lwz	SCRATCH_REGISTER_0, SRR1_FRAME_OFFSET(FRAME_REGISTER)
 	lwz	SCRATCH_REGISTER_1, ppc_exc_msr_bits@sdarel(r13)
@@ -289,6 +291,8 @@ recover_check_twiddle_std_\_FLVR:
 
 	/* Not recoverable? */
 	bne	recover_check_twiddle_std_\_FLVR
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 	.endm
 
@@ -302,6 +306,8 @@ recover_check_twiddle_std_\_FLVR:
 /* Machine check */
 	.macro	RECOVER_CHECK_mchk _FLVR
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 	/* Check if exception is recoverable */
 	lwz	SCRATCH_REGISTER_0, SRR1_FRAME_OFFSET(FRAME_REGISTER)
 	lwz	SCRATCH_REGISTER_1, ppc_exc_msr_bits@sdarel(r13)
@@ -312,6 +318,8 @@ recover_check_twiddle_mchk_\_FLVR:
 
 	/* Not recoverable? */
 	bne	recover_check_twiddle_mchk_\_FLVR
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 	.endm
 
@@ -520,6 +528,8 @@ wrap_disable_thread_dispatching_done_\_FLVR:
 	/* Save vector number and exception type */
 	stw	VECTOR_REGISTER, EXCEPTION_NUMBER_OFFSET(FRAME_REGISTER)
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 	/* Load MSR bit mask */
 	lwz	SCRATCH_REGISTER_0, ppc_exc_msr_bits@sdarel(r13)
 
@@ -531,6 +541,8 @@ wrap_disable_thread_dispatching_done_\_FLVR:
 	bne	CR_MSR, wrap_change_msr_\_FLVR
 
 wrap_change_msr_done_\_FLVR:
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 #ifdef __ALTIVEC__
 	LA  SCRATCH_REGISTER_0, _CPU_save_altivec_volatile
@@ -660,10 +672,14 @@ wrap_thread_dispatching_done_\_FLVR:
 	bctrl
 #endif
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 	/* Restore MSR? */
 	bne	CR_MSR, wrap_restore_msr_\_FLVR
 
 wrap_restore_msr_done_\_FLVR:
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 	/*
 	 * At this point r1 is a valid exception frame pointer and
@@ -725,6 +741,8 @@ wrap_restore_msr_done_\_FLVR:
 	/* Return */
 	\_RFI
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 wrap_change_msr_\_FLVR:
 
 	mfmsr	SCRATCH_REGISTER_1
@@ -743,6 +761,8 @@ wrap_restore_msr_\_FLVR:
 	msync
 	isync
 	b	wrap_restore_msr_done_\_FLVR
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 wrap_save_non_volatile_regs_\_FLVR:
 

@@ -192,6 +192,8 @@ void ppc_exc_initialize(
 
   ppc_interrupt_set_disable_mask(interrupt_disable_mask);
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
   /* Use current MMU / RI settings when running C exception handlers */
   ppc_exc_msr_bits = ppc_machine_state_register() & (MSR_DR | MSR_IR | MSR_RI);
 
@@ -199,7 +201,9 @@ void ppc_exc_initialize(
   /* Need vector unit enabled to save/restore altivec context */
   ppc_exc_msr_bits |= MSR_VE;
 #endif
- 
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
+
   if (ppc_cpu_is_bookE() == PPC_BOOKE_STD || ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
     ppc_exc_initialize_booke();
   }
@@ -221,6 +225,7 @@ void ppc_exc_initialize(
     }
   }
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
   /* If we are on a classic PPC with MSR_DR enabled then
    * assert that the mapping for at least this task's
    * stack is write-back-caching enabled (see README/CAVEATS)
@@ -252,4 +257,5 @@ void ppc_exc_initialize(
     __asm__ volatile ("dcbz 0, %0"::"b" (p));
     /* If we make it thru here then things seem to be OK */
   }
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 }

@@ -31,6 +31,8 @@ uint32_t ppc_exc_vector_register_std  = 0;
 uint32_t ppc_exc_vector_register_crit = 0;
 uint32_t ppc_exc_vector_register_mchk = 0;
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 /* MSR bits to enable once critical status info is saved and the stack
  * is switched; must be set depending on CPU type
  *
@@ -38,6 +40,8 @@ uint32_t ppc_exc_vector_register_mchk = 0;
  * but is overridden from vectors_init.c
  */
 uint32_t ppc_exc_msr_bits = MSR_IR | MSR_DR | MSR_RI;
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector)
 {

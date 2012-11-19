@@ -76,6 +76,8 @@ ppc_exc_wrap_naked:
 	mflr	SCRATCH_REGISTER_0
 	stw	SCRATCH_REGISTER_0, EXC_LR_OFFSET(r1)
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 	/* Load MSR bit mask */
 	lwz	SCRATCH_REGISTER_0, ppc_exc_msr_bits@sdarel(r13)
 
@@ -87,6 +89,8 @@ ppc_exc_wrap_naked:
 	bne	CR_MSR, wrap_change_msr_naked
 
 wrap_change_msr_done_naked:
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 	/*
 	 * Call high level exception handler
@@ -127,10 +131,14 @@ wrap_change_msr_done_naked:
 	mtctr	SCRATCH_REGISTER_0
 	bctrl
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 	/* Restore MSR? */
 	bne	CR_MSR, wrap_restore_msr_naked
 
 wrap_restore_msr_done_naked:
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 	/* Restore XER and CTR */
 	lwz	SCRATCH_REGISTER_0, EXC_XER_OFFSET(r1)
@@ -175,6 +183,8 @@ wrap_restore_msr_done_naked:
 	/* Return */
 	rfi
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 wrap_change_msr_naked:
 
 	mfmsr	SCRATCH_REGISTER_1
@@ -193,3 +203,5 @@ wrap_restore_msr_naked:
 	sync
 	isync
 	b	wrap_restore_msr_done_naked
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */

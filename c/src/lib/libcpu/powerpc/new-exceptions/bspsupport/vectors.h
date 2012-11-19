@@ -410,6 +410,8 @@ typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned vector);
  */
 int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector);
 
+#ifndef PPC_EXC_CONFIG_BOOKE_ONLY
+
 /**
  * @brief Bits for MSR update.
  *
@@ -421,6 +423,8 @@ int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector);
  * handling is initialized is used.
  */
 extern uint32_t ppc_exc_msr_bits;
+
+#endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
 /**
  * @brief Cache write back check flag.
