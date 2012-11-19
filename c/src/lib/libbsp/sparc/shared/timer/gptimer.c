@@ -177,6 +177,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	int i, size;
 	struct gptimer_timer *timer;
 	union drvmgr_key_value *value;
+	unsigned char irq_ack_mask;
 #if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
 	char timer_index[7];
 #endif
@@ -267,6 +268,16 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	/* Get Frequency that the timers are operating in (after prescaler) */
 	priv->base_freq = priv->base_clk / (priv->regs->scaler_reload + 1);
 
+	/* Stop Timer and probe Pending bit. In newer hardware the
+	 * timer has pending bit is cleared by writing a one to it,
+	 * whereas older versions it is cleared with a zero.
+	 */
+	priv->regs->timer[0].ctrl = GPTIMER_CTRL_IP;
+	if ((priv->regs->timer[0].ctrl & GPTIMER_CTRL_IP) != 0)
+		irq_ack_mask = ~GPTIMER_CTRL_IP;
+	else
+		irq_ack_mask = ~0;
+
 	priv->timer_cnt = timer_cnt;
 	for (i=0; i<timer_cnt; i++) {
 		timer = &priv->timers[i];
@@ -274,16 +285,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 		timer->tindex = i + timer_start;
 		timer->tregs = &regs->timer[(int)timer->tindex];
 		timer->tdev.drv = &gptimer_tlib_drv;
-
-		/* Stop Timer and probe Pending bit. In newer hardware the
-		 * timer has pending bit is cleared by writing a one to it,
-		 * whereas older versions it is cleared with a zero.
-		 */
-		timer->tregs->ctrl = GPTIMER_CTRL_IP;
-		if ((timer->tregs->ctrl & GPTIMER_CTRL_IP) != 0)
-			timer->irq_ack_mask = ~GPTIMER_CTRL_IP;
-		else
-			timer->irq_ack_mask = ~0;
+		timer->irq_ack_mask = irq_ack_mask;
 
 		/* Register Timer at Timer Library */
 #if defined(LEON3) && defined(RTEMS_DRVMGR_STARTUP)
