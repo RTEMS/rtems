@@ -108,7 +108,9 @@ void bsp_start(void)
                 (uintptr_t) bsp_section_work_begin,
                 rtems_configuration_get_interrupt_stack_size()
 	);
-	ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
+	#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+		ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
+	#endif
 
 	/* Initialize interrupts */
 	bsp_interrupt_initialize();

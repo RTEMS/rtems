@@ -69,6 +69,7 @@ libbsp_a_SOURCES += ../../shared/src/stackalloc.c
 libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 libbsp_a_SOURCES += ../shared/src/memcpy.c
 libbsp_a_SOURCES += ../shared/src/tictac.c
+libbsp_a_SOURCES += ../shared/src/ppc-exc-handler-table.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspworkareainit.c
 libbsp_a_SOURCES += startup/exc-vector-base.S
