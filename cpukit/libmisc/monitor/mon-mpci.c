@@ -26,7 +26,7 @@
 void
 rtems_monitor_mpci_canonical(
     rtems_monitor_mpci_t *canonical_mpci,
-    void                  *config_void
+    const void           *config_void
 )
 {
     const rtems_configuration_table *c = &Configuration;
