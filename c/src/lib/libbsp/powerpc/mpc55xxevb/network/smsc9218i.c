@@ -471,18 +471,18 @@ static void smsc9218i_register_dump(volatile smsc9218i_registers *regs)
   reg = regs->afc_cfg;
   printf("afc_cfg: 0x%08" PRIx32 "\n", SMSC9218I_SWAP(reg));
 
-  printf("mac: cr: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_CR));
-  printf("mac: addrh: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRH));
-  printf("mac: addrl: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRL));
-  printf("mac: hashh: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_HASHH));
-  printf("mac: hashl: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_HASHL));
-  printf("mac: mii_acc: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_ACC));
-  printf("mac: mii_data: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_DATA));
-  printf("mac: flow: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_FLOW));
-  printf("mac: vlan1: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_VLAN1));
-  printf("mac: vlan2: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_VLAN2));
-  printf("mac: wuff: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_WUFF));
-  printf("mac: wucsr: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_WUCSR));
+  printf("mac: cr: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_CR, NULL));
+  printf("mac: addrh: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRH, NULL));
+  printf("mac: addrl: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_ADDRL, NULL));
+  printf("mac: hashh: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_HASHH, NULL));
+  printf("mac: hashl: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_HASHL, NULL));
+  printf("mac: mii_acc: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_ACC, NULL));
+  printf("mac: mii_data: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_MII_DATA, NULL));
+  printf("mac: flow: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_FLOW, NULL));
+  printf("mac: vlan1: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_VLAN1, NULL));
+  printf("mac: vlan2: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_VLAN2, NULL));
+  printf("mac: wuff: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_WUFF, NULL));
+  printf("mac: wucsr: 0x%08" PRIx32 "\n", smsc9218i_mac_read(regs, SMSC9218I_MAC_WUCSR, NULL));
 
   printf("phy: bcr: 0x%08" PRIx32 "\n", smsc9218i_phy_read(regs, MII_BMCR));
   printf("phy: bsr: 0x%08" PRIx32 "\n", smsc9218i_phy_read(regs, MII_BMSR));
