@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -178,9 +178,15 @@ bsp_exc_vector_base:
 	li	r4, 4
 	b	ppc_exc_wrap_nopush_std
 	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32763
+#endif
 	b	ppc_exc_wrap_async_normal
+#ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+	nop
+	nop
+#endif
 	stwu	r1, -EXC_GENERIC_SIZE(r1)
 	stw	r4, GPR4_OFFSET(r1)
 	li	r4, 6
@@ -203,13 +209,25 @@ system_call:
 	li	r4, 24
 	b	ppc_exc_wrap_nopush_std
 	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32752
+#endif
 	b	ppc_exc_wrap_async_normal
+#ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+	nop
+	nop
+#endif
 	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32749
+#endif
 	b	ppc_exc_wrap_async_normal
+#ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+	nop
+	nop
+#endif
 	stw	r1, ppc_exc_lock_crit@sdarel(r13)
 	stw	r4, ppc_exc_vector_register_crit@sdarel(r13)
 	li	r4, -32748

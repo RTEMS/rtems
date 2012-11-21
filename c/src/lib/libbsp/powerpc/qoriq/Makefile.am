@@ -64,6 +64,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	../../shared/bspclean.c \
 	../../shared/bspgetworkarea.c \
 	../../shared/src/bsp-uboot-board-info.c \
+	../shared/src/ppc-exc-handler-table.c \
 	../shared/src/tictac.c \
 	../shared/src/bsp-start-zero.S \
 	../shared/startup/bspidle.c \
