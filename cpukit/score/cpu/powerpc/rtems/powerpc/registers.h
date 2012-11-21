@@ -336,6 +336,14 @@ lidate */
 
 #define FSL_EIS_BUCSR 1013
 #define FSL_EIS_BUCSR_BBFI (1 << (63 - 54))
+#define FSL_EIS_BUCSR_BALLOC_ALL (0x0 << (63 - 59))
+#define FSL_EIS_BUCSR_BALLOC_FORWARD (0x1 << (63 - 59))
+#define FSL_EIS_BUCSR_BALLOC_BACKWARD (0x2 << (63 - 59))
+#define FSL_EIS_BUCSR_BALLOC_NONE (0x3 << (63 - 59))
+#define FSL_EIS_BUCSR_BPRED_TAKEN (0x0 << (63 - 61))
+#define FSL_EIS_BUCSR_BPRED_TAKEN_ONLY_FORWARD (0x1 << (63 - 62))
+#define FSL_EIS_BUCSR_BPRED_TAKEN_ONLY_BACKWARD (0x2 << (63 - 62))
+#define FSL_EIS_BUCSR_BPRED_NOT_TAKEN (0x3 << (63 - 62))
 #define FSL_EIS_BUCSR_BPEN (1 << (63 - 63))
 
 /* Freescale Book E Implementation Standards (EIS): Hardware Implementation-Dependent Registers */
