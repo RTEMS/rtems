@@ -24,6 +24,10 @@ RTEMS_BSPOPTS_SET([PPC_EXC_CONFIG_USE_FIXED_HANDLER],[*],[1])
 RTEMS_BSPOPTS_HELP([PPC_EXC_CONFIG_USE_FIXED_HANDLER],
 [use fixed high-level exception handler])
 
+RTEMS_BSPOPTS_SET([PPC_EXC_CONFIG_BOOKE_ONLY],[*],[1])
+RTEMS_BSPOPTS_HELP([PPC_EXC_CONFIG_BOOKE_ONLY],
+[only support Book E exception types])
+
 RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[115200])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[default baud for console and other serial devices])
 
