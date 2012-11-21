@@ -142,6 +142,15 @@ static void copy_file(const char *src_path, const char *dest_path)
   rtems_test_assert(rv == 0);
 }
 
+static void check_file_size(const char *path, size_t size)
+{
+  struct stat st;
+  int rv = lstat(path, &st);
+
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(st.st_size == (off_t) size);
+}
+
 static void check_file(const char *path)
 {
   int rv = 0;
@@ -183,6 +192,8 @@ static void test(void)
   create_file(file_a);
   copy_file(file_a, file_b);
   check_file(file_b);
+  check_file_size(file_a, sizeof(content));
+  check_file_size(file_b, sizeof(content));
 }
 
 static rtems_task Init(rtems_task_argument argument)

@@ -98,6 +98,15 @@ typedef struct {
 
   bool write;
 
+  /**
+   * Indicates if we should do a SIZE command.
+   *
+   * The first call to the rtems_ftpfs_fstat() handler is issued by the path
+   * evaluation to check for access permission.  For this case we avoid the
+   * SIZE command.
+   */
+  bool do_size_command;
+
   ino_t ino;
 
   const char *user;
@@ -1225,6 +1234,65 @@ static int rtems_ftpfs_ioctl(
   return 0;
 }
 
+typedef enum {
+  RTEMS_FTPFS_SIZE_START = 0,
+  RTEMS_FTPFS_SIZE_SPACE,
+  RTEMS_FTPFS_SIZE_NUMBER,
+  RTEMS_FTPFS_SIZE_NL
+} rtems_ftpfs_size_state;
+
+typedef struct {
+  rtems_ftpfs_size_state state;
+  size_t index;
+  off_t size;
+} rtems_ftpfs_size_entry;
+
+static void rtems_ftpfs_size_parser(
+  const char* buf,
+  size_t len,
+  void *arg
+)
+{
+  rtems_ftpfs_size_entry *se = arg;
+  size_t i = 0;
+
+  for (i = 0; se->size >= 0 && i < len; ++i, ++se->index) {
+    int c = buf [i];
+
+    switch (se->state) {
+      case RTEMS_FTPFS_SIZE_START:
+        if (se->index == 2) {
+          se->state = RTEMS_FTPFS_SIZE_SPACE;
+        }
+        break;
+      case RTEMS_FTPFS_SIZE_SPACE:
+        if (c == ' ') {
+          se->state = RTEMS_FTPFS_SIZE_NUMBER;
+        } else {
+          se->size = -1;
+        }
+        break;
+      case RTEMS_FTPFS_SIZE_NUMBER:
+        if (isdigit(c)) {
+          se->size = 10 * se->size + c - '0';
+        } else if (c == '\r') {
+          se->state = RTEMS_FTPFS_SIZE_NL;
+        } else {
+          se->size = -1;
+        }
+        break;
+      case RTEMS_FTPFS_SIZE_NL:
+        if (c != '\n') {
+          se->size = -1;
+        }
+        break;
+      default:
+        se->size = -1;
+        break;
+    }
+  }
+}
+
 /*
  * The stat() support is intended only for the cp shell command.  Each request
  * will return that we have a regular file with read, write and execute
@@ -1236,6 +1304,7 @@ static int rtems_ftpfs_fstat(
   struct stat *st
 )
 {
+  int eno = 0;
   rtems_ftpfs_entry *e = loc->node_access;
 
   /* FIXME */
@@ -1244,7 +1313,35 @@ static int rtems_ftpfs_fstat(
 
   st->st_mode = S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO;
 
-  return 0;
+  if (e->do_size_command) {
+    const rtems_ftpfs_mount_entry *me = loc->mt_entry->fs_info;
+    rtems_ftpfs_size_entry se;
+    rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
+
+    memset(&se, 0, sizeof(se));
+
+    reply = rtems_ftpfs_send_command_with_parser(
+      e,
+      "SIZE ",
+      e->filename,
+      rtems_ftpfs_size_parser,
+      &se,
+      me->verbose
+    );
+    if (reply == RTEMS_FTPFS_REPLY_2 && se.size >= 0) {
+      st->st_size = se.size;
+    } else {
+      eno = EIO;
+    }
+  } else {
+    e->do_size_command = true;
+  }
+
+  if (eno == 0) {
+    return 0;
+  } else {
+    rtems_set_errno_and_return_minus_one(eno);
+  }
 }
 
 static void rtems_ftpfs_lock_or_unlock(
