@@ -198,6 +198,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
@@ -1419,6 +1420,29 @@ command_mdtm(FTPD_SessionInfo_t  *info, char const* fname)
   }
 }
 
+static void
+command_size(FTPD_SessionInfo_t *info, char const* fname)
+{
+  struct stat stbuf;
+  char buf[FTPD_BUFSIZE];
+
+  if(!info->auth)
+  {
+    send_reply(info, 550, "Access denied.");
+    return;
+  }
+
+  if (info->xfer_mode != TYPE_I || 0 > stat(fname, &stbuf) || stbuf.st_size < 0)
+  {
+    send_reply(info, 550, "Could not get file size.");
+  }
+  else
+  {
+    snprintf(buf, FTPD_BUFSIZE, "%" PRIuMAX, (uintmax_t) stbuf.st_size);
+    send_reply(info, 213, buf);
+  }
+}
+
 /*
  * command_port
  *
@@ -1699,6 +1723,11 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   {
     strncpy(fname, args, 254);
     command_mdtm(info, fname);
+  }
+  else if (!strcmp("SIZE", cmd))
+  {
+    strncpy(fname, args, 254);
+    command_size(info, fname);
   }
   else if (!strcmp("SYST", cmd))
   {
