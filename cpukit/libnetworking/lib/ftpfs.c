@@ -5,12 +5,13 @@
  */
 
 /*
- * Copyright (c) 2009-2012
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2012 embedded brains GmbH.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * (c) Copyright 2002
  * Thomas Doerfler
@@ -18,8 +19,6 @@
  * Herbststr. 8
  * 82178 Puchheim, Germany
  * <Thomas.Doerfler@imd-systems.de>
- *
- * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>.
  *
  * This code has been created after closly inspecting "tftpdriver.c" from Eric
  * Norum.
@@ -129,7 +128,7 @@ static int rtems_ftpfs_set_connection_timeout(
 {
   if (rtems_ftpfs_use_timeout(to)) {
     int rv = 0;
-    
+
     rv = setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, to, sizeof(*to));
     if (rv != 0) {
       return EIO;
@@ -163,7 +162,7 @@ static rtems_status_code rtems_ftpfs_do_ioctl(
   if (fd < 0) {
     return RTEMS_INVALID_NAME;
   }
-  
+
   va_start(ap, req);
   rv = ioctl(fd, req, va_arg(ap, void *));
   va_end(ap);
@@ -175,7 +174,7 @@ static rtems_status_code rtems_ftpfs_do_ioctl(
   if (rv != 0 && sc == RTEMS_SUCCESSFUL) {
     sc = RTEMS_IO_ERROR;
   }
-  
+
   return sc;
 }
 
@@ -818,8 +817,8 @@ typedef enum {
 
 typedef struct {
   rtems_ftpfs_pasv_state state;
-  uint8_t data [6];
   size_t index;
+  uint8_t data [6];
 } rtems_ftpfs_pasv_entry;
 
 static void rtems_ftpfs_pasv_parser(
@@ -828,37 +827,38 @@ static void rtems_ftpfs_pasv_parser(
   void *arg
 )
 {
-  rtems_ftpfs_pasv_entry *e = arg;
+  rtems_ftpfs_pasv_entry *pe = arg;
   size_t i = 0;
 
   for (i = 0; i < len; ++i) {
     int c = buf [i];
 
-    switch (e->state) {
+    switch (pe->state) {
       case RTEMS_FTPFS_PASV_START:
         if (!isdigit(c)) {
-          e->state = RTEMS_FTPFS_PASV_JUNK;
-          e->index = 0;
+          pe->state = RTEMS_FTPFS_PASV_JUNK;
+          pe->index = 0;
         }
         break;
       case RTEMS_FTPFS_PASV_JUNK:
         if (isdigit(c)) {
-          e->state = RTEMS_FTPFS_PASV_DATA;
-          e->data [e->index] = (uint8_t) (c - '0');
+          pe->state = RTEMS_FTPFS_PASV_DATA;
+          pe->data [pe->index] = (uint8_t) (c - '0');
         }
         break;
       case RTEMS_FTPFS_PASV_DATA:
         if (isdigit(c)) {
-          e->data [e->index] = (uint8_t) (e->data [e->index] * 10 + c - '0');
+          pe->data [pe->index] =
+            (uint8_t) (pe->data [pe->index] * 10 + c - '0');
         } else if (c == ',') {
-          ++e->index;
-          if (e->index < sizeof(e->data)) {
-            e->data [e->index] = 0;
+          ++pe->index;
+          if (pe->index < sizeof(pe->data)) {
+            pe->data [pe->index] = 0;
           } else {
-            e->state = RTEMS_FTPFS_PASV_DONE;
+            pe->state = RTEMS_FTPFS_PASV_DONE;
           }
         } else {
-          e->state = RTEMS_FTPFS_PASV_DONE;
+          pe->state = RTEMS_FTPFS_PASV_DONE;
         }
         break;
       default:
@@ -881,10 +881,9 @@ static int rtems_ftpfs_open_data_connection_passive(
   struct sockaddr_in sa;
   uint32_t data_address = 0;
   uint16_t data_port = 0;
+  rtems_ftpfs_pasv_entry pe;
 
-  rtems_ftpfs_pasv_entry pe = {
-    .state = RTEMS_FTPFS_PASV_START
-  };
+  memset(&pe, 0, sizeof(pe));
 
   /* Send PASV command */
   reply = rtems_ftpfs_send_command_with_parser(
@@ -898,8 +897,10 @@ static int rtems_ftpfs_open_data_connection_passive(
   if (reply != RTEMS_FTPFS_REPLY_2) {
     return ENOTSUP;
   }
-  data_address = ((uint32_t)(pe.data [0]) << 24) + ((uint32_t)(pe.data [1]) << 16)
-    + ((uint32_t)(pe.data [2]) << 8) + ((uint32_t)(pe.data [3]));
+  data_address = ((uint32_t)(pe.data [0]) << 24)
+    + ((uint32_t)(pe.data [1]) << 16)
+    + ((uint32_t)(pe.data [2]) << 8)
+    + ((uint32_t)(pe.data [3]));
   data_port = (uint16_t) ((pe.data [4] << 8) + pe.data [5]);
   rtems_ftpfs_create_address(&sa, htonl(data_address), htons(data_port));
   DEBUG_PRINTF(
