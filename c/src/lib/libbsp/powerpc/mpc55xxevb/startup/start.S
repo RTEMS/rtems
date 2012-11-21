@@ -170,9 +170,17 @@ _start:
 	ori	r3, r3, 0x4000
 	mtspr	HID0, r3
 
-	/* Enable branch prediction */
-	LWI	r3, FSL_EIS_BUCSR_BBFI | FSL_EIS_BUCSR_BPEN
+	/*
+	 * Enable branch prediction.
+	 *
+	 * Errata e4396: e200z7: Erroneous Address Fetch
+	 *
+	 * The propose workaround does not work.
+	 */
+#if MPC55XX_CHIP_FAMILY != 567
+	LWI	r3, FSL_EIS_BUCSR_BBFI | FSL_EIS_BUCSR_BALLOC_ALL | FSL_EIS_BUCSR_BPRED_NOT_TAKEN | FSL_EIS_BUCSR_BPEN
 	mtspr	FSL_EIS_BUCSR, r3
+#endif
 
 #endif /* MPC55XX_NEEDS_LOW_LEVEL_INIT */
 
