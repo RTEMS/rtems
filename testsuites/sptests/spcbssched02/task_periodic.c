@@ -30,7 +30,7 @@ rtems_task Task_Periodic(
 
   int start, stop, now;
 
-  rtems_cbs_server_id server_id, tsid;
+  rtems_cbs_server_id server_id = 0, tsid;
   rtems_cbs_parameters params, tparams;
 
   params.deadline = Period;
@@ -115,13 +115,15 @@ rtems_task Task_Periodic(
       rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now );
       if ( now >= start + Execution ) break;
 
-      if ( rtems_cbs_get_execution_time( server_id, &exec_time, &abs_time ) )
-        printf( "ERROR: GET EXECUTION TIME FAILED\n" );
-      if ( rtems_cbs_get_remaining_budget( server_id, &remaining_budget) )
-        printf( "ERROR: GET REMAINING BUDGET FAILED\n" );
-      if ( (remaining_budget + exec_time) > (Execution + 1) ) {
-        printf( "ERROR: REMAINING BUDGET AND EXECUTION TIME MISMATCH\n" );
-        rtems_test_exit( 0 );
+      if ( server_id != 0 ) {
+        if ( rtems_cbs_get_execution_time( server_id, &exec_time, &abs_time ) )
+          printf( "ERROR: GET EXECUTION TIME FAILED\n" );
+        if ( rtems_cbs_get_remaining_budget( server_id, &remaining_budget) )
+          printf( "ERROR: GET REMAINING BUDGET FAILED\n" );
+        if ( (remaining_budget + exec_time) > (Execution + 1) ) {
+          printf( "ERROR: REMAINING BUDGET AND EXECUTION TIME MISMATCH\n" );
+          rtems_test_exit( 0 );
+        }
       }
     }
     rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &stop );
