@@ -1,6 +1,4 @@
 /*
- *  Internal Error Handler
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -9,42 +7,14 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/system.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/userext.h>
-
-/*PAGE
- *
- *  _Internal_error_Occurred
- *
- *  This routine will invoke the fatal error handler supplied by the user
- *  followed by the the default one provided by the executive.  The default
- *  error handler assumes no hardware is present to help inform the user
- *  of the problem.  Halt stores the error code in a known register,
- *  disables interrupts, and halts the CPU.  If the CPU does not have a
- *  halt instruction, it will loop to itself.
- *
- *  Input parameters:
- *    the_source  - what subsystem the error originated in
- *    is_internal - if the error was internally generated
- *    the_error   - fatal error status code
- *
- *  Output parameters:
- *    As much information as possible is stored in a CPU dependent fashion.
- *    See the CPU dependent code for more information.
- *
- *  NOTE: The the_error is not necessarily a directive status code.
- */
+#include <bsp.h>
+#include <bsp/bootcard.h>
+#include <rtems/bspIo.h>
 
 /*
  * Ugly hack.... _CPU_Fatal_halt() disonnects the bdm. Without this
  * change, the_error is only known only to the cpu :).
- *
- * From "bsp.h" which is not yet available in the arch tree during
- * this phase of install. jsg
  */
-void outbyte(char);
 
 #define RAW_PUTS(str) \
   { register char *ptr = str; \
@@ -61,21 +31,12 @@ void outbyte(char);
     } \
   }
 
-void volatile _Internal_error_Occurred(
-  Internal_errors_Source  the_source,
-  bool                    is_internal,
-  uint32_t                the_error
+void bsp_fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code the_error
 )
 {
-
-  _Internal_errors_What_happened.the_source  = the_source;
-  _Internal_errors_What_happened.is_internal = is_internal;
-  _Internal_errors_What_happened.the_error   = the_error;
-
-  _User_extensions_Fatal( the_source, is_internal, the_error );
-
-  _System_state_Set( SYSTEM_STATE_FAILED );
-
   /* try to print error message to outbyte */
   RAW_PUTS("\r\nRTEMS: A fatal error has occured.\r\n");
   RAW_PUTS("RTEMS:    fatal error ");
@@ -86,11 +47,9 @@ void volatile _Internal_error_Occurred(
   outbyte( (char)((the_error>>8) & 0xff) );
   outbyte( (char)(the_error & 0xff) );
   RAW_PUTS(").\r\n");
+}
 
-  /* configure peripherals for a safe exit */
-  bsp_cleanup(1);
-
-  _CPU_Fatal_halt( the_error );
-
-  /* will not return from this routine */
+void bsp_cleanup( uint32_t status )
+{
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }
