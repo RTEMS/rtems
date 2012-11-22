@@ -1704,9 +1704,9 @@ lstat( /my_mount_point/symlinks/a_dir_symlink/a_file_symlink ) returned
 ...st_ctime   Sat Dec 31 09:00:35 1988
 ...st_blksize 0
 ...st_blocks  0
-statvfs, with invalid path - expect ENOTSUP
+statvfs, with invalid path - expect ENOSYS
 create /tmp -- OK
-statvfs, with valid path - expect ENOTSUP
+statvfs, with valid path - expect ENOSYS
 statvfs tested!
 Exercise the reentrant version - _stat_r - expect EFAULT
 Exercise the reentrant version - _lstat_r - expect EFAULT

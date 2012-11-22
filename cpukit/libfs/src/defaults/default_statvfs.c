@@ -19,5 +19,5 @@ int rtems_filesystem_default_statvfs(
   struct statvfs *buf
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  rtems_set_errno_and_return_minus_one( ENOSYS );
 }
