@@ -4268,7 +4268,7 @@ extern "C" {
 
     struct EQADC_tag {
 
-        union {                  /* Module Configuration Register */
+        union EQADC_MCR_tag {  /* Module Configuration Register */
             uint32_t R;
             struct {
                 uint32_t:24;
@@ -4283,7 +4283,7 @@ extern "C" {
 
         uint32_t eQADC_reserved0004;  /* 0x0004-0x0007 */
 
-        union {                /* Null Message Send Format Register */
+        union EQADC_NMSFR_tag { /* Null Message Send Format Register */
             uint32_t R;
             struct {
                 uint32_t:6;
@@ -4291,7 +4291,7 @@ extern "C" {
             } B;
         } NMSFR;
 
-        union {                /* External Trigger Digital Filter Register */
+        union EQADC_ETDFR_tag { /* External Trigger Digital Filter Register */
             uint32_t R;
             struct {
                 uint32_t:28;
@@ -4299,7 +4299,7 @@ extern "C" {
             } B;
         } ETDFR;
 
-        union {              /* CFIFO Push Registers */
+        union EQADC_CFPR_tag { /* CFIFO Push Registers */
             uint32_t R;
             struct {
                 uint32_t CFPUSH:32;
@@ -4308,7 +4308,7 @@ extern "C" {
 
         uint32_t eQADC_reserved0028[2];  /* 0x0028-0x002F */
 
-        union {              /* Result FIFO Pop Registers */
+        union EQADC_RFPR_tag { /* Result FIFO Pop Registers */
             uint32_t R;
             struct {
                 uint32_t:16;
@@ -4450,7 +4450,7 @@ extern "C" {
 
         uint32_t eQADC_reserved00B0;  /* 0x00B0-0x00B3 */
 
-        union {                /* SSI Control Register */
+        union EQADC_SSICR_tag { /* SSI Control Register */
             uint32_t R;
             struct {
                 uint32_t:21;
