@@ -191,6 +191,10 @@ $(PROJECT_INCLUDE)/rtems/score/userext.h: include/rtems/score/userext.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/userext.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/userext.h
 
+$(PROJECT_INCLUDE)/rtems/score/userextimpl.h: include/rtems/score/userextimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/userextimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/userextimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/watchdog.h: include/rtems/score/watchdog.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/watchdog.h

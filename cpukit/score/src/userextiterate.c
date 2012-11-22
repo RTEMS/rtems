@@ -17,7 +17,7 @@
 #endif
 
 #include <rtems/config.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 
 CHAIN_DEFINE_EMPTY( _User_extensions_List );
 

@@ -20,7 +20,7 @@
 #endif
 
 #include <rtems/config.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 
 CHAIN_DEFINE_EMPTY( _User_extensions_Switches_list );

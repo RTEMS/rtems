@@ -52,6 +52,7 @@ include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
 include_rtems_score_HEADERS += include/rtems/score/tod.h
 include_rtems_score_HEADERS += include/rtems/score/tqdata.h
 include_rtems_score_HEADERS += include/rtems/score/userext.h
+include_rtems_score_HEADERS += include/rtems/score/userextimpl.h
 include_rtems_score_HEADERS += include/rtems/score/watchdog.h
 include_rtems_score_HEADERS += include/rtems/score/wkspace.h
 include_rtems_score_HEADERS += include/rtems/score/cpuopts.h

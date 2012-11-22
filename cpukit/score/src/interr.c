@@ -13,10 +13,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 
 System_state_Codes _System_state_Current;
 

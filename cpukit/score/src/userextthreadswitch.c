@@ -19,8 +19,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 
 void _User_extensions_Thread_switch (
   Thread_Control *executing,

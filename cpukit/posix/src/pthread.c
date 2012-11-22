@@ -20,7 +20,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/cancel.h>
 #include <rtems/posix/pthread.h>

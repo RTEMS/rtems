@@ -24,7 +24,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__

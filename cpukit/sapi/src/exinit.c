@@ -43,7 +43,7 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
-#include <rtems/score/userext.h>
+#include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/score/wkspace.h>
 
