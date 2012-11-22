@@ -199,10 +199,24 @@ static inline void _User_extensions_Thread_begin( Thread_Control *executing )
   );
 }
 
-void _User_extensions_Thread_switch(
+static inline void _User_extensions_Thread_switch(
   Thread_Control *executing,
   Thread_Control *heir
-);
+)
+{
+  const Chain_Control *chain = &_User_extensions_Switches_list;
+  const Chain_Node    *tail = _Chain_Immutable_tail( chain );
+  const Chain_Node    *node = _Chain_Immutable_first( chain );
+
+  while ( node != tail ) {
+    const User_extensions_Switch_control *extension =
+      (const User_extensions_Switch_control *) node;
+
+    (*extension->thread_switch)( executing, heir );
+
+    node = _Chain_Immutable_next( node );
+  }
+}
 
 static inline void _User_extensions_Thread_exitted( Thread_Control *executing )
 {

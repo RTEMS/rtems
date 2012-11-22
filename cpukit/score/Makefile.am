@@ -319,8 +319,7 @@ libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
 
 ## USEREXT_C_FILES
 libscore_a_SOURCES += src/userextaddset.c \
-    src/userext.c src/userextremoveset.c src/userextiterate.c \
-    src/userextthreadswitch.c
+    src/userext.c src/userextremoveset.c src/userextiterate.c
 
 ## STD_C_FILES
 libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
