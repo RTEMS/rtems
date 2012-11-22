@@ -130,7 +130,21 @@ void _API_extensions_Run_postdriver( void );
  *
  *  This routine executes all of the post context switch callouts.
  */
-void _API_extensions_Run_postswitch( void );
+static inline void _API_extensions_Run_postswitch( Thread_Control *executing )
+{
+  const Chain_Control *chain = &_API_extensions_List;
+  const Chain_Node    *tail = _Chain_Immutable_tail( chain );
+  const Chain_Node    *node = _Chain_Immutable_first( chain );
+
+  while ( node != tail ) {
+    const API_extensions_Control *extension =
+      (const API_extensions_Control *) node;
+
+    (*extension->postswitch_hook)( executing );
+
+    node = _Chain_Immutable_next( node );
+  }
+}
 
 /**@}*/
 

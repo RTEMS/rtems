@@ -211,5 +211,5 @@ post_switch:
     _Thread_Unnest_dispatch();
   #endif
 
-  _API_extensions_Run_postswitch();
+  _API_extensions_Run_postswitch( executing );
 }

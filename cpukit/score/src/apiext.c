@@ -84,23 +84,4 @@ void _API_extensions_Run_postdriver( void )
   }
 }
 
-/*
- *  _API_extensions_Run_postswitch
- */
-
-void _API_extensions_Run_postswitch( void )
-{
-  Chain_Node             *the_node;
-  API_extensions_Control *the_extension;
-
-  for ( the_node = _Chain_First( &_API_extensions_List );
-        !_Chain_Is_tail( &_API_extensions_List, the_node ) ;
-        the_node = the_node->next ) {
-
-    the_extension = (API_extensions_Control *) the_node;
-
-    (*the_extension->postswitch_hook)( _Thread_Executing );
-  }
-}
-
 /* end of file */
