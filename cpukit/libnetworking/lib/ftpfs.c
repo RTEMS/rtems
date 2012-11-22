@@ -1148,16 +1148,20 @@ static void rtems_ftpfs_eval_path(
 static void rtems_ftpfs_free_node(const rtems_filesystem_location_info_t *loc)
 {
   rtems_ftpfs_entry *e = loc->node_access;
-  const rtems_ftpfs_mount_entry *me = loc->mt_entry->fs_info;
 
-  /* Close control connection if necessary */
-  if (e->ctrl_socket >= 0) {
-    rtems_ftpfs_send_command(e, "QUIT", NULL, me->verbose);
+  /* The root node handler has no entry */
+  if (e != NULL) {
+    const rtems_ftpfs_mount_entry *me = loc->mt_entry->fs_info;
 
-    close(e->ctrl_socket);
+    /* Close control connection if necessary */
+    if (e->ctrl_socket >= 0) {
+      rtems_ftpfs_send_command(e, "QUIT", NULL, me->verbose);
+
+      close(e->ctrl_socket);
+    }
+
+    free(e);
   }
-
-  free(e);
 }
 
 static rtems_filesystem_node_types_t rtems_ftpfs_node_type(
