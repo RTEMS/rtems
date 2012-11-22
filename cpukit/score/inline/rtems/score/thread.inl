@@ -76,8 +76,12 @@
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
   {
-    _Thread_Dispatch_disable_level++;
-    return _Thread_Dispatch_disable_level;
+    uint32_t level = _Thread_Dispatch_disable_level;
+
+    ++level;
+    _Thread_Dispatch_disable_level = level;
+
+    return level;
   }
 
   /** @brief _Thread_Dispatch_decrement_disable_level
@@ -86,8 +90,12 @@
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
   {
-    _Thread_Dispatch_disable_level--;
-    return _Thread_Dispatch_disable_level;
+    uint32_t level = _Thread_Dispatch_disable_level;
+
+    --level;
+    _Thread_Dispatch_disable_level = level;
+
+    return level;
   }
 
   /** @brief _Thread_Dispatch_initialization
