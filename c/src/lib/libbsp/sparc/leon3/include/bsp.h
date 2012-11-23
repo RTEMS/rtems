@@ -45,8 +45,6 @@ void *bsp_idle_thread( uintptr_t ignored );
 /* Maximum supported APBUARTs by BSP */
 #define BSP_NUMBER_OF_TERMIOS_PORTS 8
 
-#define BSP_RESET_BOARD_AT_EXIT 1
-
 /*
  * Network driver configuration
  */

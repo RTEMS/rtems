@@ -37,7 +37,7 @@ RTEMS_BSPOPTS_HELP([BSP_LEON3_SMP],
 [Always defined when on a LEON3 to enable the LEON3 support for
  determining the CPU core number in an SMP configuration.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

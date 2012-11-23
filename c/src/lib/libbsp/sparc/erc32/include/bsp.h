@@ -52,8 +52,6 @@ extern int rtems_erc32_sonic_driver_attach(
 
 /* Constants */
 
-#define BSP_RESET_BOARD_AT_EXIT 1
-
 /*
  *  Information placed in the linkcmds file.
  */

@@ -36,8 +36,6 @@ extern "C" {
 
 #include <bspopts.h>
 
-#define BSP_RESET_BOARD_AT_EXIT 1
-
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140

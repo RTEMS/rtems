@@ -72,8 +72,6 @@ extern int   CPU_SPARC_HAS_SNOOPING;
 
 /* Constants */
 
-#define BSP_RESET_BOARD_AT_EXIT 1
-
 /*
  *  Information placed in the linkcmds file.
  */
