@@ -1,7 +1,9 @@
 MEMORY {
-	RAM : ORIGIN = 0x40000000, LENGTH = 256K - 16k
-	RAM_EXT : ORIGIN = 0x20000000, LENGTH = 512K
+	DSROM : ORIGIN = 0x00020000, LENGTH = 64k
+	RAM : ORIGIN = 0x40000000, LENGTH = 240k
 	NOCACHE : ORIGIN = 0x4003c000, LENGTH = 16k
+	DSRAM : ORIGIN = 0x20000000, LENGTH = 64k
+	RAM_EXT : ORIGIN = 0x20010000, LENGTH = 448k
 	NVRAM : ORIGIN = 0x3ffa0000, LENGTH = 128k
 }
 
@@ -23,5 +25,16 @@ REGION_ALIAS ("REGION_STACK", RAM);
 REGION_ALIAS ("REGION_NOCACHE", NOCACHE);
 REGION_ALIAS ("REGION_NOCACHE_LOAD", ROM);
 REGION_ALIAS ("REGION_NVRAM", NVRAM);
+
+SECTIONS {
+	.dsram (NOLOAD) : {
+		bsp_section_dsram_begin = .;
+		*(SORT(.bsp_dsram*))
+		bsp_section_dsram_end = .;
+	} > DSRAM AT > DSROM
+	bsp_section_dsram_size = bsp_section_dsram_end - bsp_section_dsram_begin;
+	bsp_section_dsram_load_begin = LOADADDR (.dsram);
+	bsp_section_dsram_load_end = bsp_section_dsram_load_begin + bsp_section_dsram_size;
+}
 
 INCLUDE linkcmds.mpc55xx

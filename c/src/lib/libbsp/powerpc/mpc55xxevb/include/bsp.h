@@ -37,6 +37,8 @@
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
+#include <libcpu/powerpc-utility.h>
+
 #include <bsp/tictac.h>
 #include <bsp/default-initial-extension.h>
 
@@ -76,6 +78,14 @@ void bsp_restart(void *addr);
 void *bsp_idle_thread(uintptr_t arg);
 
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
+
+LINKER_SYMBOL(bsp_section_dsram_begin)
+LINKER_SYMBOL(bsp_section_dsram_end)
+LINKER_SYMBOL(bsp_section_dsram_size)
+LINKER_SYMBOL(bsp_section_dsram_load_begin)
+LINKER_SYMBOL(bsp_section_dsram_load_end)
+
+#define BSP_DSRAM_SECTION __attribute__((section(".bsp_dsram")))
 
 typedef enum {
   MPC55XX_FATAL_FMPLL_LOCK
