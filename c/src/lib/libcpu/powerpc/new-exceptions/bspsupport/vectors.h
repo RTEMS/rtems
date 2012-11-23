@@ -437,6 +437,11 @@ extern uint32_t ppc_exc_msr_bits;
 extern uint32_t ppc_exc_cache_wb_check;
 
 /**
+ * @brief High-level exception handler table.
+ */
+extern ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1];
+
+/**
  * @brief Set high-level exception handler.
  *
  * Hook C exception handlers.
