@@ -340,6 +340,13 @@ SECTIONS {
 	bsp_section_nocache_load_begin = LOADADDR (.nocache);
 	bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
 
+	.nvram (NOLOAD) : {
+		bsp_section_nvram_begin = .;
+		*(SORT(.bsp_nvram*))
+		bsp_section_nvram_end = .;
+	} > REGION_NVRAM
+	bsp_section_nvram_size = bsp_section_nvram_end - bsp_section_nvram_begin;
+
 	/* FIXME */
 	RamBase = ORIGIN (REGION_WORK);
 	RamSize = LENGTH (REGION_WORK);

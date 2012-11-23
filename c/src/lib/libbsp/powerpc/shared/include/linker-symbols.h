@@ -99,11 +99,17 @@ LINKER_SYMBOL(bsp_section_nocache_size)
 LINKER_SYMBOL(bsp_section_nocache_load_begin)
 LINKER_SYMBOL(bsp_section_nocache_load_end)
 
+LINKER_SYMBOL(bsp_section_nvram_begin)
+LINKER_SYMBOL(bsp_section_nvram_end)
+LINKER_SYMBOL(bsp_section_nvram_size)
+
 #define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
 
 #define BSP_FAST_DATA_SECTION __attribute__((section(".bsp_fast_data")))
 
 #define BSP_NOCACHE_SECTION __attribute__((section(".bsp_nocache")))
+
+#define BSP_NVRAM_SECTION __attribute__((section(".bsp_nvram")))
 
 /** @} */
 
