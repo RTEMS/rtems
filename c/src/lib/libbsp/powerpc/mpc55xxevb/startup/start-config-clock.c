@@ -79,7 +79,7 @@ const mpc55xx_clock_config mpc55xx_start_config_clock [1] = { {
     },
     .esyncr1_final = {
       .B = {
-        .CLKCFG = 7,
+        .CLKCFG = MPC55XX_FMPLL_ESYNCR1_CLKCFG,
         .EPREDIV = EPREDIV_VAL,
         .EMFD = EMFD_VAL
       }

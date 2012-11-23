@@ -105,6 +105,26 @@ $(PROJECT_LIB)/linkcmds.mpc5674f_ecu508_app: startup/linkcmds.mpc5674f_ecu508_ap
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_ecu508_app
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_ecu508_app
 
+$(PROJECT_LIB)/linkcmds.mpc5674f_rsm6: startup/linkcmds.mpc5674f_rsm6 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6
+
+$(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_koma_boot: startup/linkcmds.mpc5674f_rsm6_koma_boot $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_koma_boot
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_koma_boot
+
+$(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_koma_app: startup/linkcmds.mpc5674f_rsm6_koma_app $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_koma_app
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_koma_app
+
+$(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_moma_boot: startup/linkcmds.mpc5674f_rsm6_moma_boot $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_moma_boot
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_moma_boot
+
+$(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_moma_app: startup/linkcmds.mpc5674f_rsm6_moma_app $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_moma_app
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_rsm6_moma_app
+
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h

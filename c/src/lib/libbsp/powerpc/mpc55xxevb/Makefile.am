@@ -33,6 +33,11 @@ dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_boot
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_app
+dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6
+dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6_koma_boot
+dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6_koma_app
+dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6_moma_boot
+dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6_moma_app
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =

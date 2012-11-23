@@ -37,7 +37,8 @@ const mpc55xx_ebi_config mpc55xx_start_config_ebi [] = {
       .siu_eccr_ebdf = 4 - 1 /* use CLK/4 as bus clock */
     }
   #elif (defined(MPC55XX_BOARD_MPC5674FEVB) \
-    || defined(MPC55XX_BOARD_MPC5674F_ECU508)) \
+    || defined(MPC55XX_BOARD_MPC5674F_ECU508) \
+    || defined(MPC55XX_BOARD_MPC5674F_RSM6)) \
       && defined(MPC55XX_NEEDS_LOW_LEVEL_INIT)
     {
       .ebi_mcr = {
