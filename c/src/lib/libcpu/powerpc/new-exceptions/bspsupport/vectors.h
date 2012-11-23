@@ -35,6 +35,8 @@
 #ifndef LIBCPU_VECTORS_H
 #define LIBCPU_VECTORS_H
 
+#include <bspopts.h>
+
 #include <libcpu/powerpc-utility.h>
 
 #ifdef __cplusplus
@@ -262,11 +264,6 @@ typedef CPU_Exception_frame BSP_Exception_frame;
 typedef void (*exception_handler_t)(BSP_Exception_frame*);
 
 /**
- * @brief Global exception handler.
- */
-extern exception_handler_t globalExceptHdl;
-
-/**
  * @brief Default global exception handler.
  */
 void C_exception_handler(BSP_Exception_frame* excPtr);
@@ -399,15 +396,19 @@ void ppc_exc_initialize(
 /**
  * @brief High-level exception handler type.
  *
- * Exception handlers should return zero if the exception was handled and
- * normal execution may resume.
- *
- * They should return minus one to reject the exception resulting in the
- * globalExcHdl() being called.
- *
- * Other return values are reserved.
+ * @retval 0 The exception was handled and normal execution may resume.
+ * @retval -1 Reject the exception resulting in a call of the global exception
+ * handler.
+ * @retval other Reserved, do not use.
  */
 typedef int (*ppc_exc_handler_t)(BSP_Exception_frame *f, unsigned vector);
+
+/**
+ * @brief Default high-level exception handler.
+ *
+ * @retval -1 Always.
+ */
+int ppc_exc_handler_default(BSP_Exception_frame *f, unsigned int vector);
 
 /**
  * @brief Bits for MSR update.
@@ -436,10 +437,27 @@ extern uint32_t ppc_exc_msr_bits;
  */
 extern uint32_t ppc_exc_cache_wb_check;
 
-/**
- * @brief High-level exception handler table.
- */
-extern ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1];
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+  /**
+   * @brief High-level exception handler table.
+   */
+  extern ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1];
+
+  /**
+   * @brief Global exception handler.
+   */
+  extern exception_handler_t globalExceptHdl;
+#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+  /**
+   * @brief High-level exception handler table.
+   */
+  extern const ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1];
+
+  /**
+   * @brief Interrupt dispatch routine provided by BSP.
+   */
+  void bsp_interrupt_dispatch(void);
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 /**
  * @brief Set high-level exception handler.
@@ -457,6 +475,11 @@ extern ppc_exc_handler_t ppc_exc_handler_table [LAST_VALID_EXC + 1];
  *
  * It is legal to set a NULL handler. This leads to the globalExcHdl
  * being called if an exception for 'vector' occurs.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid vector number.
+ * @retval RTEMS_RESOURCE_IN_USE Handler table is read-only and handler does
+ * not match.
  */
 rtems_status_code ppc_exc_set_handler(unsigned vector, ppc_exc_handler_t hdl);
 

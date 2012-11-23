@@ -19,8 +19,6 @@
 
 #include <bsp/vectors.h>
 
-exception_handler_t globalExceptHdl = C_exception_handler;
-
 void C_exception_handler(BSP_Exception_frame *excPtr)
 {
   rtems_fatal(

@@ -9,7 +9,7 @@
 /*
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (C) 2009 embedded brains GmbH.
+ * Copyright (C) 2009-2012 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -135,8 +135,12 @@ rtems_status_code ppc_exc_make_prologue(
       && (ppc_interrupt_get_disable_mask() & MSR_CE) == 0
   ) {
     prologue_template = ppc_exc_min_prolog_async_tmpl_normal;
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
     prologue_template_size = (size_t) ppc_exc_min_prolog_size;
     fixup_vector = true;
+#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+    prologue_template_size = 8;
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
   } else {
     prologue_template = ppc_exc_prologue_templates [category];
     prologue_template_size = (size_t) ppc_exc_min_prolog_size;

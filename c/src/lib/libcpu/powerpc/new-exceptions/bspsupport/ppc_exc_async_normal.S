@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -46,14 +46,21 @@
  */
 #define FRAME_OFFSET(reg) GPR2_OFFSET(reg)
 
+#ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+	.global	bsp_interrupt_dispatch
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+
 	.global	ppc_exc_min_prolog_async_tmpl_normal
 	.global ppc_exc_wrap_async_normal
 
 ppc_exc_min_prolog_async_tmpl_normal:
 
 	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	VECTOR_REGISTER, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	VECTOR_REGISTER, 0xffff8000
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 	/*
 	 * We store the absolute branch target address here.  It will be used
@@ -87,6 +94,7 @@ ppc_exc_wrap_async_normal:
 
 	PPC_GPR_STORE	SCRATCH_0_REGISTER, SCRATCH_0_OFFSET(r1)
 
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 #ifdef __SPE__
 	/*
 	 * Save high order part of VECTOR_REGISTER here.  The low order part
@@ -95,9 +103,14 @@ ppc_exc_wrap_async_normal:
 	evmergehi	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, VECTOR_REGISTER
 	stw	SCRATCH_0_REGISTER, VECTOR_OFFSET(r1)
 #endif
+#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+	/* The vector register has no special purpose in this case */
+	PPC_GPR_STORE	VECTOR_REGISTER, VECTOR_OFFSET(r1)
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 	PPC_GPR_STORE	HANDLER_REGISTER, HANDLER_OFFSET(r1)
 
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	/*
 	 * Load the handler address.  Get the handler table index from the
 	 * vector number.  We have to discard the exception type.  Take only
@@ -108,6 +121,7 @@ ppc_exc_wrap_async_normal:
 	lis	HANDLER_REGISTER, ppc_exc_handler_table@h
 	ori	HANDLER_REGISTER, HANDLER_REGISTER, ppc_exc_handler_table@l
 	lwzx	HANDLER_REGISTER, HANDLER_REGISTER, SCRATCH_0_REGISTER
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 	PPC_GPR_STORE	SCRATCH_1_REGISTER, SCRATCH_1_OFFSET(r1)
 	PPC_GPR_STORE	SCRATCH_2_REGISTER, SCRATCH_2_OFFSET(r1)
@@ -149,6 +163,7 @@ ppc_exc_wrap_async_normal:
 	mfspr	SCRATCH_0_REGISTER, SPRG1
 	iselgt	r1, r1, SCRATCH_0_REGISTER
 
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	/*
 	 * Call high level exception handler.
 	 *
@@ -159,6 +174,10 @@ ppc_exc_wrap_async_normal:
 	rlwinm	VECTOR_REGISTER, VECTOR_REGISTER, 0, 27, 31
 	mtctr	HANDLER_REGISTER
 	bctrl
+#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+	/* Call fixed high level handler */
+	bl	bsp_interrupt_dispatch
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 	/* Load ISR nest level and thread dispatch disable level */
 	lis	ISR_NEST_HADDR_REGISTER, ISR_NEST_LEVEL@ha

@@ -3,7 +3,7 @@
  *
  * Modified and partially rewritten by Till Straumann, 2007-2008
  *
- * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>, 2008.
+ * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>, 2008-2012.
  *
  * Low-level assembly code for PPC exceptions (macros).
  *
@@ -825,6 +825,8 @@ wrap_call_global_handler_\_FLVR:
 	/* First parameter = exception frame pointer + FRAME_LINK_SPACE */
 	addi	r3, FRAME_REGISTER, FRAME_LINK_SPACE
 
+#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+
 	/* Load global handler address */
 	LW	SCRATCH_REGISTER_0, globalExceptHdl
 
@@ -835,6 +837,13 @@ wrap_call_global_handler_\_FLVR:
 	/* Call global handler */
 	mtctr	SCRATCH_REGISTER_0
 	bctrl
+
+#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
+
+	/* Call fixed global handler */
+	bl	C_exception_handler
+
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 	b	wrap_handler_done_\_FLVR
 
