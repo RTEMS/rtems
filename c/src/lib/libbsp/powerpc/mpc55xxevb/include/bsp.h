@@ -87,6 +87,14 @@ LINKER_SYMBOL(bsp_section_dsram_load_end)
 
 #define BSP_DSRAM_SECTION __attribute__((section(".bsp_dsram")))
 
+LINKER_SYMBOL(bsp_section_sysram_begin)
+LINKER_SYMBOL(bsp_section_sysram_end)
+LINKER_SYMBOL(bsp_section_sysram_size)
+LINKER_SYMBOL(bsp_section_sysram_load_begin)
+LINKER_SYMBOL(bsp_section_sysram_load_end)
+
+#define BSP_SYSRAM_SECTION __attribute__((section(".bsp_sysram")))
+
 typedef enum {
   MPC55XX_FATAL_FMPLL_LOCK
 } mpc55xx_fatal_code;

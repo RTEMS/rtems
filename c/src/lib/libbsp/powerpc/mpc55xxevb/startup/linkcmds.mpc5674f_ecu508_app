@@ -1,6 +1,6 @@
 MEMORY {
 	/* Let space for the binary image library header */
-	ROM : ORIGIN = 0x00100000, LENGTH = 3M - 4k
+	ROM : ORIGIN = 0x00101000, LENGTH = 3064k
 }
 
 REGION_ALIAS ("STARTROM", ROM);
