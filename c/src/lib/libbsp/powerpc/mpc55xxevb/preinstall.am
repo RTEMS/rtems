@@ -161,10 +161,6 @@ $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h: include/mpc55xx-config.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
 
-$(PROJECT_INCLUDE)/bsp/mpc55xxevb.h: include/mpc55xxevb.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xxevb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xxevb.h
-
 $(PROJECT_INCLUDE)/bsp/smsc9218i.h: include/smsc9218i.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/smsc9218i.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/smsc9218i.h
