@@ -188,7 +188,8 @@ mpc5xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 include_libcpu_HEADERS += mpc5xx/vectors/vectors.h
 
 noinst_PROGRAMS += mpc5xx/vectors.rel
-mpc5xx_vectors_rel_SOURCES = mpc5xx/vectors/vectors_init.c mpc5xx/vectors/vectors.S
+mpc5xx_vectors_rel_SOURCES = mpc5xx/vectors/vectors_init.c mpc5xx/vectors/vectors.S \
+    new-exceptions/bspsupport/ppc_exc_print.c
 mpc5xx_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc5xx_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif

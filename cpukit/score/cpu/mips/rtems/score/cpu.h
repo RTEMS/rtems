@@ -609,6 +609,8 @@ typedef struct
 
 } CPU_Interrupt_frame;
 
+typedef CPU_Interrupt_frame CPU_Exception_frame;
+
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -702,6 +704,8 @@ extern unsigned int mips_interrupt_number_of_vectors;
  */
 
 #define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
+
+void mips_vector_exceptions( CPU_Interrupt_frame *frame );
 
 /*
  *  ISR handler macros
@@ -1111,6 +1115,15 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+
+void _BSP_Exception_frame_print( const CPU_Exception_frame *frame );
+
+static inline void _CPU_Exception_frame_print(
+  const CPU_Exception_frame *frame
+)
+{
+  _BSP_Exception_frame_print( frame );
+}
 
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.

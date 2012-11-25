@@ -117,7 +117,7 @@ struct Frame_ {
 	uintptr_t		pc;
 };
 
-static void _defaultExcHandler (CPU_Exception_frame *ctx)
+void _CPU_Exception_frame_print (const CPU_Exception_frame *ctx)
 {
   unsigned int faultAddr = 0;
   printk("----------------------------------------------------------\n");
@@ -148,7 +148,6 @@ static void _defaultExcHandler (CPU_Exception_frame *ctx)
      * because the eip points to the faulty instruction so...
      */
     printk("Exception while executing ISR!!!. System locked\n");
-    _CPU_Fatal_halt(faultAddr);
   }
   else {
   	struct Frame_ *fp = (struct Frame_*)ctx->ebp;
@@ -171,8 +170,15 @@ static void _defaultExcHandler (CPU_Exception_frame *ctx)
     printk(" ************ FAULTY THREAD WILL BE SUSPENDED **************\n");
     rtems_task_suspend(_Thread_Executing->Object.id);
 #endif
-    bsp_reset();
   }
+}
+
+static void _defaultExcHandler (CPU_Exception_frame *ctx)
+{
+  rtems_fatal(
+    RTEMS_FATAL_SOURCE_EXCEPTION,
+    (rtems_fatal_code) ctx
+  );
 }
 
 cpuExcHandlerType _currentExcHandler = _defaultExcHandler;

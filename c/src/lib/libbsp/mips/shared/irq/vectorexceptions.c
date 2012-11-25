@@ -24,9 +24,7 @@
 #include <rtems/bspIo.h>
 #include <bsp/irq-generic.h>
 
-void mips_vector_exceptions( CPU_Interrupt_frame *frame );
-
-static const char *cause_strings[32] =
+static const char *const cause_strings[32] =
 {
   /*  0 */ "Int",
   /*  1 */ "TLB Mods",
@@ -79,7 +77,7 @@ static const struct regdef dumpregs[]= {
   { R_EPC,"R_EPC"}, { -1, NULL }
 };
 
-static void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
+void _BSP_Exception_frame_print( const CPU_Exception_frame *frame )
 {
   uint32_t *frame_u32;
   int   i, j;

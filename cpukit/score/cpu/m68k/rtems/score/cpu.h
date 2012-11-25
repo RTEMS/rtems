@@ -709,6 +709,8 @@ void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
 
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
+
 #if (M68K_HAS_FPSP_PACKAGE == 1)
 /*
  *  Hooks for the Floating Point Support Package (FPSP) provided by Motorola

@@ -161,6 +161,7 @@ include_rtems_avr_HEADERS += avr/wdt.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S
+libscorecpu_a_SOURCES += avr-exception-frame-print.c
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

@@ -271,8 +271,6 @@ extern exception_handler_t globalExceptHdl;
  */
 void C_exception_handler(BSP_Exception_frame* excPtr);
 
-void ppc_exc_print_frame_and_context(const BSP_Exception_frame *excPtr);
-
 void BSP_printStackTrace(const BSP_Exception_frame *excPtr);
 
 /**

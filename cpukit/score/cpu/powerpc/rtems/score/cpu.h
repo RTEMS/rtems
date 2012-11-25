@@ -1036,6 +1036,15 @@ typedef struct {
   PPC_GPR_TYPE GPR31;
 } CPU_Exception_frame;
 
+void _BSP_Exception_frame_print( const CPU_Exception_frame *frame );
+
+static inline void _CPU_Exception_frame_print(
+  const CPU_Exception_frame *frame
+)
+{
+  _BSP_Exception_frame_print( frame );
+}
+
 /*
  * _CPU_Initialize_altivec()
  *

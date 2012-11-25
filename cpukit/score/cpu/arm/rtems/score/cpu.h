@@ -582,7 +582,12 @@ typedef CPU_Exception_frame CPU_Interrupt_frame;
 
 typedef void CPU_Interrupt_frame;
 
+/* FIXME */
+typedef CPU_Interrupt_frame CPU_Exception_frame;
+
 #endif /* !defined(ARM_MULTILIB_ARCH_V4) */
+
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 #ifdef __cplusplus
 }

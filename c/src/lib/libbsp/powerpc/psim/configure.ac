@@ -45,7 +45,7 @@ Note that the policy can still be defined by the application
 CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK this feature is removed
 and a little memory is saved.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+RTEMS_BSP_CLEANUP_OPTIONS(0, 1, 1)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

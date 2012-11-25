@@ -1221,6 +1221,20 @@ void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
 
+typedef struct {
+  uint32_t trap;
+  CPU_Interrupt_frame *isf;
+} CPU_Exception_frame;
+
+void _BSP_Exception_frame_print( const CPU_Exception_frame *frame );
+
+static inline void _CPU_Exception_frame_print(
+  const CPU_Exception_frame *frame
+)
+{
+  _BSP_Exception_frame_print( frame );
+}
+
 /**
  *  @brief SPARC Specific Method to Endian Swap an uint32_t 
  *

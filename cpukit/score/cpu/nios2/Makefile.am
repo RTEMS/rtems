@@ -24,6 +24,7 @@ libscorecpu_a_SOURCES += nios2-context-initialize.c
 libscorecpu_a_SOURCES += nios2-context-switch.S
 libscorecpu_a_SOURCES += nios2-eic-il-low-level.S
 libscorecpu_a_SOURCES += nios2-eic-rsie-low-level.S
+libscorecpu_a_SOURCES += nios2-exception-frame-print.c
 libscorecpu_a_SOURCES += nios2-fatal-halt.c
 libscorecpu_a_SOURCES += nios2-iic-low-level.S
 libscorecpu_a_SOURCES += nios2-initialize.c

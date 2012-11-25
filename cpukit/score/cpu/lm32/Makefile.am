@@ -11,6 +11,7 @@ include_rtems_score_HEADERS += rtems/score/types.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S irq.c
+libscorecpu_a_SOURCES += lm32-exception-frame-print.c
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

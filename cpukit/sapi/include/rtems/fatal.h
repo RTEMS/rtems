@@ -37,6 +37,23 @@ extern "C" {
  */
 
 /**
+ * @brief Exception frame.
+ */
+typedef CPU_Exception_frame rtems_exception_frame;
+
+/**
+ *  @brief Prints the exception frame via printk().
+ *
+ *  @see rtems_fatal() and RTEMS_FATAL_SOURCE_EXCEPTION.
+ */
+static inline void rtems_exception_frame_print(
+  const rtems_exception_frame *frame
+)
+{
+  _CPU_Exception_frame_print( frame );
+}
+
+/**
  * @brief Invokes the internal error handler with a source of
  * INTERNAL_ERROR_RTEMS_API and is internal set to false.
  *

@@ -1112,6 +1112,11 @@ void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
 
+/* FIXME */
+typedef CPU_Interrupt_frame CPU_Exception_frame;
+
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
+
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
  *

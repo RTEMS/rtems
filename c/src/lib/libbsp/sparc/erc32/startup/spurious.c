@@ -16,20 +16,15 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 
-/*
- *  bsp_spurious_handler
- *
- *  Print a message on the debug console and then die
- */
-
-rtems_isr bsp_spurious_handler(
-   rtems_vector_number trap,
-   CPU_Interrupt_frame *isf
-)
+void _BSP_Exception_frame_print( const CPU_Exception_frame *frame )
 {
-  uint32_t         real_trap;
+  uint32_t                   trap;
+  uint32_t                   real_trap;
+  const CPU_Interrupt_frame *isf;
 
+  trap = frame->trap;
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
+  isf = frame->isf;
 
   printk( "Unexpected trap (%2d) at address 0x%08x\n", real_trap, isf->tpc);
 
@@ -121,12 +116,22 @@ rtems_isr bsp_spurious_handler(
     default:
       break;
   }
+}
 
-  /*
-   *  What else can we do but stop ...
-   */
+rtems_isr bsp_spurious_handler(
+   rtems_vector_number trap,
+   CPU_Interrupt_frame *isf
+)
+{
+  CPU_Exception_frame frame = {
+    .trap = trap,
+    .isf = isf
+  };
 
-  __asm__ volatile( "mov 1, %g1; ta 0x0" );
+  rtems_fatal(
+    RTEMS_FATAL_SOURCE_EXCEPTION,
+    (rtems_fatal_code) &frame
+  );
 }
 
 /*

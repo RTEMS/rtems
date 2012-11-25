@@ -203,6 +203,33 @@ false.  See also @code{@value{DIRPREFIX}fatal_error_occurred}.
 @c
 @c
 @page
+@subsection EXCEPTION_FRAME_PRINT - Prints the exception frame
+
+@cindex exception frame
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_exception_frame_print
+@example
+void rtems_exception_frame_print(
+  const rtems_exception_frame *frame
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+NONE
+
+@subheading DESCRIPTION:
+
+Prints the exception frame via printk().
+
+@c
+@c
+@c
+@page
 @subsection INTERNAL_ERROR_DESCRIPTION - Returns a description for an internal error code
 
 @cindex fatal error

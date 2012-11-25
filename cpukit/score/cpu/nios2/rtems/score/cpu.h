@@ -338,6 +338,8 @@ void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
+
 static inline uint32_t CPU_swap_u32( uint32_t value )
 {
   uint32_t byte1, byte2, byte3, byte4, swapped;

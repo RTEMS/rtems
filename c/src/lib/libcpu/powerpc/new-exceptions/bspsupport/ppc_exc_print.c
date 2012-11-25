@@ -85,7 +85,7 @@ void BSP_printStackTrace(const BSP_Exception_frame *excPtr)
   }
 }
 
-void ppc_exc_print_frame_and_context(const BSP_Exception_frame *excPtr)
+void _BSP_Exception_frame_print(const CPU_Exception_frame *excPtr)
 {
   const Thread_Control *executing = _Thread_Executing;
   bool synch = (int) excPtr->_EXC_number >= 0;

@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal26
+
+directives:
+
+  - rtems_exception_frame_print
+
+concepts:
+
+  - Ensure that we get an fatal condition with RTEMS_FATAL_SOURCE_EXCEPTION.

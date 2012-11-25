@@ -1264,6 +1264,28 @@ void _CPU_Context_restore_fp(
 );
 
 /**
+ *  @brief The set of registers that specifies the complete processor state.
+ *
+ *  The CPU exception frame may be available in fatal error conditions like for
+ *  example illegal opcodes, instruction fetch errors, or data access errors.
+ *
+ *  @see rtems_fatal(), RTEMS_FATAL_SOURCE_EXCEPTION, and
+ *  rtems_exception_frame_print().
+ */
+typedef struct {
+  uint32_t processor_state_register;
+  uint32_t integer_registers [1];
+  double float_registers [1];
+} CPU_Exception_frame;
+
+/**
+ *  @brief Prints the exception frame via printk().
+ *
+ *  @see rtems_fatal() and RTEMS_FATAL_SOURCE_EXCEPTION.
+ */
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
+
+/**
  *  @ingroup CPUEndian
  *  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.

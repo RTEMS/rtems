@@ -9,10 +9,11 @@ dnl
 dnl To be used in bsp-configure scripts
 
 dnl USAGE:
-dnl    RTEMS_BSP_CLEANUP_OPTIONS([0|1], [0|1]) 
+dnl    RTEMS_BSP_CLEANUP_OPTIONS([0|1], [0|1], [0|1])
 dnl WHERE:
 dnl    argument 1 indicates the default value for BSP_PRESS_KEY_FOR_RESET
 dnl    argument 2 indicates the default value for BSP_RESET_BOARD_AT_EXIT
+dnl    argument 3 indicates the default value for BSP_PRINT_EXCEPTION_CONTEXT
 
 AC_DEFUN([RTEMS_BSP_CLEANUP_OPTIONS],[
 RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[$1])
@@ -23,4 +24,8 @@ RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
 RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[*],[$2])
 RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
 [If defined, reset the board when the application exits.])
+
+RTEMS_BSPOPTS_SET([BSP_PRINT_EXCEPTION_CONTEXT],[*],[$3])
+RTEMS_BSPOPTS_HELP([BSP_PRINT_EXCEPTION_CONTEXT],
+[If defined, prints the exception context when an unexpected exception occurs.])
 ])

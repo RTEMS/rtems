@@ -665,6 +665,8 @@ void _CPU_Context_restore_fp(
   } while (0)
 #endif
 
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
+
 #endif /* ASM */
 
 #ifdef __cplusplus

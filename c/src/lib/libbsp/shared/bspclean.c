@@ -16,7 +16,7 @@
 void bsp_fatal_extension(
   rtems_fatal_source source,
   bool is_internal,
-  rtems_fatal_code error
+  rtems_fatal_code code
 )
 {
   #if (BSP_PRESS_KEY_FOR_RESET)
@@ -29,6 +29,12 @@ void bsp_fatal_extension(
       ;
 
     printk("\n");
+  #endif
+
+  #if (BSP_PRINT_EXCEPTION_CONTEXT)
+    if ( source == RTEMS_FATAL_SOURCE_EXCEPTION ) {
+      rtems_exception_frame_print( (const rtems_exception_frame *) code );
+    }
   #endif
 
   /*
