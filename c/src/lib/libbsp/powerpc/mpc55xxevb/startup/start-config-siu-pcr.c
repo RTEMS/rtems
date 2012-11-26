@@ -131,5 +131,5 @@ const mpc55xx_siu_pcr_config mpc55xx_start_config_siu_pcr [] = {
 };
 
 const size_t mpc55xx_start_config_siu_pcr_count [] = {
-  sizeof(mpc55xx_start_config_siu_pcr) / sizeof(mpc55xx_start_config_siu_pcr [0])
+  RTEMS_ARRAY_SIZE(mpc55xx_start_config_siu_pcr)
 };

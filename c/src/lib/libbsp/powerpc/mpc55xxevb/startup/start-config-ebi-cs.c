@@ -158,7 +158,7 @@ const struct EBI_CS_tag mpc55xx_start_config_ebi_cs [] = {
 };
 
 const size_t mpc55xx_start_config_ebi_cs_count [] = {
-  sizeof(mpc55xx_start_config_ebi_cs) / sizeof(mpc55xx_start_config_ebi_cs [0])
+  RTEMS_ARRAY_SIZE(mpc55xx_start_config_ebi_cs)
 };
 
 #endif /* MPC55XX_HAS_EBI */

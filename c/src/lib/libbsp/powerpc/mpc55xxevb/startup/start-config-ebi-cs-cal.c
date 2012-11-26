@@ -173,7 +173,7 @@ const struct EBI_CAL_CS_tag mpc55xx_start_config_ebi_cal_cs [] = {
 };
 
 const size_t mpc55xx_start_config_ebi_cal_cs_count [] = {
-  sizeof(mpc55xx_start_config_ebi_cal_cs) / sizeof(mpc55xx_start_config_ebi_cal_cs [0])
+  RTEMS_ARRAY_SIZE(mpc55xx_start_config_ebi_cal_cs)
 };
 
 #endif /* MPC55XX_HAS_EBI */

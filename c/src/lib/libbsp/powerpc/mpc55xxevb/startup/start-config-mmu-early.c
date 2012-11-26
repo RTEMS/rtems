@@ -50,6 +50,5 @@ const struct MMU_tag mpc55xx_start_config_mmu_early [] = {
 };
 
 const size_t mpc55xx_start_config_mmu_early_count [] = {
-  sizeof(mpc55xx_start_config_mmu_early)
-    / sizeof(mpc55xx_start_config_mmu_early [0])
+  RTEMS_ARRAY_SIZE(mpc55xx_start_config_mmu_early)
 };
