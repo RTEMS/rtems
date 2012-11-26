@@ -70,7 +70,6 @@ void C_default_exception_handler(CPU_Exception_frame* excPtr)
   printk("\t CTR = %x\n", excPtr->EXC_CTR);
   printk("\t XER = %x\n", excPtr->EXC_XER);
   printk("\t LR = %x\n", excPtr->EXC_LR);
-  printk("\t MSR = %x\n", excPtr->EXC_MSR);
   if (excPtr->_EXC_number == ASM_DEC_VECTOR)
        recoverable = 1;
   if (excPtr->_EXC_number == ASM_SYS_VECTOR)

@@ -127,7 +127,6 @@ typedef struct {
   unsigned 	EXC_CTR;
   unsigned 	EXC_XER;
   unsigned	EXC_LR;
-  unsigned 	EXC_MSR;
   unsigned	EXC_DAR;
 }CPU_Exception_frame;
 
