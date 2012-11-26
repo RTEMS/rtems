@@ -160,7 +160,6 @@ int			quiet=0;
        printk("\t CTR = %08x\n", excPtr->EXC_CTR);
        printk("\t XER = %08x\n", excPtr->EXC_XER);
        printk("\t LR  = %08x\n", excPtr->EXC_LR);
-       printk("\t DAR = %08x\n", excPtr->EXC_DAR);
 
        BSP_printStackTrace(excPtr);
     }

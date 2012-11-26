@@ -209,7 +209,6 @@ extern "C" {
 #define GPR29_OFFSET PPC_EXC_GPR_OFFSET(29)
 #define GPR30_OFFSET PPC_EXC_GPR_OFFSET(30)
 #define GPR31_OFFSET PPC_EXC_GPR_OFFSET(31)
-#define EXC_DAR_OFFSET PPC_EXC_GPR_OFFSET(32)
 
 #define EXC_GENERIC_SIZE PPC_EXC_FRAME_SIZE
 
@@ -291,7 +290,6 @@ typedef struct {
   PPC_GPR_TYPE GPR29;
   PPC_GPR_TYPE GPR30;
   PPC_GPR_TYPE GPR31;
-  unsigned EXC_DAR;
 } BSP_Exception_frame;
 
 /** @} */

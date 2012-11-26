@@ -70,7 +70,6 @@
 #define EXC_CTR_OFFSET 152
 #define EXC_XER_OFFSET 156
 #define EXC_LR_OFFSET 160
-#define EXC_DAR_OFFSET 164
 /*
  * maintain the EABI requested 8 bytes aligment
  * As SVR4 ABI requires 16, make it 16 (as some
@@ -127,7 +126,6 @@ typedef struct {
   unsigned 	EXC_CTR;
   unsigned 	EXC_XER;
   unsigned	EXC_LR;
-  unsigned	EXC_DAR;
 }CPU_Exception_frame;
 
 
