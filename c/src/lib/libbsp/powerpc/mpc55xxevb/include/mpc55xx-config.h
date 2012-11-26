@@ -93,8 +93,19 @@ extern BSP_START_DATA_SECTION const mpc55xx_clock_config
   mpc55xx_start_config_clock [];
 
 #ifdef MPC55XX_HAS_EBI
-  extern BSP_START_DATA_SECTION const struct
-    EBI_CS_tag mpc55xx_start_config_ebi_cs [];
+  typedef struct {
+    union EBI_MCR_tag ebi_mcr;
+    uint32_t siu_eccr_ebdf;
+  } mpc55xx_ebi_config;
+
+  extern BSP_START_DATA_SECTION const mpc55xx_ebi_config
+    mpc55xx_start_config_ebi [];
+
+  extern BSP_START_DATA_SECTION const size_t
+    mpc55xx_start_config_ebi_count [];
+
+  extern BSP_START_DATA_SECTION const struct EBI_CS_tag
+    mpc55xx_start_config_ebi_cs [];
 
   extern BSP_START_DATA_SECTION const size_t
     mpc55xx_start_config_ebi_cs_count [];

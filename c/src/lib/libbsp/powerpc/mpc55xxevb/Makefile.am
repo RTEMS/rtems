@@ -78,6 +78,7 @@ libbsp_a_SOURCES += startup/reset.c
 libbsp_a_SOURCES += startup/restart.c
 libbsp_a_SOURCES += startup/idle-thread.c
 libbsp_a_SOURCES += startup/start-config-clock.c
+libbsp_a_SOURCES += startup/start-config-ebi.c
 libbsp_a_SOURCES += startup/start-config-ebi-cs.c
 libbsp_a_SOURCES += startup/start-config-ebi-cs-cal.c
 libbsp_a_SOURCES += startup/start-config-mmu.c

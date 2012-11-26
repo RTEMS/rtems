@@ -145,47 +145,28 @@ static BSP_START_TEXT_SECTION void mpc55xx_start_siu(void)
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_ebi_chip_select(void)
 {
-  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
-    #ifdef MPC55XX_HAS_EBI
-      size_t i = 0;
+  #ifdef MPC55XX_HAS_EBI
+    size_t i = 0;
 
-      for (i = 0; i < mpc55xx_start_config_ebi_cs_count [0]; ++i) {
-        EBI.CS [i] = mpc55xx_start_config_ebi_cs [i];
-      }
+    for (i = 0; i < mpc55xx_start_config_ebi_cs_count [0]; ++i) {
+      EBI.CS [i] = mpc55xx_start_config_ebi_cs [i];
+    }
 
-      for (i = 0; i < mpc55xx_start_config_ebi_cal_cs_count [0]; ++i) {
-        EBI.CAL_CS [i] = mpc55xx_start_config_ebi_cal_cs [i];
-      }
-    #endif
+    for (i = 0; i < mpc55xx_start_config_ebi_cal_cs_count [0]; ++i) {
+      EBI.CAL_CS [i] = mpc55xx_start_config_ebi_cal_cs [i];
+    }
   #endif
 }
 
 static BSP_START_TEXT_SECTION void mpc55xx_start_ebi(void)
 {
-  #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
-    #if defined(MPC55XX_BOARD_GWLCFM)
-      /*
-       * init EBI for Muxed AD bus
-       */
-      EBI.MCR.B.DBM = 1;
-      EBI.MCR.B.AD_MUX = 1; /* use multiplexed bus */
-      EBI.MCR.B.D16_31 = 1; /* use lower AD bus    */
+  #ifdef MPC55XX_HAS_EBI
+    size_t i = 0;
 
-      SIU.ECCR.B.EBDF = 3;  /* use CLK/4 as bus clock */
-    #elif defined(MPC55XX_BOARD_MPC5674FEVB) \
-      || defined(MPC55XX_BOARD_MPC5674F_ECU508)
-      union EBI_MCR_tag mcr = {
-        .B = {
-          .ACGE = 0,
-          .MDIS = 0,
-          .D16_31 = 1,
-          .AD_MUX = 0,
-          .DBM = 0
-        }
-      };
-
-      EBI.MCR.R = mcr.R;
-    #endif
+    for (i = 0; i < mpc55xx_start_config_ebi_count [0]; ++i) {
+      SIU.ECCR.B.EBDF = mpc55xx_start_config_ebi [i].siu_eccr_ebdf;
+      EBI.MCR.R = mpc55xx_start_config_ebi [i].ebi_mcr.R;
+    }
   #endif
 }
 
