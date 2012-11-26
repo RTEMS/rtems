@@ -34,42 +34,42 @@
 #define SRR0_FRAME_OFFSET 8
 #define SRR1_FRAME_OFFSET 12
 #define EXCEPTION_NUMBER_OFFSET 16
-#define GPR0_OFFSET 20
-#define GPR1_OFFSET 24
-#define GPR2_OFFSET 28
-#define GPR3_OFFSET 32
-#define GPR4_OFFSET 36
-#define GPR5_OFFSET 40
-#define GPR6_OFFSET 44
-#define GPR7_OFFSET 48
-#define GPR8_OFFSET 52
-#define GPR9_OFFSET 56
-#define GPR10_OFFSET 60
-#define GPR11_OFFSET 64
-#define GPR12_OFFSET 68
-#define GPR13_OFFSET 72
-#define GPR14_OFFSET 76
-#define GPR15_OFFSET 80
-#define GPR16_OFFSET 84
-#define GPR17_OFFSET 88
-#define GPR18_OFFSET 92
-#define GPR19_OFFSET 96
-#define GPR20_OFFSET 100
-#define GPR21_OFFSET 104
-#define GPR22_OFFSET 108
-#define GPR23_OFFSET 112
-#define GPR24_OFFSET 116
-#define GPR25_OFFSET 120
-#define GPR26_OFFSET 124
-#define GPR27_OFFSET 128
-#define GPR28_OFFSET 132
-#define GPR29_OFFSET 136
-#define GPR30_OFFSET 140
-#define GPR31_OFFSET 144
-#define EXC_CR_OFFSET 148
-#define EXC_CTR_OFFSET 152
-#define EXC_XER_OFFSET 156
-#define EXC_LR_OFFSET 160
+#define EXC_CR_OFFSET 20
+#define EXC_CTR_OFFSET 24
+#define EXC_XER_OFFSET 28
+#define EXC_LR_OFFSET 32
+#define GPR0_OFFSET 36
+#define GPR1_OFFSET 40
+#define GPR2_OFFSET 44
+#define GPR3_OFFSET 48
+#define GPR4_OFFSET 52
+#define GPR5_OFFSET 56
+#define GPR6_OFFSET 60
+#define GPR7_OFFSET 64
+#define GPR8_OFFSET 68
+#define GPR9_OFFSET 72
+#define GPR10_OFFSET 76
+#define GPR11_OFFSET 80
+#define GPR12_OFFSET 84
+#define GPR13_OFFSET 88
+#define GPR14_OFFSET 92
+#define GPR15_OFFSET 96
+#define GPR16_OFFSET 100
+#define GPR17_OFFSET 104
+#define GPR18_OFFSET 108
+#define GPR19_OFFSET 112
+#define GPR20_OFFSET 116
+#define GPR21_OFFSET 120
+#define GPR22_OFFSET 124
+#define GPR23_OFFSET 128
+#define GPR24_OFFSET 132
+#define GPR25_OFFSET 136
+#define GPR26_OFFSET 140
+#define GPR27_OFFSET 144
+#define GPR28_OFFSET 148
+#define GPR29_OFFSET 152
+#define GPR30_OFFSET 156
+#define GPR31_OFFSET 160
 /*
  * maintain the EABI requested 8 bytes aligment
  * As SVR4 ABI requires 16, make it 16 (as some
@@ -78,6 +78,9 @@
 #define    EXCEPTION_FRAME_END 176
 
 #ifndef ASM
+
+#include <rtems.h>
+
 /*
  * default raw exception handlers
  */
@@ -85,49 +88,6 @@
 extern	void default_exception_vector_code_prolog();
 extern	int  default_exception_vector_code_prolog_size;
 extern  void initialize_exceptions();
-
-typedef struct {
-  unsigned 	EXC_SRR0;
-  unsigned 	EXC_SRR1;
-  unsigned	_EXC_number;
-  unsigned	GPR0;
-  unsigned	GPR1;
-  unsigned	GPR2;
-  unsigned	GPR3;
-  unsigned	GPR4;
-  unsigned	GPR5;
-  unsigned	GPR6;
-  unsigned	GPR7;
-  unsigned	GPR8;
-  unsigned	GPR9;
-  unsigned	GPR10;
-  unsigned	GPR11;
-  unsigned	GPR12;
-  unsigned	GPR13;
-  unsigned	GPR14;
-  unsigned	GPR15;
-  unsigned	GPR16;
-  unsigned	GPR17;
-  unsigned	GPR18;
-  unsigned	GPR19;
-  unsigned	GPR20;
-  unsigned	GPR21;
-  unsigned	GPR22;
-  unsigned	GPR23;
-  unsigned	GPR24;
-  unsigned	GPR25;
-  unsigned	GPR26;
-  unsigned	GPR27;
-  unsigned	GPR28;
-  unsigned	GPR29;
-  unsigned	GPR30;
-  unsigned	GPR31;
-  unsigned 	EXC_CR;
-  unsigned 	EXC_CTR;
-  unsigned 	EXC_XER;
-  unsigned	EXC_LR;
-}CPU_Exception_frame;
-
 
 typedef void rtems_exception_handler_t (CPU_Exception_frame* excPtr);
 /*DEBUG typedef rtems_exception_handler_t cpuExcHandlerType; */

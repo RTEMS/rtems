@@ -246,51 +246,7 @@ extern "C" {
  * @{
  */
 
-typedef struct {
-  unsigned EXC_SRR0;
-  unsigned EXC_SRR1;
-  unsigned _EXC_number;
-  unsigned EXC_CR;
-  unsigned EXC_CTR;
-  unsigned EXC_XER;
-  unsigned EXC_LR;
-  #ifdef __SPE__
-    uint32_t EXC_SPEFSCR;
-    uint64_t EXC_ACC;
-  #endif
-  PPC_GPR_TYPE GPR0;
-  PPC_GPR_TYPE GPR1;
-  PPC_GPR_TYPE GPR2;
-  PPC_GPR_TYPE GPR3;
-  PPC_GPR_TYPE GPR4;
-  PPC_GPR_TYPE GPR5;
-  PPC_GPR_TYPE GPR6;
-  PPC_GPR_TYPE GPR7;
-  PPC_GPR_TYPE GPR8;
-  PPC_GPR_TYPE GPR9;
-  PPC_GPR_TYPE GPR10;
-  PPC_GPR_TYPE GPR11;
-  PPC_GPR_TYPE GPR12;
-  PPC_GPR_TYPE GPR13;
-  PPC_GPR_TYPE GPR14;
-  PPC_GPR_TYPE GPR15;
-  PPC_GPR_TYPE GPR16;
-  PPC_GPR_TYPE GPR17;
-  PPC_GPR_TYPE GPR18;
-  PPC_GPR_TYPE GPR19;
-  PPC_GPR_TYPE GPR20;
-  PPC_GPR_TYPE GPR21;
-  PPC_GPR_TYPE GPR22;
-  PPC_GPR_TYPE GPR23;
-  PPC_GPR_TYPE GPR24;
-  PPC_GPR_TYPE GPR25;
-  PPC_GPR_TYPE GPR26;
-  PPC_GPR_TYPE GPR27;
-  PPC_GPR_TYPE GPR28;
-  PPC_GPR_TYPE GPR29;
-  PPC_GPR_TYPE GPR30;
-  PPC_GPR_TYPE GPR31;
-} BSP_Exception_frame;
+typedef CPU_Exception_frame BSP_Exception_frame;
 
 /** @} */
 
@@ -534,7 +490,6 @@ int ppc_exc_alignment_handler(BSP_Exception_frame *frame, unsigned excNum);
 /*
  * Compatibility with pc386
  */
-typedef BSP_Exception_frame CPU_Exception_frame;
 typedef exception_handler_t cpuExcHandlerType;
 
 #endif /* ASM */
