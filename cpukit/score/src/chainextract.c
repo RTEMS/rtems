@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Extracts a Node from a Chain
+ *
+ * @ingroup ScoreChain
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,20 +23,6 @@
 #include <rtems/score/address.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Chain_Extract
- *
- *  This kernel routine deletes the given node from a chain.
- *
- *  Input parameters:
- *    node - pointer to node in chain to be deleted
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    only case
- */
 
 void _Chain_Extract(
   Chain_Node *node

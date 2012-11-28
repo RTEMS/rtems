@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Convert Microseconds to Ticks
+ *
+ * @ingroup ScoreTODConstants
+ */
+
 /*  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

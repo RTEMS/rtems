@@ -626,7 +626,7 @@ void _Thread_Close(
 );
 
 /**
- *  This routine removes any set states for the_thread.  It performs
+ *  This routine removes any set states for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  */
@@ -635,7 +635,7 @@ void _Thread_Ready(
 );
 
 /**
- *  This routine clears the indicated STATES for the_thread.  It performs
+ *  This routine clears the indicated STATES for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  */
@@ -645,7 +645,7 @@ void _Thread_Clear_state(
 );
 
 /**
- *  This routine sets the indicated states for the_thread.  It performs
+ *  This routine sets the indicated states for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  */
@@ -655,9 +655,16 @@ void _Thread_Set_state(
 );
 
 /**
- *  This routine sets the TRANSIENT state for the_thread.  It performs
+ *  @brief Sets the Transient state for a Thread
+ *
+ *  This routine sets the Transient state for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
+ *
+ *  @param[in] the_thread is the thread to preform the action upon.
+ *
+ *  - INTERRUPT LATENCY:
+ *    + single case
  */
 void _Thread_Set_transient(
   Thread_Control *the_thread
@@ -748,14 +755,19 @@ void rtems_iterate_over_all_threads(
 );
 
 /**
+ *  @brief Maps THread Id to a TCB Pointer
+ *  
  *  This function maps thread IDs to thread control
  *  blocks.  If ID corresponds to a local thread, then it
  *  returns the_thread control pointer which maps to ID
- *  and location is set to OBJECTS_LOCAL.  If the thread ID is
+ *  and @a location is set to OBJECTS_LOCAL.  If the thread ID is
  *  global and resides on a remote node, then location is set
  *  to OBJECTS_REMOTE, and the_thread is undefined.
  *  Otherwise, location is set to OBJECTS_ERROR and
  *  the_thread is undefined.
+ *  
+ *  @param[in] id is the id of the thread.
+ *  @param[in] location is the location of the block.
  *
  *  @note  The performance of many RTEMS services depends upon
  *         the quick execution of the "good object" path in this

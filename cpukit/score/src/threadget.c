@@ -1,6 +1,12 @@
-/*
- *  Thread Handler - Object Id to Thread Pointer
+/**
+ * @file
  *
+ * @brief Maps Thread IDs to TCB Pointer
+ *
+ * @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,23 +31,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
-
-/**
- *  This function maps thread IDs to thread control
- *  blocks.  If ID corresponds to a local thread, then it
- *  returns the_thread control pointer which maps to ID
- *  and location is set to OBJECTS_LOCAL.  If the thread ID is
- *  global and resides on a remote node, then location is set
- *  to OBJECTS_REMOTE, and the_thread is undefined.
- *  Otherwise, location is set to OBJECTS_ERROR and
- *  the_thread is undefined.
- *
- *  @note  The performance of many RTEMS services depends upon
- *         the quick execution of the "good object" path in this
- *         routine.  If there is a possibility of saving a few
- *         cycles off the execution time, this routine is worth
- *         further optimization attention.
- */
 Thread_Control *_Thread_Get (
   Objects_Id         id,
   Objects_Locations *location

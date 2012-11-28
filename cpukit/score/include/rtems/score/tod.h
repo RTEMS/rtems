@@ -266,7 +266,7 @@ void _TOD_Tickle_ticks( void );
 #define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((uint32_t)(_ms) * 1000L)
 
 /**
- *  @brief TOD_MICROSECONDS_TO_TICKS
+ *  @brief Converts microseconds to ticks
  *
  *  This routine converts an interval expressed in microseconds to ticks.
  *

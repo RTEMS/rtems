@@ -774,6 +774,8 @@ Objects_Information *_Objects_Get_information_id(
 );
 
 /**
+ *  @brief _Objects_Get_name_as_string
+ *  
  *  This method objects the name of an object and returns its name
  *  in the form of a C string.  It attempts to be careful about
  *  overflowing the user's string and about returning unprintable characters.

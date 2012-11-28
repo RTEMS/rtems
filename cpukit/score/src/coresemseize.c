@@ -1,12 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Core Semaphore Seize
+ *
+ * @ingroup ScoreSemaphore
+ */
+
 /*
- *  CORE Semaphore Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Semaphore Handler.
- *  This core object utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,21 +27,6 @@
 #include <rtems/score/threadq.h>
 
 #if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
-/*
- *  This routine attempts to allocate a core semaphore to the calling thread.
- *
- *  Input parameters:
- *    the_semaphore - pointer to semaphore control block
- *    id            - id of object to wait on
- *    wait          - true if wait is allowed, false otherwise
- *    timeout       - number of ticks to wait (0 means forever)
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    available
- *    wait
- */
 
 void _CORE_semaphore_Seize(
   CORE_semaphore_Control *the_semaphore,

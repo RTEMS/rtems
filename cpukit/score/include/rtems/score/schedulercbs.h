@@ -225,6 +225,8 @@ int _Scheduler_CBS_Create_server (
  *
  *  Detach all tasks from a server and destroy it.
  *
+ *  @param[in] server_id is the ID of the server
+ *
  *  @return status code.
  */
 int _Scheduler_CBS_Destroy_server (

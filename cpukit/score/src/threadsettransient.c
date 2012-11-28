@@ -1,6 +1,12 @@
-/*
- *  Thread Handler / Thread Set Transient
+/**
+ * @file
  *
+ * @brief Sets the Transient State for a Thread
+ *
+ * @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,10 +34,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 
-/*
- *  INTERRUPT LATENCY:
- *    only case
- */
 void _Thread_Set_transient(
   Thread_Control *the_thread
 )

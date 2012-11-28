@@ -1,10 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Manually releases the Barrier
+ *
+ * @ingroup ScoreBarrier
+ */
+
 /*
- *  SuperCore Barrier Handler
- *
- *  DESCRIPTION:
- *
- *  This package is part of the implementation of the SuperCore Barrier Handler.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,22 +25,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  _CORE_barrier_Release
- *
- *  Input parameters:
- *    the_barrier            - the barrier to be flushed
- *    id                     - id of the object for a remote unblock
- *    api_barrier_mp_support - api dependent MP support actions
- *
- *  Output parameters:
- *    CORE_BARRIER_STATUS_SUCCESSFUL - if successful
- *    core error code                - if unsuccessful
- *
- *  Output parameters:
- *    returns number of threads unblocked
- */
 
 uint32_t _CORE_barrier_Release(
   CORE_barrier_Control                *the_barrier,

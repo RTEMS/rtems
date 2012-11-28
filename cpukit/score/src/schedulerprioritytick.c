@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Priority Scheduler At Tick Handler
+ *
+ * @ingroup ScoreScheduler
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

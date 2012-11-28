@@ -156,6 +156,8 @@ void _CORE_barrier_Wait(
 );
 
 /**
+ *  @brief Manually releases the barrier
+ *  
  *  This routine manually releases the barrier.  All of the threads waiting
  *  for the barrier will be readied.
  *

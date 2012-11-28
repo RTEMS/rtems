@@ -1,7 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Removes a Thread from a Thread  Queue
+ *
+ * @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +27,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_Extract_fifo
- *
- *  This routine removes a specific thread from the specified threadq,
- *  deletes any timeout, and unblocks the thread.
- *
- *  Input parameters:
- *    the_thread_queue - pointer to a threadq header
- *    the_thread       - pointer to the thread to block
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
- *    EXTRACT_FIFO
- */
 
 void _Thread_queue_Extract_fifo(
   Thread_queue_Control *the_thread_queue __attribute__((unused)),

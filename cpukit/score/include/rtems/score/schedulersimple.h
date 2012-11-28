@@ -75,6 +75,8 @@ void _Scheduler_simple_Schedule( void );
 void _Scheduler_simple_Yield( void );
 
 /**
+ *  @brief Removes a thread from the queue
+ *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
  *  any necessary scheduling operations including the selection of

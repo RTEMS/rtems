@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Extracts a node from a given chain
+ *
+ * @ingroup ScoreChain
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

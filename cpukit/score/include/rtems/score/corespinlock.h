@@ -110,9 +110,11 @@ typedef struct {
 }   CORE_spinlock_Control;
 
 /**
+ *  @brief Initialized a spinlock
+ *
  *  This routine initializes the spinlock based on the parameters passed.
  *
- *  @param[in] the_spinlock is the spinlock to initialize
+ *  @param[in] the_spinlock is the spinlock control block to initialize
  *  @param[in] the_spinlock_attributes define the behavior of this instance
  */
 void _CORE_spinlock_Initialize(

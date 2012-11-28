@@ -1,6 +1,10 @@
 /**
- * @file score/src/ts64settozero.c
-*/
+ * @file
+ *
+ * @brief Zero a Timestamp64 Instance
+ *
+ * @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.
