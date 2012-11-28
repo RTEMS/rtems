@@ -157,6 +157,8 @@ void _CORE_RWLock_Obtain_for_reading(
 );
 
 /**
+ *  @brief RWLock Obtain for Writing
+ * 
  *  This routine attempts to obtain the RWLock for write exclusive access.
  *
  *  @param[in] the_rwlock is the RWLock to wait for

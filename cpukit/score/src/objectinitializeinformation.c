@@ -1,6 +1,11 @@
-/*
- *  Object Handler Initialization per Object Class
+/**
+ * @file
  *
+ * @brief Initialize Object Information
+ * @ingroup ScoreObject
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,24 +29,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Objects_Initialize_information
- *
- *  This routine initializes all object information related data structures.
- *
- *  Input parameters:
- *    information         - object information table
- *    maximum             - maximum objects of this class
- *    size                - size of this object's control block
- *    is_string           - true if names for this object are strings
- *    maximum_name_length - maximum length of each object's name
- *    When multiprocessing is configured,
- *      supports_global     - true if this is a global object class
- *      extract_callout     - pointer to threadq extract callout
- *
- *  Output parameters:  NONE
- */
 
 void _Objects_Initialize_information(
   Objects_Information *information,

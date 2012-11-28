@@ -223,6 +223,15 @@ RBTree_Node *_RBTree_Get(
  *  This function returns a pointer to the node with key equal to a key
  *  of @a the_node if it exists in the Red-Black Tree @a the_rbtree,
  *  and NULL if not.
+ * 
+ *  @param[in] the_rbtree pointer to rbtree control
+ *  @param[in] the_node node with the key to search for
+ *  @return This method returns pointer to control header of rbtree. * 
+ *          If there is no control header available (the node is not part
+ *          of a tree), then NULL is returned. *
+ *
+ *  - INTERRUPT LATENCY:
+ *    + single case  
  */
 RBTree_Node *_RBTree_Find(
   RBTree_Control *the_rbtree,

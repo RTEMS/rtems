@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Restart Thread 
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,16 +31,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Restart
- *
- *  DESCRIPTION:
- *
- *  This support routine restarts the specified task in a way that the
- *  next time this thread executes, it will begin execution at its
- *  original starting point.
- */
 
 bool _Thread_Restart(
   Thread_Control            *the_thread,

@@ -592,6 +592,7 @@ bool _Thread_Start(
 );
 
 /**
+ *  @brief Restart Thread
  *  This support routine restarts the specified task in a way that the
  *  next time this thread executes, it will begin execution at its
  *  original starting point.

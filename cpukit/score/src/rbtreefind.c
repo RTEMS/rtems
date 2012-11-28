@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Find the control structure of the tree containing the given node
+ * @ingroup ScoreRBTree
+ */
+
 /*
  *  Copyright (c) 2010 Gedare Bloom.
  *
@@ -14,25 +21,6 @@
 #include <rtems/score/address.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _RBTree_Find
- *
- *  This kernel routine returns a pointer to the rbtree node containing the
- *  given key within the given tree, if it exists, or NULL otherwise.
- *
- *  Input parameters:
- *    the_rbtree - pointer to rbtree control
- *    search_node - node with the key to search for
- *
- *  Output parameters:
- *    return_node - pointer to control header of rbtree
- *    NULL   - if there is no control header available (the node is not part
- *    of a tree)
- *
- *  INTERRUPT LATENCY:
- *    only case
- */
 
 RBTree_Node *_RBTree_Find(
   RBTree_Control *the_rbtree,

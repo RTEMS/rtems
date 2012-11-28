@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Thread Queue Enqueue
+ * @ingroup ScoreThreadQ
+ */
+
 /*
  *  Thread Queue Handler
  *
@@ -22,22 +29,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_Enqueue_with_handler
- *
- *  This routine blocks a thread, places it on a thread, and optionally
- *  starts a timeout timer.
- *
- *  Input parameters:
- *    the_thread_queue - pointer to threadq
- *    timeout          - interval to wait
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
- *    only case
- */
 
 void _Thread_queue_Enqueue_with_handler(
   Thread_queue_Control         *the_thread_queue,

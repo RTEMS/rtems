@@ -50,6 +50,12 @@ extern "C" {
  */
 
 /**
+ *  @defgroup ScoreObject Object Handler
+ *
+ *  @ingroup Score
+ */
+
+/**
  *  The following type defines the control block used to manage
  *  object names.
  */
@@ -450,6 +456,8 @@ void _Objects_Shrink_information(
 );
 
 /**
+ *  @brief Initialize object Information
+ * 
  *  This function initializes an object class information record.
  *  SUPPORTS_GLOBAL is true if the object class supports global
  *  objects, and false otherwise.  Maximum indicates the number

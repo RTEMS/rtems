@@ -1,5 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Disaable Thread Dispatching
+ * @ingroup ScoreThread
+ */
+
 /*
- *  _Thread_Disable_dispatch
  *
  *
  *  COPYRIGHT (c) 1989-2011.

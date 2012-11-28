@@ -1,12 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Insert a Message into the Message Queue
+ * @ingroup ScoreMessageQueue
+ */
+
 /*
- *  CORE Message Queue Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Message Queue Handler.
- *  This core object provides task synchronization and communication functions
- *  via messages passed to queue objects.
- *
  *  COPYRIGHT (c) 1989-2005.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,24 +26,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _CORE_message_queue_Insert_message
- *
- *  This kernel routine inserts the specified message into the
- *  message queue.  It is assumed that the message has been filled
- *  in before this routine is called.
- *
- *  Input parameters:
- *    the_message_queue - pointer to message queue
- *    the_message       - message to insert
- *    priority          - insert indication
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    insert
- */
 
 void _CORE_message_queue_Insert_message(
   CORE_message_queue_Control        *the_message_queue,

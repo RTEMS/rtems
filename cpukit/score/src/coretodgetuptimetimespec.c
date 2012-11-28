@@ -1,8 +1,12 @@
-/*
- *  Time of Day (TOD) Handler - get uptime
+/**
+ * @file
+ *
+ * @brief Get Uptime as struct timespec
+ * @ingroup ScoreTODConstants
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,17 +22,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
-
-/*
- *  _TOD_Get_uptime_as_timespec
- *
- *  This routine is used to obtain the system uptime
- *
- *  Input parameters:
- *    time  - pointer to the timestamp structure
- *
- *  Output parameters: NONE
- */
 
 void _TOD_Get_uptime_as_timespec(
   struct timespec *uptime

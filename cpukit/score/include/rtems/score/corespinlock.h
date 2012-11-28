@@ -140,6 +140,8 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
 );
 
 /**
+ * @brief Manually release Spinlock
+ * 
  *  This routine manually releases the spinlock.  All of the threads waiting
  *  for the spinlock will be readied.
  *

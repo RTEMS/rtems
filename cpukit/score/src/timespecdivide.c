@@ -1,5 +1,8 @@
 /**
- *  @file  score/src/timespecdivide.c
+ * @file
+ *
+ * @brief Divide Timespec By Integer
+ * @ingroup Timespec
  */
 
 /*

@@ -1,6 +1,9 @@
 /**
- * @file score/src/ts64getseconds.c
-*/
+ * @file
+ *
+ * @brief Get Seconds Portion of Timestamp
+ * @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.

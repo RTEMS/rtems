@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief _Scheduler_CBS_Get_parameters
+ * @ingroup ScoreScheduler
+ */
+
 /*
  *  Copyright (C) 2011 Petr Benes.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).

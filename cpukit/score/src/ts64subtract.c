@@ -1,7 +1,9 @@
 /**
- * @file score/src/ts64subtract.c
-*/
-
+ * @file
+ *
+ * @brief Subtract Two Timestamps
+ * @ingroup Timestamp
+ */
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief RWLock Specific Thread Queue Timeout
+ * @ingroup ScoreRWLock
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,18 +21,6 @@
 #include <rtems/system.h>
 #include <rtems/score/corerwlock.h>
 #include <rtems/score/corerwlock.h>
-
-/*
- *  _CORE_RWLock_Timeout
- *
- *  This routine processes a thread which timeouts while waiting on
- *  a thread queue. It is called by the watchdog handler.
- *
- *  Input parameters:
- *    id - thread id
- *
- *  Output parameters: NONE
- */
 
 void _CORE_RWLock_Timeout(
   Objects_Id  id,

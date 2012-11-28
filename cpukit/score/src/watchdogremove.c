@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Remove Watchdog from List
+ * @ingroup ScoreWatchdog
+ */
+
 /*
- *  Watchdog Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,13 +21,6 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _Watchdog_Remove
- *
- *  The routine removes a watchdog from a delta chain and updates
- *  the delta counters of the remaining watchdogs.
- */
 
 Watchdog_States _Watchdog_Remove(
   Watchdog_Control *the_watchdog

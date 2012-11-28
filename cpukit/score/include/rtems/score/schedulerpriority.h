@@ -69,6 +69,8 @@ typedef struct {
 void _Scheduler_priority_Initialize(void);
 
 /**
+ *  @brief Scheduler priority Block
+ * 
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
  *  any necessary scheduling operations including the selection of
@@ -107,6 +109,7 @@ void _Scheduler_priority_Free(
 );
 
 /**
+ *  @brief Update Scheduler priority 
  *  This routine updates @a the_thread->scheduler based on @a the_scheduler
  *  structures and thread state.
  *
