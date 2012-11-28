@@ -298,6 +298,9 @@ typedef struct fat_vol_s
     uint8_t            spc_log2;       /* log2 of spc */
     uint16_t           bpc;            /* bytes per cluster */
     uint8_t            bpc_log2;       /* log2 of bytes per cluster */
+    uint8_t            sectors_per_block;    /* sectors per bdbuf block */
+    uint16_t           bytes_per_block;      /* number of bytes for the bduf block device handling */
+    uint8_t            bytes_per_block_log2; /* log2 of bytes_per_block */
     uint8_t            fats;           /* number of FATs */
     uint8_t            type;           /* FAT type */
     uint32_t           mask;
@@ -436,6 +439,25 @@ fat_cluster_num_to_sector512_num(
             fs_info->vol.sec_mul);
 }
 
+static inline uint32_t
+ fat_sector_num_to_block_num (const fat_fs_info_t *fs_info,
+                              const uint32_t sector_number)
+{
+  return sector_number >> (fs_info->vol.bytes_per_block_log2 - fs_info->vol.sec_log2);
+}
+
+static inline uint32_t
+ fat_sector_offset_to_block_offset (const fat_fs_info_t *fs_info,
+                                    const uint32_t sector,
+                                    const uint32_t sector_offset)
+{
+  return sector_offset +
+           ((sector -
+              fat_block_num_to_sector_num (fs_info,
+                  fat_sector_num_to_block_num (fs_info, sector)))
+            << fs_info->vol.sec_log2);
+}
+
 static inline void
 fat_buf_mark_modified(fat_fs_info_t *fs_info)
 {
@@ -443,8 +465,10 @@ fat_buf_mark_modified(fat_fs_info_t *fs_info)
 }
 
 int
-fat_buf_access(fat_fs_info_t *fs_info, uint32_t   blk, int op_type,
-               rtems_bdbuf_buffer **buf);
+fat_buf_access(fat_fs_info_t  *fs_info,
+               uint32_t        sec_num,
+               int             op_type,
+               uint8_t       **sec_buf);
 
 int
 fat_buf_release(fat_fs_info_t *fs_info);
@@ -469,18 +493,7 @@ _fat_block_zero(fat_fs_info_t                         *fs_info,
                  uint32_t                              offset,
                  uint32_t                              count);
 
-int
-_fat_block_release(fat_fs_info_t *fs_info);
 
-ssize_t
-fat_cluster_read(fat_fs_info_t                        *fs_info,
-                  uint32_t                             cln,
-                  void                                *buff);
-
-ssize_t
-fat_cluster_write(fat_fs_info_t                        *fs_info,
-                   uint32_t                             cln,
-                   const void                          *buff);
 
 int
 fat_init_volume_info(fat_fs_info_t *fs_info, const char *device);

@@ -28,7 +28,7 @@
 msdos_format_request_param_t rqdata = {
     OEMName:             "RTEMS",
     VolLabel:            "RTEMSDisk",
-    sectors_per_cluster: 0,
+    sectors_per_cluster: 2,
     fat_num:             0,
     files_per_root_dir:  0,
     media:               0,
