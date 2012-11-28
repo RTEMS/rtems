@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Watchdog Adjust
+ *  @ingroup ScoreWatchdog
+ */
+
 /*
- *  Watchdog Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,20 +21,6 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _Watchdog_Adjust
- *
- *  This routine adjusts the delta chain backward or forward in response
- *  to a time change.
- *
- *  Input parameters:
- *    header    - pointer to the delta chain to be adjusted
- *    direction - forward or backward adjustment to delta chain
- *    units     - units to adjust
- *
- *  Output parameters:
- */
 
 void _Watchdog_Adjust(
   Chain_Control               *header,

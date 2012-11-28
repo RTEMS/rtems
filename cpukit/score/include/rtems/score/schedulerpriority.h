@@ -121,6 +121,8 @@ void _Scheduler_priority_Update(
 );
 
 /**
+ *  @brief Scheduler Priority Unblock
+ * 
  *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.

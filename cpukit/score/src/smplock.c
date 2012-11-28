@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief SMP Locking Support
+ *  @ingroup RTEMS
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -67,9 +74,6 @@
   #define debug_dump_log()
 #endif
 
-/*
- * SMP spinlock simple methods
- */
 void _SMP_lock_spinlock_simple_Initialize(
   SMP_lock_spinlock_simple_Control *lock
 )
@@ -105,9 +109,6 @@ void _SMP_lock_spinlock_simple_Release(
    _ISR_Enable_on_this_core( level );
 }
 
-/*
- * SMP spinlock nested methods.
- */
 void _SMP_lock_spinlock_nested_Initialize(
   SMP_lock_spinlock_nested_Control *lock
 )

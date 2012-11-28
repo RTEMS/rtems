@@ -109,6 +109,9 @@ void _Thread_queue_Enqueue_with_handler(
  *  the_thread is removed from the_thread_queue and reinserted using
  *  its new priority.  This method has no impact on the state of the_thread
  *  or of any timeouts associated with this blocking.
+ * 
+ *  @param[in] the_thread_queue pointer to a threadq header
+ *  @param[in] the_thread pointer to a thread control block
  */
 void _Thread_queue_Requeue(
   Thread_queue_Control *the_thread_queue,
@@ -254,6 +257,13 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
  *  This routine enqueues the currently executing thread on
  *  the_thread_queue with an optional timeout using the
  *  FIFO discipline.
+ * 
+ *    @param[in] the_thread_queue pointer to threadq
+ *    @param[in] the_thread pointer to the thread to block
+ *    @param[in] level_p interrupt level in case the operation blocks actually
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + single case
  */
 Thread_blocking_operation_States _Thread_queue_Enqueue_fifo (
   Thread_queue_Control *the_thread_queue,

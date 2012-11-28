@@ -257,8 +257,15 @@ typedef struct {
 
 /**
  *  @brief Initialize a Message Queue
+ * 
+ *  DESCRIPTION:
  *
- *  This routine initializes @a the_message_queue based on the parameters passed.
+ *  This package is the implementation of the CORE Message Queue Handler.
+ *  This core object provides task synchronization and communication functions
+ *  via messages passed to queue objects.
+ *
+ *  This routine initializes @a the_message_queue 
+ *      based on the parameters passed.
  *
  *  @param[in] the_message_queue points to the message queue to initialize
  *  @param[in] the_message_queue_attributes points to the attributes that

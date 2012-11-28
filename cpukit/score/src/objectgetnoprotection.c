@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief  Get Object without Dispatching Protection
+ *  @ingroup ScoreObject
+ */
+
 /*
- *  Object Handler -- Object Get
- *
- *
  *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,25 +29,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
-
-/*
- * _Objects_Get_no_protection
- *
- * This routine sets the object pointer for the given
- * object id based on the given object information structure.
- *
- * Input parameters:
- *   information - pointer to entry in table for this class
- *   id          - object id to search for
- *   location    - address of where to store the location
- *
- * Output parameters:
- *   returns  - address of object if local
- *   location - one of the following:
- *                  OBJECTS_ERROR  - invalid object ID
- *                  OBJECTS_REMOTE - remote object
- *                  OBJECTS_LOCAL  - local object
- */
 
 Objects_Control *_Objects_Get_no_protection(
   Objects_Information *information,

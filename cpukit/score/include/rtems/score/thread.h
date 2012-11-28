@@ -708,6 +708,8 @@ void _Thread_Change_priority (
 );
 
 /**
+ *  @brief Set Thread Priority
+ *  
  *  This routine updates the priority related fields in the_thread
  *  control block to indicate the current priority is now new_priority.
  */

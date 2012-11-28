@@ -1,6 +1,11 @@
-/*
- *  Time of Day (TOD) Handler - get TOD
+/**
+ *  @file
  *
+ *  @brief Returns a Current TOD with Nanosecond Granularity
+ *  @ingroup ScoreTODConstants
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

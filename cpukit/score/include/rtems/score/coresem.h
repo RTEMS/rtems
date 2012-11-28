@@ -127,6 +127,14 @@ typedef struct {
 }   CORE_semaphore_Control;
 
 /**
+ *  @brief Core Semaphore Initialize
+ * 
+ *  DESCRIPTION:
+ *
+ *  This package is the implementation of the CORE Semaphore Handler.
+ *  This core object utilizes standard Dijkstra counting semaphores to provide
+ *  synchronization and mutual exclusion capabilities.
+ * 
  *  This routine initializes the semaphore based on the parameters passed.
  *
  *  @param[in] the_semaphore is the semaphore to initialize

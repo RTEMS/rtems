@@ -1,6 +1,9 @@
 /**
- * @file score/src/ts64dividebyinteger.c
-*/
+ *  @file
+ *
+ *  @brief Divide Timestamp By Integer
+ *  @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.

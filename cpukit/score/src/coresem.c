@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Core Semaphore Initialize
+ *  @ingroup ScoreSemaphore
+ */
+
 /*
- *  CORE Semaphore Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Semaphore Handler.
- *  This core object utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,20 +24,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  CORE_semaphore_Initialize
- *
- *  This function initialize a semaphore and sets the initial value based
- *  on the given count.
- *
- *  Input parameters:
- *    the_semaphore            - the semaphore control block to initialize
- *    the_semaphore_attributes - the attributes specified at create time
- *    initial_value            - semaphore's initial value
- *
- *  Output parameters:  NONE
- */
 
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control       *the_semaphore,

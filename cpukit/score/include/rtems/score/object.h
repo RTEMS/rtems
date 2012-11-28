@@ -697,6 +697,8 @@ Objects_Control *_Objects_Get_isr_disable(
 );
 
 /**
+ *  @brief  Get No protection Object
+ * 
  *  This function maps object ids to object control blocks.
  *  If id corresponds to a local object, then it returns
  *  the_object control pointer which maps to id and location

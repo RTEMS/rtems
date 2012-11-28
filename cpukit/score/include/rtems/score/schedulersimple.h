@@ -119,6 +119,8 @@ void _Scheduler_simple_Enqueue(
 );
 
 /**
+ *  @brief Scheduler simple Enqueue first
+ *  
  *  This routine puts @a the_thread to the head of the ready queue.
  *  The thread will be the first thread at its priority level.
  *

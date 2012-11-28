@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Scheduler Priority Unblock
+ *  @ingroup ScoreScheduler
+ */
+
 /*
  *  Scheduler Handler
  *

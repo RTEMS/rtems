@@ -1,6 +1,11 @@
-/*
- *  Thread Handler / Thread Set Priority
+/**
+ *  @file
  *
+ *  @brief Set Thread Priority
+ *  @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

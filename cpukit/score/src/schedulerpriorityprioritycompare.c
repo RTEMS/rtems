@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Scheduler Priority Compare Two Priorities
+ *  @ingroup ScoreScheduler
+ */
+
 /*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
