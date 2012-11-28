@@ -167,60 +167,11 @@ static void _RTEMS_tasks_Switch_extension(
   }
 }
 
-/*
- *  _RTEMS_tasks_Post_switch_extension
- *
- *  This extension routine is invoked at each context switch.
- */
-
-static void _RTEMS_tasks_Post_switch_extension(
-  Thread_Control *executing
-)
-{
-  ISR_Level          level;
-  RTEMS_API_Control *api;
-  ASR_Information   *asr;
-  rtems_signal_set   signal_set;
-  Modes_Control      prev_mode;
-
-  api = executing->API_Extensions[ THREAD_API_RTEMS ];
-  if ( !api )
-    return;
-
-  /*
-   *  Signal Processing
-   */
-
-  asr = &api->Signal;
-
-  _ISR_Disable( level );
-    signal_set = asr->signals_posted;
-    asr->signals_posted = 0;
-  _ISR_Enable( level );
-
-
-  if ( !signal_set ) /* similar to _ASR_Are_signals_pending( asr ) */
-    return;
-
-  asr->nest_level += 1;
-  rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
-
-  (*asr->handler)( signal_set );
-
-  asr->nest_level -= 1;
-  rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
-
-}
-
 API_extensions_Control _RTEMS_tasks_API_extensions = {
   #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
     .predriver_hook = NULL,
   #endif
   .postdriver_hook = _RTEMS_tasks_Initialize_user_tasks
-};
-
-API_extensions_Post_switch_control _RTEMS_tasks_API_extensions_post_switch = {
-  .hook = _RTEMS_tasks_Post_switch_extension
 };
 
 User_extensions_Control _RTEMS_tasks_User_extensions = {
@@ -262,7 +213,6 @@ void _RTEMS_tasks_Manager_initialization(void)
   _User_extensions_Add_API_set( &_RTEMS_tasks_User_extensions );
 
   _API_extensions_Add( &_RTEMS_tasks_API_extensions );
-  _API_extensions_Add_post_switch( &_RTEMS_tasks_API_extensions_post_switch );
 
   /*
    *  Register the MP Process Packet routine.
