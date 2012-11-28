@@ -213,12 +213,14 @@ static void _RTEMS_tasks_Post_switch_extension(
 }
 
 API_extensions_Control _RTEMS_tasks_API_extensions = {
-  { NULL, NULL },
   #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-    NULL,                                   /* predriver */
+    .predriver_hook = NULL,
   #endif
-  _RTEMS_tasks_Initialize_user_tasks,       /* postdriver */
-  _RTEMS_tasks_Post_switch_extension        /* post switch */
+  .postdriver_hook = _RTEMS_tasks_Initialize_user_tasks
+};
+
+API_extensions_Post_switch_control _RTEMS_tasks_API_extensions_post_switch = {
+  .hook = _RTEMS_tasks_Post_switch_extension
 };
 
 User_extensions_Control _RTEMS_tasks_User_extensions = {
@@ -260,6 +262,7 @@ void _RTEMS_tasks_Manager_initialization(void)
   _User_extensions_Add_API_set( &_RTEMS_tasks_User_extensions );
 
   _API_extensions_Add( &_RTEMS_tasks_API_extensions );
+  _API_extensions_Add_post_switch( &_RTEMS_tasks_API_extensions_post_switch );
 
   /*
    *  Register the MP Process Packet routine.

@@ -69,7 +69,7 @@ void _Thread_Dispatch( void )
      *
      *   _Thread_Unnest_dispatch();
      *
-     *   _API_extensions_Run_postswitch();
+     *   _API_extensions_Run_post_switch();
      * }
      *
      * The interrupt event makes task H ready.  The interrupt code will see
@@ -202,5 +202,5 @@ post_switch:
     _Thread_Unnest_dispatch();
   #endif
 
-  _API_extensions_Run_postswitch( executing );
+  _API_extensions_Run_post_switch( executing );
 }

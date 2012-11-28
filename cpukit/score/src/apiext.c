@@ -25,6 +25,7 @@
 void _API_extensions_Initialization( void )
 {
  _Chain_Initialize_empty( &_API_extensions_List );
+ _Chain_Initialize_empty( &_API_extensions_Post_switch_list );
 }
 
 void _API_extensions_Add(
@@ -32,6 +33,16 @@ void _API_extensions_Add(
 )
 {
   _Chain_Append( &_API_extensions_List, &the_extension->Node );
+}
+
+void _API_extensions_Add_post_switch(
+  API_extensions_Post_switch_control *post_switch
+)
+{
+  _Chain_Append_if_is_off_chain_unprotected(
+    &_API_extensions_Post_switch_list,
+    &post_switch->Node
+  );
 }
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
