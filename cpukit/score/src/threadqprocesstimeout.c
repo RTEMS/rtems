@@ -1,7 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief Thread Queue Handler Process Timeout Handler
+ * @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler - Process Timeout Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -83,6 +83,8 @@ void _Scheduler_priority_Block(
 );
 
 /**
+ *  @brief schedule entry point
+ *
  *  This kernel routine sets the heir thread to be the next ready thread
  *  by invoking the_scheduler->ready_queue->operations->first().
  */

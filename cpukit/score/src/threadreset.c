@@ -1,7 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief Reset a Thread to its Initial State
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -26,16 +30,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Reset
- *
- *  DESCRIPTION:
- *
- *  This routine resets a thread to its initial stat but does
- *  not actually restart it.  Some APIs do this in separate
- *  operations and this division helps support this.
- */
 
 void _Thread_Reset(
   Thread_Control            *the_thread,

@@ -1,7 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief End the Delay of a Thread
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -26,18 +30,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Delay_ended
- *
- *  This routine processes a thread whose delay period has ended.
- *  It is called by the watchdog handler.
- *
- *  Input parameters:
- *    id - thread id
- *
- *  Output parameters: NONE
- */
 
 void _Thread_Delay_ended(
   Objects_Id  id,

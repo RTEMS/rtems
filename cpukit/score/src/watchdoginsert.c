@@ -1,7 +1,11 @@
+/**
+ * @file 
+ *
+ * @brief Watchdog Insert
+ * @ingroup ScoreWatchdog
+ */
+ 
 /*
- *  Watchdog Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,13 +21,6 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _Watchdog_Insert
- *
- *  This routine inserts a watchdog timer on to the appropriate delta
- *  chain while updating the delta interval counters.
- */
 
 void _Watchdog_Insert(
   Chain_Control         *header,

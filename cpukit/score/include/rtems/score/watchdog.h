@@ -263,6 +263,7 @@ void _Watchdog_Adjust_to_chain(
  *
  *  This routine inserts @a the_watchdog into the @a header watchdog chain
  *  for a time of @a units.
+ *  Update the delta interval counters.
  *
  *  @param[in] header is @a the_watchdog list to insert @a the_watchdog on
  *  @param[in] the_watchdog is the watchdog to insert
@@ -277,6 +278,7 @@ void _Watchdog_Insert (
  *
  *  This routine is invoked at appropriate intervals to update
  *  the @a header watchdog chain.
+ *  This routine decrements the delta counter in response to a tick.
  *
  *  @param[in] header is the watchdog chain to tickle
  */

@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Multiprocessing Communications Interface (MPCI) Handler
+ * @ingroup ScoreMPCI
+ */
+
 /*
- *  Multiprocessing Communications Interface (MPCI) Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -41,12 +45,6 @@ RTEMS_STATIC_ASSERT(
  *  This is the core semaphore which the MPCI Receive Server blocks on.
  */
 CORE_semaphore_Control _MPCI_Semaphore;
-
-/*
- *  _MPCI_Handler_initialization
- *
- *  This subprogram performs the initialization necessary for this handler.
- */
 
 void _MPCI_Handler_initialization(
   uint32_t   timeout_status
@@ -98,12 +96,6 @@ void _MPCI_Handler_initialization(
   );
 }
 
-/*
- *  _MPCI_Create_server
- *
- *  This subprogram creates the MPCI receive server.
- */
-
 void _MPCI_Create_server( void )
 {
   Objects_Name name;
@@ -144,24 +136,10 @@ void _MPCI_Create_server( void )
   );
 }
 
-/*
- *  _MPCI_Initialization
- *
- *  This subprogram initializes the MPCI driver by
- *  invoking the user provided MPCI initialization callout.
- */
-
 void _MPCI_Initialization ( void )
 {
   (*_MPCI_table->initialization)();
 }
-
-/*
- *  _MPCI_Register_packet_processor
- *
- *  This routine registers the MPCI packet processor for the
- *  designated object class.
- */
 
 void _MPCI_Register_packet_processor(
   MP_packet_Classes      the_class,
@@ -171,13 +149,6 @@ void _MPCI_Register_packet_processor(
 {
   _MPCI_Packet_processors[ the_class ] = the_packet_processor;
 }
-
-/*
- *  _MPCI_Get_packet
- *
- *  This subprogram obtains a packet by invoking the user provided
- *  MPCI get packet callout.
- */
 
 MP_packet_Prefix *_MPCI_Get_packet ( void )
 {
@@ -202,26 +173,12 @@ MP_packet_Prefix *_MPCI_Get_packet ( void )
   return the_packet;
 }
 
-/*
- *  _MPCI_Return_packet
- *
- *  This subprogram returns a packet by invoking the user provided
- *  MPCI return packet callout.
- */
-
 void _MPCI_Return_packet (
   MP_packet_Prefix   *the_packet
 )
 {
   (*_MPCI_table->return_packet)( the_packet );
 }
-
-/*
- *  _MPCI_Send_process_packet
- *
- *  This subprogram sends a process packet by invoking the user provided
- *  MPCI send callout.
- */
 
 void _MPCI_Send_process_packet (
   uint32_t            destination,
@@ -234,13 +191,6 @@ void _MPCI_Send_process_packet (
 
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
-
-/*
- *  _MPCI_Send_request_packet
- *
- *  This subprogram sends a request packet by invoking the user provided
- *  MPCI send callout.
- */
 
 uint32_t   _MPCI_Send_request_packet (
   uint32_t            destination,
@@ -280,13 +230,6 @@ uint32_t   _MPCI_Send_request_packet (
   return _Thread_Executing->Wait.return_code;
 }
 
-/*
- *  _MPCI_Send_response_packet
- *
- *  This subprogram sends a response packet by invoking the user provided
- *  MPCI send callout.
- */
-
 void _MPCI_Send_response_packet (
   uint32_t            destination,
   MP_packet_Prefix   *the_packet
@@ -297,13 +240,6 @@ void _MPCI_Send_response_packet (
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
 
-/*
- *  _MPCI_Receive_packet
- *
- *  This subprogram receives a packet by invoking the user provided
- *  MPCI receive callout.
- */
-
 MP_packet_Prefix  *_MPCI_Receive_packet ( void )
 {
   MP_packet_Prefix  *the_packet;
@@ -312,13 +248,6 @@ MP_packet_Prefix  *_MPCI_Receive_packet ( void )
 
   return the_packet;
 }
-
-/*
- *  _MPCI_Process_response
- *
- *  This subprogram obtains a packet by invoking the user provided
- *  MPCI get packet callout.
- */
 
 Thread_Control *_MPCI_Process_response (
   MP_packet_Prefix  *the_packet
@@ -396,22 +325,12 @@ Thread _MPCI_Receive_server(
   return 0;   /* unreached - only to remove warnings */
 }
 
-/*
- *  _MPCI_Announce
- *
- */
-
 void _MPCI_Announce ( void )
 {
   _Thread_Disable_dispatch();
   (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0 );
   _Thread_Enable_dispatch();
 }
-
-/*
- *  _MPCI_Internal_packets_Send_process_packet
- *
- */
 
 void _MPCI_Internal_packets_Send_process_packet (
    MPCI_Internal_Remote_operations operation
@@ -451,12 +370,6 @@ void _MPCI_Internal_packets_Send_process_packet (
  *
  *  This subprogram is not needed since there are no response
  *  packets to be sent by this manager.
- *
- */
-
-/*
- *
- *  _MPCI_Internal_packets_Process_packet
  *
  */
 
@@ -507,11 +420,6 @@ void _MPCI_Internal_packets_Process_packet (
  *
  *  This subprogram is not needed since there are no objects
  *  deleted by this manager.
- *
- */
-
-/*
- *  _MPCI_Internal_packets_Get_packet
  *
  */
 

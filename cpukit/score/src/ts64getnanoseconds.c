@@ -1,5 +1,8 @@
 /**
  *  @file  score/src/ts64toticks.c
+ *
+ *  @brief Get Nanoseconds Portion of Timestamp
+ *  @ingroup SuperCore
  */
 
 /*

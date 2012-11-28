@@ -1,6 +1,11 @@
-/*
- *  Scheduler Handler / Scheduler
+/**
+ * @file
  *
+ * @brief Priority Scheduler Schedule Method
+ * @ingroup ScoreScheduler
+ */
+ 
+/*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *

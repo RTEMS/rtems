@@ -1,7 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief Cancel a Blocking Operation
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Cancel Thread Blocking Operation
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Shrink an Object Class Information Record
+ * @ingroup ScoreCPU
+ */
+
 /*
- *  Object Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,20 +29,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Objects_Shrink_information
- *
- *  This routine shrinks object information related data structures.
- *  The object's name and object space are released. The local_table
- *  etc block does not shrink. The InActive list needs to be scanned
- *  to find the objects are remove them.
- *  Input parameters:
- *    information     - object information table
- *    the_block       - the block to remove
- *
- *  Output parameters:  NONE
- */
 
 void _Objects_Shrink_information(
   Objects_Information *information

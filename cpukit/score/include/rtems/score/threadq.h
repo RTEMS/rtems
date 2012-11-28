@@ -180,9 +180,16 @@ void _Thread_queue_Initialize(
 /**
  *  @brief Thread Queue Dequeue priority
  *
- *  This function returns a pointer to the highest priority
- *  thread waiting on the_thread_queue.  If no threads are waiting
- *  on the_thread_queue, then NULL is returned.
+ *  This routine removes a thread from the specified PRIORITY based
+ *  threadq, unblocks it, and cancels its timeout timer.
+ *
+ *  - INTERRUPT LATENCY:
+ *    + single case
+ *
+ * @param[in] the_thread_queue is a pointer to a thread queue
+ * 
+ * @retval thread dequeued
+ * @retval NULL if no thread are waiting on the_thread_queue
  */
 Thread_Control *_Thread_queue_Dequeue_priority(
   Thread_queue_Control *the_thread_queue

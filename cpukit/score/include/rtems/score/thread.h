@@ -524,23 +524,36 @@ void _Thread_Create_idle(void);
 void _Thread_Start_multitasking( void );
 
 /**
+ *  @brief Dispatch Thread
+ *  
  *  This routine is responsible for transferring control of the
- *  processor from the executing thread to the heir thread.  As part
- *  of this process, it is responsible for the following actions:
- *
+ *  processor from the executing thread to the heir thread. Once the 
+ *  heir is running an attempt is made to dispatch any ASRs.
+ *  As part of this process, it is responsible for the following actions:
  *     + saving the context of the executing thread
  *     + restoring the context of the heir thread
  *     + dispatching any signals for the resulting executing thread
+ 
+ *  ALTERNATE ENTRY POINTS:
+ *    void _Thread_Enable_dispatch();
+ *
+ *  INTERRUPT LATENCY:
+ *    dispatch thread
+ *    no dispatch thread
  */
 void _Thread_Dispatch( void );
 
 /**
+ *  @brief Stack Allocate Helper
+ *
  *  Allocate the requested stack space for the thread.
- *  return the actual size allocated after any adjustment
- *  or return zero if the allocation failed.
- *  Set the Start.stack field to the address of the stack
+ *  Set the Start.stack field to the address of the stack.
+ *
+ *  @param[in] the_thread is the thread where the stack space is requested
+ *  
+ *  @retval actual size allocated after any adjustment
+ *  @retval zero if the allocation failed
  */
-
 size_t _Thread_Stack_Allocate(
   Thread_Control *the_thread,
   size_t          stack_size
@@ -606,8 +619,15 @@ bool _Thread_Restart(
 );
 
 /**
+ *  @brief Resets a thread to its initial state
+ *
  *  This routine resets a thread to its initial state but does
- *  not restart it.
+ *  not restart it. Some APIs do this in separate
+ *  operations and this division helps support this.
+ *
+ *  @param[in] the_thread is the thread to resets
+ *  @param[in] pointer_argument
+ *  @param[in] numeric_argument
  */
 void _Thread_Reset(
   Thread_Control            *the_thread,
@@ -688,8 +708,13 @@ void _Thread_Load_environment(
 void _Thread_Handler( void );
 
 /**
+ *  @brief Ended the delay of a Thread
+ *  
  *  This routine is invoked when a thread must be unblocked at the
  *  end of a time based delay (i.e. wake after or wake when).
+ *  It is called by the watchdog handler.
+ *
+ *  @param[in] id is the thread id
  */
 void _Thread_Delay_ended(
   Objects_Id  id,

@@ -87,7 +87,9 @@ SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
 #endif
 
 /**
- *  This routine performs the initialization necessary for this handler.
+ *  @brief Initialize the ISR handler
+ *
+ *  This routine performs the initialization necessary for the ISR handler.
  */
 void _ISR_Handler_initialization ( void );
 

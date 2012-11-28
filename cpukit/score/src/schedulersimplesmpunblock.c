@@ -1,6 +1,11 @@
-/*
- *  Scheduler Simple SMP Handler / Unblock
+/**
+ * @file
  *
+ * @brief Scheduler Simple SMP Unblock Method
+ * @ingroup ScoreScheduler
+ */
+ 
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

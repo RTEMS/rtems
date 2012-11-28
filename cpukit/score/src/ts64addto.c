@@ -1,6 +1,9 @@
 /**
  * @file score/src/ts64addto.c
-*/
+ *
+ * @brief Add to a Timestamp
+ * @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.

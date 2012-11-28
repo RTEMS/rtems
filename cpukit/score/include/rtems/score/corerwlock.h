@@ -125,6 +125,8 @@ typedef struct {
 }   CORE_RWLock_Control;
 
 /**
+ *  @brief Initialize a RWlock
+ *
  *  This routine initializes the RWLock based on the parameters passed.
  *
  *  @param[in] the_rwlock is the RWLock to initialize

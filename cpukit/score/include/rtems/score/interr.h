@@ -172,6 +172,13 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  * determines that a fatal error has occurred or a final system state is
  * reached (for example after exit()).
  *
+ * This routine will invoke the fatal error handler supplied by the user
+ * followed by the the default one provided by the executive.  The default
+ * error handler assumes no hardware is present to help inform the user
+ * of the problem.  Halt stores the error code in a known register,
+ * disables interrupts, and halts the CPU.  If the CPU does not have a
+ * halt instruction, it will loop to itself.
+ *
  * The first action of this function is to call the fatal handler of the user
  * extensions.  For the initial extensions the following conditions are
  * required
@@ -190,6 +197,12 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  * SYSTEM_STATE_FAILED.
  *
  * The final step is to call the CPU specific _CPU_Fatal_halt().
+ *
+ * @param[in] the_source is what subsystem the error originated in
+ * @param[in] is_internal is if the error was internally generated
+ * @param[in] the_error is the fatal error status code
+ *
+ * @note The the_error is not necessarily a directive status code.
  *
  * @see rtems_fatal_error_occurred() and rtems_fatal().
  */

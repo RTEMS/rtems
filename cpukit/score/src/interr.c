@@ -1,6 +1,11 @@
-/*
- *  Internal Error Handler
+/**
+ * @file
  *
+ * @brief Initiates system termination
+ * @ingroup ScoreIntErr
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,28 +25,6 @@
 System_state_Codes _System_state_Current;
 
 Internal_errors_Information _Internal_errors_What_happened;
-
-/*
- *  _Internal_error_Occurred
- *
- *  This routine will invoke the fatal error handler supplied by the user
- *  followed by the the default one provided by the executive.  The default
- *  error handler assumes no hardware is present to help inform the user
- *  of the problem.  Halt stores the error code in a known register,
- *  disables interrupts, and halts the CPU.  If the CPU does not have a
- *  halt instruction, it will loop to itself.
- *
- *  Input parameters:
- *    the_source  - what subsystem the error originated in
- *    is_internal - if the error was internally generated
- *    the_error   - fatal error status code
- *
- *  Output parameters:
- *    As much information as possible is stored in a CPU dependent fashion.
- *    See the CPU dependent code for more information.
- *
- *  NOTE: The the_error is not necessarily a directive status code.
- */
 
 void _Internal_error_Occurred(
   Internal_errors_Source  the_source,

@@ -1,7 +1,8 @@
 /**
  *  @file
  *
- *  ISR Handler Initialization
+ *  @brief Initialize the ISR handler
+ *  @ingroup ScoreISR
  */
 
 /*
@@ -23,15 +24,6 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-
-/*  _ISR_Handler_initialization
- *
- *  This routine initializes the ISR handler.
- *
- *  Input parameters: NONE
- *
- *  Output parameters: NONE
- */
 
 void _ISR_Handler_initialization( void )
 {

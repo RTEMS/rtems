@@ -1,6 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief Dispatch Thread
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -35,20 +40,6 @@
   #include <rtems/score/smp.h>
 #endif
 
-/**
- *  _Thread_Dispatch
- *
- *  This kernel routine determines if a dispatch is needed, and if so
- *  dispatches to the heir thread.  Once the heir is running an attempt
- *  is made to dispatch any ASRs.
- *
- *  ALTERNATE ENTRY POINTS:
- *    void _Thread_Enable_dispatch();
- *
- *  INTERRUPT LATENCY:
- *    dispatch thread
- *    no dispatch thread
- */
 void _Thread_Dispatch( void )
 {
   Thread_Control   *executing;

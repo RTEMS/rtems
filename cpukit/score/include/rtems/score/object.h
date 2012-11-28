@@ -447,8 +447,13 @@ void _Objects_Extend_information(
 );
 
 /**
+ *  @brief Shrink an object class information record
+ * 
  *  This function shrink an object class information record.
- *
+ *  The object's name and object space are released. The local_table
+ *  etc block does not shrink. The InActive list needs to be scanned
+ *  to find the objects are remove them.
+ *  
  *  @param[in] information points to an object class information block.
  */
 void _Objects_Shrink_information(

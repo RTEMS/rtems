@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup ScoreHeap
+ *
+ * @brief Heap Handler API.
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *
