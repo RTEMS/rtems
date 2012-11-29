@@ -26,49 +26,96 @@ extern "C" {
 int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
                            const void                           *data);
 
+/**
+ * @defgroup rtems_msdos_format DOSFS Support
+ *
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @{
+ */
+
 #define MSDOS_FMT_INFO_LEVEL_NONE   (0)
 #define MSDOS_FMT_INFO_LEVEL_INFO   (1)
 #define MSDOS_FMT_INFO_LEVEL_DETAIL (2)
 #define MSDOS_FMT_INFO_LEVEL_DEBUG  (3)
 
-/*
- * data to be filled out for formatter: parameters for format call
- * any parameter set to 0 or NULL will be automatically detected/computed
+/**
+ * @brief FAT file system format request parameters.
  */
 typedef struct {
-  const char *OEMName;            /* OEM Name string or NULL               */
-  const char *VolLabel;           /* Volume Label string or NULL           */
-  uint32_t  sectors_per_cluster;  /* request value: sectors per cluster    */
-  uint32_t  fat_num;              /* request value: number of FATs on disk */
-  uint32_t  files_per_root_dir;   /* request value: file entries in root   */
-  uint8_t   media;                /* media code. default: 0xF8             */
-  bool      quick_format;         /* true: do not clear out data sectors   */
-  bool      skip_alignment;       /* do not align FAT, data cluster, and   */
-                                  /* root directory for FAT12 and FAT16 to */
-                                  /* a cluster boundary                    */
-  int       info_level;           /* The amount of info to output          */
+  /**
+   * @brief OEM name string or NULL.
+   */
+  const char *OEMName;
+
+  /**
+   * @brief Volume label string or NULL.
+   */
+  const char *VolLabel;
+
+  /**
+   * @brief Sectors per cluster hint.
+   *
+   * The format procedure may choose another value.  Use 0 as default value.
+   */
+  uint32_t sectors_per_cluster;
+
+  /**
+   * @brief Number of FATs hint.
+   *
+   * Use 0 as default value.
+   */
+  uint32_t fat_num;
+
+  /**
+   * @brief Minimum files in root directory for FAT12 and FAT16.
+   *
+   * The format procedure may choose a greater value.  Use 0 as default value.
+   */
+  uint32_t files_per_root_dir;
+
+  /**
+   * @brief Media code.
+   *
+   * Use 0 as default value.  The default media code is 0xf8.
+   */
+  uint8_t media;
+
+  /**
+   * @brief Quick format.
+   *
+   * If set to true, then do not clear data sectors to zero.
+   */
+  bool quick_format;
+
+  /**
+   * @brief Do not align FAT, data cluster, and root directory to a cluster
+   * boundary.
+   */
+  bool skip_alignment;
+
+  /**
+   * @brief The amount of info to output.
+   */
+  int info_level;
 } msdos_format_request_param_t;
 
-/*=========================================================================*\
-| Function:                                                                 |
-\*-------------------------------------------------------------------------*/
-int msdos_format
-(
-/*-------------------------------------------------------------------------*\
-| Purpose:                                                                  |
-|     format device with msdos filesystem                                   |
-+---------------------------------------------------------------------------+
-| Input Parameters:                                                         |
-\*-------------------------------------------------------------------------*/
- const char *devname,                        /* device name                */
- const msdos_format_request_param_t *rqdata  /* requested fmt parameters   */
-                                             /* set to NULL for automatic  */
-                                             /* determination              */
- );
-/*-------------------------------------------------------------------------*\
-| Return Value:                                                             |
-|    0, if success, -1 and errno if failed                                  |
-\*=========================================================================*/
+/**
+ * @brief Formats a block device with a FAT file system.
+ *
+ * @param[in] devname The block device path.
+ * @param[in] rqdata The FAT file system format request data.  Use NULL for
+ * default parameters.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
+ */
+int msdos_format (
+  const char *devname,
+  const msdos_format_request_param_t *rqdata
+);
+
+/** @} */
 
 #ifdef __cplusplus
 }
