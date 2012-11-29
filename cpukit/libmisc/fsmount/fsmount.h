@@ -42,6 +42,8 @@ extern "C" {
 /**
  * @defgroup rtems_fstab File System Mount Support
  *
+ * @ingroup FileSystemTypesAndMount
+ *
  * @{
  */
 
