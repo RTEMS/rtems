@@ -143,7 +143,7 @@ void _User_extensions_Fatal_visitor(
  * @brief Iterates through all user extensions and calls the visitor for each.
  *
  * @param[in, out] arg The argument passed to the visitor.
- * @param[in] visitor The visitor for each extension.
+ * @param[in] visitor is the visitor for each extension.
  */
 void _User_extensions_Iterate(
   void                    *arg,

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Removes the Thread from Ready Queue
+ *
+ * @ingroup ScoreScheduler
+ */
+
 /*
  *  Copyright (C) 2011 Petr Benes.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).

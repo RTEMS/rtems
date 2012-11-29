@@ -175,6 +175,8 @@ void _Scheduler_priority_Enqueue_first(
 );
 
 /**
+ *  @brief Removes a specific thread from scheduler  
+ *
  *  This routine removes a specific thread from the scheduler's set
  *  of ready threads.
  *

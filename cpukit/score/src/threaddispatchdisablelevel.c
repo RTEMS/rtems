@@ -1,6 +1,12 @@
-/*
- *  Thread Dispatch Disable Level Methods
+/**
+ * @file
  *
+ * @brief Thread Dispatch Disable Functions
+ *
+ * @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

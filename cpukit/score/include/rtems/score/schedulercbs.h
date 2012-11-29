@@ -259,9 +259,13 @@ int _Scheduler_CBS_Get_remaining_budget (
 );
 
 /**
- *  @brief _Scheduler_CBS_Get_execution_time
+ *  @brief Get relative time info
  *
- *  Retrieve time info relative to the current server.
+ *  Retrieve time info relative to @a server_id. The server status code is returned.
+ *
+ *  @param[in] server_id is the server to get the status code from.
+ *  @param[in] exec_time is the execution time.
+ *  @param[in] abs_time is not apparently used. 
  *
  *  @return status code.
  */

@@ -173,10 +173,12 @@ SCORE_EXTERN TOD_Control _TOD;
 void _TOD_Handler_initialization(void);
 
 /**
- *  @brief Sets the time of day according to @a tod_as_timestamp.
+ *  @brief Sets the time of day from timestamp
  *
  *  The @a tod_as_timestamp timestamp represents the time since UNIX epoch.
  *  The watchdog seconds chain will be adjusted.
+ *
+ *  @param[in] tod_as_timestamp is the constant of the time of day as a timestamp
  */
 void _TOD_Set_with_timestamp(
   const Timestamp_Control *tod_as_timestamp
@@ -251,6 +253,8 @@ void _TOD_Get_uptime_as_timespec(
 );
 
 /**
+ *  @brief Increments time of day at each clock tick
+ *
  *  This routine increments the ticks field of the current time of
  *  day at each clock tick.
  */

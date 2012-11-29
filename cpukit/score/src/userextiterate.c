@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief User Extension Iteration Helpers
+ *
+ * @ingroup ScoreUserExt
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

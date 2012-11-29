@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Enable Dispatching of Threads
+ *
+ * @ingroup ScoreThread
+ */
+
 /*
  *   _Thread_Enable_dispatch
  *
@@ -20,23 +28,6 @@
   #include <rtems/score/timestamp.h>
 #endif
 
-
-/**
- *  The following declares the dispatch critical section nesting
- *  counter which is used to prevent context switches at inopportune
- *  moments.
- */
-
-/**
- *  _Thread_Enable_dispatch
- *
- *  This kernel routine exits a context switch disable critical section.
- *  This is the NOT INLINED version.
- *
- *  INTERRUPT LATENCY:
- *    dispatch thread
- *    no dispatch thread
- */
 #if defined (__THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__ )
 void _Thread_Enable_dispatch( void )
 {

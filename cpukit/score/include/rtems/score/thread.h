@@ -546,9 +546,9 @@ void _Thread_Start_multitasking( void );
  *  ALTERNATE ENTRY POINTS:
  *    void _Thread_Enable_dispatch();
  *
- *  INTERRUPT LATENCY:
- *    dispatch thread
- *    no dispatch thread
+ *  - INTERRUPT LATENCY:
+ *    + dispatch thread
+ *    + no dispatch thread
  */
 void _Thread_Dispatch( void );
 
@@ -739,9 +739,15 @@ void _Thread_Delay_ended(
 );
 
 /**
- *  This routine changes the current priority of the_thread to
- *  new_priority.  It performs any necessary scheduling operations
+ *  @brief Changes the priority of a thread
+ *  
+ *  This routine changes the current priority of @a the_thread to
+ *  @a new_priority.  It performs any necessary scheduling operations
  *  including the selection of a new heir thread.
+ *
+ *  @param[in] the_thread is the thread to change
+ *  @param[in] new_priority is the priority to set @a the_thread to
+ *  @param[in] prepend_it is a switch to prepend the thread
  */
 void _Thread_Change_priority (
   Thread_Control   *the_thread,

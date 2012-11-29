@@ -1,6 +1,12 @@
-/*
- *  Schedule Simple Handler / Extract
+/**
+ * @file
  *
+ * @brief Removes a Thread from the Simple Queue
+ *
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

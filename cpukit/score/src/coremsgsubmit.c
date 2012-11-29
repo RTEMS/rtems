@@ -1,12 +1,12 @@
+/**
+ * @file
+ *
+ * @brief CORE Message Queue Submit
+ *
+ * @ingroup ScoreMessageQueue
+ */
+
 /*
- *  CORE Message Queue Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Message Queue Handler.
- *  This core object provides task synchronization and communication functions
- *  via messages passed to queue objects.
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,29 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _CORE_message_queue_Submit
- *
- *  This routine implements the send and urgent message functions. It
- *  processes a message that is to be submitted to the designated
- *  message queue.  The message will either be processed as a
- *  send message which it will be inserted at the rear of the queue
- *  or it will be processed as an urgent message which will be inserted
- *  at the front of the queue.
- *
- *  Input parameters:
- *    the_message_queue            - message is submitted to this message queue
- *    buffer                       - pointer to message buffer
- *    size                         - size in bytes of message to send
- *    id                           - id of message queue
- *    api_message_queue_mp_support - api specific mp support callout
- *    submit_type                  - send or urgent message
- *
- *  Output parameters:
- *    CORE_MESSAGE_QUEUE_SUCCESSFUL - if successful
- *    error code                    - if unsuccessful
- */
 
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,

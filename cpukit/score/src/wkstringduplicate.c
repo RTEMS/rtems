@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Duplicates String with Memory from the Workspace
+ *
+ * @ingroup ScoreWorkspace
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *

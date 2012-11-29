@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Frees EDF Thread Information
+ *
+ * @ingroup ScoreScheduler
+ */
+
 /*
  *  Copyright (C) 2011 Petr Benes.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).

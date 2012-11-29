@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Initialize a Chain Header
+ *
+ * @ingroup ScoreChain
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,20 +23,6 @@
 #include <rtems/score/address.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Chain_Initialize
- *
- *  This kernel routine initializes a doubly linked chain.
- *
- *  Input parameters:
- *    the_chain        - pointer to chain header
- *    starting_address - starting address of first node
- *    number_nodes     - number of nodes in chain
- *    node_size        - size of node in bytes
- *
- *  Output parameters:  NONE
- */
 
 void _Chain_Initialize(
   Chain_Control *the_chain,

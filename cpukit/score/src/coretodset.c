@@ -1,5 +1,9 @@
-/*
- *  Time of Day (TOD) Handler -- Set Time
+/**
+ * @file
+ *
+ * @brief Set Time of Day Given a Timestamp
+ *
+ * @ingroup ScoreTOD
  */
 
 /*  COPYRIGHT (c) 1989-2007.

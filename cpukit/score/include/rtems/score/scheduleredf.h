@@ -105,7 +105,7 @@ extern RBTree_Control _Scheduler_EDF_Ready_queue;
 void _Scheduler_EDF_Initialize( void );
 
 /**
- *  @brief Scheduler EDF Block
+ *  @brief Removes Thread from Ready Queue
  *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
@@ -139,7 +139,7 @@ void *_Scheduler_EDF_Allocate(
 );
 
 /**
- *  @brief Scheduler EDF Free
+ *  @brief Frees EDF information of a thread 
  *
  *  This routine frees the EDF specific information of @a the_thread.
  *

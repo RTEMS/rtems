@@ -1,5 +1,9 @@
-/*
- *  Time of Day (TOD) Handler -- Tickle Ticks
+/**
+ * @file
+ *
+ * @brief Increments time of day at each clock tick
+ *
+ * @ingroup ScoreTODConstants
  */
 
 /*  COPYRIGHT (c) 1989-2007.
@@ -21,16 +25,6 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/config.h>
-
-/*
- *  _TOD_Tickle_ticks
- *
- *  This routine processes a clock tick.
- *
- *  Input parameters: NONE
- *
- *  Output parameters: NONE
- */
 
 void _TOD_Tickle_ticks( void )
 {

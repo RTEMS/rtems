@@ -102,10 +102,10 @@ void *_Workspace_Allocate_or_fatal_error(
 );
 
 /**
- * @brief Duplicates the @a string with memory from the Workspace.
+ * @brief Duplicates String with Memory from the Workspace
  *
- * @param[in] string Pointer to zero terminated string.
- * @param[in] len Length of the string (equal to strlen(string)).
+ * @param[in] string is the pointer to a zero terminated string.
+ * @param[in] len is the length of the string (equal to strlen(string)).
  *
  * @return NULL Not enough memory.
  * @return other Duplicated string.

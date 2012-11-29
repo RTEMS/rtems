@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Converts Microseconds to Ticks
+ *
+ * @ingroup ScoreTOD
+ */
+
 /*  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

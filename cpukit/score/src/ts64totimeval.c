@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Convert 64-bit Timestamp to struct timeval
+ *
+ * @ingroup SuperCore
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

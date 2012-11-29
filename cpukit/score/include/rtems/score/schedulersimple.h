@@ -50,7 +50,9 @@ extern "C" {
   }
 
 /**
- * This routine initializes the simple scheduler.
+ *  @brief Initializes simple scheduler
+ *
+ *  This routine initializes the simple scheduler.
  */
 void _Scheduler_simple_Initialize( void );
 
@@ -100,6 +102,8 @@ void _Scheduler_simple_Unblock(
 );
 
 /**
+ *  @brief Removes a thread from a simple queue
+ *
  *  This routine removes a specific thread from the specified
  *  simple-based ready queue.
  *
@@ -110,9 +114,11 @@ void _Scheduler_simple_Extract(
 );
 
 /**
+ *  @brief Puts thread onto the ready queue
+ *
  *  This routine puts @a the_thread on to the ready queue.
  *
- *  @param[in] the_thread is the thread to be blocked
+ *  @param[in] the_thread is the thread to be enqueued
  */
 void _Scheduler_simple_Enqueue(
   Thread_Control *the_thread
@@ -131,6 +137,8 @@ void _Scheduler_simple_Enqueue_first(
 );
 
 /**
+ *  @brief Returns empty placeholder for scheduler
+ *
  *  This routine is a place holder for any memeory allocation needed
  *  by the scheduler.  For the simple scheduler the routine is an empty
  *  place holder.
@@ -146,9 +154,10 @@ void *_Scheduler_simple_Allocate(
 );
 
 /**
- * This routine does nothing, and is used as a stub for Schedule update
+ *  @breif Stub for schedule update
  *
- * The overhead of a function call will still be imposed.
+ *  This routine does nothing, and is used as a stub for Schedule update
+ *  The overhead of a function call will still be imposed.
  *
  *  @param[in] the_thread is the thread to be blocked
  */
@@ -157,9 +166,10 @@ void _Scheduler_simple_Update(
 );
 
 /**
- * This routine does nothing, and is used as a stub for Schedule free
+ *  @brief Stub for schedule free 
  *
- * The overhead of a function call will still be imposed.
+ *  This routine does nothing, and is used as a stub for Schedule free
+ *  The overhead of a function call will still be imposed.
  *
  *  @param[in] the_thread is the thread to be blocked
  */

@@ -1,9 +1,12 @@
-/*
- *  Scheduler Simple Handler / Initialize
- *  Scheduler Simple Handler / Allocate (Empty Routine)
- *  Scheduler Simple Handler / Update (Empty Routine)
- *  Scheduler Simple Handler / Free (Empty Routine)
+/**
+ * @file
  *
+ * @brief Scheduler Simple Functions
+ *
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,14 +27,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-/**
- * This routine does nothing, and is used as a stub for Schedule allocate
- *
- * Note: returns a non-zero value, or else thread initialize thinks the
- * allocation failed.
- *
- * The overhead of a function call will still be imposed.
- */
 void * _Scheduler_simple_Allocate(
   Thread_Control *the_thread
 )
@@ -39,32 +34,18 @@ void * _Scheduler_simple_Allocate(
   return (void*)-1; /* maybe pick an appropriate poison value */
 }
 
-
-/**
- * This routine does nothing, and is used as a stub for Schedule update
- *
- * The overhead of a function call will still be imposed.
- */
 void _Scheduler_simple_Update(
   Thread_Control *the_thread
 )
 {
 }
 
-/**
- * This routine does nothing, and is used as a stub for Schedule free
- *
- * The overhead of a function call will still be imposed.
- */
 void _Scheduler_simple_Free(
   Thread_Control *the_thread
 )
 {
 }
 
-/**
- * This routine initializes the simple scheduler.
- */
 void _Scheduler_simple_Initialize ( void )
 {
   void *f;

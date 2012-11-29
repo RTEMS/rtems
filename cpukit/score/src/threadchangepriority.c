@@ -1,6 +1,12 @@
-/*
- *  Thread Handler / Change Priority
+/**
+ * @file
  *
+ * @brief Changes the Priority of a Thread
+ *
+ * @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
