@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Scheduler Priority Enqueue First
+ *  @ingroup ScoreScheduler
+ */
+
 /*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).

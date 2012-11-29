@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Initialize a RBTree Header
+ *  @ingroup ScoreRBTree
+ */
+
 /*
  *  Copyright (c) 2010 Gedare Bloom.
  *
@@ -14,20 +21,6 @@
 #include <rtems/score/address.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _RBTree_Initialize
- *
- *  This kernel routine initializes a Red-Black Tree.
- *
- *  Input parameters:
- *    the_rbtree        - pointer to rbtree header
- *    starting_address - starting address of first node
- *    number_nodes     - number of nodes in rbtree
- *    node_size        - size of node in bytes
- *
- *  Output parameters:  NONE
- */
 
 void _RBTree_Initialize(
   RBTree_Control          *the_rbtree,

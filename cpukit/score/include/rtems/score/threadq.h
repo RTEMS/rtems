@@ -149,6 +149,10 @@ bool _Thread_queue_Extract_with_proxy(
  *  This function returns a pointer to the "first" thread
  *  on the_thread_queue.  The "first" thread is selected
  *  based on the discipline of the_thread_queue.
+ *
+ *  @param[in] the_thread_queue pointer to thread queue
+ *
+ *  @return first thread or NULL
  */
 Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue
@@ -172,6 +176,11 @@ void _Thread_queue_Flush(
  *  This routine initializes the_thread_queue based on the
  *  discipline indicated in attribute_set.  The state set on
  *  threads which block on the_thread_queue is state.
+ * 
+ *  @param[in] the_thread_queue is the pointer to a threadq header
+ *  @param[in] discipline is the queueing discipline
+ *  @param[in] state is the state of waiting threads
+ *  @param[in] timeout_status is the return on a timeout
  */
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
@@ -199,11 +208,18 @@ Thread_Control *_Thread_queue_Dequeue_priority(
 );
 
 /**
- *  @brief Thread Queue Enqueue priority
+ *  @brief Thread Queue Enqueue Priority
  *
  *  This routine enqueues the currently executing thread on
  *  the_thread_queue with an optional timeout using the
  *  priority discipline.
+ *
+ *  @param[in] the_thread_queue is the pointer to threadq
+ *  @param[in] thread is the thread to insert
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + forward less than
+ *    + forward equal
  */
 Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
   Thread_queue_Control *the_thread_queue,
@@ -307,13 +323,15 @@ Thread_Control *_Thread_queue_First_fifo(
 );
 
 /**
- *  @brief Thread Queue timeout
+ *  @brief Thread Queue Timeout
  *
  *  This routine is invoked when a task's request has not
  *  been satisfied after the timeout interval specified to
  *  enqueue.  The task represented by ID will be unblocked and
  *  its status code will be set in it's control block to indicate
  *  that a timeout has occurred.
+ * 
+ *  @param[in] id thread id
  */
 void _Thread_queue_Timeout (
   Objects_Id  id,

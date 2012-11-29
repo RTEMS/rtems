@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Thread Queue First
+ *  @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,19 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_First
- *
- *  This routines returns a pointer to the first thread on the
- *  specified threadq.
- *
- *  Input parameters:
- *    the_thread_queue - pointer to thread queue
- *
- *  Output parameters:
- *    returns - first thread or NULL
- */
 
 Thread_Control *_Thread_queue_First(
   Thread_queue_Control *the_thread_queue

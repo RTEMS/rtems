@@ -1,5 +1,8 @@
 /**
- *  @file  score/src/timespecisvalid.c
+ *  @file
+ *
+ *  @brief Is Timespec Valid
+ *  @ingroup Timespec
  */
 
 /*

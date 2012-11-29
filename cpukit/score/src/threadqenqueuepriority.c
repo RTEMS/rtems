@@ -1,6 +1,11 @@
-/*
- *  Thread Queue Handler - Enqueue By Priority
+/**
+ *  @file
  *
+ *  @brief Thread Queue Enqueue Priority
+ *  @ingroup ScoreThreadQ
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,22 +34,6 @@
   #undef CPU_UNROLL_ENQUEUE_PRIORITY
   #define CPU_UNROLL_ENQUEUE_PRIORITY FALSE
 #endif
-
-/*
- *  _Thread_queue_Enqueue_priority
- *
- *  This routine places a blocked thread on a priority thread queue.
- *
- *  Input parameters:
- *    the_thread_queue - pointer to threadq
- *    thread           - thread to insert
- *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
- *    forward less than
- *    forward equal
- */
 
 Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
   Thread_queue_Control *the_thread_queue,

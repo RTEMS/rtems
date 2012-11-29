@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Thread Queue Timeout
+ *  @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,18 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_Timeout
- *
- *  This routine processes a thread which timeouts while waiting on
- *  a thread queue. It is called by the watchdog handler.
- *
- *  Input parameters:
- *    id - thread id
- *
- *  Output parameters: NONE
- */
 
 void _Thread_queue_Timeout(
   Objects_Id  id,

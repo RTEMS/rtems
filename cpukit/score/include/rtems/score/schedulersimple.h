@@ -190,7 +190,7 @@ void _Scheduler_simple_Ready_queue_enqueue(
 );
 
 /**
- *  _Scheduler_simple_Ready_queue_enqueue_first
+ *  @brief Scheduler Simple Ready Queue Enqueue First
  *
  *  This routine puts @a the_thread on to the ready queue
  *  at the beginning of its priority group.

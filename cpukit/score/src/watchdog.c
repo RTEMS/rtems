@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Watchdog Handler Initialization
+ *  @ingroup ScoreWatchdog
+ */
+
 /*
  *  Watchdog Handler
  *
@@ -17,16 +24,6 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _Watchdog_Handler_initialization
- *
- *  This routine initializes the watchdog handler.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters: NONE
- */
 
 void _Watchdog_Handler_initialization( void )
 {

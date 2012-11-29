@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Allocate Object
+ *  @ingroup ScoreObject
+ */
+
 /*
- *  Object Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,15 +35,6 @@
 #if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
 #include <rtems/bspIo.h>
 #endif
-
-/*
- *  _Objects_Allocate
- *
- *  DESCRIPTION:
- *
- *  This function allocates a object control block from
- *  the inactive chain of free object control blocks.
- */
 
 Objects_Control *_Objects_Allocate(
   Objects_Information *information

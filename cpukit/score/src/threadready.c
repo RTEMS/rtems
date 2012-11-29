@@ -1,6 +1,11 @@
-/*
- *  Thread Handler / Thread Ready
+/**
+ *  @file
  *
+ *  @brief Thread Ready
+ *  @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,11 +32,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 
-/*
- *  INTERRUPT LATENCY:
- *    ready chain
- *    select heir
- */
 void _Thread_Ready(
   Thread_Control *the_thread
 )

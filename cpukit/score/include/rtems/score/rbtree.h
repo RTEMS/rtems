@@ -189,6 +189,11 @@ RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY(name)
  *  This routine initializes @a the_rbtree structure to manage the
  *  contiguous array of @a number_nodes nodes which starts at
  *  @a starting_address.  Each node is of @a node_size bytes.
+ * 
+ *  @param[in] the_rbtree is the pointer to rbtree header
+ *  @param[in] starting_address is the starting address of first node
+ *  @param[in] number_nodes is the number of nodes in rbtree
+ *  @param[in] node_size is the size of node in bytes
  */
 void _RBTree_Initialize(
   RBTree_Control          *the_rbtree,

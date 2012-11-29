@@ -91,6 +91,8 @@ void _Scheduler_priority_Block(
 void _Scheduler_priority_Schedule(void);
 
 /**
+ *  @brief Allocate Scheduler Priority
+ *
  *  This routine allocates @a the_thread->scheduler.
  *
  *  @param[in] the_thread is the thread the scheduler is allocating
@@ -164,6 +166,8 @@ void _Scheduler_priority_Enqueue(
 );
 
 /**
+ *  @brief Scheduler Priority Enqueue First
+ *
  *  This routine puts @a the_thread to the head of the ready queue.
  *  For priority-based ready queues, the thread will be the first thread
  *  at its priority level.

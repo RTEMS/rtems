@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Thread Queue Initialize
+ *  @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,20 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_Initialize
- *
- *  This routine initializes the specified threadq.
- *
- *  Input parameters:
- *    the_thread_queue      - pointer to a threadq header
- *    discipline            - queueing discipline
- *    state                 - state of waiting threads
- *    timeout_status        - return on a timeout
- *
- *  Output parameters: NONE
- */
 
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,

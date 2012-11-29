@@ -497,6 +497,8 @@ void _Objects_Initialize_information (
 );
 
 /**
+ *  @brief Object API Maximum Class
+ *
  *  This function returns the highest numeric value of a valid
  *  API for the specified @a api.
  *
@@ -509,6 +511,8 @@ unsigned int _Objects_API_maximum_class(
 );
 
 /**
+ *  @brief Allocate Object
+ *
  *  This function allocates a object control block from
  *  the inactive chain of free object control blocks.
  *
@@ -670,6 +674,8 @@ Objects_Control *_Objects_Get (
 );
 
 /**
+ *  @brief Object Get Isr Disable
+ *  
  *  This function maps object ids to object control blocks.
  *  If id corresponds to a local object, then it returns
  *  the_object control pointer which maps to id and location
@@ -831,6 +837,8 @@ void _Objects_Namespace_remove(
 );
 
 /**
+ *  @brief Close Object
+ *
  *  This function removes the_object control pointer and object name
  *  in the Local Pointer and Local Name Tables.
  *

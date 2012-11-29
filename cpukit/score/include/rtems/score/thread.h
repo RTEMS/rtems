@@ -647,6 +647,8 @@ void _Thread_Reset(
 );
 
 /**
+ *  @brief Thread Close
+ *
  *  This routine frees all memory associated with the specified
  *  thread and removes it from the local object table so no further
  *  operations on this thread are allowed.
@@ -657,9 +659,15 @@ void _Thread_Close(
 );
 
 /**
+ *  @brief Thread Ready
+ *
  *  This routine removes any set states for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + ready chain
+ *    + select heir
  */
 void _Thread_Ready(
   Thread_Control *the_thread

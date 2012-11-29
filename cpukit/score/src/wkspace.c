@@ -1,6 +1,11 @@
-/*
- *  Workspace Handler
+/**
+ *  @file
  *
+ *  @brief Workspace Handler Support
+ *  @ingroup ScoreWorkspace
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,9 +30,6 @@
   #include <rtems/bspIo.h>
 #endif
 
-/*
- *  _Workspace_Handler_initialization
- */
 void _Workspace_Handler_initialization(
   Heap_Area *areas,
   size_t area_count,
@@ -93,9 +95,6 @@ void _Workspace_Handler_initialization(
   }
 }
 
-/*
- *  _Workspace_Allocate
- */
 void *_Workspace_Allocate(
   size_t   size
 )
@@ -133,9 +132,6 @@ void _Workspace_Free(
   _Heap_Free( &_Workspace_Area, block );
 }
 
-/*
- *  _Workspace_Allocate_or_fatal_error
- */
 void *_Workspace_Allocate_or_fatal_error(
   size_t      size
 )
