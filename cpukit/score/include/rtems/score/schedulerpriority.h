@@ -136,6 +136,8 @@ void _Scheduler_priority_Unblock(
 );
 
 /**
+ *  @brief Scheduler Priority Yield
+ *
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
  *
@@ -145,6 +147,10 @@ void _Scheduler_priority_Unblock(
  *  reset is true and this is the only thread on the queue then the
  *  timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + ready chain
+ *    + select heir
  */
 void _Scheduler_priority_Yield( void );
 

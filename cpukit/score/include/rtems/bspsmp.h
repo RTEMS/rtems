@@ -143,6 +143,8 @@ int   bsp_smp_processor_id( void );
 void bsp_smp_secondary_cpu_initialize(int cpu);
 
 /**
+ *  @brief RTEMS SMP Secondary CPU Initialize
+ *
  *  This method is the C entry point which secondary CPUs should
  *  arrange to call.  It performs OS initialization for the secondary
  *  CPU and coordinates bring it to a useful state.
@@ -162,6 +164,8 @@ void rtems_smp_secondary_cpu_initialize(void);
 void rtems_smp_initialize_per_cpu(int cpu);
 
 /**
+ *  @brief RTEMS SMP Proccess Interrupt
+ *
  *  This is the method called by the BSP's interrupt handler
  *  to process the incoming interprocessor request. 
  */

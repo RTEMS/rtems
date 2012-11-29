@@ -175,7 +175,7 @@ void _Scheduler_CBS_Release_job (
 int _Scheduler_CBS_Initialize(void);
 
 /**
- *  @brief _Scheduler_CBS_Attach_thread
+ *  @brief Attach Scheduler CBS Thread
  *
  *  Attach a task to an already existing server.
  *
@@ -284,7 +284,7 @@ int _Scheduler_CBS_Get_parameters (
 );
 
 /**
- *  @brief _Scheduler_CBS_Get_server_id
+ *  @brief Scheduler CBS Get Server id
  *
  *  Get a thread server id, or SCHEDULER_CBS_ERROR_NOT_FOUND if it is not
  *  attached to any server.

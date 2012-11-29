@@ -103,7 +103,7 @@ bool _Timespec_Is_valid(
 );
 
 /**
- * @brief Timespec Less Than Operator
+ *  @brief Timespec Less Than Operator
  *
  *  This method is the less than operator for timespecs.
  *

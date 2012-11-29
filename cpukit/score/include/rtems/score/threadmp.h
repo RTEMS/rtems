@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 /**
- *  @brief _Thread_MP_Handler_initialization
+ *  @brief MP Thread Handler Initialization
  *
  *  This routine initializes the multiprocessing portion of the Thread Handler.
  */
@@ -41,7 +41,7 @@ void _Thread_MP_Handler_initialization (
 );
 
 /**
- *  @brief _Thread_MP_Allocate_proxy
+ *  @brief MP Thread Proxy Allocate
  *
  *  This  allocates a proxy control block from
  *  the inactive chain of free proxy control blocks.
@@ -54,7 +54,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 );
 
 /**
- *  @brief _Thread_MP_Find_proxy
+ *  @brief MP Thread Proxy Find
  *
  *  This function removes the proxy control block for the specified
  *  id from the active chain of proxy control blocks.

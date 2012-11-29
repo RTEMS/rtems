@@ -510,6 +510,8 @@ SCORE_EXTERN struct _reent **_Thread_libc_reent;
 void _Thread_Handler_initialization(void);
 
 /**
+ *  @brief Create Idle Thread
+ *
  *  This routine creates the idle thread.
  *
  *  @warning No thread should be created before this one.
@@ -517,9 +519,16 @@ void _Thread_Handler_initialization(void);
 void _Thread_Create_idle(void);
 
 /**
+ *  @brief Start Thread Multitasking
+ *
  *  This routine initiates multitasking.  It is invoked only as
  *  part of initialization and its invocation is the last act of
  *  the non-multitasking part of the system initialization.
+ * 
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + ready chain
+ *    + select heir
  */
 void _Thread_Start_multitasking( void );
 
@@ -560,6 +569,8 @@ size_t _Thread_Stack_Allocate(
 );
 
 /**
+ *  @brief Deallocate Thread Stack
+ * 
  *  Deallocate the Thread's stack.
  */
 void _Thread_Stack_Free(
@@ -655,9 +666,15 @@ void _Thread_Ready(
 );
 
 /**
+ *  @brief Clear Thread state
+ *
  *  This routine clears the indicated STATES for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + priority map
+ *    + select heir
  */
 void _Thread_Clear_state(
   Thread_Control *the_thread,

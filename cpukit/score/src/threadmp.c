@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Distributed MP Support
+ *  @ingroup ScoreThreadMP
+ */
+
 /*
- *  Multiprocessing Support for the Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,11 +24,6 @@
 #include <rtems/score/mpci.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Thread_MP_Handler_initialization
- *
- */
 
 void _Thread_MP_Handler_initialization (
   uint32_t    maximum_proxies
@@ -49,11 +48,6 @@ void _Thread_MP_Handler_initialization (
   );
 
 }
-
-/*
- *  _Thread_MP_Allocate_proxy
- *
- */
 
 Thread_Control *_Thread_MP_Allocate_proxy (
   States_Control  the_state
@@ -99,11 +93,6 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
   return NULL;
 }
-
-/*
- *  _Thread_MP_Find_proxy
- *
- */
 
 /*
  *  The following macro provides the offset of the Active element

@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Size a Message from the Message Queue
+ *  @ingroup ScoreMessageQueue
+ */
+
 /*
- *  CORE Message Queue Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Message Queue Handler.
- *  This core object provides task synchronization and communication functions
- *  via messages passed to queue objects.
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,31 +26,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _CORE_message_queue_Seize
- *
- *  This kernel routine dequeues a message, copies the message buffer to
- *  a given destination buffer, and frees the message buffer to the
- *  inactive message pool.  The thread will be blocked if wait is true,
- *  otherwise an error will be given to the thread if no messages are available.
- *
- *  Input parameters:
- *    the_message_queue - pointer to message queue
- *    id                - id of object we are waitig on
- *    buffer            - pointer to message buffer to be filled
- *    size_p            - pointer to the size of buffer to be filled
- *    wait              - true if wait is allowed, false otherwise
- *    timeout           - time to wait for a message
- *
- *  Output parameters:  NONE
- *
- *  NOTE: Dependent on BUFFER_LENGTH
- *
- *  INTERRUPT LATENCY:
- *    available
- *    wait
- */
 
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,

@@ -1,5 +1,8 @@
 /**
- *  @file  score/src/timespeclessthan.c
+ *  @file
+ *
+ *  @brief Timespec Less Than Operator
+ *  @ingroup Timespec
  */
 
 /*

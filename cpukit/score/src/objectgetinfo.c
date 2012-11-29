@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Get Object Information
+ *  @ingroup ScoreObject
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

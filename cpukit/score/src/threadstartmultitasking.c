@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Start Thread Multitasking
+ *  @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -26,26 +30,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Start_multitasking
- *
- *  This kernel routine readies the requested thread, the thread chain
- *  is adjusted.  A new heir thread may be selected.
- *
- *  Input parameters:
- *    system_thread - pointer to system initialization thread control block
- *    idle_thread   - pointer to idle thread control block
- *
- *  Output parameters:  NONE
- *
- *  NOTE:  This routine uses the "blocking" heir selection mechanism.
- *         This ensures the correct heir after a thread restart.
- *
- *  INTERRUPT LATENCY:
- *    ready chain
- *    select heir
- */
 
 void _Thread_Start_multitasking( void )
 {

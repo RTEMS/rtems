@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Scheduler Simple SMP Tick Method
+ *  @ingroup ScoreScheduler
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

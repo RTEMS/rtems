@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Core Semaphore Flush
+ *  @ingroup ScoreSemaphore
+ */
+
 /*
- *  CORE Semaphore Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Semaphore Handler.
- *  This core object utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,19 +24,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  _CORE_semaphore_Flush
- *
- *  This function a flushes the semaphore's task wait queue.
- *
- *  Input parameters:
- *    the_semaphore          - the semaphore to be flushed
- *    remote_extract_callout - function to invoke remotely
- *    status                 - status to pass to thread
- *
- *  Output parameters:  NONE
- */
 
 void _CORE_semaphore_Flush(
   CORE_semaphore_Control     *the_semaphore,

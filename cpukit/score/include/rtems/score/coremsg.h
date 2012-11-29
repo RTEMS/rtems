@@ -288,6 +288,11 @@ bool _CORE_message_queue_Initialize(
 
 /**
  *  @brief Close a Message Queue
+ * 
+ *  DESCRIPTION:
+ *  This package is the implementation of the CORE Message Queue Handler.
+ *  This core object provides task synchronization and communication functions
+ *  via messages passed to queue objects
  *
  *  This function closes a message by returning all allocated space and
  *  flushing @a the_message_queue's task wait queue.
@@ -306,6 +311,11 @@ void _CORE_message_queue_Close(
 
 /**
  *  @brief Flush Pending Messages
+ * 
+ *  DESCRIPTION:
+ *  This package is the implementation of the CORE Message Queue Handler.
+ *  This core object provides task synchronization and communication functions
+ *  via messages passed to queue objects.
  *
  *  This function flushes @a the_message_queue's pending message queue.  The
  *  number of messages flushed from the queue is returned.
@@ -349,6 +359,11 @@ uint32_t   _CORE_message_queue_Flush_support(
 
 /**
  *  @brief Broadcast a Message to the Message Queue
+ * 
+ *  DESCRIPTION:
+ *  This package is the implementation of the CORE Message Queue Handler.
+ *  This core object provides task synchronization and communication functions
+ *  via messages passed to queue objects.
  *
  *  This function sends a message for every thread waiting on the queue and
  *  returns the number of threads made ready by the message.
@@ -412,6 +427,11 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 
 /**
  *  @brief Size a Message from the Message Queue
+ * 
+ *  DESCRIPTION:
+ *  This package is the implementation of the CORE Message Queue Handler.
+ *  This core object provides task synchronization and communication functions
+ *  via messages passed to queue objects.
  *
  *  This kernel routine dequeues a message, copies the message buffer to
  *  a given destination buffer, and frees the message buffer to the
@@ -432,6 +452,10 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *
  *  @return indication of the successful completion or reason for failure
  *  @note Returns message priority via return are in TCB.
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + available
+ *    + wait
  */
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,

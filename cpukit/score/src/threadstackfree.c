@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Deallocate Thread Stack
+ *  @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,12 +31,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-
-/*
- *  _Thread_Stack_Free
- *
- *  Deallocate the Thread's stack.
- */
 
 void _Thread_Stack_Free(
   Thread_Control *the_thread

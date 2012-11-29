@@ -1,6 +1,11 @@
-/*
- *  ISR Enable/Disable for SMP Configurations
+/**
+ *  @file
  *
+ *  @brief Initialize, Disable, Enable, Flash, Enter, Exit ISR Implementation
+ *  @ingroup ScoreISR
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -57,11 +62,6 @@ int _ISR_SMP_Enter(void)
   return isr_nest_level;
 }
 
-/*
- *  Return values:
- *     0 - simple return
- *     1 - dispatching return
- */
 int _ISR_SMP_Exit(void)
 {
   ISR_Level level;

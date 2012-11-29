@@ -1,7 +1,8 @@
 /**
- *  @file watchdogreportchain.c
+ *  @file
  *
- *  This should only be used for debugging.
+ *  @brief Report Information on a Watchdog Chain
+ *  @ingroup ScoreWatchdog
  */
 
 /*  COPYRIGHT (c) 1989-2008.

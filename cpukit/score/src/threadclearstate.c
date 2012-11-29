@@ -1,6 +1,11 @@
-/*
- *  Thread Handler / Thread Clear State
+/**
+ *  @file
  *
+ *  @brief Clear Thread state
+ *  @ingroup ScoreThread
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,11 +32,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 
-/*
- *  INTERRUPT LATENCY:
- *    priority map
- *    select heir
- */
 void _Thread_Clear_state(
   Thread_Control *the_thread,
   States_Control  state

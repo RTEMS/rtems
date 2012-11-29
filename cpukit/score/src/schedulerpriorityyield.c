@@ -1,6 +1,11 @@
-/*
- *  Scheduler Priority Handler / Yield
+/**
+ *  @file
  *
+ *  @brief Scheduler Priority Yield
+ *  @ingroup ScoreScheduler
+ */
+
+/*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
@@ -18,12 +23,6 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/thread.h>
-
-/*
- *  INTERRUPT LATENCY:
- *    ready chain
- *    select heir
- */
 
 void _Scheduler_priority_Yield(void)
 {

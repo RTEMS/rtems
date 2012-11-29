@@ -752,6 +752,8 @@ Objects_Control *_Objects_Get_next(
 );
 
 /**
+ *  @brief Get Object Information
+ * 
  *  This function return the information structure given
  *  an the API and Class.  This can be done independent of
  *  the existence of any objects created by the API.

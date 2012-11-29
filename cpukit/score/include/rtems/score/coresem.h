@@ -189,6 +189,13 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 );
 
 /**
+ *  @brief Core Semaphore Flush
+ * 
+ *  DESCRIPTION:
+ *  This package is the implementation of the CORE Semaphore Handler.
+ *  This core object utilizes standard Dijkstra counting semaphores to provide
+ *  synchronization and mutual exclusion capabilities.
+ *
  *  This routine assists in the deletion of a semaphore by flushing the
  *  associated wait queue.
  *

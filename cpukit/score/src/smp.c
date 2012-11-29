@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief SMP Support
+ *  @ingroup Score
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -42,9 +49,6 @@ void rtems_smp_run_first_task(int cpu)
   _CPU_Context_switch_to_first_task_smp( &heir->Registers );
 }
 
-/*
- *  Process request to initialize this secondary core.
- */
 void rtems_smp_secondary_cpu_initialize(void)
 {
   int       cpu;
@@ -90,10 +94,6 @@ void rtems_smp_secondary_cpu_initialize(void)
   }
 }
 
-/*
- *  Process an interrupt processor interrupt which indicates a request
- *  from another core.
- */
 void rtems_smp_process_interrupt(void)
 {
   int        cpu;
@@ -179,9 +179,6 @@ void _SMP_Send_message(
   bsp_smp_interrupt_cpu( cpu );
 }
 
-/*
- *  Send interrupt processor request to all other nodes
- */
 void _SMP_Broadcast_message(
   uint32_t  message
 )
@@ -202,9 +199,6 @@ void _SMP_Broadcast_message(
   bsp_smp_broadcast_interrupt();
 }
 
-/*
- *  Send interrupt processor requests to perform first context switch 
- */
 void _SMP_Request_other_cores_to_perform_first_context_switch(void)
 {
   int    cpu;
@@ -215,10 +209,6 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void)
   }
 }
 
-/*
- *  Send message to other cores requesting them to perform
- *  a thread dispatch operation.
- */
 void _SMP_Request_other_cores_to_dispatch(void)
 {
   int i;
@@ -239,9 +229,6 @@ void _SMP_Request_other_cores_to_dispatch(void)
   }
 }
 
-/*
- *  Send message to other cores requesting them to shutdown.
- */
 void _SMP_Request_other_cores_to_shutdown(void)
 {
   bool   allDown;

@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Broadcast a Message to the Message Queue
+ *  @ingroup ScoreMessageQueue
+ */
+
 /*
- *  CORE Message Queue Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Message Queue Handler.
- *  This core object provides task synchronization and communication functions
- *  via messages passed to queue objects.
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,26 +26,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _CORE_message_queue_Broadcast
- *
- *  This function sends a message for every thread waiting on the queue and
- *  returns the number of threads made ready by the message.
- *
- *  Input parameters:
- *    the_message_queue            - message is submitted to this message queue
- *    buffer                       - pointer to message buffer
- *    size                         - size in bytes of message to send
- *    id                           - id of message queue
- *    api_message_queue_mp_support - api specific mp support callout
- *    count                        - area to store number of threads made ready
- *
- *  Output parameters:
- *    count                         - number of threads made ready
- *    CORE_MESSAGE_QUEUE_SUCCESSFUL - if successful
- *    error code                    - if unsuccessful
- */
 
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
