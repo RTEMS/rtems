@@ -225,6 +225,12 @@ SECTIONS {
 		KEEP (*(.gnu.linkonce.d.*personality*))
 		SORT(CONSTRUCTORS)
 
+		. = ALIGN (4);
+
+		_bsd__start_set_sysinit_set = .;
+		*(_bsd_set_sysinit_set);
+		_bsd__stop_set_sysinit_set = .;
+
 		. = ALIGN (bsp_section_align);
 	} > RAM
 
