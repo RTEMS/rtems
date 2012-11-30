@@ -51,7 +51,7 @@ static int rtems_shell_main_mount(
         if (arg == argc) {
           fprintf(
             stderr,
-            "%s: -t needs a type of file-system;; see -L.\n",
+            "%s: -t needs a type of file-system; see -L.\n",
             argv[0]
           );
           return 1;
@@ -69,7 +69,7 @@ static int rtems_shell_main_mount(
         if (arg == argc) {
           fprintf(
             stderr,
-            "%s: -o needs a list if filesystem options.\n",
+            "%s: -o needs a list of filesystem options.\n",
             argv[0]
           );
           return 1;
@@ -122,10 +122,10 @@ static int rtems_shell_main_mount(
 }
 
 rtems_shell_cmd_t rtems_shell_MOUNT_Command = {
-  "mount",                                     /* name */
-  "mount [-t type] [-r] [-L] source target",   /* usage */
-  "files",                                     /* topic */
-  rtems_shell_main_mount,                      /* command */
-  NULL,                                        /* alias */
-  NULL                                         /* next */
+  "mount",                                                  /* name */
+  "mount [-t type] [-r] [-L] [-o options] source target",   /* usage */
+  "files",                                                  /* topic */
+  rtems_shell_main_mount,                                   /* command */
+  NULL,                                                     /* alias */
+  NULL                                                      /* next */
 };
