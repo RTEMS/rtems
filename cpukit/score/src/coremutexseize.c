@@ -1,11 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Seize Mutex with Blocking
+ *  @ingroup ScoreMutex
+ */
+
 /*
- *  Mutex Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Mutex Handler.
- *  This handler provides synchronization and mutual exclusion capabilities.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -37,17 +37,6 @@ void _CORE_mutex_Seize(
   _CORE_mutex_Seize_body( _the_mutex, _id, _wait, _timeout, _level );
 }
 #endif
-
-/*
- *  _CORE_mutex_Seize (interrupt blocking support)
- *
- *  This routine blocks the caller thread after an attempt attempts to obtain
- *  the specified mutex has failed.
- *
- *  Input parameters:
- *    the_mutex - pointer to mutex control block
- *    timeout   - number of ticks to wait (0 means forever)
- */
 
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,

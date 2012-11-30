@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Default Nanoseconds Since Last Tick Handler
+ *  @ingroup ScoreWatchdog
+ */
+
 /*
  * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
  *

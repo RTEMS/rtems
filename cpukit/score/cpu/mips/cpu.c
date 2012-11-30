@@ -1,7 +1,11 @@
 /**
  *  @file
- *  
- *  Mips CPU Dependent Source
+ *
+ *  @brief MIPS CPU Dependent Source
+ */
+
+/*
+ * MIPS CPU Dependent Source
  *
  *  2002:       Greg Menke (gregory.menke@gsfc.nasa.gov)
  *      Overhauled interrupt level and interrupt enable/disable code
@@ -19,9 +23,7 @@
  *    wrote the JMR3904 BSP so this could be tested.  Joel also
  *    added the new interrupt vectoring support in libcpu and
  *    tried to better support the various interrupt controllers.
- */
-
-/*
+ *
  *  Original MIP64ORION port by Craig Lebakken <craigl@transition.com>
  *           COPYRIGHT (c) 1996 by Transition Networks Inc.
  *
@@ -65,10 +67,6 @@ typedef uint64_t ESF_PTR_TYPE;
 #endif
 
 ESF_PTR_TYPE __exceptionStackFrame = 0;
-
-
-
-
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -93,12 +91,6 @@ void _CPU_Initialize(void)
 #endif
 }
 
-/*
- *  _CPU_ISR_Get_level
- *
- *  This routine returns the current interrupt level.
- */
-
 uint32_t   _CPU_ISR_Get_level( void )
 {
   unsigned int sr;
@@ -120,8 +112,6 @@ uint32_t   _CPU_ISR_Get_level( void )
 #endif
   return sr;
 }
-
-
 void _CPU_ISR_Set_level( uint32_t   new_level )
 {
   unsigned int sr, srbits;
@@ -172,31 +162,11 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
   mips_set_sr( sr );
 }
 
-/*
- *  _CPU_Install_interrupt_stack
- */
-
 void _CPU_Install_interrupt_stack( void )
 {
 /* we don't support this yet */
 }
 
-/*
- *  _CPU_Context_Initialize
- *
- *  This kernel routine initializes the basic non-FP context area associated
- *  with each thread.
- *
- *  Input parameters:
- *    the_context  - pointer to the context area
- *    stack_base   - address of memory for the SPARC
- *    size         - size in bytes of the stack area
- *    new_level    - interrupt level for this context area
- *    entry_point  - the starting execution point for this this context
- *    is_fp        - TRUE if this context is associated with an FP thread
- *
- *  Output parameters: NONE
- */
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uintptr_t        *stack_base,
@@ -222,8 +192,6 @@ void _CPU_Context_Initialize(
       ((intlvl & 1)?_INTON:0)) ) |
       SR_CU0 | ((is_fp)?SR_CU1:0) | _EXTRABITS;
 }
-
-
 /*
  *  _CPU_Internal_threads_Idle_thread_body
  *

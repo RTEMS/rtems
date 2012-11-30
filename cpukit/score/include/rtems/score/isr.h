@@ -50,7 +50,7 @@ typedef void ISR_Handler;
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == FALSE)
 
-typedef void * ISR_Handler_entry; 
+typedef void * ISR_Handler_entry;
 
 #else
 /**
@@ -87,7 +87,7 @@ SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
 #endif
 
 /**
- *  @brief Initialize the ISR handler
+ *  @brief Initialize the ISR Handler
  *
  *  This routine performs the initialization necessary for the ISR handler.
  */
@@ -232,7 +232,7 @@ int _ISR_SMP_Exit(void);
   #define _ISR_Disable( _level ) \
     _ISR_Disable_on_this_core( _level );
 #endif
-  
+
 /**
  *  @brief Exits Interrupt Disable Critical Section
  *
@@ -281,6 +281,9 @@ int _ISR_SMP_Exit(void);
  *  for the specified vector.  The previous interrupt service routine is
  *  returned as old_handler.
  *
+ *  LM32 Specific Information:
+ *  XXX document implementation including references if appropriate
+ *
  *  @param[in] _vector is the vector number
  *  @param[in] _new_handler is ISR handler to install
  *  @param[in] _old_handler is a pointer to a variable which will be set
@@ -295,6 +298,9 @@ int _ISR_SMP_Exit(void);
  *  @brief Return Current Interrupt Level
  *
  *  This routine returns the current interrupt level.
+ *
+ *  LM32 Specific Information:
+ *  XXX document implementation including references if appropriate
  *
  *  @return This method returns the current level.
  */

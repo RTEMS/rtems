@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Thread Queue Dequeue FIFO
+ *  @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_Dequeue_fifo
- *
- *  This routine removes a thread from the specified threadq.
- *
- *  Input parameters:
- *    the_thread_queue - pointer to threadq
- *
- *  Output parameters:
- *    returns - thread dequeued or NULL
- *
- *  INTERRUPT LATENCY:
- *    check sync
- *    FIFO
- */
 
 Thread_Control *_Thread_queue_Dequeue_fifo(
   Thread_queue_Control *the_thread_queue

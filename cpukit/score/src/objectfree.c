@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Free Object
+ *  @ingroup ScoreObject
+ */
+
 /*
- *  Object Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -25,15 +29,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Objects_Free
- *
- *  DESCRIPTION:
- *
- *  This function frees a object control block to the
- *  inactive chain of free object control blocks.
- */
 
 void _Objects_Free(
   Objects_Information *information,

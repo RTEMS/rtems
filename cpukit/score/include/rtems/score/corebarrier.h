@@ -121,6 +121,8 @@ typedef struct {
 }   CORE_barrier_Control;
 
 /**
+ *  @brief Initialize CORE Barrier
+ *
  *  This routine initializes the barrier based on the parameters passed.
  *
  *  @param[in] the_barrier is the barrier to initialize
@@ -157,7 +159,7 @@ void _CORE_barrier_Wait(
 
 /**
  *  @brief Manually releases the barrier
- *  
+ *
  *  This routine manually releases the barrier.  All of the threads waiting
  *  for the barrier will be readied.
  *

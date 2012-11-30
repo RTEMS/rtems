@@ -149,7 +149,7 @@ bool _Timespec_Less_than(
   )
 
 /**
- * @brief Add to a Timespec
+ *  @brief Add to a Timespec
  *
  *  This routine adds two timespecs.  The second argument is added
  *  to the first.

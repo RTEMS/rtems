@@ -1,5 +1,8 @@
 /**
- *  @file  score/src/timespecaddto.c
+ *  @file
+ *
+ *  @brief Add to a Timespec
+ *  @ingroup Timespec
  */
 
 /*
@@ -20,12 +23,6 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/**
- *
- *  This routines adds two timespecs.  The second argument is added
- *  to the first.
- */
 
 uint32_t _Timespec_Add_to(
   struct timespec       *time,

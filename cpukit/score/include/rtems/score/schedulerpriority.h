@@ -70,7 +70,7 @@ void _Scheduler_priority_Initialize(void);
 
 /**
  *  @brief Scheduler priority Block
- * 
+ *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
  *  any necessary scheduling operations including the selection of
@@ -103,6 +103,8 @@ void * _Scheduler_priority_Allocate(
 );
 
 /**
+ *  @brief Free Scheduler Priority
+ *
  *  This routine frees @a the_thread->scheduler.
  *
  *  @param[in] the_thread is the thread whose scheduler specific information
@@ -113,7 +115,7 @@ void _Scheduler_priority_Free(
 );
 
 /**
- *  @brief Update Scheduler priority 
+ *  @brief Update Scheduler priority
  *  This routine updates @a the_thread->scheduler based on @a the_scheduler
  *  structures and thread state.
  *
@@ -126,7 +128,7 @@ void _Scheduler_priority_Update(
 
 /**
  *  @brief Scheduler Priority Unblock
- * 
+ *
  *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.
@@ -149,7 +151,7 @@ void _Scheduler_priority_Unblock(
  *  reset is true and this is the only thread on the queue then the
  *  timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
- * 
+ *
  *  - INTERRUPT LATENCY:
  *    + ready chain
  *    + select heir
@@ -157,6 +159,8 @@ void _Scheduler_priority_Unblock(
 void _Scheduler_priority_Yield( void );
 
 /**
+ *  @brief Scheduler Priority Enqueue
+ *
  *  This routine puts @a the_thread on to the priority-based ready queue.
  *
  *  @param[in] the_thread will be enqueued at the TAIL of its priority.
@@ -179,7 +183,7 @@ void _Scheduler_priority_Enqueue_first(
 );
 
 /**
- *  @brief Removes a specific thread from scheduler  
+ *  @brief Removes a specific thread from scheduler
  *
  *  This routine removes a specific thread from the scheduler's set
  *  of ready threads.

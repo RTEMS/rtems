@@ -1,6 +1,10 @@
-/*
- *  SPARC Dependent Source
+/**
+ *  @file
  *
+ *  @brief SPARC CPU Dependent Source
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -69,15 +73,6 @@ void _CPU_Initialize(void)
    */
   _CPU_ISR_Dispatch_disable = 0;
 }
-
-/*
- *  _CPU_ISR_Get_level
- *
- *  Input Parameters: NONE
- *
- *  Output Parameters:
- *    returns the current interrupt level (PIL field of the PSR)
- */
 
 uint32_t   _CPU_ISR_Get_level( void )
 {
@@ -195,22 +190,6 @@ void _CPU_ISR_install_raw_handler(
 
 }
 
-/*
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector       - interrupt vector number
- *    new_handler  - replacement ISR for this vector number
- *    old_handler  - pointer to former ISR for this vector number
- *
- *  Output parameters:
- *    *old_handler - former ISR for this vector number
- *
- */
-
 void _CPU_ISR_install_vector(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -246,23 +225,6 @@ void _CPU_ISR_install_vector(
 
     _ISR_Vector_table[ real_vector ] = new_handler;
 }
-
-/*
- *  _CPU_Context_Initialize
- *
- *  This kernel routine initializes the basic non-FP context area associated
- *  with each thread.
- *
- *  Input parameters:
- *    the_context  - pointer to the context area
- *    stack_base   - address of memory for the SPARC
- *    size         - size in bytes of the stack area
- *    new_level    - interrupt level for this context area
- *    entry_point  - the starting execution point for this this context
- *    is_fp        - TRUE if this context is associated with an FP thread
- *
- *  Output parameters: NONE
- */
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,

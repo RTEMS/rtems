@@ -1,6 +1,10 @@
-/*
- *  Hitachi H8300 CPU Dependent Source
+/**
+ *  @file
  *
+ *  @brief H8300 CPU Dependent Source
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -37,12 +41,6 @@ void _CPU_Initialize(void)
   /* FP context initialization support goes here */
 }
 
-/*
- *  _CPU_ISR_Get_level
- *
- *  This routine returns the current interrupt level.
- */
-
 uint32_t   _CPU_ISR_Get_level( void )
 {
   unsigned int _ccr;
@@ -75,21 +73,6 @@ void _CPU_ISR_install_raw_handler(
    */
   H8BD_Install_IRQ(vector,new_handler,old_handler);
 }
-
-/*
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
- */
 
 void _CPU_ISR_install_vector(
   uint32_t    vector,

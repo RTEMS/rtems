@@ -1,6 +1,10 @@
-/*
- *  XXX CPU Dependent Source
+/**
+ *  @file
  *
+ *  @brief M32C CPU Dependent Source
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -78,17 +82,6 @@ void _CPU_ISR_install_raw_handler(
 
 /*
  *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
  *
  *  NO_CPU Specific Information:
  *

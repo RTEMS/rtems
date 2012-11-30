@@ -18,8 +18,6 @@
 
 #ifndef _RTEMS_SCORE_COREMUTEX_H
 #define _RTEMS_SCORE_COREMUTEX_H
-
-
 /**
  *  @defgroup ScoreMutex Mutex Handler
  *
@@ -336,13 +334,11 @@ void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
   Watchdog_Interval    timeout
 );
-
-
 /**
  *  @brief Sieze Interrupt Wrapper
  *
  *  This macro is to verify that a mutex blocking seize is
- *  performed from a safe system state.  For example, one 
+ *  performed from a safe system state.  For example, one
  *  cannot block inside an isr.
  *
  *  @return this method returns true if dispatch is in an unsafe state.

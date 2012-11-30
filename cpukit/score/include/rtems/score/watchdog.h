@@ -326,7 +326,7 @@ void _Watchdog_Report_chain(
 );
 
 /**
- * @brief Default nanoseconds since last tick handler.
+ * @brief Default Nanoseconds Since Last Tick Handler
  *
  * @retval 0 Always.
  */

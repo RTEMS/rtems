@@ -1,8 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief LM32 Initialize the ISR Handler
+ */
+
 /*
- *  lm32 interrupt handler
- *
- *  Derived from c4x/irq.c and nios2/irq.c
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,12 +22,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>
-
-/*
- *  This routine provides the RTEMS interrupt management.
- *
- *  Upon entry, interrupts are disabled
- */
 
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   unsigned long    *_old_stack_ptr;

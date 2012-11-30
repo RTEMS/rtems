@@ -135,8 +135,6 @@ typedef uint16_t   Objects_Maximum;
  *  the object Id.
  */
 #define OBJECTS_INDEX_START_BIT  0U
-
-
 /**
  *  This is the bit position of the starting bit of the node portion of
  *  the object Id.
@@ -525,6 +523,7 @@ Objects_Control *_Objects_Allocate(
 );
 
 /**
+ *  @brief Free Object
  *
  *  This function frees a object control block to the
  *  inactive chain of free object control blocks.
