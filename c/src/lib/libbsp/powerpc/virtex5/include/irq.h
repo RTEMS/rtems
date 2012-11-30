@@ -71,6 +71,10 @@ extern "C" {
 
 #ifdef __cplusplus
 }
+
+#define	BSP_DEC           BSP_PIT
+#define	BSP_DECREMENTER   BSP_PIT
+
 #endif
 #endif /* ASM */
 

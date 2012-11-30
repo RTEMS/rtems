@@ -61,6 +61,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/powerpc/powerpc.h>
+#include <rtems/powerpc/registers.h>
 
 #define   V_TS_SZ_I    0x0290      // V,TS=0(Inst),SIZE=9,TID=0
 #define   V_TS_SZ_D    0x0390      // V,TS=1(Data),SIZE=9,TID=0
@@ -154,43 +155,44 @@ first:  li      r0,0              // Clear r0
 
        /*------------------------------------------------------------------
         * Set Core Configuration Register 0 as follows:
-        * sum: 0x00200000
+        * sum: 0x00206000
         * bit  1    off  Parity Recovery Enable
         * bit  4    off  Cache Read Parity Enable
         * bit 10    on   Disable Store Gathering
         * bit 11    off  Disable APU Instruction Broadcast
         * bit 16    off  Disable Trace Broadcast
-        * bit 17:18 off  Specifies behaviour of icbt,dcbt/dcbtst insts
+        * bit 17:18 on   Specifies behaviour of icbt,dcbt/dcbtst insts
         * bit 23    off  Force Load/Store Alignment
         * bit 28:29 off  Instruction Cache Speculative Line Count
         * bit 30:31 off  Instruction Cache Speculative Line Threshold
         *            NB: UG200/pg 21: Spec. prefetching must be disabled
         *------------------------------------------------------------------*/
 
-        lis     r2,0x0020         // 7. Set CCR0: DSTG
-        mtccr0  r2                // Configure CCR0
+        lis     r2,   0x00206000@h // 7. Set CCR0: DSTG
+        ori     r2,r2,0x00206000@l //    Set CCR0: GDCBT, GICBT
+        mtccr0  r2                 // Configure CCR0
 
-        mtspr   ccr1,r0           // 8. Clear CCR1
+        mtspr   PPC440_CCR1,r0     // 8. Clear CCR1
 
        /*------------------------------------------------------------------
 	* 9. Configure cache regions
         *------------------------------------------------------------------*/
-	mtspr   inv0,r0
-	mtspr   inv1,r0
-	mtspr   inv2,r0
-	mtspr   inv3,r0
-	mtspr   dnv0,r0
-	mtspr   dnv1,r0
-	mtspr   dnv2,r0
-	mtspr   dnv3,r0
-	mtspr   itv0,r0
-	mtspr   itv1,r0
-	mtspr   itv2,r0
-	mtspr   itv3,r0
-	mtspr   dtv0,r0
-	mtspr   dtv1,r0
-	mtspr   dtv2,r0
-	mtspr   dtv3,r0
+	mtspr   PPC440_INV0,r0
+	mtspr   PPC440_INV1,r0
+	mtspr   PPC440_INV2,r0
+	mtspr   PPC440_INV3,r0
+	mtspr   PPC440_DNV0,r0
+	mtspr   PPC440_DNV1,r0
+	mtspr   PPC440_DNV2,r0
+	mtspr   PPC440_DNV3,r0
+	mtspr   PPC440_ITV0,r0
+	mtspr   PPC440_ITV1,r0
+	mtspr   PPC440_ITV2,r0
+	mtspr   PPC440_ITV3,r0
+	mtspr   PPC440_DTV0,r0
+	mtspr   PPC440_DTV1,r0
+	mtspr   PPC440_DTV2,r0
+	mtspr   PPC440_DTV3,r0
 
        /*------------------------------------------------------------------
 	* Cache victim limits
@@ -198,8 +200,8 @@ first:  li      r0,0              // Clear r0
         *------------------------------------------------------------------*/
 	lis	r2,   0x0001f800@h
 	ori	r2,r2,0x0001f800@l
-	mtspr   ivlim,r2
-	mtspr   dvlim,r2
+	mtspr   PPC440_IVLIM,r2
+	mtspr   PPC440_DVLIM,r2
 
        /*------------------------------------------------------------------
         * Configure instruction and data cache regions:
@@ -241,7 +243,7 @@ first:  li      r0,0              // Clear r0
         *    31  SR    1     1     Supervisor State Read Enable
         *------------------------------------------------------------------*/
 
-        mtspr   mmucr,r0          // 10a. Clear MMUCR
+        mtspr   PPC440_MMUCR,r0   // 10a. Clear MMUCR
         li      r7,WIMG_U_S_1     // Word 2: Pages are NOT cache inhibited
         lis     r6,   PAGE_SZ@h   // Page size constant
         ori     r6,r6,PAGE_SZ@l
@@ -255,9 +257,9 @@ first:  li      r0,0              // Clear r0
         * Select whether Wait Enable, interrupts/exceptions and which address
         * spaces should be enabled when application starts
         *------------------------------------------------------------------*/
-        lis     r0,   0x00000000@h // 10d. MSR[IS]=0 MSR[DS]=0
-        ori     r0,r0,0x00000000@l
-        mtsrr1  r0
+        lis     r3,   0x00000000@h // 10d. MSR[IS]=0 MSR[DS]=0
+        ori     r3,r3,0x00000000@l
+        mtsrr1  r3
         mtsrr0  r28               // Return address
         rfi                       // Context synchronize to invalidate shadow TLB contents
 
@@ -275,43 +277,43 @@ startupDL:
         * 11. Tell the processor where the exception vector table will be
         *------------------------------------------------------------------*/
         .extern SYM(__vectors)
-        lis     r2, __vectors@h     /* set EVPR exc. vector prefix */
-        mtspr   ivpr,r2
+        lis     r1, __vectors@h     /* set EVPR exc. vector prefix */
+        mtspr   BOOKE_IVPR,r1
 
        /*------------------------------------------------------------------
         * Set up default exception and interrupt vectors
         *------------------------------------------------------------------*/
-        li       r1,0x100
+        li       r1,0
         mtivor0  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor1  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor2  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor3  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor4  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor5  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor6  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor7  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor8  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor9  r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor10 r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor11 r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor12 r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor13 r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor14 r1
-        addi     r1,r1,0x100
+        addi     r1,r1,0x10
         mtivor15 r1
 
        /*------------------------------------------------------------------
@@ -336,16 +338,15 @@ startupDL:
         * 13. Configure timer facilities
         *------------------------------------------------------------------*/
         mtdec   r0                // Clear Decrementer to prevent exception
-        mttbu   r0                // Clear Timebase to prevent Fixed Interval..
-        mttbl   r0                // ..timer and Watchdog Timer exceptions
+        mttbl   r0                // Clear Timebase to prevent Fixed Interval..
+        mttbu   r0                // ..timer and Watchdog Timer exceptions
         mtpit   r0                // Programmable interval timer
-        li      r1,-1             // -1 to clear TSR
-        mttsr   r1                // Timer status register
+        li      r2,-1             // -1 to clear TSR
+        mttsr   r2                // Timer status register
 
        /*-------------------------------------------------------------------
         * Clear out stale values in certain registers to avoid confusion
         *------------------------------------------------------------------*/
-        li      r0,0
         mtcrf   0xff,r0           // Need for simulation
         mtctr   r0                // Counter register
         mtxer   r0                // Fixed-point exception register

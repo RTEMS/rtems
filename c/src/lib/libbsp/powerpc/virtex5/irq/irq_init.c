@@ -35,21 +35,21 @@ rtems_irq_global_settings* BSP_rtems_irq_config;
  * these functions just do nothing fulfill the semantic
  * requirements to enable/disable a certain interrupt or exception
  */
-void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
+static void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
 {
   /*
    * nothing to do
    */
 }
 
-void BSP_irq_nop_hdl(void *hdl)
+static void BSP_irq_nop_hdl(void *hdl)
 {
   /*
    * nothing to do
    */
 }
 
-int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
+static int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
 {
   /*
    * nothing to do
@@ -64,7 +64,7 @@ int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
 /***********************************************************
  * functions to enable/disable/query external/critical interrupts
  */
-void BSP_irqexc_on_fnc(rtems_irq_connect_data *conn_data)
+void BSP_irqexc_on_fnc(const rtems_irq_connect_data *conn_data)
 {
   uint32_t msr_value;
   /*
@@ -76,7 +76,7 @@ void BSP_irqexc_on_fnc(rtems_irq_connect_data *conn_data)
   _CPU_MSR_SET(msr_value);
 }
 
-void BSP_irqexc_off_fnc(rtems_irq_connect_data *unused)
+void BSP_irqexc_off_fnc(const rtems_irq_connect_data *unused)
 {
   uint32_t msr_value;
   /*
@@ -87,6 +87,20 @@ void BSP_irqexc_off_fnc(rtems_irq_connect_data *unused)
   msr_value &= ~PPC_MSR_EE;
   _CPU_MSR_SET(msr_value);
 }
+
+SPR_RW(BOOKE_TSR)
+
+int C_dispatch_dec_handler (BSP_Exception_frame *frame, unsigned int excNum)
+{
+  /* Acknowledge the interrupt */
+  _write_BOOKE_TSR( BOOKE_TSR_DIS );
+
+  /* Handle the interrupt */
+  BSP_rtems_irq_tbl[BSP_DEC].hdl(BSP_rtems_irq_tbl[BSP_DEC].handle);
+
+  return 0;
+}
+
 
 /***********************************************************
  * High level IRQ handler called from shared_raw_irq_code_entry
@@ -100,9 +114,12 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
   case ASM_EXT_VECTOR:
     BSP_rtems_irq_tbl[BSP_EXT].hdl(BSP_rtems_irq_tbl[BSP_EXT].handle);
     break;
+#if 0 /* Dealt with by C_dispatch_dec_handler(), above */
   case ASM_BOOKE_DEC_VECTOR:
-    BSP_rtems_irq_tbl[BSP_PIT].hdl(BSP_rtems_irq_tbl[BSP_PIT].handle);
+    _write_BOOKE_TSR( BOOKE_TSR_DIS );
+    BSP_rtems_irq_tbl[BSP_DEC].hdl(BSP_rtems_irq_tbl[BSP_DEC].handle);
     break;
+#endif
 #if 0 /* Critical interrupts not yet supported */
   case ASM_BOOKE_CRIT_VECTOR:
     BSP_rtems_irq_tbl[BSP_CRIT].hdl(BSP_rtems_irq_tbl[BSP_CRIT].handle);
@@ -275,7 +292,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
  * dummy for an empty IRQ handler entry
  */
 static rtems_irq_connect_data emptyIrq = {
-  0, 		         /* Irq Name                 */
+  0, 		         /* IRQ Name                 */
   BSP_irq_nop_hdl,       /* handler function         */
   NULL,                  /* handle passed to handler */
   BSP_irq_nop_func,      /* on function              */
@@ -284,8 +301,8 @@ static rtems_irq_connect_data emptyIrq = {
 };
 
 static rtems_irq_global_settings initialConfig = {
-  BSP_IRQ_NUMBER,    /* irqNb */
-  {  0, 		         /* Irq Name                 */
+  BSP_IRQ_NUMBER,           /* IRQ number               */
+  {  0, 		    /* IRQ Name                 */
      BSP_irq_nop_hdl,       /* handler function         */
      NULL,                  /* handle passed to handler */
      BSP_irq_nop_func,      /* on function              */
@@ -305,7 +322,7 @@ void BSP_rtems_irq_mngt_init(unsigned cpuId)
    * connect all exception vectors needed
    */
   ppc_exc_set_handler(ASM_EXT_VECTOR,       C_dispatch_irq_handler);
-  ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, C_dispatch_irq_handler);
+  ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, C_dispatch_dec_handler);
 
   /*
    * setup interrupt handlers table

@@ -35,14 +35,14 @@ libbsp_a_SOURCES = startup/bspclean.c \
                    startup/bspstart.c \
                    ../../shared/bootcard.c \
                    ../../shared/sbrk.c \
-                   ../../shared/gnatinstallhandler.c
+                   ../../shared/gnatinstallhandler.c \
+                   ../shared/src/memcpy.c
 
 # start
 libbsp_a_SOURCES += startup/start.S
 
 # clock & timer
-libbsp_a_SOURCES += ../../../libcpu/@RTEMS_CPU@/ppc403/clock/clock.c
-libbsp_a_SOURCES += ../../../libcpu/@RTEMS_CPU@/ppc403/timer/timer.c
+libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # console
 libbsp_a_SOURCES += startup/dummy_console.c \
@@ -52,6 +52,10 @@ libbsp_a_SOURCES += startup/dummy_console.c \
 include_bsp_HEADERS += include/irq.h
 libbsp_a_SOURCES += irq/irq_init.c
 
+# mmu
+include_bsp_HEADERS += include/mmu.h
+libbsp_a_SOURCES += mmu/mmu.c
+
 #vectors
 include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
 include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
@@ -59,7 +63,9 @@ include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_s
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
                   ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
                   ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-                  ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel
+                  ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
+                  ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
+                  ../../../libcpu/@RTEMS_CPU@/e500/timer.rel
 
 EXTRA_DIST = times
 
