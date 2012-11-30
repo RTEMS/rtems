@@ -162,7 +162,7 @@ static int rtems_shell_main_msdos_format(
   return 0;
 }
 
-#define OPTIONS "[-v label] [-r size] [-t any/12/16/32]"
+#define OPTIONS "[-V label] [-s sectors/cluster] [-r size] [-t any/12/16/32] [-v]"
 
 rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command = {
   "mkdos",                                   /* name */
