@@ -166,15 +166,15 @@ startupDow:
         * Tell the processor where the exception vector table will be.
         *------------------------------------------------------------------*/
         .extern SYM(__vectors)
-        lis     r0, __vectors@h    /* set EVPR exc. vector prefix */
-        mtspr   evpr,r0
+        lis     r2, __vectors@h    /* set EVPR exc. vector prefix */
+        mtevpr  r2
 
        /*-------------------------------------------------------------------
         * Set up the debug register to freeze timers on debug events.
         *------------------------------------------------------------------*/
-        mfdbcr0 r0
-        ori     r0,r0,0x0001
-        mtdbcr0 r0
+        mfdbcr0 r2
+        ori     r2,r2,0x0001
+        mtdbcr0 r2
         isync
 
         /* Select whether APU, Wait Enable, interrupts/exceptions and address
@@ -182,14 +182,20 @@ startupDow:
         lis     r0,0x00000000@h   /* SRR1 value */
         mtsrr1  r0                /* Potentially: 0x80000000 >> 6 is APU */
 
+        /* Configure timer facilities */
+        mttbl   r0                /* Clear Timebase to prevent Fixed Interval.. */
+        mttbu   r0                /* ..timer and Watchdog Timer exceptions */
+        mtpit   r0                /* Programmable interval timer */
+        li      r2,-1             /* -1 to clear TSR */
+        mttsr   r2                /* Timer status register */
+
         /* Clear out stale values in certain registers to avoid confusion */
+        mtcrf   0xff,r0           /* Need for simulation */
+        mtctr   r0                /* Counter register */
         mtxer   r0                /* Fixed-point exception register */
         mtesr   r0                /* Exception syndrome register */
         mtdear  r0                /* Data exception address register */
         mtmcsr  r0                /* Machine check syndrome register */
-        mtpit   r0                /* Programmable interval timer */
-        li      r0,-1             /* -1 to clear TSR */
-        mttsr   r0                /* Timer status register */
 
         /* Invalidate the data cache */
         li      r2,0              /* Start address */

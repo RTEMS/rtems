@@ -26,8 +26,6 @@
 #include <rtems/powerpc/powerpc.h>
 #include <bsp/vectors.h>
 
-uint32_t* IRQ_Counter = (uint32_t*)0x1500;
-
 static rtems_irq_connect_data rtemsIrqTbl[BSP_IRQ_NUMBER];
 rtems_irq_connect_data *BSP_rtems_irq_tbl;
 rtems_irq_global_settings* BSP_rtems_irq_config;
@@ -37,21 +35,21 @@ rtems_irq_global_settings* BSP_rtems_irq_config;
  * these functions just do nothing fulfill the semantic
  * requirements to enable/disable a certain interrupt or exception
  */
-void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
+static void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
 {
   /*
    * nothing to do
    */
 }
 
-void BSP_irq_nop_hdl(void *hdl)
+static void BSP_irq_nop_hdl(void *hdl)
 {
   /*
    * nothing to do
    */
 }
 
-int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
+static int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
 {
   /*
    * nothing to do
@@ -66,7 +64,7 @@ int BSP_irq_isOn_func(const rtems_irq_connect_data *unused)
 /***********************************************************
  * functions to enable/disable/query external/critical interrupts
  */
-void BSP_irqexc_on_fnc(rtems_irq_connect_data *conn_data)
+void BSP_irqexc_on_fnc(const rtems_irq_connect_data *conn_data)
 {
   uint32_t msr_value;
   /*
@@ -78,7 +76,7 @@ void BSP_irqexc_on_fnc(rtems_irq_connect_data *conn_data)
   _CPU_MSR_SET(msr_value);
 }
 
-void BSP_irqexc_off_fnc(rtems_irq_connect_data *unused)
+void BSP_irqexc_off_fnc(const rtems_irq_connect_data *unused)
 {
   uint32_t msr_value;
   /*
@@ -277,7 +275,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
  * dummy for an empty IRQ handler entry
  */
 static rtems_irq_connect_data emptyIrq = {
-  0, 		         /* Irq Name                 */
+  0, 		         /* IRQ Name                 */
   BSP_irq_nop_hdl,       /* handler function         */
   NULL,                  /* handle passed to handler */
   BSP_irq_nop_func,      /* on function              */
@@ -286,8 +284,8 @@ static rtems_irq_connect_data emptyIrq = {
 };
 
 static rtems_irq_global_settings initialConfig = {
-  BSP_IRQ_NUMBER,    /* irqNb */
-  {  0, 		         /* Irq Name                 */
+  BSP_IRQ_NUMBER,           /* IRQ Number               */
+  {  0, 		    /* IRQ Name                 */
      BSP_irq_nop_hdl,       /* handler function         */
      NULL,                  /* handle passed to handler */
      BSP_irq_nop_func,      /* on function              */

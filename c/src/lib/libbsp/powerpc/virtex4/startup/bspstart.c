@@ -54,19 +54,22 @@
  *  Modifications for PPC405GP by Dennis Ehlin
  *  Modifications for Virtex4 by Richard Claus <claus@slac.stanford.edu>
  */
-
-#include <string.h>
-#include <fcntl.h>
-
-#include <bsp.h>
-#include <bsp/irq.h>
-#include <bsp/vectors.h>
+#include <rtems.h>
+#include <rtems/config.h>
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
-#include <rtems/sptables.h>             /* for RTEMS_VERSION */
+
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
+
+#include <bsp.h>
+#include <bsp/vectors.h>
+#include <bsp/bootcard.h>
+#include <bsp/irq.h>
+
+#include <string.h>
+#include <fcntl.h>
 
 #define DO_DOWN_ALIGN(x,a) ((x) & ~((a)-1))
 
@@ -74,13 +77,6 @@
 
 #define CPU_DOWN_ALIGN(x)  DO_DOWN_ALIGN(x, CPU_ALIGNMENT)
 #define CPU_UP_ALIGN(x)    DO_UP_ALIGN(x, CPU_ALIGNMENT)
-
-
-/* Expected by clock.c */
-uint32_t    bsp_clicks_per_usec;
-bool        bsp_timer_internal_clock;   /* true, when timer runs with CPU clk */
-uint32_t    bsp_timer_least_valid;
-uint32_t    bsp_timer_average_overhead;
 
 
 /* Defined in linkcmds linker script */
@@ -96,35 +92,24 @@ LINKER_SYMBOL(WorkAreaBase);
 LINKER_SYMBOL(MsgAreaBase);
 LINKER_SYMBOL(MsgAreaSize);
 LINKER_SYMBOL(__phy_ram_end);
+LINKER_SYMBOL(bsp_exc_vector_base);
+
+
+/* Expected by clock.c */
+uint32_t    bsp_clicks_per_usec;
+bool        bsp_timer_internal_clock;   /* true, when timer runs with CPU clk */
+uint32_t    bsp_timer_least_valid;
+uint32_t    bsp_timer_average_overhead;
 
 
 /*
  * Provide weak aliases so that RTEMS distribution builds
  */
 static void _noopfun(void) {}
-static void _bsp_start(void)
-{
-  uintptr_t         intrStackStart = CPU_UP_ALIGN((uint32_t)__bsp_ram_start);
-  uintptr_t         intrStackSize  = rtems_configuration_get_interrupt_stack_size();
-
-  /*
-   * Initialize default raw exception handlers.
-   *
-   * This BSP does not assume anything about firmware possibly loaded in the
-   * FPGA, so the external interrupt should not be enabled in order to avoid
-   * spurious interrupts.
-   */
-  ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT & ~MSR_EE,
-                     intrStackStart,
-                     intrStackSize);
-
-  /* Install our own set of exception vectors */
-  BSP_rtems_irq_mngt_init(0);
-}
 
 
 void app_bsp_start(void)
-__attribute__(( weak, alias("_bsp_start") ));
+__attribute__(( weak, alias("_noopfun") ));
 
 void app_bsp_pretasking_hook(void)
 __attribute__(( weak, alias("_noopfun") ));
@@ -147,20 +132,31 @@ static void __bsp_outchar_to_memory(char c)
 void BSP_ask_for_reset(void)
 {
   printk("\nSystem stopped, issue RESET");
+
   for(;;);
 }
 
 
 void BSP_panic(char *s)
 {
-  printk("\n%s PANIC %s\n", _RTEMS_version, s);
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+
+  printk("\n%s PANIC %s\n", rtems_get_version_string(), s);
+
   BSP_ask_for_reset();
 }
 
 
 void _BSP_Fatal_error(unsigned int v)
 {
-  printk("\n%s FATAL ERROR %x\n", _RTEMS_version, v);
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+
+  printk("\n%s FATAL ERROR %x\n", rtems_get_version_string(), v);
+
   BSP_ask_for_reset();
 }
 
@@ -176,13 +172,14 @@ void bsp_start(void)
 {
   uintptr_t          intrStackStart;
   uintptr_t          intrStackSize;
+
   ppc_cpu_id_t       myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
   /* Set the character output function;  The application may override this */
   BSP_output_char = __bsp_outchar_to_memory;
 
-  printk("\nWelcome to RTEMS %s\n", _RTEMS_version );
+  printk("RTEMS %s\n", rtems_get_version_string());
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
@@ -208,6 +205,12 @@ void bsp_start(void)
    */
   intrStackStart = CPU_UP_ALIGN((uint32_t)__bsp_ram_start);
   intrStackSize  = rtems_configuration_get_interrupt_stack_size();
+
+  ppc_exc_initialize(PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
+                     intrStackStart,
+                     intrStackSize);
+
+  /* Let the user know what parameters we were compiled with */
   printk("                  Base/Start     End         Size\n"
          "RAM:              0x%08x              0x%x\n"
          "RTEMS:                        0x%08x\n"
@@ -223,6 +226,11 @@ void bsp_start(void)
          (uint32_t)WorkAreaBase, (uint32_t)__bsp_ram_end,
          (uint32_t)MsgAreaBase,                           (uint32_t)MsgAreaSize,
          (uint32_t)__phy_ram_end);
+
+  /*
+   * Initialize RTEMS IRQ system
+   */
+  BSP_rtems_irq_mngt_init(0);
 
   /* Continue with application-specific initialization */
   app_bsp_start();
