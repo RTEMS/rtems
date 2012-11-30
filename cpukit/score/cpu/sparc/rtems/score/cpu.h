@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/cpu.h
+ *  @file rtems/score/cpu.h
  *
  *  This include file contains information pertaining to the port of
  *  the executive to the SPARC processor.
