@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Set Objects Name
+ * @ingroup ScoreObject
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -19,11 +26,6 @@
 #include <ctype.h>
 #include <inttypes.h>
 #include <string.h>
-
-
-/*
- *  This method sets the name of an object based upon a C string.
- */
 
 bool _Objects_Set_name(
   Objects_Information *information,

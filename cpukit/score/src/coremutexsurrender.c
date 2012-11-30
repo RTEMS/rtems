@@ -1,11 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Surrender the Mutex
+ * @ingroup ScoreMutex
+ */
+
 /*
- *  Mutex Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Mutex Handler.
- *  This handler provides synchronization and mutual exclusion capabilities.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

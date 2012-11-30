@@ -1,6 +1,11 @@
-/*
- *  Scheduler Handler / Initialization
+/**
+ * @file
  *
+ * @brief Scheduler Initialize
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *

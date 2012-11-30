@@ -1,6 +1,11 @@
-/*
- *  Scheduler Simple Handler / Schedule
+/**
+ * @file
  *
+ * @brief Simple Schedule Determine Heir
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Append a Node on the End of a Chain
+ * @ingroup ScoreChain
+*/
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

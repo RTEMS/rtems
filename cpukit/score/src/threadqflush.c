@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Thread Queue Flush
+ * @ingroup ScoreThreadQ
+ */
+
 /*
- *  Thread Queue Handler
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,19 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
-
-/*
- *  _Thread_queue_Flush
- *
- *  This kernel routine flushes the given thread queue.
- *
- *  Input parameters:
- *    the_thread_queue       - pointer to threadq to be flushed
- *    remote_extract_callout - pointer to routine which extracts a remote thread
- *    status                 - status to return to the thread
- *
- *  Output parameters:  NONE
- */
 
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,

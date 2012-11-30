@@ -1,6 +1,11 @@
-/*
- *  Scheduler Simple SMP Handler / Block
+/**
+ * @file
  *
+ * @brief Scheduler Simple Block
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

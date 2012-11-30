@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Allocates an API Mutex from the Inactive Set
+ * @ingroup ScoreAPIMutex
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,6 +1,11 @@
-/*
- *  Scheduler Simple Handler / Yield
+/**
+ * @file
  *
+ * @brief Simple Schedule Yield CPU
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

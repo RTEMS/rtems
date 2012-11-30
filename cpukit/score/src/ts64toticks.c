@@ -1,5 +1,8 @@
 /**
- *  @file  score/src/ts64toticks.c
+ *  @file
+ *
+ *  @brief Convert 64-bit Timestamp to Number of Ticks
+ *  @ingroup SuperCore Timestamp64
  */
 
 /*

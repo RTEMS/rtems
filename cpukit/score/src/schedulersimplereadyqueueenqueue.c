@@ -1,6 +1,11 @@
-/*
- *  Schedule Simple Handler / Ready Queue Enqueue
+/**
+ * @file
  *
+ * @brief Scheduler Simple Priority Enqueue Ready Thread
+ * @ingroup ScoreScheduler
+ */
+
+/*
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

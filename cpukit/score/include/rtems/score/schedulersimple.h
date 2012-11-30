@@ -64,6 +64,8 @@ void _Scheduler_simple_Initialize( void );
 void _Scheduler_simple_Schedule( void );
 
 /**
+ *  @brief Simple Schedule
+ *
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
  *  It will remove the running THREAD from the scheduler.informaiton
@@ -126,7 +128,7 @@ void _Scheduler_simple_Enqueue(
 
 /**
  *  @brief Scheduler simple Enqueue first
- *  
+ *
  *  This routine puts @a the_thread to the head of the ready queue.
  *  The thread will be the first thread at its priority level.
  *
@@ -166,7 +168,7 @@ void _Scheduler_simple_Update(
 );
 
 /**
- *  @brief Stub for schedule free 
+ *  @brief Stub for schedule free
  *
  *  This routine does nothing, and is used as a stub for Schedule free
  *  The overhead of a function call will still be imposed.

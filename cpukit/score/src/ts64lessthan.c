@@ -1,5 +1,8 @@
 /**
- * @file score/src/ts64lessthan.c
+ * @file
+ *
+ * @brief Timestamp Less Than Operator
+ * @ingroup SuperCore Timestamp64
 */
 
 /*

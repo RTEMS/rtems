@@ -448,12 +448,12 @@ void _Objects_Extend_information(
 
 /**
  *  @brief Shrink an object class information record
- * 
+ *
  *  This function shrink an object class information record.
  *  The object's name and object space are released. The local_table
  *  etc block does not shrink. The InActive list needs to be scanned
  *  to find the objects are remove them.
- *  
+ *
  *  @param[in] information points to an object class information block.
  */
 void _Objects_Shrink_information(
@@ -462,7 +462,7 @@ void _Objects_Shrink_information(
 
 /**
  *  @brief Initialize object Information
- * 
+ *
  *  This function initializes an object class information record.
  *  SUPPORTS_GLOBAL is true if the object class supports global
  *  objects, and false otherwise.  Maximum indicates the number
@@ -515,6 +515,8 @@ unsigned int _Objects_API_maximum_class(
  *
  *  This function allocates a object control block from
  *  the inactive chain of free object control blocks.
+ *
+ *  @brief Allocate Object
  *
  *  @param[in] information points to an object class information block.
  */
@@ -604,6 +606,8 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
 
 #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 /**
+ *  @brief Object ID to Name
+ *
  *  This method converts an object name to an Id.  It performs a look up
  *  using the object information block for this object class.
  *
@@ -675,7 +679,7 @@ Objects_Control *_Objects_Get (
 
 /**
  *  @brief Object Get Isr Disable
- *  
+ *
  *  This function maps object ids to object control blocks.
  *  If id corresponds to a local object, then it returns
  *  the_object control pointer which maps to id and location
@@ -709,7 +713,7 @@ Objects_Control *_Objects_Get_isr_disable(
 
 /**
  *  @brief  Get No protection Object
- * 
+ *
  *  This function maps object ids to object control blocks.
  *  If id corresponds to a local object, then it returns
  *  the_object control pointer which maps to id and location
@@ -759,7 +763,7 @@ Objects_Control *_Objects_Get_next(
 
 /**
  *  @brief Get Object Information
- * 
+ *
  *  This function return the information structure given
  *  an the API and Class.  This can be done independent of
  *  the existence of any objects created by the API.
@@ -790,7 +794,7 @@ Objects_Information *_Objects_Get_information_id(
 
 /**
  *  @brief _Objects_Get_name_as_string
- *  
+ *
  *  This method objects the name of an object and returns its name
  *  in the form of a C string.  It attempts to be careful about
  *  overflowing the user's string and about returning unprintable characters.
@@ -809,6 +813,8 @@ char *_Objects_Get_name_as_string(
 );
 
 /**
+ *  @brief Set Objects Name
+ *
  *  This method sets the object name to either a copy of a string
  *  or up to the first four characters of the string based upon
  *  whether this object class uses strings for names.

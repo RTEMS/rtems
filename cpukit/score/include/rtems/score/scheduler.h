@@ -129,6 +129,8 @@ extern Scheduler_Control  _Scheduler;
   (_Scheduler_Priority_compare(_p1,_p2) > 0)
 
 /**
+ *  @brief Scheduler is priority higher than
+ *
  *  This routine initializes the scheduler to the policy chosen by the user
  *  through confdefs, or to the priority scheduler with ready chains by
  *  default.

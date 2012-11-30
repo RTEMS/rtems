@@ -1,10 +1,12 @@
 /**
  *  @file watchdogreport.c
  *
- *  This should only be used for debugging.
+ *  @brief Report Information on a Single Watchdog Instance
+ *  @ingroup ScoreWatchdog
  */
 
-/*  COPYRIGHT (c) 1989-2008.
+/*
+ *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

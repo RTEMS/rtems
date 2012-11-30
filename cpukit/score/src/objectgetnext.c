@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Get Pointer to Next Object that is Active
+ * @ingroup ScoreObject
+ */
+
 /*
- *  Object Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -162,8 +162,9 @@ Chain_Node *_Chain_Get(
  *
  *  This routine inserts @a the_node on a chain immediately following
  *  @a after_node.
- *  
- *  @param[in] after_node is the pointer to the node in chain to be inserted after
+ *
+ *  @param[in] after_node is the pointer to the node in chain to be
+ *             inserted after
  *  @param[in] node is the pointer to the node to be inserted
  *
  *  @note It disables interrupts to ensure the atomicity
@@ -244,6 +245,9 @@ bool _Chain_Prepend_with_empty_check(
  *
  * @retval true The chain is empty now.
  * @retval false The chain contains at least one node now.
+ *
+ *  - INTERRUPT LATENCY:
+ *    + single case
  */
 bool _Chain_Get_with_empty_check(
   Chain_Control *the_chain,
