@@ -20,8 +20,10 @@
 #define MSR_UCLE	(1<<26)		/* User-mode cache lock enable (e500) */
 #define MSR_VE		(1<<25)		/* Alti-Vec enable (7400+) */
 #define MSR_SPE		(1<<25)		/* SPE enable (e500) */
+#define MSR_AP          (1<<25)         /* Auxiliary processor available */
+#define MSR_APE         (1<<19)         /* APU exception enable */
 #define MSR_POW		(1<<18)		/* Enable Power Management */
-#define MSR_WE		(1<<18)		/* Wait state enable (e500) */
+#define MSR_WE		(1<<18)		/* Wait state enable (e500, 4xx) */
 #define MSR_TGPR	(1<<17)		/* TLB Update registers in use */
 #define MSR_CE		(1<<17)		/* BookE critical interrupt */
 #define MSR_ILE		(1<<16)		/* Interrupt Little-Endian enable */
@@ -32,6 +34,7 @@
 #define MSR_FE0		(1<<11)		/* Floating Exception mode 0 */
 #define MSR_SE		(1<<10)		/* Single Step */
 #define MSR_UBLE	(1<<10)		/* User-mode BTB lock enable (e500) */
+#define MSR_DWE         (1<<10)         /* Debug wait enable (4xx) */
 #define MSR_BE		(1<<9)		/* Branch Trace */
 #define MSR_DE		(1<<9)		/* BookE debug exception */
 #define MSR_FE1		(1<<8)		/* Floating Exception mode 1 */
@@ -209,12 +212,12 @@ n:
  * is different from that of 7400 and 7410.
  * Though not used in 7400 and 7410, it is appeded with _745x just
  * to be clarified.
- */	
+ */
 #define L2CR_L2IO_745x  0x100000  /* (1<<20) L2 Instruction-Only  */
 #define L2CR_L2DO_745x  0x10000   /* (1<<16) L2 Data-Only */
 #define L2CR_LOCK_745x  (L2CR_L2IO_745x|L2CR_L2DO_745x)
 #define L2CR_L3OH0      0x00080000 /* 12:L3 output hold 0 */
-	
+
 #define L3CR    1018    /* PPC 7450/7455 L3 control register */
 #define L3CR_L3IO_745x  0x400000  /* (1<<22) L3 Instruction-Only */
 #define L3CR_L3DO_745x  0x40	  /* (1<<6) L3 Data-Only */
@@ -319,18 +322,119 @@ lidate */
 #define BOOKE_TCR_FPEXT(x)	(((x)&0xf)<<13)
 #define BOOKE_TCR_FPEXT_MASK	(0xf<<13)
 
-#define BOOKE_PID 48
-#define BOOKE_ESR 62
-#define BOOKE_IVPR 63
-#define BOOKE_PIR 286
-#define BOOKE_DBSR 304
-#define BOOKE_DBCR0 308
-#define BOOKE_DBCR1 309
-#define BOOKE_DBCR2 310
-#define BOOKE_DAC1 316
-#define BOOKE_DAC2 317
-#define BOOKE_DVC1 318
-#define BOOKE_DVC2 319
+#define BOOKE_PID       48   /* Process ID                                */
+#define BOOKE_CSRR0     58   /* Critical Save/Restore Register 0          */
+#define BOOKE_CSRR1     59   /* Critical Save/Restore Register 1          */
+#define BOOKE_ESR       62   /* Exception Syndrome Register               */
+#define BOOKE_IVPR      63   /* Interrupt Vector Prefix Register          */
+#define BOOKE_SPRG4_W  260   /* Special Purpose Register General 4 (WO)   */
+#define BOOKE_SPRG5_W  261   /* Special Purpose Register General 5 (WO)   */
+#define BOOKE_SPRG6_W  262   /* Special Purpose Register General 6 (WO)   */
+#define BOOKE_SPRG7_W  263   /* Special Purpose Register General 7 (WO)   */
+#define BOOKE_PIR      286   /* Processor ID Register                     */
+#define BOOKE_DBSR     304   /* Debug Status Register                     */
+#define BOOKE_DBCR0    308   /* Debug Control Register 0                  */
+#define BOOKE_DBCR1    309   /* Debug Control Register 1                  */
+#define BOOKE_DBCR2    310   /* Debug Control Register 2                  */
+#define BOOKE_IAC1     312   /* Instruction Address Compare 1             */
+#define BOOKE_IAC2     313   /* Instruction Address Compare 2             */
+#define BOOKE_IAC3     314   /* Instruction Address Compare 3             */
+#define BOOKE_IAC4     315   /* Instruction Address Compare 4             */
+#define BOOKE_DAC1     316   /* Data Address Compare 1                    */
+#define BOOKE_DAC2     317   /* Data Address Compare 2                    */
+#define BOOKE_DVC1     318   /* Data Value Compare 1                      */
+#define BOOKE_DVC2     319   /* Data Value Compare 2                      */
+#define BOOKE_IVOR0    400   /* Interrupt Vector Offset Register 0        */
+#define BOOKE_IVOR1    401   /* Interrupt Vector Offset Register 1        */
+#define BOOKE_IVOR2    402   /* Interrupt Vector Offset Register 2        */
+#define BOOKE_IVOR3    403   /* Interrupt Vector Offset Register 3        */
+#define BOOKE_IVOR4    404   /* Interrupt Vector Offset Register 4        */
+#define BOOKE_IVOR5    405   /* Interrupt Vector Offset Register 5        */
+#define BOOKE_IVOR6    406   /* Interrupt Vector Offset Register 6        */
+#define BOOKE_IVOR7    407   /* Interrupt Vector Offset Register 7        */
+#define BOOKE_IVOR8    408   /* Interrupt Vector Offset Register 8        */
+#define BOOKE_IVOR9    409   /* Interrupt Vector Offset Register 9        */
+#define BOOKE_IVOR10   410   /* Interrupt Vector Offset Register 10       */
+#define BOOKE_IVOR11   411   /* Interrupt Vector Offset Register 11       */
+#define BOOKE_IVOR12   412   /* Interrupt Vector Offset Register 12       */
+#define BOOKE_IVOR13   413   /* Interrupt Vector Offset Register 13       */
+#define BOOKE_IVOR14   414   /* Interrupt Vector Offset Register 14       */
+#define BOOKE_IVOR15   415   /* Interrupt Vector Offset Register 15       */
+#define BOOKE_MCSRR0   570   /* Machine Check Save/Restore Register 0     */
+#define BOOKE_MCSRR1   571   /* Machine Check Save/Restore Register 1     */
+#define BOOKE_MCSR     572   /* Machine Check Status Register             */
+
+#define PPC440_INV0    880   /* Instruction Cache Normal Victim 0         */
+#define PPC440_INV1    881   /* Instruction Cache Normal Victim 1         */
+#define PPC440_INV2    882   /* Instruction Cache Normal Victim 2         */
+#define PPC440_INV3    883   /* Instruction Cache Normal Victim 3         */
+#define PPC440_ITV0    884   /* Instruction Cache Transient Victim 0      */
+#define PPC440_ITV1    885   /* Instruction Cache Transient Victim 1      */
+#define PPC440_ITV2    886   /* Instruction Cache Transient Victim 2      */
+#define PPC440_ITV3    887   /* Instruction Cache Transient Victim 3      */
+#define PPC440_CCR1    888   /* Core Configuration Register 1             */
+#define PPC440_DNV0    912   /* Data Cache Normal Victim 0                */
+#define PPC440_DNV1    913   /* Data Cache Normal Victim 1                */
+#define PPC440_DNV2    914   /* Data Cache Normal Victim 2                */
+#define PPC440_DNV3    915   /* Data Cache Normal Victim 3                */
+#define PPC440_DTV0    916   /* Data Cache Transient Victim 0             */
+#define PPC440_DTV1    917   /* Data Cache Transient Victim 1             */
+#define PPC440_DTV2    918   /* Data Cache Transient Victim 2             */
+#define PPC440_DTV3    919   /* Data Cache Transient Victim 3             */
+#define PPC440_DVLIM   920   /* Data Cache Victim Limit                   */
+#define PPC440_IVLIM   921   /* Instruction Cache Victim Limit            */
+#define PPC440_RSTCFG  923   /* Reset Configuration                       */
+#define PPC440_DCDBTRL 924   /* Data Cache Debug Tag Register Low         */
+#define PPC440_DCDBTRH 925   /* Data Cache Debug Tag Register High        */
+#define PPC440_ICDBTRL 926   /* Instruction Cache Debug Tag Register Low  */
+#define PPC440_ICDBTRH 927   /* Instruction Cache Debug Tag Register High */
+#define PPC440_MMUCR   946   /* Memory Management Unit Control Register   */
+#define PPC440_CCR0    947   /* Core Configuration Register 0             */
+#define PPC440_ICDBDR  979   /* Instruction Cache Debug Data Register     */
+#define PPC440_DBDR   1011   /* Debug Data Register                       */
+
+#define PPC440_TLB0_EPN(n)       ( (((1<<22)-1)&(n)) << (31-21))  /* Etended Page Number    */
+#define PPC440_TLB0_EPN_GET(n)   (             ((n)  >> (31-21)) & ((1<<22)-1))
+#define PPC440_TLB0_V            (               1   << (31-22))  /* Entry valid            */
+#define PPC440_TLB0_TS           (               1   << (31-23))  /* Translation space      */
+#define PPC440_TLB0_TSIZE(n)     (       (0xf & (n)) << (31-27))  /* Page size              */
+#define PPC440_TLB0_TSIZE_GET(n) (           ((n)  >> (31-27)) & 0xf)
+#define PPC440_TLB0_TPAR(n)      (       (0xf & (n)) << (31-31))  /* Tag Parity             */
+#define PPC440_TLB0_TPAR_GET(n)  (            ((n)  >> (31-31)) & 0xf)
+
+#define PPC440_PID_TID(n)        (      (0xff & (n)) << (31-31))  /* Translation ID         */
+#define PPC440_PID_TID_GET(n)    (             ((n)  >> (31-31)) & 0xff)
+
+#define PPC440_TLB1_RPN(n)       ( (((1<<22)-1)&(n)) << (31-21))  /* Real Page Number       */
+#define PPC440_TLB1_RPN_GET(n)   (             ((n)  >> (31-21)) & ((1<<22)-1))
+#define PPC440_TLB1_PAR1(n)      (       (0x3 & (n)) << (31-23))  /* Parity for TLB word 1  */
+#define PPC440_TLB1_PAR1_GET(n)  (            ((n)  >> (31-23)) & 0x3)
+#define PPC440_TLB1_ERPN(n)      (       (0xf & (n)) << (31-31))  /* Extended Real Page No. */
+#define PPC440_TLB1_ERPN_GET(n)  (            ((n)  >> (31-31)) & 0xf)
+
+#define PPC440_TLB2_PAR2(n)      (       (0x3 & (n)) << (31- 1))  /* Parity for TLB word 2  */
+#define PPC440_TLB2_PAR2_GET(n)  (            ((n)  >> (31- 1)) & 0x3)
+#define PPC440_TLB2_U0           (               1   << (31-16))  /* User attr. 0           */
+#define PPC440_TLB2_U1           (               1   << (31-17))  /* User attr. 1           */
+#define PPC440_TLB2_U2           (               1   << (31-18))  /* User attr. 2           */
+#define PPC440_TLB2_U3           (               1   << (31-19))  /* User attr. 3           */
+#define PPC440_TLB2_W            (               1   << (31-20))  /* Write-through          */
+#define PPC440_TLB2_I            (               1   << (31-21))  /* Cache-inhibited        */
+#define PPC440_TLB2_M            (               1   << (31-22))  /* Memory-coherence req.  */
+#define PPC440_TLB2_G            (               1   << (31-23))  /* Guarded                */
+#define PPC440_TLB2_E            (               1   << (31-24))  /* Little-endian          */
+#define PPC440_TLB2_UX           (               1   << (31-26))  /* User  exec.            */
+#define PPC440_TLB2_UW           (               1   << (31-27))  /* User  write            */
+#define PPC440_TLB2_UR           (               1   << (31-28))  /* User  read             */
+#define PPC440_TLB2_SX           (               1   << (31-29))  /* Super exec.            */
+#define PPC440_TLB2_SW           (               1   << (31-30))  /* Super write            */
+#define PPC440_TLB2_SR           (               1   << (31-31))  /* Super read             */
+
+#define PPC440_TLB2_ATTR(x)      ( ((x) & 0x1ff) << 7 )
+#define PPC440_TLB2_ATTR_GET(x)  ( ((x) >> 7) & 0x1ff )
+
+#define PPC440_TLB2_PERM(n)      ( (n) & 0x3f )
+#define PPC440_TLB2_PERM_GET(n)  ( (n) & 0x3f )
 
 /* Freescale Book E Implementation Standards (EIS): Branch Operations */
 
@@ -442,9 +546,9 @@ lidate */
 
 /* Freescale Book E Implementation Standards (EIS): Interrupt */
 
-#define FSL_EIS_MCAR 573 
-#define FSL_EIS_DSRR0 574 
-#define FSL_EIS_DSRR1 575 
+#define FSL_EIS_MCAR 573
+#define FSL_EIS_DSRR0 574
+#define FSL_EIS_DSRR1 575
 
 /* Freescale Book E Implementation Standards (EIS): Signal Processing Engine (SPE) */
 
@@ -452,16 +556,16 @@ lidate */
 
 /* Freescale Book E Implementation Standards (EIS): Software-Use SPRs */
 
-#define FSL_EIS_SPRG8 604 
-#define FSL_EIS_SPRG9 605 
+#define FSL_EIS_SPRG8 604
+#define FSL_EIS_SPRG9 605
 
 /* Freescale Book E Implementation Standards (EIS): Debug */
 
-#define FSL_EIS_DBCR3 561 
-#define FSL_EIS_DBCR4 563 
-#define FSL_EIS_DBCR5 564 
-#define FSL_EIS_DBCR6 603 
-#define FSL_EIS_DBCNT 562 
+#define FSL_EIS_DBCR3 561
+#define FSL_EIS_DBCR4 563
+#define FSL_EIS_DBCR5 564
+#define FSL_EIS_DBCR6 603
+#define FSL_EIS_DBCNT 562
 
 /**
  * @brief Default value for the interrupt disable mask.
