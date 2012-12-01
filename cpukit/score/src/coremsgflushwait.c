@@ -1,12 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Flush Waiting Threads.
+ *
+ * @ingroup ScoreMessageQueue
+ */
+
 /*
- *  CORE Message Queue Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the CORE Message Queue Handler.
- *  This core object provides task synchronization and communication functions
- *  via messages passed to queue objects.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,18 +29,6 @@
 #include <rtems/score/wkspace.h>
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /*
-   *  _CORE_message_queue_Flush_waiting_threads
-   *
-   *  This function flushes the message_queue's task wait queue.  The number
-   *  of messages flushed from the queue is returned.
-   *
-   *  Input parameters:
-   *    the_message_queue - the message_queue to be flushed
-   *
-   *  Output parameters:
-   *    returns - the number of messages flushed from the queue
-   */
 
   void _CORE_message_queue_Flush_waiting_threads(
     CORE_message_queue_Control *the_message_queue

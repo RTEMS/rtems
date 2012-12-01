@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Removes Object from Namespace
+ *
+ * @ingroup Score
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

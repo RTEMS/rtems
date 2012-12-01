@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Acquires the specified API mutex.
+ *
+ * @ingroup ScoreAPIMutex
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,3 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief Initialization for the API Mutexe Handler.
+ *
+ * @ingroup ScoreAPIMutex
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Enqueues a thread to the ready queue
+ *
+ * @ingroup ScoreScheduler
+ */
+
 /*
  *  Copyright (C) 2011 Petr Benes.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).

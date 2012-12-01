@@ -1,6 +1,10 @@
 /**
- * @file score/src/ts64totimespec.c
-*/
+ * @file
+ *
+ * @brief Convert Timestamp to Struct Timespec
+ *
+ * @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.

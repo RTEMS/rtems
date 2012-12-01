@@ -336,22 +336,27 @@ uint32_t   _CORE_message_queue_Flush(
  *
  *  @param[in] the_message_queue points to the message queue to flush
  *
- *  @return This method returns the number of message pending messages flushed.
+ *  @return This method returns the number of pending messages flushed.
+ *
+ *  - INTERRUPT LATENCY:
+ *    + single case
  */
 uint32_t   _CORE_message_queue_Flush_support(
   CORE_message_queue_Control *the_message_queue
 );
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /**
-   *  @brief Flush Waiting Threads.
-   *
-   *  This function flushes the threads which are blocked on
-   *  @a the_message_queue's pending message queue.  They are
-   *  unblocked whether blocked sending or receiving.
-   *
-   *  @param[in] the_message_queue points to the message queue to flush
-   */
+/**
+ *  @brief Flush Waiting Threads.
+ *
+ *  This function flushes the threads which are blocked on
+ *  @a the_message_queue's pending message queue.  They are
+ *  unblocked whether blocked sending or receiving. It returns 
+ *  the number of messages flushed from the queue.
+ *
+ *  @param[in] the_message_queue points to the message queue to flush
+ *  @return number of messages flushed from the queue
+ */
   void _CORE_message_queue_Flush_waiting_threads(
     CORE_message_queue_Control *the_message_queue
   );

@@ -1,7 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Initializes Enviroment for A Thread
+ *
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -26,18 +31,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Load_environment
- *
- *  Load starting environment for another thread from its start area in the
- *  thread.  Only called from t_restart and t_start.
- *
- *  Input parameters:
- *    the_thread - thread control block pointer
- *
- *  Output parameters:  NONE
- */
 
 void _Thread_Load_environment(
   Thread_Control *the_thread

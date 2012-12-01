@@ -779,10 +779,12 @@ Objects_Information *_Objects_Get_information(
 );
 
 /**
- *  This function return the information structure given
- *  an id of an object.
+ *  @brief Get Information of an Object from an ID
  *
- *  @param[in] id is an object ID
+ *  This function return the information structure given
+ *  an @a id of an object.
+ *
+ *  @param[in] id is the object ID to get the information from
  *
  *  @return This method returns a pointer to the Object Information Table
  *          for the class of objects which corresponds to this object ID.
@@ -831,10 +833,12 @@ bool _Objects_Set_name(
 );
 
 /**
- *  This function removes the_object from the namespace.
+ *  @brief Removes Object from Namespace
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
+ *  This function removes @a the_object from the namespace.
+ *
+ *  @param[in] information points to an Object Information Table.
+ *  @param[in] the_object is a pointer to an object.
  */
 void _Objects_Namespace_remove(
   Objects_Information  *information,

@@ -57,10 +57,12 @@ typedef struct {
 SCORE_EXTERN Objects_Information _API_Mutex_Information;
 
 /**
- * @brief Performs the initialization necessary for this handler.
+ *  @brief Initialization for the API Mutexe Handler.
  *
- * The value @a maximum_mutexes is the maximum number of API mutexes that may
- * exist at any time.
+ *  The value @a maximum_mutexes is the maximum number of API mutexes that may
+ *  exist at any time.
+ *
+ *  @param[in] Maximum_mutexex is the maximum number of API mutexes.
  */
 void _API_Mutex_Initialization( uint32_t maximum_mutexes );
 
@@ -71,12 +73,18 @@ void _API_Mutex_Initialization( uint32_t maximum_mutexes );
 void _API_Mutex_Allocate( API_Mutex_Control **mutex );
 
 /**
- * @brief Acquires the specified API mutex @a mutex.
+ *  @brief Acquires the specified API mutex.
  */
-void _API_Mutex_Lock( API_Mutex_Control *mutex );
+void _API_Mutex_Lock(
+   API_Mutex_Control *mutex 
+   );
 
 /**
- * @brief Releases the specified API mutex @a mutex.
+ *  @brief Releases the Specified API Mutex
+ *
+ *  Releases the specified @a mutex.
+ *
+ *  @param[in] mutex is the mutex to be removed.
  */
 void _API_Mutex_Unlock( API_Mutex_Control *mutex );
 

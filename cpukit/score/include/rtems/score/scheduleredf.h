@@ -200,7 +200,7 @@ void _Scheduler_EDF_Enqueue(
 );
 
 /**
- *  @brief Scheduler EDF Enqueue first
+ *  @brief Enqueues a thread to the ready queue
  *
  *  This routine puts @a the_thread to the rbtree ready queue.
  *  For the EDF scheduler this is the same as @a _Scheduler_EDF_Enqueue.

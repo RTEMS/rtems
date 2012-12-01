@@ -182,7 +182,9 @@ void _CORE_RWLock_Obtain_for_writing(
 );
 
 /**
- *  This routine manually releases the RWLock.  All of the threads waiting
+ *  @brief Releases the RWLock
+ *
+ *  This routine manually releases @a the_rwlock.  All of the threads waiting
  *  for the RWLock will be readied.
  *
  *  @param[in] the_rwlock is the RWLock to surrender

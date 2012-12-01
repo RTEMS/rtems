@@ -1,6 +1,10 @@
 /**
- * @file score/src/ts64set.c
-*/
+ * @file
+ *
+ * @brief Set Timestamp to Specified Seconds and Nanoseconds
+ *
+ * @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.

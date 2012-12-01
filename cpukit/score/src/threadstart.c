@@ -1,7 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Initializes Thread and Executes it
+ *
+ * @ingroup ScoreThread
+ */
+
 /*
- *  Thread Handler
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,16 +32,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  _Thread_Start
- *
- *  DESCRIPTION:
- *
- *  This routine initializes the executable information for a thread
- *  and makes it ready to execute.  After this routine executes, the
- *  thread competes with all other threads for CPU time.
- */
 
 bool _Thread_Start(
   Thread_Control            *the_thread,

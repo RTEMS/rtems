@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Sets States for a Thread
+ *
+ * @ingroup ScoreThread
+ */
+
 /*
  *  Thread Handler / Thread Set State
  *
@@ -27,11 +35,6 @@
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 
-/*
- *  INTERRUPT LATENCY:
- *    ready chain
- *    select map
- */
 void _Thread_Set_state(
   Thread_Control *the_thread,
   States_Control  state

@@ -1,7 +1,12 @@
-/*  apiext.c
+/**
+ * @file
  *
- *  XXX
+ * @brief Holding for API Extension Functions
  *
+ * @ingroup ScoreAPIExtension
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,18 +22,10 @@
 #include <rtems/system.h>
 #include <rtems/score/apiext.h>
 
-/*
- *  _API_extensions_Initialization
- */
-
 void _API_extensions_Initialization( void )
 {
  _Chain_Initialize_empty( &_API_extensions_List );
 }
-
-/*
- *  _API_extensions_Add
- */
 
 void _API_extensions_Add(
   API_extensions_Control *the_extension
@@ -38,9 +35,6 @@ void _API_extensions_Add(
 }
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
-  /*
-   *  _API_extensions_Run_predriver
-   */
 
   void _API_extensions_Run_predriver( void )
   {
@@ -58,10 +52,6 @@ void _API_extensions_Add(
     }
   }
 #endif
-
-/*
- *  _API_extensions_Run_postdriver
- */
 
 void _API_extensions_Run_postdriver( void )
 {
@@ -83,5 +73,3 @@ void _API_extensions_Run_postdriver( void )
       (*the_extension->postdriver_hook)();
   }
 }
-
-/* end of file */

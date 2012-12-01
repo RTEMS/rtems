@@ -1,5 +1,9 @@
-/*
- *  Time of Day (TOD) Handler
+/**
+ * @file
+ *
+ * @brief Initializes the Time of Day Handler
+ *
+ * @ingroup ScoreTODConstants
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -19,16 +23,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _TOD_Handler_initialization
- *
- *  This routine initializes the time of day handler.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters: NONE
- */
 
 void _TOD_Handler_initialization(void)
 {

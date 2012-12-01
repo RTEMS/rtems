@@ -170,6 +170,8 @@ void _CORE_semaphore_Initialize(
 #endif
 
 /**
+ *  @brief Surrenders a Unit to a Semaphore
+ *
  *  This routine frees a unit to the semaphore.  If a task was blocked waiting
  *  for a unit from this semaphore, then that task will be readied and the unit
  *  given to that task.  Otherwise, the unit will be returned to the semaphore.

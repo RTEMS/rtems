@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Get Information of an Object from an ID
+ *
+ * @ingroup Score
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

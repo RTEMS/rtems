@@ -131,18 +131,17 @@ typedef struct {
 extern Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
 
 /**
- *  @brief Scheduler CBS Unblock
+ *  @brief Unblocks a Thread from the Queue
  *
  *  This routine adds @a the_thread to the scheduling decision, that is,
  *  adds it to the ready queue and updates any appropriate scheduling
- *  variables, for example the heir thread.
- *
- *  It is checked whether the remaining budget is sufficient. If not, the
- *  thread continues as a new job in order to protect concurrent threads.
- *
- *  @note This has to be asessed as missed deadline of the current job.
+ *  variables, for example the heir thread. It is checked whether the 
+ *  remaining budget is sufficient. If not, the thread continues as a 
+ *  new job in order to protect concurrent threads.
  *
  *  @param[in] the_thread will be unblocked.
+ *
+ *  @note This has to be asessed as missed deadline of the current job.
  */
 void _Scheduler_CBS_Unblock(
   Thread_Control    *the_thread
@@ -301,9 +300,12 @@ int _Scheduler_CBS_Get_server_id (
 );
 
 /**
- *  @brief _Scheduler_CBS_Set_parameters
+ *  @brief Set Parameters for CBS Scheduling
  *
  *  Change CBS scheduling parameters.
+ *
+ *  @param[in] server_id is the ID of the server.
+ *  @param[in] parameters are the parameters to set.
  *
  *  @return status code.
  */

@@ -166,9 +166,9 @@ SCORE_EXTERN TOD_Control _TOD;
   _Timestamp_Get_seconds(&_TOD.now)
 
 /**
- *  @brief _TOD_Handler_initialization
+ *  @brief Initializes the Time of Day Handler
  *
- *  This routine performs the initialization necessary for this handler.
+ *  Performs the initialization necessary for the Time Of Day handler.
  */
 void _TOD_Handler_initialization(void);
 

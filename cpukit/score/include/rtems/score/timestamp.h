@@ -73,9 +73,9 @@ extern "C" {
 #endif
 
 /**
- *  @brief Set Timestamp to Seconds Nanosecond
+ *  @brief Set Timestamp to Specified Seconds and Nanoseconds
  *
- *  This method sets the timestamp to the specified seconds and nanoseconds
+ *  This method sets the timestamp to the specified @a _seconds and @a _nanoseconds
  *  value.
  *
  *  @param[in] _time points to the timestamp instance to validate.
@@ -328,9 +328,9 @@ extern "C" {
 #endif
 
 /**
- *  @brief Convert Timestamp to struct timespec
+ *  @brief Convert Timestamp to Struct Timespec
  *
- *  This method returns the seconds portion of the specified timestamp
+ *  This method returns the seconds portion of the specified @a _timestamp.
  *
  *  @param[in] _timestamp points to the timestamp
  *  @param[in] _timespec points to the timespec

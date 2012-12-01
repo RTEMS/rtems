@@ -603,9 +603,17 @@ bool _Thread_Initialize(
 );
 
 /**
+ *  @brief Initializes Thread and Executes it
+ *
  *  This routine initializes the executable information for a thread
  *  and makes it ready to execute.  After this routine executes, the
  *  thread competes with all other threads for CPU time.
+ *
+ *  @param the_thread is the thread to be initialized
+ *  @param the_prototype 
+ *  @param entry_point
+ *  @param pointer_argument
+ *  @param numeric_argument
  */
 bool _Thread_Start(
   Thread_Control            *the_thread,
@@ -690,9 +698,18 @@ void _Thread_Clear_state(
 );
 
 /**
- *  This routine sets the indicated states for @a the_thread.  It performs
+ *  @brief Sets States for a Thread
+ *
+ *  This routine sets the indicated @a state for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
+ *
+ *  @param[in] the_thread is the thread to set the state for. 
+ *  @param[in] state is the state to set the_thread to.
+ *
+ *  - INTERRUPT LATENCY:
+ *   + ready chain
+ *   + select map
  */
 void _Thread_Set_state(
   Thread_Control *the_thread,
@@ -716,8 +733,12 @@ void _Thread_Set_transient(
 );
 
 /**
- *  This routine initializes the context of the_thread to its
+ *  @brief Initializes Enviroment for A Thread
+ *
+ *  This routine initializes the context of @a the_thread to its
  *  appropriate starting state.
+ *  
+ *  @param[in] the_thread is the pointer to the thread control block.
  */
 void _Thread_Load_environment(
   Thread_Control *the_thread
