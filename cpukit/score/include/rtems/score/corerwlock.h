@@ -138,6 +138,7 @@ void _CORE_RWLock_Initialize(
 );
 
 /**
+ *  @brief Obtain RWLock for reading
  *  This routine attempts to obtain the RWLock for read access.
  *
  *  @param[in] the_rwlock is the RWLock to wait for
@@ -150,6 +151,7 @@ void _CORE_RWLock_Initialize(
  *
  * @note Status is returned via the thread control block.
  */
+
 void _CORE_RWLock_Obtain_for_reading(
   CORE_RWLock_Control                 *the_rwlock,
   Objects_Id                           id,

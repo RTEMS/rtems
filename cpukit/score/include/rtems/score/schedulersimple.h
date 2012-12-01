@@ -93,6 +93,7 @@ void _Scheduler_simple_Block(
 );
 
 /**
+ *  @brief Scheduler Simple Handler / Unblock
  *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.

@@ -1,6 +1,11 @@
+/**
+ * @file 
+ * 
+ * @brief Scheduler Simple Handler / Unblock
+ * @ingroup ScoreScheduler
+ */
+
 /*
- *  Scheduler Simple Handler / Unblock
- *
  *  COPYRIGHT (c) 2011.
  *  On-Line Applications Research Corporation (OAR).
  *

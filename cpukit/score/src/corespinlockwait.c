@@ -1,6 +1,11 @@
 /*
- *  SuperCore Spinlock Handler -- Wait for Spinlock
+ *  @file
  *
+ *  @brief Wait for Spinlock
+ *  @ingroup ScoreSpinlock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,10 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Wait For The Barrier
+ *  @ingroup ScoreBarrier
+ */
+
 /*
- *  SuperCore Barrier Handler
- *
- *  DESCRIPTION:
- *
- *  This package is part of the implementation of the SuperCore Barrier Handler.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,23 +24,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  _CORE_barrier_Wait
- *
- *  Input parameters:
- *    the_barrier - pointer to barrier control block
- *    id          - id of object to wait on
- *    wait        - true if wait is allowed, false otherwise
- *    timeout     - number of ticks to wait (0 means forever)
- *    api_barrier_mp_support - api dependent MP support actions
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    available
- *    wait
- */
 
 void _CORE_barrier_Wait(
   CORE_barrier_Control                *the_barrier,

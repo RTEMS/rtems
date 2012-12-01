@@ -1,10 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Iterates Over All Threads
+ *  @ingroup ScoreThread
+ */
+
 /*
- *  rtems_iterate_over_all_threads
- *
- *  This function operates by as follows:
- *    for all threads
- *         invoke specified function
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,6 +1,9 @@
 /**
- * @file score/src/ts64equalto.c
-*/
+ *  @file
+ *
+ *  @brief Timestamp equal to Operator
+ *  @ingroup SuperCore
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.

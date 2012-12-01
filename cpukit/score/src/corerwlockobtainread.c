@@ -1,6 +1,11 @@
+/**
+ * @file 
+ * 
+ * @brief Obtain RWLock for reading
+ * @ingroup ScoreRWLock
+ */
+
 /*
- *  SuperCore RWLock Handler -- Obtain RWLock for reading
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,20 +23,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _CORE_rwlock_Obtain_for_reading
- *
- *  This function waits for the rwlock to become available.  Optionally,
- *  a limit may be placed on the duration of the spin.
- *
- *  Input parameters:
- *    the_rwlock    - the rwlock control block to initialize
- *    timeout_allowed - true if timeout allowed
- *    timeout         - the maximum number of ticks to spin
- *
- *  Output parameters:  NONE
- */
 
 void _CORE_RWLock_Obtain_for_reading(
   CORE_RWLock_Control                 *the_rwlock,

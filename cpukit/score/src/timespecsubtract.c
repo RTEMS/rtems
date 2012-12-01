@@ -1,5 +1,8 @@
 /**
  *  @file  score/src/timespecsubtract.c
+ *
+ *  @brief Subtract Two Timespec
+ *  @ingroup Timespec
  */
 
 /*

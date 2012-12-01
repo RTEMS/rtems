@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Obtain the min or max node of a rbtree
+ *  @ingroup ScoreRBTree
+ */
+
 /*
  *  Copyright (c) 2010 Gedare Bloom.
  *
@@ -14,24 +21,6 @@
 #include <rtems/score/address.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _RBTree_Get
- *
- *  This kernel routine returns a pointer to a node taken from the
- *  given rbtree.
- *
- *  Input parameters:
- *    the_rbtree - pointer to rbtree header
- *    dir - specifies min (0) or max (1)
- *
- *  Output parameters:
- *    return_node - pointer to node in rbtree allocated
- *    NULL   - if no nodes available
- *
- *  INTERRUPT LATENCY:
- *    only case
- */
 
 RBTree_Node *_RBTree_Get(
   RBTree_Control *the_rbtree,

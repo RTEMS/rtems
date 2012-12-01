@@ -1,6 +1,11 @@
-/*
- *  Object Handler
+/**
+ *  @file
  *
+ *  @brief Object Name To Id
+ *  @ingroup Score
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,24 +29,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
-
-/*
- *  _Objects_Name_to_id_u32
- *
- *  These kernel routines search the object table(s) for the given
- *  object name and returns the associated object id.
- *
- *  Input parameters:
- *    information - object information
- *    name        - user defined object name
- *    node        - node indentifier (0 indicates any node)
- *    id          - address of return ID
- *
- *  Output parameters:
- *    id                                   - object id
- *    OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL - if successful
- *    error code                           - if unsuccessful
- */
 
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Information *information,

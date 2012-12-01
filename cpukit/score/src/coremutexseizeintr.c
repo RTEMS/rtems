@@ -1,6 +1,11 @@
-/*
- *  Mutex Handler -- Seize interrupt disable version
+/**
+ *  @file
  *
+ *  @brief Trylock CORE Mutex Seize Interrupt
+ *  @ingroup ScoreMutex
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

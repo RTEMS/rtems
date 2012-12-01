@@ -296,6 +296,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
   /**
+   *  @brief Trylock CORE Mutex Seize Interrupt
    *  When doing test coverage analysis or trying to minimize the code
    *  space for RTEMS, it is often helpful to not inline this method
    *  multiple times.  It is fairly large and has a high branch complexity

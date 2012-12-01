@@ -1,11 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Initialize a Core Mutex
+ *  @ingroup ScoreMutex
+ */
+
 /*
- *  Mutex Handler
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Mutex Handler.
- *  This handler provides synchronization and mutual exclusion capabilities.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,20 +24,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  _CORE_mutex_Initialize
- *
- *  This routine initializes a mutex at create time and set the control
- *  structure according to the values passed.
- *
- *  Input parameters:
- *    the_mutex             - the mutex control block to initialize
- *    the_mutex_attributes  - the mutex attributes specified at create time
- *    initial_lock          - mutex initial lock or unlocked status
- *
- *  Output parameters:  NONE
- */
 
 CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,

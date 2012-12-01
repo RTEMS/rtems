@@ -134,6 +134,7 @@ void _CORE_barrier_Initialize(
 );
 
 /**
+ *  @brief Wait For The Barrier
  *  This routine wait for the barrier to be released.  If the barrier
  *  is set to automatic and this is the appropriate thread, then it returns
  *  immediately.  Otherwise, the calling thread is blocked until the barrier

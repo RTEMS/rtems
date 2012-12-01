@@ -123,6 +123,7 @@ void _CORE_spinlock_Initialize(
 );
 
 /**
+ *  @brief Wait for Spinlock
  *  This routine wait for the spinlock to be released.  If the spinlock
  *  is set to automatic and this is the appropriate thread, then it returns
  *  immediately.  Otherwise, the calling thread is blocked until the spinlock

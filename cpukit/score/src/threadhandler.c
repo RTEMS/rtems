@@ -1,7 +1,8 @@
 /**
  *  @file
  *
- *  Initialization Wrapper for all Threads.
+ *  @brief Thread Handler
+ *  @ingroup ScoreThread
  */
 
 /*
@@ -57,29 +58,6 @@
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
 
-/*
- *  _Thread_Handler
- *
- *  This routine is the "primal" entry point for all threads.
- *  _Context_Initialize() dummies up the thread's initial context
- *  to cause the first Context_Switch() to jump to _Thread_Handler().
- *
- *  This routine is the default thread exitted error handler.  It is
- *  returned to when a thread exits.  The configured fatal error handler
- *  is invoked to process the exit.
- *
- *  NOTE:
- *
- *  On entry, it is assumed all interrupts are blocked and that this
- *  routine needs to set the initial isr level.  This may or may not
- *  actually be needed by the context switch routine and as a result
- *  interrupts may already be at there proper level.  Either way,
- *  setting the initial isr level properly here is safe.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
 void _Thread_Handler( void )
 {
   ISR_Level  level;

@@ -64,6 +64,7 @@ typedef struct {
 } Scheduler_priority_Per_thread;
 
 /**
+ * @brief Initialize Scheduler Priority
  * This routine initializes the priority scheduler.
  */
 void _Scheduler_priority_Initialize(void);

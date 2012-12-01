@@ -1,7 +1,11 @@
 /*
- *  Obtain Object Name Given ID
+ *  @file
  *
- *
+ *  @brief Object id to name
+ *  @ingroup Score
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2003.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,19 +22,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
-/*
- *  _Objects_Id_to_name
- *
- *  DESCRIPTION:
- *
- *  This routine returns the name associated with the given ID.
- *
- *  INPUT:
- *
- *  id   - id of object to lookup name
- *  name - pointer to location in which to store name
- *
- */
 Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Id      id,
   Objects_Name   *name

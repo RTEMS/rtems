@@ -583,6 +583,7 @@ typedef enum {
 #define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
 
 /**
+ *  @brief Object Name To Id
  *  This method converts an object name to an Id.  It performs a look up
  *  using the object information block for this object class.
  *
@@ -627,6 +628,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(
 #endif
 
 /**
+ *  @brief Object Id To Name
  *  This function implements the common portion of the object Id
  *  to name directives.  This function returns the name
  *  associated with object id.
@@ -647,6 +649,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
 );
 
 /**
+ *  @brief Get Object
  *  This function maps object ids to object control blocks.
  *  If id corresponds to a local object, then it returns
  *  the_object control pointer which maps to id and location

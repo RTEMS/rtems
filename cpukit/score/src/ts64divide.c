@@ -1,5 +1,8 @@
 /**
- *  @file  score/src/ts64divide.c
+ *  @file
+ *
+ *  @brief Divide Timestamp
+ *  @ingroup SuperCore
  */
 
 /*

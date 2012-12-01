@@ -578,6 +578,7 @@ void _Thread_Stack_Free(
 );
 
 /**
+ *  @brief Initialize Thread
  *  This routine initializes the specified the thread.  It allocates
  *  all memory associated with this thread.  It completes by adding
  *  the thread to the local object table so operations on this
@@ -745,11 +746,24 @@ void _Thread_Load_environment(
 );
 
 /**
+ *  @brief Thread Handler
  *  This routine is the wrapper function for all threads.  It is
  *  the starting point for all threads.  The user provided thread
  *  entry point is invoked by this routine.  Operations
  *  which must be performed immediately before and after the user's
  *  thread executes are found here.
+ *
+ *  NOTE:
+ *
+ *  On entry, it is assumed all interrupts are blocked and that this
+ *  routine needs to set the initial isr level.  This may or may not
+ *  actually be needed by the context switch routine and as a result
+ *  interrupts may already be at there proper level.  Either way,
+ *  setting the initial isr level properly here is safe.
+ *
+ *  Input parameters:   NONE
+ *
+ *  Output parameters:  NONE
  */
 void _Thread_Handler( void );
 
@@ -826,6 +840,7 @@ void *_Thread_Idle_body(
 typedef void (*rtems_per_thread_routine)( Thread_Control * );
 
 /**
+ *  @brief Iterates Over All Threads
  *  This routine iterates over all threads regardless of API and
  *  invokes the specified routine.
  */
