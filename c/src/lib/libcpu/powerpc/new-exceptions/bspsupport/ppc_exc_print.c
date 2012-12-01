@@ -45,9 +45,9 @@ static uint32_t ppc_exc_get_DAR_dflt(void)
         break;
       case PPC_BOOKE_STD:
       case PPC_BOOKE_E500:
-        return PPC_SPECIAL_PURPOSE_REGISTER(DEAR_BOOKE);
+        return PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_DEAR);
       case PPC_BOOKE_405:
-        return PPC_SPECIAL_PURPOSE_REGISTER(DEAR_405);
+        return PPC_SPECIAL_PURPOSE_REGISTER(PPC405_DEAR);
     }
   return 0xdeadbeef;
 }
@@ -157,11 +157,24 @@ void _BSP_Exception_frame_print(const CPU_Exception_frame *excPtr)
   /* Would be great to print DAR but unfortunately,
    * that is not portable across different CPUs.
    * AFAIK on classic PPC DAR is SPR 19, on the
-   * 405 we have DEAR = SPR 0x3d5 and booE says
+   * 405 we have DEAR = SPR 0x3d5 and bookE says
    * DEAR = SPR 61 :-(
    */
   if (ppc_exc_get_DAR != NULL) {
-    printk("  DAR = 0x%08x\n", ppc_exc_get_DAR());
+    char* reg = ppc_cpu_is_60x() ? " DAR" : "DEAR";
+    printk(" %s = 0x%08x\n", reg, ppc_exc_get_DAR());
+  }
+  if (ppc_cpu_is_bookE()) {
+    unsigned esr, mcsr;
+    if (ppc_cpu_is_bookE() == PPC_BOOKE_405) {
+      esr  = PPC_SPECIAL_PURPOSE_REGISTER(PPC405_ESR);
+      mcsr = PPC_SPECIAL_PURPOSE_REGISTER(PPC405_MCSR);
+    } else {
+      esr  = PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_ESR);
+      mcsr = PPC_SPECIAL_PURPOSE_REGISTER(BOOKE_MCSR);
+    }
+    printk("  ESR = 0x%08x\n", esr);
+    printk(" MCSR = 0x%08x\n", mcsr);
   }
 
   if (executing != NULL) {
