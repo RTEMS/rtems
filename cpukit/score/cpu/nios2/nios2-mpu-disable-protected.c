@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief NIOS2 MPU Disable Protected
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *

@@ -795,6 +795,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Context handler macros */
 
 /**
+ *  @brief CPU Context Initialize
  *  @ingroup CPUContext
  *  Initialize the context to a state suitable for starting a
  *  task after a context restore operation.  Generally, this
@@ -1062,6 +1063,7 @@ void _CPU_Context_Restart_self(
 /* functions */
 
 /**
+ *  @brief CPU Initialize
  *  This routine performs CPU dependent initialization.
  *
  *  Port Specific Information:

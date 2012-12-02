@@ -398,6 +398,10 @@ void _CPU_Context_Initialize(
      while (1);                             \
    } while (0);
 
+/**
+ *  @brief CPU Initialize
+ *
+ */
 void _CPU_Initialize( void );
 
 void _CPU_ISR_install_vector(
@@ -406,6 +410,10 @@ void _CPU_ISR_install_vector(
   proc_ptr *old_handler
 );
 
+/**
+ *  @brief CPU Context Switch
+ *
+ */
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
 void _CPU_Context_restore( Context_Control *new_context )

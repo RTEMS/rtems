@@ -1,10 +1,18 @@
-/*  cpu_asm.c  ===> cpu_asm.S or cpu_asm.s
+/**
+ * @file
  *
- *  NOTE:  This is supposed to be a .S or .s file NOT a C file.
+ * @brief M32R ISR Handler
+ *
+ *  cpu_asm.c  ===> cpu_asm.S or cpu_asm.s
+ *
+ *  @note This is supposed to be a .S or .s file NOT a C file.
  *
  *  M32R does not yet have interrupt support.  When this functionality
  *  is written, this file should become obsolete.
  *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

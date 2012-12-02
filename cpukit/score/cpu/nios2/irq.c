@@ -1,8 +1,12 @@
+/**
+ * @file
+ *
+ * @brief NIOS2 Exception and Interrupt Handler
+ *
+ * @note Derived from c4x/irq.c
+ */
+
 /*
- *  NIOS2 exception and interrupt handler
- *
- *  Derived from c4x/irq.c
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -78,7 +82,7 @@ RTEMS_INLINE_ROUTINE void __IIC_Handler(void)
 
     active = _Nios2_Get_ctlreg_ipending();
   }
-  
+
 }
 
 void __ISR_Handler(void)
@@ -100,7 +104,7 @@ void __ISR_Handler(void)
   _Thread_Dispatch_increment_disable_level();
 
   __IIC_Handler();
-  
+
   /* Make sure that interrupts are disabled again */
   _CPU_ISR_Disable( level );
 

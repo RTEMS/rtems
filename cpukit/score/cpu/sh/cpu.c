@@ -1,7 +1,13 @@
-/*
- *  This file contains information pertaining to the Hitachi SH
- *  processor.
+/**
+ * @file
  *
+ * @brief SuperH CPU Support
+ *
+ * This file contains information pertaining to the Hitachi SH
+ * processor.
+ */
+
+/*
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *

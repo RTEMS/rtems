@@ -789,11 +789,12 @@ extern uint8_t   _bit_set_table[];
 /* functions */
 
 /*
+ *  @brief CPU Initialize
+ *
  *  _CPU_Initialize
  *
  *  This routine performs CPU dependent initialization.
  */
-
 void _CPU_Initialize(void);
 
 /*
@@ -866,21 +867,21 @@ void _CPU_Context_restore(
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /*
+ *  @brief This routine saves the floating point context passed to it.
+ *
  *  _CPU_Context_save_fp
  *
- *  This routine saves the floating point context passed to it.
  */
-
 void _CPU_Context_save_fp(
   Context_Control_fp **fp_context_ptr
 );
 
 /*
+ *  @brief This routine restores the floating point context passed to it.
+ *
  *  _CPU_Context_restore_fp
  *
- *  This routine restores the floating point context passed to it.
  */
-
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );

@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief M32R CPU Context Initialize
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

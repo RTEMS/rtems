@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief NIOS2 MPU Descriptor
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *

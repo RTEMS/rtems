@@ -1,7 +1,7 @@
 /**
- *  @file
+ * @file
  *
- *  v850 CPU Dependent Source
+ * @brief v850 CPU Initialize
  */
 
 /*

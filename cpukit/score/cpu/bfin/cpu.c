@@ -1,5 +1,10 @@
-/*  Blackfin CPU Dependent Source
+/**
+ * @file
  *
+ * @brief Blackfin CPU Dependent Source
+ */
+
+/*
  *  COPYRIGHT (c) 2006 by Atos Automacao Industrial Ltda.
  *             written by Alain Schaefer <alain.schaefer@easc.ch>
  *                    and Antonio Giovanini <antonio@atos.com.br>

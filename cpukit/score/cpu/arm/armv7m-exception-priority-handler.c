@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief ARMV7M Set Exception Priority and Handler
+ */
+
 /*
  * Copyright (c) 2012 Sebastian Huber.  All rights reserved.
  *

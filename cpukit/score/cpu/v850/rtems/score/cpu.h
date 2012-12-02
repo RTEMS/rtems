@@ -1041,11 +1041,14 @@ void _CPU_Context_Initialize(
 /* functions */
 
 /**
+ *  @brief CPU Initialize
  *  This routine performs CPU dependent initialization.
  *
  *  Port Specific Information:
  *
  *  This is implemented in C.
+ *
+ *  v850 CPU Dependent Source
  */
 void _CPU_Initialize(void);
 

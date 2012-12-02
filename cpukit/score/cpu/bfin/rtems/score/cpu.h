@@ -1065,6 +1065,7 @@ void _CPU_Context_Initialize(
 /* functions */
 
 /**
+ *  @brief CPU Initialize
  *  This routine performs CPU dependent initialization.
  *
  *  Port Specific Information:

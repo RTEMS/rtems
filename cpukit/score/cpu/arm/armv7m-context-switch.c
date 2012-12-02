@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief ARM7M CPU Context Switch
+ */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *

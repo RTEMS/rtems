@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief SuperH CPU Context
+ */
+
 /*
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)

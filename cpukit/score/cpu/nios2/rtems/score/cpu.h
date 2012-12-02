@@ -290,7 +290,7 @@ uint32_t _CPU_ISR_Get_level( void );
 
 /**
  * @brief Initializes the CPU context.
- * 
+ *
  * The following steps are performed:
  *  - setting a starting address
  *  - preparing the stack
@@ -318,14 +318,26 @@ void _CPU_Context_Initialize(
 
 void _CPU_Fatal_halt( uint32_t _error ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
+/**
+ * @brief CPU Initialize
+ *
+ */
 void _CPU_Initialize( void );
 
+/**
+ * @brief CPU ISR Install Raw Handler
+ *
+ */
 void _CPU_ISR_install_raw_handler(
   uint32_t vector,
   proc_ptr new_handler,
   proc_ptr *old_handler
 );
 
+/**
+ * @brief CPU ISR Install Vector.
+ *
+ */
 void _CPU_ISR_install_vector(
   uint32_t vector,
   proc_ptr new_handler,

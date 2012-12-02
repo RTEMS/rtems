@@ -1,6 +1,10 @@
-/*
- *  M32R CPU Dependent Source
+/**
+ * @file
  *
+ * @brief M32R CPU Support
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

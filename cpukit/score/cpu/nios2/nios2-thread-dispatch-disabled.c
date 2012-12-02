@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief NIOS II Specific Thread Dispatch Disabled Indicator.
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *

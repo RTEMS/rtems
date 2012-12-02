@@ -457,6 +457,10 @@ void _ARMV7M_Set_exception_handler(
   ARMV7M_Exception_handler handler
 );
 
+/**
+ *  @brief ARMV7M Set Exception Priority and Handler
+ *
+ */
 void _ARMV7M_Set_exception_priority_and_handler(
   int index,
   int priority,
