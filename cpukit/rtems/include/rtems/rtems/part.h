@@ -111,7 +111,7 @@ rtems_status_code rtems_partition_create(
 );
 
 /**
- *  @brief rtems_partition_ident
+ *  @brief RTEMS Partition Ident
  *
  *  This routine implements the rtems_partition_ident directive.
  *  This directive returns the partition ID associated with name.
@@ -120,6 +120,13 @@ rtems_status_code rtems_partition_create(
  *  extent of the search for the ID of the partition named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
+ * 
+ *  @param[in] name is the user defined partition name
+ *  @param[in] node is(are) the node(s) to be searched
+ *  @param[in] id is the pointer to partition id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ *  		*id filled in with the partition id
  */
 rtems_status_code rtems_partition_ident(
   rtems_name  name,

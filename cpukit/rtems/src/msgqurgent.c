@@ -1,6 +1,11 @@
-/*
- *  Message Queue Manager - rtems_message_queue_urgent
+/**
+ *  @file
  *
+ *  @brief RTEMS Urgent Message Queue
+ *  @ingroup ClassicMessageQueue
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -30,22 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_urgent
- *
- *  This routine implements the directives rtems_message_queue_urgent.  It
- *  prepends a message to the specified message queue.
- *
- *  Input parameters:
- *    id     - pointer to message queue
- *    buffer - pointer to message buffer
- *    size   - size of message to send urgently
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 #if defined(RTEMS_MULTIPROCESSING)
 #define MESSAGE_QUEUE_MP_HANDLER _Message_queue_Core_message_queue_mp_support

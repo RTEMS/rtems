@@ -240,14 +240,14 @@ RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;
 extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
 
 /**
- *  @brief _RTEMS_tasks_Manager_initialization
+ *  @brief RTEMS Task Manager Initialization
  *
  *  This routine initializes all Task Manager related data structures.
  */
 void _RTEMS_tasks_Manager_initialization(void);
 
 /**
- *  @brief rtems_task_create
+ *  @brief RTEMS Task Create
  *
  *  This routine implements the rtems_task_create directive.  The task
  *  will have the name name.  The attribute_set can be used to indicate
@@ -255,6 +255,16 @@ void _RTEMS_tasks_Manager_initialization(void);
  *  The task's stack will be stack_size bytes.   The task will begin
  *  execution with initial_priority and initial_modes.  It returns the
  *  id of the created task in ID.
+ * 
+ *  @param[in] name is the user defined thread name
+ *  @param[in] initial_priority is the thread priority
+ *  @param[in] stack_size is the stack size in bytes
+ *  @param[in] initial_modes is the initial thread mode
+ *  @param[in] attribute_set is the thread attributes
+ *  @param[in] id is the pointer to thread id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ *  		and *id thread id filled in
  */
 rtems_status_code rtems_task_create(
   rtems_name           name,
@@ -392,22 +402,29 @@ rtems_status_code rtems_task_start(
 );
 
 /**
- *  @brief rtems_task_wake_when
+ *  @brief RTEMS Task Wake When
  *
  *  This routine implements the rtems_task_wake_when directive.  The
  *  calling task is blocked until the current time of day is
  *  equal to that indicated by time_buffer.
+ * 
+ *  @param[in] time_buffer is the pointer to the time and date structure
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer
 );
 
 /**
- *  @brief rtems_task_wake_after
+ *  @brief RTEMS Task Wake After
  *
  *  This routine implements the rtems_task_wake_after directive.  The
  *  calling task is blocked until the indicated number of clock
  *  ticks have occurred.
+ * 
+ *  @param[in] ticks is the number of ticks to wait
+ *  @return RTEMS_SUCCESSFUL
  */
 rtems_status_code rtems_task_wake_after(
   rtems_interval  ticks
@@ -446,7 +463,7 @@ rtems_status_code rtems_task_variable_get(
 );
 
 /**
- *  @brief rtems_task_variable_delete
+ *  @brief RTEMS Delete Task Variable
  *
  *  This directive removes a per task variable.
  */
@@ -463,14 +480,10 @@ rtems_status_code rtems_task_variable_delete(
 rtems_id rtems_task_self(void);
 
 /**
- *  @brief _RTEMS_tasks_Initialize_user_tasks
+ *  @brief RTEMS User Task Initialization
  *
  *  This routine creates and starts all configured user
  *  initialization threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
  */
 void _RTEMS_tasks_Initialize_user_tasks( void );
 

@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Task Wake After
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,19 +33,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_wake_after
- *
- *  This directive suspends the requesting thread for the given amount
- *  of ticks.
- *
- *  Input parameters:
- *    ticks - number of ticks to wait
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - always successful
- */
 
 rtems_status_code rtems_task_wake_after(
   rtems_interval ticks

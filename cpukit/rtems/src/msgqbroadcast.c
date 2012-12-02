@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Broadcast Message Queue
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,24 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_broadcast
- *
- *  This directive sends a message for every thread waiting on the queue
- *  designated by id.
- *
- *  Input parameters:
- *    id     - pointer to message queue
- *    buffer - pointer to message buffer
- *    size   - size of message to broadcast
- *    count  - pointer to area to store number of threads made ready
- *
- *  Output parameters:
- *    count             - number of threads made ready
- *    RTEMS_SUCCESSFUL  - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id    id,

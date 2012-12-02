@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Interrupt Support
+ *  @ingroup ClassicINTR
+ */
+
 /*
- *  Bodies for Inlined Interrupt Manager Routines
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,10 +23,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 
-/*
- *  Real body for rtems_interrupt_disable
- */
-
 #undef rtems_interrupt_disable
 
 rtems_interrupt_level rtems_interrupt_disable( void )
@@ -34,10 +34,6 @@ rtems_interrupt_level rtems_interrupt_disable( void )
   return previous_level;
 }
 
-/*
- *  Real body for rtems_interrupt_enable
- */
-
 #undef rtems_interrupt_enable
 
 void rtems_interrupt_enable(
@@ -47,10 +43,6 @@ void rtems_interrupt_enable(
   _ISR_Enable( previous_level );
 }
 
-/*
- *  Real body for rtems_interrupt_flash
- */
-
 #undef rtems_interrupt_flash
 
 void rtems_interrupt_flash(
@@ -59,10 +51,6 @@ void rtems_interrupt_flash(
 {
   _ISR_Flash( previous_level );
 }
-
-/*
- *  Real body for rtems_interrupt_is_in_progress
- */
 
 #undef rtems_interrupt_is_in_progress
 

@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Obtain Name of Object as String
+/**
+ *  @file
  *
+ *  @brief Obtain Object Name as String
+ *  @ingroup ClassicClassInfo
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,11 +22,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/object.h>
 
-/*
- *  This method obtain the name of an object and returns its name
- *  in the form of a C string.  It attempts to be careful about
- *  overflowing the user's string and about returning unprintable characters.
- */
 char *rtems_object_get_name(
   Objects_Id     id,
   size_t         length,

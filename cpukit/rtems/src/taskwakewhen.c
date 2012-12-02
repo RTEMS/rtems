@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Task Wake When
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,20 +33,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_wake_when
- *
- *  This directive blocks the requesting thread until the given date and
- *  time is reached.
- *
- *  Input parameters:
- *    time_buffer - pointer to the time and date structure
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer

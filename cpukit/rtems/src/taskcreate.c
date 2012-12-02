@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Task Create
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,27 +33,6 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_task_create
- *
- *  This directive creates a thread by allocating and initializing a
- *  thread control block and a stack.  The newly created thread is
- *  placed in the dormant state.
- *
- *  Input parameters:
- *    name             - user defined thread name
- *    initial_priority - thread priority
- *    stack_size       - stack size in bytes
- *    initial_modes    - initial thread mode
- *    attribute_set    - thread attributes
- *    id               - pointer to thread id
- *
- *  Output parameters:
- *    id               - thread id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_task_create(
   rtems_name           name,

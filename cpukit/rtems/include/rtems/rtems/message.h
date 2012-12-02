@@ -168,13 +168,19 @@ rtems_status_code rtems_message_queue_send(
 );
 
 /**
- *  @brief rtems_message_queue_urgent
+ *  @brief RTEMS Urgent Message Queue
  *
  *  This routine implements the rtems_message_queue_urgent directive.
  *  This directive has the same behavior as rtems_message_queue_send
  *  except that if no tasks are waiting, the message buffer will
  *  be placed at the FRONT of the chain of pending messages rather
  *  than at the REAR.
+ * 
+ *  @param[in] id is the pointer to message queue
+ *  @param[in] buffer is the pointer to message buffer
+ *  @param[in] size is the size of message to send urgently
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_message_queue_urgent(
   rtems_id    id,
@@ -183,12 +189,20 @@ rtems_status_code rtems_message_queue_urgent(
 );
 
 /**
- *  @brief rtems_message_queue_broadcast
+ *  @brief RTEMS Broadcast Message Queue
  *
  *  This routine implements the rtems_message_queue_broadcast directive.
  *  This directive sends the message buffer to all of the tasks blocked
  *  waiting for a message on the message queue indicated by ID.
  *  If no tasks are waiting, then the message buffer will not be queued.
+ * 
+ *  @param[in] id is the pointer to message queue
+ *  @param[in] buffer is the pointer to message buffer
+ *  @param[in] size is the size of message to broadcast
+ *  @param[in] count pointer to area to store number of threads made ready
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ *  		*count filled in with number of threads made ready 
  */
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id    id,

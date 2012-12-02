@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Instantiate Data
+/**
+ *  @file
  *
+ *  @brief Instantiate RTEMS Period Data
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

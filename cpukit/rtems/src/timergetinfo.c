@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Timer Information
+ *  @ingroup ClassicTimer
+ */
+
 /*
- *  Timer Manager - rtems_timer_get_information directive
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +26,6 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  rtems_timer_get_information
- *
- *  This directive allows a thread to obtain information about a timer.
- *
- *  Input parameters:
- *    id       - timer id
- *    the_info - pointer to timer information block
- *
- *  Output parameters:
- *    *the_info        - region information block filled in
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- *
- */
 
 rtems_status_code rtems_timer_get_information(
   rtems_id                 id,

@@ -1,6 +1,11 @@
-/*
- *  RTEMS Task Manager -- Initialize Manager
+/**
+ *  @file
  *
+ *  @brief RTEMS Task API Extensions
+ *  @ingroup ClassicTasks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -230,16 +235,6 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
   }
 };
 
-/*
- *  _RTEMS_tasks_Manager_initialization
- *
- *  This routine initializes all Task Manager related data structures.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- */
-
 void _RTEMS_tasks_Manager_initialization(void)
 {
   _Objects_Initialize_information(
@@ -278,17 +273,6 @@ void _RTEMS_tasks_Manager_initialization(void)
 #endif
 
 }
-
-/*
- *  _RTEMS_tasks_Initialize_user_tasks
- *
- *  This routine creates and starts all configured user
- *  initialization threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- */
 
 void _RTEMS_tasks_Initialize_user_tasks( void )
 {

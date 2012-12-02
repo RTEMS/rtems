@@ -63,7 +63,7 @@ typedef struct {
 }   Semaphore_MP_Packet;
 
 /**
- *  @brief Semaphore_MP_Send_process_packet
+ *  @brief Semaphore MP Send Process Packet
  *
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
@@ -76,7 +76,7 @@ void _Semaphore_MP_Send_process_packet (
 );
 
 /**
- *  @brief Semaphore_MP_Send_request_packet
+ *  @brief Semaphore MP Send Request Packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive operation can be initiated on another node.
@@ -89,7 +89,7 @@ rtems_status_code _Semaphore_MP_Send_request_packet (
 );
 
 /**
- *  @brief Semaphore_MP_Send_response_packet
+ *  @brief Semaphore MP Send Response Packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive can be performed on another node.
@@ -101,7 +101,7 @@ void _Semaphore_MP_Send_response_packet (
 );
 
 /**
- *  @brief Semaphore_MP_Process_packet
+ *  @brief Semaphore MP Process Packet
  *
  *  This routine performs the actions specific to this package for
  *  the request from another node.
@@ -111,7 +111,7 @@ void _Semaphore_MP_Process_packet (
 );
 
 /**
- *  @brief Semaphore_MP_Send_object_was_deleted
+ *  @brief Semaphore MP Send Object was Deleted
  *
  *  This routine is invoked indirectly by the thread queue
  *  when a proxy has been removed from the thread queue and
@@ -122,7 +122,7 @@ void _Semaphore_MP_Send_object_was_deleted (
 );
 
 /**
- *  @brief Semaphore_MP_Send_extract_proxy
+ *  @brief Semaphore MP Send Extract Proxy
  *
  *  This routine is invoked when a task is deleted and it
  *  has a proxy which must be removed from a thread queue and
@@ -133,18 +133,21 @@ void _Semaphore_MP_Send_extract_proxy (
 );
 
 /**
- *  @brief Semaphore_MP_Get_packet
+ *  @brief Semaphore MP Get Packet
  *
  *  This function is used to obtain a semaphore mp packet.
  */
 Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void );
 
 /**
- * @brief _Semaphore_Core_mutex_mp_support
+ * @brief Semaphore Core Mutex MP Support
  *
  *  This function processes the global actions necessary for remote
  *  accesses to a global semaphore based on a core mutex.  This function
  *  is called by the core.
+ *
+ *  @param[in] the_thread the remote thread the semaphore was surrendered to
+ *  @param[in] id is the id of the surrendered semaphore
  */
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
@@ -152,11 +155,14 @@ void  _Semaphore_Core_mutex_mp_support (
 );
 
 /**
- *  @brief Semaphore_Core_mp_support
+ *  @brief Semaphore Core MP Support
  *
  *  This function processes the global actions necessary for remote
  *  accesses to a global semaphore based on a core semaphore.  This function
  *  is called by the core.
+ *
+ *  @param[in] the_thread the remote thread the semaphore was surrendered to
+ *  @param[in] id is the id of the surrendered semaphore
  */
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,

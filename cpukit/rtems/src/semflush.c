@@ -1,11 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Semaphore Flush
+ *  @ingroup ClassicSem
+ */
+
 /*
- *  rtems_semaphore_flush
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the flush directive
- *  of the Semaphore Manager.
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -37,20 +37,6 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
-
-/*
- *  rtems_semaphore_flush
- *
- *  This directive allows a thread to flush the threads
- *  pending on the semaphore.
- *
- *  Input parameters:
- *    id         - semaphore id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 #if defined(RTEMS_MULTIPROCESSING)
 #define SEND_OBJECT_WAS_DELETED _Semaphore_MP_Send_object_was_deleted

@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Interrupt Catch
+ *  @ingroup ClassicINTR
+ */
+
 /*
- *  Interrupt Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,21 +24,6 @@
 #include <rtems/rtems/intr.h>
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-
-/*  rtems_interrupt_catch
- *
- *  This directive allows a thread to specify what action to take when
- *  catching signals.
- *
- *  Input parameters:
- *    new_isr_handler - address of interrupt service routine (isr)
- *    vector          - interrupt vector number
- *    old_isr_handler - address at which to store previous ISR address
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - always succeeds
- *    *old_isr_handler  - previous ISR address
- */
 
 rtems_status_code rtems_interrupt_catch(
   rtems_isr_entry      new_isr_handler,

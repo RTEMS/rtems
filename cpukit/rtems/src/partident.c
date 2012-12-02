@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Partition Name to Id
+ *  @ingroup ClassicPart
+ */
+
 /*
- *  Partition Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,23 +26,6 @@
 #include <rtems/rtems/part.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_partition_ident
- *
- *  This directive returns the system ID associated with
- *  the partition name.
- *
- *  Input parameters:
- *    name - user defined partition name
- *    node - node(s) to be searched
- *    id   - pointer to partition id
- *
- *  Output parameters:
- *    *id               - partition id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_partition_ident(
   rtems_name  name,

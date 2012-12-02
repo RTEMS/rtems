@@ -435,6 +435,11 @@ typedef struct {
  */
 #define EVENT_CURRENT  0
 
+/**
+ *  @brief Event Manager Initialization
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
 void _Event_Manager_initialization( void );
 
 void _Event_Seize(

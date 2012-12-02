@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Resize RTEMS Region Segment
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,22 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_region_resize_segment
- *
- *  This directive will try to resize segment to the new size 'size'
- *  "in place".
- *
- *  Input parameters:
- *    id      - region id
- *    segment - pointer to segment address
- *    size    - new required size
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_region_resize_segment(
   rtems_id    id,

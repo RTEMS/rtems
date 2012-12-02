@@ -383,10 +383,16 @@ typedef struct {
 } rtems_timer_information;
 
 /**
- *  @brief rtems_timer_get_information
+ *  @brief RTEMS Get Timer Information
  *
  *  This routine implements the rtems_timer_get_information directive.
  *  This directive returns information about the timer.
+ * 
+ *  @param[in] id is the timer id
+ *  @param[in] the_info is the pointer to timer information block
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ *  		*the_info region information block filled in
  */
 rtems_status_code rtems_timer_get_information(
   rtems_id                 id,

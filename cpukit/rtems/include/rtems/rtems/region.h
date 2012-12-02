@@ -217,7 +217,7 @@ rtems_status_code rtems_region_return_segment(
 );
 
 /**
- *  @brief rtems_region_resize_segment
+ *  @brief Resize RTEMS Region Segment
  *
  *  This routine implements the rtems_region_resize_segment directive.  It
  *  tries to resize segment in the region associated with 'id' to the new size
@@ -228,13 +228,16 @@ rtems_status_code rtems_region_return_segment(
  *  rtems_region_get_segment of the first blocked task, then that task and as
  *  many subsequent tasks as possible will be unblocked with their requests
  *  satisfied.
- *  Returns:
- *    RTEMS_SUCCESSFUL  - operation successful
- *    RTEMS_UNSATISFIED - the segment can't be resized in place
- *    any other code    - failure.
- *  On RTEMS_SUCCESSFUL or RTEMS_UNSATISFIED exit it returns into the
- *  'old_size' the old size in bytes of the user memory area of the specified
- *  segment.
+ * 
+ *  @param[in] id is the region id
+ *  @param[in] segmet is the pointer to segment address
+ *  @param[in] size is the new required size
+ *  @return RTEMS_SUCCESSFUL if operation successful, RTEMS_UNSATISFIED if the
+ * 	the segment can't be resized in place or any other code atfailure
+ * 
+ *  @note On RTEMS_SUCCESSFUL or RTEMS_UNSATISFIED exit it returns into the
+ *  	'old_size' the old size in bytes of the user memory area of the 
+ * 	specified segment.
  */
 rtems_status_code rtems_region_resize_segment(
   rtems_id    id,

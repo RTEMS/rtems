@@ -185,8 +185,18 @@ rtems_status_code rtems_semaphore_release(
 );
 
 /**
- *  @brief rtems_semaphore_flush
+ *  @brief RTEMS Semaphore Flush
+ * 
+ *  DESCRIPTION:
+ *  This package is the implementation of the flush directive
+ *  of the Semaphore Manager.
+ * 
+ *  This directive allows a thread to flush the threads
  *  pending on the semaphore.
+ *
+ *  @param[in] id is the semaphore id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_semaphore_flush(
   rtems_id	   id

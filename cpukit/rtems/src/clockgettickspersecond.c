@@ -1,6 +1,11 @@
-/*
- *  Clock Manager - Get Ticks Per Second
+/**
+ *  @file
  *
+ *  @brief Obtain Ticks Per Seconds
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

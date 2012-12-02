@@ -1,6 +1,11 @@
-/*
- *  Clock Manager - Get Seconds Since Epoch
+/**
+ *  @file
  *
+ *  @brief Obtain Seconds Since Epoch
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -391,7 +391,7 @@ rtems_status_code rtems_rate_monotonic_period(
 );
 
 /**
- *  @brief _Rate_monotonic_Timeout
+ *  @brief Rate Monotonic Timeout
  *
  *  This routine is invoked when the period represented
  *  by ID expires.  If the thread which owns this period is blocked
@@ -399,6 +399,8 @@ rtems_status_code rtems_rate_monotonic_period(
  *  period is restarted.  If the owning thread is not waiting for the
  *  period to expire, then the period is placed in the EXPIRED
  *  state and not restarted.
+ * 
+ *  @param[in] id is the period id
  */
 void _Rate_monotonic_Timeout(
   rtems_id    id,
