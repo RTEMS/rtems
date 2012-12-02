@@ -136,11 +136,17 @@ rtems_status_code rtems_region_ident(
 );
 
 /**
- *  @brief rtems_region_get_information
+ *  @brief RTEMS Get Region Information
  *
  *  This routine implements the rtems_region_get_information directive.
  *  This directive returns information about the heap associated with
  *  this region.
+ * 
+ *  @param[in] id is the region id
+ *  @param[in] the_info is the pointer to region information block
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ *  *id filled with the region information block
  */
 rtems_status_code rtems_region_get_information(
   rtems_id                id,
@@ -249,11 +255,13 @@ rtems_status_code rtems_region_resize_segment(
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/region.inl>
 /**
- *  @brief Region_Process_queue
+ *  @brief Process Region Queue
  *
  *  This is a helper routine which is invoked any time memory is
  *  freed.  It looks at the set of waiting tasks and attempts to
  *  satisfy all outstanding requests.
+ * 
+ *  @param[in] the_region is the the region
  */
 extern void _Region_Process_queue(Region_Control *the_region);
 

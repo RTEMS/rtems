@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Region Information
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,21 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/thread.h>
-
-/*
- *  rtems_region_get_information
- *
- *  This directive will return information about the region specified.
- *
- *  Input parameters:
- *    id         - region id
- *    the_info   - pointer to region information block
- *
- *  Output parameters:
- *    *the_info   - region information block filled in
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_region_get_information(
   rtems_id                id,

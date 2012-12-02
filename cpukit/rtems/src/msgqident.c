@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Message Queue Name to Id
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,23 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_ident
- *
- *  This directive returns the system ID associated with
- *  the message queue name.
- *
- *  Input parameters:
- *    name - user defined message queue name
- *    node - node(s) to be searched
- *    id   - pointer to message queue id
- *
- *  Output parameters:
- *    *id               - message queue id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_message_queue_ident(
   rtems_name  name,

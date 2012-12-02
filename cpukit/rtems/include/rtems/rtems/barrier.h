@@ -104,7 +104,7 @@ rtems_status_code rtems_barrier_create(
 );
 
 /**
- *  @brief rtems_barrier_ident
+ *  @brief RTEMS Barrier name to Id
  *
  *  This routine implements the rtems_barrier_ident directive.
  *  This directive returns the barrier ID associated with name.
@@ -139,7 +139,7 @@ rtems_status_code rtems_barrier_delete(
 );
 
 /**
- *  @brief rtems_barrier_wait
+ *  @brief RTEMS Barrier Wait
  *
  *  This routine implements the rtems_barrier_wait directive.  It
  *  attempts to wait at the barrier associated with @a id.  The calling task

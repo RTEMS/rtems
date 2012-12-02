@@ -1,6 +1,11 @@
-/*
- *  Event Manager -- Instantiate Data
+/**
+ *  @file
  *
+ *  @brief Instantiate RTEMS Event Data
+ *  @ingroup ClassicEvent
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,7 +18,6 @@
 #include "config.h"
 #endif
 
-/* instantiate RTEMS event data */
 #define RTEMS_EVENT_EXTERN
 
 #include <rtems/system.h>

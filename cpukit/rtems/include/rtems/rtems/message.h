@@ -122,7 +122,7 @@ rtems_status_code rtems_message_queue_create(
 );
 
 /**
- *  @brief rtems_message_queue_ident
+ *  @brief RTEMS Message Queue Name to Id
  *
  *  This routine implements the rtems_message_queue_ident directive.
  *  This directive returns the message queue ID associated with NAME.
@@ -131,6 +131,13 @@ rtems_status_code rtems_message_queue_create(
  *  extent of the search for the ID of the message queue named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
+ *  
+ *  @param[in] name is the user defined message queue name
+ *  @param[in] node is the node(s) to be searched
+ *  @param[in] id is the pointer to message queue id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ *  *id filled with the message queue id
  */
 rtems_status_code rtems_message_queue_ident(
   rtems_name  name,
@@ -139,10 +146,14 @@ rtems_status_code rtems_message_queue_ident(
 );
 
 /**
- *  @brief rtems_message_queue_delete
+ *  @brief RTEMS Delete Message Queue
  *
  *  This routine implements the rtems_message_queue_delete directive.  The
  *  message queue indicated by ID is deleted.
+ * 
+ *  @param[in] id is the queue id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_message_queue_delete(
   rtems_id id

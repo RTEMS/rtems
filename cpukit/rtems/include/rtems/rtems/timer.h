@@ -239,12 +239,18 @@ rtems_status_code rtems_timer_create(
 );
 
 /**
- *  @brief rtems_timer_ident
+ *  @brief RTEMS Timer Name to Id
  *
  *  This routine implements the rtems_timer_ident directive.
  *  This directive returns the timer ID associated with name.
  *  If more than one timer is named name, then the timer
  *  to which the ID belongs is arbitrary.
+ * 
+ *  @param[in] name is the user defined message queue name
+ *  @param[in] id is the pointer to timer id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ *  id filled with the message queue id
  */
 rtems_status_code rtems_timer_ident(
   rtems_name    name,

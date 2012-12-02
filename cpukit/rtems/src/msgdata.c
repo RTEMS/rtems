@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager -- Instantiate Data
+/**
+ *  @file
  *
+ *  @brief Instantiate the Message Queue Data
+ *  @ingroup ClassicMessageQueue
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,7 +18,6 @@
 #include "config.h"
 #endif
 
-/* instantiate message queue data */
 #define RTEMS_MESSAGE_EXTERN
 
 #include <rtems/system.h>

@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Cancel a Period
+/**
+ *  @file
  *
+ *  @brief RTEMS Rate Monotonic Cancel
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,19 +25,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
-
-/*
- *  rtems_rate_monotonic_cancel
- *
- *  This directive allows a thread to cancel a rate monotonic timer.
- *
- *  Input parameters:
- *    id - rate monotonic id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful and caller is not the owning thread
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_rate_monotonic_cancel(
   rtems_id id

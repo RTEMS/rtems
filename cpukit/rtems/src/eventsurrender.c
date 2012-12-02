@@ -1,6 +1,11 @@
-/*
- *  Event Manager
+/**
+ *  @file
  *
+ *  @brief Surrender Event
+ *  @ingroup ClassicEvent
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,13 +19,6 @@
 #endif
 
 #include <rtems/rtems/event.h>
-
-/*
- *  INTERRUPT LATENCY:
- *    before flash
- *    after flash
- *    check sync
- */
 
 void _Event_Surrender(
   Thread_Control                   *the_thread,

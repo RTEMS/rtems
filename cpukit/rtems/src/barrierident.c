@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager Name to ID
+/**
+ *  @file
  *
+ *  @brief RTEMS Barrier name to Id
+ *  @ingroup ClassicBarrier
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,22 +24,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/barrier.h>
-
-/*
- *  rtems_barrier_ident
- *
- *  This directive returns the system ID associated with
- *  the barrier name.
- *
- *  Input parameters:
- *    name - user defined barrier name
- *    id   - pointer to barrier id
- *
- *  Output parameters:
- *    *id              - barrier id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_barrier_ident(
   rtems_name  name,

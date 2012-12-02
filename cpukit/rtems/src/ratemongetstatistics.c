@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Get Statistics
+/**
+ *  @file
  *
+ *  @brief RTEMS Rate Monotonic Get Statistics
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,22 +25,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
-
-/*
- *  rtems_rate_monotonic_get_statistics
- *
- *  This directive allows a thread to obtain statistics information on a
- *  period.
- *
- *  Input parameters:
- *    id         - rate monotonic id
- *    statistics - pointer to statistics control block
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- *
- */
 
 rtems_status_code rtems_rate_monotonic_get_statistics(
   rtems_id                                id,

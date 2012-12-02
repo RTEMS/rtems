@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Process Region Queue
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,20 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  _Region_Process_queue
- *
- *  If enough memory is available to satisfy the rtems_region_get_segment of
- *  the first blocked task, then that task and as many subsequent tasks as
- *  possible will be unblocked with their requests satisfied.
- *
- *  Input parameters:
- *    the_region - the region
- *
- *  Output parameters:
- *    none
- */
 
 void _Region_Process_queue(
   Region_Control *the_region
