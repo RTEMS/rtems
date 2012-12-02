@@ -98,7 +98,7 @@ extern "C" {
  */
 
 /**
- *  @brief Sends an event set to the target task.
+ *  @brief Sends an Event Set to the Target Task
  *
  *  This directive sends an event set @a event_in to the task specified by
  *  @a id.
@@ -453,6 +453,14 @@ void _Event_Seize(
   States_Control                    wait_state
 );
 
+/**
+ *  @brief Surrender Event
+ * 
+ *  - INTERRUPT LATENCY:
+ *    + before flash
+ *    + after flash
+ *    + check sync
+ */
 void _Event_Surrender(
   Thread_Control                   *the_thread,
   rtems_event_set                   event_in,

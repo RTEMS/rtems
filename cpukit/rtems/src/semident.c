@@ -1,20 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Semaphore Name to Id
+ *  @ingroup ClassicSem
+ */
+
 /*
- *  Semaphore Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Semaphore Manager.
- *  This manager utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  Directives provided are:
- *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -46,23 +37,6 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
-
-/*
- *  rtems_semaphore_ident
- *
- *  This directive returns the system ID associated with
- *  the semaphore name.
- *
- *  Input parameters:
- *    name - user defined semaphore name
- *    node - node(s) to be searched
- *    id   - pointer to semaphore id
- *
- *  Output parameters:
- *    *id              - semaphore id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_semaphore_ident(
   rtems_name  name,

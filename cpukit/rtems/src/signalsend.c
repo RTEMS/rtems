@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Send Signal
+ *  @ingroup ClassicSignal
+ */
+
 /*
- *  Signal Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,20 +26,6 @@
 #include <rtems/rtems/signal.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
-
-/*
- *  rtems_signal_send
- *
- *  This directive allows a thread to send signals to a thread.
- *
- *  Input parameters:
- *    id         - thread id
- *    signal_set - signal set
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_signal_send(
   rtems_id          id,

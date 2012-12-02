@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager -- Wait at a Barrier
+/**
+ *  @file
  *
+ *  @brief RTEMS Barrier Wait
+ *  @ingroup ClassicBarrier
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,20 +24,6 @@
 #include <rtems/rtems/barrier.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  rtems_barrier_wait
- *
- *  This directive allows a thread to wait at a barrier.
- *
- *  Input parameters:
- *    id         - barrier id
- *    timeout    - number of ticks to wait (0 means wait forever)
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_barrier_wait(
   rtems_id        id,

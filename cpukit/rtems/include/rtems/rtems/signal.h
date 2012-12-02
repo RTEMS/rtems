@@ -61,10 +61,15 @@ rtems_status_code rtems_signal_catch(
 );
 
 /**
- *  @brief rtems_signal_send
+ *  @brief RTEMS Send Signal
  *
  *  This routine implements the rtems_signal_send directive.  This directive
  *  sends the signal_set to the task specified by ID.
+ * 
+ *  @param[in] id is the thread thread id
+ *  @param[in] signal_set is the signal set
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_signal_send(
   rtems_id         id,

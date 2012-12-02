@@ -100,13 +100,13 @@ bool rtems_workspace_free(
 );
 
 /**
- * @brief Greedy allocate that empties the workspace.
+ *  @brief Greedy Allocate that Empties the Workspace
  *
- * Afterward the heap has at most @a block_count allocateable blocks of sizes
- * specified by @a block_sizes.  The @a block_sizes must point to an array with
- * @a block_count members.  All other blocks are used.
+ *  Afterward the heap has at most @a block_count allocateable blocks of sizes
+ *  specified by @a block_sizes.  The @a block_sizes must point to an array with
+ *  @a block_count members.  All other blocks are used.
  *
- * @see rtems_workspace_greedy_free().
+ *  @see rtems_workspace_greedy_free().
  */
 void *rtems_workspace_greedy_allocate(
   const uintptr_t *block_sizes,

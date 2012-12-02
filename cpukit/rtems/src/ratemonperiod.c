@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager - Period Blocking and Status
+/**
+ *  @file
  *
+ *  @brief Rate Monotonic Support
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -223,21 +228,6 @@ static void _Rate_monotonic_Update_statistics(
       stats->max_wall_time = since_last_period;
   #endif
 }
-
-
-/*
- *  rtems_rate_monotonic_period
- *
- *  This directive allows a thread to manipulate a rate monotonic timer.
- *
- *  Input parameters:
- *    id     - rate monotonic id
- *    length - length of period (in ticks)
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id       id,

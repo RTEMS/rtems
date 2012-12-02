@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Gets the System Uptime in the Struct Timeval Format
+ *  @ingroup ClassicClock
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

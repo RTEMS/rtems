@@ -297,11 +297,17 @@ rtems_status_code rtems_rate_monotonic_ident(
 );
 
 /**
- *  @brief rtems_rate_monotonic_cancel
+ *  @brief RTEMS Rate Monotonic Cancel
  *
  *  This routine implements the rtems_rate_monotonic_cancel directive.  This
  *  directive stops the period associated with ID from continuing to
  *  run.
+ * 
+ *  @param[in] id is the rate monotonic id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful and caller is not the owning thread
+ *  or error code if unsuccessful
+ *  
  */
 rtems_status_code rtems_rate_monotonic_cancel(
   rtems_id   id
@@ -318,7 +324,7 @@ rtems_status_code rtems_rate_monotonic_delete(
 );
 
 /**
- *  @brief rtems_rate_monotonic_get_status
+ *  @brief RTEMS Rate Monotonic Get Status
  *
  *  This routine implements the rtems_rate_monotonic_get_status directive.
  *  Information about the period indicated by ID is returned.
@@ -330,10 +336,15 @@ rtems_status_code rtems_rate_monotonic_get_status(
 );
 
 /**
- *  @brief rtems_rate_monotonic_get_statistics
+ *  @brief RTEMS Rate Monotonic Get Statistics
  *
  *  This routine implements the rtems_rate_monotonic_get_statistics directive.
  *  Statistics gathered from the use of this period are returned.
+ * 
+ *  @param[in] id is the rate monotonic id
+ *  @param[in] statistics is the pointer to statistics control block
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_rate_monotonic_get_statistics(
   rtems_id                                id,
@@ -378,12 +389,17 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
 void rtems_rate_monotonic_report_statistics( void );
 
 /**
- *  @brief rtems_rate_monotonic_period
+ *  @brief RTEMS Rate Monotonic Period
  *
  *  This routine implements the rtems_rate_monotonic_period directive.  When
  *  length is non-zero, this directive initiates the period associated with
  *  ID from continuing for a period of length.  If length is zero, then
  *  result is set to indicate the current state of the period.
+ *  
+ *  @param[in] id is the rate monotonic id
+ *  @param[in] lenght is the length of period (in ticks)
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id        id,
@@ -429,7 +445,7 @@ bool _Rate_monotonic_Get_status(
 );
 
 /**
- *  @brief _Rate_monotonic_Initiate_statistics(
+ *  @brief Initiate Rate Monotonic Statistics
  *
  *  This routine is invoked when a period is initiated via an explicit
  *  call to rtems_rate_monotonic_period for the period's first iteration

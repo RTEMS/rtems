@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Delete Message Queue
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,20 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_delete
- *
- *  This directive allows a thread to delete the message queue specified
- *  by the given queue identifier.
- *
- *  Input parameters:
- *    id - queue id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_message_queue_delete(
   rtems_id id

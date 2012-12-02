@@ -228,7 +228,7 @@ rtems_status_code rtems_clock_get_uptime(
 );
 
 /**
- *  @brief Gets the system uptime in the struct timeval format.
+ *  @brief Gets the System Uptime in the Struct Timeval Format
  *
  *  @param[out] Returns the system uptime.  Pointer must not be NULL.
  */

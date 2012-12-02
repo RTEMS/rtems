@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Set Task Priority
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,24 +32,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_set_priority
- *
- *  This directive changes the priority of the specified thread.
- *  The specified thread can be any thread in the system including
- *  the requesting thread.
- *
- *  Input parameters:
- *    id           - thread id (0 indicates requesting thread)
- *    new_priority - thread priority (0 indicates current priority)
- *    old_priority - pointer to previous priority
- *
- *  Output parameters:
- *    old_priority      - previous priority
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_task_set_priority(
   rtems_id             id,

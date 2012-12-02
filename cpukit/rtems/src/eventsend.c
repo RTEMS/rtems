@@ -1,6 +1,11 @@
-/*
- *  Event Manager
+/**
+ *  @file
  *
+ *  @brief Sends an Event Set to the Target Task
+ *  @ingroup ClassicEvent
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Timer Name to Id
+ *  @ingroup ClassicTimer
+ */
+
 /*
- *  Timer Manager - rtems_timer_ident directive
- *
- *
  *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +26,6 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  rtems_timer_ident
- *
- *  This directive returns the system ID associated with
- *  the timer name.
- *
- *  Input parameters:
- *    name - user defined message queue name
- *    id   - pointer to timer id
- *
- *  Output parameters:
- *    *id              - message queue id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_timer_ident(
   rtems_name    name,
