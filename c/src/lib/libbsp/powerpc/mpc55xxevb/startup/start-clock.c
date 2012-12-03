@@ -38,7 +38,7 @@
       }
 
       if (!lock) {
-        bsp_reset();
+        rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, MPC55XX_FATAL_FMPLL_LOCK);
       }
     }
   #endif

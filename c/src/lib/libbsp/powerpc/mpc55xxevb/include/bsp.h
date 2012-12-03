@@ -77,6 +77,10 @@ void *bsp_idle_thread(uintptr_t arg);
 
 #define BSP_IDLE_TASK_BODY bsp_idle_thread
 
+typedef enum {
+  MPC55XX_FATAL_FMPLL_LOCK
+} mpc55xx_fatal_code;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
