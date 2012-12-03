@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Announce a Clock Tick
+ *  @ingroup ClassicClock
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -18,21 +25,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  rtems_clock_tick
- *
- *  This directive notifies the executve that a tick has occurred.
- *  When the tick occurs the time manager updates and maintains
- *  the calendar time, timeslicing, and any timeout delays.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - always succeeds
- *
- *  NOTE: This routine only works for leap-years through 2099.
- */
 
 rtems_status_code rtems_clock_tick( void )
 {

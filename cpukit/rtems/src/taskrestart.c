@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Task Restart
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,23 +32,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_restart
- *
- *  This directive readies the specified thread.  It restores
- *  the thread environment to the original values established
- *  at thread creation and start time.  A thread can be restarted
- *  from any state except the dormant state.
- *
- *  Input parameters:
- *    id       - thread id
- *    argument - thread argument
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_task_restart(
   rtems_id  id,

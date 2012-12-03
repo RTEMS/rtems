@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager -- Translate SuperCore Status
+/**
+ *  @file
  *
+ *  @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
+ *  @ingroup ClassicBarrier
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,17 +22,6 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/barrier.h>
-
-/*
- *  _Barrier_Translate_core_barrier_return_code
- *
- *  Input parameters:
- *    the_barrier_status - barrier status code to translate
- *
- *  Output parameters:
- *    rtems status code - translated RTEMS status code
- *
- */
 
 rtems_status_code _Barrier_Translate_core_barrier_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_BARRIER_STATUS_SUCCESSFUL */

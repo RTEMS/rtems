@@ -207,7 +207,7 @@ rtems_status_code rtems_region_get_segment_size(
 );
 
 /**
- *  @brief rtems_region_return_segment
+ *  @brief RTEMS Return Region Segment
  *
  *  This routine implements the rtems_region_return_segment directive.  It
  *  frees the segment to the region associated with ID.  The segment must
@@ -216,6 +216,11 @@ rtems_status_code rtems_region_get_segment_size(
  *  rtems_region_get_segment of the first blocked task, then that task and as
  *  many subsequent tasks as possible will be unblocked with their requests
  *  satisfied.
+ *  
+ *  @param[in] id is the region id
+ *  @param[in] segment is the pointer to segment address
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_region_return_segment(
   rtems_id    id,

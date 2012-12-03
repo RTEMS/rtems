@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Catch Signal
+ *  @ingroup ClassicSignal
+ */
+
 /*
- *  Signal Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,21 +26,6 @@
 #include <rtems/rtems/signal.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
-
-/*
- *  rtems_signal_catch
- *
- *  This directive allows a thread to specify what action to take when
- *  catching signals.
- *
- *  Input parameters:
- *    handler  - address of asynchronous signal routine (asr)
- *              ( NULL indicates asr is invalid )
- *    mode_set - mode value for asr
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - always succeeds
- */
 
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   asr_handler,

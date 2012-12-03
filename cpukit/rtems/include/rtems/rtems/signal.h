@@ -48,12 +48,18 @@ extern "C" {
 void _Signal_Manager_initialization( void );
 
 /**
- *  @brief rtems_signal_catch
+ *  @brief RTEMS Catch Signal
  *
  *  This routine implements the rtems_signal_catch directive.  This directive
  *  is used to establish asr_handler as the Asynchronous Signal Routine
  *  (RTEMS_ASR) for the calling task.  The asr_handler will execute with a
  *  mode of mode_set.
+ * 
+ *  @param[in] asr_handler is the address of asynchronous signal routine (asr)
+ *              ( NULL indicates asr is invalid )
+ *  @param[in] mode_set is the mode value for asr
+ * 
+ *  @return RTEMS_SUCCESSFUL
  */
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   asr_handler,

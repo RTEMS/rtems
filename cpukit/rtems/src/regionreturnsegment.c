@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Return Region Segment
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,20 +35,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_region_return_segment
- *
- *  This directive will return a segment to its region.
- *
- *  Input parameters:
- *    id      - region id
- *    segment - pointer to segment address
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_region_return_segment(
   rtems_id  id,

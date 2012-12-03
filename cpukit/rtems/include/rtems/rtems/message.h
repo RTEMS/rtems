@@ -286,10 +286,12 @@ rtems_status_code _Message_queue_Submit(
 );
 
 /**
- *  @brief Message_queue_Allocate
+ *  @brief Message Queue Allocate
  *
  *  This function allocates a message queue control block from
  *  the inactive chain of free message queue control blocks.
+ * 
+ *  @return the_message_queue filled in if successful, NULL otherwise
  */
 Message_queue_Control *_Message_queue_Allocate (void);
 

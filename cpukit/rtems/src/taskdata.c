@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Instantiate RTEMS Classic API Tasks Data
+ *  @ingroup ClassicTasks
+ */
+
 /*
  *  RTEMS Task Manager -- Instantiate Data
  *
@@ -13,7 +20,6 @@
 #include "config.h"
 #endif
 
-/* instantiate RTEMS Classic API tasks data */
 #define RTEMS_TASKS_EXTERN
 
 #include <rtems/system.h>

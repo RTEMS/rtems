@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief MP Support
+ *  @ingroup ClassicMP
+ */
+
 /*
- *  Multiprocessing Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,19 +23,9 @@
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpci.h>
 
-/*
- *  _Multiprocessing_Manager_initialization
- *
- */
-
 void _Multiprocessing_Manager_initialization ( void )
 {
 }
-
-/*
- *  rtems_multiprocessing_announce
- *
- */
 
 void rtems_multiprocessing_announce ( void )
 {

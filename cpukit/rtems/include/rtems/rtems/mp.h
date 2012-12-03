@@ -30,14 +30,14 @@ extern "C" {
 #endif
 
 /**
- *  @brief Multiprocessing_Manager_initialization
+ *  @brief Multiprocessing Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
 void _Multiprocessing_Manager_initialization ( void );
 
 /**
- *  @brief rtems_multiprocessing_announce
+ *  @brief RTEMS Multiprocessing Announce
  *
  *  This routine implements the MULTIPROCESSING_ANNOUNCE directive.
  *  It is invoked by the MPCI layer to indicate that an MPCI packet

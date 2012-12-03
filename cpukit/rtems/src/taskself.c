@@ -1,6 +1,11 @@
-/*
- *  RTEMS Task Manager - Get ID of Self
+/**
+ *  @file
  *
+ *  @brief RTEMS Get Self Task Id
+ *  @ingroup ClassicTasks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

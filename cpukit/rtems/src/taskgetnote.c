@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Task Node
+ *  @ingroup ClassicRTEMS
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,23 +33,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_get_note
- *
- *  This directive obtains the note from the specified notepad
- *  of the specified thread.
- *
- *  Input parameters:
- *    id      - thread id
- *    notepad - notepad number
- *    note    - pointer to note
- *
- *  Output parameters:
- *    note             - filled in if successful
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_task_get_note(
   rtems_id    id,

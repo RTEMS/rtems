@@ -1,6 +1,11 @@
-/*
- *  Multiprocessing Support for the Event Manager
+/**
+ *  @file
  *
+ *  @brief Event MP Support
+ *  @ingroup ClassicEventMP
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -34,11 +39,6 @@ RTEMS_STATIC_ASSERT(
  *
  *  This subprogram is not needed since there are no process
  *  packets to be sent by this manager.
- *
- */
-
-/*
- *  _Event_MP_Send_request_packet
  *
  */
 
@@ -82,11 +82,6 @@ rtems_status_code _Event_MP_Send_request_packet (
   return RTEMS_SUCCESSFUL;
 }
 
-/*
- *  _Event_MP_Send_response_packet
- *
- */
-
 void _Event_MP_Send_response_packet (
   Event_MP_Remote_operations  operation,
   Thread_Control             *the_thread
@@ -118,12 +113,6 @@ void _Event_MP_Send_response_packet (
 
   }
 }
-
-/*
- *
- *  _Event_MP_Process_packet
- *
- */
 
 void _Event_MP_Process_packet (
   rtems_packet_prefix  *the_packet_prefix
@@ -173,11 +162,6 @@ void _Event_MP_Process_packet (
  *
  *  This subprogram is not needed since there are no objects
  *  deleted by this manager.
- *
- */
-
-/*
- *  _Event_MP_Get_packet
  *
  */
 

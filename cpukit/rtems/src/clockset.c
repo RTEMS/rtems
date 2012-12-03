@@ -1,6 +1,11 @@
-/*
- *  Clock Manager
+/**
+ *  @file
  *
+ *  @brief Set the Current TOD
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,19 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  rtems_clock_set
- *
- *  This directive sets the date and time for this node.
- *
- *  Input parameters:
- *    tod - pointer to the time and date structure
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_clock_set(
   const rtems_time_of_day *tod

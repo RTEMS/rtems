@@ -1,6 +1,11 @@
-/*
- *  Time of Day (TOD) Handler - Classic TOD to Seconds
+/**
+ *  @file
  *
+ *  @brief TOD to Seconds
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -36,20 +41,6 @@ const uint16_t   _TOD_Days_to_date[2][13] = {
  */
 const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
 
-
-
-/*
- *  _TOD_To_seconds
- *
- *  This routine returns the seconds from the epoch until the
- *  current date and time.
- *
- *  Input parameters:
- *    the_tod - pointer to the time and date structure
- *
- *  Output parameters:
- *    returns    - seconds since epoch until the_tod
- */
 
 uint32_t   _TOD_To_seconds(
   const rtems_time_of_day *the_tod

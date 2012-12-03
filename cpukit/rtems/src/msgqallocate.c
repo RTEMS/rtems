@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Message Queue Allocate
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,20 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  _Message_queue_Allocate
- *
- *  Allocate a message queue and the space for its messages
- *
- *  Input parameters:
- *    the_message_queue - the message queue to allocate message buffers
- *    count             - maximum message and reserved buffer count
- *    max_message_size  - maximum size of each message
- *
- *  Output parameters:
- *    the_message_queue - set if successful, NULL otherwise
- */
 
 Message_queue_Control *_Message_queue_Allocate(void)
 {

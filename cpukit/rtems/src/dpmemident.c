@@ -1,6 +1,11 @@
-/*
- *  Dual Port Memory Manager
+/**
+ *  @file
  *
+ *  @brief RTEMS Port Name to Id
+ *  @ingroup ClassicDPMEM
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,22 +26,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
-
-/*
- *  rtems_port_ident
- *
- *  This directive returns the system ID associated with
- *  the port name.
- *
- *  Input parameters:
- *    name - user defined port name
- *    id   - pointer to port id
- *
- *  Output parameters:
- *    *id      - port id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_port_ident(
   rtems_name  name,

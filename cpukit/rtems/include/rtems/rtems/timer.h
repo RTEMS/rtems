@@ -227,11 +227,16 @@ RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
 void _Timer_Manager_initialization(void);
 
 /**
- *  @brief rtems_timer_create
+ *  @brief RTEMS Create Timer
  *
  *  This routine implements the rtems_timer_create directive.  The
  *  timer will have the name name.  It returns the id of the
  *  created timer in ID.
+ * 
+ *  @param[in] name is the timer name
+ *  @param[out] id is the pointer to timer id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_timer_create(
   rtems_name    name,

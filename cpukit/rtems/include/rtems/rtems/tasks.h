@@ -44,6 +44,8 @@
 #include <rtems/rtems/status.h>
 
 /**
+ *  @brief Instantiate RTEMS Classic API Tasks Data
+ * 
  *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
@@ -303,11 +305,17 @@ rtems_status_code rtems_task_delete(
 );
 
 /**
- *  @brief rtems_task_get_note
+ *  @brief RTEMS Get Task Node
  *
  *  This routine implements the rtems_task_get_note directive.  The
  *  value of the indicated notepad for the task associated with ID
  *  is returned in note.
+ * 
+ *  @param[in] id is the thread id
+ *  @param[in] notepad is the notepad number
+ *  @param[out] note is the pointer to note
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_get_note(
   rtems_id    id,
@@ -343,11 +351,16 @@ rtems_status_code rtems_task_mode(
 );
 
 /**
- *  @brief rtems_task_restart
+ *  @brief RTEMS Task Restart
  *
  *  This routine implements the rtems_task_restart directive.  The
  *  task associated with ID is restarted at its initial entry
  *  point with the new argument.
+ * 
+ *  @param[in] id is the thread id
+ *  @param[in] arg is the thread argument
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_restart(
   rtems_id   id,
@@ -480,7 +493,7 @@ rtems_status_code rtems_task_variable_delete(
 );
 
 /**
- *  @brief rtems_task_self
+ *  @brief RTEMS Get Self Task Id
  *
  *  This directive returns the ID of the currently executing task.
  */

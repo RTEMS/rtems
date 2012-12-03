@@ -191,7 +191,8 @@ rtems_status_code rtems_clock_set(
  *  @return This directive always returns RTEMS_SUCCESSFUL.
  *
  *  @note This method is typically called from an ISR and is the basis
- *        for all timeouts and delays.
+ *        for all timeouts and delays. This routine only works for leap-years
+ *	  through 2099.
  */
 rtems_status_code rtems_clock_tick( void );
 
@@ -256,7 +257,7 @@ bool _TOD_Validate(
 );
 
 /**
- *  @brief _TOD_To_seconds
+ *  @brief TOD to Seconds
  *
  *  This function returns the number seconds between the epoch and @a the_tod.
  *

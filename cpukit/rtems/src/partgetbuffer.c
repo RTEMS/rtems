@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Partition Buffer
+ *  @ingroup ClassicPart
+ */
+
 /*
- *  Partition Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,21 +26,6 @@
 #include <rtems/rtems/part.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_partition_get_buffer
- *
- *  This directive will obtain a buffer from a buffer partition.
- *
- *  Input parameters:
- *    id     - partition id
- *    buffer - pointer to buffer address
- *
- *  Output parameters:
- *    buffer            - pointer to buffer address filled in
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,

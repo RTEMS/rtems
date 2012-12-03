@@ -101,11 +101,16 @@ rtems_status_code rtems_port_create(
 );
 
 /**
- *  @brief rtems_port_ident
+ *  @brief RTEMS Port Name to Id
  *
  *  This routine implements the rtems_port_ident directive.  This directive
  *  returns the port ID associated with name.  If more than one port is
  *  named name, then the port to which the ID belongs is arbitrary.
+ * 
+ *  @param[in] name is the user defined port name
+ *  @param[out] id is the pointer to port id
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_port_ident(
   rtems_name    name,
@@ -123,11 +128,19 @@ rtems_status_code rtems_port_delete(
 );
 
 /**
- *  @brief rtems_port_external_to_internal
+ *  @brief RTEMS Port External to Internal
  *
  *  This routine implements the rtems_port_external_to_internal directive.
  *  It returns the internal port address which maps to the provided
- *  external port address for the specified port ID.
+ *  external port address for the specified port ID.If the given external
+ *  address is an invalid dual-ported address, then the internal address is 
+ *  set to the given external address.
+ * 
+ *  @param[in] id is the id of dp memory object
+ *  @param[in] external is the external address
+ *  @param[out] internal is the pointer of internal address to set
+ * 
+ *  @return RTEMS_SUCCESSFUL
  */
 rtems_status_code rtems_port_external_to_internal(
   rtems_id     id,

@@ -145,11 +145,16 @@ rtems_status_code rtems_partition_delete(
 );
 
 /**
- *  @brief rtems_partition_get_buffer
+ *  @brief RTEMS Get Partition Buffer
  *
  *  This routine implements the rtems_partition_get_buffer directive.  It
  *  attempts to allocate a buffer from the partition associated with ID.
  *  If a buffer is allocated, its address is returned in buffer.
+ * 
+ *  @param[in] id is the partition id
+ *  @param[out] buffer is the pointer to buffer address
+ * 
+ *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,

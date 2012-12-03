@@ -65,7 +65,7 @@ typedef struct {
  */
 
 /**
- *  @brief Event_MP_Send_request_packet
+ *  @brief Event MP Send Packet Request
  *
  *  This routine performs a remote procedure call so that a
  *  directive operation can be initiated on another node.
@@ -77,7 +77,7 @@ rtems_status_code _Event_MP_Send_request_packet (
 );
 
 /**
- *  @brief Event_MP_Send_response_packet
+ *  @brief Event MP Send Packet Response
  *
  *  This routine performs a remote procedure call so that a
  *  directive can be performed on another node.
@@ -88,7 +88,7 @@ void _Event_MP_Send_response_packet (
 );
 
 /**
- *  @brief Event_MP_Process_packet
+ *  @brief Event MP Packet Process
  *
  *  This routine performs the actions specific to this package for
  *  the request from another node.
@@ -120,7 +120,7 @@ void _Event_MP_Process_packet (
  */
 
 /**
- *  @brief Event_MP_Get_packet
+ *  @brief Event MP Get Packet
  *
  *  This function is used to obtain a event mp packet.
  */

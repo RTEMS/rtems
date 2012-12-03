@@ -65,7 +65,7 @@ typedef struct {
 }   Region_MP_Packet;
 
 /**
- *  @brief _Region_MP_Send_process_packet
+ *  @brief Region MP Send Process Packet
  *
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
@@ -78,7 +78,7 @@ void _Region_MP_Send_process_packet (
 );
 
 /**
- *  @brief _Region_MP_Send_request_packet
+ *  @brief Region MP Send Request Packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive operation can be initiated on another node.
@@ -93,7 +93,7 @@ rtems_status_code _Region_MP_Send_request_packet (
 );
 
 /**
- *  @brief _Region_MP_Send_response_packet
+ *  @brief Region MP Send Response Packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive can be performed on another node.
@@ -105,7 +105,7 @@ void _Region_MP_Send_response_packet (
 );
 
 /**
- *  @brief _Region_MP_Process_packet
+ *  @brief Region MP Process Packet
  *
  *  This routine performs the actions specific to this package for
  *  the request from another node.
@@ -126,7 +126,7 @@ void _Region_MP_Process_packet (
  */
 
 /**
- *  @brief _Region_MP_Send_extract_proxy
+ *  @brief Region MP Send Extract Proxy
  *
  *  This routine is invoked when a task is deleted and it
  *  has a proxy which must be removed from a thread queue and
@@ -137,7 +137,7 @@ void _Region_MP_Send_extract_proxy (
 );
 
 /**
- *  @brief _Region_MP_Get_packet
+ *  @brief RegionMP Get Packet
  *
  *  This function is used to obtain a region mp packet.
  */

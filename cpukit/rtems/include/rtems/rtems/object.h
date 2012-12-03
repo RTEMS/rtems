@@ -89,7 +89,7 @@ typedef struct {
   _Objects_Build_name( _C1, _C2, _C3, _C4 )
 
 /**
- *  @brief Obtain name of object
+ *  @brief Obtain Name of Object
  *
  *  This directive returns the name associated with the specified
  *  object ID.
