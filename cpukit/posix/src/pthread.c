@@ -311,10 +311,6 @@ API_extensions_Control _POSIX_Threads_API_extensions = {
   .postdriver_hook = _POSIX_Threads_Initialize_user_threads
 };
 
-API_extensions_Post_switch_control _POSIX_Threads_API_extensions_post_switch = {
-  .hook = _POSIX_signals_Post_switch_extension
-};
-
 User_extensions_Control _POSIX_Threads_User_extensions = {
   { NULL, NULL },
   { { NULL, NULL }, NULL },
@@ -359,7 +355,6 @@ void _POSIX_Threads_Manager_initialization(void)
   _User_extensions_Add_API_set( &_POSIX_Threads_User_extensions );
 
   _API_extensions_Add( &_POSIX_Threads_API_extensions );
-  _API_extensions_Add_post_switch( &_POSIX_Threads_API_extensions_post_switch );
 
   /*
    *  If we supported MP, then here we would ...

@@ -114,6 +114,8 @@ int killinfo(
 
   _Thread_Disable_dispatch();
 
+  _POSIX_signals_Add_post_switch_extension();
+
   /*
    *  Is the currently executing thread interested?  If so then it will
    *  get it an execute it as soon as the dispatcher executes.

@@ -19,6 +19,7 @@
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/sigset.h>
+#include <rtems/score/apiext.h>
 
 #define _States_Is_interruptible_signal( _states ) \
   ( ((_states) & \
@@ -56,15 +57,18 @@ extern Chain_Control _POSIX_signals_Inactive_siginfo;
 
 extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 
+extern API_extensions_Post_switch_control _POSIX_signals_Post_switch;
+
 /*
  *  Internal routines
  */
 
 void _POSIX_signals_Manager_Initialization(void);
 
-void _POSIX_signals_Post_switch_extension(
-  Thread_Control  *the_thread
-);
+static inline void _POSIX_signals_Add_post_switch_extension(void)
+{
+  _API_extensions_Add_post_switch( &_POSIX_signals_Post_switch );
+}
 
 bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,

@@ -103,7 +103,7 @@ Watchdog_Control _POSIX_signals_Ualarm_timer;
  *  _POSIX_signals_Post_switch_extension
  */
 
-void _POSIX_signals_Post_switch_extension(
+static void _POSIX_signals_Post_switch_hook(
   Thread_Control  *the_thread
 )
 {
@@ -157,6 +157,10 @@ void _POSIX_signals_Post_switch_extension(
 
   _Thread_Executing->Wait.return_code = hold_errno;
 }
+
+API_extensions_Post_switch_control _POSIX_signals_Post_switch = {
+  .hook = _POSIX_signals_Post_switch_hook
+};
 
 /*
  *  _POSIX_signals_Manager_Initialization
