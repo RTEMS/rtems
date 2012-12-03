@@ -1651,6 +1651,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #include <rtems/posix/mutex.h>
   #include <rtems/posix/key.h>
   #include <rtems/posix/psignal.h>
+  #include <rtems/posix/pthread.h>
   #include <rtems/posix/rwlock.h>
   #include <rtems/posix/semaphore.h>
   #include <rtems/posix/spinlock.h>

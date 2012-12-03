@@ -34,6 +34,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priority.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
+include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/pthread.h
 include_rtems_posix_HEADERS += include/rtems/posix/ptimer.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h

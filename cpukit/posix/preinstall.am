@@ -80,6 +80,10 @@ $(PROJECT_INCLUDE)/rtems/posix/psignal.h: include/rtems/posix/psignal.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/psignal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/psignal.h
 
+$(PROJECT_INCLUDE)/rtems/posix/psignalimpl.h: include/rtems/posix/psignalimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/psignalimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/psignalimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/pthread.h: include/rtems/posix/pthread.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.h

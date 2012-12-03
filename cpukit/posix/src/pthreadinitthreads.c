@@ -24,7 +24,6 @@
 #include <rtems/posix/cancel.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/priority.h>
-#include <rtems/posix/psignal.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>

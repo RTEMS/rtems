@@ -13,13 +13,9 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
+#include <stddef.h>
 #include <signal.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/psignal.h>
+#include <unistd.h>
 
 /*
  *  3.4.2 Suspend Process Execution, P1003.1b-1993, p. 81

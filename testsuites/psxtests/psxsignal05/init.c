@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+
 #define TEST_NAME                "05"
 #define TEST_STRING              "User Signals"
 #define SIGNAL_ONE               SIGUSR1
@@ -20,7 +22,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <errno.h>
-#include <rtems/posix/psignal.h>
+#include <rtems/posix/psignalimpl.h>
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);

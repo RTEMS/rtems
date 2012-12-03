@@ -20,7 +20,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/psignal.h>
+#include <rtems/posix/sigset.h>
 #include <rtems/posix/time.h>
 #include <rtems/posix/timer.h>
 

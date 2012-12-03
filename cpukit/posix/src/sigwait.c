@@ -15,13 +15,9 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
+#include <stddef.h>
 #include <signal.h>
 #include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/psignal.h>
 
 int sigwait(
   const sigset_t  *set,

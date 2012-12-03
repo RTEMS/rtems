@@ -18,7 +18,7 @@
 
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
-#include <rtems/posix/psignal.h>
+#include <rtems/posix/psignalimpl.h>
 
 /*
  *  _POSIX_signals_Alarm_TSR

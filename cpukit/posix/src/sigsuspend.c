@@ -13,13 +13,11 @@
 #include "config.h"
 #endif
 
+#include <stddef.h>
 #include <assert.h>
 #include <signal.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/psignal.h>
 #include <rtems/seterr.h>
 
 int sigsuspend(
@@ -29,9 +27,6 @@ int sigsuspend(
   sigset_t            saved_signals_blocked;
   sigset_t            current_unblocked_signals;
   int                 status;
-  POSIX_API_Control  *api;
-
-  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  We use SIG_BLOCK and not SIG_SETMASK because there may be
