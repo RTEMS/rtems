@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Status Object Name Errors to Status Array
+ *  @ingroup ClassicStatus
+ */
+
 /*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -7,11 +14,6 @@
  */
 
 #include <rtems/rtems/status.h>
-
-/**
- *  This array is used to map SuperCore Object Handler return
- *  codes to Classic API status codes.
- */
 
 const rtems_status_code _Status_Object_name_errors_to_status[] = {
   /** This maps OBJECTS_SUCCESSFUL to RTEMS_SUCCESSFUL. */

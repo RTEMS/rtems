@@ -1,6 +1,11 @@
-/*
- *  Clock Manager - Get TOD in Time Value Format
+/**
+ *  @file
  *
+ *  @brief Obtain TOD in struct timeval Format
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

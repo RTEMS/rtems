@@ -97,21 +97,32 @@ typedef struct {
 RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
 
 /**
- *  @brief Message_queue_Manager_initialization
+ *  @brief Message Queue Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
 void _Message_queue_Manager_initialization(void);
 
 /**
- *  @brief rtems_message_queue_create
+ *  @brief RTEMS Create Message Queue
  *
  *  This routine implements the rtems_message_queue_create directive.  The
- *  message queue will have the name name.  If the attribute_set indicates
+ *  message queue will have the @a name.  If the @a attribute_set indicates
  *  that the message queue is to be limited in the number of messages
- *  that can be outstanding, then count indicates the maximum number of
+ *  that can be outstanding, then @a count indicates the maximum number of
  *  messages that will be held.  It returns the id of the created
- *  message queue in ID.
+ *  message queue in @a id.
+ * 
+ *  @param[in] name is the user defined queue name
+ *  @param[in] count is the maximum message and reserved buffer count
+ *  @param[in] max_message_size is the maximum size of each message
+ *  @param[in] attribute_set is the process method
+ *  @param[in] id is the pointer to queue
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the @a id will
+ *          be filled in with the queue id.
  */
 rtems_status_code rtems_message_queue_create(
   rtems_name       name,
@@ -296,10 +307,14 @@ rtems_status_code _Message_queue_Submit(
 Message_queue_Control *_Message_queue_Allocate (void);
 
 /**
- *  @brief Message_queue_Translate_core_message_queue_return_code
+ *  @brief Message queue Translate Core Message Queue Return Code
  *
- *  This function returns a RTEMS status code based on the core message queue
- *  status code specified.
+ *  This function returns a RTEMS status code based on
+ *  @a the_message_queue_status.
+ * 
+ *  @param[in] the_message_queue_status is the status code to translate
+ * 
+ *  @return translated RTEMS status code
  */
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
   uint32_t   the_message_queue_status

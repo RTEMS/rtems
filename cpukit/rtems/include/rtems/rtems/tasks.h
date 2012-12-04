@@ -324,11 +324,19 @@ rtems_status_code rtems_task_get_note(
 );
 
 /**
- *  @brief rtems_task_set_note
+ *  @brief RTEMS Set Task Note
  *
  *  This routine implements the rtems_task_set_note directive.  The
  *  value of the indicated notepad for the task associated with ID
  *  is returned in note.
+ * 
+ *  @param[in] id is the thread id
+ *  @param[in] notepad is the notepad number
+ *  @param[in] note is the note value
+ *  
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_task_set_note(
   rtems_id   id,
@@ -378,10 +386,16 @@ rtems_status_code rtems_task_suspend(
 );
 
 /**
- *  @brief rtems_task_resume
+ *  @brief RTEMS Resume Task
  *
  *  This routine implements the rtems_task_resume Directive.  The
  *  SUSPENDED state is cleared for task associated with ID.
+ * 
+ *  @param[in] id is the thread id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_task_resume(
   rtems_id   id

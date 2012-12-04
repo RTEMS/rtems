@@ -37,6 +37,8 @@
 #define _RTEMS_RTEMS_TIMER_H
 
 /**
+ *  @brief Instantiate RTEMS Timer Data
+ *  
  *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done

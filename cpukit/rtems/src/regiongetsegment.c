@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Region Segment
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,24 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_region_get_segment
- *
- *  This directive will obtain a segment from the given region.
- *
- *  Input parameters:
- *    id         - region id
- *    size       - segment size in bytes
- *    option_set - wait option
- *    timeout    - number of ticks to wait (0 means wait forever)
- *    segment    - pointer to segment address
- *
- *  Output parameters:
- *    segment    - pointer to segment address filled in
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_region_get_segment(
   rtems_id           id,

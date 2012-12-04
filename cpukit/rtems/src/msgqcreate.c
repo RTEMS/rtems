@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Create Message Queue
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,25 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_create
- *
- *  This directive creates a message queue by allocating and initializing
- *  a message queue data structure.
- *
- *  Input parameters:
- *    name             - user defined queue name
- *    count            - maximum message and reserved buffer count
- *    max_message_size - maximum size of each message
- *    attribute_set    - process method
- *    id               - pointer to queue
- *
- *  Output parameters:
- *    id                - queue id
- *    RTEMS_SUCCESSFUL  - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_message_queue_create(
   rtems_name       name,

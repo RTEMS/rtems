@@ -176,15 +176,26 @@ rtems_status_code rtems_region_delete(
 );
 
 /**
- *  @brief rtems_region_get_segment
+ *  @brief RTEMS Get Region Segment
  *
  *  This routine implements the rtems_region_get_segment directive.  It
- *  attempts to allocate a segment from the region associated with ID.
- *  If a segment of the requested size can be allocated, its address
- *  is returned in segment.  If no segment is available, then the task
+ *  attempts to allocate a segment from the region associated with @a id.
+ *  If a segment of the requested @a size size can be allocated, its address
+ *  is returned in @a segment.  If no segment is available, then the task
  *  may return immediately or block waiting for a segment with an optional
- *  timeout of timeout clock ticks.  Whether the task blocks or returns
- *  immediately is based on the no_wait option in the option_set.
+ *  timeout of @a timeout clock ticks.  Whether the task blocks or returns
+ *  immediately is based on the no_wait option in the @a option_set.
+ * 
+ *  @param[in] id is the region id
+ *  @param[in] size is the segment size in bytes
+ *  @param[in] option_set is the wait option
+ *  @param[in] timeout is the number of ticks to wait (0 means wait forever)
+ *  @param[in] segment is the pointer to segment address
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the segment will
+ *          be filled in with the segment address. 
  */
 rtems_status_code rtems_region_get_segment(
   rtems_id           id,

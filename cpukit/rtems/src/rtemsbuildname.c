@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Build an Object Name
+/**
+ *  @file
  *
+ *  @brief Build Thirty-Two Bit Object Name
+ *  @ingroup ClassicClassInfo
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

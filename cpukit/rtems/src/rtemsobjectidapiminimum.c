@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Get Least Valid API Number
+/**
+ *  @file
  *
+ *  @brief Get Lowest Valid API Index
+ *  @ingroup ClassicClassInfo
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

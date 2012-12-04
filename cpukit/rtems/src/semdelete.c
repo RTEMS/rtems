@@ -1,20 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Delete Semaphore
+ *  @ingroup ClassicSem
+ */
+
 /*
- *  Semaphore Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Semaphore Manager.
- *  This manager utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  Directives provided are:
- *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -46,21 +37,6 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
-
-/*
- *  rtems_semaphore_delete
- *
- *  This directive allows a thread to delete a semaphore specified by
- *  the semaphore id.  The semaphore is freed back to the inactive
- *  semaphore chain.
- *
- *  Input parameters:
- *    id - semaphore id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 #if defined(RTEMS_MULTIPROCESSING)
 #define SEMAPHORE_MP_OBJECT_WAS_DELETED _Semaphore_MP_Send_object_was_deleted

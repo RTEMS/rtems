@@ -183,6 +183,8 @@ typedef enum {
 #define RTEMS_STATUS_CODES_LAST  RTEMS_PROXY_BLOCKING
 
 /**
+ *  @brief Status Object Name Errors to Status Array
+ * 
  *  This array is used to map SuperCore Object Handler return
  *  codes to Classic API status codes.
  */

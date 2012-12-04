@@ -1,20 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Semaphore Manager Initialization
+ *  @ingroup ClassicSem
+ */
+
 /*
- *  Semaphore Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Semaphore Manager.
- *  This manager utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  Directives provided are:
- *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -47,16 +38,6 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
-
-/*
- *  _Semaphore_Manager_initialization
- *
- *  This routine initializes all semaphore manager related data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
 
 void _Semaphore_Manager_initialization(void)
 {

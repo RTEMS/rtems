@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Obtain Name of API
+/**
+ *  @file
  *
+ *  @brief Get Class Name
+ *  @ingroup ClassicClassInfo
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

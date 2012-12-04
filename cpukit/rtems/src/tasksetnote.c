@@ -1,6 +1,11 @@
-/*
- *  RTEMS Task Manager
+/**
+ *  @file
  *
+ *  @brief RTEMS Set Task Note
+ *  @ingroup ClassicTasks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,22 +33,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- * rtems_task_set_note
- *
- *  This directive sets the specified notepad contents to the given
- *  note.
- *
- *  Input parameters:
- *    id      - thread id
- *    notepad - notepad number
- *    note    - note value
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_task_set_note(
   rtems_id id,

@@ -469,6 +469,9 @@ void _Event_Surrender(
   States_Control                    wait_state
 );
 
+/**
+ *  @brief Timeout Event
+ */
 void _Event_Timeout(
   Objects_Id  id,
   void       *arg

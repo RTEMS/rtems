@@ -77,7 +77,7 @@ typedef struct {
 RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
 
 /**
- *  @brief _Dual_ported_memory_Manager_initialization
+ *  @brief Dual Ported Memory Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */

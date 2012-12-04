@@ -104,7 +104,7 @@ typedef struct {
 RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
 
 /**
- *  @brief Semaphore_Manager_initialization
+ *  @brief Semaphore Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
@@ -152,10 +152,16 @@ rtems_status_code rtems_semaphore_ident(
 );
 
 /**
- *  @brief rtems_semaphore_delete
+ *  @brief RTEMS Delete Semaphore
  *
  *  This routine implements the rtems_semaphore_delete directive.  The
  *  semaphore indicated by ID is deleted.
+ * 
+ *  @param[in] id is the semaphore id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_semaphore_delete(
   rtems_id   id

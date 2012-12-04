@@ -1,6 +1,11 @@
-/*
- *  Event Manager
+/**
+ *  @file
  *
+ *  @brief Timeout Event
+ *  @ingroup ClassicEvent
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

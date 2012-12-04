@@ -65,7 +65,7 @@ typedef struct {
  */
 
 /**
- *  @brief Signal_MP_Send_request_packet
+ *  @brief Signal MP Send Request Packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive operation can be initiated on another node.
@@ -77,7 +77,7 @@ rtems_status_code _Signal_MP_Send_request_packet (
 );
 
 /**
- *  @brief Signal_MP_Send_response_packet
+ *  @brief Signal MP Send Response Packet
  *
  *  This routine performs a remote procedure call so that a
  *  directive can be performed on another node.
@@ -88,7 +88,7 @@ void _Signal_MP_Send_response_packet (
 );
 
 /**
- *  @brief Signal_MP_Process_packet
+ *  @brief Signal MP Process Packet
  *
  *  This routine performs the actions specific to this package for
  *  the request from another node.
@@ -120,7 +120,7 @@ void _Signal_MP_Process_packet (
  */
 
 /**
- *  @brief Signal_MP_Get_packet
+ *  @brief Signal MP Get Packet
  *
  *  This function is used to obtain a signal mp packet.
  */

@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Message Queue Manager Initialization
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -32,17 +36,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  _Message_queue_Manager_initialization
- *
- *  This routine initializes all message queue manager related
- *  data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
 
 void _Message_queue_Manager_initialization(void)
 {

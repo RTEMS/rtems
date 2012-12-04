@@ -167,7 +167,7 @@ rtems_status_code rtems_object_set_name(
 /**
  *  @brief Get Class Portion of Object Id
  *
- *  This function returns the class portion of the ID.
+ *  This function returns the class portion of the @a _id ID.
  *
  *  @param[in] _id is the Id of the object to obtain the class from
  *
@@ -327,7 +327,7 @@ const char *rtems_object_get_api_class_name(
 );
 
 /**
- *  @brief Get Class Name
+ *  @brief Get Class Information
  *
  *  This method returns a string containing the name of the
  *  @a the_class from the specified @a api.

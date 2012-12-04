@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Extract Class From Id
+/**
+ *  @file
  *
+ *  @brief Get Class Portion of Object Id
+ *  @ingroup ClassicClassInfo
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

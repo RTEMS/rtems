@@ -1,6 +1,11 @@
-/*
- *  Dual Port Memory Manager
+/**
+ *  @file
  *
+ *  @brief Dual Ported Memory Manager Initialization
+ *  @ingroup ClassicDPMEM
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,17 +26,6 @@
 #include <rtems/rtems/dpmem.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-
-/*
- *  _Dual_ported_memory_Manager_initialization
- *
- *  This routine initializes all dual-ported memory manager related
- *  data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
 
 void _Dual_ported_memory_Manager_initialization(void)
 {
