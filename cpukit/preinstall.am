@@ -272,6 +272,10 @@ $(PROJECT_INCLUDE)/rtems/nvdisk-sram.h: libblock/include/rtems/nvdisk-sram.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/nvdisk-sram.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/nvdisk-sram.h
 
+$(PROJECT_INCLUDE)/rtems/sparse-disk.h: libblock/include/rtems/sparse-disk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sparse-disk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sparse-disk.h
+
 $(PROJECT_INCLUDE)/rtems/ide_part_table.h: libblock/include/rtems/ide_part_table.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ide_part_table.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h

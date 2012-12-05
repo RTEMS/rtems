@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sparsedisk01
+
+directives:
+
+  - rtems_sparse_disk_create()
+  - rtems_sparse_disk_register()
+
+concepts:
+
+  - Ensures that the sparse disk works.

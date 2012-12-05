@@ -124,6 +124,7 @@ include_rtems_HEADERS += libblock/include/rtems/flashdisk.h
 include_rtems_HEADERS += libblock/include/rtems/ramdisk.h
 include_rtems_HEADERS += libblock/include/rtems/nvdisk.h
 include_rtems_HEADERS += libblock/include/rtems/nvdisk-sram.h
+include_rtems_HEADERS += libblock/include/rtems/sparse-disk.h
 include_rtems_HEADERS += libblock/include/rtems/ide_part_table.h
 include_rtems_HEADERS += libblock/include/rtems/bdpart.h
 include_rtems_HEADERS += libblock/include/rtems/media.h

@@ -43,6 +43,7 @@ AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+sparsedisk01/Makefile
 block16/Makefile
 mghttpd01/Makefile
 block15/Makefile
