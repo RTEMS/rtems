@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = 
+SUBDIRS += fsdosfswrite01
 SUBDIRS += fsdosfsformat01
 SUBDIRS += fsfseeko01
 SUBDIRS += fsdosfssync01

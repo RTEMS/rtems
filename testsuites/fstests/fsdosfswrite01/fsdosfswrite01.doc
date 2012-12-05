@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsdosfswrite01
+
+directives:
+ - fat_file_write()
+ - fat_file_write_fat32_or_non_root_dir()
+
+concepts:
+ - Avoiding uneccessary device reads is to make sure that writing to the device
+   does not get slowed down unneccesarily.
+ - Verify that appending data to a file does not result in reading the new
+   clusters from device.
+ - Verify writing a whole cluster does not result in reading the cluster from
+   device.

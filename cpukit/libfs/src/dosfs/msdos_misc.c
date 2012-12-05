@@ -641,7 +641,7 @@ msdos_set_dir_wrt_time_and_date(
     msdos_date_unix2dos(fat_fd->mtime, &date, &time_val);
 
     /*
-     * calculate input for _fat_block_write: convert (cluster num, offset) to
+     * calculate input for fat_sector_write: convert (cluster num, offset) to
      * (sector num, new offset)
      */
     sec = fat_cluster_num_to_sector_num(&fs_info->fat, fat_fd->dir_pos.sname.cln);
@@ -650,12 +650,12 @@ msdos_set_dir_wrt_time_and_date(
     byte = fat_fd->dir_pos.sname.ofs & (fs_info->fat.vol.bps - 1);
 
     time_val = CT_LE_W(time_val);
-    ret1 = _fat_block_write(&fs_info->fat, sec, byte + MSDOS_FILE_WTIME_OFFSET,
+    ret1 = fat_sector_write(&fs_info->fat, sec, byte + MSDOS_FILE_WTIME_OFFSET,
                             2, (char *)(&time_val));
     date = CT_LE_W(date);
-    ret2 = _fat_block_write(&fs_info->fat, sec, byte + MSDOS_FILE_WDATE_OFFSET,
+    ret2 = fat_sector_write(&fs_info->fat, sec, byte + MSDOS_FILE_WDATE_OFFSET,
                             2, (char *)(&date));
-    ret3 = _fat_block_write(&fs_info->fat, sec, byte + MSDOS_FILE_ADATE_OFFSET,
+    ret3 = fat_sector_write(&fs_info->fat, sec, byte + MSDOS_FILE_ADATE_OFFSET,
                             2, (char *)(&date));
 
     if ( (ret1 < 0) || (ret2 < 0) || (ret3 < 0) )
@@ -691,7 +691,7 @@ msdos_set_first_cluster_num(
     uint32_t         byte = 0;
 
     /*
-     * calculate input for _fat_block_write: convert (cluster num, offset) to
+     * calculate input for fat_sector_write: convert (cluster num, offset) to
      * (sector num, new offset)
      */
     sec = fat_cluster_num_to_sector_num(&fs_info->fat, fat_fd->dir_pos.sname.cln);
@@ -700,11 +700,11 @@ msdos_set_first_cluster_num(
     byte = fat_fd->dir_pos.sname.ofs & (fs_info->fat.vol.bps - 1);
 
     le_cl_low = CT_LE_W((uint16_t  )(new_cln & 0x0000FFFF));
-    ret1 = _fat_block_write(&fs_info->fat, sec,
+    ret1 = fat_sector_write(&fs_info->fat, sec,
                             byte + MSDOS_FIRST_CLUSTER_LOW_OFFSET, 2,
                             (char *)(&le_cl_low));
     le_cl_hi = CT_LE_W((uint16_t  )((new_cln & 0xFFFF0000) >> 16));
-    ret2 = _fat_block_write(&fs_info->fat, sec,
+    ret2 = fat_sector_write(&fs_info->fat, sec,
                             byte + MSDOS_FIRST_CLUSTER_HI_OFFSET, 2,
                             (char *)(&le_cl_hi));
     if ( (ret1 < 0) || (ret2 < 0) )
@@ -742,7 +742,7 @@ msdos_set_file_size(
     byte = (fat_fd->dir_pos.sname.ofs & (fs_info->fat.vol.bps - 1));
 
     le_new_length = CT_LE_L((fat_fd->fat_file_size));
-    ret = _fat_block_write(&fs_info->fat, sec, byte + MSDOS_FILE_SIZE_OFFSET, 4,
+    ret = fat_sector_write(&fs_info->fat, sec, byte + MSDOS_FILE_SIZE_OFFSET, 4,
                            (char *)(&le_new_length));
     if ( ret < 0 )
         return -1;
@@ -802,7 +802,7 @@ msdos_set_first_char4file_name(
                       (start.ofs >> fs_info->fat.vol.sec_log2));
       uint32_t byte = (start.ofs & (fs_info->fat.vol.bps - 1));
 
-      ret = _fat_block_write(&fs_info->fat, sec, byte + MSDOS_FILE_NAME_OFFSET,
+      ret = fat_sector_write(&fs_info->fat, sec, byte + MSDOS_FILE_NAME_OFFSET,
                              1, &fchar);
       if (ret < 0)
         return -1;

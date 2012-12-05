@@ -440,6 +440,20 @@ fat_cluster_num_to_sector512_num(
 }
 
 static inline uint32_t
+ fat_block_num_to_cluster_num (const fat_fs_info_t *fs_info,
+                               const uint32_t block_number)
+{
+  return block_number >> (fs_info->vol.bpc_log2 - fs_info->vol.bytes_per_block_log2);
+}
+
+static inline uint32_t
+ fat_block_num_to_sector_num (const fat_fs_info_t *fs_info,
+                              const uint32_t block_number)
+{
+  return block_number << (fs_info->vol.bytes_per_block_log2 - fs_info->vol.sec_log2);
+}
+
+static inline uint32_t
  fat_sector_num_to_block_num (const fat_fs_info_t *fs_info,
                               const uint32_t sector_number)
 {
@@ -481,18 +495,26 @@ _fat_block_read(fat_fs_info_t                        *fs_info,
                 void                                 *buff);
 
 ssize_t
-_fat_block_write(fat_fs_info_t                        *fs_info,
+fat_cluster_write(fat_fs_info_t                    *fs_info,
+                    uint32_t                          start_cln,
+                    uint32_t                          offset,
+                    uint32_t                          count,
+                    const void                       *buff,
+                    bool                              overwrite_cluster);
+
+ssize_t
+fat_sector_write(fat_fs_info_t                        *fs_info,
                  uint32_t                              start,
                  uint32_t                              offset,
                  uint32_t                              count,
                  const void                           *buff);
 
-int
-_fat_block_zero(fat_fs_info_t                         *fs_info,
-                 uint32_t                              start,
-                 uint32_t                              offset,
-                 uint32_t                              count);
-
+ssize_t
+fat_cluster_set(fat_fs_info_t                        *fs_info,
+                  uint32_t                              start,
+                  uint32_t                              offset,
+                  uint32_t                              count,
+                  uint8_t                               pattern);
 
 
 int

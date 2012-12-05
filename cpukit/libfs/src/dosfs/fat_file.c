@@ -339,6 +339,110 @@ fat_file_read(
     return cmpltd;
 }
 
+/* fat_is_fat12_or_fat16_root_dir --
+ *     Returns true for FAT12 root directories respectively FAT16
+ *     root directories. Returns false for everything else.
+ *
+ *  PARAMETERS:
+ *      fat_fd        - fat-file descriptor
+ *      volume_type   - type of fat volume: FAT_FAT12 or FAT_FAT16 or FAT_FAT32
+ *
+ *  RETURNS:
+ *      true if conditions for FAT12 root directory or FAT16 root directory
+ *      match, false if not
+ */
+static bool
+ fat_is_fat12_or_fat16_root_dir (const fat_file_fd_t *fat_fd,
+                                 const uint8_t volume_type)
+{
+    return (FAT_FD_OF_ROOT_DIR(fat_fd)) && (volume_type & (FAT_FAT12 | FAT_FAT16));
+}
+
+/* fat_file_write_fat32_or_non_root_dir --
+ *     Execute fat file write for FAT32 respectively for non-root
+ *     directories of FAT12 or FAT16
+ *
+ * PARAMETERS:
+ *     fs_info          - FS info
+ *     fat_fd           - fat-file descriptor
+ *     start            - offset(in bytes) to write from
+ *     count            - count
+ *     buf              - buffer provided by user
+ *     file_cln_initial - initial current cluster number of the file
+ *
+ * RETURNS:
+ *     number of bytes actually written to the file on success, or -1 if
+ *     error occured (errno set appropriately)
+ */
+static ssize_t
+ fat_file_write_fat32_or_non_root_dir(
+     fat_fs_info_t                        *fs_info,
+     fat_file_fd_t                        *fat_fd,
+     const uint32_t                        start,
+     const uint32_t                        count,
+     const uint8_t                        *buf,
+     const uint32_t                        file_cln_initial)
+{
+    int            rc = RC_OK;
+    uint32_t       cmpltd = 0;
+    uint32_t       cur_cln = 0;
+    uint32_t       save_cln = 0; /* FIXME: This might be incorrect, cf. below */
+    uint32_t       start_cln = start >> fs_info->vol.bpc_log2;
+    uint32_t       ofs_cln = start - (start_cln << fs_info->vol.bpc_log2);
+    uint32_t       ofs_cln_save = ofs_cln;
+    uint32_t       bytes_to_write = count;
+    uint32_t       file_cln_cnt;
+    ssize_t        ret;
+    uint32_t       c;
+    bool           overwrite_cluster = false;
+
+    rc = fat_file_lseek(fs_info, fat_fd, start_cln, &cur_cln);
+    if (RC_OK == rc)
+    {
+        file_cln_cnt = cur_cln - fat_fd->cln;
+        while (   (RC_OK == rc)
+               && (bytes_to_write > 0))
+        {
+            c = MIN(bytes_to_write, (fs_info->vol.bpc - ofs_cln));
+
+            if (file_cln_initial < file_cln_cnt)
+                overwrite_cluster = true;
+
+            ret = fat_cluster_write(fs_info,
+                                      cur_cln,
+                                      ofs_cln,
+                                      c,
+                                      &buf[cmpltd],
+                                      overwrite_cluster);
+            if (0 > ret)
+              rc = -1;
+
+            if (RC_OK == rc)
+            {
+                ++file_cln_cnt;
+                bytes_to_write -= ret;
+                cmpltd += ret;
+                save_cln = cur_cln;
+                if (0 < bytes_to_write)
+                  rc = fat_get_fat_cluster(fs_info, cur_cln, &cur_cln);
+
+                ofs_cln = 0;
+            }
+        }
+
+        /* update cache */
+        /* XXX: check this - I'm not sure :( */
+        fat_fd->map.file_cln = start_cln +
+                               ((ofs_cln_save + cmpltd - 1) >> fs_info->vol.bpc_log2);
+        fat_fd->map.disk_cln = save_cln;
+    }
+
+    if (RC_OK != rc)
+      return rc;
+    else
+      return cmpltd;
+}
+
 /* fat_file_write --
  *     Write 'count' bytes of data from user supplied buffer to fat-file
  *     starting at offset 'start'. This interface hides the architecture
@@ -364,18 +468,15 @@ fat_file_write(
     const uint8_t                        *buf
     )
 {
-    int            rc = 0;
-    ssize_t        ret = 0;
+    int            rc = RC_OK;
+    ssize_t        ret;
     uint32_t       cmpltd = 0;
-    uint32_t       cur_cln = 0;
-    uint32_t       save_cln = 0; /* FIXME: This might be incorrect, cf. below */
-    uint32_t       cl_start = 0;
-    uint32_t       ofs = 0;
-    uint32_t       save_ofs;
-    uint32_t       sec = 0;
-    uint32_t       byte = 0;
+    uint32_t       byte;
     uint32_t       c = 0;
     bool           zero_fill = start > fat_fd->fat_file_size;
+    uint32_t       file_cln_initial = fat_fd->map.file_cln;
+    uint32_t       cln;
+
 
     if ( count == 0 )
         return cmpltd;
@@ -387,66 +488,51 @@ fat_file_write(
         count = fat_fd->size_limit - start;
 
     rc = fat_file_extend(fs_info, fat_fd, zero_fill, start + count, &c);
-    if (rc != RC_OK)
-        return rc;
-
-    /*
-     * check whether there was enough room on device to locate
-     * file of 'start + count' bytes
-     */
-    if (c != (start + count))
-        count = c - start;
-
-    if ((FAT_FD_OF_ROOT_DIR(fat_fd)) &&
-        (fs_info->vol.type & (FAT_FAT12 | FAT_FAT16)))
+    if (RC_OK == rc)
     {
-        sec = fat_cluster_num_to_sector_num(fs_info, fat_fd->cln);
-        sec += (start >> fs_info->vol.sec_log2);
-        byte = start & (fs_info->vol.bps - 1);
+        /*
+         * check whether there was enough room on device to locate
+         * file of 'start + count' bytes
+         */
+        if (c != (start + count))
+            count = c - start;
 
-        ret = _fat_block_write(fs_info, sec, byte, count, buf);
-        if ( ret < 0 )
-            return -1;
+        /* for the root directory of FAT12 and FAT16 we need this special handling */
+        if (fat_is_fat12_or_fat16_root_dir(fat_fd, fs_info->vol.type))
+        {
+            cln = fat_fd->cln;
+            cln += (start >> fs_info->vol.bpc_log2);
+            byte = start & (fs_info->vol.bpc -1);
 
-        return ret;
+            ret = fat_cluster_write(fs_info,
+                                      cln,
+                                      byte,
+                                      count,
+                                      buf,
+                                      false);
+            if (0 > ret)
+              rc = -1;
+            else
+              cmpltd = ret;
+        }
+        else
+        {
+            ret = fat_file_write_fat32_or_non_root_dir(fs_info,
+                                                       fat_fd,
+                                                       start,
+                                                       count,
+                                                       buf,
+                                                       file_cln_initial);
+            if (0 > ret)
+              rc = -1;
+            else
+              cmpltd = ret;
+        }
     }
-
-    cl_start = start >> fs_info->vol.bpc_log2;
-    save_ofs = ofs = start & (fs_info->vol.bpc - 1);
-
-    rc = fat_file_lseek(fs_info, fat_fd, cl_start, &cur_cln);
-    if (rc != RC_OK)
+    if (RC_OK != rc)
         return rc;
-
-    while (count > 0)
-    {
-        c = MIN(count, (fs_info->vol.bpc - ofs));
-
-        sec = fat_cluster_num_to_sector_num(fs_info, cur_cln);
-        sec += (ofs >> fs_info->vol.sec_log2);
-        byte = ofs & (fs_info->vol.bps - 1);
-
-        ret = _fat_block_write(fs_info, sec, byte, c, buf + cmpltd);
-        if ( ret < 0 )
-            return -1;
-
-        count -= c;
-        cmpltd += c;
-        save_cln = cur_cln;
-        rc = fat_get_fat_cluster(fs_info, cur_cln, &cur_cln);
-        if ( rc != RC_OK )
-            return rc;
-
-        ofs = 0;
-    }
-
-    /* update cache */
-    /* XXX: check this - I'm not sure :( */
-    fat_fd->map.file_cln = cl_start +
-                           ((save_ofs + cmpltd - 1) >> fs_info->vol.bpc_log2);
-    fat_fd->map.disk_cln = save_cln;
-
-    return cmpltd;
+    else
+        return cmpltd;
 }
 
 /* fat_file_extend --
@@ -482,6 +568,7 @@ fat_file_extend(
     uint32_t       last_cl = 0;
     uint32_t       bytes_remain = 0;
     uint32_t       cls_added;
+    ssize_t        bytes_written;
 
     *a_length = new_length;
 
@@ -508,20 +595,14 @@ fat_file_extend(
         uint32_t cl_start = start >> fs_info->vol.bpc_log2;
         uint32_t ofs = start & (fs_info->vol.bpc - 1);
         uint32_t cur_cln;
-        uint32_t sec;
-        uint32_t byte;
 
         rc = fat_file_lseek(fs_info, fat_fd, cl_start, &cur_cln);
         if (rc != RC_OK)
             return rc;
 
-        sec = fat_cluster_num_to_sector_num(fs_info, cur_cln);
-        sec += ofs >> fs_info->vol.sec_log2;
-        byte = ofs & (fs_info->vol.bps - 1);
-
-        rc = _fat_block_zero(fs_info, sec, byte, bytes_remain);
-        if (rc != RC_OK)
-            return rc;
+        bytes_written = fat_cluster_set (fs_info, cur_cln, ofs, bytes_remain, 0);
+        if (bytes_remain != bytes_written)
+            return -1;
     }
 
     /*
