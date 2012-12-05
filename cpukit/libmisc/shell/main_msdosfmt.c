@@ -36,7 +36,7 @@ static int rtems_shell_main_msdos_format(
     .fattype =             MSDOS_FMT_FATANY,
     .media =               0,
     .quick_format =        TRUE,
-    .cluster_align =       0,
+    .skip_alignment =      0,
     .info_level =          0
   };
 
@@ -149,7 +149,7 @@ static int rtems_shell_main_msdos_format(
     printf (" %-20s: %i\n", "fat type", rqdata.fattype);
     printf (" %-20s: %d\n", "media", rqdata.media);
     printf (" %-20s: %d\n", "quick_format", rqdata.quick_format);
-    printf (" %-20s: %" PRIu32 "\n", "cluster align", rqdata.cluster_align);
+    printf (" %-20s: %s\n", "skip_alignment", (0 == rqdata.skip_alignment) ? "false" : "true");
   }
 
   if (msdos_format (driver, &rqdata) < 0) {

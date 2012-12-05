@@ -49,12 +49,9 @@ typedef struct {
   uint8_t   fattype;              /* request value: MSDOS_FMT_FAT12/16/32  */
   uint8_t   media;                /* media code. default: 0xF8             */
   bool      quick_format;         /* true: do not clear out data sectors   */
-  uint32_t  cluster_align;        /* requested value: cluster alignment    */
-                                  /*   make sector number of first sector  */
-                                  /*   of first cluster divisible by this  */
-                                  /*   value. This can optimize clusters   */
-                                  /*   to be located at start of track     */
-                                  /*   or start of flash block             */
+  bool      skip_alignment;       /* do not align FAT, data cluster, and   */
+                                  /* root directory for FAT12 and FAT16 to */
+                                  /* a cluster boundary                    */
   int       info_level;           /* The amount of info to output          */
 } msdos_format_request_param_t;
 

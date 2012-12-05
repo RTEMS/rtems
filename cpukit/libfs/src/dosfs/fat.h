@@ -271,6 +271,7 @@ extern "C" {
 #define FAT_TOTAL_FSINFO_SIZE               512
 
 #define MS_BYTES_PER_CLUSTER_LIMIT           0x8000     /* 32K */
+#define MS_BYTES_PER_CLUSTER_LIMIT_FAT12     0x1000     /*  4K */
 
 #define FAT_BR_EXT_FLAGS_MIRROR              0x0080
 

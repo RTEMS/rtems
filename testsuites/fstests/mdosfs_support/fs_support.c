@@ -34,7 +34,7 @@ msdos_format_request_param_t rqdata = {
     fattype:             MSDOS_FMT_FATANY,
     media:               0,
     quick_format:        FALSE,
-    cluster_align:       0,
+    skip_alignment:      0,
     info_level:          0
 };
 

@@ -64,7 +64,22 @@ typedef struct {
   char     VolLabel[FAT_BR_VOLLAB_SIZE+1];
   bool     VolLabel_present;
   uint32_t vol_id;
+  bool     skip_alignment;
 }  msdos_format_param_t;
+
+/*
+ * Align to cluster borders
+ */
+static uint32_t
+ loc_align_object (const uint32_t sectors,
+                   const uint32_t clustersize,
+                   const bool     skip_alignment)
+{
+  if (! skip_alignment)
+    return (sectors + clustersize - 1) & ~(clustersize - 1);
+  else
+    return sectors;
+}
 
 /*
  * Formatted output.
@@ -278,9 +293,12 @@ static int msdos_format_eval_sectors_per_cluster
 \*-------------------------------------------------------------------------*/
  int       fattype,                  /* type code of FAT (FAT_FAT12 ...) */
  uint32_t  bytes_per_sector,         /* byte count per sector (512)      */
- uint32_t  fatdata_sec_cnt,          /* sectors available for FAT and data */
+ const uint32_t  total_sector_cnt,   /* total number of secters per volume */
+ const uint32_t  rsvd_sector_cnt,    /* number of reserved sectors */
+ const uint32_t  root_dir_sector_cnt,/* number of sectors for the root dir */
  uint8_t   fat_num,                  /* number of fat copies             */
  uint32_t  sectors_per_cluster,      /* sectors per cluster (requested)  */
+ const bool skip_alignment,          /* true for no cluster alignment */
  uint32_t *sectors_per_cluster_adj,  /* ret: sec per cluster (granted)   */
  uint32_t *sectors_per_fat_ptr       /* ret: sectors needed for one FAT  */
  )
@@ -296,6 +314,8 @@ static int msdos_format_eval_sectors_per_cluster
   uint32_t fat_capacity;
   uint32_t sectors_per_fat;
   uint32_t data_cluster_cnt;
+  uint32_t fatdata_sect_cnt;
+  uint32_t fat_sectors_cnt;
   /*
    * ensure, that maximum cluster size (32KByte) is not exceeded
    */
@@ -310,27 +330,39 @@ static int msdos_format_eval_sectors_per_cluster
      * - compute storage size for FAT
      * - subtract from total cluster count
      */
-    fatdata_cluster_cnt = fatdata_sec_cnt/sectors_per_cluster;
+    fatdata_sect_cnt = total_sector_cnt
+      - loc_align_object (rsvd_sector_cnt, sectors_per_cluster, skip_alignment);
     if (fattype == FAT_FAT12) {
-      fat_capacity = fatdata_cluster_cnt * 3 / 2;
+      fatdata_sect_cnt    = fatdata_sect_cnt
+        - loc_align_object (root_dir_sector_cnt, sectors_per_cluster, skip_alignment);
+      fatdata_cluster_cnt = fatdata_sect_cnt/sectors_per_cluster;
+      fat_capacity        = fatdata_cluster_cnt * 3 / 2;
     }
     else if (fattype == FAT_FAT16) {
-      fat_capacity = fatdata_cluster_cnt * 2;
+      fatdata_sect_cnt    = fatdata_sect_cnt
+        - loc_align_object (root_dir_sector_cnt, sectors_per_cluster, skip_alignment);
+      fatdata_cluster_cnt = fatdata_sect_cnt/sectors_per_cluster;
+      fat_capacity        = fatdata_cluster_cnt * 2;
     }
     else { /* FAT32 */
-      fat_capacity = fatdata_cluster_cnt * 4;
+      fatdata_cluster_cnt = fatdata_sect_cnt/sectors_per_cluster;
+      fat_capacity        = fatdata_cluster_cnt * 4;
     }
 
     sectors_per_fat = ((fat_capacity
 			+ (bytes_per_sector - 1))
 		       / bytes_per_sector);
 
+    fat_sectors_cnt = loc_align_object (sectors_per_fat * fat_num,
+                                        sectors_per_cluster,
+                                        skip_alignment);
+
     data_cluster_cnt = (fatdata_cluster_cnt -
-			(((sectors_per_fat * fat_num)
+			((fat_sectors_cnt
 			  + (sectors_per_cluster - 1))
 			 / sectors_per_cluster));
     /*
-     * data cluster count too big? then make sectors bigger
+     * data cluster count too big? Then make clusters bigger
      */
     if (((fattype == FAT_FAT12) && (data_cluster_cnt > FAT_FAT12_MAX_CLN)) ||
         ((fattype == FAT_FAT16) && (data_cluster_cnt > FAT_FAT16_MAX_CLN))) {
@@ -342,7 +374,12 @@ static int msdos_format_eval_sectors_per_cluster
     /*
      * when maximum cluster size is exceeded, we have invalid data, abort...
      */
-    if ((sectors_per_cluster * bytes_per_sector)
+    if (fattype == FAT_FAT12) {
+      if (MS_BYTES_PER_CLUSTER_LIMIT_FAT12 < (sectors_per_cluster * bytes_per_sector)) {
+        ret_val = EINVAL;
+        finished = true;
+      }
+    } else if ((sectors_per_cluster * bytes_per_sector)
 	> MS_BYTES_PER_CLUSTER_LIMIT) {
       ret_val = EINVAL;
       finished = true;
@@ -352,11 +389,11 @@ static int msdos_format_eval_sectors_per_cluster
   if (ret_val != 0) {
     rtems_set_errno_and_return_minus_one(ret_val);
   }
-  else {
-    *sectors_per_cluster_adj = sectors_per_cluster;
-    *sectors_per_fat_ptr     = sectors_per_fat;
-    return 0;
-  }
+
+  *sectors_per_cluster_adj = sectors_per_cluster;
+  *sectors_per_fat_ptr     = fat_sectors_cnt / fat_num;
+
+  return 0;
 }
 
 
@@ -381,7 +418,6 @@ static int msdos_format_determine_fmt_params
 \*=========================================================================*/
 {
   int ret_val = 0;
-  uint32_t fatdata_sect_cnt;
   uint32_t onebit;
   uint32_t sectors_per_cluster_adj = 0;
   uint64_t total_size = 0;
@@ -393,7 +429,8 @@ static int msdos_format_determine_fmt_params
    * At least one thing we don't have to magically guess...
    */
   if (ret_val == 0) {
-    ret_val = rtems_disk_fd_get_block_size(fd, &fmt_params->bytes_per_sector);
+    ret_val = rtems_disk_fd_get_media_block_size(fd, &fmt_params->bytes_per_sector);
+
   }
   if (ret_val == 0) {
     ret_val = rtems_disk_fd_get_block_count(fd, &fmt_params->totl_sector_cnt);
@@ -542,6 +579,10 @@ static int msdos_format_determine_fmt_params
     }
   }
 
+  if (ret_val == 0 && rqdata != NULL) {
+    fmt_params->skip_alignment = rqdata->skip_alignment;
+  }
+
   if (ret_val == 0) {
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                          "sectors per cluster: %d\n", fmt_params->sectors_per_cluster);
@@ -588,10 +629,6 @@ static int msdos_format_determine_fmt_params
        / fmt_params->bytes_per_sector);
   }
   if (ret_val == 0) {
-    fatdata_sect_cnt = (fmt_params->totl_sector_cnt -
-			fmt_params->rsvd_sector_cnt -
-			fmt_params->root_dir_sectors);
-
     /*
      * check values to get legal arrangement of FAT type and cluster count
      */
@@ -599,12 +636,30 @@ static int msdos_format_determine_fmt_params
     ret_val = msdos_format_eval_sectors_per_cluster
       (fmt_params->fattype,
        fmt_params->bytes_per_sector,
-       fatdata_sect_cnt,
+       fmt_params->totl_sector_cnt,
+       fmt_params->rsvd_sector_cnt,
+       fmt_params->root_dir_sectors,
        fmt_params->fat_num,
        fmt_params->sectors_per_cluster,
+       fmt_params->skip_alignment,
        &sectors_per_cluster_adj,
        &(fmt_params->sectors_per_fat));
     fmt_params->sectors_per_cluster = sectors_per_cluster_adj;
+  }
+
+  if (0 == ret_val)
+  {
+    if (FAT_FAT32 != fmt_params->fattype)
+    {
+      fmt_params->files_per_root_dir = loc_align_object (fmt_params->root_dir_sectors,
+                                                         fmt_params->sectors_per_cluster,
+                                                         fmt_params->skip_alignment)
+                                       * (fmt_params->bytes_per_sector / FAT_DIRENTRY_SIZE);
+    }
+
+    fmt_params->rsvd_sector_cnt = loc_align_object (fmt_params->rsvd_sector_cnt,
+                                                    fmt_params->sectors_per_cluster,
+                                                    fmt_params->skip_alignment);
   }
 
   /*
@@ -1064,6 +1119,8 @@ int msdos_format
    * allocate directory in a FAT32 FS
    */
   if (ret_val == 0) {
+    uint32_t start_sector;
+
     /*
      * empty sector: all clusters are free/do not link further on
      */
@@ -1106,15 +1163,19 @@ int msdos_format
        */
       FAT_SET_VAL32(tmp_sec,8,FAT_FAT32_EOC);
     }
+
+    start_sector = loc_align_object (fmt_params.rsvd_sector_cnt,
+                                     fmt_params.sectors_per_cluster,
+                                     fmt_params.skip_alignment);
     for (i = 0;
 	 (i < fmt_params.fat_num) && (ret_val == 0);
 	 i++) {
       ret_val = msdos_format_write_sec
-	(fd,
-	 fmt_params.rsvd_sector_cnt
-	 + (i * fmt_params.sectors_per_fat),
-	 fmt_params.bytes_per_sector,
-	 tmp_sec);
+        (fd,
+         start_sector
+         + (i * fmt_params.sectors_per_fat),
+         fmt_params.bytes_per_sector,
+         tmp_sec);
     }
   }
   /*
