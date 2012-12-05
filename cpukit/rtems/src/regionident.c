@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Region Name to Id
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,22 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_region_ident
- *
- *  This directive returns the system ID associated with
- *  the region name.
- *
- *  Input parameters:
- *    name - user defined region name
- *    id   - pointer to region id
- *
- *  Output parameters:
- *    *id      - region id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_region_ident(
   rtems_name  name,

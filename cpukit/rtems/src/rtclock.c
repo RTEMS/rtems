@@ -1,6 +1,11 @@
-/*
- *  Clock Manager
+/**
+ *  @file
  *
+ *  @brief No Initialization Routine
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

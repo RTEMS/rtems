@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Region Segment Size
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +26,6 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_region_get_segment_size
- *
- *  This directive will return the size of the segment indicated
- *
- *  Input parameters:
- *    id         - region id
- *    segment    - segment address
- *    size       - pointer to segment size in bytes
- *
- *  Output parameters:
- *    size       - segment size in bytes filled in
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_region_get_segment_size(
   rtems_id   id,

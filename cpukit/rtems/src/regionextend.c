@@ -1,6 +1,11 @@
-/*
- *  Region Manager - Extend (add memory to) a Region
+/**
+ *  @file
  *
+ *  @brief RTEMS Extend Region
+ *  @ingroup ClassicRegion
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
-
-/*
- *  rtems_region_extend
- *
- *  This directive attempts to grow a region of physical contiguous memory area
- *  from which variable sized segments can be allocated.
- *
- *  Input parameters:
- *    id         - id of region to grow
- *    start      - starting address of memory area for extension
- *    length     - physical length in bytes to grow the region
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_region_extend(
   rtems_id   id,

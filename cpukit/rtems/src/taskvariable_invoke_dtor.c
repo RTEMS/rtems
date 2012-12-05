@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Tasks Invoke Task Variable Destructor
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  Invoke the destructor on a per-task variable
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

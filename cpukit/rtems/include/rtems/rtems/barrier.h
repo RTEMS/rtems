@@ -125,10 +125,12 @@ rtems_status_code rtems_barrier_ident(
 );
 
 /**
- *  @brief rtems_barrier_delete
+ *  @brief RTEMS Delete Barrier
  *
  *  This routine implements the rtems_barrier_delete directive.  The
- *  barrier indicated by @a id is deleted.
+ *  barrier indicated by @a id is deleted.  The barrier is freed back to the
+ *  inactive barrier chain.
+ *
  *
  *  @param[in] id indicates the barrier to delete
  *

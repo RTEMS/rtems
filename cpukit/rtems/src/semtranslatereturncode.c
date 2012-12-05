@@ -1,20 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Semaphore Translate Core Mutex and Semaphore Return Code
+ *  @ingroup ClassicSem
+ */
+
 /*
- *  Semaphore Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Semaphore Manager.
- *  This manager utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  Directives provided are:
- *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -46,17 +37,6 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
-
-/*
- *  _Semaphore_Translate_core_mutex_return_code
- *
- *  Input parameters:
- *    status - mutex status code to translate
- *
- *  Output parameters:
- *    rtems status code - translated RTEMS status code
- *
- */
 
 const rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_MUTEX_STATUS_SUCCESSFUL */
@@ -94,17 +74,6 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
   #endif
   return _Semaphore_Translate_core_mutex_return_code_[status];
 }
-
-/*
- *  _Semaphore_Translate_core_semaphore_return_code
- *
- *  Input parameters:
- *    status - semaphore status code to translate
- *
- *  Output parameters:
- *    rtems status code - translated RTEMS status code
- *
- */
 
 const rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_SEMAPHORE_STATUS_SUCCESSFUL */

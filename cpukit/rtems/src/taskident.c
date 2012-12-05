@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Task Name to Id
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,23 +32,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_ident
- *
- *  This directive returns the system ID associated with
- *  the thread name.
- *
- *  Input parameters:
- *    name - user defined thread name
- *    node - node(s) to be searched
- *    id   - pointer to thread id
- *
- *  Output parameters:
- *    *id               - thread id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_task_ident(
   rtems_name    name,

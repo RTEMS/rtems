@@ -109,12 +109,20 @@ rtems_status_code rtems_region_create(
 );
 
 /**
- *  @brief rtems_region_extend
+ *  @brief RTEMS Extend Region
  *
  *  This routine implements the rtems_region_extend directive.  The
  *  region will have the name name.  The memory area managed by
  *  the region will be attempted to be grown by length bytes using
  *  the memory starting at starting_address.
+ * 
+ *  @param[in] id is the id of region to grow
+ *  @param[in] starting_address starting address of memory area for extension
+ *  @param[in] length is the physical length in bytes to grow the region
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_region_extend(
   rtems_id            id,
@@ -123,12 +131,20 @@ rtems_status_code rtems_region_extend(
 );
 
 /**
- *  @brief rtems_region_ident
+ *  @brief RTEMS Region Name to Id
  *
  *  This routine implements the rtems_region_ident directive.
  *  This directive returns the region ID associated with name.
  *  If more than one region is named name, then the region
  *  to which the ID belongs is arbitrary.
+ * 
+ *  @param[in] name is the user defined region name
+ *  @param[in] id is the pointer to region id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the id will
+ *          be filled in with the region id.
  */
 rtems_status_code rtems_region_ident(
   rtems_name    name,
@@ -166,10 +182,17 @@ rtems_status_code rtems_region_get_free_information(
 );
 
 /**
- *  @brief rtems_region_delete
+ *  @brief RTEMS Delete Region
  *
  *  This routine implements the rtems_region_delete directive.  The
- *  region indicated by ID is deleted.
+ *  region indicated by ID is deleted, provided that none of its segments are
+ *  still allocated.
+ * 
+ *  @param[in] id is the region id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_region_delete(
   rtems_id   id
@@ -206,10 +229,19 @@ rtems_status_code rtems_region_get_segment(
 );
 
 /**
- *  @brief rtems_region_get_segment_size
+ *  @brief RTEMS Get Region Segment Size
  *
  *  This routine implements the rtems_region_get_segment_size directive.  It
  *  returns the size in bytes of the specified user memory area.
+ *  
+ *  @param[in] id is the region id
+ *  @param[in] segment is the segment address
+ *  @param[in] size is the pointer to segment size in bytes
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the size will
+ *          be filled in with the segment size in bytes.
  */
 rtems_status_code rtems_region_get_segment_size(
   rtems_id           id,

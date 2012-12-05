@@ -1,6 +1,11 @@
-/*
- *  Partition Manager
+/**
+ *  @file
  *
+ *  @brief Partition Manager Initialization
+ *  @ingroup ClassicPart
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,17 +27,6 @@
 #include <rtems/rtems/part.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  _Partition_Manager_initialization
- *
- *  This routine initializes all partition manager related
- *  data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
 
 void _Partition_Manager_initialization(void)
 {

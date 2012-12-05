@@ -1,11 +1,10 @@
 /**
  *  @file
  *
- *  @body Body for Mode Routines Implemented as Macros
- *
- *  This file contains bodies for Mode Macros which are
- *  needed by language bindings other than C and C++.
+ *  @brief Body for RTEMS_INTERRUPT_LEVEL Macro
+ *  @ingroup ClassicModes
  */
+
 
 /*
  *  COPYRIGHT (c) 1989-2012.

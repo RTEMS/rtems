@@ -84,7 +84,7 @@ typedef struct {
 RTEMS_PART_EXTERN Objects_Information _Partition_Information;
 
 /**
- *  @brief Partition_Manager_initialization
+ *  @brief Partition Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */

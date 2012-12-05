@@ -1,6 +1,11 @@
-/*
- *  Dual Port Memory Manager
+/**
+ *  @file
  *
+ *  @brief RTEMS Delete Port
+ *  @ingroup ClassicDPMEM
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,20 +26,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
-
-/*
- *  rtems_port_delete
- *
- *  This directive allows a thread to delete a dual-ported memory area
- *  specified by the dual-ported memory identifier.
- *
- *  Input parameters:
- *    id - dual-ported memory area id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_port_delete(
   rtems_id id

@@ -229,20 +229,28 @@ bool _Semaphore_Seize(
 );
 
 /**
- *  @brief _Semaphore_Translate_core_mutex_return_code
+ *  @brief Semaphore Translate Core Mutex Return Code
  *
  *  This function returns a RTEMS status code based on the mutex
  *  status code specified.
+ *  
+ *  @param[in] the_mutex_status is the mutex status code to translate
+ * 
+ *  @return translated RTEMS status code
  */
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
   uint32_t   the_mutex_status
 );
 
 /**
- *  @brief _Semaphore_Translate_core_semaphore_return_code
+ *  @brief Semaphore Translate Core Semaphore Return Code
  *
  *  This function returns a RTEMS status code based on the semaphore
  *  status code specified.
+ * 
+ *  @param[in] status is the semaphore status code to translate
+ * 
+ *  @return translated RTEMS status code
  */
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
   uint32_t   the_mutex_status

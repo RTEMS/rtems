@@ -84,13 +84,24 @@ RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
 void _Dual_ported_memory_Manager_initialization(void);
 
 /**
- *  @brief rtems_port_create
+ *  @brief RTEMS Create Port
  *
  *  This routine implements the rtems_port_create directive.  The port
  *  will have the name name.  The port maps onto an area of dual ported
  *  memory of length bytes which has internal_start and external_start
  *  as the internal and external starting addresses, respectively.
  *  It returns the id of the created port in ID.
+ * 
+ *  @param[in] name is the user defined port name
+ *  @param[in] internal_start is the internal start address of port
+ *  @param[in] external_start is the external start address of port
+ *  @param[in] length is the physical length in bytes
+ *  @param[in] id is the address of port id to set
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the id will
+ *          be filled in with the port id.
  */
 rtems_status_code rtems_port_create(
   rtems_name    name,
@@ -118,10 +129,16 @@ rtems_status_code rtems_port_ident(
 );
 
 /**
- *  @brief rtems_port_delete
+ *  @brief RTEMS Delete Port
  *
  *  This routine implements the rtems_port_delete directive.  It deletes
  *  the port associated with ID.
+ * 
+ *  @param[in] id is the dual-ported memory area id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_port_delete(
   rtems_id   id

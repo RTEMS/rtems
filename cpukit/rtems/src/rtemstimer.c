@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Timer Manager Initialization
+ *  @ingroup ClassicTimer
+ */
+
 /*
- *  Timer Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,16 +27,6 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  _Timer_Manager_initialization
- *
- *  This routine initializes all timer manager related data structures.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- */
 
 void _Timer_Manager_initialization(void)
 {

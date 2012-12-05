@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Timer Fire When
+ *  @ingroup ClassicTimer
+ */
+
 /*
- *  Timer Manager - rtems_timer_fire_when directive
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +26,6 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  rtems_timer_fire_when
- *
- *  This directive allows a thread to start a timer.
- *
- *  Input parameters:
- *    id        - timer id
- *    wall_time - time of day to fire timer
- *    routine   - routine to schedule
- *    user_data - passed as argument to routine when it is fired
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_timer_fire_when(
   rtems_id                            id,

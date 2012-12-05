@@ -102,7 +102,7 @@ typedef uint32_t   Modes_Control;
 extern const uint32_t rtems_interrupt_mask;
 
 /**
- *  @brief Body for RTEMS_INTERRUPT_LEVEL macro.
+ *  @brief Body for RTEMS_INTERRUPT_LEVEL Macro
  *
  *  @param[in] level is the desired interrupt level
  *

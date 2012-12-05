@@ -278,7 +278,7 @@ rtems_status_code rtems_task_create(
 );
 
 /**
- *  @brief rtems_task_ident
+ *  @brief RTEMS Task Name to Id
  *
  *  This routine implements the rtems_task_ident directive.
  *  This directive returns the task ID associated with name.
@@ -287,6 +287,15 @@ rtems_status_code rtems_task_create(
  *  extent of the search for the ID of the task named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
+ * 
+ *  @param[in] name is the user defined thread name
+ *  @param[in] node is(are) the node(s) to be searched
+ *  @param[in] id is the pointer to thread id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the id will
+ *          be filled in with the thread id.
  */
 rtems_status_code rtems_task_ident(
   rtems_name    name,
@@ -295,10 +304,18 @@ rtems_status_code rtems_task_ident(
 );
 
 /**
- *  @brief rtems_task_delete
+ *  @brief RTEMS Delete Task
  *
  *  This routine implements the rtems_task_delete directive.  The
- *  task indicated by ID is deleted.
+ *  task indicated by ID is deleted. The executive halts execution
+ *  of the thread and frees the thread control block.
+ *  
+ *  @param[in] id is the thread id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error and id is not the requesting thread.  Status code is
+ *          returned indicating the source of the error.  Nothing
+ *          is returned if id is the requesting thread (always succeeds).
  */
 rtems_status_code rtems_task_delete(
   rtems_id   id
@@ -376,10 +393,17 @@ rtems_status_code rtems_task_restart(
 );
 
 /**
- *  @brief rtems_task_suspend
+ *  @brief RTEMS Suspend Task
  *
  *  This routine implements the rtems_task_suspend directive.  The
- *  SUSPENDED state is set for task associated with ID.
+ *  SUSPENDED state is set for task associated with ID. Note that the
+ *  suspended state can be in addition to other waiting states.
+ * 
+ *  @param[in] id is the thread id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_task_suspend(
   rtems_id   id
@@ -522,14 +546,10 @@ rtems_id rtems_task_self(void);
 void _RTEMS_tasks_Initialize_user_tasks( void );
 
 /**
- *  @brief _RTEMS_Tasks_Invoke_task_variable_dtor
+ *  @brief RTEMS Tasks Invoke Task Variable Destructor
  *
  *  This routine invokes the optional user provided destructor on the
  *  task variable and frees the memory for the task variable.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
  */
 void _RTEMS_Tasks_Invoke_task_variable_dtor(
   Thread_Control        *the_thread,

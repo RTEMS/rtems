@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager -- Delete a Barrier
+/**
+ *  @file
  *
+ *  @brief RTEMS Delete Barrier
+ *  @ingroup ClassicBarrier
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,21 +25,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-
-/*
- *  rtems_barrier_delete
- *
- *  This directive allows a thread to delete a barrier specified by
- *  the barrier id.  The barrier is freed back to the inactive
- *  barrier chain.
- *
- *  Input parameters:
- *    id - barrier id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_barrier_delete(
   rtems_id   id
