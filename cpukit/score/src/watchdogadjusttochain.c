@@ -33,16 +33,9 @@ void _Watchdog_Adjust_to_chain(
   ISR_Level          level;
   Watchdog_Control  *first;
 
-  if ( units <= 0 ) {
-    return;
-  }
-
   _ISR_Disable( level );
 
   while ( 1 ) {
-    if ( units <= 0 ) {
-      break;
-    }
     if ( _Chain_Is_empty( header ) ) {
       break;
     }
