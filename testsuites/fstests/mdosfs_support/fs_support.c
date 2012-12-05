@@ -31,7 +31,6 @@ msdos_format_request_param_t rqdata = {
     sectors_per_cluster: 0,
     fat_num:             0,
     files_per_root_dir:  0,
-    fattype:             MSDOS_FMT_FATANY,
     media:               0,
     quick_format:        FALSE,
     skip_alignment:      0,

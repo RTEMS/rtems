@@ -33,7 +33,6 @@ static int rtems_shell_main_msdos_format(
     .sectors_per_cluster = 0,
     .fat_num =             0,
     .files_per_root_dir =  0,
-    .fattype =             MSDOS_FMT_FATANY,
     .media =               0,
     .quick_format =        TRUE,
     .skip_alignment =      0,
@@ -92,27 +91,6 @@ static int rtems_shell_main_msdos_format(
           rqdata.files_per_root_dir = (uint32_t) tmp;
           break;
 
-        case 't':
-          arg++;
-          if (arg == argc) {
-            fprintf (stderr, "error: no FAT type.\n");
-            return 1;
-          }
-
-          if (strcmp (argv[arg], "any") == 0)
-            rqdata.fattype = MSDOS_FMT_FATANY;
-          else if (strcmp (argv[arg], "12") == 0)
-            rqdata.fattype = MSDOS_FMT_FAT12;
-          else if (strcmp (argv[arg], "16") == 0)
-            rqdata.fattype = MSDOS_FMT_FAT16;
-          else if (strcmp (argv[arg], "32") == 0)
-            rqdata.fattype = MSDOS_FMT_FAT32;
-          else {
-            fprintf (stderr, "error: invalid type, can any, 12, 16, or 32\n");
-            return 1;
-          }
-          break;
-
         case 'v':
           rqdata.info_level++;
           break;
@@ -146,7 +124,6 @@ static int rtems_shell_main_msdos_format(
     printf (" %-20s: %" PRIu32 "\n", "sectors per cluster", rqdata.sectors_per_cluster);
     printf (" %-20s: %" PRIu32 "\n", "fats", rqdata.fat_num);
     printf (" %-20s: %" PRIu32 "\n", "files per root dir", rqdata.files_per_root_dir);
-    printf (" %-20s: %i\n", "fat type", rqdata.fattype);
     printf (" %-20s: %d\n", "media", rqdata.media);
     printf (" %-20s: %d\n", "quick_format", rqdata.quick_format);
     printf (" %-20s: %s\n", "skip_alignment", (0 == rqdata.skip_alignment) ? "false" : "true");
@@ -162,7 +139,7 @@ static int rtems_shell_main_msdos_format(
   return 0;
 }
 
-#define OPTIONS "[-V label] [-s sectors/cluster] [-r size] [-t any/12/16/32] [-v]"
+#define OPTIONS "[-V label] [-s sectors/cluster] [-r size] [-v]"
 
 rtems_shell_cmd_t rtems_shell_MSDOSFMT_Command = {
   "mkdos",                                   /* name */

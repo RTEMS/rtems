@@ -26,11 +26,6 @@ extern "C" {
 int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
                            const void                           *data);
 
-#define MSDOS_FMT_FATANY 0
-#define MSDOS_FMT_FAT12  1
-#define MSDOS_FMT_FAT16  2
-#define MSDOS_FMT_FAT32  3
-
 #define MSDOS_FMT_INFO_LEVEL_NONE   (0)
 #define MSDOS_FMT_INFO_LEVEL_INFO   (1)
 #define MSDOS_FMT_INFO_LEVEL_DETAIL (2)
@@ -46,7 +41,6 @@ typedef struct {
   uint32_t  sectors_per_cluster;  /* request value: sectors per cluster    */
   uint32_t  fat_num;              /* request value: number of FATs on disk */
   uint32_t  files_per_root_dir;   /* request value: file entries in root   */
-  uint8_t   fattype;              /* request value: MSDOS_FMT_FAT12/16/32  */
   uint8_t   media;                /* media code. default: 0xF8             */
   bool      quick_format;         /* true: do not clear out data sectors   */
   bool      skip_alignment;       /* do not align FAT, data cluster, and   */
