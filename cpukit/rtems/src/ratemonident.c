@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Name to Id Lookup
+/**
+ *  @file
  *
+ *  @brief RTEMS Rate Monotonic Name to Id
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,22 +25,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
-
-/*
- *  rtems_rate_monotonic_ident
- *
- *  This directive returns the system ID associated with
- *  the rate monotonic period name.
- *
- *  Input parameters:
- *    name - user defined period name
- *    id   - pointer to period id
- *
- *  Output parameters:
- *    *id              - region id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name  name,

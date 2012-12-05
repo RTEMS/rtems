@@ -362,12 +362,19 @@ rtems_status_code rtems_task_set_note(
 );
 
 /**
- *  @brief rtems_task_mode
+ *  @brief RTEMS Task Mode
  *
  *  This routine implements the rtems_task_mode directive.  The current
  *  values of the modes indicated by mask of the calling task are changed
  *  to that indicated in mode_set.  The former mode of the task is
  *  returned in mode_set.
+ * 
+ *  @param[in] mode_set is the new mode
+ *  @param[in] mask is the mask
+ *  @param[in] previous_mode_set is the address of previous mode set
+ * 
+ *  @return RTEMS_SUCCESSFUL and previous_mode_set filled in with the 
+ *  previous mode set
  */
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -499,7 +506,7 @@ rtems_status_code rtems_task_is_suspended(
 );
 
 /**
- *  @brief rtems_task_variable_add
+ *  @brief RTEMS Add Task Variable
  *
  *  This directive adds a per task variable.
  */

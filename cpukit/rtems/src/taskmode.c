@@ -1,6 +1,11 @@
-/*
- *  RTEMS Task Manager - Change Task Mode
+/**
+ *  @file
  *
+ *  @brief RTEMS Task Mode
+ *  @ingroup ClassicTasks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,22 +32,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_task_mode
- *
- *  This directive enables and disables several modes of
- *  execution for the requesting thread.
- *
- *  Input parameters:
- *    mode_set          - new mode
- *    mask              - mask
- *    previous_mode_set - address of previous mode set
- *
- *  Output:
- *    *previous_mode_set - previous mode set
- *     always return RTEMS_SUCCESSFUL;
- */
 
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,

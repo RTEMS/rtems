@@ -166,11 +166,20 @@ rtems_status_code rtems_port_external_to_internal(
 );
 
 /**
- *  @brief rtems_port_internal_to_external
+ *  @brief RTEMS Port Internal to External
  *
  *  This routine implements the Port_internal_to_external directive.
  *  It returns the external port address which maps to the provided
- *  internal port address for the specified port ID.
+ *  internal port address for the specified port ID.  If the given
+ *  internal address is an invalid dual-ported address, then the
+ *  external address is set to the given internal address.
+ * 
+ *  @param[in] id is the id of dual-ported memory object
+ *  @param[in] internal is the internal address to set
+ *  @param[in] external is the pointer to external address
+ * 
+ *  @return RTEMS_SUCCESSFUL and the external will be filled in 
+ *  with the external addresses
  */
 rtems_status_code rtems_port_internal_to_external(
   rtems_id     id,

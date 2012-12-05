@@ -135,10 +135,17 @@ rtems_status_code rtems_partition_ident(
 );
 
 /**
- *  @brief rtems_partition_delete
+ *  @brief RTEMS Delete Partition
  *
  *  This routine implements the rtems_partition_delete directive.  The
- *  partition indicated by ID is deleted.
+ *  partition indicated by ID is deleted, provided that none of its buffers
+ *  are still allocated.
+ * 
+ *  @param[in] id is the partition id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_partition_delete(
   rtems_id id

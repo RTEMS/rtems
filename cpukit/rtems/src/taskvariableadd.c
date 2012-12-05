@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Add Task Variable
+ *  @ingroup ClassicTasks
+ */
+
 /*
- *  rtems_task_variable_add - Add a per-task variable
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,12 +21,6 @@
 #include <rtems/system.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/wkspace.h>
-
-/*
- *  rtems_task_variable_add
- *
- *  This directive registers a task variable.
- */
 
 rtems_status_code rtems_task_variable_add(
   rtems_id tid,

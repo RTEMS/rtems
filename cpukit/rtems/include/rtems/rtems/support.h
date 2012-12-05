@@ -63,7 +63,7 @@ extern "C" {
  */
 
 /**
- * @brief Gets workspace information.
+ * @brief Gets Workspace Information
  *
  * Returns information about the heap that is used as the RTEMS Executive
  * Workspace in @a the_info.
@@ -75,7 +75,7 @@ bool rtems_workspace_get_information(
 );
 
 /**
- * @brief Allocates memory from the workspace.
+ * @brief Allocates Memory from the Workspace
  *
  * A number of @a bytes bytes will be allocated from the RTEMS Executive
  * Workspace and returned in @a pointer.
@@ -88,7 +88,7 @@ bool rtems_workspace_allocate(
 );
 
 /**
- * @brief Frees memory allocated from the workspace.
+ * @brief Frees Memory Allocated from the Workspace
  *
  * This frees the memory indicated by @a pointer that was allocated from the
  * RTEMS Executive Workspace.

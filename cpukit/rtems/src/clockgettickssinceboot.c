@@ -1,6 +1,11 @@
-/*
- *  Clock Manager - Get Ticks Since Boot
+/**
+ *  @file
  *
+ *  @brief Obtain Ticks Since Boot
+ *  @ingroup ClassicClock
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -234,7 +234,7 @@ rtems_status_code rtems_message_queue_broadcast(
 );
 
 /**
- *  @brief rtems_message_queue_receive
+ *  @brief RTEMS Message Queue Receive
  *
  *  This routine implements the rtems_message_queue_receive directive.
  *  This directive is invoked when the calling task wishes to receive
@@ -242,7 +242,17 @@ rtems_status_code rtems_message_queue_broadcast(
  *  message is to be placed in buffer.  If no messages are outstanding
  *  and the option_set indicates that the task is willing to block,
  *  then the task will be blocked until a message arrives or until,
- *  optionally, timeout clock ticks have passed.
+ *  optionally, timeout clock ticks have passed. 
+ * 
+ *  @param[in] id is the queue id
+ *  @param[in] buffer is the pointer to message buffer
+ *  @param[in] size is the size of message receive
+ *  @param[in] option_set is the options on receive
+ *  @param[in] timeout is the number of ticks to wait
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,

@@ -170,11 +170,20 @@ rtems_status_code rtems_region_get_information(
 );
 
 /**
- *  @brief rtems_region_get_free_information
+ *  @brief RTEMS Get Region Free Information
  *
  *  This routine implements the rtems_region_get_free_information directive.
  *  This directive returns information about the free blocks in the
- *  heap associated with this region.
+ *  heap associated with this region.  Information about the used blocks
+ *  will be returned as zero.
+ * 
+ *  @param[in] id is the region id
+ *  @param[in] the_info is the pointer to region information block
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the the_info will
+ *          be filled in with the region information block.
  */
 rtems_status_code rtems_region_get_free_information(
   rtems_id                id,

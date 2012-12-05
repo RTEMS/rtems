@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief TOD Validate
+ *  @ingroup ClassicClock
+ */
+
 /*
- *  Time of Day (TOD) Handler -- Validate Classic TOD
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,21 +32,6 @@ const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
   { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
-
-/*
- *  _TOD_Validate
- *
- *  This kernel routine checks the validity of a date and time structure.
- *
- *  Input parameters:
- *    the_tod - pointer to a time and date structure
- *
- *  Output parameters:
- *    true  - if the date, time, and tick are valid
- *    false - if the the_tod is invalid
- *
- *  NOTE: This routine only works for leap-years through 2099.
- */
 
 bool _TOD_Validate(
   const rtems_time_of_day *the_tod

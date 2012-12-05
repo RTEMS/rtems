@@ -275,23 +275,38 @@ rtems_status_code rtems_timer_cancel(
 );
 
 /**
- *  @brief rtems_timer_delete
+ *  @brief RTEMS Delete Timer
  *
  *  This routine implements the rtems_timer_delete directive.  The
  *  timer indicated by ID is deleted.
+ * 
+ *  @param[in] id is the timer id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_timer_delete(
   rtems_id   id
 );
 
 /**
- *  @brief rtems_timer_fire_after
+ *  @brief RTEMS Timer Fire After
  *
  *  This routine implements the rtems_timer_fire_after directive.  It
  *  initiates the timer associated with ID to fire in ticks clock ticks.
  *  When the timer fires, the routine will be invoked in the context
  *  of the rtems_clock_tick directive which is normally invoked as
  *  part of servicing a periodic interupt.
+ * 
+ *  @param[in] id is the timer id
+ *  @param[in] ticks is the interval until routine is fired
+ *  @param[in] routine is the routine to schedule
+ *  @param[in] user_data is the passed as argument to routine when it is fired
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_timer_fire_after(
   rtems_id                           id,

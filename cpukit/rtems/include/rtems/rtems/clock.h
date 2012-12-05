@@ -243,7 +243,7 @@ void rtems_clock_get_uptime_timeval( struct timeval *uptime );
 time_t rtems_clock_get_uptime_seconds( void );
 
 /**
- *  @brief _TOD_Validate
+ *  @brief TOD Validate
  *
  *  This support function returns true if @a the_tod contains
  *  a valid time of day, and false otherwise.
@@ -251,6 +251,8 @@ time_t rtems_clock_get_uptime_seconds( void );
  *  @param[in] the_tod is the TOD structure to validate
  *
  *  @return This method returns true if the TOD is valid and false otherwise.
+ * 
+ *  @note This routine only works for leap-years through 2099.
  */
 bool _TOD_Validate(
   const rtems_time_of_day *the_tod

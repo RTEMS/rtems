@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Timer Fire After
+ *  @ingroup ClassicTimer
+ */
+
 /*
- *  Timer Manager - rtems_timer_fire_after directive
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,22 +26,6 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
-
-/*
- *  rtems_timer_fire_after
- *
- *  This directive allows a thread to start a timer.
- *
- *  Input parameters:
- *    id        - timer id
- *    ticks     - interval until routine is fired
- *    routine   - routine to schedule
- *    user_data - passed as argument to routine when it is fired
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_timer_fire_after(
   rtems_id                           id,

@@ -269,6 +269,8 @@ RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
  *  @brief Rate Monotonic Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
+ * 
+ *  @note The Rate Monotonic Manager is built on top of the Watchdog Handler
  */
 void _Rate_monotonic_Manager_initialization(void);
 
@@ -285,11 +287,19 @@ rtems_status_code rtems_rate_monotonic_create(
 );
 
 /**
- *  @brief rtems_rate_monotonic_ident
+ *  @brief RTEMS Rate Monotonic Name to Id
  *
  *  This routine implements the rtems_rate_monotonic_ident directive.
  *  It returns the period ID associated with name.  If more than one period
  *  is named name, then the period to which the ID belongs is arbitrary.
+ * 
+ *  @param[in] name is the user defined period name
+ *  @param[in] id is the pointer to period id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.  If successful, the id will
+ *          be filled in with the region id.
  */
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name    name,
@@ -314,10 +324,16 @@ rtems_status_code rtems_rate_monotonic_cancel(
 );
 
 /**
- *  @brief rtems_rate_monotonic_delete
+ *  @brief RTEMS Delete Rate Monotonic
  *
  *  This routine implements the rtems_rate_monotonic_delete directive.  The
  *  period indicated by ID is deleted.
+ * 
+ *  @param[in] id is the rate monotonic id
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id   id
@@ -328,6 +344,13 @@ rtems_status_code rtems_rate_monotonic_delete(
  *
  *  This routine implements the rtems_rate_monotonic_get_status directive.
  *  Information about the period indicated by ID is returned.
+ * 
+ *  @param[in] id is the rate monotonic id
+ *  @param[in] status is the pointer to status control block
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  *
  */
 rtems_status_code rtems_rate_monotonic_get_status(
@@ -370,10 +393,13 @@ rtems_status_code rtems_rate_monotonic_reset_statistics(
 void rtems_rate_monotonic_reset_all_statistics( void );
 
 /**
- *  @brief rtems_rate_monotonic_report_statistics
+ *  @brief RTEMS Report Rate Monotonic Statistics
  *
  *  This routine allows a thread to print the statistics information
  *  on ALL period instances which have non-zero counts using printk.
+ *  The implementation of this directive straddles the fence between
+ *  inside and outside of RTEMS.  It is presented as part of the Manager
+ *  but actually uses other services of the Manager.
  */
 void rtems_rate_monotonic_report_statistics_with_plugin(
   void                  *context,
@@ -381,7 +407,7 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
 );
 
 /**
- *  @brief rtems_rate_monotonic_report_statistics
+ *  @brief RTEMS Report Rate Monotonic Statistics
  *
  *  This routine allows a thread to print the statistics information
  *  on ALL period instances which have non-zero counts using printk.

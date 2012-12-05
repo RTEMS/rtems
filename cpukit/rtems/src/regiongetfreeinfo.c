@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Get Region Free Information
+ *  @ingroup ClassicRegion
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,23 +27,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/thread.h>
-
-/*
- *  rtems_region_get_free_information
- *
- *  This directive will return information about the free blocks
- *  in the region specified.  Information about the used blocks
- *  will be returned as zero.
- *
- *  Input parameters:
- *    id         - region id
- *    the_info   - pointer to region information block
- *
- *  Output parameters:
- *    *the_info   - region information block filled in
- *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
- */
 
 rtems_status_code rtems_region_get_free_information(
   rtems_id                id,

@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Get Status
+/**
+ *  @file
  *
+ *  @brief RTEMS Rate Monotonic Get Status
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,22 +29,6 @@
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timespec.h>
 #endif
-
-/*
- *  rtems_rate_monotonic_get_status
- *
- *  This directive allows a thread to obtain status information on a
- *  period.
- *
- *  Input parameters:
- *    id     - rate monotonic id
- *    status - pointer to status control block
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- *
- */
 
 rtems_status_code rtems_rate_monotonic_get_status(
   rtems_id                            id,

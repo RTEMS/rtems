@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Delete Partition
+ *  @ingroup ClassicPart
+ */
+
 /*
- *  Partition Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,21 +26,6 @@
 #include <rtems/rtems/part.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/sysstate.h>
-
-/*
- *  rtems_partition_delete
- *
- *  This directive allows a thread to delete a partition specified by
- *  the partition identifier, provided that none of its buffers are
- *  still allocated.
- *
- *  Input parameters:
- *    id - partition id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_partition_delete(
   rtems_id id

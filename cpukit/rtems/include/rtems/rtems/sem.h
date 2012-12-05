@@ -168,7 +168,7 @@ rtems_status_code rtems_semaphore_delete(
 );
 
 /**
- *  @brief rtems_semaphore_obtain
+ *  @brief RTEMS Obtain Semaphore
  *
  *  This routine implements the rtems_semaphore_obtain directive.  It
  *  attempts to obtain a unit from the semaphore associated with ID.
@@ -177,6 +177,14 @@ rtems_status_code rtems_semaphore_delete(
  *  block waiting for a unit with an optional timeout of timeout
  *  clock ticks.  Whether the task blocks or returns immediately
  *  is based on the RTEMS_NO_WAIT option in the option_set.
+ * 
+ *  @param[in] id is the semaphore id
+ *  @param[in] option_set is the wait option
+ *  @param[in] timeout is the number of ticks to wait (0 means wait forever)
+ * 
+ *  @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *          error.  Otherwise, a status code is returned indicating the
+ *          source of the error.
  */
 rtems_status_code rtems_semaphore_obtain(
   rtems_id       id,

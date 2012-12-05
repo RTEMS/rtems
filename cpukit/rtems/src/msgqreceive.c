@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Message Queue Receive
+ *  @ingroup ClassicMessageQueue
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,24 +35,6 @@
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
-
-/*
- *  rtems_message_queue_receive
- *
- *  This directive dequeues a message from the designated message queue
- *  and copies it into the requesting thread's buffer.
- *
- *  Input parameters:
- *    id         - queue id
- *    buffer     - pointer to message buffer
- *    size       - size of message receive
- *    option_set - options on receive
- *    timeout    - number of ticks to wait
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,

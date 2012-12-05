@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Rate Monotonic Manager Initialization
+ *  @ingroup ClassicRateMon
+ */
+
 /*
- *  Rate Monotonic Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,20 +26,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
-
-/*
- *  _Rate_monotonic_Manager_initialization
- *
- *  This routine initializes all Rate Monotonic Manager related
- *  data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  NOTE: The Rate Monotonic Manager is built on top of the Watchdog
- *        Handler.
- */
 
 void _Rate_monotonic_Manager_initialization(void)
 {

@@ -1,6 +1,11 @@
-/*
- *  Workspace Handler
+/**
+ *  @file
  *
+ *  @brief RTEMS Workspace Support
+ *  @ingroup ClassicRTEMSWorkspace
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -32,9 +37,6 @@ bool rtems_workspace_get_information(
   return _Protected_heap_Get_information( &_Workspace_Area, the_info );
 }
 
-/*
- *  _Workspace_Allocate
- */
 bool rtems_workspace_allocate(
   size_t      bytes,
   void      **pointer
@@ -62,9 +64,6 @@ bool rtems_workspace_allocate(
   return true;
 }
 
-/*
- *  _Workspace_Allocate
- */
 bool rtems_workspace_free(
   void *pointer
 )

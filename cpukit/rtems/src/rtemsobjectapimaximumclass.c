@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Get Greatest Valid Class for an API
+/**
+ *  @file
  *
+ *  @brief Get Highest Valid Class Value
+ *  @ingroup ClassicClassInfo
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

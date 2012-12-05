@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Report Statistics for All Periods
+/**
+ *  @file
  *
+ *  @brief RTEMS Report Rate Monotonic Statistics
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,14 +33,6 @@
   #define NANOSECONDS_FMT "%06" PRId32
 #endif
 
-/*
- *  This directive allows a thread to print the statistics information
- *  on ALL period instances which have non-zero counts using printk.
- *
- *  The implementation of this directive straddles the fence between
- *  inside and outside of RTEMS.  It is presented as part of the Manager
- *  but actually uses other services of the Manager.
- */
 void rtems_rate_monotonic_report_statistics_with_plugin(
   void                  *context,
   rtems_printk_plugin_t  print

@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Delete a Period
+/**
+ *  @file
  *
+ *  @brief RTEMS Delete Rate Monotonic
+ *  @ingroup ClassicRateMon
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,19 +25,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
-
-/*
- *  rtems_rate_monotonic_delete
- *
- *  This directive allows a thread to delete a rate monotonic timer.
- *
- *  Input parameters:
- *    id - rate monotonic id
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id id

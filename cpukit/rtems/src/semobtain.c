@@ -1,20 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Obtain Semaphore
+ *  @ingroup ClassicSem
+ */
+
 /*
- *  Semaphore Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Semaphore Manager.
- *  This manager utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
- *
- *  Directives provided are:
- *
- *     + create a semaphore
- *     + get an ID of a semaphore
- *     + delete a semaphore
- *     + acquire a semaphore
- *     + release a semaphore
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -46,21 +37,6 @@
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
-
-/*
- *  rtems_semaphore_obtain
- *
- *  This directive allows a thread to acquire a semaphore.
- *
- *  Input parameters:
- *    id         - semaphore id
- *    option_set - wait option
- *    timeout    - number of ticks to wait (0 means wait forever)
- *
- *  Output parameters:
- *    RTEMS_SUCCESSFUL - if successful
- *    error code        - if unsuccessful
- */
 
 rtems_status_code rtems_semaphore_obtain(
   rtems_id        id,

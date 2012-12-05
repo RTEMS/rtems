@@ -1,6 +1,11 @@
-/*
- *  Dual Port Memory Manager
+/**
+ *  @file
  *
+ *  @brief RTEMS Port Internal to External
+ *  @ingroup ClassicDPMEM
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,24 +26,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/dpmem.h>
-
-/*
- *  rtems_port_internal_to_external
- *
- *  This directive converts an internal dual-ported memory address to an
- *  external dual-ported memory address.  If the given internal address
- *  is an invalid dual-ported address, then the external address is set
- *  to the given internal address.
- *
- *  Input parameters:
- *    id       - id of dual-ported memory object
- *    internal - internal address to set
- *    external - pointer to external address
- *
- *  Output parameters:
- *    external          - external address
- *    RTEMS_SUCCESSFUL - always succeeds
- */
 
 rtems_status_code rtems_port_internal_to_external(
   rtems_id   id,
