@@ -538,6 +538,25 @@ RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
   the_node->previous = old_last;
 }
 
+/**
+ *  @brief Append a node on the end of a chain if the node is in the off chain
+ *  state (unprotected).
+ *
+ *  @note It does NOT disable interrupts to ensure the atomicity of the
+ *        append operation.
+ *
+ *  @see _Chain_Append_unprotected() and _Chain_Is_node_off_chain().
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Append_if_is_off_chain_unprotected(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+)
+{
+  if ( _Chain_Is_node_off_chain( the_node ) ) {
+    _Chain_Append_unprotected( the_chain, the_node );
+  }
+}
+
 /** @brief Prepend a Node (unprotected)
  *
  *  This routine prepends the_node onto the front of the_chain.
