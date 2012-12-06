@@ -14,6 +14,7 @@ include_libcpu_HEADERS = shared/include/powerpc-utility.h
 include_bspdir = $(includedir)/bsp
 
 include_bsp_HEADERS =
+include_bsp_HEADERS += new-exceptions/bspsupport/vectors.h
 
 EXTRA_DIST =
 
@@ -25,8 +26,6 @@ new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 
 if !mpc5xx
-include_bsp_HEADERS += new-exceptions/bspsupport/vectors.h
-
 noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
 new_exceptions_exc_bspsupport_rel_SOURCES = \
     new-exceptions/bspsupport/ppc-code-copy.c \

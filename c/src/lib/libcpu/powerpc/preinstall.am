@@ -54,11 +54,10 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-if !mpc5xx
 $(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
-endif
+
 if shared
 $(PROJECT_INCLUDE)/libcpu/io.h: shared/include/io.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/io.h
