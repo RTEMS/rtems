@@ -31,6 +31,7 @@
 /*****************************************************************************/
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <rtems/m68k/m68302.h>
 #include <debugport.h>
 #include <crc.h>
@@ -117,7 +118,6 @@ void boot_phase_2(void)
   static constructors have not been called, and RTEMS is not initialised.
   */
 
-void boot_card(const char* cmdline);
 void set_debug_traps(void);
 void breakpoint(void);
 

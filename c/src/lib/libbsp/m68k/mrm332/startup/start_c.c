@@ -18,11 +18,10 @@
 #include <rtems/m68k/sim.h>
 #define __START_C__
 #include "bsp.h"
+#include <bsp/bootcard.h>
 
 rtems_isr_entry M68Kvec[256];
 rtems_isr_entry vectors[256];
-
-void  boot_card(const char *cmdline);
 
 /*
  *  This prototype really should have the noreturn attribute but

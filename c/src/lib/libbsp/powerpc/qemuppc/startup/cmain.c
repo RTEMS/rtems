@@ -1,3 +1,5 @@
+#include <bsp/bootcard.h>
+
 static void
 __outb(int port, unsigned char v)
 {
@@ -30,8 +32,6 @@ extern unsigned char __sdata_load[], __sdata_start[], __sdata_end[];
 extern unsigned char __sbss2_start[], __sbss2_end[];
 extern unsigned char __sbss_start[], __sbss_end[];
 extern unsigned char __bss_start[], __bss_end[];
-
-extern void boot_card(void *);
 
 
 void cmain (void)

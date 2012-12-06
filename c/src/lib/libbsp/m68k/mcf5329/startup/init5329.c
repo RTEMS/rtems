@@ -4,17 +4,15 @@
  *  functions can be called from here.
  */
 
-#include <stdint.h>
+#include <bsp/bootcard.h>
 
 extern void _wr_vbr(uint32_t);
 extern void init_main(void);
-extern int boot_card(const char *);
 
 /*
  * From linkcmds
  */
 
-extern uint8_t _VBR[];
 extern uint8_t _INTERRUPT_VECTOR[];
 
 extern uint8_t _clear_start[];
@@ -39,15 +37,15 @@ void Init5329(void)
    * Copy the vector table to RAM
    */
 
-  if (_VBR != _INTERRUPT_VECTOR) {
+  if (&_VBR != _INTERRUPT_VECTOR) {
     sp = (uint32_t *) _INTERRUPT_VECTOR;
-    dp = (uint32_t *) _VBR;
+    dp = (uint32_t *) &_VBR;
     for (i = 0; i < 256; i++) {
       *dp++ = *sp++;
     }
   }
 
-  _wr_vbr((uint32_t) _VBR);
+  _wr_vbr((uint32_t) &_VBR);
 
   /*
    * Move initialized data from ROM to RAM.

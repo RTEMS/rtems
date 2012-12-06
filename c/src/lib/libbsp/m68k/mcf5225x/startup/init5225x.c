@@ -8,10 +8,9 @@
  *  functions can be called from here.
  */
 
-#include <stdint.h>
+#include <bsp/bootcard.h>
 
 extern void _wr_vbr(uint32_t);
-extern int boot_card(int, char **, char **);
 
 extern long _d0_reset,_d1_reset,_M68kSpuriousInterruptCount;
 
@@ -19,7 +18,6 @@ extern long _d0_reset,_d1_reset,_M68kSpuriousInterruptCount;
  * From linkcmds
  */
 
-extern uint8_t _VBR[];
 extern uint8_t _INTERRUPT_VECTOR[];
 
 extern uint8_t _clear_start[];
@@ -39,9 +37,9 @@ void Init5225x(void)
    * Copy the vector table to RAM 
    */
 
-  if (_VBR != _INTERRUPT_VECTOR) {
+  if (&_VBR != _INTERRUPT_VECTOR) {
     sp = (uint32_t *) _INTERRUPT_VECTOR;
-    dp = (uint32_t *) _VBR;
+    dp = (uint32_t *) &_VBR;
     for (i = 0; i < 256; i++) {
       *dp++ = *sp++;
     }
@@ -73,13 +71,13 @@ void Init5225x(void)
       *sbp++ = 0;
   }
 
-//_wr_vbr((uint32_t) _VBR);
-	asm volatile("move.l %0,%%d7;movec %%d7,%%vbr\n\t"::"i"(_VBR): "cc");
+//_wr_vbr((uint32_t) &_VBR);
+	asm volatile("move.l %0,%%d7;movec %%d7,%%vbr\n\t"::"i"(&_VBR): "cc");
 
   /*
    * We have to call some kind of RTEMS function here!
    */
 
-  boot_card(0, 0, 0);
+  boot_card(0);
   for (;;) ;
 }
