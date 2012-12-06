@@ -311,8 +311,6 @@ __change_mode:
         mov     r0, #0
 	bl	FUNCTION (boot_card)
 
-	bl	FUNCTION (bsp_cleanup)		/* Should not return.  */
-
 #if defined(__thumb__) && !defined(__thumb2__)
 	/* Come out of Thumb mode.  This code should be redundant.  */
 
