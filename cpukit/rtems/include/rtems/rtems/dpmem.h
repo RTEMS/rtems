@@ -85,10 +85,10 @@ RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
 void _Dual_ported_memory_Manager_initialization(void);
 
 /**
- *  @brief RTEMS Create Port
+ *  @brief Creates a port into a dual-ported memory area.
  *
  *  This routine implements the rtems_port_create directive.  The port
- *  will have the name name.  The port maps onto an area of dual ported
+ *  will have the name @a name.  The port maps onto an area of dual ported
  *  memory of length bytes which has internal_start and external_start
  *  as the internal and external starting addresses, respectively.
  *  It returns the id of the created port in ID.
@@ -97,7 +97,7 @@ void _Dual_ported_memory_Manager_initialization(void);
  *  @param[in] internal_start is the internal start address of port
  *  @param[in] external_start is the external start address of port
  *  @param[in] length is the physical length in bytes
- *  @param[in] id is the address of port id to set
+ *  @param[out] id is the address of port id to set
  * 
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
