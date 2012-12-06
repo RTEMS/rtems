@@ -24,10 +24,3 @@ void bsp_fatal_extension(
   printk("RTEMS terminated; Boot manually or turn on AUTO_BOOT.\n");
 #endif
 }
-
-void bsp_cleanup(
-  uint32_t status
-)
-{
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
-}

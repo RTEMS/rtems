@@ -55,10 +55,3 @@ void bsp_fatal_extension(
    M68Kvec[ 45 ] = bsp_return_to_monitor_trap;   /* install handler */
    __asm__ volatile( "trap #13" );  /* insures SUPV mode */
 }
-
-void bsp_cleanup(
-  uint32_t status
-)
-{
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
-}

@@ -179,23 +179,25 @@ this operation.
 @findex CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 If your BSP does not want to support dynamic heap extension, then you do not have to do anything special.  However, if you want to support @code{sbrk}, you must provide an implementation of this method and define @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} in @code{bsp.h}.  This informs @code{rtems/confdefs.h} to configure the Malloc Family Extensions which support @code{sbrk}.
 
-@section bsp_cleanup(uint32_t status) - Cleanup the Hardware
+@section bsp_fatal_extension() - Cleanup the Hardware
 
-The @code{bsp_cleanup()} is the last C code invoked.  Most of the BSPs
-use the same shared version of @code{bsp_cleanup()} that does nothing.
-This implementation is located in the following file:
+The @code{bsp_fatal_extension()} is an optional BSP specific initial extension
+invoked once a fatal system state is reached.  Most of the BSPs use the same
+shared version of @code{bsp_fatal_extension()} that does nothing or performs a
+system reset.  This implementation is located in the following file:
 
 @example
 c/src/lib/libbsp/shared/bspclean.c
 @end example
 
-The @code{bsp_cleanup()} routine can be used to return to a ROM monitor,
-insure that interrupt sources are disabled, etc..  This routine is the
-last place to ensure a clean shutdown of the hardware.  The @code{status}
-argument is the value passed to the service which initiated shutting
-down RTEMS.  All of the non-fatal shutdown sequences ultimately pass
-their exit status to @code{rtems_shutdown_executive} and this is what
-is passed to this routine.
+The @code{bsp_fatal_extension()} routine can be used to return to a ROM
+monitor, insure that interrupt sources are disabled, etc..  This routine is the
+last place to ensure a clean shutdown of the hardware.  The fatal source,
+internal error indicator, and the fatal code arguments are available to
+evaluate the fatal condition.  All of the non-fatal shutdown sequences
+ultimately pass their exit status to @code{rtems_shutdown_executive} and this
+is what is passed to this routine in case the fatal source is
+RTEMS_FATAL_SOURCE_EXIT.
 
 On some BSPs, it prints a message indicating that the application
 completed execution and waits for the user to press a key before

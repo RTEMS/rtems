@@ -1,5 +1,4 @@
-/*  bsp_cleanup()
- *
+/*
  *  This routine normally is part of start.s and usually returns
  *  control to a monitor.
  *
@@ -52,9 +51,4 @@ void bsp_fatal_extension(
 
   /* All done.  Hang out. */
   BSP_ask_for_reset();
-}
-
-void bsp_cleanup( uint32_t status )
-{
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

@@ -25,7 +25,7 @@
 
 #define FATAL_ERROR 0x600df00d
 
-uint32_t boot_card( const char *cmdline )
+void boot_card( const char *cmdline )
 {
   _Internal_error_Occurred( FATAL_SOURCE, FATAL_IS_INTERNAL, FATAL_ERROR );
 

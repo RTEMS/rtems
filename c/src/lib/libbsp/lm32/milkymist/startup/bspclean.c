@@ -56,8 +56,3 @@ void bsp_fatal_extension(
   else
     reboot();
 }
-
-void bsp_cleanup(uint32_t status)
-{
-  rtems_fatal(RTEMS_FATAL_SOURCE_EXIT, status);
-}

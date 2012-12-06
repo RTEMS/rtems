@@ -41,7 +41,6 @@ for this functionality.
 
 @example
 ../../sparc/shared/start.S
-../../sparc/shared/bspclean.c
 @end example
 
 @b{NOTE:} In most BSPs, the directory named @code{start340} in the
@@ -93,10 +92,9 @@ to the shared @code{bootcard.c} framework then through the C Library,
 RTEMS, device driver initialization phases, and the context switch
 to the first application task.  After this, the application executes
 until it calls @code{exit}, @code{rtems_shutdown_executive}, or some
-other normal termination initiating routine and control is returned
-to @code{bootcard.c} which allows the BSP to perform some cleanup in C
-(@code{bsp_cleanup}) and then @code{boot_card} returns to the assembly
-language which initially invoked it.
+other normal termination initiating routine and a fatal system state is
+reached.  The optional @code{bsp_fatal_extension} initial extension can perform
+BSP specific system termination.
 
 The routines invoked during this will be discussed and their location
 in the RTEMS source tree pointed out as we discuss each.
@@ -197,25 +195,23 @@ this point in the initialization sequence.  This is the last opportunity
 for the BSP to insert BSP specific code into the initialization sequence.
 
 @item It invokes the RTEMS directive
-@code{rtems_initialize_start_multitasking()} which starts multitasking and context switches to the first task.  @code{boot_card()} will not return until the application is shutdown.  As part of this sequence the following actions occur:
+@code{rtems_initialize_start_multitasking()}
+which initiates multitasking and performs a context switch to the
+first user application task and may enable interrupts as a side-effect of
+that context switch.  The context switch saves the executing context.  The
+application runs now.  The directive rtems_shutdown_executive() will return
+to the saved context.  The exit() function will use this directive.
 
-@itemize @bullet
+After a return to the saved context a fatal system state is reached.  The
+fatal source is RTEMS_FATAL_SOURCE_EXIT with a fatal code set to the value
+passed to rtems_shutdown_executive().
 
-@item RTEMS will context switch to the first application task.  As a
-side-effect of this context switch, processor interrupts will be enabled.
-This is often the source of a fatal error during BSP development because
-the BSP did not clear and/or disable all interrupt sources and a spurious
-interrupt will occur .
+The enabling of interrupts during the first context switch is often the source
+for fatal errors during BSP development because the BSP did not clear and/or
+disable all interrupt sources and a spurious interrupt will occur.
 
-@item When in the context of the first task but before its body has been
+When in the context of the first task but before its body has been
 entered, any C++ Global Constructors will be invoked.
-
-@end itemize
-
-@item Finally after the application shutsdown RTEMS and control is
-return to @code{boot_card()} from RTEMS, it invokes the BSP specific
-routine @code{bsp_cleanup()} to perform any necessary board specific
-shutdown actions.
 
 @end itemize
 

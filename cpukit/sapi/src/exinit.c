@@ -217,8 +217,10 @@ void rtems_initialize_device_drivers(void)
   _API_extensions_Run_postdriver();
 }
 
-uint32_t rtems_initialize_start_multitasking(void)
+void rtems_initialize_start_multitasking(void)
 {
+  uint32_t status;
+
   _System_state_Set( SYSTEM_STATE_BEGIN_MULTITASKING );
 
   _Thread_Start_multitasking();
@@ -232,5 +234,6 @@ uint32_t rtems_initialize_start_multitasking(void)
    *******************************************************************
    *******************************************************************/
   
-  return _Per_CPU_Information[0].idle->Wait.return_code;
+  status = _Per_CPU_Information[0].idle->Wait.return_code;
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

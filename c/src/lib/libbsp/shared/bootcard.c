@@ -31,8 +31,7 @@
  *        - 1st task executes C++ global constructors
  *          .... appplication runs ...
  *          - exit
- *     + back to here eventually
- *     + bspclean.c: bsp_cleanup
+ *      + will not return to here
  *
  *  This style of initialization ensures that the C++ global
  *  constructors are executed after RTEMS is initialized.
@@ -69,12 +68,11 @@ const char *bsp_boot_cmdline;
  *  the system while maximizing shared code and keeping BSP code in C
  *  as much as possible.
  */
-uint32_t boot_card(
+void boot_card(
   const char *cmdline
 )
 {
   rtems_interrupt_level  bsp_isr_level;
-  uint32_t               status = 0;
 
   /*
    * Special case for PowerPC: The interrupt disable mask is stored in SPRG0.
@@ -164,22 +162,11 @@ uint32_t boot_card(
    *  Complete initialization of RTEMS and switch to the first task.
    *  Global C++ constructors will be executed in the context of that task.
    */
-  status = rtems_initialize_start_multitasking();
+  rtems_initialize_start_multitasking();
 
   /***************************************************************
    ***************************************************************
-   *  APPLICATION RUNS HERE!!!  When it shuts down, we return!!! *
+   *  APPLICATION RUNS NOW!!!  We will not return to here!!!     *
    ***************************************************************
-   ***************************************************************
-   */
-
-  /*
-   *  Perform any BSP specific shutdown actions which are written in C.
-   */
-  bsp_cleanup( status );
-
-  /*
-   *  Now return to the start code.
-   */
-  return status;
+   ***************************************************************/
 }

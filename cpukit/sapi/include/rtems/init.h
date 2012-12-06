@@ -69,16 +69,22 @@ void rtems_initialize_before_drivers(void);
 void rtems_initialize_device_drivers(void);
 
 /**
- *  @brief rtems_initialize_start_multitasking
+ *  @brief Starts the multitasking.
  *
- *  This routine implements the early portion of rtems_initialize_executive
- *  directive up to the pretasking hook. This directive is invoked at system
- *  startup to initialize the RTEMS multitasking environment.
+ *  This directive initiates multitasking and performs a context switch to the
+ *  first user application task and may enable interrupts as a side-effect of
+ *  that context switch.  The context switch saves the executing context.  The
+ *  application runs now.  The directive rtems_shutdown_executive() will return
+ *  to the saved context.  The exit() function will use this directive.
  *
- *  @return This method returns the status code passed into the 
- *          @ref rtems_shutdown_executive directive.
+ *  After a return to the saved context a fatal system state is reached.  The
+ *  fatal source is RTEMS_FATAL_SOURCE_EXIT with a fatal code set to the value
+ *  passed to rtems_shutdown_executive().
+ *
+ *  This directive does not return.
  */
-uint32_t rtems_initialize_start_multitasking(void);
+void rtems_initialize_start_multitasking(void)
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  *  @brief rtems_shutdown_executive

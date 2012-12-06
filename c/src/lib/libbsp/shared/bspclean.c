@@ -1,6 +1,4 @@
 /*
- *  This is a dummy bsp_cleanup routine.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -44,9 +42,4 @@ void bsp_fatal_extension(
   #if (BSP_PRESS_KEY_FOR_RESET) || (BSP_RESET_BOARD_AT_EXIT)
     bsp_reset();
   #endif
-}
-
-void bsp_cleanup( uint32_t status )
-{
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

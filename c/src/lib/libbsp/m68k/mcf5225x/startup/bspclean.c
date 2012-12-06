@@ -1,6 +1,4 @@
 /*
- *  SBC5206 bsp_cleanup
- *
  *  This routine returns control from RTEMS to the monitor.
  *
  *  Author:
@@ -26,11 +24,4 @@ void bsp_fatal_extension(
 )
 {
   printk("\nRTEMS exited!\n");
-}
-
-void  __attribute__((weak)) bsp_cleanup(
-  uint32_t status
-)
-{
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

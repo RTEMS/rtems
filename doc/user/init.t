@@ -346,7 +346,7 @@ the first context switch.
 @ifset is-C
 @findex rtems_initialize_start_multitasking
 @example
-uint32_t rtems_initialize_start_multitasking(void);
+void rtems_initialize_start_multitasking(void);
 @end example
 @end ifset
 
@@ -358,21 +358,23 @@ NOT SUPPORTED FROM Ada BINDING
 
 @subheading DIRECTIVE STATUS CODES:
 
-This directive returns the status code passed in to the 
-@code{@value{DIRPREFIX}shutdown_executive}.
+NONE
 
 @subheading DESCRIPTION:
 
-This directive is called after the other Initialization Manager
-directives have successfully completed.  This directive
-initiates multitasking and performs a context switch to
-the first user application task and enables interrupts as
-a side-effect of that context switch.
+This directive initiates multitasking and performs a context switch to the
+first user application task and may enable interrupts as a side-effect of
+that context switch.  The context switch saves the executing context.  The
+application runs now.  The directive rtems_shutdown_executive() will return
+to the saved context.  The exit() function will use this directive.
+
+After a return to the saved context a fatal system state is reached.  The
+fatal source is RTEMS_FATAL_SOURCE_EXIT with a fatal code set to the value
+passed to rtems_shutdown_executive().
 
 @subheading NOTES:
 
-This directive @b{DOES NOT RETURN} to the caller until the
-@code{@value{DIRPREFIX}shutdown_executive} is invoked.
+This directive @b{DOES NOT RETURN} to the caller.
 
 This directive causes all nodes in the system to
 verify that certain configuration parameters are the same as
