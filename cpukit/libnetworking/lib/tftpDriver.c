@@ -574,8 +574,12 @@ static int rtems_tftp_open_worker(
      */
     hostname = full_path_name;
     cp1 = strchr (full_path_name, ':');
-    if (!cp1)
+    if (!cp1) /* if can't use : as delimiter, try / */
+        cp1 = strchr (full_path_name, '/');
+    if (!cp1) {
         hostname = "BOOTP_HOST";
+        cp1 = full_path_name;
+    }
     else {
         *cp1 = '\0';
         ++cp1;
@@ -591,8 +595,6 @@ static int rtems_tftp_open_worker(
         if (he == NULL)
             return ENOENT;
         memcpy (&farAddress, he->h_addr, sizeof (farAddress));
-    } else {
-        return ENOENT;
     }
     
     /*
@@ -784,11 +786,9 @@ static int rtems_tftp_open(
      */
     device =
       rtems_filesystem_mount_device (rtems_filesystem_location_mount (&iop->pathinfo));
-    dlen = strlen (device);
-    if (dlen == 0)
-        rtems_set_errno_and_return_minus_one (ENOENT);
+    dlen = device ? strlen(device) : 0;
 
-    if (iop->pathinfo.node_access_2 == NULL)
+    if (iop->pathinfo.node_access == NULL || iop->pathinfo.node_access_2 == NULL)
         rtems_set_errno_and_return_minus_one (ENOENT);
 
     if (iop->pathinfo.node_access != ROOT_NODE_ACCESS (fs)) {
@@ -824,7 +824,10 @@ static int rtems_tftp_open(
     full_path_name = malloc (dlen + nalen + sep1 + na2len + 1);
     if (full_path_name == NULL)
         rtems_set_errno_and_return_minus_one(ENOMEM);
-    strcpy (full_path_name, device);
+    if (dlen)
+        strcpy (full_path_name, device);
+    else
+        strcpy (full_path_name, "");
     if (nalen)
       strcat (full_path_name, na);
     if (sep1)
