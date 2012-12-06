@@ -72,12 +72,10 @@ rtems_isr Spurious_Isr(
   RAW_PUTI(sp);
   RAW_PUTS("\n\r");
 #endif
-  bsp_cleanup(1);
-
-  /* BDM SIGEMT */
-  __asm__ ("  .word  0x4afa");
-
-  for(;;);
+  rtems_fatal(
+    RTEMS_FATAL_SOURCE_BSP_GENERIC,
+    BSP_GENERIC_FATAL_SPURIOUS_INTERRUPT
+  );
 }
 
 void Spurious_Initialize(void)
