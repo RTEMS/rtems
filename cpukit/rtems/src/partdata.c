@@ -1,6 +1,11 @@
-/*
- *  Partition Manager -- Instantiate Data
+/**
+ * @file
  *
+ * @brief Instantiate RTEMS Partition Data
+ * @ingroup ClassicPart Partitions
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

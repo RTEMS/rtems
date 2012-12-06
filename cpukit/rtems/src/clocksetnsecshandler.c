@@ -1,6 +1,11 @@
-/*
- *  Clock Manager
+/**
+ * @file
  *
+ * @brief Set the BSP specific Nanoseconds Extension
+ * @ingroup ClassicClock Clocks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,6 +1,11 @@
-/*
- *  Clock Manager - rtems_clock_get_tod
+/**
+ * @file
  *
+ * @brief Obtain Current Time of Day (Classic TOD)
+ * @ingroup ClassicClock Clocks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -45,6 +45,10 @@
 /**@{*/
 
 /**
+ *  @brief Instantiate RTEMS Region Data
+ *
+ *  Region Manager -- Instantiate Data
+ *
  *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
@@ -84,12 +88,16 @@ RTEMS_REGION_EXTERN Objects_Information _Region_Information;
 /**
  *  @brief _Region_Manager_initialization
  *
+ *  Region Manager
+ *
  *  This routine performs the initialization necessary for this manager.
  */
 void _Region_Manager_initialization(void);
 
 /**
  *  @brief rtems_region_create
+ *
+ *  Region Manager
  *
  *  This routine implements the rtems_region_create directive.  The
  *  region will have the name name.  The memory area managed by
@@ -157,10 +165,10 @@ rtems_status_code rtems_region_ident(
  *  This routine implements the rtems_region_get_information directive.
  *  This directive returns information about the heap associated with
  *  this region.
- * 
+ *
  *  @param[in] id is the region id
  *  @param[in] the_info is the pointer to region information block
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
  *  *id filled with the region information block
  */
@@ -291,15 +299,15 @@ rtems_status_code rtems_region_return_segment(
  *  rtems_region_get_segment of the first blocked task, then that task and as
  *  many subsequent tasks as possible will be unblocked with their requests
  *  satisfied.
- * 
+ *
  *  @param[in] id is the region id
  *  @param[in] segmet is the pointer to segment address
  *  @param[in] size is the new required size
  *  @return RTEMS_SUCCESSFUL if operation successful, RTEMS_UNSATISFIED if the
  * 	the segment can't be resized in place or any other code atfailure
- * 
+ *
  *  @note On RTEMS_SUCCESSFUL or RTEMS_UNSATISFIED exit it returns into the
- *  	'old_size' the old size in bytes of the user memory area of the 
+ *  	'old_size' the old size in bytes of the user memory area of the
  * 	specified segment.
  */
 rtems_status_code rtems_region_resize_segment(
@@ -317,7 +325,7 @@ rtems_status_code rtems_region_resize_segment(
  *  This is a helper routine which is invoked any time memory is
  *  freed.  It looks at the set of waiting tasks and attempts to
  *  satisfy all outstanding requests.
- * 
+ *
  *  @param[in] the_region is the the region
  */
 extern void _Region_Process_queue(Region_Control *the_region);

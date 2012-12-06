@@ -257,14 +257,14 @@ void _RTEMS_tasks_Manager_initialization(void);
  *  The task's stack will be stack_size bytes.   The task will begin
  *  execution with initial_priority and initial_modes.  It returns the
  *  id of the created task in ID.
- * 
+ *
  *  @param[in] name is the user defined thread name
  *  @param[in] initial_priority is the thread priority
  *  @param[in] stack_size is the stack size in bytes
  *  @param[in] initial_modes is the initial thread mode
  *  @param[in] attribute_set is the thread attributes
  *  @param[in] id is the pointer to thread id
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  *  		and *id thread id filled in
  */
@@ -439,11 +439,11 @@ rtems_status_code rtems_task_resume(
  *  current priority of the task associated with ID is set to
  *  new_priority.  The former priority of that task is returned
  *  in old_priority.
- * 
+ *
  *  @param[in] id is the thread to extract
  *  @param[in] new_priority is the thread to extract
  *  @param[in] old_priority is the thread to extract
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
  *  and *old_priority filled in with the previous previous priority
  */
@@ -472,9 +472,9 @@ rtems_status_code rtems_task_start(
  *  This routine implements the rtems_task_wake_when directive.  The
  *  calling task is blocked until the current time of day is
  *  equal to that indicated by time_buffer.
- * 
+ *
  *  @param[in] time_buffer is the pointer to the time and date structure
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_wake_when(
@@ -487,7 +487,7 @@ rtems_status_code rtems_task_wake_when(
  *  This routine implements the rtems_task_wake_after directive.  The
  *  calling task is blocked until the indicated number of clock
  *  ticks have occurred.
- * 
+ *
  *  @param[in] ticks is the number of ticks to wait
  *  @return RTEMS_SUCCESSFUL
  */
@@ -497,9 +497,11 @@ rtems_status_code rtems_task_wake_after(
 
 /**
  *  @brief rtems_task_is_suspended
-
+ *
  *  This directive returns a status indicating whether or not
  *  the specified task is suspended.
+ *
+ *  RTEMS Task Manager
  */
 rtems_status_code rtems_task_is_suspended(
   rtems_id   id
@@ -572,6 +574,8 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
  *  Input parameters: NONE
  *
  *  Output parameters:  NONE
+ *
+ *  RTEMS Task Manager
  */
 
 extern void _RTEMS_tasks_Initialize_user_tasks_body( void );

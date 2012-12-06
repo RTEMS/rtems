@@ -50,6 +50,8 @@
  *  API calls.  The statistics kept include minimum, maximum and average times
  *  for both cpu usage and wall time.  The statistics indicate the execution time
  *  used by the owning thread between successive calls to rtems_rate_monotonic_period.
+ *
+ *  Rate Monotonic Manager -- Reset Statistics for All Periods
  */
 /**@{*/
 
@@ -312,12 +314,12 @@ rtems_status_code rtems_rate_monotonic_ident(
  *  This routine implements the rtems_rate_monotonic_cancel directive.  This
  *  directive stops the period associated with ID from continuing to
  *  run.
- * 
+ *
  *  @param[in] id is the rate monotonic id
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful and caller is not the owning thread
  *  or error code if unsuccessful
- *  
+ *
  */
 rtems_status_code rtems_rate_monotonic_cancel(
   rtems_id   id
@@ -363,10 +365,10 @@ rtems_status_code rtems_rate_monotonic_get_status(
  *
  *  This routine implements the rtems_rate_monotonic_get_statistics directive.
  *  Statistics gathered from the use of this period are returned.
- * 
+ *
  *  @param[in] id is the rate monotonic id
  *  @param[in] statistics is the pointer to statistics control block
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_rate_monotonic_get_statistics(
@@ -421,10 +423,10 @@ void rtems_rate_monotonic_report_statistics( void );
  *  length is non-zero, this directive initiates the period associated with
  *  ID from continuing for a period of length.  If length is zero, then
  *  result is set to indicate the current state of the period.
- *  
+ *
  *  @param[in] id is the rate monotonic id
  *  @param[in] lenght is the length of period (in ticks)
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_rate_monotonic_period(
@@ -441,7 +443,7 @@ rtems_status_code rtems_rate_monotonic_period(
  *  period is restarted.  If the owning thread is not waiting for the
  *  period to expire, then the period is placed in the EXPIRED
  *  state and not restarted.
- * 
+ *
  *  @param[in] id is the period id
  */
 void _Rate_monotonic_Timeout(

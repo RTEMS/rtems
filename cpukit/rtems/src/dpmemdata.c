@@ -1,6 +1,11 @@
-/*
- *  Dual Port Memory Manager -- Instantiate Data
+/**
+ * @file
  *
+ * @brief Define the internal Dual Ported Memory information
+ * @ingroup ClassicDPMEM Dual Ported Memory
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

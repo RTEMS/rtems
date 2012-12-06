@@ -1,6 +1,11 @@
-/*
- *  Message Queue Manager - rtems_message_queue_send
+/**
+ * @file
  *
+ * @brief rtems_message_queue_send
+ * @ingroup ClassicMessageQueue Message Queues
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

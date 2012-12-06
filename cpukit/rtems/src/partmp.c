@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Partition_MP_Send_process_packet
+ * @ingroup ClassicPartMP Partition MP Support
+ */
+
 /*
- *  Multiprocessing Support for the Partition Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

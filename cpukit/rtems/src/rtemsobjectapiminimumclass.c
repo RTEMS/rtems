@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Get Least Valid Class for an API
+/**
+ * @file
  *
+ * @brief Get Lowest Valid Class Value
+ * @ingroup ClassicClassInfo Object Class Information
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

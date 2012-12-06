@@ -65,6 +65,8 @@ typedef struct {
 /**
  *  @brief Partition_MP_Send_process_packet
  *
+ *  Multiprocessing Support for the Partition Manager
+ *
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.
  */

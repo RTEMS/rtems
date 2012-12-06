@@ -31,6 +31,8 @@
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.
+ *
+ *  Partition Manager -- Instantiate Data
  */
 #ifndef RTEMS_PART_EXTERN
 #define RTEMS_PART_EXTERN extern
@@ -120,11 +122,11 @@ rtems_status_code rtems_partition_create(
  *  extent of the search for the ID of the partition named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
- * 
+ *
  *  @param[in] name is the user defined partition name
  *  @param[in] node is(are) the node(s) to be searched
  *  @param[in] id is the pointer to partition id
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
  *  		*id filled in with the partition id
  */

@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief rtems_task_is_suspended
+ * @ingroup ClassicTasks Tasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

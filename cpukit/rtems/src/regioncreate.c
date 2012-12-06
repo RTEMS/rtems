@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief rtems_region_create
+ * @ingroup ClassicRegion Regions
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

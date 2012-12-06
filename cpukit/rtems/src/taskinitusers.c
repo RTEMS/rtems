@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief _RTEMS_tasks_Initialize_user_tasks_body
+ * @ingroup ClassicTasks Tasks
+ */
+
 /*
- *  RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

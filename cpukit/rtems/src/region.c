@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief _Region_Manager_initialization
+ * @ingroup ClassicRegion Regions
+ */
+
 /*
- *  Region Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

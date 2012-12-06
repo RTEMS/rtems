@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Reset Statistics for All Periods
+/**
+ * @file
  *
+ * @brief rtems_rate_monotonic_reset_all_statistics
+ * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Returns the system uptime in seconds.
+ * @ingroup ClassicClock Clocks
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

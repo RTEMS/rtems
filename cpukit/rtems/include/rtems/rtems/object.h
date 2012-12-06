@@ -73,6 +73,8 @@ typedef struct {
 /**
  *  @brief Build Thirty-Two Bit Object Name
  *
+ *  RTEMS Object Helper -- Build an Object Id
+ *
  *  This function returns an object name composed of the four characters
  *  C1, C2, C3, and C4.
  *
@@ -134,6 +136,8 @@ char *rtems_object_get_name(
  *  This method allows the caller to set the name of an
  *  object.  This can be used to set the name of objects
  *  which do not have a naming scheme per their API.
+ *
+ *  RTEMS Object Helper -- Set Name of Object as String
  *
  *  @param[in] id is the Id of the object to obtain the name of
  *  @param[out] name will be set to the name of the object
@@ -254,6 +258,7 @@ rtems_status_code rtems_object_set_name(
  *
  *  @return This method returns the least valid value for
  *          class number for the specified @a api.
+ *  RTEMS Object Helper -- Get Least Valid Class for an API
  */
 int rtems_object_api_minimum_class(
   int api

@@ -1,6 +1,11 @@
-/*
- *  Clock Manager - get uptime
+/**
+ * @file
  *
+ * @brief Obtain the System Uptime
+ * @ingroup ClassicClock Clocks
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

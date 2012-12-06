@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Set Name of Object as String
+/**
+ * @file
  *
+ * @brief Set Name of Object
+ * @ingroup ClassicClassInfo Object Class Information
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

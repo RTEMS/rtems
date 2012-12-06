@@ -1,6 +1,11 @@
-/*
- *  RTEMS Object Helper -- Build an Object Id
+/**
+ * @file
  *
+ * @brief Build Object Id
+ * @ingroup ClassicClassInfo Object Class Information
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

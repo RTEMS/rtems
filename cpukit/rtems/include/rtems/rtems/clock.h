@@ -95,6 +95,8 @@ rtems_status_code rtems_clock_get(
  *  This routine implements the rtems_clock_get_tod directive.  It returns
  *  the current time of day in the format defined by RTEID.
  *
+ *  Clock Manager - rtems_clock_get_tod
+ *
  *  @param[in] time_buffer points to the time of day structure
  *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
@@ -199,6 +201,8 @@ rtems_status_code rtems_clock_tick( void );
 /**
  *  @brief Set the BSP specific Nanoseconds Extension
  *
+ *  Clock Manager
+ *
  *  This directive sets the BSP provided nanoseconds since last tick
  *  extension.
  *
@@ -223,6 +227,8 @@ rtems_status_code rtems_clock_set_nanoseconds_extension(
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.  If successful, the uptime will be
  *          filled in.
+ *
+ *  Clock Manager - get uptime
  */
 rtems_status_code rtems_clock_get_uptime(
   struct timespec *uptime

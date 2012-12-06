@@ -1,6 +1,11 @@
-/*
- *  Semaphore Manager -- Data Instantiation
+/**
+ * @file
  *
+ * @brief Instantiate Semaphore Data
+ * @ingroup ClassicSem Semaphores
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

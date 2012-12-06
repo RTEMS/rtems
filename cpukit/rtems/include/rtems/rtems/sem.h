@@ -27,10 +27,15 @@
 #define _RTEMS_RTEMS_SEM_H
 
 /**
+ *  @brief Instantiate Semaphore Data
+ *
+ *  Semaphore Manager -- Data Instantiation
+ *
  *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
  *  in a single per manager file.
+ *
  */
 #ifndef RTEMS_SEM_EXTERN
 #define RTEMS_SEM_EXTERN extern
@@ -118,6 +123,8 @@ void _Semaphore_Manager_initialization(void);
  *  the semaphore is count.  The attribute_set determines if
  *  the semaphore is global or local and the thread queue
  *  discipline.  It returns the id of the created semaphore in ID.
+ *
+ *  Semaphore Manager
  */
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
@@ -137,11 +144,11 @@ rtems_status_code rtems_semaphore_create(
  *  extent of the search for the ID of the semaphore named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
- * 
+ *
  *  @param[in] name is the user defined semaphore name
  *  @param[in] node is(are) the node(s) to be searched
  *  @param[in] id is the pointer to semaphore id
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
  *  *id filled in with the semaphore id
  */
@@ -207,16 +214,16 @@ rtems_status_code rtems_semaphore_release(
 
 /**
  *  @brief RTEMS Semaphore Flush
- * 
+ *
  *  DESCRIPTION:
  *  This package is the implementation of the flush directive
  *  of the Semaphore Manager.
- * 
+ *
  *  This directive allows a thread to flush the threads
  *  pending on the semaphore.
  *
  *  @param[in] id is the semaphore id
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_semaphore_flush(

@@ -72,6 +72,7 @@ typedef struct {
 }   Dual_ported_memory_Control;
 
 /**
+ *  @brief Define the internal Dual Ported Memory information
  *  The following define the internal Dual Ported Memory information.
  */
 RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;

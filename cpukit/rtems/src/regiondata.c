@@ -1,6 +1,11 @@
-/*
- *  Region Manager -- Instantiate Data
+/**
+ * @file
  *
+ * @brief Instantiate RTEMS Region Data
+ * @ingroup ClassicRegion Regions
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
