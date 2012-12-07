@@ -18,7 +18,7 @@
 #include <rtems/config.h>
 
 /**
- *  _RTEMS_API_Initialize
+ *  @brief Initializes the RTEMS API
  *
  *  This routine initializes the RTEMS API by invoking the initialization
  *  routine for each RTEMS manager with the appropriate parameters

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Get the RTEMS Version as a String
+ *
+ * @ingroup ClassicRTEMS
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

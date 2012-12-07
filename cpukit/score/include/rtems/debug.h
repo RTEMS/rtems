@@ -45,25 +45,27 @@ typedef uint32_t   rtems_debug_control;
 SCORE_EXTERN rtems_debug_control _Debug_Level;
 
 /**
- *  This routine performs the initialization necessary for this manager.
+ *  @brief Initialize Debug Manager
  */
 void _Debug_Manager_initialization( void );
 
 /**
- *  This routine enables the specified types of debug checks.
+ *  @brief Enable Debugging
  */
 void rtems_debug_enable(
   rtems_debug_control  to_be_enabled
 );
 
 /**
- *  This routine disables the specified types of debug checks.
+ *  @brief Disable Debugging
  */
 void rtems_debug_disable(
   rtems_debug_control  to_be_disabled
 );
 
 /**
+ *  @brief Check if Debug is Enabled
+ *  
  *  This routine returns TRUE if the requested debug level is
  *  enabled, and FALSE otherwise.
  */

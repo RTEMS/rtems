@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Returns a description for an internal error code.
+ *
+ * @ingroup ClassicFatal
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

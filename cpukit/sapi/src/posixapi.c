@@ -1,8 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Initialize POSIX API
+ *
+ * @ingroup ClassicRTEMS
+ */
+
 /*
- *  RTEMS API Initialization Support
- *
- *  NOTE:
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,11 +18,6 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-/*
- *  POSIX_API_INIT is defined so all of the POSIX API
- *  data will be included in this object file.
- */
 
 #define POSIX_API_INIT
 
@@ -44,12 +43,6 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/spinlock.h>
 #include <rtems/posix/time.h>
-
-/*
- *  _POSIX_API_Initialize
- *
- *  XXX
- */
 
 Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
 
@@ -82,4 +75,3 @@ void _POSIX_API_Initialize(void)
 }
 
 #endif
-/* end of file */

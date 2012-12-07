@@ -1,6 +1,12 @@
-/*
- *  Input/Output Manager - Device Write
+/**
+ * @file
  *
+ * @brief Writing for The IO Manager
+ *
+ * @ingroup ClassicIO
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -15,20 +21,6 @@
 
 #include <rtems/system.h>
 #include <rtems/io.h>
-
-/*
- *  rtems_io_write
- *
- *  This routine is the write directive of the IO manager.
- *
- *  Input Paramters:
- *    major        - device driver number
- *    minor        - device number
- *    argument     - pointer to argument(s)
- *
- *  Output Parameters:
- *    returns       - return code
- */
 
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,

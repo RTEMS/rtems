@@ -1,8 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Initializes the RTEMS API
+ *
+ * @ingroup ClassicRTEMS
+ */
+
 /*
- *  POSIX API Initialization Support
- *
- *  NOTE:
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,11 +18,6 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-/*
- *  RTEMS_API_INIT is defined so all of the RTEMS API
- *  data will be included in this object file.
- */
 
 #define RTEMS_API_INIT
 
@@ -45,12 +44,6 @@
 
 Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 
-/*
- *  _RTEMS_API_Initialize
- *
- *  XXX
- */
-
 void _RTEMS_API_Initialize(void)
 {
   /*
@@ -75,5 +68,3 @@ void _RTEMS_API_Initialize(void)
   _Rate_monotonic_Manager_initialization();
   _Barrier_Manager_initialization();
 }
-
-/* end of file */

@@ -100,11 +100,13 @@ rtems_status_code rtems_io_register_driver(
 );
 
 /**
- * @brief Unregisters the device driver with number @a major.
+ *  @brief Unregister a Driver from the Device Driver Table.
  *
- * @retval RTEMS_SUCCESSFUL Device driver successfully unregistered.
- * @retval RTEMS_UNSATISFIED Invalid major number.
- * @retval RTEMS_CALLED_FROM_ISR Called from interrupt context.
+ *  @param[in] major is the device major number.
+ *
+ *  @retval RTEMS_SUCCESSFUL Device driver successfully unregistered.
+ *  @retval RTEMS_UNSATISFIED Invalid major number.
+ *  @retval RTEMS_CALLED_FROM_ISR Called from interrupt context.
  */
 rtems_status_code rtems_io_unregister_driver(
   rtems_device_major_number major
@@ -126,41 +128,101 @@ rtems_status_code rtems_io_register_name(
 /** @} */
 
 /**
- * @name Device Driver Invocation
+ *  @brief IO Driver Initialization
  *
- * @{
+ *  This routine is the initialization directive of the IO manager.
+ *
+ *  @param[in] major is the device drive number
+ *  @param[in] minor is the device number
+ *  @param[in] argument is the pointer to the argument(s)
+ *
+ *  @return status code
  */
-
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
 
+/**
+ *  @brief Opening for The IO Manager
+ *  
+ *  Opens a device driver with the number @a major.
+ *
+ *  @param[in] major is the device driver number.
+ *  @param[in] minor is the device number.
+ *  @param[in] argument is the pointer to the argument(s).
+ *
+ *  @return Status code.
+ */
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
 
+/**
+ *  @brief Closing for The IO Manager
+ *  
+ *  This routine is the close directive of the IO manager.
+ *
+ *  @param[in] major is the device driver number.
+ *  @param[in] minor is the device number.
+ *  @param[in] argument is the pointer to the argument(s).
+ *
+ *  @return Status code.
+ */
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
 
+/**
+ *  @brief Reading for The IO Manager
+ *  
+ *  This routine is the read directive of the IO manager.
+ *
+ *  @param[in] major is the device driver number.
+ *  @param[in] minor is the device number.
+ *  @param[in] argument is the pointer to the argument(s).
+ *
+ *  @return Status code.
+ */
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
 
+/**
+ *  @brief Writing for The IO Manager
+ *  
+ *  This routine is the write directive of the IO manager.
+ *
+ *  @param[in] major is the device driver number.
+ *  @param[in] minor is the device number.
+ *  @param[in] argument is the pointer to the argument(s).
+ *
+ *  @return Status code.
+ */
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
   void                      *argument
 );
 
+/**
+ *  @brief Control for The IO Manager
+ *  
+ *  This routine is the control directive of the IO manager.
+ *
+ *  @param[in] major is the device driver number.
+ *  @param[in] minor is the device number.
+ *  @param[in] argument is the pointer to the argument(s).
+ *
+ *  @return Status code.
+ */
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -190,8 +252,20 @@ SAPI_IO_EXTERN uint32_t _IO_Number_of_drivers;
 
 SAPI_IO_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
 
+/**
+ *  @brief Initialization of Device Drivers
+ *
+ *  @note The IO manager has been extended to support runtime driver
+ *  registration. The driver table is now allocated in the
+ *  workspace.
+ */
 void _IO_Manager_initialization( void );
 
+/**
+ *  @brief Initialization of All Device Drivers
+ *
+ *  Initializes all device drivers.
+ */
 void _IO_Initialize_all_drivers( void );
 
 #ifdef __cplusplus
@@ -199,4 +273,26 @@ void _IO_Initialize_all_drivers( void );
 #endif
 
 #endif
-/* end of include file */
+  rtems_io_write(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *argument
+);
+
+/**
+ *  @brief Control for The IO Manager
+ *  
+ *  This routine is the control directive of the IO manager.
+ *
+ *  @param[in] major is the device driver number.
+ *  @param[in] minor is the device number.
+ *  @param[in] argument is the pointer to the argument(s).
+ *
+ *  @return Status code.
+ */
+rtems_status_code rtems_io_control(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *argument
+);
+

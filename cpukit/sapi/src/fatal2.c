@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Invokes the internal error handler with is internal set to false.
+ *
+ * @ingroup ClassicFatal
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

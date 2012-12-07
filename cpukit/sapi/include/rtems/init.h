@@ -87,7 +87,7 @@ void rtems_initialize_start_multitasking(void)
   RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
- *  @brief rtems_shutdown_executive
+ *  @brief Shutdown the RTEMS environment
  *
  *  This routine implements the rtems_shutdown_executive directive.  The
  *  invocation of this directive results in the RTEMS environment being

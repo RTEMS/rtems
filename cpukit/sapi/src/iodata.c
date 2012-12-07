@@ -1,6 +1,12 @@
-/*
- *  RTEMS Task Manager -- Instantiate Data
+/**
+ * @file
  *
+ * @brief IO Data
+ *
+ * @ingroup ClassicIO
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

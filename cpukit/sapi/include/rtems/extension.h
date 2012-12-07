@@ -38,6 +38,11 @@ typedef struct {
   User_extensions_Control  Extension;
 }   Extension_Control;
 
+/**
+ *  @brief Initialize Extension Manager
+ *
+ *  This routine initializes all extension manager related data structures.
+ */
 void _Extension_Manager_initialization(void);
 
 typedef User_extensions_routine

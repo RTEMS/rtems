@@ -1,6 +1,12 @@
-/*
- *  Extension Manager -- Instantiate Data
+/**
+ * @file
  *
+ * @brief Extension Data
+ *
+ * @ingroup ClassicUserExtensions
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

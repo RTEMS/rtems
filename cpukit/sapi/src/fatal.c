@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @brief Invokes the internal error handler with a source of
+ *        INTERNAL_ERROR_RTEMS_API and is internal set to false.
+ *
+ * @ingroup ClassicFatal
+ */
+
 /*
  *  Fatal Error Manager
  *
@@ -16,17 +25,6 @@
 #include <rtems/system.h>
 #include <rtems/fatal.h>
 #include <rtems/score/interr.h>
-
-/*
- *  rtems_fatal_error_occurred
- *
- *  This directive will invoke the internal fatal error handler.
- *
- *  Input parameters:
- *    the_error - fatal error status code
- *
- *  Output parameters: NONE
- */
 
 void rtems_fatal_error_occurred(
   uint32_t   the_error

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Closing for The IO Manager
+ *
+ * @ingroup ClassicIO
+ */
+
 /*
  *  Input/Output Manager -- Close Device
  *
@@ -15,20 +23,6 @@
 
 #include <rtems/system.h>
 #include <rtems/io.h>
-
-/*
- *  rtems_io_close
- *
- *  This routine is the close directive of the IO manager.
- *
- *  Input Paramters:
- *    major        - device driver number
- *    minor        - device number
- *    argument     - pointer to argument(s)
- *
- *  Output Parameters:
- *    returns       - return code
- */
 
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,

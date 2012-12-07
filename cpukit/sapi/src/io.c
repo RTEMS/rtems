@@ -1,6 +1,12 @@
-/*
- *  Input/Output Manager - Initialize Device Driver Subsystem
+/**
+ * @file
  *
+ * @brief Initialization of Device Drivers
+ *
+ * @ingroup ClassicIO
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,15 +27,6 @@
 #include <rtems/score/wkspace.h>
 
 #include <string.h>
-
-/*
- *  _IO_Manager_initialization
- *
- *  The IO manager has been extended to support runtime driver
- *  registration. The driver table is now allocated in the
- *  workspace.
- *
- */
 
 void _IO_Manager_initialization(void)
 {
@@ -79,16 +76,6 @@ void _IO_Manager_initialization(void)
   for ( index = 0 ; index < drivers_in_table ; index++ )
     _IO_Driver_address_table[index] = driver_table[index];
 }
-
-/*
- *  _IO_Initialize_all_drivers
- *
- *  This routine initializes all device drivers
- *
- *  Input Paramters:   NONE
- *
- *  Output Parameters: NONE
- */
 
 void _IO_Initialize_all_drivers( void )
 {

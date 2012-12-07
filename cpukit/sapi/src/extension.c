@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Initialize Extension Manager
+ *
+ * @ingroup ClassicUserExtensions
+ */
+
 /*
  *  Extension Manager
  *
@@ -19,16 +27,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/extension.h>
-
-/*
- *  _Extension_Manager_initialization
- *
- *  This routine initializes all extension manager related data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
 
 void _Extension_Manager_initialization(void)
 {

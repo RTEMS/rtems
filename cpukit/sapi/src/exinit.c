@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Device Driver Initialization Functions
+ *
+ * @ingroup ClassicRTEMS
+ */
+
 /*
  *  Initialization Manager
  *
