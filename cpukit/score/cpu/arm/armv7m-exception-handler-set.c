@@ -1,3 +1,9 @@
+/**
+ *  @file
+ *
+ *  @brief ARMV7M Set Exception Handler
+ */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *

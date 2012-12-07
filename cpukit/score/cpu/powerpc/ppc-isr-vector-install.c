@@ -1,3 +1,9 @@
+/**
+ *  @file
+ *
+ *  @brief Install Interrupt Handler Vector
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

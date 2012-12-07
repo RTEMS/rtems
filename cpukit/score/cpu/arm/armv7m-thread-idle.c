@@ -1,3 +1,9 @@
+/**
+ *  @file
+ *
+ *  @brief CPU Thread Idle Body
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

@@ -1,6 +1,10 @@
-/*
- *  Intel i386 Dependent Source
+/**
+ *  @file
  *
+ *  @brief Intel i386 Dependent Source
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,13 +25,6 @@
 
 #include <rtems/bspIo.h>
 #include <rtems/score/thread.h>
-
-/*  _CPU_Initialize
- *
- *  This routine performs processor dependent initialization.
- *
- *  INPUT PARAMETERS: NONE
- */
 
 void _CPU_Initialize(void)
 {
@@ -90,10 +87,6 @@ void _CPU_Initialize(void)
   }
 #endif
 }
-
-/*
- *  _CPU_ISR_Get_level
- */
 
 uint32_t   _CPU_ISR_Get_level( void )
 {

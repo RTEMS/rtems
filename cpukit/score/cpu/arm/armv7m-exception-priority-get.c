@@ -1,3 +1,8 @@
+/**
+ *  @file
+ *
+ *  @brief ARMV7M Get Exception Priority
+ */
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *

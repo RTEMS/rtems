@@ -1,6 +1,10 @@
-/*
- *  Motorola MC68xxx Dependent Source
+/**
+ *  @file
  *
+ *  @brief Motorola MC68xxx Dependent Source
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,15 +24,6 @@
   uint32_t _CPU_cacr_shadow;
 #endif
 
-/*  _CPU_Initialize
- *
- *  This routine performs processor dependent initialization.
- *
- *  INPUT PARAMETERS: NONE
- *
- *  OUTPUT PARAMETERS: NONE
- */
-
 void _CPU_Initialize(void)
 {
 #if ( M68K_HAS_VBR == 0 )
@@ -46,10 +41,6 @@ void _CPU_Initialize(void)
   }
 #endif /* M68K_HAS_VBR */
 }
-
-/*
- *  _CPU_ISR_Get_level
- */
 
 uint32_t   _CPU_ISR_Get_level( void )
 {
@@ -110,20 +101,6 @@ void _CPU_ISR_install_raw_handler(
     interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
 #endif /* M68K_HAS_VBR */
 }
-
-/*
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    new_handler - replacement ISR for this vector number
- *    old_handler - former ISR for this vector number
- *
- *  Output parameters:  NONE
- */
 
 void _CPU_ISR_install_vector(
   uint32_t    vector,

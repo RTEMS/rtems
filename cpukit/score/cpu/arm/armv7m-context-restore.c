@@ -1,3 +1,9 @@
+/**
+ *  @file
+ *
+ *  @brief CPU Restore Context
+ */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
