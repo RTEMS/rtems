@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager -- Create a Barrier Instance
+/**
+ * @file
  *
+ * @brief RTEMS Create Barrier
+ * @ingroup ClassicBarrier Barriers
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

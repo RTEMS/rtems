@@ -45,7 +45,7 @@
 
 /**
  *  @brief Instantiate RTEMS Classic API Tasks Data
- * 
+ *
  *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
@@ -287,11 +287,11 @@ rtems_status_code rtems_task_create(
  *  extent of the search for the ID of the task named name.
  *  The search can be limited to a particular node or allowed to
  *  encompass all nodes.
- * 
+ *
  *  @param[in] name is the user defined thread name
  *  @param[in] node is(are) the node(s) to be searched
  *  @param[in] id is the pointer to thread id
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.  If successful, the id will
@@ -309,9 +309,9 @@ rtems_status_code rtems_task_ident(
  *  This routine implements the rtems_task_delete directive.  The
  *  task indicated by ID is deleted. The executive halts execution
  *  of the thread and frees the thread control block.
- *  
+ *
  *  @param[in] id is the thread id
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error and id is not the requesting thread.  Status code is
  *          returned indicating the source of the error.  Nothing
@@ -327,11 +327,11 @@ rtems_status_code rtems_task_delete(
  *  This routine implements the rtems_task_get_note directive.  The
  *  value of the indicated notepad for the task associated with ID
  *  is returned in note.
- * 
+ *
  *  @param[in] id is the thread id
  *  @param[in] notepad is the notepad number
  *  @param[out] note is the pointer to note
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_get_note(
@@ -346,11 +346,11 @@ rtems_status_code rtems_task_get_note(
  *  This routine implements the rtems_task_set_note directive.  The
  *  value of the indicated notepad for the task associated with ID
  *  is returned in note.
- * 
+ *
  *  @param[in] id is the thread id
  *  @param[in] notepad is the notepad number
  *  @param[in] note is the note value
- *  
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -368,12 +368,12 @@ rtems_status_code rtems_task_set_note(
  *  values of the modes indicated by mask of the calling task are changed
  *  to that indicated in mode_set.  The former mode of the task is
  *  returned in mode_set.
- * 
+ *
  *  @param[in] mode_set is the new mode
  *  @param[in] mask is the mask
  *  @param[in] previous_mode_set is the address of previous mode set
- * 
- *  @return RTEMS_SUCCESSFUL and previous_mode_set filled in with the 
+ *
+ *  @return RTEMS_SUCCESSFUL and previous_mode_set filled in with the
  *  previous mode set
  */
 rtems_status_code rtems_task_mode(
@@ -388,10 +388,10 @@ rtems_status_code rtems_task_mode(
  *  This routine implements the rtems_task_restart directive.  The
  *  task associated with ID is restarted at its initial entry
  *  point with the new argument.
- * 
+ *
  *  @param[in] id is the thread id
  *  @param[in] arg is the thread argument
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_restart(
@@ -405,9 +405,9 @@ rtems_status_code rtems_task_restart(
  *  This routine implements the rtems_task_suspend directive.  The
  *  SUSPENDED state is set for task associated with ID. Note that the
  *  suspended state can be in addition to other waiting states.
- * 
+ *
  *  @param[in] id is the thread id
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -421,9 +421,9 @@ rtems_status_code rtems_task_suspend(
  *
  *  This routine implements the rtems_task_resume Directive.  The
  *  SUSPENDED state is cleared for task associated with ID.
- * 
+ *
  *  @param[in] id is the thread id
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -454,7 +454,9 @@ rtems_status_code rtems_task_set_priority(
 );
 
 /**
- *  @brief rtems_task_start
+ *  @brief RTEMS Start Task
+ *
+ *  RTEMS Task Manager
  *
  *  This routine implements the rtems_task_start directive.  The
  *  starting execution point of the task associated with ID is
@@ -519,7 +521,9 @@ rtems_status_code rtems_task_variable_add(
 );
 
 /**
- *  @brief rtems_task_variable_get
+ *  @brief Get a per-task variable
+ *
+ *  RTEMS Task Variable Get
  *
  *  This directive gets the value of a task variable.
  */

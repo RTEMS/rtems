@@ -163,9 +163,9 @@ rtems_status_code rtems_semaphore_ident(
  *
  *  This routine implements the rtems_semaphore_delete directive.  The
  *  semaphore indicated by ID is deleted.
- * 
+ *
  *  @param[in] id is the semaphore id
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -184,11 +184,11 @@ rtems_status_code rtems_semaphore_delete(
  *  block waiting for a unit with an optional timeout of timeout
  *  clock ticks.  Whether the task blocks or returns immediately
  *  is based on the RTEMS_NO_WAIT option in the option_set.
- * 
+ *
  *  @param[in] id is the semaphore id
  *  @param[in] option_set is the wait option
  *  @param[in] timeout is the number of ticks to wait (0 means wait forever)
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -200,7 +200,9 @@ rtems_status_code rtems_semaphore_obtain(
 );
 
 /**
- *  @brief rtems_semaphore_release
+ *  @brief RTEMS Semaphore Release
+ *
+ *  Semaphore Manager
  *
  *  This routine implements the rtems_semaphore_release directive.  It
  *  frees a unit to the semaphore associated with ID.  If a task was
@@ -248,9 +250,9 @@ bool _Semaphore_Seize(
  *
  *  This function returns a RTEMS status code based on the mutex
  *  status code specified.
- *  
+ *
  *  @param[in] the_mutex_status is the mutex status code to translate
- * 
+ *
  *  @return translated RTEMS status code
  */
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
@@ -262,9 +264,9 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  *
  *  This function returns a RTEMS status code based on the semaphore
  *  status code specified.
- * 
+ *
  *  @param[in] status is the semaphore status code to translate
- * 
+ *
  *  @return translated RTEMS status code
  */
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (

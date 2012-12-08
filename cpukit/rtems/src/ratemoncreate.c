@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Create a Period
+/**
+ * @file
  *
+ * @brief Create a Period
+ * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

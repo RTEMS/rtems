@@ -68,7 +68,9 @@ typedef struct {
 }   RTEMS_tasks_MP_Packet;
 
 /**
- *  @brief _RTEMS_tasks_MP_Send_process_packet
+ *  @brief RTEMS Tasks MP Send Process Packet
+ *
+ *  Multiprocessing Support for the RTEMS Task Manager
  *
  *  This routine performs a remote procedure call so that a
  *  process operation can be performed on another node.

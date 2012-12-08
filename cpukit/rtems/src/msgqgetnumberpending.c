@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Message Queue Get Number Pending
+ * @ingroup ClassicMessageQueue Message Queues
+ */
+
 /*
- *  Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

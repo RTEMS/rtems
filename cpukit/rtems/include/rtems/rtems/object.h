@@ -154,6 +154,8 @@ rtems_status_code rtems_object_set_name(
 /**
  *  @brief Get API Portion of Object Id
  *
+ *  RTEMS Object Helper -- Extract API From Id
+ *
  *  This function returns the API portion of the Id.
  *
  *  @param[in] _id is the Id of the object to obtain the API from

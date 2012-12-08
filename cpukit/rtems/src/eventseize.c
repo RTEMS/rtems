@@ -1,6 +1,11 @@
-/*
- *  Event Manager
+/**
+ * @file
  *
+ * @brief Event Manager Initialization
+ * @ingroup ClassicEvent Events
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

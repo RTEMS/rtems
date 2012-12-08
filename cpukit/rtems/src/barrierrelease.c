@@ -1,6 +1,11 @@
-/*
- *  Barrier Manager -- Release Tasks Waitng at a Barrier
+/**
+ * @file
  *
+ * @brief RTEMS Barrier Release
+ * @ingroup ClassicBarrier Barriers
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

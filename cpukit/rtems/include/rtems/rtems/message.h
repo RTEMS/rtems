@@ -112,13 +112,13 @@ void _Message_queue_Manager_initialization(void);
  *  that can be outstanding, then @a count indicates the maximum number of
  *  messages that will be held.  It returns the id of the created
  *  message queue in @a id.
- * 
+ *
  *  @param[in] name is the user defined queue name
  *  @param[in] count is the maximum message and reserved buffer count
  *  @param[in] max_message_size is the maximum size of each message
  *  @param[in] attribute_set is the process method
  *  @param[in] id is the pointer to queue
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.  If successful, the @a id will
@@ -244,14 +244,14 @@ rtems_status_code rtems_message_queue_broadcast(
  *  message is to be placed in buffer.  If no messages are outstanding
  *  and the option_set indicates that the task is willing to block,
  *  then the task will be blocked until a message arrives or until,
- *  optionally, timeout clock ticks have passed. 
- * 
+ *  optionally, timeout clock ticks have passed.
+ *
  *  @param[in] id is the queue id
  *  @param[in] buffer is the pointer to message buffer
  *  @param[in] size is the size of message receive
  *  @param[in] option_set is the options on receive
  *  @param[in] timeout is the number of ticks to wait
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -280,7 +280,9 @@ rtems_status_code rtems_message_queue_flush(
 );
 
 /**
- *  @brief rtems_message_queue_get_number_pending
+ *  @brief RTEMS Message Queue Get Number Pending
+ *
+ *  Message Queue Manager
  *
  *  This routine implements the rtems_message_queue_get_number_pending
  *  directive.  This directive returns the number of pending
@@ -315,7 +317,7 @@ rtems_status_code _Message_queue_Submit(
  *
  *  This function allocates a message queue control block from
  *  the inactive chain of free message queue control blocks.
- * 
+ *
  *  @return the_message_queue filled in if successful, NULL otherwise
  */
 Message_queue_Control *_Message_queue_Allocate (void);
@@ -325,9 +327,9 @@ Message_queue_Control *_Message_queue_Allocate (void);
  *
  *  This function returns a RTEMS status code based on
  *  @a the_message_queue_status.
- * 
+ *
  *  @param[in] the_message_queue_status is the status code to translate
- * 
+ *
  *  @return translated RTEMS status code
  */
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (

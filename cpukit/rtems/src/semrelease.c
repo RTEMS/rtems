@@ -1,5 +1,8 @@
-/*
- *  Semaphore Manager
+/**
+ * @file
+ *
+ * @brief RTEMS Semaphore Release
+ * @ingroup ClassicSem Semaphores
  *
  *  DESCRIPTION:
  *
@@ -15,6 +18,9 @@
  *     + acquire a semaphore
  *     + release a semaphore
  *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

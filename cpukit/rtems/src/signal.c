@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Signal Manager Initialization
+ * @ingroup ClassicSignal Signals
+ */
+
 /*
- *  Signal Manager
- *
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

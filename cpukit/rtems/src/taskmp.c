@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Tasks MP Send Process Packet
+ * @ingroup ClassicTaskMP Task MP Support
+ */
+
 /*
- *  Multiprocessing Support for the RTEMS Task Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

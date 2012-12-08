@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Timer Server Fire When Directive
+ * @ingroup ClassicTimer Timers
+ */
+
 /*
- *  Timer Manager - rtems_timer_server fire_when directive
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

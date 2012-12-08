@@ -1,6 +1,11 @@
-/*
- *  Event Manager
+/**
+ * @file
  *
+ * @brief  Constant used to receive the set of currently pending events in
+ * @ingroup ClassicEventSet Event Set
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

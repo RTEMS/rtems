@@ -1,6 +1,11 @@
-/*
- *  Rate Monotonic Manager -- Reset Statistics
+/**
+ * @file
  *
+ * @brief RTEMS Rate Monotonic Reset Statistics
+ * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

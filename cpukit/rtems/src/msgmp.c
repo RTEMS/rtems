@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Multiprocessing Support for the Message Queue Manager
+ * @ingroup ClassicMsgMP Message Queue MP Support
+ */
+
 /*
- *  Multiprocessing Support for the Message Queue Manager
- *
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Timer Reset
+ * @ingroup ClassicTimer Timers
+ */
+
 /*
- *  Timer Manager - rtems_timer_reset directive
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

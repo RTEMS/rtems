@@ -34,6 +34,10 @@
 /**@{*/
 
 /**
+ *  @brief Instantiate Barrier Data
+ *
+ *  Barrier Manager -- Instantiate Data
+ *
  *  This constant is defined to extern most of the time when using
  *  this header file.  However by defining it to nothing, the data
  *  declared in this header file can be instantiated.  This is done
@@ -80,7 +84,9 @@ RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
 void _Barrier_Manager_initialization(void);
 
 /**
- *  @brief rtems_barrier_create
+ *  @brief RTEMS Create Barrier
+ *
+ *  Barrier Manager -- Create a Barrier Instance
  *
  *  This routine implements the rtems_barrier_create directive.  The
  *  barrier will have the name name.  The starting count for
@@ -160,7 +166,9 @@ rtems_status_code rtems_barrier_wait(
 );
 
 /**
- *  @brief rtems_barrier_release
+ *  @brief RTEMS Barrier Release
+ *
+ *  Barrier Manager -- Release Tasks Waitng at a Barrier
  *
  *  This routine implements the rtems_barrier_release directive.  It
  *  unblocks all of the threads waiting on the barrier associated with

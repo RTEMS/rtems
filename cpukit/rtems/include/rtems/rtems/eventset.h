@@ -109,6 +109,9 @@ typedef uint32_t   rtems_event_set;
 
 /**
  *  @brief Constant used to receive the set of currently pending events in
+ *
+ *  Event Manager
+ *
  *  rtems_event_receive().
  *
  *  @ingroup ClassicEvent

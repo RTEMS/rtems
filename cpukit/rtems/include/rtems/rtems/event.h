@@ -70,7 +70,7 @@ extern "C" {
  *  - Events do not hold or transport data.
  *  - Events are not queued. In other words, if an event is sent more than once
  *    to a task before being received, the second and subsequent send
- *    operations to that same task have no effect. 
+ *    operations to that same task have no effect.
  *
  *  An event set is posted when it is directed (or sent) to a task. A pending
  *  event is an event that has been posted but not received. An event condition
@@ -80,7 +80,7 @@ extern "C" {
  *  selected by the user. The @ref RTEMS_EVENT_ANY algorithm states that an
  *  event condition is satisfied when at least a single requested event is
  *  posted.  The @ref RTEMS_EVENT_ALL algorithm states that an event condition
- *  is satisfied when every requested event is posted. 
+ *  is satisfied when every requested event is posted.
  *
  *  An event set or condition is built by a bitwise or of the desired events.
  *  The set of valid events is @ref RTEMS_EVENT_0 through @ref RTEMS_EVENT_31.
@@ -92,7 +92,7 @@ extern "C" {
  *  For example, when sending the event set consisting of @ref RTEMS_EVENT_6,
  *  @ref RTEMS_EVENT_15, and @ref RTEMS_EVENT_31, the event parameter to the
  *  rtems_event_send() directive should be @ref RTEMS_EVENT_6 |
- *  @ref RTEMS_EVENT_15 | @ref RTEMS_EVENT_31. 
+ *  @ref RTEMS_EVENT_15 | @ref RTEMS_EVENT_31.
  *
  *  @{
  */
@@ -109,9 +109,9 @@ extern "C" {
  *    If the waiting task's input event condition is
  *    - satisfied, then the task is made ready for execution.
  *    - not satisfied, then the event set is posted but left pending and the
- *      task remains blocked. 
+ *      task remains blocked.
  *  - not waiting for events.
- *    - The event set is posted and left pending. 
+ *    - The event set is posted and left pending.
  *
  *  Identical events sent to a task are not queued. In other words, the second,
  *  and subsequent, posting of an event to a task before it can perform an
@@ -190,7 +190,7 @@ rtems_status_code rtems_event_send (
  *  @param[in] ticks Time out in ticks.  Use @ref RTEMS_NO_TIMEOUT to wait
  *  without a time out (potentially forever).
  *  @param[out] event_out Set of received events (output events).
- * 
+ *
  *  @retval RTEMS_SUCCESSFUL Successful operation.
  *  @retval RTEMS_UNSATISFIED Input events not satisfied (only with the
  *  @ref RTEMS_NO_WAIT option).
@@ -438,7 +438,12 @@ typedef struct {
 /**
  *  @brief Event Manager Initialization
  *
+ *  Event Manager
+ *
  *  This routine performs the initialization necessary for this manager.
+ *
+ *  - INTERRUPT LATENCY:
+ *    + single case
  */
 void _Event_Manager_initialization( void );
 
@@ -455,7 +460,7 @@ void _Event_Seize(
 
 /**
  *  @brief Surrender Event
- * 
+ *
  *  - INTERRUPT LATENCY:
  *    + before flash
  *    + after flash

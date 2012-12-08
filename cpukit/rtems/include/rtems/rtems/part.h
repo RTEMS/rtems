@@ -93,7 +93,9 @@ RTEMS_PART_EXTERN Objects_Information _Partition_Information;
 void _Partition_Manager_initialization(void);
 
 /**
- *  @brief rtems_partition_create
+ *  @brief RTEMS Partition Create
+ *
+ *  Partition Manager
  *
  *  This routine implements the rtems_partition_create directive.  The
  *  partition will have the name name.  The memory area managed by
@@ -142,9 +144,9 @@ rtems_status_code rtems_partition_ident(
  *  This routine implements the rtems_partition_delete directive.  The
  *  partition indicated by ID is deleted, provided that none of its buffers
  *  are still allocated.
- * 
+ *
  *  @param[in] id is the partition id
- * 
+ *
  *  @return This method returns RTEMS_SUCCESSFUL if there was not an
  *          error.  Otherwise, a status code is returned indicating the
  *          source of the error.
@@ -159,10 +161,10 @@ rtems_status_code rtems_partition_delete(
  *  This routine implements the rtems_partition_get_buffer directive.  It
  *  attempts to allocate a buffer from the partition associated with ID.
  *  If a buffer is allocated, its address is returned in buffer.
- * 
+ *
  *  @param[in] id is the partition id
  *  @param[out] buffer is the pointer to buffer address
- * 
+ *
  *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_partition_get_buffer(

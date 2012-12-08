@@ -1,7 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Get a per-task variable
+ * @ingroup ClassicTasks Tasks
+ */
+
 /*
- *  rtems_task_variable_get - Get a per-task variable
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
