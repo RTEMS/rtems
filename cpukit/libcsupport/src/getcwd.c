@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Get Current Working Directory
+ * @ingroup libcsupport
+ */
+
 /*
  * Copyright (c) 1989, 1991 The Regents of the University of California.
  * All rights reserved.

@@ -1,6 +1,11 @@
-/*
- *  chdir() - POSIX 1003.1b - 5.2.1 - Change Current Working Directory
+/**
+ * @file
  *
+ * @brief POSIX 1003.1b - 5.2.1 - Change Current Working Directory
+ * @ingroup libio Internal Interface
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

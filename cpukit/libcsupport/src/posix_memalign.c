@@ -1,6 +1,11 @@
-/*
- *  posix_memalign()
+/**
+ * @file
  *
+ * @brief Update call statistics
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

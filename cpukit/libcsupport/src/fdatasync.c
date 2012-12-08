@@ -1,6 +1,11 @@
-/*
- *  fdatasync() - POSIX 1003.1b 6.6.2 - Synchronize the Data of a File
+/**
+ * @file
  *
+ * @brief POSIX 1003.1b 6.6.2 - Synchronize the Data of a File
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

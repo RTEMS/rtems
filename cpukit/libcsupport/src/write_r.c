@@ -1,6 +1,11 @@
-/*
- *  write_r() - POSIX 1003.1b 6.4.2 - Write to a File
+/**
+ * @file
  *
+ * @brief POSIX 1003.1b 6.4.2 - Write to a File
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -9,6 +9,11 @@
 #ifndef _RTEMS_RTEMS_ASSOC_H
 #define _RTEMS_RTEMS_ASSOC_H
 
+/**
+ *  @defgroup Associativity Routines
+ */
+/**@{*/
+
 #include <stdint.h> /* uint32_t */
 
 #ifdef __cplusplus
@@ -51,6 +56,10 @@ uint32_t rtems_assoc_remote_by_name(
   const rtems_assoc_t *,
   const char *
 );
+
+/**
+ *  @brief RTEMS Associate Local by Name
+ */
 uint32_t rtems_assoc_local_by_name(
   const rtems_assoc_t *,
   const char *
@@ -66,6 +75,9 @@ const char *rtems_assoc_name_by_remote(
   uint32_t
 );
 
+/**
+ *  @brief RTEMS Assoc Routines
+ */
 uint32_t rtems_assoc_remote_by_local_bitfield(
   const rtems_assoc_t *,
   uint32_t
@@ -111,5 +123,5 @@ const char *rtems_assoc_name_bad(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* ! _RTEMS_RTEMS_ASSOC_H */

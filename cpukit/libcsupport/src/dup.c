@@ -1,6 +1,11 @@
-/*
- *  dup() - POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
+/**
+ * @file
  *
+ * @brief POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

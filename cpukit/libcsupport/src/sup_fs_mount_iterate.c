@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Mount table entry visitor.
+ * @ingroup Termios Termios
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

@@ -1,6 +1,11 @@
-/*
- *  ioctl() system call
+/**
+ * @file
  *
+ * @brief ioctl() system call
+ * @ingroup libcsupport
+ */
+
+/*
  *  This routine is not defined in the POSIX 1003.1b standard but is
  *  commonly supported on most UNIX and POSIX systems.
  *

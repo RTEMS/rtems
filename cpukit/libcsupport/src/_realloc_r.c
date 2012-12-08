@@ -1,6 +1,11 @@
-/*
- *  _realloc_r Implementation
+/**
+ * @file
  *
+ * @brief  _realloc_r Implementation
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

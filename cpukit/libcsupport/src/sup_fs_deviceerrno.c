@@ -1,9 +1,14 @@
+/**
+ * @file
+ *
+ * @brief IMFS Device Node Handlers
+ * @ingroup Device IO Handler
+ *
+ * This file contains the set of handlers used to map operations on
+ * IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
+ */
+
 /*
- *  IMFS Device Node Handlers
- *
- *  This file contains the set of handlers used to map operations on
- *  IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

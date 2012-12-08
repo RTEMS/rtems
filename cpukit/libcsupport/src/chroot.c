@@ -1,5 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Change Root Directory
+ * @ingroup libcsupport
+ */
+
 /*
- *  chroot() -  Change Root Directory
  *  Author: fernando.ruiz@ctv.es
  *
  *  COPYRIGHT (c) 1989-2008.

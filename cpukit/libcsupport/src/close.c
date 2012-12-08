@@ -1,6 +1,11 @@
-/*
- *  close() - POSIX 1003.1b 6.3.1 - Close a File
+/**
+ * @file
  *
+ * @brief POSIX 1003.1b 6.3.1 - Close a File
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

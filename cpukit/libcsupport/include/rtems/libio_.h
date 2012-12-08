@@ -19,6 +19,11 @@
 #ifndef _RTEMS_RTEMS_LIBIO__H
 #define _RTEMS_RTEMS_LIBIO__H
 
+/**
+ *  @defgroup libio Internal Interface
+ */
+/**@{*/
+
 #include <errno.h>
 
 #include <rtems.h>
@@ -536,6 +541,9 @@ int rtems_filesystem_mknod(
   dev_t dev
 );
 
+/**
+ *  @brief POSIX 1003.1b - 5.2.1 - Change Current Working Directory
+ */
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc );
 
 int rtems_filesystem_chown(
@@ -803,6 +811,6 @@ static inline bool rtems_filesystem_is_parent_directory(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

@@ -1,6 +1,11 @@
-/*
- *   fcntl() - POSIX 1003.1b 6.5.2 - File Control
+/**
+ * @file
  *
+ * @brief POSIX 1003.1b 6.5.2 - File Control
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

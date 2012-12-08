@@ -1,3 +1,7 @@
+/**
+ * @file rtems/deviceio.h
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
@@ -10,12 +14,25 @@
 #ifndef _RTEMS_DEVICEIO_H
 #define _RTEMS_DEVICEIO_H
 
+/**
+ *  @defgroup Device IO Handler
+ */
+/**@{*/
+
 #include <rtems/libio.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ *  @brief IMFS Device Node Handlers
+ *
+ *  IMFS Device Node Handlers
+ *
+ *  This file contains the set of handlers used to map operations on
+ *  IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
+ */
 int rtems_deviceio_errno( rtems_status_code status );
 
 int rtems_deviceio_open(
@@ -59,6 +76,8 @@ int rtems_deviceio_control(
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
+/**@}*/
+/* __cplusplus */
 
 #endif /* _RTEMS_DEVICEIO_H */

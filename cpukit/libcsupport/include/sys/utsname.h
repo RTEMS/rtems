@@ -16,6 +16,11 @@
 #ifndef __POSIX_SYS_UTSNAME_h
 #define __POSIX_SYS_UTSNAME_h
 
+/**
+ *  @defgroup utsname Service
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,10 +52,9 @@ struct utsname {
                            /*   is running */
 };
 
-/*
- *  4.4.1 Get System Name, P1003.1b-1993, p. 90
+/**
+ * @brief 4.4.1 Get System Name, P1003.1b-1993, p. 90
  */
-
 int uname(
   struct utsname *name
 );
@@ -58,5 +62,6 @@ int uname(
 #ifdef __cplusplus
 }
 #endif
+/**@}*/
 #endif
 /* end of include file */

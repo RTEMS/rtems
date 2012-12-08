@@ -1,6 +1,11 @@
-/*
- *  access() - POSIX 1003.1b 5.6.3 - File Accessibility
+/**
+ * @file
  *
+ * @brief access() - POSIX 1003.1b 5.6.3 - File Accessibility
+ * @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
