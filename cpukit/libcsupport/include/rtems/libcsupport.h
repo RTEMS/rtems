@@ -27,7 +27,17 @@
 extern "C" {
 #endif
 
+/**
+ *  @defgroup libcsupport Standard C Library Support
+ *
+ *  @brief RTEMS Specific Support for the Standard C Library
+ */
+
 extern void malloc_dump(void);
+
+/**
+ *  @brief Malloc Walk
+ */
 extern bool malloc_walk(int source, bool printf_enabled);
 void malloc_set_heap_pointer(Heap_Control *new_heap);
 Heap_Control *malloc_get_heap_pointer( void );

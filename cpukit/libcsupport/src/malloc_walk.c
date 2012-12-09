@@ -1,6 +1,11 @@
-/*
- *  malloc_walk Implementation
+/**
+ *  @file
  *
+ *  @brief Malloc Walk
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

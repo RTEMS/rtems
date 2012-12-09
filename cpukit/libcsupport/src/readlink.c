@@ -1,6 +1,11 @@
-/*
- *  readlink() - POSIX 1003.1b - X.X.X - XXX
+/**
+ *  @file
  *
+ *  @brief Read Value of a Symbolic Link 
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +22,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b - X.X.X - XXX
+ */
 ssize_t readlink( const char *path, char *buf, size_t bufsize )
 {
   ssize_t rv = 0;

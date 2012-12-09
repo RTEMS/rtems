@@ -26,6 +26,14 @@
 extern "C" {
 #endif
 
+/**
+ *  @defgroup TermiostypesSupport RTEMS Termios Device Support
+ *
+ *  @ingroup libcsupport
+ *
+ *  @brief RTEMS Termios Device Support Internal Data Structures
+ */
+
 /*
  * Wakeup callback data structure
  */
@@ -186,11 +194,11 @@ typedef uint32_t rtems_termios_baud_t;
 extern const rtems_assoc_t rtems_termios_baud_table [];
 
 /**
- * @brief Converts the integral baud value @a baud to the Termios control flag
- * representation.
+ *  @brief Converts the Integral Baud value @a baud to the Termios Control Flag
+ *  Representation
  *
- * @retval B0 Invalid baud value or a baud value of 0.
- * @retval other Baud constant according to @a baud.
+ *  @retval B0 Invalid baud value or a baud value of 0.
+ *  @retval other Baud constant according to @a baud.
  */
 tcflag_t rtems_termios_number_to_baud(rtems_termios_baud_t baud);
 
@@ -205,7 +213,9 @@ tcflag_t rtems_termios_number_to_baud(rtems_termios_baud_t baud);
  */
 rtems_termios_baud_t rtems_termios_baud_to_number(tcflag_t c_cflag);
 
-/* convert Bxxx constant to index */
+/** 
+ *  @brief Convert Bxxx Constant to Index 
+ */
 int  rtems_termios_baud_to_index(rtems_termios_baud_t termios_baud);
 
 /**

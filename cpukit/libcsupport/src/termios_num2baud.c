@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Converts the Integral Baud to Termios Control Flag Representation
+ *  @ingroup TermiostypesSupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

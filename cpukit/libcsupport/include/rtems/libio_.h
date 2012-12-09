@@ -399,6 +399,9 @@ typedef struct {
   rtems_filesystem_eval_path_eval_token eval_token;
 } rtems_filesystem_eval_path_generic_config;
 
+/**
+ *  @brief RTEMS File System Eval Generic Path
+ */
 void rtems_filesystem_eval_path_generic(
   rtems_filesystem_eval_path_context_t *ctx,
   void *arg,
@@ -535,7 +538,9 @@ static inline void rtems_filesystem_location_error(
     errno = eno;
   }
 }
-
+/**
+ *  @brief RTEMS File System Mknod
+ */
 int rtems_filesystem_mknod(
   const rtems_filesystem_location_info_t *parentloc,
   const char *name,

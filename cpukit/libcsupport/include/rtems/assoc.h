@@ -32,6 +32,9 @@ typedef struct {
 
 #define RTEMS_ASSOC_DEFAULT_NAME "(default)"
 
+/**
+ *  @brief RTEMS Associate Pointer by Name
+ */
 const rtems_assoc_t *rtems_assoc_ptr_by_name(
   const rtems_assoc_t *,
   const char *
@@ -52,6 +55,9 @@ uint32_t rtems_assoc_local_by_remote(
   uint32_t
 );
 
+/**
+ *  @brief RTEMS Associate Remote by Name
+ */
 uint32_t rtems_assoc_remote_by_name(
   const rtems_assoc_t *,
   const char *

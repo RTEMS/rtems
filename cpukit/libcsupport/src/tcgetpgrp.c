@@ -1,6 +1,11 @@
-/*
- *  tcgetprgrp() - POSIX 1003.1b 7.2.3 - Get Foreground Process Group ID
+/**
+ *  @file
  *
+ *  @brief Get Foreground Process Group ID
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,6 +23,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+/**
+ *  POSIX 1003.1b 7.2.3 - Get Foreground Process Group ID
+ */
 pid_t tcgetpgrp(int fd __attribute__((unused)))
 {
   return getpid();

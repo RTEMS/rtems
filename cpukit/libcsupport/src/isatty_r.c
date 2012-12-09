@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Test for a Terminal Device
+ *  @ingroup libcsupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -11,14 +18,11 @@
 #include "config.h"
 #endif
 
-/*
- *  _isatty_r
- *
- *  This is the Newlib dependent reentrant version of isatty().
- */
-
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__ISATTY_R)
 
+ /**
+ *  This is the Newlib dependent reentrant version of isatty().
+ */
 #include <unistd.h>
 #include <reent.h>
 #include <sys/stat.h>

@@ -1,6 +1,11 @@
-/*
- *  Termios initialization routine
+/**
+ *  @file
  *
+ *  @brief Termios Initialization
+ *  @ingroup Termios
+ */
+
+/*
  *  Author:
  *    W. Eric Norum
  *    Saskatchewan Accelerator Laboratory

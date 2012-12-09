@@ -1,6 +1,11 @@
-/*
- *  fchown() - POSIX 1003.1b 5.6.5 - Change Owner and Group of a File
+/**
+ *  @file
  *
+ *  @brief Change Owner and Group of a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +22,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b 5.6.5 - Change Owner and Group of a File
+ */
 int fchown( int fd, uid_t owner, gid_t group )
 {
   int rv = 0;

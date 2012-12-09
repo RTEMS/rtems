@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Newlib Support
+ *  @ingroup libcsupport
+ */
+
 /*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -98,9 +105,7 @@ void newlib_begin_hook(rtems_tcb *current_task)
  *  Called when a task is deleted.
  *  Must restore the new lib reentrancy state for the new current
  *  task.
- *
  */
-
 int newlib_free_buffers(
   FILE *fp
 )
