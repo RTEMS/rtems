@@ -273,26 +273,4 @@ void _IO_Initialize_all_drivers( void );
 #endif
 
 #endif
-  rtems_io_write(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
-);
-
-/**
- *  @brief Control for The IO Manager
- *  
- *  This routine is the control directive of the IO manager.
- *
- *  @param[in] major is the device driver number.
- *  @param[in] minor is the device number.
- *  @param[in] argument is the pointer to the argument(s).
- *
- *  @return Status code.
- */
-rtems_status_code rtems_io_control(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
-);
-
+/* end of include file */
