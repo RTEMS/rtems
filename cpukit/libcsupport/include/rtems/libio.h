@@ -46,7 +46,6 @@ extern "C" {
  *
  * @{
  */
-/**@{*/
 
 /**
  * @brief File system node types.
