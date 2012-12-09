@@ -57,7 +57,9 @@ static inline void rtems_exception_frame_print(
  * @brief Invokes the internal error handler with a source of
  * INTERNAL_ERROR_RTEMS_API and is internal set to false.
  *
- * @param[in] the_error is a 32-bit fatal error code.
+ * @param[in] the_error A 32-bit fatal error code.
+ *
+ * @return This function will not return.
  *
  * @see _Internal_error_Occurred().
  */
@@ -68,8 +70,10 @@ void rtems_fatal_error_occurred(
 /**
  * @brief Invokes the internal error handler with is internal set to false.
  *
- * @param[in] source is the fatal source.
- * @param[in] error is the fatal code.
+ * @param[in] source The fatal source.
+ * @param[in] error The fatal code.
+ *
+ * @return This function will not return.
  *
  * @see _Internal_error_Occurred().
  */
@@ -81,7 +85,7 @@ void rtems_fatal(
 /**
  * @brief Returns a description for an internal error code.
  *
- * @param[in] error is the error code.
+ * @param[in] error The error code.
  *
  * @return The error code description or "?" in case the passed error code is
  * invalid.
