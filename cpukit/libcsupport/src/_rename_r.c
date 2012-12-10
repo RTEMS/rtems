@@ -1,6 +1,11 @@
-/*
- *  _rename_r() - POSIX 1003.1b - 5.3.4 - Rename a file
+/**
+ *  @file
  *
+ *  @brief Rename a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,6 +27,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b - 5.3.4 - Rename a file
+ */
 int _rename_r(
   struct _reent *ptr __attribute__((unused)),
   const char    *old,

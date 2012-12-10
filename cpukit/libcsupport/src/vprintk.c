@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Print Formatted Output
+ *  @ingroup libcsupport
+ */
+
 /*
  * (C) Copyright 1997 -
  * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
@@ -31,9 +38,7 @@ static void printNum(
   char lead
 );
 
-/*
- *  vprintk
- *
+/**
  *  A simplified version of printf intended for use when the
  *  console is not yet initialized or in ISR's.
  *
@@ -146,11 +151,10 @@ void vprintk(
   }
 }
 
-/*
- * printNum - print number in a given base.
- * Arguments
- *    num - number to print
- *    base - base used to print the number.
+/**
+ *  @brief Print Number in a Given Base
+ *  @param[in] num is the number to print
+ *  @param[in] base is the base used to print the number
  */
 static void printNum(
   long num,

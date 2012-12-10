@@ -40,6 +40,9 @@ const rtems_assoc_t *rtems_assoc_ptr_by_name(
   const char *
 );
 
+/**
+ *  @brief RTEMS Associate Pointer by Remote
+ */
 const rtems_assoc_t *rtems_assoc_ptr_by_remote(
   const rtems_assoc_t *,
   uint32_t
@@ -50,6 +53,9 @@ uint32_t rtems_assoc_remote_by_local(
   uint32_t
 );
 
+/**
+ *  @brief RTEMS Associate Local by Remote
+ */
 uint32_t rtems_assoc_local_by_remote(
   const rtems_assoc_t *,
   uint32_t

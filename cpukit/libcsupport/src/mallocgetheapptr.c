@@ -1,6 +1,11 @@
-/*
- *  RTEMS Malloc Get Heap Pointer -- Primarily for Debug
+/**
+ *  @file
  *
+ *  @brief RTEMS Malloc Get Heap Pointer
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

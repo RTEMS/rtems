@@ -27,6 +27,14 @@ extern "C" {
 #endif
 
 /**
+ *  @defgroup MallocSupport Malloc Support
+ *
+ *  @ingroup libcsupport
+ *
+ *  @brief RTEMS extensions to the Malloc Family
+ */
+
+/**
  *  @brief C program heap control.
  *
  *  This is the pointer to the heap control structure used to manage the C
@@ -211,7 +219,7 @@ rtems_status_code rtems_heap_extend(
 );
 
 /**
- * @brief Greedy allocate that empties the heap.
+ *  @brief Greedy Allocate that Empties the Heap
  *
  * Afterward the heap has at most @a block_count allocatable blocks of sizes
  * specified by @a block_sizes.  The @a block_sizes must point to an array with

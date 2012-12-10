@@ -22,6 +22,12 @@
 extern "C" {
 #endif
 
+/**
+ *  @ingroup Termios
+ *
+ *  @brief POSIX Termios Implementation
+ */
+
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
 typedef unsigned int	tcflag_t;
@@ -194,6 +200,9 @@ pid_t	tcgetprgrp(int);
 int	tcsetprgrp(int, pid_t);
 int	tcsendbreak(int, int);
 
+/**
+ *  @brief Baud Rate Functions
+ */
 speed_t	cfgetospeed(const struct termios *tp);
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);

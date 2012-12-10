@@ -1,6 +1,11 @@
-/*
- *  _free_r Implementation
+/**
+ *  @file
  *
+ *  @brief Allocate and Free Dynamic Memory 
+ *  @ingroup libcsupport
+ */
+
+/* 
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

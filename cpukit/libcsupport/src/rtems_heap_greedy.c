@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Greedy Allocate that Empties the Heap
+ *  @ingroup MallocSupport
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

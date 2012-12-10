@@ -680,6 +680,9 @@ static inline void rtems_filesystem_eval_path_put_back_token(
   ctx->tokenlen = 0;
 }
 
+/**
+ *  @brief RTEMS File System Eval Eat Delimiter Path
+ */
 void rtems_filesystem_eval_path_eat_delimiter(
   rtems_filesystem_eval_path_context_t *ctx
 );
