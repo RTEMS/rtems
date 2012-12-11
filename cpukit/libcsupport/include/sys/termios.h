@@ -190,6 +190,10 @@ struct termios {
 #define	TCSADRAIN	1
 #define	TCSAFLUSH	2
 
+/**
+ *  @brief Line Control Functions
+ *  POSIX 1003.1b 7.2.2 - Line Control Functions
+ */
 int	tcdrain(int);
 
 /**

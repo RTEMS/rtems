@@ -1,6 +1,8 @@
-/*
- * assoc.c
- *      rtems assoc routines
+/**
+ *  @file
+ *
+ *  @brief RTEMS Associate Bad Name
+ *  @ingroup SET
  */
 
 #if HAVE_CONFIG_H
@@ -14,11 +16,6 @@
 
 #include <inttypes.h>
 #include <stdio.h>              /* sprintf */
-
-/*
- * what to return if a value is not found
- * this is not reentrant, but it really shouldn't be invoked anyway
- */
 
 const char *
 rtems_assoc_name_bad(

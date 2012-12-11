@@ -1,6 +1,11 @@
-/*
- *  symlink() - POSIX 1003.1b - X.X.X - XXX
+/**
+ *  @file
  *
+ *  @brief Make a Symbolic Link to a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

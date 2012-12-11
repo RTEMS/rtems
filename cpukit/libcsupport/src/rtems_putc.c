@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Output a Character
+ *  @ingroup libcsupport
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

@@ -1,11 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Unmount a File System
+ *  @ingroup libcsupport
+ */
+
 /*
- *  unmount() - Unmount a File System
- *
- *  This routine is not defined in the POSIX 1003.1b standard but
- *  in some form is supported on most UNIX and POSIX systems.  This
- *  routine is necessary to mount instantiations of a file system
- *  into the file system name space.
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -34,6 +34,12 @@ static bool contains_root_or_current_directory(
   return mt_entry == root->mt_entry || mt_entry == current->mt_entry;
 }
 
+/**
+ *  This routine is not defined in the POSIX 1003.1b standard but
+ *  in some form is supported on most UNIX and POSIX systems.  This
+ *  routine is necessary to mount instantiations of a file system
+ *  into the file system name space.
+ */
 int unmount( const char *path )
 {
   int rv = 0;

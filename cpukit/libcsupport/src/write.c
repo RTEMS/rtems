@@ -1,6 +1,11 @@
-/*
- *  write() - POSIX 1003.1b 6.4.2 - Write to a File
+/**
+ *  @file
  *
+ *  @brief Write to a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,13 +21,12 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-/*
- * write
- *
- * This routine writes count bytes from from buffer pointed to by buffer
- * to the file associated with the open file descriptor, fildes.
+/**
+ *  POSIX 1003.1b 6.4.2 - Write to a File
+ * 
+ *  This routine writes count bytes from from buffer pointed to by buffer
+ *  to the file associated with the open file descriptor, fildes.
  */
-
 ssize_t write(
   int         fd,
   const void *buffer,

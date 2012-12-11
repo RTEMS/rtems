@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Global Environment Lock Support
+ *  @ingroup libcsupport
+ */
+
 /*
  *  Author: Till Straumann <strauman@slac.stanford.edu>, 3/2002
  */
