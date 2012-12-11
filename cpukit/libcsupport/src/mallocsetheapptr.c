@@ -1,6 +1,11 @@
-/*
- *  RTEMS Malloc Set Heap Pointer -- Primarily for Debug
+/**
+ *  @file
  *
+ *  @brief RTEMS Malloc Set Heap Pointer
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

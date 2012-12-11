@@ -39,6 +39,12 @@ extern void malloc_dump(void);
  *  @brief Malloc Walk
  */
 extern bool malloc_walk(int source, bool printf_enabled);
+
+/**
+ *  @brief RTEMS Malloc Set Heap Pointer
+ * 
+ *  This routine is primarily used for debugging. 
+ */
 void malloc_set_heap_pointer(Heap_Control *new_heap);
 
 /**

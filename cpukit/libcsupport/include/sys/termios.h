@@ -191,6 +191,11 @@ struct termios {
 #define	TCSAFLUSH	2
 
 int	tcdrain(int);
+
+/**
+ *  @brief Line Control Functions
+ *  POSIX 1003.1b 7.2.2 - Line Control Functions
+ */
 int	tcflow(int, int);
 int	tcflush(int, int);
 int	tcgetattr(int, struct termios *);
@@ -204,8 +209,16 @@ int	tcsendbreak(int, int);
  *  @brief Baud Rate Functions
  */
 speed_t	cfgetospeed(const struct termios *tp);
+
+/**
+ *  @brief Baud Rate Functions
+ */
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);
+
+/**
+ *  @brief Baud Rate Functions
+ */
 int	cfsetispeed(struct termios *tp, speed_t speed);
 
 #ifdef __cplusplus

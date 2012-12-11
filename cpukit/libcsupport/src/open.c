@@ -1,6 +1,11 @@
-/*
- *  open() - POSIX 1003.1 5.3.1 - Open a File
+/**
+ *  @file
  *
+ *  @brief Open a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -120,6 +125,9 @@ static int do_open(
   return rv;
 }
 
+/**
+*  POSIX 1003.1 5.3.1 - Open a File
+*/
 int open( const char *path, int oflag, ... )
 {
   int rv = 0;
@@ -144,16 +152,15 @@ int open( const char *path, int oflag, ... )
   return rv;
 }
 
-/*
- *  _open_r
- *
- *  This is the Newlib dependent reentrant version of open().
- */
+
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__OPEN_R)
 
 #include <reent.h>
 
+/**
+ *  This is the Newlib dependent reentrant version of open().
+ */
 int _open_r(
   struct _reent *ptr __attribute__((unused)),
   const char    *buf,

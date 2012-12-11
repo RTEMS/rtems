@@ -101,6 +101,9 @@ char *rtems_assoc_name_by_local_bitfield(
   char *
 );
 
+/**
+ *  @brief RTEMS Associate Name by Remote Bitfield
+ */
 char *rtems_assoc_name_by_remote_bitfield(
   const rtems_assoc_t *,
   uint32_t  ,

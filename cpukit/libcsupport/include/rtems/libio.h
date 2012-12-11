@@ -1373,6 +1373,14 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
  *  Prototypes for filesystem
  */
 
+/**
+ *  @brief Base File System Initialization
+ *  
+ *  Initialize the foundation of the file system.  This is specified
+ *  by the structure rtems_filesystem_mount_table.  The usual
+ *  configuration is a single instantiation of the IMFS or miniIMFS with
+ *  a single "/dev" directory in it.
+ */
 void rtems_filesystem_initialize( void );
 
 typedef void (*rtems_libio_init_functions_t)(void);

@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Malloc Deferred Support
+ *  @ingroup libcsupport
+ */
+
 /*
  *  Process free requests deferred because they were from ISR
  *  or other critical section.

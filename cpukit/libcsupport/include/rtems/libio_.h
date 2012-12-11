@@ -30,11 +30,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup LibIOInternal IO Internal Library
+ *  @defgroup LibIOInternal IO Internal Library
  *
- * @brief Internal IO library API and implementation.
+ *  @brief Internal IO library API and implementation.
  *
- * @{
+ *  @{
  */
 
 #define RTEMS_FILESYSTEM_SYMLOOP_MAX 32
@@ -62,7 +62,7 @@ extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
 extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
 
 /**
- * @brief The global null location.
+ *  @brief The Global NULL Location
  *
  * Every operation and the open and fstat handlers of this location returns an
  * error status.  The errno is not touched by these operations and handlers.
@@ -770,10 +770,10 @@ void rtems_filesystem_eval_path_error(
 );
 
 /**
- * @brief Checks that the locations exist in the same file system instance.
+ *  @brief Checks that the Locations Exist in the Same File System Instance
  *
- * @retval 0 The locations exist and are in the same file system instance.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ *  @retval 0 The locations exist and are in the same file system instance.
+ *  @retval -1 An error occured.  The @c errno indicates the error.
  */
 int rtems_filesystem_location_exists_in_same_instance_as(
   const rtems_filesystem_location_info_t *a,
