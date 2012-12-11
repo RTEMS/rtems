@@ -198,11 +198,21 @@ int	tcdrain(int);
  */
 int	tcflow(int, int);
 int	tcflush(int, int);
+
+/**
+ *  @brief Get State
+ *  POSIX 1003.1b 7.2.1 - Get and Set State
+ */
 int	tcgetattr(int, struct termios *);
 int	tcsetattr(int, int, struct termios *);
 int	tcdrain(int);
 pid_t	tcgetprgrp(int);
 int	tcsetprgrp(int, pid_t);
+
+/**
+ *  @brief Line Control Functions
+ *  POSIX 1003.1b 7.2.2 - Line Control Functions
+ */
 int	tcsendbreak(int, int);
 
 /**

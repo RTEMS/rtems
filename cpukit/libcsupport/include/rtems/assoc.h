@@ -115,6 +115,9 @@ uint32_t     rtems_assoc_local_by_remote_bitfield(
   uint32_t
 );
 
+/**
+ *  @brief RTEMS Associate Pointer by Local
+ */
 const rtems_assoc_t *rtems_assoc_ptr_by_local(
   const rtems_assoc_t *ap,
   uint32_t             local_value

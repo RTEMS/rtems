@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Plugin Printf
+ *  @ingroup libcsupport
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

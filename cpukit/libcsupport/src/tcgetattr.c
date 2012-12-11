@@ -1,6 +1,11 @@
-/*
- *  tcgetattr() - POSIX 1003.1b 7.2.1 - Get and Set State
+/**
+ *  @file
  *
+ *  @brief Get State
+ *  @ingroup Termios
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

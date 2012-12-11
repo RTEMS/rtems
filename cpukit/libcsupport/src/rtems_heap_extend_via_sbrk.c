@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Extend Heap via Sbrk
+ *  @ingroup MallocSupport
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

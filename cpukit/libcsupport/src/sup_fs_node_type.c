@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Returns the Type of a Node
+ *  @ingroup LibIOInternal
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

@@ -194,15 +194,15 @@ void rtems_filesystem_location_clone(
 );
 
 /**
- * @brief Returns the type of a node.
+ *  @brief Returns the Type of a Node
  *
- * This function obtains and releases the file system instance lock.
+ *  This function obtains and releases the file system instance lock.
  *
- * @param[in] loc The location of the node.
+ *  @param[in] loc The location of the node.
  *
- * @return The node type.
+ *  @return The node type.
  *
- * @see rtems_filesystem_instance_lock().
+ *  @see rtems_filesystem_instance_lock().
  */
 rtems_filesystem_node_types_t rtems_filesystem_node_type(
   const rtems_filesystem_location_info_t *loc
@@ -551,6 +551,9 @@ int rtems_filesystem_mknod(
 
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc );
 
+/**
+ *  @brief Change Owner and Group of a File
+ */
 int rtems_filesystem_chown(
   const char *path,
   uid_t owner,

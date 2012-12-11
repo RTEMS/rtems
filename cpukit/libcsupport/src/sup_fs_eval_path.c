@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS File Sysyem Path Eval Support
+ *  @ingroup LibIOInternal
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

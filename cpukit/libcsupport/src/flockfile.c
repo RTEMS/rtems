@@ -1,3 +1,9 @@
+/**
+ *  @file
+ *
+ *  @brief Lock File for Stdio
+ *  @ingroup SET
+ */
 /*
  * Copyright (c) 2009 by
  * Ralf Corsépius, Ulm, Germany. All rights reserved.
@@ -14,7 +20,9 @@
 
 #include <stdio.h>
 
-/* This is a non-functional stub */
+/**
+ *  This is a non-functional stub 
+ */
 void flockfile(FILE* file __attribute__((unused)))
 {
 }

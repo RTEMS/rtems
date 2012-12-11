@@ -88,6 +88,9 @@ typedef void *(*rtems_heap_extend_handler)(
   size_t alloc_size
 );
 
+/**
+ *  @brief RTEMS Extend Heap via Sbrk
+ */
 void *rtems_heap_extend_via_sbrk(
   Heap_Control *heap,
   size_t alloc_size

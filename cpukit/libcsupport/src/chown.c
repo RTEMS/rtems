@@ -1,6 +1,11 @@
-/*
- *  chown() - POSIX 1003.1b 5.6.5 - Change Owner and Group of a File
+/**
+ *  @file
  *
+ *  @brief Change Owner and Group of a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -41,6 +46,9 @@ int rtems_filesystem_chown(
   return rv;
 }
 
+/**
+ *  POSIX 1003.1b 5.6.5 - Change Owner and Group of a File
+ */
 int chown( const char *path, uid_t owner, gid_t group )
 {
   return rtems_filesystem_chown( path, owner, group, RTEMS_FS_FOLLOW_LINK );
