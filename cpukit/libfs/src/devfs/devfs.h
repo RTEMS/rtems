@@ -13,10 +13,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /**
- *  This structure define the type of device table
+ * @defgroup DevFsDeviceTable Define Device Table Type
+ *
+ * @ingroup DevFs
+ *
+ * @brief This structure defines the type of device table
+ *
+ * @{
  */
+
 typedef struct {
   /** This member points to device name which is not a null-terminated string */
   const char               *name;
@@ -56,11 +62,15 @@ static inline const devFS_data *devFS_get_data(
   return (const devFS_data *) loc->mt_entry->immutable_fs_info;
 }
 
+/**
+ *  @brief Evaluate Patch
+ */
 extern void devFS_eval_path(
   rtems_filesystem_eval_path_context_t *ctx
 );
 
 /**
+ *  @brief Maps Open Operation to rtems_io_open
  *  This handler maps open operation to rtems_io_open.
  *  @param iop This is the RTEMS's internal representation of file.
  *  @param pathname a null-terminated string that starts with /dev.
@@ -90,6 +100,7 @@ extern int devFS_close(
 
 
 /**
+ *  @brief Maps Read Operation to rtems_io_read
  *  This handler maps read operation to rtems_io_read.
  *  @param iop This is the RTEMS's internal representation of file
  *  @param  buffer memory location to store read data
@@ -106,6 +117,7 @@ extern ssize_t devFS_read(
 
 
 /**
+ *  @brief Writes Operation to rtems_io_write
  *  This handler maps write operation to rtems_io_write.
  *  @param iop This is the RTEMS's internal representation of file
  *  @param buffer data to be written
@@ -122,6 +134,7 @@ extern ssize_t devFS_write(
 
 
 /**
+ *  @brief Maps ioctl Operation to rtems_io_ioctl
  *  This handler maps ioctl operation to rtems_io_ioctl.
  *  @param iop This is the RTEMS's internal representation of file
  *  @param command io control command
@@ -159,6 +172,7 @@ extern int devFS_stat(
 
 
 /**
+ *  @brief Invoked upon Determination of a Node Type
  *  This routine is invoked upon determination of a node type.
  *  Since this is a device-only filesystem, so there is only
  *  one node type in the system.
@@ -173,6 +187,7 @@ extern rtems_filesystem_node_types_t devFS_node_type(
 );
 
 /**
+ *  @brief Creates an item in the main device table.
  *  This routine is invoked upon registration of a new device
  *  file. It is responsible for creating a item in the main
  *  device table. This routine searches the device table in
@@ -192,6 +207,7 @@ extern int devFS_mknod(
 
 
 /**
+ *  @brief Creates the Main Device Table
  *  This routine is invoked upon rtems filesystem initialization.
  *  It is responsible for creating the main device table,
  *  initializing it to a known state, and set device file operation
@@ -225,7 +241,7 @@ extern int devFS_initialize(
  */
 
 extern void devFS_Show(void);
-
+/** @} */
 #ifdef __cplusplus
 }
 #endif
