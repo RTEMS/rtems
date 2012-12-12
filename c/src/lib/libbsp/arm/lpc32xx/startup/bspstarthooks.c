@@ -263,35 +263,12 @@ static BSP_START_TEXT_SECTION void stop_dma_activities(void)
 
 static BSP_START_TEXT_SECTION void setup_uarts(void)
 {
-  uint32_t uartclk_ctrl = 0;
-
-  #ifdef LPC32XX_CONFIG_U3CLK
-    uartclk_ctrl |= 1U << 0;
-    LPC32XX_U3CLK = LPC32XX_CONFIG_U3CLK;
-  #endif
-  #ifdef LPC32XX_CONFIG_U4CLK
-    uartclk_ctrl |= 1U << 1;
-    LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
-  #endif
-  #ifdef LPC32XX_CONFIG_U5CLK
-    uartclk_ctrl |= 1U << 2;
-    LPC32XX_U5CLK = LPC32XX_CONFIG_U5CLK;
-  #endif
-  #ifdef LPC32XX_CONFIG_U6CLK
-    uartclk_ctrl |= 1U << 3;
-    LPC32XX_U6CLK = LPC32XX_CONFIG_U6CLK;
-  #endif
-
-  #ifdef LPC32XX_CONFIG_UART_CLKMODE
-    LPC32XX_UART_CLKMODE = LPC32XX_CONFIG_UART_CLKMODE;
-  #endif
-
-  LPC32XX_UARTCLK_CTRL = uartclk_ctrl;
   LPC32XX_UART_CTRL = 0x0;
   LPC32XX_UART_LOOP = 0x0;
 
-  #ifdef LPC32XX_CONFIG_U5CLK
-    /* Clock is already set in LPC32XX_U5CLK */
+  #ifdef LPC32XX_UART_5_BAUD
+    LPC32XX_UARTCLK_CTRL |= 1U << 2;
+    LPC32XX_U5CLK = LPC32XX_CONFIG_U5CLK;
     BSP_CONSOLE_UART_INIT(0x01);
   #endif
 }

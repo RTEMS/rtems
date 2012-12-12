@@ -42,10 +42,40 @@ static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
   reg [i] = val;
 }
 
+#ifdef LPC32XX_UART_3_BAUD
+  static bool lpc32xx_uart_probe_3(int minor)
+  {
+    LPC32XX_UARTCLK_CTRL |= 1U << 0;
+    LPC32XX_U3CLK = LPC32XX_CONFIG_U3CLK;
+
+    return true;
+  }
+#endif
+
+#ifdef LPC32XX_UART_4_BAUD
+  static bool lpc32xx_uart_probe_4(int minor)
+  {
+    LPC32XX_UARTCLK_CTRL |= 1U << 1;
+    LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
+
+    return true;
+  }
+#endif
+
+#ifdef LPC32XX_UART_6_BAUD
+  static bool lpc32xx_uart_probe_6(int minor)
+  {
+    LPC32XX_UARTCLK_CTRL |= 1U << 3;
+    LPC32XX_U6CLK = LPC32XX_CONFIG_U6CLK;
+
+    return true;
+  }
+#endif
+
 /* FIXME: Console selection */
 
 console_tbl Console_Configuration_Ports [] = {
-  #ifdef LPC32XX_CONFIG_U5CLK
+  #ifdef LPC32XX_UART_5_BAUD
     {
       .sDeviceName = "/dev/ttyS5",
       .deviceType = SERIAL_NS16550,
@@ -54,7 +84,7 @@ console_tbl Console_Configuration_Ports [] = {
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
-      .pDeviceParams = (void *) 1,
+      .pDeviceParams = (void *) LPC32XX_UART_5_BAUD,
       .ulCtrlPort1 = LPC32XX_BASE_UART_5,
       .ulCtrlPort2 = 0,
       .ulDataPort = LPC32XX_BASE_UART_5,
@@ -62,20 +92,20 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc32xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = 16,
+      .ulClock = 16 * LPC32XX_UART_5_BAUD,
       .ulIntVector = LPC32XX_IRQ_UART_5
     },
   #endif
-  #ifdef LPC32XX_CONFIG_U3CLK
+  #ifdef LPC32XX_UART_3_BAUD
     {
       .sDeviceName = "/dev/ttyS3",
       .deviceType = SERIAL_NS16550,
       .pDeviceFns = &ns16550_fns,
-      .deviceProbe = NULL,
+      .deviceProbe = lpc32xx_uart_probe_3,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
-      .pDeviceParams = (void *) 1,
+      .pDeviceParams = (void *) LPC32XX_UART_3_BAUD,
       .ulCtrlPort1 = LPC32XX_BASE_UART_3,
       .ulCtrlPort2 = 0,
       .ulDataPort = LPC32XX_BASE_UART_3,
@@ -83,20 +113,20 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc32xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = 16,
+      .ulClock = 16 * LPC32XX_UART_3_BAUD,
       .ulIntVector = LPC32XX_IRQ_UART_3
     },
   #endif
-  #ifdef LPC32XX_CONFIG_U4CLK
+  #ifdef LPC32XX_UART_4_BAUD
     {
       .sDeviceName = "/dev/ttyS4",
       .deviceType = SERIAL_NS16550,
       .pDeviceFns = &ns16550_fns,
-      .deviceProbe = NULL,
+      .deviceProbe = lpc32xx_uart_probe_4,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
-      .pDeviceParams = (void *) 1,
+      .pDeviceParams = (void *) LPC32XX_UART_4_BAUD,
       .ulCtrlPort1 = LPC32XX_BASE_UART_4,
       .ulCtrlPort2 = 0,
       .ulDataPort = LPC32XX_BASE_UART_4,
@@ -104,20 +134,20 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc32xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = 16,
+      .ulClock = 16 * LPC32XX_UART_4_BAUD,
       .ulIntVector = LPC32XX_IRQ_UART_4
     },
   #endif
-  #ifdef LPC32XX_CONFIG_U6CLK
+  #ifdef LPC32XX_UART_6_BAUD
     {
       .sDeviceName = "/dev/ttyS6",
       .deviceType = SERIAL_NS16550,
       .pDeviceFns = &ns16550_fns,
-      .deviceProbe = NULL,
+      .deviceProbe = lpc32xx_uart_probe_6,
       .pDeviceFlow = NULL,
       .ulMargin = 16,
       .ulHysteresis = 8,
-      .pDeviceParams = (void *) 1,
+      .pDeviceParams = (void *) LPC32XX_UART_6_BAUD,
       .ulCtrlPort1 = LPC32XX_BASE_UART_6,
       .ulCtrlPort2 = 0,
       .ulDataPort = LPC32XX_BASE_UART_6,
@@ -125,7 +155,7 @@ console_tbl Console_Configuration_Ports [] = {
       .setRegister = lpc32xx_uart_set_register,
       .getData = NULL,
       .setData = NULL,
-      .ulClock = 16,
+      .ulClock = 16 * LPC32XX_UART_6_BAUD,
       .ulIntVector = LPC32XX_IRQ_UART_6
     },
   #endif
