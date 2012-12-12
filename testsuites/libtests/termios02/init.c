@@ -83,25 +83,27 @@ rtems_task Init(
   puts( "" );
 
   /***** TEST TCFLUSH *****/
-  puts( "tcflush(stdin, TCIFLUSH) - ENOTSUP" );
+  puts( "tcflush(stdin, TCIFLUSH) - OK" );
+  errno = 0;
   sc = tcflush( 0, TCIFLUSH );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( errno == 0 );
 
-  puts( "tcflush(stdin, TCOFLUSH) - ENOTSUP" );
+  puts( "tcflush(stdin, TCOFLUSH) - OK" );
   sc = tcflush( 0, TCOFLUSH );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( errno == 0 );
 
-  puts( "tcflush(stdin, TCIOFLUSH) - ENOTSUP" );
+  puts( "tcflush(stdin, TCIOFLUSH) - OK" );
   sc = tcflush( 0, TCIOFLUSH );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( errno == 0 );
 
   puts( "tcflush(stdin, 22) - EINVAL" );
+  errno = 0;
   sc = tcflush( 0, 22 );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = EINVAL );
+  rtems_test_assert( errno == EINVAL );
 
   puts( "" );
 

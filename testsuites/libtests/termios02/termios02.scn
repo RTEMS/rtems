@@ -10,9 +10,9 @@ tcflow(stdin, TCIOFF) - ENOTSUP
 tcflow(stdin, TCION) - ENOTSUP
 tcflow(stdin, 22) - EINVAL
 
-tcflush(stdin, TCIFLUSH) - ENOTSUP
-tcflush(stdin, TCOFLUSH) - ENOTSUP
-tcflush(stdin, TCIOFLUSH) - ENOTSUP
+tcflush(stdin, TCIFLUSH) - OK
+tcflush(stdin, TCOFLUSH) - OK
+tcflush(stdin, TCIOFLUSH) - OK
 tcflush(stdin, 22) - EINVAL
 
 tcgetpgrp( 1 ) - OK

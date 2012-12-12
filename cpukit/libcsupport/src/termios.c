@@ -354,6 +354,28 @@ drainOutput (struct rtems_termios_tty *tty)
   }
 }
 
+static void
+flushOutput (struct rtems_termios_tty *tty)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+  tty->rawOutBuf.Tail = 0;
+  tty->rawOutBuf.Head = 0;
+  rtems_interrupt_enable (level);
+}
+
+static void
+flushInput (struct rtems_termios_tty *tty)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+  tty->rawInBuf.Tail = 0;
+  tty->rawInBuf.Head = 0;
+  rtems_interrupt_enable (level);
+}
+
 rtems_status_code
 rtems_termios_close (void *arg)
 {
@@ -570,6 +592,24 @@ rtems_termios_ioctl (void *arg)
 
   case RTEMS_IO_TCDRAIN:
     drainOutput (tty);
+    break;
+
+  case RTEMS_IO_TCFLUSH:
+    switch ((intptr_t) args->buffer) {
+      case TCIFLUSH:
+        flushInput (tty);
+        break;
+      case TCOFLUSH:
+        flushOutput (tty);
+        break;
+      case TCIOFLUSH:
+        flushOutput (tty);
+        flushInput (tty);
+        break;
+      default:
+        sc = RTEMS_INVALID_NAME;
+        break;
+    }
     break;
 
   case RTEMS_IO_SNDWAKEUP:
