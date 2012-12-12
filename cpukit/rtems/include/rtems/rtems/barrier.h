@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/barrier.h
  *
+ * @brief Constants and Structures Associated with the Barrier Manager
+ *
  *  This include file contains all the constants and structures associated
  *  with the Barrier Manager.
  *

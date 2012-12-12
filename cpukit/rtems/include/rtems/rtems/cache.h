@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/cache.h
  *
+ * @brief Functionality Associated with the Cache Manager
+ *
  *  Cache Manager
  */
 
@@ -152,7 +154,7 @@ void rtems_cache_disable_instruction( void );
  *  integral number of cache blocks.
  */
 void *rtems_cache_aligned_malloc ( size_t nbytes );
-  
+
 #ifdef __cplusplus
 }
 #endif

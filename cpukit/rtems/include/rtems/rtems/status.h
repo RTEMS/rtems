@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/status.h
  *
+ * @brief Status Codes Returned from the Executive Directives
+ *
  *  This include file contains the status codes returned from the
  *  executive directives.
  */
@@ -184,7 +186,7 @@ typedef enum {
 
 /**
  *  @brief Status Object Name Errors to Status Array
- * 
+ *
  *  This array is used to map SuperCore Object Handler return
  *  codes to Classic API status codes.
  */

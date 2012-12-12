@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/ratemon.h
  *
+ * @brief Constants, Structures, and Prototypes Associated to the Classic API Rate Monotonic Manager.
+ *
  *  This include file contains all the constants, structures, and
  *  prototypes associated with the Rate Monotonic Manager.  This manager
  *  provides facilities to implement threads which execute in a periodic

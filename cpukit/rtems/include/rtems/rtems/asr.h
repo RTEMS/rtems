@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/asr.h
  *
+ * @brief Constants and Structures Associated with the Asynchronous Signal Handler
+ *
  *  This include file contains all the constants and structures associated
  *  with the Asynchronous Signal Handler.  This Handler provides the low-level
  *  support required by the Signal Manager.
