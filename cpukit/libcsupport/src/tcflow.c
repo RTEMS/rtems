@@ -34,6 +34,7 @@ int tcflow (
     case TCOON:
     case TCIOFF:
     case TCION:
+      break;
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
   }
