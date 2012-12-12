@@ -433,7 +433,6 @@ static int msdos_format_determine_fmt_params
    */
   if (ret_val == 0) {
     ret_val = rtems_disk_fd_get_media_block_size(fd, &fmt_params->bytes_per_sector);
-
   }
   if (ret_val == 0) {
     ret_val = rtems_disk_fd_get_block_count(fd, &fmt_params->totl_sector_cnt);
