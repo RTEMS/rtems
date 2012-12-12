@@ -159,7 +159,7 @@ static void test( void )
   const char                   dev_name[]  = "/dev/rda";
   const char                   mount_dir[] = "/mnt";
   msdos_format_request_param_t rqdata;
-
+  rtems_blkdev_bnum            media_block_count;
 
   memset( &rqdata, 0, sizeof( rqdata ) );
 
@@ -217,23 +217,30 @@ static void test( void )
   rv                         = msdos_format( dev_name, &rqdata );
   rtems_test_assert( rv != 0 );
 
-  rqdata.OEMName             = NULL;
-  rqdata.VolLabel            = NULL;
-  rqdata.sectors_per_cluster = 16; /* Invalid number of sectors per cluster for FAT12 */
-  rqdata.fat_num             = 1;
-  rqdata.files_per_root_dir  = 32;
-  rqdata.media               = 0; /* Media code. 0 == Default */
-  rqdata.quick_format        = true;
-  rqdata.skip_alignment      = false;
-  rv                         = msdos_format( dev_name, &rqdata );
-  rtems_test_assert( rv != 0 );
-
   /* Optimized for read/write speed */
   rqdata.OEMName             = NULL;
   rqdata.VolLabel            = NULL;
   rqdata.sectors_per_cluster = 8;
   rqdata.fat_num             = 0;
   rqdata.files_per_root_dir  = 0;
+  rqdata.media               = 0; /* Media code. 0 == Default */
+  rqdata.quick_format        = true;
+  rqdata.skip_alignment      = false;
+  rv                         = msdos_format( dev_name, &rqdata );
+  rtems_test_assert( rv == 0 );
+  test_disk_params( dev_name,
+                    mount_dir,
+                    SECTOR_SIZE,
+                    SECTOR_SIZE * rqdata.sectors_per_cluster,
+                    rqdata.sectors_per_cluster );
+
+  /* The same disk formatted with FAT16 because sectors per cluster is too high
+   * for FAT12 */
+  rqdata.OEMName             = NULL;
+  rqdata.VolLabel            = NULL;
+  rqdata.sectors_per_cluster = 16;
+  rqdata.fat_num             = 1;
+  rqdata.files_per_root_dir  = 32;
   rqdata.media               = 0; /* Media code. 0 == Default */
   rqdata.quick_format        = true;
   rqdata.skip_alignment      = false;
@@ -275,7 +282,7 @@ static void test( void )
     dev_name,
     SECTOR_SIZE,
     1024,
-    ( FAT16_MAX_CLN * FAT16_DEFAULT_SECTORS_PER_CLUSTER ) - 1L,
+    ( FAT12_MAX_CLN * FAT12_DEFAULT_SECTORS_PER_CLUSTER ) + 1L,
     0
     );
   rtems_test_assert( RTEMS_SUCCESSFUL == sc );
@@ -291,7 +298,11 @@ static void test( void )
   rqdata.skip_alignment      = true;
   rv                         = msdos_format( dev_name, &rqdata );
   rtems_test_assert( rv == 0 );
-  test_disk_params( dev_name, mount_dir, SECTOR_SIZE, SECTOR_SIZE, 1 );
+  test_disk_params( dev_name,
+                    mount_dir,
+                    SECTOR_SIZE,
+                    rqdata.sectors_per_cluster * SECTOR_SIZE,
+                    rqdata.sectors_per_cluster );
 
   rv = unlink( dev_name );
   rtems_test_assert( rv == 0 );
@@ -360,6 +371,44 @@ static void test( void )
                     rqdata.sectors_per_cluster );
   rv = unlink( dev_name );
   rtems_test_assert( rv == 0 );
+
+  /* Format some disks from 1MB up to 128GB */
+  rqdata.OEMName             = NULL;
+  rqdata.VolLabel            = NULL;
+  rqdata.sectors_per_cluster = 64;
+  rqdata.fat_num             = 0;
+  rqdata.files_per_root_dir  = 0;
+  rqdata.media               = 0;
+  rqdata.quick_format        = true;
+  rqdata.skip_alignment      = false;
+  for (
+    media_block_count = 1 * 1024 * ( 1024 / SECTOR_SIZE );
+    media_block_count <= 128 * 1024 * 1024 * ( 1024 / SECTOR_SIZE );
+    media_block_count *= 2
+  ) {
+    sc = rtems_sparse_disk_create_and_register(
+      dev_name,
+      SECTOR_SIZE,
+      64,
+      media_block_count,
+      0
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+    rv = msdos_format( dev_name, &rqdata );
+    rtems_test_assert( rv == 0 );
+
+    test_disk_params(
+      dev_name,
+      mount_dir,
+      SECTOR_SIZE,
+      SECTOR_SIZE * rqdata.sectors_per_cluster,
+      rqdata.sectors_per_cluster
+    );
+
+    rv = unlink( dev_name );
+    rtems_test_assert( rv == 0 );
+  }
 
   /* FAT32 */
 
