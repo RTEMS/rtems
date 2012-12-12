@@ -563,11 +563,7 @@ static int msdos_format_determine_fmt_params
        * Skip aligning structures or d align them
        */
       if (ret_val == 0 && rqdata != NULL)
-      {
         fmt_params->skip_alignment = rqdata->skip_alignment;
-        if (fmt_params->skip_alignment)
-          fmt_params->sectors_per_cluster = 1;
-      }
 
       if (ret_val == 0) {
         msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
