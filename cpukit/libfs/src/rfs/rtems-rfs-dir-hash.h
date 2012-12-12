@@ -1,17 +1,20 @@
+/**
+ * @file
+ *
+ * @brief Provides a 32bit Hash of a String used to Search a Directory
+ *
+ * @ingroup rtems-rfs
+ *
+ * RTEMS File Systems Directory Hash provides a 32bit hash of a string. This is
+ * used to search a directory.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Directory Hash provides a 32bit hash of a string. This is
- * used to search a directory.
  */
 
 #if !defined (_RTEMS_RFS_DIR_HASH_H_)

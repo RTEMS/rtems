@@ -1,18 +1,21 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
+ *
+ * @brief RTEMS File System File Support
  *
  * @ingroup rtems-rfs
  *
  * RTEMS File System File Support
  *
  * This file provides the support functions.
+ */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #if !defined (_RTEMS_RFS_FILE_H_)

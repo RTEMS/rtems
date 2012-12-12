@@ -1,12 +1,7 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
+ *
+ * @brief RTEMS File Systems Block Position and Size Management
  *
  * @ingroup rtems-rfs
  *
@@ -21,6 +16,14 @@
  * size offset of 0 and a non-zero block count means the length if aligned to
  * the end of the block. For this reason there are 2 similar types so we know
  * which set of rules are in use and the reason for this file.
+ */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #if !defined (_RTEMS_RFS_BLOCK_POS_H_)

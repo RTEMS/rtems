@@ -1,3 +1,13 @@
+/**
+ * @file
+ *
+ * @ingroup rtems-rfs
+ *
+ * @brief Maps Blocks to the Media Interface Layers
+ *
+ * These functions map blocks to the media interface layers.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
@@ -5,15 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Buffer Management.
- *
- * These functions map blocks to the media interface layers.
- */
+
 
 #if !defined (_RTEMS_RFS_BUFFER_H_)
 #define _RTEMS_RFS_BUFFER_H_

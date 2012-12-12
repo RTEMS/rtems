@@ -1,3 +1,13 @@
+/**
+ * @file
+ *
+ * @brief RTEMS File Systems Data forward decl
+ *
+ * @ingroup rtems-rfs
+ *
+ * RTEMS File Systems Data forward decl.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
@@ -5,13 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Data forward decl.
- */
+
 
 #if !defined (_RTEMS_RFS_FILE_SYSTEM_FWD_H_)
 #define _RTEMS_RFS_FILE_SYSTEM_FWD_H_

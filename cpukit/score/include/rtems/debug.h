@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/debug.h
  *
+ *  @brief Information Related to the Debug Support Within RTEMS
+ *
  *  This include file contains the information pertaining to the debug
  *  support within RTEMS.  It is currently cast in the form of a
  *  Manager since it is externally accessible.
@@ -65,7 +67,7 @@ void rtems_debug_disable(
 
 /**
  *  @brief Check if Debug is Enabled
- *  
+ *
  *  This routine returns TRUE if the requested debug level is
  *  enabled, and FALSE otherwise.
  */
