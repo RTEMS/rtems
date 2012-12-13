@@ -362,6 +362,7 @@ flushOutput (struct rtems_termios_tty *tty)
   rtems_interrupt_disable (level);
   tty->rawOutBuf.Tail = 0;
   tty->rawOutBuf.Head = 0;
+  tty->rawOutBufState = rob_idle;
   rtems_interrupt_enable (level);
 }
 
