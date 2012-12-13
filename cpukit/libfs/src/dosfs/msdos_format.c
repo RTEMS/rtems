@@ -1251,6 +1251,11 @@ int msdos_format
          tmp_sec);
     }
   }
+
+  if (ret_val == 0 && rqdata != NULL && rqdata->sync_device) {
+    ret_val = rtems_disk_fd_sync(fd);
+  }
+
   /*
    * cleanup:
    * sync and unlock disk
