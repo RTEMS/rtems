@@ -222,7 +222,7 @@ rtems_status_code rtems_heap_extend(
 );
 
 /**
- *  @brief Greedy Allocate that Empties the Heap
+ * @brief Greedy allocate that empties the heap.
  *
  * Afterward the heap has at most @a block_count allocatable blocks of sizes
  * specified by @a block_sizes.  The @a block_sizes must point to an array with

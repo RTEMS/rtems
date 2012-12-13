@@ -62,7 +62,7 @@ extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
 extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
 
 /**
- *  @brief The Global NULL Location
+ * @brief The global null location.
  *
  * Every operation and the open and fstat handlers of this location returns an
  * error status.  The errno is not touched by these operations and handlers.
@@ -194,15 +194,15 @@ void rtems_filesystem_location_clone(
 );
 
 /**
- *  @brief Returns the Type of a Node
+ * @brief Returns the type of a node.
  *
- *  This function obtains and releases the file system instance lock.
+ * This function obtains and releases the file system instance lock.
  *
- *  @param[in] loc The location of the node.
+ * @param[in] loc The location of the node.
  *
- *  @return The node type.
+ * @return The node type.
  *
- *  @see rtems_filesystem_instance_lock().
+ * @see rtems_filesystem_instance_lock().
  */
 rtems_filesystem_node_types_t rtems_filesystem_node_type(
   const rtems_filesystem_location_info_t *loc
@@ -773,10 +773,10 @@ void rtems_filesystem_eval_path_error(
 );
 
 /**
- *  @brief Checks that the Locations Exist in the Same File System Instance
+ * @brief Checks that the locations exist in the same file system instance.
  *
- *  @retval 0 The locations exist and are in the same file system instance.
- *  @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval 0 The locations exist and are in the same file system instance.
+ * @retval -1 An error occured.  The @c errno indicates the error.
  */
 int rtems_filesystem_location_exists_in_same_instance_as(
   const rtems_filesystem_location_info_t *a,
