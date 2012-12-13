@@ -384,14 +384,14 @@ static int msdos_format_eval_sectors_per_cluster
     }
   } while (!finished);
 
-  if (ret_val != 0) {
-    rtems_set_errno_and_return_minus_one(ret_val);
-  }
-
   *sectors_per_cluster_adj = sectors_per_cluster;
   *sectors_per_fat_ptr     = fat_sectors_cnt / fat_num;
 
-  return 0;
+  if (ret_val != 0) {
+    errno = EINVAL;
+  }
+
+  return ret_val;
 }
 
 static uint8_t
@@ -445,6 +445,11 @@ msdos_set_sectors_per_cluster_from_request(
       }
     }
   }
+
+  if (ret_val != 0) {
+    errno = EINVAL;
+  }
+
   return ret_val;
 }
 
@@ -529,7 +534,8 @@ static int msdos_format_determine_fmt_params
       fmt_params->fat_num = rqdata->fat_num;
     }
     else {
-      ret_val = EINVAL;
+      errno = EINVAL;
+      ret_val = -1;
     }
   }
 
@@ -715,7 +721,10 @@ static int msdos_format_determine_fmt_params
     }
   }
   if ( fmt_params->totl_sector_cnt == 0 )
-    ret_val = EINVAL;
+  {
+    errno = EINVAL;
+    ret_val = -1;
+  }
 
   if (0 == ret_val)
   {
@@ -843,12 +852,7 @@ static int msdos_format_determine_fmt_params
   /*
    * Phuuu.... That's it.
    */
-  if (ret_val != 0) {
-    rtems_set_errno_and_return_minus_one(ret_val);
-  }
-  else {
-    return 0;
-  }
+  return ret_val;
 }
 
 /*=========================================================================*\
@@ -1029,7 +1033,6 @@ int msdos_format
 \*=========================================================================*/
 {
   char                 tmp_sec[FAT_TOTAL_MBR_SIZE];
-  int                  rc;
   struct stat          stat_buf;
   int                  ret_val   = 0;
   int                  fd        = -1;
@@ -1051,8 +1054,7 @@ int msdos_format
   msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                        "stat check: %s\n", devname);
   if (ret_val == 0) {
-    rc = fstat(fd, &stat_buf);
-    ret_val = rc;
+    ret_val = fstat(fd, &stat_buf);
   }
 
   msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
