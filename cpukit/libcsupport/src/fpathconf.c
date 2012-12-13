@@ -1,6 +1,11 @@
-/*
- *  fpathconf() - POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
+/**
+ *  @file
  *
+ *  @brief Configurable Pathname Varables
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,6 +24,9 @@
 #include <unistd.h>
 #include <errno.h>
 
+/**
+ *  POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
+ */
 long fpathconf(
   int   fd,
   int   name

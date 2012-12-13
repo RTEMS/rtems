@@ -1,12 +1,11 @@
 /**
- * @file
+ *  @file
  *
- * @ingroup LibIOEnv
+ *  @brief Instantiate a Private User Environment
+ *  @ingroup LibIOEnv
  */
 
 /*
- *  Instantiate a private user environment for the calling thread.
- *
  *  Submitted by: fernando.ruiz@ctv.es (correo@fernando-ruiz.com)
  *
  *  COPYRIGHT (c) 1989-2010.
@@ -27,6 +26,10 @@
 
 #include <rtems/libio_.h>
 #include <rtems/score/thread.h>
+
+/**
+ *  Instantiate a private user environment for the calling thread.
+ */
 
 static void free_user_env(void *arg)
 {

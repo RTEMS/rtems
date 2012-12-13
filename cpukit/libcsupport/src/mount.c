@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Mounts a File System
+ *  @ingroup FileSystemTypesAndMount
+ */
+
 /*
- *  mount()
- *
- *  XXX
- *
- *  XXX make sure no required ops are NULL
- *  XXX make sure no optional ops you are using are NULL
- *  XXX unmount should be required.
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,9 +27,6 @@
 
 RTEMS_CHAIN_DEFINE_EMPTY(rtems_filesystem_mount_table);
 
-/*
- * Default pathconfs.
- */
 const rtems_filesystem_limits_and_options_t rtems_filesystem_default_pathconf = {
    5,    /* link_max: count */
    128,  /* max_canon: max formatted input line size */

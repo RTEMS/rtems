@@ -157,7 +157,7 @@ void malloc_report_statistics_with_plugin(
 );
 
 /**
- *  @brief RTEMS variation on Aligned Memory Allocation
+ *  @brief RTEMS Variation on Aligned Memory Allocation
  *
  *  This method is a help memalign implementation which does all
  *  error checking done by posix_memalign() EXCEPT it does NOT

@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Set Effective User Id
+ *  @ingroup libcsupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).

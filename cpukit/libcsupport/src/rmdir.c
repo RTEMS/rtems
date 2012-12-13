@@ -1,6 +1,11 @@
-/*
- *  rmdir() - POSIX 1003.1b - 5.2.2 - Remove a Directory
+/**
+ *  @file
  *
+ *  @brief Remove a Directory
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +22,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *   POSIX 1003.1b - 5.2.2 - Remove a Directory
+ */
 int rmdir( const char *path )
 {
   int rv = 0;

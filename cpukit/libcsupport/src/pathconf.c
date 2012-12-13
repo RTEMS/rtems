@@ -1,6 +1,11 @@
-/*
- *  pathconf() - POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
+/**
+ *  @file
  *
+ *  @brief Configurable Pathname Varables
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,6 +24,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+/**
+ *  POSIX 1003.1b - 5.7.1 - Configurable Pathname Varables
+ */
 long pathconf(
   const char *path,
   int         name

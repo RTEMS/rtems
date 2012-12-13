@@ -1,6 +1,11 @@
-/*
- *  fsync() - POSIX 1003.1b 6.6.1 - Synchronize the State of a File
+/**
+ *  @file
  *
+ *  @brief Synchronize the State of a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,6 +23,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+/**
+ *  POSIX 1003.1b 6.6.1 - Synchronize the State of a File
+ */
 int fsync(
   int     fd
 )

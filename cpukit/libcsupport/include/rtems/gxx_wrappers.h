@@ -25,6 +25,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ *  @defgroup GxxWrappersSupport Gxx Wrappers Support
+ *
+ *  @ingroup libcsupport
+ *
+ *  @brief RTEMS Threads Compatibility Routines for Libgcc2
+ */
+
 /*
  * These typedefs should match with the ones defined in the file
  * gcc/gthr-rtems.h in the gcc distribution.

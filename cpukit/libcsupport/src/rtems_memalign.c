@@ -1,6 +1,11 @@
-/*
- *  rtems_memalign() - Raw aligned allocate from Protected Heap
+/**
+ *  @file
  *
+ *  @brief RTEMS Variation on Aligned Memory Allocation
+ *  @ingroup MallocSupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
