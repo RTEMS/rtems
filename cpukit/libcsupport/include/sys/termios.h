@@ -1,7 +1,9 @@
 /**
  * @file sys/termios.h
  *
- * POSIX termios implementation for RTEMS console device driver.
+ * @brief POSIX termios implementation for RTEMS console device driver.
+ *
+ * http://pubs.opengroup.org/onlinepubs/009604599/basedefs/termios.h.html
  */
 
 /*
@@ -190,49 +192,18 @@ struct termios {
 #define	TCSADRAIN	1
 #define	TCSAFLUSH	2
 
-/**
- *  @brief Line Control Functions
- *  POSIX 1003.1b 7.2.2 - Line Control Functions
- */
 int	tcdrain(int);
-
-/**
- *  @brief Line Control Functions
- *  POSIX 1003.1b 7.2.2 - Line Control Functions
- */
 int	tcflow(int, int);
 int	tcflush(int, int);
-
-/**
- *  @brief Get State
- *  POSIX 1003.1b 7.2.1 - Get and Set State
- */
 int	tcgetattr(int, struct termios *);
 int	tcsetattr(int, int, struct termios *);
 int	tcdrain(int);
 pid_t	tcgetprgrp(int);
 int	tcsetprgrp(int, pid_t);
-
-/**
- *  @brief Line Control Functions
- *  POSIX 1003.1b 7.2.2 - Line Control Functions
- */
 int	tcsendbreak(int, int);
-
-/**
- *  @brief Baud Rate Functions
- */
 speed_t	cfgetospeed(const struct termios *tp);
-
-/**
- *  @brief Baud Rate Functions
- */
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);
-
-/**
- *  @brief Baud Rate Functions
- */
 int	cfsetispeed(struct termios *tp, speed_t speed);
 
 #ifdef __cplusplus
