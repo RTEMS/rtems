@@ -218,10 +218,6 @@ static int rtems_shell_main_ifconfig(
     flags |= IFF_UP;
   }
 
-  if (f_down != 0) {
-    printf("Warning: taking interfaces down is not supported\n");
-  }
-
   rc = rtems_bsdnet_ifconfig(iface, SIOCSIFFLAGS, &flags);
   if (rc < 0) {
     printf("Could not set interface flags: %s\n", strerror(errno));
