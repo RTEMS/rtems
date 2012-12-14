@@ -92,6 +92,11 @@ extern "C" {
   }
 #endif
 
+static void lpc_eth_config_module_disable(void)
+{
+  lpc24xx_module_disable(LPC24XX_MODULE_ETHERNET);
+}
+
 static char *lpc_eth_config_alloc_table_area(size_t size)
 {
   if (size < LPC24XX_ETH_RAM_SIZE) {
