@@ -291,10 +291,9 @@ static volatile lpc_eth_controller *const lpc_eth =
 #endif
 
 typedef enum {
-  LPC_ETH_NOT_INITIALIZED,
-  LPC_ETH_INITIALIZED,
-  LPC_ETH_STARTED,
-  LPC_ETH_RUNNING
+  LPC_ETH_STATE_NOT_INITIALIZED = 0,
+  LPC_ETH_STATE_DOWN,
+  LPC_ETH_STATE_UP
 } lpc_eth_state;
 
 typedef struct {
@@ -332,13 +331,39 @@ typedef struct {
   unsigned transmit_no_descriptor_errors;
   unsigned transmit_overflow_errors;
   unsigned transmit_fatal_errors;
+  rtems_vector_number interrupt_number;
+  rtems_id control_task;
 } lpc_eth_driver_entry;
 
-static lpc_eth_driver_entry lpc_eth_driver_data = {
-  .state = LPC_ETH_NOT_INITIALIZED,
-  .receive_task = RTEMS_ID_NONE,
-  .transmit_task = RTEMS_ID_NONE
-};
+static lpc_eth_driver_entry lpc_eth_driver_data;
+
+static void lpc_eth_control_request_complete(const lpc_eth_driver_entry *e)
+{
+  rtems_status_code sc = rtems_event_transient_send(e->control_task);
+  assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void lpc_eth_control_request(
+  lpc_eth_driver_entry *e,
+  rtems_id task,
+  rtems_event_set event
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  uint32_t nest_count = 0;
+
+  e->control_task = rtems_task_self();
+
+  sc = rtems_bsdnet_event_send(task, event);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  nest_count = rtems_bsdnet_semaphore_release_recursive();
+  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  assert(sc == RTEMS_SUCCESSFUL);
+  rtems_bsdnet_semaphore_obtain_recursive(nest_count);
+
+  e->control_task = 0;
+}
 
 static inline uint32_t lpc_eth_increment(
   uint32_t value,
@@ -596,6 +621,8 @@ static void lpc_eth_receive_task(void *arg)
       /* Enable receive interrupts */
       lpc_eth_enable_receive_interrupts();
 
+      lpc_eth_control_request_complete(e);
+
       /* Wait for events */
       continue;
     }
@@ -830,6 +857,8 @@ static void lpc_eth_transmit_task(void *arg)
 
       /* Enable transmitter */
       lpc_eth->command |= ETH_CMD_TX_ENABLE;
+
+      lpc_eth_control_request_complete(e);
     }
 
     /* Free consumed fragments */
@@ -1102,15 +1131,12 @@ static int lpc_eth_mdio_write(
   return eno;
 }
 
-static void lpc_eth_interface_init(void *arg)
+static void lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) arg;
   struct ifnet *ifp = &e->arpcom.ac_if;
 
-  LPC_ETH_PRINTF("%s\n", __func__);
-
-  if (e->state == LPC_ETH_INITIALIZED) {
+  if (up && e->state == LPC_ETH_STATE_DOWN) {
     lpc_eth_config_module_enable();
 
     /* Soft reset */
@@ -1137,7 +1163,7 @@ static void lpc_eth_interface_init(void *arg)
     #else
       lpc_eth->command = 0x0400;
     #endif
-    lpc_eth->intenable = 0;
+    lpc_eth->intenable = ETH_INT_RX_OVERRUN | ETH_INT_TX_UNDERRUN;
     lpc_eth->intclear = 0x30ff;
     lpc_eth->powerdown = 0;
 
@@ -1149,57 +1175,38 @@ static void lpc_eth_interface_init(void *arg)
     lpc_eth->sa2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
       | (uint32_t) e->arpcom.ac_enaddr [0];
 
+    lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
+
     /* Enable receiver */
     lpc_eth->mac1 = 0x03;
 
-    /* Start receive task */
-    if (e->receive_task == RTEMS_ID_NONE) {
-      e->receive_task = rtems_bsdnet_newproc(
-        "ntrx",
-        4096,
-        lpc_eth_receive_task,
-        e
-      );
-      sc = rtems_bsdnet_event_send(e->receive_task, LPC_ETH_EVENT_INITIALIZE);
-      RTEMS_SYSLOG_ERROR_SC(sc, "send receive initialize event");
-    }
+    /* Initialize tasks */
+    lpc_eth_control_request(e, e->receive_task, LPC_ETH_EVENT_INITIALIZE);
+    lpc_eth_control_request(e, e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
 
-    /* Start transmit task */
-    if (e->transmit_task == RTEMS_ID_NONE) {
-      e->transmit_task = rtems_bsdnet_newproc(
-        "nttx",
-        4096,
-        lpc_eth_transmit_task,
-        e
-      );
-      sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
-      RTEMS_SYSLOG_ERROR_SC(sc, "send transmit initialize event");
-    }
-
-    /* Change state */
-    if (
-      e->receive_task != RTEMS_ID_NONE && e->transmit_task != RTEMS_ID_NONE
-    ) {
-      e->state = LPC_ETH_STARTED;
-    }
-  }
-
-  if (e->state == LPC_ETH_STARTED) {
-    /* Enable fatal interrupts */
-    lpc_eth->intenable = ETH_INT_RX_OVERRUN | ETH_INT_TX_UNDERRUN;
-
-    /* Enable promiscous mode */
-    lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
+    /* Install interrupt handler */
+    sc = rtems_interrupt_handler_install(
+      e->interrupt_number,
+      "Ethernet",
+      RTEMS_INTERRUPT_UNIQUE,
+      lpc_eth_interrupt_handler,
+      e
+    );
+    assert(sc == RTEMS_SUCCESSFUL);
 
     /* Start watchdog timer */
     ifp->if_timer = 1;
 
-    /* Set interface to running state */
-    ifp->if_flags |= IFF_RUNNING;
-
     /* Change state */
-    e->state = LPC_ETH_RUNNING;
+    e->state = LPC_ETH_STATE_UP;
+  } else if (!up && e->state == LPC_ETH_STATE_UP) {
+    /* TODO */
   }
+}
+
+static void lpc_eth_interface_init(void *arg)
+{
+  /* Nothing to do */
 }
 
 static void lpc_eth_interface_stats(lpc_eth_driver_entry *e)
@@ -1309,13 +1316,7 @@ static int lpc_eth_interface_ioctl(
       ether_ioctl(ifp, cmd, data);
       break;
     case SIOCSIFFLAGS:
-      if (ifp->if_flags & IFF_RUNNING) {
-        /* TODO: off */
-      }
-      if (ifp->if_flags & IFF_UP) {
-        ifp->if_flags |= IFF_RUNNING;
-        /* TODO: init */
-      }
+      lpc_eth_up_or_down(e, (ifp->if_flags & IFF_UP) != 0);
       break;
     case SIOCADDMULTI:
     case SIOCDELMULTI:
@@ -1395,7 +1396,6 @@ static unsigned lpc_eth_fixup_unit_count(int count, int default_value, int max)
 
 static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc_eth_driver_entry *e = &lpc_eth_driver_data;
   struct ifnet *ifp = &e->arpcom.ac_if;
   char *unit_name = NULL;
@@ -1446,18 +1446,8 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
   );
   config->xbuf_count = (int) e->tx_unit_count;
 
-  /* Disable interrupts */
-  lpc_eth->intenable = 0;
-
-  /* Install interrupt handler */
-  sc = rtems_interrupt_handler_install(
-    config->irno,
-    "Ethernet",
-    RTEMS_INTERRUPT_UNIQUE,
-    lpc_eth_interrupt_handler,
-    e
-  );
-  RTEMS_CLEANUP_SC(sc, cleanup, "install interrupt handler");
+  /* Remember interrupt number */
+  e->interrupt_number = config->irno;
 
   /* Copy MAC address */
   memcpy(e->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
@@ -1515,8 +1505,23 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
   ifp->if_snd.ifq_maxlen = ifqmaxlen;
   ifp->if_timer = 0;
 
+  /* Create tasks */
+  e->receive_task = rtems_bsdnet_newproc(
+    "ntrx",
+    4096,
+    lpc_eth_receive_task,
+    e
+  );
+  e->transmit_task = rtems_bsdnet_newproc(
+    "nttx",
+    4096,
+    lpc_eth_transmit_task,
+    e
+  );
+
   /* Change status */
-  e->state = LPC_ETH_INITIALIZED;
+  ifp->if_flags |= IFF_RUNNING;
+  e->state = LPC_ETH_STATE_DOWN;
 
   /* Attach the interface */
   if_attach(ifp);
