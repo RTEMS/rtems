@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
@@ -49,8 +50,6 @@
 #include <bsp/irq.h>
 #include <bsp/lpc-ethernet-config.h>
 #include <bsp/utility.h>
-
-#include <rtems/status-checks.h>
 
 #if MCLBYTES > (2 * 1024)
   #error "MCLBYTES to large"
@@ -541,7 +540,7 @@ static void lpc_eth_receive_task(void *arg)
       RTEMS_NO_TIMEOUT,
       &events
     );
-    RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
+    assert(sc == RTEMS_SUCCESSFUL);
 
     LPC_ETH_PRINTF("rx: wake up: 0x%08" PRIx32 "\n", events);
 
@@ -683,17 +682,6 @@ static void lpc_eth_receive_task(void *arg)
       }
     }
   }
-
-cleanup:
-
-  /* Clear task ID */
-  e->receive_task = RTEMS_ID_NONE;
-
-  /* Release network semaphore */
-  rtems_bsdnet_semaphore_release();
-
-  /* Terminate self */
-  (void) rtems_task_delete(RTEMS_SELF);
 }
 
 static struct mbuf *lpc_eth_next_fragment(
@@ -790,7 +778,7 @@ static void lpc_eth_transmit_task(void *arg)
       RTEMS_NO_TIMEOUT,
       &events
     );
-    RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
+    assert(sc == RTEMS_SUCCESSFUL);
 
     LPC_ETH_PRINTF("tx: wake up: 0x%08" PRIx32 "\n", events);
 
@@ -1038,17 +1026,6 @@ static void lpc_eth_transmit_task(void *arg)
       lpc_eth_enable_transmit_interrupts();
     }
   }
-
-cleanup:
-
-  /* Clear task ID */
-  e->transmit_task = RTEMS_ID_NONE;
-
-  /* Release network semaphore */
-  rtems_bsdnet_semaphore_release();
-
-  /* Terminate self */
-  (void) rtems_task_delete(RTEMS_SELF);
 }
 
 static void lpc_eth_mdio_wait_for_not_busy(void)
@@ -1363,7 +1340,7 @@ static void lpc_eth_interface_start(struct ifnet *ifp)
   ifp->if_flags |= IFF_OACTIVE;
 
   sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_START);
-  RTEMS_SYSLOG_ERROR_SC(sc, "send transmit start event");
+  assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void lpc_eth_interface_watchdog(struct ifnet *ifp)
@@ -1429,17 +1406,16 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
 
   /* Check parameter */
   if (unit_index < 0) {
-    RTEMS_SYSLOG_ERROR("parse error for interface name\n");
     return 0;
   }
   if (unit_index != 0) {
-    RTEMS_DO_CLEANUP(cleanup, "unexpected unit number");
+    goto cleanup;
   }
   if (config->hardware_address == NULL) {
-    RTEMS_DO_CLEANUP(cleanup, "MAC address missing");
+    goto cleanup;
   }
-  if (e->state != LPC_ETH_NOT_INITIALIZED) {
-    RTEMS_DO_CLEANUP(cleanup, "already attached");
+  if (e->state != LPC_ETH_STATE_NOT_INITIALIZED) {
+    goto cleanup;
   }
 
   /* MDIO */
@@ -1498,7 +1474,7 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
         + LPC_ETH_CONFIG_TX_BUF_SIZE);
   table_area = lpc_eth_config_alloc_table_area(table_area_size);
   if (table_area == NULL) {
-    RTEMS_DO_CLEANUP(cleanup, "no memory for table area");
+    goto cleanup;
   }
   memset(table_area, 0, table_area_size);
 
