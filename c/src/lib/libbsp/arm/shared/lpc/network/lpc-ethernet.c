@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -317,6 +317,7 @@ typedef struct {
   unsigned receive_interrupts;
   unsigned transmitted_frames;
   unsigned transmit_interrupts;
+  unsigned receive_drop_errors;
   unsigned receive_overrun_errors;
   unsigned receive_fragment_errors;
   unsigned receive_crc_errors;
@@ -528,14 +529,11 @@ static void lpc_eth_receive_task(void *arg)
   uint32_t const index_max = e->rx_unit_count - 1;
   uint32_t produce_index = 0;
   uint32_t consume_index = 0;
-  uint32_t receive_index = 0;
 
   LPC_ETH_PRINTF("%s\n", __func__);
 
   /* Main event loop */
   while (true) {
-    bool wait_for_mbuf = false;
-
     /* Wait for events */
     sc = rtems_bsdnet_event_receive(
       LPC_ETH_EVENT_INITIALIZE | LPC_ETH_EVENT_INTERRUPT,
@@ -592,7 +590,6 @@ static void lpc_eth_receive_task(void *arg)
       /* Initialize indices */
       produce_index = lpc_eth->rxproduceindex;
       consume_index = lpc_eth->rxconsumeindex;
-      receive_index = consume_index;
 
       /* Enable receiver */
       lpc_eth->command |= ETH_CMD_RX_ENABLE;
@@ -611,49 +608,47 @@ static void lpc_eth_receive_task(void *arg)
       /* Get current produce index */
       produce_index = lpc_eth->rxproduceindex;
 
-      if (receive_index != produce_index) {
+      if (consume_index != produce_index) {
         uint32_t stat = 0;
-
-        /* Fragment mbuf */
-        struct mbuf *m = mbufs [receive_index];
 
         /* Fragment status */
         rtems_cache_invalidate_multiple_data_lines(
-          (void *) &status [receive_index],
+          (void *) &status [consume_index],
           sizeof(status [0])
         );
-        stat = status [receive_index].info;
-
-        /* Remove mbuf from table */
-        mbufs [receive_index] = NULL;
+        stat = status [consume_index].info;
 
         if (
           (stat & ETH_RX_STAT_LAST_FLAG) != 0
             && (stat & LPC_ETH_RX_STAT_ERRORS) == 0
         ) {
-          /* Ethernet header */
-          struct ether_header *eh = mtod(m, struct ether_header *);
+          /* Received mbuf */
+          struct mbuf *m = mbufs [consume_index];
 
-          /* Discard Ethernet header and CRC */
-          int sz = (int) (stat & ETH_RX_STAT_RXSIZE_MASK) + 1
-            - ETHER_HDR_LEN - ETHER_CRC_LEN;
+          if (lpc_eth_add_new_mbuf(ifp, desc, mbufs, consume_index, false)) {
+            /* Ethernet header */
+            struct ether_header *eh = mtod(m, struct ether_header *);
 
-          /* Update mbuf */
-          m->m_len = sz;
-          m->m_pkthdr.len = sz;
-          m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
+            /* Discard Ethernet header and CRC */
+            int sz = (int) (stat & ETH_RX_STAT_RXSIZE_MASK) + 1
+              - ETHER_HDR_LEN - ETHER_CRC_LEN;
 
-          LPC_ETH_PRINTF("rx: %02" PRIu32 ": %u\n", receive_index, sz);
+            /* Update mbuf */
+            m->m_len = sz;
+            m->m_pkthdr.len = sz;
+            m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
 
-          /* Hand over */
-          ether_input(ifp, eh, m);
+            LPC_ETH_PRINTF("rx: %02" PRIu32 ": %u\n", consume_index, sz);
 
-          /* Increment received frames counter */
-          ++e->received_frames;
+            /* Hand over */
+            ether_input(ifp, eh, m);
+
+            /* Increment received frames counter */
+            ++e->received_frames;
+          } else {
+            ++e->receive_drop_errors;
+          }
         } else {
-          /* Release mbuf */
-          m_free(m);
-
           /* Update error counters */
           if ((stat & ETH_RX_STAT_OVERRUN) != 0) {
             ++e->receive_overrun_errors;
@@ -678,36 +673,14 @@ static void lpc_eth_receive_task(void *arg)
           }
         }
 
-        /* Increment receive index */
-        receive_index = lpc_eth_increment(receive_index, index_max);
+        /* Increment and update consume index */
+        consume_index = lpc_eth_increment(consume_index, index_max);
+        lpc_eth->rxconsumeindex = consume_index;
       } else {
         /* Nothing to do, enable receive interrupts */
         lpc_eth_enable_receive_interrupts();
         break;
       }
-    }
-
-    /* Wait for mbuf? */
-    wait_for_mbuf =
-      lpc_eth_increment(produce_index, index_max) == consume_index;
-
-    /* Fill queue with new mbufs */
-    while (consume_index != produce_index) {
-      /* Add new mbuf to queue */
-      if (
-        !lpc_eth_add_new_mbuf(ifp, desc, mbufs, consume_index, wait_for_mbuf)
-      ) {
-        break;
-      }
-
-      /* We wait for at most one mbuf */
-      wait_for_mbuf = false;
-
-      /* Increment consume index */
-      consume_index = lpc_eth_increment(consume_index, index_max);
-
-      /* Update consume indices */
-      lpc_eth->rxconsumeindex = consume_index;
     }
   }
 
@@ -1268,6 +1241,7 @@ static void lpc_eth_interface_stats(lpc_eth_driver_entry *e)
   printf("receive interrupts:                  %u\n", e->receive_interrupts);
   printf("transmitted frames:                  %u\n", e->transmitted_frames);
   printf("transmit interrupts:                 %u\n", e->transmit_interrupts);
+  printf("receive drop errors:                 %u\n", e->receive_drop_errors);
   printf("receive overrun errors:              %u\n", e->receive_overrun_errors);
   printf("receive fragment errors:             %u\n", e->receive_fragment_errors);
   printf("receive CRC errors:                  %u\n", e->receive_crc_errors);
