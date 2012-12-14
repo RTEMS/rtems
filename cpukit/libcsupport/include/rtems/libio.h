@@ -172,7 +172,7 @@ typedef void (*rtems_filesystem_eval_path_t)(
  * @param[in] namelen Length of the name for the new link in characters.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_link().
  */
@@ -190,7 +190,7 @@ typedef int (*rtems_filesystem_link_t)(
  * @param[in] mode The new mode of the node
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_fchmod().
  */
@@ -207,7 +207,7 @@ typedef int (*rtems_filesystem_fchmod_t)(
  * @param[in] group Group ID for the node.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_chown().
  */
@@ -228,7 +228,7 @@ typedef int (*rtems_filesystem_chown_t)(
  * @param[in, out] loc Location to clone.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_clonenode().
  */
@@ -259,7 +259,7 @@ typedef void (*rtems_filesystem_freenode_t)(
  * @param[in] mt_entry The mount table entry.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_mount().
  */
@@ -277,7 +277,7 @@ typedef int (*rtems_filesystem_mount_t) (
  * @param[in] data The data provided by the user.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  */
 typedef int (*rtems_filesystem_fsmount_me_t)(
   rtems_filesystem_mount_table_entry_t *mt_entry,
@@ -294,7 +294,7 @@ typedef int (*rtems_filesystem_fsmount_me_t)(
  * @param[in] mt_entry The mount table entry.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_unmount().
  */
@@ -361,7 +361,7 @@ typedef rtems_filesystem_node_types_t (*rtems_filesystem_node_type_t)(
  * @param[in] dev Optional device identifier for the new node.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_mknod().
  */
@@ -380,7 +380,7 @@ typedef int (*rtems_filesystem_mknod_t)(
  * @param[in] loc The location of the node.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_rmnod().
  */
@@ -397,7 +397,7 @@ typedef int (*rtems_filesystem_rmnod_t)(
  * @param[in] modtime Modification for the node.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_utime().
  */
@@ -417,7 +417,7 @@ typedef int (*rtems_filesystem_utime_t)(
  * @param[in] target Contents for the symbolic link.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_symlink().
  */
@@ -436,7 +436,7 @@ typedef int (*rtems_filesystem_symlink_t)(
  * @param[in] bufsize The size of the buffer in characters.
  *
  * @retval non-negative Size of the actual contents in characters.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_readlink().
  */
@@ -456,7 +456,7 @@ typedef ssize_t (*rtems_filesystem_readlink_t)(
  * @param[in] namelen Length of the name for the new node in characters.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_rename().
  */
@@ -475,7 +475,7 @@ typedef int (*rtems_filesystem_rename_t)(
  * @param[out] buf Buffer for file system information.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_statvfs().
  */
@@ -758,7 +758,7 @@ int rtems_filesystem_default_statvfs(
  * @param[in] mode Optional mode for node creation.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_open().
  */
@@ -775,7 +775,7 @@ typedef int (*rtems_filesystem_open_t)(
  * @param[in, out] iop The IO pointer.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_close().
  */
@@ -793,7 +793,7 @@ typedef int (*rtems_filesystem_close_t)(
  * @param[in] count The size of the buffer in characters.
  *
  * @retval non-negative Count of read characters.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_read().
  */
@@ -813,7 +813,7 @@ typedef ssize_t (*rtems_filesystem_read_t)(
  * @param[in] count The size of the buffer in characters.
  *
  * @retval non-negative Count of written characters.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_write().
  */
@@ -831,7 +831,7 @@ typedef ssize_t (*rtems_filesystem_write_t)(
  * @param[in, out] buffer The buffer for IO control request data.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_ioctl().
  */
@@ -849,7 +849,7 @@ typedef int (*rtems_filesystem_ioctl_t)(
  * @param[in] whence The reference position for the offset.
  *
  * @retval non-negative The new offset from the beginning of the file.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_lseek(),
  * rtems_filesystem_default_lseek_file(), and
@@ -868,7 +868,7 @@ typedef off_t (*rtems_filesystem_lseek_t)(
  * @param[out] stat The buffer to status information.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_fstat().
  */
@@ -884,7 +884,7 @@ typedef int (*rtems_filesystem_fstat_t)(
  * @param[in] length The new length in characters.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_ftruncate() and
  * rtems_filesystem_default_ftruncate_directory().
@@ -900,7 +900,7 @@ typedef int (*rtems_filesystem_ftruncate_t)(
  * @param[in, out] iop The IO pointer.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_fsync_or_fdatasync() and
  * rtems_filesystem_default_fsync_or_fdatasync_success().
@@ -915,7 +915,7 @@ typedef int (*rtems_filesystem_fsync_t)(
  * @param[in, out] iop The IO pointer.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The errno is set to indicate the error.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
  * @see rtems_filesystem_default_fsync_or_fdatasync() and
  * rtems_filesystem_default_fsync_or_fdatasync_success().
@@ -931,7 +931,7 @@ typedef int (*rtems_filesystem_fdatasync_t)(
  * @param[in] cmd Control command.
  *
  * @retval 0 Successful operation.
- * @retval errno An error occured.  This value is assigned to errno.
+ * @retval errno An error occurred.  This value is assigned to errno.
  *
  * @see rtems_filesystem_default_fcntl().
  */
@@ -1053,7 +1053,7 @@ off_t rtems_filesystem_default_lseek_directory(
  *
  * This function has no protection against concurrent access.
  *
- * @retval -1 An error occured.  In case an integer overflow occured, then the
+ * @retval -1 An error occurred.  In case an integer overflow occurred, then the
  * errno will be set to EOVERFLOW.  In case the new offset is negative, then
  * the errno will be set to EINVAL.  In case the whence is SEEK_END and the
  * fstat() handler to obtain the current file size returned an error status,
@@ -1401,7 +1401,7 @@ extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
  * The @a mode value selects the access permissions of the directory.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 extern int rtems_mkdir(const char *path, mode_t mode);
 
@@ -1509,7 +1509,7 @@ extern rtems_chain_control rtems_filesystem_mount_table;
  * The @a mount_h handler will be used to mount a file system of this @a type.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 int rtems_filesystem_register(
   const char                    *type,
@@ -1520,7 +1520,7 @@ int rtems_filesystem_register(
  * @brief Unregisters a file system @a type.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 int rtems_filesystem_unregister(
   const char *type
@@ -1542,7 +1542,7 @@ int rtems_filesystem_unregister(
  * unpredictable effects.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  *
  * @see ClassicEventTransient.
  */
@@ -1582,7 +1582,7 @@ int unmount(
  * @see rtems_filesystem_register() and mount_and_make_target_path().
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 int mount(
   const char                 *source,
@@ -1601,7 +1601,7 @@ int mount(
  * @see mount().
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 int mount_and_make_target_path(
   const char                 *source,

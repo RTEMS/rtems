@@ -154,7 +154,7 @@ typedef struct rtems_blkdev_request {
  * @param[in,out] req The transfer request.
  * @param[in] status The status of the operation should be
  *  - @c RTEMS_SUCCESSFUL, if the operation was successful,
- *  - @c RTEMS_IO_ERROR, if some sort of input or output error occured, or
+ *  - @c RTEMS_IO_ERROR, if some sort of input or output error occurred, or
  *  - @c RTEMS_UNSATISFIED, if media is no more present.
  */
 static inline void rtems_blkdev_request_done(

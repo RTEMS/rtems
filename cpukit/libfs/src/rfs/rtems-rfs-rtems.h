@@ -46,7 +46,7 @@
  *
  * @param what The message to print is the error is not zero.
  * @param error The error code.
- * @retval -1 An error has occured.
+ * @retval -1 An error has occurred.
  * @retval 0 No error.
  */
 int rtems_rfs_rtems_error (const char* mesg, int error);

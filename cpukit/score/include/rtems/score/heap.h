@@ -558,7 +558,7 @@ bool _Heap_Free( Heap_Control *heap, void *addr );
  * If @a dump is @c true, then diagnostic messages will be printed to standard
  * output.  In this case @a source is used to mark the output lines.
  *
- * Returns @c true if no errors occured, and @c false if the heap is corrupt.
+ * Returns @c true if no errors occurred, and @c false if the heap is corrupt.
  */
 bool _Heap_Walk(
   Heap_Control *heap,
