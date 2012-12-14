@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/modes.h
  *
+ * @brief Constants and Structures Associated with the RTEMS thread and RTEMS_ASR modes
+ *
  *  This include file contains all constants and structures associated
  *  with the RTEMS thread and RTEMS_ASR modes.
  */

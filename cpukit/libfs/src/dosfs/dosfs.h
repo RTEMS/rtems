@@ -95,6 +95,11 @@ typedef struct {
   bool skip_alignment;
 
   /**
+   * @brief Synchronize device after write operations.
+   */
+  bool sync_device;
+
+  /**
    * @brief The amount of info to output.
    */
   int info_level;

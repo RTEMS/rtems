@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Get Directory Entries
+ *  @ingroup libcsupport
+ */
+
 /*
- *  getdents() - Get Directory Entries
- *
- *  SVR4 and SVID extension required by Newlib readdir() family.
- *
- *  This routine will dd_len / (sizeof dirent) directory entries relative to
- *  the current directory position index. These entries will be placed in
- *  character array pointed to by -dd_buf-
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,6 +23,13 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+/**
+ *  SVR4 and SVID extension required by Newlib readdir() family.
+ *
+ *  This routine will dd_len / (sizeof dirent) directory entries relative to
+ *  the current directory position index. These entries will be placed in
+ *  character array pointed to by -dd_buf-
+ */
 int getdents(
   int   dd_fd,
   char *dd_buf,

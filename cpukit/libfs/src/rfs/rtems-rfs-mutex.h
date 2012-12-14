@@ -1,12 +1,7 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
+ *
+ * @brief RTEMS File System Mutex
  *
  * @ingroup rtems-rfs
  *
@@ -14,6 +9,14 @@
  *
  * It may be suprising we abstract this for the RTEMS file system but this code
  * is designed to be run on host operating systems.
+ */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #if !defined (_RTEMS_RFS_MUTEX_H_)

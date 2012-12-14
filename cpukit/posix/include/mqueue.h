@@ -26,6 +26,13 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 
+/**
+ *  @defgroup POSIX_MQUEUE Message Queues
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -72,7 +79,21 @@ int mq_close(
 );
 
 /**
+ *  @brief Remove a Message Queue
+ *
  *  15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276
+ *
+ *  NOTE:  The structure of the routines is identical to that of POSIX
+ *         Message_queues to leave the option of having unnamed message
+ *         queues at a future date.  They are currently not part of the
+ *         POSIX standard but unnamed message_queues are.  This is also
+ *         the reason for the apparently unnecessary tracking of
+ *         the process_shared attribute.  [In addition to the fact that
+ *         it would be trivial to add pshared to the mq_attr structure
+ *         and have process private message queues.]
+ *
+ *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
+ *         time.
  */
 int mq_unlink(
   const char *name
@@ -167,6 +188,6 @@ int mq_getattr(
 #endif
 
 #endif /* _POSIX_MESSAGE_PASSING */
-
+/**@}*/
 #endif
 /* end of include file */

@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Test whether a File Descriptor Refers to a Terminal 
+ *  @ingroup libcsupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup RBHeap
+ * @brief Red-Black Tree Heap API
  *
- * @brief Red-Black Tree Heap API.
+ * @ingroup RBHeap
  */
 
 /*

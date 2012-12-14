@@ -1,6 +1,11 @@
-/*
- *  3.3.3 Manipulate Signal Sets, P1003.1b-1993, p. 69
+/**
+ * @file
  *
+ * @brief Manipulate Signal Sets
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

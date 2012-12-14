@@ -1,6 +1,11 @@
-/*
- * utils.c - various utility functions used in pppd.
+/**
+ *  @file
  *
+ *  @brief Concatenate a Strings
+ *  @ingroup libcsupport
+ */
+
+/*
  * Copyright (c) 1999 The Australian National University.
  * All rights reserved.
  *
@@ -24,9 +29,10 @@
 #include <string.h>
 
 #ifndef HAVE_STRLCAT
-/*
- * strlcat - like strcat/strncat, doesn't overflow destination buffer,
- * always leaves destination null-terminated (for len > 0).
+
+/**
+ *  like strcat/strncat, doesn't overflow destination buffer,
+ *  always leaves destination null-terminated (for len > 0).
  */
 size_t
 strlcat(

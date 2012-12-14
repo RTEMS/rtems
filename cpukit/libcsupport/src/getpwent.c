@@ -1,6 +1,11 @@
-/*
- *  POSIX 1003.1b - 9.2.2 - User Database Access Routines
+/**
+ *  @file
  *
+ *  @brief User Database Access Routines
+ *  @ingroup libcsupport
+ */
+
+/*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -24,6 +29,10 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+/**
+ *  POSIX 1003.1b - 9.2.2 - User Database Access Routines
+ */
+
 /*
  * Static, thread-unsafe, buffers
  */
@@ -34,8 +43,8 @@ static FILE *group_fp;
 static char grbuf[200];
 static struct group grent;
 
-/*
- * Initialize useable but dummy databases
+/**
+ *  Initialize useable but dummy databases
  */
 void init_etc_passwd_group(void)
 {
@@ -74,8 +83,8 @@ void init_etc_passwd_group(void)
   }
 }
 
-/*
- * Extract a string value from the database
+/**
+ *  Extract a string value from the database
  */
 static int
 scanString(FILE *fp, char **name, char **bufp, size_t *nleft, int nlFlag)
@@ -109,8 +118,8 @@ scanString(FILE *fp, char **name, char **bufp, size_t *nleft, int nlFlag)
   return 1;
 }
 
-/*
- * Extract an integer value from the database
+/**
+ *  Extract an integer value from the database
  */
 static int
 scanInt(FILE *fp, int *val)
@@ -279,8 +288,8 @@ void endpwent(void)
     fclose(passwd_fp);
 }
 
-/*
- * Extract a single group record from the database
+/**
+ *  Extract a single group record from the database
  */
 static int scangr(
   FILE *fp,

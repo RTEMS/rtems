@@ -1,6 +1,11 @@
-/*
- *  tcsendbreak() - POSIX 1003.1b 7.2.2 - Line Control Functions
+/**
+ *  @file
  *
+ *  @brief Line Control Functions
+ *  @ingroup Termios
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

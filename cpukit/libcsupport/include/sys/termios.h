@@ -1,7 +1,9 @@
 /**
  * @file sys/termios.h
  *
- * POSIX termios implementation for RTEMS console device driver.
+ * @brief POSIX termios implementation for RTEMS console device driver.
+ *
+ * http://pubs.opengroup.org/onlinepubs/009604599/basedefs/termios.h.html
  */
 
 /*
@@ -21,6 +23,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @ingroup Termios
+ *
+ *  @brief POSIX Termios Implementation
+ */
 
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
@@ -193,7 +201,6 @@ int	tcdrain(int);
 pid_t	tcgetprgrp(int);
 int	tcsetprgrp(int, pid_t);
 int	tcsendbreak(int, int);
-
 speed_t	cfgetospeed(const struct termios *tp);
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);

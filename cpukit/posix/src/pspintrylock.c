@@ -1,6 +1,11 @@
-/*
- *  POSIX Spinlock Manager -- Wait at a Spinlock
+/**
+ * @file
  *
+ * @brief Wait at a Spinlock
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

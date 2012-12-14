@@ -1,6 +1,11 @@
-/*
- *  RTEMS threads compatibility routines for libgcc2.
+/**
+ *  @file
  *
+ *  @brief RTEMS Threads Compatibility Routines for Libgcc2
+ *  @ingroup GxxWrappersSupport
+ */
+
+/*
  *  by: Rosimildo da Silva (rdasilva@connecttel.com)
  *
  *  Used ideas from:

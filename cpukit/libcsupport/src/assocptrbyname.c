@@ -1,6 +1,8 @@
-/*
- * assoc.c
- *      rtems assoc routines
+/**
+ *  @file
+ *
+ *  @brief RTEMS Associate Pointer by Name
+ *  @ingroup Associativity
  */
 
 #if HAVE_CONFIG_H

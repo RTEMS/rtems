@@ -1,6 +1,11 @@
-/*
- *  tcsetattr() - POSIX 1003.1b 7.2.1 - Get and Set State
+/**
+ *  @file
  *
+ *  @brief Get and Set State
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -26,6 +31,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+/**
+ *  POSIX 1003.1b 7.2.1 - Get and Set State
+ */
 int tcsetattr(
   int             fd,
   int             opt,

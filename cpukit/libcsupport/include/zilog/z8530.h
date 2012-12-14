@@ -1,6 +1,8 @@
 /**
  * @file rtems/zilog/z8530.h
  *
+ * @brief Information Related to a Zilog Z8530 SCC Chip
+ *
  *  This include file defines information related to a Zilog Z8530
  *  SCC Chip.  It is a IO mapped part.
  */

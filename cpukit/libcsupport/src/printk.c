@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Kernel Printf Function
+ *  @ingroup libcsupport
+ */
+
 /*
  * (C) Copyright 1997 -
  * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
@@ -22,10 +29,8 @@
 #include <stdio.h>
 #include <rtems/bspIo.h>
 
-/*
- * printk
- *
- * Kernel printf function requiring minimal infrastructure.
+/**
+ *  Kernel printf function requiring minimal infrastructure.
  */
 void printk(const char *fmt, ...)
 {

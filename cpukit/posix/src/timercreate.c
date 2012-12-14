@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Create a Per-Process Timer
+ * @ingroup POSIX_PRIV_TIMERS Timers
+ */
+
 /*
  *  14.2.2 Create a Per-Process Timer, P1003.1b-1993, p. 264
  *

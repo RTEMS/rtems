@@ -1,6 +1,11 @@
-/*
- *  ftruncate() - Truncate a File to the Specified Length
+/**
+ *  @file
  *
+ *  @brief Truncate a File to the Specified Length
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

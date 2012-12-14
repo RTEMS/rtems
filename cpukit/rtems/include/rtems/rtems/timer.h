@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/timer.h
  *
+ * @brief Constants, Structures, and Prototypes Associated with the Timer Manager
+ *
  *  This include file contains all the constants, structures, and
  *  prototypes associated with the Timer Manager.  This manager provides
  *  facilities to configure, initiate, cancel, and delete timers which will

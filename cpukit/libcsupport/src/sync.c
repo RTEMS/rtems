@@ -1,12 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Synchronize Data on Disk with Memory 
+ *  @ingroup libcsupport
+ */
+
 /*
- *  sync() - XXX ??? where is this defined
- *
- *  This function operates by as follows:
- *    for all threads
- *      for all FILE *
- *         fsync()
- *         fdatasync()
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -79,6 +78,13 @@ static void sync_per_thread(Thread_Control *t)
  */
 extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
 
+/**
+ * This function operates by as follows:
+ *    for all threads
+ *      for all FILE *
+ *         fsync()
+ *         fdatasync()
+ */
 void sync(void)
 {
 

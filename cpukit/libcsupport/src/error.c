@@ -1,45 +1,13 @@
-/*
- *  report errors and panics to RTEMS' stderr.
- *  Currently just used by RTEMS monitor.
+/**
+ *  @file
+ *
+ *  @brief Error and Panic Report Support
+ *  @ingroup ErrorPanicSupport
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-/*
- * These routines provide general purpose error reporting.
- * rtems_error reports an error to stderr and allows use of
- * printf style formatting.  A newline is appended to all messages.
- *
- * error_flag can be specified as any of the following:
- *
- *  RTEMS_ERROR_ERRNO       -- include errno text in output
- *  RTEMS_ERROR_PANIC       -- halts local system after output
- *  RTEMS_ERROR_ABORT       -- abort after output
- *
- * It can also include a rtems_status value which can be OR'd
- * with the above flags. *
- *
- * EXAMPLE
- *  #include <rtems.h>
- *  #include <rtems/error.h>
- *  rtems_error(0, "stray interrupt %d", intr);
- *
- * EXAMPLE
- *        if ((status = rtems_task_create(...)) != RTEMS_SUCCCESSFUL)
- *        {
- *            rtems_error(status | RTEMS_ERROR_ABORT,
- *                        "could not create task");
- *        }
- *
- * EXAMPLE
- *        if ((fd = open(pathname, O_RDNLY)) < 0)
- *        {
- *            rtems_error(RTEMS_ERROR_ERRNO, "open of '%s' failed", pathname);
- *            goto failed;
- *        }
- */
 
 /* This is always defined on RTEMS Scheduler Simulator and thus
  * we get a redefined warning if this is not present.
@@ -153,15 +121,6 @@ static int rtems_verror(
   return chars_written;
 }
 
-
-/*
- * Report an error.
- * error_flag is as above; printf_format is a normal
- * printf(3) format string, with its concommitant arguments.
- *
- * Returns the number of characters written.
- */
-
 int rtems_error(
   rtems_error_code_t error_flag,
   const char *printf_format,
@@ -186,10 +145,6 @@ int rtems_error(
 
   return chars_written;
 }
-
-/*
- * rtems_panic is shorthand for rtems_error(RTEMS_ERROR_PANIC, ...)
- */
 
 void rtems_panic(
   const char *printf_format,

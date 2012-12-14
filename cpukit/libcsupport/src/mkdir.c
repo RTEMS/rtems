@@ -1,6 +1,11 @@
-/*
- *  mkdir() - POSIX 1003.1b 5.4.1 - Make a Directory
+/**
+ *  @file
  *
+ *  @brief Make a Directory
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,6 +24,9 @@
 #include <errno.h>
 #include <stdlib.h>
 
+/**
+ *  POSIX 1003.1b 5.4.1 - Make a Directory
+ */
 int mkdir(
   const char *pathname,
   mode_t      mode

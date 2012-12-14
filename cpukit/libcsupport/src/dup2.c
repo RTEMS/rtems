@@ -1,6 +1,11 @@
-/*
- *  dup2() - POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
+/**
+ *  @file
  *
+ *  @brief Duplicate an Open File Descriptor
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,6 +23,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
+ */
 int dup2(
   int fildes,
   int fildes2

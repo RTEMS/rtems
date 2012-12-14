@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/part.h
  *
+ * @brief Constants and Structures Associated with the Partition Manager
+ *
  *  This include file contains all the constants and structures associated
  *  with the Partition Manager.  This manager provides facilities to
  *  dynamically allocate memory in fixed-sized units which are returned

@@ -30,11 +30,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup LibIOInternal IO Internal Library
+ *  @defgroup LibIOInternal IO Internal Library
  *
- * @brief Internal IO library API and implementation.
+ *  @brief Internal IO library API and implementation.
  *
- * @{
+ *  @{
  */
 
 #define RTEMS_FILESYSTEM_SYMLOOP_MAX 32
@@ -179,14 +179,14 @@ extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
    rtems_libio_check_permissions_with_error(_iop, _flag, EINVAL )
 
 /**
- * @brief Clones a node.
+ *  @brief Clones a Node
  *
- * The caller must hold the file system instance lock.
+ *  The caller must hold the file system instance lock.
  *
- * @param[out] clone The cloned location.
- * @param[in] master The master location.
+ *  @param[out] clone The cloned location.
+ *  @param[in] master The master location.
  *
- * @see rtems_filesystem_instance_lock().
+ *  @see rtems_filesystem_instance_lock().
  */
 void rtems_filesystem_location_clone(
   rtems_filesystem_location_info_t *clone,
@@ -399,6 +399,9 @@ typedef struct {
   rtems_filesystem_eval_path_eval_token eval_token;
 } rtems_filesystem_eval_path_generic_config;
 
+/**
+ *  @brief RTEMS File System Eval Generic Path
+ */
 void rtems_filesystem_eval_path_generic(
   rtems_filesystem_eval_path_context_t *ctx,
   void *arg,
@@ -535,7 +538,9 @@ static inline void rtems_filesystem_location_error(
     errno = eno;
   }
 }
-
+/**
+ *  @brief RTEMS File System Mknod
+ */
 int rtems_filesystem_mknod(
   const rtems_filesystem_location_info_t *parentloc,
   const char *name,
@@ -546,6 +551,9 @@ int rtems_filesystem_mknod(
 
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc );
 
+/**
+ *  @brief Change Owner and Group of a File
+ */
 int rtems_filesystem_chown(
   const char *path,
   uid_t owner,
@@ -675,6 +683,9 @@ static inline void rtems_filesystem_eval_path_put_back_token(
   ctx->tokenlen = 0;
 }
 
+/**
+ *  @brief RTEMS File System Eval Eat Delimiter Path
+ */
 void rtems_filesystem_eval_path_eat_delimiter(
   rtems_filesystem_eval_path_context_t *ctx
 );

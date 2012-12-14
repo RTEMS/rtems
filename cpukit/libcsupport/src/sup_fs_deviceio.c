@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS DeviceIO Support
+ *  @ingroup Device
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).

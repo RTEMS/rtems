@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Malloc Family Implementation
+ *  @ingroup libcsupport
+ */
+
 /*
- *  RTEMS Malloc Family Implementation
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

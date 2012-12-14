@@ -1,12 +1,7 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
+ *
+ * @brief RTEMS File Systems Bitmap Routines
  *
  * @ingroup rtems-rfs
  *
@@ -17,6 +12,15 @@
  * bits. The search map allows for a faster search for an available bit as 32
  * search bits can checked in a test.
  */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
+
 
 #if !defined (_RTEMS_RFS_BITMAPS_H_)
 #define _RTEMS_RFS_BITMAPS_H_

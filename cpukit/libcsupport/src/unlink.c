@@ -1,6 +1,11 @@
-/*
- *  unlink() - POSIX 1003.1b - 5.5.1 - Remove an existing link
+/**
+ *  @file
  *
+ *  @brief Remove an Existing Link
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +22,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b - 5.5.1 - Remove an existing link
+ */
 int unlink( const char *path )
 {
   int rv = 0;
@@ -49,16 +57,13 @@ int unlink( const char *path )
   return rv;
 }
 
-/*
- *  _unlink_r
- *
- *  This is the Newlib dependent reentrant version of unlink().
- */
-
 #if defined(RTEMS_NEWLIB)
 
 #include <reent.h>
 
+/**
+ *  This is the Newlib dependent reentrant version of unlink().
+ */
 int _unlink_r(
   struct _reent *ptr __attribute__((unused)),
   const char    *path

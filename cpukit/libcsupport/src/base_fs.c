@@ -1,6 +1,11 @@
-/*
- *  Base file system initialization
+/**
+ *  @file
  *
+ *  @brief Base File System Initialization
+ *  @ingroup LibIO
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,16 +27,6 @@
 
 /*
  *  Default mode for created files.
- */
-
-
-/*
- *  rtems_filesystem_initialize
- *
- *  Initialize the foundation of the file system.  This is specified
- *  by the structure rtems_filesystem_mount_table.  The usual
- *  configuration is a single instantiation of the IMFS or miniIMFS with
- *  a single "/dev" directory in it.
  */
 
 void rtems_filesystem_initialize( void )

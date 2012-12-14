@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Convert Baud Part of Termios control flags to an integral Baud Value
+ *  @ingroup TermiostypesSupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

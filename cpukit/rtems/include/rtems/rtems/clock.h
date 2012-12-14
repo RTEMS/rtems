@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/clock.h
  *
+ * @brief Constants and Structures Associated with the Clock Manager
+ *
  *  This include file contains all the constants and structures associated
  *  with the Clock Manager.  This manager provides facilities to set, obtain,
  *  and continually update the current date and time.
@@ -257,7 +259,7 @@ time_t rtems_clock_get_uptime_seconds( void );
  *  @param[in] the_tod is the TOD structure to validate
  *
  *  @return This method returns true if the TOD is valid and false otherwise.
- * 
+ *
  *  @note This routine only works for leap-years through 2099.
  */
 bool _TOD_Validate(

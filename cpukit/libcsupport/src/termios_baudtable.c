@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief  RTEMS Termios Baud Table
+ *  @ingroup TermiostypesSupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).

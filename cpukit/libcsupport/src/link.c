@@ -1,6 +1,11 @@
-/*
- *  link() - POSIX 1003.1b - 5.3.4 - Create a new link
+/**
+ *  @file
  *
+ *  @brief Create a new link
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +22,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  link() - POSIX 1003.1b - 5.3.4 - Create a new link
+ */
 int link( const char *path1, const char *path2 )
 {
   int rv = 0;
@@ -50,16 +58,13 @@ int link( const char *path1, const char *path2 )
   return rv;
 }
 
-/*
- *  _link_r
- *
- *  This is the Newlib dependent reentrant version of link().
- */
-
 #if defined(RTEMS_NEWLIB)
 
 #include <reent.h>
 
+/**
+ *  This is the Newlib dependent reentrant version of link().
+ */
 int _link_r(
   struct _reent *ptr __attribute__((unused)),
   const char    *path1,

@@ -1,6 +1,11 @@
-/*
- *  _calloc_r Implementation
+/**
+ *  @file
  *
+ *  @brief Allocate Space for Array in Memory
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Evaluate Patch
+ * @ingroup DevFsDeviceTable Define Device Table Type
+ */
+
 /*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

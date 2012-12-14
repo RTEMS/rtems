@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/message.h
  *
+ * @brief Constants and Structures Associated with the Message Queue Manager
+ *
  *  This include file contains all the constants and structures associated
  *  with the Message Queue Manager.  This manager provides a mechanism for
  *  communication and synchronization between tasks using messages.

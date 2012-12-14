@@ -1,6 +1,11 @@
-/*
- *  chmod() - POSIX 1003.1b 5.6.4 - Change File Modes
+/**
+ *  @file
  *
+ *  @brief Change File Modes
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +22,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b 5.6.4 - Change File Modes
+ */
 int chmod( const char *path, mode_t mode )
 {
   int rv = 0;

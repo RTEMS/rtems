@@ -1,5 +1,8 @@
-/*
- *  Convert abstime timeout to ticks
+/**
+ * @file
+ *
+ * @brief Convert Absolute Timeout to Ticks
+ * @ingroup POSIX_TIMETYPES Time Types
  */
 
 /*

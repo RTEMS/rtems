@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Newlib Initialization
+ *  @ingroup libcsupport
+ */
+
 /*
  *  Implementation of hooks for the CYGNUS newlib libc
  *  These hooks set things up so that:
@@ -17,7 +24,7 @@
 
 #if defined(RTEMS_NEWLIB)
 
-/*
+/**
  *  Init libc for CYGNUS newlib
  *
  *  Set up _REENT to use our global libc_global_reent.
@@ -29,8 +36,6 @@
  *  create, delete, switch, exit, etc.
  *
  */
-
-
 void
 libc_init(void)
 {

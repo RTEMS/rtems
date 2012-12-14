@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/options.h
  *
+ * @brief Information Which Defines the Options Available on Many Directives.
+ *
  *  This include file contains information which defines the
  *  options available on many directives.
  */

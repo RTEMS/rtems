@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Implements wake up version of the "signal" operation
+ * @ingroup POSIX_COND_VARS Condition Variables
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

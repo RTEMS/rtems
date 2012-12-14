@@ -1,5 +1,7 @@
 /**
  * @file rtems/deviceio.h
+ *
+ * @brief Map Operations on IMFS Device Nodes to the RTEMS Classic API IO Manager
  */
 
 /*

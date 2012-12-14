@@ -1,12 +1,7 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
+ *
+ * @brief Manages the Trace and Debugging Features of the RTEMS RFS File System
  *
  * @ingroup rtems-rfs
  *
@@ -14,6 +9,15 @@
  * RTEMS RFS file system. The design allows all tracing code and strings to be
  * removed from the target code for small footprint systems.
  */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
+
 
 #if !defined (_RTEMS_RFS_TRACE_H_)
 #define _RTEMS_RFS_TRACE_H_

@@ -1,6 +1,11 @@
-/*
- *  ctermid() - POSIX 1003.1b 4.7.1 - Generate Terminal Pathname
+/**
+ *  @file
  *
+ *  @brief Generate Terminal Pathname
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,6 +26,9 @@
 
 static char *ctermid_name = "/dev/console";
 
+/**
+ *  ctermid() - POSIX 1003.1b 4.7.1 - Generate Terminal Pathname
+ */
 char *ctermid(
   char *s
 )

@@ -1,6 +1,11 @@
-/*
- *  tcflow() - POSIX 1003.1b 7.2.2 - Line Control Functions
+/**
+ *  @file
  *
+ *  @brief Line Control Functions
+ *  @ingroup Termios
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -29,6 +34,7 @@ int tcflow (
     case TCOON:
     case TCIOFF:
     case TCION:
+      break;
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
   }

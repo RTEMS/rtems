@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/config.h
  *
+ * @brief Records Which Define the Configuration Table
+ *
  *  This include file contains the table of user defined configuration
  *  parameters specific for the RTEMS API.
  */

@@ -20,6 +20,12 @@
 #ifndef _RTEMS_POSIX_PTIMER_H
 #define _RTEMS_POSIX_PTIMER_H
 
+/**
+ *  @defgroup POSIX_PRIV_TIMERS Timers
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,6 +43,8 @@ extern "C" {
 void _POSIX_Timer_Manager_initialization(void);
 
 /*
+ *  @brief Create a Per-Process Timer
+ *
  *  14.2.2 Create a Per-Process Timer, P1003.1b-1993, p. 264
  *
  *  timer_create
@@ -90,5 +98,5 @@ int timer_gettime(
 int timer_getoverrun(
   timer_t   timerid
 );
-
+/**@}*/
 #endif

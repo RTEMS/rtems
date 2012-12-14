@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Write Character to Stream 
+ *  @ingroup libcsupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -13,9 +20,7 @@
 
 #include <rtems/bspIo.h>
 
-/*
- * putk
- *
+/**
  * Kernel putk (e.g. puts) function requiring minimal infrastrure.
  */
 void putk(const char *s)

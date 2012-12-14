@@ -89,6 +89,11 @@ static void check_file_size(const char *file, off_t size)
 
 static void test(const char *rda, const char *mnt, const char *file)
 {
+  static const msdos_format_request_param_t rqdata = {
+    .quick_format = true,
+    .sync_device = true
+  };
+
   rtems_status_code sc;
   int disk_fd;
   int rv;
@@ -99,7 +104,7 @@ static void test(const char *rda, const char *mnt, const char *file)
   disk_fd = open(rda, O_RDWR);
   rtems_test_assert(disk_fd >= 0);
 
-  rv = msdos_format(rda, NULL);
+  rv = msdos_format(rda, &rqdata);
   rtems_test_assert(rv == 0);
 
   rv = mount_and_make_target_path(

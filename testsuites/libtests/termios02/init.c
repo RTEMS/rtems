@@ -47,56 +47,63 @@ rtems_task Init(
   tcdrain(2);
   rtems_test_assert( !sc );
 
-  puts( "" ); 
+  puts( "" );
 
   /***** TEST TCFLOW *****/
   puts( "tcflow(stdin, TCOOFF) - ENOTSUP" );
+  errno = 0;
   sc = tcflow( 0, TCOOFF );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( errno == ENOTSUP );
 
   puts( "tcflow(stdin, TCOON) - ENOTSUP" );
+  errno = 0;
   sc = tcflow( 0, TCOON );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( errno == ENOTSUP );
 
   puts( "tcflow(stdin, TCIOFF) - ENOTSUP" );
+  errno = 0;
   sc = tcflow( 0, TCIOFF );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( errno == ENOTSUP );
 
   puts( "tcflow(stdin, TCION) - ENOTSUP" );
+  errno = 0;
   sc = tcflow( 0, TCION );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( errno == ENOTSUP );
 
   puts( "tcflow(stdin, 22) - EINVAL" );
+  errno = 0;
   sc = tcflow( 0, 22 );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = EINVAL );
+  rtems_test_assert( errno == EINVAL );
 
-  puts( "" ); 
+  puts( "" );
 
   /***** TEST TCFLUSH *****/
-  puts( "tcflush(stdin, TCIFLUSH) - ENOTSUP" );
+  puts( "tcflush(stdin, TCIFLUSH) - OK" );
+  errno = 0;
   sc = tcflush( 0, TCIFLUSH );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( errno == 0 );
 
-  puts( "tcflush(stdin, TCOFLUSH) - ENOTSUP" );
+  puts( "tcflush(stdin, TCOFLUSH) - OK" );
   sc = tcflush( 0, TCOFLUSH );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( errno == 0 );
 
-  puts( "tcflush(stdin, TCIOFLUSH) - ENOTSUP" );
+  puts( "tcflush(stdin, TCIOFLUSH) - OK" );
   sc = tcflush( 0, TCIOFLUSH );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = ENOTSUP );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( errno == 0 );
 
   puts( "tcflush(stdin, 22) - EINVAL" );
+  errno = 0;
   sc = tcflush( 0, 22 );
   rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno = EINVAL );
+  rtems_test_assert( errno == EINVAL );
 
   puts( "" );
 

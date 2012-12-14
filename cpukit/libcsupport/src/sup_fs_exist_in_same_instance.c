@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Checks that the Locations Exist in the Same File System Instance
+ *  @ingroup LibIOInternal
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

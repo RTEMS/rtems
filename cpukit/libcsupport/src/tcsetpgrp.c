@@ -1,6 +1,11 @@
-/*
- *  tcsetprgrp() - POSIX 1003.1b 7.2.4 - Set Foreground Process Group ID
+/**
+ *  @file
  *
+ *  @brief Set Foreground Process Group ID
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,6 +29,9 @@
 
 #include <rtems/libio.h>
 
+/**
+ *  POSIX 1003.1b 7.2.4 - Set Foreground Process Group ID
+ */
 int tcsetpgrp(
   int fd __attribute__((unused)),
   pid_t pid __attribute__((unused)) )

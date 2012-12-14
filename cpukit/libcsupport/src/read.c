@@ -1,6 +1,11 @@
-/*
- *  read() - POSIX 1003.1b 6.4.1 - Read From a File
+/**
+ *  @file
  *
+ *  @brief Read From a File
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,6 +21,9 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+/**
+ *  POSIX 1003.1b 6.4.1 - Read From a File
+ */
 ssize_t read(
   int         fd,
   void       *buffer,
@@ -37,16 +45,13 @@ ssize_t read(
   return (*iop->pathinfo.handlers->read_h)( iop, buffer, count );
 }
 
-/*
- *  _read_r
- *
- *  This is the Newlib dependent reentrant version of read().
- */
-
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__READ_R)
 
 #include <reent.h>
 
+/**
+ *  This is the Newlib dependent reentrant version of read().
+ */
 ssize_t _read_r(
   struct _reent *ptr __attribute__((unused)),
   int            fd,

@@ -1,6 +1,11 @@
-/*
- *  malloc_report_statistics Implementation
+/**
+ *  @file
  *
+ *  @brief Print Malloc Statistic Usage Report
+ *  @ingroup MallocSupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

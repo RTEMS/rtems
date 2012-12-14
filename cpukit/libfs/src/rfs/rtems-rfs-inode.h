@@ -1,12 +1,7 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
+ *
+ * @brief RTEMS File System Information Node
  *
  * @ingroup rtems-rfs
  *
@@ -14,6 +9,15 @@
  *
  * The information nodes hold the data about all nodes in the file system.
  */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
+
 
 #if !defined (_RTEMS_RFS_INODE_H_)
 #define _RTEMS_RFS_INODE_H_

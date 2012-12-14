@@ -27,9 +27,31 @@
 extern "C" {
 #endif
 
+/**
+ *  @defgroup libcsupport Standard C Library Support
+ *
+ *  @brief RTEMS Specific Support for the Standard C Library
+ */
+
 extern void malloc_dump(void);
+
+/**
+ *  @brief Malloc Walk
+ */
 extern bool malloc_walk(int source, bool printf_enabled);
+
+/**
+ *  @brief RTEMS Malloc Set Heap Pointer
+ * 
+ *  This routine is primarily used for debugging. 
+ */
 void malloc_set_heap_pointer(Heap_Control *new_heap);
+
+/**
+ *  @brief RTEMS Malloc Get Heap Pointer
+ * 
+ *  This routine is primarily used for debugging. 
+ */
 Heap_Control *malloc_get_heap_pointer( void );
 extern void libc_init(void);
 extern int  host_errno(void);
@@ -37,6 +59,11 @@ extern void fix_syscall_errno(void);
 extern size_t malloc_free_space(void);
 extern void open_dev_console(void);
 
+/**
+ *  @brief RTEMS Malloc Get Status Information
+ * 
+ *  Find amount of free heap remaining.
+ */
 extern int malloc_info(Heap_Information_block *the_info);
 
 /*

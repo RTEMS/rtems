@@ -1,6 +1,11 @@
-/*
- *  3.3.6 Examine Pending Signals, P1003.1b-1993, p. 75
+/**
+ * @file
  *
+ * @brief Examine Pending Signals
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

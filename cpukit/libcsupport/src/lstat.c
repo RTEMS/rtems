@@ -1,6 +1,11 @@
-/*
- *  lstat() - BSD 4.3 and SVR4 - Get File Status
+/**
+ *  @file
  *
+ *  @brief Get File Status
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,3 +23,7 @@
 #define _STAT_FOLLOW_LINKS RTEMS_FS_FOLLOW_HARD_LINK
 
 #include "stat.c"
+
+/**
+ *  BSD 4.3 and SVR4 - Get File Status
+ */

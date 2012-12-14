@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Convert Bxxx Constant to Index
+ *  @ingroup TermiostypesSupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
