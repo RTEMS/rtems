@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Initialization Necessary for this Manager
+ * @ingroup POSIX_COND_VARS Condition Variables
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

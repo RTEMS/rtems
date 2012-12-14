@@ -17,6 +17,12 @@
 #ifndef _RTEMS_POSIX_COND_H
 #define _RTEMS_POSIX_COND_H
 
+/**
+ *  @defgroup POSIX_COND_VARS Condition Variables
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -56,6 +62,8 @@ POSIX_EXTERN Objects_Information  _POSIX_Condition_variables_Information;
 extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
 
 /*
+ * @brief Initialization Necessary for this Manager
+ *
  *  _POSIX_Condition_variables_Manager_initialization
  *
  *  DESCRIPTION:
@@ -125,6 +133,8 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Condition_variables_Is_null (
 );
 
 /*
+ * @brief Implements wake up version of the "signal" operation
+ *
  *  _POSIX_Condition_variables_Signal_support
  *
  *  DESCRIPTION:
@@ -174,6 +184,6 @@ POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /*  end of include file */

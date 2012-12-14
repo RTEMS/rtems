@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Waiting on a Condition
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

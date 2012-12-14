@@ -1,8 +1,11 @@
+/**
+ * @file
+ *
+ * @brief POSIX Thread Exit Shared Helper
+ * @ingroup POSIX_THREAD Thread API Extension
+ */
+
 /*
- *  16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
- *
- *  NOTE: Key destructors are executed in the POSIX api delete extension.
- *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Keys Manager Initialization
+ * @ingroup POSIX_KEY Key
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

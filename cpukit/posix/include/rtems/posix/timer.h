@@ -21,6 +21,12 @@
 #include <rtems/score/object.h>
 #include <rtems/score/watchdog.h> /* Watchdog_Control */
 
+/**
+ *  @defgroup POSIX_INTERNAL_TIMERS Timers
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -75,6 +81,8 @@ typedef struct {
 void _POSIX_Timer_Manager_initialization(void);
 
 /*
+ *  @brief Operation that is run when a timer expires
+ *
  *  Timer TSR
  */
 void _POSIX_Timer_TSR(Objects_Id timer, void *data);
@@ -103,6 +111,6 @@ POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

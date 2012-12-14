@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Establishing Cancellation Handlers
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

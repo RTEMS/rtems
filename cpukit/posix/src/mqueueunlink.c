@@ -1,16 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Remove a Message Queue
+ * @ingroup POSIX_MQUEUE Message Queues
+ */
+
 /*
- *  NOTE:  The structure of the routines is identical to that of POSIX
- *         Message_queues to leave the option of having unnamed message
- *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also
- *         the reason for the apparently unnecessary tracking of
- *         the process_shared attribute.  [In addition to the fact that
- *         it would be trivial to add pshared to the mq_attr structure
- *         and have process private message queues.]
- *
- *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *         time.
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

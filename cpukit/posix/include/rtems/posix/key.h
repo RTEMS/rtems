@@ -19,6 +19,12 @@
 
 #include <rtems/score/object.h>
 
+/**
+ *  @defgroup POSIX_KEY Key
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -45,7 +51,7 @@ typedef struct {
 POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 
 /**
- *  @brief _POSIX_Keys_Manager_initialization
+ *  @brief POSIX Keys Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
@@ -95,6 +101,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /*  end of include file */

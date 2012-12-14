@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Operation that is run when a timer expires
+ * @ingroup POSIX_INTERNAL_TIMERS Timers
+ */
+
 /*
  * _POSIX_Timer_TSR
  *

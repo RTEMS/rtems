@@ -20,6 +20,12 @@
 #include <rtems/score/coresem.h>
 #include <rtems/score/tqdata.h>
 
+/**
+ *  @defgroup POSIX_THREAD Thread API Extension
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -75,12 +81,17 @@ typedef struct {
 /*!
  *  @brief POSIX Thread Exit Shared Helper
  *
+ *  16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
+ *
  *  This method is a helper routine which ensures that all
  *  POSIX thread calls which result in a thread exiting will
  *  do so in the same manner.
  *
  *  @param[in] the_thread is the thread exiting or being canceled
  *  @param[in] value_ptr is the value to be returned by the thread
+ *
+ *  NOTE: Key destructors are executed in the POSIX api delete extension.
+ *
  */
 void _POSIX_Thread_Exit(
   Thread_Control *the_thread,
@@ -90,6 +101,6 @@ void _POSIX_Thread_Exit(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

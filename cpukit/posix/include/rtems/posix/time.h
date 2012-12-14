@@ -19,6 +19,12 @@
 
 #include <rtems/score/timespec.h>
 #include <rtems/score/watchdog.h>
+/**
+ *  @defgroup POSIX_TIMETYPES Time Types
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 
 /**
  *  @brief Absolute Timeout Conversion Results
@@ -59,3 +65,4 @@ POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
 );
 
 #endif
+/**@}*/
