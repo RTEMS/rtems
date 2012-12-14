@@ -179,14 +179,14 @@ extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
    rtems_libio_check_permissions_with_error(_iop, _flag, EINVAL )
 
 /**
- *  @brief Clones a Node
+ * @brief Clones a node.
  *
- *  The caller must hold the file system instance lock.
+ * The caller must hold the file system instance lock.
  *
- *  @param[out] clone The cloned location.
- *  @param[in] master The master location.
+ * @param[out] clone The cloned location.
+ * @param[in] master The master location.
  *
- *  @see rtems_filesystem_instance_lock().
+ * @see rtems_filesystem_instance_lock().
  */
 void rtems_filesystem_location_clone(
   rtems_filesystem_location_info_t *clone,

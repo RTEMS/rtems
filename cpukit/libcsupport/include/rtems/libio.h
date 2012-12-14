@@ -1176,9 +1176,9 @@ typedef struct {
 } rtems_filesystem_limits_and_options_t;
 
 /**
- *  @brief Default Pathconf Settings
+ * @brief Default pathconf settings.
  *
- *  Override in a filesystem.
+ * Override in a filesystem.
  */
 extern const rtems_filesystem_limits_and_options_t
   rtems_filesystem_default_pathconf;
@@ -1551,38 +1551,38 @@ int unmount(
 );
 
 /**
- *  @brief Mounts a File System
+ * @brief Mounts a file system at @a target.
  *
- *  The @a source may be a path to the corresponding device file, or @c NULL.
- *  The @a target path must lead to an existing directory, or @c NULL.  
- *  In case @a target is @c NULL, the root file system will be mounted.  
- *  The @a data parameter will be forwarded to the file system
- *  initialization handler.  The file system type is selected by
- *  @a filesystemtype and may be one of
- *  - RTEMS_FILESYSTEM_TYPE_DEVFS,
- *  - RTEMS_FILESYSTEM_TYPE_DOSFS,
- *  - RTEMS_FILESYSTEM_TYPE_FTPFS,
- *  - RTEMS_FILESYSTEM_TYPE_IMFS,
- *  - RTEMS_FILESYSTEM_TYPE_MINIIMFS,
- *  - RTEMS_FILESYSTEM_TYPE_NFS,
- *  - RTEMS_FILESYSTEM_TYPE_RFS, or
- *  - RTEMS_FILESYSTEM_TYPE_TFTPFS.
+ * The @a source may be a path to the corresponding device file, or @c NULL.
+ * The @a target path must lead to an existing directory, or @c NULL.
+ * In case @a target is @c NULL, the root file system will be mounted.
+ * The @a data parameter will be forwarded to the file system
+ * initialization handler.  The file system type is selected by
+ * @a filesystemtype and may be one of
+ * - RTEMS_FILESYSTEM_TYPE_DEVFS,
+ * - RTEMS_FILESYSTEM_TYPE_DOSFS,
+ * - RTEMS_FILESYSTEM_TYPE_FTPFS,
+ * - RTEMS_FILESYSTEM_TYPE_IMFS,
+ * - RTEMS_FILESYSTEM_TYPE_MINIIMFS,
+ * - RTEMS_FILESYSTEM_TYPE_NFS,
+ * - RTEMS_FILESYSTEM_TYPE_RFS, or
+ * - RTEMS_FILESYSTEM_TYPE_TFTPFS.
  *
- *  Only configured or registered file system types are available.  
- *  You can add file system types to your application configuration with
- *  - CONFIGURE_FILESYSTEM_DEVFS,
- *  - CONFIGURE_FILESYSTEM_DOSFS,
- *  - CONFIGURE_FILESYSTEM_FTPFS,
- *  - CONFIGURE_FILESYSTEM_IMFS,
- *  - CONFIGURE_FILESYSTEM_MINIIMFS,
- *  - CONFIGURE_FILESYSTEM_NFS,
- *  - CONFIGURE_FILESYSTEM_RFS, and
- *  - CONFIGURE_FILESYSTEM_TFTPFS.
+ * Only configured or registered file system types are available.
+ * You can add file system types to your application configuration with
+ * - CONFIGURE_FILESYSTEM_DEVFS,
+ * - CONFIGURE_FILESYSTEM_DOSFS,
+ * - CONFIGURE_FILESYSTEM_FTPFS,
+ * - CONFIGURE_FILESYSTEM_IMFS,
+ * - CONFIGURE_FILESYSTEM_MINIIMFS,
+ * - CONFIGURE_FILESYSTEM_NFS,
+ * - CONFIGURE_FILESYSTEM_RFS, and
+ * - CONFIGURE_FILESYSTEM_TFTPFS.
  *
- *  @see rtems_filesystem_register() and mount_and_make_target_path().
+ * @see rtems_filesystem_register() and mount_and_make_target_path().
  *
- *  @retval 0 Successful operation.
- *  @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
  */
 int mount(
   const char                 *source,
