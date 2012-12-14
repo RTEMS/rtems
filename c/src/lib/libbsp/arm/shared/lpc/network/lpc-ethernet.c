@@ -1084,7 +1084,7 @@ static uint32_t lpc_eth_mdio_read_anlpar(void)
 }
 
 static int lpc_eth_mdio_read(
-  int phy __attribute__((unused)),
+  int phy,
   void *arg __attribute__((unused)),
   unsigned reg,
   uint32_t *val
@@ -1106,7 +1106,7 @@ static int lpc_eth_mdio_read(
 }
 
 static int lpc_eth_mdio_write(
-  int phy __attribute__((unused)),
+  int phy,
   void *arg __attribute__((unused)),
   unsigned reg,
   uint32_t val
@@ -1366,7 +1366,7 @@ static void lpc_eth_interface_start(struct ifnet *ifp)
   RTEMS_SYSLOG_ERROR_SC(sc, "send transmit start event");
 }
 
-static void lpc_eth_interface_watchdog(struct ifnet *ifp __attribute__((unused)))
+static void lpc_eth_interface_watchdog(struct ifnet *ifp)
 {
   lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) ifp->if_softc;
   uint32_t anlpar = lpc_eth_mdio_read_anlpar();
