@@ -111,7 +111,7 @@ rtems_bsdnet_initialize_sockaddr_in(struct sockaddr_in *addr)
 	memcpy(addr, &address_template, sizeof(*addr));
 }
 
-static uint32_t
+uint32_t
 rtems_bsdnet_semaphore_release_recursive(void)
 {
 #ifdef RTEMS_FAST_MUTEX
@@ -128,7 +128,7 @@ rtems_bsdnet_semaphore_release_recursive(void)
 #endif
 }
 
-static void
+void
 rtems_bsdnet_semaphore_obtain_recursive(uint32_t nest_count)
 {
 	uint32_t i;

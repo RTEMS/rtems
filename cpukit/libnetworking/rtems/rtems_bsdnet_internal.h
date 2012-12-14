@@ -136,6 +136,8 @@ void rtems_bsdnet_free (void *addr, int type);
 
 void rtems_bsdnet_semaphore_obtain (void);
 void rtems_bsdnet_semaphore_release (void);
+void rtems_bsdnet_semaphore_obtain_recursive (uint32_t nest_count);
+uint32_t rtems_bsdnet_semaphore_release_recursive (void);
 void rtems_bsdnet_schednetisr (int n);
 int rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char **namep);
 
