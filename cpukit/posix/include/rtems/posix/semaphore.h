@@ -17,6 +17,12 @@
 #ifndef _RTEMS_POSIX_SEMAPHORE_H
 #define _RTEMS_POSIX_SEMAPHORE_H
 
+/**
+ *  @defgroup POSIX_SEMAPHORES Semaphore
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -150,7 +156,7 @@ void _POSIX_Semaphore_Delete(
 );
 
 /*
- *  _POSIX_Semaphore_Wait_support
+ *  @brief POSIX Semaphore Wait Support
  *
  *  DESCRIPTION:
  *

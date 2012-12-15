@@ -1,6 +1,11 @@
-/*
- *  execvp() - POSIX 1003.1b 3.1.2
+/**
+ * @file
  *
+ * @brief execvp() - POSIX 1003.1b 3.1.2
+ * @ingroup POSIX_KEY Key
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

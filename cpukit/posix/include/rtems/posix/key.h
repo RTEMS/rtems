@@ -58,7 +58,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
 void _POSIX_Key_Manager_initialization(void);
 
 /**
- *  @brief _POSIX_Keys_Run_destructors
+ *  @brief Thread-Specific Data Key Create
  *
  *  This function executes all the destructors associated with the thread's
  *  keys.  This function will execute until all values have been set to NULL.

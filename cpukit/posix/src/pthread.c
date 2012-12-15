@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Private Support Information for POSIX Threads
+ * @ingroup POSIX_PTHREADS Private Threads
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).

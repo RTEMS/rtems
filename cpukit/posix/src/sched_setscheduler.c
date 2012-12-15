@@ -1,7 +1,11 @@
-/*
- *  13.3.3 Set Scheduling Policy and Scheduling Parameters,
- *         P1003.1b-1993, p. 254
+/**
+ * @file
  *
+ * @brief Set Scheduling Policy and Scheduling Parameters
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

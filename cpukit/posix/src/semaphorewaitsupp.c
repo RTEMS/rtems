@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Semaphore Wait Support
+ * @ingroup POSIX_SEMAPHORES Semaphore
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

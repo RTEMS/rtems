@@ -21,6 +21,12 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 
+/**
+ *  @defgroup POSIX_PTHREADS Private Threads
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -176,6 +182,6 @@ extern void _POSIX_Threads_Initialize_user_threads_body(void);
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /*  end of include file */

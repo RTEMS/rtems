@@ -1,6 +1,11 @@
-/*
- *  3.3.2 Send a Signal to a Process, P1003.1b-1993, p. 68
+/**
+ * @file
  *
+ * @brief Send a Signal to a Process
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
