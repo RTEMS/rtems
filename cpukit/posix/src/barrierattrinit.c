@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Initialize the Barrier Attributes Object
+ *  @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,10 +22,6 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-
-/*
- *  Barrier Attributes Initialization
- */
 
 int pthread_barrierattr_init(
   pthread_barrierattr_t *attr

@@ -99,6 +99,11 @@ int sem_wait(
   sem_t *sem
 );
 
+/**
+ *  @brief Lock a Semaphore
+ * 
+ *  @see sem_wait()
+ */
 int sem_trywait(
   sem_t *sem
 );

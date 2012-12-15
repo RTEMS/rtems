@@ -1,6 +1,11 @@
-/*
- *  POSIX Barrier Manager -- Destroy a Barrier
+/**
+ *  @file
  *
+ *  @brief Destroy a Barrier Object 
+ *  @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,21 +24,17 @@
 #include <rtems/system.h>
 #include <rtems/posix/barrier.h>
 
-/*
- *  pthread_barrier_destroy
- *
+/**
  *  This directive allows a thread to delete a barrier specified by
  *  the barrier id.  The barrier is freed back to the inactive
  *  barrier chain.
  *
- *  Input parameters:
- *    barrier - barrier id
- *
- *  Output parameters:
- *    0           - if successful
- *    error code  - if unsuccessful
+ *  @param[in] barrier is the barrier id
+ * 
+ *  @return This method returns 0 if there was not an
+ *  error. Otherwise, a status code is returned indicating the
+ *  source of the error.
  */
-
 int pthread_barrier_destroy(
   pthread_barrier_t *barrier
 )

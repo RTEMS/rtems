@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Initialize a Condition Variable
+ *  @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -22,11 +29,10 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*
+/**
  *  11.4.2 Initializing and Destroying a Condition Variable,
  *         P1003.1c/Draft 10, p. 87
  */
-
 int pthread_cond_init(
   pthread_cond_t           *cond,
   const pthread_condattr_t *attr

@@ -21,6 +21,10 @@
 extern "C" {
 #endif
 
+/**
+ * @ingroup POSIX_SEMAPHORE
+ */
+
 #include <semaphore.h>
 #include <rtems/score/coresem.h>
 #include <rtems/posix/posixapi.h>
@@ -134,14 +138,13 @@ int _POSIX_Semaphore_Create_support(
   POSIX_Semaphore_Control  **the_sem
 );
 
-/*
- *  _POSIX_Semaphore_Delete
+/**
+ *  @brief POSIX Delete Semaphore
  *
  *  DESCRIPTION:
  *
  *  This routine supports the sem_close and sem_unlink routines.
  */
-
 void _POSIX_Semaphore_Delete(
   POSIX_Semaphore_Control *the_semaphore
 );

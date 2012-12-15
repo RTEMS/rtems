@@ -3,6 +3,18 @@
  *
  * This include file contains all the private support information for
  * POSIX Message Queues.
+ * 
+ *  The structure of the routines is identical to that of POSIX
+ *  Message_queues to leave the option of having unnamed message
+ *  queues at a future date.  They are currently not part of the
+ *  POSIX standard but unnamed message_queues are.  This is also
+ *  the reason for the apparently unnecessary tracking of
+ *  the process_shared attribute.  [In addition to the fact that
+ *  it would be trivial to add pshared to the mq_attr structure
+ *  and have process private message queues.]
+ *
+ *  This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
+ *  time.
  */
 
 /*
@@ -26,6 +38,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @ingroup POSIX_MQUEUE
+ */
 
 /*
  *  Data Structure used to manage a POSIX message queue
@@ -84,15 +100,14 @@ int _POSIX_Message_queue_Create_support(
   POSIX_Message_queue_Control  **message_queue
 );
 
-/*
- *  _POSIX_Message_queue_Delete
+/**
+ *  @brief POSIX Delete Message Queue
  *
  *  DESCRIPTION:
  *
  *  This routine supports the mq_unlink and mq_close routines by
  *  doing most of the work involved with removing a message queue.
  */
-
 void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq
 );

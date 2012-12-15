@@ -71,6 +71,9 @@ extern API_extensions_Post_switch_control _POSIX_signals_Post_switch;
  *  Internal routines
  */
 
+/**
+ *  @brief POSIX Signals Manager Initialization
+ */
 void _POSIX_signals_Manager_Initialization(void);
 
 static inline void _POSIX_signals_Add_post_switch_extension(void)
@@ -107,6 +110,9 @@ int killinfo(
   const union sigval *value
 );
 
+/**
+ *  @brief POSIX Signals Set Process Signals
+ */
 void _POSIX_signals_Set_process_signals(
   sigset_t   mask
 );

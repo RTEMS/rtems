@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief POSIX Delete Semaphore
+ *  @ingroup POSIX_SEMAPHORE
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -24,10 +31,6 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
-
-/*
- *  _POSIX_Semaphore_Delete
- */
 
 void _POSIX_Semaphore_Delete(
   POSIX_Semaphore_Control *the_semaphore
