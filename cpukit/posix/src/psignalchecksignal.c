@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief POSIX Signals Check Signal
+ *  @ingroup POSIX_SIGNALS
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -30,11 +37,6 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/time.h>
 #include <stdio.h>
-
-
-/*
- *  _POSIX_signals_Check_signal
- */
 
 bool    _POSIX_signals_Check_signal(
   POSIX_API_Control  *api,

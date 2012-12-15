@@ -16,6 +16,14 @@
 #ifndef _RTEMS_POSIX_PSIGNALIMPL_H
 #define _RTEMS_POSIX_PSIGNALIMPL_H
 
+/**
+ * @defgroup POSIX_SIGNALS POSIX Signals Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Internal Information about POSIX Signals
+ */
+
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/sigset.h>
@@ -76,6 +84,9 @@ bool _POSIX_signals_Unblock_thread(
   siginfo_t       *info
 );
 
+/**
+ *  @brief POSIX Signals Check Signal
+ */
 bool _POSIX_signals_Check_signal(
   POSIX_API_Control  *api,
   int                 signo,

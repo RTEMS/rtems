@@ -1,6 +1,11 @@
-/*
- *  POSIX Mutex Error Translation
+/**
+ *  @file
  *
+ *  @brief POSIX Mutex Translate Core Mutex Return Code
+ *  @ingroup POSIX_MUTEX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,17 +24,6 @@
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/posix/mutex.h>
-
-/*
- *  _POSIX_Mutex_Translate_core_mutex_return_code
- *
- *  Input parameters:
- *    the_mutex_status - mutex status code to translate
- *
- *  Output parameters:
- *    status code - translated POSIX status code
- *
- */
 
 static int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
   0,                      /* CORE_MUTEX_STATUS_SUCCESSFUL */

@@ -1,6 +1,11 @@
-/*
- *  13.5.1 Thread Creation Scheduling Parameters, P1003.1c/Draft 10, p. 120
+/**
+ *  @file
  *
+ *  @brief Get The Schedpolicy Attribute
+ *  @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,6 +21,9 @@
 #include <pthread.h>
 #include <errno.h>
 
+/**
+ *  13.5.1 Thread Creation Scheduling Parameters, P1003.1c/Draft 10, p. 120
+ */
 int pthread_attr_getschedpolicy(
   const pthread_attr_t  *attr,
   int                   *policy

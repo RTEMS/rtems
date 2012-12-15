@@ -21,6 +21,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup POSIX_MUTEX POSIX Mutex Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Private Support Information for POSIX Mutex
+ */
+
 #include <rtems/score/coremutex.h>
 #include <pthread.h>
 
@@ -129,13 +137,17 @@ int _POSIX_Mutex_Lock_support(
   Watchdog_Interval          timeout
 );
 
-/*
- *  _POSIX_Mutex_Translate_core_mutex_return_code
+/**
+ *  @brief POSIX Mutex Translate Core Mutex Return Code
  *
  *  DESCRIPTION:
  *
  *  A support routine which converts core mutex status codes into the
  *  appropriate POSIX status values.
+ * 
+ *  @param[in] the_mutex_status is the mutex status code to translate
+ * 
+ *  @return the translated POSIX status code
  */
 
 int _POSIX_Mutex_Translate_core_mutex_return_code(

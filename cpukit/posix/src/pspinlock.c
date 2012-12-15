@@ -1,6 +1,11 @@
-/*
- *  POSIX Spinlock Manager -- Wait at a Spinlock
+/**
+ *  @file
  *
+ *  @brief Wait at a Spinlock
+ *  @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,19 +24,15 @@
 #include <rtems/system.h>
 #include <rtems/posix/spinlock.h>
 
-/*
- *  pthread_spin_lock
- *
+/**
  *  This directive allows a thread to wait at a spinlock.
  *
- *  Input parameters:
- *    spinlock    - spinlock id
- *
- *  Output parameters:
- *    0          - if successful
- *    error code - if unsuccessful
+ *  @param[in] spinlock is spinlock id
+ * 
+ *  @return This method returns 0 if there was not an
+ *  error. Otherwise, a status code is returned indicating the
+ *  source of the error.
  */
-
 int pthread_spin_lock(
   pthread_spinlock_t *spinlock
 )

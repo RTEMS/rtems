@@ -1,15 +1,8 @@
-/*
- *  NOTE:  The structure of the routines is identical to that of POSIX
- *         Message_queues to leave the option of having unnamed message
- *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also
- *         the reason for the apparently unnecessary tracking of
- *         the process_shared attribute.  [In addition to the fact that
- *         it would be trivial to add pshared to the mq_attr structure
- *         and have process private message queues.]
+/**
+ *  @file
  *
- *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *         time.
+ *  @brief Send a Message to a Message Queue
+ *  @ingroup POSIX_MQUEUE
  */
 
 /*
@@ -38,12 +31,6 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
-
-/*
- *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
- *
- *  NOTE: P1003.4b/D8, p. 45 adds mq_timedsend().
- */
 
 int mq_timedsend(
   mqd_t                  mqdes,

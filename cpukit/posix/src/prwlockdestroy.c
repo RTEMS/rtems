@@ -1,6 +1,10 @@
-/*
- *  POSIX RWLock Manager -- Destroy a RWLock
+/**
+ *  @file
  *
+ *  @brief Destroy a RWLock
+ *  @ingroup POSIX
+ */
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,21 +23,17 @@
 #include <rtems/system.h>
 #include <rtems/posix/rwlock.h>
 
-/*
- *  pthread_rwlock_destroy
- *
+/**
  *  This directive allows a thread to delete a rwlock specified by
  *  the rwlock id.  The rwlock is freed back to the inactive
  *  rwlock chain.
  *
- *  Input parameters:
- *    rwlock - rwlock id
+ *  @param[in] rwlock is the rwlock id
  *
- *  Output parameters:
- *    0           - if successful
- *    error code  - if unsuccessful
+ *  @return This method returns 0 if there was not an
+ *  error. Otherwise, a status code is returned indicating the
+ *  source of the error.
  */
-
 int pthread_rwlock_destroy(
   pthread_rwlock_t *rwlock
 )

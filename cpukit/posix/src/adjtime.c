@@ -1,9 +1,8 @@
-/*
- *  adjime() function
+/**
+ *  @file
  *
- *  This method was initially added as part of porting NTP to RTEMS.
- *  It is a BSD compatability function and now is available on
- *  GNU/Linux.
+ *  @brief Correct the Time to Synchronize the System Clock
+ *  @ingroup POSIX
  */
 
 /*
@@ -31,12 +30,15 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/timespec.h>
 
-/*
+/**
+ * This method was initially added as part of porting NTP to RTEMS.
+ *  It is a BSD compatability function and now is available on
+ *  GNU/Linux.
+ * 
  *  At one point there was a static variable named adjustment
  *  used by this implementation.  I don't see any reason for it
  *  to be here based upon the GNU/Linux documentation.
  */
-
 int  adjtime(
   const struct timeval *delta,
   struct timeval *olddelta

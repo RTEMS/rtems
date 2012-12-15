@@ -21,6 +21,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup POSIX_SEMAPHORE POSIX Semaphores Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Private Support Information for POSIX Semaphores
+ */
+
 #include <unistd.h>
 
 #if defined(_POSIX_SEMAPHORES)
@@ -46,7 +54,9 @@ int sem_init(
   unsigned int   value
 );
 
-/*
+/**
+ *  @brief Destroy an Unnamed Semaphore
+ * 
  *  11.2.2 Destroy an Unnamed Semaphore, P1003.1b-1993, p.220
  */
 int sem_destroy(
@@ -78,10 +88,12 @@ int sem_unlink(
   const char *name
 );
 
-/*
+/**
+ *  @brief Lock a Semaphore
+ * 
  *  11.2.6 Lock a Semaphore, P1003.1b-1993, p.226
  *
- *  NOTE: P1003.4b/D8 adds sem_timedwait(), p. 27
+ *  @note P1003.4b/D8 adds sem_timedwait(), p. 27
  */
 int sem_wait(
   sem_t *sem
@@ -98,10 +110,11 @@ int sem_timedwait(
 );
 #endif
 
-/*
+/**
+ *  @brief Unlock a Semaphore
+ * 
  *  11.2.7 Unlock a Semaphore, P1003.1b-1993, p.227
  */
-
 int sem_post(
   sem_t  *sem
 );

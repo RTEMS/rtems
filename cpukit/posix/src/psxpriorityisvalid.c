@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief POSIX Is Priority Valid
+ *  @ingroup POSIX_PRIORITY
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
