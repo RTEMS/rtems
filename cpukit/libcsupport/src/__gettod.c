@@ -1,6 +1,11 @@
-/*
- *  gettimeofday() - SVR4 and BSD4.3 extension required by Newlib
+/**
+ *  @file
  *
+ *  @brief Get the Date and Time
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -22,8 +27,11 @@
 #include <rtems/seterr.h>
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_GETTIMEOFDAY)
-/*
- *  NOTE:  The solaris gettimeofday does not have a second parameter.
+
+/** 
+ *  SVR4 and BSD4.3 extension required by Newlib
+ * 
+ *  @note The solaris gettimeofday does not have a second parameter.
  */
 int gettimeofday(
   struct timeval  *tp,
@@ -54,7 +62,7 @@ int gettimeofday(
 
 #include <sys/reent.h>
 
-/*
+/**
  *  "Reentrant" version
  */
 int _gettimeofday_r(
@@ -68,10 +76,10 @@ int _gettimeofday_r(
 #endif
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__GETTIMEOFDAY)
-/*
+
+/**
  *  "System call" version
  */
-
 int _gettimeofday(
   struct timeval  *tp,
   struct timezone *tzp

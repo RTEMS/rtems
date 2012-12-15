@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Sets the Initial Baud in the Termios Context
+ *  @ingroup TermiostypesSupport
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,6 +1,11 @@
-/*
- *  RTEMS Malloc Family -- Dirty Memory from Malloc
+/**
+ *  @file
  *
+ *  @brief Dirty Memory Function
+ *  @ingroup MallocSupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

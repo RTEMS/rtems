@@ -276,12 +276,26 @@ static inline void rtems_filesystem_instance_unlock(
  *  File Descriptor Routine Prototypes
  */
 
+/**
+ *  This routine searches the IOP Table for an unused entry.  If it
+ *  finds one, it returns it.  Otherwise, it returns NULL.
+ */
 rtems_libio_t *rtems_libio_allocate(void);
 
+/**
+ *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
+ */
 uint32_t rtems_libio_fcntl_flags( int fcntl_flags );
 
+/**
+ *  Convert RTEMS internal flags to UNIX fnctl(2) flags
+ */
 int rtems_libio_to_fcntl_flags( uint32_t flags );
 
+/**
+ *  This routine frees the resources associated with an IOP (file descriptor)
+ *  and clears the slot in the IOP Table.
+ */
 void rtems_libio_free(
   rtems_libio_t *iop
 );

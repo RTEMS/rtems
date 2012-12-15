@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Demetermine Terminal Device Name
+ *  @ingroup libcsupport
+ */
+
 /*
  * Copyright (c) 1988, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -54,7 +61,7 @@
 
 static char ttyname_buf[sizeof (_PATH_DEV) + MAXNAMLEN];
 
-/*
+/**
  *  ttyname_r() - POSIX 1003.1b 4.7.2 - Demetermine Terminal Device Name
  */
 int ttyname_r(
@@ -99,10 +106,9 @@ int ttyname_r(
   return 0;
 }
 
-/*
+/**
  *  ttyname() - POSIX 1003.1b 4.7.2 - Determine Terminal Device Name
  */
-
 char *ttyname(
   int fd
 )

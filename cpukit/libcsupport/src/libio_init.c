@@ -1,8 +1,11 @@
-/*
- *  This file contains the support infrastructure used to manage the
- *  table of integer style file descriptors used by the low level
- *  POSIX system calls like open(), read, fstat(), etc.
+/**
+ *  @file
  *
+ *  @brief RTEMS LibIO Initialization
+ *  @ingroup LibIO
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -37,12 +40,6 @@
 rtems_id           rtems_libio_semaphore;
 rtems_libio_t     *rtems_libio_iops;
 rtems_libio_t     *rtems_libio_iop_freelist;
-
-/*
- *  rtems_libio_init
- *
- *  Called by BSP startup code to initialize the libio subsystem.
- */
 
 void rtems_libio_init( void )
 {

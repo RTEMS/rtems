@@ -4,6 +4,10 @@
  * @ingroup LibIO
  *
  * @brief Basic IO API.
+ * 
+ * This file contains the support infrastructure used to manage the
+ * table of integer style file descriptors used by the low level
+ * POSIX system calls like open(), read, fstat(), etc.
  */
 
 /*
@@ -1251,6 +1255,11 @@ typedef struct {
 
 /** @} */
 
+/**
+ * @brief RTEMS LibIO Initialization
+ * 
+ * Called by BSP startup code to initialize the libio subsystem.
+ */
 void rtems_libio_init(void);
 
 /**

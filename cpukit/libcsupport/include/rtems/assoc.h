@@ -85,6 +85,9 @@ const char *rtems_assoc_name_by_local(
   uint32_t
 );
 
+/**
+ *  @brief RTEMS Associate Name by Remote
+ */
 const char *rtems_assoc_name_by_remote(
   const rtems_assoc_t *,
   uint32_t

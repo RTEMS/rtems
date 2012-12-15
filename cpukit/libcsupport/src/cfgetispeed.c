@@ -1,6 +1,11 @@
-/*
- *  cfgetispeed() - POSIX 1003.1b 7.1.3 - Baud Rate Functions
+/**
+ *  @file
  *
+ *  @brief Baud Rate Functions
+ *  @ingroup Termios
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

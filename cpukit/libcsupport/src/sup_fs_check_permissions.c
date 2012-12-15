@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS File System Permissions Check Support
+ *  @ingroup LibIOInternal
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

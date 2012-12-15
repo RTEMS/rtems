@@ -110,7 +110,7 @@ typedef void (*rtems_malloc_dirtier_t)(void *, size_t);
 extern rtems_malloc_dirtier_t rtems_malloc_dirty_helper;
 
 /**
- *  @brief Dirty memory function
+ *  @brief Dirty Memory Function
  *
  *  This method fills the specified area with a non-zero pattern
  *  to aid in debugging programs which do not initialize their
