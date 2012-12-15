@@ -172,11 +172,12 @@ ssize_t mq_timedreceive(
 
 #if defined(_POSIX_REALTIME_SIGNALS)
 
-/*
- *  15.2.6 Notify Process that a Message is Available on a Queue,
- *         P1003.1b-1993, p. 280
+/**
+ * @brief Notify Process that a Message is Available on a Queue
+ *
+ * 15.2.6 Notify Process that a Message is Available on a Queue,
+ *        P1003.1b-1993, p. 280
  */
-
 int mq_notify(
   mqd_t                  mqdes,
   const struct sigevent *notification
@@ -184,10 +185,11 @@ int mq_notify(
 
 #endif /* _POSIX_REALTIME_SIGNALS */
 
-/*
- *  15.2.7 Set Message Queue Attributes, P1003.1b-1993, p. 281
+/**
+ * @brief Set Message Queue Attributes
+ *
+ * 15.2.7 Set Message Queue Attributes, P1003.1b-1993, p. 281
  */
-
 int mq_setattr(
   mqd_t                 mqdes,
   const struct mq_attr *mqstat,

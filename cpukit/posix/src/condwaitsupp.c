@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Condition Variables Wait Support
+ * @ingroup POSIX_COND_VARS
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -21,13 +28,6 @@
 #include <rtems/posix/cond.h>
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
-
-/*
- *  _POSIX_Condition_variables_Wait_support
- *
- *  A support routine which implements guts of the blocking, non-blocking, and
- *  timed wait version of condition variable wait routines.
- */
 
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,

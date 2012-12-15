@@ -81,6 +81,11 @@ static inline void _POSIX_signals_Add_post_switch_extension(void)
   _API_extensions_Add_post_switch( &_POSIX_signals_Post_switch );
 }
 
+/**
+ * @brief POSIX Signals Thread Unlock
+ *
+ * XXX this routine could probably be cleaned up
+ */
 bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,

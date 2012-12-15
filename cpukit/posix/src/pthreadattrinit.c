@@ -1,6 +1,11 @@
-/*
- *  16.1.1 Thread Creation Attributes, P1003.1c/Draft 10, p, 140
+/**
+ * @file
  *
+ * @brief Thread Attributes Creation
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,6 +24,9 @@
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
 
+/**
+ * 16.1.1 Thread Creation Attributes, P1003.1c/Draft 10, p, 140
+ */
 int pthread_attr_init(
   pthread_attr_t  *attr
 )

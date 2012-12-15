@@ -74,15 +74,24 @@ sem_t *sem_open(
   ...
 );
 
-/*
- *  11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
+/**
+ * @brief Close a Named Semaphore
+ *
+ * Routine to close a semaphore that has been opened or initialized.
+ *
+ * 11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
  */
 int sem_close(
   sem_t *sem
 );
 
-/*
- *  11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
+/**
+ * @brief Remove a Named Semaphore
+ *
+ * Unlinks a named semaphore, sem_close must also be called to remove
+ * the semaphore.
+ *
+ * 11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
  */
 int sem_unlink(
   const char *name
@@ -124,10 +133,11 @@ int sem_post(
   sem_t  *sem
 );
 
-/*
- *  11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
+/**
+ * @brief Get the Value of a Semaphore
+ *
+ * 11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
  */
-
 int sem_getvalue(
   sem_t  *sem,
   int    *sval

@@ -1,6 +1,11 @@
-/*
- *  POSIX RWLock Manager -- Obtain a Read Lock on a RWLock Instance
+/**
+ * @file
  *
+ * @brief Obtain a Read Lock on a RWLock Instance
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,17 +24,13 @@
 #include <rtems/system.h>
 #include <rtems/posix/rwlock.h>
 
-/*
- *  pthread_rwlock_rdlock
+/**
+ * This directive attempts to obtain a read only lock on an rwlock instance.
  *
- *  This directive attempts to obtain a read only lock on an rwlock instance.
+ * @param[in] rwlock is the pointer to rwlock id
  *
- *  Input parameters:
- *    rwlock          - pointer to rwlock id
- *
- *  Output parameters:
- *    0          - if successful
- *    error code - if unsuccessful
+ * @retval 0 if successful
+ * @retval error_code if unsuccessful
  */
 
 int pthread_rwlock_rdlock(

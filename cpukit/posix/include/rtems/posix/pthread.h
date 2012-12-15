@@ -30,6 +30,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup POSIX_PTHREAD POSIX Threads Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Private Support Information for POSIX Threads
+ */
+
 /**
  *  The following sets the minimum stack size for POSIX threads.
  */
@@ -170,10 +179,10 @@ int _POSIX_Thread_Translate_sched_param(
 );
 
 /**
- *  @brief  _POSIX_Threads_Initialize_user_threads_body
+ * @brief POSIX Threads Initialize User Threads Body
  *
- *  This routine creates and starts all configured user
- *  initialization threads.
+ * This routine creates and starts all configured user
+ * initialization threads.
  */
 extern void _POSIX_Threads_Initialize_user_threads_body(void);
 
