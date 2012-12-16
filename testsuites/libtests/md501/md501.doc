@@ -11,3 +11,4 @@ directives:
 concepts:
 
   - Ensures that the MD5 digest is calucated correctly for a sample data set.
+  - Test cases are from RFC 2202.
