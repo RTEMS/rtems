@@ -56,7 +56,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
 POSIX_EXTERN pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 /*
- *  _POSIX_Mutex_Manager_initialization
+ *  @brief POSIX Mutex Manager Initialization
  *
  *  DESCRIPTION:
  *
@@ -144,9 +144,9 @@ int _POSIX_Mutex_Lock_support(
  *
  *  A support routine which converts core mutex status codes into the
  *  appropriate POSIX status values.
- * 
+ *
  *  @param[in] the_mutex_status is the mutex status code to translate
- * 
+ *
  *  @return the translated POSIX status code
  */
 

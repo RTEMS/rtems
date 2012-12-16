@@ -1,6 +1,11 @@
-/*
- *  13.3.5 Yield Processor, P1003.1b-1993, p. 257
+/**
+ * @file
  *
+ * @brief Yield Processor
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

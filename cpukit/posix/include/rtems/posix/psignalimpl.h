@@ -101,6 +101,9 @@ bool _POSIX_signals_Check_signal(
   bool                is_global
 );
 
+/**
+ *  @brief POSIX Signals Clear Signals
+ */
 bool _POSIX_signals_Clear_signals(
   POSIX_API_Control  *api,
   int                 signo,

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Signals Clear Signals
+ * @ingroup POSIX_SIGNALS POSIX Signals Support
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

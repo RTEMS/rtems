@@ -1,6 +1,11 @@
-/*
- *  execlp() - POSIX 1003.1b 3.1.2
+/**
+ * @file
  *
+ * @brief execlp()
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

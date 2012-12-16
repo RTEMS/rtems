@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Thread-Specific Data Management
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

@@ -56,7 +56,7 @@ int sem_init(
 
 /**
  *  @brief Destroy an Unnamed Semaphore
- * 
+ *
  *  11.2.2 Destroy an Unnamed Semaphore, P1003.1b-1993, p.220
  */
 int sem_destroy(
@@ -99,7 +99,7 @@ int sem_unlink(
 
 /**
  *  @brief Lock a Semaphore
- * 
+ *
  *  11.2.6 Lock a Semaphore, P1003.1b-1993, p.226
  *
  *  @note P1003.4b/D8 adds sem_timedwait(), p. 27
@@ -110,7 +110,7 @@ int sem_wait(
 
 /**
  *  @brief Lock a Semaphore
- * 
+ *
  *  @see sem_wait()
  */
 int sem_trywait(
@@ -118,6 +118,9 @@ int sem_trywait(
 );
 
 #if defined(_POSIX_TIMEOUTS)
+/**
+ *  @brief Lock a Semaphore
+ */
 int sem_timedwait(
   sem_t                 *sem,
   const struct timespec *timeout
@@ -126,7 +129,7 @@ int sem_timedwait(
 
 /**
  *  @brief Unlock a Semaphore
- * 
+ *
  *  11.2.7 Unlock a Semaphore, P1003.1b-1993, p.227
  */
 int sem_post(
