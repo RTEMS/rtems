@@ -333,6 +333,7 @@ typedef struct {
   unsigned transmit_no_descriptor_errors;
   unsigned transmit_overflow_errors;
   unsigned transmit_fatal_errors;
+  uint32_t phy_id;
   rtems_vector_number interrupt_number;
   rtems_id control_task;
 } lpc_eth_driver_entry;
@@ -1163,6 +1164,148 @@ static int lpc_eth_mdio_write(
   return eno;
 }
 
+static int lpc_eth_phy_get_id(uint32_t *id)
+{
+  uint32_t id1 = 0;
+  int eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, MII_PHYIDR1, &id1);
+
+  if (eno == 0) {
+    uint32_t id2 = 0;
+
+    eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, MII_PHYIDR2, &id2);
+    if (eno == 0) {
+      *id = (id1 << 16) | (id2 & 0xfff0);
+    }
+  }
+
+  return eno;
+}
+
+#define PHY_KSZ80X1RNL 0x221550
+
+typedef struct {
+  unsigned reg;
+  uint32_t set;
+  uint32_t clear;
+} lpc_eth_phy_action;
+
+static int lpc_eth_phy_set_and_clear(
+  const lpc_eth_phy_action *actions,
+  size_t n
+)
+{
+  int eno = 0;
+  size_t i;
+
+  for (i = 0; eno == 0 && i < n; ++i) {
+    const lpc_eth_phy_action *action = &actions [i];
+    uint32_t val;
+
+    eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, action->reg, &val);
+    if (eno == 0) {
+      val |= action->set;
+      val &= ~action->clear;
+      eno = lpc_eth_mdio_write(DEFAULT_PHY, NULL, action->reg, val);
+    }
+  }
+
+  return eno;
+}
+
+static const lpc_eth_phy_action lpc_eth_phy_up_action_default [] = {
+  { MII_BMCR, 0, BMCR_PDOWN },
+  { MII_BMCR, BMCR_RESET, 0 },
+  { MII_BMCR, BMCR_AUTOEN, 0 }
+};
+
+static const lpc_eth_phy_action lpc_eth_phy_up_pre_action_KSZ80X1RNL [] = {
+  /* Disable slow oscillator mode */
+  { 0x11, 0, 0x10 }
+};
+
+static const lpc_eth_phy_action lpc_eth_phy_up_post_action_KSZ80X1RNL [] = {
+  /* Enable energy detect power down (EDPD) mode */
+  { 0x18, 0x0800, 0 },
+  /* Turn PLL of automatically in EDPD mode */
+  { 0x10, 0x10, 0 }
+};
+
+static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
+{
+  int eno = lpc_eth_phy_get_id(&e->phy_id);
+
+  if (eno == 0) {
+    switch (e->phy_id) {
+      case PHY_KSZ80X1RNL:
+        eno = lpc_eth_phy_set_and_clear(
+          &lpc_eth_phy_up_pre_action_KSZ80X1RNL [0],
+          RTEMS_ARRAY_SIZE(lpc_eth_phy_up_pre_action_KSZ80X1RNL)
+        );
+        break;
+      case 0:
+      case 0xfffffff0:
+        eno = EIO;
+        break;
+      default:
+        break;
+    }
+
+    if (eno == 0) {
+      eno = lpc_eth_phy_set_and_clear(
+        &lpc_eth_phy_up_action_default [0],
+        RTEMS_ARRAY_SIZE(lpc_eth_phy_up_action_default)
+      );
+    }
+
+    if (eno == 0) {
+      switch (e->phy_id) {
+        case PHY_KSZ80X1RNL:
+          eno = lpc_eth_phy_set_and_clear(
+            &lpc_eth_phy_up_post_action_KSZ80X1RNL [0],
+            RTEMS_ARRAY_SIZE(lpc_eth_phy_up_post_action_KSZ80X1RNL)
+          );
+          break;
+        default:
+          break;
+      }
+    }
+  } else {
+    e->phy_id = 0;
+  }
+
+  return eno;
+}
+
+static const lpc_eth_phy_action lpc_eth_phy_down_action_default [] = {
+  { MII_BMCR, BMCR_PDOWN, 0 }
+};
+
+static const lpc_eth_phy_action lpc_eth_phy_down_post_action_KSZ80X1RNL [] = {
+  /* Enable slow oscillator mode */
+  { 0x11, 0x10, 0 }
+};
+
+static void lpc_eth_phy_down(lpc_eth_driver_entry *e)
+{
+  int eno = lpc_eth_phy_set_and_clear(
+    &lpc_eth_phy_down_action_default [0],
+    RTEMS_ARRAY_SIZE(lpc_eth_phy_down_action_default)
+  );
+
+  if (eno == 0) {
+    switch (e->phy_id) {
+      case PHY_KSZ80X1RNL:
+        eno = lpc_eth_phy_set_and_clear(
+          &lpc_eth_phy_down_post_action_KSZ80X1RNL [0],
+          RTEMS_ARRAY_SIZE(lpc_eth_phy_down_post_action_KSZ80X1RNL)
+        );
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 static void lpc_eth_soft_reset(void)
 {
   lpc_eth->command = 0x38;
@@ -1170,69 +1313,81 @@ static void lpc_eth_soft_reset(void)
   lpc_eth->mac1 = 0x0;
 }
 
-static void lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
+static int lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
 {
+  int eno = 0;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   struct ifnet *ifp = &e->arpcom.ac_if;
 
   if (up && e->state == LPC_ETH_STATE_DOWN) {
-    lpc_eth_config_module_enable();
 
-    lpc_eth_soft_reset();
+    lpc_eth_config_module_enable();
 
     /* Initialize PHY */
     lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(0x7);
-    /* TODO */
+    eno = lpc_eth_phy_up(e);
 
-    /* Reinitialize registers */
-    lpc_eth->mac2 = 0x31;
-    lpc_eth->ipgt = 0x15;
-    lpc_eth->ipgr = 0x12;
-    lpc_eth->clrt = 0x370f;
-    lpc_eth->maxf = 0x0600;
-    lpc_eth->supp = ETH_SUPP_SPEED;
-    lpc_eth->test = 0;
-    #ifdef LPC_ETH_CONFIG_RMII
-      lpc_eth->command = 0x0600;
-    #else
-      lpc_eth->command = 0x0400;
-    #endif
-    lpc_eth->intenable = ETH_INT_RX_OVERRUN | ETH_INT_TX_UNDERRUN;
-    lpc_eth->intclear = 0x30ff;
-    lpc_eth->powerdown = 0;
+    if (eno == 0) {
+      /*
+       * We must have a valid external clock from the PHY at this point,
+       * otherwise the system bus hangs and only a watchdog reset helps.
+       */
+      lpc_eth_soft_reset();
 
-    /* MAC address */
-    lpc_eth->sa0 = ((uint32_t) e->arpcom.ac_enaddr [5] << 8)
-      | (uint32_t) e->arpcom.ac_enaddr [4];
-    lpc_eth->sa1 = ((uint32_t) e->arpcom.ac_enaddr [3] << 8)
-      | (uint32_t) e->arpcom.ac_enaddr [2];
-    lpc_eth->sa2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
-      | (uint32_t) e->arpcom.ac_enaddr [0];
+      /* Reinitialize registers */
+      lpc_eth->mac2 = 0x31;
+      lpc_eth->ipgt = 0x15;
+      lpc_eth->ipgr = 0x12;
+      lpc_eth->clrt = 0x370f;
+      lpc_eth->maxf = 0x0600;
+      lpc_eth->supp = ETH_SUPP_SPEED;
+      lpc_eth->test = 0;
+      #ifdef LPC_ETH_CONFIG_RMII
+        lpc_eth->command = 0x0600;
+      #else
+        lpc_eth->command = 0x0400;
+      #endif
+      lpc_eth->intenable = ETH_INT_RX_OVERRUN | ETH_INT_TX_UNDERRUN;
+      lpc_eth->intclear = 0x30ff;
+      lpc_eth->powerdown = 0;
 
-    lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
+      /* MAC address */
+      lpc_eth->sa0 = ((uint32_t) e->arpcom.ac_enaddr [5] << 8)
+        | (uint32_t) e->arpcom.ac_enaddr [4];
+      lpc_eth->sa1 = ((uint32_t) e->arpcom.ac_enaddr [3] << 8)
+        | (uint32_t) e->arpcom.ac_enaddr [2];
+      lpc_eth->sa2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
+        | (uint32_t) e->arpcom.ac_enaddr [0];
 
-    /* Enable receiver */
-    lpc_eth->mac1 = 0x03;
+      lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
 
-    /* Initialize tasks */
-    lpc_eth_control_request(e, e->receive_task, LPC_ETH_EVENT_INITIALIZE);
-    lpc_eth_control_request(e, e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
+      /* Enable receiver */
+      lpc_eth->mac1 = 0x03;
 
-    /* Install interrupt handler */
-    sc = rtems_interrupt_handler_install(
-      e->interrupt_number,
-      "Ethernet",
-      RTEMS_INTERRUPT_UNIQUE,
-      lpc_eth_interrupt_handler,
-      e
-    );
-    assert(sc == RTEMS_SUCCESSFUL);
+      /* Initialize tasks */
+      lpc_eth_control_request(e, e->receive_task, LPC_ETH_EVENT_INITIALIZE);
+      lpc_eth_control_request(e, e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
 
-    /* Start watchdog timer */
-    ifp->if_timer = 1;
+      /* Install interrupt handler */
+      sc = rtems_interrupt_handler_install(
+        e->interrupt_number,
+        "Ethernet",
+        RTEMS_INTERRUPT_UNIQUE,
+        lpc_eth_interrupt_handler,
+        e
+      );
+      assert(sc == RTEMS_SUCCESSFUL);
 
-    /* Change state */
-    e->state = LPC_ETH_STATE_UP;
+      /* Start watchdog timer */
+      ifp->if_timer = 1;
+
+      /* Change state */
+      e->state = LPC_ETH_STATE_UP;
+    }
+
+    if (eno != 0) {
+      ifp->if_flags &= ~IFF_UP;
+    }
   } else if (!up && e->state == LPC_ETH_STATE_UP) {
     /* Remove interrupt handler */
     sc = rtems_interrupt_handler_remove(
@@ -1247,6 +1402,7 @@ static void lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
     lpc_eth_control_request(e, e->transmit_task, LPC_ETH_EVENT_STOP);
 
     lpc_eth_soft_reset();
+    lpc_eth_phy_down(e);
     lpc_eth_config_module_disable();
 
     /* Stop watchdog timer */
@@ -1255,6 +1411,8 @@ static void lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
     /* Change state */
     e->state = LPC_ETH_STATE_DOWN;
   }
+
+  return eno;
 }
 
 static void lpc_eth_interface_init(void *arg)
@@ -1374,7 +1532,7 @@ static int lpc_eth_interface_ioctl(
       ether_ioctl(ifp, cmd, data);
       break;
     case SIOCSIFFLAGS:
-      lpc_eth_up_or_down(e, (ifp->if_flags & IFF_UP) != 0);
+      eno = lpc_eth_up_or_down(e, (ifp->if_flags & IFF_UP) != 0);
       break;
     case SIOCADDMULTI:
     case SIOCDELMULTI:
