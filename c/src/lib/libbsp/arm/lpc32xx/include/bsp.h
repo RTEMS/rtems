@@ -149,6 +149,10 @@ void lpc32xx_select_nand_controller(lpc32xx_nand_controller nand_controller);
 
 void bsp_restart(void *addr);
 
+void *bsp_idle_thread(uintptr_t arg);
+
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
+
 #define BSP_CONSOLE_UART_BASE LPC32XX_BASE_UART_5
 
 /**
