@@ -1078,17 +1078,24 @@ static void lpc_eth_transmit_task(void *arg)
   }
 }
 
-static void lpc_eth_mdio_wait_for_not_busy(void)
+static int lpc_eth_mdio_wait_for_not_busy(void)
 {
-  while ((lpc_eth->mind & ETH_MIND_BUSY) != 0) {
-    rtems_task_wake_after(2);
+  rtems_interval one_second = rtems_clock_get_ticks_per_second();
+  rtems_interval i = 0;
+
+  while ((lpc_eth->mind & ETH_MIND_BUSY) != 0 && i < one_second) {
+    rtems_task_wake_after(1);
+    ++i;
   }
+
+  return i != one_second ? 0 : ETIMEDOUT;
 }
 
 static uint32_t lpc_eth_mdio_read_anlpar(void)
 {
   uint32_t madr = ETH_MADR_REG(MII_ANLPAR) | ETH_MADR_PHY(DEFAULT_PHY);
   uint32_t anlpar = 0;
+  int eno = 0;
 
   if (lpc_eth->madr != madr) {
     lpc_eth->madr = madr;
@@ -1099,9 +1106,10 @@ static uint32_t lpc_eth_mdio_read_anlpar(void)
     lpc_eth->mcmd = ETH_MCMD_READ;
   }
 
-  lpc_eth_mdio_wait_for_not_busy();
-
-  anlpar = lpc_eth->mrdd;
+  eno = lpc_eth_mdio_wait_for_not_busy();
+  if (eno == 0) {
+    anlpar = lpc_eth->mrdd;
+  }
 
   /* Start next read */
   lpc_eth->mcmd = 0;
@@ -1123,8 +1131,11 @@ static int lpc_eth_mdio_read(
     lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
     lpc_eth->mcmd = 0;
     lpc_eth->mcmd = ETH_MCMD_READ;
-    lpc_eth_mdio_wait_for_not_busy();
-    *val = lpc_eth->mrdd;
+    eno = lpc_eth_mdio_wait_for_not_busy();
+
+    if (eno == 0) {
+      *val = lpc_eth->mrdd;
+    }
   } else {
     eno = EINVAL;
   }
@@ -1144,7 +1155,7 @@ static int lpc_eth_mdio_write(
   if (phy == -1 || phy == 0) {
     lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
     lpc_eth->mwtd = val;
-    lpc_eth_mdio_wait_for_not_busy();
+    eno = lpc_eth_mdio_wait_for_not_busy();
   } else {
     eno = EINVAL;
   }
