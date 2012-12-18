@@ -55,6 +55,14 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 #ifdef LPC32XX_UART_4_BAUD
   static bool lpc32xx_uart_probe_4(int minor)
   {
+    volatile lpc32xx_gpio *gpio = &lpc32xx.gpio;
+
+    /*
+     * Set GPO_21/U4_TX/LCDVD[3] to U4_TX.  This works only if LCD module is
+     * disabled.
+     */
+    gpio->p2_mux_set = BSP_BIT32(2);
+
     LPC32XX_UARTCLK_CTRL |= 1U << 1;
     LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
 
