@@ -221,7 +221,7 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Has_only_one_node(
     const RBTree_Control *the_rbtree
     )
 {
-  if(!the_rbtree) return NULL; /* TODO: expected behavior? */
+  if(!the_rbtree) return false; /* TODO: expected behavior? */
   return (the_rbtree->root->child[RBT_LEFT] == NULL && the_rbtree->root->child[RBT_RIGHT] == NULL);
 }
 
