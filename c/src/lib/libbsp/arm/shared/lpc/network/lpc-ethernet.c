@@ -1359,8 +1359,6 @@ static int lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
       lpc_eth->sa2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
         | (uint32_t) e->arpcom.ac_enaddr [0];
 
-      lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
-
       /* Enable receiver */
       lpc_eth->mac1 = 0x03;
 
@@ -1533,6 +1531,9 @@ static int lpc_eth_interface_ioctl(
       break;
     case SIOCSIFFLAGS:
       eno = lpc_eth_up_or_down(e, (ifp->if_flags & IFF_UP) != 0);
+      if (eno == 0 && (ifp->if_flags & IFF_UP) != 0) {
+        lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
+      }
       break;
     case SIOCADDMULTI:
     case SIOCDELMULTI:
