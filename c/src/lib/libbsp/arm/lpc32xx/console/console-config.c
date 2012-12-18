@@ -28,14 +28,14 @@
 
 extern console_fns lpc32xx_hsu_fns;
 
-static uint8_t lpc32xx_uart_get_register(uint32_t addr, uint8_t i)
+static uint8_t lpc32xx_uart_get_register(uintptr_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
   return (uint8_t) reg [i];
 }
 
-static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
