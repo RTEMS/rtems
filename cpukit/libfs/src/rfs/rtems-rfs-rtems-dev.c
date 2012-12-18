@@ -1,20 +1,19 @@
+/**
+ * @file
+ *
+ * @brief RTEMS RFS Device Interface
+ * @ingroup rtems-rfs
+ * 
+ * This file contains the set of handlers used to map operations on RFS device
+ * nodes onto calls to the RTEMS Classic API IO Manager.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS RFS Device Interface.
- *
- * This file contains the set of handlers used to map operations on RFS device
- * nodes onto calls to the RTEMS Classic API IO Manager.
- *
  */
 
 #if HAVE_CONFIG_H

@@ -1,7 +1,7 @@
 /**
  * @file rtems/imfs.h
  *
- * Header file for the In-Memory File System
+ * @brief Header file for the In-Memory File System
  */
 
 /*
@@ -20,6 +20,12 @@
 
 #include <rtems/libio_.h>
 #include <rtems/pipe.h>
+
+/**
+ * @defgroup IMFS POSIX In-Memory File System Support
+ *
+ * @brief In-Memory File System Support
+ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -158,6 +164,9 @@ typedef IMFS_jnode_t *(*IMFS_node_control_initialize)(
   const IMFS_types_union *info
 );
 
+/**
+ * @brief Initialize Default IMFS Node 
+ */
 IMFS_jnode_t *IMFS_node_initialize_default(
   IMFS_jnode_t *node,
   const IMFS_types_union *info
@@ -172,12 +181,18 @@ typedef IMFS_jnode_t *(*IMFS_node_control_remove)(
   IMFS_jnode_t *node
 );
 
+/**
+ * @brief Remove Default IMFS Node 
+ */
 IMFS_jnode_t *IMFS_node_remove_default(
   IMFS_jnode_t *node
 );
 
 typedef IMFS_jnode_t *(*IMFS_node_control_destroy)( IMFS_jnode_t *node );
 
+/**
+ * @brief Destroy Default IMFS Node 
+ */
 IMFS_jnode_t *IMFS_node_destroy_default( IMFS_jnode_t *node );
 
 typedef struct {
@@ -298,6 +313,9 @@ extern int miniIMFS_initialize(
    const void                           *data
 );
 
+/**
+ * @brief IMFS Initialization Support
+ */
 extern int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const rtems_filesystem_operations_table *op_table,
@@ -322,21 +340,44 @@ extern void IMFS_dump( void );
  */
 extern int IMFS_memfile_maximum_size( void );
 
+/**
+ * @brief Destroy IMFS Node
+ */
 extern void IMFS_node_destroy( IMFS_jnode_t *node );
 
+/**
+ * @brief Clone IMFS Node
+ */
 extern int IMFS_node_clone( rtems_filesystem_location_info_t *loc );
 
+/**
+ * @brief Free IMFS Node
+ */
 extern void IMFS_node_free( const rtems_filesystem_location_info_t *loc );
 
+/**
+ * @brief IMFS Node Type
+ * 
+ * The following verifies that returns the type of node that the
+ * loc refers to.
+ */
 extern rtems_filesystem_node_types_t IMFS_node_type(
   const rtems_filesystem_location_info_t *loc
 );
 
+/**
+ * @brief IMFS Stat
+ * 
+ * This routine provides a stat for the IMFS file system.
+ */
 extern int IMFS_stat(
   const rtems_filesystem_location_info_t *loc,
   struct stat *buf
 );
 
+/**
+ * @brief Evaluation IMFS Node Support
+ */
 extern void IMFS_eval_path(
   rtems_filesystem_eval_path_context_t *ctx
 );
@@ -362,6 +403,11 @@ extern int IMFS_mknod(
   dev_t dev
 );
 
+/**
+ * @brief Create a New IMFS Node
+ * 
+ * Routine to create a new in memory file system node.
+ */
 extern IMFS_jnode_t *IMFS_allocate_node(
   IMFS_fs_info_t *fs_info,
   const IMFS_node_control *node_control,
@@ -371,6 +417,12 @@ extern IMFS_jnode_t *IMFS_allocate_node(
   const IMFS_types_union *info
 );
 
+/**
+ * @brief Create an IMFS Node
+ * 
+ * Create an IMFS filesystem node of an arbitrary type that is NOT
+ * the root directory node.
+ */
 extern IMFS_jnode_t *IMFS_create_node_with_control(
   const rtems_filesystem_location_info_t *parentloc,
   const IMFS_node_control *node_control,
@@ -391,6 +443,9 @@ extern int IMFS_make_generic_node(
   void *context
 );
 
+/**
+ * @brief Mount an IMFS
+ */
 extern int IMFS_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
 );
@@ -433,6 +488,16 @@ extern ssize_t memfile_write(
   size_t         count            /* IN  */
 );
 
+/**
+ * @name IMFS Device Node Handlers
+ *
+ * This section contains the set of handlers used to map operations on
+ * IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
+ * 
+ * @{
+ */
+
+
 extern int device_open(
   rtems_libio_t *iop,            /* IN  */
   const char    *pathname,       /* IN  */
@@ -467,12 +532,24 @@ extern int device_ftruncate(
   off_t          length             /* IN  */
 );
 
+/** @} */
+
+/**
+ * @brief Set IMFS File Access and Modification Times
+ * 
+ * 
+ * This routine is the implementation of the utime() system
+ * call for the IMFS.
+ */
 extern int IMFS_utime(
   const rtems_filesystem_location_info_t *loc,
   time_t actime,
   time_t modtime
 );
 
+/**
+ * @brief Change IMFS File Mode
+ */
 extern int IMFS_fchmod(
   const rtems_filesystem_location_info_t *loc,
   mode_t mode

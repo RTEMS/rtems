@@ -1,6 +1,11 @@
-/*
- *  Evaluation IMFS Node Support Routines
+/**
+ * @file
  *
+ * @brief Evaluation IMFS Node Support
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

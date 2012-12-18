@@ -1,9 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Set IMFS File Access and Modification Times
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_utime
- *
- *  This routine is the implementation of the utime() system
- *  call for the IMFS.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

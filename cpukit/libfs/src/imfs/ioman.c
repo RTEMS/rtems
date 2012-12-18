@@ -1,7 +1,11 @@
-/*
- *  This file emulates the old Classic RTEMS IO manager directives
- *  which register and lookup names using the in-memory filesystem.
+/**
+ * @file
  *
+ * @brief RTMES Register IO Name
+ * @ingroup ClassicIO
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,12 +25,6 @@
 #include <string.h>
 
 #include <rtems/libio_.h>
-
-/*
- *  rtems_io_register_name
- *
- *  This assumes that all registered devices are character devices.
- */
 
 rtems_status_code rtems_io_register_name(
   const char                *device_name,

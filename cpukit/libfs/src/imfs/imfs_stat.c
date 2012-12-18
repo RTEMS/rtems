@@ -1,8 +1,11 @@
+/**
+ * @file
+ *
+ * @brief IMFS Stat
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_stat
- *
- *  This routine provides a stat for the IMFS file system.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

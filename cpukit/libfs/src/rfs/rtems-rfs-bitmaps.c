@@ -1,21 +1,21 @@
+/**
+ * @file
+ *
+ * @brief RTEMS File Systems Bitmap Routines
+ * @ingroup rtems-rfs
+ * 
+ * These functions manage bit maps. A bit map consists of the map of bit
+ * allocated in a block and a search map where a bit represents 32 actual
+ * bits. The search map allows for a faster search for an available bit as 32
+ * search bits can checked in a test.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Bitmap Routines.
- *
- * These functions manage bit maps. A bit map consists of the map of bit
- * allocated in a block and a search map where a bit represents 32 actual
- * bits. The search map allows for a faster search for an available bit as 32
- * search bits can checked in a test.
  */
 
 #if HAVE_CONFIG_H

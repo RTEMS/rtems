@@ -1,9 +1,11 @@
+/**
+ * @file
+ *
+ * @brief IMFS Node Type
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_node_type
- *
- *  The following verifies that returns the type of node that the
- *  loc refers to.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

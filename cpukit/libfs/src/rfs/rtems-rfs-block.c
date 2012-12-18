@@ -1,21 +1,13 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
  *
+ * @brief RTEMS File Systems Block Routines
  * @ingroup rtems-rfs
- *
- * RTEMS File Systems Block Routines.
- *
+ * 
  * These functions manage blocks in the RFS file system. A block is an area of
  * the media and its size is set for a each specific media. The block size is
- * set when the file system is set up and needs to be matched for it to be read
- * correctly.
+ * set when the file system is set up and needs to be matched for it to be 
+ * read correctly.
  *
  * Blocks are managed as groups. A block group or "group" is part of the total
  * number of blocks being managed by the file system and exist to allow
@@ -26,10 +18,18 @@
  * A group consist of a block bitmap, inodes and data blocks. The first block
  * of the file system will hold the superblock. The block bitmap is a
  * collection of blocks that hold a map of bits, one bit per block for each
- * block in the group. When a file system is mounted the block bitmaps are read
- * and a summary bit map is made. The summary bitmap has a single bit for 32
- * bits in the bitmap and is set when all 32 bits it maps to are set. This
+ * block in the group. When a file system is mounted the block bitmaps are 
+ * read and a summary bit map is made. The summary bitmap has a single bit for
+ * 32 bits in the bitmap and is set when all 32 bits it maps to are set. This
  * speeds up the search for a free block by a factor of 32.
+ */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #if HAVE_CONFIG_H
