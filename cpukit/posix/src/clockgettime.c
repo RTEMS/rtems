@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Retrieves the Specified Clock Time
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

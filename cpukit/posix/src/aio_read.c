@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Asynchronously reads Data from a File
+ * @ingroup POSIX
+ */
+
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
  * 

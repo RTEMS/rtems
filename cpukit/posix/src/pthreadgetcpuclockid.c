@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Returns Clock ID for CPU time clock of the thread 
+ * @ingroup POSIX
+ */
+
 /*
  *  20.1.6 Accessing a Thread CPU-time Clock, P1003.4b/Draft 8, p. 58
  *
