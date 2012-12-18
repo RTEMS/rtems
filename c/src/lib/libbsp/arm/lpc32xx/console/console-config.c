@@ -47,6 +47,7 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
   {
     LPC32XX_UARTCLK_CTRL |= 1U << 0;
     LPC32XX_U3CLK = LPC32XX_CONFIG_U3CLK;
+    LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 4, 5);
 
     return true;
   }
@@ -65,6 +66,7 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 
     LPC32XX_UARTCLK_CTRL |= 1U << 1;
     LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
+    LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 6, 7);
 
     return true;
   }
@@ -75,6 +77,7 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
   {
     LPC32XX_UARTCLK_CTRL |= 1U << 3;
     LPC32XX_U6CLK = LPC32XX_CONFIG_U6CLK;
+    LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 10, 11);
 
     return true;
   }
