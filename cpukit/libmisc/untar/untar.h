@@ -18,6 +18,12 @@
 #include <stddef.h>
 #include <tar.h>
 
+/**
+ *  @defgroup libmisc_untar_img Untar Image
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -49,5 +55,5 @@ _rtems_tar_header_checksum(const char *bufr);
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif  /* _RTEMS_UNTAR_H */

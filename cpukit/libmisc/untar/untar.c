@@ -1,8 +1,17 @@
-/* FIXME:
+/**
+ * @file
+ *
+ * @brief Untar an Image
+ * @ingroup libmisc_untar_img Untar Image
+ *
+ * FIXME:
  *   1. Symbolic links are not created.
  *   2. Untar_FromMemory uses FILE *fp.
  *   3. How to determine end of archive?
  *
+ */
+
+/*
  *  Written by: Jake Janovetz <janovetz@tempest.ece.uiuc.edu>
  *
  *  The license and distribution terms for this file may be
@@ -274,7 +283,7 @@ Untar_FromFile(
    if (bufr == NULL) {
       return(UNTAR_FAIL);
    }
-   
+
    while (1)
    {
       /* Read the header */
