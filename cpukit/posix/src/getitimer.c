@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Gets Value of an Interval Timer
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-20089
  *  On-Line Applications Research Corporation (OAR).

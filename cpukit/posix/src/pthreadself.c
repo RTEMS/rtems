@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function returns the ID of the Calling Thread 
+ * @ingroup POSIX
+ */
+
 /*
  *  16.1.6 Get Calling Thread's ID, p1003.1c/Draft 10, p. 152
  *

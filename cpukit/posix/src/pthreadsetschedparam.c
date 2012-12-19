@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function sets scheduling policy and parameters of the thread
+ * @ingroup POSIX
+ */
+
 /*
  *  13.5.2 Dynamic Thread Scheduling Parameters Access,
  *         P1003.1c/Draft 10, p. 124

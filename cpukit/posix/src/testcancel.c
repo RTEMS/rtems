@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Setting test on Cancelability State 
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

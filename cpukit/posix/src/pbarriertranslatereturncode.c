@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Translates POSIX Barrier Status Code
+ * @ingroup POSIX
+ */
+
 /*
  *  Barrier Manager -- Translate SuperCore Status
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Returns Clock ID of CPU-time Clock of process specified 
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
