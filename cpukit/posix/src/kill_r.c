@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Send a Signal to a Process
+ * @ingroup POSIX
+ */
+
 /*
  *  3.3.2 Send a Signal to a Process, P1003.1b-1993, p. 68
  *

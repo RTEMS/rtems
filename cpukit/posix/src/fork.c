@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Inoperable implementation of fork() for POSIX threads
+ * @ingroup POSIX
+ */
+
 /*
  *  fork() - POSIX 1003.1b 3.1.1
  *

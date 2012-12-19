@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Syncing of all Outstanding Asynchronous I/O Operations
+ * @ingroup POSIX
+ */
+
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
  * 

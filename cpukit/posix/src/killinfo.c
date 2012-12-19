@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Send a Signal to a Process
+ * @ingroup POSIX
+ */
+
 /*
  *  kill() support routine
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Semaphore Code Translation Error
+ * @ingroup POSIX
+ */
+
 /*
  *  POSIX Semaphore Error Translation
  *

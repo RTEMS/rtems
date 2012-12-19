@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Executes a thread's cancellation handlers
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Changes the Priority Ceiling of a Mutex and Releases it
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
