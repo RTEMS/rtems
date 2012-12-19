@@ -361,7 +361,12 @@
  * derived values for all boards
  */
 /* value of input clock divider (derived from pll mode reg) */
-#define BSP_SYSPLL_CKID (((mpc83xx.clk.spmr>>(31-8))&0x01)+1)
+#if MPC83XX_CHIP_TYPE != 8309
+  #define BSP_SYSPLL_CKID (((mpc83xx.clk.spmr>>(31-8))&0x01)+1)
+#else
+  /* On the MPC8309 this bit is reserved */
+  #define BSP_SYSPLL_CKID 1
+#endif
 /* value of system pll (derived from pll mode reg) */
 #define BSP_SYSPLL_MF    ((mpc83xx.clk.spmr>>(31-7))&0x0f)
 /* value of system pll (derived from pll mode reg) */
