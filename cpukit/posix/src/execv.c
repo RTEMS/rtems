@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Inoperable implementation of execv for POSIX threads
+ * @ingroup POSIX
+ */
+
 /*
  *  execv() - POSIX 1003.1b 3.1.2
  *

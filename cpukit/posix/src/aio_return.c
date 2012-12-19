@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Final return status for Asynchronous I/O request pointed to by aiobcp
+ * @ingroup POSIX
+ */
+
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
  * 

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Replacing signal mask with *sigmask and suspending calling process
+ * @ingroup POSIX
+ */
+
 /*
  *  3.3.7 Wait for a Signal, P1003.1b-1993, p. 75
  *

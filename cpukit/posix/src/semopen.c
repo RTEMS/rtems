@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Creates New POSIX semaphore or Opens an existing Semaphore
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

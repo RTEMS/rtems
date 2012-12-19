@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Starts a New Thread in The Calling Process
+ * @ingroup POSIX
+ */
+
 /*
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
  */
