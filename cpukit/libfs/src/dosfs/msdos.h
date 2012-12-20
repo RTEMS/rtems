@@ -19,6 +19,12 @@
 #include "fat.h"
 #include "fat_file.h"
 
+/**
+ *  @defgroup libfs_msdos MSDOS FileSystem
+ *
+ *  @ingroup libfs
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -73,6 +79,12 @@ extern const rtems_filesystem_file_handlers_r  msdos_file_handlers;
 #define MSDOS_REGULAR_FILE  RTEMS_FILESYSTEM_MEMORY_FILE
 #define MSDOS_HARD_LINK     RTEMS_FILESYSTEM_HARD_LINK /* pseudo type */
 
+/**
+ *  @brief Type of Node that Loc Refers To
+ *
+ *  The following returns the type of node that the loc refers to.
+ *
+ */
 typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
 /*
@@ -220,11 +232,20 @@ typedef enum msdos_token_types_e
  */
 #define MSDOS_DPS512_NUM    16
 
-/* Prototypes */
+/**
+ *  @brief Shut Down MSDOS FileSystem
+ *
+ *  MSDOS shut down handler implementation
+ */
 void msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
 
 void msdos_eval_path(rtems_filesystem_eval_path_context_t *ctx);
 
+/**
+ *  @brief Call Fat-File Close Routine
+ *
+ *  Free node handler implementation for the filesystem operations table.
+ */
 void msdos_free_node_info(const rtems_filesystem_location_info_t *pathloc);
 
 rtems_filesystem_node_types_t msdos_node_type(
@@ -239,11 +260,21 @@ int msdos_mknod(
   dev_t dev
 );
 
+/**
+ * @brief Remove Node from MSDOS Directory
+ *
+ * MSDOS Directory Handlers Implementation
+ */
 int msdos_rmnod(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *loc
 );
 
+/**
+ * @brief Rename a MSDOS FileSystem Node
+ *
+ * Routine to rename a MSDOS filesystem node
+ */
 int msdos_rename(
   const rtems_filesystem_location_info_t *old_parent_loc,
   const rtems_filesystem_location_info_t *old_loc,
@@ -256,6 +287,11 @@ void msdos_lock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
 void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
+/**
+ *  @brief MSDOS Filesystem Initialization
+ *
+ *  MSDOS Initialization support routine implementation
+ */
 int msdos_initialize_support(
   rtems_filesystem_mount_table_entry_t    *temp_mt_entry,
   const rtems_filesystem_operations_table *op_table,
@@ -305,6 +341,12 @@ int msdos_dir_stat(
   struct stat *buf
 );
 
+/**
+ * @brief Implements wake up version of the "signal" operation
+ *
+ * Routine to create a new MSDOS filesystem node
+ *
+ */
 int msdos_creat_node(const rtems_filesystem_location_info_t *parent_loc,
                      msdos_node_type_t                       type,
                      const char                             *name,
@@ -402,5 +444,5 @@ int msdos_sync(rtems_libio_t *iop);
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* __DOSFS_MSDOS_H__ */

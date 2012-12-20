@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Get the Process-Shared Attribute of the RWLock
+ *  @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -13,10 +20,6 @@
 
 #include <pthread.h>
 #include <errno.h>
-
-/*
- *  RWLock Attributes Get Process Shared
- */
 
 int pthread_rwlockattr_getpshared(
   const pthread_rwlockattr_t *attr,

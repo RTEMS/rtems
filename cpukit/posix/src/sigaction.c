@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Allows calling process to examine action of a Specific Signal
+ * @ingroup POSIX
+ */
+
 /*
  *  3.3.4 Examine and Change Signal Action, P1003.1b-1993, p. 70
  *

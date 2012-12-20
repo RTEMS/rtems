@@ -1,5 +1,8 @@
-/*
- *  Mutex Timed Lock
+/**
+ * @file
+ *
+ * @brief Mutex Timed Lock
+ * @ingroup POSIX
  */
 
 /*
@@ -28,12 +31,11 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*
- *  11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93
+/**
+ * 11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93
  *
- *  NOTE: P1003.4b/D8 adds pthread_mutex_timedlock(), p. 29
+ * NOTE: P1003.4b/D8 adds pthread_mutex_timedlock(), p. 29
  */
-
 int pthread_mutex_timedlock(
   pthread_mutex_t       *mutex,
   const struct timespec *abstime

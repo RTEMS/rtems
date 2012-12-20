@@ -1,6 +1,11 @@
-/*
- *  Miscellaneous routines implementation for MSDOS filesystem
+/**
+ * @file
  *
+ * @brief Miscellaneous Routines Implementation for MSDOS FileSystem
+ * @ingroup libfs
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

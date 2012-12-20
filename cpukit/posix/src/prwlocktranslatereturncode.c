@@ -1,6 +1,11 @@
-/*
- *  RWLock Manager -- Translate SuperCore Status
+/**
+ *  @file
  *
+ *  @brief POSIX RWLock Translate Core RWLock Return Code
+ *  @ingroup POSIX_RWLOCK
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,17 +23,6 @@
 
 #include <rtems/system.h>
 #include <rtems/posix/rwlock.h>
-
-/*
- *  _POSIX_RWLock_Translate_core_rwlock_return_code
- *
- *  Input parameters:
- *    the_rwlock_status - rwlock status code to translate
- *
- *  Output parameters:
- *    status code - translated POSIX status code
- *
- */
 
 static int _POSIX_RWLock_Return_codes[CORE_RWLOCK_STATUS_LAST + 1] = {
   0,                        /* CORE_RWLOCK_SUCCESSFUL */

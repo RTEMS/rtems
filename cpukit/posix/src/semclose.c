@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Close a Named Semaphore
+ * @ingroup POSIX_SEMAPHORE
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -24,15 +31,6 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
-
-
-/*
- *  sem_close
- *
- *  Routine to close a semaphore that has been opened or initialized.
- *
- *  11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
- */
 
 int sem_close(
   sem_t *sem

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Deleted Signal from Set
+ * @ingroup POSIX
+ */
+
 /*
  *  3.3.3 Manipulate Signal Sets, P1003.1b-1993, p. 69
  *

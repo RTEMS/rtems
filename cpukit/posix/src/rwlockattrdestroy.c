@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Destroys a read-write lock Attributes object 
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

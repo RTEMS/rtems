@@ -1,6 +1,11 @@
-/*
- *  16.1.4 Detaching a Thread, P1003.1c/Draft 10, p. 149
+/**
+ * @file
  *
+ * @brief Detaching a Thread
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,6 +25,9 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/pthread.h>
 
+/**
+ * 16.1.4 Detaching a Thread, P1003.1c/Draft 10, p. 149
+ */
 int pthread_detach(
   pthread_t   thread
 )

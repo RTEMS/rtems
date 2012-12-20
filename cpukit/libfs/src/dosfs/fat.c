@@ -773,17 +773,12 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
     if (is_cluster_aligned(vol, vol->data_fsec)
         && (FAT_FAT32 == vol->type || is_cluster_aligned(vol, vol->rdir_loc)))
     {
-        vol->bytes_per_block = vol->bpc;
-        vol->bytes_per_block_log2 = vol->bpc_log2;
-        vol->sectors_per_block = vol->spc;
-        sc = rtems_bdbuf_set_block_size (vol->dd, vol->bytes_per_block, true);
-        if (RTEMS_SUCCESSFUL != sc)
+        sc = rtems_bdbuf_set_block_size (vol->dd, vol->bpc, true);
+        if (sc == RTEMS_SUCCESSFUL)
         {
-            close(vol->fd);
-            free(fs_info->vhash);
-            free(fs_info->rhash);
-            free(fs_info->uino);
-            rtems_set_errno_and_return_minus_one( EIO );
+            vol->bytes_per_block = vol->bpc;
+            vol->bytes_per_block_log2 = vol->bpc_log2;
+            vol->sectors_per_block = vol->spc;
         }
     }
 

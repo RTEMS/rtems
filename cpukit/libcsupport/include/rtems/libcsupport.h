@@ -56,6 +56,12 @@ Heap_Control *malloc_get_heap_pointer( void );
 extern void libc_init(void);
 extern int  host_errno(void);
 extern void fix_syscall_errno(void);
+
+/**
+ *  @brief RTEMS Malloc Get Free Information
+ * 
+ *  Find amount of free heap remaining
+ */
 extern size_t malloc_free_space(void);
 extern void open_dev_console(void);
 

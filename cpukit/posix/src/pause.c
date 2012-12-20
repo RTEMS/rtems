@@ -1,6 +1,11 @@
-/*
- *  3.4.2 Suspend Process Execution, P1003.1b-1993, p. 81
+/**
+ * @file
  *
+ * @brief Suspend Process Execution
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,10 +22,9 @@
 #include <signal.h>
 #include <unistd.h>
 
-/*
- *  3.4.2 Suspend Process Execution, P1003.1b-1993, p. 81
+/**
+ * 3.4.2 Suspend Process Execution, P1003.1b-1993, p. 81
  */
-
 int pause( void )
 {
   sigset_t  all_signals;

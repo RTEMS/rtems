@@ -1,6 +1,11 @@
-/*
- *  IMFS file change mode routine.
+/**
+ * @file
  *
+ * @brief Change IMFS File Mode
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -88,13 +88,15 @@ int timer_gettime(
   struct itimerspec *value
 );
 
-/*
+/**
+ *  @brief Get Overrun Count for a POSIX Per-Process Timer
+ * 
+ *  The expiration of a timer must increase by one a counter.
+ *  After the signal handler associated to the timer finishes
+ *  its execution, _POSIX_Timer_TSR will have to set this counter to 0.
+ * 
  *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
- *
- *  timer_getoverrun
- *
  */
-
 int timer_getoverrun(
   timer_t   timerid
 );

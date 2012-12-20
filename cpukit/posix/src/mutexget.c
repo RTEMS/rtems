@@ -1,6 +1,11 @@
-/*
- *  Convert POSIX Mutex ID to local object pointer
+/**
+ * @file
  *
+ * @brief Convert POSIX Mutex ID to local object pointer
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

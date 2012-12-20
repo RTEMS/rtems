@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: md501
+
+directives:
+
+  - MD5Init
+  - MD5Update
+  - MD5Final
+
+concepts:
+
+  - Ensures that the MD5 digest is calucated correctly for a sample data set.
+  - Test cases are from RFC 2202.

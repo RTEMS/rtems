@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function does Actual creation and Initialization of POSIX Semaphore 
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

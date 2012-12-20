@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Function Installs signal Handler
+ * @ingroup POSIX
+ */
+
 /*
  *  signal(2) - Install signal handler
  *

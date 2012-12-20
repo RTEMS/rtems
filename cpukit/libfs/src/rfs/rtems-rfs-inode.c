@@ -1,19 +1,18 @@
+/**
+ * @file
+ *
+ * @brief RTEMS File Systems Inode Routines
+ * @ingroup rtems-rfs
+ * 
+ * These functions manage inodes in the RFS file system. An inode is part of a
+ * block that reside after the bitmaps in the group.
+ */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Inode Routines.
- *
- * These functions manage inodes in the RFS file system. An inode is part of a
- * block that reside after the bitmaps in the group.
  */
 
 #if HAVE_CONFIG_H

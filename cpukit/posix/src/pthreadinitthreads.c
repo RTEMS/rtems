@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Threads Initialize User Threads Body
+ * @ingroup POSIX_PTHREAD
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
@@ -27,17 +34,6 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
-
-/*
- *  _POSIX_Threads_Initialize_user_threads_body
- *
- *  This routine creates and starts all configured user
- *  initialization threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- */
 
 void _POSIX_Threads_Initialize_user_threads_body(void)
 {

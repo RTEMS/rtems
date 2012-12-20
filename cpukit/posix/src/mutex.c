@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Mutex Manager Initialization
+ * @ingroup POSIX_MUTEX POSIX Mutex Support
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

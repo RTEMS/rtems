@@ -1,6 +1,11 @@
-/*
- *  16.1.1 Thread Creation Attributes
+/**
+ * @file
  *
+ * @brief Thread Creation Attributes
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

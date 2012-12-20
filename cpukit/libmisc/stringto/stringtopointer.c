@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Convert String to Pointer (with validation)
+ * @ingroup libmisc_conv_help Conversion Helpers
+ */
+
 /*
  *  COPYRIGHT (c) 2009.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,6 +1,11 @@
-/*
- *  times() - POSIX 1003.1b 4.5.2 - Get Process Times
+/**
+ *  @file
  *
+ *  @brief Get Process Times
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -24,6 +29,9 @@
   #include <rtems/score/timestamp.h>
 #endif
 
+/**
+ *  POSIX 1003.1b 4.5.2 - Get Process Times
+ */
 clock_t _times(
    struct tms  *ptms
 )
@@ -79,12 +87,9 @@ clock_t _times(
   return ticks;
 } 
 
-/*
- *  times()
- *
+/**
  *  times() system call wrapper for _times() above.
  */
-
 clock_t times(
    struct tms  *ptms
 )
@@ -92,16 +97,13 @@ clock_t times(
   return _times( ptms );
 }
 
-/*
- *  _times_r
- *
- *  This is the Newlib dependent reentrant version of times().
- */
-
 #if defined(RTEMS_NEWLIB)
 
 #include <reent.h>
 
+/**
+ *  This is the Newlib dependent reentrant version of times().
+ */
 clock_t _times_r(
    struct _reent *ptr __attribute__((unused)),
    struct tms  *ptms

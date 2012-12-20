@@ -1,6 +1,11 @@
-/*
- * imfs_fifo.c: FIFO support for IMFS
+/**
+ * @file
  *
+ * @brief FIFO Support
+ * @ingroup IMFS
+ */
+
+/*
  * Author: Wei Shen <cquark@gmail.com>
  *
  * The license and distribution terms for this file may be

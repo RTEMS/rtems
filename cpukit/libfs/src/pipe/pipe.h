@@ -22,6 +22,12 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup FIFO_PIPE FIFO/pipe File System Support
+ * 
+ * @brief Interface to the POSIX FIFO/pipe File System
+ */
+
 /* Control block to manage each pipe */
 typedef struct pipe_control {
   char *Buffer;
@@ -42,14 +48,18 @@ typedef struct pipe_control {
 #endif
 } pipe_control_t;
 
-/*
+/**
+ * @brief Create an Anonymous Pipe
+ * 
  * Called by pipe() to create an anonymous pipe.
  */
 extern int pipe_create(
   int filsdes[2]
 );
 
-/*
+/**
+ * @brief Release a Pipe
+ * 
  * Interface to file system close.
  *
  * *pipep points to pipe control structure. When the last user releases pipe,
@@ -60,7 +70,8 @@ extern void pipe_release(
   rtems_libio_t *iop
 );
 
-/*
+/**
+ * @brief FIFO Open
  * Interface to file system open.
  *
  * *pipep points to pipe control structure. If called with *pipep = NULL,
@@ -72,7 +83,9 @@ extern int fifo_open(
   rtems_libio_t *iop
 );
 
-/*
+/**
+ * @brief Pipe Read
+ * 
  * Interface to file system read.
  */
 extern ssize_t pipe_read(
@@ -82,7 +95,9 @@ extern ssize_t pipe_read(
   rtems_libio_t  *iop
 );
 
-/*
+/**
+ * @brief Pipe Write
+ * 
  * Interface to file system write.
  */
 extern ssize_t pipe_write(
@@ -92,7 +107,9 @@ extern ssize_t pipe_write(
   rtems_libio_t  *iop
 );
 
-/*
+/**
+ * @brief Pipe IO Control
+ * 
  * Interface to file system ioctl.
  */
 extern int pipe_ioctl(

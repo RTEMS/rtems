@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Remove a Named Semaphore
+ * @ingroup POSIX_SEMAPHORE
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -24,15 +31,6 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
-
-/*
- *  sem_unlink
- *
- *  Unlinks a named semaphore, sem_close must also be called to remove
- *  the semaphore.
- *
- *  11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
- */
 
 int sem_unlink(
   const char *name

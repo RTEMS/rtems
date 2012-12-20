@@ -1,6 +1,11 @@
-/*
- *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
+/**
+ *  @file
  *
+ *  @brief Get Overrun Count for a POSIX Per-Process Timer
+ *  @ingroup POSIX_PRIV_TIMERS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -21,13 +26,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/timer.h>
 
-/*
- * timer_getoverrun
- *
- * The expiration of a timer must increase by one a counter.
- * After the signal handler associated to the timer finishes
- * its execution, _POSIX_Timer_TSR will have to set this counter to 0.
- */
 int timer_getoverrun(
   timer_t   timerid
 )

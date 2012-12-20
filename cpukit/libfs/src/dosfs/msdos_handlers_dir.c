@@ -1,6 +1,11 @@
-/*
- *  Directory Handlers Table for MSDOS filesystem
+/**
+ * @file
  *
+ * @brief Directory Handlers Table for MSDOS FileSystem
+ * @ingroup libfs
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

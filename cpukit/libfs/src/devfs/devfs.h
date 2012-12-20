@@ -88,6 +88,8 @@ extern int devFS_open(
 
 
 /**
+ *  @brief Maps Close Operation to rtems_io_close
+ *
  *  This handler maps close operation to rtems_io_close.
  *  @param iop This is the RTEMS's internal representation of file
  *  @retval the same as close
@@ -153,6 +155,8 @@ extern int devFS_ioctl(
 
 
 /**
+ *  @brief Gets the Device File Information
+ *
  *  This handler gets the device file information. This routine only set the following member of struct stat:
  *  st_dev : device number
  *  st_mode: device file creation mode, only two mode are accepted:
@@ -227,6 +231,8 @@ extern int devFS_initialize(
 
 
 /**
+ *  @brief Retrieves and Prints all the Device Registered in System
+ *
  *  This routine retrieves all the device registered in system, and
  *  prints out their detail information. For example, on one system,
  *  devFS_show will print out following message:

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Fetches State of POSIX Per-Process Timers
+ * @ingroup POSIX
+ */
+
 /*
  *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
  *

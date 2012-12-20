@@ -1,8 +1,11 @@
-/*
- *  This file contains the support infrastructure used to manage the
- *  table of integer style file descriptors used by the low level
- *  POSIX system calls like open(), read, fstat(), etc.
+/**
+ *  @file
  *
+ *  @brief File Descriptor Routines
+ *  @ingroup LibIOInternal
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -38,12 +41,6 @@
  * does (silently) ignore the operation.
  */
 #undef ACCEPT_O_NDELAY_ALIAS
-
-/*
- *  rtems_libio_fcntl_flags
- *
- *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
- */
 
 static const rtems_assoc_t access_modes_assoc[] = {
   { "READ",       LIBIO_FLAGS_READ,  O_RDONLY },
@@ -87,12 +84,6 @@ uint32_t rtems_libio_fcntl_flags( int fcntl_flags )
   return flags;
 }
 
-/*
- *  rtems_libio_to_fcntl_flags
- *
- *  Convert RTEMS internal flags to UNIX fnctl(2) flags
- */
-
 int rtems_libio_to_fcntl_flags( uint32_t flags )
 {
   int fcntl_flags = 0;
@@ -120,13 +111,6 @@ int rtems_libio_to_fcntl_flags( uint32_t flags )
   return fcntl_flags;
 }
 
-/*
- *  rtems_libio_allocate
- *
- *  This routine searches the IOP Table for an unused entry.  If it
- *  finds one, it returns it.  Otherwise, it returns NULL.
- */
-
 rtems_libio_t *rtems_libio_allocate( void )
 {
   rtems_libio_t *iop = NULL;
@@ -144,13 +128,6 @@ rtems_libio_t *rtems_libio_allocate( void )
 
   return iop;
 }
-
-/*
- *  rtems_libio_free
- *
- *  This routine frees the resources associated with an IOP (file descriptor)
- *  and clears the slot in the IOP Table.
- */
 
 void rtems_libio_free(
   rtems_libio_t *iop

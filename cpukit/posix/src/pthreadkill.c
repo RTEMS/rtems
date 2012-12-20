@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Sends a signal Asynchronously directed to a thread
+ * @ingroup POSIX
+ */
+
 /*
  *  3.3.10 Send a Signal to a Thread, P1003.1c/D10, p. 43
  *

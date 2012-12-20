@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Receive Message from Message Queue
+ * @ingroup POSIX
+ */
+
 /*
  *  NOTE:  The structure of the routines is identical to that of POSIX
  *         Message_queues to leave the option of having unnamed message

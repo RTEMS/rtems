@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Sets the Thread Creation stackaddr Attribute in the attr Object
+ * @ingroup POSIX
+ */
+
 /*
  *  16.1.1 Thread Creation Attributes, P1003.1c/Draft 10, p, 140
  *

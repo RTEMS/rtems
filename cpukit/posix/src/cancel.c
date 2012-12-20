@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Canceling Execution of a Thread
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

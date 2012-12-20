@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Get the Process-Shared Condition Variable Attributes
+ *  @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -22,11 +29,10 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*
+/**
  *  11.4.1 Condition Variable Initialization Attributes,
  *            P1003.1c/Draft 10, p. 96
  */
-
 int pthread_condattr_getpshared(
   const pthread_condattr_t *attr,
   int                      *pshared

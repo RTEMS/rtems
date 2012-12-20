@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Releases a lock held on RWLock object referenced by rwlock 
+ * @ingroup POSIX
+ */
+
 /*
  *  POSIX RWLock Manager -- Release a lock held on a RWLock Instance
  *

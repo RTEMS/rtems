@@ -1,6 +1,11 @@
-/*
- * fifo.c: POSIX FIFO/pipe for RTEMS
+/**
+ * @file
  *
+ * @brief FIFO/Pipe Support
+ * @ingroup FIFO_PIPE
+ */
+
+/*
  * Author: Wei Shen <cquark@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -236,12 +241,6 @@ out:
   return err;
 }
 
-/*
- * Interface to file system close.
- *
- * *pipep points to pipe control structure. When the last user releases pipe,
- * it will be set to NULL.
- */
 void pipe_release(
   pipe_control_t **pipep,
   rtems_libio_t *iop
@@ -299,13 +298,6 @@ void pipe_release(
 
 }
 
-/*
- * Interface to file system open.
- *
- * *pipep points to pipe control structure. If called with *pipep = NULL,
- * fifo_open will try allocating and initializing a control structure. If the
- * call succeeds, *pipep will be set to address of new control structure.
- */
 int fifo_open(
   pipe_control_t **pipep,
   rtems_libio_t *iop
@@ -387,9 +379,6 @@ out_error:
   return err;
 }
 
-/*
- * Interface to file system read.
- */
 ssize_t pipe_read(
   pipe_control_t *pipe,
   void           *buffer,
@@ -459,9 +448,6 @@ out_nolock:
   return ret;
 }
 
-/*
- * Interface to file system write.
- */
 ssize_t pipe_write(
   pipe_control_t *pipe,
   const void     *buffer,
@@ -545,9 +531,6 @@ out_nolock:
   return ret;
 }
 
-/*
- * Interface to file system ioctl.
- */
 int pipe_ioctl(
   pipe_control_t  *pipe,
   ioctl_command_t  cmd,

@@ -179,14 +179,14 @@ extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
    rtems_libio_check_permissions_with_error(_iop, _flag, EINVAL )
 
 /**
- *  @brief Clones a Node
+ * @brief Clones a node.
  *
- *  The caller must hold the file system instance lock.
+ * The caller must hold the file system instance lock.
  *
- *  @param[out] clone The cloned location.
- *  @param[in] master The master location.
+ * @param[out] clone The cloned location.
+ * @param[in] master The master location.
  *
- *  @see rtems_filesystem_instance_lock().
+ * @see rtems_filesystem_instance_lock().
  */
 void rtems_filesystem_location_clone(
   rtems_filesystem_location_info_t *clone,
@@ -276,12 +276,26 @@ static inline void rtems_filesystem_instance_unlock(
  *  File Descriptor Routine Prototypes
  */
 
+/**
+ *  This routine searches the IOP Table for an unused entry.  If it
+ *  finds one, it returns it.  Otherwise, it returns NULL.
+ */
 rtems_libio_t *rtems_libio_allocate(void);
 
+/**
+ *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
+ */
 uint32_t rtems_libio_fcntl_flags( int fcntl_flags );
 
+/**
+ *  Convert RTEMS internal flags to UNIX fnctl(2) flags
+ */
 int rtems_libio_to_fcntl_flags( uint32_t flags );
 
+/**
+ *  This routine frees the resources associated with an IOP (file descriptor)
+ *  and clears the slot in the IOP Table.
+ */
 void rtems_libio_free(
   rtems_libio_t *iop
 );
@@ -776,7 +790,7 @@ void rtems_filesystem_eval_path_error(
  * @brief Checks that the locations exist in the same file system instance.
  *
  * @retval 0 The locations exist and are in the same file system instance.
- * @retval -1 An error occured.  The @c errno indicates the error.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
  */
 int rtems_filesystem_location_exists_in_same_instance_as(
   const rtems_filesystem_location_info_t *a,

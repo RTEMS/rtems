@@ -4,6 +4,9 @@
  * @ingroup ClassicIO
  *
  * @brief Classic Input/Output Manager API.
+ * 
+ * This file emulates the old Classic RTEMS IO manager directives
+ * which register and lookup names using the in-memory filesystem.
  */
 
 /*
@@ -115,9 +118,11 @@ rtems_status_code rtems_io_unregister_driver(
 /**
  * @brief Registers the name @a device_name in the file system for the device
  * with number tuple @a major and @a minor.
+ * 
+ * This assumes that all registered devices are character devices.
  *
  * @retval RTEMS_SUCCESSFUL Name successfully registered.
- * @retval RTEMS_TOO_MANY Name already in use or other errors.
+ * @retval RTEMS_TOO_MANY Name already in use or other errors. 
  */
 rtems_status_code rtems_io_register_name(
   const char *device_name,

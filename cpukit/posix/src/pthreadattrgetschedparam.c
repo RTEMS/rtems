@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Returns Scheduling Parameter Attributes of Thread Attributes Object
+ * @ingroup POSIX
+ */
+
 /*
  *  13.5.1 Thread Creation Scheduling Attributes, P1003.1c/Draft 10, p. 120
  *

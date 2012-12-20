@@ -1,6 +1,11 @@
-/*
- *  3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
+/**
+ * @file
  *
+ * @brief Schedule Alarm
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *

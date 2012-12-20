@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function queues I/O request described by buffer pointed by aiocb 
+ * @ingroup POSIX
+ */
+
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
  * 

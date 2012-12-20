@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
@@ -49,8 +50,6 @@
 #include <bsp/irq.h>
 #include <bsp/lpc-ethernet-config.h>
 #include <bsp/utility.h>
-
-#include <rtems/status-checks.h>
 
 #if MCLBYTES > (2 * 1024)
   #error "MCLBYTES to large"
@@ -254,9 +253,11 @@ static volatile lpc_eth_controller *const lpc_eth =
 
 #define LPC_ETH_EVENT_INITIALIZE RTEMS_EVENT_1
 
-#define LPC_ETH_EVENT_START RTEMS_EVENT_2
+#define LPC_ETH_EVENT_TXSTART RTEMS_EVENT_2
 
 #define LPC_ETH_EVENT_INTERRUPT RTEMS_EVENT_3
+
+#define LPC_ETH_EVENT_STOP RTEMS_EVENT_4
 
 /* Status */
 
@@ -292,10 +293,9 @@ static volatile lpc_eth_controller *const lpc_eth =
 #endif
 
 typedef enum {
-  LPC_ETH_NOT_INITIALIZED,
-  LPC_ETH_INITIALIZED,
-  LPC_ETH_STARTED,
-  LPC_ETH_RUNNING
+  LPC_ETH_STATE_NOT_INITIALIZED = 0,
+  LPC_ETH_STATE_DOWN,
+  LPC_ETH_STATE_UP
 } lpc_eth_state;
 
 typedef struct {
@@ -317,6 +317,7 @@ typedef struct {
   unsigned receive_interrupts;
   unsigned transmitted_frames;
   unsigned transmit_interrupts;
+  unsigned receive_drop_errors;
   unsigned receive_overrun_errors;
   unsigned receive_fragment_errors;
   unsigned receive_crc_errors;
@@ -332,13 +333,40 @@ typedef struct {
   unsigned transmit_no_descriptor_errors;
   unsigned transmit_overflow_errors;
   unsigned transmit_fatal_errors;
+  uint32_t phy_id;
+  rtems_vector_number interrupt_number;
+  rtems_id control_task;
 } lpc_eth_driver_entry;
 
-static lpc_eth_driver_entry lpc_eth_driver_data = {
-  .state = LPC_ETH_NOT_INITIALIZED,
-  .receive_task = RTEMS_ID_NONE,
-  .transmit_task = RTEMS_ID_NONE
-};
+static lpc_eth_driver_entry lpc_eth_driver_data;
+
+static void lpc_eth_control_request_complete(const lpc_eth_driver_entry *e)
+{
+  rtems_status_code sc = rtems_event_transient_send(e->control_task);
+  assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void lpc_eth_control_request(
+  lpc_eth_driver_entry *e,
+  rtems_id task,
+  rtems_event_set event
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  uint32_t nest_count = 0;
+
+  e->control_task = rtems_task_self();
+
+  sc = rtems_bsdnet_event_send(task, event);
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  nest_count = rtems_bsdnet_semaphore_release_recursive();
+  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  assert(sc == RTEMS_SUCCESSFUL);
+  rtems_bsdnet_semaphore_obtain_recursive(nest_count);
+
+  e->control_task = 0;
+}
 
 static inline uint32_t lpc_eth_increment(
   uint32_t value,
@@ -528,24 +556,31 @@ static void lpc_eth_receive_task(void *arg)
   uint32_t const index_max = e->rx_unit_count - 1;
   uint32_t produce_index = 0;
   uint32_t consume_index = 0;
-  uint32_t receive_index = 0;
 
   LPC_ETH_PRINTF("%s\n", __func__);
 
   /* Main event loop */
   while (true) {
-    bool wait_for_mbuf = false;
-
     /* Wait for events */
     sc = rtems_bsdnet_event_receive(
-      LPC_ETH_EVENT_INITIALIZE | LPC_ETH_EVENT_INTERRUPT,
+      LPC_ETH_EVENT_INITIALIZE
+        | LPC_ETH_EVENT_STOP
+        | LPC_ETH_EVENT_INTERRUPT,
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
     );
-    RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
+    assert(sc == RTEMS_SUCCESSFUL);
 
     LPC_ETH_PRINTF("rx: wake up: 0x%08" PRIx32 "\n", events);
+
+    /* Stop receiver? */
+    if ((events & LPC_ETH_EVENT_STOP) != 0) {
+      lpc_eth_control_request_complete(e);
+
+      /* Wait for events */
+      continue;
+    }
 
     /* Initialize receiver? */
     if ((events & LPC_ETH_EVENT_INITIALIZE) != 0) {
@@ -592,13 +627,14 @@ static void lpc_eth_receive_task(void *arg)
       /* Initialize indices */
       produce_index = lpc_eth->rxproduceindex;
       consume_index = lpc_eth->rxconsumeindex;
-      receive_index = consume_index;
 
       /* Enable receiver */
       lpc_eth->command |= ETH_CMD_RX_ENABLE;
 
       /* Enable receive interrupts */
       lpc_eth_enable_receive_interrupts();
+
+      lpc_eth_control_request_complete(e);
 
       /* Wait for events */
       continue;
@@ -611,49 +647,47 @@ static void lpc_eth_receive_task(void *arg)
       /* Get current produce index */
       produce_index = lpc_eth->rxproduceindex;
 
-      if (receive_index != produce_index) {
+      if (consume_index != produce_index) {
         uint32_t stat = 0;
-
-        /* Fragment mbuf */
-        struct mbuf *m = mbufs [receive_index];
 
         /* Fragment status */
         rtems_cache_invalidate_multiple_data_lines(
-          (void *) &status [receive_index],
+          (void *) &status [consume_index],
           sizeof(status [0])
         );
-        stat = status [receive_index].info;
-
-        /* Remove mbuf from table */
-        mbufs [receive_index] = NULL;
+        stat = status [consume_index].info;
 
         if (
           (stat & ETH_RX_STAT_LAST_FLAG) != 0
             && (stat & LPC_ETH_RX_STAT_ERRORS) == 0
         ) {
-          /* Ethernet header */
-          struct ether_header *eh = mtod(m, struct ether_header *);
+          /* Received mbuf */
+          struct mbuf *m = mbufs [consume_index];
 
-          /* Discard Ethernet header and CRC */
-          int sz = (int) (stat & ETH_RX_STAT_RXSIZE_MASK) + 1
-            - ETHER_HDR_LEN - ETHER_CRC_LEN;
+          if (lpc_eth_add_new_mbuf(ifp, desc, mbufs, consume_index, false)) {
+            /* Ethernet header */
+            struct ether_header *eh = mtod(m, struct ether_header *);
 
-          /* Update mbuf */
-          m->m_len = sz;
-          m->m_pkthdr.len = sz;
-          m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
+            /* Discard Ethernet header and CRC */
+            int sz = (int) (stat & ETH_RX_STAT_RXSIZE_MASK) + 1
+              - ETHER_HDR_LEN - ETHER_CRC_LEN;
 
-          LPC_ETH_PRINTF("rx: %02" PRIu32 ": %u\n", receive_index, sz);
+            /* Update mbuf */
+            m->m_len = sz;
+            m->m_pkthdr.len = sz;
+            m->m_data = mtod(m, char *) + ETHER_HDR_LEN;
 
-          /* Hand over */
-          ether_input(ifp, eh, m);
+            LPC_ETH_PRINTF("rx: %02" PRIu32 ": %u\n", consume_index, sz);
 
-          /* Increment received frames counter */
-          ++e->received_frames;
+            /* Hand over */
+            ether_input(ifp, eh, m);
+
+            /* Increment received frames counter */
+            ++e->received_frames;
+          } else {
+            ++e->receive_drop_errors;
+          }
         } else {
-          /* Release mbuf */
-          m_free(m);
-
           /* Update error counters */
           if ((stat & ETH_RX_STAT_OVERRUN) != 0) {
             ++e->receive_overrun_errors;
@@ -678,49 +712,16 @@ static void lpc_eth_receive_task(void *arg)
           }
         }
 
-        /* Increment receive index */
-        receive_index = lpc_eth_increment(receive_index, index_max);
+        /* Increment and update consume index */
+        consume_index = lpc_eth_increment(consume_index, index_max);
+        lpc_eth->rxconsumeindex = consume_index;
       } else {
         /* Nothing to do, enable receive interrupts */
         lpc_eth_enable_receive_interrupts();
         break;
       }
     }
-
-    /* Wait for mbuf? */
-    wait_for_mbuf =
-      lpc_eth_increment(produce_index, index_max) == consume_index;
-
-    /* Fill queue with new mbufs */
-    while (consume_index != produce_index) {
-      /* Add new mbuf to queue */
-      if (
-        !lpc_eth_add_new_mbuf(ifp, desc, mbufs, consume_index, wait_for_mbuf)
-      ) {
-        break;
-      }
-
-      /* We wait for at most one mbuf */
-      wait_for_mbuf = false;
-
-      /* Increment consume index */
-      consume_index = lpc_eth_increment(consume_index, index_max);
-
-      /* Update consume indices */
-      lpc_eth->rxconsumeindex = consume_index;
-    }
   }
-
-cleanup:
-
-  /* Clear task ID */
-  e->receive_task = RTEMS_ID_NONE;
-
-  /* Release network semaphore */
-  rtems_bsdnet_semaphore_release();
-
-  /* Terminate self */
-  (void) rtems_task_delete(RTEMS_SELF);
 }
 
 static struct mbuf *lpc_eth_next_fragment(
@@ -811,15 +812,24 @@ static void lpc_eth_transmit_task(void *arg)
     /* Wait for events */
     sc = rtems_bsdnet_event_receive(
       LPC_ETH_EVENT_INITIALIZE
-        | LPC_ETH_EVENT_START
+        | LPC_ETH_EVENT_STOP
+        | LPC_ETH_EVENT_TXSTART
         | LPC_ETH_EVENT_INTERRUPT,
       RTEMS_EVENT_ANY | RTEMS_WAIT,
       RTEMS_NO_TIMEOUT,
       &events
     );
-    RTEMS_CLEANUP_SC(sc, cleanup, "wait for events");
+    assert(sc == RTEMS_SUCCESSFUL);
 
     LPC_ETH_PRINTF("tx: wake up: 0x%08" PRIx32 "\n", events);
+
+    /* Stop transmitter? */
+    if ((events & LPC_ETH_EVENT_STOP) != 0) {
+      lpc_eth_control_request_complete(e);
+
+      /* Wait for events */
+      continue;
+    }
 
     /* Initialize transmitter? */
     if ((events & LPC_ETH_EVENT_INITIALIZE) != 0) {
@@ -869,6 +879,8 @@ static void lpc_eth_transmit_task(void *arg)
 
       /* Enable transmitter */
       lpc_eth->command |= ETH_CMD_TX_ENABLE;
+
+      lpc_eth_control_request_complete(e);
     }
 
     /* Free consumed fragments */
@@ -1065,30 +1077,26 @@ static void lpc_eth_transmit_task(void *arg)
       lpc_eth_enable_transmit_interrupts();
     }
   }
-
-cleanup:
-
-  /* Clear task ID */
-  e->transmit_task = RTEMS_ID_NONE;
-
-  /* Release network semaphore */
-  rtems_bsdnet_semaphore_release();
-
-  /* Terminate self */
-  (void) rtems_task_delete(RTEMS_SELF);
 }
 
-static void lpc_eth_mdio_wait_for_not_busy(void)
+static int lpc_eth_mdio_wait_for_not_busy(void)
 {
-  while ((lpc_eth->mind & ETH_MIND_BUSY) != 0) {
-    rtems_task_wake_after(2);
+  rtems_interval one_second = rtems_clock_get_ticks_per_second();
+  rtems_interval i = 0;
+
+  while ((lpc_eth->mind & ETH_MIND_BUSY) != 0 && i < one_second) {
+    rtems_task_wake_after(1);
+    ++i;
   }
+
+  return i != one_second ? 0 : ETIMEDOUT;
 }
 
 static uint32_t lpc_eth_mdio_read_anlpar(void)
 {
   uint32_t madr = ETH_MADR_REG(MII_ANLPAR) | ETH_MADR_PHY(DEFAULT_PHY);
   uint32_t anlpar = 0;
+  int eno = 0;
 
   if (lpc_eth->madr != madr) {
     lpc_eth->madr = madr;
@@ -1099,9 +1107,10 @@ static uint32_t lpc_eth_mdio_read_anlpar(void)
     lpc_eth->mcmd = ETH_MCMD_READ;
   }
 
-  lpc_eth_mdio_wait_for_not_busy();
-
-  anlpar = lpc_eth->mrdd;
+  eno = lpc_eth_mdio_wait_for_not_busy();
+  if (eno == 0) {
+    anlpar = lpc_eth->mrdd;
+  }
 
   /* Start next read */
   lpc_eth->mcmd = 0;
@@ -1111,7 +1120,7 @@ static uint32_t lpc_eth_mdio_read_anlpar(void)
 }
 
 static int lpc_eth_mdio_read(
-  int phy __attribute__((unused)),
+  int phy,
   void *arg __attribute__((unused)),
   unsigned reg,
   uint32_t *val
@@ -1123,8 +1132,11 @@ static int lpc_eth_mdio_read(
     lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
     lpc_eth->mcmd = 0;
     lpc_eth->mcmd = ETH_MCMD_READ;
-    lpc_eth_mdio_wait_for_not_busy();
-    *val = lpc_eth->mrdd;
+    eno = lpc_eth_mdio_wait_for_not_busy();
+
+    if (eno == 0) {
+      *val = lpc_eth->mrdd;
+    }
   } else {
     eno = EINVAL;
   }
@@ -1133,7 +1145,7 @@ static int lpc_eth_mdio_read(
 }
 
 static int lpc_eth_mdio_write(
-  int phy __attribute__((unused)),
+  int phy,
   void *arg __attribute__((unused)),
   unsigned reg,
   uint32_t val
@@ -1144,7 +1156,7 @@ static int lpc_eth_mdio_write(
   if (phy == -1 || phy == 0) {
     lpc_eth->madr = ETH_MADR_REG(reg) | ETH_MADR_PHY(DEFAULT_PHY);
     lpc_eth->mwtd = val;
-    lpc_eth_mdio_wait_for_not_busy();
+    eno = lpc_eth_mdio_wait_for_not_busy();
   } else {
     eno = EINVAL;
   }
@@ -1152,110 +1164,269 @@ static int lpc_eth_mdio_write(
   return eno;
 }
 
-static void lpc_eth_interface_init(void *arg)
+static int lpc_eth_phy_get_id(uint32_t *id)
 {
+  uint32_t id1 = 0;
+  int eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, MII_PHYIDR1, &id1);
+
+  if (eno == 0) {
+    uint32_t id2 = 0;
+
+    eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, MII_PHYIDR2, &id2);
+    if (eno == 0) {
+      *id = (id1 << 16) | (id2 & 0xfff0);
+    }
+  }
+
+  return eno;
+}
+
+#define PHY_KSZ80X1RNL 0x221550
+
+typedef struct {
+  unsigned reg;
+  uint32_t set;
+  uint32_t clear;
+} lpc_eth_phy_action;
+
+static int lpc_eth_phy_set_and_clear(
+  const lpc_eth_phy_action *actions,
+  size_t n
+)
+{
+  int eno = 0;
+  size_t i;
+
+  for (i = 0; eno == 0 && i < n; ++i) {
+    const lpc_eth_phy_action *action = &actions [i];
+    uint32_t val;
+
+    eno = lpc_eth_mdio_read(DEFAULT_PHY, NULL, action->reg, &val);
+    if (eno == 0) {
+      val |= action->set;
+      val &= ~action->clear;
+      eno = lpc_eth_mdio_write(DEFAULT_PHY, NULL, action->reg, val);
+    }
+  }
+
+  return eno;
+}
+
+static const lpc_eth_phy_action lpc_eth_phy_up_action_default [] = {
+  { MII_BMCR, 0, BMCR_PDOWN },
+  { MII_BMCR, BMCR_RESET, 0 },
+  { MII_BMCR, BMCR_AUTOEN, 0 }
+};
+
+static const lpc_eth_phy_action lpc_eth_phy_up_pre_action_KSZ80X1RNL [] = {
+  /* Disable slow oscillator mode */
+  { 0x11, 0, 0x10 }
+};
+
+static const lpc_eth_phy_action lpc_eth_phy_up_post_action_KSZ80X1RNL [] = {
+  /* Enable energy detect power down (EDPD) mode */
+  { 0x18, 0x0800, 0 },
+  /* Turn PLL of automatically in EDPD mode */
+  { 0x10, 0x10, 0 }
+};
+
+static int lpc_eth_phy_up(lpc_eth_driver_entry *e)
+{
+  int eno = lpc_eth_phy_get_id(&e->phy_id);
+
+  if (eno == 0) {
+    switch (e->phy_id) {
+      case PHY_KSZ80X1RNL:
+        eno = lpc_eth_phy_set_and_clear(
+          &lpc_eth_phy_up_pre_action_KSZ80X1RNL [0],
+          RTEMS_ARRAY_SIZE(lpc_eth_phy_up_pre_action_KSZ80X1RNL)
+        );
+        break;
+      case 0:
+      case 0xfffffff0:
+        eno = EIO;
+        break;
+      default:
+        break;
+    }
+
+    if (eno == 0) {
+      eno = lpc_eth_phy_set_and_clear(
+        &lpc_eth_phy_up_action_default [0],
+        RTEMS_ARRAY_SIZE(lpc_eth_phy_up_action_default)
+      );
+    }
+
+    if (eno == 0) {
+      switch (e->phy_id) {
+        case PHY_KSZ80X1RNL:
+          eno = lpc_eth_phy_set_and_clear(
+            &lpc_eth_phy_up_post_action_KSZ80X1RNL [0],
+            RTEMS_ARRAY_SIZE(lpc_eth_phy_up_post_action_KSZ80X1RNL)
+          );
+          break;
+        default:
+          break;
+      }
+    }
+  } else {
+    e->phy_id = 0;
+  }
+
+  return eno;
+}
+
+static const lpc_eth_phy_action lpc_eth_phy_down_action_default [] = {
+  { MII_BMCR, BMCR_PDOWN, 0 }
+};
+
+static const lpc_eth_phy_action lpc_eth_phy_down_post_action_KSZ80X1RNL [] = {
+  /* Enable slow oscillator mode */
+  { 0x11, 0x10, 0 }
+};
+
+static void lpc_eth_phy_down(lpc_eth_driver_entry *e)
+{
+  int eno = lpc_eth_phy_set_and_clear(
+    &lpc_eth_phy_down_action_default [0],
+    RTEMS_ARRAY_SIZE(lpc_eth_phy_down_action_default)
+  );
+
+  if (eno == 0) {
+    switch (e->phy_id) {
+      case PHY_KSZ80X1RNL:
+        eno = lpc_eth_phy_set_and_clear(
+          &lpc_eth_phy_down_post_action_KSZ80X1RNL [0],
+          RTEMS_ARRAY_SIZE(lpc_eth_phy_down_post_action_KSZ80X1RNL)
+        );
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+static void lpc_eth_soft_reset(void)
+{
+  lpc_eth->command = 0x38;
+  lpc_eth->mac1 = 0xcf00;
+  lpc_eth->mac1 = 0x0;
+}
+
+static int lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
+{
+  int eno = 0;
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) arg;
   struct ifnet *ifp = &e->arpcom.ac_if;
 
-  LPC_ETH_PRINTF("%s\n", __func__);
+  if (up && e->state == LPC_ETH_STATE_DOWN) {
 
-  if (e->state == LPC_ETH_INITIALIZED) {
     lpc_eth_config_module_enable();
-
-    /* Soft reset */
-
-    /* Do soft reset */
-    lpc_eth->command = 0x38;
-    lpc_eth->mac1 = 0xcf00;
-    lpc_eth->mac1 = 0x0;
 
     /* Initialize PHY */
     lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(0x7);
-    /* TODO */
+    eno = lpc_eth_phy_up(e);
 
-    /* Reinitialize registers */
-    lpc_eth->mac2 = 0x31;
-    lpc_eth->ipgt = 0x15;
-    lpc_eth->ipgr = 0x12;
-    lpc_eth->clrt = 0x370f;
-    lpc_eth->maxf = 0x0600;
-    lpc_eth->supp = ETH_SUPP_SPEED;
-    lpc_eth->test = 0;
-    #ifdef LPC_ETH_CONFIG_RMII
-      lpc_eth->command = 0x0600;
-    #else
-      lpc_eth->command = 0x0400;
-    #endif
-    lpc_eth->intenable = 0;
-    lpc_eth->intclear = 0x30ff;
-    lpc_eth->powerdown = 0;
+    if (eno == 0) {
+      /*
+       * We must have a valid external clock from the PHY at this point,
+       * otherwise the system bus hangs and only a watchdog reset helps.
+       */
+      lpc_eth_soft_reset();
 
-    /* MAC address */
-    lpc_eth->sa0 = ((uint32_t) e->arpcom.ac_enaddr [5] << 8)
-      | (uint32_t) e->arpcom.ac_enaddr [4];
-    lpc_eth->sa1 = ((uint32_t) e->arpcom.ac_enaddr [3] << 8)
-      | (uint32_t) e->arpcom.ac_enaddr [2];
-    lpc_eth->sa2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
-      | (uint32_t) e->arpcom.ac_enaddr [0];
+      /* Reinitialize registers */
+      lpc_eth->mac2 = 0x31;
+      lpc_eth->ipgt = 0x15;
+      lpc_eth->ipgr = 0x12;
+      lpc_eth->clrt = 0x370f;
+      lpc_eth->maxf = 0x0600;
+      lpc_eth->supp = ETH_SUPP_SPEED;
+      lpc_eth->test = 0;
+      #ifdef LPC_ETH_CONFIG_RMII
+        lpc_eth->command = 0x0600;
+      #else
+        lpc_eth->command = 0x0400;
+      #endif
+      lpc_eth->intenable = ETH_INT_RX_OVERRUN | ETH_INT_TX_UNDERRUN;
+      lpc_eth->intclear = 0x30ff;
+      lpc_eth->powerdown = 0;
 
-    /* Enable receiver */
-    lpc_eth->mac1 = 0x03;
+      /* MAC address */
+      lpc_eth->sa0 = ((uint32_t) e->arpcom.ac_enaddr [5] << 8)
+        | (uint32_t) e->arpcom.ac_enaddr [4];
+      lpc_eth->sa1 = ((uint32_t) e->arpcom.ac_enaddr [3] << 8)
+        | (uint32_t) e->arpcom.ac_enaddr [2];
+      lpc_eth->sa2 = ((uint32_t) e->arpcom.ac_enaddr [1] << 8)
+        | (uint32_t) e->arpcom.ac_enaddr [0];
 
-    /* Start receive task */
-    if (e->receive_task == RTEMS_ID_NONE) {
-      e->receive_task = rtems_bsdnet_newproc(
-        "ntrx",
-        4096,
-        lpc_eth_receive_task,
+      /* Enable receiver */
+      lpc_eth->mac1 = 0x03;
+
+      /* Initialize tasks */
+      lpc_eth_control_request(e, e->receive_task, LPC_ETH_EVENT_INITIALIZE);
+      lpc_eth_control_request(e, e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
+
+      /* Install interrupt handler */
+      sc = rtems_interrupt_handler_install(
+        e->interrupt_number,
+        "Ethernet",
+        RTEMS_INTERRUPT_UNIQUE,
+        lpc_eth_interrupt_handler,
         e
       );
-      sc = rtems_bsdnet_event_send(e->receive_task, LPC_ETH_EVENT_INITIALIZE);
-      RTEMS_SYSLOG_ERROR_SC(sc, "send receive initialize event");
+      assert(sc == RTEMS_SUCCESSFUL);
+
+      /* Start watchdog timer */
+      ifp->if_timer = 1;
+
+      /* Change state */
+      e->state = LPC_ETH_STATE_UP;
     }
 
-    /* Start transmit task */
-    if (e->transmit_task == RTEMS_ID_NONE) {
-      e->transmit_task = rtems_bsdnet_newproc(
-        "nttx",
-        4096,
-        lpc_eth_transmit_task,
-        e
-      );
-      sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_INITIALIZE);
-      RTEMS_SYSLOG_ERROR_SC(sc, "send transmit initialize event");
+    if (eno != 0) {
+      ifp->if_flags &= ~IFF_UP;
     }
+  } else if (!up && e->state == LPC_ETH_STATE_UP) {
+    /* Remove interrupt handler */
+    sc = rtems_interrupt_handler_remove(
+      e->interrupt_number,
+      lpc_eth_interrupt_handler,
+      e
+    );
+    assert(sc == RTEMS_SUCCESSFUL);
+
+    /* Stop tasks */
+    lpc_eth_control_request(e, e->receive_task, LPC_ETH_EVENT_STOP);
+    lpc_eth_control_request(e, e->transmit_task, LPC_ETH_EVENT_STOP);
+
+    lpc_eth_soft_reset();
+    lpc_eth_phy_down(e);
+    lpc_eth_config_module_disable();
+
+    /* Stop watchdog timer */
+    ifp->if_timer = 0;
 
     /* Change state */
-    if (
-      e->receive_task != RTEMS_ID_NONE && e->transmit_task != RTEMS_ID_NONE
-    ) {
-      e->state = LPC_ETH_STARTED;
-    }
+    e->state = LPC_ETH_STATE_DOWN;
   }
 
-  if (e->state == LPC_ETH_STARTED) {
-    /* Enable fatal interrupts */
-    lpc_eth->intenable = ETH_INT_RX_OVERRUN | ETH_INT_TX_UNDERRUN;
+  return eno;
+}
 
-    /* Enable promiscous mode */
-    lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
-
-    /* Start watchdog timer */
-    ifp->if_timer = 1;
-
-    /* Set interface to running state */
-    ifp->if_flags |= IFF_RUNNING;
-
-    /* Change state */
-    e->state = LPC_ETH_RUNNING;
-  }
+static void lpc_eth_interface_init(void *arg)
+{
+  /* Nothing to do */
 }
 
 static void lpc_eth_interface_stats(lpc_eth_driver_entry *e)
 {
-  int media = IFM_MAKEWORD(0, 0, 0, 0);
-  int eno = rtems_mii_ioctl(&e->mdio, e, SIOCGIFMEDIA, &media);
+  int eno = EIO;
+  int media = 0;
+
+  if (e->state == LPC_ETH_STATE_UP) {
+    media = IFM_MAKEWORD(0, 0, 0, 0);
+    eno = rtems_mii_ioctl(&e->mdio, e, SIOCGIFMEDIA, &media);
+  }
 
   rtems_bsdnet_semaphore_release();
 
@@ -1268,6 +1439,7 @@ static void lpc_eth_interface_stats(lpc_eth_driver_entry *e)
   printf("receive interrupts:                  %u\n", e->receive_interrupts);
   printf("transmitted frames:                  %u\n", e->transmitted_frames);
   printf("transmit interrupts:                 %u\n", e->transmit_interrupts);
+  printf("receive drop errors:                 %u\n", e->receive_drop_errors);
   printf("receive overrun errors:              %u\n", e->receive_overrun_errors);
   printf("receive fragment errors:             %u\n", e->receive_fragment_errors);
   printf("receive CRC errors:                  %u\n", e->receive_crc_errors);
@@ -1358,12 +1530,9 @@ static int lpc_eth_interface_ioctl(
       ether_ioctl(ifp, cmd, data);
       break;
     case SIOCSIFFLAGS:
-      if (ifp->if_flags & IFF_RUNNING) {
-        /* TODO: off */
-      }
-      if (ifp->if_flags & IFF_UP) {
-        ifp->if_flags |= IFF_RUNNING;
-        /* TODO: init */
+      eno = lpc_eth_up_or_down(e, (ifp->if_flags & IFF_UP) != 0);
+      if (eno == 0 && (ifp->if_flags & IFF_UP) != 0) {
+        lpc_eth_enable_promiscous_mode((ifp->if_flags & IFF_PROMISC) != 0);
       }
       break;
     case SIOCADDMULTI:
@@ -1388,46 +1557,51 @@ static void lpc_eth_interface_start(struct ifnet *ifp)
 
   ifp->if_flags |= IFF_OACTIVE;
 
-  sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_START);
-  RTEMS_SYSLOG_ERROR_SC(sc, "send transmit start event");
+  if (e->state == LPC_ETH_STATE_UP) {
+    sc = rtems_bsdnet_event_send(e->transmit_task, LPC_ETH_EVENT_TXSTART);
+    assert(sc == RTEMS_SUCCESSFUL);
+  }
 }
 
-static void lpc_eth_interface_watchdog(struct ifnet *ifp __attribute__((unused)))
+static void lpc_eth_interface_watchdog(struct ifnet *ifp)
 {
   lpc_eth_driver_entry *e = (lpc_eth_driver_entry *) ifp->if_softc;
-  uint32_t anlpar = lpc_eth_mdio_read_anlpar();
 
-  if (e->anlpar != anlpar) {
-    bool full_duplex = false;
-    bool speed = false;
+  if (e->state == LPC_ETH_STATE_UP) {
+    uint32_t anlpar = lpc_eth_mdio_read_anlpar();
 
-    e->anlpar = anlpar;
+    if (e->anlpar != anlpar) {
+      bool full_duplex = false;
+      bool speed = false;
 
-    if ((anlpar & ANLPAR_TX_FD) != 0) {
-      full_duplex = true;
-      speed = true;
-    } else if ((anlpar & ANLPAR_T4) != 0) {
-      speed = true;
-    } else if ((anlpar & ANLPAR_TX) != 0) {
-      speed = true;
-    } else if ((anlpar & ANLPAR_10_FD) != 0) {
-      full_duplex = true;
+      e->anlpar = anlpar;
+
+      if ((anlpar & ANLPAR_TX_FD) != 0) {
+        full_duplex = true;
+        speed = true;
+      } else if ((anlpar & ANLPAR_T4) != 0) {
+        speed = true;
+      } else if ((anlpar & ANLPAR_TX) != 0) {
+        speed = true;
+      } else if ((anlpar & ANLPAR_10_FD) != 0) {
+        full_duplex = true;
+      }
+
+      if (full_duplex) {
+        lpc_eth->mac2 |= ETH_MAC2_FULL_DUPLEX;
+      } else {
+        lpc_eth->mac2 &= ~ETH_MAC2_FULL_DUPLEX;
+      }
+
+      if (speed) {
+        lpc_eth->supp |= ETH_SUPP_SPEED;
+      } else {
+        lpc_eth->supp &= ~ETH_SUPP_SPEED;
+      }
     }
 
-    if (full_duplex) {
-      lpc_eth->mac2 |= ETH_MAC2_FULL_DUPLEX;
-    } else {
-      lpc_eth->mac2 &= ~ETH_MAC2_FULL_DUPLEX;
-    }
-
-    if (speed) {
-      lpc_eth->supp |= ETH_SUPP_SPEED;
-    } else {
-      lpc_eth->supp &= ~ETH_SUPP_SPEED;
-    }
+    ifp->if_timer = WATCHDOG_TIMEOUT;
   }
-
-  ifp->if_timer = WATCHDOG_TIMEOUT;
 }
 
 static unsigned lpc_eth_fixup_unit_count(int count, int default_value, int max)
@@ -1444,7 +1618,6 @@ static unsigned lpc_eth_fixup_unit_count(int count, int default_value, int max)
 
 static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   lpc_eth_driver_entry *e = &lpc_eth_driver_data;
   struct ifnet *ifp = &e->arpcom.ac_if;
   char *unit_name = NULL;
@@ -1455,17 +1628,16 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
 
   /* Check parameter */
   if (unit_index < 0) {
-    RTEMS_SYSLOG_ERROR("parse error for interface name\n");
     return 0;
   }
   if (unit_index != 0) {
-    RTEMS_DO_CLEANUP(cleanup, "unexpected unit number");
+    goto cleanup;
   }
   if (config->hardware_address == NULL) {
-    RTEMS_DO_CLEANUP(cleanup, "MAC address missing");
+    goto cleanup;
   }
-  if (e->state != LPC_ETH_NOT_INITIALIZED) {
-    RTEMS_DO_CLEANUP(cleanup, "already attached");
+  if (e->state != LPC_ETH_STATE_NOT_INITIALIZED) {
+    goto cleanup;
   }
 
   /* MDIO */
@@ -1496,18 +1668,8 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
   );
   config->xbuf_count = (int) e->tx_unit_count;
 
-  /* Disable interrupts */
-  lpc_eth->intenable = 0;
-
-  /* Install interrupt handler */
-  sc = rtems_interrupt_handler_install(
-    config->irno,
-    "Ethernet",
-    RTEMS_INTERRUPT_UNIQUE,
-    lpc_eth_interrupt_handler,
-    e
-  );
-  RTEMS_CLEANUP_SC(sc, cleanup, "install interrupt handler");
+  /* Remember interrupt number */
+  e->interrupt_number = config->irno;
 
   /* Copy MAC address */
   memcpy(e->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
@@ -1524,7 +1686,7 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
         + LPC_ETH_CONFIG_TX_BUF_SIZE);
   table_area = lpc_eth_config_alloc_table_area(table_area_size);
   if (table_area == NULL) {
-    RTEMS_DO_CLEANUP(cleanup, "no memory for table area");
+    goto cleanup;
   }
   memset(table_area, 0, table_area_size);
 
@@ -1565,8 +1727,23 @@ static int lpc_eth_attach(struct rtems_bsdnet_ifconfig *config)
   ifp->if_snd.ifq_maxlen = ifqmaxlen;
   ifp->if_timer = 0;
 
+  /* Create tasks */
+  e->receive_task = rtems_bsdnet_newproc(
+    "ntrx",
+    4096,
+    lpc_eth_receive_task,
+    e
+  );
+  e->transmit_task = rtems_bsdnet_newproc(
+    "nttx",
+    4096,
+    lpc_eth_transmit_task,
+    e
+  );
+
   /* Change status */
-  e->state = LPC_ETH_INITIALIZED;
+  ifp->if_flags |= IFF_RUNNING;
+  e->state = LPC_ETH_STATE_DOWN;
 
   /* Attach the interface */
   if_attach(ifp);

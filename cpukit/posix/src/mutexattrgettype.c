@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function gets the Mutex Type Attribute
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

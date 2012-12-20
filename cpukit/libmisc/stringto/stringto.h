@@ -15,6 +15,12 @@
 
 #ifndef _RTEMS_STRINGTO_H
 #define _RTEMS_STRINGTO_H
+/**
+ *  @defgroup libmisc_conv_help Conversion Helpers
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 
 #include <rtems.h>
 
@@ -248,3 +254,4 @@ rtems_status_code rtems_string_to_long_double(
 );
 
 #endif
+/**@}*/

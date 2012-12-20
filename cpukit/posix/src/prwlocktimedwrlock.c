@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function applies a Write lock to RWLock referenced by rwlock 
+ * @ingroup POSIX
+ */
+
 /*
  *  POSIX RWLock Manager -- Attempt to Obtain a Write Lock on a RWLock Instance
  *

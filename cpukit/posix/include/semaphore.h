@@ -21,6 +21,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup POSIX_SEMAPHORE POSIX Semaphores Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Private Support Information for POSIX Semaphores
+ */
+
 #include <unistd.h>
 
 #if defined(_POSIX_SEMAPHORES)
@@ -46,7 +54,9 @@ int sem_init(
   unsigned int   value
 );
 
-/*
+/**
+ *  @brief Destroy an Unnamed Semaphore
+ *
  *  11.2.2 Destroy an Unnamed Semaphore, P1003.1b-1993, p.220
  */
 int sem_destroy(
@@ -64,52 +74,73 @@ sem_t *sem_open(
   ...
 );
 
-/*
- *  11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
+/**
+ * @brief Close a Named Semaphore
+ *
+ * Routine to close a semaphore that has been opened or initialized.
+ *
+ * 11.2.4 Close a Named Semaphore, P1003.1b-1993, p.224
  */
 int sem_close(
   sem_t *sem
 );
 
-/*
- *  11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
+/**
+ * @brief Remove a Named Semaphore
+ *
+ * Unlinks a named semaphore, sem_close must also be called to remove
+ * the semaphore.
+ *
+ * 11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
  */
 int sem_unlink(
   const char *name
 );
 
-/*
+/**
+ *  @brief Lock a Semaphore
+ *
  *  11.2.6 Lock a Semaphore, P1003.1b-1993, p.226
  *
- *  NOTE: P1003.4b/D8 adds sem_timedwait(), p. 27
+ *  @note P1003.4b/D8 adds sem_timedwait(), p. 27
  */
 int sem_wait(
   sem_t *sem
 );
 
+/**
+ *  @brief Lock a Semaphore
+ *
+ *  @see sem_wait()
+ */
 int sem_trywait(
   sem_t *sem
 );
 
 #if defined(_POSIX_TIMEOUTS)
+/**
+ *  @brief Lock a Semaphore
+ */
 int sem_timedwait(
   sem_t                 *sem,
   const struct timespec *timeout
 );
 #endif
 
-/*
+/**
+ *  @brief Unlock a Semaphore
+ *
  *  11.2.7 Unlock a Semaphore, P1003.1b-1993, p.227
  */
-
 int sem_post(
   sem_t  *sem
 );
 
-/*
- *  11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
+/**
+ * @brief Get the Value of a Semaphore
+ *
+ * 11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
  */
-
 int sem_getvalue(
   sem_t  *sem,
   int    *sval

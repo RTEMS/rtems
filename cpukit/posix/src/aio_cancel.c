@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Cancel Asynchronous I/O Operation
+ *  @ingroup POSIX_AIO
+ */
+
 /*
  * Copyright 2010, Alin Rus <alin.codejunkie@gmail.com> 
  * 
@@ -16,23 +23,6 @@
 #include <stdlib.h>
 #include <rtems/system.h>
 #include <rtems/seterr.h>
-
-/* 
- *  aio_cancel
- *
- * Cancel an asynchronous I/O request
- *
- *  Input parameters:
- *        fildes - file descriptor
- *        aiocbp - asynchronous I/O control block
- *
- *  Output parameters: 
- *        AIO_CANCELED    - if the requested operation(s)
- *                          were canceled
- *        AIO_NOTCANCELED - if at least one of the requested
- *                          operation(s) cannot be canceled
- */
-
 
 int aio_cancel(int fildes, struct aiocb  *aiocbp)
 {

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief POSIX Error Translation in Message Queue
+ * @ingroup POSIX
+ */
+
 /*
  *  POSIX Message Queue Error Translation
  *

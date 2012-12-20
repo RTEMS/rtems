@@ -71,6 +71,11 @@ extern "C" {
   }
 #endif
 
+static void lpc_eth_config_module_disable(void)
+{
+  LPC32XX_MAC_CLK_CTRL = 0;
+}
+
 #define LPC_ETH_CONFIG_USE_TRANSMIT_DMA
 
 static char *lpc_eth_config_alloc_table_area(size_t size)

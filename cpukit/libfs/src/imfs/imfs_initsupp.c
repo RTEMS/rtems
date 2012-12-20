@@ -1,6 +1,11 @@
-/*
- *  IMFS Initialization
+/**
+ * @file
  *
+ * @brief IMFS Node Support
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

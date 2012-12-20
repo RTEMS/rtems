@@ -1,9 +1,11 @@
+/**
+ * @file
+ *
+ * @brief IMFS Rename
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_rename
- *
- *  The following rouine creates a new link node under parent with the
- *  name given in name and removes the old.
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

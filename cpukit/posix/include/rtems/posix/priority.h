@@ -17,6 +17,14 @@
 #ifndef _RTEMS_POSIX_PRIORITY_H
 #define _RTEMS_POSIX_PRIORITY_H
 
+/**
+ * @defgroup POSIX_PRIORITY POSIX Priority Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Interface to the POSIX Priority Implementation
+ */
+
 #include <rtems/score/priority.h>
 
 /**
@@ -44,6 +52,8 @@
 #define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
 
 /**
+ *  @brief POSIX Is Priority Valid
+ * 
  *  1003.1b-1993,2.2.2.80 definition of priority, p. 19
  *
  *  "Numerically higher values represent higher priorities."

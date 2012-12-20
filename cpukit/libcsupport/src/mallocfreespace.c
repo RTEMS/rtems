@@ -1,7 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief RTEMS Malloc Get Free Information
+ *  @ingroup libcsupport
+ */
+
 /*
- *  RTEMS Malloc Get Free Information
- *
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

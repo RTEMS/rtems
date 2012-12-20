@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief POSIX Signals Manager Initialization
+ *  @ingroup POSIX_SIGNALS
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
@@ -161,10 +168,6 @@ static void _POSIX_signals_Post_switch_hook(
 API_extensions_Post_switch_control _POSIX_signals_Post_switch = {
   .hook = _POSIX_signals_Post_switch_hook
 };
-
-/*
- *  _POSIX_signals_Manager_Initialization
- */
 
 void _POSIX_signals_Manager_Initialization(void)
 {

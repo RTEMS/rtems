@@ -1,6 +1,11 @@
-/*
- *  MSDOS directory handlers implementation
+/**
+ * @file
  *
+ * @brief MSDOS Directory Handlers Implementation
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

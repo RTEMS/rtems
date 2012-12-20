@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Lock a Semaphore
+ * @ingroup POSIX_SEMAPHORE POSIX Semaphores Support
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).

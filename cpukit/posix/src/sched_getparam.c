@@ -1,6 +1,11 @@
-/*
- *  13.3.2 Set Scheduling Parameters, P1003.1b-1993, p. 253
+/**
+ * @file
  *
+ * @brief Set Scheduling Parameters
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,6 +24,9 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 
+/**
+ * 13.3.2 Set Scheduling Parameters, P1003.1b-1993, p. 253
+ */
 int sched_getparam(
   pid_t                     pid __attribute__((unused)),
   struct sched_param       *param __attribute__((unused))

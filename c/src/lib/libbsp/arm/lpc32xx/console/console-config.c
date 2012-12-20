@@ -28,14 +28,14 @@
 
 extern console_fns lpc32xx_hsu_fns;
 
-static uint8_t lpc32xx_uart_get_register(uint32_t addr, uint8_t i)
+static uint8_t lpc32xx_uart_get_register(uintptr_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
   return (uint8_t) reg [i];
 }
 
-static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *) addr;
 
@@ -47,6 +47,7 @@ static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
   {
     LPC32XX_UARTCLK_CTRL |= 1U << 0;
     LPC32XX_U3CLK = LPC32XX_CONFIG_U3CLK;
+    LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 4, 5);
 
     return true;
   }
@@ -55,8 +56,17 @@ static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
 #ifdef LPC32XX_UART_4_BAUD
   static bool lpc32xx_uart_probe_4(int minor)
   {
+    volatile lpc32xx_gpio *gpio = &lpc32xx.gpio;
+
+    /*
+     * Set GPO_21/U4_TX/LCDVD[3] to U4_TX.  This works only if LCD module is
+     * disabled.
+     */
+    gpio->p2_mux_set = BSP_BIT32(2);
+
     LPC32XX_UARTCLK_CTRL |= 1U << 1;
     LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
+    LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 6, 7);
 
     return true;
   }
@@ -67,6 +77,7 @@ static void lpc32xx_uart_set_register(uint32_t addr, uint8_t i, uint8_t val)
   {
     LPC32XX_UARTCLK_CTRL |= 1U << 3;
     LPC32XX_U6CLK = LPC32XX_CONFIG_U6CLK;
+    LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 10, 11);
 
     return true;
   }

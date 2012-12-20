@@ -1,6 +1,11 @@
-/*
- * pipe.c: anonymous pipe
+/**
+ * @file
  *
+ * @brief Create an Anonymous Pipe
+ * @ingroup FIFO_PIPE
+ */
+
+/*
  * Author: Wei Shen <cquark@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -22,9 +27,6 @@
 /* FIXME: This approach is questionable */
 static uint16_t rtems_pipe_no = 0;
 
-/*
- * Called by pipe() to create an anonymous pipe.
- */
 int pipe_create(
   int filsdes[2]
 )

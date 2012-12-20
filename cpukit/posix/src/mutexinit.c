@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Initialize a Mutex
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -21,11 +28,11 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*
- *  11.3.2 Initializing and Destroying a Mutex, P1003.1c/Draft 10, p. 87
+/**
+ * 11.3.2 Initializing and Destroying a Mutex, P1003.1c/Draft 10, p. 87
  *
- *  NOTE:  XXX Could be optimized so all the attribute error checking
- *             is not performed when attr is NULL.
+ * NOTE:  XXX Could be optimized so all the attribute error checking
+ *            is not performed when attr is NULL.
  */
 
 int pthread_mutex_init(

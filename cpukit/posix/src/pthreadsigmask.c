@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Examine and/or change the calling thread's signal mask
+ * @ingroup POSIX
+ */
+
 /*
  *  3.3.5 Examine and Change Blocked Signals, P1003.1b-1993, p. 73
  *

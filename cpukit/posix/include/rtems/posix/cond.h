@@ -148,15 +148,14 @@ int _POSIX_Condition_variables_Signal_support(
   bool                       is_broadcast
 );
 
-/*
- *  _POSIX_Condition_variables_Wait_support
+/**
+ * @brief POSIX Condition Variables Wait Support
  *
- *  DESCRIPTION:
+ * DESCRIPTION:
  *
- *  A support routine which implements guts of the blocking, non-blocking, and
- *  timed wait version of condition variable wait routines.
+ * A support routine which implements guts of the blocking, non-blocking, and
+ * timed wait version of condition variable wait routines.
  */
-
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,

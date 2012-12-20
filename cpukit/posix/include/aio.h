@@ -23,6 +23,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup POSIX_AIO POSIX Asynchronous I/O Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief POSIX Asynchronous Input and Output
+ */
+
 #if defined(_POSIX_ASYNCHRONOUS_IO)
 
 /*
@@ -126,10 +134,18 @@ ssize_t aio_return(
   const struct aiocb  *aiocbp
 );
 
-/*
+/**
+ *  @brief Cancel Asynchronous I/O Operation
+ * 
  *  6.7.7 Cancel Asynchronous I/O Operation, P1003.1b-1993, p. 163
+ * 
+ *  @param[in] filedes is the file descriptor
+ *  @param[in] aiocbp is the asynchronous I/O control block
+ * 
+ *  @return This method returns AIO_CANCELED if the requested operation(s)
+ *          were canceled. Otherwise, AIO_NOTCANCELED is returned indicating
+ *          that at least one of the requested operation(s) cannot be canceled
  */
-
 int aio_cancel(
   int            filedes,
   struct aiocb  *aiocbp

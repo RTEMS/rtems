@@ -1,6 +1,11 @@
-/*
- *  MSDOS directory handlers implementation
+/**
+ * @file
  *
+ * @brief Remove Node from MSDOS Directory
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

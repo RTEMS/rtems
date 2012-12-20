@@ -1,6 +1,11 @@
-/*
- *  execve() - POSIX 1003.1b 3.1.2
+/**
+ *  @file
  *
+ *  @brief Execute a Program
+ *  @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,6 +23,9 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 
+/**
+ *  POSIX 1003.1b 3.1.2
+ */
 int execve(
   const char *path,
   char *const argv[],

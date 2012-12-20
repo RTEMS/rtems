@@ -1,6 +1,11 @@
-/*
- *  3.3.8 Synchronously Accept a Signal, P1003.1b-1993, p. 76
+/**
+ *  @file
  *
+ *  @brief Wait for Queued Signals
+ *  @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -58,6 +63,9 @@ found_it:
   return signo;
 }
 
+/**
+ *  3.3.8 Synchronously Accept a Signal, P1003.1b-1993, p. 76
+ */
 int sigtimedwait(
   const sigset_t         *set,
   siginfo_t              *info,

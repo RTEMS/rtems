@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Thread-Specific Data Key Create
+ *  @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
@@ -21,10 +28,9 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
 
-/*
+/**
  *  17.1.1 Thread-Specific Data Key Create, P1003.1c/Draft 10, p. 163
  */
-
 int pthread_key_create(
   pthread_key_t  *key,
   void          (*destructor)( void * )

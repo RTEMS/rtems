@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Get the Value of a Semaphore
+ * @ingroup POSIX_SEMAPHORE
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -24,10 +31,6 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
-
-/*
- *  11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
- */
 
 int sem_getvalue(
   sem_t  *sem,

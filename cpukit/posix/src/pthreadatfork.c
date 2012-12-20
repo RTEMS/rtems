@@ -1,15 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Register Fork Handlers
+ *  @ingroup POSIX
+ */
+
 /*
- *  pthread_atfork() - POSIX 1003.1b 3.1.3
- *
- *  3.1.3 Register Fork Handlers, P1003.1c/Draft 10, P1003.1c/Draft 10, p. 27
- *
- *  RTEMS does not support processes, so we fall under this and do not
- *  provide this routine:
- *
- *  "Either the implementation shall support the pthread_atfork() function
- *   as described above or the pthread_atfork() funciton shall not be
- *   provided."
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -27,6 +23,18 @@
 #include <errno.h>
 #include <rtems/seterr.h>
 
+/**
+ *  POSIX 1003.1b 3.1.3
+ *
+ *  3.1.3 Register Fork Handlers, P1003.1c/Draft 10, P1003.1c/Draft 10, p. 27
+ *
+ *  RTEMS does not support processes, so we fall under this and do not
+ *  provide this routine:
+ *
+ *  "Either the implementation shall support the pthread_atfork() function
+ *   as described above or the pthread_atfork() funciton shall not be
+ *   provided."
+ */
 int pthread_atfork(
   void (*prepare)(void) __attribute__((unused)),
   void (*parent)(void) __attribute__((unused)),

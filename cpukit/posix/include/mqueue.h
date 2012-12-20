@@ -2,6 +2,18 @@
  * @file mqueue.h
  *
  * This file contains the definitions related to POSIX Message Queues.
+ * 
+ * The structure of the routines is identical to that of POSIX
+ * Message_queues to leave the option of having unnamed message
+ * queues at a future date.  They are currently not part of the
+ * POSIX standard but unnamed message_queues are.  This is also
+ * the reason for the apparently unnecessary tracking of
+ * the process_shared attribute.  [In addition to the fact that
+ * it would be trivial to add pshared to the mq_attr structure
+ * and have process private message queues.]
+ *
+ * This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
+ * time.
  */
 
 /*
@@ -115,6 +127,13 @@ int mq_send(
 
 #include <time.h>
 
+/**
+ *  @brief Send a Message to a Message Queue
+ * 
+ *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
+ *
+ *  @note P1003.4b/D8, p. 45 adds mq_timedsend().
+ */
 int mq_timedsend(
   mqd_t                  mqdes,
   const char            *msg_ptr,
@@ -125,12 +144,13 @@ int mq_timedsend(
 
 #endif /* _POSIX_TIMEOUTS */
 
-/*
+/**
+ *  @brief Receive a Message From a Message Queue 
+ * 
  *  15.2.5 Receive a Message From a Message Queue, P1003.1b-1993, p. 279
  *
- *  NOTE: P1003.4b/D8, p. 45 adds mq_timedreceive().
+ *  @note P1003.4b/D8, p. 45 adds mq_timedreceive().
  */
-
 ssize_t mq_receive(
   mqd_t         mqdes,
   char         *msg_ptr,
@@ -152,11 +172,12 @@ ssize_t mq_timedreceive(
 
 #if defined(_POSIX_REALTIME_SIGNALS)
 
-/*
- *  15.2.6 Notify Process that a Message is Available on a Queue,
- *         P1003.1b-1993, p. 280
+/**
+ * @brief Notify Process that a Message is Available on a Queue
+ *
+ * 15.2.6 Notify Process that a Message is Available on a Queue,
+ *        P1003.1b-1993, p. 280
  */
-
 int mq_notify(
   mqd_t                  mqdes,
   const struct sigevent *notification
@@ -164,10 +185,11 @@ int mq_notify(
 
 #endif /* _POSIX_REALTIME_SIGNALS */
 
-/*
- *  15.2.7 Set Message Queue Attributes, P1003.1b-1993, p. 281
+/**
+ * @brief Set Message Queue Attributes
+ *
+ * 15.2.7 Set Message Queue Attributes, P1003.1b-1993, p. 281
  */
-
 int mq_setattr(
   mqd_t                 mqdes,
   const struct mq_attr *mqstat,

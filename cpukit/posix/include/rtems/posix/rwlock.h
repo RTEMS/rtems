@@ -27,6 +27,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup POSIX_RWLOCK POSIX RWLock Manager
+ *
+ * @ingroup POSIX
+ *
+ * @brief Constants and Structures Associated with the POSIX RWLock Manager
+ */
+
 #include <rtems/score/object.h>
 #include <rtems/score/corerwlock.h>
 
@@ -60,7 +68,7 @@ POSIX_EXTERN Objects_Information  _POSIX_RWLock_Information;
 void _POSIX_RWLock_Manager_initialization(void);
 
 /**
- *  @brief _POSIX_RWLock_Translate_core_RWLock_return_code (
+ *  @brief POSIX RWLock Translate Core RWLock Return Code
  *
  *  This routine translates SuperCore RWLock status codes into the
  *  corresponding POSIX ones.

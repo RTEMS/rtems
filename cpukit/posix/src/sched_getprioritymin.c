@@ -1,6 +1,11 @@
-/*
- *  13.3.6 Get Scheduling Parameter Limits, P1003.1b-1993, p. 258
+/**
+ *  @file
  *
+ *  @brief Get the Minimum Priority Limit 
+ *  @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,6 +25,9 @@
 #include <rtems/seterr.h>
 #include <rtems/posix/priority.h>
 
+/**
+ *  13.3.6 Get Scheduling Parameter Limits, P1003.1b-1993, p. 258
+ */
 int sched_get_priority_min(
   int  policy
 )

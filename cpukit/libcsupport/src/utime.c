@@ -1,6 +1,11 @@
-/*
- *  utime() - POSIX 1003.1b 5.5.6 - Set File Access and Modification Times
+/**
+ *  @file
  *
+ *  @brief Set File Access and Modification Times
+ *  @ingroup libcsupport
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -20,6 +25,9 @@
 
 #include <rtems/libio_.h>
 
+/**
+ *  POSIX 1003.1b 5.5.6 - Set File Access and Modification Times
+ */
 int utime( const char *path, const struct utimbuf *times )
 {
   int rv = 0;

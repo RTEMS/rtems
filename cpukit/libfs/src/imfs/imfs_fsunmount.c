@@ -1,6 +1,11 @@
-/*
- *  IMFS Initialization
+/**
+ * @file
  *
+ * @brief Unmount this Instance of IMFS
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,10 +19,6 @@
 #endif
 
 #include "imfs.h"
-
-/*
- *  IMFS_fsunmount
- */
 
 #define jnode_get_control( jnode ) \
   (&jnode->info.directory.Entries)

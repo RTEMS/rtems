@@ -17,9 +17,19 @@
 #ifndef _RTEMS_POSIX_SEMAPHORE_H
 #define _RTEMS_POSIX_SEMAPHORE_H
 
+/**
+ *  @defgroup POSIX_SEMAPHORES Semaphore
+ *
+ *  @ingroup POSIX
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @ingroup POSIX_SEMAPHORE
+ */
 
 #include <semaphore.h>
 #include <rtems/score/coresem.h>
@@ -134,20 +144,19 @@ int _POSIX_Semaphore_Create_support(
   POSIX_Semaphore_Control  **the_sem
 );
 
-/*
- *  _POSIX_Semaphore_Delete
+/**
+ *  @brief POSIX Delete Semaphore
  *
  *  DESCRIPTION:
  *
  *  This routine supports the sem_close and sem_unlink routines.
  */
-
 void _POSIX_Semaphore_Delete(
   POSIX_Semaphore_Control *the_semaphore
 );
 
 /*
- *  _POSIX_Semaphore_Wait_support
+ *  @brief POSIX Semaphore Wait Support
  *
  *  DESCRIPTION:
  *

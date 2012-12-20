@@ -1,6 +1,11 @@
-/*
- *  16.1.7 Compare Thread IDs, p1003.1c/Draft 10, p. 153
+/**
+ * @file
  *
+ * @brief Compare Thread IDs
+ * @ingroup POSIX
+ */
+
+/*
  *  NOTE:  POSIX does not define the behavior when either thread id is invalid.
  *
  *  COPYRIGHT (c) 1989-2007.

@@ -1,6 +1,11 @@
-/*
- *  13.5.1 Thread Creation Scheduling Attributes, P1003.1c/Draft 10, p. 120
+/**
+ * @file
  *
+ * @brief Thread Creation Scheduling Attributes
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

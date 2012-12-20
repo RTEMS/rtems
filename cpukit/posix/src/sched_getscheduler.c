@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Returns Scheduling Policy of the process specified by pid
+ * @ingroup POSIX
+ */
+
 /*
  *  13.3.4 Get Scheduling Policy, P1003.1b-1993, p. 256
  *

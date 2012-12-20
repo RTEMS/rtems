@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function sets Current pshared Attribute for Mutex Attributes Object
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

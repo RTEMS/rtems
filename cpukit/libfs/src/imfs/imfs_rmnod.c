@@ -1,9 +1,11 @@
+/**
+ * @file
+ *
+ * @brief IMFS Node Removal Handler
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS Node Removal Handler
- *
- *  This file contains the handler used to remove a node when a file type
- *  does not require special actions.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

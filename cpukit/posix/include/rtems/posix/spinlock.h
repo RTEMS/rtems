@@ -27,6 +27,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup POSIX_SPINLOCK POSIX Spinlock Support
+ *
+ * @ingroup POSIX
+ *
+ * @brief Constants and Structures Associated with the POSIX Spinlock Manager
+ */
+
 #include <rtems/score/object.h>
 #include <rtems/score/corespinlock.h>
 
@@ -60,7 +68,7 @@ POSIX_EXTERN Objects_Information  _POSIX_Spinlock_Information;
 void _POSIX_Spinlock_Manager_initialization(void);
 
 /**
- *  @brief _POSIX_Spinlock_Translate_core_spinlock_return_code (
+ *  @brief POSIX Spinlock Translate Core Spinlock Return Code
  *
  *  This routine translates SuperCore Spinlock status codes into the
  *  corresponding POSIX ones.

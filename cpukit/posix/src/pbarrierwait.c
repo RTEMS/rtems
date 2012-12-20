@@ -1,6 +1,11 @@
-/*
- *  POSIX Barrier Manager -- Wait at a Barrier
+/**
+ * @file
  *
+ * @brief Wait at a Barrier
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,18 +24,14 @@
 #include <rtems/system.h>
 #include <rtems/posix/barrier.h>
 
-/*
- *  pthread_barrier_wait
+/**
+ * This directive allows a thread to wait at a barrier.
  *
- *  This directive allows a thread to wait at a barrier.
+ * @param[in] barrier is the barrier id
  *
- *  Input parameters:
- *    barrier    - barrier id
- *
- *  Output parameters:
- *    0                             - if successful
- *    PTHREAD_BARRIER_SERIAL_THREAD - if successful
- *    error code                    - if unsuccessful
+ * @retval 0 if successful
+ * @retval PTHREAD_BARRIER_SERIAL_THREAD if successful
+ * @retval error_code if unsuccessful
  */
 
 int pthread_barrier_wait(

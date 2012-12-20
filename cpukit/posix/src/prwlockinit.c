@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Allocate resources to use the read-write lock and Initialize it
+ * @ingroup POSIX
+ */
+
 /*
  *  POSIX RWLock Manager -- Destroy a RWLock Instance
  *

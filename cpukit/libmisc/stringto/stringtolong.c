@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Convert String to Long (with validation)
+ * @ingroup libmisc_conv_help Conversion Helpers
+ */
+
 /*
  *  COPYRIGHT (c) 2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -47,7 +54,7 @@ rtems_status_code rtems_string_to_long (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( ( errno == ERANGE ) && 
+  if ( ( errno == ERANGE ) &&
     (( result == 0 ) || ( result == LONG_MAX ) || ( result == LONG_MIN )))
       return RTEMS_INVALID_NUMBER;
 

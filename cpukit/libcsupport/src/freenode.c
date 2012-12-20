@@ -1,6 +1,10 @@
-/*
- *  freenode()
+/**
+ *  @file
  *
+ *  @brief Releases all Resources of a Location
+ *  @ingroup LibIOInternal
+ */
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

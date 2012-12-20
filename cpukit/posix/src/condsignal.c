@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Signal a Condition 
+ *  @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -22,10 +29,9 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/mutex.h>
 
-/*
+/**
  *  11.4.3 Broadcasting and Signaling a Condition, P1003.1c/Draft 10, p. 101
  */
-
 int pthread_cond_signal(
   pthread_cond_t   *cond
 )

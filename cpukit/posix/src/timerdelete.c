@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Deletes a POSIX Interval Timer
+ * @ingroup POSIX
+ */
+
 /*
  *  14.2.3 Delete a Per_process Timer, P1003.1b-1993, p. 266
  *

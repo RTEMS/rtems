@@ -3,7 +3,9 @@
  *
  * @brief POSIX termios implementation for RTEMS console device driver.
  *
- * http://pubs.opengroup.org/onlinepubs/009604599/basedefs/termios.h.html
+ * The Open Group Base Specifications Issue 6
+ * IEEE Std 1003.1, 2004 Edition
+ * Chapter 11, General Terminal Interface
  */
 
 /*

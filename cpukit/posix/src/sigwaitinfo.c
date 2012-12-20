@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Suspends Execution of Calling Thread until Signals in set Deleivered
+ */
+
 /*
  *  3.3.8 Synchronously Accept a Signal, P1003.1b-1993, p. 76
  *

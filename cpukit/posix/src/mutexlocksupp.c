@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Support Call to function Enables Locking of Mutex Object 
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

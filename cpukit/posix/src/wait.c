@@ -1,6 +1,11 @@
-/*
- *  waitpid() - POSIX 1003.1b 3.2.1
+/**
+ * @file
  *
+ * @brief Wait for Process to Change State 
+ * @ingroup POSIX
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

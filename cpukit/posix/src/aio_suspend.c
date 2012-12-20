@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Suspends Process until Asynchronous I/O Operation completes
+ * @ingroup POSIX
+ */
+
 /*
  *  6.7.7 Wait for Asynchronous I/O Request, P1003.1b-1993, p. 164
  *

@@ -1,3 +1,10 @@
+/**
+ *  @file
+ *
+ *  @brief Get User Name
+ *  @ingroup libcsupport
+ */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -15,10 +22,10 @@
 #include <unistd.h>
 #include <pwd.h>
 
-/*
+/**
  *  4.2.4 Get User Name, P1003.1b-1993, p. 87
  *
- *  NOTE:  P1003.1c/D10, p. 49 adds getlogin_r().
+ *  @note P1003.1c/D10, p. 49 adds getlogin_r().
  */
 char *getlogin( void )
 {
@@ -26,10 +33,10 @@ char *getlogin( void )
   return _POSIX_types_Getlogin_buffer;
 }
 
-/*
+/**
  *  4.2.4 Get User Name, P1003.1b-1993, p. 87
  *
- *  NOTE:  P1003.1c/D10, p. 49 adds getlogin_r().
+ *  @note P1003.1c/D10, p. 49 adds getlogin_r().
  */
 int getlogin_r(
   char   *name,

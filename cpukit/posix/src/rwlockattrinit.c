@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Initialises a RWLock Attributes object attr with the default value
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).

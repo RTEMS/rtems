@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Destroy Mutex Attributes Object
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -21,10 +28,9 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 
-/*
- *  11.3.1 Mutex Initialization Attributes, P1003.1c/Draft 10, p. 81
+/**
+ * 11.3.1 Mutex Initialization Attributes, P1003.1c/Draft 10, p. 81
  */
-
 int pthread_mutexattr_destroy(
   pthread_mutexattr_t *attr
 )

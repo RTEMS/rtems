@@ -1,6 +1,11 @@
-/*
- *  IMFS_mount
+/**
+ * @file
  *
+ * @brief Mount an IMFS
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

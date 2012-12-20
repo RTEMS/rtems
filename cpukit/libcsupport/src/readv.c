@@ -1,10 +1,11 @@
+/**
+ *  @file
+ *
+ *  @brief Read a Vector
+ *  @ingroup libcsupport
+ */
+
 /*
- *  readv() - POSIX 1003.1 - Read a Vector
- *
- *  OpenGroup URL:
- *
- *  http://www.opengroup.org/onlinepubs/009695399/functions/readv.html
- *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -23,6 +24,13 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
+/**
+ *  readv() - POSIX 1003.1 - Read a Vector
+ *
+ *  OpenGroup URL:
+ *
+ *  http://www.opengroup.org/onlinepubs/009695399/functions/readv.html
+ */
 ssize_t readv(
   int                 fd,
   const struct iovec *iov,
