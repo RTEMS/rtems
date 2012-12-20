@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Sets Scheduling Parameters Associated with Scheduling Policies 
+ * @ingroup POSIX
+ */
+
 /*
  *  13.3.1 Set Scheduling Parameters, P1003.1b-1993, p. 252
  *

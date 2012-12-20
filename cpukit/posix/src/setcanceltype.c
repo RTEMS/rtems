@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Sets the Cancelability Type of Calling Thread to value given in type 
+ * @ingroup POSIX
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Call to function by Thread will call init_routine with no Arguments
+ * @ingroup POSIX
+ */
+
 /*
  *  16.1.8 Dynamic Package Initialization, P1003.1c/Draft 10, p. 154
  *

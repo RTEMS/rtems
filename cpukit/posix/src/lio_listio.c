@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Function Initiates a List of I/O Requests with Single Function Call 
+ * @ingroup POSIX
+ */
+
 /*
  *  6.7.4 List Directed I/O, P1003.1b-1993, p. 158
  *

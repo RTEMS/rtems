@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Sets the Thread Creation Stacksize Attribute in the attr object 
+ * @ingroup POSIX
+ */
+
 /*
  *  16.1.1 Thread Creation Attributes, P1003.1c/Draft 10, p, 140
  *
