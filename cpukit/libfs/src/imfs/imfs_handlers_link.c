@@ -1,6 +1,11 @@
-/*
- *  Link Operations Table for the IMFS
+/**
+ * @file
  *
+ * @brief Link Operations Table for the IMFS
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

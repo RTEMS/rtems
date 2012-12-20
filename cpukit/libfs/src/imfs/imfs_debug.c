@@ -1,6 +1,11 @@
-/*
- *  IMFS debug support routines
+/**
+ * @file
  *
+ * @brief IMFS Debug Support
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -119,16 +124,6 @@ static void IMFS_dump_directory(
   }
 }
 
-/*
- *  IMFS_dump
- *
- *  This routine dumps the entire IMFS that is mounted at the root
- *  directory.
- *
- *  NOTE: Assuming the "/" directory is bad.
- *        Not checking that the starting directory is in an IMFS is bad.
- */
-
 void IMFS_dump( void )
 {
   fprintf(stdout, "*************** Dump of Entire IMFS ***************\n" );
@@ -137,13 +132,6 @@ void IMFS_dump( void )
   fprintf(stdout, "***************      End of Dump       ***************\n" );
 }
 
-/*
- *  IMFS_memfile_maximum_size()
- *
- *  This routine returns the size of the largest file which can be created
- *  using the IMFS memory file type.
- *
- */
 int IMFS_memfile_maximum_size( void )
 {
   return IMFS_MEMFILE_MAXIMUM_SIZE;

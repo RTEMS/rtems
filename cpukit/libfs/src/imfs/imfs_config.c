@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief IMFS Limits and Options
+ * @ingroup IMFS
+ */
+
 /*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

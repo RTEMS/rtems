@@ -1,6 +1,11 @@
-/*
- *  Operations Table for Directories for the IMFS
+/**
+ * @file
  *
+ * @brief Operations Table for Directories
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

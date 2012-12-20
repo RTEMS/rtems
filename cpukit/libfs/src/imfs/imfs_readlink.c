@@ -1,9 +1,11 @@
+/**
+ * @file
+ *
+ * @brief IMFS Put Symbolic Link into Buffer
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_readlink
- *
- *  The following rouine puts the symblic links destination name into
- *  buff.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

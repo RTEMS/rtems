@@ -321,20 +321,79 @@ extern int IMFS_initialize_support(
   const rtems_filesystem_operations_table *op_table,
   const IMFS_node_control *const node_controls [IMFS_TYPE_COUNT]
 );
-
+/**
+ * @brief Unmount this Instance of IMFS
+ */
 extern void IMFS_fsunmount(
    rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
+/**
+ * @brief RTEMS Load Tarfs
+ * 
+ * This file implements the "mount" procedure for tar-based IMFS
+ * extensions.  The TAR is not actually mounted under the IMFS.
+ * Directories from the TAR file are created as usual in the IMFS.
+ * File entries are created as IMFS_LINEAR_FILE nodes with their nods
+ * pointing to addresses in the TAR image.
+ *
+ * Here we create the mountpoint directory and load the tarfs at
+ * that node.  Once the IMFS has been mounted, we work through the
+ * tar image and perform as follows:
+ *  - For directories, simply call mkdir().  The IMFS creates nodes as
+ *    needed.
+ *  - For files, we make our own calls to IMFS eval_for_make and
+ *    create_node.
+ * 
+ * TAR file format:
+ *
+ *  Offset   Length   Contents
+ *    0    100 bytes  File name ('\0' terminated, 99 maxmum length)
+ *  100      8 bytes  File mode (in octal ascii)
+ *  108      8 bytes  User ID (in octal ascii)
+ *  116      8 bytes  Group ID (in octal ascii)
+ *  124     12 bytes  File size (s) (in octal ascii)
+ *  136     12 bytes  Modify time (in octal ascii)
+ *  148      8 bytes  Header checksum (in octal ascii)
+ *  156      1 bytes  Link flag
+ *  157    100 bytes  Linkname ('\0' terminated, 99 maxmum length)
+ *  257      8 bytes  Magic PAX ("ustar\0" + 2 bytes padding)
+ *  257      8 bytes  Magic GNU tar ("ustar  \0")
+ *  265     32 bytes  User name ('\0' terminated, 31 maxmum length)
+ *  297     32 bytes  Group name ('\0' terminated, 31 maxmum length)
+ *  329      8 bytes  Major device ID (in octal ascii)
+ *  337      8 bytes  Minor device ID (in octal ascii)
+ *  345    167 bytes  Padding
+ *  512   (s+p)bytes  File contents (s+p) := (((s) + 511) & ~511),
+ *                    round up to 512 bytes
+ *
+ *  Checksum:
+ *  int i, sum;
+ *  char* header = tar_header_pointer;
+ *  sum = 0;
+ *  for(i = 0; i < 512; i++)
+ *      sum += 0xFF & header[i];
+ */
 extern int rtems_tarfs_load(
    const char *mountpoint,
    uint8_t *tar_image,
    size_t tar_size
 );
 
+/**
+ * @brief IMFS Dump
+ * 
+ * This routine dumps the entire IMFS that is mounted at the root
+ * directory.
+ *
+ * NOTE: Assuming the "/" directory is bad.
+ *       Not checking that the starting directory is in an IMFS is bad.
+ */
 extern void IMFS_dump( void );
 
-/*
+/**
+ * @brief IMFS Memory File Maximum Size
+ * 
  * Return the size of the largest file which can be created
  * using the IMFS memory file type.
  */
@@ -382,6 +441,13 @@ extern void IMFS_eval_path(
   rtems_filesystem_eval_path_context_t *ctx
 );
 
+/**
+ * @brief IMFS Create a New Link Node
+ * 
+ * The following rouine creates a new link node under parent with the
+ * name given in name.  The link node is set to point to the node at
+ * to_loc.
+ */
 extern int IMFS_link(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *targetloc,
@@ -389,12 +455,23 @@ extern int IMFS_link(
   size_t namelen
 );
 
+/**
+ * @brief IMFS Change Owner
+ * 
+ * This routine is the implementation of the chown() system
+ * call for the IMFS.
+ */
 extern int IMFS_chown(
   const rtems_filesystem_location_info_t *loc,
   uid_t owner,
   gid_t group
 );
 
+/**
+ * @brief Create a IMFS Node
+ * 
+ * Routine to create a node in the IMFS file system.
+ */
 extern int IMFS_mknod(
   const rtems_filesystem_location_info_t *parentloc,
   const char *name,
@@ -436,6 +513,9 @@ extern bool IMFS_is_imfs_instance(
   const rtems_filesystem_location_info_t *loc
 );
 
+/**
+ * @brief IMFS Make a Generic Node
+ */
 extern int IMFS_make_generic_node(
   const char *path,
   mode_t mode,
@@ -450,6 +530,9 @@ extern int IMFS_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
 );
 
+/**
+ * @brief Unmount an IMFS
+ */
 extern int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
 );
@@ -458,17 +541,54 @@ extern IMFS_jnode_t *IMFS_memfile_remove(
  IMFS_jnode_t  *the_jnode         /* IN/OUT */
 );
 
+/**
+ * @brief Truncate a Memory File
+ *
+ * This routine processes the ftruncate() system call.
+ */
 extern int memfile_ftruncate(
   rtems_libio_t *iop,               /* IN  */
   off_t          length             /* IN  */
 );
 
+/**
+ * @brief IMFS Read Next Directory
+ * 
+ * This routine will read the next directory entry based on the directory
+ * offset. The offset should be equal to -n- time the size of an individual
+ * dirent structure. If n is not an integer multiple of the sizeof a
+ * dirent structure, an integer division will be performed to determine
+ * directory entry that will be returned in the buffer. Count should reflect
+ * -m- times the sizeof dirent bytes to be placed in the buffer.
+ * If there are not -m- dirent elements from the current directory position
+ * to the end of the exisiting file, the remaining entries will be placed in
+ * the buffer and the returned value will be equal to -m actual- times the
+ * size of a directory entry.
+ */
 extern ssize_t imfs_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
   size_t         count             /* IN  */
 );
 
+/**
+ * @name IMFS Memory File Handlers
+ *
+ * This section contains the set of handlers used to process operations on
+ * IMFS memory file nodes.  The memory files are created in memory using
+ * malloc'ed memory.  Thus any data stored in one of these files is lost
+ * at system shutdown unless special arrangements to copy the data to
+ * some type of non-volailte storage are made by the application.
+ * 
+ * @{
+ */
+
+/**
+ * @brief Open a Memory File
+ *
+ * This routine processes the open() system call.  Note that there is
+ * nothing special to be done at open() time.
+ */
 extern int memfile_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
@@ -476,17 +596,30 @@ extern int memfile_open(
   mode_t         mode             /* IN  */
 );
 
+/**
+ * @brief Read a Memory File
+ *
+ * This routine processes the read() system call.
+ */
 extern ssize_t memfile_read(
   rtems_libio_t *iop,             /* IN  */
   void          *buffer,          /* IN  */
   size_t         count            /* IN  */
 );
 
+/**
+ * @brief Write a Memory File
+ *
+ * This routine processes the write() system call.
+ */
 extern ssize_t memfile_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
   size_t         count            /* IN  */
 );
+
+/** @} */
+
 
 /**
  * @name IMFS Device Node Handlers
@@ -555,6 +688,13 @@ extern int IMFS_fchmod(
   mode_t mode
 );
 
+/**
+ * @brief IMFS Create a New Symbolic Link Node
+ * 
+ * The following rouine creates a new symbolic link node under parent
+ * with the name given in name.  The node is set to point to the node at
+ * to_loc.
+ */
 extern int IMFS_symlink(
   const rtems_filesystem_location_info_t *parentloc,
   const char *name,
@@ -562,12 +702,25 @@ extern int IMFS_symlink(
   const char *target
 );
 
+/**
+ * @brief IMFS Put Symbolic Link into Buffer
+ * 
+ * The following rouine puts the symblic links destination name into
+ * buff.
+ * 
+ */
 extern ssize_t IMFS_readlink(
   const rtems_filesystem_location_info_t *loc,
   char *buf,
   size_t bufsize
 );
 
+/**
+ * @brief IMFS Rename
+ * 
+ * The following rouine creates a new link node under parent with the
+ * name given in name and removes the old.
+ */
 extern int IMFS_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
@@ -575,7 +728,12 @@ extern int IMFS_rename(
   const char *name,
   size_t namelen
 );
-
+/**
+ * @brief IMFS Node Removal Handler
+ * 
+ * This file contains the handler used to remove a node when a file type
+ * does not require special actions.
+ */
 extern int IMFS_rmnod(
   const rtems_filesystem_location_info_t *parentloc,
   const rtems_filesystem_location_info_t *loc

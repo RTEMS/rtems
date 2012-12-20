@@ -1,6 +1,11 @@
-/*
- *  IMFS Directory Access Routines
+/**
+ * @file
  *
+ * @brief IMFS Read Next Directory
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,21 +22,6 @@
 
 #include <string.h>
 #include <dirent.h>
-
-/*
- *  imfs_dir_read
- *
- *  This routine will read the next directory entry based on the directory
- *  offset. The offset should be equal to -n- time the size of an individual
- *  dirent structure. If n is not an integer multiple of the sizeof a
- *  dirent structure, an integer division will be performed to determine
- *  directory entry that will be returned in the buffer. Count should reflect
- *  -m- times the sizeof dirent bytes to be placed in the buffer.
- *  If there are not -m- dirent elements from the current directory position
- *  to the end of the exisiting file, the remaining entries will be placed in
- *  the buffer and the returned value will be equal to -m actual- times the
- *  size of a directory entry.
- */
 
 ssize_t imfs_dir_read(
   rtems_libio_t  *iop,

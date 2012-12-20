@@ -1,8 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Create a IMFS Node
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_mknod
- *
- *  Routine to create a node in the IMFS file system.
- *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,6 +1,11 @@
-/*
- *  Device Operations Table for the IMFS
+/**
+ * @file
  *
+ * @brief Device Operations Table
+ * @ingroup IMFS
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

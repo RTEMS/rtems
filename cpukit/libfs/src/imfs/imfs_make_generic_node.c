@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief IMFS Make a Generic Node
+ * @ingroup IMFS
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

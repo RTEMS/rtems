@@ -1,9 +1,11 @@
+/**
+ * @file
+ *
+ * @brief IMFS Change Owner
+ * @ingroup IMFS
+ */
+
 /*
- *  IMFS_chown
- *
- *  This routine is the implementation of the chown() system
- *  call for the IMFS.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
