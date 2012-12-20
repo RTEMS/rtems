@@ -1,6 +1,11 @@
-/*
- * Routine to rename a MSDOS filesystem node
+/**
+ * @file
  *
+ * @brief Rename a MSDOS FileSystem Node
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  * Copyright (C) 2010 Chris Johns <chrisj@rtems.org>
  *
  * The license and distribution terms for this file may be

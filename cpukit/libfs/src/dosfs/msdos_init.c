@@ -1,6 +1,11 @@
-/*
- *  Init routine for MSDOS
+/**
+ * @file
  *
+ * @brief Init Routine for MSDOS
+ * @ingroup libfs
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

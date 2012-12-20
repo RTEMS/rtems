@@ -1,7 +1,11 @@
-/*
- *  Free node handler implementation for the filesystem
- *  operations table.
+/**
+ * @file
  *
+ * @brief Call Fat-File Close Routine
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

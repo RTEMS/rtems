@@ -1,7 +1,10 @@
-/*
- * Adaptation of NetBSD code for RTEMS by Victor V. Vengerov <vvv@oktet.ru>
+/**
+ * @file
+ *
+ * @brief MDOS Date Conversion
+ * @ingroup libfs_msdos MSDOS FileSystem
  */
-/*	$NetBSD: msdosfs_conv.c,v 1.10 1994/12/27 18:36:24 mycroft Exp $	*/
+
 /*
  * Written by Paul Popelka (paulp@uts.amdahl.com)
  *
@@ -14,6 +17,9 @@
  * understanding that the author is not responsible for the correct
  * functioning of this software in any circumstances and is not liable for
  * any damages caused by this software.
+ *
+ * Adaptation of NetBSD code for RTEMS by Victor V. Vengerov <vvv@oktet.ru>
+ * $NetBSD: msdosfs_conv.c,v 1.10 1994/12/27 18:36:24 mycroft Exp $
  *
  * October 1992
  */

@@ -20,6 +20,12 @@
 
 #include "fat.h"
 
+/**
+ *  @defgroup libfs_ff Fat File
+ *
+ *  @ingroup libfs
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -182,5 +188,5 @@ fat_file_mark_removed(fat_fs_info_t                        *fs_info,
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* __DOSFS_FAT_FILE_H__ */

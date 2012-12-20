@@ -1,8 +1,11 @@
+/**
+ * @file
+ *
+ * @brief General operations on "fat-file"
+ * @ingroup libfs_ff Fat File
+ */
+
 /*
- *  fat_file.c
- *
- *  General operations on "fat-file"
- *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

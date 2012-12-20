@@ -1,8 +1,11 @@
+/**
+ * @file
+ *
+ * @brief General operations on File Allocation Table
+ * @ingroup libfs_ffo Fat Fat Operations
+ */
+
 /*
- *  fat_fat_operations.c
- *
- *  General operations on File Allocation Table
- *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  */

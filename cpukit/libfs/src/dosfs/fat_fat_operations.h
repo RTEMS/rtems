@@ -19,6 +19,12 @@
 
 #include <rtems/bdbuf.h>
 
+/**
+ *  @defgroup libfs_ffo Fat Fat Operations
+ *
+ *  @ingroup libfs
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -54,5 +60,5 @@ fat_free_fat_clusters_chain(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* __DOSFS_FAT_FAT_OPERATIONS_H__ */

@@ -1,6 +1,11 @@
-/*
- * Routine to create a new MSDOS filesystem node
+/**
+ * @file
  *
+ * @brief Create a new MSDOS FileSystem node
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

@@ -1,25 +1,23 @@
-/*===============================================================*\
-| Project: RTEMS msdos format functionality                       |
-+-----------------------------------------------------------------+
-| File: msdos_format.c                                            |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2004 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file contains msdos_format function. This function         |
-| formats a disk partition conforming to MS-DOS conventions       |
-|                                                                 |
-|  The license and distribution terms for this file may be        |
-|  found in the file LICENSE in this distribution or at           |
-|  http://www.rtems.com/license/LICENSE.                          |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 29.10.04  creation                                         doe  |
-\*===============================================================*/
+/**
+ * @file
+ *
+ * @brief RTEMS MSDOS Format Functionality
+ * @ingroup libfs
+ *
+ * This function formats a disk partition conforming to MS-DOS conventions
+ */
+
+/*
+ *  Copyright (C) 2004 IMD
+ *  Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ *  <Thomas.Doerfler@imd-systems.de>
+ *
+ *  All rights reserved.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
 
 #if HAVE_CONFIG_H
 #include "config.h"

@@ -1,6 +1,11 @@
-/*
- *  MSDOS Initialization support routine implementation
+/**
+ * @file
  *
+ * @brief MSDOS Filesystem Initialization
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

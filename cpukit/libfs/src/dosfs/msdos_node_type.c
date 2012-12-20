@@ -1,6 +1,11 @@
-/*
- *  The following returns the type of node that the loc refers to.
+/**
+ * @file
  *
+ * @brief Type of Node that Loc Refers To
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
