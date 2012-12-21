@@ -99,6 +99,93 @@ void newlib_delete_hook(
   0                       /* fatal        */ \
 }
 
+typedef struct {
+  uint32_t active_barriers;
+  uint32_t active_extensions;
+  uint32_t active_message_queues;
+  uint32_t active_partitions;
+  uint32_t active_periods;
+  uint32_t active_ports;
+  uint32_t active_regions;
+  uint32_t active_semaphores;
+  uint32_t active_tasks;
+  uint32_t active_timers;
+} rtems_resource_rtems_api;
+
+typedef struct {
+  uint32_t active_barriers;
+  uint32_t active_condition_variables;
+  uint32_t active_keys;
+  uint32_t active_message_queues;
+  uint32_t active_message_queue_descriptors;
+  uint32_t active_mutexes;
+  uint32_t active_rwlocks;
+  uint32_t active_semaphores;
+  uint32_t active_spinlocks;
+  uint32_t active_threads;
+  uint32_t active_timers;
+} rtems_resource_posix_api;
+
+typedef struct {
+  Heap_Information_block workspace_info;
+  Heap_Information_block heap_info;
+  rtems_resource_rtems_api rtems_api;
+  rtems_resource_posix_api posix_api;
+  int open_files;
+} rtems_resource_snapshot;
+
+/**
+ * @brief Tasks a snapshot of the resource usage of the system.
+ *
+ * @param[out] snapshot The snapshot of used resources.
+ *
+ * @see rtems_resource_snapshot_equal() and rtems_resource_snapshot_check().
+ *
+ * @code
+ * #include <assert.h>
+ *
+ * #include <rtems/libcsupport.h>
+ *
+ * void example(void)
+ * {
+ *   rtems_resource_snapshot before;
+ *
+ *   test_setup();
+ *   rtems_resource_snapshot_take(&before);
+ *   test();
+ *   assert(rtems_resource_snapshot_check(&before));
+ *   test_cleanup();
+ * }
+ * @endcode
+ */
+void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot);
+
+/**
+ * @brief Compares two resource snapshots for equality.
+ *
+ * @return Returns true if the resource snapshots are equal, and false
+ * otherwise.
+ *
+ * @see rtems_resource_snapshot_take().
+ */
+bool rtems_resource_snapshot_equal(
+  const rtems_resource_snapshot *a,
+  const rtems_resource_snapshot *b
+);
+
+/**
+ * @brief Takes a new resource snapshot and checks that it is equal to the
+ * given snapshot.
+ *
+ * @param[in] snapshot The snapshot used for comparison with the new snapshot.
+ *
+ * @return Returns true if the resource snapshots are equal, and false
+ * otherwise.
+ *
+ * @see rtems_resource_snapshot_take().
+ */
+bool rtems_resource_snapshot_check(const rtems_resource_snapshot *snapshot);
+
 #ifdef __cplusplus
 }
 #endif
