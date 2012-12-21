@@ -12,10 +12,13 @@ test set name:  spobjgetnext
 
 directives:
 
-  SCORE _Objects_Get_next
+  _Objects_Get_next
+  _Objects_Active_count
 
 concepts:
 
 + Ensure that _Objects_Get_next handles error conditions properly.
 
 + Ensure the _Objects_Get_next behaves as expected.
+
++ Ensure the _Objects_Active_count behaves as expected.

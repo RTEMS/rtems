@@ -4,4 +4,5 @@ Init - _Objects_Get_next - NULL location
 Init - _Objects_Get_next - NULL id
 1 RTEMS Task
 1 RTEMS Task
+Init - _Objects_Active_count
 *** END OF TEST OBJECT GET NEXT ***

@@ -862,6 +862,17 @@ void _Objects_Close(
   Objects_Control      *the_object
 );
 
+/**
+ * @brief Returns the count of active objects.
+ *
+ * @param[in] information The object information table.
+ *
+ * @return The count of active objects.
+ */
+Objects_Maximum _Objects_Active_count(
+  const Objects_Information *information
+);
+
 /*
  *  Pieces of object.inl are promoted out to the user
  */

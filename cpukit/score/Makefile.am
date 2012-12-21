@@ -190,7 +190,8 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c src/objectgetnameasstring.c src/objectsetname.c \
     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
-    src/objectnamespaceremove.c
+    src/objectnamespaceremove.c \
+    src/objectactivecount.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
