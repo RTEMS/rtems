@@ -28,6 +28,7 @@ provided by RTEMS is:
 @item @code{@value{DIRPREFIX}chain_is_first} - Is the Node the first in the chain ?
 @item @code{@value{DIRPREFIX}chain_is_last} - Is the Node the last in the chain ? 
 @item @code{@value{DIRPREFIX}chain_has_only_one_node} - Does the node have one node ?
+@item @code{@value{DIRPREFIX}chain_node_count_unprotected} - Returns the node count of the chain (unprotected)
 @item @code{@value{DIRPREFIX}chain_is_head} - Is the node the head ?
 @item @code{@value{DIRPREFIX}chain_is_tail} - Is the node the tail ?
 @item @code{@value{DIRPREFIX}chain_extract} - Extract the node from the chain
@@ -495,6 +496,33 @@ This function returns @code{true} if there is only one node on the chain and
 
 This function returns @code{true} if there is only one node on the chain and
 @code{false} otherwise.
+
+@c
+@c
+@c
+@page
+@subsection Returns the node count of the chain (unprotected)
+
+@cindex chain only one node
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex @value{DIRPREFIX}chain_node_count_unprotected
+@example
+size_t @value{DIRPREFIX}chain_node_count_unprotected(
+  const @value{DIRPREFIX}chain_control *the_chain
+);
+@end example
+@end ifset
+
+@subheading RETURNS
+
+This function returns the node count of the chain.
+
+@subheading DESCRIPTION:
+
+This function returns the node count of the chain.
 
 @c
 @c

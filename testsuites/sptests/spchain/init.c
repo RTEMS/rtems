@@ -136,7 +136,6 @@ static void test_chain_with_notification(void)
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   rtems_test_assert( p == &a );
 
-  puts( "INIT - Verify rtems_chain_prepend_with_notification" );
   puts( "INIT - Verify rtems_chain_get_with_notification" );
   rtems_chain_initialize_empty( &chain );
 
@@ -199,6 +198,26 @@ static void test_chain_with_empty_check(void)
   rtems_test_assert( p == &b );
 }
 
+static void test_chain_node_count(void)
+{
+  rtems_chain_control chain;
+  rtems_chain_node nodes[3];
+  size_t count;
+  size_t i;
+
+  puts( "INIT - Verify rtems_chain_node_count_unprotected" );
+
+  rtems_chain_initialize_empty( &chain );
+  count = rtems_chain_node_count_unprotected( &chain );
+  rtems_test_assert( count == 0 );
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE( nodes ); ++i) {
+    rtems_chain_append_unprotected( &chain, &nodes[i] );
+    count = rtems_chain_node_count_unprotected( &chain );
+    rtems_test_assert( count == i + 1 );
+  }
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -240,6 +259,7 @@ rtems_task Init(
   test_chain_get_with_wait();
   test_chain_control_layout();
   test_chain_control_initializer();
+  test_chain_node_count();
 
   puts( "*** END OF RTEMS CHAIN API TEST ***" );
   rtems_test_exit(0);

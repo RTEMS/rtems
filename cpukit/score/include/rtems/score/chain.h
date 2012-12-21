@@ -254,6 +254,18 @@ bool _Chain_Get_with_empty_check(
   Chain_Node **the_node
 );
 
+/**
+ * @brief Returns the node count of the chain.
+ *
+ * @param[in] chain The chain.
+ *
+ * @note It does NOT disable interrupts to ensure the atomicity of the
+ * operation.
+ *
+ * @return The node count of the chain.
+ */
+size_t _Chain_Node_count_unprotected( const Chain_Control *chain );
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/chain.inl>
 #endif
