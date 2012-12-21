@@ -159,42 +159,113 @@ typedef union {
   IMFS_generic_t     generic;
 } IMFS_types_union;
 
+/**
+ * @addtogroup IMFSGenericNodes
+ *
+ * @{
+ */
+
+/**
+ * @brief Initializes an IMFS node.
+ *
+ * @param[in,out] node The IMFS node.
+ * @param[in] info The IMFS type information.
+ *
+ * @retval node Successful operation.
+ * @retval NULL An error occurred.  The @c errno indicates the error.  This
+ * will abort the make operation.
+ *
+ * @see IMFS_node_control, IMFS_node_initialize_default(), and
+ * IMFS_node_initialize_generic().
+ */
 typedef IMFS_jnode_t *(*IMFS_node_control_initialize)(
   IMFS_jnode_t *node,
   const IMFS_types_union *info
 );
 
 /**
- * @brief Initialize Default IMFS Node 
+ * @brief Returns the node and does nothing else.
+ *
+ * @param[in,out] node The IMFS node.
+ * @param[in] info The IMFS type information.
+ *
+ * @retval node Returns always the node passed as parameter.
+ *
+ * @see IMFS_node_control.
  */
 IMFS_jnode_t *IMFS_node_initialize_default(
   IMFS_jnode_t *node,
   const IMFS_types_union *info
 );
 
+/**
+ * @brief Returns the node and sets the generic node context.
+ *
+ * @param[in,out] node The IMFS node.
+ * @param[in] info The IMFS type information.
+ *
+ * @retval node Returns always the node passed as parameter.
+ *
+ * @see IMFS_node_control.
+ */
 IMFS_jnode_t *IMFS_node_initialize_generic(
   IMFS_jnode_t *node,
   const IMFS_types_union *info
 );
 
+/**
+ * @brief Prepares the removal of an IMFS node from its parent directory.
+ *
+ * @param[in,out] node The IMFS node.
+ *
+ * @retval node Successful operation.
+ * @retval NULL An error occurred.  The @c errno indicates the error.  This
+ * will abort the removal operation.
+ *
+ * @see IMFS_node_control and IMFS_node_remove_default().
+ */
 typedef IMFS_jnode_t *(*IMFS_node_control_remove)(
   IMFS_jnode_t *node
 );
 
 /**
- * @brief Remove Default IMFS Node 
+ * @brief Returns the node and does nothing else.
+ *
+ * @param[in,out] node The IMFS node.
+ *
+ * @retval node Returns always the node passed as parameter.
+ *
+ * @see IMFS_node_control.
  */
 IMFS_jnode_t *IMFS_node_remove_default(
   IMFS_jnode_t *node
 );
 
+/**
+ * @brief Destroys an IMFS node.
+ *
+ * @param[in,out] node The IMFS node.
+ *
+ * @retval node Returns always the node passed as parameter.
+ *
+ * @see IMFS_node_control and IMFS_node_destroy_default().
+ */
 typedef IMFS_jnode_t *(*IMFS_node_control_destroy)( IMFS_jnode_t *node );
 
 /**
- * @brief Destroy Default IMFS Node 
+ * @brief Returns the node and does nothing else.
+ *
+ * @param[in,out] node The IMFS node.
+ *
+ * @retval node Returns always the node passed as parameter.
+ *
+ * @see IMFS_node_control.
  */
 IMFS_jnode_t *IMFS_node_destroy_default( IMFS_jnode_t *node );
 
+/**
+ * @brief IMFS node control.
+ */
 typedef struct {
   IMFS_jnode_types_t imfs_type;
   const rtems_filesystem_file_handlers_r *handlers;
@@ -203,12 +274,19 @@ typedef struct {
   IMFS_node_control_destroy node_destroy;
 } IMFS_node_control;
 
+/** @} */
+
 /*
  * Major device number for the IMFS. This is not a real device number because
  * the IMFS is just a file system and does not have a driver.
  */
 #define IMFS_DEVICE_MAJOR_NUMBER (0xfffe)
 
+/**
+ * @ingroup IMFSGenericNodes
+ *
+ * @brief Generic IMFS device major number.
+ */
 #define IMFS_GENERIC_DEVICE_MAJOR_NUMBER (0xfffd)
 
 /*
@@ -513,8 +591,62 @@ extern bool IMFS_is_imfs_instance(
   const rtems_filesystem_location_info_t *loc
 );
 
+
 /**
- * @brief IMFS Make a Generic Node
+ * @defgroup IMFSGenericNodes IMFS Generic Nodes
+ *
+ * @ingroup LibIO
+ *
+ * @brief Generic nodes are an alternative to standard drivers in RTEMS.
+ *
+ * The handlers of a generic node are called with less overhead compared to the
+ * standard driver operations.  The usage of file system node handlers enable
+ * more features like support for fsync() and fdatasync().  The generic nodes
+ * use the reference counting of the IMFS.  This provides automatic node
+ * destruction when the last reference vanishes.
+ *
+ * @{
+ */
+
+/**
+ * @brief Makes a generic IMFS node.
+ *
+ * @param[in] path The path to the new generic IMFS node.
+ * @param[in] mode The node mode.
+ * @param[in] node_control The node control.
+ * @param[in] context The node control handler context.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
+ *
+ * @code
+ * #include <sys/stat.h>
+ * #include <assert.h>
+ * #include <fcntl.h>
+ *
+ * #include <rtems/imfs.h>
+ *
+ * static const IMFS_node_control some_node_control = {
+ *   .imfs_type = IMFS_GENERIC,
+ *   .handlers = &some_node_handlers,
+ *   .node_initialize = IMFS_node_initialize_generic,
+ *   .node_remove = IMFS_node_remove_default,
+ *   .node_destroy = some_node_destroy
+ * };
+ *
+ * void example(void *some_node_context)
+ * {
+ *   int rv;
+ *
+ *   rv = IMFS_make_generic_node(
+ *     "/path/to/some/generic/node",
+ *     S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
+ *     &some_node_control,
+ *     some_node_context
+ *   );
+ *   assert(rv == 0);
+ * }
+ * @endcode
  */
 extern int IMFS_make_generic_node(
   const char *path,
@@ -522,6 +654,8 @@ extern int IMFS_make_generic_node(
   const IMFS_node_control *node_control,
   void *context
 );
+
+/** @} */
 
 /**
  * @brief Mount an IMFS
@@ -805,6 +939,12 @@ static inline IMFS_jnode_t *IMFS_create_node(
   );
 }
 
+/**
+ * @addtogroup IMFSGenericNodes
+ *
+ * @{
+ */
+
 static inline void *IMFS_generic_get_context_by_node(
   const IMFS_jnode_t *node
 )
@@ -837,6 +977,8 @@ static inline dev_t IMFS_generic_get_device_identifier_by_node(
     node->st_ino
   );
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }
