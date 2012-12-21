@@ -921,8 +921,9 @@ extern m83xxRegisters_t mpc83xx;
 #define RCWLR_COREPLL(n) (((n)&0xff)<<(31-15))
 
 /* for MPC8309: */
-#define RCWLR_CEVCOD_1_4 (0<<(31-25))     /* QUICC internal PLL divider 1:4 */
-#define RCWLR_CEVCOD_1_2 (2<<(31-25))     /* QUICC internal PLL divider 1:2 */
+#define RCWLR_CEVCOD_1_8 (2<<(31-25))     /* QUICC internal PLL divider 1:8 */
+#define RCWLR_CEVCOD_1_4 (1<<(31-25))     /* QUICC internal PLL divider 1:4 */
+#define RCWLR_CEVCOD_1_2 (0<<(31-25))     /* QUICC internal PLL divider 1:2 */
                                           /* QUICC Engine PLL mult. factor */
 #define RCWLR_CEPDF_2     (1<<(31-26))    /* QUICC Engine divide PLL out by 2*/
                                           /* QUICC Engine PLL mult. factor */
