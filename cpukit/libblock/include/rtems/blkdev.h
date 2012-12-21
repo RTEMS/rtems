@@ -276,7 +276,7 @@ static inline int rtems_disk_fd_reset_device_stats(int fd)
 /** @} */
 
 /**
- * @brief Common IO Control Primitive
+ * @brief Common IO control primitive.
  *
  * Use this in all block devices to handle the common set of IO control
  * requests.
@@ -344,7 +344,7 @@ rtems_status_code rtems_blkdev_create_partition(
 );
 
 /**
- * @brief Prints the Block Device Statistics
+ * @brief Prints the block device statistics.
  */
 void rtems_blkdev_print_stats(
   const rtems_blkdev_stats *stats,
@@ -353,7 +353,7 @@ void rtems_blkdev_print_stats(
 );
 
 /**
- * @brief Block Device Statistics Command
+ * @brief Block device statistics command.
  */
 void rtems_blkstats(
   FILE *output,

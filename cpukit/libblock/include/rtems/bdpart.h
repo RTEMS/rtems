@@ -33,12 +33,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @brief Manage Partitions of a Disk Device
  * @defgroup rtems_bdpart Block Device Partition Management
  *
  * @ingroup rtems_libblock
  *
- * This module provides functions to manage partitions of a disk device.
+ * @brief This module provides functions to manage partitions of a disk device.
  *
  * A @ref rtems_disk "disk" is a set of blocks which are identified by a
  * consecutive set of non-negative integers starting at zero.  There are also
@@ -335,7 +334,7 @@ rtems_status_code rtems_bdpart_unmount(
 );
 
 /**
- * @brief Prints the Partition Table @a Partitions with @a Count Partitions
+ * @brief The Partition Table @a Partitions with @a Count Partitions is printed.
  *
  * Prints the partition table @a partitions with @a count partitions to
  * standard output.
