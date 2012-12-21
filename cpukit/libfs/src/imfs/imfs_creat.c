@@ -32,6 +32,7 @@ IMFS_jnode_t *IMFS_allocate_node(
 )
 {
   IMFS_jnode_t        *node;
+  IMFS_jnode_t        *initialized_node;
   struct timeval       tv;
 
   if ( namelen > IMFS_NAME_MAX ) {
@@ -82,7 +83,12 @@ IMFS_jnode_t *IMFS_allocate_node(
   node->stat_ctime  = (time_t) tv.tv_sec;
   node->st_ino = ++fs_info->ino_count;
 
-  return (*node->control->node_initialize)( node, info );
+  initialized_node = (*node->control->node_initialize)( node, info );
+  if ( initialized_node == NULL ) {
+    free( node );
+  }
+
+  return initialized_node;
 }
 
 IMFS_jnode_t *IMFS_create_node_with_control(
