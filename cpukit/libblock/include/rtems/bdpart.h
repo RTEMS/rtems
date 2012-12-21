@@ -33,6 +33,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * @brief Manage Partitions of a Disk Device
  * @defgroup rtems_bdpart Block Device Partition Management
  *
  * @ingroup rtems_libblock
@@ -334,6 +335,8 @@ rtems_status_code rtems_bdpart_unmount(
 );
 
 /**
+ * @brief Prints the Partition Table @a Partitions with @a Count Partitions
+ *
  * Prints the partition table @a partitions with @a count partitions to
  * standard output.
  */

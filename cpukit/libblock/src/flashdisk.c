@@ -1,6 +1,11 @@
-/*
- * flashdisk.c -- Flash disk block device implementation
+/**
+ * @file
  *
+ * @brief Flash Disk Block Device Implementation
+ * @ingroup libblock
+ */
+
+/*
  * Copyright (C) 2007 Chris Johns
  *
  * The license and distribution terms for this file may be

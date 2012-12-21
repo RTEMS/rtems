@@ -1,9 +1,8 @@
 /**
  * @file
  *
+ * @brief Manage Partitions of a Disk Device
  * @ingroup rtems_bdpart
- *
- * Block device partition management.
  */
 
 /*
