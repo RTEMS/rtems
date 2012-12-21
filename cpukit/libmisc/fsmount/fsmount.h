@@ -123,6 +123,8 @@ typedef struct {
 } rtems_fstab_entry;
 
 /**
+ * @brief Mounts the file systems listed in the file system mount table.
+ *
  * Mounts the file systems listed in the file system mount table @a fstab of
  * size @a size.
  *

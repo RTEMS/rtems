@@ -1,11 +1,16 @@
-/*
- *  Stack Overflow Check User Extension Set
+/**
+ * @file
  *
- *  NOTE:  This extension set automatically determines at
+ * @brief Stack Overflow Check User Extension Set
+ * @ingroup libmisc_stackchk Stack Checker Mechanism
+ *
+ * NOTE:  This extension set automatically determines at
  *         initialization time whether the stack for this
  *         CPU grows up or down and installs the correct
  *         extension routines for that direction.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -409,7 +414,7 @@ static void Stack_check_Dump_threads_usage(
       stack = &Stack_check_Interrupt_stack;
       the_thread = 0;
       current = 0;
-    } else 
+    } else
   #endif
     {
       stack  = &the_thread->Start.Initial_stack;

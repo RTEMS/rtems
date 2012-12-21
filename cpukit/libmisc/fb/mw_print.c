@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief MicroWindows Print
+ * @ingroup libmisc_fb_mw Input Devices for MicroWindows
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -86,5 +93,5 @@ void uid_print_message_with_plugin(
       (*handler)( context, "Invalid device type\n" );
       break;
   }
- 
+
 }

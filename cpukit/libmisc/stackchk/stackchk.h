@@ -21,12 +21,18 @@
 #include <rtems/score/percpu.h> /* Thread_Control */
 #include <rtems/bspIo.h>
 
+/**
+ *  @defgroup libmisc_stackchk Stack Checker Mechanism
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- *  @brief Has Current Task Blown Its Stack
+ *  @brief Checks if current task is blown its stack.
  *
  *  This method is used to determine if the current stack pointer
  *  of the currently executing task is within bounds.
@@ -38,7 +44,7 @@ extern "C" {
 bool rtems_stack_checker_is_blown( void );
 
 /**
- *  @brief Print Stack Usage Report
+ *  @brief Print the stack usage report using printk.
  *
  *  This method prints a stack usage report for the curently executing
  *  task.
@@ -48,7 +54,7 @@ bool rtems_stack_checker_is_blown( void );
 void rtems_stack_checker_report_usage( void );
 
 /**
- *  @brief Print Stack Usage Report
+ *  @brief Print the stack usage report using caller's routine.
  *
  *  This method prints a stack usage report for the curently executing
  *  task.
@@ -135,6 +141,6 @@ void rtems_stack_checker_switch_extension(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

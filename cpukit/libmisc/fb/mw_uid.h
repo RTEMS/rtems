@@ -15,6 +15,12 @@
 #include <sys/types.h>
 #include <rtems/bspIo.h>
 
+/**
+ *  @defgroup libmisc_fb_mw Input Devices for MicroWindows
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -182,5 +188,5 @@ void uid_print_message_with_plugin(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* _MW_UID_H */

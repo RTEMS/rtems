@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Obtain COPY of the Right Hand Side of the Matching Argument
+ * @ingroup BSPCommandLine BSP Command Line Helpers
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

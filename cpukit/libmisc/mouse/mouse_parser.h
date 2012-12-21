@@ -25,7 +25,7 @@
  * ==================================================================
  *
  * It has been modified to support the concept of being just a parser
- * fed data from an arbitrary source.  It is independent of either 
+ * fed data from an arbitrary source.  It is independent of either
  * a PS/2 driver or a serial port.
  *
  * It was moved to cpukit/libmisc/mouse by Joel Sherrill.
@@ -36,6 +36,12 @@
 
 #include <rtems/mw_uid.h>
 
+/**
+ *  @defgroup libmisc_mouse Mouse Parser Engine
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -79,7 +85,7 @@ typedef unsigned int  BUTTON;
 typedef void (*mouse_parser_enqueue_handler)(unsigned char *, size_t);
 
 /**
- *  @brief Initialize the Mouse Parser Engine
+ *  @brief Initialize the mouse parser engine.
  *
  *  This method initializes the Mouse Parser Engine for the mouse
  *  of @a type. The @a type should be one of the following strings:
@@ -92,7 +98,7 @@ typedef void (*mouse_parser_enqueue_handler)(unsigned char *, size_t);
 int mouse_parser_initialize(const char *type);
 
 /**
- *  @brief Enqueue Input to the Mouse Parser Engine
+ *  @brief Enqueue input to the mouse parser engine.
  *
  *  This method is used to pass mouse input to the Mouse Parser Engine.
  *

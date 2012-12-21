@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Opens a Serial Port Directly, and Interprets Serial Data
+ * @ingroup libmisc_mouse Mouse Parser Engine
+ */
+
 /*
  * This code is derived from a UNIX Serial Port Mouse Driver with
  * the following notice:
@@ -19,7 +26,7 @@
  * ==================================================================
  *
  * It has been modified to support the concept of being just a parser
- * fed data from an arbitrary source.  It is independent of either 
+ * fed data from an arbitrary source.  It is independent of either
  * a PS/2 driver or a serial port.
  *
  * It was moved to cpukit/libmisc/mouse by Joel Sherrill.
@@ -135,7 +142,7 @@ static int MOU_Data( int ch, COORD *dx, COORD *dy, COORD *dz, BUTTON *bptr)
   if ( !parse ) {
     printk( "Mouse parser is not initialized!\n" );
     return -1;
-  } 
+  }
 
   /*
    * Loop over all the bytes read in the buffer, parsing them.

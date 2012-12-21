@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Devzero
+ * @ingroup libmisc_devnull Device Driver
+ */
+
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *
