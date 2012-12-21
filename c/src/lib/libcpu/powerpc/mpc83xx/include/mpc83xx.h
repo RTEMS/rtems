@@ -61,7 +61,9 @@ typedef struct m83xxSysConRegisters_ {
   uint8_t reserved0_011C[0x00128-0x0011C];/* 0x0_011C--0x0_0128  Reserved    */
   volatile uint32_t ddrcdr;               /* 0x0_0128 control driver register (DDRCDR) R/W 0x7304_0001 5.3.2.8/5-28 */
   volatile uint32_t ddrdsr;               /* 0x0_012C debug status register (DDRDSR) R 0x3300_0000 5.3.2.9/5-30 */
-  uint8_t reserved0_0130[0x00200-0x00130];/* 0x0_0130--0x0_01FC  Reserved    */
+  uint8_t reserved0_0130[0x00150-0x00130];/* 0x0_0130--0x0_015C  Reserved    */
+  volatile uint32_t gpr_1;                /* 0x0_0150 General Purpose Register 1 (GPR_1) */
+  uint8_t reserved0_0154[0x00200-0x00154];/* 0x0_0154--0x0_01FC  Reserved    */
 } m83xxSysConRegisters_t;
 #define M83xx_SYSCON_SPCR_TBEN (1 << (31-9))
 
