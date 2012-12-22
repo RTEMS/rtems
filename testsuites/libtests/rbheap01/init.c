@@ -20,6 +20,7 @@
 
 #include <rtems.h>
 #include <rtems/rbheap.h>
+#include <rtems/malloc.h>
 
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
@@ -389,6 +390,45 @@ static void test_alloc_many_chunks(void)
   TEST_PAGE_TREE(&control, indices_1, frees_1);
 }
 
+static void test_alloc_misaligned(void)
+{
+  rtems_rbheap_control control;
+  void *p;
+
+  test_init_successful(&control);
+
+  p = rtems_rbheap_allocate(&control, PAGE_SIZE - 1);
+  rtems_test_assert(p != NULL);
+}
+
+static void test_alloc_with_malloc_extend(void)
+{
+  rtems_status_code sc;
+  rtems_rbheap_control control;
+  void *p;
+  void *opaque;
+
+  sc = rtems_rbheap_initialize(
+    &control,
+    area,
+    sizeof(area),
+    PAGE_SIZE,
+    rtems_rbheap_extend_descriptors_with_malloc,
+    NULL
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  opaque = rtems_heap_greedy_allocate(NULL, 0);
+
+  p = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  rtems_test_assert(p == NULL);
+
+  rtems_heap_greedy_free(opaque);
+
+  p = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  rtems_test_assert(p != NULL);
+}
+
 static void test_free_null(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -564,6 +604,8 @@ static void Init(rtems_task_argument arg)
   test_alloc_huge_chunk();
   test_alloc_one_chunk();
   test_alloc_many_chunks();
+  test_alloc_misaligned();
+  test_alloc_with_malloc_extend();
   test_free_null();
   test_free_invalid();
   test_free_double();
