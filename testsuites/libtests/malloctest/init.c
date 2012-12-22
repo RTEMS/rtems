@@ -586,6 +586,30 @@ static void test_heap_allocate(void)
   p1 = test_init_and_alloc( alloc_size, alignment, boundary, NULL );
 }
 
+static void test_heap_free(void)
+{
+  Heap_Control *heap = &TestHeap;
+  void *p;
+  Heap_Block *block;
+  bool ok;
+
+  _Heap_Initialize( heap, &TestHeapMemory[0], sizeof(TestHeapMemory), 0 );
+
+  p = _Heap_Allocate( heap, 1 );
+  rtems_test_assert( p != NULL );
+
+  block = _Heap_Block_of_alloc_area( (uintptr_t) p, heap->page_size );
+
+  /*
+   * This will kick the next block outside of the heap area and the next
+   * _Heap_Free() will detect this.
+   */
+  block->size_and_flag += sizeof(TestHeapMemory);
+
+  ok = _Heap_Free( heap, p );
+  rtems_test_assert( !ok );
+}
+
 static void *test_create_used_block( void )
 {
   uintptr_t const alloc_size = 3 * TEST_DEFAULT_PAGE_SIZE;
@@ -1207,6 +1231,7 @@ rtems_task Init(
   test_heap_initialize();
   test_heap_block_allocate();
   test_heap_allocate();
+  test_heap_free();
   test_heap_resize_block();
   test_realloc();
   test_heap_cases_1();
