@@ -224,6 +224,20 @@ RBTree_Node *_RBTree_Get(
   RBTree_Direction dir
 );
 
+/** @brief Find the node with given key in the tree
+ *
+ *  This function returns a pointer to the node in @a the_rbtree
+ *  having key equal to key of  @a the_node if it exists,
+ *  and NULL if not. @a the_node has to be made up before a search.
+ *
+ *  @note If the tree is not unique and contains duplicate keys, the set
+ *        of duplicate keys acts as FIFO.
+ */
+RBTree_Node *_RBTree_Find_unprotected(
+  RBTree_Control *the_rbtree,
+  RBTree_Node *the_node
+);
+
 /**
  *  @brief Find the node with given key in the tree.
  *
