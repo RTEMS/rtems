@@ -23,8 +23,8 @@
 #include <rtems/score/isr.h>
 
 RBTree_Node *_RBTree_Find(
-  RBTree_Control *the_rbtree,
-  RBTree_Node *search_node
+  const RBTree_Control *the_rbtree,
+  const RBTree_Node *search_node
 )
 {
   ISR_Level          level;
@@ -38,8 +38,8 @@ RBTree_Node *_RBTree_Find(
 }
 
 RBTree_Node *_RBTree_Find_unprotected(
-  RBTree_Control *the_rbtree,
-  RBTree_Node *the_node
+  const RBTree_Control *the_rbtree,
+  const RBTree_Node *the_node
 )
 {
   RBTree_Node* iter_node = the_rbtree->root;

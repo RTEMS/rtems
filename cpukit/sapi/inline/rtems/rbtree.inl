@@ -255,8 +255,8 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
  * @copydoc _RBTree_Find_unprotected()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find_unprotected(
-    rtems_rbtree_control *the_rbtree,
-    rtems_rbtree_node *the_node
+  const rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Find_unprotected( the_rbtree, the_node );
@@ -272,8 +272,8 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find_unprotected(
  *        of duplicate keys acts as FIFO.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
-  rtems_rbtree_control *the_rbtree,
-  rtems_rbtree_node *the_node
+  const rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Find( the_rbtree, the_node );

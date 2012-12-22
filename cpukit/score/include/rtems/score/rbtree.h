@@ -234,8 +234,8 @@ RBTree_Node *_RBTree_Get(
  *        of duplicate keys acts as FIFO.
  */
 RBTree_Node *_RBTree_Find_unprotected(
-  RBTree_Control *the_rbtree,
-  RBTree_Node *the_node
+  const RBTree_Control *the_rbtree,
+  const RBTree_Node *the_node
 );
 
 /**
@@ -255,8 +255,8 @@ RBTree_Node *_RBTree_Find_unprotected(
  *    + single case
  */
 RBTree_Node *_RBTree_Find(
-  RBTree_Control *the_rbtree,
-  RBTree_Node *the_node
+  const RBTree_Control *the_rbtree,
+  const RBTree_Node *the_node
 );
 
 /**
