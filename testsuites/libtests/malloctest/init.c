@@ -1147,6 +1147,29 @@ static void test_posix_memalign(void)
 
 }
 
+static void test_greedy_allocate(void)
+{
+  Heap_Control *heap = &TestHeap;
+  uintptr_t block_size = 1;
+  void *p;
+
+  _Heap_Initialize( heap, &TestHeapMemory[0], sizeof(TestHeapMemory), 0 );
+
+  _Heap_Greedy_allocate( heap, &block_size, 1 );
+
+  p = _Heap_Allocate( heap, 1 );
+  rtems_test_assert( p != NULL );
+
+  p = _Heap_Allocate( heap, 1 );
+  rtems_test_assert( p == NULL );
+
+  /* The internal allocation fails */
+  _Heap_Greedy_allocate( heap, &block_size, 1 );
+
+  p = _Heap_Allocate( heap, 1 );
+  rtems_test_assert( p == NULL );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -1194,6 +1217,7 @@ rtems_task Init(
   test_heap_info();
   test_protected_heap_info();
   test_rtems_heap_allocate_aligned_with_boundary();
+  test_greedy_allocate();
 
   test_posix_memalign();
 
