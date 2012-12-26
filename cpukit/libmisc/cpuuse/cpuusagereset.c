@@ -1,6 +1,11 @@
-/*
- *  CPU Usage Reporter
+/**
+ * @file
  *
+ * @brief CPU Usage Reset
+ * @ingroup libmisc_cpuuse CPU Usage
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009
  *  On-Line Applications Research Corporation (OAR).
  *

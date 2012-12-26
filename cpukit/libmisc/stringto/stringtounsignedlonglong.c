@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Convert String to Unsigned Long Long (with validation)
+ * @ingroup libmisc_conv_help Conversion Helpers
+ */
+
 /*
  *  COPYRIGHT (c) 2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -52,7 +59,7 @@ rtems_status_code rtems_string_to_unsigned_long_long (
   if ( end == s )
     return RTEMS_NOT_DEFINED;
 
-  if ( ( errno == ERANGE ) && 
+  if ( ( errno == ERANGE ) &&
     (( result == 0 ) || ( result == ULONG_LONG_MAX )))
       return RTEMS_INVALID_NUMBER;
 

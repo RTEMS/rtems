@@ -77,12 +77,46 @@ static void test_with_timeout(void)
   rtems_test_assert(sc == RTEMS_UNSATISFIED);
 }
 
+static void test_with_invalid_receiver(void)
+{
+  rtems_status_code sc;
+
+  sc = rtems_event_system_send(0xffff, EVENT);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_with_invalid_address(void)
+{
+  rtems_status_code sc;
+
+  sc = rtems_event_system_receive(EVENT, RTEMS_NO_WAIT, 0, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+}
+
+static void test_get_pending_events(void)
+{
+  rtems_status_code sc;
+  rtems_event_set out;
+
+  sc = rtems_event_system_receive(
+    RTEMS_PENDING_EVENTS,
+    RTEMS_NO_WAIT,
+    0,
+    &out
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(out == 0);
+}
+
 static void Init(rtems_task_argument arg)
 {
   puts("\n\n*** TEST SPEVENTSYSTEM 1 ***");
 
   test_with_normal_and_system_event();
   test_with_timeout();
+  test_with_invalid_receiver();
+  test_with_invalid_address();
+  test_get_pending_events();
 
   puts("*** END OF TEST SPEVENTSYSTEM 1 ***");
 

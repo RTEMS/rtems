@@ -190,7 +190,8 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectshrinkinformation.c src/objectgetnoprotection.c \
     src/objectidtoname.c src/objectgetnameasstring.c src/objectsetname.c \
     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
-    src/objectnamespaceremove.c
+    src/objectnamespaceremove.c \
+    src/objectactivecount.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
@@ -326,6 +327,7 @@ libscore_a_SOURCES += src/userextaddset.c \
 libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
     src/chainextract.c src/chainget.c src/chaininsert.c \
     src/chainappendempty.c src/chainprependempty.c src/chaingetempty.c \
+    src/chainnodecount.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c
 
 EXTRA_DIST = src/Unlimited.txt

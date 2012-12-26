@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Serial Mouse Driver
+ * @ingroup libmisc_mouse Serial Mouse Driver
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
@@ -26,7 +33,7 @@ const char *serial_mouse_type;
 static int serial_mouse_l_rint(int c, struct rtems_termios_tty *tp)
 {
   unsigned char buf = c;
-  
+
   /* call mouse_parser( void *ptr, char *buffer, int size ) */
   mouse_parser_enqueue( &buf, 1 );
   return 0;

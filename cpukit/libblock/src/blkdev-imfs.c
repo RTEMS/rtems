@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Block Device IMFS
+ * @ingroup libblock
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

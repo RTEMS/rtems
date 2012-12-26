@@ -21,6 +21,12 @@
 
 #include <rtems/io.h> /* rtems_device_driver */
 
+/**
+ *  @defgroup libmisc_devnull Device Driver
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -70,6 +76,6 @@ rtems_device_driver null_control(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

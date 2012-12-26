@@ -1,38 +1,28 @@
-/*===============================================================*\
-| Project: RTEMS bdbuf inspector                                  |
-+-----------------------------------------------------------------+
-| File: show_bdbuf.c
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2005                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.com/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains functions to enable the monitor              |
-| to show bdbuf information                                       |
-|                                                                 |
-|                    XXX!!! ATTETION!!! XXX!!!                    |
-|                                                                 |
-| This module inspects the bdbuf data structures,                 |
-| assuming they are static, but in fact they are used very        |
-| dynamically. Therefore the results show MAY BE INCORRECT in     |
-| some cases. And, to cure this a bit, this module may block      |
-| preemption for a rather long time and therefore it may          |
-| BREAK THE REALTIME BEHAVIOUR OF YOUR SYSTEM (when in use)       |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 26.09.06  creation                                         doe  |
-|*****************************************************************|
-\*===============================================================*/
+/**
+ * @file
+ *
+ * @brief Enable the Monitor to Show bdbuf Information
+ * @ingroup rtems_bdpart
+ *
+ * This module inspects the bdbuf data structures,
+ * assuming they are static, but in fact they are used very
+ * dynamically. Therefore the results show MAY BE INCORRECT in
+ * some cases. And, to cure this a bit, this module may block
+ * preemption for a rather long time and therefore it may
+ * BREAK THE REALTIME BEHAVIOUR OF YOUR SYSTEM (when in use)
+ */
+
+/*
+ * Copyright (c) 2005
+ * Embedded Brains GmbH
+ * Obere Lagerstr. 30
+ * D-82178 Puchheim
+ * Germany
+ * rtems@embedded-brains.de
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
+ */
 
 #if HAVE_CONFIG_H
 #include "config.h"

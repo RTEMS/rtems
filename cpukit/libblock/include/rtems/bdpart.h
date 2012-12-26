@@ -37,7 +37,7 @@ extern "C" {
  *
  * @ingroup rtems_libblock
  *
- * This module provides functions to manage partitions of a disk device.
+ * @brief This module provides functions to manage partitions of a disk device.
  *
  * A @ref rtems_disk "disk" is a set of blocks which are identified by a
  * consecutive set of non-negative integers starting at zero.  There are also
@@ -205,8 +205,8 @@ typedef union {
 } rtems_bdpart_format;
 
 /**
- * Reads the partition information from the physical disk device with name
- * @a disk_name.
+ * @brief Reads the partition information from the physical disk device with
+ * name @a disk_name.
  *
  * The partition information will be stored in the partition table
  * @a partitions with a maximum of @a count partitions.  The number of actual
@@ -222,13 +222,13 @@ rtems_status_code rtems_bdpart_read(
 );
 
 /**
- * Sorts the partition table @a partitions with @a count partitions to have
- * ascending begin blocks
+ * @brief Sorts the partition table @a partitions with @a count partitions to
+ * have ascending begin blocks
  */
 void rtems_bdpart_sort( rtems_bdpart_partition *partitions, size_t count);
 
 /**
- * Writes the partition table to the physical disk device with name
+ * @brief Writes the partition table to the physical disk device with name
  * @a disk_name.
  *
  * The partition table @a partitions with @a count partitions will be written
@@ -248,8 +248,8 @@ rtems_status_code rtems_bdpart_write(
 );
 
 /**
- * Creates a partition table in @a partitions with @a count partitions for the
- * physical disk device with name @a disk_name.
+ * @brief Creates a partition table in @a partitions with @a count partitions
+ * for the physical disk device with name @a disk_name.
  *
  * The array of positive integer weights in @a distribution must have exactly
  * @a count elements.  The weights in the distribution array are summed up.
@@ -266,13 +266,15 @@ rtems_status_code rtems_bdpart_create(
 );
 
 /**
- * Registers the partitions as logical disks for the physical disk device with
- * name @a disk_name.
+ * @brief Registers the partitions as logical disks for the physical disk
+ * device with name @a disk_name.
  *
  * For each partition of the partition table @a partitions with @a count
  * partitions a logical disk is registered.  The partition number equals the
  * partition table index plus one.  The name of the logical disk device is the
  * concatenation of the physical disk device name and the partition number.
+ *
+ * @see rtems_blkdev_create_partition().
  */
 rtems_status_code rtems_bdpart_register(
   const char *disk_name,
@@ -281,16 +283,16 @@ rtems_status_code rtems_bdpart_register(
 );
 
 /**
- * Reads the partition table from the disk device with name @a disk_name and
- * registers the partitions as logical disks.
+ * @a brief Reads the partition table from the disk device with name @a
+ * disk_name and registers the partitions as logical disks.
  *
  * @see rtems_bdpart_register() and rtems_fsmount().
  */
 rtems_status_code rtems_bdpart_register_from_disk( const char *disk_name);
 
 /**
- * Deletes the logical disks associated with the partitions of the disk device
- * with name @a disk_name.
+ * @brief Deletes the logical disks associated with the partitions of the disk
+ * device with name @a disk_name.
  *
  * The partition table @a partitions with @a count partitions will be used to
  * determine which disks need to be deleted.  It may be obtained from
@@ -303,8 +305,8 @@ rtems_status_code rtems_bdpart_unregister(
 );
 
 /**
- * Mounts all supported file systems inside the logical disks derived from the
- * partitions of the physical disk device with name @a disk_name.
+ * @brief Mounts all supported file systems inside the logical disks derived
+ * from the partitions of the physical disk device with name @a disk_name.
  *
  * For each partition in the partition table @a partitions with @a count
  * partitions it will be checked if it contains a supported file system.  In
@@ -324,7 +326,7 @@ rtems_status_code rtems_bdpart_mount(
 );
 
 /**
- * Unmounts all file systems mounted with rtems_bdpart_mount().
+ * @brief Unmounts all file systems mounted with rtems_bdpart_mount().
  */
 rtems_status_code rtems_bdpart_unmount(
   const char *disk_name,
@@ -334,19 +336,19 @@ rtems_status_code rtems_bdpart_unmount(
 );
 
 /**
- * Prints the partition table @a partitions with @a count partitions to
+ * @brief Prints the partition table @a partitions with @a count partitions to
  * standard output.
  */
 void rtems_bdpart_dump( const rtems_bdpart_partition *partitions, size_t count);
 
 /**
- * Returns the partition type for the MBR partition type value @a mbr_type in
- * @a type.
+ * @brief Returns the partition type for the MBR partition type value
+ * @a mbr_type in @a type.
  */
 void rtems_bdpart_to_partition_type( uint8_t mbr_type, uuid_t type);
 
 /**
- * Converts the partition type in @a type to the MBR partition type.
+ * @brief Converts the partition type in @a type to the MBR partition type.
  *
  * The result will be stored in @a mbr_type.  Returns @c true in case of a
  * successful convertion and otherwise @c false.  Both arguments must not be

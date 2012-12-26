@@ -1,7 +1,13 @@
-/*  /dev/null
+/**
+ * @file
  *
- *  Derived from rtems' stub driver.
+ * @brief Null Device Driver Init Routine
+ * @ingroup libmisc_devnull Device Driver
  *
+ * Derived from rtems' stub driver.
+ */
+
+/*
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
  *  COPYRIGHT (c) 1989-2000.

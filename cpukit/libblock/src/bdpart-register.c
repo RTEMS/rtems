@@ -1,18 +1,18 @@
 /**
  * @file
  *
+ * @brief Block Device Partition Management
  * @ingroup rtems_bdpart
- *
- * Block device partition management.
  */
 
 /*
- * Copyright (c) 2009, 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009, 2012 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Obere Lagerstr. 30
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -20,15 +20,45 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/bdpart.h>
+
+static char *create_logical_disk_name( const char *disk_name, char **marker)
+{
+  size_t disk_name_size = strlen( disk_name);
+  char *logical_disk_name = malloc( disk_name_size + RTEMS_BDPART_NUMBER_SIZE);
+
+  if (logical_disk_name != NULL) {
+    strncpy( logical_disk_name, disk_name, disk_name_size);
+    *marker = logical_disk_name + disk_name_size;
+  }
+
+  return logical_disk_name;
+}
+
+static rtems_status_code update_logical_disk_name(
+  char *logical_disk_marker,
+  size_t i
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  int rv = 0;
+
+  rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
+  if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
+    sc = RTEMS_INVALID_NAME;
+  }
+
+  return sc;
+}
 
 rtems_status_code rtems_bdpart_register(
   const char *disk_name,
@@ -38,14 +68,9 @@ rtems_status_code rtems_bdpart_register(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_status_code esc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
-  rtems_device_minor_number minor = 0;
   rtems_blkdev_bnum disk_end = 0;
-  dev_t disk = 0;
-  dev_t logical_disk = 0;
   char *logical_disk_name = NULL;
   char *logical_disk_marker = NULL;
-  size_t disk_name_size = strlen( disk_name);
   size_t i = 0;
   int fd = -1;
   rtems_disk_device *dd = NULL;
@@ -55,45 +80,34 @@ rtems_status_code rtems_bdpart_register(
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
-  disk = rtems_disk_get_device_identifier( dd);
-  close( fd);
-
-  /* Get the disk device identifier */
-  rtems_filesystem_split_dev_t( disk, major, minor);
 
   /* Create logical disk name */
-  logical_disk_name = malloc( disk_name_size + RTEMS_BDPART_NUMBER_SIZE);
+  logical_disk_name = create_logical_disk_name(
+    disk_name,
+    &logical_disk_marker
+  );
   if (logical_disk_name == NULL) {
-    return RTEMS_NO_MEMORY;
+    esc = sc;
+    goto cleanup;
   }
-  strncpy( logical_disk_name, disk_name, disk_name_size);
-  logical_disk_marker = logical_disk_name + disk_name_size;
 
   /* Create a logical disk for each partition */
   for (i = 0; i < count; ++i) {
     const rtems_bdpart_partition *p = pt + i;
-    int rv = 0;
-
-    /* New minor number */
-    ++minor;
-
-    /* Create a new device identifier */
-    logical_disk = rtems_filesystem_make_dev_t( major, minor);
 
     /* Set partition number for logical disk name */
-    rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
-    if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
-      esc = RTEMS_INVALID_NAME;
+    sc = update_logical_disk_name( logical_disk_marker, i);
+    if (sc != RTEMS_SUCCESSFUL) {
+      esc = sc;
       goto cleanup;
     }
 
     /* Create logical disk */
-    sc = rtems_disk_create_log(
-      logical_disk,
-      disk,
+    sc = rtems_blkdev_create_partition(
+      logical_disk_name,
+      disk_name,
       p->begin,
-      p->end - p->begin,
-      logical_disk_name
+      p->end - p->begin
     );
     if (sc != RTEMS_SUCCESSFUL) {
       esc = sc;
@@ -104,6 +118,7 @@ rtems_status_code rtems_bdpart_register(
 cleanup:
 
   free( logical_disk_name);
+  close( fd);
 
   return esc;
 }
@@ -132,11 +147,10 @@ rtems_status_code rtems_bdpart_unregister(
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
-  rtems_device_minor_number minor = 0;
+  rtems_status_code esc = RTEMS_SUCCESSFUL;
   rtems_blkdev_bnum disk_end = 0;
-  dev_t disk = 0;
-  dev_t logical_disk = 0;
+  char *logical_disk_name = NULL;
+  char *logical_disk_marker = NULL;
   size_t i = 0;
   int fd = -1;
   rtems_disk_device *dd = NULL;
@@ -146,26 +160,40 @@ rtems_status_code rtems_bdpart_unregister(
   if (sc != RTEMS_SUCCESSFUL) {
     return sc;
   }
-  disk = rtems_disk_get_device_identifier( dd);
-  close( fd);
 
-  /* Get the disk device identifier */
-  rtems_filesystem_split_dev_t( disk, major, minor);
+  /* Create logical disk name */
+  logical_disk_name = create_logical_disk_name(
+    disk_name,
+    &logical_disk_marker
+  );
+  if (logical_disk_name == NULL) {
+    esc = sc;
+    goto cleanup;
+  }
 
-  /* Create a logical disk for each partition */
+  /* Delete the logical disk for each partition */
   for (i = 0; i < count; ++i) {
-    /* New minor number */
-    ++minor;
+    int rv = 0;
 
-    /* Get the device identifier */
-    logical_disk = rtems_filesystem_make_dev_t( major, minor);
+    /* Set partition number for logical disk name */
+    sc = update_logical_disk_name( logical_disk_marker, i);
+    if (sc != RTEMS_SUCCESSFUL) {
+      esc = sc;
+      goto cleanup;
+    }
 
     /* Delete logical disk */
-    sc = rtems_disk_delete( logical_disk);
-    if (sc != RTEMS_SUCCESSFUL) {
-      return sc;
+    rv = unlink( logical_disk_name);
+    if (rv != 0) {
+      esc = sc;
+      goto cleanup;
     }
   }
 
-  return RTEMS_SUCCESSFUL;
+cleanup:
+
+  free( logical_disk_name);
+  close( fd);
+
+  return esc;
 }

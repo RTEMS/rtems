@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Dump Buffer
+ * @ingroup libmisc_dumpbuf Print Memory Buffer
+ */
+
 /*
  *  COPYRIGHT (c) 1997-2007.
  *  On-Line Applications Research Corporation (OAR).

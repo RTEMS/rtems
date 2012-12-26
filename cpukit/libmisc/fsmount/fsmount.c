@@ -1,32 +1,24 @@
 /**
  * @file
  *
- * File system mount functions.
+ * @brief File System Mount Functions
+ * @ingroup rtems_fstab File System Mount Support
  */
 
-/*===============================================================*\
-| Project: RTEMS fsmount                                          |
-+-----------------------------------------------------------------+
-| File: fsmount.c                                                 |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2003 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file contains the fsmount functions. These functions       |
-| are used to mount a list of filesystems (and create their mount |
-| points before)                                                  |
-|                                                                 |
-|  The license and distribution terms for this file may be        |
-|  found in the file LICENSE in this distribution or at           |
-|  http://www.rtems.com/license/LICENSE.                     |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 02.07.03  creation                                         doe  |
-\*===============================================================*/
+/*
+ *                    Copyright (c) 2003 IMD
+ *      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ *               <Thomas.Doerfler@imd-systems.de>
+ *                       all rights reserved
+ *
+ * This file contains the fsmount functions. These functions
+ * are used to mount a list of filesystems (and create their mount
+ * points before).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
 
 #ifndef HAVE_CONFIG_H
 #include "config.h"

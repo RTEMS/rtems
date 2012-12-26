@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Block Device Statistics Command
+ * @ingroup rtems_blkdev Block Device Management
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

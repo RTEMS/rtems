@@ -23,6 +23,13 @@
 #define __SERIAL_MOUSE_h__
 
 /* functions */
+
+/**
+ *  @defgroup libmisc_mouse Serial Mouse Driver
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,7 +42,7 @@ extern "C" {
     serial_mouse_read, serial_mouse_write, serial_mouse_control }
 
 /**
- *  @brief Serial Mouse Driver Initialization
+ *  @brief The initialization of the serial mouse driver.
  *
  *  This method initializes the serial mouse driver.
  *
@@ -50,7 +57,7 @@ rtems_device_driver serial_mouse_initialize(
 );
 
 /**
- *  @brief Serial Mouse Driver Open
+ *  @brief Open device driver entry point for the serial mouse driver.
  *
  *  This method implements the Open device driver entry
  *  point for the serial mouse driver.
@@ -66,7 +73,7 @@ rtems_device_driver serial_mouse_open(
 );
 
 /**
- *  @brief Serial Mouse Driver Close
+ *  @brief Close device driver entry point for the serial mouse driver.
  *
  *  This method implements the Close device driver entry
  *  point for the serial mouse driver.
@@ -82,7 +89,7 @@ rtems_device_driver serial_mouse_close(
 );
 
 /**
- *  @brief Serial Mouse Driver Read
+ *  @brief Read device driver entry point for the serial mouse driver.
  *
  *  This method implements the Read device driver entry
  *  point for the serial mouse driver.
@@ -98,7 +105,7 @@ rtems_device_driver serial_mouse_read(
 );
 
 /**
- *  @brief Serial Mouse Driver Write
+ *  @brief Write device driver entry point for the serial mouse driver.
  *
  *  This method implements the Write device driver entry
  *  point for the serial mouse driver.
@@ -114,7 +121,7 @@ rtems_device_driver serial_mouse_write(
 );
 
 /**
- *  @brief Serial Mouse Driver IO Control
+ *  @brief IO Control device driver entry point for the serial mouse driver.
  *
  *  This method implements the IO Control device driver entry
  *  point for the serial mouse driver.
@@ -130,7 +137,7 @@ rtems_device_driver serial_mouse_control(
 );
 
 /**
- *  @brief Obtain Serial Mouse Configuration Information
+ *  @brief Obtain serial mouse configuration information.
  *
  *  This method is implemented by the BSP or application and
  *  tells the driver what device to open() and what type of
@@ -150,5 +157,5 @@ bool bsp_get_serial_mouse_device(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif  /* __tty_drv__  */

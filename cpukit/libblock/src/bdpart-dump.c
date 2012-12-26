@@ -1,9 +1,8 @@
 /**
  * @file
  *
+ * @brief Prints the Partition Table @a Partitions with @a Count Partitions
  * @ingroup rtems_bdpart
- *
- * Block device partition management.
  */
 
 /*

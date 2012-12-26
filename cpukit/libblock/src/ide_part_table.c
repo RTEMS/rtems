@@ -1,10 +1,11 @@
-/*****************************************************************************
+/**
+ * @file
  *
- * ide_part_table.c
- *
- * The implementation of library supporting "MS-DOS-style" partition table
- *
- *
+ * @brief Library supporting "MS-DOS-style" Partition Table
+ * @ingroup libblock
+ */
+
+/*
  * Copyright (C) 2002 OKTET Ltd., St.-Petersburg, Russia
  *
  * Author: Konstantin Abramenko <Konstantin.Abramenko@oktet.ru>
@@ -14,7 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *****************************************************************************/
+ */
 
 #if HAVE_CONFIG_H
 #include "config.h"

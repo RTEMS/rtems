@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Obtain Pointer to the Entire Matching Argument
+ * @ingroup BSPCommandLine BSP Command Line Helpers
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

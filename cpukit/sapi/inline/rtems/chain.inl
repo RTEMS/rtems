@@ -645,6 +645,23 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_get_with_empty_check(
   return _Chain_Get_with_empty_check( chain, node );
 }
 
+/**
+ * @brief Returns the node count of the chain.
+ *
+ * @param[in] chain The chain.
+ *
+ * @note It does NOT disable interrupts to ensure the atomicity of the
+ * operation.
+ *
+ * @return The node count of the chain.
+ */
+RTEMS_INLINE_ROUTINE size_t rtems_chain_node_count_unprotected(
+  const rtems_chain_control *chain
+)
+{
+  return _Chain_Node_count_unprotected( chain );
+}
+
 /** @} */
 
 #endif

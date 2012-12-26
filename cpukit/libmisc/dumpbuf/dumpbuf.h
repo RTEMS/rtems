@@ -17,12 +17,18 @@
 #ifndef __DUMP_BUFFER_h
 #define __DUMP_BUFFER_h
 
+/**
+ *  @defgroup libmisc_dumpbuf Print Memory Buffer
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- *  @brief Print Memory Buffer
+ *  @brief Print memory buffer.
  *
  *  This method prints @a length bytes beginning at @a buffer in
  *  a nice format similar to what one would expect from a debugger
@@ -39,6 +45,6 @@ void rtems_print_buffer(
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

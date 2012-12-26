@@ -26,6 +26,7 @@
 
 #include <rtems/imfs.h>
 #include <rtems/malloc.h>
+#include <rtems/libcsupport.h>
 
 typedef enum {
   TEST_NEW,
@@ -313,12 +314,44 @@ static void test_imfs_make_generic_node(void)
   rtems_test_assert(state == TEST_DESTROYED);
 }
 
+static IMFS_jnode_t *node_initialize_error(
+  IMFS_jnode_t *node,
+  const IMFS_types_union *info
+)
+{
+  errno = EIO;
+
+  return NULL;
+}
+
+static IMFS_jnode_t *node_remove_inhibited(IMFS_jnode_t *node)
+{
+  rtems_test_assert(false);
+
+  return node;
+}
+
+static IMFS_jnode_t *node_destroy_inhibited(IMFS_jnode_t *node)
+{
+  rtems_test_assert(false);
+
+  return node;
+}
+
 static const IMFS_node_control node_invalid_control = {
   .imfs_type = IMFS_DIRECTORY,
   .handlers = &node_handlers,
-  .node_initialize = node_initialize,
-  .node_remove = node_remove,
-  .node_destroy = node_destroy
+  .node_initialize = node_initialize_error,
+  .node_remove = node_remove_inhibited,
+  .node_destroy = node_destroy_inhibited
+};
+
+static const IMFS_node_control node_initialization_error_control = {
+  .imfs_type = IMFS_GENERIC,
+  .handlers = &node_handlers,
+  .node_initialize = node_initialize_error,
+  .node_remove = node_remove_inhibited,
+  .node_destroy = node_destroy_inhibited
 };
 
 static void test_imfs_make_generic_node_errors(void)
@@ -330,6 +363,9 @@ static void test_imfs_make_generic_node_errors(void)
     (rtems_filesystem_mount_table_entry_t *) rtems_chain_first(chain);
   const char *type = mt_entry->type;
   void *opaque = NULL;
+  rtems_resource_snapshot before;
+
+  rtems_resource_snapshot_take(&before);
 
   errno = 0;
   rv = IMFS_make_generic_node(
@@ -340,6 +376,7 @@ static void test_imfs_make_generic_node_errors(void)
   );
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == EINVAL);
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
 
   errno = 0;
   rv = IMFS_make_generic_node(
@@ -350,30 +387,44 @@ static void test_imfs_make_generic_node_errors(void)
   );
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == EINVAL);
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
 
-  mt_entry->type = "XXX";
   errno = 0;
+  mt_entry->type = "XXX";
   rv = IMFS_make_generic_node(
     path,
     S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
     &node_control,
     NULL
   );
+  mt_entry->type = type;
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENOTSUP);
-  mt_entry->type = type;
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
 
-  opaque = rtems_heap_greedy_allocate(NULL, 0);
   errno = 0;
+  opaque = rtems_heap_greedy_allocate(NULL, 0);
   rv = IMFS_make_generic_node(
     path,
     S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
     &node_control,
     NULL
   );
+  rtems_heap_greedy_free(opaque);
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENOMEM);
-  rtems_heap_greedy_free(opaque);
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
+
+  errno = 0;
+  rv = IMFS_make_generic_node(
+    path,
+    S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
+    &node_initialization_error_control,
+    NULL
+  );
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EIO);
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
 }
 
 static void Init(rtems_task_argument arg)

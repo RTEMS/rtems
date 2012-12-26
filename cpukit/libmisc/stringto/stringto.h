@@ -25,7 +25,7 @@
 #include <rtems.h>
 
 /**
- *  @brief Convert String to Pointer (with validation)
+ *  @brief Convert String to Pointer (with validation).
  *
  *  This method converts a string to a pointer (void *) with
  *  basic numeric validation.
@@ -45,7 +45,7 @@ rtems_status_code rtems_string_to_pointer(
 );
 
 /**
- *  @brief Convert String to Unsigned Character (with validation)
+ *  @brief Convert String to Unsigned Character (with validation).
  *
  *  This method converts a string to an unsigned character with
  *  range validation.
@@ -67,7 +67,7 @@ rtems_status_code rtems_string_to_unsigned_char(
 );
 
 /**
- *  @brief Convert String to Int (with validation)
+ *  @brief Convert String to Int (with validation).
  *
  *  This method converts a string to an int with range validation.
  *
@@ -88,7 +88,7 @@ rtems_status_code rtems_string_to_int(
 );
 
 /**
- *  @brief Convert String to Unsigned Int (with validation)
+ *  @brief Convert String to Unsigned Int (with validation).
  *
  *  This method converts a string to an unsigned int with range validation.
  *
@@ -109,7 +109,7 @@ rtems_status_code rtems_string_to_unsigned_int(
 );
 
 /**
- *  @brief Convert String to Long (with validation)
+ *  @brief Convert String to Long (with validation).
  *
  *  This method converts a string to a long with
  *  range validation.
@@ -131,7 +131,7 @@ rtems_status_code rtems_string_to_long(
 );
 
 /**
- *  @brief Convert String to Unsigned Long (with validation)
+ *  @brief Convert String to Unsigned Long (with validation).
  *
  *  This method converts a string to an unsigned long with
  *  range validation.
@@ -153,7 +153,7 @@ rtems_status_code rtems_string_to_unsigned_long(
 );
 
 /**
- *  @brief Convert String to Long Long (with validation)
+ *  @brief Convert String to Long Long (with validation).
  *
  *  This method converts a string to a long long with
  *  range validation.
@@ -175,7 +175,7 @@ rtems_status_code rtems_string_to_long_long(
 );
 
 /**
- *  @brief Convert String to Unsigned Long Long (with validation)
+ *  @brief Convert String to Unsigned Long Long (with validation).
  *
  *  This method converts a string to an unsigned character with
  *  range validation.
@@ -197,7 +197,7 @@ rtems_status_code rtems_string_to_unsigned_long_long(
 );
 
 /**
- *  @brief Convert String to Float (with validation)
+ *  @brief Convert String to Float (with validation).
  *
  *  This method converts a string to a float with range validation.
  *
@@ -216,7 +216,7 @@ rtems_status_code rtems_string_to_float(
 );
 
 /**
- *  @brief Convert String to Double (with validation)
+ *  @brief Convert String to Double (with validation).
  *
  *  This method converts a string to a double with range validation.
  *
@@ -235,7 +235,7 @@ rtems_status_code rtems_string_to_double(
 );
 
 /**
- *  @brief Convert String to long double (with validation)
+ *  @brief Convert String to long double (with validation).
  *
  *  This method converts a string to a long double with range validation.
  *

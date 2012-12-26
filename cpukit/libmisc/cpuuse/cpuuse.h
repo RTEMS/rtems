@@ -24,6 +24,12 @@
   #include <rtems/score/timestamp.h>
 #endif
 
+/**
+ *  @defgroup libmisc_cpuuse CPU Usage
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -43,14 +49,18 @@ void rtems_cpu_usage_report_with_plugin(
   rtems_printk_plugin_t  handler
 );
 
-/*
- *  rtems_cpu_usage_report
+/**
+ *  @brief Report CPU usage.
+ *
+ *  CPU Usage Reporter
  */
 
 void rtems_cpu_usage_report( void );
 
-/*
- *  rtems_cpu_usage_reset
+/**
+ *  @brief Reset CPU usage.
+ *
+ *  CPU Usage Reporter
  */
 
 void rtems_cpu_usage_reset( void );
@@ -58,6 +68,6 @@ void rtems_cpu_usage_reset( void );
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif
 /* end of include file */

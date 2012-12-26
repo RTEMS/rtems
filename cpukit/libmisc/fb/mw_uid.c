@@ -1,5 +1,11 @@
-/*
+/**
+ * @file
  *
+ * @brief MicroWindows UID
+ * @ingroup libmisc_fb_mw Input Devices for MicroWindows
+ */
+
+/*
  * Copyright (c) 2000 - Rosimildo da Silva
  *
  * MODULE DESCRIPTION:

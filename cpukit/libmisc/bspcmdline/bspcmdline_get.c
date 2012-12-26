@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Obtain Pointer to BSP Boot Command String
+ * @ingroup BSPCommandLine BSP Command Line Helpers
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).

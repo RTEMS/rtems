@@ -1,6 +1,13 @@
-/*
- *  CPU Usage Reporter - Shared Data
+/**
+ * @file
  *
+ * @brief CPU Usage Data
+ * @ingroup libmisc_cpuuse CPU Usage
+ *
+ * CPU Usage Reporter - Shared Data
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2009
  *  On-Line Applications Research Corporation (OAR).
  *
