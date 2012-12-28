@@ -21,6 +21,14 @@
 #include <rtems/score/object.h>
 
 /**
+ * @defgroup POSIXAPI RTEMS POSIX API
+ *
+ * RTEMS POSIX API definitions and modules.
+ *
+ * @{
+ */
+
+/**
  *  @brief Initialize POSIX API
  *
  *  This method is responsible for initializing each of the POSIX
@@ -49,6 +57,8 @@ int _POSIX_Name_to_id(
   Objects_Id          *id,
   size_t              *len
 );
+
+/**@}*/
 
 #endif
 /* end of include file */
