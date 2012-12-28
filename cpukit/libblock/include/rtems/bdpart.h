@@ -3,7 +3,7 @@
  *
  * @ingroup rtems_bdpart
  *
- * Block device partition management.
+ * @brief Block Device Partition Management
  */
 
 /*

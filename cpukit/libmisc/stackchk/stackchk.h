@@ -1,7 +1,11 @@
-/** @file rtems/stackchk.h
+/**
+ * @file rtems/stackchk.h
  *
- *  This include file contains information necessary to utilize
- *  and install the stack checker mechanism.
+ * @brief Information Necessary to Utilize and Install the
+ * Stack Checker Mechanism
+ *
+ * This include file contains information necessary to utilize
+ * and install the stack checker mechanism.
  */
 
 /*

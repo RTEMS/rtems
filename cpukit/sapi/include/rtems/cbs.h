@@ -1,8 +1,11 @@
 /**
  * @file rtems/cbs.h
  *
- *  This include file contains all the constants and structures associated
- *  with the CBS library in RTEMS.
+ * @brief Constants and Structures Associated
+ * with the CBS library in RTEMS
+ *
+ * This include file contains all the constants and structures associated
+ * with the CBS library in RTEMS.
  */
 
 /*

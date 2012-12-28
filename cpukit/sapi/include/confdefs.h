@@ -1,6 +1,9 @@
 /**
  * @file rtems/confdefs.h
  *
+ * @brief Configuration Table Template that will be Instantiated
+ * by an Application
+ *
  *  This include file contains the configuration table template that will
  *  be instantiated by an application based on the setting of a number
  *  of macros.  The macros are documented in the Configuring a System
@@ -175,11 +178,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  If configured for SMP, then we need to know the maximum CPU cores.
    */
   #if !defined(CONFIGURE_SMP_APPLICATION)
-    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS) 
+    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
       #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
     #endif
   #else
-    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS) 
+    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
       #error "CONFIGURE_SMP_MAXIMUM_PROCESSORS not specified for SMP Application"
     #endif
   #endif
@@ -259,7 +262,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         #error "Configured filesystems but root filesystem was not IMFS!"
         #error "Filesystems could be disabled, DEVFS is root, or"
         #error "  miniIMFS is root!"
-     #endif 
+     #endif
   #endif
 
   /*
@@ -297,7 +300,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  *  This defines the miniIMFS file system table entry.
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS) && \
     defined(CONFIGURE_FILESYSTEM_MINIIMFS)
   #define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS \
@@ -315,7 +318,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifndef RTEMS_SCHEDSIM
 /**
  *  This defines the IMFS file system table entry.
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_IMFS) && \
     defined(CONFIGURE_FILESYSTEM_IMFS)
   #if defined(CONFIGURE_FIFOS_ENABLED)
@@ -352,7 +355,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  * DEVFS
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DEVFS) && \
     defined(CONFIGURE_FILESYSTEM_DEVFS)
 #include <rtems/devfs.h>
@@ -363,9 +366,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef RTEMS_NETWORKING
   /**
    * FTPFS
-   */ 
+   */
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_FTPFS) && \
-      defined(CONFIGURE_FILESYSTEM_FTPFS) 
+      defined(CONFIGURE_FILESYSTEM_FTPFS)
     #include <rtems/ftpfs.h>
     #define CONFIGURE_FILESYSTEM_ENTRY_FTPFS \
       { RTEMS_FILESYSTEM_TYPE_FTPFS, rtems_ftpfs_initialize }
@@ -373,7 +376,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   /**
    * TFTPFS
-   */ 
+   */
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_TFTPFS) && \
       defined(CONFIGURE_FILESYSTEM_TFTPFS)
     #include <rtems/tftp.h>
@@ -383,7 +386,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   /**
    * NFS
-   */ 
+   */
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
       defined(CONFIGURE_FILESYSTEM_NFS)
     #include <librtemsNfs.h>
@@ -394,7 +397,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  * DOSFS
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS) && \
     defined(CONFIGURE_FILESYSTEM_DOSFS)
   #include <rtems/dosfs.h>
@@ -404,7 +407,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  * RFS
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_RFS) && \
     defined(CONFIGURE_FILESYSTEM_RFS)
   #include <rtems/rtems-rfs.h>
@@ -574,7 +577,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 /*
  * Scheduler configuration.
  *
- * The scheduler configuration allows an application to select the 
+ * The scheduler configuration allows an application to select the
  * scheduling policy to use.  The supported configurations are:
  *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
@@ -582,13 +585,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
  *  CONFIGURE_SCHEDULER_CBS        - CBS Scheduler
- * 
- * If no configuration is specified by the application, then 
+ *
+ * If no configuration is specified by the application, then
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
  *
  * An application can define its own scheduling policy by defining
  * CONFIGURE_SCHEDULER_USER and the following:
- *    - CONFIGURE_SCHEDULER_ENTRY_POINTS 
+ *    - CONFIGURE_SCHEDULER_ENTRY_POINTS
  *    - CONFIGURE_MEMORY_FOR_SCHEDULER - base memory
  *    - CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER - per task memory
  */
@@ -612,7 +615,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
-/* 
+/*
  * If the Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
@@ -630,7 +633,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
 
-/* 
+/*
  * If the Simple Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE)
@@ -705,7 +708,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
 #endif
 
-/* 
+/*
  * Set up the scheduler entry points table.  The scheduling code uses
  * this code to know which scheduler is configured by the user.
  */
@@ -858,7 +861,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       #define CONFIGURE_UNIFIED_WORK_AREAS
     #endif
   #endif
-  
+
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
   #else

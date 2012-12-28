@@ -1,7 +1,9 @@
 /**
  * @file rtems/timerdrv.h
  *
- *  This file describes the Timer Driver for all boards.
+ * @brief Timer Driver for all Boards
+ *
+ * This file describes the Timer Driver for all boards.
  */
 
 /*

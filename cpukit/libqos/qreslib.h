@@ -1,8 +1,11 @@
 /**
  * @file qreslib.h
  *
- *  This include file contains all the constants and structures associated
- *  with the QoS RES library in RTEMS.
+ * @brief Constants and Structures Associated
+ * with the QoS RES library in RTEMS
+ *
+ * This include file contains all the constants and structures
+ * associated with the QoS RES library in RTEMS.
  *
  * @note The library is available only together with CBS scheduler.
  */

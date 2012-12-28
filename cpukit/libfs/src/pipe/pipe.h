@@ -1,6 +1,8 @@
 /**
  * @file rtems/pipe.h
  *
+ * @brief Defines the Interface to the POSIX FIFO/pipe File System Support
+ *
  * This include file defines the interface to the POSIX FIFO/pipe file system
  * support.
  */
@@ -24,7 +26,7 @@ extern "C" {
 
 /**
  * @defgroup FIFO_PIPE FIFO/pipe File System Support
- * 
+ *
  * @brief Interface to the POSIX FIFO/pipe File System
  */
 
@@ -50,7 +52,7 @@ typedef struct pipe_control {
 
 /**
  * @brief Create an Anonymous Pipe
- * 
+ *
  * Called by pipe() to create an anonymous pipe.
  */
 extern int pipe_create(
@@ -59,7 +61,7 @@ extern int pipe_create(
 
 /**
  * @brief Release a Pipe
- * 
+ *
  * Interface to file system close.
  *
  * *pipep points to pipe control structure. When the last user releases pipe,
@@ -85,7 +87,7 @@ extern int fifo_open(
 
 /**
  * @brief Pipe Read
- * 
+ *
  * Interface to file system read.
  */
 extern ssize_t pipe_read(
@@ -97,7 +99,7 @@ extern ssize_t pipe_read(
 
 /**
  * @brief Pipe Write
- * 
+ *
  * Interface to file system write.
  */
 extern ssize_t pipe_write(
@@ -109,7 +111,7 @@ extern ssize_t pipe_write(
 
 /**
  * @brief Pipe IO Control
- * 
+ *
  * Interface to file system ioctl.
  */
 extern int pipe_ioctl(

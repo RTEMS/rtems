@@ -1,8 +1,11 @@
 /**
  * @file rtems/mw_uid.h
  *
- * This file defines the interface for input devices used by MicroWindows
- * in an embedded system environment.
+ * @brief Input device Interface for MicroWindows in an
+ * Embedded System Enviroment
+ *
+ * This file defines the interface for input devices used by
+ * MicroWindows in an embedded system environment.
  */
 
 /*

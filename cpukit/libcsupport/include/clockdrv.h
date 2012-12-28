@@ -1,6 +1,8 @@
 /**
  * @file rtems/clockdrv.h
  *
+ * @brief Clock Driver for all Boards
+ *
  * This file describes the Clock Driver for all boards.
  */
 

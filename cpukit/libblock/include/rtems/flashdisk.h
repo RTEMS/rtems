@@ -3,6 +3,8 @@
  *
  * @ingroup RTEMSFDisk
  *
+ * @brief Interface to a Flash Disk Block Device
+ *
  * This file defines the interface to a flash disk block device.
  */
 

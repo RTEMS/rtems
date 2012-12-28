@@ -1,6 +1,9 @@
 /**
  *  @file  rtems/bspcmdline.h
  *
+ *  @brief Related Prototypes and Specifications to
+ *  BSP Command Line String and helper routines.
+ *
  *  This include file contains all prototypes and specifications
  *  related to the BSP Command Line String and associated helper
  *  routines.  The helpers are useful for locating command line

@@ -3,7 +3,7 @@
  *
  * @ingroup rtems_blkdev
  *
- * Block device management.
+ * @brief Block Device Management
  */
 
 /*

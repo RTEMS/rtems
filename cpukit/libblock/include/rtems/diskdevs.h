@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup rtems_disk
+ * @brief Block Device Disk Management API
  *
- * @brief Block device disk management API.
+ * @ingroup rtems_disk
  */
 
 /*
@@ -94,7 +94,7 @@ typedef struct {
 typedef struct {
   /**
    * @brief Read hit count.
-   * 
+   *
    * A read hit occurs in the rtems_bdbuf_read() function in case the block is
    * in the cached or modified state.
    */
@@ -102,7 +102,7 @@ typedef struct {
 
   /**
    * @brief Read miss count.
-   * 
+   *
    * A read miss occurs in the rtems_bdbuf_read() function in case the block is
    * in the empty state and a read transfer must be initiated to read the data
    * from the device.
