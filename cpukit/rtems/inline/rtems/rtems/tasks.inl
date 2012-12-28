@@ -26,7 +26,7 @@
  */
 
 /**
- *  @brief RTEMS_tasks_Allocate
+ *  @brief Allocates a task control block.
  *
  *  This function allocates a task control block from
  *  the inactive chain of free task control blocks.
@@ -37,7 +37,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate( void )
 }
 
 /**
- *  @brief RTEMS_tasks_Free
+ *  @brief Frees a task control block.
  *
  *  This routine frees a task control block to the
  *  inactive chain of free task control blocks.
@@ -46,14 +46,14 @@ RTEMS_INLINE_ROUTINE void _RTEMS_tasks_Free (
   Thread_Control *the_task
 )
 {
-  _Objects_Free( 
+  _Objects_Free(
     _Objects_Get_information_id( the_task->Object.id ),
     &the_task->Object
   );
 }
 
 /**
- *  @brief RTEMS_tasks_Priority_to_Core
+ *  @brief Converts an RTEMS API priority into a core priority.
  *
  *  This function converts an RTEMS API priority into a core priority.
  */
@@ -65,7 +65,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_tasks_Priority_to_Core(
 }
 
 /**
- *  @brief RTEMS_tasks_Priority_is_valid
+ *  @brief Checks whether the priority is a valid user task.
  *
  *  This function returns TRUE if the_priority is a valid user task priority
  *  and FALSE otherwise.

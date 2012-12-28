@@ -26,7 +26,7 @@
  */
 
 /**
- *  @brief Partition_Allocate_buffer
+ *  @brief Allocate a buffer from the_partition.
  *
  *  This function attempts to allocate a buffer from the_partition.
  *  If successful, it returns the address of the allocated buffer.
@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE void *_Partition_Allocate_buffer (
 }
 
 /**
- *  @brief Partition_Free_buffer
+ *  @brief Frees the_buffer to the_partition.
  *
  *  This routine frees the_buffer to the_partition.
  */
@@ -53,7 +53,7 @@ RTEMS_INLINE_ROUTINE void _Partition_Free_buffer (
 }
 
 /**
- *  @brief Partition_Is_buffer_on_boundary
+ *  @brief Checks whether is on a valid buffer boundary for the_partition.
  *
  *  This function returns TRUE if the_buffer is on a valid buffer
  *  boundary for the_partition, and FALSE otherwise.
@@ -74,7 +74,7 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_on_boundary (
 }
 
 /**
- *  @brief Partition_Is_buffer_valid
+ *  @brief Checks whether the_buffer is a valid buffer from the_partition.
  *
  *  This function returns TRUE if the_buffer is a valid buffer from
  *  the_partition, otherwise FALSE is returned.
@@ -97,7 +97,7 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_valid (
 }
 
 /**
- *  @brief Partition_Is_buffer_size_aligned
+ *  @brief Checks if partition is buffer size aligned.
  *
  *  This function returns TRUE if the use of the specified buffer_size
  *  will result in the allocation of buffers whose first byte is
@@ -111,7 +111,8 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned (
 }
 
 /**
- *  @brief Partition_Allocate
+ *  @brief Allocates a partition control block from the
+ *  inactive chain of free partition control blocks.
  *
  *  This function allocates a partition control block from
  *  the inactive chain of free partition control blocks.
@@ -122,7 +123,8 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Allocate ( void )
 }
 
 /**
- *  @brief Partition_Free
+ *  @brief Frees a partition control block to the
+ *  inactive chain of free partition control blocks.
  *
  *  This routine frees a partition control block to the
  *  inactive chain of free partition control blocks.
@@ -135,7 +137,7 @@ RTEMS_INLINE_ROUTINE void _Partition_Free (
 }
 
 /**
- *  @brief Partition_Get
+ *  @brief Maps partition IDs to partition control blocks.
  *
  *  This function maps partition IDs to partition control blocks.
  *  If ID corresponds to a local partition, then it returns
@@ -155,7 +157,7 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get (
 }
 
 /**
- *  @brief Partition_Is_null
+ *  @brief Checks if the_partition is NULL.
  *
  *  This function returns TRUE if the_partition is NULL
  *  and FALSE otherwise.

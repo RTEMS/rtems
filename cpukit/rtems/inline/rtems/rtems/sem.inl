@@ -26,7 +26,8 @@
  */
 
 /**
- *  @brief Semaphore_Allocate
+ *  @brief Allocates a semaphore control block from
+ *  the inactive chain of free semaphore control blocks.
  *
  *  This function allocates a semaphore control block from
  *  the inactive chain of free semaphore control blocks.
@@ -37,7 +38,8 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Allocate( void )
 }
 
 /**
- *  @brief Semaphore_Free
+ *  @brief Frees a semaphore control block to the
+ *  inactive chain of free semaphore control blocks.
  *
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
@@ -50,7 +52,7 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
 }
 
 /**
- *  @brief Semaphore_Get
+ *  @brief Maps semaphore IDs to semaphore control blocks.
  *
  *  This function maps semaphore IDs to semaphore control blocks.
  *  If ID corresponds to a local semaphore, then it returns
@@ -70,7 +72,7 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get (
 }
 
 /**
- *  @brief Semaphore_Get (Interrupts disabled)
+ *  @brief Maps semaphore IDs to semaphore control blocks.
  *
  *  This function maps semaphore IDs to semaphore control blocks.
  *  If ID corresponds to a local semaphore, then it returns
@@ -91,7 +93,7 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
 }
 
 /**
- *  @brief Semaphore_Is_null
+ *  @brief Checks if the_semaphore is NULL.
  *
  *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
  */

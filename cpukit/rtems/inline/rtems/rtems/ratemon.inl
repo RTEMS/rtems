@@ -26,7 +26,8 @@
  */
 
 /**
- *  @brief Rate_monotonic_Allocate
+ *  @brief Allocates a period control block from
+ *  the inactive chain of free period control blocks.
  *
  *  This function allocates a period control block from
  *  the inactive chain of free period control blocks.
@@ -38,7 +39,8 @@ RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
 }
 
 /**
- *  @brief Rate_monotonic_Free
+ *  @brief Allocates a period control block from
+ *  the inactive chain of free period control blocks.
  *
  *  This routine allocates a period control block from
  *  the inactive chain of free period control blocks.
@@ -51,7 +53,7 @@ RTEMS_INLINE_ROUTINE void _Rate_monotonic_Free (
 }
 
 /**
- *  @brief Rate_monotonic_Get
+ *  @brief Maps period IDs to period control blocks.
  *
  *  This function maps period IDs to period control blocks.
  *  If ID corresponds to a local period, then it returns
@@ -69,7 +71,7 @@ RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get (
 }
 
 /**
- *  @brief Rate_monotonic_Is_active
+ *  @brief Checks if the_period is in the ACTIVE state.
  *
  *  This function returns TRUE if the_period is in the ACTIVE state,
  *  and FALSE otherwise.
@@ -82,7 +84,7 @@ RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_active (
 }
 
 /**
- *  @brief Rate_monotonic_Is_inactive
+ *  @brief Checks if the_period is in the ACTIVE state.
  *
  *  This function returns TRUE if the_period is in the ACTIVE state,
  *  and FALSE otherwise.
@@ -95,7 +97,7 @@ RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_inactive (
 }
 
 /**
- *  @brief Rate_monotonic_Is_expired
+ *  @brief Checks if the_period is in the EXPIRED state.
  *
  *  This function returns TRUE if the_period is in the EXPIRED state,
  *  and FALSE otherwise.
@@ -108,7 +110,7 @@ RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_expired (
 }
 
 /**
- *  @brief Rate_monotonic_Is_null
+ *  @brief Checks if the_period is NULL.
  *
  *  This function returns TRUE if the_period is NULL and FALSE otherwise.
  */

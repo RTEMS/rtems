@@ -28,7 +28,7 @@
  */
 
 /**
- *  @brief Message_queue_Is_null
+ *  @brief Check whether message queue is null.
  *
  *  This function places the_message at the rear of the outstanding
  *  messages on the_message_queue.
@@ -42,7 +42,8 @@ RTEMS_INLINE_ROUTINE bool _Message_queue_Is_null (
 
 
 /**
- *  @brief Message_queue_Free
+ *  @brief Deallocates a message queue control block into
+ *  the inactive chain of free message queue control blocks.
  *
  *  This routine deallocates a message queue control block into
  *  the inactive chain of free message queue control blocks.
@@ -55,7 +56,7 @@ RTEMS_INLINE_ROUTINE void _Message_queue_Free (
 }
 
 /**
- *  @brief Message_queue_Get
+ *  @brief Maps message queue IDs to message queue control blocks.
  *
  *  This function maps message queue IDs to message queue control
  *  blocks.  If ID corresponds to a local message queue, then it

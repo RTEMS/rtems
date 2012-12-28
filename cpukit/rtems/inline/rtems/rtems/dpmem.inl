@@ -26,7 +26,8 @@
  */
 
 /**
- *  @brief Dual_ported_memory_Allocate
+ *  @brief Allocates a port control block from the inactive chain
+ *  of free port control blocks.
  *
  *  This routine allocates a port control block from the inactive chain
  *  of free port control blocks.
@@ -39,7 +40,8 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control
 }
 
 /**
- *  @brief Dual_ported_memory_Free
+ *  @brief Frees a port control block to the inactive chain
+ *  of free port control blocks.
  *
  *  This routine frees a port control block to the inactive chain
  *  of free port control blocks.
@@ -52,7 +54,7 @@ RTEMS_INLINE_ROUTINE void _Dual_ported_memory_Free (
 }
 
 /**
- *  @brief Dual_ported_memory_Get
+ *  @brief Maps port IDs to port control blocks.
  *
  *  This function maps port IDs to port control blocks.  If ID
  *  corresponds to a local port, then it returns the_port control
@@ -71,7 +73,7 @@ RTEMS_INLINE_ROUTINE Dual_ported_memory_Control *_Dual_ported_memory_Get (
 }
 
 /**
- *  @brief Dual_ported_memory_Is_null
+ *  @brief Checks if the_port is NULL.
  *
  *  This function returns true if the_port is NULL and false otherwise.
  */

@@ -28,7 +28,7 @@
  */
 
 /**
- *  @brief Options_Is_no_wait
+ *  @brief Checks if the RTEMS_NO_WAIT option is enabled in option_set.
  *
  *  This function returns TRUE if the RTEMS_NO_WAIT option is enabled in
  *  option_set, and FALSE otherwise.
@@ -41,7 +41,7 @@ RTEMS_INLINE_ROUTINE bool _Options_Is_no_wait (
 }
 
 /**
- *  @brief Options_Is_any
+ *  @brief Checks if the RTEMS_EVENT_ANY option is enabled in OPTION_SET.
  *
  *  This function returns TRUE if the RTEMS_EVENT_ANY option is enabled in
  *  OPTION_SET, and FALSE otherwise.
