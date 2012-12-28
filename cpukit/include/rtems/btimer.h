@@ -1,7 +1,7 @@
 /**
  * @file rtems/btimer.h
  *
- *  RTEMS benchmark timer API for all boards.
+ * @brief RTEMS Benchmark Timer API for all Boards
  */
 
 /*
@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
- 
+
 /*
  * All the functions declared as extern after this comment
  * MUST be implemented in each BSP.

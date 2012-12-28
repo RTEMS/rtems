@@ -1,7 +1,7 @@
 /**
  * @file rtems/rtems/rtemsapi.h
  *
- *  RTEMS API Support
+ * @brief RTEMS API Support
  */
 
 /*  COPYRIGHT (c) 1989-2008.

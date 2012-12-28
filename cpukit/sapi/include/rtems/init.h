@@ -1,6 +1,8 @@
 /**
  * @file rtems/init.h
  *
+ * @brief Constants and Structures Associated
+ * with the Initialization Manager
  *
  *  This include file contains all the constants and structures associated
  *  with the Initialization Manager.  This manager is responsible for

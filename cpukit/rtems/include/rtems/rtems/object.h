@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/object.h
  *
+ * @brief Classic API interfaces to Object Services
+ *
  * This include file defines Classic API interfaces to Object Services.
  */
 

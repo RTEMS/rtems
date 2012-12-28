@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/tasks.h
  *
+ * @brief Constants and Structures Associated with RTEMS Tasks
+ *
  *  This include file contains all constants and structures associated
  *  with RTEMS tasks.  This manager provides a comprehensive set of directives
  *  to create, delete, and administer tasks.

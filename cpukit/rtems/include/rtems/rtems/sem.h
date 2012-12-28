@@ -1,6 +1,8 @@
 /**
  * @file rtems/rtems/sem.h
  *
+ * @brief Constants and Structures Associated with the Semaphore Manager
+ *
  *  This include file contains all the constants and structures associated
  *  with the Semaphore Manager.  This manager utilizes standard Dijkstra
  *  counting semaphores to provide synchronization and mutual exclusion

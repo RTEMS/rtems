@@ -1,9 +1,11 @@
 /**
  *  @file  rtems/bspsmp.h
  *
+ *  @brief Interface Between RTEMS and an SMP Aware BSP
+ *
  *  This include file defines the interface between RTEMS and an
  *  SMP aware BSP.  These methods will only be used when RTEMS
- *  is configured with SMP support enabled. 
+ *  is configured with SMP support enabled.
  */
 
 /*
@@ -25,7 +27,7 @@
  *  @defgroup RTEMS BSP SMP Interface
  *
  *  This defines the interface between RTEMS and the BSP for
- *  SMP support.  The interface uses the term primary 
+ *  SMP support.  The interface uses the term primary
  *  to refer to the "boot" processor and secondary to refer
  *  to the "application" processors.  Different architectures
  *  use different terminology.
@@ -51,7 +53,7 @@ extern "C" {
  *  indicate the Maximum number of CPUs in this system.
  */
 extern uint32_t rtems_configuration_smp_maximum_processors;
- 
+
 /**
  *  @brief Initialize Secondary CPUs
  *
@@ -97,11 +99,11 @@ void rtems_smp_send_message(
  *  @brief Generate a Interprocessor Broadcast Interrupt
  *
  *  This method is invoked when RTEMS wants to let all of the other
- *  CPUs know that it has sent them message.  CPUs not including 
+ *  CPUs know that it has sent them message.  CPUs not including
  *  the originating CPU should receive the interrupt.
 
  *
- *  @note On CPUs without the capability to generate a broadcast 
+ *  @note On CPUs without the capability to generate a broadcast
  *        to all other CPUs interrupt, this can be implemented by
  *        a loop of sending interrupts to specific CPUs.
  */
@@ -152,7 +154,7 @@ void bsp_smp_secondary_cpu_initialize(int cpu);
  *  @note This is provided by RTEMS.
  */
 void rtems_smp_secondary_cpu_initialize(void);
- 
+
 /**
  *  This method is invoked by the BSP to initialize the per CPU structure
  *  for the specified @a cpu while it is bringing the secondary CPUs
@@ -167,7 +169,7 @@ void rtems_smp_initialize_per_cpu(int cpu);
  *  @brief RTEMS SMP Proccess Interrupt
  *
  *  This is the method called by the BSP's interrupt handler
- *  to process the incoming interprocessor request. 
+ *  to process the incoming interprocessor request.
  */
 void rtems_smp_process_interrupt(void);
 
@@ -184,7 +186,7 @@ void bsp_smp_wait_for(
 #endif
 
 #else
-  #define bsp_smp_processor_id()  0 
+  #define bsp_smp_processor_id()  0
 #endif
 
 #endif

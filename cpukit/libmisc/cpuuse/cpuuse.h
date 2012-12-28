@@ -1,6 +1,9 @@
 /**
  * @file rtems/cpuuse.h
  *
+ * @brief Information Necessary to Utilize
+ * and Install the CPU Usage Reporting Mechanism
+ *
  * This include file contains information necessary to utilize
  * and install the cpu usage reporting mechanism.
  */

@@ -3,8 +3,8 @@
  *
  * @ingroup LibIO
  *
- * @brief Basic IO API.
- * 
+ * @brief Basic IO API
+ *
  * This file contains the support infrastructure used to manage the
  * table of integer style file descriptors used by the low level
  * POSIX system calls like open(), read, fstat(), etc.
@@ -1257,7 +1257,7 @@ typedef struct {
 
 /**
  * @brief RTEMS LibIO Initialization
- * 
+ *
  * Called by BSP startup code to initialize the libio subsystem.
  */
 void rtems_libio_init(void);
@@ -1384,7 +1384,7 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
 
 /**
  *  @brief Base File System Initialization
- *  
+ *
  *  Initialize the foundation of the file system.  This is specified
  *  by the structure rtems_filesystem_mount_table.  The usual
  *  configuration is a single instantiation of the IMFS or miniIMFS with

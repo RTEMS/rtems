@@ -3,7 +3,7 @@
  *
  * @ingroup libi2c
  *
- * @brief I2C library.
+ * @brief I2C Library
  */
 
 #ifndef _RTEMS_LIBI2C_H

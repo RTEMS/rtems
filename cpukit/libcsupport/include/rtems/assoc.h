@@ -1,6 +1,8 @@
 /**
  * @file rtems/assoc.h
  *
+ * @brief RTEMS Associativity Routines
+ *
  * RTEMS associativity routines.  Mainly used to convert a value from
  * one space to another (eg: our errno's to host errno's and vice-versa)
  */
@@ -139,7 +141,7 @@ const rtems_assoc_t *rtems_assoc_ptr_by_local(
 
 /**
  *  @brief RTEMS Associate Bad Name
- * 
+ *
  *  what to return if a value is not found
  *  this is not reentrant, but it really shouldn't be invoked anyway
  */
