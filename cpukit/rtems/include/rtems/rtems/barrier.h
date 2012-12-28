@@ -31,7 +31,8 @@
  *
  *  @ingroup ClassicRTEMS
  *
- *  This encapsulates functionality which XXX
+ *  This encapsulates functionality which implements the Classic API
+ *  Barrier Manager.
  */
 /**@{*/
 

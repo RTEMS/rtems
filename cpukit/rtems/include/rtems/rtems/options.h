@@ -25,7 +25,11 @@ extern "C" {
 /**
  *  @defgroup ClassicOptions Classic API Options
  *
- *  This encapsulates functionality which XXX
+ *  @ingroup ClassicRTEMS
+ *
+ *  This encapsulates functionality related to the options argument
+ *  to Classic API blocking operations. The primary option is whether
+ *  or not a task is willing to wait for the operation to complete.
  */
 /**@{*/
 

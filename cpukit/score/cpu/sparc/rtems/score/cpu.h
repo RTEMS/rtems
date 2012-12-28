@@ -354,6 +354,8 @@ typedef struct {
 /**
  * @defgroup Contexts SPARC Context Structures
  *
+ *  @ingroup Score
+ *
  *  Generally there are 2 types of context to save.
  *     + Interrupt registers to save
  *     + Task level registers to save

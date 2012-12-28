@@ -10,7 +10,7 @@
 #define _RTEMS_RTEMS_ASSOC_H
 
 /**
- *  @defgroup Associativity Routines
+ *  @defgroup Associativity Associativity Routines
  */
 /**@{*/
 

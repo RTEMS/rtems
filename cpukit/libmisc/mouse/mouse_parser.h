@@ -114,4 +114,6 @@ void mouse_parser_enqueue(
 }
 #endif
 
+/**@}*/
+
 #endif

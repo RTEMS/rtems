@@ -189,5 +189,7 @@ int _POSIX_Semaphore_Translate_core_semaphore_return_code(
 }
 #endif
 
+/**@}*/
+
 #endif
 /*  end of include file */
