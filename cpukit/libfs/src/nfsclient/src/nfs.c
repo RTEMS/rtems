@@ -1,15 +1,20 @@
-/* NFS client implementation for RTEMS; hooks into the RTEMS filesystem */
-
-/* Author: Till Straumann <strauman@slac.stanford.edu> 2002 */
+/**
+ * @file
+ *
+ * @brief NFS Client Implementation for RTEMS
+ * @ingroup libfs
+ *
+ * Hooks Into the RTEMS NFS Filesystem
+ */
 
 /*
+ * Author: Till Straumann <strauman@slac.stanford.edu>, 2002
+ *
  * Hacked on by others.
  *
  * Modifications to support reference counting in the file system are
  * Copyright (c) 2012 embedded brains GmbH.
- */
-
-/*
+ *
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by
@@ -1313,7 +1318,7 @@ int		len;
 	}
 
 	memcpy(&psa->sin_addr, h->h_addr, sizeof (struct in_addr));
-  
+
   /* END OF NON-THREAD SAFE REGION */
 
 	psa->sin_family = AF_INET;
@@ -1770,13 +1775,13 @@ char				*path     = mt_entry->dev;
     fprintf (stderr, "error: initialising RPC\n");
     return -1;
   }
-  
+
 	nfsInit(0, 0);
 
 #if 0
 	printf("Trying to mount %s on %s\n",path,mntpoint);
 #endif
-  
+
 	if ( buildIpAddr(&uid, &gid, &host, &saddr, &path) )
 		return -1;
 

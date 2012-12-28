@@ -8,7 +8,12 @@
 
 #include <rpc/rpc.h>
 
-
+/**
+ *  @defgroup libfs_nfsclient_nfs_prot NFS Prot
+ *
+ *  @ingroup libfs
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -451,5 +456,5 @@ extern bool_t xdr_statfsres ();
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* !_NFS_PROT_H_RPCGEN */

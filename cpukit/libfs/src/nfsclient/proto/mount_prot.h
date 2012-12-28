@@ -8,7 +8,12 @@
 
 #include <rpc/rpc.h>
 
-
+/**
+ *  @defgroup libfs_nfsclient_mount_prot Mount Prot
+ *
+ *  @ingroup libfs
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -140,5 +145,5 @@ extern bool_t xdr_exportnode ();
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* !_MOUNT_PROT_H_RPCGEN */

@@ -1,6 +1,11 @@
-/*
- *  MSDOS evaluation routines
+/**
+ * @file
  *
+ * @brief MSDOS Evaluation Routines
+ * @ingroup libfs
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

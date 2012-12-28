@@ -1,8 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Low-level Operations on a Volume with a DOSFS FAT filesystem
+ * @ingroup libfs
+ */
+
 /*
- * fat.c
- *
- * Low-level operations on a volume with FAT filesystem
- *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  */

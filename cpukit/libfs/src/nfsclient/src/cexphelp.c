@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief CEXP Help Information
+ * @ingroup libfs
+ */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
