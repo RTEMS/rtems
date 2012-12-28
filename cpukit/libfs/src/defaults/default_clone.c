@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default File System creates a child process
+ * @ingroup LibIOFSOps File System Operations  
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

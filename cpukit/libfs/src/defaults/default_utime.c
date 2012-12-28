@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default File System sets file access and modification times
+ * @ingroup LibIOFSOps File System Operations  
+ */
+
 /*
  *  COPYRIGHT (c) 2010.
  *  On-Line Applications Research Corporation (OAR).
