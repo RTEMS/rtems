@@ -3,7 +3,7 @@
  *
  * @ingroup ClassicRTEMS
  *
- * @brief Provides the public interface to the RTEMS Classic API.
+ * @brief Provides the Public Interface to the RTEMS Classic API
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -158,7 +158,7 @@ const char *rtems_get_version_string(void);
  * risk of blown stacks for most user applications. Using this constant when
  * specifying the task stack size, indicates that the stack size will be at
  * least RTEMS_MINIMUM_STACK_SIZE bytes in size. If the user configured minimum
- * stack size is larger than the recommended minimum, then it will be used. 
+ * stack size is larger than the recommended minimum, then it will be used.
  */
 #define RTEMS_MINIMUM_STACK_SIZE  STACK_MINIMUM_SIZE
 
@@ -174,7 +174,7 @@ const char *rtems_get_version_string(void);
  * minimum stack size value, you may get a stack size that is smaller or larger
  * than the recommended minimum. This can be used to provide large stacks for
  * all tasks on complex applications or small stacks on applications that are
- * trying to conserve memory. 
+ * trying to conserve memory.
  */
 #define RTEMS_CONFIGURED_MINIMUM_STACK_SIZE  0
 

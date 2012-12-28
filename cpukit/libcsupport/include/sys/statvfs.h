@@ -1,6 +1,8 @@
 /**
  * @file sys/statvfs.h
  *
+ * @brief Interface to the statvfs() set of API Methods
+ *
  * This include file defines the interface to the statvfs() set of
  * API methods. The statvfs as defined by the SUS:
  *

@@ -1,6 +1,8 @@
 /**
  * @file sys/utsname.h
  *
+ * @brief Interface to the POSIX utsname() Service
+ *
  * This include file defines the interface to the POSIX utsname() service.
  */
 

@@ -1,7 +1,7 @@
 /**
  * @file rtems/monitor.h
  *
- * The RTEMS monitor task.
+ * @brief The RTEMS Monitor Task
  */
 
 

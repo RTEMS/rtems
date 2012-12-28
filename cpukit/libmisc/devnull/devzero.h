@@ -1,6 +1,8 @@
 /**
  * @file rtems/devzero.h
  *
+ * @brief Interface to the RTEMS /dev/zero Device Driver
+ *
  * This include file defines the interface to the RTEMS /dev/zero
  * device driver.
  */

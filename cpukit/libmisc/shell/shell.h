@@ -1,7 +1,7 @@
 /**
  * @file rtems/shell.h
  *
- *  Instantatiate a new terminal shell.
+ * @brief Instantatiate a New Terminal Shell
  */
 
 /*
