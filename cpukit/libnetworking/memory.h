@@ -1,7 +1,7 @@
 /**
- * @file memory.h
+ * @file
  *
- * Dummy include file for FreeBSD routines
+ * @brief Dummy Include File for FreeBSD Routines
  */
 
 #include <string.h>

@@ -1,6 +1,8 @@
 /**
- * @file rtems/libio_.h
+ * @file
  *
+ * @brief LibIO Internal Interface
+ * 
  * This file is the libio internal interface.
  */
 

@@ -1,8 +1,10 @@
 /**
-*  @file  libfs/devfs/devfs.h
-*
-*  This include file contains all constants and structures associated
-*  with the 'device-only' filesystem.
+* @file 
+* 
+* @brief 'device-only' File System Support
+*  
+* This include file contains all constants and structures associated
+* with the 'device-only' filesystem.
 */
 
 #ifndef _RTEMS_DEVFS_H

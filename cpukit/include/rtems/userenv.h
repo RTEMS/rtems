@@ -2,6 +2,7 @@
  * @file
  *
  * @ingroup LibIOEnv
+ * @brief User Environment Support
  */
 
 /*

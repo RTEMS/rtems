@@ -1,9 +1,11 @@
 /**
- *  @file  rtems/system.h
+ * @file
+ * 
+ * @brief Information Included in Every Function in the Executive
  *
- *  This include file contains information that is included in every
- *  function in the executive.  This must be the first include file
- *  included in all internal RTEMS files.
+ * This include file contains information that is included in every
+ * function in the executive.  This must be the first include file
+ * included in all internal RTEMS files.
  */
 
 /*

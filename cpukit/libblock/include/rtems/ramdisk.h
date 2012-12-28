@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup rtems_ramdisk
- *
- * @brief RAM disk block device API.
+ * @brief RAM Disk Block Device API
  */
 
 /*

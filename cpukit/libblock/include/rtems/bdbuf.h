@@ -2,8 +2,7 @@
  * @file
  *
  * @ingroup rtems_bdbuf
- *
- * Block device buffer management.
+ * @brief Block Device Buffer Management
  */
 
 /*

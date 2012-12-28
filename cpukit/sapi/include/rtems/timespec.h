@@ -1,11 +1,9 @@
 /**
- *  @file  rtems/sapi/timespec.h
+ * @file
  *
- *  @ingroup 
+ * @brief Timespec API
  *
- *  @brief Timespec API
- *
- *  This include file contains API for manipulating timespecs.
+ * This include file contains API for manipulating timespecs.
  */
 
 /*

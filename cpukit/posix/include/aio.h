@@ -1,6 +1,8 @@
 /**
- * @file aio.h
+ * @file
  *
+ * @brief POSIX Asynchronous Input and Output
+ * 
  * This file contains the definitions related to POSIX Asynchronous
  * Input and Output,
  */

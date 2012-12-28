@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicIO
- *
- * @brief Classic Input/Output Manager API.
+ * @brief Classic Input/Output Manager API
  * 
  * This file emulates the old Classic RTEMS IO manager directives
  * which register and lookup names using the in-memory filesystem.

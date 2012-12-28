@@ -1,6 +1,8 @@
 /**
- * @file rtems/devnull.h
+ * @file
  *
+ * @brief RTEMS /dev/null Device Driver
+ * 
  * This include file defines the interface to the RTEMS /dev/null
  * device driver.
  */

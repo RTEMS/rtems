@@ -1,6 +1,8 @@
 /**
- * @file rtems/libcsupport.h
- *
+ * @file
+ * 
+ * @brief Standard C Library Support
+ * 
  * This include file contains the information regarding the
  * RTEMS specific support for the standard C library.
  */

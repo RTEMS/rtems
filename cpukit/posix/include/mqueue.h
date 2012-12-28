@@ -1,6 +1,8 @@
 /**
- * @file mqueue.h
+ * @file
  *
+ * @brief POSIX Message Queues
+ * 
  * This file contains the definitions related to POSIX Message Queues.
  * 
  * The structure of the routines is identical to that of POSIX

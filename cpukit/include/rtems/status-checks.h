@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Header file for status checks.
+ * @brief Header File for Status Checks
  *
  * @warning Do not include this file in other header files.  Use it only in
  * source files.

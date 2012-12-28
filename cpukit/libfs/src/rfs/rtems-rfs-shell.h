@@ -1,17 +1,20 @@
+/**
+ * @file
+ *
+ * 
+ * @ingroup rtems-rfs
+ * @brief RTEMS File Systems Shell Commands
+ *
+ * RTEMS File Systems Shell commands provide a CLI interface to support and
+ * development of the RFS file system.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Shell commands provide a CLI interface to support and
- * development od the RFS file system.
  */
 
 #if !defined (_RTEMS_RFS_SHELL_H_)

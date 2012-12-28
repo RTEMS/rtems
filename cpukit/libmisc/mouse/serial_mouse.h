@@ -1,13 +1,15 @@
 /**
- * @file rtems/serial_mouse.h
+ * @file
+ * 
+ * @brief Serial Mouse Driver
  *
- *  This file describes the Serial Mouse Driver for all boards.
- *  This driver assumes that the BSP or application will provide
- *  an implementation of the method bsp_get_serial_mouse_device()
- *  which tells the driver what serial port device to open() and
- *  what type of mouse is connected.
+ * This file describes the Serial Mouse Driver for all boards.
+ * This driver assumes that the BSP or application will provide
+ * an implementation of the method bsp_get_serial_mouse_device()
+ * which tells the driver what serial port device to open() and
+ * what type of mouse is connected.
  *
- *  This driver relies on the Mouse Parser Engine.
+ * This driver relies on the Mouse Parser Engine.
  */
 
 /*

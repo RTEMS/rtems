@@ -1,6 +1,8 @@
 /**
- * @file rtems/dumpbuf.h
+ * @file
  *
+ * @brief Print a Memory Buffer
+ * 
  * This file defines the interface to the RTEMS methods to print a
  * memory buffer in a style similar to many ROM monitors and debuggers.
  */
