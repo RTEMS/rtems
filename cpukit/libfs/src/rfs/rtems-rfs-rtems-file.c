@@ -1,19 +1,19 @@
+/**
+ * @file
+ *
+ * @brief RTEMS RFS File Handlers
+ * @ingroup rtems-rfs
+ * 
+ * This file contains the set of handlers used to process operations on
+ * RFS file nodes.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS RFS File Handlers
- *
- * This file contains the set of handlers used to process operations on
- * RFS file nodes.
  */
 
 #if HAVE_CONFIG_H

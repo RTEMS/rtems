@@ -1,3 +1,13 @@
+/**
+ * @file
+ *
+ * @brief RTEMS File Systems Group Routines
+ * @ingroup rtems-rfs
+ *
+ * These functions open and close a group as well as manage bit allocations
+ * within a group.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
@@ -5,16 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Group Routines.
- *
- * These functions open and close a group as well as manage bit allocations
- * within a group.
- */
+
 
 #if HAVE_CONFIG_H
 #include "config.h"

@@ -1,16 +1,15 @@
+/**
+ * @file
+ *
+ * @brief RTEMS RFS Directory Access Routines
+ * @ingroup rtems-rfs
+ */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS RFS Directory Access Routines
  */
 
 #if HAVE_CONFIG_H
