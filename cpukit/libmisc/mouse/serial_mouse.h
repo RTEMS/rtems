@@ -25,9 +25,8 @@
 /* functions */
 
 /**
- *  @defgroup libmisc_mouse Serial Mouse Driver
- *
- *  @ingroup libmisc
+ *  @defgroup libmisc_serialmouse Serial Mouse Driver
+ *  @ingroup libmisc_mouse
  */
 /**@{*/
 #ifdef __cplusplus
