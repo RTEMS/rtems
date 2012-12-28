@@ -23,6 +23,16 @@
 #ifndef _RTEMS_POSIX_BARRIER_H
 #define _RTEMS_POSIX_BARRIER_H
 
+/**
+ *  @defgroup POSIXBarrier POSIX Barriers
+ *
+ *  @ingroup POSIXAPI
+ *
+ *  This encapsulates functionality which implements the RTEMS API
+ *  Barrier Manager.
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -81,6 +91,8 @@ int _POSIX_Barrier_Translate_core_barrier_return_code(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /*  end of include file */
