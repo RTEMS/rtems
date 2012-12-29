@@ -1,53 +1,65 @@
-/* Copyright (c) 2007 Eric B. Weddington
-   All rights reserved.
+/**
+ * @file
+ *
+ * @brief Common Symbols and Define Undefined Registers
+ *
+ * This purpose of this header is to define registers that have not been
+ * previously defined in the individual device IO header files, and to define
+ * other symbols that are common across AVR device families.
+ *
+ * This file is designed to be included in <avr/io.h> after the individual
+ * device IO header files, and after <avr/sfr_defs.h>
+ */
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-   * Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in
-     the documentation and/or other materials provided with the
-     distribution.
-
-   * Neither the name of the copyright holders nor the names of
-     contributors may be used to endorse or promote products derived
-     from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE. */
+/*
+ *  Copyright (c) 2007 Eric B. Weddington
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in
+ *   the documentation and/or other materials provided with the
+ *   distribution.
+ *
+ * * Neither the name of the copyright holders nor the names of
+ *   contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 
 
 #ifndef _AVR_COMMON_H
 #define _AVR_COMMON_H
 
+/**
+ *  @defgroup Avr_common Common Data
+ *
+ *  @ingroup avr
+ */
+/**@{*/
+
 #include <avr/sfr_defs.h>
-
-/* 
-This purpose of this header is to define registers that have not been 
-previously defined in the individual device IO header files, and to define 
-other symbols that are common across AVR device families.
-
-This file is designed to be included in <avr/io.h> after the individual
-device IO header files, and after <avr/sfr_defs.h>
-
-*/
 
 /*------------ Registers Not Previously Defined ------------*/
 
-/* 
+/*
 These are registers that are not previously defined in the individual
 IO header files, OR they are defined here because they are used in parts of
 avr-libc even if a device is not selected but a general architecture has
@@ -58,7 +70,7 @@ been selected.
 /*
 Stack pointer register.
 
-AVR architecture 1 has no RAM, thus no stack pointer. 
+AVR architecture 1 has no RAM, thus no stack pointer.
 
 All other architectures do have a stack pointer.  Some devices have only
 less than 256 bytes of possible RAM locations (128 Bytes of SRAM
@@ -75,7 +87,7 @@ for them.
 #  ifndef SP
 #    define SP _SFR_MEM16(0x3D)
 #  endif
-#elif __AVR_ARCH__ != 1 
+#elif __AVR_ARCH__ != 1
 #  ifndef SPL
 #    define SPL _SFR_IO8(0x3D)
 #  endif
@@ -192,7 +204,7 @@ keep the EEPROM-related definitions here.
 
 /*------------ Common Symbols ------------*/
 
-/* 
+/*
 Generic definitions for registers that are common across multiple AVR devices
 and families.
 */
@@ -319,4 +331,5 @@ and families.
 # endif
 #endif
 
+/**@}*/
 #endif /* _AVR_COMMON_H */
