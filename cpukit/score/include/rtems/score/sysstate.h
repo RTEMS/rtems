@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreSysState
  *
- * @brief System State Handler API.
+ * @brief System State Handler API
  */
 
 /*

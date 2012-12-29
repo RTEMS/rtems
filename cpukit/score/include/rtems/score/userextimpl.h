@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreUserExt
  *
- * @brief User Extension Handler API.
+ * @brief User Extension Handler API
  */
 
 /*
@@ -25,6 +25,10 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup ScoreUserExt User Extension Handler
+ *
+ * @ingroup Score
+ *
  * @addtogroup ScoreUserExt
  *
  * @{

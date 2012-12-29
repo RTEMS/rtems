@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/rbtree.h
  *
+ *  @brief Constants and Structures Associated with the Red-Black Tree Handler
+ *
  *  This include file contains all the constants and structures associated
  *  with the Red-Black Tree Handler.
  */
@@ -80,7 +82,7 @@ struct RBTree_Node_struct {
 };
 
 /**
- * @brief macro to return the structure containing the @a node.
+ * @brief Macro to return the structure containing the @a node.
  *
  * This macro returns a pointer of type @a container_type that points
  * to the structure containing @a node, where @a node_field_name is the
@@ -184,12 +186,12 @@ RBTree_Control name = RBTREE_INITIALIZER_EMPTY(name)
 RBTree_Node name = RBTREE_NODE_INITIALIZER_EMPTY(name)
 
 /**
- *  @brief Initialize a RBTree Header
+ *  @brief Initialize a RBTree Header.
  *
  *  This routine initializes @a the_rbtree structure to manage the
  *  contiguous array of @a number_nodes nodes which starts at
  *  @a starting_address.  Each node is of @a node_size bytes.
- * 
+ *
  *  @param[in] the_rbtree is the pointer to rbtree header
  *  @param[in] starting_address is the starting address of first node
  *  @param[in] number_nodes is the number of nodes in rbtree
@@ -205,13 +207,13 @@ void _RBTree_Initialize(
 );
 
 /**
- *  @brief Obtain the min or max node of a rbtree
+ *  @brief Obtain the min or max node of a rbtree.
  *
  *  This function removes the min or max node from @a the_rbtree and returns
  *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
  *  @a dir specifies whether to return the min (0) or max (1).
  *
- *  @return This method returns a pointer to a node.  If a node was removed,
+ *  @retval This method returns a pointer to a node.  If a node was removed,
  *          then a pointer to that node is returned.  If @a the_rbtree was
  *          empty, then NULL is returned.
  *
@@ -223,20 +225,20 @@ RBTree_Node *_RBTree_Get(
 );
 
 /**
- * @brief Find the node with given key in the tree
+ *  @brief Find the node with given key in the tree.
  *
  *  This function returns a pointer to the node with key equal to a key
  *  of @a the_node if it exists in the Red-Black Tree @a the_rbtree,
  *  and NULL if not.
- * 
+ *
  *  @param[in] the_rbtree pointer to rbtree control
  *  @param[in] the_node node with the key to search for
- *  @return This method returns pointer to control header of rbtree. * 
+ *  @retval This method returns pointer to control header of rbtree. *
  *          If there is no control header available (the node is not part
  *          of a tree), then NULL is returned. *
  *
  *  - INTERRUPT LATENCY:
- *    + single case  
+ *    + single case
  */
 RBTree_Node *_RBTree_Find(
   RBTree_Control *the_rbtree,
@@ -244,7 +246,7 @@ RBTree_Node *_RBTree_Find(
 );
 
 /**
- *  @brief Find the control structure of the tree containing the given node
+ *  @brief Find the control structure of the tree containing the given node.
  *
  *  This function returns a pointer called @a return_header to the control structure of the tree
  *  containing @a the_node, if it exists, and @a NULL if not.
@@ -252,7 +254,7 @@ RBTree_Node *_RBTree_Find(
  *  @param[in] the_node is the pointer to the rbtree node.
  *  @param[out] return_header is the pointer to control header of rbtree.
  *  @param[out] NULL is returned if there is no control header available.
- *  
+ *
  *  -INTERRUPT LATENCY:
  *    + single case
  */
@@ -261,7 +263,7 @@ RBTree_Control *_RBTree_Find_header(
 );
 
 /**
- * @brief Insert a Node (unprotected)
+ *  @brief Insert @a the_node on the Red-Black Tree @a the_rbtree (unprotected).
  *
  *  This routine inserts @a the_node on the Red-Black Tree @a the_rbtree.
  *
@@ -279,7 +281,7 @@ RBTree_Node *_RBTree_Insert_unprotected(
 );
 
 /**
- *  @brief Insert a node on a rbtree
+ *  @brief Insert a node on a rbtree.
  *
  *  This routine inserts @a the_node on the tree @a the_rbtree.
  *
@@ -298,7 +300,7 @@ RBTree_Node *_RBTree_Insert(
 
 
 /**
- * @brief Extract a Node (unprotected)
+ *  @brief Extracts (removes) @a the_node from @a the_rbtree (unprotected).
  *
  *  This routine extracts (removes) @a the_node from @a the_rbtree.
  *
@@ -311,7 +313,7 @@ void _RBTree_Extract_unprotected(
 );
 
 /**
- *  @brief Delete a node from the rbtree
+ *  @brief Delete a node from the rbtree.
  *
  *  This routine deletes @a the_node from @a the_rbtree.
  *

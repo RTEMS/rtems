@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/copyrt.h
  *
+ *  @brief Copyright Notice for RTEMS
+ *
  *  This include file contains the copyright notice for RTEMS
  *  which is included in every binary copy of the executive.
  */
@@ -16,6 +18,13 @@
 
 #ifndef _RTEMS_SCORE_COPYRT_H
 #define _RTEMS_SCORE_COPYRT_H
+
+/**
+ *  @defgroup SuperCore RTEMS Copyright Notice
+ *
+ *  @ingroup Score
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,5 +45,6 @@ extern const char _Copyright_Notice[];
 }
 #endif
 
+/**@}*/
 #endif
 /* end of include file */

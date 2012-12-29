@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/schedulerpriority.h
  *
+ *  @brief Thread Manipulation with the Priority-Based Scheduler
+ *
  *  This include file contains all the constants and structures associated
  *  with the manipulation of threads for the priority-based scheduler.
  */
@@ -26,8 +28,11 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup ScoreScheduler
+ * @defgroup ScoreScheduler Priority-based Scheduler
  *
+ * @ingroup Score
+ *
+ * @addtogroup ScoreScheduler
  */
 /**@{*/
 
@@ -64,13 +69,13 @@ typedef struct {
 } Scheduler_priority_Per_thread;
 
 /**
- * @brief Initialize Scheduler Priority
+ * @brief Initializes the priority scheduler.
  * This routine initializes the priority scheduler.
  */
 void _Scheduler_priority_Initialize(void);
 
 /**
- *  @brief Scheduler priority Block
+ *  @brief Removes @a the_thread from the scheduling decision.
  *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
@@ -84,7 +89,7 @@ void _Scheduler_priority_Block(
 );
 
 /**
- *  @brief schedule entry point
+ *  @brief Sets the heir thread to be the next ready thread.
  *
  *  This kernel routine sets the heir thread to be the next ready thread
  *  by invoking the_scheduler->ready_queue->operations->first().
@@ -92,7 +97,7 @@ void _Scheduler_priority_Block(
 void _Scheduler_priority_Schedule(void);
 
 /**
- *  @brief Allocate Scheduler Priority
+ *  @brief Allocates @a the_thread->scheduler.
  *
  *  This routine allocates @a the_thread->scheduler.
  *
@@ -104,7 +109,7 @@ void * _Scheduler_priority_Allocate(
 );
 
 /**
- *  @brief Free Scheduler Priority
+ *  @brief Frees @a the_thread->scheduler.
  *
  *  This routine frees @a the_thread->scheduler.
  *
@@ -116,7 +121,7 @@ void _Scheduler_priority_Free(
 );
 
 /**
- *  @brief Update Scheduler priority
+ *  @brief Update the scheduler priority.
  *  This routine updates @a the_thread->scheduler based on @a the_scheduler
  *  structures and thread state.
  *
@@ -128,7 +133,7 @@ void _Scheduler_priority_Update(
 );
 
 /**
- *  @brief Scheduler Priority Unblock
+ *  @brief Add @a the_thread to the scheduling decision.
  *
  *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and
@@ -141,7 +146,7 @@ void _Scheduler_priority_Unblock(
 );
 
 /**
- *  @brief Scheduler Priority Yield
+ *  @brief Remove the running THREAD to the rear of this chain.
  *
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
@@ -160,7 +165,7 @@ void _Scheduler_priority_Unblock(
 void _Scheduler_priority_Yield( void );
 
 /**
- *  @brief Scheduler Priority Enqueue
+ *  @brief Puts @a the_thread on to the priority-based ready queue.
  *
  *  This routine puts @a the_thread on to the priority-based ready queue.
  *
@@ -171,7 +176,7 @@ void _Scheduler_priority_Enqueue(
 );
 
 /**
- *  @brief Scheduler Priority Enqueue First
+ *  @brief Puts @a the_thread to the head of the ready queue.
  *
  *  This routine puts @a the_thread to the head of the ready queue.
  *  For priority-based ready queues, the thread will be the first thread
@@ -184,7 +189,7 @@ void _Scheduler_priority_Enqueue_first(
 );
 
 /**
- *  @brief Removes a specific thread from scheduler
+ *  @brief Remove a specific thread from scheduler.
  *
  *  This routine removes a specific thread from the scheduler's set
  *  of ready threads.
@@ -196,7 +201,7 @@ void _Scheduler_priority_Extract(
 );
 
 /**
- *  @brief Scheduler priority Priority compare
+ *  @brief Compare two priorities.
  *
  *  This routine compares two priorities.
  */
@@ -206,7 +211,7 @@ int _Scheduler_priority_Priority_compare(
 );
 
 /**
- *  @brief Scheduler priority Release job
+ *  @brief Called when a new job of task is released.
  *
  *  This routine is called when a new job of task is released.
  *
@@ -220,7 +225,7 @@ void _Scheduler_priority_Release_job (
 );
 
 /**
- *  @brief Deterministic Priority Scheduler Tick Method
+ *  @brief Determines if the current thread allows timeslicing.
  *
  *  This routine is invoked as part of processing each clock tick.
  *  It is responsible for determining if the current thread allows

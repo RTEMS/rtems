@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreUserExt
  *
- * @brief User Extension Handler API.
+ * @brief User Extension Handler API
  */
 
 /*

@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/smp.h
  *
+ *  @brief Interface to the SuperCore SMP Support used Internally to RTEMS
+ *
  *  This include file defines the interface to the SuperCore
  *  SMP support that is used internally to RTEMS.
  */
@@ -65,7 +67,7 @@ extern "C" {
 
 #ifndef ASM
 /**
- *  @brief Number of CPUs in SMP System
+ *  @brief Number of CPUs in a SMP system.
  *
  *  This variable is set during the SMP initialization sequence to
  *  indicate the number of CPUs in this system.
@@ -73,7 +75,7 @@ extern "C" {
 SCORE_EXTERN uint32_t _SMP_Processor_count;
 
 /**
- *  @brief Make Request of Others CPUs
+ *  @brief Request of others CPUs.
  *
  *  This method is invoked by RTEMS when it needs to make a request
  *  of the other CPUs.  It should be implemented using some type of
@@ -87,7 +89,7 @@ void _SMP_Broadcast_message(
 );
 
 /**
- *  @brief Request Other Cores to Perform First Context Switch
+ *  @brief Request other cores to perform first context switch.
  *
  *  Send message to other cores requesting them to perform
  *  their first context switch operation.
@@ -95,7 +97,7 @@ void _SMP_Broadcast_message(
 void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 
 /**
- *  @brief Request Dispatch on Other Cores
+ *  @brief Request dispatch on other cores.
  *
  *  Send message to other cores requesting them to perform
  *  a thread dispatch operation.
@@ -103,7 +105,7 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 void _SMP_Request_other_cores_to_dispatch(void);
 
 /**
- *  @Brief Request Other Cores to Shutdown
+ *  @Brief Request other cores to shutdown.
  *
  *  Send message to other cores requesting them to shutdown.
  */
@@ -116,5 +118,7 @@ void _SMP_Request_other_cores_to_shutdown(void);
 #endif
 
 #endif
+
+/**@}*/
 #endif
 /* end of include file */

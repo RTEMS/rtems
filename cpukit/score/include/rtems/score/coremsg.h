@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/coremsg.h
  *
+ *  @brief Constants and Structures Associated with the Message Queue Handler.
+ *
  *  This include file contains all the constants and structures associated
  *  with the Message queue Handler.
  */
@@ -64,7 +66,7 @@ extern "C" {
 #endif
 
 /**
- *  @brief  Message Queue MP Callback Prototype
+ *  @brief Callout provides to support global/multiprocessor operations.
  *
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on message_queues.
@@ -75,7 +77,7 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
              );
 
 /**
- *  @brief Message Buffer Contents Management Structure
+ *  @brief Data types needed to manipulate the contents of message buffers.
  *
  *  The following defines the data types needed to manipulate
  *  the contents of message buffers.
@@ -91,7 +93,7 @@ typedef struct {
 } CORE_message_queue_Buffer;
 
 /**
- *  @brief Message Structure
+ *  @brief The organization of a message buffer.
  *
  *  The following records define the organization of a message
  *  buffer.
@@ -108,7 +110,7 @@ typedef struct {
 }   CORE_message_queue_Buffer_control;
 
 /**
- *  @brief Message Queue Blocking Disciplines
+ *  @brief The possible blocking disciplines for a message queue.
  *
  *  This enumerated types defines the possible blocking disciplines
  *  for a message queue.
@@ -121,7 +123,7 @@ typedef enum {
 }   CORE_message_queue_Disciplines;
 
 /**
- *  @brief Message Priority for Appending
+ *  @brief Used when appending messages onto a message queue.
  *
  *  This is the priority constant used when appending messages onto
  *  a message queue.
@@ -129,7 +131,7 @@ typedef enum {
 #define  CORE_MESSAGE_QUEUE_SEND_REQUEST   INT_MAX
 
 /**
- *  @brief Message Priority for Prepending
+ *  @brief Used when prepending messages onto a message queue.
  *
  *  This is the priority constant used when prepending messages onto
  *  a message queue.
@@ -137,7 +139,7 @@ typedef enum {
 #define  CORE_MESSAGE_QUEUE_URGENT_REQUEST INT_MIN
 
 /**
- *  @brief Message Insertion Operation Types
+ *  @brief The modes in which a message may be submitted to a message queue.
  *
  *  The following type details the modes in which a message
  *  may be submitted to a message queue.  The message may be posted
@@ -149,7 +151,7 @@ typedef enum {
 typedef int CORE_message_queue_Submit_types;
 
 /**
- *  @brief Core Message Queue Return Statuses
+ *  @brief The possible set of Core Message Queue handler return statuses.
  *
  *  This enumerated type defines the possible set of Core Message
  *  Queue handler return statuses.
@@ -178,14 +180,14 @@ typedef enum {
 }   CORE_message_queue_Status;
 
 /**
- *  @brief Core Message Queue Last Status
+ *  @brief Core message queue last status value.
  *
  *  This is the last status value.
  */
 #define CORE_MESSAGE_QUEUE_STATUS_LAST CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT
 
 /**
- *  @brief Message Queue Attributes Type
+ *  @brief Control block used to manage the attributes of each message queue.
  *
  *  The following defines the control block used to manage the
  *  attributes of each message queue.
@@ -197,7 +199,7 @@ typedef struct {
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
   /**
-   *  @brief Message Queue Notification Callback Prototype
+   *  @brief Type for a notification handler.
    *
    *  The following defines the type for a Notification handler.  A
    *  notification handler is invoked when the message queue makes a
@@ -207,10 +209,10 @@ typedef struct {
 #endif
 
 /**
- *  @brief Core Message Queue Control Structure
+ *  @brief Control block used to manage each message queue.
  *
  *  The following defines the control block used to manage each
- *  Message Queue
+ *  Message Queue.
  */
 typedef struct {
   /** This field is the Waiting Queue used to manage the set of tasks
@@ -256,15 +258,15 @@ typedef struct {
 }   CORE_message_queue_Control;
 
 /**
- *  @brief Initialize a Message Queue
- * 
+ *  @brief Initialize a message queue.
+ *
  *  DESCRIPTION:
  *
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
  *  via messages passed to queue objects.
  *
- *  This routine initializes @a the_message_queue 
+ *  This routine initializes @a the_message_queue
  *      based on the parameters passed.
  *
  *  @param[in] the_message_queue points to the message queue to initialize
@@ -275,7 +277,7 @@ typedef struct {
  *  @param[in] maximum_message_size is the size of largest message that
  *         may be sent to this message queue instance
  *
- *  @return true if the message queue can be initialized.  In general,
+ *  @retval true if the message queue can be initialized.  In general,
  *         false will only be returned if memory for the pending
  *         messages cannot be allocated.
  */
@@ -287,8 +289,8 @@ bool _CORE_message_queue_Initialize(
 );
 
 /**
- *  @brief Close a Message Queue
- * 
+ *  @brief Close a message queue.
+ *
  *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
@@ -310,8 +312,8 @@ void _CORE_message_queue_Close(
 );
 
 /**
- *  @brief Flush Pending Messages
- * 
+ *  @brief Flush pending messages.
+ *
  *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
@@ -322,21 +324,21 @@ void _CORE_message_queue_Close(
  *
  *  @param[in] the_message_queue points to the message queue to flush
  *
- *  @return This method returns the number of message pending messages flushed.
+ *  @retval This method returns the number of message pending messages flushed.
  */
 uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue
 );
 
 /**
- *  @brief Flush Messages Support Routine
+ *  @brief Flush all outstanding messages.
  *
  *  This routine flushes all outstanding messages and returns
  *  them to the inactive message chain.
  *
  *  @param[in] the_message_queue points to the message queue to flush
  *
- *  @return This method returns the number of pending messages flushed.
+ *  @retval This method returns the number of pending messages flushed.
  *
  *  - INTERRUPT LATENCY:
  *    + single case
@@ -347,15 +349,15 @@ uint32_t   _CORE_message_queue_Flush_support(
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
 /**
- *  @brief Flush Waiting Threads.
+ *  @brief Flush waiting threads.
  *
  *  This function flushes the threads which are blocked on
  *  @a the_message_queue's pending message queue.  They are
- *  unblocked whether blocked sending or receiving. It returns 
+ *  unblocked whether blocked sending or receiving. It returns
  *  the number of messages flushed from the queue.
  *
  *  @param[in] the_message_queue points to the message queue to flush
- *  @return number of messages flushed from the queue
+ *  @retval number of messages flushed from the queue
  */
   void _CORE_message_queue_Flush_waiting_threads(
     CORE_message_queue_Control *the_message_queue
@@ -363,8 +365,8 @@ uint32_t   _CORE_message_queue_Flush_support(
 #endif
 
 /**
- *  @brief Broadcast a Message to the Message Queue
- * 
+ *  @brief Broadcast a message to the message queue.
+ *
  *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
@@ -382,8 +384,8 @@ uint32_t   _CORE_message_queue_Flush_support(
  *         a thread that is unblocked is actually a remote thread.
  *  @param[out] count points to the variable that will contain the
  *         number of tasks that are sent this message
- *  @return @a *count will contain the number of messages sent
- *  @return indication of the successful completion or reason for failure
+ *  @retval @a *count will contain the number of messages sent
+ *  @retval indication of the successful completion or reason for failure
  */
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
@@ -395,7 +397,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 );
 
 /**
- *  @brief Submit a Message to the Message Queue
+ *  @brief Submit a message to the message queue.
  *
  *  This routine implements the send and urgent message functions. It
  *  processes a message that is to be submitted to the designated
@@ -417,7 +419,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *         if the message queue is full.
  *  @param[in] timeout is the maximum number of clock ticks that the calling
  *         thread is willing to block if the message queue is full.
- *  @return indication of the successful completion or reason for failure
+ *  @retval indication of the successful completion or reason for failure
  */
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
@@ -431,8 +433,8 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 );
 
 /**
- *  @brief Size a Message from the Message Queue
- * 
+ *  @brief Size a message from the message queue.
+ *
  *  DESCRIPTION:
  *  This package is the implementation of the CORE Message Queue Handler.
  *  This core object provides task synchronization and communication functions
@@ -455,9 +457,9 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *  @param[in] timeout is the maximum number of clock ticks that the calling
  *         thread is willing to block if the message queue is empty.
  *
- *  @return indication of the successful completion or reason for failure
+ *  @retval indication of the successful completion or reason for failure
  *  @note Returns message priority via return are in TCB.
- * 
+ *
  *  - INTERRUPT LATENCY:
  *    + available
  *    + wait
@@ -472,8 +474,8 @@ void _CORE_message_queue_Seize(
 );
 
 /**
- *  @brief Insert a Message into the Message Queue
- * 
+ *  @brief Insert a message into the message queue.
+ *
  *  This kernel routine inserts the specified message into the
  *  message queue.  It is assumed that the message has been filled
  *  in before this routine is called.
@@ -482,7 +484,7 @@ void _CORE_message_queue_Seize(
  *  @param[in] the_message is the message to enqueue
  *  @param[in] submit_type determines whether the message is prepended,
  *         appended, or enqueued in priority order.
- * 
+ *
  *  - INTERRUPT LATENCY:
  *    + insert
  */

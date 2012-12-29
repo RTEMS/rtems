@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreHeap
  *
- * @brief Heap Handler API.
+ * @brief Heap Handler API
  */
 
 /*
