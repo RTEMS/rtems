@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/mppkt.h
  *
+ *  @brief Specification for the Packet Handler
+ *
  *  This package is the specification for the Packet Handler.
  *  This handler defines the basic packet and provides
  *  mechanisms to utilize packets based on this prefix.

@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/stack.h
  *
+ *  @brief Information About the Thread Stack Handler
+ *
  *  This include file contains all information about the thread
  *  Stack Handler.  This Handler provides mechanisms which can be used to
  *  initialize and utilize stacks.

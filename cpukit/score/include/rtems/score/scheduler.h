@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/scheduler.h
  *
+ *  @brief Constants and Structures Associated with the Scheduler
+ *
  *  This include file contains all the constants and structures associated
  *  with the scheduler.
  */
@@ -129,7 +131,7 @@ extern Scheduler_Control  _Scheduler;
   (_Scheduler_Priority_compare(_p1,_p2) > 0)
 
 /**
- *  @brief Scheduler is priority higher than
+ *  @brief Initializes the scheduler to the policy chosen by the user.
  *
  *  This routine initializes the scheduler to the policy chosen by the user
  *  through confdefs, or to the priority scheduler with ready chains by

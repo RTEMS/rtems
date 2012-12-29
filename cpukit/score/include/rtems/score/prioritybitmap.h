@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/prioritybitmap.h
  *
+ *  @brief Manipulation Routines for the Bitmap Priority Queue Implementation
+ *
  *  This include file contains all thread priority manipulation routines for
  *  the bit map priority queue implementation.
  */
@@ -18,8 +20,11 @@
 #define _RTEMS_SCORE_PRIORITYBITMAP_H
 
 /**
- *  @addtogroup ScorePriority
+ *  @defgroup ScorePriority Bitmap Priority Thread Routines
  *
+ *  @ingroup Score
+ *
+ *  @addtogroup ScorePriority
  */
 /**@{*/
 
@@ -86,7 +91,7 @@ typedef struct {
  *
  *  @param[in] _bit_number is the bit number for which we need a mask
  *
- *  @return the priority bit mask
+ *  @retval the priority bit mask
  *
  *  @note This may simply be a pass through to a CPU dependent implementation.
  */
@@ -100,7 +105,7 @@ typedef struct {
  *
  *  @param[in] _priority is the priority for which we need the index.
  *
- *  @return This method returns the array index into the priority bit map.
+ *  @retval This method returns the array index into the priority bit map.
  *
  *  @note This may simply be a pass through to a CPU dependent implementation.
  */

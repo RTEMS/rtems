@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreProtHeap
  *
- * @brief Protected Heap Handler API.
+ * @brief Protected Heap Handler API
  */
 
 /*

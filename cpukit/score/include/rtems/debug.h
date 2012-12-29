@@ -22,6 +22,13 @@
 
 #include <rtems/score/basedefs.h>
 
+/**
+ *  @defgroup ScoreDebug Debug Information
+ *
+ *  @ingroup Score
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,26 +54,26 @@ typedef uint32_t   rtems_debug_control;
 SCORE_EXTERN rtems_debug_control _Debug_Level;
 
 /**
- *  @brief Initialize Debug Manager
+ *  @brief Initialize debug manager.
  */
 void _Debug_Manager_initialization( void );
 
 /**
- *  @brief Enable Debugging
+ *  @brief Enable debugging.
  */
 void rtems_debug_enable(
   rtems_debug_control  to_be_enabled
 );
 
 /**
- *  @brief Disable Debugging
+ *  @brief Disable debugging.
  */
 void rtems_debug_disable(
   rtems_debug_control  to_be_disabled
 );
 
 /**
- *  @brief Check if Debug is Enabled
+ *  @brief Check if debug is enabled.
  *
  *  This routine returns TRUE if the requested debug level is
  *  enabled, and FALSE otherwise.
@@ -79,5 +86,6 @@ bool rtems_debug_is_enabled(
 }
 #endif
 
+/**@}*/
 #endif
 /* end of include file */

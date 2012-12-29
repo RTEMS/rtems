@@ -1,6 +1,6 @@
 /**
  * @file
- * 
+ *
  * @brief Information Included in Every Function in the Executive
  *
  * This include file contains information that is included in every
@@ -21,6 +21,13 @@
 #define _RTEMS_SYSTEM_H
 
 #include <rtems/score/percpu.h>
+
+/**
+ *  @defgroup ScoreSystem System Information
+ *
+ *  @ingroup Score
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,5 +61,6 @@ extern const char _Copyright_Notice[];
 }
 #endif
 
+/**@}*/
 #endif
 /* end of include file */

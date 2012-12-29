@@ -1,5 +1,7 @@
 /**
- *  @file  rtems/score/corebarrier.h
+ *  @file rtems/score/corebarrier.h
+ *
+ *  @brief Constants and Structures Associated with the Barrier Handler
  *
  *  This include file contains all the constants and structures associated
  *  with the Barrier Handler.
@@ -82,7 +84,7 @@ typedef enum {
 }   CORE_barrier_Status;
 
 /**
- *  @brief Core Barrier Last Status
+ *  @brief Core barrier last status value.
  *
  *  This is the last status value.
  */
@@ -121,7 +123,7 @@ typedef struct {
 }   CORE_barrier_Control;
 
 /**
- *  @brief Initialize CORE Barrier
+ *  @brief Initialize core barrier.
  *
  *  This routine initializes the barrier based on the parameters passed.
  *
@@ -134,7 +136,8 @@ void _CORE_barrier_Initialize(
 );
 
 /**
- *  @brief Wait For The Barrier
+ *  @brief Wait for the barrier.
+ *
  *  This routine wait for the barrier to be released.  If the barrier
  *  is set to automatic and this is the appropriate thread, then it returns
  *  immediately.  Otherwise, the calling thread is blocked until the barrier
@@ -159,7 +162,7 @@ void _CORE_barrier_Wait(
 );
 
 /**
- *  @brief Manually releases the barrier
+ *  @brief Manually release the barrier.
  *
  *  This routine manually releases the barrier.  All of the threads waiting
  *  for the barrier will be readied.
@@ -169,7 +172,7 @@ void _CORE_barrier_Wait(
  *  @param[in] api_barrier_mp_support is the routine to invoke if the
  *         thread unblocked is remote
  *
- *  @return the number of unblocked threads
+ *  @retval the number of unblocked threads
  */
 uint32_t _CORE_barrier_Release(
   CORE_barrier_Control                *the_barrier,

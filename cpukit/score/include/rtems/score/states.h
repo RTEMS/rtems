@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/states.h
  *
+ *  @brief Thread Execution State Information
+ *
  *  This include file contains thread execution state information.
  */
 
@@ -17,7 +19,8 @@
 #define _RTEMS_SCORE_STATES_H
 
 /**
- *  @defgroup ScoreStates Thread States Handler
+ *  @defgroup Encapsulates functionality which relates to the management of
+ *  the state bitmap associated with each thread.
  *
  *  @ingroup Score
  *

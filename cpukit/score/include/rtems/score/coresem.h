@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/coresem.h
  *
+ *  @brief Data Associated with the Counting Semaphore Handler
+ *
  *  This include file contains all the constants and structures associated
  *  with the Counting Semaphore Handler.  A counting semaphore is the
  *  standard Dijkstra binary semaphore used to provide synchronization
@@ -90,7 +92,7 @@ typedef enum {
 }   CORE_semaphore_Status;
 
 /**
- *  @brief Core Semaphore Last Status
+ *  @brief Core semaphore last status value.
  *
  *  This is the last status value.
  */
@@ -127,14 +129,14 @@ typedef struct {
 }   CORE_semaphore_Control;
 
 /**
- *  @brief Core Semaphore Initialize
- * 
+ *  @brief Initialize the semaphore based on the parameters passed.
+ *
  *  DESCRIPTION:
  *
  *  This package is the implementation of the CORE Semaphore Handler.
  *  This core object utilizes standard Dijkstra counting semaphores to provide
  *  synchronization and mutual exclusion capabilities.
- * 
+ *
  *  This routine initializes the semaphore based on the parameters passed.
  *
  *  @param[in] the_semaphore is the semaphore to initialize
@@ -170,7 +172,7 @@ void _CORE_semaphore_Initialize(
 #endif
 
 /**
- *  @brief Surrenders a Unit to a Semaphore
+ *  @brief Surrender a unit to a semaphore.
  *
  *  This routine frees a unit to the semaphore.  If a task was blocked waiting
  *  for a unit from this semaphore, then that task will be readied and the unit
@@ -182,7 +184,7 @@ void _CORE_semaphore_Initialize(
  *  @param[in] api_semaphore_mp_support is the routine to invoke if the
  *         thread unblocked is remote
  *
- *  @return an indication of whether the routine succeeded or failed
+ *  @retval an indication of whether the routine succeeded or failed
  */
 CORE_semaphore_Status _CORE_semaphore_Surrender(
   CORE_semaphore_Control                *the_semaphore,
@@ -191,8 +193,8 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 );
 
 /**
- *  @brief Core Semaphore Flush
- * 
+ *  @brief Core semaphore flush.
+ *
  *  DESCRIPTION:
  *  This package is the implementation of the CORE Semaphore Handler.
  *  This core object utilizes standard Dijkstra counting semaphores to provide

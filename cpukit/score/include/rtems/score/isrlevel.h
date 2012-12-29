@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/isrlevel.h
  *
+ *  @brief ISR Level Type
+ *
  *  This include file defines the ISR Level type.  It exists to
  *  simplify include dependencies.  It is part of the ISR Handler.
  */
@@ -22,6 +24,10 @@ extern "C" {
 #endif
 
 /**
+ *  @defgroup ScoreISR ISR Handler
+ *
+ *  @ingroup Score
+ *
  *  @addtogroup ScoreISR ISR Handler
  */
 /**@{*/
@@ -38,4 +44,3 @@ typedef uint32_t   ISR_Level;
 }
 #endif
 #endif
-
