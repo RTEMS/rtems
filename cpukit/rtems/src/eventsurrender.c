@@ -39,6 +39,11 @@ void _Event_Surrender(
   _ISR_Disable( level );
   _Event_sets_Post( event_in, &event->pending_events );
   pending_events  = event->pending_events;
+
+  /*
+   * At this point the event condition is a speculative quantity.  Later state
+   * checks will show if the thread actually waits for an event.
+   */
   event_condition = the_thread->Wait.count;
 
   seized_events = _Event_sets_Get( pending_events, event_condition );
