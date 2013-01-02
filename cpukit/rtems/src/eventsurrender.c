@@ -57,11 +57,13 @@ void _Event_Surrender(
   }
 
   /*
-   *  If we are in an ISR and sending to the current thread, then
-   *  we have a critical section issue to deal with.
+   *  If we are sending to the executing thread, then we have a critical
+   *  section issue to deal with.  The entity sending to the executing thread
+   *  can be either the executing thread or an ISR.  In case it is the
+   *  executing thread, then the blocking operation state is not equal to
+   *  THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED.
    */
-  if ( _ISR_Is_in_progress() &&
-       _Thread_Is_executing( the_thread ) &&
+  if ( _Thread_Is_executing( the_thread ) &&
        *sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
     if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
       event->pending_events = _Event_sets_Clear(
