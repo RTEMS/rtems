@@ -64,13 +64,18 @@ void _Event_Timeout(
        *  a timeout is not allowed to occur.
        */
       _ISR_Disable( level );
-        #if defined(RTEMS_DEBUG)
-          if ( !the_thread->Wait.count ) {  /* verify thread is waiting */
-            _Thread_Unnest_dispatch();
-            _ISR_Enable( level );
-            return;
-          }
-        #endif
+        /*
+         * Verify that the thread is still waiting for the event condition.
+         * This test is necessary to avoid state corruption if the timeout
+         * happens after the event condition is satisfied in
+         * _Event_Surrender().  A satisfied event condition is indicated with
+         * count set to zero.
+         */
+        if ( !the_thread->Wait.count ) {
+          _Thread_Unnest_dispatch();
+          _ISR_Enable( level );
+          return;
+        }
 
         the_thread->Wait.count = 0;
         if ( _Thread_Is_executing( the_thread ) ) {
