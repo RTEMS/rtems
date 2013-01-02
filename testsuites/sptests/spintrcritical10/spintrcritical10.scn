@@ -1,4 +1,5 @@
 *** TEST INTERRUPT CRITICAL SECTION 10 ***
-Init - Test may not be able to detect case is hit reliably
-Init - Trying to generate timeout while blocking on event
+Init - Trying to generate any satisfied before timeout while blocking on event
+Init - Trying to generate all satisfied before timeout while blocking on event
+Init - Trying to generate timeout before all satisfied while blocking on event
 *** END OF TEST INTERRUPT CRITICAL SECTION 10 ***
