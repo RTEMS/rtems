@@ -1,5 +1,7 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
+ * 
+ * @brief PowerPC CPU Department Source
  */
 
 /*

@@ -1,19 +1,21 @@
 /**
- * @file rtems/score/idtr.h
- */
-
-/*
+ * @file
+ * 
+ * @brief Intel I386 Data Structures
+ * 
  * This file contains definitions for data structure related
  *          to Intel system programming. More information can be found
  *          on Intel site and more precisely in the following book :
  *
- *		Pentium Processor familly
- *		Developper's Manual
+ *              Pentium Processor familly
+ *              Developper's Manual
  *
- *		Volume 3 : Architecture and Programming Manual
+ *              Volume 3 : Architecture and Programming Manual
  *
  * Formerly contained in and extracted from libcpu/i386/cpu.h.
- *
+ */
+
+/*
  * COPYRIGHT (C) 1998  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
  *
