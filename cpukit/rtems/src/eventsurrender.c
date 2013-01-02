@@ -62,8 +62,7 @@ void _Event_Surrender(
    */
   if ( _ISR_Is_in_progress() &&
        _Thread_Is_executing( the_thread ) &&
-       ((*sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
-        (*sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED)) ) {
+       *sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
     if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
       event->pending_events = _Event_sets_Clear(
         pending_events,
