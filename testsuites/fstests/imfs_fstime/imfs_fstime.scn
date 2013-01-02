@@ -1,0 +1,12 @@
+*** FILE SYSTEM TEST ( IMFS ) ***
+Initializing filesystem IMFS
+
+
+*** TIME TEST ***
+Sleep a few seconds
+*** END OF TIME TEST ***
+
+
+Shutting down filesystem IMFS
+*** END OF FILE SYSTEM TEST ( IMFS ) ***
+

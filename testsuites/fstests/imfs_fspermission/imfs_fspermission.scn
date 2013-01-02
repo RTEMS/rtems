@@ -1,0 +1,52 @@
+*** FILE SYSTEM TEST ( IMFS ) ***
+Initializing filesystem IMFS
+
+
+*** PERMISSION TEST ***
+The previous cmask is 022
+The file mode of file01 is 755
+The file mode of file02 is 755
+The file mode of dir01 is 755
+The previous cmask is 321
+The file mode of file01 is 456
+The file mode of file02 is 456
+The file mode of dir01 is 456
+The file mode of file01 is 777
+The file mode of file02 is 240
+The file mode of dir01 is 340
+Testing open       with arguments: "file02,O_RDONLY"    EXPECT "EACCES"
+PASS
+Testing open       with arguments: "file02,O_RDWR"      EXPECT "EACCES"
+PASS
+Change euid and check
+Testing open       with arguments: "file02,O_WRONLY"    EXPECT "EACCES"
+PASS
+Testing open       with arguments: "file02,O_RDWR"      EXPECT "EACCES"
+PASS
+Testing creat      with arguments: "path,mode"          EXPECT "EACCES"
+PASS
+Testing rename     with arguments: "path,\"test\""      EXPECT "EACCES"
+PASS
+Testing truncate   with arguments: "path,0"             EXPECT "EACCES"
+PASS
+Testing link       with arguments: "path,\"test\""      EXPECT "EACCES"
+PASS
+Testing unlink     with arguments: "path"               EXPECT "EACCES"
+PASS
+Change egid and check
+Testing open       with arguments: "file02,O_WRONLY"    EXPECT "EACCES"
+PASS
+Testing open       with arguments: "file02,O_RDONLY"    EXPECT "EACCES"
+PASS
+Testing open       with arguments: "file02,O_RDWR"      EXPECT "EACCES"
+PASS
+Testing creat      with arguments: "path,mode"          EXPECT "EACCES"
+PASS
+The directory file mode is 777
+The directory file mode is 321
+*** END OF PERMISSION TEST ***
+
+
+Shutting down filesystem IMFS
+*** END OF FILE SYSTEM TEST ( IMFS ) ***
+
