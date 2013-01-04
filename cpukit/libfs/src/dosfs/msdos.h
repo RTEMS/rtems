@@ -1,8 +1,12 @@
+/**
+ * @file
+ *
+ * @brief The MSDOS Filesystem Constants/Data Structures/Prototypes
+ *
+ * @ingroup libfs_msdos
+ */
+
 /*
- *  msdos.h
- *
- *  The MSDOS filesystem constants/data structures/prototypes
- *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
@@ -10,6 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
+
 #ifndef __DOSFS_MSDOS_H__
 #define __DOSFS_MSDOS_H__
 
@@ -276,7 +281,7 @@ int msdos_rmnod(
 );
 
 /**
- * @brief rename a MSDOS filesystem node
+ * @brief Rename a MSDOS filesystem node.
  *
  * Routine to rename a MSDOS filesystem node
  */
@@ -293,7 +298,7 @@ void msdos_lock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
 /**
- *  @brief The MSDOS filesystem initialization.
+ *  @brief MSDOS filesystem initialization routine.
  *
  *  MSDOS Initialization support routine implementation
  */

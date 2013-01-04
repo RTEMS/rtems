@@ -1,8 +1,15 @@
-/*
- *  fat.h
+/**
+ * @file
  *
- *  Constants/data structures/prototypes for low-level operations on a volume
- *  with FAT filesystem
+ * @brief Constants/Data Structures/Prototypes on a Volume with FAT Filesystem
+ *
+ * @ingroup libfs_dosfs
+ *
+ * Constants/Data Structures/Prototypes for Low-Level
+ * Operations on a Volume with FAT Filesystem
+ */
+
+/*
  *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
@@ -23,6 +30,12 @@
 #include <errno.h>
 #include <rtems/bdbuf.h>
 
+/**
+ *  @defgroup libfs_dosfs FAT FileSystem
+ *
+ *  @ingroup libfs
+ */
+/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -545,5 +558,5 @@ fat_sync(fat_fs_info_t *fs_info);
 #ifdef __cplusplus
 }
 #endif
-
+/**@}*/
 #endif /* __DOSFS_FAT_H__ */

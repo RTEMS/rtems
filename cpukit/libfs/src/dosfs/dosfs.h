@@ -1,7 +1,9 @@
 /**
- *  @file rtems/dosfs.h
+ * @file rtems/dosfs.h
  *
- *  Application interface to MSDOS filesystem.
+ * @brief Application Interface to MSDOS Filesystem
+ *
+ * @ingroup rtems_msdos_format
  */
 
 /*
