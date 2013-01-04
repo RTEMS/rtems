@@ -30,11 +30,11 @@
 
 .extern rtems_fatal_error_occurred
 
-.globl arm_exc_data_abort_set_handler
-.globl arm_exc_data_abort
+.globl _ARMV4_Exception_data_abort_set_handler
+.globl _ARMV4_Exception_data_abort
 
-.globl arm_exc_prefetch_abort_set_handler
-.globl arm_exc_prefetch_abort
+.globl _ARMV4_Exception_prefetch_abort_set_handler
+.globl _ARMV4_Exception_prefetch_abort
 
 .section ".bss"
 
@@ -50,7 +50,7 @@ prefetch_abort_handler:
 	.thumb_func
 #endif
 
-arm_exc_data_abort_set_handler:
+_ARMV4_Exception_data_abort_set_handler:
 	ldr	r1, =data_abort_handler
 	str	r0, [r1]
 #ifdef __thumb__
@@ -63,7 +63,7 @@ arm_exc_data_abort_set_handler:
 	.thumb_func
 #endif
 
-arm_exc_prefetch_abort_set_handler:
+_ARMV4_Exception_prefetch_abort_set_handler:
 	ldr	r1, =prefetch_abort_handler
 	str	r0, [r1]
 #ifdef __thumb__
@@ -74,7 +74,7 @@ arm_exc_prefetch_abort_set_handler:
 
 .arm
 
-arm_exc_prefetch_abort:
+_ARMV4_Exception_prefetch_abort:
 
 	/* Save context and load handler */
 	sub	sp, #16
@@ -83,7 +83,7 @@ arm_exc_prefetch_abort:
 
 	b	save_more_context
 
-arm_exc_data_abort:
+_ARMV4_Exception_data_abort:
 
 	/* Save context and load handler */
 	sub	sp, #16
