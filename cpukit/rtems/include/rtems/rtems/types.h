@@ -1,17 +1,18 @@
 /**
  * @file
  *
- * @ingroup ClassicRTEMS
+ * @defgroup ClassicTypes Types
  *
- * @brief Types used by the Classic API.
+ * @ingroup ClassicRTEMS
+ * @brief Types used by Classic API.
  */
 
-/*  COPYRIGHT (c) 1989-2009.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2009.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_TYPES_H

@@ -1,18 +1,21 @@
 /**
  * @file rtems/rtems/attr.h
  *
- * @brief Information about the Object Attributes Handler
+ * @defgroup ClassicAttributes Attributes
  *
- *  This include file contains all information about the Object Attributes
- *  Handler.
+ * @ingroup ClassicRTEMS
+ * @brief Object Attributes Handler
+ *
+ * This include file contains all information about the Object Attributes
+ * Handler.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_ATTR_H

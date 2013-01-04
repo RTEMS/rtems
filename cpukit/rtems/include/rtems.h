@@ -1,17 +1,20 @@
 /**
  * @file
  *
- * @ingroup ClassicRTEMS
+ * @defgroup ClassicRTEMS RTEMS Classic API
  *
- * @brief Provides the Public Interface to the RTEMS Classic API
+ * @ingroup ClassicRTEMS
+ * @brief RTEMS Classic API
+ *
+ * the Public Interface to the RTEMS Classic API
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_H

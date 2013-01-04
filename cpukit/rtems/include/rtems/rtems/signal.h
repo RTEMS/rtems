@@ -1,24 +1,27 @@
 /**
  * @file rtems/rtems/signal.h
  *
- * @brief Constants and Structures Associated with the Signal Manager
+ * @defgroup ClassicSignal Signals
  *
- *  This include file contains all the constants and structures associated
- *  with the Signal Manager.   This manager provides capabilities required
- *  for asynchronous communication between tasks via signal sets.
+ * @ingroup ClassicRTEMS
+ * @brief Signal Manager
  *
- *  Directives provided are:
+ * This include file contains all the constants and structures associated
+ * with the Signal Manager. This manager provides capabilities required
+ * for asynchronous communication between tasks via signal sets.
  *
- *     + establish an asynchronous signal routine
- *     + send a signal set to a task
+ * Directives provided are:
+ *
+ * + establish an asynchronous signal routine
+ * + send a signal set to a task
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_SIGNAL_H
@@ -52,18 +55,18 @@ extern "C" {
 void _Signal_Manager_initialization( void );
 
 /**
- *  @brief RTEMS Catch Signal
+ * @brief RTEMS Catch Signal
  *
- *  This routine implements the rtems_signal_catch directive.  This directive
- *  is used to establish asr_handler as the Asynchronous Signal Routine
- *  (RTEMS_ASR) for the calling task.  The asr_handler will execute with a
- *  mode of mode_set.
+ * This routine implements the rtems_signal_catch directive. This directive
+ * is used to establish asr_handler as the Asynchronous Signal Routine
+ * (RTEMS_ASR) for the calling task. The asr_handler will execute with a
+ * mode of mode_set.
  *
- *  @param[in] asr_handler is the address of asynchronous signal routine (asr)
- *              ( NULL indicates asr is invalid )
- *  @param[in] mode_set is the mode value for asr
+ * @param[in] asr_handler is the address of asynchronous signal routine (asr)
+ *            ( NULL indicates asr is invalid )
+ * @param[in] mode_set is the mode value for asr
  *
- *  @return RTEMS_SUCCESSFUL
+ * @retval RTEMS_SUCCESSFUL
  */
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry   asr_handler,
@@ -71,15 +74,15 @@ rtems_status_code rtems_signal_catch(
 );
 
 /**
- *  @brief RTEMS Send Signal
+ * @brief RTEMS Send Signal
  *
- *  This routine implements the rtems_signal_send directive.  This directive
- *  sends the signal_set to the task specified by ID.
+ * This routine implements the rtems_signal_send directive. This directive
+ * sends the signal_set to the task specified by ID.
  *
- *  @param[in] id is the thread thread id
- *  @param[in] signal_set is the signal set
+ * @param[in] id is the thread thread id
+ * @param[in] signal_set is the signal set
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_signal_send(
   rtems_id         id,
