@@ -28,7 +28,7 @@
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
-.extern rtems_fatal_error_occurred
+.extern _ARM_Exception_default
 
 .globl _ARMV4_Exception_data_abort_set_handler
 .globl _ARMV4_Exception_data_abort
@@ -110,9 +110,8 @@ save_more_context:
 	/* Call high level handler */
 	ldr	r2, [r6]
 	cmp	r2, #0
-	ldreq	r2, =rtems_fatal_error_occurred
-	movne	r0, sp
-	moveq	r0, #0xaa
+	ldreq	r2, =_ARM_Exception_default
+	mov	r0, sp
 #ifndef __thumb__
 	mov	lr, pc
 	mov	pc, r2

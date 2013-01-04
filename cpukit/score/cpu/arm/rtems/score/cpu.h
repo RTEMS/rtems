@@ -573,6 +573,8 @@ typedef CPU_Interrupt_frame CPU_Exception_frame;
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
+void _ARM_Exception_default( CPU_Exception_frame *frame );
+
 #ifdef __cplusplus
 }
 #endif
