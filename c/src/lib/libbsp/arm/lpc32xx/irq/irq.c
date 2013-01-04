@@ -254,11 +254,11 @@ void bsp_interrupt_dispatch(void)
   lpc32xx.sic_1.er = er_sic_1 & masks->field.sic_1;
   lpc32xx.sic_2.er = er_sic_2 & masks->field.sic_2;
 
-  psr = arm_status_irq_enable();
+  psr = _ARMV4_Status_irq_enable();
 
   bsp_interrupt_handler_dispatch(vector);
 
-  arm_status_restore(psr);
+  _ARMV4_Status_restore(psr);
 
   lpc32xx.mic.er = er_mic & lpc32xx_irq_enable.field.mic;
   lpc32xx.sic_1.er = er_sic_1 & lpc32xx_irq_enable.field.sic_1;

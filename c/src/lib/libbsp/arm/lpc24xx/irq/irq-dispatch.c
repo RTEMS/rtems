@@ -35,13 +35,13 @@ void bsp_interrupt_dispatch(void)
   rtems_vector_number vector = VICVectAddr;
 
   /* Enable interrupts in program status register */
-  uint32_t psr = arm_status_irq_enable();
+  uint32_t psr = _ARMV4_Status_irq_enable();
 
   /* Dispatch interrupt handlers */
   bsp_interrupt_handler_dispatch(vector);
 
   /* Restore program status register */
-  arm_status_restore(psr);
+  _ARMV4_Status_restore(psr);
 
   /* Acknowledge interrupt */
   VICVectAddr = 0;

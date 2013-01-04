@@ -55,7 +55,7 @@ void _ARMV4_Exception_irq_default( void );
 
 void _ARMV4_Exception_fiq_default( void );
 
-static inline uint32_t arm_status_irq_enable( void )
+static inline uint32_t _ARMV4_Status_irq_enable( void )
 {
   uint32_t arm_switch_reg;
   uint32_t psr;
@@ -74,7 +74,7 @@ static inline uint32_t arm_status_irq_enable( void )
   return psr;
 }
 
-static inline void arm_status_restore( uint32_t psr )
+static inline void _ARMV4_Status_restore( uint32_t psr )
 {
   ARM_SWITCH_REGISTERS;
 
