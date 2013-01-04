@@ -1,8 +1,10 @@
 /**
- * @file rtems/posix/barrier.inl
+ * @file
+ * 
+ * @brief Inlined Routines from the POSIX Barrier Manager
  *
- *  This file contains the static inlin implementation of the inlined
- *  routines from the POSIX Barrier Manager.
+ * This file contains the static inlin implementation of the inlined
+ * routines from the POSIX Barrier Manager.
  */
 
 /*
@@ -24,10 +26,10 @@
 #include <pthread.h>
 
 /**
- *  @brief _POSIX_Barrier_Allocate
+ * @brief Allocate a barrier control block.
  *
- *  This function allocates a barrier control block from
- *  the inactive chain of free barrier control blocks.
+ * This function allocates a barrier control block from
+ * the inactive chain of free barrier control blocks.
  */
 RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Allocate( void )
 {
@@ -36,10 +38,10 @@ RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Allocate( void )
 }
 
 /**
- *  @brief _POSIX_Barrier_Free
+ * @brief Free a barrier control block.
  *
- *  This routine frees a barrier control block to the
- *  inactive chain of free barrier control blocks.
+ * This routine frees a barrier control block to the
+ * inactive chain of free barrier control blocks.
  */
 RTEMS_INLINE_ROUTINE void _POSIX_Barrier_Free (
   POSIX_Barrier_Control *the_barrier
@@ -49,15 +51,15 @@ RTEMS_INLINE_ROUTINE void _POSIX_Barrier_Free (
 }
 
 /**
- *  @brief _POSIX_Barrier_Get
+ * @brief Get a barrier control block.
  *
- *  This function maps barrier IDs to barrier control blocks.
- *  If ID corresponds to a local barrier, then it returns
- *  the_barrier control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the barrier ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_barrier is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_barrier is undefined.
+ * This function maps barrier IDs to barrier control blocks.
+ * If ID corresponds to a local barrier, then it returns
+ * the_barrier control pointer which maps to ID and location
+ * is set to OBJECTS_LOCAL.  if the barrier ID is global and
+ * resides on a remote node, then location is set to OBJECTS_REMOTE,
+ * and the_barrier is undefined.  Otherwise, location is set
+ * to OBJECTS_ERROR and the_barrier is undefined.
  */
 RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
   pthread_barrier_t *barrier,
@@ -72,9 +74,16 @@ RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
 }
 
 /**
- *  @brief _POSIX_Barrier_Is_null
+ * @brief Check if a barrier control block is NULL.
  *
- *  This function returns TRUE if the_barrier is NULL and FALSE otherwise.
+ * This function returns @c TRUE if the_barrier is @c NULL and @c FALSE
+ * otherwise.
+ * 
+ * @param[in] the_barrier is the pointer to the barrier control block
+ * to be checked.
+ * 
+ * @retval TRUE The barrier control block is @c NULL.
+ * @retval FALSE The barrier control block is not @c NULL.
  */
 RTEMS_INLINE_ROUTINE bool _POSIX_Barrier_Is_null (
   POSIX_Barrier_Control *the_barrier

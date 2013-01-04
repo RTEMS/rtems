@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/mutex.h
+ * @file
+ * 
+ * @brief POSIX MUTEX Support
  *
  * This include file contains all the private support information for
  * POSIX mutex's.
@@ -27,6 +29,8 @@ extern "C" {
  * @ingroup POSIX
  *
  * @brief Private Support Information for POSIX Mutex
+ * 
+ * @{
  */
 
 #include <rtems/score/coremutex.h>
@@ -138,16 +142,28 @@ int _POSIX_Mutex_Lock_support(
 );
 
 /**
- *  @brief POSIX Mutex Translate Core Mutex Return Code
+ * @brief Convert core mutex status codes into the appropriate POSIX status
+ * values.
  *
- *  DESCRIPTION:
+ * DESCRIPTION:
  *
- *  A support routine which converts core mutex status codes into the
- *  appropriate POSIX status values.
+ * A support routine which converts core mutex status codes into the
+ * appropriate POSIX status values.
  *
- *  @param[in] the_mutex_status is the mutex status code to translate
+ * @param[in] the_mutex_status is the mutex status code to translate
  *
- *  @return the translated POSIX status code
+ * @retval 0 Mutex status code indicates the operation completed successfully.
+ * @retval EBUSY Mutex status code indicates that the operation unable to 
+ * complete immediately because the resource was unavailable.
+ * @retval EDEADLK Mutex status code indicates that an attempt was made to
+ * relock a mutex for which nesting is not configured.
+ * @retval EPERM Mutex status code indicates that an attempt was made to 
+ * release a mutex by a thread other than the thread which locked it.
+ * @retval EINVAL Mutex status code indicates that the thread was blocked
+ * waiting for an operation to complete and the mutex was deleted.
+ * @retval ETIMEDOUT Mutex status code indicates that the calling task was
+ * willing to block but the operation was unable to complete within the time
+ * allotted because the resource never became available.
  */
 
 int _POSIX_Mutex_Translate_core_mutex_return_code(
@@ -197,6 +213,8 @@ POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable (
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif
 /*  end of include file */

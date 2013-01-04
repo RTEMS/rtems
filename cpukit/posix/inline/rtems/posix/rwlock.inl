@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/rwlock.inl
+ * @file
+ * 
+ * @brief Inlined Routines from the POSIX RWLock Manager
  *
  * This file contains the static inlin implementation of the inlined
  * routines from the POSIX RWLock Manager.
@@ -24,10 +26,10 @@
 #include <pthread.h>
 
 /**
- *  @brief _POSIX_RWLock_Allocate
+ * @brief Allocate a RWLock control block.
  *
- *  This function allocates a RWLock control block from
- *  the inactive chain of free RWLock control blocks.
+ * This function allocates a RWLock control block from
+ * the inactive chain of free RWLock control blocks.
  */
 RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Allocate( void )
 {
@@ -36,10 +38,10 @@ RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Allocate( void )
 }
 
 /**
- *  @brief _POSIX_RWLock_Free
+ * @brief Free a RWLock control block.
  *
- *  This routine frees a RWLock control block to the
- *  inactive chain of free RWLock control blocks.
+ * This routine frees a RWLock control block to the
+ * inactive chain of free RWLock control blocks.
  */
 RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
   POSIX_RWLock_Control *the_RWLock
@@ -49,15 +51,15 @@ RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
 }
 
 /**
- *  @brief _POSIX_RWLock_Get
+ * @brief Get a RWLock control block.
  *
- *  This function maps RWLock IDs to RWLock control blocks.
- *  If ID corresponds to a local RWLock, then it returns
- *  the_RWLock control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the RWLock ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_RWLock is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_RWLock is undefined.
+ * This function maps RWLock IDs to RWLock control blocks.
+ * If ID corresponds to a local RWLock, then it returns
+ * the_RWLock control pointer which maps to ID and location
+ * is set to OBJECTS_LOCAL.  if the RWLock ID is global and
+ * resides on a remote node, then location is set to OBJECTS_REMOTE,
+ * and the_RWLock is undefined.  Otherwise, location is set
+ * to OBJECTS_ERROR and the_RWLock is undefined.
  */
 RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get (
   pthread_rwlock_t *RWLock,
@@ -72,9 +74,16 @@ RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get (
 }
 
 /**
- *  @brief _POSIX_RWLock_Is_null
+ * @brief Check if a RWLock control block is NULL.
  *
- *  This function returns TRUE if the_RWLock is NULL and FALSE otherwise.
+ * This function returns @c TRUE if the_RWLock is @c NULL and @c FALSE
+ * otherwise.
+ * 
+ * @param[in] the_RWLock is the pointer to the RWLock control block
+ * to be checked.
+ * 
+ * @retval TRUE The RWLock control block is @c NULL.
+ * @retval FALSE The RWLock control block is not @c NULL.
  */
 RTEMS_INLINE_ROUTINE bool _POSIX_RWLock_Is_null (
   POSIX_RWLock_Control *the_RWLock

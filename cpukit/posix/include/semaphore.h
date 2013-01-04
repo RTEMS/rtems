@@ -1,5 +1,7 @@
 /**
- * @file semaphore.h
+ * @file
+ * 
+ * @brief Private Support Information for POSIX Semaphores
  *
  * This file contains definitions that are internal to the RTEMS
  * implementation of POSIX Semaphores.
@@ -55,9 +57,9 @@ int sem_init(
 );
 
 /**
- *  @brief Destroy an Unnamed Semaphore
+ * @brief Destroy an unnamed semaphore.
  *
- *  11.2.2 Destroy an Unnamed Semaphore, P1003.1b-1993, p.220
+ * 11.2.2 Destroy an Unnamed Semaphore, P1003.1b-1993, p.220
  */
 int sem_destroy(
   sem_t *sem
@@ -75,7 +77,7 @@ sem_t *sem_open(
 );
 
 /**
- * @brief Close a Named Semaphore
+ * @brief Close a named semaphore.
  *
  * Routine to close a semaphore that has been opened or initialized.
  *
@@ -86,7 +88,7 @@ int sem_close(
 );
 
 /**
- * @brief Remove a Named Semaphore
+ * @brief Remove a named semaphore.
  *
  * Unlinks a named semaphore, sem_close must also be called to remove
  * the semaphore.
@@ -98,20 +100,20 @@ int sem_unlink(
 );
 
 /**
- *  @brief Lock a Semaphore
+ * @brief Lock a semaphore.
  *
- *  11.2.6 Lock a Semaphore, P1003.1b-1993, p.226
+ * 11.2.6 Lock a Semaphore, P1003.1b-1993, p.226
  *
- *  @note P1003.4b/D8 adds sem_timedwait(), p. 27
+ * NOTE: P1003.4b/D8 adds sem_timedwait(), p. 27
  */
 int sem_wait(
   sem_t *sem
 );
 
 /**
- *  @brief Lock a Semaphore
+ * @brief Lock a semaphore.
  *
- *  @see sem_wait()
+ * @see sem_wait()
  */
 int sem_trywait(
   sem_t *sem
@@ -119,7 +121,7 @@ int sem_trywait(
 
 #if defined(_POSIX_TIMEOUTS)
 /**
- *  @brief Lock a Semaphore
+ * @brief Lock a semaphore.
  */
 int sem_timedwait(
   sem_t                 *sem,
@@ -128,16 +130,16 @@ int sem_timedwait(
 #endif
 
 /**
- *  @brief Unlock a Semaphore
+ * @brief Unlock a semaphore.
  *
- *  11.2.7 Unlock a Semaphore, P1003.1b-1993, p.227
+ * 11.2.7 Unlock a Semaphore, P1003.1b-1993, p.227
  */
 int sem_post(
   sem_t  *sem
 );
 
 /**
- * @brief Get the Value of a Semaphore
+ * @brief Get the value of a semaphore.
  *
  * 11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
  */

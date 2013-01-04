@@ -1,6 +1,8 @@
 /**
- * @file rtems/posix/timer.inl
+ * @file
  *
+ * @brief Inlined Routines from the POSIX Timer Manager
+ * 
  * This file contains the static inline implementation of the inlined routines
  * from the POSIX Timer Manager.
  */

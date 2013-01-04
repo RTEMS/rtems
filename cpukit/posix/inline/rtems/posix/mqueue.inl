@@ -1,6 +1,8 @@
 /**
- * @file rtems/posix/mqueue.inl
+ * @file
  *
+ * @brief Private Inlined Routines for POSIX Message Queue
+ * 
  * This include file contains the static inline implementation of the private 
  * inlined routines for POSIX Message Queue.
  */
