@@ -172,7 +172,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   }
   int_stat = *EP7312_INTSR3;
 
-  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt, NULL);
 
   return RTEMS_SUCCESSFUL;
 }

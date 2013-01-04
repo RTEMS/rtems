@@ -162,7 +162,7 @@
     .align
     PUBLIC_ARM_FUNCTION(_gba_ISR_handler)
         ldmfd  r13!,{r0-r3,r12,r14}
-        b      arm_exc_interrupt
+        b      _ARMV4_Exception_interrupt
     LABEL_END(_gba_ISR_handler)
 
 

@@ -66,7 +66,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   VICVectAddr = 0;
 
   /* Install the IRQ exception handler */
-  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, arm_exc_interrupt, NULL);
+  _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt, NULL);
 
   return RTEMS_SUCCESSFUL;
 }

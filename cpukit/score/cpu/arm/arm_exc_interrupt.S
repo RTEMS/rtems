@@ -50,8 +50,8 @@
 .extern bsp_interrupt_dispatch
 
 .arm
-.globl arm_exc_interrupt
-arm_exc_interrupt:
+.globl _ARMV4_Exception_interrupt
+_ARMV4_Exception_interrupt:
 
 	/* Save exchange registers to exchange area */
 	stmdb	sp, EXCHANGE_LIST

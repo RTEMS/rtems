@@ -25,7 +25,7 @@ extern "C" {
 
 void bsp_interrupt_dispatch( void );
 
-void arm_exc_interrupt( void );
+void _ARMV4_Exception_interrupt( void );
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
