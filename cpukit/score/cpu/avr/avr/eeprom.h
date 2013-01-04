@@ -1,34 +1,78 @@
-/* Copyright (c) 2002, 2003, 2004, 2007 Marek Michalkiewicz
-   Copyright (c) 2005, 2006 Bjoern Haase
-   Copyright (c) 2008 Atmel Corporation
-   Copyright (c) 2008 Wouter van Gulik
-   Copyright (c) 2009 Dmitry Xmelkov
-   All rights reserved.
+/**
+ * @file
+ *
+ * @brief Data EEPROM Contained in the AVR Microcontrollers
+ *
+ * This header file declares the interface to some simple library
+ * routines suitable for handling the data EEPROM contained in the
+ * AVR microcontrollers.  The implementation uses a simple polled
+ * mode interface.  Applications that require interrupt-controlled
+ * EEPROM access to ensure that no time will be wasted in spinloops
+ * will have to deploy their own implementation.
+ *
+ *  \par Notes:
+ *
+ *  - In addition to the write functions there is a set of update ones.
+ *  This functions read each byte first and skip the burning if the
+ *  old value is the same with new.  The scaning direction is from
+ *  high address to low, to obtain quick return in common cases.
+ *
+ *  - All of the read/write functions first make sure the EEPROM is
+ *  ready to be accessed.  Since this may cause long delays if a
+ *  write operation is still pending, time-critical applications
+ *  should first poll the EEPROM e. g. using eeprom_is_ready() before
+ *  attempting any actual I/O.  But this functions are not wait until
+ *  SELFPRGEN in SPMCSR becomes zero.  Do this manually, if your
+ *  softwate contains the Flash burning.
+ *
+ *  - As these functions modify IO registers, they are known to be
+ *  non-reentrant.  If any of these functions are used from both,
+ *  standard and interrupt context, the applications must ensure
+ *  proper protection (e.g. by disabling interrupts before accessing
+ *  them).
+ *
+ *  - All write functions force erase_and_write programming mode.
+ *
+ *  - For Xmega the EEPROM start address is 0, like other architectures.
+ *  The reading functions add the 0x2000 value to use EEPROM mapping into
+ *  data space.
+ */
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-   * Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in
-     the documentation and/or other materials provided with the
-     distribution.
-   * Neither the name of the copyright holders nor the names of
-     contributors may be used to endorse or promote products derived
-     from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE. */
+/*
+ * Copyright (c) 2002, 2003, 2004, 2007 Marek Michalkiewicz
+ * Copyright (c) 2005, 2006 Bjoern Haase
+ * Copyright (c) 2008 Atmel Corporation
+ * Copyright (c) 2008 Wouter van Gulik
+ * Copyright (c) 2009 Dmitry Xmelkov
+ * All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *  * Neither the name of the copyright holders nor the names of
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 
 #ifndef _AVR_EEPROM_H_
@@ -409,43 +453,12 @@
 #include <stddef.h>	/* size_t */
 #include <stdint.h>
 
-/** \defgroup avr_eeprom <avr/eeprom.h>: EEPROM handling
-    \code #include <avr/eeprom.h> \endcode
-
-    This header file declares the interface to some simple library
-    routines suitable for handling the data EEPROM contained in the
-    AVR microcontrollers.  The implementation uses a simple polled
-    mode interface.  Applications that require interrupt-controlled
-    EEPROM access to ensure that no time will be wasted in spinloops
-    will have to deploy their own implementation.
-
-    \par Notes:
-
-    - In addition to the write functions there is a set of update ones.
-    This functions read each byte first and skip the burning if the
-    old value is the same with new.  The scaning direction is from
-    high address to low, to obtain quick return in common cases.
-
-    - All of the read/write functions first make sure the EEPROM is
-    ready to be accessed.  Since this may cause long delays if a
-    write operation is still pending, time-critical applications
-    should first poll the EEPROM e. g. using eeprom_is_ready() before
-    attempting any actual I/O.  But this functions are not wait until
-    SELFPRGEN in SPMCSR becomes zero.  Do this manually, if your
-    softwate contains the Flash burning.
-
-    - As these functions modify IO registers, they are known to be
-    non-reentrant.  If any of these functions are used from both,
-    standard and interrupt context, the applications must ensure
-    proper protection (e.g. by disabling interrupts before accessing
-    them).
-
-    - All write functions force erase_and_write programming mode.
-    
-    - For Xmega the EEPROM start address is 0, like other architectures.
-    The reading functions add the 0x2000 value to use EEPROM mapping into
-    data space.
+/**
+ *  @defgroup avr_eeprom EEPROM handling
+ *
+ *  @ingroup avr
  */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -486,7 +499,7 @@ extern "C" {
     \ingroup avr_eeprom
     Loops until the eeprom is no longer busy.
     \returns Nothing.
- */ 	 
+ */
 #define eeprom_busy_wait() do {} while (!eeprom_is_ready())
 
 
@@ -602,4 +615,6 @@ void eeprom_update_block (const void *__src, void *__dst, size_t __n);
 
 #endif	/* !__ASSEMBLER__ */
 #endif	/* E2END || defined(__DOXYGEN__) || defined(__COMPILING_AVR_LIBC__) */
+
+/**@}*/
 #endif	/* !_AVR_EEPROM_H_ */

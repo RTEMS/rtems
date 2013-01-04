@@ -1,37 +1,42 @@
-/* Copyright (c) 2009 Atmel Corporation
-   All rights reserved.
+/**
+ * @file avr/iox128a3.h
+ *
+ * @brief Definitions for ATxmega128A3
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-   * Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in
-     the documentation and/or other materials provided with the
-     distribution.
-
-   * Neither the name of the copyright holders nor the names of
-     contributors may be used to endorse or promote products derived
-     from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE. */
-
-
-/* avr/iox128a3.h - definitions for ATxmega128A3 */
-
-/* This file should only be included from <avr/io.h>, never directly. */
+/*
+ * Copyright (c) 2009 Atmel Corporation
+ * All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *  * Neither the name of the copyright holders nor the names of
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef _AVR_IO_H_
 #  error "Include <avr/io.h> instead of this file."
@@ -41,12 +46,18 @@
 #  define _AVR_IOXXX_H_ "iox128a3.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 
 #ifndef _AVR_ATxmega128A3_H_
 #define _AVR_ATxmega128A3_H_ 1
 
+/**
+ *  @defgroup Avr_iox128a3 ATxmega128A3 Definitions
+ *
+ *  @ingroup avr
+ */
+/**@{*/
 
 /* Ungrouped common registers */
 #define GPIO0  _SFR_MEM8(0x0000)  /* General Purpose IO Register 0 */
@@ -6437,21 +6448,21 @@ IO Module Instances. Mapped to memory.
 
 // Generic Port Pins
 
-#define PIN0_bm 0x01 
+#define PIN0_bm 0x01
 #define PIN0_bp 0
 #define PIN1_bm 0x02
 #define PIN1_bp 1
-#define PIN2_bm 0x04 
+#define PIN2_bm 0x04
 #define PIN2_bp 2
-#define PIN3_bm 0x08 
+#define PIN3_bm 0x08
 #define PIN3_bp 3
-#define PIN4_bm 0x10 
+#define PIN4_bm 0x10
 #define PIN4_bp 4
-#define PIN5_bm 0x20 
+#define PIN5_bm 0x20
 #define PIN5_bp 5
-#define PIN6_bm 0x40 
+#define PIN6_bm 0x40
 #define PIN6_bp 6
-#define PIN7_bm 0x80 
+#define PIN7_bm 0x80
 #define PIN7_bp 7
 
 
@@ -6885,5 +6896,5 @@ IO Module Instances. Mapped to memory.
 #define SIGNATURE_2 0x42
 
 
+/**@}*/
 #endif /* _AVR_ATxmega128A3_H_ */
-
