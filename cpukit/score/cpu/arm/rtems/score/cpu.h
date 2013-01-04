@@ -503,40 +503,6 @@ typedef enum {
   ARM_EXCEPTION_MAKE_ENUM_32_BIT = 0xffffffff
 } Arm_symbolic_exception_name;
 
-static inline uint32_t arm_status_irq_enable( void )
-{
-  uint32_t arm_switch_reg;
-  uint32_t psr;
-
-  RTEMS_COMPILER_MEMORY_BARRIER();
-
-  __asm__ volatile (
-    ARM_SWITCH_TO_ARM
-    "mrs %[psr], cpsr\n"
-    "bic %[arm_switch_reg], %[psr], #0x80\n"
-    "msr cpsr, %[arm_switch_reg]\n"
-    ARM_SWITCH_BACK
-    : [arm_switch_reg] "=&r" (arm_switch_reg), [psr] "=&r" (psr)
-  );
-
-  return psr;
-}
-
-static inline void arm_status_restore( uint32_t psr )
-{
-  ARM_SWITCH_REGISTERS;
-
-  __asm__ volatile (
-    ARM_SWITCH_TO_ARM
-    "msr cpsr, %[psr]\n"
-    ARM_SWITCH_BACK
-    : ARM_SWITCH_OUTPUT
-    : [psr] "r" (psr)
-  );
-
-  RTEMS_COMPILER_MEMORY_BARRIER();
-}
-
 /** @} */
 
 typedef struct {
