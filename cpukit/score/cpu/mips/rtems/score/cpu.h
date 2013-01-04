@@ -1,7 +1,7 @@
 /**
  *  @file
- *  
- *  Mips CPU Dependent Header File
+ *
+ *  @brief Mips CPU Dependent Header File
  *
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
  *           Joel Sherrill <joel@OARcorp.com>.
@@ -41,6 +41,14 @@
 
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
+
+/**
+ *  @defgroup ScoreCPU CPU CPU
+ *
+ *  @ingroup Score
+ *
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -211,7 +219,7 @@ extern "C" {
  *  all tasks floating point.
  */
 
-#define CPU_ALL_TASKS_ARE_FP CPU_HARDWARE_FP 
+#define CPU_ALL_TASKS_ARE_FP CPU_HARDWARE_FP
 
 /*
  *  Should the IDLE task have a floating point context?
@@ -1172,4 +1180,5 @@ static inline uint32_t CPU_swap_u32(
 }
 #endif
 
+/**@}*/
 #endif

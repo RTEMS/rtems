@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreChain
  *
- * @brief Chain Handler API.
+ * @brief Chain Handler API
  */
 
 /*
@@ -107,7 +107,7 @@ typedef union {
   Chain_Control name = CHAIN_INITIALIZER_EMPTY(name)
 
 /**
- *  @brief Initialize a Chain Header
+ *  @brief Initialize a chain header.
  *
  *  This routine initializes @a the_chain structure to manage the
  *  contiguous array of @a number_nodes nodes which starts at
@@ -127,7 +127,7 @@ void _Chain_Initialize(
 );
 
 /**
- *  @brief Extract the specified node from a chain
+ *  @brief Extract the specified node from a chain.
  *
  *  This routine extracts @a the_node from the chain on which it resides.
  *  It disables interrupts to ensure the atomicity of the extract operation.
@@ -142,12 +142,12 @@ void _Chain_Extract(
 );
 
 /**
- *  @brief Obtain the first node on a chain
+ *  @brief Obtain the first node on a chain.
  *
  *  This function removes the first node from @a the_chain and returns
  *  a pointer to that node.  If @a the_chain is empty, then NULL is returned.
  *
- *  @return This method returns a pointer a node.  If a node was removed,
+ *  @retval This method returns a pointer a node.  If a node was removed,
  *          then a pointer to that node is returned.  If @a the_chain was
  *          empty, then NULL is returned.
  *
@@ -158,7 +158,7 @@ Chain_Node *_Chain_Get(
 );
 
 /**
- *  @brief Insert a node on a chain
+ *  @brief Insert a node on a chain.
  *
  *  This routine inserts @a the_node on a chain immediately following
  *  @a after_node.
@@ -179,7 +179,7 @@ void _Chain_Insert(
 );
 
 /**
- *  @brief Append a node on the end of a chain
+ *  @brief Append a node on the end of a chain.
  *
  *  This routine appends @a the_node onto the end of @a the_chain.
  *
@@ -262,7 +262,7 @@ bool _Chain_Get_with_empty_check(
  * @note It does NOT disable interrupts to ensure the atomicity of the
  * operation.
  *
- * @return The node count of the chain.
+ * @retval The node count of the chain.
  */
 size_t _Chain_Node_count_unprotected( const Chain_Control *chain );
 

@@ -1,5 +1,7 @@
 /**
- *  @file  rtems/score/threadsync.h
+ *  @file rtems/score/threadsync.h
+ *
+ *  @brief Synchronize Thread Blocking Operations with Actions in an ISR
  *
  *  This include file contains all constants and structures associated
  *  with synchronizing a thread blocking operation with potential

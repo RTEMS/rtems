@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/timestamp64.h
  *
+ *  @brief Helpers for Manipulating 64-bit Integer Timestamps
+ *
  *  This include file contains helpers for manipulating
  *  64-bit integer timestamps.
  */
@@ -61,7 +63,7 @@ static inline void _Timestamp64_implementation_Set(
 }
 
 /**
- *  @brief Set Timestamp to Seconds Nanosecond
+ *  @brief Set 64-bit timestamp to seconds nanosecond.
  *
  *  This method sets the timestamp to the specified seconds and nanoseconds
  *  value.
@@ -89,10 +91,9 @@ static inline void _Timestamp64_implementation_Set_to_zero(
 }
 
 /**
- *  @brief Zero Timestamp
+ *  @brief Sets the 64-bit timestamp to zero.
  *
- *  This method sets the timestamp to zero.
- *  value.
+ *  This method sets the timestamp to zero value.
  *
  *  @param[in] _time points to the timestamp instance to zero.
  */
@@ -106,13 +107,13 @@ static inline void _Timestamp64_implementation_Set_to_zero(
 #endif
 
 /**
- *  @brief Is Timestamp Valid
+ *  @brief Determines the validity of a 64-bit timestamp.
  *
  *  This method determines the validity of a timestamp.
  *
  *  @param[in] _time points to the timestamp instance to validate.
  *
- *  @return This method returns true if @a time is valid and
+ *  @retval This method returns true if @a time is valid and
  *          false otherwise.
  */
 #define _Timestamp64_Is_valid( _time ) \
@@ -127,14 +128,14 @@ static inline bool _Timestamp64_implementation_Less_than(
 }
 
 /**
- *  @brief Timestamp Less Than Operator
+ *  @brief The "less than" operator for 64-bit timestamps.
  *
  *  This method is the less than operator for timestamps.
  *
  *  @param[in] _lhs points to the left hand side timestamp
  *  @param[in] _rhs points to the right hand side timestamp
  *
- *  @return This method returns true if @a _lhs is less than the @a _rhs and
+ *  @retval This method returns true if @a _lhs is less than the @a _rhs and
  *          false otherwise.
  */
 #if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
@@ -159,14 +160,14 @@ static inline bool _Timestamp64_implementation_Equal_to(
   _Timestamp64_Less_than( _rhs, _lhs )
 
 /**
- *  @brief Timestamp equal to Operator
+ *  @brief The "equal to" operator for 64-bit timestamps.
  *
  *  This method is the is equal to than operator for timestamps.
  *
  *  @param[in] _lhs points to the left hand side timestamp
  *  @param[in] _rhs points to the right hand side timestamp
  *
- *  @return This method returns true if @a _lhs is equal to  @a _rhs and
+ *  @retval This method returns true if @a _lhs is equal to  @a _rhs and
  *          false otherwise.
  */
 #if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
@@ -188,7 +189,7 @@ static inline void _Timestamp64_implementation_Add_to(
 }
 
 /**
- *  @brief Add to a Timestamp
+ *  @brief Add two 64-bit timestamps.
  *
  *  This routine adds two timestamps.  The second argument is added
  *  to the first.
@@ -196,7 +197,7 @@ static inline void _Timestamp64_implementation_Add_to(
  *  @param[in] _time points to the base time to be added to
  *  @param[in] _add points to the timestamp to add to the first argument
  *
- *  @return This method returns the number of seconds @a time increased by.
+ *  @retval This method returns the number of seconds @a time increased by.
  */
 #if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Add_to( _time, _add ) \
@@ -209,21 +210,21 @@ static inline void _Timestamp64_implementation_Add_to(
 #endif
 
 /**
- *  @brief Convert Timestamp to Number of Ticks
+ *  @brief Convert 64-bit timestamp to number of ticks.
  *
  *  This routine convert the @a time timestamp to the corresponding number
  *  of clock ticks.
  *
  *  @param[in] _time points to the time to be converted
  *
- *  @return This method returns the number of ticks computed.
+ *  @retval This method returns the number of ticks computed.
  */
 uint32_t _Timestamp64_To_ticks(
   const Timestamp64_Control *_time
 );
 
 /**
- *  @brief Convert Ticks to Timestamp
+ *  @brief Convert ticks to 64-bit timestamp.
  *
  *  This routine converts the @a _ticks value to the corresponding
  *  timestamp format @a _time.
@@ -246,7 +247,7 @@ static inline void _Timestamp64_implementation_Subtract(
 }
 
 /**
- *  @brief Subtract Two Timestamp
+ *  @brief Subtract two 64-bit timestamps.
  *
  *  This routine subtracts two timestamps.  @a result is set to
  *  @a end - @a start.
@@ -277,7 +278,7 @@ static inline void _Timestamp64_implementation_Divide_by_integer(
 }
 
 /**
- *  @brief Divide Timestamp By Integer
+ *  @brief Divide 64-bit timestamp by an integer.
  *
  *  This routine divides a timestamp by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically
@@ -299,7 +300,7 @@ static inline void _Timestamp64_implementation_Divide_by_integer(
 #endif
 
 /**
- *  @brief Divide Timestamp
+ *  @brief Divide 64-bit timestamp by another 64-bit timestamp.
  *
  *  This routine divides a timestamp by another timestamp.  The
  *  intended use is for calculating percentages to three decimal points.
@@ -324,13 +325,13 @@ static inline uint32_t _Timestamp64_implementation_Get_seconds(
 }
 
 /**
- *  @brief Get Seconds Portion of Timestamp
+ *  @brief Get seconds portion of a 64-bit timestamp.
  *
  *  This method returns the seconds portion of the specified timestamp
  *
  *  @param[in] _time points to the timestamp
  *
- *  @return The seconds portion of @a _time.
+ *  @retval The seconds portion of @a _time.
  */
 #if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Get_seconds( _time ) \
@@ -349,13 +350,13 @@ static inline uint32_t _Timestamp64_implementation_Get_nanoseconds(
 }
 
 /**
- *  @brief Get Nanoseconds Portion of Timestamp
+ *  @brief Get nanoseconds portion of a 64-bit timestamp.
  *
  *  This method returns the nanoseconds portion of the specified timestamp
  *
  *  @param[in] _time points to the timestamp
  *
- *  @return The nanoseconds portion of @a _time.
+ *  @retval The nanoseconds portion of @a _time.
  */
 #if CPU_TIMESTAMP_USE_INT64_INLINE == TRUE
   #define _Timestamp64_Get_nanoseconds( _time ) \
@@ -376,7 +377,7 @@ static inline void _Timestamp64_implementation_To_timespec(
 }
 
 /**
- *  @brief Convert Timestamp to struct timespec
+ *  @brief Convert 64-bit timestamp to struct timespec.
  *
  *  This method returns the seconds portion of the specified timestamp
  *
@@ -403,7 +404,7 @@ static inline void _Timestamp64_implementation_To_timeval(
 }
 
 /**
- *  @brief Convert Timestamp to struct timeval
+ *  @brief Convert 64-bit timestamp to struct timeval.
  *
  *  This method returns the seconds portion of the specified timestamp
  *

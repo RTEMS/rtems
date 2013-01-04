@@ -1,11 +1,13 @@
 /**
  * @file rtems/score/types.h
+ *
+ * @brief Type Definitions Pertaining to the MIPS Processor Family
+ *
+ *  This include file contains type definitions pertaining to the MIPS
+ *  processor family.
  */
 
 /*
- *  This include file contains type definitions pertaining to the MIPS
- *  processor family.
- *
  *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,6 +19,14 @@
 
 #ifndef _RTEMS_SCORE_TYPES_H
 #define _RTEMS_SCORE_TYPES_H
+
+/**
+ *  @defgroup ScoreTypes MIPS Processor Family Type Definitions
+ *
+ *  @ingroup Score
+ *
+ */
+/**@{*/
 
 #include <rtems/score/basedefs.h>
 
@@ -40,4 +50,5 @@ typedef void ( *mips_isr_entry )( void );
 
 #endif  /* !ASM */
 
+/**@}*/
 #endif
