@@ -570,8 +570,6 @@ void bsp_interrupt_dispatch( void );
 
 void arm_exc_interrupt( void );
 
-void arm_exc_undefined( void );
-
 /** @} */
 
 /* XXX This is out of date */
