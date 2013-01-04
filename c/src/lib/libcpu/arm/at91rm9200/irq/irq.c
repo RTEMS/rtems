@@ -10,6 +10,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/score/armv4.h>
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>

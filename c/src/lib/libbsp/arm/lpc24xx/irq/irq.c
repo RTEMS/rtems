@@ -20,6 +20,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/score/armv4.h>
 #include <rtems/score/armv7m.h>
 
 #include <bsp.h>

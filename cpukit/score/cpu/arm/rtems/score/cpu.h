@@ -566,10 +566,6 @@ void arm_exc_prefetch_abort_set_handler( arm_exc_abort_handler handler );
 
 void arm_exc_prefetch_abort( void );
 
-void bsp_interrupt_dispatch( void );
-
-void arm_exc_interrupt( void );
-
 /** @} */
 
 /* XXX This is out of date */

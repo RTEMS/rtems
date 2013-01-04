@@ -39,6 +39,10 @@ $(PROJECT_INCLUDE)/rtems/score/arm.h: rtems/score/arm.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/arm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/arm.h
 
+$(PROJECT_INCLUDE)/rtems/score/armv4.h: rtems/score/armv4.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/armv4.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/armv4.h
+
 $(PROJECT_INCLUDE)/rtems/score/armv7m.h: rtems/score/armv7m.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/armv7m.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/armv7m.h
