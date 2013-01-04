@@ -490,26 +490,6 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
  * @{
  */
 
-typedef struct {
-  uint32_t r0;
-  uint32_t r1;
-  uint32_t r2;
-  uint32_t r3;
-  uint32_t r4;
-  uint32_t r5;
-  uint32_t r6;
-  uint32_t r7;
-  uint32_t r8;
-  uint32_t r9;
-  uint32_t r10;
-  uint32_t r11;
-  uint32_t r12;
-  uint32_t sp;
-  uint32_t lr;
-  uint32_t pc;
-  uint32_t cpsr;
-} arm_cpu_context;
-
 typedef enum {
   ARM_EXCEPTION_RESET = 0,
   ARM_EXCEPTION_UNDEF = 1,
@@ -519,7 +499,8 @@ typedef enum {
   ARM_EXCEPTION_RESERVED = 5,
   ARM_EXCEPTION_IRQ = 6,
   ARM_EXCEPTION_FIQ = 7,
-  MAX_EXCEPTIONS = 8
+  MAX_EXCEPTIONS = 8,
+  ARM_EXCEPTION_MAKE_ENUM_32_BIT = 0xffffffff
 } Arm_symbolic_exception_name;
 
 static inline uint32_t arm_status_irq_enable( void )
@@ -558,14 +539,25 @@ static inline void arm_status_restore( uint32_t psr )
 
 /** @} */
 
-/* XXX This is out of date */
 typedef struct {
   uint32_t register_r0;
   uint32_t register_r1;
   uint32_t register_r2;
   uint32_t register_r3;
-  uint32_t register_ip;
+  uint32_t register_r4;
+  uint32_t register_r5;
+  uint32_t register_r6;
+  uint32_t register_r7;
+  uint32_t register_r8;
+  uint32_t register_r9;
+  uint32_t register_r10;
+  uint32_t register_r11;
+  uint32_t register_r12;
+  uint32_t register_sp;
   uint32_t register_lr;
+  uint32_t register_pc;
+  uint32_t register_cpsr;
+  Arm_symbolic_exception_name vector;
 } CPU_Exception_frame;
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;

@@ -27,7 +27,7 @@ void bsp_interrupt_dispatch( void );
 
 void _ARMV4_Exception_interrupt( void );
 
-typedef void ARMV4_Exception_abort_handler( arm_cpu_context *context );
+typedef void ARMV4_Exception_abort_handler( CPU_Exception_frame *frame );
 
 void _ARMV4_Exception_data_abort_set_handler(
   ARMV4_Exception_abort_handler handler
