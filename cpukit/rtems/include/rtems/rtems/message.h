@@ -1,30 +1,33 @@
 /**
  * @file rtems/rtems/message.h
  *
- * @brief Constants and Structures Associated with the Message Queue Manager
+ * @defgroup ClassicMessageQueue Message Queues
  *
- *  This include file contains all the constants and structures associated
- *  with the Message Queue Manager.  This manager provides a mechanism for
- *  communication and synchronization between tasks using messages.
+ * @ingroup ClassicRTEMS
+ * @brief Message Queue Manager
  *
- *  Directives provided are:
+ * This include file contains all the constants and structures associated
+ * with the Message Queue Manager. This manager provides a mechanism for
+ * communication and synchronization between tasks using messages.
  *
- *     - create a queue
- *     - get ID of a queue
- *     - delete a queue
- *     - put a message at the rear of a queue
- *     - put a message at the front of a queue
- *     - broadcast N messages to a queue
- *     - receive message from a queue
- *     - flush all messages on a queue
+ * Directives provided are:
+ *
+ * - create a queue
+ * - get ID of a queue
+ * - delete a queue
+ * - put a message at the rear of a queue
+ * - put a message at the front of a queue
+ * - broadcast N messages to a queue
+ * - receive message from a queue
+ * - flush all messages on a queue
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_MESSAGE_H
@@ -106,25 +109,25 @@ RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
 void _Message_queue_Manager_initialization(void);
 
 /**
- *  @brief RTEMS Create Message Queue
+ * @brief RTEMS Create Message Queue
  *
- *  This routine implements the rtems_message_queue_create directive.  The
- *  message queue will have the @a name.  If the @a attribute_set indicates
- *  that the message queue is to be limited in the number of messages
- *  that can be outstanding, then @a count indicates the maximum number of
- *  messages that will be held.  It returns the id of the created
- *  message queue in @a id.
+ * This routine implements the rtems_message_queue_create directive. The
+ * message queue will have the @a name. If the @a attribute_set indicates
+ * that the message queue is to be limited in the number of messages
+ * that can be outstanding, then @a count indicates the maximum number of
+ * messages that will be held. It returns the id of the created
+ * message queue in @a id.
  *
- *  @param[in] name is the user defined queue name
- *  @param[in] count is the maximum message and reserved buffer count
- *  @param[in] max_message_size is the maximum size of each message
- *  @param[in] attribute_set is the process method
- *  @param[in] id is the pointer to queue
+ * @param[in] name is the user defined queue name
+ * @param[in] count is the maximum message and reserved buffer count
+ * @param[in] max_message_size is the maximum size of each message
+ * @param[in] attribute_set is the process method
+ * @param[in] id is the pointer to queue
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the @a id will
- *          be filled in with the queue id.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the @a id will
+ *         be filled in with the queue id.
  */
 rtems_status_code rtems_message_queue_create(
   rtems_name       name,
@@ -135,22 +138,22 @@ rtems_status_code rtems_message_queue_create(
 );
 
 /**
- *  @brief RTEMS Message Queue Name to Id
+ * @brief RTEMS Message Queue Name to Id
  *
- *  This routine implements the rtems_message_queue_ident directive.
- *  This directive returns the message queue ID associated with NAME.
- *  If more than one message queue is named name, then the message
- *  queue to which the ID belongs is arbitrary.  node indicates the
- *  extent of the search for the ID of the message queue named name.
- *  The search can be limited to a particular node or allowed to
- *  encompass all nodes.
+ * This routine implements the rtems_message_queue_ident directive.
+ * This directive returns the message queue ID associated with NAME.
+ * If more than one message queue is named name, then the message
+ * queue to which the ID belongs is arbitrary. node indicates the
+ * extent of the search for the ID of the message queue named name.
+ * The search can be limited to a particular node or allowed to
+ * encompass all nodes.
  *
- *  @param[in] name is the user defined message queue name
- *  @param[in] node is the node(s) to be searched
- *  @param[in] id is the pointer to message queue id
+ * @param[in] name is the user defined message queue name
+ * @param[in] node is the node(s) to be searched
+ * @param[in] id is the pointer to message queue id
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
- *  *id filled with the message queue id
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ * *id filled with the message queue id
  */
 rtems_status_code rtems_message_queue_ident(
   rtems_name  name,
@@ -159,14 +162,14 @@ rtems_status_code rtems_message_queue_ident(
 );
 
 /**
- *  @brief RTEMS Delete Message Queue
+ * @brief RTEMS Delete Message Queue
  *
- *  This routine implements the rtems_message_queue_delete directive.  The
- *  message queue indicated by ID is deleted.
+ * This routine implements the rtems_message_queue_delete directive. The
+ * message queue indicated by ID is deleted.
  *
- *  @param[in] id is the queue id
+ * @param[in] id is the queue id
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_message_queue_delete(
   rtems_id id
@@ -194,19 +197,19 @@ rtems_status_code rtems_message_queue_send(
 );
 
 /**
- *  @brief RTEMS Urgent Message Queue
+ * @brief RTEMS Urgent Message Queue
  *
- *  This routine implements the rtems_message_queue_urgent directive.
- *  This directive has the same behavior as rtems_message_queue_send
- *  except that if no tasks are waiting, the message buffer will
- *  be placed at the FRONT of the chain of pending messages rather
- *  than at the REAR.
+ * This routine implements the rtems_message_queue_urgent directive.
+ * This directive has the same behavior as rtems_message_queue_send
+ * except that if no tasks are waiting, the message buffer will
+ * be placed at the FRONT of the chain of pending messages rather
+ * than at the REAR.
  *
- *  @param[in] id is the pointer to message queue
- *  @param[in] buffer is the pointer to message buffer
- *  @param[in] size is the size of message to send urgently
+ * @param[in] id is the pointer to message queue
+ * @param[in] buffer is the pointer to message buffer
+ * @param[in] size is the size of message to send urgently
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_message_queue_urgent(
   rtems_id    id,
@@ -215,20 +218,20 @@ rtems_status_code rtems_message_queue_urgent(
 );
 
 /**
- *  @brief RTEMS Broadcast Message Queue
+ * @brief RTEMS Broadcast Message Queue
  *
- *  This routine implements the rtems_message_queue_broadcast directive.
- *  This directive sends the message buffer to all of the tasks blocked
- *  waiting for a message on the message queue indicated by ID.
- *  If no tasks are waiting, then the message buffer will not be queued.
+ * This routine implements the rtems_message_queue_broadcast directive.
+ * This directive sends the message buffer to all of the tasks blocked
+ * waiting for a message on the message queue indicated by ID.
+ * If no tasks are waiting, then the message buffer will not be queued.
  *
- *  @param[in] id is the pointer to message queue
- *  @param[in] buffer is the pointer to message buffer
- *  @param[in] size is the size of message to broadcast
- *  @param[in] count pointer to area to store number of threads made ready
+ * @param[in] id is the pointer to message queue
+ * @param[in] buffer is the pointer to message buffer
+ * @param[in] size is the size of message to broadcast
+ * @param[in] count pointer to area to store number of threads made ready
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
- *  		*count filled in with number of threads made ready
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ * 		*count filled in with number of threads made ready
  */
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id    id,
@@ -238,25 +241,25 @@ rtems_status_code rtems_message_queue_broadcast(
 );
 
 /**
- *  @brief RTEMS Message Queue Receive
+ * @brief RTEMS Message Queue Receive
  *
- *  This routine implements the rtems_message_queue_receive directive.
- *  This directive is invoked when the calling task wishes to receive
- *  a message from the message queue indicated by ID.  The received
- *  message is to be placed in buffer.  If no messages are outstanding
- *  and the option_set indicates that the task is willing to block,
- *  then the task will be blocked until a message arrives or until,
- *  optionally, timeout clock ticks have passed.
+ * This routine implements the rtems_message_queue_receive directive.
+ * This directive is invoked when the calling task wishes to receive
+ * a message from the message queue indicated by ID. The received
+ * message is to be placed in buffer. If no messages are outstanding
+ * and the option_set indicates that the task is willing to block,
+ * then the task will be blocked until a message arrives or until,
+ * optionally, timeout clock ticks have passed.
  *
- *  @param[in] id is the queue id
- *  @param[in] buffer is the pointer to message buffer
- *  @param[in] size is the size of message receive
- *  @param[in] option_set is the options on receive
- *  @param[in] timeout is the number of ticks to wait
+ * @param[in] id is the queue id
+ * @param[in] buffer is the pointer to message buffer
+ * @param[in] size is the size of message receive
+ * @param[in] option_set is the options on receive
+ * @param[in] timeout is the number of ticks to wait
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,
@@ -315,24 +318,24 @@ rtems_status_code _Message_queue_Submit(
 );
 
 /**
- *  @brief Message Queue Allocate
+ * @brief Message Queue Allocate
  *
- *  This function allocates a message queue control block from
- *  the inactive chain of free message queue control blocks.
+ * This function allocates a message queue control block from
+ * the inactive chain of free message queue control blocks.
  *
- *  @return the_message_queue filled in if successful, NULL otherwise
+ * @retval the_message_queue filled in if successful, NULL otherwise
  */
 Message_queue_Control *_Message_queue_Allocate (void);
 
 /**
- *  @brief Message queue Translate Core Message Queue Return Code
+ * @brief Message queue Translate Core Message Queue Return Code
  *
- *  This function returns a RTEMS status code based on
- *  @a the_message_queue_status.
+ * This function returns a RTEMS status code based on
+ * @a the_message_queue_status.
  *
- *  @param[in] the_message_queue_status is the status code to translate
+ * @param[in] the_message_queue_status is the status code to translate
  *
- *  @return translated RTEMS status code
+ * @retval translated RTEMS status code
  */
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
   uint32_t   the_message_queue_status

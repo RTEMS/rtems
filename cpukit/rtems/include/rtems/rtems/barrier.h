@@ -1,50 +1,53 @@
 /**
  * @file rtems/rtems/barrier.h
  *
- * @brief Constants and Structures Associated with the Barrier Manager
+ * @defgroup ClassicBarrier Barriers
  *
- *  This include file contains all the constants and structures associated
- *  with the Barrier Manager.
+ * @ingroup ClassicRTEMS
+ * @brief Classic API Barrier Manager
  *
- *  Directives provided are:
+ * This include file contains all the constants and structures associated
+ * with the Barrier Manager.
  *
- *    - create a barrier
- *    - get an ID of a barrier
- *    - delete a barrier
- *    - wait for a barrier
- *    - signal a barrier
+ * Directives provided are:
+ *
+ * - create a barrier
+ * - get an ID of a barrier
+ * - delete a barrier
+ * - wait for a barrier
+ * - signal a barrier
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_BARRIER_H
 #define _RTEMS_RTEMS_BARRIER_H
 
 /**
- *  @defgroup ClassicBarrier Barriers
+ * @defgroup ClassicBarrier Barriers
  *
- *  @ingroup ClassicRTEMS
+ * @ingroup ClassicRTEMS
  *
- *  This encapsulates functionality which implements the Classic API
- *  Barrier Manager.
+ * This encapsulates functionality which implements the Classic API
+ * Barrier Manager.
  */
 /**@{*/
 
 /**
- *  @brief Instantiate Barrier Data
+ * @brief Instantiate Barrier Data
  *
- *  Barrier Manager -- Instantiate Data
+ * Barrier Manager -- Instantiate Data
  *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
+ * This constant is defined to extern most of the time when using
+ * this header file. However by defining it to nothing, the data
+ * declared in this header file can be instantiated. This is done
+ * in a single per manager file.
  */
 #ifndef RTEMS_BARRIER_EXTERN
 #define RTEMS_BARRIER_EXTERN extern
@@ -87,23 +90,23 @@ RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
 void _Barrier_Manager_initialization(void);
 
 /**
- *  @brief RTEMS Create Barrier
+ * @brief RTEMS Create Barrier
  *
- *  Barrier Manager -- Create a Barrier Instance
+ * Barrier Manager -- Create a Barrier Instance
  *
- *  This routine implements the rtems_barrier_create directive.  The
- *  barrier will have the name name.  The starting count for
- *  the barrier is count.  The attribute_set determines if
- *  the barrier is global or local and the thread queue
- *  discipline.  It returns the id of the created barrier in ID.
+ * This routine implements the rtems_barrier_create directive.  The
+ * barrier will have the name name. The starting count for
+ * the barrier is count. The attribute_set determines if
+ * the barrier is global or local and the thread queue
+ * discipline. It returns the id of the created barrier in ID.
  *
- *  @param[in] name is the name of this barrier instance.
- *  @param[in] attribute_set specifies the attributes of this barrier instance.
- *  @param[in] maximum_waiters is the maximum number of threads which will
- *             be allowed to concurrently wait at the barrier.
- *  @param[out] id will contain the id of this barrier.
+ * @param[in] name is the name of this barrier instance.
+ * @param[in] attribute_set specifies the attributes of this barrier instance.
+ * @param[in] maximum_waiters is the maximum number of threads which will
+ *            be allowed to concurrently wait at the barrier.
+ * @param[out] id will contain the id of this barrier.
  *
- *  @return a status code indicating success or the reason for failure.
+ * @retval a status code indicating success or the reason for failure.
  */
 rtems_status_code rtems_barrier_create(
   rtems_name           name,
@@ -113,20 +116,20 @@ rtems_status_code rtems_barrier_create(
 );
 
 /**
- *  @brief RTEMS Barrier name to Id
+ * @brief RTEMS Barrier name to Id
  *
- *  This routine implements the rtems_barrier_ident directive.
- *  This directive returns the barrier ID associated with name.
- *  If more than one barrier is named name, then the barrier
- *  to which the ID belongs is arbitrary.  node indicates the
- *  extent of the search for the ID of the barrier named name.
- *  The search can be limited to a particular node or allowed to
- *  encompass all nodes.
+ * This routine implements the rtems_barrier_ident directive.
+ * This directive returns the barrier ID associated with name.
+ * If more than one barrier is named name, then the barrier
+ * to which the ID belongs is arbitrary. node indicates the
+ * extent of the search for the ID of the barrier named name.
+ * The search can be limited to a particular node or allowed to
+ * encompass all nodes.
  *
- *  @param[in] name is the name of this barrier instance.
- *  @param[out] id will contain the id of this barrier.
+ * @param[in] name is the name of this barrier instance.
+ * @param[out] id will contain the id of this barrier.
  *
- *  @return a status code indicating success or the reason for failure.
+ * @retval a status code indicating success or the reason for failure.
  */
 rtems_status_code rtems_barrier_ident(
   rtems_name    name,
@@ -134,34 +137,34 @@ rtems_status_code rtems_barrier_ident(
 );
 
 /**
- *  @brief RTEMS Delete Barrier
+ * @brief RTEMS Delete Barrier
  *
- *  This routine implements the rtems_barrier_delete directive.  The
- *  barrier indicated by @a id is deleted.  The barrier is freed back to the
- *  inactive barrier chain.
+ * This routine implements the rtems_barrier_delete directive. The
+ * barrier indicated by @a id is deleted. The barrier is freed back to the
+ * inactive barrier chain.
  *
  *
- *  @param[in] id indicates the barrier to delete
+ * @param[in] id indicates the barrier to delete
  *
- *  @return a status code indicating success or the reason for failure.
+ * @retval a status code indicating success or the reason for failure.
  */
 rtems_status_code rtems_barrier_delete(
   rtems_id   id
 );
 
 /**
- *  @brief RTEMS Barrier Wait
+ * @brief RTEMS Barrier Wait
  *
- *  This routine implements the rtems_barrier_wait directive.  It
- *  attempts to wait at the barrier associated with @a id.  The calling task
- *  may block waiting for the barrier with an optional timeout of @a timeout
- *  clock ticks.
+ * This routine implements the rtems_barrier_wait directive. It
+ * attempts to wait at the barrier associated with @a id. The calling task
+ * may block waiting for the barrier with an optional timeout of @a timeout
+ * clock ticks.
  *
- *  @param[in] id indicates the barrier to wait at.
- *  @param[in] timeout is the maximum length of time in ticks the calling
- *             thread is willing to block.
+ * @param[in] id indicates the barrier to wait at.
+ * @param[in] timeout is the maximum length of time in ticks the calling
+ *            thread is willing to block.
  *
- *  @return a status code indicating success or the reason for failure.
+ * @retval a status code indicating success or the reason for failure.
  */
 rtems_status_code rtems_barrier_wait(
   rtems_id       id,
@@ -169,19 +172,19 @@ rtems_status_code rtems_barrier_wait(
 );
 
 /**
- *  @brief RTEMS Barrier Release
+ * @brief RTEMS Barrier Release
  *
- *  Barrier Manager -- Release Tasks Waitng at a Barrier
+ * Barrier Manager -- Release Tasks Waitng at a Barrier
  *
- *  This routine implements the rtems_barrier_release directive.  It
- *  unblocks all of the threads waiting on the barrier associated with
- *  @a id.  The number of threads unblocked is returned in @a released.
+ * This routine implements the rtems_barrier_release directive. It
+ * unblocks all of the threads waiting on the barrier associated with
+ * @a id. The number of threads unblocked is returned in @a released.
  *
  *
- *  @param[in] id indicates the barrier to wait at.
- *  @param[out] released will contain the number of threads unblocked.
+ * @param[in] id indicates the barrier to wait at.
+ * @param[out] released will contain the number of threads unblocked.
  *
- *  @return a status code indicating success or the reason for failure.
+ * @retval a status code indicating success or the reason for failure.
  */
 rtems_status_code rtems_barrier_release(
   rtems_id  id,
@@ -189,14 +192,14 @@ rtems_status_code rtems_barrier_release(
 );
 
 /**
- *  @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
+ * @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
  *
- *  This function returns a RTEMS status code based on the barrier
- *  status code specified.
+ * This function returns a RTEMS status code based on the barrier
+ * status code specified.
  *
- *  @param[in] the_status is the SuperCore Barrier status to translate.
+ * @param[in] the_status is the SuperCore Barrier status to translate.
  *
- *  @return a status code indicating success or the reason for failure.
+ * @retval a status code indicating success or the reason for failure.
  */
 rtems_status_code _Barrier_Translate_core_barrier_return_code (
   CORE_barrier_Status  the_status

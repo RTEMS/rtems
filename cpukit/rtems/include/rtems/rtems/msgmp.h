@@ -1,16 +1,21 @@
 /**
  * @file rtems/rtems/msgmp.h
  *
- *  This include file contains all the constants and structures associated
- *  with the Multiprocessing Support in the Message Manager.
+ * @defgroup ClassicMsgMP Message Queue MP Support
+ *
+ * @ingroup ClassicRTEMS
+ * @brief Message Manager MP Support
+ *
+ * This include file contains all the constants and structures associated
+ * with the Multiprocessing Support in the Message Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_MSGMP_H
@@ -119,10 +124,10 @@ void _Message_queue_MP_Send_response_packet (
 
 /**
  *
- @brief *  _Message_queue_MP_Process_packet
+ * @brief _Message_queue_MP_Process_packet
  *
- *  This routine performs the actions specific to this package for
- *  the request from another node.
+ * This routine performs the actions specific to this package for
+ * the request from another node.
  */
 void _Message_queue_MP_Process_packet (
   rtems_packet_prefix *the_packet_prefix

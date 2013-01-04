@@ -1,27 +1,30 @@
 /**
  * @file rtems/rtems/clock.h
  *
- * @brief Constants and Structures Associated with the Clock Manager
+ * @defgroup ClassicClock Clocks
  *
- *  This include file contains all the constants and structures associated
- *  with the Clock Manager.  This manager provides facilities to set, obtain,
- *  and continually update the current date and time.
+ * @ingroup ClassicRTEMS
+ * @brief Clock Manager API
  *
- *  This manager provides directives to:
+ * This include file contains all the constants and structures associated
+ * with the Clock Manager. This manager provides facilities to set, obtain,
+ * and continually update the current date and time.
  *
- *     - set the current date and time
- *     - obtain the current date and time
- *     - set the nanoseconds since last clock tick handler
- *     - announce a clock tick
- *     - obtain the system uptime
+ * This manager provides directives to:
+ *
+ * - set the current date and time
+ * - obtain the current date and time
+ * - set the nanoseconds since last clock tick handler
+ * - announce a clock tick
+ * - obtain the system uptime
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_CLOCK_H
@@ -70,21 +73,21 @@ typedef Watchdog_Nanoseconds_since_last_tick_routine
   rtems_nanoseconds_extension_routine;
 
 /**
- *  @brief Obtain Current Time of Day
+ * @brief Obtain Current Time of Day
  *
- *  This routine implements the rtems_clock_get directive.  It returns
- *  one of the following:
- *    + current time of day
- *    + seconds since epoch
- *    + ticks since boot
- *    + ticks per second
+ * This routine implements the rtems_clock_get directive. It returns
+ * one of the following:
+ * + current time of day
+ * + seconds since epoch
+ * + ticks since boot
+ * + ticks per second
  *
- *  @param[in] option is the format of time to return
- *  @param[in] time_buffer points to the output area
+ * @param[in] option is the format of time to return
+ * @param[in] time_buffer points to the output area
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
@@ -92,189 +95,189 @@ rtems_status_code rtems_clock_get(
 );
 
 /**
- *  @brief Obtain Current Time of Day (Classic TOD)
+ * @brief Obtain Current Time of Day (Classic TOD)
  *
- *  This routine implements the rtems_clock_get_tod directive.  It returns
- *  the current time of day in the format defined by RTEID.
+ * This routine implements the rtems_clock_get_tod directive. It returns
+ * the current time of day in the format defined by RTEID.
  *
- *  Clock Manager - rtems_clock_get_tod
+ * Clock Manager - rtems_clock_get_tod
  *
- *  @param[in] time_buffer points to the time of day structure
+ * @param[in] time_buffer points to the time of day structure
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the time_buffer will
- *          be filled in with the current time of day.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the time_buffer will
+ *         be filled in with the current time of day.
  */
 rtems_status_code rtems_clock_get_tod(
   rtems_time_of_day *time_buffer
 );
 
 /**
- *  @brief Obtain TOD in struct timeval Format
+ * @brief Obtain TOD in struct timeval Format
  *
- *  This routine implements the rtems_clock_get_tod_timeval
- *  directive.
+ * This routine implements the rtems_clock_get_tod_timeval
+ * directive.
  *
- *  @param[in] time points to the struct timeval variable to fill in
+ * @param[in] time points to the struct timeval variable to fill in
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the time will
- *          be filled in with the current time of day.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the time will
+ *         be filled in with the current time of day.
  */
 rtems_status_code rtems_clock_get_tod_timeval(
   struct timeval *time
 );
 
 /**
- *  @brief Obtain Seconds Since Epoch
+ * @brief Obtain Seconds Since Epoch
  *
- *  This routine implements the rtems_clock_get_seconds_since_epoch
- *  directive.
+ * This routine implements the rtems_clock_get_seconds_since_epoch
+ * directive.
  *
- *  @param[in] the_interval points to the interval variable to fill in
+ * @param[in] the_interval points to the interval variable to fill in
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the time_buffer will
- *          be filled in with the current time of day.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the time_buffer will
+ *         be filled in with the current time of day.
  */
 rtems_status_code rtems_clock_get_seconds_since_epoch(
   rtems_interval *the_interval
 );
 
 /**
- *  @brief Obtain Ticks Since Boot
+ * @brief Obtain Ticks Since Boot
  *
- *  This routine implements the rtems_clock_get_ticks_since_boot
- *  directive.
+ * This routine implements the rtems_clock_get_ticks_since_boot
+ * directive.
  *
- *  @return This method returns the number of ticks since boot.  It cannot
- *          fail since RTEMS always keeps a running count of ticks since boot.
+ * @retval This method returns the number of ticks since boot. It cannot
+ *         fail since RTEMS always keeps a running count of ticks since boot.
  */
 rtems_interval rtems_clock_get_ticks_since_boot(void);
 
 /**
- *  @brief Obtain Ticks Per Seconds
+ * @brief Obtain Ticks Per Seconds
  *
- *  This routine implements the rtems_clock_get_ticks_per_second
- *  directive.
+ * This routine implements the rtems_clock_get_ticks_per_second
+ * directive.
  *
- *  @return This method returns the number of ticks since boot.  It cannot
- *          fail since RTEMS is always configured to know the number of
- *          ticks per second.
+ * @retval This method returns the number of ticks since boot. It cannot
+ *         fail since RTEMS is always configured to know the number of
+ *         ticks per second.
  */
 rtems_interval rtems_clock_get_ticks_per_second(void);
 
 /**
- *  @brief Set the Current TOD
+ * @brief Set the Current TOD
  *
- *  This routine implements the rtems_clock_set directive.  It sets
- *  the current time of day to that in the time_buffer record.
+ * This routine implements the rtems_clock_set directive. It sets
+ * the current time of day to that in the time_buffer record.
  *
- *  @param[in] time_buffer points to the new TOD
+ * @param[in] time_buffer points to the new TOD
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  *
- *  @note Activities scheduled based upon the current time of day
- *        may be executed immediately if the time is moved forward.
+ * @note Activities scheduled based upon the current time of day
+ *       may be executed immediately if the time is moved forward.
  */
 rtems_status_code rtems_clock_set(
   const rtems_time_of_day *time_buffer
 );
 
 /**
- *  @brief Announce a Clock Tick
+ * @brief Announce a Clock Tick
  *
- *  This routine implements the rtems_clock_tick directive.  It is invoked
- *  to inform RTEMS of the occurrence of a clock tick.
+ * This routine implements the rtems_clock_tick directive. It is invoked
+ * to inform RTEMS of the occurrence of a clock tick.
  *
- *  @return This directive always returns RTEMS_SUCCESSFUL.
+ * @retval This directive always returns RTEMS_SUCCESSFUL.
  *
- *  @note This method is typically called from an ISR and is the basis
- *        for all timeouts and delays. This routine only works for leap-years
- *	  through 2099.
+ * @note This method is typically called from an ISR and is the basis
+ *       for all timeouts and delays. This routine only works for leap-years
+ *       through 2099.
  */
 rtems_status_code rtems_clock_tick( void );
 
 /**
- *  @brief Set the BSP specific Nanoseconds Extension
+ * @brief Set the BSP specific Nanoseconds Extension
  *
- *  Clock Manager
+ * Clock Manager
  *
- *  This directive sets the BSP provided nanoseconds since last tick
- *  extension.
+ * This directive sets the BSP provided nanoseconds since last tick
+ * extension.
  *
- *  @param[in] routine is a pointer to the extension routine
+ * @param[in] routine is a pointer to the extension routine
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @return This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_clock_set_nanoseconds_extension(
   rtems_nanoseconds_extension_routine routine
 );
 
 /**
- *  @brief Obtain the System Uptime
+ * @brief Obtain the System Uptime
  *
- *  This directive returns the system uptime.
+ * This directive returns the system uptime.
  *
- *  @param[in] uptime is a pointer to the time structure
+ * @param[in] uptime is a pointer to the time structure
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the uptime will be
- *          filled in.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the uptime will be
+ *         filled in.
  *
- *  Clock Manager - get uptime
+ * Clock Manager - get uptime
  */
 rtems_status_code rtems_clock_get_uptime(
   struct timespec *uptime
 );
 
 /**
- *  @brief Gets the System Uptime in the Struct Timeval Format
+ * @brief Gets the System Uptime in the Struct Timeval Format
  *
- *  @param[out] Returns the system uptime.  Pointer must not be NULL.
+ * @param[out] Returns the system uptime. Pointer must not be NULL.
  */
 void rtems_clock_get_uptime_timeval( struct timeval *uptime );
 
 /**
- *  @brief Returns the system uptime in seconds.
+ * @brief Returns the system uptime in seconds.
  *
- *  @return The system uptime in seconds.
+ * @retval The system uptime in seconds.
  */
 time_t rtems_clock_get_uptime_seconds( void );
 
 /**
- *  @brief TOD Validate
+ * @brief TOD Validate
  *
- *  This support function returns true if @a the_tod contains
- *  a valid time of day, and false otherwise.
+ * This support function returns true if @a the_tod contains
+ * a valid time of day, and false otherwise.
  *
- *  @param[in] the_tod is the TOD structure to validate
+ * @param[in] the_tod is the TOD structure to validate
  *
- *  @return This method returns true if the TOD is valid and false otherwise.
+ * @retval This method returns true if the TOD is valid and false otherwise.
  *
- *  @note This routine only works for leap-years through 2099.
+ * @note This routine only works for leap-years through 2099.
  */
 bool _TOD_Validate(
   const rtems_time_of_day *the_tod
 );
 
 /**
- *  @brief TOD to Seconds
+ * @brief TOD to Seconds
  *
- *  This function returns the number seconds between the epoch and @a the_tod.
+ * This function returns the number seconds between the epoch and @a the_tod.
  *
- *  @param[in] the_tod is the TOD structure to convert to seconds
+ * @param[in] the_tod is the TOD structure to convert to seconds
  *
- *  @return This method returns the number of seconds since epoch represented
- *          by @a the_tod
+ * @retval This method returns the number of seconds since epoch represented
+ *         by @a the_tod
  */
 Watchdog_Interval _TOD_To_seconds(
   const rtems_time_of_day *the_tod
