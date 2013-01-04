@@ -21,6 +21,7 @@ libscorecpu_a_SOURCES += arm_exc_handler_low.S
 libscorecpu_a_SOURCES += arm_exc_handler_high.c
 libscorecpu_a_SOURCES += arm-exception-frame-print.c
 libscorecpu_a_SOURCES += arm-exception-default.c
+libscorecpu_a_SOURCES += armv4-exception-default.S
 libscorecpu_a_SOURCES += armv7m-context-initialize.c
 libscorecpu_a_SOURCES += armv7m-context-restore.c
 libscorecpu_a_SOURCES += armv7m-context-switch.c

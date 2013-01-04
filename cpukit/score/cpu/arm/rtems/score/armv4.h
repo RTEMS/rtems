@@ -41,6 +41,20 @@ void _ARMV4_Exception_prefetch_abort_set_handler(
 
 void _ARMV4_Exception_prefetch_abort( void );
 
+void _ARMV4_Exception_undef_default( void );
+
+void _ARMV4_Exception_swi_default( void );
+
+void _ARMV4_Exception_data_abort_default( void );
+
+void _ARMV4_Exception_pref_abort_default( void );
+
+void _ARMV4_Exception_reserved_default( void );
+
+void _ARMV4_Exception_irq_default( void );
+
+void _ARMV4_Exception_fiq_default( void );
+
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
 #ifdef __cplusplus
