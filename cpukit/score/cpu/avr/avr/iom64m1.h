@@ -48,8 +48,11 @@
 #define _AVR_ATmega64M1_H_ 1
 
 
-/* Registers and associated bit numbers. */
-
+/**
+ * @name Registers and Associated Bit Numbers
+ * 
+ * @{
+ */
 #define PINB _SFR_IO8(0x03)
 #define PINB0 0
 #define PINB1 1
@@ -1415,9 +1418,13 @@
 #define MSG5 5
 #define MSG6 6
 #define MSG7 7
+/** @} */
 
-
-/* Interrupt vectors */
+/**
+ * @name Interrupt Vectors
+ * 
+ * @{
+ */
 /* Vector 0 is the reset vector */
 #define ANACOMP0_vect_num  1
 #define ANACOMP0_vect      _VECTOR(1)  /* Analog Comparator 0 */
@@ -1442,15 +1449,19 @@
 #define TIMER1_CAPT_vect_num  11
 #define TIMER1_CAPT_vect      _VECTOR(11)  /* Timer/Counter1 Capture Event */
 #define TIMER1_COMPA_vect_num  12
-#define TIMER1_COMPA_vect      _VECTOR(12)  /* Timer/Counter1 Compare Match A */
+/* Timer/Counter1 Compare Match A */
+#define TIMER1_COMPA_vect      _VECTOR(12)  
 #define TIMER1_COMPB_vect_num  13
-#define TIMER1_COMPB_vect      _VECTOR(13)  /* Timer/Counter1 Compare Match B */
+/* Timer/Counter1 Compare Match B */
+#define TIMER1_COMPB_vect      _VECTOR(13)  
 #define TIMER1_OVF_vect_num  14
 #define TIMER1_OVF_vect      _VECTOR(14)  /* Timer1/Counter1 Overflow */
 #define TIMER0_COMPA_vect_num  15
-#define TIMER0_COMPA_vect      _VECTOR(15)  /* Timer/Counter0 Compare Match A */
+/* Timer/Counter0 Compare Match A */
+#define TIMER0_COMPA_vect      _VECTOR(15)  
 #define TIMER0_COMPB_vect_num  16
-#define TIMER0_COMPB_vect      _VECTOR(16)  /* Timer/Counter0 Compare Match B */
+/* Timer/Counter0 Compare Match B */
+#define TIMER0_COMPB_vect      _VECTOR(16)  
 #define TIMER0_OVF_vect_num  17
 #define TIMER0_OVF_vect      _VECTOR(17)  /* Timer/Counter0 Overflow */
 #define CAN_INT_vect_num  18
@@ -1482,9 +1493,13 @@
 
 #define _VECTOR_SIZE 4 /* Size of individual vector. */
 #define _VECTORS_SIZE (31 * _VECTOR_SIZE)
+/** @} */
 
-
-/* Constants */
+/**
+ * @name Constants
+ * 
+ * @{
+ */
 #define SPM_PAGESIZE (256)
 #define RAMSTART     (0x0100)
 #define RAMSIZE      (4096)
@@ -1495,9 +1510,13 @@
 #define E2END        (0x7FF)
 #define E2PAGESIZE   (8)
 #define FLASHEND     (0xFFFF)
+/** @} */
 
-
-/* Fuses */
+/**
+ * @name Fuses
+ * 
+ * @{
+ */
 #define FUSE_MEMORY_SIZE 3
 
 /* Low Fuse Byte */
@@ -1509,40 +1528,54 @@
 #define FUSE_SUT1  (unsigned char)~_BV(5)  /* Select start-up time */
 #define FUSE_CKOUT  (unsigned char)~_BV(6)  /* Oscillator output option */
 #define FUSE_CKDIV8  (unsigned char)~_BV(7)  /* Divide clock by 8 */
-#define LFUSE_DEFAULT (FUSE_CKDIV8 & FUSE_SUT1 & FUSE_SUT0 & FUSE_CKSEL3 & FUSE_CKSEL2 & FUSE_CKSEL1)
+#define LFUSE_DEFAULT (FUSE_CKDIV8 & FUSE_SUT1 & FUSE_SUT0 & \
+                       FUSE_CKSEL3 & FUSE_CKSEL2 & FUSE_CKSEL1)
 
 /* High Fuse Byte */
 #define FUSE_BOOTRST  (unsigned char)~_BV(0)  /* Select Reset Vector */
 #define FUSE_BOOTSZ0  (unsigned char)~_BV(1)  /* Select Boot Size */
 #define FUSE_BOOTSZ1  (unsigned char)~_BV(2)  /* Select Boot Size */
-#define FUSE_EESAVE  (unsigned char)~_BV(3)  /* EEPROM memory is preserved through chip erase */
+/* EEPROM memory is preserved through chip erase */
+#define FUSE_EESAVE  (unsigned char)~_BV(3)  
 #define FUSE_WDTON  (unsigned char)~_BV(4)  /* Watchdog timer always on */
-#define FUSE_SPIEN  (unsigned char)~_BV(5)  /* Enable Serial programming and Data Downloading */
+/* Enable Serial programming and Data Downloading */
+#define FUSE_SPIEN  (unsigned char)~_BV(5)  
 #define FUSE_DWEN  (unsigned char)~_BV(6)  /* DebugWIRE Enable */
 #define FUSE_RSTDISBL  (unsigned char)~_BV(7)  /* External Reset Disable */
 #define HFUSE_DEFAULT (FUSE_SPIEN & FUSE_BOOTSZ1 & FUSE_BOOTSZ0)
 
 /* Extended Fuse Byte */
-#define FUSE_BODLEVEL0  (unsigned char)~_BV(0)  /* Brown-out Detector Trigger Level */
-#define FUSE_BODLEVEL1  (unsigned char)~_BV(1)  /* Brown-out Detector Trigger Level */
-#define FUSE_BODLEVEL2  (unsigned char)~_BV(2)  /* Brown-out Detector Trigger Level */
+/* Brown-out Detector Trigger Level */
+#define FUSE_BODLEVEL0  (unsigned char)~_BV(0)  
+/* Brown-out Detector Trigger Level */
+#define FUSE_BODLEVEL1  (unsigned char)~_BV(1)  
+/* Brown-out Detector Trigger Level */
+#define FUSE_BODLEVEL2  (unsigned char)~_BV(2)  
 #define FUSE_PSCRVB  (unsigned char)~_BV(3)  /* PSC Outputs xB Reset Value */
 #define FUSE_PSCRVA  (unsigned char)~_BV(4)  /* PSC Outputs xA Reset Value */
 #define FUSE_PSCRB  (unsigned char)~_BV(5)  /* PSC Reset Behavior */
 #define EFUSE_DEFAULT (FUSE_BODLEVEL2 & FUSE_BODLEVEL1)
+/** @} */
 
-
-/* Lock Bits */
+/**
+ * @name Lock Bits
+ * 
+ * @{
+ */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST
+/** @} */
 
-
-/* Signature */
+/**
+ * @name Signature
+ * 
+ * @{
+ */
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x96
 #define SIGNATURE_2 0x84
-
+/** @} */
 
 #endif /* _AVR_ATmega64M1_H_ */
 

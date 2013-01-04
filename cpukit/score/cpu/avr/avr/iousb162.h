@@ -36,16 +36,24 @@
 
 #include <avr/iousbxx2.h>
 
-/* Constants */
+/**
+ * @name Constants
+ * 
+ * @{
+ */
 #define SPM_PAGESIZE 128
 #define RAMEND       0x2FF
 #define XRAMEND      RAMEND
 #define E2END        0x1FF
 #define E2PAGESIZE   4
 #define FLASHEND     0x3FFF
+/** @} */
 
-
-/* Fuses */
+/**
+ * @name Fuses
+ * 
+ * @{
+ */
 #define FUSE_MEMORY_SIZE 3
 
 /* Low Fuse Byte */
@@ -76,18 +84,26 @@
 #define FUSE_BODLEVEL2   (unsigned char)~_BV(2)
 #define FUSE_HWBE        (unsigned char)~_BV(3)
 #define EFUSE_DEFAULT (BODLEVEL0 & BODLEVEL1 & HWBE)
+/** @} */
 
-
-/* Lock Bits */
+/**
+ * @name Lock Bits
+ * 
+ * @{
+ */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST 
+/** @} */
 
-
-/* Signature */
+/**
+ * @name Signature
+ * 
+ * @{
+ */
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x82
-
+/** @} */
 
 #endif /* _AVR_AT90USB162_H_ */

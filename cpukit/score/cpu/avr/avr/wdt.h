@@ -1,3 +1,8 @@
+/**
+ * @file
+ * 
+ * @brief Watchdog Timer Handling
+ */
 /* Copyright (c) 2002, 2004 Marek Michalkiewicz
    Copyright (c) 2005, 2006, 2007 Eric B. Weddington
    All rights reserved.
@@ -40,59 +45,60 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-/** \file */
-/** \defgroup avr_watchdog <avr/wdt.h>: Watchdog timer handling
-    \code #include <avr/wdt.h> \endcode
-
-    This header file declares the interface to some inline macros
-    handling the watchdog timer present in many AVR devices.  In order
-    to prevent the watchdog timer configuration from being
-    accidentally altered by a crashing application, a special timed
-    sequence is required in order to change it.  The macros within
-    this header file handle the required sequence automatically
-    before changing any value.  Interrupts will be disabled during
-    the manipulation.
-
-    \note Depending on the fuse configuration of the particular
-    device, further restrictions might apply, in particular it might
-    be disallowed to turn off the watchdog timer.
-
-    Note that for newer devices (ATmega88 and newer, effectively any
-    AVR that has the option to also generate interrupts), the watchdog
-    timer remains active even after a system reset (except a power-on
-    condition), using the fastest prescaler value (approximately 15
-    ms).  It is therefore required to turn off the watchdog early
-    during program startup, the datasheet recommends a sequence like
-    the following:
-
-    \code
-    #include <stdint.h>
-    #include <avr/wdt.h>
-
-    uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
-
-    void get_mcusr(void) \
-      __attribute__((naked)) \
-      __attribute__((section(".init3")));
-    void get_mcusr(void)
-    {
-      mcusr_mirror = MCUSR;
-      MCUSR = 0;
-      wdt_disable();
-    }
-    \endcode
-
-    Saving the value of MCUSR in \c mcusr_mirror is only needed if the
-    application later wants to examine the reset source, but in particular, 
-    clearing the watchdog reset flag before disabling the
-    watchdog is required, according to the datasheet.
+/** 
+ * @defgroup avr_watchdog Watchdog Timer Handling
+ *
+ * This header file declares the interface to some inline macros
+ * handling the watchdog timer present in many AVR devices.  In order
+ * to prevent the watchdog timer configuration from being
+ * accidentally altered by a crashing application, a special timed
+ * equence is required in order to change it.  The macros within
+ * this header file handle the required sequence automatically
+ * before changing any value.  Interrupts will be disabled during
+ * the manipulation.
+ * 
+ * Note: Depending on the fuse configuration of the particular
+ * device, further restrictions might apply, in particular it might
+ * be disallowed to turn off the watchdog timer.
+ * 
+ * Note that for newer devices (ATmega88 and newer, effectively any
+ * AVR that has the option to also generate interrupts), the watchdog
+ * timer remains active even after a system reset (except a power-on
+ * condition), using the fastest prescaler value (approximately 15
+ * ms).  It is therefore required to turn off the watchdog early
+ * during program startup, the datasheet recommends a sequence like
+ * the following:
+ * 
+ * @code{.c}
+ * #include <stdint.h>
+ * #include <avr/wdt.h>
+ *
+ * uint8_t mcusr_mirror __attribute__ ((section (".noinit")));
+ *
+ * void get_mcusr(void) \
+ *   __attribute__((naked)) \
+ *   __attribute__((section(".init3")));
+ * void get_mcusr(void)
+ * {
+ *   mcusr_mirror = MCUSR;
+ *   MCUSR = 0;
+ *   wdt_disable();
+ * }
+ * @endcode
+ *
+ * Saving the value of MCUSR in @c mcusr_mirror is only needed if the
+ * application later wants to examine the reset source, but in particular, 
+ * clearing the watchdog reset flag before disabling the
+ * watchdog is required, according to the datasheet.
+ * @{
 */
 
 /**
-   \ingroup avr_watchdog
-   Reset the watchdog timer.  When the watchdog timer is enabled,
-   a call to this instruction is required before the timer expires,
-   otherwise a watchdog-initiated device reset will occur. 
+ * @brief Watchdog Timer Reset
+ * 
+ * Reset the watchdog timer.  When the watchdog timer is enabled,
+ * a call to this instruction is required before the timer expires,
+ * otherwise a watchdog-initiated device reset will occur. 
 */
 
 #define wdt_reset() __asm__ __volatile__ ("wdr")
@@ -118,14 +124,13 @@
 
 
 /**
-   \ingroup avr_watchdog
-   Enable the watchdog timer, configuring it for expiry after
-   \c timeout (which is a combination of the \c WDP0 through
-   \c WDP2 bits to write into the \c WDTCR register; For those devices 
-   that have a \c WDTCSR register, it uses the combination of the \c WDP0 
-   through \c WDP3 bits).
-
-   See also the symbolic constants \c WDTO_15MS et al.
+ * Enable the watchdog timer, configuring it for expiry after
+ * @c timeout (which is a combination of the @c WDP0 through
+ * @c WDP2 bits to write into the @c WDTCR register; For those devices 
+ * that have a @c WDTCSR register, it uses the combination of the @c WDP0 
+ * through @c WDP3 bits).
+ *
+ * See also the symbolic constants @c WDTO_15MS et al.
 */
 
 
@@ -317,10 +322,9 @@ __asm__ __volatile__ (  \
     )
 
 /**
-   \ingroup avr_watchdog
-   Disable the watchdog timer, if possible.  This attempts to turn off the 
-   Enable bit in the watchdog control register. See the datasheet for 
-   details.
+ *  Disable the watchdog timer, if possible.  This attempts to turn off the 
+ *  Enable bit in the watchdog control register. See the datasheet for 
+ *  details.
 */
 #define wdt_disable() \
 __asm__ __volatile__ (  \
@@ -340,101 +344,77 @@ __asm__ __volatile__ (  \
 
 
 /**
-   \ingroup avr_watchdog
-   Symbolic constants for the watchdog timeout.  Since the watchdog
-   timer is based on a free-running RC oscillator, the times are
-   approximate only and apply to a supply voltage of 5 V.  At lower
-   supply voltages, the times will increase.  For older devices, the
-   times will be as large as three times when operating at Vcc = 3 V,
-   while the newer devices (e. g. ATmega128, ATmega8) only experience
-   a negligible change.
-
-   Possible timeout values are: 15 ms, 30 ms, 60 ms, 120 ms, 250 ms,
-   500 ms, 1 s, 2 s.  (Some devices also allow for 4 s and 8 s.)
-   Symbolic constants are formed by the prefix
-   \c WDTO_, followed by the time.
-
-   Example that would select a watchdog timer expiry of approximately
-   500 ms:
-   \code
-   wdt_enable(WDTO_500MS);
-   \endcode
+ *  Symbolic constants for the watchdog timeout.  Since the watchdog
+ *  timer is based on a free-running RC oscillator, the times are
+ *  approximate only and apply to a supply voltage of 5 V.  At lower
+ *  supply voltages, the times will increase.  For older devices, the
+ *  times will be as large as three times when operating at Vcc = 3 V,
+ *  while the newer devices (e. g. ATmega128, ATmega8) only experience
+ *  a negligible change.
+ * 
+ *  Possible timeout values are: 15 ms, 30 ms, 60 ms, 120 ms, 250 ms,
+ *  500 ms, 1 s, 2 s.  (Some devices also allow for 4 s and 8 s.)
+ *  Symbolic constants are formed by the prefix
+ *  @c WDTO_, followed by the time.
+ * 
+ *  Example that would select a watchdog timer expiry of approximately
+ *  500 ms:
+ * 
+ *  @code{.c}
+ *  wdt_enable(WDTO_500MS);
+ *  @endcode
 */
 #define WDTO_15MS   0
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_30MS   1
 
-/** \ingroup avr_watchdog See
-    \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_60MS   2
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_120MS  3
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_250MS  4
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_500MS  5
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_1S     6
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS */
+/** @see WDT0_15MS */
 #define WDTO_2S     7
 
 #if defined(__DOXYGEN__) || defined(WDP3)
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS
-    Note: This is only available on the 
-    ATtiny2313, 
-    ATtiny24, ATtiny44, ATtiny84, 
-    ATtiny25, ATtiny45, ATtiny85, 
-    ATtiny261, ATtiny461, ATtiny861, 
-    ATmega48, ATmega88, ATmega168,
-    ATmega48P, ATmega88P, ATmega168P, ATmega328P,
-    ATmega164P, ATmega324P, ATmega644P, ATmega644,
-    ATmega640, ATmega1280, ATmega1281, ATmega2560, ATmega2561,
-    ATmega8HVA, ATmega16HVA, ATmega32HVB,
-    ATmega406, ATmega1284P,
-    AT90PWM1, AT90PWM2, AT90PWM2B, AT90PWM3, AT90PWM3B, AT90PWM216, AT90PWM316,
-    AT90PWM81,
-    AT90USB82, AT90USB162,
-    AT90USB646, AT90USB647, AT90USB1286, AT90USB1287,
-    ATtiny48, ATtiny88.
-    */
+/**
+ * @see WDT0_15MS
+ * 
+ * Note: This is only available on:
+ * ATtiny2313, 
+ * ATtiny24, ATtiny44, ATtiny84, 
+ * ATtiny25, ATtiny45, ATtiny85, 
+ * ATtiny261, ATtiny461, ATtiny861, 
+ * ATmega48, ATmega88, ATmega168,
+ * ATmega48P, ATmega88P, ATmega168P, ATmega328P,
+ * ATmega164P, ATmega324P, ATmega644P, ATmega644,
+ * ATmega640, ATmega1280, ATmega1281, ATmega2560, ATmega2561,
+ * ATmega8HVA, ATmega16HVA, ATmega32HVB,
+ * ATmega406, ATmega1284P,
+ * AT90PWM1, AT90PWM2, AT90PWM2B, AT90PWM3, AT90PWM3B, AT90PWM216, AT90PWM316,
+ * AT90PWM81,
+ * AT90USB82, AT90USB162,
+ * AT90USB646, AT90USB647, AT90USB1286, AT90USB1287,
+ * ATtiny48, ATtiny88.
+ */
 #define WDTO_4S     8
 
-/** \ingroup avr_watchdog
-    See \c WDT0_15MS
-    Note: This is only available on the 
-    ATtiny2313, 
-    ATtiny24, ATtiny44, ATtiny84, 
-    ATtiny25, ATtiny45, ATtiny85, 
-    ATtiny261, ATtiny461, ATtiny861, 
-    ATmega48, ATmega88, ATmega168,
-    ATmega48P, ATmega88P, ATmega168P, ATmega328P,
-    ATmega164P, ATmega324P, ATmega644P, ATmega644,
-    ATmega640, ATmega1280, ATmega1281, ATmega2560, ATmega2561,
-    ATmega8HVA, ATmega16HVA, ATmega32HVB,
-    ATmega406, ATmega1284P,
-    AT90PWM1, AT90PWM2, AT90PWM2B, AT90PWM3, AT90PWM3B, AT90PWM216, AT90PWM316,
-    AT90PWM81,
-    AT90USB82, AT90USB162,
-    AT90USB646, AT90USB647, AT90USB1286, AT90USB1287,
-    ATtiny48, ATtiny88.
-    */
+/** @see WDTO_4S */
 #define WDTO_8S     9
 
 #endif  /* defined(__DOXYGEN__) || defined(WDP3) */
-   
+/** @} */   
 
 #endif /* _AVR_WDT_H_ */

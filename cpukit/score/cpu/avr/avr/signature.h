@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Signature Support
+ */
+
 /* Copyright (c) 2009, Atmel Corporation
    All rights reserved.
 
@@ -34,38 +40,38 @@
 #ifndef _AVR_SIGNATURE_H_
 #define _AVR_SIGNATURE_H_ 1
 
-/** \file */
-/** \defgroup avr_signature <avr/signature.h>: Signature Support
-
-    \par Introduction
-
-    The <avr/signature.h> header file allows the user to automatically
-    and easily include the device's signature data in a special section of
-    the final linked ELF file.
-    
-    This value can then be used by programming software to compare the on-device
-    signature with the signature recorded in the ELF file to look for a match
-    before programming the device.
-    
-    \par API Usage Example
-
-    Usage is very simple; just include the header file:
-    
-    \code
-    #include <avr/signature.h>
-    \endcode
-    
-    This will declare a constant unsigned char array and it is initialized with
-    the three signature bytes, MSB first, that are defined in the device I/O
-    header file. This array is then placed in the .signature section in the
-    resulting linked ELF file.
-    
-    The three signature bytes that are used to initialize the array are 
-    these defined macros in the device I/O header file, from MSB to LSB:
-    SIGNATURE_2, SIGNATURE_1, SIGNATURE_0.
-    
-    This header file should only be included once in an application.
-*/
+/**
+ * @defgroup avr_signature Signature Support
+ *
+ * @par Introduction
+ *
+ * The <avr/signature.h> header file allows the user to automatically
+ * and easily include the device's signature data in a special section of
+ * the final linked ELF file.
+ *
+ * This value can then be used by programming software to compare the 
+ * on-device signature with the signature recorded in the ELF file
+ * to look for a match before programming the device.
+ * 
+ * @par API Usage Example
+ *
+ * Usage is very simple; just include the header file:
+ *
+ * @code{.c}
+ * #include <avr/signature.h>
+ * @endcode
+ *
+ * This will declare a constant unsigned char array and it is initialized with
+ * the three signature bytes, MSB first, that are defined in the device I/O
+ * header file. This array is then placed in the .signature section in the
+ * resulting linked ELF file.
+ * 
+ * The three signature bytes that are used to initialize the array are 
+ * these defined macros in the device I/O header file, from MSB to LSB:
+ * SIGNATURE_2, SIGNATURE_1, SIGNATURE_0.
+ * 
+ * This header file should only be included once in an application.
+ */
 
 #ifndef __ASSEMBLER__
 
@@ -75,8 +81,9 @@
 
 const unsigned char __signature[3] __attribute__((section (".signature"))) =
         { SIGNATURE_2, SIGNATURE_1, SIGNATURE_0 };
-
-#endif  /* defined(SIGNATURE_0) && defined(SIGNATURE_1) && defined(SIGNATURE_2) */
+        
+/* defined(SIGNATURE_0) && defined(SIGNATURE_1) && defined(SIGNATURE_2) */
+#endif
 
 #endif  /* __ASSEMBLER__ */
 

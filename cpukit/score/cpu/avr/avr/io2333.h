@@ -46,8 +46,11 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
-/* I/O registers */
-
+/**
+ * @name I/O Registers
+ * 
+ * @{
+ */
 /* UART Baud Rate Register high */
 #define UBRRH	_SFR_IO8(0x03)
 
@@ -171,9 +174,13 @@
 
 /* General Interrupt MaSK register */
 #define GIMSK	_SFR_IO8(0x3B)
+/** @} */
 
-/* Interrupt vectors */
-
+/**
+ * @name Interrupt Vectors
+ * 
+ * @{
+ */
 /* External Interrupt 0 */
 #define INT0_vect			_VECTOR(1)
 #define SIG_INTERRUPT0			_VECTOR(1)
@@ -227,6 +234,7 @@
 #define SIG_COMPARATOR			_VECTOR(13)
 
 #define _VECTORS_SIZE 28
+/** @} */
 
 /*
    The Register Bit names are represented by their bit number (0-7).
@@ -434,10 +442,15 @@
 #define    EEWE      1
 #define    EERE      0
 
-/* Constants */
+/**
+ * @name Constants
+ * 
+ * @{
+ */
 #define    RAMEND   0xDF    /*Last On-Chip SRAM location*/
 #define    XRAMEND  RAMEND
 #define    E2END    0x7F
 #define    FLASHEND 0x7FF
+/** @} */
 
 #endif /* _AVR_IO2333_H_ */

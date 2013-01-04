@@ -46,8 +46,11 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
-/* I/O registers */
-
+/**
+ * @name I/O Registers
+ * 
+ * @{
+ */
 #define PRR     _SFR_IO8 (0x00)
 #define PRTIM1  3
 #define PRTIM0  2
@@ -378,9 +381,13 @@
 /* 0x3D..0x3E SP  [defined in <avr/io.h>] */
 /* 0x3F SREG      [defined in <avr/io.h>] */
 
-///---
+/** @} */
 
-/* Interrupt vectors */
+/**
+ * @name Interrupt Vectors
+ * 
+ * @{
+ */
 /* Interrupt vector 0 is the reset vector. */
 /* External Interrupt Request 0 */
 #define INT0_vect			_VECTOR(1)
@@ -451,5 +458,7 @@
 #define SIG_USI_OVERFLOW		_VECTOR(16)
 
 #define _VECTORS_SIZE 34
+
+/** @} */
 
 #endif /* _AVR_IOTNX4_H_ */

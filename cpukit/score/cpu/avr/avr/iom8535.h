@@ -46,8 +46,11 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
-/* I/O registers */
-
+/**
+ * @name I/O Registers
+ * 
+ * @{
+ */
 /* TWI stands for "Two Wire Interface" or "TWI Was I2C(tm)" */
 #define TWBR    _SFR_IO8(0x00)
 #define TWSR    _SFR_IO8(0x01)
@@ -227,9 +230,13 @@
 /* 0x3D..0x3E SP */
 
 /* 0x3F SREG */
+/** @} */
 
-/* Interrupt vectors */
-
+/**
+ * @name Interrupt Vectors
+ * 
+ * @{
+ */
 /* External Interrupt 0 */
 #define INT0_vect			_VECTOR(1)
 #define SIG_INTERRUPT0			_VECTOR(1)
@@ -311,10 +318,10 @@
 #define SIG_SPM_READY			_VECTOR(20)
 
 #define _VECTORS_SIZE 42
-
+/** @} */
 /*
-   The Register Bit names are represented by their bit number (0-7).
-*/
+ * The Register Bit names are represented by their bit number (0-7).
+ */
 
 /* General Interrupt Control Register */
 #define    INT1         7
@@ -394,10 +401,10 @@
 #define    CS00         0
 
 /* 
-   The ADHSM bit has been removed from all documentation, 
-   as being not needed at all since the comparator has proven 
-   to be fast enough even without feeding it more power.
-*/
+ * The ADHSM bit has been removed from all documentation, 
+ * as being not needed at all since the comparator has proven 
+ * to be fast enough even without feeding it more power.
+ */
 
 /* Special Function IO Register */
 #define    ADTS2        7
@@ -663,17 +670,24 @@
 #define    EEWE         1
 #define    EERE         0
 
-/* Constants */
+/**
+ * @name Constants
+ * 
+ * @{
+ */
 #define SPM_PAGESIZE 64
 #define RAMEND       0x25F    /* Last On-Chip SRAM Location */
 #define XRAMEND      RAMEND
 #define E2END        0x1FF
 #define E2PAGESIZE   4
 #define FLASHEND     0x1FFF
+/** @} */
 
-
-/* Fuses */
-
+/**
+ * @name Fuses
+ * 
+ * @{
+ */
 #define FUSE_MEMORY_SIZE 2
 
 /* Low Fuse Byte */
@@ -685,7 +699,8 @@
 #define FUSE_SUT1        (unsigned char)~_BV(5)
 #define FUSE_BODEN       (unsigned char)~_BV(6)
 #define FUSE_BODLEVEL    (unsigned char)~_BV(7)
-#define LFUSE_DEFAULT (FUSE_CKSEL1 & FUSE_CKSEL2 & FUSE_CKSEL3 & FUSE_SUT0 & FUSE_SUT1)
+#define LFUSE_DEFAULT (FUSE_CKSEL1 & FUSE_CKSEL2 & FUSE_CKSEL3 & \
+                       FUSE_SUT0 & FUSE_SUT1)
 
 /* High Fuse Byte */
 #define FUSE_BOOTRST     (unsigned char)~_BV(0)
@@ -697,18 +712,26 @@
 #define FUSE_WDTON       (unsigned char)~_BV(6)
 #define FUSE_S8535C      (unsigned char)~_BV(7)
 #define HFUSE_DEFAULT (FUSE_BOOTSZ0 & FUSE_BOOTSZ1 & FUSE_SPIEN)
+/** @} */
 
-
-/* Lock Bits */
+/**
+ * @name Lock Bits
+ * 
+ * @{
+ */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST 
+/** @} */
 
-
-/* Signature */
+/**
+ * @name Signature
+ * 
+ * @{
+ */
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x08
-
+/** @} */
 
 #endif /* _AVR_IOM8535_H_ */

@@ -47,9 +47,11 @@
 #ifndef _AVR_ATmega16A_H_
 #define _AVR_ATmega16A_H_ 1
 
-
-/* Registers and associated bit numbers. */
-
+/**
+ * @name Registers and Associated Bit Numbers
+ * 
+ * @{
+ */
 #define TWBR _SFR_IO8(0x00)
 #define TWBR0 0
 #define TWBR1 1
@@ -654,8 +656,13 @@
 #define OCR0_6 6
 #define OCR0_7 7
 
+/** @} */
 
-/* Interrupt vectors */
+/**
+ * @name Interrupt Vectors
+ * 
+ * @{
+ */
 /* Vector 0 is the reset vector */
 #define INT0_vect_num  1
 #define INT0_vect      _VECTOR(1)  /* External Interrupt Request 0 */
@@ -668,9 +675,11 @@
 #define TIMER1_CAPT_vect_num  5
 #define TIMER1_CAPT_vect      _VECTOR(5)  /* Timer/Counter1 Capture Event */
 #define TIMER1_COMPA_vect_num  6
-#define TIMER1_COMPA_vect      _VECTOR(6)  /* Timer/Counter1 Compare Match A */
+/* Timer/Counter1 Compare Match A */
+#define TIMER1_COMPA_vect      _VECTOR(6)  
 #define TIMER1_COMPB_vect_num  7
-#define TIMER1_COMPB_vect      _VECTOR(7)  /* Timer/Counter1 Compare Match B */
+/* Timer/Counter1 Compare Match B */
+#define TIMER1_COMPB_vect      _VECTOR(7)  
 #define TIMER1_OVF_vect_num  8
 #define TIMER1_OVF_vect      _VECTOR(8)  /* Timer/Counter1 Overflow */
 #define TIMER0_OVF_vect_num  9
@@ -700,9 +709,13 @@
 
 #define _VECTOR_SIZE 4 /* Size of individual vector. */
 #define _VECTORS_SIZE (21 * _VECTOR_SIZE)
+/** @} */
 
-
-/* Constants */
+/**
+ * @name Constants
+ * 
+ * @{
+ */
 #define SPM_PAGESIZE (128)
 #define RAMSTART     (0x60)
 #define RAMSIZE      (1024)
@@ -713,9 +726,13 @@
 #define E2END        (0x1FF)
 #define E2PAGESIZE   (4)
 #define FLASHEND     (0x3FFF)
+/** @} */
 
-
-/* Fuses */
+/**
+ * @name Fuses
+ * 
+ * @{
+ */
 #define FUSE_MEMORY_SIZE 2
 
 /* Low Fuse Byte */
@@ -726,34 +743,50 @@
 #define FUSE_SUT0  (unsigned char)~_BV(4)  /* Select start-up time */
 #define FUSE_SUT1  (unsigned char)~_BV(5)  /* Select start-up time */
 #define FUSE_BODEN  (unsigned char)~_BV(6)  /* Brown out detector enable */
-#define FUSE_BODLEVEL  (unsigned char)~_BV(7)  /* Brown out detector trigger level */
-#define LFUSE_DEFAULT (FUSE_SUT1 & FUSE_SUT0 & FUSE_CKSEL3 & FUSE_CKSEL2 & FUSE_CKSEL1)
+/* Brown out detector trigger level */
+#define FUSE_BODLEVEL  (unsigned char)~_BV(7)  
+#define LFUSE_DEFAULT (FUSE_SUT1 & FUSE_SUT0 & FUSE_CKSEL3 & \
+                       FUSE_CKSEL2 & FUSE_CKSEL1)
 
 /* High Fuse Byte */
 #define FUSE_BOOTRST  (unsigned char)~_BV(0)  /* Select Reset Vector */
 #define FUSE_BOOTSZ0  (unsigned char)~_BV(1)  /* Select Boot Size */
 #define FUSE_BOOTSZ1  (unsigned char)~_BV(2)  /* Select Boot Size */
-#define FUSE_EESAVE  (unsigned char)~_BV(3)  /* EEPROM memory is preserved through chip erase */
+/* EEPROM memory is preserved through chip erase */
+#define FUSE_EESAVE  (unsigned char)~_BV(3)  
 #define FUSE_CKOPT  (unsigned char)~_BV(4)  /* Oscillator Options */
-#define FUSE_SPIEN  (unsigned char)~_BV(5)  /* Enable Serial programming and Data Downloading */
+/* Enable Serial programming and Data Downloading */
+#define FUSE_SPIEN  (unsigned char)~_BV(5)  
 #define FUSE_JTAGEN  (unsigned char)~_BV(6)  /* Enable JTAG */
 #define FUSE_OCDEN  (unsigned char)~_BV(7)  /* Enable OCD */
 #define HFUSE_DEFAULT (FUSE_JTAGEN & FUSE_SPIEN & FUSE_BOOTSZ1 & FUSE_BOOTSZ0)
+/** @} */
 
-
-/* Lock Bits */
+/**
+ * @name Lock Bits
+ * 
+ * @{
+ */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST
+/** @} */
 
-
-/* Signature */
+/**
+ * @name Signature
+ * 
+ * @{
+ */
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x03
+/** @} */
 
-
-/* Device Pin Definitions */
+/**
+ * @name Device Pin Definitions
+ * 
+ * @{
+ */
 #define MOSI_DDR   DDRB
 #define MOSI_PORT  PORTB
 #define MOSI_PIN   PINB
@@ -898,6 +931,7 @@
 #define SS_PORT  PORTB
 #define SS_PIN   PINB
 #define SS_BIT   4
+/** @} */
 
 #endif /* _AVR_ATmega16A_H_ */
 
