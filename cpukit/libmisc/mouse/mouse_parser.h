@@ -1,7 +1,10 @@
 /**
  * @file rtems/mouse_parser.h
  *
- * @brief Mouse Parser Engine
+ * @defgroup libmisc_mouse Mouse Parser Engine
+ *
+ * @ingroup libmisc
+ * @brief Initialize Mouse Parser Engine
  *
  * This file is the header file for the Mouse Parser Engine.
  */
@@ -51,23 +54,23 @@ extern "C" {
 #endif
 
 /**
- *  This is the mask for the right button.
+ * This is the mask for the right button.
  *
- *  @note Use the same definitions as the user interface.
+ * @note Use the same definitions as the user interface.
  */
 #define RBUTTON      MV_BUTTON_RIGHT
 
 /**
  * This is the mask for the center button.
  *
- *  @note Use the same definitions as the user interface.
+ * @note Use the same definitions as the user interface.
  */
 #define MBUTTON      MV_BUTTON_CENTER
 
 /**
- *  This is the mask for the left button.
+ * This is the mask for the left button.
  *
- *  @note Use the same definitions as the user interface.
+ * @note Use the same definitions as the user interface.
  */
 #define LBUTTON      MV_BUTTON_LEFT
 
@@ -89,25 +92,25 @@ typedef unsigned int  BUTTON;
 typedef void (*mouse_parser_enqueue_handler)(unsigned char *, size_t);
 
 /**
- *  @brief Initialize the mouse parser engine.
+ * @brief Initialize the mouse parser engine.
  *
- *  This method initializes the Mouse Parser Engine for the mouse
- *  of @a type. The @a type should be one of the following strings:
- *  pc  ms, logi, ps2.
+ * This method initializes the Mouse Parser Engine for the mouse
+ * of @a type. The @a type should be one of the following strings:
+ * pc  ms, logi, ps2.
  *
- *  @a param[in] type indicates the type of mouse.
+ * @a param[in] type indicates the type of mouse.
  *
- *  @return This method returns 0 on success and -1 on error.
+ * @retval This method returns 0 on success and -1 on error.
  */
 int mouse_parser_initialize(const char *type);
 
 /**
- *  @brief Enqueue input to the mouse parser engine.
+ * @brief Enqueue input to the mouse parser engine.
  *
- *  This method is used to pass mouse input to the Mouse Parser Engine.
+ * This method is used to pass mouse input to the Mouse Parser Engine.
  *
- *  @a param[in] buffer is the data to enqueue
- *  @a param[in] size is the amount of data to enqueue
+ * @a param[in] buffer is the data to enqueue
+ * @a param[in] size is the amount of data to enqueue
  */
 void mouse_parser_enqueue(
   unsigned char *buffer,

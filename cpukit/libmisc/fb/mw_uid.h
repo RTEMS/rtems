@@ -1,11 +1,13 @@
 /**
  * @file rtems/mw_uid.h
  *
- * @brief Input device Interface for MicroWindows in an
- * Embedded System Enviroment
+ * @defgroup libmisc_fb_mw Input Devices for MicroWindows
  *
- * This file defines the interface for input devices used by
- * MicroWindows in an embedded system environment.
+ * @ingroup libmisc
+ * @brief Input Devices for MicroWindows
+ *
+ * This file defines the interface for input devices used by MicroWindows
+ * in an embedded system environment.
  */
 
 /*
@@ -112,43 +114,43 @@ struct MW_UID_MESSAGE {
  */
 
 /**
- *  This method creates the message queue that holds events from the
- *  input devices.
+ * This method creates the message queue that holds events from the
+ * input devices.
  *
- *  @param[in] q_name is the name of the message queue
- *  @param[in] flags controls the behaviour of the queue
- *  @param[in] max_msgs specifies the maximum number of pending messages
+ * @param[in] q_name is the name of the message queue
+ * @param[in] flags controls the behaviour of the queue
+ * @param[in] max_msgs specifies the maximum number of pending messages
  *
- *  @note The message queue is from the Classic API.
+ * @note The message queue is from the Classic API.
  *
- *  @return This method returns 0 on success and -1 on error.
+ * @retval This method returns 0 on success and -1 on error.
  */
 extern int uid_open_queue( const char *q_name, int flags, size_t max_msgs );
 
 /**
- *  This method closes the message queue and deletes it.
+ * This method closes the message queue and deletes it.
  *
- *  @return This method returns 0 on success and -1 on error.
+ * @retval This method returns 0 on success and -1 on error.
  */
 extern int uid_close_queue( void );
 
 /**
- *  This method reads a message from the queue. It waits up to the specified
- *  timeout in miliseconds. A @a timeout of 0 is a poll.
+ * This method reads a message from the queue. It waits up to the specified
+ * timeout in miliseconds. A @a timeout of 0 is a poll.
  *
- *  @param[in] m will be filled in with the received message
- *  @param[in] timeout is the maximum number of mulliseconds to wait
+ * @param[in] m will be filled in with the received message
+ * @param[in] timeout is the maximum number of mulliseconds to wait
  *
- *  @return This method returns 0 on success and -1 on error.
+ * @retval This method returns 0 on success and -1 on error.
  */
 extern int uid_read_message( struct MW_UID_MESSAGE *m, unsigned long timeout );
 
 /**
- *  This methods writes a message to the queue.
+ * This methods writes a message to the queue.
  *
- *  @param[in] m is the message to send
+ * @param[in] m is the message to send
  *
- *  @return This method returns 0 on success and -1 on error.
+ * @retval This method returns 0 on success and -1 on error.
  */
 extern int uid_send_message( struct MW_UID_MESSAGE *m );
 
@@ -165,22 +167,22 @@ extern int uid_unregister_device( int fd );
 extern int uid_set_kbd_mode( int fd, int mode, int *old_mode );
 
 /**
- *  This methods prints the specified UID message using printk
+ * This methods prints the specified UID message using printk
  *
- *  @param[in] uid points to the message to print
+ * @param[in] uid points to the message to print
  */
 void uid_print_message(
   struct MW_UID_MESSAGE *uid
 );
 
 /**
- *  This methods prints the specified UID message using your fprintf
- *  style method of choice.
+ * This methods prints the specified UID message using your fprintf
+ * style method of choice.
  *
- *  @param[in] context is a pointer to a data area which may be
- *             used by some print handlers
- *  @param[in] handler is the fprintf style method to invoke
- *  @param[in] uid points to the message to print
+ * @param[in] context is a pointer to a data area which may be
+ *            used by some print handlers
+ * @param[in] handler is the fprintf style method to invoke
+ * @param[in] uid points to the message to print
  */
 void uid_print_message_with_plugin(
   void                  *context,

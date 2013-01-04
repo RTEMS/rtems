@@ -1,14 +1,22 @@
-/*  internal.h
+/*  
+ * @file rtems/internal.h
  *
- *  This include file contains internal information
- *  for the RTEMS stack checker.
+ * @defgroup libmisc_internal Internal Stack Checker Information
  *
- *  COPYRIGHT (c) 1989-2006.
- *  On-Line Applications Research Corporation (OAR).
+ * @ingroup libmisc
+ * @brief Stack Checker Internal Information
+ *  
+ * This include file contains internal information
+ * for the RTEMS stack checker.
+ */
+
+/*
+ * COPYRIGHT (c) 1989-2006.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef __INTERNAL_STACK_CHECK_h

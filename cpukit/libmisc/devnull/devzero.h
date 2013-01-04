@@ -1,7 +1,10 @@
 /**
  * @file rtems/devzero.h
  *
- * @brief Interface to the RTEMS /dev/zero Device Driver
+ * @defgroup libmisc_devzero Device Driver
+ *
+ * @ingroup libmisc
+ * @brief RTEMS /dev/zero Device Driver
  *
  * This include file defines the interface to the RTEMS /dev/zero
  * device driver.
@@ -10,11 +13,11 @@
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * embedded brains GmbH
+ * Obere Lagerstr. 30
+ * 82178 Puchheim
+ * Germany
+ * <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

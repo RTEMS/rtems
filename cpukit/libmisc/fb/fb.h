@@ -1,4 +1,10 @@
-/** @file rtems/fb.h
+/** 
+ * @file rtems/fb.h
+ *
+ * @defgroup libmisc_fb Device Driver
+ *
+ * @ingroup libmisc
+ * @brief Frame Buffer Device Driver
  *
  * This file defines the interface to a frame buffer device driver.
  */
