@@ -27,6 +27,16 @@ void bsp_interrupt_dispatch( void );
 
 void _ARMV4_Exception_interrupt( void );
 
+typedef void arm_exc_abort_handler( arm_cpu_context *context );
+
+void arm_exc_data_abort_set_handler( arm_exc_abort_handler handler );
+
+void arm_exc_data_abort( void );
+
+void arm_exc_prefetch_abort_set_handler( arm_exc_abort_handler handler );
+
+void arm_exc_prefetch_abort( void );
+
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
 #ifdef __cplusplus

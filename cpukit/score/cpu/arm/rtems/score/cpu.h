@@ -510,8 +510,6 @@ typedef struct {
   uint32_t cpsr;
 } arm_cpu_context;
 
-typedef void arm_exc_abort_handler( arm_cpu_context *context );
-
 typedef enum {
   ARM_EXCEPTION_RESET = 0,
   ARM_EXCEPTION_UNDEF = 1,
@@ -557,14 +555,6 @@ static inline void arm_status_restore( uint32_t psr )
 
   RTEMS_COMPILER_MEMORY_BARRIER();
 }
-
-void arm_exc_data_abort_set_handler( arm_exc_abort_handler handler );
-
-void arm_exc_data_abort( void );
-
-void arm_exc_prefetch_abort_set_handler( arm_exc_abort_handler handler );
-
-void arm_exc_prefetch_abort( void );
 
 /** @} */
 
