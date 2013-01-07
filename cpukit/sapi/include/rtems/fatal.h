@@ -83,6 +83,16 @@ void rtems_fatal(
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
+ * @brief Returns a description for a fatal source.
+ *
+ * @param[in] source The fatal source.
+ *
+ * @return The fatal source description or "?" in case the passed fatal source
+ * is invalid.
+ */
+const char *rtems_fatal_source_description( rtems_fatal_source source );
+
+/**
  * @brief Returns a description for an internal error code.
  *
  * @param[in] error The error code.

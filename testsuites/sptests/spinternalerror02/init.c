@@ -20,7 +20,7 @@
 
 #include <rtems.h>
 
-static void test(void)
+static void test_internal_error_description(void)
 {
   rtems_fatal_code error = 0;
   const char *desc_last = NULL;
@@ -36,11 +36,28 @@ static void test(void)
   rtems_test_assert( error - 3 == INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR );
 }
 
+static void test_fatal_source_description(void)
+{
+  rtems_fatal_source source = 0;
+  const char *desc_last = NULL;
+  const char *desc;
+
+  do {
+    desc_last = desc;
+    desc = rtems_fatal_source_description( source );
+    ++source;
+    puts( desc );
+  } while ( desc != desc_last );
+
+  rtems_test_assert( source - 3 == RTEMS_FATAL_SOURCE_EXCEPTION );
+}
+
 static void Init(rtems_task_argument arg)
 {
   puts("\n\n*** TEST SPINTERNALERROR 2 ***");
 
-  test();
+  test_internal_error_description();
+  test_fatal_source_description();
 
   puts("*** END OF TEST SPINTERNALERROR 2 ***");
 
