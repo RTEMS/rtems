@@ -1,14 +1,16 @@
 /**
- * @file rtems/posix/barrier.h
+ * @file
+ * 
+ * @brief Constants and Structures Associated with the POSIX Barrier Manager
  *
- *  This include file contains all the constants and structures associated
- *  with the POSIX Barrier Manager.
+ * This include file contains all the constants and structures associated
+ * with the POSIX Barrier Manager.
  *
- *  Directives provided are:
+ * Directives provided are:
  *
- *   - create a barrier
- *   - delete a barrier
- *   - wait for a barrier
+ *  - create a barrier
+ *  - delete a barrier
+ *  - wait for a barrier
  */
 
 /*
@@ -24,14 +26,15 @@
 #define _RTEMS_POSIX_BARRIER_H
 
 /**
- *  @defgroup POSIXBarrier POSIX Barriers
+ * @defgroup POSIXBarrier POSIX Barriers
  *
- *  @ingroup POSIXAPI
+ * @ingroup POSIXAPI
  *
- *  This encapsulates functionality which implements the RTEMS API
- *  Barrier Manager.
+ * This encapsulates functionality which implements the RTEMS API
+ * Barrier Manager.
+ * 
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,7 +44,7 @@ extern "C" {
 #include <rtems/score/corebarrier.h>
 
 /**
- *  This type defines the control block used to manage each barrier.
+ * This type defines the control block used to manage each barrier.
  */
 
 typedef struct {
@@ -59,26 +62,22 @@ typedef struct {
 POSIX_EXTERN Objects_Information  _POSIX_Barrier_Information;
 
 /**
- *  @brief _POSIX_Barrier_Manager_initialization
+ * @brief POSIX barrier manager initialization.
  *
- *  This routine performs the initialization necessary for this manager.
- *
- *  @param[in] maximum_barriers is the total number of barriers allowed to
- *             concurrently be active in the system.
+ * This routine performs the initialization necessary for this manager.
  */
 
 void _POSIX_Barrier_Manager_initialization(void);
 
 /**
- *  @brief _POSIX_Barrier_Translate_core_barrier_return_code (
+ * @brief POSIX translate barrier return code.
+ * 
+ * This routine translates SuperCore Barrier status codes into the
+ * corresponding POSIX ones.
  *
- *  This routine translates SuperCore Barrier status codes into the
- *  corresponding POSIX ones.
+ * @param[in] the_barrier_status is the SuperCore status.
  *
- *
- *  @param[in] the_barrier_status is the SuperCore status.
- *
- *  @return the corresponding POSIX status
+ * @return the corresponding POSIX status
  */
 int _POSIX_Barrier_Translate_core_barrier_return_code(
   CORE_barrier_Status  the_barrier_status
@@ -88,11 +87,11 @@ int _POSIX_Barrier_Translate_core_barrier_return_code(
 #include <rtems/posix/barrier.inl>
 #endif
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /*  end of include file */

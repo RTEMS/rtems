@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/timer.h
+ * @file 
+ * 
+ * @brief POSIX Timers Internal Support
  *
  * This include files defines the internal support for implementation of
  * POSIX Timers.
@@ -22,11 +24,13 @@
 #include <rtems/score/watchdog.h> /* Watchdog_Control */
 
 /**
- *  @defgroup POSIX_INTERNAL_TIMERS Timers
+ * @defgroup POSIX_INTERNAL_TIMERS Timers
  *
- *  @ingroup POSIX
+ * @ingroup POSIX
+ * 
+ * @{
  */
-/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -108,9 +112,11 @@ POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 #include <rtems/posix/timer.inl>
 #endif
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif
 /* end of include file */

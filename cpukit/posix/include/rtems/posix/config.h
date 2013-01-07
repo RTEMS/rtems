@@ -1,6 +1,8 @@
 /**
- * @file rtems/posix/config.h
+ * @file
  *
+ * @brief User Defined Configuration Parameters Specific For The POSIX API
+ * 
  * This include file contains the table of user defined configuration
  * parameters specific for the POSIX API.
  */
@@ -60,10 +62,10 @@ typedef struct {
 } posix_api_configuration_table;
 
 /**
- *  @brief POSIX API Configuration Table
+ * @brief POSIX API configuration table.
  *
- *  This is the POSIX API Configuration Table expected to be generated
- *  by confdefs.h.
+ * This is the POSIX API Configuration Table expected to be generated
+ * by confdefs.h.
  */
 extern posix_api_configuration_table Configuration_POSIX_API;
 

@@ -41,11 +41,12 @@
 #include <rtems/score/object.h>
 
 /**
- *  @defgroup POSIX_MQUEUE Message Queues
+ * @defgroup POSIX_MQUEUE POSIX Message Queues
  *
- *  @ingroup POSIX
+ * @ingroup POSIX
+ * 
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,14 +57,14 @@ extern "C" {
  */
 
 /**
- *  Message queue id type.
+ * Message queue id type.
  *
- *  @note Use uint32_t since all POSIX Ids are 32-bit currently.
+ * NOTE: Use uint32_t since all POSIX Ids are 32-bit currently.
  */
 typedef uint32_t  mqd_t;
 
 /**
- *  This is the message queue attributes structure.
+ * This is the message queue attributes structure.
  */
 struct mq_attr {
   /** This is the message queue flags */
@@ -77,7 +78,7 @@ struct mq_attr {
 };
 
 /**
- *  15.2.2 Open a Message Queue, P1003.1b-1993, p. 272
+ * 15.2.2 Open a Message Queue, P1003.1b-1993, p. 272
  */
 mqd_t mq_open(
   const char *name,
@@ -86,37 +87,37 @@ mqd_t mq_open(
 );
 
 /**
- *  15.2.2 Close a Message Queue, P1003.1b-1993, p. 275
+ * 15.2.2 Close a Message Queue, P1003.1b-1993, p. 275
  */
 int mq_close(
   mqd_t  mqdes
 );
 
 /**
- *  @brief Remove a Message Queue
+ * @brief Remove a message queue.
  *
- *  15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276
+ * 15.2.2 Remove a Message Queue, P1003.1b-1993, p. 276
  *
- *  NOTE:  The structure of the routines is identical to that of POSIX
- *         Message_queues to leave the option of having unnamed message
- *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also
- *         the reason for the apparently unnecessary tracking of
- *         the process_shared attribute.  [In addition to the fact that
- *         it would be trivial to add pshared to the mq_attr structure
- *         and have process private message queues.]
+ * NOTE:  The structure of the routines is identical to that of POSIX
+ *        Message_queues to leave the option of having unnamed message
+ *        queues at a future date.  They are currently not part of the
+ *        POSIX standard but unnamed message_queues are.  This is also
+ *        the reason for the apparently unnecessary tracking of
+ *        the process_shared attribute.  [In addition to the fact that
+ *        it would be trivial to add pshared to the mq_attr structure
+ *        and have process private message queues.]
  *
- *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *         time.
+ *        This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
+ *        time.
  */
 int mq_unlink(
   const char *name
 );
 
 /**
- *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
+ * 15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
  *
- *  @note P1003.4b/D8, p. 45 adds mq_timedsend().
+ * NOTE; P1003.4b/D8, p. 45 adds mq_timedsend().
  */
 int mq_send(
   mqd_t         mqdes,
@@ -130,11 +131,9 @@ int mq_send(
 #include <time.h>
 
 /**
- *  @brief Send a Message to a Message Queue
+ * @brief Send a message to a message queue.
  * 
- *  15.2.4 Send a Message to a Message Queue, P1003.1b-1993, p. 277
- *
- *  @note P1003.4b/D8, p. 45 adds mq_timedsend().
+ * @see mq_send()
  */
 int mq_timedsend(
   mqd_t                  mqdes,
@@ -147,11 +146,11 @@ int mq_timedsend(
 #endif /* _POSIX_TIMEOUTS */
 
 /**
- *  @brief Receive a Message From a Message Queue 
+ * @brief Receive a message from a message queue. 
  * 
- *  15.2.5 Receive a Message From a Message Queue, P1003.1b-1993, p. 279
+ * 15.2.5 Receive a Message From a Message Queue, P1003.1b-1993, p. 279
  *
- *  @note P1003.4b/D8, p. 45 adds mq_timedreceive().
+ * NOTE: P1003.4b/D8, p. 45 adds mq_timedreceive().
  */
 ssize_t mq_receive(
   mqd_t         mqdes,
@@ -175,7 +174,7 @@ ssize_t mq_timedreceive(
 #if defined(_POSIX_REALTIME_SIGNALS)
 
 /**
- * @brief Notify Process that a Message is Available on a Queue
+ * @brief Notify process that a message is available on a queue.
  *
  * 15.2.6 Notify Process that a Message is Available on a Queue,
  *        P1003.1b-1993, p. 280
@@ -188,7 +187,7 @@ int mq_notify(
 #endif /* _POSIX_REALTIME_SIGNALS */
 
 /**
- * @brief Set Message Queue Attributes
+ * @brief Set message queue attributes.
  *
  * 15.2.7 Set Message Queue Attributes, P1003.1b-1993, p. 281
  */
@@ -207,11 +206,13 @@ int mq_getattr(
   struct mq_attr *mqstat
 );
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* _POSIX_MESSAGE_PASSING */
-/**@}*/
+
 #endif
 /* end of include file */
