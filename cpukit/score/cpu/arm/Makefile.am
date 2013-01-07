@@ -25,6 +25,7 @@ libscorecpu_a_SOURCES += armv4-exception-default.S
 libscorecpu_a_SOURCES += armv7m-context-initialize.c
 libscorecpu_a_SOURCES += armv7m-context-restore.c
 libscorecpu_a_SOURCES += armv7m-context-switch.c
+libscorecpu_a_SOURCES += armv7m-exception-default.c
 libscorecpu_a_SOURCES += armv7m-exception-frame-print.c
 libscorecpu_a_SOURCES += armv7m-exception-handler-get.c
 libscorecpu_a_SOURCES += armv7m-exception-handler-set.c
