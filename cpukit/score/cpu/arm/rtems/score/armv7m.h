@@ -15,12 +15,13 @@
 #ifndef RTEMS_SCORE_ARMV7M_H
 #define RTEMS_SCORE_ARMV7M_H
 
-#include <stdint.h>
-#include <stdbool.h>
+#include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#ifdef ARM_MULTILIB_ARCH_V7M
 
 typedef struct {
   uint32_t reserved_0;
@@ -474,6 +475,8 @@ void _ARMV7M_Interrupt_service_leave( void );
 void _ARMV7M_Pendable_service_call( void );
 
 void _ARMV7M_Supervisor_call( void );
+
+#endif /* ARM_MULTILIB_ARCH_V7M */
 
 #ifdef __cplusplus
 }

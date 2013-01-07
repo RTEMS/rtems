@@ -22,11 +22,10 @@
   #include "config.h"
 #endif
 
+#include <rtems/score/armv7m.h>
 #include <rtems/score/isr.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
-
-#include <rtems/score/armv7m.h>
 
 void _CPU_ISR_install_vector(
   uint32_t vector,
