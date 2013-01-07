@@ -28,6 +28,24 @@
 #define LPC17XX_BASE 0x00
 
 typedef struct {
+#define LPC17XX_WWDT_MOD_WDEN BSP_BIT32(0)
+#define LPC17XX_WWDT_MOD_WDRESET BSP_BIT32(1)
+#define LPC17XX_WWDT_MOD_WDTOF BSP_BIT32(2)
+#define LPC17XX_WWDT_MOD_WDINT BSP_BIT32(3)
+#define LPC17XX_WWDT_MOD_WDPROTECT BSP_BIT32(4)
+	uint32_t mod;
+	uint32_t tc;
+	uint32_t feed;
+	uint32_t tv;
+	uint32_t reserved_10;
+	uint32_t warnint;
+	uint32_t window;
+	uint32_t reserved_1c;
+} lpc17xx_wwdt;
+
+#define LPC17XX_WWDT (*(volatile lpc17xx_wwdt *) (LPC17XX_BASE + 0x40000000))
+
+typedef struct {
 #define LPC17XX_PLL_CON_PLLE BSP_BIT32(0)
 #define LPC17XX_PLL_SEL_MSEL(val) BSP_FLD32(val, 0, 4)
 #define LPC17XX_PLL_SEL_MSEL_GET(reg) BSP_FLD32GET(reg, 0, 4)
@@ -176,7 +194,9 @@ typedef struct {
 #define LPC17XX_SCB (*(volatile lpc17xx_scb *) (LPC17XX_BASE + 0x400fc000))
 
 typedef struct {
-	uint32_t reserved_00 [268693504];
+	uint32_t reserved_00 [268435456];
+	lpc17xx_wwdt wwdt;
+	uint32_t reserved_40000020 [258040];
 	lpc17xx_scb scb;
 } lpc17xx;
 
