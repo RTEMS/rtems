@@ -482,13 +482,13 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
 
 /** @} */
 
-#if defined(ARM_MULTILIB_ARCH_V4)
-
 /**
  * @addtogroup ScoreCPUARM
  *
  * @{
  */
+
+#if defined(ARM_MULTILIB_ARCH_V4)
 
 typedef enum {
   ARM_EXCEPTION_RESET = 0,
@@ -503,7 +503,7 @@ typedef enum {
   ARM_EXCEPTION_MAKE_ENUM_32_BIT = 0xffffffff
 } Arm_symbolic_exception_name;
 
-/** @} */
+#endif /* defined(ARM_MULTILIB_ARCH_V4) */
 
 typedef struct {
   uint32_t register_r0;
@@ -520,26 +520,24 @@ typedef struct {
   uint32_t register_r11;
   uint32_t register_r12;
   uint32_t register_sp;
-  uint32_t register_lr;
-  uint32_t register_pc;
+  void *register_lr;
+  void *register_pc;
+#if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t register_cpsr;
   Arm_symbolic_exception_name vector;
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+  uint32_t register_xpsr;
+  uint32_t vector;
+#endif
 } CPU_Exception_frame;
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;
 
-#else /* !defined(ARM_MULTILIB_ARCH_V4) */
-
-typedef void CPU_Interrupt_frame;
-
-/* FIXME */
-typedef CPU_Interrupt_frame CPU_Exception_frame;
-
-#endif /* !defined(ARM_MULTILIB_ARCH_V4) */
-
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 void _ARM_Exception_default( CPU_Exception_frame *frame );
+
+/** @} */
 
 #ifdef __cplusplus
 }
