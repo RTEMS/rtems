@@ -32,11 +32,11 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup LibIOInternal IO Internal Library
+ * @defgroup LibIOInternal IO Internal Library
  *
- *  @brief Internal IO library API and implementation.
+ * @brief Internal IO library API and implementation.
  *
- *  @{
+ * @{
  */
 
 #define RTEMS_FILESYSTEM_SYMLOOP_MAX 32
@@ -71,8 +71,8 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
  * The purpose of this location is to deliver the error return status for a
  * previous error condition which must set the errno accordingly.
  *
- * The usage of this null location instead of the NULL pointer eliminates a lot
- * of branches.
+ * The usage of this null location instead of the NULL pointer eliminates 
+ * a lot of branches.
  *
  * The user environment root and current directory are statically initialized
  * with the null location.  Due to that all file system services are in a
@@ -185,8 +185,8 @@ extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
  *
  * The caller must hold the file system instance lock.
  *
- * @param[out] clone The cloned location.
- * @param[in] master The master location.
+ * @param[out] clone will contain the cloned location.
+ * @param[in] master is the master location.
  *
  * @see rtems_filesystem_instance_lock().
  */
@@ -200,9 +200,9 @@ void rtems_filesystem_location_clone(
  *
  * This function obtains and releases the file system instance lock.
  *
- * @param[in] loc The location of the node.
+ * @param[in] loc is the location of the node.
  *
- * @return The node type.
+ * @retval type The node type.
  *
  * @see rtems_filesystem_instance_lock().
  */
@@ -215,9 +215,9 @@ rtems_filesystem_node_types_t rtems_filesystem_node_type(
  *
  * This function may block on a mutex and may complete an unmount process.
  *
- * @param[in] loc The location to free.
+ * @param[in] loc is the location to free.
  *
- * @note The file system root location is released by the file system instance
+ * NOTE: The file system root location is released by the file system instance
  * destruction handler (see @ref rtems_filesystem_fsunmount_me_t).
  *
  * @see rtems_filesystem_freenode_t.
@@ -279,24 +279,24 @@ static inline void rtems_filesystem_instance_unlock(
  */
 
 /**
- *  This routine searches the IOP Table for an unused entry.  If it
- *  finds one, it returns it.  Otherwise, it returns NULL.
+ * This routine searches the IOP Table for an unused entry.  If it
+ * finds one, it returns it.  Otherwise, it returns NULL.
  */
 rtems_libio_t *rtems_libio_allocate(void);
 
 /**
- *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
+ * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 uint32_t rtems_libio_fcntl_flags( int fcntl_flags );
 
 /**
- *  Convert RTEMS internal flags to UNIX fnctl(2) flags
+ * Convert RTEMS internal flags to UNIX fnctl(2) flags
  */
 int rtems_libio_to_fcntl_flags( uint32_t flags );
 
 /**
- *  This routine frees the resources associated with an IOP (file descriptor)
- *  and clears the slot in the IOP Table.
+ * This routine frees the resources associated with an IOP (file descriptor)
+ * and clears the slot in the IOP Table.
  */
 void rtems_libio_free(
   rtems_libio_t *iop
@@ -360,8 +360,8 @@ void rtems_filesystem_eval_path_cleanup_with_parent(
  * The function obtains the new start location and clones it to set the new
  * current location.  The previous start and current locations are released.
  *
- * @param[in, out] ctx The path evaluation context.
- * @param[in, out] newstartloc_ptr Pointer to new start location.
+ * @param[in, out] ctx is the path evaluation context.
+ * @param[in, out] newstartloc_ptr is a pointer to the new start location.
  */
 void rtems_filesystem_eval_path_restart(
   rtems_filesystem_eval_path_context_t *ctx,
@@ -377,8 +377,8 @@ typedef enum {
 /**
  * @brief Tests if the current location is a directory.
  *
- * @param[in, out] ctx The path evaluation context.
- * @param[in, out] arg The handler argument.
+ * @param[in, out] ctx is the path evaluation context.
+ * @param[in, out] arg is the handler argument.
  *
  * @retval true The current location is a directory.
  * @retval false Otherwise.
@@ -393,10 +393,10 @@ typedef bool (*rtems_filesystem_eval_path_is_directory)(
 /**
  * @brief Evaluates a token.
  *
- * @param[in, out] ctx The path evaluation context.
- * @param[in, out] arg The handler argument.
- * @param[in] token The token contents.
- * @param[in] tokenlen The token length in characters.
+ * @param[in, out] ctx is the path evaluation context.
+ * @param[in, out] arg is the handler argument.
+ * @param[in] token is the token contents.
+ * @param[in] tokenlen is the token length in characters.
  *
  * @retval status The generic path evaluation status.
  *
@@ -416,7 +416,7 @@ typedef struct {
 } rtems_filesystem_eval_path_generic_config;
 
 /**
- *  @brief RTEMS File System Eval Generic Path
+ * @brief Evaluates a generic path.
  */
 void rtems_filesystem_eval_path_generic(
   rtems_filesystem_eval_path_context_t *ctx,
@@ -432,8 +432,8 @@ void rtems_filesystem_initialize(void);
  * A bitwise copy is performed.  The destination location will be added to the
  * corresponding mount entry.
  *
- * @param[out] dst The destination location.
- * @param[in] src The source location.
+ * @param[out] dst is the destination location.
+ * @param[in] src is the  source location.
  *
  * @retval dst The destination location.
  *
@@ -463,9 +463,10 @@ rtems_filesystem_location_transform_to_global(
 /**
  * @brief Assigns a global file system location.
  *
- * @param[in, out] lhs_global_loc_ptr Pointer to the global left hand side file
- * system location.  The current left hand side location will be released.
- * @param[in] rhs_global_loc The global right hand side file system location.
+ * @param[in, out] lhs_global_loc_ptr is a pointer to the global 
+ * left hand side file system location.  The current left hand side location
+ * will be released.
+ * @param[in] rhs_global_loc is the global right hand side file system location.
  */
 void rtems_filesystem_global_location_assign(
   rtems_filesystem_global_location_t **lhs_global_loc_ptr,
@@ -480,7 +481,7 @@ void rtems_filesystem_global_location_assign(
  * This function must be called from normal thread context and may block on a
  * mutex.  Thread dispatching is disabled to protect some critical sections.
  *
- * @param[in] global_loc_ptr Pointer to the global file system location.
+ * @param[in] global_loc_ptr is a pointer to the global file system location.
  *
  * @return A global file system location.  It returns always a valid object.
  * In case of an error, the global null location will be returned.  Each
@@ -506,7 +507,8 @@ rtems_filesystem_global_location_t *rtems_filesystem_global_location_obtain(
  * sections of the operating system.  In this case the release will be
  * deferred.  The next obtain call will do the actual release.
  *
- * @param[in] global_loc The global file system location.  It must not be NULL.
+ * @param[in] global_loc is the global file system location.  It must not
+ * be NULL.
  *
  * @see rtems_filesystem_global_location_obtain().
  */
@@ -555,7 +557,7 @@ static inline void rtems_filesystem_location_error(
   }
 }
 /**
- *  @brief RTEMS File System Mknod
+ * @brief Create a file.
  */
 int rtems_filesystem_mknod(
   const rtems_filesystem_location_info_t *parentloc,
@@ -568,7 +570,7 @@ int rtems_filesystem_mknod(
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc );
 
 /**
- *  @brief Change Owner and Group of a File
+ * @brief Change the owner and the group of a file.
  */
 int rtems_filesystem_chown(
   const char *path,
@@ -700,7 +702,7 @@ static inline void rtems_filesystem_eval_path_put_back_token(
 }
 
 /**
- *  @brief RTEMS File System Eval Eat Delimiter Path
+ * @brief Evaluates an eat delimiter path.
  */
 void rtems_filesystem_eval_path_eat_delimiter(
   rtems_filesystem_eval_path_context_t *ctx

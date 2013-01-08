@@ -1,5 +1,5 @@
 /**
- * @file rtems/zilog/z8036.h
+ * @file
  *
  * @brief Zilog Z8036 Counter/Timer/IO Chip
  *

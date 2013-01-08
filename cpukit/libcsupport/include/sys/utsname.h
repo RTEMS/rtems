@@ -1,5 +1,5 @@
 /**
- * @file sys/utsname.h
+ * @file
  *
  * @brief Interface to the POSIX utsname() Service
  *
@@ -19,9 +19,10 @@
 #define __POSIX_SYS_UTSNAME_h
 
 /**
- *  @defgroup utsname Service
+ * @defgroup utsname Service
+ * 
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,15 +56,19 @@ struct utsname {
 };
 
 /**
- * @brief 4.4.1 Get System Name, P1003.1b-1993, p. 90
+ * @brief Get system name.
+ * 
+ * 4.4.1 Get System Name, P1003.1b-1993, p. 90
  */
 int uname(
   struct utsname *name
 );
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif
 /* end of include file */

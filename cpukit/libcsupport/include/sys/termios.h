@@ -1,7 +1,7 @@
 /**
- * @file sys/termios.h
+ * @file
  *
- * @brief POSIX termios Implementation for RTEMS Console Device Driver
+ * @brief POSIX Termios Implementation for RTEMS Console Device Driver
  *
  * The Open Group Base Specifications Issue 6
  * IEEE Std 1003.1, 2004 Edition
@@ -27,9 +27,11 @@ extern "C" {
 #endif
 
 /**
- *  @ingroup Termios
+ * @ingroup Termios
  *
- *  @brief POSIX Termios Implementation
+ * @brief POSIX Termios Implementation
+ * 
+ * @{
  */
 
 typedef unsigned char	cc_t;
@@ -47,8 +49,8 @@ struct termios {
 };
 
 /**
- *  This value is used to disable processing of a member of c_cc
- *  in the struct termios.
+ * This value is used to disable processing of a member of c_cc
+ * in the struct termios.
  */
 #define _POSIX_VDISABLE 0
 
@@ -207,6 +209,8 @@ speed_t	cfgetospeed(const struct termios *tp);
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);
 int	cfsetispeed(struct termios *tp, speed_t speed);
+
+/** @} */ 
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @brief Real-Time Clock Driver Interface
+ * 
  * Real-time clock driver interface.
  */
 

@@ -1,5 +1,5 @@
 /**
- * @file rtems/timerdrv.h
+ * @file
  *
  * @brief Timer Driver for all Boards
  *

@@ -1,5 +1,5 @@
 /**
- * @file rtems/clockdrv.h
+ * @file
  *
  * @brief Clock Driver for all Boards
  *
