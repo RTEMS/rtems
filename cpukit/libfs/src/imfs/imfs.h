@@ -1,7 +1,7 @@
 /**
- * @file rtems/imfs.h
+ * @file
  *
- * @brief Header file for the In-Memory File System
+ * @brief Header File for the In-Memory File System
  */
 
 /*
@@ -25,6 +25,8 @@
  * @defgroup IMFS POSIX In-Memory File System Support
  *
  * @brief In-Memory File System Support
+ *
+ * @{
  */
 
 #ifdef __cplusplus
@@ -168,8 +170,8 @@ typedef union {
 /**
  * @brief Initializes an IMFS node.
  *
- * @param[in,out] node The IMFS node.
- * @param[in] info The IMFS type information.
+ * @param[in,out] node is the IMFS node.
+ * @param[in] info is the IMFS type information.
  *
  * @retval node Successful operation.
  * @retval NULL An error occurred.  The @c errno indicates the error.  This
@@ -186,8 +188,8 @@ typedef IMFS_jnode_t *(*IMFS_node_control_initialize)(
 /**
  * @brief Returns the node and does nothing else.
  *
- * @param[in,out] node The IMFS node.
- * @param[in] info The IMFS type information.
+ * @param[in,out] node is the IMFS node.
+ * @param[in] info is the IMFS type information.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -201,8 +203,8 @@ IMFS_jnode_t *IMFS_node_initialize_default(
 /**
  * @brief Returns the node and sets the generic node context.
  *
- * @param[in,out] node The IMFS node.
- * @param[in] info The IMFS type information.
+ * @param[in,out] node is the IMFS node.
+ * @param[in] info is the IMFS type information.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -216,7 +218,7 @@ IMFS_jnode_t *IMFS_node_initialize_generic(
 /**
  * @brief Prepares the removal of an IMFS node from its parent directory.
  *
- * @param[in,out] node The IMFS node.
+ * @param[in,out] node is the IMFS node.
  *
  * @retval node Successful operation.
  * @retval NULL An error occurred.  The @c errno indicates the error.  This
@@ -231,7 +233,7 @@ typedef IMFS_jnode_t *(*IMFS_node_control_remove)(
 /**
  * @brief Returns the node and does nothing else.
  *
- * @param[in,out] node The IMFS node.
+ * @param[in,out] node is the IMFS node.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -244,7 +246,7 @@ IMFS_jnode_t *IMFS_node_remove_default(
 /**
  * @brief Destroys an IMFS node.
  *
- * @param[in,out] node The IMFS node.
+ * @param[in,out] node is the IMFS node.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -255,7 +257,7 @@ typedef IMFS_jnode_t *(*IMFS_node_control_destroy)( IMFS_jnode_t *node );
 /**
  * @brief Returns the node and does nothing else.
  *
- * @param[in,out] node The IMFS node.
+ * @param[in,out] node is the IMFS node.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -392,7 +394,7 @@ extern int miniIMFS_initialize(
 );
 
 /**
- * @brief IMFS Initialization Support
+ * @brief IMFS initialization support.
  */
 extern int IMFS_initialize_support(
   rtems_filesystem_mount_table_entry_t *mt_entry,
@@ -400,14 +402,14 @@ extern int IMFS_initialize_support(
   const IMFS_node_control *const node_controls [IMFS_TYPE_COUNT]
 );
 /**
- * @brief Unmount this Instance of IMFS
+ * @brief Unmount this instance of IMFS.
  */
 extern void IMFS_fsunmount(
    rtems_filesystem_mount_table_entry_t *mt_entry
 );
 
 /**
- * @brief RTEMS Load Tarfs
+ * @brief RTEMS load tarfs.
  * 
  * This file implements the "mount" procedure for tar-based IMFS
  * extensions.  The TAR is not actually mounted under the IMFS.
@@ -459,7 +461,7 @@ extern int rtems_tarfs_load(
 );
 
 /**
- * @brief IMFS Dump
+ * @brief Dump the entire IMFS.
  * 
  * This routine dumps the entire IMFS that is mounted at the root
  * directory.
@@ -470,7 +472,8 @@ extern int rtems_tarfs_load(
 extern void IMFS_dump( void );
 
 /**
- * @brief IMFS Memory File Maximum Size
+ * @brief Get the size of the largest file which can be created
+ * using the IMFS memory file type.
  * 
  * Return the size of the largest file which can be created
  * using the IMFS memory file type.
@@ -478,22 +481,22 @@ extern void IMFS_dump( void );
 extern int IMFS_memfile_maximum_size( void );
 
 /**
- * @brief Destroy IMFS Node
+ * @brief Destroy an IMFS node.
  */
 extern void IMFS_node_destroy( IMFS_jnode_t *node );
 
 /**
- * @brief Clone IMFS Node
+ * @brief Clone an IMFS node.
  */
 extern int IMFS_node_clone( rtems_filesystem_location_info_t *loc );
 
 /**
- * @brief Free IMFS Node
+ * @brief Free an IMFS node.
  */
 extern void IMFS_node_free( const rtems_filesystem_location_info_t *loc );
 
 /**
- * @brief IMFS Node Type
+ * @brief IMFS Node Type Get the type of an IMFS node.
  * 
  * The following verifies that returns the type of node that the
  * loc refers to.
@@ -503,7 +506,7 @@ extern rtems_filesystem_node_types_t IMFS_node_type(
 );
 
 /**
- * @brief IMFS Stat
+ * @brief Perform a status processing for the IMFS.
  * 
  * This routine provides a stat for the IMFS file system.
  */
@@ -513,14 +516,14 @@ extern int IMFS_stat(
 );
 
 /**
- * @brief Evaluation IMFS Node Support
+ * @brief IMFS evaluation node support.
  */
 extern void IMFS_eval_path(
   rtems_filesystem_eval_path_context_t *ctx
 );
 
 /**
- * @brief IMFS Create a New Link Node
+ * @brief Create a new IMFS link node.
  * 
  * The following rouine creates a new link node under parent with the
  * name given in name.  The link node is set to point to the node at
@@ -534,7 +537,7 @@ extern int IMFS_link(
 );
 
 /**
- * @brief IMFS Change Owner
+ * @brief Change the owner of IMFS.
  * 
  * This routine is the implementation of the chown() system
  * call for the IMFS.
@@ -546,7 +549,7 @@ extern int IMFS_chown(
 );
 
 /**
- * @brief Create a IMFS Node
+ * @brief Create an IMFS node.
  * 
  * Routine to create a node in the IMFS file system.
  */
@@ -559,7 +562,7 @@ extern int IMFS_mknod(
 );
 
 /**
- * @brief Create a New IMFS Node
+ * @brief Create a new IMFS node.
  * 
  * Routine to create a new in memory file system node.
  */
@@ -573,7 +576,7 @@ extern IMFS_jnode_t *IMFS_allocate_node(
 );
 
 /**
- * @brief Create an IMFS Node
+ * @brief Create an IMFS node.
  * 
  * Create an IMFS filesystem node of an arbitrary type that is NOT
  * the root directory node.
@@ -611,10 +614,10 @@ extern bool IMFS_is_imfs_instance(
 /**
  * @brief Makes a generic IMFS node.
  *
- * @param[in] path The path to the new generic IMFS node.
- * @param[in] mode The node mode.
- * @param[in] node_control The node control.
- * @param[in] context The node control handler context.
+ * @param[in] path is a pointer to the new generic IMFS node.
+ * @param[in] mode is the node mode.
+ * @param[in] node_control is the node control.
+ * @param[in] context is the node control handler context.
  *
  * @retval 0 Successful operation.
  * @retval -1 An error occurred.  The @c errno indicates the error.
@@ -658,14 +661,14 @@ extern int IMFS_make_generic_node(
 /** @} */
 
 /**
- * @brief Mount an IMFS
+ * @brief Mount an IMFS.
  */
 extern int IMFS_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
 );
 
 /**
- * @brief Unmount an IMFS
+ * @brief Unmount an IMFS.
  */
 extern int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
@@ -676,7 +679,7 @@ extern IMFS_jnode_t *IMFS_memfile_remove(
 );
 
 /**
- * @brief Truncate a Memory File
+ * @brief Truncate a memory file.
  *
  * This routine processes the ftruncate() system call.
  */
@@ -686,7 +689,7 @@ extern int memfile_ftruncate(
 );
 
 /**
- * @brief IMFS Read Next Directory
+ * @brief Read the next directory of the IMFS.
  * 
  * This routine will read the next directory entry based on the directory
  * offset. The offset should be equal to -n- time the size of an individual
@@ -718,7 +721,7 @@ extern ssize_t imfs_dir_read(
  */
 
 /**
- * @brief Open a Memory File
+ * @brief Open a memory file.
  *
  * This routine processes the open() system call.  Note that there is
  * nothing special to be done at open() time.
@@ -731,7 +734,7 @@ extern int memfile_open(
 );
 
 /**
- * @brief Read a Memory File
+ * @brief Read a memory file.
  *
  * This routine processes the read() system call.
  */
@@ -742,7 +745,7 @@ extern ssize_t memfile_read(
 );
 
 /**
- * @brief Write a Memory File
+ * @brief Write a memory file.
  *
  * This routine processes the write() system call.
  */
@@ -802,7 +805,7 @@ extern int device_ftruncate(
 /** @} */
 
 /**
- * @brief Set IMFS File Access and Modification Times
+ * @brief Set IMFS file access and modification times.
  * 
  * 
  * This routine is the implementation of the utime() system
@@ -815,7 +818,7 @@ extern int IMFS_utime(
 );
 
 /**
- * @brief Change IMFS File Mode
+ * @brief Change the IMFS file mode.
  */
 extern int IMFS_fchmod(
   const rtems_filesystem_location_info_t *loc,
@@ -823,7 +826,7 @@ extern int IMFS_fchmod(
 );
 
 /**
- * @brief IMFS Create a New Symbolic Link Node
+ * @brief Create a new IMFS symbolic link node.
  * 
  * The following rouine creates a new symbolic link node under parent
  * with the name given in name.  The node is set to point to the node at
@@ -837,9 +840,9 @@ extern int IMFS_symlink(
 );
 
 /**
- * @brief IMFS Put Symbolic Link into Buffer
+ * @brief Put IMFS symbolic link into buffer.
  * 
- * The following rouine puts the symblic links destination name into
+ * The following rouine puts the symbolic links destination name into
  * buff.
  * 
  */
@@ -850,7 +853,7 @@ extern ssize_t IMFS_readlink(
 );
 
 /**
- * @brief IMFS Rename
+ * @brief Rename the IMFS.
  * 
  * The following rouine creates a new link node under parent with the
  * name given in name and removes the old.
@@ -863,7 +866,7 @@ extern int IMFS_rename(
   size_t namelen
 );
 /**
- * @brief IMFS Node Removal Handler
+ * @brief IMFS node removal handler.
  * 
  * This file contains the handler used to remove a node when a file type
  * does not require special actions.
@@ -977,6 +980,8 @@ static inline dev_t IMFS_generic_get_device_identifier_by_node(
     node->st_ino
   );
 }
+
+/** @} */
 
 /** @} */
 

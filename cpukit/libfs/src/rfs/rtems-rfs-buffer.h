@@ -159,14 +159,16 @@ typedef struct rtems_rfs_buffer_handle_t
 #define rtems_rfs_buffer_refs_down(_h) ((_h)->buffer->references -= 1)
 
 /**
- * Request a buffer. The buffer can be filled with data from the media (read ==
- * true) or you can request a buffer to fill with data.
+ * Request a buffer. The buffer can be filled with data from the media
+ * (read == true) or you can request a buffer to fill with data.
  *
- * @param fs The file system data.
- * @param handle The handle the requested buffer is attached to.
- * @param block The block number.
- * @param read Read the data from the disk.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] handle is the handle the requested buffer is attached to.
+ * @param[in] block is the block number.
+ * @param[in] read Read the data from the disk.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
                                      rtems_rfs_buffer_handle* handle,
@@ -178,9 +180,11 @@ int rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
  * result does not indicate if the data was successfully written to the disk as
  * this operation may be performed in asynchronously to this release.
  *
- * @param fs The file system data.
- * @param handle The handle the requested buffer is attached to.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] handle is the handle the requested buffer is attached to.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
                                      rtems_rfs_buffer_handle* handle);
@@ -188,9 +192,11 @@ int rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
 /**
  * Open a handle.
  *
- * @param fs The file system data.
- * @param handle The buffer handle to open.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs i the file system data.
+ * @param[in] handle i the buffer handle to open.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 static inline int
 rtems_rfs_buffer_handle_open (rtems_rfs_file_system*   fs,
@@ -205,9 +211,11 @@ rtems_rfs_buffer_handle_open (rtems_rfs_file_system*   fs,
 /**
  * Close a handle.
  *
- * @param fs The file system data.
- * @param handle The buffer handle to close.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] handle is the buffer handle to close.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 static inline int
 rtems_rfs_buffer_handle_close (rtems_rfs_file_system*   fs,
@@ -223,42 +231,52 @@ rtems_rfs_buffer_handle_close (rtems_rfs_file_system*   fs,
 /**
  * Open the buffer interface.
  *
- * @param name The device name to the media.
- * @param fs Pointer to the file system data.
- * @return int The error number (errno). No error if 0.
+ * @param[in] name is a pointer to the device name to the media.
+ * @param[in] fs is the file system data.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffer_open (const char* name, rtems_rfs_file_system* fs);
 
 /**
  * Close the buffer interface.
  *
- * @param fs Pointer to the file system data.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffer_close (rtems_rfs_file_system* fs);
 
 /**
  * Sync all buffers to the media.
  *
- * @param fs Pointer to the file system data.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffer_sync (rtems_rfs_file_system* fs);
 
 /**
  * Set the block size of the device.
  *
- * @param fs Pointer to the file system data.
- * @param size The new block size.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] size is the new block size.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, size_t size);
 
 /**
  * Release any chained buffers.
  *
- * @param fs The file system data.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_buffers_release (rtems_rfs_file_system* fs);
 

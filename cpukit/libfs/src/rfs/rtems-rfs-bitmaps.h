@@ -186,7 +186,8 @@ typedef struct rtems_rfs_bitmap_control_s
  * Create a bit mask with the specified number of bits up to an element's
  * size. The mask is aligned to bit 0 of the element.
  *
- * @param size The number of bits in the mask.
+ * @param[in] size is the number of bits in the mask.
+ *
  * @return The mask of the argument size number of bits.
  */
 rtems_rfs_bitmap_element rtems_rfs_bitmap_mask (unsigned int size);
@@ -195,8 +196,9 @@ rtems_rfs_bitmap_element rtems_rfs_bitmap_mask (unsigned int size);
  * Create a bit mask section. A mask section is a mask that is not aligned to
  * an end of the element.
  *
- * @param start The first bit of the mask numbered from 0.
- * @param end The end bit of the mask numbered from 0.
+ * @param[in] start is the first bit of the mask numbered from 0.
+ * @param[in] end is the end bit of the mask numbered from 0.
+ *
  * @return Mask section as defined by the start and end arguments.
  */
 rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section (unsigned int start,
@@ -206,9 +208,11 @@ rtems_rfs_bitmap_element rtems_rfs_bitmap_mask_section (unsigned int start,
  * Set a bit in a map and if all the bits are set, set the search map bit as
  * well.
  *
- * @param control The control for the map.
- * @param bit The bit in the map to set.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the control for the map.
+ * @param[in] bit is the bit in the map to set.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
                               rtems_rfs_bitmap_bit      bit);
@@ -217,9 +221,11 @@ int rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
  * Clear a bit in a map and make sure the search map bit is clear so a search
  * will find this bit available.
  *
- * @param control The control for the map.
- * @param bit The bit in the map to clear.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the control for the map.
+ * @param[in] bit is the bit in the map to clear.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
                                 rtems_rfs_bitmap_bit      bit);
@@ -227,10 +233,12 @@ int rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
 /**
  * Test a bit in the map.
  *
- * @param control The bitmap control.
- * @param bit The bit to test.
- * @param state The state of the bit if no error is returned.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the bitmap control.
+ * @param[in] bit is the bit to test.
+ * @param[in] state is the state of the bit if no error is returned.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int
 rtems_rfs_bitmap_map_test (rtems_rfs_bitmap_control* control,
@@ -240,31 +248,37 @@ rtems_rfs_bitmap_map_test (rtems_rfs_bitmap_control* control,
 /**
  * Set all bits in the bitmap and set the dirty bit.
  *
- * @param control The bitmap control.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the bitmap control.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_map_set_all (rtems_rfs_bitmap_control* control);
 
 /**
  * Clear all bits in the bitmap and set the dirty bit.
  *
- * @param control The bitmap control.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the bitmap control.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_map_clear_all (rtems_rfs_bitmap_control* control);
 
 /**
  * Find a free bit searching from the seed up and down until found. The search
  * is performing by moving up from the seed for the window distance then to
- * search down from the seed for the window distance. This is repeated out from
- * the seed for each window until a free bit is found. The search is performed
- * by checking the search map to see if the map has a free bit.
+ * search down from the seed for the window distance. This is repeated out
+ * from the seed for each window until a free bit is found. The search is
+ * performed by checking the search map to see if the map has a free bit.
  *
- * @param control The map control.
- * @param seed The bit to search out from.
- * @param allocate A bit was allocated.
- * @param bit Returns the bit found free if true is returned.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the map control.
+ * @param[in] seed is the bit to search out from.
+ * @param[out] allocate A bit was allocated.
+ * @param[out] bit will contain the bit found free if true is returned.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_map_alloc (rtems_rfs_bitmap_control* control,
                                 rtems_rfs_bitmap_bit      seed,
@@ -274,19 +288,24 @@ int rtems_rfs_bitmap_map_alloc (rtems_rfs_bitmap_control* control,
 /**
  * Create a search bit map from the actual bit map.
  *
- * @param control The map control.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the map control.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_create_search (rtems_rfs_bitmap_control* control);
 
 /**
  * Open a bitmap control with a map and search map.
  *
- * @param control The map control.
- * @param fs The file system data.
- * @param  buffer The buffer handle the map is stored in.
- * @param size The number of bits in the map.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the map control.
+ * @param[in] fs is the file system data.
+ * @param[in]  buffer is a pointer to the buffer handle the map is
+ *           stored in.
+ * @param[in] size is the number of bits in the map.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_open (rtems_rfs_bitmap_control* control,
                            rtems_rfs_file_system*    fs,
@@ -297,8 +316,10 @@ int rtems_rfs_bitmap_open (rtems_rfs_bitmap_control* control,
 /**
  * Close a bitmap.
  *
- * @param control The bit map control.
- * @return int The error number (errno). No error if 0.
+ * @param[in] control is the bit map control.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_bitmap_close (rtems_rfs_bitmap_control* control);
 

@@ -75,8 +75,9 @@ typedef struct _rtems_rfs_format_config
 /**
  * RFS Format command.
  *
- * @param name The device name to format.
- * @param config Pointer to a configuration table.
+ * @param[in] name is the device name to format.
+ * @param[in] config is a pointer to the configuration table.
+ *
  * @retval -1 Error. See errno.
  * @retval 0 No error. Format successful.
  */

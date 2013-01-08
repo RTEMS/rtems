@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Data forward decl
+ * @brief RTEMS File Systems Data Forward Declaration
  *
  * @ingroup rtems-rfs
  *

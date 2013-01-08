@@ -26,9 +26,10 @@
 /**
  * Compute a hash of the key over the length of string.
  *
- * @param key The key to calculate the hash of.
- * @param length The length of the key in bytes.
- * @return uint32_t The hash.
+ * @param[in] key is a pointer to the key to calculate the hash of.
+ * @param[in] length is the length of the key in bytes.
+ *
+ * @retval hash The computed uint32_t hash.
  */
 uint32_t rtems_rfs_dir_hash (const void *key, size_t length);
 

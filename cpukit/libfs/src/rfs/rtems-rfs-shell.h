@@ -1,6 +1,5 @@
 /**
  * @file
- *
  * 
  * @ingroup rtems-rfs
  * @brief RTEMS File Systems Shell Commands
@@ -27,18 +26,22 @@
 /**
  * The shell command for the RFS debugger.
  *
- * @param argc The argument count.
- * @param argv The argument variables.
- * @return int The exit code for the command. A 0 is no error.
+ * @param[in] argc is the argument count.
+ * @param[in] argv is a pointer to the argument variables.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_shell_debugrfs (int argc, char *argv[]);
 
 /**
  * The shell command for formatting an RFS file system.
  *
- * @param argc The argument count.
- * @param argv The argument variables.
- * @return int The exit code for the command. A 0 is no error.
+ * @param[in] argc is the argument count.
+ * @param[in] argv is a pointer to the argument variables.
+ *
+ * @retval 0 Successful operation.
+ * @retval 1 An error occurred.
  */
 int rtems_shell_rfs_format (int argc, char* argv[]);
 

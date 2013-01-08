@@ -30,9 +30,10 @@
 /**
  * Get a block number in the media format and return it in the host format.
  *
- * @param _h The buffer handle of the block.
- * @param _b The block number index.
- * @return uint32_t The block number.
+ * @param[in] _h is the buffer handle of the block.
+ * @param[in] _b is the block number index.
+ *
+ * @retval block The block number.
  */
 #define rtems_rfs_block_get_number(_h, _b) \
   ((rtems_rfs_block_no) \
@@ -42,10 +43,10 @@
 /**
  * Set a block number in the media format given a number in the host format.
  *
- * @param _h The buffer handle of the block.
- * @param _b The block number index, ie the number of block number not the
+ * @param[in] _h is the buffer handle of the block.
+ * @param[in] _b is the block number index, ie the number of block number not the
  *           buffer offset.
- * @param _n The block number.
+ * @param[in] _n is the block number.
  */
 #define rtems_rfs_block_set_number(_h, _b, _n) \
   do { \
@@ -195,8 +196,8 @@ typedef struct rtems_rfs_block_map_s
 /**
  * Set the size offset for the map. The map is tagged as dirty.
  *
- * @param map Pointer to the open map to set the offset in.
- * @param offset The offset to set in the map's size.
+ * @param[in] map is a pointer to the open map to set the offset in.
+ * @param[in] offset is the offset to set in the map's size.
  */
 static inline void
 rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
@@ -209,8 +210,8 @@ rtems_rfs_block_map_set_size_offset (rtems_rfs_block_map* map,
 /**
  * Set the map's size. The map is tagged as dirty.
  *
- * @param map Pointer to the open map to set the offset in.
- * @param size The size to set in the map's size.
+ * @param[in] map is a pointer to the open map to set the offset in.
+ * @param[in] size is the size to set in the map's size.
  */
 static inline void
 rtems_rfs_block_map_set_size (rtems_rfs_block_map*  map,
@@ -224,10 +225,12 @@ rtems_rfs_block_map_set_size (rtems_rfs_block_map*  map,
  * map. The buffer handles are opened. The block position is set to the start
  * so a seek of offset 0 will return the first block.
  *
- * @param fs The file system data.
- * @param inode The inode the map belongs to.
- * @param map The map that is opened.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] inode is a pointer to the inode the map belongs to.
+ * @param[in] map is a pointer to the map that is opened.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
                               rtems_rfs_inode_handle* inode,
@@ -237,9 +240,11 @@ int rtems_rfs_block_map_open (rtems_rfs_file_system*  fs,
  * Close the map. The buffer handles are closed and any help buffers are
  * released.
  *
- * @param fs The file system data.
- * @param map The map that is opened.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the map that is opened.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_close (rtems_rfs_file_system* fs,
                                rtems_rfs_block_map*   map);
@@ -247,11 +252,13 @@ int rtems_rfs_block_map_close (rtems_rfs_file_system* fs,
 /**
  * Find a block number in the map from the position provided.
  *
- * @param fs The file system data.
- * @param map The map to search.
- * @param bpos The block position to find.
- * @param block Pointer to place the block in when found.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the map to search.
+ * @param[in] bpos is a pointer to the block position to find.
+ * @param[out] block will contain the block in when found.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_find (rtems_rfs_file_system*  fs,
                               rtems_rfs_block_map*    map,
@@ -261,12 +268,14 @@ int rtems_rfs_block_map_find (rtems_rfs_file_system*  fs,
 /**
  * Seek around the map.
  *
- * @param fs The file system data.
- * @param map The map to search.
- * @param offset The distance to seek. It is signed.
- * @param block Pointer to place the block in when found.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the map to search.
+ * @param[in] offset is the distance to seek. It is signed.
+ * @param[out] block will contain the block in when found.
+ *
+ * @retval 0 Successful operation.
  * @retval ENXIO Failed to seek because it is outside the block map.
- * @return int The error number (errno). No error if 0.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_seek (rtems_rfs_file_system*  fs,
                               rtems_rfs_block_map*    map,
@@ -276,11 +285,13 @@ int rtems_rfs_block_map_seek (rtems_rfs_file_system*  fs,
 /**
  * Seek to the next block.
  *
- * @param fs The file system data.
- * @param map The map to search.
- * @param block Pointer to place the block in when found.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the map to search.
+ * @param[out] block will contain the block in when found.
+ *
+ * @retval 0 Successful operation.
  * @retval ENXIO Failed to seek because it is outside the block map.
- * @return int The error number (errno). No error if 0.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_next_block (rtems_rfs_file_system*  fs,
                                     rtems_rfs_block_map*    map,
@@ -289,11 +300,14 @@ int rtems_rfs_block_map_next_block (rtems_rfs_file_system*  fs,
 /**
  * Grow the block map by the specified number of blocks.
  *
- * @param fs The file system data.
- * @param map Pointer to the open map to grow.
- * @param blocks The number of blocks to grow the map by.
- * @param new_block The first of the blocks allocated to the map.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the open map to grow.
+ * @param[in] blocks is the number of blocks to grow the map by.
+ * @param[out] new_block will contain first of the blocks allocated
+ *                  to the map.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
                               rtems_rfs_block_map*   map,
@@ -303,11 +317,13 @@ int rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
 /**
  * Grow the block map by the specified number of blocks.
  *
- * @param fs The file system data.
- * @param map Pointer to the open map to shrink.
- * @param blocks The number of blocks to shrink the map by. If more than the
- *               number of blocks the map is emptied.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the open map to shrink.
+ * @param[in] blocks is the number of blocks to shrink the map by. If more
+ *               than the number of blocks the map is emptied.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
                                 rtems_rfs_block_map*   map,
@@ -316,9 +332,11 @@ int rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
 /**
  * Free all blocks in the map.
  *
- * @param fs The file system data.
- * @param map Pointer to the open map to free all blocks from.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] map is a pointer to the open map to free all blocks from.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_block_map_free_all (rtems_rfs_file_system* fs,
                                   rtems_rfs_block_map*   map);
