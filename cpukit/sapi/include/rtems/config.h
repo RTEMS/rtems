@@ -1,5 +1,5 @@
 /**
- * @file rtems/config.h
+ * @file
  *
  * @brief Table of User Defined Configuration Parameters
  *
@@ -79,9 +79,10 @@ typedef struct {
   /** This is the maximum number of proxies. */
   uint32_t            maximum_proxies;
 
-  /** The MPCI Receive server is assumed to have a stack of at least
-   *  minimum stack size.  This field specifies the amount of extra
-   *  stack this task will be given in bytes.
+  /** 
+   * The MPCI Receive server is assumed to have a stack of at least
+   * minimum stack size.  This field specifies the amount of extra
+   * stack this task will be given in bytes.
    */
   uint32_t            extra_mpci_receive_server_stack;
 
@@ -93,14 +94,14 @@ typedef struct {
 /**
  * @brief Task stack allocator initialization hook.
  *
- * @param[in] stack_space_size Size of the stack space in bytes.
+ * @param[in] stack_space_size is the size of the stack space in bytes.
  */
 typedef void (*rtems_stack_allocate_init_hook)( size_t stack_space_size );
 
 /**
  * @brief Task stack allocator hook.
  *
- * @param[in] stack_size Size of the task stack in bytes.
+ * @param[in] stack_size is the Size of the task stack in bytes.
  *
  * @retval NULL Not enough memory.
  * @retval other Pointer to task stack.
@@ -110,7 +111,7 @@ typedef void *(*rtems_stack_allocate_hook)( size_t stack_size );
 /**
  * @brief Task stack deallocator hook.
  *
- * @param[in] addr Pointer to previously allocated task stack.
+ * @param[in] addr is a pointer to previously allocated task stack.
  */
 typedef void (*rtems_stack_free_hook)( void *addr );
 
@@ -126,49 +127,58 @@ typedef void (*rtems_stack_free_hook)( void *addr );
  *     + required number of each object type for each API configured
  */
 typedef struct {
-  /** This field specifies the size in bytes of the RTEMS Workspace.
+  /**
+   * This field specifies the size in bytes of the RTEMS Workspace.
    */
   uintptr_t                      work_space_size;
 
-  /** This field specifies the size in bytes of the RTEMS thread stack space.
+  /**
+   * This field specifies the size in bytes of the RTEMS thread stack space.
    */
   uintptr_t                      stack_space_size;
 
-  /** This field specifies the maximum number of dynamically installed
-   *  used extensions.
+  /** 
+   * This field specifies the maximum number of dynamically installed
+   * used extensions.
    */
   uint32_t                       maximum_extensions;
 
-  /** This field specifies the number of microseconds which elapse
-   *  between clock ticks.  This is the basis for RTEMS timing.
+  /** 
+   * This field specifies the number of microseconds which elapse
+   * between clock ticks.  This is the basis for RTEMS timing.
    */
   uint32_t                       microseconds_per_tick;
 
-  /** This field specifies the number of nanoseconds which elapse
-   *  between clock ticks.  This value is derived from the
-   *  microseconds_per_tick field and provided to avoid calculation at
-   *  run-time.
+  /** 
+   * This field specifies the number of nanoseconds which elapse
+   * between clock ticks.  This value is derived from the
+   * microseconds_per_tick field and provided to avoid calculation at
+   * run-time.
    */
   uint32_t                       nanoseconds_per_tick;
 
-  /** This field specifies the number of ticks in each task's timeslice.
+  /** 
+   * This field specifies the number of ticks in each task's timeslice.
    */
   uint32_t                       ticks_per_timeslice;
 
-  /** This element points to the BSP's optional idle task which may override
-   *  the default one provided with RTEMS.
+  /** 
+   * This element points to the BSP's optional idle task which may override
+   * the default one provided with RTEMS.
    */
   Thread                       (*idle_task)( uintptr_t );
 
-  /** This field specifies the size of the IDLE task's stack.  If less than or
-   *  equal to the minimum stack size, then the IDLE task will have the minimum
-   *  stack size.
+  /** 
+   * This field specifies the size of the IDLE task's stack.  If less than or
+   * equal to the minimum stack size, then the IDLE task will have the minimum
+   * stack size.
    */
   uint32_t                       idle_task_stack_size;
 
-  /** This field specifies the size of the interrupt stack.  If less than or
-   *  equal to the minimum stack size, then the interrupt stack will be of
-   *  minimum stack size.
+  /** 
+   * This field specifies the size of the interrupt stack.  If less than or
+   * equal to the minimum stack size, then the interrupt stack will be of
+   * minimum stack size.
    */
   uint32_t                       interrupt_stack_size;
 
@@ -187,10 +197,11 @@ typedef struct {
    */
   rtems_stack_free_hook          stack_free_hook;
 
-  /** If this element is TRUE, then RTEMS will zero the Executive Workspace.
-   *  When this element is FALSE, it is assumed that the BSP or invoking
-   *  environment has ensured that memory was cleared before RTEMS was
-   *  invoked.
+  /** 
+   * If this element is TRUE, then RTEMS will zero the Executive Workspace.
+   * When this element is FALSE, it is assumed that the BSP or invoking
+   * environment has ensured that memory was cleared before RTEMS was
+   * invoked.
    */
   bool                           do_zero_of_workspace;
 
@@ -222,23 +233,23 @@ typedef struct {
 } rtems_configuration_table;
 
 /**
- *   This is the configuration table generated by confdefs.h.
+ * This is the configuration table generated by confdefs.h.
  */
 extern const rtems_configuration_table Configuration;
 
 #if defined(RTEMS_MULTIPROCESSING)
   /**
-   *   This points to the multiprocessing configuration table.
+   *  This points to the multiprocessing configuration table.
    */
   SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
 #endif
 
 #if defined(RTEMS_MULTIPROCESSING)
   /**
-   *  @brief RTEMS Multiprocessing Configuration Table
+   * @brief RTEMS multiprocessing configuration table.
    *
-   *  This is the RTEMS Multiprocessing Configuration Table expected to
-   *  be generated by confdefs.h.
+   * This is the RTEMS Multiprocessing Configuration Table expected to
+   * be generated by confdefs.h.
    */
   extern rtems_multiprocessing_table  Multiprocessing_configuration;
 #endif
@@ -294,7 +305,7 @@ extern const rtems_configuration_table Configuration;
 #define rtems_configuration_get_stack_free_hook() \
         (Configuration.stack_free_hook)
 
-/**
+ /**
   * This macro assists in accessing the field which indicates whether
   * RTEMS is responsible for zeroing the Executive Workspace.
   */

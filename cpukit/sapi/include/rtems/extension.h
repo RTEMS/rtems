@@ -1,8 +1,6 @@
 /**
  * @file
- *
- * @ingroup ClassicUserExtensions
- *
+ * 
  * @brief User Extensions API.
  */
 
@@ -39,7 +37,7 @@ typedef struct {
 }   Extension_Control;
 
 /**
- *  @brief Initialize Extension Manager
+ *  @brief Initialize extension manager.
  *
  *  This routine initializes all extension manager related data structures.
  */

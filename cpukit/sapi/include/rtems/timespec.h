@@ -26,9 +26,10 @@
  *  @ingroup ClassicRTEMS
  *
  *  @brief Timespec API
+ * 
+ * @{
  *
  */
-/**@{*/
 
 #include <stdbool.h> /* bool */
 #include <stdint.h> /* uint32_t */
@@ -40,11 +41,11 @@ extern "C" {
 
 #include <rtems/timespec.inl>
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

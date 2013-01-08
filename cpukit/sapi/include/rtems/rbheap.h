@@ -2,8 +2,6 @@
  * @file
  *
  * @brief Red-Black Tree Heap API
- *
- * @ingroup RBHeap
  */
 
 /*
@@ -34,7 +32,7 @@ extern "C" {
 /**
  * @defgroup RBHeap Red-Black Tree Heap
  *
- * @brief Red-Black Tree Heap API.
+ * @brief Red-Black Tree Heap API
  *
  * The red-black tree heap provides a memory allocator suitable to implement
  * the malloc() and free() interface.  It uses a first-fit allocation strategy.
@@ -146,13 +144,13 @@ struct rtems_rbheap_control {
 /**
  * @brief Initializes the red-black tree heap @a control.
  *
- * @param[in, out] control The red-black tree heap.
- * @param[in] area_begin The managed memory area begin.
- * @param[in] area_size The managed memory area size.
- * @param[in] alignment The minimum chunk alignment.
- * @param[in] extend_descriptors The handler to extend the available chunk
+ * @param[in, out] control is the red-black tree heap.
+ * @param[in] area_begin is the managed memory area begin.
+ * @param[in] area_size is the managed memory area size.
+ * @param[in] alignment is the minimum chunk alignment.
+ * @param[in] extend_descriptors is the handler to extend the available chunk
  * descriptors.
- * @param[in] handler_arg The handler argument.
+ * @param[in] handler_arg is the handler argument.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_NUMBER The alignment is not positive.
@@ -175,8 +173,8 @@ rtems_status_code rtems_rbheap_initialize(
  * The chunk begin is aligned by the value specified in
  * rtems_rbheap_initialize().
  *
- * @param[in, out] control The red-black tree heap.
- * @param[in] size The requested chunk size in bytes.
+ * @param[in, out] control is the red-black tree heap.
+ * @param[in] size is the requested chunk size in bytes.
  *
  * @retval NULL Not enough free space in the heap.
  * @retval otherwise Pointer to allocated chunk of memory.
@@ -184,16 +182,17 @@ rtems_status_code rtems_rbheap_initialize(
 void *rtems_rbheap_allocate(rtems_rbheap_control *control, size_t size);
 
 /**
- * @brief Frees a chunk of memory @a ptr allocated from the red-black tree heap
- * @a control.
+ * @brief Frees a chunk of memory @a ptr allocated from the red-black 
+ * tree heap @a control.
  *
- * @param[in, out] control The red-black tree heap.
- * @param[in] ptr The pointer to the chunk of memory.
+ * @param[in, out] control is the red-black tree heap.
+ * @param[in] ptr is a pointer to the chunk of memory.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ID The chunk of memory is not a valid chunk in the
  * red-black tree heap.
- * @retval RTEMS_INCORRECT_STATE The chunk of memory is not in the right state.
+ * @retval RTEMS_INCORRECT_STATE The chunk of memory is not in the 
+ * right state.
  */
 rtems_status_code rtems_rbheap_free(rtems_rbheap_control *control, void *ptr);
 

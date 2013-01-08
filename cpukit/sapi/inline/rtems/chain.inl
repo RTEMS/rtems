@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicChains
- *
- * @brief Chain API.
+ * @brief Chain API
  */
  
 /*
@@ -33,17 +31,17 @@
  */
 
 /**
- *  @brief Initialize a Chain Header
+ * @brief Initialize a chain Header.
  *
- *  This routine initializes @a the_chain structure to manage the
- *  contiguous array of @a number_nodes nodes which starts at
- *  @a starting_address.  Each node is of @a node_size bytes.
+ * This routine initializes @a the_chain structure to manage the
+ * contiguous array of @a number_nodes nodes which starts at
+ * @a starting_address.  Each node is of @a node_size bytes.
  *
- *  @param[in] the_chain specifies the chain to initialize
- *  @param[in] starting_address is the starting address of the array
- *         of elements
- *  @param[in] number_nodes is the number of nodes that will be in the chain
- *  @param[in] node_size is the size of each node
+ * @param[in] the_chain specifies the chain to initialize
+ * @param[in] starting_address is the starting address of the array
+ *        of elements
+ * @param[in] number_nodes is the number of nodes that will be in the chain
+ * @param[in] node_size is the size of each node
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_initialize(
   rtems_chain_control *the_chain,
@@ -56,11 +54,11 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize(
 }
 
 /**
- *  @brief Initialize this Chain as Empty
+ * @brief Initialize this chain as empty.
  *
- *  This routine initializes the specified chain to contain zero nodes.
+ * This routine initializes the specified chain to contain zero nodes.
  *
- *  @param[in] the_chain is the chain to be initialized.
+ * @param[in] the_chain is the chain to be initialized.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
   rtems_chain_control *the_chain
@@ -70,12 +68,12 @@ RTEMS_INLINE_ROUTINE void rtems_chain_initialize_empty(
 }
 
 /**
- *  @brief Set off chain
+ * @brief Set off chain.
  *
- *  This function sets the next and previous fields of the @a node to NULL
- *  indicating the @a node is not part of a chain.
+ * This function sets the next and previous fields of the @a node to NULL
+ * indicating the @a node is not part of a chain.
  *
- *  @param[in] node the node set to off chain.
+ * @param[in] node the node set to off chain.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_set_off_chain(
   rtems_chain_node *node
@@ -85,14 +83,15 @@ RTEMS_INLINE_ROUTINE void rtems_chain_set_off_chain(
 }
 
 /**
- *  @brief Is the Node off Chain
+ * @brief Is the node off chain.
  *
- *  This function returns true if the @a node is not on a chain. A @a node is
- *  off chain if the next and previous fields are set to NULL.
+ * This function returns true if the @a node is not on a chain. A @a node is
+ * off chain if the next and previous fields are set to NULL.
  *
- *  @param[in] node is the node off chain.
+ * @param[in] node is the node off chain.
  *
- *  @return This function returns true if the @a node is off chain.
+ * @retval true The node is off chain.
+ * @retval false The node is not off chain.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_node_off_chain(
   const rtems_chain_node *node
@@ -102,13 +101,14 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_node_off_chain(
 }
 
 /**
- *  @brief Is the Chain Node Pointer NULL
+ * @brief Is the chain node pointer NULL.
  *
- *  This function returns true if the_node is NULL and false otherwise.
+ * This function returns true if the_node is NULL and false otherwise.
  *
- *  @param[in] the_node is the node pointer to check.
- *
- *  @return This method returns true if the_node is NULL and false otherwise.
+ * @param[in] the_node is the node pointer to check.
+ * 
+ * @retval true The chain node pointer is NULL.
+ * @retval false The chain node pointer is not NULL.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
   const rtems_chain_node *the_node
@@ -118,13 +118,13 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
 }
 
 /**
- *  @brief Return pointer to Chain Head
+ * @brief Return pointer to Chain Head
  *
- *  This function returns a pointer to the first node on the chain.
+ * This function returns a pointer to the first node on the chain.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the permanent  node of the chain.
+ * @return This method returns the permanent node of the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
   rtems_chain_control *the_chain
@@ -133,13 +133,14 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_head(
   return _Chain_Head( the_chain );
 }
 
-/** @brief Return pointer to immutable Chain Head
+/**
+ * @brief Return pointer to immutable Chain Head
  *
- *  This function returns a pointer to the head node on the chain.
+ * This function returns a pointer to the head node on the chain.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the permanent head node of the chain.
+ * @return This method returns the permanent head node of the chain.
  */
 RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_head(
   const rtems_chain_control *the_chain
@@ -149,13 +150,13 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_head(
 }
 
 /**
- *  @brief Return pointer to Chain Tail
+ * @brief Return pointer to Chain Tail
  *
- *  This function returns a pointer to the tail node on the chain.
+ * This function returns a pointer to the tail node on the chain.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the permanent tail node of the chain.
+ * @return This method returns the permanent tail node of the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
   rtems_chain_control *the_chain
@@ -164,13 +165,14 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_tail(
   return _Chain_Tail( the_chain );
 }
 
-/** @brief Return pointer to immutable Chain Tail
+/** 
+ * @brief Return pointer to immutable Chain Tail
  *
- *  This function returns a pointer to the tail node on the chain.
+ * This function returns a pointer to the tail node on the chain.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the permanent tail node of the chain.
+ * @return This method returns the permanent tail node of the chain.
  */
 RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_tail(
   const rtems_chain_control *the_chain
@@ -180,14 +182,14 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_tail(
 }
 
 /**
- *  @brief Return pointer to Chain's First node after the permanent head.
+ * @brief Return pointer to Chain's First node after the permanent head.
  *
- *  This function returns a pointer to the first node on the chain after the
- *  head.
+ * This function returns a pointer to the first node on the chain after the
+ * head.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the first node of the chain.
+ * @return This method returns the first node of the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
   rtems_chain_control *the_chain
@@ -196,14 +198,15 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_first(
   return _Chain_First( the_chain );
 }
 
-/** @brief Return pointer to immutable Chain's First node
+/** 
+ * @brief Return pointer to immutable Chain's First node
  *
- *  This function returns a pointer to the first node on the chain after the
- *  head.
+ * This function returns a pointer to the first node on the chain after the
+ * head.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the first node of the chain.
+ * @return This method returns the first node of the chain.
  */
 RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_first(
   const rtems_chain_control *the_chain
@@ -213,14 +216,14 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_first(
 }
 
 /**
- *  @brief Return pointer to Chain's Last node before the permanent tail.
+ * @brief Return pointer to Chain's Last node before the permanent tail.
  *
- *  This function returns a pointer to the last node on the chain just before
- *  the tail.
+ * This function returns a pointer to the last node on the chain just before
+ * the tail.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the last node of the chain.
+ * @return This method returns the last node of the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
   rtems_chain_control *the_chain
@@ -229,14 +232,15 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_last(
   return _Chain_Last( the_chain );
 }
 
-/** @brief Return pointer to immutable Chain's Last node
+/**
+ * @brief Return pointer to immutable Chain's Last node
  *
- *  This function returns a pointer to the last node on the chain just before
- *  the tail.
+ * This function returns a pointer to the last node on the chain just before
+ * the tail.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This method returns the last node of the chain.
+ * @return This method returns the last node of the chain.
  */
 RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_last(
   const rtems_chain_control *the_chain
@@ -246,13 +250,13 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_last(
 }
 
 /**
- *  @brief Return pointer the next node from this node
+ * @brief Return pointer the next node from this node
  *
- *  This function returns a pointer to the next node after this node.
+ * This function returns a pointer to the next node after this node.
  *
- *  @param[in] the_node is the node to be operated upon.
+ * @param[in] the_node is the node to be operated upon.
  *
- *  @return This method returns the next node on the chain.
+ * @return This method returns the next node on the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
   rtems_chain_node *the_node
@@ -261,13 +265,14 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_next(
   return _Chain_Next( the_node );
 }
 
-/** @brief Return pointer the immutable next node from this node
+/** 
+ * @brief Return pointer the immutable next node from this node
  *
- *  This function returns a pointer to the next node after this node.
+ * This function returns a pointer to the next node after this node.
  *
- *  @param[in] the_node is the node to be operated upon.
+ * @param[in] the_node is the node to be operated upon.
  *
- *  @return This method returns the next node on the chain.
+ * @return This method returns the next node on the chain.
  */
 RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_next(
   const rtems_chain_node *the_node
@@ -277,13 +282,13 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_next(
 }
 
 /**
- *  @brief Return pointer the previous node from this node
+ * @brief Return pointer the previous node from this node
  *
- *  This function returns a pointer to the previous node on this chain.
+ * This function returns a pointer to the previous node on this chain.
  *
- *  @param[in] the_node is the node to be operated upon.
+ * @param[in] the_node is the node to be operated upon.
  *
- *  @return This method returns the previous node on the chain.
+ * @return This method returns the previous node on the chain.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_previous(
   rtems_chain_node *the_node
@@ -292,13 +297,14 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_previous(
   return _Chain_Previous( the_node );
 }
 
-/** @brief Return pointer the immutable previous node from this node
+/**
+ * @brief Return pointer the immutable previous node from this node.
  *
- *  This function returns a pointer to the previous node on this chain.
+ * This function returns a pointer to the previous node on this chain.
  *
- *  @param[in] the_node is the node to be operated upon.
+ * @param[in] the_node is the node to be operated upon.
  *
- *  @return This method returns the previous node on the chain.
+ * @return This method returns the previous node on the chain.
  */
 RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_previous(
   const rtems_chain_node *the_node
@@ -308,16 +314,16 @@ RTEMS_INLINE_ROUTINE const rtems_chain_node *rtems_chain_immutable_previous(
 }
 
 /**
- *  @brief Are Two Nodes Equal
+ * @brief Are Two nodes equal.
  *
- *  This function returns true if @a left and @a right are equal,
- *  and false otherwise.
+ * This function returns true if @a left and @a right are equal,
+ * and false otherwise.
  *
- *  @param[in] left is the node on the left hand side of the comparison.
- *  @param[in] right is the node on the left hand side of the comparison.
+ * @param[in] left is the node on the left hand side of the comparison.
+ * @param[in] right is the node on the left hand side of the comparison.
  *
- *  @return This function returns true if @a left and @a right are equal,
- *          and false otherwise.
+ * @retval true @a left is equal to @a right.
+ * @retval false @a left is not equal to @a right
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_are_nodes_equal(
   const rtems_chain_node *left,
@@ -328,15 +334,15 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_are_nodes_equal(
 }
 
 /**
- *  @brief Is the Chain Empty
+ * @brief Is the chain empty
  *
- *  This function returns true if there a no nodes on @a the_chain and
- *  false otherwise.
+ * This function returns true if there a no nodes on @a the_chain and
+ * false otherwise.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This function returns true if there a no nodes on @a the_chain and
- *  false otherwise.
+ * @retval true The chain is empty.
+ * @retval false The chain is not empty.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
   const rtems_chain_control *the_chain
@@ -346,16 +352,16 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_empty(
 }
 
 /**
- *  @brief Is this the First Node on the Chain
+ * @brief Is this the first node on the chain.
  *
- *  This function returns true if the_node is the first node on a chain and
- *  false otherwise.
+ * This function returns true if the_node is the first node on a chain and
+ * false otherwise.
  *
- *  @param[in] the_node is the node the caller wants to know if it is
- *             the first node on a chain.
+ * @param[in] the_node is the node the caller wants to know if it is
+ *            the first node on a chain.
  *
- *  @return This function returns true if @a the_node is the first node on
- *          a chain and false otherwise.
+ * @retval true @a the_node is the first node on a chain.
+ * @retval false @a the_node is not the first node on a chain.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_first(
   const rtems_chain_node *the_node
@@ -365,15 +371,15 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_first(
 }
 
 /**
- *  @brief Is this the Last Node on the Chain
+ * @brief Is this the last node on the chain.
  *
- *  This function returns true if @a the_node is the last node on a chain and
- *  false otherwise.
+ * This function returns true if @a the_node is the last node on a chain and
+ * false otherwise.
  *
- *  @param[in] the_node is the node to check as the last node.
+ * @param[in] the_node is the node to check as the last node.
  *
- *  @return This function returns true if @a the_node is the last node on
- *          a chain and false otherwise.
+ * @retval true @a the_node is the last node on a chain.
+ * @retval false @a the_node is not the last node on a chain
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_last(
   const rtems_chain_node *the_node
@@ -383,15 +389,15 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_last(
 }
 
 /**
- *  @brief Does this Chain have only One Node
+ * @brief Does this chain have only one node.
  *
- *  This function returns true if there is only one node on @a the_chain and
- *  false otherwise.
+ * This function returns true if there is only one node on @a the_chain and
+ * false otherwise.
  *
- *  @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_chain is the chain to be operated upon.
  *
- *  @return This function returns true if there is only one node on
- *          @a the_chain and false otherwise.
+ * @retval true The chain has only one node.
+ * @retval false The chain has more than one nodes.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
   const rtems_chain_control *the_chain
@@ -401,16 +407,16 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_has_only_one_node(
 }
 
 /**
- *  @brief Is this Node the Chain Head
+ * @brief Is this node the chain head.
  *
- *  This function returns true if @a the_node is the head of the_chain and
- *  false otherwise.
+ * This function returns true if @a the_node is the head of the_chain and
+ * false otherwise.
  *
- *  @param[in] the_chain is the chain to be operated upon.
- *  @param[in] the_node is the node to check for being the Chain Head.
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to check for being the Chain Head.
  *
- *  @return This function returns true if @a the_node is the head of
- *          @a the_chain and false otherwise.
+ * @retval true @a the_node is the head of @a the_chain.
+ * @retval false @a the_node is not the head of @a the_chain.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
   const rtems_chain_control *the_chain,
@@ -421,13 +427,16 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_head(
 }
 
 /**
- *  @brief Is this Node the Chail Tail
+ * @brief Is this node the chain tail.
  *
- *  This function returns true if the_node is the tail of the_chain and
- *  false otherwise.
+ * This function returns true if the_node is the tail of the_chain and
+ * false otherwise.
  *
- *  @param[in] the_chain is the chain to be operated upon.
- *  @param[in] the_node is the node to check for being the Chain Tail.
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to check for being the Chain Tail.
+ * 
+ * @retval true @a the_node is the tail of @a the_chain.
+ * @retval false @a the_node is not the tail of @a the_chain.
  */
 RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
   const rtems_chain_control *the_chain,
@@ -438,13 +447,13 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_tail(
 }
 
 /**
- *  @brief Extract the specified node from a chain
+ * @brief Extract the specified node from a chain.
  *
- *  This routine extracts @a the_node from the chain on which it resides.
- *  It disables interrupts to ensure the atomicity of the
- *  extract operation.
+ * This routine extracts @a the_node from the chain on which it resides.
+ * It disables interrupts to ensure the atomicity of the
+ * extract operation.
  *
- *  @arg the_node specifies the node to extract
+ * @arg the_node specifies the node to extract
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_extract(
   rtems_chain_node *the_node
@@ -454,12 +463,12 @@ RTEMS_INLINE_ROUTINE void rtems_chain_extract(
 }
 
 /**
- *  @brief Extract the specified node from a chain (unprotected).
+ * @brief Extract the specified node from a chain (unprotected).
  *
- *  This routine extracts @a the_node from the chain on which it resides.
+ * This routine extracts @a the_node from the chain on which it resides.
  *
- *  @note It does NOT disable interrupts to ensure the atomicity of the
- *  append operation.
+ * NOTE: It does NOT disable interrupts to ensure the atomicity of the
+ * append operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_extract_unprotected(
   rtems_chain_node *the_node
@@ -469,16 +478,16 @@ RTEMS_INLINE_ROUTINE void rtems_chain_extract_unprotected(
 }
 
 /**
- *  @brief Obtain the first node on a chain
+ * @brief Obtain the first node on a chain.
  *
- *  This function removes the first node from @a the_chain and returns
- *  a pointer to that node.  If @a the_chain is empty, then NULL is returned.
+ * This function removes the first node from @a the_chain and returns
+ * a pointer to that node.  If @a the_chain is empty, then NULL is returned.
  *
- *  @return This method returns a pointer a node.  If a node was removed,
- *          then a pointer to that node is returned.  If @a the_chain was
- *          empty, then NULL is returned.
+ * @return This method returns a pointer a node.  If a node was removed,
+ *         then a pointer to that node is returned.  If @a the_chain was
+ *         empty, then NULL is returned.
  *
- *  @note It disables interrupts to ensure the atomicity of the get operation.
+ *  NOTE: It disables interrupts to ensure the atomicity of the get operation.
  */
 RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get(
   rtems_chain_control *the_chain
@@ -498,13 +507,13 @@ RTEMS_INLINE_ROUTINE rtems_chain_node *rtems_chain_get_unprotected(
 }
 
 /**
- *  @brief Insert a node on a chain
+ * @brief Insert a node on a chain
  *
- *  This routine inserts @a the_node on a chain immediately following
- *  @a after_node.  
+ * This routine inserts @a the_node on a chain immediately following
+ * @a after_node.  
  *
- *  @note It disables interrupts to ensure the atomicity
- *  of the extract operation.
+ * NOTE: It disables interrupts to ensure the atomicity
+ * of the extract operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_insert(
   rtems_chain_node *after_node,
@@ -526,12 +535,12 @@ RTEMS_INLINE_ROUTINE void rtems_chain_insert_unprotected(
 }
 
 /**
- *  @brief Append a node on the end of a chain
+ * @brief Append a node on the end of a chain.
  *
- *  This routine appends @a the_node onto the end of @a the_chain.
+ * This routine appends @a the_node onto the end of @a the_chain.
  *
- *  @note It disables interrupts to ensure the atomicity of the
- *  append operation.
+ * NOTE: It disables interrupts to ensure the atomicity of the
+ * append operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_append(
   rtems_chain_control *the_chain,
@@ -542,12 +551,12 @@ RTEMS_INLINE_ROUTINE void rtems_chain_append(
 }
 
 /**
- *  @brief Append a node on the end of a chain (unprotected)
+ * @brief Append a node on the end of a chain (unprotected).
  *
- *  This routine appends @a the_node onto the end of @a the_chain.
+ * This routine appends @a the_node onto the end of @a the_chain.
  *
- *  @note It does NOT disable interrupts to ensure the atomicity of the
- *  append operation.
+ * NOTE: It does NOT disable interrupts to ensure the atomicity of the
+ * append operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_append_unprotected(
   rtems_chain_control *the_chain,
@@ -557,15 +566,16 @@ RTEMS_INLINE_ROUTINE void rtems_chain_append_unprotected(
   _Chain_Append_unprotected( the_chain, the_node );
 }
 
-/** @brief Prepend a Node
+/** 
+ * @brief Prepend a node.
  *
- *  This routine prepends the_node onto the front of the_chain.
+ * This routine prepends the_node onto the front of the_chain.
  *
- *  @param[in] the_chain is the chain to be operated upon.
- *  @param[in] the_node is the node to be prepended.
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to be prepended.
  *
- *  @note It disables interrupts to ensure the atomicity of the
- *        prepend operation.
+ * NOTE: It disables interrupts to ensure the atomicity of the
+ *       prepend operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_prepend(
   rtems_chain_control *the_chain,
@@ -575,15 +585,16 @@ RTEMS_INLINE_ROUTINE void rtems_chain_prepend(
   _Chain_Prepend( the_chain, the_node );
 }
 
-/** @brief Prepend a Node (unprotected)
+/** 
+ * @brief Prepend a node (unprotected).
  *
- *  This routine prepends the_node onto the front of the_chain.
+ * This routine prepends the_node onto the front of the_chain.
  *
- *  @param[in] the_chain is the chain to be operated upon.
- *  @param[in] the_node is the node to be prepended.
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to be prepended.
  *
- *  @note It does NOT disable interrupts to ensure the atomicity of the
- *        prepend operation.
+ * NOTE: It does NOT disable interrupts to ensure the atomicity of the
+ *       prepend operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_chain_prepend_unprotected(
   rtems_chain_control *the_chain,

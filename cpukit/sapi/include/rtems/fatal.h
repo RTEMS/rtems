@@ -1,8 +1,6 @@
 /**
  * @file
  *
- * @ingroup ClassicFatal
- *
  * @brief Fatal API.
  */
 
@@ -42,9 +40,9 @@ extern "C" {
 typedef CPU_Exception_frame rtems_exception_frame;
 
 /**
- *  @brief Prints the exception frame via printk().
+ * @brief Prints the exception frame via printk().
  *
- *  @see rtems_fatal() and RTEMS_FATAL_SOURCE_EXCEPTION.
+ * @see rtems_fatal() and RTEMS_FATAL_SOURCE_EXCEPTION.
  */
 static inline void rtems_exception_frame_print(
   const rtems_exception_frame *frame
@@ -57,9 +55,7 @@ static inline void rtems_exception_frame_print(
  * @brief Invokes the internal error handler with a source of
  * INTERNAL_ERROR_RTEMS_API and is internal set to false.
  *
- * @param[in] the_error A 32-bit fatal error code.
- *
- * @return This function will not return.
+ * @param[in] the_error is a 32-bit fatal error code.
  *
  * @see _Internal_error_Occurred().
  */
@@ -70,10 +66,8 @@ void rtems_fatal_error_occurred(
 /**
  * @brief Invokes the internal error handler with is internal set to false.
  *
- * @param[in] source The fatal source.
- * @param[in] error The fatal code.
- *
- * @return This function will not return.
+ * @param[in] source is the fatal source.
+ * @param[in] error is the fatal code.
  *
  * @see _Internal_error_Occurred().
  */
@@ -85,20 +79,20 @@ void rtems_fatal(
 /**
  * @brief Returns a description for a fatal source.
  *
- * @param[in] source The fatal source.
+ * @param[in] source is the fatal source.
  *
- * @return The fatal source description or "?" in case the passed fatal source
- * is invalid.
+ * @retval description The fatal source description.
+ * @retval ? The passed fatal source is invalid.
  */
 const char *rtems_fatal_source_description( rtems_fatal_source source );
 
 /**
  * @brief Returns a description for an internal error code.
  *
- * @param[in] error The error code.
+ * @param[in] error is the error code.
  *
- * @return The error code description or "?" in case the passed error code is
- * invalid.
+ * @retval description The error code description.
+ * @retval ? The passed error code is invalid.
  */
 const char *rtems_internal_error_description( rtems_fatal_code error );
 

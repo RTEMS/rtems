@@ -1,5 +1,5 @@
 /**
- * @file rtems/cbs.h
+ * @file
  *
  * @brief Constants and Structures Associated
  * with the CBS library in RTEMS

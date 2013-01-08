@@ -1,8 +1,10 @@
 /**
- * @file cbs.inl
- *
- *  This include file contains all the constants and structures associated
- *  with the CBS library.
+ * @file
+ * 
+ * @brief Constants and Structures Associated with the CBS Library
+ * 
+ * This include file contains all the constants and structures associated
+ * with the CBS library.
  *
  */
 
@@ -22,11 +24,11 @@
 #include <rtems/score/schedulercbs.h>
 
 /**
- *  @brief rtems cbs init
+ * @brief Initialize the CBS library.
  *
- *  Initializes the CBS library.
+ * Initializes the CBS library.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_initialize ( void )
 {
@@ -34,11 +36,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_initialize ( void )
 }
 
 /**
- *  @brief rtems cbs cleanup
+ * @brief Cleanup resources associated to the CBS Library
  *
- *  Cleanup resources associated to the CBS Library.
+ * Cleanup resources associated to the CBS Library.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_cleanup ( void )
 {
@@ -46,11 +48,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_cleanup ( void )
 }
 
 /**
- *  @brief rtems cbs create server
+ * @brief Create a new server with specified parameters.
  *
- *  Create a new server with specified parameters.
+ * Create a new server with specified parameters.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_create_server (
   rtems_cbs_parameters     *params,
@@ -66,11 +68,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_create_server (
 }
 
 /**
- *  @brief rtems cbs attach thread
+ * @brief Attach a task to an already existing server.
  *
- *  Attach a task to an already existing server.
+ * Attach a task to an already existing server.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_attach_thread (
   rtems_cbs_server_id server_id,
@@ -81,11 +83,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_attach_thread (
 }
 
 /**
- *  @brief rtems cbs detach thread
+ * @brief Detach from the CBS server.
  *
- *  Detach from the CBS Server.
+ * Detach from the CBS Server.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_detach_thread (
   rtems_cbs_server_id server_id,
@@ -96,11 +98,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_detach_thread (
 }
 
 /**
- *  @brief rtems cbs destroy server
+ * @brief Detach all tasks from a server and destroy it.
  *
- *  Detach all tasks from a server and destroy it.
+ * Detach all tasks from a server and destroy it.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_destroy_server (
   rtems_cbs_server_id server_id
@@ -110,12 +112,12 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_destroy_server (
 }
 
 /**
- *  @brief rtems cbs get server id
+ * @brief Get CBS server id.
  *
- *  Get a thread server id, or RTEMS_CBS_E_NOT_FOUND if it is not
- *  attached to any server.
+ * Get a thread server id, or RTEMS_CBS_E_NOT_FOUND if it is not
+ * attached to any server.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_get_server_id (
   rtems_id             task_id,
@@ -126,11 +128,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_server_id (
 }
 
 /**
- *  @brief rtems cbs get parameters
+ * @brief Get CBS parameters.
  *
- *  Retrieve CBS scheduling parameters.
+ * Retrieve CBS scheduling parameters.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_get_parameters (
   rtems_cbs_server_id   server_id,
@@ -141,11 +143,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_parameters (
 }
 
 /**
- *  @brief rtems cbs set parameters
+ * @brief Set CBS parameters.
  *
- *  Change CBS scheduling parameters.
+ * Change CBS scheduling parameters.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_set_parameters (
   rtems_cbs_server_id   server_id,
@@ -156,11 +158,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_set_parameters (
 }
 
 /**
- *  @brief rtems cbs get execution time
+ * @brief Get the CBS get execution time.
  *
- *  Retrieve time info relative to the current server.
+ * Retrieve time info relative to the current server.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_get_execution_time (
   rtems_cbs_server_id    server_id,
@@ -172,11 +174,11 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_execution_time (
 }
 
 /**
- *  @brief rtems cbs get remaining budget
+ * @brief Get the remaining CBS budget.
  *
- *  Retrieve remaining budget for the current server instance.
+ * Retrieve remaining budget for the current server instance.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_get_remaining_budget (
   rtems_cbs_server_id  server_id,
@@ -187,12 +189,12 @@ RTEMS_INLINE_ROUTINE int rtems_cbs_get_remaining_budget (
 }
 
 /**
- *  @brief rtems cbs get approved budget
+ * @brief Get the approved CBS budget.
  *
- *  Retrieve the budget that has been approved for the subsequent
- *  server instances.
+ * Retrieve the budget that has been approved for the subsequent
+ * server instances.
  *
- *  @return status code.
+ * @return status code.
  */
 RTEMS_INLINE_ROUTINE int rtems_cbs_get_approved_budget (
   rtems_cbs_server_id  server_id,

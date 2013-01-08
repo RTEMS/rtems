@@ -1,9 +1,7 @@
 /**
  * @file
- *
- * @ingroup ClassicChains
- *
- * @brief Chain API.
+ * 
+ * @brief Chain API
  */
 
 /*
@@ -33,7 +31,7 @@ extern "C" {
  *
  * @ingroup ClassicRTEMS
  *
- * @brief Chain API.
+ * @brief Chain API
  *
  * @{
  */
