@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/m68k.h
+ * @file
+ * 
+ * @brief Motorola M68K CPU Dependent Source
+ * 
+ * This include file contains information pertaining to the Motorola
+ * m68xxx processor family.
  */
 
 /*
- *  This include file contains information pertaining to the Motorola
- *  m68xxx processor family.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

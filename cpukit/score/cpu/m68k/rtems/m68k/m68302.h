@@ -1,7 +1,7 @@
-/*
- *------------------------------------------------------------------
+/**
+ * @file
  *
- *	m68302.h - Definitions for Motorola MC68302 processor.
+ * @brief Definitions for Motorola MC68302 Processor
  *
  * Section references in this file refer to revision 2 of Motorola's
  * "MC68302 Integrated Multiprotocol Processor User's Manual".
@@ -9,7 +9,9 @@
  *
  * Based on Don Meyer's cpu68302.h that was posted in comp.sys.m68k
  * on 17 February, 1993.
- *
+ */
+
+/*
  * COPYRIGHT 1995 David W. Glessner.
  *
  * Redistribution and use in source and binary forms are permitted

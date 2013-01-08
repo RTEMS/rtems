@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief ARMV7M Architecture Support
+ */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
@@ -474,8 +480,7 @@ void _ARMV7M_Set_exception_handler(
 );
 
 /**
- *  @brief ARMV7M Set Exception Priority and Handler
- *
+ * @brief ARMV7M set exception priority and handler.
  */
 void _ARMV7M_Set_exception_priority_and_handler(
   int index,

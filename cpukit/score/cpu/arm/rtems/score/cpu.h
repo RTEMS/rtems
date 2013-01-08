@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
- *
- * @brief ARM architecture support API.
+ * @brief ARM Architecture Support API
  */
 
 /*
@@ -399,8 +397,7 @@ void _CPU_Context_Initialize(
    } while (0);
 
 /**
- *  @brief CPU Initialize
- *
+ * @brief CPU initialization.
  */
 void _CPU_Initialize( void );
 
@@ -411,8 +408,7 @@ void _CPU_ISR_install_vector(
 );
 
 /**
- *  @brief CPU Context Switch
- *
+ * @brief CPU switch context.
  */
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 

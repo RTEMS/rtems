@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreCPU
  *
- * @brief ARM assembler support API.
+ * @brief ARM Assembler Support API
  */
 
 /*

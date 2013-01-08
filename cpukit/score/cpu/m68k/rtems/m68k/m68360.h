@@ -1,3 +1,8 @@
+/**
+ * @file
+ *
+ * @brief Definitions for Motorola MC68360 Processor
+ */
 /*
  **************************************************************************
  **************************************************************************
@@ -707,7 +712,7 @@ typedef struct m360_ {
 	unsigned char		_pad14[0xF0-0xD0];
 	unsigned char		_pad15[0x100-0xF0];
 	unsigned char		_pad16[0x500-0x100];
-	
+
 	/*
 	 * IDMA1 Block
 	 */
@@ -725,7 +730,7 @@ typedef struct m360_ {
 	unsigned char		csr1;
 	unsigned char		_pad21;
 	unsigned short		_pad22;
-	
+
 	/*
 	 * SDMA Block
 	 */
@@ -733,7 +738,7 @@ typedef struct m360_ {
 	unsigned char		_pad23;
 	unsigned short		sdcr;
 	unsigned long		sdar;
-	
+
 	/*
 	 * IDMA2 Block
 	 */
@@ -750,7 +755,7 @@ typedef struct m360_ {
 	unsigned char		_pad28;
 	unsigned short		_pad29;
 	unsigned long		_pad30;
-	
+
 	/*
 	 * CPIC Block
 	 */
@@ -774,7 +779,7 @@ typedef struct m360_ {
 	unsigned short		pcint;
 	unsigned short		_pad32;
 	unsigned long		_pad33[5];
-	
+
 	/*
 	 * TIMER Block
 	 */
@@ -802,7 +807,7 @@ typedef struct m360_ {
 	unsigned short		ter3;
 	unsigned short		ter4;
 	unsigned long		_pad36[2];
-	
+
 	/*
 	 * CP Block
 	 */

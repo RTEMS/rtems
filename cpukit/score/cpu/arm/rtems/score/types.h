@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
- *
- * @brief ARM architecture types API.
+ * @brief ARM Architecture Types API
  */
 
 /*

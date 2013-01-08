@@ -1,7 +1,7 @@
-/*
- *-------------------------------------------------------------------
+/**
+ * @file
  *
- *   SIM -- System Integration Module
+ * @brief Motorola M68K System Integration Module
  *
  * The system integration module (SIM) is used on many Motorola 16-
  * and 32-bit MCUs for the following functions:
@@ -23,7 +23,9 @@
  * For more information, refer to Motorola's "Modular Microcontroller
  * Family System Integration Module Reference Manual" (Motorola document
  * SIMRM/AD).
- *
+ */
+
+/*
  * This file was created by John S. Gwynne to support Motorola's 68332 MCU.
  *
  * Redistribution and use in source and binary forms are permitted
