@@ -1,12 +1,17 @@
-/*  Shared Memory Lock Routines
+/**
+ *  @file
+ *
+ *  LEON3 Shared Memory Lock Routines
  *
  *  This shared memory locked queue support routine need to be
  *  able to lock the specified locked queue.  Interrupts are
  *  disabled while the queue is locked to prevent preemption
  *  and deadlock when two tasks poll for the same lock.
  *  previous level.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,11 +25,8 @@
 
 
 /*
- *  Shm_Initialize_lock
- *
  *  Initialize the lock for the specified locked queue.
  */
-
 void Shm_Initialize_lock(
   Shm_Locked_queue_Control *lq_cb
 )
@@ -32,12 +34,12 @@ void Shm_Initialize_lock(
   lq_cb->lock = LQ_UNLOCKED;
 }
 
-/*  void _Shm_Lock( &lq_cb )
- *
+/*
  *  This shared memory locked queue support routine locks the
  *  specified locked queue.  It disables interrupts to prevent
  *  a deadlock condition.
  */
+extern unsigned int LEON3_Atomic_Swap(uint32_t value, uint32_t *address);
 
 __asm__ (
     ".text\n"
@@ -63,16 +65,9 @@ void Shm_Lock(
     Shm_isrstat = isr_level;
     while ( lock_value ) {
       lock_value = LEON3_Atomic_Swap(lock_value, lockptr);
-/*       __asm__ volatile( "" */
-/*                          : "=r" (lockptr), "=r" (lock_value) */
-/*                          : "0" (lockptr),  "1" (lock_value) */
-/*                   ); */
       /*
        *  If not available, then may want to delay to reduce load on lock.
        */
-
-/*       if ( lock_value ) */
-/*         rtems_bsp_delay( 10 );   /\* approximately 10 microseconds *\/ */
    }
 }
 
