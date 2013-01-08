@@ -17,6 +17,7 @@
 #include <bsp.h>
 #include <shm_driver.h>
 
+#if 0
 void Shm_isr(void)
 {
   /*
@@ -32,6 +33,7 @@ void Shm_isr(void)
    *  routine below.
    */
 }
+#endif
 
 /*
  *  This driver routine sets the SHM interrupt vector to point to the
