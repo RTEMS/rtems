@@ -1,8 +1,10 @@
 /**
- *  @file rtems/score/cpu.h
+ * @file
  *
- *  This include file contains information pertaining to the port of
- *  the executive to the SPARC processor.
+ * @brief SPARC CPU Department Source
+ *
+ * This include file contains information pertaining to the port of
+ * the executive to the SPARC processor.
  */
 
 /*
@@ -27,94 +29,94 @@ extern "C" {
 /* conditional compilation parameters */
 
 /**
- *  Should the calls to _Thread_Enable_dispatch be inlined?
+ * Should the calls to _Thread_Enable_dispatch be inlined?
  *
- *  - If TRUE, then they are inlined.
- *  - If FALSE, then a subroutine call is made.
+ * - If TRUE, then they are inlined.
+ * - If FALSE, then a subroutine call is made.
  *
- *  On this port, it is faster to inline _Thread_Enable_dispatch.
+ * On this port, it is faster to inline _Thread_Enable_dispatch.
  */
 #define CPU_INLINE_ENABLE_DISPATCH       TRUE
 
 /**
- *  Should the body of the search loops in _Thread_queue_Enqueue_priority
- *  be unrolled one time?  In unrolled each iteration of the loop examines
- *  two "nodes" on the chain being searched.  Otherwise, only one node
- *  is examined per iteration.
+ * Should the body of the search loops in _Thread_queue_Enqueue_priority
+ * be unrolled one time?  In unrolled each iteration of the loop examines
+ * two "nodes" on the chain being searched.  Otherwise, only one node
+ * is examined per iteration.
  *
- *  - If TRUE, then the loops are unrolled.
- *  - If FALSE, then the loops are not unrolled.
+ * - If TRUE, then the loops are unrolled.
+ * - If FALSE, then the loops are not unrolled.
  *
- *  This parameter could go either way on the SPARC.  The interrupt flash
- *  code is relatively lengthy given the requirements for nops following
- *  writes to the psr.  But if the clock speed were high enough, this would
- *  not represent a great deal of time.
+ * This parameter could go either way on the SPARC.  The interrupt flash
+ * code is relatively lengthy given the requirements for nops following
+ * writes to the psr.  But if the clock speed were high enough, this would
+ * not represent a great deal of time.
  */
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
 
 /**
- *  Does the executive manage a dedicated interrupt stack in software?
+ * Does the executive manage a dedicated interrupt stack in software?
  *
- *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
- *  If FALSE, nothing is done.
+ * If TRUE, then a stack is allocated in _ISR_Handler_initialization.
+ * If FALSE, nothing is done.
  *
- *  The SPARC does not have a dedicated HW interrupt stack and one has
- *  been implemented in SW.
+ * The SPARC does not have a dedicated HW interrupt stack and one has
+ * been implemented in SW.
  */
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK   TRUE
 
 /**
- *  Does the CPU follow the simple vectored interrupt model?
+ * Does the CPU follow the simple vectored interrupt model?
  *
- *  - If TRUE, then RTEMS allocates the vector table it internally manages.
- *  - If FALSE, then the BSP is assumed to allocate and manage the vector
- *    table
+ * - If TRUE, then RTEMS allocates the vector table it internally manages.
+ * - If FALSE, then the BSP is assumed to allocate and manage the vector
+ *   table
  *
- *  THe SPARC is a simple vectored architecture.  Usually there is no
- *  PIC and the CPU directly vectors the interrupts.
+ * THe SPARC is a simple vectored architecture.  Usually there is no
+ * PIC and the CPU directly vectors the interrupts.
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
 
-/** 
- *  Does this CPU have hardware support for a dedicated interrupt stack?
+/**
+ * Does this CPU have hardware support for a dedicated interrupt stack?
  *
- *  - If TRUE, then it must be installed during initialization.
- *  - If FALSE, then no installation is performed.
+ * - If TRUE, then it must be installed during initialization.
+ * - If FALSE, then no installation is performed.
  *
- *  The SPARC does not have a dedicated HW interrupt stack.
+ * The SPARC does not have a dedicated HW interrupt stack.
  */
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK  FALSE
 
 /**
- *  Do we allocate a dedicated interrupt stack in the Interrupt Manager?
+ * Do we allocate a dedicated interrupt stack in the Interrupt Manager?
  *
- *  - If TRUE, then the memory is allocated during initialization.
- *  - If FALSE, then the memory is allocated during initialization.
+ * - If TRUE, then the memory is allocated during initialization.
+ * - If FALSE, then the memory is allocated during initialization.
  *
- *  The SPARC does not have hardware support for switching to a 
- *  dedicated interrupt stack.  The port includes support for doing this
- *  in software.
+ * The SPARC does not have hardware support for switching to a
+ * dedicated interrupt stack.  The port includes support for doing this
+ * in software.
  *
  */
 #define CPU_ALLOCATE_INTERRUPT_STACK      TRUE
 
 /**
- *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector
- *  number (0)?
+ * Does the RTEMS invoke the user's ISR with the vector number and
+ * a pointer to the saved interrupt frame (1) or just the vector
+ * number (0)?
  *
- *  The SPARC port does not pass an Interrupt Stack Frame pointer to
- *  interrupt handlers.
+ * The SPARC port does not pass an Interrupt Stack Frame pointer to
+ * interrupt handlers.
  */
 #define CPU_ISR_PASSES_FRAME_POINTER 0
 
 /**
- *  Does the CPU have hardware floating point?
+ * Does the CPU have hardware floating point?
  *
- *  - If TRUE, then the FLOATING_POINT task attribute is supported.
- *  - If FALSE, then the FLOATING_POINT task attribute is ignored.
+ * - If TRUE, then the FLOATING_POINT task attribute is supported.
+ * - If FALSE, then the FLOATING_POINT task attribute is ignored.
  *
- *  This is set based upon the multilib settings.
+ * This is set based upon the multilib settings.
  */
 #if ( SPARC_HAS_FPU == 1 )
   #define CPU_HARDWARE_FP     TRUE
@@ -123,123 +125,123 @@ extern "C" {
 #endif
 
 /**
- *  The SPARC GCC port does not have a software floating point library
- *  that requires RTEMS assistance.
+ * The SPARC GCC port does not have a software floating point library
+ * that requires RTEMS assistance.
  */
 #define CPU_SOFTWARE_FP     FALSE
 
 /**
- *  Are all tasks FLOATING_POINT tasks implicitly?
+ * Are all tasks FLOATING_POINT tasks implicitly?
  *
- *  - If TRUE, then the FLOATING_POINT task attribute is assumed.
- *  - If FALSE, then the FLOATING_POINT task attribute is followed.
+ * - If TRUE, then the FLOATING_POINT task attribute is assumed.
+ * - If FALSE, then the FLOATING_POINT task attribute is followed.
  *
- *  The SPARC GCC port does not implicitly use floating point registers.
+ * The SPARC GCC port does not implicitly use floating point registers.
  */
 #define CPU_ALL_TASKS_ARE_FP     FALSE
 
 /**
- *  Should the IDLE task have a floating point context?
+ * Should the IDLE task have a floating point context?
  *
- *  - If TRUE, then the IDLE task is created as a FLOATING_POINT task
- *    and it has a floating point context which is switched in and out.
- *  - If FALSE, then the IDLE task does not have a floating point context.
+ * - If TRUE, then the IDLE task is created as a FLOATING_POINT task
+ *   and it has a floating point context which is switched in and out.
+ * - If FALSE, then the IDLE task does not have a floating point context.
  *
- *  The IDLE task does not have to be floating point on the SPARC.
+ * The IDLE task does not have to be floating point on the SPARC.
  */
 #define CPU_IDLE_TASK_IS_FP      FALSE
 
 /**
- *  Should the saving of the floating point registers be deferred
- *  until a context switch is made to another different floating point
- *  task?
+ * Should the saving of the floating point registers be deferred
+ * until a context switch is made to another different floating point
+ * task?
  *
- *  - If TRUE, then the floating point context will not be stored until
- *  necessary.  It will remain in the floating point registers and not
- *  disturned until another floating point task is switched to.
+ * - If TRUE, then the floating point context will not be stored until
+ * necessary.  It will remain in the floating point registers and not
+ * disturned until another floating point task is switched to.
  *
- *  - If FALSE, then the floating point context is saved when a floating
- *  point task is switched out and restored when the next floating point
- *  task is restored.  The state of the floating point registers between
- *  those two operations is not specified.
+ * - If FALSE, then the floating point context is saved when a floating
+ * point task is switched out and restored when the next floating point
+ * task is restored.  The state of the floating point registers between
+ * those two operations is not specified.
  *
- *  On the SPARC, we can disable the FPU for integer only tasks so
- *  it is safe to defer floating point context switches.
+ * On the SPARC, we can disable the FPU for integer only tasks so
+ * it is safe to defer floating point context switches.
  */
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 
 /**
- *  Does this port provide a CPU dependent IDLE task implementation?
+ * Does this port provide a CPU dependent IDLE task implementation?
  *
- *  - If TRUE, then the routine _CPU_Thread_Idle_body
- *  must be provided and is the default IDLE thread body instead of
- *  _CPU_Thread_Idle_body.
+ * - If TRUE, then the routine _CPU_Thread_Idle_body
+ * must be provided and is the default IDLE thread body instead of
+ * _CPU_Thread_Idle_body.
  *
- *  - If FALSE, then use the generic IDLE thread body if the BSP does
- *  not provide one.
+ * - If FALSE, then use the generic IDLE thread body if the BSP does
+ * not provide one.
  *
- *  The SPARC architecture does not have a low power or halt instruction.
- *  It is left to the BSP and/or CPU specific code to provide an IDLE
- *  thread body which is aware of low power modes.
+ * The SPARC architecture does not have a low power or halt instruction.
+ * It is left to the BSP and/or CPU specific code to provide an IDLE
+ * thread body which is aware of low power modes.
  */
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /**
- *  Does the stack grow up (toward higher addresses) or down
- *  (toward lower addresses)?
+ * Does the stack grow up (toward higher addresses) or down
+ * (toward lower addresses)?
  *
- *  - If TRUE, then the grows upward.
- *  - If FALSE, then the grows toward smaller addresses.
+ * - If TRUE, then the grows upward.
+ * - If FALSE, then the grows toward smaller addresses.
  *
- *  The stack grows to lower addresses on the SPARC.
+ * The stack grows to lower addresses on the SPARC.
  */
 #define CPU_STACK_GROWS_UP               FALSE
 
 /**
- *  The following is the variable attribute used to force alignment
- *  of critical data structures.  On some processors it may make
- *  sense to have these aligned on tighter boundaries than
- *  the minimum requirements of the compiler in order to have as
- *  much of the critical data area as possible in a cache line.
+ * The following is the variable attribute used to force alignment
+ * of critical data structures.  On some processors it may make
+ * sense to have these aligned on tighter boundaries than
+ * the minimum requirements of the compiler in order to have as
+ * much of the critical data area as possible in a cache line.
  *
- *  The SPARC does not appear to have particularly strict alignment
- *  requirements.  This value was chosen to take advantages of caches.
+ * The SPARC does not appear to have particularly strict alignment
+ * requirements.  This value was chosen to take advantages of caches.
  */
 #define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (16)))
 
 #define CPU_TIMESTAMP_USE_INT64_INLINE TRUE
 
 /**
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
+ * Define what is required to specify how the network to host conversion
+ * routines are handled.
  *
- *  The SPARC is big endian.
+ * The SPARC is big endian.
  */
 #define CPU_BIG_ENDIAN                           TRUE
 
 /**
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
+ * Define what is required to specify how the network to host conversion
+ * routines are handled.
  *
- *  The SPARC is NOT little endian.
+ * The SPARC is NOT little endian.
  */
 #define CPU_LITTLE_ENDIAN                        FALSE
 
 /**
- *  The following defines the number of bits actually used in the
- *  interrupt field of the task mode.  How those bits map to the
- *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
+ * The following defines the number of bits actually used in the
+ * interrupt field of the task mode.  How those bits map to the
+ * CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
  *
- *  The SPARC has 16 interrupt levels in the PIL field of the PSR.
+ * The SPARC has 16 interrupt levels in the PIL field of the PSR.
  */
 #define CPU_MODES_INTERRUPT_MASK   0x0000000F
 
 #ifndef ASM
 /**
- *  This structure represents the organization of the minimum stack frame
- *  for the SPARC.  More framing information is required in certain situaions
- *  such as when there are a large number of out parameters or when the callee
- *  must save floating point registers.
+ * This structure represents the organization of the minimum stack frame
+ * for the SPARC.  More framing information is required in certain situaions
+ * such as when there are a large number of out parameters or when the callee
+ * must save floating point registers.
  */
 typedef struct {
   /** This is the offset of the l0 register. */
@@ -278,8 +280,8 @@ typedef struct {
   void       *structure_return_address;
 
   /*
-   *  The following are for the callee to save the register arguments in
-   *  should this be necessary.
+   * The following are for the callee to save the register arguments in
+   * should this be necessary.
    */
   /** This is the offset of the register for saved argument 0. */
   uint32_t    saved_arg0;
@@ -354,37 +356,37 @@ typedef struct {
 /**
  * @defgroup Contexts SPARC Context Structures
  *
- *  @ingroup Score
+ * @ingroup Score
  *
- *  Generally there are 2 types of context to save.
- *     + Interrupt registers to save
- *     + Task level registers to save
+ * Generally there are 2 types of context to save.
+ *    + Interrupt registers to save
+ *    + Task level registers to save
  *
- *  This means we have the following 3 context items:
- *     + task level context stuff::  Context_Control
- *     + floating point task stuff:: Context_Control_fp
- *     + special interrupt level context :: Context_Control_interrupt
+ * This means we have the following 3 context items:
+ *    + task level context stuff::  Context_Control
+ *    + floating point task stuff:: Context_Control_fp
+ *    + special interrupt level context :: Context_Control_interrupt
  *
- *  On the SPARC, we are relatively conservative in that we save most
- *  of the CPU state in the context area.  The ET (enable trap) bit and
- *  the CWP (current window pointer) fields of the PSR are considered
- *  system wide resources and are not maintained on a per-thread basis.
+ * On the SPARC, we are relatively conservative in that we save most
+ * of the CPU state in the context area.  The ET (enable trap) bit and
+ * the CWP (current window pointer) fields of the PSR are considered
+ * system wide resources and are not maintained on a per-thread basis.
+ *
+ * @{
  */
 
 #ifndef ASM
 /**
- *  @brief SPARC Basic Context
+ * @brief SPARC basic context.
  *
- *  @ingroup Contexts
- *
- *  This structure defines the basic integer and processor state context
- *  for the SPARC architecture.
+ * This structure defines the basic integer and processor state context
+ * for the SPARC architecture.
  */
 typedef struct {
   /**
-   *  Using a double g0_g1 will put everything in this structure on a
-   *  double word boundary which allows us to use double word loads
-   *  and stores safely in the context switch.
+   * Using a double g0_g1 will put everything in this structure on a
+   * double word boundary which allows us to use double word loads
+   * and stores safely in the context switch.
    */
   double     g0_g1;
   /** This will contain the contents of the g2 register. */
@@ -462,9 +464,9 @@ typedef struct {
 } Context_Control;
 
 /**
- *  This macro provides a CPU independent way for RTEMS to access the
- *  stack pointer in a context structure. The actual name and offset is
- *  CPU architecture dependent.
+ * This macro provides a CPU independent way for RTEMS to access the
+ * stack pointer in a context structure. The actual name and offset is
+ * CPU architecture dependent.
  */
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->o6_sp
@@ -553,11 +555,9 @@ typedef struct {
 
 #ifndef ASM
 /**
- *  @brief SPARC Basic Context
+ * @brief SPARC basic context.
  *
- *  @ingroup Contexts
- *
- *  This structure defines floating point context area.
+ * This structure defines floating point context area.
  */
 typedef struct {
   /** This will contain the contents of the f0 and f1 register. */
@@ -642,13 +642,15 @@ typedef struct {
 
 #ifndef ASM
 
+/** @} */
+
 /**
- *  @brief Interrupt Stack Frame (ISF)
+ * @brief Interrupt stack frame (ISF).
  *
- *  Context saved on stack for an interrupt.
+ * Context saved on stack for an interrupt.
  *
- *  @note The PSR, PC, and NPC are only saved in this structure for the
- *        benefit of the user's handler.
+ * NOTE: The PSR, PC, and NPC are only saved in this structure for the
+ *       benefit of the user's handler.
  */
 typedef struct {
   /** On an interrupt, we must save the minimum stack frame. */
@@ -750,27 +752,27 @@ typedef struct {
 
 #ifndef ASM
 /**
- *  This variable is contains the initialize context for the FP unit.
- *  It is filled in by _CPU_Initialize and copied into the task's FP
- *  context area during _CPU_Context_Initialize.
+ * This variable is contains the initialize context for the FP unit.
+ * It is filled in by _CPU_Initialize and copied into the task's FP
+ * context area during _CPU_Context_Initialize.
  */
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 /**
- *  This flag is context switched with each thread.  It indicates
- *  that THIS thread has an _ISR_Dispatch stack frame on its stack.
- *  By using this flag, we can avoid nesting more interrupt dispatching
- *  attempts on a previously interrupted thread's stack.
+ * This flag is context switched with each thread.  It indicates
+ * that THIS thread has an _ISR_Dispatch stack frame on its stack.
+ * By using this flag, we can avoid nesting more interrupt dispatching
+ * attempts on a previously interrupted thread's stack.
  */
 SCORE_EXTERN volatile uint32_t _CPU_ISR_Dispatch_disable;
 
 /**
- *  The following type defines an entry in the SPARC's trap table.
+ * The following type defines an entry in the SPARC's trap table.
  *
- *  @note The instructions chosen are RTEMS dependent although one is
- *        obligated to use two of the four instructions to perform a
- *        long jump.  The other instructions load one register with the
- *        trap type (a.k.a. vector) and another with the psr.
+ * NOTE: The instructions chosen are RTEMS dependent although one is
+ *       obligated to use two of the four instructions to perform a
+ *       long jump.  The other instructions load one register with the
+ *       trap type (a.k.a. vector) and another with the psr.
  */
 typedef struct {
   /** This will contain a "mov %psr, %l0" instruction. */
@@ -784,52 +786,52 @@ typedef struct {
 } CPU_Trap_table_entry;
 
 /**
- *  This is the set of opcodes for the instructions loaded into a trap
- *  table entry.  The routine which installs a handler is responsible
- *  for filling in the fields for the _handler address and the _vector
- *  trap type.
+ * This is the set of opcodes for the instructions loaded into a trap
+ * table entry.  The routine which installs a handler is responsible
+ * for filling in the fields for the _handler address and the _vector
+ * trap type.
  *
- *  The constants following this structure are masks for the fields which
- *  must be filled in when the handler is installed.
+ * The constants following this structure are masks for the fields which
+ * must be filled in when the handler is installed.
  */
 extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 /**
- *  The size of the floating point context area.
+ * The size of the floating point context area.
  */
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 #endif
 
 /**
- *  Amount of extra stack (above minimum stack size) required by
- *  MPCI receive server thread.  Remember that in a multiprocessor
- *  system this thread must exist and be able to process all directives.
+ * Amount of extra stack (above minimum stack size) required by
+ * MPCI receive server thread.  Remember that in a multiprocessor
+ * system this thread must exist and be able to process all directives.
  */
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 1024
 
 /**
- *  This defines the number of entries in the ISR_Vector_table managed
- *  by the executive.
+ * This defines the number of entries in the ISR_Vector_table managed
+ * by the executive.
  *
- *  On the SPARC, there are really only 256 vectors.  However, the executive
- *  has no easy, fast, reliable way to determine which traps are synchronous
- *  and which are asynchronous.  By default, synchronous traps return to the
- *  instruction which caused the interrupt.  So if you install a software
- *  trap handler as an executive interrupt handler (which is desirable since
- *  RTEMS takes care of window and register issues), then the executive needs
- *  to know that the return address is to the trap rather than the instruction
- *  following the trap.
+ * On the SPARC, there are really only 256 vectors.  However, the executive
+ * has no easy, fast, reliable way to determine which traps are synchronous
+ * and which are asynchronous.  By default, synchronous traps return to the
+ * instruction which caused the interrupt.  So if you install a software
+ * trap handler as an executive interrupt handler (which is desirable since
+ * RTEMS takes care of window and register issues), then the executive needs
+ * to know that the return address is to the trap rather than the instruction
+ * following the trap.
  *
- *  So vectors 0 through 255 are treated as regular asynchronous traps which
- *  provide the "correct" return address.  Vectors 256 through 512 are assumed
- *  by the executive to be synchronous and to require that the return address
- *  be fudged.
+ * So vectors 0 through 255 are treated as regular asynchronous traps which
+ * provide the "correct" return address.  Vectors 256 through 512 are assumed
+ * by the executive to be synchronous and to require that the return address
+ * be fudged.
  *
- *  If you use this mechanism to install a trap handler which must reexecute
- *  the instruction which caused the trap, then it should be installed as
- *  an asynchronous trap.  This will avoid the executive changing the return
- *  address.
+ * If you use this mechanism to install a trap handler which must reexecute
+ * the instruction which caused the trap, then it should be installed as
+ * an asynchronous trap.  This will avoid the executive changing the return
+ * address.
  */
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS     256
 
@@ -840,18 +842,18 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER 511
 
 /**
- *  This is the bit step in a vector number to indicate it is being installed
- *  as a synchronous trap.
+ * This is the bit step in a vector number to indicate it is being installed
+ * as a synchronous trap.
  */
 #define SPARC_SYNCHRONOUS_TRAP_BIT_MASK     0x100
 
 /**
- *  This macro indicates that @a _trap as an asynchronous trap.
+ * This macro indicates that @a _trap as an asynchronous trap.
  */
 #define SPARC_ASYNCHRONOUS_TRAP( _trap )    (_trap)
 
 /**
- *  This macro indicates that @a _trap as a synchronous trap.
+ * This macro indicates that @a _trap as a synchronous trap.
  */
 #define SPARC_SYNCHRONOUS_TRAP( _trap )     ((_trap) + 256 )
 
@@ -861,69 +863,69 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 #define SPARC_REAL_TRAP_NUMBER( _trap )     ((_trap) % 256)
 
 /**
- *  This is defined if the port has a special way to report the ISR nesting
- *  level.  Most ports maintain the variable _ISR_Nest_level.
+ * This is defined if the port has a special way to report the ISR nesting
+ * level.  Most ports maintain the variable _ISR_Nest_level.
  */
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /**
- *  Should be large enough to run all tests.  This ensures
- *  that a "reasonable" small application should not have any problems.
+ * Should be large enough to run all tests.  This ensures
+ * that a "reasonable" small application should not have any problems.
  *
- *  This appears to be a fairly generous number for the SPARC since
- *  represents a call depth of about 20 routines based on the minimum
- *  stack frame.
+ * This appears to be a fairly generous number for the SPARC since
+ * represents a call depth of about 20 routines based on the minimum
+ * stack frame.
  */
 #define CPU_STACK_MINIMUM_SIZE  (1024*4)
 
 #define CPU_SIZEOF_POINTER 4
 
 /**
- *  CPU's worst alignment requirement for data types on a byte boundary.  This
- *  alignment does not take into account the requirements for the stack.
+ * CPU's worst alignment requirement for data types on a byte boundary.  This
+ * alignment does not take into account the requirements for the stack.
  *
- *  On the SPARC, this is required for double word loads and stores.
+ * On the SPARC, this is required for double word loads and stores.
  */
 #define CPU_ALIGNMENT      8
 
 /**
- *  This number corresponds to the byte alignment requirement for the
- *  heap handler.  This alignment requirement may be stricter than that
- *  for the data types alignment specified by CPU_ALIGNMENT.  It is
- *  common for the heap to follow the same alignment requirement as
- *  CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict enough for the heap,
- *  then this should be set to CPU_ALIGNMENT.
+ * This number corresponds to the byte alignment requirement for the
+ * heap handler.  This alignment requirement may be stricter than that
+ * for the data types alignment specified by CPU_ALIGNMENT.  It is
+ * common for the heap to follow the same alignment requirement as
+ * CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict enough for the heap,
+ * then this should be set to CPU_ALIGNMENT.
  *
- *  @note  This does not have to be a power of 2.  It does have to
- *         be greater or equal to than CPU_ALIGNMENT.
+ * NOTE:  This does not have to be a power of 2.  It does have to
+ *        be greater or equal to than CPU_ALIGNMENT.
  */
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
 /**
- *  This number corresponds to the byte alignment requirement for memory
- *  buffers allocated by the partition manager.  This alignment requirement
- *  may be stricter than that for the data types alignment specified by
- *  CPU_ALIGNMENT.  It is common for the partition to follow the same
- *  alignment requirement as CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict
- *  enough for the partition, then this should be set to CPU_ALIGNMENT.
+ * This number corresponds to the byte alignment requirement for memory
+ * buffers allocated by the partition manager.  This alignment requirement
+ * may be stricter than that for the data types alignment specified by
+ * CPU_ALIGNMENT.  It is common for the partition to follow the same
+ * alignment requirement as CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict
+ * enough for the partition, then this should be set to CPU_ALIGNMENT.
  *
- *  @note  This does not have to be a power of 2.  It does have to
- *         be greater or equal to than CPU_ALIGNMENT.
+ * NOTE:  This does not have to be a power of 2.  It does have to
+ *        be greater or equal to than CPU_ALIGNMENT.
  */
 #define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
 
 /**
- *  This number corresponds to the byte alignment requirement for the
- *  stack.  This alignment requirement may be stricter than that for the
- *  data types alignment specified by CPU_ALIGNMENT.  If the CPU_ALIGNMENT
- *  is strict enough for the stack, then this should be set to 0.
+ * This number corresponds to the byte alignment requirement for the
+ * stack.  This alignment requirement may be stricter than that for the
+ * data types alignment specified by CPU_ALIGNMENT.  If the CPU_ALIGNMENT
+ * is strict enough for the stack, then this should be set to 0.
  *
- *  @note  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
+ * NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
  *
- *  The alignment restrictions for the SPARC are not that strict but this
- *  should unsure that the stack is always sufficiently alignment that the
- *  window overflow, underflow, and flush routines can use double word loads
- *  and stores.
+ * The alignment restrictions for the SPARC are not that strict but this
+ * should unsure that the stack is always sufficiently alignment that the
+ * window overflow, underflow, and flush routines can use double word loads
+ * and stores.
  */
 #define CPU_STACK_ALIGNMENT        16
 
@@ -934,49 +936,49 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  */
 
 /**
- *  Support routine to initialize the RTEMS vector table after it is allocated.
+ * Support routine to initialize the RTEMS vector table after it is allocated.
  */
 #define _CPU_Initialize_vectors()
 
 /**
- *  Disable all interrupts for a critical section.  The previous
- *  level is returned in _level.
+ * Disable all interrupts for a critical section.  The previous
+ * level is returned in _level.
  */
 #define _CPU_ISR_Disable( _level ) \
   (_level) = sparc_disable_interrupts()
 
 /**
- *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
- *  This indicates the end of a critical section.  The parameter
- *  _level is not modified.
+ * Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
+ * This indicates the end of a critical section.  The parameter
+ * _level is not modified.
  */
 #define _CPU_ISR_Enable( _level ) \
   sparc_enable_interrupts( _level )
 
 /**
- *  This temporarily restores the interrupt to _level before immediately
- *  disabling them again.  This is used to divide long critical
- *  sections into two or more parts.  The parameter _level is not
- *  modified.
+ * This temporarily restores the interrupt to _level before immediately
+ * disabling them again.  This is used to divide long critical
+ * sections into two or more parts.  The parameter _level is not
+ * modified.
  */
 #define _CPU_ISR_Flash( _level ) \
   sparc_flash_interrupts( _level )
 
 /**
- *  Map interrupt level in task mode onto the hardware that the CPU
- *  actually provides.  Currently, interrupt levels which do not
- *  map onto the CPU in a straight fashion are undefined.
+ * Map interrupt level in task mode onto the hardware that the CPU
+ * actually provides.  Currently, interrupt levels which do not
+ * map onto the CPU in a straight fashion are undefined.
  */
 #define _CPU_ISR_Set_level( _newlevel ) \
    sparc_enable_interrupts( _newlevel << 8)
 
 /**
- *  @brief Obtain the Current Interrupt Disable Level
+ * @brief Obtain the current interrupt disable level.
  *
- *  This method is invoked to return the current interrupt disable level.
+ * This method is invoked to return the current interrupt disable level.
  *
- *  @return This method returns the current interrupt disable level.
- */ 
+ * @return This method returns the current interrupt disable level.
+ */
 uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
@@ -984,15 +986,15 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Context handler macros */
 
 /**
- *  Initialize the context to a state suitable for starting a
- *  task after a context restore operation.  Generally, this
- *  involves:
+ * Initialize the context to a state suitable for starting a
+ * task after a context restore operation.  Generally, this
+ * involves:
  *
- *  - setting a starting address
- *  - preparing the stack
- *  - preparing the stack and frame pointers
- *  - setting the proper interrupt level in the context
- *  - initializing the floating point context
+ * - setting a starting address
+ * - preparing the stack
+ * - preparing the stack and frame pointers
+ * - setting the proper interrupt level in the context
+ * - initializing the floating point context
  *
  * @param[in] the_context points to the context area
  * @param[in] stack_base is the low address of the allocated stack area
@@ -1001,7 +1003,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  * @param[in] entry_point is the task's entry point
  * @param[in] is_fp is set to TRUE if the task is a floating point task
  *
- *  @note  Implemented as a subroutine for the SPARC port.
+ * NOTE:  Implemented as a subroutine for the SPARC port.
  */
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
@@ -1013,17 +1015,17 @@ void _CPU_Context_Initialize(
 );
 
 /**
- *  This macro is invoked from _Thread_Handler to do whatever CPU
- *  specific magic is required that must be done in the context of
- *  the thread when it starts.
+ * This macro is invoked from _Thread_Handler to do whatever CPU
+ * specific magic is required that must be done in the context of
+ * the thread when it starts.
  *
- *  On the SPARC, this is setting the frame pointer so GDB is happy.
- *  Make GDB stop unwinding at _Thread_Handler, previous register window
- *  Frame pointer is 0 and calling address must be a function with starting
- *  with a SAVE instruction. If return address is leaf-function (no SAVE)
- *  GDB will not look at prev reg window fp.
+ * On the SPARC, this is setting the frame pointer so GDB is happy.
+ * Make GDB stop unwinding at _Thread_Handler, previous register window
+ * Frame pointer is 0 and calling address must be a function with starting
+ * with a SAVE instruction. If return address is leaf-function (no SAVE)
+ * GDB will not look at prev reg window fp.
  *
- *  _Thread_Handler is known to start with SAVE.
+ * _Thread_Handler is known to start with SAVE.
  */
 #define _CPU_Context_Initialization_at_thread_begin() \
   do { \
@@ -1031,30 +1033,30 @@ void _CPU_Context_Initialize(
   } while (0)
 
 /**
- *  This routine is responsible for somehow restarting the currently
- *  executing task.
+ * This routine is responsible for somehow restarting the currently
+ * executing task.
  *
- *  On the SPARC, this is is relatively painless but requires a small
- *  amount of wrapper code before using the regular restore code in
- *  of the context switch.
+ * On the SPARC, this is is relatively painless but requires a small
+ * amount of wrapper code before using the regular restore code in
+ * of the context switch.
  */
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
 
 /**
- *  The FP context area for the SPARC is a simple structure and nothing
- *  special is required to find the "starting load point"
+ * The FP context area for the SPARC is a simple structure and nothing
+ * special is required to find the "starting load point"
  */
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
 
 /**
- *  This routine initializes the FP context area passed to it to.
+ * This routine initializes the FP context area passed to it to.
  *
- *  The SPARC allows us to use the simple initialization model
- *  in which an "initial" FP context was saved into _CPU_Null_fp_context
- *  at CPU initialization and it is simply copied into the destination
- *  context.
+ * The SPARC allows us to use the simple initialization model
+ * in which an "initial" FP context was saved into _CPU_Null_fp_context
+ * at CPU initialization and it is simply copied into the destination
+ * context.
  */
 #define _CPU_Context_Initialize_fp( _destination ) \
   do { \
@@ -1066,9 +1068,9 @@ void _CPU_Context_Initialize(
 /* Fatal Error manager macros */
 
 /**
- *  This routine copies _error into a known place -- typically a stack
- *  location or a register, optionally disables interrupts, and
- *  halts/stops the CPU.
+ * This routine copies _error into a known place -- typically a stack
+ * location or a register, optionally disables interrupts, and
+ * halts/stops the CPU.
  */
 #define _CPU_Fatal_halt( _error ) \
   do { \
@@ -1085,14 +1087,14 @@ void _CPU_Context_Initialize(
 
 #if ( SPARC_HAS_BITSCAN == 0 )
   /**
-   *  The SPARC port uses the generic C algorithm for bitfield scan if the
-   *  CPU model does not have a scan instruction.
+   * The SPARC port uses the generic C algorithm for bitfield scan if the
+   * CPU model does not have a scan instruction.
    */
   #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
   /**
-   *  The SPARC port uses the generic C algorithm for bitfield scan if the
-   *  CPU model does not have a scan instruction.  Thus is needs the generic
-   *  data table used by that algorithm.
+   * The SPARC port uses the generic C algorithm for bitfield scan if the
+   * CPU model does not have a scan instruction.  Thus is needs the generic
+   * data table used by that algorithm.
    */
   #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 #else
@@ -1104,21 +1106,21 @@ void _CPU_Context_Initialize(
 /* functions */
 
 /**
- *  @brief SPARC Specific Initialization
+ * @brief SPARC specific initialization.
  *
- *  This routine performs CPU dependent initialization.
+ * This routine performs CPU dependent initialization.
  */
 void _CPU_Initialize(void);
 
 /**
- *  @brief SPARC Specific Raw ISR Installer
+ * @brief SPARC specific raw ISR installer.
  *
- *  This routine installs @a new_handler to be directly called from the trap
- *  table.
+ * This routine installs @a new_handler to be directly called from the trap
+ * table.
  *
- *  @param[in] vector is the vector number
- *  @param[in] new_handler is the new ISR handler
- *  @param[in] old_handler will contain the old ISR handler
+ * @param[in] vector is the vector number
+ * @param[in] new_handler is the new ISR handler
+ * @param[in] old_handler will contain the old ISR handler
  */
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
@@ -1127,13 +1129,13 @@ void _CPU_ISR_install_raw_handler(
 );
 
 /**
- *  @brief SPARC Specific RTEMS ISR Installer
+ * @brief SPARC specific RTEMS ISR installer.
  *
- *  This routine installs an interrupt vector.
+ * This routine installs an interrupt vector.
  *
- *  @param[in] vector is the vector number
- *  @param[in] new_handler is the new ISR handler
- *  @param[in] old_handler will contain the old ISR handler
+ * @param[in] vector is the vector number
+ * @param[in] new_handler is the new ISR handler
+ * @param[in] old_handler will contain the old ISR handler
  */
 
 void _CPU_ISR_install_vector(
@@ -1143,12 +1145,12 @@ void _CPU_ISR_install_vector(
 );
 
 /**
- *  @brief SPARC Specific Context Switch
+ * @brief SPARC specific context switch.
  *
- *  This routine switches from the run context to the heir context.
+ * This routine switches from the run context to the heir context.
  *
- *  @param[in] run is the currently executing thread
- *  @param[in] heir will become the currently executing thread
+ * @param[in] run is the currently executing thread
+ * @param[in] heir will become the currently executing thread
  */
 void _CPU_Context_switch(
   Context_Control  *run,
@@ -1156,12 +1158,12 @@ void _CPU_Context_switch(
 );
 
 /**
- *  @brief SPARC Specific Context Restore
+ * @brief SPARC specific context restore.
  *
- *  This routine is generally used only to restart self in an
- *  efficient manner.
+ * This routine is generally used only to restart self in an
+ * efficient manner.
  *
- *  @param[in] new_context is the context to restore
+ * @param[in] new_context is the context to restore
  */
 void _CPU_Context_restore(
   Context_Control *new_context
@@ -1169,14 +1171,14 @@ void _CPU_Context_restore(
 
 #if defined(RTEMS_SMP)
   /**
-   *  @brief SPARC Specific Method to Switch to First Task 
+   * @brief SPARC specific method to switch to first task.
    *
-   *  This routine is only used to switch to the first task on a
-   *  secondary core in an SMP configuration.  We do not need to
-   *  flush all the windows and, in fact, this can be dangerous
-   *  as they may or may not be initialized properly.
+   * This routine is only used to switch to the first task on a
+   * secondary core in an SMP configuration.  We do not need to
+   * flush all the windows and, in fact, this can be dangerous
+   * as they may or may not be initialized properly.
    *
-   *  @param[in] new_context is the context to restore
+   * @param[in] new_context is the context to restore
    */
   void _CPU_Context_switch_to_first_task_smp(
     Context_Control *new_context
@@ -1185,7 +1187,7 @@ void _CPU_Context_restore(
   /**
    * Macro to access memory and bypass the cache.
    *
-   * @note address space 1 is uncacheable
+   * NOTE: address space 1 is uncacheable
    */
   #define SMP_CPU_SWAP( _address, _value, _previous ) \
     do { \
@@ -1202,22 +1204,22 @@ void _CPU_Context_restore(
 #endif
 
 /**
- *  @brief SPARC Specific Save FPU Method
+ * @brief SPARC specific save FPU method.
  *
- *  This routine saves the floating point context passed to it.
+ * This routine saves the floating point context passed to it.
  *
- *  @param[in] fp_context_ptr is the area to save into
+ * @param[in] fp_context_ptr is the area to save into
  */
 void _CPU_Context_save_fp(
   Context_Control_fp **fp_context_ptr
 );
 
 /**
- *  @brief SPARC Specific Rstore FPU Method
+ * @brief SPARC specific restore FPU method.
  *
- *  This routine restores the floating point context passed to it.
+ * This routine restores the floating point context passed to it.
  *
- *  @param[in] fp_context_ptr is the area to restore from
+ * @param[in] fp_context_ptr is the area to restore from
  */
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
@@ -1238,24 +1240,24 @@ static inline void _CPU_Exception_frame_print(
 }
 
 /**
- *  @brief SPARC Specific Method to Endian Swap an uint32_t 
+ * @brief SPARC specific method to endian swap an uint32_t.
  *
- *  The following routine swaps the endian format of an unsigned int.
- *  It must be static because it is referenced indirectly.
+ * The following routine swaps the endian format of an unsigned int.
+ * It must be static because it is referenced indirectly.
  *
- *  @param[in] value is the value to endian swap
+ * @param[in] value is the value to endian swap
  *
- *  This version will work on any processor, but if you come across a better
- *  way for the SPARC PLEASE use it.  The most common way to swap a 32-bit
- *  entity as shown below is not any more efficient on the SPARC.
+ * This version will work on any processor, but if you come across a better
+ * way for the SPARC PLEASE use it.  The most common way to swap a 32-bit
+ * entity as shown below is not any more efficient on the SPARC.
  *
- *     - swap least significant two bytes with 16-bit rotate
- *     - swap upper and lower 16-bits
- *     - swap most significant two bytes with 16-bit rotate
+ *    - swap least significant two bytes with 16-bit rotate
+ *    - swap upper and lower 16-bits
+ *    - swap most significant two bytes with 16-bit rotate
  *
- *  It is not obvious how the SPARC can do significantly better than the
- *  generic code.  gcc 2.7.0 only generates about 12 instructions for the
- *  following code at optimization level four (i.e. -O4).
+ * It is not obvious how the SPARC can do significantly better than the
+ * generic code.  gcc 2.7.0 only generates about 12 instructions for the
+ * following code at optimization level four (i.e. -O4).
  */
 static inline uint32_t CPU_swap_u32(
   uint32_t value
@@ -1273,11 +1275,11 @@ static inline uint32_t CPU_swap_u32(
 }
 
 /**
- *  @brief SPARC Specific Method to Endian Swap an uint16_t 
+ * @brief SPARC specific method to endian swap an uint16_t.
  *
- *  The following routine swaps the endian format of a uint16_t.
+ * The following routine swaps the endian format of a uint16_t.
  *
- *  @param[in] value is the value to endian swap
+ * @param[in] value is the value to endian swap
  */
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))

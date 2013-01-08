@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/types.h
+ * @file
+ *
+ * @brief SPARC64 CPU Type Definitions
+ *
+ * This include file contains type definitions pertaining to the
+ * SPARC-v9 processor family.
  */
 
 /*
- *  This include file contains type definitions pertaining to the 
- *  SPARC-v9 processor family.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

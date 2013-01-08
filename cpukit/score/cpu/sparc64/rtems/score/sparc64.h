@@ -1,15 +1,18 @@
 /**
- * @file rtems/score/sparc64.h
+ * @file
+ *
+ * @brief Information Required to Build RTEMS for a Particular Member
+ * of the SPARC Family
+ *
+ * This include file contains information pertaining to the SPARC
+ * processor family.
  */
 
 /*
- *  This include file contains information pertaining to the SPARC 
- *  processor family.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  This file is based on the SPARC sparc.h file. Modifications are made 
+ *  This file is based on the SPARC sparc.h file. Modifications are made
  *  to support the SPARC64 processor.
  *    COPYRIGHT (c) 2010. Gedare Bloom.
  *
@@ -34,19 +37,19 @@ extern "C" {
  *
  *  Currently recognized feature flags:
  *
- *    + SPARC_HAS_FPU 
+ *    + SPARC_HAS_FPU
  *        0 - no HW FPU
  *        1 - has HW FPU (assumed to be compatible w/90C602)
  *
- *    + SPARC_HAS_BITSCAN 
+ *    + SPARC_HAS_BITSCAN
  *        0 - does not have scan instructions
  *        1 - has scan instruction  (not currently implemented)
- * 
+ *
  *    + SPARC_NUMBER_OF_REGISTER_WINDOWS
  *        8 is the most common number supported by SPARC implementations.
  *        SPARC_PSR_CWP_MASK is derived from this value.
  */
- 
+
 /*
  *  Some higher end SPARCs have a bitscan instructions. It would
  *  be nice to take advantage of them.  Right now, there is no
@@ -67,9 +70,9 @@ extern "C" {
  */
 
 #define SPARC_NUMBER_OF_REGISTER_WINDOWS 8
- 
+
 /*
- *  This should be determined based on some soft float derived 
+ *  This should be determined based on some soft float derived
  *  cpp predefine but gcc does not currently give us that information.
  */
 
@@ -96,7 +99,7 @@ extern "C" {
  *  Miscellaneous constants
  */
 
-/* 
+/*
  * The PSR is deprecated and deleted.
  *
  * The following registers represent fields of the PSR:
@@ -145,7 +148,7 @@ extern "C" {
 
 #ifdef ASM
 
-/* 
+/*
  * To enable the FPU we need to set both PSTATE.pef and FPRS.fef
  */
 
@@ -237,9 +240,9 @@ extern "C" {
 /*
  * read the stick register
  *
- * Note: 
+ * Note:
  * stick asr=24, mnemonic=stick
- * Note: stick does not appear to be a valid ASR for US3, although it is 
+ * Note: stick does not appear to be a valid ASR for US3, although it is
  * implemented in US3i.
  */
 #define sparc64_read_stick( _stick ) \
@@ -249,11 +252,11 @@ extern "C" {
   } while ( 0 )
 
 /*
- * write the stick_cmpr register 
+ * write the stick_cmpr register
  *
- * Note: 
+ * Note:
  * stick_cmpr asr=25, mnemonic=stick_cmpr
- * Note: stick_cmpr does not appear to be a valid ASR for US3, although it is 
+ * Note: stick_cmpr does not appear to be a valid ASR for US3, although it is
  * implemented in US3i.
  */
 #define sparc64_write_stick_cmpr( _stick_cmpr ) \
@@ -280,7 +283,7 @@ extern "C" {
                                              :  "0" (_tick_cmpr) ); \
   } while ( 0 )
 
-/* 
+/*
  * Clear the softint register.
  *
  * sun4u and sun4v: softint_clr asr = 21, with mnemonic clear_softint
@@ -296,12 +299,12 @@ extern "C" {
 /*
  *  Get and set the Y
  */
- 
+
 #define sparc_get_y( _y ) \
   do { \
     __asm__ volatile( "rd %%y, %0" :  "=r" (_y) : "0" (_y) ); \
   } while ( 0 )
- 
+
 #define sparc_set_y( _y ) \
   do { \
     __asm__ volatile( "wr %0, %%y" :  "=r" (_y) : "0" (_y) ); \
@@ -310,12 +313,12 @@ extern "C" {
 /************* /DEPRECATED ****************/
 
 /*
- *  Manipulate the interrupt level in the pstate 
+ *  Manipulate the interrupt level in the pstate
  */
 
 uint32_t sparc_disable_interrupts(void);
 void sparc_enable_interrupts(uint32_t);
-  
+
 #define sparc_flash_interrupts( _level ) \
   do { \
     register uint32_t   _ignored = 0; \

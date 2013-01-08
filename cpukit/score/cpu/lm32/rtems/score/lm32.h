@@ -1,11 +1,14 @@
-/*  lm32.h
+/**
+ * @file
  *
- *  This file sets up basic CPU dependency settings based on
- *  compiler settings.  For example, it can determine if
- *  floating point is available.  This particular implementation
- *  is specified to the NO CPU port.
+ * @brief LM32 Set up Basic CPU Dependency Settings Based on Compiler Settings
  *
- *
+ * This file sets up basic CPU dependency settings based on
+ * compiler settings.  For example, it can determine if
+ * floating point is available.  This particular implementation
+ * is specified to the NO CPU port.
+ */
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
