@@ -1,9 +1,12 @@
-/*  bspclean.c
+/** 
+ *  @file
  *
  *  These routines return control to 167Bug after a normal exit from the
  *  application.
- *
- *  COPYRIGHT (c) 1989-2010.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,17 +24,11 @@
 extern void start( void );
 extern void page_table_teardown( void );
 
-/*
- *  bsp_return_to_monitor_trap
+/**
+ *  @brief bsp_return_to_monitor_trap
  *
  *  Switch the VBR back to ROM and make a .RETURN syscall to return control to
  *  167 Bug. If 167Bug ever returns, restart the application.
- *
- *  Input parameters: NONE
- *
- *  Output parameters: NONE
- *
- *  Return values: NONE
  */
 static void bsp_return_to_monitor_trap( void )
 {
