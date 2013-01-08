@@ -1,8 +1,12 @@
-/*
- *  This file sets up basic CPU dependency settings based on
- *  compiler settings.  For example, it can determine if
- *  floating point is available.  This particular implementation
- *  is specified to the Renesas v850 port.
+/**
+ * @file
+ *
+ * @brief V850 Set up Basic CPU Dependency Settings Based on Compiler Settings
+ *
+ * This file sets up basic CPU dependency settings based on
+ * compiler settings.  For example, it can determine if
+ * floating point is available.  This particular implementation
+ * is specified to the Renesas v850 port.
  */
 
 /*

@@ -1,7 +1,13 @@
-/*
- *  This include file contains type definitions pertaining to the
- *  Blackfin processor family.
+/**
+ * @file
  *
+ * @brief Blackfin CPU Type Definitions
+ *
+ * This include file contains type definitions pertaining to the
+ * Blackfin processor family.
+ */
+
+/*
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
