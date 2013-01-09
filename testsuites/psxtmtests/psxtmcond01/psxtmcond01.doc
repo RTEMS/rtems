@@ -1,0 +1,6 @@
+This test benchmarks the following cases:
+
++ single invocation of creating a POSIX condition variable
+  (e.g pthread_cond_init)
++ single invocation of deleting a POSIX condition variable
+  (e.g pthread_cond_destroy)
