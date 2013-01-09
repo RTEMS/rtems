@@ -21,17 +21,17 @@
 #include <rtems/libio_.h>
 #include <rtems/pipe.h>
 
-/**
- * @defgroup IMFS POSIX In-Memory File System Support
- *
- * @brief In-Memory File System Support
- *
- * @{
- */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup IMFS POSIX In-Memory File System Support
+ *
+ * @brief In-Memory File System Support.
+ *
+ * @{
+ */
 
 /*
  *  Data types
@@ -161,6 +161,8 @@ typedef union {
   IMFS_generic_t     generic;
 } IMFS_types_union;
 
+/** @} */
+
 /**
  * @addtogroup IMFSGenericNodes
  *
@@ -170,8 +172,8 @@ typedef union {
 /**
  * @brief Initializes an IMFS node.
  *
- * @param[in,out] node is the IMFS node.
- * @param[in] info is the IMFS type information.
+ * @param[in,out] node The IMFS node.
+ * @param[in] info The IMFS type information.
  *
  * @retval node Successful operation.
  * @retval NULL An error occurred.  The @c errno indicates the error.  This
@@ -188,8 +190,8 @@ typedef IMFS_jnode_t *(*IMFS_node_control_initialize)(
 /**
  * @brief Returns the node and does nothing else.
  *
- * @param[in,out] node is the IMFS node.
- * @param[in] info is the IMFS type information.
+ * @param[in,out] node The IMFS node.
+ * @param[in] info The IMFS type information.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -203,8 +205,8 @@ IMFS_jnode_t *IMFS_node_initialize_default(
 /**
  * @brief Returns the node and sets the generic node context.
  *
- * @param[in,out] node is the IMFS node.
- * @param[in] info is the IMFS type information.
+ * @param[in,out] node The IMFS node.
+ * @param[in] info The IMFS type information.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -218,7 +220,7 @@ IMFS_jnode_t *IMFS_node_initialize_generic(
 /**
  * @brief Prepares the removal of an IMFS node from its parent directory.
  *
- * @param[in,out] node is the IMFS node.
+ * @param[in,out] node The IMFS node.
  *
  * @retval node Successful operation.
  * @retval NULL An error occurred.  The @c errno indicates the error.  This
@@ -233,7 +235,7 @@ typedef IMFS_jnode_t *(*IMFS_node_control_remove)(
 /**
  * @brief Returns the node and does nothing else.
  *
- * @param[in,out] node is the IMFS node.
+ * @param[in,out] node The IMFS node.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -246,7 +248,7 @@ IMFS_jnode_t *IMFS_node_remove_default(
 /**
  * @brief Destroys an IMFS node.
  *
- * @param[in,out] node is the IMFS node.
+ * @param[in,out] node The IMFS node.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -257,7 +259,7 @@ typedef IMFS_jnode_t *(*IMFS_node_control_destroy)( IMFS_jnode_t *node );
 /**
  * @brief Returns the node and does nothing else.
  *
- * @param[in,out] node is the IMFS node.
+ * @param[in,out] node The IMFS node.
  *
  * @retval node Returns always the node passed as parameter.
  *
@@ -277,6 +279,12 @@ typedef struct {
 } IMFS_node_control;
 
 /** @} */
+
+/**
+ * @addtogroup IMFS
+ *
+ * @{
+ */
 
 /*
  * Major device number for the IMFS. This is not a real device number because
@@ -594,6 +602,7 @@ extern bool IMFS_is_imfs_instance(
   const rtems_filesystem_location_info_t *loc
 );
 
+/** @} */
 
 /**
  * @defgroup IMFSGenericNodes IMFS Generic Nodes
@@ -614,10 +623,10 @@ extern bool IMFS_is_imfs_instance(
 /**
  * @brief Makes a generic IMFS node.
  *
- * @param[in] path is a pointer to the new generic IMFS node.
- * @param[in] mode is the node mode.
- * @param[in] node_control is the node control.
- * @param[in] context is the node control handler context.
+ * @param[in] path The path to the new generic IMFS node.
+ * @param[in] mode The node mode.
+ * @param[in] node_control The node control.
+ * @param[in] context The node control handler context.
  *
  * @retval 0 Successful operation.
  * @retval -1 An error occurred.  The @c errno indicates the error.
@@ -659,6 +668,12 @@ extern int IMFS_make_generic_node(
 );
 
 /** @} */
+
+/**
+ * @addtogroup IMFS
+ *
+ * @{
+ */
 
 /**
  * @brief Mount an IMFS.
@@ -757,7 +772,6 @@ extern ssize_t memfile_write(
 
 /** @} */
 
-
 /**
  * @name IMFS Device Node Handlers
  *
@@ -766,7 +780,6 @@ extern ssize_t memfile_write(
  * 
  * @{
  */
-
 
 extern int device_open(
   rtems_libio_t *iop,            /* IN  */
@@ -942,6 +955,8 @@ static inline IMFS_jnode_t *IMFS_create_node(
   );
 }
 
+/** @} */
+
 /**
  * @addtogroup IMFSGenericNodes
  *
@@ -980,8 +995,6 @@ static inline dev_t IMFS_generic_get_device_identifier_by_node(
     node->st_ino
   );
 }
-
-/** @} */
 
 /** @} */
 
