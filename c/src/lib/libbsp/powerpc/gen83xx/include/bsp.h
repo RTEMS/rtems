@@ -145,6 +145,8 @@ void mpc83xx_zero_4( void *dest, size_t n);
 
 void cpu_init( void);
 
+void bsp_restart(void *addr);
+
 #ifdef __cplusplus
 }
 #endif
