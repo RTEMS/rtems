@@ -141,14 +141,21 @@ void cpu_init( void)
 {
   BAT dbat, ibat;
   uint32_t msr;
+  uint32_t hid0;
 
   /* Clear MMU and segment registers */
   clear_mmu_regs();
 
   /* Clear caches */
-  PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ILOCK | HID0_DLOCK | HID0_ICE | HID0_DCE);
-  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ICFI | HID0_DCI);
-  PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ICFI | HID0_DCI);
+  hid0 = PPC_SPECIAL_PURPOSE_REGISTER(HID0);
+  if ((hid0 & (HID0_ICE | HID0_DCE)) == 0) {
+    hid0 &= ~(HID0_ILOCK | HID0_DLOCK | HID0_ICE | HID0_DCE);
+    PPC_SET_SPECIAL_PURPOSE_REGISTER(HID0, hid0);
+    hid0 |= HID0_ICFI | HID0_DCI;
+    PPC_SET_SPECIAL_PURPOSE_REGISTER(HID0, hid0);
+    hid0 &= ~(HID0_ICFI | HID0_DCI);
+    PPC_SET_SPECIAL_PURPOSE_REGISTER(HID0, hid0);
+  }
 
   /*
    * Set up IBAT registers in MMU
