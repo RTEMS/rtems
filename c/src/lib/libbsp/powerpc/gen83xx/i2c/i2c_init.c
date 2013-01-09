@@ -20,6 +20,7 @@
 
 #include <mpc83xx/mpc83xx_i2cdrv.h>
 #include <libchip/i2c-2b-eeprom.h>
+#include <libchip/i2c-sc620.h>
 #include <bsp/irq.h>
 #include <bsp.h>
 
@@ -126,6 +127,17 @@ rtems_status_code bsp_register_i2c
                  i2c_busno[0],0x50);
   }
 #endif /* RTEMS_BSP_I2C_EEPROM_DEVICE_NAME */
+
+#ifdef MPC83XX_BOARD_BR_UID
+  if (n > 0) {
+    rtems_libi2c_register_drv(
+      "sc620",
+      &i2c_sc620_driver,
+      i2c_busno[0],
+      0x70
+    );
+  }
+#endif /* MPC83XX_BOARD_BR_UID */
 
   /*
    * FIXME: register RTC driver, when available
