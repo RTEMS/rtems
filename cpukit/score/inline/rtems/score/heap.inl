@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreHeap
- *
- * @brief Heap Handler API.
+ * @brief Heap Handler API
  */
 
 /*
@@ -201,7 +199,8 @@ RTEMS_INLINE_ROUTINE bool _Heap_Is_block_in_heap(
  *
  * The next block of the last block will be the first block.  Since the first
  * block indicates that the previous block is used, this ensures that the last
- * block appears as used for the _Heap_Is_used() and _Heap_Is_free() functions.
+ * block appears as used for the _Heap_Is_used() and _Heap_Is_free()
+ * functions.
  *
  * This feature will be used to terminate the scattered heap area list.  See
  * also _Heap_Extend().

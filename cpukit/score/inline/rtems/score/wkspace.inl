@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/wkspace.inl
+/**
+ * @file
  *
- *  This include file contains the bodies of the routines which contains
- *  information related to the RAM Workspace.
+ * @brief Inlined Routines Associated with the RAM Workspace
+ *
+ * This include file contains the bodies of the routines which contains
+ * information related to the RAM Workspace.
  */
 
 /*
@@ -22,11 +24,12 @@
 #define _RTEMS_SCORE_WKSPACE_INL
 
 /**
- *  @addtogroup ScoreWorkspace 
+ *  @addtogroup ScoreWorkspace
+ *
  *  @{
  */
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

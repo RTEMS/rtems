@@ -1,8 +1,11 @@
-/** 
- *  @file  rtems/score/schedulersimple.inl
+/**
+ * @file
  *
- *  This inline file contains all of the inlined routines associated with
- *  the manipulation of the priority-based scheduling structures.
+ * @brief Inlined Routines Associated with the Manipulation of the
+ * Priority-Based Scheduling Structures
+ *
+ * This inline file contains all of the inlined routines associated with
+ * the manipulation of the priority-based scheduling structures.
  */
 
 /*
@@ -23,15 +26,16 @@
 #include <rtems/score/thread.h>
 
 /**
- *  @addtogroup ScoreScheduler
+ * @addtogroup ScoreScheduler
+ *
  * @{
  */
 
 /**
- *  This routine puts @a the_thread on to the ready queue.
+ * This routine puts @a the_thread on to the ready queue.
  *
- *  @param[in] the_ready_queue is a pointer to the ready queue head
- *  @param[in] the_thread is the thread to be blocked
+ * @param[in] the_ready_queue is a pointer to the ready queue head
+ * @param[in] the_thread is the thread to be blocked
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
   Scheduler_Control *the_ready_queue,
@@ -45,7 +49,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
   _Scheduler_simple_Ready_queue_enqueue( the_thread );
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

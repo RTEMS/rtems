@@ -1,8 +1,11 @@
-/** 
- *  @file  rtems/score/schedulerpriority.inl
+/**
+ * @file
  *
- *  This inline file contains all of the inlined routines associated with
- *  the manipulation of the priority-based scheduling structures.
+ * @brief Inlined Routines Associated with the Manipulation of the
+ * Priority-Based Scheduling Structures
+ *
+ * This inline file contains all of the inlined routines associated with
+ * the manipulation of the priority-based scheduling structures.
  */
 
 /*
@@ -24,13 +27,15 @@
 #include <rtems/score/wkspace.h>
 
 /**
- *  @addtogroup ScoreScheduler
+ * @addtogroup ScoreScheduler
+ *
  * @{
  */
 
-/** @brief  Scheduler priority Ready queue initialize
+/**
+ * @brief Ready queue initialization.
  *
- *  This routine initializes @a the_ready_queue for priority-based scheduling.
+ * This routine initializes @a the_ready_queue for priority-based scheduling.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(void)
 {
@@ -49,11 +54,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(void)
 }
 
 /**
- *  @brief _Scheduler_priority_Ready_queue_enqueue
+ * @brief Put a thread to the ready queue.
  *
- *  This routine puts @a the_thread on to the priority-based ready queue.
- *  
- *  @param[in] the_thread  - pointer to thread
+ * This routine puts @a the_thread on to the priority-based ready queue.
+ *
+ * @param[in] the_thread is a pointer to the thread
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
   Thread_Control                  *the_thread
@@ -66,18 +71,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
   ready      = sched_info->ready_chain;
 
   _Priority_bit_map_Add( &sched_info->Priority_map );
-  
+
   _Chain_Append_unprotected( ready, &the_thread->Object.Node );
 }
 
 /**
- *  @brief _Scheduler_priority_Ready_queue_Enqueue_first
+ * @brief Put a thread to the head of the ready queue.
  *
- *  This routine puts @a the_thread to the head of the ready queue. 
- *  For priority-based ready queues, the thread will be the first thread
- *  at its priority level.
- *  
- *  @param[in] the_thread  - pointer to thread
+ * This routine puts @a the_thread to the head of the ready queue.
+ * For priority-based ready queues, the thread will be the first thread
+ * at its priority level.
+ *
+ * @param[in] the_thread is a pointer to the thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
   Thread_Control                   *the_thread
@@ -96,12 +101,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
 }
 
 /**
- *  @brief _Scheduler_priority_Ready_queue_extract
+ * @brief Remove a specific thread from the ready queue.
  *
- *  This routine removes a specific thread from the specified 
- *  priority-based ready queue.
+ * This routine removes a specific thread from the specified
+ * priority-based ready queue.
  *
- *  @param[in] the_thread  - pointer to thread
+ * @param[in] the_thread is a pointer to the thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
   Thread_Control        *the_thread
@@ -122,13 +127,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
 }
 
 /**
- *  @brief _Scheduler_priority_Ready_queue_first
+ * @brief Return a pointer to the first thread.
  *
- *  This routines returns a pointer to the first thread on @a the_ready_queue.
+ * This routines returns a pointer to the first thread on @a the_ready_queue.
  *
- *  @param[in] the_ready_queue - pointer to thread queue
+ * @param[in] the_ready_queue - pointer to thread queue
  *
- *  @return This method returns the first thread or NULL
+ * @return This method returns the first thread or NULL
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
   Chain_Control       *the_ready_queue
@@ -143,12 +148,12 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_priority_Ready_queue_first(
 }
 
 /**
- *  @brief _Scheduler_priority_Ready_queue_requeue
+ * @brief Requeue a thread on the ready queue.
  *
- *  This routine is invoked when a thread changes priority and should be
- *  moved to a different position on the ready queue.
+ * This routine is invoked when a thread changes priority and should be
+ * moved to a different position on the ready queue.
  *
- *  @param[in] the_thread  - pointer to thread
+ * @param[in] the_thread is a pointer to the thread
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
   Thread_Control            *the_thread
@@ -162,19 +167,17 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
     _Chain_Extract_unprotected( &the_thread->Object.Node );
 
     _Chain_Append_unprotected(
-      sched_info->ready_chain, 
+      sched_info->ready_chain,
       &the_thread->Object.Node
     );
   }
 }
 
 /**
- *  @brief _Scheduler_priority_Schedule_body
+ * @brief Scheduling decision logic.
  *
- *  This kernel routine implements scheduling decision logic
- *  for priority-based scheduling.  
- *
- *  @param[in] the_thread  - pointer to thread
+ * This kernel routine implements scheduling decision logic
+ * for priority-based scheduling.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(void)
 {
@@ -184,12 +187,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(void)
 }
 
 /**
- *  @brief Scheduler priority Priority compare body
+ * @brief Priority comparison.
  *
- *  This routine implements priority comparison for priority-based
- *  scheduling.
+ * This routine implements priority comparison for priority-based
+ * scheduling.
  *
- *  @return >0 for higher priority, 0 for equal and <0 for lower priority.
+ * @return >0 for higher priority, 0 for equal and <0 for lower priority.
  */
 RTEMS_INLINE_ROUTINE int _Scheduler_priority_Priority_compare_body(
   Priority_Control      p1,
@@ -200,7 +203,7 @@ RTEMS_INLINE_ROUTINE int _Scheduler_priority_Priority_compare_body(
   return ( p2 - p1 );
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
