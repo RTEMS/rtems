@@ -135,8 +135,11 @@ rpcUdpCleanup(void);
  *
  * 			Supply zero values to have the
  * 			driver chose reasonable defaults.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  */
-void
+int
 nfsInit(int smallPoolDepth, int bigPoolDepth);
 
 /**
