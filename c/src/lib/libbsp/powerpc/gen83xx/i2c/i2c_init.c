@@ -23,7 +23,27 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 
-static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[2] = {
+static void i2c1_probe(mpc83xx_i2c_softc_t *self)
+{
+#if MPC83XX_CHIP_TYPE != 8309
+  if (((mpc83xx.clk.sccr >> (31-1)) & 0x03) > 0) {
+    self->base_frq =
+      (BSP_bus_frequency
+       /((mpc83xx.clk.sccr >> (31-1)) & 0x03));
+  }
+#else /* MPC83XX_CHIP_TYPE != 8309 */
+  self->base_frq = BSP_bus_frequency;
+#endif /* MPC83XX_CHIP_TYPE != 8309 */
+}
+
+#ifndef MPC83XX_BOARD_BR_UID
+static void i2c2_probe(mpc83xx_i2c_softc_t *self)
+{
+  self->base_frq = BSP_bus_frequency;
+}
+#endif /* MPC83XX_BOARD_BR_UID */
+
+static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[] = {
   /* first channel */
   {
     {/* public fields */
@@ -34,27 +54,26 @@ static mpc83xx_i2c_desc_t mpc83xx_i2c_bus_tbl[2] = {
       .reg_ptr = &mpc83xx.i2c[0],
       .initialized = FALSE,
       .irq_number = BSP_IPIC_IRQ_I2C1,
-      .base_frq = 0 /* will be set during initiailization */
+      .base_frq = 0, /* will be set during probe */
+      .probe = i2c1_probe
     }
-  },
+  }
+#ifndef MPC83XX_BOARD_BR_UID
   /* second channel */
-  {
+  , {
     { /* public fields */
       .ops = &mpc83xx_i2c_ops,
-      .size = sizeof(mpc83xx_i2c_bus_tbl[1]),
+      .size = sizeof(mpc83xx_i2c_bus_tbl[0]),
     },
     { /* our private fields */
       .reg_ptr = &mpc83xx.i2c[1],
       .initialized = FALSE,
       .irq_number = BSP_IPIC_IRQ_I2C2,
-      .base_frq = 0 /* will be set during initiailization */
+      .base_frq = 0, /* will be set during probe */
+      .probe = i2c2_probe
     }
   }
-};
-
-rtems_libi2c_bus_t *mpc83xx_i2c_bus_descriptor[2] = {
-  &mpc83xx_i2c_bus_tbl[0].bus_desc,
-  &mpc83xx_i2c_bus_tbl[1].bus_desc
+#endif /* MPC83XX_BOARD_BR_UID */
 };
 
 /*=========================================================================*\
@@ -76,8 +95,10 @@ rtems_status_code bsp_register_i2c
 \*=========================================================================*/
 
 {
-  int ret_code;
-  int i2c1_busno,i2c2_busno;
+  char device_path[] = "/dev/i2c?";
+  size_t n = RTEMS_ARRAY_SIZE(mpc83xx_i2c_bus_tbl);
+  size_t i;
+  int i2c_busno[n];
 
   /*
    * init I2C library (if not already done)
@@ -85,54 +106,30 @@ rtems_status_code bsp_register_i2c
   rtems_libi2c_initialize ();
 
   /*
-   * update input frequency of I2c modules into descriptor
+   * init I2C buses
    */
-  /*
-   * I2C1 is clocked with TSEC 1
-   */
-  if (((mpc83xx.clk.sccr >> (31-1)) & 0x03) > 0) {
-    mpc83xx_i2c_bus_tbl[0].softc.base_frq =
-      (BSP_bus_frequency
-       /((mpc83xx.clk.sccr >> (31-1)) & 0x03));
-  }
+  for (i = 0; i < n; ++i) {
+    mpc83xx_i2c_desc_t *desc = &mpc83xx_i2c_bus_tbl[i];
 
-  mpc83xx_i2c_bus_tbl[1].softc.base_frq = BSP_bus_frequency;
-  /*
-   * register first I2C bus
-   */
-  ret_code = rtems_libi2c_register_bus("/dev/i2c1",
-				       mpc83xx_i2c_bus_descriptor[0]);
-  if (ret_code < 0) {
-    return -ret_code;
+    (*desc->softc.probe)(&desc->softc);
+    device_path[sizeof(device_path) - 2] = (char) ('1' + i);
+    i2c_busno[i] = rtems_libi2c_register_bus(device_path, &desc->bus_desc);
   }
-  i2c1_busno = ret_code;
-  /*
-   * register second I2C bus
-   */
-  ret_code = rtems_libi2c_register_bus("/dev/i2c2",
-				       mpc83xx_i2c_bus_descriptor[1]);
-  if (ret_code < 0) {
-    return -ret_code;
-  }
-  i2c2_busno = ret_code;
 
 #ifdef RTEMS_BSP_I2C_EEPROM_DEVICE_NAME
-
-  /*
-   * register EEPROM to bus 1, Address 0x50
-   */
-  ret_code = rtems_libi2c_register_drv(RTEMS_BSP_I2C_EEPROM_DEVICE_NAME,
-				       i2c_2b_eeprom_driver_descriptor,
-				       i2c1_busno,0x50);
-
-  if (ret_code < 0) {
-    return -ret_code;
+  if (n > 0) {
+    /*
+     * register EEPROM to bus 1, Address 0x50
+     */
+    rtems_libi2c_register_drv(RTEMS_BSP_I2C_EEPROM_DEVICE_NAME,
+                 i2c_2b_eeprom_driver_descriptor,
+                 i2c_busno[0],0x50);
   }
-
 #endif /* RTEMS_BSP_I2C_EEPROM_DEVICE_NAME */
 
   /*
    * FIXME: register RTC driver, when available
    */
-  return 0;
+
+  return RTEMS_SUCCESSFUL;
 }

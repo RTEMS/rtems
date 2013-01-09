@@ -24,6 +24,11 @@
 #include <bsp/mpc83xx_i2cdrv.h>
 
 #if MPC55XX_CHIP_FAMILY == 551
+  static void i2c_probe(mpc83xx_i2c_softc_t *self)
+  {
+    self->base_frq = bsp_clock_speed;
+  }
+
   static mpc83xx_i2c_desc_t mpc55xx_i2c_bus = {
     .bus_desc = {
       .ops = &mpc83xx_i2c_ops,
@@ -33,7 +38,8 @@
       .reg_ptr = (m83xxI2CRegisters_t *) 0xfff88000,
       .initialized = FALSE,
       .irq_number = MPC55XX_IRQ_I2C(0),
-      .base_frq = 0
+      .base_frq = 0,
+      .probe = i2c_probe
     }
   };
 
@@ -44,7 +50,6 @@
 
     rtems_libi2c_initialize ();
 
-    mpc55xx_i2c_bus.softc.base_frq = bsp_clock_speed;
     busno = rtems_libi2c_register_bus(
       "/dev/i2c1",
       &mpc55xx_i2c_bus.bus_desc
