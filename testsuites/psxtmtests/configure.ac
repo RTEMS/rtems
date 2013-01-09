@@ -82,6 +82,7 @@ psxtmbarrier02/Makefile
 psxtmbarrier03/Makefile
 psxtmcond01/Makefile
 psxtmcond02/Makefile
+psxtmcond05/Makefile
 psxtmkey01/Makefile
 psxtmkey02/Makefile
 psxtmmq01/Makefile
