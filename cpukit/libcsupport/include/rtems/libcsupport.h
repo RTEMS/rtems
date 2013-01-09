@@ -141,7 +141,7 @@ typedef struct {
 /**
  * @brief Tasks a snapshot of the resource usage of the system.
  *
- * @param[out] snapshot will contain snapshot of used resources.
+ * @param[out] snapshot The snapshot of used resources.
  *
  * @see rtems_resource_snapshot_equal() and rtems_resource_snapshot_check().
  *
@@ -167,8 +167,11 @@ void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot);
 /**
  * @brief Compares two resource snapshots for equality.
  *
+ * @param[in] a One resource snapshot.
+ * @param[in] b Another resource snapshot.
+ *
  * @retval true The resource snapshots are equal.
- * @retval false The resource snapshots are not equal.
+ * @retval false Otherwise.
  *
  * @see rtems_resource_snapshot_take().
  */
@@ -179,13 +182,13 @@ bool rtems_resource_snapshot_equal(
 
 /**
  * @brief Takes a new resource snapshot and checks that it is equal to the
- * given snapshot.
+ * given resource snapshot.
  *
- * @param[in] snapshot is a pointer to the snapshot used for comparison 
- * with the new snapshot.
+ * @param[in] snapshot The resource snapshot used for comparison with the new
+ * resource snapshot.
  *
  * @retval true The resource snapshots are equal.
- * @retval false The resource snapshots are not equal.
+ * @retval false Otherwise.
  *
  * @see rtems_resource_snapshot_take().
  */
