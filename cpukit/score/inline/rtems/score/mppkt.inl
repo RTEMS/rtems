@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/mppkt.inl
+/**
+ * @file
  *
- *  This package is the implementation of the Packet Handler
- *  routines which are inlined.
+ * @brief Inlined Routines from the Packet Handler
+ *
+ * This package is the implementation of the Packet Handler
+ * routines which are inlined.
  */
 
 /*
@@ -22,16 +24,17 @@
 #define _RTEMS_SCORE_MPPKT_INL
 
 /**
- *  @addtogroup ScoreMPPacket 
- *  @{
+ * @addtogroup ScoreMPPacket
+ *
+ * @{
  */
 
 /**
- *  This function returns true if the the_packet_class is valid,
- *  and false otherwise.
+ * This function returns true if the the_packet_class is valid,
+ * and false otherwise.
  *
- *  @note Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
- *        because this enum starts at lower bound of zero.
+ * @note Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
+ *       because this enum starts at lower bound of zero.
  */
 
 RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_valid_packet_class (
@@ -42,8 +45,8 @@ RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_valid_packet_class (
 }
 
 /**
- *  This function returns true if the the_packet_class is null,
- *  and false otherwise.
+ * This function returns true if the the_packet_class is null,
+ * and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_null (
@@ -53,7 +56,7 @@ RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_null (
   return the_packet == NULL;
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

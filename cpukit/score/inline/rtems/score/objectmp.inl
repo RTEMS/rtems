@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/objectmp.inl
+/**
+ * @file
  *
- *  This include file contains the bodies of all inlined routines
- *  which deal with global objects.
+ * @brief Inlined Routines Associated with Global Objects
+ *
+ * This include file contains the bodies of all inlined routines
+ * which deal with global objects.
  */
 
 /*
@@ -22,12 +24,13 @@
 #define _RTEMS_SCORE_OBJECTMP_INL
 
 /**
- *  @addtogroup ScoreObjectMP 
- *  @{
+ * @addtogroup ScoreObjectMP
+ *
+ * @{
  */
 
 /**
- *  This function allocates a Global Object control block.
+ * This function allocates a Global Object control block.
  */
 
 RTEMS_INLINE_ROUTINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
@@ -39,7 +42,7 @@ RTEMS_INLINE_ROUTINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
 }
 
 /**
- *  This routine deallocates a Global Object control block.
+ * This routine deallocates a Global Object control block.
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
@@ -53,7 +56,7 @@ RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
 }
 
 /**
- *  This function returns whether the global object is NULL or not.
+ * This function returns whether the global object is NULL or not.
  */
 
 RTEMS_INLINE_ROUTINE bool _Objects_MP_Is_null_global_object (
@@ -63,7 +66,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_MP_Is_null_global_object (
   return( the_object == NULL );
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

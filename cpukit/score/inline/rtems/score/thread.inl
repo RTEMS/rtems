@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/thread.inl
+/**
+ * @file
  *
- *  This file contains the macro implementation of the inlined
- *  routines from the Thread handler.
+ * @brief Inlined Routines from the Thread Handler
+ *
+ * This file contains the macro implementation of the inlined
+ * routines from the Thread handler.
  */
 
 /*
@@ -25,8 +27,9 @@
 #include <rtems/score/context.h>
 
 /**
- *  @addtogroup ScoreThread 
- *  @{
+ * @addtogroup ScoreThread
+ *
+ * @{
  */
 
 #if defined(RTEMS_SMP)
@@ -37,8 +40,9 @@
 
 #else
 
-  /** @brief _Thread_Dispatch_in_critical_section
-   * 
+  /**
+ * @brief _Thread_Dispatch_in_critical_section
+   *
    * This routine returns true if thread dispatch indicates
    * that we are in a critical section.
    */
@@ -50,8 +54,9 @@
      return true;
   }
 
-  /** @brief _Thread_Dispatch_get_disable_level
-   * 
+  /**
+   * @brief Get thread dispatch disable level.
+   *
    * This routine returns value of the the thread dispatch level.
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
@@ -59,9 +64,10 @@
     return _Thread_Dispatch_disable_level;
   }
 
-  /** @brief _Thread_Dispatch_set_disable_level
-   * 
-   * This routine sets thread dispatch level to the 
+  /**
+   * @brief Set thread dispatch disable level.
+   *
+   * This routine sets thread dispatch level to the
    * value passed in.
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
@@ -70,8 +76,9 @@
     return value;
   }
 
-  /** @brief _Thread_Dispatch_increment_disable_level
-   * 
+  /**
+   * @brief Increase thread dispatch disable level.
+   *
    * This rountine increments the thread dispatch level
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_increment_disable_level(void)
@@ -84,8 +91,9 @@
     return level;
   }
 
-  /** @brief _Thread_Dispatch_decrement_disable_level
-   * 
+  /**
+   * @brief Decrease thread dispatch disable level.
+   *
    * This routine decrements the thread dispatch level.
    */
   RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_decrement_disable_level(void)
@@ -98,9 +106,10 @@
     return level;
   }
 
-  /** @brief _Thread_Dispatch_initialization
-   * 
-   *  This routine initializes the thread dispatching subsystem.
+  /**
+   * @brief Thread dispatch initialization.
+   *
+   * This routine initializes the thread dispatching subsystem.
    */
   RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
   {
@@ -110,9 +119,9 @@
 #endif
 
 /**
- *  This routine halts multitasking and returns control to
- *  the "thread" (i.e. the BSP) which initially invoked the
- *  routine which initialized the system.
+ * This routine halts multitasking and returns control to
+ * the "thread" (i.e. the BSP) which initially invoked the
+ * routine which initialized the system.
  */
 
 RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
@@ -140,8 +149,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Stop_multitasking( void )
 }
 
 /**
- *  This function returns true if the_thread is the currently executing
- *  thread, and false otherwise.
+ * This function returns true if the_thread is the currently executing
+ * thread, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
@@ -152,8 +161,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing (
 }
 
 /**
- *  This function returns true if the_thread is the heir
- *  thread, and false otherwise.
+ * This function returns true if the_thread is the heir
+ * thread, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
@@ -164,8 +173,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
 }
 
 /**
- *  This function returns true if the currently executing thread
- *  is also the heir thread, and false otherwise.
+ * This function returns true if the currently executing thread
+ * is also the heir thread, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_also_the_heir( void )
@@ -174,9 +183,9 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_also_the_heir( void )
 }
 
 /**
- *  This routine clears any blocking state for the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
+ * This routine clears any blocking state for the_thread.  It performs
+ * any necessary scheduling operations including the selection of
+ * a new heir thread.
  */
 
 RTEMS_INLINE_ROUTINE void _Thread_Unblock (
@@ -187,8 +196,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Unblock (
 }
 
 /**
- *  This routine resets the current context of the calling thread
- *  to that of its initial state.
+ * This routine resets the current context of the calling thread
+ * to that of its initial state.
  */
 
 RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
@@ -202,9 +211,9 @@ RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 }
 
 /**
- *  This function returns true if the floating point context of
- *  the_thread is currently loaded in the floating point unit, and
- *  false otherwise.
+ * This function returns true if the floating point context of
+ * the_thread is currently loaded in the floating point unit, and
+ * false otherwise.
  */
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -217,8 +226,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_allocated_fp (
 #endif
 
 /**
- *  This routine is invoked when the currently loaded floating
- *  point context is now longer associated with an active thread.
+ * This routine is invoked when the currently loaded floating
+ * point context is now longer associated with an active thread.
  */
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -229,7 +238,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Deallocate_fp( void )
 #endif
 
 /**
- *  This routine prevents dispatching.
+ * This routine prevents dispatching.
  */
 
 #if defined ( __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__ )
@@ -243,10 +252,10 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 #endif
 
 /**
- *  This routine allows dispatching to occur again.  If this is
- *  the outer most dispatching critical section, then a dispatching
- *  operation will be performed and, if necessary, control of the
- *  processor will be transferred to the heir thread.
+ * This routine allows dispatching to occur again.  If this is
+ * the outer most dispatching critical section, then a dispatching
+ * operation will be performed and, if necessary, control of the
+ * processor will be transferred to the heir thread.
  */
 
 #if defined ( __THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__ )
@@ -262,9 +271,9 @@ RTEMS_INLINE_ROUTINE void _Thread_Disable_dispatch( void )
 #endif
 
 /**
- *  This routine allows dispatching to occur again.  However,
- *  no dispatching operation is performed even if this is the outer
- *  most dispatching critical section.
+ * This routine allows dispatching to occur again.  However,
+ * no dispatching operation is performed even if this is the outer
+ * most dispatching critical section.
  */
 
 RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
@@ -274,8 +283,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 }
 
 /**
- *  This function returns true if dispatching is disabled, and false
- *  otherwise.
+ * This function returns true if dispatching is disabled, and false
+ * otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
@@ -284,8 +293,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
 }
 
 /**
- *  This function returns true if dispatching is disabled, and false
- *  otherwise.
+ * This function returns true if dispatching is disabled, and false
+ * otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
@@ -294,7 +303,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
 }
 
 /**
- *  This function returns true if the_thread is NULL and false otherwise.
+ * This function returns true if the_thread is NULL and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
@@ -304,9 +313,10 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
   return ( the_thread == NULL );
 }
 
-/** @brief _Thread_Is_proxy_blocking
+/**
+ * @brief Is proxy blocking.
  *
- *  status which indicates that a proxy is blocking, and false otherwise.
+ * status which indicates that a proxy is blocking, and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Thread_Is_proxy_blocking (
   uint32_t   code
@@ -316,18 +326,18 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_proxy_blocking (
 }
 
 /**
- *  This routine allocates an internal thread.
+ * This routine allocates an internal thread.
  */
- 
+
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 {
   return (Thread_Control *) _Objects_Allocate( &_Thread_Internal_information );
 }
- 
+
 /**
- *  This routine frees an internal thread.
+ * This routine frees an internal thread.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
   Thread_Control *the_task
 )
@@ -336,18 +346,18 @@ RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
 }
 
 /**
- *  This routine returns the C library re-enterant pointer.
+ * This routine returns the C library re-enterant pointer.
  */
- 
+
 RTEMS_INLINE_ROUTINE struct _reent **_Thread_Get_libc_reent( void )
 {
   return _Thread_libc_reent;
 }
 
 /**
- *  This routine set the C library re-enterant pointer.
+ * This routine set the C library re-enterant pointer.
  */
- 
+
 RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
   struct _reent **libc_reent
 )
@@ -356,13 +366,13 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
 }
 
 /**
- *  This routine evaluates the current scheduling information for the
- *  system and determines if a context switch is required.  This
- *  is usually called after changing an execution mode such as preemptability
- *  for a thread.
+ * This routine evaluates the current scheduling information for the
+ * system and determines if a context switch is required.  This
+ * is usually called after changing an execution mode such as preemptability
+ * for a thread.
  *
- *  @param[in] are_signals_pending specifies whether or not the API
- *             level signals are pending and a dispatch is needed.
+ * @param[in] are_signals_pending specifies whether or not the API
+ *            level signals are pending and a dispatch is needed.
  */
 RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_is_dispatch_needed(
   bool are_signals_pending
@@ -381,7 +391,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_is_dispatch_needed(
   return false;
 }
 
-/**@}*/
+/** @}*/
 
 #endif
 /* end of include file */

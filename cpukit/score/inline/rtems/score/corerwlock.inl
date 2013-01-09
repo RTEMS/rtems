@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/corerwlock.inl
+/**
+ * @file
  *
- *  This include file contains all of the inlined routines associated
- *  with the SuperCore RWLock.
+ * @brief Inlined Routines Associated with the SuperCore RWLock
+ *
+ * This include file contains all of the inlined routines associated
+ * with the SuperCore RWLock.
  */
 
 /*
@@ -22,18 +24,18 @@
 #define _RTEMS_SCORE_CORERWLOCK_INL
 
 /**
- *  @addtogroup ScoreRWLock 
- *  @{
+ * @addtogroup ScoreRWLock
+ *
+ * @{
  */
 
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
 /**
+ * This method is used to initialize core rwlock attributes.
  *
- *  This method is used to initialize core rwlock attributes.
- *
- *  @param[in] the_attributes pointer to the attributes to initialize.
+ * @param[in] the_attributes pointer to the attributes to initialize.
  */
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Initialize_attributes(
   CORE_RWLock_Attributes *the_attributes
@@ -43,7 +45,7 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Initialize_attributes(
 }
 
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
