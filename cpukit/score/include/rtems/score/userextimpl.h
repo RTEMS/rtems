@@ -30,9 +30,8 @@ extern "C" {
  * @ingroup Score
  *
  * @addtogroup ScoreUserExt
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief List of active extensions.
@@ -46,9 +45,8 @@ extern Chain_Control _User_extensions_Switches_list;
 
 /**
  * @name Extension Maintainance
- *
- * @{
  */
+/**@{**/
 
 void _User_extensions_Handler_initialization( void );
 
@@ -158,9 +156,8 @@ void _User_extensions_Iterate(
 
 /**
  * @name Extension Callout Dispatcher
- *
- * @{
  */
+/**@{**/
 
 static inline bool _User_extensions_Thread_create( Thread_Control *created )
 {

@@ -26,9 +26,8 @@ extern "C" {
 
 /**
  * @addtogroup ScoreCPU
- *
- * @{
  */
+/**@{**/
 
 /*
  *  This file contains the information required to build

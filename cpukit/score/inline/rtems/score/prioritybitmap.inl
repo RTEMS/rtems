@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScorePriority
- *
- * @{
  */
+/**@{**/
 
 #include <rtems/score/bitfield.h>
 

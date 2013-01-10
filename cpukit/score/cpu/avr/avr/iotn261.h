@@ -45,8 +45,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #include <avr/iotnx61.h>
 

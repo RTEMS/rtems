@@ -34,8 +34,8 @@ extern "C" {
  *
  * @brief Private Support Information for POSIX Threads
  * 
- * @{
  */
+/**@{**/
 
 /**
  * The following sets the minimum stack size for POSIX threads.

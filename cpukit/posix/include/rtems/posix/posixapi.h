@@ -27,8 +27,8 @@
  *
  * RTEMS POSIX API definitions and modules.
  *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Initialize POSIX API.

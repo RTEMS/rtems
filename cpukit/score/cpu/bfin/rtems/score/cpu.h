@@ -363,8 +363,8 @@ extern "C" {
  *
  * This group assists in issues related to processor endianness.
  *
- * @{
  */
+/**@{**/
 
 /**
  * Define what is required to specify how the network to host conversion
@@ -460,9 +460,8 @@ extern "C" {
  * Port Specific Information:
  *
  * XXX document implementation including references if appropriate
- *
- * @{
  */
+/**@{**/
 
 #ifndef ASM
 
@@ -547,9 +546,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  * Port Specific Information:
  *
  * XXX document implementation including references if appropriate
- *
- * @{
  */
+/**@{**/
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
@@ -700,9 +698,8 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /**
  * @addtogroup CPUInterrupt
- *
- * @{
  */
+/**@{**/
 
 /**
  * Support routine to initialize the RTEMS vector table after it is allocated.
@@ -939,9 +936,8 @@ void _CPU_Context_Initialize(
  *
  * This set of routines are used to implement fast searches for
  * the most important ready task.
- *
- * @{
  */
+/**@{**/
 
 /**
  * This definition is set to TRUE if the port uses the generic bitfield
@@ -1149,9 +1145,8 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
  * @addtogroup CPUContext
- *
- * @{
  */
+/**@{**/
 
 /**
  * This routine switches from the run context to the heir context.

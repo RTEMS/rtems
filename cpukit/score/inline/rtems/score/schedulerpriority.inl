@@ -28,9 +28,8 @@
 
 /**
  * @addtogroup ScoreScheduler
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Ready queue initialization.

@@ -53,8 +53,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #ifndef _AVR_ATmega169PA_H_
 #define _AVR_ATmega169PA_H_ 1

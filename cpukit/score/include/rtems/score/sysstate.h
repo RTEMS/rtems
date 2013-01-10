@@ -30,9 +30,8 @@ extern "C" {
  * @ingroup Score
  *
  * @brief Management of the internal system state of RTEMS.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief System states.

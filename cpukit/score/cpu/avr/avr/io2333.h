@@ -49,8 +49,8 @@
 /**
  * @name I/O Registers
  * 
- * @{
  */
+/**@{**/
 /* UART Baud Rate Register high */
 #define UBRRH	_SFR_IO8(0x03)
 
@@ -179,8 +179,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 /* External Interrupt 0 */
 #define INT0_vect			_VECTOR(1)
 #define SIG_INTERRUPT0			_VECTOR(1)
@@ -445,8 +445,8 @@
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define    RAMEND   0xDF    /*Last On-Chip SRAM location*/
 #define    XRAMEND  RAMEND
 #define    E2END    0x7F

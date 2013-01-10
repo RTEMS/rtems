@@ -30,9 +30,8 @@ extern "C" {
 
 /**
  * @addtogroup ScoreCPU
- *
- * @{
  */
+/**@{**/
 
 /*
  *  This section defines the basic types for this processor.

@@ -223,9 +223,8 @@ rtems_status_code rtems_event_receive (
  * The event @ref RTEMS_EVENT_SYSTEM_TRANSIENT is used for transient usage.
  * See also @ref ClassicEventTransient.  This event may be used by every entity
  * that fulfils its usage pattern.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Reserved system event for network SBWAIT usage.
@@ -367,9 +366,8 @@ rtems_status_code rtems_event_system_receive(
  *   assert(req.work_done);
  * }
  * @endcode
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief See rtems_event_system_send().

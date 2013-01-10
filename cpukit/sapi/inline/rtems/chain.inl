@@ -26,9 +26,8 @@
 
 /**
  * @addtogroup ClassicChains
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Initialize a chain Header.

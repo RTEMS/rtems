@@ -26,8 +26,8 @@
  *
  * @brief Interface to the POSIX Priority Implementation
  * 
- * @{
  */
+/**@{**/
 
 #include <rtems/score/priority.h>
 

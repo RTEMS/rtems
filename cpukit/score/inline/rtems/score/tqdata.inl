@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreThreadQ
- *
- * @{
  */
+/**@{**/
 
 /**
  * This function returns the index of the priority chain on which

@@ -34,8 +34,8 @@ extern "C" {
  *
  * @brief RTEMS Specific Support for the Standard C Library
  *
- * @{
  */
+/**@{**/
 
 extern void malloc_dump(void);
 

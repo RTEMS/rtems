@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreMessageQueue
- *
- * @{
  */
+/**@{**/
 
 #include <string.h>   /* needed for memcpy */
 

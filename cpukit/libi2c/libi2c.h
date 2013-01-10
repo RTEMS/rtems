@@ -67,8 +67,8 @@ extern "C" {
  *
  * @brief I2C library.
  *
- * @{
  */
+/**@{**/
 
 /* Simple I2C driver API */
 

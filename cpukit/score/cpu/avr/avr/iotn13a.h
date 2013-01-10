@@ -50,8 +50,8 @@
 /**
  * @name Registers and Associated Bit Numbers
  * 
- * @{
  */
+/**@{**/
 #define ADCSRB _SFR_IO8(0x03)
 #define ADTS0 0
 #define ADTS1 1
@@ -313,8 +313,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 /* Vector 0 is the reset vector */
 #define INT0_vect_num  1
 #define INT0_vect      _VECTOR(1)  /* External Interrupt 0 */
@@ -342,8 +342,8 @@
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define SPM_PAGESIZE (32)
 #define RAMSTART     (0x60)
 #define RAMSIZE      (64)
@@ -359,8 +359,8 @@
 /**
  * @name Fuses
  * 
- * @{
  */
+/**@{**/
 #define FUSE_MEMORY_SIZE 2
 
 /* Low Fuse Byte */
@@ -390,16 +390,16 @@
 /**
  * @name Lock Bits
  * 
- * @{
  */
+/**@{**/
 #define __LOCK_BITS_EXIST
 /** @} */
 
 /**
  * @name Signature
  * 
- * @{
  */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x90
 #define SIGNATURE_2 0x07

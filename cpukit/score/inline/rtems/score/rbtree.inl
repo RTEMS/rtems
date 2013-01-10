@@ -28,9 +28,8 @@
 
 /**
  * @addtogroup ScoreRBTree
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Get the direction opposite to @a the_dir.

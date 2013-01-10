@@ -27,9 +27,8 @@
 
 /**
  * @addtogroup ScoreAddress
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Add offset to an address.

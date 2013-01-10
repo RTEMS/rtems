@@ -27,9 +27,8 @@
 
 /**
  * @addtogroup ScoreScheduler
- *
- * @{
  */
+/**@{**/
 
 /**
  * This routine puts @a the_thread on to the ready queue.

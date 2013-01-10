@@ -27,9 +27,8 @@
 
 /**
  * @addtogroup ScoreThreadQ
- *
- * @{
  */
+/**@{**/
 
 /** @} */
 

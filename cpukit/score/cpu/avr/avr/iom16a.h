@@ -50,8 +50,8 @@
 /**
  * @name Registers and Associated Bit Numbers
  * 
- * @{
  */
+/**@{**/
 #define TWBR _SFR_IO8(0x00)
 #define TWBR0 0
 #define TWBR1 1
@@ -661,8 +661,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 /* Vector 0 is the reset vector */
 #define INT0_vect_num  1
 #define INT0_vect      _VECTOR(1)  /* External Interrupt Request 0 */
@@ -714,8 +714,8 @@
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define SPM_PAGESIZE (128)
 #define RAMSTART     (0x60)
 #define RAMSIZE      (1024)
@@ -731,8 +731,8 @@
 /**
  * @name Fuses
  * 
- * @{
  */
+/**@{**/
 #define FUSE_MEMORY_SIZE 2
 
 /* Low Fuse Byte */
@@ -765,8 +765,8 @@
 /**
  * @name Lock Bits
  * 
- * @{
  */
+/**@{**/
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST
@@ -775,8 +775,8 @@
 /**
  * @name Signature
  * 
- * @{
  */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x03
@@ -785,8 +785,8 @@
 /**
  * @name Device Pin Definitions
  * 
- * @{
  */
+/**@{**/
 #define MOSI_DDR   DDRB
 #define MOSI_PORT  PORTB
 #define MOSI_PIN   PINB

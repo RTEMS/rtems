@@ -24,9 +24,8 @@
 
 /**
  * @addtogroup ScoreHeap
- *
- * @{
  */
+/**@{**/
 
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Free_list_head( Heap_Control *heap )
 {

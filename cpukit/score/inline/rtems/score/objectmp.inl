@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreObjectMP
- *
- * @{
  */
+/**@{**/
 
 /**
  * This function allocates a Global Object control block.

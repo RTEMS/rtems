@@ -38,9 +38,8 @@ extern "C" {
  * In addition to the Classic API interrupt handler with a handle are
  * supported.  You can also install multiple shared handler for one interrupt
  * vector.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Makes the interrupt handler unique.  Prevents other handler from

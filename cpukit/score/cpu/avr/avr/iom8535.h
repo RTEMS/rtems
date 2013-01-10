@@ -49,8 +49,8 @@
 /**
  * @name I/O Registers
  * 
- * @{
  */
+/**@{**/
 /* TWI stands for "Two Wire Interface" or "TWI Was I2C(tm)" */
 #define TWBR    _SFR_IO8(0x00)
 #define TWSR    _SFR_IO8(0x01)
@@ -235,8 +235,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 /* External Interrupt 0 */
 #define INT0_vect			_VECTOR(1)
 #define SIG_INTERRUPT0			_VECTOR(1)
@@ -673,8 +673,8 @@
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define SPM_PAGESIZE 64
 #define RAMEND       0x25F    /* Last On-Chip SRAM Location */
 #define XRAMEND      RAMEND
@@ -686,8 +686,8 @@
 /**
  * @name Fuses
  * 
- * @{
  */
+/**@{**/
 #define FUSE_MEMORY_SIZE 2
 
 /* Low Fuse Byte */
@@ -717,8 +717,8 @@
 /**
  * @name Lock Bits
  * 
- * @{
  */
+/**@{**/
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST 
@@ -727,8 +727,8 @@
 /**
  * @name Signature
  * 
- * @{
  */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x08

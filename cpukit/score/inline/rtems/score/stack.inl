@@ -27,9 +27,8 @@
 
 /**
  * @addtogroup ScoreStack
- *
- * @{
  */
+/**@{**/
 
 /**
  * This routine initializes the_stack record to indicate that

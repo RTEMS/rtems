@@ -33,8 +33,8 @@
  * This encapsulates functionality which implements the RTEMS API
  * Barrier Manager.
  * 
- * @{
  */
+/**@{**/
 
 #ifdef __cplusplus
 extern "C" {

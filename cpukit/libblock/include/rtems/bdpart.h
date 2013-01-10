@@ -79,15 +79,13 @@ extern "C" {
  *  - <a href="http://en.wikipedia.org/wiki/Extended_boot_record">Extended Boot Record</a>
  *  - <a href="http://en.wikipedia.org/wiki/Cylinder-head-sector">Cylinder Head Sector</a>
  *  - <a href="http://www.win.tue.nl/~aeb/partitions/partition_types-1.html">Partition Types</a>
- *
- * @{
  */
+/**@{**/
 
 /**
  * @name MBR Partition Types and Flags
- *
- * @{
  */
+/**@{**/
 
 #define RTEMS_BDPART_MBR_EMPTY 0x0U
 

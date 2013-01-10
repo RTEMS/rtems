@@ -1,7 +1,7 @@
 /**
  * @file rtems/rtems/region.inl
  *
- * @defgroup ClassicRegion 
+ * @addtogroup ClassicRegion 
  *
  * @ingroup ClassicRTEMS
  * @brief Macro Implementation from Region Manager

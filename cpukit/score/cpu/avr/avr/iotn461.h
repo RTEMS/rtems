@@ -47,8 +47,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 /* Constants */
 #define SPM_PAGESIZE 64

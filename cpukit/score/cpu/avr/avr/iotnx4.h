@@ -49,8 +49,8 @@
 /**
  * @name I/O Registers
  * 
- * @{
  */
+/**@{**/
 #define PRR     _SFR_IO8 (0x00)
 #define PRTIM1  3
 #define PRTIM0  2
@@ -386,8 +386,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 /* Interrupt vector 0 is the reset vector. */
 /* External Interrupt Request 0 */
 #define INT0_vect			_VECTOR(1)

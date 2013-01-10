@@ -56,8 +56,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #ifndef _AVR_AT90PWM81_H_
 #define _AVR_AT90PWM81_H_ 1

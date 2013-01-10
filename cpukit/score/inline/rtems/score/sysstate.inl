@@ -22,9 +22,8 @@
 
 /**
  * @addtogroup ScoreSysState
- *
- * @{
  */
+/**@{**/
 
 RTEMS_INLINE_ROUTINE void _System_state_Set (
   System_state_Codes state

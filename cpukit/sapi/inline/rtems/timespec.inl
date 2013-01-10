@@ -24,9 +24,8 @@
 
 /**
  * @addtogroup TimespecAPI Timespec
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Is timespec valid

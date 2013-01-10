@@ -348,8 +348,8 @@ extern "C" {
  *
  * This group assists in issues related to processor endianness.
  *
- * @{
  */
+/**@{**/
 
 /**
  * Define what is required to specify how the network to host conversion
@@ -436,9 +436,8 @@ extern "C" {
  *
  * On the v850, this port saves special registers and those that are
  * callee saved.
- *
- * @{
  */
+/**@{**/
 
 /**
  * This defines the minimal set of integer and processor state registers
@@ -514,9 +513,8 @@ typedef struct {
  * Port Specific Information:
  *
  * XXX document implementation including references if appropriate
- *
- * @{
  */
+/**@{**/
 
 /**
  * @ingroup CPUContext
@@ -660,9 +658,8 @@ typedef struct {
 
 /**
  * @addtogroup CPUInterrupt
- *
- * @{
  */
+/**@{**/
 
 /**
  * Disable all interrupts for an RTEMS critical section.  The previous
@@ -901,9 +898,8 @@ void _CPU_Context_Initialize(
  *
  * This set of routines are used to implement fast searches for
  * the most important ready task.
- *
- * @{
  */
+/**@{**/
 
 /**
  * This definition is set to TRUE if the port uses the generic bitfield
@@ -1058,9 +1054,8 @@ void _CPU_Initialize(void);
 
 /**
  * @addtogroup CPUContext
- *
- * @{
  */
+/**@{**/
 
 /**
  * This routine switches from the run context to the heir context.

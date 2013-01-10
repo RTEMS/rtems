@@ -29,9 +29,8 @@
 
 /**
  * @addtogroup ScoreTOD
- *
- * @{
  */
+/**@{**/
 
 /**
  * This routine deactivates updating of the current time of day.

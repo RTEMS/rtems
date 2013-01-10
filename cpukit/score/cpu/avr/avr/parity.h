@@ -45,8 +45,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #warning "This file has been moved to <util/parity.h>."
 #include <util/parity.h>

@@ -120,8 +120,8 @@ typedef volatile uint32_t register32_t;
 /**
  * @name IO Module Structures
  * 
- * @{
  */
+/**@{**/
 
 /*
 --------------------------------------------------------------------------
@@ -2646,8 +2646,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name IO Module Instances. Mapped to Memory
  * 
- * @{
  */
+/**@{**/
 #define GPIO    (*(GPIO_t *) 0x0000)  /* General Purpose IO Registers */
 #define VPORT0    (*(VPORT_t *) 0x0010)  /* Virtual Port 0 */
 #define VPORT1    (*(VPORT_t *) 0x0014)  /* Virtual Port 1 */
@@ -2736,8 +2736,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Flattened Fully Qualified IO Register Names
  * 
- * @{
  */
+/**@{**/
 
 /* GPIO - General Purpose IO Registers */
 #define GPIO_GPIO0  _SFR_MEM8(0x0000)
@@ -3760,8 +3760,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Bitfield Definitions
  * 
- * @{
  */
+/**@{**/
 /* XOCD - On-Chip Debug System */
 /* OCD.OCDR1  bit masks and bit positions */
 #define OCD_OCDRD_bm  0x01  /* OCDR Dirty bit mask. */
@@ -7043,8 +7043,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Interrupt Vector Definitions
  * 
- * @{
  */
+/**@{**/
 /* Vector 0 is the reset vector */
 
 /* OSC interrupt vectors */
@@ -7398,8 +7398,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define PROGMEM_START     (0x0000)
 #define PROGMEM_SIZE      (139264)
 #define PROGMEM_PAGE_SIZE (512)
@@ -7493,8 +7493,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Fuses
  * 
- * @{
  */
+/**@{**/
 #define FUSE_MEMORY_SIZE 6
 
 /* Fuse Byte 0 */
@@ -7561,8 +7561,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Lock Bits
  * 
- * @{
  */
+/**@{**/
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_APPLICATION_TABLE_BITS_EXIST
 #define __BOOT_LOCK_APPLICATION_BITS_EXIST
@@ -7572,8 +7572,8 @@ typedef enum AES_INTLVL_enum
 /**
  * @name Signature
  * 
- * @{
  */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x97
 #define SIGNATURE_2 0x4C

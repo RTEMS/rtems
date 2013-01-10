@@ -43,8 +43,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #include <avr/iomx8.h>
 

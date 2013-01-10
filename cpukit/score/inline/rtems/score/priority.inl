@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScorePriority
- *
- * @{
  */
+/**@{**/
 
 /**
  * This function returns true if the_priority if valid for a

@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreRWLock
- *
- * @{
  */
+/**@{**/
 
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>

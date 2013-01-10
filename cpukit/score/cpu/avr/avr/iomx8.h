@@ -49,8 +49,8 @@
 /**
  * @name I/O Registers
  * 
- * @{
  */
+/**@{**/
 /* Port B */
 
 #define PINB    _SFR_IO8 (0x03)
@@ -628,8 +628,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 /* External Interrupt Request 0 */
 #define INT0_vect			_VECTOR(1)
 #define SIG_INTERRUPT0			_VECTOR(1)

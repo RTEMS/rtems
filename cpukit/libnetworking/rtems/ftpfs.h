@@ -70,9 +70,8 @@ extern "C" {
  *
  * For the data transfer passive (= default) and active (= fallback) mode are
  * supported.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Well-known port number for FTP control connection.

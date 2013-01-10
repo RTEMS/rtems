@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreISR
- *
- * @{
  */
+/**@{**/
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**

@@ -31,8 +31,8 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
 /**
  * @name Interrupt Level Macros
  * 
- * @{
  */
+/**@{**/
 
 #define i386_disable_interrupts( _level ) \
   { \

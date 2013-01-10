@@ -50,9 +50,8 @@
  * @ingroup ScoreCPU
  *
  * @brief ARM Assembler Support
- *
- * @{
  */
+/**@{**/
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

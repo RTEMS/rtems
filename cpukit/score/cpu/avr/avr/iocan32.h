@@ -46,8 +46,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #include <avr/iocanxx.h>
 

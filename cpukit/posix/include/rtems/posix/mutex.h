@@ -30,8 +30,8 @@ extern "C" {
  *
  * @brief Private Support Information for POSIX Mutex
  * 
- * @{
  */
+/**@{**/
 
 #include <rtems/score/coremutex.h>
 #include <pthread.h>

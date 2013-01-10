@@ -26,9 +26,8 @@ extern "C" {
 
 /**
  * @addtogroup ClassicRTEMS
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Returns the number of micro seconds for the milli seconds value @a _ms.
@@ -57,9 +56,8 @@ extern "C" {
  * @ingroup ClassicRTEMS
  *
  * Workspace definitions.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Gets Workspace Information

@@ -31,8 +31,8 @@ extern "C" {
  *
  * @brief POSIX Termios Implementation
  * 
- * @{
  */
+/**@{**/
 
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;

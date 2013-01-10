@@ -62,8 +62,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 /* I/O registers */
 

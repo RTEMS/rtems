@@ -49,8 +49,8 @@
 /**
  * @name I/O Registers
  * 
- * @{
  */
+/**@{**/
 /* ADC Data Register */
 #ifndef __ASSEMBLER__
 #define ADC 	_SFR_IO16(0x02)
@@ -187,8 +187,8 @@
 /**
  * @name Interrupt Vectors
  * 
- * @{
  */
+/**@{**/
 #define SIG_INTERRUPT0		_VECTOR(1)  /* suspend/resume */
 #define SIG_INTERRUPT1		_VECTOR(2)
 #define SIG_TIMER1_CAPT1	_VECTOR(3)
@@ -429,8 +429,8 @@
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define    RAMEND   0x045F     /*Last On-Chip SRAM Location*/
 #define    XRAMEND  RAMEND
 #define    E2END    0x0000

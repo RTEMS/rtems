@@ -32,8 +32,8 @@ extern "C" {
  *
  * @brief POSIX Asynchronous Input and Output
  * 
- * @{
  */
+/**@{**/
 
 #if defined(_POSIX_ASYNCHRONOUS_IO)
 

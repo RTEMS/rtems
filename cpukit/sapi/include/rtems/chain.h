@@ -32,9 +32,8 @@ extern "C" {
  * @ingroup ClassicRTEMS
  *
  * @brief Chain API
- *
- * @{
  */
+/**@{**/
 
 typedef Chain_Node rtems_chain_node;
 
@@ -58,9 +57,8 @@ typedef Chain_Control rtems_chain_control;
 
 /**
  * @addtogroup ClassicChains
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Appends the @a node to the @a chain and sends the @a events to the

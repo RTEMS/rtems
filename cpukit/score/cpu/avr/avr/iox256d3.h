@@ -57,8 +57,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 /* Ungrouped common registers */
 #define GPIOR0  _SFR_MEM8(0x0000)  /* General Purpose IO Register 0 */

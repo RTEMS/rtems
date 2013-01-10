@@ -25,14 +25,13 @@ extern "C" {
  *
  * @ingroup rtems_blkdev
  *
- * @{
  */
+/**@{**/
 
 /**
  * @name Static Configuration
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief RAM disk configuration table entry.
@@ -95,9 +94,8 @@ rtems_device_driver ramdisk_initialize(
 
 /**
  * @name Runtime Configuration
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief RAM disk descriptor.

@@ -45,8 +45,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #warning "This file has been moved to <util/delay.h>."
 #include <util/delay.h>

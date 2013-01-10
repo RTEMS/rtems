@@ -36,8 +36,8 @@ extern "C" {
  *
  * @brief Constants and Structures Associated with the POSIX Spinlock Manager
  * 
- * @{
  */
+/**@{**/
 
 #include <rtems/score/object.h>
 #include <rtems/score/corespinlock.h>

@@ -28,9 +28,8 @@
 
 /**
  * @addtogroup ScoreThread
- *
- * @{
  */
+/**@{**/
 
 #if defined(RTEMS_SMP)
 

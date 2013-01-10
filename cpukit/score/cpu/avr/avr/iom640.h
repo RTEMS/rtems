@@ -44,8 +44,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #include <avr/iomxx0_1.h>
 

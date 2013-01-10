@@ -27,9 +27,8 @@
 
 /**
  * @addtogroup ScoreThreadMP
- *
- * @{
  */
+/**@{**/
 
 /**
  * This function returns true if the thread in question is the

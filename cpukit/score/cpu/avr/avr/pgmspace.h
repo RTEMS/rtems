@@ -77,8 +77,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #define __need_size_t
 #include <inttypes.h>

@@ -40,9 +40,8 @@
  * @ingroup ScoreCPU
  *
  * @brief ARM specific support.
- *
- * @{
  */
+/**@{**/
 
 #ifdef __thumb__
   #define ARM_SWITCH_REGISTERS uint32_t arm_switch_reg
@@ -60,9 +59,8 @@
 
 /**
  * @name Program Status Register
- *
- * @{
  */
+/**@{**/
 
 #define ARM_PSR_N (1 << 31)
 #define ARM_PSR_Z (1 << 30)
@@ -95,9 +93,8 @@
 
 /**
  * @addtogroup ScoreCPU
- *
- * @{
  */
+/**@{**/
 
 /* If someone uses THUMB we assume she wants minimal code size */
 #ifdef __thumb__
@@ -225,9 +222,8 @@ extern "C" {
 
 /**
  * @addtogroup ScoreCPU
- *
- * @{
  */
+/**@{**/
 
 typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)
@@ -480,9 +476,8 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
 
 /**
  * @addtogroup ScoreCPUARM
- *
- * @{
  */
+/**@{**/
 
 #if defined(ARM_MULTILIB_ARCH_V4)
 

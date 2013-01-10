@@ -64,8 +64,8 @@ extern "C" {
  *
  * @ingroup FileSystemTypesAndMount
  *
- * @{
  */
+/**@{**/
 
 /**
  * File system mount report and abort condition flags.

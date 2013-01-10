@@ -56,8 +56,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 /* Registers and associated bit numbers */
 

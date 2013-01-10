@@ -37,9 +37,8 @@ typedef struct rtems_disk_device rtems_disk_device;
  * contain a subset of consecutive disk blocks.  The logical disks are used to
  * represent the partitions of a disk.  The disk devices are accessed via the
  * @ref rtems_bdbuf "block device buffer module".
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Block device block index type.
@@ -276,9 +275,8 @@ struct rtems_disk_device {
 
 /**
  * @name Disk Device Data
- *
- * @{
  */
+/**@{**/
 
 static inline dev_t rtems_disk_get_device_identifier(
   const rtems_disk_device *dd
@@ -340,9 +338,8 @@ static inline rtems_blkdev_bnum rtems_disk_get_block_count(
 
 /**
  * @name Disk Device Maintainance
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Creates a physical disk with device identifier @a dev.
@@ -443,9 +440,8 @@ rtems_status_code rtems_disk_release(rtems_disk_device *dd);
 
 /**
  * @name Disk Management
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Initializes the disk device management.

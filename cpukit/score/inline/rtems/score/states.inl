@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,9 +27,8 @@
 
 /**
  * @addtogroup ScoreStates
- *
- * @{
  */
+/**@{**/
 
 /**
  * This function sets the given states_to_set into the current_state

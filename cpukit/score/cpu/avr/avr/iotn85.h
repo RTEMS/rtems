@@ -44,8 +44,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #include <avr/iotnx5.h>
 

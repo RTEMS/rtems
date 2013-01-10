@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreScheduler
- *
- * @{
  */
+/**@{**/
 
 /**
  * The preferred method to add a new scheduler is to define the jump table

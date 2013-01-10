@@ -28,9 +28,8 @@ extern "C" {
  * @ingroup Score
  *
  * @brief Provides routines to ensure mutual exclusion on API level.
- *
- * @{
  */
+/**@{**/
 
 #include <rtems/score/coremutex.h>
 #include <rtems/score/isr.h>
@@ -100,9 +99,8 @@ void _API_Mutex_Unlock( API_Mutex_Control *mutex );
  * When the APIs all use this for allocation and deallocation protection, then
  * this possibly should be renamed and moved to a higher level in the
  * hierarchy.
- *
- * @{
  */
+/**@{**/
 
 /**
  *  @brief Memory allocation mutex.

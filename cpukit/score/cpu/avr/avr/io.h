@@ -101,8 +101,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #include <avr/sfr_defs.h>
 

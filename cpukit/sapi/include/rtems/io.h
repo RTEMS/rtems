@@ -34,8 +34,8 @@ extern "C" {
  *
  * @ingroup ClassicRTEMS
  *
- * @{
  */
+/**@{**/
 
 typedef uint32_t rtems_device_major_number;
 
@@ -60,9 +60,8 @@ typedef struct {
 
 /**
  * @name Device Driver Maintainance
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Returns @c RTEMS_IO_ERROR.

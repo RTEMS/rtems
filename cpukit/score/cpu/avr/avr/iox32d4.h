@@ -59,8 +59,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 
 /* Ungrouped common registers */

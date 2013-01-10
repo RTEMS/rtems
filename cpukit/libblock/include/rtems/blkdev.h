@@ -36,9 +36,8 @@ extern "C" {
  * control. This call puts IO @ref rtems_blkdev_request "requests" to the block
  * device for asynchronous processing. When a driver executes a request, it
  * invokes the request done callback function to finish the request.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Block device request type.
@@ -175,9 +174,8 @@ static inline void rtems_blkdev_request_done(
 
 /**
  * @name IO Control Request Codes
- *
- * @{
  */
+/**@{**/
 
 #define RTEMS_BLKIO_REQUEST         _IOWR('B', 1, rtems_blkdev_request)
 #define RTEMS_BLKIO_GETMEDIABLKSIZE _IOR('B', 2, uint32_t)
@@ -253,9 +251,8 @@ static inline int rtems_disk_fd_reset_device_stats(int fd)
 
 /**
  * @name Block Device Driver Capabilities
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Only consecutive multi-sector buffer requests are supported.
@@ -369,9 +366,8 @@ void rtems_blkstats(
  * @ingroup rtems_blkdev
  *
  * Generic disk device operations for standard RTEMS IO drivers.
- *
- * @{
  */
+/**@{**/
 
 /**
  * The device driver interface conventions suppose that a driver may contain an

@@ -36,8 +36,8 @@ extern "C" {
  *
  * @brief Internal IO library API and implementation.
  *
- * @{
  */
+/**@{**/
 
 #define RTEMS_FILESYSTEM_SYMLOOP_MAX 32
 

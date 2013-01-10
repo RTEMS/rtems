@@ -25,8 +25,8 @@
  *
  * @brief Internal Information about POSIX Signals
  * 
- * @{
  */
+/**@{**/
 
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>

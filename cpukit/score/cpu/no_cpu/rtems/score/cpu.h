@@ -389,8 +389,8 @@ extern "C" {
  *   be an improvement on the PowerPC and SPARC. The struct timespec
  *   and the executables with int64 not inlined are about the same size.
  * 
- * @{
  */
+/**@{**/
 
 /**
  * Selects the timestamp implementation using struct timespec.
@@ -426,8 +426,8 @@ extern "C" {
  *
  * This group assists in issues related to processor endianness.
  * 
- * @{
  */
+/**@{**/
 
 /**
  * Define what is required to specify how the network to host conversion
@@ -525,8 +525,8 @@ extern "C" {
  *
  * XXX document implementation including references if appropriate
  * 
- * @{
  */
+/**@{**/
 
 /**
  * @ingroup Management
@@ -1013,8 +1013,8 @@ uint32_t   _CPU_ISR_Get_level( void );
  * This set of routines are used to implement fast searches for
  * the most important ready task.
  * 
- * @{
  */
+/**@{**/
 
 /**
  * This definition is set to TRUE if the port uses the generic bitfield

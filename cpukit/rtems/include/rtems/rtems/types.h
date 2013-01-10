@@ -40,9 +40,8 @@ extern "C" {
 
 /**
  * @addtogroup ClassicRTEMS
- *
- * @{
  */
+/**@{**/
 
 #ifdef RTEMS_DEPRECATED_TYPES
 /**

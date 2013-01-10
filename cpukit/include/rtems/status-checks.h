@@ -29,15 +29,13 @@ extern "C" {
 
 /**
  * @defgroup rtems_status_checks Status Checks
- *
- * @{
  */
+/**@{**/
 
 /**
  * @name Print Macros
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief General purpose debug print macro.
@@ -142,9 +140,8 @@ extern "C" {
 
 /**
  * @name Check Macros
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Prints message @a msg and returns with status code @a sc if the status
@@ -248,9 +245,8 @@ extern "C" {
 
 /**
  * @name Cleanup Macros
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Prints message @a msg and jumps to @a label if the status code @a sc

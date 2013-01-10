@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreMPPacket
- *
- * @{
  */
+/**@{**/
 
 /**
  * This function returns true if the the_packet_class is valid,

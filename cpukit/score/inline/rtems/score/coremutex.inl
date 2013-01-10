@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreMutex
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Is mutex locked.

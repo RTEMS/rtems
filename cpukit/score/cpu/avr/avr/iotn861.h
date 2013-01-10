@@ -39,8 +39,8 @@
 /**
  * @name Constants
  * 
- * @{
  */
+/**@{**/
 #define SPM_PAGESIZE 64
 #define RAMEND       0x25F
 #define XRAMEND      RAMEND
@@ -52,8 +52,8 @@
 /**
  * @name Fuses
  * 
- * @{
  */
+/**@{**/
 #define FUSE_MEMORY_SIZE 3
 
 /* Low Fuse Byte */
@@ -87,16 +87,16 @@
 /**
  * @name Lock Bits 
  * 
- * @{
  */
+/**@{**/
 #define __LOCK_BITS_EXIST
 /** @} */
 
 /**
  * @name Signature
  * 
- * @{
  */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x0D

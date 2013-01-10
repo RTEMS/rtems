@@ -25,9 +25,8 @@
 
 /**
  * @addtogroup ScoreSpinlock
- *
- * @{
  */
+/**@{**/
 
 /**
  * This method is used to initialize core spinlock attributes.

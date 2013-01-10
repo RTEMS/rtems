@@ -118,9 +118,8 @@
  *  }
  *  close (fd);
  * @endcode
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief The base name of the flash disks.

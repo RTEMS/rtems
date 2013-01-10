@@ -24,9 +24,8 @@
 
 /**
  * @addtogroup ScoreChain
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Set off chain.

@@ -26,8 +26,8 @@
  *
  * @ingroup POSIXAPI
  * 
- * @{
  */
+/**@{**/
 
 /**
  * @brief Absolute timeout conversion results.

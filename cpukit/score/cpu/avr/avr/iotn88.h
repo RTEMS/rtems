@@ -57,8 +57,8 @@
  *
  * @ingroup avr
  *
- * @{
  */
+/**@{**/
 
 #ifndef _AVR_IOTN88_H_
 #define _AVR_IOTN88_H_ 1

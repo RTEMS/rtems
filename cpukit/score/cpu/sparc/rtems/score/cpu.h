@@ -371,9 +371,8 @@ typedef struct {
  * of the CPU state in the context area.  The ET (enable trap) bit and
  * the CWP (current window pointer) fields of the PSR are considered
  * system wide resources and are not maintained on a per-thread basis.
- *
- * @{
  */
+/**@{**/
 
 #ifndef ASM
 /**

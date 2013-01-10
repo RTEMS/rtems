@@ -366,8 +366,8 @@ extern "C" {
  *
  * This group assists in issues related to processor endianness.
  * 
- * @{
  */
+/**@{**/
 
 /**
  * Define what is required to specify how the network to host conversion
@@ -464,8 +464,8 @@ extern "C" {
  * Port Specific Information:
  *
  * XXX document implementation including references if appropriate
- * @{
  */
+/**@{**/
 
 /**
  * @ingroup Management
@@ -529,8 +529,8 @@ typedef struct {
  *
  * XXX document implementation including references if appropriate
  * 
- * @{
  */
+/**@{**/
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
@@ -911,8 +911,8 @@ void _CPU_Context_Restart_self(
  *
  * This set of routines are used to implement fast searches for
  * the most important ready task.
- * @{
  */
+/**@{**/
 
 /**
  * This definition is set to TRUE if the port uses the generic bitfield
