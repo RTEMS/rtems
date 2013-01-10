@@ -123,8 +123,8 @@ bool _Timespec_Less_than(
  *
  *  This method is the greater than operator for timespecs.
  *
- *  @param[in] lhs is the left hand side timespec
- *  @param[in] rhs is the right hand side timespec
+ *  @param[in] _lhs is the left hand side timespec
+ *  @param[in] _rhs is the right hand side timespec
  *
  *  @retval This method returns true if @a lhs is greater than the @a rhs and
  *          false otherwise.

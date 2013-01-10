@@ -61,7 +61,7 @@ SCORE_EXTERN Objects_Information _API_Mutex_Information;
  *  The value @a maximum_mutexes is the maximum number of API mutexes that may
  *  exist at any time.
  *
- *  @param[in] Maximum_mutexex is the maximum number of API mutexes.
+ *  @param[in] maximum_mutexes is the maximum number of API mutexes.
  */
 void _API_Mutex_Initialization( uint32_t maximum_mutexes );
 

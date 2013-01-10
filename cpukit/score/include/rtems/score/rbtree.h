@@ -262,12 +262,11 @@ RBTree_Node *_RBTree_Find(
 /**
  *  @brief Find the control structure of the tree containing the given node.
  *
- *  This function returns a pointer called @a return_header to the control structure of the tree
- *  containing @a the_node, if it exists, and @a NULL if not.
+ *  This function returns a pointer called @a return_header to the
+ *  control structure of the tree containing @a the_node, if it exists,
+ *   and @a NULL if not.
  *
  *  @param[in] the_node is the pointer to the rbtree node.
- *  @param[out] return_header is the pointer to control header of rbtree.
- *  @param[out] NULL is returned if there is no control header available.
  *
  *  -INTERRUPT LATENCY:
  *    + single case

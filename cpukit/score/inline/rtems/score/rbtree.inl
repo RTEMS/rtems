@@ -65,7 +65,9 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_rbtree(
     const RBTree_Node *node
     )
 {
-  return (node->parent == NULL) && (node->child[RBT_LEFT] == NULL) && (node->child[RBT_RIGHT] == NULL);
+  return (node->parent == NULL) &&
+         (node->child[RBT_LEFT] == NULL) &&
+         (node->child[RBT_RIGHT] == NULL);
 }
 
 /**
@@ -255,7 +257,8 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Has_only_one_node(
     )
 {
   if(!the_rbtree) return false; /* TODO: expected behavior? */
-  return (the_rbtree->root->child[RBT_LEFT] == NULL && the_rbtree->root->child[RBT_RIGHT] == NULL);
+  return (the_rbtree->root->child[RBT_LEFT] == NULL &&
+          the_rbtree->root->child[RBT_RIGHT] == NULL);
 }
 
 /**
@@ -385,11 +388,10 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_lesser(
 /**
  * @brief Returns the predecessor of a node.
  *
- * @param[in] rbtree is the red-black tree.
  * @param[in] node is the node.
  *
- * @retval NULL The predecessor does not exist.
- * @retval otherwise The predecessor node.
+ * @retval NULL The predecessor does not exist.  Otherwise it returns
+ *         the predecessor node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
   const RBTree_Node *node
@@ -413,11 +415,9 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
 /**
  * @brief Returns the successor of a node.
  *
- * @param[in] rbtree is the red-black tree.
  * @param[in] node is the node.
  *
- * @retval NULL The successor does not exist.
- * @retval otherwise The successor node.
+ * @retval NULL The successor does not exist.  Otherwise the successor node.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
   const RBTree_Node *node

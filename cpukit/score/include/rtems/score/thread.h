@@ -758,17 +758,11 @@ void _Thread_Load_environment(
  *  which must be performed immediately before and after the user's
  *  thread executes are found here.
  *
- *  NOTE:
- *
- *  On entry, it is assumed all interrupts are blocked and that this
+ *  @note On entry, it is assumed all interrupts are blocked and that this
  *  routine needs to set the initial isr level.  This may or may not
  *  actually be needed by the context switch routine and as a result
  *  interrupts may already be at there proper level.  Either way,
  *  setting the initial isr level properly here is safe.
- *
- *  @param[in]: NONE
- *
- *  @param[out]: NONE
  */
 void _Thread_Handler( void );
 

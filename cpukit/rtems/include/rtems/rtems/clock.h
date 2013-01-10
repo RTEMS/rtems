@@ -230,10 +230,8 @@ rtems_status_code rtems_clock_set_nanoseconds_extension(
  *
  * @retval This method returns RTEMS_SUCCESSFUL if there was not an
  *         error. Otherwise, a status code is returned indicating the
- *         source of the error. If successful, the uptime will be
+ *         source of the error. If successful, the @a uptime will be
  *         filled in.
- *
- * Clock Manager - get uptime
  */
 rtems_status_code rtems_clock_get_uptime(
   struct timespec *uptime
@@ -242,7 +240,11 @@ rtems_status_code rtems_clock_get_uptime(
 /**
  * @brief Gets the System Uptime in the Struct Timeval Format
  *
- * @param[out] Returns the system uptime. Pointer must not be NULL.
+ * @param[out] uptime is a pointer to a struct timeval structure.
+ *
+ * @retval This methods returns the system uptime.
+ *
+ * @note Pointer must not be NULL.
  */
 void rtems_clock_get_uptime_timeval( struct timeval *uptime );
 

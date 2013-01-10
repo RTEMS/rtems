@@ -264,10 +264,9 @@ extern int devFS_initialize(
  */
 extern void devFS_Show(void);
 
-/** @} */
 #ifdef __cplusplus
 }
 #endif
-
+/** @} */
 #endif
 

@@ -117,7 +117,7 @@ void _ISR_Handler_initialization ( void );
  *  LEVEL.  It is used at the end of a critical section of code to
  *  enable interrupts so they can be processed again.
  *
- *  @param[in] level contains the interrupt level mask level
+ *  @param[in] _level contains the interrupt level mask level
  *             previously returned by @ref _ISR_Disable_on_this_core.
  */
 #define _ISR_Enable_on_this_core( _level ) \
@@ -142,7 +142,7 @@ void _ISR_Handler_initialization ( void );
  *  must be selected with care to ensure that the critical section
  *  properly protects itself.
  *
- *  @param[in] level contains the interrupt level mask level
+ *  @param[in] _level contains the interrupt level mask level
  *             previously returned by @ref _ISR_Disable_on_this_core.
  */
 #define _ISR_Flash_on_this_core( _level ) \

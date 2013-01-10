@@ -49,7 +49,7 @@ extern "C" {
  *
  * @param[in] major is the mouse device major number
  * @param[in] minor is the mouse device minor number
- * @param[in] arguments points to device driver arguments
+ * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_initialize(
   rtems_device_major_number  major,
@@ -65,7 +65,7 @@ rtems_device_driver serial_mouse_initialize(
  *
  * @param[in] major is the mouse device major number
  * @param[in] minor is the mouse device minor number
- * @param[in] arguments points to device driver arguments
+ * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_open(
   rtems_device_major_number  major,
@@ -81,7 +81,7 @@ rtems_device_driver serial_mouse_open(
  *
  * @param[in] major is the mouse device major number
  * @param[in] minor is the mouse device minor number
- * @param[in] arguments points to device driver arguments
+ * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_close(
   rtems_device_major_number  major,
@@ -97,7 +97,7 @@ rtems_device_driver serial_mouse_close(
  *
  * @param[in] major is the mouse device major number
  * @param[in] minor is the mouse device minor number
- * @param[in] arguments points to device driver arguments
+ * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_read(
   rtems_device_major_number  major,
@@ -113,7 +113,7 @@ rtems_device_driver serial_mouse_read(
  *
  * @param[in] major is the mouse device major number
  * @param[in] minor is the mouse device minor number
- * @param[in] arguments points to device driver arguments
+ * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_write(
   rtems_device_major_number  major,
@@ -129,7 +129,7 @@ rtems_device_driver serial_mouse_write(
  *
  * @param[in] major is the mouse device major number
  * @param[in] minor is the mouse device minor number
- * @param[in] arguments points to device driver arguments
+ * @param[in] arg points to device driver arguments
  */
 rtems_device_driver serial_mouse_control(
   rtems_device_major_number  major,

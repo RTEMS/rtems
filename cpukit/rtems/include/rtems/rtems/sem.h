@@ -271,7 +271,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  * This function returns a RTEMS status code based on the semaphore
  * status code specified.
  *
- * @param[in] status is the semaphore status code to translate
+ * @param[in] the_mutex_status is the semaphore status code to translate
  *
  * @retval translated RTEMS status code
  */

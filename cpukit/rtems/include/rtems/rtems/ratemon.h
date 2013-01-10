@@ -434,7 +434,7 @@ void rtems_rate_monotonic_report_statistics( void );
  * result is set to indicate the current state of the period.
  *
  * @param[in] id is the rate monotonic id
- * @param[in] lenght is the length of period (in ticks)
+ * @param[in] length is the length of period (in ticks)
  *
  * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */

@@ -52,8 +52,8 @@ RTEMS_INLINE_ROUTINE bool rtems_timespec_is_valid(
  * @param[in] lhs is the left hand side timespec
  * @param[in] rhs is the right hand side timespec
  *
- * @retval true @a lhs is less than @a rhr.
- * @retval false @a lhs is not less than @a rhr.
+ * @retval true @a lhs is less than @a rhs.
+ * @retval false @a lhs is not less than @a rhs.
  * 
  */
 RTEMS_INLINE_ROUTINE bool rtems_timespec_less_than(
@@ -250,17 +250,16 @@ RTEMS_INLINE_ROUTINE uint32_t rtems_timespec_get_nanoseconds(
   return _Timespec_Get_nanoseconds( _time );
 }
 
-
 /**
  * @brief Timespec greater than operator.
  *
  * This method is the greater than operator for timespecs.
  *
- * @param[in] lhs is the left hand side timespec
- * @param[in] rhs is the right hand side timespec
+ * @param[in] _lhs is the left hand side timespec
+ * @param[in] _rhs is the right hand side timespec
  *
- * @retval true @a lhs is greater than @a rhr.
- * @retval false @a lhs is not greater than @a rhr.
+ * @retval true @a _lhs is greater than @a _rhs.
+ * @retval false @a _lhs is not greater than @a _rhs.
  */
 RTEMS_INLINE_ROUTINE bool rtems_timespec_greater_than(
   const struct timespec *_lhs,
@@ -277,8 +276,8 @@ RTEMS_INLINE_ROUTINE bool rtems_timespec_greater_than(
  * @param[in] lhs is the left hand side timespec
  * @param[in] rhs is the right hand side timespec
  *
- * @retval true @a lhs is equal to @a rhr.
- * @retval false @a lhs is not equal to @a rhr.
+ * @retval true @a lhs is equal to @a rhs.
+ * @retval false @a lhs is not equal to @a rhs.
  */
 RTEMS_INLINE_ROUTINE bool rtems_timespec_equal_to(
   const struct timespec *lhs,

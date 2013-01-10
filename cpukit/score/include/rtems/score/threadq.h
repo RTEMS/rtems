@@ -165,6 +165,12 @@ Thread_Control *_Thread_queue_First(
  *
  *  This routine unblocks all threads blocked on the_thread_queue
  *  and cancels any associated timeouts.
+ *
+ *  @param[in] the_thread_queue is the pointer to a threadq header
+ *  @param[in] remote_extract_callout points to a method to invoke to 
+ *             invoke when a remote thread is unblocked
+ *  @param[in] status is the status which will be returned to
+ *             all unblocked threads
  */
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,
@@ -180,7 +186,7 @@ void _Thread_queue_Flush(
  *  threads which block on the_thread_queue is state.
  *
  *  @param[in] the_thread_queue is the pointer to a threadq header
- *  @param[in] discipline is the queueing discipline
+ *  @param[in] the_discipline is the queueing discipline
  *  @param[in] state is the state of waiting threads
  *  @param[in] timeout_status is the return on a timeout
  */
@@ -218,7 +224,11 @@ Thread_Control *_Thread_queue_Dequeue_priority(
  *  priority discipline.
  *
  *  @param[in] the_thread_queue is the pointer to threadq
- *  @param[in] thread is the thread to insert
+ *  @param[in] the_thread is the thread to insert
+ *  @param[in] level_p is a pointer to an interrupt level to be returned
+ *
+ *  @retval This methods returns an indication of the blocking state as
+ *          well as filling in *@ level_p with the previous interrupt level.
  *
  *  - INTERRUPT LATENCY:
  *    + forward less than

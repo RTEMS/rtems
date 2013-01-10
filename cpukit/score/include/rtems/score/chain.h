@@ -165,7 +165,7 @@ Chain_Node *_Chain_Get(
  *
  *  @param[in] after_node is the pointer to the node in chain to be
  *             inserted after
- *  @param[in] node is the pointer to the node to be inserted
+ *  @param[in] the_node is the pointer to the node to be inserted
  *
  *  @note It disables interrupts to ensure the atomicity
  *  of the insert operation.

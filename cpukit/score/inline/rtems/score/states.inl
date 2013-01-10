@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE States_Control _States_Set (
  * This function clears the given states_to_clear into the current_state
  * passed in.  The result is returned to the user in current_state.
  *
- * @param[in] states_to_set is the state bits to clean
+ * @param[in] states_to_clear is the state bits to clean
  * @param[in] current_state is the state set to remove them from
  *
  * @return This method returns the updated states value.

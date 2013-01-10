@@ -306,7 +306,7 @@ rtems_status_code rtems_region_return_segment(
  * satisfied.
  *
  * @param[in] id is the region id
- * @param[in] segmet is the pointer to segment address
+ * @param[in] segment is the pointer to segment address
  * @param[in] size is the new required size
  * @retval RTEMS_SUCCESSFUL if operation successful, RTEMS_UNSATISFIED if the
  *         the segment can't be resized in place or any other code at failure

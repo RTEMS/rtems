@@ -205,10 +205,11 @@ static inline void _TOD_Set(
  *
  *  This function invokes the nanoseconds extension.
  *
- *  @param[out] snapshot The snapshot.
- *  @param[in] source The clock.
+ *  @param[out] snapshot points to an area that will contain the current
+ *              TOD plus the BSP nanoseconds since last tick adjustment
+ *  @param[in] clock contains the current TOD
  *
- *  @retval The snapshot.
+ *  @retval @a snapshot
  */
 Timestamp_Control *_TOD_Get_with_nanoseconds(
   Timestamp_Control *snapshot,

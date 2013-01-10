@@ -450,15 +450,18 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *         It is used when unblocking a remote thread.
  *  @param[in] buffer is the starting address of the message buffer to
  *         to be filled in with a message
- *  @param[in] size is the size of the @a buffer and indicates the maximum
- *         size message that the caller can receive.
+ *  @param[in] size_p is a pointer to the size of the @a buffer and
+ *         indicates the maximum size message that the caller can receive.
  *  @param[in] wait indicates whether the calling thread is willing to block
  *         if the message queue is empty.
  *  @param[in] timeout is the maximum number of clock ticks that the calling
  *         thread is willing to block if the message queue is empty.
  *
- *  @retval indication of the successful completion or reason for failure
- *  @note Returns message priority via return are in TCB.
+ *  @retval indication of the successful completion or reason for failure.
+ *          On success, the location pointed to @a size_p will contain the
+ *          size of the received message.
+ *
+ *  @note Returns message priority via return area in TCB.
  *
  *  - INTERRUPT LATENCY:
  *    + available
