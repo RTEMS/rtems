@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Function Keys Free Memory 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

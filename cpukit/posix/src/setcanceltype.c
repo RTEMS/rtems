@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Sets the Cancelability Type of Calling Thread to value given in type 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Receive Message from Message Queue
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

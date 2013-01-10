@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Manipulate Signal Sets
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

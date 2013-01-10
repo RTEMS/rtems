@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Helper Routine for POSIX TIMERS 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

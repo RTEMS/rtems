@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Get protocol Attribute of Mutex Attribute Obect
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

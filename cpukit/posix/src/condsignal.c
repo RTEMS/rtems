@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Signal a Condition 
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

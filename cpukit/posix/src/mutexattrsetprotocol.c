@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Mutex Initialization Scheduling Attributes
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

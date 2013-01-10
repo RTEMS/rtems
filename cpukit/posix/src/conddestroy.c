@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Destroy a Condition Variable
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

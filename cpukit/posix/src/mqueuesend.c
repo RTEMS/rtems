@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Adds Message Pointed by msg_ptr to Message Queue Reffered by mqdes 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

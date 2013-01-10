@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Deleted Signal from Set
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

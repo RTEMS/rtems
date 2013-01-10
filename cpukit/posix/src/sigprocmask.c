@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Examine and Change Blocked Signals
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

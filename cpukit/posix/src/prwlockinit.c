@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Allocate resources to use the read-write lock and Initialize it
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

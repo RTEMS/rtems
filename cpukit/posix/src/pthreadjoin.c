@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Suspends Execution of Calling Thread until Target Thread Terminates 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Initialize the Barrier Attributes Object
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

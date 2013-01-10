@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Process will get Executed and then Terminated by execl
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

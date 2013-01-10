@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Compare Thread IDs
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

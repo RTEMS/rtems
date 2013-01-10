@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function does Actual creation and Initialization of POSIX Semaphore 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

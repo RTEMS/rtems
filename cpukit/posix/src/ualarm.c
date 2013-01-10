@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Schedule Alarm
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

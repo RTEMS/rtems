@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Setting test on Cancelability State 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

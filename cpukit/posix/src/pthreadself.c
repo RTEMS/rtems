@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function returns the ID of the Calling Thread 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

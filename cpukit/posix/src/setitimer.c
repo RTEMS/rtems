@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Set the Timer
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

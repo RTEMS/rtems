@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Register Fork Handlers
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

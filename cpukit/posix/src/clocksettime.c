@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Set Time of Clock
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

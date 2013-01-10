@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Error Translation in Message Queue
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

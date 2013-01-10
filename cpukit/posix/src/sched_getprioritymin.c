@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Get the Minimum Priority Limit 
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

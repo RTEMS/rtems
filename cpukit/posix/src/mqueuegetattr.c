@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Message Queue Attributes
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Destroy Condition Attribute
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

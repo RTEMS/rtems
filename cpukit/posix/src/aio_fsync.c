@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Syncing of all Outstanding Asynchronous I/O Operations
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

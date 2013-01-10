@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Suspend Process Execution
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

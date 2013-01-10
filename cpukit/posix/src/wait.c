@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Wait for Process to Change State 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

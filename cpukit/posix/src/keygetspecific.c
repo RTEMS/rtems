@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Thread-Specific Data Management
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

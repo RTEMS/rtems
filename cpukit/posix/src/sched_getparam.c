@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Set Scheduling Parameters
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Changes the Priority Ceiling of a Mutex and Releases it
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Process Timer
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

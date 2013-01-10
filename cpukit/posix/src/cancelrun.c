@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Executes a thread's cancellation handlers
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

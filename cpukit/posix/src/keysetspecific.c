@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Set Specific Key
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

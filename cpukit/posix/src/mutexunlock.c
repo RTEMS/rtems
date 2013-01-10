@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Locking and Unlocking a Mutex
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RWLock Attributes Set Process Shared
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

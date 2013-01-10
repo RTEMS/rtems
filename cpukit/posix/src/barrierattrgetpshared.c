@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Barrier Attributes Get Process Shared
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

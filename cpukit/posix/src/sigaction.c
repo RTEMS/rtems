@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Allows calling process to examine action of a Specific Signal
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

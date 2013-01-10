@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Call to function by Thread will call init_routine with no Arguments
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

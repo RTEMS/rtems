@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Yield Processor
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

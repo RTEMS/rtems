@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Gets Value of an Interval Timer
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

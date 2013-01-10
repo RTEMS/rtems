@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function gets the Contentionscope Attribute in the attr object 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

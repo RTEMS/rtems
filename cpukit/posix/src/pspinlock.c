@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Wait at a Spinlock
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Unlocks a Spin Lock Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Replacing signal mask with *sigmask and suspending calling process
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

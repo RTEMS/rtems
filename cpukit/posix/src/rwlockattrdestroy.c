@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Destroys a read-write lock Attributes object 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

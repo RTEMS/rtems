@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Set a Mutex Type
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

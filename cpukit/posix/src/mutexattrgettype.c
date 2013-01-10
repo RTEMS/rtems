@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function gets the Mutex Type Attribute
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

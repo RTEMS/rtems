@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Establishing Cancellation Handlers
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

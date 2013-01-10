@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Examine Pending Signals
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

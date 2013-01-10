@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Suspends Process until Asynchronous I/O Operation completes
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

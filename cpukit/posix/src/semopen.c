@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Creates New POSIX semaphore or Opens an existing Semaphore
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

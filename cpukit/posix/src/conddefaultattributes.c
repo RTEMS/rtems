@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Condition variable Attributes structure
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

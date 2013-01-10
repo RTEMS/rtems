@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Destroy Mutex Attributes Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

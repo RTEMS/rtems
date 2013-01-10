@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function gets the detachstate Attribute in the attr Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

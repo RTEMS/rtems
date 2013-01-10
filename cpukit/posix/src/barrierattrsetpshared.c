@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Set the Process-Shared Attribute of the Barrier Attributes Object
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

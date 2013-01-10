@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Convert POSIX Mutex ID to local object pointer
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Inoperable implementation of execv for POSIX threads
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Change Memory Protection
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*
