@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Ddefinitions for AT90USB82
+ */
+
 /* Copyright (c) 2007 Anatoly Sokolov 
    All rights reserved.
 
@@ -35,6 +41,14 @@
 #define _AVR_AT90USB82_H_ 1
 
 #include <avr/iousbxx2.h>
+
+/**
+ * @defgroup AvrDef_iousb82 AT90USB82 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* Constants */
 #define SPM_PAGESIZE 128
@@ -83,5 +97,6 @@
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST 
 
+/** @} */
 
 #endif /* _AVR_AT90USB82_H_ */

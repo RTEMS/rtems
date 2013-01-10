@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/types.h
+ * @file
+ *
+ * @brief Intel AVR CPU Type Definitions
+ *
+ * This include file contains type definitions pertaining to the Intel
+ * avr processor family.
  */
 
 /*
- *  This include file contains type definitions pertaining to the Intel
- *  avr processor family.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

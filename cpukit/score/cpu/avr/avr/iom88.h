@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega88
+ */
+
 /* Copyright (c) 2004, Theodore A. Roth
    All rights reserved.
 
@@ -31,6 +37,14 @@
 
 #ifndef _AVR_IOM88_H_
 #define _AVR_IOM88_H_ 1
+
+/**
+ * @defgroup AvrDef_iom88 ATmega88 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 #include <avr/iomx8.h>
 
@@ -86,5 +100,6 @@
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x0A
 
+/** @} */
 
 #endif /* _AVR_IOM88_H_ */

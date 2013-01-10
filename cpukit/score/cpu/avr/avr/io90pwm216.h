@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90PWM216
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2007, Atmel Corporation
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_io90pwm216 AT90PWM216 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* I/O registers */
 
@@ -1176,5 +1192,6 @@
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x83
 
+/** @} */
 
 #endif /* _AVR_IO90PWM216_H_ */

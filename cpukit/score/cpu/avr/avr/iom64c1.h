@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega64C1
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2009 Atmel Corporation
    All rights reserved.
 
@@ -47,6 +55,13 @@
 #ifndef _AVR_ATmega64C1_H_
 #define _AVR_ATmega64C1_H_ 1
 
+/**
+ * @defgroup AvrDef_iom64c1 ATmega64C1 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* Registers and associated bit numbers. */
 
@@ -1292,6 +1307,7 @@
 #define SIGNATURE_1 0x96
 #define SIGNATURE_2 0x86
 
+/** @} */
 
 #endif /* _AVR_ATmega64C1_H_ */
 

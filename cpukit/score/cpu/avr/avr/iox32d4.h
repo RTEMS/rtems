@@ -1,6 +1,13 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATxmega32D4
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2009 Atmel Corporation
    All rights reserved.
-
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are met:
 
@@ -46,6 +53,14 @@
 
 #ifndef _AVR_ATxmega32D4_H_
 #define _AVR_ATxmega32D4_H_ 1
+
+/**
+ * @defgroup AvrDef_iox32d4 ATxmega32D4 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 
 /* Ungrouped common registers */
@@ -5539,6 +5554,7 @@ IO Module Instances. Mapped to memory.
 #define SIGNATURE_1 0x95
 #define SIGNATURE_2 0x42
 
+/** @} */
 
 #endif /* _AVR_ATxmega32D4_H_ */
 
