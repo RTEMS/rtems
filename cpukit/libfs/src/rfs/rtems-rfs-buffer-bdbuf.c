@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Buffer Routines
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Buffer Routines for the RTEMS libblock BD buffer cache.
  *

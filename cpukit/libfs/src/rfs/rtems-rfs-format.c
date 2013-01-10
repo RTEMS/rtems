@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Format
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  * 
  * Format the file system ready for use.
  */

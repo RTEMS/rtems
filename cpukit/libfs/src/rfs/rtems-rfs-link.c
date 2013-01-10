@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Link Routines
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  * 
  * These functions manage links. A link is the addition of a directory entry
  * in a parent directory and incrementing the links count in the inode.

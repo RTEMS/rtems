@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File System Interface for RTEMS
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  */
 
 /*

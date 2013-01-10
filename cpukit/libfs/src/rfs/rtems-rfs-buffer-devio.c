@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Buffer Routines
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  */
 
 /*

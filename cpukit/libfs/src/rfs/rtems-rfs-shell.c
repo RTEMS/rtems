@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Shell Commands Support
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  */
 
 /*

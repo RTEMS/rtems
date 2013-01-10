@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Group Routines
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * These functions open and close a group as well as manage bit allocations
  * within a group.

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems File Routines
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * These functions manage files.
  */
