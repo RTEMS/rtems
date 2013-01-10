@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup POSIX_RWLOCK POSIX RWLock Manager
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Constants and Structures Associated with the POSIX RWLock Manager
  * 

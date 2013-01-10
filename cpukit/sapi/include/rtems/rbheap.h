@@ -1,8 +1,6 @@
 /**
  * @file
  *
- * @ingroup RBHeap
- *
  * @brief Red-Black Tree Heap API
  */
 
@@ -34,6 +32,8 @@ extern "C" {
 /**
  * @defgroup RBHeap Red-Black Tree Heap
  *
+ * @ingroup ClassicRTEMS
+ *
  * @brief Red-Black Tree Heap API.
  *
  * The red-black tree heap provides a memory allocator suitable to implement
@@ -45,9 +45,8 @@ extern "C" {
  * by other tasks.  The allocated and free memory parts of the managed area are
  * called chunks.  Each chunk needs a descriptor which is stored outside of the
  * managed area.
- *
- * @{
  */
+/**@{*/
 
 /**
  * @brief Red-black heap chunk descriptor.

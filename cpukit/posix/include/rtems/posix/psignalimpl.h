@@ -21,7 +21,7 @@
 /**
  * @defgroup POSIX_SIGNALS POSIX Signals Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Internal Information about POSIX Signals
  * 

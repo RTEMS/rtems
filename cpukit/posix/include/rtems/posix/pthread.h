@@ -30,7 +30,7 @@ extern "C" {
 /**
  * @defgroup POSIX_PTHREAD POSIX Threads Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Private Support Information for POSIX Threads
  * 

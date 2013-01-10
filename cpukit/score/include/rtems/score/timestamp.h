@@ -19,7 +19,7 @@
 #define _RTEMS_SCORE_TIMESTAMP_H
 
 /**
- *  @defgroup SuperCore Timestamp
+ *  @defgroup SuperCoreTimeStamp Score Timestamp
  *
  *  @ingroup Score
  *

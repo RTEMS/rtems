@@ -24,7 +24,7 @@
 /**
  * @defgroup POSIX_TIMETYPES POSIX Time Types
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  * 
  * @{
  */

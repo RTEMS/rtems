@@ -24,7 +24,7 @@
 /**
  * @defgroup POSIX_KEY POSIX Key
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  * 
  * @{
  */

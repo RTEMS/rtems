@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup POSIX_SPINLOCK POSIX Spinlock Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Constants and Structures Associated with the POSIX Spinlock Manager
  * 

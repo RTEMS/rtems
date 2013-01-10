@@ -21,17 +21,18 @@
 #include <rtems/libio_.h>
 #include <rtems/pipe.h>
 
+/**
+ * @brief In-Memory File System Support.
+ *
+ * @defgroup IMFS In-Memory File System Support
+ *
+ * @ingroup FileSystemTypesAndMount
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup IMFS POSIX In-Memory File System Support
- *
- * @brief In-Memory File System Support.
- *
- * @{
- */
 
 /*
  *  Data types
@@ -66,7 +67,7 @@ typedef struct {
   void *context;
 } IMFS_generic_t;
 
-/*
+/**
  *  IMFS "memfile" information
  *
  *  The data structure for the in-memory "memfiles" is based on classic UNIX.
@@ -79,14 +80,15 @@ typedef struct {
  *  memory wasted due to internal file fragmentation.  The following
  *  is a list of maximum file sizes based on various settings
  *
+ *  @code
  *    max_filesize with blocks of   16 is         1,328
  *    max_filesize with blocks of   32 is        18,656
  *    max_filesize with blocks of   64 is       279,488
  *    max_filesize with blocks of  128 is     4,329,344
  *    max_filesize with blocks of  256 is    68,173,568
  *    max_filesize with blocks of  512 is 1,082,195,456
+ *  @endcode
  */
-
 #define IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK     128
   extern int imfs_rq_memfile_bytes_per_block;
   extern int imfs_memfile_bytes_per_block;
@@ -113,7 +115,6 @@ typedef struct {
 /*
  *  Important block numbers for "memfiles"
  */
-
 #define FIRST_INDIRECT           (0)
 #define LAST_INDIRECT            (IMFS_MEMFILE_BLOCK_SLOTS - 1)
 
@@ -134,7 +135,6 @@ typedef struct {
 /*
  *  What types of IMFS file systems entities there can be.
  */
-
 typedef enum {
   IMFS_DIRECTORY = RTEMS_FILESYSTEM_DIRECTORY,
   IMFS_DEVICE = RTEMS_FILESYSTEM_DEVICE,
@@ -165,9 +165,8 @@ typedef union {
 
 /**
  * @addtogroup IMFSGenericNodes
- *
- * @{
  */
+/**@{*/
 
 /**
  * @brief Initializes an IMFS node.
@@ -282,9 +281,8 @@ typedef struct {
 
 /**
  * @addtogroup IMFS
- *
- * @{
  */
+/**@{*/
 
 /*
  * Major device number for the IMFS. This is not a real device number because
@@ -435,32 +433,37 @@ extern void IMFS_fsunmount(
  * 
  * TAR file format:
  *
- *  Offset   Length   Contents
- *    0    100 bytes  File name ('\0' terminated, 99 maxmum length)
- *  100      8 bytes  File mode (in octal ascii)
- *  108      8 bytes  User ID (in octal ascii)
- *  116      8 bytes  Group ID (in octal ascii)
- *  124     12 bytes  File size (s) (in octal ascii)
- *  136     12 bytes  Modify time (in octal ascii)
- *  148      8 bytes  Header checksum (in octal ascii)
- *  156      1 bytes  Link flag
- *  157    100 bytes  Linkname ('\0' terminated, 99 maxmum length)
- *  257      8 bytes  Magic PAX ("ustar\0" + 2 bytes padding)
- *  257      8 bytes  Magic GNU tar ("ustar  \0")
- *  265     32 bytes  User name ('\0' terminated, 31 maxmum length)
- *  297     32 bytes  Group name ('\0' terminated, 31 maxmum length)
- *  329      8 bytes  Major device ID (in octal ascii)
- *  337      8 bytes  Minor device ID (in octal ascii)
- *  345    167 bytes  Padding
- *  512   (s+p)bytes  File contents (s+p) := (((s) + 511) & ~511),
- *                    round up to 512 bytes
+ * @code
+ *   Offset   Length                 Contents
+ *     0    100  bytes  File name ('\0' terminated, 99 maxmum length)
+ *   100      8  bytes  File mode (in octal ascii)
+ *   108      8  bytes  User ID (in octal ascii)
+ *   116      8  bytes  Group ID (in octal ascii)
+ *   124     12  bytes  File size (s) (in octal ascii)
+ *   136     12  bytes  Modify time (in octal ascii)
+ *   148      8  bytes  Header checksum (in octal ascii)
+ *   156      1  bytes  Link flag
+ *   157    100  bytes  Linkname ('\0' terminated, 99 maxmum length)
+ *   257      8  bytes  Magic PAX ("ustar\0" + 2 bytes padding)
+ *   257      8  bytes  Magic GNU tar ("ustar  \0")
+ *   265     32  bytes  User name ('\0' terminated, 31 maxmum length)
+ *   297     32  bytes  Group name ('\0' terminated, 31 maxmum length)
+ *   329      8  bytes  Major device ID (in octal ascii)
+ *   337      8  bytes  Minor device ID (in octal ascii)
+ *   345    167  bytes  Padding
+ *   512   (s+p) bytes  File contents (s+p) := (((s) + 511) & ~511),
+ *                      round up to 512 bytes
+ * @endcode
  *
  *  Checksum:
- *  int i, sum;
- *  char* header = tar_header_pointer;
- *  sum = 0;
- *  for(i = 0; i < 512; i++)
- *      sum += 0xFF & header[i];
+ *  @code
+ *    int   i, sum;
+ *    char *header = tar_header_pointer;
+ *
+ *    sum = 0;
+ *    for (i = 0; i < 512; i++)
+ *        sum += 0xFF & header[i];
+ * @endcode
  */
 extern int rtems_tarfs_load(
    const char *mountpoint,
@@ -616,9 +619,8 @@ extern bool IMFS_is_imfs_instance(
  * more features like support for fsync() and fdatasync().  The generic nodes
  * use the reference counting of the IMFS.  This provides automatic node
  * destruction when the last reference vanishes.
- *
- * @{
  */
+/**@{*/
 
 /**
  * @brief Makes a generic IMFS node.
@@ -671,9 +673,8 @@ extern int IMFS_make_generic_node(
 
 /**
  * @addtogroup IMFS
- *
- * @{
  */
+/**@{*/
 
 /**
  * @brief Mount an IMFS.
@@ -731,9 +732,8 @@ extern ssize_t imfs_dir_read(
  * malloc'ed memory.  Thus any data stored in one of these files is lost
  * at system shutdown unless special arrangements to copy the data to
  * some type of non-volailte storage are made by the application.
- * 
- * @{
  */
+/**@{*/
 
 /**
  * @brief Open a memory file.
@@ -777,9 +777,8 @@ extern ssize_t memfile_write(
  *
  * This section contains the set of handlers used to map operations on
  * IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
- * 
- * @{
  */
+/**@{*/
 
 extern int device_open(
   rtems_libio_t *iop,            /* IN  */
@@ -959,9 +958,8 @@ static inline IMFS_jnode_t *IMFS_create_node(
 
 /**
  * @addtogroup IMFSGenericNodes
- *
- * @{
  */
+/**@{*/
 
 static inline void *IMFS_generic_get_context_by_node(
   const IMFS_jnode_t *node
@@ -996,11 +994,9 @@ static inline dev_t IMFS_generic_get_device_identifier_by_node(
   );
 }
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
-
+/** @} */
 #endif
 /* end of include file */

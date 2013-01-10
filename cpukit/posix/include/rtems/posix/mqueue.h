@@ -40,7 +40,7 @@
 /**
  *  @defgroup POSIX_MQUEUE_P Message Queues Private Support
  *
- *  @ingroup POSIX_MQUEUE
+ *  @ingroup POSIXAPI
  * 
  * @{
  */

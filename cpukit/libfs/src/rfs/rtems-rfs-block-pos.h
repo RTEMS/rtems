@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Block Position and Size Management
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Block Position and Size Management.
  *

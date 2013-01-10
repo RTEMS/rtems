@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Bitmap Routines
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Bitmap Routines.
  *

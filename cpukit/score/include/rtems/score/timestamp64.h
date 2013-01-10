@@ -20,7 +20,7 @@
 #define _RTEMS_SCORE_TIMESTAMP64_H
 
 /**
- *  @defgroup SuperCore Timestamp64
+ *  @defgroup SuperCoreTimestamp64 SuperCore Sixty-Four Bit Timestamps
  *
  *  @ingroup Score
  *

@@ -20,11 +20,9 @@
 #define _RTEMS_SCORE_PRIORITYBITMAP_H
 
 /**
- *  @defgroup ScorePriority Bitmap Priority Thread Routines
+ *  @defgroup ScorePriorityBitmap Bitmap Priority Thread Routines
  *
  *  @ingroup Score
- *
- *  @addtogroup ScorePriority
  */
 /**@{*/
 

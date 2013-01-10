@@ -23,11 +23,9 @@
 #define _RTEMS_SCORE_SCHEDULERSIMPLE_SMP_H
 
 /**
- *  @defgroup ScoreScheduler
+ *  @defgroup ScoreSchedulerSMP Simple SMP Scheduler
  *
- *  @ingroup Score
- *
- *  @addtogroup ScoreScheduler
+ *  @ingroup ScoreScheduler
  *
  *  The Simple SMP Scheduler attempts to faithfully implement the
  *  behaviour of the Deterministic Priority Scheduler while spreading

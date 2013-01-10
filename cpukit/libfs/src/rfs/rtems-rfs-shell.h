@@ -1,7 +1,7 @@
 /**
  * @file
  * 
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  * @brief RTEMS File Systems Shell Commands
  *
  * RTEMS File Systems Shell commands provide a CLI interface to support and

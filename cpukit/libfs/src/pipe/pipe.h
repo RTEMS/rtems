@@ -20,17 +20,18 @@
 
 #include <rtems/libio.h>
 
+/**
+ * @defgroup FIFO_PIPE FIFO/Pipe File System Support
+ *
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @brief Interface to the POSIX FIFO/Pipe File System
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup FIFO_PIPE FIFO/pipe File System Support
- *
- * @brief Interface to the POSIX FIFO/pipe File System
- *
- * @{
- */
 
 /* Control block to manage each pipe */
 typedef struct pipe_control {

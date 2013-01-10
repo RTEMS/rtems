@@ -1,9 +1,6 @@
 /** 
  * @file rtems/fb.h
  *
- * @defgroup libmisc_fb Device Driver
- *
- * @ingroup libmisc
  * @brief Frame Buffer Device Driver
  *
  * This file defines the interface to a frame buffer device driver.
@@ -20,6 +17,13 @@
 #define _MW_FB_H
 
 #include <stdint.h>
+
+/**
+ * @defgroup libmisc_fb Frame Buffer Device Driver Interface
+ *
+ * @ingroup Device Drivers and Frameworks
+ */
+/**@{*/
 
 #ifdef	__cplusplus
 extern "C" {
@@ -92,10 +96,9 @@ struct fb_cmap {
     uint16_t *transp;              /* transparency, can be NULL */
 };
 
-
-
 #ifdef	__cplusplus
 }
 #endif
+/**@}*/
 
 #endif /* _MW_FB_H */

@@ -19,11 +19,9 @@
 #define _RTEMS_SCORE_SCHEDULERSIMPLE_H
 
 /**
- *  @defgroup ScoreScheduler
+ *  @defgroup ScoreSchedulerSimple Simple Priority Scheduler
  *
- *  @ingroup Score
- *
- *  @addtogroup ScoreScheduler
+ *  @ingroup ScoreScheduler
  */
 /**@{*/
 
@@ -166,7 +164,7 @@ void *_Scheduler_simple_Allocate(
 );
 
 /**
- *  @breif Stub for simple schedule update.
+ *  @brief Stub for simple schedule update.
  *
  *  This routine does nothing, and is used as a stub for Schedule update
  *  The overhead of a function call will still be imposed.

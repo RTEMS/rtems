@@ -20,10 +20,14 @@
 #define _RTEMS_POSIX_SEMAPHORE_H
 
 /**
- * @addtogroup POSIX_SEMAPHORES
- * 
- * @{
+ * @defgroup POSIXSemaphorePrivate POSIX Semaphore Private Support
+ *
+ * @ingroup POSIXAPI
+ *
+ * This defines the internal implementation support for POSIX semaphores.
  */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif

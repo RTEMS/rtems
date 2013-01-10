@@ -1,9 +1,6 @@
 /**
  * @file rtems/rtems/partmp.h
  *
- * @defgroup ClassicPartMP Partition MP Support
- *
- * @ingroup ClassicMP
  * @brief MP Support in Partition Manager
  *
  * This include file contains all the constants and structures associated
@@ -39,7 +36,7 @@ extern "C" {
  *
  *  This encapsulates functionality which XXX
  */
-/**{*/
+/*{*/
 
 /**
  *  The following enumerated type defines the list of

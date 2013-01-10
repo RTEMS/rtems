@@ -1,9 +1,6 @@
 /**
  * @file rtems/rtems/barriermp.h
  *
- * @defgroup ClassicBarrierMP Barrier MP Support
- *
- * @ingroup ClassicMP
  * @brief MP Support in the Barrier Manager
  *
  * This include file contains all the constants and structures associated
@@ -28,7 +25,7 @@
  *
  *  This encapsulates functionality which XXX
  */
-/**{*/
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {

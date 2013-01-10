@@ -22,7 +22,7 @@
 /**
  * @defgroup POSIX_COND_VARS POSIX Condition Variables
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  * 
  * @{
  */

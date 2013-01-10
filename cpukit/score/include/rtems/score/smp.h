@@ -23,7 +23,7 @@
 #include <rtems/score/percpu.h>
 
 /**
- *  @defgroup SuperCore SMP Support
+ *  @defgroup SuperCoreSMP SMP Support
  *
  *  @ingroup Score
  *
@@ -105,7 +105,7 @@ void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 void _SMP_Request_other_cores_to_dispatch(void);
 
 /**
- *  @Brief Request other cores to shutdown.
+ *  @brief Request other cores to shutdown.
  *
  *  Send message to other cores requesting them to shutdown.
  */

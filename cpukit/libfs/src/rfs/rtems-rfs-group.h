@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Group Management
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Group Management.
  *
@@ -23,11 +23,11 @@
 #define _RTEMS_RFS_GROUP_H_
 
 /**
- * @defgroup rtems-rfs FS Group Management
+ * @ingroup rtems_rfs
  *
- * @ingroup rfs
- * @{
+ * RTEMS File System Group Management
  */
+/**@{*/
 
 #include <rtems/rfs/rtems-rfs-trace.h>
 #include <rtems/rfs/rtems-rfs-bitmaps.h>

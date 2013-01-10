@@ -26,7 +26,7 @@ extern "C" {
 /**
  * @defgroup POSIX_MUTEX POSIX Mutex Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Private Support Information for POSIX Mutex
  * 

@@ -1,10 +1,11 @@
 /**
  * @file rtems/rtems/sem.h
  *
+ * @brief Semaphore Manager
+ *
  * @defgroup ClassicSem Semaphores
  *
  * @ingroup ClassicRTEMS
- * @brief Semaphore Manager
  *
  * This include file contains all the constants and structures associated
  * with the Semaphore Manager. This manager utilizes standard Dijkstra

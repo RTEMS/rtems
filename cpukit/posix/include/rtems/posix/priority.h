@@ -22,7 +22,7 @@
 /**
  * @defgroup POSIX_PRIORITY POSIX Priority Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Interface to the POSIX Priority Implementation
  * 

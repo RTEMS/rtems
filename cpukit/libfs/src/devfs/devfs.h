@@ -12,18 +12,18 @@
 
 #include <rtems/libio_.h>
 
+/**
+ * @defgroup DevFsDeviceTable Device Only File System
+ *
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @brief This structure defines the type of device table
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-/**
- * @defgroup DevFsDeviceTable Define Device Table Type
- *
- * @ingroup DevFs
- *
- * @brief This structure defines the type of device table
- *
- * @{
- */
 
 typedef struct {
   /** This member points to device name which is not a null-terminated string */

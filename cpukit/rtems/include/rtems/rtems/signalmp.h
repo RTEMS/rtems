@@ -1,9 +1,6 @@
 /**
  * @file rtems/rtems/signalmp.h
  *
- * @defgroup ClassicSignalMP Signal MP Support
- *
- * @ingroup ClassicRTEMS
  * @brief Signal MP Support
  *
  * This include file contains all the constants and structures associated
@@ -38,7 +35,7 @@ extern "C" {
  *
  *  This encapsulates functionality which XXX
  */
-/**{*/
+/*{*/
 
 /**
  *  The following enumerated type defines the list of

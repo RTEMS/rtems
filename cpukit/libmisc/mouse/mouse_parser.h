@@ -1,9 +1,6 @@
 /**
  * @file rtems/mouse_parser.h
  *
- * @defgroup libmisc_mouse Mouse Parser Engine
- *
- * @ingroup libmisc
  * @brief Initialize Mouse Parser Engine
  *
  * This file is the header file for the Mouse Parser Engine.
@@ -42,13 +39,11 @@
 #include <rtems/mw_uid.h>
 
 /**
- *  @defgroup libmisc_mouse Mouse Support
- *  @ingroup libmisc
- *
  *  @defgroup libmisc_mouseparser Mouse Parser Engine
  *  @ingroup libmisc_mouse
  */
 /**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif

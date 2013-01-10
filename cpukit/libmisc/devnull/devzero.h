@@ -1,9 +1,6 @@
 /**
  * @file rtems/devzero.h
  *
- * @defgroup libmisc_devzero Device Driver
- *
- * @ingroup libmisc
  * @brief RTEMS /dev/zero Device Driver
  *
  * This include file defines the interface to the RTEMS /dev/zero
@@ -28,6 +25,13 @@
 #define _RTEMS_DEVZERO_H
 
 #include <rtems/io.h>
+
+/**
+ *  @defgroup libmisc_devzero Zero Device Driver
+ *
+ *  @ingroup libmisc
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,5 +88,5 @@ rtems_device_driver dev_zero_control(
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
+/**@}*/
 #endif /* _RTEMS_DEVZERO_H */

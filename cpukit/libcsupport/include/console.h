@@ -47,7 +47,7 @@ extern "C" {
  * @param[in] major is the device driver major number.
  * @param[in] minor is the device driver minor number.
  * @param[in] arg is the parameters to this call.
- *.
+ *
  * @retval RTEMS_SUCCESSFUL The device driver is successfully initialized.
  */
 rtems_device_driver console_initialize(

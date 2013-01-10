@@ -25,7 +25,7 @@
 /**
  * @defgroup POSIX_PRIV_TIMERS POSIX Timers
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  * 
  * @{
  */

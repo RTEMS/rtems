@@ -19,10 +19,11 @@
 #define __POSIX_SYS_UTSNAME_h
 
 /**
- * @defgroup utsname Service
+ * @defgroup UTSNAME utsname Service
  * 
- * @{
+ * @ingroup POSIXAPI
  */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,7 +47,8 @@ extern "C" {
 #endif
 
 struct utsname {
-  char sysname[SYS_NMLN];  /* Name of this implementation of the operating system */
+  char sysname[SYS_NMLN];  /* Name of this implementation of the */
+                           /*   operating system */
   char nodename[SYS_NMLN]; /* Name of this node within an implementation */
                            /*   specified communication network */
   char release[SYS_NMLN];  /* Current release level of this implementation */

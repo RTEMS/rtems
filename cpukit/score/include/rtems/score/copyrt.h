@@ -20,7 +20,7 @@
 #define _RTEMS_SCORE_COPYRT_H
 
 /**
- *  @defgroup SuperCore RTEMS Copyright Notice
+ *  @defgroup SuperCoreCopyright RTEMS Copyright Notice
  *
  *  @ingroup Score
  */

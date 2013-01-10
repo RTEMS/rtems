@@ -23,9 +23,9 @@
 #include <rtems/score/tqdata.h>
 
 /**
- *  @defgroup POSIX_THREAD Thread API Extension
+ *  @defgroup POSIX_THREAD POSIX Thread API Extension
  *
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  * 
  * @{
  */

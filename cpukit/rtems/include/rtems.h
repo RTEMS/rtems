@@ -3,7 +3,6 @@
  *
  * @defgroup ClassicRTEMS RTEMS Classic API
  *
- * @ingroup ClassicRTEMS
  * @brief RTEMS Classic API
  *
  * the Public Interface to the RTEMS Classic API
@@ -24,9 +23,8 @@
  * @defgroup ClassicRTEMS RTEMS Classic API
  *
  * RTEMS Classic API definitions and modules.
- *
- * @{
  */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {

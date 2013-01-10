@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup POSIX_AIO POSIX Asynchronous I/O Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief POSIX Asynchronous Input and Output
  * 

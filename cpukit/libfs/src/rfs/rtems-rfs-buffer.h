@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * @brief Maps Blocks to the Media Interface Layers
  *

@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System Information Node
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System Information Node.
  *

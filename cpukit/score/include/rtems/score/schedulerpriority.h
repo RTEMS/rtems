@@ -28,11 +28,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreScheduler Priority-based Scheduler
+ * @defgroup ScoreSchedulerDPS Deterministic Priority-based Scheduler
  *
- * @ingroup Score
- *
- * @addtogroup ScoreScheduler
+ * @ingroup ScoreScheduler
  */
 /**@{*/
 

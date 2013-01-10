@@ -43,7 +43,7 @@
 /**
  * @defgroup POSIX_MQUEUE POSIX Message Queues
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  * 
  * @{
  */

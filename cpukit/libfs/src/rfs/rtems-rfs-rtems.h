@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System RTEMS Header file.
  *
