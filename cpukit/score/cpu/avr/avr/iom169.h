@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega169
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2002, 2003, 2004, 2005 
    Juergen Schilling <juergen.schilling@honeywell.com>
    Eric B. Weddington
@@ -49,6 +57,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_iom169 ATmega169 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* I/O registers */
 
@@ -1102,5 +1118,6 @@
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x05
 
+/** @} */
 
 #endif  /* _AVR_IOM169_H_ */

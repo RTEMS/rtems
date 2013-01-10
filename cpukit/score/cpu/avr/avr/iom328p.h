@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega328P
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2007 Atmel Corporation
    All rights reserved.
 
@@ -47,6 +55,14 @@
 
 #ifndef _AVR_IOM328P_H_
 #define _AVR_IOM328P_H_ 1
+
+/**
+ * @defgroup AvrDef_iom328p ATmega328P Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* Registers and associated bit numbers */
 
@@ -870,5 +886,6 @@
 #define SIGNATURE_1 0x95
 #define SIGNATURE_2 0x0F
 
+/** @} */
 
 #endif  /* _AVR_IOM328P_H_ */

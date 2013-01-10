@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega8HVA
+ */
+
 /* Copyright (c) 2007, Anatoly Sokolov 
    All rights reserved.
 
@@ -36,6 +42,14 @@
 
 #include <avr/iomxxhva.h>
 
+/**
+ * @defgroup AvrDef_iom8hva ATmega8HVA Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
+
 /* Constants */
 #define SPM_PAGESIZE 128
 #define RAMEND      0x2FF
@@ -64,6 +78,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 
+/** @} */
 
 #endif /* _AVR_IOM8HVA_H_ */
 

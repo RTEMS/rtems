@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny28
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2002, Marek Michalkiewicz
    All rights reserved.
 
@@ -49,6 +57,14 @@
 #ifndef __ASSEMBLER__
 #  warning "MCU not supported by the C compiler"
 #endif
+
+/**
+ * @defgroup AvrDef_iotn28 ATtiny28 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* I/O registers */
 
@@ -270,5 +286,6 @@
 #define SIGNATURE_1 0x91
 #define SIGNATURE_2 0x07
 
+/** @} */
 
 #endif /* _AVR_IOTN28_H_ */

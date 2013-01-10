@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny2313
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2004, 2005, 2006 Bob Paddock
    All rights reserved.
 
@@ -70,6 +78,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif
+
+/**
+ * @defgroup AvrDef_iotn2313 ATtiny2313 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 /* I/O registers */
 
@@ -628,5 +644,6 @@
 #define SIGNATURE_1 0x91
 #define SIGNATURE_2 0x0A
 
+/** @} */
 
 #endif  /* _AVR_IOTN2313_H_ */

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90PWM81
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2009 Atmel Corporation
    All rights reserved.
 
@@ -43,6 +51,13 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
+/**
+ * @defgroup AvrDef_io90pwm81 AT90PWM81 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 #ifndef _AVR_AT90PWM81_H_
 #define _AVR_AT90PWM81_H_ 1
@@ -1019,6 +1034,7 @@
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x88
 
+/** @} */
 
 #endif /* _AVR_AT90PWM81_H_ */
 

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny88
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2007 Atmel Corporation
    All rights reserved.
 
@@ -44,6 +52,13 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
+/**
+ * @defgroup AvrDef_iotn88 ATtiny88 Definitions
+ *
+ * @ingroup avr
+ *
+ * @{
+ */
 
 #ifndef _AVR_IOTN88_H_
 #define _AVR_IOTN88_H_ 1
@@ -752,5 +767,6 @@
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x11
 
+/** @} */
 
 #endif /* _AVR_IOTN88_H_ */
