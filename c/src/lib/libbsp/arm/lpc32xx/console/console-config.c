@@ -45,7 +45,7 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 #ifdef LPC32XX_UART_3_BAUD
   static bool lpc32xx_uart_probe_3(int minor)
   {
-    LPC32XX_UARTCLK_CTRL |= 1U << 0;
+    LPC32XX_UARTCLK_CTRL |= BSP_BIT32(0);
     LPC32XX_U3CLK = LPC32XX_CONFIG_U3CLK;
     LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 4, 5);
 
@@ -64,7 +64,7 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
      */
     gpio->p2_mux_set = BSP_BIT32(2);
 
-    LPC32XX_UARTCLK_CTRL |= 1U << 1;
+    LPC32XX_UARTCLK_CTRL |= BSP_BIT32(1);
     LPC32XX_U4CLK = LPC32XX_CONFIG_U4CLK;
     LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 6, 7);
 
@@ -75,7 +75,10 @@ static void lpc32xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 #ifdef LPC32XX_UART_6_BAUD
   static bool lpc32xx_uart_probe_6(int minor)
   {
-    LPC32XX_UARTCLK_CTRL |= 1U << 3;
+    /* Bypass the IrDA modulator/demodulator */
+    LPC32XX_UART_CTRL |= BSP_BIT32(5);
+
+    LPC32XX_UARTCLK_CTRL |= BSP_BIT32(3);
     LPC32XX_U6CLK = LPC32XX_CONFIG_U6CLK;
     LPC32XX_UART_CLKMODE = BSP_FLD32SET(LPC32XX_UART_CLKMODE, 0x2, 10, 11);
 
