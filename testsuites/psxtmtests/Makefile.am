@@ -8,6 +8,7 @@ SUBDIRS += psxtmbarrier02
 SUBDIRS += psxtmbarrier03
 SUBDIRS += psxtmcond01
 SUBDIRS += psxtmcond02
+SUBDIRS += psxtmcond03
 SUBDIRS += psxtmcond05
 SUBDIRS += psxtmkey01
 SUBDIRS += psxtmkey02
