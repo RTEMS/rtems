@@ -15,7 +15,9 @@
 #include <bspopts.h>
 #include <rtems/powerpc/powerpc.h>
 
-#if BSP_DATA_CACHE_ENABLED && PPC_CACHE_ALIGNMENT == 32
+#if BSP_DATA_CACHE_ENABLED \
+  && PPC_CACHE_ALIGNMENT == 32 \
+  && !defined(BSP_DATA_CACHE_USE_WRITE_THROUGH)
 
 #include <string.h>
 #include <stdint.h>
