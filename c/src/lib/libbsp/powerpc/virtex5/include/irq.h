@@ -69,12 +69,11 @@ extern "C" {
   extern rtems_irq_connect_data *BSP_rtems_irq_tbl;
   void BSP_rtems_irq_mngt_init(unsigned cpuId);
 
-#ifdef __cplusplus
-}
-
 #define	BSP_DEC           BSP_PIT
 #define	BSP_DECREMENTER   BSP_PIT
 
+#ifdef __cplusplus
+}
 #endif
 #endif /* ASM */
 
