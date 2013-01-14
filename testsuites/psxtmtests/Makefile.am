@@ -40,6 +40,7 @@ SUBDIRS += psxtmsem05
 SUBDIRS += psxtmsleep01
 SUBDIRS += psxtmsleep02
 SUBDIRS += psxtmthread01
+SUBDIRS += psxtmthread02
 SUBDIRS += psxtmthread03
 endif
 
