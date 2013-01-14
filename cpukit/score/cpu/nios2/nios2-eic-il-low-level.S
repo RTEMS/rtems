@@ -160,7 +160,6 @@ do_thread_dispatch:
 	ldw	r10, FRAME_OFFSET_R10(sp)
 	ldw	r11, FRAME_OFFSET_R11(sp)
 	ldw	r12, FRAME_OFFSET_R12(sp)
-	ldw	r13, FRAME_OFFSET_R13(sp)
 
 	/*
 	 * Disable interrupts.
@@ -180,15 +179,16 @@ do_thread_dispatch:
 	wrctl	status, r15
 
 	/* Load thread dispatch necessary */
-	ldb	r12, %gprel(_Per_CPU_Information + PER_CPU_DISPATCH_NEEDED)(gp)
+	ldb	r13, %gprel(_Per_CPU_Information + PER_CPU_DISPATCH_NEEDED)(gp)
 
 	/* Is thread dispatch necessary? */
-	bne	r12, zero, enable_interrupts_before_thread_dispatch
+	bne	r13, zero, enable_interrupts_before_thread_dispatch
 
 	/* Enable Nios II specific thread dispatch */
 	stw	zero, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
 
 	/* Restore remaining volatile register */
+	ldw	r13, FRAME_OFFSET_R13(sp)
 	ldw	r14, FRAME_OFFSET_R14(sp)
 	ldw	r15, FRAME_OFFSET_R15(sp)
 
