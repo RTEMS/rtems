@@ -1,0 +1,9 @@
+*** POSIX TIME TEST PSXTMMUTEX03 ***
+pthread_mutex_lock - available 12
+pthread_mutex_unlock - no threads waiting 26
+pthread_mutex_trylock - available 12
+pthread_mutex_trylock - not available 12
+pthread_mutex_unlock - no threads waiting 27
+pthread_mutex_timedlock - available 14
+pthread_mutex_unlock - no threads waiting 26
+*** END OF POSIX TIME TEST PSXTMMUTEX03 ***

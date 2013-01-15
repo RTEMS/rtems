@@ -1,0 +1,3 @@
+*** POSIX TIME TEST PSXTMMUTEX04 ***
+pthread_mutex_timedlock - not available, block 98
+*** END OF POSIX TIME TEST PSXTMMUTEX04 ***
