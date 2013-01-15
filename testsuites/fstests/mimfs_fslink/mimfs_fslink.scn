@@ -1,0 +1,10 @@
+*** FILE SYSTEM TEST ( MOUNTED IMFS ) ***
+Initializing filesystem MOUNTED IMFS
+
+
+*** LINK TEST ***
+link creates hardlinks
+test if the stat is the same
+chmod and chown
+unlink then stat the file 
+*** END OF LINK TEST ***
