@@ -43,6 +43,10 @@ $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h: rtems/score/cpuatomic.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
 
+$(PROJECT_INCLUDE)/rtems/score/cpusmplock.h: rtems/score/cpusmplock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpusmplock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpusmplock.h
+
 $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/powerpc
 	@: > $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)

@@ -8,6 +8,7 @@ include_rtems_score_HEADERS = rtems/score/powerpc.h
 include_rtems_score_HEADERS += rtems/score/cpu.h
 include_rtems_score_HEADERS += rtems/score/types.h
 include_rtems_score_HEADERS += rtems/score/cpuatomic.h
+include_rtems_score_HEADERS += rtems/score/cpusmplock.h
 
 include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/registers.h

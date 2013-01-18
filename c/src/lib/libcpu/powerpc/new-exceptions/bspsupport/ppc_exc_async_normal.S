@@ -152,6 +152,7 @@ ppc_exc_wrap_async_normal:
 	evstdd	SCRATCH_1_REGISTER, PPC_EXC_ACC_OFFSET(r1)
 #endif
 
+#ifndef RTEMS_SMP
 	/* Increment ISR nest level and thread dispatch disable level */
 	cmpwi	ISR_NEST_REGISTER, 0
 	addi	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
@@ -196,6 +197,28 @@ ppc_exc_wrap_async_normal:
 	subic.	DISPATCH_LEVEL_REGISTER, DISPATCH_LEVEL_REGISTER, 1
 	stw	ISR_NEST_REGISTER, ISR_NEST_LEVEL@l(ISR_NEST_HADDR_REGISTER)
 	stw	DISPATCH_LEVEL_REGISTER, _Thread_Dispatch_disable_level@sdarel(r13)
+#else /* RTEMS_SMP */
+	/* ISR Enter */
+	bl	_ISR_SMP_Enter
+	cmpwi	r3, 0
+
+	/* Switch stack if necessary */
+	mfspr	SCRATCH_0_REGISTER, SPRG1
+	iselgt	r1, r1, SCRATCH_0_REGISTER
+
+	bl      bsp_interrupt_dispatch
+
+	/*
+	 * Switch back to original stack (FRAME_REGISTER == r1 if we are still
+	 * on the IRQ stack) and restore FRAME_REGISTER.
+	 */
+	mr	r1, FRAME_REGISTER
+	lwz	FRAME_REGISTER, FRAME_OFFSET(r1)
+
+	/* ISR Leave */
+	bl	_ISR_SMP_Exit
+	cmpwi	r3, 1
+#endif /* RTEMS_SMP */
 
 	/* Call thread dispatcher if necessary */
 	bne	thread_dispatching_done
