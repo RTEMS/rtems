@@ -20,6 +20,8 @@
 #ifndef _RTEMS_BSPSMP_H
 #define _RTEMS_BSPSMP_H
 
+#include <rtems/score/cpuopts.h>
+
 #if defined (RTEMS_SMP)
 #include <rtems/score/percpu.h>
 
