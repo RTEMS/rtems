@@ -72,6 +72,8 @@ rtems_task Init(
     (1 + CONFIGURE_SMP_MAXIMUM_PROCESSORS)
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
+
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
