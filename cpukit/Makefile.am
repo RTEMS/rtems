@@ -42,7 +42,7 @@ if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
-include_HEADERS += libnetworking/memory.h
+include_HEADERS += include/memory.h
 include_HEADERS += libmd/md4.h
 include_HEADERS += libmd/md5.h
 
@@ -55,7 +55,8 @@ include_sys_HEADERS += libcsupport/include/sys/ttycom.h
 include_sys_HEADERS += libcsupport/include/sys/termios.h
 include_sys_HEADERS += libcsupport/include/sys/utsname.h
 
-include_sys_HEADERS += libnetworking/sys/uio.h
+include_sys_HEADERS += include/sys/uio.h
+include_sys_HEADERS += include/sys/_iovec.h
 include_sys_HEADERS += include/sys/priority.h
 
 if LIBNETWORKING

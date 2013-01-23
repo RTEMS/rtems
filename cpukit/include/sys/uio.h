@@ -1,4 +1,4 @@
-/*
+/*-
  * Copyright (c) 1982, 1986, 1993, 1994
  *	The Regents of the University of California.  All rights reserved.
  *
@@ -27,23 +27,30 @@
  * SUCH DAMAGE.
  *
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
- * $FreeBSD: src/sys/sys/uio.h,v 1.40 2006/11/29 19:08:45 alfred Exp $
+ * $FreeBSD$
  */
 
-
-#ifndef _SYS_UIO_H_
-#define	_SYS_UIO_H_
+#ifndef _SYS_UIO_HH_
+#define	_SYS_UIO_HH_
 
 #include <sys/cdefs.h>
+#ifdef __rtems__
 #include <sys/types.h>
+#endif /* __rtems__ */
+#include <sys/_types.h>
+#include <sys/_iovec.h>
 
-/*
- *  POSIX compliant iovec definition
- */
-struct iovec {
-  void    *iov_base;  /* pointer to data to be written */
-  size_t   iov_len;   /* length of this data block */
-};
+#ifndef __rtems__
+#ifndef _SSIZE_T_DECLARED
+typedef	__ssize_t	ssize_t;
+#define	_SSIZE_T_DECLARED
+#endif
+
+#ifndef _OFF_T_DECLARED
+typedef	__off_t	off_t;
+#define	_OFF_T_DECLARED
+#endif
+#endif /* !__rtems__ */
 
 #if __BSD_VISIBLE
 enum	uio_rw { UIO_READ, UIO_WRITE };
@@ -65,11 +72,7 @@ struct uio {
 	ssize_t	uio_resid;		/* remaining bytes to process */
 	enum	uio_seg uio_segflg;	/* address space */
 	enum	uio_rw uio_rw;		/* operation */
-#if !defined(__rtems__)
 	struct	thread *uio_td;		/* owner */
-#else
-	struct	proc *uio_procp;
-#endif /* !__rtems__ */
 };
 
 /*
@@ -85,15 +88,37 @@ struct uio {
  */
 #define UIO_MAXIOV	1024		/* max 1K of iov's */
 
+struct vm_object;
+struct vm_page;
+
+struct uio *cloneuio(struct uio *uiop);
+int	copyinfrom(const void * __restrict src, void * __restrict dst,
+	    size_t len, int seg);
+int	copyiniov(struct iovec *iovp, u_int iovcnt, struct iovec **iov,
+	    int error);
+int	copyinstrfrom(const void * __restrict src, void * __restrict dst,
+	    size_t len, size_t * __restrict copied, int seg);
+int	copyinuio(struct iovec *iovp, u_int iovcnt, struct uio **uiop);
+void	uio_yield(void);
 int	uiomove(void *cp, int n, struct uio *uio);
+int	uiomove_frombuf(void *buf, int buflen, struct uio *uio);
+#ifndef __rtems__
+int	uiomove_fromphys(struct vm_page *ma[], vm_offset_t offset, int n,
+	    struct uio *uio);
+#endif /* !__rtems__ */
+int	uiomoveco(void *cp, int n, struct uio *uio, int disposable);
 
 #else /* !_KERNEL */
 
 __BEGIN_DECLS
 ssize_t	readv(int, const struct iovec *, int);
 ssize_t	writev(int, const struct iovec *, int);
+#if __BSD_VISIBLE
+ssize_t	preadv(int, const struct iovec *, int, off_t);
+ssize_t	pwritev(int, const struct iovec *, int, off_t);
+#endif
 __END_DECLS
 
 #endif /* _KERNEL */
 
-#endif /* !_SYS_UIO_H_ */
+#endif /* !_SYS_UIO_HH_ */

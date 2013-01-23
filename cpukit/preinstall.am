@@ -43,7 +43,7 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-$(PROJECT_INCLUDE)/memory.h: libnetworking/memory.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/memory.h: include/memory.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/memory.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
 
@@ -87,9 +87,13 @@ $(PROJECT_INCLUDE)/sys/utsname.h: libcsupport/include/sys/utsname.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
 
-$(PROJECT_INCLUDE)/sys/uio.h: libnetworking/sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+$(PROJECT_INCLUDE)/sys/uio.h: include/sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/uio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/uio.h
+
+$(PROJECT_INCLUDE)/sys/_iovec.h: include/sys/_iovec.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_iovec.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_iovec.h
 
 $(PROJECT_INCLUDE)/sys/priority.h: include/sys/priority.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/priority.h
