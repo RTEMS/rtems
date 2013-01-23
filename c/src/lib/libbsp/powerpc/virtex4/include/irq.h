@@ -67,6 +67,8 @@ extern "C" {
   } rtems_irq_symbolic_name;
 
   extern rtems_irq_connect_data *BSP_rtems_irq_tbl;
+  void BSP_irqexc_on_fnc(const rtems_irq_connect_data *conn_data);
+  void BSP_irqexc_off_fnc(const rtems_irq_connect_data *unused);
   void BSP_rtems_irq_mngt_init(unsigned cpuId);
 
 #ifdef __cplusplus
