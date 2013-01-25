@@ -67,91 +67,91 @@ extern "C" {
  * is always consistent, so we only need to take care of compiler.
  */
 #define	ATOMIC_STORE_LOAD(NAME, TYPE, LOP, SOP)               \
-static inline Atomic_##TYPE                           \
-_CPU_Atomic_Load_##NAME(volatile Atomic_##TYPE *p)      \
-{                                                       \
-  Atomic_##TYPE tmp;                                    \
-                                                        \
-  tmp = *p;                                             \
-  __asm __volatile("" : : : "memory");                  \
-  return (tmp);                                         \
-}                                                       \
-                                                        \
+static inline Atomic_##TYPE                                   \
+_CPU_Atomic_Load_##NAME(volatile Atomic_##TYPE *p)            \
+{                                                             \
+  Atomic_##TYPE tmp;                                          \
+                                                              \
+  tmp = *p;                                                   \
+  __asm __volatile("" : : : "memory");                        \
+  return (tmp);                                               \
+}                                                             \
+                                                              \
 static inline _CPU_Atomic_Load_acq_##NAME(volatile Atomic_##TYPE *p)  \
-{                                                       \
-  Atomic_##TYPE tmp;                                    \
-                                                        \
-  tmp = *p;                                             \
-  __asm __volatile("" : : : "memory");                  \
-  return (tmp);                                         \
-}                                                       \
-                                                        \
-static inline void                                    \
+{                                                             \
+  Atomic_##TYPE tmp;                                          \
+                                                              \
+  tmp = *p;                                                   \
+  __asm __volatile("" : : : "memory");                        \
+  return (tmp);                                               \
+}                                                             \
+                                                              \
+static inline void                                            \
 _CPU_Atomic_Store_##NAME(volatile Atomic_##TYPE *p, Atomic_##TYPE v) \
-{                                                                    \
-  __asm __volatile("" : : : "memory");                               \
-  *p = v;                                                            \
-}                                                                    \
-                                                        \
-static inline void                                    \
+{                                                             \
+  __asm __volatile("" : : : "memory");                        \
+  *p = v;                                                     \
+}                                                             \
+                                                              \
+static inline void                                            \
 _CPU_Atomic_Store_rel_##NAME(volatile Atomic_##TYPE *p, Atomic_##TYPE v) \
-{                                                                        \
-  __asm __volatile("" : : : "memory");                                   \
-  *p = v;                                                                \
-}                                                                        \
+{                                                             \
+  __asm __volatile("" : : : "memory");                        \
+  *p = v;                                                     \
+}                                                             \
 
 #else /* !(!SMP) */
 
 #define	ATOMIC_STORE_LOAD(NAME, TYPE, LOP, SOP)               \
-static inline Atomic_##TYPE                           \
-_CPU_Atomic_Load_##NAME(volatile Atomic_##TYPE *p)      \
-{                                                       \
-  Atomic_##TYPE res;                                    \
-                                                        \
-  __asm __volatile(MPLOCKED LOP                         \
-  : "=a" (res),                 /* 0 */                 \
-  "=m" (*p)                     /* 1 */                 \
-  : "m" (*p)                    /* 2 */                 \
-  : "memory", "cc");                                    \
-                                                        \
-  return (res);                                         \
-}                                                       \
-                                                        \
-static inline Atomic_##TYPE                           \
-_CPU_Atomic_Load_acq_##NAME(volatile Atomic_##TYPE *p)  \
-{                                                       \
-  Atomic_##TYPE res;                                    \
-                                                        \
-  __asm __volatile(MPLOCKED LOP                         \
-  : "=a" (res),			/* 0 */                 \
-  "=m" (*p)			/* 1 */                 \
-  : "m" (*p)			/* 2 */                 \
-  : "memory", "cc");                                    \
-                                                        \
-  return (res);                                         \
-}							\
-							\
-/*							\
- * The XCHG instruction asserts LOCK automagically.	\
- */							\
-static inline void                                    \
+static inline Atomic_##TYPE                                   \
+_CPU_Atomic_Load_##NAME(volatile Atomic_##TYPE *p)            \
+{                                                             \
+  Atomic_##TYPE res;                                          \
+                                                              \
+  __asm __volatile(MPLOCKED LOP                               \
+  : "=a" (res),                 /* 0 */                       \
+  "=m" (*p)                     /* 1 */                       \
+  : "m" (*p)                    /* 2 */                       \
+  : "memory", "cc");                                          \
+                                                              \
+  return (res);                                               \
+}                                                             \
+                                                              \
+static inline Atomic_##TYPE                                   \
+_CPU_Atomic_Load_acq_##NAME(volatile Atomic_##TYPE *p)        \
+{                                                             \
+  Atomic_##TYPE res;                                          \
+                                                              \
+  __asm __volatile(MPLOCKED LOP                               \
+  : "=a" (res),			/* 0 */                       \
+  "=m" (*p)			/* 1 */                       \
+  : "m" (*p)			/* 2 */                       \
+  : "memory", "cc");                                          \
+                                                              \
+  return (res);                                               \
+}                                                             \
+                                                              \
+/*                                                            \
+ * The XCHG instruction asserts LOCK automagically.           \
+ */                                                           \
+static inline void                                            \
 _CPU_Atomic_Store_##NAME(volatile Atomic_##TYPE *p, Atomic_##TYPE v) \
-{                                                                    \
-  __asm __volatile(SOP                                               \
-  : "=m" (*p),                  /* 0 */                              \
-  "+r" (v)                      /* 1 */                              \
-  : "m" (*p)                    /* 2 */                              \
-  : "memory");                                                       \
-}                                                                    \
-static inline void					             \
+{                                                             \
+  __asm __volatile(SOP                                        \
+  : "=m" (*p),                  /* 0 */                       \
+  "+r" (v)                      /* 1 */                       \
+  : "m" (*p)                    /* 2 */                       \
+  : "memory");                                                \
+}                                                             \
+static inline void					      \
 _CPU_Atomic_Store_rel_##NAME(volatile Atomic_##TYPE *p, Atomic_##TYPE v) \
-{                                                                        \
-  __asm __volatile(SOP                                                   \
-  : "=m" (*p),			/* 0 */                                  \
-  "+r" (v)			/* 1 */		                         \
-  : "m" (*p)			/* 2 */	                                 \
-  : "memory");                                                           \
-}                                                                        \
+{                                                             \
+  __asm __volatile(SOP                                        \
+  : "=m" (*p),			/* 0 */                       \
+  "+r" (v)			/* 1 */		              \
+  : "m" (*p)			/* 2 */	                      \
+  : "memory");                                                \
+}                                                             \
 
 #endif /* !SMP */
 
@@ -160,8 +160,8 @@ _CPU_Atomic_Store_rel_##NAME(volatile Atomic_##TYPE *p, Atomic_##TYPE v) \
  * GCC aggressively reorders operations and memory clobbering is necessary
  * in order to avoid that for memory barriers.
  */
-#define	ATOMIC_FETCH_GENERIC(NAME, TYPENAME, TYPE, OP, CONS, V)                         \
-static inline void                                                                      \
+#define	ATOMIC_FETCH_GENERIC(NAME, TYPENAME, TYPE, OP, CONS, V)               \
+static inline void                                                            \
 _CPU_Atomic_Fetch_##NAME##_##TYPENAME(volatile Atomic_##TYPE *p, Atomic_##TYPE v) \
 {                                                                             \
   __asm __volatile(MPLOCKED OP                                                \
@@ -251,37 +251,37 @@ ATOMIC_FETCH_GENERIC(and, long, Long, "andl %1,%0", "ir", v);
 #define	_CPU_Atomic_Compare_exchange_rel_long _CPU_Atomic_Compare_exchange_long
 
 /* Operations on 32-bit double words. */
-#define	_CPU_Atomic_Fetch_or_32(p, v)  \
+#define	_CPU_Atomic_Fetch_or_32(p, v)      \
     _CPU_Atomic_Fetch_or_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
 #define	_CPU_Atomic_Fetch_or_acq_32(p, v)  \
     _CPU_Atomic_Fetch_or_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
 #define	_CPU_Atomic_Fetch_or_rel_32(p, v)  \
     _CPU_Atomic_Fetch_or_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_and_32(p, v)  \
+#define	_CPU_Atomic_Fetch_and_32(p, v)     \
     _CPU_Atomic_Fetch_and_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_and_acq_32(p, v)  \
+#define	_CPU_Atomic_Fetch_and_acq_32(p, v) \
     _CPU_Atomic_Fetch_and_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_and_rel_32(p, v)  \
+#define	_CPU_Atomic_Fetch_and_rel_32(p, v) \
     _CPU_Atomic_Fetch_and_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_add_32(p, v)  \
+#define	_CPU_Atomic_Fetch_add_32(p, v)     \
     _CPU_Atomic_Fetch_add_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_add_acq_32(p, v)  \
+#define	_CPU_Atomic_Fetch_add_acq_32(p, v) \
     _CPU_Atomic_Fetch_add_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_add_rel_32(p, v)  \
+#define	_CPU_Atomic_Fetch_add_rel_32(p, v) \
     _CPU_Atomic_Fetch_add_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_sub_32(p, v)  \
+#define	_CPU_Atomic_Fetch_sub_32(p, v)     \
     _CPU_Atomic_Fetch_sub_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_sub_acq_32(p, v)  \
+#define	_CPU_Atomic_Fetch_sub_acq_32(p, v) \
     _CPU_Atomic_Fetch_sub_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_sub_rel_32(p, v)  \
+#define	_CPU_Atomic_Fetch_sub_rel_32(p, v) \
     _CPU_Atomic_Fetch_sub_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define _CPU_Atomic_Load_32(p)  \
+#define _CPU_Atomic_Load_32(p)             \
     _CPU_Atomic_Load_int((volatile Atomic_Int *)(p))
-#define	_CPU_Atomic_Load_acq_32(p)  \
+#define	_CPU_Atomic_Load_acq_32(p)         \
     _CPU_Atomic_Load_acq_int((volatile Atomic_Int *)(p))
-#define _CPU_Atomic_Store_32(p, v)  \
+#define _CPU_Atomic_Store_32(p, v)         \
     _CPU_Atomic_Store_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Store_rel_32(p, v)  \
+#define	_CPU_Atomic_Store_rel_32(p, v)     \
     _CPU_Atomic_Store_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
 #define	_CPU_Atomic_Compare_exchange_32(dst, old, new)  \
     _CPU_Atomic_Compare_exchange_int((volatile Atomic_Int *)(dst), (Atomic_Int)(old), (Atomic_Int)(new))
@@ -291,37 +291,37 @@ ATOMIC_FETCH_GENERIC(and, long, Long, "andl %1,%0", "ir", v);
     _CPU_Atomic_Compare_exchange_rel_int((volatile Atomic_Int *)(dst), (Atomic_Int)(old), (Atomic_Int)(new))
 
 /* Operations on pointers. */
-#define	_CPU_Atomic_Fetch_or_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_or_ptr(p, v)     \
     _CPU_Atomic_Fetch_or_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
 #define	_CPU_Atomic_Fetch_or_acq_ptr(p, v) \
     _CPU_Atomic_Fetch_or_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
 #define	_CPU_Atomic_Fetch_or_rel_ptr(p, v) \
     _CPU_Atomic_Fetch_or_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_and_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_and_ptr(p, v)    \
     _CPU_Atomic_Fetch_and_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_and_acq_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_and_acq_ptr(p, v)\
     _CPU_Atomic_Fetch_and_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_and_rel_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_and_rel_ptr(p, v)\
     _CPU_Atomic_Fetch_and_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_add_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_add_ptr(p, v)    \
     _CPU_Atomic_Fetch_add_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_add_acq_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_add_acq_ptr(p, v)\
     _CPU_Atomic_Fetch_add_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_add_rel_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_add_rel_ptr(p, v)\
     _CPU_Atomic_Fetch_add_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_sub_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_sub_ptr(p, v)    \
     _CPU_Atomic_Fetch_sub_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_sub_acq_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_sub_acq_ptr(p, v)\
     _CPU_Atomic_Fetch_sub_acq_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define	_CPU_Atomic_Fetch_sub_rel_ptr(p, v) \
+#define	_CPU_Atomic_Fetch_sub_rel_ptr(p, v)\
     _CPU_Atomic_Fetch_sub_rel_int((volatile Atomic_Int *)(p), (Atomic_Int)(v))
-#define _CPU_Atomic_Load_ptr(p) \
+#define _CPU_Atomic_Load_ptr(p)            \
     _CPU_Atomic_Load_int((volatile Atomic_Int *)(p))
-#define	_CPU_Atomic_Load_acq_ptr(p) \
+#define	_CPU_Atomic_Load_acq_ptr(p)        \
     _CPU_Atomic_Load_acq_int((volatile Atomic_Int *)(p))
-#define _CPU_Atomic_Store_ptr(p, v) \
+#define _CPU_Atomic_Store_ptr(p, v)        \
     _CPU_Atomic_Store_int((volatile Atomic_Int *)(p), (v))
-#define	_CPU_Atomic_Store_rel_ptr(p, v) \
+#define	_CPU_Atomic_Store_rel_ptr(p, v)    \
     _CPU_Atomic_Store_rel_int((volatile Atomic_Int *)(p), (v))
 #define	_CPU_Atomic_Compare_exchange_ptr(dst, old, new) \
     _CPU_Atomic_Compare_exchange_int((volatile Atomic_Int *)(dst), (Atomic_Int)(old), (Atomic_Int)(new))
