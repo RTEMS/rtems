@@ -39,6 +39,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/support.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/tasks.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timer.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/types.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/atomic.h
 include_rtems_rtems_HEADERS += mainpage.h
 
 if HAS_MP
