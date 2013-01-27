@@ -83,11 +83,10 @@ void Put_Source( rtems_fatal_source source )
   printk( "%s", rtems_fatal_source_description( source ) );
 }
 
-
 void Fatal_extension(
-  uint32_t   source,
-  bool       is_internal,
-  uint32_t   error
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
 )
 {
   print_test_begin_message();

@@ -25,9 +25,9 @@ rtems_task Init(
 );
 
 void Fatal_extension(
-  uint32_t   source,
-  bool       is_internal,
-  uint32_t   error
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
 );
 
 void Put_Error(

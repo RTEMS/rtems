@@ -36,9 +36,9 @@ void *POSIX_Init(
 );
 
 void Fatal_extension(
-  uint32_t   source,
-  bool    is_internal,
-  uint32_t   error
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
 );
 
 /* need prototypes */
