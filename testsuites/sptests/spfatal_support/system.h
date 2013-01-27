@@ -35,9 +35,7 @@ void Put_Error(
   uint32_t error
 );
 
-void Put_Source(
-  uint32_t source
-);
+void Put_Source( rtems_fatal_source source );
 
 void force_error(void);
 

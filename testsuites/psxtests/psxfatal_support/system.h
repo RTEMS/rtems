@@ -24,7 +24,7 @@
 /* functions */
 void force_error(void);
 
-void Put_Source(uint32_t source);
+void Put_Source( rtems_fatal_source source );
 
 void Put_Error(
   uint32_t source,
