@@ -88,7 +88,9 @@ typedef enum {
   /**
    * @brief Fatal source of assert().
    *
-   * The fatal code is the pointer value of the function string.
+   * The fatal code is the pointer value of the assert context.
+   *
+   * @see rtems_assert_context.
    */
   RTEMS_FATAL_SOURCE_ASSERT,
 

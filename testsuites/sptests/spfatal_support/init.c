@@ -80,6 +80,15 @@ void Put_Source( rtems_fatal_source source )
   printk( "%s", rtems_fatal_source_description( source ) );
 }
 
+static bool is_expected_error( rtems_fatal_code error )
+{
+#ifdef FATAL_ERROR_EXPECTED_ERROR
+  return error == FATAL_ERROR_EXPECTED_ERROR;
+#else /* FATAL_ERROR_EXPECTED_ERROR */
+  return FATAL_ERROR_EXPECTED_ERROR_CHECK( error );
+#endif /* FATAL_ERROR_EXPECTED_ERROR */
+}
+
 void Fatal_extension(
   rtems_fatal_source source,
   bool               is_internal,
@@ -109,6 +118,7 @@ void Fatal_extension(
       );
   }
 
+#ifdef FATAL_ERROR_EXPECTED_ERROR
   if ( error !=  FATAL_ERROR_EXPECTED_ERROR ) {
     printk( "ERROR==> Fatal Error Expected (");
     Put_Error( source, FATAL_ERROR_EXPECTED_ERROR );
@@ -116,11 +126,12 @@ void Fatal_extension(
     Put_Error( source, error );
     printk( ")\n" );
   }
+#endif /* FATAL_ERROR_EXPECTED_ERROR */
 
   if (
     source == FATAL_ERROR_EXPECTED_SOURCE
       && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
-      && error == FATAL_ERROR_EXPECTED_ERROR
+      && is_expected_error( error )
   ) {
     printk( "*** END OF TEST FATAL " FATAL_ERROR_TEST_NAME " ***\n" );
   }

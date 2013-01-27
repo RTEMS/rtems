@@ -34,6 +34,13 @@ void __assert_func(
   const char *failedexpr
 )
 {
+  rtems_assert_context assert_context = {
+    .file = file,
+    .line = line,
+    .function = func,
+    .failed_expression = failedexpr
+  };
+
   printk("assertion \"%s\" failed: file \"%s\", line %d%s%s\n",
     failedexpr,
     file,
@@ -41,7 +48,7 @@ void __assert_func(
     (func) ? ", function: " : "",
     (func) ? func : ""
   );
-  rtems_fatal( RTEMS_FATAL_SOURCE_ASSERT, (rtems_fatal_code) func );
+  rtems_fatal( RTEMS_FATAL_SOURCE_ASSERT, (rtems_fatal_code) &assert_context );
 }
 #endif
 

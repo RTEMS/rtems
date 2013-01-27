@@ -34,6 +34,16 @@ extern "C" {
 /**@{**/
 
 /**
+ * @brief Assert context.
+ */
+typedef struct {
+  const char *file;
+  int         line;
+  const char *function;
+  const char *failed_expression;
+} rtems_assert_context;
+
+/**
  * @brief Exception frame.
  */
 typedef CPU_Exception_frame rtems_exception_frame;
