@@ -30,6 +30,8 @@ int main( int, char **, char **);
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
+#define CONFIGURE_DISABLE_BSP_SETTINGS
+
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>

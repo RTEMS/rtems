@@ -354,6 +354,69 @@ The default value is 0.
 NOTE: The required size of the Executive RAM Work Area is calculated
 automatically when using the @code{rtems/confdefs.h} mechanism.
 
+@subsection BSP Specific Settings
+
+This section describes BSP specific configuration settings used by
+@code{<rtems/confdefs.h>}.  The BSP specific configuration settings are defined
+in @code{<bsp.h>}.
+
+@itemize @bullet
+
+@findex BSP_DEFAULT_UNIFIED_WORK_AREAS
+@item If @code{BSP_DEFAULT_UNIFIED_WORK_AREAS} is defined by the BSP and
+@code{CONFIGURE_UNIFIED_WORK_AREAS} is not defined by the application, then
+unified work areas will be used.
+
+@findex BSP_IDLE_TASK_BODY
+@item If @code{BSP_IDLE_TASK_BODY} is defined by the BSP and
+@code{CONFIGURE_IDLE_TASK_BODY} is not defined by the application, then
+this BSP specific idle task body will be used.
+
+@findex BSP_IDLE_TASK_STACK_SIZE
+@item If @code{BSP_IDLE_TASK_STACK_SIZE} is defined by the BSP and
+@code{CONFIGURE_IDLE_TASK_STACK_SIZE} is not defined by the application, then
+this BSP specific idle task stack size will be used.
+
+@findex BSP_INITIAL_EXTENSION
+@item If @code{BSP_INITIAL_EXTENSION} is defined by the BSP, then this BSP
+specific initial extension will be placed as the last entry in the initial
+extension table.
+
+@findex BSP_INTERRUPT_STACK_SIZE
+@item If @code{BSP_INTERRUPT_STACK_SIZE} is defined by the BSP and
+@code{CONFIGURE_INTERRUPT_STACK_SIZE} is not defined by the application, then
+this BSP specific interrupt stack size will be used.
+
+@findex BSP_MAXIMUM_DEVICES
+@item If @code{BSP_MAXIMUM_DEVICES} is defined by the BSP and
+@code{CONFIGURE_MAXIMUM_DEVICES} is not defined by the application, then
+this BSP specific maximum device count will be used.  This option is specific
+to the device file system (devfs) and should not be confused with the
+@code{CONFIGURE_MAXIMUM_DRIVERS} option.
+
+@findex BSP_ZERO_WORKSPACE_AUTOMATICALLY
+@item If @code{BSP_ZERO_WORKSPACE_AUTOMATICALLY} is defined by the BSP and
+@code{CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY} is not defined by the
+application, then the workspace will be zeroed automatically.
+
+@findex CONFIGURE_BSP_PREREQUISITE_DRIVERS
+@item If @code{CONFIGURE_BSP_PREREQUISITE_DRIVERS} is defined by the BSP, then
+these BSP specific drivers will be placed as the first entries in the drivers
+table.  The application specific prerequisite drivers are placed after the BSP
+specific drivers.
+
+@findex CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+@item @code{CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK} is defined by the BSP to
+indicate that it does not allocate all available memory to the C Program Heap
+used by the Malloc Family of routines.  If defined, when @code{malloc()} is
+unable to allocate memory, it will call the BSP supplied @code{sbrk()} to
+obtain more memory.
+
+@end itemize
+
+All BSP specific configuration settings can be disabled by the application with
+the @code{CONFIGURE_DISABLE_BSP_SETTINGS} option.
+
 @c
 @c
 @c
