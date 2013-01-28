@@ -64,6 +64,8 @@
  * Connection entry for each open file stream.
  */
 typedef struct {
+  off_t file_size;
+
   /**
    * Control connection socket.
    */
@@ -931,6 +933,93 @@ static int rtems_ftpfs_open_data_connection_passive(
   return 0;
 }
 
+typedef enum {
+  RTEMS_FTPFS_SIZE_START = 0,
+  RTEMS_FTPFS_SIZE_SPACE,
+  RTEMS_FTPFS_SIZE_NUMBER,
+  RTEMS_FTPFS_SIZE_NL
+} rtems_ftpfs_size_state;
+
+typedef struct {
+  rtems_ftpfs_size_state state;
+  size_t index;
+  off_t size;
+} rtems_ftpfs_size_entry;
+
+static void rtems_ftpfs_size_parser(
+  const char* buf,
+  size_t len,
+  void *arg
+)
+{
+  rtems_ftpfs_size_entry *se = arg;
+  size_t i = 0;
+
+  for (i = 0; se->size >= 0 && i < len; ++i, ++se->index) {
+    int c = buf [i];
+
+    switch (se->state) {
+      case RTEMS_FTPFS_SIZE_START:
+        if (se->index == 2) {
+          se->state = RTEMS_FTPFS_SIZE_SPACE;
+        }
+        break;
+      case RTEMS_FTPFS_SIZE_SPACE:
+        if (c == ' ') {
+          se->state = RTEMS_FTPFS_SIZE_NUMBER;
+        } else {
+          se->size = -1;
+        }
+        break;
+      case RTEMS_FTPFS_SIZE_NUMBER:
+        if (isdigit(c)) {
+          se->size = 10 * se->size + c - '0';
+        } else if (c == '\r') {
+          se->state = RTEMS_FTPFS_SIZE_NL;
+        } else {
+          se->size = -1;
+        }
+        break;
+      case RTEMS_FTPFS_SIZE_NL:
+        if (c != '\n') {
+          se->size = -1;
+        }
+        break;
+      default:
+        se->size = -1;
+        break;
+    }
+  }
+}
+
+static void rtems_ftpfs_get_file_size(rtems_ftpfs_entry *e, bool verbose)
+{
+  if (e->file_size < 0) {
+    if (e->write) {
+      e->file_size = 0;
+    } else {
+      rtems_ftpfs_size_entry se;
+      rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
+
+      memset(&se, 0, sizeof(se));
+
+      reply = rtems_ftpfs_send_command_with_parser(
+        e,
+        "SIZE ",
+        e->filename,
+        rtems_ftpfs_size_parser,
+        &se,
+        verbose
+      );
+      if (reply == RTEMS_FTPFS_REPLY_2 && se.size >= 0) {
+        e->file_size = se.size;
+      } else {
+        e->file_size = 0;
+      }
+    }
+  }
+}
+
 static int rtems_ftpfs_open(
   rtems_libio_t *iop,
   const char *path,
@@ -952,6 +1041,10 @@ static int rtems_ftpfs_open(
       && (iop->flags & LIBIO_FLAGS_READ) != 0
   ) {
     eno = ENOTSUP;
+  }
+
+  if (eno == 0) {
+    rtems_ftpfs_get_file_size(e, verbose);
   }
 
   if (eno == 0) {
@@ -1052,6 +1145,8 @@ static ssize_t rtems_ftpfs_write(
 
     out += rv;
     todo -= (size_t) rv;
+
+    e->file_size += rv;
   }
 
   return (ssize_t) (count - todo);
@@ -1119,6 +1214,7 @@ static void rtems_ftpfs_eval_path(
         e->ino = me->ino;
         rtems_libio_unlock();
 
+        e->file_size = -1;
         e->ctrl_socket = -1;
 
         eno = rtems_ftpfs_open_ctrl_connection(
@@ -1238,65 +1334,6 @@ static int rtems_ftpfs_ioctl(
   return 0;
 }
 
-typedef enum {
-  RTEMS_FTPFS_SIZE_START = 0,
-  RTEMS_FTPFS_SIZE_SPACE,
-  RTEMS_FTPFS_SIZE_NUMBER,
-  RTEMS_FTPFS_SIZE_NL
-} rtems_ftpfs_size_state;
-
-typedef struct {
-  rtems_ftpfs_size_state state;
-  size_t index;
-  off_t size;
-} rtems_ftpfs_size_entry;
-
-static void rtems_ftpfs_size_parser(
-  const char* buf,
-  size_t len,
-  void *arg
-)
-{
-  rtems_ftpfs_size_entry *se = arg;
-  size_t i = 0;
-
-  for (i = 0; se->size >= 0 && i < len; ++i, ++se->index) {
-    int c = buf [i];
-
-    switch (se->state) {
-      case RTEMS_FTPFS_SIZE_START:
-        if (se->index == 2) {
-          se->state = RTEMS_FTPFS_SIZE_SPACE;
-        }
-        break;
-      case RTEMS_FTPFS_SIZE_SPACE:
-        if (c == ' ') {
-          se->state = RTEMS_FTPFS_SIZE_NUMBER;
-        } else {
-          se->size = -1;
-        }
-        break;
-      case RTEMS_FTPFS_SIZE_NUMBER:
-        if (isdigit(c)) {
-          se->size = 10 * se->size + c - '0';
-        } else if (c == '\r') {
-          se->state = RTEMS_FTPFS_SIZE_NL;
-        } else {
-          se->size = -1;
-        }
-        break;
-      case RTEMS_FTPFS_SIZE_NL:
-        if (c != '\n') {
-          se->size = -1;
-        }
-        break;
-      default:
-        se->size = -1;
-        break;
-    }
-  }
-}
-
 /*
  * The stat() support is intended only for the cp shell command.  Each request
  * will return that we have a regular file with read, write and execute
@@ -1319,24 +1356,9 @@ static int rtems_ftpfs_fstat(
 
   if (e->do_size_command) {
     const rtems_ftpfs_mount_entry *me = loc->mt_entry->fs_info;
-    rtems_ftpfs_size_entry se;
-    rtems_ftpfs_reply reply = RTEMS_FTPFS_REPLY_ERROR;
 
-    memset(&se, 0, sizeof(se));
-
-    reply = rtems_ftpfs_send_command_with_parser(
-      e,
-      "SIZE ",
-      e->filename,
-      rtems_ftpfs_size_parser,
-      &se,
-      me->verbose
-    );
-    if (reply == RTEMS_FTPFS_REPLY_2 && se.size >= 0) {
-      st->st_size = se.size;
-    } else {
-      eno = EIO;
-    }
+    rtems_ftpfs_get_file_size(e, me->verbose);
+    st->st_size = e->file_size;
   } else {
     e->do_size_command = true;
   }
