@@ -291,6 +291,8 @@ truncate_test03 (void)
    */
   status = chdir ("..");
   rtems_test_assert (status == 0);
+
+  free(readbuf);
 }
 
 static void
@@ -518,6 +520,8 @@ lseek_test (void)
   rtems_test_assert (status == 0);
 
   test_case_leave ();
+
+  free(readbuf);
 }
 
 static void
