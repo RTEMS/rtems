@@ -32,7 +32,7 @@ static const msdos_format_request_param_t rqdata = {
   .fat_num             = 0,
   .files_per_root_dir  = 0,
   .media               = 0,
-  .quick_format        = false,
+  .quick_format        = true,
   .skip_alignment      = 0,
   .info_level          = 0
 };
