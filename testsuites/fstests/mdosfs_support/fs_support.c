@@ -18,6 +18,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/dosfs.h>
+#include <rtems/libcsupport.h>
 
 #include "ramdisk_support.h"
 #include "fstest.h"
@@ -37,6 +38,8 @@ static const msdos_format_request_param_t rqdata = {
   .info_level          = 0
 };
 
+static rtems_resource_snapshot before_mount;
+
 void test_initialize_filesystem(void)
 {
   int rc=0;
@@ -47,6 +50,8 @@ void test_initialize_filesystem(void)
 
   rc=msdos_format(RAMDISK_PATH,&rqdata);
   rtems_test_assert(rc==0);
+
+  rtems_resource_snapshot_take(&before_mount);
 
   rc=mount(RAMDISK_PATH,
       BASE_FOR_TEST,
@@ -62,6 +67,7 @@ void test_shutdown_filesystem(void)
   int rc=0;
   rc=unmount(BASE_FOR_TEST) ;
   rtems_test_assert(rc==0);
+  rtems_test_assert(rtems_resource_snapshot_check(&before_mount));
   del_ramdisk();
 }
 
