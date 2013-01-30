@@ -191,45 +191,46 @@ fat_file_close(
     )
 {
     int            rc = RC_OK;
-    uint32_t       key = 0;
 
     /*
      * if links_num field of fat-file descriptor is greater than 1
-     * decrement the count of links and return
+     * decrement only the count of links
      */
     if (fat_fd->links_num > 1)
     {
         fat_fd->links_num--;
-        return rc;
-    }
-
-    key = fat_construct_key(fs_info, &fat_fd->dir_pos.sname);
-
-    if (fat_fd->flags & FAT_FILE_REMOVED)
-    {
-        rc = fat_file_truncate(fs_info, fat_fd, 0);
-        if ( rc != RC_OK )
-            return rc;
-
-        _hash_delete(fs_info->rhash, key, fat_fd->ino, fat_fd);
-
-        if ( fat_ino_is_unique(fs_info, fat_fd->ino) )
-            fat_free_unique_ino(fs_info, fat_fd->ino);
-
-        free(fat_fd);
     }
     else
     {
-        if (fat_ino_is_unique(fs_info, fat_fd->ino))
+        uint32_t key = fat_construct_key(fs_info, &fat_fd->dir_pos.sname);
+
+        if (fat_fd->flags & FAT_FILE_REMOVED)
         {
-            fat_fd->links_num = 0;
+            rc = fat_file_truncate(fs_info, fat_fd, 0);
+            if (rc == RC_OK)
+            {
+                _hash_delete(fs_info->rhash, key, fat_fd->ino, fat_fd);
+
+                if (fat_ino_is_unique(fs_info, fat_fd->ino))
+                    fat_free_unique_ino(fs_info, fat_fd->ino);
+
+                free(fat_fd);
+            }
         }
         else
         {
-            _hash_delete(fs_info->vhash, key, fat_fd->ino, fat_fd);
-            free(fat_fd);
+            if (fat_ino_is_unique(fs_info, fat_fd->ino))
+            {
+                fat_fd->links_num = 0;
+            }
+            else
+            {
+                _hash_delete(fs_info->vhash, key, fat_fd->ino, fat_fd);
+                free(fat_fd);
+            }
         }
     }
+
     /*
      * flush any modified "cached" buffer back to disk
      */
