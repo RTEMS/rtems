@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default File System Synchronises changes to a file
+ * @ingroup LibIOFSOps File System Operations 
+ */
+
 /*
  *  COPYRIGHT (c) 2010.
  *  On-Line Applications Research Corporation (OAR).

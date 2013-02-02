@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Removes Routine from Top of Calling Thread's stack and Invoke it 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

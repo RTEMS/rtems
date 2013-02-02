@@ -1,8 +1,10 @@
-/* RPC multiplexor for a multitasking environment */
-
-/* Author: Till Straumann <strauman@slac.stanford.edu>, 2002 */
-
-/* This code funnels arbitrary task's UDP/RPC requests
+/**
+ * @file
+ *
+ * @brief RPC Multiplexor for a Multitasking Environment
+ * @ingroup libfs
+ *
+ * This code funnels arbitrary task's UDP/RPC requests
  * through one socket to arbitrary servers.
  * The replies are gathered and dispatched to the
  * requestors.
@@ -15,6 +17,8 @@
  */
 
 /*
+ * Author: Till Straumann <strauman@slac.stanford.edu>, 2002
+ *
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by

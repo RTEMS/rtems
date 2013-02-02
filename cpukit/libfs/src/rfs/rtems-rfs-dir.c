@@ -1,16 +1,8 @@
-/*
- *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- */
 /**
  * @file
  *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Directory Routines.
+ * @brief RTEMS File Systems Directory Routines
+ * @ingroup rtems_rfs
  *
  * These functions manage blocks in the directory format. A directory entry is
  * a variable length record in the block. The entry consists of a length, hash
@@ -21,6 +13,14 @@
  *
  * The maximum length can be 1 or 2 bytes depending on the value in the
  * superblock.
+ */
+
+/*
+ *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
  */
 
 #if HAVE_CONFIG_H

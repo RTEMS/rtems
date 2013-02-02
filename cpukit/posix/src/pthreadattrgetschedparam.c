@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Returns Scheduling Parameter Attributes of Thread Attributes Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

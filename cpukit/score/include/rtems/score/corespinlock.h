@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/corespinlock.h
  *
+ *  @brief Constants and Structures Associated with the Spinlock Handler
+ *
  *  This include file contains all the constants and structures associated
  *  with the Spinlock Handler.
  */
@@ -110,7 +112,7 @@ typedef struct {
 }   CORE_spinlock_Control;
 
 /**
- *  @brief Initialized a spinlock
+ *  @brief Initialize the spinlock.
  *
  *  This routine initializes the spinlock based on the parameters passed.
  *
@@ -123,7 +125,8 @@ void _CORE_spinlock_Initialize(
 );
 
 /**
- *  @brief Wait for Spinlock
+ *  @brief Wait for spinlock.
+ *
  *  This routine wait for the spinlock to be released.  If the spinlock
  *  is set to automatic and this is the appropriate thread, then it returns
  *  immediately.  Otherwise, the calling thread is blocked until the spinlock
@@ -133,7 +136,7 @@ void _CORE_spinlock_Initialize(
  *  @param[in] wait is true if willing to wait
  *  @param[in] timeout is the maximum number of ticks to spin (0 is forever)
  *
- * @return A status is returned which indicates the success or failure of
+ * @retval A status is returned which indicates the success or failure of
  *         this operation.
  */
 CORE_spinlock_Status _CORE_spinlock_Wait(
@@ -143,8 +146,8 @@ CORE_spinlock_Status _CORE_spinlock_Wait(
 );
 
 /**
- * @brief Manually release Spinlock
- * 
+ * @brief Manually release the spinlock.
+ *
  *  This routine manually releases the spinlock.  All of the threads waiting
  *  for the spinlock will be readied.
  *

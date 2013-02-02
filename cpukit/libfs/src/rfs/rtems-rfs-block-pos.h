@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Block Position and Size Management
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Block Position and Size Management.
  *
@@ -72,8 +72,8 @@ typedef struct rtems_rfs_block_pos_s
 /**
  * Copy a block position.
  *
- * @param _lhs The left hand side.
- * @param _rhs The right hand side.
+ * @param[in] _lhs is the left hand side.
+ * @param[in] _rhs is the right hand side.
  */
 #define rtems_rfs_block_copy_bpos(_lhs, _rhs) \
   do { (_lhs)->bno = (_rhs)->bno; \
@@ -83,7 +83,7 @@ typedef struct rtems_rfs_block_pos_s
 /**
  * Zero a block position.
  *
- * @param bpos A pointer to the block position.
+ * @param[in] bpos is a pointer to the block position.
  */
 static inline void
 rtems_rfs_block_set_bpos_zero (rtems_rfs_block_pos* bpos)
@@ -96,9 +96,9 @@ rtems_rfs_block_set_bpos_zero (rtems_rfs_block_pos* bpos)
 /**
  * Given a position compute the block number and block offset.
  *
- * @param fs The file system data.
- * @param pos The position as an absolute offset from the start.
- * @param bpos Pointer to the block position to fill in.
+ * @param[in] fs is the file system data.
+ * @param[in] pos is the position as an absolute offset from the start.
+ * @param[out] bpos is a pointer to the block position to fill in.
  */
 void rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
                                rtems_rfs_pos           pos,
@@ -107,9 +107,10 @@ void rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
 /**
  * Given a block position compute the absolute offset.
  *
- * @param fs The file system data.
- * @param bpos Pointer to the block position to fill in.
- * @return rtems_rfs_pos The absolute offset.
+ * @param[in] fs is the file system data.
+ * @param[out] bpos is a pointer to the block position to fill in.
+ *
+ * @retval offset The absolute offset.
  */
 rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
                                        rtems_rfs_block_pos*   bpos);
@@ -118,9 +119,9 @@ rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
  * Add the relative position to the block position. The relative position is
  * signed.
  *
- * @param fs The file system data.
- * @param offset The relative offset add to the block position.
- * @param bpos Pointer to the block position to fill in.
+ * @param[in] fs is the file system data.
+ * @param[in] offset is the relative offset add to the block position.
+ * @param[out] bpos is a pointer to the block position to fill in.
  */
 static inline void
 rtems_rfs_block_add_pos (rtems_rfs_file_system*  fs,
@@ -156,8 +157,8 @@ typedef struct rtems_rfs_block_size_s
 /**
  * Copy a block size.
  *
- * @param _lhs The left hand side.
- * @param _rhs The right hand side.
+ * @param[in] _lhs is the left hand side.
+ * @param[in] _rhs is the right hand side.
  */
 #define rtems_rfs_block_copy_size(_lhs, _rhs) \
   do { (_lhs)->count = (_rhs)->count; \
@@ -202,7 +203,7 @@ typedef struct rtems_rfs_block_size_s
 /**
  * Zero a block size.
  *
- * @param size A pointer to the block size.
+ * @param[in] size is a pointer to the block size.
  */
 static inline void
 rtems_rfs_block_set_size_zero (rtems_rfs_block_size* size)
@@ -214,9 +215,9 @@ rtems_rfs_block_set_size_zero (rtems_rfs_block_size* size)
 /**
  * Set the size given a position.
  *
- * @param fs The file system data.
- * @param pos The position as an absolute offset from the start.
- * @param size Pointer to the block size to fill in.
+ * @param[in] fs is the file system data.
+ * @param[in] pos is the position as an absolute offset from the start.
+ * @param[out] size is a pointer to the block size to fill in.
  */
 void rtems_rfs_block_get_block_size (rtems_rfs_file_system*  fs,
                                      rtems_rfs_pos           pos,
@@ -230,9 +231,10 @@ void rtems_rfs_block_get_block_size (rtems_rfs_file_system*  fs,
  * blocks is 1 and offset is 0 the size is the block size. If the block count
  * is 1 and size is 100 the size is 100.
  *
- * @param fs The file system data.
- * @param size The size in blocks and offset.
- * @return rtems_rfs_pos The size in bytes.
+ * @param[in] fs is the file system data.
+ * @param[in] size The size in blocks and offset.
+ *
+ * @retval size The size in bytes.
  */
 rtems_rfs_pos rtems_rfs_block_get_size (rtems_rfs_file_system* fs,
                                         rtems_rfs_block_size*  size);

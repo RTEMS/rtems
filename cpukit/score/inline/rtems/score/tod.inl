@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/tod.inl
+/**
+ * @file
  *
- *  This file contains the static inline implementation of the inlined routines
- *  from the Time of Day Handler.
+ * @brief Inlined Routines from the Time of Day Handle
+ *
+ * This file contains the static inline implementation of the inlined routines
+ * from the Time of Day Handler.
  */
 
 /*
@@ -26,12 +28,12 @@
 #include <rtems/score/isr.h>
 
 /**
- *  @addtogroup ScoreTOD 
- *  @{
+ * @addtogroup ScoreTOD
  */
+/**@{**/
 
 /**
- *  This routine deactivates updating of the current time of day.
+ * This routine deactivates updating of the current time of day.
  */
 
 RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
@@ -40,7 +42,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
 }
 
 /**
- *  This routine activates updating of the current time of day.
+ * This routine activates updating of the current time of day.
  */
 
 RTEMS_INLINE_ROUTINE void _TOD_Activate( void )
@@ -49,7 +51,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Activate( void )
 }
 
 /**
- *  This routine returns a timeval based upon the internal timespec format TOD.
+ * This routine returns a timeval based upon the internal timespec format TOD.
  */
 
 RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
@@ -64,7 +66,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

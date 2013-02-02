@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Try to Lock Mutex
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

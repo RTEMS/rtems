@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -17,12 +17,9 @@
 #endif
 
 #include <rtems/score/cpu.h>
+#include <rtems/fatal.h>
 
-#ifdef ARM_MULTILIB_ARCH_V7M
-
-void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
+void _ARM_Exception_default( CPU_Exception_frame *frame )
 {
-  /* TODO */
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) frame );
 }
-
-#endif /* ARM_MULTILIB_ARCH_V7M */

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Releases a lock held on RWLock object referenced by rwlock 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

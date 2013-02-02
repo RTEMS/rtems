@@ -1,6 +1,8 @@
 /**
- * @file rtems/posix/mutex.inl
+ * @file
  *
+ * @brief Private Inlined Routines for POSIX Mutex's.
+ * 
  * This include file contains the static inline implementation of the private 
  * inlined routines for POSIX mutex's.
  */

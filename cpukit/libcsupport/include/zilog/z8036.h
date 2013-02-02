@@ -1,5 +1,7 @@
 /**
- * @file rtems/zilog/z8036.h
+ * @file
+ *
+ * @brief Zilog Z8036 Counter/Timer/IO Chip
  *
  * This include file defines information related to a Zilog Z8036
  * Counter/Timer/IO Chip.  It is a memory mapped part.

@@ -1,28 +1,31 @@
 /**
  * @file rtems/rtems/ratemon.h
  *
- * @brief Constants, Structures, and Prototypes Associated to the Classic API Rate Monotonic Manager.
+ * @defgroup ClassicRateMon Rate Monotonic Scheduler
  *
- *  This include file contains all the constants, structures, and
- *  prototypes associated with the Rate Monotonic Manager.  This manager
- *  provides facilities to implement threads which execute in a periodic
- *  fashion.
+ * @ingroup ClassicRTEMS
+ * @brief Classic API Rate Monotonic Manager.
  *
- *  Directives provided are:
+ * This include file contains all the constants, structures, and
+ * prototypes associated with the Rate Monotonic Manager. This manager
+ * provides facilities to implement threads which execute in a periodic
+ * fashion.
  *
- *     - create a rate monotonic timer
- *     - cancel a period
- *     - delete a rate monotonic timer
- *     - conclude current and start the next period
- *     - obtain status information on a period
+ * Directives provided are:
+ *
+ * - create a rate monotonic timer
+ * - cancel a period
+ * - delete a rate monotonic timer
+ * - conclude current and start the next period
+ * - obtain status information on a period
  */
 
-/*  COPYRIGHT (c) 1989-2009.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2009.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_RATEMON_H
@@ -293,19 +296,19 @@ rtems_status_code rtems_rate_monotonic_create(
 );
 
 /**
- *  @brief RTEMS Rate Monotonic Name to Id
+ * @brief RTEMS Rate Monotonic Name to Id
  *
- *  This routine implements the rtems_rate_monotonic_ident directive.
- *  It returns the period ID associated with name.  If more than one period
- *  is named name, then the period to which the ID belongs is arbitrary.
+ * This routine implements the rtems_rate_monotonic_ident directive.
+ * It returns the period ID associated with name. If more than one period
+ * is named name, then the period to which the ID belongs is arbitrary.
  *
- *  @param[in] name is the user defined period name
- *  @param[in] id is the pointer to period id
+ * @param[in] name is the user defined period name
+ * @param[in] id is the pointer to period id
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the id will
- *          be filled in with the region id.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the id will
+ *         be filled in with the region id.
  */
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name    name,
@@ -313,16 +316,16 @@ rtems_status_code rtems_rate_monotonic_ident(
 );
 
 /**
- *  @brief RTEMS Rate Monotonic Cancel
+ * @brief RTEMS Rate Monotonic Cancel
  *
- *  This routine implements the rtems_rate_monotonic_cancel directive.  This
- *  directive stops the period associated with ID from continuing to
- *  run.
+ * This routine implements the rtems_rate_monotonic_cancel directive. This
+ * directive stops the period associated with ID from continuing to
+ * run.
  *
- *  @param[in] id is the rate monotonic id
+ * @param[in] id is the rate monotonic id
  *
- *  @return RTEMS_SUCCESSFUL if successful and caller is not the owning thread
- *  or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful and caller is not the owning thread
+ * or error code if unsuccessful
  *
  */
 rtems_status_code rtems_rate_monotonic_cancel(
@@ -330,33 +333,33 @@ rtems_status_code rtems_rate_monotonic_cancel(
 );
 
 /**
- *  @brief RTEMS Delete Rate Monotonic
+ * @brief RTEMS Delete Rate Monotonic
  *
- *  This routine implements the rtems_rate_monotonic_delete directive.  The
- *  period indicated by ID is deleted.
+ * This routine implements the rtems_rate_monotonic_delete directive. The
+ * period indicated by ID is deleted.
  *
- *  @param[in] id is the rate monotonic id
+ * @param[in] id is the rate monotonic id
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id   id
 );
 
 /**
- *  @brief RTEMS Rate Monotonic Get Status
+ * @brief RTEMS Rate Monotonic Get Status
  *
- *  This routine implements the rtems_rate_monotonic_get_status directive.
- *  Information about the period indicated by ID is returned.
+ * This routine implements the rtems_rate_monotonic_get_status directive.
+ * Information about the period indicated by ID is returned.
  *
- *  @param[in] id is the rate monotonic id
- *  @param[in] status is the pointer to status control block
+ * @param[in] id is the rate monotonic id
+ * @param[in] status is the pointer to status control block
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  *
  */
 rtems_status_code rtems_rate_monotonic_get_status(
@@ -365,15 +368,15 @@ rtems_status_code rtems_rate_monotonic_get_status(
 );
 
 /**
- *  @brief RTEMS Rate Monotonic Get Statistics
+ * @brief RTEMS Rate Monotonic Get Statistics
  *
- *  This routine implements the rtems_rate_monotonic_get_statistics directive.
- *  Statistics gathered from the use of this period are returned.
+ * This routine implements the rtems_rate_monotonic_get_statistics directive.
+ * Statistics gathered from the use of this period are returned.
  *
- *  @param[in] id is the rate monotonic id
- *  @param[in] statistics is the pointer to statistics control block
+ * @param[in] id is the rate monotonic id
+ * @param[in] statistics is the pointer to statistics control block
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_rate_monotonic_get_statistics(
   rtems_id                                id,
@@ -423,17 +426,17 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
 void rtems_rate_monotonic_report_statistics( void );
 
 /**
- *  @brief RTEMS Rate Monotonic Period
+ * @brief RTEMS Rate Monotonic Period
  *
- *  This routine implements the rtems_rate_monotonic_period directive.  When
- *  length is non-zero, this directive initiates the period associated with
- *  ID from continuing for a period of length.  If length is zero, then
- *  result is set to indicate the current state of the period.
+ * This routine implements the rtems_rate_monotonic_period directive. When
+ * length is non-zero, this directive initiates the period associated with
+ * ID from continuing for a period of length. If length is zero, then
+ * result is set to indicate the current state of the period.
  *
- *  @param[in] id is the rate monotonic id
- *  @param[in] lenght is the length of period (in ticks)
+ * @param[in] id is the rate monotonic id
+ * @param[in] length is the length of period (in ticks)
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id        id,
@@ -441,16 +444,16 @@ rtems_status_code rtems_rate_monotonic_period(
 );
 
 /**
- *  @brief Rate Monotonic Timeout
+ * @brief Rate Monotonic Timeout
  *
- *  This routine is invoked when the period represented
- *  by ID expires.  If the thread which owns this period is blocked
- *  waiting for the period to expire, then it is readied and the
- *  period is restarted.  If the owning thread is not waiting for the
- *  period to expire, then the period is placed in the EXPIRED
- *  state and not restarted.
+ * This routine is invoked when the period represented
+ * by ID expires. If the thread which owns this period is blocked
+ * waiting for the period to expire, then it is readied and the
+ * period is restarted. If the owning thread is not waiting for the
+ * period to expire, then the period is placed in the EXPIRED
+ * state and not restarted.
  *
- *  @param[in] id is the period id
+ * @param[in] id is the period id
  */
 void _Rate_monotonic_Timeout(
   rtems_id    id,
@@ -458,19 +461,19 @@ void _Rate_monotonic_Timeout(
 );
 
 /**
- *  @brief _Rate_monotonic_Get_status(
+ * @brief _Rate_monotonic_Get_status(
  *
- *  This routine is invoked to compute the elapsed wall time and cpu
- *  time for a period.
+ * This routine is invoked to compute the elapsed wall time and cpu
+ * time for a period.
  *
- *  @param[in] the_period points to the period being operated upon.
- *  @param[out] wall_since_last_period is set to the wall time elapsed
- *              since the period was initiated.
- *  @param[out] cpu_since_last_period is set to the cpu time used by the
- *              owning thread since the period was initiated.
+ * @param[in] the_period points to the period being operated upon.
+ * @param[out] wall_since_last_period is set to the wall time elapsed
+ *             since the period was initiated.
+ * @param[out] cpu_since_last_period is set to the cpu time used by the
+ *             owning thread since the period was initiated.
  *
- *  @return This routine returns true if the status can be determined
- *          and false otherwise.
+ * @retval This routine returns true if the status can be determined
+ *         and false otherwise.
  */
 bool _Rate_monotonic_Get_status(
   Rate_monotonic_Control        *the_period,

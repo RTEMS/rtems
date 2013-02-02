@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System Data
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System Data.
  *

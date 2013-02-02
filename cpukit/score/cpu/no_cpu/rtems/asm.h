@@ -1,17 +1,19 @@
 /**
  * @file rtems/asm.h
  *
+ * @brief Addresses Incompatible Flavors Problems
+ *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and
  *  toolsets.  It primarily addresses variations in the
  *  use of leading underscores on symbols and the requirement
  *  that register names be preceded by a %.
+ *
+ *  NOTE: The spacing in the use of these macros
+ *        is critical to them working as advertised.
  */
 
 /*
- *  NOTE: The spacing in the use of these macros
- *        is critical to them working as advertised.
- *
  *  COPYRIGHT:
  *
  *  This file is based on similar code found in newlib available
@@ -25,6 +27,13 @@
 
 #ifndef _RTEMS_ASM_H
 #define _RTEMS_ASM_H
+
+/**
+ *  @defgroup no_cpuAsm Address Incompatible Flavors Problems
+ *
+ *  @ingroup no_cpu
+ */
+/**@{*/
 
 /*
  *  Indicate we are in an assembly file and get the basic CPU definitions.
@@ -120,4 +129,5 @@
  */
 #define EXTERN(sym) .globl SYM (sym)
 
+/**@}*/
 #endif

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File System Mutex
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>

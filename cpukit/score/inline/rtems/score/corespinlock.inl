@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/corespinlock.inl
+/**
+ * @file
  *
- *  This include file contains all of the inlined routines associated
- *  with the SuperCore spinlock.
+ * @brief Inlined Routines Associated with the SuperCore Spinlock
+ *
+ * This include file contains all of the inlined routines associated
+ * with the SuperCore spinlock.
  */
 
 /*
@@ -22,15 +24,14 @@
 #define _RTEMS_SCORE_CORESPINLOCK_INL
 
 /**
- *  @addtogroup ScoreSpinlock 
- *  @{
+ * @addtogroup ScoreSpinlock
  */
+/**@{**/
 
 /**
+ * This method is used to initialize core spinlock attributes.
  *
- *  This method is used to initialize core spinlock attributes.
- *
- *  @param[in] the_attributes pointer to the attributes to initialize.
+ * @param[in] the_attributes pointer to the attributes to initialize.
  */
 RTEMS_INLINE_ROUTINE void _CORE_spinlock_Initialize_attributes(
   CORE_spinlock_Attributes *the_attributes
@@ -40,13 +41,12 @@ RTEMS_INLINE_ROUTINE void _CORE_spinlock_Initialize_attributes(
 }
 
 /**
+ * This method is used to determine if the spinlock is available or not.
  *
- *  This method is used to determine if the spinlock is available or not.
+ * @param[in] the_spinlock will be checked
  *
- *  @param[in] the_spinlock will be checked
- *
- *  @return This method will return true if the spinlock is busy
- *          and false otherwise.
+ * @return This method will return true if the spinlock is busy
+ *         and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_spinlock_Is_busy(
   CORE_spinlock_Control  *the_spinlock
@@ -55,7 +55,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_spinlock_Is_busy(
   return (the_spinlock->users != 0);
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Initializing and Destroying a Mutex
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

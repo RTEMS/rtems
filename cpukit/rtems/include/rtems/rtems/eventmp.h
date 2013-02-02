@@ -1,16 +1,21 @@
 /**
  * @file rtems/rtems/eventmp.h
  *
- *  This include file contains all the constants and structures associated
- *  with the Multiprocessing Support in the Event Manager.
+ * @defgroup ClassicEventMP Event MP Support
+ *
+ * @ingroup ClassicRTEMS
+ * @brief Event Manager MP Support
+ *
+ * This include file contains all the constants and structures associated
+ * with the Multiprocessing Support in the Event Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_EVENTMP_H

@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/threadsup.h
+ * @file
+ * 
+ * @brief POSIX Thread API Support
  *
  * This defines the POSIX thread API extension.
  */
@@ -21,18 +23,19 @@
 #include <rtems/score/tqdata.h>
 
 /**
- *  @defgroup POSIX_THREAD Thread API Extension
+ *  @defgroup POSIX_THREAD POSIX Thread API Extension
  *
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
+ * 
  */
-/**@{*/
+/**@{**/
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*!
- *  This defines the POSIX API support structure associated with
- *  each thread in a system with POSIX configured.
+/**
+ * This defines the POSIX API support structure associated with
+ * each thread in a system with POSIX configured.
  */
 typedef struct {
   /** This is the POSIX threads attribute set. */
@@ -46,13 +49,13 @@ typedef struct {
   /** This is the thread's current set of scheduling parameters. */
   struct sched_param      schedparam;
   /**
-   *  This is the high priority to execute at when using the sporadic
-   *  scheduler.
+   * This is the high priority to execute at when using the sporadic
+   * scheduler.
    */
   int                     ss_high_priority;
   /**
-   *  This is the timer which controls when the thread executes at
-   *  high and low priority when using the sporadic scheduler.
+   * This is the timer which controls when the thread executes at
+   * high and low priority when using the sporadic scheduler.
    */
   Watchdog_Control        Sporadic_timer;
 
@@ -78,19 +81,19 @@ typedef struct {
 
 } POSIX_API_Control;
 
-/*!
- *  @brief POSIX Thread Exit Shared Helper
+/**
+ * @brief POSIX thread exit shared helper.
  *
- *  16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
+ * 16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
  *
- *  This method is a helper routine which ensures that all
- *  POSIX thread calls which result in a thread exiting will
- *  do so in the same manner.
+ * This method is a helper routine which ensures that all
+ * POSIX thread calls which result in a thread exiting will
+ * do so in the same manner.
  *
- *  @param[in] the_thread is the thread exiting or being canceled
- *  @param[in] value_ptr is the value to be returned by the thread
+ * @param[in] the_thread is a pointer to the thread exiting or being canceled
+ * @param[in] value_ptr is a pointer the value to be returned by the thread
  *
- *  NOTE: Key destructors are executed in the POSIX api delete extension.
+ * NOTE: Key destructors are executed in the POSIX api delete extension.
  *
  */
 void _POSIX_Thread_Exit(
@@ -98,9 +101,11 @@ void _POSIX_Thread_Exit(
   void           *value_ptr
 );
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif
 /* end of include file */

@@ -29,7 +29,7 @@
  */
 
 /**
- *  @brief Attributes_Set
+ *  @brief Sets the requested new_attributes in the attribute_set passed in.
  *
  *  This function sets the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
@@ -43,7 +43,8 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Set (
 }
 
 /**
- *  @brief Attributes_Clear
+ *  @brief Clears the requested new_attributes in the attribute_set
+ *  passed in.
  *
  *  This function clears the requested new_attributes in the attribute_set
  *  passed in.  The result is returned to the user.
@@ -57,7 +58,8 @@ RTEMS_INLINE_ROUTINE rtems_attribute _Attributes_Clear (
 }
 
 /**
- *  @brief Attributes_Is_floating_point
+ *  @brief Checks if the floating point attribute is
+ *  enabled in the attribute_set.
  *
  *  This function returns TRUE if the floating point attribute is
  *  enabled in the attribute_set and FALSE otherwise.
@@ -71,7 +73,8 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_floating_point(
 
 #if defined(RTEMS_MULTIPROCESSING)
 /**
- *  @brief Attributes_Is_global
+ *  @brief Checks if the global object attribute is enabled in
+ *  the attribute_set.
  *
  *  This function returns TRUE if the global object attribute is
  *  enabled in the attribute_set and FALSE otherwise.
@@ -85,7 +88,7 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_global(
 #endif
 
 /**
- *  @brief Attributes_Is_priority
+ *  @brief Checks if the priority attribute is enabled in the attribute_set.
  *
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
@@ -98,7 +101,8 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority(
 }
 
 /**
- *  @brief Attributes_Is_binary_semaphore
+ *  @brief Checks if the binary semaphore attribute is
+ *  enabled in the attribute_set.
  *
  *  This function returns TRUE if the binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
@@ -111,21 +115,23 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_binary_semaphore(
 }
 
 /**
- *  @brief Attributes_Is_simple_binary_semaphore
+ *  @brief Checks if the simple binary semaphore attribute is
+ *  enabled in the attribute_set
  *
  *  This function returns TRUE if the simple binary semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Attributes_Is_simple_binary_semaphore(
   rtems_attribute attribute_set
-) 
+)
 {
   return
     ((attribute_set & RTEMS_SEMAPHORE_CLASS) == RTEMS_SIMPLE_BINARY_SEMAPHORE);
-}  
+}
 
 /**
- *  @brief Attributes_Is_counting_semaphore
+ *  @brief Checks if the counting semaphore attribute is
+ *  enabled in the attribute_set
  *
  *  This function returns TRUE if the counting semaphore attribute is
  *  enabled in the attribute_set and FALSE otherwise.
@@ -138,7 +144,8 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_counting_semaphore(
 }
 
 /**
- *  @brief Attributes_Is_inherit_priority
+ *  @brief Checks if the priority inheritance attribute
+ *  is enabled in the attribute_set
  *
  *  This function returns TRUE if the priority inheritance attribute
  *  is enabled in the attribute_set and FALSE otherwise.
@@ -151,7 +158,8 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_inherit_priority(
 }
 
 /**
- *  @brief Attributes_Is_priority_ceiling
+ *  @brief Checks if the priority ceiling attribute
+ *  is enabled in the attribute_set
  *
  *  This function returns TRUE if the priority ceiling attribute
  *  is enabled in the attribute_set and FALSE otherwise.
@@ -164,7 +172,8 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_priority_ceiling(
 }
 
 /**
- *  @brief Attributes_Is_barrier_automatic
+ *  @brief Checks if the barrier automatic release
+ *  attribute is enabled in the attribute_set
  *
  *  This function returns TRUE if the barrier automatic release
  *  attribute is enabled in the attribute_set and FALSE otherwise.
@@ -177,7 +186,8 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_barrier_automatic(
 }
 
 /**
- *  @brief Attributes_Is_system_task
+ *  @brief Checks if the system task attribute
+ *  is enabled in the attribute_set.
  *
  *  This function returns TRUE if the system task attribute
  *  is enabled in the attribute_set and FALSE otherwise.

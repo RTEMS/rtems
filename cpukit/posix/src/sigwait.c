@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Synchronously Accept a Signal
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

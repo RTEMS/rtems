@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default File System sends a message to another user
+ * @ingroup LibIOFSOps File System Operations 
+ */
+
 /*
  *  COPYRIGHT (c) 2010.
  *  On-Line Applications Research Corporation (OAR).

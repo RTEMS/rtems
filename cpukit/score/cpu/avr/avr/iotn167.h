@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny167
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2008 Atmel Corporation
    All rights reserved.
 
@@ -48,6 +56,13 @@
 #ifndef _AVR_IOTN167_H_
 #define _AVR_IOTN167_H_ 1
 
+/**
+ * @defgroup AvrDef_iotn167 ATtiny167 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers */
 
@@ -826,6 +841,6 @@
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x87
 
-
+/** @} */
 
 #endif  /* _AVR_IOTN167_H_ */

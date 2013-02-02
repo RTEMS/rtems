@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega164
+ */
+
 /* Copyright (c) 2005, 2006 Anatoly Sokolov
    All rights reserved.
 
@@ -35,6 +41,14 @@
 #define _AVR_IOM164_H_ 1
 
 #include <avr/iomxx4.h>
+
+/**
+ * @defgroup AvrDef_iom164 ATmega164 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Constants */
 #define SPM_PAGESIZE    128
@@ -89,5 +103,6 @@
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x0A 
 
+/** @} */
 
 #endif /* _AVR_IOM164_H_ */

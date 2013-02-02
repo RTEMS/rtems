@@ -1,18 +1,20 @@
 /**
- * @file rtems/rbtree.inl
+ * @file
+ * 
+ * @brief Constants and Structures Associated with the RBTree API in RTEMS
  *
- *  This include file contains all the constants and structures associated
- *  with the RBTree API in RTEMS. The rbtree is a Red Black Tree that
- *  is part of the Super Core. This is the published interface to that
- *  code.
+ * This include file contains all the constants and structures associated
+ * with the RBTree API in RTEMS. The rbtree is a Red Black Tree that
+ * is part of the Super Core. This is the published interface to that
+ * code.
  */
  
 /*
- *  Copyright (c) 2010-2012 Gedare Bloom.
+ * Copyright (c) 2010-2012 Gedare Bloom.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RBTREE_H
@@ -25,11 +27,11 @@
 #include <rtems/score/rbtree.inl>
 
 /**
- *  @brief Initialize a RBTree Header
+ * @brief Initialize a RBTree header.
  *
- *  This routine initializes @a the_rbtree structure to manage the
- *  contiguous array of @a number_nodes nodes which starts at
- *  @a starting_address.  Each node is of @a node_size bytes.
+ * This routine initializes @a the_rbtree structure to manage the
+ * contiguous array of @a number_nodes nodes which starts at
+ * @a starting_address.  Each node is of @a node_size bytes.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
   rtems_rbtree_control          *the_rbtree,
@@ -45,9 +47,9 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize(
 }
 
 /**
- *  @brief Initialize this RBTree as Empty
+ * @brief Initialize this RBTree as Empty
  *
- *  This routine initializes @a the_rbtree to contain zero nodes.
+ * This routine initializes @a the_rbtree to contain zero nodes.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
   rtems_rbtree_control          *the_rbtree,
@@ -59,10 +61,10 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_initialize_empty(
 }
 
 /**
- *  @brief Set off rbtree
+ * @brief Set off RBtree.
  *
- *  This function sets the next and previous fields of the @a node to NULL
- *  indicating the @a node is not part of any rbtree.
+ * This function sets the next and previous fields of the @a node to NULL
+ * indicating the @a node is not part of any rbtree.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_rbtree(
   rtems_rbtree_node *node
@@ -72,10 +74,10 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_set_off_rbtree(
 }
 
 /**
- *  @brief Is the Node off RBTree
+ * @brief Is the Node off RBTree.
  *
- *  This function returns true if the @a node is not on a rbtree. A @a node is
- *  off rbtree if the next and previous fields are set to NULL.
+ * This function returns true if the @a node is not on a rbtree. A @a node is
+ * off rbtree if the next and previous fields are set to NULL.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_node_off_rbtree(
   const rtems_rbtree_node *node
@@ -85,9 +87,9 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_node_off_rbtree(
 }
 
 /**
- *  @brief Is the RBTree Node Pointer NULL
+ * @brief Is the RBTree Node Pointer NULL.
  *
- *  This function returns true if @a the_node is NULL and false otherwise.
+ * This function returns true if @a the_node is NULL and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_null_node(
   const rtems_rbtree_node *the_node
@@ -97,9 +99,9 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_null_node(
 }
 
 /**
- *  @brief Return pointer to RBTree Root
+ * @brief Return pointer to RBTree root.
  *
- *  This function returns a pointer to the root node of @a the_rbtree.
+ * This function returns a pointer to the root node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
   const rtems_rbtree_control *the_rbtree
@@ -109,9 +111,9 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_root(
 }
 
 /**
- *  @brief Return pointer to RBTree Minimum
+ * @brief Return pointer to RBTree Minimum
  *
- *  This function returns a pointer to the minimum node of @a the_rbtree.
+ * This function returns a pointer to the minimum node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
   const rtems_rbtree_control *the_rbtree
@@ -121,9 +123,9 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_min(
 }
 
 /**
- *  @brief Return pointer to RBTree Maximum
+ * @brief Return pointer to RBTree maximum.
  *
- *  This function returns a pointer to the maximum node of @a the_rbtree.
+ * This function returns a pointer to the maximum node of @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
   const rtems_rbtree_control *the_rbtree
@@ -133,9 +135,9 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_max(
 }
 
 /**
- *  @brief Return pointer to the left child node from this node
+ * @brief Return pointer to the left child node from this node.
  *
- *  This function returns a pointer to the left child node of @a the_node.
+ * This function returns a pointer to the left child node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_left(
   const rtems_rbtree_node *the_node
@@ -145,9 +147,9 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_left(
 }
 
 /**
- *  @brief Return pointer to the right child node from this node
+ * @brief Return pointer to the right child node from this node.
  *
- *  This function returns a pointer to the right child node of @a the_node.
+ * This function returns a pointer to the right child node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
   const rtems_rbtree_node *the_node
@@ -157,9 +159,9 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_right(
 }
 
 /**
- *  @brief Return pointer to the parent child node from this node
+ * @brief Return pointer to the parent child node from this node.
  *
- *  This function returns a pointer to the parent node of @a the_node.
+ * This function returns a pointer to the parent node of @a the_node.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_parent(
   const rtems_rbtree_node *the_node
@@ -169,10 +171,10 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_parent(
 }
 
 /**
- *  @brief Are Two Nodes Equal
+ * @brief Are two nodes equal.
  *
- *  This function returns true if @a left and @a right are equal,
- *  and false otherwise.
+ * This function returns true if @a left and @a right are equal,
+ * and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_are_nodes_equal(
   const rtems_rbtree_node *left,
@@ -183,10 +185,10 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_are_nodes_equal(
 }
 
 /**
- *  @brief Is the RBTree Empty
+ * @brief Is the RBTree empty.
  *
- *  This function returns true if there a no nodes on @a the_rbtree and
- *  false otherwise.
+ * This function returns true if there a no nodes on @a the_rbtree and
+ * false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_empty(
   const rtems_rbtree_control *the_rbtree
@@ -196,10 +198,10 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_empty(
 }
 
 /**
- *  @brief Is this the Minimum Node on the RBTree
+ * @brief Is this the minimum node on the RBTree.
  *
- *  This function returns true if @a the_node is the min node on @a the_rbtree 
- *  and false otherwise.
+ * This function returns true if @a the_node is the min node on @a the_rbtree 
+ * and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
   const rtems_rbtree_control *the_rbtree,
@@ -210,10 +212,10 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_min(
 }
 
 /**
- *  @brief Is this the Maximum Node on the RBTree
+ * @brief Is this the maximum node on the RBTree.
  *
- *  This function returns true if @a the_node is the max node on @a the_rbtree 
- *  and false otherwise.
+ * This function returns true if @a the_node is the max node on @a the_rbtree 
+ * and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
   const rtems_rbtree_control *the_rbtree,
@@ -225,10 +227,10 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_max(
 
 
 /**
- *  @brief Does this RBTree have only One Node
+ * @brief Does this RBTree have only one node.
  *
- *  This function returns true if there is only one node on @a the_rbtree and
- *  false otherwise.
+ * This function returns true if there is only one node on @a the_rbtree and
+ * false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_has_only_one_node(
   const rtems_rbtree_control *the_rbtree
@@ -238,10 +240,10 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_has_only_one_node(
 }
 
 /**
- *  @brief Is this Node the RBTree Root
+ * @brief Is this node the RBTree root.
  *
- *  This function returns true if @a the_node is the root of @a the_rbtree and
- *  false otherwise.
+ * This function returns true if @a the_node is the root of @a the_rbtree and
+ * false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
   const rtems_rbtree_control *the_rbtree,
@@ -255,25 +257,25 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
  * @copydoc _RBTree_Find_unprotected()
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find_unprotected(
-    rtems_rbtree_control *the_rbtree,
-    rtems_rbtree_node *the_node
+  const rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Find_unprotected( the_rbtree, the_node );
 }
 
-/** @brief Find the node with given key in the tree
+/** @brief Find the node with given key in the tree.
  *
- *  This function returns a pointer to the node having key equal to the key
- *  of @a the_node if it exists within @a the_rbtree, and NULL if not.
- *  @a the_node has to be made up before a search.
+ * This function returns a pointer to the node having key equal to the key
+ * of @a the_node if it exists within @a the_rbtree, and NULL if not.
+ * @a the_node has to be made up before a search.
  *
- *  @note If the tree is not unique and contains duplicate keys, the set
- *        of duplicate keys acts as FIFO.
+ * @note If the tree is not unique and contains duplicate keys, the set
+ *       of duplicate keys acts as FIFO.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
-  rtems_rbtree_control *the_rbtree,
-  rtems_rbtree_node *the_node
+  const rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_node *the_node
 )
 {
   return _RBTree_Find( the_rbtree, the_node );
@@ -331,10 +333,10 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_extract_unprotected(
 }
 
 /**
- *  @brief Extract the specified node from a rbtree
+ * @brief Extract the specified node from a rbtree.
  *
- *  This routine extracts @a the_node from @a the_rbtree on which it resides.
- *  It disables interrupts to ensure the atomicity of the extract operation.
+ * This routine extracts @a the_node from @a the_rbtree on which it resides.
+ * It disables interrupts to ensure the atomicity of the extract operation.
  */
 RTEMS_INLINE_ROUTINE void rtems_rbtree_extract(
   rtems_rbtree_control *the_rbtree,
@@ -345,10 +347,10 @@ RTEMS_INLINE_ROUTINE void rtems_rbtree_extract(
 }
 
 /**
- *  @brief Obtain the min node on a rbtree
+ * @brief Obtain the min node on a rbtree.
  *
- *  This function removes the min node from @a the_rbtree and returns
- *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ * This function removes the min node from @a the_rbtree and returns
+ * a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
  */
 
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min_unprotected(
@@ -359,11 +361,11 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min_unprotected(
 }
 
 /**
- *  @brief Obtain the min node on a rbtree
+ * @brief Obtain the min node on a rbtree.
  *
- *  This function removes the min node from @a the_rbtree and returns
- *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
- *  It disables interrupts to ensure the atomicity of the get operation.
+ * This function removes the min node from @a the_rbtree and returns
+ * a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ * It disables interrupts to ensure the atomicity of the get operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
   rtems_rbtree_control *the_rbtree
@@ -373,10 +375,10 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_min(
 }
 
 /**
- *  @brief Obtain the max node on a rbtree
+ * @brief Obtain the max node on a rbtree.
  *
- *  This function removes the max node from @a the_rbtree and returns
- *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ * This function removes the max node from @a the_rbtree and returns
+ * a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
  */
 
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max_unprotected(
@@ -387,11 +389,11 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max_unprotected(
 }
 
 /**
- *  @brief Obtain the max node on a rbtree
+ * @brief Obtain the max node on a rbtree.
  *
- *  This function removes the max node from @a the_rbtree and returns
- *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
- *  It disables interrupts to ensure the atomicity of the get operation.
+ * This function removes the max node from @a the_rbtree and returns
+ * a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
+ * It disables interrupts to ensure the atomicity of the get operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
   rtems_rbtree_control *the_rbtree
@@ -401,11 +403,11 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_get_max(
 }
 
 /**
- *  @brief Peek at the min node on a rbtree
+ * @brief Peek at the min node on a rbtree.
  *
- *  This function returns a pointer to the min node from @a the_rbtree 
- *  without changing the tree.  If @a the_rbtree is empty, 
- *  then NULL is returned.
+ * This function returns a pointer to the min node from @a the_rbtree 
+ * without changing the tree.  If @a the_rbtree is empty, 
+ * then NULL is returned.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
   const rtems_rbtree_control *the_rbtree
@@ -415,11 +417,11 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_min(
 }
 
 /**
- *  @brief Peek at the max node on a rbtree
+ * @brief Peek at the max node on a rbtree.
  *
- *  This function returns a pointer to the max node from @a the_rbtree 
- *  without changing the tree.  If @a the_rbtree is empty, 
- *  then NULL is returned.
+ * This function returns a pointer to the max node from @a the_rbtree 
+ * without changing the tree.  If @a the_rbtree is empty, 
+ * then NULL is returned.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
   const rtems_rbtree_control *the_rbtree
@@ -439,11 +441,11 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_header_unprotected(
 }
 
 /**
- *  @brief Find the control header of the tree containing a given node.
+ * @brief Find the control header of the tree containing a given node.
  *
- *  This routine finds the rtems_rbtree_control structure of the tree 
- *  containing @a the_node.
- *  It disables interrupts to ensure the atomicity of the find operation.
+ * This routine finds the rtems_rbtree_control structure of the tree 
+ * containing @a the_node.
+ * It disables interrupts to ensure the atomicity of the find operation.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_control *rtems_rbtree_find_header(
   rtems_rbtree_node *the_node
@@ -464,15 +466,15 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert_unprotected(
 }
 
 /**
- *  @brief Insert a node on a rbtree
+ * @brief Insert a node on a rbtree.
  *
- *  This routine inserts @a the_node on @a the_rbtree.
- *  It disables interrupts to ensure the atomicity of the insert operation.
+ * This routine inserts @a the_node on @a the_rbtree.
+ * It disables interrupts to ensure the atomicity of the insert operation.
  *
- *  @retval 0 Successfully inserted.
- *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal key to the key of @a the_node exists
- *          in an unique @a the_rbtree.
+ * @retval 0 Successfully inserted.
+ * @retval -1 NULL @a the_node.
+ * @retval RBTree_Node* if one with equal key to the key of @a the_node exists
+ *         in an unique @a the_rbtree.
  */
 RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(
   rtems_rbtree_control *the_rbtree,
@@ -482,7 +484,8 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(
   return _RBTree_Insert( the_rbtree, the_node );
 }
 
-/** @brief Determines whether the tree is unique
+/** 
+ * @brief Determines whether the tree is unique.
  */
 RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_unique(
   const rtems_rbtree_control *the_rbtree

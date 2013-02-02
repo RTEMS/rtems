@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default File System Get Statistics
+ */
+
 /*
  *  COPYRIGHT (c) 2010.
  *  On-Line Applications Research Corporation (OAR).

@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreSysState
  *
- * @brief System State Handler API.
+ * @brief System State Handler API
  */
 
 /*
@@ -30,9 +30,8 @@ extern "C" {
  * @ingroup Score
  *
  * @brief Management of the internal system state of RTEMS.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief System states.

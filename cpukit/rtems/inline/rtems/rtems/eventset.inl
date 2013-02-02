@@ -27,7 +27,7 @@
  */
 
 /**
- *  @brief Event_sets_Is_empty
+ *  @brief Checks if on events are posted in the event_set.
  *
  *  This function returns TRUE if on events are posted in the event_set,
  *  and FALSE otherwise.
@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE bool _Event_sets_Is_empty(
 }
 
 /**
- *  @brief Event_sets_Post
+ *  @brief Posts the given new_events into the event_set passed in.
  *
  *  This routine posts the given new_events into the event_set
  *  passed in.  The result is returned to the user in event_set.
@@ -54,7 +54,7 @@ RTEMS_INLINE_ROUTINE void _Event_sets_Post(
 }
 
 /**
- *  @brief Event_sets_Get
+ *  @brief Returns the events in event_condition that are set in event_set.
  *
  *  This function returns the events in event_condition which are
  *  set in event_set.
@@ -68,7 +68,7 @@ RTEMS_INLINE_ROUTINE rtems_event_set _Event_sets_Get(
 }
 
 /**
- *  @brief Event_sets_Clear
+ *  @brief Removes the events in mask from the event_set passed in.
  *
  *  This function removes the events in mask from the event_set
  *  passed in.  The result is returned to the user in event_set.

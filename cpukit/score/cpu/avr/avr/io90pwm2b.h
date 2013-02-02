@@ -1,38 +1,42 @@
-/* Copyright (c) 2007 Atmel Corporation
-   All rights reserved.
+/**
+ * @file avr/io90pwm2b.h
+ *
+ * @brief Definitions for AT90PWM2B
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-   * Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in
-     the documentation and/or other materials provided with the
-     distribution.
-
-   * Neither the name of the copyright holders nor the names of
-     contributors may be used to endorse or promote products derived
-     from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE. 
-*/
-
-
-/* avr/io90pwm2b.h - definitions for AT90PWM2B */
-
-/* This file should only be included from <avr/io.h>, never directly. */
+/*
+ * Copyright (c) 2007 Atmel Corporation
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *
+ *   * Neither the name of the copyright holders nor the names of
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef _AVR_IO_H_
 #  error "Include <avr/io.h> instead of this file."
@@ -42,11 +46,19 @@
 #  define _AVR_IOXXX_H_ "io90pwm2b.h"
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
-#endif 
+#endif
 
 
 #ifndef _AVR_IO90PWM2B_H_
 #define _AVR_IO90PWM2B_H_ 1
+
+/**
+ * @defgroup Avr_io90pwm2b AT90PWM2B Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers */
 
@@ -79,7 +91,7 @@
 #define PORTB5 5
 #define PORTB6 6
 #define PORTB7 7
-      
+
 #define PINC _SFR_IO8(0x06)
 #define PINC0 0
 #define PINC1 1
@@ -817,7 +829,7 @@
 #define STP0 0
 #define STP1 1
 #define F1617 2
-#define FEM 3 
+#define FEM 3
 
 #define MUBRR _SFR_MEM16(0xCC)
 
@@ -1362,7 +1374,7 @@
 #define FUSE_SPIEN     (unsigned char)~_BV(5)  /* Enable Serial programming and Data Downloading */
 #define FUSE_DWEN      (unsigned char)~_BV(6)  /* debugWIRE Enable */
 #define FUSE_RSTDISBL  (unsigned char)~_BV(7)  /* External Reset Disable */
-#define HFUSE_DEFAULT (FUSE_SPIEN)    
+#define HFUSE_DEFAULT (FUSE_SPIEN)
 
 
 /* Extended Fuse Byte */
@@ -1379,7 +1391,7 @@
 /* Lock Bits */
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
-#define __BOOT_LOCK_BITS_1_EXIST 
+#define __BOOT_LOCK_BITS_1_EXIST
 
 
 /* Signature */
@@ -1388,4 +1400,5 @@
 #define SIGNATURE_2 0x83
 
 
+/** @} */
 #endif /* _AVR_IO90PWM2B_H_ */

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Adds Signal from Set
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

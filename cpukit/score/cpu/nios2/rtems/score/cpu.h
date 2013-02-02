@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Altera Nios II CPU Department Source
+ */
+
 /*
  *  Copyright (c) 2011 embedded brains GmbH
  *
@@ -253,8 +259,8 @@ void _CPU_Initialize_vectors( void );
  * _CPU_ISR_Disable().  The value is not modified.
  *
  * This flash code is optimal for all Nios II configurations.  The rdctl does
- * not flush the pipeline and has only a late result penalty.  The wrctl on the
- * other hand leads to a pipeline flush.
+ * not flush the pipeline and has only a late result penalty.  The wrctl on
+ * the other hand leads to a pipeline flush.
  */
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
@@ -319,14 +325,12 @@ void _CPU_Context_Initialize(
 void _CPU_Fatal_halt( uint32_t _error ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
- * @brief CPU Initialize
- *
+ * @brief CPU initialization.
  */
 void _CPU_Initialize( void );
 
 /**
- * @brief CPU ISR Install Raw Handler
- *
+ * @brief CPU ISR install raw handler.
  */
 void _CPU_ISR_install_raw_handler(
   uint32_t vector,
@@ -335,8 +339,7 @@ void _CPU_ISR_install_raw_handler(
 );
 
 /**
- * @brief CPU ISR Install Vector.
- *
+ * @brief CPU ISR install vector.
  */
 void _CPU_ISR_install_vector(
   uint32_t vector,

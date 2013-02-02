@@ -1,28 +1,31 @@
 /**
- * @file rtems/confdefs.h
+ * @file
  *
- *  This include file contains the configuration table template that will
- *  be instantiated by an application based on the setting of a number
- *  of macros.  The macros are documented in the Configuring a System
- *  chapter of the Classic API User's Guide
+ * @brief Configuration Table Template that will be Instantiated
+ * by an Application
  *
- *  The model is to estimate the memory required for each configured item
- *  and sum those estimates.  The estimate can be too high or too low for
- *  a variety of reasons:
+ * This include file contains the configuration table template that will
+ * be instantiated by an application based on the setting of a number
+ * of macros.  The macros are documented in the Configuring a System
+ * chapter of the Classic API User's Guide
  *
- *  Reasons estimate is too high:
- *    + FP contexts (not all tasks are FP)
+ * The model is to estimate the memory required for each configured item
+ * and sum those estimates.  The estimate can be too high or too low for
+ * a variety of reasons:
  *
- *  Reasons estimate is too low:
- *    + stacks greater than minimum size
- *    + messages
- *    + application must account for device driver resources
- *    + application must account for add-on library resource requirements
+ * Reasons estimate is too high:
+ *   + FP contexts (not all tasks are FP)
  *
- *  NOTE:  Eventually this may be able to take into account some of
- *         the above.  This procedure has evolved from just enough to
- *         support the RTEMS Test Suites into something that can be
- *         used remarkably reliably by most applications.
+ * Reasons estimate is too low:
+ *   + stacks greater than minimum size
+ *   + messages
+ *   + application must account for device driver resources
+ *   + application must account for add-on library resource requirements
+ *
+ * NOTE:  Eventually this may be able to take into account some of
+ *        the above.  This procedure has evolved from just enough to
+ *        support the RTEMS Test Suites into something that can be
+ *        used remarkably reliably by most applications.
  */
 
 /*
@@ -58,8 +61,8 @@ extern rtems_driver_address_table       Device_drivers[];
 #endif
 
 /**
- *  This macro determines whether the RTEMS reentrancy support for
- *  the Newlib C Library is enabled.
+ * This macro determines whether the RTEMS reentrancy support for
+ * the Newlib C Library is enabled.
  */
 #ifdef RTEMS_SCHEDSIM
   #undef RTEMS_NEWLIB
@@ -107,62 +110,62 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This macro defines the number of POSIX file descriptors allocated
- *  and managed by libio.  These are the "integer" file descriptors that
- *  are used by calls like open(2) and read(2).
+ * This macro defines the number of POSIX file descriptors allocated
+ * and managed by libio.  These are the "integer" file descriptors that
+ * are used by calls like open(2) and read(2).
  */
 #ifndef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
   #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 3
 #endif
 
 /**
- *  Semaphore count used by the IO library.
+ * Semaphore count used by the IO library.
  */
 #define CONFIGURE_LIBIO_SEMAPHORES 1
 
 #ifdef CONFIGURE_INIT
   /**
-   *  When instantiating the configuration tables, this variable is
-   *  initialized to specify the maximum number of file descriptors.
+   * When instantiating the configuration tables, this variable is
+   * initialized to specify the maximum number of file descriptors.
    */
   uint32_t rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
 #endif
 
 /**
- *  This macro determines if termios is disabled by this application.
- *  This only means that resources will not be reserved.  If you end
- *  up using termios, it will fail.
+ * This macro determines if termios is disabled by this application.
+ * This only means that resources will not be reserved.  If you end
+ * up using termios, it will fail.
  */
 #ifdef CONFIGURE_TERMIOS_DISABLED
   #define CONFIGURE_TERMIOS_SEMAPHORES 0
 #else
   /**
-   *  This macro specifies the number of serial or PTY ports that will
-   *  use termios.
+   * This macro specifies the number of serial or PTY ports that will
+   * use termios.
    */
   #ifndef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
   #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
   #endif
 
   /**
-   *  This macro reserves the number of semaphores required by termios
-   *  based upon the number of communication ports that will use it.
+   * This macro reserves the number of semaphores required by termios
+   * based upon the number of communication ports that will use it.
    */
   #define CONFIGURE_TERMIOS_SEMAPHORES \
     ((CONFIGURE_NUMBER_OF_TERMIOS_PORTS * 4) + 1)
 #endif
 
 /**
- *  This macro specifies the number of PTYs that can be concurrently
- *  active.
+ * This macro specifies the number of PTYs that can be concurrently
+ * active.
  */
 #ifndef CONFIGURE_MAXIMUM_PTYS
   #define CONFIGURE_MAXIMUM_PTYS 0
 #endif
 
 /**
- *  This variable contains the maximum number of PTYs that can be
- *  concurrently active.
+ * This variable contains the maximum number of PTYs that can be
+ * concurrently active.
  */
 #ifdef CONFIGURE_INIT
   int rtems_telnetd_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
@@ -175,11 +178,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  If configured for SMP, then we need to know the maximum CPU cores.
    */
   #if !defined(CONFIGURE_SMP_APPLICATION)
-    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS) 
+    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
       #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
     #endif
   #else
-    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS) 
+    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
       #error "CONFIGURE_SMP_MAXIMUM_PROCESSORS not specified for SMP Application"
     #endif
   #endif
@@ -259,7 +262,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
         #error "Configured filesystems but root filesystem was not IMFS!"
         #error "Filesystems could be disabled, DEVFS is root, or"
         #error "  miniIMFS is root!"
-     #endif 
+     #endif
   #endif
 
   /*
@@ -285,10 +288,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #include <rtems/imfs.h>
 
 /**
- *  This specifies the number of bytes per block for files within the IMFS.
- *  There are a maximum number of blocks per file so this dictates the maximum
- *  size of a file.  This has to be balanced with the unused portion of each
- *  block that might be wasted.
+ * This specifies the number of bytes per block for files within the IMFS.
+ * There are a maximum number of blocks per file so this dictates the maximum
+ * size of a file.  This has to be balanced with the unused portion of each
+ * block that might be wasted.
  */
 #ifndef CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
   #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK \
@@ -296,8 +299,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This defines the miniIMFS file system table entry.
- */ 
+ * This defines the miniIMFS file system table entry.
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_miniIMFS) && \
     defined(CONFIGURE_FILESYSTEM_MINIIMFS)
   #define CONFIGURE_FILESYSTEM_ENTRY_miniIMFS \
@@ -306,7 +309,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  Internall it is called FIFOs not pipes
+ * Internall it is called FIFOs not pipes
  */
 #if defined(CONFIGURE_PIPES_ENABLED)
   #define CONFIGURE_FIFOS_ENABLED
@@ -314,8 +317,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifndef RTEMS_SCHEDSIM
 /**
- *  This defines the IMFS file system table entry.
- */ 
+ * This defines the IMFS file system table entry.
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_IMFS) && \
     defined(CONFIGURE_FILESYSTEM_IMFS)
   #if defined(CONFIGURE_FIFOS_ENABLED)
@@ -329,7 +332,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This sets up the resources for the PIPES/FIFOs
+ * This sets up the resources for the PIPES/FIFOs
  */
 #if defined(CONFIGURE_FIFOS_ENABLED)
   #if !defined(CONFIGURE_MAXIMUM_FIFOS) && !defined(CONFIGURE_MAXIMUM_PIPES)
@@ -352,7 +355,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  * DEVFS
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DEVFS) && \
     defined(CONFIGURE_FILESYSTEM_DEVFS)
 #include <rtems/devfs.h>
@@ -363,9 +366,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef RTEMS_NETWORKING
   /**
    * FTPFS
-   */ 
+   */
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_FTPFS) && \
-      defined(CONFIGURE_FILESYSTEM_FTPFS) 
+      defined(CONFIGURE_FILESYSTEM_FTPFS)
     #include <rtems/ftpfs.h>
     #define CONFIGURE_FILESYSTEM_ENTRY_FTPFS \
       { RTEMS_FILESYSTEM_TYPE_FTPFS, rtems_ftpfs_initialize }
@@ -373,7 +376,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   /**
    * TFTPFS
-   */ 
+   */
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_TFTPFS) && \
       defined(CONFIGURE_FILESYSTEM_TFTPFS)
     #include <rtems/tftp.h>
@@ -383,7 +386,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   /**
    * NFS
-   */ 
+   */
   #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
       defined(CONFIGURE_FILESYSTEM_NFS)
     #include <librtemsNfs.h>
@@ -394,7 +397,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  * DOSFS
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS) && \
     defined(CONFIGURE_FILESYSTEM_DOSFS)
   #include <rtems/dosfs.h>
@@ -404,7 +407,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /**
  * RFS
- */ 
+ */
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_RFS) && \
     defined(CONFIGURE_FILESYSTEM_RFS)
   #include <rtems/rtems-rfs.h>
@@ -415,13 +418,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef CONFIGURE_INIT
 
   /**
-   *  DEVFS variables.
+   * DEVFS variables.
    *
-   *  The number of individual devices that may be registered
-   *  in the system or the CONFIGURE_MAXIMUM_DEVICES variable
-   *  is defaulted to 4 when a filesystem is enabled, unless
-   *  the bsp overwrides this.  In which case the value is set
-   *  to BSP_MAXIMUM_DEVICES.
+   * The number of individual devices that may be registered
+   * in the system or the CONFIGURE_MAXIMUM_DEVICES variable
+   * is defaulted to 4 when a filesystem is enabled, unless
+   * the bsp overwrides this.  In which case the value is set
+   * to BSP_MAXIMUM_DEVICES.
    */
   #ifdef CONFIGURE_FILESYSTEM_DEVFS
     #ifndef CONFIGURE_MAXIMUM_DEVICES
@@ -529,7 +532,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This configures the stack checker user extension.
+ * This configures the stack checker user extension.
  */
 #ifdef CONFIGURE_STACK_CHECKER_ENABLED
   #define CONFIGURE_STACK_CHECKER_EXTENSION 1
@@ -538,34 +541,34 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  @brief Maximum Priority configuration
+ * @brief Maximum priority configuration.
  *
- *  This configures the maximum priority value that
- *  a task may have.
+ * This configures the maximum priority value that
+ * a task may have.
  *
- *  The following applies to the data space requirements
- *  of the Priority Scheduler.
+ * The following applies to the data space requirements
+ * of the Priority Scheduler.
  *
- *  By reducing the number of priorities in a system,
- *  the amount of RAM required by RTEMS can be significantly
- *  reduced.  RTEMS allocates a Chain_Control structure per
- *  priority and this structure contains 3 pointers.  So
- *  the default is (256 * 12) = 3K on 32-bit architectures.
+ * By reducing the number of priorities in a system,
+ * the amount of RAM required by RTEMS can be significantly
+ * reduced.  RTEMS allocates a Chain_Control structure per
+ * priority and this structure contains 3 pointers.  So
+ * the default is (256 * 12) = 3K on 32-bit architectures.
  *
- *  This must be one less than a power of 2 between
- *  4 and 256.  Valid values along with the application
- *  priority levels and memory saved when pointers are
- *  32-bits in size are:
+ * This must be one less than a power of 2 between
+ * 4 and 256.  Valid values along with the application
+ * priority levels and memory saved when pointers are
+ * 32-bits in size are:
  *
- *    + 3,  2 application priorities, 3024 bytes saved
- *    + 7, 5 application priorities, 2976 bytes saved
- *    + 15, 13 application priorities, 2880 bytes saved
- *    + 31, 29 application priorities, 2688 bytes saved
- *    + 63, 61 application priorities, 2304 bytes saved
- *    + 127, 125 application priorities, 1536 bytes saved
- *    + 255, 253 application priorities, 0 bytes saved
+ *   + 3,  2 application priorities, 3024 bytes saved
+ *   + 7, 5 application priorities, 2976 bytes saved
+ *   + 15, 13 application priorities, 2880 bytes saved
+ *   + 31, 29 application priorities, 2688 bytes saved
+ *   + 63, 61 application priorities, 2304 bytes saved
+ *   + 127, 125 application priorities, 1536 bytes saved
+ *   + 255, 253 application priorities, 0 bytes saved
  *
- *  It is specified in terms of Classic API priority values.
+ * It is specified in terms of Classic API priority values.
  */
 #ifndef CONFIGURE_MAXIMUM_PRIORITY
   #define CONFIGURE_MAXIMUM_PRIORITY PRIORITY_DEFAULT_MAXIMUM
@@ -574,7 +577,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 /*
  * Scheduler configuration.
  *
- * The scheduler configuration allows an application to select the 
+ * The scheduler configuration allows an application to select the
  * scheduling policy to use.  The supported configurations are:
  *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
@@ -582,13 +585,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
  *  CONFIGURE_SCHEDULER_CBS        - CBS Scheduler
- * 
- * If no configuration is specified by the application, then 
+ *
+ * If no configuration is specified by the application, then
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
  *
  * An application can define its own scheduling policy by defining
  * CONFIGURE_SCHEDULER_USER and the following:
- *    - CONFIGURE_SCHEDULER_ENTRY_POINTS 
+ *    - CONFIGURE_SCHEDULER_ENTRY_POINTS
  *    - CONFIGURE_MEMORY_FOR_SCHEDULER - base memory
  *    - CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER - per task memory
  */
@@ -612,7 +615,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
-/* 
+/*
  * If the Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
@@ -630,7 +633,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
 #endif
 
-/* 
+/*
  * If the Simple Priority Scheduler is selected, then configure for it.
  */
 #if defined(CONFIGURE_SCHEDULER_SIMPLE)
@@ -705,7 +708,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     _Configure_From_workspace(sizeof(Scheduler_CBS_Per_thread)))
 #endif
 
-/* 
+/*
  * Set up the scheduler entry points table.  The scheduling code uses
  * this code to know which scheduler is configured by the user.
  */
@@ -726,12 +729,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  @brief Idle task body configuration
+ * @brief Idle task body configuration.
  *
- *  There is a default IDLE thread body provided by RTEMS which
- *  has the possibility of being CPU specific.  There may be a
- *  BSP specific override of the RTEMS default body and in turn,
- *  the application may override and provide its own.
+ * There is a default IDLE thread body provided by RTEMS which
+ * has the possibility of being CPU specific.  There may be a
+ * BSP specific override of the RTEMS default body and in turn,
+ * the application may override and provide its own.
  */
 #ifndef CONFIGURE_IDLE_TASK_BODY
   #if defined(BSP_IDLE_TASK_BODY)
@@ -752,7 +755,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  By default, use the minimum stack size requested by this port.
+ * By default, use the minimum stack size requested by this port.
  */
 #ifndef CONFIGURE_MINIMUM_TASK_STACK_SIZE
   #define CONFIGURE_MINIMUM_TASK_STACK_SIZE CPU_STACK_MINIMUM_SIZE
@@ -762,10 +765,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   (2 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
 
 /**
- *  @brief Idle task stack size configuration
+ * @brief Idle task stack size configuration.
  *
- *  By default, the IDLE task will have a stack of minimum size.
- *  The BSP or application may override this value.
+ * By default, the IDLE task will have a stack of minimum size.
+ * The BSP or application may override this value.
  */
 #ifndef CONFIGURE_IDLE_TASK_STACK_SIZE
   #ifdef BSP_IDLE_TASK_STACK_SIZE
@@ -779,10 +782,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  @brief Interrupt stack size configuration
+ * @brief Interrupt stack size configuration.
  *
- *  By default, the interrupt stack will be of minimum size.
- *  The BSP or application may override this value.
+ * By default, the interrupt stack will be of minimum size.
+ * The BSP or application may override this value.
  */
 #ifndef CONFIGURE_INTERRUPT_STACK_SIZE
   #ifdef BSP_INTERRUPT_STACK_SIZE
@@ -793,11 +796,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This reserves memory for the interrupt stack if it is to be allocated
- *  by RTEMS rather than the BSP.
+ * This reserves memory for the interrupt stack if it is to be allocated
+ * by RTEMS rather than the BSP.
  *
- *  @todo Try to get to the point where all BSPs support allocating the
- *        memory from the Workspace.
+ * @todo Try to get to the point where all BSPs support allocating the
+ *       memory from the Workspace.
  */
 #if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
   #define CONFIGURE_INTERRUPT_STACK_MEMORY 0
@@ -807,7 +810,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  Configure the very much optional task stack allocator initialization
+ * Configure the very much optional task stack allocator initialization
  */
 #ifndef CONFIGURE_TASK_STACK_ALLOCATOR_INIT
   #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT NULL
@@ -828,8 +831,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  Should the RTEMS Workspace and C Program Heap be cleared automatically
- *  at system start up?
+ * Should the RTEMS Workspace and C Program Heap be cleared automatically
+ * at system start up?
  */
 #ifndef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
   #ifdef BSP_ZERO_WORKSPACE_AUTOMATICALLY
@@ -848,17 +851,17 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
-   *  By default, RTEMS uses separate heaps for the RTEMS Workspace and
-   *  the C Program Heap.  On many BSPs, these can be optionally
-   *  combined provided one larger memory pool. This is particularly
-   *  useful in combination with the unlimited objects configuration.
+   * By default, RTEMS uses separate heaps for the RTEMS Workspace and
+   * the C Program Heap.  On many BSPs, these can be optionally
+   * combined provided one larger memory pool. This is particularly
+   * useful in combination with the unlimited objects configuration.
    */
   #ifdef BSP_DEFAULT_UNIFIED_WORK_AREAS
     #ifndef CONFIGURE_UNIFIED_WORK_AREAS
       #define CONFIGURE_UNIFIED_WORK_AREAS
     #endif
   #endif
-  
+
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
   #else
@@ -869,8 +872,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
-   *  This configures the malloc family statistics to be available.
-   *  By default only function call counts are kept.
+   * This configures the malloc family statistics to be available.
+   * By default only function call counts are kept.
    */
   rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers =
     #ifndef CONFIGURE_MALLOC_STATISTICS
@@ -882,10 +885,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
-   *  This configures the sbrk() support for the malloc family.
-   *  By default it is assumed that the BSP provides all available
-   *  RAM to the malloc family implementation so sbrk()'ing to get
-   *  more memory would always fail anyway.
+   * This configures the sbrk() support for the malloc family.
+   * By default it is assumed that the BSP provides all available
+   * RAM to the malloc family implementation so sbrk()'ing to get
+   * more memory would always fail anyway.
    */
   const rtems_heap_extend_handler rtems_malloc_extend_handler =
     #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
@@ -897,9 +900,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
-   *  This configures the malloc family plugin which dirties memory
-   *  allocated.  This is helpful for finding unitialized data structure
-   *  problems.
+   * This configures the malloc family plugin which dirties memory
+   * allocated.  This is helpful for finding unitialized data structure
+   * problems.
    */
   rtems_malloc_dirtier_t rtems_malloc_dirty_helper =
     #if defined(CONFIGURE_MALLOC_DIRTY)
@@ -910,18 +913,18 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This is a helper macro used in calculations in this file.  It is used
- *  to noted when an element is allocated from the RTEMS Workspace and adds
- *  a factor to account for heap overhead plus an alignment factor that
- *  may be applied.
+ * This is a helper macro used in calculations in this file.  It is used
+ * to noted when an element is allocated from the RTEMS Workspace and adds
+ * a factor to account for heap overhead plus an alignment factor that
+ * may be applied.
  */
 #define _Configure_From_workspace(_size) \
   (ssize_t)((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1)
 
 /**
- *  This is a helper macro used in stack space calculations in this file.  It
- *  may be provided by the application in case a special task stack allocator
- *  is used.  The default is allocation from the RTEMS Workspace.
+ * This is a helper macro used in stack space calculations in this file.  It
+ * may be provided by the application in case a special task stack allocator
+ * is used.  The default is allocation from the RTEMS Workspace.
  */
 #ifdef CONFIGURE_TASK_STACK_FROM_ALLOCATOR
   #define _Configure_From_stackspace(_stack_size) \
@@ -932,18 +935,18 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  Do not use the unlimited bit as part of the multiplication
- *  for memory usage.
+ * Do not use the unlimited bit as part of the multiplication
+ * for memory usage.
  */
 #define _Configure_Max_Objects(_max) \
   rtems_resource_maximum_per_allocation(_max)
 
 /**
- *  This macro accounts for how memory for a set of configured objects is
- *  allocated from the Executive Workspace.
+ * This macro accounts for how memory for a set of configured objects is
+ * allocated from the Executive Workspace.
  *
- *  NOTE: It does NOT attempt to address the more complex case of unlimited
- *        objects.
+ * NOTE: It does NOT attempt to address the more complex case of unlimited
+ *       objects.
  */
 #define _Configure_Object_RAM(_number, _size) \
   ( _Configure_From_workspace(_Configure_Max_Objects(_number) * (_size)) + \
@@ -1153,9 +1156,9 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   RTEMS_ARRAY_SIZE(Device_drivers)
 
 /**
- *  This specifies the maximum number of device drivers that
- *  can be installed in the system at one time.  It must account
- *  for both the statically and dynamically installed drivers.
+ * This specifies the maximum number of device drivers that
+ * can be installed in the system at one time.  It must account
+ * for both the statically and dynamically installed drivers.
  */
 #ifndef CONFIGURE_MAXIMUM_DRIVERS
   #define CONFIGURE_MAXIMUM_DRIVERS CONFIGURE_NUMBER_OF_DRIVERS
@@ -1482,10 +1485,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 
   /**
-   *  This macro calculates the memory required for task variables.
+   * This macro calculates the memory required for task variables.
    *
-   *  @note Each task variable is individually allocated from the Workspace.
-   *        Hence, we do the multiplication on the configured size.
+   * NOTE: Each task variable is individually allocated from the Workspace.
+   *       Hence, we do the multiplication on the configured size.
    */
   #ifndef CONFIGURE_MAXIMUM_TASK_VARIABLES
     #define CONFIGURE_MAXIMUM_TASK_VARIABLES                     0
@@ -1659,8 +1662,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #include <rtems/posix/timer.h>
 
   /**
-   *  Account for the object control structures plus the name
-   *  of the object to be duplicated.
+   * Account for the object control structures plus the name
+   * of the object to be duplicated.
    */
   #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
     _Configure_Object_RAM( (_number), _size ) + \
@@ -1853,15 +1856,15 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef CONFIGURE_GNAT_RTEMS
 
   /**
-   *  The GNAT run-time needs something less than (10) POSIX mutexes.
-   *  We may be able to get by with less but why bother.
+   * The GNAT run-time needs something less than (10) POSIX mutexes.
+   * We may be able to get by with less but why bother.
    */
   #define CONFIGURE_GNAT_MUTEXES 10
 
   /**
-   *  This is the maximum number of Ada tasks which can be concurrently
-   *  in existence.  Twenty (20) are required to run all tests in the
-   *  ACATS (formerly ACVC).
+   * This is the maximum number of Ada tasks which can be concurrently
+   * in existence.  Twenty (20) are required to run all tests in the
+   * ACATS (formerly ACVC).
    */
   #ifndef CONFIGURE_MAXIMUM_ADA_TASKS
     #define CONFIGURE_MAXIMUM_ADA_TASKS  20
@@ -1916,8 +1919,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifndef RTEMS_SCHEDSIM
 /**
- *  This macro specifies the amount of memory to be reserved for the
- *  Newlib C Library reentrancy structure -- if we are using newlib.
+ * This macro specifies the amount of memory to be reserved for the
+ * Newlib C Library reentrancy structure -- if we are using newlib.
  */
 
 #if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
@@ -1934,8 +1937,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This is so we can account for tasks with stacks greater than minimum
- *  size.  This is in bytes.
+ * This is so we can account for tasks with stacks greater than minimum
+ * size.  This is in bytes.
  */
 #ifndef CONFIGURE_EXTRA_TASK_STACKS
   #define CONFIGURE_EXTRA_TASK_STACKS 0
@@ -1948,10 +1951,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
 
 /**
- *  Account for allocating the following per object
- *    + array of object control structures
- *    + local pointer table -- pointer per object plus a zero'th
- *      entry in the local pointer table.
+ * Account for allocating the following per object
+ *   + array of object control structures
+ *   + local pointer table -- pointer per object plus a zero'th
+ *     entry in the local pointer table.
  */
 
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
@@ -1973,8 +1976,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   )
 
 /**
- *  This defines the amount of memory configured for the multiprocessing
- *  support required by this application.
+ * This defines the amount of memory configured for the multiprocessing
+ * support required by this application.
  */
 #ifdef CONFIGURE_MP_APPLICATION
   #define CONFIGURE_MEMORY_FOR_MP \
@@ -1988,44 +1991,44 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  The following macro is used to calculate the memory allocated by RTEMS
- *  for the message buffers associated with a particular message queue.
- *  There is a fixed amount of overhead per message.
+ * The following macro is used to calculate the memory allocated by RTEMS
+ * for the message buffers associated with a particular message queue.
+ * There is a fixed amount of overhead per message.
  */
 #define CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(_messages, _size) \
     _Configure_From_workspace( \
       (_messages) * ((_size) + sizeof(CORE_message_queue_Buffer_control)))
 
 /**
- *  This macros is set to the amount of memory required for pending message
- *  buffers in bytes.  It should be constructed by adding together a
- *  set of values determined by CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE.
+ * This macros is set to the amount of memory required for pending message
+ * buffers in bytes.  It should be constructed by adding together a
+ * set of values determined by CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE.
  */
 #ifndef CONFIGURE_MESSAGE_BUFFER_MEMORY
   #define CONFIGURE_MESSAGE_BUFFER_MEMORY 0
 #endif
 
 /**
- *  This macro is available just in case the confdefs.h file underallocates
- *  memory for a particular application.  This lets the user add some extra
- *  memory in case something broken and underestimates.
+ * This macro is available just in case the confdefs.h file underallocates
+ * memory for a particular application.  This lets the user add some extra
+ * memory in case something broken and underestimates.
  *
- *  It is also possible for cases where confdefs.h overallocates memory,
- *  you could substract memory from the allocated.  The estimate is just
- *  that, an estimate, and assumes worst case alignment and padding on
- *  each allocated element.  So in some cases it could be too conservative.
+ * It is also possible for cases where confdefs.h overallocates memory,
+ * you could substract memory from the allocated.  The estimate is just
+ * that, an estimate, and assumes worst case alignment and padding on
+ * each allocated element.  So in some cases it could be too conservative.
  *
- *  @note Historically this was used for message buffers.
+ * NOTE: Historically this was used for message buffers.
  */
 #ifndef CONFIGURE_MEMORY_OVERHEAD
   #define CONFIGURE_MEMORY_OVERHEAD 0
 #endif
 
 /**
- *  On architectures that use Simple Vectored Interrupts, it is RTEMS
- *  responsibility to allocate the vector table.  This avoids reserving
- *  the memory on architectures that use the Programmable Interrupt
- *  Controller Vectored Interrupts.
+ * On architectures that use Simple Vectored Interrupts, it is RTEMS
+ * responsibility to allocate the vector table.  This avoids reserving
+ * the memory on architectures that use the Programmable Interrupt
+ * Controller Vectored Interrupts.
  */
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
   /*
@@ -2047,15 +2050,15 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  RTEMS uses one instance of an internal mutex class.  This accounts
- *  for that mutex
+ * RTEMS uses one instance of an internal mutex class.  This accounts
+ * for that mutex
  */
 #define CONFIGURE_API_MUTEX_MEMORY \
   _Configure_Object_RAM(1, sizeof(API_Mutex_Control))
 
 /**
- *  This calculates the amount of memory reserved for the IDLE tasks.
- *  In an SMP system, each CPU core has its own idle task.
+ * This calculates the amount of memory reserved for the IDLE tasks.
+ * In an SMP system, each CPU core has its own idle task.
  */
 #if defined(RTEMS_SMP)
   #define CONFIGURE_IDLE_TASKS_COUNT CONFIGURE_SMP_MAXIMUM_PROCESSORS
@@ -2064,14 +2067,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This defines the formula used to compute the amount of memory
- *  reserved for IDLE task control structures.
+ * This defines the formula used to compute the amount of memory
+ * reserved for IDLE task control structures.
  */
 #define CONFIGURE_MEMORY_FOR_IDLE_TASK \
   CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_IDLE_TASKS_COUNT, 0)
 
 /**
- *  This macro accounts for general RTEMS system overhead.
+ * This macro accounts for general RTEMS system overhead.
  */
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( CONFIGURE_MEMORY_FOR_IDLE_TASK +                /* IDLE and stack */ \
@@ -2082,8 +2085,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   )
 
 /**
- *  This macro provides a summation of the various task and thread
- *  requirements.
+ * This macro provides a summation of the various task and thread
+ * requirements.
  */
 #define CONFIGURE_TOTAL_TASKS_AND_THREADS \
    (CONFIGURE_TASKS + \
@@ -2091,8 +2094,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MAXIMUM_GOROUTINES)
 
 /**
- *  This macro reserves the memory required by the statically configured
- *  user extensions.
+ * This macro reserves the memory required by the statically configured
+ * user extensions.
  */
 #define CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS \
   (CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS == 0 ? 0 : \
@@ -2102,8 +2105,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     ))
 
 /**
- *  This macro provides a summation of the memory required by the
- *  Classic API as configured.
+ * This macro provides a summation of the memory required by the
+ * Classic API as configured.
  */
 #define CONFIGURE_MEMORY_FOR_CLASSIC \
   (CONFIGURE_MEMORY_FOR_TASK_VARIABLES(CONFIGURE_MAXIMUM_TASK_VARIABLES + \
@@ -2130,7 +2133,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This calculates the memory required for the executive workspace.
+ * This calculates the memory required for the executive workspace.
  */
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 (( \
@@ -2152,8 +2155,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 
 /**
- *  This accounts for any extra memory required by the Classic API
- *  Initialization Task.
+ * This accounts for any extra memory required by the Classic API
+ * Initialization Task.
  */
 #if (CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
   #define CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
@@ -2163,8 +2166,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This accounts for any extra memory required by the POSIX API
- *  Initialization Thread.
+ * This accounts for any extra memory required by the POSIX API
+ * Initialization Thread.
  */
 #if defined(RTEMS_POSIX_API) && \
     (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > \
@@ -2177,8 +2180,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
- *  This macro provides a summation of the various initialization task
- *  and thread stack requirements.
+ * This macro provides a summation of the various initialization task
+ * and thread stack requirements.
  */
 #define CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS \
     (CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
@@ -2238,7 +2241,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #ifdef CONFIGURE_INIT
   /**
-   *  This is the Classic API Configuration Table.
+   * This is the Classic API Configuration Table.
    */
   rtems_api_configuration_table Configuration_RTEMS_API = {
     CONFIGURE_TASKS,
@@ -2257,7 +2260,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #ifdef RTEMS_POSIX_API
     /**
-     *  This is the POSIX API Configuration Table.
+     * This is the POSIX API Configuration Table.
      */
     posix_api_configuration_table Configuration_POSIX_API = {
       CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS +
@@ -2282,29 +2285,31 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     };
   #endif
 
-  /** This variable specifies the minimum stack size for tasks in an RTEMS
-   *  application.
+  /** 
+   * This variable specifies the minimum stack size for tasks in an RTEMS
+   * application.
    *
-   *  @note This is left as a simple uint32_t so it can be externed as
-   *        needed without requring being high enough logical to
-   *        include the full configuration table.
+   * NOTE: This is left as a simple uint32_t so it can be externed as
+   *       needed without requring being high enough logical to
+   *       include the full configuration table.
    */
   uint32_t rtems_minimum_stack_size =
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
-  /** This variable specifies the maximum priority value that
-   *  a task may have.  This must be a power of 2 between 4
-   *  and 256 and is specified in terms of Classic API
-   *  priority values.
+  /** 
+   * This variable specifies the maximum priority value that
+   * a task may have.  This must be a power of 2 between 4
+   * and 256 and is specified in terms of Classic API
+   * priority values.
    *
-   *  @note This is left as a simple uint8_t so it can be externed as
-   *        needed without requring being high enough logical to
-   *        include the full configuration table.
+   * NOTE: This is left as a simple uint8_t so it can be externed as
+   *       needed without requring being high enough logical to
+   *       include the full configuration table.
    */
   uint8_t rtems_maximum_priority = CONFIGURE_MAXIMUM_PRIORITY;
 
   /**
-   *  This is the primary Configuration Table for this application.
+   * This is the primary Configuration Table for this application.
    */
   const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
@@ -2347,8 +2352,8 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #if defined(RTEMS_SMP)
   /**
-   *  Instantiate the variable which specifies the number of CPUs
-   *  in an SMP configuration.
+   * Instantiate the variable which specifies the number of CPUs
+   * in an SMP configuration.
    */
   #if defined(CONFIGURE_INIT)
     uint32_t rtems_configuration_smp_maximum_processors = \
@@ -2411,11 +2416,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 #if defined(CONFIGURE_CONFDEFS_DEBUG) && defined(CONFIGURE_INIT)
   /**
-   *  This is a debug mechanism, so if you need to, the executable will
-   *  have a structure with various partial values.  Add to this as you
-   *  need to.  Viewing this structure in gdb combined with dumping
-   *  the Configuration structures generated should help a lot in tracing
-   *  down errors and analyzing where over and under allocations are.
+   * This is a debug mechanism, so if you need to, the executable will
+   * have a structure with various partial values.  Add to this as you
+   * need to.  Viewing this structure in gdb combined with dumping
+   * the Configuration structures generated should help a lot in tracing
+   * down errors and analyzing where over and under allocations are.
    */
   typedef struct {
     uint32_t SYSTEM_OVERHEAD;

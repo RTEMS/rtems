@@ -1,7 +1,12 @@
-/*
- *  fat_file.h
+/**
+ * @file
  *
- *  Constants/data structures/prototypes for operations on "fat-file"
+ * @brief Constants/Data Structures/Prototypes for Operations on "fat-file"
+ *
+ * @ingroup libfs_ff
+ */
+
+/*
  *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
@@ -10,6 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
+
 #ifndef __DOSFS_FAT_FILE_H__
 #define __DOSFS_FAT_FILE_H__
 
@@ -26,11 +32,13 @@
  *  @ingroup libfs
  */
 /**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* "fat-file" representation
+/**
+ * @brief The "fat-file" representation.
  *
  * the idea is: fat-file is nothing but a cluster chain, any open fat-file is
  * represented in system by fat-file descriptor and has well-known
@@ -44,7 +52,6 @@ extern "C" {
  * Such interface hides the architecture of fat-file and represents it like
  * linear file
  */
-
 typedef rtems_filesystem_node_types_t fat_file_type_t;
 
 #define FAT_DIRECTORY     RTEMS_FILESYSTEM_DIRECTORY
@@ -56,8 +63,9 @@ typedef struct fat_file_map_s
     uint32_t   disk_cln;
     uint32_t   last_cln;
 } fat_file_map_t;
-/*
- * descriptor of a fat-file
+
+/**
+ * @brief Descriptor of a fat-file.
  *
  * To each particular clusters chain
  */
@@ -109,18 +117,17 @@ typedef struct fat_file_fd_s
 
 #define FAT_EOF           0x00
 
-/* fat_construct_key --
- *     Construct key for hash access: convert (cluster num, offset) to
- *     (sector512 num, new offset) and than construct key as
- *     key = (sector512 num) << 4 | (new offset)
+/* @brief Construct key for hash access.
  *
- * PARAMETERS:
- *     cl       - cluster number
- *     ofs      - offset inside cluster 'cl'
- *     fs_info  - FS info
+ * Construct key for hash access: convert (cluster num, offset) to
+ * (sector512 num, new offset) and than construct key as
+ * key = (sector512 num) << 4 | (new offset)
  *
- * RETURNS:
- *     constructed key
+ * @param[in] cl - cluster number
+ * @param[in] ofs - offset inside cluster 'cl'
+ * @param[in] fs_info - FS info
+ *
+ * @retval constructed key
  */
 static inline uint32_t
 fat_construct_key(

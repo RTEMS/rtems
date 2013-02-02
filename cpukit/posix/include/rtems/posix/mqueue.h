@@ -1,20 +1,22 @@
 /**
- * @file rtems/posix/mqueue.h
+ * @file
+ * 
+ * @brief POSIX Message Queues Private Private Support
  *
  * This include file contains all the private support information for
  * POSIX Message Queues.
  * 
- *  The structure of the routines is identical to that of POSIX
- *  Message_queues to leave the option of having unnamed message
- *  queues at a future date.  They are currently not part of the
- *  POSIX standard but unnamed message_queues are.  This is also
- *  the reason for the apparently unnecessary tracking of
- *  the process_shared attribute.  [In addition to the fact that
- *  it would be trivial to add pshared to the mq_attr structure
- *  and have process private message queues.]
+ * The structure of the routines is identical to that of POSIX
+ * Message_queues to leave the option of having unnamed message
+ * queues at a future date.  They are currently not part of the
+ * POSIX standard but unnamed message_queues are.  This is also
+ * the reason for the apparently unnecessary tracking of
+ * the process_shared attribute.  [In addition to the fact that
+ * it would be trivial to add pshared to the mq_attr structure
+ * and have process private message queues.]
  *
- *  This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *  time.
+ * This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
+ * time.
  */
 
 /*
@@ -36,18 +38,15 @@
 #include <rtems/posix/posixapi.h>
 
 /**
- *  @defgroup POSIX_MQUEUE_P Message Queues Private Support Information
+ *  @defgroup POSIX_MQUEUE_P Message Queues Private Support
  *
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
+ * 
  */
-/**@{*/
+/**@{**/
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- *  @ingroup POSIX_MQUEUE
- */
 
 /*
  *  Data Structure used to manage a POSIX message queue
@@ -78,24 +77,24 @@ typedef struct {
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information;
 POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information_fds;
 
-/*
- *  @brief Initializes message_queue Manager Related Data Structures
+/**
+ * @brief Initialize message_queue manager related data structures.
  *
- *  DESCRIPTION:
+ * DESCRIPTION:
  *
- *  This routine performs the initialization necessary for this manager.
+ * This routine performs the initialization necessary for this manager.
  *
- *  NOTE:  The structure of the routines is identical to that of POSIX
- *         Message_queues to leave the option of having unnamed message
- *         queues at a future date.  They are currently not part of the
- *         POSIX standard but unnamed message_queues are.  This is also
- *         the reason for the apparently unnecessary tracking of
- *         the process_shared attribute.  [In addition to the fact that
- *         it would be trivial to add pshared to the mq_attr structure
- *         and have process private message queues.]
+ * NOTE:  The structure of the routines is identical to that of POSIX
+ *        Message_queues to leave the option of having unnamed message
+ *        queues at a future date.  They are currently not part of the
+ *        POSIX standard but unnamed message_queues are.  This is also
+ *        the reason for the apparently unnecessary tracking of
+ *        the process_shared attribute.  [In addition to the fact that
+ *        it would be trivial to add pshared to the mq_attr structure
+ *        and have process private message queues.]
  *
- *         This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
- *         time.
+ *        This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open
+ *        time.
  *
  */
 
@@ -120,12 +119,12 @@ int _POSIX_Message_queue_Create_support(
 );
 
 /**
- *  @brief POSIX Delete Message Queue
+ * @brief Delete a POSIX message queue.
  *
- *  DESCRIPTION:
+ * DESCRIPTION:
  *
- *  This routine supports the mq_unlink and mq_close routines by
- *  doing most of the work involved with removing a message queue.
+ * This routine supports the mq_unlink and mq_close routines by
+ * doing most of the work involved with removing a message queue.
  */
 void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq
@@ -271,9 +270,11 @@ int _POSIX_Message_queue_Translate_core_message_queue_return_code(
 
 #include <rtems/posix/mqueue.inl>
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif
 /*  end of include file */

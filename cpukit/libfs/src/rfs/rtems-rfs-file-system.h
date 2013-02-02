@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System Data
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System Data
  *
@@ -50,8 +50,8 @@
 #define RTEMS_RFS_VERSION_MASK INT32_C(0x00000000)
 
 /**
- * The root inode number. Do not use 0 as this has special meaning in some Unix
- * operating systems.
+ * The root inode number. Do not use 0 as this has special meaning in some
+ * Unix operating systems.
  */
 #define RTEMS_RFS_ROOT_INO (1)
 
@@ -61,8 +61,8 @@
 #define RTEMS_RFS_EMPTY_INO (0)
 
 /**
- * The number of blocks in the inode. This number effects the size of the inode
- * and that effects the overhead of the inode tables in a group.
+ * The number of blocks in the inode. This number effects the size of the
+ * inode and that effects the overhead of the inode tables in a group.
  */
 #define RTEMS_RFS_INODE_BLOCKS (5)
 
@@ -262,27 +262,27 @@ struct _rtems_rfs_file_system
 /**
  * Return the flags.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #define rtems_rfs_fs_flags(_f) ((_f)->flags)
 /**
  * Should bitmap buffers be released when finished ?
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #define rtems_rfs_fs_release_bitmaps(_f) (!((_f)->flags & RTEMS_RFS_FS_BITMAPS_HOLD))
 
 /**
  * Are the buffers locally cache or released back to the buffering layer ?
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #define rtems_rfs_fs_no_local_cache(_f) ((_f)->flags & RTEMS_RFS_FS_NO_LOCAL_CACHE)
 
 /**
  * The disk device number.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #if RTEMS_RFS_USE_LIBBLOCK
 #define rtems_rfs_fs_device(_fs) ((_fs)->disk)
@@ -293,21 +293,21 @@ struct _rtems_rfs_file_system
 /**
  * The size of the disk in blocks.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #define rtems_rfs_fs_blocks(_fs) ((_fs)->blocks)
 
 /**
  * The block size.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #define rtems_rfs_fs_block_size(_fs) ((_fs)->block_size)
 
 /**
  * The number of inodes.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #define rtems_rfs_fs_inodes(_fs) ((_fs)->inodes)
 
@@ -315,9 +315,9 @@ struct _rtems_rfs_file_system
  * Calculate a block in the file system given the group and the block within
  * the group.
  *
- * @param _fs Pointer to the file system.
- * @param _grp The group.
- * @param _blk The block within the group.
+ * @param[in] _fs is a pointer to the file system.
+ * @param[in] _grp is the group.
+ * @param[in] _blk is the block within the group.
  * @return The absolute block number.
  */
 #define rtems_rfs_fs_block(_fs, _grp, _blk) \
@@ -326,7 +326,7 @@ struct _rtems_rfs_file_system
 /**
  * The media size of the disk in media size blocks.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #if RTEMS_RFS_USE_LIBBLOCK
 #define rtems_rfs_fs_media_blocks(_fs) ((_fs)->disk->size)
@@ -338,7 +338,7 @@ struct _rtems_rfs_file_system
  * The media block size. This is the size of a block on disk. For a device I/O
  * this value is 1.
  *
- * @param _fs Pointer to the file system.
+ * @param[in] _fs is a pointer to the file system.
  */
 #if RTEMS_RFS_USE_LIBBLOCK
 #define rtems_rfs_fs_media_block_size(_fs) ((_fs)->disk->media_block_size)
@@ -366,7 +366,7 @@ struct _rtems_rfs_file_system
 /**
  * Return the size of the disk in bytes.
  *
- * @param fs Pointer to the file system.
+ * @param[in] fs is a pointer to the file system.
  * @return uint64_t The size of the disk in bytes.
  */
 uint64_t rtems_rfs_fs_size(rtems_rfs_file_system* fs);
@@ -374,7 +374,7 @@ uint64_t rtems_rfs_fs_size(rtems_rfs_file_system* fs);
 /**
  * The size of the disk in bytes calculated from the media parameters..
  *
- * @param fs Pointer to the file system.
+ * @param[in] fs is a pointer to the file system.
  * @return uint64_t The size of the disk in bytes.
  */
 uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
@@ -382,12 +382,14 @@ uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
 /**
  * Open the file system given a file path.
  *
- * @param name The device to open.
- * @param fs The file system data filled in by this call.
- * @param user A pointer to user data.
- * @param flags The initial set of user flags for the file system.
- * @param max_held_buffers The maximum number of buffers the RFS holds.
- * @return int The error number (errno). No error if 0.
+ * @param[in] name is a pointer to the device to open.
+ * @param[in] fs is the file system data filled in by this call.
+ * @param[in] user is a pointer to the user data.
+ * @param[in] flags is a initial set of user flags for the file system.
+ * @param[in] max_held_buffers is the maximum number of buffers the RFS holds.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_fs_open (const char*             name,
                        void*                   user,
@@ -398,8 +400,10 @@ int rtems_rfs_fs_open (const char*             name,
 /**
  * Close the file system.
  *
- * @param fs The file system data.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_fs_close (rtems_rfs_file_system* fs);
 

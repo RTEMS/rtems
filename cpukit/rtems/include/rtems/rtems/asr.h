@@ -1,19 +1,22 @@
 /**
  * @file rtems/rtems/asr.h
  *
- * @brief Constants and Structures Associated with the Asynchronous Signal Handler
+ * @defgroup ClassicASR ASR Support
  *
- *  This include file contains all the constants and structures associated
- *  with the Asynchronous Signal Handler.  This Handler provides the low-level
- *  support required by the Signal Manager.
+ * @ingroup ClassicRTEMS
+ * @brief Asynchronous Signal Handler
+ *
+ * This include file contains all the constants and structures associated
+ * with the Asynchronous Signal Handler. This Handler provides the low-level
+ * support required by the Signal Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_ASR_H

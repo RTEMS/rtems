@@ -47,9 +47,11 @@
 #ifndef _AVR_ATTINY13A_H_
 #define _AVR_ATTINY13A_H_ 1
 
-
-/* Registers and associated bit numbers. */
-
+/**
+ * @name Registers and Associated Bit Numbers
+ * 
+ */
+/**@{**/
 #define ADCSRB _SFR_IO8(0x03)
 #define ADTS0 0
 #define ADTS1 1
@@ -306,9 +308,13 @@
 #define GIMSK _SFR_IO8(0x3B)
 #define PCIE 5
 #define INT0 6
+/** @} */
 
-
-/* Interrupt vectors */
+/**
+ * @name Interrupt Vectors
+ * 
+ */
+/**@{**/
 /* Vector 0 is the reset vector */
 #define INT0_vect_num  1
 #define INT0_vect      _VECTOR(1)  /* External Interrupt 0 */
@@ -331,9 +337,13 @@
 
 #define _VECTOR_SIZE 2 /* Size of individual vector. */
 #define _VECTORS_SIZE (10 * _VECTOR_SIZE)
+/** @} */
 
-
-/* Constants */
+/**
+ * @name Constants
+ * 
+ */
+/**@{**/
 #define SPM_PAGESIZE (32)
 #define RAMSTART     (0x60)
 #define RAMSIZE      (64)
@@ -344,9 +354,13 @@
 #define E2END        (64 - 1)
 #define E2PAGESIZE   (4)
 #define FLASHEND     (1024 - 1)
+/** @} */
 
-
-/* Fuses */
+/**
+ * @name Fuses
+ * 
+ */
+/**@{**/
 #define FUSE_MEMORY_SIZE 2
 
 /* Low Fuse Byte */
@@ -354,30 +368,42 @@
 #define FUSE_CKSEL1 (unsigned char)~_BV(1)  /* Select Clock Source */
 #define FUSE_SUT0 (unsigned char)~_BV(2)  /* Select start-up time */
 #define FUSE_SUT1 (unsigned char)~_BV(3)  /* Select start-up time */
-#define FUSE_CKDIV8 (unsigned char)~_BV(4)  /* Start up with system clock divided by 8 */
+/* Start up with system clock divided by 8 */
+#define FUSE_CKDIV8 (unsigned char)~_BV(4)  
 #define FUSE_WDTON (unsigned char)~_BV(5)  /* Watch dog timer always on */
-#define FUSE_EESAVE (unsigned char)~_BV(6)  /* Keep EEprom contents during chip erase */
+/* Keep EEprom contents during chip erase */
+#define FUSE_EESAVE (unsigned char)~_BV(6)  
 #define FUSE_SPIEN (unsigned char)~_BV(7)  /* SPI programming enable */
 #define LFUSE_DEFAULT (FUSE_SPIEN & FUSE_CKDIV8 & FUSE_SUT0 & FUSE_CKSEL0)
 
 /* High Fuse Byte */
 #define FUSE_RSTDISBL (unsigned char)~_BV(0)  /* Disable external reset */
-#define FUSE_BODLEVEL0 (unsigned char)~_BV(1)  /* Enable BOD and select level */
-#define FUSE_BODLEVEL1 (unsigned char)~_BV(2)  /* Enable BOD and select level */
+/* Enable BOD and select level */
+#define FUSE_BODLEVEL0 (unsigned char)~_BV(1)  
+/* Enable BOD and select level */
+#define FUSE_BODLEVEL1 (unsigned char)~_BV(2)  
 #define FUSE_DWEN (unsigned char)~_BV(3)  /* DebugWire Enable */
 #define FUSE_SELFPRGEN (unsigned char)~_BV(4)  /* Self Programming Enable */
 #define HFUSE_DEFAULT (0xFF)
+/** @} */
 
-
-/* Lock Bits */
+/**
+ * @name Lock Bits
+ * 
+ */
+/**@{**/
 #define __LOCK_BITS_EXIST
+/** @} */
 
-
-/* Signature */
+/**
+ * @name Signature
+ * 
+ */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x90
 #define SIGNATURE_2 0x07
-
+/** @} */
 
 #endif /* _AVR_ATTINY13A_H_ */
 

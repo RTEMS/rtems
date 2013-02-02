@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Group Management
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Group Management.
  *
@@ -22,6 +22,13 @@
 #if !defined (_RTEMS_RFS_GROUP_H_)
 #define _RTEMS_RFS_GROUP_H_
 
+/**
+ * @ingroup rtems_rfs
+ *
+ * RTEMS File System Group Management
+ */
+/**@{*/
+
 #include <rtems/rfs/rtems-rfs-trace.h>
 #include <rtems/rfs/rtems-rfs-bitmaps.h>
 #include <rtems/rfs/rtems-rfs-buffer.h>
@@ -34,6 +41,8 @@
 #define RTEMS_RFS_GROUP_INODE_BLOCK        (2)
 
 /**
+ * @brief Creates bit allocator for blocks in the group simpler.
+ *
  * A group is a selection of blocks on the disk. Typically the number of blocks
  * in a group is determined by the number of bits a block holds. This makes the
  * bit allocator for blocks in the group simpler plus is allows a simple way to
@@ -85,13 +94,15 @@ typedef struct _rtems_rfs_group
   (((_f)->group_inodes * (_g)) + (_i) + RTEMS_RFS_ROOT_INO)
 
 /**
- * Open a group. Allocate all the resources including the bitmaps.
+ * @brief Open a group.
+ *
+ * Allocate all the resources including the bitmaps.
  *
  * @param fs The file system.
  * @param base The base block number.
  * @param size The number of blocks in the group.
  * @param group Reference to the group to open.
- * @return int The error number (errno). No error if 0.
+ * @retval int The error number (errno). No error if 0.
  */
 int rtems_rfs_group_open (rtems_rfs_file_system* fs,
                           rtems_rfs_buffer_block base,
@@ -100,24 +111,28 @@ int rtems_rfs_group_open (rtems_rfs_file_system* fs,
                           rtems_rfs_group*       group);
 
 /**
- * Close a group. Release all resources the group holds.
+ * @brief Close a group.
+ *
+ * Release all resources the group holds.
  *
  * @param fs The file system.
  * @param group The group to close.
- * @return int The error number (errno). No error if 0.
+ * @retval int The error number (errno). No error if 0.
  */
 int rtems_rfs_group_close (rtems_rfs_file_system* fs,
                            rtems_rfs_group*       group);
 
 /**
- * Allocate an inode or block. The groups are searched to find the next
+ * @brief Allocate an inode or block.
+ *
+ * The groups are searched to find the next
  * available inode or block.
  *
  * @param fs The file system data.
  * @param goal The goal to seed the bitmap search.
  * @param inode If true allocate an inode else allocate a block.
  * @param result The allocated bit in the bitmap.
- * @return int The error number (errno). No error if 0.
+ * @retval int The error number (errno). No error if 0.
  */
 int rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
                                   rtems_rfs_bitmap_bit   goal,
@@ -125,25 +140,25 @@ int rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
                                   rtems_rfs_bitmap_bit*  result);
 
 /**
- * Free the group allocated bit.
+ * @brief Free the group allocated bit.
  *
  * @param fs The file system data.
  * @param inode If true the number to free is an inode else it is a block.
  * @param block The inode or block number to free.
- * @return int The error number (errno). No error if 0.
+ * @retval int The error number (errno). No error if 0.
  */
 int rtems_rfs_group_bitmap_free (rtems_rfs_file_system* fs,
                                  bool                   inode,
                                  rtems_rfs_bitmap_bit   no);
 
 /**
- * Test the group allocated bit.
+ * @brief Test the group allocated bit.
  *
  * @param fs The file system data.
  * @param inode If true the number to free is an inode else it is a block.
  * @param block The inode or block number to free.
  * @param state Return the state of the bit.
- * @return int The error number (errno). No error if 0.
+ * @retval int The error number (errno). No error if 0.
  */
 int rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
                                  bool                   inode,
@@ -151,15 +166,16 @@ int rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
                                  bool*                  state);
 
 /**
- * Determine the number of blocks and inodes used.
+ * @brief Determine the number of blocks and inodes used.
  *
  * @param fs The file system data.
  * @param blocks The number of blocks used.
  * @param inodes The number of inodes used.
- * @return int The error number (errno). No error if 0.
+ * @retval int The error number (errno). No error if 0.
  */
 int rtems_rfs_group_usage (rtems_rfs_file_system* fs,
                            size_t*                blocks,
                            size_t*                inodes);
 
+/** @} */
 #endif

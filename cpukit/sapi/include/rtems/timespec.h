@@ -1,11 +1,9 @@
 /**
- *  @file  rtems/sapi/timespec.h
+ * @file
  *
- *  @ingroup 
+ * @brief Timespec API
  *
- *  @brief Timespec API
- *
- *  This include file contains API for manipulating timespecs.
+ * This include file contains API for manipulating timespecs.
  */
 
 /*
@@ -28,9 +26,10 @@
  *  @ingroup ClassicRTEMS
  *
  *  @brief Timespec API
+ * 
+ * @{
  *
  */
-/**@{*/
 
 #include <stdbool.h> /* bool */
 #include <stdint.h> /* uint32_t */
@@ -42,11 +41,11 @@ extern "C" {
 
 #include <rtems/timespec.inl>
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

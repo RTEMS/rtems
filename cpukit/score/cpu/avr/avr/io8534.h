@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90C8534
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2002, Marek Michalkiewicz
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_io8534 AT90C8534 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* I/O registers */
 
@@ -211,5 +227,7 @@
 #define XRAMEND		RAMEND
 #define E2END		0x1FF
 #define FLASHEND	0x1FFF
+
+/** @} */
 
 #endif /* _AVR_IO8534_H_ */

@@ -1,8 +1,10 @@
 /**
- * @file rtems/sptables.h
+ * @file
+ * 
+ * @brief Pre-Initialized Tables Used when in a Single Processor Configuration
  *
- *  This include file contains the executive's pre-initialized tables
- *  used when in a single processor configuration.
+ * This include file contains the executive's pre-initialized tables
+ * used when in a single processor configuration.
  */
 
 /*

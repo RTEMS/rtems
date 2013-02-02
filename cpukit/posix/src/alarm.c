@@ -2,7 +2,7 @@
  * @file
  *
  * @brief System Generates Signal for process after realtime seconds elapsed
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/aio_misc.h
+ * @file
+ * 
+ * @brief POSIX Asynchronous Input and Output Private Support
  *
  * This defines private information for the AIO implementation.
  */

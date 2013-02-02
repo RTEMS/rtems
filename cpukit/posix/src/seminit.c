@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Initializing of an Unnamed Semaphore
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -117,13 +117,11 @@ typedef volatile uint32_t register32_t;
         }; \
     }
 
-
-/*
-==========================================================================
-IO Module Structures
-==========================================================================
-*/
-
+/**
+ * @name IO Module Structures
+ * 
+ */
+/**@{**/
 
 /*
 --------------------------------------------------------------------------
@@ -186,7 +184,8 @@ typedef enum CLK_SCLKSEL_enum
     CLK_SCLKSEL_RC2M_gc = (0x00<<0),  /* Internal 2MHz RC Oscillator */
     CLK_SCLKSEL_RC32M_gc = (0x01<<0),  /* Internal 32MHz RC Oscillator */
     CLK_SCLKSEL_RC32K_gc = (0x02<<0),  /* Internal 32kHz RC Oscillator */
-    CLK_SCLKSEL_XOSC_gc = (0x03<<0),  /* External Crystal Oscillator or Clock */
+    /* External Crystal Oscillator or Clock */
+    CLK_SCLKSEL_XOSC_gc = (0x03<<0),  
     CLK_SCLKSEL_PLL_gc = (0x04<<0),  /* Phase Locked Loop */
 } CLK_SCLKSEL_t;
 
@@ -218,9 +217,12 @@ typedef enum CLK_PSBCDIV_enum
 typedef enum CLK_RTCSRC_enum
 {
     CLK_RTCSRC_ULP_gc = (0x00<<1),  /* 1kHz from internal 32kHz ULP */
-    CLK_RTCSRC_TOSC_gc = (0x01<<1),  /* 1kHz from 32kHz crystal oscillator on TOSC */
-    CLK_RTCSRC_RCOSC_gc = (0x02<<1),  /* 1kHz from internal 32kHz RC oscillator */
-    CLK_RTCSRC_TOSC32_gc = (0x05<<1),  /* 32kHz from 32kHz crystal oscillator on TOSC */
+    /* 1kHz from 32kHz crystal oscillator on TOSC */
+    CLK_RTCSRC_TOSC_gc = (0x01<<1),  
+    /* 1kHz from internal 32kHz RC oscillator */
+    CLK_RTCSRC_RCOSC_gc = (0x02<<1),  
+    /* 32kHz from 32kHz crystal oscillator on TOSC */
+    CLK_RTCSRC_TOSC32_gc = (0x05<<1),  
 } CLK_RTCSRC_t;
 
 
@@ -259,8 +261,10 @@ typedef struct OSC_struct
     register8_t CTRL;  /* Control Register */
     register8_t STATUS;  /* Status Register */
     register8_t XOSCCTRL;  /* External Oscillator Control Register */
-    register8_t XOSCFAIL;  /* External Oscillator Failure Detection Register */
-    register8_t RC32KCAL;  /* 32kHz Internal Oscillator Calibration Register */
+    /* External Oscillator Failure Detection Register */
+    register8_t XOSCFAIL;  
+    /* 32kHz Internal Oscillator Calibration Register */
+    register8_t RC32KCAL;  
     register8_t PLLCTRL;  /* PLL Control REgister */
     register8_t DFLLCTRL;  /* DFLL Control Register */
 } OSC_t;
@@ -484,7 +488,8 @@ typedef enum DMA_CH_SRCRELOAD_enum
     DMA_CH_SRCRELOAD_NONE_gc = (0x00<<6),  /* No reload */
     DMA_CH_SRCRELOAD_BLOCK_gc = (0x01<<6),  /* Reload at end of block */
     DMA_CH_SRCRELOAD_BURST_gc = (0x02<<6),  /* Reload at end of burst */
-    DMA_CH_SRCRELOAD_TRANSACTION_gc = (0x03<<6),  /* Reload at end of transaction */
+    /* Reload at end of transaction */
+    DMA_CH_SRCRELOAD_TRANSACTION_gc = (0x03<<6),  
 } DMA_CH_SRCRELOAD_t;
 
 /* Source addressing mode */
@@ -501,7 +506,8 @@ typedef enum DMA_CH_DESTRELOAD_enum
     DMA_CH_DESTRELOAD_NONE_gc = (0x00<<2),  /* No reload */
     DMA_CH_DESTRELOAD_BLOCK_gc = (0x01<<2),  /* Reload at end of block */
     DMA_CH_DESTRELOAD_BURST_gc = (0x02<<2),  /* Reload at end of burst */
-    DMA_CH_DESTRELOAD_TRANSACTION_gc = (0x03<<2),  /* Reload at end of transaction */
+    /* Reload at end of transaction */
+    DMA_CH_DESTRELOAD_TRANSACTION_gc = (0x03<<2), 
 } DMA_CH_DESTRELOAD_t;
 
 /* Destination adressing mode */
@@ -523,94 +529,142 @@ typedef enum DMA_CH_TRIGSRC_enum
     DMA_CH_TRIGSRC_ADCA_CH1_gc = (0x11<<0),  /* ADCA Channel 1 */
     DMA_CH_TRIGSRC_ADCA_CH2_gc = (0x12<<0),  /* ADCA Channel 2 */
     DMA_CH_TRIGSRC_ADCA_CH3_gc = (0x13<<0),  /* ADCA Channel 3 */
-    DMA_CH_TRIGSRC_ADCA_CH4_gc = (0x14<<0),  /* ADCA Channel 0,1,2,3 combined */
+    /* ADCA Channel 0,1,2,3 combined */
+    DMA_CH_TRIGSRC_ADCA_CH4_gc = (0x14<<0),  
     DMA_CH_TRIGSRC_DACA_CH0_gc = (0x15<<0),  /* DACA Channel 0 */
     DMA_CH_TRIGSRC_DACA_CH1_gc = (0x16<<0),  /* DACA Channel 1 */
     DMA_CH_TRIGSRC_ADCB_CH0_gc = (0x20<<0),  /* ADCB Channel 0 */
     DMA_CH_TRIGSRC_ADCB_CH1_gc = (0x21<<0),  /* ADCB Channel 1 */
     DMA_CH_TRIGSRC_ADCB_CH2_gc = (0x22<<0),  /* ADCB Channel 2 */
     DMA_CH_TRIGSRC_ADCB_CH3_gc = (0x23<<0),  /* ADCB Channel 3 */
-    DMA_CH_TRIGSRC_ADCB_CH4_gc = (0x24<<0),  /* ADCB Channel 0,1,2,3 combined */
+    /* ADCB Channel 0,1,2,3 combined */
+    DMA_CH_TRIGSRC_ADCB_CH4_gc = (0x24<<0),  
     DMA_CH_TRIGSRC_DACB_CH0_gc = (0x25<<0),  /* DACB Channel 0 */
     DMA_CH_TRIGSRC_DACB_CH1_gc = (0x26<<0),  /* DACB Channel 1 */
     DMA_CH_TRIGSRC_TCC0_OVF_gc = (0x40<<0),  /* Timer/Counter C0 Overflow */
     DMA_CH_TRIGSRC_TCC0_ERR_gc = (0x41<<0),  /* Timer/Counter C0 Error */
-    DMA_CH_TRIGSRC_TCC0_CCA_gc = (0x42<<0),  /* Timer/Counter C0 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCC0_CCB_gc = (0x43<<0),  /* Timer/Counter C0 Compare or Capture B */
-    DMA_CH_TRIGSRC_TCC0_CCC_gc = (0x44<<0),  /* Timer/Counter C0 Compare or Capture C */
-    DMA_CH_TRIGSRC_TCC0_CCD_gc = (0x45<<0),  /* Timer/Counter C0 Compare or Capture D */
+     /* Timer/Counter C0 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCC0_CCA_gc = (0x42<<0), 
+    /* Timer/Counter C0 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCC0_CCB_gc = (0x43<<0),  
+    /* Timer/Counter C0 Compare or Capture C */
+    DMA_CH_TRIGSRC_TCC0_CCC_gc = (0x44<<0),  
+    /* Timer/Counter C0 Compare or Capture D */
+    DMA_CH_TRIGSRC_TCC0_CCD_gc = (0x45<<0),  
     DMA_CH_TRIGSRC_TCC1_OVF_gc = (0x46<<0),  /* Timer/Counter C1 Overflow */
     DMA_CH_TRIGSRC_TCC1_ERR_gc = (0x47<<0),  /* Timer/Counter C1 Error */
-    DMA_CH_TRIGSRC_TCC1_CCA_gc = (0x48<<0),  /* Timer/Counter C1 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCC1_CCB_gc = (0x49<<0),  /* Timer/Counter C1 Compare or Capture B */
+    /* Timer/Counter C1 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCC1_CCA_gc = (0x48<<0),  
+    /* Timer/Counter C1 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCC1_CCB_gc = (0x49<<0),  
     DMA_CH_TRIGSRC_SPIC_gc = (0x4A<<0),  /* SPI C Transfer Complete */
-    DMA_CH_TRIGSRC_USARTC0_RXC_gc = (0x4B<<0),  /* USART C0 Receive Complete */
-    DMA_CH_TRIGSRC_USARTC0_DRE_gc = (0x4C<<0),  /* USART C0 Data Register Empty */
-    DMA_CH_TRIGSRC_USARTC1_RXC_gc = (0x4E<<0),  /* USART C1 Receive Complete */
-    DMA_CH_TRIGSRC_USARTC1_DRE_gc = (0x4F<<0),  /* USART C1 Data Register Empty */
+    /* USART C0 Receive Complete */
+    DMA_CH_TRIGSRC_USARTC0_RXC_gc = (0x4B<<0),  
+    /* USART C0 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTC0_DRE_gc = (0x4C<<0),  
+    /* USART C1 Receive Complete */
+    DMA_CH_TRIGSRC_USARTC1_RXC_gc = (0x4E<<0),  
+    /* USART C1 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTC1_DRE_gc = (0x4F<<0),  
     DMA_CH_TRIGSRC_TCD0_OVF_gc = (0x60<<0),  /* Timer/Counter D0 Overflow */
     DMA_CH_TRIGSRC_TCD0_ERR_gc = (0x61<<0),  /* Timer/Counter D0 Error */
-    DMA_CH_TRIGSRC_TCD0_CCA_gc = (0x62<<0),  /* Timer/Counter D0 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCD0_CCB_gc = (0x63<<0),  /* Timer/Counter D0 Compare or Capture B */
-    DMA_CH_TRIGSRC_TCD0_CCC_gc = (0x64<<0),  /* Timer/Counter D0 Compare or Capture C */
-    DMA_CH_TRIGSRC_TCD0_CCD_gc = (0x65<<0),  /* Timer/Counter D0 Compare or Capture D */
+    /* Timer/Counter D0 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCD0_CCA_gc = (0x62<<0),  
+    /* Timer/Counter D0 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCD0_CCB_gc = (0x63<<0),  
+    /* Timer/Counter D0 Compare or Capture C */
+    DMA_CH_TRIGSRC_TCD0_CCC_gc = (0x64<<0),  
+    /* Timer/Counter D0 Compare or Capture D */
+    DMA_CH_TRIGSRC_TCD0_CCD_gc = (0x65<<0),  
     DMA_CH_TRIGSRC_TCD1_OVF_gc = (0x66<<0),  /* Timer/Counter D1 Overflow */
     DMA_CH_TRIGSRC_TCD1_ERR_gc = (0x67<<0),  /* Timer/Counter D1 Error */
-    DMA_CH_TRIGSRC_TCD1_CCA_gc = (0x68<<0),  /* Timer/Counter D1 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCD1_CCB_gc = (0x69<<0),  /* Timer/Counter D1 Compare or Capture B */
+    /* Timer/Counter D1 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCD1_CCA_gc = (0x68<<0),  
+    /* Timer/Counter D1 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCD1_CCB_gc = (0x69<<0),  
     DMA_CH_TRIGSRC_SPID_gc = (0x6A<<0),  /* SPI D Transfer Complete */
-    DMA_CH_TRIGSRC_USARTD0_RXC_gc = (0x6B<<0),  /* USART D0 Receive Complete */
-    DMA_CH_TRIGSRC_USARTD0_DRE_gc = (0x6C<<0),  /* USART D0 Data Register Empty */
-    DMA_CH_TRIGSRC_USARTD1_RXC_gc = (0x6E<<0),  /* USART D1 Receive Complete */
-    DMA_CH_TRIGSRC_USARTD1_DRE_gc = (0x6F<<0),  /* USART D1 Data Register Empty */
+    /* USART D0 Receive Complete */
+    DMA_CH_TRIGSRC_USARTD0_RXC_gc = (0x6B<<0),  
+    /* USART D0 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTD0_DRE_gc = (0x6C<<0),  
+    /* USART D1 Receive Complete */
+    DMA_CH_TRIGSRC_USARTD1_RXC_gc = (0x6E<<0),  
+    /* USART D1 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTD1_DRE_gc = (0x6F<<0),  
     DMA_CH_TRIGSRC_TCE0_OVF_gc = (0x80<<0),  /* Timer/Counter E0 Overflow */
     DMA_CH_TRIGSRC_TCE0_ERR_gc = (0x81<<0),  /* Timer/Counter E0 Error */
-    DMA_CH_TRIGSRC_TCE0_CCA_gc = (0x82<<0),  /* Timer/Counter E0 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCE0_CCB_gc = (0x83<<0),  /* Timer/Counter E0 Compare or Capture B */
-    DMA_CH_TRIGSRC_TCE0_CCC_gc = (0x84<<0),  /* Timer/Counter E0 Compare or Capture C */
-    DMA_CH_TRIGSRC_TCE0_CCD_gc = (0x85<<0),  /* Timer/Counter E0 Compare or Capture D */
+    /* Timer/Counter E0 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCE0_CCA_gc = (0x82<<0),  
+    /* Timer/Counter E0 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCE0_CCB_gc = (0x83<<0),  
+    /* Timer/Counter E0 Compare or Capture C */
+    DMA_CH_TRIGSRC_TCE0_CCC_gc = (0x84<<0),  
+    /* Timer/Counter E0 Compare or Capture D */
+    DMA_CH_TRIGSRC_TCE0_CCD_gc = (0x85<<0), 
     DMA_CH_TRIGSRC_TCE1_OVF_gc = (0x86<<0),  /* Timer/Counter E1 Overflow */
     DMA_CH_TRIGSRC_TCE1_ERR_gc = (0x87<<0),  /* Timer/Counter E1 Error */
-    DMA_CH_TRIGSRC_TCE1_CCA_gc = (0x88<<0),  /* Timer/Counter E1 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCE1_CCB_gc = (0x89<<0),  /* Timer/Counter E1 Compare or Capture B */
+    /* Timer/Counter E1 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCE1_CCA_gc = (0x88<<0),  
+    /* Timer/Counter E1 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCE1_CCB_gc = (0x89<<0),  
     DMA_CH_TRIGSRC_SPIE_gc = (0x8A<<0),  /* SPI E Transfer Complete */
-    DMA_CH_TRIGSRC_USARTE0_RXC_gc = (0x8B<<0),  /* USART E0 Receive Complete */
-    DMA_CH_TRIGSRC_USARTE0_DRE_gc = (0x8C<<0),  /* USART E0 Data Register Empty */
-    DMA_CH_TRIGSRC_USARTE1_RXC_gc = (0x8E<<0),  /* USART E1 Receive Complete */
-    DMA_CH_TRIGSRC_USARTE1_DRE_gc = (0x8F<<0),  /* USART E1 Data Register Empty */
+    /* USART E0 Receive Complete */
+    DMA_CH_TRIGSRC_USARTE0_RXC_gc = (0x8B<<0), 
+    /* USART E0 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTE0_DRE_gc = (0x8C<<0),  
+    /* USART E1 Receive Complete */
+    DMA_CH_TRIGSRC_USARTE1_RXC_gc = (0x8E<<0),  
+    /* USART E1 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTE1_DRE_gc = (0x8F<<0),  
     DMA_CH_TRIGSRC_TCF0_OVF_gc = (0xA0<<0),  /* Timer/Counter F0 Overflow */
     DMA_CH_TRIGSRC_TCF0_ERR_gc = (0xA1<<0),  /* Timer/Counter F0 Error */
-    DMA_CH_TRIGSRC_TCF0_CCA_gc = (0xA2<<0),  /* Timer/Counter F0 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCF0_CCB_gc = (0xA3<<0),  /* Timer/Counter F0 Compare or Capture B */
-    DMA_CH_TRIGSRC_TCF0_CCC_gc = (0xA4<<0),  /* Timer/Counter F0 Compare or Capture C */
-    DMA_CH_TRIGSRC_TCF0_CCD_gc = (0xA5<<0),  /* Timer/Counter F0 Compare or Capture D */
+    /* Timer/Counter F0 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCF0_CCA_gc = (0xA2<<0),  
+    /* Timer/Counter F0 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCF0_CCB_gc = (0xA3<<0),  
+    /* Timer/Counter F0 Compare or Capture C */
+    DMA_CH_TRIGSRC_TCF0_CCC_gc = (0xA4<<0),  
+    /* Timer/Counter F0 Compare or Capture D */
+    DMA_CH_TRIGSRC_TCF0_CCD_gc = (0xA5<<0),  
     DMA_CH_TRIGSRC_TCF1_OVF_gc = (0xA6<<0),  /* Timer/Counter F1 Overflow */
     DMA_CH_TRIGSRC_TCF1_ERR_gc = (0xA7<<0),  /* Timer/Counter F1 Error */
-    DMA_CH_TRIGSRC_TCF1_CCA_gc = (0xA8<<0),  /* Timer/Counter F1 Compare or Capture A */
-    DMA_CH_TRIGSRC_TCF1_CCB_gc = (0xA9<<0),  /* Timer/Counter F1 Compare or Capture B */
+    /* Timer/Counter F1 Compare or Capture A */
+    DMA_CH_TRIGSRC_TCF1_CCA_gc = (0xA8<<0),  
+    /* Timer/Counter F1 Compare or Capture B */
+    DMA_CH_TRIGSRC_TCF1_CCB_gc = (0xA9<<0),  
     DMA_CH_TRIGSRC_SPIF_gc = (0xAA<<0),  /* SPI F Transfer Complete */
-    DMA_CH_TRIGSRC_USARTF0_RXC_gc = (0xAB<<0),  /* USART F0 Receive Complete */
-    DMA_CH_TRIGSRC_USARTF0_DRE_gc = (0xAC<<0),  /* USART F0 Data Register Empty */
-    DMA_CH_TRIGSRC_USARTF1_RXC_gc = (0xAE<<0),  /* USART F1 Receive Complete */
-    DMA_CH_TRIGSRC_USARTF1_DRE_gc = (0xAF<<0),  /* USART F1 Data Register Empty */
+    /* USART F0 Receive Complete */
+    DMA_CH_TRIGSRC_USARTF0_RXC_gc = (0xAB<<0),  
+    /* USART F0 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTF0_DRE_gc = (0xAC<<0),  
+    /* USART F1 Receive Complete */
+    DMA_CH_TRIGSRC_USARTF1_RXC_gc = (0xAE<<0),  
+    /* USART F1 Data Register Empty */
+    DMA_CH_TRIGSRC_USARTF1_DRE_gc = (0xAF<<0),  
 } DMA_CH_TRIGSRC_t;
 
 /* Double buffering mode */
 typedef enum DMA_DBUFMODE_enum
 {
     DMA_DBUFMODE_DISABLED_gc = (0x00<<2),  /* Double buffering disabled */
-    DMA_DBUFMODE_CH01_gc = (0x01<<2),  /* Double buffering enabled on channel 0/1 */
-    DMA_DBUFMODE_CH23_gc = (0x02<<2),  /* Double buffering enabled on channel 2/3 */
-    DMA_DBUFMODE_CH01CH23_gc = (0x03<<2),  /* Double buffering enabled on ch. 0/1 and ch. 2/3 */
+    /* Double buffering enabled on channel 0/1 */
+    DMA_DBUFMODE_CH01_gc = (0x01<<2),  
+    /* Double buffering enabled on channel 2/3 */
+    DMA_DBUFMODE_CH23_gc = (0x02<<2),  
+    /* Double buffering enabled on ch. 0/1 and ch. 2/3 */
+    DMA_DBUFMODE_CH01CH23_gc = (0x03<<2),  
 } DMA_DBUFMODE_t;
 
 /* Priority mode */
 typedef enum DMA_PRIMODE_enum
 {
     DMA_PRIMODE_RR0123_gc = (0x00<<0),  /* Round Robin */
-    DMA_PRIMODE_CH0RR123_gc = (0x01<<0),  /* Channel 0 > Round Robin on channel 1/2/3 */
-    DMA_PRIMODE_CH01RR23_gc = (0x02<<0),  /* Channel 0 > channel 1 > Round Robin on channel 2/3 */
-    DMA_PRIMODE_CH0123_gc = (0x03<<0),  /* Channel 0 > channel 1 > channel 2 > channel 3 */
+    /* Channel 0 > Round Robin on channel 1/2/3 */
+    DMA_PRIMODE_CH0RR123_gc = (0x01<<0),  
+    /* Channel 0 > channel 1 > Round Robin on channel 2/3 */
+    DMA_PRIMODE_CH01RR23_gc = (0x02<<0),  
+    /* Channel 0 > channel 1 > channel 2 > channel 3 */
+    DMA_PRIMODE_CH0123_gc = (0x03<<0),  
 } DMA_PRIMODE_t;
 
 /* Interrupt level */
@@ -761,52 +815,82 @@ typedef enum EVSYS_CHMUX_enum
     EVSYS_CHMUX_PRESCALER_128_gc = (0x87<<0),  /* Prescaler, divide by 128 */
     EVSYS_CHMUX_PRESCALER_256_gc = (0x88<<0),  /* Prescaler, divide by 256 */
     EVSYS_CHMUX_PRESCALER_512_gc = (0x89<<0),  /* Prescaler, divide by 512 */
-    EVSYS_CHMUX_PRESCALER_1024_gc = (0x8A<<0),  /* Prescaler, divide by 1024 */
-    EVSYS_CHMUX_PRESCALER_2048_gc = (0x8B<<0),  /* Prescaler, divide by 2048 */
-    EVSYS_CHMUX_PRESCALER_4096_gc = (0x8C<<0),  /* Prescaler, divide by 4096 */
-    EVSYS_CHMUX_PRESCALER_8192_gc = (0x8D<<0),  /* Prescaler, divide by 8192 */
-    EVSYS_CHMUX_PRESCALER_16384_gc = (0x8E<<0),  /* Prescaler, divide by 16384 */
-    EVSYS_CHMUX_PRESCALER_32768_gc = (0x8F<<0),  /* Prescaler, divide by 32768 */
+    /* Prescaler, divide by 1024 */
+    EVSYS_CHMUX_PRESCALER_1024_gc = (0x8A<<0),  
+    /* Prescaler, divide by 2048 */
+    EVSYS_CHMUX_PRESCALER_2048_gc = (0x8B<<0),  
+    /* Prescaler, divide by 4096 */
+    EVSYS_CHMUX_PRESCALER_4096_gc = (0x8C<<0),  
+    /* Prescaler, divide by 8192 */
+    EVSYS_CHMUX_PRESCALER_8192_gc = (0x8D<<0),  
+    /* Prescaler, divide by 16384 */
+    EVSYS_CHMUX_PRESCALER_16384_gc = (0x8E<<0),  
+    /* Prescaler, divide by 32768 */
+    EVSYS_CHMUX_PRESCALER_32768_gc = (0x8F<<0),  
     EVSYS_CHMUX_TCC0_OVF_gc = (0xC0<<0),  /* Timer/Counter C0 Overflow */
     EVSYS_CHMUX_TCC0_ERR_gc = (0xC1<<0),  /* Timer/Counter C0 Error */
-    EVSYS_CHMUX_TCC0_CCA_gc = (0xC4<<0),  /* Timer/Counter C0 Compare or Capture A */
-    EVSYS_CHMUX_TCC0_CCB_gc = (0xC5<<0),  /* Timer/Counter C0 Compare or Capture B */
-    EVSYS_CHMUX_TCC0_CCC_gc = (0xC6<<0),  /* Timer/Counter C0 Compare or Capture C */
-    EVSYS_CHMUX_TCC0_CCD_gc = (0xC7<<0),  /* Timer/Counter C0 Compare or Capture D */
+    /* Timer/Counter C0 Compare or Capture A */
+    EVSYS_CHMUX_TCC0_CCA_gc = (0xC4<<0),  
+    /* Timer/Counter C0 Compare or Capture B */
+    EVSYS_CHMUX_TCC0_CCB_gc = (0xC5<<0),  
+    /* Timer/Counter C0 Compare or Capture C */
+    EVSYS_CHMUX_TCC0_CCC_gc = (0xC6<<0),  
+    /* Timer/Counter C0 Compare or Capture D */
+    EVSYS_CHMUX_TCC0_CCD_gc = (0xC7<<0),  
     EVSYS_CHMUX_TCC1_OVF_gc = (0xC8<<0),  /* Timer/Counter C1 Overflow */
     EVSYS_CHMUX_TCC1_ERR_gc = (0xC9<<0),  /* Timer/Counter C1 Error */
-    EVSYS_CHMUX_TCC1_CCA_gc = (0xCC<<0),  /* Timer/Counter C1 Compare or Capture A */
-    EVSYS_CHMUX_TCC1_CCB_gc = (0xCD<<0),  /* Timer/Counter C1 Compare or Capture B */
+    /* Timer/Counter C1 Compare or Capture A */
+    EVSYS_CHMUX_TCC1_CCA_gc = (0xCC<<0),  
+    /* Timer/Counter C1 Compare or Capture B */
+    EVSYS_CHMUX_TCC1_CCB_gc = (0xCD<<0),  
     EVSYS_CHMUX_TCD0_OVF_gc = (0xD0<<0),  /* Timer/Counter D0 Overflow */
     EVSYS_CHMUX_TCD0_ERR_gc = (0xD1<<0),  /* Timer/Counter D0 Error */
-    EVSYS_CHMUX_TCD0_CCA_gc = (0xD4<<0),  /* Timer/Counter D0 Compare or Capture A */
-    EVSYS_CHMUX_TCD0_CCB_gc = (0xD5<<0),  /* Timer/Counter D0 Compare or Capture B */
-    EVSYS_CHMUX_TCD0_CCC_gc = (0xD6<<0),  /* Timer/Counter D0 Compare or Capture C */
-    EVSYS_CHMUX_TCD0_CCD_gc = (0xD7<<0),  /* Timer/Counter D0 Compare or Capture D */
+    /* Timer/Counter D0 Compare or Capture A */
+    EVSYS_CHMUX_TCD0_CCA_gc = (0xD4<<0),  
+    /* Timer/Counter D0 Compare or Capture B */
+    EVSYS_CHMUX_TCD0_CCB_gc = (0xD5<<0),  
+    /* Timer/Counter D0 Compare or Capture C */
+    EVSYS_CHMUX_TCD0_CCC_gc = (0xD6<<0),  
+    /* Timer/Counter D0 Compare or Capture D */
+    EVSYS_CHMUX_TCD0_CCD_gc = (0xD7<<0),  
     EVSYS_CHMUX_TCD1_OVF_gc = (0xD8<<0),  /* Timer/Counter D1 Overflow */
     EVSYS_CHMUX_TCD1_ERR_gc = (0xD9<<0),  /* Timer/Counter D1 Error */
-    EVSYS_CHMUX_TCD1_CCA_gc = (0xDC<<0),  /* Timer/Counter D1 Compare or Capture A */
-    EVSYS_CHMUX_TCD1_CCB_gc = (0xDD<<0),  /* Timer/Counter D1 Compare or Capture B */
+    /* Timer/Counter D1 Compare or Capture A */
+    EVSYS_CHMUX_TCD1_CCA_gc = (0xDC<<0),  
+    /* Timer/Counter D1 Compare or Capture B */
+    EVSYS_CHMUX_TCD1_CCB_gc = (0xDD<<0),  
     EVSYS_CHMUX_TCE0_OVF_gc = (0xE0<<0),  /* Timer/Counter E0 Overflow */
     EVSYS_CHMUX_TCE0_ERR_gc = (0xE1<<0),  /* Timer/Counter E0 Error */
-    EVSYS_CHMUX_TCE0_CCA_gc = (0xE4<<0),  /* Timer/Counter E0 Compare or Capture A */
-    EVSYS_CHMUX_TCE0_CCB_gc = (0xE5<<0),  /* Timer/Counter E0 Compare or Capture B */
-    EVSYS_CHMUX_TCE0_CCC_gc = (0xE6<<0),  /* Timer/Counter E0 Compare or Capture C */
-    EVSYS_CHMUX_TCE0_CCD_gc = (0xE7<<0),  /* Timer/Counter E0 Compare or Capture D */
+    /* Timer/Counter E0 Compare or Capture A */
+    EVSYS_CHMUX_TCE0_CCA_gc = (0xE4<<0),  
+    /* Timer/Counter E0 Compare or Capture B */
+    EVSYS_CHMUX_TCE0_CCB_gc = (0xE5<<0),  
+    /* Timer/Counter E0 Compare or Capture C */
+    EVSYS_CHMUX_TCE0_CCC_gc = (0xE6<<0),  
+    /* Timer/Counter E0 Compare or Capture D */
+    EVSYS_CHMUX_TCE0_CCD_gc = (0xE7<<0),  
     EVSYS_CHMUX_TCE1_OVF_gc = (0xE8<<0),  /* Timer/Counter E1 Overflow */
     EVSYS_CHMUX_TCE1_ERR_gc = (0xE9<<0),  /* Timer/Counter E1 Error */
-    EVSYS_CHMUX_TCE1_CCA_gc = (0xEC<<0),  /* Timer/Counter E1 Compare or Capture A */
-    EVSYS_CHMUX_TCE1_CCB_gc = (0xED<<0),  /* Timer/Counter E1 Compare or Capture B */
+    /* Timer/Counter E1 Compare or Capture A */
+    EVSYS_CHMUX_TCE1_CCA_gc = (0xEC<<0),  
+    /* Timer/Counter E1 Compare or Capture B */
+    EVSYS_CHMUX_TCE1_CCB_gc = (0xED<<0),  
     EVSYS_CHMUX_TCF0_OVF_gc = (0xF0<<0),  /* Timer/Counter F0 Overflow */
     EVSYS_CHMUX_TCF0_ERR_gc = (0xF1<<0),  /* Timer/Counter F0 Error */
-    EVSYS_CHMUX_TCF0_CCA_gc = (0xF4<<0),  /* Timer/Counter F0 Compare or Capture A */
-    EVSYS_CHMUX_TCF0_CCB_gc = (0xF5<<0),  /* Timer/Counter F0 Compare or Capture B */
-    EVSYS_CHMUX_TCF0_CCC_gc = (0xF6<<0),  /* Timer/Counter F0 Compare or Capture C */
-    EVSYS_CHMUX_TCF0_CCD_gc = (0xF7<<0),  /* Timer/Counter F0 Compare or Capture D */
+    /* Timer/Counter F0 Compare or Capture A */
+    EVSYS_CHMUX_TCF0_CCA_gc = (0xF4<<0),  
+    /* Timer/Counter F0 Compare or Capture B */
+    EVSYS_CHMUX_TCF0_CCB_gc = (0xF5<<0),  
+    /* Timer/Counter F0 Compare or Capture C */
+    EVSYS_CHMUX_TCF0_CCC_gc = (0xF6<<0),  
+    /* Timer/Counter F0 Compare or Capture D */
+    EVSYS_CHMUX_TCF0_CCD_gc = (0xF7<<0),  
     EVSYS_CHMUX_TCF1_OVF_gc = (0xF8<<0),  /* Timer/Counter F1 Overflow */
     EVSYS_CHMUX_TCF1_ERR_gc = (0xF9<<0),  /* Timer/Counter F1 Error */
-    EVSYS_CHMUX_TCF1_CCA_gc = (0xFC<<0),  /* Timer/Counter F1 Compare or Capture A */
-    EVSYS_CHMUX_TCF1_CCB_gc = (0xFD<<0),  /* Timer/Counter F1 Compare or Capture B */
+    /* Timer/Counter F1 Compare or Capture A */
+    EVSYS_CHMUX_TCF1_CCA_gc = (0xFC<<0),  
+    /* Timer/Counter F1 Compare or Capture B */
+    EVSYS_CHMUX_TCF1_CCB_gc = (0xFD<<0),  
 } EVSYS_CHMUX_t;
 
 
@@ -953,20 +1037,27 @@ typedef enum NVM_CMD_enum
     NVM_CMD_ERASE_USER_SIG_ROW_gc = (0x18<<0),  /* Erase user signature row */
     NVM_CMD_WRITE_USER_SIG_ROW_gc = (0x1A<<0),  /* Write user signature row */
     NVM_CMD_ERASE_APP_gc = (0x20<<0),  /* Erase Application Section */
-    NVM_CMD_ERASE_APP_PAGE_gc = (0x22<<0),  /* Erase Application Section page */
+    /* Erase Application Section page */
+    NVM_CMD_ERASE_APP_PAGE_gc = (0x22<<0),  
     NVM_CMD_LOAD_FLASH_BUFFER_gc = (0x23<<0),  /* Load Flash page buffer */
-    NVM_CMD_WRITE_APP_PAGE_gc = (0x24<<0),  /* Write Application Section page */
-    NVM_CMD_ERASE_WRITE_APP_PAGE_gc = (0x25<<0),  /* Erase-and-write Application Section page */
-    NVM_CMD_ERASE_FLASH_BUFFER_gc = (0x26<<0),  /* Erase/flush Flash page buffer */
+    /* Write Application Section page */
+    NVM_CMD_WRITE_APP_PAGE_gc = (0x24<<0),  
+    /* Erase-and-write Application Section page */
+    NVM_CMD_ERASE_WRITE_APP_PAGE_gc = (0x25<<0),  
+    /* Erase/flush Flash page buffer */
+    NVM_CMD_ERASE_FLASH_BUFFER_gc = (0x26<<0),  
     NVM_CMD_ERASE_BOOT_PAGE_gc = (0x2A<<0),  /* Erase Boot Section page */
     NVM_CMD_WRITE_BOOT_PAGE_gc = (0x2C<<0),  /* Write Boot Section page */
-    NVM_CMD_ERASE_WRITE_BOOT_PAGE_gc = (0x2D<<0),  /* Erase-and-write Boot Section page */
+    /* Erase-and-write Boot Section page */
+    NVM_CMD_ERASE_WRITE_BOOT_PAGE_gc = (0x2D<<0),  
     NVM_CMD_ERASE_EEPROM_gc = (0x30<<0),  /* Erase EEPROM */
     NVM_CMD_ERASE_EEPROM_PAGE_gc = (0x32<<0),  /* Erase EEPROM page */
     NVM_CMD_LOAD_EEPROM_BUFFER_gc = (0x33<<0),  /* Load EEPROM page buffer */
     NVM_CMD_WRITE_EEPROM_PAGE_gc = (0x34<<0),  /* Write EEPROM page */
-    NVM_CMD_ERASE_WRITE_EEPROM_PAGE_gc = (0x35<<0),  /* Erase-and-write EEPROM page */
-    NVM_CMD_ERASE_EEPROM_BUFFER_gc = (0x36<<0),  /* Erase/flush EEPROM page buffer */
+    /* Erase-and-write EEPROM page */
+    NVM_CMD_ERASE_WRITE_EEPROM_PAGE_gc = (0x35<<0),  
+    /* Erase/flush EEPROM page buffer */
+    NVM_CMD_ERASE_EEPROM_BUFFER_gc = (0x36<<0),  
     NVM_CMD_APP_CRC_gc = (0x38<<0),  /* Generate Application section CRC */
     NVM_CMD_BOOT_CRC_gc = (0x39<<0),  /* Generate Boot Section CRC */
     NVM_CMD_FLASH_RANGE_CRC_gc = (0x3A<<0),  /* Generate Flash Range CRC */
@@ -1272,9 +1363,11 @@ typedef enum ADC_CH_MUXNEG_enum
 typedef enum ADC_CH_INPUTMODE_enum
 {
     ADC_CH_INPUTMODE_INTERNAL_gc = (0x00<<0),  /* Internal inputs, no gain */
-    ADC_CH_INPUTMODE_SINGLEENDED_gc = (0x01<<0),  /* Single-ended input, no gain */
+    /* Single-ended input, no gain */
+    ADC_CH_INPUTMODE_SINGLEENDED_gc = (0x01<<0),  
     ADC_CH_INPUTMODE_DIFF_gc = (0x02<<0),  /* Differential input, no gain */
-    ADC_CH_INPUTMODE_DIFFWGAIN_gc = (0x03<<0),  /* Differential input, with gain */
+    /* Differential input, with gain */
+    ADC_CH_INPUTMODE_DIFFWGAIN_gc = (0x03<<0),  
 } ADC_CH_INPUTMODE_t;
 
 /* Gain factor */
@@ -1294,7 +1387,8 @@ typedef enum ADC_RESOLUTION_enum
 {
     ADC_RESOLUTION_12BIT_gc = (0x00<<1),  /* 12-bit right-adjusted result */
     ADC_RESOLUTION_8BIT_gc = (0x02<<1),  /* 8-bit right-adjusted result */
-    ADC_RESOLUTION_LEFT12BIT_gc = (0x03<<1),  /* 12-bit left-adjusted result */
+    /* 12-bit left-adjusted result */
+    ADC_RESOLUTION_LEFT12BIT_gc = (0x03<<1),
 } ADC_RESOLUTION_t;
 
 /* Voltage reference selection */
@@ -1334,18 +1428,23 @@ typedef enum ADC_EVACT_enum
     ADC_EVACT_NONE_gc = (0x00<<0),  /* No event action */
     ADC_EVACT_CH0_gc = (0x01<<0),  /* First event triggers channel 0 */
     ADC_EVACT_CH01_gc = (0x02<<0),  /* First two events trigger channel 0,1 */
-    ADC_EVACT_CH012_gc = (0x03<<0),  /* First three events trigger channel 0,1,2 */
+    /* First three events trigger channel 0,1,2 */
+    ADC_EVACT_CH012_gc = (0x03<<0),  
     ADC_EVACT_CH0123_gc = (0x04<<0),  /* Events trigger channel 0,1,2,3 */
     ADC_EVACT_SWEEP_gc = (0x05<<0),  /* First event triggers sweep */
-    ADC_EVACT_SYNCHSWEEP_gc = (0x06<<0),  /* First event triggers synchronized sweep */
+    /* First event triggers synchronized sweep */
+    ADC_EVACT_SYNCHSWEEP_gc = (0x06<<0),  
 } ADC_EVACT_t;
 
 /* Interupt mode */
 typedef enum ADC_CH_INTMODE_enum
 {
-    ADC_CH_INTMODE_COMPLETE_gc = (0x00<<2),  /* Interrupt on conversion complete */
-    ADC_CH_INTMODE_BELOW_gc = (0x01<<2),  /* Interrupt on result below compare value */
-    ADC_CH_INTMODE_ABOVE_gc = (0x03<<2),  /* Interrupt on result above compare value */
+    /* Interrupt on conversion complete */
+    ADC_CH_INTMODE_COMPLETE_gc = (0x00<<2),  
+    /* Interrupt on result below compare value */
+    ADC_CH_INTMODE_BELOW_gc = (0x01<<2),  
+    /* Interrupt on result above compare value */
+    ADC_CH_INTMODE_ABOVE_gc = (0x03<<2), 
 } ADC_CH_INTMODE_t;
 
 /* Interrupt level */
@@ -1420,8 +1519,10 @@ typedef struct DAC_struct
 /* Output channel selection */
 typedef enum DAC_CHSEL_enum
 {
-    DAC_CHSEL_SINGLE_gc = (0x00<<5),  /* Single channel operation (Channel A only) */
-    DAC_CHSEL_DUAL_gc = (0x02<<5),  /* Dual channel operation (S/H on both channels) */
+    /* Single channel operation (Channel A only) */
+    DAC_CHSEL_SINGLE_gc = (0x00<<5),  
+    /* Dual channel operation (S/H on both channels) */
+    DAC_CHSEL_DUAL_gc = (0x02<<5),  
 } DAC_CHSEL_t;
 
 /* Reference voltage selection */
@@ -1429,8 +1530,10 @@ typedef enum DAC_REFSEL_enum
 {
     DAC_REFSEL_INT1V_gc = (0x00<<3),  /* Internal 1V  */
     DAC_REFSEL_AVCC_gc = (0x01<<3),  /* Analog supply voltage */
-    DAC_REFSEL_AREFA_gc = (0x02<<3),  /* External reference on AREF on PORTA */
-    DAC_REFSEL_AREFB_gc = (0x03<<3),  /* External reference on AREF on PORTB */
+    /* External reference on AREF on PORTA */
+    DAC_REFSEL_AREFA_gc = (0x02<<3),  
+    /* External reference on AREF on PORTB */
+    DAC_REFSEL_AREFB_gc = (0x03<<3),  
 } DAC_REFSEL_t;
 
 /* Event channel selection */
@@ -1810,7 +1913,8 @@ typedef enum TWI_MASTER_TIMEOUT_enum
 typedef enum TWI_MASTER_CMD_enum
 {
     TWI_MASTER_CMD_NOACT_gc = (0x00<<0),  /* No Action */
-    TWI_MASTER_CMD_REPSTART_gc = (0x01<<0),  /* Issue Repeated Start Condition */
+    /* Issue Repeated Start Condition */
+    TWI_MASTER_CMD_REPSTART_gc = (0x01<<0),  
     TWI_MASTER_CMD_RECVTRANS_gc = (0x02<<0),  /* Receive or Transmit Data */
     TWI_MASTER_CMD_STOP_gc = (0x03<<0),  /* Issue Stop Condition */
 } TWI_MASTER_CMD_t;
@@ -1820,7 +1924,8 @@ typedef enum TWI_MASTER_BUSSTATE_enum
 {
     TWI_MASTER_BUSSTATE_UNKNOWN_gc = (0x00<<0),  /* Unknown Bus State */
     TWI_MASTER_BUSSTATE_IDLE_gc = (0x01<<0),  /* Bus is Idle */
-    TWI_MASTER_BUSSTATE_OWNER_gc = (0x02<<0),  /* This Module Controls The Bus */
+    /* This Module Controls The Bus */
+    TWI_MASTER_BUSSTATE_OWNER_gc = (0x02<<0),  
     TWI_MASTER_BUSSTATE_BUSY_gc = (0x03<<0),  /* The Bus is Busy */
 } TWI_MASTER_BUSSTATE_t;
 
@@ -1837,8 +1942,10 @@ typedef enum TWI_SLAVE_INTLVL_enum
 typedef enum TWI_SLAVE_CMD_enum
 {
     TWI_SLAVE_CMD_NOACT_gc = (0x00<<0),  /* No Action */
-    TWI_SLAVE_CMD_COMPTRANS_gc = (0x02<<0),  /* Used To Complete a Transaction */
-    TWI_SLAVE_CMD_RESPONSE_gc = (0x03<<0),  /* Used in Response to Address/Data Interrupt */
+    /* Used To Complete a Transaction */
+    TWI_SLAVE_CMD_COMPTRANS_gc = (0x02<<0),  
+    /* Used in Response to Address/Data Interrupt */
+    TWI_SLAVE_CMD_RESPONSE_gc = (0x03<<0), 
 } TWI_SLAVE_CMD_t;
 
 
@@ -2005,9 +2112,12 @@ typedef enum PORTCFG_CLKOUT_enum
 typedef enum PORTCFG_EVOUT_enum
 {
     PORTCFG_EVOUT_OFF_gc = (0x00<<4),  /* Event Output Disabled */
-    PORTCFG_EVOUT_PC7_gc = (0x01<<4),  /* Event Channel 7 Output on Port C pin 7 */
-    PORTCFG_EVOUT_PD7_gc = (0x02<<4),  /* Event Channel 7 Output on Port D pin 7 */
-    PORTCFG_EVOUT_PE7_gc = (0x03<<4),  /* Event Channel 7 Output on Port E pin 7 */
+    /* Event Channel 7 Output on Port C pin 7 */
+    PORTCFG_EVOUT_PC7_gc = (0x01<<4),  
+    /* Event Channel 7 Output on Port D pin 7 */
+    PORTCFG_EVOUT_PD7_gc = (0x02<<4),  
+    /* Event Channel 7 Output on Port E pin 7 */
+    PORTCFG_EVOUT_PE7_gc = (0x03<<4),  
 } PORTCFG_EVOUT_t;
 
 /* Port Interrupt 0 Level */
@@ -2032,7 +2142,8 @@ typedef enum PORT_INT1LVL_enum
 typedef enum PORT_OPC_enum
 {
     PORT_OPC_TOTEM_gc = (0x00<<3),  /* Totempole */
-    PORT_OPC_BUSKEEPER_gc = (0x01<<3),  /* Totempole w/ Bus keeper on Input and Output */
+    /* Totempole w/ Bus keeper on Input and Output */
+    PORT_OPC_BUSKEEPER_gc = (0x01<<3),  
     PORT_OPC_PULLDOWN_gc = (0x02<<3),  /* Totempole w/ Pull-down on Input */
     PORT_OPC_PULLUP_gc = (0x03<<3),  /* Totempole w/ Pull-up on Input */
     PORT_OPC_WIREDOR_gc = (0x04<<3),  /* Wired OR */
@@ -2244,7 +2355,8 @@ typedef enum TC_WGMODE_enum
     TC_WGMODE_FRQ_gc = (0x01<<0),  /* Frequency Generation Mode */
     TC_WGMODE_SS_gc = (0x03<<0),  /* Single Slope */
     TC_WGMODE_DS_T_gc = (0x05<<0),  /* Dual Slope, Update on TOP */
-    TC_WGMODE_DS_TB_gc = (0x06<<0),  /* Dual Slope, Update on TOP and BOTTOM */
+    /* Dual Slope, Update on TOP and BOTTOM */
+    TC_WGMODE_DS_TB_gc = (0x06<<0),  
     TC_WGMODE_DS_B_gc = (0x07<<0),  /* Dual Slope, Update on BOTTOM */
 } TC_WGMODE_t;
 
@@ -2349,9 +2461,12 @@ typedef enum AWEX_FDACT_enum
 typedef enum HIRES_HREN_enum
 {
     HIRES_HREN_NONE_gc = (0x00<<0),  /* No Fault Protection */
-    HIRES_HREN_TC0_gc = (0x01<<0),  /* Enable High Resolution on Timer/Counter 0 */
-    HIRES_HREN_TC1_gc = (0x02<<0),  /* Enable High Resolution on Timer/Counter 1 */
-    HIRES_HREN_BOTH_gc = (0x03<<0),  /* Enable High Resolution both Timer/Counters */
+    /* Enable High Resolution on Timer/Counter 0 */
+    HIRES_HREN_TC0_gc = (0x01<<0),  
+    /* Enable High Resolution on Timer/Counter 1 */
+    HIRES_HREN_TC1_gc = (0x02<<0),  
+    /* Enable High Resolution both Timer/Counters */
+    HIRES_HREN_BOTH_gc = (0x03<<0),  
 } HIRES_HREN_t;
 
 
@@ -2482,7 +2597,8 @@ IRCOM - IR Communication Module
 typedef struct IRCOM_struct
 {
     register8_t CTRL;  /* Control Register */
-    register8_t TXPLCTRL;  /* IrDA Transmitter Pulse Length Control Register */
+    /* IrDA Transmitter Pulse Length Control Register */
+    register8_t TXPLCTRL;  
     register8_t RXPLCTRL;  /* IrDA Receiver Pulse Length Control Register */
 } IRCOM_t;
 
@@ -2525,15 +2641,13 @@ typedef enum AES_INTLVL_enum
     AES_INTLVL_MED_gc = (0x02<<0),  /* Medium Level */
     AES_INTLVL_HI_gc = (0x03<<0),  /* High Level */
 } AES_INTLVL_t;
+/** @} */
 
-
-
-/*
-==========================================================================
-IO Module Instances. Mapped to memory.
-==========================================================================
-*/
-
+/**
+ * @name IO Module Instances. Mapped to Memory
+ * 
+ */
+/**@{**/
 #define GPIO    (*(GPIO_t *) 0x0000)  /* General Purpose IO Registers */
 #define VPORT0    (*(VPORT_t *) 0x0010)  /* Virtual Port 0 */
 #define VPORT1    (*(VPORT_t *) 0x0014)  /* Virtual Port 1 */
@@ -2583,35 +2697,47 @@ IO Module Instances. Mapped to memory.
 #define TCC1    (*(TC1_t *) 0x0840)  /* Timer/Counter C1 */
 #define AWEXC    (*(AWEX_t *) 0x0880)  /* Advanced Waveform Extension C */
 #define HIRESC    (*(HIRES_t *) 0x0890)  /* High-Resolution Extension C */
-#define USARTC0    (*(USART_t *) 0x08A0)  /* Universal Asynchronous Receiver-Transmitter C0 */
-#define USARTC1    (*(USART_t *) 0x08B0)  /* Universal Asynchronous Receiver-Transmitter C1 */
+/* Universal Asynchronous Receiver-Transmitter C0 */
+#define USARTC0    (*(USART_t *) 0x08A0)  
+/* Universal Asynchronous Receiver-Transmitter C1 */
+#define USARTC1    (*(USART_t *) 0x08B0)  
 #define SPIC    (*(SPI_t *) 0x08C0)  /* Serial Peripheral Interface C */
 #define IRCOM    (*(IRCOM_t *) 0x08F8)  /* IR Communication Module */
 #define TCD0    (*(TC0_t *) 0x0900)  /* Timer/Counter D0 */
 #define TCD1    (*(TC1_t *) 0x0940)  /* Timer/Counter D1 */
 #define HIRESD    (*(HIRES_t *) 0x0990)  /* High-Resolution Extension D */
-#define USARTD0    (*(USART_t *) 0x09A0)  /* Universal Asynchronous Receiver-Transmitter D0 */
-#define USARTD1    (*(USART_t *) 0x09B0)  /* Universal Asynchronous Receiver-Transmitter D1 */
+/* Universal Asynchronous Receiver-Transmitter D0 */
+#define USARTD0    (*(USART_t *) 0x09A0)  
+/* Universal Asynchronous Receiver-Transmitter D1 */
+#define USARTD1    (*(USART_t *) 0x09B0)  
 #define SPID    (*(SPI_t *) 0x09C0)  /* Serial Peripheral Interface D */
 #define TCE0    (*(TC0_t *) 0x0A00)  /* Timer/Counter E0 */
 #define TCE1    (*(TC1_t *) 0x0A40)  /* Timer/Counter E1 */
 #define AWEXE    (*(AWEX_t *) 0x0A80)  /* Advanced Waveform Extension E */
 #define HIRESE    (*(HIRES_t *) 0x0A90)  /* High-Resolution Extension E */
-#define USARTE0    (*(USART_t *) 0x0AA0)  /* Universal Asynchronous Receiver-Transmitter E0 */
-#define USARTE1    (*(USART_t *) 0x0AB0)  /* Universal Asynchronous Receiver-Transmitter E1 */
+/* Universal Asynchronous Receiver-Transmitter E0 */
+#define USARTE0    (*(USART_t *) 0x0AA0)  
+/* Universal Asynchronous Receiver-Transmitter E1 */
+#define USARTE1    (*(USART_t *) 0x0AB0)  
 #define SPIE    (*(SPI_t *) 0x0AC0)  /* Serial Peripheral Interface E */
 #define TCF0    (*(TC0_t *) 0x0B00)  /* Timer/Counter F0 */
 #define TCF1    (*(TC1_t *) 0x0B40)  /* Timer/Counter F1 */
 #define HIRESF    (*(HIRES_t *) 0x0B90)  /* High-Resolution Extension F */
-#define USARTF0    (*(USART_t *) 0x0BA0)  /* Universal Asynchronous Receiver-Transmitter F0 */
-#define USARTF1    (*(USART_t *) 0x0BB0)  /* Universal Asynchronous Receiver-Transmitter F1 */
+/* Universal Asynchronous Receiver-Transmitter F0 */
+#define USARTF0    (*(USART_t *) 0x0BA0)  
+/* Universal Asynchronous Receiver-Transmitter F1 */
+#define USARTF1    (*(USART_t *) 0x0BB0)  
 #define SPIF    (*(SPI_t *) 0x0BC0)  /* Serial Peripheral Interface F */
 
 
 #endif /* !defined (__ASSEMBLER__) */
+/** @} */
 
-
-/* ========== Flattened fully qualified IO register names ========== */
+/**
+ * @name Flattened Fully Qualified IO Register Names
+ * 
+ */
+/**@{**/
 
 /* GPIO - General Purpose IO Registers */
 #define GPIO_GPIO0  _SFR_MEM8(0x0000)
@@ -3629,11 +3755,13 @@ IO Module Instances. Mapped to memory.
 #define SPIF_INTCTRL  _SFR_MEM8(0x0BC1)
 #define SPIF_STATUS  _SFR_MEM8(0x0BC2)
 #define SPIF_DATA  _SFR_MEM8(0x0BC3)
+/** @} */
 
-
-
-/*================== Bitfield Definitions ================== */
-
+/**
+ * @name Bitfield Definitions
+ * 
+ */
+/**@{**/
 /* XOCD - On-Chip Debug System */
 /* OCD.OCDR1  bit masks and bit positions */
 #define OCD_OCDRD_bm  0x01  /* OCDR Dirty bit mask. */
@@ -3714,12 +3842,18 @@ IO Module Instances. Mapped to memory.
 #define CLK_PSADIV4_bm  (1<<6)  /* Prescaler A Division Factor bit 4 mask. */
 #define CLK_PSADIV4_bp  6  /* Prescaler A Division Factor bit 4 position. */
 
-#define CLK_PSBCDIV_gm  0x03  /* Prescaler B and C Division factor group mask. */
-#define CLK_PSBCDIV_gp  0  /* Prescaler B and C Division factor group position. */
-#define CLK_PSBCDIV0_bm  (1<<0)  /* Prescaler B and C Division factor bit 0 mask. */
-#define CLK_PSBCDIV0_bp  0  /* Prescaler B and C Division factor bit 0 position. */
-#define CLK_PSBCDIV1_bm  (1<<1)  /* Prescaler B and C Division factor bit 1 mask. */
-#define CLK_PSBCDIV1_bp  1  /* Prescaler B and C Division factor bit 1 position. */
+/* Prescaler B and C Division factor group mask. */
+#define CLK_PSBCDIV_gm  0x03  
+/* Prescaler B and C Division factor group position. */
+#define CLK_PSBCDIV_gp  0  
+/* Prescaler B and C Division factor bit 0 mask. */
+#define CLK_PSBCDIV0_bm  (1<<0)  
+/* Prescaler B and C Division factor bit 0 position. */
+#define CLK_PSBCDIV0_bp  0  
+/* Prescaler B and C Division factor bit 1 mask. */
+#define CLK_PSBCDIV1_bm  (1<<1) 
+/* Prescaler B and C Division factor bit 1 position. */
+#define CLK_PSBCDIV1_bp  1  
 
 
 /* CLK.LOCK  bit masks and bit positions */
@@ -3895,14 +4029,20 @@ IO Module Instances. Mapped to memory.
 #define OSC_XOSCEN_bm  0x08  /* External Oscillator Enable bit mask. */
 #define OSC_XOSCEN_bp  3  /* External Oscillator Enable bit position. */
 
-#define OSC_RC32KEN_bm  0x04  /* Internal 32kHz RC Oscillator Enable bit mask. */
-#define OSC_RC32KEN_bp  2  /* Internal 32kHz RC Oscillator Enable bit position. */
+/* Internal 32kHz RC Oscillator Enable bit mask. */
+#define OSC_RC32KEN_bm  0x04 
+/* Internal 32kHz RC Oscillator Enable bit position. */
+#define OSC_RC32KEN_bp  2  
 
-#define OSC_RC32MEN_bm  0x02  /* Internal 32MHz RC Oscillator Enable bit mask. */
-#define OSC_RC32MEN_bp  1  /* Internal 32MHz RC Oscillator Enable bit position. */
+/* Internal 32MHz RC Oscillator Enable bit mask. */
+#define OSC_RC32MEN_bm  0x02  
+/* Internal 32MHz RC Oscillator Enable bit position. */
+#define OSC_RC32MEN_bp  1  
 
-#define OSC_RC2MEN_bm  0x01  /* Internal 2MHz RC Oscillator Enable bit mask. */
-#define OSC_RC2MEN_bp  0  /* Internal 2MHz RC Oscillator Enable bit position. */
+/* Internal 2MHz RC Oscillator Enable bit mask. */
+#define OSC_RC2MEN_bm  0x01  
+/* Internal 2MHz RC Oscillator Enable bit position. */
+#define OSC_RC2MEN_bp  0  
 
 
 /* OSC.STATUS  bit masks and bit positions */
@@ -3912,14 +4052,20 @@ IO Module Instances. Mapped to memory.
 #define OSC_XOSCRDY_bm  0x08  /* External Oscillator Ready bit mask. */
 #define OSC_XOSCRDY_bp  3  /* External Oscillator Ready bit position. */
 
-#define OSC_RC32KRDY_bm  0x04  /* Internal 32kHz RC Oscillator Ready bit mask. */
-#define OSC_RC32KRDY_bp  2  /* Internal 32kHz RC Oscillator Ready bit position. */
+/* Internal 32kHz RC Oscillator Ready bit mask. */
+#define OSC_RC32KRDY_bm  0x04 
+/* Internal 32kHz RC Oscillator Ready bit position. */
+#define OSC_RC32KRDY_bp  2  
 
-#define OSC_RC32MRDY_bm  0x02  /* Internal 32MHz RC Oscillator Ready bit mask. */
-#define OSC_RC32MRDY_bp  1  /* Internal 32MHz RC Oscillator Ready bit position. */
+/* Internal 32MHz RC Oscillator Ready bit mask. */
+#define OSC_RC32MRDY_bm  0x02 
+/* Internal 32MHz RC Oscillator Ready bit position. */
+#define OSC_RC32MRDY_bp  1  
 
-#define OSC_RC2MRDY_bm  0x01  /* Internal 2MHz RC Oscillator Ready bit mask. */
-#define OSC_RC2MRDY_bp  0  /* Internal 2MHz RC Oscillator Ready bit position. */
+/* Internal 2MHz RC Oscillator Ready bit mask. */
+#define OSC_RC2MRDY_bm  0x01  
+/* Internal 2MHz RC Oscillator Ready bit position. */
+#define OSC_RC2MRDY_bp  0  
 
 
 /* OSC.XOSCCTRL  bit masks and bit positions */
@@ -3933,21 +4079,33 @@ IO Module Instances. Mapped to memory.
 #define OSC_X32KLPM_bm  0x20  /* 32kHz XTAL OSC Low-power Mode bit mask. */
 #define OSC_X32KLPM_bp  5  /* 32kHz XTAL OSC Low-power Mode bit position. */
 
-#define OSC_XOSCSEL_gm  0x0F  /* External Oscillator Selection and Startup Time group mask. */
-#define OSC_XOSCSEL_gp  0  /* External Oscillator Selection and Startup Time group position. */
-#define OSC_XOSCSEL0_bm  (1<<0)  /* External Oscillator Selection and Startup Time bit 0 mask. */
-#define OSC_XOSCSEL0_bp  0  /* External Oscillator Selection and Startup Time bit 0 position. */
-#define OSC_XOSCSEL1_bm  (1<<1)  /* External Oscillator Selection and Startup Time bit 1 mask. */
-#define OSC_XOSCSEL1_bp  1  /* External Oscillator Selection and Startup Time bit 1 position. */
-#define OSC_XOSCSEL2_bm  (1<<2)  /* External Oscillator Selection and Startup Time bit 2 mask. */
-#define OSC_XOSCSEL2_bp  2  /* External Oscillator Selection and Startup Time bit 2 position. */
-#define OSC_XOSCSEL3_bm  (1<<3)  /* External Oscillator Selection and Startup Time bit 3 mask. */
-#define OSC_XOSCSEL3_bp  3  /* External Oscillator Selection and Startup Time bit 3 position. */
+/* External Oscillator Selection and Startup Time group mask. */
+#define OSC_XOSCSEL_gm  0x0F  
+/* External Oscillator Selection and Startup Time group position. */
+#define OSC_XOSCSEL_gp  0
+/* External Oscillator Selection and Startup Time bit 0 mask. */
+#define OSC_XOSCSEL0_bm  (1<<0) 
+/* External Oscillator Selection and Startup Time bit 0 position. */
+#define OSC_XOSCSEL0_bp  0  
+/* External Oscillator Selection and Startup Time bit 1 mask. */
+#define OSC_XOSCSEL1_bm  (1<<1)  
+/* External Oscillator Selection and Startup Time bit 1 position. */
+#define OSC_XOSCSEL1_bp  1 
+/* External Oscillator Selection and Startup Time bit 2 mask. */
+#define OSC_XOSCSEL2_bm  (1<<2)  
+/* External Oscillator Selection and Startup Time bit 2 position. */
+#define OSC_XOSCSEL2_bp  2  
+/* External Oscillator Selection and Startup Time bit 3 mask. */
+#define OSC_XOSCSEL3_bm  (1<<3)  
+/* External Oscillator Selection and Startup Time bit 3 position. */
+#define OSC_XOSCSEL3_bp  3  
 
 
 /* OSC.XOSCFAIL  bit masks and bit positions */
-#define OSC_XOSCFDIF_bm  0x02  /* Failure Detection Interrupt Flag bit mask. */
-#define OSC_XOSCFDIF_bp  1  /* Failure Detection Interrupt Flag bit position. */
+/* Failure Detection Interrupt Flag bit mask. */
+#define OSC_XOSCFDIF_bm  0x02  
+/* Failure Detection Interrupt Flag bit position. */
+#define OSC_XOSCFDIF_bp  1  
 
 #define OSC_XOSCFDEN_bm  0x01  /* Failure Detection Enable bit mask. */
 #define OSC_XOSCFDEN_bp  0  /* Failure Detection Enable bit position. */
@@ -4033,8 +4191,10 @@ IO Module Instances. Mapped to memory.
 #define RST_SRF_bm  0x20  /* Software Reset Flag bit mask. */
 #define RST_SRF_bp  5  /* Software Reset Flag bit position. */
 
-#define RST_PDIRF_bm  0x10  /* Programming and Debug Interface Interface Reset Flag bit mask. */
-#define RST_PDIRF_bp  4  /* Programming and Debug Interface Interface Reset Flag bit position. */
+/* Programming and Debug Interface Interface Reset Flag bit mask. */
+#define RST_PDIRF_bm  0x10  
+/* Programming and Debug Interface Interface Reset Flag bit position. */
+#define RST_PDIRF_bp  4  
 
 #define RST_WDRF_bm  0x08  /* Watchdog Reset Flag bit mask. */
 #define RST_WDRF_bp  3  /* Watchdog Reset Flag bit position. */
@@ -4128,8 +4288,10 @@ IO Module Instances. Mapped to memory.
 #define PMIC_HILVLEX_bm  0x04  /* High Level Interrupt Executing bit mask. */
 #define PMIC_HILVLEX_bp  2  /* High Level Interrupt Executing bit position. */
 
-#define PMIC_MEDLVLEX_bm  0x02  /* Medium Level Interrupt Executing bit mask. */
-#define PMIC_MEDLVLEX_bp  1  /* Medium Level Interrupt Executing bit position. */
+/* Medium Level Interrupt Executing bit mask. */
+#define PMIC_MEDLVLEX_bm  0x02  
+/* Medium Level Interrupt Executing bit position. */
+#define PMIC_MEDLVLEX_bp  1
 
 #define PMIC_LOLVLEX_bm  0x01  /* Low Level Interrupt Executing bit mask. */
 #define PMIC_LOLVLEX_bp  0  /* Low Level Interrupt Executing bit position. */
@@ -4166,8 +4328,10 @@ IO Module Instances. Mapped to memory.
 #define DMA_CH_TRFREQ_bm  0x10  /* Channel Transfer Request bit mask. */
 #define DMA_CH_TRFREQ_bp  4  /* Channel Transfer Request bit position. */
 
-#define DMA_CH_SINGLE_bm  0x04  /* Channel Single Shot Data Transfer bit mask. */
-#define DMA_CH_SINGLE_bp  2  /* Channel Single Shot Data Transfer bit position. */
+/* Channel Single Shot Data Transfer bit mask. */
+#define DMA_CH_SINGLE_bm  0x04  
+/* Channel Single Shot Data Transfer bit position. */
+#define DMA_CH_SINGLE_bp  2  
 
 #define DMA_CH_BURSTLEN_gm  0x03  /* Channel Transfer Mode group mask. */
 #define DMA_CH_BURSTLEN_gp  0  /* Channel Transfer Mode group position. */
@@ -4184,55 +4348,93 @@ IO Module Instances. Mapped to memory.
 #define DMA_CH_CHPEND_bm  0x40  /* Block Transfer Pending bit mask. */
 #define DMA_CH_CHPEND_bp  6  /* Block Transfer Pending bit position. */
 
-#define DMA_CH_ERRIF_bm  0x20  /* Block Transfer Error Interrupt Flag bit mask. */
-#define DMA_CH_ERRIF_bp  5  /* Block Transfer Error Interrupt Flag bit position. */
+/* Block Transfer Error Interrupt Flag bit mask. */
+#define DMA_CH_ERRIF_bm  0x20  
+/* Block Transfer Error Interrupt Flag bit position. */
+#define DMA_CH_ERRIF_bp  5  
 
-#define DMA_CH_TRNIF_bm  0x10  /* Transaction Complete Interrup Flag bit mask. */
-#define DMA_CH_TRNIF_bp  4  /* Transaction Complete Interrup Flag bit position. */
+/* Transaction Complete Interrup Flag bit mask. */
+#define DMA_CH_TRNIF_bm  0x10  
+/* Transaction Complete Interrup Flag bit position. */
+#define DMA_CH_TRNIF_bp  4  
 
-#define DMA_CH_ERRINTLVL_gm  0x0C  /* Transfer Error Interrupt Level group mask. */
-#define DMA_CH_ERRINTLVL_gp  2  /* Transfer Error Interrupt Level group position. */
-#define DMA_CH_ERRINTLVL0_bm  (1<<2)  /* Transfer Error Interrupt Level bit 0 mask. */
-#define DMA_CH_ERRINTLVL0_bp  2  /* Transfer Error Interrupt Level bit 0 position. */
-#define DMA_CH_ERRINTLVL1_bm  (1<<3)  /* Transfer Error Interrupt Level bit 1 mask. */
-#define DMA_CH_ERRINTLVL1_bp  3  /* Transfer Error Interrupt Level bit 1 position. */
+/* Transfer Error Interrupt Level group mask. */
+#define DMA_CH_ERRINTLVL_gm  0x0C  
+/* Transfer Error Interrupt Level group position. */
+#define DMA_CH_ERRINTLVL_gp  2  
+/* Transfer Error Interrupt Level bit 0 mask. */
+#define DMA_CH_ERRINTLVL0_bm  (1<<2)  
+/* Transfer Error Interrupt Level bit 0 position. */
+#define DMA_CH_ERRINTLVL0_bp  2  
+/* Transfer Error Interrupt Level bit 1 mask. */
+#define DMA_CH_ERRINTLVL1_bm  (1<<3)  
+ /* Transfer Error Interrupt Level bit 1 position. */
+#define DMA_CH_ERRINTLVL1_bp  3 
 
-#define DMA_CH_TRNINTLVL_gm  0x03  /* Transaction Complete Interrupt Level group mask. */
-#define DMA_CH_TRNINTLVL_gp  0  /* Transaction Complete Interrupt Level group position. */
-#define DMA_CH_TRNINTLVL0_bm  (1<<0)  /* Transaction Complete Interrupt Level bit 0 mask. */
-#define DMA_CH_TRNINTLVL0_bp  0  /* Transaction Complete Interrupt Level bit 0 position. */
-#define DMA_CH_TRNINTLVL1_bm  (1<<1)  /* Transaction Complete Interrupt Level bit 1 mask. */
-#define DMA_CH_TRNINTLVL1_bp  1  /* Transaction Complete Interrupt Level bit 1 position. */
+/* Transaction Complete Interrupt Level group mask. */
+#define DMA_CH_TRNINTLVL_gm  0x03  
+/* Transaction Complete Interrupt Level group position. */
+#define DMA_CH_TRNINTLVL_gp  0  
+/* Transaction Complete Interrupt Level bit 0 mask. */
+#define DMA_CH_TRNINTLVL0_bm  (1<<0)  
+/* Transaction Complete Interrupt Level bit 0 position. */
+#define DMA_CH_TRNINTLVL0_bp  0  
+/* Transaction Complete Interrupt Level bit 1 mask. */
+#define DMA_CH_TRNINTLVL1_bm  (1<<1)  
+/* Transaction Complete Interrupt Level bit 1 position. */
+#define DMA_CH_TRNINTLVL1_bp  1  
 
 
 /* DMA_CH.ADDRCTRL  bit masks and bit positions */
-#define DMA_CH_SRCRELOAD_gm  0xC0  /* Channel Source Address Reload group mask. */
-#define DMA_CH_SRCRELOAD_gp  6  /* Channel Source Address Reload group position. */
-#define DMA_CH_SRCRELOAD0_bm  (1<<6)  /* Channel Source Address Reload bit 0 mask. */
-#define DMA_CH_SRCRELOAD0_bp  6  /* Channel Source Address Reload bit 0 position. */
-#define DMA_CH_SRCRELOAD1_bm  (1<<7)  /* Channel Source Address Reload bit 1 mask. */
-#define DMA_CH_SRCRELOAD1_bp  7  /* Channel Source Address Reload bit 1 position. */
+/* Channel Source Address Reload group mask. */
+#define DMA_CH_SRCRELOAD_gm  0xC0  
+/* Channel Source Address Reload group position. */
+#define DMA_CH_SRCRELOAD_gp  6  
+/* Channel Source Address Reload bit 0 mask. */
+#define DMA_CH_SRCRELOAD0_bm  (1<<6)  
+/* Channel Source Address Reload bit 0 position. */
+#define DMA_CH_SRCRELOAD0_bp  6  
+/* Channel Source Address Reload bit 1 mask. */
+#define DMA_CH_SRCRELOAD1_bm  (1<<7)  
+/* Channel Source Address Reload bit 1 position. */
+#define DMA_CH_SRCRELOAD1_bp  7  
 
 #define DMA_CH_SRCDIR_gm  0x30  /* Channel Source Address Mode group mask. */
 #define DMA_CH_SRCDIR_gp  4  /* Channel Source Address Mode group position. */
-#define DMA_CH_SRCDIR0_bm  (1<<4)  /* Channel Source Address Mode bit 0 mask. */
-#define DMA_CH_SRCDIR0_bp  4  /* Channel Source Address Mode bit 0 position. */
-#define DMA_CH_SRCDIR1_bm  (1<<5)  /* Channel Source Address Mode bit 1 mask. */
-#define DMA_CH_SRCDIR1_bp  5  /* Channel Source Address Mode bit 1 position. */
+/* Channel Source Address Mode bit 0 mask. */
+#define DMA_CH_SRCDIR0_bm  (1<<4)  
+/* Channel Source Address Mode bit 0 position. */
+#define DMA_CH_SRCDIR0_bp  4  
+/* Channel Source Address Mode bit 1 mask. */
+#define DMA_CH_SRCDIR1_bm  (1<<5)  
+/* Channel Source Address Mode bit 1 position. */
+#define DMA_CH_SRCDIR1_bp  5  
 
-#define DMA_CH_DESTRELOAD_gm  0x0C  /* Channel Destination Address Reload group mask. */
-#define DMA_CH_DESTRELOAD_gp  2  /* Channel Destination Address Reload group position. */
-#define DMA_CH_DESTRELOAD0_bm  (1<<2)  /* Channel Destination Address Reload bit 0 mask. */
-#define DMA_CH_DESTRELOAD0_bp  2  /* Channel Destination Address Reload bit 0 position. */
-#define DMA_CH_DESTRELOAD1_bm  (1<<3)  /* Channel Destination Address Reload bit 1 mask. */
-#define DMA_CH_DESTRELOAD1_bp  3  /* Channel Destination Address Reload bit 1 position. */
+/* Channel Destination Address Reload group mask. */
+#define DMA_CH_DESTRELOAD_gm  0x0C  
+/* Channel Destination Address Reload group position. */
+#define DMA_CH_DESTRELOAD_gp  2  
+/* Channel Destination Address Reload bit 0 mask. */
+#define DMA_CH_DESTRELOAD0_bm  (1<<2)  
+/* Channel Destination Address Reload bit 0 position. */
+#define DMA_CH_DESTRELOAD0_bp  2  
+/* Channel Destination Address Reload bit 1 mask. */
+#define DMA_CH_DESTRELOAD1_bm  (1<<3)  
+/* Channel Destination Address Reload bit 1 position. */
+#define DMA_CH_DESTRELOAD1_bp  3  
 
-#define DMA_CH_DESTDIR_gm  0x03  /* Channel Destination Address Mode group mask. */
-#define DMA_CH_DESTDIR_gp  0  /* Channel Destination Address Mode group position. */
-#define DMA_CH_DESTDIR0_bm  (1<<0)  /* Channel Destination Address Mode bit 0 mask. */
-#define DMA_CH_DESTDIR0_bp  0  /* Channel Destination Address Mode bit 0 position. */
-#define DMA_CH_DESTDIR1_bm  (1<<1)  /* Channel Destination Address Mode bit 1 mask. */
-#define DMA_CH_DESTDIR1_bp  1  /* Channel Destination Address Mode bit 1 position. */
+/* Channel Destination Address Mode group mask. */
+#define DMA_CH_DESTDIR_gm  0x03  
+/* Channel Destination Address Mode group position. */
+#define DMA_CH_DESTDIR_gp  0  
+/* Channel Destination Address Mode bit 0 mask. */
+#define DMA_CH_DESTDIR0_bm  (1<<0)  
+/* Channel Destination Address Mode bit 0 position. */
+#define DMA_CH_DESTDIR0_bp  0  
+/* Channel Destination Address Mode bit 1 mask. */
+#define DMA_CH_DESTDIR1_bm  (1<<1)  
+/* Channel Destination Address Mode bit 1 position. */
+#define DMA_CH_DESTDIR1_bp  1  
 
 
 /* DMA_CH.TRIGSRC  bit masks and bit positions */
@@ -4279,29 +4481,45 @@ IO Module Instances. Mapped to memory.
 
 
 /* DMA.INTFLAGS  bit masks and bit positions */
-#define DMA_CH3ERRIF_bm  0x80  /* Channel 3 Block Transfer Error Interrupt Flag bit mask. */
-#define DMA_CH3ERRIF_bp  7  /* Channel 3 Block Transfer Error Interrupt Flag bit position. */
+/* Channel 3 Block Transfer Error Interrupt Flag bit mask. */
+#define DMA_CH3ERRIF_bm  0x80  
+/* Channel 3 Block Transfer Error Interrupt Flag bit position. */
+#define DMA_CH3ERRIF_bp  7  
 
-#define DMA_CH2ERRIF_bm  0x40  /* Channel 2 Block Transfer Error Interrupt Flag bit mask. */
-#define DMA_CH2ERRIF_bp  6  /* Channel 2 Block Transfer Error Interrupt Flag bit position. */
+/* Channel 2 Block Transfer Error Interrupt Flag bit mask. */
+#define DMA_CH2ERRIF_bm  0x40  
+/* Channel 2 Block Transfer Error Interrupt Flag bit position. */
+#define DMA_CH2ERRIF_bp  6  
 
-#define DMA_CH1ERRIF_bm  0x20  /* Channel 1 Block Transfer Error Interrupt Flag bit mask. */
-#define DMA_CH1ERRIF_bp  5  /* Channel 1 Block Transfer Error Interrupt Flag bit position. */
+/* Channel 1 Block Transfer Error Interrupt Flag bit mask. */
+#define DMA_CH1ERRIF_bm  0x20  
+/* Channel 1 Block Transfer Error Interrupt Flag bit position. */
+#define DMA_CH1ERRIF_bp  5  
 
-#define DMA_CH0ERRIF_bm  0x10  /* Channel 0 Block Transfer Error Interrupt Flag bit mask. */
-#define DMA_CH0ERRIF_bp  4  /* Channel 0 Block Transfer Error Interrupt Flag bit position. */
+/* Channel 0 Block Transfer Error Interrupt Flag bit mask. */
+#define DMA_CH0ERRIF_bm  0x10  
+/* Channel 0 Block Transfer Error Interrupt Flag bit position. */
+#define DMA_CH0ERRIF_bp  4  
 
-#define DMA_CH3TRNIF_bm  0x08  /* Channel 3 Transaction Complete Interrupt Flag bit mask. */
-#define DMA_CH3TRNIF_bp  3  /* Channel 3 Transaction Complete Interrupt Flag bit position. */
+/* Channel 3 Transaction Complete Interrupt Flag bit mask. */
+#define DMA_CH3TRNIF_bm  0x08  
+/* Channel 3 Transaction Complete Interrupt Flag bit position. */
+#define DMA_CH3TRNIF_bp  3  
 
-#define DMA_CH2TRNIF_bm  0x04  /* Channel 2 Transaction Complete Interrupt Flag bit mask. */
-#define DMA_CH2TRNIF_bp  2  /* Channel 2 Transaction Complete Interrupt Flag bit position. */
+/* Channel 2 Transaction Complete Interrupt Flag bit mask. */
+#define DMA_CH2TRNIF_bm  0x04  
+/* Channel 2 Transaction Complete Interrupt Flag bit position. */
+#define DMA_CH2TRNIF_bp  2  
 
-#define DMA_CH1TRNIF_bm  0x02  /* Channel 1 Transaction Complete Interrupt Flag bit mask. */
-#define DMA_CH1TRNIF_bp  1  /* Channel 1 Transaction Complete Interrupt Flag bit position. */
+/* Channel 1 Transaction Complete Interrupt Flag bit mask. */
+#define DMA_CH1TRNIF_bm  0x02  
+/* Channel 1 Transaction Complete Interrupt Flag bit position. */
+#define DMA_CH1TRNIF_bp  1 
 
-#define DMA_CH0TRNIF_bm  0x01  /* Channel 0 Transaction Complete Interrupt Flag bit mask. */
-#define DMA_CH0TRNIF_bp  0  /* Channel 0 Transaction Complete Interrupt Flag bit position. */
+/* Channel 0 Transaction Complete Interrupt Flag bit mask. */
+#define DMA_CH0TRNIF_bm  0x01  
+/* Channel 0 Transaction Complete Interrupt Flag bit position. */
+#define DMA_CH0TRNIF_bp  0  
 
 
 /* DMA.STATUS  bit masks and bit positions */
@@ -4318,16 +4536,20 @@ IO Module Instances. Mapped to memory.
 #define DMA_CH0BUSY_bp  4  /* Channel 0 Block Transfer Busy bit position. */
 
 #define DMA_CH3PEND_bm  0x08  /* Channel 3 Block Transfer Pending bit mask. */
-#define DMA_CH3PEND_bp  3  /* Channel 3 Block Transfer Pending bit position. */
+/* Channel 3 Block Transfer Pending bit position. */
+#define DMA_CH3PEND_bp  3  
 
 #define DMA_CH2PEND_bm  0x04  /* Channel 2 Block Transfer Pending bit mask. */
-#define DMA_CH2PEND_bp  2  /* Channel 2 Block Transfer Pending bit position. */
+/* Channel 2 Block Transfer Pending bit position. */
+#define DMA_CH2PEND_bp  2  
 
 #define DMA_CH1PEND_bm  0x02  /* Channel 1 Block Transfer Pending bit mask. */
-#define DMA_CH1PEND_bp  1  /* Channel 1 Block Transfer Pending bit position. */
+/* Channel 1 Block Transfer Pending bit position. */
+#define DMA_CH1PEND_bp  1  
 
 #define DMA_CH0PEND_bm  0x01  /* Channel 0 Block Transfer Pending bit mask. */
-#define DMA_CH0PEND_bp  0  /* Channel 0 Block Transfer Pending bit position. */
+/* Channel 0 Block Transfer Pending bit position. */
+#define DMA_CH0PEND_bp  0  
 
 
 /* EVSYS - Event System */
@@ -4500,12 +4722,18 @@ IO Module Instances. Mapped to memory.
 
 
 /* EVSYS.CH0CTRL  bit masks and bit positions */
-#define EVSYS_QDIRM_gm  0x60  /* Quadrature Decoder Index Recognition Mode group mask. */
-#define EVSYS_QDIRM_gp  5  /* Quadrature Decoder Index Recognition Mode group position. */
-#define EVSYS_QDIRM0_bm  (1<<5)  /* Quadrature Decoder Index Recognition Mode bit 0 mask. */
-#define EVSYS_QDIRM0_bp  5  /* Quadrature Decoder Index Recognition Mode bit 0 position. */
-#define EVSYS_QDIRM1_bm  (1<<6)  /* Quadrature Decoder Index Recognition Mode bit 1 mask. */
-#define EVSYS_QDIRM1_bp  6  /* Quadrature Decoder Index Recognition Mode bit 1 position. */
+/* Quadrature Decoder Index Recognition Mode group mask. */
+#define EVSYS_QDIRM_gm  0x60  
+/* Quadrature Decoder Index Recognition Mode group position. */
+#define EVSYS_QDIRM_gp  5  
+/* Quadrature Decoder Index Recognition Mode bit 0 mask. */
+#define EVSYS_QDIRM0_bm  (1<<5)  
+/* Quadrature Decoder Index Recognition Mode bit 0 position. */
+#define EVSYS_QDIRM0_bp  5  
+/* Quadrature Decoder Index Recognition Mode bit 1 mask. */
+#define EVSYS_QDIRM1_bm  (1<<6)  
+/* Quadrature Decoder Index Recognition Mode bit 1 position. */
+#define EVSYS_QDIRM1_bp  6  
 
 #define EVSYS_QDIEN_bm  0x10  /* Quadrature Decoder Index Enable bit mask. */
 #define EVSYS_QDIEN_bp  4  /* Quadrature Decoder Index Enable bit position. */
@@ -4691,7 +4919,8 @@ IO Module Instances. Mapped to memory.
 #define NVM_FBUSY_bp  6  /* Flash Memory Busy bit position. */
 
 #define NVM_EELOAD_bm  0x02  /* EEPROM Page Buffer Active Loading bit mask. */
-#define NVM_EELOAD_bp  1  /* EEPROM Page Buffer Active Loading bit position. */
+/* EEPROM Page Buffer Active Loading bit position. */
+#define NVM_EELOAD_bp  1  
 
 #define NVM_FLOAD_bm  0x01  /* Flash Page Buffer Active Loading bit mask. */
 #define NVM_FLOAD_bp  0  /* Flash Page Buffer Active Loading bit position. */
@@ -4705,19 +4934,31 @@ IO Module Instances. Mapped to memory.
 #define NVM_BLBB1_bm  (1<<7)  /* Boot Lock Bits - Boot Section bit 1 mask. */
 #define NVM_BLBB1_bp  7  /* Boot Lock Bits - Boot Section bit 1 position. */
 
-#define NVM_BLBA_gm  0x30  /* Boot Lock Bits - Application Section group mask. */
-#define NVM_BLBA_gp  4  /* Boot Lock Bits - Application Section group position. */
-#define NVM_BLBA0_bm  (1<<4)  /* Boot Lock Bits - Application Section bit 0 mask. */
-#define NVM_BLBA0_bp  4  /* Boot Lock Bits - Application Section bit 0 position. */
-#define NVM_BLBA1_bm  (1<<5)  /* Boot Lock Bits - Application Section bit 1 mask. */
-#define NVM_BLBA1_bp  5  /* Boot Lock Bits - Application Section bit 1 position. */
+/* Boot Lock Bits - Application Section group mask. */
+#define NVM_BLBA_gm  0x30  
+/* Boot Lock Bits - Application Section group position. */
+#define NVM_BLBA_gp  4  
+ /* Boot Lock Bits - Application Section bit 0 mask. */
+#define NVM_BLBA0_bm  (1<<4) 
+/* Boot Lock Bits - Application Section bit 0 position. */
+#define NVM_BLBA0_bp  4  
+/* Boot Lock Bits - Application Section bit 1 mask. */
+#define NVM_BLBA1_bm  (1<<5)  
+/* Boot Lock Bits - Application Section bit 1 position. */
+#define NVM_BLBA1_bp  5  
 
-#define NVM_BLBAT_gm  0x0C  /* Boot Lock Bits - Application Table group mask. */
-#define NVM_BLBAT_gp  2  /* Boot Lock Bits - Application Table group position. */
-#define NVM_BLBAT0_bm  (1<<2)  /* Boot Lock Bits - Application Table bit 0 mask. */
-#define NVM_BLBAT0_bp  2  /* Boot Lock Bits - Application Table bit 0 position. */
-#define NVM_BLBAT1_bm  (1<<3)  /* Boot Lock Bits - Application Table bit 1 mask. */
-#define NVM_BLBAT1_bp  3  /* Boot Lock Bits - Application Table bit 1 position. */
+/* Boot Lock Bits - Application Table group mask. */
+#define NVM_BLBAT_gm  0x0C  
+/* Boot Lock Bits - Application Table group position. */
+#define NVM_BLBAT_gp  2  
+/* Boot Lock Bits - Application Table bit 0 mask. */
+#define NVM_BLBAT0_bm  (1<<2)  
+/* Boot Lock Bits - Application Table bit 0 position. */
+#define NVM_BLBAT0_bp  2  
+/* Boot Lock Bits - Application Table bit 1 mask. */
+#define NVM_BLBAT1_bm  (1<<3)  
+/* Boot Lock Bits - Application Table bit 1 position. */
+#define NVM_BLBAT1_bp  3  
 
 #define NVM_LB_gm  0x03  /* Lock Bits group mask. */
 #define NVM_LB_gp  0  /* Lock Bits group position. */
@@ -4728,26 +4969,44 @@ IO Module Instances. Mapped to memory.
 
 
 /* NVM_LOCKBITS.LOCKBITS  bit masks and bit positions */
-#define NVM_LOCKBITS_BLBB_gm  0xC0  /* Boot Lock Bits - Boot Section group mask. */
-#define NVM_LOCKBITS_BLBB_gp  6  /* Boot Lock Bits - Boot Section group position. */
-#define NVM_LOCKBITS_BLBB0_bm  (1<<6)  /* Boot Lock Bits - Boot Section bit 0 mask. */
-#define NVM_LOCKBITS_BLBB0_bp  6  /* Boot Lock Bits - Boot Section bit 0 position. */
-#define NVM_LOCKBITS_BLBB1_bm  (1<<7)  /* Boot Lock Bits - Boot Section bit 1 mask. */
-#define NVM_LOCKBITS_BLBB1_bp  7  /* Boot Lock Bits - Boot Section bit 1 position. */
+/* Boot Lock Bits - Boot Section group mask. */
+#define NVM_LOCKBITS_BLBB_gm  0xC0  
+/* Boot Lock Bits - Boot Section group position. */
+#define NVM_LOCKBITS_BLBB_gp  6  
+/* Boot Lock Bits - Boot Section bit 0 mask. */
+#define NVM_LOCKBITS_BLBB0_bm  (1<<6)  
+ /* Boot Lock Bits - Boot Section bit 0 position. */
+#define NVM_LOCKBITS_BLBB0_bp  6 
+/* Boot Lock Bits - Boot Section bit 1 mask. */
+#define NVM_LOCKBITS_BLBB1_bm  (1<<7)  
+/* Boot Lock Bits - Boot Section bit 1 position. */
+#define NVM_LOCKBITS_BLBB1_bp  7  
 
-#define NVM_LOCKBITS_BLBA_gm  0x30  /* Boot Lock Bits - Application Section group mask. */
-#define NVM_LOCKBITS_BLBA_gp  4  /* Boot Lock Bits - Application Section group position. */
-#define NVM_LOCKBITS_BLBA0_bm  (1<<4)  /* Boot Lock Bits - Application Section bit 0 mask. */
-#define NVM_LOCKBITS_BLBA0_bp  4  /* Boot Lock Bits - Application Section bit 0 position. */
-#define NVM_LOCKBITS_BLBA1_bm  (1<<5)  /* Boot Lock Bits - Application Section bit 1 mask. */
-#define NVM_LOCKBITS_BLBA1_bp  5  /* Boot Lock Bits - Application Section bit 1 position. */
+/* Boot Lock Bits - Application Section group mask. */
+#define NVM_LOCKBITS_BLBA_gm  0x30  
+/* Boot Lock Bits - Application Section group position. */
+#define NVM_LOCKBITS_BLBA_gp  4  
+/* Boot Lock Bits - Application Section bit 0 mask. */
+#define NVM_LOCKBITS_BLBA0_bm  (1<<4)  
+/* Boot Lock Bits - Application Section bit 0 position. */
+#define NVM_LOCKBITS_BLBA0_bp  4  
+/* Boot Lock Bits - Application Section bit 1 mask. */
+#define NVM_LOCKBITS_BLBA1_bm  (1<<5)  
+/* Boot Lock Bits - Application Section bit 1 position. */
+#define NVM_LOCKBITS_BLBA1_bp  5  
 
-#define NVM_LOCKBITS_BLBAT_gm  0x0C  /* Boot Lock Bits - Application Table group mask. */
-#define NVM_LOCKBITS_BLBAT_gp  2  /* Boot Lock Bits - Application Table group position. */
-#define NVM_LOCKBITS_BLBAT0_bm  (1<<2)  /* Boot Lock Bits - Application Table bit 0 mask. */
-#define NVM_LOCKBITS_BLBAT0_bp  2  /* Boot Lock Bits - Application Table bit 0 position. */
-#define NVM_LOCKBITS_BLBAT1_bm  (1<<3)  /* Boot Lock Bits - Application Table bit 1 mask. */
-#define NVM_LOCKBITS_BLBAT1_bp  3  /* Boot Lock Bits - Application Table bit 1 position. */
+/* Boot Lock Bits - Application Table group mask. */
+#define NVM_LOCKBITS_BLBAT_gm  0x0C  
+/* Boot Lock Bits - Application Table group position. */
+#define NVM_LOCKBITS_BLBAT_gp  2  
+/* Boot Lock Bits - Application Table bit 0 mask. */
+#define NVM_LOCKBITS_BLBAT0_bm  (1<<2)  
+/* Boot Lock Bits - Application Table bit 0 position. */
+#define NVM_LOCKBITS_BLBAT0_bp  2  
+/* Boot Lock Bits - Application Table bit 1 mask. */
+#define NVM_LOCKBITS_BLBAT1_bm  (1<<3)  
+/* Boot Lock Bits - Application Table bit 1 position. */
+#define NVM_LOCKBITS_BLBAT1_bp  3  
 
 #define NVM_LOCKBITS_LB_gm  0x03  /* Lock Bits group mask. */
 #define NVM_LOCKBITS_LB_gp  0  /* Lock Bits group position. */
@@ -4779,16 +5038,26 @@ IO Module Instances. Mapped to memory.
 
 
 /* NVM_FUSES.FUSEBYTE1  bit masks and bit positions */
-#define NVM_FUSES_WDWP_gm  0xF0  /* Watchdog Window Timeout Period group mask. */
-#define NVM_FUSES_WDWP_gp  4  /* Watchdog Window Timeout Period group position. */
-#define NVM_FUSES_WDWP0_bm  (1<<4)  /* Watchdog Window Timeout Period bit 0 mask. */
-#define NVM_FUSES_WDWP0_bp  4  /* Watchdog Window Timeout Period bit 0 position. */
-#define NVM_FUSES_WDWP1_bm  (1<<5)  /* Watchdog Window Timeout Period bit 1 mask. */
-#define NVM_FUSES_WDWP1_bp  5  /* Watchdog Window Timeout Period bit 1 position. */
-#define NVM_FUSES_WDWP2_bm  (1<<6)  /* Watchdog Window Timeout Period bit 2 mask. */
-#define NVM_FUSES_WDWP2_bp  6  /* Watchdog Window Timeout Period bit 2 position. */
-#define NVM_FUSES_WDWP3_bm  (1<<7)  /* Watchdog Window Timeout Period bit 3 mask. */
-#define NVM_FUSES_WDWP3_bp  7  /* Watchdog Window Timeout Period bit 3 position. */
+/* Watchdog Window Timeout Period group mask. */
+#define NVM_FUSES_WDWP_gm  0xF0  
+/* Watchdog Window Timeout Period group position. */
+#define NVM_FUSES_WDWP_gp  4  
+/* Watchdog Window Timeout Period bit 0 mask. */
+#define NVM_FUSES_WDWP0_bm  (1<<4)  
+/* Watchdog Window Timeout Period bit 0 position. */
+#define NVM_FUSES_WDWP0_bp  4  
+/* Watchdog Window Timeout Period bit 1 mask. */
+#define NVM_FUSES_WDWP1_bm  (1<<5)  
+/* Watchdog Window Timeout Period bit 1 position. */
+#define NVM_FUSES_WDWP1_bp  5  
+/* Watchdog Window Timeout Period bit 2 mask. */
+#define NVM_FUSES_WDWP2_bm  (1<<6)  
+/* Watchdog Window Timeout Period bit 2 position. */
+#define NVM_FUSES_WDWP2_bp  6  
+/* Watchdog Window Timeout Period bit 3 mask. */
+#define NVM_FUSES_WDWP3_bm  (1<<7)  
+/* Watchdog Window Timeout Period bit 3 position. */
+#define NVM_FUSES_WDWP3_bp  7  
 
 #define NVM_FUSES_WDP_gm  0x0F  /* Watchdog Timeout Period group mask. */
 #define NVM_FUSES_WDP_gp  0  /* Watchdog Timeout Period group position. */
@@ -4806,22 +5075,36 @@ IO Module Instances. Mapped to memory.
 #define NVM_FUSES_DVSDON_bm  0x80  /* Spike Detector Enable bit mask. */
 #define NVM_FUSES_DVSDON_bp  7  /* Spike Detector Enable bit position. */
 
-#define NVM_FUSES_BOOTRST_bm  0x40  /* Boot Loader Section Reset Vector bit mask. */
-#define NVM_FUSES_BOOTRST_bp  6  /* Boot Loader Section Reset Vector bit position. */
+/* Boot Loader Section Reset Vector bit mask. */
+#define NVM_FUSES_BOOTRST_bm  0x40  
+/* Boot Loader Section Reset Vector bit position. */
+#define NVM_FUSES_BOOTRST_bp  6  
 
-#define NVM_FUSES_BODACT_gm  0x0C  /* BOD Operation in Active Mode group mask. */
-#define NVM_FUSES_BODACT_gp  2  /* BOD Operation in Active Mode group position. */
-#define NVM_FUSES_BODACT0_bm  (1<<2)  /* BOD Operation in Active Mode bit 0 mask. */
-#define NVM_FUSES_BODACT0_bp  2  /* BOD Operation in Active Mode bit 0 position. */
-#define NVM_FUSES_BODACT1_bm  (1<<3)  /* BOD Operation in Active Mode bit 1 mask. */
-#define NVM_FUSES_BODACT1_bp  3  /* BOD Operation in Active Mode bit 1 position. */
+/* BOD Operation in Active Mode group mask. */
+#define NVM_FUSES_BODACT_gm  0x0C  
+/* BOD Operation in Active Mode group position. */
+#define NVM_FUSES_BODACT_gp  2 
+/* BOD Operation in Active Mode bit 0 mask. */
+#define NVM_FUSES_BODACT0_bm  (1<<2)  
+/* BOD Operation in Active Mode bit 0 position. */
+#define NVM_FUSES_BODACT0_bp  2  
+/* BOD Operation in Active Mode bit 1 mask. */
+#define NVM_FUSES_BODACT1_bm  (1<<3)  
+/* BOD Operation in Active Mode bit 1 position. */
+#define NVM_FUSES_BODACT1_bp  3  
 
-#define NVM_FUSES_BODPD_gm  0x03  /* BOD Operation in Power-Down Mode group mask. */
-#define NVM_FUSES_BODPD_gp  0  /* BOD Operation in Power-Down Mode group position. */
-#define NVM_FUSES_BODPD0_bm  (1<<0)  /* BOD Operation in Power-Down Mode bit 0 mask. */
-#define NVM_FUSES_BODPD0_bp  0  /* BOD Operation in Power-Down Mode bit 0 position. */
-#define NVM_FUSES_BODPD1_bm  (1<<1)  /* BOD Operation in Power-Down Mode bit 1 mask. */
-#define NVM_FUSES_BODPD1_bp  1  /* BOD Operation in Power-Down Mode bit 1 position. */
+/* BOD Operation in Power-Down Mode group mask. */
+#define NVM_FUSES_BODPD_gm  0x03  
+/* BOD Operation in Power-Down Mode group position. */
+#define NVM_FUSES_BODPD_gp  0  
+/* BOD Operation in Power-Down Mode bit 0 mask. */
+#define NVM_FUSES_BODPD0_bm  (1<<0)  
+/* BOD Operation in Power-Down Mode bit 0 position. */
+#define NVM_FUSES_BODPD0_bp  0  
+/* BOD Operation in Power-Down Mode bit 1 mask. */
+#define NVM_FUSES_BODPD1_bm  (1<<1)  
+/* BOD Operation in Power-Down Mode bit 1 position. */
+#define NVM_FUSES_BODPD1_bp  1  
 
 
 /* NVM_FUSES.FUSEBYTE4  bit masks and bit positions */
@@ -4840,17 +5123,27 @@ IO Module Instances. Mapped to memory.
 
 
 /* NVM_FUSES.FUSEBYTE5  bit masks and bit positions */
-#define NVM_FUSES_EESAVE_bm  0x08  /* Preserve EEPROM Through Chip Erase bit mask. */
-#define NVM_FUSES_EESAVE_bp  3  /* Preserve EEPROM Through Chip Erase bit position. */
+/* Preserve EEPROM Through Chip Erase bit mask. */
+#define NVM_FUSES_EESAVE_bm  0x08  
+/* Preserve EEPROM Through Chip Erase bit position. */
+#define NVM_FUSES_EESAVE_bp  3  
 
-#define NVM_FUSES_BODLVL_gm  0x07  /* Brown Out Detection Voltage Level group mask. */
-#define NVM_FUSES_BODLVL_gp  0  /* Brown Out Detection Voltage Level group position. */
-#define NVM_FUSES_BODLVL0_bm  (1<<0)  /* Brown Out Detection Voltage Level bit 0 mask. */
-#define NVM_FUSES_BODLVL0_bp  0  /* Brown Out Detection Voltage Level bit 0 position. */
-#define NVM_FUSES_BODLVL1_bm  (1<<1)  /* Brown Out Detection Voltage Level bit 1 mask. */
-#define NVM_FUSES_BODLVL1_bp  1  /* Brown Out Detection Voltage Level bit 1 position. */
-#define NVM_FUSES_BODLVL2_bm  (1<<2)  /* Brown Out Detection Voltage Level bit 2 mask. */
-#define NVM_FUSES_BODLVL2_bp  2  /* Brown Out Detection Voltage Level bit 2 position. */
+/* Brown Out Detection Voltage Level group mask. */
+#define NVM_FUSES_BODLVL_gm  0x07  
+/* Brown Out Detection Voltage Level group position. */
+#define NVM_FUSES_BODLVL_gp  0  
+/* Brown Out Detection Voltage Level bit 0 mask. */
+#define NVM_FUSES_BODLVL0_bm  (1<<0)  
+/* Brown Out Detection Voltage Level bit 0 position. */
+#define NVM_FUSES_BODLVL0_bp  0  
+/* Brown Out Detection Voltage Level bit 1 mask. */
+#define NVM_FUSES_BODLVL1_bm  (1<<1)  
+/* Brown Out Detection Voltage Level bit 1 position. */
+#define NVM_FUSES_BODLVL1_bp  1  
+/* Brown Out Detection Voltage Level bit 2 mask. */
+#define NVM_FUSES_BODLVL2_bm  (1<<2)  
+/* Brown Out Detection Voltage Level bit 2 position. */
+#define NVM_FUSES_BODLVL2_bp  2  
 
 
 /* AC - Analog Comparator */
@@ -5309,12 +5602,18 @@ IO Module Instances. Mapped to memory.
 
 
 /* RTC.INTCTRL  bit masks and bit positions */
-#define RTC_COMPINTLVL_gm  0x0C  /* Compare Match Interrupt Level group mask. */
-#define RTC_COMPINTLVL_gp  2  /* Compare Match Interrupt Level group position. */
-#define RTC_COMPINTLVL0_bm  (1<<2)  /* Compare Match Interrupt Level bit 0 mask. */
-#define RTC_COMPINTLVL0_bp  2  /* Compare Match Interrupt Level bit 0 position. */
-#define RTC_COMPINTLVL1_bm  (1<<3)  /* Compare Match Interrupt Level bit 1 mask. */
-#define RTC_COMPINTLVL1_bp  3  /* Compare Match Interrupt Level bit 1 position. */
+/* Compare Match Interrupt Level group mask. */
+#define RTC_COMPINTLVL_gm  0x0C  
+/* Compare Match Interrupt Level group position. */
+#define RTC_COMPINTLVL_gp  2  
+ /* Compare Match Interrupt Level bit 0 mask. */
+#define RTC_COMPINTLVL0_bm  (1<<2) 
+/* Compare Match Interrupt Level bit 0 position. */
+#define RTC_COMPINTLVL0_bp  2  
+/* Compare Match Interrupt Level bit 1 mask. */
+#define RTC_COMPINTLVL1_bm  (1<<3)  
+/* Compare Match Interrupt Level bit 1 position. */
+#define RTC_COMPINTLVL1_bp  3  
 
 #define RTC_OVFINTLVL_gm  0x03  /* Overflow Interrupt Level group mask. */
 #define RTC_OVFINTLVL_gp  0  /* Overflow Interrupt Level group position. */
@@ -5459,14 +5758,22 @@ IO Module Instances. Mapped to memory.
 #define EBI_WRDLY1_bm  (1<<7)  /* SDRAM Write Recovery Delay bit 1 mask. */
 #define EBI_WRDLY1_bp  7  /* SDRAM Write Recovery Delay bit 1 position. */
 
-#define EBI_ESRDLY_gm  0x38  /* SDRAM Exit-Self-refresh-to-Active Delay group mask. */
-#define EBI_ESRDLY_gp  3  /* SDRAM Exit-Self-refresh-to-Active Delay group position. */
-#define EBI_ESRDLY0_bm  (1<<3)  /* SDRAM Exit-Self-refresh-to-Active Delay bit 0 mask. */
-#define EBI_ESRDLY0_bp  3  /* SDRAM Exit-Self-refresh-to-Active Delay bit 0 position. */
-#define EBI_ESRDLY1_bm  (1<<4)  /* SDRAM Exit-Self-refresh-to-Active Delay bit 1 mask. */
-#define EBI_ESRDLY1_bp  4  /* SDRAM Exit-Self-refresh-to-Active Delay bit 1 position. */
-#define EBI_ESRDLY2_bm  (1<<5)  /* SDRAM Exit-Self-refresh-to-Active Delay bit 2 mask. */
-#define EBI_ESRDLY2_bp  5  /* SDRAM Exit-Self-refresh-to-Active Delay bit 2 position. */
+/* SDRAM Exit-Self-refresh-to-Active Delay group mask. */
+#define EBI_ESRDLY_gm  0x38  
+/* SDRAM Exit-Self-refresh-to-Active Delay group position. */
+#define EBI_ESRDLY_gp  3  
+/* SDRAM Exit-Self-refresh-to-Active Delay bit 0 mask. */
+#define EBI_ESRDLY0_bm  (1<<3)  
+/* SDRAM Exit-Self-refresh-to-Active Delay bit 0 position. */
+#define EBI_ESRDLY0_bp  3  
+/* SDRAM Exit-Self-refresh-to-Active Delay bit 1 mask. */
+#define EBI_ESRDLY1_bm  (1<<4)  
+/* SDRAM Exit-Self-refresh-to-Active Delay bit 1 position. */
+#define EBI_ESRDLY1_bp  4  
+/* SDRAM Exit-Self-refresh-to-Active Delay bit 2 mask. */
+#define EBI_ESRDLY2_bm  (1<<5)  
+/* SDRAM Exit-Self-refresh-to-Active Delay bit 2 position. */
+#define EBI_ESRDLY2_bp  5  
 
 #define EBI_ROWCOLDLY_gm  0x07  /* SDRAM Row-to-Column Delay group mask. */
 #define EBI_ROWCOLDLY_gp  0  /* SDRAM Row-to-Column Delay group position. */
@@ -5562,8 +5869,10 @@ IO Module Instances. Mapped to memory.
 #define TWI_SLAVE_DIEN_bm  0x20  /* Data Interrupt Enable bit mask. */
 #define TWI_SLAVE_DIEN_bp  5  /* Data Interrupt Enable bit position. */
 
-#define TWI_SLAVE_APIEN_bm  0x10  /* Address/Stop Interrupt Enable bit mask. */
-#define TWI_SLAVE_APIEN_bp  4  /* Address/Stop Interrupt Enable bit position. */
+/* Address/Stop Interrupt Enable bit mask. */
+#define TWI_SLAVE_APIEN_bm  0x10  
+/* Address/Stop Interrupt Enable bit position. */
+#define TWI_SLAVE_APIEN_bp  4  
 
 #define TWI_SLAVE_ENABLE_bm  0x08  /* Enable TWI Slave bit mask. */
 #define TWI_SLAVE_ENABLE_bp  3  /* Enable TWI Slave bit position. */
@@ -6052,33 +6361,57 @@ IO Module Instances. Mapped to memory.
 
 
 /* TC0.INTCTRLB  bit masks and bit positions */
-#define TC0_CCDINTLVL_gm  0xC0  /* Compare or Capture D Interrupt Level group mask. */
-#define TC0_CCDINTLVL_gp  6  /* Compare or Capture D Interrupt Level group position. */
-#define TC0_CCDINTLVL0_bm  (1<<6)  /* Compare or Capture D Interrupt Level bit 0 mask. */
-#define TC0_CCDINTLVL0_bp  6  /* Compare or Capture D Interrupt Level bit 0 position. */
-#define TC0_CCDINTLVL1_bm  (1<<7)  /* Compare or Capture D Interrupt Level bit 1 mask. */
-#define TC0_CCDINTLVL1_bp  7  /* Compare or Capture D Interrupt Level bit 1 position. */
+/* Compare or Capture D Interrupt Level group mask. */
+#define TC0_CCDINTLVL_gm  0xC0  
+/* Compare or Capture D Interrupt Level group position. */
+#define TC0_CCDINTLVL_gp  6  
+/* Compare or Capture D Interrupt Level bit 0 mask. */
+#define TC0_CCDINTLVL0_bm  (1<<6)  
+/* Compare or Capture D Interrupt Level bit 0 position. */
+#define TC0_CCDINTLVL0_bp  6  
+/* Compare or Capture D Interrupt Level bit 1 mask. */
+#define TC0_CCDINTLVL1_bm  (1<<7)  
+/* Compare or Capture D Interrupt Level bit 1 position. */
+#define TC0_CCDINTLVL1_bp  7  
 
-#define TC0_CCCINTLVL_gm  0x30  /* Compare or Capture C Interrupt Level group mask. */
-#define TC0_CCCINTLVL_gp  4  /* Compare or Capture C Interrupt Level group position. */
-#define TC0_CCCINTLVL0_bm  (1<<4)  /* Compare or Capture C Interrupt Level bit 0 mask. */
-#define TC0_CCCINTLVL0_bp  4  /* Compare or Capture C Interrupt Level bit 0 position. */
-#define TC0_CCCINTLVL1_bm  (1<<5)  /* Compare or Capture C Interrupt Level bit 1 mask. */
-#define TC0_CCCINTLVL1_bp  5  /* Compare or Capture C Interrupt Level bit 1 position. */
+/* Compare or Capture C Interrupt Level group mask. */
+#define TC0_CCCINTLVL_gm  0x30  
+ /* Compare or Capture C Interrupt Level group position. */
+#define TC0_CCCINTLVL_gp  4 
+/* Compare or Capture C Interrupt Level bit 0 mask. */
+#define TC0_CCCINTLVL0_bm  (1<<4)  
+/* Compare or Capture C Interrupt Level bit 0 position. */
+#define TC0_CCCINTLVL0_bp  4  
+ /* Compare or Capture C Interrupt Level bit 1 mask. */
+#define TC0_CCCINTLVL1_bm  (1<<5) 
+/* Compare or Capture C Interrupt Level bit 1 position. */
+#define TC0_CCCINTLVL1_bp  5  
 
-#define TC0_CCBINTLVL_gm  0x0C  /* Compare or Capture B Interrupt Level group mask. */
-#define TC0_CCBINTLVL_gp  2  /* Compare or Capture B Interrupt Level group position. */
-#define TC0_CCBINTLVL0_bm  (1<<2)  /* Compare or Capture B Interrupt Level bit 0 mask. */
-#define TC0_CCBINTLVL0_bp  2  /* Compare or Capture B Interrupt Level bit 0 position. */
-#define TC0_CCBINTLVL1_bm  (1<<3)  /* Compare or Capture B Interrupt Level bit 1 mask. */
-#define TC0_CCBINTLVL1_bp  3  /* Compare or Capture B Interrupt Level bit 1 position. */
+/* Compare or Capture B Interrupt Level group mask. */
+#define TC0_CCBINTLVL_gm  0x0C  
+/* Compare or Capture B Interrupt Level group position. */
+#define TC0_CCBINTLVL_gp  2  
+/* Compare or Capture B Interrupt Level bit 0 mask. */
+#define TC0_CCBINTLVL0_bm  (1<<2)  
+ /* Compare or Capture B Interrupt Level bit 0 position. */
+#define TC0_CCBINTLVL0_bp  2 
+/* Compare or Capture B Interrupt Level bit 1 mask. */
+#define TC0_CCBINTLVL1_bm  (1<<3)  
+/* Compare or Capture B Interrupt Level bit 1 position. */
+#define TC0_CCBINTLVL1_bp  3  
 
-#define TC0_CCAINTLVL_gm  0x03  /* Compare or Capture A Interrupt Level group mask. */
-#define TC0_CCAINTLVL_gp  0  /* Compare or Capture A Interrupt Level group position. */
-#define TC0_CCAINTLVL0_bm  (1<<0)  /* Compare or Capture A Interrupt Level bit 0 mask. */
-#define TC0_CCAINTLVL0_bp  0  /* Compare or Capture A Interrupt Level bit 0 position. */
-#define TC0_CCAINTLVL1_bm  (1<<1)  /* Compare or Capture A Interrupt Level bit 1 mask. */
-#define TC0_CCAINTLVL1_bp  1  /* Compare or Capture A Interrupt Level bit 1 position. */
+/* Compare or Capture A Interrupt Level group mask. */
+#define TC0_CCAINTLVL_gm  0x03  
+/* Compare or Capture A Interrupt Level group position. */
+#define TC0_CCAINTLVL_gp  0  
+/* Compare or Capture A Interrupt Level bit 0 mask. */
+#define TC0_CCAINTLVL0_bm  (1<<0)  
+/* Compare or Capture A Interrupt Level bit 0 position. */
+#define TC0_CCAINTLVL0_bp  0  
+/* Compare or Capture A Interrupt Level bit 1 mask. */
+#define TC0_CCAINTLVL1_bm  (1<<1)  
+/* Compare or Capture A Interrupt Level bit 1 position. */
+#define TC0_CCAINTLVL1_bp  1  
 
 
 /* TC0.CTRLFCLR  bit masks and bit positions */
@@ -6146,17 +6479,25 @@ IO Module Instances. Mapped to memory.
 
 
 /* TC0.INTFLAGS  bit masks and bit positions */
-#define TC0_CCDIF_bm  0x80  /* Compare or Capture D Interrupt Flag bit mask. */
-#define TC0_CCDIF_bp  7  /* Compare or Capture D Interrupt Flag bit position. */
+/* Compare or Capture D Interrupt Flag bit mask. */
+#define TC0_CCDIF_bm  0x80  
+/* Compare or Capture D Interrupt Flag bit position. */
+#define TC0_CCDIF_bp  7  
 
-#define TC0_CCCIF_bm  0x40  /* Compare or Capture C Interrupt Flag bit mask. */
-#define TC0_CCCIF_bp  6  /* Compare or Capture C Interrupt Flag bit position. */
+/* Compare or Capture C Interrupt Flag bit mask. */
+#define TC0_CCCIF_bm  0x40  
+/* Compare or Capture C Interrupt Flag bit position. */
+#define TC0_CCCIF_bp  6  
 
-#define TC0_CCBIF_bm  0x20  /* Compare or Capture B Interrupt Flag bit mask. */
-#define TC0_CCBIF_bp  5  /* Compare or Capture B Interrupt Flag bit position. */
+/* Compare or Capture B Interrupt Flag bit mask. */
+#define TC0_CCBIF_bm  0x20  
+/* Compare or Capture B Interrupt Flag bit position. */
+#define TC0_CCBIF_bp  5  
 
-#define TC0_CCAIF_bm  0x10  /* Compare or Capture A Interrupt Flag bit mask. */
-#define TC0_CCAIF_bp  4  /* Compare or Capture A Interrupt Flag bit position. */
+/* Compare or Capture A Interrupt Flag bit mask. */
+#define TC0_CCAIF_bm  0x10  
+/* Compare or Capture A Interrupt Flag bit position. */
+#define TC0_CCAIF_bp  4  
 
 #define TC0_ERRIF_bm  0x02  /* Error Interrupt Flag bit mask. */
 #define TC0_ERRIF_bp  1  /* Error Interrupt Flag bit position. */
@@ -6253,19 +6594,31 @@ IO Module Instances. Mapped to memory.
 
 
 /* TC1.INTCTRLB  bit masks and bit positions */
-#define TC1_CCBINTLVL_gm  0x0C  /* Compare or Capture B Interrupt Level group mask. */
-#define TC1_CCBINTLVL_gp  2  /* Compare or Capture B Interrupt Level group position. */
-#define TC1_CCBINTLVL0_bm  (1<<2)  /* Compare or Capture B Interrupt Level bit 0 mask. */
-#define TC1_CCBINTLVL0_bp  2  /* Compare or Capture B Interrupt Level bit 0 position. */
-#define TC1_CCBINTLVL1_bm  (1<<3)  /* Compare or Capture B Interrupt Level bit 1 mask. */
-#define TC1_CCBINTLVL1_bp  3  /* Compare or Capture B Interrupt Level bit 1 position. */
+/* Compare or Capture B Interrupt Level group mask. */
+#define TC1_CCBINTLVL_gm  0x0C  
+/* Compare or Capture B Interrupt Level group position. */
+#define TC1_CCBINTLVL_gp  2  
+/* Compare or Capture B Interrupt Level bit 0 mask. */
+#define TC1_CCBINTLVL0_bm  (1<<2)  
+ /* Compare or Capture B Interrupt Level bit 0 position. */
+#define TC1_CCBINTLVL0_bp  2 
+/* Compare or Capture B Interrupt Level bit 1 mask. */
+#define TC1_CCBINTLVL1_bm  (1<<3)  
+/* Compare or Capture B Interrupt Level bit 1 position. */
+#define TC1_CCBINTLVL1_bp  3  
 
-#define TC1_CCAINTLVL_gm  0x03  /* Compare or Capture A Interrupt Level group mask. */
-#define TC1_CCAINTLVL_gp  0  /* Compare or Capture A Interrupt Level group position. */
-#define TC1_CCAINTLVL0_bm  (1<<0)  /* Compare or Capture A Interrupt Level bit 0 mask. */
-#define TC1_CCAINTLVL0_bp  0  /* Compare or Capture A Interrupt Level bit 0 position. */
-#define TC1_CCAINTLVL1_bm  (1<<1)  /* Compare or Capture A Interrupt Level bit 1 mask. */
-#define TC1_CCAINTLVL1_bp  1  /* Compare or Capture A Interrupt Level bit 1 position. */
+/* Compare or Capture A Interrupt Level group mask. */
+#define TC1_CCAINTLVL_gm  0x03  
+/* Compare or Capture A Interrupt Level group position. */
+#define TC1_CCAINTLVL_gp  0  
+/* Compare or Capture A Interrupt Level bit 0 mask. */
+#define TC1_CCAINTLVL0_bm  (1<<0)  
+/* Compare or Capture A Interrupt Level bit 0 position. */
+#define TC1_CCAINTLVL0_bp  0  
+/* Compare or Capture A Interrupt Level bit 1 mask. */
+#define TC1_CCAINTLVL1_bm  (1<<1)  
+/* Compare or Capture A Interrupt Level bit 1 position. */
+#define TC1_CCAINTLVL1_bp  1  
 
 
 /* TC1.CTRLFCLR  bit masks and bit positions */
@@ -6321,11 +6674,16 @@ IO Module Instances. Mapped to memory.
 
 
 /* TC1.INTFLAGS  bit masks and bit positions */
-#define TC1_CCBIF_bm  0x20  /* Compare or Capture B Interrupt Flag bit mask. */
-#define TC1_CCBIF_bp  5  /* Compare or Capture B Interrupt Flag bit position. */
 
-#define TC1_CCAIF_bm  0x10  /* Compare or Capture A Interrupt Flag bit mask. */
-#define TC1_CCAIF_bp  4  /* Compare or Capture A Interrupt Flag bit position. */
+/* Compare or Capture B Interrupt Flag bit mask. */
+#define TC1_CCBIF_bm  0x20  
+/* Compare or Capture B Interrupt Flag bit position. */
+#define TC1_CCBIF_bp  5  
+
+/* Compare or Capture A Interrupt Flag bit mask. */
+#define TC1_CCAIF_bm  0x10  
+/* Compare or Capture A Interrupt Flag bit position. */
+#define TC1_CCAIF_bp  4  
 
 #define TC1_ERRIF_bm  0x02  /* Error Interrupt Flag bit mask. */
 #define TC1_ERRIF_bp  1  /* Error Interrupt Flag bit position. */
@@ -6341,22 +6699,32 @@ IO Module Instances. Mapped to memory.
 #define AWEX_CWCM_bm  0x10  /* Common Waveform Channel Mode bit mask. */
 #define AWEX_CWCM_bp  4  /* Common Waveform Channel Mode bit position. */
 
-#define AWEX_DTICCDEN_bm  0x08  /* Dead Time Insertion Compare Channel D Enable bit mask. */
-#define AWEX_DTICCDEN_bp  3  /* Dead Time Insertion Compare Channel D Enable bit position. */
+/* Dead Time Insertion Compare Channel D Enable bit mask. */
+#define AWEX_DTICCDEN_bm  0x08  
+/* Dead Time Insertion Compare Channel D Enable bit position. */
+#define AWEX_DTICCDEN_bp  3  
 
-#define AWEX_DTICCCEN_bm  0x04  /* Dead Time Insertion Compare Channel C Enable bit mask. */
-#define AWEX_DTICCCEN_bp  2  /* Dead Time Insertion Compare Channel C Enable bit position. */
+/* Dead Time Insertion Compare Channel C Enable bit mask. */
+#define AWEX_DTICCCEN_bm  0x04  
+/* Dead Time Insertion Compare Channel C Enable bit position. */
+#define AWEX_DTICCCEN_bp  2  
 
-#define AWEX_DTICCBEN_bm  0x02  /* Dead Time Insertion Compare Channel B Enable bit mask. */
-#define AWEX_DTICCBEN_bp  1  /* Dead Time Insertion Compare Channel B Enable bit position. */
+/* Dead Time Insertion Compare Channel B Enable bit mask. */
+#define AWEX_DTICCBEN_bm  0x02  
+/* Dead Time Insertion Compare Channel B Enable bit position. */
+#define AWEX_DTICCBEN_bp  1  
 
-#define AWEX_DTICCAEN_bm  0x01  /* Dead Time Insertion Compare Channel A Enable bit mask. */
-#define AWEX_DTICCAEN_bp  0  /* Dead Time Insertion Compare Channel A Enable bit position. */
+/* Dead Time Insertion Compare Channel A Enable bit mask. */
+#define AWEX_DTICCAEN_bm  0x01  
+/* Dead Time Insertion Compare Channel A Enable bit position. */
+#define AWEX_DTICCAEN_bp  0  
 
 
 /* AWEX.FDCTRL  bit masks and bit positions */
-#define AWEX_FDDBD_bm  0x10  /* Fault Detect on Disable Break Disable bit mask. */
-#define AWEX_FDDBD_bp  4  /* Fault Detect on Disable Break Disable bit position. */
+/* Fault Detect on Disable Break Disable bit mask. */
+#define AWEX_FDDBD_bm  0x10  
+/* Fault Detect on Disable Break Disable bit position. */
+#define AWEX_FDDBD_bp  4  
 
 #define AWEX_FDMODE_bm  0x04  /* Fault Detect Mode bit mask. */
 #define AWEX_FDMODE_bp  2  /* Fault Detect Mode bit position. */
@@ -6373,11 +6741,15 @@ IO Module Instances. Mapped to memory.
 #define AWEX_FDF_bm  0x04  /* Fault Detect Flag bit mask. */
 #define AWEX_FDF_bp  2  /* Fault Detect Flag bit position. */
 
-#define AWEX_DTHSBUFV_bm  0x02  /* Dead Time High Side Buffer Valid bit mask. */
-#define AWEX_DTHSBUFV_bp  1  /* Dead Time High Side Buffer Valid bit position. */
+/* Dead Time High Side Buffer Valid bit mask. */
+#define AWEX_DTHSBUFV_bm  0x02  
+/* Dead Time High Side Buffer Valid bit position. */
+#define AWEX_DTHSBUFV_bp  1  
 
-#define AWEX_DTLSBUFV_bm  0x01  /* Dead Time Low Side Buffer Valid bit mask. */
-#define AWEX_DTLSBUFV_bp  0  /* Dead Time Low Side Buffer Valid bit position. */
+/* Dead Time Low Side Buffer Valid bit mask. */
+#define AWEX_DTLSBUFV_bm  0x01  
+/* Dead Time Low Side Buffer Valid bit position. */
+#define AWEX_DTLSBUFV_bp  0  
 
 
 /* HIRES.CTRL  bit masks and bit positions */
@@ -6423,17 +6795,25 @@ IO Module Instances. Mapped to memory.
 
 #define USART_TXCINTLVL_gm  0x0C  /* Transmit Interrupt Level group mask. */
 #define USART_TXCINTLVL_gp  2  /* Transmit Interrupt Level group position. */
-#define USART_TXCINTLVL0_bm  (1<<2)  /* Transmit Interrupt Level bit 0 mask. */
+/* Transmit Interrupt Level bit 0 mask. */
+#define USART_TXCINTLVL0_bm  (1<<2)  
 #define USART_TXCINTLVL0_bp  2  /* Transmit Interrupt Level bit 0 position. */
-#define USART_TXCINTLVL1_bm  (1<<3)  /* Transmit Interrupt Level bit 1 mask. */
+/* Transmit Interrupt Level bit 1 mask. */
+#define USART_TXCINTLVL1_bm  (1<<3)  
 #define USART_TXCINTLVL1_bp  3  /* Transmit Interrupt Level bit 1 position. */
 
-#define USART_DREINTLVL_gm  0x03  /* Data Register Empty Interrupt Level group mask. */
-#define USART_DREINTLVL_gp  0  /* Data Register Empty Interrupt Level group position. */
-#define USART_DREINTLVL0_bm  (1<<0)  /* Data Register Empty Interrupt Level bit 0 mask. */
-#define USART_DREINTLVL0_bp  0  /* Data Register Empty Interrupt Level bit 0 position. */
-#define USART_DREINTLVL1_bm  (1<<1)  /* Data Register Empty Interrupt Level bit 1 mask. */
-#define USART_DREINTLVL1_bp  1  /* Data Register Empty Interrupt Level bit 1 position. */
+/* Data Register Empty Interrupt Level group mask. */
+#define USART_DREINTLVL_gm  0x03  
+/* Data Register Empty Interrupt Level group position. */
+#define USART_DREINTLVL_gp  0  
+/* Data Register Empty Interrupt Level bit 0 mask. */
+#define USART_DREINTLVL0_bm  (1<<0) 
+/* Data Register Empty Interrupt Level bit 0 position. */
+#define USART_DREINTLVL0_bp  0  
+/* Data Register Empty Interrupt Level bit 1 mask. */
+#define USART_DREINTLVL1_bm  (1<<1)  
+/* Data Register Empty Interrupt Level bit 1 position. */
+#define USART_DREINTLVL1_bp  1  
 
 
 /* USART.CTRLB  bit masks and bit positions */
@@ -6446,8 +6826,10 @@ IO Module Instances. Mapped to memory.
 #define USART_CLK2X_bm  0x04  /* Double transmission speed bit mask. */
 #define USART_CLK2X_bp  2  /* Double transmission speed bit position. */
 
-#define USART_MPCM_bm  0x02  /* Multi-processor Communication Mode bit mask. */
-#define USART_MPCM_bp  1  /* Multi-processor Communication Mode bit position. */
+/* Multi-processor Communication Mode bit mask. */
+#define USART_MPCM_bm  0x02  
+/* Multi-processor Communication Mode bit position. */
+#define USART_MPCM_bp  1  
 
 #define USART_TXB8_bm  0x01  /* Transmit bit 8 bit mask. */
 #define USART_TXB8_bp  0  /* Transmit bit 8 bit position. */
@@ -6484,22 +6866,38 @@ IO Module Instances. Mapped to memory.
 /* USART.BAUDCTRLA  bit masks and bit positions */
 #define USART_BSEL_gm  0xFF  /* Baud Rate Selection Bits [7:0] group mask. */
 #define USART_BSEL_gp  0  /* Baud Rate Selection Bits [7:0] group position. */
-#define USART_BSEL0_bm  (1<<0)  /* Baud Rate Selection Bits [7:0] bit 0 mask. */
-#define USART_BSEL0_bp  0  /* Baud Rate Selection Bits [7:0] bit 0 position. */
-#define USART_BSEL1_bm  (1<<1)  /* Baud Rate Selection Bits [7:0] bit 1 mask. */
-#define USART_BSEL1_bp  1  /* Baud Rate Selection Bits [7:0] bit 1 position. */
-#define USART_BSEL2_bm  (1<<2)  /* Baud Rate Selection Bits [7:0] bit 2 mask. */
-#define USART_BSEL2_bp  2  /* Baud Rate Selection Bits [7:0] bit 2 position. */
-#define USART_BSEL3_bm  (1<<3)  /* Baud Rate Selection Bits [7:0] bit 3 mask. */
-#define USART_BSEL3_bp  3  /* Baud Rate Selection Bits [7:0] bit 3 position. */
-#define USART_BSEL4_bm  (1<<4)  /* Baud Rate Selection Bits [7:0] bit 4 mask. */
-#define USART_BSEL4_bp  4  /* Baud Rate Selection Bits [7:0] bit 4 position. */
-#define USART_BSEL5_bm  (1<<5)  /* Baud Rate Selection Bits [7:0] bit 5 mask. */
-#define USART_BSEL5_bp  5  /* Baud Rate Selection Bits [7:0] bit 5 position. */
-#define USART_BSEL6_bm  (1<<6)  /* Baud Rate Selection Bits [7:0] bit 6 mask. */
-#define USART_BSEL6_bp  6  /* Baud Rate Selection Bits [7:0] bit 6 position. */
-#define USART_BSEL7_bm  (1<<7)  /* Baud Rate Selection Bits [7:0] bit 7 mask. */
-#define USART_BSEL7_bp  7  /* Baud Rate Selection Bits [7:0] bit 7 position. */
+/* Baud Rate Selection Bits [7:0] bit 0 mask. */
+#define USART_BSEL0_bm  (1<<0)  
+/* Baud Rate Selection Bits [7:0] bit 0 position. */
+#define USART_BSEL0_bp  0  
+/* Baud Rate Selection Bits [7:0] bit 1 mask. */
+#define USART_BSEL1_bm  (1<<1)  
+/* Baud Rate Selection Bits [7:0] bit 1 position. */
+#define USART_BSEL1_bp  1  
+/* Baud Rate Selection Bits [7:0] bit 2 mask. */
+#define USART_BSEL2_bm  (1<<2)  
+/* Baud Rate Selection Bits [7:0] bit 2 position. */
+#define USART_BSEL2_bp  2  
+/* Baud Rate Selection Bits [7:0] bit 3 mask. */
+#define USART_BSEL3_bm  (1<<3)  
+/* Baud Rate Selection Bits [7:0] bit 3 position. */
+#define USART_BSEL3_bp  3  
+/* Baud Rate Selection Bits [7:0] bit 4 mask. */
+#define USART_BSEL4_bm  (1<<4)  
+/* Baud Rate Selection Bits [7:0] bit 4 position. */
+#define USART_BSEL4_bp  4  
+/* Baud Rate Selection Bits [7:0] bit 5 mask. */
+#define USART_BSEL5_bm  (1<<5)  
+/* Baud Rate Selection Bits [7:0] bit 5 position. */
+#define USART_BSEL5_bp  5  
+/* Baud Rate Selection Bits [7:0] bit 6 mask. */
+#define USART_BSEL6_bm  (1<<6)  
+/* Baud Rate Selection Bits [7:0] bit 6 position. */
+#define USART_BSEL6_bp  6  
+/* Baud Rate Selection Bits [7:0] bit 7 mask. */
+#define USART_BSEL7_bm  (1<<7)  
+/* Baud Rate Selection Bits [7:0] bit 7 position. */
+#define USART_BSEL7_bp  7
 
 
 /* USART.BAUDCTRLB  bit masks and bit positions */
@@ -6640,14 +7038,19 @@ IO Module Instances. Mapped to memory.
 #define PIN6_bp 6
 #define PIN7_bm 0x80 
 #define PIN7_bp 7
+/** @} */
 
-
-/* ========== Interrupt Vector Definitions ========== */
+/**
+ * @name Interrupt Vector Definitions
+ * 
+ */
+/**@{**/
 /* Vector 0 is the reset vector */
 
 /* OSC interrupt vectors */
 #define OSC_XOSCF_vect_num  1
-#define OSC_XOSCF_vect      _VECTOR(1)  /* External Oscillator Failure Interrupt (NMI) */
+/* External Oscillator Failure Interrupt (NMI) */
+#define OSC_XOSCF_vect      _VECTOR(1)
 
 /* PORTC interrupt vectors */
 #define PORTC_INT0_vect_num  2
@@ -6717,7 +7120,8 @@ IO Module Instances. Mapped to memory.
 #define USARTC0_DRE_vect_num  26
 #define USARTC0_DRE_vect      _VECTOR(26)  /* Data Register Empty Interrupt */
 #define USARTC0_TXC_vect_num  27
-#define USARTC0_TXC_vect      _VECTOR(27)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTC0_TXC_vect      _VECTOR(27)
 
 /* USARTC1 interrupt vectors */
 #define USARTC1_RXC_vect_num  28
@@ -6725,7 +7129,8 @@ IO Module Instances. Mapped to memory.
 #define USARTC1_DRE_vect_num  29
 #define USARTC1_DRE_vect      _VECTOR(29)  /* Data Register Empty Interrupt */
 #define USARTC1_TXC_vect_num  30
-#define USARTC1_TXC_vect      _VECTOR(30)  /* Transmission Complete Interrupt */
+ /* Transmission Complete Interrupt */
+#define USARTC1_TXC_vect      _VECTOR(30)
 
 /* AES interrupt vectors */
 #define AES_INT_vect_num  31
@@ -6807,7 +7212,8 @@ IO Module Instances. Mapped to memory.
 #define USARTE0_DRE_vect_num  59
 #define USARTE0_DRE_vect      _VECTOR(59)  /* Data Register Empty Interrupt */
 #define USARTE0_TXC_vect_num  60
-#define USARTE0_TXC_vect      _VECTOR(60)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTE0_TXC_vect      _VECTOR(60)
 
 /* USARTE1 interrupt vectors */
 #define USARTE1_RXC_vect_num  61
@@ -6815,7 +7221,8 @@ IO Module Instances. Mapped to memory.
 #define USARTE1_DRE_vect_num  62
 #define USARTE1_DRE_vect      _VECTOR(62)  /* Data Register Empty Interrupt */
 #define USARTE1_TXC_vect_num  63
-#define USARTE1_TXC_vect      _VECTOR(63)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTE1_TXC_vect      _VECTOR(63)
 
 /* PORTD interrupt vectors */
 #define PORTD_INT0_vect_num  64
@@ -6887,7 +7294,8 @@ IO Module Instances. Mapped to memory.
 #define USARTD0_DRE_vect_num  89
 #define USARTD0_DRE_vect      _VECTOR(89)  /* Data Register Empty Interrupt */
 #define USARTD0_TXC_vect_num  90
-#define USARTD0_TXC_vect      _VECTOR(90)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTD0_TXC_vect      _VECTOR(90)
 
 /* USARTD1 interrupt vectors */
 #define USARTD1_RXC_vect_num  91
@@ -6895,7 +7303,8 @@ IO Module Instances. Mapped to memory.
 #define USARTD1_DRE_vect_num  92
 #define USARTD1_DRE_vect      _VECTOR(92)  /* Data Register Empty Interrupt */
 #define USARTD1_TXC_vect_num  93
-#define USARTD1_TXC_vect      _VECTOR(93)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTD1_TXC_vect      _VECTOR(93)
 
 /* PORTQ interrupt vectors */
 #define PORTQ_INT0_vect_num  94
@@ -6965,25 +7374,32 @@ IO Module Instances. Mapped to memory.
 #define USARTF0_RXC_vect_num  119
 #define USARTF0_RXC_vect      _VECTOR(119)  /* Reception Complete Interrupt */
 #define USARTF0_DRE_vect_num  120
-#define USARTF0_DRE_vect      _VECTOR(120)  /* Data Register Empty Interrupt */
+/* Data Register Empty Interrupt */
+#define USARTF0_DRE_vect      _VECTOR(120)  
 #define USARTF0_TXC_vect_num  121
-#define USARTF0_TXC_vect      _VECTOR(121)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTF0_TXC_vect      _VECTOR(121)
 
 /* USARTF1 interrupt vectors */
 #define USARTF1_RXC_vect_num  122
 #define USARTF1_RXC_vect      _VECTOR(122)  /* Reception Complete Interrupt */
 #define USARTF1_DRE_vect_num  123
-#define USARTF1_DRE_vect      _VECTOR(123)  /* Data Register Empty Interrupt */
+/* Data Register Empty Interrupt */
+#define USARTF1_DRE_vect      _VECTOR(123)
 #define USARTF1_TXC_vect_num  124
-#define USARTF1_TXC_vect      _VECTOR(124)  /* Transmission Complete Interrupt */
+/* Transmission Complete Interrupt */
+#define USARTF1_TXC_vect      _VECTOR(124) 
 
 
 #define _VECTOR_SIZE 4 /* Size of individual vector. */
 #define _VECTORS_SIZE (125 * _VECTOR_SIZE)
+/** @} */
 
-
-/* ========== Constants ========== */
-
+/**
+ * @name Constants
+ * 
+ */
+/**@{**/
 #define PROGMEM_START     (0x0000)
 #define PROGMEM_SIZE      (139264)
 #define PROGMEM_PAGE_SIZE (512)
@@ -6997,7 +7413,8 @@ IO Module Instances. Mapped to memory.
 #define APPTABLE_SECTION_START     (0x1E000)
 #define APPTABLE_SECTION_SIZE      (8192)
 #define APPTABLE_SECTION_PAGE_SIZE (512)
-#define APPTABLE_SECTION_END       (APPTABLE_SECTION_START + APPTABLE_SECTION_SIZE - 1)
+#define APPTABLE_SECTION_END       (APPTABLE_SECTION_START + \
+                                    APPTABLE_SECTION_SIZE - 1)
 
 #define BOOT_SECTION_START     (0x20000)
 #define BOOT_SECTION_SIZE      (8192)
@@ -7052,12 +7469,14 @@ IO Module Instances. Mapped to memory.
 #define USER_SIGNATURES_START     (0x0000)
 #define USER_SIGNATURES_SIZE      (512)
 #define USER_SIGNATURES_PAGE_SIZE (0)
-#define USER_SIGNATURES_END       (USER_SIGNATURES_START + USER_SIGNATURES_SIZE - 1)
+#define USER_SIGNATURES_END       (USER_SIGNATURES_START + \
+                                   USER_SIGNATURES_SIZE - 1)
 
 #define PROD_SIGNATURES_START     (0x0000)
 #define PROD_SIGNATURES_SIZE      (52)
 #define PROD_SIGNATURES_PAGE_SIZE (0)
-#define PROD_SIGNATURES_END       (PROD_SIGNATURES_START + PROD_SIGNATURES_SIZE - 1)
+#define PROD_SIGNATURES_END       (PROD_SIGNATURES_START + \
+                                   PROD_SIGNATURES_SIZE - 1)
 
 #define FLASHEND     PROGMEM_END
 #define SPM_PAGESIZE PROGMEM_PAGE_SIZE
@@ -7069,9 +7488,13 @@ IO Module Instances. Mapped to memory.
 #define XRAMEND      EXTERNAL_SRAM_END
 #define E2END        EEPROM_END
 #define E2PAGESIZE   EEPROM_PAGE_SIZE
+/** @} */
 
-
-/* ========== Fuses ========== */
+/**
+ * @name Fuses
+ * 
+ */
+/**@{**/
 #define FUSE_MEMORY_SIZE 6
 
 /* Fuse Byte 0 */
@@ -7090,18 +7513,27 @@ IO Module Instances. Mapped to memory.
 #define FUSE_WDP1  (unsigned char)~_BV(1)  /* Watchdog Timeout Period Bit 1 */
 #define FUSE_WDP2  (unsigned char)~_BV(2)  /* Watchdog Timeout Period Bit 2 */
 #define FUSE_WDP3  (unsigned char)~_BV(3)  /* Watchdog Timeout Period Bit 3 */
-#define FUSE_WDWP0  (unsigned char)~_BV(4)  /* Watchdog Window Timeout Period Bit 0 */
-#define FUSE_WDWP1  (unsigned char)~_BV(5)  /* Watchdog Window Timeout Period Bit 1 */
-#define FUSE_WDWP2  (unsigned char)~_BV(6)  /* Watchdog Window Timeout Period Bit 2 */
-#define FUSE_WDWP3  (unsigned char)~_BV(7)  /* Watchdog Window Timeout Period Bit 3 */
+/* Watchdog Window Timeout Period Bit 0 */
+#define FUSE_WDWP0  (unsigned char)~_BV(4)
+/* Watchdog Window Timeout Period Bit 1 */
+#define FUSE_WDWP1  (unsigned char)~_BV(5)
+/* Watchdog Window Timeout Period Bit 2 */
+#define FUSE_WDWP2  (unsigned char)~_BV(6)
+/* Watchdog Window Timeout Period Bit 3 */
+#define FUSE_WDWP3  (unsigned char)~_BV(7)
 #define FUSE1_DEFAULT  (0xFF)
 
 /* Fuse Byte 2 */
-#define FUSE_BODPD0  (unsigned char)~_BV(0)  /* BOD Operation in Power-Down Mode Bit 0 */
-#define FUSE_BODPD1  (unsigned char)~_BV(1)  /* BOD Operation in Power-Down Mode Bit 1 */
-#define FUSE_BODACT0  (unsigned char)~_BV(2)  /* BOD Operation in Active Mode Bit 0 */
-#define FUSE_BODACT1  (unsigned char)~_BV(3)  /* BOD Operation in Active Mode Bit 1 */
-#define FUSE_BOOTRST  (unsigned char)~_BV(6)  /* Boot Loader Section Reset Vector */
+/* BOD Operation in Power-Down Mode Bit 0 */
+#define FUSE_BODPD0  (unsigned char)~_BV(0)
+/* BOD Operation in Power-Down Mode Bit 1 */
+#define FUSE_BODPD1  (unsigned char)~_BV(1)
+/* BOD Operation in Active Mode Bit 0 */
+#define FUSE_BODACT0  (unsigned char)~_BV(2)
+/* BOD Operation in Active Mode Bit 1 */
+#define FUSE_BODACT1  (unsigned char)~_BV(3)
+/* Boot Loader Section Reset Vector */
+#define FUSE_BOOTRST  (unsigned char)~_BV(6)
 #define FUSE_DVSDON  (unsigned char)~_BV(7)  /* Spike Detector Enable */
 #define FUSE2_DEFAULT  (0xFF)
 
@@ -7115,25 +7547,37 @@ IO Module Instances. Mapped to memory.
 #define FUSE4_DEFAULT  (0xFF)
 
 /* Fuse Byte 5 */
-#define FUSE_BODLVL0  (unsigned char)~_BV(0)  /* Brown Out Detection Voltage Level Bit 0 */
-#define FUSE_BODLVL1  (unsigned char)~_BV(1)  /* Brown Out Detection Voltage Level Bit 1 */
-#define FUSE_BODLVL2  (unsigned char)~_BV(2)  /* Brown Out Detection Voltage Level Bit 2 */
-#define FUSE_EESAVE  (unsigned char)~_BV(3)  /* Preserve EEPROM Through Chip Erase */
+/* Brown Out Detection Voltage Level Bit 0 */
+#define FUSE_BODLVL0  (unsigned char)~_BV(0)
+/* Brown Out Detection Voltage Level Bit 1 */
+#define FUSE_BODLVL1  (unsigned char)~_BV(1)
+/* Brown Out Detection Voltage Level Bit 2 */
+#define FUSE_BODLVL2  (unsigned char)~_BV(2)
+/* Preserve EEPROM Through Chip Erase */
+#define FUSE_EESAVE  (unsigned char)~_BV(3)
 #define FUSE5_DEFAULT  (0xFF)
+/** @} */
 
-
-/* ========== Lock Bits ========== */
+/**
+ * @name Lock Bits
+ * 
+ */
+/**@{**/
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_APPLICATION_TABLE_BITS_EXIST
 #define __BOOT_LOCK_APPLICATION_BITS_EXIST
 #define __BOOT_LOCK_BOOT_BITS_EXIST
+/** @} */
 
-
-/* ========== Signature ========== */
+/**
+ * @name Signature
+ * 
+ */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x97
 #define SIGNATURE_2 0x4C
-
+/** @} */
 
 #endif /* _AVR_ATxmega128A1_H_ */
 

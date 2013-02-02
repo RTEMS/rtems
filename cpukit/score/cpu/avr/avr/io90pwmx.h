@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90PWM2(B) and AT90PWM3(B)
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2005, Andrey Pashchenko
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup io90pwmx AT90PWM2(B) and AT90PWM3(B) Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* I/O registers */
 
@@ -1366,5 +1382,6 @@
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST 
 
+/** @} */
 
 #endif /* _AVR_IO90PWMX_H_ */

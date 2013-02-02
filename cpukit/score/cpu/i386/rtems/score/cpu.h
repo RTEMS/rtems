@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
+ * 
+ * @brief Intel I386 CPU Dependent Source
+ * 
+ * This include file contains information pertaining to the Intel
+ * i386 processor.
  */
 
 /*
- *  This include file contains information pertaining to the Intel
- *  i386 processor.
- *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *

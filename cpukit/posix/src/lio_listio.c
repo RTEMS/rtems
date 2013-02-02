@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Initiates a List of I/O Requests with Single Function Call 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

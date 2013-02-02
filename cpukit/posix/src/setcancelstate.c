@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Setting Cancelability State
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

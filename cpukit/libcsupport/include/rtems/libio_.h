@@ -1,6 +1,8 @@
 /**
- * @file rtems/libio_.h
+ * @file
  *
+ * @brief LibIO Internal Interface
+ * 
  * This file is the libio internal interface.
  */
 
@@ -30,12 +32,12 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup LibIOInternal IO Internal Library
+ * @defgroup LibIOInternal IO Internal Library
  *
- *  @brief Internal IO library API and implementation.
+ * @brief Internal IO library API and implementation.
  *
- *  @{
  */
+/**@{**/
 
 #define RTEMS_FILESYSTEM_SYMLOOP_MAX 32
 
@@ -69,8 +71,8 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
  * The purpose of this location is to deliver the error return status for a
  * previous error condition which must set the errno accordingly.
  *
- * The usage of this null location instead of the NULL pointer eliminates a lot
- * of branches.
+ * The usage of this null location instead of the NULL pointer eliminates 
+ * a lot of branches.
  *
  * The user environment root and current directory are statically initialized
  * with the null location.  Due to that all file system services are in a
@@ -200,7 +202,7 @@ void rtems_filesystem_location_clone(
  *
  * @param[in] loc The location of the node.
  *
- * @return The node type.
+ * @retval type The node type.
  *
  * @see rtems_filesystem_instance_lock().
  */
@@ -215,8 +217,8 @@ rtems_filesystem_node_types_t rtems_filesystem_node_type(
  *
  * @param[in] loc The location to free.
  *
- * @note The file system root location is released by the file system instance
- * destruction handler (see @ref rtems_filesystem_fsunmount_me_t).
+ * @note The file system root location is released by the file system
+ * instance destruction handler (see @ref rtems_filesystem_fsunmount_me_t).
  *
  * @see rtems_filesystem_freenode_t.
  */
@@ -277,24 +279,24 @@ static inline void rtems_filesystem_instance_unlock(
  */
 
 /**
- *  This routine searches the IOP Table for an unused entry.  If it
- *  finds one, it returns it.  Otherwise, it returns NULL.
+ * This routine searches the IOP Table for an unused entry.  If it
+ * finds one, it returns it.  Otherwise, it returns NULL.
  */
 rtems_libio_t *rtems_libio_allocate(void);
 
 /**
- *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
+ * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 uint32_t rtems_libio_fcntl_flags( int fcntl_flags );
 
 /**
- *  Convert RTEMS internal flags to UNIX fnctl(2) flags
+ * Convert RTEMS internal flags to UNIX fnctl(2) flags
  */
 int rtems_libio_to_fcntl_flags( uint32_t flags );
 
 /**
- *  This routine frees the resources associated with an IOP (file descriptor)
- *  and clears the slot in the IOP Table.
+ * This routine frees the resources associated with an IOP (file descriptor)
+ * and clears the slot in the IOP Table.
  */
 void rtems_libio_free(
   rtems_libio_t *iop
@@ -359,7 +361,7 @@ void rtems_filesystem_eval_path_cleanup_with_parent(
  * current location.  The previous start and current locations are released.
  *
  * @param[in, out] ctx The path evaluation context.
- * @param[in, out] newstartloc_ptr Pointer to new start location.
+ * @param[in, out] newstartloc_ptr Pointer to the new start location.
  */
 void rtems_filesystem_eval_path_restart(
   rtems_filesystem_eval_path_context_t *ctx,
@@ -413,9 +415,6 @@ typedef struct {
   rtems_filesystem_eval_path_eval_token eval_token;
 } rtems_filesystem_eval_path_generic_config;
 
-/**
- *  @brief RTEMS File System Eval Generic Path
- */
 void rtems_filesystem_eval_path_generic(
   rtems_filesystem_eval_path_context_t *ctx,
   void *arg,
@@ -431,7 +430,7 @@ void rtems_filesystem_initialize(void);
  * corresponding mount entry.
  *
  * @param[out] dst The destination location.
- * @param[in] src The source location.
+ * @param[in] src The  source location.
  *
  * @retval dst The destination location.
  *
@@ -552,9 +551,7 @@ static inline void rtems_filesystem_location_error(
     errno = eno;
   }
 }
-/**
- *  @brief RTEMS File System Mknod
- */
+
 int rtems_filesystem_mknod(
   const rtems_filesystem_location_info_t *parentloc,
   const char *name,
@@ -565,9 +562,6 @@ int rtems_filesystem_mknod(
 
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc );
 
-/**
- *  @brief Change Owner and Group of a File
- */
 int rtems_filesystem_chown(
   const char *path,
   uid_t owner,
@@ -697,9 +691,6 @@ static inline void rtems_filesystem_eval_path_put_back_token(
   ctx->tokenlen = 0;
 }
 
-/**
- *  @brief RTEMS File System Eval Eat Delimiter Path
- */
 void rtems_filesystem_eval_path_eat_delimiter(
   rtems_filesystem_eval_path_context_t *ctx
 );

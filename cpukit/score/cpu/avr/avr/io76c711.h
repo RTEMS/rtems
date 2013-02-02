@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT76C711
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2002, Marek Michalkiewicz
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_io76c711 AT76C711 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* I/O registers */
 
@@ -489,4 +505,7 @@
    0x8000 - 0xBFFF - program SRAM (read/write), would be nice if other
                      AVR devices did that as well (no need to use LPM!)
  */
+
+/** @} */
+
 #endif /* _AVR_IO76C711_H_ */

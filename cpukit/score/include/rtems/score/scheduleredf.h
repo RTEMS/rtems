@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/scheduleredf.h
  *
+ *  @brief Data Related to the Manipulation of Threads for the EDF Scheduler
+ *
  *  This include file contains all the constants and structures associated
  *  with the manipulation of threads for the EDF scheduler.
  */
@@ -27,8 +29,9 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup ScoreScheduler
+ *  @defgroup ScoreSchedulerEDF EDF Scheduler
  *
+ *  @ingroup ScoreScheduler
  */
 /**@{*/
 
@@ -98,14 +101,14 @@ typedef struct {
 extern RBTree_Control _Scheduler_EDF_Ready_queue;
 
 /**
- * @brief Scheduler EDF Initialize
+ * @brief Initialize EDF scheduler.
  *
  * This routine initializes the EDF scheduler.
  */
 void _Scheduler_EDF_Initialize( void );
 
 /**
- *  @brief Removes Thread from Ready Queue
+ *  @brief Removes thread from ready queue.
  *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
@@ -119,7 +122,8 @@ void _Scheduler_EDF_Block(
 );
 
 /**
- *  @brief Scheduler EDF Schedule
+ *  @brief Sets the heir thread to be the next ready thread
+ *  in the rbtree ready queue.
  *
  *  This kernel routine sets the heir thread to be the next ready thread
  *  in the rbtree ready queue.
@@ -127,7 +131,7 @@ void _Scheduler_EDF_Block(
 void _Scheduler_EDF_Schedule( void );
 
 /**
- *  @brief Scheduler EDF Allocate
+ *  @brief Allocates EDF specific information of @a the_thread.
  *
  *  This routine allocates EDF specific information of @a the_thread.
  *
@@ -139,7 +143,7 @@ void *_Scheduler_EDF_Allocate(
 );
 
 /**
- *  @brief Frees EDF information of a thread 
+ *  @brief Frees EDF information of a thread.
  *
  *  This routine frees the EDF specific information of @a the_thread.
  *
@@ -151,7 +155,7 @@ void _Scheduler_EDF_Free(
 );
 
 /**
- *  @brief Scheduler EDF Update
+ *  @brief Updates position in the ready queue of @a the_thread.
  *
  *  This routine updates position in the ready queue of @a the_thread.
  *
@@ -163,7 +167,7 @@ void _Scheduler_EDF_Update(
 );
 
 /**
- *  @brief Scheduler EDF Unblock
+ *  @brief Adds @a the_thread to the scheduling decision.
  *
  *  This routine adds @a the_thread to the scheduling decision, that is,
  *  adds it to the ready queue and updates any appropriate scheduling
@@ -176,7 +180,9 @@ void _Scheduler_EDF_Unblock(
 );
 
 /**
- *  @brief Scheduler EDF Yield
+ *  @brief invoked when a thread wishes to voluntarily
+ *  transfer control of the processor to another thread
+ *  with equal deadline.
  *
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue with
@@ -189,7 +195,7 @@ void _Scheduler_EDF_Unblock(
 void _Scheduler_EDF_Yield( void );
 
 /**
- *  @brief Scheduler EDF Enqueue
+ *  @brief Put @a the_thread to the rbtree ready queue.
  *
  *  This routine puts @a the_thread to the rbtree ready queue.
  *
@@ -200,7 +206,7 @@ void _Scheduler_EDF_Enqueue(
 );
 
 /**
- *  @brief Enqueues a thread to the ready queue
+ *  @brief Enqueue a thread to the ready queue.
  *
  *  This routine puts @a the_thread to the rbtree ready queue.
  *  For the EDF scheduler this is the same as @a _Scheduler_EDF_Enqueue.
@@ -212,7 +218,8 @@ void _Scheduler_EDF_Enqueue_first(
 );
 
 /**
- *  @brief Scheduler EDF Extract
+ *  @brief Remove a specific thread from the scheduler's set
+ *  of ready threads.
  *
  *  This routine removes a specific thread from the scheduler's set
  *  of ready threads.
@@ -224,12 +231,12 @@ void _Scheduler_EDF_Extract(
 );
 
 /**
- *  @brief Scheduler EDF Priority compare
+ *  @brief Explicitly compare absolute dedlines (priorities) of threads.
  *
  * This routine explicitly compares absolute dedlines (priorities) of threads.
  * In case of EDF scheduling time overflow is taken into account.
  *
- * @return >0 for p1 > p2; 0 for p1 == p2; <0 for p1 < p2.
+ * @retval >0 for p1 > p2; 0 for p1 == p2; <0 for p1 < p2.
  */
 int _Scheduler_EDF_Priority_compare (
   Priority_Control p1,
@@ -237,7 +244,7 @@ int _Scheduler_EDF_Priority_compare (
 );
 
 /**
- *  @brief Scheduler EDF Release job
+ *  @brief Called when a new job of task is released.
  *
  *  This routine is called when a new job of task is released.
  *  It is called only from Rate Monotonic manager in the beginning

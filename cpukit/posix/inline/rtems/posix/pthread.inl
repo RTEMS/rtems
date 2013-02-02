@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/pthread.inl
+ * @file
+ * 
+ * @brief Private Inlined Routines for POSIX Threads
  *
  * This include file contains the static inline implementation of the private 
  * inlined routines for POSIX threads.

@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System Directory Support
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System Directory Support
  *
@@ -55,8 +55,9 @@
 /**
  * Return the hash of the entry.
  *
- * @param _e Pointer to the directory entry.
- * @return uint32_t The hash.
+ * @param[in] _e is a pointer to the directory entry.
+ *
+ * @retval hash The uint32_t hash of the entry.
  */
 #define rtems_rfs_dir_entry_hash(_e) \
   rtems_rfs_read_u32 (_e + RTEMS_RFS_DIR_ENTRY_HASH)
@@ -64,8 +65,9 @@
 /**
  * Set the hash of the entry.
  *
- * @param _e Pointer to the directory entry.
- * @param _h The hash.
+ * @param[in] _e is a pointer to the directory entry.
+ *
+ * @param[in] _h is the hash of the entry.
  */
 #define rtems_rfs_dir_set_entry_hash(_e, _h) \
   rtems_rfs_write_u32 (_e + RTEMS_RFS_DIR_ENTRY_HASH, _h)
@@ -73,8 +75,9 @@
 /**
  * Return the ino of the entry.
  *
- * @param _e Pointer to the directory entry.
- * @return uint32_t The ino.
+ * @param[in] _e is a pointer to the directory entry.
+ *
+ * @retval ino The ino of the entry.
  */
 #define rtems_rfs_dir_entry_ino(_e) \
   rtems_rfs_read_u32 (_e + RTEMS_RFS_DIR_ENTRY_INO)
@@ -82,8 +85,9 @@
 /**
  * Set the ino of the entry.
  *
- * @param _e Pointer to the directory entry.
- * @param _i The ino.
+ * @param[in] _e is a pointer to the directory entry.
+ *
+ * @param[in] _i is the ino of the entry.
  */
 #define rtems_rfs_dir_set_entry_ino(_e, _i) \
   rtems_rfs_write_u32 (_e + RTEMS_RFS_DIR_ENTRY_INO, _i)
@@ -91,8 +95,9 @@
 /**
  * Return the length of the entry.
  *
- * @param _e Pointer to the directory entry.
- * @return uint16_t The length.
+ * @param[in] _e Pointer to the directory entry.
+ *
+ * @retval length The length of the entry.
  */
 #define rtems_rfs_dir_entry_length(_e) \
   rtems_rfs_read_u16 (_e + RTEMS_RFS_DIR_ENTRY_LEN)
@@ -100,8 +105,8 @@
 /**
  * Set the length of the entry.
  *
- * @param _e Pointer to the directory entry.
- * @param _l The length.
+ * @param[in] _e is a pointer to the directory entry.
+ * @param[in] _l is the length.
  */
 #define rtems_rfs_dir_set_entry_length(_e, _l) \
   rtems_rfs_write_u16 (_e + RTEMS_RFS_DIR_ENTRY_LEN, _l)
@@ -110,13 +115,17 @@
  * Look up a directory entry in the directory pointed to by the inode. The look
  * up is local to this directory. No need to decend.
  *
- * @param fs The file system.
- * @param inode The inode of the directory to search.
- * @param name The name to look up. The name may not be nul terminated.
- * @param length The length of the name.
- * @param ino The return inode number if there is no error.
- * @param offset The offset in the directory for the entry.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] inode is a pointer to the inode of the directory to search.
+ * @param[in] name is a pointer to the name to look up. The name may not be
+ *             nul terminated.
+ * @param[in] length is the length of the name.
+ * @param[out] ino will be filled in with the inode number
+ *              if there is no error.
+ * @param[in] offset is the offset in the directory for the entry.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
                               rtems_rfs_inode_handle* inode,
@@ -129,12 +138,15 @@ int rtems_rfs_dir_lookup_ino (rtems_rfs_file_system*  fs,
  * Add an entry to the directory returing the inode number allocated to the
  * entry.
  *
- * @param fs The file system data.
- * @param dir Pointer to the directory inode the entry is to be added too.
- * @param name The name of the entry to be added.
- * @param length The length of the name excluding a terminating 0.
- * @param ino The ino of the entry.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] dir is a pointer to the directory inode the
+ *             entry is to be added too.
+ * @param[in] name is a pointer to the name of the entry to be added.
+ * @param[in] length is the length of the name excluding a terminating 0.
+ * @param[in] ino is the ino of the entry.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
                              rtems_rfs_inode_handle* dir,
@@ -145,12 +157,15 @@ int rtems_rfs_dir_add_entry (rtems_rfs_file_system*  fs,
 /**
  * Del an entry from the directory using an inode number as a key.
  *
- * @param fs The file system data.
- * @param dir Pointer to the directory inode the entry is to be deleted from.
- * @param ino The ino of the entry.
- * @param offset The offset in the directory of the entry to delete. If 0
- *               search from the start for the ino.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] dir is a pointer to the directory inode the
+ * entry is to be deleted from.
+ * @param[in] ino is the ino of the entry.
+ * @param[in] offset is the offset in the directory of the entry
+ *               to delete. If 0  search from the start for the ino.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
                              rtems_rfs_inode_handle* dir,
@@ -161,12 +176,16 @@ int rtems_rfs_dir_del_entry (rtems_rfs_file_system*  fs,
  * Read the directory entry from offset into the directory entry buffer and
  * return the length of space this entry uses in the directory table.
  *
- * @param fs The file system data.
- * @param dir The direct inode handler.
- * @param offset The offset in the directory to read from.
- * @param dirent Pointer to the dirent structure the entry is written into.
- * @param length Set the length this entry takes in the directory.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] dir is a pointer to the direct inode handler.
+ * @param[in] offset is the offset in the directory to read from.
+ * @param[in] dirent is a ointer to the dirent structure the entry
+ *              is written into.
+ * @param[out] length will contain the length this entry
+ *               takes in the directory.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
                         rtems_rfs_inode_handle* dir,
@@ -178,9 +197,11 @@ int rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
  * Check if the directory is empty. The current and parent directory entries
  * are ignored.
  *
- * @param fs The file system data
- * @param dir The directory inode to check.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data
+ * @param[in] dir is a pointer to the directory inode to check.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_dir_empty (rtems_rfs_file_system*  fs,
                          rtems_rfs_inode_handle* dir);

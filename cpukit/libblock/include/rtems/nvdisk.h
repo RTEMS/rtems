@@ -1,7 +1,7 @@
 /**
  * @file rtems/nvdisk.h
  *
- * Non-volatile disk block device implementation
+ * @brief Non-volatile Disk Block Device Implementation
  */
 
 /*

@@ -1,5 +1,7 @@
-/** 
- * @file rtems/score/priority.inl
+/**
+ * @file
+ *
+ * @brief Inlined Routines in the Priority Handler
  *
  * This file contains the static inline implementation of all inlined
  * routines in the Priority Handler.
@@ -22,20 +24,20 @@
 #define _RTEMS_SCORE_PRIORITY_INL
 
 /**
- *  @addtogroup ScorePriority 
- *  @{
+ * @addtogroup ScorePriority
  */
+/**@{**/
 
 /**
- *  This function returns true if the_priority if valid for a
- *  user task, and false otherwise.
+ * This function returns true if the_priority if valid for a
+ * user task, and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _Priority_Is_valid (
   Priority_Control the_priority
 )
 {
-  /* 
+  /*
    *  Since PRIORITY_MINIMUM is 0 and priorities are stored unsigned,
    *  then checking for less than 0 is unnecessary.
    */
@@ -45,7 +47,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Is_valid (
 
 
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

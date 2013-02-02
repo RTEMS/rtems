@@ -86,7 +86,11 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
-void Fatal_extension( uint32_t source, bool is_internal, uint32_t error )
+void Fatal_extension(
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
+)
 {
   if ( source != RTEMS_FATAL_SOURCE_STACK_CHECKER ) {
     printk( "unexpected fatal source\n" );

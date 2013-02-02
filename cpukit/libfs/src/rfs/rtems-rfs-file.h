@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System File Support
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System File Support
  *
@@ -89,8 +89,9 @@ typedef struct _rtems_rfs_file_shared
 /**
  * Get the atime.
  *
- * @param shared The shared file data.
- * @return rtems_rfs_time The atime.
+ * @param[in] shared is a pointer to the shared file data.
+ *
+ * @retval atime The atime.
  */
 static inline rtems_rfs_time
 rtems_rfs_file_shared_get_atime (rtems_rfs_file_shared* shared)
@@ -101,8 +102,9 @@ rtems_rfs_file_shared_get_atime (rtems_rfs_file_shared* shared)
 /**
  * Get the mtime.
  *
- * @param shared The shared file data.
- * @return rtems_rfs_time The mtime.
+ * @param[in] shared is a pointer to the shared file data.
+ *
+ * @retval mtime The mtime.
  */
 static inline rtems_rfs_time
 rtems_rfs_file_shared_get_mtime (rtems_rfs_file_shared* shared)
@@ -113,8 +115,9 @@ rtems_rfs_file_shared_get_mtime (rtems_rfs_file_shared* shared)
 /**
  * Get the ctime.
  *
- * @param shared The shared file data.
- * @return rtems_rfs_time The ctime.
+ * @param[in] shared is a pointer to the shared file data.
+ *
+ * @retval ctime The ctime.
  */
 static inline rtems_rfs_time
 rtems_rfs_file_shared_get_ctime (rtems_rfs_file_shared* shared)
@@ -125,8 +128,9 @@ rtems_rfs_file_shared_get_ctime (rtems_rfs_file_shared* shared)
 /**
  * Get the block count.
  *
- * @param shared The shared file data.
- * @return uint32_t The block count.
+ * @param[in] shared is a pointer to the shared file data.
+ *
+ * @retval count The block count.
  */
 static inline uint32_t
 rtems_rfs_file_shared_get_block_count (rtems_rfs_file_shared* shared)
@@ -137,8 +141,9 @@ rtems_rfs_file_shared_get_block_count (rtems_rfs_file_shared* shared)
 /**
  * Get the block offset.
  *
- * @param shared The shared file data.
- * @return uint16_t The block offset.
+ * @param shared is a pointer to the shared file data.
+ *
+ * @retval offset The block offset.
  */
 static inline uint16_t
 rtems_rfs_file_shared_get_block_offset (rtems_rfs_file_shared* shared)
@@ -149,9 +154,10 @@ rtems_rfs_file_shared_get_block_offset (rtems_rfs_file_shared* shared)
 /**
  * Calculate the size of data.
  *
- * @param fs The file system data.
- * @oaram shared The shared file data.
- * @return rtems_rfs_pos The data size in bytes.
+ * @param[in] fs is the file system data.
+ * @param[in] shared is a pointer to the shared file data.
+ *
+ * @retval data The data size in bytes.
  */
 static inline rtems_rfs_pos
 rtems_rfs_file_shared_get_size (rtems_rfs_file_system* fs,
@@ -292,10 +298,12 @@ typedef struct _rtems_rfs_file_handle
 /**
  * Open a file handle.
  *
- * @param fs The file system.
- * @param ino The inode number of the file to be opened.
- * @param handle Return the handle pointer in this handle.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] ino is the inode number of the file to be opened.
+ * @param[out] handle will be filled in with the handle pointer.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_open (rtems_rfs_file_system*  fs,
                          rtems_rfs_ino           ino,
@@ -305,9 +313,11 @@ int rtems_rfs_file_open (rtems_rfs_file_system*  fs,
 /**
  * Close an open file handle.
  *
- * @param fs The file system.
- * @param handle The open file handle.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] handle is the open file handle.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_close (rtems_rfs_file_system* fs,
                           rtems_rfs_file_handle* handle);
@@ -321,10 +331,12 @@ int rtems_rfs_file_close (rtems_rfs_file_system* fs,
  * I/O past the end of a block so the call returns the amount of data
  * available.
  *
- * @param handle The file handle.
- * @param available The amount of data available for I/O.
- * @param read The I/O operation is a read so the block is read from the media.
- * @return int The error number (errno). No error if 0.
+ * @param[in] handle is the file handle.
+ * @param[in] available is the amount of data available for I/O.
+ * @param[in] read is the I/O operation is a read so the block is read from the media.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
                              size_t*                available,
@@ -337,10 +349,12 @@ int rtems_rfs_file_io_start (rtems_rfs_file_handle* handle,
  *
  * If the file's position is updated by the size amount.
  *
- * @param handle The file handle.
- * @param size The amount of data read or written.
- * @param read The I/O was a read if true else it was a write.
- * @return int The error number (errno). No error if 0.
+ * @param[in] handle is the file handle.
+ * @param[in] size is the amount of data read or written.
+ * @param[in] read is the I/O was a read if true else it was a write.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
                            size_t                 size,
@@ -351,8 +365,10 @@ int rtems_rfs_file_io_end (rtems_rfs_file_handle* handle,
  * buffer and the buffer was not already released as modified the data will be
  * lost.
  *
- * @param handle The file handle.
- * @return int The error number (errno). No error if 0.
+ * @param[in] handle is the file handle.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_io_release (rtems_rfs_file_handle* handle);
 
@@ -360,10 +376,12 @@ int rtems_rfs_file_io_release (rtems_rfs_file_handle* handle);
  * The file to the position returning the old position. The position is
  * abolute.
  *
- * @param handle The file handle.
- * @param pos The position to seek to.
- * @param new_pos The actual position.
- * @return int The error number (errno). No error if 0.
+ * @param[in] handle The file handle.
+ * @param[in] pos is the position to seek to.
+ * @param[out] new_pos will contain the actual position.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
                          rtems_rfs_pos          pos,
@@ -373,9 +391,10 @@ int rtems_rfs_file_seek (rtems_rfs_file_handle* handle,
  * Set the size of the file to the new size. This can extend the file to a new
  * size.
  *
- * @param handle The file handle.
- * @param size The new size of the file.
- * @return int The error number (errno). No error if 0.
+ * @param[in] handle is the file handle.
+ * @param[in] size is the new size of the file.
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
                              rtems_rfs_pos          size);
@@ -383,9 +402,12 @@ int rtems_rfs_file_set_size (rtems_rfs_file_handle* handle,
 /**
  * Return the shared file data for an ino.
  *
- * @param fs The file system data.
- * @param ino The inode number to locate the data for.
+ * @param[in] fs is the file system data.
+ * @param[in] ino is the inode number to locate the data for.
  * @return rtems_rfs_file_shared* The shared data or NULL is not located.
+ *
+ * @retval shared The shared data.
+ * @retval NULL No shared file data is located.
  */
 rtems_rfs_file_shared* rtems_rfs_file_get_shared (rtems_rfs_file_system* fs,
                                                   rtems_rfs_ino          ino);

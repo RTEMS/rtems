@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Returns the Resolution of any Clock
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

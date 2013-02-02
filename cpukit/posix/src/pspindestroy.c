@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Destroy a Spinlock
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

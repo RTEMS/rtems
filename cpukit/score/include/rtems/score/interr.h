@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/interr.h
  *
+ *  @brief Constants and Prototypes Related to the Internal Error Handler
+ *
  *  This include file contains constants and prototypes related
  *  to the Internal Error Handler.
  */

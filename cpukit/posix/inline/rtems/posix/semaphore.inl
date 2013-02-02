@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/semaphore.inl
+ * @file
+ * 
+ * @brief Private Inlined Routines for POSIX Semaphores
  *
  * This include file contains the static inline implementation of the private 
  * inlined routines for POSIX Semaphores.

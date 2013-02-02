@@ -1,0 +1,3 @@
+*** POSIX TIME TEST PSXTMMUTEX05 ***
+pthread_mutex_unlock - unblocking, no preemption 37
+*** END OF POSIX TIME TEST PSXTMMUTEX05 ***

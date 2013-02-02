@@ -1,10 +1,13 @@
 /**
  *  @file  rtems/score/schedulersimple.h
  *
+ *  @brief Manipulation of Threads Simple-Priority-Based Ready Queue
+ *
  *  This include file contains all the constants and structures associated
  *  with the manipulation of threads on a simple-priority-based ready queue.
- *
- *
+ */
+
+/*
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,8 +19,9 @@
 #define _RTEMS_SCORE_SCHEDULERSIMPLE_H
 
 /**
- *  @addtogroup ScoreScheduler
+ *  @defgroup ScoreSchedulerSimple Simple Priority Scheduler
  *
+ *  @ingroup ScoreScheduler
  */
 /**@{*/
 
@@ -50,7 +54,7 @@ extern "C" {
   }
 
 /**
- *  @brief Initializes simple scheduler
+ *  @brief Initialize simple scheduler.
  *
  *  This routine initializes the simple scheduler.
  */
@@ -64,7 +68,8 @@ void _Scheduler_simple_Initialize( void );
 void _Scheduler_simple_Schedule( void );
 
 /**
- *  @brief Simple Schedule
+ *  @brief Invoked when a thread wishes to voluntarily
+ *  transfer control of the processor to another thread in the queue.
  *
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
@@ -79,7 +84,7 @@ void _Scheduler_simple_Schedule( void );
 void _Scheduler_simple_Yield( void );
 
 /**
- *  @brief Removes a thread from the queue
+ *  @brief Remove a simple-priority-based thread from the queue.
  *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
@@ -93,7 +98,8 @@ void _Scheduler_simple_Block(
 );
 
 /**
- *  @brief Scheduler Simple Handler / Unblock
+ *  @brief Unblock a simple-priority-based thread.
+ *
  *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and
  *  updates any appropriate scheduling variables, for example the heir thread.
@@ -105,7 +111,7 @@ void _Scheduler_simple_Unblock(
 );
 
 /**
- *  @brief Removes a thread from a simple queue
+ *  @brief Removes a simple-priority-based thread from a simple queue.
  *
  *  This routine removes a specific thread from the specified
  *  simple-based ready queue.
@@ -117,7 +123,7 @@ void _Scheduler_simple_Extract(
 );
 
 /**
- *  @brief Puts thread onto the ready queue
+ *  @brief Puts simple-priority-based thread onto the ready queue.
  *
  *  This routine puts @a the_thread on to the ready queue.
  *
@@ -128,7 +134,8 @@ void _Scheduler_simple_Enqueue(
 );
 
 /**
- *  @brief Scheduler simple Enqueue first
+ *  @brief Put simple-priority-based @a the_thread to
+ *  the head of the ready queue.
  *
  *  This routine puts @a the_thread to the head of the ready queue.
  *  The thread will be the first thread at its priority level.
@@ -140,7 +147,7 @@ void _Scheduler_simple_Enqueue_first(
 );
 
 /**
- *  @brief Returns empty placeholder for scheduler
+ *  @brief Return empty placeholder for the simple scheduler.
  *
  *  This routine is a place holder for any memeory allocation needed
  *  by the scheduler.  For the simple scheduler the routine is an empty
@@ -149,7 +156,7 @@ void _Scheduler_simple_Enqueue_first(
  *  @param[in] the_thread is the thread the scheduler is allocating
  *             management memory for
  *
- *  @return this routine returns -1 since this is just an empty placeholder
+ *  @retval this routine returns -1 since this is just an empty placeholder
  *  and the return value may be defined differently by each scheduler.
  */
 void *_Scheduler_simple_Allocate(
@@ -157,7 +164,7 @@ void *_Scheduler_simple_Allocate(
 );
 
 /**
- *  @breif Stub for schedule update
+ *  @brief Stub for simple schedule update.
  *
  *  This routine does nothing, and is used as a stub for Schedule update
  *  The overhead of a function call will still be imposed.
@@ -169,7 +176,7 @@ void _Scheduler_simple_Update(
 );
 
 /**
- *  @brief Stub for schedule free
+ *  @brief Stub for simple schedule free.
  *
  *  This routine does nothing, and is used as a stub for Schedule free
  *  The overhead of a function call will still be imposed.
@@ -193,7 +200,8 @@ void _Scheduler_simple_Ready_queue_enqueue(
 );
 
 /**
- *  @brief Scheduler Simple Ready Queue Enqueue First
+ *  @brief Puts simple-priority-based @a the_thread on to the ready queue
+ *  at the beginning of its priority group.
  *
  *  This routine puts @a the_thread on to the ready queue
  *  at the beginning of its priority group.

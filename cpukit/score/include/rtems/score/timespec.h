@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 /**
- * @brief Set Timespec to Seconds Nanosecond
+ * @brief Set timespec to seconds nanosecond.
  *
  *  This method sets the timespec to the specified seconds and nanoseconds
  *  value.
@@ -51,7 +51,7 @@ extern "C" {
 	} while (0)
 
 /**
- * @brief Zero Timespec
+ * @brief Sets the Timespec to Zero
  *
  *  This method sets the timespec to zero.
  *  value.
@@ -65,37 +65,37 @@ extern "C" {
 	} while (0)
 
 /**
- * @brief Get Seconds Portion of Timespec
+ * @brief Get seconds portion of timespec.
  *
  *  This method returns the seconds portion of the specified timespec
  *
  *  @param[in] _time points to the timespec
  *
- *  @return The seconds portion of @a _time.
+ *  @retval The seconds portion of @a _time.
  */
 #define _Timespec_Get_seconds( _time ) \
 	((_time)->tv_sec)
 
 /**
- * @brief Get Nanoseconds Portion of Timespec
+ * @brief Get nanoseconds portion of timespec.
  *
  *  This method returns the nanoseconds portion of the specified timespec
  *
  *  @param[in] _time points to the timespec
  *
- *  @return The nanoseconds portion of @a _time.
+ *  @retval The nanoseconds portion of @a _time.
  */
 #define _Timespec_Get_nanoseconds( _time ) \
 	((_time)->tv_nsec)
 
 /**
- * @brief Is Timespec Valid
+ * @brief Check if timespec is valid.
  *
  *  This method determines the validity of a timespec.
  *
  *  @param[in] time is the timespec instance to validate.
  *
- *  @return This method returns true if @a time is valid and
+ *  @retval This method returns true if @a time is valid and
  *          false otherwise.
  */
 bool _Timespec_Is_valid(
@@ -103,14 +103,14 @@ bool _Timespec_Is_valid(
 );
 
 /**
- *  @brief Timespec Less Than Operator
+ *  @brief The Timespec "less than" operator.
  *
  *  This method is the less than operator for timespecs.
  *
  *  @param[in] lhs is the left hand side timespec
  *  @param[in] rhs is the right hand side timespec
  *
- *  @return This method returns true if @a lhs is less than the @a rhs and
+ *  @retval This method returns true if @a lhs is less than the @a rhs and
  *          false otherwise.
  */
 bool _Timespec_Less_than(
@@ -119,28 +119,28 @@ bool _Timespec_Less_than(
 );
 
 /**
- * @brief Timespec Greater Than Operator
+ * @brief The Timespec "greater than" operator.
  *
  *  This method is the greater than operator for timespecs.
  *
- *  @param[in] lhs is the left hand side timespec
- *  @param[in] rhs is the right hand side timespec
+ *  @param[in] _lhs is the left hand side timespec
+ *  @param[in] _rhs is the right hand side timespec
  *
- *  @return This method returns true if @a lhs is greater than the @a rhs and
+ *  @retval This method returns true if @a lhs is greater than the @a rhs and
  *          false otherwise.
  */
 #define _Timespec_Greater_than( _lhs, _rhs ) \
   _Timespec_Less_than( _rhs, _lhs )
 
 /**
- * @brief Timespec equal to Operator
+ * @brief The Timespec "equal to" operator.
  *
  *  This method is the is equal to than operator for timespecs.
  *
  *  @param[in] lhs is the left hand side timespec
  *  @param[in] rhs is the right hand side timespec
  *
- *  @return This method returns true if @a lhs is equal to  @a rhs and
+ *  @retval This method returns true if @a lhs is equal to  @a rhs and
  *          false otherwise.
  */
 #define _Timespec_Equal_to( lhs, rhs ) \
@@ -149,7 +149,7 @@ bool _Timespec_Less_than(
   )
 
 /**
- *  @brief Add to a Timespec
+ *  @brief Add two timespecs.
  *
  *  This routine adds two timespecs.  The second argument is added
  *  to the first.
@@ -157,7 +157,7 @@ bool _Timespec_Less_than(
  *  @param[in] time is the base time to be added to
  *  @param[in] add is the timespec to add to the first argument
  *
- *  @return This method returns the number of seconds @a time increased by.
+ *  @retval This method returns the number of seconds @a time increased by.
  */
 uint32_t _Timespec_Add_to(
   struct timespec       *time,
@@ -165,21 +165,21 @@ uint32_t _Timespec_Add_to(
 );
 
 /**
- * @brief Convert Timespec to Number of Ticks
+ * @brief Convert timespec to number of ticks.
  *
  *  This routine convert the @a time timespec to the corresponding number
  *  of clock ticks.
  *
  *  @param[in] time is the time to be converted
  *
- *  @return This method returns the number of ticks computed.
+ *  @retval This method returns the number of ticks computed.
  */
 uint32_t _Timespec_To_ticks(
   const struct timespec *time
 );
 
 /**
- * @brief Convert Ticks to Timespec
+ * @brief Convert ticks to timespec.
  *
  *  This routine converts the @a ticks value to the corresponding
  *  timespec format @a time.
@@ -193,7 +193,7 @@ void _Timespec_From_ticks(
 );
 
 /**
- * @brief Subtract Two Timespec
+ * @brief Subtract two timespec.
  *
  *  This routine subtracts two timespecs.  @a result is set to
  *  @a end - @a start.
@@ -202,7 +202,7 @@ void _Timespec_From_ticks(
  *  @param[in] end is the ending time
  *  @param[in] result is the difference between starting and ending time.
  *
- *  @return This method fills in @a result.
+ *  @retval This method fills in @a result.
  */
 void _Timespec_Subtract(
   const struct timespec *start,
@@ -211,7 +211,7 @@ void _Timespec_Subtract(
 );
 
 /**
- * @brief Divide Timespec By Integer
+ * @brief Divide timespec by an integer.
  *
  *  This routine divides a timespec by an integer value.  The expected
  *  use is to assist in benchmark calculations where you typically
@@ -221,7 +221,7 @@ void _Timespec_Subtract(
  *  @param[in] iterations is the number of iterations
  *  @param[in] result is the average time.
  *
- *  @return This method fills in @a result.
+ *  @retval This method fills in @a result.
  */
 void _Timespec_Divide_by_integer(
   const struct timespec *time,
@@ -230,7 +230,7 @@ void _Timespec_Divide_by_integer(
 );
 
 /**
- * @brief Divide Timespec
+ * @brief Divide a timespec by anonther timespec.
  *
  *  This routine divides a timespec by another timespec.  The
  *  intended use is for calculating percentages to three decimal points.
@@ -240,7 +240,7 @@ void _Timespec_Divide_by_integer(
  *  @param[in] ival_percentage is the integer portion of the average
  *  @param[in] fval_percentage is the thousandths of percentage
  *
- *  @return This method fills in @a result.
+ *  @retval This method fills in @a result.
  */
 void _Timespec_Divide(
   const struct timespec *lhs,

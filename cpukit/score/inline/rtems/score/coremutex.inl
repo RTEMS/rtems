@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/coremutex.inl
+/**
+ * @file
  *
- *  This include file contains all of the inlined routines associated
- *  with the CORE mutexes.
+ * @brief Inlined Routines Associated with the CORE Mutexes
+ *
+ * This include file contains all of the inlined routines associated
+ * with the CORE mutexes.
  */
 
 /*
@@ -22,19 +24,20 @@
 #define _RTEMS_SCORE_COREMUTEX_INL
 
 /**
- *  @addtogroup ScoreMutex 
- *  @{
+ * @addtogroup ScoreMutex
  */
+/**@{**/
 
 /**
- *  @brief Is Mutex Locked
+ * @brief Is mutex locked.
  *
- *  This routine returns true if the mutex specified is locked and false
- *  otherwise.
+ * This routine returns true if the mutex specified is locked and false
+ * otherwise.
  *
- *  @param[in] the_mutex is the mutex to check
+ * @param[in] the_mutex is the mutex to check.
  *
- *  @return This method returns true if the mutex is locked.
+ * @retval true The mutex is locked.
+ * @retval false The mutex is not locked.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
   CORE_mutex_Control  *the_mutex
@@ -42,16 +45,17 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
 {
   return the_mutex->lock == CORE_MUTEX_LOCKED;
 }
- 
+
 /**
- *  @brief Does Core Mutex Use FIFO Blocking
+ * @brief Does core mutex use FIFO blocking.
  *
- *  This routine returns true if the mutex's wait discipline is FIFO and false
- *  otherwise.
+ * This routine returns true if the mutex's wait discipline is FIFO and false
+ * otherwise.
  *
- *  @param[in] the_attribute is the attribute set of the mutex
+ * @param[in] the_attribute is the attribute set of the mutex.
  *
- *  @return This method returns true if the mutex is using FIFO blocking order.
+ * @retval true The mutex is using FIFO blocking order.
+ * @retval false The mutex is not using FIFO blocking order.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
   CORE_mutex_Attributes *the_attribute
@@ -59,17 +63,18 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_FIFO;
 }
- 
+
 /**
- *  @brief Doex Core Mutex Use Priority Blocking
+ * @brief Doex core mutex use priority blocking.
  *
- *  This routine returns true if the mutex's wait discipline is PRIORITY and
- *  false otherwise.
+ * This routine returns true if the mutex's wait discipline is PRIORITY and
+ * false otherwise.
  *
- *  @param[in] the_attribute is the attribute set of the mutex
+ * @param[in] the_attribute is the attribute set of the mutex.
  *
- *  @return This method returns true if the mutex is using
- *          priority blocking order.
+ * @retval true The mutex is using priority blocking order.
+ * @retval false The mutex is not using priority blocking order.
+ *
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority(
   CORE_mutex_Attributes *the_attribute
@@ -77,17 +82,17 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority(
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY;
 }
- 
+
 /**
- *  @brief Does Mutex Use Priority Inheritance
+ * @brief Does mutex use priority inheritance.
  *
- *  This routine returns true if the mutex's wait discipline is
- *  INHERIT_PRIORITY and false otherwise.
+ * This routine returns true if the mutex's wait discipline is
+ * INHERIT_PRIORITY and false otherwise.
  *
- *  @param[in] the_attribute is the attribute set of the mutex
+ * @param[in] the_attribute is the attribute set of the mutex.
  *
- *  @return This method returns true if the mutex is using priority
- *          inheritance.
+ * @retval true The mutex is using priority inheritance.
+ * @retval false The mutex is not using priority inheritance.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_inherit_priority(
   CORE_mutex_Attributes *the_attribute
@@ -95,16 +100,17 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_inherit_priority(
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
 }
- 
+
 /**
- *  @brief Does Mutex Use Priority Ceiling
+ * @brief Does mutex use priority ceiling.
  *
- *  This routine returns true if the mutex's wait discipline is
- *  PRIORITY_CEILING and false otherwise.
+ * This routine returns true if the mutex's wait discipline is
+ * PRIORITY_CEILING and false otherwise.
  *
- *  @param[in] the_attribute is the attribute set of the mutex
- *  @return This method returns true if the mutex is using priority
- *          ceiling.
+ * @param[in] the_attribute is the attribute set of the mutex.
+ *
+ * @retval true The mutex is using priority ceiling.
+ * @retval false The mutex is not using priority ceiling.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority_ceiling(
   CORE_mutex_Attributes *the_attribute
@@ -112,7 +118,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority_ceiling(
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
 }
- 
+
 /*
  *  Seize Mutex with Quick Success Path
  *
@@ -221,7 +227,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   return 1;
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

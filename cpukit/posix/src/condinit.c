@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Initialize a Condition Variable
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

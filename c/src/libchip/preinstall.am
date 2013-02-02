@@ -126,6 +126,10 @@ $(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h: i2c/i2c-2b-eeprom.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-2b-eeprom.h
 
+$(PROJECT_INCLUDE)/libchip/i2c-sc620.h: i2c/i2c-sc620.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/i2c-sc620.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/i2c-sc620.h
+
 $(PROJECT_INCLUDE)/libchip/spi-memdrv.h: i2c/spi-memdrv.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/spi-memdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/spi-memdrv.h

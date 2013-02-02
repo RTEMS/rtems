@@ -1,18 +1,19 @@
+/**
+ * @file
+ *
+ * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File System Format
+ *
+ * This function lets you format a disk in the RFS format.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File System Format.
- *
- * This function lets you format a disk in the RFS format.
  */
 
 #if !defined (_RTEMS_RFS_FORMAT_H_)
@@ -74,8 +75,9 @@ typedef struct _rtems_rfs_format_config
 /**
  * RFS Format command.
  *
- * @param name The device name to format.
- * @param config Pointer to a configuration table.
+ * @param[in] name is the device name to format.
+ * @param[in] config is a pointer to the configuration table.
+ *
  * @retval -1 Error. See errno.
  * @retval 0 No error. Format successful.
  */

@@ -19,6 +19,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/score/armv4.h>
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
@@ -252,11 +254,11 @@ void bsp_interrupt_dispatch(void)
   lpc32xx.sic_1.er = er_sic_1 & masks->field.sic_1;
   lpc32xx.sic_2.er = er_sic_2 & masks->field.sic_2;
 
-  psr = arm_status_irq_enable();
+  psr = _ARMV4_Status_irq_enable();
 
   bsp_interrupt_handler_dispatch(vector);
 
-  arm_status_restore(psr);
+  _ARMV4_Status_restore(psr);
 
   lpc32xx.mic.er = er_mic & lpc32xx_irq_enable.field.mic;
   lpc32xx.sic_1.er = er_sic_1 & lpc32xx_irq_enable.field.sic_1;
@@ -341,7 +343,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   lpc32xx.sic_1.atr = 0x26000;
   lpc32xx.sic_2.atr = 0x0;
 
-  lpc32xx_set_exception_handler(ARM_EXCEPTION_IRQ, arm_exc_interrupt);
+  lpc32xx_set_exception_handler(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt);
 
   return RTEMS_SUCCESSFUL;
 }

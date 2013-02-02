@@ -1,8 +1,10 @@
-/* Test program for evaluating NFS read throughput */
-
-/* Author: Till Straumann <strauman@slac.stanford.edu>, 2006 */
-
-/* This test code allows for evaluating NFS read performance
+/**
+ * @file
+ *
+ * @brief Test Program for Evaluating NFS Read Throughput
+ * @ingroup libfs
+ *
+ * This test code allows for evaluating NFS read performance
  * under various scenarios:
  *  - synchronous reads with various buffer sizes (select
  *    'num_readers' == 0, see below).
@@ -48,7 +50,12 @@
  *    performed at 'big block' boundaries (num_readers * chunk_size).
  */
 
+
+
+
 /*
+ * Author: Till Straumann <strauman@slac.stanford.edu>, 2006
+ *
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by

@@ -1,6 +1,12 @@
-/*
+/**
+ * @file
+ * 
+ * @brief PowerPc MSR and Registers Access Definitions
+ * 
  * This file contains some powerpc MSR and registers access definitions.
- *
+ */
+
+/*
  * COPYRIGHT (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
  *

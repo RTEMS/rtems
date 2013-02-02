@@ -1,6 +1,8 @@
 /**
  * @file rtems/bspIo.h
  *
+ * @brief Interface to Kernel Print Methods
+ *
  * This include file defines the interface to kernel print methods.
  */
 

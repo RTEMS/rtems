@@ -37,8 +37,8 @@ extern "C" {
  *
  * @ingroup rtems_blkdev
  *
- * @{
  */
+/**@{**/
 
 typedef struct {
   rtems_blkdev_bnum  block;

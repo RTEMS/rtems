@@ -18,6 +18,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/dosfs.h>
+#include <rtems/libcsupport.h>
 
 #include "ramdisk_support.h"
 #include "fstest.h"
@@ -25,17 +26,19 @@
 
 #define BLOCK_SIZE 512
 
-msdos_format_request_param_t rqdata = {
-    OEMName:             "RTEMS",
-    VolLabel:            "RTEMSDisk",
-    sectors_per_cluster: 2,
-    fat_num:             0,
-    files_per_root_dir:  0,
-    media:               0,
-    quick_format:        FALSE,
-    skip_alignment:      0,
-    info_level:          0
+static const msdos_format_request_param_t rqdata = {
+  .OEMName             = "RTEMS",
+  .VolLabel            = "RTEMSDisk",
+  .sectors_per_cluster = 2,
+  .fat_num             = 0,
+  .files_per_root_dir  = 0,
+  .media               = 0,
+  .quick_format        = true,
+  .skip_alignment      = 0,
+  .info_level          = 0
 };
+
+static rtems_resource_snapshot before_mount;
 
 void test_initialize_filesystem(void)
 {
@@ -47,6 +50,8 @@ void test_initialize_filesystem(void)
 
   rc=msdos_format(RAMDISK_PATH,&rqdata);
   rtems_test_assert(rc==0);
+
+  rtems_resource_snapshot_take(&before_mount);
 
   rc=mount(RAMDISK_PATH,
       BASE_FOR_TEST,
@@ -62,6 +67,7 @@ void test_shutdown_filesystem(void)
   int rc=0;
   rc=unmount(BASE_FOR_TEST) ;
   rtems_test_assert(rc==0);
+  rtems_test_assert(rtems_resource_snapshot_check(&before_mount));
   del_ramdisk();
 }
 

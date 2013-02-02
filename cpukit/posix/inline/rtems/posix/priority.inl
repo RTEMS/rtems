@@ -1,6 +1,8 @@
 /**
- * @file rtems/posix/priority.inl
+ * @file
  *
+ * @brief Inline Methods Related to POSIX Priority Management
+ * 
  * This defines the static inline methods related to POSIX priority management.
  */
 

@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Adds printk Support via Polled termios
+ */
+
 /*===============================================================*\
 | Project: RTEMS configure remote gdb over serial line            |
 +-----------------------------------------------------------------+

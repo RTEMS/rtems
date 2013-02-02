@@ -1,17 +1,20 @@
 /**
- * @file rtems/asm.h
+ * @file
  *
- *  This include file attempts to address the problems
- *  caused by incompatible flavors of assemblers and
- *  toolsets.  It primarily addresses variations in the
- *  use of leading underscores on symbols and the requirement
- *  that register names be preceded by a %.
+ * @brief Address the Problems Caused by Incompatible Flavor of
+ * Assemblers and Toolsets
+ *
+ * This include file attempts to address the problems
+ * caused by incompatible flavors of assemblers and
+ * toolsets.  It primarily addresses variations in the
+ * use of leading underscores on symbols and the requirement
+ * that register names be preceded by a %.
+ *
+ * @note The spacing in the use of these macros
+ *       is critical to them working as advertised.
  */
 
 /*
- *  NOTE: The spacing in the use of these macros
- *        is critical to them working as advertised.
- *
  *  COPYRIGHT:
  *
  *  This file is based on similar code found in newlib available
@@ -38,24 +41,24 @@
 
 #ifndef __USER_LABEL_PREFIX__
 /**
- *  Recent versions of GNU cpp define variables which indicate the
- *  need for underscores and percents.  If not using GNU cpp or
- *  the version does not support this, then you will obviously
- *  have to define these as appropriate.
+ * Recent versions of GNU cpp define variables which indicate the
+ * need for underscores and percents.  If not using GNU cpp or
+ * the version does not support this, then you will obviously
+ * have to define these as appropriate.
  *
- *  This symbol is prefixed to all C program symbols.
+ * This symbol is prefixed to all C program symbols.
  */
 #define __USER_LABEL_PREFIX__ _
 #endif
 
 #ifndef __REGISTER_PREFIX__
 /**
- *  Recent versions of GNU cpp define variables which indicate the
- *  need for underscores and percents.  If not using GNU cpp or
- *  the version does not support this, then you will obviously
- *  have to define these as appropriate.
+ * Recent versions of GNU cpp define variables which indicate the
+ * need for underscores and percents.  If not using GNU cpp or
+ * the version does not support this, then you will obviously
+ * have to define these as appropriate.
  *
- *  This symbol is prefixed to all register names.
+ * This symbol is prefixed to all register names.
  */
 #define __REGISTER_PREFIX__
 #endif
@@ -95,8 +98,9 @@
 #define BEGIN_DATA
 /** This macro is used to denote the end of a data section. */
 #define END_DATA
-/** This macro is used to denote the beginning of the
- *  unitialized data section.
+/**
+ * This macro is used to denote the beginning of the
+ * unitialized data section.
  */
 #define BEGIN_BSS
 /** This macro is used to denote the end of the unitialized data section.  */
@@ -105,18 +109,18 @@
 #define END
 
 /**
- *  This macro is used to declare a public global symbol.
+ * This macro is used to declare a public global symbol.
  *
- *  @note This must be tailored for a particular flavor of the C compiler.
- *  They may need to put underscores in front of the symbols.
+ * @note This must be tailored for a particular flavor of the C compiler.
+ * They may need to put underscores in front of the symbols.
  */
 #define PUBLIC(sym) .globl SYM (sym)
 
 /**
- *  This macro is used to prototype a public global symbol.
+ * This macro is used to prototype a public global symbol.
  *
- *  @note This must be tailored for a particular flavor of the C compiler.
- *  They may need to put underscores in front of the symbols.
+ * @note This must be tailored for a particular flavor of the C compiler.
+ * They may need to put underscores in front of the symbols.
  */
 #define EXTERN(sym) .globl SYM (sym)
 

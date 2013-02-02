@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/smplock.h
  *
+ *  @brief Interface for Atomic Locks
+ *
  *  This include file defines the interface for atomic locks
  *  which can be used in multiprocessor configurations.
  */
@@ -54,7 +56,7 @@ typedef struct {
 } SMP_lock_spinlock_nested_Control;
 
 /**
- *  @brief Initialize a Lock
+ *  @brief Initialize a lock.
  *
  *  This method is used to initialize the lock at @a lock.
  *
@@ -65,13 +67,13 @@ void _SMP_lock_spinlock_simple_Initialize(
 );
 
 /**
- *  @brief Obtain a Lock
+ *  @brief Obtain a lock.
  *
  *  This method is used to obtain the lock at @a lock.
  *
  *  @param [in] lock is the address of the lock to obtain.
  *
- *  @return This method returns with processor interrupts disabled.
+ *  @retval This method returns with processor interrupts disabled.
  *          The previous level is returned.
  */
 ISR_Level _SMP_lock_spinlock_simple_Obtain(
@@ -79,7 +81,7 @@ ISR_Level _SMP_lock_spinlock_simple_Obtain(
 );
 
 /**
- *  @brief Release a Lock
+ *  @brief Release a lock.
  *
  *  This method is used to release the lock at @a lock.
  *
@@ -91,7 +93,7 @@ void _SMP_lock_spinlock_simple_Release(
 );
 
 /**
- *  @brief Initialize a Lock
+ *  @brief Initialize a lock.
  *
  *  This method is used to initialize the lock at @a lock.
  *
@@ -102,7 +104,7 @@ void _SMP_lock_spinlock_nested_Initialize(
 );
 
 /**
- *  @brief Obtain a Lock
+ *  @brief Obtain a lock.
  *
  *  This method is used to obtain the lock at @a lock.  ISR's are
  *  disabled when this routine returns and it is the callers responsibility
@@ -115,7 +117,7 @@ void _SMP_lock_spinlock_nested_Initialize(
  *
  *  @param [in] lock is the address of the lock to obtain.
  *
- *  @return This method returns with processor interrupts disabled.
+ *  @retval This method returns with processor interrupts disabled.
  *          The previous level is returned.
  */
 ISR_Level _SMP_lock_spinlock_nested_Obtain(
@@ -123,9 +125,9 @@ ISR_Level _SMP_lock_spinlock_nested_Obtain(
 );
 
 /**
- *  @brief Release a Lock
+ *  @brief Release a lock.
  *
- *  This method is used to release the lock at @a lock.  
+ *  This method is used to release the lock at @a lock.
  *
  *  @note ISR's are reenabled by this method and are expected to be
  *  disabled upon entry to the method.

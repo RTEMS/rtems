@@ -1,7 +1,9 @@
 /**
- *  @file rtems/ringbuf.h
+ * @file
  *
- *  This file provides simple ring buffer functionality.
+ * @brief Simple Ring Buffer Functionality
+ *
+ * This file provides simple ring buffer functionality.
  */
 
 

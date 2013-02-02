@@ -1,19 +1,18 @@
 /**
  * @file
  *
+ * @defgroup ClassicRTEMSWorkspace Workspace
+ *
  * @ingroup ClassicRTEMS
- *
- * @ingroup ClassicRTEMSWorkspace
- *
  * @brief Classic API support.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_SUPPORT_H
@@ -27,9 +26,8 @@ extern "C" {
 
 /**
  * @addtogroup ClassicRTEMS
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Returns the number of micro seconds for the milli seconds value @a _ms.
@@ -58,9 +56,8 @@ extern "C" {
  * @ingroup ClassicRTEMS
  *
  * Workspace definitions.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Gets Workspace Information

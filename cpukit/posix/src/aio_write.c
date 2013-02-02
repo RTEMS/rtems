@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function queues I/O request described by buffer pointed by aiocb 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

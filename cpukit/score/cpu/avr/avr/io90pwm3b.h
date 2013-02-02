@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90PWM3B
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2007 Atmel Corporation
    All rights reserved.
 
@@ -47,6 +55,14 @@
 
 #ifndef _AVR_IO90PWM3B_H_
 #define _AVR_IO90PWM3B_H_ 1
+
+/**
+ * @defgroup AvrDef_io90pwm3b AT90PWM3B Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers */
 
@@ -1387,5 +1403,6 @@
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x83
 
+/** @} */
 
 #endif /* _AVR_IO90PWM3B_H_ */

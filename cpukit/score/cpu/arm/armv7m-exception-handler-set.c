@@ -22,11 +22,9 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/armv7m.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
-
-#include <rtems/score/armv7m.h>
 
 void _ARMV7M_Set_exception_handler(
   int index,

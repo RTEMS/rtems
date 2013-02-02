@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/tqdata.h
  *
+ *  @brief Constants and Structures Needed to Declare a Thread Queue
+ *
  *  This include file contains all the constants and structures
  *  needed to declare a thread queue.
  */

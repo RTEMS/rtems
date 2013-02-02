@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Wait for Queued Signals
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

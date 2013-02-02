@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90USB647
+ */
+
 /* Copyright (c) 2006 Anatoly Sokolov 
    All rights reserved.
 
@@ -35,6 +41,14 @@
 #define _AVR_AT90USB647_H_ 1
 
 #include <avr/iousbxx6_7.h>
+
+/**
+ * @defgroup AvrDef_iousb647 AT90USB647 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Constants */
 #define SPM_PAGESIZE 256
@@ -89,5 +103,6 @@
 #define SIGNATURE_1 0x96
 #define SIGNATURE_2 0x82
 
+/** @} */
 
 #endif /* _AVR_AT90USB647_H_ */

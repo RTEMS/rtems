@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Thread Creation Attributes
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

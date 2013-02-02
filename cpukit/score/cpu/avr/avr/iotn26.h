@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny26
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2004,2005 Eric B. Weddington
    All rights reserved.
 
@@ -45,6 +53,14 @@
 
 #ifndef _AVR_IOTN26_H_
 #define _AVR_IOTN26_H_ 1
+
+/**
+ * @defgroup AvrDef_iotn26 ATtiny26 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers */
 
@@ -380,5 +396,6 @@
 #define SIGNATURE_1 0x91
 #define SIGNATURE_2 0x09
 
+/** @} */
 
 #endif  /* _AVR_IOTN26_H_ */

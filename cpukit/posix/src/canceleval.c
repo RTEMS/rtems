@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Function Evaluates Thread Cancellation and Enables Dispatch
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -1,30 +1,5 @@
-/*  bspstart.c
- *
- *  This set of routines starts the application. It includes application,
- *  board, and monitor specific initialization and configuration. The generic
- *  CPU dependent initialization has been performed before any of these are
- *  invoked.
- *
- *  COPYRIGHT (c) 1989-2010.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
- *  Modifications of respective RTEMS files:
- *  Copyright (c) 1998, National Research Council of Canada
- */
-
-#include <bsp.h>
-#include <page_table.h>
-#include <fatal.h>
-
-void M68KFPSPInstallExceptionHandlers (void);
-extern rtems_isr_entry  M68Kvec[];
-
-/*
- *  bsp_start()
+/**
+ *  @file
  *
  *  Board-specific initialization code. Called from the generic boot_card()
  *  function defined in rtems/c/src/lib/libbsp/shared/main.c. That function
@@ -43,22 +18,35 @@ extern rtems_isr_entry  M68Kvec[];
  *
  *  ASSUMES THAT 167BUG IS PRESENT TO CATCH ANY EXCEPTIONS DURING
  *  INITIALIZATION.
- *
- *  Input parameters: NONE
- *
- *  Output parameters: NONE
- *
- *  Return values: NONE
  */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ *
+ *  Modifications of respective RTEMS files:
+ *  Copyright (c) 1998, National Research Council of Canada
+ */
+
+#include <bsp.h>
+#include <bsp/bootcard.h>
+#include <page_table.h>
+
+void M68KFPSPInstallExceptionHandlers (void);
+
 void bsp_start( void )
 {
-  rtems_isr_entry *rom_monitor_vector_table;
+  void **rom_monitor_vector_table;
   int index;
 
   /*
    *  167Bug Vectors are at 0xFFE00000
    */
-  rom_monitor_vector_table = (rtems_isr_entry *)0xFFE00000;
+  rom_monitor_vector_table = (void **)0xFFE00000;
   m68k_set_vbr( rom_monitor_vector_table );
 
   /*

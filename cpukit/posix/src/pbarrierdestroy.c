@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Destroy a Barrier Object 
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

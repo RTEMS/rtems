@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Suspends Execution of calling thread until Time elaps
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

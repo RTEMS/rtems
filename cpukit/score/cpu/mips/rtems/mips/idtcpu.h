@@ -1,32 +1,45 @@
-/*
-
-Based upon IDT provided code with the following release:
-
-This source code has been made available to you by IDT on an AS-IS
-basis. Anyone receiving this source is licensed under IDT copyrights
-to use it in any way he or she deems fit, including copying it,
-modifying it, compiling it, and redistributing it either with or
-without modifications.  No license under IDT patents or patent
-applications is to be implied by the copyright license.
-
-Any user of this software should understand that IDT cannot provide
-technical support for this software and will not be responsible for
-any consequences resulting from the use of this software.
-
-Any person who transfers this source code or any derivative work must
-include the IDT copyright notice, this paragraph, and the preceeding
-two paragraphs in the transferred software.
-
-COPYRIGHT IDT CORPORATION 1996
-LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
-*/
+/**
+ *  @file idtcpu.h
+ *
+ *  @brief CPU Related Definitions
+ *
+ * 950313: Ketan added sreg/lreg and R_SZ for 64-bit saves
+ *         added Register definition for XContext reg.
+ *         Look towards end of this file.
+ */
 
 /*
-** idtcpu.h -- cpu related defines
-*/
+ * Based upon IDT provided code with the following release:
+ *
+ * This source code has been made available to you by IDT on an AS-IS
+ * basis. Anyone receiving this source is licensed under IDT copyrights
+ * to use it in any way he or she deems fit, including copying it,
+ * modifying it, compiling it, and redistributing it either with or
+ * without modifications.  No license under IDT patents or patent
+ * applications is to be implied by the copyright license.
+ *
+ * Any user of this software should understand that IDT cannot provide
+ * technical support for this software and will not be responsible for
+ * any consequences resulting from the use of this software.
+ *
+ * Any person who transfers this source code or any derivative work must
+ * include the IDT copyright notice, this paragraph, and the preceeding
+ * two paragraphs in the transferred software.
+ *
+ * COPYRIGHT IDT CORPORATION 1996
+ * LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
+ */
 
 #ifndef _RTEMS_MIPS_IDTCPU_H
 #define _RTEMS_MIPS_IDTCPU_H
+
+/**
+ *  @defgroup MipsSet_idtcpu CPU Related Definitions
+ *
+ *  @ingroup MIPS
+ *
+ */
+/**@{*/
 
 /*
  * 950313: Ketan added Register definition for XContext reg.
@@ -92,7 +105,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **	Cache size constants
 */
 #define	MINCACHE	0x200		/* 512       For 3041. */
-#define	MAXCACHE	0x40000		/* 256*1024   256k */	
+#define	MAXCACHE	0x40000		/* 256*1024   256k */
 
 #if  __mips == 32
 /* R4000 configuration register definitions */
@@ -691,5 +704,5 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define CALG	$17
 #endif
 
+/**@}*/
 #endif /* _RTEMS_MIPS_IDTCPU_H */
-

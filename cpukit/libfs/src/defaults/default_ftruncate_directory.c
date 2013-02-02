@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default Filesystem - Default Ftruncate Directory
+ * @ingroup libfs
+ */
+
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

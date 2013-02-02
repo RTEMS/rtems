@@ -1,7 +1,7 @@
 /**
- * @file rtems/deviceio.h
+ * @file
  *
- * @brief Map Operations on IMFS Device Nodes to the RTEMS Classic API IO Manager
+ * @brief Operations on IMFS Device Nodes 
  */
 
 /*
@@ -16,24 +16,28 @@
 #ifndef _RTEMS_DEVICEIO_H
 #define _RTEMS_DEVICEIO_H
 
+#include <rtems/libio.h>
+
 /**
- *  @defgroup Device IO Handler
+ *  @defgroup IMFSDevices IMFS Device IO Handler
+ * 
+ *  @ingroup IMFS
+ *
+ *  This contains the interface to device drivers using the RTEMS Classic API.
  */
 /**@{*/
-
-#include <rtems/libio.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 /**
- *  @brief IMFS Device Node Handlers
+ * @brief IMFS device node handlers.
  *
- *  IMFS Device Node Handlers
+ * IMFS Device Node Handlers
  *
- *  This file contains the set of handlers used to map operations on
- *  IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
+ * This file contains the set of handlers used to map operations on
+ * IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
  */
 int rtems_deviceio_errno( rtems_status_code status );
 
@@ -79,7 +83,8 @@ int rtems_deviceio_control(
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
 /* __cplusplus */
+
+/**@}*/
 
 #endif /* _RTEMS_DEVICEIO_H */

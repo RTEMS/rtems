@@ -1,27 +1,30 @@
 /**
  * @file rtems/rtems/region.h
  *
- * @brief Constants and Structures Associated with the Region Manager
+ * @defgroup ClassicRegion Regions
  *
- *  This include file contains all the constants and structures associated
- *  with the Region Manager.  This manager provides facilities to dynamically
- *  allocate memory in variable sized units which are returned as segments.
+ * @ingroup ClassicRTEMS
+ * @brief Region Manager
  *
- *  Directives provided are:
+ * This include file contains all the constants and structures associated
+ * with the Region Manager. This manager provides facilities to dynamically
+ * allocate memory in variable sized units which are returned as segments.
  *
- *     - create a region
- *     - get an ID of a region
- *     - delete a region
- *     - get a segment from a region
- *     - return a segment to a region
+ * Directives provided are:
+ *
+ * - create a region
+ * - get an ID of a region
+ * - delete a region
+ * - get a segment from a region
+ * - return a segment to a region
  */
 
-/*  COPYRIGHT (c) 1989-2009.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2009.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_REGION_H
@@ -119,20 +122,20 @@ rtems_status_code rtems_region_create(
 );
 
 /**
- *  @brief RTEMS Extend Region
+ * @brief RTEMS Extend Region
  *
- *  This routine implements the rtems_region_extend directive.  The
- *  region will have the name name.  The memory area managed by
- *  the region will be attempted to be grown by length bytes using
- *  the memory starting at starting_address.
+ * This routine implements the rtems_region_extend directive. The
+ * region will have the name name. The memory area managed by
+ * the region will be attempted to be grown by length bytes using
+ * the memory starting at starting_address.
  *
- *  @param[in] id is the id of region to grow
- *  @param[in] starting_address starting address of memory area for extension
- *  @param[in] length is the physical length in bytes to grow the region
+ * @param[in] id is the id of region to grow
+ * @param[in] starting_address starting address of memory area for extension
+ * @param[in] length is the physical length in bytes to grow the region
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_region_extend(
   rtems_id            id,
@@ -141,20 +144,20 @@ rtems_status_code rtems_region_extend(
 );
 
 /**
- *  @brief RTEMS Region Name to Id
+ * @brief RTEMS Region Name to Id
  *
- *  This routine implements the rtems_region_ident directive.
- *  This directive returns the region ID associated with name.
- *  If more than one region is named name, then the region
- *  to which the ID belongs is arbitrary.
+ * This routine implements the rtems_region_ident directive.
+ * This directive returns the region ID associated with name.
+ * If more than one region is named name, then the region
+ * to which the ID belongs is arbitrary.
  *
- *  @param[in] name is the user defined region name
- *  @param[in] id is the pointer to region id
+ * @param[in] name is the user defined region name
+ * @param[in] id is the pointer to region id
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the id will
- *          be filled in with the region id.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the id will
+ *         be filled in with the region id.
  */
 rtems_status_code rtems_region_ident(
   rtems_name    name,
@@ -162,17 +165,17 @@ rtems_status_code rtems_region_ident(
 );
 
 /**
- *  @brief RTEMS Get Region Information
+ * @brief RTEMS Get Region Information
  *
- *  This routine implements the rtems_region_get_information directive.
- *  This directive returns information about the heap associated with
- *  this region.
+ * This routine implements the rtems_region_get_information directive.
+ * This directive returns information about the heap associated with
+ * this region.
  *
- *  @param[in] id is the region id
- *  @param[in] the_info is the pointer to region information block
+ * @param[in] id is the region id
+ * @param[in] the_info is the pointer to region information block
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
- *  *id filled with the region information block
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ * *id filled with the region information block
  */
 rtems_status_code rtems_region_get_information(
   rtems_id                id,
@@ -180,20 +183,20 @@ rtems_status_code rtems_region_get_information(
 );
 
 /**
- *  @brief RTEMS Get Region Free Information
+ * @brief RTEMS Get Region Free Information
  *
- *  This routine implements the rtems_region_get_free_information directive.
- *  This directive returns information about the free blocks in the
- *  heap associated with this region.  Information about the used blocks
- *  will be returned as zero.
+ * This routine implements the rtems_region_get_free_information directive.
+ * This directive returns information about the free blocks in the
+ * heap associated with this region. Information about the used blocks
+ * will be returned as zero.
  *
- *  @param[in] id is the region id
- *  @param[in] the_info is the pointer to region information block
+ * @param[in] id is the region id
+ * @param[in] the_info is the pointer to region information block
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the the_info will
- *          be filled in with the region information block.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the the_info will
+ *         be filled in with the region information block.
  */
 rtems_status_code rtems_region_get_free_information(
   rtems_id                id,
@@ -201,43 +204,43 @@ rtems_status_code rtems_region_get_free_information(
 );
 
 /**
- *  @brief RTEMS Delete Region
+ * @brief RTEMS Delete Region
  *
- *  This routine implements the rtems_region_delete directive.  The
- *  region indicated by ID is deleted, provided that none of its segments are
- *  still allocated.
+ * This routine implements the rtems_region_delete directive. The
+ * region indicated by ID is deleted, provided that none of its segments are
+ * still allocated.
  *
- *  @param[in] id is the region id
+ * @param[in] id is the region id
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_region_delete(
   rtems_id   id
 );
 
 /**
- *  @brief RTEMS Get Region Segment
+ * @brief RTEMS Get Region Segment
  *
- *  This routine implements the rtems_region_get_segment directive.  It
- *  attempts to allocate a segment from the region associated with @a id.
- *  If a segment of the requested @a size size can be allocated, its address
- *  is returned in @a segment.  If no segment is available, then the task
- *  may return immediately or block waiting for a segment with an optional
- *  timeout of @a timeout clock ticks.  Whether the task blocks or returns
- *  immediately is based on the no_wait option in the @a option_set.
+ * This routine implements the rtems_region_get_segment directive. It
+ * attempts to allocate a segment from the region associated with @a id.
+ * If a segment of the requested @a size size can be allocated, its address
+ * is returned in @a segment. If no segment is available, then the task
+ * may return immediately or block waiting for a segment with an optional
+ * timeout of @a timeout clock ticks. Whether the task blocks or returns
+ * immediately is based on the no_wait option in the @a option_set.
  *
- *  @param[in] id is the region id
- *  @param[in] size is the segment size in bytes
- *  @param[in] option_set is the wait option
- *  @param[in] timeout is the number of ticks to wait (0 means wait forever)
- *  @param[in] segment is the pointer to segment address
+ * @param[in] id is the region id
+ * @param[in] size is the segment size in bytes
+ * @param[in] option_set is the wait option
+ * @param[in] timeout is the number of ticks to wait (0 means wait forever)
+ * @param[in] segment is the pointer to segment address
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the segment will
- *          be filled in with the segment address.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the segment will
+ *         be filled in with the segment address.
  */
 rtems_status_code rtems_region_get_segment(
   rtems_id           id,
@@ -248,19 +251,19 @@ rtems_status_code rtems_region_get_segment(
 );
 
 /**
- *  @brief RTEMS Get Region Segment Size
+ * @brief RTEMS Get Region Segment Size
  *
- *  This routine implements the rtems_region_get_segment_size directive.  It
- *  returns the size in bytes of the specified user memory area.
+ * This routine implements the rtems_region_get_segment_size directive. It
+ * returns the size in bytes of the specified user memory area.
  *
- *  @param[in] id is the region id
- *  @param[in] segment is the segment address
- *  @param[in] size is the pointer to segment size in bytes
+ * @param[in] id is the region id
+ * @param[in] segment is the segment address
+ * @param[in] size is the pointer to segment size in bytes
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the size will
- *          be filled in with the segment size in bytes.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the size will
+ *         be filled in with the segment size in bytes.
  */
 rtems_status_code rtems_region_get_segment_size(
   rtems_id           id,
@@ -269,20 +272,20 @@ rtems_status_code rtems_region_get_segment_size(
 );
 
 /**
- *  @brief RTEMS Return Region Segment
+ * @brief RTEMS Return Region Segment
  *
- *  This routine implements the rtems_region_return_segment directive.  It
- *  frees the segment to the region associated with ID.  The segment must
- *  have been previously allocated from the same region.  If freeing the
- *  segment results in enough memory being available to satisfy the
- *  rtems_region_get_segment of the first blocked task, then that task and as
- *  many subsequent tasks as possible will be unblocked with their requests
- *  satisfied.
+ * This routine implements the rtems_region_return_segment directive. It
+ * frees the segment to the region associated with ID. The segment must
+ * have been previously allocated from the same region. If freeing the
+ * segment results in enough memory being available to satisfy the
+ * rtems_region_get_segment of the first blocked task, then that task and as
+ * many subsequent tasks as possible will be unblocked with their requests
+ * satisfied.
  *
- *  @param[in] id is the region id
- *  @param[in] segment is the pointer to segment address
+ * @param[in] id is the region id
+ * @param[in] segment is the pointer to segment address
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_region_return_segment(
   rtems_id    id,
@@ -290,27 +293,27 @@ rtems_status_code rtems_region_return_segment(
 );
 
 /**
- *  @brief Resize RTEMS Region Segment
+ * @brief Resize RTEMS Region Segment
  *
- *  This routine implements the rtems_region_resize_segment directive.  It
- *  tries to resize segment in the region associated with 'id' to the new size
- *  'size' in place. The first 'size' or old size bytes of the segment
- *  (whatever is less) are guaranteed to remain unmodified. The segment must
- *  have been previously allocated from the same region.  If resizing the
- *  segment results in enough memory being available to satisfy the
- *  rtems_region_get_segment of the first blocked task, then that task and as
- *  many subsequent tasks as possible will be unblocked with their requests
- *  satisfied.
+ * This routine implements the rtems_region_resize_segment directive. It
+ * tries to resize segment in the region associated with 'id' to the new size
+ * 'size' in place. The first 'size' or old size bytes of the segment
+ * (whatever is less) are guaranteed to remain unmodified. The segment must
+ * have been previously allocated from the same region. If resizing the
+ * segment results in enough memory being available to satisfy the
+ * rtems_region_get_segment of the first blocked task, then that task and as
+ * many subsequent tasks as possible will be unblocked with their requests
+ * satisfied.
  *
- *  @param[in] id is the region id
- *  @param[in] segmet is the pointer to segment address
- *  @param[in] size is the new required size
- *  @return RTEMS_SUCCESSFUL if operation successful, RTEMS_UNSATISFIED if the
- * 	the segment can't be resized in place or any other code atfailure
+ * @param[in] id is the region id
+ * @param[in] segment is the pointer to segment address
+ * @param[in] size is the new required size
+ * @retval RTEMS_SUCCESSFUL if operation successful, RTEMS_UNSATISFIED if the
+ *         the segment can't be resized in place or any other code at failure
  *
- *  @note On RTEMS_SUCCESSFUL or RTEMS_UNSATISFIED exit it returns into the
- *  	'old_size' the old size in bytes of the user memory area of the
- * 	specified segment.
+ * @note On RTEMS_SUCCESSFUL or RTEMS_UNSATISFIED exit it returns into the
+ *       'old_size' the old size in bytes of the user memory area of the
+ * 	 specified segment.
  */
 rtems_status_code rtems_region_resize_segment(
   rtems_id    id,

@@ -1,9 +1,29 @@
 /**
- * @file
+ * @file rtems/fsmount.h
  *
- * File system mount functions.
- */
+ * @defgroup rtems_fstab File System Mount Support
+ *
+ * @ingroup FileSystemTypesAndMount
+ * @brief File System Mount Functions
+ *
+ * This file contains the fsmount functions. These functions       
+ * are used to mount a list of filesystems (and create their mount 
+ * points before)
+  */
 
+/*
+ *
+ * Copyright (c) 2003 IMD
+ *    
+ * Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      
+ * <Thomas.Doerfler@imd-systems.de>                  
+ * all rights reserved
+ *                    
+ * The license and distribution terms for this file may be        
+ * found in the file LICENSE in this distribution or at           
+ * http://www.rtems.com/license/LICENSE. 
+ */
+ 
 /*===============================================================*\
 | Project: RTEMS fsmount                                          |
 +-----------------------------------------------------------------+
@@ -44,8 +64,8 @@ extern "C" {
  *
  * @ingroup FileSystemTypesAndMount
  *
- * @{
  */
+/**@{**/
 
 /**
  * File system mount report and abort condition flags.

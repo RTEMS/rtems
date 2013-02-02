@@ -1,3 +1,8 @@
+/**
+ * @file
+ *
+ * @brief NIOS II Utility
+ */
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *
@@ -496,9 +501,8 @@ static inline void _Nios2_MPU_Restore( uint32_t config )
   _Nios2_Set_ctlreg_config( config );
 }
 
-/*
- *  @brief Nios2 MPU Disable Protected
- *
+/**
+ * @brief Nios2 MPU disable protected.
  */
 uint32_t _Nios2_MPU_Disable_protected( void );
 

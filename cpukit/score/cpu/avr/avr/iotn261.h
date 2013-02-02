@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny261
+ */
+
 /* Copyright (c) 2006, Anatoly Sokolov
    All rights reserved.
 
@@ -33,6 +39,14 @@
 
 #ifndef _AVR_IOTN261_H_
 #define _AVR_IOTN261_H_ 1
+
+/**
+ * @defgroup AvrDef_iotn261 ATtiny261 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 #include <avr/iotnx61.h>
 
@@ -83,5 +97,6 @@
 #define SIGNATURE_1 0x91
 #define SIGNATURE_2 0x0C
 
+/** @} */
 
 #endif /* _AVR_IOTN261_H_ */

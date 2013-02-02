@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System Link Support
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System Link Support
  *
@@ -41,13 +41,16 @@ typedef enum rtems_rfs_unlink_dir_e
  * Create a link. Do not link directories unless renaming or you will create
  * loops in the file system.
  *
- * @param fs The file system.
- * @param name The name of the link.
- * @param length The length of the name.
- * @param parent The inode number of the parent directory.
- * @param target The inode of the target.
- * @param link_dir If true directories can be linked. Useful when renaming.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] name is a pointer to the name of the link.
+ * @param[in] length is the length of the name.
+ * @param[in] parent is the inode number of the parent directory.
+ * @param[in] target is the inode of the target.
+ * @param[in] link_dir If true directories can be linked. Useful when
+ *                renaming.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_link (rtems_rfs_file_system* fs,
                     const char*            name,
@@ -57,16 +60,18 @@ int rtems_rfs_link (rtems_rfs_file_system* fs,
                     bool                   link_dir);
 
 /**
- * Unlink the node from the parent directory. A directory offset for the target
- * entry is required because links cause a number of inode numbers to appear in
- * a single directory so scanning does not work.
+ * Unlink the node from the parent directory. A directory offset for the
+ * target entry is required because links cause a number of inode numbers to
+ * appear in a single directory so scanning does not work.
  *
- * @param fs The file system.
- * @param parent The inode number of the parent directory.
- * @param target The inode of the target.
- * @param doff Parent directory entry offset for the target entry.
- * @param dir_mode Directory unlink mode.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] parent is the inode number of the parent directory.
+ * @param[in] target is the inode of the target.
+ * @param[in] doff is the parent directory entry offset for the target entry.
+ * @param[in] dir_mode is the directory unlink mode.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_unlink (rtems_rfs_file_system* fs,
                       rtems_rfs_ino          parent,
@@ -77,13 +82,16 @@ int rtems_rfs_unlink (rtems_rfs_file_system* fs,
 /**
  * Symbolic link is an inode that has a path attached.
  *
- * @param fs The file system data.
- * @param name The name of the node.
- * @param length The length of the name of the node.
- * @param link The link path attached to the symlink inode.
- * @param link_length The length of the link path.
- * @param parent The parent inode number.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] name is a pointer to the name of the node.
+ * @param[in] length is the length of the name of the node.
+ * @param[in] link is a pointer to the link path attached to the
+ *             symlink inode.
+ * @param[in] link_length is the length of the link path.
+ * @param[in] parent is the parent inode number.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_symlink (rtems_rfs_file_system* fs,
                        const char*            name,
@@ -98,12 +106,14 @@ int rtems_rfs_symlink (rtems_rfs_file_system* fs,
  * Read a symbolic link into the provided buffer returning the link of link
  * name.
  *
- * @param fs The file system data.
- * @param link The link inode number to read.
- * @param path The buffer to write the link path into.
- * @param size The size of the buffer.
- * @param length Set to the length of the link path.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] link is the link inode number to read.
+ * @param[in] path is a pointer to the buffer to write the link path into.
+ * @param[in] size is the size of the buffer.
+ * @param[out] length will contain the length of the link path.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_symlink_read (rtems_rfs_file_system* fs,
                             rtems_rfs_ino          link,

@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup rtems_ramdisk
- *
- * @brief RAM disk block device API.
+ * @brief RAM Disk Block Device API
  */
 
 /*
@@ -27,14 +25,13 @@ extern "C" {
  *
  * @ingroup rtems_blkdev
  *
- * @{
  */
+/**@{**/
 
 /**
  * @name Static Configuration
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief RAM disk configuration table entry.
@@ -97,9 +94,8 @@ rtems_device_driver ramdisk_initialize(
 
 /**
  * @name Runtime Configuration
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief RAM disk descriptor.

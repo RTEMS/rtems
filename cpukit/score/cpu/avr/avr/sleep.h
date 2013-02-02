@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief Power Management and Sleep Modes
+ * 
+ */
+
 /* Copyright (c) 2002, 2004 Theodore A. Roth
    Copyright (c) 2004, 2007, 2008 Eric B. Weddington
    Copyright (c) 2005, 2006, 2007 Joerg Wunsch
@@ -37,103 +44,104 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-
-/** \file */
-
-/** \defgroup avr_sleep <avr/sleep.h>: Power Management and Sleep Modes
-
-    \code #include <avr/sleep.h>\endcode
-
-    Use of the \c SLEEP instruction can allow an application to reduce its
-    power comsumption considerably. AVR devices can be put into different
-    sleep modes. Refer to the datasheet for the details relating to the device
-    you are using.
-
-    There are several macros provided in this header file to actually
-    put the device into sleep mode.  The simplest way is to optionally
-    set the desired sleep mode using \c set_sleep_mode() (it usually
-    defaults to idle mode where the CPU is put on sleep but all
-    peripheral clocks are still running), and then call
-    \c sleep_mode(). This macro automatically sets the sleep enable bit, goes 
-    to sleep, and clears the sleep enable bit.
-    
-    Example:
-    \code
-    #include <avr/sleep.h>
-
-    ...
-      set_sleep_mode(<mode>);
-      sleep_mode();
-    \endcode
-    
-    Note that unless your purpose is to completely lock the CPU (until a 
-    hardware reset), interrupts need to be enabled before going to sleep.
-
-    As the \c sleep_mode() macro might cause race conditions in some
-    situations, the individual steps of manipulating the sleep enable
-    (SE) bit, and actually issuing the \c SLEEP instruction, are provided
-    in the macros \c sleep_enable(), \c sleep_disable(), and
-    \c sleep_cpu().  This also allows for test-and-sleep scenarios that
-    take care of not missing the interrupt that will awake the device
-    from sleep.
-
-    Example:
-    \code
-    #include <avr/interrupt.h>
-    #include <avr/sleep.h>
-
-    ...
-      set_sleep_mode(<mode>);
-      cli();
-      if (some_condition)
-      {
-        sleep_enable();
-        sei();
-        sleep_cpu();
-        sleep_disable();
-      }
-      sei();
-    \endcode
-
-    This sequence ensures an atomic test of \c some_condition with
-    interrupts being disabled.  If the condition is met, sleep mode
-    will be prepared, and the \c SLEEP instruction will be scheduled
-    immediately after an \c SEI instruction.  As the intruction right
-    after the \c SEI is guaranteed to be executed before an interrupt
-    could trigger, it is sure the device will really be put to sleep.
-
-    Some devices have the ability to disable the Brown Out Detector (BOD) before 
-    going to sleep. This will also reduce power while sleeping. If the
-    specific AVR device has this ability then an additional macro is defined:
-    \c sleep_bod_disable(). This macro generates inlined assembly code
-    that will correctly implement the timed sequence for disabling the BOD
-    before sleeping. However, there is a limited number of cycles after the
-    BOD has been disabled that the device can be put into sleep mode, otherwise
-    the BOD will not truly be disabled. Recommended practice is to disable
-    the BOD (\c sleep_bod_disable()), set the interrupts (\c sei()), and then
-    put the device to sleep (\c sleep_cpu()), like so:
-
-    \code
-    #include <avr/interrupt.h>
-    #include <avr/sleep.h>
-
-    ...
-      set_sleep_mode(<mode>);
-      cli();
-      if (some_condition)
-      {
-        sleep_enable();
-        sleep_bod_disable();
-        sei();
-        sleep_cpu();
-        sleep_disable();
-      }
-      sei();
-    \endcode
-*/
+/**
+ * @defgroup avr_sleep Power Management and Sleep Modes
+ * 
+ * Use of the @c SLEEP instruction can allow an application to reduce its
+ * power comsumption considerably. AVR devices can be put into different
+ * sleep modes. Refer to the datasheet for the details relating to the device
+ * you are using.
+ * 
+ * There are several macros provided in this header file to actually
+ * put the device into sleep mode.  The simplest way is to optionally
+ * set the desired sleep mode using @c set_sleep_mode() (it usually
+ * defaults to idle mode where the CPU is put on sleep but all
+ * peripheral clocks are still running), and then call
+ * @c sleep_mode(). This macro automatically sets the sleep enable bit, goes 
+ * to sleep, and clears the sleep enable bit.
+ *   
+ * Example:
+ * @code{.c}
+ * #include <avr/sleep.h>
+ * 
+ * ...
+ *   set_sleep_mode(<mode>);
+ *   sleep_mode();
+ * @endcode
+ *   
+ * Note that unless your purpose is to completely lock the CPU (until a 
+ * hardware reset), interrupts need to be enabled before going to sleep.
+ *
+ * As the @c sleep_mode() macro might cause race conditions in some
+ * situations, the individual steps of manipulating the sleep enable
+ * (SE) bit, and actually issuing the @c SLEEP instruction, are provided
+ * in the macros @c sleep_enable(), @c sleep_disable(), and
+ * @c sleep_cpu().  This also allows for test-and-sleep scenarios that
+ * take care of not missing the interrupt that will awake the device
+ * from sleep.
+ *
+ * Example:
+ * @code{.c}
+ * #include <avr/interrupt.h>
+ * #include <avr/sleep.h>*
+ *
+ * ...
+ *   set_sleep_mode(<mode>);
+ *   cli();
+ *   if (some_condition)
+ *   {
+ *     sleep_enable();
+ *     sei();
+ *     sleep_cpu();
+ *     sleep_disable();
+ *   }
+ *   sei();
+ * @endcode
+ * 
+ * This sequence ensures an atomic test of @c some_condition with
+ * interrupts being disabled.  If the condition is met, sleep mode
+ * will be prepared, and the @c SLEEP instruction will be scheduled
+ * immediately after an @c SEI instruction.  As the intruction right
+ * after the @c SEI is guaranteed to be executed before an interrupt
+ * could trigger, it is sure the device will really be put to sleep.
+ * 
+ * Some devices have the ability to disable the Brown Out Detector (BOD) 
+ * before going to sleep. This will also reduce power while sleeping. If the
+ * specific AVR device has this ability then an additional macro is defined:
+ * @c sleep_bod_disable(). This macro generates inlined assembly code
+ * that will correctly implement the timed sequence for disabling the BOD
+ * before sleeping. However, there is a limited number of cycles after the
+ * BOD has been disabled that the device can be put into sleep mode, otherwise
+ * the BOD will not truly be disabled. Recommended practice is to disable
+ * the BOD (@c sleep_bod_disable()), set the interrupts (@c sei()), and then
+ * put the device to sleep (@c sleep_cpu()), like so:
+ * 
+ * @code{.c}
+ * #include <avr/interrupt.h>
+ * #include <avr/sleep.h>*
+ *
+ * ...
+ *   set_sleep_mode(<mode>);
+ *   cli();
+ *   if (some_condition)
+ *   {
+ *     sleep_enable();
+ *     sleep_bod_disable();
+ *     sei();
+ *     sleep_cpu();
+ *     sleep_disable();
+ *  }
+ *   sei();
+ * @endcode
+ * 
+ */
+/**@{**/
 
 
-/* Define an internal sleep control register and an internal sleep enable bit mask. */
+/* 
+ * Define an internal sleep control register and 
+ * an internal sleep enable bit mask. 
+ */
 #if defined(SLEEP_CTRL)
 
     /* XMEGA devices */
@@ -167,8 +175,11 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        MCUCR = ((MCUCR & ~_BV(SM1)) | ((mode) == SLEEP_MODE_PWR_DOWN || (mode) == SLEEP_MODE_PWR_SAVE ? _BV(SM1) : 0)); \
-        EMCUCR = ((EMCUCR & ~_BV(SM0)) | ((mode) == SLEEP_MODE_PWR_SAVE ? _BV(SM0) : 0)); \
+        MCUCR = ((MCUCR & ~_BV(SM1)) | \
+        ((mode) == SLEEP_MODE_PWR_DOWN || \
+        (mode) == SLEEP_MODE_PWR_SAVE ? _BV(SM1) : 0)); \
+        EMCUCR = ((EMCUCR & ~_BV(SM0)) | \
+        ((mode) == SLEEP_MODE_PWR_SAVE ? _BV(SM0) : 0)); \
     } while(0)
 
 
@@ -184,9 +195,12 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        MCUCR = ((MCUCR & ~_BV(SM1)) | ((mode) == SLEEP_MODE_IDLE ? 0 : _BV(SM1))); \
-        MCUCSR = ((MCUCSR & ~_BV(SM2)) | ((mode) == SLEEP_MODE_STANDBY  || (mode) == SLEEP_MODE_EXT_STANDBY ? _BV(SM2) : 0)); \
-        EMCUCR = ((EMCUCR & ~_BV(SM0)) | ((mode) == SLEEP_MODE_PWR_SAVE || (mode) == SLEEP_MODE_EXT_STANDBY ? _BV(SM0) : 0)); \
+        MCUCR = ((MCUCR & ~_BV(SM1)) | \
+        ((mode) == SLEEP_MODE_IDLE ? 0 : _BV(SM1))); \
+        MCUCSR = ((MCUCSR & ~_BV(SM2)) | ((mode) == SLEEP_MODE_STANDBY  || \
+        (mode) == SLEEP_MODE_EXT_STANDBY ? _BV(SM2) : 0)); \
+        EMCUCR = ((EMCUCR & ~_BV(SM0)) | ((mode) == SLEEP_MODE_PWR_SAVE || \
+        (mode) == SLEEP_MODE_EXT_STANDBY ? _BV(SM0) : 0)); \
     } while(0)
 
 #elif defined(__AVR_AT90S2313__) \
@@ -217,7 +231,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG &  \
+        ~(_BV(SM0) | _BV(SM1))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_AT90S4434__) \
@@ -253,7 +268,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_ATtiny2313__) \
@@ -266,7 +282,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_AT94K__)
@@ -277,7 +294,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_ATtiny26__) \
@@ -290,7 +308,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_AT90PWM216__) \
@@ -304,7 +323,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_AT90CAN128__) \
@@ -415,7 +435,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_ATxmega16A4__) \
@@ -438,11 +459,13 @@
     #define SLEEP_MODE_PWR_DOWN     (SLEEP_SMODE1_bm)
     #define SLEEP_MODE_PWR_SAVE     (SLEEP_SMODE1_bm | SLEEP_SMODE0_bm)
     #define SLEEP_MODE_STANDBY      (SLEEP_SMODE2_bm | SLEEP_SMODE1_bm)
-    #define SLEEP_MODE_EXT_STANDBY  (SLEEP_SMODE2_bm | SLEEP_SMODE1_bm | SLEEP_SMODE0_bm)
+    #define SLEEP_MODE_EXT_STANDBY  (SLEEP_SMODE2_bm | SLEEP_SMODE1_bm | \
+                                     SLEEP_SMODE0_bm)
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(SLEEP_SMODE2_bm | SLEEP_SMODE1_bm | SLEEP_SMODE0_bm)) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(SLEEP_SMODE2_bm | SLEEP_SMODE1_bm | SLEEP_SMODE0_bm)) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_AT90SCR100__)
@@ -455,7 +478,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
     } while(0)
 
 #elif defined(__AVR_ATA6289__)
@@ -466,7 +490,8 @@
 
     #define set_sleep_mode(mode) \
     do { \
-        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
+        _SLEEP_CONTROL_REG = ((_SLEEP_CONTROL_REG & \
+        ~(_BV(SM0) | _BV(SM1) | _BV(SM2))) | (mode)); \
     } while(0)
 
 #else
@@ -477,18 +502,17 @@
 
 
 
-/** \ingroup avr_sleep
-
-    Put the device in sleep mode. How the device is brought out of sleep mode
-    depends on the specific mode selected with the set_sleep_mode() function.
-    See the data sheet for your device for more details. */
+/**
+ * Put the device in sleep mode. How the device is brought out of sleep mode
+ * depends on the specific mode selected with the set_sleep_mode() function.
+ * See the data sheet for your device for more details. 
+ */
 
 
 #if defined(__DOXYGEN__)
 
-/** \ingroup avr_sleep
-
-    Set the SE (sleep enable) bit.
+/**
+ * Set the SE (sleep enable) bit.
 */
 extern void sleep_enable (void);
 
@@ -504,10 +528,9 @@ do {                               \
 
 #if defined(__DOXYGEN__)
 
-/** \ingroup avr_sleep
-
-    Clear the SE (sleep enable) bit.
-*/
+/**
+ * Clear the SE (sleep enable) bit.
+ */
 extern void sleep_disable (void);
 
 #else
@@ -520,11 +543,10 @@ do {                               \
 #endif
 
 
-/** \ingroup avr_sleep
-
-    Put the device into sleep mode.  The SE bit must be set
-    beforehand, and it is recommended to clear it afterwards.
-*/
+/**
+ * Put the device into sleep mode.  The SE bit must be set
+ * beforehand, and it is recommended to clear it afterwards.
+ */
 #if defined(__DOXYGEN__)
 
 extern void sleep_cpu (void);
@@ -582,6 +604,6 @@ do { \
 #endif
 
 
-/*@}*/
+/** @} */
 
 #endif /* _AVR_SLEEP_H_ */

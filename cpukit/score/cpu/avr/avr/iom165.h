@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega165
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2004,2005,2006 Eric B. Weddington
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_iom165 ATmega165 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers */
 
@@ -815,5 +831,6 @@
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x07
 
+/** @} */
 
 #endif /* _AVR_IOM165_H_ */

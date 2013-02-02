@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreHeap
  *
- * @brief Heap Handler API.
+ * @brief Heap Handler API
  */
 
 /*
@@ -126,9 +126,8 @@ extern "C" {
  * block indicates that the previous block is used, this ensures that the
  * last block appears as used for the _Heap_Is_used() and _Heap_Is_free()
  * functions.
- *
- * @{
  */
+/**@{**/
 
 typedef struct Heap_Control Heap_Control;
 

@@ -1,13 +1,16 @@
 /**
- * @file rtems/score/avr.h
+ * @file
+ *
+ * @brief Intel AVR Set up Basic CPU Dependency Settings Based on
+ * Compiler Settings
+ *
+ * This file sets up basic CPU dependency settings based on
+ * compiler settings.  For example, it can determine if
+ * floating point is available.  This particular implementation
+ * is specified to the avr port.
  */
 
 /*
- *  This file sets up basic CPU dependency settings based on
- *  compiler settings.  For example, it can determine if
- *  floating point is available.  This particular implementation
- *  is specified to the avr port.
- *
  *  COPYRIGHT 2004, Ralf Corsepius, Ulm, Germany.
  *
  *  The license and distribution terms for this file may be

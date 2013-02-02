@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Name to ID
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

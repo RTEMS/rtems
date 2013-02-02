@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/stack.inl
+/**
+ * @file
  *
- *  This file contains the static inline implementation of the inlined
- *  routines from the Stack Handler.
+ * @brief Inlined Routines from the Stack Handler
+ *
+ * This file contains the static inline implementation of the inlined
+ * routines from the Stack Handler.
  */
 
 /*
@@ -24,14 +26,14 @@
 #include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
 
 /**
- *  @addtogroup ScoreStack 
- *  @{
+ * @addtogroup ScoreStack
  */
+/**@{**/
 
 /**
- *  This routine initializes the_stack record to indicate that
- *  size bytes of memory starting at starting_address have been
- *  reserved for a stack.
+ * This routine initializes the_stack record to indicate that
+ * size bytes of memory starting at starting_address have been
+ * reserved for a stack.
  */
 RTEMS_INLINE_ROUTINE void _Stack_Initialize (
   Stack_Control *the_stack,
@@ -44,10 +46,10 @@ RTEMS_INLINE_ROUTINE void _Stack_Initialize (
 }
 
 /**
- *  This function returns the minimum stack size configured
- *  for this application.
+ * This function returns the minimum stack size configured
+ * for this application.
  *
- *  @return This method returns the minimum stack size;
+ * @return This method returns the minimum stack size;
  */
 RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
 {
@@ -55,12 +57,12 @@ RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
 }
 
 /**
- *  This function returns true if size bytes is enough memory for
- *  a valid stack area on this processor, and false otherwise.
+ * This function returns true if size bytes is enough memory for
+ * a valid stack area on this processor, and false otherwise.
  *
- *  @param[in] size is the stack size to check
+ * @param[in] size is the stack size to check
  *
- *  @return This method returns true if the stack is large enough.
+ * @return This method returns true if the stack is large enough.
  */
 RTEMS_INLINE_ROUTINE bool _Stack_Is_enough (
   size_t size
@@ -70,13 +72,13 @@ RTEMS_INLINE_ROUTINE bool _Stack_Is_enough (
 }
 
 /**
- *  This function returns the appropriate stack size given the requested
- *  size.  If the requested size is below the minimum, then the minimum
- *  configured stack size is returned.
+ * This function returns the appropriate stack size given the requested
+ * size.  If the requested size is below the minimum, then the minimum
+ * configured stack size is returned.
  *
- *  @param[in] size is the stack size to check
+ * @param[in] size is the stack size to check
  *
- *  @return This method returns the appropriate stack size.
+ * @return This method returns the appropriate stack size.
  */
 RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
   size_t size
@@ -87,7 +89,7 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
   return _Stack_Minimum();
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

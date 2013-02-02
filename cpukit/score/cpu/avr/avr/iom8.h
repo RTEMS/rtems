@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega8
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2002, Marek Michalkiewicz
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_iom8 ATmega8 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* I/O registers */
 
@@ -609,5 +625,6 @@
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x07
 
+/** @} */
 
 #endif /* _AVR_IOM8_H_ */

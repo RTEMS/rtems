@@ -1,53 +1,63 @@
-/* Copyright (c) 2005, Joerg Wunsch                               -*- c -*-
-   All rights reserved.
+/**
+ * @file avr/iom644PA.h
+ *
+ * @brief Current Version of avr-libc
+ *
+ * This header file defines macros that contain version numbers and
+ * strings describing the current version of avr-libc.
+ *
+ * The version number itself basically consists of three pieces that
+ * are separated by a dot: the major number, the minor number, and
+ * the revision number.  For development versions (which use an odd
+ * minor number), the string representation additionally gets the
+ * date code (YYYYMMDD) appended.
+ *
+ * This file will also be included by \c <avr/io.h>.  That way,
+ * portable tests can be implemented using \c <avr/io.h> that can be
+ * used in code that wants to remain backwards-compatible to library
+ * versions prior to the date when the library version API had been
+ * added, as referenced but undefined C preprocessor macros
+ * automatically evaluate to 0.
+ */
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are met:
+/*
+ *  Copyright (c) 2005, Joerg Wunsch
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in
+ *   the documentation and/or other materials provided with the
+ *   distribution.
+ *
+ * * Neither the name of the copyright holders nor the names of
+ *   contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
-   * Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in
-     the documentation and/or other materials provided with the
-     distribution.
-
-   * Neither the name of the copyright holders nor the names of
-     contributors may be used to endorse or promote products derived
-     from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE. */
-
-
-/** \defgroup avr_version <avr/version.h>: avr-libc version macros
-    \code #include <avr/version.h> \endcode
-
-    This header file defines macros that contain version numbers and
-    strings describing the current version of avr-libc.
-
-    The version number itself basically consists of three pieces that
-    are separated by a dot: the major number, the minor number, and
-    the revision number.  For development versions (which use an odd
-    minor number), the string representation additionally gets the
-    date code (YYYYMMDD) appended.
-
-    This file will also be included by \c <avr/io.h>.  That way,
-    portable tests can be implemented using \c <avr/io.h> that can be
-    used in code that wants to remain backwards-compatible to library
-    versions prior to the date when the library version API had been
-    added, as referenced but undefined C preprocessor macros
-    automatically evaluate to 0.
-*/
+/**
+ *  @defgroup avr_version avr-libc Version Macros
+ *
+ *  @ingroup avr
+ */
+/**@{*/
 
 #ifndef _AVR_VERSION_H_
 #define _AVR_VERSION_H_
@@ -86,4 +96,5 @@
     Library revision number. */
 #define __AVR_LIBC_REVISION__       8
 
+/**@}*/
 #endif /* _AVR_VERSION_H_ */

@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/cancel.h
+ * @file
+ * 
+ * @brief POSIX Thread Cancelation Support
  *
  * This file contains the prototypes and data types used to implement
  * POSIX thread cancelation.
@@ -20,7 +22,7 @@
 #include <rtems/posix/threadsup.h>
 
 /**
- *  This structure is used to manage the cancelation handlers.
+ * This structure is used to manage the cancelation handlers.
  */
 typedef struct {
   /** This field is the Chain Node so we can put these on lists. */
@@ -32,25 +34,25 @@ typedef struct {
 }  POSIX_Cancel_Handler_control;
 
 /**
- *  @brief _POSIX_Threads_cancel_run
+ * @brief POSIX run thread cancelation.
  *
- *  This support routine runs through the chain of cancel handlers that
- *  have been registered and executes them.
+ * This support routine runs through the chain of cancel handlers that
+ * have been registered and executes them.
  *
- *  @param[in] the_thread is the thread whose cancelation handlers
- *             should be run
+ * @param[in] the_thread is a pointer to the thread whose cancelation handlers
+ *            should be run
  */
 void _POSIX_Threads_cancel_run(
   Thread_Control *the_thread
 );
 
 /**
- *  @brief _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch
+ * @brief POSIX evaluate thread cancelation and enable dispatch. 
  *
- *  This routine separates a piece of code that existed as part of
- *  another routine, but had to be separated to improve coverage.
+ * This routine separates a piece of code that existed as part of
+ * another routine, but had to be separated to improve coverage.
  *
- *  @param[in] the_thread is the thread to evaluate canceling
+ * @param[in] the_thread is a pointer to the thread to evaluate canceling
  */
 void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch (
   Thread_Control *the_thread

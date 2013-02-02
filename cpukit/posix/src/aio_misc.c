@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Actual request being processed
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

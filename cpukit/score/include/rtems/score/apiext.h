@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/apiext.h
  *
+ *  @brief API Extensions Handler
+ *
  *  This is the API Extensions Handler.
  */
 
@@ -106,14 +108,14 @@ SCORE_EXTERN Chain_Control _API_extensions_List;
 SCORE_EXTERN Chain_Control _API_extensions_Post_switch_list;
 
 /**
- *  @brief Initialize the API Extensions Handler
+ *  @brief Initialize the API extensions handler.
  *
  *  This routine initializes the API extension handler.
  */
 void _API_extensions_Initialization( void );
 
 /**
- *  @brief Add Extension Set to the Active Set
+ *  @brief Add extension set to the active set.
  *
  *  This routine adds @a the_extension to the active set of API extensions.
  *
@@ -142,7 +144,7 @@ void _API_extensions_Add_post_switch(
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
 /**
- *  @brief Execute all Pre-Driver Extensions
+ *  @brief Execute all pre-driver extensions.
  *
  *  This routine executes all of the predriver callouts.
  */
@@ -150,7 +152,7 @@ void _API_extensions_Add_post_switch(
 #endif
 
 /**
- *  @brief Execute all Post-Driver Extensions
+ *  @brief Execute all post-driver extensions.
  *
  *  This routine executes all of the postdriver callouts.
  */

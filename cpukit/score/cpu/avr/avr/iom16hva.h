@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega16HVA
+ */
+
 /* Copyright (c) 2007, Anatoly Sokolov 
    All rights reserved.
 
@@ -36,6 +42,14 @@
 
 #include <avr/iomxxhva.h>
 
+/**
+ * @defgroup AvrDef_iom16hva ATmega16HVA Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
+
 /* Constants */
 #define SPM_PAGESIZE 128
 #define RAMEND      0x2FF
@@ -70,5 +84,6 @@
 #define SIGNATURE_1 0x94
 #define SIGNATURE_2 0x0C
 
+/** @} */
 
 #endif /* _AVR_IOM16HVA_H_ */

@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/timer.h
+ * @file 
+ * 
+ * @brief POSIX Timers Internal Support
  *
  * This include files defines the internal support for implementation of
  * POSIX Timers.
@@ -22,11 +24,12 @@
 #include <rtems/score/watchdog.h> /* Watchdog_Control */
 
 /**
- *  @defgroup POSIX_INTERNAL_TIMERS Timers
+ * @defgroup POSIX_INTERNAL_TIMERS POSIX Timer Private Support
  *
- *  @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 /**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,13 +37,13 @@ extern "C" {
 /* Timer is free */
 #define POSIX_TIMER_STATE_FREE        0x01
 
-/* Created timer but not running          */
+/* Created timer but not running */
 #define POSIX_TIMER_STATE_CREATE_NEW  0x02
 
-/* Created timer and running              */
+/* Created timer and running */
 #define POSIX_TIMER_STATE_CREATE_RUN  0x03
 
-/* Created, ran and stopped timer         */
+/* Created, ran and stopped timer */
 #define POSIX_TIMER_STATE_CREATE_STOP 0x04
 
 /* Indicates that the fire time is relative to the current one */
@@ -54,7 +57,6 @@ extern "C" {
 #if (POSIX_TIMER_RELATIVE == TIMER_ABSTIME)
 #error "POSIX_TIMER_RELATIVE == TIMER_ABSTIME"
 #endif
-
 
 /*
  * Data for a timer
@@ -108,9 +110,11 @@ POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 #include <rtems/posix/timer.inl>
 #endif
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif
 /* end of include file */

@@ -1,21 +1,17 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
+ * @brief ARM Assembler Support API
  *
- * @brief ARM assembler support API.
- */
-
-/*
- *  This include file attempts to address the problems
- *  caused by incompatible flavors of assemblers and
- *  toolsets.  It primarily addresses variations in the
- *  use of leading underscores on symbols and the requirement
- *  that register names be preceded by a %.
+ * This include file attempts to address the problems
+ * caused by incompatible flavors of assemblers and
+ * toolsets.  It primarily addresses variations in the
+ * use of leading underscores on symbols and the requirement
+ * that register names be preceded by a %.
  *
  *
- *  NOTE: The spacing in the use of these macros
- *        is critical to them working as advertised.
+ * NOTE: The spacing in the use of these macros
+ *       is critical to them working as advertised.
  */
 
 /*
@@ -53,10 +49,9 @@
  *
  * @ingroup ScoreCPU
  *
- * @brief ARM assembler support.
- *
- * @{
+ * @brief ARM Assembler Support
  */
+/**@{**/
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the

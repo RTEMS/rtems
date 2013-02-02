@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Adds a GDB remote Debug Stub to an RTEMS System
+ */
+
 /*===============================================================*\
 | Project: RTEMS configure remote gdb over serial line            |
 +-----------------------------------------------------------------+

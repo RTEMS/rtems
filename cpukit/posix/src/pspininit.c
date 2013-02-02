@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Function Initializes a Spinlock Instance
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

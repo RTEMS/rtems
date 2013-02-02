@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/corerwlock.h
  *
+ *  @brief Constants and Structures Associated with the RWLock Handler
+ *
  *  This include file contains all the constants and structures associated
  *  with the RWLock Handler.
  */
@@ -125,7 +127,7 @@ typedef struct {
 }   CORE_RWLock_Control;
 
 /**
- *  @brief Initialize a RWlock
+ *  @brief Initialize a RWlock.
  *
  *  This routine initializes the RWLock based on the parameters passed.
  *
@@ -138,7 +140,8 @@ void _CORE_RWLock_Initialize(
 );
 
 /**
- *  @brief Obtain RWLock for reading
+ *  @brief Obtain RWLock for reading.
+ *
  *  This routine attempts to obtain the RWLock for read access.
  *
  *  @param[in] the_rwlock is the RWLock to wait for
@@ -161,8 +164,8 @@ void _CORE_RWLock_Obtain_for_reading(
 );
 
 /**
- *  @brief RWLock Obtain for Writing
- * 
+ *  @brief Obtain RWLock for writing.
+ *
  *  This routine attempts to obtain the RWLock for write exclusive access.
  *
  *  @param[in] the_rwlock is the RWLock to wait for
@@ -184,14 +187,14 @@ void _CORE_RWLock_Obtain_for_writing(
 );
 
 /**
- *  @brief Releases the RWLock
+ *  @brief Release the RWLock.
  *
  *  This routine manually releases @a the_rwlock.  All of the threads waiting
  *  for the RWLock will be readied.
  *
  *  @param[in] the_rwlock is the RWLock to surrender
  *
- *  @return Status is returned to indicate successful or failure.
+ *  @retval Status is returned to indicate successful or failure.
  */
 CORE_RWLock_Status _CORE_RWLock_Release(
   CORE_RWLock_Control                *the_rwlock
@@ -214,7 +217,7 @@ CORE_RWLock_Status _CORE_RWLock_Release(
   )
 
 /**
- *  @brief RWLock Specific Thread Queue Timeout
+ *  @brief RWLock specific thread queue timeout.
  *
  *  This routine processes a thread which timeouts while waiting on
  *  an RWLock's thread queue. It is called by the watchdog handler.

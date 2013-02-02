@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
+ *
+ * @brief Hitachi H8300 CPU Department Source
+ *
+ * This include file contains information pertaining to the H8300
+ *  processor.
  */
 
 /*
- *  This include file contains information pertaining to the H8300
- *  processor.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

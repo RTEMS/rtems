@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Send a Signal to a Process
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

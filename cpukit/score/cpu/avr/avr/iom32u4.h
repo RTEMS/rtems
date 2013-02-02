@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega32U4
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2008 Atmel Corporation
    All rights reserved.
 
@@ -48,6 +56,13 @@
 #ifndef _AVR_IOM32U4_H_
 #define _AVR_IOM32U4_H_ 1
 
+/**
+ * @defgroup AvrDef_iom32u4 ATmega32U4 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers */
 
@@ -1498,6 +1513,6 @@
 #define SIGNATURE_1 0x95
 #define SIGNATURE_2 0x87
 
-
+/** @} */
 
 #endif  /* _AVR_IOM32U4_H_ */

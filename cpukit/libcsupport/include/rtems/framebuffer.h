@@ -1,6 +1,8 @@
 /**
  * @file rtems/framebuffer.h
  *
+ * @brief Frame Buffer Device Driver for all Boards
+ *
  * This file describes the Frame Buffer Device Driver for all boards.
  */
 

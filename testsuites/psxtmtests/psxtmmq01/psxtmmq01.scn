@@ -1,0 +1,12 @@
+*** POSIX TIME TEST PSXTMMQ01 ***
+mq_open (first open) 106
+mq_send - no threads waiting 44
+mq_open (second open) 38
+mq_receive - available 41
+mq_unlink 46
+mq_timedsend - no threads waiting 92
+mq_timedreceive - available 91
+mq_notify 13
+mq_close (close of second) 21
+mq_close (close of first) 21
+*** END OF POSIX TIME TEST PSXTMMQ01 ***

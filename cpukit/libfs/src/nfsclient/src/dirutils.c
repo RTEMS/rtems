@@ -1,8 +1,13 @@
-/* very crude and basic fs utilities for testing the NFS */
-
-/* Till Straumann, <strauman@slac.stanford.edu>, 10/2002 */
+/**
+ * @file
+ *
+ * @brief Basic NFS Filesystem Utilities for Testing the NFS
+ * @ingroup libfs
+ */
 
 /*
+ * Author: Till Straumann, <strauman@slac.stanford.edu>, 10/2002
+ *
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by

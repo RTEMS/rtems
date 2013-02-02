@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Get The Schedpolicy Attribute
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

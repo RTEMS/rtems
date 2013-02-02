@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
- *
- * @brief ARM assembler support API.
+ * @brief ARM Assembler Support API
  */
 
 /*
@@ -28,9 +26,8 @@ extern "C" {
 
 /**
  * @addtogroup ScoreCPU
- *
- * @{
  */
+/**@{**/
 
 /*
  *  This file contains the information required to build

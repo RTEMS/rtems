@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @brief Real-Time Clock Driver Interface
+ * 
  * Real-time clock driver interface.
  */
 
@@ -27,9 +29,8 @@ extern "C" {
  *
  * This driver interface provides support to read and set the real-time clock
  * and to initialize the time of day for the system.
- *
- * @{
  */
+/**@{**/
 
 /**
  * Device file name path.

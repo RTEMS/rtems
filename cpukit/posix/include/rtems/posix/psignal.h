@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/psignal.h
+ * @file
+ * 
+ * @brief Internal Information about POSIX Signals
  *
  * This include file defines internal information about POSIX signals.
  */

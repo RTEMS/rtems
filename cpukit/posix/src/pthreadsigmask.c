@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Examine and/or change the calling thread's signal mask
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

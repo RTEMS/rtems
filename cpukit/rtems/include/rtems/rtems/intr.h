@@ -1,18 +1,21 @@
 /**
  *  @file rtems/rtems/intr.h
  *
- *  @brief Header file for the Interrupt Manager.
+ * @defgroup ClassicINTR Interrupts
  *
- *  This include file contains all the constants and structures associated with
- *  the Interrupt Manager.
+ * @ingroup ClassicRTEMS
+ * @brief Header file for Interrupt Manager
+ *
+ * This include file contains all the constants and structures associated with
+ * the Interrupt Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_INTR_H
@@ -63,17 +66,17 @@ typedef rtems_isr ( *rtems_isr_entry )(
              );
 
 /**
- *  @brief RTEMS Interrupt Catch
+ * @brief RTEMS Interrupt Catch
  *
- *  This directive installs @a new_isr_handler as the RTEMS interrupt service
- *  routine for the interrupt vector with number @a vector.  The previous RTEMS
- *  interrupt service routine is returned in @a old_isr_handler.
+ * This directive installs @a new_isr_handler as the RTEMS interrupt service
+ * routine for the interrupt vector with number @a vector. The previous RTEMS
+ * interrupt service routine is returned in @a old_isr_handler.
  *  
- *  @param[in] new_isr_handler is the address of interrupt service routine
- *  @param[in] vector is the interrupt vector number
- *  @param[in] old_isr_handler address at which to store previous ISR address
+ * @param[in] new_isr_handler is the address of interrupt service routine
+ * @param[in] vector is the interrupt vector number
+ * @param[in] old_isr_handler address at which to store previous ISR address
  * 
- *  @return RTEMS_SUCCESSFUL and *old_isr_handler filled with previous ISR
+ * @retval RTEMS_SUCCESSFUL and *old_isr_handler filled with previous ISR
  * 		address
  */
 rtems_status_code rtems_interrupt_catch(

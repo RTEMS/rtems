@@ -1,11 +1,12 @@
 /**
- * @file rtems/rbtree.h
- *
- *  This include file contains all the constants and structures associated
- *  with the RBTree API in RTEMS. The rbtree is a Red Black Tree that
- *  is part of the Super Core. This is the published interface to that
- *  code.
- *
+ * @file
+ * 
+ * @brief Constants and Structures Associated with the RBTree API in RTEMS
+ * 
+ * This include file contains all the constants and structures associated
+ * with the RBTree API in RTEMS. The rbtree is a Red Black Tree that
+ * is part of the Super Core. This is the published interface to that
+ * code.
  */
 
 /*
@@ -50,13 +51,13 @@ typedef RBTree_Control rtems_rbtree_control;
 typedef RBTree_Compare_function rtems_rbtree_compare_function;
 
 /**
- *  @brief RBTree initializer for an empty rbtree with designator @a name.
+ * @brief RBTree initializer for an empty rbtree with designator @a name.
  */
 #define RTEMS_RBTREE_INITIALIZER_EMPTY(name) \
   RBTREE_INITIALIZER_EMPTY(name)
 
 /**
- *  @brief RBTree definition for an empty rbtree with designator @a name.
+ * @brief RBTree definition for an empty rbtree with designator @a name.
  */
 #define RTEMS_RBTREE_DEFINE_EMPTY(name) \
   RBTREE_DEFINE_EMPTY(name)

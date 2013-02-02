@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Get the Process-Shared Condition Variable Attributes
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

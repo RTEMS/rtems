@@ -230,6 +230,33 @@ Prints the exception frame via printk().
 @c
 @c
 @page
+@subsection FATAL_SOURCE_DESCRIPTION - Returns a description for a fatal source
+
+@cindex fatal error
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_fatal_source_description
+@example
+const char *rtems_fatal_source_description(
+  rtems_fatal_source source
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES
+
+The fatal source description or "?" in case the passed fatal source is invalid.
+
+@subheading DESCRIPTION:
+
+Returns a description for a fatal source.
+
+@c
+@c
+@c
+@page
 @subsection INTERNAL_ERROR_DESCRIPTION - Returns a description for an internal error code
 
 @cindex fatal error

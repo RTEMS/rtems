@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/sigset.h
+ * @file
+ * 
+ * @brief POSIX Signal Sets Management Helper
  *
  * This file defines the interface to implementation helper for management
  * of POSIX Signal Sets.

@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
+ *
+ * @brief Intel AVR CPU Department Source
+ *
+ * This include file contains information pertaining to the AVR
+ * processor.
  */
 
 /*
- *  This include file contains information pertaining to the AVR
- *  processor.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

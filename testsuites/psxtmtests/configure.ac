@@ -80,6 +80,13 @@ AC_CONFIG_FILES([Makefile
 psxtmbarrier01/Makefile
 psxtmbarrier02/Makefile
 psxtmbarrier03/Makefile
+psxtmcond01/Makefile
+psxtmcond02/Makefile
+psxtmcond03/Makefile
+psxtmcond05/Makefile
+psxtmcond08/Makefile
+psxtmcond09/Makefile
+psxtmcond10/Makefile
 psxtmkey01/Makefile
 psxtmkey02/Makefile
 psxtmmq01/Makefile
@@ -107,6 +114,7 @@ psxtmsem05/Makefile
 psxtmsleep01/Makefile
 psxtmsleep02/Makefile
 psxtmthread01/Makefile
+psxtmthread02/Makefile
 psxtmthread03/Makefile
 ])
 AC_OUTPUT

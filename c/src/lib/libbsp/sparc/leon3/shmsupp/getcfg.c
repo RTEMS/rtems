@@ -1,27 +1,11 @@
-/*  void Shm_Get_configuration( localnode, &shmcfg )
+/**
+ *  @file
  *
- *  This routine initializes, if necessary, and returns a pointer
- *  to the Shared Memory Configuration Table for the XXX target.
- *
- *  INPUT PARAMETERS:
- *    localnode - local node number
- *    shmcfg    - address of pointer to SHM Config Table
- *
- *  OUTPUT PARAMETERS:
- *    *shmcfg   - pointer to SHM Config Table
- *
-XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
- *  NOTES:  The XYZ does not have an interprocessor interrupt.
- *
- *          The following table illustrates the configuration limitations:
- *
- *                                   BUS     MAX
- *                          MODE    ENDIAN  NODES
- *                        ========= ====== =======
- *                         POLLED    BIG    2+
- *                        INTERRUPT **** NOT SUPPORTED ****
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  LEON3 Shared Memory Driver Support - Configuration
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +18,6 @@ XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
 #include <shm_driver.h>
 
 /* multiprocessor communications interface (MPCI) table */
-
 
 extern rtems_mpci_entry Shm_Get_packet(
   rtems_packet_prefix **
@@ -56,19 +39,11 @@ extern rtems_mpci_entry Shm_Send_packet(
 );
 
 
-/* rtems_mpci_table MPCI_table  = { */
-/*   100000,                     /\* default timeout value in ticks *\/ */
-/*   MAX_PACKET_SIZE,            /\* maximum packet size *\/ */
-/*   Shm_Initialization,         /\* initialization procedure   *\/ */
-/*   Shm_Get_packet,             /\* get packet procedure       *\/ */
-/*   Shm_Return_packet,          /\* return packet procedure    *\/ */
-/*   Shm_Send_packet,            /\* packet send procedure      *\/ */
-/*   Shm_Receive_packet          /\* packet receive procedure   *\/ */
-/* }; */
-
-
 /*
- *  configured if currently polling of interrupt driven
+ *  configured if currently polling or interrupt driven
+ *
+ *  NOTE: Code in mpisr.c is commented out. Fix when interrupt mode
+ *        is added.
  */
 
 #define INTERRUPT 0        /* XXX: */
@@ -95,7 +70,6 @@ void Shm_Get_configuration(
   shm_config_table **shmcfg
 )
 {
-  extern rtems_configuration_table Configuration;
   int i;
   unsigned int tmp;
 

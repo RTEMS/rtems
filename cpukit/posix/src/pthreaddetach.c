@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Detaching a Thread
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

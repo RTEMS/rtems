@@ -1,15 +1,19 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
+ *
+ * @brief SPARC64 CPU Department Source
+ *
+ * This include file contains information pertaining to the port of
+ * the executive to the SPARC64 processor.
  */
 
 /*
- *  This include file contains information pertaining to the port of 
- *  the executive to the SPARC64 processor.
+ *
  *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  This file is based on the SPARC cpu.h file. Modifications are made 
+ *  This file is based on the SPARC cpu.h file. Modifications are made
  *  to support the SPARC64 processor.
  *    COPYRIGHT (c) 2010. Gedare Bloom.
  *
@@ -103,7 +107,7 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  */
 
@@ -191,10 +195,10 @@ extern "C" {
  *  the minimum requirements of the compiler in order to have as
  *  much of the critical data area as possible in a cache line.
  *
- *  The SPARC does not appear to have particularly strict alignment 
+ *  The SPARC does not appear to have particularly strict alignment
  *  requirements.  This value (16) was chosen to take advantages of caches.
  *
- *  SPARC 64 requirements on floating point alignment is at least 8, 
+ *  SPARC 64 requirements on floating point alignment is at least 8,
  *  and is 16 if quad-word fp instructions are available (e.g. LDQF).
  */
 
@@ -221,7 +225,7 @@ extern "C" {
 #define CPU_MODES_INTERRUPT_MASK   0x0000000F
 
 /*
- *  This structure represents the organization of the minimum stack frame 
+ *  This structure represents the organization of the minimum stack frame
  *  for the SPARC.  More framing information is required in certain situaions
  *  such as when there are a large number of out parameters or when the callee
  *  must save floating point registers.
@@ -490,7 +494,7 @@ typedef struct {
  *  NOTE:  The tstate, tpc, and tnpc are saved in this structure
  *  	   to allow resetting the TL while still being able to return
  *  	   from a trap later.  The PIL is saved because
- *         if this is an external interrupt, we will mask lower 
+ *         if this is an external interrupt, we will mask lower
  *         priority interrupts until finishing. Even though the y register
  *         is deprecated, gcc still uses it.
  */
@@ -549,11 +553,11 @@ typedef struct {
 #define ISF_O7_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x98
 #define ISF_TVEC_OFFSET        CPU_MINIMUM_STACK_FRAME_SIZE + 0xA0
 
-#define CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE CPU_MINIMUM_STACK_FRAME_SIZE + 0xA8 
+#define CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE CPU_MINIMUM_STACK_FRAME_SIZE + 0xA8
 #ifndef ASM
 /*
  *  This variable is contains the initialize context for the FP unit.
- *  It is filled in by _CPU_Initialize and copied into the task's FP 
+ *  It is filled in by _CPU_Initialize and copied into the task's FP
  *  context area during _CPU_Context_Initialize.
  */
 
@@ -592,9 +596,9 @@ SCORE_EXTERN volatile uint32_t _CPU_ISR_Dispatch_disable;
  *        long jump.  The other instructions load one register with the
  *        trap type (a.k.a. vector) and another with the psr.
  */
-/* For SPARC V9, we must use 6 of these instructions to perform a long 
- * jump, because the _handler value is now 64-bits. We also need to store 
- * temporary values in the global register set at this trap level. Because 
+/* For SPARC V9, we must use 6 of these instructions to perform a long
+ * jump, because the _handler value is now 64-bits. We also need to store
+ * temporary values in the global register set at this trap level. Because
  * the handler runs at TL > 0 with GL > 0, it should be OK to use g2 and g3
  * to pass parameters to ISR_Handler.
  *
@@ -614,7 +618,7 @@ typedef struct {
   uint32_t     jmp_to_low_of_handler_plus_g3;	/* jmp   %g3 + %lo(_handler) */
   uint32_t     mov_vector_g2;			/* mov   _vector, %g2        */
 } CPU_Trap_table_entry;
- 
+
 /*
  *  This is the set of opcodes for the instructions loaded into a trap
  *  table entry.  The routine which installs a handler is responsible
@@ -624,11 +628,11 @@ typedef struct {
  *  The constants following this structure are masks for the fields which
  *  must be filled in when the handler is installed.
  */
- 
+
 extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 /*
- *  The size of the floating point context area.  
+ *  The size of the floating point context area.
  */
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
@@ -666,7 +670,7 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  *  an asynchronous trap.  This will avoid the executive changing the return
  *  address.
  */
-/* On SPARC v9, there are 512 vectors. The same philosophy applies to 
+/* On SPARC v9, there are 512 vectors. The same philosophy applies to
  * vector installation and use, we just provide a larger table.
  */
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS     512
@@ -796,14 +800,14 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 /*
  *  Map interrupt level in task mode onto the hardware that the CPU
  *  actually provides.  Currently, interrupt levels which do not
- *  map onto the CPU in a straight fashion are undefined.  
+ *  map onto the CPU in a straight fashion are undefined.
  */
 
 #define _CPU_ISR_Set_level( _newlevel ) \
    sparc_enable_interrupts( _newlevel)
 
 uint32_t   _CPU_ISR_Get_level( void );
- 
+
 /* end of ISR handler macros */
 
 /* Context handler macros */
@@ -839,7 +843,7 @@ void _CPU_Context_Initialize(
  *  On the SPARC, this is setting the frame pointer so GDB is happy.
  *  Make GDB stop unwinding at _Thread_Handler, previous register window
  *  Frame pointer is 0 and calling address must be a function with starting
- *  with a SAVE instruction. If return address is leaf-function (no SAVE) 
+ *  with a SAVE instruction. If return address is leaf-function (no SAVE)
  *  GDB will not look at prev reg window fp.
  *
  *  _Thread_Handler is known to start with SAVE.
@@ -852,7 +856,7 @@ void _CPU_Context_Initialize(
 
 /*
  *  This routine is responsible for somehow restarting the currently
- *  executing task.  
+ *  executing task.
  *
  *  On the SPARC, this is is relatively painless but requires a small
  *  amount of wrapper code before using the regular restore code in
@@ -874,7 +878,7 @@ void _CPU_Context_Initialize(
  *  This routine initializes the FP context area passed to it to.
  *
  *  The SPARC allows us to use the simple initialization model
- *  in which an "initial" FP context was saved into _CPU_Null_fp_context 
+ *  in which an "initial" FP context was saved into _CPU_Null_fp_context
  *  at CPU initialization and it is simply copied into the destination
  *  context.
  */
@@ -950,7 +954,7 @@ void _CPU_Initialize(void);
  *  This routine installs new_handler to be directly called from the trap
  *  table.
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -970,14 +974,14 @@ void _CPU_ISR_install_vector(
 );
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
- 
+
 /*
  *  _CPU_Thread_Idle_body
  *
  *  Some SPARC implementations have low power, sleep, or idle modes.  This
  *  tries to take advantage of those models.
  */
- 
+
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 #endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
@@ -1036,7 +1040,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
  *  It must be static because it is referenced indirectly.
  *
  *  This version will work on any processor, but if you come across a better
- *  way for the SPARC PLEASE use it.  The most common way to swap a 32-bit 
+ *  way for the SPARC PLEASE use it.  The most common way to swap a 32-bit
  *  entity as shown below is not any more efficient on the SPARC.
  *
  *     swap least significant two bytes with 16-bit rotate
@@ -1047,18 +1051,18 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
  *  generic code.  gcc 2.7.0 only generates about 12 instructions for the
  *  following code at optimization level four (i.e. -O4).
  */
- 
+
 static inline uint32_t CPU_swap_u32(
   uint32_t value
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
- 
+
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
   byte2 = (value >> 8)  & 0xff;
   byte1 =  value        & 0xff;
- 
+
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }

@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/time.h
+ * @file
+ * 
+ * @brief POSIX Time Types
  *
  * This defines the interface to implementation helper routines related
  * to POSIX time types.
@@ -20,18 +22,19 @@
 #include <rtems/score/timespec.h>
 #include <rtems/score/watchdog.h>
 /**
- *  @defgroup POSIX_TIMETYPES Time Types
+ * @defgroup POSIX_TIMETYPES POSIX Time Types
  *
- *  @ingroup POSIX
+ * @ingroup POSIXAPI
+ * 
  */
-/**@{*/
+/**@{**/
 
 /**
- *  @brief Absolute Timeout Conversion Results
+ * @brief Absolute timeout conversion results.
  *
- *  This enumeration defines the possible results of converting
- *  an absolute time used for timeouts to POSIX blocking calls to
- *  a number of ticks.
+ * This enumeration defines the possible results of converting
+ * an absolute time used for timeouts to POSIX blocking calls to
+ * a number of ticks.
  */
 typedef enum {
   /** The timeout is invalid. */
@@ -45,24 +48,25 @@ typedef enum {
 } POSIX_Absolute_timeout_conversion_results_t;
 
 /**
- *  @brief Convert Absolute Timeout to Ticks
+ * @brief Convert absolute timeout to ticks.
  *
- *  This method takes an absolute time being used as a timeout
- *  to a blocking directive, validates it and returns the number
- *  of corresponding clock ticks for use by the SuperCore.
+ * This method takes an absolute time being used as a timeout
+ * to a blocking directive, validates it and returns the number
+ * of corresponding clock ticks for use by the SuperCore.
  *
- *  @param[in] abstime is the timeout
- *  @param[in] ticks_out will contain the number of ticks
+ * @param[in] abstime is a pointer to the timeout
+ * @param[out] ticks_out will contain the number of ticks
  *
- *  @return This method returns the number of ticks in @a ticks_out
- *          and a status value indicating whether the absolute time
- *          is valid, in the past, equal to the current time or in
- *          the future as it should be.
+ * @return This method returns the number of ticks in @a ticks_out
+ *         and a status value indicating whether the absolute time
+ *         is valid, in the past, equal to the current time or in
+ *         the future as it should be.
  */
 POSIX_Absolute_timeout_conversion_results_t _POSIX_Absolute_timeout_to_ticks(
   const struct timespec *abstime,
   Watchdog_Interval     *ticks_out
 );
 
+/** @} */
+
 #endif
-/**@}*/

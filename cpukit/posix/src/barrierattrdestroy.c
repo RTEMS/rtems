@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function shall Destroy a Barrier Attribues Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

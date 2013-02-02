@@ -26,7 +26,7 @@
  */
 
 /**
- *  @brief Modes_Mask_changed
+ *  @brief Checks if any of the mode flags in mask are set in mode_set.
  *
  *  This function returns TRUE if any of the mode flags in mask
  *  are set in mode_set, and FALSE otherwise.
@@ -40,7 +40,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Mask_changed (
 }
 
 /**
- *  @brief Modes_Is_asr_disabled
+ *  @brief Checks if mode_set says that Asynchronous Signal Processing is disabled.
  *
  *  This function returns TRUE if mode_set indicates that Asynchronous
  *  Signal Processing is disabled, and FALSE otherwise.
@@ -53,7 +53,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_asr_disabled (
 }
 
 /**
- *  @brief Modes_Is_preempt
+ *  @brief Checks if mode_set indicates that preemption is enabled.
  *
  *  This function returns TRUE if mode_set indicates that preemption
  *  is enabled, and FALSE otherwise.
@@ -66,7 +66,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt (
 }
 
 /**
- *  @brief Modes_Is_timeslice
+ *  @brief Checks if mode_set indicates that timeslicing is enabled.
  *
  *  This function returns TRUE if mode_set indicates that timeslicing
  *  is enabled, and FALSE otherwise.
@@ -79,7 +79,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_timeslice (
 }
 
 /**
- *  @brief Modes_Get_interrupt_level
+ *  @brief Gets the interrupt level portion of the mode_set.
  *
  *  This function returns the interrupt level portion of the mode_set.
  */
@@ -91,7 +91,7 @@ RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
 }
 
 /**
- *  @brief Modes_Set_interrupt_level
+ *  @brief Sets the current interrupt level to that specified in the mode_set.
  *
  *  This routine sets the current interrupt level to that specified
  *  in the mode_set.
@@ -104,7 +104,8 @@ RTEMS_INLINE_ROUTINE void _Modes_Set_interrupt_level (
 }
 
 /**
- *  @brief Modes_Change
+ *  @brief Changes the modes in old_mode_set indicated by
+ *  mask to the requested values in new_mode_set.
  *
  *  This routine changes the modes in old_mode_set indicated by
  *  mask to the requested values in new_mode_set.  The resulting

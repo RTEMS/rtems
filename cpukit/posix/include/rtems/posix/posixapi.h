@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/posixapi.h
+ * @file
+ * 
+ * @brief POSIX API Implementation
  *
  * This include file defines the top level interface to the POSIX API
  * implementation in RTEMS.
@@ -21,27 +23,35 @@
 #include <rtems/score/object.h>
 
 /**
- *  @brief Initialize POSIX API
+ * @defgroup POSIXAPI RTEMS POSIX API
  *
- *  This method is responsible for initializing each of the POSIX
- *  API managers.
+ * RTEMS POSIX API definitions and modules.
+ *
+ */
+/**@{**/
+
+/**
+ * @brief Initialize POSIX API.
+ *
+ * This method is responsible for initializing each of the POSIX
+ * API managers.
  */
 void _POSIX_API_Initialize(void);
 
 /**
- *  @brief Queries the object identifier @a id for a @a name.
+ * @brief Queries the object identifier @a id for a @a name.
  *
- *  @param[in] information Object information.
- *  @param[in] name Zero terminated name string to look up.
- *  @param[out] id Pointer for identifier.  The pointer must be valid.
- *  @param[out] len Pointer for string length.  The pointer must be valid.
+ * @param[in] information Object information.
+ * @param[in] name Zero terminated name string to look up.
+ * @param[out] id Pointer for identifier.  The pointer must be valid.
+ * @param[out] len Pointer for string length.  The pointer must be valid.
  *
- *  @retval 0 Successful operation.
- *  @retval EINVAL The @a name pointer is @c NULL or the @a name string has
- *  zero length.
- *  @retval ENAMETOOLONG The @a name string length is greater than or equal to
- *  @c NAME_MAX.
- *  @retval ENOENT Found no corresponding identifier.
+ * @retval 0 Successful operation.
+ * @retval EINVAL The @a name pointer is @c NULL or the @a name string has
+ * zero length.
+ * @retval ENAMETOOLONG The @a name string length is greater than or equal to
+ * @c NAME_MAX.
+ * @retval ENOENT Found no corresponding identifier.
  */
 int _POSIX_Name_to_id(
   Objects_Information *information,
@@ -49,6 +59,8 @@ int _POSIX_Name_to_id(
   Objects_Id          *id,
   size_t              *len
 );
+
+/** @} */
 
 #endif
 /* end of include file */

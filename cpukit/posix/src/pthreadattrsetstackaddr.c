@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Sets the Thread Creation stackaddr Attribute in the attr Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

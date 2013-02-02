@@ -1,7 +1,7 @@
-/*
- *-------------------------------------------------------------------
+/**
+ * @file
  *
- *   QSM -- Queued Serial Module
+ * @brief Motorola M68K Queued Serial Module
  *
  * The QSM contains two serial interfaces: (a) the queued serial
  * peripheral interface (QSPI) and the serial communication interface
@@ -15,7 +15,9 @@
  * For more information, refer to Motorola's "Modular Microcontroller
  * Family Queued Serial Module Reference Manual" (Motorola document
  * QSMRM/AD).
- *
+ */
+
+/*
  * This file was created by John S. Gwynne to support Motorola's 68332 MCU.
  *
  * Redistribution and use in source and binary forms are permitted

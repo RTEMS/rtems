@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/corebarrier.inl
+/**
+ * @file
  *
- *  This include file contains all of the inlined routines associated
- *  with the SuperCore barrier.
+ * @brief Inlined Routines Associated with the SuperCore Barrier
+ *
+ * This include file contains all of the inlined routines associated
+ * with the SuperCore barrier.
  */
 
 /*
@@ -22,19 +24,20 @@
 #define _RTEMS_SCORE_COREBARRIER_INL
 
 /**
- *  @addtogroup ScoreBarrier 
- *  @{
+ * @addtogroup ScoreBarrier
  */
+/**@{**/
 
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
 /**
- *  This function returns true if the automatic release attribute is
- *  enabled in the @a attribute_set and false otherwise.
+ * This function returns true if the automatic release attribute is
+ * enabled in the @a attribute_set and false otherwise.
  *
- *  @param[in] the_attribute is the attribute set to test
- *  @return true if the priority attribute is enabled
+ * @param[in] the_attribute is the attribute set to test
+ *
+ * @return true if the priority attribute is enabled
  */
 RTEMS_INLINE_ROUTINE bool _CORE_barrier_Is_automatic(
   CORE_barrier_Attributes *the_attribute
@@ -45,11 +48,11 @@ RTEMS_INLINE_ROUTINE bool _CORE_barrier_Is_automatic(
 }
 
 /**
- *  This routine returns the number of threads currently waiting at the barrier.
+ * This routine returns the number of threads currently waiting at the barrier.
  *
- *  @param[in] the_barrier is the barrier to obtain the number of blocked
- *             threads for
- *  @return the current count of this barrier
+ * @param[in] the_barrier is the barrier to obtain the number of blocked
+ *            threads for
+ * @return the current count of this barrier
  */
 RTEMS_INLINE_ROUTINE uint32_t  _CORE_barrier_Get_number_of_waiting_threads(
   CORE_barrier_Control  *the_barrier
@@ -58,7 +61,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_barrier_Get_number_of_waiting_threads(
   return the_barrier->number_of_waiting_threads;
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

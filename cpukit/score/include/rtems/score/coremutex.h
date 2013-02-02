@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/coremutex.h
  *
+ *  @brief Constants and Structures Associated with the Mutex Handler
+ *
  *  This include file contains all the constants and structures associated
  *  with the Mutex Handler.  A mutex is an enhanced version of the standard
  *  Dijkstra binary semaphore used to provide synchronization and mutual
@@ -40,7 +42,7 @@ extern "C" {
 #include <rtems/score/sysstate.h>
 
 /**
- *  @brief MP Support Callback Prototype
+ *  @brief Callout which provides to support global/multiprocessor operations.
  *
  *  The following type defines the callout which the API provides
  *  to support global/multiprocessor operations on mutexes.
@@ -51,7 +53,7 @@ typedef void ( *CORE_mutex_API_mp_support_callout )(
              );
 
 /**
- *  @brief Blocking Disciplines Enumerated Type
+ *  @brief The blocking disciplines for a mutex.
  *
  *  This enumerated type defines the blocking disciplines for a mutex.
  */
@@ -71,7 +73,7 @@ typedef enum {
 }   CORE_mutex_Disciplines;
 
 /**
- *  @brief Mutex method return statuses
+ *  @brief The possible Mutex handler return statuses.
  *
  *  This enumerated type defines the possible Mutex handler return statuses.
  */
@@ -118,14 +120,14 @@ typedef enum {
 }   CORE_mutex_Status;
 
 /**
- *  @brief Core Mutex Last Status
+ *  @brief The last status value.
  *
  *  This is the last status value.
  */
 #define CORE_MUTEX_STATUS_LAST CORE_MUTEX_STATUS_CEILING_VIOLATED
 
 /**
- *  @brief Mutex Lock Nesting Behavior Enumeration
+ *  @brief The possible behaviors for lock nesting.
  *
  *  This enumerated type defines the possible behaviors for
  *  lock nesting.
@@ -170,7 +172,7 @@ typedef enum {
 #define CORE_MUTEX_LOCKED   0
 
 /**
- *  @brief Core Mutex Attributes
+ *  @brief The control block used to manage attributes of each mutex.
  *
  *  The following defines the control block used to manage the
  *  attributes of each mutex.
@@ -195,7 +197,8 @@ typedef struct {
 }   CORE_mutex_Attributes;
 
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
-/*@brief Core Mutex Lock_Chain Struct
+/**
+ * @brief The control block to manage lock chain of priority inheritance mutex.
  *
  * The following defines the control block used to manage lock chain of
  * priority inheritance mutex.
@@ -214,7 +217,7 @@ typedef struct {
 #endif
 
 /**
- *  @brief Core Mutex Control Structure
+ *  @brief Control block used to manage each mutex.
  *
  *  The following defines the control block used to manage each mutex.
  */
@@ -251,7 +254,7 @@ typedef struct {
 }   CORE_mutex_Control;
 
 /**
- *  @brief Initialize a Core Mutex
+ *  @brief Initializes the mutex based on the parameters passed.
  *
  *  This routine initializes the mutex based on the parameters passed.
  *
@@ -260,7 +263,7 @@ typedef struct {
  *         mutex instance
  *  @param[in] initial_lock is the initial value of the mutex
  *
- *  @return This method returns CORE_MUTEX_STATUS_SUCCESSFUL if successful.
+ *  @retval This method returns CORE_MUTEX_STATUS_SUCCESSFUL if successful.
  */
 CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
@@ -270,7 +273,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 
 #ifndef __RTEMS_APPLICATION__
 /**
- *  @brief Seize Mutex with Quick Success Path
+ *  @brief Attempt to receive a unit from the_mutex.
  *
  *  This routine attempts to receive a unit from the_mutex.
  *  If a unit is available or if the wait flag is false, then the routine
@@ -280,7 +283,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
  *  @param[in] the_mutex is the mutex to attempt to lock
  *  @param[in] level_p is the interrupt level holder
  *
- *  @return This routine returns 0 if "trylock" can resolve whether or not
+ *  @retval This routine returns 0 if "trylock" can resolve whether or not
  *  the mutex is immediately obtained or there was an error attempting to
  *  get it.  It returns 1 to indicate that the caller cannot obtain
  *  the mutex and will have to block to do so.
@@ -296,7 +299,8 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
   /**
-   *  @brief Trylock CORE Mutex Seize Interrupt
+   *  @brief Interrupt trylock CORE mutex seize.
+   *
    *  When doing test coverage analysis or trying to minimize the code
    *  space for RTEMS, it is often helpful to not inline this method
    *  multiple times.  It is fairly large and has a high branch complexity
@@ -322,7 +326,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 #endif
 
 /**
- *  @brief Seize Mutex with Blocking
+ *  @brief Performs the blocking portion of a mutex obtain.
  *
  *  This routine performs the blocking portion of a mutex obtain.
  *  It is an actual subroutine and is not implemented as something
@@ -336,13 +340,13 @@ void _CORE_mutex_Seize_interrupt_blocking(
   Watchdog_Interval    timeout
 );
 /**
- *  @brief Sieze Interrupt Wrapper
+ *  @brief Verifies that a mutex blocking seize is performed safely.
  *
  *  This macro is to verify that a mutex blocking seize is
  *  performed from a safe system state.  For example, one
  *  cannot block inside an isr.
  *
- *  @return this method returns true if dispatch is in an unsafe state.
+ *  @retval this method returns true if dispatch is in an unsafe state.
  */
 #ifdef RTEMS_SMP
   #define _CORE_mutex_Check_dispatch_for_seize(_wait) 0
@@ -354,7 +358,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
 #endif
 
 /**
- *  @brief Sieze Interrupt Wrapper
+ *  @brief Attempt to obtain the mutex.
  *
  *  This routine attempts to obtain the mutex.  If the mutex is available,
  *  then it will return immediately.  Otherwise, it will invoke the
@@ -430,7 +434,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
 #endif
 
 /**
- *  @brief Surrender the Mutex
+ *  @brief Frees a unit to the mutex.
  *
  *  This routine frees a unit to the mutex.  If a task was blocked waiting for
  *  a unit from this mutex, then that task will be readied and the unit
@@ -441,7 +445,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  @param[in] api_mutex_mp_support is the routine that will be called when
  *         unblocking a remote mutex
  *
- *  @return an indication of whether the routine succeeded or failed
+ *  @retval an indication of whether the routine succeeded or failed
  */
 CORE_mutex_Status _CORE_mutex_Surrender(
   CORE_mutex_Control                *the_mutex,
@@ -450,7 +454,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 );
 
 /**
- *  @brief Flush all waiting threads
+ *  @brief Flush all waiting threads.
  *
  *  This routine assists in the deletion of a mutex by flushing the associated
  *  wait queue.

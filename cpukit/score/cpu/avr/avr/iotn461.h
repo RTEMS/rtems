@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATtiny461
+ */
+
 /* Copyright (c) 2006, Anatoly Sokolov
    All rights reserved.
 
@@ -35,6 +41,14 @@
 #define _AVR_IOTN461_H_ 1
 
 #include <avr/iotnx61.h>
+
+/**
+ * @defgroup AvrDef_iotn461 ATtiny461 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Constants */
 #define SPM_PAGESIZE 64
@@ -84,5 +98,6 @@
 #define SIGNATURE_1 0x92
 #define SIGNATURE_2 0x08
 
+/** @} */
 
 #endif /* _AVR_IOTN461_H_ */

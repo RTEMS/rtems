@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/isr.inl
+/**
+ * @file
  *
- *  This include file contains the static implementation of all
- *  inlined routines in the Interrupt Handler.
+ * @brief Inlined Routines in the Interrupt Handler
+ *
+ * This include file contains the static implementation of all
+ * inlined routines in the Interrupt Handler.
  */
 
 /*
@@ -22,14 +24,14 @@
 #define _RTEMS_SCORE_ISR_INL
 
 /**
- *  @addtogroup ScoreISR 
- *  @{
+ * @addtogroup ScoreISR
  */
+/**@{**/
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**
- *  This function returns true if the vector is a valid vector number
- *  for this processor and false otherwise.
+ * This function returns true if the vector is a valid vector number
+ * for this processor and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _ISR_Is_vector_number_valid (
@@ -40,8 +42,8 @@ RTEMS_INLINE_ROUTINE bool _ISR_Is_vector_number_valid (
 }
 
 /**
- *  This function returns true if handler is the entry point of a valid
- *  use interrupt service routine and false otherwise.
+ * This function returns true if handler is the entry point of a valid
+ * use interrupt service routine and false otherwise.
  */
 
 RTEMS_INLINE_ROUTINE bool _ISR_Is_valid_user_handler (
@@ -52,7 +54,7 @@ RTEMS_INLINE_ROUTINE bool _ISR_Is_valid_user_handler (
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/address.h
  *
+ *  @brief Information Required to Manipulate Physical Addresses
+ *
  *  This include file contains the information required to manipulate
  *  physical addresses.
  */

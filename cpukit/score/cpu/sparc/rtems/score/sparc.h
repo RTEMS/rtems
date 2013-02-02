@@ -1,5 +1,8 @@
 /**
- * @file rtems/score/sparc.h
+ * @file
+ *
+ * @brief Information Required to Build RTEMS for a Particular Member
+ * of the SPARC Family
  *
  * This file contains the information required to build
  * RTEMS for a particular member of the SPARC family.  It does
@@ -42,25 +45,25 @@ extern "C" {
  */
 
 /**
- *  Some higher end SPARCs have a bitscan instructions. It would
- *  be nice to take advantage of them.  Right now, there is no
- *  port to a CPU model with this feature and no (untested) code
- *  that is based on this feature flag.
+ * Some higher end SPARCs have a bitscan instructions. It would
+ * be nice to take advantage of them.  Right now, there is no
+ * port to a CPU model with this feature and no (untested) code
+ * that is based on this feature flag.
  */
 #define SPARC_HAS_BITSCAN                0
 
 /**
- *  This should be OK until a port to a higher end SPARC processor
- *  is made that has more than 8 register windows.  If this cannot
- *  be determined based on multilib settings (v7/v8/v9), then the
- *  cpu_asm.S code that depends on this will have to move to libcpu.
+ * This should be OK until a port to a higher end SPARC processor
+ * is made that has more than 8 register windows.  If this cannot
+ * be determined based on multilib settings (v7/v8/v9), then the
+ * cpu_asm.S code that depends on this will have to move to libcpu.
  */
 #define SPARC_NUMBER_OF_REGISTER_WINDOWS 8
 
 /**
- *  This macro indicates whether this multilib variation has hardware
- *  floating point or not.  We use the gcc cpp predefine _SOFT_FLOAT
- *  to determine that.
+ * This macro indicates whether this multilib variation has hardware
+ * floating point or not.  We use the gcc cpp predefine _SOFT_FLOAT
+ * to determine that.
  */
 #if defined(_SOFT_FLOAT)
   #define SPARC_HAS_FPU 0
@@ -69,8 +72,8 @@ extern "C" {
 #endif
 
 /**
- *  This macro contains a string describing the multilib variant being
- *  build.
+ * This macro contains a string describing the multilib variant being
+ * build.
  */
 #if SPARC_HAS_FPU
   #define CPU_MODEL_NAME "w/FPU"
@@ -79,7 +82,7 @@ extern "C" {
 #endif
 
 /**
- *  Define the name of the CPU family.
+ * Define the name of the CPU family.
  */
 #define CPU_NAME "SPARC"
 
@@ -88,9 +91,9 @@ extern "C" {
  */
 
 /**
- *  PSR masks and starting bit positions
+ * PSR masks and starting bit positions
  *
- *  @note Reserved bits are ignored.
+ * NOTE: Reserved bits are ignored.
  */
 #if (SPARC_NUMBER_OF_REGISTER_WINDOWS == 8)
   #define SPARC_PSR_CWP_MASK               0x07   /* bits  0 -  4 */
@@ -145,7 +148,7 @@ extern "C" {
 #ifndef ASM
 
 /**
- *  This macro is a standard nop instruction.
+ * This macro is a standard nop instruction.
  */
 #define nop() \
   do { \
@@ -153,9 +156,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Obtain the PSR
+ * @brief Macro to obtain the PSR.
  *
- *  This macro returns the current contents of the PSR register in @a _psr.
+ * This macro returns the current contents of the PSR register in @a _psr.
  */
 #define sparc_get_psr( _psr ) \
   do { \
@@ -164,9 +167,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Set the PSR
+ * @brief Macro to set the PSR.
  *
- *  This macro sets the PSR register to the value in @a _psr.
+ * This macro sets the PSR register to the value in @a _psr.
  */
 #define sparc_set_psr( _psr ) \
   do { \
@@ -177,9 +180,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Obtain the TBR
+ * @brief Macro to obtain the TBR.
  *
- *  This macro returns the current contents of the TBR register in @a _tbr.
+ * This macro returns the current contents of the TBR register in @a _tbr.
  */
 #define sparc_get_tbr( _tbr ) \
   do { \
@@ -188,9 +191,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Set the TBR
+ * @brief Macro to set the TBR.
  *
- *  This macro sets the TBR register to the value in @a _tbr.
+ * This macro sets the TBR register to the value in @a _tbr.
  */
 #define sparc_set_tbr( _tbr ) \
   do { \
@@ -198,9 +201,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Obtain the WIM
+ * @brief Macro to obtain the WIM.
  *
- *  This macro returns the current contents of the WIM field in @a _wim.
+ * This macro returns the current contents of the WIM field in @a _wim.
  */
 #define sparc_get_wim( _wim ) \
   do { \
@@ -208,9 +211,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Set the WIM
+ * @brief Macro to set the WIM.
  *
- *  This macro sets the WIM field to the value in @a _wim.
+ * This macro sets the WIM field to the value in @a _wim.
  */
 #define sparc_set_wim( _wim ) \
   do { \
@@ -221,9 +224,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Obtain the Y Register
+ * @brief Macro to obtain the Y register.
  *
- *  This macro returns the current contents of the Y register in @a _y.
+ * This macro returns the current contents of the Y register in @a _y.
  */
 #define sparc_get_y( _y ) \
   do { \
@@ -231,9 +234,9 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief Macro to Set the Y Register
+ * @brief Macro to set the Y register.
  *
- *  This macro sets the Y register to the value in @a _y.
+ * This macro sets the Y register to the value in @a _y.
  */
 #define sparc_set_y( _y ) \
   do { \
@@ -241,29 +244,29 @@ extern "C" {
   } while ( 0 )
 
 /**
- *  @brief SPARC Disable Processor Interrupts
+ * @brief SPARC disable processor interrupts.
  *
- *  This method is invoked to disable all maskable interrupts.
+ * This method is invoked to disable all maskable interrupts.
  *
- *  @return This method returns the entire PSR contents.
+ * @return This method returns the entire PSR contents.
  */
 uint32_t sparc_disable_interrupts(void);
 
 /**
- *  @brief SPARC Enable Processor Interrupts
+ * @brief SPARC enable processor interrupts.
  *
- *  This method is invoked to enable all maskable interrupts.
+ * This method is invoked to enable all maskable interrupts.
  *
- *  @param[in] psr is the PSR returned by @ref sparc_disable_interrupts.
+ * @param[in] psr is the PSR returned by @ref sparc_disable_interrupts.
  */
 void sparc_enable_interrupts(uint32_t psr);
 
 /**
- *  @brief SPARC Flash Processor Interrupts
+ * @brief SPARC flash processor interrupts.
  *
- *  This method is invoked to temporarily enable all maskable interrupts.
+ * This method is invoked to temporarily enable all maskable interrupts.
  *
- *  @param[in] _psr is the PSR returned by @ref sparc_disable_interrupts.
+ * @param[in] _psr is the PSR returned by @ref sparc_disable_interrupts.
  */
 #define sparc_flash_interrupts( _psr ) \
   do { \
@@ -272,11 +275,11 @@ void sparc_enable_interrupts(uint32_t psr);
   } while ( 0 )
 
 /**
- *  @brief SPARC Obtain Interrupt Level
+ * @brief SPARC obtain interrupt level.
  *
- *  This method is invoked to obtain the current interrupt disable level.
+ * This method is invoked to obtain the current interrupt disable level.
  *
- *  @param[in] _level is the PSR returned by @ref sparc_disable_interrupts.
+ * @param[in] _level is the PSR returned by @ref sparc_disable_interrupts.
  */
 #define sparc_get_interrupt_level( _level ) \
   do { \

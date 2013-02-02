@@ -380,7 +380,9 @@ bootpc_call(
 		auio.uio_rw = UIO_WRITE;
 		auio.uio_offset = 0;
 		auio.uio_resid = sizeof(*call);
+#ifndef __rtems__
 		auio.uio_procp = procp;
+#endif
 		error = sosend(so, nam, &auio, NULL, NULL, 0);
 		if (error) {
 			printf("bootpc_call: sosend: %d\n", error);
@@ -414,7 +416,9 @@ bootpc_call(
 			auio.uio_rw = UIO_READ;
 			auio.uio_offset = 0;
 			auio.uio_resid = sizeof(*reply);
+#ifndef __rtems__
 			auio.uio_procp = procp;
+#endif
 			
 			rcvflg = 0;
 			error = soreceive(so, NULL, &auio, NULL, NULL, &rcvflg);

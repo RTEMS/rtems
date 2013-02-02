@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Define Generic PORTn, DDn, and PINn Values
+ */
+
 /* Copyright (c) 2003  Theodore A. Roth
    All rights reserved.
 
@@ -38,8 +44,6 @@
 #  error "Include <avr/io.h> instead of this file."
 #endif
 
-/* Define Generic PORTn, DDn, and PINn values. */
-
 /* Port Data Register (generic) */
 #define    PORT7        7
 #define    PORT6        6
@@ -70,7 +74,9 @@
 #define    PIN1         1
 #define    PIN0         0
 
-/* Define PORTxn an Pxn values for all possible port pins if not defined already by io.h. */
+/* Define PORTxn an Pxn values for all possible port pins 
+ * if not defined already by io.h. 
+ */
 
 /* PORT A */
 

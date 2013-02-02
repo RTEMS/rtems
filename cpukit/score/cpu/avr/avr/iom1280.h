@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega1280
+ */
+
 /* Copyright (c) 2005 Anatoly Sokolov 
    All rights reserved.
 
@@ -35,6 +41,14 @@
 #define _AVR_IOM1280_H_ 1
 
 #include <avr/iomxx0_1.h>
+
+/**
+ * @defgroup AvrDef_iom1280 ATmega1280 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Constants */
 #define SPM_PAGESIZE    256
@@ -89,5 +103,6 @@
 #define SIGNATURE_1 0x97
 #define SIGNATURE_2 0x03
 
+/** @} */
 
 #endif /* _AVR_IOM1280_H_ */

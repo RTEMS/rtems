@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Waiting on a Condition
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

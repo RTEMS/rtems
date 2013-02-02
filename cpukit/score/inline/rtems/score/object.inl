@@ -1,5 +1,7 @@
 /**
- * @file rtems/score/object.inl
+ * @file
+ *
+ * @brief Inlined Routines in the Object Handler
  *
  * This include file contains the static inline implementation of all
  * of the inlined routines in the Object Handler.
@@ -22,16 +24,16 @@
 #define _RTEMS_SCORE_OBJECT_INL
 
 /**
- *  This function builds an object's id from the processor node and index
- *  values specified.
+ * This function builds an object's id from the processor node and index
+ * values specified.
  *
- *  @param[in] the_api indicates the API associated with this Id.
- *  @param[in] the_class indicates the class of object.
- *             It is specific to @a the_api.
- *  @param[in] node is the node where this object resides.
- *  @param[in] index is the instance number of this object.
+ * @param[in] the_api indicates the API associated with this Id.
+ * @param[in] the_class indicates the class of object.
+ *            It is specific to @a the_api.
+ * @param[in] node is the node where this object resides.
+ * @param[in] index is the instance number of this object.
  *
- *  @return This method returns an object Id constructed from the arguments.
+ * @return This method returns an object Id constructed from the arguments.
  */
 RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   Objects_APIs     the_api,
@@ -49,11 +51,11 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
 }
 
 /**
- *  This function returns the API portion of the ID.
+ * This function returns the API portion of the ID.
  *
- *  @param[in] id is the object Id to be processed.
+ * @param[in] id is the object Id to be processed.
  *
- *  @return This method returns an object Id constructed from the arguments.
+ * @return This method returns an object Id constructed from the arguments.
  */
 RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
   Objects_Id id
@@ -63,24 +65,24 @@ RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
 }
 
 /**
- *  This function returns the class portion of the ID.
+ * This function returns the class portion of the ID.
  *
- *  @param[in] id is the object Id to be processed
+ * @param[in] id is the object Id to be processed
  */
 RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_class(
   Objects_Id id
 )
 {
-  return (uint32_t) 
+  return (uint32_t)
     ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
 }
- 
+
 /**
- *  This function returns the node portion of the ID.
+ * This function returns the node portion of the ID.
  *
- *  @param[in] id is the object Id to be processed
+ * @param[in] id is the object Id to be processed
  *
- *  @return This method returns the node portion of an object ID.
+ * @return This method returns the node portion of an object ID.
  */
 RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
   Objects_Id id
@@ -98,11 +100,11 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
 }
 
 /**
- *  This function returns the index portion of the ID.
+ * This function returns the index portion of the ID.
  *
- *  @param[in] id is the Id to be processed
+ * @param[in] id is the Id to be processed
  *
- *  @return This method returns the class portion of the specified object ID.
+ * @return This method returns the class portion of the specified object ID.
  */
 RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
   Objects_Id id
@@ -114,12 +116,12 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
 }
 
 /**
- *  This function returns true if the api is valid.
+ * This function returns true if the api is valid.
  *
- *  @param[in] the_api is the api portion of an object ID.
+ * @param[in] the_api is the api portion of an object ID.
  *
- *  @return This method returns true if the specified api value is valid
- *          and false otherwise.
+ * @return This method returns true if the specified api value is valid
+ *         and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
   uint32_t   the_api
@@ -129,16 +131,16 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
    return false;
   return true;
 }
-   
+
 /**
- *  This function returns true if the node is of the local object, and
- *  false otherwise.
+ * This function returns true if the node is of the local object, and
+ * false otherwise.
  *
- *  @param[in] node is the node number and corresponds to the node number
- *         portion of an object ID.
+ * @param[in] node is the node number and corresponds to the node number
+ *        portion of an object ID.
  *
- *  @return This method returns true if the specified node is the local node
- *          and false otherwise.
+ * @return This method returns true if the specified node is the local node
+ *         and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
   uint32_t   node
@@ -148,15 +150,15 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
 }
 
 /**
- *  This function returns true if the id is of a local object, and
- *  false otherwise.
+ * This function returns true if the id is of a local object, and
+ * false otherwise.
  *
- *  @param[in] id is an object ID
+ * @param[in] id is an object ID
  *
- *  @return This method returns true if the specified object Id is local
- *          and false otherwise.
+ * @return This method returns true if the specified object Id is local
+ *         and false otherwise.
  *
- *  @note On a single processor configuration, this always returns true.
+ * @note On a single processor configuration, this always returns true.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
 #if defined(RTEMS_MULTIPROCESSING)
@@ -174,14 +176,14 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
 }
 
 /**
- *  This function returns true if left and right are equal,
- *  and false otherwise.
+ * This function returns true if left and right are equal,
+ * and false otherwise.
  *
- *  @param[in] left is the Id on the left hand side of the comparison
- *  @param[in] right is the Id on the right hand side of the comparison
+ * @param[in] left is the Id on the left hand side of the comparison
+ * @param[in] right is the Id on the right hand side of the comparison
  *
- *  @return This method returns true if the specified object IDs are equal
- *          and false otherwise.
+ * @return This method returns true if the specified object IDs are equal
+ *         and false otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
   Objects_Id left,
@@ -192,14 +194,14 @@ RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
 }
 
 /**
- *  This function returns a pointer to the local_table object
- *  referenced by the index.
+ * This function returns a pointer to the local_table object
+ * referenced by the index.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] index is the index of the object the caller wants to access
+ * @param[in] information points to an Object Information Table
+ * @param[in] index is the index of the object the caller wants to access
  *
- *  @return This method returns a pointer to a local object or NULL if the
- *          index is invalid and RTEMS_DEBUG is enabled.
+ * @return This method returns a pointer to a local object or NULL if the
+ *         index is invalid and RTEMS_DEBUG is enabled.
  */
 RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   Objects_Information *information,
@@ -207,10 +209,10 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
 )
 {
   /*
-   *  This routine is ONLY to be called from places in the code
-   *  where the Id is known to be good.  Therefore, this should NOT
-   *  occur in normal situations.
-   */ 
+   * This routine is ONLY to be called from places in the code
+   * where the Id is known to be good.  Therefore, this should NOT
+   * occur in normal situations.
+   */
   #if defined(RTEMS_DEBUG)
     if ( index > information->maximum )
       return NULL;
@@ -219,17 +221,17 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
 }
 
 /**
- *  This function sets the pointer to the local_table object
- *  referenced by the index.
+ * This function sets the pointer to the local_table object
+ * referenced by the index.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] index is the index of the object the caller wants to access
- *  @param[in] the_object is the local object pointer
+ * @param[in] information points to an Object Information Table
+ * @param[in] index is the index of the object the caller wants to access
+ * @param[in] the_object is the local object pointer
  *
- *  @note This routine is ONLY to be called in places where the
- *        index portion of the Id is known to be good.  This is
- *        OK since it is normally called from object create/init
- *        or delete/destroy operations.
+ * @note This routine is ONLY to be called in places where the
+ *       index portion of the Id is known to be good.  This is
+ *       OK since it is normally called from object create/init
+ *       or delete/destroy operations.
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
@@ -242,7 +244,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
    *  This routine is ONLY to be called from places in the code
    *  where the Id is known to be good.  Therefore, this should NOT
    *  occur in normal situations.
-   */ 
+   */
   #if defined(RTEMS_DEBUG)
     if ( index > information->maximum )
       return;
@@ -252,17 +254,17 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
 }
 
 /**
- *  This function sets the pointer to the local_table object
- *  referenced by the index to a NULL so the object Id is invalid
- *  after this call.
+ * This function sets the pointer to the local_table object
+ * referenced by the index to a NULL so the object Id is invalid
+ * after this call.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is the local object pointer
+ * @param[in] information points to an Object Information Table
+ * @param[in] the_object is the local object pointer
  *
- *  @note This routine is ONLY to be called in places where the
- *        index portion of the Id is known to be good.  This is
- *        OK since it is normally called from object create/init
- *        or delete/destroy operations.
+ * @note This routine is ONLY to be called in places where the
+ *       index portion of the Id is known to be good.  This is
+ *       OK since it is normally called from object create/init
+ *       or delete/destroy operations.
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
@@ -278,12 +280,12 @@ RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
 }
 
 /**
- *  This function places the_object control pointer and object name
- *  in the Local Pointer and Local Name Tables, respectively.
+ * This function places the_object control pointer and object name
+ * in the Local Pointer and Local Name Tables, respectively.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
- *  @param[in] name is the name of the object to make accessible
+ * @param[in] information points to an Object Information Table
+ * @param[in] the_object is a pointer to an object
+ * @param[in] name is the name of the object to make accessible
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Information *information,
@@ -301,12 +303,12 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
 }
 
 /**
- *  This function places the_object control pointer and object name
- *  in the Local Pointer and Local Name Tables, respectively.
+ * This function places the_object control pointer and object name
+ * in the Local Pointer and Local Name Tables, respectively.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
- *  @param[in] name is the name of the object to make accessible
+ * @param[in] information points to an Object Information Table
+ * @param[in] the_object is a pointer to an object
+ * @param[in] name is the name of the object to make accessible
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
   Objects_Information *information,
@@ -320,17 +322,17 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
     the_object
   );
 
-  /* ASSERT: information->is_string == false */ 
+  /* ASSERT: information->is_string == false */
   the_object->name.name_u32 = name;
 }
 
 /**
- *  This function places the_object control pointer and object name
- *  in the Local Pointer and Local Name Tables, respectively.
+ * This function places the_object control pointer and object name
+ * in the Local Pointer and Local Name Tables, respectively.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
- *  @param[in] name is the name of the object to make accessible
+ * @param[in] information points to an Object Information Table
+ * @param[in] the_object is a pointer to an object
+ * @param[in] name is the name of the object to make accessible
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   Objects_Information *information,
@@ -345,18 +347,18 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   );
 
   #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    /* ASSERT: information->is_string */ 
+    /* ASSERT: information->is_string */
     the_object->name.name_p = name;
   #endif
 }
 
 /**
- *  Returns if the object maximum specifies unlimited objects.
+ * Returns if the object maximum specifies unlimited objects.
  *
- *  @param[in] maximum The object maximum specification.
+ * @param[in] maximum The object maximum specification.
  *
- *  @retval true Unlimited objects are available.
- *  @retval false The object count is fixed.
+ * @retval true Unlimited objects are available.
+ * @retval false The object count is fixed.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
 {

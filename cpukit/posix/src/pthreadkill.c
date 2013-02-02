@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Sends a signal Asynchronously directed to a thread
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

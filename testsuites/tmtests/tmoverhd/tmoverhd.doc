@@ -6,4 +6,79 @@
 #  http://www.rtems.com/license/LICENSE.
 #
 
+directives:
 
++ rtems shutdown executive
++ rtems task create
++ rtems task ident
++ rtems task start
++ rtems task restart
++ rtems task delete
++ rtems task suspend
++ rtems task resume
++ rtems task set priority
++ rtems task mode
++ rtems task get note
++ rtems task set note
++ rtems task wake when
++ rtems task wake after
++ rtems interrupt catch
++ rtems clock get
++ rtems clock set
++ rtems clock tick
++ rtems timer create
++ rtems timer delete
++ rtems timer ident
++ rtems timer fire after
++ rtems timer fire when
++ rtems timer reset
++ rtems timer cancel
++ rtems semaphore create
++ rtems semaphore delete
++ rtems semaphore ident
++ rtems semaphore obtain
++ rtems semaphore release
++ rtems message queue create
++ rtems message queue ident
++ rtems message queue delete
++ rtems message queue send
++ rtems message queue urgent
++ rtems message queue broadcast
++ rtems message queue receive
++ rtems message queue flush
++ rtems event send
++ rtems event receive
++ rtems signal catch
++ rtems signal send
++ rtems partition create
++ rtems partition ident
++ rtems partition delete
++ rtems partition get buffer
++ rtems partition return buffer
++ rtems region create
++ rtems region ident
++ rtems region delete
++ rtems region get segment
++ rtems region return segment
++ rtems port create
++ rtems port ident
++ rtems port delete
++ rtems port external to internal
++ rtems port internal to external
++ rtems io initialize
++ rtems io open
++ rtems io close
++ rtems io read
++ rtems io write
++ rtems io control
++ rtems fatal error occurred
++ rtems rate monotonic create
++ rtems rate monotonic ident
++ rtems rate monotonic delete
++ rtems rate monotonic cancel
++ rtems rate monotonic period
++ rtems multiprocessing announce
+
+concepts:
+
++ Test the overhead of various classic RTEMS directives.

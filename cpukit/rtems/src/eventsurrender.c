@@ -39,27 +39,28 @@ void _Event_Surrender(
   _ISR_Disable( level );
   _Event_sets_Post( event_in, &event->pending_events );
   pending_events  = event->pending_events;
+
+  /*
+   * At this point the event condition is a speculative quantity.  Later state
+   * checks will show if the thread actually waits for an event.
+   */
   event_condition = the_thread->Wait.count;
 
   seized_events = _Event_sets_Get( pending_events, event_condition );
 
-  /*
-   *  No events were seized in this operation
-   */
-  if ( _Event_sets_Is_empty( seized_events ) ) {
-    _ISR_Enable( level );
-    return;
-  }
-
-  /*
-   *  If we are in an ISR and sending to the current thread, then
-   *  we have a critical section issue to deal with.
-   */
-  if ( _ISR_Is_in_progress() &&
-       _Thread_Is_executing( the_thread ) &&
-       ((*sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
-        (*sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED)) ) {
-    if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
+  if (
+    !_Event_sets_Is_empty( seized_events )
+      && ( seized_events == event_condition || _Options_Is_any( option_set ) )
+  ) {
+    /*
+     *  If we are sending to the executing thread, then we have a critical
+     *  section issue to deal with.  The entity sending to the executing thread
+     *  can be either the executing thread or an ISR.  In case it is the
+     *  executing thread, then the blocking operation state is not equal to
+     *  THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED.
+     */
+    if ( _Thread_Is_executing( the_thread ) &&
+         *sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED ) {
       event->pending_events = _Event_sets_Clear(
         pending_events,
         seized_events
@@ -67,16 +68,7 @@ void _Event_Surrender(
       the_thread->Wait.count = 0;
       *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
       *sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
-    }
-    _ISR_Enable( level );
-    return;
-  }
-
-  /*
-   *  Otherwise, this is a normal send to another thread
-   */
-  if ( _States_Are_set( the_thread->current_state, wait_state ) ) {
-    if ( seized_events == event_condition || _Options_Is_any( option_set ) ) {
+    } else if ( _States_Are_set( the_thread->current_state, wait_state ) ) {
       event->pending_events = _Event_sets_Clear(
         pending_events,
         seized_events

@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/threadq.inl
+/**
+ * @file
  *
- *  This inline file contains all of the inlined routines associated with
- *  the manipulation of thread queues.
+ * @brief Inlined Routines Associated with the Manipulation of Thread Queues
+ *
+ * This inline file contains all of the inlined routines associated with
+ * the manipulation of thread queues.
  */
 
 /*
@@ -24,11 +26,11 @@
 #include <rtems/score/thread.h>
 
 /**
- *  @addtogroup ScoreThreadQ
- * @{
+ * @addtogroup ScoreThreadQ
  */
+/**@{**/
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

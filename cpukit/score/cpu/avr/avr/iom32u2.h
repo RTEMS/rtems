@@ -47,9 +47,11 @@
 #ifndef _AVR_ATmega32U2_H_
 #define _AVR_ATmega32U2_H_ 1
 
-
-/* Registers and associated bit numbers. */
-
+/**
+ * @name Registers and Associated Bit Numbers
+ * 
+ */
+/**@{**/
 #define PINB _SFR_IO8(0x03)
 #define PINB0 0
 #define PINB1 1
@@ -851,9 +853,13 @@
 #define UPDRV1 5
 #define UPWE0 6
 #define UPWE1 7
+/** @} */
 
-
-/* Interrupt vectors */
+/**
+ * @name Interrupt Vectors
+ * 
+ */
+/**@{**/
 /* Vector 0 is the reset vector */
 #define INT0_vect_num  1
 #define INT0_vect      _VECTOR(1)  /* External Interrupt Request 0 */
@@ -878,17 +884,21 @@
 #define USB_GEN_vect_num  11
 #define USB_GEN_vect      _VECTOR(11)  /* USB General Interrupt Request */
 #define USB_COM_vect_num  12
-#define USB_COM_vect      _VECTOR(12)  /* USB Endpoint/Pipe Interrupt Communication Request */
+/* USB Endpoint/Pipe Interrupt Communication Request */
+#define USB_COM_vect      _VECTOR(12)  
 #define WDT_vect_num  13
 #define WDT_vect      _VECTOR(13)  /* Watchdog Time-out Interrupt */
 #define TIMER1_CAPT_vect_num  14
 #define TIMER1_CAPT_vect      _VECTOR(14)  /* Timer/Counter2 Capture Event */
 #define TIMER1_COMPA_vect_num  15
-#define TIMER1_COMPA_vect      _VECTOR(15)  /* Timer/Counter2 Compare Match B */
+/* Timer/Counter2 Compare Match B */
+#define TIMER1_COMPA_vect      _VECTOR(15)  
 #define TIMER0_COMPA_vect_num  19
-#define TIMER0_COMPA_vect      _VECTOR(19)  /* Timer/Counter0 Compare Match A */
+/* Timer/Counter0 Compare Match A */
+#define TIMER0_COMPA_vect      _VECTOR(19)  
 #define TIMER0_COMPB_vect_num  20
-#define TIMER0_COMPB_vect      _VECTOR(20)  /* Timer/Counter0 Compare Match B */
+/* Timer/Counter0 Compare Match B */
+#define TIMER0_COMPB_vect      _VECTOR(20)  
 #define TIMER0_OVF_vect_num  21
 #define TIMER0_OVF_vect      _VECTOR(21)  /* Timer/Counter0 Overflow */
 #define SPI_STC_vect_num  22
@@ -906,15 +916,17 @@
 #define SPM_READY_vect_num  28
 #define SPM_READY_vect      _VECTOR(28)  /* Store Program Memory Read */
 #define TIMER1_COMPB_vect_num  16
-#define TIMER1_COMPB_vect      _VECTOR(16)  /* Timer/Counter2 Compare Match B */
+/* Timer/Counter2 Compare Match B */
+#define TIMER1_COMPB_vect      _VECTOR(16)  
 #define TIMER1_COMPC_vect_num  17
-#define TIMER1_COMPC_vect      _VECTOR(17)  /* Timer/Counter2 Compare Match C */
+/* Timer/Counter2 Compare Match C */
+#define TIMER1_COMPC_vect      _VECTOR(17)  
 #define TIMER1_OVF_vect_num  18
 #define TIMER1_OVF_vect      _VECTOR(18)  /* Timer/Counter1 Overflow */
 
 #define _VECTOR_SIZE 4 /* Size of individual vector. */
 #define _VECTORS_SIZE (38 * _VECTOR_SIZE)
-
+/** @} */
 
 /* Constants */
 #define SPM_PAGESIZE (128)
@@ -927,9 +939,13 @@
 #define E2END        (0x3FF)
 #define E2PAGESIZE   (4)
 #define FLASHEND     (0x7FFF)
+/** @} */
 
-
-/* Fuses */
+/**
+ * @name Fuses
+ * 
+ */
+/**@{**/
 #define FUSE_MEMORY_SIZE 3
 
 /* Low Fuse Byte */
@@ -941,38 +957,52 @@
 #define FUSE_SUT1  (unsigned char)~_BV(5)  /* Select start-up time */
 #define FUSE_CKOUT  (unsigned char)~_BV(6)  /* Oscillator options */
 #define FUSE_CKDIV8  (unsigned char)~_BV(7)  /* Divide clock by 8 */
-#define LFUSE_DEFAULT (FUSE_CKDIV8 & FUSE_SUT1 & FUSE_SUT0 & FUSE_CKSEL3 & FUSE_CKSEL2 & FUSE_CKSEL1)
+#define LFUSE_DEFAULT (FUSE_CKDIV8 & FUSE_SUT1 & FUSE_SUT0 & FUSE_CKSEL3 & \
+                       FUSE_CKSEL2 & FUSE_CKSEL1)
 
 /* High Fuse Byte */
 #define FUSE_BOOTRST  (unsigned char)~_BV(0)  /* Select Reset Vector */
 #define FUSE_BOOTSZ0  (unsigned char)~_BV(1)  /* Select Boot Size */
 #define FUSE_BOOTSZ1  (unsigned char)~_BV(2)  /* Select Boot Size */
-#define FUSE_EESAVE  (unsigned char)~_BV(3)  /* EEPROM memory is preserved through chip erase */
+/* EEPROM memory is preserved through chip erase */
+#define FUSE_EESAVE  (unsigned char)~_BV(3)
 #define FUSE_WDTON  (unsigned char)~_BV(4)  /* Watchdog timer always on */
-#define FUSE_SPIEN  (unsigned char)~_BV(5)  /* Enable Serial programming and Data Downloading */
+/* Enable Serial programming and Data Downloading */
+#define FUSE_SPIEN  (unsigned char)~_BV(5)  
 #define FUSE_RSTDISBL  (unsigned char)~_BV(6)  /* External Reset Disable */
 #define FUSE_DWEN  (unsigned char)~_BV(7)  /* dwbugWIRE Enable */
 #define HFUSE_DEFAULT (FUSE_SPIEN & FUSE_BOOTSZ1 & FUSE_BOOTSZ0)
 
 /* Extended Fuse Byte */
-#define FUSE_BODLEVEL0  (unsigned char)~_BV(0)  /* Brown-out Detector trigger level */
-#define FUSE_BODLEVEL1  (unsigned char)~_BV(1)  /* Brown-out Detector trigger level */
-#define FUSE_BODLEVEL2  (unsigned char)~_BV(2)  /* Brown-out Detector trigger level */
+/* Brown-out Detector trigger level */
+#define FUSE_BODLEVEL0  (unsigned char)~_BV(0)  
+/* Brown-out Detector trigger level */
+#define FUSE_BODLEVEL1  (unsigned char)~_BV(1)  
+/* Brown-out Detector trigger level */
+#define FUSE_BODLEVEL2  (unsigned char)~_BV(2)  
 #define FUSE_HWBE  (unsigned char)~_BV(3)  /* Hardware Boot Enable */
 #define EFUSE_DEFAULT (0xFF)
+/** @} */
 
-
-/* Lock Bits */
+/**
+ * @name Lock Bits
+ * 
+ */
+/**@{**/
 #define __LOCK_BITS_EXIST
 #define __BOOT_LOCK_BITS_0_EXIST
 #define __BOOT_LOCK_BITS_1_EXIST
+/** @} */
 
-
-/* Signature */
+/**
+ * @name Signature
+ * 
+ */
+/**@{**/
 #define SIGNATURE_0 0x1E
 #define SIGNATURE_1 0x95
 #define SIGNATURE_2 0x8A
-
+/** @} */
 
 /* Device Pin Definitions */
 #endif /* _AVR_ATmega32U2_H_ */

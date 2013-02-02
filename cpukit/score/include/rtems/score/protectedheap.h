@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreProtHeap
  *
- * @brief Protected Heap Handler API.
+ * @brief Protected Heap Handler API
  */
 
 /*
@@ -34,8 +34,8 @@ extern "C" {
  *
  * The @ref ScoreAllocatorMutex is used to protect the heap accesses.
  *
- * @{
  */
+/**@{**/
 
 /**
  * @brief See _Heap_Initialize().

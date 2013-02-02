@@ -1,15 +1,20 @@
-/* NFS client implementation for RTEMS; hooks into the RTEMS filesystem */
-
-/* Author: Till Straumann <strauman@slac.stanford.edu> 2002 */
+/**
+ * @file
+ *
+ * @brief NFS Client Implementation for RTEMS
+ * @ingroup libfs
+ *
+ * Hooks Into the RTEMS NFS Filesystem
+ */
 
 /*
+ * Author: Till Straumann <strauman@slac.stanford.edu>, 2002
+ *
  * Hacked on by others.
  *
  * Modifications to support reference counting in the file system are
  * Copyright (c) 2012 embedded brains GmbH.
- */
-
-/*
+ *
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by
@@ -674,7 +679,19 @@ static struct nfsstats {
 		 * during the system lifetime
 		 */
 	u_short						fs_ids;
-} nfsGlob = {0, 0,  0, 0, 0, 0};
+
+	/* Two pools of RPC transactions;
+	 * One with small send buffers
+	 * the other with a big one.
+	 * The actual size of the small
+	 * buffer is configurable (see top).
+	 *
+	 * Note: The RX buffers are always
+	 * big
+	 */
+	RpcUdpXactPool smallPool;
+	RpcUdpXactPool bigPool;
+} nfsGlob = {0, 0,  0xffffffff, 0, 0, 0, NULL, NULL};
 
 /*
  * Global variable to tune the 'st_blksize' (stat(2)) value this nfs
@@ -685,18 +702,6 @@ static struct nfsstats {
 #define DEFAULT_NFS_ST_BLKSIZE	NFS_MAXDATA
 #endif
 int nfsStBlksize = DEFAULT_NFS_ST_BLKSIZE;
-
-/* Two pools of RPC transactions;
- * One with small send buffers
- * the other with a big one.
- * The actual size of the small
- * buffer is configurable (see top).
- *
- * Note: The RX buffers are always
- * big
- */
-static RpcUdpXactPool smallPool = 0;
-static RpcUdpXactPool bigPool   = 0;
 
 
 /*****************************************
@@ -992,7 +997,7 @@ NfsNode rval = nfsNodeCreate(node->nfs, 0);
  * 			they are created and destroyed
  * 			on the fly).
  */
-void
+int
 nfsInit(int smallPoolDepth, int bigPoolDepth)
 {
 static int initialised = 0;
@@ -1000,7 +1005,7 @@ entry	dummy;
 rtems_status_code status;
 
 	if (initialised)
-		return;
+		return 0;
 
 	initialised = 1;
 
@@ -1013,7 +1018,8 @@ rtems_status_code status;
 
 	if (RTEMS_SUCCESSFUL != rtems_io_register_driver(0, &drvNfs, &nfsGlob.nfs_major)) {
 		fprintf(stderr,"Registering NFS driver failed - %s\n", strerror(errno));
-		return;
+		errno = ENOMEM;
+		return -1;
 	}
 
 	if (0==smallPoolDepth)
@@ -1034,19 +1040,23 @@ rtems_status_code status;
 	dummy.name        = "somename"; /* guess average length of a filename */
 	dirres_entry_size = xdr_sizeof((xdrproc_t)xdr_entry, &dummy);
 
-	smallPool = rpcUdpXactPoolCreate(
+	nfsGlob.smallPool = rpcUdpXactPoolCreate(
 		NFS_PROGRAM,
 		NFS_VERSION_2,
 		CONFIG_NFS_SMALL_XACT_SIZE,
 		smallPoolDepth);
-	assert( smallPool );
+	if (nfsGlob.smallPool == NULL) {
+		goto cleanup;
+	}
 
-	bigPool = rpcUdpXactPoolCreate(
+	nfsGlob.bigPool = rpcUdpXactPoolCreate(
 		NFS_PROGRAM,
 		NFS_VERSION_2,
 		CONFIG_NFS_BIG_XACT_SIZE,
 		bigPoolDepth);
-	assert( bigPool );
+	if (nfsGlob.bigPool == NULL) {
+		goto cleanup;
+	}
 
 	status = rtems_semaphore_create(
 		rtems_build_name('N','F','S','l'),
@@ -1054,14 +1064,19 @@ rtems_status_code status;
 		MUTEX_ATTRIBUTES,
 		0,
 		&nfsGlob.llock);
-	assert( status == RTEMS_SUCCESSFUL );
+	if (status != RTEMS_SUCCESSFUL) {
+		goto cleanup;
+	}
+
 	status = rtems_semaphore_create(
 		rtems_build_name('N','F','S','m'),
 		1,
 		MUTEX_ATTRIBUTES,
 		0,
 		&nfsGlob.lock);
-	assert( status == RTEMS_SUCCESSFUL );
+	if (status != RTEMS_SUCCESSFUL) {
+		goto cleanup;
+	}
 
 	if (sizeof(ino_t) < sizeof(u_int)) {
 		fprintf(stderr,
@@ -1070,6 +1085,15 @@ rtems_status_code status;
 			"you should fix newlib's sys/stat.h - for now I'll enable a hack...\n");
 
 	}
+
+	return 0;
+
+cleanup:
+
+	nfsCleanup();
+	initialised = 0;
+
+	return -1;
 }
 
 /* Driver cleanup code
@@ -1077,38 +1101,47 @@ rtems_status_code status;
 int
 nfsCleanup(void)
 {
-rtems_id	l;
 int			refuse;
 
-	if (!nfsGlob.llock) {
-		/* registering the driver failed - let them still cleanup */
-		return 0;
+	if (nfsGlob.llock != 0) {
+		LOCK(nfsGlob.llock);
+		if ( (refuse = nfsGlob.num_mounted_fs) ) {
+			fprintf(stderr,"Refuse to unload NFS; %i filesystems still mounted.\n",
+							refuse);
+			nfsMountsShow(stderr);
+			/* yes, printing is slow - but since you try to unload the driver,
+			 * you assume nobody is using NFS, so what if they have to wait?
+			 */
+			UNLOCK(nfsGlob.llock);
+			return -1;
+		}
 	}
 
-	LOCK(nfsGlob.llock);
-	if ( (refuse = nfsGlob.num_mounted_fs) ) {
-		fprintf(stderr,"Refuse to unload NFS; %i filesystems still mounted.\n",
-						refuse);
-		nfsMountsShow(stderr);
-		/* yes, printing is slow - but since you try to unload the driver,
-		 * you assume nobody is using NFS, so what if they have to wait?
-		 */
-		UNLOCK(nfsGlob.llock);
-		return -1;
+	if (nfsGlob.lock != 0) {
+		rtems_semaphore_delete(nfsGlob.lock);
+		nfsGlob.lock = 0;
 	}
 
-	rtems_semaphore_delete(nfsGlob.lock);
-	nfsGlob.lock = 0;
+	if (nfsGlob.smallPool != NULL) {
+		rpcUdpXactPoolDestroy(nfsGlob.smallPool);
+		nfsGlob.smallPool = NULL;
+	}
 
-	/* hold the lock while cleaning up... */
+	if (nfsGlob.bigPool != NULL) {
+		rpcUdpXactPoolDestroy(nfsGlob.bigPool);
+		nfsGlob.bigPool = NULL;
+	}
 
-	rpcUdpXactPoolDestroy(smallPool);
-	rpcUdpXactPoolDestroy(bigPool);
-	l = nfsGlob.llock;
-	rtems_io_unregister_driver(nfsGlob.nfs_major);
+	if (nfsGlob.nfs_major != 0xffffffff) {
+		rtems_io_unregister_driver(nfsGlob.nfs_major);
+		nfsGlob.nfs_major = 0xffffffff;
+	}
 
-	rtems_semaphore_delete(l);
-	nfsGlob.llock = 0;
+	if (nfsGlob.llock != 0) {
+		rtems_semaphore_delete(nfsGlob.llock);
+		nfsGlob.llock = 0;
+	}
+
 	return 0;
 }
 
@@ -1148,8 +1181,8 @@ int				rval = -1;
 	switch (proc) {
 		case NFSPROC_SYMLINK:
 		case NFSPROC_WRITE:
-					pool = bigPool;		break;
-		default:	pool = smallPool;	break;
+					pool = nfsGlob.bigPool;		break;
+		default:	pool = nfsGlob.smallPool;	break;
 	}
 
 	xact = rpcUdpXactPoolGet(pool, XactGetCreate);
@@ -1313,7 +1346,7 @@ int		len;
 	}
 
 	memcpy(&psa->sin_addr, h->h_addr, sizeof (struct in_addr));
-  
+
   /* END OF NON-THREAD SAFE REGION */
 
 	psa->sin_family = AF_INET;
@@ -1770,13 +1803,16 @@ char				*path     = mt_entry->dev;
     fprintf (stderr, "error: initialising RPC\n");
     return -1;
   }
-  
-	nfsInit(0, 0);
+
+	if (nfsInit(0, 0) != 0) {
+		fprintf (stderr, "error: initialising NFS\n");
+		return -1;
+	};
 
 #if 0
 	printf("Trying to mount %s on %s\n",path,mntpoint);
 #endif
-  
+
 	if ( buildIpAddr(&uid, &gid, &host, &saddr, &path) )
 		return -1;
 

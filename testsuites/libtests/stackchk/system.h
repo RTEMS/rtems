@@ -41,7 +41,11 @@ void blow_stack( void );
 
 #define CONFIGURE_STACK_CHECKER_ENABLED
 
-void Fatal_extension( uint32_t source, bool is_internal, uint32_t error );
+void Fatal_extension(
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
+);
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { NULL, NULL, NULL, NULL, NULL, NULL, NULL, Fatal_extension }

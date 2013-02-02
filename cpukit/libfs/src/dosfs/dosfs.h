@@ -1,7 +1,9 @@
 /**
- *  @file rtems/dosfs.h
+ * @file rtems/dosfs.h
  *
- *  Application interface to MSDOS filesystem.
+ * @brief Application Interface to MSDOS Filesystem
+ *
+ * @ingroup rtems_msdos_format
  */
 
 /*
@@ -31,8 +33,8 @@ int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
  *
  * @ingroup FileSystemTypesAndMount
  *
- * @{
  */
+/**@{**/
 
 #define MSDOS_FMT_INFO_LEVEL_NONE   (0)
 #define MSDOS_FMT_INFO_LEVEL_INFO   (1)

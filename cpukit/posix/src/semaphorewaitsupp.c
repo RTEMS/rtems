@@ -2,11 +2,11 @@
  * @file
  *
  * @brief POSIX Semaphore Wait Support
- * @ingroup POSIX_SEMAPHORES Semaphore
+ * @ingroup POSIXSemaphorePrivate
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -31,10 +31,6 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
-
-/*
- *  _POSIX_Semaphore_Wait_support
- */
 
 int _POSIX_Semaphore_Wait_support(
   sem_t             *sem,

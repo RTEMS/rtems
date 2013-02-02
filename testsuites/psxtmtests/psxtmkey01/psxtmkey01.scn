@@ -1,0 +1,4 @@
+*** POSIX TIME TEST PSXTMKEY01 ***
+pthread_key_create 86
+pthread_key_delete 79
+*** END OF POSIX TIME TEST PSXTMKEY01 ***

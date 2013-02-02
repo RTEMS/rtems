@@ -157,7 +157,8 @@ extern "C" {
       .VALID = 1, .IPROT = 1, .TID = 0, .TS = 0, .TSIZE = (size) } \
     }, \
     .MAS2 = { .B = { \
-      .EPN = (addr) >> 10, .VLE = 0, .W = 0, .I = (io), .M = 0, .G = (io), .E = 0 } \
+      .EPN = (addr) >> 10, .VLE = 0, \
+      .W = (io) == 2, .I = (io) == 1, .M = 0, .G = (io) == 1, .E = 0 } \
     }, \
     .MAS3 = { .B = { \
       .RPN = (addr) >> 10, .U0 = 0, .U1 = 0, .U2 = 0, .U3 = 0, .UX = 0, \

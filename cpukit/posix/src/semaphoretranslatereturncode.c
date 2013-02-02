@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Semaphore Code Translation Error
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

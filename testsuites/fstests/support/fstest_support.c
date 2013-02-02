@@ -16,11 +16,12 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdlib.h> /* exit */
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "rtems.h"
+#include <rtems.h>
+#include <rtems/userenv.h>
 
 #include "fstest_support.h"
 #include "fs_config.h"
@@ -31,7 +32,17 @@
 /* Break out of a chroot() environment in C */
 static void break_out_of_chroot(void)
 {
-  chroot("/");
+  int rv;
+  struct stat st;
+
+  rtems_libio_use_global_env();
+
+  /* Perform deferred global location releases */
+  rv = stat(".", &st);
+  rtems_test_assert(rv == 0);
+
+  /* Perform deferred memory frees */
+  free(malloc(1));
 }
 
 /*

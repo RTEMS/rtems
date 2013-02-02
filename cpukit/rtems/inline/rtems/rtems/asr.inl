@@ -1,16 +1,21 @@
 /**
  * @file rtems/rtems/asr.inl
  *
- *  This include file contains the implemenation of all routines
- *  associated with the asynchronous signal handler which are inlined.
+ * @defgroup ClassicASR ASR Support
+ *
+ * @ingroup ClassicRTEMS
+ * @brief Asynchronous Signal Handler
+ *
+ * This include file contains the implemenation of all routines
+ * associated with the asynchronous signal handler which are inlined.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_ASR_H

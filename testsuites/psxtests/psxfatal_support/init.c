@@ -34,12 +34,6 @@ void *POSIX_Init(
   rtems_test_exit(0);
 }
 
-char *Sources[] = {
-  "INTERNAL_ERROR_CORE",
-  "INTERNAL_ERROR_RTEMS_API",
-  "INTERNAL_ERROR_POSIX_API",
-};
-
 char *Errors_Rtems[] = {
   "RTEMS_SUCCESSFUL",               /* successful completion */
   "RTEMS_TASK_EXITTED",             /* returned from a task */
@@ -84,19 +78,15 @@ void Put_Error( uint32_t source, uint32_t error )
   }
 }
 
-void Put_Source( uint32_t source )
+void Put_Source( rtems_fatal_source source )
 {
-  if ( source > INTERNAL_ERROR_POSIX_API )
-    printk("Unknown Source (%d)", source);
-  else
-    printk( Sources[ source ] );
+  printk( "%s", rtems_fatal_source_description( source ) );
 }
 
-
 void Fatal_extension(
-  uint32_t   source,
-  bool       is_internal,
-  uint32_t   error
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
 )
 {
   print_test_begin_message();

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for AT90S4414
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2002, Marek Michalkiewicz
    All rights reserved.
 
@@ -45,6 +53,14 @@
 #else
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
+
+/**
+ * @defgroup AvrDef_io4414 AT90S4414 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* I/O registers */
 
@@ -480,5 +496,6 @@
 #define SIGNATURE_1 0x92
 #define SIGNATURE_2 0x01
 
+/** @} */
 
 #endif /* _AVR_IO4414_H_ */

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Initialize a Mutex
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

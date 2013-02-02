@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/thread.h
  *
+ *  @brief Constants and Structures Related with the Thread Control Block
+ *
  *  This include file contains all constants and structures associated
  *  with the thread control block.
  */
@@ -185,14 +187,14 @@ typedef enum {
 typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
 
 /**
- *  @brief Per Task Variable Manager Structure Forward Reference
+ *  @brief Forward reference to the per task variable structure..
  *
  *  Forward reference to the per task variable structure.
  */
 struct rtems_task_variable_tt;
 
 /**
- *  @brief Per Task Variable Manager Structure
+ *  @brief Internal structure used to manager per task variables.
  *
  *  This is the internal structure used to manager per Task Variables.
  */
@@ -275,7 +277,7 @@ typedef union {
 } Thread_Wait_information_Object_argument_type;
 
 /**
- *  @brief Thread Blocking Management Information
+ *  @brief Information required to manage a thread while it is blocked.
  *
  *  This contains the information required to manage a thread while it is
  *  blocked and to return information to it.
@@ -503,14 +505,14 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
  */
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
 /**
- *  @brief Initialize Thread Handler
+ *  @brief Initialize thread handler.
  *
  *  This routine performs the initialization necessary for this handler.
  */
 void _Thread_Handler_initialization(void);
 
 /**
- *  @brief Create Idle Thread
+ *  @brief Create idle thread.
  *
  *  This routine creates the idle thread.
  *
@@ -519,7 +521,7 @@ void _Thread_Handler_initialization(void);
 void _Thread_Create_idle(void);
 
 /**
- *  @brief Start Thread Multitasking
+ *  @brief Start thread multitasking.
  *
  *  This routine initiates multitasking.  It is invoked only as
  *  part of initialization and its invocation is the last act of
@@ -533,7 +535,7 @@ void _Thread_Create_idle(void);
 void _Thread_Start_multitasking( void );
 
 /**
- *  @brief Dispatch Thread
+ *  @brief Dispatch thread.
  *
  *  This routine is responsible for transferring control of the
  *  processor from the executing thread to the heir thread. Once the
@@ -553,7 +555,7 @@ void _Thread_Start_multitasking( void );
 void _Thread_Dispatch( void );
 
 /**
- *  @brief Stack Allocate Helper
+ *  @brief Allocate the requested stack space for the thread.
  *
  *  Allocate the requested stack space for the thread.
  *  Set the Start.stack field to the address of the stack.
@@ -569,7 +571,7 @@ size_t _Thread_Stack_Allocate(
 );
 
 /**
- *  @brief Deallocate Thread Stack
+ *  @brief Deallocate thread stack.
  *
  *  Deallocate the Thread's stack.
  */
@@ -578,7 +580,8 @@ void _Thread_Stack_Free(
 );
 
 /**
- *  @brief Initialize Thread
+ *  @brief Initialize thread.
+ *
  *  This routine initializes the specified the thread.  It allocates
  *  all memory associated with this thread.  It completes by adding
  *  the thread to the local object table so operations on this
@@ -604,14 +607,14 @@ bool _Thread_Initialize(
 );
 
 /**
- *  @brief Initializes Thread and Executes it
+ *  @brief Initializes thread and executes it.
  *
  *  This routine initializes the executable information for a thread
  *  and makes it ready to execute.  After this routine executes, the
  *  thread competes with all other threads for CPU time.
  *
  *  @param the_thread is the thread to be initialized
- *  @param the_prototype 
+ *  @param the_prototype
  *  @param entry_point
  *  @param pointer_argument
  *  @param numeric_argument
@@ -625,7 +628,8 @@ bool _Thread_Start(
 );
 
 /**
- *  @brief Restart Thread
+ *  @brief Restarts the specified thread.
+ *
  *  This support routine restarts the specified task in a way that the
  *  next time this thread executes, it will begin execution at its
  *  original starting point.
@@ -639,7 +643,7 @@ bool _Thread_Restart(
 );
 
 /**
- *  @brief Resets a thread to its initial state
+ *  @brief Resets a thread to its initial state.
  *
  *  This routine resets a thread to its initial state but does
  *  not restart it. Some APIs do this in separate
@@ -656,7 +660,7 @@ void _Thread_Reset(
 );
 
 /**
- *  @brief Thread Close
+ *  @brief Frees all memory associated with the specified thread.
  *
  *  This routine frees all memory associated with the specified
  *  thread and removes it from the local object table so no further
@@ -668,7 +672,7 @@ void _Thread_Close(
 );
 
 /**
- *  @brief Thread Ready
+ *  @brief Removes any set states for @a the_thread.
  *
  *  This routine removes any set states for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
@@ -683,7 +687,7 @@ void _Thread_Ready(
 );
 
 /**
- *  @brief Clear Thread state
+ *  @brief Clears the indicated STATES for @a the_thread.
  *
  *  This routine clears the indicated STATES for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
@@ -699,13 +703,13 @@ void _Thread_Clear_state(
 );
 
 /**
- *  @brief Sets States for a Thread
+ *  @brief Sets the indicated @a state for @a the_thread.
  *
  *  This routine sets the indicated @a state for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  *
- *  @param[in] the_thread is the thread to set the state for. 
+ *  @param[in] the_thread is the thread to set the state for.
  *  @param[in] state is the state to set the_thread to.
  *
  *  - INTERRUPT LATENCY:
@@ -718,7 +722,7 @@ void _Thread_Set_state(
 );
 
 /**
- *  @brief Sets the Transient state for a Thread
+ *  @brief Sets the transient state for a thread.
  *
  *  This routine sets the Transient state for @a the_thread.  It performs
  *  any necessary scheduling operations including the selection of
@@ -734,11 +738,11 @@ void _Thread_Set_transient(
 );
 
 /**
- *  @brief Initializes Enviroment for A Thread
+ *  @brief Initializes enviroment for a thread.
  *
  *  This routine initializes the context of @a the_thread to its
  *  appropriate starting state.
- *  
+ *
  *  @param[in] the_thread is the pointer to the thread control block.
  */
 void _Thread_Load_environment(
@@ -746,29 +750,24 @@ void _Thread_Load_environment(
 );
 
 /**
- *  @brief Thread Handler
+ *  @brief Wrapper function for all threads.
+ *
  *  This routine is the wrapper function for all threads.  It is
  *  the starting point for all threads.  The user provided thread
  *  entry point is invoked by this routine.  Operations
  *  which must be performed immediately before and after the user's
  *  thread executes are found here.
  *
- *  NOTE:
- *
- *  On entry, it is assumed all interrupts are blocked and that this
+ *  @note On entry, it is assumed all interrupts are blocked and that this
  *  routine needs to set the initial isr level.  This may or may not
  *  actually be needed by the context switch routine and as a result
  *  interrupts may already be at there proper level.  Either way,
  *  setting the initial isr level properly here is safe.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
  */
 void _Thread_Handler( void );
 
 /**
- *  @brief Ended the delay of a Thread
+ *  @brief Ended the delay of a thread.
  *
  *  This routine is invoked when a thread must be unblocked at the
  *  end of a time based delay (i.e. wake after or wake when).
@@ -782,7 +781,7 @@ void _Thread_Delay_ended(
 );
 
 /**
- *  @brief Changes the priority of a thread
+ *  @brief Change the priority of a thread.
  *
  *  This routine changes the current priority of @a the_thread to
  *  @a new_priority.  It performs any necessary scheduling operations
@@ -799,7 +798,7 @@ void _Thread_Change_priority (
 );
 
 /**
- *  @brief Set Thread Priority
+ *  @brief Set thread priority.
  *
  *  This routine updates the priority related fields in the_thread
  *  control block to indicate the current priority is now new_priority.
@@ -840,7 +839,7 @@ void *_Thread_Idle_body(
 typedef void (*rtems_per_thread_routine)( Thread_Control * );
 
 /**
- *  @brief Iterates Over All Threads
+ *  @brief Iterates over all threads.
  *  This routine iterates over all threads regardless of API and
  *  invokes the specified routine.
  */
@@ -849,7 +848,7 @@ void rtems_iterate_over_all_threads(
 );
 
 /**
- *  @brief Maps THread Id to a TCB Pointer
+ *  @brief Maps thread Id to a TCB pointer.
  *
  *  This function maps thread IDs to thread control
  *  blocks.  If ID corresponds to a local thread, then it
@@ -875,7 +874,7 @@ Thread_Control *_Thread_Get (
 );
 
 /**
- *  @brief Cancel a blocking operation due to ISR
+ *  @brief Cancel a blocking operation due to ISR.
  *
  *  This method is used to cancel a blocking operation that was
  *  satisfied from an ISR while the thread executing was in the
@@ -900,14 +899,14 @@ void _Thread_blocking_operation_Cancel(
 #if defined(RTEMS_SMP)
 
   /**
-   *  @brief _Thread_Dispatch_initialization
+   *  @brief Initializes the thread dispatching subsystem.
    *
    *  This routine initializes the thread dispatching subsystem.
    */
   void _Thread_Dispatch_initialization(void);
 
   /**
-   *  @brief _Thread_Dispatch_in_critical_section
+   *  @brief Checks if thread dispatch says that we are in a critical section.
    *
    * This routine returns true if thread dispatch indicates
    * that we are in a critical section.
@@ -915,14 +914,14 @@ void _Thread_blocking_operation_Cancel(
   bool _Thread_Dispatch_in_critical_section(void);
 
   /**
-   *  @brief _Thread_Dispatch_get_disable_level
+   *  @brief Returns value of the the thread dispatch level.
    *
    * This routine returns value of the the thread dispatch level.
    */
   uint32_t _Thread_Dispatch_get_disable_level(void);
 
   /**
-   *  @brief _Thread_Dispatch_set_disable_level
+   *  @brief Sets thread dispatch level to the value passed in.
    *
    * This routine sets thread dispatch level to the
    * value passed in.
@@ -930,14 +929,14 @@ void _Thread_blocking_operation_Cancel(
   uint32_t _Thread_Dispatch_set_disable_level(uint32_t value);
 
   /**
-   *  @brief _Thread_Dispatch_increment_disable_level
+   *  @brief Increments the thread dispatch level.
    *
    * This rountine increments the thread dispatch level
    */
   uint32_t _Thread_Dispatch_increment_disable_level(void);
 
   /**
-   *  @brief _Thread_Dispatch_decrement_disable_level
+   *  @brief Decrements the thread dispatch level.
    *
    * This routine decrements the thread dispatch level.
    */

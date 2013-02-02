@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/types.h
+ * @file
+ *
+ * @brief Hitachi SH CPU Type Definitions
+ *
+ * This include file contains information pertaining to the Hitachi SH
+ * processor.
  */
 
 /*
- *  This include file contains information pertaining to the Hitachi SH
- *  processor.
- *
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *

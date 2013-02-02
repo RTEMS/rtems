@@ -1,5 +1,7 @@
 /**
- * @file sys/utsname.h
+ * @file
+ *
+ * @brief Interface to the POSIX utsname() Service
  *
  * This include file defines the interface to the POSIX utsname() service.
  */
@@ -17,7 +19,9 @@
 #define __POSIX_SYS_UTSNAME_h
 
 /**
- *  @defgroup utsname Service
+ * @defgroup UTSNAME utsname Service
+ * 
+ * @ingroup POSIXAPI
  */
 /**@{*/
 
@@ -43,7 +47,8 @@ extern "C" {
 #endif
 
 struct utsname {
-  char sysname[SYS_NMLN];  /* Name of this implementation of the operating system */
+  char sysname[SYS_NMLN];  /* Name of this implementation of the */
+                           /*   operating system */
   char nodename[SYS_NMLN]; /* Name of this node within an implementation */
                            /*   specified communication network */
   char release[SYS_NMLN];  /* Current release level of this implementation */
@@ -53,15 +58,19 @@ struct utsname {
 };
 
 /**
- * @brief 4.4.1 Get System Name, P1003.1b-1993, p. 90
+ * @brief Get system name.
+ * 
+ * 4.4.1 Get System Name, P1003.1b-1993, p. 90
  */
 int uname(
   struct utsname *name
 );
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif
 /* end of include file */

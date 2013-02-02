@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Creates Child process Of The Calling process
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

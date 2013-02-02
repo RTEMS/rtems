@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
- *
- * @brief ARM architecture types API.
+ * @brief ARM Architecture Types API
  */
 
 /*
@@ -32,9 +30,8 @@ extern "C" {
 
 /**
  * @addtogroup ScoreCPU
- *
- * @{
  */
+/**@{**/
 
 /*
  *  This section defines the basic types for this processor.

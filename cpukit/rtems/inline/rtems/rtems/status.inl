@@ -28,7 +28,7 @@
  */
 
 /**
- *  @brief rtems_is_status_successful
+ *  @brief Checks if the status code is equal to RTEMS_SUCCESSFUL.
  *
  *  This function returns TRUE if the status code is equal to RTEMS_SUCCESSFUL,
  *  and FALSE otherwise.
@@ -41,7 +41,7 @@ RTEMS_INLINE_ROUTINE bool rtems_is_status_successful(
 }
 
 /**
- *  @brief rtems_are_statuses_equal
+ *  @brief Checks if the status code1 is equal to code2.
  *
  *  This function returns TRUE if the status code1 is equal to code2,
  *  and FALSE otherwise.

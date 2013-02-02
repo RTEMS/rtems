@@ -1,16 +1,21 @@
 /**
  * @file rtems/rtems/region.inl
  *
- *  This file contains the macro implementation of the inlined
- *  routines from the Region Manager.
+ * @addtogroup ClassicRegion 
+ *
+ * @ingroup ClassicRTEMS
+ * @brief Macro Implementation from Region Manager
+ *
+ * This file contains the macro implementation of the inlined
+ * routines from the Region Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_REGION_H

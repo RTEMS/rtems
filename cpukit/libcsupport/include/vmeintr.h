@@ -1,9 +1,11 @@
 /**
- * @file rtems/vmeintr.h
+ * @file
+ * 
+ * @brief VMEbus Interface Library
  *
- *  This file is the specification for the VMEbus interface library
- *  which should be provided by all BSPs for VMEbus Single Board
- *  Computers but currently only a few do so.
+ * This file is the specification for the VMEbus interface library
+ * which should be provided by all BSPs for VMEbus Single Board
+ * Computers but currently only a few do so.
  */
 
 /*

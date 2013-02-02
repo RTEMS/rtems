@@ -23,9 +23,8 @@
 
 /**
  * @addtogroup ClassicRTEMS
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Returns @c true if the name is valid, and @c false otherwise.

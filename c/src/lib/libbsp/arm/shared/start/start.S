@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -31,6 +31,14 @@
 	.extern	boot_card
 	.extern	bsp_start_hook_0
 	.extern	bsp_start_hook_1
+	.extern	_ARMV4_Exception_undef_default
+	.extern	_ARMV4_Exception_swi_default
+	.extern	_ARMV4_Exception_data_abort_default
+	.extern	_ARMV4_Exception_pref_abort_default
+	.extern	_ARMV4_Exception_reserved_default
+	.extern	_ARMV4_Exception_irq_default
+	.extern	_ARMV4_Exception_fiq_default
+	.extern	_ARMV7M_Exception_default
 
 	/* Global symbols */
 	.globl	_start
@@ -74,31 +82,31 @@ handler_addr_reset:
 
 handler_addr_undef:
 
-	.word	reset
+	.word	_ARMV4_Exception_undef_default
 
 handler_addr_swi:
 
-	.word	reset
+	.word	_ARMV4_Exception_swi_default
 
 handler_addr_prefetch:
 
-	.word	reset
+	.word	_ARMV4_Exception_data_abort_default
 
 handler_addr_abort:
 
-	.word	reset
+	.word	_ARMV4_Exception_pref_abort_default
 
 handler_addr_reserved:
 
-	.word	reset
+	.word	_ARMV4_Exception_reserved_default
 
 handler_addr_irq:
 
-	.word	reset
+	.word	_ARMV4_Exception_irq_default
 
 handler_addr_fiq:
 
-	.word	reset
+	.word	_ARMV4_Exception_fiq_default
 
 bsp_start_vector_table_end:
 
@@ -199,13 +207,6 @@ twiddle:
 
 	b	twiddle
 
-.arm
-
-reset:
-
-	SWITCH_FROM_ARM_TO_THUMB	r0
-	b	twiddle
-
 #elif defined(ARM_MULTILIB_ARCH_V7M)
 
 	.syntax	unified
@@ -218,22 +219,22 @@ bsp_start_vector_table_begin:
 
 	.word	bsp_stack_main_end
 	.word	_start /* Reset */
-	.word	bsp_reset /* NMI */
-	.word	bsp_reset /* Hard Fault */
-	.word	bsp_reset /* MPU Fault */
-	.word	bsp_reset /* Bus Fault */
-	.word	bsp_reset /* Usage Fault */
-	.word	bsp_reset /* Reserved */
-	.word	bsp_reset /* Reserved */
-	.word	bsp_reset /* Reserved */
-	.word	bsp_reset /* Reserved */
-	.word	bsp_reset /* SVC */
-	.word	bsp_reset /* Debug Monitor */
-	.word	bsp_reset /* Reserved */
-	.word	bsp_reset /* PendSV */
-	.word	bsp_reset /* SysTick */
+	.word	_ARMV7M_Exception_default /* NMI */
+	.word	_ARMV7M_Exception_default /* Hard Fault */
+	.word	_ARMV7M_Exception_default /* MPU Fault */
+	.word	_ARMV7M_Exception_default /* Bus Fault */
+	.word	_ARMV7M_Exception_default /* Usage Fault */
+	.word	_ARMV7M_Exception_default /* Reserved */
+	.word	_ARMV7M_Exception_default /* Reserved */
+	.word	_ARMV7M_Exception_default /* Reserved */
+	.word	_ARMV7M_Exception_default /* Reserved */
+	.word	_ARMV7M_Exception_default /* SVC */
+	.word	_ARMV7M_Exception_default /* Debug Monitor */
+	.word	_ARMV7M_Exception_default /* Reserved */
+	.word	_ARMV7M_Exception_default /* PendSV */
+	.word	_ARMV7M_Exception_default /* SysTick */
 	.rept	BSP_INTERRUPT_VECTOR_MAX + 1
-	.word	bsp_reset /* IRQ */
+	.word	_ARMV7M_Exception_default /* IRQ */
 	.endr
 
 bsp_start_vector_table_end:

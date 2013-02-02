@@ -3,7 +3,7 @@
  *
  * @ingroup ClassicUserExtensions
  *
- * @brief User Extensions API.
+ * @brief User Extensions API
  */
 
 /*

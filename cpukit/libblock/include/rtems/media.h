@@ -40,8 +40,8 @@ extern "C" {
  * actions.  For example a disk attach will lead to inspection of the partition
  * table and mounted file systems.  Clients can register listeners to react to
  * events.
- * @{
  */
+/**@{**/
 
 #define RTEMS_MEDIA_MOUNT_BASE "/media"
 
@@ -312,9 +312,8 @@ typedef rtems_status_code (*rtems_media_worker)(
 
 /**
  * @name Base
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Initializes the media manager.
@@ -377,9 +376,8 @@ rtems_status_code rtems_media_post_event(
 
 /**
  * @name Server
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Initializes the media manager and media server.
@@ -452,9 +450,8 @@ static inline rtems_status_code rtems_media_server_disk_detach(
 
 /**
  * @name Path Construction
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Creates a new path as "prefix/name-major".
@@ -490,9 +487,8 @@ char *rtems_media_append_minor(
 
 /**
  * @name Support
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Returns the device identifier for the device located at

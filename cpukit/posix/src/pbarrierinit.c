@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Call to Function Enables Reinitializing of the Barrier
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

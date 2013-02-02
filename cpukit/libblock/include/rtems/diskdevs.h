@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup rtems_disk
+ * @brief Block Device Disk Management API
  *
- * @brief Block device disk management API.
+ * @ingroup rtems_disk
  */
 
 /*
@@ -37,9 +37,8 @@ typedef struct rtems_disk_device rtems_disk_device;
  * contain a subset of consecutive disk blocks.  The logical disks are used to
  * represent the partitions of a disk.  The disk devices are accessed via the
  * @ref rtems_bdbuf "block device buffer module".
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Block device block index type.
@@ -94,7 +93,7 @@ typedef struct {
 typedef struct {
   /**
    * @brief Read hit count.
-   * 
+   *
    * A read hit occurs in the rtems_bdbuf_read() function in case the block is
    * in the cached or modified state.
    */
@@ -102,7 +101,7 @@ typedef struct {
 
   /**
    * @brief Read miss count.
-   * 
+   *
    * A read miss occurs in the rtems_bdbuf_read() function in case the block is
    * in the empty state and a read transfer must be initiated to read the data
    * from the device.
@@ -276,9 +275,8 @@ struct rtems_disk_device {
 
 /**
  * @name Disk Device Data
- *
- * @{
  */
+/**@{**/
 
 static inline dev_t rtems_disk_get_device_identifier(
   const rtems_disk_device *dd
@@ -340,9 +338,8 @@ static inline rtems_blkdev_bnum rtems_disk_get_block_count(
 
 /**
  * @name Disk Device Maintainance
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Creates a physical disk with device identifier @a dev.
@@ -443,9 +440,8 @@ rtems_status_code rtems_disk_release(rtems_disk_device *dd);
 
 /**
  * @name Disk Management
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Initializes the disk device management.

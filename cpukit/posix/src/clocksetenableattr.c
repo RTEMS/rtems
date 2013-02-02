@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Clock set Enable Attribute Access
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

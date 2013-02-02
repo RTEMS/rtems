@@ -1,12 +1,12 @@
 /**
  *  @file
  * 
- * This include file contains definitions related to the GP32 BSP.
+ *  This include file contains definitions related to the GP32 BSP.
  */
 
 /*
- * Copyright (c) Canon Research France SA.]
- * Emmanuel Raguet, mailto:raguet@crf.canon.fr
+ *  Copyright (c) Canon Research France SA.]
+ *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -59,13 +59,13 @@ void gp32_setPalette( unsigned char pos, uint16_t color);
 
 
 /*
- *  This BSP provides its own IDLE task to override the RTEMS one.
+ *  This BSP provides its own IDLE thread to override the RTEMS one.
  *  So we prototype it and define the constant confdefs.h expects
  *  to configure a BSP specific one.
  */
-Thread bsp_idle_task(uint32_t);
+void *bsp_idle_thread(uintptr_t ignored);
 
-#define BSP_IDLE_TASK_BODY bsp_idle_task
+#define BSP_IDLE_TASK_BODY bsp_idle_thread
 
 #ifdef __cplusplus
 }

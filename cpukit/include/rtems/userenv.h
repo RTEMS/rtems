@@ -2,6 +2,7 @@
  * @file
  *
  * @ingroup LibIOEnv
+ * @brief User Environment Support
  */
 
 /*
@@ -39,9 +40,8 @@ extern "C" {
  * @ingroup LibIO
  *
  * @brief Provides a POSIX like user environment for tasks.
- *
- * @{
  */
+/**@{**/
 
 #ifndef LOGIN_NAME_MAX
   #ifdef _POSIX_LOGIN_NAME_MAX

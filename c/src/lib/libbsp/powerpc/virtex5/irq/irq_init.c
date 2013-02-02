@@ -90,7 +90,7 @@ void BSP_irqexc_off_fnc(const rtems_irq_connect_data *unused)
 
 SPR_RW(BOOKE_TSR)
 
-int C_dispatch_dec_handler (BSP_Exception_frame *frame, unsigned int excNum)
+static int C_dispatch_dec_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   /* Acknowledge the interrupt */
   _write_BOOKE_TSR( BOOKE_TSR_DIS );
@@ -105,7 +105,7 @@ int C_dispatch_dec_handler (BSP_Exception_frame *frame, unsigned int excNum)
 /***********************************************************
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
+static int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   /*
    * Handle interrupt

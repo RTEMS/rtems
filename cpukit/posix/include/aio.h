@@ -1,6 +1,8 @@
 /**
- * @file aio.h
+ * @file
  *
+ * @brief POSIX Asynchronous Input and Output
+ * 
  * This file contains the definitions related to POSIX Asynchronous
  * Input and Output,
  */
@@ -26,10 +28,12 @@ extern "C" {
 /**
  * @defgroup POSIX_AIO POSIX Asynchronous I/O Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief POSIX Asynchronous Input and Output
+ * 
  */
+/**@{**/
 
 #if defined(_POSIX_ASYNCHRONOUS_IO)
 
@@ -135,16 +139,18 @@ ssize_t aio_return(
 );
 
 /**
- *  @brief Cancel Asynchronous I/O Operation
+ * @brief Cancel asynchronous I/O operation.
  * 
- *  6.7.7 Cancel Asynchronous I/O Operation, P1003.1b-1993, p. 163
+ * 6.7.7 Cancel Asynchronous I/O Operation, P1003.1b-1993, p. 163
  * 
- *  @param[in] filedes is the file descriptor
- *  @param[in] aiocbp is the asynchronous I/O control block
+ * @param[in] filedes is the file descriptor
+ * @param[in] aiocbp is a pointer to the asynchronous I/O control block
  * 
- *  @return This method returns AIO_CANCELED if the requested operation(s)
- *          were canceled. Otherwise, AIO_NOTCANCELED is returned indicating
- *          that at least one of the requested operation(s) cannot be canceled
+ * @retval AIO_CANCELED The requested operation(s) were canceled. 
+ * @retval AIO_NOTCANCELED Some of the requested operation(s) cannot be
+ * canceled since they are in progress.
+ * @retval AIO_ALLDONE None of the requested operation(s) could be canceled
+ * since they are already complete
  */
 int aio_cancel(
   int            filedes,
@@ -175,6 +181,8 @@ int aio_fsync(
 #endif /* _POSIX_SYNCHRONIZED_IO */
 
 #endif /* _POSIX_ASYNCHRONOUS_IO */
+
+/** @} */
 
 #ifdef __cplusplus
 }

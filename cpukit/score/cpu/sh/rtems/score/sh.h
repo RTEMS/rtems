@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/sh.h
+ * @file
+ *
+ * @brief Hitachi SH CPU Department Source
+ *
+ * This include file contains information pertaining to the Hitachi SH
+ * processor.
  */
 
 /*
- *  This include file contains information pertaining to the Hitachi SH
- *  processor.
- *
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Mutex Timed Lock
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

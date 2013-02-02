@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Returns Scheduling Policy of the process specified by pid
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

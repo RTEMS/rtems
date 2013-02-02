@@ -21,8 +21,10 @@
 "pthread_cond_broadcast - no threads waiting","psxtmcond05","psxtmtest_single",
 "pthread_cond_broadcast -  threads waiting, no preempt","psxtmcond06","psxtmtest_unblocking_nopreempt",
 "pthread_cond_broadcast -  threads waiting, preempt","psxtmcond07","psxtmtest_unblocking_preempt",
-"pthread_cond_wait - blocks","psxtmcond08","psxtmtest_blocking",
-"pthread_cond_timedwait - blocks","psxtmcond09","psxtmtest_blocking",
+
+"pthread_cond_wait - blocks (mutex+condvar pattern)","psxtmcond08","psxtmtest_blocking",
+"pthread_cond_timedwait(&time) - blocks (mutex+condvar pattern)","psxtmcond09","psxtmtest_blocking",
+"pthread_cond_timedwait(&time) - time in past error","psxtmcond10","psxtmtest_blocking",
 ,,,
 "pthread_create - no preempt","psxtmthread01","psxtmtest_single","Yes"
 "pthread_create - preempt","psxtmthread02","psxtmtest_single",

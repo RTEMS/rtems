@@ -1,5 +1,5 @@
 /**
- * @file rtems/zilog/z8536.h
+ * @file
  *
  * @brief Information Related to a Zilog Z8536 Counter/Timer/IO Chip
  *

@@ -2,8 +2,7 @@
  * @file
  *
  * @ingroup rtems_bdbuf
- *
- * Block device buffer management.
+ * @brief Block Device Buffer Management
  */
 
 /*
@@ -172,9 +171,8 @@ extern "C" {
  * issue with this design.  The reallocation of a group may forced recently
  * accessed buffers out of the cache when they should not.  The design should be
  * change to have groups on a LRU list if they have no buffers in use.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief State of a buffer of the cache.

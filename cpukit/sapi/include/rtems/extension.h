@@ -1,8 +1,6 @@
 /**
  * @file
- *
- * @ingroup ClassicUserExtensions
- *
+ * 
  * @brief User Extensions API.
  */
 
@@ -39,7 +37,7 @@ typedef struct {
 }   Extension_Control;
 
 /**
- *  @brief Initialize Extension Manager
+ *  @brief Initialize extension manager.
  *
  *  This routine initializes all extension manager related data structures.
  */
@@ -172,9 +170,8 @@ typedef User_extensions_routine
  * will operate correctly even if they utilize the C Library because the C
  * Library's task delete extension is invoked after that of the other
  * extensions.
- *
- * @{
  */
+/**@{**/
 
 typedef User_extensions_thread_create_extension   rtems_task_create_extension;
 typedef User_extensions_thread_delete_extension   rtems_task_delete_extension;

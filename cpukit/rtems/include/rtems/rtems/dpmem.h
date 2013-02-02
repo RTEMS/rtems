@@ -1,27 +1,32 @@
 /**
  * @file rtems/rtems/dpmem.h
  *
- *  This include file contains all the constants and structures associated
- *  with the Dual Ported Memory Manager. This manager provides a mechanism
- *  for converting addresses between internal and external representations
- *  for multiple dual-ported memory areas.
+ * @defgroup ClassicDPMEM Dual Ported Memory
  *
- *  Directives provided are:
+ * @ingroup ClassicRTEMS
+ * @brief Dual Ported Memory Manager
  *
- *     - create a port
- *     - get ID of a port
- *     - delete a port
- *     - convert external to internal address
- *     - convert internal to external address
+ * This include file contains all the constants and structures associated
+ * with the Dual Ported Memory Manager. This manager provides a mechanism
+ * for converting addresses between internal and external representations
+ * for multiple dual-ported memory areas.
+ *
+ * Directives provided are:
+ *
+ * - create a port
+ * - get ID of a port
+ * - delete a port
+ * - convert external to internal address
+ * - convert internal to external address
  *
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_DPMEM_H
@@ -85,24 +90,24 @@ RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
 void _Dual_ported_memory_Manager_initialization(void);
 
 /**
- *  @brief Creates a port into a dual-ported memory area.
+ * @brief Creates a port into a dual-ported memory area.
  *
- *  This routine implements the rtems_port_create directive.  The port
- *  will have the name @a name.  The port maps onto an area of dual ported
- *  memory of length bytes which has internal_start and external_start
- *  as the internal and external starting addresses, respectively.
- *  It returns the id of the created port in ID.
- * 
- *  @param[in] name is the user defined port name
- *  @param[in] internal_start is the internal start address of port
- *  @param[in] external_start is the external start address of port
- *  @param[in] length is the physical length in bytes
- *  @param[out] id is the address of port id to set
- * 
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.  If successful, the id will
- *          be filled in with the port id.
+ * This routine implements the rtems_port_create directive. The port
+ * will have the name @a name. The port maps onto an area of dual ported
+ * memory of length bytes which has internal_start and external_start
+ * as the internal and external starting addresses, respectively.
+ * It returns the id of the created port in ID.
+ *
+ * @param[in] name is the user defined port name
+ * @param[in] internal_start is the internal start address of port
+ * @param[in] external_start is the external start address of port
+ * @param[in] length is the physical length in bytes
+ * @param[out] id is the address of port id to set
+ *
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error. If successful, the id will
+ *         be filled in with the port id.
  */
 rtems_status_code rtems_port_create(
   rtems_name    name,
@@ -113,16 +118,16 @@ rtems_status_code rtems_port_create(
 );
 
 /**
- *  @brief RTEMS Port Name to Id
+ * @brief RTEMS Port Name to Id
  *
- *  This routine implements the rtems_port_ident directive.  This directive
- *  returns the port ID associated with name.  If more than one port is
- *  named name, then the port to which the ID belongs is arbitrary.
- * 
- *  @param[in] name is the user defined port name
- *  @param[out] id is the pointer to port id
- * 
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * This routine implements the rtems_port_ident directive. This directive
+ * returns the port ID associated with name. If more than one port is
+ * named name, then the port to which the ID belongs is arbitrary.
+ *
+ * @param[in] name is the user defined port name
+ * @param[out] id is the pointer to port id
+ *
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_port_ident(
   rtems_name    name,
@@ -130,35 +135,35 @@ rtems_status_code rtems_port_ident(
 );
 
 /**
- *  @brief RTEMS Delete Port
+ * @brief RTEMS Delete Port
  *
- *  This routine implements the rtems_port_delete directive.  It deletes
- *  the port associated with ID.
- * 
- *  @param[in] id is the dual-ported memory area id
- * 
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * This routine implements the rtems_port_delete directive. It deletes
+ * the port associated with ID.
+ *
+ * @param[in] id is the dual-ported memory area id
+ *
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_port_delete(
   rtems_id   id
 );
 
 /**
- *  @brief RTEMS Port External to Internal
+ * @brief RTEMS Port External to Internal
  *
- *  This routine implements the rtems_port_external_to_internal directive.
- *  It returns the internal port address which maps to the provided
- *  external port address for the specified port ID.If the given external
- *  address is an invalid dual-ported address, then the internal address is 
- *  set to the given external address.
- * 
- *  @param[in] id is the id of dp memory object
- *  @param[in] external is the external address
- *  @param[out] internal is the pointer of internal address to set
- * 
- *  @return RTEMS_SUCCESSFUL
+ * This routine implements the rtems_port_external_to_internal directive.
+ * It returns the internal port address which maps to the provided
+ * external port address for the specified port ID. If the given external
+ * address is an invalid dual-ported address, then the internal address is
+ * set to the given external address.
+ *
+ * @param[in] id is the id of dp memory object
+ * @param[in] external is the external address
+ * @param[out] internal is the pointer of internal address to set
+ *
+ * @retval RTEMS_SUCCESSFUL
  */
 rtems_status_code rtems_port_external_to_internal(
   rtems_id     id,
@@ -167,20 +172,20 @@ rtems_status_code rtems_port_external_to_internal(
 );
 
 /**
- *  @brief RTEMS Port Internal to External
+ * @brief RTEMS Port Internal to External
  *
- *  This routine implements the Port_internal_to_external directive.
- *  It returns the external port address which maps to the provided
- *  internal port address for the specified port ID.  If the given
- *  internal address is an invalid dual-ported address, then the
- *  external address is set to the given internal address.
- * 
- *  @param[in] id is the id of dual-ported memory object
- *  @param[in] internal is the internal address to set
- *  @param[in] external is the pointer to external address
- * 
- *  @return RTEMS_SUCCESSFUL and the external will be filled in 
- *  with the external addresses
+ * This routine implements the Port_internal_to_external directive.
+ * It returns the external port address which maps to the provided
+ * internal port address for the specified port ID. If the given
+ * internal address is an invalid dual-ported address, then the
+ * external address is set to the given internal address.
+ *
+ * @param[in] id is the id of dual-ported memory object
+ * @param[in] internal is the internal address to set
+ * @param[in] external is the pointer to external address
+ *
+ * @retval RTEMS_SUCCESSFUL and the external will be filled in
+ * with the external addresses
  */
 rtems_status_code rtems_port_internal_to_external(
   rtems_id     id,

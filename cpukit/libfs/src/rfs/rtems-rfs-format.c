@@ -1,18 +1,18 @@
+/**
+ * @file
+ *
+ * @brief RTEMS File Systems Format
+ * @ingroup rtems_rfs
+ * 
+ * Format the file system ready for use.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Format
- *
- * Format the file system ready for use.
  */
 
 #if HAVE_CONFIG_H

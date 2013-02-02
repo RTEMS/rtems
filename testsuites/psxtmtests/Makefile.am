@@ -6,6 +6,13 @@ if HAS_POSIX
 SUBDIRS += psxtmbarrier01
 SUBDIRS += psxtmbarrier02
 SUBDIRS += psxtmbarrier03
+SUBDIRS += psxtmcond01
+SUBDIRS += psxtmcond02
+SUBDIRS += psxtmcond03
+SUBDIRS += psxtmcond05
+SUBDIRS += psxtmcond08
+SUBDIRS += psxtmcond09
+SUBDIRS += psxtmcond10
 SUBDIRS += psxtmkey01
 SUBDIRS += psxtmkey02
 SUBDIRS += psxtmmq01
@@ -33,6 +40,7 @@ SUBDIRS += psxtmsem05
 SUBDIRS += psxtmsleep01
 SUBDIRS += psxtmsleep02
 SUBDIRS += psxtmthread01
+SUBDIRS += psxtmthread02
 SUBDIRS += psxtmthread03
 endif
 

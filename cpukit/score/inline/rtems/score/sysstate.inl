@@ -1,9 +1,7 @@
-/** 
+/**
  * @file
  *
- * @ingroup ScoreSysState
- *
- * @brief System State Handler API.
+ * @brief System State Handler API
  */
 
 /*
@@ -23,10 +21,9 @@
 #define _RTEMS_SCORE_SYSSTATE_INL
 
 /**
- * @addtogroup ScoreSysState 
- *
- * @{
+ * @addtogroup ScoreSysState
  */
+/**@{**/
 
 RTEMS_INLINE_ROUTINE void _System_state_Set (
   System_state_Codes state
@@ -34,7 +31,7 @@ RTEMS_INLINE_ROUTINE void _System_state_Set (
 {
   _System_state_Current = state;
 }
- 
+
 RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
 #if defined(RTEMS_MULTIPROCESSING)
   bool  is_multiprocessing
@@ -96,7 +93,7 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_failed (
   return (state == SYSTEM_STATE_FAILED);
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

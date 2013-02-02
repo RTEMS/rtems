@@ -1,7 +1,9 @@
 /**
  *  @file  rtems/score/states.h
  *
- *  This include file contains thread execution state information.
+ *  @brief Thread Execution State Information
+ *
+ *  This include file defines thread execution state information.
  */
 
 /*
@@ -17,7 +19,7 @@
 #define _RTEMS_SCORE_STATES_H
 
 /**
- *  @defgroup ScoreStates Thread States Handler
+ *  @defgroup ScoreStates SuperCore Thread States
  *
  *  @ingroup Score
  *

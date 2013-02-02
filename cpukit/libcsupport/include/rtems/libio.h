@@ -3,8 +3,8 @@
  *
  * @ingroup LibIO
  *
- * @brief Basic IO API.
- * 
+ * @brief Basic IO API
+ *
  * This file contains the support infrastructure used to manage the
  * table of integer style file descriptors used by the low level
  * POSIX system calls like open(), read, fstat(), etc.
@@ -47,9 +47,8 @@ extern "C" {
  * @ingroup LibIO
  *
  * @brief File system operations.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief File system node types.
@@ -749,9 +748,8 @@ int rtems_filesystem_default_statvfs(
  * @ingroup LibIO
  *
  * @brief File system node handler.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Opens a node.
@@ -1143,9 +1141,8 @@ int rtems_filesystem_default_fcntl(
  * system call behavior under RTEMS.  Initially this supported only
  * IO to devices but has since been enhanced to support networking
  * and support for mounted file systems.
- *
- * @{
  */
+/**@{**/
 
 typedef off_t rtems_off64_t __attribute__((deprecated));
 
@@ -1240,9 +1237,8 @@ typedef struct {
 
 /**
  * @name Flag Values
- *
- * @{
  */
+/**@{**/
 
 #define LIBIO_FLAGS_NO_DELAY      0x0001U  /* return immediately if no data */
 #define LIBIO_FLAGS_READ          0x0002U  /* reading */
@@ -1257,16 +1253,15 @@ typedef struct {
 
 /**
  * @brief RTEMS LibIO Initialization
- * 
+ *
  * Called by BSP startup code to initialize the libio subsystem.
  */
 void rtems_libio_init(void);
 
 /**
  * @name External I/O Handlers
- *
- * @{
  */
+/**@{**/
 
 typedef int (*rtems_libio_open_t)(
   const char  *pathname,
@@ -1306,9 +1301,8 @@ typedef off_t (*rtems_libio_lseek_t)(
 
 /**
  * @name Permission Macros
- *
- * @{
  */
+/**@{**/
 
 /*
  *  The following macros are used to build up the permissions sets
@@ -1384,7 +1378,7 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
 
 /**
  *  @brief Base File System Initialization
- *  
+ *
  *  Initialize the foundation of the file system.  This is specified
  *  by the structure rtems_filesystem_mount_table.  The usual
  *  configuration is a single instantiation of the IMFS or miniIMFS with
@@ -1422,15 +1416,13 @@ extern int rtems_mkdir(const char *path, mode_t mode);
  * @ingroup LibIO
  *
  * @brief File system types and mount.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @name File System Types
- *
- * @{
  */
+/**@{**/
 
 #define RTEMS_FILESYSTEM_TYPE_IMFS "imfs"
 #define RTEMS_FILESYSTEM_TYPE_MINIIMFS "mimfs"
@@ -1701,9 +1693,8 @@ extern const rtems_filesystem_mount_configuration
  * @ingroup LibIO
  *
  * @brief Termios
- *
- * @{
  */
+/**@{**/
 
 typedef struct rtems_termios_callbacks {
   int    (*firstOpen)(int major, int minor, void *arg);

@@ -1,5 +1,7 @@
 /**
- *  @file  rtems/score/wkspace.h
+ *  @file rtems/score/wkspace.h
+ *
+ *  @brief Information Related to the RAM Workspace
  *
  *  This include file contains information related to the
  *  RAM Workspace.  This Handler provides mechanisms which can be used to
@@ -44,7 +46,7 @@ extern "C" {
 SCORE_EXTERN Heap_Control _Workspace_Area;
 
 /**
- * @brief Workspace Handler Initialization
+ * @brief Initilize workspace handler.
  *
  *  This routine performs the initialization necessary for this handler.
  */
@@ -55,7 +57,7 @@ void _Workspace_Handler_initialization(
 );
 
 /**
- * @brief Allocate Memory from Workspace
+ * @brief Allocate memory from workspace.
  *
  *  This routine returns the address of a block of memory of size
  *  bytes.  If a block of the appropriate size cannot be allocated
@@ -63,14 +65,14 @@ void _Workspace_Handler_initialization(
  *
  *  @param size is the requested size
  *
- *  @return a pointer to the requested memory or NULL.
+ *  @retval a pointer to the requested memory or NULL.
  */
 void *_Workspace_Allocate(
   size_t   size
 );
 
 /**
- * @brief Free Memory to the Workspace
+ * @brief Free memory to the workspace.
  *
  *  This function frees the specified block of memory.  If the block
  *  belongs to the Workspace and can be successfully freed, then
@@ -88,27 +90,27 @@ void _Workspace_Free(
 );
 
 /**
- * @brief Workspace Allocate or Fail with Fatal Error
+ * @brief Workspace allocate or fail with fatal error.
  *
  *  This routine returns the address of a block of memory of @a size
  *  bytes.  If a block of the appropriate size cannot be allocated
  *  from the workspace, then the internal error handler is invoked.
  *
  *  @param[in] size is the desired number of bytes to allocate
- *  @return If successful, the starting address of the allocated memory
+ *  @retval If successful, the starting address of the allocated memory
  */
 void *_Workspace_Allocate_or_fatal_error(
   size_t  size
 );
 
 /**
- * @brief Duplicates String with Memory from the Workspace
+ * @brief Duplicates string with memory from the workspace.
  *
  * @param[in] string is the pointer to a zero terminated string.
  * @param[in] len is the length of the string (equal to strlen(string)).
  *
- * @return NULL Not enough memory.
- * @return other Duplicated string.
+ * @retval NULL Not enough memory.
+ * @retval other Duplicated string.
  */
 char *_Workspace_String_duplicate(
   const char *string,

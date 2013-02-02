@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Destroy a RWLock
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 /*
  *  COPYRIGHT (c) 1989-2007.

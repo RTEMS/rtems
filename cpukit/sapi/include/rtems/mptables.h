@@ -1,5 +1,8 @@
 /**
- * @file rtems/mptables.h
+ * @file
+ *
+ * @brief Executive's Pre-Initialized Tables used in a
+ * Multiprocessor Configuration
  *
  * This include file contains the executive's pre-initialized tables
  * used in a multiprocessor configuration.

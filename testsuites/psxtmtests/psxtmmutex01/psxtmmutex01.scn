@@ -1,0 +1,4 @@
+*** POSIX TIME TEST PSXTMMUTEX01 ***
+pthread_mutex_init 28
+pthread_mutex_destroy 32
+*** END OF POSIX TIME TEST PSXTMMUTEX01 ***

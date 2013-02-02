@@ -1,40 +1,43 @@
 /**
  * @file rtems/rtems/part.h
  *
- * @brief Constants and Structures Associated with the Partition Manager
+ * @defgroup ClassicPart Partitions
  *
- *  This include file contains all the constants and structures associated
- *  with the Partition Manager.  This manager provides facilities to
- *  dynamically allocate memory in fixed-sized units which are returned
- *  as buffers.
+ * @ingroup ClassicRTEMS
+ * @brief Partition Manager
  *
- *  Directives provided are:
+ * This include file contains all the constants and structures associated
+ * with the Partition Manager. This manager provides facilities to
+ * dynamically allocate memory in fixed-sized units which are returned
+ * as buffers.
  *
- *     - create a partition
- *     - get an ID of a partition
- *     - delete a partition
- *     - get a buffer from a partition
- *     - return a buffer to a partition
+ * Directives provided are:
+ *
+ * - create a partition
+ * - get an ID of a partition
+ * - delete a partition
+ * - get a buffer from a partition
+ * - return a buffer to a partition
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_PART_H
 #define _RTEMS_RTEMS_PART_H
 
 /**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
+ * This constant is defined to extern most of the time when using
+ * this header file. However by defining it to nothing, the data
+ * declared in this header file can be instantiated. This is done
+ * in a single per manager file.
  *
- *  Partition Manager -- Instantiate Data
+ * Partition Manager -- Instantiate Data
  */
 #ifndef RTEMS_PART_EXTERN
 #define RTEMS_PART_EXTERN extern
@@ -117,22 +120,22 @@ rtems_status_code rtems_partition_create(
 );
 
 /**
- *  @brief RTEMS Partition Ident
+ * @brief RTEMS Partition Ident
  *
- *  This routine implements the rtems_partition_ident directive.
- *  This directive returns the partition ID associated with name.
- *  If more than one partition is named name, then the partition
- *  to which the ID belongs is arbitrary.  node indicates the
- *  extent of the search for the ID of the partition named name.
- *  The search can be limited to a particular node or allowed to
- *  encompass all nodes.
+ * This routine implements the rtems_partition_ident directive.
+ * This directive returns the partition ID associated with name.
+ * If more than one partition is named name, then the partition
+ * to which the ID belongs is arbitrary. node indicates the
+ * extent of the search for the ID of the partition named name.
+ * The search can be limited to a particular node or allowed to
+ * encompass all nodes.
  *
- *  @param[in] name is the user defined partition name
- *  @param[in] node is(are) the node(s) to be searched
- *  @param[in] id is the pointer to partition id
+ * @param[in] name is the user defined partition name
+ * @param[in] node is(are) the node(s) to be searched
+ * @param[in] id is the pointer to partition id
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
- *  		*id filled in with the partition id
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful and
+ * 		*id filled in with the partition id
  */
 rtems_status_code rtems_partition_ident(
   rtems_name  name,
@@ -141,33 +144,33 @@ rtems_status_code rtems_partition_ident(
 );
 
 /**
- *  @brief RTEMS Delete Partition
+ * @brief RTEMS Delete Partition
  *
- *  This routine implements the rtems_partition_delete directive.  The
- *  partition indicated by ID is deleted, provided that none of its buffers
- *  are still allocated.
+ * This routine implements the rtems_partition_delete directive. The
+ * partition indicated by ID is deleted, provided that none of its buffers
+ * are still allocated.
  *
- *  @param[in] id is the partition id
+ * @param[in] id is the partition id
  *
- *  @return This method returns RTEMS_SUCCESSFUL if there was not an
- *          error.  Otherwise, a status code is returned indicating the
- *          source of the error.
+ * @retval This method returns RTEMS_SUCCESSFUL if there was not an
+ *         error. Otherwise, a status code is returned indicating the
+ *         source of the error.
  */
 rtems_status_code rtems_partition_delete(
   rtems_id id
 );
 
 /**
- *  @brief RTEMS Get Partition Buffer
+ * @brief RTEMS Get Partition Buffer
  *
- *  This routine implements the rtems_partition_get_buffer directive.  It
- *  attempts to allocate a buffer from the partition associated with ID.
- *  If a buffer is allocated, its address is returned in buffer.
+ * This routine implements the rtems_partition_get_buffer directive. It
+ * attempts to allocate a buffer from the partition associated with ID.
+ * If a buffer is allocated, its address is returned in buffer.
  *
- *  @param[in] id is the partition id
- *  @param[out] buffer is the pointer to buffer address
+ * @param[in] id is the partition id
+ * @param[out] buffer is the pointer to buffer address
  *
- *  @return RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,

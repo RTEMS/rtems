@@ -2,7 +2,7 @@
  * @file
  *
  * @brief RTEMS File Systems Bitmap Routines
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  * 
  * These functions manage bit maps. A bit map consists of the map of bit
  * allocated in a block and a search map where a bit represents 32 actual

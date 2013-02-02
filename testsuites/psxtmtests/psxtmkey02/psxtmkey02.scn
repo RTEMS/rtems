@@ -1,0 +1,5 @@
+*** POSIX TIME TEST PSXTMKEY02 ***
+pthread_getspecific 11
+pthread_setspecific 11
+pthread_getspecific 11
+*** END OF POSIX TIME TEST PSXTMKEY02 ***

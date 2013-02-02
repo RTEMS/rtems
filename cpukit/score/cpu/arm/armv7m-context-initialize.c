@@ -24,11 +24,10 @@
 
 #include <string.h>
 
+#include <rtems/score/armv7m.h>
 #include <rtems/score/thread.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
-
-#include <rtems/score/armv7m.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,

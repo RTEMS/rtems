@@ -1,9 +1,15 @@
+/**
+ * @file
+ *
+ * @brief Constants/Data Structures/Prototypes for Files Allocation Table
+ *
+ * @ingroup libfs_ffo
+ *
+ * Constants/Data Structures/Prototypes for
+ * Operations on Files Allocation Table
+ */
+
 /*
- *  fat_fat_operations.h
- *
- *  Constants/data structures/prototypes for operations on Files Allocation
- *  Table
- *
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
@@ -11,6 +17,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
+
 #ifndef __DOSFS_FAT_FAT_OPERATIONS_H__
 #define __DOSFS_FAT_FAT_OPERATIONS_H__
 

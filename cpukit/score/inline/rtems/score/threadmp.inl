@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/threadmp.inl
+/**
+ * @file
  *
- *  This include file contains the bodies of all inlined routines
- *  for the multiprocessing part of thread package.
+ * @brief Inlined Routines for the Multiprocessing part of Thread Package
+ *
+ * This include file contains the bodies of all inlined routines
+ * for the multiprocessing part of thread package.
  */
 
 /*
@@ -24,23 +26,23 @@
 #define _RTEMS_SCORE_THREADMP_INL
 
 /**
- *  @addtogroup ScoreThreadMP 
- *  @{
+ * @addtogroup ScoreThreadMP
  */
+/**@{**/
 
 /**
- *  This function returns true if the thread in question is the
- *  multiprocessing receive thread.
+ * This function returns true if the thread in question is the
+ * multiprocessing receive thread.
  *
- *  @note This is a macro to avoid needing a prototype for 
- *        _MPCI_Receive_server_tcb until it is used.
+ * @note This is a macro to avoid needing a prototype for
+ *       _MPCI_Receive_server_tcb until it is used.
  */
 #define _Thread_MP_Is_receive(_the_thread) \
   ((_the_thread) == _MPCI_Receive_server_tcb)
 
 /**
- *  This routine frees a proxy control block to the
- *  inactive chain of free proxy control blocks.
+ * This routine frees a proxy control block to the
+ * inactive chain of free proxy control blocks.
  */
 
 RTEMS_INLINE_ROUTINE void _Thread_MP_Free_proxy (
@@ -56,7 +58,7 @@ RTEMS_INLINE_ROUTINE void _Thread_MP_Free_proxy (
   _Chain_Append( &_Thread_MP_Inactive_proxies, &the_thread->Object.Node );
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

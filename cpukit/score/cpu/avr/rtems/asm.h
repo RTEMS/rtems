@@ -1,17 +1,20 @@
 /**
- * @file rtems/asm.h
+ * @file
  *
- *  This include file attempts to address the problems
- *  caused by incompatible flavors of assemblers and
- *  toolsets.  It primarily addresses variations in the
- *  use of leading underscores on symbols and the requirement
- *  that register names be preceded by a %.
+ * @brief Address the Problems Caused by Incompatible Flavor of
+ * Assemblers and Toolsets
+ *
+ * This include file attempts to address the problems
+ * caused by incompatible flavors of assemblers and
+ * toolsets.  It primarily addresses variations in the
+ * use of leading underscores on symbols and the requirement
+ * that register names be preceded by a %.
+ *
+ * @note The spacing in the use of these macros
+ *       is critical to them working as advertised.
  */
 
 /*
- *  NOTE: The spacing in the use of these macros
- *        is critical to them working as advertised.
- *
  *  COPYRIGHT:
  *
  *  This file is based on similar code found in newlib available
@@ -324,7 +327,7 @@
 	lpm / mov Rd,r0
 	lpm / adiw ZL,1
 	lpm / mov Rd,r0 / adiw ZL,1
-	
+
    For enhanced chips it is one instruction always.
 
    ATTENTION:  unlike enhanced chips SREG (S,V,N,Z,C) flags are

@@ -1,17 +1,19 @@
+/**
+ * @file
+ * 
+ * @ingroup rtems_rfs
+ * @brief RTEMS File Systems Shell Commands
+ *
+ * RTEMS File Systems Shell commands provide a CLI interface to support and
+ * development of the RFS file system.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File Systems Shell commands provide a CLI interface to support and
- * development od the RFS file system.
  */
 
 #if !defined (_RTEMS_RFS_SHELL_H_)
@@ -24,18 +26,22 @@
 /**
  * The shell command for the RFS debugger.
  *
- * @param argc The argument count.
- * @param argv The argument variables.
- * @return int The exit code for the command. A 0 is no error.
+ * @param[in] argc is the argument count.
+ * @param[in] argv is a pointer to the argument variables.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_shell_debugrfs (int argc, char *argv[]);
 
 /**
  * The shell command for formatting an RFS file system.
  *
- * @param argc The argument count.
- * @param argv The argument variables.
- * @return int The exit code for the command. A 0 is no error.
+ * @param[in] argc is the argument count.
+ * @param[in] argv is a pointer to the argument variables.
+ *
+ * @retval 0 Successful operation.
+ * @retval 1 An error occurred.
  */
 int rtems_shell_rfs_format (int argc, char* argv[]);
 

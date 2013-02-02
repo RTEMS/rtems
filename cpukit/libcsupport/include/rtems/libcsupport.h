@@ -1,6 +1,8 @@
 /**
- * @file rtems/libcsupport.h
- *
+ * @file
+ * 
+ * @brief Standard C Library Support
+ * 
  * This include file contains the information regarding the
  * RTEMS specific support for the standard C library.
  */
@@ -28,29 +30,31 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup libcsupport Standard C Library Support
+ * @defgroup libcsupport Standard C Library Support
  *
- *  @brief RTEMS Specific Support for the Standard C Library
+ * @brief RTEMS Specific Support for the Standard C Library
+ *
  */
+/**@{**/
 
 extern void malloc_dump(void);
 
 /**
- *  @brief Malloc Walk
+ * @brief Malloc walk.
  */
 extern bool malloc_walk(int source, bool printf_enabled);
 
 /**
- *  @brief RTEMS Malloc Set Heap Pointer
+ * @brief Set malloc heap pointer.
  * 
- *  This routine is primarily used for debugging. 
+ * This routine is primarily used for debugging. 
  */
 void malloc_set_heap_pointer(Heap_Control *new_heap);
 
 /**
- *  @brief RTEMS Malloc Get Heap Pointer
+ * @brief Get malloc heap pointer.
  * 
- *  This routine is primarily used for debugging. 
+ * This routine is primarily used for debugging. 
  */
 Heap_Control *malloc_get_heap_pointer( void );
 extern void libc_init(void);
@@ -58,17 +62,17 @@ extern int  host_errno(void);
 extern void fix_syscall_errno(void);
 
 /**
- *  @brief RTEMS Malloc Get Free Information
+ * @brief Get free malloc information.
  * 
- *  Find amount of free heap remaining
+ * Find amount of free heap remaining
  */
 extern size_t malloc_free_space(void);
 extern void open_dev_console(void);
 
 /**
- *  @brief RTEMS Malloc Get Status Information
+ * @brief Get malloc status information.
  * 
- *  Find amount of free heap remaining.
+ * Find amount of free heap remaining.
  */
 extern int malloc_info(Heap_Information_block *the_info);
 
@@ -163,8 +167,11 @@ void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot);
 /**
  * @brief Compares two resource snapshots for equality.
  *
- * @return Returns true if the resource snapshots are equal, and false
- * otherwise.
+ * @param[in] a One resource snapshot.
+ * @param[in] b Another resource snapshot.
+ *
+ * @retval true The resource snapshots are equal.
+ * @retval false Otherwise.
  *
  * @see rtems_resource_snapshot_take().
  */
@@ -175,16 +182,19 @@ bool rtems_resource_snapshot_equal(
 
 /**
  * @brief Takes a new resource snapshot and checks that it is equal to the
- * given snapshot.
+ * given resource snapshot.
  *
- * @param[in] snapshot The snapshot used for comparison with the new snapshot.
+ * @param[in] snapshot The resource snapshot used for comparison with the new
+ * resource snapshot.
  *
- * @return Returns true if the resource snapshots are equal, and false
- * otherwise.
+ * @retval true The resource snapshots are equal.
+ * @retval false Otherwise.
  *
  * @see rtems_resource_snapshot_take().
  */
 bool rtems_resource_snapshot_check(const rtems_resource_snapshot *snapshot);
+
+/** @} */
 
 #ifdef __cplusplus
 }

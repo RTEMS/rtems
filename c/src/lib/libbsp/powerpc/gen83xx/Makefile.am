@@ -66,6 +66,7 @@ libbsp_a_SOURCES += ../../shared/bsplibc.c \
 	startup/bspstart.c \
 	../../shared/bspclean.c \
 	startup/bspreset.c \
+	startup/bsprestart.c \
 	../../shared/bspgetworkarea.c \
         ../../shared/src/bsp-uboot-board-info.c \
         ../shared/uboot_getenv.c

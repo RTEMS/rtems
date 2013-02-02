@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Thread Creation Scheduling Parameters
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

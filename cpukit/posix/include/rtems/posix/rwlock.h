@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/rwlock.h
+ * @file
+ * 
+ * @brief Constants and Structures Associated with the POSIX RWLock Manager
  *
  * This include file contains all the constants and structures associated
  * with the POSIX RWLock Manager.
@@ -30,16 +32,18 @@ extern "C" {
 /**
  * @defgroup POSIX_RWLOCK POSIX RWLock Manager
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Constants and Structures Associated with the POSIX RWLock Manager
+ * 
  */
+/**@{**/
 
 #include <rtems/score/object.h>
 #include <rtems/score/corerwlock.h>
 
 /**
- *  This type defines the control block used to manage each RWLock.
+ * This type defines the control block used to manage each RWLock.
  */
 
 typedef struct {
@@ -50,33 +54,38 @@ typedef struct {
 }   POSIX_RWLock_Control;
 
 /**
- *  The following defines the information control block used to manage
- *  this class of objects.
+ * The following defines the information control block used to manage
+ * this class of objects.
  */
 
 POSIX_EXTERN Objects_Information  _POSIX_RWLock_Information;
 
 /**
- *  @brief _POSIX_RWLock_Manager_initialization
+ * @brief POSIX RWLock manager initialization.
  *
- *  This routine performs the initialization necessary for this manager.
- *
- *  @param[in] maximum_rwlocks is the total number of RWLocks allowed to
- *             concurrently be active in the system.
+ * This routine performs the initialization necessary for this manager.
  */
 
 void _POSIX_RWLock_Manager_initialization(void);
 
 /**
- *  @brief POSIX RWLock Translate Core RWLock Return Code
+ * @brief POSIX translate core RWLock return code.
  *
- *  This routine translates SuperCore RWLock status codes into the
- *  corresponding POSIX ones.
+ * This routine translates SuperCore RWLock status codes into the
+ * corresponding POSIX ones.
  *
  *
- *  @param[in] the_RWLock_status is the SuperCore status.
+ * @param[in] the_RWLock_status is the SuperCore status.
  *
- *  @return the corresponding POSIX status
+ * @return the corresponding POSIX status
+ * @retval 0 The status indicates that the operation completed successfully.
+ * @retval EINVAL The status indicates that the thread was blocked waiting for
+ * an operation to complete and the RWLock was deleted.
+ * @retval EBUSY This status indicates that the RWLock was not 
+ * immediately available.
+ * @retval ETIMEDOUT This status indicates that the calling task was 
+ * willing to block but the operation was unable to complete within
+ * the time allotted because the resource never became available.
  */
 int _POSIX_RWLock_Translate_core_RWLock_return_code(
   CORE_RWLock_Status  the_RWLock_status
@@ -85,6 +94,8 @@ int _POSIX_RWLock_Translate_core_RWLock_return_code(
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/posix/rwlock.inl>
 #endif
+
+/** @} */
 
 #ifdef __cplusplus
 }

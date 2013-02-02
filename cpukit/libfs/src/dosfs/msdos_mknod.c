@@ -1,6 +1,11 @@
-/*
- *  Routine for node creation in MSDOS filesystem.
+/**
+ * @file
  *
+ * @brief Routine for Node Creation in MSDOS Filesystem
+ * @ingroup libfs_msdos MSDOS FileSystem
+ */
+
+/*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *

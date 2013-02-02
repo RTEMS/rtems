@@ -1,18 +1,19 @@
+/**
+ * @file
+ *
+ * @ingroup rtems_rfs
+ *
+ * RTEMS File System RTEMS Header file.
+ *
+ * This file is not to be installed. It binds the RFS file system to RTEMS.
+ */
+
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- */
-/**
- * @file
- *
- * @ingroup rtems-rfs
- *
- * RTEMS File System RTEMS Header file.
- *
- * This file is not to be installed. It binds the RFS file system to RTEMS.
  */
 
 #if !defined(RTEMS_RFS_RTEMS_DEFINED)
@@ -44,10 +45,12 @@
  * Take the result code and set errno with it and if non-zero return -1 else
  * return 0.
  *
- * @param what The message to print is the error is not zero.
- * @param error The error code.
- * @retval -1 An error has occurred.
- * @retval 0 No error.
+ * @param[in] what is a pointer to the message to print if the error
+ *            is not zero.
+ * @param[in] error is the error code.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.
  */
 int rtems_rfs_rtems_error (const char* mesg, int error);
 #endif
@@ -84,7 +87,8 @@ int rtems_rfs_rtems_error (const char* mesg, int error);
  * defined to 0 the code is dead code elminiated when built with -Os, -O2, or
  * higher.
  *
- * @param mask The part of the API to trace.
+ * @param[in] mask is the part of the API to trace.
+ *
  * @retval true Tracing is active for the mask.
  * @retval false Do not trace.
  */
@@ -97,8 +101,9 @@ bool rtems_rfs_rtems_trace (uint32_t mask);
 /**
  * Set the mask.
  *
- * @param mask The mask bits to set.
- * @return The previous mask.
+ * @param[in] mask is the mask bits to set.
+ *
+ * @retval mask The previous mask.
  */
 #if RTEMS_RFS_RTEMS_TRACE
 void rtems_rfs_rtems_trace_set_mask (uint32_t mask);
@@ -109,8 +114,9 @@ void rtems_rfs_rtems_trace_set_mask (uint32_t mask);
 /**
  * Clear the mask.
  *
- * @param mask The mask bits to clear.
- * @return The previous mask.
+ * @param[in] mask is the mask bits to clear.
+ *
+ * @retval mask The previous mask.
  */
 #if RTEMS_RFS_RTEMS_TRACE
 void rtems_rfs_rtems_trace_clear_mask (uint32_t mask);
@@ -144,7 +150,7 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Return the file system structure given a path location.
  *
- * @param _loc Pointer to the path location.
+ * @param[in] _loc is a pointer to the path location.
  * @return rtems_rfs_file_system*
  */
 #define rtems_rfs_rtems_pathloc_dev(_loc) \
@@ -153,8 +159,8 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Set the inode number (ino) into the path location.
  *
- * @param _loc Pointer to the path location.
- * @param _ino The ino to set in the path location.
+ * @param[in] _loc is a pointer to the path location.
+ * @param[in] _ino is the ino to set in the path location.
  */
 #define rtems_rfs_rtems_set_pathloc_ino(_loc, _ino) \
   (_loc)->node_access = (void*)((intptr_t)(_ino))
@@ -162,7 +168,7 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Get the inode number (ino) given a path location.
  *
- * @param _loc Pointer to the path location.
+ * @param[in] _loc is a pointer to the path location.
  * @return rtems_rfs_ino The inode number in the path location.
  */
 #define rtems_rfs_rtems_get_pathloc_ino(_loc) \
@@ -171,8 +177,8 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Set the directory offset (doff) into the path location.
  *
- * @param _loc Pointer to the path location.
- * @param _doff The doff to set in the path location.
+ * @param[in] _loc is a pointer to the path location.
+ * @param[in] _doff is the doff to set in the path location.
  */
 #define rtems_rfs_rtems_set_pathloc_doff(_loc, _doff) \
   (_loc)->node_access_2 = (void*)((intptr_t)(_doff))
@@ -180,7 +186,7 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Get the directory offset (doff) given a path location.
  *
- * @param _loc Pointer to the path location.
+ * @param[in] _loc is a pointer to the path location.
  * @return uin32_t The doff in the path location.
  */
 #define rtems_rfs_rtems_get_pathloc_doff(_loc) \
@@ -189,7 +195,7 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Get the ino from the I/O pointer.
  *
- * @param _iop The I/O pointer.
+ * @param[in] _iop is the I/O pointer.
  * @return ino
  */
 #define rtems_rfs_rtems_get_iop_ino(_iop) \
@@ -207,8 +213,8 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Set the file handle in the I/O pointer.
  *
- * @param _iop The I/O pointer.
- * @param _fh The file handle.
+ * @param[in] _iop is the I/O pointer.
+ * @param[in] _fh is the file handle.
  */
 #define rtems_rfs_rtems_set_iop_file_handle(_iop, _fh) \
   (_iop)->pathinfo.node_access_2 = (_fh)
@@ -216,7 +222,7 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Create the name of the handler's table given the type of handlers.
  *
- * @param _h The name of the handlers.
+ * @param[in] _h is the name of the handlers.
  * @return label The name of the handler's table.
  */
 #define rtems_rfs_rtems_handlers(_h) \
@@ -225,8 +231,10 @@ typedef struct rtems_rfs_rtems_private
 /**
  * Set the handlers in the path location based on the mode of the inode.
  *
- * @param loc Pointer to the path location to set the handlers in.
- * @param inode The inode handle to check the mode of for the type of handlers.
+ * @param[in] loc is a pointer to the path location to set the handlers in.
+ * @param[in] inode is the inode handle to check the mode of for the
+ *         type of handlers.
+ *
  * @retval true The handlers have been set.
  * @retval false There are no handlers for the mode.
  */
@@ -236,7 +244,7 @@ bool rtems_rfs_rtems_set_handlers (rtems_filesystem_location_info_t* pathloc,
 /**
  * Convert the system mode flags to inode mode flags.
  *
- * @param mode The system mode flags.
+ * @param[in] mode is the system mode flags.
  * @return uint16_t The inode mode flags.
  */
 uint16_t rtems_rfs_rtems_imode (mode_t mode);
@@ -244,7 +252,7 @@ uint16_t rtems_rfs_rtems_imode (mode_t mode);
 /**
  * Convert the inode mode flags to system mode flags.
  *
- * @param imode The inode mode flags
+ * @param[in] imode is the inode mode flags
  * @return mode_t The system mode flags.
  */
 mode_t rtems_rfs_rtems_mode (int imode);

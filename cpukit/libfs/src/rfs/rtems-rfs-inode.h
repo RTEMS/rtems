@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File System Information Node
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File System Information Node.
  *
@@ -230,8 +230,9 @@ typedef struct _rtems_rfs_inode_handle
 /**
  * Get the link count.
  *
- * @param handle The inode handle.
- * @return uint16_t The link count.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval links The link count.
  */
 static inline uint16_t
 rtems_rfs_inode_get_links (rtems_rfs_inode_handle* handle)
@@ -246,8 +247,8 @@ rtems_rfs_inode_get_links (rtems_rfs_inode_handle* handle)
 /**
  * Set the link count.
  *
- * @param handle The inode handle.
- * @prarm links The links.
+ * @param[in] handle is the inode handle.
+ * @param[in] links are the links.
  */
 static inline void
 rtems_rfs_inode_set_links (rtems_rfs_inode_handle* handle, uint16_t links)
@@ -259,8 +260,9 @@ rtems_rfs_inode_set_links (rtems_rfs_inode_handle* handle, uint16_t links)
 /**
  * Get the flags.
  *
- * @param handle The inode handle.
- * @return uint16_t The flags.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval flags The flags.
  */
 static inline uint16_t
 rtems_rfs_inode_get_flags (rtems_rfs_inode_handle* handle)
@@ -271,8 +273,8 @@ rtems_rfs_inode_get_flags (rtems_rfs_inode_handle* handle)
 /**
  * Set the flags.
  *
- * @param handle The inode handle.
- * @prarm flags The flags.
+ * @param[in] handle is the inode handle.
+ * @param[in] flags are the flags.
  */
 static inline void
 rtems_rfs_inode_set_flags (rtems_rfs_inode_handle* handle, uint16_t flags)
@@ -284,8 +286,9 @@ rtems_rfs_inode_set_flags (rtems_rfs_inode_handle* handle, uint16_t flags)
 /**
  * Get the mode.
  *
- * @param handle The inode handle.
- * @return uint16_t The mode.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval mode The mode.
  */
 static inline uint16_t
 rtems_rfs_inode_get_mode (rtems_rfs_inode_handle* handle)
@@ -296,8 +299,8 @@ rtems_rfs_inode_get_mode (rtems_rfs_inode_handle* handle)
 /**
  * Set the mode.
  *
- * @param handle The inode handle.
- * @prarm mode The mode.
+ * @param[in] handle is the inode handle.
+ * @param[in] mode is the mode.
  */
 static inline void
 rtems_rfs_inode_set_mode (rtems_rfs_inode_handle* handle, uint16_t mode)
@@ -309,8 +312,9 @@ rtems_rfs_inode_set_mode (rtems_rfs_inode_handle* handle, uint16_t mode)
 /**
  * Get the user id.
  *
- * @param handle The inode handle.
- * @return uint16_t The user id (uid).
+ * @param[in] handle is the inode handle.
+ *
+ * @retval uid The used id.
  */
 static inline uint16_t
 rtems_rfs_inode_get_uid (rtems_rfs_inode_handle* handle)
@@ -321,8 +325,9 @@ rtems_rfs_inode_get_uid (rtems_rfs_inode_handle* handle)
 /**
  * Get the group id.
  *
- * @param handle The inode handle.
- * @return uint16_t The group id (gid).
+ * @param[in] handle is the inode handle.
+ *
+ * @retval gid The grpup id.
  */
 static inline uint16_t
 rtems_rfs_inode_get_gid (rtems_rfs_inode_handle* handle)
@@ -333,9 +338,9 @@ rtems_rfs_inode_get_gid (rtems_rfs_inode_handle* handle)
 /**
  * Set the user id and group id.
  *
- * @param handle The inode handle.
- * @param uid The user id (uid).
- * @param gid The group id (gid).
+ * @param[in] handle is the inode handle.
+ * @param[in] uid is the user id (uid).
+ * @param[in] gid is the group id (gid).
  */
 static inline void
 rtems_rfs_inode_set_uid_gid (rtems_rfs_inode_handle* handle,
@@ -348,8 +353,9 @@ rtems_rfs_inode_set_uid_gid (rtems_rfs_inode_handle* handle,
 /**
  * Get the block offset.
  *
- * @param handle The inode handle.
- * @return uint32_t The block offset.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval offset The block offset.
  */
 static inline uint16_t
 rtems_rfs_inode_get_block_offset (rtems_rfs_inode_handle* handle)
@@ -360,8 +366,8 @@ rtems_rfs_inode_get_block_offset (rtems_rfs_inode_handle* handle)
 /**
  * Set the block offset.
  *
- * @param handle The inode handle.
- * @param block_count The block offset.
+ * @param[in] handle is the inode handle.
+ * @param[in] block_count is the block offset.
  */
 static inline void
 rtems_rfs_inode_set_block_offset (rtems_rfs_inode_handle* handle,
@@ -374,8 +380,9 @@ rtems_rfs_inode_set_block_offset (rtems_rfs_inode_handle* handle,
 /**
  * Get the block count.
  *
- * @param handle The inode handle.
- * @return uint32_t The block count.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval count The block count.
  */
 static inline uint32_t
 rtems_rfs_inode_get_block_count (rtems_rfs_inode_handle* handle)
@@ -386,8 +393,8 @@ rtems_rfs_inode_get_block_count (rtems_rfs_inode_handle* handle)
 /**
  * Set the block count.
  *
- * @param handle The inode handle.
- * @param block_count The block count.
+ * @param[in] handle is the inode handle.
+ * @param[in] block_count is the block count.
  */
 static inline void
 rtems_rfs_inode_set_block_count (rtems_rfs_inode_handle* handle, uint32_t block_count)
@@ -399,8 +406,9 @@ rtems_rfs_inode_set_block_count (rtems_rfs_inode_handle* handle, uint32_t block_
 /**
  * Get the atime.
  *
- * @param handle The inode handle.
- * @return rtems_rfs_time The atime.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval atime The atime.
  */
 static inline rtems_rfs_time
 rtems_rfs_inode_get_atime (rtems_rfs_inode_handle* handle)
@@ -411,8 +419,8 @@ rtems_rfs_inode_get_atime (rtems_rfs_inode_handle* handle)
 /**
  * Set the atime.
  *
- * @param handle The inode handle.
- * @prarm atime The atime.
+ * @param[in] handle is the inode handle.
+ * @param[in] atime The atime.
  */
 static inline void
 rtems_rfs_inode_set_atime (rtems_rfs_inode_handle* handle,
@@ -425,8 +433,9 @@ rtems_rfs_inode_set_atime (rtems_rfs_inode_handle* handle,
 /**
  * Get the mtime.
  *
- * @param handle The inode handle.
- * @return rtems_rfs_time The mtime.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval mtime The mtime.
  */
 static inline rtems_rfs_time
 rtems_rfs_inode_get_mtime (rtems_rfs_inode_handle* handle)
@@ -437,8 +446,8 @@ rtems_rfs_inode_get_mtime (rtems_rfs_inode_handle* handle)
 /**
  * Set the mtime.
  *
- * @param handle The inode handle.
- * @prarm atime The mtime.
+ * @param[in] handle is the inode handle.
+ * @param[in] mtime The mtime.
  */
 static inline void
 rtems_rfs_inode_set_mtime (rtems_rfs_inode_handle* handle,
@@ -451,8 +460,9 @@ rtems_rfs_inode_set_mtime (rtems_rfs_inode_handle* handle,
 /**
  * Get the ctime.
  *
- * @param handle The inode handle.
- * @return rtems_rfs_time The ctime.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval ctime The ctime.
  */
 static inline rtems_rfs_time
 rtems_rfs_inode_get_ctime (rtems_rfs_inode_handle* handle)
@@ -463,8 +473,8 @@ rtems_rfs_inode_get_ctime (rtems_rfs_inode_handle* handle)
 /**
  * Set the ctime.
  *
- * @param handle The inode handle.
- * @prarm atime The ctime.
+ * @param[in] handle is the inode handle.
+ * @param[in] ctime The ctime.
  */
 static inline void
 rtems_rfs_inode_set_ctime (rtems_rfs_inode_handle* handle,
@@ -477,9 +487,10 @@ rtems_rfs_inode_set_ctime (rtems_rfs_inode_handle* handle,
 /**
  * Get the block number.
  *
- * @param handle The inode handle.
- * @param block The block number to return.
- * @return uint32_t The block number.
+ * @param[in] handle is the inode handle.
+ * @param[in] block is the block number to return.
+ *
+ * @retval block The block number.
  */
 static inline uint32_t
 rtems_rfs_inode_get_block (rtems_rfs_inode_handle* handle, int block)
@@ -490,9 +501,9 @@ rtems_rfs_inode_get_block (rtems_rfs_inode_handle* handle, int block)
 /**
  * Set the block number for a given block index.
  *
- * @param handle The inode handle.
- * @param block The block index.
- * @param bno The block number.
+ * @param[in] handle is the inode handle.
+ * @param[in] block is the block index.
+ * @param[in] bno is the block number.
  */
 static inline void
 rtems_rfs_inode_set_block (rtems_rfs_inode_handle* handle, int block, uint32_t bno)
@@ -504,8 +515,9 @@ rtems_rfs_inode_set_block (rtems_rfs_inode_handle* handle, int block, uint32_t b
 /**
  * Get the last map block from the inode.
  *
- * @param handle The inode handle.
- * @return uint32_t The last map block number.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval block The last map block number.
  */
 static inline uint32_t
 rtems_rfs_inode_get_last_map_block (rtems_rfs_inode_handle* handle)
@@ -516,8 +528,8 @@ rtems_rfs_inode_get_last_map_block (rtems_rfs_inode_handle* handle)
 /**
  * Set the last map block.
  *
- * @param handle The inode handle.
- * @param block_count The last map block number.
+ * @param[in] handle is the inode handle.
+ * @param[in] block_count is last map block number.
  */
 static inline void
 rtems_rfs_inode_set_last_map_block (rtems_rfs_inode_handle* handle, uint32_t last_map_block)
@@ -529,8 +541,10 @@ rtems_rfs_inode_set_last_map_block (rtems_rfs_inode_handle* handle, uint32_t las
 /**
  * Get the last data block from the inode.
  *
- * @param handle The inode handle.
- * @return uint32_t The last data block number.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval block The last data block number.
+ *
  */
 static inline uint32_t
 rtems_rfs_inode_get_last_data_block (rtems_rfs_inode_handle* handle)
@@ -541,8 +555,8 @@ rtems_rfs_inode_get_last_data_block (rtems_rfs_inode_handle* handle)
 /**
  * Set the last data block.
  *
- * @param handle The inode handle.
- * @param block_count The last data block number.
+ * @param[in] handle is the inode handle.
+ * @param[in] block_count is the last data block number.
  */
 static inline void
 rtems_rfs_inode_set_last_data_block (rtems_rfs_inode_handle* handle, uint32_t last_data_block)
@@ -554,20 +568,24 @@ rtems_rfs_inode_set_last_data_block (rtems_rfs_inode_handle* handle, uint32_t la
 /**
  * Allocate an inode number and return it.
  *
- * @param fs The file system data.
- * @param ino Return the ino.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[out] ino will contain the ino.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_alloc (rtems_rfs_file_system* fs,
                            rtems_rfs_bitmap_bit   goal,
                            rtems_rfs_ino*         ino);
 
 /**
- * Allocate an inode number and return it.
+ * Free an inode.
  *
- * @param fs The file system data.
- * @param ino The ino too free.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system data.
+ * @param[in] ino is the ino too free.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_free (rtems_rfs_file_system* fs,
                           rtems_rfs_ino          ino);
@@ -577,11 +595,13 @@ int rtems_rfs_inode_free (rtems_rfs_file_system* fs,
  * data pointer. All data is in media byte order and needs to be accessed via
  * the supporting calls.
  *
- * @param fs The file system.
- * @param ino The inode number.
- * @param handle The handle to the inode we are opening.
- * @param load If true load the inode into memory from the media.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] ino is the inode number.
+ * @param[in] handle is the handle to the inode we are opening.
+ * @param[in] load If true load the inode into memory from the media.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
                           rtems_rfs_ino           ino,
@@ -591,9 +611,11 @@ int rtems_rfs_inode_open (rtems_rfs_file_system*  fs,
 /**
  * The close inode handle. All opened inodes need to be closed.
  *
- * @param fs The file system.
- * @param handle The handle to close.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] handle is the handle to close.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_close (rtems_rfs_file_system*  fs,
                            rtems_rfs_inode_handle* handle);
@@ -601,9 +623,11 @@ int rtems_rfs_inode_close (rtems_rfs_file_system*  fs,
 /**
  * Load the inode into memory.
  *
- * @param fs The file system.
- * @param handle The inode handle to load.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] handle is the inode handle to load.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
                           rtems_rfs_inode_handle* handle);
@@ -611,10 +635,12 @@ int rtems_rfs_inode_load (rtems_rfs_file_system*  fs,
 /**
  * Unload the inode from memory.
  *
- * @param fs The file system.
- * @param handle The inode handle to unload.
- * @param update_ctime Update the ctime field of the inode.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] handle is the inode handle to unload.
+ * @param[in] update_ctime Update the ctime field of the inode.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
                             rtems_rfs_inode_handle* handle,
@@ -624,9 +650,10 @@ int rtems_rfs_inode_unload (rtems_rfs_file_system*  fs,
  * Create an inode allocating, initialising and adding an entry to the parent
  * directory.
  *
- * @param fs The file system data.
- * @param parent The parent inode number to add the directory entry to.
- * @param name The name of the directory entryinode to create.
+ * @param[in] fs is the file system data.
+ * @param[in] parent is the parent inode number to add the directory entry to.
+ * @param[in] name is a pointer to the name of the directory entryinode
+ *             to create.
  *
  */
 int rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
@@ -643,9 +670,11 @@ int rtems_rfs_inode_create (rtems_rfs_file_system*  fs,
  * Delete the inode eraseing it and release the buffer to commit the write. You
  * need to load the inode again if you wish to use it again.
  *
- * @param fs The file system.
- * @param handle The inode handle to erase.
- * @return int The error number (errno). No error if 0.
+ * @param[in] fs is the file system.
+ * @param[in] handle is the inode handle to erase.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
                             rtems_rfs_inode_handle* handle);
@@ -653,12 +682,14 @@ int rtems_rfs_inode_delete (rtems_rfs_file_system*  fs,
 /**
  * Initialise a new inode.
  *
- * @param handle The inode handle to initialise.
- * @param links The number of links to the inode.
- * @param mode The inode mode.
- * @param uid The user id.
- * @param gid The group id.
- * @return int The error number (errno). No error if 0.
+ * @param[in] handle is the inode handle to initialise.
+ * @param[in] links are the number of links to the inode.
+ * @param[in] mode is the inode mode.
+ * @param[in] uid is the user id.
+ * @param[in] gid is the group id.
+ *
+ * @retval 0 Successful operation.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_initialise (rtems_rfs_inode_handle* handle,
                                 uint16_t                links,
@@ -670,11 +701,13 @@ int rtems_rfs_inode_initialise (rtems_rfs_inode_handle* handle,
  * Time stamp the inode with the current time. The ctime field is hanlded
  * automatically.
  *
- * @param handle The inode handle.
- * @param atime Update the atime field.
- * @param mtime UPdate the mtime field.
- * @return int The error number (errno). No error if 0 and ENXIO if no inode
- *             loaded.
+ * @param[in] handle is the inode handle.
+ * @param[in] atime Update the atime field.
+ * @param[in] mtime UPdate the mtime field.
+ *
+ * @retval 0 Successful operation.
+ * @retval ENXIO No inode is loaded.
+ * @retval error_code An error occurred.
  */
 int rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
                                     bool                    atime,
@@ -683,10 +716,10 @@ int rtems_rfs_inode_time_stamp_now (rtems_rfs_inode_handle* handle,
 /**
  * Calculate the size of data attached to the inode.
  *
- * @param fs The file system data.
- * @param handle The inode handle.
- * @return rtems_rfs_pos The data size in bytes in the block map attched to the
- *                       inode.
+ * @param[in] fs is the file system data.
+ * @param[in] handle is the inode handle.
+ *
+ * @retval size The data size in bytes in the block map attched to the inode.
  */
 rtems_rfs_pos rtems_rfs_inode_get_size (rtems_rfs_file_system*  fs,
                                         rtems_rfs_inode_handle* handle);

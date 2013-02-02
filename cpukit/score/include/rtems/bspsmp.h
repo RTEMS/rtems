@@ -1,9 +1,11 @@
 /**
  *  @file  rtems/bspsmp.h
  *
+ *  @brief Interface Between RTEMS and an SMP Aware BSP
+ *
  *  This include file defines the interface between RTEMS and an
  *  SMP aware BSP.  These methods will only be used when RTEMS
- *  is configured with SMP support enabled. 
+ *  is configured with SMP support enabled.
  */
 
 /*
@@ -24,8 +26,10 @@
 /**
  *  @defgroup RTEMS BSP SMP Interface
  *
+ *  @ingroup Score
+ *
  *  This defines the interface between RTEMS and the BSP for
- *  SMP support.  The interface uses the term primary 
+ *  SMP support.  The interface uses the term primary
  *  to refer to the "boot" processor and secondary to refer
  *  to the "application" processors.  Different architectures
  *  use different terminology.
@@ -45,15 +49,15 @@ extern "C" {
 
 #ifndef ASM
 /**
- *  @brief Maximum Number of CPUs in SMP System
+ *  @brief Maximum number of CPUs in SMP system.
  *
  *  This variable is set during the SMP initialization sequence to
  *  indicate the Maximum number of CPUs in this system.
  */
 extern uint32_t rtems_configuration_smp_maximum_processors;
- 
+
 /**
- *  @brief Initialize Secondary CPUs
+ *  @brief Initialize secondary CPUs.
  *
  *  This method is invoked by RTEMS during initialization to bring the
  *  secondary CPUs out of reset.
@@ -61,7 +65,7 @@ extern uint32_t rtems_configuration_smp_maximum_processors;
  *  @param [in] maximum is the maximum number of CPU cores that RTEMS
  *              can handle
  *
- *  @return This method returns the number of cores available in the
+ *  @retval This method returns the number of cores available in the
  *          system.
  */
 int bsp_smp_initialize(
@@ -69,17 +73,17 @@ int bsp_smp_initialize(
 );
 
 /**
- *  @brief Obtain Current CPU Index
+ *  @brief Obtain current CPU index.
  *
  *  This method is invoked by RTEMS when it needs to know the index
  *  of the CPU it is executing on.
  *
- *  @return This method returns the current CPU index.
+ *  @retval This method returns the current CPU index.
  */
 int bsp_smp_processor_id(void) RTEMS_COMPILER_PURE_ATTRIBUTE;
 
 /**
- *  @brief Make Request of Another CPU
+ *  @brief Make request of another CPU.
  *
  *  This method is invoked by RTEMS when it needs to make a request
  *  of another CPU.  It should be implemented using some type of
@@ -94,21 +98,21 @@ void rtems_smp_send_message(
 );
 
 /**
- *  @brief Generate a Interprocessor Broadcast Interrupt
+ *  @brief Generate an interprocessor broadcast interrupt.
  *
  *  This method is invoked when RTEMS wants to let all of the other
- *  CPUs know that it has sent them message.  CPUs not including 
+ *  CPUs know that it has sent them message.  CPUs not including
  *  the originating CPU should receive the interrupt.
 
  *
- *  @note On CPUs without the capability to generate a broadcast 
+ *  @note On CPUs without the capability to generate a broadcast
  *        to all other CPUs interrupt, this can be implemented by
  *        a loop of sending interrupts to specific CPUs.
  */
 void bsp_smp_broadcast_interrupt(void);
 
 /**
- *  @brief Generate a Interprocessor Interrupt
+ *  @brief Generate a interprocessor interrupt.
  *
  *  This method is invoked by RTEMS to let @a cpu know that it
  *  has sent it a message.
@@ -120,7 +124,7 @@ void bsp_smp_interrupt_cpu(
 );
 
 /**
- *  @brief Obtain CPU Core Number
+ *  @brief Obtain CPU core number.
  *
  *  This method is invoked by RTEMS when it needs to know which core
  *  number it is executing on.  This is used when it needs to perform
@@ -128,7 +132,7 @@ void bsp_smp_interrupt_cpu(
  *  the other cores.  For example, it may need to realize it needs to
  *  preempt a thread on another node.
  *
- *  @return This method returns the Id of the current CPU core.
+ *  @retval This method returns the Id of the current CPU core.
  */
 int   bsp_smp_processor_id( void );
 
@@ -143,7 +147,7 @@ int   bsp_smp_processor_id( void );
 void bsp_smp_secondary_cpu_initialize(int cpu);
 
 /**
- *  @brief RTEMS SMP Secondary CPU Initialize
+ *  @brief Initialize secondary CPU and coordinates.
  *
  *  This method is the C entry point which secondary CPUs should
  *  arrange to call.  It performs OS initialization for the secondary
@@ -152,7 +156,7 @@ void bsp_smp_secondary_cpu_initialize(int cpu);
  *  @note This is provided by RTEMS.
  */
 void rtems_smp_secondary_cpu_initialize(void);
- 
+
 /**
  *  This method is invoked by the BSP to initialize the per CPU structure
  *  for the specified @a cpu while it is bringing the secondary CPUs
@@ -164,10 +168,10 @@ void rtems_smp_secondary_cpu_initialize(void);
 void rtems_smp_initialize_per_cpu(int cpu);
 
 /**
- *  @brief RTEMS SMP Proccess Interrupt
+ *  @brief Process the incoming interprocessor request.
  *
  *  This is the method called by the BSP's interrupt handler
- *  to process the incoming interprocessor request. 
+ *  to process the incoming interprocessor request.
  */
 void rtems_smp_process_interrupt(void);
 
@@ -184,9 +188,10 @@ void bsp_smp_wait_for(
 #endif
 
 #else
-  #define bsp_smp_processor_id()  0 
+  #define bsp_smp_processor_id()  0
 #endif
 
+/**@}*/
 #endif
 
 /* end of include file */

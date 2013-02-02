@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Execute a File
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

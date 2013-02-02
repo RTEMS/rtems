@@ -1,10 +1,12 @@
 /**
  * @file rtems/error.h
  *
+ * @brief RTEMS Error Reporting
+ *
  * Defines and externs for rtems error reporting
- * 
+ *
  * Currently just used by RTEMS monitor.
- * 
+ *
  * These routines provide general purpose error reporting.
  * rtems_error reports an error to stderr and allows use of
  * printf style formatting.  A newline is appended to all messages.
@@ -18,26 +20,31 @@
  * It can also include a rtems_status value which can be OR'd
  * with the above flags. *
  *
- * EXAMPLE
+ * Example 1:
+ * @code
  *  #include <rtems.h>
  *  #include <rtems/error.h>
  *  rtems_error(0, "stray interrupt %d", intr);
+ * @endcode
  *
- * EXAMPLE
+ * Example 2:
+ * @code
  *        if ((status = rtems_task_create(...)) != RTEMS_SUCCCESSFUL)
  *        {
  *            rtems_error(status | RTEMS_ERROR_ABORT,
  *                        "could not create task");
  *        }
+ * @endcode
  *
- * EXAMPLE
+ * Example 3:
+ * @code
  *        if ((fd = open(pathname, O_RDNLY)) < 0)
  *        {
  *            rtems_error(RTEMS_ERROR_ERRNO, "open of '%s' failed", pathname);
  *            goto failed;
  *        }
+ * @endcode
  */
-
 
 #ifndef _RTEMS_RTEMS_ERROR_H
 #define _RTEMS_RTEMS_ERROR_H
@@ -53,11 +60,10 @@ extern "C" {
  *  @defgroup ErrorPanicSupport Error And Panic Support
  *
  *  @ingroup libcsupport
- * 
+ *
  *  @brief Defines and externs for rtems error reporting
- * 
+ *
  */
-
 typedef Internal_errors_t rtems_error_code_t;
 
 /*
@@ -82,13 +88,13 @@ const char *rtems_status_text(rtems_status_code sc);
 
 /**
  *  @brief Report an Error
- * 
+ *
  *  @param[in] error_code can be specified as any of the following:
  *  RTEMS_ERROR_ERRNO       -- include errno text in output
  *  RTEMS_ERROR_PANIC       -- halts local system after output
  *  RTEMS_ERROR_ABORT       -- abort after output
- * 
- *  @param[in] printf_format is a normal printf(3) format string, 
+ *
+ *  @param[in] printf_format is a normal printf(3) format string,
  *  with its concommitant arguments
  *
  *  @return the number of characters written.

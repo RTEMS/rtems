@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Final return status for Asynchronous I/O request pointed to by aiobcp
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

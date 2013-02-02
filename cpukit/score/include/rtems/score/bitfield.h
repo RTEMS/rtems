@@ -1,7 +1,9 @@
 /**
- *  @file  rtems/score/bitfield.h
+ * @file  rtems/score/bitfield.h
  *
- *  This include file contains all bit field manipulation routines.
+ * @brief Bit Field Manipulation Routines
+ *
+ * This include file contains all bit field manipulation routines.
  */
 
 /*
@@ -64,6 +66,8 @@ const unsigned char __log2table[256] = {
 #endif
 
 /**
+ *  @brief Gets the @a _bit_number of the first bit set in the specified value.
+ *
  *  This routine returns the @a _bit_number of the first bit set
  *  in the specified value.  The correspondence between @a _bit_number
  *  and actual bit position is processor dependent.  The search for

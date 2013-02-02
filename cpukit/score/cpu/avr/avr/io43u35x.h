@@ -46,8 +46,11 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
-/* I/O registers */
-
+/**
+ * @name I/O Registers
+ * 
+ */
+/**@{**/
 /* ADC Data Register */
 #ifndef __ASSEMBLER__
 #define ADC 	_SFR_IO16(0x02)
@@ -179,9 +182,13 @@
 
 /* General Interrupt Mask register */
 #define GIMSK	_SFR_IO8(0x3B)
+/** @} */
 
-/* Interrupt vectors */
-
+/**
+ * @name Interrupt Vectors
+ * 
+ */
+/**@{**/
 #define SIG_INTERRUPT0		_VECTOR(1)  /* suspend/resume */
 #define SIG_INTERRUPT1		_VECTOR(2)
 #define SIG_TIMER1_CAPT1	_VECTOR(3)
@@ -196,10 +203,11 @@
 #define SIG_USB_INT         _VECTOR(12)
 
 #define _VECTORS_SIZE 52
+/** @} */
 
 /*
-   The Register Bit names are represented by their bit number (0-7).
-*/
+ * The Register Bit names are represented by their bit number (0-7).
+ */
 
 /* Timer/Counter Interrupt MaSK register */
 #define    TICIE1       3
@@ -418,10 +426,15 @@
 #define    ADPS1    1
 #define    ADPS0    0  
 
-/* Constants */
+/**
+ * @name Constants
+ * 
+ */
+/**@{**/
 #define    RAMEND   0x045F     /*Last On-Chip SRAM Location*/
 #define    XRAMEND  RAMEND
 #define    E2END    0x0000
 #define    FLASHEND 0x5FFF
+/** @} */
 
 #endif /* _AVR_43USB355_H_ */

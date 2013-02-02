@@ -46,8 +46,11 @@
 #  error "Attempt to include more than one <avr/ioXXX.h> file."
 #endif 
 
-/* I/O registers */
-
+/**
+ * @name I/O Registers
+ * 
+ */
+/**@{**/
 /* Port B */
 
 #define PINB    _SFR_IO8 (0x03)
@@ -203,16 +206,19 @@
 #define EEARL   _SFR_IO8(0x21)
 #define EEARH   _SFR_IO8(0X22)
 /* 
-Even though EEARH is not used by the mega48, the EEAR8 bit in the register
-must be written to 0, according to the datasheet, hence the EEARH register
-must be defined for the mega48.
-*/
-/* 6-char sequence denoting where to find the EEPROM registers in memory space.
-   Adresses denoted in hex syntax with uppercase letters. Used by the EEPROM
-   subroutines.
-   First two letters:  EECR address.
-   Second two letters: EEDR address.
-   Last two letters:   EEAR address.  */
+ * Even though EEARH is not used by the mega48, the EEAR8 bit in the register
+ * must be written to 0, according to the datasheet, hence the EEARH register
+ * must be defined for the mega48.
+ */
+/*
+ * 6-char sequence denoting where to find the EEPROM registers in 
+ * memory space.
+ * Adresses denoted in hex syntax with uppercase letters. Used by the EEPROM
+ * subroutines.
+ * First two letters:  EECR address.
+ * Second two letters: EEDR address.
+ * Last two letters:   EEAR address.  
+ */
 #define __EEPROM_REG_LOCATIONS__ 1F2021
 
 
@@ -617,9 +623,13 @@ must be defined for the mega48.
 #define UBRR0L  _SFR_MEM8 (0xC4)
 #define UBRR0H  _SFR_MEM8 (0xC5)
 #define UDR0    _SFR_MEM8 (0xC6)
+/** @} */
 
-/* Interrupt vectors */
-
+/**
+ * @name Interrupt Vectors
+ * 
+ */
+/**@{**/
 /* External Interrupt Request 0 */
 #define INT0_vect			_VECTOR(1)
 #define SIG_INTERRUPT0			_VECTOR(1)
@@ -721,14 +731,17 @@ must be defined for the mega48.
 #define SPM_READY_vect			_VECTOR(25)
 #define SIG_SPM_READY			_VECTOR(25)
 
-/* The mega48 and mega88 vector tables are single instruction entries (16 bits
-   per entry for an RJMP) while the mega168 table has double instruction
-   entries (32 bits per entry for a JMP). */
+/* 
+ * The mega48 and mega88 vector tables are single instruction entries (16 bits
+ * per entry for an RJMP) while the mega168 table has double instruction
+ * entries (32 bits per entry for a JMP). 
+ */
 
 #if defined (__AVR_ATmega168__)
 #  define _VECTORS_SIZE 104
 #else
 #  define _VECTORS_SIZE 52
 #endif
+/** @} */
 
 #endif /* _AVR_IOM8_H_ */

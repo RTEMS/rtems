@@ -1,11 +1,14 @@
-#ifndef LIB_RTEMS_NFS_CLIENT_H
-#define LIB_RTEMS_NFS_CLIENT_H
-
-/* public interface to the NFS client library for RTEMS */
-
-/* Author: Till Straumann <strauman@slac.stanford.edu> 2002-2003 */
+/**
+ * @file
+ *
+ * @brief Public Interface to the NFS Client Library for RTEMS
+ *
+ * @ingroup rtems-nfsclient
+ */
 
 /*
+ * Author: Till Straumann <strauman@slac.stanford.edu> 2002-2003
+ *
  * Authorship
  * ----------
  * This software (NFS-2 client implementation for RTEMS) was created by
@@ -50,6 +53,16 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
+#ifndef LIB_RTEMS_NFS_CLIENT_H
+#define LIB_RTEMS_NFS_CLIENT_H
+
+/**
+ * @defgroup rtems-nfsclient NFS Client Library
+ *
+ * @ingroup nfsclient
+ * @{
+ */
+
 #ifdef	HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -73,40 +86,41 @@
 extern "C" {
 #endif
 
-/* RPCIO driver interface.
+/** RPCIO driver interface.
  * If you need RPCIO for other purposes than NFS
  * you may want to include <rpcio.h>
 #include "rpcio.h"
  */
 
-/* Priority of daemon; may be setup prior to calling rpcUdpInit();
+/** Priority of daemon; may be setup prior to calling rpcUdpInit();
  * otherwise the network task priority from the rtems_bsdnet_config
  * is used...
  */
 extern rtems_task_priority rpciodPriority;
 
-/* Initialize the driver.
+/** Initialize the driver.
  *
  * Note, called in nfsfs initialise when mount is called.
  *
- * RETURNS: 0 on success, -1 on failure
+ * @retval 0 on success, -1 on failure
  */
 int
 rpcUdpInit(void);
 
-/* Cleanup/Stop
+/**
+ * @brief RPC cleanup and stop.
  *
- * RETURNS: 0 on success, nonzero if still in use
+ * @retval 0 on success, nonzero if still in use
  */
 int
 rpcUdpCleanup(void);
 
-/* NFS driver interface */
+/** NFS driver interface */
 
-/* Initialize the NFS driver.
+/**
+ * @brief Initialize the NFS driver.
  *
- * NOTE: The RPCIO driver must have been initialized prior to
- *       calling this.
+ * The RPCIO driver must have been initialized prior to calling this.
  *
  * Note, called in nfsfs initialise when mount is called with defaults.
  *
@@ -121,54 +135,67 @@ rpcUdpCleanup(void);
  *
  * 			Supply zero values to have the
  * 			driver chose reasonable defaults.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
  */
-void
+int
 nfsInit(int smallPoolDepth, int bigPoolDepth);
 
-/* Driver cleanup code
+/**
+ * @brief Driver cleanup code.
  *
- * RETURNS: 0 on success, nonzero if still in use
+ * @retval 0 on success, nonzero if still in use
  */
 int
 nfsCleanup(void);
 
-/* Dump a list of the currently mounted NFS to a file
+/**
+ * @brief Dump a list of the currently mounted NFS to a file.
+ *
+ * Dump a list of the currently mounted NFS to a file
  * (stdout is used in case f==NULL)
  */
 int
 nfsMountsShow(FILE *f);
 
-/*
+/**
+ * @brief Filesystem mount table mount handler.
+ *
  * Filesystem mount table mount handler. Do not call, use the mount call.
  */
-int 
+int
 rtems_nfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
                      const void                           *data);
 
-/* A utility routine to find the path leading to a
+/**
+ * @brief A utility routine to find the path leading to a
  * rtems_filesystem_location_info_t node.
  *
  * This should really be present in libcsupport...
  *
- * INPUT: 'loc' and a buffer 'buf' (length 'len') to hold the
- *        path.
- * OUTPUT: path copied into 'buf'
+ * @param[in] 'loc' and a buffer 'buf' (length 'len') to hold the path.
  *
- * RETURNS: 0 on success, RTEMS error code on error.
+ * @param[out] path copied into 'buf'
+ *
+ * @retval 0 on success, RTEMS error code on error.
  */
 rtems_status_code
 rtems_filesystem_resolve_location(char *buf, int len, rtems_filesystem_location_info_t *loc);
 
-/* Set the timeout (initial default: 10s) for NFS and mount calls.
+/**
+ * @brief Set the timeout (initial default: 10s) for NFS and mount calls.
  *
- * RETURNS 0 on success, nonzero if the requested timeout is less than
+ * Set the timeout (initial default: 10s) for NFS and mount calls.
+ *
+ * @retval 0 on success, nonzero if the requested timeout is less than
  * a clock tick or if the system clock rate cannot be determined.
  */
 
 int
 nfsSetTimeout(uint32_t timeout_ms);
 
-/* Read current timeout (in milliseconds) */
+/** Read current timeout (in milliseconds) */
 uint32_t
 nfsGetTimeout(void);
 
@@ -176,4 +203,5 @@ nfsGetTimeout(void);
 }
 #endif
 
+/** @} */
 #endif

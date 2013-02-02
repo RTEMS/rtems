@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Function Initializes Semaphore Manager
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

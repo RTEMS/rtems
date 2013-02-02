@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Correct the Time to Synchronize the System Clock
- *  @ingroup POSIX
+ *  @ingroup POSIXAPI
  */
 
 /*

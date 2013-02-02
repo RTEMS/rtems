@@ -1,44 +1,51 @@
-/*
-
-Based upon IDT provided code with the following release:
-
-This source code has been made available to you by IDT on an AS-IS
-basis. Anyone receiving this source is licensed under IDT copyrights
-to use it in any way he or she deems fit, including copying it,
-modifying it, compiling it, and redistributing it either with or
-without modifications.  No license under IDT patents or patent
-applications is to be implied by the copyright license.
-
-Any user of this software should understand that IDT cannot provide
-technical support for this software and will not be responsible for
-any consequences resulting from the use of this software.
-
-Any person who transfers this source code or any derivative work must
-include the IDT copyright notice, this paragraph, and the preceeding
-two paragraphs in the transferred software.
-
-COPYRIGHT IDT CORPORATION 1996
-LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
-
-
-/*
-**	iregdef.h - IDT R3000 register structure header file
-**
-**	Copyright 1989 Integrated Device Technology, Inc
-**	All Rights Reserved
-**
-*/
-#ifndef _RTEMS_MIPS_IREGDEF_H
-#define _RTEMS_MIPS_IREGDEF_H
-
-/*
+/**
+ *  @file iregdef.h
+ *
+ *  @brief IDT R3000 Register Structure
+ *
  * 950313: Ketan added sreg/lreg and R_SZ for 64-bit saves
  *         added Register definition for XContext reg.
  *         Look towards end of this file.
  */
+
 /*
-** register names
-*/
+ *	Copyright 1989 Integrated Device Technology, Inc
+ *	All Rights Reserved
+ *
+ * Based upon IDT provided code with the following release:
+ *
+ * This source code has been made available to you by IDT on an AS-IS
+ * basis. Anyone receiving this source is licensed under IDT copyrights
+ * to use it in any way he or she deems fit, including copying it,
+ * modifying it, compiling it, and redistributing it either with or
+ * without modifications.  No license under IDT patents or patent
+ * applications is to be implied by the copyright license.
+ *
+ * Any user of this software should understand that IDT cannot provide
+ * technical support for this software and will not be responsible for
+ * any consequences resulting from the use of this software.
+ *
+ * Any person who transfers this source code or any derivative work must
+ * include the IDT copyright notice, this paragraph, and the preceeding
+ * two paragraphs in the transferred software.
+ *
+ * COPYRIGHT IDT CORPORATION 1996
+ * LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
+ */
+
+#ifndef _RTEMS_MIPS_IREGDEF_H
+#define _RTEMS_MIPS_IREGDEF_H
+
+/**
+ *  @defgroup MipsSet_iregdef Register Structure
+ *
+ *  @ingroup MIPS
+ *
+ */
+/**@{*/
+
+/* register names */
+
 #define r0	$0
 #define r1	$1
 #define r2	$2
@@ -326,5 +333,5 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 /* Ketan till here */
 #endif
 
+/**@}*/
 #endif /* _RTEMS_MIPS_IREGDEF_H */
-

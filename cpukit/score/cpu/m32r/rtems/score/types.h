@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/types.h
+ * @file
+ *
+ * @brief Intel M32R CPU Type Definitions
+ *
+ * This include file contains type definitions pertaining to the Intel
+ * m32r processor family.
  */
 
 /*
- *  This include file contains type definitions pertaining to the Intel
- *  m32r processor family.
- *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *

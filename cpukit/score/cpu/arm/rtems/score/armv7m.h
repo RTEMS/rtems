@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @brief ARMV7M Architecture Support
+ */
+
 /*
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
@@ -15,12 +21,13 @@
 #ifndef RTEMS_SCORE_ARMV7M_H
 #define RTEMS_SCORE_ARMV7M_H
 
-#include <stdint.h>
-#include <stdbool.h>
+#include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#ifdef ARM_MULTILIB_ARCH_V7M
 
 typedef struct {
   uint32_t reserved_0;
@@ -58,6 +65,21 @@ typedef struct {
   uint32_t icsr;
 
   ARMV7M_Exception_handler *vtor;
+
+#define ARMV7M_SCB_AIRCR_VECTKEY (0x05fa << 16)
+#define ARMV7M_SCB_AIRCR_ENDIANESS (1U << 15)
+#define ARMV7M_SCB_AIRCR_PRIGROUP_SHIFT 8
+#define ARMV7M_SCB_AIRCR_PRIGROUP_MASK \
+  ((0x7U) << ARMV7M_SCB_AIRCR_PRIGROUP_SHIFT)
+#define ARMV7M_SCB_AIRCR_PRIGROUP(val) \
+  (((val) << ARMV7M_SCB_AIRCR_PRIGROUP_SHIFT) & ARMV7M_SCB_AIRCR_PRIGROUP_MASK)
+#define ARMV7M_SCB_AIRCR_PRIGROUP_GET(reg) \
+  (((val) & ARMV7M_SCB_AIRCR_PRIGROUP_MASK) >> ARMV7M_SCB_AIRCR_PRIGROUP_SHIFT)
+#define ARMV7M_SCB_AIRCR_PRIGROUP_SET(reg, val) \
+  (((reg) & ~ARMV7M_SCB_AIRCR_PRIGROUP_MASK) | ARMV7M_SCB_AIRCR_PRIGROUP(val))
+#define ARMV7M_SCB_AIRCR_SYSRESETREQ (1U << 2)
+#define ARMV7M_SCB_AIRCR_VECTCLRACTIVE (1U << 1)
+#define ARMV7M_SCB_AIRCR_VECTRESET (1U << 0)
   uint32_t aircr;
   uint32_t scr;
   uint32_t ccr;
@@ -458,14 +480,15 @@ void _ARMV7M_Set_exception_handler(
 );
 
 /**
- *  @brief ARMV7M Set Exception Priority and Handler
- *
+ * @brief ARMV7M set exception priority and handler.
  */
 void _ARMV7M_Set_exception_priority_and_handler(
   int index,
   int priority,
   ARMV7M_Exception_handler handler
 );
+
+void _ARMV7M_Exception_default( void );
 
 void _ARMV7M_Interrupt_service_enter( void );
 
@@ -474,6 +497,8 @@ void _ARMV7M_Interrupt_service_leave( void );
 void _ARMV7M_Pendable_service_call( void );
 
 void _ARMV7M_Supervisor_call( void );
+
+#endif /* ARM_MULTILIB_ARCH_V7M */
 
 #ifdef __cplusplus
 }

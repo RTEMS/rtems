@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/psignal.h
+ * @file
+ * 
+ * @brief POSIX Signals Support
  *
  * This include file defines internal information about POSIX signals.
  */
@@ -19,10 +21,12 @@
 /**
  * @defgroup POSIX_SIGNALS POSIX Signals Support
  *
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  *
  * @brief Internal Information about POSIX Signals
+ * 
  */
+/**@{**/
 
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
@@ -72,7 +76,7 @@ extern API_extensions_Post_switch_control _POSIX_signals_Post_switch;
  */
 
 /**
- *  @brief POSIX Signals Manager Initialization
+ * @brief POSIX signals manager initialization.
  */
 void _POSIX_signals_Manager_Initialization(void);
 
@@ -82,7 +86,7 @@ static inline void _POSIX_signals_Add_post_switch_extension(void)
 }
 
 /**
- * @brief POSIX Signals Thread Unlock
+ * @brief Unlock POSIX signals thread.
  *
  * XXX this routine could probably be cleaned up
  */
@@ -93,7 +97,7 @@ bool _POSIX_signals_Unblock_thread(
 );
 
 /**
- *  @brief POSIX Signals Check Signal
+ *  @brief Check POSIX signal.
  */
 bool _POSIX_signals_Check_signal(
   POSIX_API_Control  *api,
@@ -102,7 +106,7 @@ bool _POSIX_signals_Check_signal(
 );
 
 /**
- *  @brief POSIX Signals Clear Signals
+ * @brief Clear POSIX signals.
  */
 bool _POSIX_signals_Clear_signals(
   POSIX_API_Control  *api,
@@ -119,7 +123,7 @@ int killinfo(
 );
 
 /**
- *  @brief POSIX Signals Set Process Signals
+ *  @brief Set POSIX process signals.
  */
 void _POSIX_signals_Set_process_signals(
   sigset_t   mask
@@ -137,6 +141,8 @@ void _POSIX_signals_Clear_process_signals(
 #define _POSIX_signals_Continue_handler NULL
 
 void _POSIX_signals_Abnormal_termination_handler( int signo );
+
+/** @} */
 
 #endif
 /* end of file */

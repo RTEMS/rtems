@@ -1,18 +1,21 @@
 /**
  * @file rtems/rtems/status.h
  *
- * @brief Status Codes Returned from the Executive Directives
+ * @defgroup ClassicStatus Status Codes
  *
- *  This include file contains the status codes returned from the
- *  executive directives.
+ * @ingroup ClassicRTEMS
+ * @brief Status Codes Returned from Executive Directives
+ *
+ * This include file contains the status codes returned from the
+ * executive directives.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_STATUS_H

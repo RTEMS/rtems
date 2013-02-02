@@ -1,6 +1,8 @@
 /**
- * @file rtems/devnull.h
+ * @file
  *
+ * @brief RTEMS /dev/null Device Driver
+ * 
  * This include file defines the interface to the RTEMS /dev/null
  * device driver.
  */
@@ -19,14 +21,15 @@
 #ifndef _RTEMS_DEVNULL_H
 #define _RTEMS_DEVNULL_H
 
-#include <rtems/io.h> /* rtems_device_driver */
+#include <rtems/io.h>
 
 /**
- *  @defgroup libmisc_devnull Device Driver
+ *  @defgroup libmisc_devnull Null Device Driver
  *
  *  @ingroup libmisc
  */
 /**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif

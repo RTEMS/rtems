@@ -2,7 +2,7 @@
  * @file
  *
  * @brief POSIX Message Queue and Send Support
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

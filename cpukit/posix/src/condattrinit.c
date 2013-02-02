@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Initialization of Conditional Attributes
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

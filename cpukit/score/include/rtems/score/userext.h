@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreUserExt
  *
- * @brief User Extension Handler API.
+ * @brief User Extension Handler API
  */
 
 /*
@@ -36,9 +36,8 @@ typedef void User_extensions_routine RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
  * @brief The User Extension Handler provides invocation of application
  * dependent routines at critical points in the life of each thread and the
  * system as a whole.
- *
- * @{
  */
+/**@{**/
 
 /**
  * @brief Task create extension.

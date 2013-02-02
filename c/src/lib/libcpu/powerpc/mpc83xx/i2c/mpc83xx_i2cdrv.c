@@ -493,7 +493,6 @@ static rtems_status_code mpc83xx_i2c_send_addr
 \*=========================================================================*/
 {
   mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
-  bool long_addr = false;
   uint8_t addr_byte;
   rtems_status_code rc;
 
@@ -505,7 +504,6 @@ static rtems_status_code mpc83xx_i2c_send_addr
    * determine, whether short or long address is needed, determine rd/wr
    */
   if (addr > 0x7f) {
-    long_addr = true;
     addr_byte = (0xf0
 		 | ((addr >> 7) & 0x06)
 		 | ((rw) ? 1 : 0));
@@ -565,7 +563,6 @@ static int mpc83xx_i2c_read_bytes
   mpc83xx_i2c_softc_t *softc_ptr = &(((mpc83xx_i2c_desc_t *)(bh))->softc);
   rtems_status_code rc;
   unsigned char *p = buf;
-  unsigned char dummy;
 
 #if defined(DEBUG)
   printk("mpc83xx_i2c_read_bytes called... ");
@@ -579,7 +576,7 @@ static int mpc83xx_i2c_read_bytes
   /*
    * we need a dummy transfer here to start the first read
    */
-  dummy = softc_ptr->reg_ptr->i2cdr;
+  softc_ptr->reg_ptr->i2cdr;
 
   while (len-- > 0) {
     if (len == 0) {

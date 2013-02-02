@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Wait at a Barrier
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

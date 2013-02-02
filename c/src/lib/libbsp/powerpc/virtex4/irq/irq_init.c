@@ -91,7 +91,7 @@ void BSP_irqexc_off_fnc(const rtems_irq_connect_data *unused)
 /***********************************************************
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
+static int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 {
   /*
    * Handle interrupt

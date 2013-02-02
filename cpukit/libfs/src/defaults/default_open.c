@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @brief RTEMS Default Filesystem - Default Open
+ * @ingroup libfs
+ */
+
 /*
  *  COPYRIGHT (c) 2010.
  *  On-Line Applications Research Corporation (OAR).

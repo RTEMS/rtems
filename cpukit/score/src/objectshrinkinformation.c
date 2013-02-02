@@ -34,12 +34,9 @@ void _Objects_Shrink_information(
   Objects_Information *information
 )
 {
-  Objects_Control  *the_object;
-  Objects_Control  *extract_me;
   uint32_t          block_count;
   uint32_t          block;
   uint32_t          index_base;
-  uint32_t          index;
 
   /*
    * Search the list to find block or chunk with all objects inactive.
@@ -52,25 +49,24 @@ void _Objects_Shrink_information(
   for ( block = 0; block < block_count; block++ ) {
     if ( information->inactive_per_block[ block ] ==
          information->allocation_size ) {
+      Chain_Node       *node = _Chain_First( &information->Inactive );
+      const Chain_Node *tail = _Chain_Immutable_tail( &information->Inactive );
+      uint32_t          index_end = index_base + information->allocation_size;
 
-      /*
-       *  Assume the Inactive chain is never empty at this point
-       */
-      the_object = (Objects_Control *) _Chain_First( &information->Inactive );
+      while ( node != tail ) {
+        Objects_Control *object = (Objects_Control *) node;
+        uint32_t         index = _Objects_Get_index( object->id );
 
-      do {
-         index = _Objects_Get_index( the_object->id );
-         /*
-          *  Get the next node before the node is extracted
-          */
-         extract_me = the_object;
-         the_object = (Objects_Control *) the_object->Node.next;
-         if ((index >= index_base) &&
-             (index < (index_base + information->allocation_size))) {
-           _Chain_Extract( &extract_me->Node );
-         }
-       }
-       while ( the_object );
+        /*
+         *  Get the next node before the node is extracted
+         */
+        node = _Chain_Next( node );
+
+        if ( index >= index_base && index < index_end ) {
+          _Chain_Extract( &object->Node );
+        }
+      }
+
       /*
        *  Free the memory and reset the structures in the object' information
        */

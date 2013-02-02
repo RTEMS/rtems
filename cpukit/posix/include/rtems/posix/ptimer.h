@@ -1,5 +1,7 @@
 /**
- * @file rtems/posix/ptimer.h
+ * @file
+ * 
+ * @brief POSIX Timers Private Support
  *
  * This include file contains all the private support information for
  * POSIX timers.
@@ -21,11 +23,12 @@
 #define _RTEMS_POSIX_PTIMER_H
 
 /**
- *  @defgroup POSIX_PRIV_TIMERS Timers
+ * @defgroup POSIX_PRIV_TIMERS POSIX Timers
  *
- *  @ingroup POSIX
+ * @ingroup POSIXAPI
+ * 
  */
-/**@{*/
+/**@{**/
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,16 +92,18 @@ int timer_gettime(
 );
 
 /**
- *  @brief Get Overrun Count for a POSIX Per-Process Timer
+ * @brief Get overrun count for a POSIX per-process timer.
  * 
- *  The expiration of a timer must increase by one a counter.
- *  After the signal handler associated to the timer finishes
- *  its execution, _POSIX_Timer_TSR will have to set this counter to 0.
+ * The expiration of a timer must increase by one a counter.
+ * After the signal handler associated to the timer finishes
+ * its execution, _POSIX_Timer_TSR will have to set this counter to 0.
  * 
- *  14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
+ * 14.2.4 Per-Process Timers, P1003.1b-1993, p. 267
  */
 int timer_getoverrun(
   timer_t   timerid
 );
-/**@}*/
+
+/** @} */
+
 #endif

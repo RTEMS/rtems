@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/threadmp.h
  *
+ *  @brief Multiprocessing Portion of the Thread Package
+ *
  *  This include file contains the specification for all routines
  *  and data specific to the multiprocessing portion of the thread package.
  */
@@ -20,6 +22,8 @@
 /**
  *  @defgroup ScoreThreadMP Thread Handler Multiprocessing Support
  *
+ *  @ingroup Score
+ *
  *  This handler encapsulates functionality which is related to managing
  *  threads in a multiprocessor system configuration.  This handler must
  *  manage proxies which represent remote threads blocking on local
@@ -32,7 +36,7 @@ extern "C" {
 #endif
 
 /**
- *  @brief MP Thread Handler Initialization
+ *  @brief Initialize MP thread handler.
  *
  *  This routine initializes the multiprocessing portion of the Thread Handler.
  */
@@ -41,7 +45,8 @@ void _Thread_MP_Handler_initialization (
 );
 
 /**
- *  @brief MP Thread Proxy Allocate
+ *  @brief Allocate a MP proxy control block from
+ *  the inactive chain of free proxy control blocks.
  *
  *  This  allocates a proxy control block from
  *  the inactive chain of free proxy control blocks.
@@ -54,7 +59,8 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 );
 
 /**
- *  @brief MP Thread Proxy Find
+ *  @brief Removes the MP proxy control block for the specified
+ *  id from the active chain of proxy control blocks.
  *
  *  This function removes the proxy control block for the specified
  *  id from the active chain of proxy control blocks.
@@ -64,14 +70,14 @@ Thread_Control *_Thread_MP_Find_proxy (
 );
 
 /**
- *  @brief Active Proxy Set
+ *  @brief Manage the active set MP proxies.
  *
  * The following chain is used to manage the active set proxies.
  */
 SCORE_EXTERN Chain_Control _Thread_MP_Active_proxies;
 
 /**
- *  @brief Inactive Proxy Set
+ *  @brief Manage the inactive set of MP proxies.
  *
  * The following chain is used to manage the inactive set of proxies.
  */

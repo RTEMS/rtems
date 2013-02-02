@@ -1,12 +1,14 @@
-/** 
- *  @file  rtems/score/states.inl
+/**
+ * @file
  *
- *  This file contains the static inline implementation of the inlined
- *  routines associated with thread state information.
+ * @brief Inlined Routines Associated with Thread State Information
+ *
+ * This file contains the static inline implementation of the inlined
+ * routines associated with thread state information.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -24,18 +26,18 @@
 #include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
 
 /**
- *  @addtogroup ScoreStates 
- *  @{
+ * @addtogroup ScoreStates
  */
+/**@{**/
 
 /**
- *  This function sets the given states_to_set into the current_state
- *  passed in.  The result is returned to the user in current_state.
+ * This function sets the given states_to_set into the current_state
+ * passed in.  The result is returned to the user in current_state.
  *
- *  @param[in] states_to_set is the state bits to set
- *  @param[in] current_state is the state set to add them to
+ * @param[in] states_to_set is the state bits to set
+ * @param[in] current_state is the state set to add them to
  *
- *  @return This method returns the updated states value.
+ * @return This method returns the updated states value.
  */
 RTEMS_INLINE_ROUTINE States_Control _States_Set (
   States_Control states_to_set,
@@ -46,13 +48,13 @@ RTEMS_INLINE_ROUTINE States_Control _States_Set (
 }
 
 /**
- *  This function clears the given states_to_clear into the current_state
- *  passed in.  The result is returned to the user in current_state.
+ * This function clears the given states_to_clear into the current_state
+ * passed in.  The result is returned to the user in current_state.
  *
- *  @param[in] states_to_set is the state bits to clean
- *  @param[in] current_state is the state set to remove them from
+ * @param[in] states_to_clear is the state bits to clean
+ * @param[in] current_state is the state set to remove them from
  *
- *  @return This method returns the updated states value.
+ * @return This method returns the updated states value.
  */
 RTEMS_INLINE_ROUTINE States_Control _States_Clear (
   States_Control states_to_clear,
@@ -63,12 +65,12 @@ RTEMS_INLINE_ROUTINE States_Control _States_Clear (
 }
 
 /**
- *  This function returns true if the_states indicates that the
- *  state is READY, and false otherwise.
+ * This function returns true if the_states indicates that the
+ * state is READY, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_ready (
   States_Control the_states
@@ -78,12 +80,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_ready (
 }
 
 /**
- *  This function returns true if the DORMANT state is the ONLY state
- *  set in the_states, and false otherwise.
+ * This function returns true if the DORMANT state is the ONLY state
+ * set in the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_only_dormant (
   States_Control the_states
@@ -93,12 +95,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_only_dormant (
 }
 
 /**
- *  This function returns true if the DORMANT state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the DORMANT state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
   States_Control the_states
@@ -108,12 +110,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
 }
 
 /**
- *  This function returns true if the SUSPENDED state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the SUSPENDED state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
   States_Control the_states
@@ -123,12 +125,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
 }
 
 /**
- *  This function returns true if the TRANSIENT state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the TRANSIENT state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_transient (
   States_Control the_states
@@ -138,12 +140,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_transient (
 }
 
 /**
- *  This function returns true if the DELAYING state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the DELAYING state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
   States_Control the_states
@@ -153,12 +155,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_BUFFER state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_BUFFER state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_buffer (
   States_Control the_states
@@ -168,12 +170,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_buffer (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_SEGMENT state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_SEGMENT state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_segment (
   States_Control the_states
@@ -183,12 +185,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_segment (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_MESSAGE state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_MESSAGE state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_message (
   States_Control the_states
@@ -198,12 +200,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_message (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_EVENT state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_EVENT state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_event (
   States_Control the_states
@@ -213,12 +215,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_event (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_SYSTEM_EVENT state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_SYSTEM_EVENT state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_system_event (
   States_Control the_states
@@ -228,12 +230,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_system_event (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_MUTEX state
- *  is set in the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_MUTEX state
+ * is set in the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_mutex (
   States_Control the_states
@@ -243,12 +245,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_mutex (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_SEMAPHORE state
- *  is set in the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_SEMAPHORE state
+ * is set in the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_semaphore (
   States_Control the_states
@@ -258,12 +260,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_semaphore (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_TIME state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_TIME state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_time (
   States_Control the_states
@@ -273,12 +275,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_time (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_TIME state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_TIME state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
   States_Control the_states
@@ -288,12 +290,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
 }
 
 /**
- *  This function returns true if the WAITING_FOR_PERIOD state is set in
- *  the_states, and false otherwise.
+ * This function returns true if the WAITING_FOR_PERIOD state is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_period (
   States_Control the_states
@@ -303,12 +305,12 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_period (
 }
 
 /**
- *  This function returns true if the task's state is set in
- *  way that allows it to be interrupted by a signal.
+ * This function returns true if the task's state is set in
+ * way that allows it to be interrupted by a signal.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
   States_Control the_states
@@ -318,13 +320,13 @@ RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
 
 }
 /**
- *  This function returns true if one of the states which indicates
- *  that a task is blocked waiting for a local resource is set in
- *  the_states, and false otherwise.
+ * This function returns true if one of the states which indicates
+ * that a task is blocked waiting for a local resource is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the desired state condition is set.
+ * @return This method returns true if the desired state condition is set.
  */
 
 RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
@@ -335,14 +337,14 @@ RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
 }
 
 /**
- *  This function returns true if one of the states which indicates
- *  that a task is blocked waiting for a local resource is set in
- *  the_states, and false otherwise.
+ * This function returns true if one of the states which indicates
+ * that a task is blocked waiting for a local resource is set in
+ * the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the state indicates that the
- *          assocated thread is waiting on a thread queue.
+ * @return This method returns true if the state indicates that the
+ *         assocated thread is waiting on a thread queue.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_on_thread_queue (
   States_Control the_states
@@ -352,13 +354,13 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_on_thread_queue (
 }
 
 /**
- *  This function returns true if one of the states which indicates
- *  that a task is blocked is set in the_states, and false otherwise.
+ * This function returns true if one of the states which indicates
+ * that a task is blocked is set in the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
+ * @param[in] the_states is the task state set to test
  *
- *  @return This method returns true if the state indicates that the
- *          assocated thread is blocked.
+ * @return This method returns true if the state indicates that the
+ *         assocated thread is blocked.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_blocked (
   States_Control the_states
@@ -368,13 +370,13 @@ RTEMS_INLINE_ROUTINE bool _States_Is_blocked (
 }
 
 /**
- *  This function returns true if any of the states in the mask
- *  are set in the_states, and false otherwise.
+ * This function returns true if any of the states in the mask
+ * are set in the_states, and false otherwise.
  *
- *  @param[in] the_states is the task state set to test
- *  @param[in] mask is the state bits to test for
+ * @param[in] the_states is the task state set to test
+ * @param[in] mask is the state bits to test for
  *
- *  @return This method returns true if the indicates state condition is set.
+ * @return This method returns true if the indicates state condition is set.
  */
 RTEMS_INLINE_ROUTINE bool _States_Are_set (
   States_Control the_states,
@@ -384,7 +386,7 @@ RTEMS_INLINE_ROUTINE bool _States_Are_set (
    return ( (the_states & mask) != STATES_READY);
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

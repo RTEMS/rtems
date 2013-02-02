@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Canceling Execution of a Thread
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

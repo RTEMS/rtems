@@ -1,17 +1,20 @@
 /**
- * @file rtems/asm.h
+ * @file
  *
- *  This include file attempts to address the problems
- *  caused by incompatible flavors of assemblers and
- *  toolsets.  It primarily addresses variations in the
- *  use of leading underscores on symbols and the requirement
- *  that register names be preceded by a %.
+ * @brief Address the Problems Caused by Incompatible Flavor of
+ * Assemblers and Toolsets
+ *
+ * This include file attempts to address the problems
+ * caused by incompatible flavors of assemblers and
+ * toolsets.  It primarily addresses variations in the
+ * use of leading underscores on symbols and the requirement
+ * that register names be preceded by a %.
+ *
+ * NOTE: The spacing in the use of these macros
+ *       is critical to them working as advertised.
  */
 
 /*
- *  NOTE: The spacing in the use of these macros
- *        is critical to them working as advertised.
- *
  *  COPYRIGHT:
  *
  *  This file is based on similar code found in newlib available
@@ -69,23 +72,23 @@
  */
 #define	r0	REG(r0)
 #define r1	REG(r1)
-#define r2	REG(r2)	
-#define r3	REG(r3)	
-#define r4	REG(r4)	
-#define r5	REG(r5)	
-#define r6	REG(r6)	
-#define r7	REG(r7)	
+#define r2	REG(r2)
+#define r3	REG(r3)
+#define r4	REG(r4)
+#define r5	REG(r5)
+#define r6	REG(r6)
+#define r7	REG(r7)
 
 #define	er0	REG(er0)
 #define er1	REG(er1)
-#define er2	REG(er2)	
-#define er3	REG(er3)	
-#define er4	REG(er4)	
-#define er5	REG(er5)	
-#define er6	REG(er6)	
-#define er7	REG(er7)	
+#define er2	REG(er2)
+#define er3	REG(er3)
+#define er4	REG(er4)
+#define er5	REG(er5)
+#define er6	REG(er6)
+#define er7	REG(er7)
 
-#define sp	REG(sp)	
+#define sp	REG(sp)
 
 /*
  *  Define macros to handle section beginning and ends.

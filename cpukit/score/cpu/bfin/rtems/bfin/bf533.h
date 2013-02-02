@@ -1,14 +1,18 @@
-/*  bfin.h
+/**
+ * @file
  *
- *  This file defines basic MMR for the Blackfin 531/532/533 CPU.
- *  The MMR have been taken from the ADSP-BF533 Blackfin Processor
- *  Hardware Reference from Analog Devices. Mentioned Chapters
- *  refer to this Documentation.
+ * @brief Basic MMR for the Blackfin 531/532/533 CPU
  *
- *  The Blackfins MMRs are divided into core MMRs (0xFFE0 0000–0xFFFF FFFF)
- *  and System MMRs (0xFFC0 0000–0xFFE0 0000). The core MMRs are defined
- *  in bfin.h which is included.
+ * This file defines basic MMR for the Blackfin 531/532/533 CPU.
+ * The MMR have been taken from the ADSP-BF533 Blackfin Processor
+ * Hardware Reference from Analog Devices. Mentioned Chapters
+ * refer to this Documentation.
  *
+ * The Blackfins MMRs are divided into core MMRs (0xFFE0 0000–0xFFFF FFFF)
+ * and System MMRs (0xFFC0 0000–0xFFE0 0000). The core MMRs are defined
+ * in bfin.h which is included.
+ */
+/*
  *  COPYRIGHT (c) 2006.
  *  Atos Automacao Industrial LTDA.
  *             modified by Alain Schaefer <alain.schaefer@easc.ch>

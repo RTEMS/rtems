@@ -1,11 +1,13 @@
 /**
- * @file rtems/score/types.h
+ * @file
+ * 
+ * @brief Motorola M68K CPU Type Definitions
+ * 
+ * This include file contains type definitions pertaining to the Motorola
+ * m68xxx processor family.
  */
 
 /*
- *  This include file contains type definitions pertaining to the Motorola
- *  m68xxx processor family.
- *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *

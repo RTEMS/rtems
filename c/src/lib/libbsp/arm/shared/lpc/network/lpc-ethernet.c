@@ -1323,6 +1323,9 @@ static int lpc_eth_up_or_down(lpc_eth_driver_entry *e, bool up)
 
     lpc_eth_config_module_enable();
 
+    /* Enable RX/TX reset and disable soft reset */
+    lpc_eth->mac1 = 0xf00;
+
     /* Initialize PHY */
     lpc_eth->mcfg = ETH_MCFG_CLOCK_SELECT(0x7);
     eno = lpc_eth_phy_up(e);

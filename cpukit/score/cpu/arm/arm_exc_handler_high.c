@@ -42,7 +42,7 @@ static void _defaultExcHandler (CPU_Exception_frame *ctx)
     printk("----------------------------------------------------------\n\r");
 #if 1
     printk("Exception 0x%x caught at PC 0x%x by thread %d\n",
-           ctx->register_ip, ctx->register_lr - 4,
+           ctx->vector, ctx->register_lr - 4,
            _Thread_Executing->Object.id);
 #endif
     printk("----------------------------------------------------------\n\r");

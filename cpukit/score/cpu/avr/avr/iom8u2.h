@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @brief Definitions for ATmega8U2
+ *
+ * This file should only be included from <avr/io.h>, never directly.
+ */
+
 /* Copyright (c) 2009 Atmel Corporation
    All rights reserved.
 
@@ -47,6 +55,13 @@
 #ifndef _AVR_ATmega8U2_H_
 #define _AVR_ATmega8U2_H_ 1
 
+/**
+ * @defgroup AvrDef_iom8u2 ATmega8U2 Definitions
+ *
+ * @ingroup avr
+ *
+ */
+/**@{**/
 
 /* Registers and associated bit numbers. */
 
@@ -960,7 +975,9 @@
 #define SIGNATURE_1 0x93
 #define SIGNATURE_2 0x89
 
-
 /* Device Pin Definitions */
+
+/** @} */
+
 #endif /* _AVR_ATmega8U2_H_ */
 

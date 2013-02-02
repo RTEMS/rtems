@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/schedulersimplesmp.h
  *
+ *  @brief Manipulation of Threads on a Simple-Priority-Based Ready Queue
+ *
  *  This include file contains all the constants and structures associated
  *  with the manipulation of threads on a simple-priority-based ready queue.
  *  This implementation is SMP-aware and schedules across multiple cores.
@@ -21,7 +23,9 @@
 #define _RTEMS_SCORE_SCHEDULERSIMPLE_SMP_H
 
 /**
- *  @addtogroup ScoreScheduler
+ *  @defgroup ScoreSchedulerSMP Simple SMP Scheduler
+ *
+ *  @ingroup ScoreScheduler
  *
  *  The Simple SMP Scheduler attempts to faithfully implement the
  *  behaviour of the Deterministic Priority Scheduler while spreading
@@ -62,7 +66,7 @@ extern "C" {
   }
 
 /**
- *  @brief Scheduler Simple SMP Schedule Method
+ *  @brief Allocates ready SMP threads to individual cores in an SMP system.
  *
  *  This routine allocates ready threads to individual cores in an SMP
  *  system.  If the allocation results in a new heir which requires
@@ -71,7 +75,7 @@ extern "C" {
 void _Scheduler_simple_smp_Schedule( void );
 
 /**
- *  @brief Scheduler Simple SMP Block Method
+ *  @brief Remove SMP @a the_thread from the ready queue.
  *
  *  This routine removes @a the_thread from the scheduling decision,
  *  that is, removes it from the ready queue.  It performs
@@ -85,7 +89,8 @@ void _Scheduler_simple_smp_Block(
 );
 
 /**
- *  @brief Scheduler Simple SMP Unblock Method
+ *  @brief Adds SMP @a the_thread to the ready queue and updates any
+ *  appropriate scheduling variables, for example the heir thread.
  *
  *  This routine adds @a the_thread to the scheduling decision,
  *  that is, adds it to the ready queue and updates any appropriate
@@ -98,7 +103,7 @@ void _Scheduler_simple_smp_Unblock(
 );
 
 /**
- *  @brief Scheduler Simple SMP Tick Method
+ *  @brief Invoked as part of processing each SMP clock tick.
  *
  *  This routine is invoked as part of processing each clock tick.
  *  It is responsible for determining if the current thread allows

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Manages the Trace and Debugging Features of the RTEMS RFS File System
+ * @brief Manages the Trace and Debugging Features of the
+ * RTEMS RFS File System
  *
- * @ingroup rtems-rfs
+ * @ingroup rtems_rfs
  *
  * RTEMS File Systems Trace manages the trace and debugging features of the
  * RTEMS RFS file system. The design allows all tracing code and strings to be
@@ -87,7 +88,8 @@ typedef uint64_t rtems_rfs_trace_mask;
  * Call to check if this part is bring traced. If RTEMS_RFS_TRACE is defined to
  * 0 the code is dead code elminiated when built with -Os, -O2, or higher.
  *
- * @param mask The part of the API to trace.
+ * @param[in] mask is the part of the API to trace.
+ *
  * @retval true Tracing is active for the mask.
  * @retval false Do not trace.
  */
@@ -100,8 +102,9 @@ bool rtems_rfs_trace (rtems_rfs_trace_mask mask);
 /**
  * Set the mask.
  *
- * @param mask The mask bits to set.
- * @return The previous mask.
+ * @param[in] mask are the mask bits to set.
+ *
+ * @retval mask The previous mask.
  */
 #if RTEMS_RFS_TRACE
 rtems_rfs_trace_mask rtems_rfs_trace_set_mask (rtems_rfs_trace_mask mask);
@@ -112,8 +115,9 @@ rtems_rfs_trace_mask rtems_rfs_trace_set_mask (rtems_rfs_trace_mask mask);
 /**
  * Clear the mask.
  *
- * @param mask The mask bits to clear.
- * @return The previous mask.
+ * @param[in] mask are the mask bits to clear.
+ *
+ * @retval mask The previous mask.
  */
 #if RTEMS_RFS_TRACE
 rtems_rfs_trace_mask rtems_rfs_trace_clear_mask (rtems_rfs_trace_mask mask);

@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreAPIMutex
  *
- * @brief API Mutex Handler API.
+ * @brief API Mutex Handler API
  */
 
 /*
@@ -28,9 +28,8 @@ extern "C" {
  * @ingroup Score
  *
  * @brief Provides routines to ensure mutual exclusion on API level.
- *
- * @{
  */
+/**@{**/
 
 #include <rtems/score/coremutex.h>
 #include <rtems/score/isr.h>
@@ -62,7 +61,7 @@ SCORE_EXTERN Objects_Information _API_Mutex_Information;
  *  The value @a maximum_mutexes is the maximum number of API mutexes that may
  *  exist at any time.
  *
- *  @param[in] Maximum_mutexex is the maximum number of API mutexes.
+ *  @param[in] maximum_mutexes is the maximum number of API mutexes.
  */
 void _API_Mutex_Initialization( uint32_t maximum_mutexes );
 
@@ -76,11 +75,11 @@ void _API_Mutex_Allocate( API_Mutex_Control **mutex );
  *  @brief Acquires the specified API mutex.
  */
 void _API_Mutex_Lock(
-   API_Mutex_Control *mutex 
+   API_Mutex_Control *mutex
    );
 
 /**
- *  @brief Releases the Specified API Mutex
+ *  @brief Releases the specified API mutex.
  *
  *  Releases the specified @a mutex.
  *
@@ -100,12 +99,11 @@ void _API_Mutex_Unlock( API_Mutex_Control *mutex );
  * When the APIs all use this for allocation and deallocation protection, then
  * this possibly should be renamed and moved to a higher level in the
  * hierarchy.
- *
- * @{
  */
+/**@{**/
 
 /**
- *  @brief Memory Allocation Mutex
+ *  @brief Memory allocation mutex.
  *
  *  This points to the API Mutex instance used to ensure that only
  *  one thread at a time is allocating or freeing memory.
@@ -113,7 +111,7 @@ void _API_Mutex_Unlock( API_Mutex_Control *mutex );
 SCORE_EXTERN API_Mutex_Control *_RTEMS_Allocator_Mutex;
 
 /**
- *  @brief Macro to Ease Locking the Allocator Mutex
+ *  @brief Macro to ease locking the allocator mutex.
  *
  *  This macro makes it explicit that one is locking the allocator mutex.
  */
@@ -121,7 +119,7 @@ SCORE_EXTERN API_Mutex_Control *_RTEMS_Allocator_Mutex;
   _API_Mutex_Lock( _RTEMS_Allocator_Mutex )
 
 /**
- *  @brief Macro to Ease Unlocking the Allocator Mutex
+ *  @brief Macro to ease unlocking the allocator mutex.
  *
  *  This macro makes it explicit that one is unlocking the allocator mutex.
  */

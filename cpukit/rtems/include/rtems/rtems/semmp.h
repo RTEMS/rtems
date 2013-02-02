@@ -1,16 +1,21 @@
 /**
  * @file rtems/rtems/semmp.h
  *
- *  This include file contains all the constants and structures associated
- *  with the Multiprocessing Support in the Semaphore Manager.
+ * @defgroup ClassicSEM Semaphore MP Support
+ *
+ * @ingroup ClassicRTEMS
+ * @brief Semaphore Manager MP Support
+ *
+ * This include file contains all the constants and structures associated
+ * with the Multiprocessing Support in the Semaphore Manager.
  */
 
-/*  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+/* COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #ifndef _RTEMS_RTEMS_SEMMP_H
@@ -142,12 +147,12 @@ Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void );
 /**
  * @brief Semaphore Core Mutex MP Support
  *
- *  This function processes the global actions necessary for remote
- *  accesses to a global semaphore based on a core mutex.  This function
- *  is called by the core.
+ * This function processes the global actions necessary for remote
+ * accesses to a global semaphore based on a core mutex. This function
+ * is called by the core.
  *
- *  @param[in] the_thread the remote thread the semaphore was surrendered to
- *  @param[in] id is the id of the surrendered semaphore
+ * @param[in] the_thread the remote thread the semaphore was surrendered to
+ * @param[in] id is the id of the surrendered semaphore
  */
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
@@ -155,14 +160,14 @@ void  _Semaphore_Core_mutex_mp_support (
 );
 
 /**
- *  @brief Semaphore Core MP Support
+ * @brief Semaphore Core MP Support
  *
- *  This function processes the global actions necessary for remote
- *  accesses to a global semaphore based on a core semaphore.  This function
- *  is called by the core.
+ * This function processes the global actions necessary for remote
+ * accesses to a global semaphore based on a core semaphore. This function
+ * is called by the core.
  *
- *  @param[in] the_thread the remote thread the semaphore was surrendered to
- *  @param[in] id is the id of the surrendered semaphore
+ * @param[in] the_thread the remote thread the semaphore was surrendered to
+ * @param[in] id is the id of the surrendered semaphore
  */
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,

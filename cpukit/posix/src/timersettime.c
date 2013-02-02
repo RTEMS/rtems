@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Function Arms or Disarms the Timer Identified by timerid 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

@@ -1,0 +1,5 @@
+*** POSIX TIME TEST PSXTMMUTEX07 ***
+pthread_mutex_getprioceiling 11
+pthread_mutex_setprioceiling 40
+pthread_mutex_getprioceiling 12
+*** END OF POSIX TIME TEST PSXTMMUTEX07 ***

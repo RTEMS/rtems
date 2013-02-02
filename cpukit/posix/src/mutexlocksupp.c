@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Support Call to function Enables Locking of Mutex Object 
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

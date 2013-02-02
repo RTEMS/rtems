@@ -2,7 +2,7 @@
  * @file
  *
  * @brief execlp()
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*

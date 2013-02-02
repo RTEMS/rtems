@@ -17,6 +17,8 @@ USER anonymous
 230 User logged in.
 TYPE I
 200 Type set to I.
+SIZE a.txt
+213 1102
 PASV
 227 Entering passive mode (127,0,0,1,4,4).
 RETR a.txt
@@ -41,6 +43,8 @@ USER anonymous
 230 User logged in.
 TYPE I
 200 Type set to I.
+SIZE b.txt
+213 1102
 PASV
 227 Entering passive mode (127,0,0,1,4,10).
 RETR b.txt

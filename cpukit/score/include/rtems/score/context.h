@@ -1,6 +1,8 @@
 /**
  *  @file  rtems/score/context.h
  *
+ *  @brief Information About Each Thread's Context
+ *
  *  This include file contains all information about each thread's context.
  */
 
@@ -36,7 +38,7 @@ extern "C" {
 #include <rtems/score/cpu.h>
 
 /**
- *  @brief Size of Floating Point Context Area
+ *  @brief Size of floating point context area.
  *
  *  This constant defines the number of bytes required
  *  to store a full floating point context.
@@ -44,7 +46,7 @@ extern "C" {
 #define CONTEXT_FP_SIZE CPU_CONTEXT_FP_SIZE
 
 /**
- *  @brief Initialize Context Area
+ *  @brief Initialize context area.
  *
  *  This routine initializes @a _the_context such that the stack
  *  pointer, interrupt level, and entry point are correct for the
@@ -79,7 +81,7 @@ extern "C" {
 #endif
 
 /**
- *  @brief Perform Context Switch
+ *  @brief Perform context switch.
  *
  *  This routine saves the current context into the @a _executing
  *  context record and restores the context specified by @a _heir.
@@ -91,7 +93,7 @@ extern "C" {
    _CPU_Context_switch( _executing, _heir )
 
 /**
- *  @brief Restart Currently Executing Thread
+ *  @brief Restart currently executing thread.
  *
  *  This routine restarts the calling thread by restoring its initial
  *  stack pointer and returning to the thread's entry point.
@@ -103,7 +105,7 @@ extern "C" {
 
 #if defined(RTEMS_SMP)
 /*
- *  @brief Switch to First Task on Secondary Core
+ *  @brief Switch to first task on secondary core.
  *
  *  This routine is only used to switch to the first task on a
  *  secondary core in an SMP configuration.  Since the switch
@@ -119,7 +121,7 @@ extern "C" {
 #endif
 
 /**
- *  @brief Return Starting Address of Floating Point Context
+ *  @brief Return starting address of floating point context.
  *
  *  This function returns the starting address of the floating
  *  point context save area.  It is assumed that the are reserved
@@ -129,13 +131,13 @@ extern "C" {
  *         context save area.
  *  @param[in] _offset is the offset into the floating point area
  *
- *  @return the initial FP context pointer
+ *  @retval the initial FP context pointer
  */
 #define _Context_Fp_start( _base, _offset ) \
    _CPU_Context_Fp_start( (_base), (_offset) )
 
 /**
- *  @brief Initialize Floating Point Context Area
+ *  @brief Initialize floating point context area.
  *
  *  This routine initializes the floating point context save
  *  area to contain an initial known state.
@@ -147,7 +149,7 @@ extern "C" {
    _CPU_Context_Initialize_fp( _fp_area )
 
 /**
- *  @brief Restore Floating Point Context Area
+ *  @brief Restore floating point context area.
  *
  *  This routine restores the floating point context contained
  *  in the @a _fp area.  It is assumed that the current
@@ -160,7 +162,7 @@ extern "C" {
    _CPU_Context_restore_fp( _fp )
 
 /**
- *  @brief Save Floating Point Context Area
+ *  @brief Save floating point context area.
  *
  *  This routine saves the current floating point context
  *  in the @a _fp area.

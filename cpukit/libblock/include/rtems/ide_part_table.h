@@ -1,7 +1,7 @@
 /**
- * @file rtems/ide_part_table.h
- *
- * Support for "MS-DOS-style" partition tables
+ * @file
+ * 
+ * @brief "MS-DOS-style" Partition Tables Support
  */
 
 /*

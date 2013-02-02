@@ -1914,38 +1914,48 @@ session(rtems_task_argument arg)
   while(1)
   {
     rtems_event_set set;
+    int rv;
 
     rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
       &set);
 
     chroot_made = chroot_made || chroot(ftpd_root) == 0;
 
+    rv = chroot_made ? chdir("/") : -1;
+
     errno = 0;
 
-    send_reply(info, 220, FTPD_SERVER_MESSAGE);
-
-    while (1)
+    if (rv == 0)
     {
-      char buf[FTPD_BUFSIZE];
-      char *cmd, *opts, *args;
+      send_reply(info, 220, FTPD_SERVER_MESSAGE);
 
-      if (fgets(buf, FTPD_BUFSIZE, info->ctrl_fp) == NULL)
+      while (1)
       {
-        syslog(LOG_INFO, "ftpd: Connection aborted.");
-        break;
-      }
+        char buf[FTPD_BUFSIZE];
+        char *cmd, *opts, *args;
 
-      split_command(buf, &cmd, &opts, &args);
+        if (fgets(buf, FTPD_BUFSIZE, info->ctrl_fp) == NULL)
+        {
+          syslog(LOG_INFO, "ftpd: Connection aborted.");
+          break;
+        }
 
-      if (!strcmp("QUIT", cmd))
-      {
-        send_reply(info, 221, "Goodbye.");
-        break;
+        split_command(buf, &cmd, &opts, &args);
+
+        if (!strcmp("QUIT", cmd))
+        {
+          send_reply(info, 221, "Goodbye.");
+          break;
+        }
+        else
+        {
+          exec_command(info, cmd, args);
+        }
       }
-      else
-      {
-        exec_command(info, cmd, args);
-      }
+    }
+    else
+    {
+      send_reply(info, 421, "Service not available, closing control connection.");
     }
 
     /* Close connection and put ourselves back into the task pool. */
@@ -1954,8 +1964,6 @@ session(rtems_task_argument arg)
     free(info->user);
     free(info->pass);
     task_pool_release(info);
-
-    chdir("/");
   }
 }
 

@@ -1,8 +1,10 @@
-/** 
- *  @file  rtems/score/prioritybitmap.inl
+/**
+ * @file
  *
- *  This file contains the static inline implementation of all inlined
- *  routines in the Priority Handler bit map implementation
+ * @brief Inlined Routines in the Priority Handler Bit Map Implementation
+ *
+ * This file contains the static inline implementation of all inlined
+ * routines in the Priority Handler bit map implementation
  */
 
 /*
@@ -22,14 +24,14 @@
 #define _RTEMS_SCORE_PRIORITYBITMAP_INL
 
 /**
- *  @addtogroup ScorePriority 
- *  @{
+ * @addtogroup ScorePriority
  */
+/**@{**/
 
 #include <rtems/score/bitfield.h>
 
 /**
- *  This function returns the major portion of the_priority.
+ * This function returns the major portion of the_priority.
  */
 
 RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Major (
@@ -40,7 +42,7 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Major (
 }
 
 /**
- *  This function returns the minor portion of the_priority.
+ * This function returns the minor portion of the_priority.
  */
 
 RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Minor (
@@ -51,23 +53,23 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Minor (
 }
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
- 
+
 /**
- *  This function returns the mask associated with the major or minor
- *  number passed to it.
+ * This function returns the mask associated with the major or minor
+ * number passed to it.
  */
- 
+
 RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Mask (
   uint32_t   bit_number
 )
 {
   return (Priority_bit_map_Control)(0x8000u >> bit_number);
 }
- 
+
 /**
- *  This function returns the mask bit inverted.
+ * This function returns the mask bit inverted.
  */
- 
+
 RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Mask_invert (
   uint32_t   mask
 )
@@ -75,13 +77,13 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Mask_invert (
   return (Priority_bit_map_Control)(~mask);
 }
 
- 
+
 /**
- *  This function translates the bit numbers returned by the bit scan
- *  of a priority bit field into something suitable for use as
- *  a major or minor component of a priority.
+ * This function translates the bit numbers returned by the bit scan
+ * of a priority bit field into something suitable for use as
+ * a major or minor component of a priority.
  */
- 
+
 RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
   uint32_t   bit_number
 )
@@ -96,7 +98,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
  */
 
 /**
- *  This routine performs the initialization necessary for this handler.
+ * This routine performs the initialization necessary for this handler.
  */
 
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Handler_initialization( void )
@@ -109,8 +111,8 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Handler_initialization( void )
 }
 
 /**
- *  This routine uses the_priority_map to update the priority
- *  bit maps to indicate that a thread has been readied.
+ * This routine uses the_priority_map to update the priority
+ * bit maps to indicate that a thread has been readied.
  */
 
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
@@ -122,9 +124,9 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
 }
 
 /**
- *  This routine uses the_priority_map to update the priority
- *  bit maps to indicate that a thread has been removed from the
- *  ready state.
+ * This routine uses the_priority_map to update the priority
+ * bit maps to indicate that a thread has been removed from the
+ * ready state.
  */
 
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
@@ -137,8 +139,8 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
 }
 
 /**
- *  This function returns the priority of the highest priority
- *  ready thread.
+ * This function returns the priority of the highest priority
+ * ready thread.
  */
 
 RTEMS_INLINE_ROUTINE Priority_Control _Priority_bit_map_Get_highest( void )
@@ -154,9 +156,9 @@ RTEMS_INLINE_ROUTINE Priority_Control _Priority_bit_map_Get_highest( void )
 }
 
 /**
- *  This routine initializes the_priority_map so that it
- *  contains the information necessary to manage a thread
- *  at new_priority.
+ * This routine initializes the_priority_map so that it
+ * contains the information necessary to manage a thread
+ * at new_priority.
  */
 
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
@@ -185,7 +187,7 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
   the_priority_map->block_minor = (Priority_bit_map_Control)(~((uint32_t)mask));
 }
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

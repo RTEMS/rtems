@@ -1,8 +1,10 @@
 /**
- *  @file rtems/posix/key.inl
+ * @file
+ * 
+ * @brief Private Inlined Routines for POSIX Key's
  *
- *  This include file contains the static inline implementation of the private 
- *  inlined routines for POSIX key's.
+ * This include file contains the static inline implementation of the private 
+ * inlined routines for POSIX key's.
  */
 
 /*
@@ -22,10 +24,10 @@
 #define _RTEMS_POSIX_KEY_INL
  
 /**
- *  @brief _POSIX_Keys_Allocate
+ * @brief Allocate a keys control block.
  *
- *  This function allocates a keys control block from
- *  the inactive chain of free keys control blocks.
+ * This function allocates a keys control block from
+ * the inactive chain of free keys control blocks.
  */
  
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
@@ -34,10 +36,10 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
 }
  
 /**
- *  @brief _POSIX_Keys_Free
+ * @brief Free a keys control block.
  *
- *  This routine frees a keys control block to the
- *  inactive chain of free keys control blocks.
+ * This routine frees a keys control block to the
+ * inactive chain of free keys control blocks.
  */
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
@@ -47,15 +49,15 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
 }
  
 /**
- *  @brief _POSIX_Keys_Get
+ * @brief Get a keys control block.
  *
- *  This function maps key IDs to key control blocks.
- *  If ID corresponds to a local keys, then it returns
- *  the_key control pointer which maps to ID and location
- *  is set to OBJECTS_LOCAL.  if the keys ID is global and
- *  resides on a remote node, then location is set to OBJECTS_REMOTE,
- *  and the_key is undefined.  Otherwise, location is set
- *  to OBJECTS_ERROR and the_key is undefined.
+ * This function maps key IDs to key control blocks.
+ * If ID corresponds to a local keys, then it returns
+ * the_key control pointer which maps to ID and location
+ * is set to OBJECTS_LOCAL.  if the keys ID is global and
+ * resides on a remote node, then location is set to OBJECTS_REMOTE,
+ * and the_key is undefined.  Otherwise, location is set
+ * to OBJECTS_ERROR and the_key is undefined.
  */
  
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
@@ -68,9 +70,15 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
 }
  
 /**
- *  @brief _POSIX_Keys_Is_null
+ * @brief Check if a keys control block is NULL.
  *
- *  This function returns TRUE if the_key is NULL and FALSE otherwise.
+ * This function returns @c TRUE if the_key is @c NULL and @c FALSE
+ * otherwise.
+ * 
+ * @param[in] the_key is the pointer to the key control block to be checked.
+ * 
+ * @retval TRUE The key control block is @c NULL.
+ * @retval FALSE The key control block is not @c NULL.
  */
 RTEMS_INLINE_ROUTINE bool _POSIX_Keys_Is_null (
   POSIX_Keys_Control *the_key

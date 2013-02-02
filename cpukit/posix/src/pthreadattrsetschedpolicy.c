@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Sets Scheduling policy Attributes of Thread Attributes Object
- * @ingroup POSIX
+ * @ingroup POSIXAPI
  */
 
 /*
