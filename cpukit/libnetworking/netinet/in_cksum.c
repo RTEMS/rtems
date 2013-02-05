@@ -57,6 +57,10 @@
 
 #include "in_cksum_powerpc.h"
 
+#elif (defined(__GNUC__) && defined(__nios2__))
+
+#include "in_cksum_nios2.h"
+
 #else
 
 #include <stdio.h> /* for puts */

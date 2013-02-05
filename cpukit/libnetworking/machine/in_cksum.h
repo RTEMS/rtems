@@ -1,4 +1,16 @@
 /*
+ * Nios II version by Jeffrey O. Hill
+ *
+ * Copyright 2012. Los Alamos National Security, LLC.
+ * The Nios II specific part was produced under U.S. Government contract
+ * DE-AC52-06NA25396 for Los Alamos National Laboratory (LANL),
+ * which is operated by Los Alamos National Security, LLC for
+ * the U.S. Department of Energy. The U.S. Government has rights
+ * to use, reproduce, and distribute this software.  NEITHER THE
+ * GOVERNMENT NOR LOS ALAMOS NATIONAL SECURITY, LLC MAKES ANY
+ * WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR
+ * THE USE OF THIS SOFTWARE.
+ *
  * Copyright (c) 1990 The Regents of the University of California.
  * All rights reserved.
  *
@@ -208,6 +220,63 @@ in_cksum_hdr(const struct ip *ip)
 		__tmpsum = (int)ntohs(ip->ip_sum) + 256; \
 		ip->ip_sum = htons(__tmpsum + (__tmpsum >> 16)); \
 	} while(0)
+
+/*
+ *  Optimized version for the Altera Nios II softcore
+ */
+#elif defined ( __GNUC__ ) && defined ( __nios2__ )
+
+static inline uint32_t _NIOS2_Add_ones_complement ( const uint32_t a,
+                                                    const uint32_t b )
+{
+  uint32_t sum;
+  uint32_t C;
+  __asm__ __volatile__ (
+              "   add     %0, %2, %3  \n" /* sum <= a + b */
+              "   cmpltu  %1, %0, %2  \n" /* C <= carryBit32 */
+              "   add     %0, %1, %0  \n" /* sum <= sum + C */
+              : "=&r"(sum), "=&r"(C)
+              : "r"(a), "r"(b)
+  );
+  return sum;
+}
+
+static inline uint16_t _NIOS2_Add_ones_complement_word_halves
+                                                ( const uint32_t a )
+{
+  uint16_t sum;
+  uint32_t tmp;
+  __asm__ __volatile__ (
+              "   roli    %1, %2, 16   \n"  /* tmp <= a rotate left 16 */
+              "   add     %1, %2, %1   \n"  /* tmp <= a + tmp + carryBit16 */
+              "   srli    %0, %1, 16   \n"  /* sum <= tmp shift right 16 */
+              : "=&r"(sum),"=&r"(tmp)
+              : "r"(a)
+  );
+  return sum;
+}
+
+static __inline u_int in_cksum_hdr ( const struct ip * pHdrIP )
+{
+  const uint32_t * const pWd = ( const uint32_t * ) pHdrIP;
+  uint32_t sum = pWd[0];
+  sum = _NIOS2_Add_ones_complement ( sum, pWd[1] );
+  sum = _NIOS2_Add_ones_complement ( sum, pWd[2] );
+  sum = _NIOS2_Add_ones_complement ( sum, pWd[3] );
+  sum = _NIOS2_Add_ones_complement ( sum, pWd[4] );
+  sum = _NIOS2_Add_ones_complement_word_halves ( sum );
+  sum ^= 0xffff;
+  return sum;
+}
+
+static __inline void in_cksum_update ( struct ip * pHdrIP )
+{
+  uint32_t __tmpsum = ntohs ( pHdrIP->ip_sum );
+  __tmpsum += 256u;
+  __tmpsum += __tmpsum >> 16u;
+  pHdrIP->ip_sum = htons ( ( uint16_t ) __tmpsum );
+}
+
 /*
  *  Here is the generic, portable, inefficient algorithm.
  */
