@@ -57,7 +57,7 @@ typedef enum
   PPC_e300c3  = 0x8085, /* e300c3  core */
   PPC_e200z0  = 0x8170,
   PPC_e200z1  = 0x8140,
-  PPC_e200z4  = 0x8155,
+  PPC_e200z4  = 0x8150,
   PPC_e200z6  = 0x8110,
   PPC_e200z7  = 0x8160,
   PPC_PSIM    = 0xfffe,  /* GDB PowerPC simulator -- fake version */
@@ -121,9 +121,7 @@ static inline ppc_cpu_id_t ppc_cpu_current(void)
 
 static inline bool ppc_cpu_is_e200(void)
 {
-	return ppc_cpu_current() == PPC_e200z0
-		|| ppc_cpu_current() == PPC_e200z1
-		|| ppc_cpu_current() == PPC_e200z6;
+	return (ppc_cpu_current() & 0xff80) == 0x8100;
 }
 
 static inline bool ppc_cpu_is_e300(void)
