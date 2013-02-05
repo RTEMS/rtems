@@ -42,9 +42,10 @@
 #ifndef LIBCPU_POWERPC_MPC55XX_H
 #define LIBCPU_POWERPC_MPC55XX_H
 
-#include <stddef.h>
-
 #include <mpc55xx/regs.h>
+#include <mpc55xx/regs-mmu.h>
+
+#include <libcpu/powerpc-utility.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -136,6 +137,15 @@ static inline mpc55xx_wait_for_interrupt(void)
   #else
     __asm__ volatile ("");
   #endif
+}
+
+static inline void mpc55xx_mmu_apply_config(const struct MMU_tag *config)
+{
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, config->MAS0.R);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1, config->MAS1.R);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS2, config->MAS2.R);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3, config->MAS3.R);
+  __asm__ volatile ("tlbwe");
 }
 
 #ifdef __cplusplus
