@@ -38,7 +38,7 @@
       }
 
       if (!lock) {
-        rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, MPC55XX_FATAL_FMPLL_LOCK);
+        mpc55xx_fatal(MPC55XX_FATAL_FMPLL_LOCK);
       }
     }
   #endif

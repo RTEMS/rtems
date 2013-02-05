@@ -268,12 +268,12 @@ static int mpc55xx_esci_first_open(int major, int minor, void *arg)
 
   rv = rtems_termios_set_initial_baud(tty, BSP_DEFAULT_BAUD_RATE);
   if (rv != 0) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+    mpc55xx_fatal(MPC55XX_FATAL_CONSOLE_ESCI_BAUD);
   }
 
   rv = mpc55xx_esci_set_attributes(minor, &tty->termios);
   if (rv != 0) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+    mpc55xx_fatal(MPC55XX_FATAL_CONSOLE_ESCI_ATTRIBUTES);
   }
 
   sc = mpc55xx_interrupt_handler_install(
@@ -285,7 +285,7 @@ static int mpc55xx_esci_first_open(int major, int minor, void *arg)
     self
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+    mpc55xx_fatal(MPC55XX_FATAL_CONSOLE_ESCI_IRQ_INSTALL);
   }
 
   mpc55xx_esci_interrupts_clear_and_enable(self);

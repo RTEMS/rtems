@@ -59,6 +59,11 @@ void _BSP_Fatal_error(unsigned n)
 	}
 }
 
+void mpc55xx_fatal(rtems_fatal_code code)
+{
+  rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, code);
+}
+
 static void null_pointer_protection(void)
 {
 #ifdef MPC55XX_NULL_POINTER_PROTECTION
