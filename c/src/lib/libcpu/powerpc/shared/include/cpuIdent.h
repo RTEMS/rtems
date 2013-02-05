@@ -124,6 +124,11 @@ static inline bool ppc_cpu_is_e200(void)
 	return (ppc_cpu_current() & 0xff80) == 0x8100;
 }
 
+static inline bool ppc_cpu_is_specific_e200(ppc_cpu_id_t id)
+{
+	return (ppc_cpu_current() & 0xfff0) == id;
+}
+
 static inline bool ppc_cpu_is_e300(void)
 {
 	return ppc_cpu_current() == PPC_e300c1
