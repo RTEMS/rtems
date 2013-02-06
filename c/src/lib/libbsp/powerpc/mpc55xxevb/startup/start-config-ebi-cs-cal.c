@@ -169,8 +169,7 @@ const struct EBI_CAL_CS_tag mpc55xx_start_config_ebi_cal_cs [] = {
       }
     }
   }
-#elif defined(MPC55XX_BOARD_MPC5674F_RSM6) \
-  && defined(MPC55XX_NEEDS_LOW_LEVEL_INIT)
+#elif defined(MPC55XX_BOARD_MPC5674F_RSM6)
   /* D_CS0 for MRAM */
   {
     .BR = {
@@ -225,37 +224,29 @@ const struct EBI_CAL_CS_tag mpc55xx_start_config_ebi_cal_cs [] = {
     .OR = { .R = 0xe0000000 }
   },
 
-  #if defined(MPC55XX_BOARD_MPC5674F_RSM6_KOMA)
-    /* D_CS3 for Ethernet Controller */
-    {
-      .BR = {
-        .B = {
-          .BA = 0x23000000 >> 15,
-          .PS = 1,
-          .AD_MUX = 1,
-          .BL = 0,
-          .WEBS = 1,
-          .TBDIP = 0,
-          .SETA = 0,
-          .BI = 1,
-          .V = 1
-      }
-    },
-      .OR = {
-        .B = {
-          .AM = 0xfff80000 >> 15,
-          .SCY = 8,
-          .BSCY = 0
-        }
+  /* D_CS3 for Ethernet Controller */
+  {
+    .BR = {
+      .B = {
+        .BA = 0x23000000 >> 15,
+        .PS = 1,
+        .AD_MUX = 1,
+        .BL = 0,
+        .WEBS = 1,
+        .TBDIP = 0,
+        .SETA = 0,
+        .BI = 1,
+        .V = 1
+    }
+  },
+    .OR = {
+      .B = {
+        .AM = 0xfff80000 >> 15,
+        .SCY = 8,
+        .BSCY = 0
       }
     }
-  #else
-    /* D_CS3 unused */
-    {
-      .BR = { .R = 0x20000002 },
-      .OR = { .R = 0xe0000000 }
-    }
-  #endif
+  }
 #endif
 };
 

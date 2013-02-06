@@ -127,15 +127,12 @@ const mpc55xx_siu_pcr_config mpc55xx_start_config_siu_pcr [] = {
   { 305,  3, 0, { .B = { .PA = 1, .DSC = 0 } } }, /* D_ADD9 .. D_ADD11 */
   { 432,  1, 1, { .B = { .PA = 0, .OBE = 1, .WPE = 0 } } }, /* EMIOS26 (HBR34_RST) */
   { 433,  1, 0, { .B = { .PA = 0, .OBE = 1, .WPE = 0 } } } /* EMIOS27 (\ETH_RST) */
-#elif defined(MPC55XX_BOARD_MPC5674F_RSM6) \
-  && defined(MPC55XX_NEEDS_LOW_LEVEL_INIT)
+#elif defined(MPC55XX_BOARD_MPC5674F_RSM6)
   {  89,  1, 0, { .B = { .PA = 1, .OBE = 1, .IBE = 1, .WPE = 1, .WPS = 1 } } }, /* TXD_A (ESCI_A)*/
   {  90,  1, 0, { .B = { .PA = 1, .OBE = 0, .IBE = 1, .WPE = 1, .WPS = 1 } } }, /* RXD_A (ESCI_A)*/
   { 256,  1, 0, { .B = { .PA = 1, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_CS0 */
   { 257,  1, 0, { .B = { .PA = 2, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_ADD_DAT31 */
-  #if defined(MPC55XX_BOARD_MPC5674F_RSM6_KOMA)
-    { 258,  1, 0, { .B = { .PA = 1, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_CS3 */
-  #endif
+  { 258,  1, 0, { .B = { .PA = 1, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_CS3 */
   { 259,  4, 0, { .B = { .PA = 1, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_ADD12 .. D_ADD15 */
   { 263, 15, 0, { .B = { .PA = 2, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_ADD_DAT16 .. D_ADD_DAT30 */
   { 278, 16, 0, { .B = { .PA = 1, .DSC = 3, .WPE = 1, .WPS = 1 } } }, /* D_ADD_DAT0 .. D_ADD_DAT15 */

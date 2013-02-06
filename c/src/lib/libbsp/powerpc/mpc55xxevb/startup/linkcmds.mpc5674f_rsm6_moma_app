@@ -1,8 +1,0 @@
-MEMORY {
-	/* Let space for the binary image library header */
-	ROM : ORIGIN = 0x00100000, LENGTH = 3068k
-}
-
-REGION_ALIAS ("STARTROM", ROM);
-
-INCLUDE linkcmds.mpc5674f_rsm6
