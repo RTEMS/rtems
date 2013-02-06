@@ -12,11 +12,12 @@
  */
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/nios2-utility.h>
 
 void _CPU_Fatal_halt( uint32_t _error )
 {
   /* write 0 to status register (disable interrupts) */
-  __builtin_wrctl( 0, 0 );
+  __builtin_wrctl( NIOS2_CTLREG_INDEX_STATUS, 0 );
 
   /* write error code to ET register */
   __asm__ volatile ("mov et, %z0" : : "rM" (_error));
