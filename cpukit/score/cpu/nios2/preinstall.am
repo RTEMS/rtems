@@ -39,6 +39,10 @@ $(PROJECT_INCLUDE)/rtems/score/nios2-utility.h: rtems/score/nios2-utility.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/nios2-utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/nios2-utility.h
 
+$(PROJECT_INCLUDE)/rtems/score/nios2-count-zeros.h: rtems/score/nios2-count-zeros.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/nios2-count-zeros.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/nios2-count-zeros.h
+
 $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h: rtems/score/cpu_asm.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h
