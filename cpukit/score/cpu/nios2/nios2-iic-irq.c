@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE void __IIC_Handler(void)
       if (active & mask)
       {
         if ( _ISR_Vector_table[ vector] )
-          (*_ISR_Vector_table[ vector ])(vector, NULL);
+          (*_ISR_Vector_table[ vector ])(vector);
         active &= ~mask;
       }
       mask <<= 1;

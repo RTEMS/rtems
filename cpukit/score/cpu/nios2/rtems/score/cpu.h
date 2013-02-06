@@ -51,7 +51,7 @@ extern "C" {
 
 #define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
-#define CPU_ISR_PASSES_FRAME_POINTER 1
+#define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
 #define CPU_HARDWARE_FP FALSE
 
@@ -149,27 +149,7 @@ typedef struct {
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->sp
 
-typedef struct {
-  uint32_t r1;
-  uint32_t r2;
-  uint32_t r3;
-  uint32_t r4;
-  uint32_t r5;
-  uint32_t r6;
-  uint32_t r7;
-  uint32_t r8;
-  uint32_t r9;
-  uint32_t r10;
-  uint32_t r11;
-  uint32_t r12;
-  uint32_t r13;
-  uint32_t r14;
-  uint32_t r15;
-  uint32_t ra;
-  uint32_t gp;
-  uint32_t et;
-  uint32_t ea;
-} CPU_Interrupt_frame;
+typedef void CPU_Interrupt_frame;
 
 typedef struct {
   uint32_t r1;
