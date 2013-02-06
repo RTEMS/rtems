@@ -117,6 +117,21 @@ extern BSP_START_DATA_SECTION const mpc55xx_clock_config
     mpc55xx_start_config_ebi_cal_cs_count [];
 #endif
 
+/**
+ * @brief Start prologue.
+ *
+ * In case the BSP enabled the MPC55XX_ENABLE_START_PROLOGUE option, then this
+ * function will be called directly after the Boot Assist Module (BAM) jumped
+ * to the start entry defined by the reset configuration.
+ *
+ * This function executes in the context initialized by the BAM.  There exists
+ * no valid stack pointer and the internal RAM has an invalid ECC state.
+ *
+ * The default implementation does nothing.  The application may provide its
+ * own implementation.
+ */
+void mpc55xx_start_prologue(void);
+
 void mpc55xx_start_early(void);
 
 void mpc55xx_start_flash(void);

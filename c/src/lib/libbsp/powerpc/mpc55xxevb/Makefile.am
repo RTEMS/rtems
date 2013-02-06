@@ -86,6 +86,7 @@ libbsp_a_SOURCES += startup/start-config-ebi-cs-cal.c
 libbsp_a_SOURCES += startup/start-config-mmu.c
 libbsp_a_SOURCES += startup/start-config-mmu-early.c
 libbsp_a_SOURCES += startup/start-config-siu-pcr.c
+libbsp_a_SOURCES += startup/start-prologue.c
 libbsp_a_SOURCES += startup/start-early.c
 libbsp_a_SOURCES += startup/start-cache.S
 libbsp_a_SOURCES += startup/start-clock.c

@@ -80,6 +80,10 @@ mpc55xx_bootflag_1:
 
 _start:
 
+#ifdef MPC55XX_ENABLE_START_PROLOGUE
+	bl	mpc55xx_start_prologue
+#endif
+
 #ifdef MPC55XX_NEEDS_LOW_LEVEL_INIT
 
 	/* Enable SPE */
