@@ -337,6 +337,10 @@ typedef struct _z85c30_context
  * Private routines
  */
 
+Z85C30_STATIC void z85c30_initialize_port(
+  int minor
+);
+
 Z85C30_STATIC void z85c30_init(int minor);
 
 Z85C30_STATIC int z85c30_set_attributes(
@@ -398,6 +402,15 @@ Z85C30_STATIC int z85c30_inbyte_nonblocking_polled(
 Z85C30_STATIC void z85c30_enable_interrupts(
   int minor,
   int interrupt_mask
+);
+
+Z85C30_STATIC void z85c30_process(
+  int        minor,
+  uint8_t    ucIntPend
+);
+
+Z85C30_STATIC rtems_isr z85c30_isr(
+  rtems_vector_number vector
 );
 
 #ifdef __cplusplus

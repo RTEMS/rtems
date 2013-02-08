@@ -704,11 +704,9 @@ Z85C30_STATIC void z85c30_initialize_interrupts(
 )
 {
   uint32_t       ulCtrlPort1;
-  uint32_t       ulCtrlPort2;
   setRegister_f  setReg;
 
   ulCtrlPort1 = Console_Port_Tbl[minor]->ulCtrlPort1;
-  ulCtrlPort2 = Console_Port_Tbl[minor]->ulCtrlPort2;
   setReg      = Console_Port_Tbl[minor]->setRegister;
 
 
