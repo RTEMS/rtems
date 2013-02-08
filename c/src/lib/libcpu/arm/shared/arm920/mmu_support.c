@@ -1,5 +1,5 @@
 /*
- * COPYRIGHT (c) 1989-2011.
+ * COPYRIGHT (c) Hesham AL-Matary.
  * On-Line Applications Research Corporation (OAR).
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -12,11 +12,10 @@
 #include <libcpu/memorymanagement.h>
 extern uint32_t _ttbl_base;
 
-
-/* @brief Deleting MPE and freeing its Control block as well as uninstalling
- * mpe from HW and uninstall the high-level pointer to cpu_mpe
+/* Deleting MPE and freeing its Control block as well as uninstalling
+ * mpe from HW and uninstall the high-level pointer to cpu_mpe.
  */
-static inline rtems_status_code _CPU_Memory_management_Delete_MPE(rtems_memory_management_entry *mpe)
+rtems_status_code _CPU_Memory_management_Delete_MPE(rtems_memory_management_entry *mpe)
 {
   arm_bsp_mm_mpe *arm_mpe;
   arm_mpe = mpe->cpu_mpe;
@@ -29,7 +28,7 @@ static inline rtems_status_code _CPU_Memory_management_Delete_MPE(rtems_memory_m
 }
 
 /* Changing Page table attributes to new attributes */
-static inline rtems_status_code arm_Region_Change_Attr(arm_bsp_mm_mpe *mpe,uint32_t AP, uint32_t CB)
+rtems_status_code arm_Region_Change_Attr(arm_bsp_mm_mpe *mpe,uint32_t AP, uint32_t CB)
 {
   mmu_lvl1_t     *lvl1_pt;
   int             sectionsNumber; /* 1MB sections */
@@ -43,17 +42,7 @@ static inline rtems_status_code arm_Region_Change_Attr(arm_bsp_mm_mpe *mpe,uint3
   PTEIndex = ((mpe->vAddress & 0xfff00000) >> 20);
   paddr = (mpe->vAddress & 0xfff00000);
   
-  /* flush the cache and TLB */
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate();
-
-  /*  I & D caches turned off */
-  arm_cp15_set_control(MMU_CTRL_DEFAULT |
-                       MMU_CTRL_D_CACHE_DES |
-                       MMU_CTRL_I_CACHE_DES |
-                       MMU_CTRL_ALIGN_FAULT_EN |
-                       MMU_CTRL_LITTLE_ENDIAN |
-                       MMU_CTRL_MMU_DES);
+  disable_mmu();
 
   int c = 0;
   int b = 0;
@@ -98,22 +87,13 @@ static inline rtems_status_code arm_Region_Change_Attr(arm_bsp_mm_mpe *mpe,uint3
   mpe->ap = AP; /* Default when installing entry */
   mpe->cb = CB; /* Default */
 
-    /* flush the cache and TLB */
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate();
+  enable_mmu();
 
-  /*  I & D caches turned on */
-  arm_cp15_set_control(MMU_CTRL_DEFAULT |
-                       MMU_CTRL_D_CACHE_EN |
-                       MMU_CTRL_I_CACHE_EN |
-                       MMU_CTRL_ALIGN_FAULT_EN |
-                       MMU_CTRL_LITTLE_ENDIAN |
-                       MMU_CTRL_MMU_EN);
   return RTEMS_SUCCESSFUL;
 }
 
 /* Verify that size must is multiple of page size */
-inline rtems_status_code _CPU_Memory_management_Verify_size(uint32_t size)
+rtems_status_code _CPU_Memory_management_Verify_size(uint32_t size)
 {
   if ( (size % MMU_SECT_SIZE) != 0)
     return RTEMS_INVALID_SIZE;
@@ -121,8 +101,8 @@ inline rtems_status_code _CPU_Memory_management_Verify_size(uint32_t size)
   return RTEMS_SUCCESSFUL;
 }
 
-/* Verify that size must is multiple of page size */
-inline rtems_status_code _CPU_Memory_management_Initialize(void)
+/* Initialize first page table level with no protected entries */
+rtems_status_code _CPU_Memory_management_Initialize(void)
 {
   mmu_lvl1_t *lvl1_base;
 
@@ -154,23 +134,14 @@ inline rtems_status_code _CPU_Memory_management_Initialize(void)
                                      0);
     }
   
-  /* flush the cache and TLB */
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate();
+  enable_mmu();
 
-  /*  I & D caches turned on */
-  arm_cp15_set_control(MMU_CTRL_DEFAULT |
-                       MMU_CTRL_D_CACHE_EN |
-                       MMU_CTRL_I_CACHE_EN |
-                       MMU_CTRL_ALIGN_FAULT_EN |
-                       MMU_CTRL_LITTLE_ENDIAN |
-                       MMU_CTRL_MMU_EN);
   return RTEMS_SUCCESSFUL;
 }
 
-/* @brief Installing @mpe allocates new arm_bsp_mm_mpe for it
+/* Installing @mpe allocates new arm_bsp_mm_mpe for it
  * and set its value for then allocate a new lvl2 page table
- * and activate it */
+ * and activate it. */
 rtems_status_code _CPU_Memory_management_Install_MPE(
   rtems_memory_management_entry *mpe
 )
@@ -195,17 +166,7 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
 
   sectionsNumber = (size / MMU_SECT_SIZE);
  
-  /* flush the cache and TLB */
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate(); 
-
-  /*  I & D caches turned off */
-  arm_cp15_set_control(MMU_CTRL_DEFAULT |
-                       MMU_CTRL_D_CACHE_DES |
-                       MMU_CTRL_I_CACHE_DES |
-                       MMU_CTRL_ALIGN_FAULT_EN |
-                       MMU_CTRL_LITTLE_ENDIAN |
-                       MMU_CTRL_MMU_DES);
+  disable_mmu();
 
   /* Set AP for this region to NO ACCESS */
 
@@ -229,37 +190,29 @@ rtems_status_code _CPU_Memory_management_Install_MPE(
   arm_mpe->type = LVL1_PT; /* Default value now */
   arm_mpe->ap   = ARM_MMU_AP_NO_ACCESS; /* Default when installing entry */
   arm_mpe->cb   = ARM_MMU_WT; /* Default */
-  /* TODO: Domain may be defined as read only, write.. and any page may
-   * be attached to it */  
   arm_mpe->domain = 0; 
 
   /* install a pointer to high-level API to bsp_mm_mpe */
   mpe->cpu_mpe = arm_mpe;
   
-  /* flush the cache and TLB */
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate();
-
-  /*  I & D caches turned on */
-  arm_cp15_set_control(MMU_CTRL_DEFAULT |
-                       MMU_CTRL_D_CACHE_EN |
-                       MMU_CTRL_I_CACHE_EN |
-                       MMU_CTRL_ALIGN_FAULT_EN |
-                       MMU_CTRL_LITTLE_ENDIAN |
-                       MMU_CTRL_MMU_EN);
+  enable_mmu();
 
   PTEIndex = ((arm_mpe->vAddress & 0xfff00000) >> 20);
+
+#if DEBUG
     uint32_t *PTE_debug = ((uint32_t *) ((arm_mpe->ptAddress) + (arm_mpe->pagesNumber * 4)));
           printk(" ~~~ Debug : Entered _CPU_Memory_management_Install_MPE function succesfully and \n\
            installed the first PTE for region starting at base address %x with assigned \n\
            pagetable address at address %x is %x ~~~ \n",arm_mpe->vAddress, arm_mpe->ptAddress + (arm_mpe->pagesNumber *4),\
            lvl1_pt[PTEIndex + arm_mpe->pagesNumber - 1]);
+#endif
+
   return RTEMS_SUCCESSFUL;
 }
 
-/* @brief Unistalling @mpe from level1 page table and return 
+/* Uninstalling @mpe from level1 page table and return 
  * access/cache attributes to its defaults. Note that bsp MPE
- * will still exist even after uninstalling mpe 
+ * will still exist even after uninstalling mpe. 
  */
 rtems_status_code _CPU_Memory_management_UnInstall_MPE(
   rtems_memory_management_entry *mpe
@@ -284,17 +237,7 @@ rtems_status_code _CPU_Memory_management_UnInstall_MPE(
   PTEIndex = ((((uint32_t)mpe->region.base) & 0xfff00000) >> 20);
   paddr = (((uint32_t)mpe->region.base) & 0xfff00000);
   
-  /* flush the cache and TLB */
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate();
-
-  /*  I & D caches turned off */
-  arm_cp15_set_control(MMU_CTRL_DEFAULT |
-                       MMU_CTRL_D_CACHE_DES |
-                       MMU_CTRL_I_CACHE_DES |
-                       MMU_CTRL_ALIGN_FAULT_EN |
-                       MMU_CTRL_LITTLE_ENDIAN |
-                       MMU_CTRL_MMU_DES);
+  disable_mmu();
 
   /* Return ap/CB for this region to defaults */
   int i;
@@ -313,7 +256,40 @@ rtems_status_code _CPU_Memory_management_UnInstall_MPE(
   arm_mpe->ap   = ARM_MMU_AP_NO_ACCESS; /* Default */
   arm_mpe->cb   = ARM_MMU_WT; /* Default */
 
-    /* flush the cache and TLB */
+  enable_mmu();
+
+  return RTEMS_SUCCESSFUL;
+}
+
+/* Disable MMU unit and caching (required before updating PTs)
+ * include two steps:
+ * 1- flushing caches and TLB (to ignore old caches page tables).
+ * 2- turn of MMU and caching unit before editing page tables.
+ */
+rtems_status_code disable_mmu()
+{
+  /* flush the cache and TLB */
+  arm_cp15_cache_invalidate();
+  arm_cp15_tlb_invalidate();
+
+  /*  I & D caches turned off */
+  arm_cp15_set_control(MMU_CTRL_DEFAULT |
+                       MMU_CTRL_D_CACHE_DES |
+                       MMU_CTRL_I_CACHE_DES |
+                       MMU_CTRL_ALIGN_FAULT_EN |
+                       MMU_CTRL_LITTLE_ENDIAN |
+                       MMU_CTRL_MMU_DES);
+  return RTEMS_SUCCESSFUL;
+}
+
+/* Re-enable MMU unit and caching (after updating PTs)
+ * include two steps:
+ * 1- flushing caches and TLB (to ignore old caches page tables).
+ * 2- turn on MMU and caching unit after editing page tables.
+ */
+rtems_status_code enable_mmu()
+{
+  /* flush the cache and TLB */
   arm_cp15_cache_invalidate();
   arm_cp15_tlb_invalidate();
 
