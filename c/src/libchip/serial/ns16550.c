@@ -44,6 +44,7 @@
 #include <bsp.h>
 
 #include "ns16550_p.h"
+#include "ns16550.h"
 
 #if defined(BSP_FEATURE_IRQ_EXTENSION)
   #include <bsp/irq.h>
@@ -442,13 +443,11 @@ NS16550_STATIC int ns16550_set_attributes(
   uint8_t                 ucLineControl;
   uint32_t                baud_requested;
   setRegister_f           setReg;
-  getRegister_f           getReg;
   uint32_t                Irql;
   const console_tbl      *c = Console_Port_Tbl [minor];
 
   pNS16550 = c->ulCtrlPort1;
   setReg   = c->setRegister;
-  getReg   = c->getRegister;
 
   /*
    *  Calculate the baud rate divisor
