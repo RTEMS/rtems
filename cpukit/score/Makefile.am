@@ -56,7 +56,8 @@ include_rtems_score_HEADERS += include/rtems/score/watchdog.h
 include_rtems_score_HEADERS += include/rtems/score/wkspace.h
 include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
 include_rtems_score_HEADERS += include/rtems/score/basedefs.h
-
+include_rtems_score_HEADERS += include/rtems/score/atomic.h
+include_rtems_score_HEADERS += include/rtems/score/genericcpuatomic.h
 if HAS_SMP
 include_rtems_score_HEADERS += include/rtems/score/smplock.h
 include_rtems_score_HEADERS += include/rtems/score/smp.h
@@ -104,6 +105,7 @@ include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
 include_rtems_score_HEADERS += inline/rtems/score/watchdog.inl
 include_rtems_score_HEADERS += inline/rtems/score/wkspace.inl
+include_rtems_score_HEADERS += inline/rtems/score/atomic.inl
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl
