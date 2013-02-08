@@ -42,15 +42,15 @@ extern "C" {
  *  Driver function table
  */
 
-extern console_fns z85c30_fns;
-extern console_fns z85c30_fns_polled;
+extern const console_fns z85c30_fns;
+extern const console_fns z85c30_fns_polled;
 
 /*
  *  Flow control function tables
  */
 
-extern console_flow z85c30_flow_RTSCTS;
-extern console_flow z85c30_flow_DTRCTS;
+extern const console_flow z85c30_flow_RTSCTS;
+extern const console_flow z85c30_flow_DTRCTS;
 
 /*
  * Default register access routines

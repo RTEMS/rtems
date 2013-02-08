@@ -29,7 +29,7 @@ static void    ffuart_write_polled(int minor, char c);
 static int     ffuart_set_attributes(int minor, const struct termios *t);
 
 /* Pointers to functions for handling the UART. */
-console_fns ffuart_fns =
+const console_fns ffuart_fns =
 {
     libchip_serial_default_probe,
     ffuart_first_open,

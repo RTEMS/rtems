@@ -91,7 +91,7 @@ static int set_attribues(int minor, const struct termios *term)
   return -1;
 }
 
-console_fns lm3s69xx_uart_fns = {
+const console_fns lm3s69xx_uart_fns = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = first_open,
   .deviceLastClose = last_close,

@@ -31,8 +31,8 @@ void  Write_ns16550_register(
   uint8_t   ucData
 );
 
-extern console_fns ns16550_fns_8245;
-extern console_fns ns16550_fns_polled_8245;
+extern const console_fns ns16550_fns_8245;
+extern const console_fns ns16550_fns_polled_8245;
 
 #ifdef __cplusplus
 }

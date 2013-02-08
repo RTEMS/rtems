@@ -27,7 +27,7 @@
  * Flow control is only supported when using interrupts
  */
 
-console_fns mc68681_fns =
+const console_fns mc68681_fns =
 {
   libchip_serial_default_probe,   /* deviceProbe */
   mc68681_open,                   /* deviceFirstOpen */
@@ -40,7 +40,7 @@ console_fns mc68681_fns =
   true                            /* deviceOutputUsesInterrupts */
 };
 
-console_fns mc68681_fns_polled =
+const console_fns mc68681_fns_polled =
 {
   libchip_serial_default_probe,        /* deviceProbe */
   mc68681_open,                        /* deviceFirstOpen */

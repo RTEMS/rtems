@@ -31,7 +31,7 @@ static void    fbcons_write_polled(int minor, char c);
 static int     fbcons_set_attributes(int minor, const struct termios *t);
 
 /* Pointers to functions for handling the UART. */
-console_fns fbcons_fns =
+const console_fns fbcons_fns =
 {
   libchip_serial_default_probe,
   fbcons_first_open,

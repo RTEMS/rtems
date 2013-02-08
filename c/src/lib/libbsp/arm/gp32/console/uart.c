@@ -45,7 +45,7 @@ static int     uart_set_attributes(int minor, const struct termios *t);
 unsigned long Console_Configuration_Count = NUM_DEVS;
 
 /* Pointers to functions for handling the UART. */
-console_fns uart_fns =
+const console_fns uart_fns =
 {
     libchip_serial_default_probe,
     uart_first_open,

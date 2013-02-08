@@ -199,7 +199,7 @@ static int usart_set_attributes(int minor, const struct termios *term)
   return -1;
 }
 
-console_fns stm32f4_usart_fns = {
+const console_fns stm32f4_usart_fns = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = usart_first_open,
   .deviceLastClose = usart_last_close,

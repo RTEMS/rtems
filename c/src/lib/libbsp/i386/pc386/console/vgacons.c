@@ -186,7 +186,7 @@ bool vgacons_probe(
   return true;
 }
 
-console_fns vgacons_fns =
+const console_fns vgacons_fns =
 {
   libchip_serial_default_probe,        /* deviceProbe */
   vgacons_open,                        /* deviceFirstOpen */

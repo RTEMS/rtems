@@ -228,7 +228,7 @@ int xlite_set_attributes(int minor, const struct termios *t)
 
 
 
-console_fns xlite_fns_polled =
+const console_fns xlite_fns_polled =
 {
   libchip_serial_default_probe,        /* deviceProbe */
   xlite_open,                          /* deviceFirstOpen */

@@ -198,7 +198,7 @@ static int set_attribues(int minor, const struct termios *term)
   return -1;
 }
 
-console_fns qoriq_uart_bridge_slave = {
+const console_fns qoriq_uart_bridge_slave = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = first_open,
   .deviceLastClose = last_close,

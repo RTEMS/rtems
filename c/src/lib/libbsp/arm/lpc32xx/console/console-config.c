@@ -26,7 +26,7 @@
 #include <bsp/lpc32xx.h>
 #include <bsp/irq.h>
 
-extern console_fns lpc32xx_hsu_fns;
+extern const console_fns lpc32xx_hsu_fns;
 
 static uint8_t lpc32xx_uart_get_register(uintptr_t addr, uint8_t i)
 {

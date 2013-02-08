@@ -77,7 +77,7 @@ typedef struct {
   uint32_t icr;
 } lm3s69xx_uart;
 
-extern console_fns lm3s69xx_uart_fns;
+extern const console_fns lm3s69xx_uart_fns;
 
 #ifdef __cplusplus
 }

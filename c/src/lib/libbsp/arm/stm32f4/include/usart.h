@@ -21,7 +21,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-extern console_fns stm32f4_usart_fns;
+extern const console_fns stm32f4_usart_fns;
 
 #ifdef __cplusplus
 }

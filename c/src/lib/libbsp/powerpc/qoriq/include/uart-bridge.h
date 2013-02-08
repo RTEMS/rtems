@@ -55,9 +55,9 @@ typedef struct {
   rtems_chain_control transmit_fifo;
 } uart_bridge_slave_control;
 
-extern console_fns qoriq_uart_bridge_master;
+extern const console_fns qoriq_uart_bridge_master;
 
-extern console_fns qoriq_uart_bridge_slave;
+extern const console_fns qoriq_uart_bridge_slave;
 
 /** @} */
 

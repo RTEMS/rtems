@@ -62,17 +62,17 @@
  * Flow control is only supported when using interrupts
  */
 
-console_flow ns16550_flow_RTSCTS = {
+const console_flow ns16550_flow_RTSCTS = {
   ns16550_negate_RTS,             /* deviceStopRemoteTx */
   ns16550_assert_RTS              /* deviceStartRemoteTx */
 };
 
-console_flow ns16550_flow_DTRCTS = {
+const console_flow ns16550_flow_DTRCTS = {
   ns16550_negate_DTR,             /* deviceStopRemoteTx */
   ns16550_assert_DTR              /* deviceStartRemoteTx */
 };
 
-console_fns ns16550_fns = {
+const console_fns ns16550_fns = {
   libchip_serial_default_probe,   /* deviceProbe */
   ns16550_open,                   /* deviceFirstOpen */
   ns16550_close,                  /* deviceLastClose */
@@ -84,7 +84,7 @@ console_fns ns16550_fns = {
   true                            /* deviceOutputUsesInterrupts */
 };
 
-console_fns ns16550_fns_polled = {
+const console_fns ns16550_fns_polled = {
   libchip_serial_default_probe,        /* deviceProbe */
   ns16550_open,                        /* deviceFirstOpen */
   ns16550_close,                       /* deviceLastClose */

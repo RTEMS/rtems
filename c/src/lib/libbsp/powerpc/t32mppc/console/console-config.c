@@ -112,7 +112,7 @@ static int set_attribues(int minor, const struct termios *term)
   return -1;
 }
 
-static console_fns t32mppc_console_fns = {
+static const console_fns t32mppc_console_fns = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = first_open,
   .deviceLastClose = last_close,

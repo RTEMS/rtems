@@ -123,7 +123,7 @@ typedef struct _console_tbl {
    */
   console_devs   deviceType;
   /** pDeviceFns   This is a pointer to the set of driver routines to use. */
-  console_fns   *pDeviceFns;
+  const console_fns *pDeviceFns;
   /** This value is passed to the serial device driver for use.  In termios
    *  itself the number is ignored.
    */
@@ -135,7 +135,7 @@ typedef struct _console_tbl {
    *  should be necessary as RTS will be driven automatically
    *  when the transmitter is active.
    */
-  console_flow  *pDeviceFlow;
+  const console_flow *pDeviceFlow;
   /** The high water mark in the input buffer is set to the buffer
    *  size less ulMargin. Once this level is reached, the driver's
    *  flow control routine used to stop the remote transmitter will

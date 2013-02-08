@@ -29,24 +29,24 @@
 #include <libchip/sersupp.h>
 #include <bspopts.h>
 
-extern console_fns dbgu_fns;
+extern const console_fns dbgu_fns;
 
 #if ENABLE_LCD
-  extern console_fns fbcons_fns;
+  extern const console_fns fbcons_fns;
   #define LCD_DEV 1
 #else
   #define LCD_DEV 0
 #endif
 
 #if (ENABLE_UMON && ENABLE_UMON_CONSOLE)
-  extern console_fns umoncons_fns;
+  extern const console_fns umoncons_fns;
   #define UMON_CONS_DEV 1
 #else
   #define UMON_CONS_DEV 0
 #endif
 
 #if ENABLE_USART0 || ENABLE_USART1 || ENABLE_USART2 || ENABLE_USART3
-  extern console_fns usart_polling_fns;
+  extern const console_fns usart_polling_fns;
 #endif
 
 #if ENABLE_USART0

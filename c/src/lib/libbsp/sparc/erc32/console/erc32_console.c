@@ -57,7 +57,7 @@ static int erc32_console_first_open(int major, int minor, void *arg);
 static void erc32_console_initialize(int minor);
 
 #if (CONSOLE_USE_INTERRUPTS)
-  console_fns erc32_fns = {
+  const console_fns erc32_fns = {
     libchip_serial_default_probe,           /* deviceProbe */
     erc32_console_first_open,               /* deviceFirstOpen */
     NULL,                                   /* deviceLastClose */
@@ -69,7 +69,7 @@ static void erc32_console_initialize(int minor);
     TERMIOS_IRQ_DRIVEN                      /* deviceOutputUsesInterrupts */
   };
 #else
-  console_fns erc32_fns = {
+  const console_fns erc32_fns = {
     libchip_serial_default_probe,           /* deviceProbe */
     erc32_console_first_open,               /* deviceFirstOpen */
     NULL,                                   /* deviceLastClose */

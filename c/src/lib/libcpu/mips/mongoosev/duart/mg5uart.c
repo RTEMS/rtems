@@ -893,7 +893,7 @@ MG5UART_STATIC void mg5uart_enable_interrupts(
  * Flow control is only supported when using interrupts
  */
 
-console_fns mg5uart_fns =
+const console_fns mg5uart_fns =
 {
   libchip_serial_default_probe,   /* deviceProbe */
   mg5uart_open,                   /* deviceFirstOpen */
@@ -906,7 +906,7 @@ console_fns mg5uart_fns =
   TRUE                            /* deviceOutputUsesInterrupts */
 };
 
-console_fns mg5uart_fns_polled =
+const console_fns mg5uart_fns_polled =
 {
   libchip_serial_default_probe,        /* deviceProbe */
   mg5uart_open,                        /* deviceFirstOpen */

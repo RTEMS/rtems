@@ -189,7 +189,7 @@ static int lpc32xx_hsu_set_attributes(int minor, const struct termios *term)
   return 0;
 }
 
-console_fns lpc32xx_hsu_fns = {
+const console_fns lpc32xx_hsu_fns = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = lpc32xx_hsu_first_open,
   .deviceLastClose = NULL,

@@ -37,7 +37,7 @@ static int     usart_set_attributes(int minor, const struct termios *t);
 at91rm9200_usart_regs_t *usart_get_base(int minor);
 
 /* Pointers to functions for handling the UART polled. */
-console_fns usart_polling_fns = {
+const console_fns usart_polling_fns = {
   libchip_serial_default_probe,       /* deviceProbe */
   usart_first_open,                   /* deviceFirstOpen */
   usart_last_close,                   /* deviceLastClose */

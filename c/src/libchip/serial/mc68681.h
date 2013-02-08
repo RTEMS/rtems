@@ -61,8 +61,8 @@ extern mc68681_baud_t
  * Driver function table
  */
 
-extern console_fns mc68681_fns;
-extern console_fns mc68681_fns_polled;
+extern const console_fns mc68681_fns;
+extern const console_fns mc68681_fns_polled;
 
 /*
  * Default register access routines

@@ -32,7 +32,7 @@ bool vgacons_probe( int minor );
 /*
  * Driver function table
  */
-extern console_fns vgacons_fns;
+extern const console_fns vgacons_fns;
 
 #ifdef __cplusplus
 }

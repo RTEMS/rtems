@@ -73,8 +73,8 @@ extern "C" {
  * Driver function table
  */
 
-extern console_fns mg5uart_fns;
-extern console_fns mg5uart_fns_polled;
+extern const console_fns mg5uart_fns;
+extern const console_fns mg5uart_fns_polled;
 
 /*
  * Default register access routines

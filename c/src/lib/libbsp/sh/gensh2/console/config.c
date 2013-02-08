@@ -25,7 +25,7 @@
 /*
  * Function set for interrupt enabled termios console
  */
-console_fns sh_sci_fns =
+const console_fns sh_sci_fns =
 {
     libchip_serial_default_probe, /* deviceProbe */
     sh_sci_first_open,            /* deviceFirstOpen */
@@ -41,7 +41,7 @@ console_fns sh_sci_fns =
 /*
  * Function set for polled termios console
  */
-console_fns sh_sci_fns_polled =
+const console_fns sh_sci_fns_polled =
 {
     libchip_serial_default_probe, /* deviceProbe */
     sh_sci_first_open,            /* deviceFirstOpen */

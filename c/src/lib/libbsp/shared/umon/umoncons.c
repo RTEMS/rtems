@@ -26,7 +26,7 @@ static void    umoncons_write_polled(int minor, char c);
 static int     umoncons_set_attributes(int minor, const struct termios *t);
 
 /* Pointers to functions for handling the UART. */
-console_fns umoncons_fns =
+const console_fns umoncons_fns =
 {
   libchip_serial_default_probe,
   umoncons_first_open,
