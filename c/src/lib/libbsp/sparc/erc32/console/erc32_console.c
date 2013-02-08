@@ -32,13 +32,13 @@
 #define CONSOLE_UART_A_TRAP  ERC32_TRAP_TYPE(ERC32_INTERRUPT_UART_A_RX_TX)
 #define CONSOLE_UART_B_TRAP  ERC32_TRAP_TYPE(ERC32_INTERRUPT_UART_B_RX_TX)
 
-static uint8_t erc32_console_get_register(uint32_t addr, uint8_t i)
+static uint8_t erc32_console_get_register(uintptr_t addr, uint8_t i)
 {
   volatile uint32_t *reg = (volatile uint32_t *)addr;
   return (uint8_t) reg [i];
 }
 
-static void erc32_console_set_register(uint32_t addr, uint8_t i, uint8_t val)
+static void erc32_console_set_register(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint32_t *reg = (volatile uint32_t *)addr;
   reg [i] = val;
