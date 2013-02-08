@@ -27,6 +27,8 @@
 #ifndef _NS16550_H_
 #define _NS16550_H_
 
+#include <libchip/serial.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -28,6 +28,8 @@
 #ifndef _NS16550_P_H_
 #define _NS16550_P_H_
 
+#include <libchip/serial.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -138,21 +140,21 @@ typedef struct {
  * Driver functions
  */
 
-NS16550_STATIC void ns16550_init(int minor);
+void ns16550_init(int minor);
 
-NS16550_STATIC int ns16550_open(
+int ns16550_open(
   int major,
   int minor,
   void  * arg
 );
 
-NS16550_STATIC int ns16550_close(
+int ns16550_close(
   int major,
   int minor,
   void  * arg
 );
 
-NS16550_STATIC void ns16550_write_polled(
+void ns16550_write_polled(
   int   minor,
   char  cChar
 );
@@ -177,19 +179,19 @@ NS16550_STATIC void ns16550_initialize_interrupts(int minor);
 
 NS16550_STATIC void ns16550_cleanup_interrupts(int minor);
 
-NS16550_STATIC ssize_t ns16550_write_support_int(
+ssize_t ns16550_write_support_int(
   int   minor,
   const char *buf,
   size_t len
 );
 
-NS16550_STATIC ssize_t ns16550_write_support_polled(
+ssize_t ns16550_write_support_polled(
   int   minor,
   const char *buf,
   size_t len
   );
 
-NS16550_STATIC int ns16550_inbyte_nonblocking_polled(
+int ns16550_inbyte_nonblocking_polled(
   int minor
 );
 
@@ -198,10 +200,12 @@ NS16550_STATIC void ns16550_enable_interrupts(
   int         mask
 );
 
-NS16550_STATIC int ns16550_set_attributes(
+int ns16550_set_attributes(
   int                   minor,
   const struct termios *t
 );
+
+void ns16550_isr(void *arg);
 
 #ifdef __cplusplus
 }

@@ -166,6 +166,10 @@ $(PROJECT_INCLUDE)/libchip/sersupp.h: serial/sersupp.h $(PROJECT_INCLUDE)/libchi
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/sersupp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sersupp.h
 
+$(PROJECT_INCLUDE)/libchip/ns16550_p.h: serial/ns16550_p.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ns16550_p.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ns16550_p.h
+
 if HAS_MP
 $(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/shm_driver.h
