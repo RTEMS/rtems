@@ -249,6 +249,11 @@ typedef struct _mc68681_context
 /*
  * Driver functions
  */
+MC68681_STATIC void mc68681_initialize_context(
+  int               minor,
+  mc68681_context  *pmc68681Context
+);
+
 MC68681_STATIC bool mc68681_probe(int minor);
 
 MC68681_STATIC int mc68681_set_attributes(
@@ -305,6 +310,10 @@ MC68681_STATIC void mc68681_process(
 MC68681_STATIC void mc68681_enable_interrupts(
   int minor,
   int imr_mask
+);
+
+MC68681_STATIC rtems_isr mc68681_isr(
+  rtems_vector_number vector
 );
 
 #ifdef __cplusplus
