@@ -28,12 +28,7 @@
 #define ARM_MMU_WT 0x2 // Write through
 #define ARM_MMU_WB 0x3 // Write Back
 
-<<<<<<< HEAD
 #define MMU_SET_FAULT (0x0) // Fault entry 
-=======
-/* FAULT ENTRY */
-#define MMU_SET_FAULT (0x0)
->>>>>>> f93088ff895c191fd4e32b5453dc668e0876c18b
 
 /* FIXME: ARM supports various page sizes */
 #define ARM_MMU_PAGE_SIZE  0x1000
@@ -48,11 +43,8 @@
            0x11)                
 
 #define MMU_SET_LVL2_PTE_4KB(paddr,ap,c,b) \
-<<<<<<< HEAD
                             (((paddr)&0xfffff000)   | \
-=======
-                           (((paddr)&0xfffff000)   | \
->>>>>>> f93088ff895c191fd4e32b5453dc668e0876c18b
+                            (((paddr)&0xfffff000)   | \
                             ((ap)<<10)      | \
                             ((ap)<<8)       | \
                             ((ap)<<6)       | \
@@ -62,21 +54,12 @@
                             0x2)
 
 #define MMU_SET_LVL1_SECT(addr, ap, dom, ce, be) \
-<<<<<<< HEAD
                          ((((addr) & 0xfff00000)) |     \
                          ((ap) << 10)            |     \
                          ((dom) << 5)            |     \
                          ((ce) << 3)             |     \
                          ((be) << 2)             |     \
                          0x12)
-=======
-          ((((addr) & 0xfff00000)) |     \
-           ((ap) << 10)            |     \
-           ((dom) << 5)            |     \
-           ((ce) << 3)             |     \
-           ((be) << 2)             |     \
-           0x12)
->>>>>>> f93088ff895c191fd4e32b5453dc668e0876c18b
 
 /* TODO: Add other page sizes */
 typedef enum { LVL1_PT, LVL2_PT } pt_type;
@@ -96,11 +79,8 @@ uint8_t  cb;
 uint8_t domain;
 } arm_bsp_mm_mpe;
 
-<<<<<<< HEAD
 rtems_status_code enable_mmu();
 
 rtems_status_code disable_mmu();
 
-=======
->>>>>>> f93088ff895c191fd4e32b5453dc668e0876c18b
 #endif 

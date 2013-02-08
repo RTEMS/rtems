@@ -210,12 +210,9 @@ rtems_task Init(
   else printf("Passed : Failed to find unmapped address in ALUT, status = %d\n",status);
   printf(  "\n\n*** LIBMM HIGH/MID LEVEL TEST ENDS ***\n" );
   
-<<<<<<< HEAD
-=======
   char *a = (char *) 0x00100008;
   char b;
   *a = 5;
->>>>>>> f93088ff895c191fd4e32b5453dc668e0876c18b
   exit( 0 ); 
 }
 
