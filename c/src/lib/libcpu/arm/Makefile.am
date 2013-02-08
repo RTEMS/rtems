@@ -15,12 +15,16 @@ include_libcpu_HEADERS =
 ## shared/include
 if shared
 
-include_libcpu_HEADERS += shared/include/mmu.h
+include_libcpu_HEADERS += shared/include/mmu.h ../shared/include/memorymanagement.h \
+                          shared/arm920/mmu_support.h
 include_libcpu_HEADERS += shared/include/arm-cp15.h
 
 ## shared/arm920
 noinst_PROGRAMS += shared/arm920.rel
-shared_arm920_rel_SOURCES = shared/arm920/mmu.c
+shared_arm920_rel_SOURCES = shared/arm920/mmu.c shared/arm920/mmu_support.h \
+                            shared/arm920/mmu_support.c \
+                            ../shared/include/memorymanagement.h \
+                            ../shared/src/memorymanagement_manager.c
 shared_arm920_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
 shared_arm920_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif

@@ -47,6 +47,8 @@ block14/Makefile
 block13/Makefile
 rbheap01/Makefile
 syscall01/Makefile
+mmtest1/Makefile
+mmtest2/Makefile
 flashdisk01/Makefile
 block01/Makefile
 block02/Makefile
