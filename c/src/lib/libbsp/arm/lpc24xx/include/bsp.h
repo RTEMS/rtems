@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -110,6 +110,12 @@ void *bsp_idle_thread(uintptr_t ignored);
 #endif
 
 void bsp_restart(void *addr);
+
+bool lpc24xx_uart_probe_1(int minor);
+
+bool lpc24xx_uart_probe_2(int minor);
+
+bool lpc24xx_uart_probe_3(int minor);
 
 /** @} */
 

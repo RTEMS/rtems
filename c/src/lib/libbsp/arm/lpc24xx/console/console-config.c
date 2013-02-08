@@ -42,54 +42,6 @@ static void lpc24xx_uart_set_register(uintptr_t addr, uint8_t i, uint8_t val)
   reg [i] = val;
 }
 
-#ifdef LPC24XX_CONFIG_UART_1
-  static bool lpc24xx_uart_probe_1(int minor)
-  {
-    static const lpc24xx_pin_range pins [] = {
-      LPC24XX_PIN_UART_1_TXD_P0_15,
-      LPC24XX_PIN_UART_1_RXD_P0_16,
-      LPC24XX_PIN_TERMINAL
-    };
-
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_1, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
-
-    return true;
-  }
-#endif
-
-#ifdef LPC24XX_CONFIG_UART_2
-  static bool lpc24xx_uart_probe_2(int minor)
-  {
-    static const lpc24xx_pin_range pins [] = {
-      LPC24XX_PIN_UART_2_TXD_P0_10,
-      LPC24XX_PIN_UART_2_RXD_P0_11,
-      LPC24XX_PIN_TERMINAL
-    };
-
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_2, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
-
-    return true;
-  }
-#endif
-
-#ifdef LPC24XX_CONFIG_UART_3
-  static bool lpc24xx_uart_probe_3(int minor)
-  {
-    static const lpc24xx_pin_range pins [] = {
-      LPC24XX_PIN_UART_3_TXD_P0_0,
-      LPC24XX_PIN_UART_3_RXD_P0_1,
-      LPC24XX_PIN_TERMINAL
-    };
-
-    lpc24xx_module_enable(LPC24XX_MODULE_UART_3, LPC24XX_MODULE_PCLK_DEFAULT);
-    lpc24xx_pin_config(&pins [0], LPC24XX_PIN_SET_FUNCTION);
-
-    return true;
-  }
-#endif
-
 console_tbl Console_Configuration_Ports [] = {
   #ifdef LPC24XX_CONFIG_CONSOLE
     {
