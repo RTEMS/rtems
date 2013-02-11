@@ -11,8 +11,8 @@
  * Declare some sizes.
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
-RamSize = DEFINED(RamSize) ? RamSize : 12M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 2M;
+RamSize = DEFINED(RamSize) ? RamSize : 4M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 1M;
 
 RAM_END = RamBase + RamSize;
 
