@@ -34,8 +34,7 @@ file from the PowerPC psim BSP:
 The first section of this file renames the built-in definition of
 some specification variables so they can be augmented without
 embedded their original definition.  The subsequent sections
-specify what behavior is expected when the @code{-qrtems} or
-@code{-qrtems_debug} option is specified.
+specify what behavior is expected when the @code{-qrtems} option is specified.
 
 The @code{*startfile} section specifies that the BSP specific file
 @code{start.o} will be used instead of @code{crt0.o}.  In addition,
