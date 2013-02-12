@@ -142,6 +142,50 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
   return (address >= base && address <= limit);
 }
 
+/**
+ * @brief Align address to nearest multiple of alignment, rounding up.
+ *
+ * This function returns the given address aligned to the given alignment.
+ * If the address already is aligned, or if alignment is 0, the address is
+ * returned as is. The returned address is greater than or equal to the
+ * given address.
+ *
+ * @param[in] address is the address to align.
+ * @param[in] alignment is the boundary for alignment and must be a power of 2
+ *
+ * @return Returns the aligned address.
+ */
+RTEMS_INLINE_ROUTINE void *_Addresses_Align_up(
+  void *address,
+  size_t alignment
+)
+{
+  uintptr_t mask = alignment - (uintptr_t)1;
+  return (void*)(((uintptr_t)address + mask) & ~mask);
+}
+
+/**
+ * @brief Align address to nearest multiple of alignment, truncating.
+ *
+ * This function returns the given address aligned to the given alignment.
+ * If the address already is aligned, or if alignment is 0, the address is
+ * returned as is. The returned address is less than or equal to the
+ * given address.
+ *
+ * @param[in] address is the address to align.
+ * @param[in] alignment is the boundary for alignment and must be a power of 2.
+ *
+ * @return Returns the aligned address.
+ */
+RTEMS_INLINE_ROUTINE void *_Addresses_Align_down(
+  void *address,
+  size_t alignment
+)
+{
+  uintptr_t mask = alignment - (uintptr_t)1;
+  return (void*)((uintptr_t)address & ~mask);
+}
+
 /** @} */
 
 #endif
