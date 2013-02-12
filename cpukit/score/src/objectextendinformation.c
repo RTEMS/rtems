@@ -117,6 +117,8 @@ void _Objects_Extend_information(
     Objects_Control **local_table;
     void             *old_tables;
     size_t            block_size;
+    uintptr_t         object_blocks_size;
+    uintptr_t         inactive_per_block_size;
 
     /*
      *  Growing the tables means allocating a new area, doing a copy and
@@ -142,15 +144,21 @@ void _Objects_Extend_information(
 
     /*
      *  Allocate the tables and break it up. The tables are:
-     *      1. object_locks        : void*
+     *      1. object_blocks        : void*
      *      2. inactive_per_blocks : uint32_t
      *      3. local_table         : Objects_Name*
      */
-    #define ALIGN_BLOCK_SIZE(_s) \
-        (((_s) + (CPU_ALIGNMENT - 1)) & ~(CPU_ALIGNMENT - 1))
-    block_size = ALIGN_BLOCK_SIZE( block_count * sizeof(void*) ) +
-          ALIGN_BLOCK_SIZE( block_count * sizeof(uint32_t) ) +
-          ((maximum + minimum_index) * sizeof(Objects_Control *));
+    object_blocks_size = (uintptr_t)_Addresses_Align_up(
+        (void*)(block_count * sizeof(void*)),
+        CPU_ALIGNMENT
+    );
+    inactive_per_block_size =
+        (uintptr_t)_Addresses_Align_up(
+            (void*)(block_count * sizeof(uint32_t)),
+            CPU_ALIGNMENT
+        );
+    block_size = object_blocks_size + inactive_per_block_size +
+        ((maximum + minimum_index) * sizeof(Objects_Control *));
     if ( information->auto_extend ) {
       object_blocks = _Workspace_Allocate( block_size );
       if ( !object_blocks ) {
@@ -166,16 +174,12 @@ void _Objects_Extend_information(
      */
     inactive_per_block = (uint32_t *) _Addresses_Add_offset(
         object_blocks,
-        ALIGN_BLOCK_SIZE( block_count * sizeof(void*) )
+        object_blocks_size
     );
     local_table = (Objects_Control **) _Addresses_Add_offset(
         inactive_per_block,
-        ALIGN_BLOCK_SIZE( block_count * sizeof(uint32_t) )
+        inactive_per_block_size
     );
-    if ( !_Addresses_Is_aligned( local_table ) ) {
-      local_table = (Objects_Control **)
-        (((uintptr_t)local_table + CPU_ALIGNMENT - 1) & ~(CPU_ALIGNMENT - 1));
-    }
 
     /*
      *  Take the block count down. Saves all the (block_count - 1)
