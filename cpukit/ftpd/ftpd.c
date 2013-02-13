@@ -1958,6 +1958,14 @@ session(rtems_task_argument arg)
       send_reply(info, 421, "Service not available, closing control connection.");
     }
 
+    /*
+     * Go back to the root directory.  A use case is to release a current
+     * directory in a mounted file system on dynamic media, e.g. USB stick.
+     * The return value can be ignored since the next session will try do the
+     * operation again and an error check is performed in this case.
+     */
+    chdir("/");
+
     /* Close connection and put ourselves back into the task pool. */
     close_data_socket(info);
     close_stream(info);
