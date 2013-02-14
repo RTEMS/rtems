@@ -15,6 +15,8 @@
 #ifndef _RTEMS_SCORE_GENERAL_ATOMIC_CPU_H
 #define _RTEMS_SCORE_GEMERAL_ATOMIC_CPU_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
