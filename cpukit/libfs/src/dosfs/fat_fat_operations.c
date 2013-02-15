@@ -53,27 +53,24 @@ fat_scan_fat_for_free_clusters(
 {
     int            rc = RC_OK;
     uint32_t       cl4find = 2;
-    uint32_t       next_cln = 0;
-    uint32_t       save_cln = 0;
+    uint32_t       save_cln = FAT_UNDEFINED_VALUE;
     uint32_t       data_cls_val = fs_info->vol.data_cls + 2;
     uint32_t       i = 2;
-    ssize_t        bytes_written;
+
+    if (fs_info->vol.next_cl - 2 < fs_info->vol.data_cls)
+        cl4find = fs_info->vol.next_cl;
 
     *cls_added = 0;
-
-    if (count == 0)
-        return rc;
-
-    if (fs_info->vol.next_cl != FAT_UNDEFINED_VALUE)
-        cl4find = fs_info->vol.next_cl;
 
     /*
      * fs_info->vol.data_cls is exactly the count of data clusters
      * starting at cluster 2, so the maximum valid cluster number is
      * (fs_info->vol.data_cls + 1)
      */
-    while (i < data_cls_val)
+    while (*cls_added != count && i < data_cls_val)
     {
+        uint32_t next_cln = 0;
+
         rc = fat_get_fat_cluster(fs_info, cl4find, &next_cln);
         if ( rc != RC_OK )
         {
@@ -120,7 +117,9 @@ fat_scan_fat_for_free_clusters(
 
             if (zero_fill)
             {
-                bytes_written = fat_cluster_set (fs_info, cl4find, 0, fs_info->vol.bpc, 0);
+                ssize_t bytes_written =
+                    fat_cluster_set(fs_info, cl4find, 0, fs_info->vol.bpc, 0);
+
                 if (fs_info->vol.bpc != bytes_written)
                 {
                     rc = -1;
@@ -130,17 +129,6 @@ fat_scan_fat_for_free_clusters(
 
             save_cln = cl4find;
             (*cls_added)++;
-
-            /* have we satisfied request ? */
-            if (*cls_added == count)
-            {
-                    fs_info->vol.next_cl = save_cln;
-                    if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
-                        fs_info->vol.free_cls -= (*cls_added);
-                *last_cl = save_cln;
-                fat_buf_release(fs_info);
-                return rc;
-            }
         }
         i++;
         cl4find++;
@@ -148,12 +136,14 @@ fat_scan_fat_for_free_clusters(
             cl4find = 2;
     }
 
-        fs_info->vol.next_cl = save_cln;
-        if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
-            fs_info->vol.free_cls -= (*cls_added);
-
     *last_cl = save_cln;
+    fs_info->vol.next_cl = save_cln;
+
+    if (fs_info->vol.free_cls != FAT_UNDEFINED_VALUE)
+        fs_info->vol.free_cls -= (*cls_added);
+
     fat_buf_release(fs_info);
+
     return RC_OK;
 
 cleanup:
