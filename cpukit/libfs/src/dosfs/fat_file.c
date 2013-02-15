@@ -637,42 +637,43 @@ fat_file_extend(
         new_length -= (cls2add - cls_added) << fs_info->vol.bpc_log2;
     }
 
-    /* add new chain to the end of existed */
-    if ( fat_fd->fat_file_size == 0 )
+    if (cls_added > 0)
     {
-        fat_fd->map.disk_cln = fat_fd->cln = chain;
-        fat_fd->map.file_cln = 0;
-    }
-    else
-    {
-        if (fat_fd->map.last_cln != FAT_UNDEFINED_VALUE)
+        /* add new chain to the end of existing */
+        if ( fat_fd->fat_file_size == 0 )
         {
-            old_last_cl = fat_fd->map.last_cln;
+            fat_fd->map.disk_cln = fat_fd->cln = chain;
+            fat_fd->map.file_cln = 0;
         }
         else
         {
-            rc = fat_file_ioctl(fs_info, fat_fd, F_CLU_NUM,
-                                (fat_fd->fat_file_size - 1), &old_last_cl);
+            if (fat_fd->map.last_cln != FAT_UNDEFINED_VALUE)
+            {
+                old_last_cl = fat_fd->map.last_cln;
+            }
+            else
+            {
+                rc = fat_file_ioctl(fs_info, fat_fd, F_CLU_NUM,
+                                    (fat_fd->fat_file_size - 1), &old_last_cl);
+                if ( rc != RC_OK )
+                {
+                    fat_free_fat_clusters_chain(fs_info, chain);
+                    return rc;
+                }
+            }
+
+            rc = fat_set_fat_cluster(fs_info, old_last_cl, chain);
             if ( rc != RC_OK )
             {
                 fat_free_fat_clusters_chain(fs_info, chain);
                 return rc;
             }
+            fat_buf_release(fs_info);
         }
 
-        rc = fat_set_fat_cluster(fs_info, old_last_cl, chain);
-        if ( rc != RC_OK )
-        {
-            fat_free_fat_clusters_chain(fs_info, chain);
-            return rc;
-        }
-        fat_buf_release(fs_info);
-    }
-
-    /* update number of the last cluster of the file if it changed */
-    if (cls_added != 0)
-    {
+        /* update number of the last cluster of the file */
         fat_fd->map.last_cln = last_cl;
+
         if (fat_fd->fat_file_type == FAT_DIRECTORY)
         {
             rc = fat_init_clusters_chain(fs_info, chain);
