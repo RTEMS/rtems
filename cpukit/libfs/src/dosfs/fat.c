@@ -652,11 +652,16 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
             vol->mask = FAT_FAT16_MASK;
             vol->eoc_val = FAT_FAT16_EOC;
         }
-        else
+        else if ( vol->data_cls < FAT_FAT32_MASK - 1 )
         {
             vol->type = FAT_FAT32;
             vol->mask = FAT_FAT32_MASK;
             vol->eoc_val = FAT_FAT32_EOC;
+        }
+        else
+        {
+            close(vol->fd);
+            rtems_set_errno_and_return_minus_one( EINVAL );
         }
     }
 
