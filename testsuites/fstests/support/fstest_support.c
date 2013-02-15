@@ -29,6 +29,8 @@
 #include "fstest.h"
 #include "pmacros.h"
 
+volatile void *prevent_compiler_optimizations;
+
 /* Break out of a chroot() environment in C */
 static void break_out_of_chroot(void)
 {
@@ -42,7 +44,8 @@ static void break_out_of_chroot(void)
   rtems_test_assert(rv == 0);
 
   /* Perform deferred memory frees */
-  free(malloc(1));
+  prevent_compiler_optimizations = malloc(1);
+  free(prevent_compiler_optimizations);
 }
 
 /*
