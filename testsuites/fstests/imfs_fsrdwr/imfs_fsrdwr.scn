@@ -15,8 +15,8 @@ test case: block_rw_case_1
 test case: block_rw_case_2
 test case: block_rw_case_3
 test case: block_rw_case_4
+test case: write_until_no_space_is_left
 
 
 Shutting down filesystem IMFS
 *** END OF FILE SYSTEM TEST ( IMFS ) ***
-
