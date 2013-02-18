@@ -633,8 +633,9 @@ fat_file_extend(
     /*  check wether we satisfied request for 'cls2add' clusters */
     if (cls2add != cls_added)
     {
-        new_length -= bytes2add & (fs_info->vol.bpc - 1);
-        new_length -= (cls2add - cls_added) << fs_info->vol.bpc_log2;
+        uint32_t missing = (cls2add - cls_added) << fs_info->vol.bpc_log2;
+
+        new_length -= bytes2add < missing ? bytes2add : missing;
     }
 
     if (cls_added > 0)
