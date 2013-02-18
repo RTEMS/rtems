@@ -83,20 +83,27 @@ libbsp_a_SOURCES += console/console.c
 libbsp_a_SOURCES += i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
 # ide
 libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
+libbsp_a_SOURCES += ide/ata.c
+libbsp_a_SOURCES += ide/ata-instance.c
+libbsp_a_SOURCES += ide/ata-dma-pio-single.c
 
-include_bsp_HEADERS = ../../shared/include/irq-generic.h \
-	../../shared/include/irq-info.h \
-	../../shared/include/utility.h \
-	../../shared/include/bootcard.h \
-	../../shared/include/u-boot.h \
-	../shared/include/u-boot-board-info.h \
-	include/irq.h \
-	include/i2cdrv.h \
-	include/i2c.h \
-	include/mpc5200.h \
-	include/mscan-base.h \
-	include/u-boot-config.h \
-	mscan/mscan.h
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../shared/include/bootcard.h
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += ../../shared/include/u-boot.h
+include_bsp_HEADERS += ../../shared/include/utility.h
+include_bsp_HEADERS += ../shared/include/u-boot-board-info.h
+include_bsp_HEADERS += include/ata.h
+include_bsp_HEADERS += include/bestcomm.h
+include_bsp_HEADERS += include/bestcomm_ops.h
+include_bsp_HEADERS += include/i2cdrv.h
+include_bsp_HEADERS += include/i2c.h
+include_bsp_HEADERS += include/irq.h
+include_bsp_HEADERS += include/mpc5200.h
+include_bsp_HEADERS += include/mscan-base.h
+include_bsp_HEADERS += include/u-boot-config.h
+include_bsp_HEADERS += mscan/mscan.h
 
 # irq
 libbsp_a_SOURCES += include/irq.h \
@@ -123,25 +130,26 @@ libbsp_a_SOURCES += tod/todcfg.c tod/pcf8563.c tod/pcf8563.h \
     ../../shared/tod.c
 
 # startup
-libbsp_a_SOURCES += ../../shared/bootcard.c \
-	../../shared/bsplibc.c \
-	../../shared/bsppost.c \
-	../../shared/bsppretaskinghook.c \
-	../../shared/bsppredriverhook.c \
-	../../shared/gnatinstallhandler.c \
-	../../shared/sbrk.c \
-	../../shared/src/bsp-uboot-board-info.c \
-	../shared/showbats.c \
-	../shared/uboot_dump_bdinfo.c \
-	../shared/uboot_getenv.c \
-	../../shared/bspclean.c \
-	startup/bspreset.c \
-	../../shared/bspgetworkarea.c \
-	../shared/startup/bspidle.c \
-	../shared/src/memcpy.c \
-	startup/bspstart.c \
-	startup/cpuinit.c  \
-	startup/uboot_support.c
+libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/bspclean.c
+libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bsplibc.c
+libbsp_a_SOURCES += ../../shared/bsppost.c
+libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+libbsp_a_SOURCES += ../../shared/bsppretaskinghook.c
+libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/sbrk.c
+libbsp_a_SOURCES += ../../shared/src/bsp-uboot-board-info.c
+libbsp_a_SOURCES += ../shared/showbats.c
+libbsp_a_SOURCES += ../shared/src/memcpy.c
+libbsp_a_SOURCES += ../shared/startup/bspidle.c
+libbsp_a_SOURCES += ../shared/uboot_dump_bdinfo.c
+libbsp_a_SOURCES += ../shared/uboot_getenv.c
+libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += startup/bspstart.c
+libbsp_a_SOURCES += startup/cpuinit.c 
+libbsp_a_SOURCES += startup/uboot_support.c
+libbsp_a_SOURCES += startup/bestcomm.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network_5200/network.c
