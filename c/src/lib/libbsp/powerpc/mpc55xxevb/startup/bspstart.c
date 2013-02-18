@@ -59,7 +59,7 @@ void _BSP_Fatal_error(unsigned n)
 	}
 }
 
-void mpc55xx_fatal(rtems_fatal_code code)
+void mpc55xx_fatal(mpc55xx_fatal_code code)
 {
   rtems_fatal(RTEMS_FATAL_SOURCE_BSP_SPECIFIC, code);
 }

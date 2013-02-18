@@ -117,7 +117,7 @@ typedef enum {
   MPC55XX_FATAL_CONSOLE_LINFLEX_ERR_IRQ_REMOVE
 } mpc55xx_fatal_code;
 
-void mpc55xx_fatal(rtems_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+void mpc55xx_fatal(mpc55xx_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #ifdef __cplusplus
 }
