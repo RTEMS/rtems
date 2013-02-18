@@ -560,7 +560,7 @@ random_fill (char *dst, size_t n)
 {
   static uint32_t u = 0x12345678;
   uint32_t v = u;
-  uint32_t w;
+  uint32_t w = u;
   size_t i = 0;
   int j = 0;
 
