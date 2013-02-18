@@ -338,7 +338,7 @@ rtems_device_driver slt_initialize
       {
 
       printk("Unable to connect PSC Irq handler\n");
-      rtems_fatal_error_occurred(1);
+      mpc5200_fatal(MPC5200_FATAL_SLICETIMER_0_IRQ_INSTALL);
 
       }
 
@@ -353,7 +353,7 @@ rtems_device_driver slt_initialize
       {
 
       printk("Unable to connect PSC Irq handler\n");
-      rtems_fatal_error_occurred(1);
+      mpc5200_fatal(MPC5200_FATAL_SLICETIMER_1_IRQ_INSTALL);
 
       }
 

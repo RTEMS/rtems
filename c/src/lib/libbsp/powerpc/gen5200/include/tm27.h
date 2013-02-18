@@ -33,7 +33,7 @@ void Install_tm27_vector(void (*_handler)())
   clockIrqData.hdl = _handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
         printk("Error installing clock interrupt handler!\n");
-        rtems_fatal_error_occurred(1);
+        mpc5200_fatal(MPC5200_FATAL_TM27_IRQ_INSTALL);
   }
 }
 
