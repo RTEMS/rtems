@@ -28,20 +28,6 @@
 
 dev_t dev = 0;
 
-static void initialize_swapout_task(void)
-{
-  int fd = open(RAMDISK_PATH, O_RDONLY);
-  int rv = 0;
-
-  rtems_test_assert(fd >= 0);
-
-  rv = rtems_disk_fd_sync(fd);
-  rtems_test_assert(rv == 0);
-
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
-}
-
 void
 init_ramdisk (void)
 {
@@ -52,9 +38,6 @@ init_ramdisk (void)
   rc = ramdisk_register (RAMDISK_BLOCK_SIZE, RAMDISK_BLOCK_COUNT,
                          false, RAMDISK_PATH, &dev);
   rtems_test_assert (rc == 0);
-
-
-  initialize_swapout_task();
 }
 
 void

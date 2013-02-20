@@ -100,20 +100,6 @@ static void test_logical_disks(const char *const *rdax, bool exists)
   }
 }
 
-static void initialize_swapout_task(void)
-{
-  int fd = open(rda, O_RDONLY);
-  int rv = 0;
-
-  rtems_test_assert(fd >= 0);
-
-  rv = rtems_disk_fd_sync(fd);
-  rtems_test_assert(rv == 0);
-
-  rv = close(fd);
-  rtems_test_assert(rv == 0);
-}
-
 static void test_bdpart(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -127,8 +113,6 @@ static void test_bdpart(void)
   memset(&created_partitions [0], 0, sizeof(created_partitions));
   memset(&actual_format, 0, sizeof(actual_format));
   memset(&actual_partitions [0], 0, sizeof(actual_partitions));
-
-  initialize_swapout_task();
 
   rtems_resource_snapshot_take(&before);
 
