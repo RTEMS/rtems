@@ -69,6 +69,10 @@ extern "C" {
 #  define CPU_MODEL_NAME  "ARMv6J"
 #  define ARM_MULTILIB_ARCH_V4
 
+#elif defined(__ARM_ARCH_6ZK__)
+#  define CPU_MODEL_NAME  "ARMv6ZK"
+#  define ARM_MULTILIB_ARCH_V4
+
 #elif defined(__ARM_ARCH_6M__)
 #  define CPU_MODEL_NAME  "ARMv6M"
 
