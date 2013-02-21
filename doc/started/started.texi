@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -55,15 +55,6 @@
 
 @contents
 
-@include intro.texi
-@include require.texi
-@include binaries.texi
-@include buildc.texi
-@include buildrt.texi
-@include sample.texi
-@include nextstep.texi
-@include nt.texi
-
 @node Top, Introduction, (dir), (dir)
 @top Getting Started With RTEMS
 
@@ -82,6 +73,15 @@ This is the online version of the Getting Started with RTEMS.
 
 @c * Command and Variable Index::
 @c * Concept Index::
+
+@include intro.texi
+@include require.texi
+@include binaries.texi
+@include buildc.texi
+@include buildrt.texi
+@include sample.texi
+@include nextstep.texi
+@include nt.texi
 
 @c @node Command and Variable Index, Concept Index, Installing GCC AND NEWLIB, Top
 @c @unnumbered Command and Variable Index

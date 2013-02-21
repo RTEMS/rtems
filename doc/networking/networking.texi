@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -55,13 +55,6 @@
 
 @contents
 
-@include preface.texi
-@include networktasks.texi
-@include driver.texi
-@include networkapp.texi
-@include testing.texi
-@include servers.texi
-@include decdriver.texi
 @node Top, Preface, (dir), (dir)
 @top RTEMS TCP/IP Networking Supplement
 
@@ -76,6 +69,14 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+
+@include preface.texi
+@include networktasks.texi
+@include driver.texi
+@include networkapp.texi
+@include testing.texi
+@include servers.texi
+@include decdriver.texi
 
 @node Command and Variable Index, Concept Index, List of Ethernet cards using the DEC chip, Top
 @unnumbered Command and Variable Index

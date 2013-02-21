@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -55,27 +55,6 @@
 
 @contents
 
-@include preface.texi
-@include ch01.texi
-@include ch02.texi
-@include ch03.texi
-@include ch04.texi
-@include ch05.texi
-@include ch06.texi
-@include ch07.texi
-@include ch08.texi
-@include ch09.texi
-@include ch10.texi
-@include ch11.texi
-@include ch12.texi
-@include ch13.texi
-@include ch14.texi
-@include ch15.texi
-@include ch16.texi
-@include ch17.texi
-@include ch18.texi
-@include ch19.texi
-
 @ifnottex
 @node Top, Preface, (dir), (dir)
 @top RTEMS POSIX 1003.1 Compliance Guide
@@ -105,6 +84,27 @@
 * Concept Index::
 @end menu
 @end ifnottex
+
+@include preface.texi
+@include ch01.texi
+@include ch02.texi
+@include ch03.texi
+@include ch04.texi
+@include ch05.texi
+@include ch06.texi
+@include ch07.texi
+@include ch08.texi
+@include ch09.texi
+@include ch10.texi
+@include ch11.texi
+@include ch12.texi
+@include ch13.texi
+@include ch14.texi
+@include ch15.texi
+@include ch16.texi
+@include ch17.texi
+@include ch18.texi
+@include ch19.texi
 
 @node Command and Variable Index, Concept Index, Overall Summary, Top
 @unnumbered Command and Variable Index

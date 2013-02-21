@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -75,44 +75,6 @@
 
 @contents
 
-@node List of Figures, Preface, Top, Top
-@unnumbered List of Figures
-@listoffloats Figure
-
-@include preface.texi
-@include overview.texi
-@include concepts.texi
-@include datatypes.texi
-@include schedule.texi
-@include init.texi
-@include task.texi
-@include intr.texi
-@include clock.texi
-@include timer.texi
-@include rtmon.texi
-@include sem.texi
-@include barrier.texi
-@include msg.texi
-@include event.texi
-@include signal.texi
-@include part.texi
-@include region.texi
-@include dpmem.texi
-@include io.texi
-@include fatal.texi
-@include bsp.texi
-@include userext.texi
-@include conf.texi
-@include mp.texi
-@include stackchk.texi
-@include cpuuse.texi
-@include object.texi
-@include chains.texi
-@include timespec.texi
-@include cbs.texi
-@include dirstat.texi
-@include example.texi
-@include glossary.texi
 @node Top, List of Figures, (dir), (dir)
 @top RTEMS Applications C User's Guide
 
@@ -155,6 +117,44 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@node List of Figures, Preface, Top, Top
+@unnumbered List of Figures
+@listoffloats Figure
+
+@include preface.texi
+@include overview.texi
+@include concepts.texi
+@include datatypes.texi
+@include schedule.texi
+@include init.texi
+@include task.texi
+@include intr.texi
+@include clock.texi
+@include timer.texi
+@include rtmon.texi
+@include sem.texi
+@include barrier.texi
+@include msg.texi
+@include event.texi
+@include signal.texi
+@include part.texi
+@include region.texi
+@include dpmem.texi
+@include io.texi
+@include fatal.texi
+@include bsp.texi
+@include userext.texi
+@include conf.texi
+@include mp.texi
+@include stackchk.texi
+@include cpuuse.texi
+@include object.texi
+@include chains.texi
+@include timespec.texi
+@include cbs.texi
+@include dirstat.texi
+@include example.texi
+@include glossary.texi
 
 @node Command and Variable Index, Concept Index, Glossary, Top
 @unnumbered Command and Variable Index

@@ -7,7 +7,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -62,13 +62,6 @@
 
 @contents
 
-@include preface.texi
-@include confinit.texi
-@include general.texi
-@include file.texi
-@include memory.texi
-@include rtems.texi
-@include network.texi
 @node Top, Preface, (dir), (dir)
 @top RTEMS Shell User's Guide
 
@@ -84,6 +77,14 @@
 * Concept Index::
 * Command Index::
 @end menu
+
+@include preface.texi
+@include confinit.texi
+@include general.texi
+@include file.texi
+@include memory.texi
+@include rtems.texi
+@include network.texi
 
 @node Function and Variable Index, Concept Index, Network Commands route - show or manipulate the ip routing table, Top
 @unnumbered Function and Variable Index

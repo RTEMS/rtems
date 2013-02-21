@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -55,19 +55,6 @@
 
 @contents
 
-@include preface.texi
-@include general.texi
-@include arm.texi
-@include avr.texi
-@include bfin.texi
-@include i386.texi
-@include lm32.texi
-@include m68k.texi
-@include mips.texi
-@include powerpc.texi
-@include sh.texi
-@include sparc.texi
-@include sparc64.texi
 @node Top, Preface, (dir), (dir)
 @top RTEMS CPU Architecture Supplement
 
@@ -88,6 +75,20 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+
+@include preface.texi
+@include general.texi
+@include arm.texi
+@include avr.texi
+@include bfin.texi
+@include i386.texi
+@include lm32.texi
+@include m68k.texi
+@include mips.texi
+@include powerpc.texi
+@include sh.texi
+@include sparc.texi
+@include sparc64.texi
 
 @node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index

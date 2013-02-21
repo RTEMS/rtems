@@ -8,7 +8,7 @@
 @c %**end of header
 
 @c
-@c  COPYRIGHT (c) 1989-2011.
+@c  COPYRIGHT (c) 1989-2013.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 
@@ -55,26 +55,6 @@
 
 @contents
 
-@include intro.texi
-@include target.texi
-@include makefiles.texi
-@include linkcmds.texi
-@include support.texi
-@include adaintr.texi
-@include init.texi
-@include console.texi
-@include clock.texi
-@include timer.texi
-@include rtc.texi
-@include ata.texi
-@include ide-ctrl.texi
-@include nvmem.texi
-@include network.texi
-@include shmsupp.texi
-@include framebuffer.texi
-@include analog.texi
-@include discrete.texi
-
 @node Top, Introduction, (dir), (dir)
 @top RTEMS BSP and Device Driver Development Guide
 
@@ -101,6 +81,26 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+
+@include intro.texi
+@include target.texi
+@include makefiles.texi
+@include linkcmds.texi
+@include support.texi
+@include adaintr.texi
+@include init.texi
+@include console.texi
+@include clock.texi
+@include timer.texi
+@include rtc.texi
+@include ata.texi
+@include ide-ctrl.texi
+@include nvmem.texi
+@include network.texi
+@include shmsupp.texi
+@include framebuffer.texi
+@include analog.texi
+@include discrete.texi
 
 @node Command and Variable Index, Concept Index, , Top
 @unnumbered Command and Variable Index
