@@ -1,4 +1,4 @@
-# HACK: makeinfo is locale sensitive 
+# HACK: makeinfo is locale sensitive
 LANG=C
 
 SUFFIXES = .t
@@ -37,20 +37,42 @@ CLEANFILES += $(PROJECT).pdf
 
 MOSTLYCLEANFILES += $(PDF_IMAGES)
 
-## HTML 
+## HTML
 SUFFIXES += .html
 
-$(PROJECT)*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
+if USE_HTML
+
+<<<<<<< HEAD
+html_project_DATA = 
+=======
+html_project_DATA =
+MOSTLYCLEANFILES += $(PROJECT)*.html
+html_project_DATA += *.html
+>>>>>>> bdf959d... doc/project.am: Fix whitespace at EOL
+
+if USE_TEXI2HTML
+index.html $(PROJECT)*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
 	rm -rf $(PROJECT).html
 	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $< $<
 	-rm -rf $(PROJECT)
 
 MOSTLYCLEANFILES += $(PROJECT)*.html 
 
-## Common installation points
-if USE_HTML
-html_project_DATA = $(PROJECT)*.html
-endif
+html_project_DATA += index.html $(PROJECT)*.html
+endif # USE_TEXI2HTML
+
+if USE_TEXI2ANY
+index.html *.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
+	rm -rf $(PROJECT).html
+	$(TEXI2ANY) $(TEXI2ANY_ARGS) $<
+
+MOSTLYCLEANFILES += $(PROJECT)/*.html 
+
+html_project_DATA += *.html
+endif # USE_TEXI2ANY
+
+endif # USE_HTML
+
 
 if USE_DVI
 dvi_DATA = $(PROJECT).dvi

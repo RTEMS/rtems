@@ -4,5 +4,13 @@ endif
 
 TEXI2HTML_ARGS=\
 -D use-html --split node \
+-o ./ \
+--top-file index.html \
 --init-file=$(top_builddir)/texi2html_init \
+-I $(srcdir) -I $(top_srcdir) -I $(top_builddir) -I .
+
+TEXI2ANY_ARGS=\
+--html -D use-html --split node \
+-o ./ \
+--init-file=$(top_builddir)/texi2any_init \
 -I $(srcdir) -I $(top_srcdir) -I $(top_builddir) -I .

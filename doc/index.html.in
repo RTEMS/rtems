@@ -16,7 +16,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/started.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="started/started.html">
+            <A HREF="started/index.html">
                Getting Started with RTEMS</A>
             </LI>
 
@@ -26,7 +26,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/c_user.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="c_user/c_user.html">
+            <A HREF="c_user/index.html">
                RTEMS Applications C User's Guide</A>
             </LI>
         
@@ -36,7 +36,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/posix_users.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="posix_users/posix_users.html">
+            <A HREF="posix_users/index.html">
                RTEMS POSIX API User's Guide</A>
             </LI>
 
@@ -46,7 +46,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/networking.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="networking/networking.html">
+            <A HREF="networking/index.html">
                RTEMS TCP/IP Networking Supplement</A>
             </LI>
 
@@ -56,7 +56,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/shell.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="shell/shell.html">
+            <A HREF="shell/index.html">
                RTEMS Shell User's Guide</A>
             </LI>
     </MENU>
@@ -68,7 +68,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/ada_user.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="ada_user/ada_user.html">
+            <A HREF="ada_user/index.html">
                RTEMS Applications Ada User's Guide</A>
             </LI>
     </MENU>
@@ -81,7 +81,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/bsp_howto.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="bsp_howto/bsp_howto.html">
+            <A HREF="bsp_howto/index.html">
                RTEMS BSP and Device Driver Development Guide</A>
             </LI>
 
@@ -91,7 +91,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/cpu_supplement.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="cpu_supplement/cpu_supplement.html">
+            <A HREF="cpu_supplement/index.html">
                RTEMS CPU Architecture Supplement</A>
             </LI>
 
@@ -101,7 +101,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/develenv.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="develenv/develenv.html">
+            <A HREF="develenv/index.html">
                RTEMS Development Environment Guide</A>
             </LI>
 
@@ -111,7 +111,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/porting.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="porting/porting.html">
+            <A HREF="porting/index.html">
                RTEMS Porting Guide</A>
             </LI>
 
@@ -121,7 +121,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/posix1003_1.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="posix1003_1/posix1003_1.html">
+            <A HREF="posix1003_1/index.html">
                RTEMS POSIX 1003.1 Compliance Guide</A>
             </LI>
 
@@ -131,7 +131,7 @@
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../dvi/filesystem.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="filesystem/filesystem.html">
+            <A HREF="filesystem/index.html">
                RTEMS Filesystem Design Guide</A>
             </LI>
     </MENU>

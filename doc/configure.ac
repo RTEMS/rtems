@@ -75,8 +75,18 @@ AC_PROG_LN_S
 
 AC_CHECK_PROGS(PERL,perl)
 
+AC_CHECK_PROGS(TEXI2ANY,texi2any)
+AC_SUBST(TEXI2ANY)
+AM_CONDITIONAL(USE_TEXI2ANY,
+  test "$enable_html" = "yes" \
+    && test x"$TEXI2ANY" != x"")
+
 AC_CHECK_PROGS(TEXI2HTML,texi2html)
 AC_SUBST(TEXI2HTML)
+AM_CONDITIONAL(USE_TEXI2HTML,
+  test "$enable_html" = "yes" \
+    && test x"$TEXI2ANY" = x"" \
+    && test x"$TEXI2HTML" != x"")
 
 AC_CHECK_PROGS(GS,gs)
 AM_CONDITIONAL(GS,test x"$GS" != x"")
@@ -169,5 +179,6 @@ new_chapters/Makefile
 cpu_supplement/Makefile
 shell/Makefile
 texi2html_init
+texi2any_init
 ])
 AC_OUTPUT
