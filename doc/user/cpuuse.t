@@ -56,7 +56,7 @@ This routine prints a table with the following information per task:
 
 The following is an example of the report generated:
 
-@example
+@smallexample
 @group
 -------------------------------------------------------------------------------
                               CPU USAGE BY THREAD
@@ -72,7 +72,7 @@ The following is an example of the report generated:
  TOTAL UNITS:                                                             1608
 -------------------------------------------------------------------------------
 @end group
-@end example
+@end smallexample
 
 Notice that the "TOTAL UNITS" is greater than the ticks per reset.
 This is an artifact of the way in which RTEMS keeps track of CPU 

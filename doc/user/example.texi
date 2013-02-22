@@ -11,9 +11,7 @@
  *  This file contains an example of a simple RTEMS
  *  application.  It instantiates the RTEMS Configuration 
  *  Information using confdef.h and contains two tasks:
- *  a *  user initialization task and a simple task.
- *
- *  This example assumes that a board support package exists.
+ *  a user initialization task and a simple task.
  */
 
 #include <rtems.h>
@@ -66,8 +64,11 @@ rtems_task user_application(rtems_task_argument argument)
   @}
 @}
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER  /* for stdio */
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER    /* for time services */
+/* The Console Driver supplies Standard I/O. */
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+/* The Clock Driver supplies the clock tick. */
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
@@ -75,8 +76,7 @@ rtems_task user_application(rtems_task_argument argument)
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT
-
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 @end example
 
 
