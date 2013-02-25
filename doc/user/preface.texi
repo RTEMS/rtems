@@ -155,14 +155,14 @@ It has been ported to the following processor families:
 @item Freescale (formerly Motorola) ColdFire
 @item Intel i386 and above 
 @item Lattice Semiconductor LM32
+@item NEC V850
 @item MIPS
 @item PowerPC
 @item Renesas (formerly Hitachi) SuperH
 @item Renesas (formerly Hitachi) H8/300
 @item Renesas M32C
 @item Renesas M32R
-@item SPARC
-@item Texas Instruments C3x/C4x
+@item SPARC v7, v8, and V9
 @end itemize
 
 Support for other processor families, including RISC, CISC, and DSP, is
