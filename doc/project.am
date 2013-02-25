@@ -42,33 +42,21 @@ SUFFIXES += .html
 
 if USE_HTML
 
-<<<<<<< HEAD
-html_project_DATA = 
-=======
 html_project_DATA =
+
 MOSTLYCLEANFILES += $(PROJECT)*.html
 html_project_DATA += *.html
->>>>>>> bdf959d... doc/project.am: Fix whitespace at EOL
 
-if USE_TEXI2HTML
-index.html *.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
+# Share as much as possible between the texi2html and texi2any rules
+*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
 	rm -rf $(PROJECT).html
+if USE_TEXI2HTML
 	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $< $<
 	-rm -rf $(PROJECT)
-
-MOSTLYCLEANFILES += $(PROJECT)*.html 
-
-html_project_DATA += *.html
 endif # USE_TEXI2HTML
-
 if USE_TEXI2ANY
-index.html *.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
-	rm -rf $(PROJECT).html
 	$(TEXI2ANY) $(TEXI2ANY_ARGS) $<
-
-MOSTLYCLEANFILES += $(PROJECT)/*.html 
-
-html_project_DATA += *.html
+	-rm -rf $(PROJECT)
 endif # USE_TEXI2ANY
 
 endif # USE_HTML
