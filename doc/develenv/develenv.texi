@@ -69,6 +69,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Introduction, (dir), (dir)
 @top RTEMS Development Environment Guide
 
@@ -80,6 +81,7 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
 
 @include intro.texi
 @include direct.texi

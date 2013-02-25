@@ -55,6 +55,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Introduction, (dir), (dir)
 @top RTEMS BSP and Device Driver Development Guide
 
@@ -81,6 +82,7 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
 
 @include intro.texi
 @include target.texi

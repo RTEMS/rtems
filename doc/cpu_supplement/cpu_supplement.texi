@@ -55,6 +55,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Preface, (dir), (dir)
 @top RTEMS CPU Architecture Supplement
 
@@ -75,6 +76,7 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
 
 @include preface.texi
 @include general.texi

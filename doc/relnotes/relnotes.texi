@@ -68,6 +68,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Introduction, (dir), (dir)
 @top RTEMS Release Notes
 
@@ -79,6 +80,7 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
 
 @include intro.texi
 @include install.texi

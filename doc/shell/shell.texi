@@ -62,6 +62,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Preface, (dir), (dir)
 @top RTEMS Shell User's Guide
 
@@ -77,6 +78,7 @@
 * Concept Index::
 * Command Index::
 @end menu
+@end ifnottex
 
 @include preface.texi
 @include confinit.texi

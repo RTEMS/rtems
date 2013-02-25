@@ -80,6 +80,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Preface, (dir), (dir)
 @top RTEMS Porting Guide
 
@@ -98,6 +99,7 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
 
 @include preface.texi
 @include developtools.texi

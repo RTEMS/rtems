@@ -75,6 +75,7 @@
 
 @contents
 
+@ifnottex
 @node Top, List of Figures, (dir), (dir)
 @top RTEMS Applications C User's Guide
 
@@ -117,6 +118,8 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
+
 @node List of Figures, Preface, Top, Top
 @unnumbered List of Figures
 @listoffloats Figure

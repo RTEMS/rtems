@@ -55,6 +55,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Preface, (dir), (dir)
 @top RTEMS TCP/IP Networking Supplement
 
@@ -69,6 +70,7 @@
 * Command and Variable Index::
 * Concept Index::
 @end menu
+@end ifnottex
 
 @include preface.texi
 @include networktasks.texi

@@ -55,6 +55,7 @@
 
 @contents
 
+@ifnottex
 @node Top, Introduction, (dir), (dir)
 @top Getting Started With RTEMS
 
@@ -70,9 +71,9 @@ This is the online version of the Getting Started with RTEMS.
 * Where To Go From Here::
 * Using MS-Windows as a Development Host::
 @end menu
-
 @c * Command and Variable Index::
 @c * Concept Index::
+@end ifnottex
 
 @include intro.texi
 @include require.texi
