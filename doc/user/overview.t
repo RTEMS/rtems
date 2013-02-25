@@ -409,107 +409,140 @@ The following provides an overview of the remainder
 of this manual:
 
 @table @asis
-@item Chapter 2
-Key Concepts: presents an
-introduction to the ideas which are common across multiple RTEMS
-managers.
+@item Chapter 2:
+Key Concepts: presents an introduction to the ideas which are common
+across multiple RTEMS managers.
 
 @item Chapter 3:
 RTEMS Data Types: describes the fundamental data types shared
 by the services in the RTEMS Classic API.
 
 @item Chapter 4:
+Scheduling Concepts: details the various RTEMS scheduling algorithms
+and task state transitions.
+
+@item Chapter 5:
 Initialization Manager: describes the functionality and directives
 provided by the Initialization Manager.
 
-@item Chapter 5:
+@item Chapter 6:
 Task Manager: describes the functionality and directives provided
 by the Task Manager.
 
-@item Chapter 6:
+@item Chapter 7:
 Interrupt Manager: describes the functionality and directives
 provided by the Interrupt Manager.
 
-@item Chapter 7:
+@item Chapter 8:
 Clock Manager: describes the functionality and directives
 provided by the Clock Manager.
 
-@item Chapter 8:
+@item Chapter 9:
 Timer Manager: describes the functionality and directives provided
 by the Timer Manager.
 
-@item Chapter 9:
+@item Chapter 10:
+Rate Monotonic Manager: describes the functionality and directives
+provided by the Rate Monotonic Manager.
+
+@item Chapter 11:
 Semaphore Manager: describes the functionality and directives
 provided by the Semaphore Manager.
 
-@item Chapter 10:
+@item Chapter 12:
+Barrier Manager: describes the functionality and directives
+provided by the Barrier Manager.
+
+@item Chapter 13:
 Message Manager: describes the functionality and directives
 provided by the Message Manager.
 
-@item Chapter 11:
+@item Chapter 14:
 Event Manager: describes the
 functionality and directives provided by the Event Manager.
 
-@item Chapter 12:
+@item Chapter 15:
 Signal Manager: describes the
 functionality and directives provided by the Signal Manager.
 
-@item Chapter 13:
+@item Chapter 16:
 Partition Manager: describes the
 functionality and directives provided by the Partition Manager.
 
-@item Chapter 14:
+@item Chapter 17:
 Region Manager: describes the
 functionality and directives provided by the Region Manager.
 
-@item Chapter 15:
+@item Chapter 18:
 Dual-Ported Memory Manager: describes
 the functionality and directives provided by the Dual-Ported
 Memory Manager.
 
-@item Chapter 16:
+@item Chapter 19:
 I/O Manager: describes the
 functionality and directives provided by the I/O Manager.
 
-@item Chapter 17:
+@item Chapter 20:
 Fatal Error Manager: describes the functionality and directives
 provided by the Fatal Error Manager.
 
-@item Chapter 18:
-Scheduling Concepts: details the RTEMS scheduling algorithm and
-task state transitions.
-
-@item Chapter 19:
-Rate Monotonic Manager: describes the functionality and directives
-provided by the Rate Monotonic Manager.
-
-@item Chapter 20:
+@item Chapter 21:
 Board Support Packages: defines the
 functionality required of user-supplied board support packages.
 
-@item Chapter 21:
+@item Chapter 22:
 User Extensions: shows the user how to
 extend RTEMS to incorporate custom features.
 
-@item Chapter 22:
+@item Chapter 23:
 Configuring a System: details the process by which one tailors RTEMS
 for a particular single-processor or multiprocessor application.
 
-@item Chapter 23:
+@item Chapter 24:
 Multiprocessing Manager: presents a
 conceptual overview of the multiprocessing capabilities provided
 by RTEMS as well as describing the Multiprocessing
 Communications Interface Layer and Multiprocessing Manager
 directives.
 
-@item Chapter 24:
+@item Chapter 25:
+Stack Bounds Checker: presents the capabilities of the RTEMS
+task stack checker which can report stack usage as well as detect
+bounds violations.
+
+@item Chapter 26:
+CPU Usage Statistics: presents the capabilities of the CPU Usage
+statistics gathered on a per task basis along with the mechanisms
+for reporting and resetting the statistics.
+
+@item Chapter 27:
+Object Services: presents a collection of helper services useful
+when manipulating RTEMS objects. These include methods to assist
+in obtaining an object's name in printable form. Additional services
+are provided to decompose an object Id and determine which API
+and object class it belongs to.
+
+@item Chapter 28:
+Chains: presents the methods provided to build, iterate and
+manipulate doubly-linked chains. This manager makes the
+chain implementation used internally by RTEMS to user space
+applications.
+
+@item Chapter 29:
+Timespec Helpers: presents a set of helper services useful
+when manipulating POSIX @code{struct timespec} instances.
+
+@item Chapter 30:
+Constant Bandwidth Server Scheduler API::
+
+@item Chapter 31:
 Directive Status Codes: provides a definition of each of the
 directive status codes referenced in this manual.
 
-@item Chapter 25:
+@item Chapter 32:
 Example Application: provides a template for simple RTEMS applications.
 
-@item Chapter 26:
+@item Chapter 33:
 Glossary: defines terms used throughout this manual.
 
 @end table
