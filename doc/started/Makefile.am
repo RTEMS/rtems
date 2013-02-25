@@ -30,7 +30,7 @@ require.texi: require.t
 
 binaries.texi: binaries.t
 	$(BMENU2) -c \
-	    -p "GNU/Linux Distrobutions using Debian Packaging Format" \
+	    -p "GNU/Linux Distributions using Debian Packaging Format" \
 	    -u "Top" \
 	    -n "Building the GNU Cross Compiler Toolset" < $< > $@
 

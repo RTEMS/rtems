@@ -152,7 +152,7 @@ to at least GNU fileutils version 3.16 to resolve this problem.
 
 @end itemize
 
-@subsection GNU/Linux Distrobutions using Debian Packaging Format
+@subsection GNU/Linux Distributions using Debian Packaging Format
 
 The RTEMS Project does not currently provide prebuilt toolsets in the Debian packaging format used by the Debian and Ubuntu distributions.  If you are using a distribution using this packaging format, then you have two options for installing the RTEMS toolset.
 
