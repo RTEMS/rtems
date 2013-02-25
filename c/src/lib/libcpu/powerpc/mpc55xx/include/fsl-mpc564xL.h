@@ -993,7 +993,7 @@ extern "C" {
 
    /* Register layout for all registers PSMI... */
 
-   typedef union {   /* PSMI - Pad Selection for Multiplexed Inputs */
+   typedef union SIUL_PSMI_8B_tag {   /* PSMI - Pad Selection for Multiplexed Inputs */
       uint8_t R;
       struct {
          uint8_t:4;
