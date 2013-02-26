@@ -3,6 +3,7 @@
  *
  * @brief  Thread Queue Dequeue Priority
  * @ingroup ScoreThreadQ
+ */
 
 /*
  *  COPYRIGHT (c) 1989-2008.
