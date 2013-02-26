@@ -153,6 +153,10 @@ libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
 noinst_LIBRARIES += libfsmount.a
 libfsmount_a_SOURCES = fsmount/fsmount.c fsmount/fsmount.h
 
+## utf8proc
+noinst_LIBRARIES += libutf8proc.a
+libutf8proc_a_SOURCES = utf8proc/utf8proc.c
+
 ## uuid
 noinst_LIBRARIES += libuuid.a
 libuuid_a_SOURCES = uuid/clear.c uuid/compare.c uuid/copy.c uuid/gen_uuid.c \

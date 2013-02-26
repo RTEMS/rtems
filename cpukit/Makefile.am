@@ -38,6 +38,9 @@ include_rtems_rtems_HEADERS =
 include_uuiddir = $(includedir)/uuid
 include_uuid_HEADERS = libmisc/uuid/uuid.h
 
+include_utf8procdir = $(includedir)/utf8proc
+include_utf8proc_HEADERS = libmisc/utf8proc/utf8proc.h
+
 if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
