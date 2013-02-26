@@ -28,6 +28,8 @@
 #include <rtems/ramdisk.h>
 #include <rtems/libcsupport.h>
 #include "ramdisk_support.h"
+#include "image.h"
+#include "files.h"
 
 #define MOUNT_DIR "/mnt"
 #define MOUNT_DIR_SIZE 4
@@ -43,10 +45,22 @@
 #define MAX_NAME_LENGTH ( 255 + 1 )
 #define MAX_NAME_LENGTH_INVALID ( 255 + 2 )
 #define MAX_DUPLICATES_PER_NAME 3
+static const char UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
+#define UTF8_BOM_SIZE 3 /* Size of the UTF-8 byte-order-mark */
 
 #define BLOCK_SIZE 512
 
 #define BLOCK_COUNT ( sizeof( image_bin ) / BLOCK_SIZE )
+
+static ramdisk                            disk_image = {
+  .block_size             = BLOCK_SIZE,
+  .block_num              = BLOCK_COUNT,
+  .area                   = &image_bin[0],
+  .initialized            = true,
+  .malloced               = false,
+  .trace                  = false,
+  .free_at_delete_request = false
+};
 
 static rtems_resource_snapshot            before_mount;
 
@@ -710,6 +724,112 @@ static void test_finding_directories(
 }
 
 /*
+ * Test the compatibility with a genuine MS Windows FAT file system.
+ */
+static void test_compatibility( void )
+{
+  int                       rc;
+  rtems_status_code         sc;
+  dev_t                     dev;
+  char                      diskpath[] = "/dev/ramdisk1";
+  rtems_dosfs_mount_options mount_opts;
+  rtems_device_major_number major;
+  FILE                     *fp;
+  int                       buffer;
+  unsigned int              index_file = 0;
+  unsigned int              index_char;
+  unsigned int              offset;
+  char                      content_buf[MAX_NAME_LENGTH + strlen( MOUNT_DIR )
+                                        + 1];
+  char                      file_path[MAX_NAME_LENGTH + strlen( MOUNT_DIR )
+                                      + 1];
+  DIR                      *dir_stream;
+  struct dirent            *dp;
+
+
+  mount_opts.converter = rtems_dosfs_create_utf8_converter( "CP850" );
+  rtems_test_assert( mount_opts.converter != NULL );
+
+  sc = rtems_io_register_driver( 0, &ramdisk_ops, &major );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  dev = rtems_filesystem_make_dev_t( major, 1 );
+
+  sc  = rtems_disk_create_phys(
+    dev,
+    BLOCK_SIZE,
+    BLOCK_COUNT,
+    ramdisk_ioctl,
+    &disk_image,
+    diskpath );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  rc = mount_and_make_target_path(
+    diskpath,
+    MOUNT_DIR,
+    RTEMS_FILESYSTEM_TYPE_DOSFS,
+    RTEMS_FILESYSTEM_READ_WRITE,
+    &mount_opts );
+  rtems_test_assert( rc == 0 );
+
+  dir_stream = opendir( MOUNT_DIR );
+  rtems_test_assert( dir_stream != NULL );
+
+  dp = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+
+  while ( dp != NULL ) {
+    index_char = 0;
+
+    size_t len = strlen( filenames[index_file] );
+
+    if ( filenames[index_file][len - 1] == '.' )
+      rtems_test_assert( ( len - 1 ) == dp->d_namlen );
+    else
+      rtems_test_assert( len == dp->d_namlen );
+
+    rtems_test_assert( 0
+                       == memcmp( &filenames[index_file][0], &dp->d_name[0],
+                                  dp->d_namlen ) );
+
+    snprintf( file_path, sizeof( file_path ), "%s/%s", MOUNT_DIR,
+              filenames[index_file] );
+    fp = fopen( file_path, "r" );
+    rtems_test_assert( fp != NULL );
+
+    /* These files should contain their own file names. */
+    while ( ( buffer = fgetc( fp ) ) != EOF ) {
+      content_buf[index_char] = buffer;
+      ++index_char;
+    }
+
+    if ( 0 == strncmp( content_buf, UTF8_BOM, UTF8_BOM_SIZE ) )
+      offset = UTF8_BOM_SIZE;
+    else
+      offset = 0;
+
+    rtems_test_assert( 0
+                       == memcmp( filenames[index_file],
+                                  &content_buf[offset],
+                                  index_char - offset ) );
+
+    rc = fclose( fp );
+    rtems_test_assert( rc == 0 );
+
+    ++index_file;
+    dp = readdir( dir_stream );
+  }
+
+  rtems_test_assert( index_file == FILES_FILENAMES_NUMBER_OF );
+
+  rc = closedir( dir_stream );
+  rtems_test_assert( rc == 0 );
+
+  rc = unmount( MOUNT_DIR );
+  rtems_test_assert( rc == 0 );
+}
+
+/*
  * Main test method
  */
 static void test( void )
@@ -878,6 +998,8 @@ static void test( void )
     NUMBER_OF_NAMES_MULTIBYTE );
 
   unmount_and_close_device();
+
+  test_compatibility();
 
   del_ramdisk();
 }
