@@ -1,0 +1,23 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: utf8proc01
+
+directives:
+- utf8proc_errmsg ( )
+- utf8proc_version ( )
+- utf8proc_iterate ( )
+- utf8proc_encode_char ( )
+- utf8proc_get_property ( )
+- utf8proc_decompose_char ( )
+- utf8proc_decompose ( )
+- utf8proc_reencode ( )
+- utf8proc_map ( )
+- utf8proc_NFD ( )
+- utf8proc_NFC ( )
+- utf8proc_NFKD ( )
+- utf8proc_NFKC ( )
+
+concepts:
+- Call interface methods of library utf8proc in order to make sure they compiled and linked ok.
+- The library is third party, thus it should be sufficient for us to make sure we can build it correctly.
+

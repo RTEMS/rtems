@@ -45,6 +45,7 @@ AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 AC_CONFIG_FILES([Makefile
 exit02/Makefile
 exit01/Makefile
+utf8proc01/Makefile
 md501/Makefile
 sparsedisk01/Makefile
 block16/Makefile
