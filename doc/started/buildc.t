@@ -96,9 +96,9 @@ location for the source tarballs and to determine if a patch is required
 for each tool version cited in the @code{Makefile.am}.
 
 @itemize
-binutils-sources.add
-gcc-sources.add
-gdb-sources.add
+@item binutils-sources.add
+@item gcc-sources.add
+@item gdb-sources.add
 @end itemize
 
 If any patches are required, they will be in the
