@@ -354,10 +354,6 @@ dont_switch_stacks:
 	cmp	%o0, 0
 	bz	simple_return
 	 nop
-#else
-        !sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
-        !ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
-        !ld       [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))], %l6
 #endif
 
         /*
