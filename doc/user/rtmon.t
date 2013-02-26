@@ -176,7 +176,7 @@ worst-case conditions and emphasizes the predictability of the
 system's behavior.  It has been proven that:
 
 @itemize @code{ }
-@b{RMS is an optimal static priority algorithm for
+@item @b{RMS is an optimal static priority algorithm for
 scheduling independent, preemptible, periodic tasks
 on a single processor.}
 @end itemize
