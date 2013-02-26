@@ -37,7 +37,9 @@
 #define NUMBER_OF_FILES 13
 #define NUMBER_OF_DIRECTORIES_INVALID 18
 #define NUMBER_OF_DIRECTORIES_DUPLICATED 2
+#define NUMBER_OF_MULTIBYTE_NAMES_DUPLICATED 2
 #define NUMBER_OF_FILES_DUPLICATED 2
+#define NUMBER_OF_NAMES_MULTIBYTE 10
 #define MAX_NAME_LENGTH ( 255 + 1 )
 #define MAX_NAME_LENGTH_INVALID ( 255 + 2 )
 #define MAX_DUPLICATES_PER_NAME 3
@@ -94,6 +96,34 @@ static const char DIRECTORY_NAMES_INVALID[
     10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
     20, 21, 22, 23, 24, 25, 26, 17, 28, 29, 30, 31},
   {127}
+};
+
+static const char NAMES_MULTIBYTE[
+  NUMBER_OF_NAMES_MULTIBYTE][MAX_NAME_LENGTH] = {
+  "đây là một tên tập tin dài",
+  "Bu uzun bir dosya adı",
+  "هذا هو اسم ملف طويل",
+  "αυτό είναι ένα μεγάλο όνομα αρχείου",
+  "это длинное имя",
+  "гэта доўгае імя",
+  "това е дълго име на файла",
+  "这是一个长文件名",
+  "shrtname",
+  "long_conventional_name"
+};
+
+static const char NAMES_MULTIBYTE_IN_CODEPAGE_FORMAT[
+  NUMBER_OF_NAMES_MULTIBYTE][MAX_NAME_LENGTH] = {
+  "_\2030005~1._t",
+  "bu0008~1.bir",
+  "__000b~1.__",
+  "__000f~1.__",
+  "__0012~1.___",
+  "__0015~1.___",
+  "__0018~1.___",
+  "__001a~1",
+  "shrtname",
+  "long_conventional_name"
 };
 
 static const char FILE_NAMES[NUMBER_OF_FILES][
@@ -167,6 +197,7 @@ static const name_duplicates MULTIBYTE_DUPLICATES[
     }
   }
 };
+
 
 static const name_duplicates FILES_DUPLICATES[NUMBER_OF_FILES_DUPLICATED] = {
   {
@@ -261,6 +292,22 @@ static void mount_device_with_defaults( const char *start_dir )
   rtems_resource_snapshot_take( &before_mount );
 
   mount_device( start_dir, NULL );
+}
+
+static void mount_device_with_iconv( const char *start_dir )
+{
+  int                       rc;
+  rtems_dosfs_mount_options mount_opts;
+
+
+  rc = msdos_format( RAMDISK_PATH, &rqdata );
+  rtems_test_assert( rc == 0 );
+
+  rtems_resource_snapshot_take( &before_mount );
+
+  mount_opts.string_opts = rtems_dosfs_string_options_init_utf8( "CP850" );
+
+  mount_device( start_dir, &mount_opts );
 }
 
 static void unmount_and_close_device( void )
@@ -427,6 +474,68 @@ static void test_handling_files(
 }
 
 /*
+ * Try to find (and open) all of the file names from an
+ * array in a given directory
+ */
+static void test_finding_files(
+  const char        *dirname,
+  const char        *file_names,
+  const unsigned int number_of_files )
+{
+  int            rc;
+  DIR           *dir_stream;
+  struct dirent *dp;
+  int            fd;
+  unsigned int   index_file;
+  char           filename[MAX_NAME_LENGTH * 2 + MOUNT_DIR_SIZE
+                          + START_DIR_SIZE + 4];
+
+
+  dir_stream = opendir( dirname );
+  rtems_test_assert( dir_stream != NULL );
+
+  dp = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+  rtems_test_assert( 0 == strcmp( ".", dp->d_name ) );
+
+  dp = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+  rtems_test_assert( 0 == strcmp( "..", dp->d_name ) );
+
+  dp         = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+  index_file = 0;
+
+  while ( dp != NULL ) {
+    rtems_test_assert( 0 == strcmp(
+                         file_names + index_file * MAX_NAME_LENGTH,
+                         dp->d_name ) );
+
+    snprintf(
+      filename,
+      sizeof( filename ) - 1,
+      "%s/%s",
+      dirname,
+      file_names + index_file * MAX_NAME_LENGTH );
+
+    /* See if the file still exists and can be found */
+    fd = open( filename, O_RDWR );
+    rtems_test_assert( fd >= 0 );
+
+    rc = close( fd );
+    rtems_test_assert( rc == 0 );
+
+    ++index_file;
+    dp = readdir( dir_stream );
+  }
+
+  rtems_test_assert( number_of_files == index_file );
+
+  rc = closedir( dir_stream );
+  rtems_test_assert( rc == 0 );
+}
+
+/*
  * Try opening files which do already exist (with different capitalization in their names)
  */
 static void test_duplicated_files( const char *dirname,
@@ -539,13 +648,74 @@ static void test_handling_directories(
 }
 
 /*
+ * Try to find all sub-directories from an array
+ * in a given start directory.
+ * In addition try to find and open files
+ * in these sub-directories.
+ */
+static void test_finding_directories(
+  const char        *start_dir,
+  const char        *directory_names,
+  const unsigned int number_of_directories,
+  const char        *file_names,
+  const unsigned int number_of_files )
+{
+  unsigned int   index_directory;
+  int            rc;
+  DIR           *dir_stream;
+  struct dirent *dp;
+  char           dirname[MAX_NAME_LENGTH * 2];
+
+
+  dir_stream = opendir( start_dir );
+  rtems_test_assert( dir_stream != NULL );
+
+  dp = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+  rtems_test_assert( 0 == strcmp( ".", dp->d_name ) );
+
+  dp = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+  rtems_test_assert( 0 == strcmp( "..", dp->d_name ) );
+
+  dp              = readdir( dir_stream );
+  rtems_test_assert( dp != NULL );
+  index_directory = 0;
+
+  while ( dp != NULL ) {
+    rtems_test_assert( 0 == strcmp(
+                         directory_names + index_directory * MAX_NAME_LENGTH,
+                         dp->d_name ) );
+
+    snprintf(
+      dirname,
+      sizeof( dirname ) - 1,
+      "%s/%s",
+      start_dir,
+      directory_names + index_directory * MAX_NAME_LENGTH );
+
+    test_finding_files(
+      dirname,
+      file_names,
+      number_of_files );
+
+    ++index_directory;
+    dp = readdir( dir_stream );
+  }
+
+  rtems_test_assert( number_of_directories == index_directory );
+
+  rc = closedir( dir_stream );
+  rtems_test_assert( rc == 0 );
+}
+
+/*
  * Main test method
  */
 static void test( void )
 {
   int  rc;
   char start_dir[MOUNT_DIR_SIZE + START_DIR_SIZE + 2];
-
 
   rc = mkdir( MOUNT_DIR, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( rc == 0 );
@@ -592,6 +762,120 @@ static void test( void )
     NUMBER_OF_DIRECTORIES,
     &FILE_NAMES[0][0],
     NUMBER_OF_FILES );
+
+  rc = unmount( MOUNT_DIR );
+  rtems_test_assert( rc == 0 );
+
+  /*
+   * Again tests with code page 850 compatible directory and file names
+   * but with multibyte string compatible conversion methods which use
+   * iconv and utf8proc
+   */
+  rtems_dosfs_mount_options mount_opts;
+  mount_opts.string_opts = rtems_dosfs_string_options_init_utf8( "CP850" );
+  rc                     = mount(
+    RAMDISK_PATH,
+    MOUNT_DIR,
+    "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    &mount_opts );
+  rtems_test_assert( rc == 0 );
+
+  test_finding_directories(
+    &start_dir[0],
+    &DIRECTORY_NAMES[0][0],
+    NUMBER_OF_DIRECTORIES,
+    &FILE_NAMES[0][0],
+    NUMBER_OF_FILES );
+  unmount_and_close_device();
+
+  mount_device_with_iconv( start_dir );
+  test_creating_invalid_directories();
+
+  test_creating_directories(
+    &start_dir[0],
+    &DIRECTORY_NAMES[0][0],
+    NUMBER_OF_DIRECTORIES );
+
+  test_handling_directories(
+    &start_dir[0],
+    &DIRECTORY_NAMES[0][0],
+    NUMBER_OF_DIRECTORIES,
+    &FILE_NAMES[0][0],
+    NUMBER_OF_FILES );
+  unmount_and_close_device();
+
+  mount_device_with_iconv( start_dir );
+
+  test_creating_duplicate_directories(
+    &start_dir[0],
+    &DIRECTORY_DUPLICATES[0],
+    NUMBER_OF_DIRECTORIES_DUPLICATED );
+
+  unmount_and_close_device();
+
+  mount_device_with_iconv( start_dir );
+
+  test_duplicated_files(
+    MOUNT_DIR,
+    FILES_DUPLICATES,
+    NUMBER_OF_FILES_DUPLICATED );
+
+  unmount_and_close_device();
+
+  /*
+   * Tests with multibyte directory and file names and
+   * with multibyte string compatible conversion methods which use
+   * iconv and utf8proc
+   */
+  mount_device_with_iconv( start_dir );
+
+  test_creating_duplicate_directories(
+    &start_dir[0],
+    &MULTIBYTE_DUPLICATES[0],
+    NUMBER_OF_MULTIBYTE_NAMES_DUPLICATED );
+
+  unmount_and_close_device();
+
+  mount_device_with_iconv( start_dir );
+
+  test_duplicated_files(
+    MOUNT_DIR,
+    &MULTIBYTE_DUPLICATES[0],
+    NUMBER_OF_MULTIBYTE_NAMES_DUPLICATED );
+
+  unmount_and_close_device();
+
+  mount_device_with_iconv( start_dir );
+
+  test_creating_directories(
+    &start_dir[0],
+    &NAMES_MULTIBYTE[0][0],
+    NUMBER_OF_NAMES_MULTIBYTE );
+  test_handling_directories(
+    &start_dir[0],
+    &NAMES_MULTIBYTE[0][0],
+    NUMBER_OF_NAMES_MULTIBYTE,
+    &NAMES_MULTIBYTE[0][0],
+    NUMBER_OF_NAMES_MULTIBYTE );
+
+  rc = unmount( MOUNT_DIR );
+  rtems_test_assert( rc == 0 );
+
+  rc = mount(
+    RAMDISK_PATH,
+    MOUNT_DIR,
+    "dosfs",
+    RTEMS_FILESYSTEM_READ_WRITE,
+    NULL );
+  rtems_test_assert( rc == 0 );
+
+  test_finding_directories(
+    &start_dir[0],
+    &NAMES_MULTIBYTE_IN_CODEPAGE_FORMAT[0][0],
+    NUMBER_OF_NAMES_MULTIBYTE,
+    &NAMES_MULTIBYTE_IN_CODEPAGE_FORMAT[0][0],
+    NUMBER_OF_NAMES_MULTIBYTE );
 
   unmount_and_close_device();
 
