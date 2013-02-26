@@ -8,13 +8,13 @@ endif
 # file naming consistent.
 TEXI2HTML_ARGS=\
 -D use-html --split node --node-files \
--o ./ \
+-o $(PROJECT)/ \
 --top-file index.html \
 --init-file=$(top_builddir)/texi2html_init \
 -I $(srcdir) -I $(top_srcdir) -I $(top_builddir) -I .
 
 TEXI2ANY_ARGS=\
 --html -D use-html --split node \
--o ./ \
+-o $(PROJECT)/ \
 --init-file=$(top_builddir)/texi2any_init \
 -I $(srcdir) -I $(top_srcdir) -I $(top_builddir) -I .

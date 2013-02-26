@@ -44,19 +44,17 @@ if USE_HTML
 
 html_project_DATA =
 
-MOSTLYCLEANFILES += $(PROJECT)*.html
-html_project_DATA += *.html
+MOSTLYCLEANFILES += $(PROJECT)/*.html
+html_project_DATA += $(PROJECT)/*.html
 
 # Share as much as possible between the texi2html and texi2any rules
-*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
+$(PROJECT)/*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
 	rm -rf $(PROJECT).html
 if USE_TEXI2HTML
 	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $< $<
-	-rm -rf $(PROJECT)
 endif # USE_TEXI2HTML
 if USE_TEXI2ANY
 	$(TEXI2ANY) $(TEXI2ANY_ARGS) $<
-	-rm -rf $(PROJECT)
 endif # USE_TEXI2ANY
 
 endif # USE_HTML
@@ -82,3 +80,9 @@ $(top_builddir)/common/rtems.texi: $(top_srcdir)/common/rtems.texi.in $(top_buil
           $(top_srcdir)/common/rtems.texi.in > $(top_builddir)/common/rtems.texi
 
 $(srcdir)/version.texi:
+
+clean-local: clean-local-check
+.PHONY: clean-local-check
+
+clean-local-check:
+	-rm -rf $(PROJECT)
