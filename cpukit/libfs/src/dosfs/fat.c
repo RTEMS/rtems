@@ -30,11 +30,6 @@
 static int
  _fat_block_release(fat_fs_info_t *fs_info);
 
-static ssize_t
- fat_cluster_read(fat_fs_info_t                       *fs_info,
-                  uint32_t                             cln,
-                  void                                *buff);
-
 static inline uint32_t
 fat_cluster_num_to_block_num (const fat_fs_info_t *fs_info,
                               uint32_t             cln)
@@ -390,33 +385,6 @@ int
 _fat_block_release(fat_fs_info_t *fs_info)
 {
     return fat_buf_release(fs_info);
-}
-
-/* fat_cluster_read --
- *     wrapper for reading a whole cluster at once
- *
- * PARAMETERS:
- *     fs_info  - FS info
- *     cln      - number of cluster to read
- *     buff     - buffer provided by user
- *
- * RETURNS:
- *     bytes read on success, or -1 if error occured
- *     and errno set appropriately
- */
-ssize_t
-fat_cluster_read(
-    fat_fs_info_t                        *fs_info,
-    uint32_t                              cln,
-    void                                 *buff
-    )
-{
-    uint32_t       fsec = 0;
-
-    fsec = fat_cluster_num_to_sector_num(fs_info, cln);
-
-    return _fat_block_read(fs_info, fsec, 0,
-                           fs_info->vol.spc << fs_info->vol.sec_log2, buff);
 }
 
 /* fat_cluster_write --
