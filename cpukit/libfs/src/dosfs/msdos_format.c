@@ -40,6 +40,8 @@
 #include "msdos.h"
 #include "dosfs.h"
 
+#define ONE_GB (1024L * 1024L * 1024L)
+
 typedef struct {
   uint32_t bytes_per_sector;
   uint32_t totl_sector_cnt;
@@ -462,7 +464,6 @@ msdos_set_default_sectors_per_cluster_for_fattype(
     fmt_params->sectors_per_cluster = 2;
   }
   else {
-    #define ONE_GB ( 1024L * 1024L * 1024L )
     uint32_t gigs = ( total_size + ONE_GB ) / ONE_GB;
     int b;
     /* scale with the size of disk... */
@@ -601,7 +602,6 @@ static int msdos_format_determine_fmt_params
       fmt_params->sectors_per_cluster = 2;
     }
     else {
-      #define ONE_GB (1024L * 1024L * 1024L)
       uint32_t gigs = (total_size + ONE_GB) / ONE_GB;
       int b;
       fmt_params->fattype = FAT_FAT32;
