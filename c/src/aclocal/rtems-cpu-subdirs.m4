@@ -20,6 +20,7 @@ _RTEMS_CPU_SUBDIR([m32c],[$1]);;
 _RTEMS_CPU_SUBDIR([m32r],[$1]);;
 _RTEMS_CPU_SUBDIR([m68k],[$1]);;
 _RTEMS_CPU_SUBDIR([mips],[$1]);;
+_RTEMS_CPU_SUBDIR([moxie],[$1]);;
 _RTEMS_CPU_SUBDIR([nios2],[$1]);;
 _RTEMS_CPU_SUBDIR([no_cpu],[$1]);;
 _RTEMS_CPU_SUBDIR([powerpc],[$1]);;
