@@ -242,7 +242,8 @@ static void print_rbd (struct ie_softc *, int);
 #define i82586_WAKE_EVENT RTEMS_EVENT_1
 #define i82586_TX_EVENT   RTEMS_EVENT_2
 
-char *bitmask_snprintf(unsigned long value, const char *format, char *buf, int blen)
+static char *
+bitmask_snprintf(unsigned long value, const char *format, char *buf, int blen)
 {
   char *b  = buf;
   int  bit = 31;
