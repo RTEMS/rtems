@@ -15,6 +15,9 @@
 
 #include <rtems.h>
 
+#include <libchip/serial.h>
+#include <libchip/mc68681.h>
+
 #ifndef _MC68681_MULTIPLIER
 #define _MC68681_MULTIPLIER 1
 #define _MC68681_NAME(_X) _X
