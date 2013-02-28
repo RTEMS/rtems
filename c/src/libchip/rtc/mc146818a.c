@@ -52,7 +52,7 @@ bool mc146818a_probe(
 /*
  * Initialize chip
  */
-void mc146818a_initialize(
+static void mc146818a_initialize(
   int minor
 )
 {
@@ -69,7 +69,7 @@ void mc146818a_initialize(
 /*
  * Read time from chip
  */
-int mc146818a_get_time(
+static int mc146818a_get_time(
   int                minor,
   rtems_time_of_day *time
 )
@@ -129,7 +129,7 @@ int mc146818a_get_time(
 /*
  * Set time into chip
  */
-int mc146818a_set_time(
+static int mc146818a_set_time(
   int                      minor,
   const rtems_time_of_day *time
 )

@@ -14,6 +14,8 @@
  */
 
 #include <rtems.h>
+#include <libchip/rtc.h>
+#include <libchip/icm7170.h>
 
 #ifndef _ICM7170_MULTIPLIER
 #define _ICM7170_MULTIPLIER 1

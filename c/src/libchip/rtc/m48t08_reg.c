@@ -14,6 +14,8 @@
  */
 
 #include <rtems.h>
+#include <libchip/rtc.h>
+#include <libchip/m48t08.h>
 
 #ifndef _M48T08_MULTIPLIER
 #define _M48T08_MULTIPLIER 1
