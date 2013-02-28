@@ -51,7 +51,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 
 /*
@@ -75,7 +74,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
 
 /*
@@ -111,7 +109,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
 
 /*
@@ -145,7 +142,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
 
 /*
@@ -160,7 +156,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
 /*
@@ -182,7 +177,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_HARDWARE_FP     FALSE
 
 /*
@@ -197,7 +191,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_ALL_TASKS_ARE_FP     FALSE
 
 /*
@@ -215,7 +208,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_IDLE_TASK_IS_FP      FALSE
 
 /*
@@ -247,7 +239,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 
 /*
@@ -277,7 +268,6 @@ extern "C" {
  *  IDLE_Monitor.  The idle task body can be overridden by
  *  the BSP in newer versions of RTEMS.
  */
-
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
 /*
@@ -291,7 +281,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_STACK_GROWS_UP               FALSE
 
 /*
@@ -317,7 +306,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_STRUCTURE_ALIGNMENT
 
 #define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
@@ -328,7 +316,6 @@ extern "C" {
  *  Define what is required to specify how the network to host conversion
  *  routines are handled.
  */
-
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 
@@ -341,7 +328,6 @@ extern "C" {
  *
  *  XXX
  */
-
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
 
 /*
@@ -393,8 +379,6 @@ extern "C" {
  *  XXX
  */
 
-
-
 #define nogap __attribute__ ((packed))
 
 typedef struct {
@@ -437,7 +421,6 @@ typedef struct {
  *
  *  XXX
  */
-
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /*
@@ -447,8 +430,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
-/* XXX: if needed, put more variables here */
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -460,7 +441,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /*
@@ -472,7 +452,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  It is highly unlikely the MOXIE will get used in a multiprocessor system.
  */
-
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
@@ -483,15 +462,14 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS      64
-#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER \
+    (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  *  This is defined if the port has a special way to report the ISR nesting
  *  level.  Most ports maintain the variable _ISR_Nest_level.
  */
-
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /*
@@ -502,7 +480,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_STACK_MINIMUM_SIZE          (1536)
 
 /**
@@ -522,7 +499,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_ALIGNMENT              8
 
 /*
@@ -540,7 +516,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
 /*
@@ -558,7 +533,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
 
 /*
@@ -573,7 +547,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define CPU_STACK_ALIGNMENT        0
 
 /*
@@ -583,7 +556,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 /*
  *  Support routine to initialize the RTEMS vector table after it is allocated.
  */
-
 #define _CPU_Initialize_vectors()
 
 /*
@@ -594,7 +566,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define _CPU_ISR_Disable( _isr_cookie ) (_isr_cookie) = 0
 
 /*
@@ -606,7 +577,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define _CPU_ISR_Enable( _isr_cookie )
 
 /*
@@ -619,7 +589,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define _CPU_ISR_Flash( _isr_cookie )
 
 /*
@@ -636,7 +605,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX
  */
-
 #define _CPU_ISR_Set_level( _new_level )        \
   {                                                     \
     if (_new_level)   asm volatile ( "nop\n" );         \
@@ -673,8 +641,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
-
 #define CPU_CCR_INTERRUPTS_ON  0x80
 #define CPU_CCR_INTERRUPTS_OFF 0x00
 
@@ -705,7 +671,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
 
@@ -726,7 +691,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #define _CPU_Context_Fp_start( _base, _offset ) \
    ( (void *) (_base) + (_offset) )
 
@@ -745,7 +709,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #define _CPU_Context_Initialize_fp( _destination ) \
   { \
    *(*(_destination)) = _CPU_Null_fp_context; \
@@ -764,11 +727,9 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #define _CPU_Fatal_halt( _error ) \
         printk("Fatal Error %d Halted\n",_error); \
         for(;;)
-
 
 /* end of Fatal Error manager macros */
 
@@ -832,7 +793,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
@@ -856,7 +816,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
 #define _CPU_Priority_Mask( _bit_number ) \
@@ -874,7 +833,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
 #define _CPU_Priority_bits_index( _priority ) \
@@ -895,7 +853,6 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX
  */
-
 void _CPU_Initialize(void);
 
 /*
@@ -908,7 +865,6 @@ void _CPU_Initialize(void);
  *
  *  XXX
  */
-
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -924,7 +880,6 @@ void _CPU_ISR_install_raw_handler(
  *
  *  XXX
  */
-
 void _CPU_ISR_install_vector(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -943,7 +898,6 @@ void _CPU_ISR_install_vector(
  *
  *  XXX
  */
-
 void _CPU_Install_interrupt_stack( void );
 
 /*
@@ -958,7 +912,6 @@ void _CPU_Install_interrupt_stack( void );
  *
  *  XXX
  */
-
 void *_CPU_Thread_Idle_body( uint32_t );
 
 /*
@@ -970,7 +923,6 @@ void *_CPU_Thread_Idle_body( uint32_t );
  *
  *  XXX
  */
-
 void _CPU_Context_switch(
   Context_Control  *run,
   Context_Control  *heir
@@ -988,7 +940,6 @@ void _CPU_Context_switch(
  *
  *  XXX
  */
-
 void _CPU_Context_restore(
   Context_Control *new_context
 );
@@ -1002,7 +953,6 @@ void _CPU_Context_restore(
  *
  *  XXX
  */
-
 void _CPU_Context_save_fp(
   Context_Control_fp **fp_context_ptr
 );
@@ -1016,7 +966,6 @@ void _CPU_Context_save_fp(
  *
  *  XXX
  */
-
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
@@ -1064,7 +1013,6 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
  *
  *  This is the generic implementation.
  */
-
 static inline uint32_t   CPU_swap_u32(
   uint32_t   value
 )
