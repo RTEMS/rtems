@@ -69,45 +69,45 @@ extern const console_fns mc68681_fns_polled;
  */
 
 uint8_t   mc68681_get_register(     /* registers are at 1 byte boundaries */
-  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uintptr_t   ulCtrlPort,           /*   and accessed as bytes            */
   uint8_t     ucRegNum
 );
 
 void  mc68681_set_register(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 );
 
 uint8_t   mc68681_get_register_2(   /* registers are at 2 byte boundaries */
-  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uintptr_t   ulCtrlPort,           /*   and accessed as bytes            */
   uint8_t     ucRegNum
 );
 
 void  mc68681_set_register_2(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 );
 
 uint8_t   mc68681_get_register_4(   /* registers are at 4 byte boundaries */
-  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uintptr_t   ulCtrlPort,           /*   and accessed as bytes            */
   uint8_t     ucRegNum
 );
 
 void  mc68681_set_register_4(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 );
 
 uint8_t   mc68681_get_register_8(   /* registers are at 8 byte boundaries */
-  uint32_t    ulCtrlPort,           /*   and accessed as bytes            */
+  uintptr_t   ulCtrlPort,           /*   and accessed as bytes            */
   uint8_t     ucRegNum
 );
 
 void  mc68681_set_register_8(
-  uint32_t    ulCtrlPort,
+  uintptr_t   ulCtrlPort,
   uint8_t     ucRegNum,
   uint8_t     ucData
 );
