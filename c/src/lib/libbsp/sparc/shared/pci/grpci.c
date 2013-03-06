@@ -449,6 +449,13 @@ int grpci_hw_init(struct grpci_priv *priv)
 	/* Translate I/O accesses 1:1 */
 	priv->regs->iomap = priv->pci_io & 0xffff0000;
 
+	/* Setup Latency Timer and cache line size. Default cache line
+	 * size will result in poor performance (256 word fetches), 0xff
+	 * will set it according to the max size of the PCI FIFO.
+	 */
+	grpci_cfg_w8(host, PCI_CACHE_LINE_SIZE, 0xff);
+	grpci_cfg_w8(host, PCI_LATENCY_TIMER, 0x40);
+
 	/* set as bus master and enable pci memory responses */  
 	grpci_cfg_r32(host, PCI_COMMAND, &data);
 	data |= (PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
