@@ -159,7 +159,7 @@ conf.texi: conf.t
 	    -n "Multiprocessing Manager" < $< > $@
 
 mp.texi: mp.t
-	$(BMENU2) -p "Configuring a System Unlimited Objects" \
+	$(BMENU2) -p "Configuring a System Configuration Data Structures" \
 	    -u "Top" \
 	    -n "Stack Bounds Checker" < $< > $@
 
