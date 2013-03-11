@@ -820,6 +820,25 @@ typedef struct m83xxRegisters_ {
 
 extern m83xxRegisters_t mpc83xx;
 
+static inline void mpc83xx_reset(void)
+{
+  _ISR_Set_level( 0 );
+
+  /* Set Reset Protection Register (RPR) to "RSTE" */
+  mpc83xx.res.rpr = 0x52535445;
+
+  /*
+   * Wait for Control Register Enabled in the
+   * Reset Control Enable Register (RCER).
+   */
+  while (mpc83xx.res.rcer != 0x00000001) {
+    /* Wait */
+  }
+
+  /* Set Software Hard Reset in the Reset Control Register (RCR) */
+  mpc83xx.res.rcr = 0x00000002;
+}
+
 #endif /* !defined ASM */
 /*
  * some definitions used in assembler startup
