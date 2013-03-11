@@ -1,4 +1,4 @@
-my $button_text = '<a href="../index.html">Library</a>';
+my $button_text = '<a href="../index.html">[Library]</a>';
 push @SECTION_BUTTONS, \$button_text;
 push @CHAPTER_BUTTONS, \$button_text;
 push @MISC_BUTTONS, \$button_text;
