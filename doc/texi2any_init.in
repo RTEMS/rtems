@@ -7,7 +7,7 @@ Logo">   </A>
 
 texinfo_register_handler('setup', \&add_button);
 
-my $button_text = '<a href="../dir.html">Directory</a>';
+my $button_text = '[<a href="../index.html">Directory</a>]';
 sub add_button($)
 {
   my $self = shift;
