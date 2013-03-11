@@ -23,6 +23,13 @@
 
 #include <mpc83xx/mpc83xx.h>
 #include <bsp.h>
+
+#ifdef MPC83XX_HAS_NAND_LP_FLASH_ON_CS0
+  #define MPC83XX_RCWHR_BOOT_DEVICE (RCWHR_ROMLOC_LB08 | RCWHR_RLEXT_NAND)
+#else
+  #define MPC83XX_RCWHR_BOOT_DEVICE (RCWHR_ROMLOC_LB16 | RCWHR_RLEXT_LGCY)
+#endif
+
 /*
  * distinguish board characteristics
  */
@@ -60,7 +67,7 @@
 			  RCWHR_BMS_LOW      |	\
 			  RCWHR_BOOTSEQ_NONE |	\
 			  RCWHR_SW_DIS       |	\
-			  RCWHR_ROMLOC_LB16  |	\
+			  MPC83XX_RCWHR_BOOT_DEVICE | \
 			  RCWHR_TSEC1M_GMII  |	\
 			  RCWHR_TSEC2M_GMII  |	\
 			  RCWHR_ENDIAN_BIG   |	\
@@ -99,7 +106,7 @@
 			  RCWHR_BMS_LOW      |	\
 			  RCWHR_BOOTSEQ_NONE |	\
 			  RCWHR_SW_DIS       |	\
-			  RCWHR_ROMLOC_LB16  |	\
+			  MPC83XX_RCWHR_BOOT_DEVICE | \
 			  RCWHR_TSEC1M_RGMII |	\
 			  RCWHR_TSEC2M_GMII  |	\
 			  RCWHR_ENDIAN_BIG   |	\
@@ -142,8 +149,7 @@
 			  RCWHR_BMS_LOW      |	\
 			  RCWHR_BOOTSEQ_NONE |	\
 			  RCWHR_SW_DIS       |	\
-			  RCWHR_ROMLOC_LB16  |	\
-			  RCWHR_RLEXT_LGCY   |	\
+			  MPC83XX_RCWHR_BOOT_DEVICE |	\
 			  RCWHR_ENDIAN_BIG)
 
 #elif defined( HAS_UBOOT)

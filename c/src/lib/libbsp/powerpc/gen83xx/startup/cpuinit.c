@@ -240,11 +240,19 @@ void cpu_init( void)
       (uint32_t) bsp_rom_start,
       (uint32_t) bsp_rom_size,
     #endif /* HAS_UBOOT */
-    true,
-    false,
-    false,
-    false,
-    BPP_RX
+    #ifdef MPC83XX_HAS_NAND_LP_FLASH_ON_CS0
+      false,
+      true,
+      false,
+      true,
+      BPP_RW
+    #else
+      true,
+      false,
+      false,
+      false,
+      BPP_RX
+    #endif
   );
   SET_DBAT( 1, dbat.batu, dbat.batl);
 
