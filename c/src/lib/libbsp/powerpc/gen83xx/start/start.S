@@ -138,12 +138,22 @@ start_code_in_rom:
 #ifdef LBLAWAR0_VAL
 	SET_IMM_REGW r31,r30,LBLAWAR0_OFF,LBLAWAR0_VAL
 #endif
+
+/*
+ * Local access window 1 is a special case since we used it for a temporary
+ * mapping.  If we do not use it then restore the reset value.
+ */
 #ifdef LBLAWBAR1_VAL
 	SET_IMM_REGW r31,r30,LBLAWBAR1_OFF,LBLAWBAR1_VAL
+#else
+	SET_IMM_REGW r31,r30,LBLAWBAR1_OFF,0
 #endif
 #ifdef LBLAWAR1_VAL
 	SET_IMM_REGW r31,r30,LBLAWAR1_OFF,LBLAWAR1_VAL
+#else
+	SET_IMM_REGW r31,r30,LBLAWAR1_OFF,0
 #endif
+
 #ifdef LBLAWBAR2_VAL
 	SET_IMM_REGW r31,r30,LBLAWBAR2_OFF,LBLAWBAR2_VAL
 #endif
