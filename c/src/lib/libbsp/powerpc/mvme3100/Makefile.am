@@ -145,7 +145,7 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-EXTRA_DIST += LICENSE ChangeLog README KNOWN_PROBLEMS
+EXTRA_DIST += LICENSE README KNOWN_PROBLEMS
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
