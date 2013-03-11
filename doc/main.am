@@ -15,6 +15,7 @@ TEXI2HTML_ARGS=\
 
 TEXI2ANY_ARGS=\
 --html -D use-html --split node \
+-c MENU_ENTRY_COLON= -c NODE_NAME_IN_MENU=0 -c USE_NODES=0 \
 -o $(PROJECT)/ \
 --init-file=$(top_builddir)/texi2any_init \
 -I $(srcdir) -I $(top_srcdir) -I $(top_builddir) -I .
