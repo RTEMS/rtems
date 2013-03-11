@@ -457,6 +457,9 @@ twiddle:
 	b	twiddle
 
 copy_image:
+	cmpwi	r28, 0
+	beqlr
+
 	mr	r27, r28
 	srwi	r28, r28, 2
 	mtctr	r28
