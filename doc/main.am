@@ -9,7 +9,7 @@ endif
 TEXI2HTML_ARGS=\
 -D use-html --split node --node-files \
 -o $(PROJECT)/ \
---top-file index.html \
+--top-file=index.html \
 --init-file=$(top_builddir)/texi2html_init \
 -I $(srcdir) -I $(top_srcdir) -I $(top_builddir) -I .
 
