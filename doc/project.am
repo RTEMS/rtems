@@ -51,7 +51,7 @@ html_project_DATA += $(PROJECT)/*.html
 $(PROJECT)/*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS)
 	rm -rf $(PROJECT).html
 if USE_TEXI2HTML
-	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $< $<
+	$(TEXI2HTML) $(TEXI2HTML_ARGS) --menu $<
 endif # USE_TEXI2HTML
 if USE_TEXI2ANY
 	$(TEXI2ANY) $(TEXI2ANY_ARGS) $<
