@@ -312,10 +312,6 @@ static inline bool _Nios2_Has_internal_interrupt_controller( void )
   return _Nios2_ISR_Get_status_mask() == NIOS2_ISR_STATUS_MASK_IIC;
 }
 
-/*
- *  @brief Nios2 ISR Set level
- *
- */
 uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status );
 
 typedef struct {
@@ -408,10 +404,6 @@ bool _Nios2_MPU_Setup_region_registers(
   uint32_t *mpuacc
 );
 
-/**
- * @brief Nios2 MPU Get region descriptor.
- *
- */
 bool _Nios2_MPU_Get_region_descriptor(
   const Nios2_MPU_Configuration *config,
   int index,
@@ -420,12 +412,12 @@ bool _Nios2_MPU_Get_region_descriptor(
 );
 
 /**
- * @brief Seaches the region table part for a disabled region.
+ * @brief Searches the region table part for a disabled region.
  *
  * The table will be searched between indices @a begin and @a end.  The @a end
  * index is not part of the search range.  If @a end is negative, then the
  * region count will be used.  Thus a @a begin of 0 and a @a end of -1 will
- * specifiy the complete table.
+ * specify the complete table.
  *
  * @retval -1 No disabled region is available.
  * @retval other Index of disabled region.
@@ -501,9 +493,6 @@ static inline void _Nios2_MPU_Restore( uint32_t config )
   _Nios2_Set_ctlreg_config( config );
 }
 
-/**
- * @brief Nios2 MPU disable protected.
- */
 uint32_t _Nios2_MPU_Disable_protected( void );
 
 void _Nios2_MPU_Reset( const Nios2_MPU_Configuration *config );
