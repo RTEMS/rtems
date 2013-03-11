@@ -229,7 +229,7 @@ libbsp_a_LIBADD += network_support.rel \
     network_if_mve.rel network_if_gfe.rel network_if_em.rel
 endif
 
-EXTRA_DIST += README LICENSE ChangeLog
+EXTRA_DIST += README LICENSE
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
