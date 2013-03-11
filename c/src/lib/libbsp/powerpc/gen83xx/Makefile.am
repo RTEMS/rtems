@@ -18,6 +18,8 @@ include_bsp_HEADERS += ../../shared/include/irq-generic.h
 include_bsp_HEADERS += ../../shared/include/irq-info.h
 include_bsp_HEADERS += ../../shared/include/u-boot.h
 include_bsp_HEADERS += ../../shared/include/utility.h
+include_bsp_HEADERS += ../shared/include/linker-symbols.h
+include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/include/tictac.h
 include_bsp_HEADERS += ../shared/include/u-boot-board-info.h
 include_bsp_HEADERS += include/hwreg_vals.h
@@ -39,7 +41,8 @@ libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds \
-    startup/linkcmds.base \
+    ../shared/startup/linkcmds.base \
+    startup/linkcmds.mpc83xx \
     startup/linkcmds.mpc8309som \
     startup/linkcmds.mpc8313erdb \
     startup/linkcmds.br_uid \
@@ -48,9 +51,6 @@ dist_project_lib_DATA += startup/linkcmds \
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
-
-# mpc83xx_regs
-libbsp_a_SOURCES += startup/mpc83xx_regs.c
 
 # startup
 libbsp_a_SOURCES += ../../shared/bsplibc.c \

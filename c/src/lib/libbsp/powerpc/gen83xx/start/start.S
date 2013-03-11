@@ -53,10 +53,9 @@ PUBLIC_VAR (reset_vec)
 reset_vec:
 	bl rom_entry
 
-.section ".entry"
-PUBLIC_VAR (start)
-start:
-
+.section ".bsp_start_text", "ax"
+PUBLIC_VAR (_start)
+_start:
 	/* Reset time base */
 	li	r0, 0
 	mtspr	TBWU, r0
@@ -359,14 +358,13 @@ start_rom_skip1:
 	/*
 	 * ROM or relocatable startup: copy startup code to SDRAM
 	 */
-	/* get start address of text section in RAM */
-	LA	r29, bsp_section_text_start
-	/* get start address of text section in ROM (add reloc offset) */
+	/* get start address of start section in RAM */
+	LA	r29, bsp_section_start_begin
+	/* get start address of start section in ROM (add reloc offset) */
 	add	r30, r20, r29
 	/* get size of startup code */
-	LA	r28, end_reloc_startup
-	LA	r31, bsp_section_text_start
-	sub	28,r28,r31
+	LA	r28, bsp_section_start_end
+	sub	28,r28,r29
 	/* copy startup code from ROM to RAM location */
 	bl	copy_image
 
@@ -385,58 +383,29 @@ copy_rest_of_text:
 	/*
 	 * ROM or relocatable startup: copy rest of code to SDRAM
 	 */
-	/* get start address of rest of code in RAM */
-	LA	r29, end_reloc_startup
-	/* get start address of text section in ROM (add reloc offset) */
+	/* get start address of rest of loadable sections in RAM */
+	LA	r29, bsp_section_text_begin
+	/* get start address of loadable sections in ROM (add reloc offset) */
 	add	r30, r20, r29
-	/* get size of rest of code */
-	LA	r28, bsp_section_text_start
-	LA	r31, bsp_section_text_size
-	add	r28,r28,r31
+	/* get size of rest of loadable sections */
+	LA	r28, bsp_section_data_end
 	sub	r28,r28,r29
 	bl	copy_image      /* copy text section from ROM to RAM location */
-
-	/*
-	 * ROM or relocatable startup: copy data to SDRAM
-	 */
-	/* get start address of data section in RAM */
-	LA	r29, bsp_section_data_start
-	/* get start address of data section in ROM (add reloc offset) */
-	add	r30, r20, r29
-	/* get size of RAM image */
-	LA	r28, bsp_section_data_size
-	/* copy initialized data section from ROM to RAM location */
-	bl	copy_image
 
 start_code_in_ram:
 
 	/*
 	 * ROM/RAM startup: clear bss in SDRAM
 	 */
-	LA	r3, bsp_section_bss_start  /* get start address of bss section */
-	LWI	r4, bsp_section_bss_size   /* get size of bss section */
-	bl	mpc83xx_zero_4          /* Clear the bss section */
+	LA	r3, bsp_section_sbss_begin  /* get start address of bss section */
+	LA	r4, bsp_section_bss_end     /* get end address of bss section */
+	sub	r4, r4, r3                  /* get size of bss section */
+	bl	mpc83xx_zero_4              /* Clear the bss section */
 
 #ifdef HAS_UBOOT
 	mr	r3, r14
 	bl	bsp_uboot_copy_board_info
 #endif /* HAS_UBOOT */
-	/*
-	 * call boot_card
-	 */
-
-	/* Set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_start
-        addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */
-
-	/* Create NULL */
-	li r0, 0
-
-	/* Return address */
-	stw r0, 4(r1)
-
-	/* Back chain */
-	stw r0, 0(r1)
 
 	/* Read-only small data */
 	LA r2, _SDA2_BASE_
@@ -444,12 +413,16 @@ start_code_in_ram:
 	/* Read-write small data */
 	LA r13, _SDA_BASE_
 
-/* clear arguments and do further init. in C (common for RAM/ROM startup) */
-
         /* Clear cmdline */
-        xor r3, r3, r3
+	li	r3, 0
 
-        bl      SYM (boot_card)  /* Call the first C routine */
+	/* Set start stack pointer */
+	LA	r1, start_stack_end
+	stwu	r3, -4(r1)
+	stwu	r3, -4(r1)
+
+	/* Call the first C routine */
+        bl      SYM (boot_card)
 
 twiddle:
 	/* We don't expect to return from boot_card but if we do */
@@ -548,4 +521,9 @@ mpc83xx_zero_4_tail:
 	/* Return */
 	blr
 
-end_reloc_startup:
+.section ".bsp_rwextra", "aw", @nobits
+
+	/* Start stack area */
+.align 4
+.space 4096
+start_stack_end:

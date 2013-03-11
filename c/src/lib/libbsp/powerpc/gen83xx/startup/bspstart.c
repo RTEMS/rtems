@@ -27,6 +27,7 @@
 #include <bsp/vectors.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
+#include <bsp/linker-symbols.h>
 #include <bsp/u-boot.h>
 
 /* Configuration parameters for console driver, ... */
@@ -79,9 +80,6 @@ void bsp_start( void)
 
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
-
-  uintptr_t interrupt_stack_start = (uintptr_t) bsp_interrupt_stack_start;
-  uintptr_t interrupt_stack_size = (uintptr_t) bsp_interrupt_stack_size;
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -136,8 +134,8 @@ void bsp_start( void)
 #endif
   ppc_exc_initialize(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    interrupt_stack_start,
-    interrupt_stack_size
+    (uintptr_t) bsp_section_work_begin,
+    rtems_configuration_get_interrupt_stack_size()
   );
 
   /* Install default handler for the decrementer exception */
