@@ -328,14 +328,19 @@ greth_initialize_hardware (struct greth_softc *sc)
         phyaddr = sc->phyaddr;
     }
 
-    /* get phy control register default values */
-    while ((phyctrl = read_mii(sc, phyaddr, 0)) & 0x8000) {}
-    
-    /* reset PHY and wait for completion */
-    write_mii(sc, phyaddr, 0, 0x8000 | phyctrl);
+    /* reset PHY */
+    write_mii(sc, phyaddr, 0, 0x8000);
 
-    while ((read_mii(sc, phyaddr, 0)) & 0x8000) {}
-    
+    /* Wait for reset to complete and get default values */
+    while ((phyctrl = read_mii(sc, phyaddr, 0)) & 0x8000) {}
+
+    /* If autonegotiation implemented we start it */
+    phystatus = read_mii(sc, phyaddr, 1);
+    if (phystatus & 0x0008) {
+        write_mii(sc, phyaddr, 0, phyctrl | 0x1200);
+        phyctrl = read_mii(sc, phyaddr, 0);
+    }
+
     /* Check if PHY is autoneg capable and then determine operating mode, 
        otherwise force it to 10 Mbit halfduplex */
     sc->gb = 0;
