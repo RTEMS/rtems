@@ -877,6 +877,9 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  */
 #define CPU_STACK_MINIMUM_SIZE  (1024*4)
 
+/**
+ * What is the size of a pointer on this architecture?
+ */
 #define CPU_SIZEOF_POINTER 4
 
 /**
