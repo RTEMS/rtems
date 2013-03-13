@@ -63,6 +63,14 @@ extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 #define DBG(args...)
 #endif
 
+/* #define GRETH_DEBUG_MII */
+
+#ifdef GRETH_DEBUG_MII
+#define MIIDBG(args...) printk(args)
+#else
+#define MIIDBG(args...)
+#endif
+
 #ifdef CPU_U32_FIX
 extern void ipalign(struct mbuf *m);
 #endif
@@ -162,6 +170,8 @@ struct greth_softc
    
    /*Status*/
    struct phy_device_info phydev;
+   int phy_read_access;
+   int phy_write_access;
    int fd;
    int sp;
    int gb;
@@ -241,23 +251,40 @@ void greth_interrupt (void *arg)
 
 static uint32_t read_mii(struct greth_softc *sc, uint32_t phy_addr, uint32_t reg_addr)
 {
+    sc->phy_read_access++;
     while (sc->regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
     sc->regs->mdio_ctrl = (phy_addr << 11) | (reg_addr << 6) | GRETH_MDIO_READ;
     while (sc->regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
-    if (!(sc->regs->mdio_ctrl & GRETH_MDIO_LINKFAIL))
+    if (!(sc->regs->mdio_ctrl & GRETH_MDIO_LINKFAIL)) {
+	MIIDBG("greth%d: mii read[%d] OK to %x.%x (0x%08x,0x%08x)\n",
+                sc->minor, sc->phy_read_access, phy_addr, reg_addr,
+                sc->regs->ctrl, sc->regs->mdio_ctrl);
+
         return((sc->regs->mdio_ctrl >> 16) & 0xFFFF);
-    else {
-	printf("greth: failed to read mii\n");
-	return (0);
+    } else {
+	printf("greth%d: mii read[%d] failed to %x.%x (0x%08x,0x%08x)\n",
+                sc->minor, sc->phy_read_access, phy_addr, reg_addr,
+                sc->regs->ctrl, sc->regs->mdio_ctrl);
+	return (0xffff);
     }
 }
 
 static void write_mii(struct greth_softc *sc, uint32_t phy_addr, uint32_t reg_addr, uint32_t data)
 {
+    sc->phy_write_access++;
     while (sc->regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
     sc->regs->mdio_ctrl =
      ((data & 0xFFFF) << 16) | (phy_addr << 11) | (reg_addr << 6) | GRETH_MDIO_WRITE;
     while (sc->regs->mdio_ctrl & GRETH_MDIO_BUSY) {}
+    if (!(sc->regs->mdio_ctrl & GRETH_MDIO_LINKFAIL)) {
+	MIIDBG("greth%d: mii write[%d] OK to %x.%x (0x%08x,0x%08x)\n",
+                sc->minor, sc->phy_write_access, phy_addr, reg_addr,
+                sc->regs->ctrl, sc->regs->mdio_ctrl);
+    } else {
+	printf("greth%d: mii write[%d] failed to %x.%x (0x%08x,0x%08x)\n",
+                sc->minor, sc->phy_write_access, phy_addr, reg_addr,
+                sc->regs->ctrl, sc->regs->mdio_ctrl);
+    }
 }
 
 static void print_init_info(struct greth_softc *sc) 
@@ -313,13 +340,14 @@ greth_initialize_hardware (struct greth_softc *sc)
     sc->rxInterrupts = 0;
     sc->rxPackets = 0;
 
-    regs->ctrl = 0;
     regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
-    regs->ctrl = 0;			/* Reset OFF */
-    
+    for (i = 0; i<100 && (regs->ctrl & GRETH_CTRL_RST); i++)
+        ;
+    regs->ctrl = GRETH_CTRL_DD; 	/* Reset OFF. SW do PHY Init */
+
     /* Check if mac is gbit capable*/
     sc->gbit_mac = (regs->ctrl >> 27) & 1;
-    
+
     /* Get the phy address which assumed to have been set
        correctly with the reset value in hardware*/
     if ( sc->phyaddr == -1 ) {
@@ -327,15 +355,40 @@ greth_initialize_hardware (struct greth_softc *sc)
     } else {
         phyaddr = sc->phyaddr;
     }
+    sc->phy_read_access = 0;
+    sc->phy_write_access = 0;
 
-    /* reset PHY */
-    write_mii(sc, phyaddr, 0, 0x8000);
+    /* As I understand the PHY comes back to a good default state after
+     * Power-down or Reset, so we do both just in case. Power-down bit should
+     * be cleared.
+     * Wait for old reset (if asserted by boot loader) to complete, otherwise
+     * power-down instruction might not have any effect.
+     */
+    while (read_mii(sc, phyaddr, 0) & 0x8000) {}
+    write_mii(sc, phyaddr, 0, 0x0800); /* Power-down */
+    write_mii(sc, phyaddr, 0, 0x0000); /* Power-Up */
+    write_mii(sc, phyaddr, 0, 0x8000); /* Reset */
+
+    /* We wait about 30ms */
+    rtems_task_wake_after(rtems_clock_get_ticks_per_second()/32);
 
     /* Wait for reset to complete and get default values */
     while ((phyctrl = read_mii(sc, phyaddr, 0)) & 0x8000) {}
 
-    /* If autonegotiation implemented we start it */
+    /* Enable/Disable GBit auto-neg advetisement so that the link partner
+     * know that we have/haven't GBit capability. The MAC may not support
+     * Gbit even though PHY does...
+     */
     phystatus = read_mii(sc, phyaddr, 1);
+    if (phystatus & 0x0100) {
+        tmp1 = read_mii(sc, phyaddr, 9);
+        if (sc->gbit_mac)
+            write_mii(sc, phyaddr, 9, tmp1 | 0x300);
+        else
+            write_mii(sc, phyaddr, 9, tmp1 & ~(0x300));
+    }
+
+    /* If autonegotiation implemented we start it */
     if (phystatus & 0x0008) {
         write_mii(sc, phyaddr, 0, phyctrl | 0x1200);
         phyctrl = read_mii(sc, phyaddr, 0);
@@ -437,9 +490,10 @@ auto_neg_done:
     }
     while ((read_mii(sc, phyaddr, 0)) & 0x8000) {}
 
-    regs->ctrl = 0;
     regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
-    regs->ctrl = 0;
+    for (i = 0; i < 100 && (regs->ctrl & GRETH_CTRL_RST); i++)
+        ;
+    regs->ctrl = GRETH_CTRL_DD;
 
     /* Initialize rx/tx descriptor table pointers. Due to alignment we 
      * always allocate maximum table size.
