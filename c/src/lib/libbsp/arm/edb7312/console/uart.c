@@ -83,13 +83,11 @@ static int     uart_set_attributes(int minor, const struct termios *t)
 int uart_poll_read(int minor)
 {
     volatile uint32_t   *data_reg;
-    volatile uint32_t   *ctrl_reg1;
     volatile uint32_t   *ctrl_reg2;
     char        c;
     int         err;
 
     data_reg  = (uint32_t *)Console_Port_Tbl[minor]->ulDataPort;
-    ctrl_reg1 = (uint32_t *)Console_Port_Tbl[minor]->ulCtrlPort1;
     ctrl_reg2 = (uint32_t *)Console_Port_Tbl[minor]->ulCtrlPort2;
 
     if ((*ctrl_reg2 & EP7312_UART_URXFE1) != 0) {
@@ -106,13 +104,11 @@ int uart_poll_read(int minor)
 static ssize_t uart_write(int minor, const char *buf, size_t len)
 {
     volatile uint32_t   *data_reg;
-    volatile uint32_t   *ctrl_reg1;
     volatile uint32_t   *ctrl_reg2;
     size_t i;
     char c;
 
     data_reg  = (uint32_t *)Console_Port_Tbl[minor]->ulDataPort;
-    ctrl_reg1 = (uint32_t *)Console_Port_Tbl[minor]->ulCtrlPort1;
     ctrl_reg2 = (uint32_t *)Console_Port_Tbl[minor]->ulCtrlPort2;
 
     for (i = 0; i < len; i++) {
@@ -130,13 +126,9 @@ static ssize_t uart_write(int minor, const char *buf, size_t len)
 
 static void uart_init(int minor)
 {
-    volatile uint32_t   *data_reg;
     volatile uint32_t   *ctrl_reg1;
-    volatile uint32_t   *ctrl_reg2;
 
-    data_reg  = (uint32_t *)Console_Port_Tbl[minor]->ulDataPort;
     ctrl_reg1 = (uint32_t *)Console_Port_Tbl[minor]->ulCtrlPort1;
-    ctrl_reg2 = (uint32_t *)Console_Port_Tbl[minor]->ulCtrlPort2;
 
     /*   *ctrl_reg = (BSP_UART_DATA8       |
                  BSP_UART_STOP1       |
