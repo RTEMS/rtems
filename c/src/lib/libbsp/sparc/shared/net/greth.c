@@ -459,8 +459,8 @@ auto_neg_done:
     sc->phydev.device = 0;
     sc->phydev.rev = 0;
     phystatus = read_mii(sc, phyaddr, 1);
-    
-    /*Read out PHY info if extended registers are available */
+
+    /* Read out PHY info if extended registers are available */
     if (phystatus & 1) {  
             tmp1 = read_mii(sc, phyaddr, 2);
             tmp2 = read_mii(sc, phyaddr, 3);
@@ -470,23 +470,18 @@ auto_neg_done:
             sc->phydev.device = (tmp2 >> 4) & 0x3F;
     }
 
-    /* Force to 10 mbit half duplex if the 10/100 MAC is used with a 1000 PHY*/
-    /*check if marvell 88EE1111 PHY. Needs special reset handling */
-    if ((phystatus & 1) && (sc->phydev.vendor == 0x005043) && (sc->phydev.device == 0x0C)) {
-            if (((sc->gb) && !(sc->gbit_mac)) || !((phyctrl >> 12) & 1)) {
-                    write_mii(sc, phyaddr, 0, sc->sp << 13);
-                    write_mii(sc, phyaddr, 0, 0x8000);
-                    sc->gb = 0;
-                    sc->sp = 0;
-                    sc->fd = 0;
-            }
-    } else {
-            if (((sc->gb) && !(sc->gbit_mac))  || !((phyctrl >> 12) & 1)) {
-                    write_mii(sc, phyaddr, 0, sc->sp << 13);
-                    sc->gb = 0;
-                    sc->sp = 0;
-                    sc->fd = 0;
-            }
+    /* Force to 10 mbit half duplex if the 10/100 MAC is used with a 1000 PHY */
+    if (((sc->gb) && !(sc->gbit_mac)) || !((phyctrl >> 12) & 1)) {
+        write_mii(sc, phyaddr, 0, sc->sp << 13);
+
+        /* check if marvell 88EE1111 PHY. Needs special reset handling */
+        if ((phystatus & 1) && (sc->phydev.vendor == 0x005043) &&
+            (sc->phydev.device == 0x0C))
+            write_mii(sc, phyaddr, 0, 0x8000);
+
+        sc->gb = 0;
+        sc->sp = 0;
+        sc->fd = 0;
     }
     while ((read_mii(sc, phyaddr, 0)) & 0x8000) {}
 
