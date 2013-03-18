@@ -39,7 +39,7 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
    unsigned int   block
 );
 
-MEMFILE_STATIC int IMFS_memfile_remove_block(
+MEMFILE_STATIC void IMFS_memfile_remove_block(
    IMFS_jnode_t  *the_jnode,
    unsigned int   block
 );
@@ -273,6 +273,9 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
    * Obtain the pointer for the specified block number
    */
   block_entry_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 1 );
+  if ( !block_entry_ptr )
+    return 1;
+
   if ( *block_entry_ptr )
     return 0;
 
@@ -297,7 +300,7 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
  *         block from the middle of a file would be exceptionally
  *         dangerous and the results unpredictable.
  */
-MEMFILE_STATIC int IMFS_memfile_remove_block(
+MEMFILE_STATIC void IMFS_memfile_remove_block(
    IMFS_jnode_t  *the_jnode,
    unsigned int   block
 )
@@ -306,13 +309,11 @@ MEMFILE_STATIC int IMFS_memfile_remove_block(
   block_p  ptr;
 
   block_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 0 );
-  IMFS_assert( block_ptr );
-
-  ptr = *block_ptr;
-  *block_ptr = 0;
-  memfile_free_block( ptr );
-
-  return 1;
+  if ( block_ptr ) {
+    ptr = *block_ptr;
+    *block_ptr = 0;
+    memfile_free_block( ptr );
+  }
 }
 
 /*
