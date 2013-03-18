@@ -253,9 +253,9 @@ typedef struct {
       memset( *(_fp_area), 0, sizeof( Context_Control_fp ) )
   #else
     /*
-     *  FP context save area for the M68881/M68882 and 68060 numeric coprocessors.
+     *  FP context save area for the M68881/M68882 and 68060 numeric
+     *  coprocessors.
      */
-
     typedef struct {
       /*
        * M68K_FP_STATE_SIZE bytes for FSAVE/FRESTORE
@@ -711,7 +711,14 @@ void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
 
-void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
+/**
+ *  This method prints the CPU exception frame.
+ *
+ *  @param[in] frame points to the frame to be printed
+ */
+void _CPU_Exception_frame_print(
+  const CPU_Exception_frame *frame
+);
 
 #if (M68K_HAS_FPSP_PACKAGE == 1)
 /*
