@@ -260,6 +260,12 @@ int gr_rasta_io_hw_init(struct gr_rasta_io_priv *priv)
 	}
 #endif
 
+	/* Setup cache line size. Default cache line size will result in
+	 * poor performance (256 word fetches), 0xff will set it according
+	 * to the max size of the PCI FIFO.
+	 */
+	pci_cfg_w8(priv->pcidev, PCI_CACHE_LINE_SIZE, 0xff);
+
 	/* Scan AMBA Plug&Play */
 
 	/* AMBA MAP bar0 (in CPU) ==> 0x80000000(remote amba address) */
