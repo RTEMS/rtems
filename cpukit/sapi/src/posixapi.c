@@ -36,7 +36,7 @@
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/posix/priority.h>
-#include <rtems/posix/psignal.h>
+#include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/rwlock.h>
 #include <rtems/posix/timer.h>
