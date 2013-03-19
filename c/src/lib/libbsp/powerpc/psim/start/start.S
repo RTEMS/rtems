@@ -41,10 +41,10 @@ FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
 	.long	.LCTOC1			/* address we think .LCTOC1 is loaded at */
 
 .Lbss_start = .-.LCTOC1
-	.long	__bss_start
+	.long	bsp_section_sbss_begin
 
 .Lend = .-.LCTOC1
-	.long	_end
+	.long	bsp_section_bss_end
 
 .Lstack = .-.LCTOC1			/* stack address if set by user */
 	.long	__stack
@@ -132,3 +132,9 @@ FUNC_NAME(bsp_reset):
 
 .Lstart:
 	.size	_start,.Lstart-_start
+
+	/* Start stack area */
+.section ".bsp_rwextra", "aw", @nobits
+.align 4
+.space 4096
+__stack:
