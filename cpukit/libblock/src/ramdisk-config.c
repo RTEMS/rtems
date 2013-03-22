@@ -50,7 +50,7 @@ ramdisk_initialize(
     {
         dev_t dev = rtems_filesystem_make_dev_t(major, i);
         char name [] = RAMDISK_DEVICE_BASE_NAME "a";
-        name [sizeof(RAMDISK_DEVICE_BASE_NAME)] += i;
+        name [sizeof(RAMDISK_DEVICE_BASE_NAME) - 1] += i;
         r->block_size = c->block_size;
         r->block_num = c->block_num;
         if (c->location == NULL)
