@@ -609,13 +609,8 @@ rtems_rfs_rtems_mknod (const rtems_filesystem_location_info_t *parentloc,
   gid_t                   gid;
   int                     rc;
 
-#if defined(RTEMS_POSIX_API)
   uid = geteuid ();
   gid = getegid ();
-#else
-  uid = 0;
-  gid = 0;
-#endif
 
   rc = rtems_rfs_inode_create (fs, parent, name, namelen,
                                rtems_rfs_rtems_imode (mode),

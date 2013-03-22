@@ -66,13 +66,8 @@ IMFS_jnode_t *IMFS_allocate_node(
    *  Fill in the mode and permission information for the jnode structure.
    */
   node->st_mode = mode;
-  #if defined(RTEMS_POSIX_API)
-    node->st_uid = geteuid();
-    node->st_gid = getegid();
-  #else
-    node->st_uid = 0;
-    node->st_gid = 0;
-  #endif
+  node->st_uid = geteuid();
+  node->st_gid = getegid();
 
   /*
    *  Now set all the times.
