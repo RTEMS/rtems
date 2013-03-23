@@ -24,6 +24,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([lpc32xx]);;
   nds )
     AC_CONFIG_SUBDIRS([nds]);;
+  raspberrypi )
+    AC_CONFIG_SUBDIRS([raspberrypi]);;
   rtl22xx )
     AC_CONFIG_SUBDIRS([rtl22xx]);;
   smdk2410 )
