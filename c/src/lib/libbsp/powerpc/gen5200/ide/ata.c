@@ -93,7 +93,7 @@ bool ata_set_transfer_mode(uint8_t mode)
   return ata_check_status();
 }
 
-static bool probe()
+static bool probe(void)
 {
   bool card_present = true;
 
@@ -121,13 +121,17 @@ static void create_lock(ata_driver *self)
     0,
     &self->lock
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  if (sc != RTEMS_SUCCESSFUL) {
+    mpc5200_fatal(MPC5200_FATAL_ATA_LOCK_CREATE);
+  }
 }
 
 static void destroy_lock(const ata_driver *self)
 {
   rtems_status_code sc = rtems_semaphore_delete(self->lock);
-  assert(sc == RTEMS_SUCCESSFUL);
+  if (sc != RTEMS_SUCCESSFUL) {
+    mpc5200_fatal(MPC5200_FATAL_ATA_LOCK_DESTROY);
+  }
 }
 
 void ata_driver_create(ata_driver *self, const char *device_file_path, rtems_block_device_ioctl io_control)
