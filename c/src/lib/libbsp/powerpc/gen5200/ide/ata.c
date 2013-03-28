@@ -19,6 +19,8 @@
 #include <bsp.h>
 #include <bsp/mpc5200.h>
 
+#include <libcpu/powerpc-utility.h>
+
 bool ata_execute_io_command(uint8_t command, uint32_t lba, uint32_t sector_count_32)
 {
   assert(sector_count_32 >= 1);
@@ -68,10 +70,11 @@ bool ata_execute_io_command(uint8_t command, uint32_t lba, uint32_t sector_count
 
 void ata_reset_device(void)
 {
+  /* ATA/ATAPI-7 V2, 11.2 Software reset protocol */
   ATA->write.control = DCTRL_SRST;
-  rtems_task_wake_after(1);
+  rtems_bsp_delay(5);
   ATA->write.control = 0;
-  rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(2));
+  rtems_bsp_delay(2000);
   ata_wait_for_not_busy();
 }
 

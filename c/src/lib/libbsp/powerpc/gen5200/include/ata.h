@@ -176,7 +176,7 @@ static inline void ata_flush_sector(uint16_t *begin)
   rtems_cache_flush_multiple_data_lines(begin, ATA_SECTOR_SIZE);
 }
 
-void ata_reset_device();
+void ata_reset_device(void);
 
 bool ata_set_transfer_mode(uint8_t mode);
 
