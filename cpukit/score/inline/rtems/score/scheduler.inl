@@ -118,7 +118,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Free(
   Thread_Control    *the_thread
 )
 {
-  return _Scheduler.Operations.free( the_thread );
+  _Scheduler.Operations.free( the_thread );
 }
 
 /**
