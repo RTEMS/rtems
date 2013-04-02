@@ -29,7 +29,6 @@ RTEMS_BSPOPTS_HELP([ALLOW_IRQ_NESTING],
 [If set to !0, allow nested IRQ processing.])
 
 RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[icecube],[1])
-RTEMS_BSPOPTS_SET([BSP_RESET_BOARD_AT_EXIT],[pm520_cr825],[1])
 RTEMS_BSPOPTS_SET([BSP_PRESS_KEY_FOR_RESET],[*],[0])
 RTEMS_BSPOPTS_HELP([BSP_PRESS_KEY_FOR_RESET],
 [If set to !0, print a message and wait until pressed before resetting
