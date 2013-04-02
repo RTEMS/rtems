@@ -59,7 +59,7 @@ initialization.  Must match the hardware requirements.  Must be consistent with
 BSP_GPIOPCR_INITVAL.  The bits are cleared via BSP_GPIOPCR_INITMASK and then
 set via BSP_GPIOPCR_INITVAL.])
 RTEMS_BSPOPTS_HELP([BSP_GPIOPCR_INITVAL],
-[Defines the bit set in the MPC5200 GPIOPCR register during initialization.
+[Defines the bits set in the MPC5200 GPIOPCR register during initialization.
 Must match the hardware requirements.  Must be consistent with
 BSP_GPIOPCR_INITMASK.  The bits are cleared via BSP_GPIOPCR_INITMASK and then
 set via BSP_GPIOPCR_INITVAL.])
