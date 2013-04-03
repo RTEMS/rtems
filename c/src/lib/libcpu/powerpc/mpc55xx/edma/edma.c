@@ -26,6 +26,7 @@
 
 #include <assert.h>
 
+#include <bsp.h>
 #include <bsp/irq.h>
 
 #if MPC55XX_CHIP_FAMILY == 551
@@ -246,8 +247,7 @@ void mpc55xx_edma_init(void)
       NULL
     );
     if (sc != RTEMS_SUCCESSFUL) {
-      /* FIXME */
-      rtems_fatal_error_occurred(0xdeadbeef);
+      mpc55xx_fatal(MPC55XX_FATAL_EDMA_IRQ_INSTALL);
     }
   }
 }
@@ -319,8 +319,7 @@ void mpc55xx_edma_release_channel(mpc55xx_edma_channel_entry *e)
     e
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
+    mpc55xx_fatal(MPC55XX_FATAL_EDMA_IRQ_REMOVE);
   }
 
   e->done(e, 0);
