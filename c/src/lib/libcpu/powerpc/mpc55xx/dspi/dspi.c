@@ -113,8 +113,9 @@ static const mpc55xx_dspi_baudrate_scaler_entry mpc55xx_dspi_baudrate_scaler_tab
 	{ 229376, 3, 15 },
 };
 
-static void mpc55xx_dspi_edma_done( mpc55xx_edma_channel_entry *e, uint32_t error_status)
+static void mpc55xx_dspi_edma_done( edma_channel_context *ctx, uint32_t error_status)
 {
+	const mpc55xx_dspi_edma_entry *e = (const mpc55xx_dspi_edma_entry *) ctx;
 	rtems_semaphore_release( e->id);
 
 	if (error_status != 0) {
@@ -175,7 +176,7 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 	);
 	RTEMS_CHECK_SC( sc, "create receive update semaphore");
 
-	sc = mpc55xx_edma_obtain_channel( &e->edma_receive, MPC55XX_INTC_DEFAULT_PRIORITY);
+	sc = mpc55xx_edma_obtain_channel( &e->edma_receive.edma, MPC55XX_INTC_DEFAULT_PRIORITY);
 	RTEMS_CHECK_SC( sc, "obtain receive eDMA channel");
 
 	/* eDMA transmit */
@@ -188,10 +189,10 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 	);
 	RTEMS_CHECK_SC( sc, "create transmit update semaphore");
 
-	sc = mpc55xx_edma_obtain_channel( &e->edma_transmit, MPC55XX_INTC_DEFAULT_PRIORITY);
+	sc = mpc55xx_edma_obtain_channel( &e->edma_transmit.edma, MPC55XX_INTC_DEFAULT_PRIORITY);
 	RTEMS_CHECK_SC( sc, "obtain transmit eDMA channel");
 
-	sc = mpc55xx_edma_obtain_channel( &e->edma_push, MPC55XX_INTC_DEFAULT_PRIORITY);
+	sc = mpc55xx_edma_obtain_channel( &e->edma_push.edma, MPC55XX_INTC_DEFAULT_PRIORITY);
 	RTEMS_CHECK_SC( sc, "obtain push eDMA channel");
 
 	tcd_push.SADDR = mpc55xx_dspi_push_data_address( e);
@@ -204,7 +205,7 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 	tcd_push.CDF.B.CITER = 1;
 	tcd_push.BMF.B.BITER = 1;
 
-	EDMA.TCD [e->edma_push.channel] = tcd_push;
+	*e->edma_push.edma.edma_tcd = tcd_push;
 
 	/* Module Control Register */
 	mcr.B.MSTR = e->master ? 1 : 0;
@@ -248,7 +249,7 @@ static rtems_status_code mpc55xx_dspi_init( rtems_libi2c_bus_t *bus)
 		e->regs->CTAR [i].R = ctar.R;
 	}
 
-        /* DMA/Interrupt Request Select and Enable Register */
+	/* DMA/Interrupt Request Select and Enable Register */
 	rser.B.TFFFRE = 1;
 	rser.B.TFFFDIRS = 1;
 	rser.B.RFDFRE = 1;
@@ -547,7 +548,8 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 			tcd_transmit.CDF.B.CITER = n_c;
 			tcd_transmit.BMF.B.BITER = n_c;
 		} else {
-			EDMA.CDSBR.R = e->edma_transmit.channel;
+			unsigned push_channel = mpc55xx_edma_channel_by_tcd( e->edma_push.edma.edma_tcd);
+			mpc55xx_edma_clear_done( e->edma_transmit.edma.edma_tcd);
 			tcd_transmit.SADDR = (uint32_t) out_c;
 			tcd_transmit.SDF.B.SSIZE = 0;
 			tcd_transmit.SDF.B.SOFF = 1;
@@ -557,14 +559,14 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 			tcd_transmit.NBYTES = 1;
 			tcd_transmit.CDF.B.CITERE_LINK = 1;
 			tcd_transmit.BMF.B.BITERE_LINK = 1;
-			tcd_transmit.BMF.B.MAJORLINKCH = e->edma_push.channel;
-			tcd_transmit.CDF.B.CITER = EDMA_TCD_LINK_AND_BITER( e->edma_push.channel, n_c);
-			tcd_transmit.BMF.B.BITER = EDMA_TCD_LINK_AND_BITER( e->edma_push.channel, n_c);
+			tcd_transmit.BMF.B.MAJORLINKCH = push_channel;
+			tcd_transmit.CDF.B.CITER = EDMA_TCD_LINK_AND_BITER( push_channel, n_c);
+			tcd_transmit.BMF.B.BITER = EDMA_TCD_LINK_AND_BITER( push_channel, n_c);
 			tcd_transmit.BMF.B.MAJORE_LINK = 1;
 		}
 		tcd_transmit.BMF.B.D_REQ = 1;
 		tcd_transmit.BMF.B.INT_MAJ = 1;
-		EDMA.TCD [e->edma_transmit.channel] = tcd_transmit;
+		*e->edma_transmit.edma.edma_tcd = tcd_transmit;
 
 		/* Set receive TCD */
 		if (in == NULL) {
@@ -583,7 +585,7 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 		tcd_receive.BMF.B.INT_MAJ = 1;
 		tcd_receive.CDF.B.CITER = n_c;
 		tcd_receive.BMF.B.BITER = n_c;
-		EDMA.TCD [e->edma_receive.channel] = tcd_receive;
+		*e->edma_receive.edma.edma_tcd = tcd_receive;
 
 		/* Clear request flags */
 		sr.R = 0;
@@ -592,8 +594,8 @@ static int mpc55xx_dspi_read_write( rtems_libi2c_bus_t *bus, unsigned char *in, 
 		status->R = sr.R;
 
 		/* Enable hardware requests */
-		mpc55xx_edma_enable_hardware_requests( e->edma_receive.channel, true);
-		mpc55xx_edma_enable_hardware_requests( e->edma_transmit.channel, true);
+		mpc55xx_edma_enable_hardware_requests( e->edma_receive.edma.edma_tcd);
+		mpc55xx_edma_enable_hardware_requests( e->edma_transmit.edma.edma_tcd);
 
 		/* Wait for transmit update */
 		sc = rtems_semaphore_obtain( e->edma_transmit.id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -676,18 +678,24 @@ mpc55xx_dspi_bus_entry mpc55xx_dspi_bus_table [MPC55XX_DSPI_NUMBER] = {
 		.master = true,
 		.push_data = MPC55XX_ZERO_FLAGS,
 		.edma_transmit = {
-			.channel = 32,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_A_SR_TFFF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_push = {
-			.channel = 43,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = &EDMA.TCD [43],
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_receive = {
-			.channel = 33,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_A_SR_RFDF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.idle_char = 0xffffffff,
@@ -704,18 +712,24 @@ mpc55xx_dspi_bus_entry mpc55xx_dspi_bus_table [MPC55XX_DSPI_NUMBER] = {
 		.master = true,
 		.push_data = MPC55XX_ZERO_FLAGS,
 		.edma_transmit = {
-			.channel = 12,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_B_SR_TFFF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_push = {
-			.channel = 10,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = &EDMA.TCD [10],
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_receive = {
-			.channel = 13,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_B_SR_RFDF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.idle_char = 0xffffffff,
@@ -732,18 +746,24 @@ mpc55xx_dspi_bus_entry mpc55xx_dspi_bus_table [MPC55XX_DSPI_NUMBER] = {
 		.master = true,
 		.push_data = MPC55XX_ZERO_FLAGS,
 		.edma_transmit = {
-			.channel = 14,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_C_SR_TFFF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_push = {
-			.channel = 11,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = &EDMA.TCD [11],
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_receive = {
-			.channel = 15,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_C_SR_RFDF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.idle_char = 0xffffffff,
@@ -761,18 +781,24 @@ mpc55xx_dspi_bus_entry mpc55xx_dspi_bus_table [MPC55XX_DSPI_NUMBER] = {
 		.master = true,
 		.push_data = MPC55XX_ZERO_FLAGS,
 		.edma_transmit = {
-			.channel = 16,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_D_SR_TFFF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_push = {
-			.channel = 18,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = &EDMA.TCD [18],
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.edma_receive = {
-			.channel = 17,
-			.done = mpc55xx_dspi_edma_done,
+			.edma = {
+				.edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(EDMA_DSPI_D_SR_RFDF),
+				.done = mpc55xx_dspi_edma_done
+			},
 			.id = RTEMS_ID_NONE
 		},
 		.idle_char = 0xffffffff,

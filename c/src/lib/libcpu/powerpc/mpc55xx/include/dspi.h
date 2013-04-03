@@ -38,6 +38,11 @@ extern "C" {
 
 struct DSPI_tag;
 
+typedef struct {
+  edma_channel_context edma;
+  rtems_id id;
+} mpc55xx_dspi_edma_entry;
+
 /**
  * @brief LibI2C bus driver entry.
  */
@@ -79,21 +84,21 @@ typedef struct {
 	 *
 	 * The channel is fixed to a particular DSPI.
 	 */
-	mpc55xx_edma_channel_entry edma_transmit;
+	mpc55xx_dspi_edma_entry edma_transmit;
 
 	/**
 	 * @brief eDMA entry for push data generation.
 	 *
 	 * You can choose every available channel.
 	 */
-	mpc55xx_edma_channel_entry edma_push;
+	mpc55xx_dspi_edma_entry edma_push;
 
 	/**
 	 * @brief eDMA entry for receiving.
 	 *
 	 * The channel is fixed to a particular DSPI.
 	 */
-	mpc55xx_edma_channel_entry edma_receive;
+	mpc55xx_dspi_edma_entry edma_receive;
 
 	/**
 	 * @brief Idle character transmitted in read only mode.

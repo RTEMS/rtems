@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,7 +20,6 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <mpc55xx/regs.h>
 #include <mpc55xx/edma.h>
 #include <mpc55xx/mpc55xx.h>
 
@@ -29,29 +28,9 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 
-#if MPC55XX_CHIP_FAMILY == 551
-  #define EDMA_CHANNEL_COUNT 16U
-#elif MPC55XX_CHIP_FAMILY == 564
-  #define EDMA_CHANNEL_COUNT 16U
-#elif MPC55XX_CHIP_FAMILY == 567
-  #define EDMA_CHANNEL_COUNT 96U
-#else
-  #define EDMA_CHANNEL_COUNT 64U
-#endif
-
 #define EDMA_CHANNELS_PER_GROUP 32U
 
-#define EDMA_CHANNELS_PER_MODULE 64U
-
 #define EDMA_GROUP_COUNT ((EDMA_CHANNEL_COUNT + 31U) / 32U)
-
-#define EDMA_MODULE_COUNT ((EDMA_CHANNEL_COUNT + 63U) / 64U)
-
-#define EDMA_INVALID_CHANNEL EDMA_CHANNEL_COUNT
-
-#define EDMA_IS_CHANNEL_INVALID(i) ((unsigned) (i) >= EDMA_CHANNEL_COUNT)
-
-#define EDMA_IS_CHANNEL_VALID(i) ((unsigned) (i) < EDMA_CHANNEL_COUNT)
 
 #define EDMA_GROUP_INDEX(channel) ((channel) / EDMA_CHANNELS_PER_GROUP)
 
@@ -59,18 +38,19 @@
 
 #define EDMA_MODULE_INDEX(channel) ((channel) / EDMA_CHANNELS_PER_MODULE)
 
-#define EDMA_MODULE_BIT(channel) (1U << ((channel) % EDMA_CHANNELS_PER_MODULE))
-
 static uint32_t edma_channel_occupation [EDMA_GROUP_COUNT];
 
 static RTEMS_CHAIN_DEFINE_EMPTY(edma_channel_chain);
 
-static volatile struct EDMA_tag *edma_get_regs_by_channel(unsigned channel)
+static unsigned edma_channel_index_of_tcd(volatile struct tcd_t *edma_tcd)
 {
+  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  unsigned channel = edma_tcd - &edma->TCD[0];
+
 #if EDMA_MODULE_COUNT == 1
-  return &EDMA;
+  return channel;
 #elif EDMA_MODULE_COUNT == 2
-  return channel < EDMA_CHANNELS_PER_MODULE ? &EDMA_A : &EDMA_B;
+  return channel + (&EDMA_A == edma ? 0 : EDMA_CHANNELS_PER_MODULE);
 #else
   #error "unsupported module count"
 #endif
@@ -111,13 +91,11 @@ static uint32_t edma_bit_array_clear(unsigned channel, uint32_t *bit_array)
 
 static void edma_interrupt_handler(void *arg)
 {
-  mpc55xx_edma_channel_entry *e = arg;
-  unsigned channel = e->channel;
-  volatile struct EDMA_tag *edma = edma_get_regs_by_channel(channel);
+  edma_channel_context *ctx = arg;
 
-  edma->CIRQR.R = (uint8_t) channel;
+  mpc55xx_edma_clear_interrupts(ctx->edma_tcd);
 
-  e->done(e, 0);
+  (*ctx->done)(ctx, 0);
 }
 
 static void edma_interrupt_error_handler(void *arg)
@@ -155,44 +133,18 @@ static void edma_interrupt_error_handler(void *arg)
 #endif
 
   while (!rtems_chain_is_tail(chain, node)) {
-    mpc55xx_edma_channel_entry *e = (mpc55xx_edma_channel_entry *) node;
-    unsigned channel = e->channel;
-    unsigned group_index = EDMA_GROUP_INDEX(channel);
-    unsigned group_bit = EDMA_GROUP_BIT(channel);
+    edma_channel_context *ctx = (edma_channel_context *) node;
+    unsigned channel_index = edma_channel_index_of_tcd(ctx->edma_tcd);
+    unsigned group_index = EDMA_GROUP_INDEX(channel_index);
+    unsigned group_bit = EDMA_GROUP_BIT(channel_index);
 
     if ((error_channels [group_index] & group_bit) != 0) {
-      unsigned module_index = EDMA_MODULE_INDEX(channel);
+      unsigned module_index = EDMA_MODULE_INDEX(channel_index);
 
-      e->done(e, error_status [module_index]);
+      (*ctx->done)(ctx, error_status [module_index]);
     }
 
     node = rtems_chain_next(node);
-  }
-}
-
-void mpc55xx_edma_enable_hardware_requests(unsigned channel, bool enable)
-{
-  volatile struct EDMA_tag *edma = edma_get_regs_by_channel(channel);
-
-  assert(EDMA_IS_CHANNEL_VALID(channel));
-
-  if (enable) {
-    edma->SERQR.R = (uint8_t) channel;
-  } else {
-    edma->CERQR.R = (uint8_t) channel;
-  }
-}
-
-void mpc55xx_edma_enable_error_interrupts(unsigned channel, bool enable)
-{
-  volatile struct EDMA_tag *edma = edma_get_regs_by_channel(channel);
-
-  assert(EDMA_IS_CHANNEL_VALID(channel));
-
-  if (enable) {
-    edma->SEEIR.R = (uint8_t) channel;
-  } else {
-    edma->CEEIR.R = (uint8_t) channel;
   }
 }
 
@@ -252,75 +204,125 @@ void mpc55xx_edma_init(void)
   }
 }
 
-rtems_status_code mpc55xx_edma_obtain_channel(
-  mpc55xx_edma_channel_entry *e,
-  unsigned irq_priority
+rtems_status_code mpc55xx_edma_obtain_channel_by_tcd(
+  volatile struct tcd_t *edma_tcd
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  unsigned channel_index = edma_channel_index_of_tcd(edma_tcd);
   rtems_interrupt_level level;
-  unsigned channel = e->channel;
-  uint32_t channel_occupation = 0;
-
-  if (EDMA_IS_CHANNEL_INVALID(channel)) {
-    return RTEMS_INVALID_ID;
-  }
+  uint32_t channel_occupation;
 
   rtems_interrupt_disable(level);
   channel_occupation = edma_bit_array_set(
-    channel,
+    channel_index,
     &edma_channel_occupation [0]
   );
   rtems_interrupt_enable(level);
 
-  if ((channel_occupation & EDMA_GROUP_BIT(channel))) {
-    return RTEMS_RESOURCE_IN_USE;
+  if ((channel_occupation & EDMA_GROUP_BIT(channel_index)) != 0) {
+    sc = RTEMS_RESOURCE_IN_USE;
   }
 
-  sc = mpc55xx_interrupt_handler_install(
-    MPC55XX_IRQ_EDMA(channel),
-    "eDMA Channel",
-    RTEMS_INTERRUPT_SHARED,
-    irq_priority,
-    edma_interrupt_handler,
-    e
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_interrupt_disable(level);
-    edma_bit_array_clear(channel, &edma_channel_occupation [0]);
-    rtems_interrupt_enable(level);
-
-    return RTEMS_IO_ERROR;
-  }
-
-  rtems_chain_prepend(&edma_channel_chain, &e->node);
-  mpc55xx_edma_enable_error_interrupts(channel, true);
-
-  return RTEMS_SUCCESSFUL;
+  return sc;
 }
 
-void mpc55xx_edma_release_channel(mpc55xx_edma_channel_entry *e)
+void mpc55xx_edma_release_channel_by_tcd(volatile struct tcd_t *edma_tcd)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  unsigned channel_index = edma_channel_index_of_tcd(edma_tcd);
   rtems_interrupt_level level;
-  unsigned channel = e->channel;
 
   rtems_interrupt_disable(level);
-  edma_bit_array_clear(channel, &edma_channel_occupation [0]);
+  edma_bit_array_clear(channel_index, &edma_channel_occupation [0]);
   rtems_interrupt_enable(level);
 
-  mpc55xx_edma_enable_hardware_requests(channel, false);
-  mpc55xx_edma_enable_error_interrupts(channel, false);
-  rtems_chain_extract(&e->node);
+  mpc55xx_edma_disable_hardware_requests(edma_tcd);
+  mpc55xx_edma_disable_error_interrupts(edma_tcd);
+}
+
+rtems_status_code mpc55xx_edma_obtain_channel(
+  edma_channel_context *ctx,
+  unsigned irq_priority
+)
+{
+  rtems_status_code sc = mpc55xx_edma_obtain_channel_by_tcd(ctx->edma_tcd);
+  if (sc == RTEMS_SUCCESSFUL) {
+    unsigned channel_index = edma_channel_index_of_tcd(ctx->edma_tcd);
+
+    sc = mpc55xx_interrupt_handler_install(
+      MPC55XX_IRQ_EDMA(channel_index),
+      "eDMA Channel",
+      RTEMS_INTERRUPT_SHARED,
+      irq_priority,
+      edma_interrupt_handler,
+      ctx
+    );
+    if (sc == RTEMS_SUCCESSFUL) {
+      rtems_chain_prepend(&edma_channel_chain, &ctx->node);
+      mpc55xx_edma_enable_error_interrupts(ctx->edma_tcd);
+    } else {
+      mpc55xx_edma_release_channel_by_tcd(ctx->edma_tcd);
+      sc = RTEMS_IO_ERROR;
+    }
+  }
+
+  return sc;
+}
+
+void mpc55xx_edma_release_channel(edma_channel_context *ctx)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  unsigned channel_index = edma_channel_index_of_tcd(ctx->edma_tcd);
+
+  mpc55xx_edma_release_channel_by_tcd(ctx->edma_tcd);
+  rtems_chain_extract(&ctx->node);
 
   sc = rtems_interrupt_handler_remove(
-    MPC55XX_IRQ_EDMA(e->channel),
+    MPC55XX_IRQ_EDMA(channel_index),
     edma_interrupt_handler,
-    e
+    ctx
   );
   if (sc != RTEMS_SUCCESSFUL) {
     mpc55xx_fatal(MPC55XX_FATAL_EDMA_IRQ_REMOVE);
   }
+}
 
-  e->done(e, 0);
+void mpc55xx_edma_copy(
+  volatile struct tcd_t *edma_tcd,
+  const struct tcd_t *source_tcd
+)
+{
+  /* Clear DONE flag */
+  edma_tcd->BMF.R = 0;
+
+  edma_tcd->SADDR = source_tcd->SADDR;
+  edma_tcd->SDF.R = source_tcd->SDF.R;
+  edma_tcd->NBYTES = source_tcd->NBYTES;
+  edma_tcd->SLAST = source_tcd->SLAST;
+  edma_tcd->DADDR = source_tcd->DADDR;
+  edma_tcd->CDF.R = source_tcd->CDF.R;
+  edma_tcd->DLAST_SGA = source_tcd->DLAST_SGA;
+  edma_tcd->BMF.R = source_tcd->BMF.R;
+}
+
+void mpc55xx_edma_copy_and_enable_hardware_requests(
+  volatile struct tcd_t *edma_tcd,
+  const struct tcd_t *source_tcd
+)
+{
+  mpc55xx_edma_copy(edma_tcd, source_tcd);
+  mpc55xx_edma_enable_hardware_requests(edma_tcd);
+}
+
+void mpc55xx_edma_sg_link(
+  volatile struct tcd_t *edma_tcd,
+  const struct tcd_t *source_tcd
+)
+{
+  edma_tcd->DLAST_SGA = (int32_t) source_tcd;
+  edma_tcd->BMF.B.E_SG = 1;
+
+  if (!edma_tcd->BMF.B.E_SG) {
+    mpc55xx_edma_copy(edma_tcd, source_tcd);
+  }
 }
