@@ -622,6 +622,10 @@ extern "C" {
 		    uint16_t CITER:9;
                     int16_t DOFF;
                 } B_ALT;
+                struct {
+                    uint16_t CITER;
+                    int16_t DOFF;
+                } B_NOLINK;
             } CDF;
 
             int32_t DLAST_SGA;
@@ -658,6 +662,19 @@ extern "C" {
                     uint32_t INT_MAJ:1;
                     uint32_t START:1;
                 } B_ALT;
+                struct {
+                    uint16_t BITER;
+                    uint16_t BWC:2;
+                    uint16_t MAJORLINKCH:6;
+                    uint16_t DONE:1;
+                    uint16_t ACTIVE:1;
+                    uint16_t MAJORE_LINK:1;
+                    uint16_t E_SG:1;
+                    uint16_t D_REQ:1;
+                    uint16_t INT_HALF:1;
+                    uint16_t INT_MAJ:1;
+                    uint16_t START:1;
+                } B_NOLINK;
             } BMF;
         } TCD[64];              /* transfer_control_descriptor */
     };
