@@ -2297,7 +2297,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     };
   #endif
 
-  /** 
+  /**
    * This variable specifies the minimum stack size for tasks in an RTEMS
    * application.
    *
@@ -2308,7 +2308,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   uint32_t rtems_minimum_stack_size =
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
-  /** 
+  /**
    * This variable specifies the maximum priority value that
    * a task may have.  This must be a power of 2 between 4
    * and 256 and is specified in terms of Classic API
@@ -2611,25 +2611,35 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
-#ifndef RTEMS_SCHEDSIM
-/*
- *  You must either explicity include or exclude the clock driver.
- *  It is such a common newbie error to leave it out.  Maybe this
- *  will put an end to it.
- *
- *  NOTE: If you are using the timer driver, it is considered
- *        mutually exclusive with the clock driver because the
- *        drivers are assumed to use the same "timer" hardware
- *        on many boards.
- */
-#if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
-  #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
-      !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
-      !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
-    #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
-   #endif
-#endif
-#endif
+#if !defined(RTEMS_SCHEDSIM)
+  #if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
+    /*
+     *  You must either explicity include or exclude the clock driver.
+     *  It is such a common newbie error to leave it out.  Maybe this
+     *  will put an end to it.
+     *
+     *  NOTE: If you are using the timer driver, it is considered
+     *        mutually exclusive with the clock driver because the
+     *        drivers are assumed to use the same "timer" hardware
+     *        on many boards.
+     */
+    #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
+        !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
+        !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
+      #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
+     #endif
+
+    /*
+     * Only one of the following three configuration parameters should be
+     * defined at a time.
+     */
+    #if ((defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) + \
+          defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER) + \
+          defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER)) > 1)
+       #error "CONFIGURATION ERROR: More than one clock/timer driver configuration parameter specified?!?"
+    #endif
+  #endif /* !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE) */
+#endif   /* !defined(RTEMS_SCHEDSIM) */
 
 /*
  *  These names have been obsoleted so make the user application stop compiling
