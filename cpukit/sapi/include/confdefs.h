@@ -866,14 +866,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef CONFIGURE_INIT
   /**
    * By default, RTEMS uses separate heaps for the RTEMS Workspace and
-   * the C Program Heap.  On many BSPs, these can be optionally
-   * combined provided one larger memory pool. This is particularly
+   * the C Program Heap.  The application can choose optionally to combine
+   * these to provide one larger memory pool. This is particularly
    * useful in combination with the unlimited objects configuration.
    */
-  #ifdef BSP_DEFAULT_UNIFIED_WORK_AREAS
-    #ifndef CONFIGURE_UNIFIED_WORK_AREAS
-      #define CONFIGURE_UNIFIED_WORK_AREAS
-    #endif
+  #ifndef CONFIGURE_UNIFIED_WORK_AREAS
+    #define CONFIGURE_UNIFIED_WORK_AREAS
   #endif
 
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
