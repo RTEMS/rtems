@@ -14,6 +14,10 @@
 
 #include "test-file-system.h"
 
+#include <bsp.h>
+
+#if !BSP_SMALL_MEMORY
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <assert.h>
@@ -830,3 +834,5 @@ void test_file_system_with_handler(
 
   free(fs);
 }
+
+#endif /* !BSP_SMALL_MEMORY */
