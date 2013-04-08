@@ -101,7 +101,7 @@ static bool probe(void)
   bool card_present = true;
 
 #ifdef BRS5L
-  volatile struct mpc5200_::mpc5200_gpt *gpt = &mpc5200.gpt[GPT2];
+  volatile struct mpc5200_gpt *gpt = &mpc5200.gpt[GPT2];
 
   /* Enable card detection on GPT2 */
   gpt->emsel = (GPT_EMSEL_GPIO_IN | GPT_EMSEL_TIMER_MS_GPIO);
