@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -52,6 +52,7 @@ void _BSP_Fatal_error(unsigned n)
 {
 	rtems_interrupt_level level;
 
+	(void) level;
 	rtems_interrupt_disable( level);
 
 	while (true) {
@@ -80,10 +81,7 @@ static void null_pointer_protection(void)
 
 void bsp_start(void)
 {
-	ppc_cpu_id_t myCpu;
-	ppc_cpu_revision_t myCpuRevision;
-
-        null_pointer_protection();
+	null_pointer_protection();
 
 	/*
 	 * make sure BSS/SBSS is cleared
@@ -95,8 +93,8 @@ void bsp_start(void)
 	 * function store the result in global variables so that it can be used
 	 * latter...
 	 */
-	myCpu = get_ppc_cpu_type();
-	myCpuRevision = get_ppc_cpu_revision();
+	get_ppc_cpu_type();
+	get_ppc_cpu_revision();
 
 	/*
 	 * determine clock speed

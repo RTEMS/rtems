@@ -19,6 +19,7 @@ void bsp_restart(void *addr)
   rtems_interrupt_level level;
   void (*start)(void) = addr;
 
+  (void) level;
   rtems_interrupt_disable(level);
   (*start)();
 }
