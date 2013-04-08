@@ -39,7 +39,7 @@ extern "C" {
  *  will show up in the symbol table.
  */
 
-#define NS16550_STATIC
+#define NS16550_STATIC static
 
 #define NS16550_RECEIVE_BUFFER   0
 #define NS16550_TRANSMIT_BUFFER  0
