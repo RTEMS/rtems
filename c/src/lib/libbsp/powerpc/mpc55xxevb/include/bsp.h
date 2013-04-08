@@ -40,6 +40,7 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp/tictac.h>
+#include <bsp/linker-symbols.h>
 #include <bsp/default-initial-extension.h>
 
 #ifdef __cplusplus
