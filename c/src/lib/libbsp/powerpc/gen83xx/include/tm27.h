@@ -29,16 +29,16 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-static rtems_isr_entry tm27_interrupt_handler = NULL;
+static void (*tm27_interrupt_handler)(rtems_vector_number);
 
 static int tm27_exception_handler( BSP_Exception_frame *frame, unsigned number)
 {
-	tm27_interrupt_handler( 0);
+	(*tm27_interrupt_handler)( 0);
 
 	return 0;
 }
 
-void Install_tm27_vector( rtems_isr_entry handler)
+void Install_tm27_vector( void (*handler)(rtems_vector_number))
 {
   int rv = 0;
 
