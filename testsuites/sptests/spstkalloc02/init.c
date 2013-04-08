@@ -26,6 +26,8 @@
 
 #include <tmacros.h>
 
+#if !BSP_SMALL_MEMORY
+
 #include <stdio.h>
 #include <inttypes.h>
 
@@ -158,3 +160,26 @@ static void task_stack_free(void *addr)
 {
   _Heap_Free(&task_stack_heap, addr);
 }
+
+#else /* BSP_SMALL_MEMORY */
+
+static void Init(rtems_task_argument arg)
+{
+  puts("\n\n*** TEST STKALLOC 02 ***");
+  puts("NOT ENOUGH MEMORY TO RUN TEST");
+
+  rtems_test_exit(0);
+}
+
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+
+#endif /* BSP_SMALL_MEMORY */
