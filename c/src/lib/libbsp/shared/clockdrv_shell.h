@@ -160,6 +160,7 @@ rtems_device_driver Clock_initialize(
   /*
    *  Install vector
    */
+  (void) Old_ticker;
   Clock_driver_support_install_isr( Clock_isr, Old_ticker );
 
   #if defined(Clock_driver_nanoseconds_since_last_tick)
