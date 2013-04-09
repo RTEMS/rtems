@@ -335,8 +335,7 @@ of the RTEMS executive is application dependent.
 RTEMS requires RAM to manage each instance of an RTEMS object
 that is created.  Thus the more RTEMS objects an application
 needs, the more memory that must be reserved.  See
-@ref{Configuring a System Determining Memory Requirements} for
-more details.
+@ref{Configuring a System} for more details.
 
 RTEMS utilizes memory for both code and data space.
 Although RTEMS' data space must be in RAM, its code space can be
