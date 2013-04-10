@@ -2623,6 +2623,382 @@ intend to use any kind of filesystem support. This include the device
 infrastructure necessary to support @code{printf()}.
 
 @c
+@c === Block Device Cache Configuration ===
+@c
+@section Block Device Cache Configuration
+
+This section defines Block Device Cache (bdbuf) related configuration
+parameters.
+
+@c
+@c === CONFIGURE_APPLICATION_NEEDS_LIBBLOCK ===
+@c
+@subsection Enable Block Device Cache
+
+@findex CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_APPLICATION_NEEDS_LIBBLOCK}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This option is not defined by default.
+
+@end table
+
+@subheading DESCRIPTION:
+Provides a Block Device Cache configuration.
+
+@subheading NOTES:
+Each option of the Block Device Cache configuration can be explicitly set by
+the user with the configuration options below.  The Block Device Cache is used
+for example by the RFS and DOSFS file systems.
+
+@c
+@c === CONFIGURE_BDBUF_CACHE_MEMORY_SIZE ===
+@c
+@subsection Size of the Cache Memory
+
+@findex CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_CACHE_MEMORY_SIZE}
+
+@item DATA TYPE:
+Unsigned integer (@code{size_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+The default value is 32KiB.
+
+@end table
+
+@subheading DESCRIPTION:
+Size of the cache memory in bytes.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_BDBUF_BUFFER_MIN_SIZE ===
+@c
+@subsection Minimum Size of a Buffer
+
+@findex CONFIGURE_BDBUF_BUFFER_MIN_SIZE
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_BUFFER_MIN_SIZE}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+The default value is 512 bytes.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the minimum size of a buffer in bytes.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_BDBUF_BUFFER_MAX_SIZE ===
+@c
+@subsection Maximum Size of a Buffer
+
+@findex CONFIGURE_BDBUF_BUFFER_MAX_SIZE
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_BUFFER_MAX_SIZE}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+It must be positive and an integral multiple of the buffer minimum size.
+
+@item DEFAULT VALUE:
+The default value is 4096 bytes.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the maximum size of a buffer in bytes.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_SWAPOUT_SWAP_PERIOD ===
+@c
+@subsection Swapout Task Swap Period
+
+@findex CONFIGURE_SWAPOUT_SWAP_PERIOD
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SWAPOUT_SWAP_PERIOD}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+The default value is 250 milliseconds.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the swapout task swap period in milliseconds.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_SWAPOUT_BLOCK_HOLD ===
+@c
+@subsection Swapout Task Maximum Block Hold Time
+
+@findex CONFIGURE_SWAPOUT_BLOCK_HOLD
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SWAPOUT_BLOCK_HOLD}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+The default value is 1000 milliseconds.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the swapout task maximum block hold time in milliseconds.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_SWAPOUT_TASK_PRIORITY ===
+@c
+@subsection Swapout Task Priority
+
+@findex CONFIGURE_SWAPOUT_TASK_PRIORITY
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SWAPOUT_TASK_PRIORITY}
+
+@item DATA TYPE:
+Task priority (@code{rtems_task_priority}).
+
+@item RANGE:
+Valid task priority.
+
+@item DEFAULT VALUE:
+The default value is 15.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the swapout task priority.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS ===
+@c
+@subsection Maximum Blocks per Read-Ahead Request
+
+@findex CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+The default value is 0.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the maximum blocks per read-ahead request.
+
+@subheading NOTES:
+A value of 0 disables the read-ahead task (default).  The read-ahead task will
+issue speculative read transfers if a sequential access pattern is detected.
+This can improve the performance on some systems.
+
+@c
+@c === CONFIGURE_BDBUF_MAX_WRITE_BLOCKS ===
+@c
+@subsection Maximum Blocks per Write Request
+
+@findex CONFIGURE_BDBUF_MAX_WRITE_BLOCKS
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_MAX_WRITE_BLOCKS}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Positive.
+
+@item DEFAULT VALUE:
+The default value is 16.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the maximum blocks per write request.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_BDBUF_TASK_STACK_SIZE ===
+@c
+@subsection Task Stack Size of the Block Device Cache Tasks
+
+@findex CONFIGURE_BDBUF_TASK_STACK_SIZE
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_TASK_STACK_SIZE}
+
+@item DATA TYPE:
+Unsigned integer (@code{size_t}).
+
+@item RANGE:
+Zero or positive.
+
+@item DEFAULT VALUE:
+The default value is the RTEMS minimum stack size.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the task stack size of the Block Device Cache tasks in bytes.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY ===
+@c
+@subsection Read-Ahead Task Priority
+
+@findex CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY}
+
+@item DATA TYPE:
+Task priority (@code{rtems_task_priority}).
+
+@item RANGE:
+Valid task priority.
+
+@item DEFAULT VALUE:
+The default value is 15.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the read-ahead task priority.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_SWAPOUT_WORKER_TASKS ===
+@c
+@subsection Swapout Worker Task Count
+
+@findex CONFIGURE_SWAPOUT_WORKER_TASKS
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SWAPOUT_WORKER_TASKS}
+
+@item DATA TYPE:
+Unsigned integer (@code{size_t}).
+
+@item RANGE:
+Zero or positive.
+
+@item DEFAULT VALUE:
+The default value is 0.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the swapout worker task count.
+
+@subheading NOTES:
+None.
+
+@c
+@c === CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY ===
+@c
+@subsection Swapout Worker Task Priority
+
+@findex CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY}
+
+@item DATA TYPE:
+Task priority (@code{rtems_task_priority}).
+
+@item RANGE:
+Valid task priority.
+
+@item DEFAULT VALUE:
+The default value is 15.
+
+@end table
+
+@subheading DESCRIPTION:
+Defines the swapout worker task priority.
+
+@subheading NOTES:
+None.
+
+@c
 @c === BSP Specific Settings ===
 @c
 @section BSP Specific Settings
