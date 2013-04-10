@@ -71,7 +71,7 @@ expect that all systems can be easily configured using the
 avoid internal RTEMS configuration changes impacting applications.
 
 @c
-@c === Philospohy ===
+@c === Philosophy ===
 @c
 @section Default Value Selection Philosophy
 
@@ -95,19 +95,16 @@ from the RTEMS Workspace.
 
 The @code{<rtems/confdefs.h>} mechanism calculates the size of the RTEMS
 Workspace automatically.  It assumes that all tasks are floating point and
-that all will be allocated the mininum stack space.  This calculation
+that all will be allocated the minimum stack space.  This calculation
 includes the amount of memory that will be allocated for internal use
 by RTEMS. The automatic calculation may underestimate the workspace
 size truly needed by the application, in which case one can use the
 @code{CONFIGURE_MEMORY_OVERHEAD} macro to add a value to the estimate. See
 @ref{Configuring a System Specify Memory Overhead} for more details.
 
-@c XXX - ************* REMOVE ME *************
-@c The starting address of the RTEMS Workspace is determined
-@c by the BSP and must be aligned on at least a four-byte boundary.
-@c Failure to properly align the workspace will result in the
-@c @code{@value{DIRPREFIX}fatal_error_occurred} directive being invoked
-@c with the @code{@value{RPREFIX}INVALID_ADDRESS} error code.
+The memory area for the RTEMS Workspace is determined by the BSP.  In case the
+RTEMS Workspace is too large for the available memory, then a fatal run-time
+error occurs and the system terminates.
 
 The file @code{<rtems/confdefs.h>} will calculate the value of the
 @code{work_space_size} parameter of the Configuration Table. There
@@ -147,9 +144,8 @@ automatic estimates of space required will in general change when:
 @item the target processor is changed.
 @end itemize
 
-Failure to provide enough space in the RTEMS Workspace will result in
-the @code{@value{DIRPREFIX}fatal_error_occurred} directive being invoked
-with the appropriate error code.
+Failure to provide enough space in the RTEMS Workspace may result in fatal
+run-time errors terminating the system.
 
 @c
 @c === Potential Issues ===
@@ -211,7 +207,7 @@ fifty (50) milliseconds is as follows:
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
 
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 10, sizeof(struct USER_MESSAGE))
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(20, sizeof(struct USER_MESSAGE))
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
@@ -279,7 +275,8 @@ other things, the application implicitly used the following defaults:
 @item All unspecified types of communications and synchronization objects
 in the Classic and POSIX Threads API have maximums of zero (0).
 
-@item The filesystem will be the default filesystem which only supports device nodes.
+@item The filesystem will be the default filesystem which is the In-Memory File
+System (IMFS).
 
 @item The application will have the default number of priority levels.
 
@@ -426,10 +423,10 @@ pool of memory for both RTEMS and application memory allocations.
 @code{CONFIGURE_OBJECTS_ALLOCATION_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-undefined or positive
+Positive.
 
 @item DEFAULT VALUE:
 If not defined and @code{CONFIGURE_OBJECTS_UNLIMITED} is defined, the
@@ -474,10 +471,10 @@ parameters supported by @code{<rtems/confdefs.h>}.
 @code{CONFIGURE_MAXIMUM_TASKS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -491,7 +488,7 @@ Tasks that can be concurrently active.
 @subheading NOTES:
 This object class can be configured in unlimited allocation mode.
 
-This calculations for the required memory in the RTEMS Workspace
+The calculations for the required memory in the RTEMS Workspace
 for tasks assume that each task has a minimum stack size and
 has floating point support enabled.  The configuration parameter
 @code{CONFIGURE_EXTRA_TASK_STACKS} is used to specify task stack
@@ -553,10 +550,10 @@ and this can save significant memory in a low RAM system.
 @code{CONFIGURE_MAXIMUM_TIMERS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -582,10 +579,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_SEMAPHORES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -611,10 +608,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_MESSAGE_QUEUES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -640,10 +637,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_BARRIERS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -669,10 +666,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_PERIODS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -698,10 +695,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_PARTITIONS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -727,10 +724,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_REGIONS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -756,10 +753,10 @@ None.
 @code{CONFIGURE_MAXIMUM_PORTS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -785,10 +782,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_USER_EXTENSIONS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -863,10 +860,10 @@ any initialization tasks or threads.
 @code{CONFIGURE_INIT_TASK_ENTRY_POINT}
 
 @item DATA TYPE:
-rtems_task_entry
+Task entry function pointer (@code{rtems_task_entry}).
 
 @item RANGE:
-valid method pointer
+Valid task entry function pointer.
 
 @item DEFAULT VALUE:
 By default the value is @code{Init}.
@@ -879,7 +876,7 @@ name) of the single initialization task defined by the Classic API
 Initialization Tasks Table.
 
 @subheading NOTES:
-The user must implement the method @code{Init} or the method name provided
+The user must implement the function @code{Init} or the function name provided
 in this configuration parameter.
 
 @c
@@ -894,10 +891,10 @@ in this configuration parameter.
 @code{CONFIGURE_INIT_TASK_NAME}
 
 @item DATA TYPE:
-rtems_name
+RTEMS Name (@code{rtems_name}).
 
 @item RANGE:
-any value
+Any value.
 
 @item DEFAULT VALUE:
 By default the value is @code{rtems_build_name( 'U', 'I', '1', ' ' )}.
@@ -923,10 +920,10 @@ None.
 @code{CONFIGURE_INIT_TASK_STACK_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 By default value is the configured minimum stack size.
@@ -955,10 +952,10 @@ for more information about @code{CONFIGURE_EXTRA_TASK_STACKS}.
 @code{CONFIGURE_INIT_TASK_PRIORITY}
 
 @item DATA TYPE:
-rtems_task_priority
+RTEMS Task Priority (@code{rtems_task_priority}).
 
 @item RANGE:
-1 to CONFIGURE_MAXIMUM_PRIORITY
+One (1) to CONFIGURE_MAXIMUM_PRIORITY.
 
 @item DEFAULT VALUE:
 By default the value is one (1) which is the highest priority in the
@@ -986,10 +983,10 @@ None.
 
 
 @item DATA TYPE:
-rtems_attributes
+RTEMS Attributes (@code{rtems_attribute}).
 
 @item RANGE:
-valid task attribute sets
+Valid task attribute sets.
 
 @item DEFAULT VALUE:
 By default the tvalue is @code{RTEMS_DEFAULT_ATTRIBUTES}.
@@ -1015,10 +1012,10 @@ None.
 @code{CONFIGURE_INIT_TASK_INITIAL_MODES}
 
 @item DATA TYPE:
-rtems_mode
+RTEMS Mode (@code{rtems_mode}).
 
 @item RANGE:
-valid task mode sets
+Valid task mode sets.
 
 @item DEFAULT VALUE:
 By default the value is @code{RTEMS_NO_PREEMPT}.
@@ -1045,10 +1042,10 @@ None.
 @code{CONFIGURE_INIT_TASK_ARGUMENTS}
 
 @item DATA TYPE:
-rtems_task_argument
+RTEMS Task Argument (@code{rtems_task_argument}).
 
 @item RANGE:
-valid rtems_task_argument values
+Complete range of the type.
 
 @item DEFAULT VALUE:
 By default the value is 0.
@@ -1114,10 +1111,10 @@ is enabled at configure time using the @code{--enable-posix} option.
 @code{CONFIGURE_MAXIMUM_POSIX_THREADS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1158,10 +1155,10 @@ All POSIX threads have floating point enabled.
 @code{CONFIGURE_MAXIMUM_POSIX_MUTEXES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1187,10 +1184,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1216,10 +1213,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_KEYS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1247,10 +1244,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_TIMERS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1276,10 +1273,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1305,10 +1302,10 @@ None.
 @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1336,7 +1333,7 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
 greater than or equal to @code{CONFIGURE_MAXIMUM_POSIX_MESSAGES_QUEUES}
@@ -1369,10 +1366,10 @@ greater than or equal to @code{CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES}.
 @code{CONFIGURE_MAXIMUM_POSIX_SEMAPHORES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1398,10 +1395,10 @@ None.
 @code{CONFIGURE_MAXIMUM_POSIX_BARRIERS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1427,10 +1424,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_SPINLOCKS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1456,10 +1453,10 @@ This object class can be configured in unlimited allocation mode.
 @code{CONFIGURE_MAXIMUM_POSIX_RWLOCKS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default for this field is 0.
@@ -1536,10 +1533,10 @@ any initialization tasks or threads.
 @code{CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT}
 
 @item DATA TYPE:
-void *(*entry_point)(void *)
+POSIX thread function pointer (@code{void *(*entry_point)(void *)}).
 
 @item RANGE:
-valid method pointer
+Undefined or a valid POSIX thread function pointer.
 
 @item DEFAULT VALUE:
 By default the value is @code{POSIX_Init}.
@@ -1552,7 +1549,7 @@ By default the value is @code{POSIX_Init}.
 the POSIX API Initialization Threads Table.
 
 @subheading NOTES:
-The user must implement the method @code{POSIX_Init} or the method name
+The user must implement the function @code{POSIX_Init} or the function name
 provided in this configuration parameter.
 
 @c
@@ -1567,10 +1564,10 @@ provided in this configuration parameter.
 @code{CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 By default value is twice the configured minimum stack size.
@@ -1685,10 +1682,10 @@ run out of RTEMS Workspace.
 @code{CONFIGURE_MICROSECONDS_PER_TICK}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-non-zero positive values
+Positive.
 
 @item DEFAULT VALUE:
 When not defined, the clock tick quantum is configured to be 10,000
@@ -1735,10 +1732,10 @@ a clock tick quantum.
 
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-non-zero positive values
+Positive.
 
 @item DEFAULT VALUE:
 If unspecified, this parameter defaults to fifty (50).
@@ -1767,7 +1764,7 @@ driver is not configured.
 @code{CONFIGURE_MAXIMUM_PRIORITY}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint8_t}).
 
 @item RANGE:
 Valid values for this configuration parameter must be one (1) less than
@@ -1815,10 +1812,10 @@ to sixteen (16) can reduce memory usage by about three (3) kilobytes.
 @code{CONFIGURE_MINIMUM_TASK_STACK_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-non-zero positive integer
+Positive.
 
 @item DEFAULT VALUE:
 When not defined by the application, this is set to the recommended
@@ -1856,10 +1853,10 @@ risk of stack overflow without performing analysis on actual consumption.
 @code{CONFIGURE_INTERRUPT_STACK_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-non-zero positive integer
+Positive.
 
 @item DEFAULT VALUE:
 If not specified, the interrupt stack will be of minimum size.
@@ -1895,10 +1892,10 @@ from the RTEMS Workspace would be welcomed by the RTEMS Project.
 @code{CONFIGURE_EXTRA_TASK_STACKS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-Undefined or positive
+Undefined or positive.
 
 @item DEFAULT VALUE:
 When this is not defined, the default value is 0.
@@ -1997,7 +1994,7 @@ overhead to each context switch.
 @code{CONFIGURE_INITIAL_EXTENSIONS}
 
 @item DATA TYPE:
-List of @code{rtems_extensions_table} entries
+List of user extension initializers (@code{rtems_extensions_table}).
 
 @item RANGE:
 Undefined or a list of one or more user extensions.
@@ -2037,10 +2034,10 @@ so that stack overflows are detected in hardware.
 @code{CONFIGURE_TASK_STACK_ALLOCATOR_INIT}
 
 @item DATA TYPE:
-method pointer
+Function pointer.
 
 @item RANGE:
-NULL or valid pointer to a method
+Undefined, NULL or valid function pointer.
 
 @item DEFAULT VALUE:
 The default value for this field is NULL which indicates that
@@ -2076,14 +2073,14 @@ A correctly configured system must configure the following to be consistent:
 @code{CONFIGURE_TASK_STACK_ALLOCATOR}
 
 @item DATA TYPE:
-method pointer
+Function pointer.
 
 @item RANGE:
-NULL or valid method pointer
+Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
-The default value for this field is NULL which indicates that
-task stacks will be allocated from the RTEMS Workspace.
+The default value for this field is @code{_Workspace_Allocate} which indicates
+that task stacks will be allocated from the RTEMS Workspace.
 
 @end table
 
@@ -2113,13 +2110,13 @@ A correctly configured system must configure the following to be consistent:
 @code{CONFIGURE_TASK_STACK_DEALLOCATOR}
 
 @item DATA TYPE:
-method pointer
+Function pointer.
 
 @item RANGE:
-undefined or valid pointer
+Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
-The default value for this field is NULL which indicates that
+The default value for this field is @code{_Workspace_Free} which indicates that
 task stacks will be allocated from the RTEMS Workspace.
 
 @end table
@@ -2155,16 +2152,16 @@ the amount of memory reserved for Classic API Message Buffers.
 
 @table @b
 @item CONSTANT:
-@code{CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE}
+@code{CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(max_messages, size_per)}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-zero or positive
+Positive.
 
 @item DEFAULT VALUE:
-This macro is only used as input to
+None.
 
 @end table
 
@@ -2257,10 +2254,10 @@ and providing work-arounds when the memory estimated by
 @code{CONFIGURE_MEMORY_OVERHEAD}
 
 @item DATA TYPE:
-undefined or integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 The default value is 0.
@@ -2305,36 +2302,6 @@ is providing their own complete set of configuration tables.
 
 @subheading NOTES:
 None.
-
-@c
-@c === CONFIGURE_EXECUTIVE_RAM_WORK_AREA ===
-@c
-@subsection Specify Location of RTEMS Workspace
-
-@findex CONFIGURE_EXECUTIVE_RAM_WORK_AREA
-
-@table @b
-@item CONSTANT:
-@code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}
-
-@item DATA TYPE:
-pointer
-
-@item RANGE:
-NULL or valid pointer
-
-@item DEFAULT VALUE:
-By default, this value is not defined indicating that the BSP is to determine
-the location of the RTEMS Workspace.
-
-@end table
-
-@subheading DESCRIPTION:
-This configuration parameter is the base address of the RTEMS Workspace.
-
-@subheading NOTES:
-The BSP is responsible for setting this address. It is highly unlikely
-that an application could do this portably and reliably.
 
 @c
 @c === C Library Support Configuration ===
@@ -2389,10 +2356,10 @@ None.
 @code{CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-Zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 If not defined, the default value is either zero (0) or three if
@@ -2403,15 +2370,11 @@ I/O streams on @code{/dev/console}.
 @end table
 
 @subheading DESCRIPTION:
-This configuration parameter is set to the maximum number of files that
-can be concurrently open.
+This configuration parameter is set to the maximum number of file like objects
+that can be concurrently open.
 
 @subheading NOTES:
-In addition to the actual file descriptor data structures, the RTEMS
-Libio Support library requires a Classic API semaphore for each file
-descriptor as well as one to manage the set. Thus this configuration
-parameter implicitly impacts the configured number of Classic API
-semaphores configured for the application.
+None.
 
 @c
 @c === CONFIGURE_TERMIOS_DISABLED ===
@@ -2457,13 +2420,13 @@ device driver.
 @code{CONFIGURE_NUMBER_OF_TERMIOS_PORTS}
 
 @item DATA TYPE:
-integer
+Unsigned integer.
 
 @item RANGE:
-zero or positive integer
+Zero or positive.
 
 @item DEFAULT VALUE:
-By default, this is set to 1 so a console port can be used.
+By default, this is set to one (1) so a console port can be used.
 
 @end table
 
@@ -2539,7 +2502,6 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-
 This value is not defined by default. If no other root file system
 configuration parameters are specified, the IMFS will be used as the
 root file system.
@@ -2600,6 +2562,7 @@ space provided before RTEMS release 4.5.0.
 
 @table @b
 @item CONSTANT:
+@code{CONFIGURE_APPLICATION_DISABLE_FILESYSTEM}
 
 @item DATA TYPE:
 Boolean feature macro.
@@ -2615,12 +2578,12 @@ root file system.
 @end table
 
 @subheading DESCRIPTION:
-@code{CONFIGURE_APPLICATION_DISABLE_FILESYSTEM}
-
-@subheading NOTES:
 This configuration parameter is defined if the application dose not
 intend to use any kind of filesystem support. This include the device
 infrastructure necessary to support @code{printf()}.
+
+@subheading NOTES:
+None.
 
 @c
 @c === Block Device Cache Configuration ===
@@ -3054,7 +3017,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This configuration is undefined by default.
+This option is BSP specific.
 
 @end table
 
@@ -3082,13 +3045,13 @@ knows how it allocates memory to the C Program Heap.
 @code{BSP_IDLE_TASK_BODY}
 
 @item DATA TYPE:
-Pointer to method.
+Function pointer.
 
 @item RANGE:
-Null or pointer to method.
+Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
-This is not defined by default.
+This option is BSP specific.
 
 @end table
 
@@ -3114,13 +3077,13 @@ components off to save power during extended periods of no task activity
 @code{BSP_IDLE_TASK_STACK_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-undefined or positive integer
+Undefined or positive.
 
 @item DEFAULT VALUE:
-This is not defined by default.
+This option is BSP specific.
 
 @end table
 
@@ -3155,13 +3118,13 @@ The order of precedence for configuring the IDLE task stack size is:
 @code{BSP_INITIAL_EXTENSION}
 
 @item DATA TYPE:
-List of @code{rtems_extensions_table} entries
+List of user extension initializers (@code{rtems_extensions_table}).
 
 @item RANGE:
-Undefined or a list of one or more user extensions.
+Undefined or a list of user extension initializers.
 
 @item DEFAULT VALUE:
-This value is not defined by default.
+This option is BSP specific.
 
 @end table
 
@@ -3185,10 +3148,13 @@ None.
 @code{BSP_INTERRUPT_STACK_SIZE}
 
 @item DATA TYPE:
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
+Undefined or positive.
 
 @item DEFAULT VALUE:
+This option is BSP specific.
 
 @end table
 
@@ -3212,26 +3178,25 @@ None.
 @code{BSP_MAXIMUM_DEVICES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-zero or positive
+Undefined or positive.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This option is BSP specific.
 
 @end table
 
 @subheading DESCRIPTION:
 If @code{BSP_MAXIMUM_DEVICES} is defined by the BSP and
 @code{CONFIGURE_MAXIMUM_DEVICES} is not defined by the application,
-then this BSP specific maximum device count will be used.  This option
-is specific to the device file system (devFS) and should not be confused
-with the @code{CONFIGURE_MAXIMUM_DRIVERS} option.
+then this BSP specific maximum device count will be used.
 
 @subheading NOTES:
-This parameter only impacts the devFS and thus
-is only used by @code{<rtems/confdefs.h>} when
+This option is specific to the device file system (devFS) and should not be
+confused with the @code{CONFIGURE_MAXIMUM_DRIVERS} option.  This parameter only
+impacts the devFS and thus is only used by @code{<rtems/confdefs.h>} when
 @code{CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM} is specified.
 
 @c
@@ -3252,7 +3217,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This is not defined by default.
+This option is BSP specific.
 
 @end table
 
@@ -3277,13 +3242,13 @@ necessary for RTEMS but is often assumed by support libraries.
 @code{CONFIGURE_BSP_PREREQUISITE_DRIVERS}
 
 @item DATA TYPE:
-array of device drivers
+List of device driver initializers (@code{rtems_driver_address_table}).
 
 @item RANGE:
-Undefined or array of device drivers
+Undefined or array of device drivers.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This option is BSP specific.
 
 @end table
 
@@ -3320,10 +3285,10 @@ supported by @code{<rtems/confdefs.h>}.
 @code{CONFIGURE_IDLE_TASK_BODY}
 
 @item DATA TYPE:
-method pointer.
+Function pointer.
 
 @item RANGE:
-Undefined or method pointer.
+Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
 By default, this is not defined.
@@ -3331,7 +3296,7 @@ By default, this is not defined.
 @end table
 
 @subheading DESCRIPTION:
-@code{CONFIGURE_IDLE_TASK_BODY} is set to the method name corresponding
+@code{CONFIGURE_IDLE_TASK_BODY} is set to the function name corresponding
 to the application specific IDLE thread body.  If not specified, the
 BSP or RTEMS default IDLE thread body will be used.
 
@@ -3350,10 +3315,10 @@ None.
 @code{CONFIGURE_IDLE_TASK_STACK_SIZE}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{size_t}).
 
 @item RANGE:
-undefined or positive
+Undefined or positive.
 
 @item DEFAULT VALUE:
 If not specified, the IDLE task will have a stack of the configured
@@ -3756,7 +3721,7 @@ Note that network device drivers are not configured in the Device Driver Table.
 @code{CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE}
 
 @item DATA TYPE:
-Array of device drivers.
+List of device driver initializers (@code{rtems_driver_address_table}).
 
 @item RANGE:
 Undefined or array of device drivers.
@@ -3789,10 +3754,10 @@ It is expected that there the application would only rarely need to do this.
 @code{CONFIGURE_MAXIMUM_DRIVERS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 By default, this is set to the number of device drivers configured
@@ -3824,10 +3789,10 @@ are statically installed.
 @code{CONFIGURE_MAXIMUM_DEVICES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-undefined or positive integer.
+Positive.
 
 @item DEFAULT VALUE:
 Unless @code{BSP_MAXIMUM_DEVICES} is set by the BSP, the default value
@@ -3838,11 +3803,12 @@ value specified by the BSP.
 
 @subheading DESCRIPTION:
 @code{CONFIGURE_MAXIMUM_DEVICES} is defined to the number of
-individual devices that may be registered in the system.
+individual devices that may be registered in the device file system (devFS).
 
 @subheading NOTES:
-This parameter only impacts the devFS and thus
-is only used by @code{<rtems/confdefs.h>} when
+This option is specific to the device file system (devFS) and should not be
+confused with the @code{CONFIGURE_MAXIMUM_DRIVERS} option.  This parameter only
+impacts the devFS and thus is only used by @code{<rtems/confdefs.h>} when
 @code{CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM} is specified.
 
 @c
@@ -3854,7 +3820,7 @@ is only used by @code{<rtems/confdefs.h>} when
 
 @table @b
 @item CONSTANT:
-@item @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
+@code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER}
 
 @item DATA TYPE:
 Boolean feature macro.
@@ -4295,10 +4261,10 @@ This has no impact unless RTEMS was configured and built using the
 @code{CONFIGURE_MP_NODE_NUMBER}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-positive integer
+Positive.
 
 @item DEFAULT VALUE:
 If not defined, it is set to @code{NODE_NUMBER} which is assumed to be
@@ -4329,10 +4295,10 @@ differently based upon their node number.
 @code{CONFIGURE_MP_MAXIMUM_NODES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-positive
+Positive.
 
 @item DEFAULT VALUE:
 The default is two (2).
@@ -4358,10 +4324,10 @@ None.
 @code{CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-positive
+Positive.
 
 @item DEFAULT VALUE:
 The default is 32.
@@ -4388,10 +4354,10 @@ created with the @code{RTEMS_GLOBAL} attribute.
 @code{CONFIGURE_MP_MAXIMUM_PROXIES}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-undefined or positive
+Undefined or positive.
 
 @item DEFAULT VALUE:
 The default is 32.
@@ -4535,10 +4501,10 @@ run-time.
 @code{CONFIGURE_MAXIMUM_ADA_TASKS}
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-undefined or positive
+Undefined or positive.
 
 @item DEFAULT VALUE:
 By default, when @code{CONFIGURE_GNAT_RTEMS} is defined, this is set to 20.
@@ -4564,10 +4530,10 @@ None.
 @findex CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
 
 @item DATA TYPE:
-integer
+Unsigned integer (@code{uint32_t}).
 
 @item RANGE:
-zero or positive
+Zero or positive.
 
 @item DEFAULT VALUE:
 By default, this is undefined which implies zero (0) @i{fake} Ada Tasks.
