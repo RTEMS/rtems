@@ -23,7 +23,6 @@ rtems_task Init(
   char               ch;
   rtems_id           id;
   rtems_status_code  status;
-  bool               allDone;
 
   /* Put start of test message */
   puts( "\n\n***  spatomic02 TEST ***\n" );

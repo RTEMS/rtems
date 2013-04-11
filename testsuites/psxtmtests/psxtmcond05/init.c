@@ -12,6 +12,7 @@
 #endif
 
 #include <timesys.h>
+#include <pthread.h>
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 

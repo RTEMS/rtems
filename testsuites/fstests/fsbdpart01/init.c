@@ -196,7 +196,10 @@ static void test_ide_part_table(void)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   test_logical_disks(&ide_part_table_rdax [0], false);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   sc = rtems_ide_part_table_initialize(rda);
+#pragma GCC diagnostic pop
   ASSERT_SC(sc);
   test_logical_disks(&ide_part_table_rdax [0], true);
 }
