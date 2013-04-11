@@ -870,10 +870,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    * these to provide one larger memory pool. This is particularly
    * useful in combination with the unlimited objects configuration.
    */
-  #ifndef CONFIGURE_UNIFIED_WORK_AREAS
-    #define CONFIGURE_UNIFIED_WORK_AREAS
-  #endif
-
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
   #else
