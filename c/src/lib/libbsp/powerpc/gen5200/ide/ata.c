@@ -100,7 +100,7 @@ static bool probe(void)
 {
   bool card_present = true;
 
-#ifdef BRS5L
+#ifdef MPC5200_BOARD_BRS5L
   volatile struct mpc5200_gpt *gpt = &mpc5200.gpt[GPT2];
 
   /* Enable card detection on GPT2 */

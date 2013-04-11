@@ -114,7 +114,7 @@ static void calc_dbat_regvals(
 
 static void cpu_init_bsp(void)
 {
-#if defined (BRS5L)
+#if defined (MPC5200_BOARD_BRS5L)
   BAT dbat;
 
   calc_dbat_regvals(
@@ -251,7 +251,7 @@ static void cpu_init_bsp(void)
 #warning "Using BAT register values set by environment"
 #endif
 
-#if defined(BSP_TYPE_DP2)
+#if defined(MPC5200_BOARD_DP2)
   /* Enable BAT4-7 */
   PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
 
@@ -267,7 +267,7 @@ static void cpu_init_bsp(void)
     BPP_RW
   );
   SET_DBAT(4, dbat.batu, dbat.batl);
-#elif defined(PM520_ZE30)
+#elif defined(MPC5200_BOARD_PM520_ZE30)
   /* Enable BAT4-7 */
   PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
 

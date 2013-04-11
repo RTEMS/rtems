@@ -142,7 +142,7 @@ bool mpc5200_pcmciaide_probe(int minor)
   bool ide_card_plugged = false; /* assume: we don't have a card plugged in */
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT2]);
 
-  #ifdef BSP_TYPE_DP2
+  #ifdef MPC5200_BOARD_DP2
     /* Deactivate RESET signal */
     rtems_interrupt_level level;
     rtems_interrupt_disable(level);
@@ -159,7 +159,7 @@ bool mpc5200_pcmciaide_probe(int minor)
   /* enable card detection on GPT2 */
   gpt->emsel = (GPT_EMSEL_GPIO_IN | GPT_EMSEL_TIMER_MS_GPIO);
 
-#if defined (BRS5L)
+#if defined (MPC5200_BOARD_BRS5L)
   /* Check for card detection (-CD0) */
   if((gpt->status) & GPT_STATUS_PIN)
     ide_card_plugged = false;
@@ -641,7 +641,7 @@ int mpc5200_pcmciaide_control(int  minor, uint32_t cmd, void * arg)
 
 void mpc5200_pcmciaide_initialize(int minor)
   {
-#if defined (BRS5L)
+#if defined (MPC5200_BOARD_BRS5L)
   struct mpc5200_gpt *gpt = (struct mpc5200_gpt *)(&mpc5200.gpt[GPT7]);
 
   /* invert ATA reset on GPT7 */

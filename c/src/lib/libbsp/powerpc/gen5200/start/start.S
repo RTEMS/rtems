@@ -292,12 +292,12 @@ start:
 
 
 
-#ifdef BRS5L
+#ifdef MPC5200_BOARD_BRS5L
 	LWI	r30, CSBOOTROM_VAL
 	stw	r30, CSBOOTROM(r31)	 	/* Set CSBOOTROM */
 
 
-#endif /* BRS5L */
+#endif /* MPC5200_BOARD_BRS5L */
 
 
 	/* FIXME: map BOOT ROM into final location with CS0 registers */
@@ -489,7 +489,7 @@ twiddle:
 
 #if defined(NEED_LOW_LEVEL_INIT)
 SDRAM_init:
-#if defined(BRS5L)
+#if defined(MPC5200_BOARD_BRS5L)
       /* set GPIO_WKUP7 pin low for 66MHz buffering */
       /* or high for 133MHz registered buffering    */
 	LWI	r30, 0x80000000
@@ -537,7 +537,7 @@ SDRAM_init:
 	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */ 
 	stw	r30, CFG2(r31)			/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
 
-#ifdef BRS5L
+#ifdef MPC5200_BOARD_BRS5L
 	LWI	r30, 0xD1470000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
 	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
 
