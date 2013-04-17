@@ -112,11 +112,16 @@ static void calc_dbat_regvals(
   bat_ptr->batl.pp   = flg_bpp;
 }
 
+static inline enable_bat_4_to_7(void)
+{
+  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
+}
+
 static void cpu_init_bsp(void)
 {
-#if defined (MPC5200_BOARD_BRS5L)
   BAT dbat;
 
+#if defined(MPC5200_BOARD_BRS5L)
   calc_dbat_regvals(
     &dbat,
     (uint32_t) bsp_ram_start,
@@ -165,7 +170,6 @@ static void cpu_init_bsp(void)
   );
   SET_DBAT(3,dbat.batu,dbat.batl);
 #elif defined (HAS_UBOOT)
-  BAT dbat;
   uint32_t start = 0;
 
   /*
@@ -252,8 +256,7 @@ static void cpu_init_bsp(void)
 #endif
 
 #if defined(MPC5200_BOARD_DP2)
-  /* Enable BAT4-7 */
-  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
+  enable_bat_4_to_7();
 
   /* FPGA */
   calc_dbat_regvals(
@@ -268,8 +271,7 @@ static void cpu_init_bsp(void)
   );
   SET_DBAT(4, dbat.batu, dbat.batl);
 #elif defined(MPC5200_BOARD_PM520_ZE30)
-  /* Enable BAT4-7 */
-  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(HID2, BSP_BBIT32(13));
+  enable_bat_4_to_7();
 
   /* External CC770 CAN controller available in version 2 */
   calc_dbat_regvals(
