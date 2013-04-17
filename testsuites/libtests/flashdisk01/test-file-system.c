@@ -36,7 +36,7 @@
 
 #define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
 
-#define BUFFER_SIZE (32 * 1024)
+#define BUFFER_SIZE (32U * 1024U)
 
 #define HEADER_SIZE 8
 
@@ -147,8 +147,8 @@ static uint32_t simple_random(uint32_t v)
 
 static unsigned get_bucket_with_random(unsigned count, long random)
 {
-  long unsigned unit = (1U << 31) / count;
-  long unsigned bucket = (long unsigned) random / unit;
+  uint32_t unit = ((uint32_t) 1U << 31) / count;
+  uint32_t bucket = (uint32_t) random / unit;
 
   if (bucket != count) {
     return bucket;
