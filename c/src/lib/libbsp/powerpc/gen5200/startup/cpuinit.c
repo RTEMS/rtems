@@ -290,8 +290,9 @@ void cpu_init(void)
 {
   uint32_t msr;
 
-  /* Enable instruction cache */
-  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_ICE);
+  #if BSP_INSTRUCTION_CACHE_ENABLED
+    rtems_cache_enable_instruction();
+  #endif
 
   /* Set up DBAT registers in MMU */
   cpu_init_bsp();
@@ -311,10 +312,7 @@ void cpu_init(void)
   /* Update MSR */
   ppc_set_machine_state_register( msr);
 
-  /*
-   * Enable data cache.
-   *
-   * NOTE: TRACE32 now supports data cache for MGT5x00.
-   */
-  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( HID0, HID0_DCE);
+  #if BSP_DATA_CACHE_ENABLED
+    rtems_cache_enable_data();
+  #endif
 }
