@@ -609,6 +609,27 @@ static inline void arm_cp15_data_cache_test_and_clean(void)
   );
 }
 
+/*	In DDI0301H_arm1176jzfs_r0p7_trm
+ * 	'MCR p15, 0, <Rd>, c7, c14, 0' means
+ * 	Clean and Invalidate Entire Data Cache
+ */
+static inline void arm_cp15_data_cache_clean_and_invalidate(void)
+{
+  ARM_SWITCH_REGISTERS;
+
+  uint32_t sbz = 0;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[sbz], c7, c14, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [sbz] "r" (sbz)
+    : "memory"
+  );
+
+}
+
 static inline void arm_cp15_data_cache_clean_and_invalidate_line(const void *mva)
 {
   ARM_SWITCH_REGISTERS;
