@@ -154,6 +154,14 @@
 /* Some fixed values for MPC5x00 registers */
 .set    CSBOOTROM_VAL,		0x0101D910
 .set    CSCONTROL_VAL,		0x91000000
+
+/*
+ * The DDR_MODE bit is a read-only status and should be written as 0.
+ *
+ * XLB_CLK = FVCO / 4
+ * IPB_CLK = XLB_CLK / 2
+ * PCI_CLK = IPB_CLK
+ */
 .set	CFG_VAL,		0x00000100
 
 .extern boot_card
@@ -274,7 +282,7 @@ start:
 
 
 	LWI     r30, CFG_VAL			/* get CFG register content */
-	lwz	r30, CFG(r31)			/* set SDRAM single data rate / XLB_CLK=FVCO/4 / IPB_CLK=XLB_CLK/2 / PCICLK=IPB_CLK */
+	lwz	r30, CFG(r31)			/* set CFG register */
 
 
 
