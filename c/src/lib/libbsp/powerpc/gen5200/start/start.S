@@ -146,9 +146,9 @@
 .set	ADREN_CS1_EN,		(1 << (31 - 14))
 .set	ADREN_WSE,		(1 << (31 - 31))
 
-.set	CTRL_PRECHARGE,		(1<<1)
-.set	CTRL_REFRESH,		(1<<2)
-.set 	CTRL_BA1,		(1<<31)
+.set	CTRL_PRECHARGE_ALL,	(1 << (31 - 30))
+.set	CTRL_REFRESH,		(1 << (31 - 29))
+.set 	CTRL_MODE_EN,		(1 << (31 - 0))
 
 .set	CSCONF_CE,		(1<<12)
 
@@ -496,6 +496,8 @@ twiddle:
 
 #if defined(NEED_LOW_LEVEL_INIT)
 SDRAM_init:
+	mflr	r12
+
 #if defined(MPC5200_BOARD_BRS5L)
       /* set GPIO_WKUP7 pin low for 66MHz buffering */
       /* or high for 133MHz registered buffering    */
@@ -526,64 +528,115 @@ SDRAM_init:
 
 	#define SDELAY_VAL 0x00000004
 
+	/*
+	 * Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4
+	 * Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2
+	 */
+	#define CFG1_VAL 0xC4222600
+
+	/* Refr.2No-Read delay=0x06, Write latency=0x0 */
+	/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */
+	/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
+	#define CFG2_VAL 0xCCC70004
+
+#if defined(MPC5200_BOARD_BRS5L)
+	/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
+	/* Refresh counter=0xFFFF */
+	#define CTRL_VAL 0xD1470000
+#else
+	/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
+	/* Refresh counter=0xFFFF */
+	#define CTRL_VAL 0xD04F0000
+#endif
+
+	/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
+	#define MODE_VAL 0x008D0000
+
+	/* SDRAM initialization according to application note AN3221 */
+
+	/* SDRAM controller setup */
+
 	LWI	r3, SDELAY_VAL
 	stw	r3, SDELAY(r31)
 
-	LWI	r30, 0xC4222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4 */ 
-	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */ 
-						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
-	
-	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */ 
-	stw	r30, CFG2(r31)			/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
+	LWI	r3, CFG1_VAL
+	stw	r3, CFG1(r31)
 
-#ifdef MPC5200_BOARD_BRS5L
-	LWI	r30, 0xD1470000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
-	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
+	LWI	r3, CFG2_VAL
+	stw	r3, CFG2(r31)
 
+	LWI	r11, CTRL_VAL
+	stw	r11, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
-#else
-	LWI	r30, 0xD04F0000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
-	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
+	/* Perform a PRECHARGE ALL command */
+	ori	r3, r11, CTRL_PRECHARGE_ALL
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRP time */
+	li	r3, 15
+	bl	ndelay
 
+#if defined(EMODE_VAL)
+	/* Write EMODE register */
+	LWI	r3, EMODE_VAL
+	stw	r3, MOD(r31)
+
+	/* Wait at least tMRD time */
+	li	r3, 10
+	bl	ndelay
 #endif
-	lwz	r30, CTRL(r31)
 
+	/* Write MODE register */
+	LWI	r3, MODE_VAL
+	stw	r3, MOD(r31)
 
-	SETBITS	r30, r29, CTRL_PRECHARGE 	/* send two times precharge */
-	stw     r30, CTRL(r31)
+	/* Wait at least tMRD time */
+	li	r3, 10
+	bl	ndelay
 
+	/* Perform a PRECHARGE ALL command */
+	ori	r3, r11, CTRL_PRECHARGE_ALL
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
-	stw     r30, CTRL(r31)
+	/* Wait at least tRP time */
+	li	r3, 15
+	bl	ndelay
 
+	/* Perform an AUTO REFRESH */
+	ori	r3, r11, CTRL_REFRESH
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRFC time */
+	li	r3, 70
+	bl	ndelay
 
-	lwz	r30, CTRL(r31)
+	/* Perform an AUTO REFRESH */
+	ori	r3, r11, CTRL_REFRESH
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRFC time */
+	li	r3, 70
+	bl	ndelay
 
-	SETBITS	r30, r29, CTRL_REFRESH 		/* send two times refresh */
-	stw     r30, CTRL(r31)
+#if defined(SECOND_MODE_VAL)
+	/* Write MODE register */
+	LWI	r3, SECOND_MODE_VAL
+	stw	r3, MOD(r31)
+#endif
 
+	/* Disable MODE register access */
+	lis	r4, CTRL_MODE_EN@h
+	andc	r3, r11, r4
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
-	stw     r30, CTRL(r31)
-
-
-
-	LWI	r30, 0x008D0000 		/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
-	stw	r30, MOD(r31)
-
-
-
-	lwz	r30, CTRL(r31)			/* Clock enabled, Auto refresh enabled, Mem. data drv. Refresh counter=0xFFFF */
-
-
- 	CLRBITS	r30, r29, CTRL_BA1
- 	stw     r30, CTRL(r31)
-
-
-
+	mtlr	r12
 	blr
-
 
 copy_image:
 	mr	r27, r28
@@ -899,5 +952,22 @@ XLB_init:
 	LWI	r30, 4096
 	stw	r30, ARBADRTO(r31) 		/* Set ARBADRTO */
 	stw	r30, ARBDATTO(r31) 		/* Set ARBDATTO */
+
+	blr
+
+ndelay:
+	/*
+	 * The maximum core frequency is 396MHz.
+	 * We have (396MHz * 1024) / 10**9 == 405.
+	 */
+	mulli	r3, r3, 405
+	srwi.	r3, r3, 10
+
+	beqlr
+
+	mtctr	r3
+
+ndelay_loop:
+	bdnz	ndelay_loop
 
 	blr
