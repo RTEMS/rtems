@@ -515,21 +515,7 @@ SDRAM_init:
 	stw	r29,GPIOPCR(r31)
 
 #endif
-	/* See Erratum 342/339 in MPC5200_Errata_L25R_3_June.pdf:	*/
-	/* set 5 delays to their maximum to support two banks           */
-#if 0
-	LWI	r30, 0xCC222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */ 
-#else
-	/* EB 04.12.08: 
-	 * on MPC5200B, Erratum342 is no longer applicable.
-	 * on MPC5200_, Single Write2Read/Prec is only 3 bits, 
-	 *     therefore the MSB of the set value (1100) was ignored
-	 * in the MPC5200B, this bit is implemented in results in 
-	 *     SSSLLLOOOWWW access to SDRAM. To make the mem ctrl settings compatible with the MPC5200_,
-	 *     we use a 4 for now.
-	 */
 	LWI	r30, 0xC4222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4 */ 
-#endif
 	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */ 
 						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
 	
