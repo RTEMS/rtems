@@ -152,7 +152,6 @@
 .set	CSCONF_CE,		(1<<12)
 
 /* Some fixed values for MPC5x00 registers */
-.set    CSBOOTROM_VAL,		0x0101D910
 .set    CSCONTROL_VAL,		0x91000000
 
 /*
@@ -298,14 +297,14 @@ start:
 	stw	r30, CSCONTROL(r31)		/* enable internal/external bus error and master for CS */
 
 
+#if defined(MPC5200_BOARD_BRS5L)
+	#define CSBOOTROM_VAL 0x0101D910
+#endif
 
-#ifdef MPC5200_BOARD_BRS5L
+#ifdef CSBOOTROM_VAL
 	LWI	r30, CSBOOTROM_VAL
 	stw	r30, CSBOOTROM(r31)	 	/* Set CSBOOTROM */
-
-
-#endif /* MPC5200_BOARD_BRS5L */
-
+#endif
 
 	/* FIXME: map BOOT ROM into final location with CS0 registers */
 	LWI	r30, bsp_rom_start
