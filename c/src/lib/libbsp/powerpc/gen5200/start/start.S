@@ -284,9 +284,6 @@ start:
 	bne	skip_ROM_start 			/* If BOOT_ROM is not enabled, skip further initialization */
 
 /* do some board dependent configuration (unique for ROM startup) */
-	bl	SPRG_brk_init			/* Initialize special purpose onchip breakpoint registers */
-
-
 	LWI     r30, CSCONTROL_VAL		/* get CSCONTROL register content */
 	stw	r30, CSCONTROL(r31)		/* enable internal/external bus error and master for CS */
 
@@ -837,23 +834,6 @@ SPRG_init:					/* initialize registers */
 
 
 	blr
-
-SPRG_brk_init:
-	xor	r30, r30, r30
-
-	mtspr	DABR2, r30
-	mtspr	DBCR, r30
-	mtspr	IBCR, r30
-	mtspr	IABR, r30
-	mtspr	HID2, r30
-	mtspr	DABR, r30
-	mtspr	IABR2, r30
-
-
-
-
-	blr
-
 
 PPC_HID0_rd:					/* get HID0 content to r30 */
 
