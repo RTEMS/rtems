@@ -119,6 +119,7 @@
 .set	CFG1,			0x108
 .set	CFG2,			0x10C
 .set	ADRSEL,			0x110
+.set	SDELAY,			0x190
 
 /* Register offsets of MPC5x00 GPIO registers needed */
 .set	GPIOPCR,		0xb00
@@ -522,6 +523,12 @@ SDRAM_init:
 	stw	r29,GPIOPCR(r31)
 
 #endif
+
+	#define SDELAY_VAL 0x00000004
+
+	LWI	r3, SDELAY_VAL
+	stw	r3, SDELAY(r31)
+
 	LWI	r30, 0xC4222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4 */ 
 	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */ 
 						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
