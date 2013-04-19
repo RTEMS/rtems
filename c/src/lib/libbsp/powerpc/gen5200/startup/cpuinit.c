@@ -121,7 +121,7 @@ static void cpu_init_bsp(void)
 {
   BAT dbat;
 
-#if defined(MPC5200_BOARD_BRS5L)
+#if defined(MPC5200_BOARD_BRS5L) || defined(MPC5200_BOARD_BRS6L)
   calc_dbat_regvals(
     &dbat,
     (uint32_t) bsp_ram_start,
@@ -157,18 +157,6 @@ static void cpu_init_bsp(void)
     BPP_RW
   );
   SET_DBAT(2,dbat.batu,dbat.batl);
-
-  calc_dbat_regvals(
-    &dbat,
-    (uint32_t) bsp_dpram_start,
-    128 * 1024,
-    false,
-    true,
-    false,
-    true,
-    BPP_RW
-  );
-  SET_DBAT(3,dbat.batu,dbat.batl);
 #elif defined (HAS_UBOOT)
   uint32_t start = 0;
 
@@ -285,6 +273,46 @@ static void cpu_init_bsp(void)
     BPP_RW
   );
   SET_DBAT(4, dbat.batu, dbat.batl);
+#elif defined(MPC5200_BOARD_BRS5L)
+  calc_dbat_regvals(
+    &dbat,
+    (uint32_t) bsp_dpram_start,
+    128 * 1024,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
+  SET_DBAT(3,dbat.batu,dbat.batl);
+#elif defined(MPC5200_BOARD_BRS6L)
+  enable_bat_4_to_7();
+
+  /* FPGA */
+  calc_dbat_regvals(
+    &dbat,
+    MPC5200_BRS6L_FPGA_BEGIN,
+    MPC5200_BRS6L_FPGA_SIZE,
+    false,
+    true,
+    false,
+    true,
+    BPP_RW
+  );
+  SET_DBAT(3,dbat.batu,dbat.batl);
+
+  /* MRAM */
+  calc_dbat_regvals(
+    &dbat,
+    MPC5200_BRS6L_MRAM_BEGIN,
+    MPC5200_BRS6L_MRAM_SIZE,
+    true,
+    false,
+    false,
+    false,
+    BPP_RW
+  );
+  SET_DBAT(4,dbat.batu,dbat.batl);
 #endif
 }
 

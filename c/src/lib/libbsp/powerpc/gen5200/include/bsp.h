@@ -109,6 +109,16 @@ LINKER_SYMBOL(MBAR);
 
 #define HAS_NVRAM_93CXX
 
+#elif defined(MPC5200_BOARD_BRS6L)
+  #define MPC5200_BRS6L_FPGA_BEGIN 0x800000
+  #define MPC5200_BRS6L_FPGA_SIZE (64 * 1024)
+  #define MPC5200_BRS6L_FPGA_END \
+    (MPC5200_BRS6L_FPGA_BEGIN + MPC5200_BRS6L_FPGA_SIZE)
+
+  #define MPC5200_BRS6L_MRAM_BEGIN 0xff000000
+  #define MPC5200_BRS6L_MRAM_SIZE (4 * 1024 * 1024)
+  #define MPC5200_BRS6L_MRAM_END \
+    (MPC5200_BRS6L_MRAM_BEGIN + MPC5200_BRS6L_MRAM_SIZE)
 #elif defined (PM520)
 
 /* Nothing special */
@@ -193,7 +203,7 @@ extern int rtems_mpc5200_fec_driver_attach_detach (struct rtems_bsdnet_ifconfig 
 #define IPB_CLOCK (bsp_uboot_board_info.bi_ipbfreq)
 #define XLB_CLOCK (bsp_uboot_board_info.bi_busfreq)
 #define G2_CLOCK  (bsp_uboot_board_info.bi_intfreq)
-#elif defined(MPC5200_BOARD_BRS5L)
+#elif defined(MPC5200_BOARD_BRS5L) || defined(MPC5200_BOARD_BRS6L)
 #define IPB_CLOCK 66000000   /* 66 MHz */
 #define XLB_CLOCK 132000000  /* 132 MHz */
 #define G2_CLOCK  396000000  /* 396 MHz */

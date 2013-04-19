@@ -1,0 +1,15 @@
+/**
+ * @file
+ *
+ * Linker command file for the BRS6L board.
+ */
+
+MEMORY {
+	/* For the 4k adjustment see cpuinit.c */
+	RAM : ORIGIN = 0x0, LENGTH = 128M - 4k
+	ROM : ORIGIN = 0xff800000, LENGTH = 8M
+	DPRAM : ORIGIN = 0xff000000, LENGTH = 0
+	REGS : ORIGIN = 0xf0000000, LENGTH = 64k
+}
+
+INCLUDE linkcmds.base

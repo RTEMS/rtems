@@ -300,6 +300,8 @@ start:
 
 #if defined(MPC5200_BOARD_BRS5L)
 	#define CSBOOTROM_VAL 0x0101D910
+#elif defined(MPC5200_BOARD_BRS6L)
+	#define CSBOOTROM_VAL 0x0202D910
 #endif
 
 #ifdef CSBOOTROM_VAL
@@ -528,29 +530,54 @@ SDRAM_init:
 
 	#define SDELAY_VAL 0x00000004
 
+#if defined(MPC5200_BOARD_BRS6L)
+	#define CFG1_VAL 0x73722930
+#else
 	/*
 	 * Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4
 	 * Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2
 	 */
 	#define CFG1_VAL 0xC4222600
+#endif
 
+#if defined(MPC5200_BOARD_BRS6L)
+	#define CFG2_VAL 0x47770000
+#else
 	/* Refr.2No-Read delay=0x06, Write latency=0x0 */
 	/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */
 	/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
 	#define CFG2_VAL 0xCCC70004
+#endif
 
 #if defined(MPC5200_BOARD_BRS5L)
 	/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
 	/* Refresh counter=0xFFFF */
 	#define CTRL_VAL 0xD1470000
+#elif defined(MPC5200_BOARD_BRS6L)
+	#define CTRL_VAL 0xF15F0F00
 #else
 	/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
 	/* Refresh counter=0xFFFF */
 	#define CTRL_VAL 0xD04F0000
 #endif
 
+#if defined(MPC5200_BOARD_BRS6L)
+	/* Enable DLL, normal drive strength */
+	#define EMODE_VAL 0x40010000
+#endif
+
+#if defined(MPC5200_BOARD_BRS6L)
+	/* Burst length = 8, burst type sequential, CAS latency 2.5, normal operation/reset DLL */
+	#define MODE_VAL 0x058D0000
+#else
 	/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
 	#define MODE_VAL 0x008D0000
+#endif
+
+#if defined(MPC5200_BOARD_BRS6L)
+	/* Burst length = 8, burst type sequential, CAS latency 2.5, normal operation */
+	#define SECOND_MODE_VAL (MODE_VAL & ~0x04000000)
+#endif
 
 	/* SDRAM initialization according to application note AN3221 */
 
