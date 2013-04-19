@@ -133,6 +133,8 @@
 
 /* Register offsets of MPC5x00 Arbiter registers */
 .set	ARBCFG,			0x1f40
+.set	ARBADRTO,		0x1f58
+.set	ARBDATTO,		0x1f5c
 .set	ARBMPREN,		0x1f64
 .set	ARBMPRIO,		0x1f68
 .set	ARBSNOOP,		0x1f70
@@ -893,5 +895,9 @@ XLB_init:
 
 	LWI	r30, 0x0000001e
 	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */
+
+	LWI	r30, 4096
+	stw	r30, ARBADRTO(r31) 		/* Set ARBADRTO */
+	stw	r30, ARBDATTO(r31) 		/* Set ARBDATTO */
 
 	blr
