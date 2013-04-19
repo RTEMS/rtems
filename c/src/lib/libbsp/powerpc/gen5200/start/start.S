@@ -140,10 +140,10 @@
 .set	ARBSNOOP,		0x1f70
 
 /* Some bit encodings for MGT5100 registers */
-.set	ADREN_SDRAM_EN,		(1<<22)
-.set    ADREN_BOOT_EN,  	(1<<25)
-.set    ADREN_CS0_EN,   	(1<<16)
-.set    ADREN_CS1_EN,   	(1<<17)
+.set	ADREN_BOOT_EN,		(1 << (31 - 6))
+.set	ADREN_CS0_EN,		(1 << (31 - 15))
+.set	ADREN_CS1_EN,		(1 << (31 - 14))
+.set	ADREN_WSE,		(1 << (31 - 31))
 
 .set	CTRL_PRECHARGE,		(1<<1)
 .set	CTRL_REFRESH,		(1<<2)
