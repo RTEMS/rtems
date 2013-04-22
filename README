@@ -1,93 +1,15 @@
-Building RTEMS
-==============
-See the file README.configure.
+See the documentation manuals in doc/ with daily builds available online at
+http://rtems.org/onlinedocs/doc-current/share/rtems/html/ and released builds
+at http://www.rtems.org/onlinedocs/releases/
 
-Directory Overview
-==================
+See the RTEMS Wiki at http://wiki.rtems.org/wiki/index.php/Main_Page
+for community knowledge and tutorials.
 
-This is the top level of the RTEMS directory structure.  The following 
-is a description of the files and directories in this directory:
+RTEMS Doxygen available at http://www.rtems.org/onlinedocs/doxygen/cpukit/html
 
-  INSTALL
-    Rudimentary installation instructions.  For more detailed
-    information please see the Release Notes.  The Postscript 
-    version of this manual can be found in the file
-    c_or_ada/doc/relnotes.tgz.
+Get help on the mailing lists:
+* For general-purpose questions related to using RTEMS, use the
+  rtems-users ml: http://www.rtems.org/mailman/listinfo/rtems-users
+* For questions and discussion related to development of RTEMS, use the
+  rtems-devel ml: http://www.rtems.org/mailman/listinfo/rtems-devel
 
-  LICENSE
-    Required legalese.
-
-  README
-    This file.
-
-  c
-    This directory contains the source code for the C 
-    implementation of RTEMS as well as the test suites, sample 
-    applications, Board Support Packages, Device Drivers, and 
-    support libraries.
-
-  doc
-    This directory contains the PDL for the RTEMS executive.
-
-Ada versus C
-============
-
-There are two implementations of RTEMS in this source tree -- 
-in Ada and in C.  These two implementations are functionally
-and structurally equivalent.  The C implementation follows
-the packaging conventions and hierarchical nature of the Ada 
-implementation.  In addition, a style has been followed which 
-allows one to easily find the corresponding Ada and C 
-implementations.  
-
-File names in C and code placement was carefully designed to insure
-a close mapping to the Ada implementation.  The following file name 
-extensions are used:
-
-   .adb - Ada body
-   .ads - Ada specification
-   .adp - Ada body requiring preprocessing
-   .inc - include file for .adp files
-
-   .c   - C body (non-inlined routines)
-   .inl - C body (inlined routines)
-   .h   - C specification
-
-In the executive source, XYZ.c and XYZ.inl correspond directly to a 
-single XYZ.adb or XYZ.adp file.  A .h file corresponds directly to
-the .ads file.  There are only a handful of .inc files in the 
-Ada source and these are used to insure that the desired simple 
-inline textual expansion is performed.  This avoids scoping and
-calling convention side-effects in carefully constructed tests 
-which usually test context switch behavior.
-
-In addition, in Ada code and data name references are always fully
-qualified as PACKAGE.NAME.  In C, this convention is followed 
-by having the package name as part of the name itself and using a
-capital letter to indicate the presence of a "." level.  So we have
-PACKAGE.NAME in Ada and _Package_Name in C.  The leading "_" in C
-is used to avoid naming conflicts between RTEMS and user variables.
-By using these conventions, one can easily compare the C and Ada
-implementations.
-
-The most noticeable difference between the C and Ada83 code is 
-the inability to easily obtain a "typed pointer" in Ada83.  
-Using the "&" operator in C yields a pointer with a specific type.
-The 'Address attribute is the closest feature in Ada83.  This
-returns a System.Address and this must be coerced via Unchecked_Conversion
-into an access type of the desired type.  It is easy to view 
-System.Address as similar to a "void *" in C, but this is not the case.
-A "void *" can be assigned to any other pointer type without an
-explicit conversion.  
-
-The solution adopted to this problem was to provide two routines for
-each access type in the Ada implementation -- one to convert from
-System.Address to the access type and another to go the opposite
-direction.  This results in code which accomplishes the same thing
-as the corresponding C but it is easier to get lost in the clutter
-of the apparent subprogram invocations than the "less bulky"
-C equivalent.
-
-A related difference is the types which are only in Ada which are used 
-for pointers to arrays.  These types do not exist and are not needed 
-in the C implementation.
