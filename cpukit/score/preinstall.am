@@ -211,7 +211,6 @@ $(PROJECT_INCLUDE)/rtems/score/basedefs.h: include/rtems/score/basedefs.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 
-if ATOMIC
 $(PROJECT_INCLUDE)/rtems/score/atomic.h: include/rtems/score/atomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic.h
@@ -223,7 +222,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/genericcpuatomic.h
 $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h: include/rtems/score/genericatomicops.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
-endif
+
 if HAS_SMP
 $(PROJECT_INCLUDE)/rtems/score/smplock.h: include/rtems/score/smplock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smplock.h
