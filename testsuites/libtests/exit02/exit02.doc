@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: exit02
+
+directives:
+
+  _Exit()
+
+concepts:
+
+  Ensure _Exit() works.
