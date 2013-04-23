@@ -60,6 +60,7 @@ include_rtems_score_HEADERS += include/rtems/score/basedefs.h
 if ATOMIC
 include_rtems_score_HEADERS += include/rtems/score/atomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericcpuatomic.h
+include_rtems_score_HEADERS += include/rtems/score/genericatomicops.h
 endif
 if HAS_SMP
 include_rtems_score_HEADERS += include/rtems/score/smplock.h
