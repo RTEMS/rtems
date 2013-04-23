@@ -19,11 +19,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/support.h>
+#include <rtems/extension.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/extension.h>
+#include <rtems/score/userextimpl.h>
 
 rtems_status_code rtems_extension_delete(
   rtems_id id
