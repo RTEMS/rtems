@@ -8,6 +8,7 @@ include_rtems_score_HEADERS = rtems/score/cpu.h
 include_rtems_score_HEADERS += rtems/score/avr.h
 include_rtems_score_HEADERS += rtems/score/cpu_asm.h
 include_rtems_score_HEADERS += rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 include_rtems_avrdir = $(includedir)/avr
 include_rtems_avr_HEADERS = avr/boot.h

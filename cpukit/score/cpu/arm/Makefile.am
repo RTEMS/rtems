@@ -9,6 +9,7 @@ include_rtems_score_HEADERS += rtems/score/arm.h
 include_rtems_score_HEADERS += rtems/score/armv4.h
 include_rtems_score_HEADERS += rtems/score/armv7m.h
 include_rtems_score_HEADERS += rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)

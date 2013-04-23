@@ -10,6 +10,7 @@ include_rtems_HEADERS = rtems/asm.h
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/moxie.h \
     rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c moxie-exception-frame-print.c cpu_asm.S
