@@ -917,6 +917,7 @@ void _CPU_Context_Initialize(
   do { \
     unsigned int _level; \
     _CPU_ISR_Disable(_level); \
+    (void)_level; \
     loop: goto loop; \
   } while (0)
 
