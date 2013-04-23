@@ -1,6 +1,10 @@
+This is the Real-Time Executive for Multiprocessing Systems (RTEMS).
+The version number for this software is indicated in the VERSION file.
+
 See the documentation manuals in doc/ with daily builds available online at
 http://rtems.org/onlinedocs/doc-current/share/rtems/html/ and released builds
-at http://www.rtems.org/onlinedocs/releases/
+at http://www.rtems.org/onlinedocs/releases/ for information on building,
+installing, and using RTEMS. The INSTALL file tells you to come back here.
 
 See the RTEMS Wiki at http://wiki.rtems.org/wiki/index.php/Main_Page
 for community knowledge and tutorials.
@@ -12,4 +16,6 @@ Get help on the mailing lists:
   rtems-users ml: http://www.rtems.org/mailman/listinfo/rtems-users
 * For questions and discussion related to development of RTEMS, use the
   rtems-devel ml: http://www.rtems.org/mailman/listinfo/rtems-devel
+
+See http://www.rtems.org/bugzilla/ to report a bug.
 
