@@ -48,13 +48,7 @@
 int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
 extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
-/*
- * reent struct allocation moved here from libc_start_hook() to avoid
- * mutual exclusion problems when memory is allocated from the start hook.
- *
- * Memory is also now allocated from the workspace rather than the heap.
- *  -- ptorre 9/30/03
- */
+
 bool newlib_create_hook(
   rtems_tcb *current_task __attribute__((unused)),
   rtems_tcb *creating_task
@@ -69,19 +63,10 @@ bool newlib_create_hook(
     _Thread_Set_libc_reent (&_REENT);
   }
 
-  /*  NOTE: The RTEMS malloc is reentrant without a reent ptr since
-   *        it is based on the Classic API Region Manager.
+  /* It is OK to allocate from the workspace because these
+   * hooks run with thread dispatching disabled.
    */
-
-  #define REENT_MALLOCED 0
-  #if REENT_MALLOCED
-    ptr = (struct _reent *) calloc(1, sizeof(struct _reent));
-  #else
-    /* It is OK to allocate from the workspace because these
-     * hooks run with thread dispatching disabled.
-     */
-    ptr = (struct _reent *) _Workspace_Allocate(sizeof(struct _reent));
-  #endif
+  ptr = (struct _reent *) _Workspace_Allocate(sizeof(struct _reent));
 
   if (ptr) {
     _REENT_INIT_PTR((ptr)); /* GCC extension: structure constants */
@@ -135,10 +120,6 @@ void newlib_delete_hook(
 {
   struct _reent *ptr;
 
-  /*
-   * The reentrancy structure was allocated by newlib using malloc()
-   */
-
   if (current_task == deleted_task) {
     ptr = _REENT;
   } else {
@@ -154,11 +135,8 @@ void newlib_delete_hook(
      *  Just in case there are some buffers lying around.
      */
     _fwalk(ptr, newlib_free_buffers);
-#if REENT_MALLOCED
-    free(ptr);
-#else
+
     _Workspace_Free(ptr);
-#endif
   }
 
   deleted_task->libc_reent = NULL;
