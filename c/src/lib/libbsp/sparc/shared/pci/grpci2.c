@@ -187,11 +187,13 @@ struct grpci2_cap_first {
 	unsigned int ext2ahb_map;
 	unsigned int io_map;
 	unsigned int pcibar_size[6];
+	unsigned int ahb_pref;
 };
 #define CAP9_CTRL_OFS 0
 #define CAP9_BAR_OFS 0x4
 #define CAP9_IOMAP_OFS 0x20
 #define CAP9_BARSIZE_OFS 0x24
+#define CAP9_AHBPREF_OFS 0x3C
 
 struct grpci2_priv *grpci2priv = NULL;
 
@@ -224,6 +226,7 @@ struct grpci2_pcibar_cfg grpci2_default_bar_mapping[6] = {
 struct grpci2_priv {
 	struct drvmgr_dev	*dev;
 	struct grpci2_regs		*regs;
+	unsigned char			ver;
 	char				irq;
 	char				irq_mode; /* IRQ Mode from CAPSTS REG */
 	char				bt_enabled;
@@ -649,6 +652,10 @@ int grpci2_hw_init(struct grpci2_priv *priv)
 	if (capptr == 0)
 		return -1;
 
+	/* Limit the prefetch for GRPCI2 version 0. */
+	if (priv->ver == 0)
+		grpci2_cfg_w32(host, capptr+CAP9_AHBPREF_OFS, 0);
+
 	/* Enable/Disable Byte twisting */
 	grpci2_cfg_r32(host, capptr+CAP9_IOMAP_OFS, &io_map);
 	io_map = (io_map & ~0x1) | (priv->bt_enabled ? 1 : 0);
@@ -708,6 +715,7 @@ int grpci2_init(struct grpci2_priv *priv)
 
 	/* Found PCI core, init private structure */
 	priv->irq = apb->irq;
+	priv->ver = apb->ver;
 	priv->regs = (struct grpci2_regs *)apb->start;
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 	priv->irq_mode = (priv->regs->sts_cap & STS_IRQMODE) >> STS_IRQMODE_BIT;
