@@ -77,12 +77,7 @@ bool newlib_create_hook(
   return FALSE;
 }
 
-/*
- *  Called when a task is deleted.
- *  Must restore the new lib reentrancy state for the new current
- *  task.
- */
-int newlib_free_buffers(
+static int newlib_free_buffers(
   FILE *fp
 )
 {
