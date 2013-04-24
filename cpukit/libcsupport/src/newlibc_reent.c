@@ -78,17 +78,6 @@ bool newlib_create_hook(
 }
 
 /*
- * Called for all user TASKS (system tasks are MPCI Receive Server and IDLE)
- */
-
-#ifdef NEED_SETVBUF
-void newlib_begin_hook(rtems_tcb *current_task)
-{
-  setvbuf( stdout, NULL, _IOLBF, BUFSIZ );
-}
-#endif
-
-/*
  *  Called when a task is deleted.
  *  Must restore the new lib reentrancy state for the new current
  *  task.
