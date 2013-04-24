@@ -11,36 +11,13 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 
 #if defined(RTEMS_NEWLIB)
-#include <rtems/libcsupport.h>
+#include <rtems/libio.h>
 
 #include <stdio.h>
 #include <unistd.h>
-
-static void libc_wrapup(void)
-{
-  /*
-   *  In case RTEMS is already down, don't do this.  It could be
-   *  dangerous.
-   */
-
-  if (!_System_state_Is_up(_System_state_Get()))
-     return;
-
-  /*
-   * Try to drain output buffers.
-   *
-   * Should this be changed to do *all* file streams?
-   *    _fwalk (_REENT, fclose);
-   */
-
-  fclose (stdin);
-  fclose (stdout);
-  fclose (stderr);
-}
 
 /* FIXME: These defines are a blatant hack */
 
@@ -66,7 +43,7 @@ void _exit(int status)
     FINI_SYMBOL();
   #endif
 
-  libc_wrapup();
+  (*rtems_libio_exit_helper)();
   rtems_shutdown_executive(status);
   for (;;) ; /* to avoid warnings */
 }
