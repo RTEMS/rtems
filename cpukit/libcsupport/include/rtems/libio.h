@@ -1386,16 +1386,17 @@ static inline rtems_device_minor_number rtems_filesystem_dev_minor_t(
  */
 void rtems_filesystem_initialize( void );
 
-typedef void (*rtems_libio_init_functions_t)(void);
-extern  rtems_libio_init_functions_t rtems_libio_init_helper;
+typedef void (*rtems_libio_helper)(void);
 
-void    open_dev_console(void);
+extern const rtems_libio_helper rtems_libio_init_helper;
 
-typedef void (*rtems_libio_supp_functions_t)(void);
-extern  rtems_libio_supp_functions_t rtems_libio_supp_helper;
+extern const rtems_libio_helper rtems_libio_supp_helper;
 
-typedef void (*rtems_fs_init_functions_t)(void);
-extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
+extern const rtems_libio_helper rtems_fs_init_helper;
+
+void rtems_libio_helper_null(void);
+
+void open_dev_console(void);
 
 /**
  * @brief Creates a directory and all its parent directories according to

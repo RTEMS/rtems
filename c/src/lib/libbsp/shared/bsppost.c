@@ -12,16 +12,11 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <fcntl.h>
-
-#include <rtems.h>
 #include <rtems/libio.h>
-#include <rtems/libcsupport.h>
 
 #include <bsp/bootcard.h>
 
 void bsp_postdriver_hook(void)
 {
-  if (rtems_libio_supp_helper)
-    (*rtems_libio_supp_helper)();
+  (*rtems_libio_supp_helper)();
 }

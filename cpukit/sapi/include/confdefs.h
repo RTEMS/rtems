@@ -92,26 +92,26 @@ extern rtems_driver_address_table       Device_drivers[];
 #include <rtems/libio.h>
 
 #ifdef CONFIGURE_INIT
-rtems_libio_init_functions_t rtems_libio_init_helper =
-    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    NULL;
-    #else
+const rtems_libio_helper rtems_libio_init_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
     rtems_libio_init;
-    #endif
+  #endif
 
-rtems_libio_supp_functions_t rtems_libio_supp_helper =
-    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    NULL;
-    #else
+const rtems_libio_helper rtems_libio_supp_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
     open_dev_console;
-    #endif
+  #endif
 
-rtems_fs_init_functions_t    rtems_fs_init_helper =
-    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    NULL;
-    #else
+const rtems_libio_helper rtems_fs_init_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
     rtems_filesystem_initialize;
-    #endif
+  #endif
 #endif
 #endif
 
