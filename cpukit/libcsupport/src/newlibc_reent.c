@@ -22,32 +22,14 @@
 #include <rtems.h>
 
 #if defined(RTEMS_NEWLIB)
-#include <rtems/libcsupport.h>
 
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
-#include <stdlib.h>             /* for free() */
-#include <string.h>             /* for memset() */
-
-#include <sys/reent.h>          /* for extern of _REENT (aka _impure_ptr) */
-#include <errno.h>
-
-/*
- *  NOTE:
- *        There is some problem with doing this on the hpux version
- *        of the UNIX simulator (symptom is printf core dumps), so
- *        we just don't for now.
- *        Not sure if this is a problem with hpux, newlib, or something else.
- */
-
+#include <sys/reent.h>
+#include <stdlib.h>
 #include <stdio.h>
 
-int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
+#include <rtems/libcsupport.h>
 
-extern struct _reent * const _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
+int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
 bool newlib_create_hook(
   rtems_tcb *current_task __attribute__((unused)),
@@ -55,10 +37,11 @@ bool newlib_create_hook(
 )
 {
   struct _reent *ptr;
+  bool ok;
 
   if (_Thread_libc_reent == 0)
   {
-    _REENT = _global_impure_ptr;
+    _REENT = _GLOBAL_REENT;
 
     _Thread_Set_libc_reent (&_REENT);
   }
@@ -66,15 +49,15 @@ bool newlib_create_hook(
   /* It is OK to allocate from the workspace because these
    * hooks run with thread dispatching disabled.
    */
-  ptr = (struct _reent *) _Workspace_Allocate(sizeof(struct _reent));
+  ptr = (struct _reent *) _Workspace_Allocate(sizeof(*ptr));
+  creating_task->libc_reent = ptr;
+  ok = ptr != NULL;
 
-  if (ptr) {
+  if (ok) {
     _REENT_INIT_PTR((ptr)); /* GCC extension: structure constants */
-    creating_task->libc_reent = ptr;
-    return TRUE;
   }
 
-  return FALSE;
+  return ok;
 }
 
 static int newlib_free_buffers(
@@ -104,34 +87,15 @@ void newlib_delete_hook(
 {
   struct _reent *ptr;
 
-  if (current_task == deleted_task) {
-    ptr = _REENT;
-  } else {
-    ptr = deleted_task->libc_reent;
-  }
-
-  if (ptr && ptr != _global_impure_ptr) {
-/*
-    _wrapup_reent(ptr);
-    _reclaim_reent(ptr);
-*/
-    /*
-     *  Just in case there are some buffers lying around.
-     */
-    _fwalk(ptr, newlib_free_buffers);
-
-    _Workspace_Free(ptr);
-  }
-
+  ptr = deleted_task->libc_reent;
   deleted_task->libc_reent = NULL;
 
   /*
-   * Require the switch back to another task to install its own
+   *  Just in case there are some buffers lying around.
    */
+  _fwalk(ptr, newlib_free_buffers);
 
-  if ( current_task == deleted_task ) {
-    _REENT = 0;
-  }
+  _Workspace_Free(ptr);
 }
 
 #endif
