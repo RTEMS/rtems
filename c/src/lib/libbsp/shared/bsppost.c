@@ -18,5 +18,5 @@
 
 void bsp_postdriver_hook(void)
 {
-  (*rtems_libio_supp_helper)();
+  (*rtems_libio_post_driver_helper)();
 }

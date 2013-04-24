@@ -1390,13 +1390,13 @@ typedef void (*rtems_libio_helper)(void);
 
 extern const rtems_libio_helper rtems_libio_init_helper;
 
-extern const rtems_libio_helper rtems_libio_supp_helper;
+extern const rtems_libio_helper rtems_libio_post_driver_helper;
 
 extern const rtems_libio_helper rtems_fs_init_helper;
 
 void rtems_libio_helper_null(void);
 
-void open_dev_console(void);
+void rtems_libio_post_driver(void);
 
 /**
  * @brief Creates a directory and all its parent directories according to

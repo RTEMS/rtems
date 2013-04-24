@@ -67,7 +67,6 @@ extern void fix_syscall_errno(void);
  * Find amount of free heap remaining
  */
 extern size_t malloc_free_space(void);
-extern void open_dev_console(void);
 
 /**
  * @brief Get malloc status information.

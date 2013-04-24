@@ -99,11 +99,11 @@ const rtems_libio_helper rtems_libio_init_helper =
     rtems_libio_init;
   #endif
 
-const rtems_libio_helper rtems_libio_supp_helper =
+const rtems_libio_helper rtems_libio_post_driver_helper =
   #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     rtems_libio_helper_null;
   #else
-    open_dev_console;
+    rtems_libio_post_driver;
   #endif
 
 const rtems_libio_helper rtems_fs_init_helper =
