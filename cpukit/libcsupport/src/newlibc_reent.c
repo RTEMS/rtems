@@ -25,11 +25,8 @@
 
 #include <sys/reent.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #include <rtems/libcsupport.h>
-
-int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
 
 bool newlib_create_hook(
   rtems_tcb *current_task __attribute__((unused)),
@@ -60,26 +57,6 @@ bool newlib_create_hook(
   return ok;
 }
 
-static int newlib_free_buffers(
-  FILE *fp
-)
-{
-  switch ( fileno(fp) ) {
-    case 0:
-    case 1:
-    case 2:
-      if (fp->_flags & __SMBF) {
-        free( fp->_bf._base );
-        fp->_flags &= ~__SMBF;
-        fp->_bf._base = fp->_p = (unsigned char *) NULL;
-      }
-      break;
-    default:
-     fclose(fp);
-  }
-  return 0;
-}
-
 void newlib_delete_hook(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
@@ -90,11 +67,7 @@ void newlib_delete_hook(
   ptr = deleted_task->libc_reent;
   deleted_task->libc_reent = NULL;
 
-  /*
-   *  Just in case there are some buffers lying around.
-   */
-  _fwalk(ptr, newlib_free_buffers);
-
+  _reclaim_reent(ptr);
   _Workspace_Free(ptr);
 }
 
