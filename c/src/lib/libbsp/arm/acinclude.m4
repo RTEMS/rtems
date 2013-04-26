@@ -26,6 +26,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([nds]);;
   raspberrypi )
     AC_CONFIG_SUBDIRS([raspberrypi]);;
+  realview-pbx-a9 )
+    AC_CONFIG_SUBDIRS([realview-pbx-a9]);;
   rtl22xx )
     AC_CONFIG_SUBDIRS([rtl22xx]);;
   smdk2410 )
