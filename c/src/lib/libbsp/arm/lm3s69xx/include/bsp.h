@@ -23,6 +23,8 @@
 
 #define BSP_ARMV7M_SYSTICK_PRIORITY (6 << 5)
 
+#define BSP_ARMV7M_SYSTICK_FREQUENCY LM3S69XX_SYSTEM_CLOCK
+
 #ifndef ASM
 
 #include <bsp/default-initial-extension.h>
@@ -30,14 +32,6 @@
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif /* ASM */
 

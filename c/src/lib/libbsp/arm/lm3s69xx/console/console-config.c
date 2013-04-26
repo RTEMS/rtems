@@ -1,4 +1,6 @@
 /*
+ * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
+ *
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -29,7 +31,8 @@ console_tbl Console_Configuration_Ports [] = {
       .pDeviceFns = &lm3s69xx_uart_fns,
       .ulCtrlPort1 = LM3S69XX_UART_0_BASE,
       .ulClock = LM3S69XX_UART_BAUD,
-      .ulIntVector = LM3S69XX_IRQ_UART_0
+      .ulIntVector = LM3S69XX_IRQ_UART_0,
+      .pDeviceParams = (void *)0
     },
   #endif
   #ifdef LM3S69XX_ENABLE_UART_1
@@ -39,7 +42,8 @@ console_tbl Console_Configuration_Ports [] = {
       .pDeviceFns = &lm3s69xx_uart_fns,
       .ulCtrlPort1 = LM3S69XX_UART_1_BASE,
       .ulClock = LM3S69XX_UART_BAUD,
-      .ulIntVector = LM3S69XX_IRQ_UART_1
+      .ulIntVector = LM3S69XX_IRQ_UART_1,
+      .pDeviceParams = (void *)1
     }
   #endif
   #ifdef LM3S69XX_ENABLE_UART_2
@@ -49,7 +53,8 @@ console_tbl Console_Configuration_Ports [] = {
       .pDeviceFns = &lm3s69xx_uart_fns,
       .ulCtrlPort1 = LM3S69XX_UART_2_BASE,
       .ulClock = LM3S69XX_UART_BAUD,
-      .ulIntVector = LM3S69XX_IRQ_UART_2
+      .ulIntVector = LM3S69XX_IRQ_UART_2,
+      .pDeviceParams = (void *)2
     }
   #endif
 };
@@ -64,7 +69,7 @@ static void output_char(char c)
 {
   const console_fns *con =
     Console_Configuration_Ports [Console_Port_Minor].pDeviceFns;
-  
+
   if (c == '\n') {
     con->deviceWritePolled((int) Console_Port_Minor, '\r');
   }

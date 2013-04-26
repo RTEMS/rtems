@@ -101,6 +101,18 @@ $(PROJECT_INCLUDE)/bsp/uart.h: include/uart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart.h
 
+$(PROJECT_INCLUDE)/bsp/io.h: include/io.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/io.h
+
+$(PROJECT_INCLUDE)/bsp/syscon.h: include/syscon.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/syscon.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/syscon.h
+
+$(PROJECT_INCLUDE)/bsp/ssi.h: include/ssi.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ssi.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ssi.h
+
 $(PROJECT_INCLUDE)/bsp/lm3s69xx.h: include/lm3s69xx.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/lm3s69xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/lm3s69xx.h

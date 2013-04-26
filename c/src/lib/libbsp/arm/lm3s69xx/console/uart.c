@@ -1,4 +1,6 @@
 /*
+ * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
+ *
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -15,6 +17,8 @@
 #include <bspopts.h>
 #include <bsp/uart.h>
 #include <libchip/sersupp.h>
+#include <bsp/syscon.h>
+#include <bsp/lm3s69xx.h>
 
 static volatile lm3s69xx_uart *get_uart_regs(int minor)
 {
@@ -23,11 +27,35 @@ static volatile lm3s69xx_uart *get_uart_regs(int minor)
   return (lm3s69xx_uart *) ct->ulCtrlPort1;
 }
 
+static unsigned int get_uart_number(int minor)
+{
+  console_tbl *ct = Console_Port_Tbl [minor];
+
+  return (unsigned int)ct->pDeviceParams;
+}
+
+/*
+ * Returns both integer and fractional parts as one number.
+ */
+static uint32_t get_baud_div(uint32_t baud)
+{
+  uint32_t clock4 = LM3S69XX_SYSTEM_CLOCK * 4;
+  return (clock4 + baud - 1) / baud;
+}
+
 static void initialize(int minor)
 {
   volatile lm3s69xx_uart *uart = get_uart_regs(minor);
+  unsigned int num = get_uart_number(minor);
+
+  lm3s69xx_syscon_enable_uart_clock(num, true);
 
   uart->ctl = 0;
+
+  uint32_t brd = get_baud_div(LM3S69XX_UART_BAUD);
+  uart->ibrd = brd / 64;
+  uart->fbrd = brd % 64;
+
   uart->lcrh = UARTLCRH_WLEN(0x3) | UARTLCRH_FEN;
   uart->ctl = UARTCTL_RXE | UARTCTL_TXE | UARTCTL_UARTEN;
 }
