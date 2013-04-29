@@ -292,6 +292,8 @@ typedef enum {
     PCR_ETPUC29_SCKD_GPIO470 = 470,
     PCR_ETPUC30_SOUTD_GPIO471 = 471,
     PCR_ETPUC31_SIND_GPIO472 = 472
+  #else
+    PCR_TODO
   #endif
 } pcr_index;
 
