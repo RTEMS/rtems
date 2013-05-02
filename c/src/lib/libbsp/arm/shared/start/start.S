@@ -186,10 +186,14 @@ bsp_start_hook_0_done:
 
 	ldr	r0, =bsp_vector_table_begin
 	adr	r1, bsp_start_vector_table_begin
+	cmp	r0, r1
+	beq	bsp_vector_table_copy_done
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
+
+bsp_vector_table_copy_done:
 
 	SWITCH_FROM_ARM_TO_THUMB	r0
 
