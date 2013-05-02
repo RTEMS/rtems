@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2008, 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <info@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -119,6 +120,8 @@ LINKER_SYMBOL(bsp_vector_table_size)
 LINKER_SYMBOL(bsp_start_vector_table_begin)
 LINKER_SYMBOL(bsp_start_vector_table_end)
 LINKER_SYMBOL(bsp_start_vector_table_size)
+
+LINKER_SYMBOL(bsp_translation_table_base)
 
 #define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
 

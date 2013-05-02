@@ -41,8 +41,6 @@
   #define LPC32XX_MMU_CODE LPC32XX_MMU_READ_ONLY_CACHED
 #endif
 
-LINKER_SYMBOL(lpc32xx_translation_table_base);
-
 static BSP_START_TEXT_SECTION void clear_bss(void)
 {
   const int *end = (const int *) bsp_section_bss_end;
@@ -155,7 +153,7 @@ static BSP_START_TEXT_SECTION void clear_bss(void)
   {
     uint32_t const dac =
       ARM_CP15_DAC_DOMAIN(LPC32XX_MMU_CLIENT_DOMAIN, ARM_CP15_DAC_CLIENT);
-    uint32_t *const ttb = (uint32_t *) lpc32xx_translation_table_base;
+    uint32_t *const ttb = (uint32_t *) bsp_translation_table_base;
     size_t const config_entry_count =
       sizeof(lpc32xx_mmu_config_table) / sizeof(lpc32xx_mmu_config_table [0]);
     size_t i = 0;
