@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009, 2010
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <info@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -441,6 +442,25 @@ static inline uint32_t arm_cp15_get_cache_type(void)
   );
 
   return val;
+}
+
+static inline uint32_t arm_cp15_get_min_cache_line_size(void)
+{
+  uint32_t mcls = 0;
+  uint32_t ct = arm_cp15_get_cache_type();
+  uint32_t format = (ct >> 29) & 0x7U;
+
+  if (format == 0x4) {
+    mcls = (1U << (ct & 0xf)) * 4;
+  } else if (format == 0x0) {
+    uint32_t mask = (1U << 12) - 1;
+    uint32_t dcls = (ct >> 12) & mask;
+    uint32_t icls = ct & mask;
+
+    mcls = dcls <= icls ? dcls : icls;
+  }
+
+  return mcls;
 }
 
 static inline void arm_cp15_cache_invalidate(void)
