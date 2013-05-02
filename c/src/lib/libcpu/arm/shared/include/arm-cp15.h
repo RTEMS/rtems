@@ -172,6 +172,52 @@ static inline void arm_cp15_set_control(uint32_t val)
  * @{
  */
 
+/**
+ * @brief Disable the MMU.
+ *
+ * This function will clean and invalidate eight cache lines before and after
+ * the current stack pointer.
+ *
+ * @param[in] cls The data cache line size.
+ *
+ * @return The current control register value.
+ */
+static inline uint32_t arm_cp15_mmu_disable(uint32_t cls)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t ctrl;
+  uint32_t tmp_0;
+  uint32_t tmp_1;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[ctrl], c1, c0, 0\n"
+    "bic %[tmp_0], %[ctrl], #1\n"
+    "mcr p15, 0, %[tmp_0], c1, c0, 0\n"
+    "nop\n"
+    "nop\n"
+    "mov %[tmp_1], sp\n"
+    "rsb %[tmp_0], %[cls], #0\n"
+    "and %[tmp_0], %[tmp_0], %[tmp_1]\n"
+    "sub %[tmp_0], %[tmp_0], %[cls], asl #3\n"
+    "add %[tmp_1], %[tmp_0], %[cls], asl #4\n"
+    "1:\n"
+    "mcr p15, 0, %[tmp_0], c7, c14, 1\n"
+    "add %[tmp_0], %[tmp_0], %[cls]\n"
+    "cmp %[tmp_1], %[tmp_0]\n"
+    "bne 1b\n"
+    ARM_SWITCH_BACK
+    : [ctrl] "=&r" (ctrl),
+      [tmp_0] "=&r" (tmp_0),
+      [tmp_1] "=&r" (tmp_1)
+      ARM_SWITCH_ADDITIONAL_OUTPUT
+    : [cls] "r" (cls)
+    : "memory", "cc"
+  );
+
+  return ctrl;
+}
+
 static inline uint32_t *arm_cp15_get_translation_table_base(void)
 {
   ARM_SWITCH_REGISTERS;
