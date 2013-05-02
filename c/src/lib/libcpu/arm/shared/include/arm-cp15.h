@@ -53,15 +53,26 @@ extern "C" {
 
 #define ARM_MMU_SECT_BASE_SHIFT 20
 #define ARM_MMU_SECT_BASE_MASK (0xfffU << ARM_MMU_SECT_BASE_SHIFT)
-#define ARM_MMU_SECT_DOMAIN_SHIFT 5
-#define ARM_MMU_SECT_DOMAIN_MASK (0xfU << ARM_MMU_SECT_DOMAIN_SHIFT)
+#define ARM_MMU_SECT_NS (1U << 19)
+#define ARM_MMU_SECT_NG (1U << 17)
+#define ARM_MMU_SECT_S (1U << 16)
+#define ARM_MMU_SECT_AP_2 (1U << 15)
+#define ARM_MMU_SECT_TEX_2 (1U << 14)
+#define ARM_MMU_SECT_TEX_1 (1U << 13)
+#define ARM_MMU_SECT_TEX_0 (1U << 12)
+#define ARM_MMU_SECT_TEX_SHIFT 12
+#define ARM_MMU_SECT_TEX_MASK (0x3U << ARM_MMU_SECT_TEX_SHIFT)
 #define ARM_MMU_SECT_AP_1 (1U << 11)
 #define ARM_MMU_SECT_AP_0 (1U << 10)
 #define ARM_MMU_SECT_AP_SHIFT 10
-#define ARM_MMU_SECT_AP_MASK (0x3U << ARM_MMU_SECT_AP_SHIFT)
+#define ARM_MMU_SECT_AP_MASK (0x23U << ARM_MMU_SECT_AP_SHIFT)
+#define ARM_MMU_SECT_DOMAIN_SHIFT 5
+#define ARM_MMU_SECT_DOMAIN_MASK (0xfU << ARM_MMU_SECT_DOMAIN_SHIFT)
+#define ARM_MMU_SECT_XN (1U << 4)
 #define ARM_MMU_SECT_C (1U << 3)
 #define ARM_MMU_SECT_B (1U << 2)
-#define ARM_MMU_SECT_DEFAULT 0x12U
+#define ARM_MMU_SECT_PXN (1U << 0)
+#define ARM_MMU_SECT_DEFAULT 0x2U
 #define ARM_MMU_SECT_GET_INDEX(mva) \
   (((uint32_t) (mva)) >> ARM_MMU_SECT_BASE_SHIFT)
 #define ARM_MMU_SECT_MVA_ALIGN_UP(mva) \
@@ -79,13 +90,27 @@ extern "C" {
  * @{
  */
 
+#define ARM_CP15_CTRL_TE (1U << 30)
+#define ARM_CP15_CTRL_AFE (1U << 29)
+#define ARM_CP15_CTRL_TRE (1U << 28)
+#define ARM_CP15_CTRL_NMFI (1U << 27)
+#define ARM_CP15_CTRL_EE (1U << 25)
+#define ARM_CP15_CTRL_VE (1U << 24)
+#define ARM_CP15_CTRL_U (1U << 22)
+#define ARM_CP15_CTRL_FI (1U << 21)
+#define ARM_CP15_CTRL_UWXN (1U << 20)
+#define ARM_CP15_CTRL_WXN (1U << 19)
+#define ARM_CP15_CTRL_HA (1U << 17)
 #define ARM_CP15_CTRL_L4 (1U << 15)
 #define ARM_CP15_CTRL_RR (1U << 14)
 #define ARM_CP15_CTRL_V (1U << 13)
 #define ARM_CP15_CTRL_I (1U << 12)
+#define ARM_CP15_CTRL_Z (1U << 11)
+#define ARM_CP15_CTRL_SW (1U << 10)
 #define ARM_CP15_CTRL_R (1U << 9)
 #define ARM_CP15_CTRL_S (1U << 8)
 #define ARM_CP15_CTRL_B (1U << 7)
+#define ARM_CP15_CTRL_CP15BEN (1U << 5)
 #define ARM_CP15_CTRL_C (1U << 2)
 #define ARM_CP15_CTRL_A (1U << 1)
 #define ARM_CP15_CTRL_M (1U << 0)
