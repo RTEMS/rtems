@@ -69,44 +69,6 @@ SECTIONS {
 	} > REGION_START AT > REGION_START
 	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
 
-	.vector : {
-		bsp_section_vector_begin = .;
-
-		. = . + DEFINED (bsp_vector_table_in_start_section) ? 0 : bsp_vector_table_size;
-
-		. = ALIGN (bsp_stack_align);
-
-		bsp_stack_abt_begin = .;
-		. = . + bsp_stack_abt_size;
-		bsp_stack_abt_end = .;
-
-		bsp_stack_fiq_begin = .;
-		. = . + bsp_stack_fiq_size;
-		bsp_stack_fiq_end = .;
-
-		bsp_stack_irq_begin = .;
-		. = . + bsp_stack_irq_size;
-		bsp_stack_irq_end = .;
-
-		bsp_stack_svc_begin = .;
-		. = . + bsp_stack_svc_size;
-		bsp_stack_svc_end = .;
-
-		bsp_stack_und_begin = .;
-		. = . + bsp_stack_und_size;
-		bsp_stack_und_end = .;
-
-		bsp_stack_main_begin = .;
-		. = . + bsp_stack_main_size;
-		bsp_stack_main_end = .;
-
-		*(.bsp_vector)
-		bsp_section_vector_end = .;
-	} > REGION_VECTOR AT > REGION_VECTOR
-	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
-	bsp_vector_table_begin = DEFINED (bsp_vector_table_in_start_section) ? bsp_section_start_begin : bsp_section_vector_begin;
-	bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
-
 	.xbarrier : {
 		. = ALIGN (bsp_section_xbarrier_align);
 	} > REGION_VECTOR
@@ -320,6 +282,44 @@ SECTIONS {
 	.rwbarrier : {
 		. = ALIGN (bsp_section_rwbarrier_align);
 	} > REGION_DATA
+
+	.vector : {
+		bsp_section_vector_begin = .;
+
+		. = . + DEFINED (bsp_vector_table_in_start_section) ? 0 : bsp_vector_table_size;
+
+		. = ALIGN (bsp_stack_align);
+
+		bsp_stack_abt_begin = .;
+		. = . + bsp_stack_abt_size;
+		bsp_stack_abt_end = .;
+
+		bsp_stack_fiq_begin = .;
+		. = . + bsp_stack_fiq_size;
+		bsp_stack_fiq_end = .;
+
+		bsp_stack_irq_begin = .;
+		. = . + bsp_stack_irq_size;
+		bsp_stack_irq_end = .;
+
+		bsp_stack_svc_begin = .;
+		. = . + bsp_stack_svc_size;
+		bsp_stack_svc_end = .;
+
+		bsp_stack_und_begin = .;
+		. = . + bsp_stack_und_size;
+		bsp_stack_und_end = .;
+
+		bsp_stack_main_begin = .;
+		. = . + bsp_stack_main_size;
+		bsp_stack_main_end = .;
+
+		*(.bsp_vector)
+		bsp_section_vector_end = .;
+	} > REGION_VECTOR AT > REGION_VECTOR
+	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
+	bsp_vector_table_begin = DEFINED (bsp_vector_table_in_start_section) ? bsp_section_start_begin : bsp_section_vector_begin;
+	bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
 
 	.fast_data : {
 		bsp_section_fast_data_begin = .;
