@@ -93,6 +93,7 @@ libbsp_a_SOURCES += ../../shared/src/stackalloc.c
 libbsp_a_SOURCES += ../../shared/src/uart-output-char.c
 libbsp_a_SOURCES += ../shared/abort/simple_abort.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
 libbsp_a_SOURCES += startup/bspreset.c
@@ -128,7 +129,6 @@ libbsp_a_SOURCES += ../../shared/tod.c \
 libbsp_a_SOURCES += misc/boot.c
 libbsp_a_SOURCES += misc/emc.c
 libbsp_a_SOURCES += misc/i2c.c
-libbsp_a_SOURCES += misc/mmu.c
 libbsp_a_SOURCES += misc/nand-mlc.c
 libbsp_a_SOURCES += misc/nand-mlc-erase-block-safe.c
 libbsp_a_SOURCES += misc/nand-mlc-read-blocks.c
