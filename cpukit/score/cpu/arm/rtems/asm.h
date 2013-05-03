@@ -143,7 +143,7 @@
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
 
-#if defined(__thumb2__)
+#if defined(ARM_MULTILIB_ARCH_V7M)
   #define DEFINE_FUNCTION_ARM(name) \
     .thumb_func ; .globl name ; name:
 #elif defined(__thumb__)
