@@ -43,7 +43,7 @@
  */
 /**@{**/
 
-#ifdef __thumb__
+#if defined(__thumb__) && !defined(__thumb2__)
   #define ARM_SWITCH_REGISTERS uint32_t arm_switch_reg
   #define ARM_SWITCH_TO_ARM ".align 2\nbx pc\n.arm\n"
   #define ARM_SWITCH_BACK "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
