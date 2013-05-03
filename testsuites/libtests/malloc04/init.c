@@ -40,7 +40,7 @@ void *rtems_heap_null_extend(
 }
 #endif
 
-char Malloc_Heap[ 128 ] CPU_STRUCTURE_ALIGNMENT;
+char Malloc_Heap[ 256 ] CPU_STRUCTURE_ALIGNMENT;
 int sbrk_count;
 Heap_Control TempHeap;
 
@@ -52,21 +52,17 @@ void * sbrk(ptrdiff_t incr)
 
   printf( "sbrk(%td)\n", incr );
   if ( sbrk_count == -1 ) {
-    p = (void *) (NULL - 2);
-  } else if ( offset + incr < sizeof(Malloc_Heap) ) {
-     p = &Malloc_Heap[ offset ];
-     offset += incr;
-  } else {
-    if ( sbrk_count == 0 )
-      p = (void *) rtems_task_create;
-    sbrk_count++;
+    p = (void *) -2;
+    sbrk_count = 0;
+  } else if ( offset + incr <= sizeof(Malloc_Heap) ) {
+    p = &Malloc_Heap[ offset ];
+    offset += incr;
   }
 
-  sbrk_count++;
+  ++sbrk_count;
+
   return p;
 }
-
-void *p1, *p2, *p3, *p4;
 
 rtems_task Init(
   rtems_task_argument argument
@@ -74,9 +70,7 @@ rtems_task Init(
 {
   Heap_Control *real_heap;
   Heap_Area area;
-
-  sbrk_count = 0;
-  offset     = 0;
+  void *p;
 
   puts( "\n\n*** TEST MALLOC 04 ***" );
 
@@ -84,42 +78,83 @@ rtems_task Init(
   real_heap = malloc_get_heap_pointer();
   malloc_set_heap_pointer( &TempHeap );
 
+  rtems_heap_set_sbrk_amount( 0 );
+
+  puts( "No sbrk() amount" );
+
+  sbrk_count = 0;
+  offset     = 64;
+  area.begin = &Malloc_Heap [0];
+  area.size  = offset;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
+
+  errno = 0;
+  p = malloc(64);
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == ENOMEM );
+  rtems_test_assert( sbrk_count == 0 );
+
   rtems_heap_set_sbrk_amount( 64 );
 
-  puts( "Initialize heap with some memory" );
-  offset     = 64;
-  sbrk_count = 0;
-  area.begin = &Malloc_Heap [0];
-  area.size = 64;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
-  p1 = malloc(64);
-  p2 = malloc(64);
-  p3 = malloc(48);
-  p4 = malloc(48);
-  
-  puts( "Initialize heap with some memory - return address out of heap" );
-  area.begin = &Malloc_Heap [1];
-  area.size = 64;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
-  offset     = 64;
-  sbrk_count = -1;
-  p1 = malloc( 127 );
-  rtems_test_assert( p1 == (void *) NULL );
-  rtems_test_assert( errno == ENOMEM );
-  
+  puts( "Misaligned extend" );
 
-  area.begin = &Malloc_Heap [0];
-  area.size = 64;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
-  puts( "Initialize heap with some unaligned memory" );
-  offset     = 65;
   sbrk_count = 0;
-  area.begin = &Malloc_Heap [1];
-  area.size = 64;
+  offset     = 64;
+  area.begin = &Malloc_Heap [0];
+  area.size  = offset;
   RTEMS_Malloc_Initialize( &area, 1, NULL );
-  p1 = malloc(64);
-  p2 = malloc(64);
-  p3 = malloc(48);
+
+  p = malloc(1);
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( sbrk_count == 0 );
+
+  p = malloc(65);
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( sbrk_count == 1 );
+
+  puts( "Not enough sbrk() space" );
+
+  sbrk_count = 0;
+  offset     = 64;
+  area.begin = &Malloc_Heap [0];
+  area.size  = offset;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
+
+  errno = 0;
+  p = malloc( sizeof( Malloc_Heap ) );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == ENOMEM );
+  rtems_test_assert( sbrk_count == 1 );
+
+  puts( "Valid heap extend" );
+
+  sbrk_count = 0;
+  offset     = 64;
+  area.begin = &Malloc_Heap [0];
+  area.size  = offset;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
+
+  p = malloc(32);
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( sbrk_count == 0 );
+
+  p = malloc(32);
+  rtems_test_assert( p != NULL );
+  rtems_test_assert( sbrk_count == 1 );
+
+  puts( "Invalid heap extend" );
+
+  sbrk_count = -1;
+  offset     = 64;
+  area.begin = &Malloc_Heap [0];
+  area.size  = offset;
+  RTEMS_Malloc_Initialize( &area, 1, NULL );
+
+  errno = 0;
+  p = malloc( 64 );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == ENOMEM );
+  rtems_test_assert( sbrk_count == 2 );
 
   /* Restore information on real heap */
   malloc_set_heap_pointer( real_heap );

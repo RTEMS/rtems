@@ -1,13 +1,12 @@
 *** TEST MALLOC 04 ***
-Initialize heap with some memory
+No sbrk() amount
+Misaligned extend
 sbrk(128)
-sbrk(128)
+Not enough sbrk() space
+sbrk(256)
+Valid heap extend
 sbrk(64)
-Initialize heap with some memory - return address out of heap
-sbrk(128)
-sbrk(-128)
-Initialize heap with some unaligned memory
-sbrk(128)
-sbrk(128)
+Invalid heap extend
 sbrk(64)
+sbrk(-64)
 *** END OF TEST MALLOC 04 ***
