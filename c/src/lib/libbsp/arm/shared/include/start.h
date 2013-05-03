@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -23,7 +23,9 @@
 #ifndef LIBBSP_ARM_SHARED_START_H
 #define LIBBSP_ARM_SHARED_START_H
 
-#include <stddef.h>
+#include <string.h>
+
+#include <bsp/linker-symbols.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,7 +83,48 @@ void bsp_start_memcpy_arm(int *dest, const int *src, size_t n);
 /**
  * @brief Copies all standard sections from the load to the runtime area.
  */
-void bsp_start_copy_sections(void);
+BSP_START_TEXT_SECTION static inline void bsp_start_copy_sections(void)
+{
+  /* Copy .text section */
+  bsp_start_memcpy(
+    (int *) bsp_section_text_begin,
+    (const int *) bsp_section_text_load_begin,
+    (size_t) bsp_section_text_size
+  );
+
+  /* Copy .rodata section */
+  bsp_start_memcpy(
+    (int *) bsp_section_rodata_begin,
+    (const int *) bsp_section_rodata_load_begin,
+    (size_t) bsp_section_rodata_size
+  );
+
+  /* Copy .data section */
+  bsp_start_memcpy(
+    (int *) bsp_section_data_begin,
+    (const int *) bsp_section_data_load_begin,
+    (size_t) bsp_section_data_size
+  );
+
+  /* Copy .fast_text section */
+  bsp_start_memcpy(
+    (int *) bsp_section_fast_text_begin,
+    (const int *) bsp_section_fast_text_load_begin,
+    (size_t) bsp_section_fast_text_size
+  );
+
+  /* Copy .fast_data section */
+  bsp_start_memcpy(
+    (int *) bsp_section_fast_data_begin,
+    (const int *) bsp_section_fast_data_load_begin,
+    (size_t) bsp_section_fast_data_size
+  );
+}
+
+BSP_START_TEXT_SECTION static inline void bsp_start_clear_bss(void)
+{
+  memset(bsp_section_bss_begin, 0, (size_t) bsp_section_bss_size);
+}
 
 /** @} */
 
