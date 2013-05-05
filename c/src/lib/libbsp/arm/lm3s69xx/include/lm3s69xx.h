@@ -276,7 +276,9 @@ typedef struct {
 #define UARTDR_BE BSP_BIT32(10)
 #define UARTDR_PE BSP_BIT32(9)
 #define UARTDR_FE BSP_BIT32(8)
+#define UARTDR_ERROR_MSK BSP_MSK32(8, 11)
 #define UARTDR_DATA(val) BSP_FLD32(val, 0, 7)
+#define UARTDR_DATA_GET(reg) BSP_FLD32GET(reg, 0, 7)
   uint32_t dr;
 
   uint32_t rsr_ecr;
