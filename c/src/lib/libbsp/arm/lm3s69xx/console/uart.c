@@ -19,6 +19,10 @@
 #include <libchip/sersupp.h>
 #include <bsp/syscon.h>
 #include <bsp/lm3s69xx.h>
+#include <rtems/irq-extension.h>
+#include <assert.h>
+
+#define LM3S69XX_UART_FIFO_DEPTH 16
 
 static volatile lm3s69xx_uart *get_uart_regs(int minor)
 {
@@ -43,8 +47,36 @@ static uint32_t get_baud_div(uint32_t baud)
   return (clock4 + baud - 1) / baud;
 }
 
+static void irq_handler(void *arg)
+{
+  int minor = (int)arg;
+  console_data *cd = &Console_Port_Data [minor];
+  volatile lm3s69xx_uart *uart = get_uart_regs(minor);
+
+  do {
+    char buf[LM3S69XX_UART_FIFO_DEPTH];
+    int i = 0;
+    uint32_t status = uart->fr;
+
+    while (((status & UARTFR_RXFE) == 0) && (i < LM3S69XX_UART_FIFO_DEPTH)) {
+      uint32_t d = uart->dr;
+
+      if ((d & UARTDR_ERROR_MSK) == 0) {
+        buf[i] = UARTDR_DATA_GET(d);
+        i++;
+      }
+
+      status = uart->fr;
+    }
+
+    if (i > 0)
+      rtems_termios_enqueue_raw_characters(cd->termios_data, buf, i);
+  } while (uart->mis != 0);
+}
+
 static void initialize(int minor)
 {
+  const console_tbl *ct = Console_Port_Tbl[minor];
   volatile lm3s69xx_uart *uart = get_uart_regs(minor);
   unsigned int num = get_uart_number(minor);
 
@@ -58,6 +90,10 @@ static void initialize(int minor)
 
   uart->lcrh = UARTLCRH_WLEN(0x3) | UARTLCRH_FEN;
   uart->ctl = UARTCTL_RXE | UARTCTL_TXE | UARTCTL_UARTEN;
+
+  int rv = rtems_interrupt_handler_install(ct->ulIntVector, "UART",
+      RTEMS_INTERRUPT_UNIQUE, irq_handler, (void *)minor);
+  assert(rv == RTEMS_SUCCESSFUL);
 }
 
 static int first_open(int major, int minor, void *arg)
@@ -65,27 +101,26 @@ static int first_open(int major, int minor, void *arg)
   rtems_libio_open_close_args_t *oc = (rtems_libio_open_close_args_t *) arg;
   struct rtems_termios_tty *tty = (struct rtems_termios_tty *) oc->iop->data1;
   console_data *cd = &Console_Port_Data [minor];
+  volatile lm3s69xx_uart *uart = get_uart_regs(minor);
 
   cd->termios_data = tty;
   rtems_termios_set_initial_baud(tty, LM3S69XX_UART_BAUD);
+
+  /* Drain the RX FIFO. */
+  while ((uart->fr & UARTFR_RXFE) == 0)
+    (void)uart->dr;
+
+  uart->im = UARTI_RX | UARTI_RT;
 
   return 0;
 }
 
 static int last_close(int major, int minor, void *arg)
 {
-  return 0;
-}
-
-static int read_polled(int minor)
-{
   volatile lm3s69xx_uart *uart = get_uart_regs(minor);
+  uart->im = 0;
 
-  if ((uart->fr & UARTFR_RXFE) != 0) {
-    return -1;
-  } else {
-    return UARTDR_DATA(uart->dr);
-  }
+  return 0;
 }
 
 static void write_polled(int minor, char c)
@@ -123,10 +158,10 @@ const console_fns lm3s69xx_uart_fns = {
   .deviceProbe = libchip_serial_default_probe,
   .deviceFirstOpen = first_open,
   .deviceLastClose = last_close,
-  .deviceRead = read_polled,
+  .deviceRead = NULL,
   .deviceWrite = write_support_polled,
   .deviceInitialize = initialize,
   .deviceWritePolled = write_polled,
   .deviceSetAttributes = set_attribues,
-  .deviceOutputUsesInterrupts = false
+  .deviceOutputUsesInterrupts = TERMIOS_POLLED
 };
