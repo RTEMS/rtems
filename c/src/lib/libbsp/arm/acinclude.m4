@@ -34,6 +34,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([smdk2410]);;
   stm32f4 )
     AC_CONFIG_SUBDIRS([stm32f4]);;
+  xilinx-zynq )
+    AC_CONFIG_SUBDIRS([xilinx-zynq]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
