@@ -39,6 +39,7 @@ include_bsp_HEADERS += ../shared/include/arm-cp15-start.h
 include_bsp_HEADERS += ../shared/include/arm-gic.h
 include_bsp_HEADERS += ../shared/include/arm-gic-irq.h
 include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
+include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
 include_bsp_HEADERS += ../shared/include/arm-pl011.h
 include_bsp_HEADERS += ../shared/include/arm-pl011-regs.h
 include_bsp_HEADERS += include/irq.h

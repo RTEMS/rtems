@@ -19,63 +19,6 @@
 #ifndef __tm27_h
 #define __tm27_h
 
-#include <assert.h>
-
-#include <bsp.h>
-#include <bsp/irq.h>
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define RVPBXA9_TM27_IRQ ARM_GIC_IRQ_SGI_13
-
-#define RVPBXA9_TM27_PRIO_LOW 0xfe
-
-#define RVPBXA9_TM27_PRIO_HIGH 0x00
-
-static void Install_tm27_vector(void (*handler)(rtems_vector_number))
-{
-  rtems_status_code sc = rtems_interrupt_handler_install(
-    RVPBXA9_TM27_IRQ,
-    "TM27",
-    RTEMS_INTERRUPT_UNIQUE,
-    (rtems_interrupt_handler) handler,
-    NULL
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = arm_gic_irq_set_priority(
-    RVPBXA9_TM27_IRQ,
-    RVPBXA9_TM27_PRIO_LOW
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-}
-
-static void Cause_tm27_intr(void)
-{
-  rtems_status_code sc = arm_gic_irq_generate_software_irq(
-    RVPBXA9_TM27_IRQ,
-    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF,
-    0
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-}
-
-static void Clear_tm27_intr(void)
-{
-  rtems_status_code sc = arm_gic_irq_set_priority(
-    RVPBXA9_TM27_IRQ,
-    RVPBXA9_TM27_PRIO_LOW
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-}
-
-static void Lower_tm27_intr(void)
-{
-  rtems_status_code sc = arm_gic_irq_set_priority(
-    RVPBXA9_TM27_IRQ,
-    RVPBXA9_TM27_PRIO_HIGH
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-}
+#include <bsp/arm-gic-tm27.h>
 
 #endif /* __tm27_h */

@@ -110,6 +110,10 @@ $(PROJECT_INCLUDE)/bsp/arm-gic-regs.h: ../shared/include/arm-gic-regs.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-gic-regs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-gic-regs.h
 
+$(PROJECT_INCLUDE)/bsp/arm-gic-tm27.h: ../shared/include/arm-gic-tm27.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-gic-tm27.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-gic-tm27.h
+
 $(PROJECT_INCLUDE)/bsp/arm-pl011.h: ../shared/include/arm-pl011.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl011.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl011.h
