@@ -163,5 +163,5 @@ const console_fns lm3s69xx_uart_fns = {
   .deviceInitialize = initialize,
   .deviceWritePolled = write_polled,
   .deviceSetAttributes = set_attribues,
-  .deviceOutputUsesInterrupts = TERMIOS_POLLED
+  .deviceOutputUsesInterrupts = false
 };
