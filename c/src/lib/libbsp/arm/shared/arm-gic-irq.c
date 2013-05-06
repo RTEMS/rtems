@@ -109,8 +109,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
   arm_cp15_set_exception_handler(
     ARM_EXCEPTION_IRQ,
-    _ARMV4_Exception_interrupt,
-    BSP_ARM_MMU_READ_WRITE
+    _ARMV4_Exception_interrupt
   );
 
   return RTEMS_SUCCESSFUL;

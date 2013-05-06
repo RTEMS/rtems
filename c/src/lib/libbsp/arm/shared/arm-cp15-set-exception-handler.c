@@ -18,8 +18,7 @@
 
 void arm_cp15_set_exception_handler(
   Arm_symbolic_exception_name exception,
-  void (*handler)(void),
-  uint32_t section_flags_for_mirror_table_access
+  void (*handler)(void)
 )
 {
   if ((unsigned) exception < MAX_EXCEPTIONS) {
