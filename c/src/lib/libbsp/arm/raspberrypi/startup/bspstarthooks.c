@@ -50,7 +50,7 @@ static void BSP_START_TEXT_SECTION raspberrypi_cache_setup(void)
   ctrl = arm_cp15_get_control();
   ctrl &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_R | ARM_CP15_CTRL_C
     | ARM_CP15_CTRL_V | ARM_CP15_CTRL_M);
-  ctrl |= ARM_CP15_CTRL_S | ARM_CP15_CTRL_A;
+  ctrl |= ARM_CP15_CTRL_S;
   arm_cp15_set_control(ctrl);
 
   arm_cp15_cache_invalidate();
