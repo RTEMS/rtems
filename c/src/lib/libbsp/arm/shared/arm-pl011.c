@@ -60,7 +60,7 @@ static int pl011_read_polled(int minor)
   if ((regs->uartfr & PL011_UARTFR_RXFE) != 0) {
     return -1;
   } else {
-    return PL011_UARTDR_DATA(regs->uartdr);
+    return PL011_UARTDR_DATA_GET(regs->uartdr);
   }
 }
 
