@@ -423,6 +423,10 @@ void _CPU_Context_save_fp( Context_Control_fp **fp_context_ptr );
 
 void _CPU_Context_restore_fp( Context_Control_fp **fp_context_ptr );
 
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+void _CPU_Context_validate( uintptr_t pattern );
+
 static inline uint32_t CPU_swap_u32( uint32_t value )
 {
 #if defined(__thumb2__)

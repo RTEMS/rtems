@@ -30,6 +30,7 @@ SUBDIRS = \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
     spatomic01 spatomic02 spatomic03 spatomic04 spatomic05 \
     spatomic06 spatomic07
+SUBDIRS += spcontext01
 SUBDIRS += spfatal26
 SUBDIRS += speventtransient01
 SUBDIRS += speventsystem01

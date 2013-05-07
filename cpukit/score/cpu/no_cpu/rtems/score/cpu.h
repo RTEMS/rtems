@@ -1295,6 +1295,37 @@ void _CPU_Context_restore_fp(
 );
 
 /**
+ * @ingroup CPUContext
+ *
+ * @brief Clobbers all volatile registers with values derived from the pattern
+ * parameter.
+ *
+ * This function is used only in test sptests/spcontext01.
+ *
+ * @param[in] pattern Pattern used to generate distinct register values.
+ *
+ * @see _CPU_Context_validate().
+ */
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+/**
+ * @ingroup CPUContext
+ *
+ * @brief Initializes and validates the CPU context with values derived from
+ * the pattern parameter.
+ *
+ * This function will not return if the CPU context remains consistent.  In
+ * case this function returns the CPU port is broken.
+ *
+ * This function is used only in test sptests/spcontext01.
+ *
+ * @param[in] pattern Pattern used to generate distinct register values.
+ *
+ * @see _CPU_Context_volatile_clobber().
+ */
+void _CPU_Context_validate( uintptr_t pattern );
+
+/**
  * @brief The set of registers that specifies the complete processor state.
  *
  * The CPU exception frame may be available in fatal error conditions like for

@@ -667,6 +667,18 @@ void _CPU_Context_restore_fp(
   } while (0)
 #endif
 
+static inline void _CPU_Context_volatile_clobber( uintptr_t pattern )
+{
+  /* TODO */
+}
+
+static inline void _CPU_Context_validate( uintptr_t pattern )
+{
+  while (1) {
+    /* TODO */
+  }
+}
+
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 #endif /* ASM */
