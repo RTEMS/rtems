@@ -143,6 +143,23 @@
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
 
+#define FUNCTION_THUMB_ENTRY(name) \
+  .thumb; \
+  .thumb_func; \
+  .align 2; \
+  .globl name; \
+  .type name, %function; \
+  name:
+
+#define FUNCTION_ENTRY(name) \
+  .align 2; \
+  .globl name; \
+  .type name, %function; \
+  name:
+
+#define FUNCTION_END(name) \
+  .size name, . - name
+
 #if defined(ARM_MULTILIB_ARCH_V7M)
   #define DEFINE_FUNCTION_ARM(name) \
     .thumb_func ; .globl name ; name:
