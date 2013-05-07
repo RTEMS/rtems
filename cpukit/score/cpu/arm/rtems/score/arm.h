@@ -29,70 +29,12 @@ extern "C" {
  */
 /**@{**/
 
-/*
- *  This file contains the information required to build
- *  RTEMS for a particular member of the "arm"
- *  family when executing in protected mode.  It does
- *  this by setting variables to indicate which implementation
- *  dependent features are present in a particular member
- *  of the family.
- */
-#if defined(__ARM_ARCH_4__)
-#  define CPU_MODEL_NAME  "ARMv4"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_4T__)
-#  define CPU_MODEL_NAME  "ARMv4T"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_5__)
-#  define CPU_MODEL_NAME  "ARMv5"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_5T__)
-#  define CPU_MODEL_NAME  "ARMv5T"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_5E__)
-#  define CPU_MODEL_NAME  "ARMv5E"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_5TE__)
-#  define CPU_MODEL_NAME  "ARMv5TE"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_5TEJ__)
-#  define CPU_MODEL_NAME  "ARMv5TEJ"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_6J__)
-#  define CPU_MODEL_NAME  "ARMv6J"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_6ZK__)
-#  define CPU_MODEL_NAME  "ARMv6ZK"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_6M__)
-#  define CPU_MODEL_NAME  "ARMv6M"
-
-#elif defined(__ARM_ARCH_7__)
-#  define CPU_MODEL_NAME  "ARMv7"
-
-#elif defined(__ARM_ARCH_7A__)
-#  define CPU_MODEL_NAME  "ARMv7A"
-#  define ARM_MULTILIB_ARCH_V4
-
-#elif defined(__ARM_ARCH_7R__)
-#  define CPU_MODEL_NAME  "ARMv7R"
-
-#elif defined(__ARM_ARCH_7M__)
-#  define CPU_MODEL_NAME  "ARMv7M"
-#  define ARM_MULTILIB_ARCH_V7M
-
+#if defined(__ARM_ARCH_7M__)
+  #define CPU_MODEL_NAME "ARMv7M"
+  #define ARM_MULTILIB_ARCH_V7M
 #else
-#  error "Unsupported CPU Model"
-
+  #define CPU_MODEL_NAME "ARMv4"
+  #define ARM_MULTILIB_ARCH_V4
 #endif
 
 /* All ARM CPUs are assumed to not have floating point units */
