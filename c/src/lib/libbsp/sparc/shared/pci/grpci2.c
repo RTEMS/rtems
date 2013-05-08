@@ -90,13 +90,14 @@
 struct grpci2_regs {
 	volatile unsigned int ctrl;		/* 0x00 */
 	volatile unsigned int sts_cap;		/* 0x04 */
-	int res1;				/* 0x08 */
+	volatile unsigned int ppref;		/* 0x08 */
 	volatile unsigned int io_map;		/* 0x0C */
 	volatile unsigned int dma_ctrl;		/* 0x10 */
 	volatile unsigned int dma_bdbase;	/* 0x14 */
-	int res2[2];				/* 0x18 */
+	volatile unsigned int dma_chact;	/* 0x18 */
+	int res1;				/* 0x1C */
 	volatile unsigned int bars[6];		/* 0x20 */
-	int res3[2];				/* 0x38 */
+	int res2[2];				/* 0x38 */
 	volatile unsigned int ahbmst_map[16];	/* 0x40 */
 };
 
