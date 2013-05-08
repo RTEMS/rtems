@@ -30,7 +30,7 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu_asm.h>
+#include <rtems/score/cpu.h>
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
@@ -57,9 +57,19 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	mrs	r2, cpsr
 	stmia	r0,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 
+#ifdef ARM_MULTILIB_VFP_D32
+	add	r3, r0, #ARM_CONTEXT_CONTROL_D8_OFFSET
+	vstm	r3, {d8-d15}
+#endif
 
 /* Start restoring context */
 _restore:
+
+#ifdef ARM_MULTILIB_VFP_D32
+	add	r3, r1, #ARM_CONTEXT_CONTROL_D8_OFFSET
+	vldm	r3, {d8-d15}
+#endif
+
 	ldmia	r1,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 	msr	cpsr, r2
 #ifdef __thumb__

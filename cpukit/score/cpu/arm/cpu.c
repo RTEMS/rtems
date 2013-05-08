@@ -34,6 +34,29 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/cpu.h>
 
+#ifdef ARM_MULTILIB_VFP_D32
+  RTEMS_STATIC_ASSERT(
+    offsetof( Context_Control, register_d8 ) == ARM_CONTEXT_CONTROL_D8_OFFSET,
+    ARM_CONTEXT_CONTROL_D8_OFFSET
+  );
+#endif
+
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Exception_frame ) == ARM_EXCEPTION_FRAME_SIZE,
+  ARM_EXCEPTION_FRAME_SIZE
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Exception_frame, register_sp )
+    == ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET,
+  ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( ARM_VFP_context ) == ARM_VFP_CONTEXT_SIZE,
+  ARM_VFP_CONTEXT_SIZE
+);
+
 #ifdef ARM_MULTILIB_ARCH_V4
 
 /*

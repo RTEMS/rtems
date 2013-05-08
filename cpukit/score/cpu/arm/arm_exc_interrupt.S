@@ -7,12 +7,13 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -45,6 +46,10 @@
 #define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, r12}
 #define CONTEXT_SIZE 28
 
+#ifdef ARM_MULTILIB_VFP_D32
+  #define VFP_CONTEXT_WITH_ALIGNMENT_SPACE (24 * 8 + 4 + 4)
+#endif
+
 .extern _Thread_Dispatch_disable_level
 
 .extern bsp_interrupt_dispatch
@@ -73,6 +78,17 @@ _ARMV4_Exception_interrupt:
 	 */
 	stmdb	sp!, CONTEXT_LIST
 	stmdb	sp!, {lr}
+
+#ifdef ARM_MULTILIB_VFP_D32
+	/* Save VFP context */
+	sub	sp, #VFP_CONTEXT_WITH_ALIGNMENT_SPACE
+	add	r1, sp, #4
+	vmrs	r0, FPSCR
+	bic	r1, r1, #7
+	vstmia	r1!, {d0-d7}
+	vstmia	r1!, {d16-d31}
+	str	r0, [r1]
+#endif
 
 	/* Remember INT stack pointer */
 	mov	r1, EXCHANGE_INT_SP
@@ -143,6 +159,17 @@ thread_dispatch_done:
 
 	/* Switch to ARM instructions if necessary */
 	SWITCH_FROM_THUMB_TO_ARM
+
+#ifdef ARM_MULTILIB_VFP_D32
+	/* Restore VFP context */
+	add	r1, sp, #4
+	bic	r1, r1, #7
+	vldmia	r1!, {d0-d7}
+	vldmia	r1!, {d16-d31}
+	ldr	r0, [r1]
+	add	sp, #VFP_CONTEXT_WITH_ALIGNMENT_SPACE
+	vmsr	FPSCR, r0
+#endif
 
 	/* Restore link register */
 	ldmia	sp!, {lr}

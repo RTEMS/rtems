@@ -37,14 +37,11 @@ extern "C" {
   #define ARM_MULTILIB_ARCH_V4
 #endif
 
-/* All ARM CPUs are assumed to not have floating point units */
-#if defined(__SOFTFP__)
-#define ARM_HAS_FPU     0
-#else
-#define ARM_HAS_FPU	1
-#warning "FPU-support not yet implemented for the arm"
+#if defined(__ARM_NEON__)
+  #define ARM_MULTILIB_VFP_D32
+#elif !defined(__SOFTFP__)
+  #error "FPU support not implemented"
 #endif
-
 
 /*
  *  Define the name of the CPU family.

@@ -8,7 +8,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009-2011 embedded brains GmbH.
+ *  Copyright (c) 2009-2013 embedded brains GmbH.
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -128,11 +128,7 @@
 
 #define CPU_ISR_PASSES_FRAME_POINTER 0
 
-#if ( ARM_HAS_FPU == 1 )
-  #define CPU_HARDWARE_FP TRUE
-#else
-  #define CPU_HARDWARE_FP FALSE
-#endif
+#define CPU_HARDWARE_FP FALSE
 
 #define CPU_SOFTWARE_FP FALSE
 
@@ -214,6 +210,18 @@
 
 /** @} */
 
+#ifdef ARM_MULTILIB_VFP_D32
+  #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
+#endif
+
+#define ARM_EXCEPTION_FRAME_SIZE 76
+
+#define ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET 52
+
+#define ARM_EXCEPTION_FRAME_VFP_CONTEXT_OFFSET 72
+
+#define ARM_VFP_CONTEXT_SIZE 264
+
 #ifndef ASM
 
 #ifdef __cplusplus
@@ -253,13 +261,21 @@ typedef struct {
 #else
   void *register_sp;
 #endif
+#ifdef ARM_MULTILIB_VFP_D32
+  uint64_t register_d8;
+  uint64_t register_d9;
+  uint64_t register_d10;
+  uint64_t register_d11;
+  uint64_t register_d12;
+  uint64_t register_d13;
+  uint64_t register_d14;
+  uint64_t register_d15;
+#endif
 } Context_Control;
 
 typedef struct {
   /* Not supported */
 } Context_Control_fp;
-
-SCORE_EXTERN Context_Control_fp _CPU_Null_fp_context;
 
 extern uint32_t arm_cpu_mode;
 
@@ -419,10 +435,6 @@ void _CPU_Context_restore( Context_Control *new_context )
   #define _CPU_Stop_multitasking _ARMV7M_Stop_multitasking
 #endif
 
-void _CPU_Context_save_fp( Context_Control_fp **fp_context_ptr );
-
-void _CPU_Context_restore_fp( Context_Control_fp **fp_context_ptr );
-
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
 void _CPU_Context_validate( uintptr_t pattern );
@@ -501,6 +513,43 @@ typedef enum {
 #endif /* defined(ARM_MULTILIB_ARCH_V4) */
 
 typedef struct {
+  uint32_t register_fpexc;
+  uint32_t register_fpscr;
+  uint64_t register_d0;
+  uint64_t register_d1;
+  uint64_t register_d2;
+  uint64_t register_d3;
+  uint64_t register_d4;
+  uint64_t register_d5;
+  uint64_t register_d6;
+  uint64_t register_d7;
+  uint64_t register_d8;
+  uint64_t register_d9;
+  uint64_t register_d10;
+  uint64_t register_d11;
+  uint64_t register_d12;
+  uint64_t register_d13;
+  uint64_t register_d14;
+  uint64_t register_d15;
+  uint64_t register_d16;
+  uint64_t register_d17;
+  uint64_t register_d18;
+  uint64_t register_d19;
+  uint64_t register_d20;
+  uint64_t register_d21;
+  uint64_t register_d22;
+  uint64_t register_d23;
+  uint64_t register_d24;
+  uint64_t register_d25;
+  uint64_t register_d26;
+  uint64_t register_d27;
+  uint64_t register_d28;
+  uint64_t register_d29;
+  uint64_t register_d30;
+  uint64_t register_d31;
+} ARM_VFP_context;
+
+typedef struct {
   uint32_t register_r0;
   uint32_t register_r1;
   uint32_t register_r2;
@@ -524,6 +573,7 @@ typedef struct {
   uint32_t register_xpsr;
   uint32_t vector;
 #endif
+  const ARM_VFP_context *vfp_context;
 } CPU_Exception_frame;
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;
