@@ -119,12 +119,14 @@ include_HEADERS += ../../sparc/shared/include/gr_rasta_adcdac.h
 include_HEADERS += ../../sparc/shared/include/gr_rasta_io.h
 include_HEADERS += ../../sparc/shared/include/gr_rasta_tmtc.h
 include_HEADERS += ../../sparc/shared/include/gr_tmtc_1553.h
+include_HEADERS += ../../sparc/shared/include/gr_leon4_n2x.h
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_701.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_adcdac.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_io.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_spw_router.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_rasta_tmtc.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_tmtc_1553.c
+libbsp_a_SOURCES +=  ../../sparc/shared/pci/gr_leon4_n2x.c
 
 # B1553BRM
 include_HEADERS += ../../sparc/shared/include/b1553brm.h

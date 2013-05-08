@@ -157,6 +157,10 @@ $(PROJECT_INCLUDE)/gr_tmtc_1553.h: ../../sparc/shared/include/gr_tmtc_1553.h $(P
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_tmtc_1553.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_tmtc_1553.h
 
+$(PROJECT_INCLUDE)/gr_leon4_n2x.h: ../../sparc/shared/include/gr_leon4_n2x.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gr_leon4_n2x.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/gr_leon4_n2x.h
+
 $(PROJECT_INCLUDE)/b1553brm.h: ../../sparc/shared/include/b1553brm.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/b1553brm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/b1553brm.h
