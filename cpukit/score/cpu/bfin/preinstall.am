@@ -63,3 +63,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h: rtems/score/cpuatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
+
