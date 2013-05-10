@@ -41,7 +41,12 @@ void *rtems_heap_null_extend(
 #endif
 
 char Malloc_Heap[ 256 ] CPU_STRUCTURE_ALIGNMENT;
-int sbrk_count;
+
+/*
+ * Use volatile to prevent compiler optimizations due to the malloc() builtin.
+ */
+volatile int sbrk_count;
+
 Heap_Control TempHeap;
 
 size_t offset;
