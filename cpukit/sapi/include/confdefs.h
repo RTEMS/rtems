@@ -2360,22 +2360,15 @@ const rtems_libio_helper rtems_fs_init_helper =
     #if defined(RTEMS_MULTIPROCESSING)
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
+    #ifdef RTEMS_SMP
+      CONFIGURE_SMP_MAXIMUM_PROCESSORS
+    #endif
   };
 #endif
 
 #endif /* CONFIGURE_HAS_OWN_CONFIGURATION_TABLE */
 
 #if defined(RTEMS_SMP)
-  /**
-   * Instantiate the variable which specifies the number of CPUs
-   * in an SMP configuration.
-   */
-  #if defined(CONFIGURE_INIT)
-    uint32_t rtems_configuration_smp_maximum_processors = \
-        CONFIGURE_SMP_MAXIMUM_PROCESSORS;
-  #else
-    extern uint32_t rtems_configuration_smp_maximum_processors;
-  #endif
  /*
   * Instantiate the Per CPU information based upon the user configuration.
   */

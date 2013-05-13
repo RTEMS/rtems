@@ -230,6 +230,9 @@ typedef struct {
   #if defined(RTEMS_MULTIPROCESSING)
     rtems_multiprocessing_table   *User_multiprocessing_table;
   #endif
+  #ifdef RTEMS_SMP
+    uint32_t                     maximum_processors;
+  #endif
 } rtems_configuration_table;
 
 /**
@@ -333,6 +336,22 @@ extern const rtems_configuration_table Configuration;
 #else
   #define rtems_configuration_get_user_multiprocessing_table() \
         NULL
+#endif
+
+/**
+ * @brief Returns the configured maximum count of processors.
+ *
+ * The actual number of processors available for the application will be less
+ * than or equal to the configured maximum count of processors.
+ *
+ * @return The configured maximum count of processors.
+ */
+#ifdef RTEMS_SMP
+  #define rtems_configuration_get_maximum_processors() \
+        (Configuration.maximum_processors)
+#else
+  #define rtems_configuration_get_maximum_processors() \
+        1
 #endif
 
 #define rtems_configuration_get_rtems_api_configuration() \

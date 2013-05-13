@@ -46,7 +46,7 @@
      */
     size = rtems_configuration_get_interrupt_stack_size();
     _Per_CPU_Information_p[0] = &_Per_CPU_Information[0];
-    for (cpu=1 ; cpu < rtems_configuration_smp_maximum_processors; cpu++ ) {
+    for (cpu=1 ; cpu < rtems_configuration_get_maximum_processors(); cpu++ ) {
 
       Per_CPU_Control *p = &_Per_CPU_Information[cpu];
 

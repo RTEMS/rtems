@@ -401,7 +401,7 @@ imps_read_config_table(unsigned start, int count)
   while (count-- > 0) {
     switch (*((unsigned char *)start)) {
     case IMPS_BCT_PROCESSOR:
-      if ( imps_num_cpus < rtems_configuration_smp_maximum_processors ) {
+      if ( imps_num_cpus < rtems_configuration_get_maximum_processors() ) {
 	add_processor((imps_processor *)start);
       } else 
         imps_num_cpus++;
@@ -428,13 +428,13 @@ imps_read_config_table(unsigned start, int count)
     }
     start += 8;
   }
-  if ( imps_num_cpus > rtems_configuration_smp_maximum_processors ) {
+  if ( imps_num_cpus > rtems_configuration_get_maximum_processors() ) {
     printk(
       "WARNING!! Found more CPUs (%d) than configured for (%d)!!\n",
       imps_num_cpus - 1,
-      rtems_configuration_smp_maximum_processors
+      rtems_configuration_get_maximum_processors()
     );
-    imps_num_cpus = rtems_configuration_smp_maximum_processors;
+    imps_num_cpus = rtems_configuration_get_maximum_processors();
     return;
   }
 }

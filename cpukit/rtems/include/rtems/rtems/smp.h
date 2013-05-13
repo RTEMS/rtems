@@ -36,8 +36,6 @@ extern "C" {
  */
 /**@{*/
 
-extern uint32_t rtems_configuration_smp_maximum_processors;
-
 /**
  * @brief Obtain Number of Cores in System
  *
@@ -49,18 +47,6 @@ extern uint32_t rtems_configuration_smp_maximum_processors;
  */
 #define rtems_smp_get_number_of_processors() \
     (_SMP_Processor_count)
-
-/**
- * @brief Obtain Maximum Cores Configured
- *
- * This method returns the number of CPU cores that were configured
- * in the system. The actual number of cores will always be less than
- * or equal to the number  of maximum number of cores which were configured.
- *
- * @retval This method returns the number of cores configured.
- */
-#define rtems_configuration_get_smp_maximum_processors() \
-    (rtems_configuration_smp_maximum_processors)
 
 /**
  * @brief Obtain Current Core Number

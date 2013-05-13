@@ -164,7 +164,7 @@ void rtems_initialize_data_structures(void)
    */
   #if defined(RTEMS_SMP)
     _SMP_Processor_count =
-        bsp_smp_initialize( rtems_configuration_smp_maximum_processors );
+        bsp_smp_initialize( rtems_configuration_get_maximum_processors() );
   #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );

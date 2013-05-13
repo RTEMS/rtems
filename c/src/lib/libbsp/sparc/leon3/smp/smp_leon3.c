@@ -71,13 +71,13 @@ int bsp_smp_initialize(
     printk( "Found %d CPUs\n", found_cpus );
   #endif
 
-  if ( found_cpus > rtems_configuration_smp_maximum_processors ) {
+  if ( found_cpus > rtems_configuration_get_maximum_processors() ) {
     printk(
       "%d CPUs IS MORE THAN CONFIGURED -- ONLY USING %d\n",
       found_cpus,
-      rtems_configuration_smp_maximum_processors
+      rtems_configuration_get_maximum_processors()
     );
-    found_cpus = rtems_configuration_smp_maximum_processors;
+    found_cpus = rtems_configuration_get_maximum_processors();
   }
 
   if ( found_cpus == 1 )

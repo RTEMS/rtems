@@ -49,14 +49,6 @@ extern "C" {
 
 #ifndef ASM
 /**
- *  @brief Maximum number of CPUs in SMP system.
- *
- *  This variable is set during the SMP initialization sequence to
- *  indicate the Maximum number of CPUs in this system.
- */
-extern uint32_t rtems_configuration_smp_maximum_processors;
-
-/**
  *  @brief Initialize secondary CPUs.
  *
  *  This method is invoked by RTEMS during initialization to bring the
