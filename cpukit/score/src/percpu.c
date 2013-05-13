@@ -31,15 +31,11 @@
 
   void _SMP_Handler_initialize(void)
   {
-    int         cpu;
-    size_t      size;
-    uintptr_t   ptr;
-
+    int cpu;
 
     /*
      *  Initialize per cpu pointer table
      */
-    size = rtems_configuration_get_interrupt_stack_size();
     _Per_CPU_Information_p[0] = &_Per_CPU_Information[0];
     for (cpu=1 ; cpu < rtems_configuration_get_maximum_processors(); cpu++ ) {
 
@@ -47,11 +43,19 @@
 
       _Per_CPU_Information_p[cpu] = p;
 
-      p->interrupt_stack_low = _Workspace_Allocate_or_fatal_error( size );
+#if CPU_ALLOCATE_INTERRUPT_STACK == TRUE
+      {
+        size_t size = rtems_configuration_get_interrupt_stack_size();
+        uintptr_t ptr;
 
-      ptr = (uintptr_t) _Addresses_Add_offset( p->interrupt_stack_low, size );
-      ptr &= ~(CPU_STACK_ALIGNMENT - 1);
-      p->interrupt_stack_high = (void *)ptr;
+        p->interrupt_stack_low = _Workspace_Allocate_or_fatal_error( size );
+
+        ptr = (uintptr_t) _Addresses_Add_offset( p->interrupt_stack_low, size );
+        ptr &= ~(CPU_STACK_ALIGNMENT - 1);
+        p->interrupt_stack_high = (void *)ptr;
+      }
+#endif
+
       p->state = RTEMS_BSP_SMP_CPU_INITIAL_STATE;
       RTEMS_COMPILER_MEMORY_BARRIER();
     }

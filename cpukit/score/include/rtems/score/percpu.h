@@ -60,10 +60,6 @@ extern "C" {
 typedef struct Thread_Control_struct Thread_Control;
 #endif
 
-#if (CPU_ALLOCATE_INTERRUPT_STACK == FALSE) && defined(RTEMS_SMP)
-  #error "RTEMS must allocate per CPU interrupt stack for SMP"
-#endif
-
 typedef enum {
 
   /**
