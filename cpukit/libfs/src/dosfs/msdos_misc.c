@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 /*
- * External strings. Saves spave this way.
+ * External strings. Saves space this way.
  */
 const char *const MSDOS_DOT_NAME    = ".          ";
 const char *const MSDOS_DOTDOT_NAME = "..         ";
