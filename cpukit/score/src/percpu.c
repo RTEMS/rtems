@@ -31,13 +31,14 @@
 
   void _SMP_Handler_initialize(void)
   {
-    int cpu;
+    uint32_t max_cpus = rtems_configuration_get_maximum_processors();
+    uint32_t cpu;
 
     /*
      *  Initialize per cpu pointer table
      */
     _Per_CPU_Information_p[0] = &_Per_CPU_Information[0];
-    for (cpu=1 ; cpu < rtems_configuration_get_maximum_processors(); cpu++ ) {
+    for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
 
       Per_CPU_Control *p = &_Per_CPU_Information[cpu];
 
@@ -59,6 +60,13 @@
       p->state = RTEMS_BSP_SMP_CPU_INITIAL_STATE;
       RTEMS_COMPILER_MEMORY_BARRIER();
     }
+
+    /*
+     * Discover and initialize the secondary cores in an SMP system.
+     */
+    max_cpus = bsp_smp_initialize( max_cpus );
+
+    _SMP_Processor_count = max_cpus;
   }
 #else
   /*

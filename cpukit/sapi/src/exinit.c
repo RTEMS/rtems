@@ -119,10 +119,6 @@ void rtems_initialize_data_structures(void)
 
   _Thread_Dispatch_initialization();
 
-  #if defined(RTEMS_SMP)
-    _SMP_Handler_initialize();
-  #endif
-
   _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
 
@@ -159,12 +155,8 @@ void rtems_initialize_data_structures(void)
     _POSIX_API_Initialize();
   #endif
 
-  /*
-   * Discover and initialize the secondary cores in an SMP system.
-   */
   #if defined(RTEMS_SMP)
-    _SMP_Processor_count =
-        bsp_smp_initialize( rtems_configuration_get_maximum_processors() );
+    _SMP_Handler_initialize();
   #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );

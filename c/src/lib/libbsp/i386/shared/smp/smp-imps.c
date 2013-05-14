@@ -807,9 +807,7 @@ void bsp_smp_secondary_cpu_initialize(int cpu)
 }
 
 #include <rtems/bspsmp.h>
-int bsp_smp_initialize(
-  int maximum
-)
+uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
 {
   int cores;
   /* XXX need to deal with finding too many cores */

@@ -57,12 +57,10 @@ void *bsp_ap_entry;
 
 static void bsp_smp_delay( int );
 
-int bsp_smp_initialize(
-  int maximum
-)
+uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
 {
-  int cpu;
-  int found_cpus = 0;
+  uint32_t cpu;
+  uint32_t found_cpus = 0;
 
   sparc_leon3_set_cctrl( 0x80000F );
   found_cpus =
@@ -71,13 +69,13 @@ int bsp_smp_initialize(
     printk( "Found %d CPUs\n", found_cpus );
   #endif
 
-  if ( found_cpus > rtems_configuration_get_maximum_processors() ) {
+  if ( found_cpus > configured_cpu_count ) {
     printk(
       "%d CPUs IS MORE THAN CONFIGURED -- ONLY USING %d\n",
       found_cpus,
-      rtems_configuration_get_maximum_processors()
+      configured_cpu_count
     );
-    found_cpus = rtems_configuration_get_maximum_processors();
+    found_cpus = configured_cpu_count;
   }
 
   if ( found_cpus == 1 )

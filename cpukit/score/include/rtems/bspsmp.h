@@ -50,21 +50,24 @@ extern "C" {
 
 
 #ifndef ASM
+
 /**
- *  @brief Initialize secondary CPUs.
+ * @brief Performs BSP specific SMP initialization in the context of the main
+ * processor.
  *
- *  This method is invoked by RTEMS during initialization to bring the
- *  secondary CPUs out of reset.
+ * This function is invoked on the main processor by RTEMS during
+ * initialization.  All interrupt stacks are allocated at this point in case
+ * the CPU port allocates the interrupt stacks.
  *
- *  @param [in] maximum is the maximum number of CPU cores that RTEMS
- *              can handle
+ * The BSP may start secondary processors now.
  *
- *  @retval This method returns the number of cores available in the
- *          system.
+ * @param[in] configured_cpu_count The count of processors requested by the
+ * application configuration.
+ *
+ * @return The count of processors available for the application in the system.
+ * This value is less than or equal to the configured count of processors.
  */
-int bsp_smp_initialize(
-  int maximum
-);
+uint32_t bsp_smp_initialize( uint32_t configured_cpu_count );
 
 /**
  *  @brief Obtain current CPU index.
