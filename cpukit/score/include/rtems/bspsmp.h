@@ -80,21 +80,6 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count );
 int bsp_smp_processor_id(void) RTEMS_COMPILER_PURE_ATTRIBUTE;
 
 /**
- *  @brief Make request of another CPU.
- *
- *  This method is invoked by RTEMS when it needs to make a request
- *  of another CPU.  It should be implemented using some type of
- *  interprocessor interrupt.
- *
- *  @param [in] cpu is the target CPU for this request.
- *  @param [in] message is message to send
- */
-void rtems_smp_send_message(
-  int       cpu,
-  uint32_t  message
-);
-
-/**
  *  @brief Generate an interprocessor broadcast interrupt.
  *
  *  This method is invoked when RTEMS wants to let all of the other
