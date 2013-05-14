@@ -199,6 +199,8 @@ unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
 /* now defined in getcpuid.c */
 extern unsigned imps_lapic_addr;
 
+static void secondary_cpu_initialize(void);
+
 /*
  *  MPS checksum function
  *
@@ -269,7 +271,7 @@ boot_cpu(imps_processor *proc)
     (size_t)_binary_appstart_bin_size
   );
 
-  reset[1] = (uint32_t)rtems_smp_secondary_cpu_initialize;
+  reset[1] = (uint32_t)secondary_cpu_initialize;
   reset[2] = (uint32_t)_Per_CPU_Information[apicid].interrupt_stack_high;
 
   /*
@@ -792,7 +794,7 @@ extern void enable_sse(void);
 #endif
 
 /* pc386 specific initialization */
-void bsp_smp_secondary_cpu_initialize(int cpu)
+static void secondary_cpu_initialize(void)
 {
   int apicid;
 
@@ -804,6 +806,8 @@ void bsp_smp_secondary_cpu_initialize(int cpu)
 #ifdef __SSE__
   enable_sse();
 #endif
+
+  rtems_smp_secondary_cpu_initialize();
 }
 
 #include <rtems/bspsmp.h>

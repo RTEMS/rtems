@@ -56,9 +56,6 @@ void rtems_smp_secondary_cpu_initialize(void)
 
   cpu = bsp_smp_processor_id();
 
-  _ISR_Disable_on_this_core( level );
-  bsp_smp_secondary_cpu_initialize(cpu);
-
   /*
    *  Inform the primary CPU that this secondary CPU is initialized
    *  and ready to dispatch to the first thread it is supposed to

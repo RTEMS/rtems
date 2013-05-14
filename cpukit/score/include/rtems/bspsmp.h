@@ -119,25 +119,26 @@ void bsp_smp_interrupt_cpu(
 int   bsp_smp_processor_id( void );
 
 /**
- *  This method is invoked by @ref rtems_smp_secondary_cpu_initialize
- *  to allow the BSP to perform some intialization.  The @a cpu
- *  parameter indicates the secondary CPU that the code is executing on
- *  and is currently being initialized.
+ * @brief Performs high-level initialization of a secondary CPU and runs the
+ * application threads.
  *
- *  @note This is called by @ref rtems_smp_secondary_cpu_initialize.
+ * The low-level initialization code must call this function to hand over the
+ * control of this processor to RTEMS.  Interrupts must be disabled.  It must
+ * be possible to send inter-processor interrupts to this processor.  Since
+ * interrupts are disabled the inter-processor interrupt delivery is postponed
+ * until interrupts are enabled the first time.  This is usually a side-effect
+ * of the context switch to the first thread.
+ *
+ * The pre-requisites for the call to this function are
+ * - disabled interrupts,
+ * - reception of inter-processor interrupts is possible,
+ * - a valid stack pointer and enough stack space,
+ * - a valid code memory, and
+ * - a valid BSS section.
+ *
+ * This function must not be called by the main processor.
  */
-void bsp_smp_secondary_cpu_initialize(int cpu);
-
-/**
- *  @brief Initialize secondary CPU and coordinates.
- *
- *  This method is the C entry point which secondary CPUs should
- *  arrange to call.  It performs OS initialization for the secondary
- *  CPU and coordinates bring it to a useful state.
- *
- *  @note This is provided by RTEMS.
- */
-void rtems_smp_secondary_cpu_initialize(void);
+void rtems_smp_secondary_cpu_initialize( void );
 
 /**
  *  @brief Process the incoming interprocessor request.

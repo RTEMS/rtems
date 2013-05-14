@@ -41,11 +41,15 @@ rtems_isr bsp_ap_ipi_isr(
   rtems_smp_process_interrupt();
 }
 
-void bsp_smp_secondary_cpu_initialize(int cpu)
+static void leon3_secondary_cpu_initialize(void)
 {
+  int cpu = bsp_smp_processor_id();
+
   sparc_leon3_set_cctrl( 0x80000F );
   LEON_Unmask_interrupt(LEON3_MP_IRQ);
   LEON3_IrqCtrl_Regs->mask[cpu] |= 1 << LEON3_MP_IRQ;
+
+  rtems_smp_secondary_cpu_initialize();
 }
 
 /*
@@ -89,7 +93,7 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
 
     bsp_ap_stack = _Per_CPU_Information[cpu].interrupt_stack_high -
                       CPU_MINIMUM_STACK_FRAME_SIZE;
-    bsp_ap_entry = rtems_smp_secondary_cpu_initialize;
+    bsp_ap_entry = leon3_secondary_cpu_initialize;
 
     LEON3_IrqCtrl_Regs->mpstat = 1 << cpu;
     bsp_smp_delay( 1000000 );
