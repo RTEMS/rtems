@@ -155,16 +155,6 @@ void bsp_smp_secondary_cpu_initialize(int cpu);
 void rtems_smp_secondary_cpu_initialize(void);
 
 /**
- *  This method is invoked by the BSP to initialize the per CPU structure
- *  for the specified @a cpu while it is bringing the secondary CPUs
- *  out of their reset state and into a useful state.
- *
- *  @param [in] cpu indicates the CPU whose per cpu structure is to
- *              be initialized.
- */
-void rtems_smp_initialize_per_cpu(int cpu);
-
-/**
  *  @brief Process the incoming interprocessor request.
  *
  *  This is the method called by the BSP's interrupt handler
