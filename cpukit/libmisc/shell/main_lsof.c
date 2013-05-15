@@ -44,7 +44,7 @@ static void lsof(void)
       mt_entry->writeable ? 'W' : 'R',
       mt_entry->type,
       mt_entry->target,
-      mt_entry->dev,
+      mt_entry->dev == NULL ? "none" : mt_entry->dev,
       mt_entry->mt_fs_root,
       mt_entry->mt_fs_root->location.node_access
     );
