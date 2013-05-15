@@ -54,6 +54,10 @@
 /* address modifiers & friends */
 #include <bsp/vme_am_defs.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* VME related declarations */
 
 /*
@@ -113,5 +117,9 @@ BSP_VMEInboundPortsShow(FILE *f);
 /* Assert VME SYSRESET */
 void
 BSP_VMEResetBus(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
