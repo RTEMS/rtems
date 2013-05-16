@@ -91,6 +91,7 @@ imfs_fstime/Makefile
 mdosfs_fserror/Makefile
 mdosfs_fspatheval/Makefile
 mdosfs_fsrdwr/Makefile
+mdosfs_fsstatvfs/Makefile
 mdosfs_fstime/Makefile
 mimfs_fserror/Makefile
 mimfs_fslink/Makefile

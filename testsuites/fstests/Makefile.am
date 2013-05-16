@@ -15,6 +15,7 @@ SUBDIRS += imfs_fstime
 SUBDIRS += mdosfs_fserror
 SUBDIRS += mdosfs_fspatheval
 SUBDIRS += mdosfs_fsrdwr
+SUBDIRS += mdosfs_fsstatvfs
 SUBDIRS += mdosfs_fstime
 SUBDIRS += mimfs_fserror
 SUBDIRS += mimfs_fslink

@@ -80,7 +80,7 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_handlers_file.c src/dosfs/msdos_init.c \
     src/dosfs/msdos_initsupp.c src/dosfs/msdos_misc.c \
     src/dosfs/msdos_mknod.c src/dosfs/msdos_node_type.c \
-    src/dosfs/msdos_rmnod.c \
+    src/dosfs/msdos_rmnod.c src/dosfs/msdos_statvfs.c \
     src/dosfs/msdos_conv.c src/dosfs/msdos.h src/dosfs/msdos_format.c \
     src/dosfs/dosfs.h src/dosfs/msdos_rename.c
 endif

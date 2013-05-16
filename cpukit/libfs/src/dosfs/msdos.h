@@ -293,6 +293,9 @@ int msdos_rename(
   size_t new_namelen
 );
 
+int msdos_statvfs(const rtems_filesystem_location_info_t *root_loc,
+  struct statvfs *sb);
+
 void msdos_lock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
 void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry);
