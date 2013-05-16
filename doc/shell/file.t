@@ -35,6 +35,7 @@ The RTEMS shell has the following file and directory commands:
 @item @code{dir} - alias for ls
 @item @code{mkrfs} - format RFS file system
 @item @code{cd} - alias for chdir
+@item @code{df} - display file system disk space usage
 
 @end itemize
 
@@ -2626,5 +2627,82 @@ following prototype:
 
 @example
 extern rtems_shell_cmd_t rtems_shell_CD_Command;
+@end example
+
+@c
+@c
+@c
+@page
+@subsection df - display file system disk space usage
+
+@pgindex df
+
+@subheading SYNOPSYS:
+
+@example
+df [-h] [-B block_size]
+@end example
+
+@subheading DESCRIPTION:
+
+This command print disk space usage for mounted file systems.
+
+@subheading EXIT STATUS:
+
+This command returns 0 on success and non-zero if an error is encountered.
+
+@subheading NOTES:
+
+NONE
+
+@subheading EXAMPLES:
+
+The following is an example of how to use @code{df}:
+
+@example
+SHLL [/] $ df -B 4K
+Filesystem     4K-blocks        Used   Available       Use%     Mounted on
+/dev/rda               124         1         124         0%   /mnt/ramdisk
+SHLL [/] $ df
+Filesystem     1K-blocks        Used   Available       Use%     Mounted on
+/dev/rda               495         1         494         0%   /mnt/ramdisk
+SHLL [/] $ df -h
+Filesystem     Size             Used   Available       Use%     Mounted on
+/dev/rda              495K        1K        494K         0%   /mnt/ramdisk
+@end example
+
+@subheading CONFIGURATION:
+
+@findex CONFIGURE_SHELL_NO_COMMAND_DF
+@findex CONFIGURE_SHELL_COMMAND_DF
+
+This command is included in the default shell command set.  
+When building a custom command set, define
+@code{CONFIGURE_SHELL_COMMAND_DF} to have this
+command included.
+
+This command can be excluded from the shell command set by
+defining @code{CONFIGURE_SHELL_NO_COMMAND_DF} when all
+shell commands have been configured.
+
+@subheading PROGRAMMING INFORMATION:
+
+@findex rtems_shell_rtems_main_df
+
+The @code{df} is implemented by a C language function
+which has the following prototype:
+
+@example
+int rtems_shell_main_df(
+  int argc,
+  char **argv
+);
+@end example
+
+The configuration structure for the @code{df} has the
+following prototype:
+
+@example
+extern rtems_shell_cmd_t rtems_shell_DF_Command;
 @end example
 

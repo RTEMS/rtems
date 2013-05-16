@@ -102,7 +102,7 @@ libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/hexdump-odsyntax.c shell/hexdump-parse.c shell/hexsyntax.c \
     shell/main_time.c shell/main_mknod.c \
     shell/main_setenv.c shell/main_getenv.c shell/main_unsetenv.c \
-    shell/main_mkrfs.c shell/main_debugrfs.c \
+    shell/main_mkrfs.c shell/main_debugrfs.c shell/main_df.c \
     shell/main_lsof.c \
     shell/main_blkstats.c \
     shell/shell-wait-for-input.c
