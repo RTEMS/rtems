@@ -84,5 +84,5 @@ void test(void)
 {
   puts( "\n\n*** STATVFS TEST ***");
   statvfs_test01();
-  puts( "*** END OF STATVFS TEST ***");
+  puts( "*** END OF TEST STATVFS ***");
 }
