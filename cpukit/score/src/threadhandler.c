@@ -126,12 +126,6 @@ void _Thread_Handler( void )
      */
     if (doCons) /* && (volatile void *)_init) */ {
       INIT_NAME ();
-   
-      #if defined(RTEMS_SMP)
-        _Thread_Disable_dispatch();
-          _SMP_Request_other_cores_to_perform_first_context_switch();
-        _Thread_Enable_dispatch();
-      #endif
     }
  #endif
 
