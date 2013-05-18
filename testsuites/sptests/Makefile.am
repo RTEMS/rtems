@@ -25,7 +25,7 @@ SUBDIRS = \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
     spintrcritical17 spintrcritical18 spmkdir spmountmgr01 spheapprot \
-    spsimplesched01 spsimplesched02 spsimplesched03 spnsext01 \
+    spsem01 spsimplesched01 spsimplesched02 spsimplesched03 spnsext01 \
     spedfsched01 spedfsched02 spedfsched03 \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01 \
     spatomic01 spatomic02 spatomic03 spatomic04 spatomic05 \

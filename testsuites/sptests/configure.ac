@@ -188,6 +188,7 @@ spprintk/Makefile
 spprivenv01/Makefile
 spqreslib/Makefile
 sprbtree01/Makefile
+spsem01/Makefile
 spsimplesched01/Makefile
 spsimplesched02/Makefile
 spsimplesched03/Makefile
