@@ -99,8 +99,8 @@ void rtems_smp_process_interrupt( void )
     }
 
     _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_SHUTDOWN );
-    while(1)
-      ;
+
+    _CPU_Fatal_halt( self );
     /* does not continue past here */
   }
 }
