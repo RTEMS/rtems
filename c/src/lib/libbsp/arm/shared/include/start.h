@@ -99,6 +99,13 @@ BSP_START_TEXT_SECTION static inline void bsp_start_copy_sections(void)
     (size_t) bsp_section_rodata_size
   );
 
+  /* Copy .ARM.exidx section */
+  bsp_start_memcpy(
+    (int *) bsp_section_armexidx_begin,
+    (const int *) bsp_section_armexidx_load_begin,
+    (size_t) bsp_section_armexidx_size
+  );
+
   /* Copy .data section */
   bsp_start_memcpy(
     (int *) bsp_section_data_begin,

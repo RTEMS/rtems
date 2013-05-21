@@ -83,6 +83,12 @@ LINKER_SYMBOL(bsp_section_rodata_size)
 LINKER_SYMBOL(bsp_section_rodata_load_begin)
 LINKER_SYMBOL(bsp_section_rodata_load_end)
 
+LINKER_SYMBOL(bsp_section_armexidx_begin)
+LINKER_SYMBOL(bsp_section_armexidx_end)
+LINKER_SYMBOL(bsp_section_armexidx_size)
+LINKER_SYMBOL(bsp_section_armexidx_load_begin)
+LINKER_SYMBOL(bsp_section_armexidx_load_end)
+
 LINKER_SYMBOL(bsp_section_data_begin)
 LINKER_SYMBOL(bsp_section_data_end)
 LINKER_SYMBOL(bsp_section_data_size)
