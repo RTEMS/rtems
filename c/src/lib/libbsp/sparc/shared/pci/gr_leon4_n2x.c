@@ -164,6 +164,7 @@ struct drvmgr_drv_ops gr_cpci_leon4_n2x_ops =
 struct pci_dev_id_match gr_cpci_leon4_n2x_ids[] =
 {
 	PCIID_DEVVEND(PCIID_VENDOR_GAISLER, PCIID_DEVICE_GR_LEON4_N2X),
+	PCIID_DEVVEND(PCIID_VENDOR_GAISLER, PCIID_DEVICE_GR_NGMP_PROTO),
 	PCIID_END_TABLE /* Mark end of table */
 };
 
@@ -351,15 +352,17 @@ int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
 	/* Get extended Interrupt controller IRQ number */
 	priv->eirq = (priv->irq->mpstat >> 16) & 0xf;
 
-	/* Find first Clock-Gating unit, enable/disable the requested cores */
+	/* Find first Clock-Gating unit, enable/disable the requested cores.
+	 * It is optional in order to support FPGA prototypes.
+	 */
+	priv->cg = NULL;
 	tmp = (struct ambapp_dev *)ambapp_for_each(&priv->abus,
 				(OPTIONS_ALL|OPTIONS_APB_SLVS),
 				VENDOR_GAISLER, GAISLER_CLKGATE,
 				ambapp_find_by_idx, NULL);
-	if ( !tmp ) {
-		return -5;
-	}
-	priv->cg = (struct l4n2x_grcg_regs *)DEV_TO_APB(tmp)->start;
+	if (tmp)
+		priv->cg = (struct l4n2x_grcg_regs *)DEV_TO_APB(tmp)->start;
+
 	/* Do reset and enable sequence only if not already enabled */
 	if (priv->cg && ((enabled = priv->cg->enable) != priv->cg_en_mask)) {
 		/* First disable already enabled cores */
