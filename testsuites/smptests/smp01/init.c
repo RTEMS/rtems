@@ -26,10 +26,12 @@ rtems_task Init(
 {
   int                i;
   char               ch;
-  int                cpu_num;
+  int                cpu_self;
   rtems_id           id;
   rtems_status_code  status;
   bool               allDone;
+
+  cpu_self = bsp_smp_processor_id();
 
   /* XXX - Delay a bit to allow debug messages from
    * startup to print.  This may need to go away when
@@ -47,32 +49,33 @@ rtems_task Init(
   }
 
   /* Create and start tasks for each processor */
-  for ( i=1; i< rtems_smp_get_number_of_processors() ; i++ ) {
-    ch = '0' + i;
+  for ( i=0; i< rtems_smp_get_number_of_processors() ; i++ ) {
+    if ( i != cpu_self ) {
+      ch = '0' + i;
 
-    status = rtems_task_create(
-      rtems_build_name( 'T', 'A', ch, ' ' ),
-      1,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &id
-    );
-    directive_failed( status, "task create" );
+      status = rtems_task_create(
+        rtems_build_name( 'T', 'A', ch, ' ' ),
+        1,
+        RTEMS_MINIMUM_STACK_SIZE,
+        RTEMS_DEFAULT_MODES,
+        RTEMS_DEFAULT_ATTRIBUTES,
+        &id
+      );
+      directive_failed( status, "task create" );
 
-    cpu_num = bsp_smp_processor_id();
-    locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
-    status = rtems_task_start( id, Test_task, i+1 );
-    directive_failed( status, "task start" );
+      locked_printf(" CPU %d start task TA%c\n", cpu_self, ch);
+      status = rtems_task_start( id, Test_task, i+1 );
+      directive_failed( status, "task start" );
 
-    Loop();
+      Loop();
+    }
   }
   
   /* Wait on the all tasks to run */
   while (1) {
     allDone = true;
-    for ( i=1; i<rtems_smp_get_number_of_processors() ; i++ ) {
-      if (TaskRan[i] == false)
+    for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+      if ( i != cpu_self && TaskRan[i] == false)
         allDone = false;
     }
     if (allDone) {
