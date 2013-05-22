@@ -25,6 +25,13 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Semaphore count per FAT filesystem instance.
+ *
+ * This can be used for system configuration via <rtems/confdefs.h>.
+ */
+#define RTEMS_DOSFS_SEMAPHORES_PER_INSTANCE 1
+
 int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
                            const void                           *data);
 
