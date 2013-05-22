@@ -24,7 +24,7 @@
 
 #include <rtems/score/cpu.h>
 
-#ifdef ARM_MULTILIB_ARCH_V7M
+#ifdef ARM_MULTILIB_HAS_WFI
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
@@ -33,4 +33,4 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
   }
 }
 
-#endif /* ARM_MULTILIB_ARCH_V7M */
+#endif /* ARM_MULTILIB_HAS_WFI */

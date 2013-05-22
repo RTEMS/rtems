@@ -37,6 +37,12 @@ extern "C" {
   #define ARM_MULTILIB_ARCH_V4
 #endif
 
+#if defined(__ARM_ARCH_7A__) \
+  || defined(__ARM_ARCH_7R__) \
+  || defined(__ARM_ARCH_7M__)
+  #define ARM_MULTILIB_HAS_WFI
+#endif
+
 #if defined(__ARM_NEON__)
   #define ARM_MULTILIB_VFP_D32
 #elif !defined(__SOFTFP__)
