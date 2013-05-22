@@ -12,6 +12,9 @@
  *  Modifications to support reference counting in the file system are
  *  Copyright (c) 2012 embedded brains GmbH.
  *
+ *  Modifications to support UTF-8 in the file system are
+ *  Copyright (c) 2013 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -89,14 +92,32 @@ void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry)
  *     RC_OK on success, or -1 if error occured (errno set apropriately).
  *
  */
-int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
-                           const void                           *data)
+int rtems_dosfs_initialize(
+  rtems_filesystem_mount_table_entry_t *mt_entry,
+  const void                           *data
+)
 {
-    int rc;
+    int                                rc = 0;
+    const rtems_dosfs_mount_options   *mount_options = data;
+    rtems_dosfs_convert_control       *converter;
 
-    rc = msdos_initialize_support(mt_entry,
-                                  &msdos_ops,
-                                  &msdos_file_handlers,
-                                  &msdos_dir_handlers);
+
+    if (mount_options == NULL || mount_options->converter == NULL) {
+        converter = rtems_dosfs_create_default_converter();
+    } else {
+        converter = mount_options->converter;
+    }
+
+    if (converter != NULL) {
+        rc = msdos_initialize_support(mt_entry,
+                                      &msdos_ops,
+                                      &msdos_file_handlers,
+                                      &msdos_dir_handlers,
+                                      converter);
+    } else {
+        errno = ENOMEM;
+        rc = -1;
+    }
+
     return rc;
 }

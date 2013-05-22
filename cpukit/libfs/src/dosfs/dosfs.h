@@ -1,14 +1,17 @@
 /**
- * @file rtems/dosfs.h
+ * @file
  *
- * @brief Application Interface to MSDOS Filesystem
+ * @brief Application Interface to FAT Filesystem
  *
- * @ingroup rtems_msdos_format
+ * @ingroup DOSFS
  */
 
 /*
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+ *
+ *  Modifications to support UTF-8 in the file system are
+ *  Copyright (c) 2013 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -25,6 +28,170 @@
 extern "C" {
 #endif
 
+typedef struct rtems_dosfs_convert_control rtems_dosfs_convert_control;
+
+/**
+ * @brief Converts from UTF-8 into a specific code page.
+ *
+ * @param[in/out] self The convert control.
+ * @param[in] src A well-formed UTF-8 string to be converted.
+ * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[out] dst The address the converted string will get copied to.
+ * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * number of bytes written to the buffer.
+ *
+ * @retval 0 Successful operation.
+ * @retval EINVAL Conversion was successful, but is not reversible.
+ * @retval ENOMEM Conversion failed (possibly due to insufficient buffer size).
+ */
+typedef int (*rtems_dosfs_utf8_to_codepage)(
+  rtems_dosfs_convert_control *self,
+  const uint8_t               *src,
+  size_t                       src_size,
+  char                        *dst,
+  size_t                      *dst_size
+);
+
+/**
+ * @brief Converts from a specific code page into UTF-8
+ *
+ * @param[in/out] self The convert control.
+ * @param[in] src A well-formed string in code page format.
+ * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[out] dst The address the converted string will get copied to.
+ * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * number of bytes written to the buffer.
+ *
+ * @retval 0 Successful operation.
+ * @retval EINVAL Conversion was successful, but is not reversible.
+ * @retval ENOMEM Conversion failed (possibly due to insufficient buffer size).
+ */
+typedef int (*rtems_dosfs_codepage_to_utf8)(
+  rtems_dosfs_convert_control *self,
+  const char                  *src,
+  size_t                       src_size,
+  uint8_t                     *dst,
+  size_t                      *dst_size
+);
+
+/**
+ * @brief Converts from UTF-8 to UTF-16
+ *
+ * @param[in/out] self The convert control.
+ * @param[in] src A well-formed UTF-8 string to be converted.
+ * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[out] dst The address the converted string will get copied to
+ * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * number of bytes written to the buffer.
+ *
+ * @retval 0 Successful operation.
+ * @retval EINVAL Conversion was successful, but is not reversible.
+ * @retval ENOMEM Conversion failed (possibly due to insufficient buffer size).
+ */
+typedef int (*rtems_dosfs_utf8_to_utf16)(
+  rtems_dosfs_convert_control *self,
+  const uint8_t               *src,
+  size_t                       src_size,
+  uint16_t                    *dst,
+  size_t                      *dst_size
+);
+
+/**
+ * @brief Converts from UTF-16 to UTF-8.
+ *
+ * @param[in/out] self The convert control.
+ * @param[in] src A well-formed UTF-16 string to be converted.
+ * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[out] dst The address the converted string will get copied to.
+ * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * number of bytes written to the buffer
+ *
+ * @retval 0 Successful operation.
+ * @retval EINVAL Conversion was successful, but is not reversible.
+ * @retval ENOMEM Conversion failed (possibly due to insufficient buffer size).
+ */
+typedef int (*rtems_dosfs_utf16_to_utf8)(
+  rtems_dosfs_convert_control *self,
+  const uint16_t              *src,
+  size_t                       src_size,
+  uint8_t                     *dst,
+  size_t                      *dst_size
+);
+
+/**
+ * @brief Converts from UTF-8 to Normalized Form Canonical Decomposition.
+ *
+ * Does canonical decomposition of the UTF-8 string and in addition
+ * also converts upper case alphabetic characters to lower case characters
+ *
+ * @param[in/out] self The convert control.
+ * @param[in] src A well-formed UTF-8 string to be normalized and fold.
+ * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
+ * @param[out] dst The address the normalized and fold string will get
+ * copied to.
+ * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * number of bytes written to the buffer.
+ *
+ * @retval 0 Successful operation.
+ * @retval EINVAL Conversion failed.
+ * @retval ENOMEM Conversion failed (possibly due to insufficient buffer size).
+ * @retval EOVERFLOW Conversion failed.
+ * @retval ENOENT Conversion failed.
+ */
+typedef int (*rtems_dosfs_utf8_normalize_and_fold)(
+  rtems_dosfs_convert_control *self,
+  const uint8_t               *src,
+  size_t                       src_size,
+  uint8_t                     *dst,
+  size_t                      *dst_size
+);
+
+/**
+ * @brief Destroys a convert control structure.
+ *
+ * @param[in/out] self The convert control for destruction.
+ */
+typedef void (*rtems_dosfs_convert_destroy)(
+  rtems_dosfs_convert_control *self
+);
+
+/**
+ * @brief FAT filesystem convert handler.
+ */
+typedef struct {
+  rtems_dosfs_utf8_to_codepage        utf8_to_codepage;
+  rtems_dosfs_codepage_to_utf8        codepage_to_utf8;
+  rtems_dosfs_utf8_to_utf16           utf8_to_utf16;
+  rtems_dosfs_utf16_to_utf8           utf16_to_utf8;
+  rtems_dosfs_utf8_normalize_and_fold utf8_normalize_and_fold;
+  rtems_dosfs_convert_destroy         destroy;
+} rtems_dosfs_convert_handler;
+
+typedef struct {
+  void   *data;
+  size_t  size;
+} rtems_dosfs_buffer;
+
+/**
+ * @brief FAT filesystem convert control.
+ *
+ * Short file names are stored in the code page format.  Long file names are
+ * stored as little-endian UTF-16.  The convert control determines the format
+ * conversions to and from the POSIX file name strings.
+ */
+struct rtems_dosfs_convert_control {
+  const rtems_dosfs_convert_handler *handler;
+  rtems_dosfs_buffer                 buffer;
+};
+
+/**
+ * @defgroup DOSFS FAT Filesystem Support
+ *
+ * @ingroup FileSystemTypesAndMount
+ *
+ * @{
+ */
+
 /**
  * @brief Semaphore count per FAT filesystem instance.
  *
@@ -32,16 +199,27 @@ extern "C" {
  */
 #define RTEMS_DOSFS_SEMAPHORES_PER_INSTANCE 1
 
-int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
-                           const void                           *data);
+/**
+ * @brief FAT filesystem mount options.
+ */
+typedef struct {
+  /**
+   * @brief Converter implementation for new filesystem instance.
+   *
+   * @see rtems_dosfs_create_default_converter().
+   */
+  rtems_dosfs_convert_control *converter;
+} rtems_dosfs_mount_options;
 
 /**
- * @defgroup rtems_msdos_format DOSFS Support
+ * @brief Allocates and initializes a default converter.
  *
- * @ingroup FileSystemTypesAndMount
+ * @retval NULL Something failed.
+ * @retval other Pointer to initialized converter.
  *
+ * @see rtems_dosfs_mount_options and mount().
  */
-/**@{**/
+rtems_dosfs_convert_control *rtems_dosfs_create_default_converter(void);
 
 #define MSDOS_FMT_INFO_LEVEL_NONE   (0)
 #define MSDOS_FMT_INFO_LEVEL_INFO   (1)
@@ -130,6 +308,9 @@ int msdos_format (
 );
 
 /** @} */
+
+int rtems_dosfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
+                           const void                           *data);
 
 #ifdef __cplusplus
 }

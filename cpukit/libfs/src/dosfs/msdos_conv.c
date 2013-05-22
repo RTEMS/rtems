@@ -22,17 +22,37 @@
  * $NetBSD: msdosfs_conv.c,v 1.10 1994/12/27 18:36:24 mycroft Exp $
  *
  * October 1992
+ *
+ * Modifications to support UTF-8 in the file system are
+ * Copyright (c) 2013 embedded brains GmbH.
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <rtems.h>
 #include "msdos.h"
 
 /* #define SECONDSPERDAY (24 * 60 * 60) */
 #define SECONDSPERDAY ((uint32_t) 86400)
+
+#define UTF8_MAX_CHAR_SIZE    4
+#define UTF8_NULL             0x00
+#define UTF8_NULL_SIZE        1
+#define UTF8_BLANK            0x20
+#define UTF8_BLANK_SIZE       1
+#define UTF8_FULL_STOP        0x2e
+#define UTF8_FULL_STOP_SIZE   1
+
+#define UTF16_MAX_CHAR_SIZE   4
+#define UTF16_NULL            CT_LE_W( 0x0000 )
+#define UTF16_NULL_SIZE       2
+#define UTF16_BLANK           CT_LE_W( 0x0020 )
+#define UTF16_BLANK_SIZE      2
+#define UTF16_FULL_STOP       CT_LE_W( 0x002e )
+#define UTF16_FULL_STOP_SIZE  2
 
 /*
  * Days in each month in a regular year.
@@ -174,150 +194,485 @@ msdos_date_dos2unix(unsigned int dd, unsigned int dt)
 	return seconds + lastseconds;
 }
 
-static const uint8_t msdos_map[] = {
+
+static const uint8_t codepage_valid_char_map[] = {
     0,    0,    0,    0,    0,    0,    0,    0,    /* 00-07 */
     0,    0,    0,    0,    0,    0,    0,    0,    /* 08-0f */
     0,    0,    0,    0,    0,    0,    0,    0,    /* 10-17 */
     0,    0,    0,    0,    0,    0,    0,    0,    /* 18-1f */
-    0,    '!',  0,    '#',  '$',  '%',  '&',  '\'', /* 20-27 */
-    '(',  ')',  0,    '+',  0,    '-',  0,    0,    /* 28-2f */
-    '0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',  /* 30-37 */
-    '8',  '9',  0,    0,    0,    0,    0,    0,    /* 38-3f */
-    '@',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  /* 40-47 */
-    'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',  /* 48-4f */
-    'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  /* 50-57 */
-    'X',  'Y',  'Z',  0,    0,    0,    '^',  '_',  /* 58-5f */
-    '`',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  /* 60-67 */
-    'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',  /* 68-6f */
-    'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',  /* 70-77 */
-    'X',  'Y',  'Z',  '{',  0,    '}',  '~',  0,    /* 78-7f */
-    0,    0,    0,    0,    0,    0,    0,    0,    /* 80-87 */
-    0,    0,    0,    0,    0,    0,    0,    0,    /* 88-8f */
-    0,    0,    0,    0,    0,    0,    0,    0,    /* 90-97 */
-    0,    0,    0,    0,    0,    0,    0,    0,    /* 98-9f */
-    0,    0xad, 0xbd, 0x9c, 0xcf, 0xbe, 0xdd, 0xf5, /* a0-a7 */
-    0xf9, 0xb8, 0xa6, 0xae, 0xaa, 0xf0, 0xa9, 0xee, /* a8-af */
-    0xf8, 0xf1, 0xfd, 0xfc, 0xef, 0xe6, 0xf4, 0xfa, /* b0-b7 */
-    0xf7, 0xfb, 0xa7, 0xaf, 0xac, 0xab, 0xf3, 0xa8, /* b8-bf */
-    0xb7, 0xb5, 0xb6, 0xc7, 0x8e, 0x8f, 0x92, 0x80, /* c0-c7 */
-    0xd4, 0x90, 0xd2, 0xd3, 0xde, 0xd6, 0xd7, 0xd8, /* c8-cf */
-    0xd1, 0xa5, 0xe3, 0xe0, 0xe2, 0xe5, 0x99, 0x9e, /* d0-d7 */
-    0x9d, 0xeb, 0xe9, 0xea, 0x9a, 0xed, 0xe8, 0xe1, /* d8-df */
-    0xb7, 0xb5, 0xb6, 0xc7, 0x8e, 0x8f, 0x92, 0x80, /* e0-e7 */
-    0xd4, 0x90, 0xd2, 0xd3, 0xde, 0xd6, 0xd7, 0xd8, /* e8-ef */
-    0xd1, 0xa5, 0xe3, 0xe0, 0xe2, 0xe5, 0x99, 0xf6, /* f0-f7 */
-    0x9d, 0xeb, 0xe9, 0xea, 0x9a, 0xed, 0xe8, 0x98, /* f8-ff */
-#if OLD_TABLE
-/* 00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 18 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 20 */ 0x00, 0x21, 0x00, 0x23, 0x24, 0x25, 0x26, 0x27, /*  !"#$%&' */
-/* 28 */ 0x28, 0x29, 0x00, 0x00, 0x00, 0x2D, 0x2E, 0x00, /* ()*+,-./ */
-/* 30 */ 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, /* 01234567 */
-/* 38 */ 0x38, 0x39, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 89:;<=>? */
-/* 40 */ 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, /* @ABCDEFG */
-/* 48 */ 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, /* HIJKLMNO */
-/* 50 */ 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, /* PQRSTUVW */
-/* 58 */ 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x00, 0x5E, 0x5F, /* XYZ[\]^_ */
-/* 60 */ 0x60, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, /* `abcdefg */
-/* 68 */ 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, /* hijklmno */
-/* 70 */ 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, /* pqrstuvw */
-/* 78 */ 0x58, 0x59, 0x5A, 0x5B, 0x7C, 0x00, 0x7E, 0x00, /* xyz{|}~  */
-/* 80 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 88 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 90 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* 98 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* A0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* A8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* B0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* B8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* C0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* C8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* D0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* D8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* E0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* E8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* F0 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-/* F8 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-#endif
+    0x20, 0x21, 0,    0x23, 0x24, 0x25, 0x26, 0x27, /* 20-27 */
+    0x28, 0x29, 0,    0,    0,    0x2d,  0,    0,   /* 28-2f */
+    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, /* 30-37 */
+    0x38, 0x39, 0,    0,    0,    0,    0,    0,    /* 38-3f */
+    0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, /* 40-47 */
+    0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f, /* 48-4f */
+    0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, /* 50-57 */
+    0x58, 0x59, 0x5a, 0,    0,    0,    0x5e, 0x5f, /* 58-5f */
+    0x60, 0,    0,    0,    0,    0,    0,    0,    /* 60-67 */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 68-6f */
+    0,    0,    0,    0,    0,    0,    0,    0,    /* 70-77 */
+    0,    0,    0,    0x7b, 0,    0x7d, 0x7e, 0,    /* 78-7f */
+    0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, /* 80-87 */
+    0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, /* 88-8f */
+    0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, /* 90-97 */
+    0x98, 0x99, 0x9a, 0x9b, 0x9c, 0x9d, 0x9e, 0x9f, /* 98-9f */
+    0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, /* a0-a7 */
+    0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, /* a8-af */
+    0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5, 0xb6, 0xb7, /* b0-b7 */
+    0xb8, 0xb9, 0xba, 0xbb, 0xbc, 0xbd, 0xbe, 0xbf, /* b8-bf */
+    0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, /* c0-c7 */
+    0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, /* c8-cf */
+    0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7, /* d0-d7 */
+    0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xdf, /* d8-df */
+    0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, /* e0-e7 */
+    0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef, /* e8-ef */
+    0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, /* f0-f7 */
+    0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff  /* f8-ff */
 };
-/*
- * Convert a unix filename to a DOS filename. Return -1 if wrong name is
- * supplied.
- */
-int
-msdos_filename_unix2dos(const char *un, int unlen, char *dn)
+
+static uint16_t
+msdos_get_valid_utf16_filename_character (const uint16_t utf16_character)
 {
-	int i;
-	uint8_t c;
+  uint16_t retval    = 0x0000;
+  uint16_t char_num  = CF_LE_W( utf16_character );
 
-	/*
-	 * Fill the dos filename string with blanks. These are DOS's pad
-	 * characters.
-	 */
-	for (i = 0; i <= 10; i++)
-		dn[i] = ' ';
+  if ( char_num <= 0x00ff ) {
+    switch ( char_num )
+    {
+      case 0x002b: /* '+' */
+      case 0x002c: /* ',' */
+      case 0x002e: /* '.' */
+      case 0x003b: /* ';' */
+      case 0x003d: /* '=' */
+      case 0x005b: /* '[' */
+      case 0x005d: /* ']' */
+      case 0x0061: /* 'a' */
+      case 0x0062: /* 'b' */
+      case 0x0063: /* 'c' */
+      case 0x0064: /* 'd' */
+      case 0x0065: /* 'e' */
+      case 0x0066: /* 'f' */
+      case 0x0067: /* 'g' */
+      case 0x0068: /* 'h' */
+      case 0x0069: /* 'i' */
+      case 0x006a: /* 'j' */
+      case 0x006b: /* 'k' */
+      case 0x006c: /* 'l' */
+      case 0x006d: /* 'm' */
+      case 0x006e: /* 'n' */
+      case 0x006f: /* 'o' */
+      case 0x0070: /* 'p' */
+      case 0x0071: /* 'q' */
+      case 0x0072: /* 'r' */
+      case 0x0073: /* 's' */
+      case 0x0074: /* 't' */
+      case 0x0075: /* 'u' */
+      case 0x0076: /* 'v' */
+      case 0x0077: /* 'w' */
+      case 0x0078: /* 'x' */
+      case 0x0079: /* 'y' */
+      case 0x007a: /* 'z' */
+        retval = char_num;
+      break;
+      default:
+        retval = codepage_valid_char_map[char_num];
+      break;
+    }
+  }
+  else
+    retval = char_num;
 
-	/*
-	 * The filenames "." and ".." are handled specially, since they
-	 * don't follow dos filename rules.
-	 */
-	if (un[0] == '.' && unlen == 1) {
-		dn[0] = '.';
-		return 0;
-	}
-	if (un[0] == '.' && un[1] == '.' && unlen == 2) {
-		dn[0] = '.';
-		dn[1] = '.';
-		return 0;
-	}
+  return CT_LE_W( retval );
+}
+
+static char
+msdos_get_valid_codepage_filename_character (const uint8_t character)
+{
+  return codepage_valid_char_map[(unsigned int)character];
+}
+
+static ssize_t
+msdos_filename_process_dot_names (const uint8_t *src_name,
+                                  const size_t   src_size,
+                                  uint8_t       *dest_name,
+                                  const size_t   dest_size)
+{
+  ssize_t returned_size = 0;
+  int     eno           = 0;
+  /*
+    * The filenames "." and ".." are handled specially, since they
+    * don't follow dos filename rules.
+    */
+   if (    src_name[0] == UTF8_FULL_STOP
+        && src_size    == UTF8_FULL_STOP_SIZE) {
+     if (dest_size >= UTF8_FULL_STOP_SIZE) {
+       dest_name[0]  = UTF8_FULL_STOP;
+       returned_size = UTF8_FULL_STOP_SIZE;
+     }
+     else
+       eno = ENAMETOOLONG;
+   }
+   else if (    eno           == 0
+             && src_name[0]   == UTF8_FULL_STOP
+             && src_name[1]   == UTF8_FULL_STOP
+             && src_size      == ( 2 * UTF8_FULL_STOP_SIZE ) ) {
+     if (dest_size >= 2 * UTF8_FULL_STOP_SIZE) {
+       dest_name[0]  = UTF8_FULL_STOP;
+       dest_name[1]  = UTF8_FULL_STOP;
+       returned_size = 2 * UTF8_FULL_STOP_SIZE;
+     }
+     else
+       eno = ENAMETOOLONG;
+   }
+
+   if (eno != 0) {
+     errno         = eno;
+     returned_size = -1;
+   }
+
+   return returned_size;
+}
+
+static ssize_t
+msdos_filename_delete_trailing_dots (const uint8_t *filename_utf8,
+                                     const size_t   filename_size)
+{
+  ssize_t      size_returned = filename_size;
+  unsigned int i;
 
   /*
-   * Remove any dots from the start of a file name.
+   * Remove any dots from the end of a file name.
    */
-	while (unlen && (*un == '.')) {
-		un++;
-		unlen--;
-	}
+  for ( i = size_returned - UTF8_FULL_STOP_SIZE;
+           size_returned >= UTF8_FULL_STOP_SIZE
+        && filename_utf8[i] == UTF8_FULL_STOP;) {
+    size_returned -= UTF8_FULL_STOP_SIZE;
+    i             -= UTF8_FULL_STOP_SIZE;
+  }
 
-	/*
-	 * Copy the unix filename into the dos filename string upto the end
-	 * of string, a '.', or 8 characters. Whichever happens first stops
-	 * us. This forms the name portion of the dos filename. Fold to
-	 * upper case.
-	 */
-	for (i = 0; i <= 7 && unlen && (c = *un) && c != '.'; i++) {
-    if (msdos_map[c] == 0)
-      break;
-		dn[i] = msdos_map[c];
-		un++;
-		unlen--;
-	}
-
-	/*
-	 * Strip any further characters up to a '.' or the end of the
-	 * string.
-	 */
-	while (unlen && (c = *un)) {
-		un++;
-		unlen--;
-		/* Make sure we've skipped over the dot before stopping. */
-		if (c == '.')
-			break;
-	}
-
-	/*
-	 * Copy in the extension part of the name, if any. Force to upper
-	 * case. Note that the extension is allowed to contain '.'s.
-	 * Filenames in this form are probably inaccessable under dos.
-	 */
-	for (i = 8; i <= 10 && unlen && (c = *un); i++) {
-    if (msdos_map[c] == 0)
-      break;
-    dn[i] = msdos_map[c];
-		un++;
-		unlen--;
-	}
-	return 0;
+  return size_returned;
 }
+
+ssize_t
+msdos_filename_utf8_to_long_name_for_compare (
+    rtems_dosfs_convert_control     *converter,
+    const uint8_t                   *utf8_name,
+    const size_t                     utf8_name_size,
+    uint8_t                         *long_name,
+    const size_t                     long_name_size)
+  {
+    ssize_t        returned_size = 0;
+    int            eno           = 0;
+    size_t         name_size;
+    size_t         dest_size     = long_name_size;
+
+    returned_size = msdos_filename_process_dot_names (
+      utf8_name,
+      utf8_name_size,
+      long_name,
+      long_name_size);
+
+    if (returned_size == 0) {
+      name_size = msdos_filename_delete_trailing_dots (
+        &utf8_name[0],
+        utf8_name_size);
+      if (name_size > 0) {
+        eno = (*converter->handler->utf8_normalize_and_fold) (
+          converter,
+          utf8_name,
+          name_size,
+          long_name,
+          &dest_size);
+        if (eno == 0) {
+          returned_size = (ssize_t)dest_size;
+        }
+      } else {
+        eno = EINVAL;
+      }
+    }
+
+    if ( eno != 0 ) {
+      errno         = eno;
+      returned_size = -1;
+    }
+
+    return returned_size;
+  }
+
+ssize_t
+msdos_filename_utf8_to_long_name_for_save (
+    rtems_dosfs_convert_control     *converter,
+    const uint8_t                   *utf8_name,
+    const size_t                     utf8_name_size,
+    uint16_t                        *long_name,
+    const size_t                     long_name_size)
+{
+    ssize_t      returned_size = 0;
+    int          eno           = 0;
+    size_t       name_size     = utf8_name_size;
+    size_t       name_size_tmp = long_name_size / MSDOS_NAME_LFN_BYTES_PER_CHAR;
+    int          i;
+    uint16_t     c;
+    unsigned int chars_written;
+
+    name_size_tmp = long_name_size;
+    name_size = msdos_filename_delete_trailing_dots (
+      &utf8_name[0],
+      utf8_name_size);
+    if (name_size > 0) {
+      /*
+       * Finally convert from UTF-8 to UTF-16
+       */
+      eno = (*converter->handler->utf8_to_utf16) (
+          converter,
+          utf8_name,
+          name_size,
+          &long_name[0],
+          &name_size_tmp);
+      if (eno == 0) {
+        if (name_size_tmp <= (MSDOS_NAME_MAX_LNF_LEN * MSDOS_NAME_LFN_BYTES_PER_CHAR))
+          name_size = name_size_tmp;
+        else
+          eno = ENAMETOOLONG;
+      }
+
+      if ( eno == 0 )
+      {
+        /*
+         * Validate the characters and assign them to the UTF-16 file name
+         */
+        for ( i = 0;
+                 name_size
+              && (c = msdos_get_valid_utf16_filename_character ( long_name[i]) );
+              ++i ) {
+          long_name[i]   = c;
+          returned_size += MSDOS_NAME_LFN_BYTES_PER_CHAR;
+          name_size     -= MSDOS_NAME_LFN_BYTES_PER_CHAR;
+        }
+        if ( name_size == UTF16_NULL_SIZE && c == UTF16_NULL ) {
+          long_name[i]   = c;
+          returned_size += MSDOS_NAME_LFN_BYTES_PER_CHAR;
+          name_size     -= MSDOS_NAME_LFN_BYTES_PER_CHAR;
+        }
+        else if ( name_size != 0 )
+          eno = EINVAL;
+        chars_written = returned_size / MSDOS_NAME_LFN_BYTES_PER_CHAR;
+        if (   long_name [chars_written - 1] != UTF16_NULL
+            && (returned_size + UTF16_NULL_SIZE ) <= long_name_size ) {
+          long_name[chars_written] = UTF16_NULL;
+        }
+      }
+    }
+    else
+      eno = EINVAL;
+
+    if ( eno != 0 ) {
+      errno         = eno;
+      returned_size = -1;
+    }
+
+    return returned_size;
+  }
+
+/*
+ * Remove any dots from the start of a file name.
+ */
+static void msdos_filename_remove_prepended_dots (const uint8_t **name_utf8,
+                                                  size_t         *name_size)
+{
+  while (    *name_size >= UTF8_FULL_STOP_SIZE
+         && **name_utf8 == UTF8_FULL_STOP) {
+    *name_utf8  += UTF8_FULL_STOP_SIZE;
+    *name_size  -= UTF8_FULL_STOP_SIZE;
+  }
+}
+
+ssize_t
+msdos_filename_utf8_to_short_name_for_compare (
+    rtems_dosfs_convert_control     *converter,
+    const uint8_t                   *utf8_name,
+    const size_t                     utf8_name_size,
+    void                            *short_name,
+    const size_t                     short_name_size)
+{
+  ssize_t        returned_size           = 0;
+  int            eno                     = 0;
+  const uint8_t *name_ptr                = utf8_name;
+  char          *dest_ptr                = (char*)short_name;
+  size_t         name_size               = utf8_name_size;
+  uint8_t        name_normalized_buf[(MSDOS_SHORT_NAME_LEN +1) * MSDOS_NAME_MAX_UTF8_BYTES_PER_CHAR];
+  size_t         name_size_tmp           = sizeof(name_normalized_buf);
+
+  returned_size = msdos_filename_process_dot_names (
+    utf8_name,
+    utf8_name_size,
+    short_name,
+    short_name_size);
+
+  if (returned_size == 0) {
+    msdos_filename_remove_prepended_dots (&name_ptr,
+                                          &name_size);
+    if (name_size > 0) {
+      /*
+       * Normalize the name and convert to lower case
+       */
+      eno = (*converter->handler->utf8_normalize_and_fold) (
+        converter,
+        name_ptr,
+        name_size,
+        &name_normalized_buf[0],
+        &name_size_tmp);
+      name_ptr  = &name_normalized_buf[0];
+      name_size = name_size_tmp;
+      if ( eno == ENOMEM ) {
+        eno = 0;
+      }
+      if ( eno == 0 ) {
+        memcpy (&dest_ptr[0], &name_ptr[0], name_size);
+        returned_size = name_size;
+      }
+    } else
+      eno = EINVAL;
+  }
+
+  if ( eno != 0 ) {
+    errno         = eno;
+    returned_size = -1;
+  }
+
+  return returned_size;
+}
+
+ssize_t
+msdos_filename_utf8_to_short_name_for_save (
+    rtems_dosfs_convert_control     *converter,
+    const uint8_t                   *utf8_name,
+    const size_t                     utf8_name_size,
+    void                            *short_name,
+    const size_t                     short_name_size)
+{
+  ssize_t        returned_size           = 0;
+  int            eno                     = 0;
+  const uint8_t *name_ptr                = utf8_name;
+  size_t         name_size               = utf8_name_size;
+  char          *dest_ptr                = (char*)short_name;
+  unsigned int   i;
+  char           c;
+  size_t         name_size_tmp;
+  char           name_to_format_buf[MSDOS_SHORT_NAME_LEN +1];
+
+  returned_size = msdos_filename_process_dot_names (
+    utf8_name,
+    utf8_name_size,
+    short_name,
+    short_name_size);
+
+  if (returned_size == 0) {
+    msdos_filename_remove_prepended_dots (&name_ptr,
+                                          &name_size);
+
+    if (name_size > 0) {
+      /*
+       * Finally convert from UTF-8 to codepage
+       */
+      name_size_tmp = sizeof ( name_to_format_buf );
+      eno = (*converter->handler->utf8_to_codepage) (
+        converter,
+        name_ptr,
+        name_size,
+        &name_to_format_buf[0],
+        &name_size_tmp);
+      if ( eno != 0 ) {
+        /* The UTF-8 name my well be long name, for which we now want to
+         * generate the corresponding short name. Under these circumstances
+         * eno != 0 likely simply means that the UTF-8 name is longer than 11 characters
+         * or that it contains unicode characters which can not be converted to the code page
+         * in a reversible way. Non-reversible characters will be represented by question mark
+         * characters. Later in this method they will get replaced by underline characters.
+         */
+        eno = 0;
+      }
+      name_ptr  = (const uint8_t *)(&name_to_format_buf[0]);
+      name_size = name_size_tmp;
+      for (i = 0; i < name_size; ++i)
+        name_to_format_buf[i] = toupper ( (unsigned char)(name_to_format_buf[i]) );
+      /*
+       * Validate the characters and assign them to the codepage file name
+       */
+      if ( name_size > 0 ) {
+        /*
+         * The first character needs some special treatment
+         */
+        if ( 0x20 == *name_ptr )
+          dest_ptr[0] = '_';
+        else if ( 0xE5 == *name_ptr )
+          dest_ptr[0] = 0x05;
+        else if (0 != (c = msdos_get_valid_codepage_filename_character( *name_ptr ) ) )
+          dest_ptr[0] = c;
+        else
+          dest_ptr[0] = '_';
+        ++name_ptr;
+        ++returned_size;
+        --name_size;
+        /*
+         * Validate and assign all other characters of the name part
+         */
+        for (i = 1; i <= 7 && name_size && *name_ptr != '.'; ++i) {
+          c = msdos_get_valid_codepage_filename_character ( *name_ptr );
+          if (c != 0)
+            dest_ptr[i] = c;
+          else
+            dest_ptr[i] = '_';
+          ++name_ptr;
+          ++returned_size;
+          --name_size;
+        }
+        /*
+         * Strip any further characters up to a '.' or the end of the
+         * string.
+         */
+        if ( *name_ptr == '.' ) {
+          ++name_ptr;
+          --name_size;
+        }
+
+        for (; i < 8; ++i) {
+          dest_ptr[i] = ' ';
+          ++returned_size;
+        }
+
+        /*
+         * Copy in the extension part of the name, if any.
+         */
+        for (; i <= 10 && name_size ; i++) {
+          c = msdos_get_valid_codepage_filename_character ( *name_ptr);
+          if (c != 0)
+            dest_ptr[i] = c;
+          else
+            dest_ptr[i] = '_';
+          ++name_ptr;
+          ++returned_size;
+          name_size--;
+        }
+        /*
+         * Fill up with blanks. These are DOS's pad characters.
+         */
+        for ( ; i < short_name_size; ++i ) {
+          dest_ptr[i] = ' ';
+          ++returned_size;
+        }
+      }
+    }
+    else
+      eno = EINVAL;
+  }
+
+  if ( eno != 0 ) {
+    errno = eno;
+    return -1;
+  }
+
+  return returned_size;
+}
+
+
