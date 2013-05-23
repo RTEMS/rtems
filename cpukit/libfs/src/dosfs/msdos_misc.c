@@ -42,6 +42,13 @@
 
 #include <stdio.h>
 
+#define MSDOS_LFN_ENTRY_SIZE \
+  (MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR)
+
+#define MSDOS_LFN_ENTRY_SIZE_UTF8 \
+  ((MSDOS_LFN_LEN_PER_ENTRY + 1 ) * MSDOS_NAME_LFN_BYTES_PER_CHAR \
+    * MSDOS_NAME_MAX_UTF8_BYTES_PER_CHAR)
+
 /*
  * External strings. Saves space this way.
  */
@@ -1019,7 +1026,7 @@ msdos_get_utf16_string_from_long_entry (
 {
     ssize_t chars_in_entry;
 
-    if (buf_size >= MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR) {
+    if (buf_size >= MSDOS_LFN_ENTRY_SIZE) {
         memcpy (&entry_string_buf[0],  &entry[1],  10 );
         memcpy (&entry_string_buf[5],  &entry[14], 12 );
         memcpy (&entry_string_buf[11], &entry[28],  4 );
@@ -1195,7 +1202,7 @@ msdos_compare_entry_against_filename (
 {
   ssize_t      size_remaining = filename_size_remaining;
   int          eno            = 0;
-  uint8_t      entry_normalized[( MSDOS_LFN_LEN_PER_ENTRY + 1 ) * MSDOS_NAME_LFN_BYTES_PER_CHAR * MSDOS_NAME_MAX_UTF8_BYTES_PER_CHAR];
+  uint8_t      entry_normalized[MSDOS_LFN_ENTRY_SIZE_UTF8];
   size_t       bytes_in_entry_normalized = sizeof ( entry_normalized );
 
   eno = (*converter->handler->utf8_normalize_and_fold) (
@@ -1263,7 +1270,7 @@ msdos_find_file_in_directory (
     bool              empty_space_found = false;
     uint32_t          entries_per_block = bts2rd / MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
     int               lfn_entry         = 0;
-    uint8_t           entry_utf8_normalized[(MSDOS_LFN_LEN_PER_ENTRY + 1 ) * MSDOS_NAME_LFN_BYTES_PER_CHAR * MSDOS_NAME_MAX_UTF8_BYTES_PER_CHAR/*MSDOS_ENTRY_LFN_UTF8_BYTES*/];
+    uint8_t           entry_utf8_normalized[MSDOS_LFN_ENTRY_SIZE_UTF8];
     size_t            bytes_in_entry;
     bool              filename_matched  = false;
     ssize_t           filename_size_remaining = name_len_for_compare;
@@ -1800,7 +1807,7 @@ msdos_add_file (
             *MSDOS_DIR_LFN_CHECKSUM(entry) = lfn_checksum;
 
             p = entry + 1;
-            n = name_converted + (fat_entries - lfn_entry) * MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR;
+            n = name_converted + (fat_entries - lfn_entry) * MSDOS_LFN_ENTRY_SIZE;
 
 #if MSDOS_FIND_PRINT
             printf ("MSFS:[11] ");
@@ -1919,8 +1926,8 @@ msdos_find_name_in_fat_file (
                 buffer,
                 buffer_size);
             if (name_len_for_save > 0) {
-                fat_entries = (name_len_for_save -1
-                               + (MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR)) / (MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR);
+                fat_entries = (name_len_for_save + MSDOS_LFN_ENTRY_SIZE - 1)
+                    / MSDOS_LFN_ENTRY_SIZE;
                 name_len_for_compare = msdos_filename_utf8_to_long_name_for_compare (
                   converter,
                   name_utf8,
@@ -1984,9 +1991,8 @@ msdos_find_name_in_fat_file (
                   buffer,
                   buffer_size);
               if (name_len_for_save > 0) {
-                fat_entries = (name_len_for_save -1
-                               + (MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR)) / (MSDOS_LFN_LEN_PER_ENTRY * MSDOS_NAME_LFN_BYTES_PER_CHAR);
-
+                  fat_entries = (name_len_for_save + MSDOS_LFN_ENTRY_SIZE - 1)
+                    / MSDOS_LFN_ENTRY_SIZE;
               }
               else
                   retval = -1;

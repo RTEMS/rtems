@@ -206,7 +206,8 @@ typedef struct {
   /**
    * @brief Converter implementation for new filesystem instance.
    *
-   * @see rtems_dosfs_create_default_converter().
+   * @see rtems_dosfs_create_default_converter() and
+   * rtems_dosfs_create_utf8_converter().
    */
   rtems_dosfs_convert_control *converter;
 } rtems_dosfs_mount_options;
@@ -220,6 +221,20 @@ typedef struct {
  * @see rtems_dosfs_mount_options and mount().
  */
 rtems_dosfs_convert_control *rtems_dosfs_create_default_converter(void);
+
+/**
+ * @brief Allocates and initializes a UTF-8 converter.
+ *
+ * @param[in] codepage The iconv() identification string for the used codepage.
+ *
+ * @retval NULL Something failed.
+ * @retval other Pointer to initialized converter.
+ *
+ * @see rtems_dosfs_mount_options and mount().
+ */
+rtems_dosfs_convert_control *rtems_dosfs_create_utf8_converter(
+  const char *codepage
+);
 
 #define MSDOS_FMT_INFO_LEVEL_NONE   (0)
 #define MSDOS_FMT_INFO_LEVEL_INFO   (1)
