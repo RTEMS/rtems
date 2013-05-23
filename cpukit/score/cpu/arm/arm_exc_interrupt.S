@@ -63,13 +63,13 @@ _ARMV4_Exception_interrupt:
 
 	/* Set exchange registers */
 	mov	EXCHANGE_LR, lr
-	mrs	EXCHANGE_SPSR, spsr
-	mrs	EXCHANGE_CPSR, cpsr
+	mrs	EXCHANGE_SPSR, SPSR
+	mrs	EXCHANGE_CPSR, CPSR
 	sub	EXCHANGE_INT_SP, sp, #EXCHANGE_SIZE
 
 	/* Switch to SVC mode */
 	orr	EXCHANGE_CPSR, EXCHANGE_CPSR, #0x1
-	msr	cpsr, EXCHANGE_CPSR
+	msr	CPSR_c, EXCHANGE_CPSR
 
 	/*
 	 * Save context.  We save the LR separately because it has to be
@@ -183,11 +183,11 @@ thread_dispatch_done:
 	add	sp, #CONTEXT_SIZE
 
 	/* Get INT mode program status register */
-	mrs	r1, cpsr
+	mrs	r1, CPSR
 	bic	r1, r1, #0x1
 
 	/* Switch to INT mode */
-	msr	cpsr, r1
+	msr	CPSR_c, r1
 
 	/* Save EXCHANGE_LR and EXCHANGE_SPSR registers to exchange area */
 	stmdb	sp!, {EXCHANGE_LR, EXCHANGE_SPSR}
@@ -197,7 +197,7 @@ thread_dispatch_done:
 
 	/* Set return address and program status */
 	mov	lr, EXCHANGE_LR
-	msr	spsr, EXCHANGE_SPSR
+	msr	SPSR_fsxc, EXCHANGE_SPSR
 
 	/* Restore EXCHANGE_LR and EXCHANGE_SPSR registers from exchange area */
 	ldmia	sp!, {EXCHANGE_LR, EXCHANGE_SPSR}
