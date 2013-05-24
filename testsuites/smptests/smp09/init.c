@@ -68,7 +68,7 @@ rtems_task Init(
 
   rtems_cpu_usage_report();
 
-  locked_printf( "*** END OF TEST SMP09 ***" );
+  locked_printf( "*** END OF TEST SMP09 ***\n" );
   rtems_test_exit(0);
 }
 
