@@ -64,102 +64,80 @@ int rtems_gdb_stub_thread_support_ok(void)
  *  Return the gdb thread id for the specified RTEMS thread id
  */
 
-int rtems_gdb_stub_id_to_index(
+static int rtems_gdb_stub_id_to_index(
   Objects_Id thread_obj_id
 )
 {
-  Objects_Id min_id, max_id;
-  int first_posix_id, first_rtems_id;
-  Objects_Information *obj_info;
+  int gdb_index = 0;
+  int first = 1;
+  size_t api_index;
 
   if (_System_state_Get() != SYSTEM_STATE_UP) {
     /* We have one thread let us use value reserved for idle thread */
-    return 1;
+    gdb_index = 1;
   }
 
-  if (_Thread_Executing == _Thread_Idle) {
-    return 1;
+  for (
+    api_index = 1;
+    gdb_index == 0 && api_index <= OBJECTS_APIS_LAST;
+    ++api_index
+  ) {
+    if (_Objects_Information_table[api_index] != NULL) {
+      const Objects_Information *info =
+        _Objects_Information_table[api_index][1];
+      Objects_Id min_id = info->minimum_id;
+      Objects_Id max_id = info->maximum_id;
+      int last = first + (int) (max_id - min_id);
+
+      if (thread_obj_id >= min_id && thread_obj_id < max_id) {
+        gdb_index = first + (int) (thread_obj_id - min_id);
+      }
+
+      first = last + 1;
+    }
   }
 
-  /* Let us figure out thread_id for gdb */
-  first_rtems_id = 2;
-
-  obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
-
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
-
-  if (thread_obj_id >= min_id && thread_obj_id < max_id) {
-    return first_rtems_id + (thread_obj_id - min_id);
-  }
-
-  first_posix_id = first_rtems_id + (max_id - min_id) + 1;
-
-  min_id = _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
-
-  return first_posix_id + (thread_obj_id - min_id);
+  return gdb_index;
 }
 
 /* Return the RTEMS thread id from a gdb thread id */
 Thread_Control *rtems_gdb_index_to_stub_id(
-  int thread
+  int gdb_index
 )
 {
-   Objects_Id thread_obj_id;
-   Objects_Id min_id, max_id;
-   int first_posix_id, first_rtems_id;
-   Objects_Information *obj_info;
-   Thread_Control *th;
+  Thread_Control *th = NULL;
+  int first = 1;
+  size_t api_index;
 
-   ASSERT(registers != NULL);
+  ASSERT(registers != NULL);
 
-   if (_System_state_Get() != SYSTEM_STATE_UP || thread <= 0) {
-      /* Should not happen */
-      return NULL;
-   }
+  if (_System_state_Get() != SYSTEM_STATE_UP || gdb_index <= 0) {
+     /* Should not happen */
+     return NULL;
+  }
 
-   if (thread == 1) {
-      th = _Thread_Idle;
-      goto found;
-   }
+  for (
+    api_index = 1;
+    th == NULL && api_index <= OBJECTS_APIS_LAST;
+    ++api_index
+  ) {
+    if (_Objects_Information_table[api_index] != NULL) {
+      const Objects_Information *info =
+        _Objects_Information_table[api_index][1];
+      Objects_Id min_id = info->minimum_id;
+      Objects_Id max_id = info->maximum_id;
+      int last = first + (int) (max_id - min_id);
 
-   /* Let us get object associtated with current thread */
-   first_rtems_id = 2;
-
-   thread_obj_id = _Thread_Executing->Object.id;
-
-   /* Let us figure out thread_id for gdb */
-   obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
-
-   min_id = obj_info->minimum_id;
-   max_id = obj_info->maximum_id;
-
-   if (thread <= (first_rtems_id + (max_id - min_id))) {
-      th = (Thread_Control *)(obj_info->local_table[thread - first_rtems_id + 1]);
-
-      if (th != NULL) {
-         goto found;
+      if (gdb_index <= first + (int) (max_id - min_id)) {
+        th = (Thread_Control *)
+          info->local_table[gdb_index - first + 1];
       }
 
-      /* Thread does not exist */
-      return NULL;
-   }
+      first = last + 1;
+    }
+  }
 
-   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
-
-   obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
-
-   min_id = obj_info->minimum_id;
-   max_id = obj_info->maximum_id;
-
-   th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
-   if (th == NULL) {
-      /* Thread does not exist */
-      return NULL;
-   }
-
-  found:
-   return th;
+  return th;
 }
 
 /* Get id of the thread stopped by exception */
@@ -170,70 +148,49 @@ int rtems_gdb_stub_get_current_thread(void)
 
 /* Get id of the next thread after athread, if argument <= 0 find the
    first available thread, return thread if found or 0 if not */
-int rtems_gdb_stub_get_next_thread(int athread)
+int rtems_gdb_stub_get_next_thread(int gdb_index)
 {
-  Objects_Id id, min_id, max_id;
-  int lim, first_posix_id, first_rtems_id;
-  Objects_Information *obj_info;
-  int start;
+  int next_gdb_index = 0;
+  int first = 1;
+  size_t api_index;
 
   if (_System_state_Get() != SYSTEM_STATE_UP) {
     /* We have one thread let us use value of idle thread */
-    return (athread < 1) ? 1 : 0;
+    return (gdb_index < 1) ? 1 : 0;
   }
 
-  if (athread < 1) {
-    return 1;
-  }
+  for (
+    api_index = 1;
+    next_gdb_index == 0 && api_index <= OBJECTS_APIS_LAST;
+    ++api_index
+  ) {
+    if (_Objects_Information_table[api_index] != NULL) {
+      const Objects_Information *info =
+        _Objects_Information_table[api_index][1];
+      Objects_Id min_id = info->minimum_id;
+      Objects_Id max_id = info->maximum_id;
+      int last = first + (int) (max_id - min_id);
 
-  first_rtems_id = 2;
+      if (gdb_index <= last) {
+        int start = gdb_index < first ? first : gdb_index + 1;
+        int potential_next;
 
-  obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
-
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
-
-  lim = first_rtems_id + max_id - min_id;
-
-  if (athread < lim) {
-    if (athread < first_rtems_id) {
-      start = first_rtems_id;
-    } else {
-      start = 1 + athread;
-    }
-
-    for (id=start; id<=lim; id++) {
-      if (obj_info->local_table[id - first_rtems_id + 1] != NULL) {
-        return id;
+        for (
+          potential_next = start;
+          next_gdb_index == 0 && potential_next <= last;
+          ++potential_next
+        ) {
+          if (info->local_table[potential_next - first + 1] != NULL) {
+            next_gdb_index = potential_next;
+          }
+        }
       }
+
+      first = last + 1;
     }
   }
 
-  first_posix_id = first_rtems_id + (max_id - min_id) + 1;
-
-  obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
-
-  min_id = obj_info->minimum_id;
-  max_id = obj_info->maximum_id;
-
-  lim = first_posix_id + (max_id - min_id);
-
-  if (athread < lim) {
-    if (athread < first_posix_id) {
-      start = first_posix_id;
-    } else {
-      start = 1 + athread;
-    }
-
-    for (id=start; id<=lim; id++) {
-      if (obj_info->local_table[id - first_posix_id + 1] != NULL) {
-        return id;
-      }
-    }
-  }
-
-  /* Not found */
-  return 0;
+  return next_gdb_index;
 }
 
 /* Get thread registers, return 0 if thread does not
@@ -273,25 +230,21 @@ int rtems_gdb_stub_set_thread_regs(
 
 /* Get thread information, return 0 if thread does not
    exist and 1 otherwise */
-int rtems_gdb_stub_get_thread_info(
-  int thread,
+static int rtems_gdb_stub_get_thread_info(
+  int gdb_index,
   struct rtems_gdb_stub_thread_info *info
 )
 {
-   Objects_Id thread_obj_id;
-   Objects_Id min_id, max_id;
-   int first_posix_id, first_rtems_id;
-   Objects_Information *obj_info;
-   Thread_Control *th;
-   char tmp_buf[20];
+   int first = 1;
+   size_t api_index;
 
    ASSERT(info != NULL);
 
-   if (thread <= 0) {
+   if (gdb_index <= 0) {
       return 0;
    }
 
-   if (_System_state_Get() != SYSTEM_STATE_UP || thread == 1) {
+   if (_System_state_Get() != SYSTEM_STATE_UP || gdb_index == 1) {
       /* We have one thread let us use value
          which will never happen for real thread */
       strcpy(info->display, "idle thread");
@@ -301,75 +254,53 @@ int rtems_gdb_stub_get_thread_info(
       return 1;
    }
 
-   /* Let us get object associtated with current thread */
-   thread_obj_id = _Thread_Executing->Object.id;
+   for (
+     api_index = 1;
+     api_index <= OBJECTS_APIS_LAST;
+     ++api_index
+   ) {
+     if (_Objects_Information_table[api_index] != NULL) {
+       const Objects_Information *obj_info =
+         _Objects_Information_table[api_index][1];
+       Objects_Id min_id = obj_info->minimum_id;
+       Objects_Id max_id = obj_info->maximum_id;
+       int last = first + (int) (max_id - min_id);
 
-   /* Let us figure out thread_id for gdb */
-   first_rtems_id = 2;
+       if (gdb_index <= last) {
+         Thread_Control *th = (Thread_Control *)
+           obj_info->local_table[gdb_index - first + 1];
 
-   obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
+         if (th != NULL) {
+           char tmp_buf[9];
 
-   min_id = obj_info->minimum_id;
-   max_id = obj_info->maximum_id;
+           strcpy(info->display, "task: control at 0x");
 
-   if (thread <= (first_rtems_id + (max_id - min_id))) {
-      th = (Thread_Control *)(obj_info->local_table[thread -
-                                                    first_rtems_id + 1]);
+           tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
+           tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
+           tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
+           tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
+           tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
+           tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
+           tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
+           tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
+           tmp_buf[8] = 0;
 
-      if (th == NULL) {
-         /* Thread does not exist */
-         return 0;
-      }
+           strcat(info->display, tmp_buf);
+           rtems_object_get_name( th->Object.id, 5, info->name );
+           info->more_display[0] = 0; /* Nothing */
 
-      strcpy(info->display, "rtems task:   control at 0x");
+           return 1;
+         } else {
+           /* Thread does not exist */
+           return 0;
+         }
+       }
 
-      tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
-      tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
-      tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
-      tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
-      tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
-      tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
-      tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
-      tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
-      tmp_buf[8] = 0;
-
-      strcat(info->display, tmp_buf);
-      rtems_object_get_name( ((Objects_Control*)th)->id, 5, info->name );
-      info->more_display[0] = 0; /* Nothing */
-
-      return 1;
+       first = last + 1;
+     }
    }
 
-   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
-
-   obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
-
-   min_id = obj_info->minimum_id;
-   max_id = obj_info->maximum_id;
-
-   th = (Thread_Control *)(obj_info->local_table[thread - first_posix_id + 1]);
-   if (th == NULL) {
-      /* Thread does not exist */
-      return 0;
-   }
-
-   strcpy(info->display, "posix thread: control at 0x");
-
-   tmp_buf[0] = gdb_hexchars[(((int)th) >> 28) & 0xf];
-   tmp_buf[1] = gdb_hexchars[(((int)th) >> 24) & 0xf];
-   tmp_buf[2] = gdb_hexchars[(((int)th) >> 20) & 0xf];
-   tmp_buf[3] = gdb_hexchars[(((int)th) >> 16) & 0xf];
-   tmp_buf[4] = gdb_hexchars[(((int)th) >> 12) & 0xf];
-   tmp_buf[5] = gdb_hexchars[(((int)th) >> 8) & 0xf];
-   tmp_buf[6] = gdb_hexchars[(((int)th) >> 4) & 0xf];
-   tmp_buf[7] = gdb_hexchars[((int)th) & 0xf];
-   tmp_buf[8] = 0;
-
-   strcat(info->display, tmp_buf);
-   rtems_object_get_name( ((Objects_Control*)th)->id, 5, info->name );
-   info->more_display[0] = 0; /* Nothing */
-
-   return 1;
+   return 0;
 }
 
 /*******************************************************/
