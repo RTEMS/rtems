@@ -237,7 +237,7 @@ void rtems_initialize_start_multitasking(void)
    *******************************************************************
    *******************************************************************
    *******************************************************************/
-  
-  status = _Per_CPU_Information[0].idle->Wait.return_code;
+
+  status = _Thread_Get_global_exit_status();
   rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

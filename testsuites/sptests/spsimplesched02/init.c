@@ -21,6 +21,7 @@ void ObtainRelease(bool suspendIdle);
 /*
  *  Keep the names and IDs in global variables so another task can use them.
  */
+rtems_id   Idle_id;
 rtems_id   Task_id[ 3 ];         /* array of task ids */
 rtems_name Task_name[ 3 ];       /* array of task names */
 rtems_name Semaphore_name[ 2 ];
@@ -48,7 +49,7 @@ void ObtainRelease( bool suspendIdle )
 
   if (suspendIdle) {
     puts( "INIT - Suspend Idle Task");
-    status = rtems_task_suspend( _Thread_Idle->Object.id );
+    status = rtems_task_suspend( Idle_id );
     directive_failed( status, "rtems_task_suspend idle" );
   }
 
@@ -62,7 +63,7 @@ void ObtainRelease( bool suspendIdle )
 
   if (suspendIdle) {
     puts( "INIT - Resume Idle Task");
-    status = rtems_task_resume( _Thread_Idle->Object.id );
+    status = rtems_task_resume( Idle_id );
     directive_failed( status, "rtems_task_resume idle" );
   }
 }
@@ -74,6 +75,14 @@ rtems_task Init(
   rtems_status_code   status;
 
   puts( "\n\n*** SIMPLE SCHEDULER 02 TEST ***" );
+
+  status = _Objects_Name_to_id_u32(
+    &_Thread_Internal_information,
+    rtems_build_name( 'I', 'D', 'L', 'E' ),
+    RTEMS_SEARCH_LOCAL_NODE,
+    &Idle_id
+  );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
 
   /*
    * Create the semaphore. Then obtain and release the

@@ -162,9 +162,6 @@ typedef struct {
   /** This is the heir thread for this this CPU. */
   Thread_Control *heir;
 
-  /** This is the idle thread for this CPU. */
-  Thread_Control *idle;
-
   /** This is the time of the last context switch on this CPU. */
   Timestamp_Control time_of_last_context_switch;
 
@@ -283,8 +280,6 @@ void _Per_CPU_Wait_for_state(
   _Per_CPU_Information[bsp_smp_processor_id()].heir
 #define _Thread_Executing \
   _Per_CPU_Information[bsp_smp_processor_id()].executing
-#define _Thread_Idle \
-  _Per_CPU_Information[bsp_smp_processor_id()].idle
 #define _ISR_Nest_level \
   _Per_CPU_Information[bsp_smp_processor_id()].isr_nest_level
 #define _CPU_Interrupt_stack_low \

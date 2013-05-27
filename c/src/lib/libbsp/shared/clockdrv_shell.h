@@ -73,8 +73,11 @@ rtems_isr Clock_isr(
   #ifdef CLOCK_DRIVER_USE_FAST_IDLE
     do {
       rtems_clock_tick();
-    } while ( _Thread_Executing == _Thread_Idle &&
-            _Thread_Heir == _Thread_Executing);
+    } while (
+      _Thread_Heir == _Thread_Executing
+        && _Thread_Executing->Start.entry_point
+          == rtems_configuration_get_idle_task()
+    );
 
     Clock_driver_support_at_tick();
     return;

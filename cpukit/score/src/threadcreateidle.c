@@ -40,9 +40,11 @@ static inline void _Thread_Create_idle_helper(
   int      cpu
 )
 {
-  Objects_Name    name;
-  Thread_Control *idle;
+  Per_CPU_Control *per_cpu;
+  Objects_Name     name;
+  Thread_Control  *idle;
 
+  per_cpu = &_Per_CPU_Information[ cpu ];
   name.name_u32 = name_u32;
 
   /*
@@ -79,9 +81,8 @@ static inline void _Thread_Create_idle_helper(
    *  WARNING!!! This is necessary to "kick" start the system and
    *             MUST be done before _Thread_Start is invoked.
    */
-  _Per_CPU_Information[ cpu ].idle      =
-  _Per_CPU_Information[ cpu ].heir      =
-  _Per_CPU_Information[ cpu ].executing = idle;
+  per_cpu->heir      =
+  per_cpu->executing = idle;
 
   _Thread_Start(
     idle,

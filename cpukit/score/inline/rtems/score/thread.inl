@@ -344,6 +344,24 @@ RTEMS_INLINE_ROUTINE void _Thread_Internal_free (
   _Objects_Free( &_Thread_Internal_information, &the_task->Object );
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_Set_global_exit_status(
+  uint32_t exit_status
+)
+{
+  Thread_Control *idle = (Thread_Control *)
+    _Thread_Internal_information.local_table[ 1 ];
+
+  idle->Wait.return_code = exit_status;
+}
+
+RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_global_exit_status( void )
+{
+  const Thread_Control *idle = (const Thread_Control *)
+    _Thread_Internal_information.local_table[ 1 ];
+
+  return idle->Wait.return_code;
+}
+
 /**
  * This routine returns the C library re-enterant pointer.
  */
