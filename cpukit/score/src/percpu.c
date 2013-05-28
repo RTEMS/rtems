@@ -56,9 +56,6 @@
         p->interrupt_stack_high = (void *)ptr;
       }
 #endif
-
-      p->state = RTEMS_BSP_SMP_CPU_INITIAL_STATE;
-      RTEMS_COMPILER_MEMORY_BARRIER();
     }
 
     /*
@@ -67,6 +64,32 @@
     max_cpus = bsp_smp_initialize( max_cpus );
 
     _SMP_Processor_count = max_cpus;
+
+    for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
+      _Per_CPU_Wait_for_state(
+        &_Per_CPU_Information[ cpu ],
+        PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING
+      );
+    }
+  }
+
+  void _Per_CPU_Change_state(
+    Per_CPU_Control *per_cpu,
+    Per_CPU_State new_state
+  )
+  {
+    per_cpu->state = new_state;
+    _CPU_Processor_event_broadcast();
+  }
+
+  void _Per_CPU_Wait_for_state(
+    const Per_CPU_Control *per_cpu,
+    Per_CPU_State desired_state
+  )
+  {
+    while ( per_cpu->state != desired_state ) {
+      _CPU_Processor_event_receive();
+    }
   }
 #else
   /*

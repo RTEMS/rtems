@@ -1402,6 +1402,37 @@ static inline uint32_t CPU_swap_u32(
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
 
+#ifdef RTEMS_SMP
+  /**
+   * @brief Broadcasts a processor event.
+   *
+   * Some architectures provide a low-level synchronization primitive for
+   * processors in a multi-processor environment.  Processors waiting for this
+   * event may go into a low-power state and stop generating system bus
+   * transactions.  This function must ensure that preceding store operations
+   * can be observed by other processors.
+   *
+   * @see _CPU_Processor_event_receive().
+   */
+  static inline void _CPU_Processor_event_broadcast( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+
+  /**
+   * @brief Receives a processor event.
+   *
+   * This function will wait for the processor event and may wait forever if no
+   * such event arrives.
+   *
+   * @see _CPU_Processor_event_broadcast().
+   */
+  static inline void _CPU_Processor_event_receive( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+#endif
+
 #ifdef __cplusplus
 }
 #endif

@@ -33,7 +33,7 @@ static inline unsigned int sparc_leon3_get_cctrl( void )
   return v;
 }
 
-rtems_isr bsp_ap_ipi_isr(
+static rtems_isr bsp_ap_ipi_isr(
   rtems_vector_number vector
 )
 {
@@ -99,10 +99,11 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
     bsp_smp_delay( 1000000 );
     #if defined(RTEMS_DEBUG)
       printk(
-	"CPU %d is %s\n",
-	cpu,
-	((_Per_CPU_Information[cpu].state == RTEMS_BSP_SMP_CPU_INITIALIZED) ?
-	   "online" : "offline")
+        "CPU %d is %s\n",
+        cpu,
+        _Per_CPU_Information[cpu].state
+          == PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING ?
+            "online" : "offline"
       );
     #endif
   }
@@ -160,21 +161,3 @@ void bsp_smp_delay( int max )
 {
    __delay( max );
 }
-
-void bsp_smp_wait_for(
-  volatile unsigned int *address,
-  unsigned int           desired,
-  int                    maximum_usecs
-)
-{
-  int iterations;
-  volatile unsigned int *p = address;
-
-  for (iterations=0 ;  iterations < maximum_usecs ; iterations++ ) {
-    if ( *p == desired )
-      break;
-    bsp_smp_delay( 5000 );
-  }
-}
-
-

@@ -1203,6 +1203,16 @@ void _CPU_Context_restore(
       ); \
       _previous = _val; \
     } while (0)
+
+  static inline void _CPU_Processor_event_broadcast( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+
+  static inline void _CPU_Processor_event_receive( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
 #endif
 
 /**

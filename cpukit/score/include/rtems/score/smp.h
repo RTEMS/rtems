@@ -58,13 +58,6 @@ extern "C" {
  */
 #define RTEMS_BSP_SMP_SHUTDOWN                  0x04
 
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested that the receiving CPU needs to perform a context
- *  switch to the first task.
- */
-#define RTEMS_BSP_SMP_FIRST_TASK                0x08
-
 #ifndef ASM
 /**
  *  @brief Number of CPUs in a SMP system.
@@ -73,6 +66,16 @@ extern "C" {
  *  indicate the number of CPUs in this system.
  */
 SCORE_EXTERN uint32_t _SMP_Processor_count;
+
+/**
+ *  @brief Sends a SMP message to a processor.
+ *
+ *  The target processor may be the sending processor.
+ *
+ *  @param[in] cpu The target processor of the message.
+ *  @param[in] message The message.
+ */
+void _SMP_Send_message( int cpu, uint32_t message );
 
 /**
  *  @brief Request of others CPUs.

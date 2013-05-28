@@ -148,12 +148,6 @@ void rtems_smp_secondary_cpu_initialize( void );
  */
 void rtems_smp_process_interrupt(void);
 
-void bsp_smp_wait_for(
-  volatile unsigned int *address,
-  unsigned int           desired,
-  int                    maximum_usecs
-);
-
 #endif
 
 #ifdef __cplusplus

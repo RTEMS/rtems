@@ -71,7 +71,6 @@
 #define PHYS_TO_VIRTUAL(x)    /* convert physical address "x" to virtual */
 #define VIRTUAL_TO_PHYS(x)    /* convert virtual address "x" to physical */
 #define UDELAY(x)             /* delay roughly at least "x" microsecs */
-#define TEST_BOOTED(x)        /* test bootaddr x to see if CPU started */
 #define READ_MSR_LO(x)        /* Read MSR low function */
 #else
 #include <string.h>
@@ -124,9 +123,6 @@ static void UDELAY(int x)
  
 #define READ_MSR_LO(_x) \
   (unsigned int)(read_msr(_x) & 0xffffffff)
-
-#define TEST_BOOTED(_cpu) \
-  (_Per_CPU_Information[_cpu].state == RTEMS_BSP_SMP_CPU_INITIALIZED)
 
 static inline unsigned long long read_msr(unsigned int msr)
 {
@@ -308,22 +304,6 @@ boot_cpu(imps_processor *proc)
       send_ipi(apicid, LAPIC_ICR_DM_SIPI | ((bootaddr >> 12) & 0xFF));
       UDELAY(1000);
     }
-  }
-
-  /*
-   *  Check to see if other processor has started.
-   */
-  bsp_smp_wait_for(
-    (volatile unsigned int *)&_Per_CPU_Information[imps_num_cpus].state,
-    RTEMS_BSP_SMP_CPU_INITIALIZED,
-    1600
-  );
-  if ( _Per_CPU_Information[imps_num_cpus].state ==
-        RTEMS_BSP_SMP_CPU_INITIALIZED )
-    printk("#%d  Application Processor (AP)", imps_num_cpus);
-  else {
-    printk("CPU Not Responding, DISABLED");
-    success = 0;
   }
 
   /*
@@ -834,33 +814,4 @@ void bsp_smp_broadcast_interrupt(void)
 {
   /* Single broadcast interrupt */
   send_ipi( 0, LAPIC_ICR_DS_ALLEX | 0x30 );
-}
-
-void bsp_smp_wait_for(
-  volatile unsigned int *address,
-  unsigned int           desired,
-  int                    maximum_usecs
-)
-{
-  int iterations;
-  volatile int i;
-  volatile unsigned int *p = (volatile unsigned int *)address;
-
-  for (iterations=0 ;  iterations < maximum_usecs ; iterations++ ) {
-    if ( *p == desired )
-      break;
-    #ifdef __SSE3__
-      __builtin_ia32_monitor( (const void *)address, 0, 0 );
-      if ( *p == desired )
-        break;
-      __builtin_ia32_mwait( 0, 0 );
-    #endif
-
-    /*
-     *  Until i386 ms delay does not depend upon the clock we
-     *  will use this less sophisticated delay. 
-     */
-    for(i=5000; i>0; i--)
-      ;
-  }
 }

@@ -463,6 +463,16 @@ uint32_t   _CPU_ISR_Get_level( void );
         "1" (_value) : \
         "cc"); \
     } while (0)
+
+  static inline void _CPU_Processor_event_broadcast( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+
+  static inline void _CPU_Processor_event_receive( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
 #endif
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
