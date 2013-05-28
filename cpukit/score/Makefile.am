@@ -135,7 +135,7 @@ libscore_a_SOURCES += src/mpci.c src/objectmp.c src/threadmp.c
 endif
 
 if HAS_SMP
-libscore_a_SOURCES += src/isrsmp.c src/smp.c src/smplock.c \
+libscore_a_SOURCES += src/isrsmp.c src/smp.c \
     src/schedulersimplesmpblock.c src/schedulersimplesmpschedule.c \
     src/schedulersimplesmpunblock.c src/schedulersimplesmptick.c 
 endif

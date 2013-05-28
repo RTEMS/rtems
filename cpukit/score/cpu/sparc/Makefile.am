@@ -8,6 +8,7 @@ include_rtems_score_HEADERS = rtems/score/sparc.h
 include_rtems_score_HEADERS += rtems/score/cpu.h
 include_rtems_score_HEADERS += rtems/score/types.h
 include_rtems_score_HEADERS += rtems/score/cpuatomic.h
+include_rtems_score_HEADERS += rtems/score/cpusmplock.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S

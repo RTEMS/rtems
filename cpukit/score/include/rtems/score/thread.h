@@ -470,11 +470,18 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
 SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
 
 #if defined(RTEMS_SMP)
+  typedef struct {
+    SMP_lock_Control lock;
+    int owner_cpu;
+    int nest_level;
+  } Thread_Dispatch_disable_level_lock_control;
+
   /**
    * The following declares the smp spinlock to be used to control
    * the dispatch critical section accesses across cpus.
    */
-  SCORE_EXTERN SMP_lock_spinlock_nested_Control _Thread_Dispatch_disable_level_lock;
+  SCORE_EXTERN Thread_Dispatch_disable_level_lock_control
+    _Thread_Dispatch_disable_level_lock;
 #endif
 
 /**

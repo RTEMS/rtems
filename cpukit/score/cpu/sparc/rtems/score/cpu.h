@@ -1186,24 +1186,6 @@ void _CPU_Context_restore(
     Context_Control *new_context
   );
 
-  /**
-   * Macro to access memory and bypass the cache.
-   *
-   * NOTE: address space 1 is uncacheable
-   */
-  #define SMP_CPU_SWAP( _address, _value, _previous ) \
-    do { \
-      register unsigned int _val = _value; \
-      asm volatile( \
-        "swapa [%2] %3, %0" : \
-        "=r" (_val) : \
-        "0" (_val), \
-        "r" (_address), \
-        "i" (1) \
-      ); \
-      _previous = _val; \
-    } while (0)
-
   static inline void _CPU_Processor_event_broadcast( void )
   {
     __asm__ volatile ( "" : : : "memory" );

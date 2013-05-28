@@ -26,10 +26,16 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 
+#define NO_OWNER_CPU (-1)
+
 void _Thread_Dispatch_initialization( void )
 {
-  _Thread_Dispatch_disable_level = 0; 
-  _SMP_lock_spinlock_nested_Initialize(&_Thread_Dispatch_disable_level_lock);
+  Thread_Dispatch_disable_level_lock_control *level_lock =
+    &_Thread_Dispatch_disable_level_lock;
+
+  _Thread_Dispatch_disable_level = 0;
+  _SMP_lock_Initialize( &level_lock->lock );
+  level_lock->owner_cpu = NO_OWNER_CPU;
   _Thread_Dispatch_set_disable_level( 1 );
 }
 
@@ -46,59 +52,55 @@ uint32_t _Thread_Dispatch_get_disable_level(void)
   return _Thread_Dispatch_disable_level;
 }
 
-uint32_t _Thread_Dispatch_increment_disable_level(void)
+uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
-  ISR_Level  isr_level;
-  uint32_t   level;
+  Thread_Dispatch_disable_level_lock_control *level_lock =
+    &_Thread_Dispatch_disable_level_lock;
+  int self_cpu = bsp_smp_processor_id();
+  ISR_Level isr_level;
+  uint32_t disable_level;
 
-  /*
-   * Note: _SMP_lock_spinlock_nested_Obtain returns
-   *       with ISR's disabled and the isr_level that
-   *       should be restored after a short period.
-   *
-   * Here we obtain the lock and increment the 
-   * Thread dispatch disable level while under the
-   * protection of the isr being off.  After this
-   * point it is safe to re-enable ISRs and allow
-   * the dispatch disable lock to provide protection.
-   */
-
-  isr_level = _SMP_lock_spinlock_nested_Obtain(
-    &_Thread_Dispatch_disable_level_lock
-  );
-  
-  _Thread_Dispatch_disable_level++;
-  level = _Thread_Dispatch_disable_level;
-
-  _ISR_Enable_on_this_core(isr_level);
-  return level;
-}
-
-uint32_t _Thread_Dispatch_decrement_disable_level(void)
-{
-  ISR_Level  isr_level;
-  uint32_t   level;
-
-  /*  First we must disable ISRs in order to protect
-   *  accesses to the dispatch disable level.
-   */
   _ISR_Disable_on_this_core( isr_level );
 
-  _Thread_Dispatch_disable_level--;
-  level = _Thread_Dispatch_disable_level;
+  if ( level_lock->owner_cpu != self_cpu ) {
+    _SMP_lock_Acquire( &level_lock->lock );
+    level_lock->owner_cpu = self_cpu;
+    level_lock->nest_level = 1;
+  } else {
+    ++level_lock->nest_level;
+  }
 
+  disable_level = _Thread_Dispatch_disable_level;
+  ++disable_level;
+  _Thread_Dispatch_disable_level = disable_level;
 
-  /* 
-   * Note: _SMP_lock_spinlock_nested_Obtain returns with
-   *        ISR's disabled and _SMP_lock_spinlock_nested_Release
-   *        is responsable for re-enabling interrupts.
-   */
-  _SMP_lock_spinlock_nested_Release( 
-    &_Thread_Dispatch_disable_level_lock,
-    isr_level
-  ); 
+  _ISR_Enable_on_this_core( isr_level );
 
-  return level;
+  return disable_level;
+}
+
+uint32_t _Thread_Dispatch_decrement_disable_level( void )
+{
+  Thread_Dispatch_disable_level_lock_control *level_lock =
+    &_Thread_Dispatch_disable_level_lock;
+  ISR_Level isr_level;
+  uint32_t disable_level;
+
+  _ISR_Disable_on_this_core( isr_level );
+
+  --level_lock->nest_level;
+  if ( level_lock->nest_level == 0 ) {
+    level_lock->owner_cpu = NO_OWNER_CPU;
+    _SMP_lock_Release( &level_lock->lock );
+  }
+
+  disable_level = _Thread_Dispatch_disable_level;
+  --disable_level;
+  _Thread_Dispatch_disable_level = disable_level;
+
+  _ISR_Enable_on_this_core( isr_level );
+
+  return disable_level;
 }
 
 

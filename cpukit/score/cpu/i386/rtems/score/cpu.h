@@ -455,15 +455,6 @@ uint32_t   _CPU_ISR_Get_level( void );
   #define _CPU_Context_switch_to_first_task_smp( _the_context ) \
      _CPU_Context_restore( (_the_context) );
 
-  /* address space 1 is uncacheable */
-  #define SMP_CPU_SWAP( _address, _value, _previous ) \
-    do { \
-      asm volatile("lock; xchgl %0, %1" : \
-        "+m" (*_address), "=a" (_previous) : \
-        "1" (_value) : \
-        "cc"); \
-    } while (0)
-
   static inline void _CPU_Processor_event_broadcast( void )
   {
     __asm__ volatile ( "" : : : "memory" );

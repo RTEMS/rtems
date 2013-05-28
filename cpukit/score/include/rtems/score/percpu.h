@@ -167,7 +167,7 @@ typedef struct {
 
   #if defined(RTEMS_SMP)
     /** This element is used to lock this structure */
-    SMP_lock_spinlock_simple_Control  lock;
+    SMP_lock_Control lock;
 
     /**
      *  This is the request for the interrupt.
