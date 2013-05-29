@@ -1,0 +1,22 @@
+*** TEST SMPLOCK 1 ***
+aquire global lock with local counter
+        processor 0, local counter 15964
+        processor 1, local counter 99982377
+        global counter 0, sum of local counter 99998341
+aquire global lock with global counter
+        processor 0, local counter 166073
+        processor 1, local counter 99569103
+        global counter 99735176, sum of local counter 99735176
+aquire local lock with local counter
+        processor 0, local counter 148133948
+        processor 1, local counter 148148108
+        global counter 0, sum of local counter 296282056
+aquire local lock with global counter
+        processor 0, local counter 55938783
+        processor 1, local counter 55951781
+        global counter 55951781, sum of local counter 111890564
+aquire global lock with busy section
+        processor 0, local counter 10694328
+        processor 1, local counter 10694346
+        global counter 0, sum of local counter 21388674
+*** END OF TEST SMPLOCK 1 ***
