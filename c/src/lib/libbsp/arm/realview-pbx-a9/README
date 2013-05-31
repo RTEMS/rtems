@@ -11,3 +11,5 @@ make install
 export PATH="$PATH:/opt/qemu/bin"
 
 qemu-system-arm -S -s -no-reboot -net none -nographic -M realview-pbx-a9 -m 256M -kernel ticker.exe
+
+qemu-system-arm -S -s -no-reboot -net none -nographic -smp 2 -icount auto -M realview-pbx-a9 -m 256M -kernel ticker.exe

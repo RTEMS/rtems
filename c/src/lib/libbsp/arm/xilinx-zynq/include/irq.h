@@ -91,10 +91,6 @@ extern "C" {
 #define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 92
 
-#define BSP_ARM_GIC_CPUIF_BASE 0xf8f00100
-
-#define BSP_ARM_GIC_DIST_BASE 0xf8f01000
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

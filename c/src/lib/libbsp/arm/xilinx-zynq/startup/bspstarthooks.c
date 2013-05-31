@@ -15,12 +15,14 @@
 #include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/arm-cp15-start.h>
+#include <bsp/arm-a9mpcore-start.h>
 #include <bsp/linker-symbols.h>
 
-BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
-{
-  /* Do nothing */
-}
+#ifdef RTEMS_SMP
+  #define MMU_DATA_READ_WRITE ARMV7_MMU_DATA_READ_WRITE_SHAREABLE
+#else
+  #define MMU_DATA_READ_WRITE ARMV7_MMU_DATA_READ_WRITE_CACHED
+#endif
 
 BSP_START_DATA_SECTION static const arm_cp15_start_section_config
 zynq_mmu_config_table[] = {
@@ -31,7 +33,7 @@ zynq_mmu_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_fast_data_begin,
     .end = (uint32_t) bsp_section_fast_data_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
+    .flags = MMU_DATA_READ_WRITE
   }, {
     .begin = (uint32_t) bsp_section_start_begin,
     .end = (uint32_t) bsp_section_start_end,
@@ -39,7 +41,7 @@ zynq_mmu_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_vector_begin,
     .end = (uint32_t) bsp_section_vector_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
+    .flags = MMU_DATA_READ_WRITE
   }, {
     .begin = (uint32_t) bsp_section_text_begin,
     .end = (uint32_t) bsp_section_text_end,
@@ -51,19 +53,19 @@ zynq_mmu_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_data_begin,
     .end = (uint32_t) bsp_section_data_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
+    .flags = MMU_DATA_READ_WRITE
   }, {
     .begin = (uint32_t) bsp_section_bss_begin,
     .end = (uint32_t) bsp_section_bss_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
+    .flags = MMU_DATA_READ_WRITE
   }, {
     .begin = (uint32_t) bsp_section_work_begin,
     .end = (uint32_t) bsp_section_work_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
+    .flags = MMU_DATA_READ_WRITE
   }, {
     .begin = (uint32_t) bsp_section_stack_begin,
     .end = (uint32_t) bsp_section_stack_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
+    .flags = MMU_DATA_READ_WRITE
   }, {
     .begin = 0xe0000000U,
     .end = 0xe0200000U,
@@ -89,6 +91,11 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
     &zynq_mmu_config_table[0],
     RTEMS_ARRAY_SIZE(zynq_mmu_config_table)
   );
+}
+
+BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
+{
+  arm_a9mpcore_start_hook_0();
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)

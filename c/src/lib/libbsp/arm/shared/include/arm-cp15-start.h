@@ -41,6 +41,12 @@ arm_cp15_cache_invalidate(void);
 BSP_START_TEXT_SECTION static inline void
 arm_cp15_tlb_invalidate(void);
 
+BSP_START_TEXT_SECTION static inline uint32_t
+arm_cp15_get_multiprocessor_affinity(void);
+
+BSP_START_TEXT_SECTION static inline uint32_t
+arm_cortex_a9_get_multiprocessor_cpu_id(void);
+
 typedef struct {
   uint32_t begin;
   uint32_t end;

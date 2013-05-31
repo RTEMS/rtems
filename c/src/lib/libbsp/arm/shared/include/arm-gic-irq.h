@@ -15,7 +15,8 @@
 #ifndef LIBBSP_ARM_SHARED_ARM_GIC_IRQ_H
 #define LIBBSP_ARM_SHARED_ARM_GIC_IRQ_H
 
-#include <rtems.h>
+#include <bsp.h>
+#include <bsp/arm-gic.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,6 +38,8 @@ extern "C" {
 #define ARM_GIC_IRQ_SGI_14 14
 #define ARM_GIC_IRQ_SGI_15 15
 
+#define ARM_GIC_DIST ((volatile gic_dist *) BSP_ARM_GIC_DIST_BASE)
+
 rtems_status_code arm_gic_irq_set_priority(
   rtems_vector_number vector,
   uint8_t priority
@@ -53,11 +56,35 @@ typedef enum {
   ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF
 } arm_gic_irq_software_irq_target_filter;
 
-rtems_status_code arm_gic_irq_generate_software_irq(
+static inline rtems_status_code arm_gic_irq_generate_software_irq(
   rtems_vector_number vector,
   arm_gic_irq_software_irq_target_filter filter,
   uint8_t targets
-);
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (vector <= ARM_GIC_IRQ_SGI_15) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    dist->icdsgir = GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(filter)
+      | GIC_DIST_ICDSGIR_CPU_TARGET_LIST(targets)
+      | GIC_DIST_ICDSGIR_SGIINTID(vector);
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  return sc;
+}
+
+static inline uint32_t arm_gic_irq_processor_count(void)
+{
+  volatile gic_dist *dist = ARM_GIC_DIST;
+
+  return GIC_DIST_ICDICTR_CPU_NUMBER_GET(dist->icdictr) + 1;
+}
+
+void arm_gic_irq_initialize_secondary_cpu(void);
 
 #ifdef __cplusplus
 }

@@ -77,10 +77,6 @@ extern "C" {
 #define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 89
 
-#define BSP_ARM_GIC_CPUIF_BASE 0x1f000100
-
-#define BSP_ARM_GIC_DIST_BASE 0x1f001000
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

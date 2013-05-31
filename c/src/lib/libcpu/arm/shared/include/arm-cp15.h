@@ -842,6 +842,63 @@ static inline void arm_cp15_wait_for_interrupt(void)
   );
 }
 
+static inline uint32_t arm_cp15_get_multiprocessor_affinity(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t mpidr;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+	  "mrc p15, 0, %[mpidr], c0, c0, 5\n"
+    ARM_SWITCH_BACK
+    : [mpidr] "=&r" (mpidr) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return mpidr & 0xff;
+}
+
+static inline uint32_t arm_cortex_a9_get_multiprocessor_cpu_id(void)
+{
+  return arm_cp15_get_multiprocessor_affinity() & 0xff;
+}
+
+#define ARM_CORTEX_A9_ACTL_FW (1U << 0)
+#define ARM_CORTEX_A9_ACTL_L2_PREFETCH_HINT_ENABLE (1U << 1)
+#define ARM_CORTEX_A9_ACTL_L1_PREFETCH_ENABLE (1U << 2)
+#define ARM_CORTEX_A9_ACTL_WRITE_FULL_LINE_OF_ZEROS_MODE (1U << 3)
+#define ARM_CORTEX_A9_ACTL_SMP (1U << 6)
+#define ARM_CORTEX_A9_ACTL_EXCL (1U << 7)
+#define ARM_CORTEX_A9_ACTL_ALLOC_IN_ONE_WAY (1U << 8)
+#define ARM_CORTEX_A9_ACTL_PARITY_ON (1U << 9)
+
+static inline uint32_t arm_cp15_get_auxiliary_control(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c1, c0, 1\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+static inline void arm_cp15_set_auxiliary_control(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c1, c0, 1\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
 /**
  * @brief Sets the @a section_flags for the address range [@a begin, @a end).
  *

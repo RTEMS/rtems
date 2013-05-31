@@ -56,6 +56,10 @@ bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
+bsp_stack_all_size = bsp_stack_abt_size + bsp_stack_fiq_size + bsp_stack_irq_size + bsp_stack_svc_size + bsp_stack_und_size + bsp_stack_main_size;
+
+bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 1;
+
 MEMORY {
 	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
 }
@@ -323,6 +327,10 @@ SECTIONS {
 		bsp_stack_main_begin = .;
 		. = . + bsp_stack_main_size;
 		bsp_stack_main_end = .;
+
+		bsp_stack_secondary_processors_begin = .;
+		. = . + (bsp_processor_count - 1) * bsp_stack_all_size;
+		bsp_stack_secondary_processors_end = .;
 
 		*(.bsp_vector)
 

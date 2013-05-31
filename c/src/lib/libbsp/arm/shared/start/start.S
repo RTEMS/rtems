@@ -31,6 +31,14 @@
 	.extern	boot_card
 	.extern	bsp_start_hook_0
 	.extern	bsp_start_hook_1
+	.extern bsp_stack_irq_end
+	.extern bsp_stack_fiq_end
+	.extern bsp_stack_abt_end
+	.extern bsp_stack_und_end
+	.extern bsp_stack_svc_end
+#ifdef RTEMS_SMP
+	.extern bsp_stack_all_size
+#endif
 	.extern	_ARMV4_Exception_undef_default
 	.extern	_ARMV4_Exception_swi_default
 	.extern	_ARMV4_Exception_data_abort_default
@@ -119,6 +127,16 @@ _start:
 	 * loader.
 	 */
 
+#ifdef RTEMS_SMP
+	/* Read MPIDR */
+	mrc	p15, 0, r0, c0, c0, 5
+
+	/* Calculate stack offset */
+	and	r0, #0xff
+	ldr	r1, =bsp_stack_all_size
+	mul	r1, r0
+#endif
+
 	/*
 	 * Set SVC mode, disable interrupts and enable ARM instructions.
 	 */
@@ -131,26 +149,41 @@ _start:
 	mov	r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_irq_end
+#ifdef RTEMS_SMP
+	add	sp, r1
+#endif
 
 	/* Enter FIQ mode and set up the FIQ stack pointer */
 	mov	r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_fiq_end
+#ifdef RTEMS_SMP
+	add	sp, r1
+#endif
 
 	/* Enter ABT mode and set up the ABT stack pointer */
 	mov	r0, #(ARM_PSR_M_ABT | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_abt_end
+#ifdef RTEMS_SMP
+	add	sp, r1
+#endif
 
 	/* Enter UND mode and set up the UND stack pointer */
 	mov	r0, #(ARM_PSR_M_UND | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_und_end
+#ifdef RTEMS_SMP
+	add	sp, r1
+#endif
 
 	/* Enter SVC mode and set up the SVC stack pointer */
 	mov	r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	sp, =bsp_stack_svc_end
+#ifdef RTEMS_SMP
+	add	sp, r1
+#endif
 
 	/* Stay in SVC mode */
 

@@ -33,6 +33,9 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_FAST_IDLE],
 occurs while the IDLE thread is executing.  This can significantly reduce
 simulation times.])
 
+RTEMS_CHECK_SMP
+AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
+
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 RTEMS_BSP_LINKCMDS
 

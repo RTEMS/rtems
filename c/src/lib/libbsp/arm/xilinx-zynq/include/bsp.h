@@ -31,7 +31,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define BSP_ARM_A9MPCORE_SCU_BASE 0xf8f00000
+
+#define BSP_ARM_GIC_CPUIF_BASE 0xf8f00100
+
 #define BSP_ARM_A9MPCORE_PT_BASE 0xf8f00600
+
+#define BSP_ARM_GIC_DIST_BASE 0xf8f01000
 
 typedef enum {
   BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_INSTALL,

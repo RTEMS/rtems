@@ -94,6 +94,10 @@ $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-regs.h: ../shared/include/arm-a9mpcore-regs.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-regs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-regs.h
 
+$(PROJECT_INCLUDE)/bsp/arm-a9mpcore-start.h: ../shared/include/arm-a9mpcore-start.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-start.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-a9mpcore-start.h
+
 $(PROJECT_INCLUDE)/bsp/arm-cp15-start.h: ../shared/include/arm-cp15-start.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-cp15-start.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-cp15-start.h
