@@ -119,8 +119,8 @@ void bsp_smp_interrupt_cpu(
 int   bsp_smp_processor_id( void );
 
 /**
- * @brief Performs high-level initialization of a secondary CPU and runs the
- * application threads.
+ * @brief Performs high-level initialization of a secondary processor and runs
+ * the application threads.
  *
  * The low-level initialization code must call this function to hand over the
  * control of this processor to RTEMS.  Interrupts must be disabled.  It must
@@ -131,14 +131,16 @@ int   bsp_smp_processor_id( void );
  *
  * The pre-requisites for the call to this function are
  * - disabled interrupts,
- * - reception of inter-processor interrupts is possible,
+ * - delivery of inter-processor interrupts is possible,
  * - a valid stack pointer and enough stack space,
  * - a valid code memory, and
  * - a valid BSS section.
  *
- * This function must not be called by the main processor.
+ * This function must not be called by the main processor.  This function does
+ * not return to the caller.
  */
-void rtems_smp_secondary_cpu_initialize( void );
+void rtems_smp_secondary_cpu_initialize( void )
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 /**
  *  @brief Process the incoming interprocessor request.
