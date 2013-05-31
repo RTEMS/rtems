@@ -78,7 +78,7 @@ rtems_task Init(
     sprintf(ch, "%02" PRId32, i );
     status = rtems_task_create(
       rtems_build_name( 'T', 'A', ch[0], ch[1] ),
-      1,
+      2,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
