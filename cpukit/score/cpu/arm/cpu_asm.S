@@ -64,6 +64,9 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 
 /* Start restoring context */
 _restore:
+#ifdef RTEMS_SMP
+	clrex
+#endif
 
 #ifdef ARM_MULTILIB_VFP_D32
 	add	r3, r1, #ARM_CONTEXT_CONTROL_D8_OFFSET

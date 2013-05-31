@@ -90,6 +90,38 @@ _ARMV4_Exception_interrupt:
 	str	r0, [r1]
 #endif
 
+#ifdef RTEMS_SMP
+	/* ISR enter */
+	blx	_ISR_SMP_Enter
+
+	/* Remember INT stack pointer */
+	mov	r1, EXCHANGE_INT_SP
+
+	/* Restore exchange registers from exchange area */
+	ldmia	r1, EXCHANGE_LIST
+
+	/* Switch stack if necessary and save original stack pointer */
+	mov	r2, sp
+	cmp	r0, #0
+	moveq	sp, r1
+	stmdb	sp!, {r2}
+
+	/* Call BSP dependent interrupt dispatcher */
+	blx	bsp_interrupt_dispatch
+
+	/* Restore stack pointer */
+	ldr	sp, [sp]
+
+	/* ISR exit */
+	blx	_ISR_SMP_Exit
+	cmp	r0, #0
+	beq	thread_dispatch_done
+
+	/* Thread dispatch */
+	blx	_Thread_Dispatch
+
+thread_dispatch_done:
+#else /* RTEMS_SMP */
 	/* Remember INT stack pointer */
 	mov	r1, EXCHANGE_INT_SP
 
@@ -150,8 +182,6 @@ _ARMV4_Exception_interrupt:
 	nop
 #endif /* __thumb__ */
 
-do_thread_dispatch:
-
 	/* Thread dispatch */
 	bl	_Thread_Dispatch
 
@@ -159,6 +189,7 @@ thread_dispatch_done:
 
 	/* Switch to ARM instructions if necessary */
 	SWITCH_FROM_THUMB_TO_ARM
+#endif /* RTEMS_SMP */
 
 #ifdef ARM_MULTILIB_VFP_D32
 	/* Restore VFP context */
