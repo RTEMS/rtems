@@ -204,7 +204,76 @@ struct rtems_dosfs_convert_control {
  */
 typedef struct {
   /**
-   * @brief Converter implementation for new filesystem instance.
+   * @brief Converter implementation for new file system instance.
+   *
+   * Before converters have been added to the RTEMS implementation of the FAT
+   * file system, the implementation was:
+   * - Short names were saved in code page format (as is still the case).
+   * - Long names were not saved in UTF-16 format as mandated by the FAT file
+   *   system specification.  Instead the character in the local encoding was
+   *   stored to the low byte directly and the high byte was set to zero.
+   *
+   * There are a few compatibility issues due to a non-standard conform
+   * implementation of the FAT file system before the UTF-8 support was added.
+   * These following issues affect the default converter and the UTF-8
+   * converter:
+   * - Before UTF-8 support was added, it was possible to create files with the
+   *   the same short name in single case and mixed case in a directory.  It
+   *   was for example possible to have files "ABC" and "aBc" in a single
+   *   directory.  Now this bug is fixed.
+   * - Before UTF-8 support was added, it was possible to create files with a
+   *   name length of slightly more than 255 characters.  Now the
+   *   implementation adheres exactly to the 255 character limit.
+   * - Long file names saved before UTF-8 support was added could contain
+   *   non-ASCII characters in the low byte which was saved for a long name
+   *   character.  With the default converter this means such files can be read
+   *   only by their short file name.  With the UTF-8 converter file names will
+   *   be read correctly as long as the characters written with the old
+   *   implementation were Latin-1 characters.
+   *
+   * The following sample code demonstrates how to mount a file
+   * system with UTF-8 support:
+   * @code
+   * #include <errno.h>
+   * #include <assert.h>
+   * #include <rtems/dosfs.h>
+   * #include <rtems/libio.h>
+   *
+   * static int mount_with_utf8(
+   *   const char *device_file,
+   *   const char *mount_point
+   * )
+   * {
+   *   rtems_dosfs_convert_control *convert_ctrl;
+   *   int                          rv;
+   *
+   *   convert_ctrl = rtems_dosfs_create_utf8_converter( "CP850" );
+   *
+   *   if ( convert_ctrl != NULL ) {
+   *     rtems_dosfs_mount_options mount_opts;
+   *
+   *     memset( &mount_opts, 0, sizeof( mount_opts ) );
+   *     mount_opts.converter = convert_ctrl;
+   *
+   *     rv = mount_and_make_target_path(
+   *       device_file,
+   *       mount_point,
+   *       RTEMS_FILESYSTEM_TYPE_DOSFS,
+   *       RTEMS_FILESYSTEM_READ_WRITE,
+   *       &mount_opts
+   *     );
+   *   } else {
+   *     rv = -1;
+   *     errno = ENOMEM;
+   *   }
+   *
+   *   return rv;
+   * }
+   * @endcode
+   *
+   * In case you do not want UTF-8 support, you can simply pass a NULL pointer
+   * to mount_and_make_target_path() respectively to mount() instead of the
+   * mount_opts address.
    *
    * @see rtems_dosfs_create_default_converter() and
    * rtems_dosfs_create_utf8_converter().
@@ -215,22 +284,44 @@ typedef struct {
 /**
  * @brief Allocates and initializes a default converter.
  *
+ * This default converter will accept only POSIX file names with pure ASCII
+ * characters. This largely corresponds to the file name handling before the
+ * optional UTF-8 support was added to the RTEMS implementation of the FAT file
+ * system.  This handling is mostly backwards compatible to the previous RTEMS
+ * implementation of the FAT file system.
+ *
+ * For backwards compatibility and the previous RTEMS implementation of the FAT
+ * file system please see also @ref rtems_dosfs_mount_options and mount().
+ *
  * @retval NULL Something failed.
  * @retval other Pointer to initialized converter.
- *
- * @see rtems_dosfs_mount_options and mount().
  */
 rtems_dosfs_convert_control *rtems_dosfs_create_default_converter(void);
 
 /**
  * @brief Allocates and initializes a UTF-8 converter.
  *
- * @param[in] codepage The iconv() identification string for the used codepage.
+ * This converter will assume that all file names passed to POSIX file handling
+ * methods are UTF-8 strings and will convert them to the selected code page
+ * for short file names and to UTF-16 for long file names.  This conversion
+ * will be done during reading and writing.  These conversions correspond to
+ * the specification of the FAT file system.  This handling is mostly backwards
+ * compatible to the previous RTEMS implementation of the FAT file system.
+ *
+ * For backwards compatibility and the previous RTEMS implementation of the FAT
+ * file system please see also @ref rtems_dosfs_mount_options and mount().
+ *
+ * One possible issue with this converter is: When reading file names which
+ * have been created with other implementations of the FAT file system, it can
+ * happen that during the conversion to UTF-8 a long file name becomes longer
+ * and exceeds the 255 bytes limit.  In such a case only the short file name
+ * will get read.
+ *
+ * @param[in] codepage The iconv() identification string for the used code
+ * page.
  *
  * @retval NULL Something failed.
  * @retval other Pointer to initialized converter.
- *
- * @see rtems_dosfs_mount_options and mount().
  */
 rtems_dosfs_convert_control *rtems_dosfs_create_utf8_converter(
   const char *codepage
