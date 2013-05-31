@@ -125,5 +125,9 @@ libbsp_a_SOURCES += network/network.c \
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tsec.rel
 endif
 
+if HAS_SMP
+libbsp_a_SOURCES += startup/smp.c
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

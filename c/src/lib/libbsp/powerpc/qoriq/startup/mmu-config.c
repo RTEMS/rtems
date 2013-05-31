@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,7 +20,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <bspopts.h>
+#include <bsp.h>
 #include <bsp/mmu.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/qoriq.h>
@@ -49,10 +49,16 @@ typedef struct {
 	.mas3 = FSL_EIS_MAS3_SR \
 }
 
+#ifdef RTEMS_SMP
+  #define ENTRY_RW_MAS2 FSL_EIS_MAS2_M
+#else
+  #define ENTRY_RW_MAS2 0
+#endif
+
 #define ENTRY_RW(b, s) { \
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
-	.mas2 = 0, \
+	.mas2 = ENTRY_RW_MAS2, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
 }
 
