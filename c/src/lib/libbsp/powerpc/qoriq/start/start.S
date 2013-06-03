@@ -20,6 +20,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/asm.h>
+
 #include <bspopts.h>
 
 #include <libcpu/powerpc-utility.h>
@@ -32,7 +34,9 @@
 #define UBOOT_BOARD_INFO r15
 
 	.globl _start
+#ifdef RTEMS_SMP
 	.globl _start_core_1
+#endif
 	.globl bsp_exc_vector_base
 
 	.section ".bsp_start_text", "ax"
@@ -170,6 +174,7 @@ copy:
 	beqlr
 	b	memcpy
 
+#ifdef RTEMS_SMP
 _start_core_1:
 
 	/* Reset time base */
@@ -218,6 +223,7 @@ _start_core_1:
 	b	qoriq_secondary_cpu_initialize
 
 	b	twiddle
+#endif /* RTEMS_SMP */
 
 	/* Exception vector prologues area */
 	.section ".bsp_start_text", "ax"
