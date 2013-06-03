@@ -44,7 +44,7 @@ console_tbl Console_Configuration_Ports [] = {
       .ulClock = LM3S69XX_UART_BAUD,
       .ulIntVector = LM3S69XX_IRQ_UART_1,
       .pDeviceParams = (void *)1
-    }
+    },
   #endif
   #ifdef LM3S69XX_ENABLE_UART_2
     {
