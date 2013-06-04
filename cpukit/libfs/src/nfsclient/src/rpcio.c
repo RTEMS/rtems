@@ -1052,7 +1052,7 @@ enum clnt_stat	err;
 	return RPC_SUCCESS;
 }
 
-void
+static void
 rpcUdpClntDestroy(RpcUdpClnt xact)
 {
 	rpcUdpServerDestroy(xact->server);

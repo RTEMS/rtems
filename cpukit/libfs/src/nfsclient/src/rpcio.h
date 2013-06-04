@@ -63,15 +63,13 @@
  * @{
  */
 
-#ifdef __rtems
-#include <rtems.h>
-#endif
-
 #include <rpc/rpc.h>
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <sys/param.h>
 #include <stdarg.h>
+
+#include "librtemsNfs.h"
 
 typedef struct RpcUdpServerRec_ 	*RpcUdpServer;
 typedef struct RpcUdpXactRec_		*RpcUdpXact;
@@ -79,9 +77,6 @@ typedef struct RpcUdpXactRec_		*RpcUdpXact;
 typedef RpcUdpXact					RpcUdpClnt;
 
 #define RPCIOD_DEFAULT_ID	0xdef10000
-
-int
-rpcUdpInit(void);
 
 enum clnt_stat
 rpcUdpServerCreate(
