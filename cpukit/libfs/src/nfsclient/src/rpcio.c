@@ -693,7 +693,6 @@ register int	i,j;
 			return 0;
 		}
 		/* pick a free table slot and initialize the XID */
-		rval->obuf.xid = time(0) ^ (uintptr_t)rval;
 		MU_LOCK(hlock);
 		rval->obuf.xid = (xidHashSeed++ ^ ((uintptr_t)rval>>10)) & XACT_HASH_MSK;
 		i=j=(rval->obuf.xid & XACT_HASH_MSK);
