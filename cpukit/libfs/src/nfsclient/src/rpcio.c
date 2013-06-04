@@ -932,6 +932,18 @@ rxWakeupCB(struct socket *sock, void *arg)
   rtems_event_send(*rpciod, RPCIOD_RX_EVENT);
 }
 
+void
+rpcSetXIDs(uint32_t xid)
+{
+	uint32_t i;
+
+	xid &= ~XACT_HASH_MSK;
+
+	for (i = 0; i < XACT_HASHS; ++i) {
+		xidUpper[i] = xid | i;
+	}
+}
+
 int
 rpcUdpInit(void)
 {
