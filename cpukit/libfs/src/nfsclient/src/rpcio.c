@@ -742,7 +742,7 @@ int i = xact->obuf.xid & XACT_HASH_MSK;
 		/* remember XID we used last time so we can avoid
 		 * reusing the same one (incremented by rpcUdpSend routine)
 		 */
-		xidUpper[i]   = xact->obuf.xid & ~XACT_HASH_MSK;
+		xidUpper[i]   = xact->obuf.xid;
 		MU_UNLOCK(hlock);
 
 		bufFree(&xact->ibuf);
