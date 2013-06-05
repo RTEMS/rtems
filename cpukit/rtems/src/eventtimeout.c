@@ -57,8 +57,8 @@ void _Event_Timeout(
          * count set to zero.
          */
         if ( !the_thread->Wait.count ) {
-          _Thread_Unnest_dispatch();
           _ISR_Enable( level );
+          _Thread_Unnest_dispatch();
           return;
         }
 
