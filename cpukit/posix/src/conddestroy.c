@@ -46,7 +46,7 @@ int pthread_cond_destroy(
     case OBJECTS_LOCAL:
 
       if ( _Thread_queue_First( &the_cond->Wait_queue ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         return EBUSY;
       }
 
@@ -56,7 +56,7 @@ int pthread_cond_destroy(
       );
 
       _POSIX_Condition_variables_Free( the_cond );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_cond->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

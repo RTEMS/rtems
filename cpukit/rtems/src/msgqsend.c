@@ -86,7 +86,7 @@ rtems_status_code rtems_message_queue_send(
         0        /* no timeout */
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_message_queue->Object );
 
       /*
        *  Since this API does not allow for blocking sends, we can directly

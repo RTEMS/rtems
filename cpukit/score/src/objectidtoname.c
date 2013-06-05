@@ -63,6 +63,6 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
     return OBJECTS_INVALID_ID;
 
   *name = the_object->name;
-  _Thread_Enable_dispatch();
+  _Objects_Put( the_object );
   return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
 }

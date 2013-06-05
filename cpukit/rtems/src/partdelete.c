@@ -58,10 +58,10 @@ rtems_status_code rtems_partition_delete(
         }
 #endif
 
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_partition->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_partition->Object );
       return RTEMS_RESOURCE_IN_USE;
 
 #if defined(RTEMS_MULTIPROCESSING)

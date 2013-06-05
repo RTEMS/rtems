@@ -41,7 +41,7 @@ rtems_status_code rtems_timer_delete(
       _Objects_Close( &_Timer_Information, &the_timer->Object );
       (void) _Watchdog_Remove( &the_timer->Ticker );
       _Timer_Free( the_timer );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

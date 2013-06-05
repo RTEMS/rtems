@@ -59,14 +59,14 @@ ssize_t _POSIX_Message_queue_Receive_support(
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_WRONLY ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_mq_fd->Object );
         rtems_set_errno_and_return_minus_one( EBADF );
       }
 
       the_mq = the_mq_fd->Queue;
 
       if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_mq_fd->Object );
         rtems_set_errno_and_return_minus_one( EMSGSIZE );
       }
 
@@ -97,7 +97,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
         timeout
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
       if (msg_prio) {
         *msg_prio = _POSIX_Message_queue_Priority_from_core(
              _Thread_Executing->Wait.count

@@ -71,7 +71,7 @@ rtems_status_code rtems_message_queue_receive(
         wait,
         timeout
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_message_queue->Object );
       return _Message_queue_Translate_core_message_queue_return_code(
         _Thread_Executing->Wait.return_code
       );

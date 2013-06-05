@@ -73,7 +73,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
             the_period, &since_last_period, &executed
           );
         if (!valid_status) {
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_period->Object );
           return RTEMS_NOT_DEFINED;
         }
 
@@ -90,7 +90,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
         #endif
       }
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

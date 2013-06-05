@@ -35,9 +35,10 @@ void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(
   if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
        thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS &&
        thread_support->cancelation_requested ) {
+    /* FIXME: This path is broken on SMP */
     _Thread_Unnest_dispatch();
     _POSIX_Thread_Exit( the_thread, PTHREAD_CANCELED );
   } else
-    _Thread_Enable_dispatch();
+    _Objects_Put( &the_thread->Object );
 
 }

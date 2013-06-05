@@ -95,7 +95,7 @@ char *_Objects_Get_name_as_string(
       }
       *d = '\0';
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( the_object );
       return name;
   }
   return NULL;                  /* unreachable path */

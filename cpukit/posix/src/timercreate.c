@@ -72,7 +72,7 @@ int timer_create(
    */
   ptimer = _POSIX_Timer_Allocate();
   if ( !ptimer ) {
-    _Thread_Enable_dispatch();
+    _Objects_Put( &ptimer->Object );
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 
@@ -97,6 +97,6 @@ int timer_create(
   _Objects_Open_u32(&_POSIX_Timer_Information, &ptimer->Object, 0);
 
   *timerid  = ptimer->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Put( &ptimer->Object );
   return 0;
 }

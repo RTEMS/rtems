@@ -53,7 +53,7 @@ rtems_status_code rtems_rate_monotonic_reset_statistics(
 
     case OBJECTS_LOCAL:
       _Rate_monotonic_Reset_statistics( the_period );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

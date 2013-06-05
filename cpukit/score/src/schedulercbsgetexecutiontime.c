@@ -49,9 +49,9 @@ int _Scheduler_CBS_Get_execution_time (
                );
   /* The routine _Thread_Get may disable dispatch and not enable again. */
   if ( the_thread ) {
-    _Thread_Enable_dispatch();
     *exec_time = _Scheduler_CBS_Server_list[server_id]->parameters.budget -
       the_thread->cpu_time_budget;
+    _Objects_Put( &the_thread->Object );
   }
   else {
     *exec_time = _Scheduler_CBS_Server_list[server_id]->parameters.budget;

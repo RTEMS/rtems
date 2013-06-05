@@ -49,7 +49,7 @@ rtems_status_code rtems_port_external_to_internal(
       else
         *internal = _Addresses_Add_offset( the_port->internal_base,
                                            ending );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_port->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

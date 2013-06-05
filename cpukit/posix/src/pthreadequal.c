@@ -41,8 +41,10 @@ int pthread_equal(
 #ifndef RTEMS_DEBUG
   return _Objects_Are_ids_equal( t1, t2 );
 #else
-  int               status;
-  Objects_Locations location;
+  int                status;
+  Objects_Locations  location;
+  Thread_Control    *thread_1;
+  Thread_Control    *thread_2;
 
   /*
    *  By default this is not a match.
@@ -54,7 +56,7 @@ int pthread_equal(
    *  Validate the first id and return 0 if it is not valid
    */
 
-  (void) _Thread_Get( t1, &location );
+  thread_1 = _Thread_Get( t1, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -63,21 +65,21 @@ int pthread_equal(
        *  Validate the second id and return 0 if it is not valid
        */
 
-      (void) _Thread_Get( t2, &location );
+      thread_2 = _Thread_Get( t2, &location );
       switch ( location ) {
 
         case OBJECTS_LOCAL:
           status = _Objects_Are_ids_equal( t1, t2 );
-	  _Thread_Unnest_dispatch();
-	  _Thread_Enable_dispatch();
-	  break;
+          _Objects_Put_without_thread_dispatch( &thread_2->Object );
+          _Objects_Put( &thread_1->Object );
+          break;
 
         case OBJECTS_ERROR:
 #if defined(RTEMS_MULTIPROCESSING)
         case OBJECTS_REMOTE:
 #endif
           /* t1 must have been valid so exit the critical section */
-          _Thread_Enable_dispatch();
+          _Objects_Put( &thread_1->Object );
           /* return status == 0 */
           break;
       }

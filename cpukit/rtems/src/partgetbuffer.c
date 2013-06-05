@@ -46,11 +46,11 @@ rtems_status_code rtems_partition_get_buffer(
       the_buffer = _Partition_Allocate_buffer( the_partition );
       if ( the_buffer ) {
         the_partition->number_of_used_blocks += 1;
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_partition->Object );
         *buffer = the_buffer;
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_partition->Object );
       return RTEMS_UNSATISFIED;
 
 #if defined(RTEMS_MULTIPROCESSING)

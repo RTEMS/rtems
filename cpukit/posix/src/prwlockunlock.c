@@ -55,7 +55,7 @@ int pthread_rwlock_unlock(
 
     case OBJECTS_LOCAL:
       status = _CORE_RWLock_Release( &the_rwlock->RWLock );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_rwlock->Object );
       return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
 
 #if defined(RTEMS_MULTIPROCESSING)

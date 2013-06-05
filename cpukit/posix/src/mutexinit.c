@@ -85,7 +85,7 @@ int pthread_mutex_init(
       mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
       switch ( location ) {
         case OBJECTS_LOCAL:
-          _Thread_Enable_dispatch();
+          _Objects_Put( &mutex_in_use->Object );
           return EBUSY;
         #if defined(RTEMS_MULTIPROCESSING)
           case OBJECTS_REMOTE:

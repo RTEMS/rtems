@@ -74,14 +74,16 @@ static rtems_id pipe_semaphore = RTEMS_ID_NONE;
 /* Set barriers to be interruptible by signals. */
 static void pipe_interruptible(pipe_control_t *pipe)
 {
-  Objects_Locations location;
+  Objects_Locations  location;
+  Barrier_Control   *the_barrier;
 
-  _Barrier_Get(pipe->readBarrier, &location)->Barrier.Wait_queue.state
-    |= STATES_INTERRUPTIBLE_BY_SIGNAL;
-  _Thread_Enable_dispatch();
-  _Barrier_Get(pipe->writeBarrier, &location)->Barrier.Wait_queue.state
-    |= STATES_INTERRUPTIBLE_BY_SIGNAL;
-  _Thread_Enable_dispatch();
+  the_barrier = _Barrier_Get(pipe->readBarrier, &location);
+  the_barrier->Barrier.Wait_queue.state |= STATES_INTERRUPTIBLE_BY_SIGNAL;
+  _Objects_Put( &the_barrier->Object );
+
+  the_barrier = _Barrier_Get(pipe->writeBarrier, &location);
+  the_barrier->Barrier.Wait_queue.state |= STATES_INTERRUPTIBLE_BY_SIGNAL;
+  _Objects_Put( &the_barrier->Object );
 }
 #endif
 

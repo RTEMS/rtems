@@ -54,7 +54,7 @@ int pthread_mutex_unlock(
         the_mutex->Object.id,
         NULL
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mutex->Object );
       return _POSIX_Mutex_Translate_core_mutex_return_code( status );
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -68,7 +68,7 @@ rtems_status_code rtems_semaphore_flush(
           CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT
         );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

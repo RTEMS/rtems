@@ -72,6 +72,7 @@ void _POSIX_Thread_Exit(
             the_thread,
             STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT
           );
+           /* FIXME: Lock order reversal */
            _RTEMS_Unlock_allocator();
           _Thread_Enable_dispatch();
           /* now waiting for thread to arrive */
@@ -87,6 +88,7 @@ void _POSIX_Thread_Exit(
 
       _POSIX_Threads_Free( the_thread );
 
+     /* FIXME: Lock order reversal */
     _RTEMS_Unlock_allocator();
   _Thread_Enable_dispatch();
 }

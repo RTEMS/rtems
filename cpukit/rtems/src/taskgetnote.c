@@ -75,7 +75,7 @@ rtems_status_code rtems_task_get_note(
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
       *note = api->Notepads[ notepad ];
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

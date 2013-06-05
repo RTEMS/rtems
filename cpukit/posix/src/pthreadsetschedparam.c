@@ -98,7 +98,7 @@ int pthread_setschedparam(
           break;
       }
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

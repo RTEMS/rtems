@@ -45,7 +45,7 @@ int sem_getvalue(
 
     case OBJECTS_LOCAL:
       *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

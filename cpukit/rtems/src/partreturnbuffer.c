@@ -53,10 +53,10 @@ rtems_status_code rtems_partition_return_buffer(
       if ( _Partition_Is_buffer_valid( buffer, the_partition ) ) {
         _Partition_Free_buffer( the_partition, buffer );
         the_partition->number_of_used_blocks -= 1;
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_partition->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_partition->Object );
       return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)

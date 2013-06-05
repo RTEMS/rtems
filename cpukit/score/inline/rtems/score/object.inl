@@ -377,6 +377,35 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
 #endif
 
 /**
+ * @brief Puts back an object obtained with _Objects_Get().
+ *
+ * This function decrements the thread dispatch disable level.  The
+ * _Thread_Dispatch() is called if the level reaches zero.
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Put(
+  Objects_Control *the_object
+)
+{
+  (void) the_object;
+  _Thread_Enable_dispatch();
+}
+
+/**
+ * @brief Puts back an object obtained with _Objects_Get().
+ *
+ * This function decrements the thread dispatch disable level.  The
+ * _Thread_Dispatch() is not called if the level reaches zero, thus a thread
+ * dispatch will not take place immediately on the current processor.
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Put_without_thread_dispatch(
+  Objects_Control *the_object
+)
+{
+  (void) the_object;
+  _Thread_Unnest_dispatch();
+}
+
+/**
  * @brief Puts back an object obtained with _Objects_Get_isr_disable().
  */
 RTEMS_INLINE_ROUTINE void _Objects_Put_for_get_isr_disable(

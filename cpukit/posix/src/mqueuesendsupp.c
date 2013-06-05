@@ -77,7 +77,7 @@ int _POSIX_Message_queue_Send_support(
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_RDONLY ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_mq_fd->Object );
         rtems_set_errno_and_return_minus_one( EBADF );
       }
 
@@ -105,7 +105,7 @@ int _POSIX_Message_queue_Send_support(
         timeout    /* no timeout */
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
 
       /*
        *  If we had to block, then this is where the task returns

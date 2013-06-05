@@ -245,7 +245,7 @@ rtems_status_code rtems_rate_monotonic_period(
   switch ( location ) {
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_period->Object );
         return RTEMS_NOT_OWNER_OF_RESOURCE;
       }
 
@@ -263,7 +263,7 @@ rtems_status_code rtems_rate_monotonic_period(
             return_value = RTEMS_SUCCESSFUL;
             break;
         }
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_period->Object );
         return( return_value );
       }
 
@@ -287,7 +287,7 @@ rtems_status_code rtems_rate_monotonic_period(
         );
 
         _Watchdog_Insert_ticks( &the_period->Timer, length );
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_period->Object );
         return RTEMS_SUCCESSFUL;
       }
 
@@ -326,7 +326,7 @@ rtems_status_code rtems_rate_monotonic_period(
         if ( local_state == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING )
           _Thread_Clear_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
 
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_period->Object );
         return RTEMS_SUCCESSFUL;
       }
 
@@ -343,7 +343,7 @@ rtems_status_code rtems_rate_monotonic_period(
 
         _Watchdog_Insert_ticks( &the_period->Timer, length );
         _Scheduler_Release_job(the_period->owner, the_period->next_length);
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_period->Object );
         return RTEMS_TIMEOUT;
       }
 

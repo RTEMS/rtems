@@ -59,7 +59,7 @@ rtems_status_code rtems_semaphore_delete(
         if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) &&
              !_Attributes_Is_simple_binary_semaphore(
                  the_semaphore->attribute_set ) ) {
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_semaphore->Object );
           return RTEMS_RESOURCE_IN_USE;
         }
         _CORE_mutex_Flush(
@@ -92,7 +92,7 @@ rtems_status_code rtems_semaphore_delete(
         );
       }
 #endif
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

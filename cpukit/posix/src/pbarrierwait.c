@@ -55,7 +55,7 @@ int pthread_barrier_wait(
         0,
         NULL
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return _POSIX_Barrier_Translate_core_barrier_return_code(
                 _Thread_Executing->Wait.return_code );
 

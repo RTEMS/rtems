@@ -50,7 +50,7 @@ int pthread_barrier_destroy(
 
     case OBJECTS_LOCAL:
       if ( the_barrier->Barrier.number_of_waiting_threads != 0 ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_barrier->Object );
         return EBUSY;
       }
 
@@ -58,7 +58,7 @@ int pthread_barrier_destroy(
 
       _POSIX_Barrier_Free( the_barrier );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

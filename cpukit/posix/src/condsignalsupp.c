@@ -55,7 +55,7 @@ int _POSIX_Condition_variables_Signal_support(
           the_cond->Mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
       } while ( is_broadcast && the_thread );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_cond->Object );
 
       return 0;
 

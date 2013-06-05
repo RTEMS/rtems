@@ -59,7 +59,7 @@ rtems_status_code rtems_timer_fire_after(
 
         if ( the_timer->Ticker.state != WATCHDOG_INACTIVE ) {
           _ISR_Enable( level );
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_timer->Object );
           return RTEMS_SUCCESSFUL;
         }
 
@@ -74,7 +74,7 @@ rtems_status_code rtems_timer_fire_after(
 
 
       _Watchdog_Insert_ticks( &the_timer->Ticker, ticks );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

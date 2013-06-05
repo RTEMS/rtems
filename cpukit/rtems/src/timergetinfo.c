@@ -46,7 +46,7 @@ rtems_status_code rtems_timer_get_information(
       the_info->initial    = the_timer->Ticker.initial;
       the_info->start_time = the_timer->Ticker.start_time;
       the_info->stop_time  = the_timer->Ticker.stop_time;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

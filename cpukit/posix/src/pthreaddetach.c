@@ -43,7 +43,7 @@ int pthread_detach(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
       api->detachstate = PTHREAD_CREATE_DETACHED;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

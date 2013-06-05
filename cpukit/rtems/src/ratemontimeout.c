@@ -59,7 +59,7 @@ void _Rate_monotonic_Timeout(
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else
         the_period->state = RATE_MONOTONIC_EXPIRED;
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_period->Object );
       break;
 
 #if defined(RTEMS_MULTIPROCESSING)

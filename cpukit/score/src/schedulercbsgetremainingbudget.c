@@ -47,8 +47,8 @@ int _Scheduler_CBS_Get_remaining_budget (
                );
   /* The routine _Thread_Get may disable dispatch and not enable again. */
   if ( the_thread ) {
-    _Thread_Enable_dispatch();
     *remaining_budget = the_thread->cpu_time_budget;
+    _Objects_Put( &the_thread->Object );
   }
   else {
     *remaining_budget = 0;

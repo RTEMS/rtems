@@ -50,7 +50,7 @@ int pthread_spin_destroy(
 
     case OBJECTS_LOCAL:
       if ( _CORE_spinlock_Is_busy( &the_spinlock->Spinlock ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_spinlock->Object );
         return EBUSY;
       }
 
@@ -58,7 +58,7 @@ int pthread_spin_destroy(
 
       _POSIX_Spinlock_Free( the_spinlock );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_spinlock->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

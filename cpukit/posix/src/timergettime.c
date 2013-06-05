@@ -68,7 +68,7 @@ int timer_gettime(
 
       value->it_interval  = ptimer->timer_data.it_interval;
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &ptimer->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

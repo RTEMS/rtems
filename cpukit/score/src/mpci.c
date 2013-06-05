@@ -267,7 +267,7 @@ Thread_Control *_MPCI_Process_response (
     case OBJECTS_LOCAL:
       _Thread_queue_Extract( &_MPCI_Remote_blocked_threads, the_thread );
       the_thread->Wait.return_code = the_packet->return_code;
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_thread->Object );
     break;
   }
 

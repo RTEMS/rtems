@@ -66,7 +66,7 @@ rtems_status_code rtems_timer_reset(
          */
         #if defined(RTEMS_DEBUG)
           if ( !timer_server ) {
-            _Thread_Enable_dispatch();
+            _Objects_Put( &the_timer->Object );
             return RTEMS_INCORRECT_STATE;
           }
         #endif
@@ -80,7 +80,7 @@ rtems_status_code rtems_timer_reset(
          */
         status = RTEMS_NOT_DEFINED;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return status;
 
 #if defined(RTEMS_MULTIPROCESSING)

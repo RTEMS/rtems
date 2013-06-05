@@ -49,7 +49,7 @@ int pthread_mutex_destroy(
         */
 
       if ( _CORE_mutex_Is_locked( &the_mutex->Mutex ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_mutex->Object );
         return EBUSY;
       }
 
@@ -58,7 +58,7 @@ int pthread_mutex_destroy(
       _CORE_mutex_Flush( &the_mutex->Mutex, NULL, EINVAL );
 
       _POSIX_Mutex_Free( the_mutex );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mutex->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

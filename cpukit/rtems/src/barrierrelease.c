@@ -56,7 +56,7 @@ rtems_status_code rtems_barrier_release(
 
     case OBJECTS_LOCAL:
       *released = _CORE_barrier_Release( &the_barrier->Barrier, id, NULL );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -61,7 +61,7 @@ rtems_status_code rtems_task_set_priority(
              the_thread->current_priority > new_priority )
           _Thread_Change_priority( the_thread, new_priority, false );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

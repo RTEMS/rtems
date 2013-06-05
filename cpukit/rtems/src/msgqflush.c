@@ -69,7 +69,7 @@ rtems_status_code rtems_message_queue_flush(
 
     case OBJECTS_LOCAL:
       *count = _CORE_message_queue_Flush( &the_message_queue->message_queue );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_message_queue->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -68,10 +68,10 @@ rtems_status_code rtems_task_start(
     case OBJECTS_LOCAL:
       if ( _Thread_Start(
              the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_INCORRECT_STATE;
 
 #if defined(RTEMS_MULTIPROCESSING)

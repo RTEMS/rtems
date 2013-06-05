@@ -40,7 +40,7 @@ rtems_status_code rtems_port_delete(
     case OBJECTS_LOCAL:
       _Objects_Close( &_Dual_ported_memory_Information, &the_port->Object );
       _Dual_ported_memory_Free( the_port );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_port->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

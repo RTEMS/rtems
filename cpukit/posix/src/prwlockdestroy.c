@@ -52,7 +52,7 @@ int pthread_rwlock_destroy(
        *  If there is at least one thread waiting, then do not delete it.
        */
       if ( _Thread_queue_First( &the_rwlock->RWLock.Wait_queue ) != NULL ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_rwlock->Object );
         return EBUSY;
       }
 
@@ -64,7 +64,7 @@ int pthread_rwlock_destroy(
 
       _POSIX_RWLock_Free( the_rwlock );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_rwlock->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

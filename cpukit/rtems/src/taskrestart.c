@@ -46,10 +46,10 @@ rtems_status_code rtems_task_restart(
 
     case OBJECTS_LOCAL:
       if ( _Thread_Restart( the_thread, NULL, argument ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_INCORRECT_STATE;
 
 #if defined(RTEMS_MULTIPROCESSING)

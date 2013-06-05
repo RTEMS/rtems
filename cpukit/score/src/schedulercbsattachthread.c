@@ -32,23 +32,9 @@ int _Scheduler_CBS_Attach_thread (
 {
   Objects_Locations location;
   Thread_Control *the_thread;
-  Scheduler_CBS_Per_thread *sched_info;
 
   if ( server_id >= _Scheduler_CBS_Maximum_servers )
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-
-  the_thread = _Thread_Get(task_id, &location);
-  /* The routine _Thread_Get may disable dispatch and not enable again. */
-  if ( the_thread )
-    _Thread_Enable_dispatch();
-  if ( !the_thread )
-    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
-
-  sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
-
-  /* Thread is already attached to a server. */
-  if ( sched_info->cbs_server )
-    return SCHEDULER_CBS_ERROR_FULL;
 
   /* Server is not valid. */
   if ( !_Scheduler_CBS_Server_list[server_id] )
@@ -58,12 +44,30 @@ int _Scheduler_CBS_Attach_thread (
   if ( _Scheduler_CBS_Server_list[server_id]->task_id != -1 )
     return SCHEDULER_CBS_ERROR_FULL;
 
-  _Scheduler_CBS_Server_list[server_id]->task_id = task_id;
-  sched_info->cbs_server = (void *) _Scheduler_CBS_Server_list[server_id];
+  the_thread = _Thread_Get(task_id, &location);
+  /* The routine _Thread_Get may disable dispatch and not enable again. */
+  if ( the_thread ) {
+    Scheduler_CBS_Per_thread *sched_info;
 
-  the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
-  the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-  the_thread->is_preemptible   = true;
+    sched_info = (Scheduler_CBS_Per_thread *) the_thread->scheduler_info;
+
+    /* Thread is already attached to a server. */
+    if ( sched_info->cbs_server ) {
+      _Objects_Put( &the_thread->Object );
+      return SCHEDULER_CBS_ERROR_FULL;
+    }
+
+    _Scheduler_CBS_Server_list[server_id]->task_id = task_id;
+    sched_info->cbs_server = (void *) _Scheduler_CBS_Server_list[server_id];
+
+    the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
+    the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
+    the_thread->is_preemptible   = true;
+
+    _Objects_Put( &the_thread->Object );
+  } else {
+    return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
+  }
 
   return SCHEDULER_CBS_OK;
 }

@@ -40,7 +40,7 @@ int timer_getoverrun(
     case OBJECTS_LOCAL:
       overrun = ptimer->overrun;
       ptimer->overrun = 0;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &ptimer->Object );
       return overrun;
 
 #if defined(RTEMS_MULTIPROCESSING)

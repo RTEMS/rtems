@@ -49,13 +49,13 @@ rtems_status_code rtems_task_variable_delete(
             the_thread->task_variables = (rtems_task_variable_t *)tvp->next;
 
           _RTEMS_Tasks_Invoke_task_variable_dtor( the_thread, tvp );
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_thread->Object );
           return RTEMS_SUCCESSFUL;
         }
         prev = tvp;
         tvp = (rtems_task_variable_t *)tvp->next;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)

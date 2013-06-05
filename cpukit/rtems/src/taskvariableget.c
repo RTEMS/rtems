@@ -59,12 +59,12 @@ rtems_status_code rtems_task_variable_get(
 	   * saved) value if `tid' is the current task?
 	   */
           *result = tvp->tval;
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_thread->Object );
           return RTEMS_SUCCESSFUL;
         }
         tvp = (rtems_task_variable_t *)tvp->next;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -55,7 +55,7 @@ int pthread_spin_unlock(
 
     case OBJECTS_LOCAL:
       status = _CORE_spinlock_Release( &the_spinlock->Spinlock );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_spinlock->Object );
       return _POSIX_Spinlock_Translate_core_spinlock_return_code( status );
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -95,7 +95,7 @@ int timer_settime(
          /* Indicates that the timer is created and stopped */
          ptimer->state = POSIX_TIMER_STATE_CREATE_STOP;
          /* Returns with success */
-        _Thread_Enable_dispatch();
+        _Objects_Put( &ptimer->Object );
         return 0;
        }
 
@@ -112,7 +112,7 @@ int timer_settime(
          ptimer
        );
        if ( !activated ) {
-         _Thread_Enable_dispatch();
+         _Objects_Put( &ptimer->Object );
          return 0;
        }
 
@@ -127,7 +127,7 @@ int timer_settime(
        /* Indicate that the time is running */
        ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
        _TOD_Get( &ptimer->time );
-       _Thread_Enable_dispatch();
+      _Objects_Put( &ptimer->Object );
        return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

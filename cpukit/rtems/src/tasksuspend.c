@@ -46,10 +46,10 @@ rtems_status_code rtems_task_suspend(
     case OBJECTS_LOCAL:
       if ( !_States_Is_suspended( the_thread->current_state ) ) {
         _Thread_Suspend( the_thread );
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_ALREADY_SUSPENDED;
 
 #if defined(RTEMS_MULTIPROCESSING)

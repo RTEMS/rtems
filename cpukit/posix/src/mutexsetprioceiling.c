@@ -80,7 +80,7 @@ int pthread_mutex_setprioceiling(
         the_mutex->Object.id,
         NULL
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mutex->Object );
 
       return 0;
 

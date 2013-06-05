@@ -56,10 +56,10 @@ rtems_status_code rtems_signal_send(
         } else {
           _ASR_Post_signals( signal_set, &asr->signals_pending );
         }
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_NOT_DEFINED;
 
 #if defined(RTEMS_MULTIPROCESSING)

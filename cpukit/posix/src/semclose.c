@@ -45,7 +45,7 @@ int sem_close(
     case OBJECTS_LOCAL:
       the_semaphore->open_count -= 1;
       _POSIX_Semaphore_Delete( the_semaphore );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

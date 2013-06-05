@@ -42,7 +42,7 @@ rtems_status_code rtems_rate_monotonic_delete(
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Rate_monotonic_Free( the_period );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

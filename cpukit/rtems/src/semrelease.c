@@ -91,7 +91,7 @@ rtems_status_code rtems_semaphore_release(
           id,
           MUTEX_MP_SUPPORT
         );
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_semaphore->Object );
         return _Semaphore_Translate_core_mutex_return_code( mutex_status );
       } else {
         semaphore_status = _CORE_semaphore_Surrender(
@@ -99,7 +99,7 @@ rtems_status_code rtems_semaphore_release(
           id,
           MUTEX_MP_SUPPORT
         );
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_semaphore->Object );
         return
           _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
       }

@@ -37,15 +37,17 @@ int _POSIX_Condition_variables_Wait_support(
 )
 {
   register POSIX_Condition_variables_Control *the_cond;
+  POSIX_Mutex_Control                        *the_mutex;
   Objects_Locations                           location;
   int                                         status;
   int                                         mutex_status;
 
-  if ( !_POSIX_Mutex_Get( mutex, &location ) ) {
+  the_mutex = _POSIX_Mutex_Get( mutex, &location );
+  if ( !the_mutex ) {
      return EINVAL;
   }
 
-  _Thread_Unnest_dispatch();
+  _Objects_Put_without_thread_dispatch( &the_mutex->Object );
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
@@ -53,14 +55,14 @@ int _POSIX_Condition_variables_Wait_support(
     case OBJECTS_LOCAL:
 
       if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         return EINVAL;
       }
 
       (void) pthread_mutex_unlock( mutex );
 /* XXX ignore this for now  since behavior is undefined
       if ( mutex_status ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         return EINVAL;
       }
 */
@@ -75,7 +77,7 @@ int _POSIX_Condition_variables_Wait_support(
 
         _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
 
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
 
         /*
          *  Switch ourself out because we blocked as a result of the
@@ -94,7 +96,7 @@ int _POSIX_Condition_variables_Wait_support(
           status = 0;
 
       } else {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         status = ETIMEDOUT;
       }
 

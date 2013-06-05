@@ -49,7 +49,7 @@ rtems_status_code rtems_timer_cancel(
     case OBJECTS_LOCAL:
       if ( !_Timer_Is_dormant_class( the_timer->the_class ) )
         (void) _Watchdog_Remove( &the_timer->Ticker );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

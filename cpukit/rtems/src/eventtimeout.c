@@ -58,7 +58,7 @@ void _Event_Timeout(
          */
         if ( !the_thread->Wait.count ) {
           _ISR_Enable( level );
-          _Thread_Unnest_dispatch();
+          _Objects_Put_without_thread_dispatch( &the_thread->Object );
           return;
         }
 
@@ -71,7 +71,7 @@ void _Event_Timeout(
         the_thread->Wait.return_code = RTEMS_TIMEOUT;
       _ISR_Enable( level );
       _Thread_Unblock( the_thread );
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_thread->Object );
       break;
 
 #if defined(RTEMS_MULTIPROCESSING)

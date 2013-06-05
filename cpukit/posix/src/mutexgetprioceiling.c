@@ -53,7 +53,7 @@ int pthread_mutex_getprioceiling(
       *prioceiling = _POSIX_Priority_From_core(
         the_mutex->Mutex.Attributes.priority_ceiling
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mutex->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

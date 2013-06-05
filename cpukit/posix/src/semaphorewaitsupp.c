@@ -51,7 +51,7 @@ int _POSIX_Semaphore_Wait_support(
         blocking,
         timeout
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
 
       if ( !_Thread_Executing->Wait.return_code )
         return 0;

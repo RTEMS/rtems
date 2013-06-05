@@ -82,7 +82,7 @@ int pthread_rwlock_timedrdlock(
 	NULL
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_rwlock->Object );
       if ( !do_wait ) {
         if ( _Thread_Executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE ) {
 	  if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )

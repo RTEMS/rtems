@@ -49,7 +49,7 @@ int pthread_setspecific(
       api   = _Objects_Get_API( _Thread_Executing->Object.id );
       index = _Objects_Get_index( _Thread_Executing->Object.id );
       the_key->Values[ api ][ index ] = (void *) value;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_key->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

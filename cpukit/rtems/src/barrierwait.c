@@ -44,7 +44,7 @@ rtems_status_code rtems_barrier_wait(
         timeout,
         NULL
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return _Barrier_Translate_core_barrier_return_code(
                 _Thread_Executing->Wait.return_code );
 

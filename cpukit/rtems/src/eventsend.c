@@ -42,7 +42,7 @@ rtems_status_code rtems_event_send(
         &_Event_Sync_state,
         STATES_WAITING_FOR_EVENT
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &thread->Object );
       sc = RTEMS_SUCCESSFUL;
       break;
 #ifdef RTEMS_MULTIPROCESSING

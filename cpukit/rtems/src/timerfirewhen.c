@@ -62,7 +62,7 @@ rtems_status_code rtems_timer_fire_when(
          &the_timer->Ticker,
          seconds - _TOD_Seconds_since_epoch()
        );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

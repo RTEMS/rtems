@@ -83,7 +83,7 @@ rtems_status_code rtems_timer_server_fire_when(
 
       (*timer_server->schedule_operation)( timer_server, the_timer );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

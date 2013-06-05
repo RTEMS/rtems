@@ -45,12 +45,12 @@ on_EINTR:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       if ( api->detachstate == PTHREAD_CREATE_DETACHED ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return EINVAL;
       }
 
       if ( _Thread_Is_executing( the_thread ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return EDEADLK;
       }
 
@@ -70,7 +70,7 @@ on_EINTR:
         _Thread_queue_Enter_critical_section( &api->Join_List );
         _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
 
       if ( _Thread_Executing->Wait.return_code == EINTR )
         goto on_EINTR;

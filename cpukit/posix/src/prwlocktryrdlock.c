@@ -61,7 +61,7 @@ int pthread_rwlock_tryrdlock(
       );
 
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_rwlock->Object );
       return _POSIX_RWLock_Translate_core_RWLock_return_code(
         (CORE_RWLock_Status) _Thread_Executing->Wait.return_code
       );

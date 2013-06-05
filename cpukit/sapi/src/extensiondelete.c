@@ -37,7 +37,7 @@ rtems_status_code rtems_extension_delete(
       _User_extensions_Remove_set( &the_extension->Extension );
       _Objects_Close( &_Extension_Information, &the_extension->Object );
       _Extension_Free( the_extension );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_extension->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

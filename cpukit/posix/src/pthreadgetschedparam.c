@@ -53,7 +53,7 @@ int pthread_getschedparam(
         param->sched_priority =
           _POSIX_Priority_From_core( the_thread->current_priority );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

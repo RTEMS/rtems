@@ -54,7 +54,7 @@ rtems_status_code rtems_object_set_name(
 
     case OBJECTS_LOCAL:
       _Objects_Set_name( information, the_object, name );
-      _Thread_Enable_dispatch();
+      _Objects_Put( the_object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

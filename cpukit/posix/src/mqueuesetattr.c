@@ -64,7 +64,7 @@ int mq_setattr(
       }
 
       the_mq_fd->oflag = mqstat->mq_flags;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

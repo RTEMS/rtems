@@ -52,7 +52,7 @@ int sem_post(
         NULL
 #endif
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

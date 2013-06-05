@@ -79,6 +79,7 @@ rtems_status_code rtems_region_get_segment(
              *  dispatching disabled critical section.  We have to do this
              *  because this thread is going to block.
              */
+            /* FIXME: Lock order reversal */
             _Thread_Disable_dispatch();
             _RTEMS_Unlock_allocator();
 
@@ -91,7 +92,7 @@ rtems_status_code rtems_region_get_segment(
 
             _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
 
-            _Thread_Enable_dispatch();
+            _Objects_Put( &the_region->Object );
 
             return (rtems_status_code) executing->Wait.return_code;
           }

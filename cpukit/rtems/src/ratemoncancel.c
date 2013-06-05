@@ -38,13 +38,13 @@ rtems_status_code rtems_rate_monotonic_cancel(
 
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_period->Object );
         return RTEMS_NOT_OWNER_OF_RESOURCE;
       }
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Scheduler_Release_job(the_period->owner, 0);
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

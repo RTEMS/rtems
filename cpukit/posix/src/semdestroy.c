@@ -48,12 +48,12 @@ int sem_destroy(
        */
 
       if ( the_semaphore->named == true ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_semaphore->Object );
         rtems_set_errno_and_return_minus_one( EINVAL );
       }
 
       _POSIX_Semaphore_Delete( the_semaphore );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)
