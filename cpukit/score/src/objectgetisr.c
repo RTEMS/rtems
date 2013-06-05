@@ -43,8 +43,8 @@ Objects_Control *_Objects_Get_isr_disable(
 
   index = id - information->minimum_id + 1;
 
-  _ISR_Disable( level );
   if ( information->maximum >= index ) {
+    _ISR_Disable( level );
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
       *level_p = level;
@@ -54,7 +54,6 @@ Objects_Control *_Objects_Get_isr_disable(
     *location = OBJECTS_ERROR;
     return NULL;
   }
-  _ISR_Enable( level );
   *location = OBJECTS_ERROR;
 
 #if defined(RTEMS_MULTIPROCESSING)
