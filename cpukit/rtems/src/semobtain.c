@@ -70,7 +70,7 @@ rtems_status_code rtems_semaphore_obtain(
         id,
         ((_Options_Is_no_wait( option_set )) ? false : true),
         timeout,
-        &level
+        level
       );
       return _Semaphore_Translate_core_semaphore_return_code(
                   _Thread_Executing->Wait.return_code );
