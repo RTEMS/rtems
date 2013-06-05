@@ -53,6 +53,7 @@ rtems_status_code rtems_event_system_send(
       break;
 #ifdef RTEMS_MULTIPROCESSING
     case OBJECTS_REMOTE:
+      _Thread_Dispatch();
       sc = RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
       break;
 #endif
