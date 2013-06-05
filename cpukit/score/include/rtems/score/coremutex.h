@@ -281,7 +281,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
  *  available.
  *
  *  @param[in] the_mutex is the mutex to attempt to lock
- *  @param[in] level_p is the interrupt level holder
+ *  @param[in] level is the interrupt level
  *
  *  @retval This routine returns 0 if "trylock" can resolve whether or not
  *  the mutex is immediately obtained or there was an error attempting to
@@ -294,7 +294,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   CORE_mutex_Control  *the_mutex,
-  ISR_Level           *level_p
+  ISR_Level            level
 );
 
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
@@ -307,11 +307,11 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
    *  which makes it harder to get full binary test coverage.
    *
    *  @param[in] the_mutex will attempt to lock
-   *  @param[in] level_p is the interrupt level holder
+   *  @param[in] level_p is the interrupt level
    */
   int _CORE_mutex_Seize_interrupt_trylock(
     CORE_mutex_Control  *the_mutex,
-    ISR_Level           *level_p
+    ISR_Level            level
   );
 #else
   /**
@@ -319,10 +319,10 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
    *  a few instructions.  This is very important for mutex performance.
    *
    *  @param[in] _mutex will attempt to lock
-   *  @param[in] _level_p is the interrupt level holder
+   *  @param[in] _level is the interrupt level
    */
-  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level_p ) \
-     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level_p )
+  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level ) \
+     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level )
 #endif
 
 /**
@@ -394,7 +394,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
            INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE \
            ); \
     } \
-    if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, &(_level) ) ) {  \
+    if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, _level ) ) {  \
       if ( !(_wait) ) { \
         _ISR_Enable( _level ); \
         _Thread_Executing->Wait.return_code = \
