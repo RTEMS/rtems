@@ -29,6 +29,7 @@
 /**@{**/
 
 #include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadq.h>
 
 /**

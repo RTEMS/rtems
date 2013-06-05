@@ -22,6 +22,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 
 #if defined ( __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__ )
 void _Thread_Disable_dispatch( void )

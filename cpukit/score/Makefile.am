@@ -44,6 +44,7 @@ include_rtems_score_HEADERS += include/rtems/score/stack.h
 include_rtems_score_HEADERS += include/rtems/score/states.h
 include_rtems_score_HEADERS += include/rtems/score/sysstate.h
 include_rtems_score_HEADERS += include/rtems/score/thread.h
+include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h
 include_rtems_score_HEADERS += include/rtems/score/threadsync.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h

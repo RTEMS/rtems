@@ -22,6 +22,7 @@
 #include <rtems/config.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/rtems/object.h>
 
 int _Scheduler_CBS_Attach_thread (

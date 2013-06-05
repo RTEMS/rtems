@@ -23,6 +23,8 @@
 #ifndef _RTEMS_SCORE_COREMUTEX_INL
 #define _RTEMS_SCORE_COREMUTEX_INL
 
+#include <rtems/score/threaddispatch.h>
+
 /**
  * @addtogroup ScoreMutex
  */

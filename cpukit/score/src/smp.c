@@ -22,6 +22,7 @@
 #include <rtems/bspsmp.h>
 #include <rtems/score/smp.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>

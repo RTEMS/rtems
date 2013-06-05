@@ -29,6 +29,7 @@
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadq.h>
 
 Thread_Control *_Thread_Get (

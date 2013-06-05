@@ -23,6 +23,8 @@
 #ifndef _RTEMS_SCORE_OBJECT_INL
 #define _RTEMS_SCORE_OBJECT_INL
 
+#include <rtems/score/threaddispatch.h>
+
 /**
  * This function builds an object's id from the processor node and index
  * values specified.

@@ -21,6 +21,7 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/smp.h>
 
 void _ISR_SMP_Initialize(void)
