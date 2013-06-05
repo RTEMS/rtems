@@ -54,13 +54,6 @@ static inline void _Thread_Create_idle_helper(
    */
   idle = _Thread_Internal_allocate();
 
-  /*
-   *  This is only called during initialization and we better be sure
-   *  that when _Thread_Initialize unnests dispatch that we do not
-   *  do anything stupid.
-   */
-  _Thread_Disable_dispatch();
-
   _Thread_Initialize(
     &_Thread_Internal_information,
     idle,
@@ -74,8 +67,6 @@ static inline void _Thread_Create_idle_helper(
     0,           /* all interrupts enabled */
     name
   );
-
-  _Thread_Unnest_dispatch();
 
   /*
    *  WARNING!!! This is necessary to "kick" start the system and
