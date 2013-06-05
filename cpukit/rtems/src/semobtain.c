@@ -60,6 +60,7 @@ rtems_status_code rtems_semaphore_obtain(
           timeout,
           level
         );
+        _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_core_mutex_return_code(
                   _Thread_Executing->Wait.return_code );
       }
@@ -72,6 +73,7 @@ rtems_status_code rtems_semaphore_obtain(
         timeout,
         level
       );
+      _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
       return _Semaphore_Translate_core_semaphore_return_code(
                   _Thread_Executing->Wait.return_code );
 

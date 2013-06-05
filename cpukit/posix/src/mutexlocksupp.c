@@ -59,6 +59,7 @@ int _POSIX_Mutex_Lock_support(
         timeout,
         level
       );
+      _Objects_Put_for_get_isr_disable( &the_mutex->Object );
       return _POSIX_Mutex_Translate_core_mutex_return_code(
         (CORE_mutex_Status) _Thread_Executing->Wait.return_code
       );

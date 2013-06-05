@@ -44,6 +44,9 @@ Objects_Control *_Objects_Get_isr_disable(
   index = id - information->minimum_id + 1;
 
   if ( information->maximum >= index ) {
+#if defined(RTEMS_SMP)
+    _Thread_Disable_dispatch();
+#endif
     _ISR_Disable( level );
     if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
@@ -51,6 +54,9 @@ Objects_Control *_Objects_Get_isr_disable(
       return the_object;
     }
     _ISR_Enable( level );
+#if defined(RTEMS_SMP)
+    _Thread_Enable_dispatch();
+#endif
     *location = OBJECTS_ERROR;
     return NULL;
   }

@@ -375,4 +375,18 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
   ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
 
 #endif
+
+/**
+ * @brief Puts back an object obtained with _Objects_Get_isr_disable().
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Put_for_get_isr_disable(
+  Objects_Control *the_object
+)
+{
+  (void) the_object;
+#if defined(RTEMS_SMP)
+  _Thread_Enable_dispatch();
+#endif
+}
+
 /* end of include file */
