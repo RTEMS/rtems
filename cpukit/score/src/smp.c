@@ -150,11 +150,13 @@ void _SMP_Request_other_cores_to_perform_first_context_switch( void )
   int cpu;
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
+    Per_CPU_Control *per_cpu = &_Per_CPU_Information[ cpu ];
+
     if ( cpu != self ) {
-      _Per_CPU_Change_state(
-        &_Per_CPU_Information[ cpu ],
-        PER_CPU_STATE_BEGIN_MULTITASKING
-      );
+      _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
+    } else {
+
+      _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_UP );
     }
   }
 }
