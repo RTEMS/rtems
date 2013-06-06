@@ -683,7 +683,7 @@ const rtems_libio_helper rtems_fs_init_helper =
    * NOTE: This is the same as the Simple Scheduler
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( sizeof(Chain_Control) ) \
+    _Configure_From_workspace( sizeof( Scheduler_simple_smp_Control ) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif

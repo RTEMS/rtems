@@ -94,7 +94,10 @@ void _Thread_Dispatch( void )
   _ISR_Disable( level );
   while ( _Thread_Dispatch_necessary == true ) {
     heir = _Thread_Heir;
-    #ifndef RTEMS_SMP
+    #if defined(RTEMS_SMP)
+      executing->is_executing = false;
+      heir->is_executing = true;
+    #else
       _Thread_Dispatch_set_disable_level( 1 );
     #endif
     _Thread_Dispatch_necessary = false;

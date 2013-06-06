@@ -384,6 +384,30 @@ struct Thread_Control_struct {
 #endif
   /** This field is true if the thread is preemptible. */
   bool                                  is_preemptible;
+#if defined(RTEMS_SMP)
+  /**
+   * @brief This field is true if the thread is scheduled.
+   *
+   * A thread is scheduled if it is ready and the scheduler allocated a
+   * processor for it.  A scheduled thread is assigned to exactly one
+   * processor.  There are exactly processor count scheduled threads in the
+   * system.
+   */
+  bool                                  is_scheduled;
+
+  /**
+   * @brief This field is true if the thread is executing.
+   *
+   * A thread is executing if it executes on a processor.  An executing thread
+   * executes on exactly one processor.  There are exactly processor count
+   * executing threads in the system.  An executing thread may have a heir
+   * thread and thread dispatching is necessary.  On SMP a thread dispatch on a
+   * remote processor needs help from an inter-processor interrupt, thus it
+   * will take some time to complete the state change.  A lot of things can
+   * happen in the meantime.
+   */
+  bool                                  is_executing;
+#endif
 #if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */
   void                                 *rtems_ada_self;
@@ -407,6 +431,10 @@ struct Thread_Control_struct {
 
   /** This pointer holds per-thread data for the scheduler and ready queue. */
   void                                 *scheduler_info;
+
+#ifdef RTEMS_SMP
+  Per_CPU_Control                      *cpu;
+#endif
 
   /** This field contains information about the starting state of
    *  this thread.

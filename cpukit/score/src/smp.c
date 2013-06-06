@@ -51,7 +51,10 @@ void rtems_smp_secondary_cpu_initialize( void )
    *  THIS core.
    */
   heir = per_cpu->heir;
+  heir->is_executing = true;
+  per_cpu->executing->is_executing = false;
   per_cpu->executing = heir;
+  per_cpu->dispatch_necessary = false;
 
   /*
    * Threads begin execution in the _Thread_Handler() function.   This function

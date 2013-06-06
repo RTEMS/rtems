@@ -180,6 +180,12 @@ bool _Thread_Initialize(
 
   the_thread->Start.isr_level         = isr_level;
 
+#if defined(RTEMS_SMP)
+  the_thread->is_scheduled            = false;
+  the_thread->is_executing            = false;
+  the_thread->cpu                     = NULL;
+#endif
+
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;
   the_thread->resource_count          = 0;

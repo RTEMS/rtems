@@ -43,6 +43,11 @@ void _Thread_Start_multitasking( void )
 
   _Thread_Dispatch_necessary = false;
 
+  #if defined(RTEMS_SMP)
+    _Thread_Executing->is_executing = false;
+    _Thread_Heir->is_executing = true;
+  #endif
+
   _Thread_Executing = _Thread_Heir;
 
    /*
