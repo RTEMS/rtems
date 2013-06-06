@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Scheduler Simple SMP Tick Method
- *  @ingroup ScoreScheduler
+ * @brief Default Scheduler At Tick Handler
+ *
+ * @ingroup ScoreScheduler
  */
 
 /*
@@ -19,18 +20,12 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/schedulersimplesmp.h>
+#include <rtems/score/scheduler.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/smp.h>
 
-static void _Scheduler_simple_smp_Tick_helper(
-  int cpu
-)
+static void _Scheduler_default_Tick_for_executing( Thread_Control *executing )
 {
-  Thread_Control *executing;
-  ISR_Level       level;
-
-  executing = _Per_CPU_Information[cpu].executing;
-
   #ifdef __RTEMS_USE_TICKS_FOR_STATISTICS__
     /*
      *  Increment the number of ticks this thread has been executing
@@ -70,14 +65,8 @@ static void _Scheduler_simple_smp_Tick_helper(
          *  executing thread's timeslice is reset.  Otherwise, the
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
-         *
-         *  In the SMP case, we do the chain manipulation for every
-         *  CPU, then schedule after all CPUs have been evaluated.
          */
-        _ISR_Disable( level );
-          _Scheduler_simple_Ready_queue_requeue( &_Scheduler, executing );
-        _ISR_Enable( level );
-
+        _Scheduler_Yield( executing );
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;
@@ -91,17 +80,14 @@ static void _Scheduler_simple_smp_Tick_helper(
   }
 }
 
-void _Scheduler_simple_smp_Tick( void )
+void _Scheduler_default_Tick( void )
 {
-  uint32_t        cpu;
+  uint32_t processor_count = _SMP_Get_processor_count();
+  uint32_t processor;
 
-  /*
-   *  Iterate over all cores, updating time slicing information
-   *  and logically performing a yield.  Then perform a schedule
-   *  operation to account for all the changes.
-   */
-  for ( cpu=0 ; cpu < _SMP_Processor_count ; cpu++ ) {
-    _Scheduler_simple_smp_Tick_helper( cpu );
+  for ( processor = 0 ; processor < processor_count ; ++processor ) {
+    _Scheduler_default_Tick_for_executing(
+      _Per_CPU_Information[ processor ].executing
+    );
   }
-  _Scheduler_simple_smp_Schedule();
 }

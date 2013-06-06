@@ -150,6 +150,14 @@ extern Scheduler_Control  _Scheduler;
 void _Scheduler_Handler_initialization( void );
 
 /**
+ * @brief Performs tick operations depending on the CPU budget algorithm for
+ * each executing thread.
+ *
+ * This routine is invoked as part of processing each clock tick.
+ */
+void _Scheduler_default_Tick( void );
+
+/**
  * @brief Unblocks the thread.
  *
  * @param[in/out] thread An idle thread.

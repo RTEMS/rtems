@@ -62,7 +62,7 @@ extern "C" {
     _Scheduler_simple_Extract,            /* extract entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_priority_Release_job,      /* new period of task */ \
-    _Scheduler_simple_smp_Tick            /* tick entry point */ \
+    _Scheduler_default_Tick               /* tick entry point */ \
   }
 
 /**
@@ -101,15 +101,6 @@ void _Scheduler_simple_smp_Block(
 void _Scheduler_simple_smp_Unblock(
   Thread_Control *the_thread
 );
-
-/**
- *  @brief Invoked as part of processing each SMP clock tick.
- *
- *  This routine is invoked as part of processing each clock tick.
- *  It is responsible for determining if the current thread allows
- *  timeslicing and, if so, when its timeslice expires.
- */
-void _Scheduler_simple_smp_Tick( void );
 
 #ifdef __cplusplus
 }

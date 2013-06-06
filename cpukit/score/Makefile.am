@@ -136,7 +136,7 @@ endif
 if HAS_SMP
 libscore_a_SOURCES += src/isrsmp.c src/smp.c \
     src/schedulersimplesmpblock.c src/schedulersimplesmpschedule.c \
-    src/schedulersimplesmpunblock.c src/schedulersimplesmptick.c 
+    src/schedulersimplesmpunblock.c
 endif
 
 ## CORE_APIMUTEX_C_FILES
@@ -197,12 +197,12 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
+libscore_a_SOURCES += src/schedulerdefaulttick.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c
 
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerpriorityallocate.c \
-    src/schedulerprioritytick.c \
     src/schedulerpriorityblock.c \
     src/schedulerpriorityenqueue.c \
     src/schedulerpriorityenqueuefirst.c \

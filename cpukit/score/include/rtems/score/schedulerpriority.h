@@ -52,7 +52,7 @@ extern "C" {
     _Scheduler_priority_Extract,          /* extract entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_priority_Release_job,      /* new period of task */ \
-    _Scheduler_priority_Tick,             /* tick entry point */ \
+    _Scheduler_default_Tick,              /* tick entry point */ \
     _Scheduler_default_Start_idle         /* start idle entry point */ \
   }
 
@@ -224,15 +224,6 @@ void _Scheduler_priority_Release_job (
   Thread_Control  *the_thread,
   uint32_t         deadline
 );
-
-/**
- *  @brief Determines if the current thread allows timeslicing.
- *
- *  This routine is invoked as part of processing each clock tick.
- *  It is responsible for determining if the current thread allows
- *  timeslicing and, if so, when its timeslice expires.
- */
-void _Scheduler_priority_Tick( void );
 
 /**
  *  This is the major bit map.
