@@ -571,13 +571,17 @@ bool _Thread_Initialize(
  *  @param entry_point
  *  @param pointer_argument
  *  @param numeric_argument
+ *  @param[in/out] processor The processor if used to start an idle thread
+ *  during system initialization.  Must be set to @c NULL to start a normal
+ *  thread.
  */
 bool _Thread_Start(
   Thread_Control            *the_thread,
   Thread_Start_types         the_prototype,
   void                      *entry_point,
   void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
+  Thread_Entry_numeric_type  numeric_argument,
+  Per_CPU_Control           *processor
 );
 
 /**

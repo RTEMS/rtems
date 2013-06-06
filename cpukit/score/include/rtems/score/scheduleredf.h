@@ -53,7 +53,8 @@ extern "C" {
     _Scheduler_EDF_Extract,          /* extract entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
-    _Scheduler_priority_Tick         /* tick entry point */ \
+    _Scheduler_priority_Tick,        /* tick entry point */ \
+    _Scheduler_default_Start_idle    /* start idle entry point */ \
   }
 
 /**

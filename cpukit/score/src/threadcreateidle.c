@@ -73,7 +73,8 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
     THREAD_START_NUMERIC,
     rtems_configuration_get_idle_task(),
     NULL,
-    0
+    0,
+    per_cpu
   );
 }
 

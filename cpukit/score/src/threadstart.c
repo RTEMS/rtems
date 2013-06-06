@@ -38,7 +38,8 @@ bool _Thread_Start(
   Thread_Start_types         the_prototype,
   void                      *entry_point,
   void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
+  Thread_Entry_numeric_type  numeric_argument,
+  Per_CPU_Control           *processor
 )
 {
   if ( _States_Is_dormant( the_thread->current_state ) ) {
@@ -51,7 +52,12 @@ bool _Thread_Start(
 
     _Thread_Load_environment( the_thread );
 
-    _Thread_Ready( the_thread );
+    if ( processor == NULL ) {
+      _Thread_Ready( the_thread );
+    } else {
+      the_thread->current_state = STATES_READY;
+      _Scheduler_Start_idle( the_thread, processor );
+    }
 
     _User_extensions_Thread_start( the_thread );
 

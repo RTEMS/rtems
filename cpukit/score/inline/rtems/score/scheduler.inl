@@ -208,6 +208,22 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Tick( void )
   _Scheduler.Operations.tick();
 }
 
+/**
+ * @brief Starts the idle thread for a particular processor.
+ *
+ * @param[in/out] thread The idle thread for the processor.
+ * @parma[in/out] processor The processor for the idle thread.
+ *
+ * @see _Thread_Create_idle().
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
+  Thread_Control *thread,
+  Per_CPU_Control *processor
+)
+{
+  ( *_Scheduler.Operations.start_idle )( thread, processor );
+}
+
 /** @} */
 
 #endif

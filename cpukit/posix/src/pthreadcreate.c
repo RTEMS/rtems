@@ -203,7 +203,8 @@ int pthread_create(
     THREAD_START_POINTER,
     start_routine,
     arg,
-    0                     /* unused */
+    0,                    /* unused */
+    NULL
   );
 
   #if defined(RTEMS_DEBUG)

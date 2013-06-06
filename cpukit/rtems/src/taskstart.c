@@ -58,6 +58,7 @@ rtems_status_code rtems_task_start(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  bool                     successfully_started;
 
   if ( entry_point == NULL )
     return RTEMS_INVALID_ADDRESS;
@@ -66,13 +67,22 @@ rtems_status_code rtems_task_start(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( _Thread_Start(
-             the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
-        _Objects_Put( &the_thread->Object );
-        return RTEMS_SUCCESSFUL;
-      }
+      successfully_started = _Thread_Start(
+        the_thread,
+        THREAD_START_NUMERIC,
+        entry_point,
+        NULL,
+        argument,
+        NULL
+      );
+
       _Objects_Put( &the_thread->Object );
-      return RTEMS_INCORRECT_STATE;
+
+      if ( successfully_started ) {
+        return RTEMS_SUCCESSFUL;
+      } else {
+        return RTEMS_INCORRECT_STATE;
+      }
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

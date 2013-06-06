@@ -89,6 +89,12 @@ typedef struct {
   /** perform scheduler update actions required at each clock tick */
   void ( *tick )(void);
 
+  /**
+   * @brief Starts the idle thread for a particular processor.
+   *
+   * @see _Scheduler_Start_idle().
+   */
+  void ( *start_idle )( Thread_Control *thread, Per_CPU_Control *processor );
 } Scheduler_Operations;
 
 /**
@@ -138,6 +144,17 @@ extern Scheduler_Control  _Scheduler;
  *  default.
  */
 void _Scheduler_Handler_initialization( void );
+
+/**
+ * @brief Unblocks the thread.
+ *
+ * @param[in/out] thread An idle thread.
+ * @param[in] processor This parameter is unused.
+ */
+void _Scheduler_default_Start_idle(
+  Thread_Control  *thread,
+  Per_CPU_Control *processor
+);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/scheduler.inl>

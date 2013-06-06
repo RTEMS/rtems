@@ -52,7 +52,8 @@ extern "C" {
     _Scheduler_priority_Extract,          /* extract entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_priority_Release_job,      /* new period of task */ \
-    _Scheduler_priority_Tick              /* tick entry point */ \
+    _Scheduler_priority_Tick,             /* tick entry point */ \
+    _Scheduler_default_Start_idle         /* start idle entry point */ \
   }
 
 /**
