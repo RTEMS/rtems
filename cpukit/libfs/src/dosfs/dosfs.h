@@ -189,6 +189,14 @@ struct rtems_dosfs_convert_control {
  *
  * @ingroup FileSystemTypesAndMount
  *
+ * @brief FAT file system configuration support, format and mount options.
+ *
+ * A block device can be formatted with a FAT file system with the
+ * msdos_format() function.
+ *
+ * The FAT file system mount operation can be controlled with FAT file system
+ * specific mount options, see @ref rtems_dosfs_mount_options.
+ *
  * @{
  */
 
