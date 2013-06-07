@@ -667,7 +667,7 @@ void
 rtems_termios_puts (
   const void *_buf, size_t len, struct rtems_termios_tty *tty)
 {
-  const unsigned char *buf = _buf;
+  const char *buf = _buf;
   unsigned int newHead;
   rtems_interrupt_level level;
   rtems_status_code sc;
