@@ -477,7 +477,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -523,7 +523,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined and Classic API Notepads are supported.
+This is not defined by default, and Classic API Notepads are supported.
 
 @end table
 
@@ -556,7 +556,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -585,7 +585,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -614,7 +614,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -643,7 +643,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -672,7 +672,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -701,7 +701,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -730,7 +730,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -759,7 +759,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -788,7 +788,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -866,7 +866,7 @@ Task entry function pointer (@code{rtems_task_entry}).
 Valid task entry function pointer.
 
 @item DEFAULT VALUE:
-By default the value is @code{Init}.
+The default value is @code{Init}.
 
 @end table
 
@@ -897,7 +897,7 @@ RTEMS Name (@code{rtems_name}).
 Any value.
 
 @item DEFAULT VALUE:
-By default the value is @code{rtems_build_name( 'U', 'I', '1', ' ' )}.
+The default value is @code{rtems_build_name( 'U', 'I', '1', ' ' )}.
 
 @end table
 
@@ -926,7 +926,7 @@ Unsigned integer (@code{size_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-By default value is the configured minimum stack size.
+The default value is RTEMS_MINIMUM_STACK_SIZE.
 
 @end table
 
@@ -958,7 +958,7 @@ RTEMS Task Priority (@code{rtems_task_priority}).
 One (1) to CONFIGURE_MAXIMUM_PRIORITY.
 
 @item DEFAULT VALUE:
-By default the value is one (1) which is the highest priority in the
+The default value is 1, which is the highest priority in the
 Classic API.
 
 @end table
@@ -989,7 +989,7 @@ RTEMS Attributes (@code{rtems_attribute}).
 Valid task attribute sets.
 
 @item DEFAULT VALUE:
-By default the tvalue is @code{RTEMS_DEFAULT_ATTRIBUTES}.
+The default value is @code{RTEMS_DEFAULT_ATTRIBUTES}.
 
 @end table
 
@@ -1018,7 +1018,7 @@ RTEMS Mode (@code{rtems_mode}).
 Valid task mode sets.
 
 @item DEFAULT VALUE:
-By default the value is @code{RTEMS_NO_PREEMPT}.
+The default value is @code{RTEMS_NO_PREEMPT}.
 
 @end table
 
@@ -1048,7 +1048,7 @@ RTEMS Task Argument (@code{rtems_task_argument}).
 Complete range of the type.
 
 @item DEFAULT VALUE:
-By default the value is 0.
+The default value is 0.
 
 @end table
 
@@ -1117,7 +1117,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1161,7 +1161,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1190,7 +1190,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1219,7 +1219,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1250,7 +1250,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1279,7 +1279,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1308,7 +1308,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1339,7 +1339,7 @@ Unsigned integer (@code{uint32_t}).
 greater than or equal to @code{CONFIGURE_MAXIMUM_POSIX_MESSAGES_QUEUES}
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1372,7 +1372,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1401,7 +1401,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1430,7 +1430,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1459,7 +1459,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default for this field is 0.
+The default value is 0.
 
 @end table
 
@@ -1498,7 +1498,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this field is not defined as the user MUST select their own
+This field is not defined by default, as the user MUST select their own
 API for initialization tasks.
 
 @end table
@@ -1539,7 +1539,7 @@ POSIX thread function pointer (@code{void *(*entry_point)(void *)}).
 Undefined or a valid POSIX thread function pointer.
 
 @item DEFAULT VALUE:
-By default the value is @code{POSIX_Init}.
+The default value is @code{POSIX_Init}.
 
 @end table
 
@@ -1570,7 +1570,7 @@ Unsigned integer (@code{size_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-By default value is twice the configured minimum stack size.
+The default value is 2 * RTEMS_MINIMUM_STACK_SIZE.
 
 @end table
 
@@ -1646,7 +1646,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is undefined which specifies that the C Program Heap
+This is not defined by default, which specifies that the C Program Heap
 and the RTEMS Workspace will be separate.
 
 @end table
@@ -1688,7 +1688,8 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-When not defined, the clock tick quantum is configured to be 10,000
+This is not defined by default. When not defined,
+the clock tick quantum is configured to be 10,000
 microseconds which is ten (10) milliseconds.
 
 @end table
@@ -1738,7 +1739,7 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-If unspecified, this parameter defaults to fifty (50).
+The default value is 50.
 
 @end table
 
@@ -1772,9 +1773,8 @@ than a power of two (2) between 4 and 256 inclusively.  In other words,
 valid values are 3, 7, 31, 63, 127, and 255.
 
 @item DEFAULT VALUE:
-By default, RTEMS must support 256 priority levels to be compliant with
-various standards. These priorities range from zero (0) to 255.  Thus,
-the default value for this field is 255.
+The default value is 255, because RTEMS must support 256 priority levels to be
+compliant with various standards. These priorities range from zero (0) to 255.
 
 @end table
 
@@ -1818,7 +1818,7 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-When not defined by the application, this is set to the recommended
+This is not defined by default, which sets the executive to the recommended
 minimum stack size for this processor.
 
 @end table
@@ -1859,8 +1859,8 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-If not specified, the interrupt stack will be of minimum size.
-The default value is the configured minimum task stack size.
+The default value is CONFIGURE_MINIMUM_TASK_STACK_SIZE, which is the minimum
+interrupt stack size.
 
 @end table
 
@@ -1898,7 +1898,7 @@ Unsigned integer (@code{size_t}).
 Undefined or positive.
 
 @item DEFAULT VALUE:
-When this is not defined, the default value is 0.
+The default value is 0.
 
 @end table
 
@@ -1934,8 +1934,8 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-Unless overridden by the BSP, this is not defined by default.  The default
-is @b{NOT} to zero out the RTEMS Workspace or C Program Heap.
+This is not defined by default, unless overridden by the BSP.
+The default is @b{NOT} to zero out the RTEMS Workspace or C Program Heap.
 
 @end table
 
@@ -1966,7 +1966,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined and thus stack checking is disabled.
+This is not defined by default, and thus stack checking is disabled.
 
 @end table
 
@@ -2000,7 +2000,7 @@ List of user extension initializers (@code{rtems_extensions_table}).
 Undefined or a list of one or more user extensions.
 
 @item DEFAULT VALUE:
-This value is not defined by default.
+This is not defined by default.
 
 @end table
 
@@ -2040,7 +2040,7 @@ Function pointer.
 Undefined, NULL or valid function pointer.
 
 @item DEFAULT VALUE:
-The default value for this field is NULL which indicates that
+The default value is NULL, which indicates that
 task stacks will be allocated from the RTEMS Workspace.
 
 @end table
@@ -2079,7 +2079,7 @@ Function pointer.
 Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
-The default value for this field is @code{_Workspace_Allocate} which indicates
+The default value is @code{_Workspace_Allocate}, which indicates
 that task stacks will be allocated from the RTEMS Workspace.
 
 @end table
@@ -2116,7 +2116,7 @@ Function pointer.
 Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
-The default value for this field is @code{_Workspace_Free} which indicates that
+The default value is @code{_Workspace_Free}, which indicates that
 task stacks will be allocated from the RTEMS Workspace.
 
 @end table
@@ -2161,7 +2161,7 @@ Unsigned integer (@code{size_t}).
 Positive.
 
 @item DEFAULT VALUE:
-None.
+The default value is None.
 
 @end table
 
@@ -2202,7 +2202,7 @@ integer summation macro
 undefined (zero) or calculation resulting in a positive integer
 
 @item DEFAULT VALUE:
-By default, this is not defined and zero (0) memory is reserved.
+This is not defined by default, and zero (0) memory is reserved.
 
 @end table
 
@@ -2331,7 +2331,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This is undefined by default and Malloc Statistics are disabled.
+This is not defined by default, and Malloc Statistics are disabled.
 
 @end table
 
@@ -2362,10 +2362,12 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-If not defined, the default value is either zero (0) or three if
-@code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER} is defined. Three file
-descriptors allows RTEMS to support standard input, output, and error
-I/O streams on @code{/dev/console}.
+
+If @code{CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER} is defined, then the
+default value is 3, otherwise the default value is 0.
+
+Three file descriptors allows RTEMS to support standard input, output, and
+error I/O streams on @code{/dev/console}.
 
 @end table
 
@@ -2394,7 +2396,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined and resources are reserved for the
+This is not defined by default, and resources are reserved for the
 termios functionality.
 
 @end table
@@ -2426,7 +2428,7 @@ Unsigned integer.
 Zero or positive.
 
 @item DEFAULT VALUE:
-By default, this is set to one (1) so a console port can be used.
+The default value is 1, so a console port can be used.
 
 @end table
 
@@ -2502,7 +2504,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This value is not defined by default. If no other root file system
+This is not defined by default. If no other root file system
 configuration parameters are specified, the IMFS will be used as the
 root file system.
 
@@ -2536,7 +2538,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This value is not defined by default. If no other root file system
+This is not defined by default. If no other root file system
 configuration parameters are specified, the IMFS will be used as the
 root file system.
 
@@ -2571,7 +2573,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This value is not defined by default. If no other root file system
+This is not defined by default. If no other root file system
 configuration parameters are specified, the IMFS will be used as the
 root file system.
 
@@ -2611,7 +2613,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This option is not defined by default.
+This is not defined by default.
 
 @end table
 
@@ -2641,7 +2643,7 @@ Unsigned integer (@code{size_t}).
 Positive.
 
 @item DEFAULT VALUE:
-The default value is 32KiB.
+The default value is 32768 bytes.
 
 @end table
 
@@ -2867,7 +2869,7 @@ Unsigned integer (@code{size_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-The default value is the RTEMS minimum stack size.
+The default value is RTEMS_MINIMUM_STACK_SIZE.
 
 @end table
 
@@ -3291,7 +3293,7 @@ Function pointer.
 Undefined or valid function pointer.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -3321,8 +3323,7 @@ Unsigned integer (@code{size_t}).
 Undefined or positive.
 
 @item DEFAULT VALUE:
-If not specified, the IDLE task will have a stack of the configured
-minimum stack size.
+The default value is RTEMS_MINIMUM_STACK_SIZE.
 
 @end table
 
@@ -3351,7 +3352,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not the mode of operation and the user is assumed
+This is not defined by default, the user is assumed
 to provide one or more initialization tasks.
 
 @end table
@@ -3403,8 +3404,9 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This is the default scheduler and specifying this configuration parameter
-is redundant.
+This is defined by default.
+This is the default scheduler and specifying this 
+configuration parameter is redundant.
 
 @end table
 
@@ -3597,6 +3599,7 @@ Entry points for scheduler
 Undefined or scheduler entry set
 
 @item DEFAULT VALUE:
+This is not defined by default.
 
 @end table
 
@@ -3727,7 +3730,7 @@ List of device driver initializers (@code{rtems_driver_address_table}).
 Undefined or array of device drivers.
 
 @item DEFAULT VALUE:
-By default, this is not defined indicating the @code{<rtems/confdefs.h>}
+This is not defined default, indicating the @code{<rtems/confdefs.h>}
 is providing the device driver table.
 
 @end table
@@ -3760,9 +3763,9 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-By default, this is set to the number of device drivers configured
-using the @code{CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER} configuration
-parameters.
+This is computed by default, and is set to the number of device drivers 
+configured using the @code{CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER}
+configuration parameters.
 
 @end table
 
@@ -3829,7 +3832,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -3862,7 +3865,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -3897,7 +3900,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -3963,7 +3966,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -3996,7 +3999,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4029,7 +4032,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4062,7 +4065,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default, this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4092,7 +4095,7 @@ device driver entry structures
 Undefined or set of device driver entry structures
 
 @item DEFAULT VALUE:
-By default,this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4131,7 +4134,7 @@ device driver entry structures
 Undefined or set of device driver entry structures
 
 @item DEFAULT VALUE:
-By default,this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4163,7 +4166,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default,this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4193,7 +4196,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-By default,this is not defined.
+This is not defined by default.
 
 @end table
 
@@ -4267,7 +4270,7 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-If not defined, it is set to @code{NODE_NUMBER} which is assumed to be
+The default value is @code{NODE_NUMBER}, which is assumed to be
 set by the compilation environment.
 
 @end table
@@ -4301,7 +4304,7 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-The default is two (2).
+The default is 2.
 
 @end table
 
@@ -4330,7 +4333,7 @@ Unsigned integer (@code{uint32_t}).
 Positive.
 
 @item DEFAULT VALUE:
-The default is 32.
+The default value is 32.
 
 @end table
 
@@ -4360,7 +4363,7 @@ Unsigned integer (@code{uint32_t}).
 Undefined or positive.
 
 @item DEFAULT VALUE:
-The default is 32.
+The default value is 32.
 
 @end table
 
@@ -4536,7 +4539,7 @@ Unsigned integer (@code{uint32_t}).
 Zero or positive.
 
 @item DEFAULT VALUE:
-By default, this is undefined which implies zero (0) @i{fake} Ada Tasks.
+This is not defined by default, which implies zero (0) @i{fake} Ada Tasks.
 
 @end table
 
