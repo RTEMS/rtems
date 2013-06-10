@@ -189,11 +189,13 @@ void _Scheduler_EDF_Unblock(
  *  transfer control of the processor to another thread in the queue with
  *  equal deadline. This does not have to happen very often.
  *
- *  This routine will remove the running THREAD from the ready queue
- *  and place back. The rbtree ready queue is responsible for FIFO ordering
+ *  This routine will remove the specified THREAD from the ready queue
+ *  and place it back. The rbtree ready queue is responsible for FIFO ordering
  *  in such a case.
+ *
+ *  @param[in/out] thread The yielding thread.
  */
-void _Scheduler_EDF_Yield( void );
+void _Scheduler_EDF_Yield( Thread_Control *thread );
 
 /**
  *  @brief Put @a the_thread to the rbtree ready queue.

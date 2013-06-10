@@ -25,14 +25,13 @@
 #include <rtems/score/scheduleredf.h>
 #include <rtems/score/thread.h>
 
-void _Scheduler_EDF_Yield(void)
+void _Scheduler_EDF_Yield( Thread_Control *thread )
 {
   ISR_Level                 level;
 
-  Thread_Control *executing  = _Thread_Executing;
-  Scheduler_EDF_Per_thread *executing_info =
-    (Scheduler_EDF_Per_thread *) executing->scheduler_info;
-  RBTree_Node *executing_node = &(executing_info->Node);
+  Scheduler_EDF_Per_thread *thread_info =
+    (Scheduler_EDF_Per_thread *) thread->scheduler_info;
+  RBTree_Node *thread_node = &(thread_info->Node);
 
   _ISR_Disable( level );
 
@@ -40,8 +39,8 @@ void _Scheduler_EDF_Yield(void)
    * The RBTree has more than one node, enqueue behind the tasks
    * with the same priority in case there are such ones.
    */
-  _RBTree_Extract( &_Scheduler_EDF_Ready_queue, executing_node );
-  _RBTree_Insert( &_Scheduler_EDF_Ready_queue, executing_node );
+  _RBTree_Extract( &_Scheduler_EDF_Ready_queue, thread_node );
+  _RBTree_Insert( &_Scheduler_EDF_Ready_queue, thread_node );
 
   _ISR_Flash( level );
 

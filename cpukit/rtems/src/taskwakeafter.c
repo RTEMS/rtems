@@ -38,18 +38,26 @@ rtems_status_code rtems_task_wake_after(
   rtems_interval ticks
 )
 {
+  /*
+   * It is critical to obtain the executing thread after thread dispatching is
+   * disabled on SMP configurations.
+   */
+  Thread_Control *executing;
+
   _Thread_Disable_dispatch();
+    executing = _Thread_Executing;
+
     if ( ticks == 0 ) {
-      _Scheduler_Yield();
+      _Scheduler_Yield( executing );
     } else {
-      _Thread_Set_state( _Thread_Executing, STATES_DELAYING );
+      _Thread_Set_state( executing, STATES_DELAYING );
       _Watchdog_Initialize(
-        &_Thread_Executing->Timer,
+        &executing->Timer,
         _Thread_Delay_ended,
-        _Thread_Executing->Object.id,
+        executing->Object.id,
         NULL
       );
-      _Watchdog_Insert_ticks( &_Thread_Executing->Timer, ticks );
+      _Watchdog_Insert_ticks( &executing->Timer, ticks );
     }
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;

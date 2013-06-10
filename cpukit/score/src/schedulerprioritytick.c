@@ -68,7 +68,7 @@ void _Scheduler_priority_Tick( void )
          *  currently executing thread is placed at the rear of the
          *  FIFO for this priority and a new heir is selected.
          */
-        _Scheduler_Yield();
+        _Scheduler_Yield( executing );
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;

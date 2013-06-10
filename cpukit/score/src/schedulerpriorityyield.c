@@ -24,28 +24,26 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/thread.h>
 
-void _Scheduler_priority_Yield(void)
+void _Scheduler_priority_Yield( Thread_Control *thread )
 {
   Scheduler_priority_Per_thread *sched_info;
   ISR_Level                      level;
-  Thread_Control                *executing;
   Chain_Control                 *ready;
 
-  executing  = _Thread_Executing;
-  sched_info = (Scheduler_priority_Per_thread *) executing->scheduler_info;
+  sched_info = (Scheduler_priority_Per_thread *) thread->scheduler_info;
   ready      = sched_info->ready_chain;
   _ISR_Disable( level );
     if ( !_Chain_Has_only_one_node( ready ) ) {
-      _Chain_Extract_unprotected( &executing->Object.Node );
-      _Chain_Append_unprotected( ready, &executing->Object.Node );
+      _Chain_Extract_unprotected( &thread->Object.Node );
+      _Chain_Append_unprotected( ready, &thread->Object.Node );
 
       _ISR_Flash( level );
 
-      if ( _Thread_Is_heir( executing ) )
+      if ( _Thread_Is_heir( thread ) )
         _Thread_Heir = (Thread_Control *) _Chain_First( ready );
       _Thread_Dispatch_necessary = true;
     }
-    else if ( !_Thread_Is_heir( executing ) )
+    else if ( !_Thread_Is_heir( thread ) )
       _Thread_Dispatch_necessary = true;
 
   _ISR_Enable( level );

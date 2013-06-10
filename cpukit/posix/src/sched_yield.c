@@ -32,7 +32,7 @@
 int sched_yield( void )
 {
   _Thread_Disable_dispatch();
-    _Scheduler_Yield();
+    _Scheduler_Yield( _Thread_Executing );
   _Thread_Enable_dispatch();
   return 0;
 }
