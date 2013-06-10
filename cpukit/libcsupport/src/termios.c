@@ -1293,16 +1293,16 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
   rtems_interrupt_level level;
   int len;
 
+  rtems_interrupt_disable(level);
+
   /* check for XOF/XON to send */
   if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
       == (FL_MDXOF | FL_IREQXOF)) {
     /* XOFF should be sent now... */
     (*tty->device.write)(tty->minor, (void *)&(tty->termios.c_cc[VSTOP]), 1);
 
-    rtems_interrupt_disable(level);
     tty->t_dqlen--;
     tty->flow_ctrl |= FL_ISNTXOF;
-    rtems_interrupt_enable(level);
 
     nToSend = 1;
 
@@ -1317,10 +1317,8 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
      */
     (*tty->device.write)(tty->minor, (void *)&(tty->termios.c_cc[VSTART]), 1);
 
-    rtems_interrupt_disable(level);
     tty->t_dqlen--;
     tty->flow_ctrl &= ~FL_ISNTXOF;
-    rtems_interrupt_enable(level);
 
     nToSend = 1;
   } else if ( tty->rawOutBuf.Head == tty->rawOutBuf.Tail ) {
@@ -1336,10 +1334,8 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 
     nToSend = 0;
   } else {
-    rtems_interrupt_disable(level);
     len = tty->t_dqlen;
     tty->t_dqlen = 0;
-    rtems_interrupt_enable(level);
 
     newTail = (tty->rawOutBuf.Tail + len) % tty->rawOutBuf.Size;
     tty->rawOutBuf.Tail = newTail;
@@ -1369,10 +1365,8 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
        ==                (FL_MDXON | FL_ORCVXOF)) {
       /* Buffer not empty, but output stops due to XOFF */
       /* set flag, that output has been stopped */
-      rtems_interrupt_disable(level);
       tty->flow_ctrl |= FL_OSTOP;
       tty->rawOutBufState = rob_busy; /*apm*/
-      rtems_interrupt_enable(level);
       nToSend = 0;
     } else {
       /*
@@ -1394,6 +1388,8 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
     }
     tty->rawOutBuf.Tail = newTail; /*apm*/
   }
+
+  rtems_interrupt_enable(level);
 
   if (wakeUpWriterTask) {
     rtems_semaphore_release (tty->rawOutBuf.Semaphore);
