@@ -1332,6 +1332,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       wakeUpWriterTask = true;
     }
 
+    (*tty->device.write) (tty->minor, NULL, 0);
     nToSend = 0;
   } else {
     len = tty->t_dqlen;
@@ -1351,6 +1352,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
        * Buffer has become empty
        */
       tty->rawOutBufState = rob_idle;
+      (*tty->device.write) (tty->minor, NULL, 0);
       nToSend = 0;
 
       /*
@@ -1367,6 +1369,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       /* set flag, that output has been stopped */
       tty->flow_ctrl |= FL_OSTOP;
       tty->rawOutBufState = rob_busy; /*apm*/
+      (*tty->device.write) (tty->minor, NULL, 0);
       nToSend = 0;
     } else {
       /*
