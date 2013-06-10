@@ -561,7 +561,6 @@ NS16550_STATIC void ns16550_process( int minor)
       /* Dequeue transmitted characters */
       if (rtems_termios_dequeue_characters( d->termios_data, chars) == 0) {
         /* Nothing to do */
-        d->bActive = false;
         ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
       }
     }
@@ -598,7 +597,6 @@ ssize_t ns16550_write_support_int(
 
   if (len > 0) {
     ctx->transmitFifoChars = out;
-    d->bActive = true;
     ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR);
   }
 
@@ -644,8 +642,6 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
   console_tbl *c = Console_Port_Tbl [minor];
 #endif
   console_data *d = &Console_Port_Data [minor];
-
-  d->bActive = false;
 
   #ifdef BSP_FEATURE_IRQ_EXTENSION
     {
