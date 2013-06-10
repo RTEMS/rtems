@@ -1287,6 +1287,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
 static int
 rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 {
+  bool wakeUpWriterTask = false;
   unsigned int newTail;
   int nToSend;
   rtems_interrupt_level level;
@@ -1330,7 +1331,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       /*
        * this should never happen...
        */
-      rtems_semaphore_release (tty->rawOutBuf.Semaphore);
+      wakeUpWriterTask = true;
     }
 
     nToSend = 0;
@@ -1346,7 +1347,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
       /*
        * wake up any pending writer task
        */
-      rtems_semaphore_release (tty->rawOutBuf.Semaphore);
+      wakeUpWriterTask = true;
     }
 
     if (newTail == tty->rawOutBuf.Head) {
@@ -1393,6 +1394,11 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
     }
     tty->rawOutBuf.Tail = newTail; /*apm*/
   }
+
+  if (wakeUpWriterTask) {
+    rtems_semaphore_release (tty->rawOutBuf.Semaphore);
+  }
+
   return nToSend;
 }
 
