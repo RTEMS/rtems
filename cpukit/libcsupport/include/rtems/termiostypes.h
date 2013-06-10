@@ -140,6 +140,8 @@ struct rtems_termios_tty {
   struct ttywakeup tty_snd;
   struct ttywakeup tty_rcv;
   int              tty_rcvwakeup;
+
+  rtems_interrupt_lock interrupt_lock;
 };
 
 struct rtems_termios_linesw {
@@ -230,6 +232,12 @@ int rtems_termios_set_initial_baud(
   struct rtems_termios_tty *tty,
   rtems_termios_baud_t baud
 );
+
+#define rtems_termios_interrupt_lock_acquire(tty, level) \
+  rtems_interrupt_lock_acquire(&tty->interrupt_lock, level)
+
+#define rtems_termios_interrupt_lock_release(tty, level) \
+  rtems_interrupt_lock_release(&tty->interrupt_lock, level)
 
 #ifdef __cplusplus
 }
