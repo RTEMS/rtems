@@ -1322,20 +1322,19 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
     rtems_interrupt_enable(level);
 
     nToSend = 1;
-  } else {
-    if ( tty->rawOutBuf.Head == tty->rawOutBuf.Tail ) {
+  } else if ( tty->rawOutBuf.Head == tty->rawOutBuf.Tail ) {
+    /*
+     * buffer was empty
+     */
+    if (tty->rawOutBufState == rob_wait) {
       /*
-       * buffer was empty
+       * this should never happen...
        */
-      if (tty->rawOutBufState == rob_wait) {
-        /*
-         * this should never happen...
-         */
-        rtems_semaphore_release (tty->rawOutBuf.Semaphore);
-      }
-      return 0;
+      rtems_semaphore_release (tty->rawOutBuf.Semaphore);
     }
 
+    nToSend = 0;
+  } else {
     rtems_interrupt_disable(level);
     len = tty->t_dqlen;
     tty->t_dqlen = 0;
