@@ -24,9 +24,7 @@
 #else
   #include <rtems/score/isrlevel.h>
   #include <rtems/score/timestamp.h>
-  #if defined(RTEMS_SMP)
-    #include <rtems/score/smplock.h>
-  #endif
+  #include <rtems/score/smplock.h>
 
   /*
    * NOTE: This file MUST be included on non-smp systems as well

@@ -20,6 +20,10 @@
 #ifndef _RTEMS_SCORE_SMPLOCK_H
 #define _RTEMS_SCORE_SMPLOCK_H
 
+#include <rtems/score/cpuopts.h>
+
+#if defined( RTEMS_SMP )
+
 #include <rtems/score/cpusmplock.h>
 #include <rtems/score/isr.h>
 
@@ -119,5 +123,7 @@ static inline void _SMP_lock_Release( SMP_lock_Control *lock )
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#endif /* defined( RTEMS_SMP ) */
 
 #endif /* _RTEMS_SCORE_SMPLOCK_H */
