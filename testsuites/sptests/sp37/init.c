@@ -43,6 +43,21 @@ rtems_timer_service_routine test_isr_in_progress(
 );
 
 /* test bodies */
+
+static void test_interrupt_locks( void )
+{
+  rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_lock_initialize( &lock );
+
+  rtems_interrupt_lock_acquire( &lock, level );
+  rtems_interrupt_lock_release( &lock, level );
+
+  rtems_interrupt_lock_acquire_isr( &lock );
+  rtems_interrupt_lock_release_isr( &lock );
+}
+
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
@@ -317,6 +332,8 @@ rtems_task Init(
   check_isr_worked( "inline", isr_in_progress_body );
 
   check_isr_worked( "body", isr_in_progress_body );
+
+  test_interrupt_locks();
 
   puts( "*** END OF TEST 37 ***" );
   rtems_test_exit( 0 );
