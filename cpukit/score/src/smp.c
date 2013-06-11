@@ -70,10 +70,10 @@ void rtems_smp_process_interrupt( void )
   ISR_Level        level;
 
 
-  _SMP_lock_ISR_disable_and_acquire( &per_cpu->lock, level );
+  _Per_CPU_Lock_acquire( per_cpu, level );
   message = per_cpu->message;
   per_cpu->message = 0;
-  _SMP_lock_Release_and_ISR_enable( &per_cpu->lock, level );
+  _Per_CPU_Lock_release( per_cpu, level );
 
   #if defined(RTEMS_DEBUG)
     {
@@ -116,9 +116,9 @@ void _SMP_Send_message( int cpu, uint32_t message )
       printk( "Send 0x%x to %d\n", message, cpu );
   #endif
 
-  _SMP_lock_ISR_disable_and_acquire( &per_cpu->lock, level );
+  _Per_CPU_Lock_acquire( per_cpu, level );
   per_cpu->message |= message;
-  _SMP_lock_Release_and_ISR_enable( &per_cpu->lock, level );
+  _Per_CPU_Lock_release( per_cpu, level );
 
   bsp_smp_interrupt_cpu( cpu );
 }
@@ -134,9 +134,9 @@ void _SMP_Broadcast_message( uint32_t message )
       Per_CPU_Control *per_cpu = &_Per_CPU_Information[ cpu ];
       ISR_Level level;
 
-      _SMP_lock_ISR_disable_and_acquire( &per_cpu->lock, level );
+      _Per_CPU_Lock_acquire( per_cpu, level );
       per_cpu->message |= message;
-      _SMP_lock_Release_and_ISR_enable( &per_cpu->lock, level );
+      _Per_CPU_Lock_release( per_cpu, level );
     }
   }
 

@@ -268,6 +268,12 @@ void _Per_CPU_Wait_for_state(
   Per_CPU_State desired_state
 );
 
+#define _Per_CPU_Lock_acquire( per_cpu, isr_cookie ) \
+  _SMP_lock_ISR_disable_and_acquire( &( per_cpu )->lock, isr_cookie )
+
+#define _Per_CPU_Lock_release( per_cpu, isr_cookie ) \
+  _SMP_lock_Release_and_ISR_enable( &( per_cpu )->lock, isr_cookie )
+
 #endif
 
 /*
