@@ -15,6 +15,7 @@
 #define _RTEMS_SCORE_THREADDISPATCH_H
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/smplock.h>
 
 #ifdef __cplusplus
 extern "C" {
