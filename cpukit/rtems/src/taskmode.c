@@ -42,8 +42,7 @@ rtems_status_code rtems_task_mode(
   Thread_Control     *executing;
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
-  bool                is_asr_enabled = false;
-  bool                needs_asr_dispatching = false;
+  bool                needs_asr_dispatching;
   rtems_mode          old_mode;
 
   if ( !previous_mode_set )
@@ -69,7 +68,7 @@ rtems_status_code rtems_task_mode(
    *  These are generic thread scheduling characteristics.
    */
   if ( mask & RTEMS_PREEMPT_MASK )
-    executing->is_preemptible = _Modes_Is_preempt(mode_set) ? true : false;
+    executing->is_preemptible = _Modes_Is_preempt( mode_set );
 
   if ( mask & RTEMS_TIMESLICE_MASK ) {
     if ( _Modes_Is_timeslice(mode_set) ) {
@@ -88,11 +87,10 @@ rtems_status_code rtems_task_mode(
   /*
    *  This is specific to the RTEMS API
    */
-  is_asr_enabled = false;
   needs_asr_dispatching = false;
-
   if ( mask & RTEMS_ASR_MASK ) {
-    is_asr_enabled = _Modes_Is_asr_disabled( mode_set ) ? false : true;
+    bool is_asr_enabled = !_Modes_Is_asr_disabled( mode_set );
+
     if ( is_asr_enabled != asr->is_enabled ) {
       asr->is_enabled = is_asr_enabled;
       _ASR_Swap_signals( asr );
