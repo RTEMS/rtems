@@ -20,6 +20,7 @@ SUBDIRS += smpatomic05
 SUBDIRS += smpatomic06
 SUBDIRS += smpatomic07
 SUBDIRS += smplock01
+SUBDIRS += smpschedule01
 endif
 
 include $(top_srcdir)/../automake/subdirs.am

@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschedule01
+
+directives:
+
+  - _Scheduler_simple_smp_Enqueue_priority_fifo
+  - _Scheduler_simple_smp_Enqueue_priority_lifo
+  - _Scheduler_simple_smp_Extract
+
+concepts:
+
+  - Ensure that the per-processor state is consistent after a sequence of
+    scheduling events.
