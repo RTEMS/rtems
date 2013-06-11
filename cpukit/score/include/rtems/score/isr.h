@@ -21,7 +21,8 @@
 #ifndef _RTEMS_SCORE_ISR_H
 #define _RTEMS_SCORE_ISR_H
 
-#include <rtems/score/percpu.h>
+#include <rtems/score/cpu.h>
+#include <rtems/score/isrlevel.h>
 
 /**
  *  @defgroup ScoreISR ISR Handler
