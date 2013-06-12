@@ -223,6 +223,32 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_global_exit_status( void )
 }
 
 /**
+ * @brief Issues a thread dispatch if necessary.
+ *
+ * @param[in] executing The executing thread.
+ * @param[in] needs_asr_dispatching Indicates whether or not the API
+ *            level signals are pending and a dispatch is necessary.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_if_necessary(
+  Thread_Control *executing,
+  bool            needs_asr_dispatching
+)
+{
+  if ( _Thread_Dispatch_is_enabled() ) {
+    bool dispatch_necessary = needs_asr_dispatching;
+
+    if ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) {
+      dispatch_necessary = true;
+      _Thread_Dispatch_necessary = dispatch_necessary;
+    }
+
+    if ( dispatch_necessary ) {
+      _Thread_Dispatch();
+    }
+  }
+}
+
+/**
  * This routine returns the C library re-enterant pointer.
  */
 
@@ -240,32 +266,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
 )
 {
   _Thread_libc_reent = libc_reent;
-}
-
-/**
- * This routine evaluates the current scheduling information for the
- * system and determines if a context switch is required.  This
- * is usually called after changing an execution mode such as preemptability
- * for a thread.
- *
- * @param[in] are_signals_pending specifies whether or not the API
- *            level signals are pending and a dispatch is needed.
- */
-RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_is_dispatch_needed(
-  bool are_signals_pending
-)
-{
-  Thread_Control     *executing;
-
-  executing = _Thread_Executing;
-
-  if ( are_signals_pending ||
-       (!_Thread_Is_heir( executing ) && executing->is_preemptible) ) {
-    _Thread_Dispatch_necessary = true;
-    return true;
-  }
-
-  return false;
 }
 
 /** @}*/
