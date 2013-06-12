@@ -24,6 +24,7 @@ directives:
   rtems_chain_get_with_notification
   rtems_chain_get_with_wait
   rtems_chain_node_count_unprotected
+  _Chain_Insert_ordered_unprotected
 
 concepts:
 

@@ -218,6 +218,39 @@ static void test_chain_node_count(void)
   }
 }
 
+static bool test_order( const Chain_Node *left, const Chain_Node *right )
+{
+  return left < right;
+}
+
+static void test_chain_insert_ordered( void )
+{
+  Chain_Control chain = CHAIN_INITIALIZER_EMPTY(chain);
+  Chain_Node nodes[5];
+  const Chain_Node *tail;
+  const Chain_Node *node;
+  size_t n = RTEMS_ARRAY_SIZE( nodes );
+  size_t i = 0;
+
+  puts( "INIT - Verify _Chain_Insert_ordered_unprotected" );
+
+  _Chain_Insert_ordered_unprotected( &chain, &nodes[4], test_order );
+  _Chain_Insert_ordered_unprotected( &chain, &nodes[2], test_order );
+  _Chain_Insert_ordered_unprotected( &chain, &nodes[0], test_order );
+  _Chain_Insert_ordered_unprotected( &chain, &nodes[3], test_order );
+  _Chain_Insert_ordered_unprotected( &chain, &nodes[1], test_order );
+
+  tail = _Chain_Immutable_tail( &chain );
+  node = _Chain_Immutable_first( &chain );
+  while ( node != tail && i < n ) {
+    rtems_test_assert( node == &nodes[ i ] );
+    ++i;
+    node = _Chain_Immutable_next( node );
+  }
+
+  rtems_test_assert( i == n );
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -260,6 +293,7 @@ rtems_task Init(
   test_chain_control_layout();
   test_chain_control_initializer();
   test_chain_node_count();
+  test_chain_insert_ordered();
 
   puts( "*** END OF RTEMS CHAIN API TEST ***" );
   rtems_test_exit(0);

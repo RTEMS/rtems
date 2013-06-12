@@ -13,4 +13,5 @@ INIT - Verify rtems_chain_get_with_wait
 INIT - Verify rtems_chain_control layout
 INIT - Verify rtems_chain_control initializer
 INIT - Verify rtems_chain_node_count_unprotected
+INIT - Verify _Chain_Insert_ordered_unprotected
 *** END OF RTEMS CHAIN API TEST ***

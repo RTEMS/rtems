@@ -726,6 +726,47 @@ RTEMS_INLINE_ROUTINE bool _Chain_Get_with_empty_check_unprotected(
   return is_empty_now;
 }
 
+/**
+ * @brief Chain node order.
+ *
+ * @param[in] left The left node.
+ * @param[in] right The right node.
+ *
+ * @retval true According to the order the left node precedes the right node.
+ * @retval false Otherwise.
+ */
+typedef bool ( *Chain_Node_order )(
+  const Chain_Node *left,
+  const Chain_Node *right
+);
+
+/**
+ * @brief Inserts a node into the chain according to the order relation.
+ *
+ * After the operation the chain contains the node to insert and the order
+ * relation holds for all nodes from the head up to the inserted node.  Nodes
+ * after the inserted node are not moved.
+ *
+ * @param[in/out] chain The chain.
+ * @param[in/out] to_insert The node to insert.
+ * @param[in] order The order relation.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Insert_ordered_unprotected(
+  Chain_Control *chain,
+  Chain_Node *to_insert,
+  Chain_Node_order order
+)
+{
+  const Chain_Node *tail = _Chain_Immutable_tail( chain );
+  Chain_Node *next = _Chain_First( chain );
+
+  while ( next != tail && !( *order )( to_insert, next ) ) {
+    next = _Chain_Next( next );
+  }
+
+  _Chain_Insert_unprotected( _Chain_Previous( next ), to_insert );
+}
+
 /** @} */
 
 #endif
