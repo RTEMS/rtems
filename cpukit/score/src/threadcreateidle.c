@@ -25,27 +25,20 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-#if defined(RTEMS_SMP)
-  #include <rtems/score/smp.h>
-#endif
 
-static inline void _Thread_Create_idle_helper(
-  uint32_t name_u32,
-  int      cpu
-)
+static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
 {
-  Per_CPU_Control *per_cpu;
-  Objects_Name     name;
-  Thread_Control  *idle;
+  Objects_Name    name;
+  Thread_Control *idle;
 
-  per_cpu = &_Per_CPU_Information[ cpu ];
-  name.name_u32 = name_u32;
+  name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
@@ -86,16 +79,12 @@ static inline void _Thread_Create_idle_helper(
 
 void _Thread_Create_idle( void )
 {
-  #if defined(RTEMS_SMP)
-    int cpu;
+  uint32_t processor_count = _SMP_Get_processor_count();
+  uint32_t processor;
 
-    for ( cpu=0 ; cpu < _SMP_Get_processor_count() ; cpu++ ) {
-      _Thread_Create_idle_helper(
-        _Objects_Build_name( 'I', 'D', 'L', 'E' ),
-        cpu
-      );
-    }
-  #else
-    _Thread_Create_idle_helper(_Objects_Build_name( 'I', 'D', 'L', 'E' ), 0);
-  #endif
+  for ( processor = 0 ; processor < processor_count ; ++processor ) {
+    Per_CPU_Control *per_cpu = &_Per_CPU_Information[ processor ];
+
+    _Thread_Create_idle_for_cpu( per_cpu );
+  }
 }
