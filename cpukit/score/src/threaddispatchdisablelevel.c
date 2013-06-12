@@ -88,15 +88,15 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
 
   _ISR_Disable_on_this_core( isr_level );
 
+  disable_level = _Thread_Dispatch_disable_level;
+  --disable_level;
+  _Thread_Dispatch_disable_level = disable_level;
+
   --level_lock->nest_level;
   if ( level_lock->nest_level == 0 ) {
     level_lock->owner_cpu = NO_OWNER_CPU;
     _SMP_lock_Release( &level_lock->lock );
   }
-
-  disable_level = _Thread_Dispatch_disable_level;
-  --disable_level;
-  _Thread_Dispatch_disable_level = disable_level;
 
   _ISR_Enable_on_this_core( isr_level );
 
