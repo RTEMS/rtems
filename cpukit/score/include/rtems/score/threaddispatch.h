@@ -46,6 +46,19 @@ extern "C" {
  */
 SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
 
+/**
+ * @brief Indicates if the executing thread is inside a thread dispatch
+ * critical section.
+ *
+ * @retval true Thread dispatching is enabled.
+ * @retval false The executing thread is inside a thread dispatch critical
+ * section and dispatching is not allowed.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
+{
+  return _Thread_Dispatch_disable_level == 0;
+}
+
 #if defined(RTEMS_SMP)
   typedef struct {
     SMP_lock_Control lock;
@@ -66,14 +79,6 @@ SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
    *  This routine initializes the thread dispatching subsystem.
    */
   void _Thread_Dispatch_initialization(void);
-
-  /**
-   *  @brief Checks if thread dispatch says that we are in a critical section.
-   *
-   * This routine returns true if thread dispatch indicates
-   * that we are in a critical section.
-   */
-  bool _Thread_Dispatch_in_critical_section(void);
 
   /**
    *  @brief Returns value of the the thread dispatch level.
@@ -104,20 +109,6 @@ SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
    */
   uint32_t _Thread_Dispatch_decrement_disable_level(void);
 #else /* RTEMS_SMP */
-  /**
-   * @brief _Thread_Dispatch_in_critical_section
-   *
-   * This routine returns true if thread dispatch indicates
-   * that we are in a critical section.
-   */
-  RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_in_critical_section(void)
-  {
-     if (  _Thread_Dispatch_disable_level == 0 )
-      return false;
-
-     return true;
-  }
-
   /**
    * @brief Get thread dispatch disable level.
    *
@@ -244,16 +235,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Unnest_dispatch( void )
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
   _Thread_Dispatch_decrement_disable_level();
-}
-
-/**
- * This function returns true if dispatching is disabled, and false
- * otherwise.
- */
-
-RTEMS_INLINE_ROUTINE bool _Thread_Is_dispatching_enabled( void )
-{
-  return  ( _Thread_Dispatch_in_critical_section() == false );
 }
 
 /** @} */

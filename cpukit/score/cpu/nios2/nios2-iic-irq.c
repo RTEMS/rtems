@@ -117,7 +117,7 @@ void __ISR_Handler(void)
     stack_ptr = _old_stack_ptr;
 #endif
 
-    if( !_Thread_Dispatch_in_critical_section() )
+    if( _Thread_Dispatch_is_enabled() )
     {
       if ( _Thread_Dispatch_necessary ) {
         _CPU_ISR_Enable( level );

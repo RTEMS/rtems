@@ -39,14 +39,6 @@ void _Thread_Dispatch_initialization( void )
   _Thread_Dispatch_set_disable_level( 1 );
 }
 
-bool _Thread_Dispatch_in_critical_section(void)
-{
-  if (  _Thread_Dispatch_disable_level == 0 )
-   return false;
-
-  return true;
-}
-
 uint32_t _Thread_Dispatch_get_disable_level(void)
 {
   return _Thread_Dispatch_disable_level;

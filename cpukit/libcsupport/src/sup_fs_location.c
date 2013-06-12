@@ -178,7 +178,7 @@ void rtems_filesystem_global_location_release(
   rtems_filesystem_global_location_t *global_loc
 )
 {
-  if (!_Thread_Dispatch_in_critical_section()) {
+  if (_Thread_Dispatch_is_enabled()) {
     release_with_count(global_loc, 1);
   } else {
     if (global_loc->deferred_released_count == 0) {

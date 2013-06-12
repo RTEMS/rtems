@@ -35,7 +35,7 @@ rtems_status_code rtems_clock_tick( void )
   _Scheduler_Tick();
 
   if ( _Thread_Is_context_switch_necessary() &&
-       _Thread_Is_dispatching_enabled() )
+       _Thread_Dispatch_is_enabled() )
     _Thread_Dispatch();
 
   return RTEMS_SUCCESSFUL;

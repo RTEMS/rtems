@@ -38,7 +38,7 @@ void *realloc(
    */
 
   if (_System_state_Is_up(_System_state_Get())) {
-    if (_Thread_Dispatch_in_critical_section())
+    if (!_Thread_Dispatch_is_enabled())
       return (void *) 0;
 
     if (_ISR_Nest_level > 0)

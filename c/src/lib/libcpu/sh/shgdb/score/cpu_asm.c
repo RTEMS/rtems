@@ -69,7 +69,7 @@ void __ISR_Handler( uint32_t   vector)
   if ( _ISR_Nest_level )
     return;
 
-  if ( _Thread_Dispatch_in_critical_section() ) {
+  if ( !_Thread_Dispatch_is_enabled() ) {
     return;
   }
 

@@ -37,7 +37,7 @@ bool _Protected_heap_Walk(
    *
    * NOTE: Dispatching is also disabled during initialization.
    */
-  if ( _Thread_Dispatch_in_critical_section() == false ) {
+  if ( _Thread_Dispatch_is_enabled() ) {
     _RTEMS_Lock_allocator();
       status = _Heap_Walk( the_heap, source, do_dump );
     _RTEMS_Unlock_allocator();
