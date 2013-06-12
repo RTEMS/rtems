@@ -48,6 +48,52 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Ready_queue_requeue(
   _Scheduler_simple_Ready_queue_enqueue( the_thread );
 }
 
+RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_lifo_order(
+  const Chain_Node *to_insert,
+  const Chain_Node *next
+)
+{
+  const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
+  const Thread_Control *thread_next = (const Thread_Control *) next;
+
+  return thread_to_insert->current_priority <= thread_next->current_priority;
+}
+
+RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_fifo_order(
+  const Chain_Node *to_insert,
+  const Chain_Node *next
+)
+{
+  const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
+  const Thread_Control *thread_next = (const Thread_Control *) next;
+
+  return thread_to_insert->current_priority < thread_next->current_priority;
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_lifo(
+  Chain_Control *chain,
+  Thread_Control *to_insert
+)
+{
+  _Chain_Insert_ordered_unprotected(
+    chain,
+    &to_insert->Object.Node,
+    _Scheduler_simple_Insert_priority_lifo_order
+  );
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
+  Chain_Control *chain,
+  Thread_Control *to_insert
+)
+{
+  _Chain_Insert_ordered_unprotected(
+    chain,
+    &to_insert->Object.Node,
+    _Scheduler_simple_Insert_priority_fifo_order
+  );
+}
+
 /** @} */
 
 #endif

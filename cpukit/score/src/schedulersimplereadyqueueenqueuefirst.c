@@ -27,29 +27,7 @@ void _Scheduler_simple_Ready_queue_enqueue_first(
   Thread_Control    *the_thread
 )
 {
-  Chain_Control    *ready;
-  Chain_Node       *the_node;
-  Thread_Control   *current;
+  Chain_Control *ready = (Chain_Control *) _Scheduler.information;
 
-  ready    = (Chain_Control *)_Scheduler.information;
-  current  = (Thread_Control *)ready;
-
-  /*
-   * Do NOT need to check for end of chain because there is always
-   * at least one task on the ready chain -- the IDLE task.  It can
-   * never block, should never attempt to obtain a semaphore or mutex,
-   * and thus will always be there.
-   */
-  for ( the_node = _Chain_First(ready) ; ; the_node = the_node->next ) {
-    current = (Thread_Control *) the_node;
-
-    /* break when AT HEAD OF (or PAST) our priority */
-    if ( the_thread->current_priority <= current->current_priority ) {
-      current = (Thread_Control *)current->Object.Node.previous;
-      break;
-    }
-  }
-
-  /* enqueue */
-  _Chain_Insert_unprotected( (Chain_Node *)current, &the_thread->Object.Node );
+  _Scheduler_simple_Insert_priority_lifo( ready, the_thread );
 }
