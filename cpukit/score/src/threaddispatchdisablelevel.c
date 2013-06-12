@@ -56,11 +56,17 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
   Thread_Dispatch_disable_level_lock_control *level_lock =
     &_Thread_Dispatch_disable_level_lock;
-  int self_cpu = bsp_smp_processor_id();
+  int self_cpu;
   ISR_Level isr_level;
   uint32_t disable_level;
 
   _ISR_Disable_on_this_core( isr_level );
+
+  /*
+   * We must obtain the processor ID after interrupts are disabled since a
+   * non-optimizing compiler may store the value on the stack and read it back.
+   */
+  self_cpu = bsp_smp_processor_id();
 
   if ( level_lock->owner_cpu != self_cpu ) {
     _SMP_lock_Acquire( &level_lock->lock );
