@@ -37,13 +37,6 @@ extern "C" {
 /**
  *  This defines the bit which indicates the interprocessor interrupt
  *  has been requested so that RTEMS will reschedule on this CPU
- *  because the currently executing thread needs to be switched out.
- */
-#define RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY  0x01
-
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that RTEMS will reschedule on this CPU
  *  because the currently executing thread has been sent a signal.
  */
 #define RTEMS_BSP_SMP_SIGNAL_TO_SELF            0x02

@@ -69,43 +69,41 @@ void rtems_smp_process_interrupt( void )
 {
   int              self = bsp_smp_processor_id();
   Per_CPU_Control *per_cpu = &_Per_CPU_Information[ self ];
-  uint32_t         message;
-  ISR_Level        level;
 
 
-  _Per_CPU_Lock_acquire( per_cpu, level );
-  message = per_cpu->message;
-  per_cpu->message = 0;
-  _Per_CPU_Lock_release( per_cpu, level );
+  if ( per_cpu->message != 0 ) {
+    uint32_t  message;
+    ISR_Level level;
 
-  #if defined(RTEMS_DEBUG)
-    {
-      void *sp = __builtin_frame_address(0);
-      if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
-        printk( "ISR on CPU %d -- (0x%02x) (0x%p)\n", self, message, sp );
-	if ( message & RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY )
-	  printk( "context switch necessary\n" );
-	if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
-	  printk( "signal to self\n" );
-	if ( message & RTEMS_BSP_SMP_SHUTDOWN )
-	  printk( "shutdown\n" );
+    _Per_CPU_Lock_acquire( per_cpu, level );
+    message = per_cpu->message;
+    per_cpu->message = 0;
+    _Per_CPU_Lock_release( per_cpu, level );
+
+    #if defined(RTEMS_DEBUG)
+      {
+        void *sp = __builtin_frame_address(0);
+        if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
+          printk( "ISR on CPU %d -- (0x%02x) (0x%p)\n", self, message, sp );
+          if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
+            printk( "signal to self\n" );
+          if ( message & RTEMS_BSP_SMP_SHUTDOWN )
+            printk( "shutdown\n" );
+        }
+        printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
       }
- 
-      printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
+    #endif
+
+    if ( ( message & RTEMS_BSP_SMP_SHUTDOWN ) != 0 ) {
+      _ISR_Disable_on_this_core( level );
+
+      _Thread_Dispatch_set_disable_level( 0 );
+
+      _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_SHUTDOWN );
+
+      _CPU_Fatal_halt( self );
+      /* does not continue past here */
     }
-  #endif
-
-  if ( message & RTEMS_BSP_SMP_SHUTDOWN ) {
-    _ISR_Disable_on_this_core( level );
-
-    while ( _Thread_Dispatch_decrement_disable_level() != 0 ) {
-      /* Release completely */
-    }
-
-    _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_SHUTDOWN );
-
-    _CPU_Fatal_halt( self );
-    /* does not continue past here */
   }
 }
 
@@ -179,7 +177,7 @@ void _SMP_Request_other_cores_to_dispatch( void )
           && per_cpu->state == PER_CPU_STATE_UP
           && per_cpu->dispatch_necessary
       ) {
-        _SMP_Send_message( cpu, RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY );
+        _SMP_Send_message( cpu, 0 );
       }
     }
   }
