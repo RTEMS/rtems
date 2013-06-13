@@ -79,7 +79,7 @@
   )
   {
     per_cpu->state = new_state;
-    _CPU_Processor_event_broadcast();
+    _CPU_SMP_Processor_event_broadcast();
   }
 
   void _Per_CPU_Wait_for_state(

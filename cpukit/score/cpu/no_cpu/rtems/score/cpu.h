@@ -1437,7 +1437,7 @@ static inline uint32_t CPU_swap_u32(
    *
    * @see _CPU_Processor_event_receive().
    */
-  static inline void _CPU_Processor_event_broadcast( void )
+  static inline void _CPU_SMP_Processor_event_broadcast( void )
   {
     __asm__ volatile ( "" : : : "memory" );
   }
@@ -1448,7 +1448,7 @@ static inline uint32_t CPU_swap_u32(
    * This function will wait for the processor event and may wait forever if no
    * such event arrives.
    *
-   * @see _CPU_Processor_event_broadcast().
+   * @see _CPU_SMP_Processor_event_broadcast().
    */
   static inline void _CPU_Processor_event_receive( void )
   {

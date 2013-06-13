@@ -479,7 +479,7 @@ void _CPU_Context_validate( uintptr_t pattern );
     __asm__ volatile ( "wfe" : : : "memory" );
   }
 
-  static inline void _CPU_Processor_event_broadcast( void )
+  static inline void _CPU_SMP_Processor_event_broadcast( void )
   {
     _ARM_Data_synchronization_barrier();
     _ARM_Send_event();
