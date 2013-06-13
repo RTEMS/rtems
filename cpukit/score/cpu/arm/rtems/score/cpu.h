@@ -457,6 +457,8 @@ void _CPU_Context_validate( uintptr_t pattern );
     return mpidr & 0xffU;
   }
 
+  void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
+
   static inline void _ARM_Data_memory_barrier( void )
   {
     __asm__ volatile ( "dmb" : : : "memory" );

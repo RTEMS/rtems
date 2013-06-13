@@ -56,11 +56,11 @@ void bsp_smp_broadcast_interrupt(void)
   );
 }
 
-void bsp_smp_interrupt_cpu(int cpu)
+void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
   rtems_status_code sc = arm_gic_irq_generate_software_irq(
     ARM_GIC_IRQ_SGI_0,
     ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
-    (uint8_t) (1U << cpu)
+    (uint8_t) (1U << target_processor_index)
   );
 }

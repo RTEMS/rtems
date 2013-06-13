@@ -1014,6 +1014,7 @@ void _CPU_Context_validate( uintptr_t pattern );
     return pir;
   }
 
+  void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
   static inline void _CPU_Processor_event_broadcast( void )
   {

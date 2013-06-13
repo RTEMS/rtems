@@ -84,18 +84,6 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count );
 void bsp_smp_broadcast_interrupt(void);
 
 /**
- *  @brief Generate a interprocessor interrupt.
- *
- *  This method is invoked by RTEMS to let @a cpu know that it
- *  has sent it a message.
- *
- *  @param [in] cpu is the recipient CPU
- */
-void bsp_smp_interrupt_cpu(
-  int cpu
-);
-
-/**
  * @brief Performs high-level initialization of a secondary processor and runs
  * the application threads.
  *

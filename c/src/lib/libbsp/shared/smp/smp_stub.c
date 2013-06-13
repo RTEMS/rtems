@@ -31,9 +31,7 @@ void bsp_smp_broadcast_message(
 {
 }
 
-void bsp_smp_interrupt_cpu(
-  int cpu
-)
+void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
 }
 

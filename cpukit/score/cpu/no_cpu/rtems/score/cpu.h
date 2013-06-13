@@ -1417,6 +1417,16 @@ static inline uint32_t CPU_swap_u32(
   }
 
   /**
+   * @brief Sends an inter-processor interrupt to the specified target
+   * processor.
+   *
+   * This operation is undefined for target processor indices out of range.
+   *
+   * @param[in] target_processor_index The target processor index.
+   */
+  void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
+
+  /**
    * @brief Broadcasts a processor event.
    *
    * Some architectures provide a low-level synchronization primitive for

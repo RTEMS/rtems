@@ -121,7 +121,7 @@ void _SMP_Send_message( uint32_t cpu, uint32_t message )
   per_cpu->message |= message;
   _Per_CPU_Lock_release( per_cpu, level );
 
-  bsp_smp_interrupt_cpu( cpu );
+  _CPU_SMP_Send_interrupt( cpu );
 }
 
 void _SMP_Broadcast_message( uint32_t message )

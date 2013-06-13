@@ -803,11 +803,9 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
   return cores;
 }
 
-void bsp_smp_interrupt_cpu(
-  int cpu
-)
+void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
-  send_ipi( cpu, 0x30 );
+  send_ipi( target_processor_index, 0x30 );
 }
 
 void bsp_smp_broadcast_interrupt(void)

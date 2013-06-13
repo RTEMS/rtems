@@ -167,8 +167,9 @@ void bsp_smp_broadcast_interrupt(void)
   qoriq.pic.per_cpu [self].ipidr [IPI_INDEX].reg = ALL_CORES;
 }
 
-void bsp_smp_interrupt_cpu(int core)
+void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   uint32_t self = ppc_processor_id();
-  qoriq.pic.per_cpu [self].ipidr [IPI_INDEX].reg = ONE_CORE(core);
+  qoriq.pic.per_cpu [self].ipidr [IPI_INDEX].reg =
+    ONE_CORE(target_processor_index);
 }

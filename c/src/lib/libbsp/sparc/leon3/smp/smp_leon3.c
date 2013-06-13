@@ -115,12 +115,10 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
   return found_cpus;
 }
 
-void bsp_smp_interrupt_cpu(
-  int cpu
-)
+void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   /* send interrupt to destination CPU */
-  LEON3_IrqCtrl_Regs->force[cpu] = 1 << LEON3_MP_IRQ;
+  LEON3_IrqCtrl_Regs->force[target_processor_index] = 1 << LEON3_MP_IRQ;
 }
 
 void bsp_smp_broadcast_interrupt(void)
@@ -135,7 +133,7 @@ void bsp_smp_broadcast_interrupt(void)
   for ( dest_cpu=0 ; dest_cpu < max_cpus ; dest_cpu++ ) {
     if ( cpu == dest_cpu )
       continue;
-    bsp_smp_interrupt_cpu( dest_cpu );
+    _CPU_SMP_Send_interrupt( dest_cpu );
     /* this is likely needed due to the ISR code not being SMP aware yet */
     bsp_smp_delay( 100000 );
   }
