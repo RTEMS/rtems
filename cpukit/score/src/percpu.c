@@ -88,7 +88,7 @@
   )
   {
     while ( per_cpu->state != desired_state ) {
-      _CPU_Processor_event_receive();
+      _CPU_SMP_Processor_event_receive();
     }
   }
 #else

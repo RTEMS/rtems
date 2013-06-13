@@ -1021,7 +1021,7 @@ void _CPU_Context_validate( uintptr_t pattern );
     __asm__ volatile ( "" : : : "memory" );
   }
 
-  static inline void _CPU_Processor_event_receive( void )
+  static inline void _CPU_SMP_Processor_event_receive( void )
   {
     __asm__ volatile ( "" : : : "memory" );
   }

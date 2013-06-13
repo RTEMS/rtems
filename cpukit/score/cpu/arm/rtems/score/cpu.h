@@ -485,7 +485,7 @@ void _CPU_Context_validate( uintptr_t pattern );
     _ARM_Send_event();
   }
 
-  static inline void _CPU_Processor_event_receive( void )
+  static inline void _CPU_SMP_Processor_event_receive( void )
   {
     _ARM_Wait_for_event();
     _ARM_Data_memory_barrier();

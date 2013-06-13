@@ -464,7 +464,7 @@ uint32_t   _CPU_ISR_Get_level( void );
     __asm__ volatile ( "" : : : "memory" );
   }
 
-  static inline void _CPU_Processor_event_receive( void )
+  static inline void _CPU_SMP_Processor_event_receive( void )
   {
     __asm__ volatile ( "" : : : "memory" );
   }

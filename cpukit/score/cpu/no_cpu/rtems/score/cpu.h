@@ -1435,7 +1435,7 @@ static inline uint32_t CPU_swap_u32(
    * transactions.  This function must ensure that preceding store operations
    * can be observed by other processors.
    *
-   * @see _CPU_Processor_event_receive().
+   * @see _CPU_SMP_Processor_event_receive().
    */
   static inline void _CPU_SMP_Processor_event_broadcast( void )
   {
@@ -1450,7 +1450,7 @@ static inline uint32_t CPU_swap_u32(
    *
    * @see _CPU_SMP_Processor_event_broadcast().
    */
-  static inline void _CPU_Processor_event_receive( void )
+  static inline void _CPU_SMP_Processor_event_receive( void )
   {
     __asm__ volatile ( "" : : : "memory" );
   }
