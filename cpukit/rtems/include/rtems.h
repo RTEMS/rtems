@@ -73,9 +73,7 @@ extern "C" {
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif
-#if defined(RTEMS_SMP)
 #include <rtems/rtems/smp.h>
-#endif
 
 
 #include <rtems/rtems/support.h>

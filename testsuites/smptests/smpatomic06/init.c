@@ -35,12 +35,12 @@ rtems_task Init(
   locked_printf( "\n\n***  SMPatomic06 TEST ***\n" );
 
   /* Initialize the TaskRan array */
-  for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
     TaskRan[i] = false;
   }
 
   /* Create and start tasks for each processor */
-  for ( i=1; i< rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=1; i< rtems_smp_get_processor_count() ; i++ ) {
     ch = '0' + i;
 
     status = rtems_task_create(
@@ -60,7 +60,7 @@ rtems_task Init(
   /* Wait on the all tasks to run */
   while (1) {
     allDone = true;
-    for ( i=1; i<rtems_smp_get_number_of_processors() ; i++ ) {
+    for ( i=1; i<rtems_smp_get_processor_count() ; i++ ) {
       if (TaskRan[i] == false)
         allDone = false;
     }

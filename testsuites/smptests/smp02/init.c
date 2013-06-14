@@ -45,7 +45,7 @@ rtems_task Init(
   status = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, 0);
   directive_failed( status,"rtems_semaphore_obtain of SEM1\n");
 
-  for ( i=1; i < rtems_smp_get_number_of_processors(); i++ ){
+  for ( i=1; i < rtems_smp_get_processor_count(); i++ ){
 
     /* Create and start tasks for each CPU */
     ch = '0' + i;

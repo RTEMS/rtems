@@ -49,7 +49,7 @@ rtems_task Init(
 
   /* Initialize the TaskRan array */
   TaskRan[0] = true;
-  for ( i=1; i<rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=1; i<rtems_smp_get_processor_count() ; i++ ) {
     TaskRan[i] = false;
   }
 
@@ -57,7 +57,7 @@ rtems_task Init(
   PrintTaskInfo( "Init" );
 
   /* for each remaining cpu create and start a task */
-  for ( i=1; i < rtems_smp_get_number_of_processors(); i++ ){
+  for ( i=1; i < rtems_smp_get_processor_count(); i++ ){
 
     ch = '0' + i;
 
@@ -87,12 +87,12 @@ rtems_task Init(
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  status = rtems_task_start(id,Test_task,rtems_smp_get_number_of_processors());
+  status = rtems_task_start(id,Test_task,rtems_smp_get_processor_count());
 
   /* Wait on all tasks to run */
   while (1) {
     TestFinished = true;
-    for ( i=1; i < (rtems_smp_get_number_of_processors()+1) ; i++ ) {
+    for ( i=1; i < (rtems_smp_get_processor_count()+1) ; i++ ) {
       if (TaskRan[i] == false)
         TestFinished = false;
     }

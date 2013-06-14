@@ -126,7 +126,7 @@ void _SMP_Send_message( int cpu, uint32_t message )
 void _SMP_Broadcast_message( uint32_t message )
 {
   int self = bsp_smp_processor_id();
-  int ncpus = _SMP_Processor_count;
+  int ncpus = _SMP_Get_processor_count();
   int cpu;
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
@@ -146,7 +146,7 @@ void _SMP_Broadcast_message( uint32_t message )
 void _SMP_Request_other_cores_to_perform_first_context_switch( void )
 {
   int self = bsp_smp_processor_id();
-  int ncpus = _SMP_Processor_count;
+  int ncpus = _SMP_Get_processor_count();
   int cpu;
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
@@ -165,7 +165,7 @@ void _SMP_Request_other_cores_to_dispatch( void )
 {
   if ( _System_state_Is_up( _System_state_Get() ) ) {
     int self = bsp_smp_processor_id();
-    int ncpus = _SMP_Processor_count;
+    int ncpus = _SMP_Get_processor_count();
     int cpu;
 
     for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
@@ -185,7 +185,7 @@ void _SMP_Request_other_cores_to_dispatch( void )
 void _SMP_Request_other_cores_to_shutdown( void )
 {
   int self = bsp_smp_processor_id();
-  int ncpus = _SMP_Processor_count;
+  int ncpus = _SMP_Get_processor_count();
   int cpu;
 
   _SMP_Broadcast_message( RTEMS_BSP_SMP_SHUTDOWN );

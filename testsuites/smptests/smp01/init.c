@@ -44,12 +44,12 @@ rtems_task Init(
   locked_printf( "\n\n***  SMP01 TEST ***\n" );
 
   /* Initialize the TaskRan array */
-  for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
     TaskRan[i] = false;
   }
 
   /* Create and start tasks for each processor */
-  for ( i=0; i< rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=0; i< rtems_smp_get_processor_count() ; i++ ) {
     if ( i != cpu_self ) {
       ch = '0' + i;
 
@@ -74,7 +74,7 @@ rtems_task Init(
   /* Wait on the all tasks to run */
   while (1) {
     allDone = true;
-    for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+    for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
       if ( i != cpu_self && TaskRan[i] == false)
         allDone = false;
     }

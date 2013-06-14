@@ -36,7 +36,7 @@ rtems_task Init(
   locked_print_initialize();
   locked_printf( "\n\n*** TEST SMP05 ***\n" );
 
-  for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
     ch = '1' + i;
 
     status = rtems_task_create(

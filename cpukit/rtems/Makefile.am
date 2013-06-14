@@ -34,6 +34,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/region.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/rtemsapi.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/sem.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/signal.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/smp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/status.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/support.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/tasks.h
@@ -52,10 +53,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/regionmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/semmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/signalmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
-endif
-
-if HAS_SMP
-include_rtems_rtems_HEADERS += include/rtems/rtems/smp.h
 endif
 
 include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl

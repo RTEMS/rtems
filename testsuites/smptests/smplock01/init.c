@@ -298,7 +298,7 @@ static void run_tests(
 static void task(rtems_task_argument arg)
 {
   global_context *ctx = (global_context *) arg;
-  int cpu_count = (int) rtems_smp_get_number_of_processors();
+  int cpu_count = (int) rtems_smp_get_processor_count();
   int cpu_self = rtems_smp_get_current_processor();
   rtems_status_code sc;
   barrier_state bs = BARRIER_STATE_INITIALIZER;
@@ -312,7 +312,7 @@ static void task(rtems_task_argument arg)
 static void test(void)
 {
   global_context *ctx = &context;
-  int cpu_count = (int) rtems_smp_get_number_of_processors();
+  int cpu_count = (int) rtems_smp_get_processor_count();
   int cpu_self = rtems_smp_get_current_processor();
   int cpu;
   int test;

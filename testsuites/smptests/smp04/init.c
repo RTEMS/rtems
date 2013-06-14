@@ -58,7 +58,7 @@ rtems_task Init(
 
   /* Set all Tasks to not ran except for the init task */
   TaskRan[0] = true;
-  for ( i=1; i <= rtems_smp_get_number_of_processors() ; i++ )
+  for ( i=1; i <= rtems_smp_get_processor_count() ; i++ )
     TaskRan[i] = false;
   
 
@@ -66,7 +66,7 @@ rtems_task Init(
    * For each processor create and start a task alternating 
    * between  RTEMS_PREEMPT and RTEMS_NO_PREEMPT.
    */
-  for ( i=1; i < rtems_smp_get_number_of_processors() ; i++ ){
+  for ( i=1; i < rtems_smp_get_processor_count() ; i++ ){
 
     /* Create and start tasks for each CPU */
     ch = '0' + i;
@@ -79,7 +79,7 @@ rtems_task Init(
     status = rtems_task_create(
       rtems_build_name( 'T', 'A', ch, ' ' ),
       CONFIGURE_INIT_TASK_PRIORITY +
-        (2*rtems_smp_get_number_of_processors()) - (2*i),
+        (2*rtems_smp_get_processor_count()) - (2*i),
       RTEMS_MINIMUM_STACK_SIZE,
       ((i%2) ? RTEMS_PREEMPT : RTEMS_NO_PREEMPT),
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -106,7 +106,7 @@ rtems_task Init(
    * should preempt the longest running PREEMPTABLE
    * task and run on that cpu.
    */
-  ch = '0' + rtems_smp_get_number_of_processors() ;
+  ch = '0' + rtems_smp_get_processor_count() ;
   locked_printf(
     "Create a TA%c a %s task\n",
     ch, 
@@ -128,7 +128,7 @@ rtems_task Init(
   status = rtems_task_start(
     id,
     Test_task,
-    rtems_smp_get_number_of_processors()
+    rtems_smp_get_processor_count()
   );
   
   /* 
@@ -136,7 +136,7 @@ rtems_task Init(
    */
   while (1) {
     allDone = true;
-    for ( i=1; i<=rtems_smp_get_number_of_processors() ; i++ ) {
+    for ( i=1; i<=rtems_smp_get_processor_count() ; i++ ) {
       if (TaskRan[i] == false)
         allDone = false;
     }

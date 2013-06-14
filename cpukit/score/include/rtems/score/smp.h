@@ -1,10 +1,9 @@
 /**
- *  @file  rtems/score/smp.h
+ * @file
  *
- *  @brief Interface to the SuperCore SMP Support used Internally to RTEMS
+ * @ingroup ScoreSMP
  *
- *  This include file defines the interface to the SuperCore
- *  SMP support that is used internally to RTEMS.
+ * @brief SuperCore SMP Support API
  */
 
 /*
@@ -19,23 +18,21 @@
 #ifndef _RTEMS_SCORE_SMP_H
 #define _RTEMS_SCORE_SMP_H
 
-#if defined (RTEMS_SMP)
-#include <rtems/score/percpu.h>
-
-/**
- *  @defgroup SuperCoreSMP SMP Support
- *
- *  @ingroup Score
- *
- *  This defines the interface of the SuperCore support
- *  code for SMP support.
- */
-
-/**@{*/
+#include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup ScoreSMP SMP Support
+ *
+ * @ingroup Score
+ *
+ * This defines the interface of the SuperCore SMP support.
+ *
+ * @{
+ */
 
 /**
  *  This defines the bit which indicates the interprocessor interrupt
@@ -58,14 +55,20 @@ extern "C" {
  */
 #define RTEMS_BSP_SMP_SHUTDOWN                  0x04
 
-#ifndef ASM
-/**
- *  @brief Number of CPUs in a SMP system.
- *
- *  This variable is set during the SMP initialization sequence to
- *  indicate the number of CPUs in this system.
- */
-SCORE_EXTERN uint32_t _SMP_Processor_count;
+#if !defined( ASM )
+
+#if defined( RTEMS_SMP )
+  SCORE_EXTERN uint32_t _SMP_Processor_count;
+
+  static inline uint32_t _SMP_Get_processor_count( void )
+  {
+    return _SMP_Processor_count;
+  }
+#else
+  #define _SMP_Get_processor_count() ( ( uint32_t ) 1 )
+#endif
+
+#if defined( RTEMS_SMP )
 
 /**
  *  @brief Sends a SMP message to a processor.
@@ -114,14 +117,15 @@ void _SMP_Request_other_cores_to_dispatch(void);
  */
 void _SMP_Request_other_cores_to_shutdown(void);
 
-#endif
+#endif /* defined( RTEMS_SMP ) */
+
+#endif /* !defined( ASM ) */
+
+/** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-
-/**@}*/
 #endif
 /* end of include file */

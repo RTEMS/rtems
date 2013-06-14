@@ -40,6 +40,7 @@ include_rtems_score_HEADERS += include/rtems/score/schedulercbs.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersimple.h
+include_rtems_score_HEADERS += include/rtems/score/smp.h
 include_rtems_score_HEADERS += include/rtems/score/smplock.h
 include_rtems_score_HEADERS += include/rtems/score/stack.h
 include_rtems_score_HEADERS += include/rtems/score/states.h
@@ -62,9 +63,6 @@ include_rtems_score_HEADERS += include/rtems/score/basedefs.h
 include_rtems_score_HEADERS += include/rtems/score/atomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericcpuatomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericatomicops.h
-if HAS_SMP
-include_rtems_score_HEADERS += include/rtems/score/smp.h
-endif
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h

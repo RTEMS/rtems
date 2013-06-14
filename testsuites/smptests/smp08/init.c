@@ -73,7 +73,7 @@ rtems_task Init(
   /* Show that the init task is running on this cpu */
   PrintTaskInfo( "Init", &time );
 
-  for ( i=1; i <= rtems_smp_get_number_of_processors() *3; i++ ) {
+  for ( i=1; i <= rtems_smp_get_processor_count() *3; i++ ) {
 
     sprintf(ch, "%02" PRId32, i );
     status = rtems_task_create(

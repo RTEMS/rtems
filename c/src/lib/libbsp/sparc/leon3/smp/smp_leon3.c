@@ -130,7 +130,7 @@ void bsp_smp_broadcast_interrupt(void)
   int max_cpus;
 
   cpu = bsp_smp_processor_id();
-  max_cpus = rtems_smp_get_number_of_processors();
+  max_cpus = rtems_smp_get_processor_count();
 
   for ( dest_cpu=0 ; dest_cpu < max_cpus ; dest_cpu++ ) {
     if ( cpu == dest_cpu )

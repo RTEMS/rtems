@@ -54,7 +54,7 @@ rtems_task Init(
   status = rtems_clock_tick();
   directive_failed( status, "clock tick" );
 
-  rtems_test_assert( rtems_smp_get_number_of_processors()  > 1 );
+  rtems_test_assert( rtems_smp_get_processor_count()  > 1 );
 
   cpu_num = bsp_smp_processor_id();
 

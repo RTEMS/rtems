@@ -89,7 +89,7 @@ void _Thread_Create_idle( void )
   #if defined(RTEMS_SMP)
     int cpu;
 
-    for ( cpu=0 ; cpu < _SMP_Processor_count ; cpu++ ) {
+    for ( cpu=0 ; cpu < _SMP_Get_processor_count() ; cpu++ ) {
       _Thread_Create_idle_helper(
         _Objects_Build_name( 'I', 'D', 'L', 'E' ),
         cpu
