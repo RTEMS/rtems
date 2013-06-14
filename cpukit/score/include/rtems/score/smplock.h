@@ -83,7 +83,7 @@ static inline void _SMP_lock_Initialize( SMP_lock_Control *lock )
  * current thread of execution is not interrupted indefinite once it obtained
  * the SMP lock.
  *
- * @param[in/out] lock The SMP lock control.
+ * @param[in,out] lock The SMP lock control.
  */
 static inline void _SMP_lock_Acquire( SMP_lock_Control *lock )
 {
@@ -93,7 +93,7 @@ static inline void _SMP_lock_Acquire( SMP_lock_Control *lock )
 /**
  * @brief Releases a SMP lock.
  *
- * @param[in/out] lock The SMP lock control.
+ * @param[in,out] lock The SMP lock control.
  */
 static inline void _SMP_lock_Release( SMP_lock_Control *lock )
 {
@@ -103,7 +103,7 @@ static inline void _SMP_lock_Release( SMP_lock_Control *lock )
 /**
  * @brief Disables interrupts and acquires the SMP lock.
  *
- * @param[in/out] lock The SMP lock control.
+ * @param[in,out] lock The SMP lock control.
  * @param[out] isr_cookie The ISR cookie.
  */
 #define _SMP_lock_ISR_disable_and_acquire( lock, isr_cookie ) \
@@ -112,7 +112,7 @@ static inline void _SMP_lock_Release( SMP_lock_Control *lock )
 /**
  * @brief Releases the SMP lock and enables interrupts.
  *
- * @param[in/out] lock The SMP lock control.
+ * @param[in,out] lock The SMP lock control.
  * @param[in] isr_cookie The ISR cookie.
  */
 #define _SMP_lock_Release_and_ISR_enable( lock, isr_cookie ) \

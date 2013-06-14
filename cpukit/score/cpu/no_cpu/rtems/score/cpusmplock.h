@@ -60,7 +60,7 @@ static inline void _CPU_SMP_lock_Initialize( CPU_SMP_lock_Control *lock )
 /**
  * @brief Acquires a CPU SMP lock.
  *
- * @param[in/out] lock The CPU SMP lock control.
+ * @param[in,out] lock The CPU SMP lock control.
  */
 static inline void _CPU_SMP_lock_Acquire( CPU_SMP_lock_Control *lock )
 {
@@ -74,7 +74,7 @@ static inline void _CPU_SMP_lock_Acquire( CPU_SMP_lock_Control *lock )
 /**
  * @brief Releases a CPU SMP lock.
  *
- * @param[in/out] lock The CPU SMP lock control.
+ * @param[in,out] lock The CPU SMP lock control.
  */
 static inline void _CPU_SMP_lock_Release( CPU_SMP_lock_Control *lock )
 {
@@ -84,7 +84,7 @@ static inline void _CPU_SMP_lock_Release( CPU_SMP_lock_Control *lock )
 /**
  * @brief Disables interrupts and acquires the CPU SMP lock.
  *
- * @param[in/out] lock The CPU SMP lock control.
+ * @param[in,out] lock The CPU SMP lock control.
  * @param[out] isr_cookie The ISR cookie.
  */
 #define _CPU_SMP_lock_ISR_disable_and_acquire( lock, isr_cookie ) \
@@ -96,7 +96,7 @@ static inline void _CPU_SMP_lock_Release( CPU_SMP_lock_Control *lock )
 /**
  * @brief Releases the CPU SMP lock and enables interrupts.
  *
- * @param[in/out] lock The CPU SMP lock control.
+ * @param[in,out] lock The CPU SMP lock control.
  * @param[in] isr_cookie The ISR cookie.
  */
 #define _CPU_SMP_lock_Release_and_ISR_enable( lock, isr_cookie ) \

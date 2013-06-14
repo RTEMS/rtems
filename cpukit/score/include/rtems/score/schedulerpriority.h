@@ -161,7 +161,7 @@ void _Scheduler_priority_Unblock(
  *    + ready chain
  *    + select heir
  *
- *  @param[in/out] thread The yielding thread.
+ *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_priority_Yield( Thread_Control *thread );
 

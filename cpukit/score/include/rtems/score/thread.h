@@ -599,7 +599,7 @@ bool _Thread_Initialize(
  *  @param entry_point
  *  @param pointer_argument
  *  @param numeric_argument
- *  @param[in/out] processor The processor if used to start an idle thread
+ *  @param[in,out] processor The processor if used to start an idle thread
  *  during system initialization.  Must be set to @c NULL to start a normal
  *  thread.
  */

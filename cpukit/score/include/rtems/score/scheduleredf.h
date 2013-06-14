@@ -193,7 +193,7 @@ void _Scheduler_EDF_Unblock(
  *  and place it back. The rbtree ready queue is responsible for FIFO ordering
  *  in such a case.
  *
- *  @param[in/out] thread The yielding thread.
+ *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_EDF_Yield( Thread_Control *thread );
 

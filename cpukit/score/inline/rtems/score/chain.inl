@@ -747,8 +747,8 @@ typedef bool ( *Chain_Node_order )(
  * relation holds for all nodes from the head up to the inserted node.  Nodes
  * after the inserted node are not moved.
  *
- * @param[in/out] chain The chain.
- * @param[in/out] to_insert The node to insert.
+ * @param[in,out] chain The chain.
+ * @param[in,out] to_insert The node to insert.
  * @param[in] order The order relation.
  */
 RTEMS_INLINE_ROUTINE void _Chain_Insert_ordered_unprotected(

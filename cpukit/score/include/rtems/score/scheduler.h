@@ -160,7 +160,7 @@ void _Scheduler_default_Tick( void );
 /**
  * @brief Unblocks the thread.
  *
- * @param[in/out] thread An idle thread.
+ * @param[in,out] thread An idle thread.
  * @param[in] processor This parameter is unused.
  */
 void _Scheduler_default_Start_idle(

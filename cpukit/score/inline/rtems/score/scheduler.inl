@@ -213,8 +213,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Tick( void )
 /**
  * @brief Starts the idle thread for a particular processor.
  *
- * @param[in/out] thread The idle thread for the processor.
- * @parma[in/out] processor The processor for the idle thread.
+ * @param[in,out] thread The idle thread for the processor.
+ * @parma[in,out] processor The processor for the idle thread.
  *
  * @see _Thread_Create_idle().
  */

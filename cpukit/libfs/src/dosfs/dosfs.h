@@ -33,11 +33,11 @@ typedef struct rtems_dosfs_convert_control rtems_dosfs_convert_control;
 /**
  * @brief Converts from UTF-8 into a specific code page.
  *
- * @param[in/out] self The convert control.
+ * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-8 string to be converted.
  * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
  * @param[out] dst The address the converted string will get copied to.
- * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
  *
  * @retval 0 Successful operation.
@@ -55,11 +55,11 @@ typedef int (*rtems_dosfs_utf8_to_codepage)(
 /**
  * @brief Converts from a specific code page into UTF-8
  *
- * @param[in/out] self The convert control.
+ * @param[in,out] self The convert control.
  * @param[in] src A well-formed string in code page format.
  * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
  * @param[out] dst The address the converted string will get copied to.
- * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
  *
  * @retval 0 Successful operation.
@@ -77,11 +77,11 @@ typedef int (*rtems_dosfs_codepage_to_utf8)(
 /**
  * @brief Converts from UTF-8 to UTF-16
  *
- * @param[in/out] self The convert control.
+ * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-8 string to be converted.
  * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
  * @param[out] dst The address the converted string will get copied to
- * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
  *
  * @retval 0 Successful operation.
@@ -99,11 +99,11 @@ typedef int (*rtems_dosfs_utf8_to_utf16)(
 /**
  * @brief Converts from UTF-16 to UTF-8.
  *
- * @param[in/out] self The convert control.
+ * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-16 string to be converted.
  * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
  * @param[out] dst The address the converted string will get copied to.
- * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer
  *
  * @retval 0 Successful operation.
@@ -124,12 +124,12 @@ typedef int (*rtems_dosfs_utf16_to_utf8)(
  * Does canonical decomposition of the UTF-8 string and in addition
  * also converts upper case alphabetic characters to lower case characters
  *
- * @param[in/out] self The convert control.
+ * @param[in,out] self The convert control.
  * @param[in] src A well-formed UTF-8 string to be normalized and fold.
  * @param[in] src_size The size of the string in bytes (inludes '\0' if any).
  * @param[out] dst The address the normalized and fold string will get
  * copied to.
- * @param[in/out] dst_size The size of the buffer in bytes respectively the
+ * @param[in,out] dst_size The size of the buffer in bytes respectively the
  * number of bytes written to the buffer.
  *
  * @retval 0 Successful operation.
@@ -149,7 +149,7 @@ typedef int (*rtems_dosfs_utf8_normalize_and_fold)(
 /**
  * @brief Destroys a convert control structure.
  *
- * @param[in/out] self The convert control for destruction.
+ * @param[in,out] self The convert control for destruction.
  */
 typedef void (*rtems_dosfs_convert_destroy)(
   rtems_dosfs_convert_control *self

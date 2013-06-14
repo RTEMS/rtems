@@ -82,7 +82,7 @@ void _Scheduler_simple_Schedule( void );
  *  the timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
  *
- *  @param[in/out] thread The yielding thread.
+ *  @param[in,out] thread The yielding thread.
  */
 void _Scheduler_simple_Yield( Thread_Control *thread );
 
