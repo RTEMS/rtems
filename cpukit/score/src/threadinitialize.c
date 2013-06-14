@@ -181,7 +181,9 @@ bool _Thread_Initialize(
 #if defined(RTEMS_SMP)
   the_thread->is_scheduled            = false;
   the_thread->is_executing            = false;
-  the_thread->cpu                     = NULL;
+
+  /* Initialize the cpu field for the non-SMP schedulers */
+  the_thread->cpu                     = _Per_CPU_Get_by_index( 0 );
 #endif
 
   the_thread->current_state           = STATES_DORMANT;

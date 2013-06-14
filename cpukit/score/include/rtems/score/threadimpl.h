@@ -634,8 +634,21 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_global_exit_status( void )
 
 RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
 {
-  if ( _ISR_Is_in_progress() && _Thread_Is_executing( thread ) )
+  if ( _ISR_Is_in_progress() && _Thread_Is_executing( thread ) ) {
     _Thread_Dispatch_necessary = true;
+  } else {
+#if defined(RTEMS_SMP)
+    if ( thread->is_executing ) {
+      const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
+      Per_CPU_Control *cpu_of_thread = thread->cpu;
+
+      if ( cpu_of_executing != cpu_of_thread ) {
+        cpu_of_thread->dispatch_necessary = true;
+        _Per_CPU_Send_interrupt( cpu_of_thread );
+      }
+    }
+#endif
+  }
 }
 
 #if !defined(__DYNAMIC_REENT__)

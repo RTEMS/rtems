@@ -96,14 +96,6 @@ void _SMP_Broadcast_message(
 void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 
 /**
- *  @brief Request dispatch on other cores.
- *
- *  Send message to other cores requesting them to perform
- *  a thread dispatch operation.
- */
-void _SMP_Request_other_cores_to_dispatch(void);
-
-/**
  *  @brief Request other cores to shutdown.
  *
  *  Send message to other cores requesting them to shutdown.

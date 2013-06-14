@@ -165,27 +165,6 @@ void _SMP_Request_other_cores_to_perform_first_context_switch( void )
   }
 }
 
-void _SMP_Request_other_cores_to_dispatch( void )
-{
-  if ( _System_state_Is_up( _System_state_Get() ) ) {
-    uint32_t self = _SMP_Get_current_processor();
-    uint32_t ncpus = _SMP_Get_processor_count();
-    uint32_t cpu;
-
-    for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
-      const Per_CPU_Control *per_cpu = &_Per_CPU_Information[ cpu ];
-
-      if (
-        cpu != self
-          && per_cpu->state == PER_CPU_STATE_UP
-          && per_cpu->dispatch_necessary
-      ) {
-        _SMP_Send_message( cpu, 0 );
-      }
-    }
-  }
-}
-
 void _SMP_Request_other_cores_to_shutdown( void )
 {
   uint32_t self = _SMP_Get_current_processor();

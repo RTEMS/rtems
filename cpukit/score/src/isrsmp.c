@@ -72,8 +72,5 @@ int _ISR_SMP_Exit(void)
 
   _Thread_Dispatch_decrement_disable_level();
 
-   if ( retval == 0 )
-    _SMP_Request_other_cores_to_dispatch();
-
   return retval;
 }

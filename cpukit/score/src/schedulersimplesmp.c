@@ -58,9 +58,15 @@ static void _Scheduler_simple_smp_Allocate_processor(
   }
 
   if ( heir != victim ) {
+    const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
+
     heir->cpu = cpu_of_victim;
     cpu_of_victim->heir = heir;
     cpu_of_victim->dispatch_necessary = true;
+
+    if ( cpu_of_victim != cpu_of_executing ) {
+      _Per_CPU_Send_interrupt( cpu_of_victim );
+    }
   }
 }
 

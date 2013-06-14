@@ -65,11 +65,6 @@ void _Thread_Dispatch( void )
      * once someone calls _Thread_Dispatch().
      */
     _Thread_Disable_dispatch();
-
-    /*
-     *  If necessary, send dispatch request to other cores.
-     */
-    _SMP_Request_other_cores_to_dispatch();
   #else
     _Thread_Dispatch_set_disable_level( 1 );
   #endif
