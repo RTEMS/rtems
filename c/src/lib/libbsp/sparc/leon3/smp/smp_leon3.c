@@ -43,7 +43,7 @@ static rtems_isr bsp_ap_ipi_isr(
 
 static void leon3_secondary_cpu_initialize(void)
 {
-  int cpu = bsp_smp_processor_id();
+  uint32_t cpu = rtems_smp_get_current_processor();
 
   sparc_leon3_set_cctrl( 0x80000F );
   LEON_Unmask_interrupt(LEON3_MP_IRQ);
@@ -125,11 +125,11 @@ void bsp_smp_interrupt_cpu(
 
 void bsp_smp_broadcast_interrupt(void)
 {
-  int dest_cpu;
-  int cpu;
-  int max_cpus;
+  uint32_t dest_cpu;
+  uint32_t cpu;
+  uint32_t max_cpus;
 
-  cpu = bsp_smp_processor_id();
+  cpu = rtems_smp_get_current_processor();
   max_cpus = rtems_smp_get_processor_count();
 
   for ( dest_cpu=0 ; dest_cpu < max_cpus ; dest_cpu++ ) {

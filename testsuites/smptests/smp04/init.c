@@ -15,6 +15,7 @@
 #include "system.h"
 
 #include <stdio.h>
+#include <inttypes.h>
 
 
 void Loop() {
@@ -27,9 +28,9 @@ rtems_task Test_task(
   rtems_task_argument task_index
 )
 {
-  int               cpu_num;
+  uint32_t cpu_num;
 
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
   locked_printf("  CPU %d running task TA%" PRIu32 "\n", cpu_num, task_index );
   Loop();
   TaskRan[task_index] = true;
@@ -41,20 +42,20 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int               i;
+  uint32_t          i;
   char              ch;
   rtems_id          id;
   rtems_status_code status;
   bool              allDone;
-  int               cpu_num;
+  uint32_t          cpu_num;
 
   Loop();
   locked_print_initialize();
   locked_printf( "\n\n***  SMP04 TEST ***\n" );
 
   /* Display which cpu is running this init thread. */
-  cpu_num = bsp_smp_processor_id();
-  locked_printf("  CPU %d running task Init\n", cpu_num );
+  cpu_num = rtems_smp_get_current_processor();
+  locked_printf("  CPU %" PRIu32 " running task Init\n", cpu_num );
 
   /* Set all Tasks to not ran except for the init task */
   TaskRan[0] = true;

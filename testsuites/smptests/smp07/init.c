@@ -22,7 +22,7 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
-  int               cpu_num;
+  uint32_t          cpu_num;
   rtems_status_code sc;
   char              name[5];
   char             *p;
@@ -32,10 +32,10 @@ rtems_task Test_task(
   rtems_test_assert( p != NULL );
 
    /* Get the CPU Number */
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
   /* Print that the task is up and running. */
-  locked_printf(" CPU %d runnng Task %s and blocking\n", cpu_num, name);
+  locked_printf(" CPU %" PRIu32 " runnng Task %s and blocking\n", cpu_num, name);
 
   sc = rtems_semaphore_obtain( Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
   directive_failed( sc,"obtain in test task");
@@ -47,7 +47,7 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   locked_printf(
-    " CPU %d running Task %s after semaphore release\n", 
+    " CPU %" PRIu32 " running Task %s after semaphore release\n", 
     cpu_num, 
     name
   );
@@ -110,7 +110,7 @@ rtems_task Init(
   );
   directive_failed( status, "task create" );
 
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
   locked_printf(" CPU %d start task TA1\n", cpu_num );
   status = rtems_task_start( id, Test_task, 1 );
   directive_failed( status, "task start" );

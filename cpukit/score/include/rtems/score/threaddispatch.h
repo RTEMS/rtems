@@ -62,8 +62,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
 #if defined(RTEMS_SMP)
   typedef struct {
     SMP_lock_Control lock;
-    int owner_cpu;
-    int nest_level;
+    uint32_t owner_cpu;
+    uint32_t nest_level;
   } Thread_Dispatch_disable_level_lock_control;
 
   /**

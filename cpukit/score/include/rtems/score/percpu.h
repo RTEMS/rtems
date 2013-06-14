@@ -25,12 +25,7 @@
   #include <rtems/score/isrlevel.h>
   #include <rtems/score/timestamp.h>
   #include <rtems/score/smplock.h>
-
-  /*
-   * NOTE: This file MUST be included on non-smp systems as well
-   *       in order to define bsp_smp_processor_id.
-   */
-  #include <rtems/bspsmp.h>
+  #include <rtems/score/smp.h>
 #endif
 
 /**
@@ -277,23 +272,23 @@ void _Per_CPU_Wait_for_state(
 #endif
 
 /*
- * On a non SMP system, the bsp_smp_processor_id is defined to 0.
+ * On a non SMP system, the _SMP_Get_current_processor() is defined to 0.
  * Thus when built for non-SMP, there should be no performance penalty.
  */
 #define _Thread_Heir \
-  _Per_CPU_Information[bsp_smp_processor_id()].heir
+  _Per_CPU_Information[_SMP_Get_current_processor()].heir
 #define _Thread_Executing \
-  _Per_CPU_Information[bsp_smp_processor_id()].executing
+  _Per_CPU_Information[_SMP_Get_current_processor()].executing
 #define _ISR_Nest_level \
-  _Per_CPU_Information[bsp_smp_processor_id()].isr_nest_level
+  _Per_CPU_Information[_SMP_Get_current_processor()].isr_nest_level
 #define _CPU_Interrupt_stack_low \
-  _Per_CPU_Information[bsp_smp_processor_id()].interrupt_stack_low
+  _Per_CPU_Information[_SMP_Get_current_processor()].interrupt_stack_low
 #define _CPU_Interrupt_stack_high \
-  _Per_CPU_Information[bsp_smp_processor_id()].interrupt_stack_high
+  _Per_CPU_Information[_SMP_Get_current_processor()].interrupt_stack_high
 #define _Thread_Dispatch_necessary \
-  _Per_CPU_Information[bsp_smp_processor_id()].dispatch_necessary
+  _Per_CPU_Information[_SMP_Get_current_processor()].dispatch_necessary
 #define _Thread_Time_of_last_context_switch \
-  _Per_CPU_Information[bsp_smp_processor_id()].time_of_last_context_switch
+  _Per_CPU_Information[_SMP_Get_current_processor()].time_of_last_context_switch
 
 #endif  /* ASM */
 

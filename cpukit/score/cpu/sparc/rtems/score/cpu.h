@@ -1186,6 +1186,8 @@ void _CPU_Context_restore(
     Context_Control *new_context
   );
 
+  RTEMS_COMPILER_PURE_ATTRIBUTE uint32_t _CPU_SMP_Get_current_processor( void );
+
   static inline void _CPU_Processor_event_broadcast( void )
   {
     __asm__ volatile ( "" : : : "memory" );

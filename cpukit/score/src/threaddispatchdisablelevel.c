@@ -26,7 +26,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
 
-#define NO_OWNER_CPU (-1)
+#define NO_OWNER_CPU 0xffffffffU
 
 void _Thread_Dispatch_initialization( void )
 {
@@ -48,8 +48,8 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
   Thread_Dispatch_disable_level_lock_control *level_lock =
     &_Thread_Dispatch_disable_level_lock;
-  int self_cpu;
   ISR_Level isr_level;
+  uint32_t self_cpu;
   uint32_t disable_level;
 
   _ISR_Disable_on_this_core( isr_level );
@@ -58,7 +58,7 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
    * We must obtain the processor ID after interrupts are disabled since a
    * non-optimizing compiler may store the value on the stack and read it back.
    */
-  self_cpu = bsp_smp_processor_id();
+  self_cpu = _SMP_Get_current_processor();
 
   if ( level_lock->owner_cpu != self_cpu ) {
     _SMP_lock_Acquire( &level_lock->lock );

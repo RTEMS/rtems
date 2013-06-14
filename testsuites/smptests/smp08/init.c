@@ -19,13 +19,13 @@ void PrintTaskInfo(
   rtems_time_of_day  *_tb 
 )
 {
-  int               cpu_num;
+  uint32_t cpu_num;
 
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
   /* Print the cpu number and task name */
   locked_printf(
-    "  CPU %d running task %s - rtems_clock_get_tod "
+    "  CPU %" PRIu32 " running task %s - rtems_clock_get_tod "
     "%02" PRId32 ":%02" PRId32 ":%02" PRId32 "   %02" PRId32 
         "/%02" PRId32 "/%04" PRId32 "\n",
     cpu_num,

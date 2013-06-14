@@ -43,11 +43,6 @@ void _start_core_1(void);
 
 #define TLB_COUNT (TLB_END - TLB_BEGIN)
 
-int bsp_smp_processor_id(void)
-{
-  return (int) ppc_processor_id();
-}
-
 /*
  * These values can be obtained with the debugger or a look into the
  * U-Boot sources (arch/powerpc/cpu/mpc85xx/release.S).

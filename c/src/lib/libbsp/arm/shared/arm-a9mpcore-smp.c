@@ -20,11 +20,6 @@
 
 #include <bsp/irq.h>
 
-int bsp_smp_processor_id(void)
-{
-  return (int) arm_cortex_a9_get_multiprocessor_cpu_id();
-}
-
 static void ipi_handler(void *arg)
 {
   rtems_smp_process_interrupt();

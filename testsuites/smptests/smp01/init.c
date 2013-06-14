@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <inttypes.h>
+
 void Loop() {
   volatile int i;
 
@@ -24,14 +26,14 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int                i;
+  uint32_t           i;
   char               ch;
-  int                cpu_self;
+  uint32_t           cpu_self;
   rtems_id           id;
   rtems_status_code  status;
   bool               allDone;
 
-  cpu_self = bsp_smp_processor_id();
+  cpu_self = rtems_smp_get_current_processor();
 
   /* XXX - Delay a bit to allow debug messages from
    * startup to print.  This may need to go away when
@@ -63,7 +65,7 @@ rtems_task Init(
       );
       directive_failed( status, "task create" );
 
-      locked_printf(" CPU %d start task TA%c\n", cpu_self, ch);
+      locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_self, ch);
       status = rtems_task_start( id, Test_task, i+1 );
       directive_failed( status, "task start" );
 

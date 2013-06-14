@@ -18,7 +18,7 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
-  locked_printf( "Shut down from CPU %d\n", bsp_smp_processor_id() );
+  locked_printf( "Shut down from CPU %" PRIu32 "\n", rtems_smp_get_current_processor() );
   locked_printf( "*** END OF TEST SMP05 ***\n" );
   rtems_test_exit(0);
 }
@@ -27,9 +27,9 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int                i;
+  uint32_t           i;
   char               ch;
-  int                cpu_num;
+  uint32_t           cpu_num;
   rtems_id           id;
   rtems_status_code  status;
 
@@ -49,8 +49,8 @@ rtems_task Init(
     );
     directive_failed( status, "task create" );
 
-    cpu_num = bsp_smp_processor_id();
-    locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
+    cpu_num = rtems_smp_get_current_processor();
+    locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_num, ch);
 
     status = rtems_task_start( id, Test_task, i+1 );
     directive_failed( status, "task start" );

@@ -71,7 +71,7 @@ extern "C" {
  *  @param[in] cpu The target processor of the message.
  *  @param[in] message The message.
  */
-void _SMP_Send_message( int cpu, uint32_t message );
+void _SMP_Send_message( uint32_t cpu, uint32_t message );
 
 /**
  *  @brief Request of others CPUs.
@@ -115,6 +115,16 @@ void _SMP_Request_other_cores_to_shutdown(void);
 #endif /* !defined( ASM ) */
 
 /** @} */
+
+#if defined( RTEMS_SMP )
+  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
+    _SMP_Get_current_processor( void )
+  {
+    return _CPU_SMP_Get_current_processor();
+  }
+#else
+  #define _SMP_Get_current_processor() ( ( uint32_t ) 0 )
+#endif
 
 #ifdef __cplusplus
 }

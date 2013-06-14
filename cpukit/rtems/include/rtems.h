@@ -75,7 +75,6 @@ extern "C" {
 #endif
 #include <rtems/rtems/smp.h>
 
-
 #include <rtems/rtems/support.h>
 #include <rtems/score/sysstate.h>
 

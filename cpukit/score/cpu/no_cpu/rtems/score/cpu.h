@@ -1404,6 +1404,19 @@ static inline uint32_t CPU_swap_u32(
 
 #ifdef RTEMS_SMP
   /**
+   * @brief Returns the index of the current processor.
+   *
+   * An architecture specific method must be used to obtain the index of the
+   * current processor in the system.  The set of processor indices is the
+   * range of integers starting with zero up to the processor count minus one.
+   */
+  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
+    _CPU_SMP_Get_current_processor( void )
+  {
+    return 123;
+  }
+
+  /**
    * @brief Broadcasts a processor event.
    *
    * Some architectures provide a low-level synchronization primitive for

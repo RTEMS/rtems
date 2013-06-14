@@ -20,15 +20,15 @@ rtems_task Test_task(
   rtems_task_argument do_exit
 )
 {
-  int               cpu_num;
+  uint32_t          cpu_num;
   char              name[5];
   char             *p;
 
   p = rtems_object_get_name( RTEMS_SELF, 5, name );
   rtems_test_assert( p != NULL );
 
-  cpu_num = bsp_smp_processor_id();
-  locked_printf(" CPU %d running Task %s\n", cpu_num, name);
+  cpu_num = rtems_smp_get_current_processor();
+  locked_printf(" CPU %" PRIu32 " running Task %s\n", cpu_num, name);
 
   Ran = true;
 
@@ -44,7 +44,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int                cpu_num;
+  uint32_t           cpu_num;
   rtems_id           id;
   rtems_status_code  status;
 
@@ -56,7 +56,7 @@ rtems_task Init(
 
   rtems_test_assert( rtems_smp_get_processor_count()  > 1 );
 
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
   /*
    * Create a task at equal priority.
@@ -72,7 +72,7 @@ rtems_task Init(
   );
   directive_failed( status, "task create" );
 
-  locked_printf(" CPU %d start task TA1\n", cpu_num );
+  locked_printf(" CPU %" PRIu32 " start task TA1\n", cpu_num );
 
   status = rtems_task_start( id, Test_task, 0 );
   directive_failed( status, "task start" );
@@ -94,8 +94,8 @@ rtems_task Init(
   );
   directive_failed( status, "task create" );
 
-  cpu_num = bsp_smp_processor_id();
-  locked_printf(" CPU %d start task TA2\n", cpu_num );
+  cpu_num = rtems_smp_get_current_processor();
+  locked_printf(" CPU %" PRIu32 " start task TA2\n", cpu_num );
 
   status = rtems_task_start( id, Test_task, 1 );
   directive_failed( status, "task start" );

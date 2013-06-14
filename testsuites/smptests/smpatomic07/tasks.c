@@ -58,7 +58,7 @@ rtems_task Test_task(
     rtems_task_argument argument
     )
 {
-  int               cpu_num;
+  uint32_t          cpu_num;
   char              name[5];
   char             *p;
 
@@ -67,7 +67,7 @@ rtems_task Test_task(
   rtems_test_assert( p != NULL );
 
    /* Get the CPU Number */
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */

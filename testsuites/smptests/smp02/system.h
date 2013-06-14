@@ -50,7 +50,7 @@ rtems_task Test_task(
 
 typedef struct {
   bool     IsLocked;
-  int      cpu_num;
+  uint32_t cpu_num;
   uint32_t task_index;
 } Log_t;
 

@@ -15,6 +15,7 @@
 #include "system.h"
 
 #include <stdio.h>
+#include <inttypes.h>
 
 void Loop() {
   volatile int i;
@@ -26,18 +27,18 @@ void PrintTaskInfo(
   const char *task_name
 )
 {
-  int               cpu_num;
+  uint32_t cpu_num;
 
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
-  locked_printf("  CPU %d running task %s\n", cpu_num, task_name );
+  locked_printf("  CPU %" PRIu32 " running task %s\n", cpu_num, task_name );
 }
 
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int               i;
+  uint32_t          i;
   char              ch = '0';
   rtems_id          id;
   rtems_status_code status;

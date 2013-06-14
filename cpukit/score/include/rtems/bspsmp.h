@@ -70,16 +70,6 @@ extern "C" {
 uint32_t bsp_smp_initialize( uint32_t configured_cpu_count );
 
 /**
- *  @brief Obtain current CPU index.
- *
- *  This method is invoked by RTEMS when it needs to know the index
- *  of the CPU it is executing on.
- *
- *  @retval This method returns the current CPU index.
- */
-int bsp_smp_processor_id(void) RTEMS_COMPILER_PURE_ATTRIBUTE;
-
-/**
  *  @brief Generate an interprocessor broadcast interrupt.
  *
  *  This method is invoked when RTEMS wants to let all of the other
@@ -104,19 +94,6 @@ void bsp_smp_broadcast_interrupt(void);
 void bsp_smp_interrupt_cpu(
   int cpu
 );
-
-/**
- *  @brief Obtain CPU core number.
- *
- *  This method is invoked by RTEMS when it needs to know which core
- *  number it is executing on.  This is used when it needs to perform
- *  some action or bookkeeping and needs to distinguish itself from
- *  the other cores.  For example, it may need to realize it needs to
- *  preempt a thread on another node.
- *
- *  @retval This method returns the Id of the current CPU core.
- */
-int   bsp_smp_processor_id( void );
 
 /**
  * @brief Performs high-level initialization of a secondary processor and runs
@@ -156,8 +133,6 @@ void rtems_smp_process_interrupt(void);
 }
 #endif
 
-#else
-  #define bsp_smp_processor_id()  0
 #endif
 
 /**@}*/

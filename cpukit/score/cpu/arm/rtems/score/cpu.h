@@ -443,6 +443,20 @@ void _CPU_Context_validate( uintptr_t pattern );
   #define _CPU_Context_switch_to_first_task_smp( _context ) \
     _CPU_Context_restore( _context )
 
+  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
+    _CPU_SMP_Get_current_processor( void )
+  {
+    uint32_t mpidr;
+
+    /* Use ARMv7 Multiprocessor Affinity Register (MPIDR) */
+    __asm__ volatile (
+      "mrc p15, 0, %[mpidr], c0, c0, 5\n"
+      : [mpidr] "=&r" (mpidr)
+    );
+
+    return mpidr & 0xffU;
+  }
+
   static inline void _ARM_Data_memory_barrier( void )
   {
     __asm__ volatile ( "dmb" : : : "memory" );

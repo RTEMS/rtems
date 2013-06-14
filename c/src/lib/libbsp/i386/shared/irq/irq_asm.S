@@ -100,7 +100,7 @@ SYM (_ISR_Handler):
 	movl      esp, ebp                  /* ebp = previous stack pointer */
 #if defined(RTEMS_SMP) && defined(BSP_HAS_SMP)
 	movl     $SYM(_Per_CPU_Information_p), ebx
-	call     SYM(bsp_smp_processor_id)
+	call     SYM(_CPU_SMP_Get_current_processor)
 	mov      (ebx,eax,4), ebx
         pushl    ecx
         call     SYM(_ISR_SMP_Enter)

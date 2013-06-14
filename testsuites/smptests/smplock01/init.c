@@ -298,8 +298,8 @@ static void run_tests(
 static void task(rtems_task_argument arg)
 {
   global_context *ctx = (global_context *) arg;
-  int cpu_count = (int) rtems_smp_get_processor_count();
-  int cpu_self = rtems_smp_get_current_processor();
+  uint32_t cpu_count = rtems_smp_get_processor_count();
+  uint32_t cpu_self = rtems_smp_get_current_processor();
   rtems_status_code sc;
   barrier_state bs = BARRIER_STATE_INITIALIZER;
 
@@ -312,9 +312,9 @@ static void task(rtems_task_argument arg)
 static void test(void)
 {
   global_context *ctx = &context;
-  int cpu_count = (int) rtems_smp_get_processor_count();
-  int cpu_self = rtems_smp_get_current_processor();
-  int cpu;
+  uint32_t cpu_count = rtems_smp_get_processor_count();
+  uint32_t cpu_self = rtems_smp_get_current_processor();
+  uint32_t cpu;
   int test;
   rtems_status_code sc;
   barrier_state bs = BARRIER_STATE_INITIALIZER;
@@ -356,7 +356,7 @@ static void test(void)
       sum += local_counter;
 
       printf(
-        "\tprocessor %i, local counter %lu\n",
+        "\tprocessor %" PRIu32 ", local counter %lu\n",
         cpu,
         local_counter
       );

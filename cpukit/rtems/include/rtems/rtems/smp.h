@@ -55,14 +55,25 @@ extern "C" {
   _SMP_Get_processor_count()
 
 /**
- * @brief Obtain Current Core Number
+ * @brief Returns the index of the current processor.
  *
- * This method returns the id of the current CPU core.
+ * On uni-processor configurations this is a compile time constant and defined
+ * to be zero.
  *
- * @retval This method returns the id of the current CPU core.
+ * On SMP configurations an architecture specific method is used to obtain the
+ * index of the current processor in the system.  The set of processor indices
+ * is the range of integers starting with zero up to the processor count minus
+ * one.
+ *
+ * Outside of sections with disabled thread dispatching the current processor
+ * index may change after every instruction since the thread may migrate from
+ * one processor to another.  Sections with disabled interrupts are sections
+ * with thread dispatching disabled.
+ *
+ * @return The index of the current processor.
  */
 #define rtems_smp_get_current_processor() \
-    bsp_smp_processor_id()
+  _SMP_Get_current_processor()
 
 /** @} */
 
