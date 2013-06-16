@@ -344,7 +344,7 @@ greth_initialize_hardware (struct greth_softc *sc)
                                sc->gb = 1;
                                sc->fd = 1;
                        }
-                       if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000HD) &&
+		       else if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000HD) &&
                             (sc->phydev.extpart & GRETH_MII_EXTPRT_1000HD)) {
                                sc->gb = 1;
                                sc->fd = 0;
@@ -356,12 +356,12 @@ greth_initialize_hardware (struct greth_softc *sc)
                             sc->sp = 1;
                             sc->fd = 1;
                     }
-                    if ( (sc->phydev.adv & GRETH_MII_100TXHD) &&
+		    else if ( (sc->phydev.adv & GRETH_MII_100TXHD) &&
                          (sc->phydev.part & GRETH_MII_100TXHD)) {
                             sc->sp = 1;
                             sc->fd = 0;
                     }
-                    if ( (sc->phydev.adv & GRETH_MII_10FD) &&
+		    else if ( (sc->phydev.adv & GRETH_MII_10FD) &&
                          (sc->phydev.part & GRETH_MII_10FD)) {
                             sc->fd = 1;
                     }
