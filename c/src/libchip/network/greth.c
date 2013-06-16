@@ -306,6 +306,17 @@ greth_initialize_hardware (struct greth_softc *sc)
     write_mii(phyaddr, 0, 0x8000 | phyctrl);
 
     while ((read_mii(phyaddr, 0)) & 0x8000) {}
+    phystatus = read_mii(phyaddr, 1);
+
+    /* Disable Gbit auto-neg advertisement if MAC does not support it */
+
+    if ((!sc->gbit_mac) && (phystatus & 0x100)) write_mii(phyaddr, 9, 0);
+
+    /* Restart auto-negotiation if available */
+    if (phystatus & 0x08) {
+	write_mii(phyaddr, 0, phyctrl | 0x1200);
+	phyctrl = read_mii(phyaddr, 0);
+    }
 
     /* Check if PHY is autoneg capable and then determine operating mode,
        otherwise force it to 10 Mbit halfduplex */
