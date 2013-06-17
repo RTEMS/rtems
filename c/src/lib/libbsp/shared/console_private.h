@@ -20,6 +20,8 @@
 
 #include <rtems.h>
 
+#include <libchip/serial.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
