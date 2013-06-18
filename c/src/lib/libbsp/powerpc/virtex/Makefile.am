@@ -15,11 +15,16 @@ endif
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
+
+include_bsp_HEADERS =
+
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
 include_HEADERS += include/coverhd.h
+
+include_bsp_HEADERS += ../shared/include/linker-symbols.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
@@ -27,6 +32,10 @@ project_lib_DATA = start.$(OBJEXT)
 
 libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
+
+# Link commands
+project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
@@ -37,11 +46,13 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
+
 # bspconsole
 libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
     ../../shared/console_select.c ../../shared/console_control.c \
     ../../shared/console_read.c ../../shared/console_write.c 
-include_bsp_HEADERS = include/opbintctrl.h
+include_bsp_HEADERS += include/opbintctrl.h
 # opbintctrl
 libbsp_a_SOURCES += opbintctrl/opbintctrl.c
 

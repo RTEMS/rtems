@@ -61,6 +61,8 @@ extern "C" {
 #include <bsp/vectors.h>
 #include <bsp/default-initial-extension.h>
 
+#define BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
+
 /* miscellaneous stuff assumed to exist */
 extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 

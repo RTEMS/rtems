@@ -59,6 +59,7 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/linker-symbols.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
@@ -70,6 +71,9 @@
 uint32_t _heap_start;
 uint32_t _heap_end;
 uint32_t _top_of_ram;
+
+/* Symbols defined in linker command file */
+LINKER_SYMBOL(virtex_exc_vector_base);
 
 /*
  *  Driver configuration parameters
@@ -83,9 +87,6 @@ uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
-
-extern unsigned char IntrStack_start[];
-extern unsigned char IntrStack_end[];
 
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
@@ -104,9 +105,6 @@ void bsp_XAssertHandler(const char* file, int line) {
  */
 void bsp_start( void )
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
    * function store the result in global variables
@@ -133,11 +131,13 @@ void bsp_start( void )
   /*
    * Initialize default raw exception handlers.
    */
-  ppc_exc_initialize(
+  ppc_exc_initialize_with_vector_base(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    (uint32_t)IntrStack_start,
-    IntrStack_end - IntrStack_start
+    (uintptr_t) bsp_section_work_begin,
+    rtems_configuration_get_interrupt_stack_size(),
+    virtex_exc_vector_base
   );
+  __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));
 
   /*
    * Install our own set of exception vectors

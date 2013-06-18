@@ -1,156 +1,116 @@
 /*
- *  This file contains the entry code for RTEMS programs starting
- *  after download to RAM
+ * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
  *
- *  Author:	Thomas Doerfler <td@imd.m.isar.de>
- *              IMD Ingenieurbuero fuer Microcomputertechnik
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
- *  COPYRIGHT (c) 1998 by IMD
- *
- *  Changes from IMD are covered by the original distributions terms.
- *  This file has been derived from the papyrus BSP:
- *
- *  This file contains the entry veneer for RTEMS programs
- *  downloaded to Papyrus.
- *
- *  Author:	Andrew Bray <andy@i-cubed.co.uk>
- *
- *  COPYRIGHT (c) 1995 by i-cubed ltd.
- *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of i-cubed limited not be used in
- *      advertising or publicity pertaining to distribution of the
- *      software without specific, written prior permission.
- *      i-cubed limited makes no representations about the suitability
- *      of this software for any purpose.
- *
- *  derived from "helas403/dlentry.S":
- *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <rtems/asm.h>
 
-/*
- *  The virtex ELF link scripts support three special sections:
- *    .entry    The actual entry point
- *    .vectors  The section containing the interrupt entry veneers.
- */
+#include <bspopts.h>
 
-/*
- *  Downloaded code loads the vectors separately to 0x00000100,
- *  so .entry can be over 256 bytes.
- *
- *  The other sections are linked in the following order:
- *    .entry
- *    .text
- *    .data
- *    .bss
- * see linker command file for section placement
- *
- *  The initial stack is set to stack.end
- *
- *  All the entry veneer has to do is to clear the BSS.
- */
+#include <libcpu/powerpc-utility.h>
 
-/*
- *  GDB likes to have debugging information for the entry veneer.
- *  Here was some DWARF information. IMD removed it, because we
- *  could not check, whether it was still correct. Sorry.
+	.globl _start
+	.globl virtex_exc_vector_base
 
- */
+	.section ".bsp_start_text", "ax"
 
-        .section .entry
+virtex_exc_vector_base:
 
-	PUBLIC_VAR (start)
-	PUBLIC_VAR (download_entry)
-	PUBLIC_VAR (__rtems_entry_point)
-SYM(start):
-SYM(download_entry):
-SYM(__rtems_entry_point):
-	bl	.startup
-base_addr:
+	b	_start
 
-/*---------------------------------------------------------------------------
- * Parameters from linker
- *--------------------------------------------------------------------------*/
-toc_pointer:
-	.long	s.got
-bss_length:
-	.long	bss.size
-bss_addr:
-	.long	bss.start
-stack_top:
-	.long	stack.end
-PUBLIC_VAR (text_addr)
-text_addr:
-        .long   text.start
+	/* Critical Input 0x0100 */
+	/* Machine Check 0x0200 */
+	/* Data Storage 0x0300 */
+	/* Instruction Storage 0x0400 */
+	/* External 0x0500 */
+	/* Alignment 0x0600 */
+	/* Program 0x0700 */
+	/* FPU Unavailable 0x0800 */
+	/* System Call 0x0C00 */
+	/* APU Unavailable 0x0F20 */
+	/* Programmable-Interval Timer 0x1000 */
+	/* Fixed-Interval Timer 0x1010 */
+	/* Watchdog Timer 0x1020 */
+	/* Data TLB Miss 0x1100 */
+	/* Instruction TLB Miss 0x1200 */
+	/* Debug 0x2000 */
+.rept 0x2000 / 4 - 1
+	b	twiddle
+.endr
 
-PUBLIC_VAR (text_length)
-text_length:
-        .long   text.size
-/*---------------------------------------------------------------------------
- * Reset_entry.
- *--------------------------------------------------------------------------*/
-.startup:
-	/* Get start address, stack grows down from here... */
-	mflr	r1
+	/* Start stack area */
+.rept BSP_START_STACK_SIZE / 4
+	b	twiddle
+.endr
 
-	/* Assume Bank regs set up..., cache etc. */
-        bl      bssclr
+_start:
 
-#if 0
-	.extern SYM(__vectors)
+	/* Reset time base */
+	li	r0, 0
+	mtspr	TBWU, r0
+	mtspr	TBWL, r0
 
-	lis	r2,__vectors@h          /* set EVPR exc. vector prefix */
-#else
-	lis	r2,0
-#endif
-	mtspr	evpr,r2
+	/* Initialize start stack */
+	LWI	r1, _start
+	stwu	r0, -4(r1)
+	stwu	r0, -4(r1)
 
-        /*-------------------------------------------------------------------
-         * C_setup.
-         *------------------------------------------------------------------*/
-        lwz     r2,toc_pointer-base_addr(r1)       /* set r2 to toc */
-        lwz     r1,stack_top-base_addr(r1)         /* set r1 to stack_top */
+	/* Copy fast text */
+	LWI	r3, bsp_section_fast_text_begin
+	LWI	r4, bsp_section_fast_text_load_begin
+	LWI	r5, bsp_section_fast_text_size
+	bl	copy
 
-        addi    r1,r1,-56-4              /* start stack at text_addr - 56 */
-        addi    r3,r0,0x0                /* clear r3 */
-	stw	r3, 0(r1)		 /* Clear stack chain */
-	stw	r3, 4(r1)
-	stw	r3, 8(r1)
-	stw	r3, 12(r1)
-        lis	r5,environ@ha
-        la	r5,environ@l(r5)	/* environp */
-	li	r4, 0			/* argv */
-	li	r3, 0			/* argc */
-	.extern SYM(_SDA_BASE_)
-	lis r13,SYM(_SDA_BASE_)@h
-	ori r13,r13,SYM(_SDA_BASE_)@l
-        .extern SYM (boot_card)
-        b       SYM (boot_card) 	 /* call the first C routine */
+	/* Copy fast data */
+	LWI	r3, bsp_section_fast_data_begin
+	LWI	r4, bsp_section_fast_data_load_begin
+	LWI	r5, bsp_section_fast_data_size
+	bl	copy
 
-/*---------------------------------------------------------------------------
- * bssclr.
- *--------------------------------------------------------------------------*/
-bssclr:
-        /*-------------------------------------------------------------------
-         * Data move finished, zero out bss.
-         *------------------------------------------------------------------*/
-        lwz     r2,bss_addr-base_addr(r1)   /* start of bss set by loader */
-        lwz     r3,bss_length-base_addr(r1) /* bss length */
-        rlwinm. r3,r3,30,0x3FFFFFFF     /* form length/4 */
-        beqlr                           /* no bss */
-        mtctr   r3                      /* set ctr reg */
-        xor     r6,r6,r6                /* r6 = 0 */
-clear_bss:
-        stswi   r6,r2,0x4               /* store r6 */
-        addi    r2,r2,0x4               /* update r2 */
-        bdnz    clear_bss               /* decrement counter and loop */
-        blr                             /* return */
-.L_text_e:
+	/* Clear SBSS */
+	LWI	r3, bsp_section_sbss_begin
+	LWI	r4, bsp_section_sbss_size
+	bl	bsp_start_zero
 
-	.comm	environ,4,4
+	/* Clear BSS */
+	LWI	r3, bsp_section_bss_begin
+	LWI	r4, bsp_section_bss_size
+	bl	bsp_start_zero
+
+	/* Set up EABI and SYSV environment */
+	bl	__eabi
+
+	/* Clear command line */
+	li	r3, 0
+
+	bl	boot_card
+
+twiddle:
+
+	bl	bsp_reset
+	b	twiddle
+
+copy:
+
+	cmpw	r3, r4
+	beqlr
+	b	memcpy
+
+	/* Reset entry */
+	.section ".virtex_reset", "ax"
+
+jump_to_start:
+
+	LWI	r3, _start
+	mtctr	r3
+	bctr
+	b	jump_to_start
