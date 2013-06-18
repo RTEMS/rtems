@@ -108,20 +108,14 @@ void bsp_start( void )
   bsp_interrupt_initialize();
 }
 
-void BSP_ask_for_reset(void)
-{
-  printk("system stopped, press RESET");
-  while(1) {};
-}
-
-void BSP_panic(char *s)
-{
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  BSP_ask_for_reset();
-}
-
 void _BSP_Fatal_error(unsigned int v)
 {
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  BSP_ask_for_reset();
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+  (void) level;
+
+  while (true) {
+    /* Do nothing */
+  }
 }
