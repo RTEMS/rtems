@@ -22,10 +22,11 @@ noinst_PROGRAMS =
 include_HEADERS += include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = ../../powerpc/shared/start/rtems_crti.S
-project_lib_DATA = rtems_crti.$(OBJEXT)
+libbspstart_a_SOURCES = start/start.S
+project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
+project_lib_DATA += rtems_crti.$(OBJEXT)
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
@@ -36,8 +37,6 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
-# dlentry
-libbsp_a_SOURCES += dlentry/dlentry.S
 # bspconsole
 libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
     ../../shared/console_select.c ../../shared/console_control.c \

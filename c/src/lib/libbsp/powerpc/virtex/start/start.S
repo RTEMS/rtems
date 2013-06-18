@@ -1,5 +1,4 @@
-/*  dlentry.s
- *
+/*
  *  This file contains the entry code for RTEMS programs starting
  *  after download to RAM
  *
