@@ -38,6 +38,18 @@ extern "C" {
   #define _Assert( _e ) ( ( void ) 0 )
 #endif
 
+/**
+ * @brief Asserts that thread dispatching is repressed.
+ *
+ * Thread dispatching can be repressed via _Thread_Disable_dispatch() or
+ * _ISR_Disable().
+ */
+#if defined( RTEMS_DEBUG )
+  void _Assert_Thread_dispatching_repressed( void );
+#else
+  #define _Assert_Thread_dispatching_repressed() ( ( void ) 0 )
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
