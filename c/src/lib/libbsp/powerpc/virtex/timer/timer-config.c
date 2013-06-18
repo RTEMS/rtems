@@ -1,14 +1,4 @@
-/*  bsp_start()
- *
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
- *  INPUT:  NONE
- *
- *  OUTPUT: NONE
- *
+/*
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
@@ -54,79 +44,18 @@
  *  Modifications for PPC405GP by Dennis Ehlin
  */
 
-#include <string.h>
-
-#include <bsp.h>
-#include <bsp/irq.h>
-#include <bsp/linker-symbols.h>
-#include <rtems/bspIo.h>
-#include <libcpu/cpuIdent.h>
-#include <libcpu/spr.h>
-#include <rtems/powerpc/powerpc.h>
-
-#include RTEMS_XPARAMETERS_H
-
-/* Symbols defined in linker command file */
-LINKER_SYMBOL(virtex_exc_vector_base);
+#include <stdint.h>
+#include <stdbool.h>
 
 /*
  *  Driver configuration parameters
  */
-uint32_t   bsp_clicks_per_usec;
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
-void bsp_start( void )
-{
-  /*
-   * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
-   * function store the result in global variables
-   * so that it can be used latter...
-   */
-  get_ppc_cpu_type();
-  get_ppc_cpu_revision();
+/* Average overhead of timer in ticks */
+uint32_t bsp_timer_average_overhead = 2;
 
-  /*
-   *  initialize the device driver parameters
-   */
+/* Least valid number from timer */
+uint32_t bsp_timer_least_valid = 3;
 
-  /* timebase register ticks/microsecond */
-  bsp_clicks_per_usec = (250000000 / 1000000);
-
-  /*
-   * Initialize default raw exception handlers.
-   */
-  ppc_exc_initialize_with_vector_base(
-    PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    (uintptr_t) bsp_section_work_begin,
-    rtems_configuration_get_interrupt_stack_size(),
-    virtex_exc_vector_base
-  );
-  __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));
-
-  /*
-   * Install our own set of exception vectors
-   */
-  BSP_rtems_irq_mng_init(0);
-}
-
-void BSP_ask_for_reset(void)
-{
-  printk("system stopped, press RESET");
-  while(1) {};
-}
-
-void BSP_panic(char *s)
-{
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  BSP_ask_for_reset();
-}
-
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  BSP_ask_for_reset();
-}
+/* TRUE, when timer runs with CPU clk */
+bool bsp_timer_internal_clock = true;

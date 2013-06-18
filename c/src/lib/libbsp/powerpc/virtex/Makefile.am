@@ -39,6 +39,7 @@ dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
+libbsp_a_LIBADD =
 
 # startup
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
@@ -69,13 +70,16 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_LIBADD = \
+# timer
+libbsp_a_SOURCES += timer/timer-config.c
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
+
+libbsp_a_LIBADD += \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
