@@ -94,8 +94,8 @@ void bsp_start( void )
    * function store the result in global variables
    * so that it can be used latter...
    */
-  myCpu 	    = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /*
    *  initialize the device driver parameters
