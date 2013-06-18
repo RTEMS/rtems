@@ -55,7 +55,6 @@
  */
 
 #include <string.h>
-#include <fcntl.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -66,7 +65,6 @@
 #include <rtems/powerpc/powerpc.h>
 
 #include RTEMS_XPARAMETERS_H
-#include <stdio.h>
 
 /* Symbols defined in linker command file */
 LINKER_SYMBOL(virtex_exc_vector_base);
@@ -83,16 +81,6 @@ uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
-
-/*      Initialize whatever libc we are using
- *      called from postdriver hook
- */
-
-void bsp_XAssertHandler(const char* file, int line);
-
-void bsp_XAssertHandler(const char* file, int line) {
-  printf("\n***\n*** XAssert Failed!  File: %s, Line: %d\n***\n", file, line);
-}
 
 /*
  *  bsp_start
