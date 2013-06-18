@@ -56,6 +56,7 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/bootcard.h>
 #include <bsp/linker-symbols.h>
 
@@ -104,10 +105,7 @@ void bsp_start( void )
   );
   __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));
 
-  /*
-   * Install our own set of exception vectors
-   */
-  BSP_rtems_irq_mng_init(0);
+  bsp_interrupt_initialize();
 }
 
 void BSP_ask_for_reset(void)

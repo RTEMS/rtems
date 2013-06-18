@@ -68,21 +68,6 @@ extern "C" {
 /* Master Enable Register: Master IRQ Enable */
 #define OPB_INTC_MER_ME		0x1
 
-  /*
-   * make this fast: is this a opbintc interrupt?
-   */
-  void BSP_irq_enable_at_opbintc (rtems_irq_number irqnum);
-
-  void BSP_irq_disable_at_opbintc (rtems_irq_number irqnum);
-  /*
-   *  IRQ Handler: this is called from the primary exception dispatcher
-   */
-  void BSP_irq_handle_at_opbintc(void);
-  /*
-   * activate the interrupt controller
-   */
-  rtems_status_code opb_intc_init(void);
-
 #ifdef __cplusplus
 }
 #endif

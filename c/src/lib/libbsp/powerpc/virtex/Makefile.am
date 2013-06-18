@@ -53,12 +53,18 @@ libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
     ../../shared/console_select.c ../../shared/console_control.c \
     ../../shared/console_read.c ../../shared/console_write.c 
-include_bsp_HEADERS += include/opbintctrl.h
-# opbintctrl
-libbsp_a_SOURCES += opbintctrl/opbintctrl.c
 
-include_bsp_HEADERS += irq/irq.h
 # irq
+include_bsp_HEADERS += ../../shared/include/irq-generic.h
+include_bsp_HEADERS += ../../shared/include/irq-info.h
+include_bsp_HEADERS += include/opbintctrl.h
+include_bsp_HEADERS += irq/irq.h
+libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+libbsp_a_SOURCES += ../../shared/src/irq-generic.c
+libbsp_a_SOURCES += ../../shared/src/irq-info.c
+libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+libbsp_a_SOURCES += ../../shared/src/irq-server.c
+libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq_init.c
 
 if HAS_NETWORKING

@@ -19,329 +19,166 @@
 +-----------------------------------------------------------------+
 | this file contains the irq controller handler                   |
 \*===============================================================*/
-#include <libcpu/spr.h>
-#include <bsp/irq.h>
+
+/*  Content moved from opbintctrl.c:
+ *
+ *  This file contains definitions and declarations for the
+ *  Xilinx Off Processor Bus (OPB) Interrupt Controller
+ *
+ *  Author: Keith Robertson <kjrobert@alumni.uwaterloo.ca>
+ *  COPYRIGHT (c) 2005 Linn Products Ltd, Scotland.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.com/license/LICENSE.
+ */
+
 #include <bsp.h>
-#include <rtems/bspIo.h>
-#include <rtems/powerpc/powerpc.h>
+#include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <bsp/vectors.h>
 
-static rtems_irq_connect_data rtemsIrqTbl[BSP_IRQ_NUMBER];
-rtems_irq_connect_data *BSP_rtems_irq_tbl;
-rtems_irq_global_settings* BSP_rtems_irq_config;
-
-/***********************************************************
- * dummy functions for on/off/isOn calls
- * these functions just do nothing fulfill the semantic
- * requirements to enable/disable a certain interrupt or exception
- */
-void BSP_irq_nop_func(const rtems_irq_connect_data *unused)
-{
-  /*
-   * nothing to do
-   */
-}
-
-void BSP_irq_nop_hdl(void *hdl)
-{
-  /*
-   * nothing to do
-   */
-}
-
-int BSP_irq_true_func(const rtems_irq_connect_data *unused)
-{
-  /*
-   * nothing to do
-   */
-  return TRUE;
-}
-
-/***********************************************************
- * interrupt handler and its enable/disable functions
- ***********************************************************/
-
-/***********************************************************
- * functions to enable/disable/query external/critical interrupts
- */
-void BSP_irqexc_on_fnc(rtems_irq_connect_data *conn_data)
-{
-  uint32_t msr_value;
-  /*
-   * get current MSR value
-   */
-  _CPU_MSR_GET(msr_value);
-
-
-   msr_value |= PPC_MSR_EE;
-   _CPU_MSR_SET(msr_value);
-}
-
-void BSP_irqexc_off_fnc(rtems_irq_connect_data *unused)
-{
-  /*
-   * nothing to do
-   */
-}
-
-/***********************************************************
- * High level IRQ handler called from shared_raw_irq_code_entry
- */
-int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
-{
-
-
-  /*
-   * Handle interrupt
-   */
-  switch(excNum) {
-  case ASM_EXT_VECTOR:
-    BSP_irq_handle_at_opbintc();
-    break;
-#if 0 /* We now let the clock driver hook the exception directly */
-  case ASM_BOOKE_DEC_VECTOR:
-    BSP_rtems_irq_tbl[BSP_PIT].hdl
-      (BSP_rtems_irq_tbl[BSP_PIT].handle);
-    break;
-#endif
-#if 0 /* Critical interrupts not yet supported */
-  case ASM_BOOKE_CRIT_VECTOR:
-    break;
-#endif
-  }
-  return 0;
-}
-
-/***********************************************************
- * functions to set/get/remove interrupt handlers
- ***********************************************************/
-int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
-{
-  rtems_interrupt_level level;
-
-  /*
-   * check for valid irq name
-   * if invalid, print error and return 0
-   */
-  if (!BSP_IS_VALID_IRQ(irq->name)) {
-    printk("Invalid interrupt vector %d\n",irq->name);
-    return 0;
-  }
-
-  /*
-   * disable interrupts
-   */
-  rtems_interrupt_disable(level);
-  /*
-   * check, that default handler is installed now
-   */
-  if (rtemsIrqTbl[irq->name].hdl != BSP_rtems_irq_config->defaultEntry.hdl) {
-    rtems_interrupt_enable(level);
-    printk("IRQ vector %d already connected\n",irq->name);
-    return 0;
-  }
-  /*
-   * store new handler data
-   */
-  rtemsIrqTbl[irq->name] = *irq;
-
-  /*
-   * enable irq at interrupt controller
-   */
-  if (BSP_IS_OPBINTC_IRQ(irq->name)) {
-    BSP_irq_enable_at_opbintc(irq->name);
-  }
-  /*
-   * call "on" function to enable interrupt at device
-   */
-  irq->on(irq);
-  /*
-   * reenable interrupts
-   */
-  rtems_interrupt_enable(level);
-
-  return 1;
-}
-
-int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
-{
-  rtems_interrupt_level level;
-
-  /*
-   * check for valid IRQ name
-   */
-  if (!BSP_IS_VALID_IRQ(irq->name)) {
-    return 0;
-  }
-  rtems_interrupt_disable(level);
-  /*
-   * return current IRQ entry
-   */
-  *irq = rtemsIrqTbl[irq->name];
-  rtems_interrupt_enable(level);
-  return 1;
-}
-
-int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
-{
-  rtems_interrupt_level level;
-
-  /*
-   * check for valid IRQ name
-   */
-  if (!BSP_IS_VALID_IRQ(irq->name)) {
-    return 0;
-  }
-  rtems_interrupt_disable(level);
-  /*
-   * check, that specified handler is really connected now
-   */
-  if (rtemsIrqTbl[irq->name].hdl != irq->hdl) {
-    rtems_interrupt_enable(level);
-    return 0;
-  }
-  /*
-   * disable interrupt at interrupt controller
-   */
-  if (BSP_IS_OPBINTC_IRQ(irq->name)) {
-    BSP_irq_disable_at_opbintc(irq->name);
-  }
-  /*
-   * disable interrupt at source
-   */
-  irq->off(irq);
-  /*
-   * restore default interrupt handler
-   */
-  rtemsIrqTbl[irq->name] = BSP_rtems_irq_config->defaultEntry;
-
-  /*
-   * reenable interrupts
-   */
-  rtems_interrupt_enable(level);
-
-  return 1;
-}
-
-/***********************************************************
- * functions to set/get the basic interrupt management setup
- ***********************************************************/
 /*
- * (Re) get info on current RTEMS interrupt management.
+ * Acknowledge a mask of interrupts.
  */
-int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** ret_ptr)
+static void set_iar(uint32_t mask)
 {
-  *ret_ptr = BSP_rtems_irq_config;
-  return 0;
-}
-
-
-/*
- * set management stuff
- */
-int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
-{
-  int                    i;
-  rtems_interrupt_level  level;
-
-  rtems_interrupt_disable(level);
-  /*
-   * store given configuration
-   */
-  BSP_rtems_irq_config = config;
-  BSP_rtems_irq_tbl    = BSP_rtems_irq_config->irqHdlTbl;
-  /*
-   * enable any non-empty IRQ entries at OPBINTC
-   */
-  for (i =  BSP_OPBINTC_IRQ_LOWEST_OFFSET;
-       i <= BSP_OPBINTC_IRQ_MAX_OFFSET;
-       i++) {
-    if (BSP_rtems_irq_tbl[i].hdl != config->defaultEntry.hdl) {
-      BSP_irq_enable_at_opbintc(i);
-      BSP_rtems_irq_tbl[i].on((&BSP_rtems_irq_tbl[i]));
-    }
-    else {
-      BSP_rtems_irq_tbl[i].off(&(BSP_rtems_irq_tbl[i]));
-      BSP_irq_disable_at_opbintc(i);
-    }
-  }
-  /*
-   * store any irq-like processor exceptions
-   */
-  for (i = BSP_PROCESSOR_IRQ_LOWEST_OFFSET;
-       i < BSP_PROCESSOR_IRQ_MAX_OFFSET;
-       i++) {
-    if (BSP_rtems_irq_tbl[i].hdl != config->defaultEntry.hdl) {
-      if (BSP_rtems_irq_tbl[i].on != NULL) {
-	BSP_rtems_irq_tbl[i].on
-	  (&(BSP_rtems_irq_tbl[i]));
-      }
-    }
-    else {
-      if (BSP_rtems_irq_tbl[i].off != NULL) {
-	BSP_rtems_irq_tbl[i].off
-	  (&(BSP_rtems_irq_tbl[i]));
-      }
-    }
-  }
-  rtems_interrupt_enable(level);
-  return 1;
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_IAR)) = mask;
 }
 
 /*
- * dummy for an empty IRQ handler entry
+ * Set IER state.  Used to (dis)enable a mask of vectors.
+ * If you only have to do one, use enable/disable_vector.
  */
-static rtems_irq_connect_data emptyIrq = {
-  0, 		         /* Irq Name                 */
-  BSP_irq_nop_hdl,       /* handler function         */
-  NULL,                  /* handle passed to handler */
-  BSP_irq_nop_func,      /* on function              */
-  BSP_irq_nop_func,      /* off function             */
-  BSP_irq_true_func      /* isOn function            */
-};
-
-static rtems_irq_global_settings initialConfig = {
-  BSP_IRQ_NUMBER,    /* irqNb */
-  {  0, 		         /* Irq Name                 */
-     BSP_irq_nop_hdl,       /* handler function         */
-     NULL,                  /* handle passed to handler */
-     BSP_irq_nop_func,      /* on function              */
-     BSP_irq_nop_func,      /* off function             */
-     BSP_irq_true_func      /* isOn function            */
-  }, /* emptyIrq */
-  rtemsIrqTbl, /* irqHdlTbl  */
-  0,           /* irqBase    */
-  NULL         /* irqPrioTbl */
-};
-
-void BSP_rtems_irq_mng_init(unsigned cpuId)
+static void set_ier(uint32_t mask)
 {
-  int i;
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_IER)) = mask;
+}
 
-  /*
-   * connect all exception vectors needed
-   */
- ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
- ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, C_dispatch_irq_handler);
+/*
+ * Retrieve contents of Interrupt Pending Register
+ */
+static uint32_t get_ipr(void)
+{
+  uint32_t c = *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_IPR));
+  return c;
+}
 
-  /*
-   * setup interrupt handlers table
-   */
+static void BSP_irq_enable_at_opbintc (rtems_irq_number irqnum)
+{
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_SIE))
+    = 1 << (irqnum - BSP_OPBINTC_IRQ_LOWEST_OFFSET);
+}
+
+static void BSP_irq_disable_at_opbintc (rtems_irq_number irqnum)
+{
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_CIE))
+    = 1 << (irqnum - BSP_OPBINTC_IRQ_LOWEST_OFFSET);
+}
+
+/*
+ *  IRQ Handler: this is called from the primary exception dispatcher
+ */
+static void BSP_irq_handle_at_opbintc(void)
+{
+  uint32_t ipr, mask, i, c;
+  ipr = get_ipr();
+
+  c = 0;
+  mask = 0;
+
   for (i = 0;
-       i < BSP_IRQ_NUMBER;
+       (i < BSP_OPBINTC_PER_IRQ_NUMBER)
+	 && (ipr != 0);
        i++) {
-    rtemsIrqTbl[i]      = emptyIrq;
-    rtemsIrqTbl[i].name = i;
+    c = (1 << i);
+
+    if ((ipr & c) != 0) {
+      /* interrupt is asserted */
+      mask |= c;
+      ipr &= ~c;
+
+      bsp_interrupt_handler_dispatch(i+BSP_OPBINTC_IRQ_LOWEST_OFFSET);
+    }
   }
-  /*
-   * init interrupt controller
-   */
-  opb_intc_init();
-  /*
-   * initialize interrupt management
-   */
-  if (!BSP_rtems_irq_mngt_set(&initialConfig)) {
-    BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
+
+  if (mask) {
+    /* ack all the interrupts we serviced */
+    set_iar(mask);
   }
 }
 
+/*
+ * activate the interrupt controller
+ */
+static void opb_intc_init(void)
+{
+  uint32_t i, mask = 0;
+
+  /* mask off all interrupts */
+  set_ier(0x0);
+
+  for (i = 0; i < OPB_INTC_IRQ_MAX; i++) {
+    mask |= (1 << i);
+  }
+
+  /* make sure interupt status register is clear before we enable the interrupt controller */
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_ISR)) = 0;
+
+  /* acknowledge all interrupt sources */
+  set_iar(mask);
+
+  /* Turn on normal hardware operation of interrupt controller */
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_MER)) =
+    (OPB_INTC_MER_HIE);
+
+  /* Enable master interrupt switch for the interrupt controller */
+  *((volatile uint32_t *) (OPB_INTC_BASE + OPB_INTC_MER)) =
+    (OPB_INTC_MER_HIE | OPB_INTC_MER_ME);
+}
+
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (bsp_interrupt_is_valid_vector(vector)) {
+    if (BSP_IS_OPBINTC_IRQ(vector)) {
+      BSP_irq_enable_at_opbintc(vector);
+    }
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  return sc;
+}
+
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (bsp_interrupt_is_valid_vector(vector)) {
+    if (BSP_IS_OPBINTC_IRQ(vector)) {
+      BSP_irq_disable_at_opbintc(vector);
+    }
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  return sc;
+}
+
+static int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned int excNum)
+{
+  BSP_irq_handle_at_opbintc();
+
+  return 0;
+}
+
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+  opb_intc_init();
+
+  ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
+
+  return RTEMS_SUCCESSFUL;
+}
