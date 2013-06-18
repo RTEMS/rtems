@@ -33,7 +33,7 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_FAST_IDLE],
 occurs while the IDLE thread is executing.  This can significantly reduce
 simulation times.])
 
-RTEMS_BSPOPTS_SET([BSP_CONSOLE_MINOR],[*],[0])
+RTEMS_BSPOPTS_SET([BSP_CONSOLE_MINOR],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_MINOR],[minor number of console device])
 
 RTEMS_CHECK_SMP
