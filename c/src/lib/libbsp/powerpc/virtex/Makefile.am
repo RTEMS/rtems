@@ -75,8 +75,7 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/tty_drv.rel
+    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel

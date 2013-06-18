@@ -73,11 +73,6 @@ LINKER_SYMBOL(virtex_exc_vector_base);
  *  Driver configuration parameters
  */
 uint32_t   bsp_clicks_per_usec;
-uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
-bool       bsp_serial_external_clock;
-bool       bsp_serial_xon_xoff;
-bool       bsp_serial_cts_rts;
-uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
@@ -103,12 +98,7 @@ void bsp_start( void )
 
   /* timebase register ticks/microsecond */
   bsp_clicks_per_usec = (250000000 / 1000000);
-  bsp_serial_per_sec = 14625000;
-  bsp_serial_external_clock = false;
   bsp_timer_internal_clock  = true;
-  bsp_serial_xon_xoff = false;
-  bsp_serial_cts_rts = false;
-  bsp_serial_rate = 115200;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid = 3;
 
