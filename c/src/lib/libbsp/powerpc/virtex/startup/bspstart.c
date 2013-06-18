@@ -54,15 +54,12 @@
  *  Modifications for PPC405GP by Dennis Ehlin
  */
 
-#include <string.h>
-
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/bootcard.h>
 #include <bsp/linker-symbols.h>
-#include <rtems/bspIo.h>
-#include <libcpu/cpuIdent.h>
-#include <libcpu/spr.h>
-#include <rtems/powerpc/powerpc.h>
+
+#include <libcpu/powerpc-utility.h>
 
 #include RTEMS_XPARAMETERS_H
 
