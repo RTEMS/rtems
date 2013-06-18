@@ -68,10 +68,6 @@
 #include RTEMS_XPARAMETERS_H
 #include <stdio.h>
 
-uint32_t _heap_start;
-uint32_t _heap_end;
-uint32_t _top_of_ram;
-
 /* Symbols defined in linker command file */
 LINKER_SYMBOL(virtex_exc_vector_base);
 
