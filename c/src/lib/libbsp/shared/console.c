@@ -18,6 +18,7 @@
 #include <bsp.h>
 #include <bsp/generic-fatal.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <termios.h>
@@ -294,7 +295,7 @@ rtems_device_driver console_initialize(
       }
 
       if (minor == Console_Port_Minor) {
-        status = rtems_io_register_name( "dev/console", major, minor );
+        status = rtems_io_register_name( CONSOLE_DEVICE_NAME, major, minor );
         if (status != RTEMS_SUCCESSFUL) {
           bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_REGISTER_DEV_1 );
         }
