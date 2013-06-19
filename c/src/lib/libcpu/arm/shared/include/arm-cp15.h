@@ -899,6 +899,53 @@ static inline void arm_cp15_set_auxiliary_control(uint32_t val)
   );
 }
 
+/* ID_PFR1, Processor Feature Register 1 */
+
+static inline uint32_t arm_cp15_get_processor_feature_1(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c0, c1, 1\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* VBAR, Vector Base Address Register, Security Extensions */
+
+static inline void *arm_cp15_get_vector_base_address(void)
+{
+  ARM_SWITCH_REGISTERS;
+  void *base;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[base], c12, c0, 0\n"
+    ARM_SWITCH_BACK
+    : [base] "=&r" (base) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return base;
+}
+
+static inline void arm_cp15_set_vector_base_address(void *base)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[base], c12, c0, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [base] "r" (base)
+  );
+}
+
 /**
  * @brief Sets the @a section_flags for the address range [@a begin, @a end).
  *

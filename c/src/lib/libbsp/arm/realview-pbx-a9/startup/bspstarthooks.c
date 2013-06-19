@@ -100,6 +100,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
+  arm_a9mpcore_start_hook_1();
   bsp_start_copy_sections();
   setup_mmu_and_cache();
   bsp_start_clear_bss();
