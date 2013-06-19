@@ -42,7 +42,6 @@ static void zynq_uart_initialize(int minor)
   regs->rx_timeout = ZYNQ_UART_RX_TIMEOUT_RTO(0);
   regs->control = ZYNQ_UART_CONTROL_RXEN
     | ZYNQ_UART_CONTROL_TXEN
-    | ZYNQ_UART_CONTROL_STTBRK
     | ZYNQ_UART_CONTROL_RSTTO;
 }
 
