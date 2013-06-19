@@ -36,8 +36,8 @@ static void zynq_uart_initialize(int minor)
   regs->mode = ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL)
     | ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE)
     | ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8);
-  regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(1);
-  regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(0xff);
+  regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(0x3e);
+  regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(0x6);
   regs->rx_fifo_trg_lvl = ZYNQ_UART_RX_FIFO_TRG_LVL_RTRIG(0);
   regs->rx_timeout = ZYNQ_UART_RX_TIMEOUT_RTO(0);
   regs->control = ZYNQ_UART_CONTROL_RXEN
