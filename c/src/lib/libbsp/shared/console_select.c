@@ -92,10 +92,6 @@ void bsp_console_select(void)
    * let the user know and select the first available device.
    */
   if ( !bsp_Is_Available( Console_Port_Minor ) ) {
-    printk(
-      "Error finding %s setting console to first available\n",
-      Console_Port_Tbl[Console_Port_Minor]->sDeviceName
-    );
     Console_Port_Minor = bsp_First_Available_Device();
   }
 }
