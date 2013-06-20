@@ -117,11 +117,11 @@ void qoriq_secondary_cpu_initialize(void)
   PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS(BOOKE_TCR, BOOKE_TCR_DIE);
 
   /* Initialize exception handler */
-  ppc_exc_vector_base = (uint32_t) bsp_exc_vector_base;
-  ppc_exc_initialize(
+  ppc_exc_initialize_with_vector_base(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) _Per_CPU_Information[1].interrupt_stack_low,
-    rtems_configuration_get_interrupt_stack_size()
+    rtems_configuration_get_interrupt_stack_size(),
+    bsp_exc_vector_base
   );
 
   /* Now it is possible to make the code execute only */

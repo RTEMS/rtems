@@ -63,6 +63,7 @@ static const uint32_t *const ppc_exc_prologue_templates [] = {
 
 static bool ppc_exc_create_branch_op(
   unsigned vector,
+  void *vector_base,
   uint32_t *prologue,
   size_t prologue_size
 )
@@ -72,7 +73,8 @@ static bool ppc_exc_create_branch_op(
   static const uintptr_t BRANCH_OP_ABS = 0x2;
   static const uintptr_t BRANCH_OP_MSK = 0x3ffffff;
   size_t branch_op_index = prologue_size / 4 - 1;
-  uintptr_t vector_address = (uintptr_t) ppc_exc_vector_address(vector);
+  uintptr_t vector_address =
+    (uintptr_t) ppc_exc_vector_address(vector, vector_base);
   uintptr_t branch_op_address = vector_address + 4 * branch_op_index;
 
   /* This value may have BRANCH_OP_LINK set */
@@ -101,6 +103,7 @@ static bool ppc_exc_create_branch_op(
 
 rtems_status_code ppc_exc_make_prologue(
   unsigned vector,
+  void *vector_base,
   ppc_exc_category category,
   uint32_t *prologue,
   size_t *prologue_size
@@ -152,7 +155,14 @@ rtems_status_code ppc_exc_make_prologue(
 
     memcpy(prologue, prologue_template, prologue_template_size);
 
-    if (!ppc_exc_create_branch_op(vector, prologue, prologue_template_size)) {
+    if (
+      !ppc_exc_create_branch_op(
+        vector,
+        vector_base,
+        prologue,
+        prologue_template_size
+      )
+    ) {
       return RTEMS_INVALID_ADDRESS;
     }
 

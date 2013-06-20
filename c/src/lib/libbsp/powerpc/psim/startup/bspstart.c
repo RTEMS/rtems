@@ -94,17 +94,13 @@ void bsp_start( void )
   BSP_time_base_divisor    = 1;
 
   /*
-   *  The simulator likes the exception table to be at 0xfff00000.
-   */
-  bsp_exceptions_in_RAM = FALSE;
-
-  /*
    * Initialize default raw exception handlers.
    */
-  ppc_exc_initialize(
+  ppc_exc_initialize_with_vector_base(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
     (uintptr_t) bsp_section_work_begin,
-    rtems_configuration_get_interrupt_stack_size()
+    rtems_configuration_get_interrupt_stack_size(),
+    (void *) 0xfff00000
   );
 
   /*

@@ -303,32 +303,12 @@ static inline bool ppc_exc_is_valid_category(ppc_exc_category category)
 }
 
 /**
- * @brief Indicates if exception entry table resides in a writable memory.
+ * @brief Returns the entry address of the vector.
  *
- * This variable is initialized to 'TRUE' by default;
- * BSPs which have their vectors in ROM should set it
- * to FALSE prior to initializing raw exceptions.
- *
- * I suspect the only candidate is the simulator.
- * After all, the value of this variable is used to
- * determine where to install the prologue code and
- * installing to ROM on anyting that's real ROM
- * will fail anyways.
- *
- * This should probably go away... (T.S. 2007/11/30)
+ * @param[in] vector The vector number.
+ * @param[in] vector_base The vector table base address.
  */
-extern bool bsp_exceptions_in_RAM;
-
-/**
- * @brief Vector base address for CPUs (for example e200 and e500) with IVPR
- * and IVOR registers.
- */
-extern uint32_t ppc_exc_vector_base;
-
-/**
- * @brief Returns the entry address of the vector @a vector.
- */
-void *ppc_exc_vector_address(unsigned vector);
+void *ppc_exc_vector_address(unsigned vector, void *vector_base);
 
 /**
  * @brief Returns the category set for a CPU of type @a cpu, or @c NULL if
@@ -358,8 +338,8 @@ ppc_exc_category ppc_exc_category_for_vector(
  * @brief Makes a minimal prologue for the vector @a vector with the category
  * @a category.
  *
- * The minimal prologue will be copied to @a prologue.  Not more than @a
- * prologue_size bytes will be copied.  Returns the actual minimal prologue
+ * The minimal prologue will be copied to @a prologue.  Not more than
+ * @a prologue_size bytes will be copied.  Returns the actual minimal prologue
  * size in bytes in @a prologue_size.
  *
  * @retval RTEMS_SUCCESSFUL Minimal prologue successfully made.
@@ -369,9 +349,22 @@ ppc_exc_category ppc_exc_category_for_vector(
  */
 rtems_status_code ppc_exc_make_prologue(
   unsigned vector,
+  void *vector_base,
   ppc_exc_category category,
   uint32_t *prologue,
   size_t *prologue_size
+);
+
+/**
+ * @brief Initializes the exception handling.
+ *
+ * @see ppc_exc_initialize().
+ */
+void ppc_exc_initialize_with_vector_base(
+  uint32_t interrupt_disable_mask,
+  uintptr_t interrupt_stack_begin,
+  uintptr_t interrupt_stack_size,
+  void *vector_base
 );
 
 /**
@@ -387,11 +380,19 @@ rtems_status_code ppc_exc_make_prologue(
  *   SVR4/EABI, or
  * - the minimal prologue creation failed.
  */
-void ppc_exc_initialize(
+static inline void ppc_exc_initialize(
   uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
   uintptr_t interrupt_stack_size
-);
+)
+{
+  ppc_exc_initialize_with_vector_base(
+    interrupt_disable_mask,
+    interrupt_stack_begin,
+    interrupt_stack_size,
+    NULL
+  );
+}
 
 /**
  * @brief High-level exception handler type.
