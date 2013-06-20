@@ -84,7 +84,7 @@ RTEMS_INLINE_ROUTINE void xlite_uart_write(uint32_t base, char ch)
 
 
 
-int xlite_write_char(uint32_t base, char ch)
+static int xlite_write_char(uint32_t base, char ch)
 {
    uint32_t  retrycount= 0, idler, status;
 
@@ -119,7 +119,7 @@ int xlite_write_char(uint32_t base, char ch)
 
 
 
-void xlite_init (int minor )
+static void xlite_init (int minor )
 {
    uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
 
@@ -131,7 +131,7 @@ void xlite_init (int minor )
 }
 
 
-int xlite_open(
+static int xlite_open(
   int      major,
   int      minor,
   void    *arg
@@ -153,7 +153,7 @@ int xlite_open(
 }
 
 
-int xlite_close(
+static int xlite_close(
   int      major,
   int      minor,
   void    *arg
@@ -165,7 +165,7 @@ int xlite_close(
 
 
 
-int xlite_read_polled (int minor )
+static int xlite_read_polled (int minor )
 {
    uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
 
@@ -180,7 +180,7 @@ int xlite_read_polled (int minor )
 
 
 
-ssize_t xlite_write_buffer_polled(
+static ssize_t xlite_write_buffer_polled(
   int         minor,
   const char *buf,
   size_t      len
@@ -205,7 +205,7 @@ ssize_t xlite_write_buffer_polled(
 }
 
 
-void xlite_write_char_polled(
+static void xlite_write_char_polled(
   int   minor,
   char  c
 )
@@ -217,7 +217,7 @@ void xlite_write_char_polled(
 
 
 
-int xlite_set_attributes(int minor, const struct termios *t)
+static int xlite_set_attributes(int minor, const struct termios *t)
 {
    return RTEMS_SUCCESSFUL;
 }
@@ -228,7 +228,7 @@ int xlite_set_attributes(int minor, const struct termios *t)
 
 
 
-const console_fns xlite_fns_polled =
+static const console_fns xlite_fns_polled =
 {
   libchip_serial_default_probe,        /* deviceProbe */
   xlite_open,                          /* deviceFirstOpen */
@@ -341,7 +341,7 @@ unsigned long Console_Configuration_Count = NUM_CONSOLE_PORTS;
 
 #include <rtems/bspIo.h>
 
-void outputChar(char ch)
+static void outputChar(char ch)
 {
   if (ch == '\n') {
     xlite_write_char_polled( 0, '\r' );
@@ -349,7 +349,7 @@ void outputChar(char ch)
    xlite_write_char_polled( 0, ch );
 }
 
-int inputChar(void)
+static int inputChar(void)
 {
    return xlite_read_polled(0);
 }
