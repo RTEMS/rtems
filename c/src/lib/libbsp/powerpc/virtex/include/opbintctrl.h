@@ -39,7 +39,7 @@ extern "C" {
 #define OPB_INTC_REGISTER_WIDTH   32
 
 /* Base Register address and register offsets.  Defined in vhdl model  */
-#define OPB_INTC_BASE		  XPAR_INTC_BASEADDR
+#define OPB_INTC_BASE		  XPAR_INTC_SINGLE_BASEADDR
 
 
 
