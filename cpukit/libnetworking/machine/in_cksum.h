@@ -181,7 +181,7 @@ in_cksum_update(struct ip *ip)
  *  SPARC Version
  */
 
-#elif (defined(__GNUC__) && defined(sparc))
+#elif (defined(__GNUC__) && defined(__sparc__))
 
 static __inline u_int
 in_cksum_hdr(const struct ip *ip)
