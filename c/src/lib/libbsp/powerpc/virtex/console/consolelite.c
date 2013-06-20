@@ -271,6 +271,7 @@ console_tbl     Console_Configuration_Ports[] = {
    0,                                      /* ulClock */
    0                                       /* ulIntVector -- base for port */
 },
+#ifdef XPAR_UARTLITE_1_BASEADDR
 {
   "/dev/ttyS1",                             /* sDeviceName */
    SERIAL_CUSTOM,                           /* deviceType */
@@ -280,7 +281,7 @@ console_tbl     Console_Configuration_Ports[] = {
    16,                                     /* ulMargin */
    8,                                      /* ulHysteresis */
    (void *) NULL,               /* NULL */ /* pDeviceParams */
-   0x40610000,                             /* ulCtrlPort1 */
+   XPAR_UARTLITE_1_BASEADDR,               /* ulCtrlPort1 */
    0,                                      /* ulCtrlPort2 */
    0,                                      /* ulDataPort */
    NULL,                                   /* getRegister */
@@ -290,6 +291,8 @@ console_tbl     Console_Configuration_Ports[] = {
    0,                                      /* ulClock */
    0                                       /* ulIntVector -- base for port */
 },
+#endif
+#ifdef XPAR_UARTLITE_2_BASEADDR
 {
   "/dev/ttyS2",                             /* sDeviceName */
    SERIAL_CUSTOM,                           /* deviceType */
@@ -299,7 +302,7 @@ console_tbl     Console_Configuration_Ports[] = {
    16,                                     /* ulMargin */
    8,                                      /* ulHysteresis */
    (void *) NULL,               /* NULL */ /* pDeviceParams */
-   0x40620000,                             /* ulCtrlPort1 */
+   XPAR_UARTLITE_2_BASEADDR,               /* ulCtrlPort1 */
    0,                                      /* ulCtrlPort2 */
    0,                                      /* ulDataPort */
    NULL,                                   /* getRegister */
@@ -309,6 +312,8 @@ console_tbl     Console_Configuration_Ports[] = {
    0,                                      /* ulClock */
    0                                       /* ulIntVector -- base for port */
 },
+#endif
+#ifdef XPAR_UARTLITE_2_BASEADDR
 {
   "/dev/ttyS3",                             /* sDeviceName */
    SERIAL_CUSTOM,                           /* deviceType */
@@ -318,7 +323,7 @@ console_tbl     Console_Configuration_Ports[] = {
    16,                                     /* ulMargin */
    8,                                      /* ulHysteresis */
    (void *) NULL,               /* NULL */ /* pDeviceParams */
-   0x40630000,                             /* ulCtrlPort1 */
+   XPAR_UARTLITE_3_BASEADDR,               /* ulCtrlPort1 */
    0,                                      /* ulCtrlPort2 */
    0,                                      /* ulDataPort */
    NULL,                                   /* getRegister */
@@ -328,15 +333,11 @@ console_tbl     Console_Configuration_Ports[] = {
    0,                                      /* ulClock */
    0                                       /* ulIntVector -- base for port */
 }
+#endif
 };
 
-
-
-
-#define NUM_CONSOLE_PORTS \
-  (sizeof(Console_Configuration_Ports)/sizeof(console_tbl))
-
-unsigned long Console_Configuration_Count = NUM_CONSOLE_PORTS;
+unsigned long Console_Configuration_Count =
+  RTEMS_ARRAY_SIZE(Console_Configuration_Ports);
 
 
 #include <rtems/bspIo.h>
