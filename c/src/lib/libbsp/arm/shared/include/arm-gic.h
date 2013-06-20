@@ -127,7 +127,8 @@ static inline gic_trigger_mode gic_id_get_trigger_mode(
   uint32_t o = GIC_ID_TO_TWO_BITS_REG_OFFSET(id) + 1;
   uint32_t bit = 1U << o;
 
-  return dist->icdicfr[i] & bit;
+  return (dist->icdicfr[i] & bit) != 0 ?
+    GIC_EDGE_TRIGGERED : GIC_LEVEL_SENSITIVE;
 }
 
 static inline void gic_id_set_trigger_mode(
@@ -162,7 +163,7 @@ static inline gic_handling_model gic_id_get_handling_model(
   uint32_t o = GIC_ID_TO_TWO_BITS_REG_OFFSET(id);
   uint32_t bit = 1U << o;
 
-  return dist->icdicfr[i] & bit;
+  return (dist->icdicfr[i] & bit) != 0 ? GIC_1_TO_N : GIC_N_TO_N;
 }
 
 static inline void gic_id_set_handling_model(
