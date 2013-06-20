@@ -637,7 +637,6 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
   console_tbl *c = Console_Port_Tbl [minor];
 #endif
-  console_data *d = &Console_Port_Data [minor];
 
   #ifdef BSP_FEATURE_IRQ_EXTENSION
     {
