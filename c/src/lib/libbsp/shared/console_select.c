@@ -19,6 +19,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/generic-fatal.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -71,7 +72,7 @@ static rtems_device_minor_number bsp_First_Available_Device( void )
   /*
    *  Error No devices were found.  We will want to bail here.
    */
-  rtems_fatal_error_occurred(RTEMS_IO_ERROR);
+  bsp_generic_fatal(BSP_GENERIC_FATAL_CONSOLE_NO_DEV);
 }
 
 void bsp_console_select(void)
