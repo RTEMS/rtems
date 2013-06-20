@@ -33,6 +33,7 @@ include_bspdir = $(includedir)/bsp
 
 include_bsp_HEADERS =
 include_bsp_HEADERS += shared/include/default-initial-extension.h
+include_bsp_HEADERS += shared/include/generic-fatal.h
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am

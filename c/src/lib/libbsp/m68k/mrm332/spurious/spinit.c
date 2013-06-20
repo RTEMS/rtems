@@ -15,7 +15,7 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
+#include <bsp/generic-fatal.h>
 #include <stdio.h>
 
 const char * const _Spurious_Error_[] = {"Reset","Bus Error","Address Error",
@@ -72,10 +72,7 @@ rtems_isr Spurious_Isr(
   RAW_PUTI(sp);
   RAW_PUTS("\n\r");
 #endif
-  rtems_fatal(
-    RTEMS_FATAL_SOURCE_BSP_GENERIC,
-    BSP_GENERIC_FATAL_SPURIOUS_INTERRUPT
-  );
+  bsp_generic_fatal( BSP_GENERIC_FATAL_SPURIOUS_INTERRUPT );
 }
 
 void Spurious_Initialize(void)

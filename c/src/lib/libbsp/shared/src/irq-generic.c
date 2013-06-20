@@ -23,7 +23,7 @@
  */
 
 #include <bsp/irq-generic.h>
-#include <bsp/bootcard.h>
+#include <bsp/generic-fatal.h>
 
 #include <stdlib.h>
 
@@ -170,10 +170,7 @@ void bsp_interrupt_initialize(void)
 
   sc = bsp_interrupt_facility_initialize();
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal(
-      RTEMS_FATAL_SOURCE_BSP_GENERIC,
-      BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION
-    );
+    bsp_generic_fatal(BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION);
   }
 
   bsp_interrupt_set_initialized();
