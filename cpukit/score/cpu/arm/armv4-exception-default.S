@@ -72,6 +72,8 @@ _ARMV4_Exception_data_abort_default:
 	stmdb	sp!, {r0-r12}
 	mov	r4, #4
 
+	b	save_more_context
+
 _ARMV4_Exception_reserved_default:
 
 	/* Save context and load vector */
@@ -79,12 +81,16 @@ _ARMV4_Exception_reserved_default:
 	stmdb	sp!, {r0-r12}
 	mov	r4, #5
 
+	b	save_more_context
+
 _ARMV4_Exception_irq_default:
 
 	/* Save context and load vector */
 	sub	sp, #MORE_CONTEXT_SIZE
 	stmdb	sp!, {r0-r12}
 	mov	r4, #6
+
+	b	save_more_context
 
 _ARMV4_Exception_fiq_default:
 
