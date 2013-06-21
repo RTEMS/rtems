@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -35,6 +35,8 @@
  * initialization.
  */
 extern uint32_t bsp_time_base_frequency;
+
+#define PPC405_PIT 0x3db
 
 #define PPC_CLOCK_DECREMENTER_MAX UINT32_MAX
 
@@ -132,6 +134,28 @@ static int ppc_clock_exception_handler_booke( BSP_Exception_frame *frame, unsign
 	return 0;
 }
 
+static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame, unsigned number)
+{
+	uint32_t msr;
+
+	/* Acknowledge PIT request */
+	PPC_SET_SPECIAL_PURPOSE_REGISTER(PPC405_TSR, BOOKE_TSR_DIS);
+
+	/* Increment clock ticks */
+	Clock_driver_ticks += 1;
+
+	/* Enable external exceptions */
+	msr = ppc_external_exceptions_enable();
+
+	/* Call clock ticker  */
+	ppc_clock_tick();
+
+	/* Restore machine state */
+	ppc_external_exceptions_disable(msr);
+
+	return 0;
+}
+
 static uint32_t ppc_clock_nanoseconds_since_last_tick(void)
 {
 	uint64_t k = ppc_clock_factor;
@@ -139,6 +163,19 @@ static uint32_t ppc_clock_nanoseconds_since_last_tick(void)
 	uint32_t i = ppc_clock_decrementer_value + 1;
 
 	return (uint32_t) (((i - c) * k) >> 32);
+}
+
+static uint32_t ppc_clock_nanoseconds_since_last_tick_ppc405(void)
+{
+	uint64_t k = ppc_clock_factor;
+	uint32_t i = ppc_clock_decrementer_value;
+	uint32_t c = i - PPC_SPECIAL_PURPOSE_REGISTER(PPC405_PIT);
+
+	if ((PPC_SPECIAL_PURPOSE_REGISTER(PPC405_TSR) & BOOKE_TSR_DIS) != 0) {
+		c = i - PPC_SPECIAL_PURPOSE_REGISTER(PPC405_PIT) + i;
+	}
+
+	return (uint32_t) ((c * k) >> 32);
 }
 
 void Clock_exit(void)
@@ -156,9 +193,6 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 	uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
 	uint32_t interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
 
-	/* Current CPU type */
-	ppc_cpu_id_t cpu_type = get_ppc_cpu_type();
-
 	/* Make major/minor available to others such as shared memory driver */
 	rtems_clock_major = major;
 	rtems_clock_minor = minor;
@@ -172,46 +206,60 @@ rtems_device_driver Clock_initialize( rtems_device_major_number major, rtems_dev
 	 */
 	ppc_clock_tick = (void (*)(void)) rtems_clock_tick;
 
-	/* Set the decrementer to the maximum value */
-	ppc_set_decrementer_register( PPC_CLOCK_DECREMENTER_MAX);
-
 	/* Factor for nano seconds extension */
 	ppc_clock_factor = (1000000000ULL << 32) / frequency;
 
-	/* Decrementer value */
-	ppc_clock_decrementer_value = interval - 1;
+	if (ppc_cpu_is_bookE() != PPC_BOOKE_405) {
+		/* Decrementer value */
+		ppc_clock_decrementer_value = interval - 1;
 
-	/* Check decrementer value */
-	if (ppc_clock_decrementer_value == 0) {
-		ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
-		RTEMS_SYSLOG_ERROR( "decrementer value would be zero, will be set to maximum value instead\n");
-	}
+		/* Check decrementer value */
+		if (ppc_clock_decrementer_value == 0) {
+			ppc_clock_decrementer_value = PPC_CLOCK_DECREMENTER_MAX;
+			RTEMS_SYSLOG_ERROR( "decrementer value would be zero, will be set to maximum value instead\n");
+		}
 
-	/* Set the nanoseconds since last tick handler */
-	rtems_clock_set_nanoseconds_extension( ppc_clock_nanoseconds_since_last_tick);
+		/* Set the nanoseconds since last tick handler */
+		rtems_clock_set_nanoseconds_extension( ppc_clock_nanoseconds_since_last_tick);
 
-	if (ppc_cpu_is_bookE()) {
-		/* Set decrementer auto-reload value */
-		PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_DECAR, ppc_clock_decrementer_value);
+		if (ppc_cpu_is_bookE()) {
+			/* Set decrementer auto-reload value */
+			PPC_SET_SPECIAL_PURPOSE_REGISTER( BOOKE_DECAR, ppc_clock_decrementer_value);
 
-		/* Install exception handler */
-		ppc_exc_set_handler( ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_booke);
+			/* Install exception handler */
+			ppc_exc_set_handler( ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_booke);
 
-		/* Enable decrementer and auto-reload */
-		PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( BOOKE_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
+			/* Enable decrementer and auto-reload */
+			PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS( BOOKE_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
+		} else {
+			/* Here the decrementer value is actually the interval */
+			++ppc_clock_decrementer_value;
+
+			/* Initialize next time base */
+			ppc_clock_next_time_base = ppc_time_base() + ppc_clock_decrementer_value;
+
+			/* Install exception handler */
+			ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler_first);
+		}
+
+		/* Set the decrementer value */
+		ppc_set_decrementer_register( ppc_clock_decrementer_value);
 	} else {
-		/* Here the decrementer value is actually the interval */
-		++ppc_clock_decrementer_value;
+		/* PIT interval value */
+		ppc_clock_decrementer_value = interval;
 
-		/* Initialize next time base */
-		ppc_clock_next_time_base = ppc_time_base() + ppc_clock_decrementer_value;
+		/* Set the nanoseconds since last tick handler */
+		rtems_clock_set_nanoseconds_extension(ppc_clock_nanoseconds_since_last_tick_ppc405);
 
 		/* Install exception handler */
-		ppc_exc_set_handler( ASM_DEC_VECTOR, ppc_clock_exception_handler_first);
-	}
+		ppc_exc_set_handler(ASM_BOOKE_DEC_VECTOR, ppc_clock_exception_handler_ppc405);
 
-	/* Set the decrementer value */
-	ppc_set_decrementer_register( ppc_clock_decrementer_value);
+		/* Enable PIT and auto-reload */
+		PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(PPC405_TCR, BOOKE_TCR_DIE | BOOKE_TCR_ARE);
+
+		/* Set PIT auto-reload and initial value */
+		PPC_SET_SPECIAL_PURPOSE_REGISTER(PPC405_PIT, interval);
+	}
 
 	return RTEMS_SUCCESSFUL;
 }
