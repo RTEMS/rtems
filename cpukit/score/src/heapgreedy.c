@@ -38,6 +38,8 @@ Heap_Block *_Heap_Greedy_allocate(
   Heap_Block *current;
   size_t i;
 
+  _Heap_Protection_free_all_delayed_blocks( heap );
+
   for (i = 0; i < block_count; ++i) {
     void *next = _Heap_Allocate( heap, block_sizes [i] );
 
