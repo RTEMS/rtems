@@ -70,7 +70,7 @@ LINKER_SYMBOL(virtex_exc_vector_base);
 /*
  *  Driver configuration parameters
  */
-uint32_t   bsp_clicks_per_usec;
+uint32_t bsp_time_base_frequency = XPAR_CPU_PPC405_CORE_CLOCK_FREQ_HZ;
 
 /*
  *  bsp_start
@@ -86,13 +86,6 @@ void bsp_start( void )
    */
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
-
-  /*
-   *  initialize the device driver parameters
-   */
-
-  /* timebase register ticks/microsecond */
-  bsp_clicks_per_usec = (250000000 / 1000000);
 
   /*
    * Initialize default raw exception handlers.

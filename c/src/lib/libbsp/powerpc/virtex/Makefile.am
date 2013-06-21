@@ -67,6 +67,9 @@ libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq_init.c
 
+# clock
+libbsp_a_SOURCES += ../shared/clock/clock.c
+
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 network_CPPFLAGS += -D__BSD_VISIBLE
@@ -84,8 +87,7 @@ libbsp_a_LIBADD += \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel
+    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel

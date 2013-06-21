@@ -78,8 +78,6 @@ extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 extern xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH xilTemac_driver_attach
 
-#define BSP_PPC403_CLOCK_HOOK_EXCEPTION ASM_BOOKE_DEC_VECTOR
-
 #endif /* ASM */
 
 #ifdef __cplusplus
