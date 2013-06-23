@@ -43,6 +43,8 @@ include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
 include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
 include_bsp_HEADERS += ../shared/include/arm-pl011.h
 include_bsp_HEADERS += ../shared/include/arm-pl011-regs.h
+include_bsp_HEADERS += ../shared/include/arm-pl111-fb.h
+include_bsp_HEADERS += ../shared/include/arm-pl111-regs.h
 include_bsp_HEADERS += include/irq.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
@@ -123,6 +125,10 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
+
+# Framebuffer
+libbsp_a_SOURCES += ../shared/arm-pl111-fb.c
+libbsp_a_SOURCES += startup/fb-config.c
 
 if HAS_SMP
 libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
