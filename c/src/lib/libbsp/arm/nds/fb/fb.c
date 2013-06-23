@@ -72,12 +72,12 @@ frame_buffer_initialize (rtems_device_major_number major,
   printk ("[+] framebuffer started\n");
 
   /* register the devices */
-  status = rtems_io_register_name ("/dev/fb0", major, 0);
+  status = rtems_io_register_name (FRAMEBUFFER_DEVICE_0_NAME, major, 0);
   if (status != RTEMS_SUCCESSFUL) {
     printk ("[!] error registering framebuffer\n");
     rtems_fatal_error_occurred (status);
   }
-  status = rtems_io_register_name ("/dev/fb1", major, 1);
+  status = rtems_io_register_name (FRAMEBUFFER_DEVICE_NAME "1", major, 1);
   if (status != RTEMS_SUCCESSFUL) {
     printk ("[!] error registering framebuffer\n");
     rtems_fatal_error_occurred (status);

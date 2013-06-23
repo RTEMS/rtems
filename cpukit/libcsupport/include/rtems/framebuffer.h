@@ -18,6 +18,8 @@
 #ifndef __RTEMS_FRAMEBUFFER_h__
 #define __RTEMS_FRAMEBUFFER_h__
 
+#include <rtems/io.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,6 +29,14 @@ extern "C" {
  *  that is available to applications.
  */
 #define FRAMEBUFFER_DEVICE_NAME "/dev/fb"
+
+/**
+ * @brief Standard device file path of first frame buffer device.
+ *
+ * This device is the default frame buffer device for the Microwindows Screen
+ * Driver.
+ */
+#define FRAMEBUFFER_DEVICE_0_NAME "/dev/fb0"
 
 /**
  *  This macro defines the standard device driver table entry for
