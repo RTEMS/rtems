@@ -84,7 +84,7 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
     ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_Z
   );
 
-  arm_cp15_start_setup_translation_table_and_enable_mmu(
+  arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
     ctrl,
     (uint32_t *) bsp_translation_table_base,
     ARM_MMU_DEFAULT_CLIENT_DOMAIN,

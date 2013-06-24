@@ -126,7 +126,7 @@ static BSP_START_TEXT_SECTION void setup_mmu_and_cache(void)
   arm_cp15_cache_invalidate();
 
   #ifndef LPC32XX_DISABLE_MMU
-    arm_cp15_start_setup_translation_table_and_enable_mmu(
+    arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
       ctrl,
       (uint32_t *) bsp_translation_table_base,
       LPC32XX_MMU_CLIENT_DOMAIN,

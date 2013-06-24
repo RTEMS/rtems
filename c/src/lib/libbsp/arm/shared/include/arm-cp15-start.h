@@ -71,8 +71,8 @@ arm_cp15_start_set_translation_table_entries(
   }
 }
 
-BSP_START_TEXT_SECTION static void
-arm_cp15_start_setup_translation_table_and_enable_mmu(
+BSP_START_TEXT_SECTION static inline void
+arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
   uint32_t ctrl,
   uint32_t *ttb,
   uint32_t client_domain,
