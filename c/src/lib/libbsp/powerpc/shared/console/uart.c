@@ -559,8 +559,6 @@ BSP_uart_termios_write_polled(int minor, const char *buf, size_t len)
   int nwrite;
   const char *b = buf;
 
-  assert(buf != NULL);
-
   for (nwrite=0 ; nwrite < len ; nwrite++) {
     BSP_uart_polled_write(uart, *b++);
   }
@@ -571,7 +569,6 @@ ssize_t
 BSP_uart_termios_write_com(int minor, const char *buf, size_t len)
 {
   int uart=minor;	/* could differ, theoretically */
-  assert(buf != NULL);
 
   if(len <= 0)
     {

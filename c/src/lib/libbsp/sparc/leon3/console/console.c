@@ -117,27 +117,24 @@ void console_isr(void *arg)
  */
 int console_write_interrupt(int minor, const char *buf, int len)
 {
-  struct apbuart_priv *uart;
-  unsigned int oldLevel;
+  if (len > 0) {
+    struct apbuart_priv *uart;
 
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
+    if (minor == 0)
+      uart = &apbuarts[syscon_uart_index];
+    else
+      uart = &apbuarts[minor - 1];
 
-  /* Remember what position in buffer */
+    /* Remember what position in buffer */
 
-  rtems_interrupt_disable(oldLevel);
+    /* Enable TX interrupt */
+    uart->regs->ctrl |= LEON_REG_UART_CTRL_TI;
 
-  /* Enable TX interrupt */
-  uart->regs->ctrl |= LEON_REG_UART_CTRL_TI;
+    /* start UART TX, this will result in an interrupt when done */
+    uart->regs->data = *buf;
 
-  /* start UART TX, this will result in an interrupt when done */
-  uart->regs->data = *buf;
-
-  uart->sending = 1;
-
-  rtems_interrupt_enable(oldLevel);
+    uart->sending = 1;
+  }
 
   return 0;
 }

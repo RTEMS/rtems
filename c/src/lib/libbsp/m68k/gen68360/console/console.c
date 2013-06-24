@@ -231,9 +231,12 @@ smc1PollRead (int minor)
 static ssize_t
 smc1InterruptWrite (int minor, const char *buf, size_t len)
 {
-	smcTxBd->buffer = (char *)buf;
-	smcTxBd->length = len;
-	smcTxBd->status = M360_BD_READY | M360_BD_WRAP | M360_BD_INTERRUPT;
+	if (len > 0) {
+		smcTxBd->buffer = (char *)buf;
+		smcTxBd->length = len;
+		smcTxBd->status = M360_BD_READY | M360_BD_WRAP | M360_BD_INTERRUPT;
+	}
+
 	return 0;
 }
 

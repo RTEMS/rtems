@@ -1090,12 +1090,15 @@ m8xx_uart_write(
   size_t len
 )
 {
-  while( (TxBd[minor]->status) & M8260_BD_READY );
+  if (len > 0) {
+    while( (TxBd[minor]->status) & M8260_BD_READY );
 
-  rtems_cache_flush_multiple_data_lines( buf, len );
-  TxBd[minor]->buffer = (char *) buf;
-  TxBd[minor]->length = len;
-  TxBd[minor]->status = M8260_BD_READY | M8260_BD_WRAP | M8260_BD_INTERRUPT;
+    rtems_cache_flush_multiple_data_lines( buf, len );
+    TxBd[minor]->buffer = (char *) buf;
+    TxBd[minor]->length = len;
+    TxBd[minor]->status = M8260_BD_READY | M8260_BD_WRAP | M8260_BD_INTERRUPT;
+  }
+
   return 0;
 }
 

@@ -323,12 +323,14 @@ static int setAttributes(int minor, const struct termios *termios) {
 static ssize_t uart_interruptWrite(int minor, const char *buf, size_t len) {
   uint32_t              base      = 0;
   bfin_uart_channel_t*  channel   = NULL;
-  rtems_interrupt_level isrLevel;
 
   /**
    * Sanity Check
    */
-  if (NULL == buf || NULL == channel || NULL == uartsConfig || minor < 0) {
+  if (
+    NULL == buf || NULL == channel || NULL == uartsConfig
+      || minor < 0 || 0 == len
+  ) {
     return 0;
   }
 
@@ -338,16 +340,12 @@ static ssize_t uart_interruptWrite(int minor, const char *buf, size_t len) {
     return 0;
   }
 
-  rtems_interrupt_disable(isrLevel);
-
   base = channel->uart_baseAddress;
 
   channel->flags |= BFIN_UART_XMIT_BUSY;
   channel->length = 1;
   *(uint16_t volatile *) (base + UART_THR_OFFSET) = *buf;
   *(uint16_t volatile *) (base + UART_IER_OFFSET) = UART_IER_ETBEI;
-
-  rtems_interrupt_enable(isrLevel);
 
   return 0;
 }
@@ -412,12 +410,11 @@ static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len) {
   uint32_t              base        = 0;
   bfin_uart_channel_t*  channel     = NULL;
   uint32_t              tx_dma_base = 0;
-  rtems_interrupt_level isrLevel;
 
   /**
    * Sanity Check
    */
-  if ( NULL == buf || 0 > minor || NULL == uartsConfig ) {
+  if ( NULL == buf || 0 > minor || NULL == uartsConfig || 0 == len ) {
     return 0;
   }
 
@@ -429,8 +426,6 @@ static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len) {
   if ( NULL == channel || BFIN_UART_XMIT_BUSY & channel->flags ) {
     return 0;
   }
-
-  rtems_interrupt_disable(isrLevel);
 
   base        = channel->uart_baseAddress;
   tx_dma_base = channel->uart_txDmaBaseAddress;
@@ -444,8 +439,6 @@ static ssize_t uart_DmaWrite(int minor, const char *buf, size_t len) {
   *(uint16_t volatile *) (tx_dma_base + DMA_X_MODIFY_OFFSET) = 1;
   *(uint16_t volatile *) (tx_dma_base + DMA_CONFIG_OFFSET) |= DMA_CONFIG_DMAEN;
   *(uint16_t volatile *) (base + UART_IER_OFFSET) = UART_IER_ETBEI;
-
-  rtems_interrupt_enable(isrLevel);
 
   return 0;
 }

@@ -581,33 +581,35 @@ ssize_t mpc5200_uart_write(
   size_t len
 )
 {
-  int frame_len = len;
-  const char *frame_buf = buf;
-  struct mpc5200_psc *psc =
-    (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
+  if (len > 0) {
+    int frame_len = len;
+    const char *frame_buf = buf;
+    struct mpc5200_psc *psc =
+      (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
 
- /*
-  * Check tx fifo space
-  */
-  if(len > (TX_FIFO_SIZE - psc->tfnum))
-    frame_len = TX_FIFO_SIZE - psc->tfnum;
+   /*
+    * Check tx fifo space
+    */
+    if(len > (TX_FIFO_SIZE - psc->tfnum))
+      frame_len = TX_FIFO_SIZE - psc->tfnum;
 
 #ifndef SINGLE_CHAR_MODE
-  channel_info[minor].cur_tx_len = frame_len;
+    channel_info[minor].cur_tx_len = frame_len;
 #else
-  frame_len = 1;
+    frame_len = 1;
 #endif
 
- /*rtems_cache_flush_multiple_data_lines( (void *)frame_buf, frame_len);*/
+   /*rtems_cache_flush_multiple_data_lines( (void *)frame_buf, frame_len);*/
 
-  while (frame_len--)
-    /* perform byte write to avoid extra NUL characters */
-    (* (volatile char *)&(psc->rb_tb)) = *frame_buf++;
+    while (frame_len--)
+      /* perform byte write to avoid extra NUL characters */
+      (* (volatile char *)&(psc->rb_tb)) = *frame_buf++;
 
- /*
-  * unmask interrupt
-  */
-  psc->isr_imr = channel_info[minor].shadow_imr |= IMR_TX_RDY;
+   /*
+    * unmask interrupt
+    */
+    psc->isr_imr = channel_info[minor].shadow_imr |= IMR_TX_RDY;
+  }
 
   return 0;
 }

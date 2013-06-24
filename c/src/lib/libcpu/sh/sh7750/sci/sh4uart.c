@@ -761,24 +761,21 @@ sh4uart2_interrupt_transmit(rtems_vector_number vec)
 rtems_status_code
 sh4uart_interrupt_write(sh4uart *uart, const char *buf, int len)
 {
-  volatile uint8_t  *scr1 = (volatile uint8_t *)SH7750_SCSCR1;
-  volatile uint16_t *scr2 = (volatile uint16_t *)SH7750_SCSCR2;
-  int level;
+  if (len > 0) {
+    volatile uint8_t  *scr1 = (volatile uint8_t *)SH7750_SCSCR1;
+    volatile uint16_t *scr2 = (volatile uint16_t *)SH7750_SCSCR2;
 
-  while ((SCSSR1 & SH7750_SCSSR1_TEND) == 0);
+    while ((SCSSR1 & SH7750_SCSSR1_TEND) == 0);
 
-  rtems_interrupt_disable(level);
+    uart->tx_buf = buf;
+    uart->tx_buf_len = len;
+    uart->tx_ptr = 0;
 
-  uart->tx_buf = buf;
-  uart->tx_buf_len = len;
-  uart->tx_ptr = 0;
-
-  if (uart->chn == SH4_SCI)
-    *scr1 |= SH7750_SCSCR_TIE;
-  else
-    *scr2 |= SH7750_SCSCR_TIE;
-
-  rtems_interrupt_enable(level);
+    if (uart->chn == SH4_SCI)
+      *scr1 |= SH7750_SCSCR_TIE;
+    else
+      *scr2 |= SH7750_SCSCR_TIE;
+  }
 
   return RTEMS_SUCCESSFUL;
 }

@@ -294,11 +294,13 @@ static ssize_t imx_uart_poll_write(int minor, const char *buf, size_t len)
 #if defined(USE_INTERRUPTS)
 static ssize_t imx_uart_intr_write(int minor, const char *buf, size_t len)
 {
-    imx_uart_data[minor].buf = buf;
-    imx_uart_data[minor].len = len;
-    imx_uart_data[minor].idx = 0;
+    if (len > 0) {
+        imx_uart_data[minor].buf = buf;
+        imx_uart_data[minor].len = len;
+        imx_uart_data[minor].idx = 0;
 
-    imx_uart_data[minor].regs->cr1 |= MC9328MXL_UART_CR1_TXMPTYEN;
+        imx_uart_data[minor].regs->cr1 |= MC9328MXL_UART_CR1_TXMPTYEN;
+    }
 
     return 1;
 }

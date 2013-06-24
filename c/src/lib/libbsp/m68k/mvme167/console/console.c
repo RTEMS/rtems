@@ -1141,37 +1141,39 @@ ssize_t cd2401_write(
   size_t len
 )
 {
-  cd2401->car = minor;              /* Select channel */
+  if (len > 0) {
+    cd2401->car = minor;              /* Select channel */
 
-  if ( (cd2401->dmabsts & 0x08) == 0 ) {
-    /* Next buffer is A. Wait for it to be ours. */
-    while ( cd2401->atbsts & 0x01 );
+    if ( (cd2401->dmabsts & 0x08) == 0 ) {
+      /* Next buffer is A. Wait for it to be ours. */
+      while ( cd2401->atbsts & 0x01 );
 
-    CD2401_Channel_Info[minor].own_buf_A = FALSE;
-    CD2401_Channel_Info[minor].len = len;
-    CD2401_Channel_Info[minor].buf = buf;
-    cd2401->atbadru = (uint16_t)( ( (uint32_t) buf ) >> 16 );
-    cd2401->atbadrl = (uint16_t)( (uint32_t) buf );
-    cd2401->atbcnt = len;
-    CD2401_RECORD_WRITE_INFO(( len, buf, 'A' ));
-    cd2401->atbsts = 0x03;          /* CD2401 owns buffer, int when empty */
+      CD2401_Channel_Info[minor].own_buf_A = FALSE;
+      CD2401_Channel_Info[minor].len = len;
+      CD2401_Channel_Info[minor].buf = buf;
+      cd2401->atbadru = (uint16_t)( ( (uint32_t) buf ) >> 16 );
+      cd2401->atbadrl = (uint16_t)( (uint32_t) buf );
+      cd2401->atbcnt = len;
+      CD2401_RECORD_WRITE_INFO(( len, buf, 'A' ));
+      cd2401->atbsts = 0x03;          /* CD2401 owns buffer, int when empty */
+    }
+    else {
+      /* Next buffer is B. Wait for it to be ours. */
+      while ( cd2401->btbsts & 0x01 );
+
+      CD2401_Channel_Info[minor].own_buf_B = FALSE;
+      CD2401_Channel_Info[minor].len = len;
+      CD2401_Channel_Info[minor].buf = buf;
+      cd2401->btbadru = (uint16_t)( ( (uint32_t) buf ) >> 16 );
+      cd2401->btbadrl = (uint16_t)( (uint32_t) buf );
+      cd2401->btbcnt = len;
+      CD2401_RECORD_WRITE_INFO(( len, buf, 'B' ));
+      cd2401->btbsts = 0x03;          /* CD2401 owns buffer, int when empty */
+    }
+    /* Nuts -- Need TxD ints */
+    CD2401_Channel_Info[minor].txEmpty = FALSE;
+    cd2401->ier |= 0x01;
   }
-  else {
-    /* Next buffer is B. Wait for it to be ours. */
-    while ( cd2401->btbsts & 0x01 );
-
-    CD2401_Channel_Info[minor].own_buf_B = FALSE;
-    CD2401_Channel_Info[minor].len = len;
-    CD2401_Channel_Info[minor].buf = buf;
-    cd2401->btbadru = (uint16_t)( ( (uint32_t) buf ) >> 16 );
-    cd2401->btbadrl = (uint16_t)( (uint32_t) buf );
-    cd2401->btbcnt = len;
-    CD2401_RECORD_WRITE_INFO(( len, buf, 'B' ));
-    cd2401->btbsts = 0x03;          /* CD2401 owns buffer, int when empty */
-  }
-  /* Nuts -- Need TxD ints */
-  CD2401_Channel_Info[minor].txEmpty = FALSE;
-  cd2401->ier |= 0x01;
 
   /* Return something */
   return len;
