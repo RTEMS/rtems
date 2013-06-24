@@ -25,7 +25,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010-2012 embedded brains GmbH.
+ *  Copyright (c) 2010-2013 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -273,7 +273,11 @@ typedef struct {
   /* There is no CPU specific per-CPU state */
 } CPU_Per_CPU_control;
 
-/* Non-volatile context according to E500ABIUG and EABI */
+/*
+ * Non-volatile context according to E500ABIUG, EABI and 32-bit TLS (according
+ * to "Power Architecture 32-bit Application Binary Interface Supplement 1.0 -
+ * Linux and Embedded")
+ */
 typedef struct {
   uint32_t gpr1;
   uint32_t msr;
@@ -297,6 +301,7 @@ typedef struct {
   PPC_GPR_TYPE gpr29;
   PPC_GPR_TYPE gpr30;
   PPC_GPR_TYPE gpr31;
+  uint32_t gpr2;
   #ifdef __ALTIVEC__
     /*
      * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
@@ -361,6 +366,7 @@ static inline ppc_context *ppc_get_context( Context_Control *context )
 #define PPC_CONTEXT_OFFSET_GPR29 PPC_CONTEXT_GPR_OFFSET( 29 )
 #define PPC_CONTEXT_OFFSET_GPR30 PPC_CONTEXT_GPR_OFFSET( 30 )
 #define PPC_CONTEXT_OFFSET_GPR31 PPC_CONTEXT_GPR_OFFSET( 31 )
+#define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_GPR_OFFSET( 32 )
 
 #ifndef ASM
 typedef struct {

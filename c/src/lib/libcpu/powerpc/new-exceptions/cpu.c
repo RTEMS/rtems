@@ -68,6 +68,7 @@ void _CPU_Context_Initialize(
   ppc_context *the_ppc_context;
   uint32_t   msr_value;
   uint32_t   sp;
+  register uint32_t gpr2 __asm__("2");
 
   sp = (uint32_t)stack_base + size - PPC_MINIMUM_STACK_FRAME_SIZE;
 
@@ -127,6 +128,7 @@ void _CPU_Context_Initialize(
   the_ppc_context->gpr1 = sp;
   the_ppc_context->msr = msr_value;
   the_ppc_context->lr = (uint32_t) entry_point;
+  the_ppc_context->gpr2 = gpr2;
 
 #ifdef __ALTIVEC__
   _CPU_Context_initialize_altivec( the_ppc_context );

@@ -110,7 +110,9 @@ _CPU_Context_validate:
 	addi	r25, r3, 20
 	addi	r26, r3, 21
 	addi	r27, r3, 22
-	addi	r28, r3, 23
+
+	/* GPR28 contains the GPR2 pattern */
+	xor	r28, r2, r3
 
 	/* GPR29 and CR are equal most of the time */
 	addi	r29, r3, 24
@@ -197,7 +199,7 @@ check:
 	addi	r4, r3, 22
 	cmpw	r4, r27
 	bne	restore
-	addi	r4, r3, 23
+	xor	r4, r2, r3
 	cmpw	r4, r28
 	bne	restore
 	addi	r4, r3, 24
@@ -224,13 +226,6 @@ check:
 	bne	restore
 	cmpw	r31, r1
 	bne	restore
-#if 0
-	/* This is only valid if we use the EABI */
-	lis	r4, _SDA2_BASE_@h
-	ori	r4, r4, _SDA2_BASE_@l
-	cmpw	r4, r2
-	bne	restore
-#endif
 	mtcr	r29
 	addi	r5, r3, 1
 	b	check
