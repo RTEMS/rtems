@@ -35,7 +35,7 @@ SPR_RW(SPRG1)
  *  per cycle at 100 Mhz.  Whether this is a good guess or not
  *  is anyone's guess.
  */
-extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
+extern int PSIM_INSTRUCTIONS_PER_MICROSECOND[];
 
 /*
  * PCI Bus Frequency
@@ -89,7 +89,7 @@ void bsp_start( void )
   /*
    *  initialize the device driver parameters
    */
-  BSP_bus_frequency        = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND;
+  BSP_bus_frequency        = (unsigned int)PSIM_INSTRUCTIONS_PER_MICROSECOND;
   bsp_clicks_per_usec      = BSP_bus_frequency;
   BSP_time_base_divisor    = 1;
 
