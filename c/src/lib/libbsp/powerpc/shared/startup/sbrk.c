@@ -79,7 +79,7 @@ static uintptr_t remaining_size = 0;
  *    0  -> limit memory effectively to 32M.
  *
  */
-extern uintptr_t        BSP_sbrk_policy __attribute__((weak));
+extern uintptr_t        BSP_sbrk_policy[] __attribute__((weak));
 
 #define LIMIT_32M  0x02000000
 
@@ -103,7 +103,7 @@ ptrdiff_t bsp_sbrk_init(Heap_Area *area, uintptr_t min_size)
     remaining_size  = rval;
   }
 
-  policy = (0 == &BSP_sbrk_policy ? (uintptr_t)(-1) : BSP_sbrk_policy);
+  policy = (0 == BSP_sbrk_policy[0] ? (uintptr_t)(-1) : BSP_sbrk_policy[0]);
   switch ( policy ) {
       case (uintptr_t)(-1):
         area->size      += rval;
