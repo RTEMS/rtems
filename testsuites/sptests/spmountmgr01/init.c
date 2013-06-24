@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <rtems/libio_.h>
 #include <rtems/libcsupport.h>
+#include <rtems/malloc.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
@@ -37,13 +38,12 @@ rtems_task Init(
 )
 {
   int status = 0;
-  void *alloc_ptr = (void *)0;
+  void *greedy;
 
   puts( "\n\n*** TEST MOUNT MANAGER ROUTINE - 01 ***" );
 
   puts( "Init - allocating most of heap -- OK" );
-  alloc_ptr = malloc( malloc_free_space() - 4 );
-  rtems_test_assert( alloc_ptr != NULL );
+  greedy = rtems_heap_greedy_allocate( NULL, 0 );
 
   puts( "Init - attempt to register filesystem fs - expect ENOMEM" );
   status = rtems_filesystem_register( "fs", fs_mount );
@@ -51,7 +51,7 @@ rtems_task Init(
   rtems_test_assert( errno == ENOMEM );
 
   puts( "Init - freeing allocated memory -- OK" );
-  free( alloc_ptr );
+  rtems_heap_greedy_free( greedy );
 
   puts( "Init - register filesystem fs -- OK" );
   status = rtems_filesystem_register( "fs", fs_mount );
