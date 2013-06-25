@@ -17,8 +17,8 @@
 rtems_task Init(rtems_task_argument argument);
 rtems_task Blocking_task(rtems_task_argument ignored);
 
-#define ALLOC_SIZE 400
 uint8_t Region_Memory[512] CPU_STRUCTURE_ALIGNMENT;
+#define ALLOC_SIZE ( sizeof( Region_Memory ) / 2 )
 rtems_id Region;
 
 rtems_task Blocking_task(
