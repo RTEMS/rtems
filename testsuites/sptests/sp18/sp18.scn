@@ -1,5 +1,4 @@
 *** TEST 18 ***
-Init - rtems_workspace_get_information - OK
 Init - rtems_task_create - Unsatisfied on Extensions
 Init - rtems_task_delete - OK
 Init - verify workspace has same memory
