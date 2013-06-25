@@ -22,26 +22,28 @@ rtems_id      Region;
 uint32_t      Region_Memory[256] CPU_STRUCTURE_ALIGNMENT;
 volatile bool case_hit;
 
-#define    FIRST_ALLOC 980
-#define    BLOCK_ALLOC 900
-#define    RESIZE      16
+#define    SECOND_ALLOC (sizeof(Region_Memory) / 2)
+#define    RESIZE 1
 
 rtems_task Blocker(
   rtems_task_argument ignored
 )
 {
   rtems_status_code  sc;
-  void              *segment_address_1;
+  void              *segment_address_2;
 
   puts( "Blocker - rtems_region_get_segment - OK");
   sc = rtems_region_get_segment(
     Region,
-    BLOCK_ALLOC,
+    SECOND_ALLOC,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT,
-    &segment_address_1
+    &segment_address_2
   );
   directive_failed( sc, "rtems_region_get_segment" );
+
+  sc = rtems_region_return_segment( Region, segment_address_2 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Blocker - Got memory after resize" );
   case_hit = true;
@@ -57,7 +59,7 @@ rtems_task Init(
   rtems_status_code  sc;
   void              *segment_address_1;
   uintptr_t          old_size;
-  size_t             size;
+  size_t             first_alloc_size;
 
   puts( "\n\n*** TEST 62 ***" );
 
@@ -88,14 +90,18 @@ rtems_task Init(
   directive_failed( sc, "rtems_region_create" );
 
   puts( "Init - rtems_region_get_segment - OK");
-  sc = rtems_region_get_segment(
-    Region,
-    FIRST_ALLOC,
-    RTEMS_DEFAULT_OPTIONS,
-    RTEMS_NO_TIMEOUT,
-    &segment_address_1
-  );
-  directive_failed( sc, "rtems_region_get_segment" );
+  first_alloc_size = sizeof( Region_Memory );
+  do {
+    --first_alloc_size;
+    sc = rtems_region_get_segment(
+      Region,
+      first_alloc_size,
+      RTEMS_NO_WAIT,
+      RTEMS_NO_TIMEOUT,
+      &segment_address_1
+    );
+  } while ( sc == RTEMS_UNSATISFIED || sc == RTEMS_INVALID_SIZE );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - sleep 1 second for Blocker - OK");
   sleep(1);
@@ -121,23 +127,14 @@ rtems_task Init(
    *  Now resize and take all of memory so there is no need to
    *  process any blocked tasks waiting for memory.
    */
-
-  size = sizeof(Region_Memory);
-  while (1) {
-    sc = rtems_region_resize_segment(
-      Region, segment_address_1, size, &old_size);
-    if ( sc == RTEMS_UNSATISFIED ) {
-      size --;
-      if ( size )
-        continue;
-    }
-    directive_failed( sc, "rtems_region_resize_segment" );
-    if ( sc == RTEMS_SUCCESSFUL )
-      break;
-
-  }
-  if ( sc == RTEMS_SUCCESSFUL && size != 0 )
-    puts( "Init - resized to all of available memory" );
+  puts( "Init - resized to all of available memory" );
+  sc = rtems_region_resize_segment(
+    Region,
+    segment_address_1,
+    first_alloc_size,
+    &old_size
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "*** END OF TEST 62 ***" );
   rtems_test_exit(0);
