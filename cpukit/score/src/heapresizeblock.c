@@ -104,6 +104,10 @@ Heap_Resize_status _Heap_Resize_block(
 
   if ( _Heap_Is_block_in_heap( heap, block ) ) {
     _Heap_Protection_block_check( heap, block );
+
+    /* TODO: Free only the next block if necessary */
+    _Heap_Protection_free_all_delayed_blocks( heap );
+
     return _Heap_Resize_block_checked(
       heap,
       block,
