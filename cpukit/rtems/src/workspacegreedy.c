@@ -40,6 +40,22 @@ void *rtems_workspace_greedy_allocate(
   return opaque;
 }
 
+void *rtems_workspace_greedy_allocate_all_except_largest(
+  uintptr_t *allocatable_size
+)
+{
+  void *opaque;
+
+  _Thread_Disable_dispatch();
+  opaque = _Heap_Greedy_allocate_all_except_largest(
+    &_Workspace_Area,
+    allocatable_size
+  );
+  _Thread_Enable_dispatch();
+
+  return opaque;
+}
+
 void rtems_workspace_greedy_free( void *opaque )
 {
   _Thread_Disable_dispatch();

@@ -224,7 +224,7 @@ rtems_status_code rtems_heap_extend(
 /**
  * @brief Greedy allocate that empties the heap.
  *
- * Afterward the heap has at most @a block_count allocatable blocks of sizes
+ * Afterwards the heap has at most @a block_count allocatable blocks of sizes
  * specified by @a block_sizes.  The @a block_sizes must point to an array with
  * @a block_count members.  All other blocks are used.
  *
@@ -236,10 +236,24 @@ void *rtems_heap_greedy_allocate(
 );
 
 /**
+ * @brief Greedy allocate all blocks except the largest free block.
+ *
+ * Afterwards the heap has at most one allocatable block.  This block is the
+ * largest free block if it exists.  The allocatable size of this block is
+ * stored in @a allocatable_size.  All other blocks are used.
+ *
+ * @see rtems_heap_greedy_free().
+ */
+void *rtems_heap_greedy_allocate_all_except_largest(
+  uintptr_t *allocatable_size
+);
+
+/**
  * @brief Frees space of a greedy allocation.
  *
  * The @a opaque argument must be the return value of
- * rtems_heap_greedy_allocate().
+ * rtems_heap_greedy_allocate() or
+ * rtems_heap_greedy_allocate_all_except_largest().
  */
 void rtems_heap_greedy_free( void *opaque );
 

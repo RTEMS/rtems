@@ -75,6 +75,19 @@ Heap_Block *_Heap_Greedy_allocate(
   return blocks;
 }
 
+Heap_Block *_Heap_Greedy_allocate_all_except_largest(
+  Heap_Control *heap,
+  uintptr_t *allocatable_size
+)
+{
+  Heap_Information info;
+
+  _Heap_Get_free_information( heap, &info );
+  *allocatable_size = info.largest - HEAP_BLOCK_HEADER_SIZE + HEAP_ALLOC_BONUS;
+
+  return _Heap_Greedy_allocate( heap, allocatable_size, 1 );
+}
+
 void _Heap_Greedy_free(
   Heap_Control *heap,
   Heap_Block *blocks
