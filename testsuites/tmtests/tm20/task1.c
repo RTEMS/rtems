@@ -240,7 +240,7 @@ rtems_task Task_1(
   benchmark_timer_initialize();
     (void) rtems_region_get_segment(
       Region_id,
-      1998,
+      1700,
       RTEMS_NO_WAIT,
       RTEMS_NO_TIMEOUT,
       &Buffer_address_4
@@ -282,7 +282,7 @@ rtems_task Task_1(
   benchmark_timer_initialize();
     (void) rtems_region_get_segment(
       Region_id,
-      1998,
+      1700,
       RTEMS_DEFAULT_OPTIONS,
       RTEMS_NO_TIMEOUT,
       &Buffer_address_2
@@ -325,7 +325,7 @@ rtems_task Task_1(
 
   status = rtems_region_get_segment(
     Region_id,
-    1998,
+    1700,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT,
     &Buffer_address_2
