@@ -1,58 +1,60 @@
 *** TEST 16 ***
 TA1 - rtems_region_ident - rnid => 32010001
-TA1 - rtems_region_get_segment - wait on 100 byte segment from region 2
-TA1 - got segment from region 2 - 0x00000060
+TA1 - rtems_region_get_segment - wait on 1000 byte segment from region 2
+TA1 - got segment from region 2 - 0x00000040
 TA1 - rtems_region_get_segment - wait on 3K segment from region 3
-TA1 - got segment from region 3 - 0x00000030
+TA1 - got segment from region 3 - 0x00000010
 TA1 - rtems_region_get_segment - get 3080 byte segment from region 1 - NO_WAIT
-TA1 - got segment from region 1 - 0x00000010
+TA1 - got segment from region 1 - 0x00000070
 TA1 - rtems_task_wake_after - yield processor
 TA2 - rtems_region_get_segment - wait on 2K segment from region 1
-TA3 - rtems_region_get_segment - wait on 3950 byte segment from region 2
+TA3 - rtems_region_get_segment - wait on 3750 byte segment from region 2
 <pause>
-TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000010
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000070
 TA1 - rtems_region_get_segment - wait 10 seconds for 3K segment from region 1
-TA2 - got segment from region 1 - 0x00000010
-TA2 - rtems_region_return_segment - return segment to region 1 - 0x00000010
+TA2 - got segment from region 1 - 0x00000070
+TA2 - rtems_region_return_segment - return segment to region 1 - 0x00000070
 TA2 - rtems_task_set_priority - make self highest priority task
-TA2 - rtems_region_get_segment - wait on 3950 byte segment
-TA1 - got segment from region 1 - 0x00000010
-TA1 - rtems_region_return_segment - return segment to region 2 - 0x00000060
-TA2 - got segment from region 2 - 0x00000060
-TA2 - rtems_region_return_segment - return segment to region 2 - 0x00000060
+TA2 - rtems_region_get_segment - wait on 3750 byte segment
+TA1 - got segment from region 1 - 0x00000070
+TA1 - rtems_region_return_segment - return segment to region 2 - 0x00000040
+TA2 - got segment from region 2 - 0x00000040
+TA2 - rtems_region_return_segment - return segment to region 2 - 0x00000040
 TA2 - rtems_task_delete - delete self
 TA1 - rtems_task_wake_after - yield processor
-TA3 - got segment from region 2 - 0x00000060
+TA3 - got segment from region 2 - 0x00000040
 TA3 - rtems_region_get_segment - wait on 2K segment from region 3
 TA1 - rtems_task_delete - delete TA3
 <pause>
 TA1 - rtems_task_wake_after - yield processor
 TA4 - rtems_region_get_segment - wait on 1.5K segment from region 1
 TA5 - rtems_region_get_segment - wait on 1.5K segment from region 1
-TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000010
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000070
 TA1 - rtems_task_wake_after - yield processor
-TA4 - got and returned 0x00000010
-TA5 - got and returned 0x00000690
+TA4 - got and returned 0x00000070
+TA5 - got and returned 0x000006f0
 TA1 - rtems_region_get_segment - wait 10 seconds for 3K segment from region 1
-TA1 - got segment from region 1 - 0x00000010
+TA1 - got segment from region 1 - 0x00000070
 TA1 - rtems_task_wake_after - yield processor
-TA5 - rtems_region_get_segment - wait on 3K segment from region 1
 TA4 - rtems_region_get_segment - wait on 3K segment from region 1
+TA5 - rtems_region_get_segment - wait on 3K segment from region 1
 TA1 - rtems_task_delete - delete TA4
-TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000010
+TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000070
 TA1 - rtems_task_wake_after - yield processor
-TA5 - got segment from region 1 - 0x00000010
-TA5 - rtems_region_return_segment - return segment to region 1 - 0x00000010
+TA5 - got segment from region 1 - 0x00000070
+TA5 - rtems_region_return_segment - return segment to region 1 - 0x00000070
 TA5 - rtems_task_delete - delete self
 TA1 - rtems_region_delete - delete region 1
 TA1 - rtems_region_get_segment - get 3K segment from region 4
-TA1 - got segment from region 4 - 0x00000060
+TA1 - got segment from region 4 - 0x00000040
 TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4
-TA1 - rtems_task_get_segment - RTEMS_UNSATISFIED
-TA1 - rtems_region_extend - extend region 4 by 4K
+TA1 - rtems_region_get_segment - RTEMS_UNSATISFIED
+TA1 - rtems_region_extend - extend region 4 by 1
+TA1 - rtems_region_extend - RTEMS_INVALID_ADDRESS
+TA1 - rtems_region_extend - extend region 4 by 4K - 1
 TA1 - rtems_region_get_segment - attempt to get 3K segment from region 4
-TA1 - got 3K segment from region 4 - 0x00000ce0
-TA1 - rtems_region_return_segment - return segment to region 4 - 0x00000060
-TA1 - rtems_region_return_segment - return segment to region 4 - 0x00000ce0
+TA1 - got 3K segment from region 4 - 0x00001040
+TA1 - rtems_region_return_segment - return segment to region 4 - 0x00000040
+TA1 - rtems_region_return_segment - return segment to region 4 - 0x00001040
 TA1 - rtems_region_delete - delete region 4
 *** END OF TEST 16 ***
