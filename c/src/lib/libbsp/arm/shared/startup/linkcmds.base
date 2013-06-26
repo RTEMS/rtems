@@ -178,12 +178,6 @@ SECTIONS {
 		/* .jcr */
 		KEEP (*(.jcr))
 
-		/* .dynamic */
-		*(.dynamic)
-
-		/* .got */
-		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
-
 		/* .interp */
 		*(.interp)
 
@@ -259,6 +253,12 @@ SECTIONS {
 
 		/* .iplt */
 		*(.iplt)
+
+		/* .dynamic */
+		*(.dynamic)
+
+		/* .got */
+		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
 
 		/* Special FreeBSD linker set sections */
 		__start_set_sysctl_set = .;
