@@ -1082,8 +1082,8 @@ _CPU_Initialize_altivec(void);
 
 void
 _CPU_Context_switch_altivec(
-  Context_Control *from,
-  Context_Control *to
+  ppc_context *from,
+  ppc_context *to
 );
 
 /*
@@ -1094,7 +1094,7 @@ _CPU_Context_switch_altivec(
 
 void
 _CPU_Context_restore_altivec(
-  Context_Control *ctxt
+  ppc_context *ctxt
 );
 
 /*
@@ -1105,7 +1105,7 @@ _CPU_Context_restore_altivec(
 
 void
 _CPU_Context_initialize_altivec(
-  Context_Control *ctxt
+  ppc_context *ctxt
 );
 
 void _CPU_Fatal_error(
