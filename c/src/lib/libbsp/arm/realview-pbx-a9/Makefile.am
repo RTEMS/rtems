@@ -43,6 +43,8 @@ include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
 include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
 include_bsp_HEADERS += ../shared/include/arm-pl011.h
 include_bsp_HEADERS += ../shared/include/arm-pl011-regs.h
+include_bsp_HEADERS += ../shared/include/arm-pl050.h
+include_bsp_HEADERS += ../shared/include/arm-pl050-regs.h
 include_bsp_HEADERS += ../shared/include/arm-pl111-fb.h
 include_bsp_HEADERS += ../shared/include/arm-pl111-regs.h
 include_bsp_HEADERS += include/irq.h
@@ -112,6 +114,7 @@ libbsp_a_SOURCES += ../../shared/console_read.c
 libbsp_a_SOURCES += ../../shared/console_select.c
 libbsp_a_SOURCES += ../../shared/console_write.c
 libbsp_a_SOURCES += ../shared/arm-pl011.c
+libbsp_a_SOURCES += ../shared/arm-pl050.c
 libbsp_a_SOURCES += console/console-config.c
 
 # Clock

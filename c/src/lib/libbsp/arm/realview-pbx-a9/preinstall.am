@@ -126,6 +126,14 @@ $(PROJECT_INCLUDE)/bsp/arm-pl011-regs.h: ../shared/include/arm-pl011-regs.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl011-regs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl011-regs.h
 
+$(PROJECT_INCLUDE)/bsp/arm-pl050.h: ../shared/include/arm-pl050.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl050.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl050.h
+
+$(PROJECT_INCLUDE)/bsp/arm-pl050-regs.h: ../shared/include/arm-pl050-regs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl050-regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl050-regs.h
+
 $(PROJECT_INCLUDE)/bsp/arm-pl111-fb.h: ../shared/include/arm-pl111-fb.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/arm-pl111-fb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/arm-pl111-fb.h

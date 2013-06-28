@@ -12,11 +12,16 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/serial_mouse.h>
+
 #include <libchip/serial.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/arm-pl011.h>
+#include <bsp/arm-pl050.h>
+
+static const char psaux[] = "/dev/psaux";
 
 console_tbl Console_Configuration_Ports[] = {
   {
@@ -37,6 +42,24 @@ console_tbl Console_Configuration_Ports[] = {
     .setData = NULL,
     .ulClock = 0,
     .ulIntVector = RVPBXA9_IRQ_UART_0
+  }, {
+    .sDeviceName = &psaux[0],
+    .deviceType = SERIAL_CUSTOM,
+    .pDeviceFns = &arm_pl050_fns,
+    .deviceProbe = NULL,
+    .pDeviceFlow = NULL,
+    .ulMargin = 10,
+    .ulHysteresis = 0,
+    .pDeviceParams = (void *) 115200,
+    .ulCtrlPort1 = 0x10007000,
+    .ulCtrlPort2 = 0,
+    .ulDataPort = 0,
+    .getRegister = NULL,
+    .setRegister = NULL,
+    .getData = NULL,
+    .setData = NULL,
+    .ulClock = 0,
+    .ulIntVector = RVPBXA9_IRQ_KMI1
   }
 };
 
@@ -73,3 +96,14 @@ static void output_char_init(char c)
 BSP_output_char_function_type BSP_output_char = output_char_init;
 
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
+
+bool bsp_get_serial_mouse_device(
+  const char **name,
+  const char **type
+)
+{
+  *name = &psaux[0];
+  *type = "ps2";
+
+  return true;
+}
