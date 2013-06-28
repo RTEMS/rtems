@@ -42,6 +42,26 @@ arm_cp15_set_auxiliary_control(uint32_t val);
 BSP_START_TEXT_SECTION static inline void
 arm_cp15_set_vector_base_address(void *base);
 
+BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_set_vector_base(void)
+{
+  /*
+   * Do not use bsp_vector_table_begin == 0, since this will get optimized away.
+  */
+  if (bsp_vector_table_end != bsp_vector_table_size) {
+    uint32_t ctrl;
+
+    /*
+     * For now we assume that every Cortex-A9 MPCore has the Security Extensions.
+     * Later it might be necessary to evaluate the ID_PFR1 register.
+     */
+    arm_cp15_set_vector_base_address(bsp_vector_table_begin);
+
+    ctrl = arm_cp15_get_control();
+    ctrl &= ~ARM_CP15_CTRL_V;
+    arm_cp15_set_control(ctrl);
+  }
+}
+
 BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
 {
 #ifdef RTEMS_SMP
@@ -59,6 +79,8 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
 
   cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
   if (cpu_id != 0) {
+    arm_a9mpcore_start_set_vector_base();
+
     if (cpu_id < rtems_configuration_get_maximum_processors()) {
       uint32_t ctrl;
 
@@ -92,22 +114,7 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
 
 BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_1(void)
 {
-  /*
-   * Do not use bsp_vector_table_begin == 0, since this will get optimized away.
-  */
-  if (bsp_vector_table_end != bsp_vector_table_size) {
-    uint32_t ctrl;
-
-    /*
-     * For now we assume that every Cortex-A9 MPCore has the Security Extensions.
-     * Later it might be necessary to evaluate the ID_PFR1 register.
-     */
-    arm_cp15_set_vector_base_address(bsp_vector_table_begin);
-
-    ctrl = arm_cp15_get_control();
-    ctrl &= ~ARM_CP15_CTRL_V;
-    arm_cp15_set_control(ctrl);
-  }
+  arm_a9mpcore_start_set_vector_base();
 }
 
 #ifdef __cplusplus
