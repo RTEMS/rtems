@@ -116,7 +116,7 @@ typedef enum {
  */
 typedef struct _console_tbl {
   /**  This is the name of the device. */
-  char          *sDeviceName;
+  const char    *sDeviceName;
   /** This indicates the chip type.  It is especially important when
    *   multiple devices share the same interrupt vector and must be
    *   distinguished.
