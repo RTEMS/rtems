@@ -9,7 +9,6 @@
 
 MEMORY {
 	RAM       : ORIGIN = 0, LENGTH = 16M
-	PSIM_REGS : ORIGIN = 0x0c000000, LENGTH = 16M
 	EMPTY     : ORIGIN = 0x0, LENGTH = 0
 }
 
@@ -34,16 +33,6 @@ REGION_ALIAS ("REGION_NVRAM", EMPTY);
 
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
 
-SECTIONS {
-	/*
-	 * BSP: PSIM Register Block
-	 */
-	.psim_regs (NOLOAD) : {
-		psim_reg*(.text)
-		psim_reg*(.data)
-		psim_reg*(.bss)
-		psim_reg*(COMMON)
-	} > PSIM_REGS
-}
+PSIM = 0x0c000000;
 
 INCLUDE linkcmds.base
