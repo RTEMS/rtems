@@ -22,6 +22,7 @@
 #ifdef ASM
   #include <rtems/asm.h>
 #else
+  #include <rtems/score/assert.h>
   #include <rtems/score/isrlevel.h>
   #include <rtems/score/timestamp.h>
   #include <rtems/score/smplock.h>
@@ -236,6 +237,8 @@ extern Per_CPU_Control _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
 {
+  _Assert_Thread_dispatching_repressed();
+
   return &_Per_CPU_Information[ _SMP_Get_current_processor() ];
 }
 #else
