@@ -24,6 +24,8 @@
 #ifndef __SERIAL_MOUSE_h__
 #define __SERIAL_MOUSE_h__
 
+#include <rtems/io.h>
+
 /* functions */
 
 /**
