@@ -196,6 +196,9 @@ struct grpci2_cap_first {
 #define CAP9_BARSIZE_OFS 0x24
 #define CAP9_AHBPREF_OFS 0x3C
 
+/* Used internally for accessing the PCI bridge's configuration space itself */
+#define HOST_TGT PCI_DEV(0xff, 0, 0)
+
 struct grpci2_priv *grpci2priv = NULL;
 
 /* PCI Interrupt assignment. Connects an PCI interrupt pin (INTA#..INTD#)
@@ -310,7 +313,9 @@ int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 	/* GRPCI2 can access "non-standard" devices on bus0 (on AD11.AD16), 
 	 * we skip them.
 	 */
-	if (bus == 0 && PCI_DEV_SLOT(dev) != 0)
+	if (dev == HOST_TGT)
+		bus = devfn = 0;
+	else if (bus == 0)
 		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
 	else
 		devfn = PCI_DEV_DEVFUNC(dev);
@@ -398,7 +403,9 @@ int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	/* GRPCI2 can access "non-standard" devices on bus0 (on AD11.AD16), 
 	 * we skip them.
 	 */
-	if (bus == 0 && PCI_DEV_SLOT(dev) != 0)
+	if (dev == HOST_TGT)
+		bus = devfn = 0;
+	if (bus == 0)
 		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
 	else
 		devfn = PCI_DEV_DEVFUNC(dev);
@@ -627,7 +634,7 @@ int grpci2_hw_init(struct grpci2_priv *priv)
 	int i;
 	uint8_t capptr;
 	uint32_t data, io_map, ahbadr, pciadr, size;
-	pci_dev_t host = PCI_DEV(0, 0, 0);
+	pci_dev_t host = HOST_TGT;
 	struct grpci2_pcibar_cfg *barcfg = priv->barcfg;
 
 	/* Reset any earlier setup */

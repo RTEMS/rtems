@@ -73,6 +73,9 @@ struct pcif_regs {
 	volatile unsigned int maps[(0x80-0x40)/4];   /* 0x40-0x80*/
 };
 
+/* Used internally for accessing the PCI bridge's configuration space itself */
+#define HOST_TGT PCI_DEV(0xff, 0, 0)
+
 struct pcif_priv *pcifpriv = NULL;
 static int pcif_minor = 0;
 
@@ -154,17 +157,27 @@ int pcif_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 {
 	struct pcif_priv *priv = pcifpriv;
 	volatile uint32_t *pci_conf;
-	unsigned int devfn = PCI_DEV_DEVFUNC(dev);
+	uint32_t devfn;
 	int retval;
 	int bus = PCI_DEV_BUS(dev);
 
 	if (ofs & 3)
 		return PCISTS_EINVAL;
 
-	if (PCI_DEV_SLOT(dev) > 21) {
+	if (PCI_DEV_SLOT(dev) > 15) {
 		*val = 0xffffffff;
 		return PCISTS_OK;
 	}
+
+	/* PCIF can access "non-standard" devices on bus0 (on AD11.AD16), 
+	 * but we skip them.
+	 */
+	if (dev == HOST_TGT)
+		bus = devfn = 0;
+	if (bus == 0)
+		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
+	else
+		devfn = PCI_DEV_DEVFUNC(dev);
 
 	/* Select bus */
 	priv->regs->bus = bus << 16;
@@ -214,14 +227,24 @@ int pcif_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 {
 	struct pcif_priv *priv = pcifpriv;
 	volatile uint32_t *pci_conf;
-	uint32_t devfn = PCI_DEV_DEVFUNC(dev);
+	uint32_t devfn;
 	int bus = PCI_DEV_BUS(dev);
 
 	if (ofs & ~0xfc)
 		return PCISTS_EINVAL;
 
-	if (PCI_DEV_SLOT(dev) > 21)
+	if (PCI_DEV_SLOT(dev) > 15)
 		return PCISTS_MSTABRT;
+
+	/* PCIF can access "non-standard" devices on bus0 (on AD11.AD16), 
+	 * but we skip them.
+	 */
+	if (dev == HOST_TGT)
+		bus = devfn = 0;
+	if (bus == 0)
+		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
+	else
+		devfn = PCI_DEV_DEVFUNC(dev);
 
 	/* Select bus */
 	priv->regs->bus = bus << 16;
@@ -332,7 +355,7 @@ int pcif_hw_init(struct pcif_priv *priv)
 	struct pcif_regs *regs;
 	uint32_t data, size;
 	int mst;
-	pci_dev_t host = PCI_DEV(0, 0, 0);
+	pci_dev_t host = HOST_TGT;
 
 	regs = priv->regs;
 

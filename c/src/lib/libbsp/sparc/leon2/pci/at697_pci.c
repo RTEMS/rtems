@@ -161,7 +161,6 @@ struct at697pci_priv {
 	struct at697pci_regs	*regs;
 	int			minor;
 
-	uint32_t		devVend; /* PCI Device and Vendor ID of Host */
 	uint32_t		bar1_pci_adr;
 	uint32_t		bar2_pci_adr;
 
@@ -228,7 +227,7 @@ int at697pci_cfg_r32(pci_dev_t dev, int offset, uint32_t *val)
 	int func = PCI_DEV_FUNC(dev);
 	int retval;
 
-	if (slot > 21 || (offset & ~0xfc)) {
+	if (slot > 15 || (offset & ~0xfc)) {
 		*val = 0xffffffff;
 		return PCISTS_EINVAL;
 	}
@@ -239,7 +238,7 @@ int at697pci_cfg_r32(pci_dev_t dev, int offset, uint32_t *val)
 
 	if ( bus == 0 ) {
 		/* PCI Access - TYPE 0 */
-		address = (1<<(11+slot)) | (func << 8) | offset;
+		address = (1<<(16+slot)) | (func << 8) | offset;
 	} else {
 		/* PCI access - TYPE 1 */
 		address = ((bus & 0xff) << 16) | ((slot & 0x1f) << 11) |
@@ -461,9 +460,6 @@ int at697pci_hw_init(struct at697pci_priv *priv)
 
 	/* Set Inititator configuration so that AHB slave accesses generate memory read/write commands */
 	regs->pciic = 0x41;
-
-	/* Get the AT697PCI Host PCI ID */
-	at697pci_cfg_r32(host, PCI_VENDOR_ID, &priv->devVend);
 
 	return 0;
 }

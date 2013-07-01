@@ -85,6 +85,8 @@ struct grpci_regs {
 	volatile unsigned int irq;
 };
 
+#define HOST_TGT PCI_DEV(0xff, 0, 0)
+
 struct grpci_priv *grpcipriv = NULL;
 static int grpci_minor = 0;
 static unsigned int *pcidma = (unsigned int *)DMAPCI_ADDR;
@@ -168,17 +170,27 @@ int grpci_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 {
 	struct grpci_priv *priv = grpcipriv;
 	volatile uint32_t *pci_conf;
-	unsigned int devfn = PCI_DEV_DEVFUNC(dev);
+	uint32_t devfn;
 	int retval;
 	int bus = PCI_DEV_BUS(dev);
 
 	if (ofs & 3)
 		return PCISTS_EINVAL;
 
-	if (PCI_DEV_SLOT(dev) > 21) {
+	if (PCI_DEV_SLOT(dev) > 15) {
 		*val = 0xffffffff;
 		return PCISTS_OK;
 	}
+
+	/* GRPCI can access "non-standard" devices on bus0 (on AD11.AD16), 
+	 * but we skip them.
+	 */
+	if (dev == HOST_TGT)
+		bus = devfn = 0;
+	if (bus == 0)
+		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
+	else
+		devfn = PCI_DEV_DEVFUNC(dev);
 
 	/* Select bus */
 	priv->regs->cfg_stat = (priv->regs->cfg_stat & ~(0xf<<23)) | (bus<<23);
@@ -240,8 +252,18 @@ int grpci_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	if (ofs & 0x3)
 		return PCISTS_EINVAL;
 
-	if (PCI_DEV_SLOT(dev) > 21)
+	if (PCI_DEV_SLOT(dev) > 15)
 		return PCISTS_MSTABRT;
+
+	/* GRPCI can access "non-standard" devices on bus0 (on AD11.AD16), 
+	 * but we skip them.
+	 */
+	if (dev == HOST_TGT)
+		bus = devfn = 0;
+	if (bus == 0)
+		devfn = PCI_DEV_DEVFUNC(dev) + PCI_DEV(0, 6, 0);
+	else
+		devfn = PCI_DEV_DEVFUNC(dev);
 
 	/* Select bus */
 	priv->regs->cfg_stat = (priv->regs->cfg_stat & ~(0xf<<23)) | (bus<<23);
@@ -409,7 +431,7 @@ int grpci_hw_init(struct grpci_priv *priv)
 {
 	volatile unsigned int *mbar0, *page0;
 	uint32_t data, addr, mbar0size;
-	pci_dev_t host = PCI_DEV(0, 0, 0);
+	pci_dev_t host = HOST_TGT;
 
 	mbar0 = (volatile unsigned int *)priv->pci_area;
 
