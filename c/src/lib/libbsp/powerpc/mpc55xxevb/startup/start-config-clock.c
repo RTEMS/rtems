@@ -48,7 +48,8 @@ const mpc55xx_clock_config mpc55xx_start_config_clock [1] = { {
     #define EMFD_VAL    (MPC55XX_FMPLL_MFD-16)
     #define VCO_CLK_REF (MPC55XX_REFERENCE_CLOCK/(EPREDIV_VAL+1))
     #define VCO_CLK_OUT (VCO_CLK_REF*(EMFD_VAL+16))
-    #define ERFD_VAL    ((VCO_CLK_OUT/MPC55XX_SYSTEM_CLOCK)-1)
+    #define ERFD_VAL \
+      (((VCO_CLK_OUT + MPC55XX_SYSTEM_CLOCK - 1) / MPC55XX_SYSTEM_CLOCK)-1)
 
     .esyncr2_tmp = {
       .B = {
