@@ -63,8 +63,8 @@ uint32_t mpc55xx_get_system_clock(void)
       uint32_t emfd = esyncr1.B.EMFD;
       uint32_t erfd = esyncr2.B.ERFD;
 
-      system_clock = (reference_clock * (emfd + 16))
-        / ((erfd + 1) * (eprediv + 1));
+      system_clock = ((reference_clock / (eprediv + 1)) * (emfd + 16))
+        / (erfd + 1);
     } else {
       system_clock = reference_clock;
     }
