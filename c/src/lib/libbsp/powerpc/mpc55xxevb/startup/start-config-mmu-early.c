@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -44,6 +44,15 @@ const struct MMU_tag mpc55xx_start_config_mmu_early [] = {
   /* Internal SRAM 64k + 64k */
   MPC55XX_MMU_TAG_INITIALIZER(3, 0x40000000, MPC55XX_MMU_64K, 1, 1, 1, 0),
   MPC55XX_MMU_TAG_INITIALIZER(4, 0x50000000, MPC55XX_MMU_64K, 0, 1, 1, 0)
+#elif MPC55XX_CHIP_FAMILY == 566
+  /* Internal flash 2M */
+  MPC55XX_MMU_TAG_INITIALIZER(1, 0x00000000, MPC55XX_MMU_1M, 1, 0, 1, 0),
+  MPC55XX_MMU_TAG_INITIALIZER(4, 0x00100000, MPC55XX_MMU_1M, 1, 0, 1, 0),
+  /* IO */
+  MPC55XX_MMU_TAG_INITIALIZER(2, 0xc3f00000, MPC55XX_MMU_1M, 0, 1, 1, 1),
+  /* Internal SRAM 512k */
+  MPC55XX_MMU_TAG_INITIALIZER(3, 0x40000000, MPC55XX_MMU_256K, 1, 1, 1, 0),
+  MPC55XX_MMU_TAG_INITIALIZER(5, 0x40040000, MPC55XX_MMU_256K, 1, 1, 1, 0)
 #elif MPC55XX_CHIP_FAMILY == 567
   /* Internal SRAM 256k */
   MPC55XX_MMU_TAG_INITIALIZER(3, 0x40000000, MPC55XX_MMU_256K, 1, 1, 1, 0)

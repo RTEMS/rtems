@@ -89,7 +89,7 @@ extern "C" {
     ((mod) == 0 ? 82U : MPC55XX_IRQ_INVALID)
 
   /* eSCI */
-  #define MPC55XX_IRQ_ESCI_BASE(mod) \
+  #define MPC55XX_IRQ_ESCI(mod) \
     ((mod) == 0 ? 113U : \
       ((mod) == 1 ? 114U : \
         ((mod) == 2 ? 115U : \
@@ -210,6 +210,29 @@ extern "C" {
 
   /* SWG */
   #define MPC55XX_IRQ_SWG 255U
+#elif MPC55XX_CHIP_FAMILY == 566
+  #define MPC55XX_IRQ_MAX 315U
+
+  /* eDMA */
+  #define MPC55XX_IRQ_EDMA_ERROR(group) \
+    ((group) == 0 ? 10U : MPC55XX_IRQ_INVALID)
+  #define MPC55XX_IRQ_EDMA(ch) \
+    ((unsigned) (ch) < 32U ? 11U + (ch) : MPC55XX_IRQ_INVALID)
+
+  /* PIT */
+  #define MPC55XX_IRQ_PIT_CHANNEL(ch) \
+    ((unsigned) (ch) < 9U ? 148U + (ch) : MPC55XX_IRQ_INVALID)
+
+  /* eMIOS */
+  #define MPC55XX_IRQ_EMIOS(ch) \
+    ((unsigned) (ch) < 24U ? 58U + (ch) : \
+      ((unsigned) (ch) < 32U ? 262U + (ch) : MPC55XX_IRQ_INVALID))
+
+  /* eSCI */
+  #define MPC55XX_IRQ_ESCI(mod) \
+    ((unsigned) (mod) < 4U ? 113U + (mod) : \
+      ((unsigned) (mod) < 8U ? 270U + (mod) : \
+        ((unsigned) (mod) < 12U ? 306U + (mod) : MPC55XX_IRQ_INVALID)))
 #else
   #if MPC55XX_CHIP_FAMILY == 555
     #define MPC55XX_IRQ_MAX 307U
@@ -269,7 +292,7 @@ extern "C" {
       ((mod) == 1 ? 394U : MPC55XX_IRQ_INVALID))
 
   /* eSCI */
-  #define MPC55XX_IRQ_ESCI_BASE(mod) \
+  #define MPC55XX_IRQ_ESCI(mod) \
     ((mod) == 0 ? 146U : \
       ((mod) == 1 ? 149U : \
         ((mod) == 2 ? 473U : MPC55XX_IRQ_INVALID)))
@@ -331,9 +354,6 @@ extern "C" {
   (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 3U)
 #define MPC55XX_IRQ_EQADC_RFDF(mod, fifo) \
   (MPC55XX_IRQ_EQADC_BASE(mod) + 1U + (fifo) * 5U + 4U)
-
-/* eSCI */
-#define MPC55XX_IRQ_ESCI(mod) (MPC55XX_IRQ_ESCI_BASE(mod) + 0U)
 
 /* FlexCAN */
 #if MPC55XX_CHIP_FAMILY == 564

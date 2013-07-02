@@ -30,6 +30,7 @@ dist_project_lib_DATA += startup/linkcmds.mpc5643l_dpu
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
 dist_project_lib_DATA += startup/linkcmds.mpc5674fevb_spe
 dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
+dist_project_lib_DATA += startup/linkcmds.mpc5668g
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_boot
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_app

@@ -118,7 +118,10 @@ void bsp_start(void)
 	/* Initialize interrupts */
 	bsp_interrupt_initialize();
 
-	mpc55xx_edma_init();
+	#if MPC55XX_CHIP_FAMILY != 566
+		mpc55xx_edma_init();
+	#endif
+
 	#ifdef MPC55XX_EMIOS_PRESCALER
 		mpc55xx_emios_initialize(MPC55XX_EMIOS_PRESCALER);
 	#endif
