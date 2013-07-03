@@ -173,10 +173,10 @@ struct grspw_regs {
 #define GRSPW_DK_DESTKEY	(0xff<<GRSPW_DK_DESTKEY_BIT)
 
 /* GRSPW - Time Register - 0x14 */
-#define GRSPW_TIME_CTRL_BIT	0
-#define GRSPW_TIME_CNT_BIT	6
-#define GRSPW_TIME_CTRL		(0x3f<<GRSPW_TIME_CTRL_BIT)
-#define GRSPW_TIME_TCNT		(0x3<<GRSPW_TIME_CNT_BIT)
+#define GRSPW_TIME_CTRL_BIT	6
+#define GRSPW_TIME_CNT_BIT	0
+#define GRSPW_TIME_CTRL		(0x3<<GRSPW_TIME_CTRL_BIT)
+#define GRSPW_TIME_TCNT		(0x3f<<GRSPW_TIME_CNT_BIT)
 
 /* GRSPW - DMA Control Register - 0x20*N */
 #define GRSPW_DMACTRL_LE_BIT	16
