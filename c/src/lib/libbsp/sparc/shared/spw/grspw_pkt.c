@@ -87,6 +87,19 @@ struct grspw_regs {
 	 * up to 4 channels are supported
 	 */
 	struct grspw_dma_regs dma[4];
+
+	volatile unsigned int icctrl;
+	volatile unsigned int icrx;
+	volatile unsigned int icack;
+	volatile unsigned int ictimeout;
+	volatile unsigned int ictickomask;
+	volatile unsigned int icaamask;
+	volatile unsigned int icrlpresc;
+	volatile unsigned int icrlisr;
+	volatile unsigned int icrlintack;
+	volatile unsigned int resv2;
+	volatile unsigned int icisr;
+	volatile unsigned int resv3;
 };
 
 /* GRSPW - Control Register - 0x00 */
@@ -95,10 +108,13 @@ struct grspw_regs {
 #define GRSPW_CTRL_RC_BIT	29
 #define GRSPW_CTRL_NCH_BIT	27
 #define GRSPW_CTRL_PO_BIT	26
+#define GRSPW_CTRL_ID_BIT	24
+#define GRSPW_CTRL_LE_BIT	22
 #define GRSPW_CTRL_PS_BIT	21
 #define GRSPW_CTRL_NP_BIT	20
 #define GRSPW_CTRL_RD_BIT	17
 #define GRSPW_CTRL_RE_BIT	16
+#define GRSPW_CTRL_TF_BIT	12
 #define GRSPW_CTRL_TR_BIT	11
 #define GRSPW_CTRL_TT_BIT	10
 #define GRSPW_CTRL_LI_BIT	9
@@ -116,10 +132,13 @@ struct grspw_regs {
 #define GRSPW_CTRL_RC	(1<<GRSPW_CTRL_RC_BIT)
 #define GRSPW_CTRL_NCH	(0x3<<GRSPW_CTRL_NCH_BIT)
 #define GRSPW_CTRL_PO	(1<<GRSPW_CTRL_PO_BIT)
+#define GRSPW_CTRL_ID	(1<<GRSPW_CTRL_ID_BIT)
+#define GRSPW_CTRL_LE	(1<<GRSPW_CTRL_LE_BIT)
 #define GRSPW_CTRL_PS	(1<<GRSPW_CTRL_PS_BIT)
 #define GRSPW_CTRL_NP	(1<<GRSPW_CTRL_NP_BIT)
 #define GRSPW_CTRL_RD	(1<<GRSPW_CTRL_RD_BIT)
 #define GRSPW_CTRL_RE	(1<<GRSPW_CTRL_RE_BIT)
+#define GRSPW_CTRL_TF	(1<<GRSPW_CTRL_TF_BIT)
 #define GRSPW_CTRL_TR	(1<<GRSPW_CTRL_TR_BIT)
 #define GRSPW_CTRL_TT	(1<<GRSPW_CTRL_TT_BIT)
 #define GRSPW_CTRL_LI	(1<<GRSPW_CTRL_LI_BIT)
@@ -132,12 +151,18 @@ struct grspw_regs {
 #define GRSPW_CTRL_LS	(1<<GRSPW_CTRL_LS_BIT)
 #define GRSPW_CTRL_LD	(1<<GRSPW_CTRL_LD_BIT)
 
+#define GRSPW_CTRL_IRQSRC_MASK \
+	(GRSPW_CTRL_LI | GRSPW_CTRL_TQ)
+#define GRSPW_ICCTRL_IRQSRC_MASK \
+	(GRSPW_ICCTRL_TQ | GRSPW_ICCTRL_AQ | GRSPW_ICCTRL_IQ)
+
+
 /* GRSPW - Status Register - 0x04 */
 #define GRSPW_STS_LS_BIT	21
 #define GRSPW_STS_AP_BIT	9
 #define GRSPW_STS_EE_BIT	8
 #define GRSPW_STS_IA_BIT	7
-#define GRSPW_STS_WE_BIT	6
+#define GRSPW_STS_WE_BIT	6	/* GRSPW1 */
 #define GRSPW_STS_PE_BIT	4
 #define GRSPW_STS_DE_BIT	3
 #define GRSPW_STS_ER_BIT	2
@@ -148,7 +173,7 @@ struct grspw_regs {
 #define GRSPW_STS_AP	(1<<GRSPW_STS_AP_BIT)
 #define GRSPW_STS_EE	(1<<GRSPW_STS_EE_BIT)
 #define GRSPW_STS_IA	(1<<GRSPW_STS_IA_BIT)
-#define GRSPW_STS_WE	(1<<GRSPW_STS_WE_BIT)
+#define GRSPW_STS_WE	(1<<GRSPW_STS_WE_BIT)	/* GRSPW1 */
 #define GRSPW_STS_PE	(1<<GRSPW_STS_PE_BIT)
 #define GRSPW_STS_DE	(1<<GRSPW_STS_DE_BIT)
 #define GRSPW_STS_ER	(1<<GRSPW_STS_ER_BIT)
@@ -224,6 +249,38 @@ struct grspw_regs {
 #define GRSPW_DMAADR_MASK_BIT	8
 #define GRSPW_DMAADR_ADDR	(0xff<<GRSPW_DMAADR_ADDR_BIT)
 #define GRSPW_DMAADR_MASK	(0xff<<GRSPW_DMAADR_MASK_BIT)
+
+/* GRSPW - Interrupt code receive register - 0xa4 */
+#define GRSPW_ICCTRL_INUM_BIT	27
+#define GRSPW_ICCTRL_IA_BIT	24
+#define GRSPW_ICCTRL_LE_BIT	23
+#define GRSPW_ICCTRL_PR_BIT	22
+#define GRSPW_ICCTRL_DQ_BIT	21 /* never used */
+#define GRSPW_ICCTRL_TQ_BIT	20
+#define GRSPW_ICCTRL_AQ_BIT	19
+#define GRSPW_ICCTRL_IQ_BIT	18
+#define GRSPW_ICCTRL_IR_BIT	17
+#define GRSPW_ICCTRL_IT_BIT	16
+#define GRSPW_ICCTRL_NUMI_BIT	13
+#define GRSPW_ICCTRL_BIRQ_BIT	8
+#define GRSPW_ICCTRL_ID_BIT	7
+#define GRSPW_ICCTRL_II_BIT	6
+#define GRSPW_ICCTRL_TXIRQ_BIT	0
+#define GRSPW_ICCTRL_INUM	(0x3f << GRSPW_ICCTRL_INUM_BIT)
+#define GRSPW_ICCTRL_IA		(1 << GRSPW_ICCTRL_IA_BIT)
+#define GRSPW_ICCTRL_LE		(1 << GRSPW_ICCTRL_LE_BIT)
+#define GRSPW_ICCTRL_PR		(1 << GRSPW_ICCTRL_PR_BIT)
+#define GRSPW_ICCTRL_DQ		(1 << GRSPW_ICCTRL_DQ_BIT)
+#define GRSPW_ICCTRL_TQ		(1 << GRSPW_ICCTRL_TQ_BIT)
+#define GRSPW_ICCTRL_AQ		(1 << GRSPW_ICCTRL_AQ_BIT)
+#define GRSPW_ICCTRL_IQ		(1 << GRSPW_ICCTRL_IQ_BIT)
+#define GRSPW_ICCTRL_IR		(1 << GRSPW_ICCTRL_IR_BIT)
+#define GRSPW_ICCTRL_IT		(1 << GRSPW_ICCTRL_IT_BIT)
+#define GRSPW_ICCTRL_NUMI	(0x7 << GRSPW_ICCTRL_NUMI_BIT)
+#define GRSPW_ICCTRL_BIRQ	(0x1f << GRSPW_ICCTRL_BIRQ_BIT)
+#define GRSPW_ICCTRL_ID		(1 << GRSPW_ICCTRL_ID_BIT)
+#define GRSPW_ICCTRL_II		(1 << GRSPW_ICCTRL_II_BIT)
+#define GRSPW_ICCTRL_TXIRQ	(0x3f << GRSPW_ICCTRL_TXIRQ_BIT)
 
 /* RX Buffer Descriptor */
 struct grspw_rxbd {
@@ -408,6 +465,10 @@ struct grspw_priv {
 	void (*tcisr)(void *data, int timecode);
 	void *tcisr_arg;
 
+	/*** Interrupt-code Handling ***/
+	spwpkt_ic_isr_t icisr;
+	void *icisr_arg;
+
 	/* Disable Link on SpW Link error */
 	int dis_link_on_err;
 
@@ -475,6 +536,8 @@ void *grspw_open(int dev_no)
 
 	priv->tcisr = NULL;
 	priv->tcisr_arg = NULL;
+	priv->icisr = NULL;
+	priv->icisr_arg = NULL;
 
 	grspw_stats_clr(priv);
 
@@ -664,6 +727,14 @@ spw_link_state_t grspw_link_state(void *d)
 	return (status & GRSPW_STS_LS) >> GRSPW_STS_LS_BIT;
 }
 
+/* Enable Global IRQ only if some irq source is set */
+static inline int grspw_is_irqsource_set(unsigned int ctrl, unsigned int icctrl)
+{
+	return (ctrl & GRSPW_CTRL_IRQSRC_MASK) ||
+		(icctrl & GRSPW_ICCTRL_IRQSRC_MASK);
+}
+
+
 /* options and clkdiv [in/out]: set to -1 to only read current config */
 void grspw_link_ctrl(void *d, int *options, int *clkdiv)
 {
@@ -685,8 +756,8 @@ void grspw_link_ctrl(void *d, int *options, int *clkdiv)
 			ctrl = (ctrl & ~GRSPW_LINK_CFG) |
 				(*options & GRSPW_LINK_CFG);
 
-			/* Enable Global IRQ only of LI or TQ is set */
-			if (ctrl & (GRSPW_CTRL_LI|GRSPW_CTRL_TQ))
+			/* Enable Global IRQ only if some irq source is set */
+			if (grspw_is_irqsource_set(ctrl, REG_READ(&regs->icctrl)))
 				ctrl |= GRSPW_CTRL_IE;
 			else
 				ctrl &= ~GRSPW_CTRL_IE;
@@ -728,10 +799,10 @@ void grspw_tc_ctrl(void *d, int *options)
 		ctrl &= ~(GRSPW_CTRL_TR|GRSPW_CTRL_TT|GRSPW_CTRL_TQ);
 		ctrl |= (*options & 0xd) << GRSPW_CTRL_TQ_BIT;
 
-		/* Enable Global IRQ only of LI or TQ is set */
-		if (ctrl & (GRSPW_CTRL_LI|GRSPW_CTRL_TQ))
+		/* Enable Global IRQ only if some irq source is set */
+		if (grspw_is_irqsource_set(ctrl, REG_READ(&regs->icctrl)))
 			ctrl |= GRSPW_CTRL_IE;
-		else 
+		else
 			ctrl &= ~GRSPW_CTRL_IE;
 
 		REG_WRITE(&regs->ctrl, ctrl);
@@ -756,14 +827,157 @@ void grspw_tc_isr(void *d, void (*tcisr)(void *data, int tc), void *data)
  */
 void grspw_tc_time(void *d, int *time)
 {
+        struct grspw_priv *priv = d;
+        struct grspw_regs *regs = priv->regs;
+
+        if (time == NULL)
+                return;
+        if (*time != -1)
+                REG_WRITE(&regs->time, *time & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL));
+        *time = REG_READ(&regs->time) & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL);
+}
+
+/* Generate Tick-In for the given Interrupt-code and check for generation
+ * error.
+ *
+ * Returns zero on success and non-zero on failure
+ */
+int grspw_ic_tickin(void *d, int ic)
+{
+	struct grspw_priv *priv = d;
+	struct grspw_regs *regs = priv->regs;
+	IRQFLAGS_TYPE irqflags;
+	unsigned int icctrl, mask;
+
+	/* Prepare before turning off IRQ */
+	mask = 0x3f << GRSPW_ICCTRL_TXIRQ_BIT;
+	ic = ((ic << GRSPW_ICCTRL_TXIRQ_BIT) & mask) |
+	     GRSPW_ICCTRL_II | GRSPW_ICCTRL_ID;
+
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	icctrl = REG_READ(&regs->icctrl);
+	icctrl &= ~mask;
+	icctrl |= ic;
+	REG_WRITE(&regs->icctrl, icctrl); /* Generate SpW Interrupt Tick-In */
+	/* the ID bit is valid after two clocks, so we not to wait here */
+	icctrl = REG_READ(&regs->icctrl); /* Check SpW-Int generation error */
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+
+	return icctrl & GRSPW_ICCTRL_ID;
+}
+
+#define ICOPTS_CTRL_MASK ICOPTS_EN_FLAGFILTER
+#define ICOPTS_ICCTRL_MASK						\
+	(ICOPTS_INTNUM | ICOPTS_EN_SPWIRQ_ON_EE  | ICOPTS_EN_SPWIRQ_ON_IA | \
+	 ICOPTS_EN_PRIO | ICOPTS_EN_TIMEOUTIRQ | ICOPTS_EN_ACKIRQ | \
+	 ICOPTS_EN_TICKOUTIRQ | ICOPTS_EN_RX | ICOPTS_EN_TX | \
+	 ICOPTS_BASEIRQ)
+
+/* Control Interrupt-code settings of core
+ * Write if not pointing to -1, always read current value
+ *
+ * TODO: A lot of code duplication with grspw_tc_ctrl
+ */
+void grspw_ic_ctrl(void *d, unsigned int *options)
+{
+	struct grspw_priv *priv = d;
+	struct grspw_regs *regs = priv->regs;
+	unsigned int ctrl;
+	unsigned int icctrl;
+	IRQFLAGS_TYPE irqflags;
+
+	if (options == NULL)
+		return;
+
+	if (*options != -1) {
+		SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+
+		ctrl = REG_READ(&regs->ctrl);
+		ctrl &= ~GRSPW_CTRL_TF; /* Depends on one to one relation between
+					 * irqopts bits and ctrl bits */
+		ctrl |= (*options & ICOPTS_CTRL_MASK) <<
+			(GRSPW_CTRL_TF_BIT - 0);
+
+		icctrl = REG_READ(&regs->icctrl);
+		icctrl &= ~ICOPTS_ICCTRL_MASK; /* Depends on one to one relation between
+						* irqopts bits and icctrl bits */
+		icctrl |= *options & ICOPTS_ICCTRL_MASK;
+
+		/* Enable Global IRQ only if some irq source is set */
+		if (grspw_is_irqsource_set(ctrl, icctrl))
+			ctrl |= GRSPW_CTRL_IE;
+		else
+			ctrl &= ~GRSPW_CTRL_IE;
+
+		REG_WRITE(&regs->ctrl, ctrl);
+		REG_WRITE(&regs->icctrl, icctrl);
+		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	}
+	*options = ((REG_READ(&regs->ctrl) & ICOPTS_CTRL_MASK) |
+		    (REG_READ(&regs->icctrl) & ICOPTS_ICCTRL_MASK));
+}
+
+void grspw_ic_config(void *d, int rw, struct spwpkt_ic_config *cfg)
+{
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
 
-	if (time == NULL)
+	if (!cfg)
 		return;
-	if (*time != -1)
-		REG_WRITE(&regs->time, *time & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL));
-	*time = REG_READ(&regs->time) & (GRSPW_TIME_TCNT | GRSPW_TIME_CTRL);
+
+	if (rw & 1) {
+		REG_WRITE(&regs->ictickomask, cfg->tomask);
+		REG_WRITE(&regs->icaamask, cfg->aamask);
+		REG_WRITE(&regs->icrlpresc, cfg->scaler);
+		REG_WRITE(&regs->icrlisr, cfg->isr_reload);
+		REG_WRITE(&regs->icrlintack, cfg->ack_reload);
+	}
+	if (rw & 2) {
+		cfg->tomask = REG_READ(&regs->ictickomask);
+		cfg->aamask = REG_READ(&regs->icaamask);
+		cfg->scaler = REG_READ(&regs->icrlpresc);
+		cfg->isr_reload = REG_READ(&regs->icrlisr);
+		cfg->ack_reload = REG_READ(&regs->icrlintack);
+	}
+}
+
+/* Read or Write Interrupt-code status registers */
+void grspw_ic_sts(void *d, unsigned int *rxirq, unsigned int *rxack, unsigned int *intto)
+{
+	struct grspw_priv *priv = d;
+	struct grspw_regs *regs = priv->regs;
+
+	/* No locking needed since the status bits are clear-on-write */
+
+	if (rxirq) {
+		if (*rxirq != 0)
+			REG_WRITE(&regs->icrx, *rxirq);
+		else
+			*rxirq = REG_READ(&regs->icrx);
+	}
+
+	if (rxack) {
+		if (*rxack != 0)
+			REG_WRITE(&regs->icack, *rxack);
+		else
+			*rxack = REG_READ(&regs->icack);
+	}
+
+	if (intto) {
+		if (*intto != 0)
+			REG_WRITE(&regs->ictimeout, *intto);
+		else
+			*intto = REG_READ(&regs->ictimeout);
+	}
+}
+
+/* Assign handler function to Interrupt-code tick out IRQ */
+void grspw_ic_isr(void *d, spwpkt_ic_isr_t handler, void *data)
+{
+	struct grspw_priv *priv = d;
+
+	priv->icisr_arg = data;
+	priv->icisr = handler;
 }
 
 /* Set (not -1) and/or read RMAP options. */
@@ -2253,8 +2467,9 @@ void grspw_work_func(rtems_task_argument unused)
 STATIC void grspw_isr(void *data)
 {
 	struct grspw_priv *priv = data;
-	unsigned int dma_stat, stat, stat_clrmsk, ctrl, timecode;
-	int i, handled = 0, message = WORK_NONE;
+	unsigned int dma_stat, stat, stat_clrmsk, ctrl, icctrl, timecode;
+	unsigned int rxirq, rxack, intto;
+	int i, handled = 0, message = WORK_NONE, call_user_int_isr;
 #ifdef RTEMS_HAS_SMP
 	IRQFLAGS_TYPE irqflags;
 #endif
@@ -2267,9 +2482,40 @@ STATIC void grspw_isr(void *data)
 	 * smallest possible interrupt latency
 	 */
 	if ((stat & GRSPW_STS_TO) && (priv->tcisr != NULL)) {
-		/* Timecode received. Let custom function handle this */
-		timecode = priv->regs->time;
-		(priv->tcisr)(priv->tcisr_arg, timecode);
+		ctrl = REG_READ(&priv->regs->ctrl);
+		if (ctrl & GRSPW_CTRL_TQ) {
+			/* Timecode received. Let custom function handle this */
+			timecode = REG_READ(&priv->regs->time) &
+					(GRSPW_TIME_CTRL | GRSPW_TIME_TCNT);
+			(priv->tcisr)(priv->tcisr_arg, timecode);
+		}
+	}
+
+	/* Get Interrupt status from hardware */
+	icctrl = REG_READ(&priv->regs->icctrl);
+	if ((icctrl & GRSPW_ICCTRL_IRQSRC_MASK) && (priv->icisr != NULL)) {
+	    	call_user_int_isr = 0;
+		rxirq = rxack = intto = 0;
+
+		if ((icctrl & GRSPW_ICCTRL_IQ) &&
+		    (rxirq = REG_READ(&priv->regs->icrx)) != 0)
+			call_user_int_isr = 1;
+
+		if ((icctrl & GRSPW_ICCTRL_AQ) &&
+		    (rxack = REG_READ(&priv->regs->icack)) != 0)
+			call_user_int_isr = 1;
+
+		if ((icctrl & GRSPW_ICCTRL_TQ) &&
+		    (intto = REG_READ(&priv->regs->ictimeout)) != 0)
+			call_user_int_isr = 1;			
+
+		/* Let custom functions handle this POTENTIAL SPW interrupt. The
+		 * user function is called even if no such IRQ has happened!
+		 * User must make sure to clear all interrupts that have been
+		 * handled from the three registers by writing a one.
+		 */
+		if (call_user_int_isr)
+			priv->icisr(priv->icisr_arg, rxirq, rxack, intto);
 	}
 
 	/* An Error occured? */
@@ -2421,12 +2667,21 @@ STATIC void grspw_hw_stop(struct grspw_priv *priv)
 STATIC void grspw_hw_softreset(struct grspw_priv *priv)
 {
 	int i;
+	unsigned int tmp;
 
 	for (i=0; i<priv->hwsup.ndma_chans; i++)
 		grspw_hw_dma_softreset(&priv->dma[i]);
 
 	REG_WRITE(&priv->regs->status, 0xffffffff);
 	REG_WRITE(&priv->regs->time, 0);
+	/* Clear all but valuable reset values of ICCTRL */
+	tmp = REG_READ(&priv->regs->icctrl);
+	tmp &= GRSPW_ICCTRL_INUM | GRSPW_ICCTRL_BIRQ | GRSPW_ICCTRL_TXIRQ;
+	tmp |= GRSPW_ICCTRL_ID;
+	REG_WRITE(&priv->regs->icctrl, tmp);
+	REG_WRITE(&priv->regs->icrx, 0xffffffff);
+	REG_WRITE(&priv->regs->icack, 0xffffffff);
+	REG_WRITE(&priv->regs->ictimeout, 0xffffffff);
 }
 
 int grspw_dev_count(void)
@@ -2503,7 +2758,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
 	int i, size;
-	unsigned int ctrl;
+	unsigned int ctrl, icctrl, numi;
 	union drvmgr_key_value *value;
 
 	GRSPW_DBG("GRSPW[%d] on bus %s\n", dev->minor_drv,
@@ -2538,6 +2793,13 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	priv->hwsup.rx_unalign = (ctrl & GRSPW_CTRL_RX) >> GRSPW_CTRL_RX_BIT;
 	priv->hwsup.nports = 1 + ((ctrl & GRSPW_CTRL_PO) >> GRSPW_CTRL_PO_BIT);
 	priv->hwsup.ndma_chans = 1 + ((ctrl & GRSPW_CTRL_NCH) >> GRSPW_CTRL_NCH_BIT);
+	priv->hwsup.irq = ((ctrl & GRSPW_CTRL_ID) >> GRSPW_CTRL_ID_BIT);
+	icctrl = REG_READ(&priv->regs->icctrl);
+	numi = (icctrl & GRSPW_ICCTRL_NUMI) >> GRSPW_ICCTRL_NUMI_BIT;
+	if (numi > 0)
+		priv->hwsup.irq_num = 1 << (numi - 1);
+	else 
+		priv->hwsup.irq_num = 0;
 
 	/* Construct hardware version identification */
 	priv->hwsup.hw_version = pnpinfo->device << 16 | pnpinfo->apb_slv->ver;
@@ -2550,6 +2812,19 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 		/* Autodetect GRSPW1 features? */
 		priv->hwsup.strip_adr = 0;
 		priv->hwsup.strip_pid = 0;
+	}
+
+	/* Probe width of SpaceWire Interrupt ISR timers. All have the same
+	 * width... so only the first is probed, if no timer result will be
+	 * zero.
+	 */
+	REG_WRITE(&priv->regs->icrlpresc, 0x7fffffff);
+	ctrl = REG_READ(&priv->regs->icrlpresc);
+	REG_WRITE(&priv->regs->icrlpresc, 0);
+	priv->hwsup.itmr_width = 0;
+	while (ctrl & 1) {
+		priv->hwsup.itmr_width++;
+		ctrl = ctrl >> 1;
 	}
 
 	/* Let user limit the number of DMA channels on this core to save

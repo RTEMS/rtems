@@ -173,6 +173,9 @@ struct grspw_hw_sup {
 	char	strip_pid;	/* Hardware can strip PID from packet data */
 	int	hw_version;	/* GRSPW Hardware Version */
 	char	reserved[2];
+	char	irq;		/* SpW Distributed Interrupt available if 1 */
+	char	irq_num;	/* Number of interrupts that can be generated */
+	char	itmr_width;	/* SpW Intr. ISR timers bit width. 0=no timer */
 };
 
 struct grspw_core_stats {
@@ -200,10 +203,28 @@ struct grspw_core_stats {
 #define TCOPTS_EN_TX	0x0004
 #define TCOPTS_EN_RX	0x0008
 
+/* grspw_ic_ctrl() options:
+ * Corresponds code duplicatingly to GRSPW_CTRL_XX_BIT defines
+ */
+#define ICOPTS_INTNUM		(0x1f << 27)
+#define ICOPTS_EN_SPWIRQ_ON_EE	(1 << 24)
+#define ICOPTS_EN_SPWIRQ_ON_IA	(1 << 23)
+#define ICOPTS_EN_PRIO		(1 << 22)
+#define ICOPTS_EN_TIMEOUTIRQ	(1 << 20)
+#define ICOPTS_EN_ACKIRQ	(1 << 19)
+#define ICOPTS_EN_TICKOUTIRQ	(1 << 18)
+#define ICOPTS_EN_RX		(1 << 17)
+#define ICOPTS_EN_TX		(1 << 16)
+#define ICOPTS_BASEIRQ		(0x1f << 8)
+#define ICOPTS_EN_FLAGFILTER	(1 << 0) /* NOTE: Not in icctrl. CTRL.bit12 */
+
+/* grspw_ic_rlisr() and grspw_ic_rlintack()  */
+#define ICRELOAD_EN		(1 << 31)
+#define ICRELOAD_MASK		0x7fffffff
+
 /* grspw_rmap_ctrl() options */
 #define RMAPOPTS_EN_RMAP	0x0001
 #define RMAPOPTS_EN_BUF		0x0002
-
 
 /* grspw_dma_config.flags options */
 #define DMAFLAG_NO_SPILL	0x0001	/* See HW doc DMA-CTRL NS bit */
@@ -301,6 +322,55 @@ extern void grspw_tc_isr(void *d, void (*tcisr)(void *data, int tc), void *data)
  * TIMECNT = bits 5 to 0
  */
 extern void grspw_tc_time(void *d, int *time);
+
+/*** Interrupt-code Interface ***/
+struct spwpkt_ic_config {
+	unsigned int tomask;
+	unsigned int aamask;
+	unsigned int scaler;
+	unsigned int isr_reload;
+	unsigned int ack_reload;
+};
+/* Function Interrupt-Code ISR callback prototype. Called when respective
+ * interrupt handling option has been enabled by grspw_ic_ctrl(), the
+ * arguments rxirq, rxack and intto are read from the registers of the
+ * GRSPW core read by the GRSPW ISR, they are individually valid only when
+ * repective handling been turned on.
+ *
+ * data    - Custom data provided by user
+ * rxirq   - Interrupt-Code Recevie register of the GRSPW core read by ISR
+ *           (only defined if IQ bit enabled through grspw_ic_ctrl())
+ * rxack   - Interrupt-Ack-Code Recevie register of the GRSPW core read by ISR
+ *           (only defined if AQ bit enabled through grspw_ic_ctrl())
+ * intto   - Interrupt Tick-out Recevie register of the GRSPW core read by ISR
+ *           (only defined if TQ bit enabled through grspw_ic_ctrl()) 
+ */
+typedef void (*spwpkt_ic_isr_t)(void *data, unsigned int rxirq,
+				unsigned int rxack, unsigned int intto);
+/* Control Interrupt-code settings of core
+ * Write if 'options' not pointing to -1, always read current value
+ */
+extern void grspw_ic_ctrl(void *d, unsigned int *options);
+/* Write (rw&1 == 1) configuration parameters to registers and/or,
+ * Read  (rw&2 == 1) configuration parameters from registers, in that sequence.
+ */
+extern void grspw_ic_config(void *d, int rw, struct spwpkt_ic_config *cfg);
+/* Read or Write Interrupt-code status registers.
+ * If pointer argument *ptr == 0 then only read, if *ptr != 0 then only write.
+ * If *ptr is NULL no operation.
+ */
+extern void grspw_ic_sts(void *d, unsigned int *rxirq, unsigned int *rxack,
+			unsigned int *intto);
+/* Generate Tick-In for the given Interrupt-code
+ * Returns zero on success and non-zero on failure
+ *
+ * Interrupt code bits (ic):
+ * Bit 5 - ACK if 1
+ * Bits 4-0 Interrupt-code number
+ */
+extern int grspw_ic_tickin(void *d, int ic);
+/* Assign handler function to Interrupt-code timeout IRQ */
+extern void grspw_ic_isr(void *d, spwpkt_ic_isr_t handler, void *data);
 
 /*** RMAP Control Interface ***/
 /* Set (not -1) and/or read RMAP options. */
