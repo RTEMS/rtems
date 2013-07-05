@@ -37,6 +37,7 @@ void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(
        thread_support->cancelation_requested ) {
     /* FIXME: This path is broken on SMP */
     _Thread_Unnest_dispatch();
+    /* FIXME: Cancelability state may change here */
     _POSIX_Thread_Exit( the_thread, PTHREAD_CANCELED );
   } else
     _Objects_Put( &the_thread->Object );
