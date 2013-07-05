@@ -209,13 +209,12 @@ void *WriterThread(void *arg)
   puts("cleanup push for write");
   pthread_cleanup_push(release_write_lock, &l->lock);
 
+  /* Thread has write lock. */
+  release_write_lock(&l->lock);
+
   /* do nothing */
   puts("do nothing cleanup pop for write");
   pthread_cleanup_pop(0);
-
-  /* Thread has write lock. */
-  puts("cleanup pop for write");
-  pthread_cleanup_pop(1);
   return NULL;
 }
 
