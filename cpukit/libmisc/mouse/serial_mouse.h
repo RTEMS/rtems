@@ -38,6 +38,11 @@ extern "C" {
 #endif
 
 /**
+ * @brief Standard device file path for a PS2 mouse device.
+ */
+#define SERIAL_MOUSE_DEVICE_PS2 "/dev/psaux"
+
+/**
  *  This macro defines the serial mouse device driver entry points.
  */
 #define SERIAL_MOUSE_DRIVER_TABLE_ENTRY \

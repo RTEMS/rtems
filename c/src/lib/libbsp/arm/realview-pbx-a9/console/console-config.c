@@ -21,8 +21,6 @@
 #include <bsp/arm-pl011.h>
 #include <bsp/arm-pl050.h>
 
-static const char psaux[] = "/dev/psaux";
-
 console_tbl Console_Configuration_Ports[] = {
   {
     .sDeviceName = "/dev/ttyS0",
@@ -43,7 +41,7 @@ console_tbl Console_Configuration_Ports[] = {
     .ulClock = 0,
     .ulIntVector = RVPBXA9_IRQ_UART_0
   }, {
-    .sDeviceName = &psaux[0],
+    .sDeviceName = SERIAL_MOUSE_DEVICE_PS2,
     .deviceType = SERIAL_CUSTOM,
     .pDeviceFns = &arm_pl050_fns,
     .deviceProbe = NULL,
@@ -96,14 +94,3 @@ static void output_char_init(char c)
 BSP_output_char_function_type BSP_output_char = output_char_init;
 
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
-
-bool bsp_get_serial_mouse_device(
-  const char **name,
-  const char **type
-)
-{
-  *name = &psaux[0];
-  *type = "ps2";
-
-  return true;
-}
