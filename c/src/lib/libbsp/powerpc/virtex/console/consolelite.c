@@ -15,6 +15,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <bsp/irq.h>
@@ -109,27 +111,33 @@ static int xlite_write_char(uint32_t base, char ch)
    return 1;
 }
 
-
-
-
-
-
-
-
-
-
-
-static void xlite_init (int minor )
+static void xlite_init(int minor )
 {
-   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
-
-   /* clear status register */
-   *((volatile uint32_t*)(base+STAT_REG)) = 0;
-
-   /* clear control register; reset fifos & interrupt enable */
-   *((volatile uint32_t*)(base+CTRL_REG)) = RST_RX_FIFO | RST_TX_FIFO;
+   /* Nothing to do */
 }
 
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+static void xlite_interrupt_handler(void *arg)
+{
+   int minor = (int) arg;
+   const console_tbl *ct = Console_Port_Tbl[minor];
+   console_data *cd = &Console_Port_Data[minor];
+   uint32_t base = ct->ulCtrlPort1;
+   uint32_t status = xlite_uart_status(base);
+
+   while ((status & RX_FIFO_VALID_DATA) != 0) {
+      char c = (char) xlite_uart_read(base);
+
+      rtems_termios_enqueue_raw_characters(cd->termios_data, &c, 1);
+
+      status = xlite_uart_status(base);
+   }
+
+   if (cd->bActive) {
+      rtems_termios_dequeue_characters(cd->termios_data, 1);
+   }
+}
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 
 static int xlite_open(
   int      major,
@@ -137,21 +145,33 @@ static int xlite_open(
   void    *arg
 )
 {
-   uint32_t base = Console_Port_Tbl[minor]->ulCtrlPort1;
-
-   /* the lite uarts have hardcoded baud & serial parms so no port
-    * conditioning is needed.  We're running polled so no interrupt
-    * enables either */
+   const console_tbl *ct = Console_Port_Tbl[minor];
+   uint32_t base = ct->ulCtrlPort1;
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+   rtems_status_code sc;
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 
    /* clear status register */
    *((volatile uint32_t*)(base+STAT_REG)) = 0;
 
-   /* clear control register; reset fifos & disable interrupts */
+   /* clear control register; reset fifos */
    *((volatile uint32_t*)(base+CTRL_REG)) = RST_RX_FIFO | RST_TX_FIFO;
 
-   return RTEMS_SUCCESSFUL;
-}
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+   *((volatile uint32_t*)(base+CTRL_REG)) = ENABLE_INTR;
 
+   sc = rtems_interrupt_handler_install(
+      ct->ulIntVector,
+      "xlite",
+      RTEMS_INTERRUPT_UNIQUE,
+      xlite_interrupt_handler,
+      (void *) minor
+   );
+   assert(sc == RTEMS_SUCCESSFUL);
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
+
+   return 0;
+}
 
 static int xlite_close(
   int      major,
@@ -159,8 +179,24 @@ static int xlite_close(
   void    *arg
 )
 {
-   /* no shutdown protocol necessary */
-   return RTEMS_SUCCESSFUL;
+   const console_tbl *ct = Console_Port_Tbl[minor];
+   uint32_t base = ct->ulCtrlPort1;
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+   rtems_status_code sc;
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
+
+   *((volatile uint32_t*)(base+CTRL_REG)) = 0;
+
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+   sc = rtems_interrupt_handler_remove(
+      ct->ulIntVector,
+      xlite_interrupt_handler,
+      (void *) minor
+   );
+   assert(sc == RTEMS_SUCCESSFUL);
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
+
+   return 0;
 }
 
 
@@ -177,8 +213,31 @@ static int xlite_read_polled (int minor )
       return -1;
 }
 
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
 
+static ssize_t xlite_write_interrupt_driven(
+  int minor,
+  const char *buf,
+  size_t len
+)
+{
+  console_data *cd = &Console_Port_Data[minor];
 
+  if (len > 0) {
+    const console_tbl *ct = Console_Port_Tbl[minor];
+    uint32_t base = ct->ulCtrlPort1;
+
+    xlite_uart_write(base, buf[0]);
+
+    cd->bActive = true;
+  } else {
+    cd->bActive = false;
+  }
+
+  return 0;
+}
+
+#else /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 
 static ssize_t xlite_write_buffer_polled(
   int         minor,
@@ -204,6 +263,7 @@ static ssize_t xlite_write_buffer_polled(
    return nwrite;
 }
 
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 
 static void xlite_write_char_polled(
   int   minor,
@@ -214,8 +274,6 @@ static void xlite_write_char_polled(
    xlite_write_char(base, c);
    return;
 }
-
-
 
 static int xlite_set_attributes(int minor, const struct termios *t)
 {
@@ -230,15 +288,20 @@ static int xlite_set_attributes(int minor, const struct termios *t)
 
 static const console_fns xlite_fns_polled =
 {
-  libchip_serial_default_probe,        /* deviceProbe */
-  xlite_open,                          /* deviceFirstOpen */
-  xlite_close,                         /* deviceLastClose */
-  xlite_read_polled,                   /* deviceRead */
-  xlite_write_buffer_polled,           /* deviceWrite */
-  xlite_init,                          /* deviceInitialize */
-  xlite_write_char_polled,             /* deviceWritePolled */
-  xlite_set_attributes,                /* deviceSetAttributes */
-  FALSE,                               /* deviceOutputUsesInterrupts */
+  .deviceProbe = libchip_serial_default_probe,
+  .deviceFirstOpen = xlite_open,
+  .deviceLastClose = xlite_close,
+  .deviceRead = xlite_read_polled,
+  .deviceInitialize = xlite_init,
+  .deviceWritePolled = xlite_write_char_polled,
+  .deviceSetAttributes = xlite_set_attributes,
+#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+  .deviceWrite = xlite_write_interrupt_driven,
+  .deviceOutputUsesInterrupts = true
+#else
+  .deviceWrite = xlite_write_buffer_polled,
+  .deviceOutputUsesInterrupts = false
+#endif
 };
 
 
@@ -269,7 +332,11 @@ console_tbl     Console_Configuration_Ports[] = {
    NULL, /* unused */                      /* getData */
    NULL, /* unused */                      /* setData */
    0,                                      /* ulClock */
-   0                                       /* ulIntVector -- base for port */
+   #ifdef XPAR_XPS_INTC_0_RS232_UART_INTERRUPT_INTR
+     .ulIntVector = XPAR_XPS_INTC_0_RS232_UART_INTERRUPT_INTR
+   #else
+     .ulIntVector = 0
+   #endif
 },
 #ifdef XPAR_UARTLITE_1_BASEADDR
 {

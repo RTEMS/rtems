@@ -25,6 +25,9 @@ RTEMS_BSPOPTS_HELP([RTEMS_XPARAMETERS_H],
 [This defines the location of the hardware specific "xparameters.h" file.
  in the file system. Specify an absolute path. Do not forget the double quotes])
 
+RTEMS_BSPOPTS_SET([VIRTEX_CONSOLE_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([VIRTEX_CONSOLE_USE_INTERRUPTS],[if defined use interrupt driven Termios mode])
+
 AC_DEFUN([VIRTEX_REGION],[
 AC_ARG_VAR([$1],[$2; default $3])dnl
 [$1]=[$]{[$1]:-[$3]}
