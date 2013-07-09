@@ -407,6 +407,19 @@ static inline void ppc_external_exceptions_disable(uint32_t msr)
   RTEMS_COMPILER_MEMORY_BARRIER();
 }
 
+static inline uint32_t ppc_count_leading_zeros(uint32_t value)
+{
+  uint32_t count;
+
+  __asm__ (
+    "cntlzw %0, %1;"
+    : "=r" (count)
+    : "r" (value)
+  );
+
+  return count;
+}
+
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
