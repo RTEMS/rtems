@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Donrierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -61,12 +61,6 @@ LINKER_SYMBOL(bsp_section_rodata_size)
 LINKER_SYMBOL(bsp_section_rodata_load_begin)
 LINKER_SYMBOL(bsp_section_rodata_load_end)
 
-LINKER_SYMBOL(bsp_section_sdata2_begin)
-LINKER_SYMBOL(bsp_section_sdata2_end)
-LINKER_SYMBOL(bsp_section_sdata2_size)
-LINKER_SYMBOL(bsp_section_sdata2_load_begin)
-LINKER_SYMBOL(bsp_section_sdata2_load_end)
-
 LINKER_SYMBOL(bsp_section_fast_data_begin)
 LINKER_SYMBOL(bsp_section_fast_data_end)
 LINKER_SYMBOL(bsp_section_fast_data_size)
@@ -78,12 +72,6 @@ LINKER_SYMBOL(bsp_section_data_end)
 LINKER_SYMBOL(bsp_section_data_size)
 LINKER_SYMBOL(bsp_section_data_load_begin)
 LINKER_SYMBOL(bsp_section_data_load_end)
-
-LINKER_SYMBOL(bsp_section_sdata_begin)
-LINKER_SYMBOL(bsp_section_sdata_end)
-LINKER_SYMBOL(bsp_section_sdata_size)
-LINKER_SYMBOL(bsp_section_sdata_load_begin)
-LINKER_SYMBOL(bsp_section_sdata_load_end)
 
 LINKER_SYMBOL(bsp_section_bss_begin)
 LINKER_SYMBOL(bsp_section_bss_end)

@@ -39,7 +39,7 @@ MEMORY {
 }
 
 SECTIONS {
-	.start : {
+	.start : ALIGN_WITH_INPUT {
 		bsp_section_start_begin = .;
 		KEEP (*(.bsp_start_text))
 		KEEP (*(.bsp_start_data))
@@ -47,35 +47,31 @@ SECTIONS {
 	} > REGION_START AT > REGION_START
 	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
 
-	.xbarrier : {
+	.xbarrier : ALIGN_WITH_INPUT {
 		. = ALIGN (bsp_section_xbarrier_align);
 	} > REGION_TEXT
 
-	.text : ALIGN(32) {
+	.text : ALIGN_WITH_INPUT {
 		bsp_section_text_begin = .;
-
 		*(SORT(.bsp_text*))
-
-		/* .text */
 		*(.text.unlikely .text.*_unlikely)
 		*(.text .stub .text.* .gnu.linkonce.t.*)
 		*(.gnu.warning)
 		*(.glink)
-
-		/* .init */
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.init : ALIGN_WITH_INPUT {
 		KEEP (*(.init))
-
-		/* .fini */
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.fini : ALIGN_WITH_INPUT {
 		PROVIDE (_fini = .);
 		KEEP (*(.fini))
-
 		bsp_section_text_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
 	bsp_section_text_load_begin = LOADADDR (.text);
 	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
 
-	.fast_text : ALIGN(32) {
+	.fast_text : ALIGN_WITH_INPUT {
 		bsp_section_fast_text_begin = .;
 		*(.bsp_fast_text)
 		bsp_section_fast_text_end = .;
@@ -84,122 +80,126 @@ SECTIONS {
 	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
 	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
 
-	.robarrier : {
+	.robarrier : ALIGN_WITH_INPUT {
 		. = ALIGN (bsp_section_robarrier_align);
 	} > REGION_RODATA
 
-	.rodata : ALIGN(32) {
+	.rodata : ALIGN_WITH_INPUT {
 		bsp_section_rodata_begin = .;
-
 		*(SORT(.bsp_rodata*))
-
-		/* .rodata */
 		*(.rodata .rodata.* .gnu.linkonce.r.*)
-
-		/* .rodata1 */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rodata1 : ALIGN_WITH_INPUT {
 		*(.rodata1)
-
-		/* .eh_frame_hdr */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.sdata2 : ALIGN_WITH_INPUT {
+		PROVIDE (_SDA2_BASE_ = 32768);
+		*(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.sbss2 : ALIGN_WITH_INPUT {
+		*(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.eh_frame_hdr : ALIGN_WITH_INPUT {
 		*(.eh_frame_hdr)
-
-		/* .eh_frame */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.eh_frame : ALIGN_WITH_INPUT {
 		KEEP (*(.eh_frame))
-
-		/* .gcc_except_table */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gcc_except_table : ALIGN_WITH_INPUT {
 		*(.gcc_except_table .gcc_except_table.*)
-
-		/* .tdata */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tdata : ALIGN_WITH_INPUT {
 		*(.tdata .tdata.* .gnu.linkonce.td.*)
-
-		/* .tbss */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tbss : ALIGN_WITH_INPUT {
 		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
-
-		/* .preinit_array */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.preinit_array : ALIGN_WITH_INPUT {
 		PROVIDE_HIDDEN (__preinit_array_start = .);
 		KEEP (*(.preinit_array))
 		PROVIDE_HIDDEN (__preinit_array_end = .);
-
-		/* .init_array */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.init_array : ALIGN_WITH_INPUT {
 		PROVIDE_HIDDEN (__init_array_start = .);
 		KEEP (*(SORT(.init_array.*)))
 		KEEP (*(.init_array))
 		PROVIDE_HIDDEN (__init_array_end = .);
-
-		/* .fini_array */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.fini_array : ALIGN_WITH_INPUT {
 		PROVIDE_HIDDEN (__fini_array_start = .);
 		KEEP (*(SORT(.fini_array.*)))
 		KEEP (*(.fini_array))
 		PROVIDE_HIDDEN (__fini_array_end = .);
-
-		/* .ctors */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.ctors : ALIGN_WITH_INPUT {
 		KEEP (*crtbegin.o(.ctors))
 		KEEP (*crtbegin?.o(.ctors))
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
 		KEEP (*(SORT(.ctors.*)))
 		KEEP (*(.ctors))
-
-		/* .dtors */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dtors : ALIGN_WITH_INPUT {
 		KEEP (*crtbegin.o(.dtors))
 		KEEP (*crtbegin?.o(.dtors))
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
 		KEEP (*(SORT(.dtors.*)))
 		KEEP (*(.dtors))
-
-		/* .jcr */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.jcr : ALIGN_WITH_INPUT {
 		KEEP (*(.jcr))
-
-		/* .data.rel.ro */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.data.rel.ro : ALIGN_WITH_INPUT {
 		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*) *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
-
-		/* .fixpup */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.fixup : ALIGN_WITH_INPUT {
 		*(.fixup)
-
-		/* .dynamic */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynamic : ALIGN_WITH_INPUT {
 		*(.dynamic)
-
-		/* .got1 */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.got1 : ALIGN_WITH_INPUT {
 		*(.got1)
-
-		/* .got2 */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.got2 : ALIGN_WITH_INPUT {
 		*(.got2)
-
-		/* .got */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.got : ALIGN_WITH_INPUT {
 		*(.got)
-
-		/* .plt */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.plt : ALIGN_WITH_INPUT {
 		*(.plt)
-
-		/* .iptl */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.iplt : ALIGN_WITH_INPUT {
 		*(.iplt)
-
-		/* .interp */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.interp : ALIGN_WITH_INPUT {
 		*(.interp)
-
-		/* .note.gnu.build-id */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.note.gnu.build-id : ALIGN_WITH_INPUT {
 		*(.note.gnu.build-id)
-
-		/* .hash */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.hash : ALIGN_WITH_INPUT {
 		*(.hash)
-
-		/* .gnu.hash */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.hash : ALIGN_WITH_INPUT {
 		*(.gnu.hash)
-
-		/* .dynsym */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynsym : ALIGN_WITH_INPUT {
 		*(.dynsym)
-
-		/* .dynstr */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynstr : ALIGN_WITH_INPUT {
 		*(.dynstr)
-
-		/* .gnu.version */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version : ALIGN_WITH_INPUT {
 		*(.gnu.version)
-
-		/* .gnu.version_d */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version_d : ALIGN_WITH_INPUT {
 		*(.gnu.version_d)
-
-		/* .gnu.version_r */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version_r : ALIGN_WITH_INPUT {
 		*(.gnu.version_r)
-
-		/* .rela.dyn */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rela.dyn : ALIGN_WITH_INPUT {
 		*(.rela.init)
 		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
 		*(.rela.fini)
@@ -222,10 +222,11 @@ SECTIONS {
 		PROVIDE_HIDDEN (__rela_iplt_start = .);
 		*(.rela.iplt)
 		PROVIDE_HIDDEN (__rela_iplt_end = .);
-
-		/* .rela.plt */
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rela.plt : ALIGN_WITH_INPUT {
 		*(.rela.plt)
-
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.robsdsets : ALIGN_WITH_INPUT {
 		/* Special FreeBSD linker set sections */
 		__start_set_sysctl_set = .;
 		*(set_sysctl_*);
@@ -245,27 +246,11 @@ SECTIONS {
 	bsp_section_rodata_load_begin = LOADADDR (.rodata);
 	bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
 
-	.sdata2 : ALIGN(32) {
-		bsp_section_sdata2_begin = .;
-
-		/* .sdata2 */
-		PROVIDE (_SDA2_BASE_ = 32768);
-		*(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
-
-		/* .sbss2 */
-		*(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
-
-		bsp_section_sdata2_end = .;
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	bsp_section_sdata2_size = bsp_section_sdata2_end - bsp_section_sdata2_begin;
-	bsp_section_sdata2_load_begin = LOADADDR (.sdata2);
-	bsp_section_sdata2_load_end = bsp_section_sdata2_load_begin + bsp_section_sdata2_size;
-
-	.rwbarrier : {
+	.rwbarrier : ALIGN_WITH_INPUT {
 		. = ALIGN (bsp_section_rwbarrier_align);
 	} > REGION_DATA
 
-	.fast_data : ALIGN(32) {
+	.fast_data : ALIGN_WITH_INPUT {
 		bsp_section_fast_data_begin = .;
 		*(SORT(.bsp_fast_data*))
 		bsp_section_fast_data_end = .;
@@ -274,43 +259,31 @@ SECTIONS {
 	bsp_section_fast_data_load_begin = LOADADDR (.fast_data);
 	bsp_section_fast_data_load_end = bsp_section_fast_data_load_begin + bsp_section_fast_data_size;
 
-	.data : ALIGN(32) {
+	.data : ALIGN_WITH_INPUT {
 		bsp_section_data_begin = .;
-
 		*(SORT(.bsp_data*))
-
-		/* .data */
 		*(.data .data.* .gnu.linkonce.d.*)
 		SORT(CONSTRUCTORS)
-
-		/* .data1 */
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.data1 : ALIGN_WITH_INPUT {
 		*(.data1)
-
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.rwbsdsets : ALIGN_WITH_INPUT {
 		/* Special FreeBSD linker set sections */
 		_bsd__start_set_sysinit_set = .;
 		*(_bsd_set_sysinit_set);
 		_bsd__stop_set_sysinit_set = .;
-
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.sdata : ALIGN_WITH_INPUT {
+		PROVIDE (_SDA_BASE_ = 32768);
+		*(.sdata .sdata.* .gnu.linkonce.s.*)
 		bsp_section_data_end = .;
 	} > REGION_DATA AT > REGION_DATA_LOAD
 	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
 	bsp_section_data_load_begin = LOADADDR (.data);
 	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
 
-	.sdata : ALIGN(32) {
-		bsp_section_sdata_begin = .;
-
-		/* .sdata */
-		PROVIDE (_SDA_BASE_ = 32768);
-		*(.sdata .sdata.* .gnu.linkonce.s.*)
-
-		bsp_section_sdata_end = .;
-	} > REGION_DATA AT > REGION_DATA_LOAD
-	bsp_section_sdata_size = bsp_section_sdata_end - bsp_section_sdata_begin;
-	bsp_section_sdata_load_begin = LOADADDR (.sdata);
-	bsp_section_sdata_load_end = bsp_section_sdata_load_begin + bsp_section_sdata_size;
-
-	.sbss : {
+	.sbss : ALIGN_WITH_INPUT {
 		bsp_section_sbss_begin = .;
 		*(.dynsbss)
 		*(.sbss .sbss.* .gnu.linkonce.sb.*)
@@ -319,7 +292,7 @@ SECTIONS {
 	} > REGION_DATA AT > REGION_DATA
 	bsp_section_sbss_size = bsp_section_sbss_end - bsp_section_sbss_begin;
 
-	.bss : {
+	.bss : ALIGN_WITH_INPUT {
 		bsp_section_bss_begin = .;
 		*(.dynbss)
 		*(.bss .bss.* .gnu.linkonce.b.*)
@@ -328,14 +301,14 @@ SECTIONS {
 	} > REGION_BSS AT > REGION_BSS
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
 
-	.rwextra : {
+	.rwextra : ALIGN_WITH_INPUT {
 		bsp_section_rwextra_begin = .;
 		*(.bsp_rwextra)
 		bsp_section_rwextra_end = .;
 	} > REGION_RWEXTRA AT > REGION_RWEXTRA
 	bsp_section_rwextra_size = bsp_section_rwextra_end - bsp_section_rwextra_begin;
 
-	.work : {
+	.work : ALIGN_WITH_INPUT {
 		/*
 		 * The work section will occupy the remaining REGION_WORK region and
 		 * contains the RTEMS work space and heap.
@@ -346,7 +319,7 @@ SECTIONS {
 	} > REGION_WORK AT > REGION_WORK
 	bsp_section_work_size = bsp_section_work_end - bsp_section_work_begin;
 
-	.stack : {
+	.stack : ALIGN_WITH_INPUT {
 		/*
 		 * The stack section will occupy the remaining REGION_STACK region and may
 		 * contain the task stacks.  Depending on the region distribution this
@@ -358,7 +331,7 @@ SECTIONS {
 	} > REGION_STACK AT > REGION_STACK
 	bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_begin;
 
-	.nocache : {
+	.nocache : ALIGN_WITH_INPUT {
 		bsp_section_nocache_begin = .;
 		*(SORT(.bsp_nocache*))
 		bsp_section_nocache_end = .;
@@ -367,7 +340,7 @@ SECTIONS {
 	bsp_section_nocache_load_begin = LOADADDR (.nocache);
 	bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
 
-	.nvram (NOLOAD) : {
+	.nvram (NOLOAD) : ALIGN_WITH_INPUT {
 		bsp_section_nvram_begin = .;
 		*(SORT(.bsp_nvram*))
 		bsp_section_nvram_end = .;
