@@ -96,6 +96,11 @@ void _Thread_Handler( void )
     #endif
   #endif
 
+  /*
+   * Initialize the floating point context because we do not come
+   * through _Thread_Dispatch on our first invocation. So the normal
+   * code path for performing the FP context switch is not hit.
+   */
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
       if ( (executing->fp_context != NULL) &&
@@ -130,6 +135,11 @@ void _Thread_Handler( void )
     }
  #endif
 
+  /*
+   *  RTEMS supports multiple APIs and each API can define a different
+   *  thread/task prototype. The following code supports invoking the
+   *  user thread entry point using the prototype expected.
+   */
   if ( executing->Start.prototype == THREAD_START_NUMERIC ) {
     executing->Wait.return_argument =
       (*(Thread_Entry_numeric) executing->Start.entry_point)(
