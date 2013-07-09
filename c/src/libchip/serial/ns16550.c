@@ -501,10 +501,13 @@ int ns16550_set_attributes(
 
     /*
      *  Set the baud rate
+     *
+     *  NOTE: When the Divisor Latch Access Bit (DLAB) is set to 1,
+     *        the transmit buffer and interrupt enable registers
+     *        turn into the LSB and MSB divisor latch registers.
      */
 
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB);
-    /* XXX are these registers right? */
     (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
     (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
 
