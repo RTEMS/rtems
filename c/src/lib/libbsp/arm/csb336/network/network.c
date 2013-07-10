@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
+#include <assert.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -39,19 +40,8 @@
 #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 
 static void enet_isr(rtems_irq_hdl_param);
-static void enet_isr_on(const rtems_irq_connect_data *unused);
-static void enet_isr_off(const rtems_irq_connect_data *unused);
-static int enet_isr_is_on(const rtems_irq_connect_data *irq);
+static void enet_isr_on(void);
 
-/* Replace the first value with the clock's interrupt name. */
-rtems_irq_connect_data mc9328mxl_enet_isr_data = {
-    .name    = BSP_INT_GPIO_PORTA,
-    .hdl     = enet_isr,
-    .handle  = (void *)BSP_INT_GPIO_PORTA,
-    .on      = enet_isr_on,
-    .off     = enet_isr_off,
-    .isOn    = enet_isr_is_on,
-};
 typedef struct {
   unsigned long rx_packets;        /* total packets received         */
   unsigned long tx_packets;        /* total packets transmitted      */
@@ -238,6 +228,7 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
 {
     uint16_t stat;
     uint16_t my = 0;
+    rtems_status_code status = RTEMS_SUCCESSFUL;
 
     lan91c11x_write_reg(LAN91C11X_RCR, LAN91C11X_RCR_RST);
     lan91c11x_write_reg(LAN91C11X_RCR, 0);
@@ -334,7 +325,15 @@ void  mc9328mxl_enet_init_hw(mc9328mxl_enet_softc_t *sc)
     MC9328MXL_GPIOA_IMR |= bit(3);
 
     /* Install the interrupt handler */
-    BSP_install_rtems_irq_handler(&mc9328mxl_enet_isr_data);
+    status = rtems_interrupt_handler_install(
+        BSP_INT_GPIO_PORTA,
+        "Network",
+        RTEMS_INTERRUPT_UNIQUE,
+        enet_isr,
+        (void *)BSP_INT_GPIO_PORTA
+    );
+    assert(status == RTEMS_SUCCESSFUL);
+    enet_isr_on();
 
 } /* mc9328mxl_enet_init_hw() */
 
@@ -602,29 +601,12 @@ void mc9328mxl_enet_stats (mc9328mxl_enet_softc_t *sc)
 
 
 /* Enables mc9328mxl_enet interrupts. */
-static void enet_isr_on(const rtems_irq_connect_data *unused)
+static void enet_isr_on(void)
 {
     /* Enable interrupts */
     MC9328MXL_AITC_INTENNUM = MC9328MXL_INT_GPIO_PORTA;
 
     return;
-}
-
-/* Disables enet interrupts */
-static void enet_isr_off(const rtems_irq_connect_data *unused)
-{
-    /* disable all various TX/RX interrupts */
-    MC9328MXL_AITC_INTDISNUM = MC9328MXL_INT_GPIO_PORTA;
-
-    return;
-}
-
-/* Tests to see if mc9328mxl_enet interrupts are enabled, and returns non-0 if so.
- * If interrupt is not enabled, returns 0.
- */
-static int enet_isr_is_on(const rtems_irq_connect_data *irq)
-{
-    return MC9328MXL_AITC_INTENABLEL & (1 << MC9328MXL_INT_GPIO_PORTA);
 }
 
 /*  Driver ioctl handler */

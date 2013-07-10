@@ -13,11 +13,11 @@
 #include <libchip/sersupp.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
+#include <assert.h>
 #include <termios.h>
 #include <rtems/irq.h>
 #include <bsp/irq.h>
 #include <mc9328mxl.h>
-
 
 /* Define this to use interrupt driver UART driver */
 #define USE_INTERRUPTS 1
@@ -34,20 +34,23 @@ static int imx_uart_set_attrs(int, const struct termios *);
 static void imx_uart_init(int minor);
 static void imx_uart_set_baud(int, int);
 static ssize_t imx_uart_poll_write(int, const char *, size_t);
+static int imx_uart_poll_read_char(int minor);
+static void imx_uart_poll_write_char(int minor, char c);
+static void _BSP_output_char(char c);
+static int _BSP_poll_char(void);
 
-#if defined(USE_INTERRUPTS)
+#if USE_INTERRUPTS
 static void imx_uart_tx_isr(rtems_irq_hdl_param);
 static void imx_uart_rx_isr(rtems_irq_hdl_param);
-static void imx_uart_isr_on(const rtems_irq_connect_data *irq);
-static void imx_uart_isr_off(const rtems_irq_connect_data *irq);
-static int imx_uart_isr_is_on(const rtems_irq_connect_data *irq);
+static void imx_uart_isr_on(const rtems_irq_number);
+static void imx_uart_isr_off(const rtems_irq_number);
 static ssize_t imx_uart_intr_write(int, const char *, size_t);
+static rtems_vector_number imx_uart_name_transmit(int minor);
+static rtems_vector_number imx_uart_name_receive(int minor);
 #endif
 
-
-
 /* TERMIOS callbacks */
-#if defined(USE_INTERRUPTS)
+#if USE_INTERRUPTS
 rtems_termios_callbacks imx_uart_cbacks = {
     .firstOpen            = imx_uart_first_open,
     .lastClose            = imx_uart_last_close,
@@ -69,11 +72,6 @@ rtems_termios_callbacks imx_uart_cbacks = {
     .startRemoteTx        = NULL,
     .outputUsesInterrupts = 0,
 };
-#endif
-
-#if defined(USE_INTERRUPTS)
-static rtems_irq_connect_data imx_uart_tx_isr_data[NUM_DEVS];
-static rtems_irq_connect_data imx_uart_rx_isr_data[NUM_DEVS];
 #endif
 
 typedef struct {
@@ -184,37 +182,15 @@ static void imx_uart_init(int minor)
     imx_uart_data[minor].idx   = 0;
 
     if (minor == 0) {
-#if defined(USE_INTERRUPTS)
-        imx_uart_tx_isr_data[minor].name = BSP_INT_UART1_TX;
-        imx_uart_rx_isr_data[minor].name = BSP_INT_UART1_RX;
-#endif
         imx_uart_data[minor].regs =
             (mc9328mxl_uart_regs_t *) MC9328MXL_UART1_BASE;
     } else if (minor == 1) {
-#if defined(USE_INTERRUPTS)
-        imx_uart_tx_isr_data[minor].name = BSP_INT_UART2_TX;
-        imx_uart_rx_isr_data[minor].name = BSP_INT_UART2_RX;
-#endif
         imx_uart_data[minor].regs =
             (mc9328mxl_uart_regs_t *) MC9328MXL_UART2_BASE;
     } else {
         rtems_panic("%s:%d Unknown UART minor number %d\n",
                     __FUNCTION__, __LINE__, minor);
     }
-
-#if defined(USE_INTERRUPTS)
-    imx_uart_tx_isr_data[minor].hdl    = imx_uart_tx_isr;
-    imx_uart_tx_isr_data[minor].handle = &imx_uart_data[minor];
-    imx_uart_tx_isr_data[minor].on     = imx_uart_isr_on;
-    imx_uart_tx_isr_data[minor].off    = imx_uart_isr_off;
-    imx_uart_tx_isr_data[minor].isOn   = imx_uart_isr_is_on;
-
-    imx_uart_rx_isr_data[minor].hdl    = imx_uart_rx_isr;
-    imx_uart_rx_isr_data[minor].handle  = &imx_uart_data[minor];
-    imx_uart_rx_isr_data[minor].on     = imx_uart_isr_on;
-    imx_uart_rx_isr_data[minor].off    = imx_uart_isr_off;
-    imx_uart_rx_isr_data[minor].isOn   = imx_uart_isr_is_on;
-#endif
 
     imx_uart_data[minor].regs->cr1 = (
         MC9328MXL_UART_CR1_UARTCLKEN |
@@ -243,12 +219,30 @@ static void imx_uart_init(int minor)
 static int imx_uart_first_open(int major, int minor, void *arg)
 {
     rtems_libio_open_close_args_t *args = arg;
+    rtems_status_code status = RTEMS_SUCCESSFUL;
 
     imx_uart_data[minor].tty   = args->iop->data1;
 
-#if defined(USE_INTERRUPTS)
-    BSP_install_rtems_irq_handler(&imx_uart_tx_isr_data[minor]);
-    BSP_install_rtems_irq_handler(&imx_uart_rx_isr_data[minor]);
+#if USE_INTERRUPTS
+    status = rtems_interrupt_handler_install(
+        imx_uart_name_transmit(minor),
+        "UART",
+        RTEMS_INTERRUPT_UNIQUE,
+        imx_uart_tx_isr,
+        &imx_uart_data[minor]
+    );
+    assert(status == RTEMS_SUCCESSFUL);
+    imx_uart_isr_on(imx_uart_name_transmit(minor));
+
+    status = rtems_interrupt_handler_install(
+        imx_uart_name_receive(minor),
+        "UART",
+        RTEMS_INTERRUPT_UNIQUE,
+        imx_uart_rx_isr,
+        &imx_uart_data[minor]
+    );
+    assert(status == RTEMS_SUCCESSFUL);
+    imx_uart_isr_on(imx_uart_name_receive(minor));
 
     imx_uart_data[minor].regs->cr1 |= MC9328MXL_UART_CR1_RRDYEN;
 #endif
@@ -258,9 +252,24 @@ static int imx_uart_first_open(int major, int minor, void *arg)
 
 static int imx_uart_last_close(int major, int minor, void *arg)
 {
-#if defined(USE_INTERRUPTS)
-    BSP_remove_rtems_irq_handler(&imx_uart_tx_isr_data[minor]);
-    BSP_remove_rtems_irq_handler(&imx_uart_rx_isr_data[minor]);
+#if USE_INTERRUPTS
+    rtems_status_code status = RTEMS_SUCCESSFUL;
+
+    imx_uart_isr_off(imx_uart_name_transmit(minor));
+    status = rtems_interrupt_handler_remove(
+        imx_uart_name_transmit(minor),
+        imx_uart_tx_isr,
+        &imx_uart_data[minor]
+    );
+    assert(status == RTEMS_SUCCESSFUL);
+
+    imx_uart_isr_off(imx_uart_name_receive(minor));
+    status = rtems_interrupt_handler_remove(
+        imx_uart_name_receive(minor),
+        imx_uart_rx_isr,
+        &imx_uart_data[minor]
+    );
+    assert(status == RTEMS_SUCCESSFUL);
 #endif
 
     return 0;
@@ -291,7 +300,7 @@ static ssize_t imx_uart_poll_write(int minor, const char *buf, size_t len)
 
 }
 
-#if defined(USE_INTERRUPTS)
+#if USE_INTERRUPTS
 static ssize_t imx_uart_intr_write(int minor, const char *buf, size_t len)
 {
     if (len > 0) {
@@ -318,23 +327,14 @@ static int imx_uart_set_attrs(int minor, const struct termios *t)
     return 0;
 }
 
-#if defined(USE_INTERRUPTS)
-static void imx_uart_isr_on(const rtems_irq_connect_data *irq)
+#if USE_INTERRUPTS
+static void imx_uart_isr_on(const rtems_irq_number name)
 {
-    MC9328MXL_AITC_INTENNUM = irq->name;
+    MC9328MXL_AITC_INTENNUM = name;
 }
-static void imx_uart_isr_off(const rtems_irq_connect_data *irq)
+static void imx_uart_isr_off(const rtems_irq_number name)
 {
-    MC9328MXL_AITC_INTDISNUM = irq->name;
-}
-static int imx_uart_isr_is_on(const rtems_irq_connect_data *irq)
-{
-    int irq_num = (int)irq->name;
-    if (irq_num < 32) {
-        return MC9328MXL_AITC_INTENABLEL & (1 << irq_num);
-    } else {
-        return MC9328MXL_AITC_INTENABLEH & (1 << (irq_num - 32));
-    }
+    MC9328MXL_AITC_INTDISNUM = name;
 }
 
 static void imx_uart_rx_isr(rtems_irq_hdl_param param)
@@ -370,6 +370,28 @@ static void imx_uart_tx_isr(rtems_irq_hdl_param param)
         imx_uart_data[minor].regs->cr1 &= ~MC9328MXL_UART_CR1_TXMPTYEN;
         rtems_termios_dequeue_characters(uart_data->tty, len);
     }
+}
+
+static rtems_vector_number imx_uart_name_transmit(int minor)
+{
+    if (minor == 0) {
+        return BSP_INT_UART1_TX;
+    } else if (minor == 1) {
+        return BSP_INT_UART2_TX;
+    }
+
+    assert(0);
+}
+
+static rtems_vector_number imx_uart_name_receive(int minor)
+{
+    if (minor == 0) {
+        return BSP_INT_UART1_RX;
+    } else if (minor == 1) {
+        return BSP_INT_UART2_RX;
+    }
+
+    assert(0);
 }
 #endif
 
@@ -419,7 +441,7 @@ static void imx_uart_set_baud(int minor, int baud)
 /*
  * Polled, non-blocking read from UART
  */
-int imx_uart_poll_read_char(int minor)
+static int imx_uart_poll_read_char(int minor)
 {
     return imx_uart_poll_read(minor);
 }
@@ -427,7 +449,7 @@ int imx_uart_poll_read_char(int minor)
 /*
  * Polled, blocking write from UART
  */
-void  imx_uart_poll_write_char(int minor, char c)
+static void  imx_uart_poll_write_char(int minor, char c)
 {
     imx_uart_poll_write(minor, &c, 1);
 }
@@ -435,7 +457,7 @@ void  imx_uart_poll_write_char(int minor, char c)
 /*
  * Functions for printk() and friends.
  */
-void _BSP_output_char(char c)
+static void _BSP_output_char(char c)
 {
     poll_write(c);
     if (c == '\n') {
@@ -445,7 +467,7 @@ void _BSP_output_char(char c)
 
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
-int _BSP_poll_char(void)
+static int _BSP_poll_char(void)
 {
     return poll_read();
 }
