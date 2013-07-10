@@ -116,7 +116,7 @@ static void xlite_init(int minor )
    /* Nothing to do */
 }
 
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
 static void xlite_interrupt_handler(void *arg)
 {
    int minor = (int) arg;
@@ -147,7 +147,7 @@ static int xlite_open(
 {
    const console_tbl *ct = Console_Port_Tbl[minor];
    uint32_t base = ct->ulCtrlPort1;
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
    rtems_status_code sc;
 #endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 
@@ -157,7 +157,7 @@ static int xlite_open(
    /* clear control register; reset fifos */
    *((volatile uint32_t*)(base+CTRL_REG)) = RST_RX_FIFO | RST_TX_FIFO;
 
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
    *((volatile uint32_t*)(base+CTRL_REG)) = ENABLE_INTR;
 
    sc = rtems_interrupt_handler_install(
@@ -181,13 +181,13 @@ static int xlite_close(
 {
    const console_tbl *ct = Console_Port_Tbl[minor];
    uint32_t base = ct->ulCtrlPort1;
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
    rtems_status_code sc;
 #endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 
    *((volatile uint32_t*)(base+CTRL_REG)) = 0;
 
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
    sc = rtems_interrupt_handler_remove(
       ct->ulIntVector,
       xlite_interrupt_handler,
@@ -213,7 +213,7 @@ static int xlite_read_polled (int minor )
       return -1;
 }
 
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
 
 static ssize_t xlite_write_interrupt_driven(
   int minor,
@@ -295,13 +295,13 @@ static const console_fns xlite_fns_polled =
   .deviceInitialize = xlite_init,
   .deviceWritePolled = xlite_write_char_polled,
   .deviceSetAttributes = xlite_set_attributes,
-#ifdef VIRTEX_CONSOLE_USE_INTERRUPTS
+#if VIRTEX_CONSOLE_USE_INTERRUPTS
   .deviceWrite = xlite_write_interrupt_driven,
   .deviceOutputUsesInterrupts = true
-#else
+#else /* VIRTEX_CONSOLE_USE_INTERRUPTS */
   .deviceWrite = xlite_write_buffer_polled,
   .deviceOutputUsesInterrupts = false
-#endif
+#endif /* VIRTEX_CONSOLE_USE_INTERRUPTS */
 };
 
 
