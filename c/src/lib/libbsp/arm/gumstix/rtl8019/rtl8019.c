@@ -350,9 +350,9 @@ ne_interrupt_handler (rtems_irq_hdl_param handle)
 /* Turn NE2000 interrupts on.  */
 
 static void
-ne_interrupt_on (const rtems_irq_connect_data *irq)
+ne_interrupt_on (const void * handle)
 {
-  struct ne_softc *sc = irq->handle;
+  struct ne_softc *sc = handle;
 
 #ifdef DEBUG_NE
   printk ("ne_interrupt_on()\n");
@@ -364,9 +364,9 @@ ne_interrupt_on (const rtems_irq_connect_data *irq)
 /* Turn NE2000 interrupts off.  See ne_interrupt_on.  */
 
 static void
-ne_interrupt_off (const rtems_irq_connect_data *irq)
+ne_interrupt_off (const void * handle)
 {
-  struct ne_softc *sc = irq->handle;
+  struct ne_softc *sc = handle;
 
 #ifdef DEBUG_NE
   printk ("ne_interrupt_off()\n");
@@ -380,9 +380,9 @@ ne_interrupt_off (const rtems_irq_connect_data *irq)
  *If it is eanbled, return 1
 */
 static int
-ne_interrupt_is_on (const rtems_irq_connect_data *irq)
+ne_interrupt_is_on (const void * handle)
 {
-  struct ne_softc *sc = irq->handle;
+  struct ne_softc *sc = handle;
   unsigned char imr;
 #ifdef DEBUG_NE
   printk("ne_interrupt_is_on()\n");
@@ -479,21 +479,20 @@ ne_init_hardware (struct ne_softc *sc)
 static void
 ne_init_irq_handler(struct ne_softc *sc)
 {
-  rtems_irq_connect_data irq;
+  rtems_status_code status = RTEMS_SUCCESSFUL;
 
 #ifdef DEBUG_NE
   printk("ne_init_irq_handler(%d)\n", sc->irno);
 #endif
-  irq.name = sc->irno;
-  irq.hdl = ne_interrupt_handler;
-  irq.handle = sc;
-  irq.on = ne_interrupt_on;
-  irq.off = ne_interrupt_off;
-  irq.isOn = ne_interrupt_is_on;
-
-  if (!BSP_install_rtems_irq_handler (&irq))
-    rtems_panic ("Can't attach NE interrupt handler for irq %d\n", sc->irno);
-}
+  status = rtems_interrupt_handler_install(
+        sc->irno,
+        "RTL8019",
+        RTEMS_INTERRUPT_UNIQUE,
+        ne_interrupt_handler,
+        sc
+    );
+    assert(status == RTEMS_SUCCESSFUL);
+    ne_interrupt_on(sc);
 
 /* The NE2000 packet receive daemon.  This task is started when the
    NE2000 driver is initialized.  */
