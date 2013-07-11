@@ -38,14 +38,8 @@ typedef enum {
   BSP_GENERIC_FATAL_CONSOLE_NO_DEV
 } bsp_generic_fatal_code;
 
-/*
- * Prototype this method to ensure that the compiler knows that
- * it does not return.
- */
-static inline void bsp_generic_fatal( bsp_generic_fatal_code code ) \
-   RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
-
-static inline void bsp_generic_fatal( bsp_generic_fatal_code code )
+RTEMS_COMPILER_NO_RETURN_ATTRIBUTE static inline void
+bsp_generic_fatal( bsp_generic_fatal_code code )
 {
   rtems_fatal( RTEMS_FATAL_SOURCE_BSP_GENERIC, (rtems_fatal_code) code );
 }
