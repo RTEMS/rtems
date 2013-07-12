@@ -18,33 +18,36 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <gba.h>
+#include <assert.h>
 
 
-void Clock_isr(rtems_irq_hdl_param arg);
-static void clock_isr_on(const rtems_irq_connect_data *unused);
-static void clock_isr_off(const rtems_irq_connect_data *unused);
-static int clock_isr_is_on(const rtems_irq_connect_data *irq);
-
-rtems_irq_connect_data clock_isr_data = {
-  .name   = BSP_IRQ_TIMER3,
-  .hdl    = Clock_isr,
-  .handle = NULL,
-  .on     = clock_isr_on,
-  .off    = clock_isr_off,
-  .isOn   = clock_isr_is_on,
-};
+void Clock_isr(void * arg);
 
 #define Clock_driver_support_at_tick()
 
 #define Clock_driver_support_install_isr( _new, _old )  \
   do {                                                  \
-    BSP_install_rtems_irq_handler(&clock_isr_data);     \
+    rtems_status_code status = RTEMS_SUCCESSFUL;        \
+    status = rtems_interrupt_handler_install(           \
+        BSP_IRQ_TIMER3,                                 \
+        "Clock",                                        \
+        RTEMS_INTERRUPT_UNIQUE,                         \
+        Clock_isr,                                      \
+        NULL                                            \
+    );                                                  \
+    assert(status == RTEMS_SUCCESSFUL);                 \
     _old = NULL;                                        \
   } while(0)
 
-#define Clock_driver_support_shutdown_hardware()    \
-  do {                                              \
-    BSP_remove_rtems_irq_handler(&clock_isr_data);  \
+#define Clock_driver_support_shutdown_hardware()        \
+  do {                                                  \
+    rtems_status_code status = RTEMS_SUCCESSFUL;        \
+    status = rtems_interrupt_handler_remove(            \
+        BSP_IRQ_TIMER3,                                 \
+        Clock_isr,                                      \
+        NULL                                            \
+    );                                                  \
+    assert(status == RTEMS_SUCCESSFUL);                 \
   } while (0)
 
 
@@ -84,37 +87,6 @@ void Clock_driver_support_initialize_hardware(void)
   GBA_REG_TM3CNT = (GBA_TMCNT_PS);
   GBA_REG_TM3D   = (0x0000-tmreload);
   GBA_REG_TM3CNT = (0x00c0|GBA_TMCNT_PS);
-}
-
-/**
- *  @brief This function is empty
- *
- *  @param  unused an unused parameter
- *  @return None
- */
-static void clock_isr_on(const rtems_irq_connect_data *unused)
-{
-}
-
-/**
- *  @brief This function is empty
- *
- *  @param  unused an unused parameter
- *  @return None
- */
-static void clock_isr_off(const rtems_irq_connect_data *unused)
-{
-}
-
-/**
- *  @brief This function is empty
- *
- *  @param  irq unused
- *  @return constant 1
- */
-static int clock_isr_is_on(const rtems_irq_connect_data *irq)
-{
-  return 1;
 }
 
 #include "../../../shared/clockdrv_shell.h"
