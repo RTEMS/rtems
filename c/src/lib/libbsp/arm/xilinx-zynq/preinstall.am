@@ -142,3 +142,31 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+$(PROJECT_LIB)/linkcmds.xilinx_zynq: startup/linkcmds.xilinx_zynq $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_a9_qemu: startup/linkcmds.xilinx_zynq_a9_qemu $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_a9_qemu
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_a9_qemu
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_a9_qemu_smp: startup/linkcmds.xilinx_zynq_a9_qemu_smp $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_a9_qemu_smp
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_a9_qemu_smp
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702: startup/linkcmds.xilinx_zynq_zc702 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702_smp: startup/linkcmds.xilinx_zynq_zc702_smp $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702_smp
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702_smp
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard: startup/linkcmds.xilinx_zynq_zedboard $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard_smp: startup/linkcmds.xilinx_zynq_zedboard_smp $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard_smp
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard_smp
+

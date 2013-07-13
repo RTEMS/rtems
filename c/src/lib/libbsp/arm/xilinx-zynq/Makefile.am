@@ -58,10 +58,13 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
-
-EXTRA_DIST =
-EXTRA_DIST += startup/linkcmds.xilinx_zynq_a9_qemu
-EXTRA_DIST += startup/linkcmds.xilinx_zynq_a9_qemu_smp
+project_lib_DATA += startup/linkcmds.xilinx_zynq
+project_lib_DATA += startup/linkcmds.xilinx_zynq_a9_qemu
+project_lib_DATA += startup/linkcmds.xilinx_zynq_a9_qemu_smp
+project_lib_DATA += startup/linkcmds.xilinx_zynq_zc702
+project_lib_DATA += startup/linkcmds.xilinx_zynq_zc702_smp
+project_lib_DATA += startup/linkcmds.xilinx_zynq_zedboard
+project_lib_DATA += startup/linkcmds.xilinx_zynq_zedboard_smp
 
 ###############################################################################
 #                  LibBSP                                                     #

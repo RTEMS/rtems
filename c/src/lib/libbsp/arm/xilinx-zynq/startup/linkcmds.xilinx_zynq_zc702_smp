@@ -1,0 +1,3 @@
+bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 2;
+
+INCLUDE linkcmds.xilinx_zynq_zc702
