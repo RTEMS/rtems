@@ -223,6 +223,7 @@ $(PROJECT_INCLUDE)/rtems/score/basedefs.h: include/rtems/score/basedefs.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 
+if ATOMIC
 $(PROJECT_INCLUDE)/rtems/score/atomic.h: include/rtems/score/atomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic.h
@@ -238,7 +239,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
 $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h: include/rtems/score/cpustdatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
-
+endif
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.h: include/rtems/score/corespinlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlock.h

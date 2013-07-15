@@ -60,10 +60,12 @@ include_rtems_score_HEADERS += include/rtems/score/watchdog.h
 include_rtems_score_HEADERS += include/rtems/score/wkspace.h
 include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
 include_rtems_score_HEADERS += include/rtems/score/basedefs.h
+if ATOMIC
 include_rtems_score_HEADERS += include/rtems/score/atomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericcpuatomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericatomicops.h
 include_rtems_score_HEADERS += include/rtems/score/cpustdatomic.h
+endif
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h
