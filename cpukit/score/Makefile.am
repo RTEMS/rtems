@@ -63,6 +63,7 @@ include_rtems_score_HEADERS += include/rtems/score/basedefs.h
 include_rtems_score_HEADERS += include/rtems/score/atomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericcpuatomic.h
 include_rtems_score_HEADERS += include/rtems/score/genericatomicops.h
+include_rtems_score_HEADERS += include/rtems/score/cpustdatomic.h
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h

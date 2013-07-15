@@ -235,6 +235,10 @@ $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h: include/rtems/score/genericat
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
 
+$(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h: include/rtems/score/cpustdatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
+
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.h: include/rtems/score/corespinlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlock.h
