@@ -18,35 +18,40 @@
 #include <stdlib.h>
 #include <rtems/rtems/atomic.h>
 
-#define TEST_REPEAT 200000
+#define TEST_REPEAT 1000
 
-#define ATOMIC_CAS_NO_BARRIER(NAME, TYPE, task_id, mem_bar)     \
+#define ATOMIC_CAS_NO_BARRIER(NAME, TYPE, R_TYPE, task_id, mem_bar)     \
 {                                                       \
-  Atomic_##TYPE a = 0, b = 0;                           \
+  Atomic_##TYPE t;                                      \
+  R_TYPE a;                                             \
+  R_TYPE b;                                             \
   unsigned int i;                                       \
   int r;                                                \
   for (i = 0; i < TEST_REPEAT; i++){                    \
-    a = rand() % (Atomic_##TYPE)-1;                     \
-    b = a;                                              \
-    r = _Atomic_Compare_exchange_##NAME(&b, a + 1, a - 1, mem_bar);                 \
-    if(r != 0){                                                                     \
-      printf("\ntask%d: _Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)task_id); \
-      rtems_test_exit( 0 );                                                         \
-    }                                                                               \
-    b = a;                                                                          \
-    r = _Atomic_Compare_exchange_##NAME(&b, a, a - 1, mem_bar);                     \
-    if((r == 0) ||((r != 0) && ((a - 1) != b))){                                    \
-      printf("\ntask%d: _Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)task_id); \
-      rtems_test_exit( 0 );                                                         \
-    }                                                                               \
-    b = a;                                                                          \
-    r = _Atomic_Compare_exchange_##NAME(&b, a + 1, a, mem_bar);                     \
-    if(r != 0){                                                                     \
-      printf("\ntask%d: _Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)task_id); \
-      rtems_test_exit( 0 );                                                         \
-    }                                                                               \
-  }                                                                                 \
-  printf("\ntask%d: _Atomic_Compare_exchange_" #NAME ": SUCCESS\n", (unsigned int)task_id);    \
+    a = rand() % (R_TYPE)-1;                            \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELAXED);  \
+    b = a + 1;                                                           \
+    r = _Atomic_Compare_exchange_##NAME(&t, &b, a - 1, mem_bar, memory_order_relaxed); \
+    if(r != 0){                                                          \
+      printf("\ntask%d: Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)task_id); \
+      rtems_test_exit( 0 );                                              \
+    }                                                                    \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELAXED);                   \
+    r = _Atomic_Compare_exchange_##NAME(&t, &a, a - 1, mem_bar, memory_order_relaxed); \
+    b = _Atomic_Load_##NAME(&t, ATOMIC_ORDER_RELAXED);                   \
+    if((r == 0) ||((r != 0) && ((a - 1) != b))){                         \
+      printf("\ntask%d: Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)task_id); \
+      rtems_test_exit( 0 );                                              \
+    }                                                                    \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELAXED);                   \
+    b = a + 1;                                                           \
+    r = _Atomic_Compare_exchange_##NAME(&t, &b, a, mem_bar, memory_order_relaxed); \
+    if(r != 0){                                                          \
+      printf("\ntask%d: Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)task_id); \
+      rtems_test_exit( 0 );                                              \
+    }                                                                    \
+  }                                                                      \
+  printf("\ntask%d: Atomic_Compare_exchange_" #NAME ": SUCCESS\n", (unsigned int)task_id);    \
 }
 
 rtems_task Test_task(
@@ -63,31 +68,19 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_CAS_NO_BARRIER(int, Int, argument, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(uint, Uint, uint_fast32_t, argument, ATOMIC_ORDER_RELAXED);
 
-  ATOMIC_CAS_NO_BARRIER(long, Long, argument, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, argument, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_CAS_NO_BARRIER(32, Int32, argument, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, uintptr_t, argument, ATOMIC_ORDER_RELAXED);
 
   /* test acquire barrier */
-  ATOMIC_CAS_NO_BARRIER(int, Int, argument, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(uint, Uint, uint_fast32_t, argument, ATOMIC_ORDER_ACQUIRE);
 
-  ATOMIC_CAS_NO_BARRIER(long, Long, argument, ATOMIC_ACQUIRE_BARRIER);
-
-  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, argument, ATOMIC_ACQUIRE_BARRIER);
-
-  ATOMIC_CAS_NO_BARRIER(32, Int32, argument, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, uintptr_t, argument, ATOMIC_ORDER_ACQUIRE);
 
   /* test release barrier */
-  ATOMIC_CAS_NO_BARRIER(int, Int, argument, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(uint, Uint, uint_fast32_t, argument, ATOMIC_ORDER_RELEASE);
 
-  ATOMIC_CAS_NO_BARRIER(long, Long, argument, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, argument, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_CAS_NO_BARRIER(32, Int32, argument, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_CAS_NO_BARRIER(ptr, Pointer, uintptr_t, argument, ATOMIC_ORDER_RELEASE);
 
   /* Set the flag that the task is up and running */
   TaskRan[argument] = true;

@@ -18,20 +18,21 @@
 #include <stdlib.h>
 #include <rtems/rtems/atomic.h>
 
-#define TEST_REPEAT 200000
+#define TEST_REPEAT 1000
 
-#define ATOMIC_STORE_NO_BARRIER(NAME, TYPE, task_id, mem_bar)    \
+#define ATOMIC_STORE_NO_BARRIER(NAME, TYPE, R_TYPE, task_id, mem_bar)    \
 {                                                        \
-  Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
+  Atomic_##TYPE t;                                       \
+  R_TYPE a;                                              \
+  R_TYPE b;                                              \
   unsigned int i;                                        \
-  _Atomic_Store_##NAME(&a, t, mem_bar);                  \
-  rtems_test_assert(a == t);                             \
   for (i = 0; i < TEST_REPEAT; i++){                     \
-    t = (Atomic_##TYPE)rand();                           \
-    _Atomic_Store_##NAME(&a, t, mem_bar);                \
-    rtems_test_assert(a == t);                           \
+    b = (R_TYPE)rand();                                  \
+    _Atomic_Store_##NAME(&t, b, mem_bar);                \
+    a = _Atomic_Load_##NAME(&t, memory_order_relaxed);   \
+    rtems_test_assert(a == b);                           \
   }                                                      \
-  printf("\ntask%d: _Atomic_Store_" #NAME ": SUCCESS\n", (unsigned int)task_id); \
+  printf("\ntask%d: Atomic_Store_" #NAME ": SUCCESS\n", (unsigned int)task_id); \
 }
 
 rtems_task Test_task(
@@ -48,22 +49,14 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_STORE_NO_BARRIER(int, Int, argument, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(uint, Uint, uint_fast32_t, argument, ATOMIC_ORDER_RELAXED);
 
-  ATOMIC_STORE_NO_BARRIER(long, Long, argument, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, argument, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(32, Int32, argument, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, uintptr_t, argument, ATOMIC_ORDER_RELAXED);
 
   /* test release barrier */
-  ATOMIC_STORE_NO_BARRIER(int, Int, argument, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(uint, Uint, uint_fast32_t, argument, ATOMIC_ORDER_RELEASE);
 
-  ATOMIC_STORE_NO_BARRIER(long, Long, argument, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, argument, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(32, Int32, argument, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, uintptr_t, argument, ATOMIC_ORDER_RELEASE);
 
   /* Set the flag that the task is up and running */
   TaskRan[argument] = true;
