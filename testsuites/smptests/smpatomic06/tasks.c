@@ -18,20 +18,24 @@
 #include <stdlib.h>
 #include <rtems/rtems/atomic.h>
 
-#define TEST_REPEAT 200000
+#define TEST_REPEAT 1000
 
-#define ATOMIC_FETCH_OR_NO_BARRIER(NAME, TYPE, cpuid, mem_bar) \
+#define ATOMIC_FETCH_OR_NO_BARRIER(NAME, TYPE, R_TYPE, cpuid, mem_bar) \
 {                                                        \
-  Atomic_##TYPE t = 0, a = 0, b = 0;                     \
+  Atomic_##TYPE t;                                       \
+  R_TYPE a;                                              \
+  R_TYPE b;                                              \
+  R_TYPE c;                                              \
   unsigned int i;                                        \
   for (i = 0; i < TEST_REPEAT; i++){                     \
-    a = (Atomic_##TYPE)(rand() % ((Atomic_##TYPE)-1 / 2));  \
-    b = (Atomic_##TYPE)(rand() % ((Atomic_##TYPE)-1 / 2));  \
-    t = a;                                               \
+    a = (R_TYPE)(rand() % ((R_TYPE)-1 / 2));             \
+    b = (R_TYPE)(rand() % ((R_TYPE)-1 / 2));             \
+    _Atomic_Store_##NAME(&t, a, mem_bar);                \
     _Atomic_Fetch_or_##NAME(&t, b, mem_bar);             \
-    rtems_test_assert(t == (Atomic_##TYPE)(a | b));      \
+    c = _Atomic_Load_##NAME(&t, mem_bar);                \
+    rtems_test_assert(c == (R_TYPE)(a | b));             \
   }                                                      \
-  locked_printf("\nCPU%d _Atomic_Fetch_or_" #NAME ": SUCCESS\n", cpuid); \
+  locked_printf("\nCPU%d Atomic_Fetch_or_" #NAME ": SUCCESS\n", cpuid); \
 }
 
 rtems_task Test_task(
@@ -51,31 +55,19 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_FETCH_OR_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_FETCH_OR_NO_BARRIER(uint, Uint, uint_fast32_t, cpu_num, ATOMIC_ORDER_RELAXED);
 
-  ATOMIC_FETCH_OR_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_FETCH_OR_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_FETCH_OR_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_FETCH_OR_NO_BARRIER(ptr, Pointer, uintptr_t, cpu_num, ATOMIC_ORDER_RELAXED);
 
   /* test acquire barrier */
-  ATOMIC_FETCH_OR_NO_BARRIER(int, Int, cpu_num, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_FETCH_OR_NO_BARRIER(uint, Uint, uint_fast32_t, cpu_num, ATOMIC_ORDER_ACQUIRE);
 
-  ATOMIC_FETCH_OR_NO_BARRIER(long, Long, cpu_num, ATOMIC_ACQUIRE_BARRIER);
-
-  ATOMIC_FETCH_OR_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_ACQUIRE_BARRIER);
-
-  ATOMIC_FETCH_OR_NO_BARRIER(32, Int32, cpu_num, ATOMIC_ACQUIRE_BARRIER);
+  ATOMIC_FETCH_OR_NO_BARRIER(ptr, Pointer, uintptr_t, cpu_num, ATOMIC_ORDER_ACQUIRE);
 
   /* test release barrier */
-  ATOMIC_FETCH_OR_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_FETCH_OR_NO_BARRIER(uint, Uint, uint_fast32_t, cpu_num, ATOMIC_ORDER_RELEASE);
 
-  ATOMIC_FETCH_OR_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_FETCH_OR_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_FETCH_OR_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_FETCH_OR_NO_BARRIER(ptr, Pointer, uintptr_t, cpu_num, ATOMIC_ORDER_RELEASE);
 
 //  ATOMIC_FETCH_OR_NO_BARRIER(64, cpu_num);
 
