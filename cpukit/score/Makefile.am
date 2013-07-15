@@ -62,8 +62,6 @@ include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
 include_rtems_score_HEADERS += include/rtems/score/basedefs.h
 if ATOMIC
 include_rtems_score_HEADERS += include/rtems/score/atomic.h
-include_rtems_score_HEADERS += include/rtems/score/genericcpuatomic.h
-include_rtems_score_HEADERS += include/rtems/score/genericatomicops.h
 include_rtems_score_HEADERS += include/rtems/score/cpustdatomic.h
 endif
 
@@ -109,7 +107,6 @@ include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
 include_rtems_score_HEADERS += inline/rtems/score/watchdog.inl
 include_rtems_score_HEADERS += inline/rtems/score/wkspace.inl
-include_rtems_score_HEADERS += inline/rtems/score/atomic.inl
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl

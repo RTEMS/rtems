@@ -228,14 +228,6 @@ $(PROJECT_INCLUDE)/rtems/score/atomic.h: include/rtems/score/atomic.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic.h
 
-$(PROJECT_INCLUDE)/rtems/score/genericcpuatomic.h: include/rtems/score/genericcpuatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/genericcpuatomic.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/genericcpuatomic.h
-
-$(PROJECT_INCLUDE)/rtems/score/genericatomicops.h: include/rtems/score/genericatomicops.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/genericatomicops.h
-
 $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h: include/rtems/score/cpustdatomic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpustdatomic.h
@@ -366,10 +358,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/watchdog.inl
 $(PROJECT_INCLUDE)/rtems/score/wkspace.inl: inline/rtems/score/wkspace.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/wkspace.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/wkspace.inl
-
-$(PROJECT_INCLUDE)/rtems/score/atomic.inl: inline/rtems/score/atomic.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/atomic.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/atomic.inl
 
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/rtems/score/corespinlock.inl: inline/rtems/score/corespinlock.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
