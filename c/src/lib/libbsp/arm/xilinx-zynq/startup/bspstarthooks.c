@@ -80,7 +80,7 @@ zynq_mmu_config_table[] = {
 BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
 {
   uint32_t ctrl = arm_cp15_start_setup_mmu_and_cache(
-    0,
+    ARM_CP15_CTRL_A,
     ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_Z
   );
 
