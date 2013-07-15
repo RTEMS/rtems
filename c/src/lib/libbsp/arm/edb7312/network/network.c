@@ -7,14 +7,13 @@
 #define CS8900_BASE 0x20000300
 unsigned int bsp_cs8900_io_base = 0;
 unsigned int bsp_cs8900_memory_base = 0;
-cs8900_device *g_cs;
-void cs8900_isr(rtems_irq_hdl_param unused);
+static void cs8900_isr(void *);
 
 char g_enetbuf[1520];
 
-void cs8900_isr(rtems_irq_hdl_param unused)
+static void cs8900_isr(void *arg)
 {
-    cs8900_interrupt(BSP_EINT3, g_cs);
+    cs8900_interrupt(BSP_EINT3, arg);
 }
 
 /* cs8900_io_set_reg - set one of the I/O addressed registers */
@@ -64,14 +63,13 @@ unsigned short cs8900_mem_get_reg (cs8900_device *cs, unsigned long reg)
 void cs8900_attach_interrupt (cs8900_device *cs)
 {
     rtems_status_code status = RTEMS_SUCCESSFUL;
-    g_cs = cs;
 
     status = rtems_interrupt_handler_install(
         BSP_EINT3,
         "Network",
         RTEMS_INTERRUPT_UNIQUE,
         cs8900_isr,
-        NULL
+        cs
     );
     assert(status == RTEMS_SUCCESSFUL);
 }
@@ -83,7 +81,7 @@ void cs8900_detach_interrupt (cs8900_device *cs)
     status = rtems_interrupt_handler_remove(
         BSP_EINT3,
         cs8900_isr,
-        NULL
+        cs
     );
     assert(status == RTEMS_SUCCESSFUL);
 }

@@ -18,8 +18,7 @@
   #define CLOCK_DRIVER_USE_FAST_IDLE
 #endif
 
-void Clock_isr(rtems_irq_hdl_param arg);
-uint32_t clock_driver_get_nanoseconds_since_last_tick(void);
+void Clock_isr(void * arg);
 
 #define Clock_driver_support_at_tick()                \
   do {                                                \
@@ -68,16 +67,5 @@ uint32_t clock_driver_get_nanoseconds_since_last_tick(void);
     );                                              \
     assert(status == RTEMS_SUCCESSFUL);             \
   } while (0)
-
-/**
- *  Return the nanoseconds since last tick
- */
-uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
-{
-  return 0;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-  clock_driver_get_nanoseconds_since_last_tick
 
 #include "../../../shared/clockdrv_shell.h"
