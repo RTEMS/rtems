@@ -118,18 +118,6 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
 );
 
 /*
- *  _POSIX_Semaphore_Is_null
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
- */
-
-RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_null (
-  POSIX_Semaphore_Control *the_semaphore
-);
-
-/*
  *  _POSIX_Semaphore_Create_support
  *
  *  DESCRIPTION:

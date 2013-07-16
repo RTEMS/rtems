@@ -69,17 +69,6 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
   return (POSIX_Semaphore_Control *)
     _Objects_Get( &_POSIX_Semaphore_Information, (Objects_Id)*id, location );
 }
- 
-/*
- *  _POSIX_Semaphore_Is_null
- */
- 
-RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_null (
-  POSIX_Semaphore_Control *the_semaphore
-)
-{
-  return !the_semaphore;
-}
 
 /**
  * @see _POSIX_Name_to_id().
