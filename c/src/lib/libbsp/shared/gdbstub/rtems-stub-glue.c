@@ -143,7 +143,7 @@ Thread_Control *rtems_gdb_index_to_stub_id(
 /* Get id of the thread stopped by exception */
 int rtems_gdb_stub_get_current_thread(void)
 {
-  return rtems_gdb_stub_id_to_index( _Thread_Executing->Object.id );
+  return rtems_gdb_stub_id_to_index( rtems_task_self() );
 }
 
 /* Get id of the next thread after athread, if argument <= 0 find the
