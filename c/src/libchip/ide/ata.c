@@ -45,11 +45,6 @@ ata_irq_chain_t ata_irq_chain[ATA_IRQ_CHAIN_MAX_CNT];
 int ata_irq_chain_cnt = 0;
 #endif
 
-#define SAFE
-#define SAFE_MUTEX
-
-#ifdef SAFE
-#ifdef SAFE_MUTEX
 static rtems_id ata_lock;
 static void
 rtems_ata_lock (void)
@@ -72,46 +67,6 @@ rtems_ata_unlock (void)
 #define RTEMS_ATA_LOCK_ATTRIBS \
   (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | \
    RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
-
-#define PREEMPTION_KEY(key)
-#define DISABLE_PREEMPTION(key) rtems_ata_lock ()
-#define ENABLE_PREEMPTION(key)  rtems_ata_unlock ()
-
-#else /* !SAFE_MUTEX */
-typedef rtems_mode preemption_key;
-
-#define PREEMPTION_KEY(key) preemption_key key
-
-#define DISABLE_PREEMPTION(key)                                        \
-    do {                                                               \
-        rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &(key)); \
-    } while (0)
-
-#define ENABLE_PREEMPTION(key) \
-    do {                                                        \
-        rtems_mode temp;                                        \
-        rtems_task_mode((key), RTEMS_PREEMPT_MASK, &temp);      \
-    } while (0)
-#endif
-#else /* !SAFE */
-typedef bool preemption_key;
-
-#define PREEMPTION_KEY(key) preemption_key key
-
-#define DISABLE_PREEMPTION(key) \
-    do {                                             \
-        (key) = _Thread_Executing->is_preemptible;   \
-        _Thread_Executing->is_preemptible = 0;       \
-    } while (0)
-
-#define ENABLE_PREEMPTION(key) \
-    do {                                             \
-        _Thread_Executing->is_preemptible = (key);   \
-        if (_Thread_Evaluate_mode())                 \
-            _Thread_Dispatch();                      \
-    } while (0)
-
-#endif
 
 /* FIXME: case if ATA device is FLASH device need more attention */
 #undef ATA_DEV_IS_FLASH_DISK
@@ -593,9 +548,7 @@ static void
 ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
                             ata_req_t                 *areq)
 {
-    PREEMPTION_KEY(key);
-
-    DISABLE_PREEMPTION(key);
+    rtems_ata_lock();
 
     rtems_chain_append(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
     if (rtems_chain_has_only_one_node(&ata_ide_ctrls[ctrl_minor].reqs))
@@ -618,7 +571,7 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
         ATA_SEND_EVT(msg, ATA_MSG_PROCESS_NEXT_EVT, ctrl_minor, 0);
     }
 
-    ENABLE_PREEMPTION(key);
+    rtems_ata_unlock();
 }
 
 
@@ -860,13 +813,11 @@ ata_queue_task(rtems_task_argument arg)
     rtems_status_code          rc;
     ISR_Level                  level;
 
-    PREEMPTION_KEY(key);
-
-    DISABLE_PREEMPTION(key);
+    rtems_ata_lock();
 
     while (1)
     {
-        ENABLE_PREEMPTION(key);
+        rtems_ata_unlock();
 
         /* get event which has happend */
         rc = rtems_message_queue_receive(ata_queue_id, &msg, &size, RTEMS_WAIT,
@@ -877,7 +828,7 @@ ata_queue_task(rtems_task_argument arg)
         /* get controller on which event has happend */
         ctrl_minor = msg.ctrl_minor;
 
-        DISABLE_PREEMPTION(key);
+        rtems_ata_lock();
 
         /* get current request to the controller */
         _ISR_Disable(level);
@@ -1168,15 +1119,11 @@ rtems_ata_initialize(rtems_device_major_number major,
     if (status != RTEMS_SUCCESSFUL)
         return status;
 
-#ifdef SAFE
-#ifdef SAFE_MUTEX
     status = rtems_semaphore_create (rtems_build_name ('A', 'T', 'A', 'L'),
                                      1, RTEMS_ATA_LOCK_ATTRIBS, 0,
                                      &ata_lock);
     if (status != RTEMS_SUCCESSFUL)
         return status;
-#endif
-#endif
 
     /* create queue for asynchronous requests handling */
     status = rtems_message_queue_create(
