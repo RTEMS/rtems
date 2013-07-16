@@ -221,6 +221,13 @@ extern console_data  *Console_Port_Data;
 
 extern rtems_device_minor_number Console_Port_Minor;
 
+/**
+ * @brief Selects the minor number of the console device.
+ *
+ * @see Console_Port_Minor.
+ */
+void bsp_console_select(void);
+
 #ifdef __cplusplus
 }
 #endif

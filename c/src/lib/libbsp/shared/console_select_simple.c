@@ -12,7 +12,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include "console_private.h"
+#include <libchip/serial.h>
 
 #include <bsp.h>
 

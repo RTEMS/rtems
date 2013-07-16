@@ -29,14 +29,6 @@ extern "C" {
 extern rtems_device_minor_number  BSPPrintkPort;
 
 /**
- *  @brief bsp_console_select
- *
- *  This function selects the port to be used as console
- *
- */
-void bsp_console_select(void);
-
-/**
  *  @brief bsp_com_outch
  *
  *  This function puts a character out of the console port.
