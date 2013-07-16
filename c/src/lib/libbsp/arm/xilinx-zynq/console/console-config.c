@@ -78,8 +78,13 @@ static void output_char(char c)
 static void output_char_init(char c)
 {
   if (Console_Port_Tbl == NULL) {
-    int minor = (int) Console_Port_Minor;
-    const console_fns *cf = Console_Configuration_Ports[minor].pDeviceFns;
+    int minor;
+    const console_fns *cf;
+
+    bsp_console_select();
+
+    minor = (int) Console_Port_Minor;
+    cf = Console_Configuration_Ports[minor].pDeviceFns;
 
     (*cf->deviceInitialize)(minor);
   }
