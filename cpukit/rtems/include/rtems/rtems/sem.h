@@ -239,19 +239,6 @@ rtems_status_code rtems_semaphore_flush(
 );
 
 /**
- *  @brief _Semaphore_Seize
- *
- *  This routine attempts to receive a unit from the_semaphore.
- *  If a unit is available or if the RTEMS_NO_WAIT option is enabled in
- *  option_set, then the routine returns.  Otherwise, the calling task
- *  is blocked until a unit becomes available.
- */
-bool _Semaphore_Seize(
-  Semaphore_Control *the_semaphore,
-  uint32_t           option_set
-);
-
-/**
  * @brief Semaphore Translate Core Mutex Return Code
  *
  * This function returns a RTEMS status code based on the mutex

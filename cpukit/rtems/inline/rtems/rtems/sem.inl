@@ -92,18 +92,6 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
     _Objects_Get_isr_disable( &_Semaphore_Information, id, location, level );
 }
 
-/**
- *  @brief Checks if the_semaphore is NULL.
- *
- *  This function returns TRUE if the_semaphore is NULL and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Semaphore_Is_null (
-  Semaphore_Control *the_semaphore
-)
-{
-  return ( the_semaphore == NULL );
-}
-
 /**@}*/
 
 #endif
