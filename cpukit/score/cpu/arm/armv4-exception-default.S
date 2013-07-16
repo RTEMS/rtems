@@ -108,7 +108,7 @@ save_more_context:
 	orr	r5, r3, #ARM_PSR_I
 	bic	r5, #ARM_PSR_T
 	msr	cpsr, r5
-	sub	r0, sp, #ARM_EXCEPTION_FRAME_SIZE
+	mov	r0, sp
 	mov	r1, lr
 	msr	cpsr, r7
 	mov	r5, #0
