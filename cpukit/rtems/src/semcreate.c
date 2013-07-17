@@ -182,6 +182,7 @@ rtems_status_code rtems_semaphore_create(
 
     mutex_status = _CORE_mutex_Initialize(
       &the_semaphore->Core_control.mutex,
+      _Thread_Executing,
       &the_mutex_attr,
       (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
     );

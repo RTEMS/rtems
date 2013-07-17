@@ -179,6 +179,7 @@ int pthread_mutex_init(
    */
   _CORE_mutex_Initialize(
     &the_mutex->Mutex,
+    NULL,
     the_mutex_attr,
     CORE_MUTEX_UNLOCKED
   );

@@ -28,9 +28,14 @@
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
 int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
+  Thread_Control      *executing,
   ISR_Level            level
 )
 {
-  return _CORE_mutex_Seize_interrupt_trylock_body( the_mutex, level );
+  return _CORE_mutex_Seize_interrupt_trylock_body(
+    the_mutex,
+    executing,
+    level
+  );
 }
 #endif

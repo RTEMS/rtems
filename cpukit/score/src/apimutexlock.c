@@ -37,6 +37,7 @@ void _API_Mutex_Lock(
 
   _CORE_mutex_Seize(
     &the_mutex->Mutex,
+    _Thread_Executing,
     the_mutex->Object.id,
     true,
     0,

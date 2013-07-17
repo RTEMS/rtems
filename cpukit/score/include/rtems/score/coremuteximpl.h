@@ -110,7 +110,8 @@ typedef enum {
  *
  *  This routine initializes the mutex based on the parameters passed.
  *
- *  @param[in] the_mutex is the mutex to initalize
+ *  @param[in,out] the_mutex is the mutex to initalize
+ *  @param[in,out] executing The currently executing thread.
  *  @param[in] the_mutex_attributes is the attributes associated with this
  *         mutex instance
  *  @param[in] initial_lock is the initial value of the mutex
@@ -119,7 +120,8 @@ typedef enum {
  */
 CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
-  CORE_mutex_Attributes        *the_mutex_attributes,
+  Thread_Control               *executing,
+  const CORE_mutex_Attributes  *the_mutex_attributes,
   uint32_t                      initial_lock
 );
 
@@ -131,7 +133,8 @@ CORE_mutex_Status _CORE_mutex_Initialize(
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
  *
- *  @param[in] the_mutex is the mutex to attempt to lock
+ *  @param[in,out] executing The currently executing thread.
+ *  @param[in,out] the_mutex is the mutex to attempt to lock
  *  @param[in] level is the interrupt level
  *
  *  @retval This routine returns 0 if "trylock" can resolve whether or not
@@ -145,6 +148,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
 
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   CORE_mutex_Control  *the_mutex,
+  Thread_Control      *executing,
   ISR_Level            level
 );
 
@@ -162,6 +166,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
    */
   int _CORE_mutex_Seize_interrupt_trylock(
     CORE_mutex_Control  *the_mutex,
+    Thread_Control      *executing,
     ISR_Level            level
   );
 #else
@@ -172,8 +177,8 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
    *  @param[in] _mutex will attempt to lock
    *  @param[in] _level is the interrupt level
    */
-  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _level ) \
-     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _level )
+  #define _CORE_mutex_Seize_interrupt_trylock( _mutex, _executing, _level ) \
+     _CORE_mutex_Seize_interrupt_trylock_body( _mutex, _executing, _level )
 #endif
 
 /**
@@ -183,11 +188,13 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
  *  It is an actual subroutine and is not implemented as something
  *  that may be inlined.
  *
- *  @param[in] the_mutex is the mutex to attempt to lock
+ *  @param[in,out] the_mutex is the mutex to attempt to lock
+ *  @param[in,out] executing The currently executing thread.
  *  @param[in] timeout is the maximum number of ticks to block
  */
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
+  Thread_Control      *executing,
   Watchdog_Interval    timeout
 );
 /**
@@ -237,6 +244,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
  */
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
   CORE_mutex_Control  *the_mutex,
+  Thread_Control      *executing,
   Objects_Id           id,
   bool                 wait,
   Watchdog_Interval    timeout,
@@ -250,7 +258,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
       INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
     );
   }
-  if ( _CORE_mutex_Seize_interrupt_trylock( the_mutex, level ) ) {
+  if ( _CORE_mutex_Seize_interrupt_trylock( the_mutex, executing, level ) ) {
     if ( !wait ) {
       _ISR_Enable( level );
       _Thread_Executing->Wait.return_code =
@@ -261,7 +269,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
       _Thread_Executing->Wait.id = id;
       _Thread_Disable_dispatch();
       _ISR_Enable( level );
-      _CORE_mutex_Seize_interrupt_blocking( the_mutex, timeout );
+      _CORE_mutex_Seize_interrupt_blocking( the_mutex, executing, timeout );
     }
   }
 }
@@ -279,14 +287,15 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
   void _CORE_mutex_Seize(
     CORE_mutex_Control  *_the_mutex,
+    Thread_Control      *_executing,
     Objects_Id           _id,
     bool                 _wait,
     Watchdog_Interval    _timeout,
     ISR_Level            _level
   );
 #else
-  #define _CORE_mutex_Seize( _the_mutex, _id, _wait, _timeout, _level ) \
-     _CORE_mutex_Seize_body( _the_mutex, _id, _wait, _timeout, _level )
+  #define _CORE_mutex_Seize( _executing, _mtx, _id, _wait, _timeout, _level ) \
+     _CORE_mutex_Seize_body( _executing, _mtx, _id, _wait, _timeout, _level )
 #endif
 
 /**
@@ -357,7 +366,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
  * @retval false The mutex is not using FIFO blocking order.
  */
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
-  CORE_mutex_Attributes *the_attribute
+  const CORE_mutex_Attributes *the_attribute
 )
 {
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_FIFO;
@@ -429,14 +438,12 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_priority_ceiling(
 
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
   CORE_mutex_Control  *the_mutex,
+  Thread_Control      *executing,
   ISR_Level            level
 )
 {
-  Thread_Control   *executing;
-
   /* disabled when you get here */
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
   if ( !_CORE_mutex_Is_locked( the_mutex ) ) {
     the_mutex->lock       = CORE_MUTEX_LOCKED;
