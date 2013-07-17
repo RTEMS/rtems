@@ -66,6 +66,7 @@ extern "C" {
 #include <rtems/score/percpu.h>
 #include <rtems/score/context.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/isr.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mppkt.h>
 #endif
@@ -881,6 +882,34 @@ void _Thread_blocking_operation_Cancel(
   Thread_Control                   *the_thread,
   ISR_Level                         level
 );
+
+/**
+ * @brief Returns the thread control block of the executing thread.
+ *
+ * This function can be called in any context.  On SMP configurations
+ * interrupts are disabled to ensure that the processor index is used
+ * consistently.
+ *
+ * @return The thread control block of the executing thread.
+ */
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_executing( void )
+{
+  Thread_Control *executing;
+
+  #if defined( RTEMS_SMP )
+    ISR_Level level;
+
+    _ISR_Disable( level );
+  #endif
+
+  executing = _Thread_Executing;
+
+  #if defined( RTEMS_SMP )
+    _ISR_Enable( level );
+  #endif
+
+  return executing;
+}
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/thread.inl>
