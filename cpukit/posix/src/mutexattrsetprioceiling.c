@@ -24,7 +24,7 @@
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
 

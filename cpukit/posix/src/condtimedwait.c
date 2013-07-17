@@ -27,7 +27,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 
 /*
  *  11.4.4 Waiting on a Condition, P1003.1c/Draft 10, p. 105

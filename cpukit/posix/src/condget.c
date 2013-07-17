@@ -20,7 +20,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 
 POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
   pthread_cond_t    *cond,

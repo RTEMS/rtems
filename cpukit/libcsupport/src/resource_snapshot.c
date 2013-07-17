@@ -31,7 +31,7 @@
   #include <rtems/posix/barrier.h>
   #include <rtems/posix/cond.h>
   #include <rtems/posix/mqueue.h>
-  #include <rtems/posix/mutex.h>
+  #include <rtems/posix/muteximpl.h>
   #include <rtems/posix/key.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthread.h>

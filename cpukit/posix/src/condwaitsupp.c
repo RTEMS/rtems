@@ -27,7 +27,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,

@@ -23,7 +23,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 
 static int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
   0,                      /* CORE_MUTEX_STATUS_SUCCESSFUL */

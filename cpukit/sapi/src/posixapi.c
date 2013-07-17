@@ -33,7 +33,7 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/psignalimpl.h>
