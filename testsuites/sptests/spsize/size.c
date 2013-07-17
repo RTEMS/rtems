@@ -37,7 +37,7 @@
 #include <rtems/score/priority.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/rtems/region.h>
-#include <rtems/rtems/sem.h>
+#include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signal.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/sysstate.h>
@@ -355,7 +355,7 @@ uninitialized =
 
 /*scheduler.h*/ SCHEDULER_OVHD                            + 
 
-/*sem.h*/       (sizeof _Semaphore_Information)           +
+/*semimpl.h*/   (sizeof _Semaphore_Information)           +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*semmp.h*/     0                                         +

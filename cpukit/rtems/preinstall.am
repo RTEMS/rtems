@@ -103,6 +103,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/sem.h: include/rtems/rtems/sem.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/sem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/sem.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/semimpl.h: include/rtems/rtems/semimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/semimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/semimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/signal.h: include/rtems/rtems/signal.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/signal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/signal.h
@@ -136,7 +140,6 @@ $(PROJECT_INCLUDE)/rtems/rtems/atomic.h: include/rtems/rtems/atomic.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/atomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/atomic.h
 endif
-
 $(PROJECT_INCLUDE)/rtems/rtems/mainpage.h: mainpage.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/mainpage.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/mainpage.h
@@ -221,10 +224,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl
 $(PROJECT_INCLUDE)/rtems/rtems/region.inl: inline/rtems/rtems/region.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/sem.inl: inline/rtems/rtems/sem.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/sem.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/sem.inl
 
 $(PROJECT_INCLUDE)/rtems/rtems/status.inl: inline/rtems/rtems/status.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/status.inl

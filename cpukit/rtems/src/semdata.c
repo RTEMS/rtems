@@ -21,5 +21,4 @@
 /* instantiate semaphore data */
 #define RTEMS_SEM_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/sem.h>
+#include <rtems/rtems/semimpl.h>

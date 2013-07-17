@@ -15,6 +15,8 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
+#include <rtems/rtems/semimpl.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);

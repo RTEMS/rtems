@@ -20,6 +20,7 @@
 #include <tmacros.h>
 #include <timesys.h>
 
+#include <rtems/rtems/semimpl.h>
 
 /* TEST DATA */
 rtems_id Semaphore_id;

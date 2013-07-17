@@ -15,6 +15,8 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
+#include <rtems/rtems/semimpl.h>
+
 static rtems_id Semaphore;
 static bool case_hit;
 

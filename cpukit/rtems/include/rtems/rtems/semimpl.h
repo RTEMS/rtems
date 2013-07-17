@@ -1,8 +1,9 @@
 /**
- * @file rtems/rtems/sem.inl
+ * @file
  *
- *  This file contains the static inlin implementation of the inlined
- *  routines from the Semaphore Manager.
+ * @ingroup ClassicSem
+ *
+ * @brief Classic Semaphores Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -13,17 +14,70 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_SEM_H
-# error "Never use <rtems/rtems/sem.inl> directly; include <rtems/rtems/sem.h> instead."
+#ifndef _RTEMS_RTEMS_SEMIMPL_H
+#define _RTEMS_RTEMS_SEMIMPL_H
+
+#include <rtems/rtems/sem.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef _RTEMS_RTEMS_SEM_INL
-#define _RTEMS_RTEMS_SEM_INL
+/**
+ * @brief Instantiate Semaphore Data
+ *
+ * Semaphore Manager -- Data Instantiation
+ *
+ * This constant is defined to extern most of the time when using
+ * this header file. However by defining it to nothing, the data
+ * declared in this header file can be instantiated. This is done
+ * in a single per manager file.
+ *
+ */
+#ifndef RTEMS_SEM_EXTERN
+#define RTEMS_SEM_EXTERN extern
+#endif
 
 /**
- *  @addtogroup ClassicSem
- *  @{
+ *  The following defines the information control block used to manage
+ *  this class of objects.
  */
+RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
+
+/**
+ *  @brief Semaphore Manager Initialization
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+void _Semaphore_Manager_initialization(void);
+
+/**
+ * @brief Semaphore Translate Core Mutex Return Code
+ *
+ * This function returns a RTEMS status code based on the mutex
+ * status code specified.
+ *
+ * @param[in] the_mutex_status is the mutex status code to translate
+ *
+ * @retval translated RTEMS status code
+ */
+rtems_status_code _Semaphore_Translate_core_mutex_return_code (
+  uint32_t   the_mutex_status
+);
+
+/**
+ * @brief Semaphore Translate Core Semaphore Return Code
+ *
+ * This function returns a RTEMS status code based on the semaphore
+ * status code specified.
+ *
+ * @param[in] the_mutex_status is the semaphore status code to translate
+ *
+ * @retval translated RTEMS status code
+ */
+rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
+  uint32_t   the_mutex_status
+);
 
 /**
  *  @brief Allocates a semaphore control block from
@@ -92,7 +146,13 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
     _Objects_Get_isr_disable( &_Semaphore_Information, id, location, level );
 }
 
-/**@}*/
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef RTEMS_MULTIPROCESSING
+#include <rtems/rtems/semmp.h>
+#endif
 
 #endif
 /*  end of include file */

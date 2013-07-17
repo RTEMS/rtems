@@ -26,7 +26,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/rtems/sem.h>
+#include <rtems/rtems/semimpl.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/coresem.h>
 #include <rtems/score/states.h>
