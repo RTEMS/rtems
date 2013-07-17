@@ -18,6 +18,7 @@
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/rtems/semimpl.h>
+#include <rtems/score/coremuteximpl.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/domain.h>

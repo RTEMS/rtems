@@ -79,6 +79,10 @@ $(PROJECT_INCLUDE)/rtems/score/coremutex.h: include/rtems/score/coremutex.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremutex.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremutex.h
 
+$(PROJECT_INCLUDE)/rtems/score/coremuteximpl.h: include/rtems/score/coremuteximpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremuteximpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremuteximpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/coresem.h: include/rtems/score/coresem.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coresem.h
@@ -278,10 +282,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corebarrier.inl
 $(PROJECT_INCLUDE)/rtems/score/coremsg.inl: inline/rtems/score/coremsg.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremsg.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremsg.inl
-
-$(PROJECT_INCLUDE)/rtems/score/coremutex.inl: inline/rtems/score/coremutex.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremutex.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremutex.inl
 
 $(PROJECT_INCLUDE)/rtems/score/coresem.inl: inline/rtems/score/coresem.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresem.inl

@@ -16,6 +16,7 @@
  */
 
 #include <rtems/posix/mutex.h>
+#include <rtems/score/coremuteximpl.h>
 
 #ifndef _RTEMS_POSIX_MUTEXIMPL_H
 #define _RTEMS_POSIX_MUTEXIMPL_H
