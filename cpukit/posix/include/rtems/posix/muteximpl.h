@@ -18,6 +18,8 @@
 #include <rtems/posix/mutex.h>
 #include <rtems/score/coremuteximpl.h>
 
+#include <errno.h>
+
 #ifndef _RTEMS_POSIX_MUTEXIMPL_H
 #define _RTEMS_POSIX_MUTEXIMPL_H
 
@@ -37,6 +39,8 @@ POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
  */
 
 POSIX_EXTERN pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
+
+extern const int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1];
 
 /*
  *  @brief POSIX Mutex Manager Initialization
@@ -144,11 +148,19 @@ int _POSIX_Mutex_Lock_support(
  * willing to block but the operation was unable to complete within the time
  * allotted because the resource never became available.
  */
-
-int _POSIX_Mutex_Translate_core_mutex_return_code(
+RTEMS_INLINE_ROUTINE int _POSIX_Mutex_Translate_core_mutex_return_code(
   CORE_mutex_Status  the_mutex_status
-);
-
+)
+{
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( the_mutex_status > CORE_MUTEX_STATUS_LAST )
+      return EINVAL;
+  #endif
+  return _POSIX_Mutex_Return_codes[the_mutex_status];
+}
 
 /*
  *  _POSIX_Mutex_Get
