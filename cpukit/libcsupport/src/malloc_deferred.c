@@ -34,9 +34,6 @@ bool malloc_is_system_state_OK(void)
   if ( !_Thread_Dispatch_is_enabled() )
     return false;
 
-  if ( _ISR_Nest_level > 0 )
-    return false;
-
   return true;
 }
 
