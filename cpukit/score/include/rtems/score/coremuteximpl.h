@@ -235,31 +235,36 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  * If the caller is willing to wait
  *      then they are blocked.
  */
-#define _CORE_mutex_Seize_body( \
-  _the_mutex, _id, _wait, _timeout, _level ) \
-  do { \
-    if ( _CORE_mutex_Check_dispatch_for_seize(_wait) ) { \
-        _Internal_error_Occurred( \
-           INTERNAL_ERROR_CORE, \
-           false, \
-           INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE \
-           ); \
-    } \
-    if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, _level ) ) {  \
-      if ( !(_wait) ) { \
-        _ISR_Enable( _level ); \
-        _Thread_Executing->Wait.return_code = \
-          CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT; \
-      } else { \
-        _Thread_queue_Enter_critical_section( &(_the_mutex)->Wait_queue ); \
-        _Thread_Executing->Wait.queue = &(_the_mutex)->Wait_queue; \
-        _Thread_Executing->Wait.id    = _id; \
-        _Thread_Disable_dispatch(); \
-        _ISR_Enable( _level ); \
-       _CORE_mutex_Seize_interrupt_blocking( _the_mutex, _timeout ); \
-      } \
-    } \
-  } while (0)
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
+  CORE_mutex_Control  *the_mutex,
+  Objects_Id           id,
+  bool                 wait,
+  Watchdog_Interval    timeout,
+  ISR_Level            level
+)
+{
+  if ( _CORE_mutex_Check_dispatch_for_seize( wait ) ) {
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      false,
+      INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
+    );
+  }
+  if ( _CORE_mutex_Seize_interrupt_trylock( the_mutex, level ) ) {
+    if ( !wait ) {
+      _ISR_Enable( level );
+      _Thread_Executing->Wait.return_code =
+        CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
+    } else {
+      _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
+      _Thread_Executing->Wait.queue = &the_mutex->Wait_queue;
+      _Thread_Executing->Wait.id = id;
+      _Thread_Disable_dispatch();
+      _ISR_Enable( level );
+      _CORE_mutex_Seize_interrupt_blocking( the_mutex, timeout );
+    }
+  }
+}
 
 /**
  *  This method is used to obtain a core mutex.
