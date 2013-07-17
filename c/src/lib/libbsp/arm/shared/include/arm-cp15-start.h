@@ -62,11 +62,12 @@ arm_cp15_start_set_translation_table_entries(
   uint32_t i = ARM_MMU_SECT_GET_INDEX(config->begin);
   uint32_t iend =
     ARM_MMU_SECT_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(config->end));
+  uint32_t index_mask = (1U << (32 - ARM_MMU_SECT_BASE_SHIFT)) - 1U;
 
   if (config->begin != config->end) {
-    while (i < iend) {
+    while (i != iend) {
       ttb [i] = (i << ARM_MMU_SECT_BASE_SHIFT) | config->flags;
-      ++i;
+      i = (i + 1U) & index_mask;
     }
   }
 }

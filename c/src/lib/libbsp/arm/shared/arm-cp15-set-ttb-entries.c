@@ -24,6 +24,7 @@ static uint32_t set_translation_table_entries(
   uint32_t *ttb = arm_cp15_get_translation_table_base();
   uint32_t i = ARM_MMU_SECT_GET_INDEX(begin);
   uint32_t iend = ARM_MMU_SECT_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(end));
+  uint32_t index_mask = (1U << (32 - ARM_MMU_SECT_BASE_SHIFT)) - 1U;
   uint32_t ctrl;
   uint32_t section_flags_of_first_entry;
 
@@ -31,12 +32,12 @@ static uint32_t set_translation_table_entries(
   arm_cp15_tlb_invalidate();
   section_flags_of_first_entry = ttb [i];
 
-  while (i < iend) {
+  while (i != iend) {
     uint32_t addr = i << ARM_MMU_SECT_BASE_SHIFT;
 
     ttb [i] = addr | section_flags;
 
-    ++i;
+    i = (i + 1U) & index_mask;
   }
 
   arm_cp15_set_control(ctrl);
