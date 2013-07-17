@@ -248,6 +248,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_if_necessary(
   }
 }
 
+#if !defined(__DYNAMIC_REENT__)
 /**
  * This routine returns the C library re-enterant pointer.
  */
@@ -267,6 +268,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
 {
   _Thread_libc_reent = libc_reent;
 }
+#endif
 
 /** @}*/
 

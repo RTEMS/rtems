@@ -36,12 +36,14 @@ bool newlib_create_hook(
   struct _reent *ptr;
   bool ok;
 
+#if !defined(__DYNAMIC_REENT__)
   if (_Thread_libc_reent == 0)
   {
     _REENT = _GLOBAL_REENT;
 
     _Thread_Set_libc_reent (&_REENT);
   }
+#endif
 
   /* It is OK to allocate from the workspace because these
    * hooks run with thread dispatching disabled.

@@ -499,6 +499,7 @@ SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
 SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 #endif
 
+#if !defined(__DYNAMIC_REENT__)
 /**
  * The C library re-enter-rant global pointer. Some C library implementations
  * such as newlib have a single global pointer that changed during a context
@@ -506,6 +507,8 @@ SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
  * holds a pointer to the task specific data.
  */
 SCORE_EXTERN struct _reent **_Thread_libc_reent;
+#endif
+
 /**
  *  @brief Initialize thread handler.
  *

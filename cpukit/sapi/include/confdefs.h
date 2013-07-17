@@ -61,6 +61,10 @@
   #include <bsp.h>
 #endif
 
+#ifdef RTEMS_NEWLIB
+  #include <sys/reent.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1650,6 +1654,16 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
+#if defined(RTEMS_NEWLIB) && defined(__DYNAMIC_REENT__)
+  struct _reent *__getreent(void)
+  {
+    #ifdef CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+      return _GLOBAL_REENT;
+    #else
+      return _Thread_Get_executing()->libc_reent;
+    #endif
+  }
+#endif
 
 #endif
 
@@ -1939,8 +1953,6 @@ const rtems_libio_helper rtems_fs_init_helper =
  */
 
 #if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  #include <reent.h>
-
   #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB \
     _Configure_From_workspace(sizeof(struct _reent))
 #else
