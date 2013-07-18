@@ -132,7 +132,8 @@ void _MPCI_Create_server( void )
     THREAD_START_NUMERIC,
     (void *) _MPCI_Receive_server,
     NULL,
-    0
+    0,
+    NULL
   );
 }
 
