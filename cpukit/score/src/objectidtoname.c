@@ -38,7 +38,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
    *  Caller is trusted for name != NULL.
    */
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
 
   the_api = _Objects_Get_API( tmpId );
   if ( !_Objects_Is_api_valid( the_api ) )

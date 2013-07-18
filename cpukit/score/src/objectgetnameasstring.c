@@ -53,7 +53,7 @@ char *_Objects_Get_name_as_string(
   if ( name == NULL )
     return NULL;
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
 
   information = _Objects_Get_information_id( tmpId );
   if ( !information )
