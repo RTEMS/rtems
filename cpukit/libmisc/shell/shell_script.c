@@ -23,6 +23,7 @@
 #include <inttypes.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <limits.h>
 #define __need_getopt_newlib
 #include <getopt.h>
 
