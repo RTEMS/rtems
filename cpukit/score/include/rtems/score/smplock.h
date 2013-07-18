@@ -25,7 +25,7 @@
 #if defined( RTEMS_SMP )
 
 #include <rtems/score/cpusmplock.h>
-#include <rtems/score/isr.h>
+#include <rtems/score/isrlevel.h>
 
 #ifdef __cplusplus
 extern "C" {
