@@ -22,6 +22,8 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/posixapi.h>
 
+#include <errno.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +34,9 @@ extern "C" {
  */
 
 POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
+
+extern const int
+  _POSIX_Semaphore_Return_codes[CORE_SEMAPHORE_STATUS_LAST + 1];
 
 /*
  *  _POSIX_Semaphore_Manager_initialization
@@ -136,9 +141,20 @@ int _POSIX_Semaphore_Wait_support(
  *  appropriate POSIX status values.
  */
 
-int _POSIX_Semaphore_Translate_core_semaphore_return_code(
+RTEMS_INLINE_ROUTINE int
+_POSIX_Semaphore_Translate_core_semaphore_return_code(
   CORE_semaphore_Status  the_semaphore_status
-);
+)
+{
+  /*
+   *  Internal consistency check for bad status from SuperCore
+   */
+  #if defined(RTEMS_DEBUG)
+    if ( the_semaphore_status > CORE_SEMAPHORE_STATUS_LAST )
+      return EINVAL;
+  #endif
+  return _POSIX_Semaphore_Return_codes[the_semaphore_status];
+}
  
 /*
  *  _POSIX_Semaphore_Allocate
