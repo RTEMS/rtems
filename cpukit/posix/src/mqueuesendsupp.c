@@ -63,6 +63,7 @@ int _POSIX_Message_queue_Send_support(
   Objects_Locations               location;
   CORE_message_queue_Status       msg_status;
   bool                            do_wait;
+  Thread_Control                 *executing;
 
   /*
    * Validate the priority.
@@ -94,8 +95,10 @@ int _POSIX_Message_queue_Send_support(
       /*
        *  Now perform the actual message receive
        */
+      executing = _Thread_Executing;
       msg_status = _CORE_message_queue_Submit(
         &the_mq->Message_queue,
+        executing,
         msg_ptr,
         msg_len,
         mqdes,      /* mqd_t is an object id */
@@ -115,7 +118,7 @@ int _POSIX_Message_queue_Send_support(
        */
 
       if ( msg_status == CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT )
-        msg_status = _Thread_Executing->Wait.return_code;
+        msg_status = executing->Wait.return_code;
 
       if ( !msg_status )
         return msg_status;

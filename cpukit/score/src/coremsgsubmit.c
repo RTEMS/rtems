@@ -30,6 +30,7 @@
 
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
+  Thread_Control                            *executing,
   const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
@@ -122,7 +123,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  would be to use this variable prior to here.
      */
     {
-      Thread_Control  *executing = _Thread_Executing;
       ISR_Level        level;
 
       _ISR_Disable( level );

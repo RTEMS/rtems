@@ -47,6 +47,7 @@ rtems_status_code rtems_message_queue_receive(
   register Message_queue_Control *the_message_queue;
   Objects_Locations               location;
   bool                            wait;
+  Thread_Control                 *executing;
 
   if ( !buffer )
     return RTEMS_INVALID_ADDRESS;
@@ -63,8 +64,10 @@ rtems_status_code rtems_message_queue_receive(
       else
         wait = true;
 
+      executing = _Thread_Executing;
       _CORE_message_queue_Seize(
         &the_message_queue->message_queue,
+        executing,
         the_message_queue->Object.id,
         buffer,
         size,
@@ -73,7 +76,7 @@ rtems_status_code rtems_message_queue_receive(
       );
       _Objects_Put( &the_message_queue->Object );
       return _Message_queue_Translate_core_message_queue_return_code(
-        _Thread_Executing->Wait.return_code
+        executing->Wait.return_code
       );
 
 #if defined(RTEMS_MULTIPROCESSING)

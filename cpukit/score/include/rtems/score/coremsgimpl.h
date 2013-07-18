@@ -274,6 +274,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  */
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
+  Thread_Control                            *executing,
   const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
@@ -320,6 +321,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  */
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
+  Thread_Control                  *executing,
   Objects_Id                       id,
   void                            *buffer,
   size_t                          *size_p,
@@ -363,6 +365,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
 {
   return _CORE_message_queue_Submit(
     the_message_queue,
+    _Thread_Executing,
     buffer,
     size,
     id,
@@ -388,6 +391,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
 {
   return _CORE_message_queue_Submit(
     the_message_queue,
+    _Thread_Executing,
     buffer,
     size,
     id,

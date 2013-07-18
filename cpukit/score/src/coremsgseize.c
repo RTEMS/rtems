@@ -29,6 +29,7 @@
 
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
+  Thread_Control                  *executing,
   Objects_Id                       id,
   void                            *buffer,
   size_t                          *size_p,
@@ -38,9 +39,7 @@ void _CORE_message_queue_Seize(
 {
   ISR_Level                          level;
   CORE_message_queue_Buffer_control *the_message;
-  Thread_Control                    *executing;
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
@@ -49,7 +48,7 @@ void _CORE_message_queue_Seize(
     _ISR_Enable( level );
 
     *size_p = the_message->Contents.size;
-    _Thread_Executing->Wait.count =
+    executing->Wait.count =
       _CORE_message_queue_Get_message_priority( the_message );
     _CORE_message_queue_Copy_buffer(
       the_message->Contents.buffer,
