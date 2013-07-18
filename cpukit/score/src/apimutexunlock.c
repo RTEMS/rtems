@@ -21,6 +21,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/coremuteximpl.h>
 
 void _API_Mutex_Unlock(
   API_Mutex_Control *the_mutex

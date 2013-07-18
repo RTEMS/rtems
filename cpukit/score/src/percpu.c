@@ -28,6 +28,7 @@
 #if defined(RTEMS_SMP)
 
   #include <rtems/score/smp.h>
+  #include <rtems/bspsmp.h>
 
   void _SMP_Handler_initialize(void)
   {
