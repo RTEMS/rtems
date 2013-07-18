@@ -94,7 +94,7 @@ int pthread_create(
    */
   switch ( the_attr->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
-      api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+      api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
       schedpolicy = api->schedpolicy;
       schedparam  = api->schedparam;
       break;

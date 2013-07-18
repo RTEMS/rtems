@@ -73,7 +73,7 @@ int sigtimedwait(
   const struct timespec  *timeout
 )
 {
-  Thread_Control    *the_thread;
+  Thread_Control    *executing;
   POSIX_API_Control *api;
   Watchdog_Interval  interval;
   siginfo_t          signal_information;
@@ -109,9 +109,8 @@ int sigtimedwait(
 
   the_info = ( info ) ? info : &signal_information;
 
-  the_thread = _Thread_Executing;
-
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  executing = _Thread_Get_executing();
+  api = executing->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  What if they are already pending?
@@ -153,10 +152,10 @@ int sigtimedwait(
   the_info->si_signo = -1;
 
   _Thread_Disable_dispatch();
-    the_thread->Wait.queue           = &_POSIX_signals_Wait_queue;
-    the_thread->Wait.return_code     = EINTR;
-    the_thread->Wait.option          = *set;
-    the_thread->Wait.return_argument = the_info;
+    executing->Wait.queue           = &_POSIX_signals_Wait_queue;
+    executing->Wait.return_code     = EINTR;
+    executing->Wait.option          = *set;
+    executing->Wait.return_argument = the_info;
     _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue );
     _ISR_Enable( level );
     _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, interval );
@@ -174,9 +173,9 @@ int sigtimedwait(
    * was not in our set.
    */
 
-  if ( (_Thread_Executing->Wait.return_code != EINTR)
+  if ( (executing->Wait.return_code != EINTR)
        || !(*set & signo_to_mask( the_info->si_signo )) ) {
-    errno = _Thread_Executing->Wait.return_code;
+    errno = executing->Wait.return_code;
     return -1;
   }
 

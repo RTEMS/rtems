@@ -35,7 +35,7 @@ int sigpending(
   if ( !set )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+  api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
 
   *set = api->signals_pending | _POSIX_signals_Pending;
 

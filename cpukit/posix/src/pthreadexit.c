@@ -97,5 +97,5 @@ void pthread_exit(
   void  *value_ptr
 )
 {
-  _POSIX_Thread_Exit( _Thread_Executing, value_ptr );
+  _POSIX_Thread_Exit( _Thread_Get_executing(), value_ptr );
 }

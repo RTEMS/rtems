@@ -118,14 +118,16 @@ static void _POSIX_signals_Post_switch_hook(
   int                 signo;
   ISR_Level           level;
   int                 hold_errno;
+  Thread_Control     *executing;
 
+  executing = _Thread_Get_executing();
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  We need to ensure that if the signal handler executes a call
    *  which overwrites the unblocking status, we restore it.
    */
-  hold_errno = _Thread_Executing->Wait.return_code;
+  hold_errno = executing->Wait.return_code;
 
   /*
    * api may be NULL in case of a thread close in progress
@@ -162,7 +164,7 @@ static void _POSIX_signals_Post_switch_hook(
     }
   }
 
-  _Thread_Executing->Wait.return_code = hold_errno;
+  executing->Wait.return_code = hold_errno;
 }
 
 API_extensions_Post_switch_control _POSIX_signals_Post_switch = {
