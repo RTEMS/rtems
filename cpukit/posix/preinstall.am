@@ -100,6 +100,10 @@ $(PROJECT_INCLUDE)/rtems/posix/semaphore.h: include/rtems/posix/semaphore.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
 
+$(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h: include/rtems/posix/semaphoreimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/threadsup.h: include/rtems/posix/threadsup.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/threadsup.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/threadsup.h
@@ -143,10 +147,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
 $(PROJECT_INCLUDE)/rtems/posix/priority.inl: inline/rtems/posix/priority.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphore.inl: inline/rtems/posix/semaphore.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.inl
 
 $(PROJECT_INCLUDE)/rtems/posix/timer.inl: inline/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl
