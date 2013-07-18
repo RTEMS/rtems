@@ -30,6 +30,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/cond.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/key.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
+include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
 include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
@@ -49,7 +50,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
 
 include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/key.inl
-include_rtems_posix_HEADERS += inline/rtems/posix/mqueue.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/pthread.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/priority.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/timer.inl

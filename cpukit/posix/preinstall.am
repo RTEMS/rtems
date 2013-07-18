@@ -64,6 +64,10 @@ $(PROJECT_INCLUDE)/rtems/posix/mqueue.h: include/rtems/posix/mqueue.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
 
+$(PROJECT_INCLUDE)/rtems/posix/mqueueimpl.h: include/rtems/posix/mqueueimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueueimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueueimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/mutex.h: include/rtems/posix/mutex.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutex.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.h
@@ -135,10 +139,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.inl
 $(PROJECT_INCLUDE)/rtems/posix/key.inl: inline/rtems/posix/key.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/mqueue.inl: inline/rtems/posix/mqueue.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.inl
 
 $(PROJECT_INCLUDE)/rtems/posix/pthread.inl: inline/rtems/posix/pthread.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.inl

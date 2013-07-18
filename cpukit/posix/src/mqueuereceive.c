@@ -29,7 +29,7 @@
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>
 
 ssize_t mq_receive(
