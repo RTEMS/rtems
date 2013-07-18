@@ -21,6 +21,7 @@
 
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/posixapi.h>
+#include <rtems/score/coremsgimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
