@@ -43,7 +43,7 @@ rtems_status_code rtems_object_set_name(
   if ( !name )
     return RTEMS_INVALID_ADDRESS;
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
 
   information  = _Objects_Get_information_id( tmpId );
   if ( !information )

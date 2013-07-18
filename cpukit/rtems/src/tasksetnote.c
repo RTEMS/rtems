@@ -43,6 +43,7 @@ rtems_status_code rtems_task_set_note(
   register Thread_Control *the_thread;
   Objects_Locations        location;
   RTEMS_API_Control       *api;
+  Thread_Control          *executing;
 
   if ( !rtems_configuration_get_notepads_enabled() )
     return RTEMS_NOT_CONFIGURED;
@@ -59,9 +60,10 @@ rtems_status_code rtems_task_set_note(
    *  Optimize the most likely case to avoid the Thread_Dispatch.
    */
 
+  executing = _Thread_Get_executing();
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ||
-       _Objects_Are_ids_equal( id, _Thread_Executing->Object.id ) ) {
-      api = _Thread_Executing->API_Extensions[ THREAD_API_RTEMS ];
+       _Objects_Are_ids_equal( id, executing->Object.id ) ) {
+      api = executing->API_Extensions[ THREAD_API_RTEMS ];
       api->Notepads[ notepad ] = note;
       return RTEMS_SUCCESSFUL;
   }
