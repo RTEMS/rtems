@@ -58,12 +58,10 @@ RTEMS_BSPOPTS_SET([MPC83XX_HAS_NAND_LP_FLASH_ON_CS0],[br_uid],[1])
 RTEMS_BSPOPTS_SET([MPC83XX_HAS_NAND_LP_FLASH_ON_CS0],[*],[])
 RTEMS_BSPOPTS_HELP([MPC83XX_HAS_NAND_LP_FLASH_ON_CS0],[indicates if the board has a NAND large page flash on chip select 0])
 
-RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[mpc8349eamds],[9600])
 RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[hsc_cm01],[9600])
 RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[115200])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[default baud for console and other serial devices])
 
-RTEMS_BSPOPTS_SET([BSP_USE_UART_INTERRUPTS],[mpc8349eamds],[])
 RTEMS_BSPOPTS_SET([BSP_USE_UART_INTERRUPTS],[hsc_cm01],[])
 RTEMS_BSPOPTS_SET([BSP_USE_UART_INTERRUPTS],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_USE_UART_INTERRUPTS],[enable usage of interrupts for the UART modules])
@@ -73,6 +71,7 @@ RTEMS_BSPOPTS_HELP([BSP_USE_UART2],[if defined, enables UART2])
 
 RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8309som],[1])
 RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8313erdb],[1])
+RTEMS_BSPOPTS_SET([HAS_UBOOT],[mpc8349eamds],[1])
 RTEMS_BSPOPTS_HELP([HAS_UBOOT],[if defined, enables U-Boot support])
 
 # Disable interrupt nesting for the MPC8313ERDB since the interrupt server
