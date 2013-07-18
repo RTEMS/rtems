@@ -116,7 +116,6 @@ void test_once(void)
 }
 
 volatile bool key_dtor_ran;
-void *key_for_testing;
 
 void key_dtor(void *ptr)
 {
@@ -128,6 +127,7 @@ void test_key(void)
   int              sc;
   __gthread_key_t  key;
   void            *p;
+  __gthread_key    key_obj;
 
   puts( "rtems_gxx_key_create(&key, NULL) - OK" );
   sc = rtems_gxx_key_create(&key, NULL);
@@ -154,25 +154,22 @@ void test_key(void)
   rtems_test_assert( sc == 0 );
   rtems_test_assert( key_dtor_ran == true );
 
-  puts( "rtems_gxx_getspecific(key_for_testing) non-existent - OK" );
-  p = rtems_gxx_getspecific((__gthread_key_t) &key_for_testing);
+  key = calloc( 1, sizeof( *key ) );
+  rtems_test_assert( key != NULL );
+
+  puts( "rtems_gxx_getspecific(key) non-existent - OK" );
+  p = rtems_gxx_getspecific( key );
   rtems_test_assert( p == NULL );
-  rtems_test_assert( key_for_testing == NULL );
 
-  key_for_testing = malloc(4);
-  rtems_test_assert( key_for_testing != NULL );
-  
-  puts( "rtems_gxx_key_delete(key_for_testing) - OK" );
-  sc = rtems_gxx_key_delete((__gthread_key_t) &key_for_testing);
+  puts( "rtems_gxx_key_delete(key) - OK" );
+  sc = rtems_gxx_key_delete( key );
   rtems_test_assert( sc == 0 );
-  rtems_test_assert( key_for_testing == NULL );
 
-
-  key = (void *)0x1234;
-  puts( "rtems_gxx_key_dtor(&key) - OK" );
-  sc = rtems_gxx_key_dtor((__gthread_key_t) &key, key_dtor);
+  memset( &key_obj, 0xff, sizeof( key_obj ) );
+  puts( "rtems_gxx_key_dtor(&key_obj) - OK" );
+  sc = rtems_gxx_key_dtor( &key_obj, key_dtor );
   rtems_test_assert( sc == 0 );
-  rtems_test_assert( key == NULL );
+  rtems_test_assert( key_obj.val == 0 );
 }
 
 rtems_task Init(
