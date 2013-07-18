@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/messageimpl.h>
 #include <rtems/score/mpci.h>
 #include <rtems/rtems/msgmp.h>
 #include <rtems/score/object.h>

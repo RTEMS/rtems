@@ -31,7 +31,7 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
 #include <rtems/rtems/event.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/messageimpl.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif

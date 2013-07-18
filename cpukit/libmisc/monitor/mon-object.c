@@ -20,6 +20,7 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/semimpl.h>
 #if defined(RTEMS_POSIX_API)
   #include <rtems/posix/pthread.h>

@@ -25,6 +25,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/protectedheap.h>
 
+#include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/semimpl.h>
 
 #ifdef RTEMS_POSIX_API

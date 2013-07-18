@@ -4,6 +4,7 @@
 
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/rtems/messageimpl.h>
 
 #include <stdio.h>
 

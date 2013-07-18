@@ -18,16 +18,18 @@
 #ifndef _RTEMS_RTEMS_MSGMP_H
 #define _RTEMS_RTEMS_MSGMP_H
 
+#ifndef _RTEMS_RTEMS_MESSAGEIMPL_H
+# error "Never use <rtems/rtems/msgmp.h> directly; include <rtems/rtems/messageimpl.h> instead."
+#endif
+
+#include <rtems/rtems/messageimpl.h>
+#include <rtems/score/mppkt.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/rtems/message.h>
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
 
 /**
  *  @defgroup ClassicMsgMP Message Queue MP Support
@@ -78,6 +80,20 @@ typedef struct {
 
 #define MESSAGE_QUEUE_MP_PACKET_SIZE \
   offsetof(Message_queue_MP_Packet, Buffer.buffer)
+
+/**
+ *  @brief Message_queue_Core_message_queue_mp_support
+ *
+ *  Input parameters:
+ *    the_thread - the remote thread the message was submitted to
+ *    id         - id of the message queue
+ *
+ *  Output parameters: NONE
+ */
+void  _Message_queue_Core_message_queue_mp_support (
+  Thread_Control *the_thread,
+  rtems_id        id
+);
 
 /**
  *  @brief _Message_queue_MP_Send_process_packet
@@ -159,11 +175,11 @@ void _Message_queue_MP_Send_extract_proxy (
  */
 Message_queue_MP_Packet *_Message_queue_MP_Get_packet ( void );
 
+/**@}*/
+
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of file */

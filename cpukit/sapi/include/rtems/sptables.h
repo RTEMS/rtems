@@ -36,7 +36,6 @@ extern "C" {
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
 #include <rtems/rtems/event.h>
-#include <rtems/rtems/message.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif

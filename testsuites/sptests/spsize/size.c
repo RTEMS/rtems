@@ -28,7 +28,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/messageimpl.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpci.h>
@@ -296,7 +296,7 @@ uninitialized =
                 (sizeof _ISR_Vector_table)                +
 #endif
 
-/*message.h*/   (sizeof _Message_queue_Information)       +
+/*messageimpl.h*/ (sizeof _Message_queue_Information)     +
 
 /*modes.h*/     0                                         +
 
