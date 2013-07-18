@@ -90,5 +90,6 @@ rtems_task Init(
     directive_failed( status, "task start" );
   }
 
-  status = rtems_task_delete( RTEMS_SELF );
+  /* FIXME: Task deletion currently not supported */
+  (void) rtems_task_suspend( RTEMS_SELF );
 }

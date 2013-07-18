@@ -20,7 +20,12 @@
 
 static void test(void)
 {
+  rtems_status_code sc;
+
   rtems_test_assert(rtems_configuration_is_smp_enabled());
+
+  sc = rtems_task_delete(RTEMS_SELF);
+  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
 }
 
 static void Init(rtems_task_argument arg)

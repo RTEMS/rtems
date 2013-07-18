@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
@@ -38,12 +39,15 @@ rtems_status_code rtems_task_delete(
   rtems_id id
 )
 {
-#ifdef RTEMS_SMP
-  return rtems_task_suspend( id );
-#else /* RTEMS_SMP */
   register Thread_Control *the_thread;
   Objects_Locations        location;
   Objects_Information     *the_information;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
 
   _RTEMS_Lock_allocator();
 
@@ -94,5 +98,4 @@ rtems_status_code rtems_task_delete(
 
   _RTEMS_Unlock_allocator();
   return RTEMS_INVALID_ID;
-#endif /* RTEMS_SMP */
 }
