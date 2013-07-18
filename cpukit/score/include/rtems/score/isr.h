@@ -193,8 +193,6 @@ void _ISR_Dispatch( void );
           (_ISR_Nest_level != 0)
 #endif
 
-#include <rtems/score/isr.inl>
-
 #ifdef __cplusplus
 }
 #endif

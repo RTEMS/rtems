@@ -90,7 +90,6 @@ include_rtems_score_HEADERS += inline/rtems/score/corebarrier.inl
 include_rtems_score_HEADERS += inline/rtems/score/coremsg.inl
 include_rtems_score_HEADERS += inline/rtems/score/coresem.inl
 include_rtems_score_HEADERS += inline/rtems/score/heap.inl
-include_rtems_score_HEADERS += inline/rtems/score/isr.inl
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/priority.inl
 include_rtems_score_HEADERS += inline/rtems/score/prioritybitmap.inl
