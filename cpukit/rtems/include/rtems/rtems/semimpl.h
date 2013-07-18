@@ -19,6 +19,7 @@
 
 #include <rtems/rtems/sem.h>
 #include <rtems/score/coremuteximpl.h>
+#include <rtems/score/coresemimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

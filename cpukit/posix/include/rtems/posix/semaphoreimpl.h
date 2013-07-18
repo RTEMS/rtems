@@ -21,6 +21,7 @@
 
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/posixapi.h>
+#include <rtems/score/coresemimpl.h>
 
 #include <errno.h>
 

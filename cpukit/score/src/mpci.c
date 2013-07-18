@@ -33,7 +33,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/score/sysstate.h>
 
-#include <rtems/score/coresem.h>
+#include <rtems/score/coresemimpl.h>
 #include <rtems/config.h>
 
 RTEMS_STATIC_ASSERT(
