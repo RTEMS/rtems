@@ -18,6 +18,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/context.h>
 #include <rtems/score/interr.h>
@@ -56,6 +57,12 @@ bool _Thread_Initialize(
   void                *extensions_area;
   bool                 extension_status;
   int                  i;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() && !is_preemptible ) {
+    return false;
+  }
+#endif
 
   /*
    *  Initialize the Ada self pointer

@@ -39,7 +39,6 @@ AC_CONFIG_FILES([Makefile
 smp01/Makefile
 smp02/Makefile
 smp03/Makefile
-smp04/Makefile
 smp05/Makefile
 smp06/Makefile
 smp07/Makefile

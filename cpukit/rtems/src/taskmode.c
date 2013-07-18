@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
@@ -67,8 +68,18 @@ rtems_status_code rtems_task_mode(
   /*
    *  These are generic thread scheduling characteristics.
    */
-  if ( mask & RTEMS_PREEMPT_MASK )
+  if ( mask & RTEMS_PREEMPT_MASK ) {
+#if defined( RTEMS_SMP )
+    if (
+      rtems_configuration_is_smp_enabled()
+        && !_Modes_Is_preempt( mode_set )
+    ) {
+      return RTEMS_NOT_IMPLEMENTED;
+    }
+#endif
+
     executing->is_preemptible = _Modes_Is_preempt( mode_set );
+  }
 
   if ( mask & RTEMS_TIMESLICE_MASK ) {
     if ( _Modes_Is_timeslice(mode_set) ) {

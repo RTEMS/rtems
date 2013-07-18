@@ -21,6 +21,8 @@
 static void test(void)
 {
   rtems_status_code sc;
+  rtems_mode mode;
+  rtems_id id;
 
   rtems_test_assert(rtems_configuration_is_smp_enabled());
 
@@ -35,6 +37,19 @@ static void test(void)
 
   sc = rtems_task_variable_get(RTEMS_SELF, NULL, NULL);
   rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+
+  sc = rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &mode);
+  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    RTEMS_MINIMUM_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_NO_PREEMPT,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_UNSATISFIED);
 }
 
 static void Init(rtems_task_argument arg)
@@ -55,7 +70,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
