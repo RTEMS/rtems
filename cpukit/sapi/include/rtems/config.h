@@ -222,6 +222,10 @@ typedef struct {
    */
   bool                           stack_allocator_avoids_work_space;
 
+  #ifdef RTEMS_SMP
+    bool                         smp_enabled;
+  #endif
+
   uint32_t                       maximum_drivers;
   uint32_t                       number_of_device_drivers;
   rtems_driver_address_table    *Device_driver_table;
@@ -339,10 +343,31 @@ extern const rtems_configuration_table Configuration;
 #endif
 
 /**
+ * @brief Returns true if the SMP mode of operation is enabled, and false
+ * otherwise.
+ *
+ * On single-processor configurations this is a compile time constant which
+ * evaluates to false.
+ *
+ * @retval true SMP mode of operation is enabled.
+ * @retval false Otherwise.
+ */
+#ifdef RTEMS_SMP
+  #define rtems_configuration_is_smp_enabled() \
+        (Configuration.smp_enabled)
+#else
+  #define rtems_configuration_is_smp_enabled() \
+        false
+#endif
+
+/**
  * @brief Returns the configured maximum count of processors.
  *
  * The actual number of processors available for the application will be less
  * than or equal to the configured maximum count of processors.
+ *
+ * On single-processor configurations this is a compile time constant which
+ * evaluates to one.
  *
  * @return The configured maximum count of processors.
  */

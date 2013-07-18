@@ -54,5 +54,6 @@ smpatomic06/Makefile
 smpatomic07/Makefile
 smplock01/Makefile
 smpschedule01/Makefile
+smpunsupported01/Makefile
 ])
 AC_OUTPUT

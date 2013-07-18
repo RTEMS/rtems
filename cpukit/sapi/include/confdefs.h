@@ -2364,6 +2364,13 @@ const rtems_libio_helper rtems_fs_init_helper =
     #else
       false,
     #endif
+    #ifdef RTEMS_SMP
+      #ifdef CONFIGURE_SMP_APPLICATION
+        true,
+      #else
+        false,
+      #endif
+    #endif
     CONFIGURE_MAXIMUM_DRIVERS,                /* maximum device drivers */
     CONFIGURE_NUMBER_OF_DRIVERS,              /* static device drivers */
     Device_drivers,                           /* pointer to driver table */
