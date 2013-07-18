@@ -289,14 +289,20 @@ Thread _MPCI_Receive_server(
   MPCI_Packet_processor     the_function;
   Thread_Control           *executing;
 
-  executing = _Thread_Executing;
+  executing = _Thread_Get_executing();
 
   for ( ; ; ) {
 
     executing->receive_packet = NULL;
 
     _Thread_Disable_dispatch();
-    _CORE_semaphore_Seize( &_MPCI_Semaphore, 0, true, WATCHDOG_NO_TIMEOUT );
+    _CORE_semaphore_Seize(
+      &_MPCI_Semaphore,
+      executing,
+      0,
+      true,
+      WATCHDOG_NO_TIMEOUT
+    );
     _Thread_Enable_dispatch();
 
     for ( ; ; ) {

@@ -30,15 +30,14 @@
 
 void _CORE_semaphore_Seize(
   CORE_semaphore_Control *the_semaphore,
+  Thread_Control         *executing,
   Objects_Id              id,
   bool                    wait,
   Watchdog_Interval       timeout
 )
 {
-  Thread_Control *executing;
   ISR_Level       level;
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   if ( the_semaphore->count != 0 ) {

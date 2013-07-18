@@ -108,6 +108,7 @@ void _CORE_semaphore_Initialize(
    *  available.
    *
    *  @param[in] the_semaphore is the semaphore to seize
+   *  @param[in,out] executing The currently executing thread.
    *  @param[in] id is the Id of the API level Semaphore object associated
    *         with this instance of a SuperCore Semaphore
    *  @param[in] wait indicates if the caller is willing to block
@@ -116,6 +117,7 @@ void _CORE_semaphore_Initialize(
    */
   void _CORE_semaphore_Seize(
     CORE_semaphore_Control  *the_semaphore,
+    Thread_Control          *executing,
     Objects_Id               id,
     bool                     wait,
     Watchdog_Interval        timeout
@@ -201,6 +203,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  * available.
  *
  * @param[in] the_semaphore is the semaphore to obtain
+ * @param[in,out] executing The currently executing thread.
  * @param[in] id is the Id of the owning API level Semaphore object
  * @param[in] wait is true if the thread is willing to wait
  * @param[in] timeout is the maximum number of ticks to block
@@ -211,17 +214,15 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  */
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   CORE_semaphore_Control  *the_semaphore,
+  Thread_Control          *executing,
   Objects_Id               id,
   bool                     wait,
   Watchdog_Interval        timeout,
   ISR_Level                level
 )
 {
-  Thread_Control *executing;
-
   /* disabled when you get here */
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;

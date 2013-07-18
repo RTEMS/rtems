@@ -40,25 +40,28 @@ int _POSIX_Semaphore_Wait_support(
 {
   POSIX_Semaphore_Control *the_semaphore;
   Objects_Locations        location;
+  Thread_Control          *executing;
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      executing = _Thread_Executing;
       _CORE_semaphore_Seize(
         &the_semaphore->Semaphore,
+        executing,
         the_semaphore->Object.id,
         blocking,
         timeout
       );
       _Objects_Put( &the_semaphore->Object );
 
-      if ( !_Thread_Executing->Wait.return_code )
+      if ( !executing->Wait.return_code )
         return 0;
 
       rtems_set_errno_and_return_minus_one(
         _POSIX_Semaphore_Translate_core_semaphore_return_code(
-          _Thread_Executing->Wait.return_code
+          executing->Wait.return_code
         )
       );
 
