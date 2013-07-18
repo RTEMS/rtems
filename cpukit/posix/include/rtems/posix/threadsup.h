@@ -21,6 +21,7 @@
 #include <sys/signal.h>
 #include <rtems/score/coresem.h>
 #include <rtems/score/tqdata.h>
+#include <rtems/score/watchdog.h>
 
 /**
  *  @defgroup POSIX_THREAD POSIX Thread API Extension

@@ -22,6 +22,7 @@
 
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {

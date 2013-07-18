@@ -31,7 +31,7 @@
 #include <rtems/config.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/threadsup.h>

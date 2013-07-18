@@ -25,6 +25,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <stdlib.h>
+#include <limits.h>
 
 /*
  *  aio_read
