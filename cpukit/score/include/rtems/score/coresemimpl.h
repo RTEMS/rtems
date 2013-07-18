@@ -95,9 +95,9 @@ typedef void ( *CORE_semaphore_API_mp_support_callout )(
  *  @param[in] initial_value is the initial count of the semaphore
  */
 void _CORE_semaphore_Initialize(
-  CORE_semaphore_Control       *the_semaphore,
-  CORE_semaphore_Attributes    *the_semaphore_attributes,
-  uint32_t                      initial_value
+  CORE_semaphore_Control          *the_semaphore,
+  const CORE_semaphore_Attributes *the_semaphore_attributes,
+  uint32_t                         initial_value
 );
 
 #if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
@@ -174,7 +174,7 @@ void _CORE_semaphore_Flush(
  * @return true if the priority attribute is enabled
  */
 RTEMS_INLINE_ROUTINE bool _CORE_semaphore_Is_priority(
-  CORE_semaphore_Attributes *the_attribute
+  const CORE_semaphore_Attributes *the_attribute
 )
 {
    return ( the_attribute->discipline == CORE_SEMAPHORE_DISCIPLINES_PRIORITY );

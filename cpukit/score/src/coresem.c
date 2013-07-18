@@ -26,9 +26,9 @@
 #include <rtems/score/threadq.h>
 
 void _CORE_semaphore_Initialize(
-  CORE_semaphore_Control       *the_semaphore,
-  CORE_semaphore_Attributes    *the_semaphore_attributes,
-  uint32_t                      initial_value
+  CORE_semaphore_Control          *the_semaphore,
+  const CORE_semaphore_Attributes *the_semaphore_attributes,
+  uint32_t                         initial_value
 )
 {
 
