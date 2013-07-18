@@ -3,6 +3,7 @@
  */
 
 #include <errno.h>
+#include <limits.h>
 
 /*
  *  Way too much stack space.  Should generate a fatal error

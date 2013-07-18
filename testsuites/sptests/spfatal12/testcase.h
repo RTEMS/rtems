@@ -8,6 +8,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
+#include <rtems/score/wkspace.h>
+
 #define FATAL_ERROR_TEST_NAME            "12"
 #define FATAL_ERROR_DESCRIPTION  \
         "_Heap_Initialize fails during RTEMS initialization"

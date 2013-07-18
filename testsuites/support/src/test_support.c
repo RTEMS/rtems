@@ -13,6 +13,7 @@
 
 #include <fcntl.h>
 #include <tmacros.h>
+#include <limits.h>
 #include "test_support.h"
 #include <rtems/libcsupport.h>
 

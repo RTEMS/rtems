@@ -35,6 +35,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <time.h>
+#include <limits.h>
 
 #include <rtems/libcsupport.h>
 
