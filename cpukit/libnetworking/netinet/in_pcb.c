@@ -60,6 +60,8 @@
 #include <netinet/in_var.h>
 #include <netinet/ip_var.h>
 
+#include <limits.h>
+
 struct	in_addr zeroin_addr;
 
 static void	 in_pcbinshash(struct inpcb *);
