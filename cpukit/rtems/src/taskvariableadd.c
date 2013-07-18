@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/wkspace.h>
 
@@ -31,6 +32,12 @@ rtems_status_code rtems_task_variable_add(
   Thread_Control        *the_thread;
   Objects_Locations      location;
   rtems_task_variable_t *tvp, *new;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
 
   if ( !ptr )
     return RTEMS_INVALID_ADDRESS;

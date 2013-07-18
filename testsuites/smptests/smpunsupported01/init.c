@@ -26,6 +26,15 @@ static void test(void)
 
   sc = rtems_task_delete(RTEMS_SELF);
   rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+
+  sc = rtems_task_variable_add(RTEMS_SELF, NULL, NULL);
+  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+
+  sc = rtems_task_variable_delete(RTEMS_SELF, NULL);
+  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+
+  sc = rtems_task_variable_get(RTEMS_SELF, NULL, NULL);
+  rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
 }
 
 static void Init(rtems_task_argument arg)
