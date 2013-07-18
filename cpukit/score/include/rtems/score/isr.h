@@ -21,8 +21,8 @@
 #ifndef _RTEMS_SCORE_ISR_H
 #define _RTEMS_SCORE_ISR_H
 
-#include <rtems/score/cpu.h>
 #include <rtems/score/isrlevel.h>
+#include <rtems/score/percpu.h>
 
 /**
  *  @defgroup ScoreISR ISR Handler
@@ -178,6 +178,34 @@ void _ISR_Handler( void );
 void _ISR_Dispatch( void );
 
 /**
+ * @brief Returns the current ISR nest level
+ *
+ * This function can be called in any context.  On SMP configurations
+ * interrupts are disabled to ensure that the processor index is used
+ * consistently.
+ *
+ * @return The current ISR nest level.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _ISR_Get_nest_level( void )
+{
+  uint32_t isr_nest_level;
+
+  #if defined( RTEMS_SMP )
+    ISR_Level level;
+
+    _ISR_Disable( level );
+  #endif
+
+  isr_nest_level = _ISR_Nest_level;
+
+  #if defined( RTEMS_SMP )
+    _ISR_Enable( level );
+  #endif
+
+  return isr_nest_level;
+}
+
+/**
  *  @brief Checks if an ISR in progress.
  *
  *  This function returns true if the processor is currently servicing
@@ -190,7 +218,7 @@ void _ISR_Dispatch( void );
   bool _ISR_Is_in_progress( void );
 #else
   #define _ISR_Is_in_progress() \
-          (_ISR_Nest_level != 0)
+          (_ISR_Get_nest_level() != 0)
 #endif
 
 #ifdef __cplusplus
