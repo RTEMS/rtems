@@ -27,6 +27,7 @@ include_HEADERS += include/semaphore.h
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
 include_rtems_posix_HEADERS += include/rtems/posix/cancel.h
 include_rtems_posix_HEADERS += include/rtems/posix/cond.h
+include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/key.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
@@ -49,7 +50,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
 
-include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/key.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/pthread.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/priority.inl

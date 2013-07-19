@@ -31,7 +31,7 @@
 
 #ifdef RTEMS_POSIX_API
   #include <rtems/posix/barrierimpl.h>
-  #include <rtems/posix/cond.h>
+  #include <rtems/posix/condimpl.h>
   #include <rtems/posix/mqueueimpl.h>
   #include <rtems/posix/muteximpl.h>
   #include <rtems/posix/key.h>
