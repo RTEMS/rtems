@@ -20,6 +20,7 @@
 #define _RTEMS_POSIX_SPINLOCKIMPL_H
 
 #include <rtems/posix/spinlock.h>
+#include <rtems/score/corespinlockimpl.h>
 
 #include <pthread.h>
 

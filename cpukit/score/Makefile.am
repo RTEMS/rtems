@@ -71,6 +71,7 @@ endif
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h
+include_rtems_score_HEADERS += include/rtems/score/corespinlockimpl.h
 include_rtems_score_HEADERS += include/rtems/score/corerwlock.h
 include_rtems_score_HEADERS += include/rtems/score/corerwlockimpl.h
 endif
@@ -107,10 +108,6 @@ include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
 include_rtems_score_HEADERS += inline/rtems/score/watchdog.inl
 include_rtems_score_HEADERS += inline/rtems/score/wkspace.inl
-
-if HAS_PTHREADS
-include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl
-endif
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
