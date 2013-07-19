@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/corerwlock.h>
+#include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>

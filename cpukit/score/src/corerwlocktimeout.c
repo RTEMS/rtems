@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/corerwlock.h>
+#include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/threaddispatch.h>
 
 void _CORE_RWLock_Timeout(

@@ -20,6 +20,7 @@
 #define _RTEMS_POSIX_RWLOCKIMPL_H
 
 #include <rtems/posix/rwlock.h>
+#include <rtems/score/corerwlockimpl.h>
 
 #include <pthread.h>
 

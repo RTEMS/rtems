@@ -72,6 +72,7 @@ endif
 if HAS_PTHREADS
 include_rtems_score_HEADERS += include/rtems/score/corespinlock.h
 include_rtems_score_HEADERS += include/rtems/score/corerwlock.h
+include_rtems_score_HEADERS += include/rtems/score/corerwlockimpl.h
 endif
 
 if HAS_MP
@@ -109,7 +110,6 @@ include_rtems_score_HEADERS += inline/rtems/score/wkspace.inl
 
 if HAS_PTHREADS
 include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl
-include_rtems_score_HEADERS += inline/rtems/score/corerwlock.inl
 endif
 
 if HAS_MP
