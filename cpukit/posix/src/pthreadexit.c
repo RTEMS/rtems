@@ -24,7 +24,7 @@
 #include <rtems/system.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 
 
 void _POSIX_Thread_Exit(

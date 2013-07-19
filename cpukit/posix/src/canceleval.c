@@ -22,7 +22,7 @@
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
 #include <rtems/posix/cancel.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 
 void _POSIX_Thread_Evaluate_cancellation_and_enable_dispatch(
   Thread_Control    *the_thread

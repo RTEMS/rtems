@@ -23,7 +23,7 @@
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/semimpl.h>
 #if defined(RTEMS_POSIX_API)
-  #include <rtems/posix/pthread.h>
+  #include <rtems/posix/pthreadimpl.h>
 #endif
 
 #include <stdio.h>

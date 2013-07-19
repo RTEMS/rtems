@@ -19,7 +19,7 @@
 #include <pthread.h>
 #include <sched.h>
 
-#include <rtems/posix/pthread.h> /* for PTHREAD_MINIMUM_STACK_SIZE */
+#include <rtems/posix/pthreadimpl.h> /* for PTHREAD_MINIMUM_STACK_SIZE */
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);

@@ -23,7 +23,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 
 /**
  * 16.1.4 Detaching a Thread, P1003.1c/Draft 10, p. 149

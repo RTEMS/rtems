@@ -100,6 +100,10 @@ $(PROJECT_INCLUDE)/rtems/posix/pthread.h: include/rtems/posix/pthread.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.h
 
+$(PROJECT_INCLUDE)/rtems/posix/pthreadimpl.h: include/rtems/posix/pthreadimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthreadimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthreadimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/ptimer.h: include/rtems/posix/ptimer.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/ptimer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/ptimer.h
@@ -143,10 +147,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/spinlock.h
 $(PROJECT_INCLUDE)/rtems/posix/key.inl: inline/rtems/posix/key.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/pthread.inl: inline/rtems/posix/pthread.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
 
 $(PROJECT_INCLUDE)/rtems/posix/timer.inl: inline/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl

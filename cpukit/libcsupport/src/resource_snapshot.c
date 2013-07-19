@@ -36,7 +36,7 @@
   #include <rtems/posix/muteximpl.h>
   #include <rtems/posix/key.h>
   #include <rtems/posix/psignal.h>
-  #include <rtems/posix/pthread.h>
+  #include <rtems/posix/pthreadimpl.h>
   #include <rtems/posix/rwlock.h>
   #include <rtems/posix/semaphoreimpl.h>
   #include <rtems/posix/spinlock.h>
