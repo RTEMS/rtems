@@ -41,6 +41,7 @@ int _POSIX_Condition_variables_Wait_support(
   Objects_Locations                           location;
   int                                         status;
   int                                         mutex_status;
+  Thread_Control                             *executing;
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   if ( !the_mutex ) {
@@ -71,9 +72,10 @@ int _POSIX_Condition_variables_Wait_support(
         the_cond->Mutex = *mutex;
 
         _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
-        _Thread_Executing->Wait.return_code = 0;
-        _Thread_Executing->Wait.queue       = &the_cond->Wait_queue;
-        _Thread_Executing->Wait.id          = *cond;
+        executing = _Thread_Executing;
+        executing->Wait.return_code = 0;
+        executing->Wait.queue       = &the_cond->Wait_queue;
+        executing->Wait.id          = *cond;
 
         _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
 
@@ -91,7 +93,7 @@ int _POSIX_Condition_variables_Wait_support(
          *  returns a success status, except for the fact that it was not
          *  woken up a pthread_cond_signal or a pthread_cond_broadcast.
          */
-        status = _Thread_Executing->Wait.return_code;
+        status = executing->Wait.return_code;
         if ( status == EINTR )
           status = 0;
 
