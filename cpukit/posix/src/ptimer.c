@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <signal.h>
 
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 
 /*
  * _POSIX_Timer_Manager_initialization

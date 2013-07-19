@@ -26,7 +26,7 @@
 #include <rtems/seterr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 #include <rtems/posix/ptimer.h>
 
 bool _POSIX_Timer_Insert_helper(

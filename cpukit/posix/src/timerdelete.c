@@ -28,7 +28,7 @@
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 
 
 int timer_delete(

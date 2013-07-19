@@ -16,12 +16,71 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_POSIX_TIMER_H
-# error "Never use <rtems/posix/timer.inl> directly; include <rtems/posix/timer.h> instead."
+#ifndef _RTEMS_POSIX_TIMERIMPL_H
+#define _RTEMS_POSIX_TIMERIMPL_H
+
+#include <rtems/posix/timer.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef _RTEMS_POSIX_TIMER_INL
-#define _RTEMS_POSIX_TIMER_INL
+/* Timer is free */
+#define POSIX_TIMER_STATE_FREE        0x01
+
+/* Created timer but not running */
+#define POSIX_TIMER_STATE_CREATE_NEW  0x02
+
+/* Created timer and running */
+#define POSIX_TIMER_STATE_CREATE_RUN  0x03
+
+/* Created, ran and stopped timer */
+#define POSIX_TIMER_STATE_CREATE_STOP 0x04
+
+/* Indicates that the fire time is relative to the current one */
+#define POSIX_TIMER_RELATIVE       0
+
+/*
+ * POSIX defines TIMER_ABSTIME but no constant for relative.  So
+ * we have one internally but we need to be careful it has a different
+ * value.
+ */
+#if (POSIX_TIMER_RELATIVE == TIMER_ABSTIME)
+#error "POSIX_TIMER_RELATIVE == TIMER_ABSTIME"
+#endif
+
+/*
+ *  _POSIX_Timers_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+void _POSIX_Timer_Manager_initialization(void);
+
+/*
+ *  @brief Operation that is run when a timer expires
+ *
+ *  Timer TSR
+ */
+void _POSIX_Timer_TSR(Objects_Id timer, void *data);
+
+/*
+ *  Watchdog Insert helper
+ */
+bool _POSIX_Timer_Insert_helper(
+  Watchdog_Control               *timer,
+  Watchdog_Interval               ticks,
+  Objects_Id                      id,
+  Watchdog_Service_routine_entry  TSR,
+  void                           *arg
+);
+
+/*
+ *  The following defines the information control block used to manage
+ *  this class of objects.
+ */
+POSIX_EXTERN Objects_Information  _POSIX_Timer_Information;
 
 /*
  *  _POSIX_Timer_Allocate
@@ -88,6 +147,10 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Timer_Is_null (
 {
   return (the_timer == NULL);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

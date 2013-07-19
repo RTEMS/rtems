@@ -46,6 +46,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
 include_rtems_posix_HEADERS += include/rtems/posix/time.h
 include_rtems_posix_HEADERS += include/rtems/posix/timer.h
+include_rtems_posix_HEADERS += include/rtems/posix/timerimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/barrier.h
 include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
@@ -53,7 +54,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
 
 include_rtems_posix_HEADERS += inline/rtems/posix/key.inl
-include_rtems_posix_HEADERS += inline/rtems/posix/timer.inl
 include_rtems_posix_HEADERS += inline/rtems/posix/spinlock.inl
 
 ## src

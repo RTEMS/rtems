@@ -24,7 +24,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 
 int timer_getoverrun(
   timer_t   timerid

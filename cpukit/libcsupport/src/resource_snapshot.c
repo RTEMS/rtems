@@ -40,7 +40,7 @@
   #include <rtems/posix/rwlockimpl.h>
   #include <rtems/posix/semaphoreimpl.h>
   #include <rtems/posix/spinlock.h>
-  #include <rtems/posix/timer.h>
+  #include <rtems/posix/timerimpl.h>
 #endif
 
 static const Objects_Information *objects_info_table[] = {
