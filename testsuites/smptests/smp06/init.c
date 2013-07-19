@@ -16,6 +16,12 @@
 
 volatile bool Ran;
 
+static void success(void)
+{
+  locked_printf( "*** END OF TEST SMP06 ***\n" );
+  rtems_test_exit( 0 );
+}
+
 rtems_task Test_task(
   rtems_task_argument do_exit
 )
@@ -33,8 +39,7 @@ rtems_task Test_task(
   Ran = true;
 
   if ( do_exit ) {
-    locked_printf( "*** END OF TEST SMP06 ***\n" );
-    rtems_test_exit(0);
+    success();
   }
   while(1)
     ;
@@ -50,11 +55,16 @@ rtems_task Init(
 
   locked_print_initialize();
   locked_printf( "\n\n*** TEST SMP06 ***\n" );
-  locked_printf( "rtems_clock_tick - so this task has run longer\n" );
-  status = rtems_clock_tick();
-  directive_failed( status, "clock tick" );
 
-  rtems_test_assert( rtems_smp_get_processor_count()  > 1 );
+  if ( rtems_smp_get_processor_count() == 1 ) {
+    success();
+  }
+
+  locked_printf( "rtems_clock_tick - so this task has run longer\n" );
+  _Thread_Disable_dispatch();
+  status = rtems_clock_tick();
+  _Thread_Enable_dispatch();
+  directive_failed( status, "clock tick" );
 
   cpu_num = rtems_smp_get_current_processor();
 

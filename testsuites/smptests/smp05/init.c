@@ -14,13 +14,18 @@
 #include <tmacros.h>
 #include "test_support.h"
 
+static void success(void)
+{
+  locked_printf( "*** END OF TEST SMP05 ***\n" );
+  rtems_test_exit( 0 );
+}
+
 rtems_task Test_task(
   rtems_task_argument argument
 )
 {
   locked_printf( "Shut down from CPU %" PRIu32 "\n", rtems_smp_get_current_processor() );
-  locked_printf( "*** END OF TEST SMP05 ***\n" );
-  rtems_test_exit(0);
+  success();
 }
 
 rtems_task Init(
@@ -35,6 +40,10 @@ rtems_task Init(
 
   locked_print_initialize();
   locked_printf( "\n\n*** TEST SMP05 ***\n" );
+
+  if ( rtems_smp_get_processor_count() == 1 ) {
+    success();
+  }
 
   for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
     ch = '1' + i;

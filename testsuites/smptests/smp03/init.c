@@ -17,6 +17,12 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+static void success(void)
+{
+  locked_printf( "*** END OF TEST SMP03 ***\n" );
+  rtems_test_exit( 0 );
+}
+
 void Loop() {
   volatile int i;
 
@@ -47,6 +53,10 @@ rtems_task Init(
   locked_print_initialize();
 
   locked_printf( "\n\n***  SMP03 TEST ***\n" );
+
+  if ( rtems_smp_get_processor_count() == 1 ) {
+    success();
+  }
 
   /* Initialize the TaskRan array */
   TaskRan[0] = true;
@@ -98,8 +108,7 @@ rtems_task Init(
         TestFinished = false;
     }
     if (TestFinished) {
-      locked_printf( "*** END OF TEST SMP03 ***\n" );
-      rtems_test_exit( 0 );
+      success();
     }
   }
 

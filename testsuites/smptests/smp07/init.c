@@ -18,6 +18,12 @@ volatile bool TaskRan = false;
 volatile bool TSRFired = false;
 rtems_id      Semaphore; 
 
+static void success(void)
+{
+  locked_printf( "*** END OF TEST SMP07 ***\n" );
+  rtems_test_exit( 0 );
+}
+
 rtems_task Test_task(
   rtems_task_argument argument
 )
@@ -83,6 +89,10 @@ rtems_task Init(
   locked_print_initialize();
   locked_printf( "\n\n*** TEST SMP07 ***\n" );
 
+  if ( rtems_smp_get_processor_count() == 1 ) {
+    success();
+  }
+
   /* Create/verify semaphore */
   status = rtems_semaphore_create(
     rtems_build_name ('S', 'E', 'M', '1'),
@@ -147,8 +157,7 @@ rtems_task Init(
   }
 
   /* End the program */
-  locked_printf( "*** END OF TEST SMP07 ***\n" );
-  rtems_test_exit(0);
+  success();
 }
 
 /* configuration information */

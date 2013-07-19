@@ -17,6 +17,12 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+static void success(void)
+{
+  locked_printf( "*** END OF TEST SMP02 ***\n" );
+  rtems_test_exit( 0 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -30,6 +36,10 @@ rtems_task Init(
 
   locked_print_initialize();
   locked_printf( "\n\n***  SMP02 TEST ***\n" );
+
+  if ( rtems_smp_get_processor_count() == 1 ) {
+    success();
+  }
 
   /* Create/verify synchronisation semaphore */
   status = rtems_semaphore_create(
@@ -95,6 +105,5 @@ rtems_task Init(
     }
   }
 
-  locked_printf( "*** END OF TEST SMP02 ***\n" );
-  rtems_test_exit( 0 );
+  success();
 }
