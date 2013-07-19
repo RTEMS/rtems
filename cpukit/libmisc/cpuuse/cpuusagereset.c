@@ -41,8 +41,17 @@ static void CPU_usage_Per_thread_handler(
 void rtems_cpu_usage_reset( void )
 {
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+    uint32_t processor_count;
+    uint32_t processor;
+
     _TOD_Get_uptime( &CPU_usage_Uptime_at_last_reset );
-    _Thread_Time_of_last_context_switch = CPU_usage_Uptime_at_last_reset;
+
+    processor_count = rtems_smp_get_processor_count();
+    for ( processor = 0 ; processor < processor_count ; ++processor ) {
+      Per_CPU_Control *per_cpu = &_Per_CPU_Information[ processor ];
+
+      per_cpu->time_of_last_context_switch = CPU_usage_Uptime_at_last_reset;
+    }
   #else
     CPU_usage_Ticks_at_last_reset = _Watchdog_Ticks_since_boot;
   #endif
