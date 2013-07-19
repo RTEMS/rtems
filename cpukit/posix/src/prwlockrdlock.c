@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/rwlock.h>
+#include <rtems/posix/rwlockimpl.h>
 
 /**
  * This directive attempts to obtain a read only lock on an rwlock instance.

@@ -38,7 +38,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/rwlock.h>
+#include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/timer.h>
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/spinlock.h>
