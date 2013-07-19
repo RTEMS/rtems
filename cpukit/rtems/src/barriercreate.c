@@ -24,7 +24,7 @@
 #include <rtems/rtems/attr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 
 /*
  *  rtems_barrier_create

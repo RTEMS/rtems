@@ -22,5 +22,5 @@
 #define RTEMS_BARRIER_EXTERN
 
 #include <rtems/system.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 

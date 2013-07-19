@@ -39,6 +39,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/barrier.h: include/rtems/rtems/barrier.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/barrier.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/barrier.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/barrierimpl.h: include/rtems/rtems/barrierimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/barrierimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/barrierimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/cache.h: include/rtems/rtems/cache.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/cache.h
@@ -188,10 +192,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/asr.inl
 $(PROJECT_INCLUDE)/rtems/rtems/attr.inl: inline/rtems/rtems/attr.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/attr.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/attr.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/barrier.inl: inline/rtems/rtems/barrier.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/barrier.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/barrier.inl
 
 $(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl: inline/rtems/rtems/dpmem.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl

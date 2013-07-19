@@ -29,6 +29,16 @@
 #ifndef _RTEMS_RTEMS_BARRIER_H
 #define _RTEMS_RTEMS_BARRIER_H
 
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/score/object.h>
+#include <rtems/score/corebarrier.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @defgroup ClassicBarrier Barriers
  *
@@ -38,31 +48,6 @@
  * Barrier Manager.
  */
 /**@{*/
-
-/**
- * @brief Instantiate Barrier Data
- *
- * Barrier Manager -- Instantiate Data
- *
- * This constant is defined to extern most of the time when using
- * this header file. However by defining it to nothing, the data
- * declared in this header file can be instantiated. This is done
- * in a single per manager file.
- */
-#ifndef RTEMS_BARRIER_EXTERN
-#define RTEMS_BARRIER_EXTERN extern
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/attr.h>
-#include <rtems/rtems/status.h>
-#include <rtems/score/object.h>
-#include <rtems/score/corebarrier.h>
 
 /**
  *  This type defines the control block used to manage each barrier.
@@ -75,19 +60,6 @@ typedef struct {
   /** This is used to implement the barrier. */
   CORE_barrier_Control     Barrier;
 }   Barrier_Control;
-
-/**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
-
-/**
- *  @brief _Barrier_Manager_initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Barrier_Manager_initialization(void);
 
 /**
  * @brief RTEMS Create Barrier
@@ -191,29 +163,11 @@ rtems_status_code rtems_barrier_release(
   uint32_t *released
 );
 
-/**
- * @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
- *
- * This function returns a RTEMS status code based on the barrier
- * status code specified.
- *
- * @param[in] the_status is the SuperCore Barrier status to translate.
- *
- * @retval a status code indicating success or the reason for failure.
- */
-rtems_status_code _Barrier_Translate_core_barrier_return_code (
-  CORE_barrier_Status  the_status
-);
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/barrier.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /*  end of include file */

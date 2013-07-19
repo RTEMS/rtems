@@ -30,7 +30,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/object.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #endif

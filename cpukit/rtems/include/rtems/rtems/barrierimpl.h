@@ -19,17 +19,49 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_BARRIER_H
-# error "Never use <rtems/rtems/barrier.inl> directly; include <rtems/rtems/barrier.h> instead."
+#ifndef _RTEMS_RTEMS_BARRIERIMPL_H
+#define _RTEMS_RTEMS_BARRIERIMPL_H
+
+#include <rtems/rtems/barrier.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef _RTEMS_RTEMS_BARRIER_INL
-#define _RTEMS_RTEMS_BARRIER_INL
-
 /**
- *  @addtogroup ClassicBarrier
+ *  @defgroup ClassicBarrierImpl Classic Barrier Implementation
+ *
+ *  @ingroup ClassicBarrier
+ *
  *  @{
  */
+
+/**
+ * @brief Instantiate Barrier Data
+ *
+ * Barrier Manager -- Instantiate Data
+ *
+ * This constant is defined to extern most of the time when using
+ * this header file. However by defining it to nothing, the data
+ * declared in this header file can be instantiated. This is done
+ * in a single per manager file.
+ */
+#ifndef RTEMS_BARRIER_EXTERN
+#define RTEMS_BARRIER_EXTERN extern
+#endif
+
+/**
+ *  The following defines the information control block used to manage
+ *  this class of objects.
+ */
+RTEMS_BARRIER_EXTERN Objects_Information  _Barrier_Information;
+
+/**
+ *  @brief _Barrier_Manager_initialization
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+void _Barrier_Manager_initialization(void);
 
 /**
  *  @brief _Barrier_Allocate
@@ -86,8 +118,25 @@ RTEMS_INLINE_ROUTINE bool _Barrier_Is_null (
 {
   return ( the_barrier == NULL );
 }
+/**
+ * @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
+ *
+ * This function returns a RTEMS status code based on the barrier
+ * status code specified.
+ *
+ * @param[in] the_status is the SuperCore Barrier status to translate.
+ *
+ * @retval a status code indicating success or the reason for failure.
+ */
+rtems_status_code _Barrier_Translate_core_barrier_return_code (
+  CORE_barrier_Status  the_status
+);
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /*  end of include file */

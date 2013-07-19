@@ -26,7 +26,7 @@
 #include <rtems/rtems/rtemsapi.h>
 
 #include <rtems/rtems/intr.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
