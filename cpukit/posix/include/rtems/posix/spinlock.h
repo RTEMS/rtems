@@ -25,6 +25,9 @@
 #ifndef _RTEMS_POSIX_SPINLOCK_H
 #define _RTEMS_POSIX_SPINLOCK_H
 
+#include <rtems/score/object.h>
+#include <rtems/score/corespinlock.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,9 +42,6 @@ extern "C" {
  */
 /**@{**/
 
-#include <rtems/score/object.h>
-#include <rtems/score/corespinlock.h>
-
 /**
  * This type defines the control block used to manage each spinlock.
  */
@@ -52,39 +52,6 @@ typedef struct {
   /** This is used to implement the spinlock. */
   CORE_spinlock_Control    Spinlock;
 }   POSIX_Spinlock_Control;
-
-/**
- * The following defines the information control block used to manage
- * this class of objects.
- */
-
-POSIX_EXTERN Objects_Information  _POSIX_Spinlock_Information;
-
-/**
- * @brief POSIX spinlock manager initialization.
- *
- * This routine performs the initialization necessary for this manager.
- */
-
-void _POSIX_Spinlock_Manager_initialization(void);
-
-/**
- * @brief Translate core spinlock status code.
- *
- * This routine translates SuperCore Spinlock status codes into the
- * corresponding POSIX ones.
- * 
- * @param[in] the_spinlock_status is the SuperCore status.
- *
- * @return the corresponding POSIX status
- */
-int _POSIX_Spinlock_Translate_core_spinlock_return_code(
-  CORE_spinlock_Status  the_spinlock_status
-);
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/posix/spinlock.inl>
-#endif
 
 /** @} */
 

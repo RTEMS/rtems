@@ -39,7 +39,7 @@
   #include <rtems/posix/pthreadimpl.h>
   #include <rtems/posix/rwlockimpl.h>
   #include <rtems/posix/semaphoreimpl.h>
-  #include <rtems/posix/spinlock.h>
+  #include <rtems/posix/spinlockimpl.h>
   #include <rtems/posix/timerimpl.h>
 #endif
 

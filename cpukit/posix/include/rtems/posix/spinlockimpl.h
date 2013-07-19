@@ -16,14 +16,45 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_POSIX_SPINLOCK_H
-# error "Never use <rtems/posix/spinlock.inl> directly; include <rtems/posix/spinlock.h> instead."
-#endif
+#ifndef _RTEMS_POSIX_SPINLOCKIMPL_H
+#define _RTEMS_POSIX_SPINLOCKIMPL_H
 
-#ifndef _RTEMS_POSIX_SPINLOCK_INL
-#define _RTEMS_POSIX_SPINLOCK_INL
+#include <rtems/posix/spinlock.h>
 
 #include <pthread.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * The following defines the information control block used to manage
+ * this class of objects.
+ */
+
+POSIX_EXTERN Objects_Information  _POSIX_Spinlock_Information;
+
+/**
+ * @brief POSIX spinlock manager initialization.
+ *
+ * This routine performs the initialization necessary for this manager.
+ */
+
+void _POSIX_Spinlock_Manager_initialization(void);
+
+/**
+ * @brief Translate core spinlock status code.
+ *
+ * This routine translates SuperCore Spinlock status codes into the
+ * corresponding POSIX ones.
+ * 
+ * @param[in] the_spinlock_status is the SuperCore status.
+ *
+ * @return the corresponding POSIX status
+ */
+int _POSIX_Spinlock_Translate_core_spinlock_return_code(
+  CORE_spinlock_Status  the_spinlock_status
+);
 
 /**
  * @brief Allocate a spinlock control block.
@@ -91,6 +122,10 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Spinlock_Is_null (
 {
   return ( the_spinlock == NULL );
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /*  end of include file */

@@ -52,9 +52,9 @@ include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
+include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
 
 include_rtems_posix_HEADERS += inline/rtems/posix/key.inl
-include_rtems_posix_HEADERS += inline/rtems/posix/spinlock.inl
 
 ## src
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \

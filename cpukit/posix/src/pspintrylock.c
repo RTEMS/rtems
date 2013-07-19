@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/spinlock.h>
+#include <rtems/posix/spinlockimpl.h>
 
 /*
  *  pthread_spin_trylock

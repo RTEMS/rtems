@@ -29,7 +29,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/posix/spinlock.h>
+#include <rtems/posix/spinlockimpl.h>
 
 /**
  *  @brief _POSIX_Spinlock_Manager_initialization

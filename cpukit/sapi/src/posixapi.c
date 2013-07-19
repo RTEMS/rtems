@@ -41,7 +41,7 @@
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/timerimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
-#include <rtems/posix/spinlock.h>
+#include <rtems/posix/spinlockimpl.h>
 #include <rtems/posix/time.h>
 
 Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
