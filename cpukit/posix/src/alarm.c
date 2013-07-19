@@ -57,6 +57,8 @@ unsigned int alarm(
 
   the_timer = &_POSIX_signals_Alarm_timer;
 
+  _Thread_Disable_dispatch();
+
   state = _Watchdog_Remove( the_timer );
   if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
     /*
@@ -71,6 +73,8 @@ unsigned int alarm(
 
   if ( seconds )
     _Watchdog_Insert_seconds( the_timer, seconds );
+
+  _Thread_Enable_dispatch();
 
   return remaining;
 }
