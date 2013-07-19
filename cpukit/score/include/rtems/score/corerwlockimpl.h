@@ -105,6 +105,7 @@ void _CORE_RWLock_Initialize(
 
 void _CORE_RWLock_Obtain_for_reading(
   CORE_RWLock_Control                 *the_rwlock,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
@@ -128,6 +129,7 @@ void _CORE_RWLock_Obtain_for_reading(
  */
 void _CORE_RWLock_Obtain_for_writing(
   CORE_RWLock_Control                 *the_rwlock,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
@@ -145,7 +147,8 @@ void _CORE_RWLock_Obtain_for_writing(
  *  @retval Status is returned to indicate successful or failure.
  */
 CORE_RWLock_Status _CORE_RWLock_Release(
-  CORE_RWLock_Control                *the_rwlock
+  CORE_RWLock_Control *the_rwlock,
+  Thread_Control      *executing
 );
 
 /**

@@ -54,7 +54,7 @@ int pthread_rwlock_unlock(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      status = _CORE_RWLock_Release( &the_rwlock->RWLock );
+      status = _CORE_RWLock_Release( &the_rwlock->RWLock, _Thread_Executing );
       _Objects_Put( &the_rwlock->Object );
       return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
 

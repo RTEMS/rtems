@@ -26,6 +26,7 @@
 
 void _CORE_RWLock_Obtain_for_reading(
   CORE_RWLock_Control                 *the_rwlock,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
@@ -33,7 +34,6 @@ void _CORE_RWLock_Obtain_for_reading(
 )
 {
   ISR_Level       level;
-  Thread_Control *executing = _Thread_Executing;
 
   /*
    *  If unlocked, then OK to read.

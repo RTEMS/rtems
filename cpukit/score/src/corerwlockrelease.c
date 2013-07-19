@@ -26,11 +26,11 @@
 #include <rtems/score/watchdog.h>
 
 CORE_RWLock_Status _CORE_RWLock_Release(
-  CORE_RWLock_Control  *the_rwlock
+  CORE_RWLock_Control *the_rwlock,
+  Thread_Control      *executing
 )
 {
   ISR_Level       level;
-  Thread_Control *executing = _Thread_Executing;
   Thread_Control *next;
 
   /*

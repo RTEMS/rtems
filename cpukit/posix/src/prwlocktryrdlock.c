@@ -43,6 +43,7 @@ int pthread_rwlock_tryrdlock(
 {
   POSIX_RWLock_Control  *the_rwlock;
   Objects_Locations      location;
+  Thread_Control        *executing;
 
   if ( !rwlock )
     return EINVAL;
@@ -52,18 +53,20 @@ int pthread_rwlock_tryrdlock(
 
     case OBJECTS_LOCAL:
 
+      executing = _Thread_Executing;
       _CORE_RWLock_Obtain_for_reading(
-	&the_rwlock->RWLock,
-	*rwlock,
-	false,                  /* do not wait for the rwlock */
-	0,
-	NULL
+        &the_rwlock->RWLock,
+        executing,
+        *rwlock,
+        false,                  /* do not wait for the rwlock */
+        0,
+        NULL
       );
 
 
       _Objects_Put( &the_rwlock->Object );
       return _POSIX_RWLock_Translate_core_RWLock_return_code(
-        (CORE_RWLock_Status) _Thread_Executing->Wait.return_code
+        (CORE_RWLock_Status) executing->Wait.return_code
       );
 
 #if defined(RTEMS_MULTIPROCESSING)
