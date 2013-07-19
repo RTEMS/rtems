@@ -27,16 +27,15 @@
 
 void _CORE_barrier_Wait(
   CORE_barrier_Control                *the_barrier,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
   CORE_barrier_API_mp_support_callout  api_barrier_mp_support
 )
 {
-  Thread_Control *executing;
   ISR_Level       level;
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_BARRIER_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   the_barrier->number_of_waiting_threads++;

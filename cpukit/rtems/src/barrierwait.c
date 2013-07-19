@@ -32,13 +32,16 @@ rtems_status_code rtems_barrier_wait(
 {
   Barrier_Control   *the_barrier;
   Objects_Locations  location;
+  Thread_Control    *executing;
 
   the_barrier = _Barrier_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      executing = _Thread_Executing;
       _CORE_barrier_Wait(
         &the_barrier->Barrier,
+        executing,
         id,
         true,
         timeout,
@@ -46,7 +49,7 @@ rtems_status_code rtems_barrier_wait(
       );
       _Objects_Put( &the_barrier->Object );
       return _Barrier_Translate_core_barrier_return_code(
-                _Thread_Executing->Wait.return_code );
+                executing->Wait.return_code );
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

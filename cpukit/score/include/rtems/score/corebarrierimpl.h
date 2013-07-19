@@ -92,6 +92,7 @@ void _CORE_barrier_Initialize(
  *  is released.
  *
  *  @param[in] the_barrier is the barrier to wait for
+ *  @param[in,out] executing The currently executing thread.
  *  @param[in] id is the id of the object being waited upon
  *  @param[in] wait is true if the calling thread is willing to wait
  *  @param[in] timeout is the number of ticks the calling thread is willing
@@ -103,6 +104,7 @@ void _CORE_barrier_Initialize(
  */
 void _CORE_barrier_Wait(
   CORE_barrier_Control                *the_barrier,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
