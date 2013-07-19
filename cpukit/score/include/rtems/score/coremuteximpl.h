@@ -261,12 +261,12 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Seize_body(
   if ( _CORE_mutex_Seize_interrupt_trylock( the_mutex, executing, level ) ) {
     if ( !wait ) {
       _ISR_Enable( level );
-      _Thread_Executing->Wait.return_code =
+      executing->Wait.return_code =
         CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
     } else {
       _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
-      _Thread_Executing->Wait.queue = &the_mutex->Wait_queue;
-      _Thread_Executing->Wait.id = id;
+      executing->Wait.queue = &the_mutex->Wait_queue;
+      executing->Wait.id = id;
       _Thread_Disable_dispatch();
       _ISR_Enable( level );
       _CORE_mutex_Seize_interrupt_blocking( the_mutex, executing, timeout );
