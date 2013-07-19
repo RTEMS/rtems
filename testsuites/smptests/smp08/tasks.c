@@ -38,7 +38,7 @@ rtems_task Test_task(
 
     status = rtems_clock_get_tod( &time );
     if ( time.second >= 35 ) {
-      locked_printf( "*** END OF SMP08 TEST ***" );
+      locked_printf( "*** END OF SMP08 TEST ***\n" );
       rtems_test_exit( 0 );
     }
 
