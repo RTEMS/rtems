@@ -28,7 +28,7 @@
 #include <mqueue.h>
 #include <rtems/config.h>
 #include <rtems/score/object.h>
-#include <rtems/posix/barrier.h>
+#include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>

@@ -124,6 +124,10 @@ $(PROJECT_INCLUDE)/rtems/posix/barrier.h: include/rtems/posix/barrier.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/barrier.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/barrier.h
 
+$(PROJECT_INCLUDE)/rtems/posix/barrierimpl.h: include/rtems/posix/barrierimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/barrierimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/barrierimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/rwlock.h: include/rtems/posix/rwlock.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/rwlock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/rwlock.h
@@ -151,10 +155,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.inl
 $(PROJECT_INCLUDE)/rtems/posix/timer.inl: inline/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/barrier.inl: inline/rtems/posix/barrier.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/barrier.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/barrier.inl
 
 $(PROJECT_INCLUDE)/rtems/posix/rwlock.inl: inline/rtems/posix/rwlock.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/rwlock.inl

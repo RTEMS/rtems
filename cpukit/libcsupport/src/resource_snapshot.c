@@ -30,7 +30,7 @@
 #include <rtems/rtems/semimpl.h>
 
 #ifdef RTEMS_POSIX_API
-  #include <rtems/posix/barrier.h>
+  #include <rtems/posix/barrierimpl.h>
   #include <rtems/posix/cond.h>
   #include <rtems/posix/mqueueimpl.h>
   #include <rtems/posix/muteximpl.h>

@@ -16,14 +16,45 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_POSIX_BARRIER_H
-# error "Never use <rtems/posix/barrier.inl> directly; include <rtems/posix/barrier.h> instead."
-#endif
+#ifndef _RTEMS_POSIX_BARRIERIMPL_H
+#define _RTEMS_POSIX_BARRIERIMPL_H
 
-#ifndef _RTEMS_POSIX_BARRIER_INL
-#define _RTEMS_POSIX_BARRIER_INL
+#include <rtems/posix/barrier.h>
 
 #include <pthread.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ *  The following defines the information control block used to manage
+ *  this class of objects.
+ */
+
+POSIX_EXTERN Objects_Information  _POSIX_Barrier_Information;
+
+/**
+ * @brief POSIX barrier manager initialization.
+ *
+ * This routine performs the initialization necessary for this manager.
+ */
+
+void _POSIX_Barrier_Manager_initialization(void);
+
+/**
+ * @brief POSIX translate barrier return code.
+ * 
+ * This routine translates SuperCore Barrier status codes into the
+ * corresponding POSIX ones.
+ *
+ * @param[in] the_barrier_status is the SuperCore status.
+ *
+ * @return the corresponding POSIX status
+ */
+int _POSIX_Barrier_Translate_core_barrier_return_code(
+  CORE_barrier_Status  the_barrier_status
+);
 
 /**
  * @brief Allocate a barrier control block.
@@ -91,6 +122,10 @@ RTEMS_INLINE_ROUTINE bool _POSIX_Barrier_Is_null (
 {
   return ( the_barrier == NULL );
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /*  end of include file */

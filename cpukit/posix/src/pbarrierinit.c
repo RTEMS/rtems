@@ -24,7 +24,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/barrier.h>
+#include <rtems/posix/barrierimpl.h>
 
 /*
  *  pthread_barrier_init

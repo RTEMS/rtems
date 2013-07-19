@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/barrier.h>
+#include <rtems/posix/barrierimpl.h>
 
 /**
  *  This directive allows a thread to delete a barrier specified by

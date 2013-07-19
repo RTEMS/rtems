@@ -24,7 +24,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/barrier.h>
+#include <rtems/posix/barrierimpl.h>
 
 /*
  *  _POSIX_Barrier_Translate_core_barrier_return_code
