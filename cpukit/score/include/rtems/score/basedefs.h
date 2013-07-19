@@ -33,6 +33,13 @@
   #include <stddef.h>
   #include <stdbool.h>
   #include <stdint.h>
+
+  /*
+   * FIXME: This include should not be present.  In older RTEMS versions
+   * <rtems.h> provided <limits.h> indirectly.  This include is here to not
+   * break application source files that relied on this accidentally.
+   */
+  #include <limits.h>
 #endif
 
 #ifndef TRUE
