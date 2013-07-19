@@ -22,6 +22,7 @@ include_rtems_score_HEADERS += include/rtems/score/chain.h
 include_rtems_score_HEADERS += include/rtems/score/context.h
 include_rtems_score_HEADERS += include/rtems/score/copyrt.h
 include_rtems_score_HEADERS += include/rtems/score/corebarrier.h
+include_rtems_score_HEADERS += include/rtems/score/corebarrierimpl.h
 include_rtems_score_HEADERS += include/rtems/score/coremsg.h
 include_rtems_score_HEADERS += include/rtems/score/coremsgimpl.h
 include_rtems_score_HEADERS += include/rtems/score/coremutex.h
@@ -88,7 +89,6 @@ endif
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/address.inl
 include_rtems_score_HEADERS += inline/rtems/score/chain.inl
-include_rtems_score_HEADERS += inline/rtems/score/corebarrier.inl
 include_rtems_score_HEADERS += inline/rtems/score/heap.inl
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/priority.inl

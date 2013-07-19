@@ -20,6 +20,7 @@
 #define _RTEMS_POSIX_BARRIERIMPL_H
 
 #include <rtems/posix/barrier.h>
+#include <rtems/score/corebarrierimpl.h>
 
 #include <pthread.h>
 

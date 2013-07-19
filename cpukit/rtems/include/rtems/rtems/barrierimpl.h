@@ -23,6 +23,7 @@
 #define _RTEMS_RTEMS_BARRIERIMPL_H
 
 #include <rtems/rtems/barrier.h>
+#include <rtems/score/corebarrierimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

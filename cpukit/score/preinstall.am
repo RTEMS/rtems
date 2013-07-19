@@ -71,6 +71,10 @@ $(PROJECT_INCLUDE)/rtems/score/corebarrier.h: include/rtems/score/corebarrier.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corebarrier.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corebarrier.h
 
+$(PROJECT_INCLUDE)/rtems/score/corebarrierimpl.h: include/rtems/score/corebarrierimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corebarrierimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corebarrierimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/coremsg.h: include/rtems/score/coremsg.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremsg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremsg.h
@@ -282,10 +286,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/address.inl
 $(PROJECT_INCLUDE)/rtems/score/chain.inl: inline/rtems/score/chain.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chain.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chain.inl
-
-$(PROJECT_INCLUDE)/rtems/score/corebarrier.inl: inline/rtems/score/corebarrier.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corebarrier.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corebarrier.inl
 
 $(PROJECT_INCLUDE)/rtems/score/heap.inl: inline/rtems/score/heap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.inl
