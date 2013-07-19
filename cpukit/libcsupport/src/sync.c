@@ -65,10 +65,11 @@ static void sync_per_thread(Thread_Control *t)
     */
    this_reent = t->libc_reent;
    if ( this_reent ) {
-     current_reent = _Thread_Executing->libc_reent;
-     _Thread_Executing->libc_reent = this_reent;
+     Thread_Control *executing = _Thread_Get_executing();
+     current_reent = executing->libc_reent;
+     executing->libc_reent = this_reent;
      _fwalk (t->libc_reent, sync_wrapper);
-     _Thread_Executing->libc_reent = current_reent;
+     executing->libc_reent = current_reent;
    }
 }
 

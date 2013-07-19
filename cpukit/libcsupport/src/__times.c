@@ -70,7 +70,7 @@ clock_t _times(
       );
 
       _Timestamp_Divide(
-        &_Thread_Executing->cpu_time_used,
+        &_Thread_Get_executing()->cpu_time_used,
         &per_tick,
         &ticks,
         &fractional_ticks
@@ -78,7 +78,7 @@ clock_t _times(
       ptms->tms_utime = ticks;
     }
   #else
-    ptms->tms_utime  = _Thread_Executing->cpu_time_used;
+    ptms->tms_utime  = _Thread_Get_executing()->cpu_time_used;
   #endif
   ptms->tms_stime  = ticks;
   ptms->tms_cutime = 0;
