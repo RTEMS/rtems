@@ -84,9 +84,9 @@ $(PROJECT_INCLUDE)/rtems/posix/posixapi.h: include/rtems/posix/posixapi.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
 
-$(PROJECT_INCLUDE)/rtems/posix/priority.h: include/rtems/posix/priority.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.h
+$(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h: include/rtems/posix/priorityimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 
 $(PROJECT_INCLUDE)/rtems/posix/psignal.h: include/rtems/posix/psignal.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/psignal.h
@@ -147,10 +147,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
 $(PROJECT_INCLUDE)/rtems/posix/pthread.inl: inline/rtems/posix/pthread.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthread.inl
-
-$(PROJECT_INCLUDE)/rtems/posix/priority.inl: inline/rtems/posix/priority.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priority.inl
 
 $(PROJECT_INCLUDE)/rtems/posix/timer.inl: inline/rtems/posix/timer.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timer.inl

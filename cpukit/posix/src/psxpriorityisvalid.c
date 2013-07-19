@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/priorityimpl.h>
 
 bool _POSIX_Priority_Is_valid(
   int priority

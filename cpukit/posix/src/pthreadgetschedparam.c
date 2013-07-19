@@ -26,7 +26,7 @@
 
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/priorityimpl.h>
 
 int pthread_getschedparam(
   pthread_t           thread,

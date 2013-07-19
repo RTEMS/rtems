@@ -35,7 +35,7 @@
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/rwlock.h>

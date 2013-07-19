@@ -16,8 +16,14 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_POSIX_PRIORITY_H
-#define _RTEMS_POSIX_PRIORITY_H
+#ifndef _RTEMS_POSIX_PRIORITYIMPL_H
+#define _RTEMS_POSIX_PRIORITYIMPL_H
+
+#include <rtems/score/priority.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @defgroup POSIX_PRIORITY POSIX Priority Support
@@ -28,8 +34,6 @@
  * 
  */
 /**@{**/
-
-#include <rtems/score/priority.h>
 
 /**
  * 1003.1b-1993,2.2.2.80 definition of priority, p. 19
@@ -85,7 +89,10 @@ bool _POSIX_Priority_Is_valid(
  */
 RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(
   int priority
-);
+)
+{
+  return (Priority_Control) (POSIX_SCHEDULER_MAXIMUM_PRIORITY - priority + 1);
+}
 
 /**
  * @brief Convert SuperCore priority To POSIX priority.
@@ -99,10 +106,15 @@ RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Priority_To_core(
  */
 RTEMS_INLINE_ROUTINE int _POSIX_Priority_From_core(
   Priority_Control priority
-);
-
-#include <rtems/posix/priority.inl>
+)
+{
+  return (POSIX_SCHEDULER_MAXIMUM_PRIORITY - priority + 1);
+}
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

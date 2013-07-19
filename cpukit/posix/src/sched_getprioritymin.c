@@ -23,7 +23,7 @@
 
 #include <rtems/system.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/priorityimpl.h>
 
 /**
  *  13.3.6 Get Scheduling Parameter Limits, P1003.1b-1993, p. 258

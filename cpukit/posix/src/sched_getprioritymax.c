@@ -25,7 +25,7 @@
 
 #include <rtems/system.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/priorityimpl.h>
 
 int sched_get_priority_max(
   int  policy
