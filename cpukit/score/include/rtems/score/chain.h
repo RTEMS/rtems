@@ -20,6 +20,10 @@
 #ifndef _RTEMS_SCORE_CHAIN_H
 #define _RTEMS_SCORE_CHAIN_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreChain Chain Handler
  *
@@ -32,12 +36,6 @@
  *  to manage a set of Chain Nodes.
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/address.h>
 
 /**
  *  @typedef Chain_Node
@@ -94,187 +92,11 @@ typedef union {
   } Tail;
 } Chain_Control;
 
-/**
- *  @brief Chain initializer for an empty chain with designator @a name.
- */
-#define CHAIN_INITIALIZER_EMPTY(name) \
-  { { { &(name).Tail.Node, NULL }, &(name).Head.Node } }
-
-/**
- *  @brief Chain definition for an empty chain with designator @a name.
- */
-#define CHAIN_DEFINE_EMPTY(name) \
-  Chain_Control name = CHAIN_INITIALIZER_EMPTY(name)
-
-/**
- *  @brief Initialize a chain header.
- *
- *  This routine initializes @a the_chain structure to manage the
- *  contiguous array of @a number_nodes nodes which starts at
- *  @a starting_address.  Each node is of @a node_size bytes.
- *
- *  @param[in] the_chain specifies the chain to initialize
- *  @param[in] starting_address is the starting address of the array
- *         of elements
- *  @param[in] number_nodes is the numebr of nodes that will be in the chain
- *  @param[in] node_size is the size of each node
- */
-void _Chain_Initialize(
-  Chain_Control *the_chain,
-  void          *starting_address,
-  size_t         number_nodes,
-  size_t         node_size
-);
-
-/**
- *  @brief Extract the specified node from a chain.
- *
- *  This routine extracts @a the_node from the chain on which it resides.
- *  It disables interrupts to ensure the atomicity of the extract operation.
- *
- *  @param[in] the_node is the node to be extracted
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Chain_Extract(
-  Chain_Node *the_node
-);
-
-/**
- *  @brief Obtain the first node on a chain.
- *
- *  This function removes the first node from @a the_chain and returns
- *  a pointer to that node.  If @a the_chain is empty, then NULL is returned.
- *
- *  @retval This method returns a pointer a node.  If a node was removed,
- *          then a pointer to that node is returned.  If @a the_chain was
- *          empty, then NULL is returned.
- *
- *  @note It disables interrupts to ensure the atomicity of the get operation.
- */
-Chain_Node *_Chain_Get(
-  Chain_Control *the_chain
-);
-
-/**
- *  @brief Insert a node on a chain.
- *
- *  This routine inserts @a the_node on a chain immediately following
- *  @a after_node.
- *
- *  @param[in] after_node is the pointer to the node in chain to be
- *             inserted after
- *  @param[in] the_node is the pointer to the node to be inserted
- *
- *  @note It disables interrupts to ensure the atomicity
- *  of the insert operation.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Chain_Insert(
-  Chain_Node *after_node,
-  Chain_Node *the_node
-);
-
-/**
- *  @brief Append a node on the end of a chain.
- *
- *  This routine appends @a the_node onto the end of @a the_chain.
- *
- *  @note It disables interrupts to ensure the atomicity of the
- *  append operation.
- */
-void _Chain_Append(
-  Chain_Control *the_chain,
-  Chain_Node    *the_node
-);
-
-/**
- * @brief Append a node and check if the chain was empty before.
- *
- * This routine appends the_node onto the end of the_chain.
- *
- * @param[in] the_chain is the chain to be operated upon.
- * @param[in] the_node is the node to be appended.
- *
- * @note It disables interrupts to ensure the atomicity of the append
- * operation.
- *
- * @retval true The chain was empty before.
- * @retval false The chain contained at least one node before.
- */
-bool _Chain_Append_with_empty_check(
-  Chain_Control *the_chain,
-  Chain_Node    *the_node
-);
-
-/**
- * @brief Prepend a node and check if the chain was empty before.
- *
- * This routine prepends the_node onto the front of the_chain.
- *
- * @param[in] the_chain is the chain to be operated upon.
- * @param[in] the_node is the node to be prepended.
- *
- * @note It disables interrupts to ensure the atomicity of the append
- * operation.
- *
- * @retval true The chain was empty before.
- * @retval false The chain contained at least one node before.
- */
-bool _Chain_Prepend_with_empty_check(
-  Chain_Control *the_chain,
-  Chain_Node    *the_node
-);
-
-/**
- * @brief Get the first node and check if the chain is empty afterwards.
- *
- * This function removes the first node from the_chain and returns
- * a pointer to that node in @a the_node.  If the_chain is empty, then NULL is
- * returned.
- *
- * @param[in] the_chain is the chain to attempt to get the first node from.
- * @param[out] the_node is the first node on the chain or NULL if the chain is
- * empty.
- *
- * @note It disables interrupts to ensure the atomicity of the append
- * operation.
- *
- * @retval true The chain is empty now.
- * @retval false The chain contains at least one node now.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-bool _Chain_Get_with_empty_check(
-  Chain_Control *the_chain,
-  Chain_Node **the_node
-);
-
-/**
- * @brief Returns the node count of the chain.
- *
- * @param[in] chain The chain.
- *
- * @note It does NOT disable interrupts to ensure the atomicity of the
- * operation.
- *
- * @retval The node count of the chain.
- */
-size_t _Chain_Node_count_unprotected( const Chain_Control *chain );
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/chain.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

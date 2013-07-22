@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/score/object.h>
+#include <rtems/score/chainimpl.h>
 
 Objects_Maximum _Objects_Active_count(
   const Objects_Information *information

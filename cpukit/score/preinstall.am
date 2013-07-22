@@ -59,6 +59,10 @@ $(PROJECT_INCLUDE)/rtems/score/chain.h: include/rtems/score/chain.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chain.h
 
+$(PROJECT_INCLUDE)/rtems/score/chainimpl.h: include/rtems/score/chainimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chainimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chainimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/context.h: include/rtems/score/context.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/context.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/context.h
@@ -290,10 +294,6 @@ endif
 $(PROJECT_INCLUDE)/rtems/score/address.inl: inline/rtems/score/address.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/address.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/address.inl
-
-$(PROJECT_INCLUDE)/rtems/score/chain.inl: inline/rtems/score/chain.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chain.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chain.inl
 
 $(PROJECT_INCLUDE)/rtems/score/heap.inl: inline/rtems/score/heap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.inl

@@ -18,8 +18,7 @@
 #ifndef _RTEMS_CHAIN_H
 #define _RTEMS_CHAIN_H
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/rtems/event.h>
 
 #ifdef __cplusplus

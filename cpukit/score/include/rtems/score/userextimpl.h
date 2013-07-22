@@ -19,6 +19,7 @@
 #define _RTEMS_SCORE_USEREXTIMPL_H
 
 #include <rtems/score/userext.h>
+#include <rtems/score/chainimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,7 +16,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/chain.h>
+#include <rtems/score/chainimpl.h>
 
 size_t _Chain_Node_count_unprotected( const Chain_Control *chain )
 {

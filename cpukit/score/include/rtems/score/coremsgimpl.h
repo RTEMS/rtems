@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_COREMSGIMPL_H
 
 #include <rtems/score/coremsg.h>
+#include <rtems/score/chainimpl.h>
 
 #include <limits.h>
 #include <string.h>

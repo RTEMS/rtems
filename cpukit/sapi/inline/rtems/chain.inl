@@ -22,8 +22,6 @@
 #ifndef _RTEMS_CHAIN_INL
 #define _RTEMS_CHAIN_INL
 
-#include <rtems/score/chain.inl>
-
 /**
  * @addtogroup ClassicChains
  */

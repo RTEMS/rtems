@@ -20,6 +20,8 @@
 #ifndef _RTEMS_RTEMS_PART_INL
 #define _RTEMS_RTEMS_PART_INL
 
+#include <rtems/score/chainimpl.h>
+
 /**
  *  @addtogroup ClassicPart
  *  @{
