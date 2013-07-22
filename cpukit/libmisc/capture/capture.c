@@ -121,7 +121,7 @@ static inline void rtems_capture_get_time (uint32_t* ticks,
     capture_timestamp (ticks, tick_offset);
   else
   {
-    *ticks       = _Watchdog_Ticks_since_boot;
+    *ticks       = rtems_clock_get_ticks_since_boot();
     *tick_offset = 0;
   }
 }

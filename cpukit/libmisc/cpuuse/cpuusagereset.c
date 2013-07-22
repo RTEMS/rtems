@@ -23,6 +23,7 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
+#include <rtems/score/watchdogimpl.h>
 
 static void CPU_usage_Per_thread_handler(
   Thread_Control *the_thread

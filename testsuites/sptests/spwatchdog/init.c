@@ -22,6 +22,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/score/watchdogimpl.h>
+
 rtems_task Init(
   rtems_task_argument argument
 )

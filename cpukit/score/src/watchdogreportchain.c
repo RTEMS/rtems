@@ -18,7 +18,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/isr.h>
 #include <rtems/bspIo.h>
 

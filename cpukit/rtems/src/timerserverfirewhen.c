@@ -25,7 +25,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 
 /*
  *  rtems_timer_server_fire_when

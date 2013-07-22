@@ -23,6 +23,7 @@
 #include <rtems/config.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Release_job(
   Thread_Control    *the_thread,

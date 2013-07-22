@@ -27,6 +27,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Thread_queue_Extract_fifo(
   Thread_queue_Control *the_thread_queue __attribute__((unused)),

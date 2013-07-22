@@ -25,7 +25,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/timerimpl.h>
 #include <rtems/posix/ptimer.h>
 

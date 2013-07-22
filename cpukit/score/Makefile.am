@@ -62,6 +62,7 @@ include_rtems_score_HEADERS += include/rtems/score/tqdata.h
 include_rtems_score_HEADERS += include/rtems/score/userext.h
 include_rtems_score_HEADERS += include/rtems/score/userextimpl.h
 include_rtems_score_HEADERS += include/rtems/score/watchdog.h
+include_rtems_score_HEADERS += include/rtems/score/watchdogimpl.h
 include_rtems_score_HEADERS += include/rtems/score/wkspace.h
 include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
 include_rtems_score_HEADERS += include/rtems/score/basedefs.h
@@ -106,7 +107,6 @@ include_rtems_score_HEADERS += inline/rtems/score/thread.inl
 include_rtems_score_HEADERS += inline/rtems/score/threadq.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
-include_rtems_score_HEADERS += inline/rtems/score/watchdog.inl
 include_rtems_score_HEADERS += inline/rtems/score/wkspace.inl
 
 if HAS_MP

@@ -45,6 +45,7 @@
 #include <rtems/rtems/timer.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/userextimpl.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 #if defined(RTEMS_SMP)
   #include <rtems/score/smp.h>

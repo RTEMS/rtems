@@ -25,6 +25,7 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
+#include <rtems/score/watchdogimpl.h>
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   static bool is_executing_on_a_core(

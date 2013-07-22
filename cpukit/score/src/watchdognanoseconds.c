@@ -24,7 +24,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 
 Watchdog_Nanoseconds_since_last_tick_routine
   _Watchdog_Nanoseconds_since_tick_handler =

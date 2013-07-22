@@ -24,7 +24,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 
 /*
  *  rtems_clock_set_nanoseconds_extension

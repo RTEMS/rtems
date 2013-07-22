@@ -25,6 +25,7 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Rate_monotonic_Timeout(
   Objects_Id  id,

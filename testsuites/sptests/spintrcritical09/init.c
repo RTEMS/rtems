@@ -16,6 +16,7 @@
 #include <intrcritical.h>
 
 #include <rtems/rtems/semimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 static rtems_id Semaphore;
 static bool case_hit;

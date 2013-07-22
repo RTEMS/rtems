@@ -20,6 +20,12 @@
 #ifndef _RTEMS_SCORE_WATCHDOG_H
 #define _RTEMS_SCORE_WATCHDOG_H
 
+#include <rtems/score/object.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreWatchdog Watchdog Handler
  *
@@ -33,35 +39,12 @@
  */
 /**@{*/
 
-#include <rtems/score/object.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
- *  @brief Control block used to manage intervals.
- *
- *  The following type defines the control block used to manage
- *  intervals.
- */
-#define WATCHDOG_MAXIMUM_INTERVAL ((Watchdog_Interval) 0xffffffff)
-
 /**
  *  @brief Type is used to specify the length of intervals.
  *
  *  This type is used to specify the length of intervals.
  */
 typedef uint32_t   Watchdog_Interval;
-
-/**
- *  @brief Pointer to the BSP plugin to obtain the number
- *  of nanoseconds since the last clock tick.
- *
- *  This type defines a pointer to the BSP plugin to obtain the number
- *  of nanoseconds since the last clock tick.
- */
-typedef uint32_t (*Watchdog_Nanoseconds_since_last_tick_routine)(void);
 
 /**
  *  @brief Return type from a Watchdog Service Routine.
@@ -79,6 +62,15 @@ typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
                  Objects_Id,
                  void *
              );
+
+/**
+ *  @brief Pointer to the BSP plugin to obtain the number
+ *  of nanoseconds since the last clock tick.
+ *
+ *  This type defines a pointer to the BSP plugin to obtain the number
+ *  of nanoseconds since the last clock tick.
+ */
+typedef uint32_t (*Watchdog_Nanoseconds_since_last_tick_routine)(void);
 
 /**
  *  @brief The constant for indefinite wait.
@@ -111,22 +103,6 @@ typedef enum {
 } Watchdog_States;
 
 /**
- *  @brief the manner in which a watchdog chain may
- *  be adjusted by the @ref _Watchdog_Adjust routine.
- *
- *  The following enumerated type details the manner in which
- *  a watchdog chain may be adjusted by the @ref _Watchdog_Adjust
- *  routine.  The direction indicates a movement FORWARD
- *  or BACKWARD in time.
- */
-typedef enum {
-  /** adjust delta value forward */
-  WATCHDOG_FORWARD,
-  /** adjust delta value backward */
-  WATCHDOG_BACKWARD
-} Watchdog_Adjust_directions;
-
-/**
  *  @brief The control block used to manage each watchdog timer.
  *
  *  The following record defines the control block used
@@ -157,198 +133,11 @@ typedef struct {
   void                           *user_data;
 }   Watchdog_Control;
 
-/**
- *  @brief Watchdog synchronization level.
- *
- *  This used for synchronization purposes
- *  during an insert on a watchdog delta chain.
- */
-SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_level;
-
-/**
- *  @brief Watchdog synchronization count.
- *
- *  This used for synchronization purposes
- *  during an insert on a watchdog delta chain.
- */
-SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
-
-/**
- *  @brief The number of ticks since the system was booted.
- *
- *  This contains the number of ticks since the system was booted.
- */
-
-SCORE_EXTERN volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
-
-/**
- *  @brief The number of nanoseconds since the last clock tick.
- *
- *  This is a pointer to the optional BSP plugin to obtain the number
- *  of nanoseconds since the last clock tick.
- */
-extern Watchdog_Nanoseconds_since_last_tick_routine
-  _Watchdog_Nanoseconds_since_tick_handler;
-
-/**
- *  @brief Watchdog chain which is managed at ticks.
- *
- *  This is the watchdog chain which is managed at ticks.
- */
-SCORE_EXTERN Chain_Control _Watchdog_Ticks_chain;
-
-/**
- *  @brief Watchdog chain which is managed at second boundaries.
- *
- *  This is the watchdog chain which is managed at second boundaries.
- */
-SCORE_EXTERN Chain_Control _Watchdog_Seconds_chain;
-
-/**
- *  @brief Initialize the watchdog handler.
- *
- *  This routine initializes the watchdog handler.  The watchdog
- *  synchronization flag is initialized and the watchdog chains are
- *  initialized and emptied.
- */
-void _Watchdog_Handler_initialization( void );
-
-/**
- *  @brief Removes @a the_watchdog from the watchdog chain.
- *
- *  This routine removes @a the_watchdog from the watchdog chain on which
- *  it resides and returns the state @a the_watchdog timer was in.
- *
- *  @param[in] the_watchdog will be removed
- *  @retval the state in which @a the_watchdog was in when removed
- */
-Watchdog_States _Watchdog_Remove (
-  Watchdog_Control *the_watchdog
-);
-
-/**
- *  @brief Adjusts the @a header watchdog chain in the forward
- *  or backward @a direction for @a units ticks.
- *
- *  This routine adjusts the @a header watchdog chain in the forward
- *  or backward @a direction for @a units ticks.
- *
- *  @param[in] header is the watchdog chain to adjust
- *  @param[in] direction is the direction to adjust @a header
- *  @param[in] units is the number of units to adjust @a header
- */
-void _Watchdog_Adjust (
-  Chain_Control              *header,
-  Watchdog_Adjust_directions  direction,
-  Watchdog_Interval           units
-);
-
-/**
- *  @brief Adjusts the @a header watchdog chain in the forward
- *  @a direction for @a units_arg ticks.
- *
- *  This routine adjusts the @a header watchdog chain in the forward
- *  @a direction for @a units_arg ticks.
- *
- *  @param[in] header is the watchdog chain to adjust
- *  @param[in] units_arg is the number of units to adjust @a header
- *  @param[in] to_fire is a pointer to an initialized Chain_Control to which
- *             all watchdog instances that are to be fired will be placed.
- *
- *  @note This always adjusts forward.
- */
-void _Watchdog_Adjust_to_chain(
-  Chain_Control               *header,
-  Watchdog_Interval            units_arg,
-  Chain_Control               *to_fire
-
-);
-
-/**
- *  @brief Inserts @a the_watchdog into the @a header watchdog chain
- *  for a time of @a units.
- *
- *  This routine inserts @a the_watchdog into the @a header watchdog chain
- *  for a time of @a units.
- *  Update the delta interval counters.
- *
- *  @param[in] header is @a the_watchdog list to insert @a the_watchdog on
- *  @param[in] the_watchdog is the watchdog to insert
- */
-void _Watchdog_Insert (
-  Chain_Control         *header,
-  Watchdog_Control      *the_watchdog
-);
-
-/**
- *  @brief This routine is invoked at appropriate intervals to update
- *  the @a header watchdog chain.
- *
- *  This routine is invoked at appropriate intervals to update
- *  the @a header watchdog chain.
- *  This routine decrements the delta counter in response to a tick.
- *
- *  @param[in] header is the watchdog chain to tickle
- */
-void _Watchdog_Tickle (
-  Chain_Control *header
-);
-
-/**
- *  @brief Report information on a single watchdog instance.
- *
- *  This method prints a one line report on the watchdog instance
- *  provided.  The @a name may be used to identify the watchdog and
- *  a space will be printed after @a name if it is not NULL.
- *
- *  @param[in] name is a string to prefix the line with.  If NULL,
- *             nothing is printed.
- *  @param[in] watch is the watchdog instance to be printed.
- *
- *  @note This is a debug routine.  It uses printk() and prudence should
- *        exercised when using it.
- */
-void _Watchdog_Report(
-  const char        *name,
-  Watchdog_Control  *watch
-);
-
-/**
- *  @brief Report information on a watchdog chain.
- *
- *  This method prints report on the watchdog chain provided.
- *  The @a name may be used to identify the watchdog chain and
- *  a space will be printed after @a name if it is not NULL.
- *
- *  @param[in] name is a string to prefix the line with.  If NULL,
- *             nothing is printed.
- *  @param[in] header is the watchdog chain to be printed.
- *
- *  @note This is a debug routine.  It uses printk() and prudence should
- *        exercised when using it.  It also disables interrupts so the
- *        chain can be traversed in a single atomic pass.
- */
-void _Watchdog_Report_chain(
-  const char        *name,
-  Chain_Control     *header
-);
-
-/**
- * @brief Handler for default nanoseconds since last tick.
- *
- * @retval 0 Always.
- */
-uint32_t _Watchdog_Nanoseconds_since_tick_default_handler( void );
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/watchdog.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

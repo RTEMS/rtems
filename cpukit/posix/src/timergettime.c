@@ -28,6 +28,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/timespec.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/timerimpl.h>
 
 /*

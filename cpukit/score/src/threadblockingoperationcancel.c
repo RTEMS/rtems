@@ -23,6 +23,7 @@
 #if defined(RTEMS_DEBUG)
 #include <rtems/score/interr.h>
 #endif
+#include <rtems/score/watchdogimpl.h>
 
 void _Thread_blocking_operation_Cancel(
 #if defined(RTEMS_DEBUG)

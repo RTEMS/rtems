@@ -22,6 +22,7 @@
 /* #include <errno.h> */
 
 #include <rtems/system.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/time.h>

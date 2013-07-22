@@ -30,6 +30,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Thread_Reset(
   Thread_Control            *the_thread,

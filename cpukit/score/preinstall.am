@@ -231,6 +231,10 @@ $(PROJECT_INCLUDE)/rtems/score/watchdog.h: include/rtems/score/watchdog.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/watchdog.h
 
+$(PROJECT_INCLUDE)/rtems/score/watchdogimpl.h: include/rtems/score/watchdogimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/watchdogimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/watchdogimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/wkspace.h: include/rtems/score/wkspace.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/wkspace.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/wkspace.h
@@ -354,10 +358,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.inl
 $(PROJECT_INCLUDE)/rtems/score/tqdata.inl: inline/rtems/score/tqdata.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
-
-$(PROJECT_INCLUDE)/rtems/score/watchdog.inl: inline/rtems/score/watchdog.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/watchdog.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/watchdog.inl
 
 $(PROJECT_INCLUDE)/rtems/score/wkspace.inl: inline/rtems/score/wkspace.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/wkspace.inl

@@ -52,7 +52,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
 #include <rtems/sptables.h>

@@ -30,6 +30,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/watchdogimpl.h>
 
 static inline size_t _POSIX_Threads_Ensure_minimum_stack (
   size_t size

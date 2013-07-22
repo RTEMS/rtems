@@ -25,6 +25,7 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdogimpl.h>
 
 bool _Rate_monotonic_Get_status(
   Rate_monotonic_Control        *the_period,

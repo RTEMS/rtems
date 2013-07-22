@@ -16,6 +16,8 @@
 
 #include <tmacros.h>
 
+#include <rtems/score/watchdogimpl.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_timer_service_routine TIMER_service_routine(

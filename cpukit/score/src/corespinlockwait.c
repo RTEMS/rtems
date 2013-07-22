@@ -23,7 +23,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threaddispatch.h>
-#include <rtems/score/watchdog.h>
 
 /*
  *  _CORE_spinlock_Wait

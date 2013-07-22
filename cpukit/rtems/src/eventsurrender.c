@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/event.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Event_Surrender(
   Thread_Control                   *the_thread,

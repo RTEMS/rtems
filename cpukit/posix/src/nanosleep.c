@@ -26,6 +26,7 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
+#include <rtems/score/watchdogimpl.h>
 
 #include <rtems/seterr.h>
 #include <rtems/score/timespec.h>

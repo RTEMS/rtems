@@ -33,6 +33,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/watchdogimpl.h>
 
 rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer
