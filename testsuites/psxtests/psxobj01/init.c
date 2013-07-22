@@ -76,7 +76,7 @@ rtems_task Init(
   puts( "INIT - _Objects_Set_name fails - out of memory" );
   rtems_workspace_greedy_allocate( NULL, 0 );
 
-  bc = _Objects_Set_name( &TestClass, &_Thread_Executing->Object, name );
+  bc = _Objects_Set_name( &TestClass, &_Thread_Get_executing()->Object, name );
   rtems_test_assert( bc == false );
 
   puts( "*** END OF POSIX OBJECT TEST 1 ***" );

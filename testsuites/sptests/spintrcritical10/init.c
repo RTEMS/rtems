@@ -300,7 +300,7 @@ static rtems_task Init(
 {
   rtems_status_code sc;
   test_context ctx = {
-    .thread = _Thread_Executing
+    .thread = _Thread_Get_executing()
   };
 
   puts( "\n\n*** TEST INTERRUPT CRITICAL SECTION 10 ***" );

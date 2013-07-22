@@ -34,7 +34,7 @@ void threadq_first_empty(
   _Thread_queue_Initialize( &tq, discipline, 0x01, 3 );
 
   puts( "Init - _Thread_queue_Extract - thread not blocked on a thread queue" );
-  _Thread_queue_Extract( &tq, _Thread_Executing );
+  _Thread_queue_Extract( &tq, _Thread_Get_executing() );
   /* is there anything to check? */
 }
 

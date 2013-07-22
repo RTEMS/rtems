@@ -77,7 +77,7 @@ void *POSIX_Init(
   _POSIX_signals_Pending |= signo_to_mask( SIGUSR1 );
 
   bc = _POSIX_signals_Clear_signals(
-    _Thread_Executing->API_Extensions[ THREAD_API_POSIX ],
+    _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ],
     SIGNAL_ONE,
     &info,
     true,              /* is_global */

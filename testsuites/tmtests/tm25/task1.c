@@ -93,7 +93,9 @@ rtems_task Low_task(
 )
 {
   benchmark_timer_initialize();
+  _Thread_Disable_dispatch();
     (void) rtems_clock_tick();
+  _Thread_Enable_dispatch();
   end_time = benchmark_timer_read();
 
   put_time(
