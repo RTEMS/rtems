@@ -69,6 +69,8 @@ useconds_t ualarm(
 
   the_timer = &_POSIX_signals_Ualarm_timer;
 
+  _Thread_Disable_dispatch();
+
   state = _Watchdog_Remove( the_timer );
   if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
     /*
@@ -102,6 +104,8 @@ useconds_t ualarm(
 
     _Watchdog_Insert_ticks( the_timer, _Timespec_To_ticks( &tp ) );
   }
+
+  _Thread_Enable_dispatch();
 
   return remaining;
 }
