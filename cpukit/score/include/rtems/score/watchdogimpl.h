@@ -40,6 +40,19 @@ extern "C" {
 #define WATCHDOG_MAXIMUM_INTERVAL ((Watchdog_Interval) 0xffffffff)
 
 /**
+ * @brief Watchdog initializer for static initialization.
+ *
+ * @see _Watchdog_Initialize().
+ */
+#define WATCHDOG_INITIALIZER( routine, id, user_data ) \
+  { \
+    { NULL, NULL }, \
+    WATCHDOG_INACTIVE, \
+    0, 0, 0, 0, \
+    ( routine ), ( id ), ( user_data ) \
+  }
+
+/**
  *  @brief the manner in which a watchdog chain may
  *  be adjusted by the @ref _Watchdog_Adjust routine.
  *
