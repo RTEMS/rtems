@@ -19,7 +19,6 @@ include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
 
-include_rtems_HEADERS += inline/rtems/chain.inl
 include_rtems_HEADERS += inline/rtems/extension.inl
 include_rtems_HEADERS += inline/rtems/cbs.inl
 include_rtems_HEADERS += inline/rtems/rbtree.inl

@@ -80,10 +80,6 @@ $(PROJECT_INCLUDE)/rtems/timespec.h: include/rtems/timespec.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timespec.h
 
-$(PROJECT_INCLUDE)/rtems/chain.inl: inline/rtems/chain.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.inl
-
 $(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
