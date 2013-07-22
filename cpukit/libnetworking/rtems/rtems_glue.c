@@ -367,6 +367,9 @@ rtems_bsdnet_semaphore_obtain (void)
 #ifdef RTEMS_FAST_MUTEX
 	ISR_Level level;
 	Thread_Control *executing;
+#ifdef RTEMS_SMP
+	_Thread_Disable_dispatch();
+#endif
 	_ISR_Disable (level);
 	executing = _Thread_Executing;
 	_CORE_mutex_Seize (
@@ -377,6 +380,9 @@ rtems_bsdnet_semaphore_obtain (void)
 		0,		/* forever */
 		level
 		);
+#ifdef RTEMS_SMP
+	_Thread_Enable_dispatch();
+#endif
 	if (executing->Wait.return_code)
 		rtems_panic ("rtems-net: can't obtain network sema: %d\n",
                  executing->Wait.return_code);
