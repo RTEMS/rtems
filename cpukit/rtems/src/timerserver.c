@@ -345,6 +345,22 @@ static void _Timer_server_Get_watchdogs_that_fire_now(
   }
 }
 
+/* FIXME: This locking approach for SMP is improvable! */
+
+static void _Timer_server_SMP_lock_aquire( void )
+{
+#if defined( RTEMS_SMP )
+  _Thread_Disable_dispatch();
+#endif
+}
+
+static void _Timer_server_SMP_lock_release( void )
+{
+#if defined( RTEMS_SMP )
+  _Thread_Enable_dispatch();
+#endif
+}
+
 /**
  *  @brief Timer server body.
  *
@@ -364,6 +380,8 @@ static rtems_task _Timer_server_Body(
 
   _Chain_Initialize_empty( &insert_chain );
   _Chain_Initialize_empty( &fire_chain );
+
+  _Timer_server_SMP_lock_aquire();
 
   while ( true ) {
     _Timer_server_Get_watchdogs_that_fire_now( ts, &insert_chain, &fire_chain );
@@ -391,12 +409,16 @@ static rtems_task _Timer_server_Body(
           break;
         }
 
+        _Timer_server_SMP_lock_release();
+
         /*
          *  The timer server may block here and wait for resources or time.
          *  The system watchdogs are inactive and will remain inactive since
          *  the active flag of the timer server is true.
          */
         (*watchdog->routine)( watchdog->id, watchdog->user_data );
+
+        _Timer_server_SMP_lock_aquire();
       }
     } else {
       ts->active = false;
@@ -404,11 +426,18 @@ static rtems_task _Timer_server_Body(
       /*
        *  Block until there is something to do.
        */
+#if !defined( RTEMS_SMP )
       _Thread_Disable_dispatch();
+#endif
         _Thread_Set_state( ts->thread, STATES_DELAYING );
         _Timer_server_Reset_interval_system_watchdog( ts );
         _Timer_server_Reset_tod_system_watchdog( ts );
+#if !defined( RTEMS_SMP )
       _Thread_Enable_dispatch();
+#endif
+
+      _Timer_server_SMP_lock_release();
+      _Timer_server_SMP_lock_aquire();
 
       ts->active = true;
 
