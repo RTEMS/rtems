@@ -304,9 +304,10 @@ void rtems_stack_checker_switch_extension(
  */
 bool rtems_stack_checker_is_blown( void )
 {
-  Stack_Control *the_stack = &_Thread_Executing->Start.Initial_stack;
-  bool           sp_ok;
-  bool           pattern_ok = true;
+  Thread_Control *executing = _Thread_Get_executing();
+  Stack_Control  *the_stack = &executing->Start.Initial_stack;
+  bool            sp_ok;
+  bool            pattern_ok = true;
 
   /*
    *  Check for an out of bounds stack pointer
@@ -331,7 +332,7 @@ bool rtems_stack_checker_is_blown( void )
    * Let's report as much as we can.
    */
   if ( !sp_ok || !pattern_ok ) {
-    Stack_check_report_blown_task( _Thread_Executing, pattern_ok );
+    Stack_check_report_blown_task( executing, pattern_ok );
     /* DOES NOT RETURN */
   }
 
