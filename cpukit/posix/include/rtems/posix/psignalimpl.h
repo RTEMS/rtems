@@ -59,8 +59,6 @@ extern const struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ];
 
 extern struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
 
-extern Watchdog_Control _POSIX_signals_Ualarm_timer;
-
 extern Thread_queue_Control _POSIX_signals_Wait_queue;
 
 extern Chain_Control _POSIX_signals_Inactive_siginfo;

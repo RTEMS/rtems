@@ -27,6 +27,14 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/time.h>
 
+static void _POSIX_signals_Ualarm_TSR( Objects_Id id, void *argument );
+
+static Watchdog_Control _POSIX_signals_Ualarm_timer = WATCHDOG_INITIALIZER(
+  _POSIX_signals_Ualarm_TSR,
+  0,
+  NULL
+);
+
 /*
  *  _POSIX_signals_Ualarm_TSR
  */
@@ -56,35 +64,26 @@ useconds_t ualarm(
   useconds_t        remaining = 0;
   Watchdog_Control *the_timer;
   Watchdog_Interval ticks;
+  Watchdog_States   state;
   struct timespec   tp;
 
   the_timer = &_POSIX_signals_Ualarm_timer;
 
-  /*
-   *  Initialize the timer used to implement alarm().
-   */
+  state = _Watchdog_Remove( the_timer );
+  if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
+    /*
+     *  The stop_time and start_time fields are snapshots of ticks since
+     *  boot.  Since alarm() is dealing in seconds, we must account for
+     *  this.
+     */
 
-  if ( !the_timer->routine ) {
-    _Watchdog_Initialize( the_timer, _POSIX_signals_Ualarm_TSR, 0, NULL );
-  } else {
-    Watchdog_States state;
+    ticks = the_timer->initial;
+    ticks -= (the_timer->stop_time - the_timer->start_time);
+    /* remaining is now in ticks */
 
-    state = _Watchdog_Remove( the_timer );
-    if ( (state == WATCHDOG_ACTIVE) || (state == WATCHDOG_REMOVE_IT) ) {
-      /*
-       *  The stop_time and start_time fields are snapshots of ticks since
-       *  boot.  Since alarm() is dealing in seconds, we must account for
-       *  this.
-       */
-
-      ticks = the_timer->initial;
-      ticks -= (the_timer->stop_time - the_timer->start_time);
-      /* remaining is now in ticks */
-
-      _Timespec_From_ticks( ticks, &tp );
-      remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
-      remaining += tp.tv_nsec / 1000;
-    }
+    _Timespec_From_ticks( ticks, &tp );
+    remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
+    remaining += tp.tv_nsec / 1000;
   }
 
   /*
