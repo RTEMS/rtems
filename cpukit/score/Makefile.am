@@ -17,6 +17,7 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = include/rtems/score/address.h
 include_rtems_score_HEADERS += include/rtems/score/apiext.h
 include_rtems_score_HEADERS += include/rtems/score/apimutex.h
+include_rtems_score_HEADERS += include/rtems/score/assert.h
 include_rtems_score_HEADERS += include/rtems/score/chain.h
 include_rtems_score_HEADERS += include/rtems/score/chainimpl.h
 include_rtems_score_HEADERS += include/rtems/score/context.h

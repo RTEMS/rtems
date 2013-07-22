@@ -51,6 +51,10 @@ $(PROJECT_INCLUDE)/rtems/score/apimutex.h: include/rtems/score/apimutex.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/apimutex.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/apimutex.h
 
+$(PROJECT_INCLUDE)/rtems/score/assert.h: include/rtems/score/assert.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/assert.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/assert.h
+
 $(PROJECT_INCLUDE)/rtems/score/chain.h: include/rtems/score/chain.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chain.h
