@@ -95,7 +95,6 @@ Thread_queue_Control _POSIX_signals_Wait_queue;
 Chain_Control _POSIX_signals_Inactive_siginfo;
 Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 
-Watchdog_Control _POSIX_signals_Alarm_timer;
 Watchdog_Control _POSIX_signals_Ualarm_timer;
 
 /*
@@ -234,6 +233,5 @@ void _POSIX_signals_Manager_Initialization(void)
   /*
    *  Initialize the Alarm Timer
    */
-  _Watchdog_Initialize( &_POSIX_signals_Alarm_timer, NULL, 0, NULL );
   _Watchdog_Initialize( &_POSIX_signals_Ualarm_timer, NULL, 0, NULL );
 }
