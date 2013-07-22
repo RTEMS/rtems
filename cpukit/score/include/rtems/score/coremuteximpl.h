@@ -208,7 +208,10 @@ void _CORE_mutex_Seize_interrupt_blocking(
  *  @retval this method returns true if dispatch is in an unsafe state.
  */
 #ifdef RTEMS_SMP
-  #define _CORE_mutex_Check_dispatch_for_seize(_wait) 0
+  #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
+      (_Thread_Dispatch_get_disable_level() != 1 \
+        && (_wait) \
+        && (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING))
 #else
   #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
       (!_Thread_Dispatch_is_enabled() \
