@@ -1,8 +1,9 @@
 /**
- * @file rtems/rtems/options.inl
+ * @file
  *
- *  This file contains the static inline implementation of the inlined
- *  routines from the Options Handler.
+ * @ingroup ClassicOptionsImpl
+ *
+ * @brief Classic Options Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -13,18 +14,21 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_OPTIONS_H
-# error "Never use <rtems/rtems/options.inl> directly; include <rtems/rtems/options.h> instead."
+#ifndef _RTEMS_RTEMS_OPTIONSIMPL_H
+#define _RTEMS_RTEMS_OPTIONSIMPL_H
+
+#include <rtems/rtems/options.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef _RTEMS_RTEMS_OPTIONS_INL
-#define _RTEMS_RTEMS_OPTIONS_INL
-
-#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
-
 /**
- *  @addtogroup ClassicOptions
- *  @{
+ * @defgroup ClassicOptionsImpl Classic Options Implementation
+ *
+ * @ingroup ClassicOptions
+ *
+ * @{
  */
 
 /**
@@ -54,6 +58,10 @@ RTEMS_INLINE_ROUTINE bool _Options_Is_any (
 }
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

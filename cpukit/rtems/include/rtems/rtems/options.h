@@ -21,6 +21,8 @@
 #ifndef _RTEMS_RTEMS_OPTIONS_H
 #define _RTEMS_RTEMS_OPTIONS_H
 
+#include <rtems/score/basedefs.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -71,15 +73,11 @@ typedef uint32_t   rtems_option;
  */
 #define RTEMS_EVENT_ANY 0x00000002
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/options.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

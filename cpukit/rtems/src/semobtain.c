@@ -24,7 +24,7 @@
 #include <rtems/rtems/attr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>

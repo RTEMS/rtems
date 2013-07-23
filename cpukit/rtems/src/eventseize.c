@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/event.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 /*

@@ -91,6 +91,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/options.h: include/rtems/rtems/options.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/options.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/options.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/optionsimpl.h: include/rtems/rtems/optionsimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/optionsimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/optionsimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/part.h: include/rtems/rtems/part.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.h
@@ -212,10 +216,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/eventset.inl
 $(PROJECT_INCLUDE)/rtems/rtems/modes.inl: inline/rtems/rtems/modes.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/modes.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/modes.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/options.inl: inline/rtems/rtems/options.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/options.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/options.inl
 
 $(PROJECT_INCLUDE)/rtems/rtems/part.inl: inline/rtems/rtems/part.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.inl

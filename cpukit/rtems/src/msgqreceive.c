@@ -33,7 +33,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/messageimpl.h>
-#include <rtems/rtems/options.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/support.h>
 
 rtems_status_code rtems_message_queue_receive(
