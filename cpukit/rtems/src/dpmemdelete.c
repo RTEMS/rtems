@@ -22,10 +22,9 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
-#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/dpmem.h>
 
 rtems_status_code rtems_port_delete(
   rtems_id id

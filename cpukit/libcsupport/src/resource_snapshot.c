@@ -28,6 +28,7 @@
 #include <rtems/extensionimpl.h>
 
 #include <rtems/rtems/barrierimpl.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/semimpl.h>
 

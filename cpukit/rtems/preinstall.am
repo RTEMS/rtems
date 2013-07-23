@@ -67,6 +67,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/dpmem.h: include/rtems/rtems/dpmem.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/dpmem.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/dpmemimpl.h: include/rtems/rtems/dpmemimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmemimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/dpmemimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/event.h: include/rtems/rtems/event.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/event.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/event.h
@@ -205,10 +209,6 @@ $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h: include/rtems/rtems/taskmp.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h
 endif
-$(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl: inline/rtems/rtems/dpmem.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl
-
 $(PROJECT_INCLUDE)/rtems/rtems/part.inl: inline/rtems/rtems/part.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.inl

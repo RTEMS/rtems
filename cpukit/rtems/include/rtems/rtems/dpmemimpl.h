@@ -1,8 +1,9 @@
 /**
- * @file rtems/rtems/dpmem.inl
+ * @file
  *
- *  This include file contains the inline routine used in conjunction
- *  with the Dual Ported Memory Manager
+ * @ingroup ClassicDPMEMImpl
+ *
+ * @brief Dual Ported Memory Manager Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -13,17 +14,41 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_DPMEM_H
-# error "Never use <rtems/rtems/dpmem.inl> directly; include <rtems/rtems/dpmem.h> instead."
-#endif
-
 #ifndef _RTEMS_RTEMS_DPMEM_INL
 #define _RTEMS_RTEMS_DPMEM_INL
 
+#include <rtems/rtems/dpmem.h>
+
 /**
- *  @addtogroup ClassicDPMEM
- *  @{
+ * @defgroup ClassicDPMEMImpl Dual Ported Memory Manager Implementation
+ *
+ * @ingroup ClassicDPMEM
+ *
+ * @{
  */
+
+/**
+ *  This constant is defined to extern most of the time when using
+ *  this header file.  However by defining it to nothing, the data
+ *  declared in this header file can be instantiated.  This is done
+ *  in a single per manager file.
+ */
+#ifndef RTEMS_DPMEM_EXTERN
+#define RTEMS_DPMEM_EXTERN extern
+#endif
+
+/**
+ *  @brief Define the internal Dual Ported Memory information
+ *  The following define the internal Dual Ported Memory information.
+ */
+RTEMS_DPMEM_EXTERN Objects_Information  _Dual_ported_memory_Information;
+
+/**
+ *  @brief Dual Ported Memory Manager Initialization
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+void _Dual_ported_memory_Manager_initialization(void);
 
 /**
  *  @brief Allocates a port control block from the inactive chain
@@ -85,6 +110,10 @@ RTEMS_INLINE_ROUTINE bool _Dual_ported_memory_Is_null(
 }
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

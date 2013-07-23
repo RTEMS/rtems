@@ -20,7 +20,7 @@
 #include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/fatal.h>
@@ -267,7 +267,7 @@ uninitialized =
 
 /*debug.h*/     (sizeof _Debug_Level)                     +
 
-/*dpmem.h*/     (sizeof _Dual_ported_memory_Information)  +
+/*dpmemimpl.h*/ (sizeof _Dual_ported_memory_Information)  +
 
 /*eventimpl.h*/ (sizeof _Event_Sync_state)                +
 

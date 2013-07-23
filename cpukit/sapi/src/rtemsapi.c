@@ -29,7 +29,7 @@
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #if defined(RTEMS_MULTIPROCESSING)

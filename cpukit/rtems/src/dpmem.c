@@ -23,7 +23,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
-#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
