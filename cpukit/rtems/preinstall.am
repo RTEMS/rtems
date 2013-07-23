@@ -127,6 +127,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/status.h: include/rtems/rtems/status.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/status.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/status.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/statusimpl.h: include/rtems/rtems/statusimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/statusimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/statusimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/support.h: include/rtems/rtems/support.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/support.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/support.h
@@ -224,10 +228,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl
 $(PROJECT_INCLUDE)/rtems/rtems/region.inl: inline/rtems/rtems/region.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/status.inl: inline/rtems/rtems/status.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/status.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/status.inl
 
 $(PROJECT_INCLUDE)/rtems/rtems/support.inl: inline/rtems/rtems/support.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/support.inl

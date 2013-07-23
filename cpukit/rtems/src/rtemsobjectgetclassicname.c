@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
-#include <rtems/rtems/status.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/object.h>
 

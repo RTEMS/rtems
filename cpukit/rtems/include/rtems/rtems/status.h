@@ -21,6 +21,12 @@
 #ifndef _RTEMS_RTEMS_STATUS_H
 #define _RTEMS_RTEMS_STATUS_H
 
+#include <rtems/score/basedefs.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ClassicStatus Status Codes
  *
@@ -29,10 +35,6 @@
  *  This encapsulates functionality which XXX
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  *  @brief Classic API Status
@@ -188,23 +190,37 @@ typedef enum {
 #define RTEMS_STATUS_CODES_LAST  RTEMS_PROXY_BLOCKING
 
 /**
- *  @brief Status Object Name Errors to Status Array
+ *  @brief Checks if the status code is equal to RTEMS_SUCCESSFUL.
  *
- *  This array is used to map SuperCore Object Handler return
- *  codes to Classic API status codes.
+ *  This function returns TRUE if the status code is equal to RTEMS_SUCCESSFUL,
+ *  and FALSE otherwise.
  */
-extern const rtems_status_code _Status_Object_name_errors_to_status[];
+RTEMS_INLINE_ROUTINE bool rtems_is_status_successful(
+  rtems_status_code code
+)
+{
+  return (code == RTEMS_SUCCESSFUL);
+}
 
-/*
- *  Applications are allowed to use the macros to compare status codes.
+/**
+ *  @brief Checks if the status code1 is equal to code2.
+ *
+ *  This function returns TRUE if the status code1 is equal to code2,
+ *  and FALSE otherwise.
  */
-#include <rtems/rtems/status.inl>
+RTEMS_INLINE_ROUTINE bool rtems_are_statuses_equal(
+  rtems_status_code code1,
+  rtems_status_code code2
+)
+{
+   return (code1 == code2);
+}
+
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

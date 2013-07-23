@@ -13,7 +13,7 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/rtems/status.h>
+#include <rtems/rtems/statusimpl.h>
 
 const rtems_status_code _Status_Object_name_errors_to_status[] = {
   /** This maps OBJECTS_SUCCESSFUL to RTEMS_SUCCESSFUL. */

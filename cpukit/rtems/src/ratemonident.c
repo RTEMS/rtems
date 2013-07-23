@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/status.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>

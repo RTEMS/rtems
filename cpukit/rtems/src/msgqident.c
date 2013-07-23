@@ -30,7 +30,7 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #endif
-#include <rtems/rtems/status.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/options.h>
