@@ -14,6 +14,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 #define __need_getopt_newlib
 #include <getopt.h>
 

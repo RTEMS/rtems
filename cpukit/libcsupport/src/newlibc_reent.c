@@ -25,6 +25,7 @@
 
 #include <sys/reent.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <rtems/libcsupport.h>
 #include <rtems/score/wkspace.h>

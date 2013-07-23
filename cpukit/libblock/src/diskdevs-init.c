@@ -26,6 +26,8 @@
 #include <rtems/blkdev.h>
 #include <rtems/bdbuf.h>
 
+#include <string.h>
+
 rtems_status_code rtems_disk_init_phys(
   rtems_disk_device *dd,
   uint32_t block_size,

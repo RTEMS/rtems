@@ -58,6 +58,7 @@
 #include <sys/fcntl.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <inttypes.h>
 
 

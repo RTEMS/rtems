@@ -22,6 +22,7 @@
 #include "malloc_p.h"
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 void *realloc(
   void *ptr,

@@ -21,6 +21,7 @@
 #endif
 
 #include <inttypes.h>
+#include <string.h>
 
 #if SIZEOF_OFF_T == 8
 #define PRIdoff_t PRId64

@@ -28,6 +28,7 @@
 #endif
 
 #include <inttypes.h>
+#include <string.h>
 
 #if SIZEOF_OFF_T == 8
 #define PRIooff_t PRIo64

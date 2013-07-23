@@ -21,6 +21,7 @@
 #include "imfs.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 /*
  *  IMFS_determine_bytes_per_block

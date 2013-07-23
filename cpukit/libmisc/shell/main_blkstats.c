@@ -19,6 +19,8 @@
 #include <rtems/blkdev.h>
 #include <rtems/shellconfig.h>
 
+#include <string.h>
+
 static bool is_reset_option(const char *opt)
 {
   return strcmp(opt, "-r") == 0 || strcmp(opt, "--reset") == 0;

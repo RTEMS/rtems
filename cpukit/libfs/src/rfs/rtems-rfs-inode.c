@@ -20,6 +20,7 @@
 #endif
 
 #include <inttypes.h>
+#include <string.h>
 
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>

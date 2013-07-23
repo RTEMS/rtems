@@ -21,6 +21,7 @@
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_CALLOC)
 #include "malloc_p.h"
 #include <stdlib.h>
+#include <string.h>
 
 void *calloc(
   size_t nelem,

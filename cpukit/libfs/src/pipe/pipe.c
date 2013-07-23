@@ -18,6 +18,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>

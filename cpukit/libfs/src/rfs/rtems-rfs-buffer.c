@@ -21,6 +21,7 @@
 #include <inttypes.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <string.h>
 
 #include <rtems/rfs/rtems-rfs-buffer.h>
 #include <rtems/rfs/rtems-rfs-file-system.h>

@@ -23,6 +23,7 @@
 #include "malloc_p.h"
 
 #include <errno.h>
+#include <string.h>
 
 void rtems_malloc_dirty_memory(
   void   *start,

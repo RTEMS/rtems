@@ -21,6 +21,7 @@
 
 #define __need_getopt_newlib
 #include <getopt.h>
+#include <string.h>
 
 static const char suffixes[] =
 { 'B', 'K', 'M', 'G', 'T' };

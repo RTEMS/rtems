@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <string.h>
 
 #include <rtems/shell.h>
 #include <rtems/userenv.h>

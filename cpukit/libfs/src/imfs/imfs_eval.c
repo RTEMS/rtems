@@ -23,6 +23,8 @@
 
 #include "imfs.h"
 
+#include <string.h>
+
 static bool IMFS_eval_is_directory(
   rtems_filesystem_eval_path_context_t *ctx,
   void *arg

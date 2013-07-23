@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 
 void rtems_blkstats(FILE *output, const char *device, bool reset)
 {

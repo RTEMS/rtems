@@ -14,6 +14,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 #include <rtems.h>
 #include <rtems/shell.h>

@@ -25,6 +25,8 @@
 
 #include <rtems/libio_.h>
 
+#include <string.h>
+
 static size_t get_parentpathlen(const char *path, size_t pathlen)
 {
   while (pathlen > 0) {

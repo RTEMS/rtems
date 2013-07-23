@@ -21,6 +21,7 @@
 #endif
 
 #include <inttypes.h>
+#include <string.h>
 #include <stdlib.h>
 
 #if SIZEOF_MODE_T == 8
