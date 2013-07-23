@@ -25,6 +25,8 @@
 
 #include <tmacros.h>
 
+#include <rtems/rtems/timerimpl.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 

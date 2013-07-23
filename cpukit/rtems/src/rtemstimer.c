@@ -24,7 +24,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/timer.h>
+#include <rtems/rtems/timerimpl.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 

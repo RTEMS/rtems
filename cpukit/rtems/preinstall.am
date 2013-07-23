@@ -167,6 +167,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/timer.h: include/rtems/rtems/timer.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/timerimpl.h: include/rtems/rtems/timerimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timerimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timerimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/types.h: include/rtems/rtems/types.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/types.h
@@ -224,8 +228,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.inl
 $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl: inline/rtems/rtems/tasks.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/timer.inl: inline/rtems/rtems/timer.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
 

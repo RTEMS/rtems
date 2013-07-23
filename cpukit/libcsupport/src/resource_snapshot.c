@@ -32,6 +32,7 @@
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/timerimpl.h>
 
 #ifdef RTEMS_POSIX_API
   #include <rtems/posix/barrierimpl.h>

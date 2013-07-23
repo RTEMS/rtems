@@ -40,7 +40,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/rtems/timer.h>
+#include <rtems/rtems/timerimpl.h>
 
 Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 

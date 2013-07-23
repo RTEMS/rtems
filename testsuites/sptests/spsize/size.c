@@ -42,7 +42,7 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/timer.h>
+#include <rtems/rtems/timerimpl.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
@@ -399,7 +399,7 @@ uninitialized =
 
 /*threadq.h*/
 
-/*timer.h*/     (sizeof _Timer_Information)               +
+/*timerimpl.h*/ (sizeof _Timer_Information)               +
 
 /*tod.h*/       (sizeof _TOD.now)                         +
                 (sizeof _TOD.uptime)                      +

@@ -49,6 +49,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/statusimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/support.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/tasks.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timer.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/timerimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/types.h
 if ATOMIC
 include_rtems_rtems_HEADERS += include/rtems/rtems/atomic.h
@@ -70,7 +71,6 @@ endif
 include_rtems_rtems_HEADERS += inline/rtems/rtems/part.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/region.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
-include_rtems_rtems_HEADERS += inline/rtems/rtems/timer.inl
 
 ## src
 librtems_a_SOURCES = src/rtemsbuildid.c
