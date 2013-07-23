@@ -16,14 +16,14 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_SCORE_STACK_H
-# error "Never use <rtems/score/stack.inl> directly; include <rtems/score/stack.h> instead."
+#ifndef _RTEMS_SCORE_STACKIMPL_H
+#define _RTEMS_SCORE_STACKIMPL_H
+
+#include <rtems/score/stack.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
-
-#ifndef _RTEMS_SCORE_STACK_INL
-#define _RTEMS_SCORE_STACK_INL
-
-#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
 
 /**
  * @addtogroup ScoreStack
@@ -90,6 +90,10 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
 }
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

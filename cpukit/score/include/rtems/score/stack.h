@@ -20,6 +20,12 @@
 #ifndef _RTEMS_SCORE_STACK_H
 #define _RTEMS_SCORE_STACK_H
 
+#include <rtems/score/basedefs.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreStack Stack Handler
  *
@@ -29,10 +35,6 @@
  *  of thread stacks.
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  *  The following constant defines the minimum stack size which every
@@ -57,15 +59,11 @@ typedef struct {
  */
 extern uint32_t rtems_minimum_stack_size;
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/stack.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
