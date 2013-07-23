@@ -92,7 +92,6 @@ include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
 endif
 
 ## inline
-include_rtems_score_HEADERS += inline/rtems/score/address.inl
 include_rtems_score_HEADERS += inline/rtems/score/heap.inl
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/priority.inl
