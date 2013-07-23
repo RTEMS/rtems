@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/score/address.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/interr.h>
