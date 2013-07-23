@@ -41,8 +41,9 @@
 #ifndef _RTEMS_RTEMS_TIMER_H
 #define _RTEMS_RTEMS_TIMER_H
 
-#include <rtems/rtems/types.h>
 #include <rtems/rtems/attr.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
