@@ -31,6 +31,7 @@ include_rtems_score_HEADERS += include/rtems/score/coremuteximpl.h
 include_rtems_score_HEADERS += include/rtems/score/coresem.h
 include_rtems_score_HEADERS += include/rtems/score/coresemimpl.h
 include_rtems_score_HEADERS += include/rtems/score/heap.h
+include_rtems_score_HEADERS += include/rtems/score/heapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/protectedheap.h
 include_rtems_score_HEADERS += include/rtems/score/interr.h
 include_rtems_score_HEADERS += include/rtems/score/isr.h
@@ -92,7 +93,6 @@ include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
 endif
 
 ## inline
-include_rtems_score_HEADERS += inline/rtems/score/heap.inl
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/priority.inl
 include_rtems_score_HEADERS += inline/rtems/score/prioritybitmap.inl

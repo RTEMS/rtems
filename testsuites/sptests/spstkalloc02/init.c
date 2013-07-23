@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 #define TASK_COUNT 5
 

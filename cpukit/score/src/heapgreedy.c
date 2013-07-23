@@ -24,7 +24,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 Heap_Block *_Heap_Greedy_allocate(
   Heap_Control *heap,

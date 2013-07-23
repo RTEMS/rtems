@@ -18,14 +18,13 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <string.h>
-
-#include <rtems/system.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
+
+#include <string.h>
 
 #if CPU_ALIGNMENT == 0 || CPU_ALIGNMENT % 2 != 0
   #error "invalid CPU_ALIGNMENT value"

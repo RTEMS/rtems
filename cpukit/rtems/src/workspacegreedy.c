@@ -25,6 +25,7 @@
 
 #include <rtems/rtems/support.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/heapimpl.h>
 
 void *rtems_workspace_greedy_allocate(
   const uintptr_t *block_sizes,

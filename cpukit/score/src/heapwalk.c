@@ -22,7 +22,7 @@
 #include <rtems/system.h>
 #include <rtems/score/address.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/bspIo.h>
 

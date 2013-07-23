@@ -15,7 +15,6 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #define CONFIGURE_INIT
 #include "system.h"
 
@@ -23,7 +22,7 @@
 #include <inttypes.h>
 #include <errno.h>
 #include <string.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/dumpbuf.h>
 
 #define TEST_HEAP_SIZE 1024

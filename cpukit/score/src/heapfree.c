@@ -20,7 +20,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 #ifndef HEAP_PROTECTION
   #define _Heap_Protection_determine_block_free( heap, block ) true

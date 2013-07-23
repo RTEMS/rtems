@@ -15,13 +15,13 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/config.h>
 
 #include <string.h>  /* for memset */
 

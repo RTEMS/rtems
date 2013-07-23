@@ -24,7 +24,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 void _Heap_Iterate(
   Heap_Control *heap,

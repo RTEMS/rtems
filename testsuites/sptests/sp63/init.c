@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+#include <rtems/score/heapimpl.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void test_case_one(void);
