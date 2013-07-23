@@ -23,7 +23,7 @@
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
+#include <rtems/rtems/modesimpl.h>
 #include <rtems/score/object.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>

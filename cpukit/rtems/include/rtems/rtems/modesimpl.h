@@ -1,8 +1,9 @@
 /**
- * @file rtems/rtems/modes.inl
+ * @file
  *
- *  This include file contains the static inline implementation of the
- *  inlined routines in the Mode Handler
+ * @ingroup ClassicModesImpl
+ *
+ * @brief Classic Modes Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -13,16 +14,22 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_MODES_H
-# error "Never use <rtems/rtems/modes.inl> directly; include <rtems/rtems/modes.h> instead."
+#ifndef _RTEMS_RTEMS_MODESIMPL_H
+#define _RTEMS_RTEMS_MODESIMPL_H
+
+#include <rtems/rtems/modes.h>
+#include <rtems/score/isrlevel.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef _RTEMS_RTEMS_MODES_INL
-#define _RTEMS_RTEMS_MODES_INL
-
 /**
- *  @addtogroup ClassicModes
- *  @{
+ * @defgroup ClassicModesImpl Classic Modes Implementation
+ *
+ * @ingroup ClassicModes
+ *
+ * @{
  */
 
 /**
@@ -128,6 +135,10 @@ RTEMS_INLINE_ROUTINE void _Modes_Change (
   *changed       = _out_mode ^ old_mode_set;
   *out_mode_set  = _out_mode;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 /**@}*/
 

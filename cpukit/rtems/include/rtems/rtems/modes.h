@@ -21,6 +21,12 @@
 #ifndef _RTEMS_RTEMS_MODES_H
 #define _RTEMS_RTEMS_MODES_H
 
+#include <rtems/score/cpu.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ClassicModes Modes
  *
@@ -29,12 +35,6 @@
  *  This encapsulates functionality which XXX
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/isr.h>
 
 /**
  *  The following type defines the control block used to manage
@@ -121,15 +121,11 @@ Modes_Control rtems_interrupt_level_body(
   uint32_t   level
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/modes.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
