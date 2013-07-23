@@ -88,10 +88,6 @@ $(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
 
-$(PROJECT_INCLUDE)/rtems/timespec.inl: inline/rtems/timespec.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timespec.inl
-
 $(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libsapi.a
