@@ -168,7 +168,11 @@ extern "C" {
  * On the SPARC, we can disable the FPU for integer only tasks so
  * it is safe to defer floating point context switches.
  */
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#if defined(RTEMS_SMP)
+  #define CPU_USE_DEFERRED_FP_SWITCH FALSE
+#else
+  #define CPU_USE_DEFERRED_FP_SWITCH TRUE
+#endif
 
 /**
  * Does this port provide a CPU dependent IDLE task implementation?

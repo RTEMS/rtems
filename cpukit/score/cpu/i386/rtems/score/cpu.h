@@ -93,7 +93,11 @@ extern "C" {
 
 #define CPU_ALL_TASKS_ARE_FP             FALSE
 #define CPU_IDLE_TASK_IS_FP              FALSE
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#if defined(RTEMS_SMP)
+  #define CPU_USE_DEFERRED_FP_SWITCH     FALSE
+#else
+  #define CPU_USE_DEFERRED_FP_SWITCH     TRUE
+#endif
 #endif /* __SSE__ */
 
 #define CPU_STACK_GROWS_UP               FALSE
