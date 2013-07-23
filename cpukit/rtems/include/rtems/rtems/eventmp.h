@@ -21,11 +21,14 @@
 #ifndef _RTEMS_RTEMS_EVENTMP_H
 #define _RTEMS_RTEMS_EVENTMP_H
 
+#ifndef _RTEMS_RTEMS_EVENTIMPL_H
+# error "Never use <rtems/rtems/eventmp.h> directly; include <rtems/rtems/eventimpl.h> instead."
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/rtems/event.h>
 #include <rtems/score/mppkt.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>

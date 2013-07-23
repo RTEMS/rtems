@@ -17,6 +17,8 @@
 #include <tmacros.h>
 #include <intrcritical.h>
 
+#include <rtems/rtems/eventimpl.h>
+
 #define GREEN RTEMS_EVENT_0
 
 #define RED RTEMS_EVENT_1

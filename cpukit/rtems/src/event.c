@@ -18,15 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/event.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/eventimpl.h>
+#if defined(RTEMS_MULTIPROCESSING)
+#include <rtems/score/mpci.h>
+#endif
 
 void _Event_Manager_initialization( void )
 {

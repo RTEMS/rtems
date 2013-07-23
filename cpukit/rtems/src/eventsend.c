@@ -18,7 +18,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/tasks.h>
 
 rtems_status_code rtems_event_send(

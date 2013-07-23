@@ -238,7 +238,7 @@ static const rtems_assoc_t rtems_monitor_events_assoc[] = {
 int
 rtems_monitor_dump_events(rtems_event_set events)
 {
-    if (events == EVENT_SETS_NONE_PENDING)  /* value is 0 */
+    if (events == 0)
         return fprintf(stdout,"  NONE  ");
 
     return fprintf(stdout,"%08" PRIx32, events);

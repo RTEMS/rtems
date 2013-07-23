@@ -18,7 +18,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventimpl.h>
 
 void _Event_Timeout(
   Objects_Id  id,

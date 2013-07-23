@@ -21,7 +21,7 @@
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventimpl.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
@@ -269,13 +269,11 @@ uninitialized =
 
 /*dpmem.h*/     (sizeof _Dual_ported_memory_Information)  +
 
-/*event.h*/     (sizeof _Event_Sync_state)                +
+/*eventimpl.h*/ (sizeof _Event_Sync_state)                +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*eventmp.h*/   0                                         +
 #endif
-
-/*eventset.h*/  0                                         +
 
 /*extensionimpl.h*/ (sizeof _Extension_Information)       +
 

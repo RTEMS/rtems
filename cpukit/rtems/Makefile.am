@@ -25,7 +25,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/clock.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/config.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/dpmem.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/event.h
-include_rtems_rtems_HEADERS += include/rtems/rtems/eventset.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/eventimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/intr.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/message.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/messageimpl.h
@@ -66,8 +66,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
 
 include_rtems_rtems_HEADERS += inline/rtems/rtems/dpmem.inl
-include_rtems_rtems_HEADERS += inline/rtems/rtems/event.inl
-include_rtems_rtems_HEADERS += inline/rtems/rtems/eventset.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/part.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/ratemon.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/region.inl
