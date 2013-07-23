@@ -20,7 +20,6 @@ include_rtems_HEADERS += include/rtems/timespec.h
 EXTRA_DIST = include/rtems/README
 
 include_rtems_HEADERS += inline/rtems/extension.inl
-include_rtems_HEADERS += inline/rtems/rbtree.inl
 
 ## src
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
