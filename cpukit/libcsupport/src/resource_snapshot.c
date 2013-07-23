@@ -30,6 +30,7 @@
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/semimpl.h>
 
 #ifdef RTEMS_POSIX_API

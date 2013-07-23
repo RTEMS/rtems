@@ -35,7 +35,7 @@
 #endif
 #include <rtems/rtems/part.h>
 #include <rtems/score/priority.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signal.h>
@@ -342,7 +342,7 @@ uninitialized =
 
 /*percpu.h*/    (_SMP_Get_processor_count() * sizeof(Per_CPU_Control))  +
 
-/*ratemon.h*/   (sizeof _Rate_monotonic_Information)      +
+/*ratemonimpl.h*/ (sizeof _Rate_monotonic_Information)    +
 
 /*region.h*/    (sizeof _Region_Information)              +
 

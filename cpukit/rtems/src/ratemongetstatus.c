@@ -23,7 +23,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/score/thread.h>
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__

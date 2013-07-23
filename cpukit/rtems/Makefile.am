@@ -37,6 +37,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/options.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/optionsimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/part.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/ratemon.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/ratemonimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/region.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/rtemsapi.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/sem.h
@@ -67,7 +68,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
 
 include_rtems_rtems_HEADERS += inline/rtems/rtems/part.inl
-include_rtems_rtems_HEADERS += inline/rtems/rtems/ratemon.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/region.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/timer.inl

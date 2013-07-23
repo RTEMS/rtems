@@ -119,6 +119,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h: include/rtems/rtems/ratemon.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/ratemonimpl.h: include/rtems/rtems/ratemonimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemonimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemonimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/region.h: include/rtems/rtems/region.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.h
@@ -212,10 +216,6 @@ endif
 $(PROJECT_INCLUDE)/rtems/rtems/part.inl: inline/rtems/rtems/part.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl: inline/rtems/rtems/ratemon.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl
 
 $(PROJECT_INCLUDE)/rtems/rtems/region.inl: inline/rtems/rtems/region.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.inl
