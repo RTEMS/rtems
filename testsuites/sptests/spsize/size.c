@@ -22,7 +22,7 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
 #include <rtems/rtems/event.h>
-#include <rtems/extension.h>
+#include <rtems/extensionimpl.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/score/isr.h>
@@ -277,7 +277,7 @@ uninitialized =
 
 /*eventset.h*/  0                                         +
 
-/*extension.h*/ (sizeof _Extension_Information)           +
+/*extensionimpl.h*/ (sizeof _Extension_Information)       +
 
 /*fatal.h*/     0                                         +
 

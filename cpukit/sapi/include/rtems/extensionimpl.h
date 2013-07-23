@@ -15,8 +15,27 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef __EXTENSION_MANAGER_inl
-#define __EXTENSION_MANAGER_inl
+#ifndef _RTEMS_EXTENSIONIMPL_H
+#define _RTEMS_EXTENSIONIMPL_H
+
+#include <rtems/extension.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef SAPI_EXT_EXTERN
+#define SAPI_EXT_EXTERN extern
+#endif
+
+SAPI_EXT_EXTERN Objects_Information  _Extension_Information;
+
+/**
+ *  @brief Initialize extension manager.
+ *
+ *  This routine initializes all extension manager related data structures.
+ */
+void _Extension_Manager_initialization(void);
 
 RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Allocate( void )
 {
@@ -45,6 +64,10 @@ RTEMS_INLINE_ROUTINE bool _Extension_Is_null (
 {
   return ( the_extension == NULL );
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

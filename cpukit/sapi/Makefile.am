@@ -7,6 +7,7 @@ include_rtems_HEADERS = include/confdefs.h
 include_rtems_HEADERS += include/rtems/chain.h
 include_rtems_HEADERS += include/rtems/config.h
 include_rtems_HEADERS += include/rtems/extension.h
+include_rtems_HEADERS += include/rtems/extensionimpl.h
 include_rtems_HEADERS += include/rtems/fatal.h
 include_rtems_HEADERS += include/rtems/init.h
 include_rtems_HEADERS += include/rtems/io.h
@@ -18,8 +19,6 @@ include_rtems_HEADERS += include/rtems/sptables.h
 include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
-
-include_rtems_HEADERS += inline/rtems/extension.inl
 
 ## src
 AM_CPPFLAGS += -D__RTEMS_INSIDE__

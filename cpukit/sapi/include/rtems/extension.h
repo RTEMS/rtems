@@ -16,10 +16,6 @@
 #ifndef _RTEMS_EXTENSION_H
 #define _RTEMS_EXTENSION_H
 
-#ifndef SAPI_EXT_EXTERN
-#define SAPI_EXT_EXTERN extern
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -29,19 +25,10 @@ extern "C" {
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
-SAPI_EXT_EXTERN Objects_Information  _Extension_Information;
-
 typedef struct {
   Objects_Control          Object;
   User_extensions_Control  Extension;
 }   Extension_Control;
-
-/**
- *  @brief Initialize extension manager.
- *
- *  This routine initializes all extension manager related data structures.
- */
-void _Extension_Manager_initialization(void);
 
 typedef User_extensions_routine
   rtems_extension RTEMS_COMPILER_DEPRECATED_ATTRIBUTE;
@@ -250,10 +237,6 @@ rtems_status_code rtems_extension_delete(
 );
 
 /** @} */
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/extension.inl>
-#endif
 
 #ifdef __cplusplus
 }

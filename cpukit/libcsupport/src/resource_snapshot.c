@@ -25,6 +25,8 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/protectedheap.h>
 
+#include <rtems/extensionimpl.h>
+
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/semimpl.h>

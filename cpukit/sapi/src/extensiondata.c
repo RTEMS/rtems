@@ -22,6 +22,4 @@
 /* instantiate extension data */
 #define SAPI_EXT_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/extension.h>
-
+#include <rtems/extensionimpl.h>

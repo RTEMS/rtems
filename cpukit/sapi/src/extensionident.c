@@ -23,7 +23,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/extension.h>
+#include <rtems/extensionimpl.h>
 
 rtems_status_code rtems_extension_ident(
   rtems_name    name,
