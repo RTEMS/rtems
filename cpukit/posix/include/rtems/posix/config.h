@@ -19,6 +19,8 @@
 #ifndef _RTEMS_POSIX_CONFIG_H
 #define _RTEMS_POSIX_CONFIG_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
