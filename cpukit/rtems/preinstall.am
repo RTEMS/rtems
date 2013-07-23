@@ -229,10 +229,6 @@ $(PROJECT_INCLUDE)/rtems/rtems/region.inl: inline/rtems/rtems/region.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.inl
 
-$(PROJECT_INCLUDE)/rtems/rtems/support.inl: inline/rtems/rtems/support.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/support.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/support.inl
-
 $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl: inline/rtems/rtems/tasks.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl

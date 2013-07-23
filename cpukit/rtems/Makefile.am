@@ -71,7 +71,6 @@ include_rtems_rtems_HEADERS += inline/rtems/rtems/eventset.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/part.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/ratemon.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/region.inl
-include_rtems_rtems_HEADERS += inline/rtems/rtems/support.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/timer.inl
 
