@@ -106,7 +106,6 @@ include_rtems_score_HEADERS += inline/rtems/score/thread.inl
 include_rtems_score_HEADERS += inline/rtems/score/threadq.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
-include_rtems_score_HEADERS += inline/rtems/score/wkspace.inl
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined

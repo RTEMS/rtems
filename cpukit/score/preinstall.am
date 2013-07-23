@@ -355,10 +355,6 @@ $(PROJECT_INCLUDE)/rtems/score/tqdata.inl: inline/rtems/score/tqdata.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
 
-$(PROJECT_INCLUDE)/rtems/score/wkspace.inl: inline/rtems/score/wkspace.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/wkspace.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/wkspace.inl
-
 if HAS_MP
 $(PROJECT_INCLUDE)/rtems/score/mppkt.inl: inline/rtems/score/mppkt.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mppkt.inl

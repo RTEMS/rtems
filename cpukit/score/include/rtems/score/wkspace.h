@@ -20,6 +20,13 @@
 #ifndef _RTEMS_SCORE_WKSPACE_H
 #define _RTEMS_SCORE_WKSPACE_H
 
+#include <rtems/score/heap.h>
+#include <rtems/score/interr.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreWorkspace Workspace Handler
  *
@@ -29,13 +36,6 @@
  *  the RTEMS Executive Workspace.
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/heap.h>
-#include <rtems/score/interr.h>
 
 /**
  *  @brief Executive workspace control.
@@ -117,15 +117,11 @@ char *_Workspace_String_duplicate(
   size_t len
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/wkspace.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
