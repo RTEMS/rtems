@@ -1,8 +1,9 @@
 /**
- * @file rtems/rtems/attr.inl
+ * @file
  *
- *  This include file contains all of the inlined routines associated
- *  with attributes.
+ * @ingroup ClassicAttributesImpl
+ *
+ * @brief Classic Attributes Implementation
  */
 
 /*
@@ -14,19 +15,45 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_ATTR_H
-# error "Never use <rtems/rtems/attr.inl> directly; include <rtems/rtems/attr.h> instead."
-#endif
-
 #ifndef _RTEMS_RTEMS_ATTR_INL
 #define _RTEMS_RTEMS_ATTR_INL
 
-#include <rtems/score/basedefs.h> /* RTEMS_INLINE_ROUTINE */
+#include <rtems/rtems/attr.h>
+#include <rtems/score/cpu.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
- *  @addtogroup ClassicAttributes
- *  @{
+ * @defgroup ClassicAttributesImpl Classic Attributes Implementation
+ *
+ * @ingroup ClassicAttributes
+ *
+ * @{
  */
+
+/****************** Forced Attributes in Configuration ****************/
+
+/**
+ *  This attribute constant indicates the attributes that are not
+ *  supportable given the hardware configuration.
+ */
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+#define ATTRIBUTES_NOT_SUPPORTED       0
+#else
+#define ATTRIBUTES_NOT_SUPPORTED       RTEMS_FLOATING_POINT
+#endif
+
+/**
+ *  This attribute constant indicates the attributes that are
+ *  required given the hardware configuration.
+ */
+#if ( CPU_ALL_TASKS_ARE_FP == TRUE )
+#define ATTRIBUTES_REQUIRED            RTEMS_FLOATING_POINT
+#else
+#define ATTRIBUTES_REQUIRED            0
+#endif
 
 /**
  *  @brief Sets the requested new_attributes in the attribute_set passed in.
@@ -200,6 +227,10 @@ RTEMS_INLINE_ROUTINE bool _Attributes_Is_system_task(
 }
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

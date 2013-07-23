@@ -22,7 +22,7 @@
 #include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/attr.h>
+#include <rtems/rtems/attrimpl.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>

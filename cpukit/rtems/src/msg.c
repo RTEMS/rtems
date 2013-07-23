@@ -32,7 +32,7 @@
 #include <rtems/score/mpci.h>
 #endif
 #include <rtems/rtems/status.h>
-#include <rtems/rtems/attr.h>
+#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
