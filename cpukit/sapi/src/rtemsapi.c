@@ -37,7 +37,7 @@
 #endif
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
-#include <rtems/rtems/region.h>
+#include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signal.h>
 #include <rtems/rtems/timerimpl.h>

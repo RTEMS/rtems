@@ -21,16 +21,17 @@
 #ifndef _RTEMS_RTEMS_REGIONMP_H
 #define _RTEMS_RTEMS_REGIONMP_H
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef _RTEMS_RTEMS_REGIONIMPL_H
+# error "Never use <rtems/rtems/regionmp.h> directly; include <rtems/rtems/regionimpl.h> instead."
 #endif
 
 #include <rtems/score/mppkt.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/region.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicRegionMP Region MP Support

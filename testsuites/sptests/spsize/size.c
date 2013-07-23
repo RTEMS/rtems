@@ -36,7 +36,7 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/score/priority.h>
 #include <rtems/rtems/ratemonimpl.h>
-#include <rtems/rtems/region.h>
+#include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signal.h>
 #include <rtems/score/scheduler.h>
@@ -344,7 +344,7 @@ uninitialized =
 
 /*ratemonimpl.h*/ (sizeof _Rate_monotonic_Information)    +
 
-/*region.h*/    (sizeof _Region_Information)              +
+/*regionimpl.h*/ (sizeof _Region_Information)             +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*regionmp.h*/  0                                         +

@@ -30,15 +30,16 @@
 #ifndef _RTEMS_RTEMS_REGION_H
 #define _RTEMS_RTEMS_REGION_H
 
-#include <rtems/score/object.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/heap.h>
-#include <rtems/debug.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/heap.h>
+#include <rtems/score/tqdata.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicRegion Regions
@@ -48,24 +49,6 @@
  *  This encapsulates functionality which XXX
  */
 /**@{*/
-
-/**
- *  @brief Instantiate RTEMS Region Data
- *
- *  Region Manager -- Instantiate Data
- *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_REGION_EXTERN
-#define RTEMS_REGION_EXTERN extern
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  *  The following records define the control block used to manage
@@ -83,21 +66,6 @@ typedef struct {
   uint32_t              number_of_used_blocks; /* blocks allocated       */
   Heap_Control          Memory;
 }  Region_Control;
-
-/**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-RTEMS_REGION_EXTERN Objects_Information _Region_Information;
-
-/**
- *  @brief _Region_Manager_initialization
- *
- *  Region Manager
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Region_Manager_initialization(void);
 
 /**
  *  @brief rtems_region_create
@@ -322,50 +290,11 @@ rtems_status_code rtems_region_resize_segment(
   uintptr_t  *old_size
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/region.inl>
-/**
- *  @brief Process Region Queue
- *
- *  This is a helper routine which is invoked any time memory is
- *  freed.  It looks at the set of waiting tasks and attempts to
- *  satisfy all outstanding requests.
- *
- *  @param[in] the_region is the the region
- */
-extern void _Region_Process_queue(Region_Control *the_region);
-
-#endif
-
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/regionmp.h>
-#endif
-
-/**
- *  @brief _Region_Debug_Walk
- *
- *  This routine is invoked to verify the integrity of a heap associated
- *  with the_region.
- */
-#ifdef RTEMS_DEBUG
-
-#define _Region_Debug_Walk( _the_region, _source ) \
-  do { \
-    if ( rtems_debug_is_enabled( RTEMS_DEBUG_REGION ) ) \
-      _Heap_Walk( &(_the_region)->Memory, _source, false ); \
-  } while ( 0 )
-
-#else
-
-#define _Region_Debug_Walk( _the_region, _source )
-
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

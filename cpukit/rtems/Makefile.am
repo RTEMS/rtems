@@ -40,6 +40,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/partimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/ratemon.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/ratemonimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/region.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/regionimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/rtemsapi.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/sem.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/semimpl.h
@@ -69,7 +70,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/signalmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
 
-include_rtems_rtems_HEADERS += inline/rtems/rtems/region.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
 
 ## src

@@ -21,5 +21,4 @@
 /* instantiate RTEMS Region data */
 #define RTEMS_REGION_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/region.h>
+#include <rtems/rtems/regionimpl.h>
