@@ -21,6 +21,7 @@
 #include <rtems.h>
 #include <rtems/rbheap.h>
 #include <rtems/malloc.h>
+#include <rtems/score/rbtreeimpl.h>
 
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);

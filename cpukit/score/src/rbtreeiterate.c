@@ -24,7 +24,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/rbtree.h>
+#include <rtems/score/rbtreeimpl.h>
 
 void _RBTree_Iterate_unprotected(
   const RBTree_Control *rbtree,
