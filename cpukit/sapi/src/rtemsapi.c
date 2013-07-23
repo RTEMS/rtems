@@ -35,7 +35,7 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif
-#include <rtems/rtems/part.h>
+#include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/semimpl.h>

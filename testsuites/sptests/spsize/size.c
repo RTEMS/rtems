@@ -33,7 +33,7 @@
 #include <rtems/rtems/mp.h>
 #include <rtems/score/mpci.h>
 #endif
-#include <rtems/rtems/part.h>
+#include <rtems/rtems/partimpl.h>
 #include <rtems/score/priority.h>
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/region.h>
@@ -334,7 +334,7 @@ uninitialized =
 
 /*options.h*/   0                                         +
 
-/*part.h*/      (sizeof _Partition_Information)           +
+/*partimpl.h*/  (sizeof _Partition_Information)           +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*partmp.h*/    0                                         +

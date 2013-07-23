@@ -21,5 +21,4 @@
 /* instantiate RTEMS partition data */
 #define RTEMS_PART_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/part.h>
+#include <rtems/rtems/partimpl.h>

@@ -1,8 +1,9 @@
 /**
- * @file rtems/rtems/part.inl
+ * @file
  *
- *  This file contains the macro implementation of all inlined routines
- *  in the Partition Manager.
+ * @ingroup ClassicPartImpl
+ *
+ * @brief Classic Partition Manager Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -13,19 +14,48 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_PART_H
-# error "Never use <rtems/rtems/part.inl> directly; include <rtems/rtems/part.h> instead."
-#endif
+#ifndef _RTEMS_RTEMS_PARTIMPL_H
+#define _RTEMS_RTEMS_PARTIMPL_H
 
-#ifndef _RTEMS_RTEMS_PART_INL
-#define _RTEMS_RTEMS_PART_INL
-
+#include <rtems/rtems/part.h>
 #include <rtems/score/chainimpl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
- *  @addtogroup ClassicPart
- *  @{
+ * @defgroup ClassicPartImpl Classic Partition Manager Implementation
+ *
+ * @ingroup ClassicPart
+ *
+ * @{
  */
+
+/**
+ * This constant is defined to extern most of the time when using
+ * this header file. However by defining it to nothing, the data
+ * declared in this header file can be instantiated. This is done
+ * in a single per manager file.
+ *
+ * Partition Manager -- Instantiate Data
+ */
+#ifndef RTEMS_PART_EXTERN
+#define RTEMS_PART_EXTERN extern
+#endif
+
+/**
+ *  The following defines the information control block used to
+ *  manage this class of objects.
+ */
+RTEMS_PART_EXTERN Objects_Information _Partition_Information;
+
+/**
+ *  @brief Partition Manager Initialization
+ *
+ *  This routine performs the initialization necessary for this manager.
+ */
+void _Partition_Manager_initialization(void);
 
 /**
  *  @brief Allocate a buffer from the_partition.
@@ -172,6 +202,14 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_null (
 }
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
+
+#if defined(RTEMS_MULTIPROCESSING)
+#include <rtems/rtems/partmp.h>
+#endif
 
 #endif
 /* end of include file */
