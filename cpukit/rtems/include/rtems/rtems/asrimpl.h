@@ -1,13 +1,9 @@
 /**
- * @file rtems/rtems/asr.inl
+ * @file
  *
- * @defgroup ClassicASR ASR Support
+ * @ingroup ClassicASRImpl
  *
- * @ingroup ClassicRTEMS
- * @brief Asynchronous Signal Handler
- *
- * This include file contains the implemenation of all routines
- * associated with the asynchronous signal handler which are inlined.
+ * @brief Classic ASR Implementation
  */
 
 /* COPYRIGHT (c) 1989-2008.
@@ -18,18 +14,22 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_ASR_H
-# error "Never use <rtems/rtems/asr.inl> directly; include <rtems/rtems/asr.h> instead."
+#ifndef _RTEMS_RTEMS_ASRIMPL_H
+#define _RTEMS_RTEMS_ASRIMPL_H
+
+#include <rtems/rtems/asr.h>
+#include <rtems/score/isrlevel.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#ifndef _RTEMS_RTEMS_ASR_INL
-#define _RTEMS_RTEMS_ASR_INL
-
-#include <rtems/score/isr.h>
-
 /**
- *  @addtogroup ClassicASR
- *  @{
+ * @defgroup ClassicASRImpl Classic ASR Implementation
+ *
+ * @ingroup ClassicASR
+ *
+ * @{
  */
 
 /**
@@ -117,6 +117,10 @@ RTEMS_INLINE_ROUTINE void _ASR_Post_signals(
 }
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

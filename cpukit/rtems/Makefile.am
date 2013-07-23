@@ -15,6 +15,7 @@ include_rtems_rtemsdir = $(includedir)/rtems/rtems
 include_rtems_rtems_HEADERS =
 
 include_rtems_rtems_HEADERS += include/rtems/rtems/asr.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/asrimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/attr.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/attrimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/barrier.h
@@ -64,7 +65,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/signalmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
 
-include_rtems_rtems_HEADERS += inline/rtems/rtems/asr.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/dpmem.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/event.inl
 include_rtems_rtems_HEADERS += inline/rtems/rtems/eventset.inl

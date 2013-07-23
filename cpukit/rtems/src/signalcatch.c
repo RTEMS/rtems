@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/asr.h>
 #include <rtems/score/isr.h>

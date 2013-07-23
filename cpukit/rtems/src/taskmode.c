@@ -20,6 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
+#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modesimpl.h>

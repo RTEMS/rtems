@@ -145,15 +145,11 @@ typedef struct {
 /** This defines the bit in the signal set associated with signal 31. */
 #define RTEMS_SIGNAL_31   0x80000000
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/asr.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
