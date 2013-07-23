@@ -17,6 +17,8 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include "system.h"
 
+#include <rtems/rtems/tasksimpl.h>
+
 /* prototypes */
 int scan_objects(
   Objects_Information *information,

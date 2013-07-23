@@ -25,6 +25,7 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/tasksimpl.h>
 #if defined(RTEMS_POSIX_API)
   #include <rtems/posix/pthreadimpl.h>
 #endif

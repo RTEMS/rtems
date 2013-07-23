@@ -50,6 +50,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/status.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/statusimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/support.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/tasks.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/tasksimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timer.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timerimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/types.h
@@ -69,8 +70,6 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/semmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/signalmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 endif
-
-include_rtems_rtems_HEADERS += inline/rtems/rtems/tasks.inl
 
 ## src
 librtems_a_SOURCES = src/rtemsbuildid.c

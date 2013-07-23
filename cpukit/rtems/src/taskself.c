@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 
 rtems_id rtems_task_self(void)
 {

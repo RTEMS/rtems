@@ -22,5 +22,4 @@
 
 #define RTEMS_TASKS_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>

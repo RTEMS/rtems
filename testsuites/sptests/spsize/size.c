@@ -19,7 +19,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/extensionimpl.h>
@@ -379,7 +379,7 @@ uninitialized =
 /*taskmp.h*/    0                                         +
 #endif
 
-/*tasks.h*/     (sizeof _RTEMS_tasks_Information)         +
+/*tasksimpl.h*/ (sizeof _RTEMS_tasks_Information)         +
 
 /*thread.h*/    (sizeof _Thread_BSP_context)              +
                 (sizeof _Thread_Dispatch_disable_level)   +

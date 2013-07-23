@@ -21,12 +21,19 @@
 #ifndef _RTEMS_RTEMS_TASKMP_H
 #define _RTEMS_RTEMS_TASKMP_H
 
+#ifndef _RTEMS_RTEMS_TASKSIMPL_H
+# error "Never use <rtems/rtems/taskmp.h> directly; include <rtems/rtems/tasksimpl.h> instead."
+#endif
+
 #include <rtems/score/mppkt.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/score/priority.h>
-#include <rtems/rtems/tasks.h>
 #include <rtems/score/thread.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicTaskMP Task MP Support
@@ -37,9 +44,6 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /**
  *  The following enumerated type defines the list of
  *  remote task operations.

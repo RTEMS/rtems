@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/wkspace.h>
 
 rtems_status_code rtems_task_variable_delete(

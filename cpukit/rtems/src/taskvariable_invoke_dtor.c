@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/wkspace.h>
 
 void _RTEMS_Tasks_Invoke_task_variable_dtor(

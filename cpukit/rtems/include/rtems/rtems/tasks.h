@@ -48,16 +48,8 @@
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 
-/**
- *  @brief Instantiate RTEMS Classic API Tasks Data
- *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_TASKS_EXTERN
-#define RTEMS_TASKS_EXTERN extern
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /**
@@ -70,10 +62,6 @@
  *  delays, suspend/resume, and manipulation of execution mode and priority.
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  *  Constant to be used as the ID of current task
@@ -207,51 +195,6 @@ typedef struct {
   /** This is the Initialization Task's argument. */
   rtems_task_argument	argument;
 } rtems_initialization_tasks_table;
-
-/**
- *  This is the API specific information required by each thread for
- *  the RTEMS API to function correctly.
- *
- *  @note Notepads must be the last entry in the structure and memory
- *        will be taken away from this structure when allocated if
- *        notespads are disabled by the application configuration.
- */
-typedef struct {
-  /** This field contains the event control for this task. */
-  Event_Control            Event;
-  /** This field contains the system event control for this task. */
-  Event_Control            System_event;
-  /** This field contains the Classic API Signal information for this task. */
-  ASR_Information          Signal;
-  /**
-   *  This field contains the notepads for this task.
-   *
-   *  @note MUST BE LAST ENTRY.
-   */
-  uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
-}  RTEMS_API_Control;
-
-/**
- *  The following instantiates the information control block used to
- *  manage this class of objects.
- */
-RTEMS_TASKS_EXTERN Objects_Information _RTEMS_tasks_Information;
-
-/**
- *  When the user configures a set of Classic API initialization tasks,
- *  This variable will point to the method used to initialize them.
- *
- *  @note It is instantiated and initialized by confdefs.h based upon
- *        application requirements.
- */
-extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
-
-/**
- *  @brief RTEMS Task Manager Initialization
- *
- *  This routine initializes all Task Manager related data structures.
- */
-void _RTEMS_tasks_Manager_initialization(void);
 
 /**
  * @brief RTEMS Task Create
@@ -555,24 +498,39 @@ rtems_status_code rtems_task_variable_delete(
  */
 rtems_id rtems_task_self(void);
 
-/**
- *  @brief RTEMS User Task Initialization
- *
- *  This routine creates and starts all configured user
- *  initialization threads.
- */
-void _RTEMS_tasks_Initialize_user_tasks( void );
+/**@}*/
 
 /**
- *  @brief RTEMS Tasks Invoke Task Variable Destructor
+ *  This is the API specific information required by each thread for
+ *  the RTEMS API to function correctly.
  *
- *  This routine invokes the optional user provided destructor on the
- *  task variable and frees the memory for the task variable.
+ *  @note Notepads must be the last entry in the structure and memory
+ *        will be taken away from this structure when allocated if
+ *        notespads are disabled by the application configuration.
  */
-void _RTEMS_Tasks_Invoke_task_variable_dtor(
-  Thread_Control        *the_thread,
-  rtems_task_variable_t *tvp
-);
+typedef struct {
+  /** This field contains the event control for this task. */
+  Event_Control            Event;
+  /** This field contains the system event control for this task. */
+  Event_Control            System_event;
+  /** This field contains the Classic API Signal information for this task. */
+  ASR_Information          Signal;
+  /**
+   *  This field contains the notepads for this task.
+   *
+   *  @note MUST BE LAST ENTRY.
+   */
+  uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
+}  RTEMS_API_Control;
+
+/**
+ *  When the user configures a set of Classic API initialization tasks,
+ *  This variable will point to the method used to initialize them.
+ *
+ *  @note It is instantiated and initialized by confdefs.h based upon
+ *        application requirements.
+ */
+extern void (*_RTEMS_tasks_Initialize_user_tasks_p)(void);
 
 /**
  *  @brief _RTEMS_tasks_Initialize_user_tasks_body
@@ -589,18 +547,9 @@ void _RTEMS_Tasks_Invoke_task_variable_dtor(
 
 extern void _RTEMS_tasks_Initialize_user_tasks_body( void );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/tasks.inl>
-#endif
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/taskmp.h>
-#endif
-
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

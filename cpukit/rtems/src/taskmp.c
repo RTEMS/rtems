@@ -24,7 +24,7 @@
 #include <rtems/score/mppkt.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
