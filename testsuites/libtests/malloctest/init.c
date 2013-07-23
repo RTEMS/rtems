@@ -133,6 +133,8 @@ static void test_heap_default_init(void)
 static void test_free( void *addr )
 {
   rtems_test_assert( _Heap_Free( &TestHeap, addr ) );
+
+  _Heap_Protection_free_all_delayed_blocks( &TestHeap );
 }
 
 static void test_heap_cases_1(void)
@@ -935,7 +937,7 @@ static void test_heap_resize_block(void)
   p3 = test_alloc_one_page();
   rtems_test_assert( p3 );
 
-  _Heap_Free( &TestHeap, p2 );
+  test_free( p2 );
   new_alloc_size = 5 * TEST_DEFAULT_PAGE_SIZE / 2;
   test_simple_resize_block( p1, new_alloc_size, HEAP_RESIZE_UNSATISFIED );
 
@@ -972,19 +974,31 @@ static void test_heap_extend(void)
   bool ret = false;
   Heap_Control *heap = &TestHeap;
   uint8_t *area_begin = TestHeapMemory;
+  uint8_t *sub_area_begin;
+  uint8_t *sub_area_end;
 
   _Heap_Initialize( heap, area_begin + 768, 256, 0 );
+  sub_area_begin = (uint8_t *) heap->first_block;
+  sub_area_end = (uint8_t *) _Heap_Alloc_area_of_block( heap->last_block );
 
   puts( "heap extend - link below" );
   ret = _Protected_heap_Extend( heap, area_begin + 0, 256 );
   test_heap_assert( ret, true );
 
+  puts( "heap extend - merge below overlap" );
+  ret = _Protected_heap_Extend( heap, sub_area_begin - 128, 256 );
+  test_heap_assert( ret, false );
+
   puts( "heap extend - merge below" );
-  ret = _Protected_heap_Extend( heap, area_begin + 512, 256 );
+  ret = _Protected_heap_Extend( heap, sub_area_begin - 256, 256 );
   test_heap_assert( ret, true );
 
+  puts( "heap extend - merge above overlap" );
+  ret = _Protected_heap_Extend( heap, sub_area_end - 128, 256 );
+  test_heap_assert( ret, false );
+
   puts( "heap extend - merge above" );
-  ret = _Protected_heap_Extend( heap, area_begin + 1024, 256 );
+  ret = _Protected_heap_Extend( heap, sub_area_end, 256 );
   test_heap_assert( ret, true );
 
   puts( "heap extend - link above" );
@@ -1054,12 +1068,27 @@ static void test_heap_no_extend(void)
   rtems_test_assert( extended_space == 0 );
 }
 
+static void free_all_delayed_blocks( void )
+{
+  rtems_resource_snapshot unused;
+
+  rtems_resource_snapshot_take( &unused );
+}
+
+static void do_free( void *p )
+{
+  free( p );
+  free_all_delayed_blocks();
+}
+
 static void test_heap_info(void)
 {
   size_t                  s1, s2;
   void                   *p1;
   int                     sc;
   Heap_Information_block  the_info;
+
+  free_all_delayed_blocks();
 
   s1 = malloc_free_space();
   p1 = malloc( 512 );
@@ -1068,7 +1097,7 @@ static void test_heap_info(void)
   rtems_test_assert( s1 );
   rtems_test_assert( s2 );
   rtems_test_assert( s2 <= s1 );
-  free( p1 );
+  do_free( p1 );
 
   puts( "malloc_free_space - verify free space returns to previous value" );
   s2 = malloc_free_space();
@@ -1092,7 +1121,7 @@ static void test_heap_info(void)
   rtems_test_assert( s1 );
   rtems_test_assert( s2 );
   rtems_test_assert( s2 <= s1 );
-  free( p1 );
+  do_free( p1 );
 
   puts( "malloc_info - verify free space returns to previous value" );
   sc = malloc_info( &the_info );

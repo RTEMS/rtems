@@ -45,7 +45,9 @@ malloc_walk - normal path
 malloc_walk - in critical section path
 Heap Initialized
 heap extend - link below
+heap extend - merge below overlap
 heap extend - merge below
+heap extend - merge above overlap
 heap extend - merge above
 heap extend - link above
 heap extend - area too small
