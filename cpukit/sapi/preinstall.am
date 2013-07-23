@@ -84,10 +84,6 @@ $(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
 
-$(PROJECT_INCLUDE)/rtems/cbs.inl: inline/rtems/cbs.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cbs.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cbs.inl
-
 $(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
