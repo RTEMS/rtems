@@ -20,6 +20,7 @@ SUBDIRS = \
     spfatal15 spfatal16 spfatal17 spfatal18 spfatal19 spfatal20 \
     spfatal22 spfatal23 spfatal24 spfatal25 \
     spfifo01 spfifo02 spfifo03 spfifo04 spfifo05 \
+    spfreechain01 \
     spintrcritical01 spintrcritical02 spintrcritical03 spintrcritical04 \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \

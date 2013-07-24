@@ -1,0 +1,9 @@
+*** START OF RTEMS FREECHAIN API TEST ***
+INIT - Get node from freechain - OK
+INIT - Put node to freechain - OK
+INIT - Verify freechain node put and get - OK
+INIT - Get more than intialized nodes from freechain on heap - OK
+INIT - Allocate node from heap in user defined freechain extend - OK
+INIT - Get more than intialized nodes from freechain in workspace - OK
+INIT - Allocate node from workspace in user defined freechain extend - OK
+*** END OF RTEMS FREECHAIN API TEST ***

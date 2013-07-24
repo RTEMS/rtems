@@ -127,6 +127,10 @@ $(PROJECT_INCLUDE)/rtems/score/isrlevel.h: include/rtems/score/isrlevel.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/isrlevel.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/isrlevel.h
 
+$(PROJECT_INCLUDE)/rtems/score/freechain.h: include/rtems/score/freechain.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/freechain.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/freechain.h
+
 $(PROJECT_INCLUDE)/rtems/score/object.h: include/rtems/score/object.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.h

@@ -1,0 +1,29 @@
+#  COPYRIGHT (c) 2013.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spfreechain01
+
+directives:
+
+  _Freechain_Initialize
+  _Freechain_Put_node
+  _Freechain_Get_node
+  my_freechain_extend_with_nothing
+  my_freechain_extend_heap
+  my_freechain_extend_workspace
+
+concepts:
+
++ Ensure that the freechain operations listed above behave as defined.
++ Define 3 freechain extension handles, they are:
+  my_freechain_extend_with_nothing: a dummy extension handle, do nothing
+  my_freechain_extend_heap: an extension handle allocates memory from heap
+  my_freechain_extend_workspace: an extension handle allocates memory from workspace
++ Ensure that the freechain is extended correctly by user provided extension handles

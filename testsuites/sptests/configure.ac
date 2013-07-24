@@ -165,6 +165,7 @@ spfifo02/Makefile
 spfifo03/Makefile
 spfifo04/Makefile
 spfifo05/Makefile
+spfreechain01/Makefile
 spintrcritical01/Makefile
 spintrcritical02/Makefile
 spintrcritical03/Makefile
