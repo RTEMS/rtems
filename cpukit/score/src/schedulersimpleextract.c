@@ -19,10 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/schedulersimple.h>
+#include <rtems/score/chainimpl.h>
+#include <rtems/score/thread.h>
 
 void _Scheduler_simple_Extract(
   Thread_Control    *the_thread

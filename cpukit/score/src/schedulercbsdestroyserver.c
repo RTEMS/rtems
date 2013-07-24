@@ -19,10 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
+#include <rtems/score/wkspace.h>
 
 int _Scheduler_CBS_Destroy_server (
   Scheduler_CBS_Server_id server_id

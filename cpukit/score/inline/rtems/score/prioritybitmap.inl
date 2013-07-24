@@ -98,6 +98,11 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
  */
 
 /**
+ *  This is the minor bit map.
+ */
+extern Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+
+/**
  * This routine performs the initialization necessary for this handler.
  */
 

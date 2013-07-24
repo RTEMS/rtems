@@ -19,10 +19,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Extract(
   Thread_Control      *the_thread

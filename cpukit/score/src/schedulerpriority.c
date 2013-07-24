@@ -18,11 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/prioritybitmap.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 
 /* Instantiate any global variables needed by the priority scheduler */
 volatile Priority_bit_map_Control _Priority_Major_bit_map;

@@ -18,10 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
+#include <rtems/score/wkspace.h>
 
 int _Scheduler_CBS_Create_server (
   Scheduler_CBS_Parameters     *params,

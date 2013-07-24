@@ -20,7 +20,7 @@
 #define _RTEMS_SCORE_SCHEDULERPRIORITY_H
 
 #include <rtems/score/chain.h>
-#include <rtems/score/priority.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/scheduler.h>
 
 #ifdef __cplusplus
@@ -225,25 +225,11 @@ void _Scheduler_priority_Release_job (
   uint32_t         deadline
 );
 
-/**
- *  This is the major bit map.
- */
-extern volatile Priority_bit_map_Control _Priority_Major_bit_map;
-
-/**
- *  This is the minor bit map.
- */
-extern Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/schedulerpriority.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

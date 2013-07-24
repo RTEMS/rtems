@@ -17,16 +17,16 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_SCORE_SCHEDULERPRIORITY_H
-# error "Never use <rtems/score/schedulerpriority.inl> directly; include <rtems/score/schedulerpriority.h> instead."
-#endif
+#ifndef _RTEMS_SCORE_SCHEDULERPRIORITYIMPL_H
+#define _RTEMS_SCORE_SCHEDULERPRIORITYIMPL_H
 
-#ifndef _RTEMS_SCORE_SCHEDULERPRIORITY_INL
-#define _RTEMS_SCORE_SCHEDULERPRIORITY_INL
-
+#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @addtogroup ScoreScheduler
@@ -205,6 +205,10 @@ RTEMS_INLINE_ROUTINE int _Scheduler_priority_Priority_compare_body(
 }
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

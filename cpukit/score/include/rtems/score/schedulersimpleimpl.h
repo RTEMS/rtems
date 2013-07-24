@@ -20,6 +20,8 @@
 #define _RTEMS_SCORE_SCHEDULERSIMPLEIMPL_H
 
 #include <rtems/score/schedulersimple.h>
+#include <rtems/score/chainimpl.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
