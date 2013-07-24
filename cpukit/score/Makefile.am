@@ -17,7 +17,6 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = include/rtems/score/address.h
 include_rtems_score_HEADERS += include/rtems/score/apiext.h
 include_rtems_score_HEADERS += include/rtems/score/apimutex.h
-include_rtems_score_HEADERS += include/rtems/score/bitfield.h
 include_rtems_score_HEADERS += include/rtems/score/chain.h
 include_rtems_score_HEADERS += include/rtems/score/chainimpl.h
 include_rtems_score_HEADERS += include/rtems/score/context.h
@@ -41,6 +40,7 @@ include_rtems_score_HEADERS += include/rtems/score/object.h
 include_rtems_score_HEADERS += include/rtems/score/percpu.h
 include_rtems_score_HEADERS += include/rtems/score/priority.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
+include_rtems_score_HEADERS += include/rtems/score/prioritybitmapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/rbtree.h
 include_rtems_score_HEADERS += include/rtems/score/rbtreeimpl.h
 include_rtems_score_HEADERS += include/rtems/score/scheduler.h
@@ -99,7 +99,6 @@ endif
 
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
-include_rtems_score_HEADERS += inline/rtems/score/prioritybitmap.inl
 include_rtems_score_HEADERS += inline/rtems/score/states.inl
 include_rtems_score_HEADERS += inline/rtems/score/thread.inl
 include_rtems_score_HEADERS += inline/rtems/score/threadq.inl

@@ -51,10 +51,6 @@ $(PROJECT_INCLUDE)/rtems/score/apimutex.h: include/rtems/score/apimutex.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/apimutex.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/apimutex.h
 
-$(PROJECT_INCLUDE)/rtems/score/bitfield.h: include/rtems/score/bitfield.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/bitfield.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/bitfield.h
-
 $(PROJECT_INCLUDE)/rtems/score/chain.h: include/rtems/score/chain.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/chain.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/chain.h
@@ -146,6 +142,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
 $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h: include/rtems/score/prioritybitmap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
+
+$(PROJECT_INCLUDE)/rtems/score/prioritybitmapimpl.h: include/rtems/score/prioritybitmapimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmapimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmapimpl.h
 
 $(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
@@ -326,10 +326,6 @@ endif
 $(PROJECT_INCLUDE)/rtems/score/object.inl: inline/rtems/score/object.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
-
-$(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybitmap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 
 $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl

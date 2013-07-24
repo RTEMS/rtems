@@ -77,7 +77,7 @@ void print_formula(void);
 /*
  *  This assumes the default Priority Scheduler
  */
-#include <rtems/score/prioritybitmap.h>
+#include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerpriority.h>
 
 /* Priority scheduling uninitialized (globals) consumption */

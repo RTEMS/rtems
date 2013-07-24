@@ -16,19 +16,135 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_SCORE_PRIORITYBITMAP_H
-# error "Never use <rtems/score/prioritybitmap.inl> directly; include <rtems/score/prioritybitmap.h> instead."
-#endif
+#ifndef _RTEMS_SCORE_PRIORITYBITMAPIMPL_H
+#define _RTEMS_SCORE_PRIORITYBITMAPIMPL_H
 
-#ifndef _RTEMS_SCORE_PRIORITYBITMAP_INL
-#define _RTEMS_SCORE_PRIORITYBITMAP_INL
+#include <rtems/score/prioritybitmap.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @addtogroup ScorePriority
  */
 /**@{**/
 
-#include <rtems/score/bitfield.h>
+/*
+ * The Priority_bit_map_Control variables are instantiated only
+ * if using the bit map handler.
+ */
+
+/**
+ *  Each sixteen bit entry in this array is associated with one of
+ *  the sixteen entries in the Priority Bit map.
+ */
+extern volatile Priority_bit_map_Control _Priority_Major_bit_map;
+
+/** Each bit in the Priority Bitmap indicates whether or not there are
+ *  threads ready at a particular priority.  The mapping of
+ *  individual priority levels to particular bits is processor
+ *  dependent as is the value of each bit used to indicate that
+ *  threads are ready at that priority.
+ */
+extern Priority_bit_map_Control
+               _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+
+#if ( CPU_USE_GENERIC_BITFIELD_DATA == TRUE )
+
+/**
+ *  This table is used by the generic bitfield routines to perform
+ *  a highly optimized bit scan without the use of special CPU
+ *  instructions.
+ */
+#ifndef SCORE_INIT
+extern const unsigned char __log2table[256];
+#else
+const unsigned char __log2table[256] = {
+    7, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+#endif
+
+#endif
+
+/**
+ *  @brief Gets the @a _bit_number of the first bit set in the specified value.
+ *
+ *  This routine returns the @a _bit_number of the first bit set
+ *  in the specified value.  The correspondence between @a _bit_number
+ *  and actual bit position is processor dependent.  The search for
+ *  the first bit set may run from most to least significant bit
+ *  or vice-versa.
+ *
+ *  @param[in] _value is the value to bit scan.
+ *  @param[in] _bit_number is the position of the first bit set.
+ *
+ *  @note This routine is used when the executing thread is removed
+ *  from the ready state and, as a result, its performance has a
+ *  significant impact on the performance of the executive as a whole.
+ *
+ *  @note This routine must be a macro because if a CPU specific version
+ *  is used it will most likely use inline assembly.
+ */
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+#define _Bitfield_Find_first_bit( _value, _bit_number ) \
+        _CPU_Bitfield_Find_first_bit( _value, _bit_number )
+#else
+#define _Bitfield_Find_first_bit( _value, _bit_number ) \
+  { \
+    register uint32_t   __value = (uint32_t) (_value); \
+    register const unsigned char *__p = __log2table; \
+    \
+    if ( __value < 0x100 ) \
+      (_bit_number) = (Priority_bit_map_Control)( __p[ __value ] + 8 );  \
+    else \
+      (_bit_number) = (Priority_bit_map_Control)( __p[ __value >> 8 ] ); \
+  }
+#endif
+
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+/**
+ *  This method returns the priority bit mask for the specified major
+ *  or minor bit number.
+ *
+ *  @param[in] _bit_number is the bit number for which we need a mask
+ *
+ *  @retval the priority bit mask
+ *
+ *  @note This may simply be a pass through to a CPU dependent implementation.
+ */
+#define _Priority_Mask( _bit_number ) \
+  _CPU_Priority_Mask( _bit_number )
+#endif
+
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+/**
+ *  This method returns the bit index position for the specified priority.
+ *
+ *  @param[in] _priority is the priority for which we need the index.
+ *
+ *  @retval This method returns the array index into the priority bit map.
+ *
+ *  @note This may simply be a pass through to a CPU dependent implementation.
+ */
+#define _Priority_Bits_index( _priority ) \
+  _CPU_Priority_bits_index( _priority )
+#endif
 
 /**
  * This function returns the major portion of the_priority.
@@ -76,7 +192,6 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Control   _Priority_Mask_invert (
 {
   return (Priority_bit_map_Control)(~mask);
 }
-
 
 /**
  * This function translates the bit numbers returned by the bit scan
@@ -193,6 +308,10 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
 }
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

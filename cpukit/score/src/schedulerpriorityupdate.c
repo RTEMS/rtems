@@ -18,12 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmap.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/thread.h>
 
 void _Scheduler_priority_Update(
