@@ -101,7 +101,6 @@ endif
 
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
-include_rtems_score_HEADERS += inline/rtems/score/threadq.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
 

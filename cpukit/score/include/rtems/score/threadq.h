@@ -19,16 +19,6 @@
 #ifndef _RTEMS_SCORE_THREADQ_H
 #define _RTEMS_SCORE_THREADQ_H
 
-/**
- *  @defgroup ScoreThreadQ Thread Queue Handler
- *
- *  @ingroup Score
- *
- *  This handler encapsulates functionality related to managing sets of threads
- *  blocked waiting for resources.
- */
-/**@{*/
-
 #include <rtems/score/tqdata.h>
 
 #include <rtems/score/object.h>
@@ -38,6 +28,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ *  @defgroup ScoreThreadQ Thread Queue Handler
+ *
+ *  @ingroup Score
+ *
+ *  This handler encapsulates functionality related to managing sets of threads
+ *  blocked waiting for resources.
+ */
+/**@{*/
 
 /**
  *  Constant for indefinite wait.
@@ -377,15 +377,11 @@ void _Thread_queue_Process_timeout(
   Thread_Control *the_thread
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/threadq.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
