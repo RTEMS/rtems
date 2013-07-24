@@ -34,8 +34,8 @@
 
 int mq_setattr(
   mqd_t                 mqdes,
-  const struct mq_attr *mqstat,
-  struct mq_attr       *omqstat
+  const struct mq_attr *__restrict mqstat,
+  struct mq_attr       *__restrict omqstat
 )
 {
   POSIX_Message_queue_Control_fd *the_mq_fd;
