@@ -3657,7 +3657,7 @@ Boolean feature macro.
 Defined or undefined.
 
 @item DEFAULT VALUE:
-This is not defined by default.
+The default value is 1, (if CONFIGURE_SMP_APPLICATION is defined).
 
 @end table
 
@@ -4552,6 +4552,98 @@ uses the Ada run-time.
 
 @subheading NOTES:
 None.
+
+@c
+@c === Go Tasks ===
+@c
+@section Go Tasks
+
+@c
+@c === CONFIGURE_ENABLE_GO ===
+@c
+@subsection Specify Application Includes Go Code
+
+@findex CONFIGURE_ENABLE_GO
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_ENABLE_GO}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This is not defined by default.
+
+@end table
+
+@subheading DESCRIPTION:
+@code{CONFIGURE_ENABLE_GO} is defined to inform RTEMS that the Go
+run-time is to be used by the application.
+
+@subheading NOTES:
+The Go language support is experimental
+
+@c
+@c === CONFIGURE_MAXIMUM_GOROUTINES ===
+@c
+@subsection Specify the maximum number of Go routines
+
+@findex CONFIGURE_MAXIMUM_GOROUTINES
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_MAXIMUM_GOROUTINES}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Zero or positive.
+
+@item DEFAULT VALUE:
+The default value is 400
+
+@end table
+
+@subheading DESCRIPTION:
+@code{CONFIGURE_MAXIMUM_GOROUTINES} is defined to specify the maximum number of
+Go routines.
+
+@subheading NOTES:
+The Go language support is experimental
+
+@c
+@c === CONFIGURE_MAXIMUM_GO_CHANNELS ===
+@c
+@subsection Specify the maximum number of Go Channels
+
+@findex CONFIGURE_MAXIMUM_GO_CHANNELS
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_MAXIMUM_GO_CHANNELS}
+
+@item DATA TYPE:
+Unsigned integer (@code{uint32_t}).
+
+@item RANGE:
+Zero or positive.
+
+@item DEFAULT VALUE:
+The default value is 500
+
+@end table
+
+@subheading DESCRIPTION:
+@code{CONFIGURE_MAXIMUM_GO_CHANNELS} is defined to specify the maximum number
+of Go channels.
+
+@subheading NOTES:
+The Go language support is experimental
 
 @c
 @c === Go Tasks ===
