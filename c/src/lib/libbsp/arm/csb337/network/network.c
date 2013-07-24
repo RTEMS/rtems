@@ -83,7 +83,7 @@
   /* RTEMS event used to start transmit daemon. */
   #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 
-static void at91rm9200_emac_isr (rtems_irq_hdl_param unused);
+static void at91rm9200_emac_isr (void *);
 static void at91rm9200_emac_isr_on(void);
 
 /* use the values defined in linkcmds for our use of SRAM */
@@ -826,7 +826,7 @@ at91rm9200_emac_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 }
 
 /* interrupt handler */
-static void at91rm9200_emac_isr (rtems_irq_hdl_param unused)
+static void at91rm9200_emac_isr (void * unused)
 {
     unsigned long status32;
 

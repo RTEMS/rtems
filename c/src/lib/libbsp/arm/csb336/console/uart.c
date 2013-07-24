@@ -40,10 +40,10 @@ static void _BSP_output_char(char c);
 static int _BSP_poll_char(void);
 
 #if USE_INTERRUPTS
-static void imx_uart_tx_isr(rtems_irq_hdl_param);
-static void imx_uart_rx_isr(rtems_irq_hdl_param);
-static void imx_uart_isr_on(const rtems_irq_number);
-static void imx_uart_isr_off(const rtems_irq_number);
+static void imx_uart_tx_isr(void *);
+static void imx_uart_rx_isr(void *);
+static void imx_uart_isr_on(rtems_vector_number);
+static void imx_uart_isr_off(rtems_vector_number);
 static ssize_t imx_uart_intr_write(int, const char *, size_t);
 static rtems_vector_number imx_uart_name_transmit(int minor);
 static rtems_vector_number imx_uart_name_receive(int minor);
@@ -328,16 +328,16 @@ static int imx_uart_set_attrs(int minor, const struct termios *t)
 }
 
 #if USE_INTERRUPTS
-static void imx_uart_isr_on(const rtems_irq_number name)
+static void imx_uart_isr_on(rtems_vector_number name)
 {
     MC9328MXL_AITC_INTENNUM = name;
 }
-static void imx_uart_isr_off(const rtems_irq_number name)
+static void imx_uart_isr_off(rtems_vector_number name)
 {
     MC9328MXL_AITC_INTDISNUM = name;
 }
 
-static void imx_uart_rx_isr(rtems_irq_hdl_param param)
+static void imx_uart_rx_isr(void * param)
 {
     imx_uart_data_t *uart_data = param;
     char buf[32];
@@ -351,7 +351,7 @@ static void imx_uart_rx_isr(rtems_irq_hdl_param param)
     rtems_termios_enqueue_raw_characters(uart_data->tty, buf, i);
 }
 
-static void imx_uart_tx_isr(rtems_irq_hdl_param param)
+static void imx_uart_tx_isr(void * param)
 {
     imx_uart_data_t *uart_data = param;
     int len;

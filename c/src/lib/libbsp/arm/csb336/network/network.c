@@ -39,7 +39,7 @@
 /* RTEMS event used to start transmit daemon. */
 #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 
-static void enet_isr(rtems_irq_hdl_param);
+static void enet_isr(void *);
 static void enet_isr_on(void);
 
 typedef struct {
@@ -658,7 +658,7 @@ mc9328mxl_enet_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 }
 
 /* interrupt handler */
-static void enet_isr(rtems_irq_hdl_param unused)
+static void enet_isr(void * unused)
 {
     uint16_t int_reg;
 
