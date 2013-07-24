@@ -18,10 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/types.h>
 #include <rtems/rtems/object.h>
+#include <rtems/score/objectimpl.h>
 
 int rtems_object_api_minimum_class(
   int api

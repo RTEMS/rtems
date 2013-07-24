@@ -18,11 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/statusimpl.h>
-#include <rtems/rtems/types.h>
 #include <rtems/rtems/object.h>
+#include <rtems/rtems/statusimpl.h>
+#include <rtems/score/objectimpl.h>
 
 rtems_status_code rtems_object_get_classic_name(
   rtems_id      id,

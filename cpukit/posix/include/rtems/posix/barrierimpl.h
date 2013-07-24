@@ -21,6 +21,7 @@
 
 #include <rtems/posix/barrier.h>
 #include <rtems/score/corebarrierimpl.h>
+#include <rtems/score/objectimpl.h>
 
 #include <pthread.h>
 

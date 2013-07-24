@@ -18,9 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/objectimpl.h>
 
 void _Objects_Close(
   Objects_Information  *information,

@@ -22,7 +22,6 @@
 #include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/partimpl.h>
 #include <rtems/score/thread.h>
 

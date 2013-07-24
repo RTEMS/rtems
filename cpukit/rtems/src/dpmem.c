@@ -24,7 +24,6 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
 void _Dual_ported_memory_Manager_initialization(void)

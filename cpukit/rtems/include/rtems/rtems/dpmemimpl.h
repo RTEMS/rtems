@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_DPMEM_INL
 
 #include <rtems/rtems/dpmem.h>
+#include <rtems/score/objectimpl.h>
 
 /**
  * @defgroup ClassicDPMEMImpl Dual Ported Memory Manager Implementation

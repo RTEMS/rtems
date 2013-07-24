@@ -19,6 +19,7 @@
 
 #include <rtems/rtems/part.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

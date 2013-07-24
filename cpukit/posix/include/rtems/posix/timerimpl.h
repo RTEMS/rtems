@@ -20,6 +20,7 @@
 #define _RTEMS_POSIX_TIMERIMPL_H
 
 #include <rtems/posix/timer.h>
+#include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

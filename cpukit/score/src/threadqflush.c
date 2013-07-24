@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,

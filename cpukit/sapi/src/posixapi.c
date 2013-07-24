@@ -27,7 +27,6 @@
 #include <sys/types.h>
 #include <mqueue.h>
 #include <rtems/config.h>
-#include <rtems/score/object.h>
 #include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/config.h>

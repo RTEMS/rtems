@@ -21,6 +21,7 @@
 
 #include <rtems/posix/spinlock.h>
 #include <rtems/score/corespinlockimpl.h>
+#include <rtems/score/objectimpl.h>
 
 #include <pthread.h>
 

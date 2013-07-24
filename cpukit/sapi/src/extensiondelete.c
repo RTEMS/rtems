@@ -20,7 +20,6 @@
 #endif
 
 #include <rtems/extensionimpl.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/userextimpl.h>
 

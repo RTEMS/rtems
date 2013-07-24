@@ -19,6 +19,7 @@
 #define _RTEMS_POSIX_THREADSUP_H
 
 #include <rtems/score/coresem.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 

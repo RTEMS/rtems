@@ -20,7 +20,7 @@
 #define _RTEMS_POSIX_POSIXAPI_H
 
 #include <rtems/config.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 
 /**
  * @defgroup POSIXAPI RTEMS POSIX API

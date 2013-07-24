@@ -37,6 +37,7 @@ include_rtems_score_HEADERS += include/rtems/score/isr.h
 include_rtems_score_HEADERS += include/rtems/score/isrlevel.h
 include_rtems_score_HEADERS += include/rtems/score/freechain.h
 include_rtems_score_HEADERS += include/rtems/score/object.h
+include_rtems_score_HEADERS += include/rtems/score/objectimpl.h
 include_rtems_score_HEADERS += include/rtems/score/percpu.h
 include_rtems_score_HEADERS += include/rtems/score/priority.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
@@ -101,7 +102,6 @@ include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
 endif
 
 ## inline
-include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 
 ## src
@@ -124,7 +124,7 @@ libscore_a_SOURCES += src/smp.c
 endif
 
 ## CORE_APIMUTEX_C_FILES
-libscore_a_SOURCES += src/apimutex.c src/apimutexallocate.c \
+libscore_a_SOURCES += src/apimutex.c \
     src/apimutexlock.c src/apimutexunlock.c
 
 ## CORE_BARRIER_C_FILES

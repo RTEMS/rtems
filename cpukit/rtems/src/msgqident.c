@@ -22,7 +22,6 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/rtems/statusimpl.h>

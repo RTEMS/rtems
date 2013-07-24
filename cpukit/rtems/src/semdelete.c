@@ -23,7 +23,6 @@
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/score/coremuteximpl.h>

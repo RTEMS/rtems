@@ -18,13 +18,15 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/types.h>
+#include <rtems/score/objectimpl.h>
 
-#undef rtems_object_id_get_api
+/* XXX: This is for language bindings */
 int rtems_object_id_get_api(
-  rtems_id id
+  Objects_Id id
+);
+
+int rtems_object_id_get_api(
+  Objects_Id id
 )
 {
   return _Objects_Get_API( id );

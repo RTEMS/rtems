@@ -18,11 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/types.h>
+#include <rtems/score/objectimpl.h>
 
-#undef rtems_object_id_api_maximum
+/* XXX: This is for language bindings */
+int rtems_object_id_api_maximum(void);
+
 int rtems_object_id_api_maximum(void)
 {
   return OBJECTS_APIS_LAST;

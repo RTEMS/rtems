@@ -19,6 +19,7 @@
 
 #include <rtems/rtems/region.h>
 #include <rtems/score/heapimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/debug.h>
 
 #ifdef __cplusplus

@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>

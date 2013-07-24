@@ -19,7 +19,7 @@
 #ifndef _RTEMS_POSIX_KEY_H
 #define _RTEMS_POSIX_KEY_H
 
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 
 /**
  * @defgroup POSIX_KEY POSIX Key

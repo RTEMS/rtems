@@ -12,7 +12,6 @@
 #include <unistd.h>
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
 pid_t _POSIX_types_Ppid = 0;

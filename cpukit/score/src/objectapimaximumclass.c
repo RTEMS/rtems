@@ -18,8 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 
 unsigned int _Objects_API_maximum_class(
   uint32_t api

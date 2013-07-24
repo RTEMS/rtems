@@ -18,18 +18,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/object.h>
+#include <rtems/score/objectimpl.h>
 
 #include <rtems/assoc.h>
 
-rtems_assoc_t rtems_object_api_internal_assoc[] = {
+static const rtems_assoc_t rtems_object_api_internal_assoc[] = {
   { "Thread",                  OBJECTS_INTERNAL_THREADS, 0},
   { "Mutex",                   OBJECTS_INTERNAL_MUTEXES, 0},
+  { NULL,                      0, 0}
 };
 
-rtems_assoc_t rtems_object_api_classic_assoc[] = {
+static const rtems_assoc_t rtems_object_api_classic_assoc[] = {
   { "Task",                    OBJECTS_RTEMS_TASKS, 0},
   { "Timer",                   OBJECTS_RTEMS_TIMERS, 0},
   { "Semaphore",               OBJECTS_RTEMS_SEMAPHORES, 0},
@@ -40,10 +40,11 @@ rtems_assoc_t rtems_object_api_classic_assoc[] = {
   { "Period",                  OBJECTS_RTEMS_PERIODS, 0},
   { "Extension",               OBJECTS_RTEMS_EXTENSIONS, 0},
   { "Barrier",                 OBJECTS_RTEMS_BARRIERS, 0},
+  { NULL,                      0, 0}
 };
 
 #ifdef RTEMS_POSIX_API
-rtems_assoc_t rtems_object_api_posix_assoc[] = {
+static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Thread",                  OBJECTS_POSIX_THREADS, 0},
   { "Key",                     OBJECTS_POSIX_KEYS, 0},
   { "Interrupt",               OBJECTS_POSIX_INTERRUPTS, 0},
@@ -56,6 +57,7 @@ rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Barrier",                 OBJECTS_POSIX_BARRIERS, 0},
   { "Spinlock",                OBJECTS_POSIX_SPINLOCKS, 0},
   { "RWLock",                  OBJECTS_POSIX_RWLOCKS, 0},
+  { NULL,                      0, 0}
 };
 #endif
 

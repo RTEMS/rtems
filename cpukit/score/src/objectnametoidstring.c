@@ -18,18 +18,9 @@
 #include "config.h"
 #endif
 
-#include <string.h>
+#include <rtems/score/objectimpl.h>
 
-#include <rtems/system.h>
-#include <rtems/score/address.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/object.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/objectmp.h>
-#endif
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/isr.h>
+#include <string.h>
 
 #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_string(

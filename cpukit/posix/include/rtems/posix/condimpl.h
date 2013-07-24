@@ -18,6 +18,7 @@
 #define _RTEMS_POSIX_CONDIMPL_H
  
 #include <rtems/posix/cond.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus

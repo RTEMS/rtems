@@ -18,10 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/objectimpl.h>
 
 Objects_Information *_Objects_Get_information(
   Objects_APIs   the_api,

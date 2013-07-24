@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/object.h>
 #include <rtems/score/threadimpl.h>
 
 #include <ctype.h>

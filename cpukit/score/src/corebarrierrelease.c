@@ -20,6 +20,7 @@
 #endif
 
 #include <rtems/score/corebarrierimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/threadqimpl.h>
 
 uint32_t _CORE_barrier_Release(

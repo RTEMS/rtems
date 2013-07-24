@@ -131,6 +131,10 @@ $(PROJECT_INCLUDE)/rtems/score/object.h: include/rtems/score/object.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.h
 
+$(PROJECT_INCLUDE)/rtems/score/objectimpl.h: include/rtems/score/objectimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/objectimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/objectimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/percpu.h: include/rtems/score/percpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/percpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/percpu.h
@@ -335,10 +339,6 @@ $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h: include/rtems/score/schedul
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h
 endif
-$(PROJECT_INCLUDE)/rtems/score/object.inl: inline/rtems/score/object.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
-
 $(PROJECT_INCLUDE)/rtems/score/tod.inl: inline/rtems/score/tod.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.inl

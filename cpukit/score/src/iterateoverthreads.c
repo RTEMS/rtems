@@ -18,8 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/objectimpl.h>
 
 void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
 {

@@ -23,7 +23,6 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
 #include <rtems/rtems/dpmemimpl.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 
 rtems_status_code rtems_port_ident(

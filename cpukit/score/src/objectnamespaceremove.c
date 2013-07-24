@@ -19,8 +19,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
 
 void _Objects_Namespace_remove(

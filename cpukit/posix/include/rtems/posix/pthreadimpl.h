@@ -22,6 +22,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus

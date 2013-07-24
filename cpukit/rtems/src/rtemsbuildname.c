@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/types.h>
 
 #undef rtems_build_name

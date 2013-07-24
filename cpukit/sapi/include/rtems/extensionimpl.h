@@ -19,6 +19,7 @@
 #define _RTEMS_EXTENSIONIMPL_H
 
 #include <rtems/extension.h>
+#include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

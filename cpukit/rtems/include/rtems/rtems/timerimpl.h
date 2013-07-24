@@ -19,6 +19,8 @@
 #define _RTEMS_RTEMS_TIMER_INL
 
 #include <rtems/rtems/timer.h>
+#include <rtems/score/objectimpl.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {

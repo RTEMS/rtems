@@ -23,6 +23,7 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/prioritybitmapimpl.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
 #ifdef __cplusplus

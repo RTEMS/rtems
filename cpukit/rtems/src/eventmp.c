@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
 
 RTEMS_STATIC_ASSERT(

@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_TASKSIMPL_H
 
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

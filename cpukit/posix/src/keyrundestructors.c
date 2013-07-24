@@ -21,7 +21,6 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
 #include <rtems/posix/key.h>
 

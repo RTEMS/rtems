@@ -25,7 +25,6 @@
 
 #include "system.h"
 #include "tmacros.h"
-#include <rtems/score/object.h>
 
 void test1()
 {

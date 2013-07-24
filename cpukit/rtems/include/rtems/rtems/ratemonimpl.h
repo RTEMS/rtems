@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_RATEMONIMPL_H
 
 #include <rtems/rtems/ratemon.h>
+#include <rtems/score/objectimpl.h>
 
 #include <string.h>
 

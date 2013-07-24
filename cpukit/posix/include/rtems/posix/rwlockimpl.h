@@ -21,6 +21,7 @@
 
 #include <rtems/posix/rwlock.h>
 #include <rtems/score/corerwlockimpl.h>
+#include <rtems/score/objectimpl.h>
 
 #include <pthread.h>
 

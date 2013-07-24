@@ -18,16 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/address.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/object.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/objectmp.h>
-#endif
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/isr.h>
 
 /* #define RTEMS_DEBUG_OBJECT_ALLOCATION */
 

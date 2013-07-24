@@ -3,7 +3,7 @@
 #endif
 
 #include <unistd.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 
 /*
  *  4.3.1 Get Process Group IDs, P1003.1b-1993, p. 89

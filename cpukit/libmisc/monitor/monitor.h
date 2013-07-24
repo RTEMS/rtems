@@ -8,6 +8,7 @@
 #ifndef __MONITOR_H
 #define __MONITOR_H
 
+#include <rtems/score/objectimpl.h>
 #include <rtems/error.h>  /* rtems_error() */
 #include <rtems/config.h>
 
