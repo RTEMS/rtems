@@ -462,9 +462,11 @@ typedef struct {
   uint32_t p3_mux_set;
   uint32_t p3_mux_clr;
   uint32_t p3_mux_state;
+  LPC32XX_RESERVE(0x11c, 0x120);
   uint32_t p0_mux_set;
   uint32_t p0_mux_clr;
   uint32_t p0_mux_state;
+  LPC32XX_RESERVE(0x12c, 0x130);
   uint32_t p1_mux_set;
   uint32_t p1_mux_clr;
   uint32_t p1_mux_state;
