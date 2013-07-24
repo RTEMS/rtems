@@ -18,7 +18,7 @@
 #ifndef _RTEMS_SCORE_HEAP_H
 #define _RTEMS_SCORE_HEAP_H
 
-#include <rtems/score/basedefs.h>
+#include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -433,6 +433,36 @@ uintptr_t _Heap_No_extend(
   uintptr_t unused_2,
   uintptr_t unused_3
 );
+
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
+  uintptr_t value,
+  uintptr_t alignment
+)
+{
+  uintptr_t remainder = value % alignment;
+
+  if ( remainder != 0 ) {
+    return value - remainder + alignment;
+  } else {
+    return value;
+  }
+}
+
+/**
+ * @brief Returns the worst case overhead to manage a memory area.
+ */
+RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
+  uintptr_t page_size
+)
+{
+  if ( page_size != 0 ) {
+    page_size = _Heap_Align_up( page_size, CPU_ALIGNMENT );
+  } else {
+    page_size = CPU_ALIGNMENT;
+  }
+
+  return 2 * (page_size - 1) + HEAP_BLOCK_HEADER_SIZE;
+}
 
 /** @} */
 

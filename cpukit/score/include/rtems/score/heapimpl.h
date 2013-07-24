@@ -284,36 +284,6 @@ Heap_Resize_status _Heap_Resize_block(
   uintptr_t *new_size
 );
 
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
-  uintptr_t value,
-  uintptr_t alignment
-)
-{
-  uintptr_t remainder = value % alignment;
-
-  if ( remainder != 0 ) {
-    return value - remainder + alignment;
-  } else {
-    return value;
-  }
-}
-
-/**
- * @brief Returns the worst case overhead to manage a memory area.
- */
-RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
-  uintptr_t page_size
-)
-{
-  if ( page_size != 0 ) {
-    page_size = _Heap_Align_up( page_size, CPU_ALIGNMENT );
-  } else {
-    page_size = CPU_ALIGNMENT;
-  }
-
-  return 2 * (page_size - 1) + HEAP_BLOCK_HEADER_SIZE;
-}
-
 /**
  * @brief Allocates the memory area starting at @a alloc_begin of size
  * @a alloc_size bytes in the block @a block.
