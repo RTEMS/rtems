@@ -18,28 +18,30 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_DEBUG)
-  #include <assert.h>
-#endif
 #include <errno.h>
-#include <pthread.h>
 #include <signal.h>
-#include <string.h>	/* memcpy */
-#include <stdlib.h>	/* exit */
+#include <string.h>
+#include <stdlib.h>
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/time.h>
-#include <stdio.h>
+#include <rtems/config.h>
+#include <rtems/seterr.h>
+
+/*
+ *  Ensure we have the same number of vectors and default vector entries
+ */
+RTEMS_STATIC_ASSERT(
+  sizeof( _POSIX_signals_Vectors ) == sizeof( _POSIX_signals_Default_vectors ),
+  posix_signals_vectors
+);
 
 /*** PROCESS WIDE STUFF ****/
 
@@ -175,16 +177,6 @@ void _POSIX_signals_Manager_Initialization(void)
   uint32_t   maximum_queued_signals;
 
   maximum_queued_signals = Configuration_POSIX_API.maximum_queued_signals;
-
-  /*
-   *  Ensure we have the same number of vectors and default vector entries
-   */
-
-  #if defined(RTEMS_DEBUG)
-    assert(
-     sizeof(_POSIX_signals_Vectors) == sizeof(_POSIX_signals_Default_vectors)
-    );
-  #endif
 
   memcpy(
     _POSIX_signals_Vectors,

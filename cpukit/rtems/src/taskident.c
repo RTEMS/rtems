@@ -24,7 +24,6 @@
 #include <rtems/rtems/modes.h>
 #include <rtems/score/object.h>
 #include <rtems/score/stack.h>
-#include <rtems/score/states.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>

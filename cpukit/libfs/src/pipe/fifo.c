@@ -29,6 +29,7 @@
 #include <rtems.h>
 #include <rtems/libio_.h>
 #include <rtems/rtems/barrierimpl.h>
+#include <rtems/score/statesimpl.h>
 
 #include "pipe.h"
 

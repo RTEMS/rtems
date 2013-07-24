@@ -24,7 +24,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/regionimpl.h>
-#include <rtems/score/states.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/thread.h>
 

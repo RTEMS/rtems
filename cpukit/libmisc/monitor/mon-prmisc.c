@@ -11,8 +11,8 @@
 
 #include <rtems.h>
 #include <rtems/monitor.h>
-
 #include <rtems/assoc.h>
+#include <rtems/score/statesimpl.h>
 
 #include <stdio.h>
 #include <ctype.h>

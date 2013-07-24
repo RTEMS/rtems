@@ -28,6 +28,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 
 RTEMS_STATIC_ASSERT(

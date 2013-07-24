@@ -24,11 +24,11 @@
 #include <signal.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
-#include <rtems/seterr.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/statesimpl.h>
+#include <rtems/seterr.h>
 
 /*
  *  If you enable this, then you get printk() feedback on each path

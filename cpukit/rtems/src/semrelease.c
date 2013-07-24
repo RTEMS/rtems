@@ -43,7 +43,6 @@
 #include <rtems/rtems/semimpl.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
-#include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #if defined(RTEMS_MULTIPROCESSING)

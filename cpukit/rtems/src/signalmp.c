@@ -25,10 +25,10 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 
 RTEMS_STATIC_ASSERT(

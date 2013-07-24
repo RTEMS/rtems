@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_THREADIMPL_H
 
 #include <rtems/score/thread.h>
+#include <rtems/score/statesimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

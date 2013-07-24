@@ -23,14 +23,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/statesimpl.h>
 
 bool _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread

@@ -26,6 +26,7 @@
 
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/statesimpl.h>
 
 rtems_status_code rtems_event_system_receive(
   rtems_event_set  event_in,

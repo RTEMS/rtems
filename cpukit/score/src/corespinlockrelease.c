@@ -20,7 +20,6 @@
 
 #include <rtems/system.h>
 #include <rtems/score/corespinlockimpl.h>
-#include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 

@@ -37,7 +37,6 @@ extern "C" {
 #endif
 
 #include <rtems/score/mppkt.h>
-#include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/tqdata.h>

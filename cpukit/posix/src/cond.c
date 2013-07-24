@@ -25,7 +25,6 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/score/object.h>
-#include <rtems/score/states.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/time.h>

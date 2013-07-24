@@ -23,7 +23,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/object.h>
-#include <rtems/score/states.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 #if defined(RTEMS_MULTIPROCESSING)

@@ -18,14 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chainimpl.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/chainimpl.h>
+#include <rtems/score/statesimpl.h>
 
 /*
  *  Support the user forcing the unrolling to be disabled.

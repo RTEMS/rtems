@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include "capture.h"
-#include <rtems/score/states.inl>
+#include <rtems/score/statesimpl.h>
 
 /*
  * These events are always recorded and are not part of the

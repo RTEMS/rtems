@@ -207,6 +207,10 @@ $(PROJECT_INCLUDE)/rtems/score/states.h: include/rtems/score/states.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/states.h
 
+$(PROJECT_INCLUDE)/rtems/score/statesimpl.h: include/rtems/score/statesimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/statesimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/statesimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/sysstate.h: include/rtems/score/sysstate.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sysstate.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sysstate.h
@@ -330,10 +334,6 @@ endif
 $(PROJECT_INCLUDE)/rtems/score/object.inl: inline/rtems/score/object.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
-
-$(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/states.inl
 
 $(PROJECT_INCLUDE)/rtems/score/threadq.inl: inline/rtems/score/threadq.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadq.inl
