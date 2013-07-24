@@ -95,7 +95,6 @@ endif
 
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
-include_rtems_score_HEADERS += inline/rtems/score/priority.inl
 include_rtems_score_HEADERS += inline/rtems/score/prioritybitmap.inl
 include_rtems_score_HEADERS += inline/rtems/score/scheduler.inl
 include_rtems_score_HEADERS += inline/rtems/score/schedulerpriority.inl

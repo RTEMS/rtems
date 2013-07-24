@@ -311,10 +311,6 @@ $(PROJECT_INCLUDE)/rtems/score/object.inl: inline/rtems/score/object.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
 
-$(PROJECT_INCLUDE)/rtems/score/priority.inl: inline/rtems/score/priority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
-
 $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybitmap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
