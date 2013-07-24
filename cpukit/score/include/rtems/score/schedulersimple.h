@@ -18,19 +18,19 @@
 #ifndef _RTEMS_SCORE_SCHEDULERSIMPLE_H
 #define _RTEMS_SCORE_SCHEDULERSIMPLE_H
 
+#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerpriority.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreSchedulerSimple Simple Priority Scheduler
  *
  *  @ingroup ScoreScheduler
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
 
 /**
  *  Entry points for Scheduler Simple
@@ -215,15 +215,11 @@ void _Scheduler_simple_Ready_queue_enqueue_first(
   Thread_Control    *the_thread
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/schedulersimple.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
