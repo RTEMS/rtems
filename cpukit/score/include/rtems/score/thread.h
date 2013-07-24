@@ -28,7 +28,7 @@
 #include <rtems/score/priority.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus

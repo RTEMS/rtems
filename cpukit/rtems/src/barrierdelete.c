@@ -18,12 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
 #include <rtems/rtems/barrierimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 rtems_status_code rtems_barrier_delete(
   rtems_id   id

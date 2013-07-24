@@ -21,6 +21,7 @@
 
 #include <rtems/score/coremsg.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 #include <limits.h>
 #include <string.h>

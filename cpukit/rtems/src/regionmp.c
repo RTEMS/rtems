@@ -29,6 +29,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(Region_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,

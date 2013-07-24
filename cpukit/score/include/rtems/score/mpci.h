@@ -39,7 +39,6 @@ extern "C" {
 #include <rtems/score/mppkt.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
 
 /**

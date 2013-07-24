@@ -20,7 +20,6 @@
 #define _RTEMS_SCORE_COREBARRIERIMPL_H
 
 #include <rtems/score/corebarrier.h>
-#include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus

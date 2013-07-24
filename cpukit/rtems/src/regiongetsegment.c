@@ -18,14 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/regionimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/threadqimpl.h>
 
 rtems_status_code rtems_region_get_segment(
   rtems_id           id,

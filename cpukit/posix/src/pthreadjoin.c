@@ -25,7 +25,7 @@
 
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 int pthread_join(
   pthread_t   thread,

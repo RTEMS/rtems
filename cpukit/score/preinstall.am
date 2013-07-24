@@ -231,6 +231,10 @@ $(PROJECT_INCLUDE)/rtems/score/threadq.h: include/rtems/score/threadq.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadq.h
 
+$(PROJECT_INCLUDE)/rtems/score/threadqimpl.h: include/rtems/score/threadqimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadqimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadqimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/threadsync.h: include/rtems/score/threadsync.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadsync.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadsync.h
@@ -250,10 +254,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/timestamp64.h
 $(PROJECT_INCLUDE)/rtems/score/tod.h: include/rtems/score/tod.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.h
-
-$(PROJECT_INCLUDE)/rtems/score/tqdata.h: include/rtems/score/tqdata.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tqdata.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tqdata.h
 
 $(PROJECT_INCLUDE)/rtems/score/userext.h: include/rtems/score/userext.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/userext.h
@@ -338,10 +338,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
 $(PROJECT_INCLUDE)/rtems/score/tod.inl: inline/rtems/score/tod.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.inl
-
-$(PROJECT_INCLUDE)/rtems/score/tqdata.inl: inline/rtems/score/tqdata.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tqdata.inl
 
 if HAS_MP
 $(PROJECT_INCLUDE)/rtems/score/mppkt.inl: inline/rtems/score/mppkt.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)

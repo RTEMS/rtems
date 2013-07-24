@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/statesimpl.h>
 
 void _Thread_queue_Requeue(

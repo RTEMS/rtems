@@ -14,7 +14,7 @@
 #include <tmacros.h>
 
 #include <sys/types.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

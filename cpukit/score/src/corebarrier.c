@@ -20,8 +20,7 @@
 
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 void _CORE_barrier_Initialize(
   CORE_barrier_Control       *the_barrier,

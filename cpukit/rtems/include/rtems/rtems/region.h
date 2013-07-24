@@ -35,7 +35,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/score/heap.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 
 #ifdef __cplusplus
 extern "C" {

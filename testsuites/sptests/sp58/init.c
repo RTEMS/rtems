@@ -15,7 +15,6 @@
 
 #include <sys/types.h>
 #include <rtems/score/timespec.h>
-#include <rtems/score/threadq.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

@@ -23,7 +23,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coresemimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 CORE_semaphore_Status _CORE_semaphore_Surrender(
   CORE_semaphore_Control                *the_semaphore,

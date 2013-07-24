@@ -22,7 +22,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coresemimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 void _CORE_semaphore_Flush(
   CORE_semaphore_Control     *the_semaphore,

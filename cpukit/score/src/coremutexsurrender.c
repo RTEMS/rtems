@@ -22,7 +22,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
   static inline void _CORE_mutex_Push_priority(

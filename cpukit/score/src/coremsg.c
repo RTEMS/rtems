@@ -20,7 +20,6 @@
 
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/threadq.h>
 #include <rtems/score/wkspace.h>
 
 /*

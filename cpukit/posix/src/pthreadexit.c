@@ -19,12 +19,11 @@
 #endif
 
 #include <pthread.h>
-#include <errno.h>
 
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/threadimpl.h>
-
+#include <rtems/score/threadqimpl.h>
 
 void _POSIX_Thread_Exit(
   Thread_Control *the_thread,

@@ -20,6 +20,7 @@
 
 #include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 void _CORE_RWLock_Timeout(
   Objects_Id  id,

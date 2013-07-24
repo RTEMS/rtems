@@ -32,6 +32,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/sigset.h>
 #include <rtems/score/apiext.h>
+#include <rtems/score/threadq.h>
 
 #define _States_Is_interruptible_signal( _states ) \
   ( ((_states) & \

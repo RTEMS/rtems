@@ -18,9 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/corerwlockimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 void _CORE_RWLock_Obtain_for_reading(

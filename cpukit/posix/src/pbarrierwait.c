@@ -21,8 +21,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/barrierimpl.h>
+#include <rtems/score/thread.h>
 
 /**
  * This directive allows a thread to wait at a barrier.

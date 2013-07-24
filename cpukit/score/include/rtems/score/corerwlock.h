@@ -19,7 +19,7 @@
 #ifndef _RTEMS_SCORE_CORERWLOCK_H
 #define _RTEMS_SCORE_CORERWLOCK_H
 
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 
 /**
  *  @defgroup ScoreRWLock RWLock Handler

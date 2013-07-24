@@ -23,9 +23,9 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/thread.h>
 
 /*
  *  pthread_rwlock_timedwrlock

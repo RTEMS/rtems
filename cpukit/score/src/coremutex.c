@@ -22,7 +22,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 CORE_mutex_Status _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,

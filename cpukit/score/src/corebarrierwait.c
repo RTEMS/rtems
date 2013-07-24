@@ -18,11 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/corebarrierimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/threadqimpl.h>
 
 void _CORE_barrier_Wait(
   CORE_barrier_Control                *the_barrier,

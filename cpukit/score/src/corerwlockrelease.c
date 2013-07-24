@@ -21,7 +21,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/corerwlockimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 CORE_RWLock_Status _CORE_RWLock_Release(

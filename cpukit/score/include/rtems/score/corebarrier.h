@@ -19,7 +19,7 @@
 #ifndef _RTEMS_SCORE_COREBARRIER_H
 #define _RTEMS_SCORE_COREBARRIER_H
 
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 
 #ifdef __cplusplus
 extern "C" {

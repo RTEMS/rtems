@@ -62,12 +62,12 @@ include_rtems_score_HEADERS += include/rtems/score/thread.h
 include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h
+include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threadsync.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
 include_rtems_score_HEADERS += include/rtems/score/tod.h
-include_rtems_score_HEADERS += include/rtems/score/tqdata.h
 include_rtems_score_HEADERS += include/rtems/score/userext.h
 include_rtems_score_HEADERS += include/rtems/score/userextimpl.h
 include_rtems_score_HEADERS += include/rtems/score/watchdog.h
@@ -102,7 +102,6 @@ endif
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
-include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined

@@ -18,10 +18,12 @@
 #ifndef _RTEMS_POSIX_THREADSUP_H
 #define _RTEMS_POSIX_THREADSUP_H
 
-#include <sys/signal.h>
 #include <rtems/score/coresem.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
+
+#include <pthread.h>
+#include <signal.h>
 
 /**
  *  @defgroup POSIX_THREAD POSIX Thread API Extension

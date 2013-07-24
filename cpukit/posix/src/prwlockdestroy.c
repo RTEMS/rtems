@@ -20,8 +20,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 /**
  *  This directive allows a thread to delete a rwlock specified by

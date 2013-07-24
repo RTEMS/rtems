@@ -18,13 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
 
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,

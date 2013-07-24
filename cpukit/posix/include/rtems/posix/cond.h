@@ -20,7 +20,7 @@
 #define _RTEMS_POSIX_COND_H
 
 #include <rtems/score/object.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadq.h>
 
 #include <pthread.h>
 

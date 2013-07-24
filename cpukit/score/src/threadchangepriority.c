@@ -20,9 +20,8 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 void _Thread_Change_priority(
   Thread_Control   *the_thread,

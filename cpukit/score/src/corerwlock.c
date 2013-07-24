@@ -20,7 +20,7 @@
 
 #include <rtems/score/corerwlockimpl.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 void _CORE_RWLock_Initialize(
   CORE_RWLock_Control       *the_rwlock,

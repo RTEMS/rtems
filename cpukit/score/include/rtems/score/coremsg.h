@@ -19,9 +19,8 @@
 #ifndef _RTEMS_SCORE_COREMSG_H
 #define _RTEMS_SCORE_COREMSG_H
 
-#include <rtems/score/thread.h>
+#include <rtems/score/chain.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus

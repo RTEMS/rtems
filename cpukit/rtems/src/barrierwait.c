@@ -23,7 +23,6 @@
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 rtems_status_code rtems_barrier_wait(
   rtems_id        id,

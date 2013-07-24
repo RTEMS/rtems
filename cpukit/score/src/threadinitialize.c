@@ -20,7 +20,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
-#include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>

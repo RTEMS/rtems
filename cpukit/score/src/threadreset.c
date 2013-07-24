@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 void _Thread_Reset(

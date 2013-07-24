@@ -21,8 +21,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/score/thread.h>
 
 /**
  * This directive attempts to obtain a read only lock on an rwlock instance.

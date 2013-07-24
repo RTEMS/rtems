@@ -23,7 +23,6 @@
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 /*
  *  rtems_barrier_release

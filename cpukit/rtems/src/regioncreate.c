@@ -23,7 +23,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadqimpl.h>
 
 /*
  *  rtems_region_create

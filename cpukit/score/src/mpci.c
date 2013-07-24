@@ -27,8 +27,8 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadqimpl.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/score/sysstate.h>
 
