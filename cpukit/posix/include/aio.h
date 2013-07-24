@@ -19,6 +19,7 @@
 #ifndef _AIO_H
 #define _AIO_H
 
+#include <sys/cdefs.h>
 #include <unistd.h>
 
 #ifdef __cplusplus
@@ -115,10 +116,10 @@ int aio_write(
  */
 
 int lio_listio(
-  int                    mode,
-  struct aiocb  * const  list[],
-  int                    nent,
-  struct sigevent       *sig
+  int              mode,
+  struct aiocb    *__restrict const  list[__restrict],
+  int              nent,
+  struct sigevent *__restrict sig
 );
 
 /*

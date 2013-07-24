@@ -27,10 +27,10 @@
 #include <rtems/seterr.h>
 
 int lio_listio(
-  int                    mode __attribute__((unused)),
-  struct aiocb  * const  list[] __attribute__((unused)),
-  int                    nent __attribute__((unused)),
-  struct sigevent       *sig __attribute__((unused))
+  int              mode __attribute__((unused)),
+  struct aiocb    *__restrict const  list[__restrict] __attribute__((unused)),
+  int              nent __attribute__((unused)),
+  struct sigevent *__restrict sig __attribute__((unused))
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );
