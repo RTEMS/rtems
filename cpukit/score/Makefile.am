@@ -109,7 +109,6 @@ if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
 include_rtems_score_HEADERS += inline/rtems/score/mppkt.inl
 include_rtems_score_HEADERS += inline/rtems/score/objectmp.inl
-include_rtems_score_HEADERS += inline/rtems/score/threadmp.inl
 endif
 
 ## src

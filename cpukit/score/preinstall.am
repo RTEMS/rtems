@@ -355,8 +355,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mppkt.inl
 $(PROJECT_INCLUDE)/rtems/score/objectmp.inl: inline/rtems/score/objectmp.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/objectmp.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/objectmp.inl
-
-$(PROJECT_INCLUDE)/rtems/score/threadmp.inl: inline/rtems/score/threadmp.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/threadmp.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/threadmp.inl
 endif
