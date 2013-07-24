@@ -27,7 +27,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>

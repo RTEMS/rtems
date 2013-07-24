@@ -63,6 +63,7 @@
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <rtems/libio.h>
+#include <rtems/score/sysstate.h>
 
 #include <rtems/libi2c.h>
 

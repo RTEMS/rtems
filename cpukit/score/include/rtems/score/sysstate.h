@@ -18,7 +18,7 @@
 #ifndef _RTEMS_SCORE_SYSSTATE_H
 #define _RTEMS_SCORE_SYSSTATE_H
 
-#include <rtems/score/basedefs.h> /* SCORE_EXTERN */
+#include <rtems/score/basedefs.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,11 +79,73 @@ SCORE_EXTERN bool _System_state_Is_multiprocessing;
 
 extern System_state_Codes _System_state_Current;
 
-/*
- *  Make it possible for the application to get the system state information.
- */
+RTEMS_INLINE_ROUTINE void _System_state_Set (
+  System_state_Codes state
+)
+{
+  _System_state_Current = state;
+}
 
-#include <rtems/score/sysstate.inl>
+RTEMS_INLINE_ROUTINE void _System_state_Handler_initialization (
+#if defined(RTEMS_MULTIPROCESSING)
+  bool  is_multiprocessing
+#else
+  bool  is_multiprocessing __attribute__((unused))
+#endif
+)
+{
+  _System_state_Set( SYSTEM_STATE_BEFORE_INITIALIZATION );
+#if defined(RTEMS_MULTIPROCESSING)
+    _System_state_Is_multiprocessing = is_multiprocessing;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
+{
+  return _System_state_Current;
+}
+
+RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
+  System_state_Codes state
+)
+{
+  return (state == SYSTEM_STATE_BEFORE_INITIALIZATION);
+}
+
+RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
+  System_state_Codes state
+)
+{
+  return (state == SYSTEM_STATE_BEFORE_MULTITASKING);
+}
+
+RTEMS_INLINE_ROUTINE bool _System_state_Is_begin_multitasking (
+  System_state_Codes state
+)
+{
+  return (state == SYSTEM_STATE_BEGIN_MULTITASKING);
+}
+
+RTEMS_INLINE_ROUTINE bool _System_state_Is_shutdown (
+  System_state_Codes state
+)
+{
+  return (state == SYSTEM_STATE_SHUTDOWN);
+}
+
+RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
+  System_state_Codes state
+)
+{
+  return (state == SYSTEM_STATE_UP);
+}
+
+RTEMS_INLINE_ROUTINE bool _System_state_Is_failed (
+  System_state_Codes state
+)
+{
+  return (state == SYSTEM_STATE_FAILED);
+}
 
 /** @} */
 

@@ -20,6 +20,7 @@
 
 #include <rtems/score/coremutex.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
 
 #ifdef __cplusplus

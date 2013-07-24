@@ -26,7 +26,6 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/partimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/sysstate.h>
 
 void _Partition_Manager_initialization(void)
 {

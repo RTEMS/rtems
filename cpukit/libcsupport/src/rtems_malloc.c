@@ -26,6 +26,8 @@
 #ifdef RTEMS_NEWLIB
 #include "malloc_p.h"
 
+#include <rtems/score/sysstate.h>
+
 void *rtems_heap_allocate_aligned_with_boundary(
   size_t size,
   uintptr_t alignment,

@@ -10,6 +10,7 @@
  */
 
 #include <bsp.h>
+#include <rtems/score/sysstate.h>
 #include "../include/i2c.h"
 
 /* i2c_transfer_sema_done_func --

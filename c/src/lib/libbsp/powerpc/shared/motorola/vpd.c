@@ -53,6 +53,7 @@ field = type, length, { data }
 
 #include <unistd.h>
 #include <rtems.h>
+#include <rtems/score/sysstate.h>
 #include <string.h>
 #include <sys/fcntl.h>
 #include <bsp.h>

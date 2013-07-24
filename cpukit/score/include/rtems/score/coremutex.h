@@ -26,7 +26,6 @@
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/sysstate.h>
 
 #ifdef __cplusplus
 extern "C" {

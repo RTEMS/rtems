@@ -49,7 +49,6 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #endif
-#include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
 

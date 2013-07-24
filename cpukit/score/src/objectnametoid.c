@@ -27,7 +27,6 @@
 #endif
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(

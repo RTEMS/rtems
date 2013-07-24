@@ -77,7 +77,6 @@ extern "C" {
 #include <rtems/rtems/smp.h>
 
 #include <rtems/rtems/support.h>
-#include <rtems/score/sysstate.h>
 
 /**
  * @brief Returns the pointer to the RTEMS version string.

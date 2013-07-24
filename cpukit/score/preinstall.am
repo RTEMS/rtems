@@ -335,10 +335,6 @@ $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/states.inl
 
-$(PROJECT_INCLUDE)/rtems/score/sysstate.inl: inline/rtems/score/sysstate.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sysstate.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sysstate.inl
-
 $(PROJECT_INCLUDE)/rtems/score/thread.inl: inline/rtems/score/thread.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/thread.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/thread.inl

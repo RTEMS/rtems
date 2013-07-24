@@ -35,7 +35,6 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
 
 /*
  *  _RTEMS_tasks_Create_extension

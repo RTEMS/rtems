@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threaddispatch.h>
 

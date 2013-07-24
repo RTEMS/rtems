@@ -33,7 +33,6 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
 
 /*
  *  _RTEMS_tasks_Initialize_user_tasks_body

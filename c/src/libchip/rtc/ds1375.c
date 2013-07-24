@@ -52,6 +52,7 @@
 
 #include <rtems.h>
 #include <rtems/rtc.h>
+#include <rtems/score/sysstate.h>
 #include <libchip/rtc.h>
 #include <libchip/ds1375-rtc.h>
 

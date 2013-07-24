@@ -27,7 +27,6 @@
 #endif
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
 /* #define RTEMS_DEBUG_OBJECT_ALLOCATION */

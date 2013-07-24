@@ -24,6 +24,8 @@
 #include <errno.h>
 #include <string.h>
 
+#include <rtems/score/sysstate.h>
+
 void *realloc(
   void *ptr,
   size_t size

@@ -23,7 +23,6 @@
 #ifndef _RTEMS_SCORE_THREAD_INL
 #define _RTEMS_SCORE_THREAD_INL
 
-#include <rtems/score/sysstate.h>
 #include <rtems/score/context.h>
 
 /**

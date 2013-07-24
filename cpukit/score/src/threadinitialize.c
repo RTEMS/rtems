@@ -28,7 +28,6 @@
 #include <rtems/score/scheduler.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>

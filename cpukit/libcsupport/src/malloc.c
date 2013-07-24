@@ -24,6 +24,8 @@
 
 #include "malloc_p.h"
 
+#include <rtems/score/sysstate.h>
+
 void *malloc(
   size_t  size
 )

@@ -101,7 +101,6 @@ include_rtems_score_HEADERS += inline/rtems/score/scheduler.inl
 include_rtems_score_HEADERS += inline/rtems/score/schedulerpriority.inl
 include_rtems_score_HEADERS += inline/rtems/score/schedulersimple.inl
 include_rtems_score_HEADERS += inline/rtems/score/states.inl
-include_rtems_score_HEADERS += inline/rtems/score/sysstate.inl
 include_rtems_score_HEADERS += inline/rtems/score/thread.inl
 include_rtems_score_HEADERS += inline/rtems/score/threadq.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl

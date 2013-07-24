@@ -23,7 +23,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
 
 #define NO_OWNER_CPU 0xffffffffU

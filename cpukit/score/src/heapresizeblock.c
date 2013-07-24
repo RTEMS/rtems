@@ -22,7 +22,6 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/heapimpl.h>
 
 static Heap_Resize_status _Heap_Resize_block_checked(

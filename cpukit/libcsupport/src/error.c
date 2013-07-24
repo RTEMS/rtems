@@ -19,6 +19,7 @@
 
 #include <rtems/error.h>
 #include <rtems/assoc.h>
+#include <rtems/score/sysstate.h>
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdarg.h>

@@ -29,6 +29,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/score/sysstate.h>
 #include <string.h>
 
 #include "gdb_if.h"

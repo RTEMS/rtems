@@ -31,7 +31,6 @@
 #include <rtems/score/tod.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
 
 /*
  *  rtems_task_start

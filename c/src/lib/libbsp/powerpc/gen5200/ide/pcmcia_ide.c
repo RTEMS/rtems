@@ -77,6 +77,7 @@
 
 #include <rtems.h>
 #include <rtems/error.h>
+#include <rtems/score/sysstate.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include "../include/mpc5200.h"

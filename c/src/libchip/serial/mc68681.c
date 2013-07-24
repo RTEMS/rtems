@@ -16,6 +16,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/score/sysstate.h>
 #include <stdlib.h>
 
 #include <libchip/serial.h>

@@ -7,7 +7,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+#include <rtems/score/sysstate.h>
+
 #define FATAL_ERROR_TEST_NAME            "SHUTDOWN WHEN NOT UP"
 #define FATAL_ERROR_DESCRIPTION          "SHUTDOWN WHEN NOT UP"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
