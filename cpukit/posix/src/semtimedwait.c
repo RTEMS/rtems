@@ -39,8 +39,8 @@
  */
 
 int sem_timedwait(
-  sem_t                 *sem,
-  const struct timespec *abstime
+  sem_t                 *__restrict sem,
+  const struct timespec *__restrict abstime
 )
 {
   Watchdog_Interval                            ticks;
