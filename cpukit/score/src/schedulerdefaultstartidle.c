@@ -10,7 +10,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerimpl.h>
 
 void _Scheduler_default_Start_idle(
   Thread_Control  *thread,

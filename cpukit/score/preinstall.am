@@ -159,6 +159,10 @@ $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 
+$(PROJECT_INCLUDE)/rtems/score/schedulerimpl.h: include/rtems/score/schedulerimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/schedulercbs.h: include/rtems/score/schedulercbs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulercbs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulercbs.h
@@ -326,10 +330,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
 $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybitmap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
-
-$(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
 
 $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl

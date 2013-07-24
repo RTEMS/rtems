@@ -44,6 +44,7 @@ include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
 include_rtems_score_HEADERS += include/rtems/score/rbtree.h
 include_rtems_score_HEADERS += include/rtems/score/rbtreeimpl.h
 include_rtems_score_HEADERS += include/rtems/score/scheduler.h
+include_rtems_score_HEADERS += include/rtems/score/schedulerimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulercbs.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
@@ -99,7 +100,6 @@ endif
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/prioritybitmap.inl
-include_rtems_score_HEADERS += inline/rtems/score/scheduler.inl
 include_rtems_score_HEADERS += inline/rtems/score/states.inl
 include_rtems_score_HEADERS += inline/rtems/score/thread.inl
 include_rtems_score_HEADERS += inline/rtems/score/threadq.inl

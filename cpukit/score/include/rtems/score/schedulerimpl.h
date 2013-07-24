@@ -16,17 +16,28 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_SCORE_SCHEDULER_H
-# error "Never use <rtems/score/scheduler.inl> directly; include <rtems/score/scheduler.h> instead."
-#endif
+#ifndef _RTEMS_SCORE_SCHEDULERIMPL_H
+#define _RTEMS_SCORE_SCHEDULERIMPL_H
 
-#ifndef _RTEMS_SCORE_SCHEDULER_INL
-#define _RTEMS_SCORE_SCHEDULER_INL
+#include <rtems/score/scheduler.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @addtogroup ScoreScheduler
  */
 /**@{**/
+
+/**
+ *  @brief Initializes the scheduler to the policy chosen by the user.
+ *
+ *  This routine initializes the scheduler to the policy chosen by the user
+ *  through confdefs, or to the priority scheduler with ready chains by
+ *  default.
+ */
+void _Scheduler_Handler_initialization( void );
 
 /**
  * The preferred method to add a new scheduler is to define the jump table
@@ -226,7 +237,25 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
   ( *_Scheduler.Operations.start_idle )( thread, processor );
 }
 
+/**
+ * Macro testing whether @a p1 has lower priority than @a p2
+ * in the intuitive sense of priority.
+ */
+#define _Scheduler_Is_priority_lower_than( _p1, _p2 ) \
+  (_Scheduler_Priority_compare(_p1,_p2) < 0)
+
+/**
+ * Macro testing whether @a p1 has higher priority than @a p2
+ * in the intuitive sense of priority.
+ */
+#define _Scheduler_Is_priority_higher_than( _p1, _p2 ) \
+  (_Scheduler_Priority_compare(_p1,_p2) > 0)
+
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

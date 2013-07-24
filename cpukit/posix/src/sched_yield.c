@@ -19,15 +19,10 @@
 #endif
 
 #include <sched.h>
-#include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/thread.h>
-#include <rtems/seterr.h>
-#include <rtems/posix/priorityimpl.h>
-#include <rtems/posix/time.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threaddispatch.h>
 
 int sched_yield( void )
 {

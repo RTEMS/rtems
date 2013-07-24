@@ -19,11 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadq.h>
 
 void _Thread_Change_priority(

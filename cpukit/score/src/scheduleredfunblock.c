@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/scheduleredf.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
 
 void _Scheduler_EDF_Unblock(

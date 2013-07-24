@@ -18,10 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/score/isr.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdogimpl.h>

@@ -48,7 +48,8 @@
 #include <rtems/score/mpci.h>
 #endif
 #include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
+#include <rtems/score/prioritybitmap.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/userextimpl.h>

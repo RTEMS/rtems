@@ -22,7 +22,6 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmap.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -127,29 +126,6 @@ typedef struct {
 extern Scheduler_Control  _Scheduler;
 
 /**
- * Macro testing whether @a p1 has lower priority than @a p2
- * in the intuitive sense of priority.
- */
-#define _Scheduler_Is_priority_lower_than( _p1, _p2 ) \
-  (_Scheduler_Priority_compare(_p1,_p2) < 0)
-
-/**
- * Macro testing whether @a p1 has higher priority than @a p2
- * in the intuitive sense of priority.
- */
-#define _Scheduler_Is_priority_higher_than( _p1, _p2 ) \
-  (_Scheduler_Priority_compare(_p1,_p2) > 0)
-
-/**
- *  @brief Initializes the scheduler to the policy chosen by the user.
- *
- *  This routine initializes the scheduler to the policy chosen by the user
- *  through confdefs, or to the priority scheduler with ready chains by
- *  default.
- */
-void _Scheduler_Handler_initialization( void );
-
-/**
  * @brief Performs tick operations depending on the CPU budget algorithm for
  * each executing thread.
  *
@@ -167,10 +143,6 @@ void _Scheduler_default_Start_idle(
   Thread_Control  *thread,
   Per_CPU_Control *processor
 );
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/scheduler.inl>
-#endif
 
 /**@}*/
 
