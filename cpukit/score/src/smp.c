@@ -18,11 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/bspsmp.h>
-#include <rtems/score/smp.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threaddispatch.h>
+#include <rtems/score/smp.h>
+#include <rtems/score/sysstate.h>
 
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>

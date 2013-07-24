@@ -21,9 +21,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/threadimpl.h>
 
 /**
  * 16.1.4 Detaching a Thread, P1003.1c/Draft 10, p. 149

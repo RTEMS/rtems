@@ -19,17 +19,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threaddispatch.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadimpl.h>
 
 Thread_Control *_Thread_Get (
   Objects_Id         id,

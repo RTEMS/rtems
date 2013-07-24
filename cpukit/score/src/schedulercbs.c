@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/score/schedulercbs.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 
 Scheduler_CBS_Server **_Scheduler_CBS_Server_list;

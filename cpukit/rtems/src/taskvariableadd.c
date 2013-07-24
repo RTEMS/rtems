@@ -18,10 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 rtems_status_code rtems_task_variable_add(
   rtems_id tid,

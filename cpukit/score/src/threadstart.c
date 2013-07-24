@@ -19,8 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/thread.h>
-#include <rtems/score/isr.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/userextimpl.h>
 

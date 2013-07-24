@@ -24,7 +24,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>

@@ -18,8 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #if defined(RTEMS_DEBUG)
 #include <rtems/score/interr.h>
 #endif

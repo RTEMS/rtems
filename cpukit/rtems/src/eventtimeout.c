@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
+#include <rtems/score/threadimpl.h>
 
 void _Event_Timeout(
   Objects_Id  id,

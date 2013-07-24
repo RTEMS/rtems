@@ -18,15 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadimpl.h>
 
 void _Thread_queue_Timeout(
   Objects_Id  id,

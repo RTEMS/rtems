@@ -21,6 +21,7 @@
 
 #include <rtems/score/schedulercbs.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Unblock(

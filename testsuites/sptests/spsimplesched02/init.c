@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+#include <rtems/score/threadimpl.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 rtems_task Test_task(rtems_task_argument argument);

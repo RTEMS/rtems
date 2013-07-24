@@ -21,12 +21,12 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
+#include <unistd.h>
 
-#include <rtems/system.h>
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/watchdogimpl.h>
 
 /*
  *  _POSIX_signals_Alarm_TSR

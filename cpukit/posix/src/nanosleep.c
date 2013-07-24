@@ -23,7 +23,7 @@
 
 #include <rtems/seterr.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdogimpl.h>

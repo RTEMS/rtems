@@ -27,6 +27,7 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/threadimpl.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(Partition_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,

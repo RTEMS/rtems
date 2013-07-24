@@ -58,6 +58,7 @@ include_rtems_score_HEADERS += include/rtems/score/stackimpl.h
 include_rtems_score_HEADERS += include/rtems/score/states.h
 include_rtems_score_HEADERS += include/rtems/score/sysstate.h
 include_rtems_score_HEADERS += include/rtems/score/thread.h
+include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h
 include_rtems_score_HEADERS += include/rtems/score/threadsync.h
@@ -100,7 +101,6 @@ endif
 ## inline
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/states.inl
-include_rtems_score_HEADERS += inline/rtems/score/thread.inl
 include_rtems_score_HEADERS += inline/rtems/score/threadq.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 include_rtems_score_HEADERS += inline/rtems/score/tqdata.inl

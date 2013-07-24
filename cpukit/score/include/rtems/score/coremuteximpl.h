@@ -21,7 +21,7 @@
 #include <rtems/score/coremutex.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -18,9 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/object.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 
 Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Id      id,

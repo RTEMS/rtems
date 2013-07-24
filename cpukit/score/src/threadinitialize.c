@@ -17,16 +17,14 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/thread.h>
-#include <rtems/config.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 bool _Thread_Initialize(
   Objects_Information                  *information,

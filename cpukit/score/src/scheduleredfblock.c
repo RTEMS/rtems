@@ -19,12 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/context.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/scheduleredf.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 
 void _Scheduler_EDF_Block(
   Thread_Control    *the_thread

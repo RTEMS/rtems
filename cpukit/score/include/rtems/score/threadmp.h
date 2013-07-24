@@ -19,6 +19,10 @@
 #ifndef _RTEMS_SCORE_THREADMP_H
 #define _RTEMS_SCORE_THREADMP_H
 
+#ifndef _RTEMS_SCORE_THREADIMPL_H
+# error "Never use <rtems/score/threadmp.h> directly; include <rtems/score/threadimpl.h> instead."
+#endif
+
 /**
  *  @defgroup ScoreThreadMP Thread Handler Multiprocessing Support
  *

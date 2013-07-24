@@ -18,9 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/corerwlockimpl.h>
-#include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 
 void _CORE_RWLock_Timeout(
   Objects_Id  id,

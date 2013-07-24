@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include <rtems/libcsupport.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
 
 bool newlib_create_hook(

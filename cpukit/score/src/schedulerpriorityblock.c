@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/score/schedulerpriorityimpl.h>
+#include <rtems/score/threadimpl.h>
 
 void _Scheduler_priority_Block(
   Thread_Control   *the_thread

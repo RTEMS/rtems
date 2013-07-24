@@ -20,6 +20,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/threadimpl.h>
 
 void _Scheduler_priority_Yield( Thread_Control *thread )
 {

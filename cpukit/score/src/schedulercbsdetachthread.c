@@ -19,11 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
-#include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 
 int _Scheduler_CBS_Detach_thread (
   Scheduler_CBS_Server_id server_id,

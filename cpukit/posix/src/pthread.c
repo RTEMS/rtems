@@ -26,7 +26,7 @@
 #include <rtems/config.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/stack.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>

@@ -22,8 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/error.h>
-#include <rtems/score/thread.h> /*  _Thread_Dispatch_disable_level */
-#include <rtems/score/thread.inl> /*  _Thread_Dispatch_disable_level */
+#include <rtems/score/threaddispatch.h>
 
 #ifdef __cplusplus
 extern "C" {

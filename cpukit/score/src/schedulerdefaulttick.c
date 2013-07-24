@@ -20,7 +20,7 @@
 #endif
 
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
 
 static void _Scheduler_default_Tick_for_executing( Thread_Control *executing )

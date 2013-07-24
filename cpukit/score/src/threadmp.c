@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/mpci.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/isr.h>

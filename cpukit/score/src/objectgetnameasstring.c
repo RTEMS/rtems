@@ -19,12 +19,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <stdlib.h>
+#include <rtems/score/threadimpl.h>
+
 #include <ctype.h>
-#include <inttypes.h>
 
 /*
  *  This method objects the name of an object and returns its name

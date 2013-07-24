@@ -18,10 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/scheduleredf.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_EDF_Release_job(

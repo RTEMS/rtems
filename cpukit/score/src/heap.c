@@ -22,6 +22,7 @@
 #endif
 
 #include <rtems/score/heapimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
 
 #include <string.h>

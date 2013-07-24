@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 void _Event_Surrender(

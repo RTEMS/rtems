@@ -28,6 +28,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/threadimpl.h>
 
 RTEMS_STATIC_ASSERT(
   MESSAGE_QUEUE_MP_PACKET_SIZE <= MP_PACKET_MINIMUM_PACKET_SIZE,

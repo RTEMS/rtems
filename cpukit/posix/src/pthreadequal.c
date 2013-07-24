@@ -23,9 +23,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 
 int pthread_equal(
   pthread_t  t1,

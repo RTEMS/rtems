@@ -18,8 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/watchdogimpl.h>
 

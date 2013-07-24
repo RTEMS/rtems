@@ -21,10 +21,9 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/score/apimutex.h>
-#include <rtems/score/thread.h>
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/apimutex.h>
+#include <rtems/score/threadimpl.h>
 
 
 void _POSIX_Thread_Exit(

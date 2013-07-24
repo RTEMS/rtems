@@ -24,14 +24,13 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
+#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/stackimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 static inline size_t _POSIX_Threads_Ensure_minimum_stack (
   size_t size

@@ -18,9 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/states.h>
 
 void _Thread_Clear_state(
   Thread_Control *the_thread,

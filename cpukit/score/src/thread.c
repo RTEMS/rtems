@@ -18,25 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/config.h>
-
-#if defined(RTEMS_SMP)
-  #include <rtems/bspsmp.h>
-#endif
 
 void _Thread_Handler_initialization(void)
 {
@@ -83,11 +68,7 @@ void _Thread_Handler_initialization(void)
    *  per CPU in an SMP system.  In addition, if this is a loosely
    *  coupled multiprocessing system, account for the MPCI Server Thread.
    */
-  #if defined(RTEMS_SMP)
-    maximum_internal_threads = rtems_configuration_get_maximum_processors();
-  #else
-    maximum_internal_threads = 1;
-  #endif
+  maximum_internal_threads = rtems_configuration_get_maximum_processors();
 
   #if defined(RTEMS_MULTIPROCESSING)
     if ( _System_state_Is_multiprocessing )
