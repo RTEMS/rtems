@@ -19,7 +19,7 @@
 #ifndef _RTEMS_SCORE_ADDRESS_H
 #define _RTEMS_SCORE_ADDRESS_H
 
-#include <rtems/score/basedefs.h>
+#include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
 extern "C" {
