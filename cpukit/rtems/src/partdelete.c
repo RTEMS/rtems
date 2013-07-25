@@ -18,13 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/partimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/rtems/attrimpl.h>
+#include <rtems/score/threaddispatch.h>
 
 rtems_status_code rtems_partition_delete(
   rtems_id id
