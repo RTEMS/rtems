@@ -1,19 +1,9 @@
 /**
- * @file rtems/rtems/signal.h
+ * @file
  *
- * @defgroup ClassicSignal Signals
+ * @ingroup ClassicSignal
  *
- * @ingroup ClassicRTEMS
- * @brief Signal Manager
- *
- * This include file contains all the constants and structures associated
- * with the Signal Manager. This manager provides capabilities required
- * for asynchronous communication between tasks via signal sets.
- *
- * Directives provided are:
- *
- * + establish an asynchronous signal routine
- * + send a signal set to a task
+ * @brief Signals API
  */
 
 /* COPYRIGHT (c) 1989-2008.
@@ -27,32 +17,26 @@
 #ifndef _RTEMS_RTEMS_SIGNAL_H
 #define _RTEMS_RTEMS_SIGNAL_H
 
-/**
- *  @defgroup ClassicSignal Signals
- *
- *  @ingroup ClassicRTEMS
- *
- *  This encapsulates functionality which XXX
- */
-/**@{*/
-
 #include <rtems/rtems/asr.h>
 #include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 /**
- *  @brief Signal Manager Initialization
+ * @defgroup ClassicSignal Signals
  *
- *  Signal Manager
+ * @ingroup ClassicRTEMS
  *
- *  This routine performs the initialization necessary for this manager.
+ * Directives provided are:
+ *
+ * + establish an asynchronous signal routine
+ * + send a signal set to a task
  */
-void _Signal_Manager_initialization( void );
+/**@{*/
 
 /**
  * @brief RTEMS Catch Signal
@@ -89,15 +73,11 @@ rtems_status_code rtems_signal_send(
   rtems_signal_set signal_set
 );
 
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/signalmp.h>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

@@ -39,7 +39,7 @@
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/signal.h>
+#include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/timerimpl.h>
 
 Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];

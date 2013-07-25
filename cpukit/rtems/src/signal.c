@@ -18,14 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/asr.h>
-#include <rtems/score/isr.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/rtems/signal.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/signalimpl.h>
 
 /*
  *  _Signal_Manager_initialization

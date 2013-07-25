@@ -18,6 +18,10 @@
 #ifndef _RTEMS_RTEMS_SIGNALMP_H
 #define _RTEMS_RTEMS_SIGNALMP_H
 
+#ifndef _RTEMS_RTEMS_SIGNALIMPL_H
+# error "Never use <rtems/rtems/signalmp.h> directly; include <rtems/rtems/signalimpl.h> instead."
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -45,6 +45,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/rtemsapi.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/sem.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/semimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/signal.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/signalimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/smp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/status.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/statusimpl.h

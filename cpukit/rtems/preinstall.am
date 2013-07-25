@@ -151,6 +151,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/signal.h: include/rtems/rtems/signal.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/signal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/signal.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/signalimpl.h: include/rtems/rtems/signalimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/signalimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/signalimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/smp.h: include/rtems/rtems/smp.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/smp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/smp.h
