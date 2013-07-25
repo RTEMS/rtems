@@ -104,11 +104,6 @@ endif
 include_rtems_score_HEADERS += inline/rtems/score/object.inl
 include_rtems_score_HEADERS += inline/rtems/score/tod.inl
 
-if HAS_MP
-## We only build multiprocessing related files if HAS_MP was defined
-include_rtems_score_HEADERS += inline/rtems/score/mppkt.inl
-endif
-
 ## src
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__

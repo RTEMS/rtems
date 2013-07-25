@@ -327,6 +327,21 @@ void _MPCI_Internal_packets_Process_packet (
  */
 MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void );
 
+/**
+ * This function returns true if the the_packet_class is valid,
+ * and false otherwise.
+ *
+ * @note Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
+ *       because this enum starts at lower bound of zero.
+ */
+
+RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_valid_packet_class (
+  MP_packet_Classes the_packet_class
+)
+{
+  return ( the_packet_class <= MP_PACKET_CLASSES_LAST );
+}
+
 /**@}*/
 
 #ifdef __cplusplus
