@@ -14,8 +14,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_EVENT_INL
-#define _RTEMS_RTEMS_EVENT_INL
+#ifndef _RTEMS_RTEMS_EVENTIMPL_H
+#define _RTEMS_RTEMS_EVENTIMPL_H
 
 #include <rtems/rtems/event.h>
 #include <rtems/score/thread.h>
