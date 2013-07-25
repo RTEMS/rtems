@@ -18,11 +18,10 @@
   #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
 #include <sys/stat.h>
 
 #include <rtems/libio_.h>
+#include <rtems/score/threaddispatch.h>
 
 /**
  *  POSIX 1003.1b 5.3.3 - Set File Creation Mask

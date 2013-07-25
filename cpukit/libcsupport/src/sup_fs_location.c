@@ -23,12 +23,10 @@
   #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
 #include <stdlib.h>
 
 #include <rtems/libio_.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 
 static rtems_filesystem_global_location_t *deferred_released_global_locations;
 

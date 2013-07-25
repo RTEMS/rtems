@@ -28,7 +28,7 @@
 #include <rtems/rtems/semimpl.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>

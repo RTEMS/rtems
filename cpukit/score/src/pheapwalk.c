@@ -19,8 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
+#include <rtems/score/threaddispatch.h>
 
 bool _Protected_heap_Walk(
   Heap_Control *the_heap,

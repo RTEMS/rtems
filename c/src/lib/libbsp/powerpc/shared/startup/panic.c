@@ -5,8 +5,8 @@
 #include <rtems/bspIo.h>
 #include <rtems/error.h>
 #include <libcpu/stackTrace.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/thread.inl>
+#include <rtems/score/percpu.h>
+#include <rtems/score/threaddispatch.h>
 
 static void
 rebootQuestion(void)

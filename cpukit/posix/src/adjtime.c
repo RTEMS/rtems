@@ -22,13 +22,11 @@
 #include <sys/time.h>
 #include <errno.h>
 
-#include <rtems/system.h>
+#include <rtems/score/timespec.h>
+#include <rtems/score/threaddispatch.h>
+#include <rtems/score/tod.h>
 #include <rtems/config.h>
 #include <rtems/seterr.h>
-#include <rtems/score/tod.h>
-#include <rtems/posix/time.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/timespec.h>
 
 /**
  * This method was initially added as part of porting NTP to RTEMS.

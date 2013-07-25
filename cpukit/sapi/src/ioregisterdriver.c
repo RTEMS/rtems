@@ -21,10 +21,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/io.h>
 #include <rtems/rtems/intr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 
 static inline bool rtems_io_is_empty_table(
   const rtems_driver_address_table *table

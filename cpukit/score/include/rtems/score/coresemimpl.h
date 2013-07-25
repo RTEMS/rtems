@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_CORESEMIMPL_H
 
 #include <rtems/score/coresem.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadqimpl.h>
 
 #ifdef __cplusplus

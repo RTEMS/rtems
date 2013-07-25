@@ -17,11 +17,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/cpu.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/threaddispatch.h>
 
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   unsigned long    *_old_stack_ptr;

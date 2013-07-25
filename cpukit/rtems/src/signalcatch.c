@@ -18,16 +18,12 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/asrimpl.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/asr.h>
-#include <rtems/score/isr.h>
-#include <rtems/rtems/modes.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
+#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/apiext.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/threaddispatch.h>
 
 static void _RTEMS_signal_Post_switch_hook( Thread_Control *executing )
 {
