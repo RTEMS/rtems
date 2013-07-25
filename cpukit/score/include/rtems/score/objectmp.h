@@ -19,6 +19,12 @@
 #ifndef _RTEMS_SCORE_OBJECTMP_H
 #define _RTEMS_SCORE_OBJECTMP_H
 
+#include <rtems/score/chainimpl.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreObjectMP Object Handler Multiprocessing Support
  *
@@ -29,10 +35,6 @@
  *  knows objects from all of the nodes in the system.
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  *  This defines the Global Object Control Block used to manage
@@ -189,15 +191,48 @@ SCORE_EXTERN uint32_t       _Objects_MP_Maximum_global_objects;
  */
 SCORE_EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/objectmp.inl>
-#endif
+/**
+ * This function allocates a Global Object control block.
+ */
+
+RTEMS_INLINE_ROUTINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
+  void
+)
+{
+  return (Objects_MP_Control *)
+           _Chain_Get( &_Objects_MP_Inactive_global_objects );
+}
+
+/**
+ * This routine deallocates a Global Object control block.
+ */
+
+RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
+  Objects_MP_Control *the_object
+)
+{
+  _Chain_Append(
+    &_Objects_MP_Inactive_global_objects,
+    &the_object->Object.Node
+  );
+}
+
+/**
+ * This function returns whether the global object is NULL or not.
+ */
+
+RTEMS_INLINE_ROUTINE bool _Objects_MP_Is_null_global_object (
+  Objects_MP_Control *the_object
+)
+{
+  return( the_object == NULL );
+}
+
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
