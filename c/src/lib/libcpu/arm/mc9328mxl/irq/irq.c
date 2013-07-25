@@ -20,7 +20,8 @@
 
 void bsp_interrupt_dispatch(void)
 {
-  rtems_vector_number vector = *((uint32_t *) 0x00223040) >> 16;
+
+  rtems_vector_number vector = MC9328MXL_AITC_NIVECSR >> 16;
 
   bsp_interrupt_handler_dispatch(vector);
 }
