@@ -25,11 +25,7 @@
 # error "Never use <rtems/rtems/taskmp.h> directly; include <rtems/rtems/tasksimpl.h> instead."
 #endif
 
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/mpciimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -18,15 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/score/mpci.h>
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/regionimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/support.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>

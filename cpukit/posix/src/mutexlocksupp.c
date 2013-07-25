@@ -24,9 +24,6 @@
 #include <rtems/system.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/time.h>

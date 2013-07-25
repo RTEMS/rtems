@@ -44,9 +44,6 @@
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/score/priority.h>
 #include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerimpl.h>

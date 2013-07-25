@@ -314,6 +314,10 @@ $(PROJECT_INCLUDE)/rtems/score/mpci.h: include/rtems/score/mpci.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mpci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mpci.h
 
+$(PROJECT_INCLUDE)/rtems/score/mpciimpl.h: include/rtems/score/mpciimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mpciimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mpciimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/mppkt.h: include/rtems/score/mppkt.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mppkt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mppkt.h

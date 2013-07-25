@@ -18,16 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/messageimpl.h>
-#include <rtems/score/mpci.h>
-#include <rtems/rtems/msgmp.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/optionsimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/rtems/support.h>
+#include <rtems/score/coremsgimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 

@@ -25,14 +25,11 @@
 # error "Never use <rtems/rtems/eventmp.h> directly; include <rtems/rtems/eventimpl.h> instead."
 #endif
 
+#include <rtems/score/mpciimpl.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
 
 /**
  *  @defgroup ClassicEventMP Event MP Support

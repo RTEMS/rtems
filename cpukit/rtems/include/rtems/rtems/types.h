@@ -31,7 +31,6 @@
 #include <rtems/rtems/modes.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
-#include <rtems/score/mppkt.h>
 #endif
 
 #ifdef __cplusplus

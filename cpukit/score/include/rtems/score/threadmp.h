@@ -23,7 +23,7 @@
 # error "Never use <rtems/score/threadmp.h> directly; include <rtems/score/threadimpl.h> instead."
 #endif
 
-#include <rtems/score/mpci.h>
+#include <rtems/score/mpciimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

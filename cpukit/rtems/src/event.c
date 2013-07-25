@@ -19,9 +19,6 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 
 void _Event_Manager_initialization( void )
 {

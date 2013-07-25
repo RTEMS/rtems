@@ -25,9 +25,6 @@
 #include <rtems/score/object.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/messageimpl.h>

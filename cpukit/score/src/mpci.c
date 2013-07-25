@@ -18,21 +18,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#include <rtems/score/mppkt.h>
-#endif
-#include <rtems/config.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/mpciimpl.h>
+#include <rtems/score/coresemimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/stackimpl.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/stackimpl.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/score/sysstate.h>
-
-#include <rtems/score/coresemimpl.h>
 #include <rtems/config.h>
 
 RTEMS_STATIC_ASSERT(

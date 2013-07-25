@@ -25,9 +25,7 @@
 # error "Never use <rtems/rtems/regionmp.h> directly; include <rtems/rtems/regionimpl.h> instead."
 #endif
 
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/mpciimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

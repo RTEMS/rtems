@@ -22,10 +22,7 @@
 # error "Never use <rtems/rtems/msgmp.h> directly; include <rtems/rtems/messageimpl.h> instead."
 #endif
 
-#include <rtems/rtems/messageimpl.h>
-#include <rtems/score/mppkt.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/mpciimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

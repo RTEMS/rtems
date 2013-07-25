@@ -22,10 +22,7 @@
 # error "Never use <rtems/rtems/partmp.h> directly; include <rtems/rtems/partimpl.h> instead."
 #endif
 
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/mpciimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

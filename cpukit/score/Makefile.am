@@ -90,6 +90,7 @@ endif
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
 include_rtems_score_HEADERS += include/rtems/score/mpci.h
+include_rtems_score_HEADERS += include/rtems/score/mpciimpl.h
 include_rtems_score_HEADERS += include/rtems/score/mppkt.h
 include_rtems_score_HEADERS += include/rtems/score/objectmp.h
 include_rtems_score_HEADERS += include/rtems/score/threadmp.h
