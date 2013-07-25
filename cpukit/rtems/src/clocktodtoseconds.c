@@ -18,8 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/rtems/clock.h>
+#include <rtems/score/tod.h>
 
 #define TOD_SECONDS_AT_2100_03_01_00_00 4107538800UL
 

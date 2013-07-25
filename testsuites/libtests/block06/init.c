@@ -202,7 +202,7 @@ bdbuf_wait (const char* who, unsigned long timeout)
   rtems_event_set   out;
   sc = rtems_event_receive (RTEMS_EVENT_0,
                             RTEMS_WAIT | RTEMS_EVENT_ANY,
-                            TOD_MICROSECONDS_TO_TICKS (timeout * 1000),
+                            RTEMS_MICROSECONDS_TO_TICKS (timeout * 1000),
                             &out);
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -236,7 +236,7 @@ bdbuf_watch (unsigned long timeout)
   rtems_event_set   out;
   sc = rtems_event_receive (RTEMS_EVENT_1,
                             RTEMS_WAIT | RTEMS_EVENT_ANY,
-                            TOD_MICROSECONDS_TO_TICKS (timeout * 1000),
+                            RTEMS_MICROSECONDS_TO_TICKS (timeout * 1000),
                             &out);
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -330,7 +330,7 @@ static bool
 bdbuf_sleep (unsigned long msecs)
 {
   rtems_status_code sc;
-  sc = rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (msecs * 1000));
+  sc = rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (msecs * 1000));
   if (sc != RTEMS_SUCCESSFUL)
   {
     bdbuf_test_printf ("sleep wake after failed: ");

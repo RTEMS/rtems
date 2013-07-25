@@ -712,7 +712,7 @@ dhcp_task (rtems_task_argument _sdl)
     /*
      * Sleep until the next poll
      */
-    timeout = TOD_MILLISECONDS_TO_TICKS (1000);
+    timeout = RTEMS_MILLISECONDS_TO_TICKS (1000);
     ev_st = rtems_event_receive (RTEMS_EVENT_0,
                                  RTEMS_WAIT | RTEMS_EVENT_ANY,
                                  timeout, &event_out);
@@ -1147,7 +1147,7 @@ void rtems_bsdnet_do_dhcp (void)
   while( dhcp_init (update) < 0 ) {
     update = false;
     rtems_bsdnet_semaphore_release();
-    rtems_task_wake_after(TOD_MILLISECONDS_TO_TICKS(1000));
+    rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(1000));
     rtems_bsdnet_semaphore_obtain ();
   }
   rtems_bsdnet_semaphore_release ();

@@ -459,7 +459,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
           rtems_event_set events;
 	  rtems_bsdnet_event_receive (OPEN_ETH_TX_WAIT_EVENT,
 				      RTEMS_WAIT | RTEMS_EVENT_ANY,
-				      TOD_MILLISECONDS_TO_TICKS(500), &events);
+				      RTEMS_MILLISECONDS_TO_TICKS(500), &events);
 #endif
       }
 

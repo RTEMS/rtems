@@ -28,6 +28,7 @@
 
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdogimpl.h>

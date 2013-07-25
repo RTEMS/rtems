@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/tod.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/watchdogimpl.h>
 
 Timestamp_Control *_TOD_Get_with_nanoseconds(

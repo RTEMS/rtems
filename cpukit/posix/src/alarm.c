@@ -25,6 +25,7 @@
 
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdogimpl.h>
 

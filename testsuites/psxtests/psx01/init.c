@@ -18,6 +18,8 @@
 #include "system.h"
 #include "pritime.h"
 
+#include <rtems/score/tod.h>
+
 void *POSIX_Init(
   void *argument
 )

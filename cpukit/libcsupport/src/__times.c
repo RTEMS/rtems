@@ -25,6 +25,7 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <rtems/seterr.h>
+#include <rtems/score/tod.h>
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
 #endif

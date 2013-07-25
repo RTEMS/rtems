@@ -1,10 +1,9 @@
 /**
- *  @file  rtems/score/tod.h
+ * @file
  *
- *  @brief Constants and Structures Associated with the Time of Day Handler.
+ * @ingroup ScoreTOD
  *
- *  This include file contains all the constants and structures associated
- *  with the Time of Day Handler.
+ * @brief Time of Day Handler API
  */
 
 /*
@@ -19,16 +18,18 @@
 #ifndef _RTEMS_SCORE_TOD_H
 #define _RTEMS_SCORE_TOD_H
 
-#include <time.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/timestamp.h>
-#include <rtems/score/basedefs.h> /* SCORE_EXTERN */
+
+#include <sys/time.h>
+#include <time.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreTODConstants TOD Constants
+ *  @defgroup ScoreTOD Time of Day Handler
  *
  *  @ingroup Score
  *
@@ -264,37 +265,6 @@ void _TOD_Get_uptime_as_timespec(
 void _TOD_Tickle_ticks( void );
 
 /**
- *  @brief Converts an interval expressed in milliseconds to microseconds.
- *
- *  This routine converts an interval expressed in milliseconds to microseconds.
- *
- *  @note This must be a macro so it can be used in "static" tables.
- */
-#define TOD_MILLISECONDS_TO_MICROSECONDS(_ms) ((uint32_t)(_ms) * 1000L)
-
-/**
- *  @brief Converts an interval expressed in microseconds to ticks.
- *
- *  This routine converts an interval expressed in microseconds to ticks.
- *
- *  @note This must be a macro so it can be used in "static" tables.
- */
-uint32_t TOD_MICROSECONDS_TO_TICKS(
-  uint32_t microseconds
-);
-
-/**
- *  @brief Converts an interval expressed in milliseconds to ticks.
- *
- *  This routine converts an interval expressed in milliseconds to ticks.
- *
- *  @note This must be a macro so it can be used in "static" tables.
- */
-uint32_t TOD_MILLISECONDS_TO_TICKS(
-  uint32_t milliseconds
-);
-
-/**
  *  @brief Gets number of ticks in a second.
  *
  *  This method returns the number of ticks in a second.
@@ -314,15 +284,45 @@ uint32_t TOD_TICKS_PER_SECOND_method(void);
  */
 #define TOD_TICKS_PER_SECOND TOD_TICKS_PER_SECOND_method()
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/tod.inl>
-#endif
+/**
+ * This routine deactivates updating of the current time of day.
+ */
+
+RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
+{
+  /* XXX do we need something now that we are using timespec for TOD */
+}
+
+/**
+ * This routine activates updating of the current time of day.
+ */
+
+RTEMS_INLINE_ROUTINE void _TOD_Activate( void )
+{
+  /* XXX do we need something now that we are using timespec for TOD */
+}
+
+/**
+ * This routine returns a timeval based upon the internal timespec format TOD.
+ */
+
+RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
+  struct timeval *time
+)
+{
+  Timestamp_Control  snapshot_as_timestamp;
+  Timestamp_Control *snapshot_as_timestamp_ptr;
+
+  snapshot_as_timestamp_ptr =
+    _TOD_Get_with_nanoseconds( &snapshot_as_timestamp, &_TOD.now );
+  _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
+}
+
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

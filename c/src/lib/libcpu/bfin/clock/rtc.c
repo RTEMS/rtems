@@ -16,6 +16,7 @@
 #include <rtems/libio.h>
 #include <bsp.h>
 #include <libcpu/rtcRegs.h>
+#include <rtems/score/tod.h>
 
 /* The following are inside RTEMS -- we are violating visibility!!!
  * Perhaps an API could be defined to get days since 1 Jan.

@@ -18,11 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threaddispatch.h>
-#include <rtems/score/timestamp.h>
 #include <rtems/score/tod.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/watchdogimpl.h>
 
 void _TOD_Set_with_timestamp(

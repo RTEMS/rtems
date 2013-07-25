@@ -339,7 +339,3 @@ $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h: include/rtems/score/schedul
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersimplesmp.h
 endif
-$(PROJECT_INCLUDE)/rtems/score/tod.inl: inline/rtems/score/tod.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/tod.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/tod.inl
-

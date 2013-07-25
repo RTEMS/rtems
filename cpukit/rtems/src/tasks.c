@@ -28,7 +28,6 @@
 #include <rtems/score/stack.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>

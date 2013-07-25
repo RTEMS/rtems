@@ -18,10 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
 
 void _TOD_Handler_initialization(void)
 {

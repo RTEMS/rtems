@@ -18,14 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/config.h>
 
 rtems_interval rtems_clock_get_ticks_per_second(void)
 {

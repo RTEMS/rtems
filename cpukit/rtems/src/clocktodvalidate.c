@@ -18,9 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
 #include <rtems/rtems/clock.h>
+#include <rtems/score/tod.h>
+#include <rtems/config.h>
 
 /*
  *  The following array contains the number of days in all months.

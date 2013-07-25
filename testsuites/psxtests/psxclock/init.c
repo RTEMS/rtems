@@ -17,6 +17,8 @@
 #include "pmacros.h"
 #include "pritime.h"
 
+#include <rtems/score/tod.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void check_enosys(int status);

@@ -18,12 +18,9 @@
 #include "config.h"
 #endif
 
-#include <time.h>
-
-#include <rtems/system.h>
-#include <rtems/config.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
+#include <rtems/config.h>
 
 void _Timespec_From_ticks(
   uint32_t         ticks,

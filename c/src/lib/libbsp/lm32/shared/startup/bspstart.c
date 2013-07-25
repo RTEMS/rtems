@@ -21,12 +21,6 @@
 #include <bsp/bootcard.h>
 #include "../include/system_conf.h"
 #include "../console/uart.h"
-#include <rtems/score/heap.h>
-
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/timespec.h>
-#include <rtems/score/tod.h>
 
 /*
  *  bsp_start

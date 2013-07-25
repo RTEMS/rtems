@@ -24,7 +24,6 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
 
 #include <rtems/seterr.h>
 #include <rtems/posix/time.h>

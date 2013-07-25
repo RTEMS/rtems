@@ -26,9 +26,9 @@
 #include <semaphore.h>
 #include <limits.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/tod.h>
 #include <rtems/seterr.h>
 
 /*

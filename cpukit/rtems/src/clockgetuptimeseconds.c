@@ -24,6 +24,8 @@
 #endif
 
 #include <rtems/rtems/clock.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/tod.h>
 
 time_t rtems_clock_get_uptime_seconds( void )
 {

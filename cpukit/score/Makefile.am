@@ -101,9 +101,6 @@ if HAS_SMP
 include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
 endif
 
-## inline
-include_rtems_score_HEADERS += inline/rtems/score/tod.inl
-
 ## src
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
@@ -301,7 +298,7 @@ libscore_a_SOURCES += src/ts64addto.c src/ts64dividebyinteger.c \
 ## TOD_C_FILES
 libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
     src/coretodgetuptimetimespec.c src/coretodtickle.c \
-    src/coretodmsecstoticks.c src/coretodtickspersec.c src/coretodusectoticks.c
+    src/coretodtickspersec.c
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \

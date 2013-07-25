@@ -19,8 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <sys/types.h>
 #include <rtems/score/timespec.h>
 #include <rtems/score/tod.h>
 

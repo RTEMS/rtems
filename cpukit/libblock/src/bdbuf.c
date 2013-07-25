@@ -206,7 +206,7 @@ typedef enum {
 #define RTEMS_BDBUF_WAIT_TIMEOUT RTEMS_NO_TIMEOUT
 #if !defined (RTEMS_BDBUF_WAIT_TIMEOUT)
 #define RTEMS_BDBUF_WAIT_TIMEOUT \
-  (TOD_MICROSECONDS_TO_TICKS (20000000))
+  (RTEMS_MICROSECONDS_TO_TICKS (20000000))
 #endif
 
 static rtems_task rtems_bdbuf_swapout_task(rtems_task_argument arg);

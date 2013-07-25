@@ -18,11 +18,9 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <inttypes.h>
-
 #include <rtems/cpuuse.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/tod.h>
 #include <rtems/score/watchdogimpl.h>
 
 static void CPU_usage_Per_thread_handler(

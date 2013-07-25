@@ -22,7 +22,6 @@
 
 #include <rtems/system.h>
 #include <rtems/score/timespec.h>
-#include <rtems/score/tod.h>
 
 bool _Timespec_Less_than(
   const struct timespec *lhs,
