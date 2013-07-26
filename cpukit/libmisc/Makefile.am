@@ -154,8 +154,10 @@ noinst_LIBRARIES += libfsmount.a
 libfsmount_a_SOURCES = fsmount/fsmount.c fsmount/fsmount.h
 
 ## utf8proc
+if LIBUTF8PROC
 noinst_LIBRARIES += libutf8proc.a
 libutf8proc_a_SOURCES = utf8proc/utf8proc.c
+endif
 
 ## uuid
 noinst_LIBRARIES += libuuid.a
