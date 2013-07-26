@@ -24,10 +24,6 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/smp.h>
 
-void _ISR_SMP_Initialize(void)
-{
-}
-
 ISR_Level _ISR_SMP_Disable(void)
 {
   ISR_Level level;

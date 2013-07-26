@@ -98,14 +98,6 @@ void _ISR_Handler_initialization ( void );
 
 #if defined( RTEMS_SMP )
 /**
- *  @brief Initialize SMP interrupt critical section support.
- *
- *  This method initializes the variables required by the SMP implementation
- *  of interrupt critical section management.
- */
-void _ISR_SMP_Initialize(void);
-
-/**
  *  @brief Enter SMP interrupt code.
  *
  *  This method is used to enter the SMP interrupt section.

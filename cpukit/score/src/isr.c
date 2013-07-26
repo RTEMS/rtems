@@ -76,8 +76,4 @@ void _ISR_Handler_initialization( void )
 #if ( CPU_HAS_HARDWARE_INTERRUPT_STACK == TRUE )
   _CPU_Install_interrupt_stack();
 #endif
-
-#if defined(RTEMS_SMP)
-  _ISR_SMP_Initialize();
-#endif
 }
