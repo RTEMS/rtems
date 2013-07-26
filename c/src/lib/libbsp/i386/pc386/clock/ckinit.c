@@ -27,6 +27,7 @@
 #include <bsp/irq.h>
 #include <bspopts.h>
 #include <libcpu/cpuModel.h>
+#include <assert.h>
 
 #define CLOCK_VECTOR 0
 
@@ -36,15 +37,12 @@ uint32_t pc386_clock_click_count;
 
 /* forward declaration */
 void Clock_isr(void *param);
-void Clock_driver_support_at_tick_tsc(void);
-void Clock_driver_support_at_tick_empty(void);
-uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void);
-uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void);
-void Clock_isr_handler(rtems_irq_hdl_param param);
-int clockIsOn(const rtems_irq_connect_data* unused);
-void clockOff(const rtems_irq_connect_data* unused);
-void Clock_driver_install_handler(void);
-void Clock_driver_support_initialize_hardware(void);
+static void Clock_driver_support_at_tick_empty(void);
+static void clockOff(void);
+static void Clock_driver_support_at_tick_tsc(void);
+static uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void);
+static uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void);
+static void Clock_isr_handler(void *param);
 
 /*
  * Roughly the number of cycles per tick and per nanosecond. Note that these
@@ -83,7 +81,7 @@ uint32_t (*Clock_driver_nanoseconds_since_last_tick)(void) = NULL;
 /*
  *  What do we do at each clock tick?
  */
-void Clock_driver_support_at_tick_tsc(void)
+static void Clock_driver_support_at_tick_tsc(void)
 {
 #ifdef CLOCK_DRIVER_ISRS_PER_TICK
   /*
@@ -99,7 +97,7 @@ void Clock_driver_support_at_tick_tsc(void)
 #endif
 }
 
-void Clock_driver_support_at_tick_empty(void)
+static void Clock_driver_support_at_tick_empty(void)
 {
 }
 
@@ -113,7 +111,7 @@ extern volatile uint32_t Clock_driver_isrs;
 /*
  * Get nanoseconds using Pentium-compatible TSC register
  */
-uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
 {
   uint64_t                 diff_nsec;
 
@@ -140,7 +138,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick_tsc(void)
 /*
  * Get nanoseconds using 8254 timer chip
  */
-uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick_i8254(void)
 {
   uint32_t                 usecs, clicks, isrs;
   uint32_t                 usecs1, usecs2;
@@ -232,9 +230,7 @@ static void calibrate_tsc(void)
   pc586_tsc_per_tick /= rtems_clock_get_ticks_per_second();
 }
 
-static void clockOn(
-  const rtems_irq_connect_data* unused
-)
+static void clockOn(void)
 {
   pc386_isrs_per_tick        = 1;
   pc386_microseconds_per_isr = rtems_configuration_get_microseconds_per_tick();
@@ -267,7 +263,7 @@ static void clockOn(
     calibrate_tsc();
 }
 
-void clockOff(const rtems_irq_connect_data* unused)
+static void clockOff(void)
 {
   /* reset timer mode to standard (BIOS) value */
   outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_RATEGEN);
@@ -275,35 +271,27 @@ void clockOff(const rtems_irq_connect_data* unused)
   outport_byte(TIMER_CNTR0, 0);
 } /* Clock_exit */
 
-int clockIsOn(const rtems_irq_connect_data* unused)
-{
-  return ((i8259s_cache & 0x1) == 0);
-}
 
 bool Clock_isr_enabled = false;
-void Clock_isr_handler(
-  rtems_irq_hdl_param param 
-)
+static void Clock_isr_handler(void *param)
 {
   if ( Clock_isr_enabled )
     Clock_isr( param );
 }
 
-static rtems_irq_connect_data clockIrqData = {
-  BSP_PERIODIC_TIMER,
-  Clock_isr_handler,
-  0,
-  clockOn,
-  clockOff,
-  clockIsOn
-};
-
 void Clock_driver_install_handler(void)
 {
-  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
-    printk("Unable to install system clock ISR handler\n");
-    rtems_fatal_error_occurred(1);
-  }
+  rtems_status_code status;
+
+  status = rtems_interrupt_handler_install(
+    BSP_PERIODIC_TIMER,
+    "ckinit",
+    RTEMS_INTERRUPT_UNIQUE,
+    Clock_isr_handler,
+    NULL
+  );
+  assert(status == RTEMS_SUCCESSFUL);
+  clockOn();
 }
 
 void Clock_driver_support_initialize_hardware(void)
@@ -349,7 +337,14 @@ void Clock_driver_support_initialize_hardware(void)
 
 #define Clock_driver_support_shutdown_hardware() \
   do { \
-    BSP_remove_rtems_irq_handler (&clockIrqData); \
+    rtems_status_code status; \
+    clockOff(); \
+    status = rtems_interrupt_handler_remove(  \
+      BSP_PERIODIC_TIMER, \
+      Clock_isr_handler,  \
+      NULL  \
+    );  \
+    assert(status == RTEMS_SUCCESSFUL); \
   } while (0)
 
 #include "../../../shared/clockdrv_shell.h"

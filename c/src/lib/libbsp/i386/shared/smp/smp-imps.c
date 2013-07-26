@@ -79,6 +79,7 @@
 #include <rtems/bspsmp.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpu.h>
+#include <assert.h>
 
 extern void _pc386_delay(void);
 
@@ -120,14 +121,14 @@ static void UDELAY(int x)
   while ( _i-- )
     _pc386_delay();
 }
- 
+
 #define READ_MSR_LO(_x) \
   (unsigned int)(read_msr(_x) & 0xffffffff)
 
 static inline unsigned long long read_msr(unsigned int msr)
 {
   unsigned long long value;
- 
+
   asm volatile("rdmsr" : "=A" (value) : "c" (msr));
   return value;
 }
@@ -385,7 +386,7 @@ imps_read_config_table(unsigned start, int count)
     case IMPS_BCT_PROCESSOR:
       if ( imps_num_cpus < rtems_configuration_get_maximum_processors() ) {
 	add_processor((imps_processor *)start);
-      } else 
+      } else
         imps_num_cpus++;
       start += 12;  /* 20 total */
       break;
@@ -751,22 +752,19 @@ rtems_isr ap_ipi_isr(
 
 #include <rtems/irq.h>
 
-static rtems_irq_connect_data apIPIIrqData = {
-  16,
-  (void *)ap_ipi_isr,
-  0,
-  NULL,            /* On */
-  NULL,            /* Off */
-  NULL,            /* IsOn */
-};
-
 extern void bsp_reset(void);
 void ipi_install_irq(void)
 {
-  if (!BSP_install_rtems_irq_handler (&apIPIIrqData)) {
-    printk("Unable to initialize IPI\n");
-    bsp_reset();
-  }
+  rtems_status_code status;
+
+  status = rtems_interrupt_handler_install(
+    16,
+    "smp-imps",
+    RTEMS_INTERRUPT_UNIQUE,
+    ap_ipi_isr,
+    NULL
+  );
+  assert(status == RTEMS_SUCCESSFUL);
 }
 
 #ifdef __SSE__

@@ -60,6 +60,7 @@
 #include <errno.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <assert.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -163,11 +164,11 @@ struct ep_softc
     struct ep_board *epb;
     int unit;
 
-    rtems_irq_connect_data   irqInfo;
-    rtems_id		     	 rxDaemonTid;
-    rtems_id		     	 txDaemonTid;
+    rtems_id rxDaemonTid;
+    rtems_id txDaemonTid;
+    rtems_vector_number name;
 
-    int              	 acceptBroadcast;
+    int acceptBroadcast;
 
     short tx_underrun;
     short rx_no_first;
@@ -355,7 +356,7 @@ static __inline unsigned short inw( unsigned short io_addr )
  * RETURNS: nothing.
  *
  **********************************************************************************/
-void __inline outb( unsigned short io_addr, uint8_t out_data )
+static __inline void outb( unsigned short io_addr, uint8_t out_data )
 {
   outport_byte( io_addr, out_data );
 }
@@ -403,46 +404,6 @@ static int get_eeprom_data( int id_port, int offset )
 
 /**********************************************************************************
  *
- * DESCRIPTION: Waits until the EEPROM of the card is ready to be accessed.
- *
- * RETURNS: 0 - not ready; 1 - ok
- *
- **********************************************************************************/
-static int eeprom_rdy( struct ep_softc *sc )
-{
-    int i;
-
-    for (i = 0; is_eeprom_busy(BASE) && i < MAX_EEPROMBUSY; i++)
-	    continue;
-    if (i >= MAX_EEPROMBUSY)
-    {
-	   printf("ep%d: eeprom failed to come ready.\n", sc->unit);
-	   return (0);
-    }
-    return (1);
-}
-
-/**********************************************************************************
- *
- * DESCRIPTION:
- * get_e: gets a 16 bits word from the EEPROM.
- * We must have set the window before call this routine.
- *
- * RETURNS: data from EEPROM
- *
- **********************************************************************************/
-u_short get_e(  struct ep_softc *sc, int offset )
-{
-    if( !eeprom_rdy(sc) )
-	   return (0xffff);
-    outw(BASE + EP_W0_EEPROM_COMMAND, EEPROM_CMD_RD | offset );
-    if( !eeprom_rdy(sc) )
-	   return( 0xffff );
-    return( inw( BASE + EP_W0_EEPROM_DATA ) );
-}
-
-/**********************************************************************************
- *
  * DESCRIPTION:
  * Driver interrupt handler. This routine is called by the RTEMS kernel when this
  * interrupt is raised.
@@ -450,39 +411,15 @@ u_short get_e(  struct ep_softc *sc, int offset )
  * RETURNS: nothing.
  *
  **********************************************************************************/
-static rtems_isr ap_interrupt_handler( rtems_vector_number v )
+static rtems_isr ap_interrupt_handler(void *arg)
 {
-  struct ep_softc *sc = (struct ep_softc *)&ep_softc[ 0 ];
+  struct ep_softc *sc = (struct ep_softc *)arg;
 
   /* de-activate any pending interrrupt, and sent and event to interrupt task
    * to process all events required by this interrupt.
    */
   outw( BASE + EP_COMMAND, SET_INTR_MASK ); 	/* disable all Ints */
   rtems_bsdnet_event_send( sc->rxDaemonTid, INTERRUPT_EVENT );
-}
-
-/**********************************************************************************
- *
- * DESCRIPTION:
- *
- * RETURNS:
- *
- **********************************************************************************/
-static void nopOn(const rtems_irq_connect_data* notUsed)
-{
-  /* does nothing */
-}
-
-/**********************************************************************************
- *
- * DESCRIPTION:
- *
- * RETURNS:
- *
- **********************************************************************************/
-static int _3c509_IsOn(const rtems_irq_connect_data* irq)
-{
-  return BSP_irq_enabled_at_i8259s (irq->name);
 }
 
 /**********************************************************************************
@@ -495,24 +432,22 @@ static int _3c509_IsOn(const rtems_irq_connect_data* irq)
  **********************************************************************************/
 static void _3c509_initialize_hardware (struct ep_softc *sc)
 {
-  rtems_status_code st;
+  rtems_status_code status;
 
   epinit( sc );
 
   /*
    * Set up interrupts
    */
-  sc->irqInfo.hdl = ( rtems_irq_hdl )ap_interrupt_handler;
-  sc->irqInfo.on  = nopOn;
-  sc->irqInfo.off = nopOn;
-  sc->irqInfo.isOn = _3c509_IsOn;
-
-  printf ("3c509: IRQ with Kernel: %d\n", sc->irqInfo.name );
-  st = BSP_install_rtems_irq_handler( &sc->irqInfo );
-  if( !st )
-  {
-    rtems_panic ("Can't attach WD interrupt handler for irq %d\n", sc->irqInfo.name );
-  }
+  printf ("3c509: IRQ with Kernel: %d\n", (int)sc->name );
+  status = rtems_interrupt_handler_install(
+    sc->name,
+    "3c509",
+    RTEMS_INTERRUPT_UNIQUE,
+    ap_interrupt_handler,
+    sc
+  );
+  assert(status == RTEMS_SUCCESSFUL);
 }
 
 /**********************************************************************************
@@ -746,8 +681,8 @@ int rtems_3c509_driver_attach (struct rtems_bsdnet_ifconfig *config )
 	 */
 	overrun = 0;
 	resend = 0;
-    ep_unit = 0;
-    ep_boards = 0;
+  ep_unit = 0;
+  ep_boards = 0;
 
 	/*
 	 * Find a free driver
@@ -782,9 +717,9 @@ int rtems_3c509_driver_attach (struct rtems_bsdnet_ifconfig *config )
 		mtu = ETHERMTU;
 
 	if (config->irno)
-		sc->irqInfo.name = config->irno;
+		sc->name = config->irno;
 	else
-		sc->irqInfo.name = 10;
+		sc->name = 10;
 
 	if (config->port)
 		sc->ep_io_addr = config->port;
@@ -1046,13 +981,13 @@ static int ep_isa_attach( struct isa_device *is )
 
     irq = is->id_irq;
 	/* update the interrupt line number to registered with kernel */
-	sc->irqInfo.name = irq;
+	  sc->name = irq;
 
     GO_WINDOW( 0 );
     SET_IRQ( BASE, irq );
 
     printf( "3C509: I/O=0x%x, IRQ=%d, CONNECTOR=%s, ",
-	    sc->ep_io_addr, sc->irqInfo.name,ep_conn_type[ sc->ep_connector ] );
+	    sc->ep_io_addr, (int)sc->name,ep_conn_type[ sc->ep_connector ] );
 
     ep_attach( sc );
     return 1;

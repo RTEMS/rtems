@@ -17,6 +17,7 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/types.h>
+#include <assert.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -29,6 +30,7 @@
 #define  INITIALIZE_MOUSE
 /* Some configuration switches are present in the include file... */
 #include "ps2_mouse.h"
+#include "ps2_drv.h"
 
 static void kbd_write_command_w(int data);
 #if 0
@@ -36,6 +38,7 @@ static void kbd_write_output_w(int data);
 #endif
 
 static unsigned char handle_kbd_event(void);
+static void ps2_set_driver_handler(int port, mouse_parser_enqueue_handler handler);
 
 /* used only by send_data - set by keyboard_interrupt */
 static volatile unsigned char reply_expected = 0;
@@ -56,14 +59,14 @@ static unsigned char mouse_reply_expected = 0;
 #define AUX_INTS_ON  (KBD_MODE_KCC | KBD_MODE_SYS | KBD_MODE_MOUSE_INT | KBD_MODE_KBD_INT)
 #define MAX_RETRIES	60		/* some aux operations take long time*/
 
-static void ps2_mouse_interrupt(rtems_irq_hdl_param);
+static void ps2_mouse_interrupt(void *);
 static mouse_parser_enqueue_handler driver_input_handler_ps2 = NULL;
 
 /*
  * This routine sets the handler to handle the characters received
  * from the serial port.
  */
-void ps2_set_driver_handler(
+static void ps2_set_driver_handler(
   int                          port,
   mouse_parser_enqueue_handler handler
 )
@@ -77,30 +80,6 @@ static void mdelay( unsigned long t )
 }
 
 static void*    termios_ttyp_paux = NULL;
-
-static void
-isr_on(const rtems_irq_connect_data *unused)
-{
-  return;
-}
-
-static void
-isr_off(const rtems_irq_connect_data *unused)
-{
-  return;
-}
-
-static int isr_is_on(const rtems_irq_connect_data *irq)
-{
-  return BSP_irq_enabled_at_i8259s( irq->name );
-}
-
-static rtems_irq_connect_data ps2_isr_data = { AUX_IRQ,
-                                               ps2_mouse_interrupt,
-                                               0,
-                                               isr_on,
-                                               isr_off,
-                                               isr_is_on };
 
 /*
  * Wait for keyboard controller input buffer to drain.
@@ -223,7 +202,7 @@ static unsigned char handle_kbd_event(void)
   return status;
 }
 
-static void ps2_mouse_interrupt(rtems_irq_hdl_param ignored)
+static void ps2_mouse_interrupt(void * unused)
 {
   handle_kbd_event();
 }
@@ -323,11 +302,17 @@ static int queue_empty(void)
 
 static int release_aux(void)
 {
+  rtems_status_code status;
   if (--aux_count)
     return 0;
   kbd_write_cmd(AUX_INTS_OFF);			    /* Disable controller ints */
   kbd_write_command_w(KBD_CCMD_MOUSE_DISABLE);
-  BSP_remove_rtems_irq_handler( &ps2_isr_data );
+  status = rtems_interrupt_handler_remove(
+    AUX_IRQ,
+    ps2_mouse_interrupt,
+    NULL
+  );
+  assert(status == RTEMS_SUCCESSFUL);
   return 0;
 }
 
@@ -338,18 +323,21 @@ static int release_aux(void)
 
 static int open_aux(void)
 {
-  int status;
+  rtems_status_code status;
 
   if (aux_count++) {
     return 0;
   }
   queue->head = queue->tail = 0;		/* Flush input queue */
 
-  status = BSP_install_rtems_irq_handler( &ps2_isr_data );
-  if( !status ) {
-    printk("Error installing ps2-mouse interrupt handler!\n" );
-    rtems_fatal_error_occurred( status );
-  }
+  status = rtems_interrupt_handler_install(
+    AUX_IRQ,
+    "ps2_mouse",
+    RTEMS_INTERRUPT_UNIQUE,
+    ps2_mouse_interrupt,
+    NULL
+  );
+  assert(status == RTEMS_SUCCESSFUL);
 
   kbd_write_command_w(KBD_CCMD_MOUSE_ENABLE); /* Enable the auxiliary port on
                                                  controller. */
@@ -429,7 +417,7 @@ static int psaux_init( void )
 /*
  * paux device driver INITIALIZE entry point.
  */
-rtems_device_driver paux_initialize(  
+rtems_device_driver paux_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                      *arg)
