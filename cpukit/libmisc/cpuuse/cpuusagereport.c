@@ -41,13 +41,10 @@
         return true;
       }
     #else
-      int  cpu;
-      for ( cpu=0 ; cpu < rtems_smp_get_processor_count() ; cpu++ ) {
-        Per_CPU_Control *p = &_Per_CPU_Information[cpu];
-        if ( p->executing->Object.id == the_thread->Object.id ) {
-          *time_of_context_switch = p->time_of_last_context_switch;
-          return true;
-        }
+      /* FIXME: Locking */
+      if ( the_thread->is_executing ) {
+        *time_of_context_switch = the_thread->cpu->time_of_last_context_switch;
+        return true;
       }
     #endif
     return false;
