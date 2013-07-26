@@ -73,7 +73,7 @@ void _Thread_Create_idle( void )
   uint32_t processor;
 
   for ( processor = 0 ; processor < processor_count ; ++processor ) {
-    Per_CPU_Control *per_cpu = &_Per_CPU_Information[ processor ];
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
 
     _Thread_Create_idle_for_cpu( per_cpu );
   }

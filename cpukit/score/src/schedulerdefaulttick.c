@@ -85,8 +85,8 @@ void _Scheduler_default_Tick( void )
   uint32_t processor;
 
   for ( processor = 0 ; processor < processor_count ; ++processor ) {
-    _Scheduler_default_Tick_for_executing(
-      _Per_CPU_Information[ processor ].executing
-    );
+    const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
+
+    _Scheduler_default_Tick_for_executing( per_cpu->executing );
   }
 }

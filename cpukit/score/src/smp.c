@@ -30,19 +30,18 @@
 
 void rtems_smp_secondary_cpu_initialize( void )
 {
-  uint32_t         self = _SMP_Get_current_processor();
-  Per_CPU_Control *per_cpu = &_Per_CPU_Information[ self ];
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
   Thread_Control  *heir;
 
   #if defined(RTEMS_DEBUG)
-    printk( "Made it to %d -- ", self );
+    printk( "Made it to %d -- ", _Per_CPU_Get_index( self_cpu ) );
   #endif
 
-  _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING );
+  _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING );
 
-  _Per_CPU_Wait_for_state( per_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
+  _Per_CPU_Wait_for_state( self_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
 
-  _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_UP );
+  _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_UP );
 
   /*
    *  The Scheduler will have selected the heir thread for each CPU core.
@@ -50,11 +49,11 @@ void rtems_smp_secondary_cpu_initialize( void )
    *  force a switch to the designated heir and make it executing on
    *  THIS core.
    */
-  heir = per_cpu->heir;
+  heir = self_cpu->heir;
   heir->is_executing = true;
-  per_cpu->executing->is_executing = false;
-  per_cpu->executing = heir;
-  per_cpu->dispatch_necessary = false;
+  self_cpu->executing->is_executing = false;
+  self_cpu->executing = heir;
+  self_cpu->dispatch_necessary = false;
 
   /*
    * Threads begin execution in the _Thread_Handler() function.   This function
@@ -67,24 +66,28 @@ void rtems_smp_secondary_cpu_initialize( void )
 
 void rtems_smp_process_interrupt( void )
 {
-  uint32_t         self = _SMP_Get_current_processor();
-  Per_CPU_Control *per_cpu = &_Per_CPU_Information[ self ];
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
 
 
-  if ( per_cpu->message != 0 ) {
+  if ( self_cpu->message != 0 ) {
     uint32_t  message;
     ISR_Level level;
 
-    _Per_CPU_Lock_acquire( per_cpu, level );
-    message = per_cpu->message;
-    per_cpu->message = 0;
-    _Per_CPU_Lock_release( per_cpu, level );
+    _Per_CPU_Lock_acquire( self_cpu, level );
+    message = self_cpu->message;
+    self_cpu->message = 0;
+    _Per_CPU_Lock_release( self_cpu, level );
 
     #if defined(RTEMS_DEBUG)
       {
         void *sp = __builtin_frame_address(0);
         if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
-          printk( "ISR on CPU %d -- (0x%02x) (0x%p)\n", self, message, sp );
+          printk(
+            "ISR on CPU %d -- (0x%02x) (0x%p)\n",
+            _Per_CPU_Get_index( self_cpu ),
+            message,
+            sp
+          );
           if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
             printk( "signal to self\n" );
           if ( message & RTEMS_BSP_SMP_SHUTDOWN )
@@ -99,9 +102,9 @@ void rtems_smp_process_interrupt( void )
 
       _Thread_Dispatch_set_disable_level( 0 );
 
-      _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_SHUTDOWN );
+      _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
 
-      _CPU_Fatal_halt( self );
+      _CPU_Fatal_halt( _Per_CPU_Get_index( self_cpu ) );
       /* does not continue past here */
     }
   }
@@ -109,7 +112,7 @@ void rtems_smp_process_interrupt( void )
 
 void _SMP_Send_message( uint32_t cpu, uint32_t message )
 {
-  Per_CPU_Control *per_cpu = &_Per_CPU_Information[ cpu ];
+  Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
   ISR_Level level;
 
   #if defined(RTEMS_DEBUG)
@@ -132,7 +135,7 @@ void _SMP_Broadcast_message( uint32_t message )
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
     if ( cpu != self ) {
-      Per_CPU_Control *per_cpu = &_Per_CPU_Information[ cpu ];
+      Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
       ISR_Level level;
 
       _Per_CPU_Lock_acquire( per_cpu, level );
@@ -151,7 +154,7 @@ void _SMP_Request_other_cores_to_perform_first_context_switch( void )
   uint32_t cpu;
 
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
-    Per_CPU_Control *per_cpu = &_Per_CPU_Information[ cpu ];
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
 
     if ( cpu != self ) {
       _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
@@ -194,7 +197,7 @@ void _SMP_Request_other_cores_to_shutdown( void )
   for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
     if ( cpu != self ) {
       _Per_CPU_Wait_for_state(
-        &_Per_CPU_Information[ cpu ],
+        _Per_CPU_Get_by_index( cpu ),
         PER_CPU_STATE_SHUTDOWN
       );
     }

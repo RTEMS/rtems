@@ -269,7 +269,7 @@ boot_cpu(imps_processor *proc)
   );
 
   reset[1] = (uint32_t)secondary_cpu_initialize;
-  reset[2] = (uint32_t)_Per_CPU_Information[apicid].interrupt_stack_high;
+  reset[2] = (uint32_t)_Per_CPU_Get_by_index(apicid)->interrupt_stack_high;
 
   /*
    *  Generic CPU startup sequence starts here.

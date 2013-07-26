@@ -86,12 +86,13 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
     return 1;
 
   for ( cpu=1 ; cpu < found_cpus ; cpu++ ) {
-    
+    const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+
     #if defined(RTEMS_DEBUG)
       printk( "Waking CPU %d\n", cpu );
     #endif
 
-    bsp_ap_stack = _Per_CPU_Information[cpu].interrupt_stack_high -
+    bsp_ap_stack = per_cpu->interrupt_stack_high -
                       CPU_MINIMUM_STACK_FRAME_SIZE;
     bsp_ap_entry = leon3_secondary_cpu_initialize;
 
@@ -101,9 +102,8 @@ uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
       printk(
         "CPU %d is %s\n",
         cpu,
-        _Per_CPU_Information[cpu].state
-          == PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING ?
-            "online" : "offline"
+        per_cpu->state == PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING ?
+          "online" : "offline"
       );
     #endif
   }

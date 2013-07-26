@@ -233,7 +233,31 @@ typedef struct {
  */
 extern Per_CPU_Control _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
+#if defined( RTEMS_SMP )
+static inline Per_CPU_Control *_Per_CPU_Get( void )
+{
+  return &_Per_CPU_Information[ _SMP_Get_current_processor() ];
+}
+#else
+#define _Per_CPU_Get() ( &_Per_CPU_Information[ 0 ] )
+#endif
+
+static inline Per_CPU_Control *_Per_CPU_Get_by_index( uint32_t index )
+{
+  return &_Per_CPU_Information[ index ];
+}
+
+static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *per_cpu )
+{
+  return ( uint32_t ) ( per_cpu - &_Per_CPU_Information[ 0 ] );
+}
+
 #if defined(RTEMS_SMP)
+static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
+{
+  _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( per_cpu ) );
+}
+
 /**
  *  @brief Set of Pointers to Per CPU Core Information
  *
@@ -280,19 +304,19 @@ void _Per_CPU_Wait_for_state(
  * Thus when built for non-SMP, there should be no performance penalty.
  */
 #define _Thread_Heir \
-  _Per_CPU_Information[_SMP_Get_current_processor()].heir
+  _Per_CPU_Get()->heir
 #define _Thread_Executing \
-  _Per_CPU_Information[_SMP_Get_current_processor()].executing
+  _Per_CPU_Get()->executing
 #define _ISR_Nest_level \
-  _Per_CPU_Information[_SMP_Get_current_processor()].isr_nest_level
+  _Per_CPU_Get()->isr_nest_level
 #define _CPU_Interrupt_stack_low \
-  _Per_CPU_Information[_SMP_Get_current_processor()].interrupt_stack_low
+  _Per_CPU_Get()->interrupt_stack_low
 #define _CPU_Interrupt_stack_high \
-  _Per_CPU_Information[_SMP_Get_current_processor()].interrupt_stack_high
+  _Per_CPU_Get()->interrupt_stack_high
 #define _Thread_Dispatch_necessary \
-  _Per_CPU_Information[_SMP_Get_current_processor()].dispatch_necessary
+  _Per_CPU_Get()->dispatch_necessary
 #define _Thread_Time_of_last_context_switch \
-  _Per_CPU_Information[_SMP_Get_current_processor()].time_of_last_context_switch
+  _Per_CPU_Get()->time_of_last_context_switch
 
 #endif  /* ASM */
 

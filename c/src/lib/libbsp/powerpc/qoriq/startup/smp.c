@@ -87,6 +87,7 @@ static void mmu_config_undo(void)
 
 static void release_core_1(void)
 {
+  const Per_CPU_Control *second_cpu = _Per_CPU_Get_by_index(1);
   uboot_spin_table *spin_table = (uboot_spin_table *) SPIN_TABLE;
   qoriq_mmu_context mmu_context;
 
@@ -96,7 +97,7 @@ static void release_core_1(void)
   qoriq_mmu_write_to_tlb1(&mmu_context, TLB_BEGIN);
 
   spin_table->pir = 1;
-  spin_table->r3_lower = (uint32_t) _Per_CPU_Information[1].interrupt_stack_high;
+  spin_table->r3_lower = (uint32_t) second_cpu->interrupt_stack_high;
   spin_table->addr_upper = 0;
   rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
   ppc_synchronize_data();
@@ -108,13 +109,15 @@ static void release_core_1(void)
 
 void qoriq_secondary_cpu_initialize(void)
 {
+  const Per_CPU_Control *second_cpu = _Per_CPU_Get_by_index(1);
+
   /* Disable decrementer */
   PPC_CLEAR_SPECIAL_PURPOSE_REGISTER_BITS(BOOKE_TCR, BOOKE_TCR_DIE);
 
   /* Initialize exception handler */
   ppc_exc_initialize_with_vector_base(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    (uintptr_t) _Per_CPU_Information[1].interrupt_stack_low,
+    (uintptr_t) second_cpu->interrupt_stack_low,
     rtems_configuration_get_interrupt_stack_size(),
     bsp_exc_vector_base
   );

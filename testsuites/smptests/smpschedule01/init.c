@@ -71,12 +71,12 @@ static bool is_per_cpu_state_ok(void)
   uint32_t i;
 
   for (i = 0; i < n; ++i) {
-    const Thread_Control *thread = _Per_CPU_Information[i].executing;
+    const Thread_Control *thread = _Per_CPU_Get_by_index(i)->executing;
     uint32_t count = 0;
     uint32_t j;
 
     for (j = 0; j < n; ++j) {
-      const Per_CPU_Control *cpu = &_Per_CPU_Information[j];
+      const Per_CPU_Control *cpu = _Per_CPU_Get_by_index(j);
       const Thread_Control *executing = cpu->executing;
       const Thread_Control *heir = cpu->heir;
 

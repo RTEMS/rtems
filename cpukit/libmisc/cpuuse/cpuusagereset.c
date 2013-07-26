@@ -47,7 +47,7 @@ void rtems_cpu_usage_reset( void )
 
     processor_count = rtems_smp_get_processor_count();
     for ( processor = 0 ; processor < processor_count ; ++processor ) {
-      Per_CPU_Control *per_cpu = &_Per_CPU_Information[ processor ];
+      Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
 
       per_cpu->time_of_last_context_switch = CPU_usage_Uptime_at_last_reset;
     }

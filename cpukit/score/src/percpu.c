@@ -39,10 +39,10 @@
     /*
      *  Initialize per cpu pointer table
      */
-    _Per_CPU_Information_p[0] = &_Per_CPU_Information[0];
+    _Per_CPU_Information_p[0] = _Per_CPU_Get_by_index( 0 );
     for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
 
-      Per_CPU_Control *p = &_Per_CPU_Information[cpu];
+      Per_CPU_Control *p = _Per_CPU_Get_by_index( cpu );
 
       _Per_CPU_Information_p[cpu] = p;
 
@@ -68,8 +68,10 @@
     _SMP_Processor_count = max_cpus;
 
     for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
+      const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+
       _Per_CPU_Wait_for_state(
-        &_Per_CPU_Information[ cpu ],
+        per_cpu,
         PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING
       );
     }
