@@ -40,7 +40,7 @@ void *rtems_heap_null_extend(
 }
 #endif
 
-char Malloc_Heap[ 512 ] CPU_STRUCTURE_ALIGNMENT;
+char Malloc_Heap[ 1024 ] CPU_STRUCTURE_ALIGNMENT;
 
 /*
  * Use volatile to prevent compiler optimizations due to the malloc() builtin.
@@ -88,23 +88,23 @@ rtems_task Init(
   puts( "No sbrk() amount" );
 
   sbrk_count = 0;
-  offset     = 128;
+  offset     = 256;
   area.begin = &Malloc_Heap [0];
   area.size  = offset;
   RTEMS_Malloc_Initialize( &area, 1, NULL );
 
   errno = 0;
-  p = malloc( 128 );
+  p = malloc( 256 );
   rtems_test_assert( p == NULL );
   rtems_test_assert( errno == ENOMEM );
   rtems_test_assert( sbrk_count == 0 );
 
-  rtems_heap_set_sbrk_amount( 128 );
+  rtems_heap_set_sbrk_amount( 256 );
 
   puts( "Misaligned extend" );
 
   sbrk_count = 0;
-  offset     = 128;
+  offset     = 256;
   area.begin = &Malloc_Heap [0];
   area.size  = offset;
   RTEMS_Malloc_Initialize( &area, 1, NULL );
@@ -113,14 +113,14 @@ rtems_task Init(
   rtems_test_assert( p != NULL );
   rtems_test_assert( sbrk_count == 0 );
 
-  p = malloc(129);
+  p = malloc(257);
   rtems_test_assert( p != NULL );
   rtems_test_assert( sbrk_count == 1 );
 
   puts( "Not enough sbrk() space" );
 
   sbrk_count = 0;
-  offset     = 128;
+  offset     = 256;
   area.begin = &Malloc_Heap [0];
   area.size  = offset;
   RTEMS_Malloc_Initialize( &area, 1, NULL );
@@ -134,29 +134,29 @@ rtems_task Init(
   puts( "Valid heap extend" );
 
   sbrk_count = 0;
-  offset     = 128;
+  offset     = 256;
   area.begin = &Malloc_Heap [0];
   area.size  = offset;
   RTEMS_Malloc_Initialize( &area, 1, NULL );
 
-  p = malloc( 64 );
+  p = malloc( 128 );
   rtems_test_assert( p != NULL );
   rtems_test_assert( sbrk_count == 0 );
 
-  p = malloc( 64 );
+  p = malloc( 128 );
   rtems_test_assert( p != NULL );
   rtems_test_assert( sbrk_count == 1 );
 
   puts( "Invalid heap extend" );
 
   sbrk_count = -1;
-  offset     = 128;
+  offset     = 256;
   area.begin = &Malloc_Heap [0];
   area.size  = offset;
   RTEMS_Malloc_Initialize( &area, 1, NULL );
 
   errno = 0;
-  p = malloc( 128 );
+  p = malloc( 256 );
   rtems_test_assert( p == NULL );
   rtems_test_assert( errno == ENOMEM );
   rtems_test_assert( sbrk_count == 2 );

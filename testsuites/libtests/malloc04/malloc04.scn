@@ -1,12 +1,12 @@
 *** TEST MALLOC 04 ***
 No sbrk() amount
 Misaligned extend
-sbrk(256)
-Not enough sbrk() space
 sbrk(512)
+Not enough sbrk() space
+sbrk(1024)
 Valid heap extend
-sbrk(128)
+sbrk(256)
 Invalid heap extend
-sbrk(128)
-sbrk(-128)
+sbrk(256)
+sbrk(-256)
 *** END OF TEST MALLOC 04 ***
