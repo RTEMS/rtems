@@ -27,6 +27,7 @@
 #include "bestcomm_api.h"
 #include "bestcomm_glue.h"
 #include "include/mgt5200/sdma.h"
+#include <rtems/score/heapimpl.h>
 
 extern const uint32 taskTableBytes;
 
