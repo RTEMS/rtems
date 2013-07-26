@@ -24,33 +24,13 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/smp.h>
 
-ISR_Level _ISR_SMP_Disable(void)
-{
-  ISR_Level level;
-
-  _ISR_Disable_on_this_core( level );
-  return level;
-}
-
-void _ISR_SMP_Enable(ISR_Level level)
-{
-  _ISR_Enable_on_this_core( level );
-}
-
-void _ISR_SMP_Flash(ISR_Level level)
-{
-  ISR_Level ignored;
-
-  _ISR_SMP_Enable( level );
-  ignored = _ISR_SMP_Disable();
-}
-
 int _ISR_SMP_Enter(void)
 {
   uint32_t isr_nest_level;
   ISR_Level level;
 
-  _ISR_Disable_on_this_core( level );
+  /* FIXME: Where is the corresponding _ISR_Enable()? */
+  _ISR_Disable( level );
 
   isr_nest_level = _ISR_Nest_level++;
 
@@ -66,7 +46,7 @@ int _ISR_SMP_Exit(void)
 
   retval = 0;
 
-  _ISR_Disable_on_this_core( level );
+  _ISR_Disable( level );
 
   _ISR_Nest_level--;
 
@@ -88,7 +68,7 @@ int _ISR_SMP_Exit(void)
       retval = 0;
   #endif
 
-  _ISR_Enable_on_this_core( level );
+  _ISR_Enable( level );
 
   _Thread_Dispatch_decrement_disable_level();
 

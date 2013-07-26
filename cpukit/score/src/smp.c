@@ -98,7 +98,7 @@ void rtems_smp_process_interrupt( void )
     #endif
 
     if ( ( message & RTEMS_BSP_SMP_SHUTDOWN ) != 0 ) {
-      _ISR_Disable_on_this_core( level );
+      _ISR_Disable( level );
 
       _Thread_Dispatch_set_disable_level( 0 );
 

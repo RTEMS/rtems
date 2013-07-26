@@ -41,40 +41,46 @@ extern "C" {
 typedef uint32_t   ISR_Level;
 
 /**
- *  @brief Disable interrupts on this core.
+ *  @brief Disables interrupts on this processor.
  *
- *  This routine disables all interrupts so that a critical section
- *  of code can be executing without being interrupted.
+ *  This macro disables all interrupts on this processor so that a critical
+ *  section of code is protected from concurrent access by interrupts of this
+ *  processor.  Disabling of interrupts disables thread dispatching on the
+ *  processor as well.
  *
- *  @retval The argument @a _level will contain the previous interrupt
- *          mask level.
+ *  On SMP configurations other processors can enter such sections if not
+ *  protected by other means.
+ *
+ *  @param[out] _level The argument @a _level will contain the previous
+ *  interrupt mask level.
  */
-#define _ISR_Disable_on_this_core( _level ) \
+#define _ISR_Disable( _level ) \
   do { \
     _CPU_ISR_Disable( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
 
 /**
- *  @brief Enable interrupts on this core.
+ *  @brief Enables interrupts on this processor.
  *
- *  This routine enables interrupts to the previous interrupt mask
- *  LEVEL.  It is used at the end of a critical section of code to
- *  enable interrupts so they can be processed again.
+ *  This macro restores the interrupt status on the processor with the
+ *  interrupt level value obtained by _ISR_Disable().  It is used at the end of
+ *  a critical section of code to enable interrupts so they can be processed
+ *  again.
  *
- *  @param[in] _level contains the interrupt level mask level
- *             previously returned by @ref _ISR_Disable_on_this_core.
+ *  @param[in] _level The interrupt level previously obtained by
+ *  _ISR_Disable().
  */
-#define _ISR_Enable_on_this_core( _level ) \
+#define _ISR_Enable( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
     _CPU_ISR_Enable( _level ); \
   } while (0)
 
 /**
- *  @brief Temporarily enable interrupts on this core.
+ *  @brief Temporarily enables interrupts on this processor.
  *
- *  This routine temporarily enables interrupts to the previous
+ *  This macro temporarily enables interrupts to the previous
  *  interrupt mask level and then disables all interrupts so that
  *  the caller can continue into the second part of a critical
  *  section.
@@ -87,112 +93,15 @@ typedef uint32_t   ISR_Level;
  *  must be selected with care to ensure that the critical section
  *  properly protects itself.
  *
- *  @param[in] _level contains the interrupt level mask level
- *             previously returned by @ref _ISR_Disable_on_this_core.
+ *  @param[in] _level The interrupt level previously obtained by
+ *  _ISR_Disable().
  */
-#define _ISR_Flash_on_this_core( _level ) \
+#define _ISR_Flash( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
     _CPU_ISR_Flash( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
-
-#if defined( RTEMS_SMP )
-
-/**
- *  @brief Enter interrupt critical section on SMP system.
- *
- *  This method is used to enter an interrupt critical section that
- *  is honored across all cores in an SMP system.
- *
- *  @retval This method returns the previous interrupt mask level.
- */
-ISR_Level _ISR_SMP_Disable(void);
-
-/**
- *  @brief Exit interrupt critical section on SMP system.
- *
- *  This method is used to exit an interrupt critical section that
- *  is honored across all cores in an SMP system.
- *
- *  @param[in] level contains the interrupt level mask level
- *             previously returned by @ref _ISR_SMP_Disable.
- */
-void _ISR_SMP_Enable(ISR_Level level);
-
-/**
- *  @brief Temporarily exit interrupt critical section on SMP system.
- *
- *  This method is used to temporarily exit an interrupt critical section
- *  that is honored across all cores in an SMP system.
- *
- *  @param[in] level contains the interrupt level mask level
- *             previously returned by @ref _ISR_SMP_Disable.
- */
-void _ISR_SMP_Flash(ISR_Level level);
-
-#endif /* defined( RTEMS_SMP ) */
-
-/**
- *  @brief Enter interrupt disable critical section.
- *
- *  This routine enters an interrupt disable critical section.  When
- *  in an SMP configuration, this involves obtaining a spinlock to ensure
- *  that only one core is inside an interrupt disable critical section.
- *  When on a single core system, this only involves disabling local
- *  CPU interrupts.
- *
- *  @retval The argument @a _level will contain the previous interrupt
- *          mask level.
- */
-#if defined( RTEMS_SMP )
-  #define _ISR_Disable( _level ) \
-    _level = _ISR_SMP_Disable();
-#else
-  #define _ISR_Disable( _level ) \
-    _ISR_Disable_on_this_core( _level );
-#endif
-
-/**
- *  @brief Exits interrupt disable critical section.
- *
- *  This routine exits an interrupt disable critical section.  When
- *  in an SMP configuration, this involves releasing a spinlock.
- *  When on a single core system, this only involves disabling local
- *  CPU interrupts.
- *
- *  @retval The argument @a _level will contain the previous interrupt
- *          mask level.
- */
-#if defined( RTEMS_SMP )
-  #define _ISR_Enable( _level ) \
-    _ISR_SMP_Enable( _level );
-#else
-  #define _ISR_Enable( _level ) \
-    _ISR_Enable_on_this_core( _level );
-#endif
-
-/**
- *  @brief Temporarily exit interrupt disable critical section.
- *
- *  This routine is used to temporarily enable interrupts
- *  during a long critical section.  It is used in long sections of
- *  critical code when a point is reached at which interrupts can
- *  be temporarily enabled.  Deciding where to flash interrupts
- *  in a long critical section is often difficult and the point
- *  must be selected with care to ensure that the critical section
- *  properly protects itself.
- *
- *  @retval The argument @a _level will contain the previous interrupt
- *          mask level.
- */
-#if defined( RTEMS_SMP )
-  #define _ISR_Flash( _level ) \
-    _ISR_SMP_Flash( _level );
-#else
-  #define _ISR_Flash( _level ) \
-    _ISR_Flash_on_this_core( _level );
-#endif
 
 /**
  *  @brief Return current interrupt level.
