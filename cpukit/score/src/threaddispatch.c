@@ -70,6 +70,8 @@ void _Thread_Dispatch( void )
      *  If necessary, send dispatch request to other cores.
      */
     _SMP_Request_other_cores_to_dispatch();
+  #else
+    _Thread_Dispatch_set_disable_level( 1 );
   #endif
 
   /*
@@ -82,8 +84,6 @@ void _Thread_Dispatch( void )
     #if defined(RTEMS_SMP)
       executing->is_executing = false;
       heir->is_executing = true;
-    #else
-      _Thread_Dispatch_set_disable_level( 1 );
     #endif
     _Thread_Dispatch_necessary = false;
     _Thread_Executing = heir;
