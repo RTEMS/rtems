@@ -3,7 +3,7 @@
  *
  * @brief RTEMS RFS File Handlers
  * @ingroup rtems_rfs
- * 
+ *
  * This file contains the set of handlers used to process operations on
  * RFS file nodes.
  */
@@ -55,7 +55,7 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
     printf("rtems-rfs: file-open: path:%s ino:%" PRId32 " flags:%04i mode:%04" PRIu32 "\n",
-           pathname, ino, flags, mode);
+           pathname, ino, flags, (uint32_t) mode);
 
   rtems_rfs_rtems_lock (fs);
 
@@ -233,7 +233,13 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
     rc = rtems_rfs_file_io_start (file, &size, false);
     if (rc)
     {
-      write = rtems_rfs_rtems_error ("file-write: write open", rc);
+      /*
+       * If we have run out of space and have written some data return that
+       * amount first as the inode will have accounted for it. This means
+       * there was no error and the return code from can be ignored.
+       */
+      if (!write)
+        write = rtems_rfs_rtems_error ("file-write: write open", rc);
       break;
     }
 
