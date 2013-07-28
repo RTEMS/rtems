@@ -13,9 +13,10 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #define CONFIGURE_INIT
 #include "system.h"
+
+#include <rtems/score/objectimpl.h>
 
 /* These functions have both macro and function incarnations */
 #undef rtems_build_id

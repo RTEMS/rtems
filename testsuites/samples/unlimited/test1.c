@@ -26,6 +26,8 @@
 #include "system.h"
 #include "tmacros.h"
 
+#include <rtems/score/objectimpl.h>
+
 void test1()
 {
   bool                 auto_extend;
