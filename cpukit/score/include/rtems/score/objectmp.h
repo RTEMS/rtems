@@ -19,6 +19,10 @@
 #ifndef _RTEMS_SCORE_OBJECTMP_H
 #define _RTEMS_SCORE_OBJECTMP_H
 
+#ifndef _RTEMS_SCORE_OBJECTIMPL_H
+# error "Never use <rtems/rtems/objectmp.h> directly; include <rtems/rtems/objectimpl.h> instead."
+#endif
+
 #include <rtems/score/chainimpl.h>
 
 #ifdef __cplusplus
@@ -35,20 +39,6 @@ extern "C" {
  *  knows objects from all of the nodes in the system.
  */
 /**@{*/
-
-/**
- *  This defines the Global Object Control Block used to manage
- *  objects resident on other nodes.  It is derived from Object.
- */
-typedef struct {
-  /** This is an object control structure. */
-  Objects_Control Object;
-  /** This is the name of the object.  Using an unsigned thirty two
-   *  bit value is broken but works.  If any API is MP with variable
-   *  length names .. BOOM!!!!
-   */
-  uint32_t        name;
-}   Objects_MP_Control;
 
 /**
  *  @brief Intializes the inactive global object chain

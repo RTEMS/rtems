@@ -233,6 +233,22 @@ typedef struct {
   Objects_Name   name;
 } Objects_Control;
 
+#if defined( RTEMS_MULTIPROCESSING )
+/**
+ *  This defines the Global Object Control Block used to manage
+ *  objects resident on other nodes.  It is derived from Object.
+ */
+typedef struct {
+  /** This is an object control structure. */
+  Objects_Control Object;
+  /** This is the name of the object.  Using an unsigned thirty two
+   *  bit value is broken but works.  If any API is MP with variable
+   *  length names .. BOOM!!!!
+   */
+  uint32_t        name;
+}   Objects_MP_Control;
+#endif
+
 /**
  *  No object can have this ID.
  */
