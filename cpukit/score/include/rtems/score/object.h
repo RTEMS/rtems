@@ -220,6 +220,9 @@ typedef enum {
   OBJECTS_POSIX_API    = 3
 } Objects_APIs;
 
+/** This macro is used to generically specify the last API index. */
+#define OBJECTS_APIS_LAST OBJECTS_POSIX_API
+
 /**
  *  The following defines the Object Control Block used to manage
  *  each object local to this node.
@@ -403,6 +406,26 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
          #endif
          (( (Objects_Id) index )     << OBJECTS_INDEX_START_BIT);
 }
+
+/**
+ * Returns if the object maximum specifies unlimited objects.
+ *
+ * @param[in] maximum The object maximum specification.
+ *
+ * @retval true Unlimited objects are available.
+ * @retval false The object count is fixed.
+ */
+RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
+{
+  return (maximum & OBJECTS_UNLIMITED_OBJECTS) != 0;
+}
+
+/*
+ * We cannot use an inline function for this since it may be evaluated at
+ * compile time.
+ */
+#define _Objects_Maximum_per_allocation( maximum ) \
+  ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
 
 /**@}*/
 /**@}*/

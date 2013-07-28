@@ -42,9 +42,6 @@ typedef bool    (*Objects_Name_comparators)(
   uint16_t     /* length */
 );
 
-/** This macro is used to generically specify the last API index. */
-#define OBJECTS_APIS_LAST OBJECTS_POSIX_API
-
 /**
  *  This enumerated type is used in the class field of the object ID
  *  for RTEMS internal object classes.
@@ -852,26 +849,6 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
     the_object->name.name_p = name;
   #endif
 }
-
-/**
- * Returns if the object maximum specifies unlimited objects.
- *
- * @param[in] maximum The object maximum specification.
- *
- * @retval true Unlimited objects are available.
- * @retval false The object count is fixed.
- */
-RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
-{
-  return (maximum & OBJECTS_UNLIMITED_OBJECTS) != 0;
-}
-
-/*
- * We cannot use an inline function for this since it may be evaluated at
- * compile time.
- */
-#define _Objects_Maximum_per_allocation( maximum ) \
-  ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
 
 /**
  * @brief Puts back an object obtained with _Objects_Get().
