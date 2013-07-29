@@ -20,6 +20,7 @@ SUBDIRS += smpatomic06
 SUBDIRS += smpatomic07
 SUBDIRS += smplock01
 SUBDIRS += smpschedule01
+SUBDIRS += smpsignal01
 SUBDIRS += smpunsupported01
 endif
 
