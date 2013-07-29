@@ -47,9 +47,7 @@ rtems_status_code rtems_signal_send(
       if ( ! _ASR_Is_null_handler( asr->handler ) ) {
         if ( asr->is_enabled ) {
           _ASR_Post_signals( signal_set, &asr->signals_posted );
-
-          if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-            _Thread_Dispatch_necessary = true;
+          _Thread_Signal_notification( the_thread );
         } else {
           _ASR_Post_signals( signal_set, &asr->signals_pending );
         }

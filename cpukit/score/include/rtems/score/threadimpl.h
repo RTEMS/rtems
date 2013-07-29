@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_THREADIMPL_H
 
 #include <rtems/score/thread.h>
+#include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
 
@@ -655,6 +656,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_if_necessary(
       _Thread_Dispatch();
     }
   }
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
+{
+  if ( _ISR_Is_in_progress() && _Thread_Is_executing( thread ) )
+    _Thread_Dispatch_necessary = true;
 }
 
 #if !defined(__DYNAMIC_REENT__)
