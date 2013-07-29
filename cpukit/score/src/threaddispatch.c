@@ -105,17 +105,10 @@ void _Thread_Dispatch( void )
     _ISR_Enable( level );
 
     #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-      {
-        Timestamp_Control uptime, ran;
-        _TOD_Get_uptime( &uptime );
-        _Timestamp_Subtract(
-          &_Thread_Time_of_last_context_switch,
-          &uptime,
-          &ran
-        );
-        _Timestamp_Add_to( &executing->cpu_time_used, &ran );
-        _Thread_Time_of_last_context_switch = uptime;
-      }
+      _Thread_Update_cpu_time_used(
+        executing,
+        &_Thread_Time_of_last_context_switch
+      );
     #else
       {
         _TOD_Get_uptime( &_Thread_Time_of_last_context_switch );

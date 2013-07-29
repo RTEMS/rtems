@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/tod.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -649,6 +650,24 @@ RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
     }
 #endif
   }
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Update_cpu_time_used(
+  Thread_Control *executing,
+  Timestamp_Control *time_of_last_context_switch
+)
+{
+  Timestamp_Control uptime;
+  Timestamp_Control ran;
+
+  _TOD_Get_uptime( &uptime );
+  _Timestamp_Subtract(
+    time_of_last_context_switch,
+    &uptime,
+    &ran
+  );
+  *time_of_last_context_switch = uptime;
+  _Timestamp_Add_to( &executing->cpu_time_used, &ran );
 }
 
 #if !defined(__DYNAMIC_REENT__)
