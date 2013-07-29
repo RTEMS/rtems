@@ -22,6 +22,9 @@ SUBDIRS += smplock01
 SUBDIRS += smpschedule01
 SUBDIRS += smpsignal01
 SUBDIRS += smpunsupported01
+if HAS_POSIX
+SUBDIRS += smppsxsignal01
+endif
 endif
 
 include $(top_srcdir)/../automake/subdirs.am
