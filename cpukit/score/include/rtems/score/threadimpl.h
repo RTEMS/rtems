@@ -632,32 +632,6 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_global_exit_status( void )
   return idle->Wait.return_code;
 }
 
-/**
- * @brief Issues a thread dispatch if necessary.
- *
- * @param[in] executing The executing thread.
- * @param[in] needs_asr_dispatching Indicates whether or not the API
- *            level signals are pending and a dispatch is necessary.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_if_necessary(
-  Thread_Control *executing,
-  bool            needs_asr_dispatching
-)
-{
-  if ( _Thread_Dispatch_is_enabled() ) {
-    bool dispatch_necessary = needs_asr_dispatching;
-
-    if ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) {
-      dispatch_necessary = true;
-      _Thread_Dispatch_necessary = dispatch_necessary;
-    }
-
-    if ( dispatch_necessary ) {
-      _Thread_Dispatch();
-    }
-  }
-}
-
 RTEMS_INLINE_ROUTINE void _Thread_Signal_notification( Thread_Control *thread )
 {
   if ( _ISR_Is_in_progress() && _Thread_Is_executing( thread ) )
