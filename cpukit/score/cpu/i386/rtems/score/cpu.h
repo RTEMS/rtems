@@ -493,10 +493,11 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define _CPU_Fatal_halt( _error ) \
   { \
+    uint32_t _error_lvalue = ( _error ); \
     __asm__ volatile ( "cli ; \
                     movl %0,%%eax ; \
                     hlt" \
-                    : "=r" ((_error)) : "0" ((_error)) \
+                    : "=r" ((_error_lvalue)) : "0" ((_error_lvalue)) \
     ); \
   }
 
