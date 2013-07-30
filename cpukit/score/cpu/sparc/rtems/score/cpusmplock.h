@@ -73,7 +73,7 @@ static inline void _CPU_SMP_lock_Acquire( CPU_SMP_lock_Control *lock )
 {
   do {
     while ( lock->locked ) {
-      /* Do nothing */
+      RTEMS_COMPILER_MEMORY_BARRIER();
     }
   } while ( _SPARC_Atomic_swap( &lock->locked, 1 ) );
 }
