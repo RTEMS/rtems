@@ -55,6 +55,7 @@
 
 #include <bsp/apic.h>
 #include <bsp/smp-imps.h>
+#include <bsp/irq.h>
 
 /*
  *  XXXXX  The following absolutely must be defined!!!
@@ -242,11 +243,11 @@ send_ipi(unsigned int dst, unsigned int v)
  *  This must be modified to perform whatever OS-specific initialization
  *  that is required.
  */
-int
+static int
 boot_cpu(imps_processor *proc)
 {
   int apicid = proc->apic_id, success = 1;
-  unsigned bootaddr, accept_status;
+  unsigned bootaddr;
   unsigned bios_reset_vector = PHYS_TO_VIRTUAL(BIOS_RESET_VECTOR);
 
   /*
@@ -281,7 +282,7 @@ boot_cpu(imps_processor *proc)
 
   /* clear the APIC error register */
   IMPS_LAPIC_WRITE(LAPIC_ESR, 0);
-  accept_status = IMPS_LAPIC_READ(LAPIC_ESR);
+  IMPS_LAPIC_READ(LAPIC_ESR);
 
   /* assert INIT IPI */
   send_ipi(
@@ -313,7 +314,7 @@ boot_cpu(imps_processor *proc)
 
   /* clear the APIC error register */
   IMPS_LAPIC_WRITE(LAPIC_ESR, 0);
-  accept_status = IMPS_LAPIC_READ(LAPIC_ESR);
+  IMPS_LAPIC_READ(LAPIC_ESR);
 
   /* clean up BIOS reset vector */
   CMOS_WRITE_BYTE(CMOS_RESET_CODE, 0);
@@ -680,7 +681,7 @@ imps_force(int ncpus)
  *
  *  Function finished.
  */
-int
+static int
 imps_probe(void)
 {
   /*
@@ -735,25 +736,22 @@ imps_probe(void)
 /*
  *  RTEMS SMP BSP Support
  */
-void smp_apic_ack(void)
+static void smp_apic_ack(void)
 {
   (void) IMPS_LAPIC_READ(LAPIC_SPIV);  /* dummy read */
   IMPS_LAPIC_WRITE(LAPIC_EOI, 0 );     /* ACK the interrupt */
 }
 
-rtems_isr ap_ipi_isr(
-  rtems_vector_number vector
-)
+static void ap_ipi_isr(void *arg)
 {
+  (void) arg;
+
   smp_apic_ack();
 
   rtems_smp_process_interrupt();
 }
 
-#include <rtems/irq.h>
-
-extern void bsp_reset(void);
-void ipi_install_irq(void)
+static void ipi_install_irq(void)
 {
   rtems_status_code status;
 
