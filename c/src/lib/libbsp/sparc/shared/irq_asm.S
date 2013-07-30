@@ -255,16 +255,18 @@ dont_fix_pil2:
 SYM(_ISR_PER_CPU):
 
 #if defined(RTEMS_SMP)
-        sethi    %hi(_Per_CPU_Information_p), %l5
-        add      %l5, %lo(_Per_CPU_Information_p), %l5
+        sethi    %hi(_Per_CPU_Information), %l5
+        add      %l5, %lo(_Per_CPU_Information), %l5
     #if BSP_LEON3_SMP 
 	/* LEON3 SMP support */
 	rd	%asr17, %l7
 	srl	%l7, 28, %l7	/* CPU number is upper 4 bits so shift */
-	sll	%l7, 2, %l7	/* l7 = offset */
-	add	%l5, %l7, %l5
+    #else
+        mov	0, %l7
+        nop
     #endif
-        ld       [%l5], %l5	/* l5 = pointer to per CPU */
+	sll	%l7, PER_CPU_CONTROL_SIZE_LOG2, %l7	/* l7 = offset */
+	add	%l5, %l7, %l5	/* l5 = pointer to per CPU */
 
         /*
          *  On multi-core system, we need to use SMP safe versions
@@ -456,19 +458,18 @@ isr_dispatch:
          */
 
 #if defined(RTEMS_SMP)
-        sethi    %hi(_Per_CPU_Information_p), %l5
-        ld       [%l5 + %lo(_Per_CPU_Information_p)], %l5
+        sethi    %hi(_Per_CPU_Information), %l5
+        add      %l5, %lo(_Per_CPU_Information), %l5
     #if BSP_LEON3_SMP 
 	/* LEON3 SMP support */
 	rd	%asr17, %l7
 	srl	%l7, 28, %l7	/* CPU number is upper 4 bits so shift */
-	sll	%l7, 2, %l7	/* l7 = offset */
-	add	%l5, %l7, %l5
     #else
-        nop
+        mov	0, %l7
         nop
     #endif
-        ld       [%l5], %l5	/* l5 = pointer to per CPU */
+	sll	%l7, PER_CPU_CONTROL_SIZE_LOG2, %l7	/* l7 = offset */
+	add	%l5, %l7, %l5	/* l5 = pointer to per CPU */
 #else
         sethi    %hi(_Per_CPU_Information), %l5
         add      %l5, %lo(_Per_CPU_Information), %l5

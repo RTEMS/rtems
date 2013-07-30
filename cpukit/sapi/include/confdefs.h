@@ -2396,8 +2396,7 @@ const rtems_libio_helper rtems_fs_init_helper =
   * Instantiate the Per CPU information based upon the user configuration.
   */
  #if defined(CONFIGURE_INIT)
-   Per_CPU_Control _Per_CPU_Information[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
-   Per_CPU_Control *_Per_CPU_Information_p[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
+   Per_CPU_Control_envelope _Per_CPU_Information[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
  #endif
 
 #endif

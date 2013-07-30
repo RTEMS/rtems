@@ -33,6 +33,18 @@
 extern "C" {
 #endif
 
+#if defined( RTEMS_SMP )
+  /*
+   * This ensures that on SMP configurations the individual per-CPU controls
+   * are on different cache lines to prevent false sharing.  This define can be
+   * used in assembler code to easily get the per-CPU control for a particular
+   * processor.
+   */
+  #define PER_CPU_CONTROL_SIZE_LOG2 7
+
+  #define PER_CPU_CONTROL_SIZE ( 1 << PER_CPU_CONTROL_SIZE_LOG2 )
+#endif
+
 #if !defined( ASM )
 
 #ifndef __THREAD_CONTROL_DEFINED__
@@ -184,32 +196,47 @@ typedef struct {
   #endif
 } Per_CPU_Control;
 
+#if defined( RTEMS_SMP )
+typedef struct {
+  Per_CPU_Control per_cpu;
+  char unused_space_for_cache_line_alignment
+    [ PER_CPU_CONTROL_SIZE - sizeof( Per_CPU_Control ) ];
+} Per_CPU_Control_envelope;
+#else
+typedef struct {
+  Per_CPU_Control per_cpu;
+} Per_CPU_Control_envelope;
+#endif
+
 /**
  *  @brief Set of Per CPU Core Information
  *
  *  This is an array of per CPU core information.
  */
-extern Per_CPU_Control _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
+extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
 {
   _Assert_Thread_dispatching_repressed();
 
-  return &_Per_CPU_Information[ _SMP_Get_current_processor() ];
+  return &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu;
 }
 #else
-#define _Per_CPU_Get() ( &_Per_CPU_Information[ 0 ] )
+#define _Per_CPU_Get() ( &_Per_CPU_Information[ 0 ].per_cpu )
 #endif
 
 static inline Per_CPU_Control *_Per_CPU_Get_by_index( uint32_t index )
 {
-  return &_Per_CPU_Information[ index ];
+  return &_Per_CPU_Information[ index ].per_cpu;
 }
 
 static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *per_cpu )
 {
-  return ( uint32_t ) ( per_cpu - &_Per_CPU_Information[ 0 ] );
+  const Per_CPU_Control_envelope *per_cpu_envelope =
+    ( const Per_CPU_Control_envelope * ) per_cpu;
+
+  return ( uint32_t ) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
 }
 
 #if defined( RTEMS_SMP )
@@ -218,15 +245,6 @@ static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
 {
   _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( per_cpu ) );
 }
-
-/**
- *  @brief Set of Pointers to Per CPU Core Information
- *
- *  This is an array of pointers to each CPU's per CPU data structure.
- *  It should be simpler to retrieve this pointer in assembly language
- *  that to calculate the array offset.
- */
-extern Per_CPU_Control *_Per_CPU_Information_p[];
 
 /**
  *  @brief Initialize SMP Handler

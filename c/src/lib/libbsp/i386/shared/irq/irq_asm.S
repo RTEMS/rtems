@@ -99,9 +99,10 @@ SYM (_ISR_Handler):
 .check_stack_switch:
 	movl      esp, ebp                  /* ebp = previous stack pointer */
 #if defined(RTEMS_SMP) && defined(BSP_HAS_SMP)
-	movl     $SYM(_Per_CPU_Information_p), ebx
 	call     SYM(_CPU_SMP_Get_current_processor)
-	mov      (ebx,eax,4), ebx
+	sall     $PER_CPU_CONTROL_SIZE_LOG2, eax
+	addl     $SYM(_Per_CPU_Information), eax
+	movl     eax, ebx
         pushl    ecx
         call     SYM(_ISR_SMP_Enter)
         popl     ecx

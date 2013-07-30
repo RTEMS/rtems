@@ -26,10 +26,17 @@ RTEMS_STATIC_ASSERT(
   CPU_SIZEOF_POINTER
 );
 
-#ifdef __SIZEOF_POINTER__
+#if defined( __SIZEOF_POINTER__ )
   RTEMS_STATIC_ASSERT(
     CPU_SIZEOF_POINTER == __SIZEOF_POINTER__,
     __SIZEOF_POINTER__
+  );
+#endif
+
+#if defined( RTEMS_SMP )
+  RTEMS_STATIC_ASSERT(
+    sizeof( Per_CPU_Control_envelope ) == PER_CPU_CONTROL_SIZE,
+    PER_CPU_CONTROL_SIZE
   );
 #endif
 

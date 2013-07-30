@@ -39,12 +39,9 @@
     /*
      *  Initialize per cpu pointer table
      */
-    _Per_CPU_Information_p[0] = _Per_CPU_Get_by_index( 0 );
     for ( cpu = 1 ; cpu < max_cpus; ++cpu ) {
 
       Per_CPU_Control *p = _Per_CPU_Get_by_index( cpu );
-
-      _Per_CPU_Information_p[cpu] = p;
 
 #if CPU_ALLOCATE_INTERRUPT_STACK == TRUE
       {
@@ -101,5 +98,5 @@
    * statically allocated per cpu structure.  And the fields are initialized
    * as individual elements just like it has always been done.
    */
-  Per_CPU_Control _Per_CPU_Information[1];
+  Per_CPU_Control_envelope _Per_CPU_Information[1];
 #endif
