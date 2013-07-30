@@ -19,7 +19,7 @@
 
 #include <rtems/score/cpu.h>
 
-#ifdef ASM
+#if defined( ASM )
   #include <rtems/asm.h>
 #else
   #include <rtems/score/assert.h>
@@ -27,6 +27,17 @@
   #include <rtems/score/timestamp.h>
   #include <rtems/score/smplock.h>
   #include <rtems/score/smp.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if !defined( ASM )
+
+#ifndef __THREAD_CONTROL_DEFINED__
+#define __THREAD_CONTROL_DEFINED__
+typedef struct Thread_Control_struct Thread_Control;
 #endif
 
 /**
@@ -42,19 +53,7 @@
 
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifndef ASM
-#include <rtems/score/timestamp.h>
-
-#ifndef __THREAD_CONTROL_DEFINED__
-#define __THREAD_CONTROL_DEFINED__
-typedef struct Thread_Control_struct Thread_Control;
-#endif
-
-#ifdef RTEMS_SMP
+#if defined( RTEMS_SMP )
 
 #if CPU_USE_DEFERRED_FP_SWITCH == TRUE
   #error "deferred FP switch not implemented for SMP"
@@ -122,7 +121,7 @@ typedef enum {
   PER_CPU_STATE_SHUTDOWN
 } Per_CPU_State;
 
-#endif /* RTEMS_SMP */
+#endif /* defined( RTEMS_SMP ) */
 
 /**
  *  @brief Per CPU Core Structure
@@ -163,7 +162,7 @@ typedef struct {
   /** This is the time of the last context switch on this CPU. */
   Timestamp_Control time_of_last_context_switch;
 
-  #if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
     /** This element is used to lock this structure */
     SMP_lock_Control lock;
 
@@ -184,48 +183,6 @@ typedef struct {
     Per_CPU_State state;
   #endif
 } Per_CPU_Control;
-#endif
-
-#if defined(ASM) || defined(_RTEMS_PERCPU_DEFINE_OFFSETS)
-
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
-    (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  /*
-   *  If this CPU target lets RTEMS allocates the interrupt stack, then
-   *  we need to have places in the per CPU table to hold them.
-   */
-  #define PER_CPU_INTERRUPT_STACK_LOW \
-    0
-  #define PER_CPU_INTERRUPT_STACK_HIGH \
-    PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
-  #define PER_CPU_END_STACK             \
-    PER_CPU_INTERRUPT_STACK_HIGH + CPU_SIZEOF_POINTER
-
-  #define INTERRUPT_STACK_LOW \
-    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
-  #define INTERRUPT_STACK_HIGH \
-    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
-#else
-  #define PER_CPU_END_STACK \
-    0
-#endif
-
-/*
- *  These are the offsets of the required elements in the per CPU table.
- */
-#define PER_CPU_ISR_NEST_LEVEL \
-  PER_CPU_END_STACK
-#define PER_CPU_DISPATCH_NEEDED \
-  PER_CPU_ISR_NEST_LEVEL + 4
-
-#define ISR_NEST_LEVEL \
-  (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
-#define DISPATCH_NEEDED \
-  (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
-
-#endif /* defined(ASM) || defined(_RTEMS_PERCPU_DEFINE_OFFSETS) */
-
-#ifndef ASM
 
 /**
  *  @brief Set of Per CPU Core Information
@@ -255,7 +212,8 @@ static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *per_cpu )
   return ( uint32_t ) ( per_cpu - &_Per_CPU_Information[ 0 ] );
 }
 
-#if defined(RTEMS_SMP)
+#if defined( RTEMS_SMP )
+
 static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *per_cpu )
 {
   _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( per_cpu ) );
@@ -300,7 +258,7 @@ void _Per_CPU_Wait_for_state(
 #define _Per_CPU_Lock_release( per_cpu, isr_cookie ) \
   _SMP_lock_Release_and_ISR_enable( &( per_cpu )->lock, isr_cookie )
 
-#endif
+#endif /* defined( RTEMS_SMP ) */
 
 /*
  * On a non SMP system, the _SMP_Get_current_processor() is defined to 0.
@@ -321,13 +279,52 @@ void _Per_CPU_Wait_for_state(
 #define _Thread_Time_of_last_context_switch \
   _Per_CPU_Get()->time_of_last_context_switch
 
-#endif  /* ASM */
+/**@}*/
+
+#endif /* !defined( ASM ) */
+
+#if defined( ASM ) || defined( _RTEMS_PERCPU_DEFINE_OFFSETS )
+
+#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
+    (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
+  /*
+   *  If this CPU target lets RTEMS allocates the interrupt stack, then
+   *  we need to have places in the per CPU table to hold them.
+   */
+  #define PER_CPU_INTERRUPT_STACK_LOW \
+    0
+  #define PER_CPU_INTERRUPT_STACK_HIGH \
+    PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
+  #define PER_CPU_END_STACK             \
+    PER_CPU_INTERRUPT_STACK_HIGH + CPU_SIZEOF_POINTER
+
+  #define INTERRUPT_STACK_LOW \
+    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
+  #define INTERRUPT_STACK_HIGH \
+    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
+#else
+  #define PER_CPU_END_STACK \
+    0
+#endif
+
+/*
+ *  These are the offsets of the required elements in the per CPU table.
+ */
+#define PER_CPU_ISR_NEST_LEVEL \
+  PER_CPU_END_STACK
+#define PER_CPU_DISPATCH_NEEDED \
+  PER_CPU_ISR_NEST_LEVEL + 4
+
+#define ISR_NEST_LEVEL \
+  (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
+#define DISPATCH_NEEDED \
+  (SYM(_Per_CPU_Information) + PER_CPU_DISPATCH_NEEDED)
+
+#endif /* defined( ASM ) || defined( _RTEMS_PERCPU_DEFINE_OFFSETS ) */
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */
