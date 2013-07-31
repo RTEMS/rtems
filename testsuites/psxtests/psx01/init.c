@@ -18,7 +18,7 @@
 #include "system.h"
 #include "pritime.h"
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 void *POSIX_Init(
   void *argument

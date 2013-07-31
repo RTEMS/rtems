@@ -20,7 +20,7 @@
 
 #include <rtems/cpuuse.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 static void CPU_usage_Per_thread_handler(

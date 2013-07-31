@@ -15,8 +15,8 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_SCORE_TOD_H
-#define _RTEMS_SCORE_TOD_H
+#ifndef _RTEMS_SCORE_TODIMPL_H
+#define _RTEMS_SCORE_TODIMPL_H
 
 #include <rtems/score/basedefs.h>
 #include <rtems/score/timestamp.h>

@@ -38,7 +38,7 @@
 #include <fcntl.h>
 #include <mqueue.h>
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>

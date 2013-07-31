@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/score/timespec.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 void _Timespec_Divide(
   const struct timespec *lhs,

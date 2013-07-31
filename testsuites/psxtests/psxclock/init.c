@@ -17,7 +17,7 @@
 #include "pmacros.h"
 #include "pritime.h"
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

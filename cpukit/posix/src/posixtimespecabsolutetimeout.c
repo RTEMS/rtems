@@ -28,7 +28,7 @@
 
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/time.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 
 /*

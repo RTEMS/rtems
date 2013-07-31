@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/rtems/clock.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 #define TOD_SECONDS_AT_2100_03_01_00_00 4107538800UL
 

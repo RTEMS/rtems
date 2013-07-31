@@ -25,7 +25,7 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/threaddispatch.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 static void _POSIX_signals_Ualarm_TSR( Objects_Id id, void *argument );

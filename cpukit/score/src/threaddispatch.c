@@ -22,7 +22,7 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 

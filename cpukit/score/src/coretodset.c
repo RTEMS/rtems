@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/watchdogimpl.h>
 

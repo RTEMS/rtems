@@ -17,7 +17,7 @@
 #include "system.h"
 #include <errno.h>
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 #define MUTEX_BAD_ID 0xfffffffe
 

@@ -23,7 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 #ifdef __cplusplus
 extern "C" {

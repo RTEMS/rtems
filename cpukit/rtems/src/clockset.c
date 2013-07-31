@@ -20,7 +20,7 @@
 
 #include <rtems/rtems/clock.h>
 #include <rtems/score/threaddispatch.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 
 rtems_status_code rtems_clock_set(

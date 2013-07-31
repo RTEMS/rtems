@@ -30,7 +30,7 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
 static Timer_server_Control _Timer_server_Default;

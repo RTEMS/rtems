@@ -24,7 +24,7 @@
 #endif
 
 #include <rtems/rtems/clock.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 void rtems_clock_get_uptime_timeval( struct timeval *uptime )
 {

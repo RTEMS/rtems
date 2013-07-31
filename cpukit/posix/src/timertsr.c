@@ -27,7 +27,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/ptimer.h>
 #include <rtems/posix/timerimpl.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 /*
  *  This is the operation that is run when a timer expires

@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/rtems/clock.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 rtems_status_code rtems_clock_get_seconds_since_epoch(
   rtems_interval *the_interval

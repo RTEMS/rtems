@@ -16,7 +16,7 @@
 #endif
 
 #include <rtems/score/timespec.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 
 /**

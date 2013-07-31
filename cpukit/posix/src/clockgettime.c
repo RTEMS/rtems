@@ -21,7 +21,7 @@
 #include <time.h>
 #include <errno.h>
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
 
 /*

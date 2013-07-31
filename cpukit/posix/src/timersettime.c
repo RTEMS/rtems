@@ -26,7 +26,7 @@
 #include <rtems/posix/time.h>
 #include <rtems/posix/ptimer.h>
 #include <rtems/posix/timerimpl.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/seterr.h>
 

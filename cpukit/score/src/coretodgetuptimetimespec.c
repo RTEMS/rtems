@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 void _TOD_Get_uptime_as_timespec(
   struct timespec *uptime
