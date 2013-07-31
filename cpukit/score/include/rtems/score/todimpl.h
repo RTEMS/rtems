@@ -300,6 +300,11 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
 }
 
+RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )
+{
+  return _TOD.is_set;
+}
+
 /**@}*/
 
 #ifdef __cplusplus
