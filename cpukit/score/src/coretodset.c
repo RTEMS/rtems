@@ -31,7 +31,6 @@ void _TOD_Set_with_timestamp(
   Watchdog_Interval seconds_now;
 
   _Thread_Disable_dispatch();
-  _TOD_Deactivate();
 
   seconds_now = _TOD_Seconds_since_epoch();
 
@@ -44,6 +43,5 @@ void _TOD_Set_with_timestamp(
   _TOD.seconds_trigger = nanoseconds;
   _TOD.is_set = true;
 
-  _TOD_Activate();
   _Thread_Enable_dispatch();
 }

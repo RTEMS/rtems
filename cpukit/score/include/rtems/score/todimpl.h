@@ -285,24 +285,6 @@ uint32_t TOD_TICKS_PER_SECOND_method(void);
 #define TOD_TICKS_PER_SECOND TOD_TICKS_PER_SECOND_method()
 
 /**
- * This routine deactivates updating of the current time of day.
- */
-
-RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
-{
-  /* XXX do we need something now that we are using timespec for TOD */
-}
-
-/**
- * This routine activates updating of the current time of day.
- */
-
-RTEMS_INLINE_ROUTINE void _TOD_Activate( void )
-{
-  /* XXX do we need something now that we are using timespec for TOD */
-}
-
-/**
  * This routine returns a timeval based upon the internal timespec format TOD.
  */
 

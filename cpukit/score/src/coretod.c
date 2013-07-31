@@ -30,5 +30,4 @@ void _TOD_Handler_initialization(void)
 
   /* TOD has not been set */
   _TOD.is_set = false;
-  _TOD_Activate();
 }
