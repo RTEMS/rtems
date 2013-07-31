@@ -24,8 +24,10 @@
 
 void _TOD_Tickle_ticks( void )
 {
-  Timestamp_Control tick;
-  uint32_t          nanoseconds_per_tick;
+  TOD_Control       *tod = &_TOD;
+  ISR_Level          level;
+  Timestamp_Control  tick;
+  uint32_t           nanoseconds_per_tick;
 
   nanoseconds_per_tick = rtems_configuration_get_nanoseconds_per_tick();
 
@@ -35,12 +37,15 @@ void _TOD_Tickle_ticks( void )
   /* Update the counter of ticks since boot */
   _Watchdog_Ticks_since_boot += 1;
 
+  _TOD_Acquire( tod, level );
+
   /* Update the uptime */
-  _Timestamp_Add_to( &_TOD.uptime, &tick );
-  /* we do not care how much the uptime changed */
+  _Timestamp_Add_to( &tod->uptime, &tick );
 
   /* Update the current TOD */
-  _Timestamp_Add_to( &_TOD.now, &tick );
+  _Timestamp_Add_to( &tod->now, &tick );
+
+  _TOD_Release( tod, level );
 
   _TOD.seconds_trigger += nanoseconds_per_tick;
   if ( _TOD.seconds_trigger >= 1000000000UL ) {

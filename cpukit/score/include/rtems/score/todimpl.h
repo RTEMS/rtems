@@ -19,6 +19,7 @@
 #define _RTEMS_SCORE_TODIMPL_H
 
 #include <rtems/score/tod.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/timestamp.h>
 
 #include <sys/time.h>
@@ -130,14 +131,23 @@ extern "C" {
  */
 typedef struct {
   /**
-   *  @brief Current time of day value.
+   * @brief Current time of day value.
+   *
+   * This field is protected by the lock.
    */
   Timestamp_Control now;
 
   /**
-   *  @brief System uptime.
+   * @brief System uptime.
+   *
+   * This field is protected by the lock.
    */
   Timestamp_Control uptime;
+
+  /**
+   * @brief Lock to protect the now and uptime fields.
+   */
+  ISR_lock_Control lock;
 
   /**
    * @brief Time of day seconds trigger.
@@ -166,14 +176,11 @@ typedef struct {
 
 SCORE_EXTERN TOD_Control _TOD;
 
-/**
- *  @brief Number of seconds Since RTEMS epoch.
- *
- *  The following contains the number of seconds from 00:00:00
- *  January 1, TOD_BASE_YEAR until the current time of day.
- */
-#define _TOD_Seconds_since_epoch() \
-  _Timestamp_Get_seconds(&_TOD.now)
+#define _TOD_Acquire( _tod, _isr_cookie ) \
+  _ISR_lock_ISR_disable_and_acquire( &( _tod )->lock, _isr_cookie )
+
+#define _TOD_Release( _tod, _isr_cookie ) \
+  _ISR_lock_Release_and_ISR_enable( &( _tod )->lock, _isr_cookie )
 
 /**
  *  @brief Initializes the time of day handler.
@@ -262,6 +269,14 @@ static inline void _TOD_Get_uptime(
 void _TOD_Get_uptime_as_timespec(
   struct timespec *time
 );
+
+/**
+ *  @brief Number of seconds Since RTEMS epoch.
+ *
+ *  The following contains the number of seconds from 00:00:00
+ *  January 1, TOD_BASE_YEAR until the current time of day.
+ */
+uint32_t _TOD_Seconds_since_epoch( void );
 
 /**
  *  @brief Increments time of day at each clock tick.
