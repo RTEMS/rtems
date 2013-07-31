@@ -1,0 +1,18 @@
+MEMORY {
+   RAM_MMU : ORIGIN = 0x00100000, LENGTH = 16k
+   NOCACHE : ORIGIN = 0x00200000, LENGTH = 1M
+   RAM     : ORIGIN = 0x00300000, LENGTH = 1024M - 1M - 1M - 1M
+}
+
+SECTIONS {
+  .nocache : {
+    bsp_section_nocache_begin = .;
+    *(SORT(.bsp_nocache*))
+    bsp_section_nocache_end = .;
+  } > NOCACHE AT > NOCACHE
+  bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
+  bsp_section_nocache_load_begin = LOADADDR (.nocache);
+  bsp_section_nocache_load_end = bsp_section_nocache_load_begin + bsp_section_nocache_size;
+}
+
+INCLUDE linkcmds.altcycv
