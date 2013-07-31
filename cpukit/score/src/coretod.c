@@ -20,14 +20,22 @@
 
 #include <rtems/score/todimpl.h>
 
+static uint32_t _TOD_Nanoseconds_since_tick_default_handler( void )
+{
+  return 0;
+}
+
 void _TOD_Handler_initialization(void)
 {
-  /* POSIX format TOD (timespec) */
-  _Timestamp_Set( &_TOD.now, TOD_SECONDS_1970_THROUGH_1988, 0 );
+  TOD_Control *tod = &_TOD;
 
-  /* Uptime (timespec) */
-  _Timestamp_Set_to_zero( &_TOD.uptime );
+  _Timestamp_Set( &tod->now, TOD_SECONDS_1970_THROUGH_1988, 0 );
+
+  _Timestamp_Set_to_zero( &tod->uptime );
+
+  tod->nanoseconds_since_last_tick =
+    _TOD_Nanoseconds_since_tick_default_handler;
 
   /* TOD has not been set */
-  _TOD.is_set = false;
+  tod->is_set = false;
 }

@@ -31,6 +31,7 @@
 #define _RTEMS_RTEMS_CLOCK_H
 
 #include <rtems/score/watchdog.h>
+#include <rtems/score/tod.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
@@ -68,7 +69,7 @@ typedef enum {
 /**
  *  Type for the nanoseconds since last tick BSP extension.
  */
-typedef Watchdog_Nanoseconds_since_last_tick_routine
+typedef TOD_Nanoseconds_since_last_tick_routine
   rtems_nanoseconds_extension_routine;
 
 /**

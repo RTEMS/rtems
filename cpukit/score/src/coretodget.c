@@ -20,20 +20,20 @@
 
 #include <rtems/score/todimpl.h>
 #include <rtems/score/isrlevel.h>
-#include <rtems/score/watchdogimpl.h>
 
 Timestamp_Control *_TOD_Get_with_nanoseconds(
   Timestamp_Control *snapshot,
   const Timestamp_Control *clock
 )
 {
+  TOD_Control      *tod = &_TOD;
   ISR_Level         level;
   Timestamp_Control offset;
   Timestamp_Control now;
   uint32_t          nanoseconds;
 
   _ISR_Disable( level );
-    nanoseconds = (*_Watchdog_Nanoseconds_since_tick_handler)();
+    nanoseconds = ( *tod->nanoseconds_since_last_tick )();
     now = *clock;
   _ISR_Enable( level );
 

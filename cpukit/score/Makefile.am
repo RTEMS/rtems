@@ -70,6 +70,7 @@ include_rtems_score_HEADERS += include/rtems/score/threadsync.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp.h
 include_rtems_score_HEADERS += include/rtems/score/timestamp64.h
+include_rtems_score_HEADERS += include/rtems/score/tod.h
 include_rtems_score_HEADERS += include/rtems/score/todimpl.h
 include_rtems_score_HEADERS += include/rtems/score/userext.h
 include_rtems_score_HEADERS += include/rtems/score/userextimpl.h
@@ -305,8 +306,7 @@ libscore_a_SOURCES += src/coretod.c src/coretodset.c src/coretodget.c \
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdog.c src/watchdogadjust.c \
     src/watchdogadjusttochain.c src/watchdoginsert.c src/watchdogremove.c \
-    src/watchdogtickle.c src/watchdogreport.c src/watchdogreportchain.c \
-    src/watchdognanoseconds.c
+    src/watchdogtickle.c src/watchdogreport.c src/watchdogreportchain.c
 
 ## USEREXT_C_FILES
 libscore_a_SOURCES += src/userextaddset.c \

@@ -18,7 +18,7 @@
 #ifndef _RTEMS_SCORE_TODIMPL_H
 #define _RTEMS_SCORE_TODIMPL_H
 
-#include <rtems/score/basedefs.h>
+#include <rtems/score/tod.h>
 #include <rtems/score/timestamp.h>
 
 #include <sys/time.h>
@@ -147,6 +147,13 @@ typedef struct {
    * _TOD_Set_with_timestamp().
    */
   uint32_t seconds_trigger;
+
+  /**
+   * @brief The current nanoseconds since last tick handler.
+   *
+   * This field must not be NULL after initialization.
+   */
+  TOD_Nanoseconds_since_last_tick_routine nanoseconds_since_last_tick;
 
   /**
    *  @brief Indicates if the time of day is set.
@@ -298,6 +305,13 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   snapshot_as_timestamp_ptr =
     _TOD_Get_with_nanoseconds( &snapshot_as_timestamp, &_TOD.now );
   _Timestamp_To_timeval( snapshot_as_timestamp_ptr, time );
+}
+
+RTEMS_INLINE_ROUTINE void _TOD_Set_nanoseconds_since_last_tick_handler(
+  TOD_Nanoseconds_since_last_tick_routine routine
+)
+{
+  _TOD.nanoseconds_since_last_tick = routine;
 }
 
 RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )

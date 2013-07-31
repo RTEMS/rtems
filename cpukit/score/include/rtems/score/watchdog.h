@@ -64,15 +64,6 @@ typedef Watchdog_Service_routine ( *Watchdog_Service_routine_entry )(
              );
 
 /**
- *  @brief Pointer to the BSP plugin to obtain the number
- *  of nanoseconds since the last clock tick.
- *
- *  This type defines a pointer to the BSP plugin to obtain the number
- *  of nanoseconds since the last clock tick.
- */
-typedef uint32_t (*Watchdog_Nanoseconds_since_last_tick_routine)(void);
-
-/**
  *  @brief The constant for indefinite wait.
  *
  *  This is the constant for indefinite wait.  It is actually an
