@@ -44,6 +44,23 @@ rtems_timer_service_routine test_isr_in_progress(
 
 /* test bodies */
 
+static void test_isr_locks( void )
+{
+  ISR_Level normal_interrupt_level = _ISR_Get_level();
+  ISR_lock_Control initialized = ISR_LOCK_INITIALIZER;
+  ISR_lock_Control lock;
+  ISR_Level level;
+
+  _ISR_lock_Initialize( &lock );
+  rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
+
+  _ISR_lock_Acquire( &lock, level );
+  rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
+  _ISR_lock_Release( &lock, level );
+
+  rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+}
+
 static rtems_mode get_interrupt_level( void )
 {
   rtems_status_code sc;
@@ -228,6 +245,7 @@ rtems_task Init(
 
   puts( "\n\n*** TEST 37 ***" );
 
+  test_isr_locks();
   test_interrupt_locks();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );

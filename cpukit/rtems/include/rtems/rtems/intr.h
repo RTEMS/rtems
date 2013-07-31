@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/isr.h>
-#include <rtems/score/smplock.h>
+#include <rtems/score/isrlock.h>
 
 /**
  *  @defgroup ClassicINTR Interrupts
@@ -143,98 +143,79 @@ rtems_status_code rtems_interrupt_catch(
  * @brief Low-level lock to protect critical sections accessed by threads and
  * interrupt service routines.
  *
- * This synchronization primitive is supported on SMP configurations.
+ * On single processor configurations the interrupt locks degrade to simple
+ * interrupt disable/enable sequences.  No additional storage or objects are
+ * required.
  *
+ * This synchronization primitive is supported on SMP configurations.  Here SMP
+ * locks are used.
  * @{
  */
 
 /**
  * @brief Interrupt lock control.
  */
-typedef struct {
-  #if defined( RTEMS_SMP )
-    SMP_lock_Control lock;
-  #endif
-} rtems_interrupt_lock;
+typedef ISR_lock_Control rtems_interrupt_lock;
 
 /**
  * @brief Initializer for static initialization of interrupt locks.
  */
-#if defined( RTEMS_SMP )
-  #define RTEMS_INTERRUPT_LOCK_INITIALIZER \
-    { SMP_LOCK_INITIALIZER }
-#else
-  #define RTEMS_INTERRUPT_LOCK_INITIALIZER \
-    { }
-#endif
+#define RTEMS_INTERRUPT_LOCK_INITIALIZER ISR_LOCK_INITIALIZER
 
 /**
  * @brief Initializes an interrupt lock.
  *
  * Concurrent initialization leads to unpredictable results.
+ *
+ * @param[in,out] _lock The interrupt lock.
  */
-#if defined( RTEMS_SMP )
-  #define rtems_interrupt_lock_initialize( _lock ) \
-    _SMP_lock_Initialize( &( _lock )->lock )
-#else
-  #define rtems_interrupt_lock_initialize( _lock ) \
-    do { \
-      (void) _lock; \
-    } while (0)
-#endif
+#define rtems_interrupt_lock_initialize( _lock ) \
+  _ISR_lock_Initialize( _lock )
 
 /**
  * @brief Acquires an interrupt lock.
  *
- * Interrupts will be disabled.  On SMP configurations this function acquires a
- * SMP lock.
+ * Interrupts will be disabled.  On SMP configurations this function acquires
+ * an SMP lock.
  *
  * This function can be used in thread and interrupt context.
  *
+ * @param[in,out] _lock The interrupt lock.
+ * @param[out] _isr_cookie The interrupt status to restore will be returned.
+ *
  * @see rtems_interrupt_lock_release().
  */
-#if defined( RTEMS_SMP )
-  #define rtems_interrupt_lock_acquire( _lock, _isr_cookie ) \
-    _SMP_lock_ISR_disable_and_acquire( &( _lock )->lock, _isr_cookie )
-#else
-  #define rtems_interrupt_lock_acquire( _lock, _isr_cookie ) \
-    do { \
-      (void) _lock; \
-      rtems_interrupt_disable( _isr_cookie ); \
-    } while (0)
-#endif
+#define rtems_interrupt_lock_acquire( _lock, _isr_cookie ) \
+  _ISR_lock_Acquire( _lock, _isr_cookie )
 
 /**
  * @brief Releases an interrupt lock.
  *
  * The interrupt status will be restored.  On SMP configurations this function
- * releases a SMP lock.
+ * releases an SMP lock.
  *
  * This function can be used in thread and interrupt context.
  *
+ * @param[in,out] _lock The interrupt lock.
+ * @param[in] _isr_cookie The interrupt status to restore.
+ *
  * @see rtems_interrupt_lock_acquire().
  */
-#if defined( RTEMS_SMP )
-  #define rtems_interrupt_lock_release( _lock, _isr_cookie ) \
-    _SMP_lock_Release_and_ISR_enable( &( _lock )->lock, _isr_cookie )
-#else
-  #define rtems_interrupt_lock_release( _lock, _isr_cookie ) \
-    do { \
-      (void) _lock; \
-      rtems_interrupt_enable( _isr_cookie ); \
-    } while (0)
-#endif
+#define rtems_interrupt_lock_release( _lock, _isr_cookie ) \
+  _ISR_lock_Release( _lock, _isr_cookie )
 
 /**
  * @brief Acquires an interrupt lock in the corresponding interrupt service
  * routine.
  *
  * The interrupt status will remain unchanged.  On SMP configurations this
- * function acquires a SMP lock.
+ * function acquires an SMP lock.
  *
  * In case the corresponding interrupt service routine can be interrupted by
  * higher priority interrupts and these interrupts enter the critical section
  * protected by this lock, then the result is unpredictable.
+ *
+ * @param[in,out] _lock The interrupt lock.
  *
  * @see rtems_interrupt_lock_release_isr().
  */
@@ -253,7 +234,9 @@ typedef struct {
  * routine.
  *
  * The interrupt status will remain unchanged.  On SMP configurations this
- * function releases a SMP lock.
+ * function releases an SMP lock.
+ *
+ * @param[in,out] _lock The interrupt lock.
  *
  * @see rtems_interrupt_lock_acquire_isr().
  */
