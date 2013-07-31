@@ -44,17 +44,35 @@ rtems_timer_service_routine test_isr_in_progress(
 
 /* test bodies */
 
+static rtems_mode get_interrupt_level( void )
+{
+  rtems_status_code sc;
+  rtems_mode mode;
+
+  sc = rtems_task_mode( RTEMS_CURRENT_MODE, RTEMS_CURRENT_MODE, &mode );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  return mode & RTEMS_INTERRUPT_MASK;
+}
+
 static void test_interrupt_locks( void )
 {
-  rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_mode normal_interrupt_level = get_interrupt_level();
+  rtems_interrupt_lock initialized = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_interrupt_lock lock;
   rtems_interrupt_level level;
 
   rtems_interrupt_lock_initialize( &lock );
+  rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
 
   rtems_interrupt_lock_acquire( &lock, level );
+  rtems_test_assert( normal_interrupt_level != get_interrupt_level() );
   rtems_interrupt_lock_release( &lock, level );
 
+  rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
+
   rtems_interrupt_lock_acquire_isr( &lock );
+  rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
   rtems_interrupt_lock_release_isr( &lock );
 }
 
@@ -210,6 +228,8 @@ rtems_task Init(
 
   puts( "\n\n*** TEST 37 ***" );
 
+  test_interrupt_locks();
+
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
@@ -336,8 +356,6 @@ rtems_task Init(
   check_isr_worked( "inline", isr_in_progress_body );
 
   check_isr_worked( "body", isr_in_progress_body );
-
-  test_interrupt_locks();
 
   puts( "*** END OF TEST 37 ***" );
   rtems_test_exit( 0 );
