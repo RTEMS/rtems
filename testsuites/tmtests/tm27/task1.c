@@ -99,6 +99,9 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
+#if defined(RTEMS_SMP)
+  rtems_interrupt_level level;
+#endif
   Chain_Control   *ready_queues;
 
   Install_tm27_vector( Isr_handler );
@@ -180,11 +183,19 @@ rtems_task Task_1(
 
   _Thread_Dispatch_set_disable_level( 0 );
 
+#if defined(RTEMS_SMP)
+  rtems_interrupt_disable(level);
+#endif
+
   ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
         (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
+
+#if defined(RTEMS_SMP)
+  rtems_interrupt_enable(level);
+#endif
 
   Interrupt_occurred = 0;
   benchmark_timer_initialize();
@@ -210,6 +221,9 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
+#if defined(RTEMS_SMP)
+  rtems_interrupt_level level;
+#endif
   Chain_Control   *ready_queues;
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
@@ -241,11 +255,19 @@ rtems_task Task_2(
 
   _Thread_Dispatch_set_disable_level( 0 );
 
+#if defined(RTEMS_SMP)
+  rtems_interrupt_disable(level);
+#endif
+
   ready_queues      = (Chain_Control *) _Scheduler.information;
   _Thread_Executing =
         (Thread_Control *) _Chain_First(&ready_queues[LOW_PRIORITY]);
 
   _Thread_Dispatch_necessary = 1;
+
+#if defined(RTEMS_SMP)
+  rtems_interrupt_enable(level);
+#endif
 
   _Thread_Dispatch();
 
