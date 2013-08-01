@@ -21,7 +21,6 @@
 
 #include <rtems/asm.h>
 #include <rtems/system.h>
-#include <bspopts.h>
 
 /*
  *  void _ISR_Handler()
@@ -162,6 +161,54 @@ save_isf:
         mov     %sp, %o1                       ! 2nd arg to ISR Handler
 
         /*
+         *  Increment ISR nest level and Thread dispatch disable level.
+         *
+         *  Register usage for this section:
+         *
+         *    l4 = _Thread_Dispatch_disable_level pointer
+         *    l5 = per cpu info pointer
+         *    l6 = _Thread_Dispatch_disable_level value
+         *    l7 = _ISR_Nest_level value
+         *
+         *  NOTE: It is assumed that l4 - l7 will be preserved until the ISR
+         *        nest and thread dispatch disable levels are unnested.
+         */
+
+        sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
+        ld       [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))], %l6
+
+        sethi    %hi(_Per_CPU_Information), %l5
+        add      %l5, %lo(_Per_CPU_Information), %l5
+
+	ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
+
+        add      %l6, 1, %l6
+        st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
+
+        add      %l7, 1, %l7
+        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
+
+        /*
+         *  If ISR nest level was zero (now 1), then switch stack.
+         */
+
+        mov      %sp, %fp
+        subcc    %l7, 1, %l7             ! outermost interrupt handler?
+        bnz      dont_switch_stacks      ! No, then do not switch stacks
+
+        nop
+	ld       [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
+
+dont_switch_stacks:
+        /*
+         *  Make sure we have a place on the stack for the window overflow
+         *  trap handler to write into.  At this point it is safe to
+         *  enable traps again.
+         */
+
+        sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+
+        /*
          *  Check if we have an external interrupt (trap 0x11 - 0x1f). If so,
          *  set the PIL in the %psr to mask off interrupts with lower priority.
          *  The original %psr in %l0 is not modified since it will be restored
@@ -251,85 +298,6 @@ pil_fixed:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 dont_fix_pil2:
 
-        PUBLIC(_ISR_PER_CPU)
-SYM(_ISR_PER_CPU):
-
-#if defined(RTEMS_SMP)
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
-    #if BSP_LEON3_SMP 
-	/* LEON3 SMP support */
-	rd	%asr17, %l7
-	srl	%l7, 28, %l7	/* CPU number is upper 4 bits so shift */
-    #else
-        mov	0, %l7
-        nop
-    #endif
-	sll	%l7, PER_CPU_CONTROL_SIZE_LOG2, %l7	/* l7 = offset */
-	add	%l5, %l7, %l5	/* l5 = pointer to per CPU */
-
-        /*
-         *  On multi-core system, we need to use SMP safe versions
-         *  of ISR and Thread Dispatch critical sections.
-         *
-         *  _ISR_SMP_Enter returns the interrupt nest level.  If we are
-         *  outermost interrupt, then we need to switch stacks.
-         */
-        call    SYM(_ISR_SMP_Enter), 0
-         mov      %sp, %fp              ! delay slot
-	cmp	%o0, 0
-#else
-        /*
-         *  On single core system, we can directly use variables.
-         *
-         *  Increment ISR nest level and Thread dispatch disable level.
-         *
-         *  Register usage for this section:
-         *
-         *    l4 = _Thread_Dispatch_disable_level pointer
-         *    l5 = _ISR_Nest_level pointer
-         *    l6 = _Thread_Dispatch_disable_level value
-         *    l7 = _ISR_Nest_level value
-         *
-         *  NOTE: It is assumed that l4 - l7 will be preserved until the ISR
-         *        nest and thread dispatch disable levels are unnested.
-         */
-        sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
-        ld       [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))], %l6
-
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
-
-        ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
-
-        add      %l6, 1, %l6
-        st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
-
-        add      %l7, 1, %l7
-        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
-
-        /*
-         *  If ISR nest level was zero (now 1), then switch stack.
-         */
-        mov      %sp, %fp
-        subcc    %l7, 1, %l7             ! outermost interrupt handler?
-#endif
-
-        /*
-         *  Do we need to switch to the interrupt stack?
-         */
-        beq,a    dont_switch_stacks      ! No, then do not switch stacks
-         ld      [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
-
-dont_switch_stacks:
-        /*
-         *  Make sure we have a place on the stack for the window overflow
-         *  trap handler to write into.  At this point it is safe to
-         *  enable traps again.
-         */
-
-        sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
-
         /*
          *  Vector to user's handler.
          *
@@ -350,14 +318,6 @@ dont_switch_stacks:
         call     %g4, 0
         nop                             ! delay slot
 
-#if defined(RTEMS_SMP)
-        call    SYM(_ISR_SMP_Exit), 0
-        nop                             ! delay slot
-	cmp	%o0, 0
-	bz	simple_return
-	 nop
-#endif
-
         /*
          *  Redisable traps so we can finish up the interrupt processing.
          *  This is a VERY conservative place to do this.
@@ -368,7 +328,6 @@ dont_switch_stacks:
         mov      %l0, %psr             ! **** DISABLE TRAPS ****
         nop; nop; nop
 
-#if !defined(RTEMS_SMP)
         /*
          *  Decrement ISR nest level and Thread dispatch disable level.
          *
@@ -399,7 +358,8 @@ dont_switch_stacks:
         ld       [%l6 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
-         nop
+        nop
+
 
         /*
          *  If a context switch is necessary, then do fudge stack to
@@ -407,10 +367,11 @@ dont_switch_stacks:
          */
 
         ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
+
         orcc     %l5, %g0, %g0   ! Is thread switch necessary?
-        bz       simple_return   ! No, then return
-         nop
-#endif
+        bz       simple_return   ! no, then do a simple return
+        nop
+
         /*
          *  Invoke interrupt dispatcher.
          */
@@ -457,26 +418,13 @@ isr_dispatch:
          *  _Thread_Dispatch before leaving this ISR Dispatch context.
          */
 
-#if defined(RTEMS_SMP)
         sethi    %hi(_Per_CPU_Information), %l5
         add      %l5, %lo(_Per_CPU_Information), %l5
-    #if BSP_LEON3_SMP 
-	/* LEON3 SMP support */
-	rd	%asr17, %l7
-	srl	%l7, 28, %l7	/* CPU number is upper 4 bits so shift */
-    #else
-        mov	0, %l7
-        nop
-    #endif
-	sll	%l7, PER_CPU_CONTROL_SIZE_LOG2, %l7	/* l7 = offset */
-	add	%l5, %l7, %l5	/* l5 = pointer to per CPU */
-#else
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
-#endif
-        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
-        orcc     %l5, %g0, %g0   ! Is thread switch necessary?
-        bz       allow_nest_again
+
+        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l7
+
+        orcc     %l7, %g0, %g0    ! Is thread switch necesary?
+        bz       allow_nest_again ! No, then clear out and return
         nop
 
         ! Yes, then invoke the dispatcher
