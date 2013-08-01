@@ -33,6 +33,8 @@
 #ifndef __ALTERA_SOCAL_H__
 #define __ALTERA_SOCAL_H__
 
+#include <rtems/score/basedefs.h>
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -344,7 +346,7 @@ typedef char alt_cat_compile_assert_text(assertion_at_##file##_line_, line)[2*!!
  *  \param a - Structure to be evaluated
  *  \param b - Reference size
  */
-#define alt_check_struct_size(a, b) alt_form_compile_assert_line((sizeof(a) <= sizeof(b)),__FILE__,__LINE__)
+#define alt_check_struct_size(a, b) RTEMS_STATIC_ASSERT((sizeof(a) <= sizeof(b)), Invalid_stuct_size)
 
 
 /*! @} */

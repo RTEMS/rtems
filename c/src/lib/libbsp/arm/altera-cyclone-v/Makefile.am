@@ -106,6 +106,7 @@ libbsp_a_LIBADD =
 # for the Altera hwlib
 libbsp_a_CPPFLAGS += -I ${srcdir}/hwlib/include
 libbsp_a_CPPFLAGS += -std=gnu99
+CFLAGS += -Wno-missing-prototypes
 
 # hwlib from Altera
 libbsp_a_SOURCES += hwlib/src/hwmgr/alt_address_space.c
