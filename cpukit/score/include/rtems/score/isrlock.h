@@ -95,13 +95,13 @@ typedef struct {
  * @param[in,out] _lock The ISR lock control.
  * @param[out] _isr_cookie The interrupt status to restore will be returned.
  *
- * @see _ISR_lock_Release().
+ * @see _ISR_lock_Release_and_ISR_enable().
  */
 #if defined( RTEMS_SMP )
-  #define _ISR_lock_Acquire( _lock, _isr_cookie ) \
+  #define _ISR_lock_ISR_disable_and_acquire( _lock, _isr_cookie ) \
     _SMP_lock_ISR_disable_and_acquire( &( _lock )->lock, _isr_cookie )
 #else
-  #define _ISR_lock_Acquire( _lock, _isr_cookie ) \
+  #define _ISR_lock_ISR_disable_and_acquire( _lock, _isr_cookie ) \
     do { \
       (void) _lock; \
       _ISR_Disable( _isr_cookie ); \
@@ -119,16 +119,60 @@ typedef struct {
  * @param[in,out] _lock The ISR lock control.
  * @param[in] _isr_cookie The interrupt status to restore.
  *
- * @see _ISR_lock_Acquire().
+ * @see _ISR_lock_ISR_disable_and_acquire().
  */
 #if defined( RTEMS_SMP )
-  #define _ISR_lock_Release( _lock, _isr_cookie ) \
+  #define _ISR_lock_Release_and_ISR_enable( _lock, _isr_cookie ) \
     _SMP_lock_Release_and_ISR_enable( &( _lock )->lock, _isr_cookie )
 #else
-  #define _ISR_lock_Release( _lock, _isr_cookie ) \
+  #define _ISR_lock_Release_and_ISR_enable( _lock, _isr_cookie ) \
     do { \
       (void) _lock; \
       _ISR_Enable( _isr_cookie ); \
+    } while (0)
+#endif
+
+/**
+ * @brief Acquires an ISR lock inside an ISR disabled section.
+ *
+ * The interrupt status will remain unchanged.  On SMP configurations this
+ * function acquires an SMP lock.
+ *
+ * In case the executing context can be interrupted by higher priority
+ * interrupts and these interrupts enter the critical section protected by this
+ * lock, then the result is unpredictable.
+ *
+ * @param[in,out] _lock The ISR lock control.
+ *
+ * @see _ISR_lock_Release().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_Acquire( _lock ) \
+    _SMP_lock_Acquire( &( _lock )->lock )
+#else
+  #define _ISR_lock_Acquire( _lock ) \
+    do { \
+      (void) _lock; \
+    } while (0)
+#endif
+
+/**
+ * @brief Releases an ISR lock inside an ISR disabled section.
+ *
+ * The interrupt status will remain unchanged.  On SMP configurations this
+ * function releases an SMP lock.
+ *
+ * @param[in,out] _lock The ISR lock control.
+ *
+ * @see _ISR_lock_Acquire().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_Release( _lock ) \
+    _SMP_lock_Release( &( _lock )->lock )
+#else
+  #define _ISR_lock_Release( _lock ) \
+    do { \
+      (void) _lock; \
     } while (0)
 #endif
 

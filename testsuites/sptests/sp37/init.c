@@ -54,9 +54,15 @@ static void test_isr_locks( void )
   _ISR_lock_Initialize( &lock );
   rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
 
-  _ISR_lock_Acquire( &lock, level );
+  _ISR_lock_ISR_disable_and_acquire( &lock, level );
   rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
-  _ISR_lock_Release( &lock, level );
+  _ISR_lock_Release_and_ISR_enable( &lock, level );
+
+  rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+
+  _ISR_lock_Acquire( &lock );
+  rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+  _ISR_lock_Release( &lock );
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
 }
@@ -91,6 +97,8 @@ static void test_interrupt_locks( void )
   rtems_interrupt_lock_acquire_isr( &lock );
   rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
   rtems_interrupt_lock_release_isr( &lock );
+
+  rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
 }
 
 void test_interrupt_inline(void)

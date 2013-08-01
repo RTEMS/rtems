@@ -186,7 +186,7 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  * @see rtems_interrupt_lock_release().
  */
 #define rtems_interrupt_lock_acquire( _lock, _isr_cookie ) \
-  _ISR_lock_Acquire( _lock, _isr_cookie )
+  _ISR_lock_ISR_disable_and_acquire( _lock, _isr_cookie )
 
 /**
  * @brief Releases an interrupt lock.
@@ -202,7 +202,7 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  * @see rtems_interrupt_lock_acquire().
  */
 #define rtems_interrupt_lock_release( _lock, _isr_cookie ) \
-  _ISR_lock_Release( _lock, _isr_cookie )
+  _ISR_lock_Release_and_ISR_enable( _lock, _isr_cookie )
 
 /**
  * @brief Acquires an interrupt lock in the corresponding interrupt service
@@ -219,15 +219,8 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  *
  * @see rtems_interrupt_lock_release_isr().
  */
-#if defined( RTEMS_SMP )
-  #define rtems_interrupt_lock_acquire_isr( _lock ) \
-    _SMP_lock_Acquire( &( _lock )->lock )
-#else
-  #define rtems_interrupt_lock_acquire_isr( _lock ) \
-    do { \
-      (void) _lock; \
-    } while (0)
-#endif
+#define rtems_interrupt_lock_acquire_isr( _lock ) \
+  _ISR_lock_Acquire( _lock )
 
 /**
  * @brief Releases an interrupt lock in the corresponding interrupt service
@@ -240,15 +233,8 @@ typedef ISR_lock_Control rtems_interrupt_lock;
  *
  * @see rtems_interrupt_lock_acquire_isr().
  */
-#if defined( RTEMS_SMP )
-  #define rtems_interrupt_lock_release_isr( _lock ) \
-    _SMP_lock_Release( &( _lock )->lock )
-#else
-  #define rtems_interrupt_lock_release_isr( _lock ) \
-    do { \
-      (void) _lock; \
-    } while (0)
-#endif
+#define rtems_interrupt_lock_release_isr( _lock ) \
+  _ISR_lock_Release( _lock )
 
 /** @} */
 
