@@ -157,6 +157,7 @@ void do_data_abort(
 
   /* disable interrupts, wait forever */
   rtems_interrupt_disable(level);
+  (void)level;
   while(1) {
     continue;
   }
