@@ -14,6 +14,7 @@
 
 #include <bspopts.h>
 #include <bsp/vectors.h>
+#include <libcpu/powerpc-utility.h>
 
 #define LT(cr) ((cr)*4+0)
 #define GT(cr) ((cr)*4+1)
@@ -441,13 +442,13 @@ wrap_no_save_frame_register_\_FLVR:
 	 */
 
 	/* Increment ISR nest level and thread dispatch disable level */
-	lis	SCRATCH_REGISTER_2, ISR_NEST_LEVEL@ha
-	lwz	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
-	lwz	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
+	GET_SELF_CPU_CONTROL	SCRATCH_REGISTER_2
+	lwz	SCRATCH_REGISTER_0, PER_CPU_ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
+	lwz	SCRATCH_REGISTER_1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SCRATCH_REGISTER_2)
 	addi	SCRATCH_REGISTER_0, SCRATCH_REGISTER_0, 1
 	addi	SCRATCH_REGISTER_1, SCRATCH_REGISTER_1, 1
-	stw	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
-	stw	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
+	stw	SCRATCH_REGISTER_0, PER_CPU_ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
+	stw	SCRATCH_REGISTER_1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SCRATCH_REGISTER_2)
 
 	/*
 	 * No higher-priority exception occurring after this point
@@ -636,13 +637,13 @@ wrap_handler_done_\_FLVR:
 	 */
 
 	/* Decrement ISR nest level and thread dispatch disable level */
-	lis	SCRATCH_REGISTER_2, ISR_NEST_LEVEL@ha
-	lwz	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
-	lwz	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
+	GET_SELF_CPU_CONTROL	SCRATCH_REGISTER_2
+	lwz	SCRATCH_REGISTER_0, PER_CPU_ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
+	lwz	SCRATCH_REGISTER_1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SCRATCH_REGISTER_2)
 	subi	SCRATCH_REGISTER_0, SCRATCH_REGISTER_0, 1
 	subic.	SCRATCH_REGISTER_1, SCRATCH_REGISTER_1, 1
-	stw	SCRATCH_REGISTER_0, ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
-	stw	SCRATCH_REGISTER_1, _Thread_Dispatch_disable_level@sdarel(r13)
+	stw	SCRATCH_REGISTER_0, PER_CPU_ISR_NEST_LEVEL@l(SCRATCH_REGISTER_2)
+	stw	SCRATCH_REGISTER_1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SCRATCH_REGISTER_2)
 
 	/* Branch to skip thread dispatching */
 	bne	wrap_thread_dispatching_done_\_FLVR

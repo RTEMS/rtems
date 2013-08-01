@@ -8,12 +8,13 @@
  */
 
 /*
- * Copyright (c) 2008, 2010, 2011
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008-2013 embedded brains GmbH.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * access function for Device Control Registers inspired by "ppc405common.h"
  * from Michael Hamel ADInstruments May 2008
@@ -891,6 +892,19 @@ void ppc_code_copy(void *dest, const void *src, size_t n);
  */
 .macro INTERRUPT_ENABLE level
 	mtmsr	\level
+.endm
+
+.macro GET_SELF_CPU_CONTROL reg
+#if defined(RTEMS_SMP)
+	/* Use Book E Processor ID Register (PIR) */
+	mfspr	\reg, 286
+	slwi	\reg, \reg, PER_CPU_CONTROL_SIZE_LOG2
+	addis	\reg, \reg, _Per_CPU_Information@ha
+	addi	\reg, \reg, _Per_CPU_Information@l
+#else
+	lis	\reg, _Per_CPU_Information@h
+	ori	\reg, \reg, _Per_CPU_Information@l
+#endif
 .endm
 
 #define LINKER_SYMBOL(sym) .extern sym
