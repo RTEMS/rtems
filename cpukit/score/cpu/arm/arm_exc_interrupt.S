@@ -38,21 +38,30 @@
 #define EXCHANGE_LR r4
 #define EXCHANGE_SPSR r5
 #define EXCHANGE_CPSR r6
-#define EXCHANGE_INT_SP r7
+#define EXCHANGE_INT_SP r8
 
 #define EXCHANGE_LIST {EXCHANGE_LR, EXCHANGE_SPSR, EXCHANGE_CPSR, EXCHANGE_INT_SP}
 #define EXCHANGE_SIZE 16
 
-#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, r12}
-#define CONTEXT_SIZE 28
+#define SELF_CPU_CONTROL r7
+
+#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, SELF_CPU_CONTROL, r12}
+#define CONTEXT_SIZE 32
 
 #ifdef ARM_MULTILIB_VFP_D32
   #define VFP_CONTEXT_WITH_ALIGNMENT_SPACE (24 * 8 + 4 + 4)
 #endif
 
-.extern _Thread_Dispatch_disable_level
+.macro GET_SELF_CPU_CONTROL REG, TMP
+	ldr	\REG, =_Per_CPU_Information
+#ifdef RTEMS_SMP
+	/* Use ARMv7 Multiprocessor Affinity Register (MPIDR) */
+	mrc	p15, 0, \TMP, c0, c0, 5
 
-.extern bsp_interrupt_dispatch
+	and	\TMP, \TMP, #0xff
+	add	\REG, \REG, \TMP, asl #PER_CPU_CONTROL_SIZE_LOG2
+#endif
+.endm
 
 .arm
 .globl _ARMV4_Exception_interrupt
@@ -90,38 +99,9 @@ _ARMV4_Exception_interrupt:
 	str	r0, [r1]
 #endif
 
-#ifdef RTEMS_SMP
-	/* ISR enter */
-	blx	_ISR_SMP_Enter
+	/* Get per-CPU control of current processor */
+	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL, r1
 
-	/* Remember INT stack pointer */
-	mov	r1, EXCHANGE_INT_SP
-
-	/* Restore exchange registers from exchange area */
-	ldmia	r1, EXCHANGE_LIST
-
-	/* Switch stack if necessary and save original stack pointer */
-	mov	r2, sp
-	cmp	r0, #0
-	moveq	sp, r1
-	stmdb	sp!, {r2}
-
-	/* Call BSP dependent interrupt dispatcher */
-	blx	bsp_interrupt_dispatch
-
-	/* Restore stack pointer */
-	ldr	sp, [sp]
-
-	/* ISR exit */
-	blx	_ISR_SMP_Exit
-	cmp	r0, #0
-	beq	thread_dispatch_done
-
-	/* Thread dispatch */
-	blx	_Thread_Dispatch
-
-thread_dispatch_done:
-#else /* RTEMS_SMP */
 	/* Remember INT stack pointer */
 	mov	r1, EXCHANGE_INT_SP
 
@@ -129,8 +109,7 @@ thread_dispatch_done:
 	ldmia	r1, EXCHANGE_LIST
 
 	/* Get interrupt nest level */
-	ldr	r0, =ISR_NEST_LEVEL
-	ldr	r2, [r0]
+	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 
 	/* Switch stack if necessary and save original stack pointer */
 	mov	r3, sp
@@ -142,25 +121,22 @@ thread_dispatch_done:
 	SWITCH_FROM_ARM_TO_THUMB        r1
 
 	/* Increment interrupt nest and thread dispatch disable level */
-	ldr	r1, =_Thread_Dispatch_disable_level
-	ldr	r3, [r1]
+	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 	add	r2, #1
 	add	r3, #1
-	str	r2, [r0]
-	str	r3, [r1]
+	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
 	/* Call BSP dependent interrupt dispatcher */
 	bl	bsp_interrupt_dispatch
 
 	/* Decrement interrupt nest and thread dispatch disable level */
-	ldr	r0, =ISR_NEST_LEVEL
-	ldr	r1, =_Thread_Dispatch_disable_level
-	ldr	r2, [r0]
-	ldr	r3, [r1]
+	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 	sub	r2, #1
 	sub	r3, #1
-	str	r2, [r0]
-	str	r3, [r1]
+	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
 	/* Restore stack pointer */
 	SWITCH_FROM_THUMB_TO_ARM
@@ -172,8 +148,7 @@ thread_dispatch_done:
 	bne	thread_dispatch_done
 
 	/* Check context switch necessary */
-	ldr	r0, =DISPATCH_NEEDED
-	ldrb	r1, [r0]
+	ldrb	r1, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
 	cmp	r1, #0
 	beq	thread_dispatch_done
 
@@ -189,7 +164,6 @@ thread_dispatch_done:
 
 	/* Switch to ARM instructions if necessary */
 	SWITCH_FROM_THUMB_TO_ARM
-#endif /* RTEMS_SMP */
 
 #ifdef ARM_MULTILIB_VFP_D32
 	/* Restore VFP context */
