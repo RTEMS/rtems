@@ -23,9 +23,8 @@
   #include <rtems/asm.h>
 #else
   #include <rtems/score/assert.h>
-  #include <rtems/score/isrlevel.h>
+  #include <rtems/score/isrlock.h>
   #include <rtems/score/timestamp.h>
-  #include <rtems/score/smplock.h>
   #include <rtems/score/smp.h>
 #endif
 
@@ -179,10 +178,13 @@ typedef struct {
   /** This is the time of the last context switch on this CPU. */
   Timestamp_Control time_of_last_context_switch;
 
-  #if defined( RTEMS_SMP )
-    /** This element is used to lock this structure */
-    SMP_lock_Control lock;
+  /**
+   * @brief This lock protects the dispatch_necessary, executing, heir and
+   * message fields.
+   */
+  ISR_lock_Control lock;
 
+  #if defined( RTEMS_SMP )
     /**
      *  This is the request for the interrupt.
      *
@@ -219,6 +221,18 @@ typedef struct {
  *  This is an array of per CPU core information.
  */
 extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
+
+#define _Per_CPU_ISR_disable_and_acquire( per_cpu, isr_cookie ) \
+  _ISR_lock_ISR_disable_and_acquire( &( per_cpu )->lock, isr_cookie )
+
+#define _Per_CPU_Release_and_ISR_enable( per_cpu, isr_cookie ) \
+  _ISR_lock_Release_and_ISR_enable( &( per_cpu )->lock, isr_cookie )
+
+#define _Per_CPU_Acquire( per_cpu ) \
+  _ISR_lock_Acquire( &( per_cpu )->lock )
+
+#define _Per_CPU_Release( per_cpu ) \
+  _ISR_lock_Release( &( per_cpu )->lock )
 
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
@@ -274,12 +288,6 @@ void _Per_CPU_Wait_for_state(
   const Per_CPU_Control *per_cpu,
   Per_CPU_State desired_state
 );
-
-#define _Per_CPU_Lock_acquire( per_cpu, isr_cookie ) \
-  _SMP_lock_ISR_disable_and_acquire( &( per_cpu )->lock, isr_cookie )
-
-#define _Per_CPU_Lock_release( per_cpu, isr_cookie ) \
-  _SMP_lock_Release_and_ISR_enable( &( per_cpu )->lock, isr_cookie )
 
 #endif /* defined( RTEMS_SMP ) */
 
