@@ -118,7 +118,7 @@ void _Thread_Create_idle(void);
  *    + ready chain
  *    + select heir
  */
-void _Thread_Start_multitasking( void );
+void _Thread_Start_multitasking( Context_Control *context );
 
 /**
  *  @brief Allocate the requested stack space for the thread.

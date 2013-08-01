@@ -19,8 +19,8 @@
 #endif
 
 #include <rtems/bspsmp.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
 #include <rtems/score/sysstate.h>
 
@@ -41,27 +41,7 @@ void rtems_smp_secondary_cpu_initialize( void )
 
   _Per_CPU_Wait_for_state( self_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
 
-  _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_UP );
-
-  /*
-   *  The Scheduler will have selected the heir thread for each CPU core.
-   *  Now we have been requested to perform the first context switch.  So
-   *  force a switch to the designated heir and make it executing on
-   *  THIS core.
-   */
-  heir = self_cpu->heir;
-  heir->is_executing = true;
-  self_cpu->executing->is_executing = false;
-  self_cpu->executing = heir;
-  self_cpu->dispatch_necessary = false;
-
-  /*
-   * Threads begin execution in the _Thread_Handler() function.   This function
-   * will call _Thread_Enable_dispatch().
-   */
-  _Thread_Disable_dispatch();
-
-  _CPU_Context_switch_to_first_task_smp( &heir->Registers );
+  _Thread_Start_multitasking( NULL );
 }
 
 void rtems_smp_process_interrupt( void )
@@ -158,9 +138,6 @@ void _SMP_Request_other_cores_to_perform_first_context_switch( void )
 
     if ( cpu != self ) {
       _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
-    } else {
-
-      _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_UP );
     }
   }
 }

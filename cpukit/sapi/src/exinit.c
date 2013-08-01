@@ -219,11 +219,13 @@ void rtems_initialize_start_multitasking(void)
 {
   uint32_t status;
 
-#ifdef RTEMS_SMP
+  _System_state_Set( SYSTEM_STATE_UP );
+
+#if defined(RTEMS_SMP)
   _SMP_Request_other_cores_to_perform_first_context_switch();
 #endif
 
-  _Thread_Start_multitasking();
+  _Thread_Start_multitasking( &_Thread_BSP_context );
 
   /*******************************************************************
    *******************************************************************

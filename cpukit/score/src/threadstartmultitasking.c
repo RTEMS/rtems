@@ -19,26 +19,21 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/sysstate.h>
 
-void _Thread_Start_multitasking( void )
+void _Thread_Start_multitasking( Context_Control *context )
 {
-  /*
-   *  The system is now multitasking and completely initialized.
-   *  This system thread now "hides" in a single processor until
-   *  the system is shut down.
-   */
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
+  Thread_Control  *heir = self_cpu->heir;
 
-  _System_state_Set( SYSTEM_STATE_UP );
+#if defined(RTEMS_SMP)
+  _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_UP );
 
-  _Thread_Dispatch_necessary = false;
+  self_cpu->executing->is_executing = false;
+  heir->is_executing = true;
+#endif
 
-  #if defined(RTEMS_SMP)
-    _Thread_Executing->is_executing = false;
-    _Thread_Heir->is_executing = true;
-  #endif
-
-  _Thread_Executing = _Thread_Heir;
+  self_cpu->dispatch_necessary = false;
+  self_cpu->executing = heir;
 
    /*
     * Get the init task(s) running.
@@ -58,13 +53,29 @@ void _Thread_Start_multitasking( void )
     *  don't need to worry about saving BSP's floating point state
     */
 
-   if ( _Thread_Heir->fp_context != NULL )
-     _Context_Restore_fp( &_Thread_Heir->fp_context );
+   if ( heir->fp_context != NULL )
+     _Context_Restore_fp( &heir->fp_context );
+#endif
+
+#if defined(RTEMS_SMP)
+  if ( context != NULL ) {
 #endif
 
 #if defined(_CPU_Start_multitasking)
-  _CPU_Start_multitasking( &_Thread_BSP_context, &_Thread_Heir->Registers );
+    _CPU_Start_multitasking( context, &heir->Registers );
 #else
-  _Context_Switch( &_Thread_BSP_context, &_Thread_Heir->Registers );
+    _Context_Switch( context, &heir->Registers );
+#endif
+
+#if defined(RTEMS_SMP)
+  } else {
+    /*
+     * Threads begin execution in the _Thread_Handler() function.   This function
+     * will call _Thread_Enable_dispatch().
+     */
+    _Thread_Disable_dispatch();
+
+    _CPU_Context_switch_to_first_task_smp( &heir->Registers );
+  }
 #endif
 }
