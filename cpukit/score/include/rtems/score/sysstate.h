@@ -49,11 +49,6 @@ typedef enum {
   SYSTEM_STATE_BEFORE_MULTITASKING,
 
   /**
-   * @brief The system is attempting to initiate multitasking.
-   */
-  SYSTEM_STATE_BEGIN_MULTITASKING,
-
-  /**
    * @brief The system is up and operating normally.
    */
   SYSTEM_STATE_UP,
@@ -117,13 +112,6 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
 )
 {
   return (state == SYSTEM_STATE_BEFORE_MULTITASKING);
-}
-
-RTEMS_INLINE_ROUTINE bool _System_state_Is_begin_multitasking (
-  System_state_Codes state
-)
-{
-  return (state == SYSTEM_STATE_BEGIN_MULTITASKING);
 }
 
 RTEMS_INLINE_ROUTINE bool _System_state_Is_shutdown (

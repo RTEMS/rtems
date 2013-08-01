@@ -213,12 +213,12 @@ void _CORE_mutex_Seize_interrupt_blocking(
   #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
       (_Thread_Dispatch_get_disable_level() != 1 \
         && (_wait) \
-        && (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING))
+        && (_System_state_Get() >= SYSTEM_STATE_UP))
 #else
   #define _CORE_mutex_Check_dispatch_for_seize(_wait) \
       (!_Thread_Dispatch_is_enabled() \
         && (_wait) \
-        && (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING))
+        && (_System_state_Get() >= SYSTEM_STATE_UP))
 #endif
 
 /**
