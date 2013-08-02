@@ -1,0 +1,17 @@
+*** TEST SMPMIGRATION 1 ***
+runner 0
+        cpu 0 tokens 411501
+        cpu 0 cycles 9464534
+        cpu 1 tokens 411501
+        cpu 1 cycles 9464802
+runner 1
+        cpu 0 tokens 411500
+        cpu 0 cycles 41936630
+        cpu 1 tokens 411501
+        cpu 1 cycles 42009945
+runner 2
+        cpu 0 tokens 411501
+        cpu 0 cycles 6583983
+        cpu 1 tokens 411500
+        cpu 1 cycles 6583701
+*** END OF TEST SMPMIGRATION 1 ***

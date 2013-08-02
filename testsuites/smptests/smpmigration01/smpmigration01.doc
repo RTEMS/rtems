@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpmigration01
+
+The screen file was obtained on a PowerPC QorIQ P1020E target running with a
+processor frequency of 800MHz.
+
+directives:
+
+  - _Thread_Dispatch()
+  - _Scheduler_simple_smp_Allocate_processor()
+
+concepts:
+
+  - Ensure that thread migration works.
