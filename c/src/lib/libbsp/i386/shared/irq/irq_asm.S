@@ -144,7 +144,14 @@ ISR_STOP:
 .check_stack_switch:
 	movl      esp, ebp                  /* ebp = previous stack pointer */
 
+#ifdef RTEMS_SMP
+	call      SYM(_CPU_SMP_Get_current_processor)
+	sall      $PER_CPU_CONTROL_SIZE_LOG2, eax
+	addl      $SYM(_Per_CPU_Information), eax
+	movl      eax, ebx
+#else
 	movl      $SYM(_Per_CPU_Information), ebx
+#endif
 
 	/* is this the outermost interrupt? */
 	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)
@@ -159,8 +166,8 @@ ISR_STOP:
 
 nested:
 	incl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one nest level deeper */
-	incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
-
+	incl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx) /* disable
+	                                                        multitasking */
 	/*
 	 * GCC versions starting with 4.3 no longer place the cld
 	 * instruction before string operations.  We  need to ensure
@@ -215,7 +222,7 @@ nested:
 	                                    /* If interrupts are nested, */
 	                                    /*   then dispatching is disabled */
 
-	decl      SYM (_Thread_Dispatch_disable_level)
+	decl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx)
 	                                    /* unnest multitasking */
 	                                    /* Is dispatch disabled */
 	jne       .exit                     /* Yes, then exit */
