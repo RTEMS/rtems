@@ -20,7 +20,7 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
+#include <rtems/score/percpu.h>
 #include <bspopts.h>
 
 .macro GET_SELF_CPU_CONTROL REG, TMP
@@ -59,18 +59,10 @@ SYM(_CPU_Context_switch):
         std     %g4, [%o0 + G4_OFFSET]
         std     %g6, [%o0 + G6_OFFSET]
 
-        ! load the address of the ISR stack nesting prevention flag
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %g2
-        ld       [%g2 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %g2
-        ! save it a bit later so we do not waste a couple of cycles
-
         std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
         std     %l2, [%o0 + L2_OFFSET]
         std     %l4, [%o0 + L4_OFFSET]
         std     %l6, [%o0 + L6_OFFSET]
-
-        ! Now actually save ISR stack nesting prevention flag
-        st       %g2, [%o0 + ISR_DISPATCH_DISABLE_STACK_OFFSET]
 
         std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
         std     %i2, [%o0 + I2_OFFSET]
@@ -82,13 +74,24 @@ SYM(_CPU_Context_switch):
         std     %o4, [%o0 + O4_OFFSET]
         std     %o6, [%o0 + O6_SP_OFFSET]
 
+        ! o3 = self per-CPU control
+        GET_SELF_CPU_CONTROL %o3, %o4
+
+        ! load the ISR stack nesting prevention flag
+        ld      [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %o4
+        ! save it a bit later so we do not waste a couple of cycles
+
         rd      %psr, %o2
         st      %o2, [%o0 + PSR_OFFSET]      ! save status register
+
+        ! Now actually save ISR stack nesting prevention flag
+        st       %o4, [%o0 + ISR_DISPATCH_DISABLE_STACK_OFFSET]
 
         /*
          *  This is entered from _CPU_Context_restore with:
          *    o1 = context to restore
          *    o2 = psr
+         *    o3 = self per-CPU control
          */
 
         PUBLIC(_CPU_Context_restore_heir)
@@ -196,7 +199,6 @@ done_flushing:
 
         ! Load thread specific ISR dispatch prevention flag
         ld      [%o1 + ISR_DISPATCH_DISABLE_STACK_OFFSET], %o2
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %o3
         ! Store it to memory later to use the cycles
 
         ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
@@ -205,7 +207,7 @@ done_flushing:
         ldd     [%o1 + L6_OFFSET], %l6
 
         ! Now restore thread specific ISR dispatch prevention flag
-        st       %o2,[%o3 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
+        st      %o2, [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         ldd     [%o1 + I0_OFFSET], %i0        ! restore the output registers
         ldd     [%o1 + I2_OFFSET], %i2
@@ -235,6 +237,7 @@ done_flushing:
 SYM(_CPU_Context_restore):
         save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
         rd      %psr, %o2
+        GET_SELF_CPU_CONTROL %o3, %o4
         ba      SYM(_CPU_Context_restore_heir)
         mov     %i0, %o1                      ! in the delay slot
         .align 4
@@ -591,11 +594,10 @@ dont_fix_pil2:
 
         orcc     %l6, %g0, %g0   ! Is dispatching disabled?
         bnz      simple_return   ! Yes, then do a "simple" exit
-        ! NOTE: Use the delay slot
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l6
+        nop
 
         ! Are we dispatching from a previous ISR in the interrupted thread?
-        ld       [%l6 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %l7
+        ld       [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
         nop
@@ -606,9 +608,9 @@ dont_fix_pil2:
          *  return to the interrupt dispatcher.
          */
 
-        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
+        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l6
 
-        orcc     %l5, %g0, %g0   ! Is thread switch necessary?
+        orcc     %l6, %g0, %g0   ! Is thread switch necessary?
         bz       simple_return   ! no, then do a simple return
         nop
 
@@ -616,12 +618,9 @@ dont_fix_pil2:
          *  Invoke interrupt dispatcher.
          */
 
-        PUBLIC(_ISR_Dispatch)
-SYM(_ISR_Dispatch):
         ! Set ISR dispatch nesting prevention flag
         mov      1,%l6
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l5
-        st       %l6,[%l5 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
+        st       %l6, [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The following subtract should get us back on the interrupted
@@ -676,8 +675,7 @@ dispatchAgain:
 allow_nest_again:
 
         ! Zero out ISR stack nesting prevention flag
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l5
-        st       %g0,[%l5 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
+        st       %g0, [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The CWP in place at this point may be different from

@@ -19,7 +19,14 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/percpu.h>
 #include <rtems/rtems/cache.h>
+
+RTEMS_STATIC_ASSERT(
+  offsetof( Per_CPU_Control, cpu_per_cpu.isr_dispatch_disable)
+    == SPARC_PER_CPU_ISR_DISPATCH_DISABLE,
+  SPARC_PER_CPU_ISR_DISPATCH_DISABLE
+);
 
 /*
  *  This initializes the set of opcodes placed in each trap
@@ -65,13 +72,6 @@ void _CPU_Initialize(void)
   pointer = &_CPU_Null_fp_context;
   _CPU_Context_save_fp( &pointer );
 #endif
-
-  /*
-   *  Since no tasks have been created yet and no interrupts have occurred,
-   *  there is no way that the currently executing thread can have an
-   *  _ISR_Dispatch stack frame on its stack.
-   */
-  _CPU_ISR_Dispatch_disable = 0;
 }
 
 uint32_t   _CPU_ISR_Get_level( void )

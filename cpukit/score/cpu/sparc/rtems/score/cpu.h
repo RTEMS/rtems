@@ -357,7 +357,13 @@ typedef struct {
 /** This defines the size of the minimum stack frame. */
 #define CPU_MINIMUM_STACK_FRAME_SIZE          0x60
 
-#define CPU_PER_CPU_CONTROL_SIZE 0
+#define CPU_PER_CPU_CONTROL_SIZE 4
+
+/**
+ * @brief Offset of the CPU_Per_CPU_control::isr_dispatch_disable field
+ * relative to the Per_CPU_Control begin.
+ */
+#define SPARC_PER_CPU_ISR_DISPATCH_DISABLE 0
 
 /**
  * @defgroup Contexts SPARC Context Structures
@@ -383,7 +389,13 @@ typedef struct {
 #ifndef ASM
 
 typedef struct {
-  /* There is no CPU specific per-CPU state */
+  /**
+   * This flag is context switched with each thread.  It indicates
+   * that THIS thread has an _ISR_Dispatch stack frame on its stack.
+   * By using this flag, we can avoid nesting more interrupt dispatching
+   * attempts on a previously interrupted thread's stack.
+   */
+  uint32_t isr_dispatch_disable;
 } CPU_Per_CPU_control;
 
 /**
@@ -767,14 +779,6 @@ typedef struct {
  * context area during _CPU_Context_Initialize.
  */
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
-
-/**
- * This flag is context switched with each thread.  It indicates
- * that THIS thread has an _ISR_Dispatch stack frame on its stack.
- * By using this flag, we can avoid nesting more interrupt dispatching
- * attempts on a previously interrupted thread's stack.
- */
-SCORE_EXTERN volatile uint32_t _CPU_ISR_Dispatch_disable;
 
 /**
  * The following type defines an entry in the SPARC's trap table.
