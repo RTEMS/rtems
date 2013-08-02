@@ -353,6 +353,8 @@ extern "C" {
 
 #define CPU_SIZEOF_POINTER 4
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  Processor defined structures
  *
@@ -398,6 +400,10 @@ extern "C" {
  */
 
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if (__mips == 1) || (__mips == 32)

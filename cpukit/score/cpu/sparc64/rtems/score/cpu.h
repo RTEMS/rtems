@@ -224,6 +224,8 @@ extern "C" {
 
 #define CPU_MODES_INTERRUPT_MASK   0x0000000F
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  This structure represents the organization of the minimum stack frame
  *  for the SPARC.  More framing information is required in certain situaions
@@ -232,6 +234,10 @@ extern "C" {
  */
 
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 typedef struct {
   uint64_t    l0;

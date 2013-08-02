@@ -141,6 +141,11 @@ typedef enum {
  *  This structure is used to hold per core state information.
  */
 typedef struct {
+  /**
+   * @brief CPU port specific control.
+   */
+  CPU_Per_CPU_control cpu_per_cpu;
+
   #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
       (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
     /**
@@ -310,7 +315,7 @@ void _Per_CPU_Wait_for_state(
    *  we need to have places in the per CPU table to hold them.
    */
   #define PER_CPU_INTERRUPT_STACK_LOW \
-    0
+    CPU_PER_CPU_CONTROL_SIZE
   #define PER_CPU_INTERRUPT_STACK_HIGH \
     PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
   #define PER_CPU_END_STACK             \
@@ -322,7 +327,7 @@ void _Per_CPU_Wait_for_state(
     (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
 #else
   #define PER_CPU_END_STACK \
-    0
+    CPU_PER_CPU_CONTROL_SIZE
 #endif
 
 /*

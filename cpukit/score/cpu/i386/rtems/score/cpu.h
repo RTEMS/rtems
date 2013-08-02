@@ -126,9 +126,15 @@ extern "C" {
 #define CPU_BIG_ENDIAN                           FALSE
 #define CPU_LITTLE_ENDIAN                        TRUE
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /* structures */
 
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /*
  *  Basic integer context for the i386 family.

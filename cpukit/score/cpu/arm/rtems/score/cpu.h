@@ -208,6 +208,8 @@
 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /** @} */
 
 #ifdef ARM_MULTILIB_VFP_D32
@@ -232,6 +234,10 @@ extern "C" {
  * @addtogroup ScoreCPU
  */
 /**@{**/
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)

@@ -407,6 +407,8 @@ extern "C" {
  */
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  * Processor defined structures required for cpukit/score.
  *
@@ -416,6 +418,10 @@ extern "C" {
  */
 
 /* may need to put some structures here.  */
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /**
  * @defgroup CPUContext Processor Dependent Context Management

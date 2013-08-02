@@ -357,6 +357,8 @@ typedef struct {
 /** This defines the size of the minimum stack frame. */
 #define CPU_MINIMUM_STACK_FRAME_SIZE          0x60
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /**
  * @defgroup Contexts SPARC Context Structures
  *
@@ -379,6 +381,11 @@ typedef struct {
 /**@{**/
 
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
+
 /**
  * @brief SPARC basic context.
  *

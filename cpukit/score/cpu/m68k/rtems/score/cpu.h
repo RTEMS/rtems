@@ -112,6 +112,8 @@ extern "C" {
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 #if ( CPU_HARDWARE_FP == TRUE ) && !defined( __mcoldfire__ )
   #if defined( __mc68060__ )
     #define M68K_FP_STATE_SIZE 16
@@ -123,6 +125,10 @@ extern "C" {
 #ifndef ASM
 
 /* structures */
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /*
  *  Basic integer context for the m68k family.

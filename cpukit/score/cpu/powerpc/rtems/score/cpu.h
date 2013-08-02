@@ -212,6 +212,8 @@ extern "C" {
 
 #define CPU_IDLE_TASK_IS_FP      FALSE
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  Processor defined structures required for cpukit/score.
  */
@@ -266,6 +268,10 @@ extern "C" {
 #define PPC_DEFAULT_CACHE_LINE_SIZE 32
 
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /* Non-volatile context according to E500ABIUG and EABI */
 typedef struct {

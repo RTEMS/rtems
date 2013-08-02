@@ -474,6 +474,14 @@ extern "C" {
  */
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
 
+/**
+ * @brief The size of the CPU specific per-CPU control.
+ *
+ * This define must be visible to assember files since it is used to derive
+ * structure offsets.
+ */
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  Processor defined structures required for cpukit/score.
  *
@@ -483,6 +491,16 @@ extern "C" {
  */
 
 /* may need to put some structures here.  */
+
+/**
+ * @brief The CPU specific per-CPU control.
+ *
+ * The CPU port can place here all state information that must be available and
+ * maintained for each CPU in the system.
+ */
+typedef struct {
+  /* CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /**
  * @defgroup CPUContext Processor Dependent Context Management

@@ -33,6 +33,11 @@ RTEMS_STATIC_ASSERT(
   );
 #endif
 
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Per_CPU_control ) == CPU_PER_CPU_CONTROL_SIZE,
+  CPU_PER_CPU_CONTROL_SIZE
+);
+
 #if defined( RTEMS_SMP )
   RTEMS_STATIC_ASSERT(
     sizeof( Per_CPU_Control_envelope ) == PER_CPU_CONTROL_SIZE,
