@@ -30,9 +30,9 @@
   for (i = 0; i < TEST_REPEAT; i++){                     \
     a = (R_TYPE)(rand() % ((R_TYPE)-1 / 2));             \
     b = (R_TYPE)(rand() % ((R_TYPE)-1 / 2));             \
-    _Atomic_Store_##NAME(&t, a, mem_bar);                \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELEASE);   \
     _Atomic_Fetch_or_##NAME(&t, b, mem_bar);             \
-    c = _Atomic_Load_##NAME(&t, mem_bar);                \
+    c = _Atomic_Load_##NAME(&t, ATOMIC_ORDER_ACQUIRE);   \
     rtems_test_assert(c == (R_TYPE)(a | b));             \
   }                                                      \
   locked_printf("\nCPU%d Atomic_Fetch_or_" #NAME ": SUCCESS\n", cpuid); \

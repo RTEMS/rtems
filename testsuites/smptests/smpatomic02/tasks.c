@@ -29,7 +29,7 @@
   for (i = 0; i < TEST_REPEAT; i++){                     \
     b = (R_TYPE)rand();                                  \
     _Atomic_Store_##NAME(&t, b, mem_bar);                \
-    a = _Atomic_Load_##NAME(&t, mem_bar);                \
+    a = _Atomic_Load_##NAME(&t, ATOMIC_ORDER_ACQUIRE);   \
     rtems_test_assert(a == b);                           \
   }                                                      \
   locked_printf("\nCPU%d Atomic_Store_" #NAME ": SUCCESS\n", cpuid); \

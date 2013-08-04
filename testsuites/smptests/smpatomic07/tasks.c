@@ -29,21 +29,21 @@
   int r;                                                \
   for (i = 0; i < TEST_REPEAT; i++){                    \
     a = rand() % (R_TYPE)-1;                            \
-    _Atomic_Store_##NAME(&t, a, mem_bar);               \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELEASE);  \
     b = a + 1;                                                           \
     r = _Atomic_Compare_exchange_##NAME(&t, &b, a - 1, mem_bar, memory_order_relaxed);\
     if(r != 0){                                                          \
       locked_printf("\ntask%d: Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)cpuid); \
       rtems_test_exit( 0 );                                              \
     }                                                                    \
-    _Atomic_Store_##NAME(&t, a, mem_bar);                                \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELEASE);                   \
     r = _Atomic_Compare_exchange_##NAME(&t, &a, a - 1, mem_bar, memory_order_relaxed);\
-    b = _Atomic_Load_##NAME(&t, mem_bar);                                \
+    b = _Atomic_Load_##NAME(&t, ATOMIC_ORDER_ACQUIRE);                   \
     if((r == 0) ||((r != 0) && ((a - 1) != b))){                         \
       locked_printf("\ntask%d: Atomic_Compare_exchange_" #NAME ": FAILED\n", (unsigned int)cpuid); \
       rtems_test_exit( 0 );                                              \
     }                                                                    \
-    _Atomic_Store_##NAME(&t, a, mem_bar);                                \
+    _Atomic_Store_##NAME(&t, a, ATOMIC_ORDER_RELEASE);                   \
     b = a + 1;                                                           \
     r = _Atomic_Compare_exchange_##NAME(&t, &b, a, mem_bar, memory_order_relaxed); \
     if(r != 0){                                                          \
