@@ -18,3 +18,5 @@ LINK_LIBS = $(spfreechain01_LDLIBS)
 spfreechain01$(EXEEXT): $(spfreechain01_OBJECTS) $(spfreechain01_DEPENDENCIES)
 	@rm -f spfreechain01$(EXEEXT)
 	$(make-exe)
+
+include $(top_srcdir)/../automake/local.am
