@@ -125,7 +125,7 @@ RTEMS_INLINE_ROUTINE void _CPU_atomic_Store_ptr(
  * @param value a value to be add and store into object.
  * @param order a type of Atomic_Order. 
  * 
- * @retval a result value after add ops.
+ * @retval a result value before add ops.
  */
 RTEMS_INLINE_ROUTINE uint_fast32_t _CPU_atomic_Fetch_add_uint(
   volatile Atomic_Uint *object,
@@ -152,7 +152,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _CPU_atomic_Fetch_add_ptr(
  * @param value a value to be sub and store into object.
  * @param order a type of Atomic_Order. 
  * 
- * @retval a result value after sub ops.
+ * @retval a result value before sub ops.
  */
 RTEMS_INLINE_ROUTINE uint_fast32_t _CPU_atomic_Fetch_sub_uint(
   volatile Atomic_Uint *object,
@@ -179,7 +179,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _CPU_atomic_Fetch_sub_ptr(
  * @param value a value to be or and store into object.
  * @param order a type of Atomic_Order. 
  * 
- * @retval a result value after or ops.
+ * @retval a result value before or ops.
  */
 RTEMS_INLINE_ROUTINE uint_fast32_t _CPU_atomic_Fetch_or_uint(
   volatile Atomic_Uint *object,
@@ -206,7 +206,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _CPU_atomic_Fetch_or_ptr(
  * @param value a value to be and and store into object.
  * @param order a type of Atomic_Order. 
  * 
- * @retval a result value after and ops.
+ * @retval a result value before and ops.
  */
 RTEMS_INLINE_ROUTINE uint_fast32_t _CPU_atomic_Fetch_and_uint(
   volatile Atomic_Uint *object,
@@ -233,7 +233,7 @@ RTEMS_INLINE_ROUTINE uintptr_t _CPU_atomic_Fetch_and_ptr(
  * @param value a value to exchange and and store into object.
  * @param order a type of Atomic_Order. 
  * 
- * @retval a result value after exchange ops.
+ * @retval a result value before exchange ops.
  */
 RTEMS_INLINE_ROUTINE uint_fast32_t _CPU_atomic_Exchange_uint(
  volatile Atomic_Uint *object,
