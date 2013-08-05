@@ -15,59 +15,69 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/priority.h>
 #include <rtems/score/threaddispatch.h>
+#include <rtems/score/assert.h>
 
 #define NO_OWNER_CPU 0xffffffffU
 
-void _Thread_Dispatch_initialization( void )
-{
-  Thread_Dispatch_disable_level_lock_control *level_lock =
-    &_Thread_Dispatch_disable_level_lock;
+typedef struct {
+  SMP_lock_Control lock;
+  uint32_t owner_cpu;
+  uint32_t nest_level;
+} Giant_Control;
 
-  _Thread_Dispatch_disable_level = 0;
-  _SMP_lock_Initialize( &level_lock->lock );
-  level_lock->owner_cpu = NO_OWNER_CPU;
-  _Thread_Dispatch_set_disable_level( 1 );
+static Giant_Control _Giant = {
+  .lock = SMP_LOCK_INITIALIZER,
+  .owner_cpu = NO_OWNER_CPU,
+  .nest_level = 0
+};
+
+static void _Giant_Do_acquire( uint32_t self_cpu_index )
+{
+  Giant_Control *giant = &_Giant;
+
+  if ( giant->owner_cpu != self_cpu_index ) {
+    _SMP_lock_Acquire( &giant->lock );
+    giant->owner_cpu = self_cpu_index;
+    giant->nest_level = 1;
+  } else {
+    ++giant->nest_level;
+  }
 }
 
-uint32_t _Thread_Dispatch_get_disable_level(void)
+static void _Giant_Do_release( void )
 {
-  return _Thread_Dispatch_disable_level;
+  Giant_Control *giant = &_Giant;
+
+  --giant->nest_level;
+  if ( giant->nest_level == 0 ) {
+    giant->owner_cpu = NO_OWNER_CPU;
+    _SMP_lock_Release( &giant->lock );
+  }
 }
 
 uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
-  Thread_Dispatch_disable_level_lock_control *level_lock =
-    &_Thread_Dispatch_disable_level_lock;
+  Giant_Control *giant = &_Giant;
   ISR_Level isr_level;
-  uint32_t self_cpu;
+  uint32_t self_cpu_index;
   uint32_t disable_level;
+  Per_CPU_Control *self_cpu;
 
   _ISR_Disable( isr_level );
 
   /*
-   * We must obtain the processor ID after interrupts are disabled since a
-   * non-optimizing compiler may store the value on the stack and read it back.
+   * We must obtain the processor ID after interrupts are disabled to prevent
+   * thread migration.
    */
-  self_cpu = _SMP_Get_current_processor();
+  self_cpu_index = _SMP_Get_current_processor();
 
-  if ( level_lock->owner_cpu != self_cpu ) {
-    _SMP_lock_Acquire( &level_lock->lock );
-    level_lock->owner_cpu = self_cpu;
-    level_lock->nest_level = 1;
-  } else {
-    ++level_lock->nest_level;
-  }
+  _Giant_Do_acquire( self_cpu_index );
 
-  disable_level = _Thread_Dispatch_disable_level;
+  self_cpu = _Per_CPU_Get_by_index( self_cpu_index );
+  disable_level = self_cpu->thread_dispatch_disable_level;
   ++disable_level;
-  _Thread_Dispatch_disable_level = disable_level;
+  self_cpu->thread_dispatch_disable_level = disable_level;
 
   _ISR_Enable( isr_level );
 
@@ -76,22 +86,18 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
 
 uint32_t _Thread_Dispatch_decrement_disable_level( void )
 {
-  Thread_Dispatch_disable_level_lock_control *level_lock =
-    &_Thread_Dispatch_disable_level_lock;
   ISR_Level isr_level;
   uint32_t disable_level;
+  Per_CPU_Control *self_cpu;
 
   _ISR_Disable( isr_level );
 
-  disable_level = _Thread_Dispatch_disable_level;
+  self_cpu = _Per_CPU_Get();
+  disable_level = self_cpu->thread_dispatch_disable_level;
   --disable_level;
-  _Thread_Dispatch_disable_level = disable_level;
+  self_cpu->thread_dispatch_disable_level = disable_level;
 
-  --level_lock->nest_level;
-  if ( level_lock->nest_level == 0 ) {
-    level_lock->owner_cpu = NO_OWNER_CPU;
-    _SMP_lock_Release( &level_lock->lock );
-  }
+  _Giant_Do_release();
 
   _ISR_Enable( isr_level );
 
@@ -110,13 +116,20 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
 
 uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
 {
+  ISR_Level isr_level;
+  uint32_t disable_level;
+
+  _ISR_Disable( isr_level );
+  disable_level = _Thread_Dispatch_disable_level;
+  _ISR_Enable( isr_level );
+
   /*
    * If we need the dispatch level to go higher 
    * call increment method the desired number of times.
    */
 
-  while ( value > _Thread_Dispatch_disable_level ) {
-    _Thread_Dispatch_increment_disable_level();
+  while ( value > disable_level ) {
+    disable_level = _Thread_Dispatch_increment_disable_level();
   }
 
   /*
@@ -124,9 +137,29 @@ uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
    * call increment method the desired number of times.
    */
 
-  while ( value < _Thread_Dispatch_disable_level ) {
-    _Thread_Dispatch_decrement_disable_level();
+  while ( value < disable_level ) {
+    disable_level = _Thread_Dispatch_decrement_disable_level();
   }
 
   return value;
+}
+
+void _Giant_Acquire( void )
+{
+  ISR_Level isr_level;
+
+  _ISR_Disable( isr_level );
+  _Assert( _Thread_Dispatch_disable_level != 0 );
+  _Giant_Do_acquire( _SMP_Get_current_processor() );
+  _ISR_Enable( isr_level );
+}
+
+void _Giant_Release( void )
+{
+  ISR_Level isr_level;
+
+  _ISR_Disable( isr_level );
+  _Assert( _Thread_Dispatch_disable_level != 0 );
+  _Giant_Do_release();
+  _ISR_Enable( isr_level );
 }

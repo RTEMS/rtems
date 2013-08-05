@@ -96,28 +96,6 @@ SCORE_EXTERN ISR_Handler_entry *_ISR_Vector_table;
  */
 void _ISR_Handler_initialization ( void );
 
-#if defined( RTEMS_SMP )
-/**
- *  @brief Enter SMP interrupt code.
- *
- *  This method is used to enter the SMP interrupt section.
- *
- *  @retval This method returns the isr level.
- */
-int _ISR_SMP_Enter(void);
-
-/**
- *  @brief Exit SMP interrupt code.
- *
- *  This method is used to exit the SMP interrupt.
- *
- *  @retval This method returns 0 on a simple return and returns 1 on a
- *  dispatching return.
- */
-int _ISR_SMP_Exit(void);
-
-#endif /* defined( RTEMS_SMP ) */
-
 /**
  *  @brief Install interrupt handler vector.
  *

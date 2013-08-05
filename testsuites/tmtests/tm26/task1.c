@@ -127,6 +127,24 @@ static void set_thread_executing( Thread_Control *thread )
 #endif
 }
 
+static void thread_disable_dispatch( void )
+{
+#if defined( RTEMS_SMP )
+  Per_CPU_Control *self_cpu;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable( level );
+  ( void ) level;
+
+  self_cpu = _Per_CPU_Get();
+  self_cpu->thread_dispatch_disable_level = 1;
+
+  _Per_CPU_Acquire( self_cpu );
+#else
+  _Thread_Disable_dispatch();
+#endif
+}
+
 rtems_task null_task(
   rtems_task_argument argument
 )
@@ -306,7 +324,7 @@ rtems_task Middle_task(
 
   set_thread_dispatch_necessary( false );
 
-  _Thread_Disable_dispatch();
+  thread_disable_dispatch();
 
   benchmark_timer_initialize();
     _Context_Switch(
@@ -350,7 +368,7 @@ rtems_task Low_task(
 
   set_thread_dispatch_necessary( false );
 
-  _Thread_Disable_dispatch();
+  thread_disable_dispatch();
 
   benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
@@ -383,7 +401,7 @@ rtems_task Floating_point_task_1(
 
   set_thread_dispatch_necessary( false );
 
-  _Thread_Disable_dispatch();
+  thread_disable_dispatch();
 
   benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
@@ -406,12 +424,6 @@ rtems_task Floating_point_task_1(
   set_thread_executing(
     (Thread_Control *) _Chain_First(&ready_queues[FP2_PRIORITY])
   );
-
-  /* do not force context switch */
-
-  set_thread_dispatch_necessary( false );
-
-  _Thread_Disable_dispatch();
 
   benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
@@ -443,12 +455,6 @@ rtems_task Floating_point_task_2(
   );
 
   FP_LOAD( 1.0 );
-
-  /* do not force context switch */
-
-  set_thread_dispatch_necessary( false );
-
-  _Thread_Disable_dispatch();
 
   benchmark_timer_initialize();
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)

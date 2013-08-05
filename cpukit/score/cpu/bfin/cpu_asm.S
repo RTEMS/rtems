@@ -313,7 +313,6 @@ SYM(_CPU_Context_restore):
 
 	.globl SYM(_ISR_Handler)
 SYM(_ISR_Handler):
-	.extern SYM(_Thread_Dispatch_disable_level)
 	/* all interrupts are disabled at this point */
 	/* the following few items are pushed onto the task stack for at
 	   most one interrupt; nested interrupts will be using the interrupt
@@ -338,8 +337,8 @@ SYM(_ISR_Handler):
 	[--sp] = r0;
 noStackSwitch:
 	/* disable thread dispatch */
-	p0.h = SYM(_Thread_Dispatch_disable_level);
-	p0.l = SYM(_Thread_Dispatch_disable_level);
+	p0.h = THREAD_DISPATCH_DISABLE_LEVEL;
+	p0.l = THREAD_DISPATCH_DISABLE_LEVEL;
 	r0 = [p0];
 	r0 += 1;
 	[p0] = r0;
@@ -459,8 +458,8 @@ noStackRestore:
 
 	/* check this stuff to ensure context_switch_necessary and
 	   isr_signals_to_thread_executing are being handled appropriately. */
-	p0.h = SYM(_Thread_Dispatch_disable_level);
-	p0.l = SYM(_Thread_Dispatch_disable_level);
+	p0.h = THREAD_DISPATCH_DISABLE_LEVEL;
+	p0.l = THREAD_DISPATCH_DISABLE_LEVEL;
 	r0 = [p0];
 	r0 += -1;
 	[p0] = r0;

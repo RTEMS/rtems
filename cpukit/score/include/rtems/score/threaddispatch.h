@@ -14,7 +14,7 @@
 #ifndef _RTEMS_SCORE_THREADDISPATCH_H
 #define _RTEMS_SCORE_THREADDISPATCH_H
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/smplock.h>
 
 #ifdef __cplusplus
@@ -40,13 +40,6 @@ extern "C" {
  */
 
 /**
- *  The following declares the dispatch critical section nesting
- *  counter which is used to prevent context switches at inopportune
- *  moments.
- */
-SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
-
-/**
  * @brief Indicates if the executing thread is inside a thread dispatch
  * critical section.
  *
@@ -56,36 +49,64 @@ SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
  */
 RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
 {
-  return _Thread_Dispatch_disable_level == 0;
+  bool enabled;
+
+#if defined(RTEMS_SMP)
+  ISR_Level level;
+
+  _ISR_Disable( level );
+#endif
+
+  enabled = _Thread_Dispatch_disable_level == 0;
+
+#if defined(RTEMS_SMP)
+  _ISR_Enable( level );
+#endif
+
+  return enabled;
+}
+
+/**
+ * @briefs Gets thread dispatch disable level.
+ *
+ * @return The value of the thread dispatch level.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
+{
+  return _Thread_Dispatch_disable_level;
+}
+
+/**
+ * @brief Thread dispatch initialization.
+ *
+ * This routine initializes the thread dispatching subsystem.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
+{
+  _Thread_Dispatch_disable_level = 1;
 }
 
 #if defined(RTEMS_SMP)
-  typedef struct {
-    SMP_lock_Control lock;
-    uint32_t owner_cpu;
-    uint32_t nest_level;
-  } Thread_Dispatch_disable_level_lock_control;
-
   /**
-   * The following declares the smp spinlock to be used to control
-   * the dispatch critical section accesses across cpus.
-   */
-  SCORE_EXTERN Thread_Dispatch_disable_level_lock_control
-    _Thread_Dispatch_disable_level_lock;
-
-  /**
-   *  @brief Initializes the thread dispatching subsystem.
+   * @brief Acquires the giant lock.
    *
-   *  This routine initializes the thread dispatching subsystem.
+   * The giant lock is a recursive SMP lock protecting nearly all operating
+   * system services.
+   *
+   * This lock is implicitly acquired in
+   * _Thread_Dispatch_increment_disable_level().
+   *
+   * Thread dispatching must be disabled before this lock can be acquired.
    */
-  void _Thread_Dispatch_initialization(void);
+  void _Giant_Acquire( void );
 
   /**
-   *  @brief Returns value of the the thread dispatch level.
+   * @brief Releases the giant lock.
    *
-   * This routine returns value of the the thread dispatch level.
+   * This lock is implicitly released in
+   * _Thread_Dispatch_decrement_disable_level().
    */
-  uint32_t _Thread_Dispatch_get_disable_level(void);
+  void _Giant_Release( void );
 
   /**
    *  @brief Sets thread dispatch level to the value passed in.
@@ -109,16 +130,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
    */
   uint32_t _Thread_Dispatch_decrement_disable_level(void);
 #else /* RTEMS_SMP */
-  /**
-   * @brief Get thread dispatch disable level.
-   *
-   * This routine returns value of the the thread dispatch level.
-   */
-  RTEMS_INLINE_ROUTINE uint32_t _Thread_Dispatch_get_disable_level(void)
-  {
-    return _Thread_Dispatch_disable_level;
-  }
-
   /**
    * @brief Set thread dispatch disable level.
    *
@@ -159,16 +170,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
     _Thread_Dispatch_disable_level = level;
 
     return level;
-  }
-
-  /**
-   * @brief Thread dispatch initialization.
-   *
-   * This routine initializes the thread dispatching subsystem.
-   */
-  RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
-  {
-    _Thread_Dispatch_set_disable_level( 1 );
   }
 #endif /* RTEMS_SMP */
 

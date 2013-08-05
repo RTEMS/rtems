@@ -166,6 +166,12 @@ typedef struct {
    */
   uint32_t isr_nest_level;
 
+  /**
+   * @brief The thread dispatch critical section nesting counter which is used
+   * to prevent context switches at inopportune moments.
+   */
+  volatile uint32_t thread_dispatch_disable_level;
+
   /** This is set to true when this CPU needs to run the dispatcher. */
   volatile bool dispatch_necessary;
 
@@ -267,9 +273,14 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
 {
-  _Assert_Thread_dispatching_repressed();
+  Per_CPU_Control *per_cpu =
+    &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu;
 
-  return &_Per_CPU_Information[ _SMP_Get_current_processor() ].per_cpu;
+  _Assert(
+    per_cpu->thread_dispatch_disable_level != 0 || _ISR_Get_level() != 0
+  );
+
+  return per_cpu;
 }
 #else
 #define _Per_CPU_Get() ( &_Per_CPU_Information[ 0 ].per_cpu )
@@ -325,6 +336,8 @@ void _Per_CPU_Wait_for_state(
  * On a non SMP system, the _SMP_Get_current_processor() is defined to 0.
  * Thus when built for non-SMP, there should be no performance penalty.
  */
+#define _Thread_Dispatch_disable_level \
+  _Per_CPU_Get()->thread_dispatch_disable_level
 #define _Thread_Heir \
   _Per_CPU_Get()->heir
 #define _Thread_Executing \
@@ -373,9 +386,13 @@ void _Per_CPU_Wait_for_state(
  */
 #define PER_CPU_ISR_NEST_LEVEL \
   PER_CPU_END_STACK
-#define PER_CPU_DISPATCH_NEEDED \
+#define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \
   PER_CPU_ISR_NEST_LEVEL + 4
+#define PER_CPU_DISPATCH_NEEDED \
+  PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL + 4
 
+#define THREAD_DISPATCH_DISABLE_LEVEL \
+  (SYM(_Per_CPU_Information) + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)
 #define ISR_NEST_LEVEL \
   (SYM(_Per_CPU_Information) + PER_CPU_ISR_NEST_LEVEL)
 #define DISPATCH_NEEDED \

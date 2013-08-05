@@ -39,9 +39,6 @@ bool _Thread_Restart(
 
     _User_extensions_Thread_restart( the_thread );
 
-    if ( _Thread_Is_executing ( the_thread ) )
-      _Thread_Restart_self();
-
     return true;
   }
 

@@ -527,6 +527,13 @@ RTEMS_INLINE_ROUTINE void _Thread_Unblock (
 
 RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 {
+#if defined(RTEMS_SMP)
+  ISR_Level level;
+
+  _Per_CPU_ISR_disable_and_acquire( _Per_CPU_Get(), level );
+  ( void ) level;
+#endif
+
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( _Thread_Executing->fp_context != NULL )
     _Context_Restore_fp( &_Thread_Executing->fp_context );

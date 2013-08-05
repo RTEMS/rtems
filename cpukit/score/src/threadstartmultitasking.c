@@ -28,6 +28,8 @@ void _Thread_Start_multitasking( Context_Control *context )
 #if defined(RTEMS_SMP)
   _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_UP );
 
+  _Per_CPU_Acquire( self_cpu );
+
   self_cpu->executing->is_executing = false;
   heir->is_executing = true;
 #endif
@@ -70,10 +72,11 @@ void _Thread_Start_multitasking( Context_Control *context )
 #if defined(RTEMS_SMP)
   } else {
     /*
-     * Threads begin execution in the _Thread_Handler() function.   This function
-     * will call _Thread_Enable_dispatch().
+     * Threads begin execution in the _Thread_Handler() function.   This
+     * function will set the thread dispatch disable level to zero and calls
+     * _Per_CPU_Release().
      */
-    _Thread_Disable_dispatch();
+    self_cpu->thread_dispatch_disable_level = 1;
 
     _CPU_Context_switch_to_first_task_smp( &heir->Registers );
   }

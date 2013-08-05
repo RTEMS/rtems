@@ -348,7 +348,11 @@ rtems_timer_service_routine test_unblock_task(
   _Thread_Disable_dispatch();
   status = rtems_task_resume( blocked_task_id );
   _Thread_Unnest_dispatch();
+#if defined( RTEMS_SMP )
   directive_failed_with_level( status, "rtems_task_resume", 1 );
+#else
+  directive_failed( status, "rtems_task_resume" );
+#endif
 }
 
 rtems_task Init(
@@ -383,9 +387,7 @@ rtems_task Init(
   /*
    *  Test clock tick from outside ISR
    */
-  _Thread_Disable_dispatch();
   status = rtems_clock_tick();
-  _Thread_Enable_dispatch();
   directive_failed( status, "rtems_clock_tick" );
   puts( "clock_tick from task level" );
 
@@ -422,9 +424,7 @@ rtems_task Init(
 
   /* we expect to be preempted from this call */
   for ( i=0 ; i<100 && blocked_task_status != 3 ; i++ ) {
-    _Thread_Disable_dispatch();
     status = rtems_clock_tick();
-    _Thread_Enable_dispatch();
     directive_failed( status, "rtems_clock_tick" );
   }
   switch ( blocked_task_status ) {

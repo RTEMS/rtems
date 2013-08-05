@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/userextimpl.h>
@@ -46,12 +47,46 @@
   #define EXECUTE_GLOBAL_CONSTRUCTORS
 #endif
 
+#if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
+  static bool _Thread_Handler_is_constructor_execution_required(
+    Thread_Control *executing
+  )
+  {
+    static bool doneConstructors;
+    bool doCons = false;
+
+    #if defined(RTEMS_SMP)
+      static SMP_lock_Control constructor_lock = SMP_LOCK_INITIALIZER;
+
+      if ( !doneConstructors ) {
+        _SMP_lock_Acquire( &constructor_lock );
+    #endif
+
+    #if defined(RTEMS_MULTIPROCESSING)
+      doCons = !doneConstructors
+        && _Objects_Get_API( executing->Object.id ) != OBJECTS_INTERNAL_API;
+      if (doCons)
+        doneConstructors = true;
+    #else
+      (void) executing;
+      doCons = !doneConstructors;
+      doneConstructors = true;
+    #endif
+
+    #if defined(RTEMS_SMP)
+        _SMP_lock_Release( &constructor_lock );
+      }
+    #endif
+
+    return doCons;
+  }
+#endif
+
 void _Thread_Handler( void )
 {
   ISR_Level  level;
   Thread_Control *executing;
   #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    static bool doneConstructors;
     bool doCons;
   #endif
 
@@ -64,23 +99,17 @@ void _Thread_Handler( void )
    */
   _Context_Initialization_at_thread_begin();
 
-  /*
-   * have to put level into a register for those cpu's that use
-   * inline asm here
-   */
-  level = executing->Start.isr_level;
-  _ISR_Set_level(level);
+  #if !defined(RTEMS_SMP)
+    /*
+     * have to put level into a register for those cpu's that use
+     * inline asm here
+     */
+    level = executing->Start.isr_level;
+    _ISR_Set_level( level );
+  #endif
 
   #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
-    #if defined(RTEMS_MULTIPROCESSING)
-      doCons = !doneConstructors
-        && _Objects_Get_API( executing->Object.id ) != OBJECTS_INTERNAL_API;
-      if (doCons)
-        doneConstructors = true;
-    #else
-      doCons = !doneConstructors;
-      doneConstructors = true;
-    #endif
+    doCons = _Thread_Handler_is_constructor_execution_required( executing );
   #endif
 
   /*
@@ -109,7 +138,34 @@ void _Thread_Handler( void )
   /*
    *  At this point, the dispatch disable level BETTER be 1.
    */
-  _Thread_Enable_dispatch();
+  #if defined(RTEMS_SMP)
+    {
+      /*
+       * On SMP we enter _Thread_Handler() with interrupts disabled and
+       * _Thread_Dispatch() obtained the per-CPU lock for us.  We have to
+       * release it here and set the desired interrupt level of the thread.
+       */
+      Per_CPU_Control *per_cpu = _Per_CPU_Get();
+
+      _Assert( per_cpu->thread_dispatch_disable_level == 1 );
+      _Assert( _ISR_Get_level() != 0 );
+
+      per_cpu->thread_dispatch_disable_level = 0;
+
+      _Per_CPU_Release( per_cpu );
+
+      level = executing->Start.isr_level;
+      _ISR_Set_level( level);
+
+      /*
+       * The thread dispatch level changed from one to zero.  Make sure we lose
+       * no thread dispatch necessary update.
+       */
+      _Thread_Dispatch();
+    }
+  #else
+    _Thread_Enable_dispatch();
+  #endif
 
   #if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
     /*

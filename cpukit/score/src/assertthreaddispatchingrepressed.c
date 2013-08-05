@@ -23,6 +23,15 @@
 #if defined( RTEMS_DEBUG )
   void _Assert_Thread_dispatching_repressed( void )
   {
-    _Assert( !_Thread_Dispatch_is_enabled() || _ISR_Get_level() != 0 );
+    bool dispatch_is_disabled;
+    ISR_Level level;
+    Per_CPU_Control *per_cpu;
+
+    _ISR_Disable( level );
+    per_cpu = _Per_CPU_Get_by_index( _SMP_Get_current_processor() );
+    dispatch_is_disabled = per_cpu->thread_dispatch_disable_level != 0;
+    _ISR_Enable( level );
+
+    _Assert( dispatch_is_disabled || _ISR_Get_level() != 0 );
   }
 #endif

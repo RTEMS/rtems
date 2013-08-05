@@ -127,9 +127,9 @@ nested:
 	mov.l	@ISR_NEST_LEVEL,er1
 	inc.l	#1,er1
 	mov.l	er1,@ISR_NEST_LEVEL
-	mov.l	@SYM(_Thread_Dispatch_disable_level),er1
+	mov.l	@THREAD_DISPATCH_DISABLE_LEVEL,er1
 	inc.l	#1,er1
-	mov.l	er1,@SYM(_Thread_Dispatch_disable_level)
+	mov.l	er1,@THREAD_DISPATCH_DISABLE_LEVEL
 	
 /* Vector to ISR */
 
@@ -145,9 +145,9 @@ nested:
 	mov.l	@ISR_NEST_LEVEL,er1
 	dec.l	#1,er1
 	mov.l	er1,@ISR_NEST_LEVEL
-	mov.l	@SYM(_Thread_Dispatch_disable_level),er1
+	mov.l	@THREAD_DISPATCH_DISABLE_LEVEL,er1
 	dec.l	#1,er1
-	mov.l	er1,@SYM(_Thread_Dispatch_disable_level)
+	mov.l	er1,@THREAD_DISPATCH_DISABLE_LEVEL
 	bne	exit
 	
 	mov.b	@DISPATCH_NEEDED,er1

@@ -61,9 +61,7 @@ rtems_task Init(
   }
 
   locked_printf( "rtems_clock_tick - so this task has run longer\n" );
-  _Thread_Disable_dispatch();
   status = rtems_clock_tick();
-  _Thread_Enable_dispatch();
   directive_failed( status, "clock tick" );
 
   cpu_num = rtems_smp_get_current_processor();

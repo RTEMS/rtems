@@ -26,15 +26,23 @@
 
 rtems_status_code rtems_clock_tick( void )
 {
+#if defined( RTEMS_SMP )
+  _Thread_Disable_dispatch();
+#endif
+
   _TOD_Tickle_ticks();
 
   _Watchdog_Tickle_ticks();
 
   _Scheduler_Tick();
 
+#if defined( RTEMS_SMP )
+  _Thread_Enable_dispatch();
+#else
   if ( _Thread_Is_context_switch_necessary() &&
        _Thread_Dispatch_is_enabled() )
     _Thread_Dispatch();
+#endif
 
   return RTEMS_SUCCESSFUL;
 }

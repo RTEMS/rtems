@@ -582,8 +582,6 @@ FRAME(_CPU_Context_restore,sp,0,ra)
 
 ENDFRAME(_CPU_Context_restore)
 
-ASM_EXTERN(_Thread_Dispatch_disable_level,4)
-
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
@@ -892,10 +890,10 @@ _ISR_Handler_1:
   /*
    *  _Thread_Dispatch_disable_level++;
    */
-        lw	t1,_Thread_Dispatch_disable_level
+        lw	t1,THREAD_DISPATCH_DISABLE_LEVEL
 	NOP
         add	t1,t1,1
-        sw	t1,_Thread_Dispatch_disable_level
+        sw	t1,THREAD_DISPATCH_DISABLE_LEVEL
 
   /*
    *  Call the CPU model or BSP specific routine to decode the
@@ -928,10 +926,10 @@ _ISR_Handler_1:
   /*
    *  --_Thread_Dispatch_disable_level;
    */
-        lw	t1,_Thread_Dispatch_disable_level
+        lw	t1,THREAD_DISPATCH_DISABLE_LEVEL
 	NOP
         add	t1,t1,-1
-        sw	t1,_Thread_Dispatch_disable_level
+        sw	t1,THREAD_DISPATCH_DISABLE_LEVEL
   /*
    *  if ( _Thread_Dispatch_disable_level || _ISR_Nest_level )
    *    goto the label "exit interrupt (simple case)"
