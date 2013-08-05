@@ -165,7 +165,7 @@
  * operating system support for a FIQ, she can trigger a software interrupt and
  * service the request in a two-step process.
  */
-#define CPU_MODES_INTERRUPT_MASK 0x80
+#define CPU_MODES_INTERRUPT_MASK 0x1
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 

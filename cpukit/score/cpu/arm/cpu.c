@@ -87,10 +87,12 @@ void _CPU_ISR_Set_level( uint32_t level )
 {
   uint32_t arm_switch_reg;
 
+  level = ( level != 0 ) ? ARM_PSR_I : 0;
+
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[arm_switch_reg], cpsr\n"
-    "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
+    "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( ARM_PSR_I ) "\n"
     "orr %[arm_switch_reg], %[level]\n"
     "msr cpsr, %0\n"
     ARM_SWITCH_BACK
@@ -107,12 +109,12 @@ uint32_t _CPU_ISR_Get_level( void )
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
-    "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
+    "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( ARM_PSR_I ) "\n"
     ARM_SWITCH_BACK
     : [level] "=&r" (level) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
 
-  return level;
+  return ( level & ARM_PSR_I ) != 0;
 }
 
 void _CPU_ISR_install_vector(
