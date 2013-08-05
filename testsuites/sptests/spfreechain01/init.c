@@ -57,7 +57,7 @@ bool my_freechain_extend_heap( Freechain_Control *freechain )
         " - OK" );
   for ( i = 0; i < self->bump_count; i++ ) {
       _Freechain_Put(freechain,
-                          nodes + i * node_size);
+                          nodes + i);
   }
   return true;
 }
@@ -81,7 +81,7 @@ bool my_freechain_extend_workspace( Freechain_Control *freechain )
 
   for ( i = 0; i < self->bump_count; i++ ) {
       _Freechain_Put(freechain,
-                          nodes + i * node_size);
+                          nodes + i);
   }
   return true;
 }
