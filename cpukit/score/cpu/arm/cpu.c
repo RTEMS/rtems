@@ -76,7 +76,8 @@ void _CPU_Context_Initialize(
 {
   the_context->register_sp = (uint32_t) stack_area_begin + stack_area_size;
   the_context->register_lr = (uint32_t) entry_point;
-  the_context->register_cpsr = new_level | arm_cpu_mode;
+  the_context->register_cpsr = ( ( new_level != 0 ) ? ARM_PSR_I : 0 )
+    | arm_cpu_mode;
 }
 
 /* Preprocessor magic for stringification of x */
