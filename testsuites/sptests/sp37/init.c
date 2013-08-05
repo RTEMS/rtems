@@ -44,11 +44,86 @@ rtems_timer_service_routine test_isr_in_progress(
 
 /* test bodies */
 
+#define TEST_ISR_EVENT RTEMS_EVENT_0
+
+typedef struct {
+  ISR_Level actual_level;
+  rtems_id master_task_id;
+} test_isr_level_context;
+
+static void isr_level_check_task( rtems_task_argument arg )
+{
+  test_isr_level_context *ctx = (test_isr_level_context *) arg;
+  rtems_status_code sc;
+
+  ctx->actual_level = _ISR_Get_level();
+
+  sc = rtems_event_send( ctx->master_task_id,  TEST_ISR_EVENT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  ( void ) rtems_task_suspend( RTEMS_SELF );
+  rtems_test_assert( 0 );
+}
+
+static void test_isr_level_for_new_threads( ISR_Level last_proper_level )
+{
+  ISR_Level mask = CPU_MODES_INTERRUPT_MASK;
+  ISR_Level current;
+  test_isr_level_context ctx = {
+    .master_task_id = rtems_task_self()
+  };
+
+  for ( current = 0 ; current <= mask ; ++current ) {
+    rtems_mode initial_modes = RTEMS_INTERRUPT_LEVEL(current);
+    rtems_id id;
+    rtems_status_code sc;
+    rtems_event_set events;
+
+    ctx.actual_level = 0xffffffff;
+
+    sc = rtems_task_create(
+      rtems_build_name('I', 'S', 'R', 'L'),
+      RTEMS_MINIMUM_PRIORITY,
+      RTEMS_MINIMUM_STACK_SIZE,
+      initial_modes,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+    sc = rtems_task_start(
+      id,
+      isr_level_check_task,
+      (rtems_task_argument) &ctx
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+    sc = rtems_event_receive(
+      TEST_ISR_EVENT,
+      RTEMS_EVENT_ALL | RTEMS_WAIT,
+      RTEMS_NO_TIMEOUT,
+      &events
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+    rtems_test_assert( events == TEST_ISR_EVENT );
+
+    if ( current <= last_proper_level ) {
+      rtems_test_assert( ctx.actual_level == current );
+    } else {
+      rtems_test_assert( ctx.actual_level == last_proper_level );
+    }
+
+    sc = rtems_task_delete( id ) ;
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  }
+}
+
 static void test_isr_level( void )
 {
   ISR_Level mask = CPU_MODES_INTERRUPT_MASK;
   ISR_Level normal = _ISR_Get_level();
   ISR_Level current = 0;
+  ISR_Level last_proper_level;
 
   _ISR_Set_level( current );
   rtems_test_assert( _ISR_Get_level() == current );
@@ -66,12 +141,20 @@ static void test_isr_level( void )
     }
   }
 
+  last_proper_level = current - 1;
+
   for ( current = current + 1 ; current <= mask ; ++current ) {
     _ISR_Set_level( current );
     rtems_test_assert( _ISR_Get_level() == current );
   }
 
   _ISR_Set_level( normal );
+
+  /*
+   * Now test that the ISR level specified for _Thread_Initialize() propagates
+   * properly to the thread.
+   */
+  test_isr_level_for_new_threads( last_proper_level );
 }
 
 static void test_isr_locks( void )
