@@ -6,12 +6,12 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2007.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2007.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #if HAVE_CONFIG_H
@@ -42,8 +42,6 @@ int pthread_key_delete(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
-
       _POSIX_Keys_Free_memory( the_key );
 
       /*
@@ -51,7 +49,7 @@ int pthread_key_delete(
        *         of the application to free the memory.
        */
       _POSIX_Keys_Free( the_key );
-      _Objects_Put( &the_key->Object );
+      _Objects_Put(&the_key->Object);
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

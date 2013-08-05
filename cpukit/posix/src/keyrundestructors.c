@@ -6,14 +6,15 @@
  */
 
 /*
- *  Copyright (c) 2010 embedded brains GmbH.
+ * Copyright (c) 2012 Zhongwei Yao.
+ * Copyright (c) 2010 embedded brains GmbH.
  *
- *  COPYRIGHT (c) 1989-2007.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2007.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #if HAVE_CONFIG_H
@@ -22,7 +23,10 @@
 
 #include <rtems/system.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/chain.h>
 #include <rtems/posix/key.h>
+#include <rtems/posix/threadsup.h>
 
 /*
  *  _POSIX_Keys_Run_destructors
@@ -32,41 +36,60 @@
  *  NOTE:  This is the routine executed when a thread exits to
  *         run through all the keys and do the destructor action.
  */
-
 void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
 )
 {
-  Objects_Maximum thread_index = _Objects_Get_index( thread->Object.id );
-  Objects_APIs thread_api = _Objects_Get_API( thread->Object.id );
-  bool done = false;
+  Chain_Control *chain;
+  Chain_Node *iter, *next;
+  void *value;
+  void (*destructor) (void *);
+  POSIX_Keys_Control *the_key;
+  Objects_Locations location;
 
-  /*
-   *  The standard allows one to avoid a potential infinite loop and limit the
-   *  number of iterations.  An infinite loop may happen if destructors set
-   *  thread specific data.  This can be considered dubious.
-   *
-   *  Reference: 17.1.1.2 P1003.1c/Draft 10, p. 163, line 99.
-   */
-  while ( !done ) {
-    Objects_Maximum index = 0;
-    Objects_Maximum max = _POSIX_Keys_Information.maximum;
+  _Thread_Disable_dispatch();
 
-    done = true;
+  chain = &(
+      (POSIX_API_Control *)thread->API_Extensions[ THREAD_API_POSIX ]
+  )->Key_Chain;
+  iter = _Chain_First( chain );
+  while ( !_Chain_Is_tail( chain, iter ) ) {
+    next = _Chain_Next( iter );
+    /**
+     * remove key from rbtree and chain.
+     * here Chain_Node *iter can be convert to POSIX_Keys_Key_value_pair *,
+     * because Chain_Node is the first member of POSIX_Keys_Key_value_pair
+     * structure.
+     */
+    _RBTree_Extract_unprotected(
+        &_POSIX_Keys_Key_value_lookup_tree,
+        &((POSIX_Keys_Key_value_pair *)iter)->Key_value_lookup_node
+    );
+    _Chain_Extract_unprotected( iter );
 
-    for ( index = 1 ; index <= max ; ++index ) {
-      POSIX_Keys_Control *key = (POSIX_Keys_Control *)
-        _POSIX_Keys_Information.local_table [ index ];
+    /**
+     * run key value's destructor if destructor and value are both non-null.
+     */
+    the_key = _POSIX_Keys_Get(
+        ((POSIX_Keys_Key_value_pair *)iter)->key,
+        &location
+    );
+    destructor = the_key->destructor;
+    value = ((POSIX_Keys_Key_value_pair *)iter)->value;
+    if ( destructor != NULL && value != NULL )
+      (*destructor)( value );
+    /**
+     * disable dispatch is nested here
+     */
+    _Thread_Enable_dispatch();
 
-      if ( key != NULL && key->destructor != NULL ) {
-        void *value = key->Values [ thread_api ][ thread_index ];
+    /**
+     * put back this node to keypool
+     */
+    _Freechain_Put( &_POSIX_Keys_Keypool.super_fc,
+                    (void *)iter );
 
-        if ( value != NULL ) {
-          key->Values [ thread_api ][ thread_index ] = NULL;
-          (*key->destructor)( value );
-          done = false;
-        }
-      }
-    }
+    iter = next;
   }
+  _Thread_Enable_dispatch();
 }
