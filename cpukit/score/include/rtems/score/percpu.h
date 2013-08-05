@@ -235,6 +235,36 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
   _ISR_lock_Release( &( per_cpu )->lock )
 
 #if defined( RTEMS_SMP )
+#define _Per_CPU_Acquire_all( isr_cookie ) \
+  do { \
+    uint32_t ncpus = _SMP_Get_processor_count(); \
+    uint32_t cpu; \
+    _ISR_Disable( isr_cookie ); \
+    for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
+      _Per_CPU_Acquire( _Per_CPU_Get_by_index( cpu ) ); \
+    } \
+  } while ( 0 )
+#else
+#define _Per_CPU_Acquire_all( isr_cookie ) \
+  _ISR_Disable( isr_cookie )
+#endif
+
+#if defined( RTEMS_SMP )
+#define _Per_CPU_Release_all( isr_cookie ) \
+  do { \
+    uint32_t ncpus = _SMP_Get_processor_count(); \
+    uint32_t cpu; \
+    for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
+      _Per_CPU_Release( _Per_CPU_Get_by_index( cpu ) ); \
+    } \
+    _ISR_Enable( isr_cookie ); \
+  } while ( 0 )
+#else
+#define _Per_CPU_Release_all( isr_cookie ) \
+  _ISR_Enable( isr_cookie )
+#endif
+
+#if defined( RTEMS_SMP )
 static inline Per_CPU_Control *_Per_CPU_Get( void )
 {
   _Assert_Thread_dispatching_repressed();
