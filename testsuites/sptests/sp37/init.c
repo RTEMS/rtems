@@ -44,6 +44,36 @@ rtems_timer_service_routine test_isr_in_progress(
 
 /* test bodies */
 
+static void test_isr_level( void )
+{
+  ISR_Level mask = CPU_MODES_INTERRUPT_MASK;
+  ISR_Level normal = _ISR_Get_level();
+  ISR_Level current = 0;
+
+  _ISR_Set_level( current );
+  rtems_test_assert( _ISR_Get_level() == current );
+
+  for ( current = current + 1 ; current <= mask ; ++current ) {
+    ISR_Level actual;
+
+    _ISR_Set_level( current );
+
+    actual = _ISR_Get_level();
+    rtems_test_assert( actual == current || actual == ( current - 1 ) );
+
+    if ( _ISR_Get_level() != current ) {
+      break;
+    }
+  }
+
+  for ( current = current + 1 ; current <= mask ; ++current ) {
+    _ISR_Set_level( current );
+    rtems_test_assert( _ISR_Get_level() == current );
+  }
+
+  _ISR_Set_level( normal );
+}
+
 static void test_isr_locks( void )
 {
   ISR_Level normal_interrupt_level = _ISR_Get_level();
@@ -253,6 +283,7 @@ rtems_task Init(
 
   puts( "\n\n*** TEST 37 ***" );
 
+  test_isr_level();
   test_isr_locks();
   test_interrupt_locks();
 
