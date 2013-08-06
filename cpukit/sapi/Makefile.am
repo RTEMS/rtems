@@ -20,9 +20,6 @@ include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
 
-## src
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
-
 noinst_LIBRARIES = libsapi.a
 project_lib_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \

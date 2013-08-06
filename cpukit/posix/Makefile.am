@@ -3,8 +3,6 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
-
 noinst_LIBRARIES = libposix.a
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
