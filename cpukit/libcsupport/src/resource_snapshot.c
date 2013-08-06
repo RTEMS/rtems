@@ -42,7 +42,7 @@
   #include <rtems/posix/condimpl.h>
   #include <rtems/posix/mqueueimpl.h>
   #include <rtems/posix/muteximpl.h>
-  #include <rtems/posix/key.h>
+  #include <rtems/posix/keyimpl.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthreadimpl.h>
   #include <rtems/posix/rwlockimpl.h>

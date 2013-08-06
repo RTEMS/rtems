@@ -19,24 +19,10 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <limits.h>
-#include <pthread.h>
-#include <string.h>
-#include <limits.h>
-
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/thread.h>
+#include <rtems/posix/keyimpl.h>
+#include <rtems/posix/config.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/posix/key.h>
-#include <rtems/score/rbtree.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/freechain.h>
-
-/* forward declarations to avoid warnings */
-void _POSIX_Keys_Keypool_init(void);
-void _POSIX_Keys_Freechain_init(Freechain_Control *freechain);
 
 /**
  * @brief This routine compares the rbtree node by comparing POSIX key first
@@ -84,22 +70,9 @@ int _POSIX_Keys_Key_value_lookup_tree_compare_function(
 }
 
 /**
- * @brief This routine does keypool initialize, keypool contains all
- * POSIX_Keys_Key_value_pair
- */
-
-void _POSIX_Keys_Keypool_init(void)
-{
-  _Freechain_Initialize((Freechain_Control *)&_POSIX_Keys_Keypool,
-                       &_POSIX_Keys_Freechain_extend);
-
-  _POSIX_Keys_Freechain_init((Freechain_Control *)&_POSIX_Keys_Keypool);
-}
-
-/**
  * @brief This routine does user side freechain initialization
  */
-void _POSIX_Keys_Freechain_init(Freechain_Control *freechain)
+static void _POSIX_Keys_Freechain_init(Freechain_Control *freechain)
 {
   POSIX_Keys_Freechain *psx_freechain_p = (POSIX_Keys_Freechain *)freechain;
   psx_freechain_p->bump_count =
@@ -113,6 +86,19 @@ void _POSIX_Keys_Freechain_init(Freechain_Control *freechain)
                     psx_freechain_p->bump_count,
                     sizeof(POSIX_Keys_Key_value_pair)
                     );
+}
+
+/**
+ * @brief This routine does keypool initialize, keypool contains all
+ * POSIX_Keys_Key_value_pair
+ */
+
+static void _POSIX_Keys_Keypool_init(void)
+{
+  _Freechain_Initialize((Freechain_Control *)&_POSIX_Keys_Keypool,
+                       &_POSIX_Keys_Freechain_extend);
+
+  _POSIX_Keys_Freechain_init((Freechain_Control *)&_POSIX_Keys_Keypool);
 }
 
 /**

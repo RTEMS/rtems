@@ -30,7 +30,7 @@
 #include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/posix/key.h>
+#include <rtems/posix/keyimpl.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>

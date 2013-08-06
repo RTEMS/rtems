@@ -30,6 +30,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/cond.h
 include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/key.h
+include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
@@ -53,8 +54,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
-
-include_rtems_posix_HEADERS += inline/rtems/posix/key.inl
 
 ## src
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \

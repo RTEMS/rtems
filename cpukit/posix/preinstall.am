@@ -64,6 +64,10 @@ $(PROJECT_INCLUDE)/rtems/posix/key.h: include/rtems/posix/key.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.h
 
+$(PROJECT_INCLUDE)/rtems/posix/keyimpl.h: include/rtems/posix/keyimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/keyimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/keyimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/mqueue.h: include/rtems/posix/mqueue.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
@@ -155,8 +159,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/spinlock.h
 $(PROJECT_INCLUDE)/rtems/posix/spinlockimpl.h: include/rtems/posix/spinlockimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/spinlockimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/spinlockimpl.h
-
-$(PROJECT_INCLUDE)/rtems/posix/key.inl: inline/rtems/posix/key.inl $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.inl
 endif

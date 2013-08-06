@@ -21,12 +21,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/chain.h>
-#include <rtems/posix/key.h>
+#include <rtems/posix/keyimpl.h>
 #include <rtems/posix/threadsup.h>
+#include <rtems/score/chainimpl.h>
 
 /*
  *  _POSIX_Keys_Run_destructors

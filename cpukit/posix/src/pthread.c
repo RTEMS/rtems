@@ -36,7 +36,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/posix/key.h>
+#include <rtems/posix/keyimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/timespec.h>
 

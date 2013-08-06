@@ -19,11 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/rbtree.h>
-#include <rtems/posix/key.h>
+#include <rtems/posix/keyimpl.h>
+#include <rtems/score/chainimpl.h>
 
 void _POSIX_Keys_Free_memory(
   POSIX_Keys_Control *the_key

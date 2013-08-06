@@ -19,18 +19,11 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <limits.h>
-#include <pthread.h>
-#include <string.h>
-#include <stddef.h>
-
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/rbtree.h>
-#include <rtems/posix/key.h>
+#include <rtems/posix/keyimpl.h>
 #include <rtems/posix/threadsup.h>
+#include <rtems/score/chainimpl.h>
+
+#include <errno.h>
 
 /*
  *  17.1.2 Thread-Specific Data Management, P1003.1c/Draft 10, p. 165
