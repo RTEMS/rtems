@@ -45,8 +45,8 @@ static void lsof(void)
       mt_entry->type,
       mt_entry->target,
       mt_entry->dev == NULL ? "none" : mt_entry->dev,
-      mt_entry->mt_fs_root,
-      mt_entry->mt_fs_root->location.node_access
+      (unsigned)mt_entry->mt_fs_root,
+      (unsigned)mt_entry->mt_fs_root->location.node_access
     );
 
     for (
@@ -55,13 +55,13 @@ static void lsof(void)
       mt_entry_node = rtems_chain_next( mt_entry_node )
     ) {
       const rtems_filesystem_location_info_t *loc =
-        (rtems_filesystem_location_info_t *) mt_entry_node;
+        (const rtems_filesystem_location_info_t *) mt_entry_node;
 
       fprintf(
         stdout,
         "\t0x%08x -> 0x%08x\n",
-        loc,
-        loc->node_access
+        (unsigned)loc,
+        (unsigned)loc->node_access
       );
     }
   }

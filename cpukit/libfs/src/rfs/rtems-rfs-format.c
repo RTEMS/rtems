@@ -48,7 +48,7 @@ rtems_rfs_bits_per_block (rtems_rfs_file_system* fs)
  * Return a rounded up integer quotient given a dividend and divisor. That is:
  * "quotient = dividend / divisor"
  */
-int
+static int
 rtems_rfs_rup_quotient (uint32_t dividend, uint32_t divisor)
 {
   if (dividend == 0)
