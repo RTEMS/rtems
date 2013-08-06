@@ -58,7 +58,8 @@ rtems_task Test_task(
     name
   );
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  /* FIXME: Task deletion currently not supported */
+  (void) rtems_task_suspend( RTEMS_SELF );
 }
 
 
