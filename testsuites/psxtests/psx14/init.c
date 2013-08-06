@@ -14,6 +14,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <rtems.h>
+#include <rtems/score/objectimpl.h>
 #include "tmacros.h"
 
 void *POSIX_Init(
