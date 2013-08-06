@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
 #define TEST_NAME                "05"
 #define TEST_STRING              "User Signals"
 #define SIGNAL_ONE               SIGUSR1

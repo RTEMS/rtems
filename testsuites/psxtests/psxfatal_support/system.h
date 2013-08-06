@@ -17,7 +17,6 @@
  *  Some of the fatal error cases require the ability to peek inside RTEMS
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <tmacros.h>
 

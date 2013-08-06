@@ -11,7 +11,6 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <pmacros.h>
 #include <errno.h>
 #include <pthread.h>

@@ -3,7 +3,6 @@
  *  On-Line Applications Research Corporation (OAR).
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <bsp.h>
 #include <stdlib.h>
 

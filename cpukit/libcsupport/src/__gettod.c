@@ -18,8 +18,6 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
 #if defined(RTEMS_NEWLIB)
 #include <sys/time.h>
 #include <errno.h>

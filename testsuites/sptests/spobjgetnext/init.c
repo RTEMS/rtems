@@ -14,7 +14,6 @@
 #endif
 
 #define CONFIGURE_INIT
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include "system.h"
 
 #include <rtems/rtems/tasksimpl.h>

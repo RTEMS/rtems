@@ -29,12 +29,6 @@ int fdatasync(int);        /* still not always prototyped */
 #include <stdio.h>
 
 #include <rtems.h>
-/*
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
-#include <rtems/libio_.h>
-#include <rtems/seterr.h>
-*/
 
 /* XXX check standards -- Linux version appears to be void */
 void _fwalk(struct _reent *, void *);

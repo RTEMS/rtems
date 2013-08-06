@@ -25,12 +25,6 @@ rtems_timer_service_routine TIMER_service_routine(
   void     *user_data
 );
 
-/*
- *  We have to extern this rather than use __RTEMS_VIOLATE_KERNEL_VISIBILITY__
- *  because this variable isn't actually in any .h.
- */
-extern Watchdog_Interval _Timer_Server_ticks_last_time;
-
 volatile bool _timer_passage_1 = FALSE;
 volatile bool _timer_passage_2 = FALSE;
 

@@ -10,9 +10,6 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-/* so we can see _API_extensions_Run_postswitch */
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
-
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>

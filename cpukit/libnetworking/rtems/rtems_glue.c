@@ -4,10 +4,6 @@
 
 #define RTEMS_FAST_MUTEX
 
-#ifdef RTEMS_FAST_MUTEX
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
-#endif
-
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
