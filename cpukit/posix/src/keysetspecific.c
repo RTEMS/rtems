@@ -34,18 +34,20 @@ int pthread_setspecific(
   const void    *value
 )
 {
+  POSIX_Keys_Control          *the_key;
   Objects_Locations            location;
   POSIX_Keys_Key_value_pair   *value_pair_ptr;
   POSIX_API_Control           *api;
 
-  _POSIX_Keys_Get( key, &location );
+  the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       value_pair_ptr = ( POSIX_Keys_Key_value_pair * )
         _Freechain_Get( &_POSIX_Keys_Keypool.super_fc );
       if ( !value_pair_ptr ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_key->Object );
+
         return ENOMEM;
       }
 
@@ -56,7 +58,8 @@ int pthread_setspecific(
                                        &(value_pair_ptr->Key_value_lookup_node) ) ) {
         _Freechain_Put( (Freechain_Control *)&_POSIX_Keys_Keypool,
                         (void *) value_pair_ptr );
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_key->Object );
+
         return EAGAIN;
       }
 
@@ -65,7 +68,8 @@ int pthread_setspecific(
        (_Thread_Executing->API_Extensions[THREAD_API_POSIX]);
       _Chain_Append_unprotected( &api->Key_Chain, &value_pair_ptr->Key_values_per_thread_node );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_key->Object );
+
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

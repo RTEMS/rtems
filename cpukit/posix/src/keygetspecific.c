@@ -38,13 +38,14 @@ void *pthread_getspecific(
   pthread_key_t  key
 )
 {
+  POSIX_Keys_Control          *the_key;
   Objects_Locations            location;
   POSIX_Keys_Key_value_pair    search_node;
   RBTree_Node                 *p;
   void                        *key_data;
   POSIX_Keys_Key_value_pair   *value_pair_p;
 
-  _POSIX_Keys_Get( key, &location );
+  the_key = _POSIX_Keys_Get( key, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -62,7 +63,9 @@ void *pthread_getspecific(
         /*                                  Key_value_lookup_node )->value; */
         key_data = value_pair_p->value;
       }
-      _Thread_Enable_dispatch();
+
+      _Objects_Put( &the_key->Object );
+
       return key_data;
 
 #if defined(RTEMS_MULTIPROCESSING)

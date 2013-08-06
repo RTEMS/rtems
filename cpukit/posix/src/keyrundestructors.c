@@ -75,10 +75,8 @@ void _POSIX_Keys_Run_destructors(
     value = ((POSIX_Keys_Key_value_pair *)iter)->value;
     if ( destructor != NULL && value != NULL )
       (*destructor)( value );
-    /**
-     * disable dispatch is nested here
-     */
-    _Thread_Enable_dispatch();
+
+    _Objects_Put( &the_key->Object );
 
     /**
      * put back this node to keypool
