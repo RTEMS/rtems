@@ -30,20 +30,6 @@
 extern "C" {
 #endif
 
-#if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && \
-    (!defined(__RTEMS_INSIDE__))
-/**
- * @brief Compiling RTEMS application macro.
- *
- * Unless told otherwise, the RTEMS include files will hide some stuff from
- * normal application code.  Defining this crosses a boundary which is
- * undesirable since it means your application is using RTEMS features which
- * are not included in the formally defined and supported API.  Define this at
- * your own risk.
- */
-#define __RTEMS_APPLICATION__
-#endif
-
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
