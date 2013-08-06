@@ -35,14 +35,6 @@ extern "C" {
  */
 
 /**
- * @brief POSIX_Keys_Freechain is used in Freechain structure
- */
-typedef struct {
-    Freechain_Control super_fc;
-    size_t bump_count;
-} POSIX_Keys_Freechain;
-
-/**
  * @brief The information control block used to manage this class of objects.
  */
 POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
@@ -55,7 +47,7 @@ POSIX_EXTERN RBTree_Control _POSIX_Keys_Key_value_lookup_tree;
 /**
  * @brief This freechain is used as a memory pool for POSIX_Keys_Key_value_pair.
  */
-POSIX_EXTERN POSIX_Keys_Freechain _POSIX_Keys_Keypool;
+POSIX_EXTERN Freechain_Control _POSIX_Keys_Keypool;
 
 /**
  * @brief POSIX key manager initialization.
@@ -63,14 +55,6 @@ POSIX_EXTERN POSIX_Keys_Freechain _POSIX_Keys_Keypool;
  * This routine performs the initialization necessary for this manager.
  */
 void _POSIX_Key_Manager_initialization(void);
-
-/**
- * @brief POSIX key Freechain extend handle
- *
- * This routine extend freechain node, which is called in freechain_get
- * automatically.
- */
-bool _POSIX_Keys_Freechain_extend(Freechain_Control *freechain);
 
 /**
  * @brief POSIX keys Red-Black tree node comparison.
@@ -166,6 +150,19 @@ RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
 {
   return (POSIX_Keys_Control *)
     _Objects_Get( &_POSIX_Keys_Information, (Objects_Id) id, location );
+}
+
+RTEMS_INLINE_ROUTINE POSIX_Keys_Key_value_pair *
+_POSIX_Keys_Key_value_pair_allocate( void )
+{
+  return (POSIX_Keys_Key_value_pair *) _Freechain_Get( &_POSIX_Keys_Keypool );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Keys_Key_value_pair_free(
+  POSIX_Keys_Key_value_pair *key_value_pair
+)
+{
+  _Freechain_Put( &_POSIX_Keys_Keypool, key_value_pair );
 }
 
 /** @} */

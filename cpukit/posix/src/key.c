@@ -22,6 +22,7 @@
 #include <rtems/posix/keyimpl.h>
 #include <rtems/posix/config.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
 
 /**
@@ -69,57 +70,60 @@ int _POSIX_Keys_Key_value_lookup_tree_compare_function(
   return 0;
 }
 
-/**
- * @brief This routine does user side freechain initialization
- */
-static void _POSIX_Keys_Freechain_init(Freechain_Control *freechain)
+static uint32_t _POSIX_Keys_Get_keypool_bump_count( void )
 {
-  POSIX_Keys_Freechain *psx_freechain_p = (POSIX_Keys_Freechain *)freechain;
-  psx_freechain_p->bump_count =
-    Configuration_POSIX_API.maximum_key_value_pairs & 0x7FFFFFFF;
-  size_t size = psx_freechain_p->bump_count * sizeof(POSIX_Keys_Key_value_pair);
-  POSIX_Keys_Key_value_pair *nodes = _Workspace_Allocate(size);
+  uint32_t max = Configuration_POSIX_API.maximum_key_value_pairs;
+
+  return _Objects_Is_unlimited( max ) ?
+    _Objects_Maximum_per_allocation( max ) : 0;
+}
+
+static uint32_t _POSIX_Keys_Get_initial_keypool_size( void )
+{
+  uint32_t max = Configuration_POSIX_API.maximum_key_value_pairs;
+
+  return _Objects_Maximum_per_allocation( max );
+}
+
+static bool _POSIX_Keys_Keypool_extend( Freechain_Control *keypool )
+{
+  size_t bump_count = _POSIX_Keys_Get_keypool_bump_count();
+  bool ok = bump_count > 0;
+
+  if ( ok ) {
+    size_t size = bump_count * sizeof( POSIX_Keys_Key_value_pair );
+    POSIX_Keys_Key_value_pair *nodes = _Workspace_Allocate( size );
+
+    ok = nodes != NULL;
+
+    if ( ok ) {
+      _Chain_Initialize(
+        &keypool->Freechain,
+        nodes,
+        bump_count,
+        sizeof( *nodes )
+      );
+    }
+  }
+
+  return ok;
+}
+
+static void _POSIX_Keys_Initialize_keypool( void )
+{
+  Freechain_Control *keypool = &_POSIX_Keys_Keypool;
+  size_t initial_count = _POSIX_Keys_Get_initial_keypool_size();
+  size_t size = initial_count * sizeof( POSIX_Keys_Key_value_pair );
+  POSIX_Keys_Key_value_pair *nodes = _Workspace_Allocate_or_fatal_error( size );
+
+  _Freechain_Initialize( keypool, _POSIX_Keys_Keypool_extend );
 
   _Chain_Initialize(
-                    &freechain->Freechain,
-                    nodes,
-                    psx_freechain_p->bump_count,
-                    sizeof(POSIX_Keys_Key_value_pair)
-                    );
-}
-
-/**
- * @brief This routine does keypool initialize, keypool contains all
- * POSIX_Keys_Key_value_pair
- */
-
-static void _POSIX_Keys_Keypool_init(void)
-{
-  _Freechain_Initialize((Freechain_Control *)&_POSIX_Keys_Keypool,
-                       &_POSIX_Keys_Freechain_extend);
-
-  _POSIX_Keys_Freechain_init((Freechain_Control *)&_POSIX_Keys_Keypool);
-}
-
-/**
- * @brief This routine is user defined freechain extension handle
- */
-bool _POSIX_Keys_Freechain_extend(Freechain_Control *freechain)
-{
-  POSIX_Keys_Freechain *psx_freechain_p = (POSIX_Keys_Freechain *)freechain;
-  size_t node_size = sizeof(POSIX_Keys_Key_value_pair);
-  size_t size = psx_freechain_p->bump_count * node_size;
-  int i;
-  POSIX_Keys_Key_value_pair *nodes = _Workspace_Allocate(size);
-
-  if (!nodes)
-    return false;
-
-  for ( i = 0; i < psx_freechain_p->bump_count; i++ ) {
-      _Freechain_Put(freechain,
-                     nodes + i);
-  }
-  return true;
+    &keypool->Freechain,
+    nodes,
+    initial_count,
+    sizeof( *nodes )
+  );
 }
 
 /**
@@ -150,5 +154,5 @@ void _POSIX_Key_Manager_initialization(void)
       true
   );
 
-  _POSIX_Keys_Keypool_init();
+  _POSIX_Keys_Initialize_keypool();
 }

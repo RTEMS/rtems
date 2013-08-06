@@ -54,9 +54,8 @@ void _POSIX_Keys_Free_memory(
     next = _RBTree_Next_unprotected( iter, RBT_RIGHT );
     _RBTree_Extract_unprotected( &_POSIX_Keys_Key_value_lookup_tree, iter );
     _Chain_Extract_unprotected( &p->Key_values_per_thread_node );
-    /* append the node to _POSIX_Keys_Keypool */
-    _Freechain_Put( &_POSIX_Keys_Keypool.super_fc,
-                    ( void * )p);
+    _POSIX_Keys_Key_value_pair_free( p );
+
     iter = next;
     p = _RBTree_Container_of( iter, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
   }

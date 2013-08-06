@@ -38,7 +38,7 @@ void _POSIX_Keys_Run_destructors(
 )
 {
   Chain_Control *chain;
-  Chain_Node *iter, *next;
+  POSIX_Keys_Key_value_pair *iter, *next;
   void *value;
   void (*destructor) (void *);
   POSIX_Keys_Control *the_key;
@@ -49,9 +49,11 @@ void _POSIX_Keys_Run_destructors(
   chain = &(
       (POSIX_API_Control *)thread->API_Extensions[ THREAD_API_POSIX ]
   )->Key_Chain;
-  iter = _Chain_First( chain );
-  while ( !_Chain_Is_tail( chain, iter ) ) {
-    next = _Chain_Next( iter );
+  iter = (POSIX_Keys_Key_value_pair *) _Chain_First( chain );
+  while ( !_Chain_Is_tail( chain, &iter->Key_values_per_thread_node ) ) {
+    next = (POSIX_Keys_Key_value_pair *)
+      _Chain_Next( &iter->Key_values_per_thread_node );
+
     /**
      * remove key from rbtree and chain.
      * here Chain_Node *iter can be convert to POSIX_Keys_Key_value_pair *,
@@ -60,31 +62,25 @@ void _POSIX_Keys_Run_destructors(
      */
     _RBTree_Extract_unprotected(
         &_POSIX_Keys_Key_value_lookup_tree,
-        &((POSIX_Keys_Key_value_pair *)iter)->Key_value_lookup_node
+        &iter->Key_value_lookup_node
     );
-    _Chain_Extract_unprotected( iter );
+    _Chain_Extract_unprotected( &iter->Key_values_per_thread_node );
 
     /**
      * run key value's destructor if destructor and value are both non-null.
      */
-    the_key = _POSIX_Keys_Get(
-        ((POSIX_Keys_Key_value_pair *)iter)->key,
-        &location
-    );
+    the_key = _POSIX_Keys_Get( iter->key, &location );
     destructor = the_key->destructor;
-    value = ((POSIX_Keys_Key_value_pair *)iter)->value;
+    value = iter->value;
     if ( destructor != NULL && value != NULL )
       (*destructor)( value );
 
     _Objects_Put( &the_key->Object );
 
-    /**
-     * put back this node to keypool
-     */
-    _Freechain_Put( &_POSIX_Keys_Keypool.super_fc,
-                    (void *)iter );
+    _POSIX_Keys_Key_value_pair_free( iter );
 
     iter = next;
   }
+
   _Thread_Enable_dispatch();
 }

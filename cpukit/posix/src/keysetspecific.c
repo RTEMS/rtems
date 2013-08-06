@@ -43,8 +43,8 @@ int pthread_setspecific(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      value_pair_ptr = ( POSIX_Keys_Key_value_pair * )
-        _Freechain_Get( &_POSIX_Keys_Keypool.super_fc );
+      value_pair_ptr = _POSIX_Keys_Key_value_pair_allocate();
+
       if ( !value_pair_ptr ) {
         _Objects_Put( &the_key->Object );
 
