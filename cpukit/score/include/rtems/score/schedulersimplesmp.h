@@ -71,7 +71,7 @@ typedef struct {
     _Scheduler_simple_smp_Enqueue_priority_lifo, \
     _Scheduler_simple_smp_Extract, \
     _Scheduler_priority_Priority_compare, \
-    _Scheduler_priority_Release_job, \
+    _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
     _Scheduler_simple_smp_Start_idle \
   }

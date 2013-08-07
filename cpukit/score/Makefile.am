@@ -179,6 +179,7 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
+libscore_a_SOURCES += src/schedulerdefaultreleasejob.c
 libscore_a_SOURCES += src/schedulerdefaulttick.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c
 
@@ -191,7 +192,6 @@ libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerpriorityextract.c \
     src/schedulerpriorityfree.c \
     src/schedulerpriorityprioritycompare.c \
-    src/schedulerpriorityreleasejob.c \
     src/schedulerpriorityschedule.c \
     src/schedulerpriorityunblock.c \
     src/schedulerpriorityupdate.c \

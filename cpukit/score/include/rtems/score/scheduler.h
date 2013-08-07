@@ -126,6 +126,17 @@ typedef struct {
 extern Scheduler_Control  _Scheduler;
 
 /**
+ * @brief Does nothing.
+ *
+ * @param[in] thread Unused.
+ * @param[in] deadline Unused.
+ */
+void _Scheduler_default_Release_job(
+  Thread_Control *thread,
+  uint32_t        deadline
+);
+
+/**
  * @brief Performs tick operations depending on the CPU budget algorithm for
  * each executing thread.
  *

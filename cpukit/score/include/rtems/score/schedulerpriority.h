@@ -51,7 +51,7 @@ extern "C" {
     _Scheduler_priority_Enqueue_first,    /* enqueue_first entry point */ \
     _Scheduler_priority_Extract,          /* extract entry point */ \
     _Scheduler_priority_Priority_compare, /* compares two priorities */ \
-    _Scheduler_priority_Release_job,      /* new period of task */ \
+    _Scheduler_default_Release_job,       /* new period of task */ \
     _Scheduler_default_Tick,              /* tick entry point */ \
     _Scheduler_default_Start_idle         /* start idle entry point */ \
   }
@@ -209,20 +209,6 @@ void _Scheduler_priority_Extract(
 int _Scheduler_priority_Priority_compare(
   Priority_Control      p1,
   Priority_Control      p2
-);
-
-/**
- *  @brief Called when a new job of task is released.
- *
- *  This routine is called when a new job of task is released.
- *
- *  @param[in] the_thread is the owner of the job.
- *  @param[in] deadline of the new job from now. If equal to 0,
- *             the job was cancelled or deleted.
- */
-void _Scheduler_priority_Release_job (
-  Thread_Control  *the_thread,
-  uint32_t         deadline
 );
 
 /**@}*/

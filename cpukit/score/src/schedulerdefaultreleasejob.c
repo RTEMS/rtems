@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Scheduler Priority Release Job
- *  @ingroup ScoreScheduler
+ * @brief Default Scheduler Release Job Operation
+ *
+ * @ingroup ScoreScheduler
  */
 
 /*
@@ -18,15 +19,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
 #include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
 
-void _Scheduler_priority_Release_job(
-  Thread_Control    *the_thread,
-  uint32_t           deadline
+void _Scheduler_default_Release_job(
+  Thread_Control *thread,
+  uint32_t        deadline
 )
 {
-  return;
+  ( void ) thread;
+  ( void ) deadline;
 }
