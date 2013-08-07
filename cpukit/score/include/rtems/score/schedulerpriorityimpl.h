@@ -186,6 +186,23 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
   _Scheduler_Update_heir( heir, force_dispatch );
 }
 
+RTEMS_INLINE_ROUTINE void _Scheduler_priority_Update_body(
+  Thread_Control *thread,
+  Chain_Control *ready_queues
+)
+{
+  Scheduler_priority_Per_thread *sched_info_of_thread =
+    _Scheduler_priority_Get_scheduler_info( thread );
+
+  sched_info_of_thread->ready_chain =
+    &ready_queues[ thread->current_priority ];
+
+  _Priority_bit_map_Initialize_information(
+    &sched_info_of_thread->Priority_map,
+    thread->current_priority
+  );
+}
+
 /**
  * @brief Priority comparison.
  *

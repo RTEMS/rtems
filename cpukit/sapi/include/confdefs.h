@@ -606,6 +606,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  * scheduling policy to use.  The supported configurations are:
  *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
+ *  CONFIGURE_SCHEDULER_PRIORITY_SMP - Deterministic Priority SMP Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
@@ -629,12 +630,13 @@ const rtems_libio_helper rtems_fs_init_helper =
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+    !defined(CONFIGURE_SCHEDULER_PRIORITY_SMP) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
     !defined(CONFIGURE_SCHEDULER_EDF) && \
     !defined(CONFIGURE_SCHEDULER_CBS)
   #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
-    #define CONFIGURE_SCHEDULER_SIMPLE_SMP
+    #define CONFIGURE_SCHEDULER_PRIORITY_SMP
   #else
     #define CONFIGURE_SCHEDULER_PRIORITY
   #endif
@@ -653,6 +655,26 @@ const rtems_libio_helper rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
       ((CONFIGURE_MAXIMUM_PRIORITY+1) * sizeof(Chain_Control)) ) \
+  )
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
+    _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
+#endif
+
+/*
+ * If the Deterministic Priority SMP Scheduler is selected, then configure for
+ * it.
+ */
+#if defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
+  #include <rtems/score/schedulerprioritysmp.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_SMP_ENTRY_POINTS
+
+  /**
+   * This defines the memory used by the priority scheduler.
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace( \
+      sizeof(Scheduler_SMP_Control) +  \
+      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )

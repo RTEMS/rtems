@@ -3536,6 +3536,43 @@ This scheduler may be explicitly selected by defining
 None.
 
 @c
+@c === CONFIGURE_SCHEDULER_PRIORITY_SMP ===
+@c
+@subsection Use Deterministic Priority SMP Scheduler
+
+@findex CONFIGURE_SCHEDULER_PRIORITY_SMP
+
+@table @b
+@item CONSTANT:
+@code{CONFIGURE_SCHEDULER_PRIORITY_SMP}
+
+@item DATA TYPE:
+Boolean feature macro.
+
+@item RANGE:
+Defined or undefined.
+
+@item DEFAULT VALUE:
+This is not defined by default.
+
+@end table
+
+@subheading DESCRIPTION:
+The Deterministic Priority SMP Scheduler is derived from the Deterministic
+Priority Scheduler but is capable of scheduling threads across multiple
+processors.
+
+In a configuration with SMP enabled at configure time, it may be
+explicitly selected by defining @code{CONFIGURE_SCHEDULER_PRIORITY_SMP}.
+
+@subheading NOTES:
+This scheduler is only available when RTEMS is configured with SMP
+support enabled.
+
+This scheduler is currently the default in SMP configurations and is
+only selected when @code{CONFIGURE_SMP_APPLICATION} is defined.
+
+@c
 @c === CONFIGURE_SCHEDULER_SIMPLE_SMP ===
 @c
 @subsection Use Simple SMP Priority Scheduler
@@ -3577,9 +3614,6 @@ explicitly selected by defining @code{CONFIGURE_SCHEDULER_SIMPLE_SMP}.
 @subheading NOTES:
 This scheduler is only available when RTEMS is configured with SMP
 support enabled.
-
-This scheduler is currently the default in SMP configurations and is
-only selected when @code{CONFIGURE_SMP_APPLICATION} is defined.
 
 @c
 @c === Configuring a User Scheduler ===
