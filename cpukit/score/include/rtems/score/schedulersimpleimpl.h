@@ -21,7 +21,7 @@
 
 #include <rtems/score/schedulersimple.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/schedulerimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -94,6 +94,20 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
     &to_insert->Object.Node,
     _Scheduler_simple_Insert_priority_fifo_order
   );
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_simple_Schedule_body(
+  Thread_Control *thread,
+  bool force_dispatch
+)
+{
+  Thread_Control *heir = (Thread_Control *) _Chain_First(
+    (Chain_Control *) _Scheduler.information
+  );
+
+  ( void ) thread;
+
+  _Scheduler_Update_heir( heir, force_dispatch );
 }
 
 /** @} */

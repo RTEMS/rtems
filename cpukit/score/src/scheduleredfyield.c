@@ -19,11 +19,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/scheduleredf.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/scheduleredfimpl.h>
 
 void _Scheduler_EDF_Yield( Thread_Control *thread )
 {
@@ -44,8 +40,7 @@ void _Scheduler_EDF_Yield( Thread_Control *thread )
 
   _ISR_Flash( level );
 
-  _Scheduler_EDF_Schedule();
-  _Thread_Dispatch_necessary = true;
+  _Scheduler_EDF_Schedule_body( thread, false );
 
   _ISR_Enable( level );
 }

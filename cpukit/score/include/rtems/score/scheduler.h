@@ -46,7 +46,7 @@ typedef struct {
   void ( *initialize )(void);
 
   /** Implements the scheduling decision logic (policy). */
-  void ( *schedule )(void);
+  void ( *schedule )( Thread_Control *thread );
 
   /**
    * @brief Voluntarily yields the processor per the scheduling policy.

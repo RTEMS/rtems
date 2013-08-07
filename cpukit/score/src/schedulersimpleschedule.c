@@ -18,12 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/schedulersimple.h>
-#include <rtems/score/chainimpl.h>
+#include <rtems/score/schedulersimpleimpl.h>
 
-void _Scheduler_simple_Schedule(void)
+void _Scheduler_simple_Schedule( Thread_Control *thread )
 {
-  _Thread_Heir = (Thread_Control *) _Chain_First(
-    (Chain_Control *) _Scheduler.information
-  );
+  _Scheduler_simple_Schedule_body( thread, false );
 }

@@ -66,7 +66,7 @@ void _Scheduler_simple_Initialize( void );
  *  on the ready queue by getting the first node in the scheduler
  *  information.
  */
-void _Scheduler_simple_Schedule( void );
+void _Scheduler_simple_Schedule( Thread_Control *thread );
 
 /**
  *  @brief Invoked when a thread wishes to voluntarily

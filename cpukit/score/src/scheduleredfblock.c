@@ -19,20 +19,15 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/scheduleredf.h>
-#include <rtems/score/threadimpl.h>
+#include <rtems/score/scheduleredfimpl.h>
 
 void _Scheduler_EDF_Block(
   Thread_Control    *the_thread
 )
 {
-  _Scheduler_EDF_Extract( the_thread );
-
-  /* TODO: flash critical section? */
-
-  if ( _Thread_Is_heir( the_thread ) )
-    _Scheduler_EDF_Schedule();
-
-  if ( _Thread_Is_executing( the_thread ) )
-    _Thread_Dispatch_necessary = true;
+  _Scheduler_Generic_block(
+    _Scheduler_EDF_Extract,
+    _Scheduler_EDF_Schedule_body,
+    the_thread
+  );
 }

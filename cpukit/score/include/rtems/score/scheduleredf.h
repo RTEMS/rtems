@@ -129,7 +129,7 @@ void _Scheduler_EDF_Block(
  *  This kernel routine sets the heir thread to be the next ready thread
  *  in the rbtree ready queue.
  */
-void _Scheduler_EDF_Schedule( void );
+void _Scheduler_EDF_Schedule( Thread_Control *thread );
 
 /**
  *  @brief Allocates EDF specific information of @a the_thread.

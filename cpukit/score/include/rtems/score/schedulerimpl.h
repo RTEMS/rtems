@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_SCHEDULERIMPL_H
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,10 +60,12 @@ void _Scheduler_Handler_initialization( void );
  *
  * This kernel routine implements the scheduling decision logic for
  * the scheduler. It does NOT dispatch.
+ *
+ * @param[in] thread The thread which state changed previously.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( void )
+RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *thread )
 {
-  _Scheduler.Operations.schedule();
+  _Scheduler.Operations.schedule( thread );
 }
 
 /**
@@ -235,6 +238,34 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
 )
 {
   ( *_Scheduler.Operations.start_idle )( thread, processor );
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
+  Thread_Control *heir,
+  bool force_dispatch
+)
+{
+  Thread_Control *executing = _Thread_Executing;
+
+  _Thread_Heir = heir;
+
+  if ( executing != heir && ( force_dispatch || executing->is_preemptible ) )
+    _Thread_Dispatch_necessary = true;
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
+  void ( *extract )( Thread_Control *thread ),
+  void ( *schedule )( Thread_Control *thread, bool force_dispatch ),
+  Thread_Control *thread
+)
+{
+  ( *extract )( thread );
+
+  /* TODO: flash critical section? */
+
+  if ( _Thread_Is_executing( thread ) || _Thread_Is_heir( thread ) ) {
+    ( *schedule )( thread, true );
+  }
 }
 
 /**

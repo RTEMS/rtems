@@ -182,9 +182,9 @@ void _Scheduler_simple_smp_Yield( Thread_Control *thread )
   _ISR_Enable( level );
 }
 
-void _Scheduler_simple_smp_Schedule( void )
+void _Scheduler_simple_smp_Schedule( Thread_Control *thread )
 {
-  /* Nothing to do */
+  ( void ) thread;
 }
 
 void _Scheduler_simple_smp_Start_idle(

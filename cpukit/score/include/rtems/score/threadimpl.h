@@ -498,16 +498,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_heir (
 }
 
 /**
- * This function returns true if the currently executing thread
- * is also the heir thread, and false otherwise.
- */
-
-RTEMS_INLINE_ROUTINE bool _Thread_Is_executing_also_the_heir( void )
-{
-  return ( _Thread_Executing == _Thread_Heir );
-}
-
-/**
  * This routine clears any blocking state for the_thread.  It performs
  * any necessary scheduling operations including the selection of
  * a new heir thread.

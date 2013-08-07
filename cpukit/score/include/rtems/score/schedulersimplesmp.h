@@ -85,7 +85,7 @@ void _Scheduler_simple_smp_Extract( Thread_Control *thread );
 
 void _Scheduler_simple_smp_Yield( Thread_Control *thread );
 
-void _Scheduler_simple_smp_Schedule( void );
+void _Scheduler_simple_smp_Schedule( Thread_Control *thread );
 
 void _Scheduler_simple_smp_Start_idle(
   Thread_Control *thread,

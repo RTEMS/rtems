@@ -32,10 +32,7 @@ void _Scheduler_simple_Yield( Thread_Control *thread )
 
     _ISR_Flash( level );
 
-    _Scheduler_simple_Schedule();
-
-    if ( !_Thread_Is_heir( thread ) )
-      _Thread_Dispatch_necessary = true;
+    _Scheduler_simple_Schedule_body( thread, false );
 
   _ISR_Enable( level );
 }

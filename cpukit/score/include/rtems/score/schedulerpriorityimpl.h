@@ -23,6 +23,7 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/prioritybitmapimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
@@ -182,11 +183,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_requeue(
  * This kernel routine implements scheduling decision logic
  * for priority-based scheduling.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(void)
+RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
+  Thread_Control *thread,
+  bool force_dispatch
+)
 {
-  _Thread_Heir = _Scheduler_priority_Ready_queue_first(
+  Thread_Control *heir = _Scheduler_priority_Ready_queue_first(
     (Chain_Control *) _Scheduler.information
   );
+
+  ( void ) thread;
+
+  _Scheduler_Update_heir( heir, force_dispatch );
 }
 
 /**

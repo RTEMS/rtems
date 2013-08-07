@@ -183,6 +183,10 @@ $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h: include/rtems/score/scheduleredf.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
 
+$(PROJECT_INCLUDE)/rtems/score/scheduleredfimpl.h: include/rtems/score/scheduleredfimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduleredfimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduleredfimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h: include/rtems/score/schedulerpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h

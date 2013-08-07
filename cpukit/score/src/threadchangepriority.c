@@ -62,6 +62,15 @@ void _Thread_Change_priority(
     /* Only clear the transient state if it wasn't set already */
     if ( ! _States_Is_transient( original_state ) )
       the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+
+    /*
+     * The thread may have new blocking states added by interrupt service
+     * routines after the change into the transient state.  This will not
+     * result in a _Scheduler_Block() operation.  Make sure we select an heir
+     * now.
+     */
+    _Scheduler_Schedule( the_thread );
+
     _ISR_Enable( level );
     if ( _States_Is_waiting_on_thread_queue( state ) ) {
       _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
@@ -91,10 +100,7 @@ void _Thread_Change_priority(
    *  We altered the set of thread priorities.  So let's figure out
    *  who is the heir and if we need to switch to them.
    */
-  _Scheduler_Schedule();
+  _Scheduler_Schedule( the_thread );
 
-  if ( !_Thread_Is_executing_also_the_heir() &&
-       _Thread_Executing->is_preemptible )
-    _Thread_Dispatch_necessary = true;
   _ISR_Enable( level );
 }
