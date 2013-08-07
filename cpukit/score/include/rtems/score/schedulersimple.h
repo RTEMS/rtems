@@ -42,8 +42,8 @@ extern "C" {
     _Scheduler_simple_Yield,              /* yield entry point */ \
     _Scheduler_simple_Block,              /* block entry point */ \
     _Scheduler_simple_Unblock,            /* unblock entry point */ \
-    _Scheduler_simple_Allocate,           /* allocate entry point */ \
-    _Scheduler_simple_Free,               /* free entry point */ \
+    _Scheduler_default_Allocate,          /* allocate entry point */ \
+    _Scheduler_default_Free,              /* free entry point */ \
     _Scheduler_simple_Update,             /* update entry point */ \
     _Scheduler_simple_Enqueue,            /* enqueue entry point */ \
     _Scheduler_simple_Enqueue_first,      /* enqueue_first entry point */ \
@@ -150,23 +150,6 @@ void _Scheduler_simple_Enqueue_first(
 );
 
 /**
- *  @brief Return empty placeholder for the simple scheduler.
- *
- *  This routine is a place holder for any memeory allocation needed
- *  by the scheduler.  For the simple scheduler the routine is an empty
- *  place holder.
- *
- *  @param[in] the_thread is the thread the scheduler is allocating
- *             management memory for
- *
- *  @retval this routine returns -1 since this is just an empty placeholder
- *  and the return value may be defined differently by each scheduler.
- */
-void *_Scheduler_simple_Allocate(
-  Thread_Control *the_thread
-);
-
-/**
  *  @brief Stub for simple schedule update.
  *
  *  This routine does nothing, and is used as a stub for Schedule update
@@ -175,18 +158,6 @@ void *_Scheduler_simple_Allocate(
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_simple_Update(
-  Thread_Control *the_thread
-);
-
-/**
- *  @brief Stub for simple schedule free.
- *
- *  This routine does nothing, and is used as a stub for Schedule free
- *  The overhead of a function call will still be imposed.
- *
- *  @param[in] the_thread is the thread to be blocked
- */
-void _Scheduler_simple_Free(
   Thread_Control *the_thread
 );
 

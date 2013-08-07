@@ -179,6 +179,7 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
+libscore_a_SOURCES += src/schedulerdefaultallocatefree.c
 libscore_a_SOURCES += src/schedulerdefaultreleasejob.c
 libscore_a_SOURCES += src/schedulerdefaulttick.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c

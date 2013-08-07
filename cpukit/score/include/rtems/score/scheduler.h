@@ -126,6 +126,26 @@ typedef struct {
 extern Scheduler_Control  _Scheduler;
 
 /**
+ * @brief Returns an arbitrary non-NULL value.
+ *
+ * @param[in] thread Unused.
+ *
+ * @return An arbitrary non-NULL value.
+ */
+void *_Scheduler_default_Allocate(
+  Thread_Control *thread
+);
+
+/**
+ * @brief Does nothing.
+ *
+ * @param[in] thread Unused.
+ */
+void _Scheduler_default_Free(
+  Thread_Control *thread
+);
+
+/**
  * @brief Does nothing.
  *
  * @param[in] thread Unused.

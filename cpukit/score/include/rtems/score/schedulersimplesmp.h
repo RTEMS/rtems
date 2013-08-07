@@ -64,8 +64,8 @@ typedef struct {
     _Scheduler_simple_smp_Yield, \
     _Scheduler_simple_smp_Extract, \
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
-    _Scheduler_simple_Allocate, \
-    _Scheduler_simple_Free, \
+    _Scheduler_default_Allocate, \
+    _Scheduler_default_Free, \
     _Scheduler_simple_Update, \
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
     _Scheduler_simple_smp_Enqueue_priority_lifo, \
