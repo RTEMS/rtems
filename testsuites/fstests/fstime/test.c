@@ -37,6 +37,7 @@ static void time_test01 (void)
   char *databuf = "TEST";
   char *file01 = "test01";
   char *file02 = "test02";
+  char *file03 = "test03";
   char *dir01 = "dir01";
 
   int n;
@@ -53,7 +54,7 @@ static void time_test01 (void)
   rtems_test_assert (status == 0);
 
   /*
-   * Create two files
+   * Create the test files
    */
   fd = open (file01, O_CREAT | O_WRONLY, mode);
   n = write (fd, databuf, len);
@@ -66,6 +67,12 @@ static void time_test01 (void)
   rtems_test_assert (n == len);
   status = close (fd);
   rtems_test_assert (status == 0);
+
+  /* A simple C version of touch */
+  fd = open (file03, O_CREAT | O_WRONLY, mode);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
   /*
    * If O_CREAT is set and the file did not previously exist, upon
    * successful completion, open() shall mark for update the st_atime,
@@ -89,6 +96,7 @@ static void time_test01 (void)
   rtems_test_assert (TIME_EQUAL (ctime1, mtime1));
   rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
   rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
+
 
   status = stat (file02, &statbuf);
   rtems_test_assert (status == 0);
@@ -119,6 +127,7 @@ static void time_test01 (void)
    */
   status = mkdir (dir01, mode);
   rtems_test_assert (status == 0);
+
   /*
    * truncate file01 to len, so it does not changes the file size
    */
@@ -132,11 +141,20 @@ static void time_test01 (void)
   rtems_test_assert (status == 0);
 
   /*
+   * Truncate an empty file which does not change the length.
+   */
+  fd = open (file03, O_TRUNC | O_WRONLY, mode);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  /*
    *
    *  truncate shall not modify the file offset for any open file
    *   descriptions associated with the file. Upon successful completion,
    *   if the file size is changed, this function shall mark for update
    *   the st_ctime and st_mtime fields of the file
+   *
+   *  open with O_TRUNC must update the file fields.
    */
 
   /*
@@ -154,6 +172,18 @@ static void time_test01 (void)
    * file02 shall update
    */
   status = stat (file02, &statbuf);
+  rtems_test_assert (status == 0);
+  ctime2 = statbuf.st_ctime;
+  mtime2 = statbuf.st_mtime;
+
+  rtems_test_assert (TIME_EQUAL (ctime2, mtime2));
+  rtems_test_assert (!TIME_EQUAL (ctime1, mtime2));
+  rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
+
+  /*
+   * file03 shall update
+   */
+  status = stat (file03, &statbuf);
   rtems_test_assert (status == 0);
   ctime2 = statbuf.st_ctime;
   mtime2 = statbuf.st_mtime;
