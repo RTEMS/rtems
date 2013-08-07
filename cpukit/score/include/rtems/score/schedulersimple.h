@@ -44,7 +44,7 @@ extern "C" {
     _Scheduler_simple_Unblock,            /* unblock entry point */ \
     _Scheduler_default_Allocate,          /* allocate entry point */ \
     _Scheduler_default_Free,              /* free entry point */ \
-    _Scheduler_simple_Update,             /* update entry point */ \
+    _Scheduler_default_Update,            /* update entry point */ \
     _Scheduler_simple_Enqueue,            /* enqueue entry point */ \
     _Scheduler_simple_Enqueue_first,      /* enqueue_first entry point */ \
     _Scheduler_simple_Extract,            /* extract entry point */ \
@@ -146,18 +146,6 @@ void _Scheduler_simple_Enqueue(
  *  @param[in] the_thread is the thread to be blocked
  */
 void _Scheduler_simple_Enqueue_first(
-  Thread_Control *the_thread
-);
-
-/**
- *  @brief Stub for simple schedule update.
- *
- *  This routine does nothing, and is used as a stub for Schedule update
- *  The overhead of a function call will still be imposed.
- *
- *  @param[in] the_thread is the thread to be blocked
- */
-void _Scheduler_simple_Update(
   Thread_Control *the_thread
 );
 

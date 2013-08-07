@@ -149,6 +149,15 @@ void _Scheduler_default_Free(
  * @brief Does nothing.
  *
  * @param[in] thread Unused.
+ */
+void _Scheduler_default_Update(
+  Thread_Control *the_thread
+);
+
+/**
+ * @brief Does nothing.
+ *
+ * @param[in] thread Unused.
  * @param[in] deadline Unused.
  */
 void _Scheduler_default_Release_job(

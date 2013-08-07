@@ -23,12 +23,6 @@
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/wkspace.h>
 
-void _Scheduler_simple_Update(
-  Thread_Control *the_thread
-)
-{
-}
-
 void _Scheduler_simple_Initialize ( void )
 {
   void *f;

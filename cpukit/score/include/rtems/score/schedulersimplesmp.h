@@ -24,7 +24,6 @@ extern "C" {
 #endif
 
 #include <rtems/score/scheduler.h>
-#include <rtems/score/schedulersimple.h>
 #include <rtems/score/schedulerpriority.h>
 
 /**
@@ -66,7 +65,7 @@ typedef struct {
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
     _Scheduler_default_Allocate, \
     _Scheduler_default_Free, \
-    _Scheduler_simple_Update, \
+    _Scheduler_default_Update, \
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
     _Scheduler_simple_smp_Enqueue_priority_lifo, \
     _Scheduler_simple_smp_Extract, \
