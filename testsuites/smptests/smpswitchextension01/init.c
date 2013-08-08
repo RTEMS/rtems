@@ -177,7 +177,9 @@ static void test(void)
       &ctx->toggler_ids[toggler_index]
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
 
+  for (toggler_index = 0; toggler_index < TOGGLER_COUNT; ++toggler_index) {
     sc = rtems_task_start(ctx->toggler_ids[toggler_index], toggler, toggler_index);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
