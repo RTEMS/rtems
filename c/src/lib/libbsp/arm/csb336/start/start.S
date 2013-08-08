@@ -23,6 +23,13 @@
 .equ PSR_F,              0x40
 .equ PSR_T,              0x20
 
+.section .bsp_start_text,"ax"
+         .code 32
+_start_jump_at_origin:
+        ldr     pc, _start_address
+_start_address:
+        .word   _start
+
 .text
 .globl  _start
 _start:

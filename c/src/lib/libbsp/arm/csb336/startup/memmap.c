@@ -16,10 +16,14 @@
  */
 mmu_sect_map_t mem_map[] = {
 /*  <phys addr>  <virt addr> <size> <flags> */
-    {0x08200000, 0x00000000,   1,    MMU_CACHE_NONE},     /* Mirror of SDRAM */
+    {0x08200000, 0x00000000,   1,    MMU_CACHE_WBACK},     /* Mirror of SDRAM */
     {0x00100000, 0x00100000,   1,    MMU_CACHE_NONE},     /* Bootstrap ROM */
-    {0x00200000, 0x00200000,   1,    MMU_CACHE_NONE},     /* Internal Regs */
-    {0x08000000, 0x08000000,  32,    MMU_CACHE_WTHROUGH}, /* SDRAM */
+    {0x00200000, 0x00200000,   2,    MMU_CACHE_NONE},     /* Internal Regs + eSRAM */
+
+    {0x08000000, 0x08000000,   1,    MMU_CACHE_NONE},     /* SDRAM */
+    {0x08100000, 0x08100000,   1,    MMU_CACHE_WTHROUGH}, /* SDRAM */
+    {0x08200000, 0x08200000,  30,    MMU_CACHE_WBACK},    /* SDRAM */
+
     {0x10000000, 0x10000000,   8,    MMU_CACHE_NONE},     /* CS0 - Flash */
     {0x12000000, 0x12000000,   1,    MMU_CACHE_NONE},     /* CS1 - enet */
     {0x13000000, 0x13000000,   1,    MMU_CACHE_NONE},     /* CS2 - */
