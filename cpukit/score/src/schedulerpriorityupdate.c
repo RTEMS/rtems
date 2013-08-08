@@ -25,16 +25,16 @@ void _Scheduler_priority_Update(
   Thread_Control    *the_thread
 )
 {
-  Scheduler_priority_Per_thread *sched_info;
+  Scheduler_priority_Per_thread *sched_info_of_thread =
+    _Scheduler_priority_Get_scheduler_info( the_thread );
   Chain_Control                 *rq;
 
-  sched_info = (Scheduler_priority_Per_thread *) the_thread->scheduler_info;
-  rq         = (Chain_Control *) _Scheduler.information;
+  rq                   = (Chain_Control *) _Scheduler.information;
 
-  sched_info->ready_chain = &rq[ the_thread->current_priority ];
+  sched_info_of_thread->ready_chain = &rq[ the_thread->current_priority ];
 
   _Priority_bit_map_Initialize_information(
-    &sched_info->Priority_map,
+    &sched_info_of_thread->Priority_map,
     the_thread->current_priority
   );
 }

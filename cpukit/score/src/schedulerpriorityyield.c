@@ -24,21 +24,20 @@
 
 void _Scheduler_priority_Yield( Thread_Control *thread )
 {
-  Scheduler_priority_Per_thread *sched_info;
-  ISR_Level                      level;
-  Chain_Control                 *ready;
+  Scheduler_priority_Per_thread *sched_info_of_thread =
+    _Scheduler_priority_Get_scheduler_info( thread );
+  Chain_Control *ready_chain = sched_info_of_thread->ready_chain;
+  ISR_Level level;
 
-  sched_info = (Scheduler_priority_Per_thread *) thread->scheduler_info;
-  ready      = sched_info->ready_chain;
   _ISR_Disable( level );
-    if ( !_Chain_Has_only_one_node( ready ) ) {
+    if ( !_Chain_Has_only_one_node( ready_chain ) ) {
       _Chain_Extract_unprotected( &thread->Object.Node );
-      _Chain_Append_unprotected( ready, &thread->Object.Node );
+      _Chain_Append_unprotected( ready_chain, &thread->Object.Node );
 
       _ISR_Flash( level );
 
       if ( _Thread_Is_heir( thread ) )
-        _Thread_Heir = (Thread_Control *) _Chain_First( ready );
+        _Thread_Heir = (Thread_Control *) _Chain_First( ready_chain );
       _Thread_Dispatch_necessary = true;
     }
     else if ( !_Thread_Is_heir( thread ) )
