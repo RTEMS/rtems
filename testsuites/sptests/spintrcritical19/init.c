@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
