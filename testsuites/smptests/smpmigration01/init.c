@@ -131,7 +131,9 @@ static void test(void)
       &ctx->runner_ids[runner_index]
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
 
+  for (runner_index = 0; runner_index < RUNNER_COUNT; ++runner_index) {
     sc = rtems_task_start(ctx->runner_ids[runner_index], runner, runner_index);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
