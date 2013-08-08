@@ -83,6 +83,20 @@ static inline void _Scheduler_SMP_Allocate_processor(
   }
 }
 
+static inline Thread_Control *_Scheduler_SMP_Get_lowest_scheduled(
+  Scheduler_SMP_Control *self
+)
+{
+  Thread_Control *lowest_ready = NULL;
+  Chain_Control *scheduled = &self->scheduled;
+
+  if ( !_Chain_Is_empty( scheduled ) ) {
+    lowest_ready = (Thread_Control *) _Chain_Last( scheduled );
+  }
+
+  return lowest_ready;
+}
+
 /** @} */
 
 #ifdef __cplusplus

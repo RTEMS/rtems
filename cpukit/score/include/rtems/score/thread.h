@@ -378,6 +378,21 @@ struct Thread_Control_struct {
   bool                                  is_scheduled;
 
   /**
+   * @brief This field is true if the thread is in the air.
+   *
+   * A thread is in the air if it has an allocated processor (it is an
+   * executing or heir thread on exactly one processor) and it is not a member
+   * of the scheduled chain.  The extract operation on a scheduled thread will
+   * produce threads in the air (see also _Thread_Set_transient()).  The next
+   * enqueue or schedule operation will decide what to do based on this state
+   * indication.  It can either place the thread back on the scheduled chain
+   * and the thread can keep its allocated processor, or it can take the
+   * processor away from the thread and give the processor to another thread of
+   * higher priority.
+   */
+  bool                                  is_in_the_air;
+
+  /**
    * @brief This field is true if the thread is executing.
    *
    * A thread is executing if it executes on a processor.  An executing thread

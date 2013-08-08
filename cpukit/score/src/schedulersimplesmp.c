@@ -34,22 +34,42 @@ void _Scheduler_simple_smp_Initialize( void )
   _Scheduler.information = self;
 }
 
+static Thread_Control *_Scheduler_simple_smp_Get_highest_ready(
+  Scheduler_SMP_Control *self
+)
+{
+  Thread_Control *highest_ready = NULL;
+  Chain_Control *ready = &self->ready[ 0 ];
+
+  if ( !_Chain_Is_empty( ready ) ) {
+    highest_ready = (Thread_Control *) _Chain_First( ready );
+  }
+
+  return highest_ready;
+}
+
 static void _Scheduler_simple_smp_Move_from_scheduled_to_ready(
-  Chain_Control *ready_chain,
+  Scheduler_SMP_Control *self,
   Thread_Control *scheduled_to_ready
 )
 {
   _Chain_Extract_unprotected( &scheduled_to_ready->Object.Node );
-  _Scheduler_simple_Insert_priority_lifo( ready_chain, scheduled_to_ready );
+  _Scheduler_simple_Insert_priority_lifo(
+    &self->ready[ 0 ],
+    scheduled_to_ready
+  );
 }
 
 static void _Scheduler_simple_smp_Move_from_ready_to_scheduled(
-  Chain_Control *scheduled_chain,
+  Scheduler_SMP_Control *self,
   Thread_Control *ready_to_scheduled
 )
 {
   _Chain_Extract_unprotected( &ready_to_scheduled->Object.Node );
-  _Scheduler_simple_Insert_priority_fifo( scheduled_chain, ready_to_scheduled );
+  _Scheduler_simple_Insert_priority_fifo(
+    &self->scheduled,
+    ready_to_scheduled
+  );
 }
 
 static void _Scheduler_simple_smp_Insert(
@@ -61,6 +81,19 @@ static void _Scheduler_simple_smp_Insert(
   _Chain_Insert_ordered_unprotected( chain, &thread->Object.Node, order );
 }
 
+static void _Scheduler_simple_smp_Schedule_highest_ready(
+  Scheduler_SMP_Control *self,
+  Thread_Control *victim
+)
+{
+  Thread_Control *highest_ready =
+    (Thread_Control *) _Chain_First( &self->ready[ 0 ] );
+
+  _Scheduler_SMP_Allocate_processor( highest_ready, victim );
+
+  _Scheduler_simple_smp_Move_from_ready_to_scheduled( self, highest_ready );
+}
+
 static void _Scheduler_simple_smp_Enqueue_ordered(
   Thread_Control *thread,
   Chain_Node_order order
@@ -68,24 +101,68 @@ static void _Scheduler_simple_smp_Enqueue_ordered(
 {
   Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
 
-  /*
-   * The scheduled chain has exactly processor count nodes after
-   * initialization, thus the lowest priority scheduled thread exists.
-   */
-  Thread_Control *lowest_scheduled =
-    (Thread_Control *) _Chain_Last( &self->scheduled );
+  if ( thread->is_in_the_air ) {
+    Thread_Control *highest_ready =
+      _Scheduler_simple_smp_Get_highest_ready( self );
 
-  if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
-    _Scheduler_SMP_Allocate_processor( thread, lowest_scheduled );
+    thread->is_in_the_air = false;
 
-    _Scheduler_simple_smp_Insert( &self->scheduled, thread, order );
+    /*
+     * The thread has been extracted from the scheduled chain.  We have to
+     * place it now on the scheduled or ready chain.
+     *
+     * NOTE: Do not exchange parameters to do the negation of the order check.
+     */
+    if (
+      highest_ready != NULL
+        && !( *order )( &thread->Object.Node, &highest_ready->Object.Node )
+    ) {
+      _Scheduler_SMP_Allocate_processor( highest_ready, thread );
 
-    _Scheduler_simple_smp_Move_from_scheduled_to_ready(
-      &self->ready[ 0 ],
-      lowest_scheduled
-    );
+      _Scheduler_simple_smp_Insert( &self->ready[ 0 ], thread, order );
+
+      _Scheduler_simple_smp_Move_from_ready_to_scheduled(
+        self,
+        highest_ready
+      );
+    } else {
+      thread->is_scheduled = true;
+
+      _Scheduler_simple_smp_Insert( &self->scheduled, thread, order );
+    }
   } else {
-    _Scheduler_simple_smp_Insert( &self->ready[ 0 ], thread, order );
+    Thread_Control *lowest_scheduled = _Scheduler_SMP_Get_lowest_scheduled( self );
+
+    /*
+     * The scheduled chain is empty if nested interrupts change the priority of
+     * all scheduled threads.  These threads are in the air.
+     */
+    if (
+      lowest_scheduled != NULL
+        && ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node )
+    ) {
+      _Scheduler_SMP_Allocate_processor( thread, lowest_scheduled );
+
+      _Scheduler_simple_smp_Insert( &self->scheduled, thread, order );
+
+      _Scheduler_simple_smp_Move_from_scheduled_to_ready(
+        self,
+        lowest_scheduled
+      );
+    } else {
+      _Scheduler_simple_smp_Insert( &self->ready[ 0 ], thread, order );
+    }
+  }
+}
+
+void _Scheduler_simple_smp_Block( Thread_Control *thread )
+{
+  _Chain_Extract_unprotected( &thread->Object.Node );
+
+  if ( thread->is_scheduled ) {
+    Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
+
+    _Scheduler_simple_smp_Schedule_highest_ready( self, thread );
   }
 }
 
@@ -107,21 +184,9 @@ void _Scheduler_simple_smp_Enqueue_priority_fifo( Thread_Control *thread )
 
 void _Scheduler_simple_smp_Extract( Thread_Control *thread )
 {
-  Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
+  thread->is_in_the_air = true;
 
   _Chain_Extract_unprotected( &thread->Object.Node );
-
-  if ( thread->is_scheduled ) {
-    Thread_Control *highest_ready =
-      (Thread_Control *) _Chain_First( &self->ready[ 0 ] );
-
-    _Scheduler_SMP_Allocate_processor( highest_ready, thread );
-
-    _Scheduler_simple_smp_Move_from_ready_to_scheduled(
-      &self->scheduled,
-      highest_ready
-    );
-  }
 }
 
 void _Scheduler_simple_smp_Yield( Thread_Control *thread )
@@ -138,5 +203,11 @@ void _Scheduler_simple_smp_Yield( Thread_Control *thread )
 
 void _Scheduler_simple_smp_Schedule( Thread_Control *thread )
 {
-  ( void ) thread;
+  if ( thread->is_in_the_air ) {
+    Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
+
+    thread->is_in_the_air = false;
+
+    _Scheduler_simple_smp_Schedule_highest_ready( self, thread );
+  }
 }

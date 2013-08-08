@@ -57,7 +57,7 @@ extern "C" {
     _Scheduler_simple_smp_Initialize, \
     _Scheduler_simple_smp_Schedule, \
     _Scheduler_simple_smp_Yield, \
-    _Scheduler_simple_smp_Extract, \
+    _Scheduler_simple_smp_Block, \
     _Scheduler_simple_smp_Enqueue_priority_fifo, \
     _Scheduler_default_Allocate, \
     _Scheduler_default_Free, \
@@ -72,6 +72,8 @@ extern "C" {
   }
 
 void _Scheduler_simple_smp_Initialize( void );
+
+void _Scheduler_simple_smp_Block( Thread_Control *thread );
 
 void _Scheduler_simple_smp_Enqueue_priority_fifo( Thread_Control *thread );
 

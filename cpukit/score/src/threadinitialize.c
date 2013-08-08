@@ -180,6 +180,7 @@ bool _Thread_Initialize(
 
 #if defined(RTEMS_SMP)
   the_thread->is_scheduled            = false;
+  the_thread->is_in_the_air           = false;
   the_thread->is_executing            = false;
 
   /* Initialize the cpu field for the non-SMP schedulers */
