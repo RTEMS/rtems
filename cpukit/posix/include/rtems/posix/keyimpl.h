@@ -1,9 +1,9 @@
 /**
  * @file
- * 
+ *
  * @brief Private Inlined Routines for POSIX Key's
  *
- * This include file contains the static inline implementation of the private 
+ * This include file contains the static inline implementation of the private
  * inlined routines for POSIX key's.
  */
 
@@ -15,10 +15,11 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
- 
+
 #include <rtems/posix/key.h>
 #include <rtems/score/freechain.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/percpu.h>
 
 #ifndef _RTEMS_POSIX_KEYIMPL_H
 #define _RTEMS_POSIX_KEYIMPL_H
@@ -120,19 +121,19 @@ void _POSIX_Keys_Free_memory(
 RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
   POSIX_Keys_Control *the_key
 );
- 
+
 /**
  * @brief Allocate a keys control block.
  *
  * This function allocates a keys control block from
  * the inactive chain of free keys control blocks.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Allocate( void )
 {
   return (POSIX_Keys_Control *) _Objects_Allocate( &_POSIX_Keys_Information );
 }
- 
+
 /**
  * @brief Free a keys control block.
  *
@@ -145,7 +146,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
 {
   _Objects_Free( &_POSIX_Keys_Information, &the_key->Object );
 }
- 
+
 /**
  * @brief Get a keys control block.
  *
@@ -157,7 +158,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Keys_Free (
  * and the_key is undefined.  Otherwise, location is set
  * to OBJECTS_ERROR and the_key is undefined.
  */
- 
+
 RTEMS_INLINE_ROUTINE POSIX_Keys_Control *_POSIX_Keys_Get (
   pthread_key_t      id,
   Objects_Locations *location
