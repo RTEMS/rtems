@@ -1,0 +1,8 @@
+MEMORY {
+   RAM_INT_0 : ORIGIN = 0x00000000, LENGTH = 64k + 64k + 64k
+   RAM_INT_1 : ORIGIN = 0xFFFF0000, LENGTH = 64k - 512
+   RAM_MMU   : ORIGIN = 0x00400000, LENGTH = 16k
+   RAM       : ORIGIN = 0x00404000, LENGTH = 1024M - 4M - 16k
+}
+
+INCLUDE linkcmds.xilinx_zynq
