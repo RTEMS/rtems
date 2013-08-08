@@ -28,11 +28,21 @@ void bsp_interrupt_dispatch(void)
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
+  if (vector >= MC9328MXL_NUM_INTS)
+     return RTEMS_INVALID_ID;
+
+  MC9328MXL_AITC_INTENNUM = vector;
+
   return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
+  if (vector >= MC9328MXL_NUM_INTS)
+     return RTEMS_INVALID_ID;
+
+  MC9328MXL_AITC_INTDISNUM = vector;
+
   return RTEMS_SUCCESSFUL;
 }
 
