@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/schedulerpriority.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
 void *_Scheduler_priority_Allocate (

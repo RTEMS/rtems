@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/schedulerpriorityimpl.h>
+#include <rtems/score/wkspace.h>
 
 /* Instantiate any global variables needed by the priority scheduler */
 volatile Priority_bit_map_Control _Priority_Major_bit_map;
@@ -27,6 +28,13 @@ Priority_bit_map_Control          _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 void _Scheduler_priority_Initialize(void)
 {
-  _Scheduler_priority_Ready_queue_initialize();
+  /* allocate ready queue structures */
+  Chain_Control *ready_queues = _Workspace_Allocate_or_fatal_error(
+    ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+  );
+
+  _Scheduler_priority_Ready_queue_initialize( ready_queues );
   _Priority_bit_map_Handler_initialization();
+
+  _Scheduler.information = ready_queues;
 }

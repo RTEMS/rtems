@@ -25,7 +25,6 @@
 #include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,18 +46,13 @@ _Scheduler_priority_Get_ready_queues( void )
  *
  * This routine initializes @a the_ready_queue for priority-based scheduling.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(void)
+RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
+  Chain_Control *ready_queues
+)
 {
-  size_t         index;
-  Chain_Control *ready_queues;
-
-  /* allocate ready queue structures */
-  _Scheduler.information = _Workspace_Allocate_or_fatal_error(
-    ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
-  );
+  size_t index;
 
   /* initialize ready queue structures */
-  ready_queues = _Scheduler_priority_Get_ready_queues();
   for( index=0; index <= PRIORITY_MAXIMUM; index++)
     _Chain_Initialize_empty( &ready_queues[index] );
 }
