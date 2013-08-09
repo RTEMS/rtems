@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_PRIORITYBITMAPIMPL_H
 
 #include <rtems/score/prioritybitmap.h>
+#include <rtems/score/priority.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,28 +58,7 @@ extern Priority_bit_map_Control
  *  a highly optimized bit scan without the use of special CPU
  *  instructions.
  */
-#ifndef SCORE_INIT
 extern const unsigned char __log2table[256];
-#else
-const unsigned char __log2table[256] = {
-    7, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
-#endif
 
 #endif
 
@@ -216,19 +196,6 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
  *  This is the minor bit map.
  */
 extern Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
-
-/**
- * This routine performs the initialization necessary for this handler.
- */
-
-RTEMS_INLINE_ROUTINE void _Priority_bit_map_Handler_initialization( void )
-{
-  int index;
-
-  _Priority_Major_bit_map = 0;
-  for ( index=0 ; index <16 ; index++ )
-     _Priority_Bit_map[ index ] = 0;
-}
 
 /**
  * This routine uses the_priority_map to update the priority

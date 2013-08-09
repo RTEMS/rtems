@@ -45,7 +45,6 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
@@ -128,7 +127,6 @@ void rtems_initialize_data_structures(void)
   _API_Mutex_Initialization( 1 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
 
-  _Priority_bit_map_Handler_initialization();
   _Watchdog_Handler_initialization();
   _TOD_Handler_initialization();
 
