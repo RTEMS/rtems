@@ -36,6 +36,12 @@ extern "C" {
  */
 /**@{**/
 
+RTEMS_INLINE_ROUTINE Chain_Control *
+_Scheduler_priority_Get_ready_queues( void )
+{
+  return ( Chain_Control * ) _Scheduler.information;
+}
+
 /**
  * @brief Ready queue initialization.
  *
@@ -52,7 +58,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(void)
   );
 
   /* initialize ready queue structures */
-  ready_queues = (Chain_Control *) _Scheduler.information;
+  ready_queues = _Scheduler_priority_Get_ready_queues();
   for( index=0; index <= PRIORITY_MAXIMUM; index++)
     _Chain_Initialize_empty( &ready_queues[index] );
 }
@@ -181,9 +187,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
   bool force_dispatch
 )
 {
-  Thread_Control *heir = _Scheduler_priority_Ready_queue_first(
-    (Chain_Control *) _Scheduler.information
-  );
+  Chain_Control *ready_queues = _Scheduler_priority_Get_ready_queues();
+  Thread_Control *heir = _Scheduler_priority_Ready_queue_first( ready_queues );
 
   ( void ) thread;
 
