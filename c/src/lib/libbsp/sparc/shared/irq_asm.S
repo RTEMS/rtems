@@ -21,6 +21,25 @@
 
 #include <rtems/asm.h>
 #include <rtems/system.h>
+#include <bspopts.h>
+
+.macro GET_SELF_CPU_CONTROL REG, TMP
+        sethi    %hi(_Per_CPU_Information), \REG
+        add      \REG, %lo(_Per_CPU_Information), \REG
+
+#if defined( RTEMS_SMP )
+#if BSP_LEON3_SMP
+        /* LEON3 SMP support */
+        rd       %asr17, \TMP
+        srl      \TMP, 28, \TMP /* CPU number is upper 4 bits so shift */
+#else
+        mov      0, \TMP
+        nop
+#endif
+        sll      \TMP, PER_CPU_CONTROL_SIZE_LOG2, \TMP
+        add      \REG, \TMP, \REG
+#endif /* defined( RTEMS_SMP ) */
+.endm
 
 /*
  *  void _ISR_Handler()
@@ -174,16 +193,13 @@ save_isf:
          *        nest and thread dispatch disable levels are unnested.
          */
 
-        sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
-        ld       [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))], %l6
+	GET_SELF_CPU_CONTROL %l5, %l7
 
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
-
+	ld       [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL], %l6
 	ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
 
         add      %l6, 1, %l6
-        st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
+        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         add      %l7, 1, %l7
         st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
@@ -334,13 +350,13 @@ dont_fix_pil2:
          *  Register usage for this section:
          *
          *    l4 = _Thread_Dispatch_disable_level pointer
-         *    l5 = _ISR_Nest_level pointer
+         *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
          */
 
         sub      %l6, 1, %l6
-        st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
+        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
 
@@ -418,8 +434,7 @@ isr_dispatch:
          *  _Thread_Dispatch before leaving this ISR Dispatch context.
          */
 
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
+	GET_SELF_CPU_CONTROL %l5, %l7
 
         ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l7
 
