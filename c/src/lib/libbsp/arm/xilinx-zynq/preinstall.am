@@ -162,6 +162,14 @@ $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702_smp: startup/linkcmds.xilinx_zynq_zc70
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702_smp
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc702_smp
 
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_zc706: startup/linkcmds.xilinx_zynq_zc706 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc706
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc706
+
+$(PROJECT_LIB)/linkcmds.xilinx_zynq_zc706_smp: startup/linkcmds.xilinx_zynq_zc706_smp $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc706_smp
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zc706_smp
+
 $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard: startup/linkcmds.xilinx_zynq_zedboard $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.xilinx_zynq_zedboard
