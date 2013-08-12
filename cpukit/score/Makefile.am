@@ -120,6 +120,7 @@ endif
 
 if HAS_SMP
 libscore_a_SOURCES += src/schedulersimplesmp.c
+libscore_a_SOURCES += src/schedulersmpstartidle.c
 libscore_a_SOURCES += src/smp.c
 endif
 

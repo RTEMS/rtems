@@ -24,6 +24,8 @@
 #define _RTEMS_SCORE_SCHEDULERSMP_H
 
 #include <rtems/score/chain.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,6 +43,11 @@ typedef struct {
   Chain_Control scheduled;
   Chain_Control ready[ 1 ];
 } Scheduler_SMP_Control;
+
+void _Scheduler_SMP_Start_idle(
+  Thread_Control *thread,
+  Per_CPU_Control *cpu
+);
 
 /** @} */
 

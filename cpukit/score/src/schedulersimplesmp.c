@@ -182,15 +182,3 @@ void _Scheduler_simple_smp_Schedule( Thread_Control *thread )
 {
   ( void ) thread;
 }
-
-void _Scheduler_simple_smp_Start_idle(
-  Thread_Control *thread,
-  Per_CPU_Control *cpu
-)
-{
-  Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
-
-  thread->is_scheduled = true;
-  thread->cpu = cpu;
-  _Chain_Append_unprotected( &self->scheduled, &thread->Object.Node );
-}
