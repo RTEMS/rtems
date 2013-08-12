@@ -34,48 +34,6 @@ void _Scheduler_simple_smp_Initialize( void )
   _Scheduler.information = self;
 }
 
-static void _Scheduler_simple_smp_Allocate_processor(
-  Thread_Control *scheduled,
-  Thread_Control *victim
-)
-{
-  Per_CPU_Control *cpu_of_scheduled = scheduled->cpu;
-  Per_CPU_Control *cpu_of_victim = victim->cpu;
-  Thread_Control *heir;
-
-  scheduled->is_scheduled = true;
-  victim->is_scheduled = false;
-
-  _Per_CPU_Acquire( cpu_of_scheduled );
-
-  if ( scheduled->is_executing ) {
-    heir = cpu_of_scheduled->heir;
-    cpu_of_scheduled->heir = scheduled;
-  } else {
-    heir = scheduled;
-  }
-
-  _Per_CPU_Release( cpu_of_scheduled );
-
-  if ( heir != victim ) {
-    const Per_CPU_Control *cpu_of_executing = _Per_CPU_Get();
-
-    heir->cpu = cpu_of_victim;
-
-    /*
-     * FIXME: Here we need atomic store operations with a relaxed memory order.
-     * The _CPU_SMP_Send_interrupt() will ensure that the change can be
-     * observed consistently.
-     */
-    cpu_of_victim->heir = heir;
-    cpu_of_victim->dispatch_necessary = true;
-
-    if ( cpu_of_victim != cpu_of_executing ) {
-      _Per_CPU_Send_interrupt( cpu_of_victim );
-    }
-  }
-}
-
 static void _Scheduler_simple_smp_Move_from_scheduled_to_ready(
   Chain_Control *ready_chain,
   Thread_Control *scheduled_to_ready
@@ -118,7 +76,7 @@ static void _Scheduler_simple_smp_Enqueue_ordered(
     (Thread_Control *) _Chain_Last( &self->scheduled );
 
   if ( ( *order )( &thread->Object.Node, &lowest_scheduled->Object.Node ) ) {
-    _Scheduler_simple_smp_Allocate_processor( thread, lowest_scheduled );
+    _Scheduler_SMP_Allocate_processor( thread, lowest_scheduled );
 
     _Scheduler_simple_smp_Insert( &self->scheduled, thread, order );
 
@@ -157,7 +115,7 @@ void _Scheduler_simple_smp_Extract( Thread_Control *thread )
     Thread_Control *highest_ready =
       (Thread_Control *) _Chain_First( &self->ready[ 0 ] );
 
-    _Scheduler_simple_smp_Allocate_processor( highest_ready, thread );
+    _Scheduler_SMP_Allocate_processor( highest_ready, thread );
 
     _Scheduler_simple_smp_Move_from_ready_to_scheduled(
       &self->scheduled,
