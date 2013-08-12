@@ -25,6 +25,7 @@ extern "C" {
 
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulersmp.h>
 
 /**
  * @defgroup ScoreSchedulerSMP Simple SMP Scheduler
@@ -47,11 +48,6 @@ extern "C" {
  *
  * @{
  */
-
-typedef struct {
-  Chain_Control ready;
-  Chain_Control scheduled;
-} Scheduler_simple_smp_Control;
 
 /**
  * @brief Entry points for the Simple SMP Scheduler.

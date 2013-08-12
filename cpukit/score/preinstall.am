@@ -203,6 +203,14 @@ $(PROJECT_INCLUDE)/rtems/score/schedulersimpleimpl.h: include/rtems/score/schedu
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulersimpleimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersimpleimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/schedulersmp.h: include/rtems/score/schedulersmp.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulersmp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersmp.h
+
+$(PROJECT_INCLUDE)/rtems/score/schedulersmpimpl.h: include/rtems/score/schedulersmpimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulersmpimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersmpimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/smp.h: include/rtems/score/smp.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/smp.h

@@ -20,19 +20,15 @@
 
 #include <rtems/score/schedulersimplesmp.h>
 #include <rtems/score/schedulersimpleimpl.h>
+#include <rtems/score/schedulersmpimpl.h>
 #include <rtems/score/wkspace.h>
-
-static Scheduler_simple_smp_Control *_Scheduler_simple_smp_Instance( void )
-{
-  return _Scheduler.information;
-}
 
 void _Scheduler_simple_smp_Initialize( void )
 {
-  Scheduler_simple_smp_Control *self =
+  Scheduler_SMP_Control *self =
     _Workspace_Allocate_or_fatal_error( sizeof( *self ) );
 
-  _Chain_Initialize_empty( &self->ready );
+  _Chain_Initialize_empty( &self->ready[ 0 ] );
   _Chain_Initialize_empty( &self->scheduled );
 
   _Scheduler.information = self;
@@ -112,7 +108,7 @@ static void _Scheduler_simple_smp_Enqueue_ordered(
   Chain_Node_order order
 )
 {
-  Scheduler_simple_smp_Control *self = _Scheduler_simple_smp_Instance();
+  Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
 
   /*
    * The scheduled chain has exactly processor count nodes after
@@ -127,11 +123,11 @@ static void _Scheduler_simple_smp_Enqueue_ordered(
     _Scheduler_simple_smp_Insert( &self->scheduled, thread, order );
 
     _Scheduler_simple_smp_Move_from_scheduled_to_ready(
-      &self->ready,
+      &self->ready[ 0 ],
       lowest_scheduled
     );
   } else {
-    _Scheduler_simple_smp_Insert( &self->ready, thread, order );
+    _Scheduler_simple_smp_Insert( &self->ready[ 0 ], thread, order );
   }
 }
 
@@ -153,13 +149,13 @@ void _Scheduler_simple_smp_Enqueue_priority_fifo( Thread_Control *thread )
 
 void _Scheduler_simple_smp_Extract( Thread_Control *thread )
 {
-  Scheduler_simple_smp_Control *self = _Scheduler_simple_smp_Instance();
+  Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
 
   _Chain_Extract_unprotected( &thread->Object.Node );
 
   if ( thread->is_scheduled ) {
     Thread_Control *highest_ready =
-      (Thread_Control *) _Chain_First( &self->ready );
+      (Thread_Control *) _Chain_First( &self->ready[ 0 ] );
 
     _Scheduler_simple_smp_Allocate_processor( highest_ready, thread );
 
@@ -192,7 +188,7 @@ void _Scheduler_simple_smp_Start_idle(
   Per_CPU_Control *cpu
 )
 {
-  Scheduler_simple_smp_Control *self = _Scheduler_simple_smp_Instance();
+  Scheduler_SMP_Control *self = _Scheduler_SMP_Instance();
 
   thread->is_scheduled = true;
   thread->cpu = cpu;
