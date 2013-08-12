@@ -242,6 +242,11 @@ RTEMS_INLINE_ROUTINE Priority_Control _Priority_bit_map_Get_highest( void )
           _Priority_Bits_index( minor );
 }
 
+RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty( void )
+{
+  return _Priority_Major_bit_map == 0;
+}
+
 /**
  * This routine initializes the_priority_map so that it
  * contains the information necessary to manage a thread
