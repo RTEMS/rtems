@@ -28,6 +28,9 @@
 #include <rtems/libio_.h>
 #include <rtems/score/threaddispatch.h>
 
+rtems_interrupt_lock rtems_filesystem_mt_entry_lock_control =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER;
+
 static rtems_filesystem_global_location_t *deferred_released_global_locations;
 
 rtems_filesystem_location_info_t *rtems_filesystem_location_copy(
