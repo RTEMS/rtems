@@ -24,7 +24,7 @@
 
 #define GIC_CPUIF ((volatile gic_cpuif *) BSP_ARM_GIC_CPUIF_BASE)
 
-#define PRIORITY_DEFAULT 128
+#define PRIORITY_DEFAULT 127
 
 void bsp_interrupt_dispatch(void)
 {
