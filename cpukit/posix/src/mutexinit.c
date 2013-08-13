@@ -165,7 +165,7 @@ int pthread_mutex_init(
 
   the_mutex_attr = &the_mutex->Mutex.Attributes;
 
-  if ( the_attr->recursive )
+  if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE )
     the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
   else
     the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
