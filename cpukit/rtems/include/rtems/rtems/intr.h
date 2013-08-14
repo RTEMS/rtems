@@ -25,6 +25,7 @@
 extern "C" {
 #endif
 
+#include <rtems/rtems/status.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/isrlock.h>
 
