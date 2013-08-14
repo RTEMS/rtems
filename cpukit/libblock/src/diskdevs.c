@@ -57,7 +57,7 @@ static rtems_id diskdevs_mutex;
  */
 static volatile bool diskdevs_protected;
 
-static rtems_interrupt_lock diskdevs_lock;
+static rtems_interrupt_lock diskdevs_lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
 
 static rtems_status_code
 disk_lock(void)
