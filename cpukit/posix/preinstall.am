@@ -84,6 +84,10 @@ $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h: include/rtems/posix/muteximpl.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
 
+$(PROJECT_INCLUDE)/rtems/posix/onceimpl.h: include/rtems/posix/onceimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/onceimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/onceimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/posixapi.h: include/rtems/posix/posixapi.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/posixapi.h

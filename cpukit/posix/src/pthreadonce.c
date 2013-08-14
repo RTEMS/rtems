@@ -25,25 +25,55 @@
 
 #include <rtems.h>
 #include <rtems/system.h>
-#include <rtems/score/thread.h>
+#include <rtems/posix/onceimpl.h>
+
+#define PTHREAD_ONCE_INIT_NOT_RUN  0
+#define PTHREAD_ONCE_INIT_RUNNING  1
+#define PTHREAD_ONCE_INIT_RUN      2
 
 int pthread_once(
   pthread_once_t  *once_control,
   void           (*init_routine)(void)
 )
 {
+  int r = 0;
+
   if ( !once_control || !init_routine )
     return EINVAL;
 
-  if ( !once_control->init_executed ) {
-    rtems_mode saveMode;
-    rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &saveMode);
-    if ( !once_control->init_executed ) {
-      once_control->is_initialized = true;
-      once_control->init_executed = true;
-      (*init_routine)();
+  if ( once_control->is_initialized != 1 )
+    return EINVAL;
+
+  if ( once_control->init_executed != PTHREAD_ONCE_INIT_RUN ) {
+    r = pthread_mutex_lock( &_POSIX_Once_Lock );
+    if ( r == 0 ) {
+      int rr;
+
+      /*
+       * Getting to here means the once_control is locked so we have:
+       *  1. The init has not run and the state is PTHREAD_ONCE_INIT_NOT_RUN.
+       *  2. The init has finished and the state is PTHREAD_ONCE_INIT_RUN.
+       *  3. The init is being run by this thread and the state
+       *     PTHREAD_ONCE_INIT_RUNNING so we are nesting. This is an error.
+       */
+
+      switch ( once_control->init_executed ) {
+        case PTHREAD_ONCE_INIT_NOT_RUN:
+          once_control->init_executed = PTHREAD_ONCE_INIT_RUNNING;
+          (*init_routine)();
+          once_control->init_executed = PTHREAD_ONCE_INIT_RUN;
+          break;
+        case PTHREAD_ONCE_INIT_RUNNING:
+          r = EINVAL;
+          break;
+        default:
+          break;
+      }
+      rr = pthread_mutex_unlock( &_POSIX_Once_Lock );
+      if ( r == 0 )
+        r = rr;
     }
-    rtems_task_mode(saveMode, RTEMS_PREEMPT_MASK, &saveMode);
   }
-  return 0;
+
+  return r;
 }

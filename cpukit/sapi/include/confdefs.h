@@ -1695,6 +1695,11 @@ const rtems_libio_helper rtems_fs_init_helper =
   #include <rtems/posix/timer.h>
 
   /**
+   * POSIX Once support uses a single mutex.
+   */
+  #define CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES 1
+
+  /**
    * Account for the object control structures plus the name
    * of the object to be duplicated.
    */
@@ -1856,6 +1861,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 
   #define CONFIGURE_MEMORY_FOR_POSIX \
     ( CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES + \
+          CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES + \
           CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_MUTEXES) + \
       CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
           CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES + \
@@ -2304,6 +2310,7 @@ const rtems_libio_helper rtems_fs_init_helper =
       CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS +
         CONFIGURE_MAXIMUM_GOROUTINES,
       CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_GNAT_MUTEXES +
+        CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES +
         CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS +
         CONFIGURE_GO_INIT_MUTEXES + CONFIGURE_MAXIMUM_GO_CHANNELS,
       CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
