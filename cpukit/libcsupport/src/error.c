@@ -66,7 +66,7 @@ const char *rtems_status_text(
 }
 
 
-static int rtems_verror(
+int rtems_verror(
   rtems_error_code_t  error_flag,
   const char         *printf_format,
   va_list             arglist

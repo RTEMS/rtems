@@ -5,8 +5,6 @@
  *
  * Defines and externs for rtems error reporting
  *
- * Currently just used by RTEMS monitor.
- *
  * These routines provide general purpose error reporting.
  * rtems_error reports an error to stderr and allows use of
  * printf style formatting.  A newline is appended to all messages.
@@ -52,6 +50,8 @@
 #include <rtems/rtems/status.h>
 #include <rtems/score/interr.h>
 
+#include <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -67,7 +67,7 @@ extern "C" {
 typedef Internal_errors_t rtems_error_code_t;
 
 /*
- * rtems_error() and rtems_panic() support
+ * rtems_error(), rtems_verror() and rtems_panic() support
  */
 
 #if 0
@@ -103,6 +103,27 @@ int   rtems_error(
   rtems_error_code_t error_code,
   const char *printf_format,
   ...
+);
+
+/**
+ *  @brief Report an Error
+ *
+ *  @param[in] error_code can be specified as any of the following:
+ *  RTEMS_ERROR_ERRNO       -- include errno text in output
+ *  RTEMS_ERROR_PANIC       -- halts local system after output
+ *  RTEMS_ERROR_ABORT       -- abort after output
+ *
+ *  @param[in] printf_format is a normal printf(3) format string,
+ *  with its concommitant arguments
+ *  @param[in] @p arglist is a varargs list corresponding to
+ *  printf_format
+ *
+ *  @return the number of characters written.
+ */
+int rtems_verror(
+  rtems_error_code_t  error_code,
+  const char         *printf_format,
+  va_list             arglist
 );
 
 /**
