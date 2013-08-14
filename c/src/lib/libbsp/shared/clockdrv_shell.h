@@ -31,7 +31,7 @@
 /*
  *  ISRs until next clock tick
  */
-#ifdef CLOCK_DRIVER_ISRS_PER_TICK
+#if CLOCK_DRIVER_ISRS_PER_TICK
   volatile uint32_t  Clock_driver_isrs;
 #endif
 

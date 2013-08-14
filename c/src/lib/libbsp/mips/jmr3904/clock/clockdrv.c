@@ -19,7 +19,7 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 
-#define CLOCK_DRIVER_USE_FAST_IDLE
+#define CLOCK_DRIVER_USE_FAST_IDLE 1
 
 #define CLOCK_VECTOR TX3904_IRQ_TMR0
 

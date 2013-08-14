@@ -23,7 +23,7 @@
 #include "yamon_api.h"
 
 
-/* #define CLOCK_DRIVER_USE_FAST_IDLE */
+/* #define CLOCK_DRIVER_USE_FAST_IDLE 1 */
 
 #define CLOCK_VECTOR TX4938_IRQ_TMR0
 

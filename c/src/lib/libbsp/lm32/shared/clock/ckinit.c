@@ -19,7 +19,7 @@
 #include "bspopts.h"
 
 #if ON_SIMULATOR
-#define CLOCK_DRIVER_USE_FAST_IDLE
+#define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
 static inline int clockread(unsigned int reg)

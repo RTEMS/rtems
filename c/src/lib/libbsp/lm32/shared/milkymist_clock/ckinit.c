@@ -17,7 +17,7 @@
 #include "bspopts.h"
 
 #if ON_SIMULATOR
-#define CLOCK_DRIVER_USE_FAST_IDLE
+#define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
 #define Clock_driver_support_at_tick() \

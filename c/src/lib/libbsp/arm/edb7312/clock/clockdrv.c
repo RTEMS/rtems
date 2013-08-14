@@ -15,7 +15,7 @@
 #include <assert.h>
 
 #if ON_SKYEYE==1
-  #define CLOCK_DRIVER_USE_FAST_IDLE
+  #define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
 void Clock_isr(void * arg);
