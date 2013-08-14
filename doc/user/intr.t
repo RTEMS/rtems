@@ -186,7 +186,7 @@ the currently executing task), while in an ISR, this will refer
 to the interrupted task.  Most of the time, it is an application
 implementation error to use RTEMS_SELF from an ISR.
 
-@itemize -
+@itemize
 @item rtems_task_get_note
 @item rtems_task_set_note
 @item rtems_task_suspend
@@ -195,7 +195,7 @@ implementation error to use RTEMS_SELF from an ISR.
 
 @item Interrupt Management
 
-@itemize -
+@itemize
 @item rtems_interrupt_enable
 @item rtems_interrupt_disable
 @item rtems_interrupt_flash
@@ -222,24 +222,47 @@ implementation error to use RTEMS_SELF from an ISR.
 @item rtems_clock_tick
 @end itemize
 
-@item Message, Event, and Signal Management
+@item Timer Management
 
-@itemize -
-@item rtems_message_queue_send
-@item rtems_message_queue_urgent
+@itemize
+@item rtems_timer_cancel
+@item rtems_timer_reset
+@item rtems_timer_fire_after
+@item rtems_timer_fire_when
+@item rtems_timer_server_fire_after
+@item rtems_timer_server_fire_when
+@end itemize
+
+@item Event Management
+
+@itemize
 @item rtems_event_send
-@item rtems_signal_send
+@item rtems_event_system_send
+@item rtems_event_transient_send
 @end itemize
 
 @item Semaphore Management
 
-@itemize -
+@itemize
 @item rtems_semaphore_release
+@end itemize
+
+@item Message Management
+
+@itemize
+@item rtems_message_queue_send
+@item rtems_message_queue_urgent
+@end itemize
+
+@item Signal Management
+
+@itemize
+@item rtems_signal_send
 @end itemize
 
 @item Dual-Ported Memory Management
 
-@itemize -
+@itemize
 @item rtems_port_external_to_internal
 @item rtems_port_internal_to_external
 @end itemize
@@ -249,7 +272,7 @@ implementation error to use RTEMS_SELF from an ISR.
 The following services are safe to call from an ISR if and only if
 the device driver service invoked is also safe.  The IO Manager itself
 is safe but the invoked driver entry point may or may not be.
-@itemize -
+@itemize
 @item rtems_io_initialize
 @item rtems_io_open
 @item rtems_io_close
@@ -260,13 +283,14 @@ is safe but the invoked driver entry point may or may not be.
 
 @item Fatal Error Management
 
-@itemize -
+@itemize
+@item rtems_fatal
 @item rtems_fatal_error_occurred
 @end itemize
 
 @item Multiprocessing
 
-@itemize -
+@itemize
 @item rtems_multiprocessing_announce
 @end itemize
 @end itemize
