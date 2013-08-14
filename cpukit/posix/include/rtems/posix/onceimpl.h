@@ -23,7 +23,7 @@
 #include <rtems/score/percpu.h>
 
 #ifndef _RTEMS_POSIX_ONCEIMPL_H
-#define _RTEMS_POSIX_ONCEMPL_H
+#define _RTEMS_POSIX_ONCEIMPL_H
 
 #ifdef __cplusplus
 extern "C" {
