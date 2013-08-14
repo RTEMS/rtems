@@ -111,6 +111,34 @@ typedef enum {
     .slr = LM3S69XX_GPIO_NO_SLEW_RATE_CONTROL \
   }
 
+#define LM3S69XX_PIN_UART_RTS(port, idx) \
+  { \
+    .pin_first = LM3S69XX_GPIO_PIN(port, idx), \
+    .pin_last = LM3S69XX_GPIO_PIN(port, idx), \
+    .digital = LM3S69XX_GPIO_DIGITAL_ENABLE, \
+    .alternate = LM3S69XX_GPIO_AF_ENABLE, \
+    .analog = LM3S69XX_GPIO_ANALOG_DISABLE, \
+    .dir = LM3S69XX_GPIO_DIRECTION_OUTPUT, \
+    .otype = LM3S69XX_GPIO_OTYPE_PUSH_PULL, \
+    .drive = LM3S69XX_GPIO_DRIVE_2MA, \
+    .pull = LM3S69XX_GPIO_NO_PULL, \
+    .slr = LM3S69XX_GPIO_NO_SLEW_RATE_CONTROL \
+  }
+
+#define LM3S69XX_PIN_UART_CTS(port, idx) \
+  { \
+    .pin_first = LM3S69XX_GPIO_PIN(port, idx), \
+    .pin_last = LM3S69XX_GPIO_PIN(port, idx), \
+    .digital = LM3S69XX_GPIO_DIGITAL_ENABLE, \
+    .alternate = LM3S69XX_GPIO_AF_ENABLE, \
+    .analog = LM3S69XX_GPIO_ANALOG_DISABLE, \
+    .dir = LM3S69XX_GPIO_DIRECTION_INPUT, \
+    .otype = LM3S69XX_GPIO_OTYPE_PUSH_PULL, \
+    .drive = LM3S69XX_GPIO_DRIVE_2MA, \
+    .pull = LM3S69XX_GPIO_PULL_UP, \
+    .slr = LM3S69XX_GPIO_NO_SLEW_RATE_CONTROL \
+  }
+
 #define LM3S69XX_PIN_LED(port, idx) \
   { \
     .pin_first = LM3S69XX_GPIO_PIN(port, idx), \
