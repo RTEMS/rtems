@@ -36,13 +36,6 @@ extern "C" {
 
 /**
  *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that RTEMS will reschedule on this CPU
- *  because the currently executing thread has been sent a signal.
- */
-#define RTEMS_BSP_SMP_SIGNAL_TO_SELF            0x02
-
-/**
- *  This defines the bit which indicates the interprocessor interrupt
  *  has been requested so that this CPU will be shutdown.  This is done
  *  as part of rtems_executive_shutdown().
  */
