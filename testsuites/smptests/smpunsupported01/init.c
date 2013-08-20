@@ -18,6 +18,13 @@
 
 #include "tmacros.h"
 
+static void some_task(rtems_task_argument arg)
+{
+  (void) arg;
+
+  while (1);
+}
+
 static void test(void)
 {
   rtems_status_code sc;
@@ -50,6 +57,22 @@ static void test(void)
     &id
   );
   rtems_test_assert(sc == RTEMS_UNSATISFIED);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    RTEMS_MAXIMUM_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(id, some_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_restart(id, 0);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
 }
 
 static void Init(rtems_task_argument arg)

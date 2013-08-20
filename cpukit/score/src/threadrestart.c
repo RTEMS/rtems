@@ -20,6 +20,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
+#include <rtems/config.h>
 
 bool _Thread_Restart(
   Thread_Control            *the_thread,
@@ -27,6 +28,15 @@ bool _Thread_Restart(
   Thread_Entry_numeric_type  numeric_argument
 )
 {
+#if defined( RTEMS_SMP )
+  if (
+    rtems_configuration_is_smp_enabled()
+      && !_Thread_Is_executing( the_thread )
+  ) {
+    return false;
+  }
+#endif
+
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
 
     _Thread_Set_transient( the_thread );
