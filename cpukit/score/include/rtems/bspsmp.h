@@ -91,8 +91,9 @@ void bsp_smp_broadcast_interrupt(void);
  * control of this processor to RTEMS.  Interrupts must be disabled.  It must
  * be possible to send inter-processor interrupts to this processor.  Since
  * interrupts are disabled the inter-processor interrupt delivery is postponed
- * until interrupts are enabled the first time.  This is usually a side-effect
- * of the context switch to the first thread.
+ * until interrupts are enabled the first time.  Interrupts are enabled during
+ * the execution begin of threads in case they have interrupt level zero (this
+ * is the default).
  *
  * The pre-requisites for the call to this function are
  * - disabled interrupts,
