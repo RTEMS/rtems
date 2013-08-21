@@ -855,7 +855,7 @@ fat_shutdown_drive(fat_fs_info_t *fs_info)
         rtems_chain_node    *node = NULL;
         rtems_chain_control *the_chain = fs_info->vhash + i;
 
-        while ( (node = rtems_chain_get(the_chain)) != NULL )
+        while ( (node = rtems_chain_get_unprotected(the_chain)) != NULL )
             free(node);
     }
 
@@ -864,7 +864,7 @@ fat_shutdown_drive(fat_fs_info_t *fs_info)
         rtems_chain_node    *node = NULL;
         rtems_chain_control *the_chain = fs_info->rhash + i;
 
-        while ( (node = rtems_chain_get(the_chain)) != NULL )
+        while ( (node = rtems_chain_get_unprotected(the_chain)) != NULL )
             free(node);
     }
 
