@@ -123,8 +123,8 @@ libbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
+libbsp_a_SOURCES += include/cache_.h
+libbsp_a_CPPFLAGS += -I$(srcdir)/include
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
