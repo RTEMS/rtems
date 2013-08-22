@@ -65,7 +65,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
   }
 
   the_mutex->blocked_count++;
-  _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_mutex->Wait_queue, executing, timeout );
 
   _Thread_Enable_dispatch();
 }

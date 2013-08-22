@@ -241,7 +241,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize_isr_disable(
   executing->Wait.id             = id;
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, executing, timeout );
   _Thread_Enable_dispatch();
 }
 

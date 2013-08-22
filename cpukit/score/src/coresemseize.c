@@ -63,6 +63,6 @@ void _CORE_semaphore_Seize(
   executing->Wait.queue = &the_semaphore->Wait_queue;
   executing->Wait.id    = id;
   _ISR_Enable( level );
-  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, executing, timeout );
 }
 #endif

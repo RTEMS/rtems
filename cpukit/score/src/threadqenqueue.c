@@ -28,11 +28,11 @@
 
 void _Thread_queue_Enqueue_with_handler(
   Thread_queue_Control         *the_thread_queue,
+  Thread_Control               *the_thread,
   Watchdog_Interval             timeout,
   Thread_queue_Timeout_callout  handler
 )
 {
-  Thread_Control                   *the_thread;
   ISR_Level                         level;
   Thread_blocking_operation_States  sync_state;
   Thread_blocking_operation_States (*enqueue_p)(
@@ -40,8 +40,6 @@ void _Thread_queue_Enqueue_with_handler(
     Thread_Control *,
     ISR_Level *
   );
-
-  the_thread = _Thread_Executing;
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )

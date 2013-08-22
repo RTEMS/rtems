@@ -190,14 +190,16 @@ uint32_t   _MPCI_Send_request_packet (
   States_Control      extra_state
 )
 {
-  the_packet->source_tid      = _Thread_Executing->Object.id;
-  the_packet->source_priority = _Thread_Executing->current_priority;
+  Thread_Control *executing = _Thread_Executing;
+
+  the_packet->source_tid      = executing->Object.id;
+  the_packet->source_priority = executing->current_priority;
   the_packet->to_convert =
      ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 
-  _Thread_Executing->Wait.id = the_packet->id;
+  executing->Wait.id = the_packet->id;
 
-  _Thread_Executing->Wait.queue = &_MPCI_Remote_blocked_threads;
+  executing->Wait.queue = &_MPCI_Remote_blocked_threads;
 
   _Thread_Disable_dispatch();
 
@@ -212,14 +214,18 @@ uint32_t   _MPCI_Send_request_packet (
     if (the_packet->timeout == MPCI_DEFAULT_TIMEOUT)
         the_packet->timeout = _MPCI_table->default_timeout;
 
-    _Thread_queue_Enqueue( &_MPCI_Remote_blocked_threads, the_packet->timeout );
+    _Thread_queue_Enqueue(
+      &_MPCI_Remote_blocked_threads,
+      executing,
+      the_packet->timeout
+    );
 
-    _Thread_Executing->current_state =
-      _States_Set( extra_state, _Thread_Executing->current_state );
+    executing->current_state =
+      _States_Set( extra_state, executing->current_state );
 
   _Thread_Enable_dispatch();
 
-  return _Thread_Executing->Wait.return_code;
+  return executing->Wait.return_code;
 }
 
 void _MPCI_Send_response_packet (

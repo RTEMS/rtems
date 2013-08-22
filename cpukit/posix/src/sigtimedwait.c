@@ -157,7 +157,7 @@ int sigtimedwait(
     executing->Wait.return_argument = the_info;
     _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue );
     _ISR_Enable( level );
-    _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, interval );
+    _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, executing, interval );
   _Thread_Enable_dispatch();
 
   /*

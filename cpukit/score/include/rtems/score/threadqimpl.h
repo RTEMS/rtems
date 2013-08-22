@@ -83,9 +83,10 @@ Thread_Control *_Thread_queue_Dequeue(
  *  This routine enqueues the currently executing thread on
  *  the_thread_queue with an optional timeout.
  */
-#define _Thread_queue_Enqueue( _the_thread_queue, _timeout ) \
+#define _Thread_queue_Enqueue( _the_thread_queue, _the_thread, _timeout ) \
   _Thread_queue_Enqueue_with_handler( \
     _the_thread_queue, \
+    _the_thread, \
     _timeout, \
     _Thread_queue_Timeout )
 
@@ -96,15 +97,17 @@ Thread_Control *_Thread_queue_Dequeue(
  *  starts a timeout timer.
  *
  *  @param[in] the_thread_queue pointer to threadq
+ *  @param[in] the_thread the thread to enqueue
  *  @param[in] timeout interval to wait
  *
  *  - INTERRUPT LATENCY:
  *    + single case
  */
 void _Thread_queue_Enqueue_with_handler(
-  Thread_queue_Control*        the_thread_queue,
-  Watchdog_Interval            timeout,
-  Thread_queue_Timeout_callout handler
+  Thread_queue_Control         *the_thread_queue,
+  Thread_Control               *the_thread,
+  Watchdog_Interval             timeout,
+  Thread_queue_Timeout_callout  handler
 );
 
 /**

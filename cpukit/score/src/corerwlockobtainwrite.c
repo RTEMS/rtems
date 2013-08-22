@@ -76,6 +76,7 @@ void _CORE_RWLock_Obtain_for_writing(
 
     _Thread_queue_Enqueue_with_handler(
        &the_rwlock->Wait_queue,
+       executing,
        timeout,
        _CORE_RWLock_Timeout
     );

@@ -75,7 +75,7 @@ int _POSIX_Condition_variables_Wait_support(
         executing->Wait.queue       = &the_cond->Wait_queue;
         executing->Wait.id          = *cond;
 
-        _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
+        _Thread_queue_Enqueue( &the_cond->Wait_queue, executing, timeout );
 
         _Objects_Put( &the_cond->Object );
 

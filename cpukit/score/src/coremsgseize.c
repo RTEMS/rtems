@@ -121,5 +121,5 @@ void _CORE_message_queue_Seize(
   /* Wait.count will be filled in with the message priority */
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, executing, timeout );
 }

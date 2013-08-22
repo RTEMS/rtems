@@ -51,5 +51,5 @@ void _CORE_barrier_Wait(
   executing->Wait.id             = id;
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_barrier->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_barrier->Wait_queue, executing, timeout );
 }

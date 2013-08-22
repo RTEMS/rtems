@@ -85,7 +85,11 @@ rtems_status_code rtems_region_get_segment(
 
             _Thread_queue_Enter_critical_section( &the_region->Wait_queue );
 
-            _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
+            _Thread_queue_Enqueue(
+              &the_region->Wait_queue,
+              executing,
+              timeout
+            );
 
             _Objects_Put( &the_region->Object );
 

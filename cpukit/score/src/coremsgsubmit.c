@@ -130,7 +130,11 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       executing->Wait.count = submit_type;
       _ISR_Enable( level );
 
-      _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+      _Thread_queue_Enqueue(
+        &the_message_queue->Wait_queue,
+        executing,
+        timeout
+      );
     }
 
     return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
