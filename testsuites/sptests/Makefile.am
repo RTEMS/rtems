@@ -29,6 +29,7 @@ SUBDIRS = \
     spsem01 spsem02 spsimplesched01 spsimplesched02 spsimplesched03 spnsext01 \
     spedfsched01 spedfsched02 spedfsched03 \
     spcbssched01 spcbssched02 spcbssched03 spqreslib sptimespec01
+SUBDIRS += spintrcritical20
 SUBDIRS += spintrcritical19
 SUBDIRS += spcontext01
 SUBDIRS += spfatal26
