@@ -577,6 +577,71 @@ static inline uint32_t arm_cp15_get_min_cache_line_size(void)
   return mcls;
 }
 
+/* CCSIDR, Cache Size ID Register */
+
+static inline uint32_t arm_cp15_get_cache_size_id(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 1, %[val], c0, c0, 0\n"
+     ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* CLIDR, Cache Level ID Register */
+
+static inline uint32_t arm_cp15_get_cache_level_id(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 1, %[val], c0, c0, 1\n"
+     ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* CSSELR, Cache Size Selection Register */
+
+static inline uint32_t arm_cp15_get_cache_size_selection(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 2, %[val], c0, c0, 0\n"
+     ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+static inline void arm_cp15_set_cache_size_selection(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 2, %[val], c0, c0, 0\n"
+     ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+    : "memory"
+  );
+}
+
 static inline void arm_cp15_cache_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
