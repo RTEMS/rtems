@@ -285,6 +285,21 @@ typedef struct {
 
 extern uint32_t arm_cpu_mode;
 
+static inline void _ARM_Data_memory_barrier( void )
+{
+  __asm__ volatile ( "dmb" : : : "memory" );
+}
+
+static inline void _ARM_Data_synchronization_barrier( void )
+{
+  __asm__ volatile ( "dsb" : : : "memory" );
+}
+
+static inline void _ARM_Instruction_synchronization_barrier( void )
+{
+  __asm__ volatile ( "isb" : : : "memory" );
+}
+
 static inline uint32_t arm_interrupt_disable( void )
 {
   uint32_t level;
@@ -464,16 +479,6 @@ void _CPU_Context_validate( uintptr_t pattern );
   }
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
-
-  static inline void _ARM_Data_memory_barrier( void )
-  {
-    __asm__ volatile ( "dmb" : : : "memory" );
-  }
-
-  static inline void _ARM_Data_synchronization_barrier( void )
-  {
-    __asm__ volatile ( "dsb" : : : "memory" );
-  }
 
   static inline void _ARM_Send_event( void )
   {
