@@ -246,20 +246,22 @@
 fdisk:Flash Disk Driver Status : 2.0
 fdisk:Block count       124
 fdisk:Unavail blocks    32
-fdisk:Starvations       76
-fdisk:Available queue   2 (2)
-fdisk:Used queue        2 (2)
+fdisk:Starvation threshold      31
+fdisk:Starvations       42
+fdisk:Available queue   1 (1)
+fdisk:Used queue        3 (3)
 fdisk:Erase queue       0 (0)
 fdisk:Failed queue      0 (0)
 fdisk:Queue total       4 of 4, ok
 fdisk:Device count      1
 fdisk: Device           0
 fdisk:  Segment count   4
-fdisk:    0 A--- p: 31 a: 30/ 30 u:  0/  0 e:  1/  1 br:30
-fdisk:    1 A--- p: 31 a:  0/  0 u:  0/  0 e: 31/ 31 br:0
+fdisk:    0 -U-- p: 31 a: 31/ 31 u:  0/  0 e:  0/  0 br:31
+fdisk:    1 -U-- p: 31 a: 30/ 30 u:  1/  1 e:  0/  0 br:30
 fdisk:    2 -U-- p: 31 a: 31/ 31 u:  0/  0 e:  0/  0 br:31
-fdisk:    3 -U-- p: 31 a: 31/ 31 u:  0/  0 e:  0/  0 br:31
+fdisk:    3 A--- p: 31 a:  0/  0 u:  0/  0 e: 31/ 31 br:0
 fdisk:Used List:
-fdisk:    0 00:002 u:  0
-fdisk:    1 00:003 u:  0
+fdisk:    0 00:001 u:  1
+fdisk:    1 00:002 u:  0
+fdisk:    2 00:000 u:  0
 *** END OF TEST FLASHDISK 1 ***
