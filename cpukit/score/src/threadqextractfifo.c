@@ -25,7 +25,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-void _Thread_queue_Extract_fifo(
+bool _Thread_queue_Extract_fifo(
   Thread_queue_Control *the_thread_queue __attribute__((unused)),
   Thread_Control       *the_thread
 )
@@ -36,7 +36,7 @@ void _Thread_queue_Extract_fifo(
 
   if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
     _ISR_Enable( level );
-    return;
+    return false;
   }
 
   _Chain_Extract_unprotected( &the_thread->Object.Node );
@@ -58,4 +58,5 @@ void _Thread_queue_Extract_fifo(
     _Thread_MP_Free_proxy( the_thread );
 #endif
 
+  return true;
 }

@@ -24,7 +24,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-void _Thread_queue_Extract_priority_helper(
+bool _Thread_queue_Extract_priority_helper(
   Thread_queue_Control *the_thread_queue __attribute__((unused)),
   Thread_Control       *the_thread,
   bool                  requeuing
@@ -45,7 +45,7 @@ void _Thread_queue_Extract_priority_helper(
   _ISR_Disable( level );
   if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
     _ISR_Enable( level );
-    return;
+    return false;
   }
 
   /*
@@ -87,7 +87,7 @@ void _Thread_queue_Extract_priority_helper(
 
   if ( requeuing ) {
     _ISR_Enable( level );
-    return;
+    return true;
   }
 
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
@@ -103,4 +103,6 @@ void _Thread_queue_Extract_priority_helper(
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
 #endif
+
+  return true;
 }

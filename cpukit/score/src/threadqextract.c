@@ -21,7 +21,7 @@
 
 #include <rtems/score/threadqimpl.h>
 
-void _Thread_queue_Extract(
+bool _Thread_queue_Extract(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
 )
@@ -31,8 +31,8 @@ void _Thread_queue_Extract(
    * is a macro and the underlying methods do not have the same signature.
    */
   if  ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
-    _Thread_queue_Extract_priority( the_thread_queue, the_thread );
+    return _Thread_queue_Extract_priority( the_thread_queue, the_thread );
   else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
-    _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
+    return _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
 
 }
