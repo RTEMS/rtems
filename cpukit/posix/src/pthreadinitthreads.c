@@ -29,6 +29,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/cancel.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/config.h>
@@ -36,7 +37,7 @@
 
 void _POSIX_Threads_Initialize_user_threads_body(void)
 {
-  int                                 status;
+  int                                 eno;
   uint32_t                            index;
   uint32_t                            maximum;
   posix_initialization_threads_table *user_threads;
@@ -60,18 +61,20 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
     /*
      * There is no way for these calls to fail in this situation.
      */
-    (void) pthread_attr_init( &attr );
-    (void) pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
-    (void) pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
+    eno = pthread_attr_init( &attr );
+    _Assert( eno == 0 );
+    eno = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+    _Assert( eno == 0 );
+    eno = pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
+    _Assert( eno == 0 );
 
-    status = pthread_create(
+    eno = pthread_create(
       &thread_id,
       &attr,
       user_threads[ index ].thread_entry,
       NULL
     );
-    if ( status )
-      _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, true, status );
+    if ( eno )
+      _POSIX_Fatal_error( POSIX_FD_PTHREAD, eno );
   }
 }
-

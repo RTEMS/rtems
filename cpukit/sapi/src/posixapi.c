@@ -44,6 +44,13 @@
 #include <rtems/posix/spinlockimpl.h>
 #include <rtems/posix/time.h>
 
+void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )
+{
+  uint32_t code = ( domain << 8 ) | ( ( uint32_t ) eno & 0xffU );
+
+  _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, false, code );
+}
+
 Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
 
 void _POSIX_API_Initialize(void)

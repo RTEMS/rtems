@@ -954,13 +954,19 @@ const rtems_libio_helper rtems_fs_init_helper =
 #endif
 
 /**
+ * Zero of one returns 0 if the parameter is 0 else 1 is returned.
+ */
+#define _Configure_Zero_or_One(_number) ((_number) ? 1 : 0)
+
+/**
  * This is a helper macro used in calculations in this file.  It is used
  * to noted when an element is allocated from the RTEMS Workspace and adds
  * a factor to account for heap overhead plus an alignment factor that
  * may be applied.
  */
 #define _Configure_From_workspace(_size) \
-  (ssize_t)((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1)
+   (ssize_t) (_Configure_Zero_or_One(_size) * \
+     ((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1))
 
 /**
  * This is a helper macro used in stack space calculations in this file.  It
@@ -980,7 +986,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  * for memory usage.
  */
 #define _Configure_Max_Objects(_max) \
-  rtems_resource_maximum_per_allocation(_max)
+  (_Configure_Zero_or_One(_max) * rtems_resource_maximum_per_allocation(_max))
 
 /**
  * This macro accounts for how memory for a set of configured objects is
@@ -992,8 +998,10 @@ const rtems_libio_helper rtems_fs_init_helper =
 #define _Configure_Object_RAM(_number, _size) \
   ( _Configure_From_workspace(_Configure_Max_Objects(_number) * (_size)) + \
     _Configure_From_workspace( \
-      ((_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *)) + \
-      (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) \
+      (_Configure_Zero_or_One(_number) * \
+       (_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *)) + \
+      (_Configure_Zero_or_One(_number) * \
+       (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *))) \
     ) \
   )
 
@@ -1730,114 +1738,95 @@ const rtems_libio_helper rtems_fs_init_helper =
     (_Configure_Max_Objects(_number) * _Configure_From_workspace(NAME_MAX) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-    #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
+    #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
   #endif
 
   #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
     _Configure_From_workspace(sizeof(POSIX_API_Control))
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES              0
-    #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
-      _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
+    _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES               0
-    #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
-        _Configure_Object_RAM(_condvars, \
-                            sizeof(POSIX_Condition_variables_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
+      _Configure_Object_RAM(_condvars, \
+                          sizeof(POSIX_Condition_variables_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-    #define CONFIGURE_MAXIMUM_POSIX_KEYS           0
-    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS      0
-    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) 0
+    #define CONFIGURE_MAXIMUM_POSIX_KEYS            0
+    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 0
   #else
     #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
       #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
         CONFIGURE_MAXIMUM_POSIX_KEYS \
         * (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS)
     #endif
-  #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs)       \
-      (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
-  + _Configure_From_workspace(_key_value_pairs * sizeof(POSIX_Keys_Key_value_pair)))
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
+     (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+      + _Configure_From_workspace(_key_value_pairs * sizeof(POSIX_Keys_Key_value_pair)))
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
-    #define CONFIGURE_MAXIMUM_POSIX_TIMERS             0
-    #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
-      _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
+    _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS                     0
-    #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
-      _Configure_From_workspace( \
-        (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
+    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
+    _Configure_From_workspace( \
+      (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES                     0
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) 0
     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS          0
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_fds) 0
   #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
-      _Configure_POSIX_Named_Object_RAM( \
-         _message_queues, sizeof(POSIX_Message_queue_Control) )
-
     /* default to same number */
     #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
        #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
                CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #endif
-
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
-      _Configure_Object_RAM( \
-         _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
   #endif
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
+    _Configure_POSIX_Named_Object_RAM( \
+       _message_queues, sizeof(POSIX_Message_queue_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
+    _Configure_Object_RAM( \
+       _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES                 0
-    #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
-      _Configure_POSIX_Named_Object_RAM( \
-         _semaphores, sizeof(POSIX_Semaphore_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
+    _Configure_POSIX_Named_Object_RAM( \
+       _semaphores, sizeof(POSIX_Semaphore_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS               0
-    #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
-      _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
+    _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS                0
-    #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
-      _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
+    _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS              0
-    #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
-      _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
+    _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
 
   #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -2578,6 +2567,7 @@ const rtems_libio_helper rtems_fs_init_helper =
 #ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
     CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES +
+      CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES +
       CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_MUTEXES),
     CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(
       CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +

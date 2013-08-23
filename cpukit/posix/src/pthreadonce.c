@@ -29,7 +29,7 @@
 
 #define PTHREAD_ONCE_INIT_NOT_RUN  0
 #define PTHREAD_ONCE_INIT_RUNNING  1
-#define PTHREAD_ONCE_INIT_RUN      2
+#define PTHREAD_ONCE_INIT_COMPLETE 2
 
 int pthread_once(
   pthread_once_t  *once_control,
@@ -44,7 +44,7 @@ int pthread_once(
   if ( once_control->is_initialized != 1 )
     return EINVAL;
 
-  if ( once_control->init_executed != PTHREAD_ONCE_INIT_RUN ) {
+  if ( once_control->init_executed != PTHREAD_ONCE_INIT_COMPLETE ) {
     r = pthread_mutex_lock( &_POSIX_Once_Lock );
     if ( r == 0 ) {
       int rr;
@@ -61,7 +61,7 @@ int pthread_once(
         case PTHREAD_ONCE_INIT_NOT_RUN:
           once_control->init_executed = PTHREAD_ONCE_INIT_RUNNING;
           (*init_routine)();
-          once_control->init_executed = PTHREAD_ONCE_INIT_RUN;
+          once_control->init_executed = PTHREAD_ONCE_INIT_COMPLETE;
           break;
         case PTHREAD_ONCE_INIT_RUNNING:
           r = EINVAL;

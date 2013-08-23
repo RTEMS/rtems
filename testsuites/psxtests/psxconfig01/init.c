@@ -162,6 +162,19 @@
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
   (MQ_BUFFER_MEMORY + POSIX_MQ_BUFFER_MEMORY)
 
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_DRIVERS 2
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+static rtems_task Init(rtems_task_argument argument);
+
+#include <rtems/confdefs.h>
+
 typedef struct {
   uint64_t data [16];
 } area;
@@ -469,7 +482,8 @@ static rtems_task Init(rtems_task_argument argument)
   }
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
-    snapshot.posix_api.active_mutexes == CONFIGURE_MAXIMUM_POSIX_MUTEXES
+    snapshot.posix_api.active_mutexes ==
+    (CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES)
   );
 #endif
 
@@ -543,14 +557,3 @@ static rtems_task Init(rtems_task_argument argument)
 
   rtems_test_exit(0);
 }
-
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-
-#define CONFIGURE_MAXIMUM_DRIVERS 2
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_INIT
-
-#include <rtems/confdefs.h>

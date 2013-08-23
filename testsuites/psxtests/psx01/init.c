@@ -20,6 +20,18 @@
 
 #include <rtems/score/todimpl.h>
 
+pthread_once_t nesting_once = PTHREAD_ONCE_INIT;
+
+void Test_init_routine_nesting( void );
+
+void Test_init_routine_nesting( void )
+{
+  int status;
+  puts( "Test_init_routine_nesting: invoked" );
+  status = pthread_once( &nesting_once, Test_init_routine_nesting );
+  rtems_test_assert( status == EINVAL );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -93,6 +105,11 @@ void *POSIX_Init(
     tr.tv_sec,
     tr.tv_nsec
   );
+  rtems_test_assert( !status );
+
+  /* once nesting */
+  puts( "Init: pthread_once - SUCCESSFUL (init_routine_nesting executes)" );
+  status = pthread_once( &nesting_once, Test_init_routine_nesting );
   rtems_test_assert( !status );
 
   /* create a thread */
