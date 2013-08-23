@@ -54,13 +54,13 @@ RTEMS_INLINE_ROUTINE bool _Thread_Dispatch_is_enabled(void)
 #if defined(RTEMS_SMP)
   ISR_Level level;
 
-  _ISR_Disable( level );
+  _ISR_Disable_without_giant( level );
 #endif
 
   enabled = _Thread_Dispatch_disable_level == 0;
 
 #if defined(RTEMS_SMP)
-  _ISR_Enable( level );
+  _ISR_Enable_without_giant( level );
 #endif
 
   return enabled;

@@ -35,7 +35,7 @@ void _Thread_Dispatch( void )
   ISR_Level         level;
 
 #if defined( RTEMS_SMP )
-  _ISR_Disable( level );
+  _ISR_Disable_without_giant( level );
 #endif
 
   per_cpu = _Per_CPU_Get();
@@ -43,7 +43,7 @@ void _Thread_Dispatch( void )
   per_cpu->thread_dispatch_disable_level = 1;
 
 #if defined( RTEMS_SMP )
-  _ISR_Enable( level );
+  _ISR_Enable_without_giant( level );
 #endif
 
   /*

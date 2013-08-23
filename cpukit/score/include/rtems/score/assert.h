@@ -50,6 +50,15 @@ extern "C" {
   #define _Assert_Thread_dispatching_repressed() ( ( void ) 0 )
 #endif
 
+/**
+ * @brief Asserts that current thread of execution owns the giant lock.
+ */
+#if defined( RTEMS_DEBUG ) && defined( RTEMS_SMP )
+  void _Assert_Owner_of_giant( void );
+#else
+  #define _Assert_Owner_of_giant() ( ( void ) 0 )
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

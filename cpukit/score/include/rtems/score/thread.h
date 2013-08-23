@@ -495,13 +495,13 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_executing( void )
   #if defined( RTEMS_SMP )
     ISR_Level level;
 
-    _ISR_Disable( level );
+    _ISR_Disable_without_giant( level );
   #endif
 
   executing = _Thread_Executing;
 
   #if defined( RTEMS_SMP )
-    _ISR_Enable( level );
+    _ISR_Enable_without_giant( level );
   #endif
 
   return executing;

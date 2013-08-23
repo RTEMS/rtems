@@ -17,6 +17,7 @@
 
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/sysstate.h>
 
 #define NO_OWNER_CPU 0xffffffffU
 
@@ -63,7 +64,7 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
   uint32_t disable_level;
   Per_CPU_Control *self_cpu;
 
-  _ISR_Disable( isr_level );
+  _ISR_Disable_without_giant( isr_level );
 
   /*
    * We must obtain the processor ID after interrupts are disabled to prevent
@@ -78,7 +79,7 @@ uint32_t _Thread_Dispatch_increment_disable_level( void )
   ++disable_level;
   self_cpu->thread_dispatch_disable_level = disable_level;
 
-  _ISR_Enable( isr_level );
+  _ISR_Enable_without_giant( isr_level );
 
   return disable_level;
 }
@@ -89,7 +90,7 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   uint32_t disable_level;
   Per_CPU_Control *self_cpu;
 
-  _ISR_Disable( isr_level );
+  _ISR_Disable_without_giant( isr_level );
 
   self_cpu = _Per_CPU_Get();
   disable_level = self_cpu->thread_dispatch_disable_level;
@@ -97,8 +98,9 @@ uint32_t _Thread_Dispatch_decrement_disable_level( void )
   self_cpu->thread_dispatch_disable_level = disable_level;
 
   _Giant_Do_release();
+  _Assert( disable_level != 0 || _Giant.owner_cpu == NO_OWNER_CPU );
 
-  _ISR_Enable( isr_level );
+  _ISR_Enable_without_giant( isr_level );
 
   return disable_level;
 }
@@ -118,9 +120,9 @@ uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
   ISR_Level isr_level;
   uint32_t disable_level;
 
-  _ISR_Disable( isr_level );
+  _ISR_Disable_without_giant( isr_level );
   disable_level = _Thread_Dispatch_disable_level;
-  _ISR_Enable( isr_level );
+  _ISR_Enable_without_giant( isr_level );
 
   /*
    * If we need the dispatch level to go higher 
@@ -147,18 +149,30 @@ void _Giant_Acquire( void )
 {
   ISR_Level isr_level;
 
-  _ISR_Disable( isr_level );
+  _ISR_Disable_without_giant( isr_level );
   _Assert( _Thread_Dispatch_disable_level != 0 );
   _Giant_Do_acquire( _SMP_Get_current_processor() );
-  _ISR_Enable( isr_level );
+  _ISR_Enable_without_giant( isr_level );
 }
 
 void _Giant_Release( void )
 {
   ISR_Level isr_level;
 
-  _ISR_Disable( isr_level );
+  _ISR_Disable_without_giant( isr_level );
   _Assert( _Thread_Dispatch_disable_level != 0 );
   _Giant_Do_release();
-  _ISR_Enable( isr_level );
+  _ISR_Enable_without_giant( isr_level );
 }
+
+#if defined( RTEMS_DEBUG )
+void _Assert_Owner_of_giant( void )
+{
+  Giant_Control *giant = &_Giant;
+
+  _Assert(
+    giant->owner_cpu == _SMP_Get_current_processor()
+      || !_System_state_Is_up( _System_state_Get() )
+  );
+}
+#endif

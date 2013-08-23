@@ -184,7 +184,7 @@ rtems_task Task_1(
   _Thread_Dispatch_set_disable_level( 0 );
 
 #if defined(RTEMS_SMP)
-  rtems_interrupt_disable(level);
+  _ISR_Disable_without_giant(level);
 #endif
 
   ready_queues      = (Chain_Control *) _Scheduler.information;
@@ -194,7 +194,7 @@ rtems_task Task_1(
   _Thread_Dispatch_necessary = 1;
 
 #if defined(RTEMS_SMP)
-  rtems_interrupt_enable(level);
+  _ISR_Enable_without_giant(level);
 #endif
 
   Interrupt_occurred = 0;

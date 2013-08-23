@@ -229,13 +229,19 @@ void test_interrupt_inline(void)
   }
 
   puts( "interrupt disable (use inline)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_disable( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt flash (use inline)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_flash( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt enable (use inline)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_enable( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt level mode (use inline)" );
   level_mode_body = rtems_interrupt_level_body( level );
@@ -463,16 +469,24 @@ rtems_task Init(
   }
 
   puts( "interrupt disable (use body)" );
+  _Thread_Disable_dispatch();
   level = rtems_interrupt_disable();
+  _Thread_Enable_dispatch();
 
   puts( "interrupt disable (use body)" );
+  _Thread_Disable_dispatch();
   level = rtems_interrupt_disable();
+  _Thread_Enable_dispatch();
 
   puts( "interrupt flash (use body)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_flash( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt enable (use body)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_enable( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt level mode (use body)" );
   level_mode_body = rtems_interrupt_level_body( level );

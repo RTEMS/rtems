@@ -39,7 +39,7 @@ static void _RTEMS_Tasks_Dispatch_if_necessary(
 #if defined( RTEMS_SMP )
     ISR_Level level;
 
-    _ISR_Disable( level );
+    _ISR_Disable_without_giant( level );
 #endif
 
     if ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) {
@@ -48,7 +48,7 @@ static void _RTEMS_Tasks_Dispatch_if_necessary(
     }
 
 #if defined( RTEMS_SMP )
-    _ISR_Enable( level );
+    _ISR_Enable_without_giant( level );
 #endif
 
     if ( dispatch_necessary ) {

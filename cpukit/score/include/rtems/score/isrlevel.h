@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_ISR_LEVEL_h
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/assert.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +58,7 @@ typedef uint32_t   ISR_Level;
 #define _ISR_Disable( _level ) \
   do { \
     _CPU_ISR_Disable( _level ); \
+    _Assert_Owner_of_giant(); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
 
@@ -74,6 +76,7 @@ typedef uint32_t   ISR_Level;
 #define _ISR_Enable( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _Assert_Owner_of_giant(); \
     _CPU_ISR_Enable( _level ); \
   } while (0)
 
@@ -99,6 +102,7 @@ typedef uint32_t   ISR_Level;
 #define _ISR_Flash( _level ) \
   do { \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _Assert_Owner_of_giant(); \
     _CPU_ISR_Flash( _level ); \
     RTEMS_COMPILER_MEMORY_BARRIER(); \
   } while (0)
@@ -131,6 +135,22 @@ typedef uint32_t   ISR_Level;
     _CPU_ISR_Set_level( _new_level ); \
     RTEMS_COMPILER_MEMORY_BARRIER();  \
   } while (0)
+
+#if defined( RTEMS_SMP )
+
+#define _ISR_Disable_without_giant( _level ) \
+  do { \
+    _CPU_ISR_Disable( _level ); \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+  } while (0)
+
+#define _ISR_Enable_without_giant( _level ) \
+  do { \
+    RTEMS_COMPILER_MEMORY_BARRIER(); \
+    _CPU_ISR_Enable( _level ); \
+  } while (0)
+
+#endif /* defined( RTEMS_SMP ) */
 
 /**@}*/
 

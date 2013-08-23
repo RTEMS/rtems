@@ -21,6 +21,10 @@
 
 #include <rtems/rtems/semimpl.h>
 
+#if defined( RTEMS_SMP ) && defined( RTEMS_DEBUG )
+  #define PREVENT_SMP_ASSERT_FAILURES
+#endif
+
 /* TEST DATA */
 rtems_id Semaphore_id;
 
@@ -84,56 +88,56 @@ void complete_test( void );
 
 static void set_thread_dispatch_necessary( bool dispatch_necessary )
 {
-#if defined( RTEMS_SMP )
-  rtems_interrupt_level level;
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  ISR_Level level;
 
-  rtems_interrupt_disable( level );
+  _ISR_Disable_without_giant( level );
 #endif
 
   _Thread_Dispatch_necessary = dispatch_necessary;
 
-#if defined( RTEMS_SMP )
-  rtems_interrupt_enable( level );
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _ISR_Enable_without_giant( level );
 #endif
 }
 
 static void set_thread_heir( Thread_Control *thread )
 {
-#if defined( RTEMS_SMP )
-  rtems_interrupt_level level;
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  ISR_Level level;
 
-  rtems_interrupt_disable( level );
+  _ISR_Disable_without_giant( level );
 #endif
 
   _Thread_Heir = thread;
 
-#if defined( RTEMS_SMP )
-  rtems_interrupt_enable( level );
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _ISR_Enable_without_giant( level );
 #endif
 }
 
 static void set_thread_executing( Thread_Control *thread )
 {
-#if defined( RTEMS_SMP )
-  rtems_interrupt_level level;
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  ISR_Level level;
 
-  rtems_interrupt_disable( level );
+  _ISR_Disable_without_giant( level );
 #endif
 
   _Thread_Executing = thread;
 
-#if defined( RTEMS_SMP )
-  rtems_interrupt_enable( level );
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _ISR_Enable_without_giant( level );
 #endif
 }
 
 static void thread_disable_dispatch( void )
 {
-#if defined( RTEMS_SMP )
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
   Per_CPU_Control *self_cpu;
-  rtems_interrupt_level level;
+  ISR_Level level;
 
-  rtems_interrupt_disable( level );
+  _ISR_Disable_without_giant( level );
   ( void ) level;
 
   self_cpu = _Per_CPU_Get();
@@ -142,6 +146,58 @@ static void thread_disable_dispatch( void )
   _Per_CPU_Acquire( self_cpu );
 #else
   _Thread_Disable_dispatch();
+#endif
+}
+
+static void thread_set_state( Thread_Control *thread, States_Control state )
+{
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Disable_dispatch();
+#endif
+
+  _Thread_Set_state( thread, state );
+
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Unnest_dispatch();
+#endif
+}
+
+static void thread_resume( Thread_Control *thread )
+{
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Disable_dispatch();
+#endif
+
+  _Thread_Resume( thread );
+
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Unnest_dispatch();
+#endif
+}
+
+static void thread_unblock( Thread_Control *thread )
+{
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Disable_dispatch();
+#endif
+
+  _Thread_Unblock( thread );
+
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Unnest_dispatch();
+#endif
+}
+
+static void thread_ready( Thread_Control *thread )
+{
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Disable_dispatch();
+#endif
+
+  _Thread_Ready( thread );
+
+#if defined( PREVENT_SMP_ASSERT_FAILURES )
+  _Thread_Unnest_dispatch();
 #endif
 }
 
@@ -273,6 +329,8 @@ rtems_task High_task(
 {
   rtems_interrupt_level level;
 
+  _Thread_Disable_dispatch();
+
   benchmark_timer_initialize();
     rtems_interrupt_disable( level );
   isr_disable_time = benchmark_timer_read();
@@ -285,6 +343,8 @@ rtems_task High_task(
     rtems_interrupt_enable( level );
   isr_enable_time = benchmark_timer_read();
 
+  _Thread_Enable_dispatch();
+
   benchmark_timer_initialize();
     _Thread_Disable_dispatch();
   thread_disable_dispatch_time = benchmark_timer_read();
@@ -294,7 +354,7 @@ rtems_task High_task(
   thread_enable_dispatch_time = benchmark_timer_read();
 
   benchmark_timer_initialize();
-    _Thread_Set_state( _Thread_Get_executing(), STATES_SUSPENDED );
+    thread_set_state( _Thread_Get_executing(), STATES_SUSPENDED );
   thread_set_state_time = benchmark_timer_read();
 
   set_thread_dispatch_necessary( true );
@@ -311,7 +371,7 @@ rtems_task Middle_task(
 
   thread_dispatch_no_fp_time = benchmark_timer_read();
 
-  _Thread_Set_state( _Thread_Get_executing(), STATES_SUSPENDED );
+  thread_set_state( _Thread_Get_executing(), STATES_SUSPENDED );
 
   Middle_tcb   = _Thread_Get_executing();
 
@@ -478,19 +538,19 @@ void complete_test( void )
   rtems_id          task_id;
 
   benchmark_timer_initialize();
-    _Thread_Resume( Middle_tcb );
+    thread_resume( Middle_tcb );
   thread_resume_time = benchmark_timer_read();
 
-  _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
+  thread_set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   benchmark_timer_initialize();
-    _Thread_Unblock( Middle_tcb );
+    thread_unblock( Middle_tcb );
   thread_unblock_time = benchmark_timer_read();
 
-  _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
+  thread_set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   benchmark_timer_initialize();
-    _Thread_Ready( Middle_tcb );
+    thread_ready( Middle_tcb );
   thread_ready_time = benchmark_timer_read();
 
   benchmark_timer_initialize();

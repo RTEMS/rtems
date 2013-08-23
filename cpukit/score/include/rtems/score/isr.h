@@ -163,13 +163,13 @@ RTEMS_INLINE_ROUTINE uint32_t _ISR_Get_nest_level( void )
   #if defined( RTEMS_SMP )
     ISR_Level level;
 
-    _ISR_Disable( level );
+    _ISR_Disable_without_giant( level );
   #endif
 
   isr_nest_level = _ISR_Nest_level;
 
   #if defined( RTEMS_SMP )
-    _ISR_Enable( level );
+    _ISR_Enable_without_giant( level );
   #endif
 
   return isr_nest_level;
