@@ -58,7 +58,6 @@ static void _Giant_Do_release( void )
 
 uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
-  Giant_Control *giant = &_Giant;
   ISR_Level isr_level;
   uint32_t self_cpu_index;
   uint32_t disable_level;

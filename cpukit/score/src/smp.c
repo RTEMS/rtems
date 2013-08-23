@@ -31,7 +31,6 @@
 void rtems_smp_secondary_cpu_initialize( void )
 {
   Per_CPU_Control *self_cpu = _Per_CPU_Get();
-  Thread_Control  *heir;
 
   #if defined(RTEMS_DEBUG)
     printk( "Made it to %d -- ", _Per_CPU_Get_index( self_cpu ) );
