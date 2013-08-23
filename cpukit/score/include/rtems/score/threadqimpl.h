@@ -266,7 +266,6 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
  *  @retval false Otherwise.
  */
 bool _Thread_queue_Extract_priority_helper(
-  Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
   bool                  requeuing
 );
@@ -277,8 +276,8 @@ bool _Thread_queue_Extract_priority_helper(
  * This macro wraps the underlying call and hides the requeuing argument.
  */
 
-#define _Thread_queue_Extract_priority( _the_thread_queue, _the_thread ) \
-  _Thread_queue_Extract_priority_helper( _the_thread_queue, _the_thread, false )
+#define _Thread_queue_Extract_priority( _the_thread ) \
+  _Thread_queue_Extract_priority_helper( _the_thread, false )
 /**
  *  @brief Get highest priority thread on the_thread_queue.
  *
@@ -339,7 +338,6 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_fifo (
  *  and cancels any timeouts associated with this blocking.
  */
 bool _Thread_queue_Extract_fifo(
-  Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
 );
 

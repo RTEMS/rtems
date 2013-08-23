@@ -45,7 +45,7 @@ void _Thread_queue_Requeue(
     _ISR_Disable( level );
     if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
       _Thread_queue_Enter_critical_section( tq );
-      _Thread_queue_Extract_priority_helper( tq, the_thread, true );
+      _Thread_queue_Extract_priority_helper( the_thread, true );
       (void) _Thread_queue_Enqueue_priority( tq, the_thread, &level_ignored );
     }
     _ISR_Enable( level );

@@ -31,8 +31,8 @@ bool _Thread_queue_Extract(
    * is a macro and the underlying methods do not have the same signature.
    */
   if  ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
-    return _Thread_queue_Extract_priority( the_thread_queue, the_thread );
+    return _Thread_queue_Extract_priority( the_thread );
   else /* must be THREAD_QUEUE_DISCIPLINE_FIFO */
-    return _Thread_queue_Extract_fifo( the_thread_queue, the_thread );
+    return _Thread_queue_Extract_fifo( the_thread );
 
 }

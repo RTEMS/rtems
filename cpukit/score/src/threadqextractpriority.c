@@ -25,7 +25,6 @@
 #include <rtems/score/watchdogimpl.h>
 
 bool _Thread_queue_Extract_priority_helper(
-  Thread_queue_Control *the_thread_queue __attribute__((unused)),
   Thread_Control       *the_thread,
   bool                  requeuing
 )
