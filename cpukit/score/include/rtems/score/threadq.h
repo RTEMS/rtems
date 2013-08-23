@@ -113,7 +113,7 @@ void _Thread_queue_Requeue(
  *  This routine removes the_thread from the_thread_queue
  *  and cancels any timeouts associated with this blocking.
  */
-void _Thread_queue_Extract(
+bool _Thread_queue_Extract(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
 );
@@ -189,7 +189,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
  *  This routine removes the_thread from the_thread_queue
  *  and cancels any timeouts associated with this blocking.
  */
-void _Thread_queue_Extract_priority_helper(
+bool _Thread_queue_Extract_priority_helper(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread,
   bool                  requeuing
@@ -242,7 +242,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_fifo (
  *  This routine removes the_thread from the_thread_queue
  *  and cancels any timeouts associated with this blocking.
  */
-void _Thread_queue_Extract_fifo(
+bool _Thread_queue_Extract_fifo(
   Thread_queue_Control *the_thread_queue,
   Thread_Control       *the_thread
 );
