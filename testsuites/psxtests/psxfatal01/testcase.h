@@ -4,6 +4,8 @@
 
 #include <errno.h>
 
+#include <rtems/posix/posixapi.h>
+
 /*
  *  Way too much stack space.  Should generate a fatal error
  *  on the init task create.
@@ -26,8 +28,8 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define FATAL_ERROR_DESCRIPTION \
         "POSIX API Init thread create failure - NULL entry"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_POSIX_API
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
-#define FATAL_ERROR_EXPECTED_ERROR       EFAULT
+#define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
+#define FATAL_ERROR_EXPECTED_ERROR       ((POSIX_FD_PTHREAD << 8) | EFAULT)
 
 void force_error(void)
 {
