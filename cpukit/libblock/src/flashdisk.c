@@ -1266,12 +1266,6 @@ rtems_fdisk_recycle_segment (rtems_flashdisk*         fd,
   {
     rtems_fdisk_page_desc* spd = &ssc->page_descriptors[spage];
 
-    if (!dsc && ssc->pages_active > 0)
-    {
-      rtems_fdisk_error ("recycle: no available dst segment");
-      return EIO;
-    }
-
     if (rtems_fdisk_page_desc_flags_set (spd, RTEMS_FDISK_PAGE_ACTIVE) &&
         !rtems_fdisk_page_desc_flags_set (spd, RTEMS_FDISK_PAGE_USED))
     {
@@ -1361,7 +1355,23 @@ rtems_fdisk_recycle_segment (rtems_flashdisk*         fd,
        */
       dst_pages = rtems_fdisk_seg_pages_available (dsc);
       if (dst_pages == 0)
+      {
         dsc = rtems_fdisk_seg_most_available (&fd->available);
+        if (!dsc)
+        {
+          if (ssc->pages_active == 0)
+          {
+            ret = rtems_fdisk_erase_segment (fd, ssc);
+          }
+          else
+          {
+            rtems_fdisk_error ("recycle: no available dst segment");
+            ret = EIO;
+          }
+
+          return ret;
+        }
+      }
 
       (*pages)--;
     }
