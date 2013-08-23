@@ -1348,8 +1348,7 @@ rtems_bdbuf_swapout_workers_create (void)
 
   worker_size = rtems_bdbuf_swapout_worker_size ();
   worker_current = calloc (1, bdbuf_config.swapout_workers * worker_size);
-  if (!worker_current)
-    sc = RTEMS_NO_MEMORY;
+  sc = worker_current != NULL ? RTEMS_SUCCESSFUL : RTEMS_NO_MEMORY;
 
   bdbuf_cache.swapout_workers = (rtems_bdbuf_swapout_worker *) worker_current;
 
