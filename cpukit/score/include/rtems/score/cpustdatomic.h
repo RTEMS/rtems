@@ -67,6 +67,44 @@ typedef enum {
   ATOMIC_ORDER_RELEASE = memory_order_release
 } Atomic_Order;
 
+
+/**
+ * @brief atomic data initializer for static initialization.
+ */
+#define CPU_ATOMIC_INITIALIZER_UINT(value) ATOMIC_VAR_INIT(value)
+#define CPU_ATOMIC_INITIALIZER_PTR(value) ATOMIC_VAR_INIT(value)
+#define CPU_ATOMIC_INITIALIZER_FLAG(value) ATOMIC_VAR_INIT(value)
+
+/**
+ * @brief Initializes an atomic type value into a atomic object.
+ *
+ * @param object an atomic type pointer of object.
+ * @param value a value to be stored into object.
+ */
+RTEMS_INLINE_ROUTINE void _CPU_atomic_Init_uint(
+  volatile Atomic_Uint *object,
+  uint_fast32_t value
+)
+{
+  atomic_init(object, value);
+}
+
+RTEMS_INLINE_ROUTINE void _CPU_atomic_Init_ptr(
+  volatile Atomic_Pointer *object,
+  uintptr_t value
+)
+{
+  atomic_init(object, value);
+}
+
+RTEMS_INLINE_ROUTINE void _CPU_atomic_Init_flag(
+  volatile Atomic_Flag *object,
+  _Bool value
+)
+{
+  atomic_init(object, value);
+}
+
 /**
  * @brief Atomically load an atomic type value from atomic object.
  *

@@ -32,6 +32,43 @@ extern "C" {
 /**@{*/
 
 /**
+ * @brief atomic data initializer for static initialization.
+ */
+#define ATOMIC_INITIALIZER_UINT(value) CPU_ATOMIC_INITIALIZER_UINT(value)
+#define ATOMIC_INITIALIZER_PTR(value) CPU_ATOMIC_INITIALIZER_PTR(value)
+#define ATOMIC_INITIALIZER_FLAG(value) CPU_ATOMIC_INITIALIZER_FLAG(value)
+
+/**
+ * @brief Initializes an atomic type value into a atomic object.
+ *
+ * @param object an atomic type pointer of object.
+ * @param value a value to be stored into object.
+ */
+RTEMS_INLINE_ROUTINE void _Atomic_Init_uint(
+  volatile Atomic_Uint *object,
+  uint_fast32_t value
+)
+{
+  _CPU_atomic_Init_uint(object, value);
+}
+
+RTEMS_INLINE_ROUTINE void _Atomic_Init_ptr(
+  volatile Atomic_Pointer *object,
+  uintptr_t value
+)
+{
+  _CPU_atomic_Init_ptr(object, value);
+}
+
+RTEMS_INLINE_ROUTINE void _Atomic_Init_flag(
+  volatile Atomic_Flag *object,
+  _Bool value
+)
+{
+  _CPU_atomic_Init_flag(object, value);
+}
+
+/**
  * @brief Atomically load an atomic type value from atomic object.
  *
  * @param object an atomic type pointer of object.
