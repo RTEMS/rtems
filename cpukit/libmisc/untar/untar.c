@@ -281,6 +281,7 @@ Untar_FromFile(
 
    bufr = (char *)malloc(512);
    if (bufr == NULL) {
+      close(fd);
       return(UNTAR_FAIL);
    }
 
