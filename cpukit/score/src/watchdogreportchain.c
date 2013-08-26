@@ -17,9 +17,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/bspIo.h>
 
 void _Watchdog_Report_chain(
@@ -30,6 +30,7 @@ void _Watchdog_Report_chain(
   ISR_Level          level;
   Chain_Node        *node;
 
+  _Thread_Disable_dispatch();
   _ISR_Disable( level );
     printk( "Watchdog Chain: %s %p\n", name, header );
     if ( !_Chain_Is_empty( header ) ) {
@@ -46,4 +47,5 @@ void _Watchdog_Report_chain(
       printk( "Chain is empty\n" );
     }
   _ISR_Enable( level );
+  _Thread_Enable_dispatch();
 }
