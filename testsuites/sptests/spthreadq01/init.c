@@ -29,13 +29,17 @@ void threadq_first_empty(
 )
 {
   Thread_queue_Control tq;
+  bool we_did_it;
 
   printf( "Init - initialize thread queue for %s\n", discipline_string );
   _Thread_queue_Initialize( &tq, discipline, 0x01, 3 );
 
   puts( "Init - _Thread_queue_Extract - thread not blocked on a thread queue" );
-  _Thread_queue_Extract( &tq, _Thread_Get_executing() );
-  /* is there anything to check? */
+  _Thread_Disable_dispatch();
+  we_did_it = _Thread_queue_Extract( &tq, _Thread_Executing );
+  _Thread_Enable_dispatch();
+  rtems_test_assert( !we_did_it );
+  /* is there more to check? */
 }
 
 rtems_task Init(
