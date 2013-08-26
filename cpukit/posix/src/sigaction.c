@@ -44,9 +44,6 @@ int sigaction(
 {
   ISR_Level     level;
 
-  if ( oact )
-    *oact = _POSIX_signals_Vectors[ sig ];
-
   if ( !sig )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -62,6 +59,11 @@ int sigaction(
 
   if ( sig == SIGKILL )
     rtems_set_errno_and_return_minus_one( EINVAL );
+
+  _Thread_Disable_dispatch();
+
+  if ( oact )
+    *oact = _POSIX_signals_Vectors[ sig ];
 
   /*
    *  Evaluate the new action structure and set the global signal vector
@@ -85,14 +87,7 @@ int sigaction(
     _ISR_Enable( level );
   }
 
-  /*
-   *  No need to evaluate or dispatch because:
-   *
-   *    + If we were ignoring the signal before, none could be pending
-   *      now (signals not posted when SIG_IGN).
-   *    + If we are now ignoring a signal that was previously pending,
-   *      we clear the pending signal indicator.
-   */
+  _Thread_Enable_dispatch();
 
   return 0;
 }
