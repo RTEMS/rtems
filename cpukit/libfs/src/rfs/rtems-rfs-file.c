@@ -123,7 +123,7 @@ rtems_rfs_file_open (rtems_rfs_file_system*  fs,
     shared->ctime = rtems_rfs_inode_get_ctime (&shared->inode);
     shared->fs = fs;
 
-    rtems_chain_append (&fs->file_shares, &shared->link);
+    rtems_chain_append_unprotected (&fs->file_shares, &shared->link);
 
     rtems_rfs_inode_unload (fs, &shared->inode, false);
 
@@ -197,7 +197,7 @@ rtems_rfs_file_close (rtems_rfs_file_system* fs,
         rrc = rc;
     }
 
-    rtems_chain_extract (&handle->shared->link);
+    rtems_chain_extract_unprotected (&handle->shared->link);
     free (handle->shared);
   }
 

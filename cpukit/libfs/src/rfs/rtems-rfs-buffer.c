@@ -61,7 +61,7 @@ rtems_rfs_scan_chain (rtems_chain_control*   chain,
                 ((intptr_t)(buffer->user)));
 
       (*count)--;
-      rtems_chain_extract (node);
+      rtems_chain_extract_unprotected (node);
       rtems_chain_set_off_chain (node);
       return buffer;
     }
@@ -181,7 +181,8 @@ rtems_rfs_buffer_handle_request (rtems_rfs_file_system*   fs,
    * Increase the reference count of the buffer.
    */
   rtems_rfs_buffer_refs_up (handle);
-  rtems_chain_append (&fs->buffers, rtems_rfs_buffer_link (handle));
+  rtems_chain_append_unprotected (&fs->buffers,
+                                  rtems_rfs_buffer_link (handle));
   fs->buffers_count++;
 
   handle->buffer->user = (void*) ((intptr_t) block);
@@ -215,7 +216,7 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
 
     if (rtems_rfs_buffer_refs (handle) == 0)
     {
-      rtems_chain_extract (rtems_rfs_buffer_link (handle));
+      rtems_chain_extract_unprotected (rtems_rfs_buffer_link (handle));
       fs->buffers_count--;
 
       if (rtems_rfs_fs_no_local_cache (fs))
@@ -247,14 +248,15 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
 
           if (fs->release_count > fs->release_modified_count)
           {
-            buffer = (rtems_rfs_buffer*) rtems_chain_get (&fs->release);
+            buffer = (rtems_rfs_buffer*)
+              rtems_chain_get_unprotected (&fs->release);
             fs->release_count--;
             modified = false;
           }
           else
           {
-            buffer =
-              (rtems_rfs_buffer*) rtems_chain_get (&fs->release_modified);
+            buffer = (rtems_rfs_buffer*)
+              rtems_chain_get_unprotected (&fs->release_modified);
             fs->release_modified_count--;
             modified = true;
           }
@@ -264,13 +266,14 @@ rtems_rfs_buffer_handle_release (rtems_rfs_file_system*   fs,
 
         if (rtems_rfs_buffer_dirty (handle))
         {
-          rtems_chain_append (&fs->release_modified,
-                              rtems_rfs_buffer_link (handle));
+          rtems_chain_append_unprotected (&fs->release_modified,
+                                          rtems_rfs_buffer_link (handle));
           fs->release_modified_count++;
         }
         else
         {
-          rtems_chain_append (&fs->release, rtems_rfs_buffer_link (handle));
+          rtems_chain_append_unprotected (&fs->release,
+                                          rtems_rfs_buffer_link (handle));
           fs->release_count++;
         }
       }
@@ -447,7 +450,7 @@ rtems_rfs_release_chain (rtems_chain_control* chain,
 
   while (!rtems_chain_is_empty (chain))
   {
-    buffer = (rtems_rfs_buffer*) rtems_chain_get (chain);
+    buffer = (rtems_rfs_buffer*) rtems_chain_get_unprotected (chain);
     (*count)--;
 
     buffer->user = (void*) 0;
