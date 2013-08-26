@@ -25,11 +25,37 @@ typedef struct {
   int              id;
 } test_node;
 
+static rtems_chain_control one_node_chain;
+
+static rtems_chain_node node_of_one_node_chain =
+  RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( &one_node_chain );
+
+static rtems_chain_control one_node_chain =
+  RTEMS_CHAIN_INITIALIZER_ONE_NODE( &node_of_one_node_chain );
+
 static void test_chain_control_initializer(void)
 {
   rtems_chain_control chain = RTEMS_CHAIN_INITIALIZER_EMPTY( chain );
+
   puts( "INIT - Verify rtems_chain_control initializer" );
+
   rtems_test_assert( rtems_chain_is_empty( &chain ) );
+
+  rtems_test_assert( rtems_chain_has_only_one_node( &one_node_chain ) );
+  rtems_test_assert(
+    rtems_chain_immutable_first( &one_node_chain ) == &node_of_one_node_chain
+  );
+  rtems_test_assert(
+    rtems_chain_immutable_last( &one_node_chain ) == &node_of_one_node_chain
+  );
+  rtems_test_assert(
+    rtems_chain_immutable_head( &one_node_chain )
+      == rtems_chain_immutable_previous( &node_of_one_node_chain )
+  );
+  rtems_test_assert(
+    rtems_chain_immutable_tail( &one_node_chain )
+      == rtems_chain_immutable_next( &node_of_one_node_chain )
+  );
 }
 
 static void test_chain_control_layout(void)

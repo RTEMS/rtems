@@ -45,6 +45,22 @@ typedef Chain_Control rtems_chain_control;
   CHAIN_INITIALIZER_EMPTY(name)
 
 /**
+ *  @brief Chain initializer for a chain with one @a node.
+ *
+ *  @see RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN().
+ */
+#define RTEMS_CHAIN_INITIALIZER_ONE_NODE( node ) \
+  CHAIN_INITIALIZER_ONE_NODE( node )
+
+/**
+ *  @brief Chain node initializer for a @a chain containing exactly this node.
+ *
+ *  @see RTEMS_CHAIN_INITIALIZER_ONE_NODE().
+ */
+#define RTEMS_CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( chain ) \
+  CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( chain )
+
+/**
  *  @brief Chain definition for an empty chain with designator @a name.
  */
 #define RTEMS_CHAIN_DEFINE_EMPTY(name) \

@@ -37,6 +37,22 @@ extern "C" {
   { { { &(name).Tail.Node, NULL }, &(name).Head.Node } }
 
 /**
+ *  @brief Chain initializer for a chain with one @a node.
+ *
+ *  @see CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN().
+ */
+#define CHAIN_INITIALIZER_ONE_NODE( node ) \
+  { { { (node), NULL }, (node) } }
+
+/**
+ *  @brief Chain node initializer for a @a chain containing exactly this node.
+ *
+ *  @see CHAIN_INITIALIZER_ONE_NODE().
+ */
+#define CHAIN_NODE_INITIALIZER_ONE_NODE_CHAIN( chain ) \
+  { &(chain)->Tail.Node, &(chain)->Head.Node }
+
+/**
  *  @brief Chain definition for an empty chain with designator @a name.
  */
 #define CHAIN_DEFINE_EMPTY(name) \
