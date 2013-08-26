@@ -29,10 +29,12 @@
 #ifndef LIBBSP_SHARED_BOOTCARD_H
 #define LIBBSP_SHARED_BOOTCARD_H
 
-#include <unistd.h>
+#include <string.h>
 
-#include <rtems/malloc.h>
+#include <rtems/config.h>
 #include <rtems/bspIo.h>
+#include <rtems/malloc.h>
+#include <rtems/score/wkspace.h>
 
 #include <bspopts.h>
 

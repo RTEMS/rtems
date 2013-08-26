@@ -46,15 +46,9 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
-
 #include <bsp/bootcard.h>
-#include <rtems/bspIo.h>
-#include <rtems/malloc.h>
 
-#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-#include <unistd.h> /* for sbrk() */
-#endif
+#include <rtems.h>
 
 /*
  *  At most a single pointer to the cmdline for those target
