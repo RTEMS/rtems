@@ -216,7 +216,7 @@ static media_item *get_media_item(
 
 static void free_item(media_item *item)
 {
-  rtems_chain_extract(&item->node);
+  rtems_chain_extract_unprotected(&item->node);
   free(item->mount_path);
   free(item);
 }
