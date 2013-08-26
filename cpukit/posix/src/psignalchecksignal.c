@@ -49,7 +49,7 @@ bool    _POSIX_signals_Check_signal(
   Thread_Control             *executing;
 
   if ( ! _POSIX_signals_Clear_signals( api, signo, &siginfo_struct,
-                                       is_global, true ) )
+                                       is_global, true, true ) )
     return false;
 
   /*

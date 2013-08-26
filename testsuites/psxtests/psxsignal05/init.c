@@ -79,7 +79,8 @@ void *POSIX_Init(
     SIGNAL_ONE,
     &info,
     true,              /* is_global */
-    false              /* check_blocked */
+    false,             /* check_blocked */
+    true               /* do_signals_acquire_release */
   );
   rtems_test_assert( bc );
 

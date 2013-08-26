@@ -39,7 +39,7 @@ void _POSIX_signals_Set_process_signals(
 {
   ISR_Level  level;
 
-  _ISR_Disable( level );
+  _POSIX_signals_Acquire( level );
     _POSIX_signals_Pending |= mask;
-  _ISR_Enable( level );
+  _POSIX_signals_Release( level );
 }

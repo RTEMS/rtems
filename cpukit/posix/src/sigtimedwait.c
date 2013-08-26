@@ -117,7 +117,7 @@ int sigtimedwait(
 
   /* API signals pending? */
 
-  _ISR_Disable( level );
+  _POSIX_signals_Acquire( level );
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_lowest( api->signals_pending );
@@ -126,9 +126,10 @@ int sigtimedwait(
       the_info->si_signo,
       the_info,
       false,
+      false,
       false
     );
-    _ISR_Enable( level );
+    _POSIX_signals_Release( level );
 
     the_info->si_code = SI_USER;
     the_info->si_value.sival_int = 0;
@@ -139,8 +140,8 @@ int sigtimedwait(
 
   if ( *set & _POSIX_signals_Pending ) {
     signo = _POSIX_signals_Get_lowest( _POSIX_signals_Pending );
-    _POSIX_signals_Clear_signals( api, signo, the_info, true, false );
-    _ISR_Enable( level );
+    _POSIX_signals_Clear_signals( api, signo, the_info, true, false, false );
+    _POSIX_signals_Release( level );
 
     the_info->si_signo = signo;
     the_info->si_code = SI_USER;
@@ -156,7 +157,7 @@ int sigtimedwait(
     executing->Wait.option          = *set;
     executing->Wait.return_argument = the_info;
     _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue );
-    _ISR_Enable( level );
+    _POSIX_signals_Release( level );
     _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, executing, interval );
   _Thread_Enable_dispatch();
 
@@ -165,7 +166,14 @@ int sigtimedwait(
    * the signal.
    */
 
-  _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info, false, false );
+  _POSIX_signals_Clear_signals(
+    api,
+    the_info->si_signo,
+    the_info,
+    false,
+    false,
+    true
+  );
 
   /* Set errno only if return code is not EINTR or
    * if EINTR was caused by a signal being caught, which

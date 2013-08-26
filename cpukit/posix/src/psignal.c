@@ -45,6 +45,8 @@ RTEMS_STATIC_ASSERT(
 
 /*** PROCESS WIDE STUFF ****/
 
+ISR_lock_Control _POSIX_signals_Lock = ISR_LOCK_INITIALIZER;
+
 sigset_t  _POSIX_signals_Pending;
 
 void _POSIX_signals_Abnormal_termination_handler(
@@ -144,13 +146,13 @@ static void _POSIX_signals_Post_switch_hook(
    *  processed at all.  No point in doing this loop otherwise.
    */
   while (1) {
-    _ISR_Disable( level );
+    _POSIX_signals_Acquire( level );
       if ( !(~api->signals_blocked &
             (api->signals_pending | _POSIX_signals_Pending)) ) {
-       _ISR_Enable( level );
+       _POSIX_signals_Release( level );
        break;
      }
-    _ISR_Enable( level );
+    _POSIX_signals_Release( level );
 
     for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
       _POSIX_signals_Check_signal( api, signo, false );

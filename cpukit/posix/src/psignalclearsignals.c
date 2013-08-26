@@ -42,7 +42,8 @@ bool _POSIX_signals_Clear_signals(
   int                 signo,
   siginfo_t          *info,
   bool                is_global,
-  bool                check_blocked
+  bool                check_blocked,
+  bool                do_signals_acquire_release
 )
 {
   sigset_t                    mask;
@@ -67,7 +68,10 @@ bool _POSIX_signals_Clear_signals(
   /* XXX is this right for siginfo type signals? */
   /* XXX are we sure they can be cleared the same way? */
 
-  _ISR_Disable( level );
+  if ( do_signals_acquire_release ) {
+    _POSIX_signals_Acquire( level );
+  }
+
     if ( is_global ) {
        if ( mask & (_POSIX_signals_Pending & signals_blocked) ) {
          if ( _POSIX_signals_Vectors[ signo ].sa_flags == SA_SIGINFO ) {
@@ -97,6 +101,10 @@ bool _POSIX_signals_Clear_signals(
         do_callout = true;
       }
     }
-  _ISR_Enable( level );
+
+  if ( do_signals_acquire_release ) {
+    _POSIX_signals_Release( level );
+  }
+
   return do_callout;
 }
