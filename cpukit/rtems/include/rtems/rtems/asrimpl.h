@@ -18,7 +18,6 @@
 #define _RTEMS_RTEMS_ASRIMPL_H
 
 #include <rtems/rtems/asr.h>
-#include <rtems/score/isrlevel.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,15 +37,16 @@ extern "C" {
  *  This routine initializes the given RTEMS_ASR information record.
  */
 RTEMS_INLINE_ROUTINE void _ASR_Initialize (
-  ASR_Information *information
+  ASR_Information *asr
 )
 {
-  information->is_enabled      = false;
-  information->handler         = NULL;
-  information->mode_set        = RTEMS_DEFAULT_MODES;
-  information->signals_posted  = 0;
-  information->signals_pending = 0;
-  information->nest_level      = 0;
+  asr->is_enabled      = false;
+  asr->handler         = NULL;
+  asr->mode_set        = RTEMS_DEFAULT_MODES;
+  asr->signals_posted  = 0;
+  asr->signals_pending = 0;
+  asr->nest_level      = 0;
+  _ISR_lock_Initialize( &asr->Lock );
 }
 
 /**
@@ -57,17 +57,17 @@ RTEMS_INLINE_ROUTINE void _ASR_Initialize (
  *  way that the RTEMS_ASR disable/enable flag changes.
  */
 RTEMS_INLINE_ROUTINE void _ASR_Swap_signals (
-  ASR_Information *information
+  ASR_Information *asr
 )
 {
   rtems_signal_set _signals;
   ISR_Level        _level;
 
-  _ISR_Disable( _level );
-    _signals                     = information->signals_pending;
-    information->signals_pending = information->signals_posted;
-    information->signals_posted  = _signals;
-  _ISR_Enable( _level );
+  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, _level );
+    _signals             = asr->signals_pending;
+    asr->signals_pending = asr->signals_posted;
+    asr->signals_posted  = _signals;
+  _ISR_lock_Release_and_ISR_enable( &asr->Lock, _level );
 }
 
 /**
@@ -90,10 +90,10 @@ RTEMS_INLINE_ROUTINE bool _ASR_Is_null_handler (
  *  given RTEMS_ASR information record and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _ASR_Are_signals_pending (
-  ASR_Information *information
+  ASR_Information *asr
 )
 {
-  return information->signals_posted != 0;
+  return asr->signals_posted != 0;
 }
 
 /**
@@ -105,15 +105,31 @@ RTEMS_INLINE_ROUTINE bool _ASR_Are_signals_pending (
  *  NOTE:  This must be implemented as a macro.
  */
 RTEMS_INLINE_ROUTINE void _ASR_Post_signals(
+  ASR_Information  *asr,
   rtems_signal_set  signals,
   rtems_signal_set *signal_set
 )
 {
   ISR_Level              _level;
 
-  _ISR_Disable( _level );
+  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, _level );
     *signal_set |= signals;
-  _ISR_Enable( _level );
+  _ISR_lock_Release_and_ISR_enable( &asr->Lock, _level );
+}
+
+RTEMS_INLINE_ROUTINE rtems_signal_set _ASR_Get_posted_signals(
+  ASR_Information *asr
+)
+{
+  rtems_signal_set signal_set;
+  ISR_Level        _level;
+
+  _ISR_lock_ISR_disable_and_acquire( &asr->Lock, _level );
+    signal_set = asr->signals_posted;
+    asr->signals_posted = 0;
+  _ISR_lock_Release_and_ISR_enable( &asr->Lock, _level );
+
+  return signal_set;
 }
 
 /**@}*/
