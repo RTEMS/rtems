@@ -183,7 +183,7 @@ rtems_device_driver Clock_initialize(
    *  If we are counting ISRs per tick, then initialize the counter.
    */
   #if CLOCK_DRIVER_ISRS_PER_TICK
-    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK_VALUE;
   #endif
 
   return RTEMS_SUCCESSFUL;
