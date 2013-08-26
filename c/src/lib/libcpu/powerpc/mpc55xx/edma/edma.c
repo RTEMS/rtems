@@ -275,7 +275,7 @@ void mpc55xx_edma_release_channel(edma_channel_context *ctx)
   unsigned channel_index = edma_channel_index_of_tcd(ctx->edma_tcd);
 
   mpc55xx_edma_release_channel_by_tcd(ctx->edma_tcd);
-  rtems_chain_extract(&ctx->node);
+  rtems_chain_explicit_extract(&edma_channel_chain, &ctx->node);
 
   sc = rtems_interrupt_handler_remove(
     MPC55XX_IRQ_EDMA(channel_index),

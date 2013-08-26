@@ -60,17 +60,29 @@ static void test_chain_control_initializer(void)
 
 static void test_chain_control_layout(void)
 {
-  rtems_chain_control chain;
+  Chain_Control chain;
+
   puts( "INIT - Verify rtems_chain_control layout" );
+
   rtems_test_assert(
-    sizeof(rtems_chain_control)
-      == sizeof(rtems_chain_node) + sizeof(rtems_chain_node *)
+    sizeof(Chain_Control)
+      == sizeof(Chain_Node) + sizeof(Chain_Node *)
   );
   rtems_test_assert(
-    sizeof(rtems_chain_control)
-      == 3 * sizeof(rtems_chain_node *)
+    sizeof(Chain_Control)
+      == 3 * sizeof(Chain_Node *)
   );
-  rtems_test_assert( &chain.Head.Node.previous == &chain.Tail.Node.next );
+  rtems_test_assert(
+    _Chain_Previous( _Chain_Head( &chain ) )
+      == _Chain_Next( _Chain_Tail( &chain ) )
+  );
+
+#if !defined( RTEMS_SMP )
+  rtems_test_assert(
+    sizeof(Chain_Control)
+      == sizeof(rtems_chain_control)
+  );
+#endif
 }
 
 static void test_chain_get_with_wait(void)
@@ -94,7 +106,7 @@ static void test_chain_first_and_last(void)
 
   rtems_chain_initialize_empty( &chain );
   rtems_chain_append( &chain, &node1 );
-  rtems_chain_insert( &node1, &node2 );
+  rtems_chain_explicit_insert( &chain, &node1, &node2 );
 
   puts( "INIT - Verify rtems_chain_is_first" );
   cnode = rtems_chain_first(&chain);  
@@ -296,7 +308,7 @@ rtems_task Init(
   node1.id = 1;
   node2.id = 2;
   rtems_chain_append( &chain1, &node1.Node );
-  rtems_chain_insert( &node1.Node, &node2.Node );
+  rtems_chain_explicit_insert( &chain1, &node1.Node, &node2.Node );
 
   for ( p = rtems_chain_first(&chain1), id = 1 ;
         !rtems_chain_is_tail(&chain1, p) ;

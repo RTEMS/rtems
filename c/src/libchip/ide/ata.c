@@ -491,7 +491,7 @@ ata_request_done(ata_req_t *areq, rtems_device_minor_number ctrl_minor,
 #endif
 
     ATA_EXEC_CALLBACK(areq, status);
-    rtems_chain_extract(&areq->link);
+    rtems_chain_explicit_extract(&ata_ide_ctrls[ctrl_minor].reqs, &areq->link);
 
     if (!rtems_chain_is_empty(&ata_ide_ctrls[ctrl_minor].reqs))
     {

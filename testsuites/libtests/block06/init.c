@@ -1130,14 +1130,14 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
 
   bd = (rtems_bdbuf_buffer*) node;
   pnode = node->previous;
-  rtems_chain_extract (node);
+  rtems_chain_explicit_extract (&buffers, node);
   node = pnode;
   bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[4]: ", tc->name);
   passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd), true);
 
   bd = (rtems_bdbuf_buffer*) node;
   pnode = node->previous;
-  rtems_chain_extract (node);
+  rtems_chain_explicit_extract (&buffers, node);
   node = pnode;
   bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[3]: ", tc->name);
   passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd), true);

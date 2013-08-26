@@ -120,7 +120,9 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
       if (rtems_chain_is_empty (chain))
         rtems_chain_prepend (chain, &r_chain->next_fd);
       else
-        rtems_chain_insert (rtems_chain_previous (node), &r_chain->next_fd);
+        rtems_chain_explicit_insert (chain,
+                                     rtems_chain_previous (node),
+                                     &r_chain->next_fd);
 
       r_chain->new_fd = 1;
 	  r_chain->fildes = fildes;
@@ -144,19 +146,22 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
 static void
 rtems_aio_move_to_work (rtems_aio_request_chain *r_chain)
 {
+  rtems_chain_control *work_req_chain = &aio_request_queue.work_req;
   rtems_aio_request_chain *temp;
   rtems_chain_node *node;
-  
-  node = rtems_chain_first (&aio_request_queue.work_req);
+
+  node = rtems_chain_first (work_req_chain);
   temp = (rtems_aio_request_chain *) node;
 
-  while (temp->fildes < r_chain->fildes && 
-	 !rtems_chain_is_tail (&aio_request_queue.work_req, node)) {
+  while (temp->fildes < r_chain->fildes &&
+	 !rtems_chain_is_tail (work_req_chain, node)) {
     node = rtems_chain_next (node);
     temp = (rtems_aio_request_chain *) node;
   }
-  
-  rtems_chain_insert (rtems_chain_previous (node), &r_chain->next_fd);
+
+  rtems_chain_explicit_insert (work_req_chain,
+                               rtems_chain_previous (node),
+                               &r_chain->next_fd);
 }
  
 
@@ -195,7 +200,7 @@ rtems_aio_insert_prio (rtems_chain_control *chain, rtems_aio_request *req)
       prio = ((rtems_aio_request *) node)->aiocbp->aio_reqprio;
     }
 
-    rtems_chain_insert (node->previous, &req->next_prio);
+    rtems_chain_explicit_insert (chain, node->previous, &req->next_prio);
 
   }
 }
@@ -221,7 +226,7 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
   
   while (!rtems_chain_is_tail (chain, node))
     {
-      rtems_chain_extract (node);
+      rtems_chain_explicit_extract (chain, node);
       rtems_aio_request *req = (rtems_aio_request *) node;
       node = rtems_chain_next (node);
       req->aiocbp->error_code = ECANCELED;
@@ -265,7 +270,7 @@ int rtems_aio_remove_req (rtems_chain_control *chain, struct aiocb *aiocbp)
     return AIO_NOTCANCELED;
   else
     {
-      rtems_chain_extract (node);
+      rtems_chain_explicit_extract (chain, node);
       current->aiocbp->error_code = ECANCELED;
       current->aiocbp->return_value = -1;
       free (current); 
@@ -440,7 +445,7 @@ rtems_aio_handle (void *arg)
       param.sched_priority = req->priority;
       pthread_setschedparam (pthread_self(), req->policy, &param);
 
-      rtems_chain_extract (node);
+      rtems_chain_explicit_extract (chain, node);
 
       pthread_mutex_unlock (&r_chain->mutex);
 
@@ -506,7 +511,8 @@ rtems_aio_handle (void *arg)
 	  /* If no requests were added to the chain we delete the fd chain from 
 	     the queue and start working with idle fd chains */
 	  if (result == ETIMEDOUT) {
-	    rtems_chain_extract (&r_chain->next_fd);
+	    rtems_chain_explicit_extract (&aio_request_queue.work_req,
+                                    &r_chain->next_fd);
 	    pthread_mutex_destroy (&r_chain->mutex);
 	    pthread_cond_destroy (&r_chain->cond);
 	    free (r_chain);
@@ -542,7 +548,7 @@ rtems_aio_handle (void *arg)
 	    ++aio_request_queue.active_threads;
 
 	    node = rtems_chain_first (&aio_request_queue.idle_req);
-	    rtems_chain_extract (node);
+	    rtems_chain_explicit_extract (&aio_request_queue.idle_req, node);
 
 	    r_chain = (rtems_aio_request_chain *) node;
 	    rtems_aio_move_to_work (r_chain);
