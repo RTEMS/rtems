@@ -29,8 +29,10 @@ void _POSIX_Keys_Free_memory(
   POSIX_Keys_Key_value_pair search_node;
   POSIX_Keys_Key_value_pair *p;
   RBTree_Node *iter, *next;
+  Objects_Id key_id;
 
-  search_node.key = the_key->Object.id;
+  key_id = the_key->Object.id;
+  search_node.key = key_id;
   search_node.thread_id = 0;
   iter = _RBTree_Find_unprotected( &_POSIX_Keys_Key_value_lookup_tree, &search_node.Key_value_lookup_node );
   if ( !iter )
@@ -40,7 +42,7 @@ void _POSIX_Keys_Free_memory(
    */
   next = _RBTree_Next_unprotected( iter, RBT_LEFT );
   p = _RBTree_Container_of( next, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
-  while ( p->key == the_key->Object.id) {
+  while ( next != NULL && p->key == key_id) {
     iter = next;
     next = _RBTree_Next_unprotected( iter, RBT_LEFT );
     p = _RBTree_Container_of( next, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
@@ -50,7 +52,7 @@ void _POSIX_Keys_Free_memory(
    * delete all nodes belongs to the_key from the rbtree and chain.
    */
   p = _RBTree_Container_of( iter, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
-  while ( p->key == the_key->Object.id ) {
+  while ( iter != NULL && p->key == key_id ) {
     next = _RBTree_Next_unprotected( iter, RBT_RIGHT );
     _RBTree_Extract_unprotected( &_POSIX_Keys_Key_value_lookup_tree, iter );
     _Chain_Extract_unprotected( &p->Key_values_per_thread_node );
