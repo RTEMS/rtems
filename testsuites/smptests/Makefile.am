@@ -11,6 +11,7 @@ SUBDIRS += smp06
 SUBDIRS += smp07
 SUBDIRS += smp08
 SUBDIRS += smp09
+if ATOMIC
 SUBDIRS += smpatomic01
 SUBDIRS += smpatomic02
 SUBDIRS += smpatomic03
@@ -18,6 +19,7 @@ SUBDIRS += smpatomic04
 SUBDIRS += smpatomic05
 SUBDIRS += smpatomic06
 SUBDIRS += smpatomic07
+endif
 SUBDIRS += smplock01
 SUBDIRS += smpmigration01
 SUBDIRS += smpschedule01
