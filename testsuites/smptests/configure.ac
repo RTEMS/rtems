@@ -53,6 +53,7 @@ smpatomic04/Makefile
 smpatomic05/Makefile
 smpatomic06/Makefile
 smpatomic07/Makefile
+smpatomic08/Makefile
 smplock01/Makefile
 smpmigration01/Makefile
 smppsxsignal01/Makefile
