@@ -73,7 +73,8 @@ typedef enum {
  */
 #define CPU_ATOMIC_INITIALIZER_UINT(value) ATOMIC_VAR_INIT(value)
 #define CPU_ATOMIC_INITIALIZER_PTR(value) ATOMIC_VAR_INIT(value)
-#define CPU_ATOMIC_INITIALIZER_FLAG(value) ATOMIC_VAR_INIT(value)
+
+#define CPU_ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
 /**
  * @brief Initializes an atomic type value into a atomic object.
@@ -92,14 +93,6 @@ static inline void _CPU_atomic_Init_uint(
 static inline void _CPU_atomic_Init_ptr(
   volatile Atomic_Pointer *object,
   uintptr_t value
-)
-{
-  atomic_init(object, value);
-}
-
-static inline void _CPU_atomic_Init_flag(
-  volatile Atomic_Flag *object,
-  _Bool value
 )
 {
   atomic_init(object, value);
@@ -329,33 +322,17 @@ static inline bool _CPU_atomic_Compare_exchange_ptr(
     new_value, order_succ, order_fail );
 }
 
-/**
- * @brief Atomically clear the value of an atomic flag type object.
- *
- * @param[in, out] object an atomic flag type pointer of object.
- * @param order a type of Atomic_Order. 
- * 
- */
-static inline void _CPU_atomic_Clear_flag(
- volatile Atomic_Flag *object,
- Atomic_Order order
+static inline void _CPU_atomic_Flag_clear(
+  volatile Atomic_Flag *object,
+  Atomic_Order order
 )
 {
   return atomic_flag_clear_explicit( object, order );
 }
 
-/**
- * @brief Atomically test and clear the value of an atomic flag type object.
- *
- * @param[in, out] object an atomic flag type pointer of object.
- * @param order a type of Atomic_Order. 
- * 
- * @retval true if the test and set successully.
- * @retval false if the test and set failed.
- */
-static inline bool _CPU_atomic_Test_set_flag(
- volatile Atomic_Flag *object,
- Atomic_Order order
+static inline bool _CPU_atomic_Flag_test_and_set(
+  volatile Atomic_Flag *object,
+  Atomic_Order order
 )
 {
   return atomic_flag_test_and_set_explicit( object, order );

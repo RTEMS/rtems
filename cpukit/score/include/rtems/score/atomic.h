@@ -36,7 +36,11 @@ extern "C" {
  */
 #define ATOMIC_INITIALIZER_UINT(value) CPU_ATOMIC_INITIALIZER_UINT(value)
 #define ATOMIC_INITIALIZER_PTR(value) CPU_ATOMIC_INITIALIZER_PTR(value)
-#define ATOMIC_INITIALIZER_FLAG(value) CPU_ATOMIC_INITIALIZER_FLAG(value)
+
+/**
+ * @brief Initializes an atomic flag object to the cleared state.
+ */
+#define ATOMIC_INITIALIZER_FLAG CPU_ATOMIC_INITIALIZER_FLAG
 
 /**
  * @brief Initializes an atomic type value into a atomic object.
@@ -58,14 +62,6 @@ static inline void _Atomic_Init_ptr(
 )
 {
   _CPU_atomic_Init_ptr(object, value);
-}
-
-static inline void _Atomic_Init_flag(
-  volatile Atomic_Flag *object,
-  _Bool value
-)
-{
-  _CPU_atomic_Init_flag(object, value);
 }
 
 /**
@@ -293,35 +289,35 @@ static inline bool _Atomic_Compare_exchange_ptr(
 }
 
 /**
- * @brief Atomically clear the value of an atomic flag type object.
+ * @brief Atomically clears an atomic flag.
  *
- * @param[in, out] object an atomic flag type pointer of object.
- * @param order a type of Atomic_Order. 
+ * @param[in, out] object Pointer to the atomic flag object.
+ * @param[in] order The atomic memory order.
  * 
  */
-static inline void _Atomic_Clear_flag(
- volatile Atomic_Flag *object,
- Atomic_Order order
+static inline void _Atomic_Flag_clear(
+  volatile Atomic_Flag *object,
+  Atomic_Order order
 )
 {
-  _CPU_atomic_Clear_flag( object, order );
+  _CPU_atomic_Flag_clear( object, order );
 }
 
 /**
- * @brief Atomically test and clear the value of an atomic flag type object.
+ * @brief Atomically tests and sets an atomic flag.
  *
- * @param[in, out] object an atomic flag type pointer of object.
- * @param order a type of Atomic_Order. 
+ * @param[in, out] object Pointer to the atomic flag object.
+ * @param[in] order The atomic memory order.
  * 
- * @retval true if the test and set successully.
- * @retval false if the test and set failed.
+ * @retval true The atomic flag was already set.
+ * @retval false Otherwise.
  */
-static inline bool _Atomic_Test_set_flag(
- volatile Atomic_Flag *object,
- Atomic_Order order
+static inline bool _Atomic_Flag_test_and_set(
+  volatile Atomic_Flag *object,
+  Atomic_Order order
 )
 {
-  return _CPU_atomic_Test_set_flag( object, order );
+  return _CPU_atomic_Flag_test_and_set( object, order );
 }
 
 #ifdef __cplusplus
