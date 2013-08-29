@@ -18,6 +18,7 @@ void lm3s69xx_syscon_enable_uart_clock(unsigned int port, bool enable);
 void lm3s69xx_syscon_enable_ssi_clock(unsigned int port, bool enable);
 void lm3s69xx_syscon_enable_pwm_clock(bool enable);
 void lm3s69xx_syscon_set_pwmdiv(unsigned int div);
+void lm3s69xx_syscon_delay_3x_clocks(unsigned long x_count);
 
 #ifdef __cplusplus
 }

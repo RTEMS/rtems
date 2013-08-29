@@ -18,6 +18,15 @@ static void delay_3_clocks(void)
       "nop");
 }
 
+void __attribute__((naked)) lm3s69xx_syscon_delay_3x_clocks(unsigned long x_count)
+{
+    asm volatile(
+                 "subs  r0, #1\n\t"
+                 "bne   lm3s69xx_syscon_delay_3x_clocks\n\t"
+                 "bx    lr"
+                 );
+}
+
 void lm3s69xx_syscon_enable_gpio_clock(unsigned int port, bool enable)
 {
   volatile lm3s69xx_syscon *syscon = LM3S69XX_SYSCON;
