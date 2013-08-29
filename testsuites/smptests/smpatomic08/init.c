@@ -83,9 +83,11 @@ typedef struct {
   Atomic_Flag global_flag;
 } test_context;
 
-typedef void (*test_case_init)(test_context *ctx);
-
-typedef void (*test_case)(test_context *ctx, size_t worker_index);
+typedef struct {
+  void (*init)(test_context *ctx);
+  void (*body)(test_context *ctx, size_t worker_index);
+  void (*fini)(test_context *ctx);
+} test_case;
 
 static test_context test_instance = {
   .stop = ATOMIC_INITIALIZER_UINT(0),
@@ -102,12 +104,24 @@ static bool is_master_worker(size_t worker_index)
   return worker_index == 0;
 }
 
-static void test_init_atomic_add(test_context *ctx)
+static void test_atomic_add_init(test_context *ctx)
 {
   _Atomic_Init_uint(&ctx->global_uint, 0);
 }
 
-static void test_atomic_add_report(test_context *ctx)
+static void test_atomic_add_body(test_context *ctx, size_t worker_index)
+{
+  uint_fast32_t counter = 0;
+
+  while (!stop(ctx)) {
+    ++counter;
+    _Atomic_Fetch_add_uint(&ctx->global_uint, 1, ATOMIC_ORDER_RELAXED);
+  }
+
+  ctx->per_worker_uint[worker_index] = counter;
+}
+
+static void test_atomic_add_fini(test_context *ctx)
 {
   uint_fast32_t expected_counter = 0;
   uint_fast32_t actual_counter;
@@ -138,23 +152,31 @@ static void test_atomic_add_report(test_context *ctx)
   rtems_test_assert(expected_counter == actual_counter);
 }
 
-static void test_atomic_add(test_context *ctx, size_t worker_index)
+static void test_atomic_flag_init(test_context *ctx)
+{
+  _Atomic_Flag_clear(&ctx->global_flag, ATOMIC_ORDER_RELEASE);
+  ctx->flag_counter = 0;
+}
+
+static void test_atomic_flag_body(test_context *ctx, size_t worker_index)
 {
   uint_fast32_t counter = 0;
 
   while (!stop(ctx)) {
+    while (_Atomic_Flag_test_and_set(&ctx->global_flag, ATOMIC_ORDER_ACQUIRE)) {
+      /* Wait */
+    }
+
     ++counter;
-    _Atomic_Fetch_add_uint(&ctx->global_uint, 1, ATOMIC_ORDER_RELAXED);
+    ++ctx->flag_counter;
+
+    _Atomic_Flag_clear(&ctx->global_flag, ATOMIC_ORDER_RELEASE);
   }
 
   ctx->per_worker_uint[worker_index] = counter;
-
-  if (is_master_worker(worker_index)) {
-    test_atomic_add_report(ctx);
-  }
 }
 
-static void test_atomic_flag_report(test_context *ctx)
+static void test_atomic_flag_fini(test_context *ctx)
 {
   uint_fast32_t expected_counter = 0;
   uint_fast32_t actual_counter;
@@ -174,7 +196,7 @@ static void test_atomic_flag_report(test_context *ctx)
     );
   }
 
-  actual_counter = _Atomic_Load_uint(&ctx->global_uint, ATOMIC_ORDER_RELAXED);
+  actual_counter = ctx->flag_counter;
 
   printf(
     "global flag counter: expected = %" PRIuFAST32 ", actual = %" PRIuFAST32 "\n",
@@ -185,45 +207,12 @@ static void test_atomic_flag_report(test_context *ctx)
   rtems_test_assert(expected_counter == actual_counter);
 }
 
-static void test_init_atomic_flag(test_context *ctx)
-{
-  _Atomic_Flag_clear(&ctx->global_flag, ATOMIC_ORDER_RELEASE);
-  ctx->flag_counter = 0;
-}
-
-static void test_atomic_flag(test_context *ctx, size_t worker_index)
-{
-  uint_fast32_t counter = 0;
-
-  while (!stop(ctx)) {
-    while (!_Atomic_Flag_test_and_set(&ctx->global_flag, ATOMIC_ORDER_ACQUIRE)) {
-      /* Wait */
-    }
-
-    ++counter;
-    ++ctx->flag_counter;
-
-    _Atomic_Flag_clear(&ctx->global_flag, ATOMIC_ORDER_RELEASE);
-  }
-
-  ctx->per_worker_uint[worker_index] = counter;
-
-  if (is_master_worker(worker_index)) {
-    test_atomic_flag_report(ctx);
-  }
-}
-
-static const test_case_init test_cases_init[] = {
-  test_init_atomic_add,
-  test_init_atomic_flag
+static const test_case test_cases[] = {
+  { test_atomic_add_init, test_atomic_add_body, test_atomic_add_fini },
+  { test_atomic_flag_init, test_atomic_flag_body, test_atomic_flag_fini }
 };
 
-#define TEST_COUNT RTEMS_ARRAY_SIZE(test_cases_init)
-
-static const test_case test_cases[TEST_COUNT] = {
-  test_atomic_add,
-  test_atomic_flag
-};
+#define TEST_COUNT RTEMS_ARRAY_SIZE(test_cases)
 
 static void stop_worker_timer(rtems_id timer_id, void *arg)
 {
@@ -253,16 +242,22 @@ static void run_tests(test_context *ctx, size_t worker_index)
   size_t test;
 
   for (test = 0; test < TEST_COUNT; ++test) {
+    const test_case *tc = &test_cases[test];
+
     if (is_master_worker(worker_index)) {
       start_worker_stop_timer(ctx);
-      (*test_cases_init[test])(ctx);
+      (*tc->init)(ctx);
     }
 
     _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
 
-    (*test_cases[test])(ctx, worker_index);
+    (*tc->body)(ctx, worker_index);
 
     _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
+
+    if (is_master_worker(worker_index)) {
+      (*tc->fini)(ctx);
+    }
   }
 }
 

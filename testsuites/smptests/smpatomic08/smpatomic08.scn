@@ -1,6 +1,10 @@
 *** TEST SMPATOMIC 8 ***
 === atomic add test case ==
-atomic add worker 0 counter: 23435
-atomic add worker 1 counter: 374134
-global counter: expected = 397569, actual = 397569
+atomic add worker 0 counter: 18583
+atomic add worker 1 counter: 36324
+global counter: expected = 54907, actual = 54907
+=== atomic flag test case ===
+atomic flag worker 0 counter: 7388
+atomic flag worker 1 counter: 17280
+global flag counter: expected = 24668, actual = 24668
 *** END OF TEST SMPATOMIC 8 ***
