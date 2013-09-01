@@ -78,8 +78,6 @@ typedef struct {
   size_t worker_count;
   rtems_id stop_worker_timer_id;
   Atomic_Uint global_uint;
-  Atomic_Uint global_swap;
-  uint_fast32_t global_swap_t;
   uint_fast32_t per_worker_uint[CPU_COUNT];
   uint32_t flag_counter;
   Atomic_Flag global_flag;
@@ -260,8 +258,7 @@ static void test_atomic_sub_fini(test_context *ctx)
 
 static void test_atomic_compare_exchange_init(test_context *ctx)
 {
-  _Atomic_Init_uint(&ctx->global_swap, 0xffffffff);
-  ctx->global_swap_t = 0xffffffff;
+  _Atomic_Init_uint(&ctx->global_uint, 0);
   ctx->flag_counter = 0;
 }
 
@@ -270,13 +267,24 @@ static void test_atomic_compare_exchange_body(test_context *ctx, size_t worker_i
   uint_fast32_t counter = 0;
 
   while (!stop(ctx)) {
-    while (_Atomic_Compare_exchange_uint(&ctx->global_swap, &ctx->global_swap_t,
-      worker_index, ATOMIC_ORDER_ACQUIRE, ATOMIC_ORDER_RELAXED)) {
-      /* Wait */
-    }
+    bool success;
+
+    do {
+      uint_fast32_t zero = 0;
+
+      success = _Atomic_Compare_exchange_uint(
+        &ctx->global_uint,
+        &zero,
+        1,
+        ATOMIC_ORDER_ACQUIRE,
+        ATOMIC_ORDER_RELAXED
+      );
+    } while (!success);
+
     ++counter;
     ++ctx->flag_counter;
-    _Atomic_Store_uint(&ctx->global_swap, 0, ATOMIC_ORDER_RELEASE);
+
+    _Atomic_Store_uint(&ctx->global_uint, 0, ATOMIC_ORDER_RELEASE);
   }
 
   ctx->per_worker_uint[worker_index] = counter;
