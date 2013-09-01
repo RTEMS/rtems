@@ -78,6 +78,8 @@ typedef struct {
   size_t worker_count;
   rtems_id stop_worker_timer_id;
   Atomic_Uint global_uint;
+  Atomic_Uint global_swap;
+  uint_fast32_t global_swap_t;
   uint_fast32_t per_worker_uint[CPU_COUNT];
   uint32_t flag_counter;
   Atomic_Flag global_flag;
@@ -207,9 +209,169 @@ static void test_atomic_flag_fini(test_context *ctx)
   rtems_test_assert(expected_counter == actual_counter);
 }
 
+static void test_atomic_sub_init(test_context *ctx)
+{
+  _Atomic_Init_uint(&ctx->global_uint, 0xffffffff);
+}
+
+static void test_atomic_sub_body(test_context *ctx, size_t worker_index)
+{
+  uint_fast32_t counter = 0xffffffff;
+
+  while (!stop(ctx)) {
+    --counter;
+    _Atomic_Fetch_sub_uint(&ctx->global_uint, 1, ATOMIC_ORDER_RELAXED);
+  }
+
+  ctx->per_worker_uint[worker_index] = 0xffffffff - counter;
+}
+
+static void test_atomic_sub_fini(test_context *ctx)
+{
+  uint_fast32_t expected_counter = 0;
+  uint_fast32_t actual_counter;
+  size_t worker_index;
+
+  printf("=== atomic sub test case ==\n");
+
+  for (worker_index = 0; worker_index < ctx->worker_count; ++worker_index) {
+    uint_fast32_t worker_counter = ctx->per_worker_uint[worker_index];
+
+    expected_counter += worker_counter;
+
+    printf(
+      "atomic sub worker %zu counter: %" PRIuFAST32 "\n",
+      worker_index,
+      worker_counter
+    );
+  }
+
+  actual_counter = _Atomic_Load_uint(&ctx->global_uint, ATOMIC_ORDER_RELAXED);
+  actual_counter = 0xffffffff - actual_counter;
+
+  printf(
+    "global counter: expected = %" PRIuFAST32 ", actual = %" PRIuFAST32 "\n",
+    expected_counter,
+    actual_counter
+  );
+
+  rtems_test_assert(expected_counter == actual_counter);
+}
+
+static void test_atomic_compare_exchange_init(test_context *ctx)
+{
+  _Atomic_Init_uint(&ctx->global_swap, 0xffffffff);
+  ctx->global_swap_t = 0xffffffff;
+  ctx->flag_counter = 0;
+}
+
+static void test_atomic_compare_exchange_body(test_context *ctx, size_t worker_index)
+{
+  uint_fast32_t counter = 0;
+
+  while (!stop(ctx)) {
+    while (_Atomic_Compare_exchange_uint(&ctx->global_swap, &ctx->global_swap_t,
+      worker_index, ATOMIC_ORDER_ACQUIRE, ATOMIC_ORDER_RELAXED)) {
+      /* Wait */
+    }
+    ++counter;
+    ++ctx->flag_counter;
+    _Atomic_Store_uint(&ctx->global_swap, 0, ATOMIC_ORDER_RELEASE);
+  }
+
+  ctx->per_worker_uint[worker_index] = counter;
+}
+
+static void test_atomic_compare_exchange_fini(test_context *ctx)
+{
+  uint_fast32_t expected_counter = 0;
+  uint_fast32_t actual_counter;
+  size_t worker_index;
+
+  printf("=== atomic compare_exchange test case ==\n");
+
+  for (worker_index = 0; worker_index < ctx->worker_count; ++worker_index) {
+    uint_fast32_t worker_counter = ctx->per_worker_uint[worker_index];
+
+    expected_counter += worker_counter;
+
+    printf(
+      "atomic compare_exchange worker %zu counter: %" PRIuFAST32 "\n",
+      worker_index,
+      worker_counter
+    );
+  }
+
+  actual_counter = ctx->flag_counter;
+
+  printf(
+    "global counter: expected = %" PRIuFAST32 ", actual = %" PRIuFAST32 "\n",
+    expected_counter,
+    actual_counter
+  );
+
+  rtems_test_assert(expected_counter == actual_counter);
+}
+
+static void test_atomic_or_and_init(test_context *ctx)
+{
+  _Atomic_Init_uint(&ctx->global_uint, 0);
+}
+
+static void test_atomic_or_and_body(test_context *ctx, size_t worker_index)
+{
+  uint_fast32_t counter = 0;
+
+  while (!stop(ctx)) {
+    _Atomic_Fetch_or_uint(&ctx->global_uint, (1 << worker_index), ATOMIC_ORDER_RELAXED);
+    counter = 1;
+    if (!stop(ctx))
+      break;
+    _Atomic_Fetch_and_uint(&ctx->global_uint, ~(1 << worker_index), ATOMIC_ORDER_RELAXED);
+    counter = 0;
+  }
+
+  ctx->per_worker_uint[worker_index] = counter;
+}
+
+static void test_atomic_or_and_fini(test_context *ctx)
+{
+  uint_fast32_t expected_counter = 0;
+  uint_fast32_t actual_counter;
+  size_t worker_index;
+
+  printf("=== atomic or_and test case ==\n");
+
+  for (worker_index = 0; worker_index < ctx->worker_count; ++worker_index) {
+    uint_fast32_t worker_counter = ctx->per_worker_uint[worker_index];
+
+    expected_counter |= ( worker_counter << worker_index );
+
+    printf(
+      "atomic or_and worker %zu counter: %" PRIuFAST32 "\n",
+      worker_index,
+      worker_counter
+    );
+  }
+
+  actual_counter = _Atomic_Load_uint(&ctx->global_uint, ATOMIC_ORDER_RELAXED);
+
+  printf(
+    "global counter: expected = %" PRIuFAST32 ", actual = %" PRIuFAST32 "\n",
+    expected_counter,
+    actual_counter
+  );
+
+  rtems_test_assert(expected_counter == actual_counter);
+}
+
 static const test_case test_cases[] = {
   { test_atomic_add_init, test_atomic_add_body, test_atomic_add_fini },
-  { test_atomic_flag_init, test_atomic_flag_body, test_atomic_flag_fini }
+  { test_atomic_flag_init, test_atomic_flag_body, test_atomic_flag_fini },
+  { test_atomic_sub_init, test_atomic_sub_body, test_atomic_sub_fini },
+  { test_atomic_compare_exchange_init, test_atomic_compare_exchange_body,
+    test_atomic_compare_exchange_fini },
+  { test_atomic_or_and_init, test_atomic_or_and_body, test_atomic_or_and_fini },
 };
 
 #define TEST_COUNT RTEMS_ARRAY_SIZE(test_cases)

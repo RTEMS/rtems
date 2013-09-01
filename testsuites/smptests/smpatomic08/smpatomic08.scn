@@ -7,4 +7,16 @@ global counter: expected = 54907, actual = 54907
 atomic flag worker 0 counter: 7388
 atomic flag worker 1 counter: 17280
 global flag counter: expected = 24668, actual = 24668
+=== atomic sub test case ==
+atomic sub worker 0 counter: 18583
+atomic sub worker 1 counter: 36324
+global counter: expected = 54907, actual = 54907
+=== atomic compare_exchange test case ==
+atomic compare_exchange worker 0 counter: 3467
+atomic compare_exchange worker 1 counter: 19635
+global counter: expected = 23102, actual = 23102
+=== atomic or_and test case ==
+atomic or_and worker 0 counter: 1
+atomic or_and worker 1 counter: 1
+global counter: expected = 3, actual = 3
 *** END OF TEST SMPATOMIC 8 ***
