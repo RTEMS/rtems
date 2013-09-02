@@ -24,42 +24,42 @@
 /* FIXME: Add barrier to Score */
 
 typedef struct {
-	Atomic_Uint value;
-	Atomic_Uint sense;
+	Atomic_Ulong value;
+	Atomic_Ulong sense;
 } SMP_barrier_Control;
 
 typedef struct {
-	uint_fast32_t sense;
+	unsigned long sense;
 } SMP_barrier_State;
 
 #define SMP_BARRIER_CONTROL_INITIALIZER \
-  { ATOMIC_INITIALIZER_UINT( 0 ), ATOMIC_INITIALIZER_UINT( 0 ) }
+  { ATOMIC_INITIALIZER_ULONG( 0 ), ATOMIC_INITIALIZER_ULONG( 0 ) }
 
 #define SMP_BARRIER_STATE_INITIALIZER { 0 }
 
 static void _SMP_barrier_Wait(
   SMP_barrier_Control *control,
   SMP_barrier_State *state,
-  uint_fast32_t count
+  unsigned long count
 )
 {
-  uint_fast32_t sense = ~state->sense;
-  uint_fast32_t previous_value;
+  unsigned long sense = ~state->sense;
+  unsigned long previous_value;
 
   state->sense = sense;
 
-  previous_value = _Atomic_Fetch_add_uint(
+  previous_value = _Atomic_Fetch_add_ulong(
     &control->value,
     1,
     ATOMIC_ORDER_RELAXED
   );
 
   if ( previous_value + 1 == count ) {
-    _Atomic_Store_uint( &control->value, 0, ATOMIC_ORDER_RELAXED );
-    _Atomic_Store_uint( &control->sense, sense, ATOMIC_ORDER_RELEASE );
+    _Atomic_Store_ulong( &control->value, 0, ATOMIC_ORDER_RELAXED );
+    _Atomic_Store_ulong( &control->sense, sense, ATOMIC_ORDER_RELEASE );
   } else {
     while (
-      _Atomic_Load_uint( &control->sense, ATOMIC_ORDER_ACQUIRE ) != sense
+      _Atomic_Load_ulong( &control->sense, ATOMIC_ORDER_ACQUIRE ) != sense
     ) {
       /* Wait */
     }
@@ -73,13 +73,13 @@ static void _SMP_barrier_Wait(
 #define CPU_COUNT 32
 
 typedef struct {
-  Atomic_Uint stop;
+  Atomic_Ulong stop;
   SMP_barrier_Control barrier;
   size_t worker_count;
   rtems_id stop_worker_timer_id;
-  Atomic_Uint atomic_value;
-  uint_fast32_t per_worker_value[CPU_COUNT];
-  uint32_t normal_value;
+  Atomic_Ulong atomic_value;
+  unsigned long per_worker_value[CPU_COUNT];
+  unsigned long normal_value;
   Atomic_Flag global_flag;
 } test_context;
 
@@ -90,13 +90,13 @@ typedef struct {
 } test_case;
 
 static test_context test_instance = {
-  .stop = ATOMIC_INITIALIZER_UINT(0),
+  .stop = ATOMIC_INITIALIZER_ULONG(0),
   .barrier = SMP_BARRIER_CONTROL_INITIALIZER
 };
 
 static bool stop(test_context *ctx)
 {
-  return _Atomic_Load_uint(&ctx->stop, ATOMIC_ORDER_RELAXED) != 0;
+  return _Atomic_Load_ulong(&ctx->stop, ATOMIC_ORDER_RELAXED) != 0;
 }
 
 static bool is_master_worker(size_t worker_index)
@@ -110,32 +110,32 @@ static void test_fini(
   bool atomic
 )
 {
-  uint_fast32_t expected_value = 0;
-  uint_fast32_t actual_value;
+  unsigned long expected_value = 0;
+  unsigned long actual_value;
   size_t worker_index;
 
   printf("=== atomic %s test case ==\n", test);
 
   for (worker_index = 0; worker_index < ctx->worker_count; ++worker_index) {
-    uint_fast32_t worker_value = ctx->per_worker_value[worker_index];
+    unsigned long worker_value = ctx->per_worker_value[worker_index];
 
     expected_value += worker_value;
 
     printf(
-      "worker %zu value: %" PRIuFAST32 "\n",
+      "worker %zu value: %lu\n",
       worker_index,
       worker_value
     );
   }
 
   if (atomic) {
-    actual_value = _Atomic_Load_uint(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+    actual_value = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
   } else {
     actual_value = ctx->normal_value;
   }
 
   printf(
-    "atomic value: expected = %" PRIuFAST32 ", actual = %" PRIuFAST32 "\n",
+    "atomic value: expected = %lu, actual = %lu\n",
     expected_value,
     actual_value
   );
@@ -145,16 +145,16 @@ static void test_fini(
 
 static void test_atomic_add_init(test_context *ctx)
 {
-  _Atomic_Init_uint(&ctx->atomic_value, 0);
+  _Atomic_Init_ulong(&ctx->atomic_value, 0);
 }
 
 static void test_atomic_add_body(test_context *ctx, size_t worker_index)
 {
-  uint_fast32_t counter = 0;
+  unsigned long counter = 0;
 
   while (!stop(ctx)) {
     ++counter;
-    _Atomic_Fetch_add_uint(&ctx->atomic_value, 1, ATOMIC_ORDER_RELAXED);
+    _Atomic_Fetch_add_ulong(&ctx->atomic_value, 1, ATOMIC_ORDER_RELAXED);
   }
 
   ctx->per_worker_value[worker_index] = counter;
@@ -173,7 +173,7 @@ static void test_atomic_flag_init(test_context *ctx)
 
 static void test_atomic_flag_body(test_context *ctx, size_t worker_index)
 {
-  uint_fast32_t counter = 0;
+  unsigned long counter = 0;
 
   while (!stop(ctx)) {
     while (_Atomic_Flag_test_and_set(&ctx->global_flag, ATOMIC_ORDER_ACQUIRE)) {
@@ -196,16 +196,16 @@ static void test_atomic_flag_fini(test_context *ctx)
 
 static void test_atomic_sub_init(test_context *ctx)
 {
-  _Atomic_Init_uint(&ctx->atomic_value, 0);
+  _Atomic_Init_ulong(&ctx->atomic_value, 0);
 }
 
 static void test_atomic_sub_body(test_context *ctx, size_t worker_index)
 {
-  uint_fast32_t counter = 0;
+  unsigned long counter = 0;
 
   while (!stop(ctx)) {
     --counter;
-    _Atomic_Fetch_sub_uint(&ctx->atomic_value, 1, ATOMIC_ORDER_RELAXED);
+    _Atomic_Fetch_sub_ulong(&ctx->atomic_value, 1, ATOMIC_ORDER_RELAXED);
   }
 
   ctx->per_worker_value[worker_index] = counter;
@@ -218,21 +218,21 @@ static void test_atomic_sub_fini(test_context *ctx)
 
 static void test_atomic_compare_exchange_init(test_context *ctx)
 {
-  _Atomic_Init_uint(&ctx->atomic_value, 0);
+  _Atomic_Init_ulong(&ctx->atomic_value, 0);
   ctx->normal_value = 0;
 }
 
 static void test_atomic_compare_exchange_body(test_context *ctx, size_t worker_index)
 {
-  uint_fast32_t counter = 0;
+  unsigned long counter = 0;
 
   while (!stop(ctx)) {
     bool success;
 
     do {
-      uint_fast32_t zero = 0;
+      unsigned long zero = 0;
 
-      success = _Atomic_Compare_exchange_uint(
+      success = _Atomic_Compare_exchange_ulong(
         &ctx->atomic_value,
         &zero,
         1,
@@ -244,7 +244,7 @@ static void test_atomic_compare_exchange_body(test_context *ctx, size_t worker_i
     ++counter;
     ++ctx->normal_value;
 
-    _Atomic_Store_uint(&ctx->atomic_value, 0, ATOMIC_ORDER_RELEASE);
+    _Atomic_Store_ulong(&ctx->atomic_value, 0, ATOMIC_ORDER_RELEASE);
   }
 
   ctx->per_worker_value[worker_index] = counter;
@@ -257,26 +257,26 @@ static void test_atomic_compare_exchange_fini(test_context *ctx)
 
 static void test_atomic_or_and_init(test_context *ctx)
 {
-  _Atomic_Init_uint(&ctx->atomic_value, 0);
+  _Atomic_Init_ulong(&ctx->atomic_value, 0);
 }
 
 static void test_atomic_or_and_body(test_context *ctx, size_t worker_index)
 {
-  uint_fast32_t the_bit = 1UL << worker_index;
-  uint_fast32_t current_bit = 0;
+  unsigned long the_bit = 1UL << worker_index;
+  unsigned long current_bit = 0;
 
   while (!stop(ctx)) {
-    uint_fast32_t previous;
+    unsigned long previous;
 
     if (current_bit != 0) {
-      previous = _Atomic_Fetch_and_uint(
+      previous = _Atomic_Fetch_and_ulong(
         &ctx->atomic_value,
         ~the_bit,
         ATOMIC_ORDER_RELAXED
       );
       current_bit = 0;
     } else {
-      previous = _Atomic_Fetch_or_uint(
+      previous = _Atomic_Fetch_or_ulong(
         &ctx->atomic_value,
         the_bit,
         ATOMIC_ORDER_RELAXED
@@ -325,14 +325,14 @@ static void stop_worker_timer(rtems_id timer_id, void *arg)
 {
   test_context *ctx = arg;
 
-  _Atomic_Store_uint(&ctx->stop, 1, ATOMIC_ORDER_RELAXED);
+  _Atomic_Store_ulong(&ctx->stop, 1, ATOMIC_ORDER_RELAXED);
 }
 
 static void start_worker_stop_timer(test_context *ctx)
 {
   rtems_status_code sc;
 
-  _Atomic_Store_uint(&ctx->stop, 0, ATOMIC_ORDER_RELEASE);
+  _Atomic_Store_ulong(&ctx->stop, 0, ATOMIC_ORDER_RELEASE);
 
   sc = rtems_timer_fire_after(
     ctx->stop_worker_timer_id,

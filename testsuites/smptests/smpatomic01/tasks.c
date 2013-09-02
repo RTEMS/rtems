@@ -52,12 +52,12 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_LOAD_NO_BARRIER(uint, Uint, uint_fast32_t, cpu_num, ATOMIC_ORDER_RELAXED);
+  ATOMIC_LOAD_NO_BARRIER(ulong, Ulong, unsigned long, cpu_num, ATOMIC_ORDER_RELAXED);
 
   ATOMIC_LOAD_NO_BARRIER(ptr, Pointer, uintptr_t, cpu_num, ATOMIC_ORDER_RELAXED);
 
   /* test acquire barrier */
-  ATOMIC_LOAD_NO_BARRIER(uint, Uint, uint_fast32_t, cpu_num, ATOMIC_ORDER_ACQUIRE);
+  ATOMIC_LOAD_NO_BARRIER(ulong, Ulong, unsigned long, cpu_num, ATOMIC_ORDER_ACQUIRE);
 
   ATOMIC_LOAD_NO_BARRIER(ptr, Pointer, unsigned long, cpu_num, ATOMIC_ORDER_ACQUIRE);
 

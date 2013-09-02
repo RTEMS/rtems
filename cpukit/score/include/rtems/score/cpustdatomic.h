@@ -35,7 +35,7 @@ extern "C" {
 /**
  * @brief atomic operation unsigned integer type
  */
-typedef atomic_uint_fast32_t Atomic_Uint;
+typedef atomic_ulong Atomic_Ulong;
 
 /**
  * @brief atomic operation unsigned integer the size of a pointer type
@@ -71,7 +71,7 @@ typedef enum {
 /**
  * @brief atomic data initializer for static initialization.
  */
-#define CPU_ATOMIC_INITIALIZER_UINT(value) ATOMIC_VAR_INIT(value)
+#define CPU_ATOMIC_INITIALIZER_ULONG(value) ATOMIC_VAR_INIT(value)
 #define CPU_ATOMIC_INITIALIZER_PTR(value) ATOMIC_VAR_INIT(value)
 
 #define CPU_ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
@@ -82,9 +82,9 @@ typedef enum {
  * @param object an atomic type pointer of object.
  * @param value a value to be stored into object.
  */
-static inline void _CPU_atomic_Init_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t value
+static inline void _CPU_atomic_Init_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value
 )
 {
   atomic_init(object, value);
@@ -106,8 +106,8 @@ static inline void _CPU_atomic_Init_ptr(
  * 
  * The order shall not be ATOMIC_ORDER_RELEASE.
  */
-static inline uint_fast32_t _CPU_atomic_Load_uint(
-  volatile Atomic_Uint *object,
+static inline unsigned long _CPU_atomic_Load_ulong(
+  volatile Atomic_Ulong *object,
   Atomic_Order order
 )
 {
@@ -131,9 +131,9 @@ static inline uintptr_t _CPU_atomic_Load_ptr(
  * 
  * The order shall not be ATOMIC_ORDER_ACQUIRE.
  */
-static inline void _CPU_atomic_Store_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t value,
+static inline void _CPU_atomic_Store_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
   Atomic_Order order
 )
 {
@@ -158,9 +158,9 @@ static inline void _CPU_atomic_Store_ptr(
  * 
  * @retval a result value before add ops.
  */
-static inline uint_fast32_t _CPU_atomic_Fetch_add_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t value,
+static inline unsigned long _CPU_atomic_Fetch_add_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
   Atomic_Order order
 )
 {
@@ -185,9 +185,9 @@ static inline uintptr_t _CPU_atomic_Fetch_add_ptr(
  * 
  * @retval a result value before sub ops.
  */
-static inline uint_fast32_t _CPU_atomic_Fetch_sub_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t value,
+static inline unsigned long _CPU_atomic_Fetch_sub_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
   Atomic_Order order
 )
 {
@@ -212,9 +212,9 @@ static inline uintptr_t _CPU_atomic_Fetch_sub_ptr(
  * 
  * @retval a result value before or ops.
  */
-static inline uint_fast32_t _CPU_atomic_Fetch_or_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t value,
+static inline unsigned long _CPU_atomic_Fetch_or_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
   Atomic_Order order
 )
 {
@@ -239,9 +239,9 @@ static inline uintptr_t _CPU_atomic_Fetch_or_ptr(
  * 
  * @retval a result value before and ops.
  */
-static inline uint_fast32_t _CPU_atomic_Fetch_and_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t value,
+static inline unsigned long _CPU_atomic_Fetch_and_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
   Atomic_Order order
 )
 {
@@ -266,9 +266,9 @@ static inline uintptr_t _CPU_atomic_Fetch_and_ptr(
  * 
  * @retval a result value before exchange ops.
  */
-static inline uint_fast32_t _CPU_atomic_Exchange_uint(
- volatile Atomic_Uint *object,
- uint_fast32_t value,
+static inline unsigned long _CPU_atomic_Exchange_ulong(
+ volatile Atomic_Ulong *object,
+ unsigned long value,
  Atomic_Order order
 )
 {
@@ -298,10 +298,10 @@ static inline uintptr_t _CPU_atomic_Exchange_ptr(
  * @retval true if the compare exchange successully.
  * @retval false if the compare exchange failed.
  */
-static inline bool _CPU_atomic_Compare_exchange_uint(
-  volatile Atomic_Uint *object,
-  uint_fast32_t *old_value,
-  uint_fast32_t new_value,
+static inline bool _CPU_atomic_Compare_exchange_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long *old_value,
+  unsigned long new_value,
   Atomic_Order order_succ,
   Atomic_Order order_fail
 )
