@@ -18,6 +18,7 @@
 
 #include <rtems/score/atomic.h>
 #include <rtems.h>
+#include <string.h>
 
 #include "tmacros.h"
 
@@ -378,11 +379,52 @@ static void worker_task(size_t worker_index)
   rtems_test_assert(0);
 }
 
+static void test_static_and_dynamic_initialization(void)
+{
+  static Atomic_Ulong static_ulong =
+    ATOMIC_INITIALIZER_ULONG(0xdeadbeefUL);
+  static Atomic_Pointer static_ptr =
+    ATOMIC_INITIALIZER_PTR(&static_ptr);
+  static Atomic_Flag static_flag = ATOMIC_INITIALIZER_FLAG;
+
+  Atomic_Ulong stack_ulong;
+  Atomic_Pointer stack_ptr;
+  Atomic_Flag stack_flag;
+
+  puts("=== static and dynamic initialization test case ===");
+
+  _Atomic_Init_ulong(&stack_ulong, 0xdeadbeefUL);
+  _Atomic_Init_ptr(&stack_ptr, &static_ptr);
+  _Atomic_Flag_clear(&stack_flag, ATOMIC_ORDER_RELAXED);
+
+  rtems_test_assert(
+    memcmp(&stack_ulong, &static_ulong, sizeof(stack_ulong)) == 0
+  );
+  rtems_test_assert(
+    memcmp(&stack_ptr, &static_ptr, sizeof(stack_ptr)) == 0
+  );
+  rtems_test_assert(
+    memcmp(&stack_flag, &static_flag, sizeof(stack_flag)) == 0
+  );
+
+  rtems_test_assert(
+    _Atomic_Load_ulong(&stack_ulong, ATOMIC_ORDER_RELAXED) == 0xdeadbeefUL
+  );
+  rtems_test_assert(
+    _Atomic_Load_ptr(&stack_ptr, ATOMIC_ORDER_RELAXED) == &static_ptr
+  );
+  rtems_test_assert(
+    !_Atomic_Flag_test_and_set(&stack_flag, ATOMIC_ORDER_RELAXED)
+  );
+}
+
 static void test(void)
 {
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   size_t worker_index;
+
+  test_static_and_dynamic_initialization();
 
   ctx->worker_count = rtems_smp_get_processor_count();
 

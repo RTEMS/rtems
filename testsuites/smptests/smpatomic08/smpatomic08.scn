@@ -1,4 +1,5 @@
 *** TEST SMPATOMIC 8 ***
+=== static and dynamic initialization test case ===
 === atomic add test case ==
 worker 0 value: 16686
 worker 1 value: 36405
