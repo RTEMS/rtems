@@ -72,7 +72,8 @@ typedef enum {
  * @brief atomic data initializer for static initialization.
  */
 #define CPU_ATOMIC_INITIALIZER_ULONG(value) ATOMIC_VAR_INIT(value)
-#define CPU_ATOMIC_INITIALIZER_PTR(value) ATOMIC_VAR_INIT(value)
+#define CPU_ATOMIC_INITIALIZER_PTR(pointer) \
+  ATOMIC_VAR_INIT((uintptr_t) pointer)
 
 #define CPU_ATOMIC_INITIALIZER_FLAG ATOMIC_FLAG_INIT
 
@@ -92,10 +93,10 @@ static inline void _CPU_atomic_Init_ulong(
 
 static inline void _CPU_atomic_Init_ptr(
   volatile Atomic_Pointer *object,
-  uintptr_t value
+  void *pointer
 )
 {
-  atomic_init(object, value);
+  atomic_init(object, pointer);
 }
 
 /**
@@ -114,7 +115,7 @@ static inline unsigned long _CPU_atomic_Load_ulong(
   return atomic_load_explicit( object, order );
 }
 
-static inline uintptr_t _CPU_atomic_Load_ptr(
+static inline void *_CPU_atomic_Load_ptr(
   volatile Atomic_Pointer *object,
   Atomic_Order order
 )
@@ -142,11 +143,11 @@ static inline void _CPU_atomic_Store_ulong(
 
 static inline void _CPU_atomic_Store_ptr(
   volatile Atomic_Pointer *object,
-  uintptr_t value,
+  void *pointer,
   Atomic_Order order
 )
 {
-  atomic_store_explicit( object, value, order );
+  atomic_store_explicit( object, pointer, order );
 }
 
 /**
@@ -275,13 +276,13 @@ static inline unsigned long _CPU_atomic_Exchange_ulong(
   return atomic_exchange_explicit( object, value, order );
 }
 
-static inline uintptr_t _CPU_atomic_Exchange_ptr(
+static inline void *_CPU_atomic_Exchange_ptr(
  volatile Atomic_Pointer *object,
- uintptr_t value,
+ void *pointer,
  Atomic_Order order
 )
 {
-  return atomic_exchange_explicit( object, value, order );
+  return atomic_exchange_explicit( object, pointer, pointer );
 }
 
 /**
@@ -312,14 +313,14 @@ static inline bool _CPU_atomic_Compare_exchange_ulong(
 
 static inline bool _CPU_atomic_Compare_exchange_ptr(
   volatile Atomic_Pointer *object,
-  uintptr_t *old_value,
-  uintptr_t new_value,
+  void **old_pointer,
+  void *new_pointer,
   Atomic_Order order_succ,
   Atomic_Order order_fail
 )
 {
-  return atomic_compare_exchange_strong_explicit( object, old_value,
-    new_value, order_succ, order_fail );
+  return atomic_compare_exchange_strong_explicit( object, old_pointer,
+    new_pointer, order_succ, order_fail );
 }
 
 static inline void _CPU_atomic_Flag_clear(

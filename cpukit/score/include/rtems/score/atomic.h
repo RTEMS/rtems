@@ -46,7 +46,7 @@ extern "C" {
  * @brief Initializes an atomic type value into a atomic object.
  *
  * @param object an atomic type pointer of object.
- * @param value a value to be stored into object.
+ * @param pointer a pointer to be stored into object.
  */
 static inline void _Atomic_Init_ulong(
   volatile Atomic_Ulong *object,
@@ -58,10 +58,10 @@ static inline void _Atomic_Init_ulong(
 
 static inline void _Atomic_Init_ptr(
   volatile Atomic_Pointer *object,
-  uintptr_t value
+  void *pointer
 )
 {
-  _CPU_atomic_Init_ptr(object, value);
+  _CPU_atomic_Init_ptr(object, pointer);
 }
 
 /**
@@ -80,7 +80,7 @@ static inline unsigned long _Atomic_Load_ulong(
   return _CPU_atomic_Load_ulong( object, order );
 }
 
-static inline uintptr_t _Atomic_Load_ptr(
+static inline void *_Atomic_Load_ptr(
   volatile Atomic_Pointer *object,
   Atomic_Order order
 )
@@ -108,11 +108,11 @@ static inline void _Atomic_Store_ulong(
 
 static inline void _Atomic_Store_ptr(
   volatile Atomic_Pointer *object,
-  uintptr_t value,
+  void *pointer,
   Atomic_Order order
 )
 {
-  _CPU_atomic_Store_ptr( object, value, order );
+  _CPU_atomic_Store_ptr( object, pointer, order );
 }
 
 /**
@@ -241,13 +241,13 @@ static inline unsigned long _Atomic_Exchange_ulong(
   return _CPU_atomic_Exchange_ulong( object, value, order );
 }
 
-static inline uintptr_t _Atomic_Exchange_ptr(
+static inline void *_Atomic_Exchange_ptr(
  volatile Atomic_Pointer *object,
- uintptr_t value,
+ void *pointer,
  Atomic_Order order
 )
 {
-  return _CPU_atomic_Exchange_ptr( object, value, order );
+  return _CPU_atomic_Exchange_ptr( object, pointer, order );
 }
 
 /**
@@ -278,13 +278,13 @@ static inline bool _Atomic_Compare_exchange_ulong(
 
 static inline bool _Atomic_Compare_exchange_ptr(
   volatile Atomic_Pointer *object,
-  uintptr_t *old_value,
-  uintptr_t new_value,
+  void **old_pointer,
+  void *new_pointer,
   Atomic_Order order_succ,
   Atomic_Order order_fail
 )
 {
-  return _CPU_atomic_Compare_exchange_ptr( object, old_value, new_value,
+  return _CPU_atomic_Compare_exchange_ptr( object, old_pointer, new_pointer,
     order_succ, order_fail );
 }
 
