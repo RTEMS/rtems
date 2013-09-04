@@ -586,7 +586,7 @@ static inline uint32_t arm_cp15_get_cache_size_id(void)
 
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
-    "mcr p15, 1, %[val], c0, c0, 0\n"
+    "mrc p15, 1, %[val], c0, c0, 0\n"
      ARM_SWITCH_BACK
     : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
@@ -603,7 +603,7 @@ static inline uint32_t arm_cp15_get_cache_level_id(void)
 
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
-    "mcr p15, 1, %[val], c0, c0, 1\n"
+    "mrc p15, 1, %[val], c0, c0, 1\n"
      ARM_SWITCH_BACK
     : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
@@ -620,7 +620,7 @@ static inline uint32_t arm_cp15_get_cache_size_selection(void)
 
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
-    "mcr p15, 2, %[val], c0, c0, 0\n"
+    "mrc p15, 2, %[val], c0, c0, 0\n"
      ARM_SWITCH_BACK
     : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
