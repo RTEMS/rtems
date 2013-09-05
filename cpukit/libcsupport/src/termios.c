@@ -970,9 +970,14 @@ siproc (unsigned char c, struct rtems_termios_tty *tty)
    * Obtain output semaphore if character will be echoed
    */
   if (tty->termios.c_lflag & (ECHO|ECHOE|ECHOK|ECHONL|ECHOPRT|ECHOCTL|ECHOKE)) {
-    rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_status_code sc;
+    sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred (sc);
     i = iproc (c, tty);
-    rtems_semaphore_release (tty->osem);
+    sc = rtems_semaphore_release (tty->osem);
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred (sc);
   }
   else {
     i = iproc (c, tty);
