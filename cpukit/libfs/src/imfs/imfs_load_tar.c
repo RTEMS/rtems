@@ -100,10 +100,12 @@ int rtems_tarfs_load(
      * - For files, create a file node with special tarfs properties.
      */
     if (linkflag == DIRTYPE) {
-      strcpy(full_filename, mountpoint);
-      if (full_filename[strlen(full_filename)-1] != '/')
+      int len;
+      strncpy(full_filename, mountpoint, 255);
+      if (full_filename[(len=strlen(full_filename))-1] != '/')
         strcat(full_filename, "/");
-      strcat(full_filename, filename);
+      ++len;
+      strncat(full_filename, filename, 256-len-1);
       rv = mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
     }
     /*
