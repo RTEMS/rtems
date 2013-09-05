@@ -74,7 +74,7 @@ rtems_status_code rtems_bdpart_get_disk_data(
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int rv = 0;
-  int fd = -1;
+  int fd;
   rtems_disk_device *dd = NULL;
   rtems_blkdev_bnum disk_begin = 0;
   rtems_blkdev_bnum block_size = 0;
@@ -83,7 +83,7 @@ rtems_status_code rtems_bdpart_get_disk_data(
   fd = open( disk_name, O_RDWR);
   if (fd < 0) {
     sc = RTEMS_INVALID_NAME;
-    goto error;
+    goto out;
   }
 
   /* Get disk handle */
@@ -119,6 +119,7 @@ error:
     close( fd);
   }
 
+out:
   return sc;
 }
 
