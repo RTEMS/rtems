@@ -90,6 +90,7 @@ int IMFS_initialize_support(
       mt_entry->mt_fs_root->location.node_access = root_node;
       IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
     } else {
+      free(fs_info);
       errno = ENOMEM;
       rv = -1;
     }
