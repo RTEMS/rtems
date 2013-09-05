@@ -515,7 +515,7 @@ static int msdos_format_determine_fmt_params
     ret_val = rtems_disk_fd_get_block_count(fd, &fmt_params->totl_sector_cnt);
   }
   if (ret_val == 0) {
-    total_size = fmt_params->bytes_per_sector * fmt_params->totl_sector_cnt;
+    total_size = (uint64_t)fmt_params->bytes_per_sector * fmt_params->totl_sector_cnt;
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                          "bytes per sector: %" PRIu32 "\ntotal sectors: %" PRIu32 "\ntotal size: %" PRIu64 "\n",
                          fmt_params->bytes_per_sector, fmt_params->totl_sector_cnt, total_size);
