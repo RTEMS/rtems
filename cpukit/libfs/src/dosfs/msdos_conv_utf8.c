@@ -57,7 +57,7 @@ static int msdos_utf8_convert_with_iconv(
   size_t  outbytes_left = *dst_size;
   char   *inbuf = (void *) (uintptr_t) src;
   char   *outbuf = dst;
-  size_t  iconv_status;
+  ssize_t iconv_status;
 
   iconv_status = iconv(
     desc,
