@@ -1057,7 +1057,7 @@ rtems_fdisk_page_checksum (const uint8_t* buffer, uint32_t page_size)
   uint32_t i;
 
   for (i = 0; i < page_size; i++, buffer++)
-    cs = rtems_fdisk_calc_crc16 (cs, *buffer);
+    cs = rtems_fdisk_calc_crc16 (*buffer, cs);
 
   return cs;
 }
