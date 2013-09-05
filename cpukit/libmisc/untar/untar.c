@@ -223,7 +223,11 @@ Untar_FromMemory(
       }
       else if (linkflag == DIRTYPE)
       {
-         mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO);
+         if ( mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) != 0 ) {
+           printk("Untar: failed to create directory %s\n", fname);
+           retval = UNTAR_FAIL;
+           break;
+         }
       }
    }
 
