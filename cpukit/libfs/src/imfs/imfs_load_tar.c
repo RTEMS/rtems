@@ -104,7 +104,7 @@ int rtems_tarfs_load(
       if (full_filename[strlen(full_filename)-1] != '/')
         strcat(full_filename, "/");
       strcat(full_filename, filename);
-      mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
+      rv = mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
     }
     /*
      * Create a LINEAR_FILE node
