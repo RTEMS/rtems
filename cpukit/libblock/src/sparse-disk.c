@@ -236,8 +236,12 @@ static int sparse_disk_read_write(
   uint8_t                *buff;
   size_t                  buff_size;
   unsigned int            bytes_handled;
+  rtems_status_code       sc;
 
-  rtems_semaphore_obtain( sparse_disk->mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  sc = rtems_semaphore_obtain(sparse_disk->mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred( 0xdeadbeef );
+  }
 
   for ( req_buffer = 0;
         ( 0 <= rv ) && ( req_buffer < req->bufnum );
@@ -267,7 +271,10 @@ static int sparse_disk_read_write(
     }
   }
 
-  rtems_semaphore_release( sparse_disk->mutex );
+  sc = rtems_semaphore_release( sparse_disk->mutex );
+  if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred( 0xdeadbeef );
+  }
 
   if ( 0 > rv )
     rtems_blkdev_request_done( req, RTEMS_IO_ERROR );
