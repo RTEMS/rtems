@@ -50,6 +50,7 @@ static int findOnPATH(
 )
 {
   int sc;
+  char *cwd;
 
   /*
    *  If the user script name starts with a / assume it is a fully
@@ -65,14 +66,20 @@ static int findOnPATH(
      */
 
     /* XXX should use strncat but what is the limit? */
-    getcwd( scriptFile, PATH_MAX );
-    strncat( scriptFile, "/", PATH_MAX );
-    strncat(
-      scriptFile,
-      ( (userScriptName[0] == '.' && userScriptName[1] == '/') ?
-         &userScriptName[2] : userScriptName),
-      PATH_MAX
-    );
+    cwd = getcwd( scriptFile, PATH_MAX );
+    if ( cwd != NULL ) {
+      int cwdlen = strnlen( scriptFile, PATH_MAX );
+
+      strncat( scriptFile, "/", PATH_MAX - cwdlen );
+      strncat(
+          scriptFile,
+          ( (userScriptName[0] == '.' && userScriptName[1] == '/') ?
+            &userScriptName[2] : userScriptName),
+          PATH_MAX - cwdlen - 1
+          );
+    } else {
+      return -1;
+    }
   }
 
   sc = access( scriptFile, R_OK );
