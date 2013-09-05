@@ -1941,7 +1941,6 @@ msdos_find_name_in_fat_file (
             else
                 retval = -1;
         break;
-        case MSDOS_NAME_INVALID:
         default:
             errno = EINVAL;
             retval = -1;
@@ -1997,7 +1996,6 @@ msdos_find_name_in_fat_file (
               else
                   retval = -1;
           break;
-          case MSDOS_NAME_INVALID:
           default:
               errno = EINVAL;
               retval = -1;
