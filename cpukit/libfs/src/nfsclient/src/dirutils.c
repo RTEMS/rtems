@@ -326,7 +326,7 @@ ln(char *to, char *name, char *opts)
 		}
 		name++;
 	}
-	if (opts || strchr(opts,'s')) {
+	if (opts && strchr(opts,'s')) {
 		if (symlink(name,to)) {
 			fprintf(stderr,"symlink: %s\n",strerror(errno));
 			return -1;
