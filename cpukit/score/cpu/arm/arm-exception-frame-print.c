@@ -55,10 +55,11 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
     "R6   = 0x%08x LR  = 0x%08x\n"
     "R7   = 0x%08x PC  = 0x%08x\n"
 #if defined(ARM_MULTILIB_ARCH_V4)
-    "CPSR = 0x%08x VEC = 0x%08x\n",
+    "CPSR = 0x%08x "
 #elif defined(ARM_MULTILIB_ARCH_V7M)
-    "XPSR = 0x%08x VEC = 0x%08x\n",
+    "XPSR = 0x%08x "
 #endif
+    "VEC = 0x%08x\n",
     frame->register_r0,
     frame->register_r8,
     frame->register_r1,
