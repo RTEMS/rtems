@@ -8,7 +8,7 @@
  */
 
 /*
- * COPYRIGHT (c) 2012 Deng Hengyi.
+ * COPYRIGHT (c) 2012-2013 Deng Hengyi.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -32,241 +32,293 @@ extern "C" {
 /**@{*/
 
 /**
- * @brief the enumeration Atomic_Memory_barrier specifies the detailed regular
- * memory synchronization operations used in the atomic operation API 
- * definitions.  
+ * @brief atomic data initializer for static initialization.
  */
-typedef enum {
-  /** no operation orders memory. */
-  ATOMIC_RELAXED_BARRIER,
-  /** a load operation performs an acquire operation on the affected memory
-  * location. This flag guarantees that the effects of load operation are 
-  * completed before the effects of any later data accesses.
-  */
-  ATOMIC_ACQUIRE_BARRIER,
-  /** a store operation performs a release operation on the affected memory
-  * location. This flag guarantee that all effects of all previous data 
-  * accesses are completed before the store operation takes place.
-  */
-  ATOMIC_RELEASE_BARRIER
-} Atomic_Memory_barrier;
+#define ATOMIC_INITIALIZER_ULONG(value) CPU_ATOMIC_INITIALIZER_ULONG(value)
+#define ATOMIC_INITIALIZER_PTR(value) CPU_ATOMIC_INITIALIZER_PTR(value)
 
 /**
- * @brief Atomically load an atomic type value from address @a address with
- * a type of Atomic_Memory_barrier @a memory_barrier. The @a memory_barrier
- * shall not be ATOMIC_RELEASE_BARRIER.
+ * @brief Initializes an atomic flag object to the cleared state.
  */
-RTEMS_INLINE_ROUTINE Atomic_Int _Atomic_Load_int(
-  volatile Atomic_Int *address,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE Atomic_Long _Atomic_Load_long(
-  volatile Atomic_Long *address,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE Atomic_Pointer _Atomic_Load_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE Atomic_Int32 _Atomic_Load_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE Atomic_Int64 _Atomic_Load_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Memory_barrier memory_barrier
-);
+#define ATOMIC_INITIALIZER_FLAG CPU_ATOMIC_INITIALIZER_FLAG
 
 /**
- * @brief Atomically store an atomic type value @a value into address @a 
- * address with a type of Atomic_Memory_barrier @a memory_barrier. The @a 
- * memory_barrier shall not be ATOMIC_ACQUIRE_BARRIER.
+ * @brief Initializes an atomic type value into a atomic object.
+ *
+ * @param object an atomic type pointer of object.
+ * @param pointer a pointer to be stored into object.
  */
-RTEMS_INLINE_ROUTINE void _Atomic_Store_int(
-  volatile Atomic_Int *address,
-  Atomic_Int value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Store_long(
-  volatile Atomic_Long *address,
-  Atomic_Long value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Store_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Pointer value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Store_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Int32 value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Store_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Int64 value,
-  Atomic_Memory_barrier memory_barrier
-);
+static inline void _Atomic_Init_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value
+)
+{
+  _CPU_atomic_Init_ulong(object, value);
+}
+
+static inline void _Atomic_Init_ptr(
+  volatile Atomic_Pointer *object,
+  void *pointer
+)
+{
+  _CPU_atomic_Init_ptr(object, pointer);
+}
 
 /**
- * @brief Atomically load-add-store an atomic type value @a value into address
- * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
+ * @brief Atomically load an atomic type value from atomic object.
+ *
+ * @param object an atomic type pointer of object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * The order shall not be ATOMIC_ORDER_RELEASE.
  */
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_int(
-  volatile Atomic_Int *address,
-  Atomic_Int value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_long(
-  volatile Atomic_Long *address,
-  Atomic_Long value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Pointer value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Int32 value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_add_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Int64 value,
-  Atomic_Memory_barrier memory_barrier
-);
+static inline unsigned long _Atomic_Load_ulong(
+  volatile Atomic_Ulong *object,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Load_ulong( object, order );
+}
+
+static inline void *_Atomic_Load_ptr(
+  volatile Atomic_Pointer *object,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Load_ptr( object, order );
+}
 
 /**
- * @brief Atomically load-sub-store an atomic type value @a value into address
- * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
+ * @brief Atomically store an atomic type value into a atomic object.
+ *
+ * @param object an atomic type pointer of object.
+ * @param value a value to be stored into object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * The order shall not be ATOMIC_ORDER_ACQUIRE.
  */
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_int(
-  volatile Atomic_Int *address,
-  Atomic_Int value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_long(
-  volatile Atomic_Long *address,
-  Atomic_Long value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Pointer value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Int32 value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_sub_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Int64 value,
-  Atomic_Memory_barrier memory_barrier
-);
+static inline void _Atomic_Store_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
+  Atomic_Order order
+)
+{
+  _CPU_atomic_Store_ulong( object, value, order );
+}
+
+static inline void _Atomic_Store_ptr(
+  volatile Atomic_Pointer *object,
+  void *pointer,
+  Atomic_Order order
+)
+{
+  _CPU_atomic_Store_ptr( object, pointer, order );
+}
 
 /**
- * @brief Atomically load-or-store an atomic type value @a value into address
- * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
+ * @brief Atomically load-add-store an atomic type value into object
+ *
+ * @param object a atomic type pointer of object.
+ * @param value a value to be add and store into object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * @retval a result value before add ops.
  */
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_int(
-  volatile Atomic_Int *address,
-  Atomic_Int value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_long(
-  volatile Atomic_Long *address,
-  Atomic_Long value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Pointer value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Int32 value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_or_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Int64 value,
-  Atomic_Memory_barrier memory_barrier
-);
+static inline unsigned long _Atomic_Fetch_add_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_add_ulong( object, value, order );
+}
+
+static inline uintptr_t _Atomic_Fetch_add_ptr(
+  volatile Atomic_Pointer *object,
+  uintptr_t value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_add_ptr( object, value, order );
+}
 
 /**
- * @brief Atomically load-and-store an atomic type value @a value into address
- * @a address with a type of Atomic_Memory_barrier @a memory_barrier.
+ * @brief Atomically load-sub-store an atomic type value into object
+ *
+ * @param object a atomic type pointer of object.
+ * @param value a value to be sub and store into object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * @retval a result value before sub ops.
  */
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_int(
-  volatile Atomic_Int *address,
-  Atomic_Int value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_long(
-  volatile Atomic_Long *address,
-  Atomic_Long value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Pointer value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Int32 value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE void _Atomic_Fetch_and_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Int64 value,
-  Atomic_Memory_barrier memory_barrier
-);
+static inline unsigned long _Atomic_Fetch_sub_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_sub_ulong( object, value, order );
+}
+
+static inline uintptr_t _Atomic_Fetch_sub_ptr(
+  volatile Atomic_Pointer *object,
+  uintptr_t value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_sub_ptr( object, value, order );
+}
 
 /**
- * @brief Atomically compare the value stored at @a address with @a 
- * old_value and if the two values are equal, update the value of @a 
- * address with @a new_value. Returns zero if the compare failed, 
- * nonzero otherwise. The operation uses a type of Atomic_Memory_barrier
- * @a memory_barrier.
+ * @brief Atomically load-or-store an atomic type value into object
+ *
+ * @param object a atomic type pointer of object.
+ * @param value a value to be or and store into object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * @retval a result value before or ops.
  */
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_int(
-  volatile Atomic_Int *address,
-  Atomic_Int old_value,
-  Atomic_Int new_value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_long(
-  volatile Atomic_Long *address,
-  Atomic_Long old_value,
-  Atomic_Long new_value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_ptr(
-  volatile Atomic_Pointer *address,
-  Atomic_Pointer old_value,
-  Atomic_Pointer new_value,
-  Atomic_Memory_barrier memory_barrier  
-);
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_32(
-  volatile Atomic_Int32 *address,
-  Atomic_Int32 old_value,
-  Atomic_Int32 new_value,
-  Atomic_Memory_barrier memory_barrier
-);
-RTEMS_INLINE_ROUTINE int _Atomic_Compare_exchange_64(
-  volatile Atomic_Int64 *address,
-  Atomic_Int64 old_value,
-  Atomic_Int64 new_value,
-  Atomic_Memory_barrier memory_barrier
-);
+static inline unsigned long _Atomic_Fetch_or_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_or_ulong( object, value, order );
+}
 
-#include <rtems/score/atomic.inl>
+static inline uintptr_t _Atomic_Fetch_or_ptr(
+  volatile Atomic_Pointer *object,
+  uintptr_t value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_or_ptr( object, value, order );
+}
+
+/**
+ * @brief Atomically load-and-store an atomic type value into object
+ *
+ * @param object a atomic type pointer of object.
+ * @param value a value to be and and store into object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * @retval a result value before and ops.
+ */
+static inline unsigned long _Atomic_Fetch_and_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_and_ulong( object, value, order );
+}
+
+static inline uintptr_t _Atomic_Fetch_and_ptr(
+  volatile Atomic_Pointer *object,
+  uintptr_t value,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Fetch_and_ptr( object, value, order );
+}
+
+/**
+ * @brief Atomically exchange an atomic type value into object
+ *
+ * @param object a atomic type pointer of object.
+ * @param value a value to exchange and and store into object.
+ * @param order a type of Atomic_Order. 
+ * 
+ * @retval a result value before exchange ops.
+ */
+static inline unsigned long _Atomic_Exchange_ulong(
+ volatile Atomic_Ulong *object,
+ unsigned long value,
+ Atomic_Order order
+)
+{
+  return _CPU_atomic_Exchange_ulong( object, value, order );
+}
+
+static inline void *_Atomic_Exchange_ptr(
+ volatile Atomic_Pointer *object,
+ void *pointer,
+ Atomic_Order order
+)
+{
+  return _CPU_atomic_Exchange_ptr( object, pointer, order );
+}
+
+/**
+ * @brief Atomically compare the value stored at object with a
+ * old_value and if the two values are equal, update the value of a
+ * address with a new_value
+ *
+ * @param object a atomic type pointer of object.
+ * @param old_value pointer of a value.
+ * @param new_value a atomic type value.
+ * @param order_succ a type of Atomic_Order for successful exchange. 
+ * @param order_fail a type of Atomic_Order for failed exchange.
+ * 
+ * @retval true if the compare exchange successully.
+ * @retval false if the compare exchange failed.
+ */
+static inline bool _Atomic_Compare_exchange_ulong(
+  volatile Atomic_Ulong *object,
+  unsigned long *old_value,
+  unsigned long new_value,
+  Atomic_Order order_succ,
+  Atomic_Order order_fail
+)
+{
+  return _CPU_atomic_Compare_exchange_ulong( object, old_value, new_value,
+    order_succ, order_fail );
+}
+
+static inline bool _Atomic_Compare_exchange_ptr(
+  volatile Atomic_Pointer *object,
+  void **old_pointer,
+  void *new_pointer,
+  Atomic_Order order_succ,
+  Atomic_Order order_fail
+)
+{
+  return _CPU_atomic_Compare_exchange_ptr( object, old_pointer, new_pointer,
+    order_succ, order_fail );
+}
+
+/**
+ * @brief Atomically clears an atomic flag.
+ *
+ * @param[in, out] object Pointer to the atomic flag object.
+ * @param[in] order The atomic memory order.
+ * 
+ */
+static inline void _Atomic_Flag_clear(
+  volatile Atomic_Flag *object,
+  Atomic_Order order
+)
+{
+  _CPU_atomic_Flag_clear( object, order );
+}
+
+/**
+ * @brief Atomically tests and sets an atomic flag.
+ *
+ * @param[in, out] object Pointer to the atomic flag object.
+ * @param[in] order The atomic memory order.
+ * 
+ * @retval true The atomic flag was already set.
+ * @retval false Otherwise.
+ */
+static inline bool _Atomic_Flag_test_and_set(
+  volatile Atomic_Flag *object,
+  Atomic_Order order
+)
+{
+  return _CPU_atomic_Flag_test_and_set( object, order );
+}
 
 #ifdef __cplusplus
 }

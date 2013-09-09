@@ -18,20 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
-#include <rtems/score/stack.h>
-#include <rtems/score/states.h>
-#include <rtems/rtems/tasks.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_task_set_priority(
   rtems_id             id,
@@ -61,7 +49,7 @@ rtems_status_code rtems_task_set_priority(
              the_thread->current_priority > new_priority )
           _Thread_Change_priority( the_thread, new_priority, false );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

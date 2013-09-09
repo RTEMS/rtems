@@ -18,11 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
-#include <rtems/rtems/signal.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/wkspace.h>
 
 Scheduler_CBS_Server **_Scheduler_CBS_Server_list;
 

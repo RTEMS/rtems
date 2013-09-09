@@ -18,13 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <inttypes.h>
+
 #include <string.h>
 
 bool _Objects_Set_name(

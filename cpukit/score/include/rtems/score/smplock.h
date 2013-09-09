@@ -1,149 +1,129 @@
 /**
- *  @file  rtems/score/smplock.h
+ * @file
  *
- *  @brief Interface for Atomic Locks
+ * @ingroup ScoreSMPLock
  *
- *  This include file defines the interface for atomic locks
- *  which can be used in multiprocessor configurations.
+ * @brief SMP Lock API
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2011.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * Copyright (c) 2013 embedded brains GmbH
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_LOCK_H
-#define _RTEMS_LOCK_H
+#ifndef _RTEMS_SCORE_SMPLOCK_H
+#define _RTEMS_SCORE_SMPLOCK_H
 
-#include <rtems/score/isr.h>
+#include <rtems/score/cpuopts.h>
 
-/**
- *  @defgroup RTEMS Lock Interface
- *
- *  @ingroup Score
- *
- */
+#if defined( RTEMS_SMP )
 
-/**@{*/
+#include <rtems/score/cpusmplock.h>
+#include <rtems/score/isrlevel.h>
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 /**
- *  This type is used to lock elements for atomic access.
- *  This spinlock is a simple non-nesting spinlock, and
- *  may be used for short non-nesting accesses.
+ * @defgroup ScoreSMPLock SMP Locks
+ *
+ * @ingroup Score
+ *
+ * The SMP lock implementation is architecture dependent.  The implementation
+ * should provide fairness in case of concurrent lock attempts.  A ticket lock
+ * is probably the most likely implementation.
+ *
+ * This SMP lock API has a flaw.  It does not provide the ability to use a
+ * local context for acquire and release pairs.  Such a context is necessary to
+ * implement for example the Mellor-Crummey and Scott (MCS) locks.  The SMP
+ * lock is currently used in _Thread_Disable_dispatch() and
+ * _Thread_Enable_dispatch() and makes them to a giant lock acquire and
+ * release.  Since these functions do not pass state information via a local
+ * context there is currently no use case for such a feature.
+ *
+ * @{
  */
-typedef uint32_t SMP_lock_spinlock_simple_Control;
 
 /**
- *  This type is used to lock elements for atomic access.
- *  This spinlock supports nesting, but is slightly more
- *  complicated to use.  Please see the descriptions of
- *  obtain and release prior to using in order to understand
- *  the callers responsibilty of managing short interupt disable
- *  times.
+ * @brief SMP lock control.
+ *
+ * This is an opaque type.  The SMP lock implementation is architecture
+ * dependent.
  */
-typedef struct {
-  SMP_lock_spinlock_simple_Control lock;
-  uint32_t  count;
-  int       cpu_id;
-} SMP_lock_spinlock_nested_Control;
+typedef CPU_SMP_lock_Control SMP_lock_Control;
 
 /**
- *  @brief Initialize a lock.
- *
- *  This method is used to initialize the lock at @a lock.
- *
- *  @param [in] lock is the address of the lock to obtain.
+ * @brief SMP lock control initializer for static initialization.
  */
-void _SMP_lock_spinlock_simple_Initialize(
-  SMP_lock_spinlock_simple_Control *lock
-);
+#define SMP_LOCK_INITIALIZER CPU_SMP_LOCK_INITIALIZER
 
 /**
- *  @brief Obtain a lock.
+ * @brief Initializes a SMP lock control.
  *
- *  This method is used to obtain the lock at @a lock.
+ * Concurrent initialization leads to unpredictable results.
  *
- *  @param [in] lock is the address of the lock to obtain.
- *
- *  @retval This method returns with processor interrupts disabled.
- *          The previous level is returned.
+ * @param[out] lock The SMP lock control.
  */
-ISR_Level _SMP_lock_spinlock_simple_Obtain(
-  SMP_lock_spinlock_simple_Control *lock
-);
-
-/**
- *  @brief Release a lock.
- *
- *  This method is used to release the lock at @a lock.
- *
- *  @param [in] lock is the address of the lock to obtain.
- */
-void _SMP_lock_spinlock_simple_Release(
-  SMP_lock_spinlock_simple_Control  *lock,
-  ISR_Level                         level
-);
-
-/**
- *  @brief Initialize a lock.
- *
- *  This method is used to initialize the lock at @a lock.
- *
- *  @param [in] lock is the address of the lock to obtain.
- */
-void _SMP_lock_spinlock_nested_Initialize(
-  SMP_lock_spinlock_nested_Control *lock
-);
-
-/**
- *  @brief Obtain a lock.
- *
- *  This method is used to obtain the lock at @a lock.  ISR's are
- *  disabled when this routine returns and it is the callers responsibility
- *  to either:
- *
- *   # Do something very short and then call
- *      _SMP_lock_spinlock_nested_Release  or
- *   # Do something very sort, call isr enable, then when ready
- *      call isr_disable and _SMP_lock_spinlock_nested_Release
- *
- *  @param [in] lock is the address of the lock to obtain.
- *
- *  @retval This method returns with processor interrupts disabled.
- *          The previous level is returned.
- */
-ISR_Level _SMP_lock_spinlock_nested_Obtain(
-  SMP_lock_spinlock_nested_Control *lock
-);
-
-/**
- *  @brief Release a lock.
- *
- *  This method is used to release the lock at @a lock.
- *
- *  @note ISR's are reenabled by this method and are expected to be
- *  disabled upon entry to the method.
- *
- *  @param [in] lock is the address of the lock to obtain.
- */
-void _SMP_lock_spinlock_nested_Release(
-  SMP_lock_spinlock_nested_Control  *lock,
-  ISR_Level                         level
-);
-
-#ifdef __cplusplus
+static inline void _SMP_lock_Initialize( SMP_lock_Control *lock )
+{
+  _CPU_SMP_lock_Initialize( lock );
 }
-#endif
+
+/**
+ * @brief Acquires a SMP lock.
+ *
+ * This function will not disable interrupts.  The caller must ensure that the
+ * current thread of execution is not interrupted indefinite once it obtained
+ * the SMP lock.
+ *
+ * @param[in,out] lock The SMP lock control.
+ */
+static inline void _SMP_lock_Acquire( SMP_lock_Control *lock )
+{
+  _CPU_SMP_lock_Acquire( lock );
+}
+
+/**
+ * @brief Releases a SMP lock.
+ *
+ * @param[in,out] lock The SMP lock control.
+ */
+static inline void _SMP_lock_Release( SMP_lock_Control *lock )
+{
+  _CPU_SMP_lock_Release( lock );
+}
+
+/**
+ * @brief Disables interrupts and acquires the SMP lock.
+ *
+ * @param[in,out] lock The SMP lock control.
+ * @param[out] isr_cookie The ISR cookie.
+ */
+#define _SMP_lock_ISR_disable_and_acquire( lock, isr_cookie ) \
+  _CPU_SMP_lock_ISR_disable_and_acquire( lock, isr_cookie )
+
+/**
+ * @brief Releases the SMP lock and enables interrupts.
+ *
+ * @param[in,out] lock The SMP lock control.
+ * @param[in] isr_cookie The ISR cookie.
+ */
+#define _SMP_lock_Release_and_ISR_enable( lock, isr_cookie ) \
+  _CPU_SMP_lock_Release_and_ISR_enable( lock, isr_cookie )
 
 /**@}*/
 
-#endif
-/* end of include file */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* defined( RTEMS_SMP ) */
+
+#endif /* _RTEMS_SCORE_SMPLOCK_H */

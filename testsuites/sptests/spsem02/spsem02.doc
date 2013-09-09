@@ -1,0 +1,23 @@
+This test demonstrates priority inheritance with multiple locks and threads.
+
+The scenario consists of 3 tasks of different priority and 2 semaphore/mutexes
+using priority inheritance. The scenario is:
+
+Task 1 has priority 36. Task 2 has priority 34. Task 3 has priority 32.
+
+1. Task 1 obtains semaphore S1.
+2. Task 1 obtains semaphore S2.
+3. Task 2 preempts Task 1.
+4. Task 2 blocks on S2.  Task 1 inherits priority 34.
+5. Task 1 resumes.
+6. Task 3 preempts Task 1.
+7. Task 3 blocks on S1. Task 1 inherits priority 32.
+8. Task 1 resumes. Task 1 releases S2. Task 1 continues with priority 32.
+9. Task 1 releases S0.
+10. Task 3 resumes.
+11. Task 3 releases S0 and exits.
+12. Task 2 resumes.
+13. Task 2 releases S1 and exits.
+14. Task 1 resumes.
+15. Task 1 exits.
+

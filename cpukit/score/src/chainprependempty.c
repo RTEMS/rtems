@@ -25,7 +25,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/chain.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/isr.h>
 
 bool _Chain_Prepend_with_empty_check(

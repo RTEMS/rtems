@@ -22,3 +22,7 @@ $(PROJECT_INCLUDE)/bsp/default-initial-extension.h: shared/include/default-initi
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/default-initial-extension.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/default-initial-extension.h
 
+$(PROJECT_INCLUDE)/bsp/generic-fatal.h: shared/include/generic-fatal.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/generic-fatal.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/generic-fatal.h
+

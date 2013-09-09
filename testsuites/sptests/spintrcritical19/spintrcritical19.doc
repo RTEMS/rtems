@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spintrcritical19
+
+directives:
+
+  - rtems_task_suspend()
+  - rtems_task_set_priority()
+
+concepts:
+
+  - Ensure that a priority change works during suspend requests from an
+    interrupt service routine.

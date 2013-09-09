@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
 #define TEST_NAME                "05"
 #define TEST_STRING              "User Signals"
 #define SIGNAL_ONE               SIGUSR1
@@ -77,11 +75,12 @@ void *POSIX_Init(
   _POSIX_signals_Pending |= signo_to_mask( SIGUSR1 );
 
   bc = _POSIX_signals_Clear_signals(
-    _Thread_Executing->API_Extensions[ THREAD_API_POSIX ],
+    _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ],
     SIGNAL_ONE,
     &info,
     true,              /* is_global */
-    false              /* check_blocked */
+    false,             /* check_blocked */
+    true               /* do_signals_acquire_release */
   );
   rtems_test_assert( bc );
 

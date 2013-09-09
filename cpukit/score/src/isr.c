@@ -19,8 +19,9 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/score/address.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/stack.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
@@ -74,9 +75,5 @@ void _ISR_Handler_initialization( void )
 
 #if ( CPU_HAS_HARDWARE_INTERRUPT_STACK == TRUE )
   _CPU_Install_interrupt_stack();
-#endif
-
-#if defined(RTEMS_SMP)
-  _ISR_SMP_Initialize();
 #endif
 }

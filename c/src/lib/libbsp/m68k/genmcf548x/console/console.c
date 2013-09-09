@@ -528,18 +528,15 @@ IntUartInitialize(void)
 static ssize_t
 IntUartInterruptWrite (int minor, const char *buf, size_t len)
 {
-	int level;
+	if (len > 0) {
+		/* write out character */
+		*(volatile uint8_t *)(&MCF548X_PSC_TB(minor)) = *buf;
 
-	rtems_interrupt_disable(level);
+		/* enable tx interrupt */
+		IntUartInfo[minor].imr |= MCF548X_PSC_IMR_TXRDY;
+		MCF548X_PSC_IMR(minor) = IntUartInfo[minor].imr;
+	}
 
-	/* write out character */
-	*(volatile uint8_t *)(&MCF548X_PSC_TB(minor)) = *buf;
-
-	/* enable tx interrupt */
-	IntUartInfo[minor].imr |= MCF548X_PSC_IMR_TXRDY;
-	MCF548X_PSC_IMR(minor) = IntUartInfo[minor].imr;
-
-	rtems_interrupt_enable(level);
 	return 0;
 }
 

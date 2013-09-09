@@ -297,6 +297,10 @@ $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc564xL.h: mpc55xx/include/fsl-mpc564xL.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc564xL.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc564xL.h
 
+$(PROJECT_INCLUDE)/mpc55xx/fsl-mpc5668.h: mpc55xx/include/fsl-mpc5668.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc5668.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc5668.h
+
 $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc567x.h: mpc55xx/include/fsl-mpc567x.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc567x.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/fsl-mpc567x.h

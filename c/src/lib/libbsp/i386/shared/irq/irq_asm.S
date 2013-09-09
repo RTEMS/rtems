@@ -44,8 +44,16 @@ SYM (_ISR_Handler):
 	 *  Before this was point is reached the vectors unique
 	 *  entry point did the following:
 	 *
-	 *     1. saved scratch registers registers eax edx ecx
+	 *     1. saved scratch registers registers eax edx ecx"
 	 *     2. put the vector number in ecx.
+	 *
+	 * BEGINNING OF ESTABLISH SEGMENTS
+	 *
+	 *  WARNING: If an interrupt can occur when the segments are
+	 *           not correct, then this is where we should establish
+	 *           the segments.  In addition to establishing the
+	 *           segments, it may be necessary to establish a stack
+	 *           in the current data area on the outermost interrupt.
 	 *
 	 *  NOTE:  If the previous values of the segment registers are
 	 *         pushed, do not forget to adjust SAVED_REGS.
@@ -74,8 +82,6 @@ SYM (_ISR_Handler):
 	movl      ebx, EBX_OFF(esp)
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
-	movw      SYM (i8259s_cache), ax /* save current i8259 interrupt mask */
-	movl      eax, MSK_OFF(esp)      /* save in stack frame */
 
 #ifdef __SSE__
 	/* NOTE: SSE only is supported if the BSP enables fxsave/fxrstor
@@ -96,53 +102,15 @@ SYM (_ISR_Handler):
 	ldmxcsr ARG_OFF(esp)            /* clean-slate MXCSR              */
 #endif
 
-.check_stack_switch:
-	movl      esp, ebp                  /* ebp = previous stack pointer */
-#if defined(RTEMS_SMP) && defined(BSP_HAS_SMP)
-	movl     $SYM(_Per_CPU_Information_p), ebx
-	call     SYM(bsp_smp_processor_id)
-	mov      (ebx,eax,4), ebx
-        pushl    ecx
-        call     SYM(_ISR_SMP_Enter)
-        popl     ecx
-        cmpl     $0, eax
-        jne      .i8259
-        movl     PER_CPU_INTERRUPT_STACK_HIGH(ebx), esp
-       
-#else
-	movl     $SYM(_Per_CPU_Information), ebx
-
-	/*
-         *  Is this the outermost interrupt?
-	 *  Switch stacks if necessary
-	 */
-	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)
-	jne       nested                    /* No, then continue */
-	movl      PER_CPU_INTERRUPT_STACK_HIGH(ebx), esp
-
-	/*
-	 *  We want to insure that the old stack pointer is in ebp
-	 *  By saving it on every interrupt, all we have to do is
-	 *  movl ebp->esp near the end of every interrupt.
-	 */
-
-nested:
-	incl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one nest level deeper */
-	incl      SYM (_Thread_Dispatch_disable_level) /* disable multitasking */
-#endif
-        /*
-         *  i8259 Management
-         */
-
-.i8259:
         /* Do not disable any 8259 interrupts if this isn't from one */
 	cmp       ecx, 16               /* is this a PIC IRQ? */
-	jge       .end_of_i8259
+	jge       .check_stack_switch
 
 	/*
 	 * acknowledge the interrupt
 	 */
-	movw      SYM (i8259s_cache), ax /* fetch current i8259 interrupt mask */
+	movw      SYM (i8259s_cache), ax /* save current i8259 interrupt mask */
+	movl      eax, MSK_OFF(esp)      /* save in stack frame */
 
 	/*
 	 * compute the new PIC mask:
@@ -166,7 +134,46 @@ nested:
 	outb      $PIC_SLAVE_COMMAND_IO_PORT
 .master:
 	outb      $PIC_MASTER_COMMAND_IO_PORT
-.end_of_i8259:
+
+	/*
+	 *  Now switch stacks if necessary
+	 */
+
+PUBLIC (ISR_STOP)
+ISR_STOP:
+.check_stack_switch:
+	movl      esp, ebp                  /* ebp = previous stack pointer */
+
+#ifdef RTEMS_SMP
+	call      SYM(_CPU_SMP_Get_current_processor)
+	sall      $PER_CPU_CONTROL_SIZE_LOG2, eax
+	addl      $SYM(_Per_CPU_Information), eax
+	movl      eax, ebx
+#else
+	movl      $SYM(_Per_CPU_Information), ebx
+#endif
+
+	/* is this the outermost interrupt? */
+	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)
+	jne       nested                    /* No, then continue */
+	movl      PER_CPU_INTERRUPT_STACK_HIGH(ebx), esp
+
+	/*
+	 *  We want to insure that the old stack pointer is in ebp
+	 *  By saving it on every interrupt, all we have to do is
+	 *  movl ebp->esp near the end of every interrupt.
+	 */
+
+nested:
+	incl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one nest level deeper */
+	incl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx) /* disable
+	                                                        multitasking */
+	/*
+	 * GCC versions starting with 4.3 no longer place the cld
+	 * instruction before string operations.  We  need to ensure
+	 * it is set correctly for ISR handlers.
+	 */
+	cld
 
 	/*
 	 * re-enable interrupts at processor level as the current
@@ -209,19 +216,13 @@ nested:
 	outb	  $PIC_MASTER_IMR_IO_PORT
 	movb	  ah, al
 	outb	  $PIC_SLAVE_IMR_IO_PORT
+
 .dont_restore_i8259:
-
-
-#if defined(RTEMS_SMP) && defined(BSP_HAS_SMP)
-        call    SYM(_ISR_SMP_Exit)
-	testl	eax, eax
-	je	.exit
-#else
 	decl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one less ISR nest level */
 	                                    /* If interrupts are nested, */
 	                                    /*   then dispatching is disabled */
 
-	decl      SYM (_Thread_Dispatch_disable_level)
+	decl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx)
 	                                    /* unnest multitasking */
 	                                    /* Is dispatch disabled */
 	jne       .exit                     /* Yes, then exit */
@@ -230,7 +231,6 @@ nested:
 	                                    /* Is task switch necessary? */
 	jne       .schedule                 /* Yes, then call the scheduler */
 	jmp       .exit                     /* No, exit */
-#endif
 
 .schedule:
 	/*

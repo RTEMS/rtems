@@ -8,7 +8,7 @@
 
 #include <rtems.h>
 #include "monitor.h"
-#include <rtems/rtems/attr.inl>
+#include <rtems/rtems/attrimpl.h>
 #include <stdio.h>
 #include <string.h>    /* memcpy() */
 

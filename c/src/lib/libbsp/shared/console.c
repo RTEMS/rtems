@@ -16,13 +16,14 @@
  */
 
 #include <bsp.h>
+#include <bsp/generic-fatal.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <termios.h>
 
 #include <rtems/termiostypes.h>
-#include <rtems/error.h>  /* rtems_panic */
 #include <libchip/serial.h>
 #include "console_private.h"
 
@@ -48,7 +49,7 @@ static void console_initialize_pointers(void)
   Console_Port_Count = Console_Configuration_Count;
   Console_Port_Tbl   = malloc( Console_Port_Count * sizeof( console_tbl * ) );
   if (Console_Port_Tbl == NULL)
-    rtems_panic("No memory for console pointers");
+    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_0 );
 
   for (i=0 ; i < Console_Port_Count ; i++)
     Console_Port_Tbl[i] = &Console_Configuration_Ports[i];
@@ -75,8 +76,7 @@ void console_register_devices(
    *  register devices.
    */
   if ( console_initialized ) {
-    printk( "Attempt to register console devices after driver initialized\n" );
-    rtems_fatal_error_occurred( 0xdead0001 );
+    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_MULTI_INIT );
   }
 
   /*
@@ -89,14 +89,12 @@ void console_register_devices(
     Console_Port_Count * sizeof( console_tbl * )
   );
   if ( Console_Port_Tbl == NULL ) {
-    printk( "Unable to allocate pointer table for registering console devices\n" );
-    rtems_fatal_error_occurred( 0xdead0002 );
+    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_1 );
   }
 
   Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
   if ( Console_Port_Data == NULL ) {
-    printk( "Unable to allocate data table for console devices\n" );
-    rtems_fatal_error_occurred( 0xdead0003 );
+    bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_2 );
   }
 
   /*
@@ -257,8 +255,7 @@ rtems_device_driver console_initialize(
     console_initialize_pointers();
     Console_Port_Data  = calloc( Console_Port_Count, sizeof( console_data ) );
     if ( Console_Port_Data == NULL ) {
-      printk( "Unable to allocate data table for console devices\n" );
-      rtems_fatal_error_occurred( 0xdead0003 );
+      bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_NO_MEMORY_3 );
     }
   }
 
@@ -293,20 +290,14 @@ rtems_device_driver console_initialize(
       if (port->sDeviceName != NULL) {
         status = rtems_io_register_name( port->sDeviceName, major, minor );
         if (status != RTEMS_SUCCESSFUL) {
-          printk( "Unable to register %s\n",  port->sDeviceName );
-          rtems_fatal_error_occurred(status);
+          bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_REGISTER_DEV_0 );
         }
       }
 
       if (minor == Console_Port_Minor) {
-#if defined(RTEMS_DEBUG)
-          if (port->sDeviceName != NULL)
-            printk( "Register %s as the CONSOLE\n", port->sDeviceName );
-#endif
-        status = rtems_io_register_name( "dev/console", major, minor );
+        status = rtems_io_register_name( CONSOLE_DEVICE_NAME, major, minor );
         if (status != RTEMS_SUCCESSFUL) {
-          printk( "Unable to register /dev/console\n" );
-          rtems_fatal_error_occurred(status);
+          bsp_generic_fatal( BSP_GENERIC_FATAL_CONSOLE_REGISTER_DEV_1 );
         }
       }
 

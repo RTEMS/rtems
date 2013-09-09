@@ -150,21 +150,24 @@ extern "C" {
             } B;
         };
 
-#define MPC55XX_MMU_TAG_INITIALIZER(idx, addr, size, x, w, r, io) \
+#define MPC55XX_MMU_TAG_TRANSLATE_INITIALIZER(idx, addreff, addrreal, size, x, w, r, io) \
   { \
     .MAS0 = { .B = { .TLBSEL = 1, .ESEL = (idx) } }, \
     .MAS1 = { .B = { \
       .VALID = 1, .IPROT = 1, .TID = 0, .TS = 0, .TSIZE = (size) } \
     }, \
     .MAS2 = { .B = { \
-      .EPN = (addr) >> 10, .VLE = 0, \
+      .EPN = (addreff) >> 10, .VLE = 0, \
       .W = (io) == 2, .I = (io) == 1, .M = 0, .G = (io) == 1, .E = 0 } \
     }, \
     .MAS3 = { .B = { \
-      .RPN = (addr) >> 10, .U0 = 0, .U1 = 0, .U2 = 0, .U3 = 0, .UX = 0, \
+      .RPN = (addrreal) >> 10, .U0 = 0, .U1 = 0, .U2 = 0, .U3 = 0, .UX = 0, \
       .SX = (x), .UW = 0, .SW = (w), .UR = 0, .SR = (r) } \
     } \
   }
+
+#define MPC55XX_MMU_TAG_INITIALIZER(idx, addr, size, x, w, r, io) \
+  MPC55XX_MMU_TAG_TRANSLATE_INITIALIZER(idx, addr, addr, size, x, w, r, io)
 
 #define MPC55XX_MMU_1K 0
 #define MPC55XX_MMU_2K 1

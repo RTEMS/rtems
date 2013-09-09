@@ -18,9 +18,14 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/object.h>
+#include <rtems/score/objectimpl.h>
+
+/* XXX: This is for language bindings */
+char *rtems_object_get_name(
+  Objects_Id     id,
+  size_t         length,
+  char          *name
+);
 
 char *rtems_object_get_name(
   Objects_Id     id,

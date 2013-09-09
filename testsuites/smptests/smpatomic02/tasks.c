@@ -18,27 +18,28 @@
 #include <stdlib.h>
 #include <rtems/rtems/atomic.h>
 
-#define TEST_REPEAT 200000
+#define TEST_REPEAT 1000
 
-#define ATOMIC_STORE_NO_BARRIER(NAME, TYPE, cpuid, mem_bar)    \
+#define ATOMIC_STORE_NO_BARRIER(NAME, TYPE, R_TYPE, cpuid, mem_bar)    \
 {                                                        \
-  Atomic_##TYPE t = (Atomic_##TYPE)-1, a = 0;            \
+  Atomic_##TYPE t;                                       \
+  R_TYPE a;                                              \
+  R_TYPE b;                                              \
   unsigned int i;                                        \
-  _Atomic_Store_##NAME(&a, t, mem_bar);                  \
-  rtems_test_assert(a == t);                             \
   for (i = 0; i < TEST_REPEAT; i++){                     \
-    t = (Atomic_##TYPE)rand();                           \
-    _Atomic_Store_##NAME(&a, t, mem_bar);                \
-    rtems_test_assert(a == t);                           \
+    b = (R_TYPE)rand();                                  \
+    _Atomic_Store_##NAME(&t, b, mem_bar);                \
+    a = _Atomic_Load_##NAME(&t, ATOMIC_ORDER_ACQUIRE);   \
+    rtems_test_assert(a == b);                           \
   }                                                      \
-  locked_printf("\nCPU%d _Atomic_Store_" #NAME ": SUCCESS\n", cpuid); \
+  locked_printf("\nCPU%d Atomic_Store_" #NAME ": SUCCESS\n", cpuid); \
 }
 
 rtems_task Test_task(
     rtems_task_argument argument
     )
 {
-  int               cpu_num;
+  uint32_t          cpu_num;
   char              name[5];
   char             *p;
 
@@ -47,26 +48,18 @@ rtems_task Test_task(
   rtems_test_assert( p != NULL );
 
    /* Get the CPU Number */
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
   /* Print that the task is up and running. */
   /* test relaxed barrier */
-  ATOMIC_STORE_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ulong, Ulong, unsigned long, cpu_num, ATOMIC_ORDER_RELAXED);
 
-  ATOMIC_STORE_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELAXED_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELAXED_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, uintptr_t, cpu_num, ATOMIC_ORDER_RELAXED);
 
   /* test release barrier */
-  ATOMIC_STORE_NO_BARRIER(int, Int, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ulong, Ulong, unsigned long, cpu_num, ATOMIC_ORDER_RELEASE);
 
-  ATOMIC_STORE_NO_BARRIER(long, Long, cpu_num, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, cpu_num, ATOMIC_RELEASE_BARRIER);
-
-  ATOMIC_STORE_NO_BARRIER(32, Int32, cpu_num, ATOMIC_RELEASE_BARRIER);
+  ATOMIC_STORE_NO_BARRIER(ptr, Pointer, uintptr_t, cpu_num, ATOMIC_ORDER_RELEASE);
 
 //  ATOMIC_STORE_NO_BARRIER(64, cpu_num);
 

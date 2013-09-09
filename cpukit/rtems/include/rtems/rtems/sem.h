@@ -1,11 +1,9 @@
 /**
- * @file rtems/rtems/sem.h
+ * @file
  *
- * @brief Semaphore Manager
+ * @ingroup ClassicSem
  *
- * @defgroup ClassicSem Semaphores
- *
- * @ingroup ClassicRTEMS
+ * @brief Classic Semaphores API
  *
  * This include file contains all the constants and structures associated
  * with the Semaphore Manager. This manager utilizes standard Dijkstra
@@ -32,25 +30,6 @@
 #ifndef _RTEMS_RTEMS_SEM_H
 #define _RTEMS_RTEMS_SEM_H
 
-/**
- * @brief Instantiate Semaphore Data
- *
- * Semaphore Manager -- Data Instantiation
- *
- * This constant is defined to extern most of the time when using
- * this header file. However by defining it to nothing, the data
- * declared in this header file can be instantiated. This is done
- * in a single per manager file.
- *
- */
-#ifndef RTEMS_SEM_EXTERN
-#define RTEMS_SEM_EXTERN extern
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
@@ -59,6 +38,10 @@ extern "C" {
 #include <rtems/score/coremutex.h>
 #include <rtems/score/object.h>
 #include <rtems/score/coresem.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicSem Semaphores
@@ -107,19 +90,6 @@ typedef struct {
     CORE_semaphore_Control semaphore;
   } Core_control;
 }   Semaphore_Control;
-
-/**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-RTEMS_SEM_EXTERN Objects_Information  _Semaphore_Information;
-
-/**
- *  @brief Semaphore Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Semaphore_Manager_initialization(void);
 
 /**
  *  @brief rtems_semaphore_create
@@ -238,59 +208,11 @@ rtems_status_code rtems_semaphore_flush(
   rtems_id	   id
 );
 
-/**
- *  @brief _Semaphore_Seize
- *
- *  This routine attempts to receive a unit from the_semaphore.
- *  If a unit is available or if the RTEMS_NO_WAIT option is enabled in
- *  option_set, then the routine returns.  Otherwise, the calling task
- *  is blocked until a unit becomes available.
- */
-bool _Semaphore_Seize(
-  Semaphore_Control *the_semaphore,
-  uint32_t           option_set
-);
-
-/**
- * @brief Semaphore Translate Core Mutex Return Code
- *
- * This function returns a RTEMS status code based on the mutex
- * status code specified.
- *
- * @param[in] the_mutex_status is the mutex status code to translate
- *
- * @retval translated RTEMS status code
- */
-rtems_status_code _Semaphore_Translate_core_mutex_return_code (
-  uint32_t   the_mutex_status
-);
-
-/**
- * @brief Semaphore Translate Core Semaphore Return Code
- *
- * This function returns a RTEMS status code based on the semaphore
- * status code specified.
- *
- * @param[in] the_mutex_status is the semaphore status code to translate
- *
- * @retval translated RTEMS status code
- */
-rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
-  uint32_t   the_mutex_status
-);
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/sem.inl>
-#endif
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/semmp.h>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /*  end of include file */

@@ -233,7 +233,7 @@ rtems_capture_cli_task_list (int                          argc __attribute__((un
     capture_timestamp (&ticks, &tick_offset);
   else
   {
-    ticks = _Watchdog_Ticks_since_boot;
+    ticks = rtems_clock_get_ticks_since_boot();
     tick_offset = 0;
   }
 

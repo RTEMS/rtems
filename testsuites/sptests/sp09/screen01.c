@@ -16,6 +16,8 @@
 
 #include "system.h"
 
+#include <rtems/rtems/tasksimpl.h>
+
 void Screen1()
 {
   uint32_t            notepad_value;

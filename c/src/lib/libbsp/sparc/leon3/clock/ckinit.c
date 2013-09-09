@@ -23,7 +23,7 @@
 #include <ambapp.h>
 
 #if SIMSPARC_FAST_IDLE==1
-#define CLOCK_DRIVER_USE_FAST_IDLE
+#define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
 /*

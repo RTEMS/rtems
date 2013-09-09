@@ -18,6 +18,13 @@
 #ifndef _RTEMS_SCORE_APIEXT_H
 #define _RTEMS_SCORE_APIEXT_H
 
+#include <rtems/score/chainimpl.h>
+#include <rtems/score/thread.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreAPIExtension API Extension Handler
  *
@@ -31,9 +38,6 @@
  *  to be largely independent of any API.
  */
 /**@{*/
-
-#include <rtems/score/chain.h>
-#include <rtems/score/thread.h>
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
   /**
@@ -178,6 +182,10 @@ static inline void _API_extensions_Run_post_switch( Thread_Control *executing )
 }
 
 /**@}*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /* end of include file */

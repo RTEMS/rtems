@@ -1,47 +1,4 @@
 Building RTEMS
 ==============
-See the file README.configure.
-
-
-UNCOMPRESSING .tgz FILES
-===========================
-Many of the files found in this directory and its subdirectories 
-are gzip'ed, tar archive files.  These files have the ".tgz"
-extension.  They were compressed with gzip version 1.2.4.  
-
-Use a command sequence similar to the following to uncompress each
-file:
-
-   gzcat FILE.tgz | tar xvof -
-
-where FILE.tgz is the file to be installed.  This procedure will
-extract the files in the archive into the current directory.
-All of the .tgz files associated with this release RTEMS will
-place their contents in a subdirectory rtems-<release> in the current
-directory.
-
-If you are unsure of what is in an RTEMS archive file, then use
-the following command sequence to get a listing of the contents:
-
-   gzcat FILE.tgz | tar tvf -
-
-NOTES:  
-
-(1) The "-o" option to tar is included on the tar command line
-    so that the user extracting the tar archive will own the extracted
-    files.
-
-(2) gzcat is sometimes installed as zcat.  Be warned that on many
-    (most) UNIX machines, zcat is associated with compress (.Z files).
-
-(3) If you do not have gzip 1.2.4, it is available from numerous sites
-    including this one.  Other sites include ftp.gnu.org and ftp.cdrom.com.
-    
-(4) The GNU archive files included in this distribution are packaged
-    exactly like they are on official GNU ftp sites.  When extracting
-    GNU archives, they will not extract under a rtems-<version> 
-    directory.  They will extract themselves under a directory which
-    is the name and version of the tool in question.  For example,
-    gcc-2.5.8.tgz will extract its contents into the subdirectory 
-    gcc-2.5.8.
+See the documentation referred to in the README.
 

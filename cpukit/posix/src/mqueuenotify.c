@@ -31,7 +31,7 @@
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -69,7 +69,7 @@ int mq_notify(
 
       if ( notification ) {
         if ( _CORE_message_queue_Is_notify_enabled( &the_mq->Message_queue ) ) {
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_mq_fd->Object );
           rtems_set_errno_and_return_minus_one( EBUSY );
         }
 
@@ -88,7 +88,7 @@ int mq_notify(
 
       }
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

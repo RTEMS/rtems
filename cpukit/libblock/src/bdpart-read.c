@@ -24,6 +24,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 
 #include <rtems.h>
 #include <rtems/bdbuf.h>

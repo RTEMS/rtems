@@ -54,48 +54,23 @@
  *  Modifications for PPC405GP by Dennis Ehlin
  */
 
-#include <string.h>
-#include <fcntl.h>
-
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <rtems/bspIo.h>
-#include <libcpu/cpuIdent.h>
-#include <libcpu/spr.h>
-#include <rtems/powerpc/powerpc.h>
+#include <bsp/irq-generic.h>
+#include <bsp/bootcard.h>
+#include <bsp/linker-symbols.h>
+
+#include <libcpu/powerpc-utility.h>
 
 #include RTEMS_XPARAMETERS_H
-#include <stdio.h>
 
-uint32_t _heap_start;
-uint32_t _heap_end;
-uint32_t _top_of_ram;
+/* Symbols defined in linker command file */
+LINKER_SYMBOL(virtex_exc_vector_base);
 
 /*
  *  Driver configuration parameters
  */
-uint32_t   bsp_clicks_per_usec;
-uint32_t   bsp_serial_per_sec;	       /* Serial clocks per second */
-bool       bsp_serial_external_clock;
-bool       bsp_serial_xon_xoff;
-bool       bsp_serial_cts_rts;
-uint32_t   bsp_serial_rate;
-uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
-uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
-bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
-
-extern unsigned char IntrStack_start[];
-extern unsigned char IntrStack_end[];
-
-/*      Initialize whatever libc we are using
- *      called from postdriver hook
- */
-
-void bsp_XAssertHandler(const char* file, int line);
-
-void bsp_XAssertHandler(const char* file, int line) {
-  printf("\n***\n*** XAssert Failed!  File: %s, Line: %d\n***\n", file, line);
-}
+uint32_t bsp_time_base_frequency = XPAR_CPU_PPC405_CORE_CLOCK_FREQ_HZ;
 
 /*
  *  bsp_start
@@ -104,61 +79,36 @@ void bsp_XAssertHandler(const char* file, int line) {
  */
 void bsp_start( void )
 {
-  ppc_cpu_id_t myCpu;
-  ppc_cpu_revision_t myCpuRevision;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
    * function store the result in global variables
    * so that it can be used latter...
    */
-  myCpu 	    = get_ppc_cpu_type();
-  myCpuRevision = get_ppc_cpu_revision();
-
-  /*
-   *  initialize the device driver parameters
-   */
-
-  /* timebase register ticks/microsecond */
-  bsp_clicks_per_usec = (250000000 / 1000000);
-  bsp_serial_per_sec = 14625000;
-  bsp_serial_external_clock = false;
-  bsp_timer_internal_clock  = true;
-  bsp_serial_xon_xoff = false;
-  bsp_serial_cts_rts = false;
-  bsp_serial_rate = 115200;
-  bsp_timer_average_overhead = 2;
-  bsp_timer_least_valid = 3;
+  get_ppc_cpu_type();
+  get_ppc_cpu_revision();
 
   /*
    * Initialize default raw exception handlers.
    */
-  ppc_exc_initialize(
+  ppc_exc_initialize_with_vector_base(
     PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-    (uint32_t)IntrStack_start,
-    IntrStack_end - IntrStack_start
+    (uintptr_t) bsp_section_work_begin,
+    rtems_configuration_get_interrupt_stack_size(),
+    virtex_exc_vector_base
   );
+  __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));
 
-  /*
-   * Install our own set of exception vectors
-   */
-  BSP_rtems_irq_mng_init(0);
-}
-
-void BSP_ask_for_reset(void)
-{
-  printk("system stopped, press RESET");
-  while(1) {};
-}
-
-void BSP_panic(char *s)
-{
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  BSP_ask_for_reset();
+  bsp_interrupt_initialize();
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  BSP_ask_for_reset();
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable(level);
+  (void) level;
+
+  while (true) {
+    /* Do nothing */
+  }
 }

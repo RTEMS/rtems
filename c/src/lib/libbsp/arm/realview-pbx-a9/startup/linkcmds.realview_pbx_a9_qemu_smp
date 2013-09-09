@@ -1,0 +1,33 @@
+MEMORY {
+	RAM : ORIGIN = 0x00000000, LENGTH = 256M - 16k
+	RAM_MMU : ORIGIN = 0x0fffc000, LENGTH = 16k
+}
+
+REGION_ALIAS ("REGION_START", RAM);
+REGION_ALIAS ("REGION_VECTOR", RAM);
+REGION_ALIAS ("REGION_TEXT", RAM);
+REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_RODATA", RAM);
+REGION_ALIAS ("REGION_RODATA_LOAD", RAM);
+REGION_ALIAS ("REGION_DATA", RAM);
+REGION_ALIAS ("REGION_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_DATA", RAM);
+REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_BSS", RAM);
+REGION_ALIAS ("REGION_WORK", RAM);
+REGION_ALIAS ("REGION_STACK", RAM);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;
+
+bsp_vector_table_in_start_section = 1;
+
+bsp_translation_table_base = ORIGIN (RAM_MMU);
+
+bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 8;
+
+INCLUDE linkcmds.armv4

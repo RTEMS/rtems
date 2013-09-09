@@ -32,6 +32,7 @@
 #include <sched.h>    /* schedule facilities */
 #include <time.h>     /* time facilities */
 #include <stdio.h>    /* console facilities */
+#include <rtems/posix/timerimpl.h>
 #include <rtems/score/timespec.h>
 #include "pritime.h"
 

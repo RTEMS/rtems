@@ -20,32 +20,38 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/score/states.h>
+#include <rtems/score/coremuteximpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 #if defined(__RTEMS_DO_NOT_INLINE_CORE_MUTEX_SEIZE__)
 void _CORE_mutex_Seize(
   CORE_mutex_Control  *_the_mutex,
+  Thread_Control      *_executing,
   Objects_Id           _id,
   bool                 _wait,
   Watchdog_Interval    _timeout,
   ISR_Level            _level
 )
 {
-  _CORE_mutex_Seize_body( _the_mutex, _id, _wait, _timeout, _level );
+  _CORE_mutex_Seize_body(
+    _the_mutex,
+    _executing,
+    _id,
+    _wait,
+    _timeout,
+    _level
+  );
 }
 #endif
 
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
+  Thread_Control      *executing,
   Watchdog_Interval    timeout
 )
 {
-  Thread_Control   *executing;
 
-  executing = _Thread_Executing;
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
     if ( _Scheduler_Is_priority_higher_than(
          executing->current_priority,
@@ -59,7 +65,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
   }
 
   the_mutex->blocked_count++;
-  _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_mutex->Wait_queue, executing, timeout );
 
   _Thread_Enable_dispatch();
 }

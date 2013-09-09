@@ -519,19 +519,20 @@ mcfuart_interrupt_handler(rtems_vector_number vec)
 ssize_t
 mcfuart_interrupt_write(mcfuart *uart, const char *buf, size_t len)
 {
-    int level;
-    rtems_interrupt_disable(level);
-    uart->tx_buf = buf;
-    uart->tx_buf_len = len;
-    uart->tx_ptr = 0;
-    *MCF5206E_UIMR(MBAR, uart->chn) =
-            MCF5206E_UIMR_FFULL | MCF5206E_UIMR_TXRDY;
-    while (((*MCF5206E_USR(MBAR,uart->chn) & MCF5206E_USR_TXRDY) != 0) &&
-           (uart->tx_ptr < uart->tx_buf_len))
+    if (len > 0)
     {
-        *MCF5206E_UTB(MBAR,uart->chn) = uart->tx_buf[uart->tx_ptr++];
+        uart->tx_buf = buf;
+        uart->tx_buf_len = len;
+        uart->tx_ptr = 0;
+        *MCF5206E_UIMR(MBAR, uart->chn) =
+                MCF5206E_UIMR_FFULL | MCF5206E_UIMR_TXRDY;
+        while (((*MCF5206E_USR(MBAR,uart->chn) & MCF5206E_USR_TXRDY) != 0) &&
+               (uart->tx_ptr < uart->tx_buf_len))
+        {
+            *MCF5206E_UTB(MBAR,uart->chn) = uart->tx_buf[uart->tx_ptr++];
+        }
     }
-    rtems_interrupt_enable(level);
+
     return 0;
 }
 

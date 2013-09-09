@@ -206,7 +206,7 @@ typedef enum {
 #define RTEMS_BDBUF_WAIT_TIMEOUT RTEMS_NO_TIMEOUT
 #if !defined (RTEMS_BDBUF_WAIT_TIMEOUT)
 #define RTEMS_BDBUF_WAIT_TIMEOUT \
-  (TOD_MICROSECONDS_TO_TICKS (20000000))
+  (RTEMS_MICROSECONDS_TO_TICKS (20000000))
 #endif
 
 static rtems_task rtems_bdbuf_swapout_task(rtems_task_argument arg);
@@ -1348,8 +1348,7 @@ rtems_bdbuf_swapout_workers_create (void)
 
   worker_size = rtems_bdbuf_swapout_worker_size ();
   worker_current = calloc (1, bdbuf_config.swapout_workers * worker_size);
-  if (!worker_current)
-    sc = RTEMS_NO_MEMORY;
+  sc = worker_current != NULL ? RTEMS_SUCCESSFUL : RTEMS_NO_MEMORY;
 
   bdbuf_cache.swapout_workers = (rtems_bdbuf_swapout_worker *) worker_current;
 

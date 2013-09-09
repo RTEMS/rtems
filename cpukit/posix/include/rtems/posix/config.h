@@ -19,6 +19,8 @@
 #ifndef _RTEMS_POSIX_CONFIG_H
 #define _RTEMS_POSIX_CONFIG_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -49,6 +51,7 @@ typedef struct {
   uint32_t                            maximum_mutexes;
   uint32_t                            maximum_condition_variables;
   uint32_t                            maximum_keys;
+  uint32_t                            maximum_key_value_pairs;
   uint32_t                            maximum_timers;
   uint32_t                            maximum_queued_signals;
   uint32_t                            maximum_message_queues;

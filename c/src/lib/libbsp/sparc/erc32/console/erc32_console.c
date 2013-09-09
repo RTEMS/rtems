@@ -149,28 +149,28 @@ static int erc32_console_first_open(int major, int minor, void *arg)
 #if (CONSOLE_USE_INTERRUPTS)
 static ssize_t erc32_console_write_support_int(int minor, const char *buf, size_t len)
 {
-  console_data *cd = &Console_Port_Data[minor];
-  int k = 0;
-
-  if (minor == 0) { /* uart a */
-    for (k = 0;
-         k < len && (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA); k ++) {
-      ERC32_MEC.UART_Channel_A = (unsigned char)buf[k];
-    }
-    ERC32_Force_interrupt(ERC32_INTERRUPT_UART_A_RX_TX);
-  } else { /* uart b */
-    for (k = 0;
-         k < len && (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB); k ++) {
-      ERC32_MEC.UART_Channel_B = (unsigned char)buf[k];
-    }
-    ERC32_Force_interrupt(ERC32_INTERRUPT_UART_B_RX_TX);
-  }
-  
   if (len > 0) {
+    console_data *cd = &Console_Port_Data[minor];
+    int k = 0;
+
+    if (minor == 0) { /* uart a */
+      for (k = 0;
+           k < len && (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA); k ++) {
+        ERC32_MEC.UART_Channel_A = (unsigned char)buf[k];
+      }
+      ERC32_Force_interrupt(ERC32_INTERRUPT_UART_A_RX_TX);
+    } else { /* uart b */
+      for (k = 0;
+           k < len && (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB); k ++) {
+        ERC32_MEC.UART_Channel_B = (unsigned char)buf[k];
+      }
+      ERC32_Force_interrupt(ERC32_INTERRUPT_UART_B_RX_TX);
+    }
+
     cd->pDeviceContext = (void *)k;
     cd->bActive = true;
   }
-  
+
   return 0;
 }
 

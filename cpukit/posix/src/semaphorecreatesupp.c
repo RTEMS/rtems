@@ -28,9 +28,8 @@
 #include <string.h>	/* strlen */
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/posix/semaphore.h>
+#include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 

@@ -21,7 +21,7 @@ rtems_task Test_task(
   rtems_time_of_day time;
   uint32_t    task_index;
   rtems_status_code status;
-  int               cpu_num;
+  uint32_t          cpu_num;
   char              name[5];
   char             *p;
 
@@ -34,11 +34,11 @@ rtems_task Test_task(
   for ( ; ; ) {
 
     /* Get the CPU Number */
-    cpu_num = bsp_smp_processor_id();
+    cpu_num = rtems_smp_get_current_processor();
 
     status = rtems_clock_get_tod( &time );
     if ( time.second >= 35 ) {
-      locked_printf( "*** END OF SMP08 TEST ***" );
+      locked_printf( "*** END OF SMP08 TEST ***\n" );
       rtems_test_exit( 0 );
     }
 

@@ -46,41 +46,36 @@ clock rate:	234 MHz
 ROM:		16MByte FLASH
 RAM:		64MByte DRAM
 
-virtex only supports single processor operations.
+Virtex only supports single processor operations.
 
-Porting
--------
+Configuration
+-------------
+
 This board support package is written for a typical virtex/PPC FPGA
 system. The rough features of such a board are described above.
 
 When a new virtex FPGA system is created (using the Xilinx design
 software), a parameter file "xparameters.h" is also created, which
 describes the basic features of the hardware (like peripherals
-inculded, interrupt routing etc).
+included, interrupt routing etc.).
 
 This BSP normally takes its basic HW description for the file
 "xparameters_dflt.h", which describes my FPGA system. When this BSP
 should run on a different hardware, a path to the proper
 "xparameters.h" can be provided on the "configure" command line.
 
-For adapting this BSP to other boards, 
+For adapting this BSP to other boards, you can specify several configuration
+options at the configure command line (use "./configure --help" in this
+directory).  Here is an example for the top-level configure invocation:
 
-the following files should be
-modified:
-
-- c/src/lib/libbsp/powerpc/virtex/startup/linkcmds
-	for the memory layout required
-
-- c/src/lib/libbsp/powerpc/virtex/startup/bspstart.c
-	Here you can select the clock source for the timers and the
-        serial interface (system clock or external clock pin), the clock
-        rates, initial baud rate and other stuff
-
-- c/src/lib/libbsp/powerpc/virtex/include/bsp.h
-	some BSP-related constants
-
-- c/src/lib/libbsp/powerpc/virtex/*
-	well, they should be generic, so there _should_ be no reason
-	to mess around there (but who knows...)
-
-
+/path/to/rtems/sources/configure \
+  --target=powerpc-rtems4.11 \
+  --enable-rtemsbsp=virtex \
+  --enable-maintainer-mode \
+  --enable-posix \
+  --enable-tests \
+  --disable-networking \
+  'RTEMS_XPARAMETERS_H="/path/to/xparameters.h"' \
+  VIRTEX_RAM_ORIGIN=0xfffc0000 \
+  VIRTEX_RAM_LENGTH=0x3ffec \
+  VIRTEX_RESET_ORIGIN=0xffffffec

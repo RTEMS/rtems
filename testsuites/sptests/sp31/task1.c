@@ -15,6 +15,8 @@
 
 #include "system.h"
 
+#include <rtems/rtems/timerimpl.h>
+
 rtems_timer_service_routine Should_not_fire_TSR(
   rtems_id  ignored_id,
   void     *ignored_address

@@ -18,15 +18,15 @@
 #ifndef _RTEMS_RTEMS_SIGNALMP_H
 #define _RTEMS_RTEMS_SIGNALMP_H
 
+#ifndef _RTEMS_RTEMS_SIGNALIMPL_H
+# error "Never use <rtems/rtems/signalmp.h> directly; include <rtems/rtems/signalimpl.h> instead."
+#endif
+
+#include <rtems/score/mpciimpl.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/rtems/asr.h>
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
 
 /**
  *  @defgroup ClassicSignalMP Signal MP Support
@@ -128,11 +128,11 @@ void _Signal_MP_Process_packet (
  */
 Signal_MP_Packet *_Signal_MP_Get_packet ( void );
 
+/**@}*/
+
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of file */

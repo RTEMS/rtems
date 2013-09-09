@@ -7,6 +7,7 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS  = rtems/score/cpu.h
 include_rtems_score_HEADERS += rtems/score/v850.h
 include_rtems_score_HEADERS += rtems/score/cpu_asm.h rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES  = cpu.c

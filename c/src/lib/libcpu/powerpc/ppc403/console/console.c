@@ -271,8 +271,11 @@ spiPollRead (int minor)
 static int
 spiInterruptWrite (int minor, const char *buf, int len)
 {
-  port->SPTB = *buf;           /* write char to send         */
-  port->SPTC |= TCRIntEnabled; /* always enable tx interrupt */
+  if (len > 0) {
+    port->SPTB = *buf;           /* write char to send         */
+    port->SPTC |= TCRIntEnabled; /* always enable tx interrupt */
+  }
+
   return 0;
 }
 

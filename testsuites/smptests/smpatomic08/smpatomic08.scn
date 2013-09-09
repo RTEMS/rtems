@@ -1,0 +1,23 @@
+*** TEST SMPATOMIC 8 ***
+=== static and dynamic initialization test case ===
+=== atomic add test case ==
+worker 0 value: 16686
+worker 1 value: 36405
+atomic value: expected = 53091, actual = 53091
+=== atomic flag test case ==
+worker 0 value: 5588
+worker 1 value: 16019
+atomic value: expected = 21607, actual = 21607
+=== atomic sub test case ==
+worker 0 value: 4294950967
+worker 1 value: 4294930886
+atomic value: expected = 4294914557, actual = 4294914557
+=== atomic compare exchange test case ==
+worker 0 value: 2950
+worker 1 value: 22456
+atomic value: expected = 25406, actual = 25406
+=== atomic or/and test case ==
+worker 0 value: 1
+worker 1 value: 0
+atomic value: expected = 1, actual = 1
+*** END OF TEST SMPATOMIC 8 ***

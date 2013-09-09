@@ -16,4 +16,5 @@ directives:
 
 concepts:
 
-+ Exercise all non-fatal paths in the sbrk() support in the malloc family.
++ Exercise all paths in rtems_heap_extend_via_sbrk() function of the sbrk()
+  support in the malloc family.

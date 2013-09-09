@@ -28,8 +28,6 @@
 void boot_card( const char *cmdline )
 {
   _Internal_error_Occurred( FATAL_SOURCE, FATAL_IS_INTERNAL, FATAL_ERROR );
-
-  return 0;
 }
 
 static void fatal_extension(

@@ -18,20 +18,44 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
-#include <rtems/score/stack.h>
-#include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/rtems/asrimpl.h>
+#include <rtems/rtems/modesimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/config.h>
+
+static void _RTEMS_Tasks_Dispatch_if_necessary(
+  Thread_Control *executing,
+  bool            needs_asr_dispatching
+)
+{
+  if ( _Thread_Dispatch_is_enabled() ) {
+    bool dispatch_necessary = needs_asr_dispatching;
+
+    /*
+     * FIXME: This locking approach is brittle.  It only works since the
+     * current simple SMP scheduler has no support for the non-preempt mode.
+     */
+#if defined( RTEMS_SMP )
+    ISR_Level level;
+
+    _ISR_Disable_without_giant( level );
+#endif
+
+    if ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) {
+      dispatch_necessary = true;
+      _Thread_Dispatch_necessary = dispatch_necessary;
+    }
+
+#if defined( RTEMS_SMP )
+    _ISR_Enable_without_giant( level );
+#endif
+
+    if ( dispatch_necessary ) {
+      _Thread_Dispatch();
+    }
+  }
+}
 
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -42,14 +66,13 @@ rtems_status_code rtems_task_mode(
   Thread_Control     *executing;
   RTEMS_API_Control  *api;
   ASR_Information    *asr;
-  bool                is_asr_enabled = false;
-  bool                needs_asr_dispatching = false;
+  bool                needs_asr_dispatching;
   rtems_mode          old_mode;
 
   if ( !previous_mode_set )
     return RTEMS_INVALID_ADDRESS;
 
-  executing     = _Thread_Executing;
+  executing     = _Thread_Get_executing();
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
@@ -68,8 +91,18 @@ rtems_status_code rtems_task_mode(
   /*
    *  These are generic thread scheduling characteristics.
    */
-  if ( mask & RTEMS_PREEMPT_MASK )
-    executing->is_preemptible = _Modes_Is_preempt(mode_set) ? true : false;
+  if ( mask & RTEMS_PREEMPT_MASK ) {
+#if defined( RTEMS_SMP )
+    if (
+      rtems_configuration_is_smp_enabled()
+        && !_Modes_Is_preempt( mode_set )
+    ) {
+      return RTEMS_NOT_IMPLEMENTED;
+    }
+#endif
+
+    executing->is_preemptible = _Modes_Is_preempt( mode_set );
+  }
 
   if ( mask & RTEMS_TIMESLICE_MASK ) {
     if ( _Modes_Is_timeslice(mode_set) ) {
@@ -88,11 +121,10 @@ rtems_status_code rtems_task_mode(
   /*
    *  This is specific to the RTEMS API
    */
-  is_asr_enabled = false;
   needs_asr_dispatching = false;
-
   if ( mask & RTEMS_ASR_MASK ) {
-    is_asr_enabled = _Modes_Is_asr_disabled( mode_set ) ? false : true;
+    bool is_asr_enabled = !_Modes_Is_asr_disabled( mode_set );
+
     if ( is_asr_enabled != asr->is_enabled ) {
       asr->is_enabled = is_asr_enabled;
       _ASR_Swap_signals( asr );
@@ -102,10 +134,7 @@ rtems_status_code rtems_task_mode(
     }
   }
 
-  if ( _System_state_Is_up( _System_state_Get() ) ) {
-     if (_Thread_Evaluate_is_dispatch_needed( needs_asr_dispatching ) )
-      _Thread_Dispatch();
-  }
+  _RTEMS_Tasks_Dispatch_if_necessary( executing, needs_asr_dispatching );
 
   return RTEMS_SUCCESSFUL;
 }

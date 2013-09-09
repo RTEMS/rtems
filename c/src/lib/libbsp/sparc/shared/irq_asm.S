@@ -20,8 +20,253 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
+#include <rtems/score/percpu.h>
 #include <bspopts.h>
+
+.macro GET_SELF_CPU_CONTROL REG, TMP
+        sethi    %hi(_Per_CPU_Information), \REG
+        add      \REG, %lo(_Per_CPU_Information), \REG
+
+#if defined( RTEMS_SMP )
+#if BSP_LEON3_SMP
+        /* LEON3 SMP support */
+        rd       %asr17, \TMP
+        srl      \TMP, 28, \TMP /* CPU number is upper 4 bits so shift */
+#else
+        mov      0, \TMP
+        nop
+#endif
+        sll      \TMP, PER_CPU_CONTROL_SIZE_LOG2, \TMP
+        add      \REG, \TMP, \REG
+#endif /* defined( RTEMS_SMP ) */
+.endm
+
+/*
+ *  void _CPU_Context_switch(
+ *    Context_Control  *run,
+ *    Context_Control  *heir
+ *  )
+ *
+ *  This routine performs a normal non-FP context switch.
+ */
+
+        .align 4
+        PUBLIC(_CPU_Context_switch)
+SYM(_CPU_Context_switch):
+        ! skip g0
+        st      %g1, [%o0 + G1_OFFSET]       ! save the global registers
+        std     %g2, [%o0 + G2_OFFSET]
+        std     %g4, [%o0 + G4_OFFSET]
+        std     %g6, [%o0 + G6_OFFSET]
+
+        std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
+        std     %l2, [%o0 + L2_OFFSET]
+        std     %l4, [%o0 + L4_OFFSET]
+        std     %l6, [%o0 + L6_OFFSET]
+
+        std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
+        std     %i2, [%o0 + I2_OFFSET]
+        std     %i4, [%o0 + I4_OFFSET]
+        std     %i6, [%o0 + I6_FP_OFFSET]
+
+        std     %o0, [%o0 + O0_OFFSET]       ! save the output registers
+        std     %o2, [%o0 + O2_OFFSET]
+        std     %o4, [%o0 + O4_OFFSET]
+        std     %o6, [%o0 + O6_SP_OFFSET]
+
+        ! o3 = self per-CPU control
+        GET_SELF_CPU_CONTROL %o3, %o4
+
+        ! load the ISR stack nesting prevention flag
+        ld      [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %o4
+        ! save it a bit later so we do not waste a couple of cycles
+
+        rd      %psr, %o2
+        st      %o2, [%o0 + PSR_OFFSET]      ! save status register
+
+        ! Now actually save ISR stack nesting prevention flag
+        st       %o4, [%o0 + ISR_DISPATCH_DISABLE_STACK_OFFSET]
+
+        /*
+         *  This is entered from _CPU_Context_restore with:
+         *    o1 = context to restore
+         *    o2 = psr
+         *    o3 = self per-CPU control
+         */
+
+        PUBLIC(_CPU_Context_restore_heir)
+SYM(_CPU_Context_restore_heir):
+        /*
+         *  Flush all windows with valid contents except the current one.
+         *  In examining the set register windows, one may logically divide
+         *  the windows into sets (some of which may be empty) based on their
+         *  current status:
+         *
+         *    + current (i.e. in use),
+         *    + used (i.e. a restore would not trap)
+         *    + invalid (i.e. 1 in corresponding bit in WIM)
+         *    + unused
+         *
+         *  Either the used or unused set of windows may be empty.
+         *
+         *  NOTE: We assume only one bit is set in the WIM at a time.
+         *
+         *  Given a CWP of 5 and a WIM of 0x1, the registers are divided
+         *  into sets as follows:
+         *
+         *    + 0   - invalid
+         *    + 1-4 - unused
+         *    + 5   - current
+         *    + 6-7 - used
+         *
+         *  In this case, we only would save the used windows -- 6 and 7.
+         *
+         *   Traps are disabled for the same logical period as in a
+         *     flush all windows trap handler.
+         *
+         *    Register Usage while saving the windows:
+         *      g1 = current PSR
+         *      g2 = current wim
+         *      g3 = CWP
+         *      g4 = wim scratch
+         *      g5 = scratch
+         */
+
+        ld      [%o1 + PSR_OFFSET], %g1       ! g1 = saved psr
+
+        and     %o2, SPARC_PSR_CWP_MASK, %g3  ! g3 = CWP
+                                              ! g1 = psr w/o cwp
+        andn    %g1, SPARC_PSR_ET_MASK | SPARC_PSR_CWP_MASK, %g1
+        or      %g1, %g3, %g1                 ! g1 = heirs psr
+        mov     %g1, %psr                     ! restore status register and
+                                              ! **** DISABLE TRAPS ****
+        mov     %wim, %g2                     ! g2 = wim
+        mov     1, %g4
+        sll     %g4, %g3, %g4                 ! g4 = WIM mask for CW invalid
+
+save_frame_loop:
+        sll     %g4, 1, %g5                   ! rotate the "wim" left 1
+        srl     %g4, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g4
+        or      %g4, %g5, %g4                 ! g4 = wim if we do one restore
+
+        /*
+         *  If a restore would not underflow, then continue.
+         */
+
+        andcc   %g4, %g2, %g0                 ! Any windows to flush?
+        bnz     done_flushing                 ! No, then continue
+        nop
+
+        restore                               ! back one window
+
+        /*
+         *  Now save the window just as if we overflowed to it.
+         */
+
+        std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
+        std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
+        std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
+        std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
+
+        std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
+        std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
+        std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
+        std     %i6, [%sp + CPU_STACK_FRAME_I6_FP_OFFSET]
+
+        ba      save_frame_loop
+        nop
+
+done_flushing:
+
+        add     %g3, 1, %g3                   ! calculate desired WIM
+        and     %g3, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
+        mov     1, %g4
+        sll     %g4, %g3, %g4                 ! g4 = new WIM
+        mov     %g4, %wim
+
+        or      %g1, SPARC_PSR_ET_MASK, %g1
+        mov     %g1, %psr                     ! **** ENABLE TRAPS ****
+                                              !   and restore CWP
+        nop
+        nop
+        nop
+
+        ! skip g0
+        ld      [%o1 + G1_OFFSET], %g1        ! restore the global registers
+        ldd     [%o1 + G2_OFFSET], %g2
+        ldd     [%o1 + G4_OFFSET], %g4
+        ldd     [%o1 + G6_OFFSET], %g6
+
+        ! Load thread specific ISR dispatch prevention flag
+        ld      [%o1 + ISR_DISPATCH_DISABLE_STACK_OFFSET], %o2
+        ! Store it to memory later to use the cycles
+
+        ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
+        ldd     [%o1 + L2_OFFSET], %l2
+        ldd     [%o1 + L4_OFFSET], %l4
+        ldd     [%o1 + L6_OFFSET], %l6
+
+        ! Now restore thread specific ISR dispatch prevention flag
+        st      %o2, [%o3 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+
+        ldd     [%o1 + I0_OFFSET], %i0        ! restore the output registers
+        ldd     [%o1 + I2_OFFSET], %i2
+        ldd     [%o1 + I4_OFFSET], %i4
+        ldd     [%o1 + I6_FP_OFFSET], %i6
+
+        ldd     [%o1 + O2_OFFSET], %o2        ! restore the output registers
+        ldd     [%o1 + O4_OFFSET], %o4
+        ldd     [%o1 + O6_SP_OFFSET], %o6
+        ! do o0/o1 last to avoid destroying heir context pointer
+        ldd     [%o1 + O0_OFFSET], %o0        ! overwrite heir pointer
+
+        jmp     %o7 + 8                       ! return
+        nop                                   ! delay slot
+
+/*
+ *  void _CPU_Context_restore(
+ *    Context_Control *new_context
+ *  )
+ *
+ *  This routine is generally used only to perform restart self.
+ *
+ *  NOTE: It is unnecessary to reload some registers.
+ */
+        .align 4
+        PUBLIC(_CPU_Context_restore)
+SYM(_CPU_Context_restore):
+        save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+        rd      %psr, %o2
+        GET_SELF_CPU_CONTROL %o3, %o4
+        ba      SYM(_CPU_Context_restore_heir)
+        mov     %i0, %o1                      ! in the delay slot
+        .align 4
+
+#if defined(RTEMS_SMP)
+/*
+ *  void _CPU_Context_switch_to_first_task_smp(
+ *    Context_Control *new_context
+ *  )
+ *
+ *  This routine is only used to switch to the first task on a
+ *  secondary core in an SMP configuration.  We do not need to
+ *  flush any windows and, in fact, this can be dangerous
+ *  as they may or may not be initialized properly.  So we just
+ *  reinitialize the PSR and WIM.
+ */
+        PUBLIC(_CPU_Context_switch_to_first_task_smp)
+SYM(_CPU_Context_switch_to_first_task_smp):
+	mov	%psr, %g1		! Turn of traps when modifying WIM
+	andn	%g1, SPARC_PSR_ET_MASK, %g1
+	mov	%g1, %psr
+	/* WIM and PSR will be set in done_flushing, it need args:
+	 * g1=PSR, g3=CWP, o1=Context
+	 */
+	and	%g1, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
+	nop
+	mov	%o0, %o1		! in the delay slot
+	ba,a	done_flushing
+#endif
 
 /*
  *  void _ISR_Handler()
@@ -162,6 +407,51 @@ save_isf:
         mov     %sp, %o1                       ! 2nd arg to ISR Handler
 
         /*
+         *  Increment ISR nest level and Thread dispatch disable level.
+         *
+         *  Register usage for this section:
+         *
+         *    l4 = _Thread_Dispatch_disable_level pointer
+         *    l5 = per cpu info pointer
+         *    l6 = _Thread_Dispatch_disable_level value
+         *    l7 = _ISR_Nest_level value
+         *
+         *  NOTE: It is assumed that l4 - l7 will be preserved until the ISR
+         *        nest and thread dispatch disable levels are unnested.
+         */
+
+	GET_SELF_CPU_CONTROL %l5, %l7
+
+	ld       [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL], %l6
+	ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
+
+        add      %l6, 1, %l6
+        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+
+        add      %l7, 1, %l7
+        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
+
+        /*
+         *  If ISR nest level was zero (now 1), then switch stack.
+         */
+
+        mov      %sp, %fp
+        subcc    %l7, 1, %l7             ! outermost interrupt handler?
+        bnz      dont_switch_stacks      ! No, then do not switch stacks
+
+        nop
+	ld       [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
+
+dont_switch_stacks:
+        /*
+         *  Make sure we have a place on the stack for the window overflow
+         *  trap handler to write into.  At this point it is safe to
+         *  enable traps again.
+         */
+
+        sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+
+        /*
          *  Check if we have an external interrupt (trap 0x11 - 0x1f). If so,
          *  set the PIL in the %psr to mask off interrupts with lower priority.
          *  The original %psr in %l0 is not modified since it will be restored
@@ -251,83 +541,6 @@ pil_fixed:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 dont_fix_pil2:
 
-        PUBLIC(_ISR_PER_CPU)
-SYM(_ISR_PER_CPU):
-
-#if defined(RTEMS_SMP)
-        sethi    %hi(_Per_CPU_Information_p), %l5
-        add      %l5, %lo(_Per_CPU_Information_p), %l5
-    #if BSP_LEON3_SMP 
-	/* LEON3 SMP support */
-	rd	%asr17, %l7
-	srl	%l7, 28, %l7	/* CPU number is upper 4 bits so shift */
-	sll	%l7, 2, %l7	/* l7 = offset */
-	add	%l5, %l7, %l5
-    #endif
-        ld       [%l5], %l5	/* l5 = pointer to per CPU */
-
-        /*
-         *  On multi-core system, we need to use SMP safe versions
-         *  of ISR and Thread Dispatch critical sections.
-         *
-         *  _ISR_SMP_Enter returns the interrupt nest level.  If we are
-         *  outermost interrupt, then we need to switch stacks.
-         */
-        call    SYM(_ISR_SMP_Enter), 0
-         mov      %sp, %fp              ! delay slot
-	cmp	%o0, 0
-#else
-        /*
-         *  On single core system, we can directly use variables.
-         *
-         *  Increment ISR nest level and Thread dispatch disable level.
-         *
-         *  Register usage for this section:
-         *
-         *    l4 = _Thread_Dispatch_disable_level pointer
-         *    l5 = _ISR_Nest_level pointer
-         *    l6 = _Thread_Dispatch_disable_level value
-         *    l7 = _ISR_Nest_level value
-         *
-         *  NOTE: It is assumed that l4 - l7 will be preserved until the ISR
-         *        nest and thread dispatch disable levels are unnested.
-         */
-        sethi    %hi(SYM(_Thread_Dispatch_disable_level)), %l4
-        ld       [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))], %l6
-
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
-
-        ld       [%l5 + PER_CPU_ISR_NEST_LEVEL], %l7
-
-        add      %l6, 1, %l6
-        st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
-
-        add      %l7, 1, %l7
-        st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
-
-        /*
-         *  If ISR nest level was zero (now 1), then switch stack.
-         */
-        mov      %sp, %fp
-        subcc    %l7, 1, %l7             ! outermost interrupt handler?
-#endif
-
-        /*
-         *  Do we need to switch to the interrupt stack?
-         */
-        beq,a    dont_switch_stacks      ! No, then do not switch stacks
-         ld      [%l5 + PER_CPU_INTERRUPT_STACK_HIGH], %sp
-
-dont_switch_stacks:
-        /*
-         *  Make sure we have a place on the stack for the window overflow
-         *  trap handler to write into.  At this point it is safe to
-         *  enable traps again.
-         */
-
-        sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
-
         /*
          *  Vector to user's handler.
          *
@@ -348,14 +561,6 @@ dont_switch_stacks:
         call     %g4, 0
         nop                             ! delay slot
 
-#if defined(RTEMS_SMP)
-        call    SYM(_ISR_SMP_Exit), 0
-        nop                             ! delay slot
-	cmp	%o0, 0
-	bz	simple_return
-	 nop
-#endif
-
         /*
          *  Redisable traps so we can finish up the interrupt processing.
          *  This is a VERY conservative place to do this.
@@ -366,20 +571,19 @@ dont_switch_stacks:
         mov      %l0, %psr             ! **** DISABLE TRAPS ****
         nop; nop; nop
 
-#if !defined(RTEMS_SMP)
         /*
          *  Decrement ISR nest level and Thread dispatch disable level.
          *
          *  Register usage for this section:
          *
          *    l4 = _Thread_Dispatch_disable_level pointer
-         *    l5 = _ISR_Nest_level pointer
+         *    l5 = per cpu info pointer
          *    l6 = _Thread_Dispatch_disable_level value
          *    l7 = _ISR_Nest_level value
          */
 
         sub      %l6, 1, %l6
-        st       %l6, [%l4 + %lo(SYM(_Thread_Dispatch_disable_level))]
+        st       %l6, [%l5 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         st       %l7, [%l5 + PER_CPU_ISR_NEST_LEVEL]
 
@@ -390,35 +594,33 @@ dont_switch_stacks:
 
         orcc     %l6, %g0, %g0   ! Is dispatching disabled?
         bnz      simple_return   ! Yes, then do a "simple" exit
-        ! NOTE: Use the delay slot
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l6
+        nop
 
         ! Are we dispatching from a previous ISR in the interrupted thread?
-        ld       [%l6 + %lo(SYM(_CPU_ISR_Dispatch_disable))], %l7
+        ld       [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
-         nop
+        nop
+
 
         /*
          *  If a context switch is necessary, then do fudge stack to
          *  return to the interrupt dispatcher.
          */
 
-        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
-        orcc     %l5, %g0, %g0   ! Is thread switch necessary?
-        bz       simple_return   ! No, then return
-         nop
-#endif
+        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l6
+
+        orcc     %l6, %g0, %g0   ! Is thread switch necessary?
+        bz       simple_return   ! no, then do a simple return
+        nop
+
         /*
          *  Invoke interrupt dispatcher.
          */
 
-        PUBLIC(_ISR_Dispatch)
-SYM(_ISR_Dispatch):
         ! Set ISR dispatch nesting prevention flag
         mov      1,%l6
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l5
-        st       %l6,[%l5 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
+        st       %l6, [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The following subtract should get us back on the interrupted
@@ -455,27 +657,12 @@ isr_dispatch:
          *  _Thread_Dispatch before leaving this ISR Dispatch context.
          */
 
-#if defined(RTEMS_SMP)
-        sethi    %hi(_Per_CPU_Information_p), %l5
-        ld       [%l5 + %lo(_Per_CPU_Information_p)], %l5
-    #if BSP_LEON3_SMP 
-	/* LEON3 SMP support */
-	rd	%asr17, %l7
-	srl	%l7, 28, %l7	/* CPU number is upper 4 bits so shift */
-	sll	%l7, 2, %l7	/* l7 = offset */
-	add	%l5, %l7, %l5
-    #else
-        nop
-        nop
-    #endif
-        ld       [%l5], %l5	/* l5 = pointer to per CPU */
-#else
-        sethi    %hi(_Per_CPU_Information), %l5
-        add      %l5, %lo(_Per_CPU_Information), %l5
-#endif
-        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l5
-        orcc     %l5, %g0, %g0   ! Is thread switch necessary?
-        bz       allow_nest_again
+	GET_SELF_CPU_CONTROL %l5, %l7
+
+        ldub     [%l5 + PER_CPU_DISPATCH_NEEDED], %l7
+
+        orcc     %l7, %g0, %g0    ! Is thread switch necesary?
+        bz       allow_nest_again ! No, then clear out and return
         nop
 
         ! Yes, then invoke the dispatcher
@@ -488,8 +675,7 @@ dispatchAgain:
 allow_nest_again:
 
         ! Zero out ISR stack nesting prevention flag
-        sethi    %hi(SYM(_CPU_ISR_Dispatch_disable)), %l5
-        st       %g0,[%l5 + %lo(SYM(_CPU_ISR_Dispatch_disable))]
+        st       %g0, [%l5 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The CWP in place at this point may be different from

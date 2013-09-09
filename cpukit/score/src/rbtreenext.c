@@ -24,7 +24,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/rbtree.h>
+#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/isr.h>
 
 RBTree_Node *_RBTree_Next_unprotected(

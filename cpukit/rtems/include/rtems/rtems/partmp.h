@@ -18,16 +18,15 @@
 #ifndef _RTEMS_RTEMS_PARTMP_H
 #define _RTEMS_RTEMS_PARTMP_H
 
+#ifndef _RTEMS_RTEMS_PARTIMPL_H
+# error "Never use <rtems/rtems/partmp.h> directly; include <rtems/rtems/partimpl.h> instead."
+#endif
+
+#include <rtems/score/mpciimpl.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/thread.h>
-
-#include <rtems/rtems/part.h>
 
 /**
  *  @defgroup ClassicPartMP Partition MP Support

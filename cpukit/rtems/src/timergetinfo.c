@@ -21,10 +21,8 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/timer.h>
-#include <rtems/score/tod.h>
+#include <rtems/rtems/timerimpl.h>
 #include <rtems/score/watchdog.h>
 
 rtems_status_code rtems_timer_get_information(
@@ -46,7 +44,7 @@ rtems_status_code rtems_timer_get_information(
       the_info->initial    = the_timer->Ticker.initial;
       the_info->start_time = the_timer->Ticker.start_time;
       the_info->stop_time  = the_timer->Ticker.stop_time;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

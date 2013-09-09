@@ -187,12 +187,18 @@ console_tbl Console_Configuration_Ports [CONSOLE_COUNT] = {
 
 static void output_char(char c)
 {
-  const console_fns *con = Console_Port_Tbl [Console_Port_Minor]->pDeviceFns;
-  
-  if (c == '\n') {
-    con->deviceWritePolled((int) Console_Port_Minor, '\r');
+  int minor = (int) Console_Port_Minor;
+  const console_tbl **ct_tbl = Console_Port_Tbl;
+
+  if (ct_tbl != NULL) {
+    const console_fns *cf = ct_tbl[minor]->pDeviceFns;
+
+    if (c == '\n') {
+      (*cf->deviceWritePolled)(minor, '\r');
+    }
+
+    (*cf->deviceWritePolled)(minor, c);
   }
-  con->deviceWritePolled((int) Console_Port_Minor, c);
 }
 
 BSP_output_char_function_type BSP_output_char = output_char;

@@ -22,12 +22,10 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/posix/cond.h>
+#include <rtems/posix/condimpl.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/muteximpl.h>
 
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
@@ -37,15 +35,18 @@ int _POSIX_Condition_variables_Wait_support(
 )
 {
   register POSIX_Condition_variables_Control *the_cond;
+  POSIX_Mutex_Control                        *the_mutex;
   Objects_Locations                           location;
   int                                         status;
   int                                         mutex_status;
+  Thread_Control                             *executing;
 
-  if ( !_POSIX_Mutex_Get( mutex, &location ) ) {
+  the_mutex = _POSIX_Mutex_Get( mutex, &location );
+  if ( !the_mutex ) {
      return EINVAL;
   }
 
-  _Thread_Unnest_dispatch();
+  _Objects_Put_without_thread_dispatch( &the_mutex->Object );
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
@@ -53,14 +54,14 @@ int _POSIX_Condition_variables_Wait_support(
     case OBJECTS_LOCAL:
 
       if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         return EINVAL;
       }
 
       (void) pthread_mutex_unlock( mutex );
 /* XXX ignore this for now  since behavior is undefined
       if ( mutex_status ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         return EINVAL;
       }
 */
@@ -69,13 +70,14 @@ int _POSIX_Condition_variables_Wait_support(
         the_cond->Mutex = *mutex;
 
         _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
-        _Thread_Executing->Wait.return_code = 0;
-        _Thread_Executing->Wait.queue       = &the_cond->Wait_queue;
-        _Thread_Executing->Wait.id          = *cond;
+        executing = _Thread_Executing;
+        executing->Wait.return_code = 0;
+        executing->Wait.queue       = &the_cond->Wait_queue;
+        executing->Wait.id          = *cond;
 
-        _Thread_queue_Enqueue( &the_cond->Wait_queue, timeout );
+        _Thread_queue_Enqueue( &the_cond->Wait_queue, executing, timeout );
 
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
 
         /*
          *  Switch ourself out because we blocked as a result of the
@@ -89,12 +91,12 @@ int _POSIX_Condition_variables_Wait_support(
          *  returns a success status, except for the fact that it was not
          *  woken up a pthread_cond_signal or a pthread_cond_broadcast.
          */
-        status = _Thread_Executing->Wait.return_code;
+        status = executing->Wait.return_code;
         if ( status == EINTR )
           status = 0;
 
       } else {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_cond->Object );
         status = ETIMEDOUT;
       }
 

@@ -25,7 +25,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/coremsg.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 
 /*
  *  _POSIX_Message_queue_Translate_core_message_queue_return_code

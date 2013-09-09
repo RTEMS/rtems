@@ -18,21 +18,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
-void* _Scheduler_priority_Allocate (
+void *_Scheduler_priority_Allocate (
   Thread_Control        *the_thread
 )
 {
-  void *sched;
+  Scheduler_priority_Per_thread *sched_info_of_thread =
+    _Workspace_Allocate( sizeof( *sched_info_of_thread ) );
 
-  sched = _Workspace_Allocate( sizeof(Scheduler_priority_Per_thread) );
+  the_thread->scheduler_info = sched_info_of_thread;
 
-  the_thread->scheduler_info = (Scheduler_priority_Per_thread*) sched;
-
-  return sched;
+  return sched_info_of_thread;
 }

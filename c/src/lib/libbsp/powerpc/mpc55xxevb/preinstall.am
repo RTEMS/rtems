@@ -93,6 +93,10 @@ $(PROJECT_LIB)/linkcmds.phycore_mpc5554: startup/linkcmds.phycore_mpc5554 $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.phycore_mpc5554
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.phycore_mpc5554
 
+$(PROJECT_LIB)/linkcmds.mpc5668g: startup/linkcmds.mpc5668g $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5668g
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5668g
+
 $(PROJECT_LIB)/linkcmds.mpc5674f_ecu508: startup/linkcmds.mpc5674f_ecu508 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.mpc5674f_ecu508
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.mpc5674f_ecu508

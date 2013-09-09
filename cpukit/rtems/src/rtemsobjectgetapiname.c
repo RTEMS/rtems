@@ -18,13 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/object.h>
-
+#include <rtems/score/objectimpl.h>
 #include <rtems/assoc.h>
 
-rtems_assoc_t rtems_objects_api_assoc[] = {
+static const rtems_assoc_t rtems_objects_api_assoc[] = {
   { "Internal", OBJECTS_INTERNAL_API, 0},
   { "Classic",  OBJECTS_CLASSIC_API, 0},
   { "POSIX",    OBJECTS_POSIX_API, 0},

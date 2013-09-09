@@ -18,15 +18,14 @@
 #include "config.h"
 #endif
 
-#ifdef RTEMS_POSIX_API
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#endif
-
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <rtems.h>
 #include <rtems/libio_.h>
+#include <rtems/rtems/barrierimpl.h>
+#include <rtems/score/statesimpl.h>
 
 #include "pipe.h"
 
@@ -66,22 +65,22 @@ static rtems_id pipe_semaphore = RTEMS_ID_NONE;
 
 
 #ifdef RTEMS_POSIX_API
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
 #include <rtems/rtems/barrier.h>
 #include <rtems/score/thread.h>
 
 /* Set barriers to be interruptible by signals. */
 static void pipe_interruptible(pipe_control_t *pipe)
 {
-  Objects_Locations location;
+  Objects_Locations  location;
+  Barrier_Control   *the_barrier;
 
-  _Barrier_Get(pipe->readBarrier, &location)->Barrier.Wait_queue.state
-    |= STATES_INTERRUPTIBLE_BY_SIGNAL;
-  _Thread_Enable_dispatch();
-  _Barrier_Get(pipe->writeBarrier, &location)->Barrier.Wait_queue.state
-    |= STATES_INTERRUPTIBLE_BY_SIGNAL;
-  _Thread_Enable_dispatch();
+  the_barrier = _Barrier_Get(pipe->readBarrier, &location);
+  the_barrier->Barrier.Wait_queue.state |= STATES_INTERRUPTIBLE_BY_SIGNAL;
+  _Objects_Put( &the_barrier->Object );
+
+  the_barrier = _Barrier_Get(pipe->writeBarrier, &location);
+  the_barrier->Barrier.Wait_queue.state |= STATES_INTERRUPTIBLE_BY_SIGNAL;
+  _Objects_Put( &the_barrier->Object );
 }
 #endif
 

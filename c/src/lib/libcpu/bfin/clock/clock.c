@@ -18,7 +18,7 @@
 #include <libcpu/coreTimerRegs.h>
 
 #if (BFIN_ON_SKYEYE)
-#define CLOCK_DRIVER_USE_FAST_IDLE
+#define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
 volatile uint32_t Clock_driver_ticks;
@@ -36,11 +36,14 @@ static rtems_isr clockISR(rtems_vector_number vector) {
 
   Clock_driver_ticks += 1;
 
-#ifdef CLOCK_DRIVER_USE_FAST_IDLE
+#if CLOCK_DRIVER_USE_FAST_IDLE
   do {
     rtems_clock_tick();
-  } while (_Thread_Executing == _Thread_Idle &&
-           _Thread_Heir == _Thread_Executing);
+  } while (
+    _Thread_Heir == _Thread_Executing
+      && _Thread_Executing->Start.entry_point
+        == rtems_configuration_get_idle_task()
+  );
 #else
   rtems_clock_tick();
 #endif

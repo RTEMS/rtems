@@ -19,9 +19,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Unblock(
   Thread_Control    *the_thread

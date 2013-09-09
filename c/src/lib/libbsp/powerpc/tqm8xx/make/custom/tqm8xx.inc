@@ -15,7 +15,7 @@ CPU_CFLAGS = -mcpu=860 -Dmpc860 \
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
 
 define bsp-post-link
-	cp $(basename $@).exe $(basename $@)$(DOWNEXT) 
+	cp $(basename $@)$(EXEEXT) $(basename $@)$(DOWNEXT) 
 	$(STRIP) $(basename $@)$(DOWNEXT)
 	$(default-bsp-post-link)
 endef

@@ -9,16 +9,11 @@
 #include "config.h"
 #endif
 
-/* This is always defined on RTEMS Scheduler Simulator and thus
- * we get a redefined warning if this is not present.
- */
-#ifndef __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-  #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-#endif
 #include <rtems.h>
-
 #include <rtems/error.h>
 #include <rtems/assoc.h>
+#include <rtems/score/sysstate.h>
+#include <rtems/score/threadimpl.h>
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -71,7 +66,7 @@ const char *rtems_status_text(
 }
 
 
-static int rtems_verror(
+int rtems_verror(
   rtems_error_code_t  error_flag,
   const char         *printf_format,
   va_list             arglist

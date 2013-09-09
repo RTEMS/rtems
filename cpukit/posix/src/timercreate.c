@@ -29,7 +29,8 @@
 #include <rtems/score/thread.h>
 #include <rtems/posix/sigset.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 int timer_create(
   clockid_t        clock_id,
@@ -72,7 +73,7 @@ int timer_create(
    */
   ptimer = _POSIX_Timer_Allocate();
   if ( !ptimer ) {
-    _Thread_Enable_dispatch();
+    _Objects_Put( &ptimer->Object );
     rtems_set_errno_and_return_minus_one( EAGAIN );
   }
 
@@ -97,6 +98,6 @@ int timer_create(
   _Objects_Open_u32(&_POSIX_Timer_Information, &ptimer->Object, 0);
 
   *timerid  = ptimer->Object.id;
-  _Thread_Enable_dispatch();
+  _Objects_Put( &ptimer->Object );
   return 0;
 }

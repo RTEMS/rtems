@@ -21,24 +21,21 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/coresem.h>
-#include <rtems/score/states.h>
+#include <rtems/score/coresemimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 #if defined(RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY)
 
 void _CORE_semaphore_Seize(
   CORE_semaphore_Control *the_semaphore,
+  Thread_Control         *executing,
   Objects_Id              id,
   bool                    wait,
   Watchdog_Interval       timeout
 )
 {
-  Thread_Control *executing;
   ISR_Level       level;
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   if ( the_semaphore->count != 0 ) {
@@ -66,6 +63,6 @@ void _CORE_semaphore_Seize(
   executing->Wait.queue = &the_semaphore->Wait_queue;
   executing->Wait.id    = id;
   _ISR_Enable( level );
-  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, executing, timeout );
 }
 #endif

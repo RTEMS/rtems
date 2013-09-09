@@ -21,14 +21,13 @@
 #include <rtems/system.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/coremsg.h>
-#include <rtems/score/states.h>
+#include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
+  Thread_Control                  *executing,
   Objects_Id                       id,
   void                            *buffer,
   size_t                          *size_p,
@@ -38,9 +37,7 @@ void _CORE_message_queue_Seize(
 {
   ISR_Level                          level;
   CORE_message_queue_Buffer_control *the_message;
-  Thread_Control                    *executing;
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
@@ -49,7 +46,7 @@ void _CORE_message_queue_Seize(
     _ISR_Enable( level );
 
     *size_p = the_message->Contents.size;
-    _Thread_Executing->Wait.count =
+    executing->Wait.count =
       _CORE_message_queue_Get_message_priority( the_message );
     _CORE_message_queue_Copy_buffer(
       the_message->Contents.buffer,
@@ -124,5 +121,5 @@ void _CORE_message_queue_Seize(
   /* Wait.count will be filled in with the message priority */
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, executing, timeout );
 }

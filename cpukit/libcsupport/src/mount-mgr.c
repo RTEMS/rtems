@@ -41,6 +41,7 @@ bool rtems_filesystem_iterate(
   void *routine_arg
 )
 {
+  rtems_chain_control *chain = &filesystem_chain;
   const rtems_filesystem_table_t *table_entry = &rtems_filesystem_table [0];
   rtems_chain_node *node = NULL;
   bool stop = false;
@@ -53,8 +54,8 @@ bool rtems_filesystem_iterate(
   if ( !stop ) {
     rtems_libio_lock();
     for (
-      node = rtems_chain_first( &filesystem_chain );
-      !rtems_chain_is_tail( &filesystem_chain, node ) && !stop;
+      node = rtems_chain_first( chain );
+      !rtems_chain_is_tail( chain, node ) && !stop;
       node = rtems_chain_next( node )
     ) {
       const filesystem_node *fsn = (filesystem_node *) node;
@@ -108,6 +109,7 @@ rtems_filesystem_register(
   rtems_filesystem_fsmount_me_t  mount_h
 )
 {
+  rtems_chain_control *chain = &filesystem_chain;
   size_t type_size = strlen(type) + 1;
   size_t fsn_size = sizeof( filesystem_node ) + type_size;
   filesystem_node *fsn = malloc( fsn_size );
@@ -122,7 +124,7 @@ rtems_filesystem_register(
 
   rtems_libio_lock();
   if ( rtems_filesystem_get_mount_handler( type ) == NULL ) {
-    rtems_chain_append( &filesystem_chain, &fsn->node );
+    rtems_chain_append_unprotected( chain, &fsn->node );
   } else {
     rtems_libio_unlock();
     free( fsn );
@@ -139,6 +141,7 @@ rtems_filesystem_unregister(
   const char *type
 )
 {
+  rtems_chain_control *chain = &filesystem_chain;
   rtems_chain_node *node = NULL;
 
   if ( type == NULL ) {
@@ -147,14 +150,14 @@ rtems_filesystem_unregister(
 
   rtems_libio_lock();
   for (
-    node = rtems_chain_first( &filesystem_chain );
-    !rtems_chain_is_tail( &filesystem_chain, node );
+    node = rtems_chain_first( chain );
+    !rtems_chain_is_tail( chain, node );
     node = rtems_chain_next( node )
   ) {
     filesystem_node *fsn = (filesystem_node *) node;
 
     if ( strcmp( fsn->entry.type, type ) == 0 ) {
-      rtems_chain_extract( node );
+      rtems_chain_extract_unprotected( node );
       free( fsn );
       rtems_libio_unlock();
 

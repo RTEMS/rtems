@@ -26,6 +26,8 @@
 
 int aio_cancel(int fildes, struct aiocb  *aiocbp)
 {
+  rtems_chain_control *idle_req_chain = &aio_request_queue.idle_req;
+  rtems_chain_control *work_req_chain = &aio_request_queue.work_req;
   rtems_aio_request_chain *r_chain;
   int result;
   
@@ -40,12 +42,12 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
   if (aiocbp == NULL) {
     AIO_printf ("Cancel all requests\n");        
          
-    r_chain = rtems_aio_search_fd (&aio_request_queue.work_req, fildes, 0);
+    r_chain = rtems_aio_search_fd (work_req_chain, fildes, 0);
     if (r_chain == NULL) {
       AIO_printf ("Request chain not on [WQ]\n");
 
-      if (!rtems_chain_is_empty (&aio_request_queue.idle_req)) {
-        r_chain = rtems_aio_search_fd (&aio_request_queue.idle_req, fildes, 0);
+      if (!rtems_chain_is_empty (idle_req_chain)) {
+        r_chain = rtems_aio_search_fd (idle_req_chain, fildes, 0);
         if (r_chain == NULL) {
           pthread_mutex_unlock(&aio_request_queue.mutex);
           return AIO_ALLDONE;
@@ -53,7 +55,7 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
 
         AIO_printf ("Request chain on [IQ]\n");
 
-        rtems_chain_extract (&r_chain->next_fd);        
+        rtems_chain_explicit_extract (idle_req_chain, &r_chain->next_fd);
         rtems_aio_remove_fd (r_chain);
         pthread_mutex_destroy (&r_chain->mutex);
         pthread_cond_destroy (&r_chain->mutex);
@@ -70,7 +72,7 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
     AIO_printf ("Request chain on [WQ]\n");
 
     pthread_mutex_lock (&r_chain->mutex);
-    rtems_chain_extract (&r_chain->next_fd);
+    rtems_chain_explicit_extract (work_req_chain, &r_chain->next_fd);
     rtems_aio_remove_fd (r_chain);
     pthread_mutex_unlock (&r_chain->mutex);
     pthread_mutex_unlock (&aio_request_queue.mutex);
@@ -83,10 +85,10 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
       rtems_set_errno_and_return_minus_one (EINVAL);
     }
       
-    r_chain = rtems_aio_search_fd (&aio_request_queue.work_req, fildes, 0);
+    r_chain = rtems_aio_search_fd (work_req_chain, fildes, 0);
     if (r_chain == NULL) {
-      if (!rtems_chain_is_empty (&aio_request_queue.idle_req)) {
-        r_chain = rtems_aio_search_fd (&aio_request_queue.idle_req, fildes, 0);
+      if (!rtems_chain_is_empty (idle_req_chain)) {
+        r_chain = rtems_aio_search_fd (idle_req_chain, fildes, 0);
         if (r_chain == NULL) { 
           pthread_mutex_unlock (&aio_request_queue.mutex);
           rtems_set_errno_and_return_minus_one (EINVAL);

@@ -98,6 +98,24 @@ extern "C" {
  */
 extern rtems_task_priority rpciodPriority;
 
+/**
+ * @brief Sets the XIDs of the RPC transaction hash table.
+ *
+ * The active RPC transactions are stored in a hash table.  Each table entry
+ * contains the XID of its corresponding transaction.  The XID consists of two
+ * parts.  The lower part is determined by the hash table index.  The upper
+ * part is incremented in each send operation.
+ *
+ * This function sets the upper part of the XID in all hash table entries.
+ * This can be used to ensure that the XIDs are not reused in a short interval
+ * for example during a boot process or after resets.
+ *
+ * @param[in] xid The upper part is used to set the upper XID part of the hash
+ * table entries.
+ */
+void
+rpcSetXIDs(uint32_t xid);
+
 /** Initialize the driver.
  *
  * Note, called in nfsfs initialise when mount is called.

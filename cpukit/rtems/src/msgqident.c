@@ -19,20 +19,14 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/coremsg.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
+#include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/attr.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/statusimpl.h>
+#include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/support.h>
 

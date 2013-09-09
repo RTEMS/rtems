@@ -18,13 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdogimpl.h>
 
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id id
@@ -42,7 +39,7 @@ rtems_status_code rtems_rate_monotonic_delete(
       (void) _Watchdog_Remove( &the_period->Timer );
       the_period->state = RATE_MONOTONIC_INACTIVE;
       _Rate_monotonic_Free( the_period );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

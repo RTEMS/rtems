@@ -10,6 +10,8 @@ include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 include_HEADERS += include/psim.h
 
+include_bsp_HEADERS = ../shared/include/linker-symbols.h
+
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
@@ -23,6 +25,7 @@ project_lib_DATA = start.$(OBJEXT)
 libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
 dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES += libbsp.a
@@ -32,9 +35,8 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppretaskinghook.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
-    ../../powerpc/shared/startup/bspgetworkarea.c ../../shared/bootcard.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c \
-    startup/psim_registers.c
+    ../../shared/bspgetworkarea.c ../../shared/bootcard.c \
+    ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c
 
 # pclock
 libbsp_a_SOURCES += ../shared/clock/p_clock.c
@@ -44,7 +46,7 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 libbsp_a_SOURCES += console/console-io.c console/consupp.S
 
 # irq
-include_bsp_HEADERS = irq/irq.h ../shared/openpic/openpic.h \
+include_bsp_HEADERS += irq/irq.h ../shared/openpic/openpic.h \
     ../../shared/include/irq-generic.h
 libbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c \
     ../shared/openpic/openpic.c ../../shared/src/irq-server.c  \

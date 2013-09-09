@@ -24,16 +24,18 @@
 #endif
 
 #include <rtems/rtems/clock.h>
+#include <rtems/score/todimpl.h>
 
 time_t rtems_clock_get_uptime_seconds( void )
 {
-  Timestamp_Control snapshot_as_timestamp;
-  struct timespec   snapshot_as_timespec;
-  ISR_Level         level;
+  TOD_Control       *tod = &_TOD;
+  Timestamp_Control  snapshot_as_timestamp;
+  struct timespec    snapshot_as_timespec;
+  ISR_Level          level;
 
-  _ISR_Disable( level );
-  snapshot_as_timestamp = _TOD.uptime;
-  _ISR_Enable( level );
+  _TOD_Acquire( tod, level );
+  snapshot_as_timestamp = tod->uptime;
+  _TOD_Release( tod, level );
 
   _Timestamp_To_timespec( &snapshot_as_timestamp, &snapshot_as_timespec );
 

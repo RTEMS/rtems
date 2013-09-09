@@ -124,8 +124,8 @@ int sem_trywait(
  * @brief Lock a semaphore.
  */
 int sem_timedwait(
-  sem_t                 *sem,
-  const struct timespec *timeout
+  sem_t                 *__restrict sem,
+  const struct timespec *__restrict timeout
 );
 #endif
 
@@ -144,8 +144,8 @@ int sem_post(
  * 11.2.8 Get the Value of a Semaphore, P1003.1b-1993, p.229
  */
 int sem_getvalue(
-  sem_t  *sem,
-  int    *sval
+  sem_t  *__restrict sem,
+  int    *__restrict sval
 );
 
 #endif   /* _POSIX_SEMAPHORES */

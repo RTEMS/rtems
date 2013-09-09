@@ -23,9 +23,9 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/rwlock.h>
+#include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/thread.h>
 
 /*
  *  pthread_rwlock_timedwrlock
@@ -50,6 +50,7 @@ int pthread_rwlock_timedwrlock(
   Watchdog_Interval                            ticks;
   bool                                         do_wait = true;
   POSIX_Absolute_timeout_conversion_results_t  status;
+  Thread_Control                              *executing;
 
   if ( !rwlock )
     return EINVAL;
@@ -76,26 +77,28 @@ int pthread_rwlock_timedwrlock(
 
     case OBJECTS_LOCAL:
 
+      executing = _Thread_Executing;
       _CORE_RWLock_Obtain_for_writing(
-	&the_rwlock->RWLock,
-	*rwlock,
-	do_wait,
-	ticks,
-	NULL
+        &the_rwlock->RWLock,
+        executing,
+        *rwlock,
+        do_wait,
+        ticks,
+        NULL
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_rwlock->Object );
       if ( !do_wait &&
-           (_Thread_Executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE) ) {
-	if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
-	  return EINVAL;
-	if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
-	     status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
-	  return ETIMEDOUT;
+           (executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE) ) {
+        if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+          return EINVAL;
+        if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+             status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+          return ETIMEDOUT;
       }
 
       return _POSIX_RWLock_Translate_core_RWLock_return_code(
-        (CORE_RWLock_Status) _Thread_Executing->Wait.return_code
+        (CORE_RWLock_Status) executing->Wait.return_code
       );
 
 #if defined(RTEMS_MULTIPROCESSING)

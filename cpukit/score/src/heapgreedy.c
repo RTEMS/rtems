@@ -24,7 +24,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 Heap_Block *_Heap_Greedy_allocate(
   Heap_Control *heap,
@@ -37,6 +37,8 @@ Heap_Block *_Heap_Greedy_allocate(
   Heap_Block *blocks = NULL;
   Heap_Block *current;
   size_t i;
+
+  _Heap_Protection_free_all_delayed_blocks( heap );
 
   for (i = 0; i < block_count; ++i) {
     void *next = _Heap_Allocate( heap, block_sizes [i] );
@@ -71,6 +73,19 @@ Heap_Block *_Heap_Greedy_allocate(
   }
 
   return blocks;
+}
+
+Heap_Block *_Heap_Greedy_allocate_all_except_largest(
+  Heap_Control *heap,
+  uintptr_t *allocatable_size
+)
+{
+  Heap_Information info;
+
+  _Heap_Get_free_information( heap, &info );
+  *allocatable_size = info.largest - HEAP_BLOCK_HEADER_SIZE + HEAP_ALLOC_BONUS;
+
+  return _Heap_Greedy_allocate( heap, allocatable_size, 1 );
 }
 
 void _Heap_Greedy_free(

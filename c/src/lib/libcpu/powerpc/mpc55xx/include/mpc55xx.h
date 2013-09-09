@@ -130,7 +130,7 @@ static inline uint32_t mpc55xx_count_leading_zeros( uint32_t value)
 	return count;
 }
 
-static inline mpc55xx_wait_for_interrupt(void)
+static inline void mpc55xx_wait_for_interrupt(void)
 {
   #ifdef MPC55XX_HAS_WAIT_INSTRUCTION
     __asm__ volatile ("wait");

@@ -30,6 +30,7 @@ void blow_stack(void)
 {
   volatile uint32_t   *low, *high;
   unsigned char *area;
+  Thread_Control *executing;
 
   b();
 
@@ -38,13 +39,14 @@ void blow_stack(void)
    *  does not cause problems :)
    */
 
-  area = (unsigned char *)_Thread_Executing->Start.Initial_stack.area;
+  executing = _Thread_Get_executing();
+  area = (unsigned char *)executing->Start.Initial_stack.area;
 
   /* Look in the stack checker implementation for this magic offset */
   low  = (volatile uint32_t *) \
      (area + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE);
   high = (volatile uint32_t *)
-             (area + _Thread_Executing->Start.Initial_stack.size - 16);
+             (area + executing->Start.Initial_stack.size - 16);
 
   low[0] = 0x11111111;
   low[1] = 0x22222222;

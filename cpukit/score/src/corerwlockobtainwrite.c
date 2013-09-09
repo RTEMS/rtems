@@ -18,14 +18,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/corerwlock.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/corerwlockimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 void _CORE_RWLock_Obtain_for_writing(
   CORE_RWLock_Control                 *the_rwlock,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
@@ -33,7 +32,6 @@ void _CORE_RWLock_Obtain_for_writing(
 )
 {
   ISR_Level       level;
-  Thread_Control *executing = _Thread_Executing;
 
   /*
    *  If unlocked, then OK to read.
@@ -78,6 +76,7 @@ void _CORE_RWLock_Obtain_for_writing(
 
     _Thread_queue_Enqueue_with_handler(
        &the_rwlock->Wait_queue,
+       executing,
        timeout,
        _CORE_RWLock_Timeout
     );

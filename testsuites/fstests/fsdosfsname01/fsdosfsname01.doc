@@ -1,0 +1,20 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsdosfsname01
+
+directives:
+- close ()
+- closedir ()
+- mkdir ()
+- mount ()
+- open ()
+- opendir ()
+- readdir ()
+- remove ()
+- rmdir ()
+- unlink ()
+
+concepts:
+- Make sure short file- and directory names and long file- and directory names are handled correctly for the default character set (code page 850)
+- Make sure multibyte file names and directory names are handled correctly
+- Make sure the RTEMS FAT file system is compatible with a genuine MS Windows FAT file system

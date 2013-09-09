@@ -20,7 +20,7 @@
 /*
  *  This is a replaceable stub which opens the console, if present.
  */
-void open_dev_console(void)
+void rtems_libio_post_driver(void)
 {
   int      stdin_fd;
   int      stdout_fd;

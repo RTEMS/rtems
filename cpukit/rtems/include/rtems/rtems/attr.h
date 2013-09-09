@@ -21,6 +21,8 @@
 #ifndef _RTEMS_RTEMS_ATTR_H
 #define _RTEMS_RTEMS_ATTR_H
 
+#include <rtems/score/basedefs.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -165,37 +167,11 @@ typedef uint32_t   rtems_attribute;
  */
 #define RTEMS_SYSTEM_TASK             0x00008000
 
-/****************** Forced Attributes in Configuration ****************/
-
-/**
- *  This attribute constant indicates the attributes that are not
- *  supportable given the hardware configuration.
- */
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-#define ATTRIBUTES_NOT_SUPPORTED       0
-#else
-#define ATTRIBUTES_NOT_SUPPORTED       RTEMS_FLOATING_POINT
-#endif
-
-/**
- *  This attribute constant indicates the attributes that are
- *  required given the hardware configuration.
- */
-#if ( CPU_ALL_TASKS_ARE_FP == TRUE )
-#define ATTRIBUTES_REQUIRED            RTEMS_FLOATING_POINT
-#else
-#define ATTRIBUTES_REQUIRED            0
-#endif
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/attr.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

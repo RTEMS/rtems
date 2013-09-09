@@ -20,6 +20,7 @@
 #define VIRTEX_IRQ_IRQ_H
 
 #include <rtems/irq.h>
+#include <rtems/irq-extension.h>
 #include <bsp/opbintctrl.h>
 
 /*
@@ -60,6 +61,9 @@
           (BSP_IS_PROCESSOR_IRQ(irqnum)	\
            || BSP_IS_OPBINTC_IRQ(irqnum))
 
+#define BSP_INTERRUPT_VECTOR_MIN 0
+#define BSP_INTERRUPT_VECTOR_MAX BSP_PROCESSOR_IRQ_MAX_OFFSET
+
 #ifndef ASM
 #ifdef __cplusplus
 extern "C" {
@@ -81,9 +85,6 @@ extern "C" {
   } rtems_irq_symbolic_name;
 
 #define BSP_OPBINTC_XPAR(xname) (BSP_OPBINTC_IRQ_LOWEST_OFFSET+xname)
-
-  extern rtems_irq_connect_data *BSP_rtems_irq_tbl;
-  void BSP_rtems_irq_mng_init(unsigned cpuId);
 
 #ifdef __cplusplus
 }

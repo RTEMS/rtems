@@ -1,4 +1,3 @@
-
 rtems_tests_PROGRAMS = smpatomic01
 smpatomic01_SOURCES = init.c tasks.c system.h ../../support/src/locked_print.c
 
@@ -8,7 +7,6 @@ dist_rtems_tests_DATA += smpatomic01.doc
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
-
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 

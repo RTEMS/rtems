@@ -165,16 +165,6 @@ void bsp_start(void)
   bsp_time_base_frequency = XLB_CLOCK / 4;
   bsp_clicks_per_usec    = (XLB_CLOCK/4000000);
 
-  /*
-   * Enable instruction and data caches. Do not force writethrough mode.
-   */
-  #if BSP_INSTRUCTION_CACHE_ENABLED
-    rtems_cache_enable_instruction();
-  #endif
-  #if BSP_DATA_CACHE_ENABLED
-    rtems_cache_enable_data();
-  #endif
-
   /* Initialize exception handler */
   ppc_exc_cache_wb_check = 0;
   ppc_exc_initialize(

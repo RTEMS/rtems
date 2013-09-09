@@ -391,6 +391,8 @@ extern "C" {
  */
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  Processor defined structures required for cpukit/score.
  *
@@ -400,6 +402,10 @@ extern "C" {
  */
 
 /* may need to put some structures here.  */
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /**
  * @defgroup CPUContext Processor Dependent Context Management
@@ -1201,6 +1207,18 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+
+static inline void _CPU_Context_volatile_clobber( uintptr_t pattern )
+{
+  /* TODO */
+}
+
+static inline void _CPU_Context_validate( uintptr_t pattern )
+{
+  while (1) {
+    /* TODO */
+  }
+}
 
 /** @} */
 

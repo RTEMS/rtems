@@ -33,56 +33,20 @@
 #ifndef _RTEMS_RTEMS_MESSAGE_H
 #define _RTEMS_RTEMS_MESSAGE_H
 
-/**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_MESSAGE_EXTERN
-#define RTEMS_MESSAGE_EXTERN extern
-#endif
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/score/object.h>
+#include <rtems/score/coremsg.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/attr.h>
-#include <rtems/score/coremsg.h>
-
 /**
- *  @defgroup ClassicMessageQueue Message Queues
+ *  @ingroup ClassicMessageQueueImpl
  *
- *  @ingroup ClassicRTEMS
- *
- *  This encapsulates functionality which XXX
- */
-/**@{*/
-
-/**
- *  The following enumerated type details the modes in which a message
- *  may be submitted to a message queue.  The message may be posted
- *  in a send or urgent fashion.
- */
-typedef enum {
-  /**
-   *  This value indicates the user wants to send the message using the
-   *  normal message insertion protocol (FIFO or priority).
-   */
-  MESSAGE_QUEUE_SEND_REQUEST   = 0,
-  /**
-   *  This value indicates the user considers the message to be urgent
-   *  and wants it inserted at the head of the pending message queue.
-   */
-  MESSAGE_QUEUE_URGENT_REQUEST = 1
-}  Message_queue_Submit_types;
-
-/**
  *  The following records define the control block used to manage
  *  each message queue.
  */
@@ -96,17 +60,13 @@ typedef struct {
 }   Message_queue_Control;
 
 /**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-RTEMS_MESSAGE_EXTERN Objects_Information  _Message_queue_Information;
-
-/**
- *  @brief Message Queue Manager Initialization
+ *  @defgroup ClassicMessageQueue Message Queues
  *
- *  This routine performs the initialization necessary for this manager.
+ *  @ingroup ClassicRTEMS
+ *
+ *  This encapsulates functionality which XXX
  */
-void _Message_queue_Manager_initialization(void);
+/**@{*/
 
 /**
  * @brief RTEMS Create Message Queue
@@ -299,76 +259,11 @@ rtems_status_code rtems_message_queue_get_number_pending(
   uint32_t *count
 );
 
-
-/**
- *  @brief Message_queue_Submit
- *
- *  This routine implements the directives rtems_message_queue_send
- *  and rtems_message_queue_urgent.  It processes a message that is
- *  to be submitted to the designated message queue.  The message will
- *  either be processed as a send send message which it will be inserted
- *  at the rear of the queue or it will be processed as an urgent message
- *  which will be inserted at the front of the queue.
- */
-rtems_status_code _Message_queue_Submit(
-  rtems_id                    id,
-  const void                 *buffer,
-  size_t                      size,
-  Message_queue_Submit_types  submit_type
-);
-
-/**
- * @brief Message Queue Allocate
- *
- * This function allocates a message queue control block from
- * the inactive chain of free message queue control blocks.
- *
- * @retval the_message_queue filled in if successful, NULL otherwise
- */
-Message_queue_Control *_Message_queue_Allocate (void);
-
-/**
- * @brief Message queue Translate Core Message Queue Return Code
- *
- * This function returns a RTEMS status code based on
- * @a the_message_queue_status.
- *
- * @param[in] the_message_queue_status is the status code to translate
- *
- * @retval translated RTEMS status code
- */
-rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
-  uint32_t   the_message_queue_status
-);
-
-#if defined(RTEMS_MULTIPROCESSING)
-/**
- *  @brief Message_queue_Core_message_queue_mp_support
- *
- *  Input parameters:
- *    the_thread - the remote thread the message was submitted to
- *    id         - id of the message queue
- *
- *  Output parameters: NONE
- */
-void  _Message_queue_Core_message_queue_mp_support (
-  Thread_Control *the_thread,
-  rtems_id        id
-);
-#endif
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/message.inl>
-#endif
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/msgmp.h>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

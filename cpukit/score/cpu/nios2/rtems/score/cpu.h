@@ -112,7 +112,13 @@ extern "C" {
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /**
  * @brief Thread register context.
@@ -332,6 +338,10 @@ void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+void _CPU_Context_validate( uintptr_t pattern );
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 

@@ -19,32 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/schedulersimple.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/wkspace.h>
-
-void * _Scheduler_simple_Allocate(
-  Thread_Control *the_thread
-)
-{
-  return (void*)-1; /* maybe pick an appropriate poison value */
-}
-
-void _Scheduler_simple_Update(
-  Thread_Control *the_thread
-)
-{
-}
-
-void _Scheduler_simple_Free(
-  Thread_Control *the_thread
-)
-{
-}
 
 void _Scheduler_simple_Initialize ( void )
 {

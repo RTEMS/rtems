@@ -41,7 +41,7 @@
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -74,7 +74,7 @@ int mq_getattr(
       mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
       mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

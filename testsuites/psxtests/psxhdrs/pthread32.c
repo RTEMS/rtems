@@ -27,6 +27,7 @@ void cleanup_routine(
   void *argument
 )
 {
+  (void) argument;
 }
 
 void test( void )
@@ -36,4 +37,5 @@ void test( void )
   argument = 0;
 
   pthread_cleanup_push( cleanup_routine, &argument );
+  pthread_cleanup_pop( 1 );
 }

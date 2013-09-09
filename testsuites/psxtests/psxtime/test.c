@@ -92,11 +92,11 @@ void check_a_tod(
     a_tm = gmtime( &a_time_t );
     printf( "gmtime:       %s\n",  asctime( a_tm ) );
 
-    status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
+    status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
 
     i++;
 
-  } while( i < 6 );
+  } while( i <= 3 );
 }
 
 void test_adjtime(void)

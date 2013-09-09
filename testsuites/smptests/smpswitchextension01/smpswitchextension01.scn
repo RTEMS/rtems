@@ -1,0 +1,13 @@
+*** TEST SMPSWITCHEXTENSION 1 ***
+toggler 0
+        toggles 2146479
+toggler 1
+        toggles 2146477
+extension 0
+        context switches 2146478
+extension 1
+        context switches 2146481
+extension 2
+        context switches 2146482
+extension switches 718121
+*** END OF TEST SMPSWITCHEXTENSION 1 ***

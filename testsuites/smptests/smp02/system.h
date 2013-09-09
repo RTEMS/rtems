@@ -37,7 +37,7 @@ rtems_task Test_task(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_SEMAPHORES          1
+#define CONFIGURE_MAXIMUM_SEMAPHORES          2
 
 #include <rtems/confdefs.h>
 
@@ -50,7 +50,7 @@ rtems_task Test_task(
 
 typedef struct {
   bool     IsLocked;
-  int      cpu_num;
+  uint32_t cpu_num;
   uint32_t task_index;
 } Log_t;
 

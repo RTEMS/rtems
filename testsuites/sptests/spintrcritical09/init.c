@@ -11,9 +11,11 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
 #include <tmacros.h>
 #include <intrcritical.h>
+
+#include <rtems/rtems/semimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 static rtems_id Semaphore;
 static bool case_hit;

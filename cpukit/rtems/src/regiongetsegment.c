@@ -18,15 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/region.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
+#include <rtems/rtems/regionimpl.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/threadqimpl.h>
 
 rtems_status_code rtems_region_get_segment(
   rtems_id           id,
@@ -79,6 +74,7 @@ rtems_status_code rtems_region_get_segment(
              *  dispatching disabled critical section.  We have to do this
              *  because this thread is going to block.
              */
+            /* FIXME: Lock order reversal */
             _Thread_Disable_dispatch();
             _RTEMS_Unlock_allocator();
 
@@ -89,9 +85,13 @@ rtems_status_code rtems_region_get_segment(
 
             _Thread_queue_Enter_critical_section( &the_region->Wait_queue );
 
-            _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
+            _Thread_queue_Enqueue(
+              &the_region->Wait_queue,
+              executing,
+              timeout
+            );
 
-            _Thread_Enable_dispatch();
+            _Objects_Put( &the_region->Object );
 
             return (rtems_status_code) executing->Wait.return_code;
           }

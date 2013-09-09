@@ -163,10 +163,10 @@ ssize_t mq_receive(
 
 ssize_t mq_timedreceive(
   mqd_t                  mqdes,
-  char                  *msg_ptr,
+  char                  *__restrict msg_ptr,
   size_t                 msg_len,
-  unsigned int          *msg_prio,
-  const struct timespec *abstime
+  unsigned int          *__restrict msg_prio,
+  const struct timespec *__restrict abstime
 );
 
 #endif /* _POSIX_TIMEOUTS */
@@ -193,8 +193,8 @@ int mq_notify(
  */
 int mq_setattr(
   mqd_t                 mqdes,
-  const struct mq_attr *mqstat,
-  struct mq_attr       *omqstat
+  const struct mq_attr *__restrict mqstat,
+  struct mq_attr       *__restrict omqstat
 );
 
 /*

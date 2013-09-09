@@ -20,7 +20,7 @@
 
 #include "ramdisk_support.h"
 #include "fstest.h"
-#include "pmacros.h"
+#include "tmacros.h"
 
 /*
  * Ramdisk information

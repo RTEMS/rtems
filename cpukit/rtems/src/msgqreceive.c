@@ -19,21 +19,15 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/coremsg.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
+#include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/rtems/status.h>
-#include <rtems/rtems/attr.h>
-#include <rtems/rtems/message.h>
-#include <rtems/rtems/options.h>
+#include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/support.h>
 
 rtems_status_code rtems_message_queue_receive(
@@ -47,6 +41,7 @@ rtems_status_code rtems_message_queue_receive(
   register Message_queue_Control *the_message_queue;
   Objects_Locations               location;
   bool                            wait;
+  Thread_Control                 *executing;
 
   if ( !buffer )
     return RTEMS_INVALID_ADDRESS;
@@ -63,17 +58,19 @@ rtems_status_code rtems_message_queue_receive(
       else
         wait = true;
 
+      executing = _Thread_Executing;
       _CORE_message_queue_Seize(
         &the_message_queue->message_queue,
+        executing,
         the_message_queue->Object.id,
         buffer,
         size,
         wait,
         timeout
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_message_queue->Object );
       return _Message_queue_Translate_core_message_queue_return_code(
-        _Thread_Executing->Wait.return_code
+        executing->Wait.return_code
       );
 
 #if defined(RTEMS_MULTIPROCESSING)

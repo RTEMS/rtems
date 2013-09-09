@@ -52,7 +52,8 @@ msdos_initialize_support(
     rtems_filesystem_mount_table_entry_t    *temp_mt_entry,
     const rtems_filesystem_operations_table *op_table,
     const rtems_filesystem_file_handlers_r  *file_handlers,
-    const rtems_filesystem_file_handlers_r  *directory_handlers
+    const rtems_filesystem_file_handlers_r  *directory_handlers,
+    rtems_dosfs_convert_control             *converter
     )
 {
     int                rc = RC_OK;
@@ -67,6 +68,8 @@ msdos_initialize_support(
         rtems_set_errno_and_return_minus_one(ENOMEM);
 
     temp_mt_entry->fs_info = fs_info;
+
+    fs_info->converter = converter;
 
     rc = fat_init_volume_info(&fs_info->fat, temp_mt_entry->dev);
     if (rc != RC_OK)

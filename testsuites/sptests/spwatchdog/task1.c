@@ -21,6 +21,8 @@
 
 #include "system.h"
 
+#include <rtems/score/watchdogimpl.h>
+
 rtems_task Task_1(
   rtems_task_argument argument
 )

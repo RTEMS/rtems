@@ -21,8 +21,7 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/score/thread.h>
 
 /*

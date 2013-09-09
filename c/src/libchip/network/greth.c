@@ -306,6 +306,17 @@ greth_initialize_hardware (struct greth_softc *sc)
     write_mii(phyaddr, 0, 0x8000 | phyctrl);
 
     while ((read_mii(phyaddr, 0)) & 0x8000) {}
+    phystatus = read_mii(phyaddr, 1);
+
+    /* Disable Gbit auto-neg advertisement if MAC does not support it */
+
+    if ((!sc->gbit_mac) && (phystatus & 0x100)) write_mii(phyaddr, 9, 0);
+
+    /* Restart auto-negotiation if available */
+    if (phystatus & 0x08) {
+	write_mii(phyaddr, 0, phyctrl | 0x1200);
+	phyctrl = read_mii(phyaddr, 0);
+    }
 
     /* Check if PHY is autoneg capable and then determine operating mode,
        otherwise force it to 10 Mbit halfduplex */
@@ -344,7 +355,7 @@ greth_initialize_hardware (struct greth_softc *sc)
                                sc->gb = 1;
                                sc->fd = 1;
                        }
-                       if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000HD) &&
+		       else if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000HD) &&
                             (sc->phydev.extpart & GRETH_MII_EXTPRT_1000HD)) {
                                sc->gb = 1;
                                sc->fd = 0;
@@ -356,12 +367,12 @@ greth_initialize_hardware (struct greth_softc *sc)
                             sc->sp = 1;
                             sc->fd = 1;
                     }
-                    if ( (sc->phydev.adv & GRETH_MII_100TXHD) &&
+		    else if ( (sc->phydev.adv & GRETH_MII_100TXHD) &&
                          (sc->phydev.part & GRETH_MII_100TXHD)) {
                             sc->sp = 1;
                             sc->fd = 0;
                     }
-                    if ( (sc->phydev.adv & GRETH_MII_10FD) &&
+		    else if ( (sc->phydev.adv & GRETH_MII_10FD) &&
                          (sc->phydev.part & GRETH_MII_10FD)) {
                             sc->fd = 1;
                     }

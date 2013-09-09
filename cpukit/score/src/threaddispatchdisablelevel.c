@@ -15,90 +15,94 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/states.h>
+#include <rtems/score/threaddispatch.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
 
-void _Thread_Dispatch_initialization( void )
+#define NO_OWNER_CPU 0xffffffffU
+
+typedef struct {
+  SMP_lock_Control lock;
+  uint32_t owner_cpu;
+  uint32_t nest_level;
+} Giant_Control;
+
+static Giant_Control _Giant = {
+  .lock = SMP_LOCK_INITIALIZER,
+  .owner_cpu = NO_OWNER_CPU,
+  .nest_level = 0
+};
+
+static void _Giant_Do_acquire( uint32_t self_cpu_index )
 {
-  _Thread_Dispatch_disable_level = 0; 
-  _SMP_lock_spinlock_nested_Initialize(&_Thread_Dispatch_disable_level_lock);
-  _Thread_Dispatch_set_disable_level( 1 );
+  Giant_Control *giant = &_Giant;
+
+  if ( giant->owner_cpu != self_cpu_index ) {
+    _SMP_lock_Acquire( &giant->lock );
+    giant->owner_cpu = self_cpu_index;
+    giant->nest_level = 1;
+  } else {
+    ++giant->nest_level;
+  }
 }
 
-bool _Thread_Dispatch_in_critical_section(void)
+static void _Giant_Do_release( void )
 {
-  if (  _Thread_Dispatch_disable_level == 0 )
-   return false;
+  Giant_Control *giant = &_Giant;
 
-  return true;
+  --giant->nest_level;
+  if ( giant->nest_level == 0 ) {
+    giant->owner_cpu = NO_OWNER_CPU;
+    _SMP_lock_Release( &giant->lock );
+  }
 }
 
-uint32_t _Thread_Dispatch_get_disable_level(void)
+uint32_t _Thread_Dispatch_increment_disable_level( void )
 {
-  return _Thread_Dispatch_disable_level;
-}
+  ISR_Level isr_level;
+  uint32_t self_cpu_index;
+  uint32_t disable_level;
+  Per_CPU_Control *self_cpu;
 
-uint32_t _Thread_Dispatch_increment_disable_level(void)
-{
-  ISR_Level  isr_level;
-  uint32_t   level;
+  _ISR_Disable_without_giant( isr_level );
 
   /*
-   * Note: _SMP_lock_spinlock_nested_Obtain returns
-   *       with ISR's disabled and the isr_level that
-   *       should be restored after a short period.
-   *
-   * Here we obtain the lock and increment the 
-   * Thread dispatch disable level while under the
-   * protection of the isr being off.  After this
-   * point it is safe to re-enable ISRs and allow
-   * the dispatch disable lock to provide protection.
+   * We must obtain the processor ID after interrupts are disabled to prevent
+   * thread migration.
    */
+  self_cpu_index = _SMP_Get_current_processor();
 
-  isr_level = _SMP_lock_spinlock_nested_Obtain(
-    &_Thread_Dispatch_disable_level_lock
-  );
-  
-  _Thread_Dispatch_disable_level++;
-  level = _Thread_Dispatch_disable_level;
+  _Giant_Do_acquire( self_cpu_index );
 
-  _ISR_Enable_on_this_core(isr_level);
-  return level;
+  self_cpu = _Per_CPU_Get_by_index( self_cpu_index );
+  disable_level = self_cpu->thread_dispatch_disable_level;
+  ++disable_level;
+  self_cpu->thread_dispatch_disable_level = disable_level;
+
+  _ISR_Enable_without_giant( isr_level );
+
+  return disable_level;
 }
 
-uint32_t _Thread_Dispatch_decrement_disable_level(void)
+uint32_t _Thread_Dispatch_decrement_disable_level( void )
 {
-  ISR_Level  isr_level;
-  uint32_t   level;
+  ISR_Level isr_level;
+  uint32_t disable_level;
+  Per_CPU_Control *self_cpu;
 
-  /*  First we must disable ISRs in order to protect
-   *  accesses to the dispatch disable level.
-   */
-  _ISR_Disable_on_this_core( isr_level );
+  _ISR_Disable_without_giant( isr_level );
 
-  _Thread_Dispatch_disable_level--;
-  level = _Thread_Dispatch_disable_level;
+  self_cpu = _Per_CPU_Get();
+  disable_level = self_cpu->thread_dispatch_disable_level;
+  --disable_level;
+  self_cpu->thread_dispatch_disable_level = disable_level;
 
+  _Giant_Do_release();
+  _Assert( disable_level != 0 || _Giant.owner_cpu == NO_OWNER_CPU );
 
-  /* 
-   * Note: _SMP_lock_spinlock_nested_Obtain returns with
-   *        ISR's disabled and _SMP_lock_spinlock_nested_Release
-   *        is responsable for re-enabling interrupts.
-   */
-  _SMP_lock_spinlock_nested_Release( 
-    &_Thread_Dispatch_disable_level_lock,
-    isr_level
-  ); 
+  _ISR_Enable_without_giant( isr_level );
 
-  return level;
+  return disable_level;
 }
 
 
@@ -113,13 +117,20 @@ uint32_t _Thread_Dispatch_decrement_disable_level(void)
 
 uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
 {
+  ISR_Level isr_level;
+  uint32_t disable_level;
+
+  _ISR_Disable_without_giant( isr_level );
+  disable_level = _Thread_Dispatch_disable_level;
+  _ISR_Enable_without_giant( isr_level );
+
   /*
    * If we need the dispatch level to go higher 
    * call increment method the desired number of times.
    */
 
-  while ( value > _Thread_Dispatch_disable_level ) {
-    _Thread_Dispatch_increment_disable_level();
+  while ( value > disable_level ) {
+    disable_level = _Thread_Dispatch_increment_disable_level();
   }
 
   /*
@@ -127,9 +138,41 @@ uint32_t _Thread_Dispatch_set_disable_level(uint32_t value)
    * call increment method the desired number of times.
    */
 
-  while ( value < _Thread_Dispatch_disable_level ) {
-    _Thread_Dispatch_decrement_disable_level();
+  while ( value < disable_level ) {
+    disable_level = _Thread_Dispatch_decrement_disable_level();
   }
 
   return value;
 }
+
+void _Giant_Acquire( void )
+{
+  ISR_Level isr_level;
+
+  _ISR_Disable_without_giant( isr_level );
+  _Assert( _Thread_Dispatch_disable_level != 0 );
+  _Giant_Do_acquire( _SMP_Get_current_processor() );
+  _ISR_Enable_without_giant( isr_level );
+}
+
+void _Giant_Release( void )
+{
+  ISR_Level isr_level;
+
+  _ISR_Disable_without_giant( isr_level );
+  _Assert( _Thread_Dispatch_disable_level != 0 );
+  _Giant_Do_release();
+  _ISR_Enable_without_giant( isr_level );
+}
+
+#if defined( RTEMS_DEBUG )
+void _Assert_Owner_of_giant( void )
+{
+  Giant_Control *giant = &_Giant;
+
+  _Assert(
+    giant->owner_cpu == _SMP_Get_current_processor()
+      || !_System_state_Is_up( _System_state_Get() )
+  );
+}
+#endif

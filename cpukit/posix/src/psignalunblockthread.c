@@ -24,13 +24,14 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/time.h>
 #include <stdio.h>
 
@@ -110,8 +111,7 @@ bool _POSIX_signals_Unblock_thread(
        }
 
     } else if ( the_thread->current_state == STATES_READY ) {
-      if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
-        _Thread_Dispatch_necessary = true;
+      _Thread_Signal_notification( the_thread );
     }
   }
   return false;

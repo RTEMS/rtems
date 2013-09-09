@@ -48,10 +48,6 @@
 /* for RTEMS_VERSION :-( I dont like the preassembled string */
 #include <rtems/sptables.h>
 
-#ifdef __RTEMS_APPLICATION__
-#undef __RTEMS_APPLICATION__
-#endif
-
 #define SHOW_MORE_INIT_SETTINGS
 
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;

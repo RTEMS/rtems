@@ -18,25 +18,21 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/corebarrier.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/corebarrierimpl.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/threadqimpl.h>
 
 void _CORE_barrier_Wait(
   CORE_barrier_Control                *the_barrier,
+  Thread_Control                      *executing,
   Objects_Id                           id,
   bool                                 wait,
   Watchdog_Interval                    timeout,
   CORE_barrier_API_mp_support_callout  api_barrier_mp_support
 )
 {
-  Thread_Control *executing;
   ISR_Level       level;
 
-  executing = _Thread_Executing;
   executing->Wait.return_code = CORE_BARRIER_STATUS_SUCCESSFUL;
   _ISR_Disable( level );
   the_barrier->number_of_waiting_threads++;
@@ -55,5 +51,5 @@ void _CORE_barrier_Wait(
   executing->Wait.id             = id;
   _ISR_Enable( level );
 
-  _Thread_queue_Enqueue( &the_barrier->Wait_queue, timeout );
+  _Thread_queue_Enqueue( &the_barrier->Wait_queue, executing, timeout );
 }

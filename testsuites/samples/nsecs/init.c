@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include <sys/time.h>
 
 #define CONFIGURE_INIT
@@ -81,13 +82,9 @@ rtems_task Init(
   for (index=0 ; index <10 ; index++ ) {
     struct timespec start, stop;
     struct timespec diff;
-#if 0
+
     clock_gettime( CLOCK_REALTIME, &start );
     clock_gettime( CLOCK_REALTIME, &stop );
-#else
-    _TOD_Get( &start );
-    _TOD_Get( &stop );
-#endif
 
     subtract_em( &start, &stop, &diff );
     printf( "Start: %s:%ld\nStop : %s:%ld",

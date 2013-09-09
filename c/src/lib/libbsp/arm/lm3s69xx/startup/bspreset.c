@@ -1,4 +1,6 @@
 /*
+ * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
+ *
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -24,5 +26,9 @@ void bsp_reset(void)
 
   rtems_interrupt_disable(level);
 
-  _ARMV7M_NVIC->reserved_5 [0] = 0;
+  _ARMV7M_SCB->aircr = ARMV7M_SCB_AIRCR_VECTKEY
+    | ARMV7M_SCB_AIRCR_SYSRESETREQ;
+
+  while (true)
+    /* Do nothing */;
 }

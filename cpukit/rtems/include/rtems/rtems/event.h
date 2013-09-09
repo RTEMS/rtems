@@ -28,28 +28,99 @@
 #ifndef _RTEMS_RTEMS_EVENT_H
 #define _RTEMS_RTEMS_EVENT_H
 
-/**
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_EVENT_EXTERN
-#define RTEMS_EVENT_EXTERN extern
-#endif
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/options.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <rtems/score/object.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadsync.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/rtems/eventset.h>
+/**
+ *  @defgroup ClassicEventSet Event Set
+ *
+ *  @ingroup ClassicEvent
+ *
+ *  @{
+ */
+
+/**
+ *  @brief Integer type to hold an event set of up to 32 events represented as
+ *  a bit field.
+ */
+typedef uint32_t   rtems_event_set;
+
+/**
+ *  @brief Constant used to send or receive all events.
+ */
+#define RTEMS_ALL_EVENTS  0xFFFFFFFF
+
+/** @brief Defines the bit in the event set associated with event 0. */
+#define RTEMS_EVENT_0     0x00000001
+/** @brief Defines the bit in the event set associated with event 1. */
+#define RTEMS_EVENT_1     0x00000002
+/** @brief Defines the bit in the event set associated with event 2. */
+#define RTEMS_EVENT_2     0x00000004
+/** @brief Defines the bit in the event set associated with event 3. */
+#define RTEMS_EVENT_3     0x00000008
+/** @brief Defines the bit in the event set associated with event 4. */
+#define RTEMS_EVENT_4     0x00000010
+/** @brief Defines the bit in the event set associated with event 5. */
+#define RTEMS_EVENT_5     0x00000020
+/** @brief Defines the bit in the event set associated with event 6. */
+#define RTEMS_EVENT_6     0x00000040
+/** @brief Defines the bit in the event set associated with event 7. */
+#define RTEMS_EVENT_7     0x00000080
+/** @brief Defines the bit in the event set associated with event 8. */
+#define RTEMS_EVENT_8     0x00000100
+/** @brief Defines the bit in the event set associated with event 9. */
+#define RTEMS_EVENT_9     0x00000200
+/** @brief Defines the bit in the event set associated with event 10. */
+#define RTEMS_EVENT_10    0x00000400
+/** @brief Defines the bit in the event set associated with event 11. */
+#define RTEMS_EVENT_11    0x00000800
+/** @brief Defines the bit in the event set associated with event 12. */
+#define RTEMS_EVENT_12    0x00001000
+/** @brief Defines the bit in the event set associated with event 13. */
+#define RTEMS_EVENT_13    0x00002000
+/** @brief Defines the bit in the event set associated with event 14. */
+#define RTEMS_EVENT_14    0x00004000
+/** @brief Defines the bit in the event set associated with event 15. */
+#define RTEMS_EVENT_15    0x00008000
+/** @brief Defines the bit in the event set associated with event 16. */
+#define RTEMS_EVENT_16    0x00010000
+/** @brief Defines the bit in the event set associated with event 17. */
+#define RTEMS_EVENT_17    0x00020000
+/** @brief Defines the bit in the event set associated with event 18. */
+#define RTEMS_EVENT_18    0x00040000
+/** @brief Defines the bit in the event set associated with event 19. */
+#define RTEMS_EVENT_19    0x00080000
+/** @brief Defines the bit in the event set associated with event 20. */
+#define RTEMS_EVENT_20    0x00100000
+/** @brief Defines the bit in the event set associated with event 21. */
+#define RTEMS_EVENT_21    0x00200000
+/** @brief Defines the bit in the event set associated with event 22. */
+#define RTEMS_EVENT_22    0x00400000
+/** @brief Defines the bit in the event set associated with event 23. */
+#define RTEMS_EVENT_23    0x00800000
+/** @brief Defines the bit in the event set associated with event 24. */
+#define RTEMS_EVENT_24    0x01000000
+/** @brief Defines the bit in the event set associated with event 25. */
+#define RTEMS_EVENT_25    0x02000000
+/** @brief Defines the bit in the event set associated with event 26. */
+#define RTEMS_EVENT_26    0x04000000
+/** @brief Defines the bit in the event set associated with event 27. */
+#define RTEMS_EVENT_27    0x08000000
+/** @brief Defines the bit in the event set associated with event 29. */
+#define RTEMS_EVENT_28    0x10000000
+/** @brief Defines the bit in the event set associated with event 29. */
+#define RTEMS_EVENT_29    0x20000000
+/** @brief Defines the bit in the event set associated with event 30. */
+#define RTEMS_EVENT_30    0x40000000
+/** @brief Defines the bit in the event set associated with event 31. */
+#define RTEMS_EVENT_31    0x80000000
+
+/** @} */
 
 /**
  *  @defgroup ClassicEvent Events
@@ -101,6 +172,12 @@ extern "C" {
  *
  *  @{
  */
+
+/**
+ *  @brief Constant used to receive the set of currently pending events in
+ *  rtems_event_receive().
+ */
+#define RTEMS_PENDING_EVENTS      0
 
 /**
  * @brief Sends an Event Set to the Target Task
@@ -420,83 +497,9 @@ RTEMS_INLINE_ROUTINE void rtems_event_transient_clear( void )
 
 /** @} */
 
-/**
- *  @defgroup ScoreEvent Event Handler
- *
- *  @ingroup Score
- *
- *  @{
- */
-
 typedef struct {
   rtems_event_set pending_events;
 } Event_Control;
-
-/**
- *  This constant is passed as the event_in to the
- *  rtems_event_receive directive to determine which events are pending.
- */
-#define EVENT_CURRENT  0
-
-/**
- *  @brief Event Manager Initialization
- *
- *  Event Manager
- *
- *  This routine performs the initialization necessary for this manager.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Event_Manager_initialization( void );
-
-void _Event_Seize(
-  rtems_event_set                   event_in,
-  rtems_option                      option_set,
-  rtems_interval                    ticks,
-  rtems_event_set                  *event_out,
-  Thread_Control                   *executing,
-  Event_Control                    *event,
-  Thread_blocking_operation_States *sync_state,
-  States_Control                    wait_state
-);
-
-/**
- *  @brief Surrender Event
- *
- *  - INTERRUPT LATENCY:
- *    + before flash
- *    + after flash
- *    + check sync
- */
-void _Event_Surrender(
-  Thread_Control                   *the_thread,
-  rtems_event_set                   event_in,
-  Event_Control                    *event,
-  Thread_blocking_operation_States *sync_state,
-  States_Control                    wait_state
-);
-
-/**
- *  @brief Timeout Event
- */
-void _Event_Timeout(
-  Objects_Id  id,
-  void       *arg
-);
-
-RTEMS_EVENT_EXTERN Thread_blocking_operation_States _Event_Sync_state;
-
-RTEMS_EVENT_EXTERN Thread_blocking_operation_States _System_event_Sync_state;
-
-/** @} */
-
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/eventmp.h>
-#endif
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/event.inl>
-#endif
 
 #ifdef __cplusplus
 }

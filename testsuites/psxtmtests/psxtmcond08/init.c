@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <errno.h>
+#include <sched.h>
 #include <timesys.h>
 #include <tmacros.h>
 #include <rtems/timerdrv.h>
@@ -88,16 +89,14 @@ void *Middle(
 
   #elif defined(USE_TIMEDWAIT_WAIT_VALUE_IN_PAST)
     {
-      long end_time;
-
       /* override sleepTime with something obviously in the past */
       sleepTime.tv_sec = 0;
       sleepTime.tv_nsec = 5;
 
       /* this does all the work of timedwait but immediately returns */
       rc = pthread_cond_timedwait( &CondID, &MutexID, &sleepTime );
-      end_time = benchmark_timer_read();
       rtems_test_assert(rc == ETIMEDOUT);
+      benchmark_timer_read();
     }
   #endif
 

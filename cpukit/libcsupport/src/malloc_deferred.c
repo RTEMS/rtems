@@ -27,14 +27,13 @@
 
 #include "malloc_p.h"
 
+#include <rtems/score/threaddispatch.h>
+
 RTEMS_CHAIN_DEFINE_EMPTY(RTEMS_Malloc_GC_list);
 
 bool malloc_is_system_state_OK(void)
 {
-  if ( _Thread_Dispatch_in_critical_section() )
-    return false;
-
-  if ( _ISR_Nest_level > 0 )
+  if ( !_Thread_Dispatch_is_enabled() )
     return false;
 
   return true;

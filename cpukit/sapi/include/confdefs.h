@@ -61,6 +61,10 @@
   #include <bsp.h>
 #endif
 
+#ifdef RTEMS_NEWLIB
+  #include <sys/reent.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -92,26 +96,33 @@ extern rtems_driver_address_table       Device_drivers[];
 #include <rtems/libio.h>
 
 #ifdef CONFIGURE_INIT
-rtems_libio_init_functions_t rtems_libio_init_helper =
-    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    NULL;
-    #else
+const rtems_libio_helper rtems_libio_init_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
     rtems_libio_init;
-    #endif
+  #endif
 
-rtems_libio_supp_functions_t rtems_libio_supp_helper =
-    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    NULL;
-    #else
-    open_dev_console;
-    #endif
+const rtems_libio_helper rtems_libio_post_driver_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
+    rtems_libio_post_driver;
+  #endif
 
-rtems_fs_init_functions_t    rtems_fs_init_helper =
-    #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
-    NULL;
-    #else
+const rtems_libio_helper rtems_libio_exit_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
+    rtems_libio_exit;
+  #endif
+
+const rtems_libio_helper rtems_fs_init_helper =
+  #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+    rtems_libio_helper_null;
+  #else
     rtems_filesystem_initialize;
-    #endif
+  #endif
 #endif
 #endif
 
@@ -595,6 +606,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  * scheduling policy to use.  The supported configurations are:
  *  CONFIGURE_SCHEDULER_USER       - user provided scheduler
  *  CONFIGURE_SCHEDULER_PRIORITY   - Deterministic Priority Scheduler
+ *  CONFIGURE_SCHEDULER_PRIORITY_SMP - Deterministic Priority SMP Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE     - Light-weight Priority Scheduler
  *  CONFIGURE_SCHEDULER_SIMPLE_SMP - Simple SMP Priority Scheduler
  *  CONFIGURE_SCHEDULER_EDF        - EDF Scheduler
@@ -618,12 +630,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+    !defined(CONFIGURE_SCHEDULER_PRIORITY_SMP) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE) && \
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
     !defined(CONFIGURE_SCHEDULER_EDF) && \
     !defined(CONFIGURE_SCHEDULER_CBS)
   #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
-    #define CONFIGURE_SCHEDULER_SIMPLE_SMP
+    #define CONFIGURE_SCHEDULER_PRIORITY_SMP
   #else
     #define CONFIGURE_SCHEDULER_PRIORITY
   #endif
@@ -642,6 +655,26 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
     _Configure_From_workspace( \
       ((CONFIGURE_MAXIMUM_PRIORITY+1) * sizeof(Chain_Control)) ) \
+  )
+  #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
+    _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
+#endif
+
+/*
+ * If the Deterministic Priority SMP Scheduler is selected, then configure for
+ * it.
+ */
+#if defined(CONFIGURE_SCHEDULER_PRIORITY_SMP)
+  #include <rtems/score/schedulerprioritysmp.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_POINTS SCHEDULER_PRIORITY_SMP_ENTRY_POINTS
+
+  /**
+   * This defines the memory used by the priority scheduler.
+   */
+  #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+    _Configure_From_workspace( \
+      sizeof(Scheduler_SMP_Control) +  \
+      ((CONFIGURE_MAXIMUM_PRIORITY) * sizeof(Chain_Control)) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
@@ -676,7 +709,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    * NOTE: This is the same as the Simple Scheduler
    */
   #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
-    _Configure_From_workspace( sizeof(Chain_Control) ) \
+    _Configure_From_workspace( sizeof( Scheduler_SMP_Control ) ) \
   )
   #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER (0)
 #endif
@@ -866,16 +899,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef CONFIGURE_INIT
   /**
    * By default, RTEMS uses separate heaps for the RTEMS Workspace and
-   * the C Program Heap.  On many BSPs, these can be optionally
-   * combined provided one larger memory pool. This is particularly
+   * the C Program Heap.  The application can choose optionally to combine
+   * these to provide one larger memory pool. This is particularly
    * useful in combination with the unlimited objects configuration.
    */
-  #ifdef BSP_DEFAULT_UNIFIED_WORK_AREAS
-    #ifndef CONFIGURE_UNIFIED_WORK_AREAS
-      #define CONFIGURE_UNIFIED_WORK_AREAS
-    #endif
-  #endif
-
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
     Heap_Control  *RTEMS_Malloc_Heap = &_Workspace_Area;
   #else
@@ -927,13 +954,19 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /**
+ * Zero of one returns 0 if the parameter is 0 else 1 is returned.
+ */
+#define _Configure_Zero_or_One(_number) ((_number) ? 1 : 0)
+
+/**
  * This is a helper macro used in calculations in this file.  It is used
  * to noted when an element is allocated from the RTEMS Workspace and adds
  * a factor to account for heap overhead plus an alignment factor that
  * may be applied.
  */
 #define _Configure_From_workspace(_size) \
-  (ssize_t)((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1)
+   (ssize_t) (_Configure_Zero_or_One(_size) * \
+     ((_size) + HEAP_BLOCK_HEADER_SIZE + CPU_HEAP_ALIGNMENT - 1))
 
 /**
  * This is a helper macro used in stack space calculations in this file.  It
@@ -953,7 +986,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  * for memory usage.
  */
 #define _Configure_Max_Objects(_max) \
-  rtems_resource_maximum_per_allocation(_max)
+  (_Configure_Zero_or_One(_max) * rtems_resource_maximum_per_allocation(_max))
 
 /**
  * This macro accounts for how memory for a set of configured objects is
@@ -965,8 +998,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #define _Configure_Object_RAM(_number, _size) \
   ( _Configure_From_workspace(_Configure_Max_Objects(_number) * (_size)) + \
     _Configure_From_workspace( \
-      ((_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *)) + \
-      (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *)) \
+      (_Configure_Zero_or_One(_number) * \
+       (_Configure_Max_Objects(_number) + 1) * sizeof(Objects_Control *)) + \
+      (_Configure_Zero_or_One(_number) * \
+       (sizeof(void *) + sizeof(uint32_t) + sizeof(Objects_Name *))) \
     ) \
   )
 
@@ -1016,7 +1051,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
-  #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
+  #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
+    #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+  #else
+    #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
+  #endif
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ARGUMENTS
@@ -1649,6 +1688,16 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #define CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
+#if defined(RTEMS_NEWLIB) && defined(__DYNAMIC_REENT__)
+  struct _reent *__getreent(void)
+  {
+    #ifdef CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+      return _GLOBAL_REENT;
+    #else
+      return _Thread_Get_executing()->libc_reent;
+    #endif
+  }
+#endif
 
 #endif
 
@@ -1676,6 +1725,11 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #include <rtems/posix/timer.h>
 
   /**
+   * POSIX Once support uses a single mutex.
+   */
+  #define CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES 1
+
+  /**
    * Account for the object control structures plus the name
    * of the object to be duplicated.
    */
@@ -1684,108 +1738,95 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     (_Configure_Max_Objects(_number) * _Configure_From_workspace(NAME_MAX) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-    #define CONFIGURE_MAXIMUM_POSIX_THREADS      0
+    #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
   #endif
 
   #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
     _Configure_From_workspace(sizeof(POSIX_API_Control))
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES              0
-    #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
-      _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
+    _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES               0
-    #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
-        _Configure_Object_RAM(_condvars, \
-                            sizeof(POSIX_Condition_variables_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condvars) \
+      _Configure_Object_RAM(_condvars, \
+                          sizeof(POSIX_Condition_variables_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-    #define CONFIGURE_MAXIMUM_POSIX_KEYS           0
-    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) 0
+    #define CONFIGURE_MAXIMUM_POSIX_KEYS            0
+    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 0
   #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
-      (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
-        + (_keys) * 3 * _Configure_From_workspace(sizeof(void *) * 2))
+    #ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+      #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
+        CONFIGURE_MAXIMUM_POSIX_KEYS \
+        * (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS)
+    #endif
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
+     (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
+      + _Configure_From_workspace(_key_value_pairs * sizeof(POSIX_Keys_Key_value_pair)))
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
-    #define CONFIGURE_MAXIMUM_POSIX_TIMERS             0
-    #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
-      _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
+    _Configure_Object_RAM(_timers, sizeof(POSIX_Timer_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS                     0
-    #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
-      _Configure_From_workspace( \
-        (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
+    #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
+    _Configure_From_workspace( \
+      (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES                     0
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) 0
     #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS          0
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_fds) 0
   #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
-      _Configure_POSIX_Named_Object_RAM( \
-         _message_queues, sizeof(POSIX_Message_queue_Control) )
-
     /* default to same number */
     #ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
        #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS \
                CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
     #endif
-
-    #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
-      _Configure_Object_RAM( \
-         _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
   #endif
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
+    _Configure_POSIX_Named_Object_RAM( \
+       _message_queues, sizeof(POSIX_Message_queue_Control) )
+
+  #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUE_DESCRIPTORS(_mqueue_fds) \
+    _Configure_Object_RAM( \
+       _mqueue_fds, sizeof(POSIX_Message_queue_Control_fd) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES                 0
-    #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
-      _Configure_POSIX_Named_Object_RAM( \
-         _semaphores, sizeof(POSIX_Semaphore_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
+    _Configure_POSIX_Named_Object_RAM( \
+       _semaphores, sizeof(POSIX_Semaphore_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS               0
-    #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
-      _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
+    _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS                0
-    #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
-      _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_SPINLOCKS(_spinlocks) \
+    _Configure_Object_RAM(_spinlocks, sizeof(POSIX_Spinlock_Control) )
 
   #ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS              0
-    #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) 0
-  #else
-    #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
-      _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
+    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
   #endif
+  #define CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
+    _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
 
   #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -1831,11 +1872,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #define CONFIGURE_MEMORY_FOR_POSIX \
     ( CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES + \
+          CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES + \
           CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_MUTEXES) + \
       CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
           CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES + \
           CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_CONDITION_VARIABLES) + \
-      CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ) + \
+      CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS, \
+                                       CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
           CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
       CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
@@ -1938,8 +1981,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 
 #if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  #include <reent.h>
-
   #define CONFIGURE_MEMORY_PER_TASK_FOR_NEWLIB \
     _Configure_From_workspace(sizeof(struct _reent))
 #else
@@ -2280,12 +2321,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
       CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS +
         CONFIGURE_MAXIMUM_GOROUTINES,
       CONFIGURE_MAXIMUM_POSIX_MUTEXES + CONFIGURE_GNAT_MUTEXES +
+        CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES +
         CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS +
         CONFIGURE_GO_INIT_MUTEXES + CONFIGURE_MAXIMUM_GO_CHANNELS,
       CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
         CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS +
         CONFIGURE_GO_INIT_CONDITION_VARIABLES + CONFIGURE_MAXIMUM_GO_CHANNELS,
       CONFIGURE_MAXIMUM_POSIX_KEYS,
+      CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS,
       CONFIGURE_MAXIMUM_POSIX_TIMERS,
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
@@ -2299,7 +2342,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     };
   #endif
 
-  /** 
+  /**
    * This variable specifies the minimum stack size for tasks in an RTEMS
    * application.
    *
@@ -2310,7 +2353,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   uint32_t rtems_minimum_stack_size =
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
-  /** 
+  /**
    * This variable specifies the maximum priority value that
    * a task may have.  This must be a power of 2 between 4
    * and 256 and is specified in terms of Classic API
@@ -2351,6 +2394,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #else
       false,
     #endif
+    #ifdef RTEMS_SMP
+      #ifdef CONFIGURE_SMP_APPLICATION
+        true,
+      #else
+        false,
+      #endif
+    #endif
     CONFIGURE_MAXIMUM_DRIVERS,                /* maximum device drivers */
     CONFIGURE_NUMBER_OF_DRIVERS,              /* static device drivers */
     Device_drivers,                           /* pointer to driver table */
@@ -2359,28 +2409,20 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #if defined(RTEMS_MULTIPROCESSING)
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
+    #ifdef RTEMS_SMP
+      CONFIGURE_SMP_MAXIMUM_PROCESSORS
+    #endif
   };
 #endif
 
 #endif /* CONFIGURE_HAS_OWN_CONFIGURATION_TABLE */
 
 #if defined(RTEMS_SMP)
-  /**
-   * Instantiate the variable which specifies the number of CPUs
-   * in an SMP configuration.
-   */
-  #if defined(CONFIGURE_INIT)
-    uint32_t rtems_configuration_smp_maximum_processors = \
-        CONFIGURE_SMP_MAXIMUM_PROCESSORS;
-  #else
-    extern uint32_t rtems_configuration_smp_maximum_processors;
-  #endif
  /*
   * Instantiate the Per CPU information based upon the user configuration.
   */
  #if defined(CONFIGURE_INIT)
-   Per_CPU_Control _Per_CPU_Information[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
-   Per_CPU_Control *_Per_CPU_Information_p[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
+   Per_CPU_Control_envelope _Per_CPU_Information[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
  #endif
 
 #endif
@@ -2525,11 +2567,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
     CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES +
+      CONFIGURE_MAXIMUM_POSIX_INTERNAL_MUTEXES +
       CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_MUTEXES),
     CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(
       CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
       CONFIGURE_MAXIMUM_GO_CHANNELS + CONFIGURE_GO_INIT_CONDITION_VARIABLES),
-    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ),
+    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS, \
+                                     CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ),
     CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ),
     CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
@@ -2600,6 +2644,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
        (CONFIGURE_MAXIMUM_POSIX_MUTEXES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
@@ -2613,25 +2658,35 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
-#ifndef RTEMS_SCHEDSIM
-/*
- *  You must either explicity include or exclude the clock driver.
- *  It is such a common newbie error to leave it out.  Maybe this
- *  will put an end to it.
- *
- *  NOTE: If you are using the timer driver, it is considered
- *        mutually exclusive with the clock driver because the
- *        drivers are assumed to use the same "timer" hardware
- *        on many boards.
- */
-#if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
-  #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
-      !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
-      !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
-    #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
-   #endif
-#endif
-#endif
+#if !defined(RTEMS_SCHEDSIM)
+  #if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
+    /*
+     *  You must either explicity include or exclude the clock driver.
+     *  It is such a common newbie error to leave it out.  Maybe this
+     *  will put an end to it.
+     *
+     *  NOTE: If you are using the timer driver, it is considered
+     *        mutually exclusive with the clock driver because the
+     *        drivers are assumed to use the same "timer" hardware
+     *        on many boards.
+     */
+    #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
+        !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
+        !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
+      #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
+     #endif
+
+    /*
+     * Only one of the following three configuration parameters should be
+     * defined at a time.
+     */
+    #if ((defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) + \
+          defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER) + \
+          defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER)) > 1)
+       #error "CONFIGURATION ERROR: More than one clock/timer driver configuration parameter specified?!?"
+    #endif
+  #endif /* !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE) */
+#endif   /* !defined(RTEMS_SCHEDSIM) */
 
 /*
  *  These names have been obsoleted so make the user application stop compiling
@@ -2669,6 +2724,20 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS < \
      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES)
   #error "Fewer POSIX Message Queue descriptors than Queues!"
+#endif
+
+/*
+ * POSIX Key pair shouldn't be less than POSIX Key, which is highly
+ * likely to be error.
+ */
+#if defined(RTEMS_POSIX_API)
+    #if (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) && \
+      (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS != 0)
+      #if (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS < \
+        CONFIGURE_MAXIMUM_POSIX_KEYS)
+      #error "Fewer POSIX Key pairs than POSIX Key!"
+      #endif
+    #endif
 #endif
 
 #endif

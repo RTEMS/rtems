@@ -21,6 +21,7 @@
 #include "imfs.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 int IMFS_symlink(
   const rtems_filesystem_location_info_t *parentloc,

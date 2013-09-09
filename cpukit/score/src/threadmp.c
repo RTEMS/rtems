@@ -18,12 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/mpci.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/isr.h>
 
 void _Thread_MP_Handler_initialization (
   uint32_t    maximum_proxies

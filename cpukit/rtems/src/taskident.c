@@ -19,19 +19,14 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/status.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
 #include <rtems/score/stack.h>
-#include <rtems/score/states.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tod.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
 
 rtems_status_code rtems_task_ident(
   rtems_name    name,
@@ -45,7 +40,7 @@ rtems_status_code rtems_task_ident(
     return RTEMS_INVALID_ADDRESS;
 
   if ( name == OBJECTS_ID_OF_SELF ) {
-    *id = _Thread_Executing->Object.id;
+    *id = _Thread_Get_executing()->Object.id;
     return RTEMS_SUCCESSFUL;
    }
 

@@ -21,6 +21,7 @@
 #include "imfs.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 /*
  *  IMFS_determine_bytes_per_block
@@ -130,10 +131,10 @@ void IMFS_node_free( const rtems_filesystem_location_info_t *loc )
 {
   IMFS_jnode_t *node = loc->node_access;
 
-  if ( node->reference_count == 1 ) {
+  --node->reference_count;
+
+  if ( node->reference_count == 0 ) {
     IMFS_node_destroy( node );
-  } else {
-    --node->reference_count;
   }
 }
 

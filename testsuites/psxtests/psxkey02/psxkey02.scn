@@ -1,5 +1,4 @@
 *** TEST KEY 02 ***
-Init - rtems_workspace_get_information - OK
 Init - pthread_key_create - ENOMEM
 Init - pthread_key_delete - OK
 Init - verify workspace has same memory

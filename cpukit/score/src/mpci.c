@@ -18,22 +18,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#include <rtems/score/mppkt.h>
-#endif
-#include <rtems/config.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/mpciimpl.h>
+#include <rtems/score/coresemimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
-
-#include <rtems/score/coresem.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/config.h>
 
 RTEMS_STATIC_ASSERT(
@@ -132,7 +123,8 @@ void _MPCI_Create_server( void )
     THREAD_START_NUMERIC,
     (void *) _MPCI_Receive_server,
     NULL,
-    0
+    0,
+    NULL
   );
 }
 
@@ -198,14 +190,16 @@ uint32_t   _MPCI_Send_request_packet (
   States_Control      extra_state
 )
 {
-  the_packet->source_tid      = _Thread_Executing->Object.id;
-  the_packet->source_priority = _Thread_Executing->current_priority;
+  Thread_Control *executing = _Thread_Executing;
+
+  the_packet->source_tid      = executing->Object.id;
+  the_packet->source_priority = executing->current_priority;
   the_packet->to_convert =
      ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 
-  _Thread_Executing->Wait.id = the_packet->id;
+  executing->Wait.id = the_packet->id;
 
-  _Thread_Executing->Wait.queue = &_MPCI_Remote_blocked_threads;
+  executing->Wait.queue = &_MPCI_Remote_blocked_threads;
 
   _Thread_Disable_dispatch();
 
@@ -220,14 +214,18 @@ uint32_t   _MPCI_Send_request_packet (
     if (the_packet->timeout == MPCI_DEFAULT_TIMEOUT)
         the_packet->timeout = _MPCI_table->default_timeout;
 
-    _Thread_queue_Enqueue( &_MPCI_Remote_blocked_threads, the_packet->timeout );
+    _Thread_queue_Enqueue(
+      &_MPCI_Remote_blocked_threads,
+      executing,
+      the_packet->timeout
+    );
 
-    _Thread_Executing->current_state =
-      _States_Set( extra_state, _Thread_Executing->current_state );
+    executing->current_state =
+      _States_Set( extra_state, executing->current_state );
 
   _Thread_Enable_dispatch();
 
-  return _Thread_Executing->Wait.return_code;
+  return executing->Wait.return_code;
 }
 
 void _MPCI_Send_response_packet (
@@ -267,7 +265,7 @@ Thread_Control *_MPCI_Process_response (
     case OBJECTS_LOCAL:
       _Thread_queue_Extract( &_MPCI_Remote_blocked_threads, the_thread );
       the_thread->Wait.return_code = the_packet->return_code;
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_thread->Object );
     break;
   }
 
@@ -288,14 +286,20 @@ Thread _MPCI_Receive_server(
   MPCI_Packet_processor     the_function;
   Thread_Control           *executing;
 
-  executing = _Thread_Executing;
+  executing = _Thread_Get_executing();
 
   for ( ; ; ) {
 
     executing->receive_packet = NULL;
 
     _Thread_Disable_dispatch();
-    _CORE_semaphore_Seize( &_MPCI_Semaphore, 0, true, WATCHDOG_NO_TIMEOUT );
+    _CORE_semaphore_Seize(
+      &_MPCI_Semaphore,
+      executing,
+      0,
+      true,
+      WATCHDOG_NO_TIMEOUT
+    );
     _Thread_Enable_dispatch();
 
     for ( ; ; ) {

@@ -10,6 +10,7 @@ include_rtems_score_HEADERS = rtems/score/cpu.h
 include_rtems_score_HEADERS += rtems/score/m32c.h
 include_rtems_score_HEADERS += rtems/score/cpu_asm.h
 include_rtems_score_HEADERS += rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.c context_switch.S context_init.c \

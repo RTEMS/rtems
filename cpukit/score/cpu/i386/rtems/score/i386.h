@@ -1,14 +1,14 @@
 /**
  * @file
- * 
+ *
  * @brief Intel I386 CPU Dependent Source
- * 
+ *
  * This include file contains information pertaining to the Intel
  * i386 processor.
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,9 +33,7 @@ extern "C" {
  *
  *  Currently recognized:
  *    i386_fp    (i386 DX or SX w/i387)
- *    i386_nofp  (i386 DX or SX w/o i387)
  *    i486dx
- *    i486sx
  *    pentium
  *    pentiumpro
  *
@@ -46,49 +44,36 @@ extern "C" {
  *                   be present in all i486's and above.
  *
  *  I386_HAS_FPU:    Defined to "1" if the CPU has an FPU.
- *
+ *                   As of at least gcc 4.7, i386 soft-float was obsoleted.
+ *                   Thus this is always set to "1".
  */
-
-#if defined(_SOFT_FLOAT)
-#define I386_HAS_FPU 0
-#else
 #define I386_HAS_FPU 1
-#endif
 
 #if defined(__pentiumpro__)
 
-#define CPU_MODEL_NAME  "Pentium Pro"
+  #define CPU_MODEL_NAME  "Pentium Pro"
 
 #elif defined(__i586__)
 
-# if defined(__pentium__)
-# define CPU_MODEL_NAME  "Pentium"
-# elif defined(__k6__)
-# define CPU_MODEL_NAME "K6"
-# else
-# define CPU_MODEL_NAME "i586"
-# endif
+  #if defined(__pentium__)
+    #define CPU_MODEL_NAME "Pentium"
+  #elif defined(__k6__)
+    #define CPU_MODEL_NAME "K6"
+  #else
+    #define CPU_MODEL_NAME "i586"
+  #endif
 
 #elif defined(__i486__)
 
-# if !defined(_SOFT_FLOAT)
-# define CPU_MODEL_NAME  "i486dx"
-# else
-# define CPU_MODEL_NAME  "i486sx"
-# endif
+  #define CPU_MODEL_NAME  "i486dx"
 
 #elif defined(__i386__)
 
-#define I386_HAS_BSWAP 	0
-
-# if !defined(_SOFT_FLOAT)
-# define CPU_MODEL_NAME	"i386 with i387"
-# else
-# define CPU_MODEL_NAME	"i386 w/o i387"
-# endif
+  #define I386_HAS_BSWAP  0
+  #define CPU_MODEL_NAME  "i386 with i387"
 
 #else
-#error "Unknown CPU Model"
+  #error "Unknown CPU Model"
 #endif
 
 /*
@@ -96,11 +81,6 @@ extern "C" {
  *
  *  NOTE: These settings are chosen to reflect most of the family members.
  */
-
-#ifndef I386_HAS_FPU
-#define I386_HAS_FPU 1
-#endif
-
 #ifndef I386_HAS_BSWAP
 #define I386_HAS_BSWAP 1
 #endif
@@ -108,7 +88,6 @@ extern "C" {
 /*
  *  Define the name of the CPU family.
  */
-
 #define CPU_NAME "Intel i386"
 
 #ifndef ASM
@@ -138,17 +117,15 @@ static inline uint16_t i386_swap_u16(
   uint16_t value
 )
 {
-    unsigned short      sout;
+  unsigned short      sout;
 
-    __asm__ volatile( "rorw $8,%0" : "=r"  (sout) : "0"   (value));
-    return (sout);
+  __asm__ volatile( "rorw $8,%0" : "=r"  (sout) : "0"   (value));
+  return (sout);
 }
-
 
 /*
  * Added for pagination management
  */
-
 static inline unsigned int i386_get_cr0(void)
 {
   register unsigned int segment = 0;
@@ -193,7 +170,6 @@ static inline void i386_set_cr3(unsigned int segment)
  *
  *  Converts logical address to physical address.
  */
-
 void *i386_Logical_to_physical(
   unsigned short  segment,
   void           *address
@@ -204,12 +180,10 @@ void *i386_Logical_to_physical(
  *
  *  Converts physical address to logical address.
  */
-
 void *i386_Physical_to_logical(
   unsigned short  segment,
   void           *address
 );
-
 
 /*
  *  "Simpler" names for a lot of the things defined in this file

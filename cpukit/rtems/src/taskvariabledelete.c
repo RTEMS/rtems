@@ -18,9 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
@@ -30,6 +31,12 @@ rtems_status_code rtems_task_variable_delete(
   Thread_Control        *the_thread;
   Objects_Locations      location;
   rtems_task_variable_t *tvp, *prev;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
 
   if ( !ptr )
     return RTEMS_INVALID_ADDRESS;
@@ -49,13 +56,13 @@ rtems_status_code rtems_task_variable_delete(
             the_thread->task_variables = (rtems_task_variable_t *)tvp->next;
 
           _RTEMS_Tasks_Invoke_task_variable_dtor( the_thread, tvp );
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_thread->Object );
           return RTEMS_SUCCESSFUL;
         }
         prev = tvp;
         tvp = (rtems_task_variable_t *)tvp->next;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)

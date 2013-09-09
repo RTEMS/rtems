@@ -16,6 +16,7 @@
 
 #include <unistd.h>
 #include <errno.h>
+#include <limits.h>
 #include <sys/types.h>
 
 /* forward declarations to avoid warnings */

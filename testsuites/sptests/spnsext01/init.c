@@ -21,6 +21,7 @@
 static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_interrupt_lock lock = RTEMS_INTERRUPT_LOCK_INITIALIZER;
   rtems_interrupt_level level;
   rtems_interval t0 = 0;
   rtems_interval t1 = 0;
@@ -50,7 +51,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   n = (3 * n) / 2;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_lock_acquire(&lock, level);
   sc = rtems_clock_get_uptime(&uptime);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   for (i = 0; i < n; ++i) {
@@ -62,7 +63,7 @@ static rtems_task Init(rtems_task_argument argument)
     rtems_test_assert(!_Timespec_Less_than(&new_uptime, &uptime));
     uptime = new_uptime;
   }
-  rtems_interrupt_enable(level);
+  rtems_interrupt_lock_release(&lock, level);
 
   puts("*** END OF TEST NANO SECONDS EXTENSION 1 ***");
 

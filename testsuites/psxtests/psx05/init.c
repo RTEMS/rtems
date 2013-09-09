@@ -16,7 +16,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
-#include <rtems/posix/priority.h>
+
+#include <rtems/score/todimpl.h>
 
 #define MUTEX_BAD_ID 0xfffffffe
 

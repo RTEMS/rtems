@@ -39,6 +39,22 @@ void *rtems_heap_greedy_allocate(
   return opaque;
 }
 
+void *rtems_heap_greedy_allocate_all_except_largest(
+  uintptr_t *allocatable_size
+)
+{
+  void *opaque;
+
+  _RTEMS_Lock_allocator();
+  opaque = _Heap_Greedy_allocate_all_except_largest(
+    RTEMS_Malloc_Heap,
+    allocatable_size
+  );
+  _RTEMS_Unlock_allocator();
+
+  return opaque;
+}
+
 void rtems_heap_greedy_free( void *opaque )
 {
   _RTEMS_Lock_allocator();

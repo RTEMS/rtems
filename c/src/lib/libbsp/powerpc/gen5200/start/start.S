@@ -119,6 +119,7 @@
 .set	CFG1,			0x108
 .set	CFG2,			0x10C
 .set	ADRSEL,			0x110
+.set	SDELAY,			0x190
 
 /* Register offsets of MPC5x00 GPIO registers needed */
 .set	GPIOPCR,		0xb00
@@ -133,25 +134,34 @@
 
 /* Register offsets of MPC5x00 Arbiter registers */
 .set	ARBCFG,			0x1f40
+.set	ARBADRTO,		0x1f58
+.set	ARBDATTO,		0x1f5c
 .set	ARBMPREN,		0x1f64
 .set	ARBMPRIO,		0x1f68
 .set	ARBSNOOP,		0x1f70
 
 /* Some bit encodings for MGT5100 registers */
-.set	ADREN_SDRAM_EN,		(1<<22)
-.set    ADREN_BOOT_EN,  	(1<<25)
-.set    ADREN_CS0_EN,   	(1<<16)
-.set    ADREN_CS1_EN,   	(1<<17)
+.set	ADREN_BOOT_EN,		(1 << (31 - 6))
+.set	ADREN_CS0_EN,		(1 << (31 - 15))
+.set	ADREN_CS1_EN,		(1 << (31 - 14))
+.set	ADREN_WSE,		(1 << (31 - 31))
 
-.set	CTRL_PRECHARGE,		(1<<1)
-.set	CTRL_REFRESH,		(1<<2)
-.set 	CTRL_BA1,		(1<<31)
+.set	CTRL_PRECHARGE_ALL,	(1 << (31 - 30))
+.set	CTRL_REFRESH,		(1 << (31 - 29))
+.set 	CTRL_MODE_EN,		(1 << (31 - 0))
 
 .set	CSCONF_CE,		(1<<12)
 
 /* Some fixed values for MPC5x00 registers */
-.set    CSBOOTROM_VAL,		0x0101D910
 .set    CSCONTROL_VAL,		0x91000000
+
+/*
+ * The DDR_MODE bit is a read-only status and should be written as 0.
+ *
+ * XLB_CLK = FVCO / 4
+ * IPB_CLK = XLB_CLK / 2
+ * PCI_CLK = IPB_CLK
+ */
 .set	CFG_VAL,		0x00000100
 
 .extern boot_card
@@ -272,7 +282,7 @@ start:
 
 
 	LWI     r30, CFG_VAL			/* get CFG register content */
-	lwz	r30, CFG(r31)			/* set SDRAM single data rate / XLB_CLK=FVCO/4 / IPB_CLK=XLB_CLK/2 / PCICLK=IPB_CLK */
+	lwz	r30, CFG(r31)			/* set CFG register */
 
 
 
@@ -284,21 +294,20 @@ start:
 	bne	skip_ROM_start 			/* If BOOT_ROM is not enabled, skip further initialization */
 
 /* do some board dependent configuration (unique for ROM startup) */
-	bl	SPRG_brk_init			/* Initialize special purpose onchip breakpoint registers */
-
-
 	LWI     r30, CSCONTROL_VAL		/* get CSCONTROL register content */
 	stw	r30, CSCONTROL(r31)		/* enable internal/external bus error and master for CS */
 
 
+#if defined(MPC5200_BOARD_BRS5L)
+	#define CSBOOTROM_VAL 0x0101D910
+#elif defined(MPC5200_BOARD_BRS6L)
+	#define CSBOOTROM_VAL 0x0202D910
+#endif
 
-#ifdef BRS5L
+#ifdef CSBOOTROM_VAL
 	LWI	r30, CSBOOTROM_VAL
 	stw	r30, CSBOOTROM(r31)	 	/* Set CSBOOTROM */
-
-
-#endif /* BRS5L */
-
+#endif
 
 	/* FIXME: map BOOT ROM into final location with CS0 registers */
 	LWI	r30, bsp_rom_start
@@ -489,7 +498,9 @@ twiddle:
 
 #if defined(NEED_LOW_LEVEL_INIT)
 SDRAM_init:
-#if defined(BRS5L)
+	mflr	r12
+
+#if defined(MPC5200_BOARD_BRS5L)
       /* set GPIO_WKUP7 pin low for 66MHz buffering */
       /* or high for 133MHz registered buffering    */
 	LWI	r30, 0x80000000
@@ -516,75 +527,143 @@ SDRAM_init:
 	stw	r29,GPIOPCR(r31)
 
 #endif
-	/* See Erratum 342/339 in MPC5200_Errata_L25R_3_June.pdf:	*/
-	/* set 5 delays to their maximum to support two banks           */
-#if 0
-	LWI	r30, 0xCC222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x2 */ 
+
+	#define SDELAY_VAL 0x00000004
+
+#if defined(MPC5200_BOARD_BRS6L)
+	#define CFG1_VAL 0x73722930
 #else
-	/* EB 04.12.08: 
-	 * on MPC5200B, Erratum342 is no longer applicable.
-	 * on MPC5200_, Single Write2Read/Prec is only 3 bits, 
-	 *     therefore the MSB of the set value (1100) was ignored
-	 * in the MPC5200B, this bit is implemented in results in 
-	 *     SSSLLLOOOWWW access to SDRAM. To make the mem ctrl settings compatible with the MPC5200_,
-	 *     we use a 4 for now.
+	/*
+	 * Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4
+	 * Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2
 	 */
-	LWI	r30, 0xC4222600			/* Single Read2Read/Write delay=0xC, Single Write2Read/Prec. delay=0x4 */ 
+	#define CFG1_VAL 0xC4222600
 #endif
-	stw	r30, CFG1(r31)			/* Read CAS latency=0x2, Active2Read delay=0x2, Prec.2active delay=0x2 */ 
-						/* Refr.2No-Read delay=0x06, Write latency=0x0 */
-	
-	LWI	r30, 0xCCC70004			/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */ 
-	stw	r30, CFG2(r31)			/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
 
-#ifdef BRS5L
-	LWI	r30, 0xD1470000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
-	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
-
-
+#if defined(MPC5200_BOARD_BRS6L)
+	#define CFG2_VAL 0x47770000
 #else
-	LWI	r30, 0xD04F0000 		/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
-	stw	r30, CTRL(r31)			/* Refresh counter=0xFFFF */
-
-
+	/* Refr.2No-Read delay=0x06, Write latency=0x0 */
+	/* Burst2Read Prec.delay=0x8, Burst Write delay=0x8 */
+	/* Burst Read2Write delay=0xB, Burst length=0x7, Read Tap=0x4 */
+	#define CFG2_VAL 0xCCC70004
 #endif
-	lwz	r30, CTRL(r31)
 
+#if defined(MPC5200_BOARD_BRS5L)
+	/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
+	/* Refresh counter=0xFFFF */
+	#define CTRL_VAL 0xD1470000
+#elif defined(MPC5200_BOARD_BRS6L)
+	#define CTRL_VAL 0xF15F0F00
+#else
+	/* Mode Set enabled, Clock enabled, Auto refresh enabled, Mem. data drv */
+	/* Refresh counter=0xFFFF */
+	#define CTRL_VAL 0xD04F0000
+#endif
 
-	SETBITS	r30, r29, CTRL_PRECHARGE 	/* send two times precharge */
-	stw     r30, CTRL(r31)
+#if defined(MPC5200_BOARD_BRS6L)
+	/* Enable DLL, normal drive strength */
+	#define EMODE_VAL 0x40010000
+#endif
 
+#if defined(MPC5200_BOARD_BRS6L)
+	/* Burst length = 8, burst type sequential, CAS latency 2.5, normal operation/reset DLL */
+	#define MODE_VAL 0x058D0000
+#else
+	/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
+	#define MODE_VAL 0x008D0000
+#endif
 
-	stw     r30, CTRL(r31)
+#if defined(MPC5200_BOARD_BRS6L)
+	/* Burst length = 8, burst type sequential, CAS latency 2.5, normal operation */
+	#define SECOND_MODE_VAL (MODE_VAL & ~0x04000000)
+#endif
 
+	/* SDRAM initialization according to application note AN3221 */
 
+	/* SDRAM controller setup */
 
-	lwz	r30, CTRL(r31)
+	LWI	r3, SDELAY_VAL
+	stw	r3, SDELAY(r31)
 
+	LWI	r3, CFG1_VAL
+	stw	r3, CFG1(r31)
 
-	SETBITS	r30, r29, CTRL_REFRESH 		/* send two times refresh */
-	stw     r30, CTRL(r31)
+	LWI	r3, CFG2_VAL
+	stw	r3, CFG2(r31)
 
+	LWI	r11, CTRL_VAL
+	stw	r11, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
-	stw     r30, CTRL(r31)
+	/* Perform a PRECHARGE ALL command */
+	ori	r3, r11, CTRL_PRECHARGE_ALL
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRP time */
+	li	r3, 15
+	bl	ndelay
 
+#if defined(EMODE_VAL)
+	/* Write EMODE register */
+	LWI	r3, EMODE_VAL
+	stw	r3, MOD(r31)
 
-	LWI	r30, 0x008D0000 		/* Op.Mode=0x0, Read CAS latency=0x2, Burst length=0x3, Write strobe puls */
-	stw	r30, MOD(r31)
+	/* Wait at least tMRD time */
+	li	r3, 10
+	bl	ndelay
+#endif
 
+	/* Write MODE register */
+	LWI	r3, MODE_VAL
+	stw	r3, MOD(r31)
 
+	/* Wait at least tMRD time */
+	li	r3, 10
+	bl	ndelay
 
-	lwz	r30, CTRL(r31)			/* Clock enabled, Auto refresh enabled, Mem. data drv. Refresh counter=0xFFFF */
+	/* Perform a PRECHARGE ALL command */
+	ori	r3, r11, CTRL_PRECHARGE_ALL
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRP time */
+	li	r3, 15
+	bl	ndelay
 
- 	CLRBITS	r30, r29, CTRL_BA1
- 	stw     r30, CTRL(r31)
+	/* Perform an AUTO REFRESH */
+	ori	r3, r11, CTRL_REFRESH
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRFC time */
+	li	r3, 70
+	bl	ndelay
 
+	/* Perform an AUTO REFRESH */
+	ori	r3, r11, CTRL_REFRESH
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
 
+	/* Wait at least tRFC time */
+	li	r3, 70
+	bl	ndelay
+
+#if defined(SECOND_MODE_VAL)
+	/* Write MODE register */
+	LWI	r3, SECOND_MODE_VAL
+	stw	r3, MOD(r31)
+#endif
+
+	/* Disable MODE register access */
+	lis	r4, CTRL_MODE_EN@h
+	andc	r3, r11, r4
+	stw	r3, CTRL(r31)
+	lwz	r3, CTRL(r31)
+
+	mtlr	r12
 	blr
-
 
 copy_image:
 	mr	r27, r28
@@ -838,23 +917,6 @@ SPRG_init:					/* initialize registers */
 
 	blr
 
-SPRG_brk_init:
-	xor	r30, r30, r30
-
-	mtspr	DABR2, r30
-	mtspr	DBCR, r30
-	mtspr	IBCR, r30
-	mtspr	IABR, r30
-	mtspr	HID2, r30
-	mtspr	DABR, r30
-	mtspr	IABR2, r30
-
-
-
-
-	blr
-
-
 PPC_HID0_rd:					/* get HID0 content to r30 */
 
 
@@ -913,5 +975,26 @@ XLB_init:
 
 	LWI	r30, 0x0000001e
 	stw	r30, ARBSNOOP(r31) 		/* Set ARBSNOOP */
+
+	LWI	r30, 4096
+	stw	r30, ARBADRTO(r31) 		/* Set ARBADRTO */
+	stw	r30, ARBDATTO(r31) 		/* Set ARBDATTO */
+
+	blr
+
+ndelay:
+	/*
+	 * The maximum core frequency is 396MHz.
+	 * We have (396MHz * 1024) / 10**9 == 405.
+	 */
+	mulli	r3, r3, 405
+	srwi.	r3, r3, 10
+
+	beqlr
+
+	mtctr	r3
+
+ndelay_loop:
+	bdnz	ndelay_loop
 
 	blr

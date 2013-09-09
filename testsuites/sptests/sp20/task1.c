@@ -13,6 +13,8 @@
 
 #include "system.h"
 
+#include <rtems/score/watchdogimpl.h>
+
 /*
  runtime of TA6 should be shorter than TA5
  */

@@ -61,6 +61,7 @@
 #include <libcpu/spr.h>
 #include <libcpu/io.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/sysstate.h>
 
 #include "mpc8540_i2c_busdrv.h"
 

@@ -18,11 +18,8 @@
 #include "config.h"
 #endif
 
-#include <sys/types.h>
-
-#include <rtems/system.h>
 #include <rtems/score/timespec.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 
 bool _Timespec_Is_valid(
   const struct timespec *time

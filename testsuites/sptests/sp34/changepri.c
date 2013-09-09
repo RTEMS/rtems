@@ -39,9 +39,10 @@ const char *CallerName(void);
 const char *CallerName(void)
 {
   static char buffer[32];
+  Thread_Control *executing = _Thread_Get_executing();
 #if defined(TEST_PRINT_TASK_ID)
   sprintf( buffer, "0x%08x -- %d",
-      rtems_task_self(), _Thread_Executing->current_priority );
+      rtems_task_self(), executing->current_priority );
 #else
   volatile union {
     uint32_t u;
@@ -49,13 +50,13 @@ const char *CallerName(void)
   } TempName;
 
   #if defined(TEST_ON_RTEMS_45)
-    TempName.u = *(uint32_t *)_Thread_Executing->Object.name;
+    TempName.u = *(uint32_t *)executing->Object.name;
   #else
-    TempName.u = _Thread_Executing->Object.name.name_u32;
+    TempName.u = executing->Object.name.name_u32;
   #endif
     sprintf( buffer, "%c%c%c%c -- %" PRIdPriority_Control,
       TempName.c[0], TempName.c[1], TempName.c[2], TempName.c[3],
-      _Thread_Executing->current_priority
+      executing->current_priority
   );
 #endif
   return buffer;

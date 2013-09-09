@@ -19,6 +19,7 @@
 #include <netinet/tcp.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "test-http-client.h"
 

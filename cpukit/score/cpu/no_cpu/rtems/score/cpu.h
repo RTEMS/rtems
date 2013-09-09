@@ -474,6 +474,14 @@ extern "C" {
  */
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
 
+/**
+ * @brief The size of the CPU specific per-CPU control.
+ *
+ * This define must be visible to assember files since it is used to derive
+ * structure offsets.
+ */
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  Processor defined structures required for cpukit/score.
  *
@@ -483,6 +491,16 @@ extern "C" {
  */
 
 /* may need to put some structures here.  */
+
+/**
+ * @brief The CPU specific per-CPU control.
+ *
+ * The CPU port can place here all state information that must be available and
+ * maintained for each CPU in the system.
+ */
+typedef struct {
+  /* CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /**
  * @defgroup CPUContext Processor Dependent Context Management
@@ -1295,6 +1313,37 @@ void _CPU_Context_restore_fp(
 );
 
 /**
+ * @ingroup CPUContext
+ *
+ * @brief Clobbers all volatile registers with values derived from the pattern
+ * parameter.
+ *
+ * This function is used only in test sptests/spcontext01.
+ *
+ * @param[in] pattern Pattern used to generate distinct register values.
+ *
+ * @see _CPU_Context_validate().
+ */
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+/**
+ * @ingroup CPUContext
+ *
+ * @brief Initializes and validates the CPU context with values derived from
+ * the pattern parameter.
+ *
+ * This function will not return if the CPU context remains consistent.  In
+ * case this function returns the CPU port is broken.
+ *
+ * This function is used only in test sptests/spcontext01.
+ *
+ * @param[in] pattern Pattern used to generate distinct register values.
+ *
+ * @see _CPU_Context_volatile_clobber().
+ */
+void _CPU_Context_validate( uintptr_t pattern );
+
+/**
  * @brief The set of registers that specifies the complete processor state.
  *
  * The CPU exception frame may be available in fatal error conditions like for
@@ -1370,6 +1419,60 @@ static inline uint32_t CPU_swap_u32(
  */
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
+
+#ifdef RTEMS_SMP
+  /**
+   * @brief Returns the index of the current processor.
+   *
+   * An architecture specific method must be used to obtain the index of the
+   * current processor in the system.  The set of processor indices is the
+   * range of integers starting with zero up to the processor count minus one.
+   */
+  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
+    _CPU_SMP_Get_current_processor( void )
+  {
+    return 123;
+  }
+
+  /**
+   * @brief Sends an inter-processor interrupt to the specified target
+   * processor.
+   *
+   * This operation is undefined for target processor indices out of range.
+   *
+   * @param[in] target_processor_index The target processor index.
+   */
+  void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
+
+  /**
+   * @brief Broadcasts a processor event.
+   *
+   * Some architectures provide a low-level synchronization primitive for
+   * processors in a multi-processor environment.  Processors waiting for this
+   * event may go into a low-power state and stop generating system bus
+   * transactions.  This function must ensure that preceding store operations
+   * can be observed by other processors.
+   *
+   * @see _CPU_SMP_Processor_event_receive().
+   */
+  static inline void _CPU_SMP_Processor_event_broadcast( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+
+  /**
+   * @brief Receives a processor event.
+   *
+   * This function will wait for the processor event and may wait forever if no
+   * such event arrives.
+   *
+   * @see _CPU_SMP_Processor_event_broadcast().
+   */
+  static inline void _CPU_SMP_Processor_event_receive( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+#endif
 
 #ifdef __cplusplus
 }

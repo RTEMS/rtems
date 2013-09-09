@@ -18,32 +18,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/config.h>
-#if defined(RTEMS_SMP)
-  #include <rtems/score/smp.h>
-#endif
 
-static inline void _Thread_Create_idle_helper(
-  uint32_t name_u32,
-  int      cpu
-)
+static void _Thread_Create_idle_for_cpu( Per_CPU_Control *per_cpu )
 {
   Objects_Name    name;
   Thread_Control *idle;
 
-  name.name_u32 = name_u32;
+  name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
@@ -51,13 +35,6 @@ static inline void _Thread_Create_idle_helper(
    *  _Workspace_Initialization.
    */
   idle = _Thread_Internal_allocate();
-
-  /*
-   *  This is only called during initialization and we better be sure
-   *  that when _Thread_Initialize unnests dispatch that we do not
-   *  do anything stupid.
-   */
-  _Thread_Disable_dispatch();
 
   _Thread_Initialize(
     &_Thread_Internal_information,
@@ -73,37 +50,31 @@ static inline void _Thread_Create_idle_helper(
     name
   );
 
-  _Thread_Unnest_dispatch();
-
   /*
    *  WARNING!!! This is necessary to "kick" start the system and
    *             MUST be done before _Thread_Start is invoked.
    */
-  _Per_CPU_Information[ cpu ].idle      =
-  _Per_CPU_Information[ cpu ].heir      =
-  _Per_CPU_Information[ cpu ].executing = idle;
+  per_cpu->heir      =
+  per_cpu->executing = idle;
 
   _Thread_Start(
     idle,
     THREAD_START_NUMERIC,
     rtems_configuration_get_idle_task(),
     NULL,
-    0
+    0,
+    per_cpu
   );
 }
 
 void _Thread_Create_idle( void )
 {
-  #if defined(RTEMS_SMP)
-    int cpu;
+  uint32_t processor_count = _SMP_Get_processor_count();
+  uint32_t processor;
 
-    for ( cpu=0 ; cpu < _SMP_Processor_count ; cpu++ ) {
-      _Thread_Create_idle_helper(
-        _Objects_Build_name( 'I', 'D', 'L', 'E' ),
-        cpu
-      );
-    }
-  #else
-    _Thread_Create_idle_helper(_Objects_Build_name( 'I', 'D', 'L', 'E' ), 0);
-  #endif
+  for ( processor = 0 ; processor < processor_count ; ++processor ) {
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( processor );
+
+    _Thread_Create_idle_for_cpu( per_cpu );
+  }
 }

@@ -21,5 +21,4 @@
 /* instantiate semaphore data */
 #define RTEMS_DPMEM_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/dpmemimpl.h>

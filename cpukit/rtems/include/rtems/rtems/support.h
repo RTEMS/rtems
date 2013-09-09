@@ -18,11 +18,12 @@
 #ifndef _RTEMS_RTEMS_SUPPORT_H
 #define _RTEMS_RTEMS_SUPPORT_H
 
+#include <rtems/rtems/types.h>
+#include <rtems/config.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/rtems/types.h>
 
 /**
  * @addtogroup ClassicRTEMS
@@ -32,14 +33,13 @@ extern "C" {
 /**
  * @brief Returns the number of micro seconds for the milli seconds value @a _ms.
  */
-#define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) \
-        TOD_MILLISECONDS_TO_MICROSECONDS(_ms)
+#define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) ((uint32_t)(_ms) * 1000UL)
 
 /**
  * @brief Returns the number of ticks for the milli seconds value @a _ms.
  */
 #define RTEMS_MILLISECONDS_TO_TICKS(_ms) \
-       (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / \
+       (RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) / \
           rtems_configuration_get_microseconds_per_tick())
 
 /**
@@ -47,6 +47,34 @@ extern "C" {
  */
 #define RTEMS_MICROSECONDS_TO_TICKS(_us) \
        ((_us) / rtems_configuration_get_microseconds_per_tick())
+
+/**
+ * @brief Returns @c true if the name is valid, and @c false otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool rtems_is_name_valid (
+  rtems_name name
+)
+{
+  return ( name != 0 );
+}
+
+/**
+ * @brief Breaks the object name into the four component characters @a c1,
+ * @a c2, @a c3, and @a c4.
+ */
+RTEMS_INLINE_ROUTINE void rtems_name_to_characters(
+  rtems_name    name,
+  char         *c1,
+  char         *c2,
+  char         *c3,
+  char         *c4
+)
+{
+  *c1 = (char) ((name >> 24) & 0xff);
+  *c2 = (char) ((name >> 16) & 0xff);
+  *c3 = (char) ((name >> 8) & 0xff);
+  *c4 = (char) ( name & 0xff);
+}
 
 /** @} */
 
@@ -99,7 +127,7 @@ bool rtems_workspace_free(
 /**
  * @brief Greedy allocate that empties the workspace.
  *
- * Afterward the heap has at most @a block_count allocateable blocks of sizes
+ * Afterwards the heap has at most @a block_count allocatable blocks of sizes
  * specified by @a block_sizes.  The @a block_sizes must point to an array with
  * @a block_count members.  All other blocks are used.
  *
@@ -111,24 +139,32 @@ void *rtems_workspace_greedy_allocate(
 );
 
 /**
+ * @brief Greedy allocate all blocks except the largest free block.
+ *
+ * Afterwards the heap has at most one allocatable block.  This block is the
+ * largest free block if it exists.  The allocatable size of this block is
+ * stored in @a allocatable_size.  All other blocks are used.
+ *
+ * @see rtems_workspace_greedy_free().
+ */
+void *rtems_workspace_greedy_allocate_all_except_largest(
+  uintptr_t *allocatable_size
+);
+
+/**
  * @brief Frees space of a greedy allocation.
  *
  * The @a opaque argument must be the return value of
- * rtems_workspace_greedy_allocate().
+ * rtems_workspace_greedy_allocate() or
+ * rtems_workspace_greedy_allocate_all_except_largest().
  */
 void rtems_workspace_greedy_free( void *opaque );
 
 /** @} */
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/support.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

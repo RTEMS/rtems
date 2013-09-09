@@ -21,6 +21,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/coremuteximpl.h>
 
 void _API_Mutex_Lock(
   API_Mutex_Control *the_mutex
@@ -36,6 +37,7 @@ void _API_Mutex_Lock(
 
   _CORE_mutex_Seize(
     &the_mutex->Mutex,
+    _Thread_Executing,
     the_mutex->Object.id,
     true,
     0,

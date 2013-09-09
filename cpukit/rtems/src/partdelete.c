@@ -18,14 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/address.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/part.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/rtems/partimpl.h>
+#include <rtems/rtems/attrimpl.h>
+#include <rtems/score/threaddispatch.h>
 
 rtems_status_code rtems_partition_delete(
   rtems_id id
@@ -58,10 +53,10 @@ rtems_status_code rtems_partition_delete(
         }
 #endif
 
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_partition->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_partition->Object );
       return RTEMS_RESOURCE_IN_USE;
 
 #if defined(RTEMS_MULTIPROCESSING)

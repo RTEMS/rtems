@@ -8,7 +8,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009-2011 embedded brains GmbH.
+ *  Copyright (c) 2009-2013 embedded brains GmbH.
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -43,7 +43,7 @@
  */
 /**@{**/
 
-#ifdef __thumb__
+#if defined(__thumb__) && !defined(__thumb2__)
   #define ARM_SWITCH_REGISTERS uint32_t arm_switch_reg
   #define ARM_SWITCH_TO_ARM ".align 2\nbx pc\n.arm\n"
   #define ARM_SWITCH_BACK "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
@@ -128,11 +128,7 @@
 
 #define CPU_ISR_PASSES_FRAME_POINTER 0
 
-#if ( ARM_HAS_FPU == 1 )
-  #define CPU_HARDWARE_FP TRUE
-#else
-  #define CPU_HARDWARE_FP FALSE
-#endif
+#define CPU_HARDWARE_FP FALSE
 
 #define CPU_SOFTWARE_FP FALSE
 
@@ -142,7 +138,7 @@
 
 #define CPU_USE_DEFERRED_FP_SWITCH FALSE
 
-#if defined(ARM_MULTILIB_ARCH_V7M)
+#if defined(ARM_MULTILIB_HAS_WFI)
   #define CPU_PROVIDES_IDLE_THREAD_BODY TRUE
 #else
   #define CPU_PROVIDES_IDLE_THREAD_BODY FALSE
@@ -169,7 +165,7 @@
  * operating system support for a FIQ, she can trigger a software interrupt and
  * service the request in a two-step process.
  */
-#define CPU_MODES_INTERRUPT_MASK 0x80
+#define CPU_MODES_INTERRUPT_MASK 0x1
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
@@ -212,7 +208,21 @@
 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /** @} */
+
+#ifdef ARM_MULTILIB_VFP_D32
+  #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
+#endif
+
+#define ARM_EXCEPTION_FRAME_SIZE 76
+
+#define ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET 52
+
+#define ARM_EXCEPTION_FRAME_VFP_CONTEXT_OFFSET 72
+
+#define ARM_VFP_CONTEXT_SIZE 264
 
 #ifndef ASM
 
@@ -224,6 +234,10 @@ extern "C" {
  * @addtogroup ScoreCPU
  */
 /**@{**/
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)
@@ -253,15 +267,38 @@ typedef struct {
 #else
   void *register_sp;
 #endif
+#ifdef ARM_MULTILIB_VFP_D32
+  uint64_t register_d8;
+  uint64_t register_d9;
+  uint64_t register_d10;
+  uint64_t register_d11;
+  uint64_t register_d12;
+  uint64_t register_d13;
+  uint64_t register_d14;
+  uint64_t register_d15;
+#endif
 } Context_Control;
 
 typedef struct {
   /* Not supported */
 } Context_Control_fp;
 
-SCORE_EXTERN Context_Control_fp _CPU_Null_fp_context;
-
 extern uint32_t arm_cpu_mode;
+
+static inline void _ARM_Data_memory_barrier( void )
+{
+  __asm__ volatile ( "dmb" : : : "memory" );
+}
+
+static inline void _ARM_Data_synchronization_barrier( void )
+{
+  __asm__ volatile ( "dsb" : : : "memory" );
+}
+
+static inline void _ARM_Instruction_synchronization_barrier( void )
+{
+  __asm__ volatile ( "isb" : : : "memory" );
+}
 
 static inline uint32_t arm_interrupt_disable( void )
 {
@@ -419,9 +456,53 @@ void _CPU_Context_restore( Context_Control *new_context )
   #define _CPU_Stop_multitasking _ARMV7M_Stop_multitasking
 #endif
 
-void _CPU_Context_save_fp( Context_Control_fp **fp_context_ptr );
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
-void _CPU_Context_restore_fp( Context_Control_fp **fp_context_ptr );
+void _CPU_Context_validate( uintptr_t pattern );
+
+#ifdef RTEMS_SMP
+  #define _CPU_Context_switch_to_first_task_smp( _context ) \
+    _CPU_Context_restore( _context )
+
+  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
+    _CPU_SMP_Get_current_processor( void )
+  {
+    uint32_t mpidr;
+
+    /* Use ARMv7 Multiprocessor Affinity Register (MPIDR) */
+    __asm__ volatile (
+      "mrc p15, 0, %[mpidr], c0, c0, 5\n"
+      : [mpidr] "=&r" (mpidr)
+    );
+
+    return mpidr & 0xffU;
+  }
+
+  void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
+
+  static inline void _ARM_Send_event( void )
+  {
+    __asm__ volatile ( "sev" : : : "memory" );
+  }
+
+  static inline void _ARM_Wait_for_event( void )
+  {
+    __asm__ volatile ( "wfe" : : : "memory" );
+  }
+
+  static inline void _CPU_SMP_Processor_event_broadcast( void )
+  {
+    _ARM_Data_synchronization_barrier();
+    _ARM_Send_event();
+  }
+
+  static inline void _CPU_SMP_Processor_event_receive( void )
+  {
+    _ARM_Wait_for_event();
+    _ARM_Data_memory_barrier();
+  }
+#endif
+
 
 static inline uint32_t CPU_swap_u32( uint32_t value )
 {
@@ -497,6 +578,43 @@ typedef enum {
 #endif /* defined(ARM_MULTILIB_ARCH_V4) */
 
 typedef struct {
+  uint32_t register_fpexc;
+  uint32_t register_fpscr;
+  uint64_t register_d0;
+  uint64_t register_d1;
+  uint64_t register_d2;
+  uint64_t register_d3;
+  uint64_t register_d4;
+  uint64_t register_d5;
+  uint64_t register_d6;
+  uint64_t register_d7;
+  uint64_t register_d8;
+  uint64_t register_d9;
+  uint64_t register_d10;
+  uint64_t register_d11;
+  uint64_t register_d12;
+  uint64_t register_d13;
+  uint64_t register_d14;
+  uint64_t register_d15;
+  uint64_t register_d16;
+  uint64_t register_d17;
+  uint64_t register_d18;
+  uint64_t register_d19;
+  uint64_t register_d20;
+  uint64_t register_d21;
+  uint64_t register_d22;
+  uint64_t register_d23;
+  uint64_t register_d24;
+  uint64_t register_d25;
+  uint64_t register_d26;
+  uint64_t register_d27;
+  uint64_t register_d28;
+  uint64_t register_d29;
+  uint64_t register_d30;
+  uint64_t register_d31;
+} ARM_VFP_context;
+
+typedef struct {
   uint32_t register_r0;
   uint32_t register_r1;
   uint32_t register_r2;
@@ -520,6 +638,7 @@ typedef struct {
   uint32_t register_xpsr;
   uint32_t vector;
 #endif
+  const ARM_VFP_context *vfp_context;
 } CPU_Exception_frame;
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;

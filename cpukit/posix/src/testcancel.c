@@ -27,7 +27,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/cancel.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/threadsup.h>
 
 /*
@@ -37,6 +37,7 @@
 void pthread_testcancel( void )
 {
   POSIX_API_Control *thread_support;
+  Thread_Control    *executing;
   bool               cancel = false;
 
   /*
@@ -48,14 +49,15 @@ void pthread_testcancel( void )
   if ( _ISR_Is_in_progress() )
     return;
 
-  thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
-
   _Thread_Disable_dispatch();
+    executing = _Thread_Executing;
+    thread_support = executing->API_Extensions[ THREAD_API_POSIX ];
+
     if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE &&
          thread_support->cancelation_requested )
       cancel = true;
   _Thread_Enable_dispatch();
 
   if ( cancel )
-    _POSIX_Thread_Exit( _Thread_Executing, PTHREAD_CANCELED );
+    _POSIX_Thread_Exit( executing, PTHREAD_CANCELED );
 }

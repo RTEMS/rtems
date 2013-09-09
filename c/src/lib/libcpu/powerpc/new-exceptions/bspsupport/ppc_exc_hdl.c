@@ -8,10 +8,10 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#include <rtems.h>
-#include <rtems/score/apiext.h>
-
 #include <bsp/vectors.h>
+
+#include <rtems/score/apiext.h>
+#include <rtems/score/threaddispatch.h>
 
 /* Provide temp. storage space for a few registers.
  * This is used by the assembly code prior to setting up

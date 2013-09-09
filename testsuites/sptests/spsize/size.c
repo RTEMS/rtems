@@ -19,32 +19,33 @@
 #include <rtems/score/apiext.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/rtems/tasks.h>
-#include <rtems/rtems/dpmem.h>
-#include <rtems/rtems/event.h>
-#include <rtems/extension.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/dpmemimpl.h>
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/extensionimpl.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/messageimpl.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
-#include <rtems/score/mpci.h>
+#include <rtems/score/mpciimpl.h>
 #endif
-#include <rtems/rtems/part.h>
+#include <rtems/rtems/partimpl.h>
 #include <rtems/score/priority.h>
-#include <rtems/rtems/ratemon.h>
-#include <rtems/rtems/region.h>
-#include <rtems/rtems/sem.h>
+#include <rtems/rtems/ratemonimpl.h>
+#include <rtems/rtems/regionimpl.h>
+#include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/signal.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/timer.h>
-#include <rtems/score/tod.h>
+#include <rtems/rtems/timerimpl.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 #if defined(RTEMS_SMP)
   #include <rtems/score/smp.h>
@@ -76,7 +77,7 @@ void print_formula(void);
 /*
  *  This assumes the default Priority Scheduler
  */
-#include <rtems/score/prioritybitmap.h>
+#include <rtems/score/prioritybitmapimpl.h>
 #include <rtems/score/schedulerpriority.h>
 
 /* Priority scheduling uninitialized (globals) consumption */
@@ -266,17 +267,15 @@ uninitialized =
 
 /*debug.h*/     (sizeof _Debug_Level)                     +
 
-/*dpmem.h*/     (sizeof _Dual_ported_memory_Information)  +
+/*dpmemimpl.h*/ (sizeof _Dual_ported_memory_Information)  +
 
-/*event.h*/     (sizeof _Event_Sync_state)                +
+/*eventimpl.h*/ (sizeof _Event_Sync_state)                +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*eventmp.h*/   0                                         +
 #endif
 
-/*eventset.h*/  0                                         +
-
-/*extension.h*/ (sizeof _Extension_Information)           +
+/*extensionimpl.h*/ (sizeof _Extension_Information)       +
 
 /*fatal.h*/     0                                         +
 
@@ -296,7 +295,7 @@ uninitialized =
                 (sizeof _ISR_Vector_table)                +
 #endif
 
-/*message.h*/   (sizeof _Message_queue_Information)       +
+/*messageimpl.h*/ (sizeof _Message_queue_Information)     +
 
 /*modes.h*/     0                                         +
 
@@ -305,7 +304,7 @@ uninitialized =
 #endif
 
 #if defined(RTEMS_MULTIPROCESSING)
-/*mpci.h*/      (sizeof _MPCI_Remote_blocked_threads)     +
+/*mpciimpl.h*/  (sizeof _MPCI_Remote_blocked_threads)     +
                 (sizeof _MPCI_Semaphore)                  +
                 (sizeof _MPCI_table)                      +
                 (sizeof _MPCI_Receive_server_tcb)         +
@@ -335,21 +334,17 @@ uninitialized =
 
 /*options.h*/   0                                         +
 
-/*part.h*/      (sizeof _Partition_Information)           +
+/*partimpl.h*/  (sizeof _Partition_Information)           +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*partmp.h*/    0                                         +
 #endif
 
-#if defined(RTEMS_SMP)
-/*percpu.h*/    (_SMP_Processor_count * sizeof(Per_CPU_Control))  +
-#else
-/*percpu.h*/    (sizeof (Per_CPU_Control) )                       +
-#endif
+/*percpu.h*/    (_SMP_Get_processor_count() * sizeof(Per_CPU_Control))  +
 
-/*ratemon.h*/   (sizeof _Rate_monotonic_Information)      +
+/*ratemonimpl.h*/ (sizeof _Rate_monotonic_Information)    +
 
-/*region.h*/    (sizeof _Region_Information)              +
+/*regionimpl.h*/ (sizeof _Region_Information)             +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*regionmp.h*/  0                                         +
@@ -359,7 +354,7 @@ uninitialized =
 
 /*scheduler.h*/ SCHEDULER_OVHD                            + 
 
-/*sem.h*/       (sizeof _Semaphore_Information)           +
+/*semimpl.h*/   (sizeof _Semaphore_Information)           +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*semmp.h*/     0                                         +
@@ -384,7 +379,7 @@ uninitialized =
 /*taskmp.h*/    0                                         +
 #endif
 
-/*tasks.h*/     (sizeof _RTEMS_tasks_Information)         +
+/*tasksimpl.h*/ (sizeof _RTEMS_tasks_Information)         +
 
 /*thread.h*/    (sizeof _Thread_BSP_context)              +
                 (sizeof _Thread_Dispatch_disable_level)   +
@@ -404,7 +399,7 @@ uninitialized =
 
 /*threadq.h*/
 
-/*timer.h*/     (sizeof _Timer_Information)               +
+/*timerimpl.h*/ (sizeof _Timer_Information)               +
 
 /*tod.h*/       (sizeof _TOD.now)                         +
                 (sizeof _TOD.uptime)                      +

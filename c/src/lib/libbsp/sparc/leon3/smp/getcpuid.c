@@ -13,9 +13,11 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-int bsp_smp_processor_id(void)
+#include <rtems/score/cpu.h>
+
+uint32_t _CPU_SMP_Get_current_processor( void )
 {
-  unsigned int id;
+  uint32_t id;
   __asm__ __volatile__( "rd     %%asr17,%0\n\t" : "=r" (id) : );
 
   return ((id >> 28) & 0xff);

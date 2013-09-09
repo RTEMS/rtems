@@ -35,7 +35,7 @@ rtems_task Test_task(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
-#define CONFIGURE_MAXIMUM_SEMAPHORES          1
+#define CONFIGURE_MAXIMUM_SEMAPHORES          2
   
 #include <rtems/confdefs.h>
 

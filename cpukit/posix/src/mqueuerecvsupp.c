@@ -29,7 +29,7 @@
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -53,20 +53,21 @@ ssize_t _POSIX_Message_queue_Receive_support(
   Objects_Locations                location;
   size_t                           length_out;
   bool                             do_wait;
+  Thread_Control                  *executing;
 
   the_mq_fd = _POSIX_Message_queue_Get_fd( mqdes, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
       if ( (the_mq_fd->oflag & O_ACCMODE) == O_WRONLY ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_mq_fd->Object );
         rtems_set_errno_and_return_minus_one( EBADF );
       }
 
       the_mq = the_mq_fd->Queue;
 
       if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_mq_fd->Object );
         rtems_set_errno_and_return_minus_one( EMSGSIZE );
       }
 
@@ -88,8 +89,10 @@ ssize_t _POSIX_Message_queue_Receive_support(
       /*
        *  Now perform the actual message receive
        */
+      executing = _Thread_Executing;
       _CORE_message_queue_Seize(
         &the_mq->Message_queue,
+        executing,
         mqdes,
         msg_ptr,
         &length_out,
@@ -97,19 +100,19 @@ ssize_t _POSIX_Message_queue_Receive_support(
         timeout
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
       if (msg_prio) {
         *msg_prio = _POSIX_Message_queue_Priority_from_core(
-             _Thread_Executing->Wait.count
+             executing->Wait.count
           );
       }
 
-      if ( !_Thread_Executing->Wait.return_code )
+      if ( !executing->Wait.return_code )
         return length_out;
 
       rtems_set_errno_and_return_minus_one(
         _POSIX_Message_queue_Translate_core_message_queue_return_code(
-          _Thread_Executing->Wait.return_code
+          executing->Wait.return_code
         )
       );
 

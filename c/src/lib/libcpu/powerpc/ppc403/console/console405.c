@@ -296,8 +296,11 @@ spiStopRemoteTx (int minor)
 
 static ssize_t InterruptWrite (int minor, const char *buf, size_t len)
 {
-  port->IER |= IER_XMT;     /* always enable tx interrupt */
-  port->THR = *buf; 	    /* write char to send         */
+  if (len > 0) {
+    port->IER |= IER_XMT;     /* always enable tx interrupt */
+    port->THR = *buf; 	    /* write char to send         */
+  }
+
   return 0;
 }
 

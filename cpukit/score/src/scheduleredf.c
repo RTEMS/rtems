@@ -18,10 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/scheduleredf.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/thread.h>
 
 static int _Scheduler_EDF_RBTree_compare_function
 (

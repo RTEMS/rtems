@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/spinlock.h>
+#include <rtems/posix/spinlockimpl.h>
 
 /*
  *  pthread_spin_trylock
@@ -53,7 +53,7 @@ int pthread_spin_trylock(
 
     case OBJECTS_LOCAL:
       status = _CORE_spinlock_Wait( &the_spinlock->Spinlock, false, 0 );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_spinlock->Object );
       return _POSIX_Spinlock_Translate_core_spinlock_return_code( status );
 
 #if defined(RTEMS_MULTIPROCESSING)

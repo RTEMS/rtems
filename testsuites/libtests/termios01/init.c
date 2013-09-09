@@ -15,6 +15,7 @@
 #include <termios.h>
 #include <rtems/termiostypes.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <sys/errno.h>
 
 /* rtems_termios_baud_t is a typedefs to int32_t */

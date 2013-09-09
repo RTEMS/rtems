@@ -18,6 +18,8 @@
 
 #include "tmacros.h"
 
+#if !BSP_SMALL_MEMORY
+
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
@@ -39,11 +41,11 @@ static rtems_task Init(rtems_task_argument argument);
 
 #define FLASHDISK_DEVICE_COUNT 1
 
-#define FLASHDISK_SEGMENT_COUNT 4
+#define FLASHDISK_SEGMENT_COUNT 4U
 
 #define FLASHDISK_SEGMENT_SIZE (16 * 1024)
 
-#define FLASHDISK_BLOCK_SIZE 512
+#define FLASHDISK_BLOCK_SIZE 512U
 
 #define FLASHDISK_BLOCKS_PER_SEGMENT \
   (FLASHDISK_SEGMENT_SIZE / FLASHDISK_BLOCK_SIZE)
@@ -345,7 +347,7 @@ uint32_t rtems_flashdisk_configuration_size = FLASHDISK_CONFIG_COUNT;
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
-#define CONFIGURE_MINIMUM_TASK_STACK_SIZE (32 * 1024)
+#define CONFIGURE_MINIMUM_TASK_STACK_SIZE (32U * 1024U)
 
 #define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
 
@@ -354,3 +356,26 @@ uint32_t rtems_flashdisk_configuration_size = FLASHDISK_CONFIG_COUNT;
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
+
+#else /* BSP_SMALL_MEMORY */
+
+static void Init(rtems_task_argument arg)
+{
+  puts("\n\n*** TEST FLASHDISK 1 ***");
+  puts("NOT ENOUGH MEMORY TO RUN TEST");
+
+  rtems_test_exit(0);
+}
+
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
+
+#endif /* BSP_SMALL_MEMORY */

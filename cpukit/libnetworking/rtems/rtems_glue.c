@@ -4,10 +4,6 @@
 
 #define RTEMS_FAST_MUTEX
 
-#ifdef RTEMS_FAST_MUTEX
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
-#endif
-
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -17,6 +13,8 @@
 #include <rtems/libio.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/rtems/semimpl.h>
+#include <rtems/score/coremuteximpl.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/domain.h>
@@ -364,17 +362,26 @@ rtems_bsdnet_semaphore_obtain (void)
 {
 #ifdef RTEMS_FAST_MUTEX
 	ISR_Level level;
+	Thread_Control *executing;
+#ifdef RTEMS_SMP
+	_Thread_Disable_dispatch();
+#endif
 	_ISR_Disable (level);
+	executing = _Thread_Executing;
 	_CORE_mutex_Seize (
 		&the_networkSemaphore->Core_control.mutex,
+		executing,
 		networkSemaphore,
 		1,		/* wait */
 		0,		/* forever */
 		level
 		);
-	if (_Thread_Executing->Wait.return_code)
+#ifdef RTEMS_SMP
+	_Thread_Enable_dispatch();
+#endif
+	if (executing->Wait.return_code)
 		rtems_panic ("rtems-net: can't obtain network sema: %d\n",
-                 _Thread_Executing->Wait.return_code);
+                 executing->Wait.return_code);
 #else
 	rtems_status_code sc;
 

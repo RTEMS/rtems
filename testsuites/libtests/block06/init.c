@@ -20,6 +20,7 @@
 #include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <inttypes.h>
@@ -201,7 +202,7 @@ bdbuf_wait (const char* who, unsigned long timeout)
   rtems_event_set   out;
   sc = rtems_event_receive (RTEMS_EVENT_0,
                             RTEMS_WAIT | RTEMS_EVENT_ANY,
-                            TOD_MICROSECONDS_TO_TICKS (timeout * 1000),
+                            RTEMS_MICROSECONDS_TO_TICKS (timeout * 1000),
                             &out);
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -235,7 +236,7 @@ bdbuf_watch (unsigned long timeout)
   rtems_event_set   out;
   sc = rtems_event_receive (RTEMS_EVENT_1,
                             RTEMS_WAIT | RTEMS_EVENT_ANY,
-                            TOD_MICROSECONDS_TO_TICKS (timeout * 1000),
+                            RTEMS_MICROSECONDS_TO_TICKS (timeout * 1000),
                             &out);
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -329,7 +330,7 @@ static bool
 bdbuf_sleep (unsigned long msecs)
 {
   rtems_status_code sc;
-  sc = rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (msecs * 1000));
+  sc = rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (msecs * 1000));
   if (sc != RTEMS_SUCCESSFUL)
   {
     bdbuf_test_printf ("sleep wake after failed: ");
@@ -1129,14 +1130,14 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
 
   bd = (rtems_bdbuf_buffer*) node;
   pnode = node->previous;
-  rtems_chain_extract (node);
+  rtems_chain_explicit_extract (&buffers, node);
   node = pnode;
   bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[4]: ", tc->name);
   passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd), true);
 
   bd = (rtems_bdbuf_buffer*) node;
   pnode = node->previous;
-  rtems_chain_extract (node);
+  rtems_chain_explicit_extract (&buffers, node);
   node = pnode;
   bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[3]: ", tc->name);
   passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd), true);

@@ -1,8 +1,0 @@
-***  SMP04 TEST ***
-  CPU 0 running task Init
-  CPU 1 running task TA1
-  CPU 2 running task TA2
-  CPU 3 running task TA3
-  CPU 2 running task TA4
-*** END OF SMP 04 TEST ***
-

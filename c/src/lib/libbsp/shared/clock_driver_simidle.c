@@ -5,9 +5,9 @@
  *  it with a special IDLE task.
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/threaddispatch.h>
 
 #define CLOCK_VECTOR 0
 

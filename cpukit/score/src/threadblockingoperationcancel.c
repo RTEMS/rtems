@@ -18,11 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #if defined(RTEMS_DEBUG)
 #include <rtems/score/interr.h>
 #endif
+#include <rtems/score/watchdogimpl.h>
 
 void _Thread_blocking_operation_Cancel(
 #if defined(RTEMS_DEBUG)

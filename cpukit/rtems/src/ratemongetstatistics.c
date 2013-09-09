@@ -22,8 +22,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/score/thread.h>
 
 rtems_status_code rtems_rate_monotonic_get_statistics(
@@ -63,7 +62,7 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
         dst->total_wall_time = src->total_wall_time;
       #endif
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

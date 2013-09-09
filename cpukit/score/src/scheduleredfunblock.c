@@ -18,9 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/scheduleredf.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/thread.h>
 
 void _Scheduler_EDF_Unblock(
   Thread_Control    *the_thread

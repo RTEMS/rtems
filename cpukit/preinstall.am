@@ -37,6 +37,15 @@ $(PROJECT_INCLUDE)/uuid/uuid.h: libmisc/uuid/uuid.h $(PROJECT_INCLUDE)/uuid/$(di
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uuid/uuid.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/uuid/uuid.h
 
+$(PROJECT_INCLUDE)/utf8proc/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/utf8proc
+	@: > $(PROJECT_INCLUDE)/utf8proc/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/utf8proc/$(dirstamp)
+
+$(PROJECT_INCLUDE)/utf8proc/utf8proc.h: libmisc/utf8proc/utf8proc.h $(PROJECT_INCLUDE)/utf8proc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/utf8proc/utf8proc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/utf8proc/utf8proc.h
+
 if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys

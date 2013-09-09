@@ -1,7 +1,7 @@
 /**
  * @file
- * 
- * @brief Initialization for the API Mutexe Handler.
+ *
+ * @brief Initialization and Allocation for API Mutex Handler
  *
  * @ingroup ScoreAPIMutex
  */
@@ -19,8 +19,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/coremuteximpl.h>
+#include <rtems/score/objectimpl.h>
+
+static Objects_Information _API_Mutex_Information;
 
 void _API_Mutex_Initialization(
   uint32_t maximum_mutexes
@@ -40,4 +43,26 @@ void _API_Mutex_Initialization(
     NULL                         /* Proxy extraction support callout */
 #endif
   );
+}
+
+void _API_Mutex_Allocate(
+  API_Mutex_Control **the_mutex
+)
+{
+  API_Mutex_Control *mutex;
+
+  CORE_mutex_Attributes attr =  {
+    CORE_MUTEX_NESTING_ACQUIRES,
+    false,
+    CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT,
+    0
+  };
+
+  mutex = (API_Mutex_Control *) _Objects_Allocate( &_API_Mutex_Information );
+
+  _CORE_mutex_Initialize( &mutex->Mutex, NULL, &attr, CORE_MUTEX_UNLOCKED );
+
+  _Objects_Open_u32( &_API_Mutex_Information, &mutex->Object, 1 );
+
+  *the_mutex = mutex;
 }

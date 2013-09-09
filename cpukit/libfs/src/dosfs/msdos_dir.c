@@ -9,6 +9,9 @@
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
+ *  Modifications to support UTF-8 in the file system are
+ *  Copyright (c) 2013 embedded brains GmbH.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
@@ -33,74 +36,7 @@
 
 #include "msdos.h"
 
-/*  msdos_format_dirent_with_dot --
- *      This routine convert a (short) MSDOS filename as present on disk
- *      (fixed 8+3 characters, filled with blanks, without separator dot)
- *      to a "normal" format, with between 0 and 8 name chars,
- *      a separating dot and up to 3 extension characters
- *   Rules to work:
- *      - copy any (0-8) "name" part characters that are non-blank
- *      - if an extension exists, append a dot
- *      - copy any (0-3) non-blank extension characters
- *      - append a '\0' (dont count it for the rturn code
- *
- * PARAMETERS:
- *     dst: pointer to destination char array (must be big enough)
- *     src: pointer to source characters
- *
- *
- * RETURNS:
- *     the number of bytes (without trailing '\0'(written to destination
- */
-static ssize_t
-msdos_format_dirent_with_dot(char *dst,const char *src)
-{
-  ssize_t len;
-  int i;
-  const char *src_tmp;
 
-  /*
-   * find last non-blank character of base name
-   */
-  for ((i       =       MSDOS_SHORT_BASE_LEN  ,
-	src_tmp = src + MSDOS_SHORT_BASE_LEN-1);
-       ((i > 0) &&
-	(*src_tmp == ' '));
-       i--,src_tmp--)
-    {};
-  /*
-   * copy base name to destination
-   */
-  src_tmp = src;
-  len = i;
-  while (i-- > 0) {
-    *dst++ = tolower((unsigned char)(*src_tmp++));
-  }
-  /*
-   * find last non-blank character of extension
-   */
-  for ((i       =                            MSDOS_SHORT_EXT_LEN  ,
-	src_tmp = src + MSDOS_SHORT_BASE_LEN+MSDOS_SHORT_EXT_LEN-1);
-       ((i > 0) &&
-	(*src_tmp == ' '));
-       i--,src_tmp--)
-    {};
-  /*
-   * extension is not empty
-   */
-  if (i > 0) {
-    *dst++ = '.'; /* append dot */
-    len += i + 1; /* extension + dot */
-    src_tmp = src + MSDOS_SHORT_BASE_LEN;
-    while (i-- > 0) {
-      *dst++ = tolower((unsigned char)(*src_tmp++));
-      len++;
-    }
-  }
-  *dst = '\0'; /* terminate string */
-
-  return len;
-}
 
 /*  msdos_dir_read --
  *      This routine will read the next directory entry based on the directory
@@ -128,11 +64,18 @@ ssize_t
 msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 {
     int                rc = RC_OK;
+    int                eno = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
+    rtems_dosfs_convert_control *converter = fs_info->converter;
+    const rtems_dosfs_convert_handler *convert_handler = converter->handler;
     fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     fat_file_fd_t     *tmp_fat_fd = NULL;
     struct dirent      tmp_dirent;
+    size_t             tmp_lfn_len = 0;
+    uint16_t          *lfn_buf = converter->buffer.data;
+    char              *sfn_buf = converter->buffer.data;
+    const size_t       buf_size = converter->buffer.size;
     uint32_t           start = 0;
     ssize_t            ret = 0;
     uint32_t           cmpltd = 0;
@@ -142,6 +85,8 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     uint32_t           lfn_start = FAT_FILE_SHORT_NAME;
     uint8_t            lfn_checksum = 0;
     int                lfn_entries = 0;
+    size_t             string_size = sizeof(tmp_dirent.d_name);
+    bool               is_first_entry;
 
     /*
      * cast start and count - protect against using sizes that are not exact
@@ -167,7 +112,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    while (count > 0)
+    while (count > 0 && cmpltd >= 0)
     {
         /*
          * fat-file is already opened by open call, so read it
@@ -183,7 +128,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
             rtems_set_errno_and_return_minus_one(EIO);
         }
 
-        for (i = 0; i < ret; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
+        for (i = 0; i < ret && cmpltd >= 0; i += MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
             char* entry = (char*) fs_info->cl_buf + i;
 
@@ -213,15 +158,14 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
             if ((*MSDOS_DIR_ATTR(entry) & MSDOS_ATTR_LFN_MASK) ==
                 MSDOS_ATTR_LFN)
             {
-                int   o;
-                char* p;
-                int   q;
+                int offset_lfn;
 
                 /*
                  * Is this is the first entry of a LFN ?
                  */
                 if (lfn_start == FAT_FILE_SHORT_NAME)
                 {
+                    is_first_entry = true;
                     /*
                      * The first entry must have the last long entry flag set.
                      */
@@ -241,9 +185,12 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                      */
                     lfn_entries = (*MSDOS_DIR_ENTRY_TYPE(entry) &
                                    MSDOS_LAST_LONG_ENTRY_MASK);
+                    tmp_lfn_len = 0;
                     lfn_checksum = *MSDOS_DIR_LFN_CHECKSUM(entry);
                     memset (tmp_dirent.d_name, 0, sizeof(tmp_dirent.d_name));
                 }
+                else
+                    is_first_entry = false;
 
                 /*
                  * If the entry number or the check sum do not match
@@ -262,7 +209,9 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 /*
                  * Extract the file name into the directory entry. The data is
                  * stored in UNICODE characters (16bit). No translation is
-                 * currently supported.
+                 * done for the possibly partial entry.
+                 * Once all entries have been assembled to a UTF-16 file name,
+                 * this file name will get converted to UTF-8.
                  *
                  * The DOS maximum length is 255 characters without the
                  * trailing nul character. We need to range check the length to
@@ -270,32 +219,13 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                  */
 
                 lfn_entries--;
-                p = entry + 1;
-                o = lfn_entries * MSDOS_LFN_LEN_PER_ENTRY;
-
-                for (q = 0; q < MSDOS_LFN_LEN_PER_ENTRY; q++)
-                {
-                    if (o >= (sizeof(tmp_dirent.d_name) - 1))
-                        break;
-
-                    tmp_dirent.d_name[o++] = *p;
-
-                    if (*p == '\0')
-                        break;
-
-                    switch (q)
-                    {
-                        case 4:
-                            p += 5;
-                            break;
-                        case 10:
-                            p += 4;
-                            break;
-                        default:
-                            p += 2;
-                            break;
-                    }
-                }
+                offset_lfn = lfn_entries * MSDOS_LFN_LEN_PER_ENTRY;
+                tmp_lfn_len += msdos_get_utf16_string_from_long_entry (
+                  entry,
+                  &lfn_buf[offset_lfn],
+                  buf_size - offset_lfn,
+                  is_first_entry
+                );
             }
             else
             {
@@ -344,9 +274,10 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 tmp_dirent.d_ino = tmp_fat_fd->ino;
 
                 /*
-                 * If a long file name check if the correct number of
-                 * entries have been found and if the checksum is correct.
-                 * If not return the short file name.
+                 * If a long file name check if the correct number of entries
+                 * have been found and if the checksum is correct and if it is
+                 * convertable to utf8 string.  If not return the short file
+                 * name.
                  */
                 if (lfn_start != FAT_FILE_SHORT_NAME)
                 {
@@ -359,6 +290,20 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 
                     if (lfn_entries || (lfn_checksum != cs))
                         lfn_start = FAT_FILE_SHORT_NAME;
+
+                    eno = (*convert_handler->utf16_to_utf8) (
+                        converter,
+                        lfn_buf,
+                        tmp_lfn_len,
+                        (uint8_t*)(&tmp_dirent.d_name[0]),
+                        &string_size);
+                    if (eno == 0) {
+                      tmp_dirent.d_namlen                    = string_size;
+                      tmp_dirent.d_name[tmp_dirent.d_namlen] = '\0';
+                    }
+                    else {
+                        lfn_start = FAT_FILE_SHORT_NAME;
+                    }
                 }
 
                 if (lfn_start == FAT_FILE_SHORT_NAME)
@@ -368,25 +313,37 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                      * to 0..8 + 1dot + 0..3 format
                      */
                     tmp_dirent.d_namlen = msdos_format_dirent_with_dot(
-                        tmp_dirent.d_name, entry); /* src text */
+                        sfn_buf, entry); /* src text */
+                    eno = (*convert_handler->codepage_to_utf8) (
+                        converter,
+                        sfn_buf,
+                        tmp_dirent.d_namlen,
+                        (uint8_t*)(&tmp_dirent.d_name[0]),
+                        &string_size);
+                    if ( 0 == eno ) {
+                      tmp_dirent.d_namlen                    = string_size;
+                      tmp_dirent.d_name[tmp_dirent.d_namlen] = '\0';
+                    }
+                    else {
+                        cmpltd = -1;
+                        errno  = eno;
+                    }
                 }
-                else
-                {
-                    tmp_dirent.d_namlen = strlen(tmp_dirent.d_name);
-                }
 
-                memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
+                if ( cmpltd >= 0 ) {
+                    memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
 
-                iop->offset = iop->offset + sizeof(struct dirent);
-                cmpltd += (sizeof(struct dirent));
-                count -= (sizeof(struct dirent));
+                    iop->offset = iop->offset + sizeof(struct dirent);
+                    cmpltd += (sizeof(struct dirent));
+                    count -= (sizeof(struct dirent));
 
-                /* inode number extracted, close fat-file */
-                rc = fat_file_close(&fs_info->fat, tmp_fat_fd);
-                if (rc != RC_OK)
-                {
-                    rtems_semaphore_release(fs_info->vol_sema);
-                    return rc;
+                    /* inode number extracted, close fat-file */
+                    rc = fat_file_close(&fs_info->fat, tmp_fat_fd);
+                    if (rc != RC_OK)
+                    {
+                        rtems_semaphore_release(fs_info->vol_sema);
+                        return rc;
+                    }
                 }
             }
 

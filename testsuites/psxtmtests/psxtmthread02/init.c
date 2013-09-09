@@ -19,7 +19,7 @@
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 void benchmark_pthread_create(void);
-void thread(void *argument);
+void *thread(void *argument);
 
 void benchmark_pthread_create(void)
 {
@@ -46,11 +46,12 @@ void benchmark_pthread_create(void)
 
 }
 
-void thread(
+void *thread(
   void *argument
 )
 {
   //Empty thread used in pthread_create().
+  return NULL;
 }
 
 void *POSIX_Init(

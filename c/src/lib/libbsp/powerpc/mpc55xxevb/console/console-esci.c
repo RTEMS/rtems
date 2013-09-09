@@ -328,13 +328,12 @@ static int mpc55xx_esci_poll_read(int minor)
 
 static int mpc55xx_esci_write(int minor, const char *out, size_t n)
 {
-  mpc55xx_esci_context *self = console_generic_get_context(minor);
-  rtems_interrupt_level level;
+  if (n > 0) {
+    mpc55xx_esci_context *self = console_generic_get_context(minor);
 
-  rtems_interrupt_disable(level);
-  self->regs->DR.B.D = out [0];
-  self->transmit_in_progress = true;
-  rtems_interrupt_enable(level);
+    self->regs->DR.B.D = out [0];
+    self->transmit_in_progress = true;
+  }
 
   return 0;
 }

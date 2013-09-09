@@ -20,9 +20,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 
 void _Scheduler_priority_Unblock (
   Thread_Control          *the_thread

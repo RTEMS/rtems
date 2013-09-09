@@ -18,10 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 
 int _Scheduler_priority_Priority_compare(
   Priority_Control      p1,

@@ -18,9 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/config.h>
-#include <rtems/score/tod.h>
 
 uint32_t TOD_TICKS_PER_SECOND_method(void)
 {

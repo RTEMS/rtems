@@ -341,18 +341,15 @@ static void IntUartInitialize(void)
  ***************************************************************************/
 static ssize_t IntUartInterruptWrite(int minor, const char *buf, size_t len)
 {
-  int level;
+  if (len > 0) {
+    /* write out character */
+    MCF_UART_UTB(minor) = *buf;
 
-  rtems_interrupt_disable(level);
+    /* enable tx interrupt */
+    IntUartInfo[minor].uimr |= MCF_UART_UIMR_TXRDY;
+    MCF_UART_UIMR(minor) = IntUartInfo[minor].uimr;
+  }
 
-  /* write out character */
-  MCF_UART_UTB(minor) = *buf;
-
-  /* enable tx interrupt */
-  IntUartInfo[minor].uimr |= MCF_UART_UIMR_TXRDY;
-  MCF_UART_UIMR(minor) = IntUartInfo[minor].uimr;
-
-  rtems_interrupt_enable(level);
   return (0);
 }
 

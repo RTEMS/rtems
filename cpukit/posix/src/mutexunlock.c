@@ -22,13 +22,10 @@
 #include <pthread.h>
 
 #include <rtems/system.h>
-#include <rtems/score/coremutex.h>
+#include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
-#include <rtems/posix/mutex.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/muteximpl.h>
+#include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -54,7 +51,7 @@ int pthread_mutex_unlock(
         the_mutex->Object.id,
         NULL
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mutex->Object );
       return _POSIX_Mutex_Translate_core_mutex_return_code( status );
 
 #if defined(RTEMS_MULTIPROCESSING)

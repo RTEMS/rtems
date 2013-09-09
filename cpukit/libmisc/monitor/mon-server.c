@@ -15,6 +15,7 @@
 #include <unistd.h>
 
 #include <rtems/monitor.h>
+#include <rtems/score/sysstate.h>
 
 /*
  * Various id's for the server

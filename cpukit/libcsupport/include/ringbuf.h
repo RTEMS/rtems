@@ -10,6 +10,8 @@
 #ifndef _RTEMS_RINGBUF_H
 #define _RTEMS_RINGBUF_H
 
+#include <rtems.h>
+
 #ifndef RINGBUF_QUEUE_LENGTH
 #define RINGBUF_QUEUE_LENGTH 128
 #endif
@@ -18,6 +20,7 @@ typedef struct {
   uint8_t buffer[RINGBUF_QUEUE_LENGTH];
   volatile int  head;
   volatile int  tail;
+  rtems_interrupt_lock lock;
 } Ring_buffer_t;
 
 #define Ring_buffer_Initialize( _buffer ) \
@@ -33,22 +36,22 @@ typedef struct {
 
 #define Ring_buffer_Add_character( _buffer, _ch ) \
   do { \
-    uint32_t   isrlevel; \
+    rtems_interrupt_level isrlevel; \
     \
-    rtems_interrupt_disable( isrlevel ); \
+    rtems_interrupt_lock_acquire( &(_buffer)->lock, isrlevel ); \
       (_buffer)->tail = ((_buffer)->tail+1) % RINGBUF_QUEUE_LENGTH; \
       (_buffer)->buffer[ (_buffer)->tail ] = (_ch); \
-    rtems_interrupt_enable( isrlevel ); \
+    rtems_interrupt_lock_release( &(_buffer)->lock, isrlevel ); \
   } while ( 0 )
 
 #define Ring_buffer_Remove_character( _buffer, _ch ) \
   do { \
-    uint32_t   isrlevel; \
+    rtems_interrupt_level isrlevel; \
     \
-    rtems_interrupt_disable( isrlevel ); \
+    rtems_interrupt_lock_acquire( &(_buffer)->lock, isrlevel ); \
       (_buffer)->head = ((_buffer)->head+1) % RINGBUF_QUEUE_LENGTH; \
       (_ch) = (_buffer)->buffer[ (_buffer)->head ]; \
-    rtems_interrupt_enable( isrlevel ); \
+    rtems_interrupt_lock_release( &(_buffer)->lock, isrlevel ); \
   } while ( 0 )
 
 #endif

@@ -38,7 +38,7 @@ void *rtems_heap_extend_via_sbrk(
 {
   ptrdiff_t sbrk_amount = RTEMS_Malloc_Sbrk_amount;
   ptrdiff_t sbrk_size = (ptrdiff_t) alloc_size;
-  ptrdiff_t misaligned = sbrk_size % sbrk_amount;
+  ptrdiff_t misaligned = sbrk_amount != 0 ? sbrk_size % sbrk_amount : 0;
   void *return_this = NULL;
 
   if ( misaligned != 0 ) {

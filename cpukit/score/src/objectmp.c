@@ -18,12 +18,11 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/object.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/thread.h>
+#include <rtems/config.h>
 
 void _Objects_MP_Handler_early_initialization(void)
 {

@@ -22,11 +22,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/thread.h>
-
-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
-  #include <rtems/score/timestamp.h>
-#endif
+#include <rtems/score/threaddispatch.h>
 
 #if defined (__THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__ )
 void _Thread_Enable_dispatch( void )

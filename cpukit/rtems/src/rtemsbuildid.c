@@ -18,12 +18,17 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/types.h>
+#include <rtems/score/objectimpl.h>
 
-#undef rtems_build_id
-rtems_id rtems_build_id(
+/* XXX: This is for language bindings */
+Objects_Id rtems_build_id(
+  uint32_t api,
+  uint32_t class,
+  uint32_t node,
+  uint32_t index
+);
+
+Objects_Id rtems_build_id(
   uint32_t api,
   uint32_t class,
   uint32_t node,

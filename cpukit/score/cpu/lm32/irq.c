@@ -17,11 +17,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/cpu.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/threaddispatch.h>
 
 #if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   unsigned long    *_old_stack_ptr;
@@ -72,7 +70,7 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
   if ( _ISR_Nest_level )
     return;
 
-  if ( _Thread_Dispatch_necessary && !_Thread_Dispatch_in_critical_section() ) {
+  if ( _Thread_Dispatch_necessary && _Thread_Dispatch_is_enabled() ) {
     /* save off our stack frame so the context switcher can get to it */
     _exception_stack_frame = ifr;
 

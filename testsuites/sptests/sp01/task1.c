@@ -25,12 +25,7 @@ rtems_task Task_1_through_3(
   status = rtems_object_get_classic_name( rtems_task_self(), &name );
   directive_failed( status, "rtems_object_get_classic_name" );
 
-  /*
-   * Use TOD_MILLISECONDS_TO_TICKS not RTEMS_MILLISECONDS_TO_TICKS to
-   * test C implementation in SuperCore -- not macro version used
-   * everywhere else.
-   */
-  ticks = TOD_MILLISECONDS_TO_TICKS( index * 5 * 1000 );
+  ticks = RTEMS_MILLISECONDS_TO_TICKS( index * 5 * 1000 );
 
   while( FOREVER ) {
     status = rtems_clock_get_tod( &time );

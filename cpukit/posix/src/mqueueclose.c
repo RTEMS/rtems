@@ -41,7 +41,7 @@
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -78,7 +78,7 @@ int mq_close(
         &_POSIX_Message_queue_Information_fds, &the_mq_fd->Object );
       _POSIX_Message_queue_Free_fd( the_mq_fd );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_mq_fd->Object );
       return 0;
    }
 

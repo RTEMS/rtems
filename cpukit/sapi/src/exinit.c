@@ -32,7 +32,7 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/debug.h>
-#include <rtems/extension.h>
+#include <rtems/extensionimpl.h>
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>
@@ -44,15 +44,12 @@
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 #include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
 #include <rtems/sptables.h>
@@ -119,10 +116,6 @@ void rtems_initialize_data_structures(void)
 
   _Thread_Dispatch_initialization();
 
-  #if defined(RTEMS_SMP)
-    _SMP_Handler_initialize();
-  #endif
-
   _User_extensions_Handler_initialization();
   _ISR_Handler_initialization();
 
@@ -134,7 +127,6 @@ void rtems_initialize_data_structures(void)
   _API_Mutex_Initialization( 1 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
 
-  _Priority_bit_map_Handler_initialization();
   _Watchdog_Handler_initialization();
   _TOD_Handler_initialization();
 
@@ -159,12 +151,8 @@ void rtems_initialize_data_structures(void)
     _POSIX_API_Initialize();
   #endif
 
-  /*
-   * Discover and initialize the secondary cores in an SMP system.
-   */
   #if defined(RTEMS_SMP)
-    _SMP_Processor_count =
-        bsp_smp_initialize( rtems_configuration_smp_maximum_processors );
+    _SMP_Handler_initialize();
   #endif
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
@@ -229,9 +217,13 @@ void rtems_initialize_start_multitasking(void)
 {
   uint32_t status;
 
-  _System_state_Set( SYSTEM_STATE_BEGIN_MULTITASKING );
+  _System_state_Set( SYSTEM_STATE_UP );
 
-  _Thread_Start_multitasking();
+#if defined(RTEMS_SMP)
+  _SMP_Request_other_cores_to_perform_first_context_switch();
+#endif
+
+  _Thread_Start_multitasking( &_Thread_BSP_context );
 
   /*******************************************************************
    *******************************************************************
@@ -241,7 +233,7 @@ void rtems_initialize_start_multitasking(void)
    *******************************************************************
    *******************************************************************
    *******************************************************************/
-  
-  status = _Per_CPU_Information[0].idle->Wait.return_code;
+
+  status = _Thread_Get_global_exit_status();
   rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, status );
 }

@@ -20,5 +20,4 @@
 
 #define RTEMS_TIMER_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/timer.h>
+#include <rtems/rtems/timerimpl.h>

@@ -19,6 +19,22 @@
 #ifndef _RTEMS_SCORE_THREAD_H
 #define _RTEMS_SCORE_THREAD_H
 
+#include <rtems/score/context.h>
+#if defined(RTEMS_MULTIPROCESSING)
+#include <rtems/score/mppkt.h>
+#endif
+#include <rtems/score/object.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/stack.h>
+#include <rtems/score/states.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/watchdog.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreThread Thread Handler
  *
@@ -49,46 +65,6 @@
 #if defined(RTEMS_POSIX_API)
   #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
 #endif
-
-#if defined(RTEMS_SMP) || \
-    defined(RTEMS_HEAVY_STACK_DEBUG) || \
-    defined(RTEMS_HEAVY_MALLOC_DEBUG)
-  #define __THREAD_DO_NOT_INLINE_DISABLE_DISPATCH__
-#endif
-
-#if defined(RTEMS_SMP) || \
-   (CPU_INLINE_ENABLE_DISPATCH == FALSE) || \
-   (__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__ == 1)
-  #define __THREAD_DO_NOT_INLINE_ENABLE_DISPATCH__
-#endif
-
-/*
- *  Deferred floating point context switches are not currently
- *  supported when in SMP configuration.
- */
-#if defined(RTEMS_SMP)
-  #undef  CPU_USE_DEFERRED_FP_SWITCH
-  #define CPU_USE_DEFERRED_FP_SWITCH FALSE
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/percpu.h>
-#include <rtems/score/context.h>
-#include <rtems/score/cpu.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mppkt.h>
-#endif
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/stack.h>
-#include <rtems/score/states.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/tqdata.h>
-#include <rtems/score/watchdog.h>
 
 /*
  *  The user can define this at configure time and go back to ticks
@@ -256,12 +232,6 @@ typedef struct {
 } Thread_Start_information;
 
 /**
- *  The following structure contains the information necessary to manage
- *  a thread which it is  waiting for a resource.
- */
-#define THREAD_STATUS_PROXY_BLOCKING 0x1111111
-
-/**
  *  @brief Union type to hold a pointer to an immutable or a mutable object.
  *
  *  The main purpose is to enable passing of pointers to read-only send buffers
@@ -396,6 +366,45 @@ struct Thread_Control_struct {
 #endif
   /** This field is true if the thread is preemptible. */
   bool                                  is_preemptible;
+#if defined(RTEMS_SMP)
+  /**
+   * @brief This field is true if the thread is scheduled.
+   *
+   * A thread is scheduled if it is ready and the scheduler allocated a
+   * processor for it.  A scheduled thread is assigned to exactly one
+   * processor.  There are exactly processor count scheduled threads in the
+   * system.
+   */
+  bool                                  is_scheduled;
+
+  /**
+   * @brief This field is true if the thread is in the air.
+   *
+   * A thread is in the air if it has an allocated processor (it is an
+   * executing or heir thread on exactly one processor) and it is not a member
+   * of the scheduled chain.  The extract operation on a scheduled thread will
+   * produce threads in the air (see also _Thread_Set_transient()).  The next
+   * enqueue or schedule operation will decide what to do based on this state
+   * indication.  It can either place the thread back on the scheduled chain
+   * and the thread can keep its allocated processor, or it can take the
+   * processor away from the thread and give the processor to another thread of
+   * higher priority.
+   */
+  bool                                  is_in_the_air;
+
+  /**
+   * @brief This field is true if the thread is executing.
+   *
+   * A thread is executing if it executes on a processor.  An executing thread
+   * executes on exactly one processor.  There are exactly processor count
+   * executing threads in the system.  An executing thread may have a heir
+   * thread and thread dispatching is necessary.  On SMP a thread dispatch on a
+   * remote processor needs help from an inter-processor interrupt, thus it
+   * will take some time to complete the state change.  A lot of things can
+   * happen in the meantime.
+   */
+  bool                                  is_executing;
+#endif
 #if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */
   void                                 *rtems_ada_self;
@@ -420,6 +429,10 @@ struct Thread_Control_struct {
   /** This pointer holds per-thread data for the scheduler and ready queue. */
   void                                 *scheduler_info;
 
+#ifdef RTEMS_SMP
+  Per_CPU_Control                      *cpu;
+#endif
+
   /** This field contains information about the starting state of
    *  this thread.
    */
@@ -441,387 +454,6 @@ struct Thread_Control_struct {
   /** This field points to the set of per task variables. */
   rtems_task_variable_t                *task_variables;
 };
-
-/**
- *  Self for the GNU Ada Run-Time
- */
-SCORE_EXTERN void *rtems_ada_self;
-
-/**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-SCORE_EXTERN Objects_Information _Thread_Internal_information;
-
-/**
- *  The following context area contains the context of the "thread"
- *  which invoked the start multitasking routine.  This context is
- *  restored as the last action of the stop multitasking routine.  Thus
- *  control of the processor can be returned to the environment
- *  which initiated the system.
- */
-SCORE_EXTERN Context_Control _Thread_BSP_context;
-
-/**
- *  The following declares the dispatch critical section nesting
- *  counter which is used to prevent context switches at inopportune
- *  moments.
- */
-SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
-
-#if defined(RTEMS_SMP)
-  /**
-   * The following declares the smp spinlock to be used to control
-   * the dispatch critical section accesses across cpus.
-   */
-  SCORE_EXTERN SMP_lock_spinlock_nested_Control _Thread_Dispatch_disable_level_lock;
-#endif
-
-/**
- *  The following holds how many user extensions are in the system.  This
- *  is used to determine how many user extension data areas to allocate
- *  per thread.
- */
-SCORE_EXTERN uint32_t   _Thread_Maximum_extensions;
-
-/**
- *  The following is used to manage the length of a timeslice quantum.
- */
-SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
-
-/**
- *  The following points to the thread whose floating point
- *  context is currently loaded.
- */
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
-#endif
-
-/**
- * The C library re-enter-rant global pointer. Some C library implementations
- * such as newlib have a single global pointer that changed during a context
- * switch. The pointer points to that global pointer. The Thread control block
- * holds a pointer to the task specific data.
- */
-SCORE_EXTERN struct _reent **_Thread_libc_reent;
-/**
- *  @brief Initialize thread handler.
- *
- *  This routine performs the initialization necessary for this handler.
- */
-void _Thread_Handler_initialization(void);
-
-/**
- *  @brief Create idle thread.
- *
- *  This routine creates the idle thread.
- *
- *  @warning No thread should be created before this one.
- */
-void _Thread_Create_idle(void);
-
-/**
- *  @brief Start thread multitasking.
- *
- *  This routine initiates multitasking.  It is invoked only as
- *  part of initialization and its invocation is the last act of
- *  the non-multitasking part of the system initialization.
- *
- *
- *  - INTERRUPT LATENCY:
- *    + ready chain
- *    + select heir
- */
-void _Thread_Start_multitasking( void );
-
-/**
- *  @brief Dispatch thread.
- *
- *  This routine is responsible for transferring control of the
- *  processor from the executing thread to the heir thread. Once the
- *  heir is running an attempt is made to dispatch any ASRs.
- *  As part of this process, it is responsible for the following actions:
- *     + saving the context of the executing thread
- *     + restoring the context of the heir thread
- *     + dispatching any signals for the resulting executing thread
-
- *  ALTERNATE ENTRY POINTS:
- *    void _Thread_Enable_dispatch();
- *
- *  - INTERRUPT LATENCY:
- *    + dispatch thread
- *    + no dispatch thread
- */
-void _Thread_Dispatch( void );
-
-/**
- *  @brief Allocate the requested stack space for the thread.
- *
- *  Allocate the requested stack space for the thread.
- *  Set the Start.stack field to the address of the stack.
- *
- *  @param[in] the_thread is the thread where the stack space is requested
- *
- *  @retval actual size allocated after any adjustment
- *  @retval zero if the allocation failed
- */
-size_t _Thread_Stack_Allocate(
-  Thread_Control *the_thread,
-  size_t          stack_size
-);
-
-/**
- *  @brief Deallocate thread stack.
- *
- *  Deallocate the Thread's stack.
- */
-void _Thread_Stack_Free(
-  Thread_Control *the_thread
-);
-
-/**
- *  @brief Initialize thread.
- *
- *  This routine initializes the specified the thread.  It allocates
- *  all memory associated with this thread.  It completes by adding
- *  the thread to the local object table so operations on this
- *  thread id are allowed.
- *
- *  @note If stack_area is NULL, it is allocated from the workspace.
- *
- *  @note If the stack is allocated from the workspace, then it is
- *        guaranteed to be of at least minimum size.
- */
-bool _Thread_Initialize(
-  Objects_Information                  *information,
-  Thread_Control                       *the_thread,
-  void                                 *stack_area,
-  size_t                                stack_size,
-  bool                                  is_fp,
-  Priority_Control                      priority,
-  bool                                  is_preemptible,
-  Thread_CPU_budget_algorithms          budget_algorithm,
-  Thread_CPU_budget_algorithm_callout   budget_callout,
-  uint32_t                              isr_level,
-  Objects_Name                          name
-);
-
-/**
- *  @brief Initializes thread and executes it.
- *
- *  This routine initializes the executable information for a thread
- *  and makes it ready to execute.  After this routine executes, the
- *  thread competes with all other threads for CPU time.
- *
- *  @param the_thread is the thread to be initialized
- *  @param the_prototype
- *  @param entry_point
- *  @param pointer_argument
- *  @param numeric_argument
- */
-bool _Thread_Start(
-  Thread_Control            *the_thread,
-  Thread_Start_types         the_prototype,
-  void                      *entry_point,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
-);
-
-/**
- *  @brief Restarts the specified thread.
- *
- *  This support routine restarts the specified task in a way that the
- *  next time this thread executes, it will begin execution at its
- *  original starting point.
- *
- *  TODO:  multiple task arg profiles
- */
-bool _Thread_Restart(
-  Thread_Control            *the_thread,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
-);
-
-/**
- *  @brief Resets a thread to its initial state.
- *
- *  This routine resets a thread to its initial state but does
- *  not restart it. Some APIs do this in separate
- *  operations and this division helps support this.
- *
- *  @param[in] the_thread is the thread to resets
- *  @param[in] pointer_argument
- *  @param[in] numeric_argument
- */
-void _Thread_Reset(
-  Thread_Control            *the_thread,
-  void                      *pointer_argument,
-  Thread_Entry_numeric_type  numeric_argument
-);
-
-/**
- *  @brief Frees all memory associated with the specified thread.
- *
- *  This routine frees all memory associated with the specified
- *  thread and removes it from the local object table so no further
- *  operations on this thread are allowed.
- */
-void _Thread_Close(
-  Objects_Information  *information,
-  Thread_Control       *the_thread
-);
-
-/**
- *  @brief Removes any set states for @a the_thread.
- *
- *  This routine removes any set states for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  - INTERRUPT LATENCY:
- *    + ready chain
- *    + select heir
- */
-void _Thread_Ready(
-  Thread_Control *the_thread
-);
-
-/**
- *  @brief Clears the indicated STATES for @a the_thread.
- *
- *  This routine clears the indicated STATES for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  - INTERRUPT LATENCY:
- *    + priority map
- *    + select heir
- */
-void _Thread_Clear_state(
-  Thread_Control *the_thread,
-  States_Control  state
-);
-
-/**
- *  @brief Sets the indicated @a state for @a the_thread.
- *
- *  This routine sets the indicated @a state for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  @param[in] the_thread is the thread to set the state for.
- *  @param[in] state is the state to set the_thread to.
- *
- *  - INTERRUPT LATENCY:
- *   + ready chain
- *   + select map
- */
-void _Thread_Set_state(
-  Thread_Control *the_thread,
-  States_Control  state
-);
-
-/**
- *  @brief Sets the transient state for a thread.
- *
- *  This routine sets the Transient state for @a the_thread.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  @param[in] the_thread is the thread to preform the action upon.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-void _Thread_Set_transient(
-  Thread_Control *the_thread
-);
-
-/**
- *  @brief Initializes enviroment for a thread.
- *
- *  This routine initializes the context of @a the_thread to its
- *  appropriate starting state.
- *
- *  @param[in] the_thread is the pointer to the thread control block.
- */
-void _Thread_Load_environment(
-  Thread_Control *the_thread
-);
-
-/**
- *  @brief Wrapper function for all threads.
- *
- *  This routine is the wrapper function for all threads.  It is
- *  the starting point for all threads.  The user provided thread
- *  entry point is invoked by this routine.  Operations
- *  which must be performed immediately before and after the user's
- *  thread executes are found here.
- *
- *  @note On entry, it is assumed all interrupts are blocked and that this
- *  routine needs to set the initial isr level.  This may or may not
- *  actually be needed by the context switch routine and as a result
- *  interrupts may already be at there proper level.  Either way,
- *  setting the initial isr level properly here is safe.
- */
-void _Thread_Handler( void );
-
-/**
- *  @brief Ended the delay of a thread.
- *
- *  This routine is invoked when a thread must be unblocked at the
- *  end of a time based delay (i.e. wake after or wake when).
- *  It is called by the watchdog handler.
- *
- *  @param[in] id is the thread id
- */
-void _Thread_Delay_ended(
-  Objects_Id  id,
-  void       *ignored
-);
-
-/**
- *  @brief Change the priority of a thread.
- *
- *  This routine changes the current priority of @a the_thread to
- *  @a new_priority.  It performs any necessary scheduling operations
- *  including the selection of a new heir thread.
- *
- *  @param[in] the_thread is the thread to change
- *  @param[in] new_priority is the priority to set @a the_thread to
- *  @param[in] prepend_it is a switch to prepend the thread
- */
-void _Thread_Change_priority (
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  bool              prepend_it
-);
-
-/**
- *  @brief Set thread priority.
- *
- *  This routine updates the priority related fields in the_thread
- *  control block to indicate the current priority is now new_priority.
- */
-void _Thread_Set_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority
-);
-
-/**
- *  This routine updates the related suspend fields in the_thread
- *  control block to indicate the current nested level.
- */
-#define _Thread_Suspend( _the_thread ) \
-        _Thread_Set_state( _the_thread, STATES_SUSPENDED )
-
-/**
- *  This routine updates the related suspend fields in the_thread
- *  control block to indicate the current nested level.  A force
- *  parameter of true will force a resume and clear the suspend count.
- */
-#define _Thread_Resume( _the_thread ) \
-        _Thread_Clear_state( _the_thread, STATES_SUSPENDED )
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**
@@ -848,118 +480,38 @@ void rtems_iterate_over_all_threads(
 );
 
 /**
- *  @brief Maps thread Id to a TCB pointer.
+ * @brief Returns the thread control block of the executing thread.
  *
- *  This function maps thread IDs to thread control
- *  blocks.  If ID corresponds to a local thread, then it
- *  returns the_thread control pointer which maps to ID
- *  and @a location is set to OBJECTS_LOCAL.  If the thread ID is
- *  global and resides on a remote node, then location is set
- *  to OBJECTS_REMOTE, and the_thread is undefined.
- *  Otherwise, location is set to OBJECTS_ERROR and
- *  the_thread is undefined.
+ * This function can be called in any context.  On SMP configurations
+ * interrupts are disabled to ensure that the processor index is used
+ * consistently.
  *
- *  @param[in] id is the id of the thread.
- *  @param[in] location is the location of the block.
- *
- *  @note  The performance of many RTEMS services depends upon
- *         the quick execution of the "good object" path in this
- *         routine.  If there is a possibility of saving a few
- *         cycles off the execution time, this routine is worth
- *         further optimization attention.
+ * @return The thread control block of the executing thread.
  */
-Thread_Control *_Thread_Get (
-  Objects_Id         id,
-  Objects_Locations *location
-);
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get_executing( void )
+{
+  Thread_Control *executing;
 
-/**
- *  @brief Cancel a blocking operation due to ISR.
- *
- *  This method is used to cancel a blocking operation that was
- *  satisfied from an ISR while the thread executing was in the
- *  process of blocking.
- *
- *  This method will restore the previous ISR disable level during the cancel
- *  operation.  Thus it is an implicit _ISR_Enable().
- *
- *  @param[in] sync_state is the synchronization state
- *  @param[in] the_thread is the thread whose blocking is canceled
- *  @param[in] level is the previous ISR disable level
- *
- *  @note This is a rare routine in RTEMS.  It is called with
- *        interrupts disabled and only when an ISR completed
- *        a blocking condition in process.
- */
-void _Thread_blocking_operation_Cancel(
-  Thread_blocking_operation_States  sync_state,
-  Thread_Control                   *the_thread,
-  ISR_Level                         level
-);
-#if defined(RTEMS_SMP)
+  #if defined( RTEMS_SMP )
+    ISR_Level level;
 
-  /**
-   *  @brief Initializes the thread dispatching subsystem.
-   *
-   *  This routine initializes the thread dispatching subsystem.
-   */
-  void _Thread_Dispatch_initialization(void);
+    _ISR_Disable_without_giant( level );
+  #endif
 
-  /**
-   *  @brief Checks if thread dispatch says that we are in a critical section.
-   *
-   * This routine returns true if thread dispatch indicates
-   * that we are in a critical section.
-   */
-  bool _Thread_Dispatch_in_critical_section(void);
+  executing = _Thread_Executing;
 
-  /**
-   *  @brief Returns value of the the thread dispatch level.
-   *
-   * This routine returns value of the the thread dispatch level.
-   */
-  uint32_t _Thread_Dispatch_get_disable_level(void);
+  #if defined( RTEMS_SMP )
+    _ISR_Enable_without_giant( level );
+  #endif
 
-  /**
-   *  @brief Sets thread dispatch level to the value passed in.
-   *
-   * This routine sets thread dispatch level to the
-   * value passed in.
-   */
-  uint32_t _Thread_Dispatch_set_disable_level(uint32_t value);
+  return executing;
+}
 
-  /**
-   *  @brief Increments the thread dispatch level.
-   *
-   * This rountine increments the thread dispatch level
-   */
-  uint32_t _Thread_Dispatch_increment_disable_level(void);
-
-  /**
-   *  @brief Decrements the thread dispatch level.
-   *
-   * This routine decrements the thread dispatch level.
-   */
-  uint32_t _Thread_Dispatch_decrement_disable_level(void);
-
-#else
-  /*
-   * The _Thread_Dispatch_... functions are in thread.inl
-   */
-#endif
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/thread.inl>
-#endif
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/threadmp.h>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

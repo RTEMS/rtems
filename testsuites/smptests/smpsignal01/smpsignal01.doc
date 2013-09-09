@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpsignal01
+
+directives:
+
+  - rtems_signal_catch()
+  - rtems_signal_send()
+
+concepts:
+
+  - Ensure that Classic Signals work on SMP.

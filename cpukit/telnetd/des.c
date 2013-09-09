@@ -69,9 +69,9 @@
 #include <netinet/in.h>
 #ifndef __rtems__
 #include <pwd.h>
-#include <string.h>
 #include <crypt.h>
 #endif
+#include <string.h>
 #include <stdlib.h>
 
 #define REENTRANT

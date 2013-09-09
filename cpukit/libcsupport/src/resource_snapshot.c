@@ -25,18 +25,30 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/protectedheap.h>
 
+#include <rtems/extensionimpl.h>
+
+#include <rtems/rtems/barrierimpl.h>
+#include <rtems/rtems/dpmemimpl.h>
+#include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/partimpl.h>
+#include <rtems/rtems/ratemonimpl.h>
+#include <rtems/rtems/regionimpl.h>
+#include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/timerimpl.h>
+
 #ifdef RTEMS_POSIX_API
-  #include <rtems/posix/barrier.h>
-  #include <rtems/posix/cond.h>
-  #include <rtems/posix/mqueue.h>
-  #include <rtems/posix/mutex.h>
-  #include <rtems/posix/key.h>
+  #include <rtems/posix/barrierimpl.h>
+  #include <rtems/posix/condimpl.h>
+  #include <rtems/posix/mqueueimpl.h>
+  #include <rtems/posix/muteximpl.h>
+  #include <rtems/posix/keyimpl.h>
   #include <rtems/posix/psignal.h>
-  #include <rtems/posix/pthread.h>
-  #include <rtems/posix/rwlock.h>
-  #include <rtems/posix/semaphore.h>
-  #include <rtems/posix/spinlock.h>
-  #include <rtems/posix/timer.h>
+  #include <rtems/posix/pthreadimpl.h>
+  #include <rtems/posix/rwlockimpl.h>
+  #include <rtems/posix/semaphoreimpl.h>
+  #include <rtems/posix/spinlockimpl.h>
+  #include <rtems/posix/timerimpl.h>
 #endif
 
 static const Objects_Information *objects_info_table[] = {
@@ -85,10 +97,24 @@ static int open_files(void)
   return (int) rtems_libio_number_iops - free_count;
 }
 
+static void free_all_delayed_blocks(void)
+{
+  #ifdef HEAP_PROTECTION
+    _RTEMS_Lock_allocator();
+    _Thread_Disable_dispatch();
+    _Heap_Protection_free_all_delayed_blocks( RTEMS_Malloc_Heap );
+    _Heap_Protection_free_all_delayed_blocks( &_Workspace_Area );
+    _Thread_Enable_dispatch();
+    _RTEMS_Unlock_allocator();
+  #endif
+}
+
 void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
 {
   uint32_t *active = &snapshot->rtems_api.active_barriers;
   size_t i;
+
+  free_all_delayed_blocks();
 
   _Protected_heap_Get_information(RTEMS_Malloc_Heap, &snapshot->heap_info);
 

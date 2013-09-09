@@ -24,7 +24,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 uintptr_t _Heap_No_extend(
   Heap_Control *unused_0 __attribute__((unused)),

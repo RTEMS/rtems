@@ -18,10 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <sys/types.h>
 #include <rtems/score/timespec.h>
-#include <rtems/score/tod.h>
+#include <rtems/score/todimpl.h>
 #include <rtems/score/watchdog.h>
 
 uint32_t _Timespec_Add_to(

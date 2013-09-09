@@ -16,12 +16,15 @@ include_rtems_score_HEADERS += rtems/score/nios2-utility.h
 include_rtems_score_HEADERS += rtems/score/nios2-count-zeros.h
 include_rtems_score_HEADERS += rtems/score/cpu_asm.h
 include_rtems_score_HEADERS += rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
 noinst_LIBRARIES = libscorecpu.a
 
 libscorecpu_a_SOURCES =
 libscorecpu_a_SOURCES += nios2-context-initialize.c
 libscorecpu_a_SOURCES += nios2-context-switch.S
+libscorecpu_a_SOURCES += nios2-context-validate.S
+libscorecpu_a_SOURCES += nios2-context-volatile-clobber.S
 libscorecpu_a_SOURCES += nios2-eic-il-low-level.S
 libscorecpu_a_SOURCES += nios2-eic-rsie-low-level.S
 libscorecpu_a_SOURCES += nios2-exception-frame-print.c

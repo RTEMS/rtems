@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/address.h>
-#include <rtems/score/chain.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/isr.h>
 
 Chain_Node *_Chain_Get(

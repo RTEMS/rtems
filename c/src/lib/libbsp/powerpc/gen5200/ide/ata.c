@@ -19,6 +19,8 @@
 #include <bsp.h>
 #include <bsp/mpc5200.h>
 
+#include <libcpu/powerpc-utility.h>
+
 bool ata_execute_io_command(uint8_t command, uint32_t lba, uint32_t sector_count_32)
 {
   assert(sector_count_32 >= 1);
@@ -68,10 +70,11 @@ bool ata_execute_io_command(uint8_t command, uint32_t lba, uint32_t sector_count
 
 void ata_reset_device(void)
 {
+  /* ATA/ATAPI-7 V2, 11.2 Software reset protocol */
   ATA->write.control = DCTRL_SRST;
-  rtems_task_wake_after(1);
+  rtems_bsp_delay(5);
   ATA->write.control = 0;
-  rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(2));
+  rtems_bsp_delay(2000);
   ata_wait_for_not_busy();
 }
 
@@ -93,12 +96,12 @@ bool ata_set_transfer_mode(uint8_t mode)
   return ata_check_status();
 }
 
-static bool probe()
+static bool probe(void)
 {
   bool card_present = true;
 
-#ifdef BRS5L
-  volatile struct mpc5200_::mpc5200_gpt *gpt = &mpc5200.gpt[GPT2];
+#ifdef MPC5200_BOARD_BRS5L
+  volatile struct mpc5200_gpt *gpt = &mpc5200.gpt[GPT2];
 
   /* Enable card detection on GPT2 */
   gpt->emsel = (GPT_EMSEL_GPIO_IN | GPT_EMSEL_TIMER_MS_GPIO);
@@ -121,13 +124,17 @@ static void create_lock(ata_driver *self)
     0,
     &self->lock
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  if (sc != RTEMS_SUCCESSFUL) {
+    mpc5200_fatal(MPC5200_FATAL_ATA_LOCK_CREATE);
+  }
 }
 
 static void destroy_lock(const ata_driver *self)
 {
   rtems_status_code sc = rtems_semaphore_delete(self->lock);
-  assert(sc == RTEMS_SUCCESSFUL);
+  if (sc != RTEMS_SUCCESSFUL) {
+    mpc5200_fatal(MPC5200_FATAL_ATA_LOCK_DESTROY);
+  }
 }
 
 void ata_driver_create(ata_driver *self, const char *device_file_path, rtems_block_device_ioctl io_control)

@@ -21,5 +21,5 @@
 #define RTEMS_MESSAGE_EXTERN
 
 #include <rtems/system.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/messageimpl.h>
 

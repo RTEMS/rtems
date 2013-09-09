@@ -280,6 +280,8 @@ AC_CHECK_SIZEOF([off_t])
 # FIXME: We should get rid of this. It's a cludge.
 AC_CHECK_SIZEOF([time_t])
 
+AC_CHECK_SIZEOF([size_t])
+
 # FIXME: Mandatory in SUSv4, optional in SUSv3. 
 #   Not implemented in GCC/newlib, so far.
 AC_CHECK_DECLS([WORD_BIT],,,[#include <limits.h>])
@@ -316,6 +318,8 @@ AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 AM_CONDITIONAL([LIBGNAT],[test x"$rtems_cv_HAS_POSIX_API" = x"yes" \
 && test x"$enable_ada" = x"yes"])
+
+AM_CONDITIONAL([LIBUTF8PROC],[test $ac_cv_sizeof_size_t -gt 2])
 
 AM_CONDITIONAL([LIBDOSFS],[dnl
 test x"$ac_cv_type_uint8_t" = xyes \

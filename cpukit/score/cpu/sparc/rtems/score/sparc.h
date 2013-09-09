@@ -23,6 +23,8 @@
 #ifndef _RTEMS_SCORE_SPARC_H
 #define _RTEMS_SCORE_SPARC_H
 
+#include <rtems/score/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

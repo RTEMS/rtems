@@ -19,12 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <stdlib.h>
+#include <rtems/score/threadimpl.h>
+
 #include <ctype.h>
-#include <inttypes.h>
 
 /*
  *  This method objects the name of an object and returns its name
@@ -53,7 +50,7 @@ char *_Objects_Get_name_as_string(
   if ( name == NULL )
     return NULL;
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
 
   information = _Objects_Get_information_id( tmpId );
   if ( !information )
@@ -95,7 +92,7 @@ char *_Objects_Get_name_as_string(
       }
       *d = '\0';
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( the_object );
       return name;
   }
   return NULL;                  /* unreachable path */

@@ -13,6 +13,8 @@
 
 #include <tmacros.h>
 
+#include <rtems/score/sysstate.h>
+
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 

@@ -18,7 +18,7 @@
 #ifndef _RTEMS_SCORE_PROTECTED_HEAP_H
 #define _RTEMS_SCORE_PROTECTED_HEAP_H
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/score/apimutex.h>
 
 #ifdef __cplusplus

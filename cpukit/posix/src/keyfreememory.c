@@ -1,34 +1,64 @@
 /**
  * @file
  *
- * @brief POSIX Function Keys Free Memory 
+ * @brief POSIX Function Keys Free Memory
  * @ingroup POSIXAPI
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2012 Zhongwei Yao.
+ * COPYRIGHT (c) 1989-2010.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/posix/key.h>
+#include <rtems/posix/keyimpl.h>
+#include <rtems/score/chainimpl.h>
 
 void _POSIX_Keys_Free_memory(
   POSIX_Keys_Control *the_key
 )
 {
-  uint32_t            the_api;
+  POSIX_Keys_Key_value_pair search_node;
+  POSIX_Keys_Key_value_pair *p;
+  RBTree_Node *iter, *next;
+  Objects_Id key_id;
 
-  for ( the_api = 1; the_api <= OBJECTS_APIS_LAST; the_api++ )
-    _Workspace_Free( the_key->Values[ the_api ] );
+  key_id = the_key->Object.id;
+  search_node.key = key_id;
+  search_node.thread_id = 0;
+  iter = _RBTree_Find_unprotected( &_POSIX_Keys_Key_value_lookup_tree, &search_node.Key_value_lookup_node );
+  if ( !iter )
+    return;
+  /**
+   * find the smallest thread_id node in the rbtree.
+   */
+  next = _RBTree_Next_unprotected( iter, RBT_LEFT );
+  p = _RBTree_Container_of( next, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  while ( next != NULL && p->key == key_id) {
+    iter = next;
+    next = _RBTree_Next_unprotected( iter, RBT_LEFT );
+    p = _RBTree_Container_of( next, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  }
+
+  /**
+   * delete all nodes belongs to the_key from the rbtree and chain.
+   */
+  p = _RBTree_Container_of( iter, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  while ( iter != NULL && p->key == key_id ) {
+    next = _RBTree_Next_unprotected( iter, RBT_RIGHT );
+    _RBTree_Extract_unprotected( &_POSIX_Keys_Key_value_lookup_tree, iter );
+    _Chain_Extract_unprotected( &p->Key_values_per_thread_node );
+    _POSIX_Keys_Key_value_pair_free( p );
+
+    iter = next;
+    p = _RBTree_Container_of( iter, POSIX_Keys_Key_value_pair, Key_value_lookup_node );
+  }
 }

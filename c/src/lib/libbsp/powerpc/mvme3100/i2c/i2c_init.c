@@ -54,6 +54,7 @@
 #include <libchip/i2c-ds1621.h>
 #include <bsp/mpc8540_i2c_busdrv.h>
 #include <rtems/libio.h>
+#include <rtems/score/sysstate.h>
 
 #include <stdio.h>
 #include <sys/stat.h>

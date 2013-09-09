@@ -31,11 +31,11 @@ rtems_task Task_3(
   void              *segment_address_2;
 
   puts(
-    "TA3 - rtems_region_get_segment - wait on 3950 byte segment from region 2"
+    "TA3 - rtems_region_get_segment - wait on 3750 byte segment from region 2"
   );
   status = rtems_region_get_segment(
     Region_id[ 2 ],
-    3950,
+    3750,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT,
     &segment_address_1

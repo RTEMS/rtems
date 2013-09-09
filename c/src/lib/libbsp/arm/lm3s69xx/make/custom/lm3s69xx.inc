@@ -12,5 +12,5 @@ CFLAGS_OPTIMIZE_V = -O2 -g
 
 define bsp-post-link
 	$(default-bsp-post-link)
-	$(OBJCOPY) -O binary $(basename $@).exe $(basename $@).ralf
+	$(OBJCOPY) -O binary $(basename $@)$(EXEEXT) $(basename $@)$(DOWNEXT)
 endef

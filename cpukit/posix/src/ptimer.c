@@ -26,7 +26,6 @@
 #include <rtems/config.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/tod.h>
 
 #include <rtems/posix/time.h>
 
@@ -44,7 +43,7 @@
 #include <stdio.h>
 #include <signal.h>
 
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 
 /*
  * _POSIX_Timer_Manager_initialization

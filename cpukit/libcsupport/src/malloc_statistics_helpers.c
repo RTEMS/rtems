@@ -23,7 +23,7 @@
 
 #include <sys/reent.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 static void rtems_malloc_statistics_initialize( void )
 {

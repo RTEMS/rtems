@@ -14,6 +14,7 @@
 #endif
 
 #include <inttypes.h>
+#include <string.h>
 
 #include <rtems.h>
 #include <rtems/malloc.h>

@@ -15,13 +15,7 @@
 #include <rtems/bspsmp.h>
 #include <stdlib.h>
 
-void bsp_smp_secondary_cpu_initialize(int cpu)
-{
-}
-
-int bsp_smp_initialize(
-  int maximum
-)
+uint32_t bsp_smp_initialize( uint32_t configured_cpu_count )
 {
   /* return the number of CPUs */
   return 1;
@@ -37,9 +31,7 @@ void bsp_smp_broadcast_message(
 {
 }
 
-void bsp_smp_interrupt_cpu(
-  int cpu
-)
+void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
 {
 }
 

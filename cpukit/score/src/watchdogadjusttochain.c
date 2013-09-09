@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Watchdog_Adjust_to_chain(
   Chain_Control               *header,

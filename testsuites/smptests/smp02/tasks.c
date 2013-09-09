@@ -21,7 +21,7 @@ void Loop(void) {
 
 void LogSemaphore(
   bool      obtained,
-  int       cpu_num,
+  uint32_t  cpu_num,
   uint32_t  task_index
 ){
   if (Log_index < LOG_SIZE) { 
@@ -37,10 +37,10 @@ rtems_task Test_task(
   rtems_task_argument task_index
 )
 {
-  int               cpu_num;
+  uint32_t          cpu_num;
   rtems_status_code sc;
 
-  cpu_num = bsp_smp_processor_id();
+  cpu_num = rtems_smp_get_current_processor();
 
   do {
 

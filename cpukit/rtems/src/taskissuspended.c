@@ -18,20 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
-#include <rtems/score/stack.h>
-#include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/score/threadimpl.h>
 
 /*
  *  rtems_task_is_suspended
@@ -60,10 +48,10 @@ rtems_status_code rtems_task_is_suspended(
 
     case OBJECTS_LOCAL:
       if ( !_States_Is_suspended( the_thread->current_state ) ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return RTEMS_SUCCESSFUL;
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_ALREADY_SUSPENDED;
 
 #if defined(RTEMS_MULTIPROCESSING)

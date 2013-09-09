@@ -21,7 +21,7 @@
 
 #include <string.h>
 
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 static bool _Heap_Get_information_visitor(
   const Heap_Block *block __attribute__((unused)),

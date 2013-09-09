@@ -19,10 +19,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/io.h>
 #include <rtems/rtems/intr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
+
 #include <string.h>
 
 rtems_status_code rtems_io_unregister_driver(

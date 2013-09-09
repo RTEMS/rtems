@@ -63,8 +63,8 @@ static void pc386_ide_prestart_sleep (void)
  */
 static void pc386_ide_tasking_sleep (void)
 {
-  rtems_task_wake_after (TOD_MICROSECONDS_TO_TICKS (10000) ?
-                         TOD_MICROSECONDS_TO_TICKS (10000) : 1);
+  rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (10000) ?
+                         RTEMS_MICROSECONDS_TO_TICKS (10000) : 1);
 }
 
 typedef void (*pc386_ide_sleeper)(void);

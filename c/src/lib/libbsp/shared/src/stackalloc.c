@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -23,6 +23,7 @@
 #include <bsp/stackalloc.h>
 
 #include <rtems.h>
+#include <rtems/score/heapimpl.h>
 #include <rtems/score/wkspace.h>
 
 #include <bsp/linker-symbols.h>

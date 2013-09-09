@@ -527,6 +527,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
   lpc24xx_stop_ethernet();
   lpc24xx_stop_usb();
   bsp_start_copy_sections();
+  bsp_start_clear_bss();
 
   /* At this point we can use objects outside the .start section */
 }

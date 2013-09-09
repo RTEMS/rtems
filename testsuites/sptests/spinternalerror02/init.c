@@ -23,8 +23,8 @@
 static void test_internal_error_description(void)
 {
   rtems_fatal_code error = 0;
-  const char *desc_last = NULL;
-  const char *desc;
+  const char *desc = NULL;
+  const char *desc_last;
 
   do {
     desc_last = desc;
@@ -39,8 +39,8 @@ static void test_internal_error_description(void)
 static void test_fatal_source_description(void)
 {
   rtems_fatal_source source = 0;
-  const char *desc_last = NULL;
-  const char *desc;
+  const char *desc = NULL;
+  const char *desc_last;
 
   do {
     desc_last = desc;

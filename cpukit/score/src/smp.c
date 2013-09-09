@@ -18,245 +18,136 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/bspsmp.h>
+#include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/smp.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/sysstate.h>
 
 #if defined(RTEMS_DEBUG)
   #include <rtems/bspIo.h>
 #endif
 
-/*
- *  Process request to switch to the first task on a secondary core.
- */
-void rtems_smp_run_first_task(int cpu)
+void rtems_smp_secondary_cpu_initialize( void )
 {
-  Thread_Control *heir;
-  ISR_Level       level;
-
-  _ISR_Disable_on_this_core( level );
-
-  /*
-   *  The Scheduler will have selected the heir thread for each CPU core.
-   *  Now we have been requested to perform the first context switch.  So
-   *  force a switch to the designated heir and make it executing on 
-   *  THIS core.
-   */
-  heir              = _Thread_Heir;
-  _Thread_Executing = heir;
-
-  _CPU_Context_switch_to_first_task_smp( &heir->Registers );
-}
-
-void rtems_smp_secondary_cpu_initialize(void)
-{
-  int       cpu;
-  ISR_Level level;
-
-  cpu = bsp_smp_processor_id();
-
-  _ISR_Disable_on_this_core( level );
-  bsp_smp_secondary_cpu_initialize(cpu);
-
-  /*
-   *  Inform the primary CPU that this secondary CPU is initialized
-   *  and ready to dispatch to the first thread it is supposed to
-   *  execute when the primary CPU is ready.
-   */
-  _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_INITIALIZED;
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
 
   #if defined(RTEMS_DEBUG)
-    printk( "Made it to %d -- ", cpu );
+    printk( "Made it to %d -- ", _Per_CPU_Get_index( self_cpu ) );
   #endif
 
-  /*
-   *  With this secondary core out of reset, we can wait for the
-   *  request to switch to the first task.
-   */
-  while(1) {
-    uint32_t   message;
+  _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_READY_TO_BEGIN_MULTITASKING );
 
-    bsp_smp_wait_for(
-      (volatile unsigned int *)&_Per_CPU_Information[cpu].message,
-      RTEMS_BSP_SMP_FIRST_TASK,
-      10000
-    );
+  _Per_CPU_Wait_for_state( self_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
 
-    level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
-      message = _Per_CPU_Information[cpu].message;
-      if ( message & RTEMS_BSP_SMP_FIRST_TASK ) {
-	_SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
-        _ISR_Set_level( 0 );
-      }
-     
-    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
-  }
+  _Thread_Start_multitasking( NULL );
 }
 
-void rtems_smp_process_interrupt(void)
+void rtems_smp_process_interrupt( void )
 {
-  int        cpu;
-  uint32_t   message;
-  ISR_Level  level;
+  Per_CPU_Control *self_cpu = _Per_CPU_Get();
 
-  cpu = bsp_smp_processor_id();
 
-  level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
-  message = _Per_CPU_Information[cpu].message;
+  if ( self_cpu->message != 0 ) {
+    uint32_t  message;
+    ISR_Level level;
 
-  #if defined(RTEMS_DEBUG)
-    {
-      void *sp = __builtin_frame_address(0);
-      if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
-        printk( "ISR on CPU %d -- (0x%02x) (0x%p)\n", cpu, message, sp );
-	if ( message & RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY )
-	  printk( "context switch necessary\n" );
-	if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
-	  printk( "signal to self\n" );
-	if ( message & RTEMS_BSP_SMP_SHUTDOWN )
-	  printk( "shutdown\n" );
-	if ( message & RTEMS_BSP_SMP_FIRST_TASK )
-	  printk( "switch to first task\n" );
-      }
- 
-      printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
-    }
-  #endif
+    _Per_CPU_ISR_disable_and_acquire( self_cpu, level );
+    message = self_cpu->message;
+    self_cpu->message = 0;
+    _Per_CPU_Release_and_ISR_enable( self_cpu, level );
 
-  if ( message & RTEMS_BSP_SMP_FIRST_TASK ) {
-    _Per_CPU_Information[cpu].isr_nest_level = 0;
-    _Per_CPU_Information[cpu].message &= ~message;
-    _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_UP;
-
-    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
-
-    rtems_smp_run_first_task(cpu);
-    /* does not return */
-  }
-
-  if ( message & RTEMS_BSP_SMP_SHUTDOWN ) {
-    _Per_CPU_Information[cpu].message &= ~message;
-
-    _Per_CPU_Information[cpu].isr_nest_level = 0;
-    _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_SHUTDOWN;
-    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
-
-    _Thread_Enable_dispatch();       /* undo ISR code */
-    _ISR_Disable_on_this_core( level );
-    while(1)
-      ;
-    /* does not continue past here */
-  }
-
-  if ( message & RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY ) {
     #if defined(RTEMS_DEBUG)
-      printk( "switch needed\n" );
+      {
+        void *sp = __builtin_frame_address(0);
+        if ( !(message & RTEMS_BSP_SMP_SHUTDOWN) ) {
+          printk(
+            "ISR on CPU %d -- (0x%02x) (0x%p)\n",
+            _Per_CPU_Get_index( self_cpu ),
+            message,
+            sp
+          );
+          if ( message & RTEMS_BSP_SMP_SHUTDOWN )
+            printk( "shutdown\n" );
+        }
+        printk( "Dispatch level %d\n", _Thread_Dispatch_get_disable_level() );
+      }
     #endif
-    _Per_CPU_Information[cpu].message &= ~message;
-    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
+
+    if ( ( message & RTEMS_BSP_SMP_SHUTDOWN ) != 0 ) {
+      _ISR_Disable_without_giant( level );
+
+      _Thread_Dispatch_set_disable_level( 0 );
+
+      _Per_CPU_Change_state( self_cpu, PER_CPU_STATE_SHUTDOWN );
+
+      _CPU_Fatal_halt( _Per_CPU_Get_index( self_cpu ) );
+      /* does not continue past here */
+    }
   }
 }
 
-/*
- *  Send an interrupt processor request to another cpu.
- */
-void _SMP_Send_message(
-  int       cpu,
-  uint32_t  message
-)
+void _SMP_Send_message( uint32_t cpu, uint32_t message )
 {
+  Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
   ISR_Level level;
 
-  #if defined(RTEMS_DEBUG)
-    if ( message & RTEMS_BSP_SMP_SIGNAL_TO_SELF )
-      printk( "Send 0x%x to %d\n", message, cpu );
-  #endif
+  _Per_CPU_ISR_disable_and_acquire( per_cpu, level );
+  per_cpu->message |= message;
+  _Per_CPU_Release_and_ISR_enable( per_cpu, level );
 
-  level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
-    _Per_CPU_Information[cpu].message |= message;
-  _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
-  bsp_smp_interrupt_cpu( cpu );
+  _CPU_SMP_Send_interrupt( cpu );
 }
 
-void _SMP_Broadcast_message(
-  uint32_t  message
-)
+void _SMP_Broadcast_message( uint32_t message )
 {
-  int        dest_cpu;
-  int        cpu;
-  ISR_Level  level;
+  uint32_t self = _SMP_Get_current_processor();
+  uint32_t ncpus = _SMP_Get_processor_count();
+  uint32_t cpu;
 
-  cpu = bsp_smp_processor_id();
+  for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
+    if ( cpu != self ) {
+      Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+      ISR_Level level;
 
-  for ( dest_cpu=0 ; dest_cpu <  _SMP_Processor_count; dest_cpu++ ) {
-    if ( cpu == dest_cpu )
-      continue;
-    level = _SMP_lock_spinlock_simple_Obtain( &_Per_CPU_Information[cpu].lock );
-      _Per_CPU_Information[dest_cpu].message |= message;
-    _SMP_lock_spinlock_simple_Release( &_Per_CPU_Information[cpu].lock, level );
+      _Per_CPU_ISR_disable_and_acquire( per_cpu, level );
+      per_cpu->message |= message;
+      _Per_CPU_Release_and_ISR_enable( per_cpu, level );
+    }
   }
+
   bsp_smp_broadcast_interrupt();
 }
 
-void _SMP_Request_other_cores_to_perform_first_context_switch(void)
+void _SMP_Request_other_cores_to_perform_first_context_switch( void )
 {
-  int    cpu;
+  uint32_t self = _SMP_Get_current_processor();
+  uint32_t ncpus = _SMP_Get_processor_count();
+  uint32_t cpu;
 
-  _Per_CPU_Information[cpu].state = RTEMS_BSP_SMP_CPU_UP; 
-  for (cpu=1 ; cpu < _SMP_Processor_count ; cpu++ ) {
-    _SMP_Send_message( cpu, RTEMS_BSP_SMP_FIRST_TASK );
+  for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+
+    if ( cpu != self ) {
+      _Per_CPU_Change_state( per_cpu, PER_CPU_STATE_BEGIN_MULTITASKING );
+    }
   }
 }
 
-void _SMP_Request_other_cores_to_dispatch(void)
+void _SMP_Request_other_cores_to_shutdown( void )
 {
-  int i;
-  int cpu;
-
-  cpu = bsp_smp_processor_id();
-
-  if ( !_System_state_Is_up (_System_state_Current) )
-    return;
-  for (i=1 ; i < _SMP_Processor_count ; i++ ) {
-    if ( cpu == i )
-      continue;
-    if ( _Per_CPU_Information[i].state != RTEMS_BSP_SMP_CPU_UP )
-      continue;
-    if ( !_Per_CPU_Information[i].dispatch_necessary )
-      continue;
-    _SMP_Send_message( i, RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY );
-  }
-}
-
-void _SMP_Request_other_cores_to_shutdown(void)
-{
-  bool   allDown;
-  int    ncpus;
-  int    n;
-  int    cpu;
-
-  cpu   = bsp_smp_processor_id();
-  ncpus = _SMP_Processor_count;
+  uint32_t self = _SMP_Get_current_processor();
+  uint32_t ncpus = _SMP_Get_processor_count();
+  uint32_t cpu;
 
   _SMP_Broadcast_message( RTEMS_BSP_SMP_SHUTDOWN );
 
-  allDown = true;
-  for (n=0 ; n<ncpus ; n++ ) {
-     if ( n == cpu ) 
-       continue;
-     bsp_smp_wait_for(
-       (unsigned int *)&_Per_CPU_Information[n].state,
-       RTEMS_BSP_SMP_CPU_SHUTDOWN,
-       10000
-    );
-    if ( _Per_CPU_Information[n].state != RTEMS_BSP_SMP_CPU_SHUTDOWN )
-      allDown = false;
+  for ( cpu = 0 ; cpu < ncpus ; ++cpu ) {
+    if ( cpu != self ) {
+      _Per_CPU_Wait_for_state(
+        _Per_CPU_Get_by_index( cpu ),
+        PER_CPU_STATE_SHUTDOWN
+      );
+    }
   }
-  if ( !allDown )
-    printk( "not all down -- timed out\n" );
-  #if defined(RTEMS_DEBUG)
-    else
-      printk( "All CPUs shutdown successfully\n" );
-  #endif
 }

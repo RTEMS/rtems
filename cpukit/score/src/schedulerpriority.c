@@ -18,19 +18,17 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/config.h>
-#include <rtems/score/prioritybitmap.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
-
-/* Instantiate any global variables needed by the priority scheduler */
-volatile Priority_bit_map_Control _Priority_Major_bit_map;
-
-Priority_bit_map_Control          _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+#include <rtems/score/schedulerpriorityimpl.h>
+#include <rtems/score/wkspace.h>
 
 void _Scheduler_priority_Initialize(void)
 {
-  _Scheduler_priority_Ready_queue_initialize();
-  _Priority_bit_map_Handler_initialization();
+  /* allocate ready queue structures */
+  Chain_Control *ready_queues = _Workspace_Allocate_or_fatal_error(
+    ((size_t) PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+  );
+
+  _Scheduler_priority_Ready_queue_initialize( ready_queues );
+
+  _Scheduler.information = ready_queues;
 }

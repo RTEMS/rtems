@@ -18,9 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 
 Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Id      id,
@@ -38,7 +36,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
    *  Caller is trusted for name != NULL.
    */
 
-  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Get_executing()->Object.id : id;
 
   the_api = _Objects_Get_API( tmpId );
   if ( !_Objects_Is_api_valid( the_api ) )
@@ -63,6 +61,6 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
     return OBJECTS_INVALID_ID;
 
   *name = the_object->name;
-  _Thread_Enable_dispatch();
+  _Objects_Put( the_object );
   return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
 }

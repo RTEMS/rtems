@@ -1,0 +1,11 @@
+*** TEST KEY 04 ***
+Init - pthread_key_create - OK
+Init - pthread_create - OK
+Init - sleep - let thread run - OK
+Test_Thread 1 - pthread_setspecific - OK
+Test_Thread 1 - sleep - let thread 2 run - OK
+Test_Thread 2 - pthread_setspecific - OK
+Test_Thread 2 - pthread_getspecific - OK
+Test_Thread 1 - pthread_getspecific - OK
+Init - pthread_key_delete - OK
+*** END OF TEST KEY 04 ***

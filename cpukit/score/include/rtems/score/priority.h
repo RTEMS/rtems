@@ -73,10 +73,6 @@ typedef uint32_t   Priority_Control;
  */
 extern uint8_t rtems_maximum_priority;
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/priority.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif

@@ -20,5 +20,4 @@
 
 #define RTEMS_EVENT_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventimpl.h>

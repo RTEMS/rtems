@@ -20,6 +20,7 @@
 #endif
 
 #include <rtems/score/userextimpl.h>
+#include <rtems/score/percpu.h>
 
 void _User_extensions_Remove_set (
   User_extensions_Control  *the_extension
@@ -31,6 +32,11 @@ void _User_extensions_Remove_set (
    * If a switch handler is present, remove it.
    */
 
-  if ( the_extension->Callouts.thread_switch != NULL )
-    _Chain_Extract( &the_extension->Switch.Node );
+  if ( the_extension->Callouts.thread_switch != NULL ) {
+    ISR_Level level;
+
+    _Per_CPU_Acquire_all( level );
+    _Chain_Extract_unprotected( &the_extension->Switch.Node );
+    _Per_CPU_Release_all( level );
+  }
 }

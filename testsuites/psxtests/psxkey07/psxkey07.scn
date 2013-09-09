@@ -1,0 +1,18 @@
+
+
+*** TEST KEY 07 ***
+Init - Mutex 1 create - OK
+Init - Mutex 2 create - OK
+Init - Condition variable 1 create - OK
+Init - Condition variable 2 create - OK
+Init - pthread Key create - OK
+Init - 380 pthreads have been created - OK
+Init - 380 pthreads have been setted key data - OK
+Init - sleep - let threads run - OK
+Init - 380 pthreads have been got key data - OK
+Init - pthread Key delete - OK
+Init - Mutex1 delete - OK
+Init - Mutex2 delete - OK
+Init - Condition variable 1 delete - OK
+Init - Condition variable 2 delete - OK
+*** END OF TEST KEY 07 ***

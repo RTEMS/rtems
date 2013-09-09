@@ -24,12 +24,18 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([lpc32xx]);;
   nds )
     AC_CONFIG_SUBDIRS([nds]);;
+  raspberrypi )
+    AC_CONFIG_SUBDIRS([raspberrypi]);;
+  realview-pbx-a9 )
+    AC_CONFIG_SUBDIRS([realview-pbx-a9]);;
   rtl22xx )
     AC_CONFIG_SUBDIRS([rtl22xx]);;
   smdk2410 )
     AC_CONFIG_SUBDIRS([smdk2410]);;
   stm32f4 )
     AC_CONFIG_SUBDIRS([stm32f4]);;
+  xilinx-zynq )
+    AC_CONFIG_SUBDIRS([xilinx-zynq]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac

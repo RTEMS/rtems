@@ -18,7 +18,7 @@ project_lib_DATA =
 project_lib_DATA += start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 
-EXTRA_DIST = startup/linkcmds.lm3s6965
+EXTRA_DIST = startup/linkcmds.lm3s6965 startup/linkcmds.lm3s6965_qemu startup/linkcmds.lm3s3749
 
 ###############################################################################
 #                  Header                                                     #
@@ -45,6 +45,9 @@ include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/armv7m/include/armv7m-irq.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h
+include_bsp_HEADERS += include/io.h
+include_bsp_HEADERS += include/syscon.h
+include_bsp_HEADERS += include/ssi.h
 include_bsp_HEADERS += include/lm3s69xx.h
 
 ###############################################################################
@@ -70,11 +73,12 @@ libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
 
 # Startup
-libbsp_a_SOURCES += ../shared/startup/bsp-start-copy-sections.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthook.c
 libbsp_a_SOURCES += startup/bspreset.c
+libbsp_a_SOURCES += startup/io.c
+libbsp_a_SOURCES += startup/syscon.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
@@ -106,6 +110,9 @@ libbsp_a_SOURCES += ../../shared/timerstub.c
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../../../libcpu/arm/shared/cache/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
+
+# SSI
+libbsp_a_SOURCES += ssi/ssi.c
 
 ###############################################################################
 #                  Special Rules                                              #

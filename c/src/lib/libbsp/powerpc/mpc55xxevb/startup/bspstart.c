@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -52,6 +52,7 @@ void _BSP_Fatal_error(unsigned n)
 {
 	rtems_interrupt_level level;
 
+	(void) level;
 	rtems_interrupt_disable( level);
 
 	while (true) {
@@ -80,10 +81,7 @@ static void null_pointer_protection(void)
 
 void bsp_start(void)
 {
-	ppc_cpu_id_t myCpu;
-	ppc_cpu_revision_t myCpuRevision;
-
-        null_pointer_protection();
+	null_pointer_protection();
 
 	/*
 	 * make sure BSS/SBSS is cleared
@@ -95,8 +93,8 @@ void bsp_start(void)
 	 * function store the result in global variables so that it can be used
 	 * latter...
 	 */
-	myCpu = get_ppc_cpu_type();
-	myCpuRevision = get_ppc_cpu_revision();
+	get_ppc_cpu_type();
+	get_ppc_cpu_revision();
 
 	/*
 	 * determine clock speed
@@ -107,11 +105,11 @@ void bsp_start(void)
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
 
 	/* Initialize exceptions */
-	ppc_exc_vector_base = (uint32_t) mpc55xx_exc_vector_base;
-	ppc_exc_initialize(
+	ppc_exc_initialize_with_vector_base(
 		PPC_INTERRUPT_DISABLE_MASK_DEFAULT,
-                (uintptr_t) bsp_section_work_begin,
-                rtems_configuration_get_interrupt_stack_size()
+		(uintptr_t) bsp_section_work_begin,
+		rtems_configuration_get_interrupt_stack_size(),
+		mpc55xx_exc_vector_base
 	);
 	#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 		ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
@@ -120,7 +118,10 @@ void bsp_start(void)
 	/* Initialize interrupts */
 	bsp_interrupt_initialize();
 
-	mpc55xx_edma_init();
+	#if MPC55XX_CHIP_FAMILY != 566
+		mpc55xx_edma_init();
+	#endif
+
 	#ifdef MPC55XX_EMIOS_PRESCALER
 		mpc55xx_emios_initialize(MPC55XX_EMIOS_PRESCALER);
 	#endif

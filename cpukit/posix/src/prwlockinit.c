@@ -24,7 +24,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/rwlock.h>
+#include <rtems/posix/rwlockimpl.h>
 
 /*
  *  pthread_rwlock_init

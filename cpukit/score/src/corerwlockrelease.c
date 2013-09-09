@@ -20,17 +20,16 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/corerwlock.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/corerwlockimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
 CORE_RWLock_Status _CORE_RWLock_Release(
-  CORE_RWLock_Control  *the_rwlock
+  CORE_RWLock_Control *the_rwlock,
+  Thread_Control      *executing
 )
 {
   ISR_Level       level;
-  Thread_Control *executing = _Thread_Executing;
   Thread_Control *next;
 
   /*

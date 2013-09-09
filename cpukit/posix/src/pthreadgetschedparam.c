@@ -24,9 +24,9 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/priorityimpl.h>
+#include <rtems/score/threadimpl.h>
 
 int pthread_getschedparam(
   pthread_t           thread,
@@ -53,7 +53,7 @@ int pthread_getschedparam(
         param->sched_priority =
           _POSIX_Priority_From_core( the_thread->current_priority );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

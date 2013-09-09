@@ -22,10 +22,8 @@
 #include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/rtems/region.h>
-#include <rtems/score/states.h>
+#include <rtems/rtems/regionimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apimutex.h>
 

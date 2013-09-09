@@ -21,8 +21,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/barrier.h>
+#include <rtems/posix/barrierimpl.h>
+#include <rtems/score/thread.h>
 
 /**
  * This directive allows a thread to wait at a barrier.
@@ -40,6 +40,7 @@ int pthread_barrier_wait(
 {
   POSIX_Barrier_Control   *the_barrier = NULL;
   Objects_Locations        location;
+  Thread_Control          *executing;
 
   if ( !barrier )
     return EINVAL;
@@ -48,16 +49,18 @@ int pthread_barrier_wait(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      executing = _Thread_Executing;
       _CORE_barrier_Wait(
         &the_barrier->Barrier,
+        executing,
         the_barrier->Object.id,
         true,
         0,
         NULL
       );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return _POSIX_Barrier_Translate_core_barrier_return_code(
-                _Thread_Executing->Wait.return_code );
+                executing->Wait.return_code );
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

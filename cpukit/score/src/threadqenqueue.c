@@ -21,22 +21,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadqimpl.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _Thread_queue_Enqueue_with_handler(
   Thread_queue_Control         *the_thread_queue,
+  Thread_Control               *the_thread,
   Watchdog_Interval             timeout,
   Thread_queue_Timeout_callout  handler
 )
 {
-  Thread_Control                   *the_thread;
   ISR_Level                         level;
   Thread_blocking_operation_States  sync_state;
   Thread_blocking_operation_States (*enqueue_p)(
@@ -44,8 +40,6 @@ void _Thread_queue_Enqueue_with_handler(
     Thread_Control *,
     ISR_Level *
   );
-
-  the_thread = _Thread_Executing;
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )

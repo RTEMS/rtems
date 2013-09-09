@@ -19,12 +19,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/corebarrier.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/corebarrierimpl.h>
+#include <rtems/score/objectimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 uint32_t _CORE_barrier_Release(
   CORE_barrier_Control                *the_barrier,

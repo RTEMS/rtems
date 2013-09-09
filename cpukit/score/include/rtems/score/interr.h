@@ -71,10 +71,10 @@ typedef enum {
   /**
    * @brief Fatal source for generic BSP errors.
    *
-   * The fatal codes are defined in <bsp/bootcard.h>.  Examples are interrupt
-   * and exception initialization.
+   * The fatal codes are defined in <bsp/generic-fatal.h>.  Examples are
+   * interrupt and exception initialization.
    *
-   * @see bsp_generic_fatal_code.
+   * @see bsp_generic_fatal_code and bsp_generic_fatal().
    */
   RTEMS_FATAL_SOURCE_BSP_GENERIC,
 

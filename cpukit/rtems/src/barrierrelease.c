@@ -21,9 +21,8 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 /*
  *  rtems_barrier_release
@@ -56,7 +55,7 @@ rtems_status_code rtems_barrier_release(
 
     case OBJECTS_LOCAL:
       *released = _CORE_barrier_Release( &the_barrier->Barrier, id, NULL );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

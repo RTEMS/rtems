@@ -30,25 +30,12 @@
 extern "C" {
 #endif
 
-#if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && \
-    (!defined(__RTEMS_INSIDE__))
-/**
- * @brief Compiling RTEMS application macro.
- *
- * Unless told otherwise, the RTEMS include files will hide some stuff from
- * normal application code.  Defining this crosses a boundary which is
- * undesirable since it means your application is using RTEMS features which
- * are not included in the formally defined and supported API.  Define this at
- * your own risk.
- */
-#define __RTEMS_APPLICATION__
-#endif
-
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
 #include <rtems/config.h>
+#include <rtems/debug.h>
 #include <rtems/init.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/tasks.h>
@@ -73,13 +60,9 @@ extern "C" {
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif
-#if defined(RTEMS_SMP)
 #include <rtems/rtems/smp.h>
-#endif
-
 
 #include <rtems/rtems/support.h>
-#include <rtems/score/sysstate.h>
 
 /**
  * @brief Returns the pointer to the RTEMS version string.

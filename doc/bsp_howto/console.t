@@ -408,6 +408,12 @@ static ssize_t my_driver_interrupt_write(int minor, const char *buf, size_t n)
      * characters in the device data structure.
      */
 
+    /*
+     * Termios will set n to zero to indicate that the transmitter is
+     * now inactive.  The output buffer is empty in this case.  The
+     * driver may disable the transmit interrupts now.
+     */
+
     return 0;
 @}
 @end group

@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/libcsupport.h>
+
 #include <tmacros.h>
 
 /* forward declarations to avoid warnings */
@@ -22,27 +24,18 @@ rtems_task Init(
 {
   rtems_id                task_id;
   rtems_status_code       sc;
-  bool                    sb;
-  Heap_Information_block  start;
-  Heap_Information_block  info;
-  size_t                  stack_size;
+  bool                    ok;
+  uintptr_t               stack_size;
+  rtems_resource_snapshot snapshot;
+  void                   *greedy;
 
   puts( "\n\n*** TEST 18 ***" );
 
-  puts( "Init - rtems_workspace_get_information - OK" );
-  sb = rtems_workspace_get_information( &start );
-  rtems_test_assert( sb );
+  greedy = rtems_workspace_greedy_allocate_all_except_largest( &stack_size );
+  rtems_resource_snapshot_take( &snapshot );
 
-  #if 0
-    printf( "Init - workspace free = %d\n", start.Free.largest );
-    printf( "Init - workspace free blocks = %d\n", start.Free.number );
-  #endif
-  rtems_test_assert( start.Free.number == 1 );
-  stack_size = start.Free.largest;
-
-  #if 0
-    printf( "Init - start with stack size of = %d\n", stack_size );
-  #endif
+  /* Make sure the first allocation fails */
+  ++stack_size;
 
   puts( "Init - rtems_task_create - Unsatisfied on Extensions" );
   while (1) {
@@ -64,10 +57,8 @@ rtems_task Init(
     /*
      * Verify heap is still in same shape if we couldn't allocate a task
      */
-    sb = rtems_workspace_get_information( &info );
-    rtems_test_assert( sb );
-    rtems_test_assert( info.Free.largest == start.Free.largest );
-    rtems_test_assert( info.Free.number  == start.Free.number  );
+    ok = rtems_resource_snapshot_check( &snapshot );
+    rtems_test_assert( ok );
 
     stack_size -= 8;
     if ( stack_size <= RTEMS_MINIMUM_STACK_SIZE )
@@ -85,10 +76,10 @@ rtems_task Init(
   directive_failed( sc, "rtems_task_delete" );
 
   puts( "Init - verify workspace has same memory" );
-  sb = rtems_workspace_get_information( &info );
-  rtems_test_assert( sb );
-  rtems_test_assert( info.Free.largest == start.Free.largest );
-  rtems_test_assert( info.Free.number  == start.Free.number  );
+  ok = rtems_resource_snapshot_check( &snapshot );
+  rtems_test_assert( ok );
+
+  rtems_workspace_greedy_free( greedy );
 
   puts( "*** END OF TEST 18 ***" );
   rtems_test_exit(0);

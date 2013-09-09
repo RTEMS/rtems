@@ -18,13 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/barrier.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/rtems/barrierimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 rtems_status_code rtems_barrier_delete(
   rtems_id   id
@@ -47,7 +42,7 @@ rtems_status_code rtems_barrier_delete(
 
       _Barrier_Free( the_barrier );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_barrier->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

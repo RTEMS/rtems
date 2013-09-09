@@ -27,8 +27,9 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/time.h>
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 
 
 int timer_delete(
@@ -54,7 +55,7 @@ int timer_delete(
       ptimer->state = POSIX_TIMER_STATE_FREE;
       (void) _Watchdog_Remove( &ptimer->Timer );
       _POSIX_Timer_Free( ptimer );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &ptimer->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -19,6 +19,8 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  */
+
+#include <rtems/asm.h>
 
 #include <bspopts.h>
 
@@ -32,6 +34,9 @@
 #define UBOOT_BOARD_INFO r15
 
 	.globl _start
+#ifdef RTEMS_SMP
+	.globl _start_core_1
+#endif
 	.globl bsp_exc_vector_base
 
 	.section ".bsp_start_text", "ax"
@@ -83,6 +88,12 @@ _start:
 	LWI	r5, bsp_section_rodata_size
 	bl	copy
 
+	/* Copy small read-only data */
+	LWI	r3, bsp_section_sdata2_begin
+	LWI	r4, bsp_section_sdata2_load_begin
+	LWI	r5, bsp_section_sdata2_size
+	bl	copy
+
 	/* Copy fast data */
 	LWI	r3, bsp_section_fast_data_begin
 	LWI	r4, bsp_section_fast_data_load_begin
@@ -93,6 +104,12 @@ _start:
 	LWI	r3, bsp_section_data_begin
 	LWI	r4, bsp_section_data_load_begin
 	LWI	r5, bsp_section_data_size
+	bl	copy
+
+	/* Copy small data */
+	LWI	r3, bsp_section_sdata_begin
+	LWI	r4, bsp_section_sdata_load_begin
+	LWI	r5, bsp_section_sdata_size
 	bl	copy
 
 	/* NULL pointer access protection (only core 0 has to do this) */
@@ -156,6 +173,57 @@ copy:
 	cmpw	r3, r4
 	beqlr
 	b	memcpy
+
+#ifdef RTEMS_SMP
+_start_core_1:
+
+	/* Reset time base */
+	li	r0, 0
+	mtspr	TBWU, r0
+	mtspr	TBWL, r0
+
+	/* Get start stack */
+	subi	r1, r3, 16
+
+	/* Initial MMU setup */
+	bl	qoriq_tlb1_ts_0_only
+	li	r3, SCRATCH_TLB
+	li	r4, FSL_EIS_MAS1_TS
+	li	r5, FSL_EIS_MAS2_I
+	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
+	li	r7, 0
+	li	r8, 11
+	bl	qoriq_tlb1_write
+
+	/* MSR initialization */
+	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
+	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
+	mtmsr	r0
+
+	/* SPEFSCR initialization */
+	LWI	r0, QORIQ_INITIAL_SPEFSCR
+	mtspr	FSL_EIS_SPEFSCR, r0
+
+	/* Initialize start stack */
+	li	r0, 0
+	stw	r0, 0(r1)
+
+	/* Configure MMU */
+	li	r3, FIRST_TLB
+	li	r4, SCRATCH_TLB
+	bl	qoriq_mmu_config
+	mtmsr	INITIAL_MSR
+	li	r3, SCRATCH_TLB
+	bl	qoriq_tlb1_invalidate
+
+	/* Set small-data anchors */
+	LA	r2, _SDA2_BASE_
+	LA	r13, _SDA_BASE_
+
+	b	qoriq_secondary_cpu_initialize
+
+	b	twiddle
+#endif /* RTEMS_SMP */
 
 	/* Exception vector prologues area */
 	.section ".bsp_start_text", "ax"

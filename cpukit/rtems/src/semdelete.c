@@ -21,20 +21,13 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/attr.h>
+#include <rtems/rtems/attrimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/rtems/sem.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/score/coresem.h>
-#include <rtems/score/states.h>
+#include <rtems/rtems/semimpl.h>
+#include <rtems/score/coremuteximpl.h>
+#include <rtems/score/coresemimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
-#include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
 
@@ -59,7 +52,7 @@ rtems_status_code rtems_semaphore_delete(
         if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) &&
              !_Attributes_Is_simple_binary_semaphore(
                  the_semaphore->attribute_set ) ) {
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_semaphore->Object );
           return RTEMS_RESOURCE_IN_USE;
         }
         _CORE_mutex_Flush(
@@ -92,7 +85,7 @@ rtems_status_code rtems_semaphore_delete(
         );
       }
 #endif
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

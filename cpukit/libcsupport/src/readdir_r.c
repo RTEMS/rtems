@@ -20,7 +20,11 @@
  *  The RTEMS version of readdir is already thread-safe.
  *  This routine is reentrant version of readdir().
  */
-int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
+int readdir_r(
+  DIR *__restrict dirp,
+  struct dirent *__restrict entry,
+  struct dirent **__restrict result
+)
 {
      *result = readdir(dirp);
      if (*result)

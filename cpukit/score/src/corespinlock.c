@@ -20,10 +20,8 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/corespinlock.h>
-#include <rtems/score/states.h>
+#include <rtems/score/corespinlockimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 void _CORE_spinlock_Initialize(
   CORE_spinlock_Control       *the_spinlock,

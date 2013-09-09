@@ -21,19 +21,13 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/attr.h>
+#include <rtems/rtems/attrimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/rtems/sem.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/score/coresem.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
+#include <rtems/rtems/semimpl.h>
+#include <rtems/score/coremuteximpl.h>
+#include <rtems/score/coresemimpl.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
@@ -182,6 +176,7 @@ rtems_status_code rtems_semaphore_create(
 
     mutex_status = _CORE_mutex_Initialize(
       &the_semaphore->Core_control.mutex,
+      _Thread_Executing,
       &the_mutex_attr,
       (count == 1) ? CORE_MUTEX_UNLOCKED : CORE_MUTEX_LOCKED
     );

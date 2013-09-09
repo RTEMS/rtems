@@ -3,7 +3,6 @@
  *  On-Line Applications Research Corporation (OAR).
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <bsp.h>
 #include <stdlib.h>
 
@@ -51,8 +50,7 @@ uint32_t milliseconds_per_tick(void)
 
 uint32_t ticks_per_second(void)
 {
-  /* XXX HACK -- use public API */
-  return TOD_TICKS_PER_SECOND;
+  return rtems_clock_get_ticks_per_second();
 }
 
 uint32_t work_space_size(void)

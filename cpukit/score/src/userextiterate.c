@@ -129,7 +129,7 @@ void _User_extensions_Iterate(
   User_extensions_Visitor  visitor
 )
 {
-  Thread_Control   *executing = _Thread_Executing;
+  Thread_Control *executing = _Thread_Get_executing();
   const User_extensions_Table *callouts_current =
     rtems_configuration_get_user_extension_table();
   const User_extensions_Table *callouts_end =

@@ -422,6 +422,7 @@ include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc551x.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc555x.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc556x.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc564xL.h
+include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc5668.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc567x.h
 include_mpc55xx_HEADERS += mpc55xx/include/regs-edma.h
 include_mpc55xx_HEADERS += mpc55xx/include/regs-mmu.h

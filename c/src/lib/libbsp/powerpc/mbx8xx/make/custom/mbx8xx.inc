@@ -49,7 +49,7 @@ CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
 LDFLAGS += $(MBX8xx_LDFLAGS)
 
 define bsp-post-link
-	cp $(basename $@).exe $(basename $@)$(DOWNEXT) 
+	cp $(basename $@)$(EXEEXT) $(basename $@)$(DOWNEXT) 
 	$(STRIP) $(basename $@)$(DOWNEXT)
 	$(default-bsp-post-link)
 endef

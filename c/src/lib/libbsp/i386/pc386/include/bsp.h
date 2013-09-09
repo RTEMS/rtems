@@ -80,6 +80,10 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define BSP_DEC21140_NETWORK_DRIVER_NAME    "dc1"
 #define BSP_DEC21140_NETWORK_DRIVER_ATTACH  rtems_dec21140_driver_attach
 
+extern int rtems_3c509_driver_attach(struct rtems_bsdnet_ifconfig *config);
+#define BSP_3C509_NETWORK_DRIVER_NAME    "3c1"
+#define BSP_3C509_NETWORK_DRIVER_ATTACH  rtems_3c509_driver_attach
+
 #ifndef RTEMS_BSP_NETWORK_DRIVER_NAME
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   BSP_DEC21140_NETWORK_DRIVER_NAME
 #endif
@@ -134,7 +138,7 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 
 /*-------------------------------------------------------------------------+
 | Console Defines
-|      WARNING: These Values MUST match the order in 
+|      WARNING: These Values MUST match the order in
 |               Console_Configuration_Ports
 +--------------------------------------------------------------------------*/
 #define    BSP_CONSOLE_VGA            0
@@ -181,6 +185,10 @@ char          _IBMPC_inch     (void);    /* from 'inch.c'   */
 char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
 
 void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
+
+void Clock_driver_install_handler(void); /* from 'ckinit.c'  */
+void Clock_driver_support_initialize_hardware(void); /* from 'ckinit.c'  */
+size_t read_aux(char * buffer, size_t count); /* from 'ps2_mouse.c'  */
 
 /* Definitions for BSPConsolePort */
 #define BSP_CONSOLE_PORT_CONSOLE (-1)

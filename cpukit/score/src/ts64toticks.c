@@ -23,7 +23,6 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/score/timestamp.h>
-#include <rtems/score/tod.h>
 
 #if CPU_TIMESTAMP_USE_INT64 == TRUE
 uint32_t _Timestamp64_To_ticks(

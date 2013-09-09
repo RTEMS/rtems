@@ -7,6 +7,7 @@ include_rtems_HEADERS = include/confdefs.h
 include_rtems_HEADERS += include/rtems/chain.h
 include_rtems_HEADERS += include/rtems/config.h
 include_rtems_HEADERS += include/rtems/extension.h
+include_rtems_HEADERS += include/rtems/extensionimpl.h
 include_rtems_HEADERS += include/rtems/fatal.h
 include_rtems_HEADERS += include/rtems/init.h
 include_rtems_HEADERS += include/rtems/io.h
@@ -19,15 +20,6 @@ include_rtems_HEADERS += include/rtems/timespec.h
 
 EXTRA_DIST = include/rtems/README
 
-include_rtems_HEADERS += inline/rtems/chain.inl
-include_rtems_HEADERS += inline/rtems/extension.inl
-include_rtems_HEADERS += inline/rtems/cbs.inl
-include_rtems_HEADERS += inline/rtems/rbtree.inl
-include_rtems_HEADERS += inline/rtems/timespec.inl
-
-## src
-AM_CPPFLAGS += -D__RTEMS_INSIDE__
-
 noinst_LIBRARIES = libsapi.a
 project_lib_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
@@ -39,6 +31,7 @@ libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
     src/chainappendnotify.c src/chaingetnotify.c src/chaingetwait.c \
     src/chainprependnotify.c src/rbheap.c src/interrdesc.c \
     src/fatal2.c src/fatalsrcdesc.c
+libsapi_a_SOURCES += src/chainsmp.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 include $(srcdir)/preinstall.am

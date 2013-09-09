@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smplock01
+
+The screen file was obtained on a PowerPC QorIQ P1020E target running with a
+processor frequency of 800MHz.
+
+directives:
+
+  - _SMP_lock_Acquire()
+  - _SMP_lock_Release()
+
+concepts:
+
+  - Benchmark the SMP lock implementation

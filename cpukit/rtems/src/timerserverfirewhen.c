@@ -18,14 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/timer.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/rtems/timerimpl.h>
+#include <rtems/rtems/clock.h>
+#include <rtems/score/todimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 /*
  *  rtems_timer_server_fire_when
@@ -59,7 +55,7 @@ rtems_status_code rtems_timer_server_fire_when(
   if ( !timer_server )
     return RTEMS_INCORRECT_STATE;
 
-  if ( !_TOD.is_set )
+  if ( !_TOD_Is_set() )
     return RTEMS_NOT_DEFINED;
 
   if ( !routine )
@@ -83,7 +79,7 @@ rtems_status_code rtems_timer_server_fire_when(
 
       (*timer_server->schedule_operation)( timer_server, the_timer );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

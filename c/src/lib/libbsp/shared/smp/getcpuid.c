@@ -7,8 +7,9 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-int bsp_smp_processor_id(void)
+#include <rtems/score/cpu.h>
+
+uint32_t _CPU_SMP_Get_current_processor( void )
 {
   return 0;
 }
-

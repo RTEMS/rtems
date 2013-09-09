@@ -24,6 +24,8 @@
 #ifndef __SERIAL_MOUSE_h__
 #define __SERIAL_MOUSE_h__
 
+#include <rtems/io.h>
+
 /* functions */
 
 /**
@@ -34,6 +36,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @brief Standard device file path for a PS2 mouse device.
+ */
+#define SERIAL_MOUSE_DEVICE_PS2 "/dev/psaux"
 
 /**
  *  This macro defines the serial mouse device driver entry points.

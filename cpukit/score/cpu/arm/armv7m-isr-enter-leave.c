@@ -23,7 +23,8 @@
 #endif
 
 #include <rtems/score/armv7m.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/threaddispatch.h>
 
 #ifdef ARM_MULTILIB_ARCH_V7M
 

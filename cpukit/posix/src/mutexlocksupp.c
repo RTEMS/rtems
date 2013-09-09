@@ -22,13 +22,10 @@
 #include <pthread.h>
 
 #include <rtems/system.h>
-#include <rtems/score/coremutex.h>
+#include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
-#include <rtems/posix/mutex.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/muteximpl.h>
+#include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -47,20 +44,24 @@ int _POSIX_Mutex_Lock_support(
   register POSIX_Mutex_Control *the_mutex;
   Objects_Locations             location;
   ISR_Level                     level;
+  Thread_Control               *executing;
 
   the_mutex = _POSIX_Mutex_Get_interrupt_disable( mutex, &location, &level );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      executing = _Thread_Executing;
       _CORE_mutex_Seize(
         &the_mutex->Mutex,
+        executing,
         the_mutex->Object.id,
         blocking,
         timeout,
         level
       );
+      _Objects_Put_for_get_isr_disable( &the_mutex->Object );
       return _POSIX_Mutex_Translate_core_mutex_return_code(
-        (CORE_mutex_Status) _Thread_Executing->Wait.return_code
+        (CORE_mutex_Status) executing->Wait.return_code
       );
 
 #if defined(RTEMS_MULTIPROCESSING)

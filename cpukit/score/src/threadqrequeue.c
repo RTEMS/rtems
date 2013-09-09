@@ -18,14 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadqimpl.h>
+#include <rtems/score/statesimpl.h>
 
 void _Thread_queue_Requeue(
   Thread_queue_Control *the_thread_queue,
@@ -51,7 +45,7 @@ void _Thread_queue_Requeue(
     _ISR_Disable( level );
     if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
       _Thread_queue_Enter_critical_section( tq );
-      _Thread_queue_Extract_priority_helper( tq, the_thread, true );
+      _Thread_queue_Extract_priority_helper( the_thread, true );
       (void) _Thread_queue_Enqueue_priority( tq, the_thread, &level_ignored );
     }
     _ISR_Enable( level );

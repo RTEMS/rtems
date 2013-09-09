@@ -12,24 +12,13 @@
 #include <ep7312.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <assert.h>
 
 #if ON_SKYEYE==1
-  #define CLOCK_DRIVER_USE_FAST_IDLE
+  #define CLOCK_DRIVER_USE_FAST_IDLE 1
 #endif
 
-void Clock_isr(rtems_irq_hdl_param arg);
-static void clock_isr_on(const rtems_irq_connect_data *unused);
-static void clock_isr_off(const rtems_irq_connect_data *unused);
-static int clock_isr_is_on(const rtems_irq_connect_data *irq);
-
-rtems_irq_connect_data clock_isr_data = {
-  .name   = BSP_TC1OI,
-  .hdl    = Clock_isr,
-  .handle = NULL,
-  .on     = clock_isr_on,
-  .off    = clock_isr_off,
-  .isOn   = clock_isr_is_on,
-};
+void Clock_isr(void * arg);
 
 #define Clock_driver_support_at_tick()                \
   do {                                                \
@@ -38,8 +27,16 @@ rtems_irq_connect_data clock_isr_data = {
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do {                                                 \
+    rtems_status_code status = RTEMS_SUCCESSFUL;       \
     (_old) = NULL; /* avoid warning */;                \
-    BSP_install_rtems_irq_handler(&clock_isr_data);    \
+    status = rtems_interrupt_handler_install(          \
+        BSP_TC1OI,                                     \
+        "Clock",                                       \
+        RTEMS_INTERRUPT_UNIQUE,                        \
+        Clock_isr,                                     \
+        NULL                                           \
+    );                                                 \
+    assert(status == RTEMS_SUCCESSFUL);                \
   } while(0)
 
 /*
@@ -60,33 +57,15 @@ rtems_irq_connect_data clock_isr_data = {
     *EP7312_TC1EOI = 0xFFFFFFFF;                    \
   } while (0)
 
-#define Clock_driver_support_shutdown_hardware()                        \
-  do {                                                                  \
-    BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
+#define Clock_driver_support_shutdown_hardware()    \
+  do {                                              \
+    rtems_status_code status = RTEMS_SUCCESSFUL;    \
+    status = rtems_interrupt_handler_remove(        \
+        BSP_TC1OI,                                  \
+        Clock_isr,                                  \
+        NULL                                        \
+    );                                              \
+    assert(status == RTEMS_SUCCESSFUL);             \
   } while (0)
-
-/**
- *  Return the nanoseconds since last tick
- */
-uint32_t clock_driver_get_nanoseconds_since_last_tick(void)
-{
-  return 0;
-}
-
-#define Clock_driver_nanoseconds_since_last_tick \
-  clock_driver_get_nanoseconds_since_last_tick
-
-static void clock_isr_on(const rtems_irq_connect_data *unused)
-{
-}
-
-static void clock_isr_off(const rtems_irq_connect_data *unused)
-{
-}
-
-static int clock_isr_is_on(const rtems_irq_connect_data *irq)
-{
-  return 1;
-}
 
 #include "../../../shared/clockdrv_shell.h"

@@ -501,10 +501,13 @@ int ns16550_set_attributes(
 
     /*
      *  Set the baud rate
+     *
+     *  NOTE: When the Divisor Latch Access Bit (DLAB) is set to 1,
+     *        the transmit buffer and interrupt enable registers
+     *        turn into the LSB and MSB divisor latch registers.
      */
 
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB);
-    /* XXX are these registers right? */
     (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
     (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
 
@@ -550,20 +553,12 @@ NS16550_STATIC void ns16550_process( int minor)
     /* Check if we can dequeue transmitted characters */
     if (ctx->transmitFifoChars > 0
         && (get( port, NS16550_LINE_STATUS) & SP_LSR_THOLD) != 0) {
-      unsigned chars = ctx->transmitFifoChars;
-
-      /*
-       * We finished the transmission, so clear the number of characters in the
-       * transmit FIFO.
-       */
-      ctx->transmitFifoChars = 0;
 
       /* Dequeue transmitted characters */
-      if (rtems_termios_dequeue_characters( d->termios_data, chars) == 0) {
-        /* Nothing to do */
-        d->bActive = false;
-        ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
-      }
+      rtems_termios_dequeue_characters(
+        d->termios_data,
+        ctx->transmitFifoChars
+      );
     }
   } while ((get( port, NS16550_INTERRUPT_ID) & SP_IID_0) == 0);
 }
@@ -596,10 +591,12 @@ ssize_t ns16550_write_support_int(
     set( port, NS16550_TRANSMIT_BUFFER, buf [i]);
   }
 
-  if (len > 0) {
-    ctx->transmitFifoChars = out;
-    d->bActive = true;
+  ctx->transmitFifoChars = out;
+
+  if (out > 0) {
     ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR);
+  } else {
+    ns16550_enable_interrupts( c, NS16550_ENABLE_ALL_INTR_EXCEPT_TX);
   }
 
   return 0;
@@ -643,9 +640,6 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
   console_tbl *c = Console_Port_Tbl [minor];
 #endif
-  console_data *d = &Console_Port_Data [minor];
-
-  d->bActive = false;
 
   #ifdef BSP_FEATURE_IRQ_EXTENSION
     {

@@ -26,21 +26,21 @@
 #include <rtems/rtems/rtemsapi.h>
 
 #include <rtems/rtems/intr.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/clock.h>
-#include <rtems/rtems/tasks.h>
-#include <rtems/rtems/dpmem.h>
-#include <rtems/rtems/event.h>
-#include <rtems/rtems/message.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/dpmemimpl.h>
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/messageimpl.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif
-#include <rtems/rtems/part.h>
-#include <rtems/rtems/ratemon.h>
-#include <rtems/rtems/region.h>
-#include <rtems/rtems/sem.h>
-#include <rtems/rtems/signal.h>
-#include <rtems/rtems/timer.h>
+#include <rtems/rtems/partimpl.h>
+#include <rtems/rtems/ratemonimpl.h>
+#include <rtems/rtems/regionimpl.h>
+#include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/signalimpl.h>
+#include <rtems/rtems/timerimpl.h>
 
 Objects_Information *_RTEMS_Objects[ OBJECTS_RTEMS_CLASSES_LAST + 1 ];
 

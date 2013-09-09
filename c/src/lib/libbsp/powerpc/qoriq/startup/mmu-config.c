@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,7 +20,7 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#include <bspopts.h>
+#include <bsp.h>
 #include <bsp/mmu.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/qoriq.h>
@@ -49,10 +49,16 @@ typedef struct {
 	.mas3 = FSL_EIS_MAS3_SR \
 }
 
+#ifdef RTEMS_SMP
+  #define ENTRY_RW_MAS2 FSL_EIS_MAS2_M
+#else
+  #define ENTRY_RW_MAS2 0
+#endif
+
 #define ENTRY_RW(b, s) { \
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
-	.mas2 = 0, \
+	.mas2 = ENTRY_RW_MAS2, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
 }
 
@@ -78,10 +84,14 @@ static const entry DATA config [] = {
 	ENTRY_X(bsp_section_text_begin, bsp_section_text_size),
 	ENTRY_R(bsp_section_rodata_load_begin, bsp_section_rodata_size),
 	ENTRY_R(bsp_section_rodata_begin, bsp_section_rodata_size),
+	ENTRY_R(bsp_section_sdata2_load_begin, bsp_section_sdata2_size),
+	ENTRY_R(bsp_section_sdata2_begin, bsp_section_sdata2_size),
 	ENTRY_R(bsp_section_fast_data_load_begin, bsp_section_fast_data_size),
 	ENTRY_RW(bsp_section_fast_data_begin, bsp_section_fast_data_size),
 	ENTRY_R(bsp_section_data_load_begin, bsp_section_data_size),
 	ENTRY_RW(bsp_section_data_begin, bsp_section_data_size),
+	ENTRY_R(bsp_section_sdata_load_begin, bsp_section_sdata_size),
+	ENTRY_RW(bsp_section_sdata_begin, bsp_section_sdata_size),
 	ENTRY_RW(bsp_section_sbss_begin, bsp_section_sbss_size),
 	ENTRY_RW(bsp_section_bss_begin, bsp_section_bss_size),
 	ENTRY_RW(bsp_section_rwextra_begin, bsp_section_rwextra_size),

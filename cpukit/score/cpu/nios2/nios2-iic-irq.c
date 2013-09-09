@@ -22,7 +22,7 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/nios2-utility.h>
 
 /*
@@ -117,7 +117,7 @@ void __ISR_Handler(void)
     stack_ptr = _old_stack_ptr;
 #endif
 
-    if( !_Thread_Dispatch_in_critical_section() )
+    if( _Thread_Dispatch_is_enabled() )
     {
       if ( _Thread_Dispatch_necessary ) {
         _CPU_ISR_Enable( level );

@@ -248,7 +248,7 @@ norst:
 
 SYM (_ISR_Handler):
                                          | disable multitasking
-        addql   #1,SYM (_Thread_Dispatch_disable_level)
+        addql   #1,THREAD_DISPATCH_DISABLE_LEVEL
 #if ( !defined(__mcoldfire__) )
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
 #else
@@ -298,7 +298,7 @@ SYM (_ISR_Handler):
         movel   (a7),a7                 | Restore task stack pointer
 1:
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
-        subql   #1,SYM (_Thread_Dispatch_disable_level)
+        subql   #1,THREAD_DISPATCH_DISABLE_LEVEL
                                          | unnest multitasking
         bne.b    exit                    | If dispatch disabled, exit
 

@@ -25,10 +25,11 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/time.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 int pthread_setschedparam(
   pthread_t           thread,
@@ -98,7 +99,7 @@ int pthread_setschedparam(
           break;
       }
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

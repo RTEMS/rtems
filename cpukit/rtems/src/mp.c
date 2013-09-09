@@ -18,10 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/mp.h>
-#include <rtems/score/mpci.h>
+#include <rtems/score/mpciimpl.h>
 
 void _Multiprocessing_Manager_initialization ( void )
 {

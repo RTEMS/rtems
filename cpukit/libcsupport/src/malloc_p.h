@@ -9,7 +9,6 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/libcsupport.h>
 #include <rtems/score/protectedheap.h>

@@ -25,6 +25,8 @@
 
 #include "imfs.h"
 
+#include <string.h>
+
 IMFS_jnode_t *IMFS_node_initialize_generic(
   IMFS_jnode_t *node,
   const IMFS_types_union *info

@@ -22,6 +22,14 @@
 #ifndef _RTEMS_SCORE_MPPKT_H
 #define _RTEMS_SCORE_MPPKT_H
 
+#include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/watchdog.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  *  @defgroup ScoreMPPacket MP Packet Handler
  *
@@ -32,14 +40,6 @@
  *  operations.
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/watchdog.h>
 
 /**
  *  The following enumerated type defines the packet classes.
@@ -111,15 +111,11 @@ typedef struct {
 #define MP_PACKET_MINIMUN_HETERO_CONVERSION  \
   ( sizeof( MP_packet_Prefix ) / sizeof( uint32_t   ) )
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/mppkt.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

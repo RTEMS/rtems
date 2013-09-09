@@ -22,10 +22,8 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
-#include <rtems/rtems/dpmem.h>
-#include <rtems/score/object.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/dpmem.h>
 
 rtems_status_code rtems_port_internal_to_external(
   rtems_id   id,
@@ -50,7 +48,7 @@ rtems_status_code rtems_port_internal_to_external(
       else
         *external = _Addresses_Add_offset( the_port->external_base,
                                            ending );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_port->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

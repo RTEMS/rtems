@@ -17,21 +17,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 bool _Thread_Initialize(
   Objects_Information                  *information,
@@ -56,6 +48,12 @@ bool _Thread_Initialize(
   void                *extensions_area;
   bool                 extension_status;
   int                  i;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() && !is_preemptible ) {
+    return false;
+  }
+#endif
 
   /*
    *  Initialize the Ada self pointer
@@ -179,6 +177,15 @@ bool _Thread_Initialize(
   }
 
   the_thread->Start.isr_level         = isr_level;
+
+#if defined(RTEMS_SMP)
+  the_thread->is_scheduled            = false;
+  the_thread->is_in_the_air           = false;
+  the_thread->is_executing            = false;
+
+  /* Initialize the cpu field for the non-SMP schedulers */
+  the_thread->cpu                     = _Per_CPU_Get_by_index( 0 );
+#endif
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;

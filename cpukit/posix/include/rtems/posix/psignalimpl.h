@@ -32,6 +32,8 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/sigset.h>
 #include <rtems/score/apiext.h>
+#include <rtems/score/isrlock.h>
+#include <rtems/score/threadq.h>
 
 #define _States_Is_interruptible_signal( _states ) \
   ( ((_states) & \
@@ -53,15 +55,13 @@
  *  Variables
  */
 
+extern ISR_lock_Control _POSIX_signals_Lock;
+
 extern sigset_t  _POSIX_signals_Pending;
 
 extern const struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ];
 
 extern struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
-
-extern Watchdog_Control _POSIX_signals_Alarm_timer;
-
-extern Watchdog_Control _POSIX_signals_Ualarm_timer;
 
 extern Thread_queue_Control _POSIX_signals_Wait_queue;
 
@@ -79,6 +79,12 @@ extern API_extensions_Post_switch_control _POSIX_signals_Post_switch;
  * @brief POSIX signals manager initialization.
  */
 void _POSIX_signals_Manager_Initialization(void);
+
+#define _POSIX_signals_Acquire( level ) \
+  _ISR_lock_ISR_disable_and_acquire( &_POSIX_signals_Lock, level )
+
+#define _POSIX_signals_Release( level ) \
+  _ISR_lock_Release_and_ISR_enable( &_POSIX_signals_Lock, level )
 
 static inline void _POSIX_signals_Add_post_switch_extension(void)
 {
@@ -113,7 +119,8 @@ bool _POSIX_signals_Clear_signals(
   int                 signo,
   siginfo_t          *info,
   bool                is_global,
-  bool                check_blocked
+  bool                check_blocked,
+  bool                do_signals_acquire_release
 );
 
 int killinfo(

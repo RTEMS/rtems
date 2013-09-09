@@ -43,7 +43,7 @@
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
-#include <rtems/posix/mqueue.h>
+#include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/time.h>
 
 /*
@@ -54,10 +54,10 @@
 
 ssize_t mq_timedreceive(
   mqd_t                  mqdes,
-  char                  *msg_ptr,
+  char                  *__restrict msg_ptr,
   size_t                 msg_len,
-  unsigned int          *msg_prio,
-  const struct timespec *abstime
+  unsigned int          *__restrict msg_prio,
+  const struct timespec *__restrict abstime
 )
 {
   Watchdog_Interval                            ticks;

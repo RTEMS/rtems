@@ -22,8 +22,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/score/thread.h>
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
@@ -73,7 +72,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
             the_period, &since_last_period, &executed
           );
         if (!valid_status) {
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_period->Object );
           return RTEMS_NOT_DEFINED;
         }
 
@@ -90,7 +89,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
         #endif
       }
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_period->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

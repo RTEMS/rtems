@@ -23,9 +23,9 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/score/thread.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 int pthread_join(
   pthread_t   thread,
@@ -36,6 +36,7 @@ int pthread_join(
   POSIX_API_Control       *api;
   Objects_Locations        location;
   void                    *return_pointer;
+  Thread_Control          *executing;
 
 on_EINTR:
   the_thread = _Thread_Get( thread, &location );
@@ -45,12 +46,14 @@ on_EINTR:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       if ( api->detachstate == PTHREAD_CREATE_DETACHED ) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return EINVAL;
       }
 
-      if ( _Thread_Is_executing( the_thread ) ) {
-        _Thread_Enable_dispatch();
+      executing = _Thread_Executing;
+
+      if ( executing == the_thread ) {
+        _Objects_Put( &the_thread->Object );
         return EDEADLK;
       }
 
@@ -66,13 +69,17 @@ on_EINTR:
            (STATES_WAITING_FOR_JOIN_AT_EXIT | STATES_TRANSIENT)
          );
       } else {
-	_Thread_Executing->Wait.return_argument = &return_pointer;
+        executing->Wait.return_argument = &return_pointer;
         _Thread_queue_Enter_critical_section( &api->Join_List );
-        _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
+        _Thread_queue_Enqueue(
+          &api->Join_List,
+          executing,
+          WATCHDOG_NO_TIMEOUT
+        );
       }
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
 
-      if ( _Thread_Executing->Wait.return_code == EINTR )
+      if ( executing->Wait.return_code == EINTR )
         goto on_EINTR;
 
       if ( value_ptr )

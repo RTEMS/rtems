@@ -24,7 +24,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/timer.h>
+#include <rtems/posix/timerimpl.h>
 
 int timer_getoverrun(
   timer_t   timerid
@@ -40,7 +40,7 @@ int timer_getoverrun(
     case OBJECTS_LOCAL:
       overrun = ptimer->overrun;
       ptimer->overrun = 0;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &ptimer->Object );
       return overrun;
 
 #if defined(RTEMS_MULTIPROCESSING)

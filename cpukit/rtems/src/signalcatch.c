@@ -18,19 +18,15 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/asr.h>
-#include <rtems/score/isr.h>
-#include <rtems/rtems/modes.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/apiext.h>
+#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/apiext.h>
+#include <rtems/score/isrlevel.h>
+#include <rtems/score/threaddispatch.h>
 
 static void _RTEMS_signal_Post_switch_hook( Thread_Control *executing )
 {
-  ISR_Level          level;
   RTEMS_API_Control *api;
   ASR_Information   *asr;
   rtems_signal_set   signal_set;
@@ -45,12 +41,7 @@ static void _RTEMS_signal_Post_switch_hook( Thread_Control *executing )
    */
 
   asr = &api->Signal;
-
-  _ISR_Disable( level );
-    signal_set = asr->signals_posted;
-    asr->signals_posted = 0;
-  _ISR_Enable( level );
-
+  signal_set = _ASR_Get_posted_signals( asr );
 
   if ( !signal_set ) /* similar to _ASR_Are_signals_pending( asr ) */
     return;
@@ -79,7 +70,7 @@ rtems_status_code rtems_signal_catch(
   ASR_Information    *asr;
 
 /* XXX normalize mode */
-  executing = _Thread_Executing;
+  executing = _Thread_Get_executing();
   api = (RTEMS_API_Control*)executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 

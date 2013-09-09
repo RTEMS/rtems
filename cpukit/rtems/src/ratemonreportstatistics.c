@@ -18,13 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <inttypes.h>
+#include <rtems/rtems/ratemonimpl.h>
+#include <rtems/rtems/object.h>
 
-#include <rtems/bspIo.h>
-#include <rtems/score/timespec.h>
+#include <inttypes.h>
 
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   /* We print to 1/10's of milliseconds */

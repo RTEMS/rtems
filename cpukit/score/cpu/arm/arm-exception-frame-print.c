@@ -19,6 +19,29 @@
 #include <rtems/score/cpu.h>
 #include <rtems/bspIo.h>
 
+static void _ARM_VFP_context_print( const ARM_VFP_context *vfp_context )
+{
+#ifdef ARM_MULTILIB_VFP_D32
+  if ( vfp_context != NULL ) {
+    const uint64_t *dx = &vfp_context->register_d0;
+    int i;
+
+    printk(
+      "FPEXC = 0x%08x\nFPSCR = 0x%08x\n",
+      vfp_context->register_fpexc,
+      vfp_context->register_fpscr
+    );
+
+    for ( i = 0; i < 32; ++i ) {
+      uint32_t low = (uint32_t) dx[i];
+      uint32_t high = (uint32_t) (dx[i] >> 32);
+
+      printk( "D%02i = 0x%08x%08x\n", i, high, low );
+    }
+  }
+#endif
+}
+
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
   printk(
@@ -37,20 +60,20 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
     "XPSR = 0x%08x VEC = 0x%08x\n",
 #endif
     frame->register_r0,
-    frame->register_r1,
-    frame->register_r2,
-    frame->register_r3,
-    frame->register_r4,
-    frame->register_r5,
-    frame->register_r6,
-    frame->register_r7,
     frame->register_r8,
+    frame->register_r1,
     frame->register_r9,
+    frame->register_r2,
     frame->register_r10,
+    frame->register_r3,
     frame->register_r11,
+    frame->register_r4,
     frame->register_r12,
+    frame->register_r5,
     frame->register_sp,
+    frame->register_r6,
     frame->register_lr,
+    frame->register_r7,
     frame->register_pc,
 #if defined(ARM_MULTILIB_ARCH_V4)
     frame->register_cpsr,
@@ -59,4 +82,6 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 #endif
     frame->vector
   );
+
+  _ARM_VFP_context_print( frame->vfp_context );
 }

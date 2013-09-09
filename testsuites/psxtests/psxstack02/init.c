@@ -11,7 +11,6 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <tmacros.h>
 #include "test_support.h"
 
@@ -19,7 +18,8 @@
 #include <pthread.h>
 #include <sched.h>
 
-#include <rtems/posix/pthread.h> /* for PTHREAD_MINIMUM_STACK_SIZE */
+#include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/stackimpl.h>
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);

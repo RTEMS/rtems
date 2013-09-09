@@ -20,8 +20,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 bool _Heap_Size_of_alloc_area(
   Heap_Control *heap,

@@ -23,7 +23,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 
 int pthread_attr_setguardsize(
   pthread_attr_t  *attr,

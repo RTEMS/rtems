@@ -545,6 +545,7 @@ convert_TI_records(
 
     while ( ! endrecord && (fgets(buff, sizeof(buff), ifp)))
     {
+        p = &buff[0];
         if (p[strlen(p)-1] == '\n')                 /* get rid of newline */
             p[strlen(p)-1] = '\0';
 
@@ -553,7 +554,6 @@ convert_TI_records(
 
         tb.dl_count = 0;
 
-        p = &buff[0];
         eol = FALSE;
         while ( ! eol && ! endrecord)
         {

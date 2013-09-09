@@ -15,7 +15,7 @@ CPU_CFLAGS = -mcfv4e -Wa,-memac
 CFLAGS_OPTIMIZE_V = -O2 -g -fomit-frame-pointer 
 
 define bsp-post-link
-	$(OBJCOPY) -O binary --strip-all $(basename $@).exe \
+	$(OBJCOPY) -O binary --strip-all $(basename $@)$(EXEEXT) \
 	    $(basename $@)$(DOWNEXT)
 	$(default-bsp-post-link)
 endef

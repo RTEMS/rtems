@@ -43,3 +43,7 @@ $(PROJECT_INCLUDE)/rtems/score/types.h: rtems/score/types.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 
+$(PROJECT_INCLUDE)/rtems/score/cpusmplock.h: rtems/score/cpusmplock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpusmplock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpusmplock.h
+

@@ -18,14 +18,9 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
+#include <rtems/posix/muteximpl.h>
 
-#include <rtems/system.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/posix/mutex.h>
-
-static int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
+const int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
   0,                      /* CORE_MUTEX_STATUS_SUCCESSFUL */
   EBUSY,                  /* CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT */
   EDEADLK,                /* CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED */
@@ -37,18 +32,3 @@ static int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1] = {
 #endif
   EINVAL                  /* CORE_MUTEX_STATUS_CEILING_VIOLATED */
 };
-
-
-int _POSIX_Mutex_Translate_core_mutex_return_code(
-  CORE_mutex_Status  the_mutex_status
-)
-{
-  /*
-   *  Internal consistency check for bad status from SuperCore
-   */
-  #if defined(RTEMS_DEBUG)
-    if ( the_mutex_status > CORE_MUTEX_STATUS_LAST )
-      return EINVAL;
-  #endif
-  return _POSIX_Mutex_Return_codes[the_mutex_status];
-}

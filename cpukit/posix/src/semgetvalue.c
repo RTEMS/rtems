@@ -27,14 +27,13 @@
 #include <limits.h>
 
 #include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/posix/semaphore.h>
+#include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/time.h>
 #include <rtems/seterr.h>
 
 int sem_getvalue(
-  sem_t  *sem,
-  int    *sval
+  sem_t  *__restrict sem,
+  int    *__restrict sval
 )
 {
   register POSIX_Semaphore_Control *the_semaphore;
@@ -45,7 +44,7 @@ int sem_getvalue(
 
     case OBJECTS_LOCAL:
       *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_semaphore->Object );
       return 0;
 
 #if defined(RTEMS_MULTIPROCESSING)

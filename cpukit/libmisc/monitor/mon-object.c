@@ -17,11 +17,16 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/extensionimpl.h>
+#include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/partimpl.h>
+#include <rtems/rtems/regionimpl.h>
+#include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/tasksimpl.h>
 #if defined(RTEMS_POSIX_API)
-  #include <rtems/posix/pthread.h>
+  #include <rtems/posix/pthreadimpl.h>
 #endif
 
 #include <stdio.h>

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Obere Lagerstr. 30
@@ -56,6 +56,10 @@ bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
+bsp_stack_all_size = bsp_stack_abt_size + bsp_stack_fiq_size + bsp_stack_irq_size + bsp_stack_svc_size + bsp_stack_und_size + bsp_stack_main_size;
+
+bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 1;
+
 MEMORY {
 	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
 }
@@ -68,6 +72,230 @@ SECTIONS {
 		bsp_section_start_end = .;
 	} > REGION_START AT > REGION_START
 	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
+
+	.xbarrier : {
+		. = ALIGN (bsp_section_xbarrier_align);
+	} > REGION_VECTOR
+
+	.text : ALIGN(32) {
+		bsp_section_text_begin = .;
+
+		/* .text */
+		*(.text.unlikely .text.*_unlikely)
+		*(.text .stub .text.* .gnu.linkonce.t.*)
+		/* .gnu.warning sections are handled specially by elf32.em.  */
+		*(.gnu.warning)
+		*(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
+
+		/* .init */
+		KEEP (*(.init))
+
+		/* .fini */
+		KEEP (*(.fini))
+
+		bsp_section_text_end = .;
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
+	bsp_section_text_load_begin = LOADADDR (.text);
+	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
+
+	.robarrier : {
+		. = ALIGN (bsp_section_robarrier_align);
+	} > REGION_RODATA
+
+	.rodata : ALIGN(32) {
+		bsp_section_rodata_begin = .;
+
+		/* .rodata */
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+
+		/* .rodata1 */
+		*(.rodata1)
+
+		/* .ARM.extab */
+		*(.ARM.extab* .gnu.linkonce.armextab.*)
+
+		/* .eh_frame */
+		KEEP (*(.eh_frame))
+
+		/* .gcc_except_table */
+		*(.gcc_except_table .gcc_except_table.*)
+
+		/* .tdata */
+		*(.tdata .tdata.* .gnu.linkonce.td.*)
+
+		/* .tbss */
+		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+
+		/* .preinit_array */
+		PROVIDE_HIDDEN (__preinit_array_start = .);
+		KEEP (*(.preinit_array))
+		PROVIDE_HIDDEN (__preinit_array_end = .);
+
+		/* .init_array */
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array))
+		PROVIDE_HIDDEN (__init_array_end = .);
+
+		/* .fini_array */
+		PROVIDE_HIDDEN (__fini_array_start = .);
+		KEEP (*(.fini_array))
+		KEEP (*(SORT(.fini_array.*)))
+		PROVIDE_HIDDEN (__fini_array_end = .);
+
+		/* .ctors */
+		/* gcc uses crtbegin.o to find the start of
+		   the constructors, so we make sure it is
+		   first.  Because this is a wildcard, it
+		   doesn't matter if the user does not
+		   actually link against crtbegin.o; the
+		   linker won't look for a file to match a
+		   wildcard.  The wildcard also means that it
+		   doesn't matter which directory crtbegin.o
+		   is in.  */
+		KEEP (*crtbegin.o(.ctors))
+		KEEP (*crtbegin?.o(.ctors))
+		/* We don't want to include the .ctor section from
+		   the crtend.o file until after the sorted ctors.
+		   The .ctor section from the crtend file contains the
+		   end of ctors marker and it must be last */
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+		KEEP (*(SORT(.ctors.*)))
+		KEEP (*(.ctors))
+
+		/* .dtors */
+		KEEP (*crtbegin.o(.dtors))
+		KEEP (*crtbegin?.o(.dtors))
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+		KEEP (*(SORT(.dtors.*)))
+		KEEP (*(.dtors))
+
+		/* .data.rel.ro */
+		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+		*(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+
+		/* .jcr */
+		KEEP (*(.jcr))
+
+		/* .interp */
+		*(.interp)
+
+		/* .note.gnu.build-id */
+		*(.note.gnu.build-id)
+
+		/* .hash */
+		*(.hash)
+
+		/* .gnu.hash */
+		*(.gnu.hash)
+
+		/* .dynsym */
+		*(.dynsym)
+
+		/* .dynstr */
+		*(.dynstr)
+
+		/* .gnu.version */
+		*(.gnu.version)
+
+		/* .gnu.version_d */
+		*(.gnu.version_d)
+
+		/* .gnu.version_r */
+		*(.gnu.version_r)
+
+		/* .rel.dyn */
+		*(.rel.init)
+		*(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+		*(.rel.fini)
+		*(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+		*(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+		*(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+		*(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+		*(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+		*(.rel.ctors)
+		*(.rel.dtors)
+		*(.rel.got)
+		*(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rel_iplt_start = .);
+		*(.rel.iplt)
+		PROVIDE_HIDDEN (__rel_iplt_end = .);
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+
+		/* .rela.dyn */
+		*(.rela.init)
+		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+		*(.rela.fini)
+		*(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+		*(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+		*(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+		*(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+		*(.rela.ctors)
+		*(.rela.dtors)
+		*(.rela.got)
+		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rel_iplt_start = .);
+		PROVIDE_HIDDEN (__rel_iplt_end = .);
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		*(.rela.iplt)
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+
+		/* .rel.plt */
+		*(.rel.plt)
+
+		/* .rela.plt */
+		*(.rela.plt)
+
+		/* .plt */
+		*(.plt)
+
+		/* .iplt */
+		*(.iplt)
+
+		/* .dynamic */
+		*(.dynamic)
+
+		/* .got */
+		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
+
+		/* Special FreeBSD linker set sections */
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = .;
+		*(set_domain_*);
+		*(set_pseudo_*);
+		_bsd__start_set_modmetadata_set = .;
+		*(_bsd_set_modmetadata_set);
+		_bsd__stop_set_modmetadata_set = .;
+		_bsd__start_set_sysctl_set = .;
+		*(_bsd_set_sysctl_set);
+		_bsd__stop_set_sysctl_set = .;
+
+		bsp_section_rodata_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
+	bsp_section_rodata_load_begin = LOADADDR (.rodata);
+	bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
+
+	.ARM.exidx : ALIGN(32) {
+		bsp_section_armexidx_begin = .;
+
+		/* .ARM.exidx */
+		__exidx_start = .;
+		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
+		__exidx_end = .;
+
+		bsp_section_armexidx_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	bsp_section_armexidx_size = bsp_section_armexidx_end - bsp_section_armexidx_begin;
+	bsp_section_armexidx_load_begin = LOADADDR (.ARM.exidx);
+	bsp_section_armexidx_load_end = bsp_section_armexidx_load_begin + bsp_section_armexidx_size;
+
+	.rwbarrier : {
+		. = ALIGN (bsp_section_rwbarrier_align);
+	} > REGION_DATA
 
 	.vector : {
 		bsp_section_vector_begin = .;
@@ -100,16 +328,17 @@ SECTIONS {
 		. = . + bsp_stack_main_size;
 		bsp_stack_main_end = .;
 
+		bsp_stack_secondary_processors_begin = .;
+		. = . + (bsp_processor_count - 1) * bsp_stack_all_size;
+		bsp_stack_secondary_processors_end = .;
+
 		*(.bsp_vector)
+
 		bsp_section_vector_end = .;
 	} > REGION_VECTOR AT > REGION_VECTOR
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
 	bsp_vector_table_begin = DEFINED (bsp_vector_table_in_start_section) ? bsp_section_start_begin : bsp_section_vector_begin;
 	bsp_vector_table_end = bsp_vector_table_begin + bsp_vector_table_size;
-
-	.xbarrier : {
-		. = ALIGN (bsp_section_xbarrier_align);
-	} > REGION_VECTOR
 
 	.fast_text : {
 		bsp_section_fast_text_begin = .;
@@ -120,208 +349,7 @@ SECTIONS {
 	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
 	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
 
-	.text : {
-		bsp_section_text_begin = .;
-		*(.text.unlikely .text.*_unlikely)
-		*(.text .stub .text.* .gnu.linkonce.t.*)
-		/* .gnu.warning sections are handled specially by elf32.em.  */
-		*(.gnu.warning)
-		*(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.init : {
-		KEEP (*(.init))
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	.fini : {
-		KEEP (*(.fini))
-		bsp_section_text_end = .;
-	} > REGION_TEXT AT > REGION_TEXT_LOAD
-	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
-	bsp_section_text_load_begin = LOADADDR (.text);
-	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
-
-	.robarrier : {
-		. = ALIGN (bsp_section_robarrier_align);
-	} > REGION_RODATA
-
-	.rodata : {
-		bsp_section_rodata_begin = .;
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rodata1 : {
-		*(.rodata1)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.ARM.extab : {
-		*(.ARM.extab* .gnu.linkonce.armextab.*)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.ARM.exidx : {
-		__exidx_start = .;
-		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
-		__exidx_end = .;
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.eh_frame : {
-		KEEP (*(.eh_frame))
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.gcc_except_table : {
-		*(.gcc_except_table .gcc_except_table.*)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.preinit_array : {
-		PROVIDE_HIDDEN (__preinit_array_start = .);
-		KEEP (*(.preinit_array))
-		PROVIDE_HIDDEN (__preinit_array_end = .);
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.init_array : {
-		PROVIDE_HIDDEN (__init_array_start = .);
-		KEEP (*(SORT(.init_array.*)))
-		KEEP (*(.init_array))
-		PROVIDE_HIDDEN (__init_array_end = .);
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.fini_array : {
-		PROVIDE_HIDDEN (__fini_array_start = .);
-		KEEP (*(.fini_array))
-		KEEP (*(SORT(.fini_array.*)))
-		PROVIDE_HIDDEN (__fini_array_end = .);
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.ctors : {
-		/* gcc uses crtbegin.o to find the start of
-		   the constructors, so we make sure it is
-		   first.  Because this is a wildcard, it
-		   doesn't matter if the user does not
-		   actually link against crtbegin.o; the
-		   linker won't look for a file to match a
-		   wildcard.  The wildcard also means that it
-		   doesn't matter which directory crtbegin.o
-		   is in.  */
-		KEEP (*crtbegin.o(.ctors))
-		KEEP (*crtbegin?.o(.ctors))
-		/* We don't want to include the .ctor section from
-		   the crtend.o file until after the sorted ctors.
-		   The .ctor section from the crtend file contains the
-		   end of ctors marker and it must be last */
-		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
-		KEEP (*(SORT(.ctors.*)))
-		KEEP (*(.ctors))
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.dtors : {
-		KEEP (*crtbegin.o(.dtors))
-		KEEP (*crtbegin?.o(.dtors))
-		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
-		KEEP (*(SORT(.dtors.*)))
-		KEEP (*(.dtors))
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.data.rel.ro : {
-		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
-		*(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.jcr : {
-		KEEP (*(.jcr))
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.dynamic : {
-		*(.dynamic)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.got : {
-		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.interp : {
-		*(.interp)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.note.gnu.build-id : {
-		*(.note.gnu.build-id)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.hash : {
-		*(.hash)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.gnu.hash : {
-		*(.gnu.hash)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.dynsym : {
-		*(.dynsym)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.dynstr : {
-		*(.dynstr)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.gnu.version : {
-		*(.gnu.version)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.gnu.version_d : {
-		*(.gnu.version_d)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.gnu.version_r : {
-		*(.gnu.version_r)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rel.dyn : {
-		*(.rel.init)
-		*(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
-		*(.rel.fini)
-		*(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
-		*(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
-		*(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
-		*(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
-		*(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
-		*(.rel.ctors)
-		*(.rel.dtors)
-		*(.rel.got)
-		*(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
-		PROVIDE_HIDDEN (__rel_iplt_start = .);
-		*(.rel.iplt)
-		PROVIDE_HIDDEN (__rel_iplt_end = .);
-		PROVIDE_HIDDEN (__rela_iplt_start = .);
-		PROVIDE_HIDDEN (__rela_iplt_end = .);
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rela.dyn : {
-		*(.rela.init)
-		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
-		*(.rela.fini)
-		*(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
-		*(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
-		*(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
-		*(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
-		*(.rela.ctors)
-		*(.rela.dtors)
-		*(.rela.got)
-		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
-		PROVIDE_HIDDEN (__rel_iplt_start = .);
-		PROVIDE_HIDDEN (__rel_iplt_end = .);
-		PROVIDE_HIDDEN (__rela_iplt_start = .);
-		*(.rela.iplt)
-		PROVIDE_HIDDEN (__rela_iplt_end = .);
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rel.plt : {
-		*(.rel.plt)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rela.plt : {
-		*(.rela.plt)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.plt : {
-		*(.plt)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.iplt : {
-		*(.iplt)
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.robsdsets : {
-		/* Special FreeBSD linker set sections */
-		__start_set_sysctl_set = .;
-		*(set_sysctl_*);
-		__stop_set_sysctl_set = .;
-		*(set_domain_*);
-		*(set_pseudo_*);
-		_bsd__start_set_modmetadata_set = .;
-		*(_bsd_set_modmetadata_set);
-		_bsd__stop_set_modmetadata_set = .;
-		_bsd__start_set_sysctl_set = .;
-		*(_bsd_set_sysctl_set);
-		_bsd__stop_set_sysctl_set = .;
-
-		bsp_section_rodata_end = .;
-	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
-	bsp_section_rodata_load_begin = LOADADDR (.rodata);
-	bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
-
-	.rwbarrier : {
-		. = ALIGN (bsp_section_rwbarrier_align);
-	} > REGION_DATA
-
-	.fast_data : {
+	.fast_data : ALIGN(32) {
 		bsp_section_fast_data_begin = .;
 		*(.bsp_fast_data)
 		bsp_section_fast_data_end = .;
@@ -330,15 +358,16 @@ SECTIONS {
 	bsp_section_fast_data_load_begin = LOADADDR (.fast_data);
 	bsp_section_fast_data_load_end = bsp_section_fast_data_load_begin + bsp_section_fast_data_size;
 
-	.data : {
+	.data : ALIGN(32) {
 		bsp_section_data_begin = .;
+
+		/* .data */
 		*(.data .data.* .gnu.linkonce.d.*)
 		SORT(CONSTRUCTORS)
-	} > REGION_DATA AT > REGION_DATA_LOAD
-	.data1 : {
+
+		/* .data1 */
 		*(.data1)
-	} > REGION_DATA AT > REGION_DATA_LOAD
-	.rwbsdsets : {
+
 		/* Special FreeBSD linker set sections */
 		_bsd__start_set_sysinit_set = .;
 		*(_bsd_set_sysinit_set);
@@ -352,9 +381,12 @@ SECTIONS {
 
 	.bss : {
 		bsp_section_bss_begin = .;
+
+		/* .bss */
 		*(.dynbss)
 		*(.bss .bss.* .gnu.linkonce.b.*)
 		*(COMMON)
+
 		bsp_section_bss_end = .;
 	} > REGION_BSS AT > REGION_BSS
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
@@ -424,6 +456,8 @@ SECTIONS {
 	/* DWARF 3 */
 	.debug_pubtypes 0 : { *(.debug_pubtypes) }
 	.debug_ranges   0 : { *(.debug_ranges) }
+	/* DWARF extension */
+	.debug_macro    0 : { *(.debug_macro) }
 	.ARM.attributes 0 : { KEEP (*(.ARM.attributes)) KEEP (*(.gnu.attributes)) }
 	.note.gnu.arm.ident 0 : { KEEP (*(.note.gnu.arm.ident)) }
 	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }

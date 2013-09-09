@@ -21,16 +21,13 @@
 #ifndef _RTEMS_RTEMS_SEMMP_H
 #define _RTEMS_RTEMS_SEMMP_H
 
+#ifndef _RTEMS_RTEMS_SEMIMPL_H
+# error "Never use <rtems/rtems/semmp.h> directly; include <rtems/rtems/semimpl.h> instead."
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/sem.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
 
 /**
  *  @defgroup ClassicSEM Semaphore MP Support

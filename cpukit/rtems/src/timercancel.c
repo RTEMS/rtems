@@ -17,11 +17,9 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/timer.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/rtems/timerimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 /*
  *  rtems_timer_cancel
@@ -49,7 +47,7 @@ rtems_status_code rtems_timer_cancel(
     case OBJECTS_LOCAL:
       if ( !_Timer_Is_dormant_class( the_timer->the_class ) )
         (void) _Watchdog_Remove( &the_timer->Ticker );
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_timer->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

@@ -22,8 +22,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 static void _Heap_Free_block( Heap_Control *heap, Heap_Block *block )
 {
@@ -40,6 +39,7 @@ static void _Heap_Free_block( Heap_Control *heap, Heap_Block *block )
    * areas are consumed first.
    */
   _Heap_Free( heap, (void *) _Heap_Alloc_area_of_block( block ) );
+  _Heap_Protection_free_all_delayed_blocks( heap );
   first_free = _Heap_Free_list_first( heap );
   _Heap_Free_list_remove( first_free );
   _Heap_Free_list_insert_before( _Heap_Free_list_tail( heap ), first_free );

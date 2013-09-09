@@ -382,18 +382,15 @@ static ssize_t IntUartInterruptWrite(
   size_t      len
 )
 {
-  rtems_interrupt_level     level;
+  if (len > 0) {
+    /* write out character */
+    MCF5282_UART_UTB(minor) = *buf;
 
-  rtems_interrupt_disable(level);
+    /* enable tx interrupt */
+    IntUartInfo[minor].uimr |= MCF5282_UART_UIMR_TXRDY;
+    MCF5282_UART_UIMR(minor) = IntUartInfo[minor].uimr;
+  }
 
-  /* write out character */
-  MCF5282_UART_UTB(minor) = *buf;
-
-  /* enable tx interrupt */
-  IntUartInfo[minor].uimr |= MCF5282_UART_UIMR_TXRDY;
-  MCF5282_UART_UIMR(minor) = IntUartInfo[minor].uimr;
-
-  rtems_interrupt_enable(level);
   return 0;
 }
 

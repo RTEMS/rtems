@@ -60,7 +60,8 @@ extern "C" {
     _Scheduler_EDF_Extract,          /* extract entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
-    _Scheduler_priority_Tick         /* tick entry point */ \
+    _Scheduler_default_Tick,         /* tick entry point */ \
+    _Scheduler_default_Start_idle    /* start idle entry point */ \
   }
 
 /* Return values for CBS server. */

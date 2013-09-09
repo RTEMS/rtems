@@ -778,26 +778,29 @@ sccPollRead (int minor)
 static ssize_t
 sccInterruptWrite (int minor, const char *buf, size_t len)
 {
-  int chan = minor;
+  if (len > 0) {
+    int chan = minor;
 
-  if ((sccPrepTxBd[chan]->status & M8xx_BD_READY) == 0) {
-    sccPrepTxBd[chan]->buffer = (char *)buf;
-    sccPrepTxBd[chan]->length = len;
-    rtems_cache_flush_multiple_data_lines((const void *)buf,len);
-    /*
-     * clear status, set ready bit
-     */
-    sccPrepTxBd[chan]->status =
-      (sccPrepTxBd[chan]->status
-       & M8xx_BD_WRAP)
-      | M8xx_BD_READY | M8xx_BD_INTERRUPT;
-    if ((sccPrepTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-      sccPrepTxBd[chan] = sccFrstTxBd[chan];
-    }
-    else {
-      sccPrepTxBd[chan]++;
+    if ((sccPrepTxBd[chan]->status & M8xx_BD_READY) == 0) {
+      sccPrepTxBd[chan]->buffer = (char *)buf;
+      sccPrepTxBd[chan]->length = len;
+      rtems_cache_flush_multiple_data_lines((const void *)buf,len);
+      /*
+       * clear status, set ready bit
+       */
+      sccPrepTxBd[chan]->status =
+        (sccPrepTxBd[chan]->status
+         & M8xx_BD_WRAP)
+        | M8xx_BD_READY | M8xx_BD_INTERRUPT;
+      if ((sccPrepTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
+        sccPrepTxBd[chan] = sccFrstTxBd[chan];
+      }
+      else {
+        sccPrepTxBd[chan]++;
+      }
     }
   }
+
   return 0;
 }
 

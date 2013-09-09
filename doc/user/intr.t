@@ -21,6 +21,11 @@ directive:
 @item @code{@value{DIRPREFIX}interrupt_disable} - Disable Interrupts
 @item @code{@value{DIRPREFIX}interrupt_enable} - Enable Interrupts
 @item @code{@value{DIRPREFIX}interrupt_flash} - Flash Interrupt
+@item @code{@value{DIRPREFIX}interrupt_lock_initialize} - Initialize an ISR Lock
+@item @code{@value{DIRPREFIX}interrupt_lock_acquire} - Acquire an ISR Lock
+@item @code{@value{DIRPREFIX}interrupt_lock_release} - Release an ISR Lock
+@item @code{@value{DIRPREFIX}interrupt_lock_acquire_isr} - Acquire an ISR Lock from ISR
+@item @code{@value{DIRPREFIX}interrupt_lock_release_isr} - Release an ISR Lock from ISR
 @item @code{@value{DIRPREFIX}interrupt_is_in_progress} - Is an ISR in Progress
 @end itemize
 
@@ -181,7 +186,7 @@ the currently executing task), while in an ISR, this will refer
 to the interrupted task.  Most of the time, it is an application
 implementation error to use RTEMS_SELF from an ISR.
 
-@itemize -
+@itemize
 @item rtems_task_get_note
 @item rtems_task_set_note
 @item rtems_task_suspend
@@ -190,10 +195,14 @@ implementation error to use RTEMS_SELF from an ISR.
 
 @item Interrupt Management
 
-@itemize -
+@itemize
 @item rtems_interrupt_enable
 @item rtems_interrupt_disable
 @item rtems_interrupt_flash
+@item rtems_interrupt_lock_acquire
+@item rtems_interrupt_lock_release
+@item rtems_interrupt_lock_acquire_isr
+@item rtems_interrupt_lock_release_isr
 @item rtems_interrupt_is_in_progress
 @item rtems_interrupt_catch
 @end itemize
@@ -213,24 +222,47 @@ implementation error to use RTEMS_SELF from an ISR.
 @item rtems_clock_tick
 @end itemize
 
-@item Message, Event, and Signal Management
+@item Timer Management
 
-@itemize -
-@item rtems_message_queue_send
-@item rtems_message_queue_urgent
+@itemize
+@item rtems_timer_cancel
+@item rtems_timer_reset
+@item rtems_timer_fire_after
+@item rtems_timer_fire_when
+@item rtems_timer_server_fire_after
+@item rtems_timer_server_fire_when
+@end itemize
+
+@item Event Management
+
+@itemize
 @item rtems_event_send
-@item rtems_signal_send
+@item rtems_event_system_send
+@item rtems_event_transient_send
 @end itemize
 
 @item Semaphore Management
 
-@itemize -
+@itemize
 @item rtems_semaphore_release
+@end itemize
+
+@item Message Management
+
+@itemize
+@item rtems_message_queue_send
+@item rtems_message_queue_urgent
+@end itemize
+
+@item Signal Management
+
+@itemize
+@item rtems_signal_send
 @end itemize
 
 @item Dual-Ported Memory Management
 
-@itemize -
+@itemize
 @item rtems_port_external_to_internal
 @item rtems_port_internal_to_external
 @end itemize
@@ -240,7 +272,7 @@ implementation error to use RTEMS_SELF from an ISR.
 The following services are safe to call from an ISR if and only if
 the device driver service invoked is also safe.  The IO Manager itself
 is safe but the invoked driver entry point may or may not be.
-@itemize -
+@itemize
 @item rtems_io_initialize
 @item rtems_io_open
 @item rtems_io_close
@@ -251,13 +283,14 @@ is safe but the invoked driver entry point may or may not be.
 
 @item Fatal Error Management
 
-@itemize -
+@itemize
+@item rtems_fatal
 @item rtems_fatal_error_occurred
 @end itemize
 
 @item Multiprocessing
 
-@itemize -
+@itemize
 @item rtems_multiprocessing_announce
 @end itemize
 @end itemize
@@ -452,6 +485,167 @@ and will be redisabled when this directive returns to the caller.
 @subheading NOTES:
 
 This directive will not cause the calling task to be preempted.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCK_INITIALIZE - Initialize an ISR Lock
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C 
+@findex rtems_interrupt_lock_initialize
+@example
+void rtems_interrupt_lock_initialize(
+  rtems_interrupt_lock *lock
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+Initializes an interrupt lock.
+
+@subheading NOTES:
+
+Concurrent initialization leads to unpredictable results.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCK_ACQUIRE - Acquire an ISR Lock
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C 
+@findex rtems_interrupt_lock_acquire
+@example
+void rtems_interrupt_lock_acquire(
+  rtems_interrupt_lock *lock,
+  rtems_interrupt_level level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+Interrupts will be disabled.  On SMP configurations this directive acquires a
+SMP lock.
+
+@subheading NOTES:
+
+This directive will not cause the calling thread to be preempted.  This
+directive can be used in thread and interrupt context.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCK_RELEASE - Release an ISR Lock
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C 
+@findex rtems_interrupt_lock_release
+@example
+void rtems_interrupt_lock_release(
+  rtems_interrupt_lock *lock,
+  rtems_interrupt_level level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+The interrupt status will be restored.  On SMP configurations this directive
+releases a SMP lock.
+
+@subheading NOTES:
+
+This directive will not cause the calling thread to be preempted.  This
+directive can be used in thread and interrupt context.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCK_ACQUIRE_ISR - Acquire an ISR Lock from ISR
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C 
+@findex rtems_interrupt_lock_acquire_isr
+@example
+void rtems_interrupt_lock_acquire_isr(
+  rtems_interrupt_lock *lock,
+  rtems_interrupt_level level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+The interrupt status will remain unchanged.  On SMP configurations this
+directive acquires a SMP lock.
+
+In case the corresponding interrupt service routine can be interrupted by
+higher priority interrupts and these interrupts enter the critical section
+protected by this lock, then the result is unpredictable.
+
+@subheading NOTES:
+
+This directive should be called from the corresponding interrupt service
+routine.
+
+@c
+@c
+@c
+@page
+@subsection INTERRUPT_LOCK_RELEASE_ISR - Release an ISR Lock from ISR
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C 
+@findex rtems_interrupt_lock_release_isr
+@example
+void rtems_interrupt_lock_release_isr(
+  rtems_interrupt_lock *lock,
+  rtems_interrupt_level level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+The interrupt status will remain unchanged.  On SMP configurations this
+directive releases a SMP lock.
+
+@subheading NOTES:
+
+This directive should be called from the corresponding interrupt service
+routine.
 
 @c
 @c

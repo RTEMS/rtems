@@ -18,20 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/percpu.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/schedulersimple.h>
+#include <rtems/score/schedulersimpleimpl.h>
 
-void _Scheduler_simple_Schedule(void)
+void _Scheduler_simple_Schedule( Thread_Control *thread )
 {
-  _Thread_Heir = (Thread_Control *) _Chain_First(
-    (Chain_Control *) _Scheduler.information
-  );
+  _Scheduler_simple_Schedule_body( thread, false );
 }

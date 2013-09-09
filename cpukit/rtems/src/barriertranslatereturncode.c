@@ -21,7 +21,7 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 
 rtems_status_code _Barrier_Translate_core_barrier_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_BARRIER_STATUS_SUCCESSFUL */

@@ -168,7 +168,11 @@ extern "C" {
  * On the SPARC, we can disable the FPU for integer only tasks so
  * it is safe to defer floating point context switches.
  */
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#if defined(RTEMS_SMP)
+  #define CPU_USE_DEFERRED_FP_SWITCH FALSE
+#else
+  #define CPU_USE_DEFERRED_FP_SWITCH TRUE
+#endif
 
 /**
  * Does this port provide a CPU dependent IDLE task implementation?
@@ -353,6 +357,14 @@ typedef struct {
 /** This defines the size of the minimum stack frame. */
 #define CPU_MINIMUM_STACK_FRAME_SIZE          0x60
 
+#define CPU_PER_CPU_CONTROL_SIZE 4
+
+/**
+ * @brief Offset of the CPU_Per_CPU_control::isr_dispatch_disable field
+ * relative to the Per_CPU_Control begin.
+ */
+#define SPARC_PER_CPU_ISR_DISPATCH_DISABLE 0
+
 /**
  * @defgroup Contexts SPARC Context Structures
  *
@@ -375,6 +387,17 @@ typedef struct {
 /**@{**/
 
 #ifndef ASM
+
+typedef struct {
+  /**
+   * This flag is context switched with each thread.  It indicates
+   * that THIS thread has an _ISR_Dispatch stack frame on its stack.
+   * By using this flag, we can avoid nesting more interrupt dispatching
+   * attempts on a previously interrupted thread's stack.
+   */
+  uint32_t isr_dispatch_disable;
+} CPU_Per_CPU_control;
+
 /**
  * @brief SPARC basic context.
  *
@@ -758,14 +781,6 @@ typedef struct {
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 /**
- * This flag is context switched with each thread.  It indicates
- * that THIS thread has an _ISR_Dispatch stack frame on its stack.
- * By using this flag, we can avoid nesting more interrupt dispatching
- * attempts on a previously interrupted thread's stack.
- */
-SCORE_EXTERN volatile uint32_t _CPU_ISR_Dispatch_disable;
-
-/**
  * The following type defines an entry in the SPARC's trap table.
  *
  * NOTE: The instructions chosen are RTEMS dependent although one is
@@ -877,6 +892,9 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  */
 #define CPU_STACK_MINIMUM_SIZE  (1024*4)
 
+/**
+ * What is the size of a pointer on this architecture?
+ */
 #define CPU_SIZEOF_POINTER 4
 
 /**
@@ -1183,23 +1201,19 @@ void _CPU_Context_restore(
     Context_Control *new_context
   );
 
-  /**
-   * Macro to access memory and bypass the cache.
-   *
-   * NOTE: address space 1 is uncacheable
-   */
-  #define SMP_CPU_SWAP( _address, _value, _previous ) \
-    do { \
-      register unsigned int _val = _value; \
-      asm volatile( \
-        "swapa [%2] %3, %0" : \
-        "=r" (_val) : \
-        "0" (_val), \
-        "r" (_address), \
-        "i" (1) \
-      ); \
-      _previous = _val; \
-    } while (0)
+  RTEMS_COMPILER_PURE_ATTRIBUTE uint32_t _CPU_SMP_Get_current_processor( void );
+
+  void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
+
+  static inline void _CPU_SMP_Processor_event_broadcast( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
+
+  static inline void _CPU_SMP_Processor_event_receive( void )
+  {
+    __asm__ volatile ( "" : : : "memory" );
+  }
 #endif
 
 /**
@@ -1223,6 +1237,18 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+
+static inline void _CPU_Context_volatile_clobber( uintptr_t pattern )
+{
+  /* TODO */
+}
+
+static inline void _CPU_Context_validate( uintptr_t pattern )
+{
+  while (1) {
+    /* TODO */
+  }
+}
 
 typedef struct {
   uint32_t trap;

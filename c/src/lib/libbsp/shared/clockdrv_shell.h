@@ -1,6 +1,6 @@
 /**
  *  @file
- *  
+ *
  *  Clock Tick Device Driver Shell
  */
 
@@ -17,7 +17,7 @@
 
 #include <bsp.h>
 
-#if defined(CLOCK_DRIVER_USE_FAST_IDLE) && defined(CLOCK_DRIVER_ISRS_PER_TICK)
+#if CLOCK_DRIVER_USE_FAST_IDLE && CLOCK_DRIVER_ISRS_PER_TICK
 #error "clockdrv_shell.h: Fast Idle PLUS n ISRs per tick is not supported"
 #endif
 
@@ -31,7 +31,7 @@
 /*
  *  ISRs until next clock tick
  */
-#ifdef CLOCK_DRIVER_ISRS_PER_TICK
+#if CLOCK_DRIVER_ISRS_PER_TICK
   volatile uint32_t  Clock_driver_isrs;
 #endif
 
@@ -58,7 +58,7 @@ void Clock_exit( void );
     (CPU_SIMPLE_VECTORED_INTERRUPTS != TRUE)
 void Clock_isr(void *arg)
 {
-#else 
+#else
 rtems_isr Clock_isr(rtems_vector_number vector);
 rtems_isr Clock_isr(
   rtems_vector_number vector
@@ -70,11 +70,14 @@ rtems_isr Clock_isr(
    */
   Clock_driver_ticks += 1;
 
-  #ifdef CLOCK_DRIVER_USE_FAST_IDLE
+  #if CLOCK_DRIVER_USE_FAST_IDLE
     do {
       rtems_clock_tick();
-    } while ( _Thread_Executing == _Thread_Idle &&
-            _Thread_Heir == _Thread_Executing);
+    } while (
+      _Thread_Heir == _Thread_Executing
+        && _Thread_Executing->Start.entry_point
+          == rtems_configuration_get_idle_task()
+    );
 
     Clock_driver_support_at_tick();
     return;
@@ -86,7 +89,7 @@ rtems_isr Clock_isr(
      */
     Clock_driver_support_at_tick();
 
-    #ifdef CLOCK_DRIVER_ISRS_PER_TICK
+    #if CLOCK_DRIVER_ISRS_PER_TICK
       /*
        *  The driver is multiple ISRs per clock tick.
        */
@@ -160,6 +163,7 @@ rtems_device_driver Clock_initialize(
   /*
    *  Install vector
    */
+  (void) Old_ticker;
   Clock_driver_support_install_isr( Clock_isr, Old_ticker );
 
   #if defined(Clock_driver_nanoseconds_since_last_tick)
@@ -178,8 +182,8 @@ rtems_device_driver Clock_initialize(
   /*
    *  If we are counting ISRs per tick, then initialize the counter.
    */
-  #ifdef CLOCK_DRIVER_ISRS_PER_TICK
-    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+  #if CLOCK_DRIVER_ISRS_PER_TICK
+    Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK_VALUE;
   #endif
 
   return RTEMS_SUCCESSFUL;

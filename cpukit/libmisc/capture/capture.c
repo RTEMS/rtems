@@ -29,9 +29,7 @@
 #include <string.h>
 
 #include "capture.h"
-#include <rtems/score/states.inl>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/wkspace.inl>
+#include <rtems/score/statesimpl.h>
 
 /*
  * These events are always recorded and are not part of the
@@ -121,7 +119,7 @@ static inline void rtems_capture_get_time (uint32_t* ticks,
     capture_timestamp (ticks, tick_offset);
   else
   {
-    *ticks       = _Watchdog_Ticks_since_boot;
+    *ticks       = rtems_clock_get_ticks_since_boot();
     *tick_offset = 0;
   }
 }
@@ -347,9 +345,9 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
 
   if (control == NULL)
   {
-    control = _Workspace_Allocate (sizeof (rtems_capture_control_t));
+    bool ok = rtems_workspace_allocate (sizeof (*control), (void **) &control);
 
-    if (control == NULL)
+    if (!ok)
     {
       capture_flags |= RTEMS_CAPTURE_NO_MEMORY;
       return NULL;
@@ -398,10 +396,11 @@ rtems_capture_create_capture_task (rtems_tcb* new_task)
   rtems_capture_task_t*    task;
   rtems_capture_control_t* control;
   rtems_name               name;
+  bool                     ok;
 
-  task = _Workspace_Allocate (sizeof (rtems_capture_task_t));
+  ok = rtems_workspace_allocate (sizeof (*task), (void **) &task);
 
-  if (task == NULL)
+  if (!ok)
   {
     capture_flags |= RTEMS_CAPTURE_NO_MEMORY;
     return NULL;
@@ -492,7 +491,7 @@ rtems_capture_destroy_capture_task (rtems_capture_task_t* task)
 
     rtems_interrupt_enable (level);
 
-    _Workspace_Free (task);
+    rtems_workspace_free (task);
   }
 }
 
@@ -1105,7 +1104,7 @@ rtems_capture_close (void)
   {
     rtems_capture_task_t* delete = task;
     task = task->forw;
-    _Workspace_Free (delete);
+    rtems_workspace_free (delete);
   }
 
   capture_tasks = NULL;
@@ -1116,7 +1115,7 @@ rtems_capture_close (void)
   {
     rtems_capture_control_t* delete = control;
     control = control->next;
-    _Workspace_Free (delete);
+    rtems_workspace_free (delete);
   }
 
   capture_controls = NULL;
@@ -1306,7 +1305,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id)
 
       rtems_interrupt_enable (level);
 
-      _Workspace_Free (control);
+      rtems_workspace_free (control);
 
       control = *prev_control;
 

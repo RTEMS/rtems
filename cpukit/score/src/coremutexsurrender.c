@@ -20,10 +20,8 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/score/states.h>
+#include <rtems/score/coremuteximpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
   static inline void _CORE_mutex_Push_priority(
@@ -47,7 +45,7 @@
      *  Check whether the holder release the mutex in LIFO order if not return
      *  error code.
      */
-    if ( _Chain_First( holder->lock_mutex ) != &mutex->queue.lock_queue ) {
+    if ( _Chain_First( &holder->lock_mutex ) != &mutex->queue.lock_queue ) {
       mutex->nest_count++;
 
       return CORE_MUTEX_RELEASE_NOT_ORDER;

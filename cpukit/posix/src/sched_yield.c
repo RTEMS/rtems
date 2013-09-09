@@ -19,20 +19,15 @@
 #endif
 
 #include <sched.h>
-#include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/thread.h>
-#include <rtems/seterr.h>
-#include <rtems/posix/priority.h>
-#include <rtems/posix/time.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/threaddispatch.h>
 
 int sched_yield( void )
 {
   _Thread_Disable_dispatch();
-    _Scheduler_Yield();
+    _Scheduler_Yield( _Thread_Executing );
   _Thread_Enable_dispatch();
   return 0;
 }

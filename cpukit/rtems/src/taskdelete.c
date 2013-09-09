@@ -18,21 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
-#include <rtems/score/stack.h>
-#include <rtems/score/states.h>
-#include <rtems/rtems/tasks.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/config.h>
 
 rtems_status_code rtems_task_delete(
   rtems_id id
@@ -41,6 +30,12 @@ rtems_status_code rtems_task_delete(
   register Thread_Control *the_thread;
   Objects_Locations        location;
   Objects_Information     *the_information;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
 
   _RTEMS_Lock_allocator();
 
@@ -51,11 +46,11 @@ rtems_status_code rtems_task_delete(
       the_information = _Objects_Get_information_id( the_thread->Object.id );
 
       #if defined(RTEMS_DEBUG)
-	if ( !the_information ) {
-	  _Thread_Enable_dispatch();
-	  return RTEMS_INVALID_ID;
-	  /* This should never happen if _Thread_Get() works right */
-	}
+        if ( !the_information ) {
+          _Objects_Put( &the_thread->Object );
+          return RTEMS_INVALID_ID;
+          /* This should never happen if _Thread_Get() works right */
+        }
       #endif
 
       #if defined(RTEMS_MULTIPROCESSING)
@@ -73,8 +68,9 @@ rtems_status_code rtems_task_delete(
 
       _RTEMS_tasks_Free( the_thread );
 
+      /* FIXME: Lock order reversal */
       _RTEMS_Unlock_allocator();
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

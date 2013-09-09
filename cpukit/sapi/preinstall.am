@@ -44,6 +44,10 @@ $(PROJECT_INCLUDE)/rtems/extension.h: include/rtems/extension.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.h
 
+$(PROJECT_INCLUDE)/rtems/extensionimpl.h: include/rtems/extensionimpl.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extensionimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extensionimpl.h
+
 $(PROJECT_INCLUDE)/rtems/fatal.h: include/rtems/fatal.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fatal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fatal.h
@@ -79,26 +83,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
 $(PROJECT_INCLUDE)/rtems/timespec.h: include/rtems/timespec.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timespec.h
-
-$(PROJECT_INCLUDE)/rtems/chain.inl: inline/rtems/chain.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/chain.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/chain.inl
-
-$(PROJECT_INCLUDE)/rtems/extension.inl: inline/rtems/extension.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
-
-$(PROJECT_INCLUDE)/rtems/cbs.inl: inline/rtems/cbs.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cbs.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cbs.inl
-
-$(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
-
-$(PROJECT_INCLUDE)/rtems/timespec.inl: inline/rtems/timespec.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timespec.inl
 
 $(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a

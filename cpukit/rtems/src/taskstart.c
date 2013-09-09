@@ -18,20 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/score/object.h>
-#include <rtems/score/stack.h>
-#include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/sysstate.h>
+#include <rtems/score/threadimpl.h>
 
 /*
  *  rtems_task_start
@@ -58,6 +46,7 @@ rtems_status_code rtems_task_start(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
+  bool                     successfully_started;
 
   if ( entry_point == NULL )
     return RTEMS_INVALID_ADDRESS;
@@ -66,13 +55,22 @@ rtems_status_code rtems_task_start(
   switch ( location ) {
 
     case OBJECTS_LOCAL:
-      if ( _Thread_Start(
-             the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
-        _Thread_Enable_dispatch();
+      successfully_started = _Thread_Start(
+        the_thread,
+        THREAD_START_NUMERIC,
+        entry_point,
+        NULL,
+        argument,
+        NULL
+      );
+
+      _Objects_Put( &the_thread->Object );
+
+      if ( successfully_started ) {
         return RTEMS_SUCCESSFUL;
+      } else {
+        return RTEMS_INCORRECT_STATE;
       }
-      _Thread_Enable_dispatch();
-      return RTEMS_INCORRECT_STATE;
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

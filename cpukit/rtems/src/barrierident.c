@@ -19,11 +19,10 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/status.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierimpl.h>
 
 rtems_status_code rtems_barrier_ident(
   rtems_name  name,

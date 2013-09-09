@@ -1327,11 +1327,12 @@ Reset, and Code Security/Debugging */
 /* LCD Controller */
 
 #ifdef ARM_MULTILIB_ARCH_V4
+  #define LCD_CFG     (*(volatile uint32_t *) 0xE01FC1B8)
   #define LCD_BASE_ADDR 0xFFE10000
 #else
+  #define LCD_CFG     (*(volatile uint32_t *) 0x400FC1B8)
   #define LCD_BASE_ADDR 0x20088000
 #endif
-#define LCD_CFG       (*(volatile uint32_t *) 0xE01FC1B8)
 #define LCD_TIMH      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x000))
 #define LCD_TIMV      (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x004))
 #define LCD_POL       (*(volatile uint32_t *) (LCD_BASE_ADDR + 0x008))

@@ -27,7 +27,7 @@
 #include <errno.h>
 
 #include <rtems/system.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/seterr.h>
 
@@ -42,7 +42,7 @@ int pthread_sigmask(
   if ( !set && !oset )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+  api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
 
   if ( oset )
     *oset = api->signals_blocked;

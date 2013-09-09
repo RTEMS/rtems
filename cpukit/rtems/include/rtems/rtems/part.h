@@ -31,28 +31,13 @@
 #ifndef _RTEMS_RTEMS_PART_H
 #define _RTEMS_RTEMS_PART_H
 
-/**
- * This constant is defined to extern most of the time when using
- * this header file. However by defining it to nothing, the data
- * declared in this header file can be instantiated. This is done
- * in a single per manager file.
- *
- * Partition Manager -- Instantiate Data
- */
-#ifndef RTEMS_PART_EXTERN
-#define RTEMS_PART_EXTERN extern
-#endif
+#include <rtems/rtems/attr.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/address.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/attr.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/types.h>
 
 /**
  *  @defgroup ClassicPart Partitions
@@ -83,19 +68,6 @@ typedef struct {
   /** This field is the chain used to manage unallocated buffers. */
   Chain_Control       Memory;
 }   Partition_Control;
-
-/**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-RTEMS_PART_EXTERN Objects_Information _Partition_Information;
-
-/**
- *  @brief Partition Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Partition_Manager_initialization(void);
 
 /**
  *  @brief RTEMS Partition Create
@@ -189,18 +161,11 @@ rtems_status_code rtems_partition_return_buffer(
   void     *buffer
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/part.inl>
-#endif
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/rtems/partmp.h>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

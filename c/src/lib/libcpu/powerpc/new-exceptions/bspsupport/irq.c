@@ -43,7 +43,7 @@ SPR_RW(PPC405_TSR)
  * However, the legacy mode works with less modifications
  * of user code.
  */
-int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNum)
+static int C_dispatch_dec_handler_bookE (BSP_Exception_frame *frame, unsigned int excNum)
 {
 	/* clear interrupt; we must do this
 	 * before C_dispatch_irq_handler()

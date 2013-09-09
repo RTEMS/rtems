@@ -26,12 +26,10 @@
 #include <rtems/score/heap.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/modes.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
-#include <rtems/score/mppkt.h>
 #endif
 
 #ifdef __cplusplus

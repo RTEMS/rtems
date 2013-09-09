@@ -22,9 +22,9 @@
 #include <signal.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/time.h>
 #include <rtems/score/isr.h>
@@ -72,7 +72,7 @@ int sigtimedwait(
   const struct timespec  *timeout
 )
 {
-  Thread_Control    *the_thread;
+  Thread_Control    *executing;
   POSIX_API_Control *api;
   Watchdog_Interval  interval;
   siginfo_t          signal_information;
@@ -108,9 +108,8 @@ int sigtimedwait(
 
   the_info = ( info ) ? info : &signal_information;
 
-  the_thread = _Thread_Executing;
-
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  executing = _Thread_Get_executing();
+  api = executing->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  What if they are already pending?
@@ -118,7 +117,7 @@ int sigtimedwait(
 
   /* API signals pending? */
 
-  _ISR_Disable( level );
+  _POSIX_signals_Acquire( level );
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_lowest( api->signals_pending );
@@ -127,9 +126,10 @@ int sigtimedwait(
       the_info->si_signo,
       the_info,
       false,
+      false,
       false
     );
-    _ISR_Enable( level );
+    _POSIX_signals_Release( level );
 
     the_info->si_code = SI_USER;
     the_info->si_value.sival_int = 0;
@@ -140,8 +140,8 @@ int sigtimedwait(
 
   if ( *set & _POSIX_signals_Pending ) {
     signo = _POSIX_signals_Get_lowest( _POSIX_signals_Pending );
-    _POSIX_signals_Clear_signals( api, signo, the_info, true, false );
-    _ISR_Enable( level );
+    _POSIX_signals_Clear_signals( api, signo, the_info, true, false, false );
+    _POSIX_signals_Release( level );
 
     the_info->si_signo = signo;
     the_info->si_code = SI_USER;
@@ -152,13 +152,13 @@ int sigtimedwait(
   the_info->si_signo = -1;
 
   _Thread_Disable_dispatch();
-    the_thread->Wait.queue           = &_POSIX_signals_Wait_queue;
-    the_thread->Wait.return_code     = EINTR;
-    the_thread->Wait.option          = *set;
-    the_thread->Wait.return_argument = the_info;
+    executing->Wait.queue           = &_POSIX_signals_Wait_queue;
+    executing->Wait.return_code     = EINTR;
+    executing->Wait.option          = *set;
+    executing->Wait.return_argument = the_info;
     _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue );
-    _ISR_Enable( level );
-    _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, interval );
+    _POSIX_signals_Release( level );
+    _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, executing, interval );
   _Thread_Enable_dispatch();
 
   /*
@@ -166,16 +166,23 @@ int sigtimedwait(
    * the signal.
    */
 
-  _POSIX_signals_Clear_signals( api, the_info->si_signo, the_info, false, false );
+  _POSIX_signals_Clear_signals(
+    api,
+    the_info->si_signo,
+    the_info,
+    false,
+    false,
+    true
+  );
 
   /* Set errno only if return code is not EINTR or
    * if EINTR was caused by a signal being caught, which
    * was not in our set.
    */
 
-  if ( (_Thread_Executing->Wait.return_code != EINTR)
+  if ( (executing->Wait.return_code != EINTR)
        || !(*set & signo_to_mask( the_info->si_signo )) ) {
-    errno = _Thread_Executing->Wait.return_code;
+    errno = executing->Wait.return_code;
     return -1;
   }
 

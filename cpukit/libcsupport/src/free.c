@@ -22,6 +22,8 @@
 #include "malloc_p.h"
 #include <stdlib.h>
 
+#include <rtems/score/sysstate.h>
+
 void free(
   void *ptr
 )

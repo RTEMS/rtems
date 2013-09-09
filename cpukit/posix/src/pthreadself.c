@@ -28,5 +28,5 @@
 
 pthread_t pthread_self( void )
 {
-  return _Thread_Executing->Object.id;
+  return _Thread_Get_executing()->Object.id;
 }

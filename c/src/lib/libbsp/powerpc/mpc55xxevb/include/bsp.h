@@ -31,6 +31,9 @@
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
+#define MPC55XX_PERIPHERAL_CLOCK \
+  (MPC55XX_SYSTEM_CLOCK / MPC55XX_SYSTEM_CLOCK_DIVIDER)
+
 #ifndef ASM
 
 #include <rtems.h>
@@ -40,6 +43,7 @@
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp/tictac.h>
+#include <bsp/linker-symbols.h>
 #include <bsp/default-initial-extension.h>
 
 #ifdef __cplusplus
@@ -114,7 +118,9 @@ typedef enum {
   MPC55XX_FATAL_CONSOLE_LINFLEX_ERR_IRQ_INSTALL,
   MPC55XX_FATAL_CONSOLE_LINFLEX_RX_IRQ_REMOVE,
   MPC55XX_FATAL_CONSOLE_LINFLEX_TX_IRQ_REMOVE,
-  MPC55XX_FATAL_CONSOLE_LINFLEX_ERR_IRQ_REMOVE
+  MPC55XX_FATAL_CONSOLE_LINFLEX_ERR_IRQ_REMOVE,
+  MPC55XX_FATAL_EDMA_IRQ_INSTALL,
+  MPC55XX_FATAL_EDMA_IRQ_REMOVE
 } mpc55xx_fatal_code;
 
 void mpc55xx_fatal(mpc55xx_fatal_code code) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;

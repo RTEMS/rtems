@@ -389,17 +389,14 @@ static int mpc55xx_linflex_poll_read(int minor)
 
 static int mpc55xx_linflex_write(int minor, const char *out, size_t n)
 {
-  mpc55xx_linflex_context *self = console_generic_get_context(minor);
-  volatile LINFLEX_tag *regs = self->regs;
-  rtems_interrupt_level level;
+  if (n > 0) {
+    mpc55xx_linflex_context *self = console_generic_get_context(minor);
+    volatile LINFLEX_tag *regs = self->regs;
 
-  rtems_interrupt_disable(level);
-
-  regs->BDRL.B.DATA0 = out [0];
-  self->transmit_in_progress = true;
-  /* TODO: send more then one byte */
-
-  rtems_interrupt_enable(level);
+    regs->BDRL.B.DATA0 = out [0];
+    self->transmit_in_progress = true;
+    /* TODO: send more then one byte */
+  }
 
   return 0;
 }

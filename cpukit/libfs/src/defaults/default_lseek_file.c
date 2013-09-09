@@ -33,7 +33,6 @@ off_t rtems_filesystem_default_lseek_file(
 {
   off_t rv = 0;
   off_t reference_offset;
-  off_t new_offset;
   struct stat st;
 
   switch ( whence ) {
@@ -53,9 +52,10 @@ off_t rtems_filesystem_default_lseek_file(
       rv = -1;
       break;
   }
-  new_offset = reference_offset + offset;
 
   if ( rv == 0 ) {
+    off_t new_offset = reference_offset + offset;
+
     if (
       (offset >= 0 && new_offset >= reference_offset)
         || (offset < 0 && new_offset < reference_offset)

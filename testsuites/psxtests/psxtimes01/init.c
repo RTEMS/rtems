@@ -32,6 +32,7 @@ rtems_task Init(
   clock_t    difference;
   struct tms start_tm;
   struct tms end_tm;
+  int        interval = 5;
 
   puts( "\n\n*** TEST TIMES 01 ***" );
 
@@ -53,7 +54,7 @@ rtems_task Init(
   rtems_test_assert( start != 0 );
   rtems_test_assert( now != 0 );
   
-  rtems_test_spin_for_ticks(5);
+  rtems_test_spin_for_ticks( interval );
 
   puts( "_times( &end_tm ) -- OK" );
   end = _times( &end_tm );
@@ -61,10 +62,10 @@ rtems_task Init(
   
   puts( "Check various values" );
   difference = end - start;
-  rtems_test_assert( difference >= 5 );
+  rtems_test_assert( difference >= interval );
 
-  rtems_test_assert( end_tm.tms_utime >= start_tm.tms_utime );
-  rtems_test_assert( end_tm.tms_stime >= start_tm.tms_stime );
+  rtems_test_assert( end_tm.tms_utime - start_tm.tms_utime >= interval );
+  rtems_test_assert( end_tm.tms_stime - start_tm.tms_stime >= interval );
   rtems_test_assert( end_tm.tms_cutime == 0 );
   rtems_test_assert( end_tm.tms_cstime == 0 );
   

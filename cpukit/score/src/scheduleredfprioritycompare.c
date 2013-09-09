@@ -22,6 +22,7 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/score/scheduleredf.h>
+#include <rtems/score/watchdogimpl.h>
 
 int _Scheduler_EDF_Priority_compare (
   Priority_Control p1,

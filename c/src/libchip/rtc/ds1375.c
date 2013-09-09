@@ -52,12 +52,14 @@
 
 #include <rtems.h>
 #include <rtems/rtc.h>
+#include <rtems/score/sysstate.h>
 #include <libchip/rtc.h>
 #include <libchip/ds1375-rtc.h>
 
 #include <sys/fcntl.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <inttypes.h>
 
 

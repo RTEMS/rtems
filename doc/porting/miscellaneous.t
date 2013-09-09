@@ -18,6 +18,31 @@ void _CPU_Fatal_halt(
 );
 @end example
 
+@section CPU Context Validation
+
+The test case @code{sptests/spcontext01} ensures that the context switching and
+interrupt processing works.  This test uses two support functions provided by
+the CPU port.  These two functions are only used for this test and have no
+other purpose.
+
+@example
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+void _CPU_Context_validate( uintptr_t pattern );
+@end example
+
+The @code{_CPU_Context_volatile_clobber()} function clobbers all volatile
+registers with values derived from the pattern parameter.  This makes sure that
+the interrupt prologue code restores all volatile registers of the interrupted
+context.
+
+The @code{_CPU_Context_validate()} function initializes and validates the CPU
+context with values derived from the pattern parameter.  This function will not
+return if the CPU context remains consistent.  In case this function returns
+the CPU port is broken.  The test uses two threads which concurrently validate
+the CPU context with a different patterns for each thread.  This ensures that
+the context switching code works.
+
 @section Processor Endianness
 
 Endianness refers to the order in which numeric values are stored in

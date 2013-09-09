@@ -18,9 +18,8 @@
 #ifndef _RTEMS_SCORE_APIMUTEX_H
 #define _RTEMS_SCORE_APIMUTEX_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <rtems/score/coremutex.h>
+#include <rtems/score/object.h>
 
 /**
  * @defgroup ScoreAPIMutex API Mutex Handler
@@ -31,9 +30,9 @@ extern "C" {
  */
 /**@{**/
 
-#include <rtems/score/coremutex.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Control block used to manage each API mutex.
@@ -49,11 +48,6 @@ typedef struct {
    */
   CORE_mutex_Control Mutex;
 } API_Mutex_Control;
-
-/**
- * @brief Information control block used to manage this class of objects.
- */
-SCORE_EXTERN Objects_Information _API_Mutex_Information;
 
 /**
  *  @brief Initialization for the API Mutexe Handler.

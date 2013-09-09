@@ -21,20 +21,13 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/rtems/attr.h>
+#include <rtems/rtems/attrimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/sem.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/score/coresem.h>
-#include <rtems/score/states.h>
+#include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/semimpl.h>
+#include <rtems/score/coremuteximpl.h>
+#include <rtems/score/coresemimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
-#include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
 
@@ -47,33 +40,39 @@ rtems_status_code rtems_semaphore_obtain(
   register Semaphore_Control     *the_semaphore;
   Objects_Locations               location;
   ISR_Level                       level;
+  Thread_Control                 *executing;
 
   the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
+      executing = _Thread_Executing;
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
+          executing,
           id,
           ((_Options_Is_no_wait( option_set )) ? false : true),
           timeout,
           level
         );
+        _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
         return _Semaphore_Translate_core_mutex_return_code(
-                  _Thread_Executing->Wait.return_code );
+                  executing->Wait.return_code );
       }
 
       /* must be a counting semaphore */
       _CORE_semaphore_Seize_isr_disable(
         &the_semaphore->Core_control.semaphore,
+        executing,
         id,
         ((_Options_Is_no_wait( option_set )) ? false : true),
         timeout,
-        &level
+        level
       );
+      _Objects_Put_for_get_isr_disable( &the_semaphore->Object );
       return _Semaphore_Translate_core_semaphore_return_code(
-                  _Thread_Executing->Wait.return_code );
+                  executing->Wait.return_code );
 
 #if defined(RTEMS_MULTIPROCESSING)
     case OBJECTS_REMOTE:

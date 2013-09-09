@@ -16,6 +16,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/rtems/eventimpl.h>
+
 /*
  *  ERROR CHECKING NOTE:
  *

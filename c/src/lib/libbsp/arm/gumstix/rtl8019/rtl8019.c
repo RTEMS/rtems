@@ -332,9 +332,9 @@ ne_check_status (struct ne_softc *sc, int from_irq_handler)
 /* Handle an NE2000 interrupt.  */
 
 static void
-ne_interrupt_handler (rtems_irq_hdl_param handle)
+ne_interrupt_handler (void *arg)
 {
-  struct ne_softc *sc = handle;
+  struct ne_softc *sc = arg;
 
   if (sc == NULL)
     return;
@@ -350,53 +350,13 @@ ne_interrupt_handler (rtems_irq_hdl_param handle)
 /* Turn NE2000 interrupts on.  */
 
 static void
-ne_interrupt_on (const rtems_irq_connect_data *irq)
+ne_interrupt_on (struct ne_softc *sc)
 {
-  struct ne_softc *sc = irq->handle;
-
 #ifdef DEBUG_NE
   printk ("ne_interrupt_on()\n");
 #endif
   if (sc != NULL)
     outport_byte (sc->port + IMR, NE_INTERRUPTS);
-}
-
-/* Turn NE2000 interrupts off.  See ne_interrupt_on.  */
-
-static void
-ne_interrupt_off (const rtems_irq_connect_data *irq)
-{
-  struct ne_softc *sc = irq->handle;
-
-#ifdef DEBUG_NE
-  printk ("ne_interrupt_off()\n");
-#endif
-  if (sc != NULL)
-    outport_byte (sc->port + IMR, 0);
-}
-
-/*
- *Return whether NE2000 interrupts are on.
- *If it is eanbled, return 1
-*/
-static int
-ne_interrupt_is_on (const rtems_irq_connect_data *irq)
-{
-  struct ne_softc *sc = irq->handle;
-  unsigned char imr;
-#ifdef DEBUG_NE
-  printk("ne_interrupt_is_on()\n");
-#endif
-  if(sc != NULL){
-    /*Read IMR in Page2*/
-    outport_byte (sc->port + CMDR, MSK_PG2 | MSK_RD2 | MSK_STP);
-    inport_byte(sc->port + IMR, imr);
-    /*Back Page 0*/
-    outport_byte (sc->port + CMDR, MSK_PG0 | MSK_RD2 | MSK_STP);
-    if(imr == NE_INTERRUPTS)
-      return 1;
-  }
-  return 0;
 }
 
 /* Initialize the NE2000 hardware.  */
@@ -479,20 +439,21 @@ ne_init_hardware (struct ne_softc *sc)
 static void
 ne_init_irq_handler(struct ne_softc *sc)
 {
-  rtems_irq_connect_data irq;
+  rtems_status_code status = RTEMS_SUCCESSFUL;
 
 #ifdef DEBUG_NE
   printk("ne_init_irq_handler(%d)\n", sc->irno);
 #endif
-  irq.name = sc->irno;
-  irq.hdl = ne_interrupt_handler;
-  irq.handle = sc;
-  irq.on = ne_interrupt_on;
-  irq.off = ne_interrupt_off;
-  irq.isOn = ne_interrupt_is_on;
 
-  if (!BSP_install_rtems_irq_handler (&irq))
-    rtems_panic ("Can't attach NE interrupt handler for irq %d\n", sc->irno);
+  status = rtems_interrupt_handler_install(
+    sc->irno,
+    "RTL8019",
+    RTEMS_INTERRUPT_UNIQUE,
+    ne_interrupt_handler,
+    sc
+  );
+  assert(status == RTEMS_SUCCESSFUL);
+  ne_interrupt_on(sc);
 }
 
 /* The NE2000 packet receive daemon.  This task is started when the
@@ -527,7 +488,7 @@ ne_rx_daemon (void *arg)
     {
       unsigned char startpage, currpage;
       unsigned short len;
-      unsigned char next, stat, cnt1, cnt2;
+      unsigned char next, cnt1, cnt2;
       struct mbuf *m = NULL;
       unsigned char *p;
       int startaddr;
@@ -614,8 +575,6 @@ ne_rx_daemon (void *arg)
         ne_reset(sc);
         goto Next;
       }
-
-      stat = hdr.rsr;
 
       /* The first four bytes of the length are the buffer header
        * Just decrease them by 2 since in ARM, we have to make sure

@@ -17,7 +17,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/posix/rwlock.h>
+#include <rtems/posix/rwlockimpl.h>
 
 /**
  *  @brief _POSIX_RWLock_Manager_initialization

@@ -87,7 +87,6 @@
 #endif
 
 
-EXTERN(_Thread_Dispatch_disable_level,4)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
@@ -239,10 +238,10 @@ _chk_int:
   /*
    *  _Thread_Dispatch_disable_level++;
    */
-        lw	t1,_Thread_Dispatch_disable_level
+        lw	t1,THREAD_DISPATCH_DISABLE_LEVEL
 	NOP
         add	t1,t1,1
-        sw	t1,_Thread_Dispatch_disable_level
+        sw	t1,THREAD_DISPATCH_DISABLE_LEVEL
 
 	/* DEBUG - Add the following code to disable interrupts and clear
 	 *	   EXL in status register, this will allow memory
@@ -302,10 +301,10 @@ _ISR_Handler_cleanup:
   /*
    *  --_Thread_Dispatch_disable_level;
    */
-        lw	t1,_Thread_Dispatch_disable_level
+        lw	t1,THREAD_DISPATCH_DISABLE_LEVEL
 	NOP
         add	t1,t1,-1
-        sw	t1,_Thread_Dispatch_disable_level
+        sw	t1,THREAD_DISPATCH_DISABLE_LEVEL
   /*
    *  if ( _Thread_Dispatch_disable_level || _ISR_Nest_level )
    *    goto the label "exit interrupt (simple case)"

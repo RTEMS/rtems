@@ -18,9 +18,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 rtems_status_code rtems_task_variable_add(
   rtems_id tid,
@@ -31,6 +32,12 @@ rtems_status_code rtems_task_variable_add(
   Thread_Control        *the_thread;
   Objects_Locations      location;
   rtems_task_variable_t *tvp, *new;
+
+#if defined( RTEMS_SMP )
+  if ( rtems_configuration_is_smp_enabled() ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
 
   if ( !ptr )
     return RTEMS_INVALID_ADDRESS;
@@ -46,7 +53,7 @@ rtems_status_code rtems_task_variable_add(
       while (tvp) {
         if (tvp->ptr == ptr) {
           tvp->dtor = dtor;
-          _Thread_Enable_dispatch();
+          _Objects_Put( &the_thread->Object );
           return RTEMS_SUCCESSFUL;
         }
         tvp = (rtems_task_variable_t *)tvp->next;
@@ -58,7 +65,7 @@ rtems_status_code rtems_task_variable_add(
       new = (rtems_task_variable_t *)
          _Workspace_Allocate(sizeof(rtems_task_variable_t));
       if (new == NULL) {
-        _Thread_Enable_dispatch();
+        _Objects_Put( &the_thread->Object );
         return RTEMS_NO_MEMORY;
       }
       new->gval = *ptr;
@@ -67,7 +74,7 @@ rtems_status_code rtems_task_variable_add(
 
       new->next = (struct rtems_task_variable_tt *)the_thread->task_variables;
       the_thread->task_variables = new;
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_thread->Object );
       return RTEMS_SUCCESSFUL;
 
 #if defined(RTEMS_MULTIPROCESSING)

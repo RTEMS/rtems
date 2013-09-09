@@ -25,7 +25,7 @@
 #include <rtems.h>
 
 #include <bsp/vectors.h>
-#include <bsp/bootcard.h>
+#include <bsp/generic-fatal.h>
 
 #define PPC_EXC_ASSERT_OFFSET(field, off) \
   RTEMS_STATIC_ASSERT( \
@@ -100,10 +100,10 @@ uint32_t ppc_exc_cache_wb_check = 1;
 #define MTIVPR(prefix) __asm__ volatile ("mtivpr %0" : : "r" (prefix))
 #define MTIVOR(x, vec) __asm__ volatile ("mtivor"#x" %0" : : "r" (vec))
 
-static void ppc_exc_initialize_booke(void)
+static void ppc_exc_initialize_booke(void *vector_base)
 {
   /* Interupt vector prefix register */
-  MTIVPR(ppc_exc_vector_base);
+  MTIVPR((uint32_t) vector_base);
 
   if (
     ppc_cpu_is_specific_e200(PPC_e200z0)
@@ -117,44 +117,42 @@ static void ppc_exc_initialize_booke(void)
   }
 
   /* Interupt vector offset registers */
-  MTIVOR(0,  ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR));
-  MTIVOR(1,  ppc_exc_vector_address(ASM_MACH_VECTOR));
-  MTIVOR(2,  ppc_exc_vector_address(ASM_PROT_VECTOR));
-  MTIVOR(3,  ppc_exc_vector_address(ASM_ISI_VECTOR));
-  MTIVOR(4,  ppc_exc_vector_address(ASM_EXT_VECTOR));
-  MTIVOR(5,  ppc_exc_vector_address(ASM_ALIGN_VECTOR));
-  MTIVOR(6,  ppc_exc_vector_address(ASM_PROG_VECTOR));
-  MTIVOR(7,  ppc_exc_vector_address(ASM_FLOAT_VECTOR));
-  MTIVOR(8,  ppc_exc_vector_address(ASM_SYS_VECTOR));
-  MTIVOR(9,  ppc_exc_vector_address(ASM_BOOKE_APU_VECTOR));
-  MTIVOR(10, ppc_exc_vector_address(ASM_BOOKE_DEC_VECTOR));
-  MTIVOR(11, ppc_exc_vector_address(ASM_BOOKE_FIT_VECTOR));
-  MTIVOR(12, ppc_exc_vector_address(ASM_BOOKE_WDOG_VECTOR));
-  MTIVOR(13, ppc_exc_vector_address(ASM_BOOKE_DTLBMISS_VECTOR));
-  MTIVOR(14, ppc_exc_vector_address(ASM_BOOKE_ITLBMISS_VECTOR));
-  MTIVOR(15, ppc_exc_vector_address(ASM_BOOKE_DEBUG_VECTOR));
+  MTIVOR(0,  ppc_exc_vector_address(ASM_BOOKE_CRIT_VECTOR, vector_base));
+  MTIVOR(1,  ppc_exc_vector_address(ASM_MACH_VECTOR, vector_base));
+  MTIVOR(2,  ppc_exc_vector_address(ASM_PROT_VECTOR, vector_base));
+  MTIVOR(3,  ppc_exc_vector_address(ASM_ISI_VECTOR, vector_base));
+  MTIVOR(4,  ppc_exc_vector_address(ASM_EXT_VECTOR, vector_base));
+  MTIVOR(5,  ppc_exc_vector_address(ASM_ALIGN_VECTOR, vector_base));
+  MTIVOR(6,  ppc_exc_vector_address(ASM_PROG_VECTOR, vector_base));
+  MTIVOR(7,  ppc_exc_vector_address(ASM_FLOAT_VECTOR, vector_base));
+  MTIVOR(8,  ppc_exc_vector_address(ASM_SYS_VECTOR, vector_base));
+  MTIVOR(9,  ppc_exc_vector_address(ASM_BOOKE_APU_VECTOR, vector_base));
+  MTIVOR(10, ppc_exc_vector_address(ASM_BOOKE_DEC_VECTOR, vector_base));
+  MTIVOR(11, ppc_exc_vector_address(ASM_BOOKE_FIT_VECTOR, vector_base));
+  MTIVOR(12, ppc_exc_vector_address(ASM_BOOKE_WDOG_VECTOR, vector_base));
+  MTIVOR(13, ppc_exc_vector_address(ASM_BOOKE_DTLBMISS_VECTOR, vector_base));
+  MTIVOR(14, ppc_exc_vector_address(ASM_BOOKE_ITLBMISS_VECTOR, vector_base));
+  MTIVOR(15, ppc_exc_vector_address(ASM_BOOKE_DEBUG_VECTOR, vector_base));
   if (ppc_cpu_is_e200() || ppc_cpu_is_e500()) {
-    MTIVOR(32, ppc_exc_vector_address(ASM_E500_SPE_UNAVAILABLE_VECTOR));
-    MTIVOR(33, ppc_exc_vector_address(ASM_E500_EMB_FP_DATA_VECTOR));
-    MTIVOR(34, ppc_exc_vector_address(ASM_E500_EMB_FP_ROUND_VECTOR));
+    MTIVOR(32, ppc_exc_vector_address(ASM_E500_SPE_UNAVAILABLE_VECTOR, vector_base));
+    MTIVOR(33, ppc_exc_vector_address(ASM_E500_EMB_FP_DATA_VECTOR, vector_base));
+    MTIVOR(34, ppc_exc_vector_address(ASM_E500_EMB_FP_ROUND_VECTOR, vector_base));
   }
   if (ppc_cpu_is_specific_e200(PPC_e200z7) || ppc_cpu_is_e500()) {
-    MTIVOR(35, ppc_exc_vector_address(ASM_E500_PERFMON_VECTOR));
+    MTIVOR(35, ppc_exc_vector_address(ASM_E500_PERFMON_VECTOR, vector_base));
   }
 }
 
 static void ppc_exc_fatal_error(void)
 {
-  rtems_fatal(
-    RTEMS_FATAL_SOURCE_BSP_GENERIC,
-    BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION
-  );
+  bsp_generic_fatal(BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION);
 }
 
-void ppc_exc_initialize(
+void ppc_exc_initialize_with_vector_base(
   uint32_t interrupt_disable_mask,
   uintptr_t interrupt_stack_begin,
-  uintptr_t interrupt_stack_size
+  uintptr_t interrupt_stack_size,
+  void *vector_base
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -208,18 +206,24 @@ void ppc_exc_initialize(
 #endif /* PPC_EXC_CONFIG_BOOKE_ONLY */
 
   if (ppc_cpu_is_bookE() == PPC_BOOKE_STD || ppc_cpu_is_bookE() == PPC_BOOKE_E500) {
-    ppc_exc_initialize_booke();
+    ppc_exc_initialize_booke(vector_base);
   }
 
   for (vector = 0; vector <= LAST_VALID_EXC; ++vector) {
     ppc_exc_category category = ppc_exc_category_for_vector(categories, vector);
 
     if (category != PPC_EXC_INVALID) {
-      void *const vector_address = ppc_exc_vector_address(vector);
+      void *const vector_address = ppc_exc_vector_address(vector, vector_base);
       uint32_t prologue [16];
       size_t prologue_size = sizeof(prologue);
 
-      sc = ppc_exc_make_prologue(vector, category, prologue, &prologue_size);
+      sc = ppc_exc_make_prologue(
+        vector,
+        vector_base,
+        category,
+        prologue,
+        &prologue_size
+      );
       if (sc != RTEMS_SUCCESSFUL) {
         ppc_exc_fatal_error();
       }

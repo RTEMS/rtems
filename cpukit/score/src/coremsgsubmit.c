@@ -19,17 +19,14 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
+#include <rtems/score/coremsgimpl.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/coremsg.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
+  Thread_Control                            *executing,
   const void                                *buffer,
   size_t                                     size,
   Objects_Id                                 id,
@@ -122,7 +119,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  would be to use this variable prior to here.
      */
     {
-      Thread_Control  *executing = _Thread_Executing;
       ISR_Level        level;
 
       _ISR_Disable( level );
@@ -134,7 +130,11 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       executing->Wait.count = submit_type;
       _ISR_Enable( level );
 
-      _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+      _Thread_queue_Enqueue(
+        &the_message_queue->Wait_queue,
+        executing,
+        timeout
+      );
     }
 
     return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;

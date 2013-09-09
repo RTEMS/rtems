@@ -265,7 +265,7 @@ void Screen12()
 
   status = rtems_region_get_segment(
      Region_id[ 1 ],
-     384,
+     REGION_LENGTH / 2,
      RTEMS_DEFAULT_OPTIONS,
      RTEMS_NO_TIMEOUT,
      &segment_address_1
@@ -290,7 +290,7 @@ void Screen12()
   puts( "TA1 - rtems_region_get_segment - timeout in 3 seconds" );
   status = rtems_region_get_segment(
     Region_id[ 1 ],
-    128,
+    REGION_LENGTH / 2,
     RTEMS_DEFAULT_OPTIONS,
     3 * rtems_clock_get_ticks_per_second(),
     &segment_address_3

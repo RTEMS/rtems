@@ -1,0 +1,15 @@
+
+
+*** TEST KEY 08 ***
+Init - Semaphore 1 create - OK
+Init - Semaphore 2 create - OK
+Init - pthread Key create - OK
+Init - 651 tasks have been created - OK
+Init - 651 tasks have been setted key data - OK
+Init - flush semaphore 2 - OK
+Init - sleep to yield processor - OK
+Init - 651 Tasks have been got key data - OK
+Init - pthread Key delete - OK
+Init - semaphore 1 delete - OK
+Init - semaphore 2 delete - OK
+*** END OF TEST KEY 08***

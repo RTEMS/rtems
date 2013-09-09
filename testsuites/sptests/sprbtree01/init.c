@@ -12,6 +12,7 @@
 
 #include <tmacros.h>
 #include <rtems/rbtree.h>
+#include <rtems/score/rbtreeimpl.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

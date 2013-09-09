@@ -19,8 +19,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
+#include <rtems/score/threadimpl.h>
 
 #ifndef HEAP_PROTECTION
   #define _Heap_Protection_determine_block_free( heap, block ) true
@@ -39,7 +39,7 @@
     uintptr_t *current = NULL;
 
     block->Protection_begin.next_delayed_free_block = block;
-    block->Protection_begin.task = _Thread_Executing;
+    block->Protection_begin.task = _Thread_Get_executing();
 
     if ( delayed_free_block_count > 0 ) {
       Heap_Block *const last = heap->Protection.last_delayed_free_block;
@@ -81,14 +81,14 @@
   )
   {
     bool do_free = true;
+    Heap_Block *const next = block->Protection_begin.next_delayed_free_block;
 
     /*
      * Sometimes after a free the allocated area is still in use.  An example
      * is the task stack of a thread that deletes itself.  The thread dispatch
      * disable level is a way to detect this use case.
      */
-    if ( !_Thread_Dispatch_in_critical_section() ) {
-      Heap_Block *const next = block->Protection_begin.next_delayed_free_block;
+    if ( _Thread_Dispatch_is_enabled() ) {
       if ( next == NULL ) {
         _Heap_Protection_delay_block_free( heap, block );
         do_free = false;
@@ -97,6 +97,12 @@
       } else {
         _Heap_Protection_block_error( heap, block );
       }
+    } else if ( next == NULL ) {
+      /*
+       * This is a hack to prevent heavy workspace fragmentation which would
+       * lead to test suite failures.
+       */
+      _Heap_Protection_free_all_delayed_blocks( heap );
     }
 
     return do_free;

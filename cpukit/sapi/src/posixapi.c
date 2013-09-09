@@ -27,22 +27,29 @@
 #include <sys/types.h>
 #include <mqueue.h>
 #include <rtems/config.h>
-#include <rtems/score/object.h>
-#include <rtems/posix/barrier.h>
-#include <rtems/posix/cond.h>
+#include <rtems/posix/barrierimpl.h>
+#include <rtems/posix/condimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/posix/key.h>
-#include <rtems/posix/mqueue.h>
-#include <rtems/posix/mutex.h>
+#include <rtems/posix/keyimpl.h>
+#include <rtems/posix/mqueueimpl.h>
+#include <rtems/posix/muteximpl.h>
+#include <rtems/posix/onceimpl.h>
 #include <rtems/posix/posixapi.h>
-#include <rtems/posix/priority.h>
-#include <rtems/posix/psignal.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/rwlock.h>
-#include <rtems/posix/timer.h>
-#include <rtems/posix/semaphore.h>
-#include <rtems/posix/spinlock.h>
+#include <rtems/posix/priorityimpl.h>
+#include <rtems/posix/psignalimpl.h>
+#include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/rwlockimpl.h>
+#include <rtems/posix/timerimpl.h>
+#include <rtems/posix/semaphoreimpl.h>
+#include <rtems/posix/spinlockimpl.h>
 #include <rtems/posix/time.h>
+
+void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno )
+{
+  uint32_t code = ( domain << 8 ) | ( ( uint32_t ) eno & 0xffU );
+
+  _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, false, code );
+}
 
 Objects_Information *_POSIX_Objects[ OBJECTS_POSIX_CLASSES_LAST + 1 ];
 
@@ -67,6 +74,7 @@ void _POSIX_API_Initialize(void)
   _POSIX_Key_Manager_initialization();
   _POSIX_Mutex_Manager_initialization();
   _POSIX_Message_queue_Manager_initialization();
+  _POSIX_Once_Manager_initialization();
   _POSIX_Semaphore_Manager_initialization();
   _POSIX_Timer_Manager_initialization();
   _POSIX_Barrier_Manager_initialization();

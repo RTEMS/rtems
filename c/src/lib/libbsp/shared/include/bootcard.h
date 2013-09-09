@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2008-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -29,10 +29,12 @@
 #ifndef LIBBSP_SHARED_BOOTCARD_H
 #define LIBBSP_SHARED_BOOTCARD_H
 
-#include <unistd.h>
+#include <string.h>
 
-#include <rtems/malloc.h>
+#include <rtems/config.h>
 #include <rtems/bspIo.h>
+#include <rtems/malloc.h>
+#include <rtems/score/wkspace.h>
 
 #include <bspopts.h>
 
@@ -49,15 +51,6 @@ extern "C" {
  *
  * @{
  */
-
-/**
- * @brief Generic BSP fatal error codes.
- */
-typedef enum {
-  BSP_GENERIC_FATAL_EXCEPTION_INITIALIZATION,
-  BSP_GENERIC_FATAL_INTERRUPT_INITIALIZATION,
-  BSP_GENERIC_FATAL_SPURIOUS_INTERRUPT
-} bsp_generic_fatal_code;
 
 /**
  * @brief Global pointer to the command line of boot_card().

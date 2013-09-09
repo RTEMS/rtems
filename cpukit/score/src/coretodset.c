@@ -18,23 +18,21 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/timestamp.h>
-#include <rtems/score/tod.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/todimpl.h>
+#include <rtems/score/threaddispatch.h>
+#include <rtems/score/watchdogimpl.h>
 
 void _TOD_Set_with_timestamp(
-  const Timestamp_Control *tod
+  const Timestamp_Control *tod_as_timestamp
 )
 {
-  uint32_t nanoseconds = _Timestamp_Get_nanoseconds( tod );
-  Watchdog_Interval seconds_next = _Timestamp_Get_seconds( tod );
+  TOD_Control *tod = &_TOD;
+  uint32_t nanoseconds = _Timestamp_Get_nanoseconds( tod_as_timestamp );
+  Watchdog_Interval seconds_next = _Timestamp_Get_seconds( tod_as_timestamp );
   Watchdog_Interval seconds_now;
+  ISR_Level level;
 
   _Thread_Disable_dispatch();
-  _TOD_Deactivate();
 
   seconds_now = _TOD_Seconds_since_epoch();
 
@@ -43,10 +41,12 @@ void _TOD_Set_with_timestamp(
   else
     _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, seconds_next - seconds_now );
 
-  _TOD.now = *tod;
-  _TOD.seconds_trigger = nanoseconds;
-  _TOD.is_set = true;
+  _TOD_Acquire( tod, level );
+  tod->now = *tod_as_timestamp;
+  _TOD_Release( tod, level );
 
-  _TOD_Activate();
+  tod->seconds_trigger = nanoseconds;
+  tod->is_set = true;
+
   _Thread_Enable_dispatch();
 }

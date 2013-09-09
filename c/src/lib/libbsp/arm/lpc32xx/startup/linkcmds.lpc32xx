@@ -6,7 +6,7 @@
  * @brief Linker support.
  */
 
-lpc32xx_translation_table_base = ORIGIN (RAM_MMU);
+bsp_translation_table_base = ORIGIN (RAM_MMU);
 
 lpc32xx = 0x20020000;
 

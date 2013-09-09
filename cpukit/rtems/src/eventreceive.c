@@ -18,8 +18,10 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/tasks.h>
+#include <rtems/score/statesimpl.h>
+#include <rtems/score/threaddispatch.h>
 
 rtems_status_code rtems_event_receive(
   rtems_event_set  event_in,
@@ -31,7 +33,7 @@ rtems_status_code rtems_event_receive(
   rtems_status_code sc;
 
   if ( event_out != NULL ) {
-    Thread_Control    *executing = _Thread_Executing;
+    Thread_Control    *executing = _Thread_Get_executing();
     RTEMS_API_Control *api = executing->API_Extensions[ THREAD_API_RTEMS ];
     Event_Control     *event = &api->Event;
 

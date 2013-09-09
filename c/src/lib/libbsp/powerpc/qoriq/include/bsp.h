@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -58,6 +58,8 @@ int qoriq_if_intercom_attach_detach(
 #define RTEMS_BSP_NETWORK_DRIVER_NAME2 "tsec2"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME3 "tsec3"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME4 "intercom1"
+
+void qoriq_secondary_cpu_initialize(void);
 
 #ifdef __cplusplus
 }

@@ -19,6 +19,11 @@
  *
  *  rtems/c/src/lib/libcpu/CPU/cache_.h
  *
+ *  The cache implementation header file can define
+ *  CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+ *  if it provides cache maintenance functions which operate on multiple lines.
+ *  Otherwise a generic loop with single line operations will be used.
+ *
  *  The functions below are implemented with CPU dependent inline routines
  *  found in the cache.c files for each CPU. In the event that a CPU does
  *  not support a specific function for a cache it has, the CPU dependent
@@ -46,6 +51,9 @@ void
 rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
+  _CPU_cache_flush_data_range( d_addr, n_bytes );
+#else
   const void * final_address;
 
  /*
@@ -65,6 +73,7 @@ rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
     d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
 #endif
+#endif
 }
 
 
@@ -78,6 +87,9 @@ void
 rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
+#if defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
+  _CPU_cache_invalidate_data_range( d_addr, n_bytes );
+#else
   const void * final_address;
 
  /*
@@ -96,6 +108,7 @@ rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes 
     _CPU_cache_invalidate_1_data_line( d_addr );
     d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
+#endif
 #endif
 }
 
@@ -204,7 +217,10 @@ rtems_cache_disable_data( void )
 void
 rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n_bytes )
 {
-#if CPU_INSTRUCTION_CACHE_ALIGNMENT
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+#if defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
+  _CPU_cache_invalidate_instruction_range( i_addr, n_bytes );
+#else
   const void * final_address;
 
  /*
@@ -223,6 +239,7 @@ rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n
     _CPU_cache_invalidate_1_instruction_line( i_addr );
     i_addr = (void *)((size_t)i_addr + CPU_INSTRUCTION_CACHE_ALIGNMENT);
   }
+#endif
 #endif
 }
 

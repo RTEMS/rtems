@@ -22,6 +22,29 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/score/watchdogimpl.h>
+
+static void test_watchdog_routine( Objects_Id id, void *arg )
+{
+  (void) id;
+  (void) arg;
+
+  rtems_test_assert( 0 );
+}
+
+static void test_watchdog_static_init( void )
+{
+  Objects_Id id = 0x12345678;
+  void *arg = (void *) 0xdeadbeef;
+  Watchdog_Control a = WATCHDOG_INITIALIZER( test_watchdog_routine, id, arg );
+  Watchdog_Control b;
+
+  memset( &b, 0, sizeof( b ) );
+  _Watchdog_Initialize( &b, test_watchdog_routine, id, arg );
+
+  rtems_test_assert( memcmp( &a, &b, sizeof( a ) ) == 0 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -33,6 +56,9 @@ rtems_task Init(
    puts( "\n*** RTEMS WATCHDOG ***" );
 
   puts( "INIT - report on empty watchdog chain" );
+
+  test_watchdog_static_init();
+
   _Chain_Initialize_empty( &empty );
   _Watchdog_Report_chain( "Empty Chain", &empty );
 

@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smppsxsignal01
+
+directives:
+
+  - _POSIX_signals_Unblock_thread()
+  - pthread_kill()
+
+concepts:
+
+  - Ensure that POSIX signal delivery works on SMP.

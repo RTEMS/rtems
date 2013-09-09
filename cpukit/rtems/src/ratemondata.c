@@ -21,5 +21,4 @@
 /* instantiate RTEMS period data */
 #define RTEMS_RATEMON_EXTERN
 
-#include <rtems/system.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemonimpl.h>

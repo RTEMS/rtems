@@ -25,7 +25,9 @@
 extern "C" {
 #endif
 
+#include <rtems/rtems/status.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/isrlock.h>
 
 /**
  *  @defgroup ClassicINTR Interrupts
@@ -133,6 +135,109 @@ rtems_status_code rtems_interrupt_catch(
  *  @note No implementation.
  */
 #define rtems_interrupt_clear( _interrupt_to_clear )
+
+/**
+ * @defgroup ClassicINTRLocks Interrupt Locks
+ *
+ * @ingroup ClassicINTR
+ *
+ * @brief Low-level lock to protect critical sections accessed by threads and
+ * interrupt service routines.
+ *
+ * On single processor configurations the interrupt locks degrade to simple
+ * interrupt disable/enable sequences.  No additional storage or objects are
+ * required.
+ *
+ * This synchronization primitive is supported on SMP configurations.  Here SMP
+ * locks are used.
+ * @{
+ */
+
+/**
+ * @brief Interrupt lock control.
+ */
+typedef ISR_lock_Control rtems_interrupt_lock;
+
+/**
+ * @brief Initializer for static initialization of interrupt locks.
+ */
+#define RTEMS_INTERRUPT_LOCK_INITIALIZER ISR_LOCK_INITIALIZER
+
+/**
+ * @brief Initializes an interrupt lock.
+ *
+ * Concurrent initialization leads to unpredictable results.
+ *
+ * @param[in,out] _lock The interrupt lock.
+ */
+#define rtems_interrupt_lock_initialize( _lock ) \
+  _ISR_lock_Initialize( _lock )
+
+/**
+ * @brief Acquires an interrupt lock.
+ *
+ * Interrupts will be disabled.  On SMP configurations this function acquires
+ * an SMP lock.
+ *
+ * This function can be used in thread and interrupt context.
+ *
+ * @param[in,out] _lock The interrupt lock.
+ * @param[out] _isr_cookie The interrupt status to restore will be returned.
+ *
+ * @see rtems_interrupt_lock_release().
+ */
+#define rtems_interrupt_lock_acquire( _lock, _isr_cookie ) \
+  _ISR_lock_ISR_disable_and_acquire( _lock, _isr_cookie )
+
+/**
+ * @brief Releases an interrupt lock.
+ *
+ * The interrupt status will be restored.  On SMP configurations this function
+ * releases an SMP lock.
+ *
+ * This function can be used in thread and interrupt context.
+ *
+ * @param[in,out] _lock The interrupt lock.
+ * @param[in] _isr_cookie The interrupt status to restore.
+ *
+ * @see rtems_interrupt_lock_acquire().
+ */
+#define rtems_interrupt_lock_release( _lock, _isr_cookie ) \
+  _ISR_lock_Release_and_ISR_enable( _lock, _isr_cookie )
+
+/**
+ * @brief Acquires an interrupt lock in the corresponding interrupt service
+ * routine.
+ *
+ * The interrupt status will remain unchanged.  On SMP configurations this
+ * function acquires an SMP lock.
+ *
+ * In case the corresponding interrupt service routine can be interrupted by
+ * higher priority interrupts and these interrupts enter the critical section
+ * protected by this lock, then the result is unpredictable.
+ *
+ * @param[in,out] _lock The interrupt lock.
+ *
+ * @see rtems_interrupt_lock_release_isr().
+ */
+#define rtems_interrupt_lock_acquire_isr( _lock ) \
+  _ISR_lock_Acquire( _lock )
+
+/**
+ * @brief Releases an interrupt lock in the corresponding interrupt service
+ * routine.
+ *
+ * The interrupt status will remain unchanged.  On SMP configurations this
+ * function releases an SMP lock.
+ *
+ * @param[in,out] _lock The interrupt lock.
+ *
+ * @see rtems_interrupt_lock_acquire_isr().
+ */
+#define rtems_interrupt_lock_release_isr( _lock ) \
+  _ISR_lock_Release( _lock )
+
+/** @} */
 
 #ifdef __cplusplus
 }

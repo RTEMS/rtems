@@ -1,0 +1,4 @@
+*** TEST INTERRUPT CRITICAL SECTION 19 ***
+
+Support - rtems_timer_create - creating timer 1
+*** END OF TEST INTERRUPT CRITICAL SECTION 19 ***

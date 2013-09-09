@@ -31,13 +31,25 @@ $(PROJECT_INCLUDE)/rtems/rtems/asr.h: include/rtems/rtems/asr.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/asr.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/asrimpl.h: include/rtems/rtems/asrimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asrimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/asrimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/attr.h: include/rtems/rtems/attr.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/attr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/attr.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/attrimpl.h: include/rtems/rtems/attrimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/attrimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/attrimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/barrier.h: include/rtems/rtems/barrier.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/barrier.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/barrier.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/barrierimpl.h: include/rtems/rtems/barrierimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/barrierimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/barrierimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/cache.h: include/rtems/rtems/cache.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/cache.h
@@ -55,13 +67,17 @@ $(PROJECT_INCLUDE)/rtems/rtems/dpmem.h: include/rtems/rtems/dpmem.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/dpmem.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/dpmemimpl.h: include/rtems/rtems/dpmemimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmemimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/dpmemimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/event.h: include/rtems/rtems/event.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/event.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/event.h
 
-$(PROJECT_INCLUDE)/rtems/rtems/eventset.h: include/rtems/rtems/eventset.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/eventset.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/eventset.h
+$(PROJECT_INCLUDE)/rtems/rtems/eventimpl.h: include/rtems/rtems/eventimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/eventimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/eventimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/intr.h: include/rtems/rtems/intr.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/intr.h
@@ -71,9 +87,17 @@ $(PROJECT_INCLUDE)/rtems/rtems/message.h: include/rtems/rtems/message.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/message.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/message.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/messageimpl.h: include/rtems/rtems/messageimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/messageimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/messageimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/modes.h: include/rtems/rtems/modes.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/modes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/modes.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/modesimpl.h: include/rtems/rtems/modesimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/modesimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/modesimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/object.h: include/rtems/rtems/object.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/object.h
@@ -83,17 +107,33 @@ $(PROJECT_INCLUDE)/rtems/rtems/options.h: include/rtems/rtems/options.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/options.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/options.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/optionsimpl.h: include/rtems/rtems/optionsimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/optionsimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/optionsimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/part.h: include/rtems/rtems/part.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/partimpl.h: include/rtems/rtems/partimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/partimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/partimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h: include/rtems/rtems/ratemon.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/ratemonimpl.h: include/rtems/rtems/ratemonimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemonimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemonimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/region.h: include/rtems/rtems/region.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/regionimpl.h: include/rtems/rtems/regionimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/regionimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/regionimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/rtemsapi.h: include/rtems/rtems/rtemsapi.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/rtemsapi.h
@@ -103,13 +143,29 @@ $(PROJECT_INCLUDE)/rtems/rtems/sem.h: include/rtems/rtems/sem.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/sem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/sem.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/semimpl.h: include/rtems/rtems/semimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/semimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/semimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/signal.h: include/rtems/rtems/signal.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/signal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/signal.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/signalimpl.h: include/rtems/rtems/signalimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/signalimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/signalimpl.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/smp.h: include/rtems/rtems/smp.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/smp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/smp.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/status.h: include/rtems/rtems/status.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/status.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/status.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/statusimpl.h: include/rtems/rtems/statusimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/statusimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/statusimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/support.h: include/rtems/rtems/support.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/support.h
@@ -119,9 +175,17 @@ $(PROJECT_INCLUDE)/rtems/rtems/tasks.h: include/rtems/rtems/tasks.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/tasks.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/tasks.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/tasksimpl.h: include/rtems/rtems/tasksimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/tasksimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/tasksimpl.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/timer.h: include/rtems/rtems/timer.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.h
+
+$(PROJECT_INCLUDE)/rtems/rtems/timerimpl.h: include/rtems/rtems/timerimpl.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timerimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timerimpl.h
 
 $(PROJECT_INCLUDE)/rtems/rtems/types.h: include/rtems/rtems/types.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/types.h
@@ -169,76 +233,3 @@ $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h: include/rtems/rtems/taskmp.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/taskmp.h
 endif
-if HAS_SMP
-$(PROJECT_INCLUDE)/rtems/rtems/smp.h: include/rtems/rtems/smp.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/smp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/smp.h
-endif
-$(PROJECT_INCLUDE)/rtems/rtems/asr.inl: inline/rtems/rtems/asr.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/asr.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/asr.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/attr.inl: inline/rtems/rtems/attr.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/attr.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/attr.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/barrier.inl: inline/rtems/rtems/barrier.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/barrier.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/barrier.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl: inline/rtems/rtems/dpmem.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/dpmem.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/event.inl: inline/rtems/rtems/event.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/event.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/event.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/eventset.inl: inline/rtems/rtems/eventset.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/eventset.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/eventset.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/message.inl: inline/rtems/rtems/message.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/message.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/message.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/modes.inl: inline/rtems/rtems/modes.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/modes.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/modes.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/options.inl: inline/rtems/rtems/options.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/options.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/options.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/part.inl: inline/rtems/rtems/part.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl: inline/rtems/rtems/ratemon.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/region.inl: inline/rtems/rtems/region.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/region.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/region.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/sem.inl: inline/rtems/rtems/sem.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/sem.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/sem.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/status.inl: inline/rtems/rtems/status.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/status.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/status.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/support.inl: inline/rtems/rtems/support.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/support.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/support.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/tasks.inl: inline/rtems/rtems/tasks.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/tasks.inl
-
-$(PROJECT_INCLUDE)/rtems/rtems/timer.inl: inline/rtems/rtems/timer.inl $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/timer.inl
-

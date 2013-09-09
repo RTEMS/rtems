@@ -1,0 +1,25 @@
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxkey08
+
+directives:
+
+  pthread_key_create
+  pthread_setspecific
+  pthread_getspecific
+  pthread_key_delete
+
+concepts:
+
++ Ensure that key data's operation(create, set, get and delete) under unlimited configuration in RTEMS classic API. Note: posix key is allowed to be called by RTEMS classic API.
++ this test workflow is:
+  1. create thread and set thread's key data one by one until exhausting workspace RAM
+  2. when step 1 finished, let all thread created thread run the getspecific function to test if key set and get works correctly.

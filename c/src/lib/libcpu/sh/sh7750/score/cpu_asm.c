@@ -32,7 +32,7 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/sh.h>
 #include <rtems/score/ispsh7750.h>
 #include <rtems/score/iosh7750.h>
@@ -95,7 +95,7 @@ void __ISR_Handler( uint32_t   vector)
   if ( _ISR_Nest_level )
     return;
 
-  if ( _Thread_Dispatch_in_critical_section() ) {
+  if ( !_Thread_Dispatch_is_enabled() ) {
     return;
   }
 

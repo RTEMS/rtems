@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spintrcritical20
+
+directives:
+
+  - _Thread_queue_Dequeue()
+  - _Thread_queue_Process_timeout()
+
+concepts:
+
+  - Ensure that _Thread_queue_Process_timeout() works in case it is
+    interrupted and _Thread_queue_Dequeue() is called.

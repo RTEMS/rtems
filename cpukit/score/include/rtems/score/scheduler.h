@@ -22,7 +22,6 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmap.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,10 +46,14 @@ typedef struct {
   void ( *initialize )(void);
 
   /** Implements the scheduling decision logic (policy). */
-  void ( *schedule )(void);
+  void ( *schedule )( Thread_Control *thread );
 
-  /** Voluntarily yields the processor per the scheduling policy. */
-  void ( *yield )(void);
+  /**
+   * @brief Voluntarily yields the processor per the scheduling policy.
+   *
+   * @see _Scheduler_Yield().
+   */
+  void ( *yield )( Thread_Control *thread );
 
   /** Removes the given thread from scheduling decisions. */
   void ( *block )(Thread_Control *);
@@ -89,6 +92,12 @@ typedef struct {
   /** perform scheduler update actions required at each clock tick */
   void ( *tick )(void);
 
+  /**
+   * @brief Starts the idle thread for a particular processor.
+   *
+   * @see _Scheduler_Start_idle().
+   */
+  void ( *start_idle )( Thread_Control *thread, Per_CPU_Control *processor );
 } Scheduler_Operations;
 
 /**
@@ -117,31 +126,63 @@ typedef struct {
 extern Scheduler_Control  _Scheduler;
 
 /**
- * Macro testing whether @a p1 has lower priority than @a p2
- * in the intuitive sense of priority.
- */
-#define _Scheduler_Is_priority_lower_than( _p1, _p2 ) \
-  (_Scheduler_Priority_compare(_p1,_p2) < 0)
-
-/**
- * Macro testing whether @a p1 has higher priority than @a p2
- * in the intuitive sense of priority.
- */
-#define _Scheduler_Is_priority_higher_than( _p1, _p2 ) \
-  (_Scheduler_Priority_compare(_p1,_p2) > 0)
-
-/**
- *  @brief Initializes the scheduler to the policy chosen by the user.
+ * @brief Returns an arbitrary non-NULL value.
  *
- *  This routine initializes the scheduler to the policy chosen by the user
- *  through confdefs, or to the priority scheduler with ready chains by
- *  default.
+ * @param[in] thread Unused.
+ *
+ * @return An arbitrary non-NULL value.
  */
-void _Scheduler_Handler_initialization( void );
+void *_Scheduler_default_Allocate(
+  Thread_Control *thread
+);
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/scheduler.inl>
-#endif
+/**
+ * @brief Does nothing.
+ *
+ * @param[in] thread Unused.
+ */
+void _Scheduler_default_Free(
+  Thread_Control *thread
+);
+
+/**
+ * @brief Does nothing.
+ *
+ * @param[in] thread Unused.
+ */
+void _Scheduler_default_Update(
+  Thread_Control *the_thread
+);
+
+/**
+ * @brief Does nothing.
+ *
+ * @param[in] thread Unused.
+ * @param[in] deadline Unused.
+ */
+void _Scheduler_default_Release_job(
+  Thread_Control *thread,
+  uint32_t        deadline
+);
+
+/**
+ * @brief Performs tick operations depending on the CPU budget algorithm for
+ * each executing thread.
+ *
+ * This routine is invoked as part of processing each clock tick.
+ */
+void _Scheduler_default_Tick( void );
+
+/**
+ * @brief Unblocks the thread.
+ *
+ * @param[in,out] thread An idle thread.
+ * @param[in] processor This parameter is unused.
+ */
+void _Scheduler_default_Start_idle(
+  Thread_Control  *thread,
+  Per_CPU_Control *processor
+);
 
 /**@}*/
 

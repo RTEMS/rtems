@@ -72,7 +72,6 @@ libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
 
 # Startup
-libbsp_a_SOURCES += ../shared/startup/bsp-start-copy-sections.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthook.c

@@ -20,8 +20,7 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapimpl.h>
 
 void _Heap_Get_free_information(
   Heap_Control        *the_heap,

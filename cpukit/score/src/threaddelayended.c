@@ -18,18 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/apiext.h>
-#include <rtems/score/context.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/states.h>
-#include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/threadimpl.h>
 
 void _Thread_Delay_ended(
   Objects_Id  id,
@@ -53,7 +42,7 @@ void _Thread_Delay_ended(
           | STATES_WAITING_FOR_TIME
           | STATES_INTERRUPTIBLE_BY_SIGNAL
       );
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_thread->Object );
       break;
   }
 }

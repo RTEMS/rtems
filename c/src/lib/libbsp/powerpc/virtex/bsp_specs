@@ -3,13 +3,12 @@
 %rename link old_link
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{!nostdlib: \
-%{qrtems:  ecrti%O%s rtems_crti%O%s  crtbegin.o%s \
-  -u __vectors -u download_entry}}
+%{!qrtems: %(old_startfile)} \
+%{!nostdlib: %{qrtems: ecrti%O%s rtems_crti%O%s  crtbegin.o%s start.o%s}}
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -N}
 

@@ -17,32 +17,36 @@ RTEMS_CHECK_NETWORKING
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-RTEMS_BSPOPTS_SET([PPC_USE_SPRG],[*],[1])
-RTEMS_BSPOPTS_HELP([PPC_USE_SPRG],
-[If defined, then the PowerPC specific code in RTEMS will use some
- of the special purpose registers to slightly optimize interrupt
- response time.  The use of these registers can conflict with
- other tools like debuggers.])
-
-RTEMS_BSPOPTS_SET([PPC_VECTOR_FILE_BASE],[*],[0x0100])
-RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
-[This defines the base address of the exception table.
- NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
+RTEMS_BSPOPTS_SET([BSP_START_STACK_SIZE],[*],[4096])
+RTEMS_BSPOPTS_HELP([BSP_START_STACK_SIZE],[size of low-level start stack])
 
 RTEMS_BSPOPTS_SET([RTEMS_XPARAMETERS_H],[*],[\<xparameters_dflt.h\>])
 RTEMS_BSPOPTS_HELP([RTEMS_XPARAMETERS_H],
 [This defines the location of the hardware specific "xparameters.h" file.
- in the file system. Specify an absolute path. Don't forget the double quotes])
+ in the file system. Specify an absolute path. Do not forget the double quotes])
 
-#RSG Start - Actually, I think this is wrong
-RTEMS_BSPOPTS_SET([RTEMS_XPPC_BASE],[*],[.])
-RTEMS_BSPOPTS_HELP([RTEMS_XPPC_BASE],[Defines path to Xilinx XPS PPC libraries.])
-#RSG End
+RTEMS_BSPOPTS_SET([VIRTEX_CONSOLE_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([VIRTEX_CONSOLE_USE_INTERRUPTS],[if defined use interrupt driven Termios mode])
+
+AC_DEFUN([VIRTEX_REGION],[
+AC_ARG_VAR([$1],[$2; default $3])dnl
+[$1]=[$]{[$1]:-[$3]}
+])
+
+VIRTEX_REGION([VIRTEX_RAM_ORIGIN],[normal RAM region origin],[0x0])
+VIRTEX_REGION([VIRTEX_RAM_LENGTH],[normal RAM region length],[0x7ffffec])
+VIRTEX_REGION([VIRTEX_FAST_RAM_ORIGIN],[fast RAM region origin],[0x0])
+VIRTEX_REGION([VIRTEX_FAST_RAM_LENGTH],[fast RAM region length],[0x0])
+VIRTEX_REGION([VIRTEX_RESET_ORIGIN],[reset region origin],[0x7ffffec])
+VIRTEX_REGION([VIRTEX_RESET_LENGTH],[reset region length],[0x14])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([
+Makefile
+startup/linkcmds
+])
 
 RTEMS_PPC_EXCEPTIONS
 

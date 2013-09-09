@@ -20,7 +20,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogimpl.h>
 
 Watchdog_States _Watchdog_Remove(
   Watchdog_Control *the_watchdog

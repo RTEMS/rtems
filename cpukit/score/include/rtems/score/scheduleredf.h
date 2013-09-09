@@ -53,7 +53,8 @@ extern "C" {
     _Scheduler_EDF_Extract,          /* extract entry point */ \
     _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
-    _Scheduler_priority_Tick         /* tick entry point */ \
+    _Scheduler_default_Tick,         /* tick entry point */ \
+    _Scheduler_default_Start_idle    /* start idle entry point */ \
   }
 
 /**
@@ -128,7 +129,7 @@ void _Scheduler_EDF_Block(
  *  This kernel routine sets the heir thread to be the next ready thread
  *  in the rbtree ready queue.
  */
-void _Scheduler_EDF_Schedule( void );
+void _Scheduler_EDF_Schedule( Thread_Control *thread );
 
 /**
  *  @brief Allocates EDF specific information of @a the_thread.
@@ -188,11 +189,13 @@ void _Scheduler_EDF_Unblock(
  *  transfer control of the processor to another thread in the queue with
  *  equal deadline. This does not have to happen very often.
  *
- *  This routine will remove the running THREAD from the ready queue
- *  and place back. The rbtree ready queue is responsible for FIFO ordering
+ *  This routine will remove the specified THREAD from the ready queue
+ *  and place it back. The rbtree ready queue is responsible for FIFO ordering
  *  in such a case.
+ *
+ *  @param[in,out] thread The yielding thread.
  */
-void _Scheduler_EDF_Yield( void );
+void _Scheduler_EDF_Yield( Thread_Control *thread );
 
 /**
  *  @brief Put @a the_thread to the rbtree ready queue.

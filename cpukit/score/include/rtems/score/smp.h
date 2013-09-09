@@ -1,10 +1,9 @@
 /**
- *  @file  rtems/score/smp.h
+ * @file
  *
- *  @brief Interface to the SuperCore SMP Support used Internally to RTEMS
+ * @ingroup ScoreSMP
  *
- *  This include file defines the interface to the SuperCore
- *  SMP support that is used internally to RTEMS.
+ * @brief SuperCore SMP Support API
  */
 
 /*
@@ -19,37 +18,21 @@
 #ifndef _RTEMS_SCORE_SMP_H
 #define _RTEMS_SCORE_SMP_H
 
-#if defined (RTEMS_SMP)
-#include <rtems/score/percpu.h>
-
-/**
- *  @defgroup SuperCoreSMP SMP Support
- *
- *  @ingroup Score
- *
- *  This defines the interface of the SuperCore support
- *  code for SMP support.
- */
-
-/**@{*/
+#include <rtems/score/cpu.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that RTEMS will reschedule on this CPU
- *  because the currently executing thread needs to be switched out.
+ * @defgroup ScoreSMP SMP Support
+ *
+ * @ingroup Score
+ *
+ * This defines the interface of the SuperCore SMP support.
+ *
+ * @{
  */
-#define RTEMS_BSP_SMP_CONTEXT_SWITCH_NECESSARY  0x01
-
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested so that RTEMS will reschedule on this CPU
- *  because the currently executing thread has been sent a signal.
- */
-#define RTEMS_BSP_SMP_SIGNAL_TO_SELF            0x02
 
 /**
  *  This defines the bit which indicates the interprocessor interrupt
@@ -58,21 +41,30 @@ extern "C" {
  */
 #define RTEMS_BSP_SMP_SHUTDOWN                  0x04
 
-/**
- *  This defines the bit which indicates the interprocessor interrupt
- *  has been requested that the receiving CPU needs to perform a context
- *  switch to the first task.
- */
-#define RTEMS_BSP_SMP_FIRST_TASK                0x08
+#if !defined( ASM )
 
-#ifndef ASM
+#if defined( RTEMS_SMP )
+  SCORE_EXTERN uint32_t _SMP_Processor_count;
+
+  static inline uint32_t _SMP_Get_processor_count( void )
+  {
+    return _SMP_Processor_count;
+  }
+#else
+  #define _SMP_Get_processor_count() ( ( uint32_t ) 1 )
+#endif
+
+#if defined( RTEMS_SMP )
+
 /**
- *  @brief Number of CPUs in a SMP system.
+ *  @brief Sends a SMP message to a processor.
  *
- *  This variable is set during the SMP initialization sequence to
- *  indicate the number of CPUs in this system.
+ *  The target processor may be the sending processor.
+ *
+ *  @param[in] cpu The target processor of the message.
+ *  @param[in] message The message.
  */
-SCORE_EXTERN uint32_t _SMP_Processor_count;
+void _SMP_Send_message( uint32_t cpu, uint32_t message );
 
 /**
  *  @brief Request of others CPUs.
@@ -97,28 +89,31 @@ void _SMP_Broadcast_message(
 void _SMP_Request_other_cores_to_perform_first_context_switch(void);
 
 /**
- *  @brief Request dispatch on other cores.
- *
- *  Send message to other cores requesting them to perform
- *  a thread dispatch operation.
- */
-void _SMP_Request_other_cores_to_dispatch(void);
-
-/**
  *  @brief Request other cores to shutdown.
  *
  *  Send message to other cores requesting them to shutdown.
  */
 void _SMP_Request_other_cores_to_shutdown(void);
 
+#endif /* defined( RTEMS_SMP ) */
+
+#endif /* !defined( ASM ) */
+
+/** @} */
+
+#if defined( RTEMS_SMP )
+  RTEMS_COMPILER_PURE_ATTRIBUTE static inline uint32_t
+    _SMP_Get_current_processor( void )
+  {
+    return _CPU_SMP_Get_current_processor();
+  }
+#else
+  #define _SMP_Get_current_processor() ( ( uint32_t ) 0 )
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-
-/**@}*/
 #endif
 /* end of include file */

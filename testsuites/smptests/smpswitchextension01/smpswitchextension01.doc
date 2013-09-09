@@ -1,0 +1,16 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpswitchextension01
+
+The screen file was obtained on a PowerPC QorIQ P1020E target running with a
+processor frequency of 800MHz.
+
+directives:
+
+  - _Thread_Dispatch()
+  - _User_extensions_Add_set()
+  - _User_extensions_Remove_set()
+
+concepts:
+
+  - Ensure that addition and removal of context switch extensions works.

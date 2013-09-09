@@ -18,7 +18,10 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/optionsimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 /*
  *  INTERRUPT LATENCY:

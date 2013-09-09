@@ -99,7 +99,7 @@ frame_buffer_initialize(rtems_device_major_number major,
   /*
    * Register the device
    */
-  status = rtems_io_register_name ("/dev/fb0", major, 0);
+  status = rtems_io_register_name (FRAMEBUFFER_DEVICE_0_NAME, major, 0);
   if (status != RTEMS_SUCCESSFUL)
     {
       printk("Error registering FBSKYEYE device!\n");

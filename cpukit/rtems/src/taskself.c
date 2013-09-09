@@ -19,9 +19,9 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
 
 rtems_id rtems_task_self(void)
 {
-   return _Thread_Executing->Object.id;
+   return _Thread_Get_executing()->Object.id;
 }

@@ -22,8 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/error.h>
-#include <rtems/score/thread.h> /*  _Thread_Dispatch_disable_level */
-#include <rtems/score/thread.inl> /*  _Thread_Dispatch_disable_level */
+#include <rtems/score/threaddispatch.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,13 +53,13 @@ extern "C" {
  #define check_dispatch_disable_level( _expect ) \
   do { \
     if ( (_expect) != -1 \
-           && ((_Thread_Dispatch_in_critical_section() == false && (_expect) != 0) \
-             || (_Thread_Dispatch_in_critical_section() && (_expect) == 0)) \
+           && ((!_Thread_Dispatch_is_enabled() == false && (_expect) != 0) \
+             || (!_Thread_Dispatch_is_enabled() && (_expect) == 0)) \
     ) { \
       printk( \
         "\n_Thread_Dispatch_disable_level is (%" PRId32 \
            ") not %d detected at %s:%d\n", \
-         _Thread_Dispatch_in_critical_section(), (_expect), __FILE__, __LINE__ ); \
+         !_Thread_Dispatch_is_enabled(), (_expect), __FILE__, __LINE__ ); \
       FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
     } \

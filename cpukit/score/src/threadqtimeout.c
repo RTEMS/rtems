@@ -18,14 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/chain.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
-#include <rtems/score/tqdata.h>
+#include <rtems/score/threadqimpl.h>
+#include <rtems/score/threadimpl.h>
 
 void _Thread_queue_Timeout(
   Objects_Id  id,
@@ -44,7 +38,7 @@ void _Thread_queue_Timeout(
       break;
     case OBJECTS_LOCAL:
       _Thread_queue_Process_timeout( the_thread );
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_thread->Object );
       break;
   }
 }

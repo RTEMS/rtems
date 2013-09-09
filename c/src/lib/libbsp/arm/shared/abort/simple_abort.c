@@ -59,7 +59,7 @@ void _print_full_context(uint32_t spsr)
   uint32_t prev_sp,prev_lr,cpsr,arm_switch_reg;
   int i, j;
 
-  printk("active thread thread 0x%08x\n", _Thread_Executing->Object.id);
+  printk("active thread thread 0x%08x\n", rtems_task_self());
 
   mode=_print_full_context_mode2txt[(spsr&0x1f)-0x10];
   if(!mode) mode="unknown";

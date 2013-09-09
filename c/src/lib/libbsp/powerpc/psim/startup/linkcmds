@@ -7,273 +7,32 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
-OUTPUT_ARCH(powerpc)
-ENTRY(_start)
-/* Do we need any of these for elf?
-   __DYNAMIC = 0;    */
+MEMORY {
+	RAM       : ORIGIN = 0, LENGTH = 16M
+	EMPTY     : ORIGIN = 0x0, LENGTH = 0
+}
+
+REGION_ALIAS ("REGION_START", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_TEXT", RAM);
+REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_RODATA", RAM);
+REGION_ALIAS ("REGION_RODATA_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_DATA", RAM);
+REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_DATA", RAM);
+REGION_ALIAS ("REGION_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_BSS", RAM);
+REGION_ALIAS ("REGION_RWEXTRA", RAM);
+REGION_ALIAS ("REGION_WORK", RAM);
+REGION_ALIAS ("REGION_STACK", RAM);
+REGION_ALIAS ("REGION_NOCACHE", EMPTY);
+REGION_ALIAS ("REGION_NOCACHE_LOAD", EMPTY);
+REGION_ALIAS ("REGION_NVRAM", EMPTY);
+
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
 
-RamBase = DEFINED(RamBase) ? RamBase : 0x0;
-/*
- * make sure device tree (property /openprom/options/oea-memory-size)
- * provides at least 'RamSize'.
- * Also, the BATs must at map at least 'RamSize' (currently, they
- * map 32M -- see startup/bspstart.c).
- * Furthermore, the RAM region must be large enough (there is no
- * disadvantage in making that one very large as long as it doesn't
- * overlap another memory area).
- *
- */
-RamSize = DEFINED(RamSize) ? RamSize : 16M;
+PSIM = 0x0c000000;
 
-MEMORY
-  {
-        RAM       : ORIGIN = 0, LENGTH = 32M
-	PSIM_REGS : ORIGIN = 0x0c000000, LENGTH = 16M
-        VECTORS   : ORIGIN = 0xFFF00000, LENGTH = 0x20000
-  }
-
-SECTIONS
-{
-  .entry_point_section :
-  {
-	*(.entry_point_section)
-  } > VECTORS
-
-  /*
-   * BSP: PSIM Register Block
-   */
-  .psim_regs (NOLOAD) : { 
-    psim_reg*(.text)
-    psim_reg*(.data)
-    psim_reg*(.bss)
-    psim_reg*(COMMON)
-  } > PSIM_REGS
-
-  /* Read-only sections, merged into text segment: */
-  /* . = 0x40000 + SIZEOF_HEADERS; */
-  . = 0x4000;
-  .interp         : { *(.interp) }
-  .hash           : { *(.hash) }
-  .dynsym         : { *(.dynsym) }
-  .dynstr         : { *(.dynstr) }
-  .gnu.version    : { *(.gnu.version) }
-  .gnu.version_d  : { *(.gnu.version_d) }
-  .gnu.version_r  : { *(.gnu.version_r) }
-  .text      :
-  {
-    *(.text*)
-    *(.gnu.linkonce.t.*)
-    *(.descriptors)
-    *(.eh_frame_hdr*)
-    *(.eh_frame*)
-
-    /* .gnu.warning sections are handled specially by elf32.em.  */
-    *(.gnu.warning)
-  } >RAM
-	.robsdsets : {
-		/* Special FreeBSD linker set sections */
-		__start_set_sysctl_set = .;
-		*(set_sysctl_*);
-		__stop_set_sysctl_set = .;
-		*(set_domain_*);
-		*(set_pseudo_*);
-		_bsd__start_set_modmetadata_set = .;
-		*(_bsd_set_modmetadata_set);
-		_bsd__stop_set_modmetadata_set = .;
-		_bsd__start_set_sysctl_set = .;
-		*(_bsd_set_sysctl_set);
-		_bsd__stop_set_sysctl_set = .;
-		_bsd__start_set_sysinit_set = .;
-		*(_bsd_set_sysinit_*);
-		_bsd__stop_set_sysinit_set = .;
-
-		bsp_section_rodata_end = .;
-	} > RAM
-  .init           :
-  {
-    KEEP (*(.init))
-  } >RAM =0
-
-  .rel.dyn        :
-    {
-      *(.rel.init)
-      *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
-      *(.rel.fini)
-      *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
-      *(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
-      *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
-      *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
-      *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
-      *(.rel.ctors)
-      *(.rel.dtors)
-      *(.rel.got)
-      *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*)
-      *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*)
-      *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*)
-      *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*)
-      *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
-    } >RAM
-  .rela.dyn       :
-    {
-      *(.rela.init)
-      *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
-      *(.rela.fini)
-      *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
-      *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
-      *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
-      *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
-      *(.rela.ctors)
-      *(.rela.dtors)
-      *(.rela.got)
-      *(.rela.got1)
-      *(.rela.got2)
-      *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
-      *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
-      *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
-      *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
-      *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
-    } >RAM
-  .rel.plt        : { *(.rel.plt) }
-  .rela.plt       : { *(.rela.plt) }
-
-  .fini           :
-  {
-    _fini = .;
-    KEEP (*(.fini))
-  } >RAM =0
-  .rodata  	  : { *(.rodata*) *(.gnu.linkonce.r*) } >RAM
-  .rodata1	  : { *(.rodata1) 	} >RAM
-  PROVIDE (__FRAME_BEGIN__ = .);
-  PROVIDE (__FRAME_END__ = .);
-  PROVIDE (_etext = .);
-  PROVIDE (etext = .);
-_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
-  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >RAM
-  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >RAM
-  PROVIDE (__SBSS2_END__ = .);
-  /* Adjust the address for the data segment.  We want to adjust up to
-     the same address within the page on the next page up.  It would
-     be more correct to do this:
-       . = ALIGN(0x40000) + (ALIGN(8) & (0x40000 - 1));
-     The current expression does not correctly handle the case of a
-     text segment ending precisely at the end of a page; it causes the
-     data segment to skip a page.  The above expression does not have
-     this problem, but it will currently (2/95) cause BFD to allocate
-     a single segment, combining both text and data, for this case.
-     This will prevent the text segment from being shared among
-     multiple executions of the program; I think that is more
-     important than losing a page of the virtual address space (note
-     that no actual memory is lost; the page which is skipped can not
-     be referenced).  */
-  /* . =  ALIGN(8) + 0x40000; */
-  .data    :
-  {
-    *(.data .data.* .gnu.linkonce.d.*)
-    SORT(CONSTRUCTORS)
-  } >RAM
-  PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table*) } >RAM
-  PROVIDE (__EXCEPT_END__ = .);
-
-  .data1   	  : { *(.data1) 	} >RAM
-  .got1		  : { *(.got1) 		} >RAM
-  .dynamic	  : { *(.dynamic) 	} >RAM
-  /* Put .ctors and .dtors next to the .got2 section, so that the pointers
-     get relocated with -mrelocatable. Also put in the .fixup pointers.
-     The current compiler no longer needs this, but keep it around for 2.7.2  */
-   PROVIDE (__GOT2_START__ = .);
-   PROVIDE (_GOT2_START_ = .);
-  .got2		  :  { *(.got2) 	} >RAM
-  PROVIDE (__GOT2_END__ = .);
-  PROVIDE (_GOT2_END_ = .);
-
-  PROVIDE (__CTOR_LIST__ = .);
-  .ctors	  : { *(.ctors) 	} >RAM
-  PROVIDE (__CTOR_END__ = .);
-
-  PROVIDE (__DTOR_LIST__ = .);
-  .dtors	  : { *(.dtors) 	} >RAM
-  PROVIDE (__DTOR_END__ = .);
-
-  PROVIDE (__FIXUP_START__ = .);
-  PROVIDE (_FIXUP_START_ = .);
-  .fixup	  : { *(.fixup) 	} >RAM
-  PROVIDE (_FIXUP_END_ = .);
-  PROVIDE (__FIXUP_END__ = .);
-
-  .jcr            : { KEEP (*(.jcr))	} > RAM
-
-  PROVIDE (__GOT_START__ = .);
-  PROVIDE (_GOT_START_ = .);
-  s.got = .;
-  .got		  : { *(.got) 		} >RAM
-  .got.plt	  : { *(.got.plt) 	} >RAM
-  PROVIDE (_GOT_END_ = .);
-  PROVIDE (__GOT_END__ = .);
-
-  /* We want the small data sections together, so single-instruction offsets
-     can access them all, and initialized data all before uninitialized, so
-     we can shorten the on-disk segment size.  */
-_SDA_BASE_ = __SDATA_START__ + 0x8000;
-  .sdata	  : { *(.sdata*) *(.gnu.linkonce.s.*)	} >RAM
-  _edata  =  .;
-  PROVIDE (edata = .);
-
-  PROVIDE (RAM_END = 32M);
-  .sbss      :
-  {
-    PROVIDE (__sbss_start = .);
-    *(.dynsbss)
-    *(.sbss* .gnu.linkonce.sb.*)
-    PROVIDE (__sbss_end = .);
-  } >RAM
-  PROVIDE (__SBSS_END__ = .);
-
-  .bss       :
-  {
-   PROVIDE (__bss_start = .);
-   *(.dynbss)
-   *(.bss .bss* .gnu.linkonce.b*)
-   *(COMMON)
-  } >RAM
-  . = ALIGN(16);
-  . += 0x1000;
-  PROVIDE(__stack = .);
-  __rtems_end = . ;
-  . =  ALIGN(8) + 0x8000;
-  PROVIDE(_end = .);
-  PROVIDE(end = .);
-
-  /* These are needed for ELF backends which have not yet been
-     converted to the new style linker.  */
-  .stab 0 : { *(.stab) }
-  .stabstr 0 : { *(.stabstr) }
-  /* DWARF debug sections.
-     Symbols in the DWARF debugging sections are relative to the beginning
-     of the section so we begin them at 0.  */
-  /* DWARF 1 */
-  .debug          0 : { *(.debug) }
-  .line           0 : { *(.line) }
-  /* GNU DWARF 1 extensions */
-  .debug_srcinfo  0 : { *(.debug_srcinfo) }
-  .debug_sfnames  0 : { *(.debug_sfnames) }
-  /* DWARF 1.1 and DWARF 2 */
-  .debug_aranges  0 : { *(.debug_aranges) }
-  .debug_pubnames 0 : { *(.debug_pubnames) }
-  /* DWARF 2 */
-  .debug_info     0 : { *(.debug_info) }
-  .debug_abbrev   0 : { *(.debug_abbrev) }
-  .debug_line     0 : { *(.debug_line) }
-  .debug_frame    0 : { *(.debug_frame) }
-  .debug_str      0 : { *(.debug_str) }
-  .debug_loc      0 : { *(.debug_loc) }
-  .debug_macinfo  0 : { *(.debug_macinfo) }
-  /* SGI/MIPS DWARF 2 extensions */
-  .debug_weaknames 0 : { *(.debug_weaknames) }
-  .debug_funcnames 0 : { *(.debug_funcnames) }
-  .debug_typenames 0 : { *(.debug_typenames) }
-  .debug_varnames  0 : { *(.debug_varnames) }
-  /* These must appear regardless of  .  */
-}
+INCLUDE linkcmds.base

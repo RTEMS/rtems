@@ -29,7 +29,7 @@
 
 #include <rtems/system.h>
 #include <rtems/config.h>
-#include <rtems/posix/barrier.h>
+#include <rtems/posix/barrierimpl.h>
 
 /**
  *  @brief _POSIX_Barrier_Manager_initialization

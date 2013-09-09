@@ -146,8 +146,8 @@ typedef struct {
   smsc9218i_state state;
   rtems_id receive_task;
   rtems_id transmit_task;
-  mpc55xx_edma_channel_entry edma_receive;
-  mpc55xx_edma_channel_entry edma_transmit;
+  edma_channel_context edma_receive;
+  edma_channel_context edma_transmit;
   unsigned phy_interrupts;
   unsigned received_frames;
   unsigned receiver_errors;
@@ -205,12 +205,12 @@ typedef struct {
 static smsc9218i_receive_job_control smsc_rx_jc __attribute__((aligned (32)));
 
 static void smsc9218i_transmit_dma_done(
-  mpc55xx_edma_channel_entry *channel_entry,
+  edma_channel_context *ctx,
   uint32_t error_status
 );
 
 static void smsc9218i_receive_dma_done(
-  mpc55xx_edma_channel_entry *e,
+  edma_channel_context *ctx,
   uint32_t error_status
 );
 
@@ -219,14 +219,12 @@ static smsc9218i_driver_entry smsc9218i_driver_data = {
   .receive_task = RTEMS_ID_NONE,
   .transmit_task = RTEMS_ID_NONE,
   .edma_receive = {
-    .channel = SMSC9218I_EDMA_RX_CHANNEL,
-    .done = smsc9218i_receive_dma_done,
-    .id = RTEMS_ID_NONE
+    .edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(SMSC9218I_EDMA_RX_CHANNEL),
+    .done = smsc9218i_receive_dma_done
   },
   .edma_transmit = {
-    .channel = SMSC9218I_EDMA_TX_CHANNEL,
-    .done = smsc9218i_transmit_dma_done,
-    .id = RTEMS_ID_NONE
+    .edma_tcd = EDMA_TCD_BY_CHANNEL_INDEX(SMSC9218I_EDMA_TX_CHANNEL),
+    .done = smsc9218i_transmit_dma_done
   }
 };
 
@@ -604,7 +602,7 @@ static void smsc9218i_setup_receive_dma(
   jc->produce = p;
 
   if (last != NULL) {
-    volatile struct tcd_t *channel = &EDMA.TCD [e->edma_receive.channel];
+    volatile struct tcd_t *channel = e->edma_receive.edma_tcd;
 
     /* Setup last TCD */
     last->BMF.R = SMSC9218I_TCD_BMF_LAST;
@@ -625,7 +623,7 @@ static void smsc9218i_setup_receive_dma(
 }
 
 static void smsc9218i_receive_dma_done(
-  mpc55xx_edma_channel_entry *channel_entry,
+  edma_channel_context *ctx,
   uint32_t error_status
 )
 {
@@ -644,14 +642,14 @@ static void smsc9218i_receive_dma_done(
     ++e->receive_dma_errors;
   }
 
-  sc = rtems_bsdnet_event_send(channel_entry->id, SMSC9218I_EVENT_DMA);
+  sc = rtems_bsdnet_event_send(e->receive_task, SMSC9218I_EVENT_DMA);
   ASSERT_SC(sc);
 
   jc->done = jc->produce;
 }
 
 static void smsc9218i_transmit_dma_done(
-  mpc55xx_edma_channel_entry *channel_entry,
+  edma_channel_context *ctx,
   uint32_t error_status
 )
 {
@@ -668,7 +666,7 @@ static void smsc9218i_transmit_dma_done(
 
   ++e->transmit_dma_interrupts;
 
-  sc = rtems_bsdnet_event_send(channel_entry->id, event);
+  sc = rtems_bsdnet_event_send(e->transmit_task, event);
   ASSERT_SC(sc);
 }
 
@@ -866,7 +864,6 @@ static void smsc9218i_init_receive_jobs(
   int i = 0;
 
   /* Obtain receive eDMA channel */
-  e->edma_receive.id = e->receive_task;
   sc = mpc55xx_edma_obtain_channel(
     &e->edma_receive,
     MPC55XX_INTC_DEFAULT_PRIORITY
@@ -1270,7 +1267,7 @@ static void smsc9218i_transmit_do_jobs(
     }
 
     if (i > 0) {
-      volatile struct tcd_t *channel = &EDMA.TCD [e->edma_transmit.channel];
+      volatile struct tcd_t *channel = e->edma_transmit.edma_tcd;
       struct tcd_t *start = &jc->command_tcd_table [jc->transfer_index];
       struct tcd_t *last = &jc->data_tcd_table [last_index];
 
@@ -1427,7 +1424,6 @@ static void smsc9218i_transmit_task(void *arg)
   SMSC9218I_PRINTF("%s\n", __func__);
 
   /* Obtain transmit eDMA channel */
-  e->edma_transmit.id = e->transmit_task;
   sc = mpc55xx_edma_obtain_channel(
     &e->edma_transmit,
     MPC55XX_INTC_DEFAULT_PRIORITY

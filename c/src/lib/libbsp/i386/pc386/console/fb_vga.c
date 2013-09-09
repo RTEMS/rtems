@@ -80,9 +80,10 @@ rtems_device_driver frame_buffer_initialize(
   /*
    * Register the device
    */
-  status = rtems_io_register_name ("/dev/fb0", major, 0);
+  status = rtems_io_register_name (FRAMEBUFFER_DEVICE_0_NAME, major, 0);
   if (status != RTEMS_SUCCESSFUL) {
-    printk("Error registering /dev/fb0 FBVGA framebuffer device!\n");
+    printk("Error registering " FRAMEBUFFER_DEVICE_0_NAME
+           " FBVGA framebuffer device!\n");
     rtems_fatal_error_occurred( status );
   }
 

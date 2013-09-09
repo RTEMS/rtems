@@ -25,12 +25,11 @@
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/tqdata.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>
-#include <rtems/posix/pthread.h>
+#include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/time.h>
 #include <stdio.h>
 
@@ -40,7 +39,7 @@ void _POSIX_signals_Set_process_signals(
 {
   ISR_Level  level;
 
-  _ISR_Disable( level );
+  _POSIX_signals_Acquire( level );
     _POSIX_signals_Pending |= mask;
-  _ISR_Enable( level );
+  _POSIX_signals_Release( level );
 }

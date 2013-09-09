@@ -249,12 +249,16 @@ static inline void rtems_filesystem_mt_unlock( void )
   rtems_libio_unlock();
 }
 
+extern rtems_interrupt_lock rtems_filesystem_mt_entry_lock_control;
+
 #define rtems_filesystem_mt_entry_declare_lock_context( ctx ) \
   rtems_interrupt_level ctx
 
-#define rtems_filesystem_mt_entry_lock( ctx ) rtems_interrupt_disable( ctx )
+#define rtems_filesystem_mt_entry_lock( ctx ) \
+  rtems_interrupt_lock_acquire( &rtems_filesystem_mt_entry_lock_control, ctx )
 
-#define rtems_filesystem_mt_entry_unlock( ctx ) rtems_interrupt_enable( ctx )
+#define rtems_filesystem_mt_entry_unlock( ctx ) \
+  rtems_interrupt_lock_release( &rtems_filesystem_mt_entry_lock_control, ctx )
 
 static inline void rtems_filesystem_instance_lock(
   const rtems_filesystem_location_info_t *loc

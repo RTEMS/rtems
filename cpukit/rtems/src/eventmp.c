@@ -18,16 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/event.h>
-#include <rtems/score/mpci.h>
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
-#include <rtems/rtems/support.h>
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/score/objectimpl.h>
+#include <rtems/score/statesimpl.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(Event_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,

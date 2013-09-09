@@ -15,8 +15,14 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef _RTEMS_RTEMS_SEMMP_H
-#define _RTEMS_RTEMS_SEMMP_H
+#ifndef _RTEMS_RTEMS_BARRIERMP_H
+#define _RTEMS_RTEMS_BARRIERMP_H
+
+#include <rtems/score/mpciimpl.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicBarrierMP Barrier MP Support
@@ -26,17 +32,6 @@
  *  This encapsulates functionality which XXX
  */
 /**@{*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <rtems/score/mppkt.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/barrier.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/watchdog.h>
 
 /**
  *  The following enumerated type defines the list of
@@ -141,11 +136,11 @@ void _Barrier_MP_Send_extract_proxy (
  */
 Barrier_MP_Packet *_Barrier_MP_Get_packet ( void );
 
+/**@}*/
+
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of file */

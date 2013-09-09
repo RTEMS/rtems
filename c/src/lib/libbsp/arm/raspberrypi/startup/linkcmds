@@ -1,0 +1,62 @@
+/**
+ * @file
+ *
+ * @ingroup raspberry_pi
+ *
+ * @brief Memory map.
+ */
+
+/**
+ * @defgroup raspberry_pi Memory Map
+ *
+ * @ingroup bsp_linker
+ *
+ * @brief Raspberry Pi memory map.
+ *
+ * <table>
+ *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
+ * <tr><td>VECTOR_RAM</td><td>0x08000000</td><td>8k</td></tr>
+ * <tr><td>RAM</td><td>0x80008000</td><td>128M</td></tr>
+ * </table>
+ *
+ * <table>
+ *   <tr><th>Section Name</th><th>Section Runtime Region</th><th>Section Load Region</th></tr>
+ * <tr><td>.start</td><td>RAM</td><td></td></tr>
+ * <tr><td>.vector</td><td>VECTOR_RAM</td><td></td></tr>
+ * <tr><td>.text</td><td>RAM</td><td>RAM_EXT</td></tr>
+ * <tr><td>.rodata</td><td>RAM</td><td>RAM_EXT</td></tr>
+ * <tr><td>.data</td><td>RAM</td><td>RAM_EXT</td></tr>
+ * <tr><td>.fast</td><td>RAM</td><td>RAM_EXT</td></tr>
+ * <tr><td>.bss</td><td>RAM</td><td></td></tr>
+ * <tr><td>.work</td><td>RAM</td><td></td></tr>
+ * <tr><td>.stack</td><td>RAM</td><td></td></tr>
+ * </table>
+ */
+
+MEMORY {
+        VECTOR_RAM     (AIW) : ORIGIN = 0x0       , LENGTH = 0x8000
+        RAM            (AIW) : ORIGIN = 0x00008000, LENGTH = 128M - 0x8000
+}
+
+REGION_ALIAS ("REGION_START", RAM);
+REGION_ALIAS ("REGION_VECTOR", VECTOR_RAM);
+REGION_ALIAS ("REGION_TEXT", RAM);
+REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_RODATA", RAM);
+REGION_ALIAS ("REGION_RODATA_LOAD", RAM);
+REGION_ALIAS ("REGION_DATA", RAM);
+REGION_ALIAS ("REGION_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT", RAM);
+REGION_ALIAS ("REGION_FAST_TEXT_LOAD", RAM);
+REGION_ALIAS ("REGION_FAST_DATA", RAM);
+REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+REGION_ALIAS ("REGION_BSS", RAM);
+REGION_ALIAS ("REGION_WORK", RAM);
+REGION_ALIAS ("REGION_STACK", RAM);
+
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
+bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1M;
+
+INCLUDE linkcmds.armv4

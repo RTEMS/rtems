@@ -67,7 +67,7 @@ extern "C" {
         union EDMA_CR_tag {
             uint32_t R;
             struct {
-#if MPC55XX_CHIP_FAMILY == 567
+#if MPC55XX_CHIP_FAMILY == 566 || MPC55XX_CHIP_FAMILY == 567
                 uint32_t:14;
                 uint32_t CX:1;
                 uint32_t ECX:1;
@@ -78,7 +78,7 @@ extern "C" {
                 uint32_t GRP2PRI:2;
                 uint32_t GRP1PRI:2;
                 uint32_t GRP0PRI:2;
-#if MPC55XX_CHIP_FAMILY == 567
+#if MPC55XX_CHIP_FAMILY == 566 || MPC55XX_CHIP_FAMILY == 567
                 uint32_t EMLM:1;
                 uint32_t CLM:1;
                 uint32_t HALT:1;
@@ -97,7 +97,7 @@ extern "C" {
             uint32_t R;
             struct {
                 uint32_t VLD:1;
-#if MPC55XX_CHIP_FAMILY == 567
+#if MPC55XX_CHIP_FAMILY == 566 || MPC55XX_CHIP_FAMILY == 567
                 uint32_t:14;
                 uint32_t ECX:1;
 #else
@@ -485,7 +485,7 @@ extern "C" {
             } B;
         } ERL;                  /* DMA Error Low */
 
-#if MPC55XX_CHIP_FAMILY == 567
+#if MPC55XX_CHIP_FAMILY == 566 || MPC55XX_CHIP_FAMILY == 567
         union {                  /* hardware request status high */
             uint32_t R;
             struct {
@@ -571,7 +571,7 @@ extern "C" {
             uint8_t R;
             struct {
                 uint8_t ECP:1;
-#if MPC55XX_CHIP_FAMILY == 567
+#if MPC55XX_CHIP_FAMILY == 566 || MPC55XX_CHIP_FAMILY == 567
                 uint8_t DPA:1;
 #else
                   uint8_t:1;
@@ -622,6 +622,10 @@ extern "C" {
 		    uint16_t CITER:9;
                     int16_t DOFF;
                 } B_ALT;
+                struct {
+                    uint16_t CITER;
+                    int16_t DOFF;
+                } B_NOLINK;
             } CDF;
 
             int32_t DLAST_SGA;
@@ -658,6 +662,19 @@ extern "C" {
                     uint32_t INT_MAJ:1;
                     uint32_t START:1;
                 } B_ALT;
+                struct {
+                    uint16_t BITER;
+                    uint16_t BWC:2;
+                    uint16_t MAJORLINKCH:6;
+                    uint16_t DONE:1;
+                    uint16_t ACTIVE:1;
+                    uint16_t MAJORE_LINK:1;
+                    uint16_t E_SG:1;
+                    uint16_t D_REQ:1;
+                    uint16_t INT_HALF:1;
+                    uint16_t INT_MAJ:1;
+                    uint16_t START:1;
+                } B_NOLINK;
             } BMF;
         } TCD[64];              /* transfer_control_descriptor */
     };

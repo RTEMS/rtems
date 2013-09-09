@@ -20,11 +20,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
-
-#include <rtems.h>
-
 #include <bsp.h>
+
+#include <rtems/score/heapimpl.h>
 
 #ifdef HEAP_PROTECTION
   static void test_heap_block_error(Heap_Control *heap, Heap_Block *block)

@@ -29,11 +29,7 @@
 #include <rtems/config.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/barrier.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
+#include <rtems/rtems/barrierimpl.h>
 
 /**
  *  @brief _Barrier_Manager_initialization

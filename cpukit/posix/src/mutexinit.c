@@ -22,10 +22,10 @@
 #include <pthread.h>
 
 #include <rtems/system.h>
-#include <rtems/score/coremutex.h>
+#include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/posix/mutex.h>
-#include <rtems/posix/priority.h>
+#include <rtems/posix/muteximpl.h>
+#include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/time.h>
 
 /**
@@ -85,7 +85,7 @@ int pthread_mutex_init(
       mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
       switch ( location ) {
         case OBJECTS_LOCAL:
-          _Thread_Enable_dispatch();
+          _Objects_Put( &mutex_in_use->Object );
           return EBUSY;
         #if defined(RTEMS_MULTIPROCESSING)
           case OBJECTS_REMOTE:
@@ -165,7 +165,7 @@ int pthread_mutex_init(
 
   the_mutex_attr = &the_mutex->Mutex.Attributes;
 
-  if ( the_attr->recursive )
+  if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE )
     the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
   else
     the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
@@ -179,6 +179,7 @@ int pthread_mutex_init(
    */
   _CORE_mutex_Initialize(
     &the_mutex->Mutex,
+    NULL,
     the_mutex_attr,
     CORE_MUTEX_UNLOCKED
   );

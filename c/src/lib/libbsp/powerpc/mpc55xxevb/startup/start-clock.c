@@ -74,7 +74,7 @@ BSP_START_TEXT_SECTION void mpc55xx_start_clock(void)
       fmpll->ESYNCR2.R;
       fmpll_wait_for_lock();
 
-      #if MPC55XX_CHIP_FAMILY == 551
+      #if MPC55XX_CHIP_FAMILY == 551 || MPC55XX_CHIP_FAMILY == 566
         /* System clock supplied by PLL */
         SIU.SYSCLK.B.SYSCLKSEL = 2;
       #endif

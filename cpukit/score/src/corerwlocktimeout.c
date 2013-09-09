@@ -18,9 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/corerwlock.h>
-#include <rtems/score/corerwlock.h>
+#include <rtems/score/corerwlockimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 void _CORE_RWLock_Timeout(
   Objects_Id  id,
@@ -39,7 +39,7 @@ void _CORE_RWLock_Timeout(
       break;
     case OBJECTS_LOCAL:
       _Thread_queue_Process_timeout( the_thread );
-      _Thread_Unnest_dispatch();
+      _Objects_Put_without_thread_dispatch( &the_thread->Object );
       break;
   }
 }

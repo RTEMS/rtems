@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#include <rtems/score/sysstate.h>
+
 int rtems_memalign(
   void   **pointer,
   size_t   alignment,

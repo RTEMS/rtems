@@ -20,6 +20,7 @@
 
 #include <errno.h>
 
+#include <rtems/score/objectimpl.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 

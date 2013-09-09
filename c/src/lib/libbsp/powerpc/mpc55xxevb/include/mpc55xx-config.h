@@ -31,6 +31,7 @@
 
 #include <mpc55xx/regs.h>
 #include <mpc55xx/regs-mmu.h>
+#include <mpc55xx/siu.h>
 
 #ifdef __cplusplus
 extern "C" {

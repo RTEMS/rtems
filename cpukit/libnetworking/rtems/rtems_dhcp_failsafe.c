@@ -257,7 +257,7 @@ do_dhcp_init (struct rtems_bsdnet_ifconfig *ifp)
 {
 #if BROADCAST_DELAY
   /* Wait before sending broadcast. */
-  rtems_task_wake_after(TOD_MILLISECONDS_TO_TICKS(BROADCAST_DELAY * 1000));
+  rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(BROADCAST_DELAY * 1000));
 #endif
 
   printf ("starting dhcp client...\n");
@@ -303,7 +303,7 @@ static void dhcp_monitor_task (rtems_task_argument ifp_arg)
           must_renew = TRUE;
 #if NETWORK_DOWN_TIME
           dhcp_if_down(ifname);
-          rtems_task_wake_after(TOD_MILLISECONDS_TO_TICKS(NETWORK_DOWN_TIME * 1000));
+          rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(NETWORK_DOWN_TIME * 1000));
           dhcp_if_up(ifname);
           downcount = 0;
 #endif
@@ -311,7 +311,7 @@ static void dhcp_monitor_task (rtems_task_argument ifp_arg)
       }
     }
 
-    rtems_task_wake_after(TOD_MILLISECONDS_TO_TICKS(1000));
+    rtems_task_wake_after(RTEMS_MILLISECONDS_TO_TICKS(1000));
   }
 
 error_out:

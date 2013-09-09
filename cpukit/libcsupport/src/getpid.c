@@ -11,8 +11,7 @@
 
 #include <unistd.h>
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/seterr.h>
 
 /**

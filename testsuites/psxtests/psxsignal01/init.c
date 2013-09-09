@@ -15,6 +15,7 @@
 #include "system.h"
 #include <signal.h>
 #include <errno.h>
+#include <reent.h>
 
 /* forward declarations to avoid warnings */
 int test_main(void);

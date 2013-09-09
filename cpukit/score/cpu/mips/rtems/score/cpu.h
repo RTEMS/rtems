@@ -353,6 +353,8 @@ extern "C" {
 
 #define CPU_SIZEOF_POINTER 4
 
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 /*
  *  Processor defined structures
  *
@@ -398,6 +400,10 @@ extern "C" {
  */
 
 #ifndef ASM
+
+typedef struct {
+  /* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if (__mips == 1) || (__mips == 32)
@@ -917,6 +923,7 @@ void _CPU_Context_Initialize(
   do { \
     unsigned int _level; \
     _CPU_ISR_Disable(_level); \
+    (void)_level; \
     loop: goto loop; \
   } while (0)
 
@@ -1123,6 +1130,18 @@ void _CPU_Context_save_fp(
 void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
+
+static inline void _CPU_Context_volatile_clobber( uintptr_t pattern )
+{
+  /* TODO */
+}
+
+static inline void _CPU_Context_validate( uintptr_t pattern )
+{
+  while (1) {
+    /* TODO */
+  }
+}
 
 void _BSP_Exception_frame_print( const CPU_Exception_frame *frame );
 

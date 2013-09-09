@@ -41,28 +41,13 @@
 #ifndef _RTEMS_RTEMS_TIMER_H
 #define _RTEMS_RTEMS_TIMER_H
 
-/**
- *  @brief Instantiate RTEMS Timer Data
- *
- *  This constant is defined to extern most of the time when using
- *  this header file.  However by defining it to nothing, the data
- *  declared in this header file can be instantiated.  This is done
- *  in a single per manager file.
- */
-#ifndef RTEMS_TIMER_EXTERN
-#define RTEMS_TIMER_EXTERN extern
-#endif
+#include <rtems/rtems/attr.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/object.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/chain.h>
-#include <rtems/rtems/clock.h>
-#include <rtems/rtems/attr.h>
 
 /**
  *  @defgroup ClassicTimer Timers
@@ -140,98 +125,6 @@ typedef struct {
   /** This field indicates what type of timer this currently is. */
   Timer_Classes    the_class;
 }   Timer_Control;
-
-typedef struct Timer_server_Control Timer_server_Control;
-
-/**
- * @brief Method used to schedule the insertion of task based timers.
- */
-typedef void (*Timer_server_Schedule_operation)(
-  Timer_server_Control *timer_server,
-  Timer_Control        *timer
-);
-
-typedef struct {
-  /**
-   * @brief This watchdog that will be registered in the system tick mechanic
-   * for timer server wake-up.
-   */
-  Watchdog_Control System_watchdog;
-
-  /**
-   * @brief Chain for watchdogs which will be triggered by the timer server.
-   */
-  Chain_Control Chain;
-
-  /**
-   * @brief Last known time snapshot of the timer server.
-   *
-   * The units may be ticks or seconds.
-   */
-  Watchdog_Interval volatile last_snapshot;
-} Timer_server_Watchdogs;
-
-struct Timer_server_Control {
-  /**
-   * @brief Timer server thread.
-   */
-  Thread_Control *thread;
-
-  /**
-   * @brief The schedule operation method of the timer server.
-   */
-  Timer_server_Schedule_operation schedule_operation;
-
-  /**
-   * @brief Interval watchdogs triggered by the timer server.
-   */
-  Timer_server_Watchdogs Interval_watchdogs;
-
-  /**
-   * @brief TOD watchdogs triggered by the timer server.
-   */
-  Timer_server_Watchdogs TOD_watchdogs;
-
-  /**
-   * @brief Chain of timers scheduled for insert.
-   *
-   * This pointer is not @c NULL whenever the interval and TOD chains are
-   * processed.  After the processing this list will be checked and if
-   * necessary the processing will be restarted.  Processing of these chains
-   * can be only interrupted through interrupts.
-   */
-  Chain_Control *volatile insert_chain;
-
-  /**
-   * @brief Indicates that the timer server is active or not.
-   *
-   * The server is active after the delay on a system watchdog.  The activity
-   * period of the server ends when no more watchdogs managed by the server
-   * fire.  The system watchdogs must not be manipulated when the server is
-   * active.
-   */
-  bool volatile active;
-};
-
-/**
- * @brief Pointer to default timer server control block.
- *
- * This value is @c NULL when the default timer server is not initialized.
- */
-RTEMS_TIMER_EXTERN Timer_server_Control *volatile _Timer_server;
-
-/**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-RTEMS_TIMER_EXTERN Objects_Information  _Timer_Information;
-
-/**
- *  @brief Timer Manager Initialization
- *
- *  This routine performs the initialization necessary for this manager.
- */
-void _Timer_Manager_initialization(void);
 
 /**
  * @brief RTEMS Create Timer
@@ -454,15 +347,11 @@ rtems_status_code rtems_timer_get_information(
   rtems_timer_information *the_info
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/rtems/timer.inl>
-#endif
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
-
-/**@}*/
 
 #endif
 /* end of include file */

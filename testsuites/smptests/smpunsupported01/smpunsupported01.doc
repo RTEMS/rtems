@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpunsupported01
+
+directives:
+
+  - rtems_configuration_is_smp_enabled()
+
+concepts:
+
+  - Ensure that functions unsupported on SMP return an error status.

@@ -116,7 +116,7 @@ typedef enum {
  */
 typedef struct _console_tbl {
   /**  This is the name of the device. */
-  char          *sDeviceName;
+  const char    *sDeviceName;
   /** This indicates the chip type.  It is especially important when
    *   multiple devices share the same interrupt vector and must be
    *   distinguished.
@@ -220,6 +220,13 @@ extern unsigned long  Console_Configuration_Count;
 extern console_data  *Console_Port_Data;
 
 extern rtems_device_minor_number Console_Port_Minor;
+
+/**
+ * @brief Selects the minor number of the console device.
+ *
+ * @see Console_Port_Minor.
+ */
+void bsp_console_select(void);
 
 #ifdef __cplusplus
 }

@@ -267,7 +267,7 @@ PROC (_CPU_Context_switch):
 	mfmsr	r5
 	mflr	r6
 	mfcr	r7
-#ifdef RTEMS_MULTIPROCESSING
+#if defined(RTEMS_MULTIPROCESSING) || defined(RTEMS_SMP)
 	/*
 	 * We have to clear the reservation of the executing thread.  See also
 	 * Book E section 6.1.6.2 "Atomic Update Primitives".

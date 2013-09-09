@@ -21,8 +21,8 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/rwlock.h>
+#include <rtems/posix/rwlockimpl.h>
+#include <rtems/score/thread.h>
 
 /*
  *  pthread_rwlock_trywrlock
@@ -43,6 +43,7 @@ int pthread_rwlock_trywrlock(
 {
   POSIX_RWLock_Control  *the_rwlock;
   Objects_Locations      location;
+  Thread_Control        *executing;
 
   if ( !rwlock )
     return EINVAL;
@@ -52,17 +53,19 @@ int pthread_rwlock_trywrlock(
 
     case OBJECTS_LOCAL:
 
+      executing = _Thread_Executing;
       _CORE_RWLock_Obtain_for_writing(
-	&the_rwlock->RWLock,
-	*rwlock,
-	false,                 /* we are not willing to wait */
-	0,
-	NULL
+        &the_rwlock->RWLock,
+        executing,
+        *rwlock,
+        false,                 /* we are not willing to wait */
+        0,
+        NULL
       );
 
-      _Thread_Enable_dispatch();
+      _Objects_Put( &the_rwlock->Object );
       return _POSIX_RWLock_Translate_core_RWLock_return_code(
-        (CORE_RWLock_Status) _Thread_Executing->Wait.return_code
+        (CORE_RWLock_Status) executing->Wait.return_code
       );
 
 #if defined(RTEMS_MULTIPROCESSING)

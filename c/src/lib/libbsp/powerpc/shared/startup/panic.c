@@ -5,8 +5,8 @@
 #include <rtems/bspIo.h>
 #include <rtems/error.h>
 #include <libcpu/stackTrace.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/thread.inl>
+#include <rtems/score/percpu.h>
+#include <rtems/score/threaddispatch.h>
 
 static void
 rebootQuestion(void)
@@ -56,12 +56,12 @@ void _BSP_Fatal_error(unsigned int v)
       printk("  UNKNOWN (0x%x)\n",THESRC);
   break;
   }
-  if ( _Thread_Dispatch_in_critical_section() )
+  if ( _Thread_Dispatch_is_enabled() )
+    printk("enabled\n");
+  else
     printk(
       "  Error occurred in a Thread Dispatching DISABLED context (level %i)\n",
       _Thread_Dispatch_get_disable_level());
-  else
-    printk("enabled\n");
 
   if ( _ISR_Nest_level ) {
     printk(

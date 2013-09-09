@@ -18,15 +18,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/object.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/region.h>
-#include <rtems/score/states.h>
-#include <rtems/score/thread.h>
+#include <rtems/rtems/regionimpl.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/threadqimpl.h>
 
 void _Region_Process_queue(
   Region_Control *the_region

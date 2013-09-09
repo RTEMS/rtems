@@ -14,6 +14,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <inttypes.h>
+
 void Loop() {
   volatile int i;
 
@@ -24,12 +26,14 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int                i;
+  uint32_t           i;
   char               ch;
-  int                cpu_num;
+  uint32_t           cpu_self;
   rtems_id           id;
   rtems_status_code  status;
   bool               allDone;
+
+  cpu_self = rtems_smp_get_current_processor();
 
   /* XXX - Delay a bit to allow debug messages from
    * startup to print.  This may need to go away when
@@ -42,37 +46,38 @@ rtems_task Init(
   locked_printf( "\n\n***  SMP01 TEST ***\n" );
 
   /* Initialize the TaskRan array */
-  for ( i=0; i<rtems_smp_get_number_of_processors() ; i++ ) {
+  for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
     TaskRan[i] = false;
   }
 
   /* Create and start tasks for each processor */
-  for ( i=1; i< rtems_smp_get_number_of_processors() ; i++ ) {
-    ch = '0' + i;
+  for ( i=0; i< rtems_smp_get_processor_count() ; i++ ) {
+    if ( i != cpu_self ) {
+      ch = '0' + i;
 
-    status = rtems_task_create(
-      rtems_build_name( 'T', 'A', ch, ' ' ),
-      1,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &id
-    );
-    directive_failed( status, "task create" );
+      status = rtems_task_create(
+        rtems_build_name( 'T', 'A', ch, ' ' ),
+        1,
+        RTEMS_MINIMUM_STACK_SIZE,
+        RTEMS_DEFAULT_MODES,
+        RTEMS_DEFAULT_ATTRIBUTES,
+        &id
+      );
+      directive_failed( status, "task create" );
 
-    cpu_num = bsp_smp_processor_id();
-    locked_printf(" CPU %d start task TA%c\n", cpu_num, ch);
-    status = rtems_task_start( id, Test_task, i+1 );
-    directive_failed( status, "task start" );
+      locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_self, ch);
+      status = rtems_task_start( id, Test_task, i+1 );
+      directive_failed( status, "task start" );
 
-    Loop();
+      Loop();
+    }
   }
   
   /* Wait on the all tasks to run */
   while (1) {
     allDone = true;
-    for ( i=1; i<rtems_smp_get_number_of_processors() ; i++ ) {
-      if (TaskRan[i] == false)
+    for ( i=0; i<rtems_smp_get_processor_count() ; i++ ) {
+      if ( i != cpu_self && TaskRan[i] == false)
         allDone = false;
     }
     if (allDone) {

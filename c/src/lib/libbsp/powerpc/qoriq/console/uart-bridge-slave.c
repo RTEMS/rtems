@@ -153,28 +153,30 @@ static int last_close(int major, int minor, void *arg)
 
 static ssize_t write_with_interrupts(int minor, const char *buf, size_t len)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  console_tbl *ct = Console_Port_Tbl[minor];
-  uart_bridge_slave_control *control = ct->pDeviceParams;
-  intercom_packet *packet = qoriq_intercom_allocate_packet(
-    control->type,
-    INTERCOM_SIZE_64
-  );
+  if (len > 0) {
+    rtems_status_code sc = RTEMS_SUCCESSFUL;
+    console_tbl *ct = Console_Port_Tbl[minor];
+    uart_bridge_slave_control *control = ct->pDeviceParams;
+    intercom_packet *packet = qoriq_intercom_allocate_packet(
+      control->type,
+      INTERCOM_SIZE_64
+    );
 
-  packet->size = len;
-  memcpy(packet->data, buf, len);
+    packet->size = len;
+    memcpy(packet->data, buf, len);
 
-  /*
-   * Due to the lovely Termios implementation we have to hand this over to
-   * another context.
-   */
-  sc = rtems_chain_append_with_notification(
-    &control->transmit_fifo,
-    &packet->glue.node,
-    control->transmit_task,
-    TRANSMIT_EVENT
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
+    /*
+     * Due to the lovely Termios implementation we have to hand this over to
+     * another context.
+     */
+    sc = rtems_chain_append_with_notification(
+      &control->transmit_fifo,
+      &packet->glue.node,
+      control->transmit_task,
+      TRANSMIT_EVENT
+    );
+    assert(sc == RTEMS_SUCCESSFUL);
+  }
 
   return 0;
 }

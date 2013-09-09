@@ -43,6 +43,177 @@ rtems_timer_service_routine test_isr_in_progress(
 );
 
 /* test bodies */
+
+#define TEST_ISR_EVENT RTEMS_EVENT_0
+
+typedef struct {
+  ISR_Level actual_level;
+  rtems_id master_task_id;
+} test_isr_level_context;
+
+static void isr_level_check_task( rtems_task_argument arg )
+{
+  test_isr_level_context *ctx = (test_isr_level_context *) arg;
+  rtems_status_code sc;
+
+  ctx->actual_level = _ISR_Get_level();
+
+  sc = rtems_event_send( ctx->master_task_id,  TEST_ISR_EVENT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  ( void ) rtems_task_suspend( RTEMS_SELF );
+  rtems_test_assert( 0 );
+}
+
+static void test_isr_level_for_new_threads( ISR_Level last_proper_level )
+{
+  ISR_Level mask = CPU_MODES_INTERRUPT_MASK;
+  ISR_Level current;
+  test_isr_level_context ctx = {
+    .master_task_id = rtems_task_self()
+  };
+
+  for ( current = 0 ; current <= mask ; ++current ) {
+    rtems_mode initial_modes = RTEMS_INTERRUPT_LEVEL(current);
+    rtems_id id;
+    rtems_status_code sc;
+    rtems_event_set events;
+
+    ctx.actual_level = 0xffffffff;
+
+    sc = rtems_task_create(
+      rtems_build_name('I', 'S', 'R', 'L'),
+      RTEMS_MINIMUM_PRIORITY,
+      RTEMS_MINIMUM_STACK_SIZE,
+      initial_modes,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+    sc = rtems_task_start(
+      id,
+      isr_level_check_task,
+      (rtems_task_argument) &ctx
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+    sc = rtems_event_receive(
+      TEST_ISR_EVENT,
+      RTEMS_EVENT_ALL | RTEMS_WAIT,
+      RTEMS_NO_TIMEOUT,
+      &events
+    );
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+    rtems_test_assert( events == TEST_ISR_EVENT );
+
+    if ( current <= last_proper_level ) {
+      rtems_test_assert( ctx.actual_level == current );
+    } else {
+      rtems_test_assert( ctx.actual_level == last_proper_level );
+    }
+
+    sc = rtems_task_delete( id ) ;
+    rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  }
+}
+
+static void test_isr_level( void )
+{
+  ISR_Level mask = CPU_MODES_INTERRUPT_MASK;
+  ISR_Level normal = _ISR_Get_level();
+  ISR_Level current = 0;
+  ISR_Level last_proper_level;
+
+  _ISR_Set_level( current );
+  rtems_test_assert( _ISR_Get_level() == current );
+
+  for ( current = current + 1 ; current <= mask ; ++current ) {
+    ISR_Level actual;
+
+    _ISR_Set_level( current );
+
+    actual = _ISR_Get_level();
+    rtems_test_assert( actual == current || actual == ( current - 1 ) );
+
+    if ( _ISR_Get_level() != current ) {
+      break;
+    }
+  }
+
+  last_proper_level = current - 1;
+
+  for ( current = current + 1 ; current <= mask ; ++current ) {
+    _ISR_Set_level( current );
+    rtems_test_assert( _ISR_Get_level() == current );
+  }
+
+  _ISR_Set_level( normal );
+
+  /*
+   * Now test that the ISR level specified for _Thread_Initialize() propagates
+   * properly to the thread.
+   */
+  test_isr_level_for_new_threads( last_proper_level );
+}
+
+static void test_isr_locks( void )
+{
+  ISR_Level normal_interrupt_level = _ISR_Get_level();
+  ISR_lock_Control initialized = ISR_LOCK_INITIALIZER;
+  ISR_lock_Control lock;
+  ISR_Level level;
+
+  _ISR_lock_Initialize( &lock );
+  rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
+
+  _ISR_lock_ISR_disable_and_acquire( &lock, level );
+  rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
+  _ISR_lock_Release_and_ISR_enable( &lock, level );
+
+  rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+
+  _ISR_lock_Acquire( &lock );
+  rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+  _ISR_lock_Release( &lock );
+
+  rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+}
+
+static rtems_mode get_interrupt_level( void )
+{
+  rtems_status_code sc;
+  rtems_mode mode;
+
+  sc = rtems_task_mode( RTEMS_CURRENT_MODE, RTEMS_CURRENT_MODE, &mode );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  return mode & RTEMS_INTERRUPT_MASK;
+}
+
+static void test_interrupt_locks( void )
+{
+  rtems_mode normal_interrupt_level = get_interrupt_level();
+  rtems_interrupt_lock initialized = RTEMS_INTERRUPT_LOCK_INITIALIZER;
+  rtems_interrupt_lock lock;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_lock_initialize( &lock );
+  rtems_test_assert( memcmp( &lock, &initialized, sizeof( lock ) ) == 0 );
+
+  rtems_interrupt_lock_acquire( &lock, level );
+  rtems_test_assert( normal_interrupt_level != get_interrupt_level() );
+  rtems_interrupt_lock_release( &lock, level );
+
+  rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
+
+  rtems_interrupt_lock_acquire_isr( &lock );
+  rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
+  rtems_interrupt_lock_release_isr( &lock );
+
+  rtems_test_assert( normal_interrupt_level == get_interrupt_level() );
+}
+
 void test_interrupt_inline(void)
 {
   rtems_interrupt_level level;
@@ -58,13 +229,19 @@ void test_interrupt_inline(void)
   }
 
   puts( "interrupt disable (use inline)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_disable( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt flash (use inline)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_flash( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt enable (use inline)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_enable( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt level mode (use inline)" );
   level_mode_body = rtems_interrupt_level_body( level );
@@ -177,7 +354,11 @@ rtems_timer_service_routine test_unblock_task(
   _Thread_Disable_dispatch();
   status = rtems_task_resume( blocked_task_id );
   _Thread_Unnest_dispatch();
+#if defined( RTEMS_SMP )
+  directive_failed_with_level( status, "rtems_task_resume", 1 );
+#else
   directive_failed( status, "rtems_task_resume" );
+#endif
 }
 
 rtems_task Init(
@@ -194,6 +375,10 @@ rtems_task Init(
   int                   i;
 
   puts( "\n\n*** TEST 37 ***" );
+
+  test_isr_level();
+  test_isr_locks();
+  test_interrupt_locks();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
@@ -284,16 +469,24 @@ rtems_task Init(
   }
 
   puts( "interrupt disable (use body)" );
+  _Thread_Disable_dispatch();
   level = rtems_interrupt_disable();
+  _Thread_Enable_dispatch();
 
   puts( "interrupt disable (use body)" );
+  _Thread_Disable_dispatch();
   level = rtems_interrupt_disable();
+  _Thread_Enable_dispatch();
 
   puts( "interrupt flash (use body)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_flash( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt enable (use body)" );
+  _Thread_Disable_dispatch();
   rtems_interrupt_enable( level );
+  _Thread_Enable_dispatch();
 
   puts( "interrupt level mode (use body)" );
   level_mode_body = rtems_interrupt_level_body( level );

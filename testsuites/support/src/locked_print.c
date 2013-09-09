@@ -36,7 +36,8 @@ void locked_print_initialize(void)
     rtems_build_name ('S', 'E', 'M', '1'),
     1,                                             
     RTEMS_LOCAL                   |
-    RTEMS_SIMPLE_BINARY_SEMAPHORE |
+    RTEMS_BINARY_SEMAPHORE |
+    RTEMS_PRIORITY_CEILING |
     RTEMS_PRIORITY,
     1,
     &locked_print_semaphore

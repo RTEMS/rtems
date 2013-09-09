@@ -10,9 +10,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/address.h>
-#include <rtems/score/rbtree.h>
+#include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/isr.h>
 
 /** @brief  Validate and fix-up tree properties after deleting a node

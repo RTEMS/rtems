@@ -19,6 +19,8 @@
 
 #include <bsp/vectors.h>
 
+#include <rtems/score/threaddispatch.h>
+
 #ifndef __SPE__
   #define GET_GPR(gpr) (gpr)
 #else

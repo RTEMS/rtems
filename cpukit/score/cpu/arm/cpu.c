@@ -34,6 +34,29 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/cpu.h>
 
+#ifdef ARM_MULTILIB_VFP_D32
+  RTEMS_STATIC_ASSERT(
+    offsetof( Context_Control, register_d8 ) == ARM_CONTEXT_CONTROL_D8_OFFSET,
+    ARM_CONTEXT_CONTROL_D8_OFFSET
+  );
+#endif
+
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Exception_frame ) == ARM_EXCEPTION_FRAME_SIZE,
+  ARM_EXCEPTION_FRAME_SIZE
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( CPU_Exception_frame, register_sp )
+    == ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET,
+  ARM_EXCEPTION_FRAME_REGISTER_SP_OFFSET
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( ARM_VFP_context ) == ARM_VFP_CONTEXT_SIZE,
+  ARM_VFP_CONTEXT_SIZE
+);
+
 #ifdef ARM_MULTILIB_ARCH_V4
 
 /*
@@ -53,7 +76,8 @@ void _CPU_Context_Initialize(
 {
   the_context->register_sp = (uint32_t) stack_area_begin + stack_area_size;
   the_context->register_lr = (uint32_t) entry_point;
-  the_context->register_cpsr = new_level | arm_cpu_mode;
+  the_context->register_cpsr = ( ( new_level != 0 ) ? ARM_PSR_I : 0 )
+    | arm_cpu_mode;
 }
 
 /* Preprocessor magic for stringification of x */
@@ -64,10 +88,12 @@ void _CPU_ISR_Set_level( uint32_t level )
 {
   uint32_t arm_switch_reg;
 
+  level = ( level != 0 ) ? ARM_PSR_I : 0;
+
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[arm_switch_reg], cpsr\n"
-    "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
+    "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( ARM_PSR_I ) "\n"
     "orr %[arm_switch_reg], %[level]\n"
     "msr cpsr, %0\n"
     ARM_SWITCH_BACK
@@ -84,12 +110,12 @@ uint32_t _CPU_ISR_Get_level( void )
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
-    "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( CPU_MODES_INTERRUPT_MASK ) "\n"
+    "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( ARM_PSR_I ) "\n"
     ARM_SWITCH_BACK
     : [level] "=&r" (level) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
 
-  return level;
+  return ( level & ARM_PSR_I ) != 0;
 }
 
 void _CPU_ISR_install_vector(

@@ -11,8 +11,9 @@
 #include "config.h"
 #endif
 
-#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <tmacros.h>
+
+#include <rtems/score/objectimpl.h>
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

@@ -13,10 +13,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/init.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
 
 #if defined(RTEMS_SMP)
@@ -44,8 +43,7 @@ void rtems_shutdown_executive(
       _SMP_Request_other_cores_to_shutdown();
     #endif
 
-    _Per_CPU_Information[0].idle->Wait.return_code = result;
-
+    _Thread_Set_global_exit_status( result );
     _System_state_Set( SYSTEM_STATE_SHUTDOWN );
     _Thread_Stop_multitasking();
 

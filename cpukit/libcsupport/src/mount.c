@@ -92,8 +92,6 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
       1,
       sizeof(*mt_fs_root)
     );
-  } else {
-    free( mt_entry );
   }
 
   *target_length_ptr = target_size - 1;

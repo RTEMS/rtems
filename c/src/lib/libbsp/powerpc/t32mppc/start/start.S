@@ -46,6 +46,12 @@ _start:
 	LWI	r5, bsp_section_rodata_size
 	bl	copy
 
+	/* Copy small read-only data */
+	LWI	r3, bsp_section_sdata2_begin
+	LWI	r4, bsp_section_sdata2_load_begin
+	LWI	r5, bsp_section_sdata2_size
+	bl	copy
+
 	/* Copy fast data */
 	LWI	r3, bsp_section_fast_data_begin
 	LWI	r4, bsp_section_fast_data_load_begin
@@ -56,6 +62,12 @@ _start:
 	LWI	r3, bsp_section_data_begin
 	LWI	r4, bsp_section_data_load_begin
 	LWI	r5, bsp_section_data_size
+	bl	copy
+
+	/* Copy small data */
+	LWI	r3, bsp_section_sdata_begin
+	LWI	r4, bsp_section_sdata_load_begin
+	LWI	r5, bsp_section_sdata_size
 	bl	copy
 
 	/* Clear SBSS */
