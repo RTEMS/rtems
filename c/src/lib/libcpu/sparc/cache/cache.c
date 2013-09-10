@@ -14,6 +14,14 @@ void _CPU_cache_invalidate_entire_instruction ( void )
 }
 
 /* XXX these need to be addressed */
+
+void _CPU_cache_invalidate_instruction_range(
+  const void *i_addr,
+  size_t n_bytes
+)
+{
+}
+
 void _CPU_cache_freeze_instruction ( void )
 {
 }
