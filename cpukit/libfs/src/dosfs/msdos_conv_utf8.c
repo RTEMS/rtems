@@ -52,12 +52,12 @@ static int msdos_utf8_convert_with_iconv(
   size_t     *dst_size
 )
 {
-  int     eno = 0;
+  int     eno;
   size_t  inbytes_left = src_size;
   size_t  outbytes_left = *dst_size;
   char   *inbuf = (void *) (uintptr_t) src;
   char   *outbuf = dst;
-  ssize_t iconv_status;
+  size_t  iconv_status;
 
   iconv_status = iconv(
     desc,
@@ -69,10 +69,21 @@ static int msdos_utf8_convert_with_iconv(
 
   *dst_size -= outbytes_left;
 
-  if ( iconv_status > 0 ) {
-    eno = EINVAL;
-  } else if ( iconv_status < 0 ) {
+  if ( iconv_status == 0 ) {
+    eno = 0;
+  } else if ( iconv_status == (size_t) -1 ) {
+    /*
+     * iconv() has detected an error.  The most likely reason seems to be a too
+     * small outbuf.
+    */
     eno = ENOMEM;
+  } else {
+    /*
+     * The iconv_status contains the number of characters converted in a
+     * non-reversible way.  We want to use reversible conversions only.
+     * Characters permitted within DOSFS names seem to be reversible.
+     */
+    eno = EINVAL;
   }
 
   return eno;
