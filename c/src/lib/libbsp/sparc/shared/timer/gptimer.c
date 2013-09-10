@@ -272,8 +272,8 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 * timer has pending bit is cleared by writing a one to it,
 	 * whereas older versions it is cleared with a zero.
 	 */
-	priv->regs->timer[0].ctrl = GPTIMER_CTRL_IP;
-	if ((priv->regs->timer[0].ctrl & GPTIMER_CTRL_IP) != 0)
+	priv->regs->timer[timer_start].ctrl = GPTIMER_CTRL_IP;
+	if ((priv->regs->timer[timer_start].ctrl & GPTIMER_CTRL_IP) != 0)
 		irq_ack_mask = ~GPTIMER_CTRL_IP;
 	else
 		irq_ack_mask = ~0;
