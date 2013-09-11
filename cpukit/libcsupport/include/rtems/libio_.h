@@ -572,10 +572,9 @@ int rtems_filesystem_chmod(
 );
 
 int rtems_filesystem_chown(
-  const char *path,
+  const rtems_filesystem_location_info_t *loc,
   uid_t owner,
-  gid_t group,
-  int eval_follow_link
+  gid_t group
 );
 
 static inline bool rtems_filesystem_is_ready_for_unmount(

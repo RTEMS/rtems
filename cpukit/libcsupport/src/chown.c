@@ -25,31 +25,20 @@
 
 #include <rtems/libio_.h>
 
-int rtems_filesystem_chown(
-  const char *path,
-  uid_t owner,
-  gid_t group,
-  int eval_follow_link
-)
-{
-  int rv = 0;
-  rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = eval_follow_link;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
-  const rtems_filesystem_operations_table *ops = currentloc->mt_entry->ops;
-
-  rv = (*ops->chown_h)( currentloc, owner, group );
-
-  rtems_filesystem_eval_path_cleanup( &ctx );
-
-  return rv;
-}
-
 /**
  *  POSIX 1003.1b 5.6.5 - Change Owner and Group of a File
  */
 int chown( const char *path, uid_t owner, gid_t group )
 {
-  return rtems_filesystem_chown( path, owner, group, RTEMS_FS_FOLLOW_LINK );
+  int rv;
+  rtems_filesystem_eval_path_context_t ctx;
+  int eval_flags = RTEMS_FS_FOLLOW_LINK;
+  const rtems_filesystem_location_info_t *currentloc =
+    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
+
+  rv = rtems_filesystem_chown( currentloc, owner, group );
+
+  rtems_filesystem_eval_path_cleanup( &ctx );
+
+  return rv;
 }
