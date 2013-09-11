@@ -566,6 +566,11 @@ int rtems_filesystem_mknod(
 
 int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc );
 
+int rtems_filesystem_chmod(
+  const rtems_filesystem_location_info_t *loc,
+  mode_t mode
+);
+
 int rtems_filesystem_chown(
   const char *path,
   uid_t owner,

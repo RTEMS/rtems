@@ -22,6 +22,42 @@
 
 #include <rtems/libio_.h>
 
+int rtems_filesystem_chmod(
+  const rtems_filesystem_location_info_t *loc,
+  mode_t mode
+)
+{
+  const rtems_filesystem_mount_table_entry_t *mt_entry = loc->mt_entry;
+  int rv;
+
+  if ( mt_entry->writeable || rtems_filesystem_location_is_null( loc ) ) {
+    struct stat st;
+
+    memset( &st, 0, sizeof(st) );
+
+    rv = (*loc->handlers->fstat_h)( loc, &st );
+    if ( rv == 0 ) {
+      uid_t uid = geteuid();
+
+      if ( uid == 0 || st.st_uid == uid ) {
+        mode_t mask = S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX;
+
+        mode = (st.st_mode & ~mask) | (mode & mask);
+
+        rv = (*mt_entry->ops->fchmod_h)( loc, mode );
+      } else {
+        errno = EPERM;
+        rv = -1;
+      }
+    }
+  } else {
+    errno = EROFS;
+    rv = -1;
+  }
+
+  return rv;
+}
+
 /**
  *  POSIX 1003.1b 5.6.4 - Change File Modes
  */
@@ -34,14 +70,11 @@ int fchmod( int fd, mode_t mode )
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
 
-  if (iop->pathinfo.mt_entry->writeable) {
-    rtems_filesystem_instance_lock( &iop->pathinfo );
-    rv = (*iop->pathinfo.mt_entry->ops->fchmod_h)( &iop->pathinfo, mode );
-    rtems_filesystem_instance_unlock( &iop->pathinfo );
-  } else {
-    errno = EROFS;
-    rv = -1;
-  }
+  rtems_filesystem_instance_lock( &iop->pathinfo );
+
+  rv = rtems_filesystem_chmod( &iop->pathinfo, mode );
+
+  rtems_filesystem_instance_unlock( &iop->pathinfo );
 
   return rv;
 }

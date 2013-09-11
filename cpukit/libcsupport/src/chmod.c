@@ -33,7 +33,7 @@ int chmod( const char *path, mode_t mode )
   const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
-  rv = (*currentloc->mt_entry->ops->fchmod_h)( currentloc, mode );
+  rv = rtems_filesystem_chmod( currentloc, mode );
 
   rtems_filesystem_eval_path_cleanup( &ctx );
 

@@ -468,10 +468,6 @@ rtems_rfs_rtems_fchmod (const rtems_filesystem_location_info_t* pathloc,
   rtems_rfs_file_system*  fs = rtems_rfs_rtems_pathloc_dev (pathloc);
   rtems_rfs_ino           ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
   rtems_rfs_inode_handle  inode;
-  uint16_t                imode;
-#if defined (RTEMS_POSIX_API)
-  uid_t                   uid;
-#endif
   int                     rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FCHMOD))
@@ -484,25 +480,7 @@ rtems_rfs_rtems_fchmod (const rtems_filesystem_location_info_t* pathloc,
     return rtems_rfs_rtems_error ("fchmod: opening inode", rc);
   }
 
-  imode = rtems_rfs_inode_get_mode (&inode);
-
-  /*
-   *  Verify I am the owner of the node or the super user.
-   */
-#if defined (RTEMS_POSIX_API)
-  uid = geteuid();
-
-  if ((uid != rtems_rfs_inode_get_uid (&inode)) && (uid != 0))
-  {
-    rtems_rfs_inode_close (fs, &inode);
-    return rtems_rfs_rtems_error ("fchmod: checking uid", EPERM);
-  }
-#endif
-
-  imode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
-  imode |= mode & (S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
-
-  rtems_rfs_inode_set_mode (&inode, imode);
+  rtems_rfs_inode_set_mode (&inode, mode);
 
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc > 0)
