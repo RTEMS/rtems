@@ -95,8 +95,9 @@ int jffs2_scan_medium(struct jffs2_sb_info *c)
 	unsigned char *flashbuf = NULL;
 	uint32_t buf_size = 0;
 	struct jffs2_summary *s = NULL; /* summary info collected by the scan process */
+	size_t try_size;
 #ifndef __ECOS
-	size_t pointlen, try_size;
+	size_t pointlen;
 
 	ret = mtd_point(c->mtd, 0, c->mtd->size, &pointlen,
 			(void **)&flashbuf, NULL);

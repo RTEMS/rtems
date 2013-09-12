@@ -75,6 +75,7 @@ do {						\
 #define JFFS2_DBG_MSG_PREFIX	JFFS2_DBG JFFS2_DBG_PREFIX
 
 /* JFFS2 message macros */
+#ifndef __rtems__
 #define JFFS2_ERROR(fmt, ...)					\
 	pr_err("error: (%d) %s: " fmt,				\
 	       task_pid_nr(current), __func__, ##__VA_ARGS__)
@@ -90,6 +91,23 @@ do {						\
 #define JFFS2_DEBUG(fmt, ...)						\
 	printk(KERN_DEBUG "[JFFS2 DBG] (%d) %s: " fmt,			\
 	       task_pid_nr(current), __func__, ##__VA_ARGS__)
+#else /* __rtems__ */
+#define JFFS2_ERROR(fmt, ...)					\
+	pr_err("error: %s: " fmt,				\
+	       __func__, ##__VA_ARGS__)
+
+#define JFFS2_WARNING(fmt, ...)						\
+	pr_warn("warning: %s: " fmt,				\
+		__func__, ##__VA_ARGS__)
+
+#define JFFS2_NOTICE(fmt, ...)						\
+	pr_notice("notice: %s: " fmt,				\
+		  __func__, ##__VA_ARGS__)
+
+#define JFFS2_DEBUG(fmt, ...)						\
+	printk(KERN_DEBUG "[JFFS2 DBG] %s: " fmt,			\
+	       __func__, ##__VA_ARGS__)
+#endif /* __rtems__ */
 
 /*
  * We split our debugging messages on several parts, depending on the JFFS2

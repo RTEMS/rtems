@@ -33,126 +33,115 @@
 
 static DEFINE_MUTEX(deflate_mutex);
 static DEFINE_MUTEX(inflate_mutex);
-static z_stream inf_strm, def_strm;
 
-#ifdef __KERNEL__ /* Linux-only */
-#include <linux/vmalloc.h>
-#include <linux/init.h>
-#include <linux/mutex.h>
-
-static int __init alloc_workspaces(void)
+static rtems_jffs2_compressor_zlib_control *get_zlib_control(
+	rtems_jffs2_compressor_control *super
+)
 {
-	def_strm.workspace = vmalloc(zlib_deflate_workspacesize(MAX_WBITS,
-							MAX_MEM_LEVEL));
-	if (!def_strm.workspace)
-		return -ENOMEM;
-
-	jffs2_dbg(1, "Allocated %d bytes for deflate workspace\n",
-		  zlib_deflate_workspacesize(MAX_WBITS, MAX_MEM_LEVEL));
-	inf_strm.workspace = vmalloc(zlib_inflate_workspacesize());
-	if (!inf_strm.workspace) {
-		vfree(def_strm.workspace);
-		return -ENOMEM;
-	}
-	jffs2_dbg(1, "Allocated %d bytes for inflate workspace\n",
-		  zlib_inflate_workspacesize());
-	return 0;
+	return (rtems_jffs2_compressor_zlib_control *) super;
 }
 
-static void free_workspaces(void)
+uint16_t rtems_jffs2_compressor_zlib_compress(
+	rtems_jffs2_compressor_control *super,
+	unsigned char *data_in,
+	unsigned char *cpage_out,
+	uint32_t *sourcelen,
+	uint32_t *dstlen
+)
 {
-	vfree(def_strm.workspace);
-	vfree(inf_strm.workspace);
-}
-#else
-#define alloc_workspaces() (0)
-#define free_workspaces() do { } while(0)
-#endif /* __KERNEL__ */
-
-static int jffs2_zlib_compress(unsigned char *data_in,
-			       unsigned char *cpage_out,
-			       uint32_t *sourcelen, uint32_t *dstlen)
-{
+	rtems_jffs2_compressor_zlib_control *self = get_zlib_control(super);
+	z_stream *def_strm = &self->stream;
 	int ret;
 
 	if (*dstlen <= STREAM_END_SPACE)
-		return -1;
+		return JFFS2_COMPR_NONE;
 
 	mutex_lock(&deflate_mutex);
 
-	if (Z_OK != zlib_deflateInit(&def_strm, 3)) {
+	if (Z_OK != zlib_deflateInit(def_strm, 3)) {
 		pr_warn("deflateInit failed\n");
 		mutex_unlock(&deflate_mutex);
-		return -1;
+		return JFFS2_COMPR_NONE;
 	}
 
-	def_strm.next_in = data_in;
-	def_strm.total_in = 0;
+	def_strm->next_in = data_in;
+	def_strm->total_in = 0;
 
-	def_strm.next_out = cpage_out;
-	def_strm.total_out = 0;
+	def_strm->next_out = cpage_out;
+	def_strm->total_out = 0;
 
-	while (def_strm.total_out < *dstlen - STREAM_END_SPACE && def_strm.total_in < *sourcelen) {
-		def_strm.avail_out = *dstlen - (def_strm.total_out + STREAM_END_SPACE);
-		def_strm.avail_in = min((unsigned)(*sourcelen-def_strm.total_in), def_strm.avail_out);
+	while (def_strm->total_out < *dstlen - STREAM_END_SPACE && def_strm->total_in < *sourcelen) {
+		def_strm->avail_out = *dstlen - (def_strm->total_out + STREAM_END_SPACE);
+		def_strm->avail_in = min((unsigned)(*sourcelen-def_strm->total_in), def_strm->avail_out);
 		jffs2_dbg(1, "calling deflate with avail_in %d, avail_out %d\n",
-			  def_strm.avail_in, def_strm.avail_out);
-		ret = zlib_deflate(&def_strm, Z_PARTIAL_FLUSH);
+			  def_strm->avail_in, def_strm->avail_out);
+		ret = zlib_deflate(def_strm, Z_PARTIAL_FLUSH);
 		jffs2_dbg(1, "deflate returned with avail_in %d, avail_out %d, total_in %ld, total_out %ld\n",
-			  def_strm.avail_in, def_strm.avail_out,
-			  def_strm.total_in, def_strm.total_out);
+			  def_strm->avail_in, def_strm->avail_out,
+			  def_strm->total_in, def_strm->total_out);
 		if (ret != Z_OK) {
 			jffs2_dbg(1, "deflate in loop returned %d\n", ret);
-			zlib_deflateEnd(&def_strm);
+			zlib_deflateEnd(def_strm);
 			mutex_unlock(&deflate_mutex);
-			return -1;
+			return JFFS2_COMPR_NONE;
 		}
 	}
-	def_strm.avail_out += STREAM_END_SPACE;
-	def_strm.avail_in = 0;
-	ret = zlib_deflate(&def_strm, Z_FINISH);
-	zlib_deflateEnd(&def_strm);
+	def_strm->avail_out += STREAM_END_SPACE;
+	def_strm->avail_in = 0;
+	ret = zlib_deflate(def_strm, Z_FINISH);
+	zlib_deflateEnd(def_strm);
 
 	if (ret != Z_STREAM_END) {
 		jffs2_dbg(1, "final deflate returned %d\n", ret);
-		ret = -1;
+		ret = JFFS2_COMPR_NONE;
 		goto out;
 	}
 
-	if (def_strm.total_out >= def_strm.total_in) {
+	if (def_strm->total_out >= def_strm->total_in) {
 		jffs2_dbg(1, "zlib compressed %ld bytes into %ld; failing\n",
-			  def_strm.total_in, def_strm.total_out);
-		ret = -1;
+			  def_strm->total_in, def_strm->total_out);
+		ret = JFFS2_COMPR_NONE;
 		goto out;
 	}
 
 	jffs2_dbg(1, "zlib compressed %ld bytes into %ld\n",
-		  def_strm.total_in, def_strm.total_out);
+		  def_strm->total_in, def_strm->total_out);
 
-	*dstlen = def_strm.total_out;
-	*sourcelen = def_strm.total_in;
-	ret = 0;
+	*dstlen = def_strm->total_out;
+	*sourcelen = def_strm->total_in;
+	ret = JFFS2_COMPR_ZLIB;
  out:
 	mutex_unlock(&deflate_mutex);
 	return ret;
 }
 
-static int jffs2_zlib_decompress(unsigned char *data_in,
-				 unsigned char *cpage_out,
-				 uint32_t srclen, uint32_t destlen)
+int rtems_jffs2_compressor_zlib_decompress(
+	rtems_jffs2_compressor_control *super,
+	uint16_t comprtype,
+	unsigned char *data_in,
+	unsigned char *cpage_out,
+	uint32_t srclen,
+	uint32_t destlen
+)
 {
+	rtems_jffs2_compressor_zlib_control *self = get_zlib_control(super);
+	z_stream *inf_strm = &self->stream;
 	int ret;
 	int wbits = MAX_WBITS;
 
+	if (comprtype != JFFS2_COMPR_ZLIB) {
+		return -EIO;
+	}
+
 	mutex_lock(&inflate_mutex);
 
-	inf_strm.next_in = data_in;
-	inf_strm.avail_in = srclen;
-	inf_strm.total_in = 0;
+	inf_strm->next_in = data_in;
+	inf_strm->avail_in = srclen;
+	inf_strm->total_in = 0;
 
-	inf_strm.next_out = cpage_out;
-	inf_strm.avail_out = destlen;
-	inf_strm.total_out = 0;
+	inf_strm->next_out = cpage_out;
+	inf_strm->avail_out = destlen;
+	inf_strm->total_out = 0;
 
 	/* If it's deflate, and it's got no preset dictionary, then
 	   we can tell zlib to skip the adler32 check. */
@@ -162,60 +151,26 @@ static int jffs2_zlib_decompress(unsigned char *data_in,
 
 		jffs2_dbg(2, "inflate skipping adler32\n");
 		wbits = -((data_in[0] >> 4) + 8);
-		inf_strm.next_in += 2;
-		inf_strm.avail_in -= 2;
+		inf_strm->next_in += 2;
+		inf_strm->avail_in -= 2;
 	} else {
 		/* Let this remain D1 for now -- it should never happen */
 		jffs2_dbg(1, "inflate not skipping adler32\n");
 	}
 
 
-	if (Z_OK != zlib_inflateInit2(&inf_strm, wbits)) {
+	if (Z_OK != zlib_inflateInit2(inf_strm, wbits)) {
 		pr_warn("inflateInit failed\n");
 		mutex_unlock(&inflate_mutex);
-		return 1;
+		return -EIO;
 	}
 
-	while((ret = zlib_inflate(&inf_strm, Z_FINISH)) == Z_OK)
+	while((ret = zlib_inflate(inf_strm, Z_FINISH)) == Z_OK)
 		;
 	if (ret != Z_STREAM_END) {
 		pr_notice("inflate returned %d\n", ret);
 	}
-	zlib_inflateEnd(&inf_strm);
+	zlib_inflateEnd(inf_strm);
 	mutex_unlock(&inflate_mutex);
 	return 0;
-}
-
-static struct jffs2_compressor jffs2_zlib_comp = {
-    .priority = JFFS2_ZLIB_PRIORITY,
-    .name = "zlib",
-    .compr = JFFS2_COMPR_ZLIB,
-    .compress = &jffs2_zlib_compress,
-    .decompress = &jffs2_zlib_decompress,
-#ifdef JFFS2_ZLIB_DISABLED
-    .disabled = 1,
-#else
-    .disabled = 0,
-#endif
-};
-
-int __init jffs2_zlib_init(void)
-{
-    int ret;
-
-    ret = alloc_workspaces();
-    if (ret)
-	    return ret;
-
-    ret = jffs2_register_compressor(&jffs2_zlib_comp);
-    if (ret)
-	    free_workspaces();
-
-    return ret;
-}
-
-void jffs2_zlib_exit(void)
-{
-    jffs2_unregister_compressor(&jffs2_zlib_comp);
-    free_workspaces();
 }

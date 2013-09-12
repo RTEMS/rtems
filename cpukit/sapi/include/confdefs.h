@@ -237,6 +237,7 @@ const rtems_libio_helper rtems_fs_init_helper =
  *     CONFIGURE_FILESYSTEM_NFS      - Network File System, networking enabled
  *     CONFIGURE_FILESYSTEM_DOSFS    - DOS File System, uses libblock
  *     CONFIGURE_FILESYSTEM_RFS      - RTEMS File System (RFS), uses libblock
+ *     CONFIGURE_FILESYSTEM_JFFS2    - Journalling Flash File System, Version 2
  *
  *   Combinations:
  *
@@ -264,6 +265,7 @@ const rtems_libio_helper rtems_fs_init_helper =
     #define CONFIGURE_FILESYSTEM_NFS
     #define CONFIGURE_FILESYSTEM_DOSFS
     #define CONFIGURE_FILESYSTEM_RFS
+    #define CONFIGURE_FILESYSTEM_JFFS2
   #endif
 
   /*
@@ -283,7 +285,8 @@ const rtems_libio_helper rtems_fs_init_helper =
         defined(CONFIGURE_FILESYSTEM_FTPFS) || \
         defined(CONFIGURE_FILESYSTEM_NFS) || \
         defined(CONFIGURE_FILESYSTEM_DOSFS) || \
-        defined(CONFIGURE_FILESYSTEM_RFS)
+        defined(CONFIGURE_FILESYSTEM_RFS) || \
+        defined(CONFIGURE_FILESYSTEM_JFFS2)
         #error "Configured filesystems but root filesystem was not IMFS!"
         #error "Filesystems could be disabled, DEVFS is root, or"
         #error "  miniIMFS is root!"
@@ -440,6 +443,16 @@ const rtems_libio_helper rtems_fs_init_helper =
     { RTEMS_FILESYSTEM_TYPE_RFS, rtems_rfs_rtems_initialise }
 #endif
 
+/**
+ * JFFS2
+ */
+#if !defined(CONFIGURE_FILESYSTEM_ENTRY_JFFS2) && \
+    defined(CONFIGURE_FILESYSTEM_JFFS2)
+  #include <rtems/jffs2.h>
+  #define CONFIGURE_FILESYSTEM_ENTRY_JFFS2 \
+    { RTEMS_FILESYSTEM_TYPE_JFFS2, rtems_jffs2_initialize }
+#endif
+
 #ifdef CONFIGURE_INIT
 
   /**
@@ -512,6 +525,10 @@ const rtems_libio_helper rtems_fs_init_helper =
       #if defined(CONFIGURE_FILESYSTEM_RFS) && \
           defined(CONFIGURE_FILESYSTEM_ENTRY_RFS)
         CONFIGURE_FILESYSTEM_ENTRY_RFS,
+      #endif
+      #if defined(CONFIGURE_FILESYSTEM_JFFS2) && \
+          defined(CONFIGURE_FILESYSTEM_ENTRY_JFFS2)
+        CONFIGURE_FILESYSTEM_ENTRY_JFFS2,
       #endif
       CONFIGURE_FILESYSTEM_NULL
     };

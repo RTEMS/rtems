@@ -28,14 +28,19 @@
 #include <linux/jffs2.h>
 #include "compr.h"
 
-/* _compress returns the compressed size, -1 if bigger */
-static int jffs2_rtime_compress(unsigned char *data_in,
-				unsigned char *cpage_out,
-				uint32_t *sourcelen, uint32_t *dstlen)
+uint16_t rtems_jffs2_compressor_rtime_compress(
+	rtems_jffs2_compressor_control *self,
+	unsigned char *data_in,
+	unsigned char *cpage_out,
+	uint32_t *sourcelen,
+	uint32_t *dstlen
+)
 {
 	short positions[256];
 	int outpos = 0;
 	int pos=0;
+
+	(void) self;
 
 	memset(positions,0,sizeof(positions));
 
@@ -60,23 +65,34 @@ static int jffs2_rtime_compress(unsigned char *data_in,
 
 	if (outpos >= pos) {
 		/* We failed */
-		return -1;
+		return JFFS2_COMPR_NONE;
 	}
 
 	/* Tell the caller how much we managed to compress, and how much space it took */
 	*sourcelen = pos;
 	*dstlen = outpos;
-	return 0;
+	return JFFS2_COMPR_RTIME;
 }
 
 
-static int jffs2_rtime_decompress(unsigned char *data_in,
-				  unsigned char *cpage_out,
-				  uint32_t srclen, uint32_t destlen)
+int rtems_jffs2_compressor_rtime_decompress(
+	rtems_jffs2_compressor_control *self,
+	uint16_t comprtype,
+	unsigned char *data_in,
+	unsigned char *cpage_out,
+	uint32_t srclen,
+	uint32_t destlen
+)
 {
 	short positions[256];
 	int outpos = 0;
 	int pos=0;
+
+	(void) self;
+
+	if (comprtype != JFFS2_COMPR_RTIME) {
+		return -EIO;
+	}
 
 	memset(positions,0,sizeof(positions));
 
@@ -104,27 +120,4 @@ static int jffs2_rtime_decompress(unsigned char *data_in,
 		}
 	}
 	return 0;
-}
-
-static struct jffs2_compressor jffs2_rtime_comp = {
-    .priority = JFFS2_RTIME_PRIORITY,
-    .name = "rtime",
-    .compr = JFFS2_COMPR_RTIME,
-    .compress = &jffs2_rtime_compress,
-    .decompress = &jffs2_rtime_decompress,
-#ifdef JFFS2_RTIME_DISABLED
-    .disabled = 1,
-#else
-    .disabled = 0,
-#endif
-};
-
-int jffs2_rtime_init(void)
-{
-    return jffs2_register_compressor(&jffs2_rtime_comp);
-}
-
-void jffs2_rtime_exit(void)
-{
-    jffs2_unregister_compressor(&jffs2_rtime_comp);
 }

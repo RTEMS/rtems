@@ -50,7 +50,9 @@ struct jffs2_inode_info {
 
 	uint16_t flags;
 	uint8_t usercompr;
+#if !defined (__ECOS)
 	struct inode vfs_inode;
+#endif
 };
 
 #endif /* _JFFS2_FS_I */

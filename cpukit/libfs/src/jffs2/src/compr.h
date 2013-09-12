@@ -78,7 +78,7 @@ int jffs2_decompress(struct jffs2_sb_info *c, struct jffs2_inode_info *f,
 		     uint16_t comprtype, unsigned char *cdata_in,
 		     unsigned char *data_out, uint32_t cdatalen, uint32_t datalen);
 
-void jffs2_free_comprbuf(unsigned char *comprbuf, unsigned char *orig);
+#define jffs2_free_comprbuf(x, y) do { } while (0)
 
 /* Compressor modules */
 /* These functions will be called by jffs2_compressors_init/exit */

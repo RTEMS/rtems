@@ -21,8 +21,8 @@
 #include "acl.h"
 #include "summary.h"
 
-#ifdef __ECOS
-#include "os-ecos.h"
+#ifdef __rtems__
+#include "os-rtems.h"
 #else
 #include "os-linux.h"
 #endif
@@ -309,6 +309,7 @@ static inline int jffs2_blocks_use_vmalloc(struct jffs2_sb_info *c)
 
 #define PAD(x) (((x)+3)&~3)
 
+#ifndef __rtems__
 static inline int jffs2_encode_dev(union jffs2_device_node *jdev, dev_t rdev)
 {
 	if (old_valid_dev(rdev)) {
@@ -319,6 +320,7 @@ static inline int jffs2_encode_dev(union jffs2_device_node *jdev, dev_t rdev)
 		return sizeof(jdev->new_id);
 	}
 }
+#endif /* __rtems__ */
 
 static inline struct jffs2_node_frag *frag_first(struct rb_root *root)
 {

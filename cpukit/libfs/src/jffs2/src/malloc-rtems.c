@@ -12,12 +12,7 @@
  */
 
 #include <linux/kernel.h>
-#include <cyg/hal/drv_api.h>
 #include "nodelist.h"
-
-#if !defined(CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE)
-# define CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE 0
-#endif
 
 struct jffs2_full_dirent *jffs2_alloc_full_dirent(int namesize)
 {
@@ -69,6 +64,60 @@ void jffs2_free_tmp_dnode_info(struct jffs2_tmp_dnode_info *x)
 	free(x);
 }
 
+static struct jffs2_raw_node_ref *jffs2_alloc_refblock(void)
+{
+	struct jffs2_raw_node_ref *ret;
+
+	ret = malloc((REFS_PER_BLOCK + 1) * sizeof(*ret));
+	if (ret) {
+		int i = 0;
+		for (i=0; i < REFS_PER_BLOCK; i++) {
+			ret[i].flash_offset = REF_EMPTY_NODE;
+			ret[i].next_in_ino = NULL;
+		}
+		ret[i].flash_offset = REF_LINK_NODE;
+		ret[i].next_in_ino = NULL;
+	}
+	return ret;
+}
+
+int jffs2_prealloc_raw_node_refs(struct jffs2_sb_info *c,
+				 struct jffs2_eraseblock *jeb, int nr)
+{
+	struct jffs2_raw_node_ref **p, *ref;
+	int i = nr;
+
+	p = &jeb->last_node;
+	ref = *p;
+
+	/* If jeb->last_node is really a valid node then skip over it */
+	if (ref && ref->flash_offset != REF_EMPTY_NODE)
+		ref++;
+
+	while (i) {
+		if (!ref) {
+			ref = *p = jffs2_alloc_refblock();
+			if (!ref)
+				return -ENOMEM;
+		}
+		if (ref->flash_offset == REF_LINK_NODE) {
+			p = &ref->next_in_ino;
+			ref = *p;
+			continue;
+		}
+		i--;
+		ref++;
+	}
+	jeb->allocated_refs = nr;
+
+	return 0;
+}
+
+void jffs2_free_refblock(struct jffs2_raw_node_ref *x)
+{
+	free(x);
+}
+
 struct jffs2_node_frag *jffs2_alloc_node_frag(void)
 {
 	return malloc(sizeof(struct jffs2_node_frag));
@@ -78,75 +127,6 @@ void jffs2_free_node_frag(struct jffs2_node_frag *x)
 {
 	free(x);
 }
-
-#if CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE == 0
-
-int jffs2_create_slab_caches(void)
-{
-	return 0;
-}
-
-void jffs2_destroy_slab_caches(void)
-{
-}
-
-struct jffs2_raw_node_ref *jffs2_alloc_raw_node_ref(void)
-{
-	return malloc(sizeof(struct jffs2_raw_node_ref));
-}
-
-void jffs2_free_raw_node_ref(struct jffs2_raw_node_ref *x)
-{
-	free(x);
-}
-
-#else // CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE == 0
-
-static struct jffs2_raw_node_ref
-	rnr_pool[CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE] __attribute__ ((aligned (4))),
-	* first = NULL;
-static cyg_drv_mutex_t mutex;
-
-int jffs2_create_slab_caches(void)
-{
-	struct jffs2_raw_node_ref * p;
-	cyg_drv_mutex_init(&mutex);
-	for (
-		p = rnr_pool;
-		p < rnr_pool + CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE - 1;
-		p++
-	)
-		p->next_phys = p + 1;
-	rnr_pool[CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE - 1].next_phys = NULL;
-	first = &rnr_pool[0];
-	return 0;
-}
-
-void jffs2_destroy_slab_caches(void)
-{
-}
-
-struct jffs2_raw_node_ref *jffs2_alloc_raw_node_ref(void)
-{
-	struct jffs2_raw_node_ref * p;
-	
-	cyg_drv_mutex_lock(&mutex);
-	p = first;
-	if (p != NULL)
-		first = p->next_phys;
-	cyg_drv_mutex_unlock(&mutex);
-	return p;
-}
-
-void jffs2_free_raw_node_ref(struct jffs2_raw_node_ref *x)
-{
-	cyg_drv_mutex_lock(&mutex);
-	x->next_phys = first;
-	first = x;
-	cyg_drv_mutex_unlock(&mutex);
-}
-
-#endif // CYGNUM_FS_JFFS2_RAW_NODE_REF_CACHE_POOL_SIZE == 0
 
 struct jffs2_inode_cache *jffs2_alloc_inode_cache(void)
 {

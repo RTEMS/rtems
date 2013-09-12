@@ -120,6 +120,9 @@ include_rtems_rfs_HEADERS += libfs/src/rfs/rtems-rfs-link.h
 include_rtems_rfs_HEADERS += libfs/src/rfs/rtems-rfs-mutex.h
 include_rtems_rfs_HEADERS += libfs/src/rfs/rtems-rfs-trace.h
 
+# JFFS2
+include_rtems_HEADERS += libfs/src/jffs2/include/rtems/jffs2.h
+
 ## libblock
 include_rtems_HEADERS += libblock/include/rtems/bdbuf.h
 include_rtems_HEADERS += libblock/include/rtems/blkdev.h

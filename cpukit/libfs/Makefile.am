@@ -102,6 +102,35 @@ librfs_a_SOURCES = \
     src/rfs/rtems-rfs-rtems-dir.c src/rfs/rtems-rfs-rtems-file.c \
     src/rfs/rtems-rfs-trace.c
 
+# JFFS2
+noinst_LIBRARIES += libjffs2.a
+libjffs2_a_SOURCES =
+libjffs2_a_SOURCES += src/jffs2/src/build.c
+libjffs2_a_SOURCES += src/jffs2/src/compat-crc32.c
+libjffs2_a_SOURCES += src/jffs2/src/compat-rbtree.c
+libjffs2_a_SOURCES += src/jffs2/src/compr.c
+libjffs2_a_SOURCES += src/jffs2/src/compr_rtime.c
+libjffs2_a_SOURCES += src/jffs2/src/compr_zlib.c
+libjffs2_a_SOURCES += src/jffs2/src/debug.c
+libjffs2_a_SOURCES += src/jffs2/src/dir-rtems.c
+libjffs2_a_SOURCES += src/jffs2/src/erase.c
+libjffs2_a_SOURCES += src/jffs2/src/flashio.c
+libjffs2_a_SOURCES += src/jffs2/src/fs-rtems.c
+libjffs2_a_SOURCES += src/jffs2/src/gc.c
+libjffs2_a_SOURCES += src/jffs2/src/malloc-rtems.c
+libjffs2_a_SOURCES += src/jffs2/src/nodelist.c
+libjffs2_a_SOURCES += src/jffs2/src/nodemgmt.c
+libjffs2_a_SOURCES += src/jffs2/src/read.c
+libjffs2_a_SOURCES += src/jffs2/src/readinode.c
+libjffs2_a_SOURCES += src/jffs2/src/scan.c
+libjffs2_a_SOURCES += src/jffs2/src/write.c
+libjffs2_a_CFLAGS =
+libjffs2_a_CFLAGS += -Wno-pointer-sign
+libjffs2_a_CPPFLAGS =
+libjffs2_a_CPPFLAGS += $(AM_CPPFLAGS) -I$(srcdir)/src/jffs2/include
+libjffs2_a_CPPFLAGS += -D__ECOS
+libjffs2_a_CPPFLAGS += '-DKBUILD_MODNAME="JFFS2"'
+
 # ---
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am

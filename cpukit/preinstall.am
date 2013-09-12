@@ -257,6 +257,10 @@ $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-trace.h: libfs/src/rfs/rtems-rfs-trace.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-trace.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rfs/rtems-rfs-trace.h
 
+$(PROJECT_INCLUDE)/rtems/jffs2.h: libfs/src/jffs2/include/rtems/jffs2.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/jffs2.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/jffs2.h
+
 $(PROJECT_INCLUDE)/rtems/bdbuf.h: libblock/include/rtems/bdbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdbuf.h

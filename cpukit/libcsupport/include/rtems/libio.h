@@ -1437,6 +1437,7 @@ extern int rtems_mkdir(const char *path, mode_t mode);
 #define RTEMS_FILESYSTEM_TYPE_NFS "nfs"
 #define RTEMS_FILESYSTEM_TYPE_DOSFS "dosfs"
 #define RTEMS_FILESYSTEM_TYPE_RFS "rfs"
+#define RTEMS_FILESYSTEM_TYPE_JFFS2 "jffs2"
 
 /** @} */
 
