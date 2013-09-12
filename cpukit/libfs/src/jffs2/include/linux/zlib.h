@@ -1,7 +1,7 @@
 #ifndef __LINUX_ZLIB_H__
 #define __LINUX_ZLIB_H__
 
-#include <cyg/compress/zlib.h>
+#include <zlib.h>
 
 #define zlib_deflateInit(x,y) deflateInit(x,y)
 #define zlib_deflate(x,y) deflate(x,y)

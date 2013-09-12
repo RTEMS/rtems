@@ -1,19 +1,25 @@
 #ifndef __LINUX_TYPES_H__
 #define __LINUX_TYPES_H__
 
-#include "cyg/infra/cyg_type.h"
-
-#define uint8_t cyg_uint8
-#define uint16_t cyg_uint16
-#define uint32_t cyg_uint32
-
-#define int8_t cyg_int8
-#define int16_t cyg_int16
-#define int32_t cyg_int32
+#include <sys/types.h>
+#include <stdint.h>
 
 #define loff_t off_t
 
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+
+typedef uint8_t __u8;
+typedef uint16_t __u16;
+typedef uint32_t __u32;
 
 #define kvec iovec
+
+struct qstr {
+	const char *name;
+	size_t len;
+};
+
 #endif /* __LINUX_TYPES_H__ */
 

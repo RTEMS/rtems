@@ -103,6 +103,20 @@ list_del( struct list_head *ent )
     ent->next->prev = ent->prev;
 } /* list_del() */
 
+static __inline__ void
+list_move( struct list_head *list, struct list_head *head )
+{
+    list_del( list );
+    list_add( list, head );
+}
+
+static __inline__ void
+list_move_tail( struct list_head *list, struct list_head *head )
+{
+    list_del( list );
+    list_add_tail( list, head );
+}
+
 /* Is this list empty? */
 static __inline__ int
 list_empty( struct list_head *list )

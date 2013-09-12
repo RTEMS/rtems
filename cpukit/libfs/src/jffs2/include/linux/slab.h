@@ -3,8 +3,9 @@
 
 #include <stdlib.h>
 
-#include <asm/page.h> /* Don't ask. Linux headers are a mess. */
+#include <asm/page.h>
 
+#define kzalloc(x, y) calloc(1, x)
 #define kmalloc(x, y) malloc(x)
 #define kfree(x) free(x)
 #define vmalloc(x) malloc(x)

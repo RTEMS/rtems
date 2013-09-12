@@ -119,8 +119,9 @@
 	RB_LEFT(tmp) = (elm);					\
 	RB_PARENT(elm) = (tmp);					\
 	RB_AUGMENT(tmp);					\
-	if ((RB_PARENT(tmp)))					\
+	if ((RB_PARENT(tmp))) {					\
 		RB_AUGMENT(RB_PARENT(tmp));			\
+	}							\
 } while (0)
 
 #define RB_ROTATE_RIGHT(head, elm, tmp) do {			\
@@ -139,8 +140,9 @@
 	RB_RIGHT(tmp) = (elm);					\
 	RB_PARENT(elm) = (tmp);					\
 	RB_AUGMENT(tmp);					\
-	if ((RB_PARENT(tmp)))					\
+	if ((RB_PARENT(tmp))) {					\
 		RB_AUGMENT(RB_PARENT(tmp));			\
+	}							\
 } while(0)
 
 /* Note args swapped to match Linux */
@@ -382,6 +384,18 @@ struct rb_node *rb_first(struct rb_root *root)
         while (n->rb_left)
                 n = n->rb_left;
         return n;
+}
+
+struct rb_node *rb_last(struct rb_root *root)
+{
+	struct rb_node	*n;
+
+	n = root->rb_node;
+	if (!n)
+		return 0;
+	while (n->rb_right)
+		n = n->rb_right;
+	return n;
 }
 
 void rb_replace_node(struct rb_node *victim, struct rb_node *new,

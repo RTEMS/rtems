@@ -1,7 +1,6 @@
 #ifndef __LINUX_WORKQUEUE_H__
 #define __LINUX_WORKQUEUE_H__
 
-/* We don't do this yet */
 struct work_struct { } ;
 
 #define INIT_WORK(x,y,z) /* */
