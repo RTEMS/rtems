@@ -326,34 +326,42 @@ struct IMFS_jnode_tt {
   IMFS_types_union    info;
 };
 
-#define IMFS_update_atime( _jnode )         \
-  do {                                      \
-    struct timeval tv;                      \
-    gettimeofday( &tv, 0 );                 \
-    _jnode->stat_atime  = (time_t) tv.tv_sec; \
-  } while (0)
+static inline void IMFS_update_atime( IMFS_jnode_t *jnode )
+{
+  struct timeval now;
 
-#define IMFS_update_mtime( _jnode )         \
-  do {                                      \
-    struct timeval tv;                      \
-    gettimeofday( &tv, 0 );                 \
-    _jnode->stat_mtime  = (time_t) tv.tv_sec; \
-  } while (0)
+  gettimeofday( &now, 0 );
 
-#define IMFS_update_ctime( _jnode )         \
-  do {                                      \
-    struct timeval tv;                      \
-    gettimeofday( &tv, 0 );                 \
-    _jnode->stat_ctime  = (time_t) tv.tv_sec; \
-  } while (0)
+  jnode->stat_atime = now.tv_sec;
+}
 
-#define IMFS_mtime_ctime_update( _jnode )   \
-  do {                                      \
-    struct timeval tv;                      \
-    gettimeofday( &tv, 0 );                 \
-    _jnode->stat_mtime  = (time_t) tv.tv_sec; \
-    _jnode->stat_ctime  = (time_t) tv.tv_sec; \
-  } while (0)
+static inline void IMFS_update_mtime( IMFS_jnode_t *jnode )
+{
+  struct timeval now;
+
+  gettimeofday( &now, 0 );
+
+  jnode->stat_mtime = now.tv_sec;
+}
+
+static inline void IMFS_update_ctime( IMFS_jnode_t *jnode )
+{
+  struct timeval now;
+
+  gettimeofday( &now, 0 );
+
+  jnode->stat_ctime = now.tv_sec;
+}
+
+static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
+{
+  struct timeval now;
+
+  gettimeofday( &now, 0 );
+
+  jnode->stat_mtime = now.tv_sec;
+  jnode->stat_ctime = now.tv_sec;
+}
 
 typedef struct {
   int instance;
