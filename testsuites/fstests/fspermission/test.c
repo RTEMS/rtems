@@ -203,6 +203,7 @@ static void test_premission01(void )
    *Create a file with mode 0777
    */
   fd=creat(file01,mode);
+  rtems_test_assert(fd >= 0);
   status=close(fd);
   rtems_test_assert(status==0);
   /*
@@ -210,6 +211,7 @@ static void test_premission01(void )
    */
 
   fd=creat(file02,0240);
+  rtems_test_assert(fd >= 0);
   status=close(fd);
   rtems_test_assert(status==0);
 
@@ -240,7 +242,10 @@ static void test_premission01(void )
   status=mkdir(directory01,0777);
   rtems_test_assert(status==0);
   sprintf(path,"%s/%s",directory01,file01);
-  fd=creat(path,0777);
+  fd = creat(path,0777);
+  rtems_test_assert(fd >= 0);
+  status = close(fd);
+  rtems_test_assert(status == 0);
 
   status=chmod(directory01,0340);
   rtems_test_assert (status == 0);
@@ -260,6 +265,7 @@ static void test_premission01(void )
    * Test write
    */
   fd=open(file01,O_WRONLY);
+  rtems_test_assert(fd >= 0);
   n=write(fd,test_data,len);
   rtems_test_assert(n==len);
   status=close(fd);
@@ -276,7 +282,7 @@ static void test_premission01(void )
    */
   data_buf=(char*)malloc(len+1);
   fd=open(file01,O_RDWR);
-  rtems_test_assert(fd!=-1);
+  rtems_test_assert(fd >= 0);
   n=read(fd,data_buf,len);
   rtems_test_assert(n==len);
   status=close(fd);
@@ -313,6 +319,7 @@ static void test_premission01(void )
   rtems_test_assert(status==0);
 
   fd=open(file01,O_WRONLY);
+  rtems_test_assert(fd >= 0);
   n=write(fd,test_data,len);
   rtems_test_assert(n==len);
   status=close(fd);
