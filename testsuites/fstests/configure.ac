@@ -89,6 +89,13 @@ imfs_fspermission/Makefile
 imfs_fsrdwr/Makefile
 imfs_fssymlink/Makefile
 imfs_fstime/Makefile
+jffs2_fserror/Makefile
+jffs2_fslink/Makefile
+jffs2_fspatheval/Makefile
+jffs2_fspermission/Makefile
+jffs2_fsrdwr/Makefile
+jffs2_fssymlink/Makefile
+jffs2_fstime/Makefile
 mdosfs_fserror/Makefile
 mdosfs_fspatheval/Makefile
 mdosfs_fsrdwr/Makefile
