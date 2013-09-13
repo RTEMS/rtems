@@ -22,23 +22,47 @@
 #include <unistd.h>
 #include <utime.h>
 
+#ifdef __rtems__
 #include "fstest.h"
 #include "pmacros.h"
+#else
+#include <assert.h>
+#define rtems_test_assert(x) assert(x)
+#define TIME_PRECISION  (2)
+#define TIME_EQUAL(x,y) (abs((x)-(y))<TIME_PRECISION)
+#endif
+
+static int do_create(const char *path, int oflag, mode_t mode)
+{
+  int fd = open (path, O_CREAT | oflag, mode);
+  rtems_test_assert (fd >= 0);
+
+  return fd;
+}
+
+static int do_open(const char *path, int oflag)
+{
+  int fd = open (path, O_CREAT | oflag);
+  rtems_test_assert (fd >= 0);
+
+  return fd;
+}
 
 static void time_test01 (void)
 {
-  struct stat statbuf;
+  struct stat st;
   struct utimbuf timbuf;
-  int status = 0;
+  int status;
   int fd;
-  time_t ctime1, mtime1;
-  time_t ctime2, mtime2;
-  char *readbuf;
-  char *databuf = "TEST";
-  char *file01 = "test01";
-  char *file02 = "test02";
-  char *file03 = "test03";
-  char *dir01 = "dir01";
+  time_t creation_time;
+  time_t truncation_time;
+  time_t dir01_creation_time;
+  char databuf[] = "TEST";
+  char readbuf[sizeof(databuf)];
+  const char *file01 = "test01";
+  const char *file02 = "test02";
+  const char *file03 = "test03";
+  const char *dir01 = "dir01";
 
   int n;
   int len = strlen (databuf);
@@ -54,22 +78,28 @@ static void time_test01 (void)
   rtems_test_assert (status == 0);
 
   /*
+   * Sleep a few seconds
+   */
+  puts ("Sleep a few seconds");
+  sleep (3 * TIME_PRECISION);
+
+  /*
    * Create the test files
    */
-  fd = open (file01, O_CREAT | O_WRONLY, mode);
+  fd = do_create (file01, O_WRONLY, mode);
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
   status = close (fd);
   rtems_test_assert (status == 0);
 
-  fd = open (file02, O_CREAT | O_WRONLY, mode);
+  fd = do_create (file02, O_WRONLY, mode);
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
   status = close (fd);
   rtems_test_assert (status == 0);
 
   /* A simple C version of touch */
-  fd = open (file03, O_CREAT | O_WRONLY, mode);
+  fd = do_create (file03, O_WRONLY, mode);
   status = close (fd);
   rtems_test_assert (status == 0);
 
@@ -79,48 +109,51 @@ static void time_test01 (void)
    * st_ctime, and st_mtime fields of the file and the st_ctime and
    * st_mtime fields of the parent directory.
    */
-  status = stat (file01, &statbuf);
+  status = stat (file01, &st);
   rtems_test_assert (status == 0);
-  ctime1 = statbuf.st_ctime;
-  mtime1 = statbuf.st_mtime;
-
-  status = stat (".", &statbuf);
-  rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
 
   /*
    * Make sure they are the same
    */
+  rtems_test_assert (st.st_ctime == st.st_mtime);
 
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime1));
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
-  rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
+  creation_time = st.st_ctime;
 
-
-  status = stat (file02, &statbuf);
+  status = stat (".", &st);
   rtems_test_assert (status == 0);
-  ctime1 = statbuf.st_ctime;
-  mtime1 = statbuf.st_mtime;
-
-  status = stat (".", &statbuf);
-  rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
 
   /*
    * Make sure they are the same
    */
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime1));
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
-  rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_mtime));
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_ctime));
+
+  status = stat (file02, &st);
+  rtems_test_assert (status == 0);
+
+  /*
+   * Make sure they are the same
+   */
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_mtime));
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_ctime));
+
+  status = stat (file03, &st);
+  rtems_test_assert (status == 0);
+
+  /*
+   * Make sure they are the same
+   */
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_mtime));
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_ctime));
 
   /*
    * Sleep a few seconds
    */
   puts ("Sleep a few seconds");
-
-  sleep (TIME_PRECISION);
+  sleep (3 * TIME_PRECISION);
 
   /*
    * Create an empty directory
@@ -143,76 +176,82 @@ static void time_test01 (void)
   /*
    * Truncate an empty file which does not change the length.
    */
-  fd = open (file03, O_TRUNC | O_WRONLY, mode);
+  fd = do_open (file03, O_TRUNC | O_WRONLY);
   status = close (fd);
   rtems_test_assert (status == 0);
 
   /*
+   * ftruncate() and open() with O_TRUNC shall upon successful completion mark
+   * for update the st_ctime and st_mtime fields of the file.
    *
-   *  truncate shall not modify the file offset for any open file
-   *   descriptions associated with the file. Upon successful completion,
-   *   if the file size is changed, this function shall mark for update
-   *   the st_ctime and st_mtime fields of the file
+   * truncate() shall upon successful completion, if the file size is changed,
+   * mark for update the st_ctime and st_mtime fields of the file.
    *
-   *  open with O_TRUNC must update the file fields.
+   * The POSIX standard "The Open Group Base Specifications Issue 7", IEEE Std
+   * 1003.1, 2013 Edition says nothing about the behaviour of truncate() if the
+   * file size remains unchanged.
+   *
+   * Future directions of the standard may mandate the behaviour specified in
+   * ftruncate():
+   *
+   * http://austingroupbugs.net/view.php?id=489
    */
 
   /*
-   * file01 shall not update
+   * file01 is currently unspecified
    */
-  status = stat (file01, &statbuf);
+  status = stat (file01, &st);
   rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
 
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
-  rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  if (TIME_EQUAL (creation_time, st.st_ctime)) {
+    puts ("WARNING: truncate() behaviour may violate future POSIX standard");
+  }
+
+  truncation_time = st.st_ctime;
 
   /*
    * file02 shall update
    */
-  status = stat (file02, &statbuf);
+  status = stat (file02, &st);
   rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
 
-  rtems_test_assert (TIME_EQUAL (ctime2, mtime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, mtime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (!TIME_EQUAL (creation_time, st.st_ctime));
 
   /*
    * file03 shall update
    */
-  status = stat (file03, &statbuf);
+  status = stat (file03, &st);
   rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
 
-  rtems_test_assert (TIME_EQUAL (ctime2, mtime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, mtime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (!TIME_EQUAL (creation_time, st.st_ctime));
 
   /*
    *  Upon successful completion, mkdir() shall mark for update the
-   *  5st_atime, st_ctime, and st_mtime fields of the directory.
+   *  st_atime, st_ctime, and st_mtime fields of the directory.
    *  Also, the st_ctime and st_mtime fields of the directory that
    *  contains the new entry shall be marked for update.
    */
-  status = stat (dir01, &statbuf);
+  status = stat (dir01, &st);
   rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
-  rtems_test_assert (TIME_EQUAL (ctime2, mtime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, mtime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
 
-  status = stat (".", &statbuf);
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+
+  dir01_creation_time = st.st_ctime;
+
+  status = stat (".", &st);
   rtems_test_assert (status == 0);
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
 
-  rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, mtime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (dir01_creation_time, st.st_mtime));
+
+  /*
+   * Sleep a few seconds
+   */
+  puts ("Sleep a few seconds");
+  sleep (3 * TIME_PRECISION);
 
   /*
    * Upon successful completion, where nbyte is greater than 0,
@@ -222,36 +261,27 @@ static void time_test01 (void)
   /*
    * read file01, and this should not uptate st_mtime and st_ctime
    */
-  readbuf = (char *) malloc (len + 1);
-  fd = open (file01, O_RDONLY);
-  rtems_test_assert (fd != -1);
+  fd = do_open (file01, O_RDONLY);
   n = read (fd, readbuf, len);
   rtems_test_assert (n == len);
-  status = fstat (fd, &statbuf);
+  status = fstat (fd, &st);
+  rtems_test_assert (status == 0);
 
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
-
-  rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (truncation_time, st.st_mtime));
 
   status = close (fd);
   rtems_test_assert (status == 0);
   /*
    * write file01, and this should uptate st_mtime st_ctime
    */
-  readbuf = (char *) malloc (len + 1);
-  fd = open (file01, O_WRONLY);
-  rtems_test_assert (fd != -1);
+  fd = do_open (file01, O_WRONLY);
   n = write (fd, databuf, len);
   rtems_test_assert (n == len);
-  status = fstat (fd, &statbuf);
+  status = fstat (fd, &st);
 
-  ctime2 = statbuf.st_ctime;
-  mtime2 = statbuf.st_mtime;
-
-  rtems_test_assert (!TIME_EQUAL (ctime1, ctime2));
-  rtems_test_assert (!TIME_EQUAL (ctime1, mtime2));
+  rtems_test_assert (st.st_ctime == st.st_mtime);
+  rtems_test_assert (!TIME_EQUAL (truncation_time, st.st_mtime));
   status = close (fd);
   rtems_test_assert (status == 0);
 
@@ -259,39 +289,46 @@ static void time_test01 (void)
    * The utime() function shall set the access and modification times
    *  of the file named by the path argument.
    */
-  timbuf.actime = ctime1;
-  timbuf.modtime = mtime1;
+  timbuf.actime = creation_time;
+  timbuf.modtime = creation_time;
 
   status = utime (file01, &timbuf);
   rtems_test_assert (status == 0);
 
-  status = stat (file01, &statbuf);
-  ctime2 = statbuf.st_atime;
-  mtime2 = statbuf.st_mtime;
+  status = stat (file01, &st);
+  rtems_test_assert (status == 0);
 
-  rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
+  rtems_test_assert (st.st_atime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_atime));
+  rtems_test_assert (!TIME_EQUAL (creation_time, st.st_ctime));
 
   status = utime (dir01, &timbuf);
   rtems_test_assert (status == 0);
 
-  status = stat (dir01, &statbuf);
-  ctime2 = statbuf.st_atime;
-  mtime2 = statbuf.st_mtime;
+  status = stat (dir01, &st);
+  rtems_test_assert (status == 0);
 
-  rtems_test_assert (TIME_EQUAL (ctime1, ctime2));
-  rtems_test_assert (TIME_EQUAL (ctime1, mtime2));
-
+  rtems_test_assert (st.st_atime == st.st_mtime);
+  rtems_test_assert (TIME_EQUAL (creation_time, st.st_atime));
+  rtems_test_assert (!TIME_EQUAL (creation_time, st.st_ctime));
 }
 
 /*
  * These tests only get time_t value, and test
  * if they are changed. Thest tests don't check atime
  */
+#ifdef __rtems__
 void test (void)
+#else
+int main(int argc, char **argv)
+#endif
 {
 
   puts( "\n\n*** TIME TEST ***" );
   time_test01();
   puts( "*** END OF TIME TEST ***" );
+
+#ifndef __rtems__
+  return 0;
+#endif
 }
