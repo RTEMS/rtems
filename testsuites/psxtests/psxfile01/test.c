@@ -617,7 +617,7 @@ since new path is not valid");
   rtems_test_assert( !status );
 
   /*
-   * Verify truncate changed only atime.
+   * Verify truncate changed all except atime.
    */
   status = stat( "/tmp/j", &buf );
   rtems_test_assert( !status );
@@ -625,9 +625,9 @@ since new path is not valid");
   atime2 = buf.st_atime;
   mtime2 = buf.st_mtime;
   ctime2 = buf.st_ctime;
-  rtems_test_assert( atime1 != atime2);
-  rtems_test_assert( mtime1 == mtime2);
-  rtems_test_assert( ctime1 == ctime2);
+  rtems_test_assert( atime1 == atime2);
+  rtems_test_assert( mtime1 != mtime2);
+  rtems_test_assert( ctime1 != ctime2);
 
   IMFS_dump();
 
