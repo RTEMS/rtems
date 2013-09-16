@@ -89,8 +89,8 @@ loop:   movel   #0,a1@+                 | to zero out uninitialized
         lea     SYM (hiintstack),a0   | a0 = high end of intr stack
         movec   a0,isp                | set interrupt stack
 #endif
-        movel   #0,a7@-               | push command line
 
+        movel   #0,a7@-               | push command line
         jsr     SYM (boot_card)
         addl    #12,a7
 
