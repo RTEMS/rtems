@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = POSIX
+SUBDIRS += block17
 SUBDIRS += exit02
 SUBDIRS += exit01
 SUBDIRS += utf8proc01

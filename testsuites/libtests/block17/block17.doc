@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: block17
+
+directives:
+
+  - rtems_bdbuf_init()
+
+concepts:
+
+  - Ensure that maximum read-ahead blocks count configuration error gets
+    detected.

@@ -1378,6 +1378,13 @@ rtems_bdbuf_swapout_workers_create (void)
   return sc;
 }
 
+static size_t
+rtems_bdbuf_read_request_size (uint32_t transfer_count)
+{
+  return sizeof (rtems_blkdev_request)
+    + sizeof (rtems_blkdev_sg_buffer) * transfer_count;
+}
+
 /**
  * Initialise the cache.
  *
@@ -1403,7 +1410,12 @@ rtems_bdbuf_init (void)
   /*
    * Check the configuration table values.
    */
+
   if ((bdbuf_config.buffer_max % bdbuf_config.buffer_min) != 0)
+    return RTEMS_INVALID_NUMBER;
+
+  if (rtems_bdbuf_read_request_size (bdbuf_config.max_read_ahead_blocks)
+      > RTEMS_MINIMUM_STACK_SIZE / 8U)
     return RTEMS_INVALID_NUMBER;
 
   /*
@@ -2077,8 +2089,7 @@ rtems_bdbuf_execute_read_request (rtems_disk_device  *dd,
    */
 #define bdbuf_alloc(size) __builtin_alloca (size)
 
-  req = bdbuf_alloc (sizeof (rtems_blkdev_request) +
-                     sizeof (rtems_blkdev_sg_buffer) * transfer_count);
+  req = bdbuf_alloc (rtems_bdbuf_read_request_size (transfer_count));
 
   req->req = RTEMS_BLKDEV_REQ_READ;
   req->done = rtems_bdbuf_transfer_done;

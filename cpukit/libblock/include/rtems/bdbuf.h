@@ -460,7 +460,7 @@ extern const rtems_bdbuf_config rtems_bdbuf_configuration;
  * @retval RTEMS_SUCCESSFUL Successful operation. 
  * @retval RTEMS_CALLED_FROM_ISR Called from an interrupt context.
  * @retval RTEMS_INVALID_NUMBER The buffer maximum is not an integral multiple
- * of the buffer minimum.
+ * of the buffer minimum.  The maximum read-ahead blocks count is too large.
  * @retval RTEMS_RESOURCE_IN_USE Already initialized.
  * @retval RTEMS_UNSATISFIED Not enough resources.
  */
