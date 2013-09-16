@@ -39,7 +39,7 @@
 
 #define CLOCK_RATE     (115200 * 16)
 
-uint8_t com_get_register(uint32_t addr,uint8_t i)
+uint8_t com_get_register(uint32_t addr, uint8_t i)
 {
   register uint8_t val;
   
@@ -47,9 +47,9 @@ uint8_t com_get_register(uint32_t addr,uint8_t i)
   return val;
 }
 
-void com_set_register(uint32_t addr,uint8_t i, uint8_t val)
+void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
 {
-  outport_byte( (addr+i),val );
+  outport_byte( (addr + i),val );
 }
 
 console_tbl     Console_Configuration_Ports[] = {
