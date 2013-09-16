@@ -82,7 +82,6 @@ extern int rtems_leon_greth_driver_attach(
 
 extern int   CPU_SPARC_HAS_SNOOPING;
 
-
 /* Constants */
 
 /*
