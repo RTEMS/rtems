@@ -98,11 +98,11 @@ handler_addr_swi:
 
 handler_addr_prefetch:
 
-	.word	_ARMV4_Exception_data_abort_default
+	.word	_ARMV4_Exception_pref_abort_default
 
 handler_addr_abort:
 
-	.word	_ARMV4_Exception_pref_abort_default
+	.word	_ARMV4_Exception_data_abort_default
 
 handler_addr_reserved:
 
