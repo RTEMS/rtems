@@ -283,3 +283,73 @@ Interrupt Controller model which does not require the BSP to implement
 @code{set_vector}.  BSPs for these architectures must provide a different
 set of support routines.
 
+@section Programmable Interrupt Controller API
+
+A BSP can use the PIC API to install Interrupt Service Routines through
+a set of generic methods. In order to do so, the header files
+libbsp/shared/include/irq-generic.h and libbsp/shared/include/irq-info.h
+must be included by the bsp specific irq.h file present in the include/
+directory. The irq.h acts as a BSP interrupt support configuration file which
+is used to define some important MACROS. It contains the declarations for
+any required global functions like bsp_interrupt_dispatch(). Thus later on,
+every call to the PIC interface requires including <bsp/irq.h>
+
+The generic interrupt handler table is intitalized by invoking the
+@code{bsp_interrupt_initialize()} method from bsp_start() in the bspstart.c
+file which sets up this table to store the ISR addresses, whose size is based
+on the definition of macros, BSP_INTERRUPT_VECTOR_MIN & BSP_INTERRUPT_VECTOR_MAX
+in include/bsp.h
+
+For the generic handler table to properly function, some bsp specific code is
+required, that should be present in irq/irq.c . The bsp-specific functions required
+to be writen by the BSP developer are :
+
+@itemize @bullet
+
+@findex bsp_interrupt_facility_initialize()
+@item @code{bsp_interrupt_facility_initialize()} contains bsp specific interrupt
+initialization code(Clear Pending interrupts by modifying registers, etc.).
+This method is called from bsp_interrupt_initialize() internally while setting up
+the table.
+
+@findex bsp_interrupt_handler_default()
+@item @code{bsp_interrupt_handler_default()} acts as a fallback handler when
+no ISR address has been provided corresponding to a vector in the table.
+
+@findex bsp_interrupt_dispatch()
+@item @code{bsp_interrupt_dispatch()} service the ISR by handling
+any bsp specific code & calling the generic method bsp_interrupt_handler_dispatch()
+which in turn services the interrupt by running the ISR after looking it up in
+the table. It acts as an entry to the interrupt switchboard, since the bsp
+branches to this function at the time of occurrence of an interrupt.
+
+@findex bsp_interrupt_vector_enable()
+@item @code{bsp_interrupt_vector_enable()} enables interrupts and is called in
+irq-generic.c while setting up the table.
+
+@findex bsp_interrupt_vector_disable()
+@item @code{bsp_interrupt_vector_disable()} disables interrupts and is called in
+irq-generic.c while setting up the table & during other important parts.
+
+@end itemize
+
+An interrupt handler is installed or removed with the help of the following functions :
+
+@example
+@group
+rtems_status_code rtems_interrupt_handler_install(   /* returns status code */
+  rtems_vector_number vector,                        /* interrupt vector */
+  const char *info,                           /* custom identification text */
+  rtems_option options,                              /* Type of Interrupt */
+  rtems_interrupt_handler handler,                   /* interrupt handler */
+  void *arg  /* parameter to be passed to handler at the time of invocation */
+)
+
+rtems_status_code rtems_interrupt_handler_remove(   /* returns status code */
+  rtems_vector_number vector,                       /* interrupt vector */
+  rtems_interrupt_handler handler,                  /* interrupt handler */
+  void *arg                          /* parameter to be passed to handler */
+)
+
+@end group
+@end example
