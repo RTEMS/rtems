@@ -158,3 +158,11 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+$(PROJECT_LIB)/linkcmds.realview_pbx_a9_qemu: startup/linkcmds.realview_pbx_a9_qemu $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.realview_pbx_a9_qemu
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.realview_pbx_a9_qemu
+
+$(PROJECT_LIB)/linkcmds.realview_pbx_a9_qemu_smp: startup/linkcmds.realview_pbx_a9_qemu_smp $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.realview_pbx_a9_qemu_smp
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.realview_pbx_a9_qemu_smp
+

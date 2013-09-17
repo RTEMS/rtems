@@ -1,5 +1,6 @@
 MEMORY {
-	RAM : ORIGIN = 0x00000000, LENGTH = 256M - 16k
+	/* Waste the first 1MiB for NULL pointer protection */
+	RAM : ORIGIN = 0x00100000, LENGTH = 255M - 16k
 	RAM_MMU : ORIGIN = 0x0fffc000, LENGTH = 16k
 }
 

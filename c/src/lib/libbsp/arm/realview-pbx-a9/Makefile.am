@@ -62,10 +62,8 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
-
-EXTRA_DIST =
-EXTRA_DIST += startup/linkcmds.realview_pbx_a9_qemu
-EXTRA_DIST += startup/linkcmds.realview_pbx_a9_qemu_smp
+project_lib_DATA += startup/linkcmds.realview_pbx_a9_qemu
+project_lib_DATA += startup/linkcmds.realview_pbx_a9_qemu_smp
 
 ###############################################################################
 #                  LibBSP                                                     #
