@@ -39,7 +39,9 @@ static const stm32f4_rcc_index usart_rcc_index [] = {
   STM32F4_RCC_USART3,
   STM32F4_RCC_UART4,
   STM32F4_RCC_UART5,
+#ifdef STM32F4_FAMILY_F4XXXX
   STM32F4_RCC_USART6
+#endif /* STM32F4_FAMILY_F4XXXX */
 };
 
 static stm32f4_rcc_index usart_get_rcc_index(const console_tbl *ct)

@@ -13,6 +13,7 @@
  */
 
 #include <bsp/rcc.h>
+#include <bsp/stm32f4.h>
 
 #include <rtems.h>
 
@@ -49,7 +50,13 @@ void stm32f4_rcc_set_reset(stm32f4_rcc_index index, bool set)
 {
   volatile stm32f4_rcc *rcc = STM32F4_RCC;
 
+#ifdef STM32F4_FAMILY_F4XXXX
   rcc_set(index, set, &rcc->ahbrstr [0]);
+#endif/* STM32F4_FAMILY_F4XXXX */
+#ifdef STM32F4_FAMILY_F10XXX
+  /* The first register is missing for the reset-block */
+  rcc_set(index, set, &rcc->cir);
+#endif /* STM32F4_FAMILY_F10XXX */
 }
 
 void stm32f4_rcc_set_clock(stm32f4_rcc_index index, bool set)
@@ -59,9 +66,11 @@ void stm32f4_rcc_set_clock(stm32f4_rcc_index index, bool set)
   rcc_set(index, set, &rcc->ahbenr [0]);
 }
 
+#ifdef STM32F4_FAMILY_F4XXXX
 void stm32f4_rcc_set_low_power_clock(stm32f4_rcc_index index, bool set)
 {
   volatile stm32f4_rcc *rcc = STM32F4_RCC;
 
   rcc_set(index, set, &rcc->ahblpenr [0]);
 }
+#endif /* STM32F4_FAMILY_F4XXXX */

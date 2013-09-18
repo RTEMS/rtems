@@ -105,6 +105,26 @@ $(PROJECT_INCLUDE)/bsp/stm32f4.h: include/stm32f4.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4.h
 
+$(PROJECT_INCLUDE)/bsp/stm32f10xxx_gpio.h: include/stm32f10xxx_gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f10xxx_gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f10xxx_gpio.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f10xxx_rcc.h: include/stm32f10xxx_rcc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f10xxx_rcc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f10xxx_rcc.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_gpio.h: include/stm32f4xxxx_gpio.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_gpio.h
+
+$(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h: include/stm32f4xxxx_rcc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h
+
+$(PROJECT_INCLUDE)/bsp/stm32_usart.h: include/stm32_usart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32_usart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32_usart.h
+
 $(PROJECT_INCLUDE)/bsp/io.h: include/io.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/io.h
