@@ -325,7 +325,9 @@ do_move_mv(rtems_shell_mv_globals* globals, char *from, char *to)
 int
 fastcopy_mv(rtems_shell_mv_globals* globals, char *from, char *to, struct stat *sbp)
 {
+#ifndef __rtems__
 	struct timeval tval[2];
+#endif
 	uint32_t blen;
 	static char *bp;
 	int nread, from_fd, to_fd;
@@ -366,6 +368,7 @@ err:		if (unlink(to))
 
   (void)free(bp);
 	(void)close(from_fd);
+#ifndef __rtems__
 #ifdef xBSD4_4
 	TIMESPEC_TO_TIMEVAL(&tval[0], &sbp->st_atimespec);
 	TIMESPEC_TO_TIMEVAL(&tval[1], &sbp->st_mtimespec);
@@ -375,7 +378,8 @@ err:		if (unlink(to))
 	tval[0].tv_usec = 0;
 	tval[1].tv_usec = 0;
 #endif
-#if 0
+#endif
+#ifndef __rtems__
 #ifdef _SRV5
 	if (utimes(to, tval))
 #else
