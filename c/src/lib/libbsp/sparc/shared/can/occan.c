@@ -747,7 +747,7 @@ static void occan_stat_print(occan_stats *stats){
 static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result){
 	int best_error = 1000000000;
 	int error;
-	int best_tseg=0, best_brp=0, best_rate=0, brp=0;
+	int best_tseg=0, best_brp=0, brp=0;
 	int tseg=0, tseg1=0, tseg2=0;
 	int sjw = 0;
 	int clock = clock_hz / 2;
@@ -791,7 +791,6 @@ static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_
 			best_error = error;
 			best_tseg = tseg/2;
 			best_brp = brp-1;
-			best_rate = clock/(brp*(1+tseg/2));
 		}
 	}
 
