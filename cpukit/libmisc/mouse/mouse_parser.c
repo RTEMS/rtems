@@ -299,7 +299,7 @@ void mouse_parser_enqueue( unsigned char *buffer, size_t size )
   BUTTON bptr;
 
   while( size-- ) {
-    if ( MOU_Data( *buffer++, &dx, &dy, &dz, &bptr ) ) {
+    if ( MOU_Data( *buffer++, &dx, &dy, &dz, &bptr ) == 1 ) {
        struct MW_UID_MESSAGE m;
 
         m.type = MV_UID_REL_POS;
