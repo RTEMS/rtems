@@ -29,7 +29,7 @@ void BSP_shared_interrupt_init(void)
 {
        rtems_vector_number vector;
        rtems_isr_entry previous_isr;
-       int sc, i;
+       int i;
 
        for (i=0; i <= BSP_INTERRUPT_VECTOR_MAX_STD; i++) {
                vector = SPARC_ASYNCHRONOUS_TRAP(i) + 0x10;
