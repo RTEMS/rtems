@@ -33,17 +33,20 @@ int sigsuspend(
 {
   sigset_t            saved_signals_blocked;
   sigset_t            current_unblocked_signals;
-  int                 status;
 
   /*
    *  We use SIG_BLOCK and not SIG_SETMASK because there may be
    *  signals which might be pending, which might get caught here.
    *  We want the signals to be caught inside sigtimedwait.
+   *
+   *  We ignore the return status codes because sigsuspend() is
+   *  defined to either terminate or return -1 with errno set to 
+   *  EINTR.
    */
-  status = sigprocmask( SIG_BLOCK, sigmask, &saved_signals_blocked );
+  (void) sigprocmask( SIG_BLOCK, sigmask, &saved_signals_blocked );
 
   current_unblocked_signals = ~(*sigmask);
-  status = sigtimedwait( &current_unblocked_signals, NULL, NULL );
+  (void) sigtimedwait( &current_unblocked_signals, NULL, NULL );
 
   (void) sigprocmask( SIG_SETMASK, &saved_signals_blocked, NULL );
 
