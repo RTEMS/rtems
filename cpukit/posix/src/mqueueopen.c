@@ -47,6 +47,15 @@
 /*
  *  15.2.2 Open a Message Queue, P1003.1b-1993, p. 272
  */
+
+/*
+ * mode is set but never used. GCC gives a warning for this
+ * and we need to tell GCC not to complain. But we have to
+ * have it because we have to work through the variable
+ * arguments to get to attr.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 mqd_t mq_open(
   const char *name,
   int         oflag,
@@ -160,3 +169,4 @@ mqd_t mq_open(
 
   return (mqd_t) the_mq_fd->Object.id;
 }
+#pragma GCC diagnostic pop
