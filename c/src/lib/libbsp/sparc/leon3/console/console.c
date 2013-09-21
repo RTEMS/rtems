@@ -32,6 +32,7 @@
 #include <assert.h>
 #include <rtems/bspIo.h>
 #include <amba.h>
+#include <rtems/termiostypes.h>
 
 /* Let user override which on-chip APBUART will be debug UART
  * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
@@ -142,10 +143,14 @@ int console_write_interrupt(int minor, const char *buf, int len)
 #else
 
 /*
- *  Console Termios Support Entry Points
- *
+ * Prototypes to avoid warnings
  */
+ssize_t console_write_polled(int minor, const char *buf, size_t len);
+int console_pollRead(int minor);
 
+/*
+ *  Console Termios Support Entry Points
+ */
 ssize_t console_write_polled(int minor, const char *buf, size_t len)
 {
   int nwrite = 0, port;
@@ -175,6 +180,14 @@ int console_pollRead(int minor)
 }
 
 #endif
+
+/*
+ * Prototypes to avoid warnings
+ */
+int console_set_attributes(int minor, const struct termios *t);
+int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg);
+int console_scan_uarts(void);
+
 
 int console_set_attributes(int minor, const struct termios *t)
 {
