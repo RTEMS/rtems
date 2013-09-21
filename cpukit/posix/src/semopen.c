@@ -43,6 +43,14 @@
  *        parameters must be present.
  */
 
+/*
+ * mode is set but never used. GCC gives a warning for this
+ * and we need to tell GCC not to complain. But we have to
+ * have it because we have to work through the variable
+ * arguments to get to attr.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 sem_t *sem_open(
   const char *name,
   int         oflag,
@@ -137,3 +145,4 @@ return_id:
     return (sem_t *)&the_semaphore->Object.id;
   #endif
 }
+#pragma GCC diagnostic pop
