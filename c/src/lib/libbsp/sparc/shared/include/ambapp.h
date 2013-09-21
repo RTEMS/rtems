@@ -353,6 +353,12 @@ extern int ambapp_find_ahbslvs(
 	int maxno);
 
 
+extern int ambapp_get_number_ahbslv_devices(
+	struct ambapp_bus *abus,
+	int vendor,
+	int device);
+
+
 #ifdef __cplusplus
 }
 #endif
