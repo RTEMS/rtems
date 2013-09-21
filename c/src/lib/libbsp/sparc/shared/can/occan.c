@@ -1806,6 +1806,8 @@ static void occan_interrupt_handler(rtems_vector_number v){
 
 static rtems_driver_address_table occan_driver = OCCAN_DRIVER_TABLE_ENTRY;
 
+int OCCAN_PREFIX(_register)(struct ambapp_bus *bus);
+
 int OCCAN_PREFIX(_register)(struct ambapp_bus *bus){
 	rtems_status_code r;
 	rtems_device_major_number m;
