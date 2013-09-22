@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +17,11 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+/*
+ *  Needed to get the prototype for this newlib helper method
+ */
+#define _COMPILING_NEWLIB
 
 #include <rtems.h>
 
