@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,6 +23,15 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
+
+/*
+ *  Prototypes to avoid warnings
+ */
+int getdents(
+  int   dd_fd,
+  char *dd_buf,
+  int   dd_len
+);
 
 /**
  *  SVR4 and SVID extension required by Newlib readdir() family.
