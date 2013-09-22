@@ -184,6 +184,17 @@
   #define RTEMS_COMPILER_DEPRECATED_ATTRIBUTE
 #endif
 
+/**
+ *  Instructs the compiler that a specific variable is deliberately unused.
+ *  This can occur when reading volatile device memory or skipping arguments
+ *  in a variable argument method.
+ */
+#if defined(__GNUC__)        
+  #define RTEMS_COMPILER_UNUSED_ATTRIBUTE __attribute__((unused))
+#else
+  #define RTEMS_COMPILER_UNUSED_ATTRIBUTE
+#endif
+
 #if __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT(cond, msg) \
     static_assert(cond, # msg)
