@@ -17,14 +17,18 @@
 #endif
 
 /*
+ *  Necessary prototypes
+ */
+rtems_task Init (rtems_task_argument arg);
+int main (int argc, char* argv[]);
+
+/*
  * This routine calls main from a confdefs.h default Init task
  * set up. The bootcard will provide the task argument as
  * command line string (ASCIIZ).
  */
 
-int main (int argc, char* argv[]);
-
-void Init (rtems_task_argument arg)
+rtems_task Init (rtems_task_argument arg)
 {
   const char* boot_cmdline = *((const char**) arg);
   char*       cmdline = 0;
