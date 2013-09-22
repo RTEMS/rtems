@@ -19,7 +19,13 @@
 #endif
 
 #if defined(RTEMS_NEWLIB)
+/*
+ *  Needed to get the prototype for the newlib helper method
+ */
+#define _COMPILING_NEWLIB
+
 #include <sys/time.h>
+#include <reent.h>
 #include <errno.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/seterr.h>
@@ -66,9 +72,10 @@ int gettimeofday(
 int _gettimeofday_r(
   struct _reent   *ignored_reentrancy_stuff __attribute__((unused)),
   struct timeval  *tp,
-  struct timezone *tzp
+  void           *__tz
 )
 {
+  struct timezone *tzp = __tz;
   return gettimeofday( tp, tzp );
 }
 #endif
@@ -79,10 +86,12 @@ int _gettimeofday_r(
  *  "System call" version
  */
 int _gettimeofday(
-  struct timeval  *tp,
-  struct timezone *tzp
+  struct timeval *tp,
+  void           *__tz
 )
 {
+  struct timezone *tzp = __tz;
+
   return gettimeofday( tp, tzp );
 }
 #endif
