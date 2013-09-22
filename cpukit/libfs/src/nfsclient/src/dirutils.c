@@ -92,6 +92,18 @@
 #endif
 
 #ifndef __vxworks
+/*
+ *  Prototypes to avoid warnings
+ */
+int pwd(void);
+int ls(char *dir, char *opts);
+int cp(char *from, char *to, char *opts);
+int ln(char *to, char *name, char *opts);
+int rm(char *path);
+int cd(char *path);
+#endif
+
+#ifndef __vxworks
 int
 pwd(void)
 {
