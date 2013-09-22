@@ -299,15 +299,14 @@ static void __inline__ grcan_hw_reset(struct grcan_regs *regs)
 	regs->ctrl = GRCAN_CTRL_RESET;
 }
 
-/*
- * tmp is set but never used. GCC gives a warning for this
- * and we need to tell GCC not to complain.
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 static rtems_device_driver grcan_start(struct grcan_priv *pDev)
 {
-  unsigned int tmp;
+  /*
+   * tmp is set but never used. GCC gives a warning for this
+   * and we need to tell GCC not to complain.
+   */
+  unsigned int tmp RTEMS_COMPILER_UNUSED_ATTRIBUTE;
+
   IRQ_GLOBAL_PREPARE(oldLevel);
 
   FUNCDBG();
@@ -374,7 +373,6 @@ static rtems_device_driver grcan_start(struct grcan_priv *pDev)
    */
   return RTEMS_SUCCESSFUL;
 }
-#pragma GCC diagnostic pop
 
 static void grcan_stop(struct grcan_priv *pDev)
 {
