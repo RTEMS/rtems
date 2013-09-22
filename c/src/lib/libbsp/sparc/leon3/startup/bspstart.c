@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Modified for LEON3 BSP.
@@ -16,9 +16,9 @@
  *  http://www.rtems.com/license/LICENSE.
  */
 
-
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <bsp/bootcard.h>
 
 /*
  * Tells us if data cache snooping is available
