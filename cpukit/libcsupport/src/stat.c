@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,6 +34,11 @@
 
 #include <rtems/libio_.h>
 
+/*
+ *  Prototype to avoid warnings
+ */
+int _STAT_NAME( const char *path, struct stat *buf );
+
 /**
  *  POSIX 1003.1b 5.6.2 - Get File Status
  * 
@@ -59,6 +64,15 @@ int _STAT_NAME( const char *path, struct stat *buf )
 #if defined(RTEMS_NEWLIB)
 
 #include <reent.h>
+
+/*
+ *  Prototype to avoid warnings
+ */
+int _STAT_R_NAME(
+  struct _reent *ptr __attribute__((unused)),
+  const char    *path,
+  struct stat   *buf
+);
 
 /**
  *  This is the Newlib dependent reentrant version of stat() and lstat().
