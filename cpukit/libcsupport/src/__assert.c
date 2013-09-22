@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 2007.
+ *  COPYRIGHT (c) 2007-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -22,6 +22,7 @@
 #include <rtems.h>
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE___ASSERT_FUNC)
+#include <assert.h>
 
 /**
  * Newlib 1.16.0 added this method.  Together these provide an
