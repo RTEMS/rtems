@@ -43,6 +43,11 @@ static FILE *group_fp;
 static char grbuf[200];
 static struct group grent;
 
+/*
+ *  Prototype to avoid warning
+ */
+void init_etc_passwd_group(void);
+
 /**
  *  Initialize useable but dummy databases
  */
