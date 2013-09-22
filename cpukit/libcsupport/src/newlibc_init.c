@@ -23,6 +23,7 @@
 #endif
 
 #if defined(RTEMS_NEWLIB)
+#include <rtems/libcsupport.h>
 
 /**
  *  Init libc for CYGNUS newlib
