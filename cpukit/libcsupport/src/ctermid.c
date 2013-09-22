@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/unistd.h>
 
 static char *ctermid_name = "/dev/console";
 
