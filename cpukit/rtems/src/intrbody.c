@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -23,8 +23,26 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 
+/*
+ *  Undefine all of these is normally a macro and we want a real body in
+ *  the library for other language bindings.
+ */
 #undef rtems_interrupt_disable
+#undef rtems_interrupt_enable
+#undef rtems_interrupt_flash
+#undef rtems_interrupt_is_in_progress
 
+/*
+ *  Prototype them to avoid warnings
+ */
+rtems_interrupt_level rtems_interrupt_disable( void );
+void rtems_interrupt_enable( rtems_interrupt_level previous_level );
+void rtems_interrupt_flash( rtems_interrupt_level previous_level );
+bool rtems_interrupt_is_in_progress( void );
+
+/*
+ *  Now define real bodies
+ */
 rtems_interrupt_level rtems_interrupt_disable( void )
 {
   rtems_interrupt_level previous_level;
@@ -34,8 +52,6 @@ rtems_interrupt_level rtems_interrupt_disable( void )
   return previous_level;
 }
 
-#undef rtems_interrupt_enable
-
 void rtems_interrupt_enable(
   rtems_interrupt_level previous_level
 )
@@ -43,16 +59,12 @@ void rtems_interrupt_enable(
   _ISR_Enable( previous_level );
 }
 
-#undef rtems_interrupt_flash
-
 void rtems_interrupt_flash(
   rtems_interrupt_level previous_level
 )
 {
   _ISR_Flash( previous_level );
 }
-
-#undef rtems_interrupt_is_in_progress
 
 bool rtems_interrupt_is_in_progress( void )
 {
