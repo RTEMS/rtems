@@ -37,7 +37,6 @@
   #define LEON3_CLOCK_INDEX 0
 #endif
 
-
 volatile struct gptimer_regs *LEON3_Timer_Regs = 0;
 static int clkirq;
 
@@ -93,6 +92,11 @@ static int clkirq;
     LEON_Mask_interrupt(LEON_TRAP_TYPE(clkirq)); \
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = 0; \
   } while (0)
+
+/*
+ *  Prototype to avoid warnings and body of get nanoseconds since last tick
+ */
+uint32_t bsp_clock_nanoseconds_since_last_tick(void);
 
 uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
