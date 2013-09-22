@@ -42,15 +42,6 @@
  *  NOTE: When oflag is O_CREAT, then optional third and fourth
  *        parameters must be present.
  */
-
-/*
- * mode is set but never used. GCC gives a warning for this
- * and we need to tell GCC not to complain. But we have to
- * have it because we have to work through the variable
- * arguments to get to attr.
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 sem_t *sem_open(
   const char *name,
   int         oflag,
@@ -59,8 +50,15 @@ sem_t *sem_open(
   /* unsigned int value */
 )
 {
+  /*
+   * mode is set but never used. GCC gives a warning for this
+   * and we need to tell GCC not to complain. But we have to
+   * have it because we have to work through the variable
+   * arguments to get to attr.
+   */
+  mode_t                     mode RTEMS_COMPILER_UNUSED_ATTRIBUTE;
+
   va_list                    arg;
-  mode_t                     mode;
   unsigned int               value = 0;
   int                        status;
   Objects_Id                 the_semaphore_id;
@@ -145,4 +143,3 @@ return_id:
     return (sem_t *)&the_semaphore->Object.id;
   #endif
 }
-#pragma GCC diagnostic pop
