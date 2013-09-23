@@ -9,6 +9,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 
 /*
  *  bsp_predriver_hook
