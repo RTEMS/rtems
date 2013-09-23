@@ -93,12 +93,7 @@ static int clkirq;
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = 0; \
   } while (0)
 
-/*
- *  Prototype to avoid warnings and body of get nanoseconds since last tick
- */
-uint32_t bsp_clock_nanoseconds_since_last_tick(void);
-
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
   uint32_t usecs;
