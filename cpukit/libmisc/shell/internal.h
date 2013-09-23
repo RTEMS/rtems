@@ -35,8 +35,6 @@ extern void rtems_shell_print_heap_info(
 );
 
 
-extern int rtems_shell_main_mdump(int argc, char *argv[]);
-
 extern void rtems_shell_print_unified_work_area_message(void);
 
 extern int rtems_shell_main_rm(int argc, char *argv[]);

@@ -35,7 +35,7 @@ static void mdumpC(void* addr, int m);
 
 int rtems_mdump(void* addr, int max, int sz);
 
-int rtems_shell_main_mdump(
+static int rtems_shell_main_mdump(
   int   argc,
   char *argv[]
 )
@@ -49,7 +49,7 @@ int rtems_shell_main_mdump(
   return rtems_mdump(addr, max, sz);
 }
 
-int rtems_shell_main_wdump(
+static int rtems_shell_main_wdump(
   int   argc,
   char *argv[]
 )
@@ -64,7 +64,7 @@ int rtems_shell_main_wdump(
 }
 
 
-int rtems_shell_main_ldump(
+static int rtems_shell_main_ldump(
   int   argc,
   char *argv[]
 )
