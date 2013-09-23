@@ -10,6 +10,7 @@
  */
 
 #include <libcpu/byteorder.h>
+#include <libcpu/access.h>
 
 uint16_t _ld_le16(uint16_t *addr)
 {
