@@ -562,13 +562,13 @@ static void simple_tests(void)
 
 static void Init(rtems_task_argument arg)
 {
-  puts("\n\n*** TEST SMPATOMIC 8 ***");
+  puts("\n\n*** TEST SMPATOMIC 1 ***");
 
   simple_tests();
 
   test();
 
-  puts("*** END OF TEST SMPATOMIC 8 ***");
+  puts("*** END OF TEST SMPATOMIC 1 ***");
 
   rtems_test_exit(0);
 }

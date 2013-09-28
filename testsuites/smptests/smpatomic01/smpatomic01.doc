@@ -1,6 +1,6 @@
 This file describes the directives and concepts tested by this test set.
 
-test set name: smpatomic08
+test set name: smpatomic01
 
 directives:
 

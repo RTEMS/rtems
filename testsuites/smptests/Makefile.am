@@ -12,7 +12,7 @@ SUBDIRS += smp07
 SUBDIRS += smp08
 SUBDIRS += smp09
 if ATOMIC
-SUBDIRS += smpatomic08
+SUBDIRS += smpatomic01
 endif
 SUBDIRS += smplock01
 SUBDIRS += smpmigration01
