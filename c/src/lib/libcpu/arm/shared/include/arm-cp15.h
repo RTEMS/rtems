@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (c) 2013 Hesham AL-Matary
  * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -139,6 +140,7 @@ extern "C" {
 #define ARM_CP15_CTRL_NMFI (1U << 27)
 #define ARM_CP15_CTRL_EE (1U << 25)
 #define ARM_CP15_CTRL_VE (1U << 24)
+#define ARM_CP15_CTRL_XP (1U << 23)
 #define ARM_CP15_CTRL_U (1U << 22)
 #define ARM_CP15_CTRL_FI (1U << 21)
 #define ARM_CP15_CTRL_UWXN (1U << 20)
@@ -170,6 +172,25 @@ extern "C" {
 #define ARM_CP15_DAC_CLIENT 0x1U
 #define ARM_CP15_DAC_MANAGER 0x3U
 #define ARM_CP15_DAC_DOMAIN(index, val) ((val) << (2 * index))
+
+/** @} */
+
+/**
+ * @name Fault Status Register Defines
+ *
+ * @{
+ */
+
+#define ARM_CP15_FAULT_STATUS_MASK 0x040F
+
+#define ARM_CP15_FSR_ALIGNMENT_FAULT   0x00000001
+#define ARM_CP15_FSR_BACKGROUND_FAULT  0x0000
+#define ARM_CP15_FSR_ACCESS_PERMISSION_FAULT 0x000D
+#define ARM_CP15_FSR_PRECISE_EXTERNAL_ABORT_FAULT 0x0008
+#define ARM_CP15_FSR_IMPRECISE_EXTERNAL_ABORT_FAULT 0x0406
+#define ARM_CP15_FSR_PRECISE_PARITY_ERROR_EXCEPTION 0x0006
+#define ARM_CP15_FSR_IMPRECISE_PARITY_ERROR_EXCEPTION 0x0408
+#define ARM_CP15_FSR_DEBUG_EVENT 0x0002
 
 /** @} */
 
