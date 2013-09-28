@@ -7,6 +7,8 @@
  *  Germany
  *  <rtems@embedded-brains.de>
  *
+ * Copyright (c) 2013 Deng Hengyi.
+ *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
@@ -454,9 +456,115 @@ static void test(void)
   run_tests(ctx, 0);
 }
 
+typedef void (*simple_test_body)(test_context *ctx);
+
+static void test_simple_atomic_add_body(test_context *ctx)
+{
+  unsigned long a = 2, b = 1;
+  unsigned long c;
+
+  puts("=== atomic simple add test case ==\n");
+
+  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
+  _Atomic_Fetch_add_ulong(&ctx->atomic_value, b, ATOMIC_ORDER_RELAXED);
+  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(c == (a + b));
+}
+
+static void test_simple_atomic_sub_body(test_context *ctx)
+{
+  unsigned long a = 2, b = 1;
+  unsigned long c;
+
+  puts("=== atomic simple sub test case ==\n");
+
+  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
+  _Atomic_Fetch_sub_ulong(&ctx->atomic_value, b, ATOMIC_ORDER_RELAXED);
+  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(c == (a - b));
+}
+
+static void test_simple_atomic_or_body(test_context *ctx)
+{
+  unsigned long a = 2, b = 1;
+  unsigned long c;
+
+  puts("=== atomic simple or test case ==\n");
+
+  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
+  _Atomic_Fetch_or_ulong(&ctx->atomic_value, b, ATOMIC_ORDER_RELAXED);
+  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(c == (a | b));
+}
+
+static void test_simple_atomic_and_body(test_context *ctx)
+{
+  unsigned long a = 2, b = 1;
+  unsigned long c;
+
+  puts("=== atomic simple and test case ==\n");
+
+  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
+  _Atomic_Fetch_and_ulong(&ctx->atomic_value, b, ATOMIC_ORDER_RELAXED);
+  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(c == (a & b));
+}
+
+static void test_simple_atomic_exchange_body(test_context *ctx)
+{
+  unsigned long a = 2, b = 1;
+  unsigned long c;
+
+  puts("=== atomic simple exchange test case ==\n");
+
+  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
+  _Atomic_Exchange_ulong(&ctx->atomic_value, b, ATOMIC_ORDER_RELAXED);
+  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(c == b);
+}
+
+static void test_simple_atomic_compare_exchange_body(test_context *ctx)
+{
+  unsigned long a = 2, b = 1;
+  unsigned long c;
+
+  puts("=== atomic simple compare exchange test case ==\n");
+
+  _Atomic_Store_ulong(&ctx->atomic_value, a, ATOMIC_ORDER_RELAXED);
+  _Atomic_Compare_exchange_ulong(&ctx->atomic_value, &a, b,
+    ATOMIC_ORDER_RELAXED, ATOMIC_ORDER_RELAXED);
+  c = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+  rtems_test_assert(c == b);
+}
+
+static const simple_test_body simple_test_bodies[] = {
+  test_simple_atomic_add_body,
+  test_simple_atomic_sub_body,
+  test_simple_atomic_or_body,
+  test_simple_atomic_and_body,
+  test_simple_atomic_exchange_body,
+  test_simple_atomic_compare_exchange_body,
+};
+
+#define SIMPLE_TEST_COUNT RTEMS_ARRAY_SIZE(simple_test_bodies)
+
+static void simple_tests(void)
+{
+  test_context *ctx = &test_instance;
+  size_t test;
+
+  for (test = 0; test < SIMPLE_TEST_COUNT; ++test) {
+    const simple_test_body *test_body = &simple_test_bodies[test];
+
+    (*test_body)(ctx);
+  }
+}
+
 static void Init(rtems_task_argument arg)
 {
   puts("\n\n*** TEST SMPATOMIC 8 ***");
+
+  simple_tests();
 
   test();
 
