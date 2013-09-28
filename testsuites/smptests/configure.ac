@@ -46,13 +46,6 @@ smp06/Makefile
 smp07/Makefile
 smp08/Makefile
 smp09/Makefile
-smpatomic01/Makefile
-smpatomic02/Makefile
-smpatomic03/Makefile
-smpatomic04/Makefile
-smpatomic05/Makefile
-smpatomic06/Makefile
-smpatomic07/Makefile
 smpatomic08/Makefile
 smplock01/Makefile
 smpmigration01/Makefile
