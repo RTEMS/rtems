@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013 Hesham AL-Matary.
  * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -16,12 +17,20 @@
 #define LIBBSP_ARM_SHARED_ARM_CP15_START_H
 
 #include <libcpu/arm-cp15.h>
-
 #include <bsp/start.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+typedef struct {
+  uint32_t begin;
+  uint32_t end;
+  uint32_t flags;
+} arm_cp15_start_section_config;
+
+extern const arm_cp15_start_section_config bsp_mm_config_table[];
+extern const size_t bsp_mm_config_table_size;
 
 BSP_START_TEXT_SECTION static inline void
 arm_cp15_set_domain_access_control(uint32_t val);
@@ -46,12 +55,6 @@ arm_cp15_get_multiprocessor_affinity(void);
 
 BSP_START_TEXT_SECTION static inline uint32_t
 arm_cortex_a9_get_multiprocessor_cpu_id(void);
-
-typedef struct {
-  uint32_t begin;
-  uint32_t end;
-  uint32_t flags;
-} arm_cp15_start_section_config;
 
 BSP_START_TEXT_SECTION static inline void
 arm_cp15_start_set_translation_table_entries(
@@ -87,9 +90,9 @@ arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
   arm_cp15_set_domain_access_control(dac);
   arm_cp15_set_translation_table_base(ttb);
 
-  /* Initialize translation table with invalid entries */
+  /* Initialize translation table with fixed-map read-write entries */
   for (i = 0; i < ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT; ++i) {
-    ttb [i] = 0;
+    ttb [i] = (i << ARM_MMU_SECT_BASE_SHIFT) | ARMV7_MMU_DATA_READ_WRITE;
   }
 
   for (i = 0; i < config_count; ++i) {
@@ -97,7 +100,9 @@ arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
   }
 
   /* Enable MMU and cache */
-  ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
+  ctrl |= ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_S | ARM_CP15_CTRL_I |
+          ARM_CP15_CTRL_C | ARM_CP15_CTRL_M  | ARM_CP15_CTRL_XP;
+
   arm_cp15_set_control(ctrl);
 }
 

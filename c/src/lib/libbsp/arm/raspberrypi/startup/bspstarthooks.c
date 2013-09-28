@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (c) 2013. Hesham AL-Matary
  * Copyright (c) 2013 by Alan Cudmore
  * based on work by:
  * Copyright (c) 2009
@@ -24,33 +25,16 @@
 #include <bspopts.h>
 #include <bsp/start.h>
 #include <bsp/raspberrypi.h>
-#include <bsp/mmu.h>
-
-static void BSP_START_TEXT_SECTION raspberrypi_cache_setup(void)
-{
-  uint32_t ctrl = 0;
-
-  /* Disable MMU and cache, basic settings */
-  ctrl = arm_cp15_get_control();
-  ctrl &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_R | ARM_CP15_CTRL_C
-    | ARM_CP15_CTRL_V | ARM_CP15_CTRL_M);
-  ctrl |= ARM_CP15_CTRL_S;
-  arm_cp15_set_control(ctrl);
-
-  arm_cp15_cache_invalidate();
-  arm_cp15_tlb_invalidate();
-
-}
-
+#include <bsp/mm.h>
 
 void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 {
-  raspberrypi_cache_setup();
 }
 
 
 void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
 {
   bsp_start_copy_sections();
+  bsp_memory_management_initialize();
   bsp_start_clear_bss();
 }
