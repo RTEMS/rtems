@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,6 @@
 /* XXX convert to macros? Move to score/cpu? */
 void mips_set_timer(uint32_t timer_clock_interval);
 uint32_t mips_get_timer(void);
-uint32_t bsp_clock_nanoseconds_since_last_tick(void);
 
 /* XXX move to BSP.h or irq.h?? */
 #define EXT_INT5             0x8000  /* external interrupt 5 */
@@ -23,7 +22,7 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void);
 
 extern uint32_t bsp_clicks_per_microsecond;
 
-static uint32_t   mips_timer_rate = 0;
+static uint32_t mips_timer_rate = 0;
 
 /* refresh the internal CPU timer */
 #define Clock_driver_support_at_tick() \
@@ -44,7 +43,7 @@ static uint32_t   mips_timer_rate = 0;
     mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK); \
   } while(0)
 
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   return 0;
 }
