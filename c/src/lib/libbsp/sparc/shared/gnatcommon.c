@@ -16,9 +16,8 @@
  * Synchronous trap handler. Map the trap number of SIGFPE, SIGSEGV
  * or SIGILL to generate the corresponding Ada exception.
  */
-
-rtems_isr __gnat_exception_handler
-  (rtems_vector_number trap)
+static rtems_isr
+__gnat_exception_handler(rtems_vector_number trap)
 {
   uint32_t         real_trap;
   uint32_t         signal;
@@ -46,9 +45,8 @@ rtems_isr __gnat_exception_handler
  * Asynchronous trap handler. As it happens, the interrupt trap numbers for
  * SPARC is 17 - 31, so we just map then directly on the same signal number.
  */
-
-rtems_isr __gnat_interrupt_handler
-  (rtems_vector_number trap)
+static rtems_isr
+__gnat_interrupt_handler (rtems_vector_number trap)
 {
   uint32_t         real_trap;
 
@@ -62,7 +60,7 @@ rtems_isr __gnat_interrupt_handler
  * Default signal handler with error reporting
  */
 
-void
+static void
 __gnat_signals_Abnormal_termination_handler (int signo)
 {
   switch (signo)
