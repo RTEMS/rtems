@@ -31,7 +31,7 @@
 #define NSEC_PER_PITC   __SRAMBASE.nsec_per_pitc
 #define FILTER_SHIFT    6
 
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
     int i = MCF5282_PIT3_PCNTR;
     if (MCF5282_PIT3_PCSR & MCF5282_PIT_PCSR_PIF)
@@ -39,7 +39,8 @@ uint32_t bsp_clock_nanoseconds_since_last_tick(void)
     return (PITC_PER_TICK - i) * NSEC_PER_PITC;
 }
 
-#define Clock_driver_nanoseconds_since_last_tick bsp_clock_nanoseconds_since_last_tick
+#define Clock_driver_nanoseconds_since_last_tick \
+    bsp_clock_nanoseconds_since_last_tick
 
 /*
  * Periodic interval timer interrupt handler
