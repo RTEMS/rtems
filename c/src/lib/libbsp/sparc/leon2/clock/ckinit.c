@@ -57,7 +57,7 @@ extern int CLOCK_SPEED;
     LEON_REG.Timer_Control_1 = 0; \
   } while (0)
 
-uint32_t bsp_clock_nanoseconds_since_last_tick(void)
+static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
 {
   uint32_t clicks;
   uint32_t usecs;
