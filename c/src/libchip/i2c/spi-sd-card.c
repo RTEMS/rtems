@@ -501,8 +501,13 @@ static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t comm
 static int sd_card_stop_multiple_block_read( sd_card_driver_entry *e)
 {
 	int rv = 0;
+	uint8_t crc7;
 
 	SD_CARD_COMMAND_SET_COMMAND( e->command, SD_CARD_CMD_STOP_TRANSMISSION);
+	SD_CARD_COMMAND_SET_ARGUMENT( e->command, 0);
+	/*crc7 = sd_card_compute_crc7( e->command + 1, 5);*/
+	crc7 = 0x30;	/* Help compiler - command and argument are constants */
+	SD_CARD_COMMAND_SET_CRC7( e->command, crc7);
 	rv = rtems_libi2c_write_bytes( e->bus, e->command, SD_CARD_COMMAND_SIZE);
 	RTEMS_CHECK_RV( rv, "Write stop transfer token");
 
