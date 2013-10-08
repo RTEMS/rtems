@@ -12,11 +12,13 @@
  * Germany
  * rtems@embedded-brains.de
  *
- * The license and distribution terms for this file may be found in the file
- * LICENSE in this distribution or at http://www.rtems.com/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.com/license/LICENSE.
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #include <inttypes.h>
 
@@ -301,9 +303,55 @@ static inline uint32_t sd_card_access_time( const uint8_t *csd)
 static inline uint32_t sd_card_max_access_time( const uint8_t *csd, uint32_t transfer_speed)
 {
 	uint64_t ac = sd_card_access_time( csd);
+	uint32_t ac_100ms = transfer_speed / 80;
 	uint32_t n = SD_CARD_CSD_GET_NSAC( csd) * 100;
-	ac = (ac * transfer_speed) / 8000000000ULL;
-	return n + (uint32_t) ac;
+	/* ac is in ns, transfer_speed in bps, max_access_time in bytes.
+	   max_access_time is 100 times typical access time (taac+nsac) */
+	ac = ac * transfer_speed / 80000000;
+	ac = ac + 100*n;
+	if ((uint32_t)ac > ac_100ms)
+		return ac_100ms;
+	else
+		return (uint32_t)ac;
+}
+
+/** @} */
+
+/**
+ * @name CRC functions
+ *
+ * Based on http://en.wikipedia.org/wiki/Computation_of_CRC
+ *
+ * @{
+ */
+
+static uint8_t sd_card_compute_crc7 (uint8_t *data, size_t len)
+{
+	uint8_t e, f, crc;
+	size_t i;
+
+	crc = 0;
+	for (i = 0; i < len; i++) {
+		e   = crc ^ data[i];
+		f   = e ^ (e >> 4) ^ (e >> 7);
+		crc = (f << 1) ^ (f << 4);
+	}
+	return crc >> 1;
+}
+
+static uint16_t sd_card_compute_crc16 (uint8_t *data, size_t len)
+{
+	uint8_t s, t;
+	uint16_t crc;
+	size_t i;
+
+	crc = 0;
+	for (i = 0; i < len; i++) {
+		s = data[i] ^ (crc >> 8);
+		t = s ^ (s >> 4);
+		crc = (crc << 8) ^ t ^ (t << 5) ^ (t << 12);
+	}
+	return crc;
 }
 
 /** @} */
@@ -323,6 +371,14 @@ static int sd_card_wait( sd_card_driver_entry *e)
 	int rv = 0;
 	int r = 0;
 	int n = 2;
+	/* For writes, the timeout is 2.5 times that of reads; since we
+	   don't know if it is a write or read, assume write.
+	   FIXME should actually look at R2W_FACTOR for non-HC cards. */
+	int retries = e->n_ac_max * 25 / 10;
+	/* n_ac_max/100 is supposed to be the average waiting time. To
+	   approximate this, we start with waiting n_ac_max/150 and
+	   gradually increase the waiting time. */
+	int wait_time_bytes = (retries + 149) / 150;
 	while (e->busy) {
 		/* Query busy tokens */
 		rv = sd_card_query( e, e->response, n);
@@ -335,11 +391,20 @@ static int sd_card_wait( sd_card_driver_entry *e)
 				return 0;
 			}
 		}
-		n = SD_CARD_COMMAND_SIZE;
+		retries -= n;
+		if (retries <= 0) {
+			return -RTEMS_TIMEOUT;
+		}
 
 		if (e->schedule_if_busy) {
-			/* Invoke the scheduler */
-			rtems_task_wake_after( RTEMS_YIELD_PROCESSOR);
+			uint64_t wait_time_us = wait_time_bytes;
+			wait_time_us *= 8000000;
+			wait_time_us /= e->transfer_mode.baudrate;
+			rtems_task_wake_after( RTEMS_MICROSECONDS_TO_TICKS(wait_time_us));
+			retries -= wait_time_bytes;
+			wait_time_bytes = wait_time_bytes * 15 / 10;
+		} else {
+			n = SD_CARD_COMMAND_SIZE;
 		}
 	}
 	return 0;
@@ -354,6 +419,7 @@ static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint
 		.byte_cnt = SD_CARD_COMMAND_SIZE
 	};
 	int r = 0;
+	uint8_t crc7;
 
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
 
@@ -364,6 +430,8 @@ static int sd_card_send_command( sd_card_driver_entry *e, uint32_t command, uint
 	/* Write command and read response */
 	SD_CARD_COMMAND_SET_COMMAND( e->command, command);
 	SD_CARD_COMMAND_SET_ARGUMENT( e->command, argument);
+	crc7 = sd_card_compute_crc7( e->command + 1, 5);
+	SD_CARD_COMMAND_SET_CRC7( e->command, crc7);
 	rv = rtems_libi2c_ioctl( e->bus, RTEMS_LIBI2C_IOCTL_READ_WRITE, &rw);
 	RTEMS_CHECK_RV( rv, "Write command and read response");
 
@@ -404,6 +472,7 @@ sd_card_send_command_error:
 static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t command, uint32_t argument, uint32_t *reg)
 {
 	int rv = 0;
+	uint8_t crc7;
 
 	rv = sd_card_send_command( e, command, argument);
 	RTEMS_CHECK_RV( rv, "Send command");
@@ -414,6 +483,13 @@ static int sd_card_send_register_command( sd_card_driver_entry *e, uint32_t comm
 		 * more sophisticated response query.
 		 */
 		RTEMS_SYSLOG_ERROR( "Unexpected response position\n");
+		return -RTEMS_IO_ERROR;
+	}
+
+	crc7 = sd_card_compute_crc7( e->response + e->response_index, 5);
+	if (crc7 != SD_CARD_COMMAND_GET_CRC7( e->response + e->response_index) &&
+		SD_CARD_COMMAND_GET_CRC7( e->response + e->response_index) != 0x7f) {
+		RTEMS_SYSLOG_ERROR( "CRC check failed on register command\n");
 		return -RTEMS_IO_ERROR;
 	}
 
@@ -456,20 +532,23 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 {
 	int rv = 0;
 
-	/* Access time idle tokens */
-	uint32_t n_ac = 1;
-
 	/* Discard command response */
 	int r = e->response_index + 1;
-
-	/* Minimum token number before data start */
-	int next_response_size = 2;
 
 	/* Standard response size */
 	int response_size = SD_CARD_COMMAND_SIZE;
 
+	/* Where the response is stored */
+	uint8_t *response = e->response;
+
 	/* Data input index */
 	int i = 0;
+
+	/* CRC check of data */
+	uint16_t crc16;
+
+	/* Maximum number of tokens to read. */
+	int retries = e->n_ac_max;
 
 	SD_CARD_INVALIDATE_RESPONSE_INDEX( e);
 
@@ -477,33 +556,41 @@ static int sd_card_read( sd_card_driver_entry *e, uint8_t start_token, uint8_t *
 		RTEMS_DEBUG_PRINT( "Search from %u to %u\n", r, response_size - 1);
 
 		/* Search the data start token in in current response buffer */
+		retries -= (response_size - r);
 		while (r < response_size) {
-			RTEMS_DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, e->response [r]);
-			if (n_ac > e->n_ac_max) {
-				RTEMS_SYSLOG_ERROR( "Timeout\n");
-				return -RTEMS_IO_ERROR;
-			} else if (e->response [r] == start_token) {
+			RTEMS_DEBUG_PRINT( "Token [%02u]: 0x%02x\n", r, response [r]);
+			if (response [r] == start_token) {
 				/* Discard data start token */
 				++r;
 				goto sd_card_read_start;
-			} else if (SD_CARD_IS_DATA_ERROR( e->response [r])) {
-				RTEMS_SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+			} else if (SD_CARD_IS_DATA_ERROR( response [r])) {
+				RTEMS_SYSLOG_ERROR( "Data error token [%02i]: 0x%02" PRIx8 "\n", r, response [r]);
 				return -RTEMS_IO_ERROR;
-			} else if (e->response [r] != SD_CARD_IDLE_TOKEN) {
-				RTEMS_SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, e->response [r]);
+			} else if (response [r] != SD_CARD_IDLE_TOKEN) {
+				RTEMS_SYSLOG_ERROR( "Unexpected token [%02i]: 0x%02" PRIx8 "\n", r, response [r]);
 				return -RTEMS_IO_ERROR;
 			}
-			++n_ac;
 			++r;
 		}
 
-		/* Query more */
-		rv = sd_card_query( e, e->response, next_response_size);
-		RTEMS_CHECK_RV( rv, "Query data start token");
+		if (retries <= 0) {
+			RTEMS_SYSLOG_ERROR( "Timeout\n");
+			return -RTEMS_IO_ERROR;
+		}
 
-		/* Set standard query size */
-		response_size = next_response_size;
-		next_response_size = SD_CARD_COMMAND_SIZE;
+		if (e->schedule_if_busy)
+			rtems_task_wake_after( RTEMS_YIELD_PROCESSOR);
+
+		/* Query more.  We typically have to wait between 10 and 100
+		   bytes.  To reduce overhead, read the response in chunks of
+		   50 bytes - this doesn't introduce too much copy overhead
+		   but does allow SPI DMA transfers to work efficiently. */
+		response = in;
+		response_size = 50;
+		if (response_size > n)
+			response_size = n;
+		rv = sd_card_query( e, response, response_size);
+		RTEMS_CHECK_RV( rv, "Query data start token");
 
 		/* Reset start position */
 		r = 0;
@@ -513,7 +600,7 @@ sd_card_read_start:
 
 	/* Read data */
 	while (r < response_size && i < n) {
-		in [i++] = e->response [r++];
+		in [i++] = response [r++];
 	}
 
 	/* Read more data? */
@@ -527,13 +614,21 @@ sd_card_read_start:
 	rv = sd_card_query( e, e->response, 3);
 	RTEMS_CHECK_RV( rv, "Read CRC 16");
 
+	crc16 = sd_card_compute_crc16 (in, n);
+	if ((e->response[0] != ((crc16 >> 8) & 0xff)) ||
+	    (e->response[1] != (crc16 & 0xff))) {
+		RTEMS_SYSLOG_ERROR( "CRC check failed on read\n");
+		return -RTEMS_IO_ERROR;
+	}
+
 	return i;
 }
 
 static int sd_card_write( sd_card_driver_entry *e, uint8_t start_token, uint8_t *out, int n)
 {
 	int rv = 0;
-	uint8_t crc16 [2] = { 0, 0 };
+	uint8_t crc16_bytes [2] = { 0, 0 };
+	uint16_t crc16;
 
 	/* Data output index */
 	int o = 0;
@@ -551,7 +646,10 @@ static int sd_card_write( sd_card_driver_entry *e, uint8_t start_token, uint8_t 
 	RTEMS_CHECK_RV( o, "Write data");
 
 	/* Write CRC 16 */
-	rv = rtems_libi2c_write_bytes( e->bus, crc16, 2);
+	crc16 = sd_card_compute_crc16(out, n);
+	crc16_bytes[0] = (crc16>>8) & 0xff;
+	crc16_bytes[1] = (crc16) & 0xff;
+	rv = rtems_libi2c_write_bytes( e->bus, crc16_bytes, 2);
 	RTEMS_CHECK_RV( rv, "Write CRC 16");
 
 	/* Read data response */
@@ -605,6 +703,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	uint32_t write_block_size = 0;
 	uint8_t csd_structure = 0;
 	uint64_t capacity = 0;
+	uint8_t crc7;
 
 	/* Assume first that we have a SD card and not a MMC card */
 	bool assume_sd = true;
@@ -671,12 +770,8 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	 * getting the High Capacity Support flag HCS and checks that the
 	 * voltage is right.  Some MMCs accept this command but will still fail
 	 * on ACMD41.  SD 1.x cards will fails this command and do not support
-	 * HCS (> 2G capacity).  SD spec requires the correct CRC7 be sent even
-	 * when in SPI mode.  So this will just change the default CRC7 and
-	 * keep it there for all subsequent commands (which just require a do
-	 * not care CRC byte).
+	 * HCS (> 2G capacity).
 	 */
-	SD_CARD_COMMAND_SET_CRC7( e->command, 0x43U);
 	rv = sd_card_send_register_command( e, SD_CARD_CMD_SEND_IF_COND, if_cond_reg, &if_cond_reg);
 
 	/*
@@ -691,6 +786,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	} else {
 		cmd_arg = SD_CARD_FLAG_HCS;
 	}
+
+	/* Enable CRC */
+	sd_card_send_command( e, SD_CARD_CMD_CRC_ON_OFF, 1);
 
 	/* Initialize card */
 	while (true) {
@@ -840,6 +938,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		RTEMS_SYSLOG( "Product serial number    : %" PRIu32 "\n", SD_CARD_CID_GET_PSN( block));
 		RTEMS_SYSLOG( "Manufacturing date       : %" PRIu8 "\n", SD_CARD_CID_GET_MDT( block));
 		RTEMS_SYSLOG( "7-bit CRC checksum       : %" PRIu8 "\n",  SD_CARD_CID_GET_CRC7( block));
+		crc7 = sd_card_compute_crc7( block, 15);
+		if (crc7 != SD_CARD_CID_GET_CRC7( block))
+			RTEMS_SYSLOG( "  Failed! (computed %02" PRIx8 ")\n", crc7);
 	}
 
 	/* Card Specific Data */
@@ -850,6 +951,13 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 	rv = sd_card_read( e, SD_CARD_START_BLOCK_SINGLE_BLOCK_READ, block, SD_CARD_CSD_SIZE);
 	RTEMS_CLEANUP_RV_SC( rv, sc, sd_card_driver_init_cleanup, "Read: SD_CARD_CMD_SEND_CSD");
 
+	crc7 = sd_card_compute_crc7( block, 15);
+	if (crc7 != SD_CARD_CID_GET_CRC7( block)) {
+		RTEMS_SYSLOG( "SD_CARD_CMD_SEND_CSD CRC failed\n");
+		sc = RTEMS_IO_ERROR;
+		goto sd_card_driver_init_cleanup;
+	}
+	
 	/* CSD Structure */
 	csd_structure = SD_CARD_CSD_GET_CSD_STRUCTURE( block);
 
@@ -883,6 +991,9 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		capacity = (c_size + 1) * 512 * 1024;
 		read_block_size = 512;
 		write_block_size = 512;
+
+		/* Timeout is fixed at 100ms in CSD Version 2.0 */
+		e->n_ac_max = transfer_speed / 80;
 	} else {
 		RTEMS_DO_CLEANUP_SC( RTEMS_IO_ERROR, sc, sd_card_driver_init_cleanup, "Unexpected CSD Structure number");
 	}
@@ -893,6 +1004,7 @@ static rtems_status_code sd_card_init( sd_card_driver_entry *e)
 		RTEMS_SYSLOG( "CSD structure            : %" PRIu8 "\n", SD_CARD_CSD_GET_CSD_STRUCTURE( block));
 		RTEMS_SYSLOG( "Spec version             : %" PRIu8 "\n", SD_CARD_CSD_GET_SPEC_VERS( block));
 		RTEMS_SYSLOG( "Access time [ns]         : %" PRIu32 "\n", sd_card_access_time( block));
+		RTEMS_SYSLOG( "Access time [N]          : %" PRIu32 "\n", SD_CARD_CSD_GET_NSAC( block)*100);
 		RTEMS_SYSLOG( "Max access time [N]      : %" PRIu32 "\n", e->n_ac_max);
 		RTEMS_SYSLOG( "Max read block size [B]  : %" PRIu32 "\n", read_block_size);
 		RTEMS_SYSLOG( "Max write block size [B] : %" PRIu32 "\n", write_block_size);
@@ -1023,7 +1135,7 @@ sd_card_disk_block_read_cleanup:
 	/* Done */
 	r->req_done( r->done_arg, RTEMS_IO_ERROR);
 
-	return rv;
+	return 0;
 }
 
 static int sd_card_disk_block_write( sd_card_driver_entry *e, rtems_blkdev_request *r)
@@ -1116,7 +1228,7 @@ sd_card_disk_block_write_cleanup:
 	/* Done */
 	r->req_done( r->done_arg, RTEMS_IO_ERROR);
 
-	return rv;
+	return 0;
 }
 
 static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
@@ -1126,20 +1238,31 @@ static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 		rtems_device_minor_number minor = rtems_disk_get_minor_number( dd);
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
 		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
+		int (*f)( sd_card_driver_entry *, rtems_blkdev_request *);
+		uint32_t retries = e->retries;
+		int result;
+
 		switch (r->req) {
 			case RTEMS_BLKDEV_REQ_READ:
-				return sd_card_disk_block_read( e, r);
+				f = sd_card_disk_block_read;
+				break;
 			case RTEMS_BLKDEV_REQ_WRITE:
-				return sd_card_disk_block_write( e, r);
+				f = sd_card_disk_block_write;
+				break;
 			default:
-                                errno = EINVAL;
+				errno = EINVAL;
 				return -1;
 		}
+		do {
+			result = f( e, r);
+		} while (retries-- > 0 && result != 0);
+		return result;
+
 	} else if (req == RTEMS_BLKIO_CAPABILITIES) {
 		*(uint32_t *) arg = RTEMS_BLKDEV_CAP_MULTISECTOR_CONT;
 		return 0;
 	} else {
-                errno = EINVAL;
+		errno = EINVAL;
 		return -1;
 	}
 }
@@ -1155,9 +1278,12 @@ static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rte
 	for (minor = 0; minor < sd_card_driver_table_size; ++minor) {
 		sd_card_driver_entry *e = &sd_card_driver_table [minor];
 		dev_t dev = rtems_filesystem_make_dev_t( major, minor);
+		uint32_t retries = e->retries;
 
 		/* Initialize SD Card */
-		sc = sd_card_init( e);
+		do {
+			sc = sd_card_init( e);
+		} while (retries-- > 0 && sc != RTEMS_SUCCESSFUL);
 		RTEMS_CHECK_SC( sc, "Initialize SD Card");
 
 		/* Create disk device */
