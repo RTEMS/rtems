@@ -42,7 +42,7 @@ bsp_mm_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_text_begin,
     .end = (uint32_t) bsp_section_text_end,
-    .flags = ARMV7_MMU_CODE_CACHED
+    .flags = ARMV7_MMU_READ_WRITE
   }, {
     .begin = (uint32_t) bsp_section_rodata_begin,
     .end = (uint32_t) bsp_section_rodata_end,
@@ -63,8 +63,12 @@ bsp_mm_config_table[] = {
     .begin = (uint32_t) bsp_section_stack_begin,
     .end = (uint32_t) bsp_section_stack_end,
     .flags = MMU_DATA_READ_WRITE
+  }, {
+    .begin = 0x20000000,
+    .end = 0x21000000,
+    .flags = ARMV7_MMU_DEVICE
   }
 };
 
 BSP_START_DATA_SECTION const size_t bsp_mm_config_table_size =
-RTEMS_ARRAY_SIZE(&bsp_mm_config_table);
+RTEMS_ARRAY_SIZE(bsp_mm_config_table);
