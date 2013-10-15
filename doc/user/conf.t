@@ -183,6 +183,62 @@ information.  However, it is quite easy to use a library and forget to
 account for its resources.
 
 @c
+@c === Format to be followed for making changes in this file ===
+@c
+@section Format to be followed for making changes in this file
+
+@itemize @bullet
+@item MACRO NAME
+Should be alphanumeric. Can have '_' (underscore).
+
+@item DATA TYPE
+Please refer to all existing formats.
+
+@item RANGE:
+The range depends on the Data Type of the macro.
+@itemize @minus
+@item If the data type is of type task priority, then its value should
+be an integer in the range of 1 to 255.
+
+@item If the data type is an integer, then it can have numbers, characters
+(in case the value is defined using another macro) and arithmetic operations
+(+, -, *, /).
+
+@item If the data type is a function pointer the first character
+should be an alphabet or an underscore. The rest of the string
+can be alphanumeric.
+
+@item If the data type is RTEMS Attributes or RTEMS Mode then
+the string should be alphanumeric.
+
+@item If the data type is RTEMS NAME then the value should be
+an integer>=0 or RTEMS_BUILD_NAME( 'U', 'I', '1', ' ' )
+@end itemize
+
+@item DEFAULT VALUE
+The default value should be in the following formats-
+Please note that the '.' (full stop) is necessary.
+
+@itemize @minus
+@item In case the value is not defined then:
+      This is not defined by default.
+
+@item If we know the default value then:
+      The default value is XXX.
+
+@item If the default value is BSP Specific then:
+      This option is BSP specific.
+@end itemize
+
+@item DESCRIPTION
+The description of the macro. (No specific format)
+
+@item NOTES
+Any further notes. (No specific format)
+
+@end itemize
+
+@c
 @c === Configuration Example ===
 @c
 @section Configuration Example
