@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)ioccom.h	8.2 (Berkeley) 3/28/94
- * $FreeBSD: src/sys/sys/ioccom.h,v 1.15 2004/04/07 04:19:49 imp Exp $
+ * $FreeBSD$
  */
 
 #ifndef	_SYS_IOCCOM_H_
@@ -36,29 +36,34 @@
 #include <sys/types.h>
 #include <stdint.h>
 
+typedef uint32_t ioctl_command_t;
+
 /*
  * Ioctl's have the command encoded in the lower word, and the size of
  * any in or out parameters in the upper word.  The high 3 bits of the
  * upper word are used to encode the in/out status of the parameter.
  */
-#define	IOCPARM_MASK	0x1fff		/* parameter length, at most 13 bits */
+#define	IOCPARM_SHIFT	13		/* number of bits for ioctl size */
+#define	IOCPARM_MASK	((1 << IOCPARM_SHIFT) - 1) /* parameter length mask */
 #define	IOCPARM_LEN(x)	(((x) >> 16) & IOCPARM_MASK)
 #define	IOCBASECMD(x)	((x) & ~(IOCPARM_MASK << 16))
 #define	IOCGROUP(x)	(((x) >> 8) & 0xff)
 
-#define	IOCPARM_MAX	PAGE_SIZE		/* max size of ioctl, mult. of PAGE_SIZE */
+#define	IOCPARM_MAX	(1 << IOCPARM_SHIFT) /* max size of ioctl */
 #define	IOC_VOID	0x20000000	/* no parameters */
 #define	IOC_OUT		0x40000000	/* copy out parameters */
 #define	IOC_IN		0x80000000	/* copy in parameters */
 #define	IOC_INOUT	(IOC_IN|IOC_OUT)
-#define	IOC_DIRMASK	0xe0000000	/* mask for IN/OUT/VOID */
+#define	IOC_DIRMASK	(IOC_VOID|IOC_OUT|IOC_IN)
 
 #define	_IOC(inout,group,num,len) \
-	(u_int32_t) ((u_int32_t)inout | \
-         (u_int32_t) ((u_int32_t)((u_int32_t)len & IOCPARM_MASK) << 16) | \
-         (u_int32_t)((group) << 8) | \
-         (u_int32_t)(num))
+	((ioctl_command_t) \
+		((ioctl_command_t) (inout) \
+			| (((ioctl_command_t) (len) & IOCPARM_MASK) << 16) \
+			| ((ioctl_command_t) (group) << 8) \
+			| (ioctl_command_t) (num)))
 #define	_IO(g,n)	_IOC(IOC_VOID,	(g), (n), 0)
+#define	_IOWINT(g,n)	_IOC(IOC_VOID,	(g), (n), sizeof(int))
 #define	_IOR(g,n,t)	_IOC(IOC_OUT,	(g), (n), sizeof(t))
 #define	_IOW(g,n,t)	_IOC(IOC_IN,	(g), (n), sizeof(t))
 /* this should be _IORW, but stdio got there first */
@@ -85,9 +90,14 @@
 #define FIOSETOWN       _IOW('f', 124, int)     /* set owner */
 #define FIOGETOWN       _IOR('f', 123, int)     /* get owner */
 
-typedef uint32_t ioctl_command_t;
+#ifdef _KERNEL
 
-#ifndef _KERNEL
+#if defined(COMPAT_FREEBSD6) || defined(COMPAT_FREEBSD5) || \
+    defined(COMPAT_FREEBSD4) || defined(COMPAT_43)
+#define	IOCPARM_IVAL(x)	((int)(intptr_t)(void *)*(caddr_t *)(void *)(x))
+#endif
+
+#else
 
 #include <sys/cdefs.h>
 
@@ -95,6 +105,6 @@ __BEGIN_DECLS
 int	ioctl(int, ioctl_command_t, ...);
 __END_DECLS
 
-#endif /* !KERNEL */
+#endif
 
 #endif /* !_SYS_IOCCOM_H_ */
