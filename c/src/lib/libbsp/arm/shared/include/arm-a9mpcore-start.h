@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -70,6 +70,15 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_set_vector_base(void)
   }
 }
 
+BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_scu_invalidate(
+  volatile a9mpcore_scu *scu,
+  uint32_t cpu_id,
+  uint32_t ways
+)
+{
+  scu->invss = (ways & 0xf) << ((cpu_id & 0x3) * 4);
+}
+
 BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
 {
 #ifdef RTEMS_SMP
@@ -86,6 +95,9 @@ BSP_START_TEXT_SECTION static inline arm_a9mpcore_start_hook_0(void)
   arm_cp15_set_auxiliary_control(actlr);
 
   cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
+
+  arm_a9mpcore_start_scu_invalidate(scu, cpu_id, 0xf);
+
   if (cpu_id != 0) {
     arm_a9mpcore_start_set_vector_base();
 

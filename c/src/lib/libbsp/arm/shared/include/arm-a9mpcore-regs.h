@@ -46,6 +46,18 @@ typedef struct {
 #define A9MPCORE_SCU_CFG_TAG_RAM_SIZE_SET(reg, val) BSP_FLD32SET(reg, val, 8, 15)
   uint32_t pwrst;
   uint32_t invss;
+#define A9MPCORE_SCU_INVSS_CPU0(ways) BSP_FLD32(val, 0, 3)
+#define A9MPCORE_SCU_INVSS_CPU0_GET(reg) /* Write only register */
+#define A9MPCORE_SCU_INVSS_CPU0_SET(reg, val) BSP_FLD32SET(reg, val, 0, 3)
+#define A9MPCORE_SCU_INVSS_CPU1(ways) BSP_FLD32(val, 4, 7)
+#define A9MPCORE_SCU_INVSS_CPU1_GET(reg) /* Write only register */
+#define A9MPCORE_SCU_INVSS_CPU1_SET(reg, val) BSP_FLD32SET(reg, val, 4, 7)
+#define A9MPCORE_SCU_INVSS_CPU2(ways) BSP_FLD32(val, 8, 11)
+#define A9MPCORE_SCU_INVSS_CPU2_GET(reg) /* Write only register */
+#define A9MPCORE_SCU_INVSS_CPU2_SET(reg, val) BSP_FLD32SET(reg, val, 8, 11)
+#define A9MPCORE_SCU_INVSS_CPU3(ways) BSP_FLD32(val, 12, 15)
+#define A9MPCORE_SCU_INVSS_CPU3_GET(reg) /* Write only register */
+#define A9MPCORE_SCU_INVSS_CPU3_SET(reg, val) BSP_FLD32SET(reg, val, 12, 15)
   uint32_t reserved_10[12];
   uint32_t fltstart;
   uint32_t fltend;
