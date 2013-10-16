@@ -20,6 +20,7 @@
 #include "config.h"
 #endif
 
+#include <sys/param.h>
 #include <inttypes.h>
 #include <string.h>
 #include <stdlib.h>
