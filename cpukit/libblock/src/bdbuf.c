@@ -2207,7 +2207,7 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
   {
     if (rtems_bdbuf_tracer)
       printf ("bdbuf:read: %" PRIu32 " (%" PRIu32 ") (dev = %08x)\n",
-              media_block + dd->start, block, (unsigned) dd->dev);
+              media_block, block, (unsigned) dd->dev);
 
     bd = rtems_bdbuf_get_buffer_for_access (dd, media_block);
     switch (bd->state)
@@ -2532,7 +2532,7 @@ rtems_bdbuf_swapout_modified_processing (rtems_disk_device  **dd_ptr,
   {
     rtems_chain_node* node = rtems_chain_head (chain);
     bool              sync_all;
-    
+
     node = node->next;
 
     /*
@@ -2542,7 +2542,7 @@ rtems_bdbuf_swapout_modified_processing (rtems_disk_device  **dd_ptr,
       sync_all = true;
     else
       sync_all = false;
-    
+
     while (!rtems_chain_is_tail (chain, node))
     {
       rtems_bdbuf_buffer* bd = (rtems_bdbuf_buffer*) node;
@@ -2675,7 +2675,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   rtems_chain_initialize_empty (&transfer->bds);
   transfer->dd = BDBUF_INVALID_DEV;
   transfer->syncing = bdbuf_cache.sync_active;
-  
+
   /*
    * When the sync is for a device limit the sync to that device. If the sync
    * is for a buffer handle process the devices in the order on the sync
@@ -2683,7 +2683,7 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
    */
   if (bdbuf_cache.sync_active)
     transfer->dd = bdbuf_cache.sync_device;
-    
+
   /*
    * If we have any buffers in the sync queue move them to the modified
    * list. The first sync buffer will select the device we use.
