@@ -544,6 +544,15 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
     for (vol->sec_log2 = 0, i = vol->bps; (i & 1) == 0;
          i >>= 1, vol->sec_log2++);
 
+    /* Assign the sector size as bdbuf block size for now.
+     * If possible the bdbuf block size will get increased to the cluster
+     * size at the end of this method for better performance */
+    sc = rtems_bdbuf_set_block_size (vol->dd, vol->bps, true);
+    if (sc != RTEMS_SUCCESSFUL)
+    {
+      close(vol->fd);
+      rtems_set_errno_and_return_minus_one( EINVAL );
+    }
     vol->bytes_per_block = vol->bps;
     vol->bytes_per_block_log2 = vol->sec_log2;
     vol->sectors_per_block = 1;
