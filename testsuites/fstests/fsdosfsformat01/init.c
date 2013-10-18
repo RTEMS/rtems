@@ -83,6 +83,17 @@ static void test_disk_params(
 
   rv = unmount( mount_dir );
   rtems_test_assert( 0 == rv );
+
+  /* See if we can re-mount the file system */
+  rv = mount( dev_name,
+              mount_dir,
+              RTEMS_FILESYSTEM_TYPE_DOSFS,
+              RTEMS_FILESYSTEM_READ_WRITE,
+              NULL );
+  rtems_test_assert( 0 == rv );
+
+  rv = unmount( mount_dir );
+  rtems_test_assert( 0 == rv );
 }
 
 static void test_create_file(
