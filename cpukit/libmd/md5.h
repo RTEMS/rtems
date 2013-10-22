@@ -48,6 +48,9 @@ extern "C" {
 /* typedef a 32-bit type */
 typedef uint32_t UINT4;
 
+#define MD5_BLOCK_LENGTH		64
+#define MD5_DIGEST_LENGTH		16
+
 /* Data structure for MD5 (Message-Digest) computation */
 typedef struct {
   UINT4 i[2];                   /* number of _bits_ handled mod 2^64 */
