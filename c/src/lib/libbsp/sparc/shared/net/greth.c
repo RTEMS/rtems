@@ -920,9 +920,9 @@ sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
 
             /* Wrap around? */
             if (dp->tx_ptr < dp->txbufs-1) {
-                ctrl = GRETH_TXD_ENABLE | GRETH_TXD_CS;
+                ctrl = GRETH_TXD_ENABLE;
             }else{
-                ctrl = GRETH_TXD_ENABLE | GRETH_TXD_CS | GRETH_TXD_WRAP;
+                ctrl = GRETH_TXD_ENABLE | GRETH_TXD_WRAP;
             }
 
             /* Enable Descriptor */  
