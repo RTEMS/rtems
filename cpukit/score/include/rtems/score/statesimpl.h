@@ -78,6 +78,8 @@ extern "C" {
 #define STATES_WAITING_FOR_RWLOCK              0x20000
 /** This macro corresponds to a task waiting for a system event. */
 #define STATES_WAITING_FOR_SYSTEM_EVENT        0x40000
+/** This macro corresponds to a task waiting for BSD wakeup. */
+#define STATES_WAITING_FOR_BSD_WAKEUP          0x80000
 
 /** This macro corresponds to a task which is in an interruptible
  *  blocking state.
@@ -94,6 +96,7 @@ extern "C" {
                                  STATES_WAITING_FOR_JOIN_AT_EXIT       | \
                                  STATES_WAITING_FOR_SIGNAL             | \
                                  STATES_WAITING_FOR_BARRIER            | \
+                                 STATES_WAITING_FOR_BSD_WAKEUP         | \
                                  STATES_WAITING_FOR_RWLOCK             )
 
 /** This macro corresponds to a task waiting which is blocked on
