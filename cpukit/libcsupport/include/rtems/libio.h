@@ -1568,6 +1568,7 @@ int unmount(
  * - RTEMS_FILESYSTEM_TYPE_DOSFS,
  * - RTEMS_FILESYSTEM_TYPE_FTPFS,
  * - RTEMS_FILESYSTEM_TYPE_IMFS,
+ * - RTEMS_FILESYSTEM_TYPE_JFFS2,
  * - RTEMS_FILESYSTEM_TYPE_MINIIMFS,
  * - RTEMS_FILESYSTEM_TYPE_NFS,
  * - RTEMS_FILESYSTEM_TYPE_RFS, or
@@ -1580,6 +1581,7 @@ int unmount(
  * - CONFIGURE_FILESYSTEM_DOSFS,
  * - CONFIGURE_FILESYSTEM_FTPFS,
  * - CONFIGURE_FILESYSTEM_IMFS,
+ * - CONFIGURE_FILESYSTEM_JFFS2,
  * - CONFIGURE_FILESYSTEM_MINIIMFS,
  * - CONFIGURE_FILESYSTEM_NFS,
  * - CONFIGURE_FILESYSTEM_RFS, and
@@ -1590,7 +1592,7 @@ int unmount(
  *
  * @param[in] source The source parameter will be forwarded to the file system
  * initialization handler.  Usually the source is a path to the corresponding
- * device file, or @c NULL.
+ * device file, or @c NULL in case the file system does not use a device file.
  * @param[in] target The target path must lead to an existing directory, or
  * must be @c NULL.  In case the target is @c NULL, the root file system will
  * be mounted.
