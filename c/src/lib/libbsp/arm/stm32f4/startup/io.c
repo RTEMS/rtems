@@ -191,7 +191,7 @@ static void set_config(unsigned pin, const stm32f4_gpio_config *config)
 #endif /* STM32F4_FAMILY_F4XXXX */
 #ifdef STM32F4_FAMILY_F10XXX
   unsigned cr_reg = index >> 3;
-  unsigned cr_index = index & 3;
+  unsigned cr_index = index & 0x7;
 
   rtems_interrupt_disable(level);
   gpio->bsrr = 1U << (index + set_or_clear_offset);
