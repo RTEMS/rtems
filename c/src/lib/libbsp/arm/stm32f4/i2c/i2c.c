@@ -251,7 +251,7 @@ rtems_status_code stm32f4_i2c_init(stm32f4_i2c_bus_entry *e)
   stm32f4_rcc_set_clock(rcc_index, true);
 
   /* Setup initial bit rate */
-  sc = stm32f4_i2c_set_bitrate(e, STM32F4_I2C_INITIAL_BAUDRATE);
+  sc = stm32f4_i2c_set_bitrate(e, STM32F4_I2C_INITIAL_BITRATE);
   RTEMS_CHECK_SC(sc, "set bitrate");
 
   /* Set config registers */
