@@ -28,6 +28,11 @@
 #include <bsp/stm32f4xxxx_rcc.h>
 #define STM32F4_RCC ((volatile stm32f4_rcc *) (STM32F4_BASE + 0x40023800))
 
+#include <bsp/stm32_i2c.h>
+#define STM32F4_I2C3 ((volatile stm32f4_i2c *) (STM32F4_BASE + 0x40005C00))
+#define STM32F4_I2C2 ((volatile stm32f4_i2c *) (STM32F4_BASE + 0x40005800))
+#define STM32F4_I2C1 ((volatile stm32f4_i2c *) (STM32F4_BASE + 0x40005400))
+
 #include <bsp/stm32_usart.h>
 #define STM32F4_USART_1 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40011000))
 #define STM32F4_USART_2 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40004400))
@@ -49,6 +54,10 @@
 
 #include <bsp/stm32f10xxx_rcc.h>
 #define STM32F4_RCC ((volatile stm32f4_rcc *) (STM32F4_BASE + 0x40021000))
+
+#include <bsp/stm32_i2c.h>
+#define STM32F4_I2C2 ((volatile stm32f4_i2c *) (STM32F4_BASE + 0x40005800))
+#define STM32F4_I2C1 ((volatile stm32f4_i2c *) (STM32F4_BASE + 0x40005400))
 
 #include <bsp/stm32_usart.h>
 #define STM32F4_USART_1 ((volatile stm32f4_usart *) (STM32F4_BASE + 0x40013800))

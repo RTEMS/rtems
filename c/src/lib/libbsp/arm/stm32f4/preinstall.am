@@ -125,6 +125,14 @@ $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h: include/stm32f4xxxx_rcc.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32f4xxxx_rcc.h
 
+$(PROJECT_INCLUDE)/bsp/stm32_i2c.h: include/stm32_i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32_i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32_i2c.h
+
+$(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
+
 $(PROJECT_INCLUDE)/bsp/stm32_usart.h: include/stm32_usart.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/stm32_usart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/stm32_usart.h

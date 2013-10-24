@@ -52,6 +52,8 @@ include_bsp_HEADERS += include/stm32f10xxx_rcc.h
 include_bsp_HEADERS += include/stm32f10xxx_exti.h
 include_bsp_HEADERS += include/stm32f4xxxx_gpio.h
 include_bsp_HEADERS += include/stm32f4xxxx_rcc.h
+include_bsp_HEADERS += include/stm32_i2c.h
+include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/stm32_usart.h
 include_bsp_HEADERS += include/io.h
 include_bsp_HEADERS += include/rcc.h
@@ -105,6 +107,10 @@ libbsp_a_SOURCES += ../../shared/console_select.c
 libbsp_a_SOURCES += ../../shared/console_write.c
 libbsp_a_SOURCES += console/console-config.c
 libbsp_a_SOURCES += console/usart.c
+
+# I2C
+libbsp_a_SOURCES += i2c/i2c.c
+libbsp_a_SOURCES += i2c/i2c-config.c
 
 # Clock
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
