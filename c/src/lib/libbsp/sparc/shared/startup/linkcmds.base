@@ -3,6 +3,7 @@
 
 OUTPUT_ARCH(sparc)
 __DYNAMIC  =  0;
+ENTRY(start)
 
 /*
  * The memory map looks like this:
@@ -101,8 +102,8 @@ SECTIONS
 
     etext = ALIGN(0x10);
     _etext = .;
-    *(.init)
-    *(.fini)
+    KEEP(*(.init))
+    KEEP(*(.fini))
     *(.lit)
     *(.shdata)
     . = ALIGN (16);
@@ -110,22 +111,22 @@ SECTIONS
   .robsdsets : {
     /* for pre rtems-libbsd FreeBSD code */
     __start_set_sysctl_set = .;
-    *(set_sysctl_*);
+    KEEP(*(set_sysctl_*));
     __stop_set_sysctl_set = .;
-    *(set_domain_*);
-    *(set_pseudo_*);
+    KEEP(*(set_domain_*));
+    KEEP(*(set_pseudo_*));
 
     /* for rtems-libbsd FreeBSD code */
     _bsd__start_set_modmetadata_set = .;
-    *(_bsd_set_modmetadata_set);
+    KEEP(*(_bsd_set_modmetadata_set));
     _bsd__stop_set_modmetadata_set = .;
 
     _bsd__start_set_sysctl_set = .;
-    *(_bsd_set_sysctl_set);
+    KEEP(*(_bsd_set_sysctl_set));
     _bsd__stop_set_sysctl_set = .;
 
     _bsd__start_set_sysinit_set = .;
-    *(_bsd_set_sysinit_*);
+    KEEP(*(_bsd_set_sysinit_*));
     _bsd__stop_set_sysinit_set = .;
 
     . = ALIGN (16);
