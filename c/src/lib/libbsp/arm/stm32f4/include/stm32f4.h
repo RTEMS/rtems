@@ -40,6 +40,9 @@
 
 #ifdef STM32F4_FAMILY_F10XXX
 
+#include <bsp/stm32f10xxx_exti.h>
+#define STM32F4_EXTI ((volatile stm32f4_exti *) (STM32F4_BASE + 0x40010400))
+
 #include <bsp/stm32f10xxx_gpio.h>
 #define STM32F4_GPIO(i) ((volatile stm32f4_gpio *) (STM32F4_BASE + 0x40010800 + i * 0x400))
 #define STM32F4_AFIO ((volatile stm32f4_afio *) (STM32F4_BASE + 0x40010000))

@@ -49,6 +49,7 @@ include_bsp_HEADERS += include/usart.h
 include_bsp_HEADERS += include/stm32f4.h
 include_bsp_HEADERS += include/stm32f10xxx_gpio.h
 include_bsp_HEADERS += include/stm32f10xxx_rcc.h
+include_bsp_HEADERS += include/stm32f10xxx_exti.h
 include_bsp_HEADERS += include/stm32f4xxxx_gpio.h
 include_bsp_HEADERS += include/stm32f4xxxx_rcc.h
 include_bsp_HEADERS += include/stm32_usart.h
