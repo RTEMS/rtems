@@ -137,7 +137,7 @@ void rtems_libio_free(
 
   rtems_libio_lock();
 
-    iop->flags &= ~LIBIO_FLAGS_OPEN;
+    iop->flags = 0;
     iop->data1 = rtems_libio_iop_freelist;
     rtems_libio_iop_freelist = iop;
 
