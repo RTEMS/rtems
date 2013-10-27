@@ -100,8 +100,7 @@ arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
   }
 
   /* Enable MMU and cache */
-  ctrl |= ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_S | ARM_CP15_CTRL_I |
-          ARM_CP15_CTRL_C | ARM_CP15_CTRL_M  | ARM_CP15_CTRL_XP;
+  ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
 
   arm_cp15_set_control(ctrl);
 }
