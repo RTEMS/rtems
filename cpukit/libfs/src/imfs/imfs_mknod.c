@@ -66,8 +66,7 @@ int IMFS_mknod(
   if ( new_node != NULL ) {
     IMFS_jnode_t *parent = parentloc->node_access;
 
-    IMFS_update_ctime( parent );
-    IMFS_update_mtime( parent );
+    IMFS_mtime_ctime_update( parent );
   } else {
     rv = -1;
   }
