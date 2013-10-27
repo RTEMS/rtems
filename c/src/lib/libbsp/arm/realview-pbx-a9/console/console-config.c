@@ -63,34 +63,3 @@ console_tbl Console_Configuration_Ports[] = {
 
 unsigned long Console_Configuration_Count =
   RTEMS_ARRAY_SIZE(Console_Configuration_Ports);
-
-static void output_char(char c)
-{
-  int minor = (int) Console_Port_Minor;
-  const console_tbl *ct = Console_Port_Tbl != NULL ?
-    Console_Port_Tbl[minor] : &Console_Configuration_Ports[minor];
-  const console_fns *cf = ct->pDeviceFns;
-
-  if (c == '\n') {
-    (*cf->deviceWritePolled)(minor, '\r');
-  }
-
-  (*cf->deviceWritePolled)(minor, c);
-}
-
-static void output_char_init(char c)
-{
-  if (Console_Port_Tbl == NULL) {
-    int minor = (int) Console_Port_Minor;
-    const console_fns *cf = Console_Configuration_Ports[minor].pDeviceFns;
-
-    (*cf->deviceInitialize)(minor);
-  }
-
-  BSP_output_char = output_char;
-  output_char(c);
-}
-
-BSP_output_char_function_type BSP_output_char = output_char_init;
-
-BSP_polling_getchar_function_type BSP_poll_char = NULL;
