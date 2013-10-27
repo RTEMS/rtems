@@ -15,12 +15,6 @@
 #include <bsp/start.h>
 #include <bsp/arm-cp15-start.h>
 
-#ifdef RTEMS_SMP
-  #define MMU_DATA_READ_WRITE ARMV7_MMU_DATA_READ_WRITE_SHAREABLE
-#else
-  #define MMU_DATA_READ_WRITE ARMV7_MMU_DATA_READ_WRITE_CACHED
-#endif
-
 BSP_START_DATA_SECTION const arm_cp15_start_section_config
 bsp_mm_config_table[] = {
   {
@@ -30,7 +24,7 @@ bsp_mm_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_fast_data_begin,
     .end = (uint32_t) bsp_section_fast_data_end,
-    .flags = MMU_DATA_READ_WRITE
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_start_begin,
     .end = (uint32_t) bsp_section_start_end,
@@ -38,7 +32,7 @@ bsp_mm_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_vector_begin,
     .end = (uint32_t) bsp_section_vector_end,
-    .flags = MMU_DATA_READ_WRITE
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_text_begin,
     .end = (uint32_t) bsp_section_text_end,
@@ -50,19 +44,19 @@ bsp_mm_config_table[] = {
   }, {
     .begin = (uint32_t) bsp_section_data_begin,
     .end = (uint32_t) bsp_section_data_end,
-    .flags = MMU_DATA_READ_WRITE
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_bss_begin,
     .end = (uint32_t) bsp_section_bss_end,
-    .flags = MMU_DATA_READ_WRITE
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_work_begin,
     .end = (uint32_t) bsp_section_work_end,
-    .flags = MMU_DATA_READ_WRITE
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
     .begin = (uint32_t) bsp_section_stack_begin,
     .end = (uint32_t) bsp_section_stack_end,
-    .flags = MMU_DATA_READ_WRITE
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
   }, {
     .begin = 0x20000000,
     .end = 0x21000000,
