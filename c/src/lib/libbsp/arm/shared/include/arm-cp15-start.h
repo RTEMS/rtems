@@ -90,9 +90,9 @@ arm_cp15_start_setup_translation_table_and_enable_mmu_and_cache(
   arm_cp15_set_domain_access_control(dac);
   arm_cp15_set_translation_table_base(ttb);
 
-  /* Initialize translation table with fixed-map read-write entries */
+  /* Initialize translation table with invalid entries */
   for (i = 0; i < ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT; ++i) {
-    ttb [i] = (i << ARM_MMU_SECT_BASE_SHIFT) | ARMV7_MMU_DATA_READ_WRITE;
+    ttb [i] = 0;
   }
 
   for (i = 0; i < config_count; ++i) {
