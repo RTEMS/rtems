@@ -16,51 +16,11 @@
 #include <bsp/start.h>
 #include <bsp/arm-cp15-start.h>
 #include <bsp/arm-a9mpcore-start.h>
-#include <bsp/linker-symbols.h>
 
 BSP_START_DATA_SECTION static const arm_cp15_start_section_config
 zynq_mmu_config_table[] = {
+  ARMV7_CP15_START_DEFAULT_SECTIONS,
   {
-    .begin = (uint32_t) bsp_section_fast_text_begin,
-    .end = (uint32_t) bsp_section_fast_text_end,
-    .flags = ARMV7_MMU_CODE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_fast_data_begin,
-    .end = (uint32_t) bsp_section_fast_data_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_start_begin,
-    .end = (uint32_t) bsp_section_start_end,
-    .flags = ARMV7_MMU_CODE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_vector_begin,
-    .end = (uint32_t) bsp_section_vector_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_text_begin,
-    .end = (uint32_t) bsp_section_text_end,
-    .flags = ARMV7_MMU_CODE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_rodata_begin,
-    .end = (uint32_t) bsp_section_rodata_end,
-    .flags = ARMV7_MMU_DATA_READ_ONLY_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_data_begin,
-    .end = (uint32_t) bsp_section_data_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_bss_begin,
-    .end = (uint32_t) bsp_section_bss_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_work_begin,
-    .end = (uint32_t) bsp_section_work_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
-  }, {
-    .begin = (uint32_t) bsp_section_stack_begin,
-    .end = (uint32_t) bsp_section_stack_end,
-    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED
-  }, {
     .begin = 0xe0000000U,
     .end = 0xe0200000U,
     .flags = ARMV7_MMU_DEVICE
