@@ -27,6 +27,21 @@
 #include <rtems/shell.h>
 #include "internal.h"
 
+
+static const char IFCONFIG_USAGE[] = 
+  "ifconfig [iface]\n"
+  "ifconfig iface options | addr\n"
+  "  iface: name of the interface\n"
+  "  options: iface \n"
+  "   up: bring the interface up\n"
+  "   down: take the interface down\n"
+  "   netmask addr: network mask\n"
+  "   broadcast addr: boardcast address\n"
+  "   pointopoint addr: destination address for a PTP link\n"
+  "\n"
+  "  addr: IP address";
+
+
 static int rtems_shell_main_ifconfig(
   int   argc,
   char *argv[]
@@ -36,13 +51,14 @@ static int rtems_shell_main_ifconfig(
   struct sockaddr_in  dstaddr;
   struct sockaddr_in  netmask;
   struct sockaddr_in  broadcast;
-  char               *iface;
+  char               *iface       = NULL;
   int                 f_ip        = 0;
   int                 f_ptp       = 0;
   int                 f_netmask   = 0;
   int                 f_up        = 0;
   int                 f_down      = 0;
   int                 f_bcast     = 0;
+  int                 f_usage      = 0;
   int                 cur_idx;
   int                 rc;
   int                 flags;
@@ -70,16 +86,28 @@ static int rtems_shell_main_ifconfig(
     iface = NULL;
     cur_idx += 1;
   } else {
-    iface = argv[1];
-    if (isdigit((unsigned char)*argv[2])) {
-      if (inet_pton(AF_INET, argv[2], &ipaddr.sin_addr) < 0) {
-        printf("bad ip address: %s\n", argv[2]);
-        return 0;
-      }
-      f_ip = 1;
-      cur_idx += 3;
-    } else {
+    if ( 0 == strcmp( "--help", argv[1] ) ) {
+      f_usage = 1;
       cur_idx += 2;
+    } else if ( 0 == strcmp( "-help", argv[1] ) ) {
+      f_usage = 1;
+      cur_idx += 2;
+    } else {
+      iface = argv[1];
+      if ( argc >= 3 ) {
+        if (isdigit((unsigned char)*argv[2])) {
+          if (inet_pton(AF_INET, argv[2], &ipaddr.sin_addr) < 0) {
+            printf("bad ip address: %s\n", argv[2]);
+            return 0;
+          }
+          f_ip = 1;
+          cur_idx += 3;
+        } else {
+          cur_idx += 2;
+        }
+      } else {
+        cur_idx += 2;
+      }
     }
   }
 
@@ -92,12 +120,14 @@ static int rtems_shell_main_ifconfig(
       f_up = 1;
       if (f_down != 0) {
         printf("Can't make interface up and down\n");
+        return -1;
       }
     } else if(strcmp(argv[cur_idx], "down") == 0) {
       f_down = 1;
       if (f_up != 0) {
         printf("Can't make interface up and down\n");
-        }
+        return -1;
+      }
     } else if(strcmp(argv[cur_idx], "netmask") == 0) {
       if ((cur_idx + 1) >= argc) {
         printf("No netmask address\n");
@@ -169,14 +199,19 @@ static int rtems_shell_main_ifconfig(
       printf("up\n");
     } else if (f_down != 0) {
       printf("down\n");
-    } else {
+    }  else {
       printf("\n");
     }
+  } else if (f_usage != 0) {
+      printf ( "\n" );
+      printf ( IFCONFIG_USAGE );
   }
 
-  if ((iface == NULL) || ((f_ip == 0) && (f_down == 0) && (f_up == 0))) {
-    rtems_bsdnet_show_if_stats();
-    return 0;
+  if ( ! f_usage ) {
+    if ((iface == NULL) || ((f_ip == 0) && (f_down == 0) && (f_up == 0))) {
+      rtems_bsdnet_show_if_stats();
+      return 0;
+    }
   }
 
   flags = 0;
@@ -218,10 +253,12 @@ static int rtems_shell_main_ifconfig(
     flags |= IFF_UP;
   }
 
-  rc = rtems_bsdnet_ifconfig(iface, SIOCSIFFLAGS, &flags);
-  if (rc < 0) {
-    printf("Could not set interface flags: %s\n", strerror(errno));
-    return -1;
+  if ( ! f_usage ) {
+    rc = rtems_bsdnet_ifconfig(iface, SIOCSIFFLAGS, &flags);
+    if (rc < 0) {
+      printf("Could not set interface flags: %s\n", strerror(errno));
+      return -1;
+    }
   }
 
   return 0;
@@ -229,7 +266,7 @@ static int rtems_shell_main_ifconfig(
 
 rtems_shell_cmd_t rtems_shell_IFCONFIG_Command = {
   "ifconfig",                                      /* name */
-  "TBD",                                           /* usage */
+  IFCONFIG_USAGE,                                  /* usage */
   "network",                                       /* topic */
   rtems_shell_main_ifconfig,                       /* command */
   NULL,                                            /* alias */
