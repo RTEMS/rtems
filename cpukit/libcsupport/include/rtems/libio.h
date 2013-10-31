@@ -41,6 +41,8 @@
 extern "C" {
 #endif
 
+struct knote;
+
 /**
  * @defgroup LibIOFSOps File System Operations
  *
@@ -958,6 +960,22 @@ typedef int (*rtems_filesystem_poll_t)(
 );
 
 /**
+ * @brief Kernel event filter support.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] kn The kernel event note.
+ *
+ * @retval 0 Successful operation.
+ * @retval error An error occurred.  This is usually EINVAL.
+ *
+ * @see rtems_filesystem_default_kqfilter().
+ */
+typedef int (*rtems_filesystem_kqfilter_t)(
+  rtems_libio_t *iop,
+  struct knote *kn
+);
+
+/**
  * @brief File system node operations table.
  */
 struct _rtems_filesystem_file_handlers_r {
@@ -973,6 +991,7 @@ struct _rtems_filesystem_file_handlers_r {
   rtems_filesystem_fdatasync_t fdatasync_h;
   rtems_filesystem_fcntl_t fcntl_h;
   rtems_filesystem_poll_t poll_h;
+  rtems_filesystem_kqfilter_t kqfilter_h;
 };
 
 /**
@@ -1156,6 +1175,18 @@ int rtems_filesystem_default_fcntl(
 int rtems_filesystem_default_poll(
   rtems_libio_t *iop,
   int events
+);
+
+/**
+ * @brief Default kernel event filter handler.
+ *
+ * @retval EINVAL Always.
+ *
+ * @see rtems_filesystem_kqfilter_t.
+ */
+int rtems_filesystem_default_kqfilter(
+  rtems_libio_t *iop,
+  struct knote *kn
 );
 
 /** @} */

@@ -68,6 +68,10 @@ $(PROJECT_INCLUDE)/sys/ioccom.h: libcsupport/include/sys/ioccom.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
 
+$(PROJECT_INCLUDE)/sys/event.h: libcsupport/include/sys/event.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/event.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/event.h
+
 $(PROJECT_INCLUDE)/sys/filio.h: libcsupport/include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h

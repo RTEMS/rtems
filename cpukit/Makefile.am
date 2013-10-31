@@ -50,6 +50,7 @@ include_HEADERS += libmd/md4.h
 include_HEADERS += libmd/md5.h
 
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h
+include_sys_HEADERS += libcsupport/include/sys/event.h
 include_sys_HEADERS += libcsupport/include/sys/filio.h
 include_sys_HEADERS += libcsupport/include/sys/ioctl.h
 include_sys_HEADERS += libcsupport/include/sys/poll.h
