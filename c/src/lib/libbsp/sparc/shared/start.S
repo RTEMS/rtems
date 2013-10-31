@@ -226,8 +226,8 @@ SYM(hard_reset):
 	sll	%g3, %g2, %g3
         mov     %g3, %wim
 
-	or	%g1, 0x20, %g1
-        wr      %g1, %psr		! enable traps
+	or	%g1, 0xf20, %g1
+        wr      %g1, %psr		! enable traps and disable ints
 
         nop
         nop
