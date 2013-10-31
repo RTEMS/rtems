@@ -125,12 +125,15 @@ void MD5Init (
  */
 void MD5Update (
   MD5_CTX *mdContext,
-  const unsigned char *inBuf,
+  const void *inBufArg,
   unsigned int inLen )
 {
   UINT4 in[16];
   int mdi;
   unsigned int i, ii;
+  const unsigned char *inBuf;
+
+  inBuf = inBufArg;
 
   /* compute number of bytes mod 64 */
   mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
