@@ -943,6 +943,21 @@ typedef int (*rtems_filesystem_fcntl_t)(
 );
 
 /**
+ * @brief Poll and select support.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in] events The poll events.
+ *
+ * @return The poll return events.
+ *
+ * @see rtems_filesystem_default_poll().
+ */
+typedef int (*rtems_filesystem_poll_t)(
+  rtems_libio_t *iop,
+  int events
+);
+
+/**
  * @brief File system node operations table.
  */
 struct _rtems_filesystem_file_handlers_r {
@@ -957,6 +972,7 @@ struct _rtems_filesystem_file_handlers_r {
   rtems_filesystem_fsync_t fsync_h;
   rtems_filesystem_fdatasync_t fdatasync_h;
   rtems_filesystem_fcntl_t fcntl_h;
+  rtems_filesystem_poll_t poll_h;
 };
 
 /**
@@ -1128,6 +1144,18 @@ int rtems_filesystem_default_fsync_or_fdatasync_success(
 int rtems_filesystem_default_fcntl(
   rtems_libio_t *iop,
   int cmd
+);
+
+/**
+ * @brief Default poll handler.
+ *
+ * @retval POLLERR Always.
+ *
+ * @see rtems_filesystem_poll_t.
+ */
+int rtems_filesystem_default_poll(
+  rtems_libio_t *iop,
+  int events
 );
 
 /** @} */

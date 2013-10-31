@@ -52,6 +52,7 @@ include_HEADERS += libmd/md5.h
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h
 include_sys_HEADERS += libcsupport/include/sys/filio.h
 include_sys_HEADERS += libcsupport/include/sys/ioctl.h
+include_sys_HEADERS += libcsupport/include/sys/poll.h
 include_sys_HEADERS += libcsupport/include/sys/statvfs.h
 include_sys_HEADERS += libcsupport/include/sys/sockio.h
 include_sys_HEADERS += libcsupport/include/sys/ttycom.h

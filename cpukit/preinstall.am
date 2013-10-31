@@ -76,6 +76,10 @@ $(PROJECT_INCLUDE)/sys/ioctl.h: libcsupport/include/sys/ioctl.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
 
+$(PROJECT_INCLUDE)/sys/poll.h: libcsupport/include/sys/poll.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/poll.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/poll.h
+
 $(PROJECT_INCLUDE)/sys/statvfs.h: libcsupport/include/sys/statvfs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/statvfs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/statvfs.h
