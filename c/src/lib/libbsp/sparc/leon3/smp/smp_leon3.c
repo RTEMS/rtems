@@ -138,7 +138,7 @@ void bsp_smp_broadcast_interrupt(void)
   }
 }
 
-extern __inline__ void __delay(unsigned long loops)
+static __inline__ void __delay(unsigned long loops)
 {
    __asm__ __volatile__("cmp %0, 0\n\t"
      "1: bne 1b\n\t"
