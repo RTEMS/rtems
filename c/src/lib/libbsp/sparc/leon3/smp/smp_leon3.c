@@ -37,7 +37,6 @@ static rtems_isr bsp_ap_ipi_isr(
   rtems_vector_number vector
 )
 {
-  LEON_Clear_interrupt(LEON3_MP_IRQ);
   rtems_smp_process_interrupt();
 }
 
