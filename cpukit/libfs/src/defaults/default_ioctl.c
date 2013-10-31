@@ -26,5 +26,5 @@ int rtems_filesystem_default_ioctl(
   void            *buffer
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  rtems_set_errno_and_return_minus_one( ENOTTY );
 }

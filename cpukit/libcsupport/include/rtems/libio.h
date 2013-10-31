@@ -1009,7 +1009,7 @@ ssize_t rtems_filesystem_default_write(
 );
 
 /**
- * @retval -1 Always.  The errno is set to ENOTSUP.
+ * @retval -1 Always.  The errno is set to ENOTTY.
  *
  * @see rtems_filesystem_ioctl_t.
  */
