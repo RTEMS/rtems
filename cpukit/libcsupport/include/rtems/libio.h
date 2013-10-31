@@ -1083,7 +1083,7 @@ int rtems_filesystem_default_fstat(
 );
 
 /**
- * @retval -1 Always.  The errno is set to ENOTSUP.
+ * @retval -1 Always.  The errno is set to EINVAL.
  *
  * @see rtems_filesystem_ftruncate_t.
  */
