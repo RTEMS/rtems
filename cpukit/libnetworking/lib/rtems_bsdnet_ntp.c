@@ -140,7 +140,8 @@ tryServer (int i, int s, rtems_bsdnet_ntp_callback_t callback, void *usr_data)
 	}
 
 	if ( i >= sizeof packet &&
-		((packet.li_vn_mode & (0x7 << 3)) == (3 << 3)) &&
+    (((packet.li_vn_mode & (0x7 << 3)) == (3 << 3)) ||
+     ((packet.li_vn_mode & (0x7 << 3)) == (4 << 3))) &&
 	    ((packet.transmit_timestamp.integer != 0) || (packet.transmit_timestamp.fraction != 0)) &&
 		0 == callback( &packet, 0 , usr_data) )
 		return 0;
@@ -174,7 +175,7 @@ int ret;
 	}
 	memset (&myAddr, 0, sizeof myAddr);
 	myAddr.sin_family = AF_INET;
-	myAddr.sin_port = htons (0);
+	myAddr.sin_port = htons (123);
 	myAddr.sin_addr.s_addr = htonl (INADDR_ANY);
 	if (bind (s, (struct sockaddr *)&myAddr, sizeof myAddr) < 0) {
 		fprintf (stderr, "rtems_bsdnet_get_ntp() Can't bind socket: %s\n", strerror (errno));
@@ -190,7 +191,7 @@ int ret;
 		 * and hope that there's an NTP broadcast
 		 * server out there somewhere.
 		 */
-		if (rtems_bsdnet_ntpserver_count < 0) {
+		if (rtems_bsdnet_ntpserver_count <= 0) {
 			ret = tryServer (-1, sock, callback, usr_data);
 		}
 		else {
