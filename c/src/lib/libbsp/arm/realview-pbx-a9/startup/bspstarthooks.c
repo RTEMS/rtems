@@ -28,6 +28,10 @@ rvpbxa9_mmu_config_table[] = {
     .begin = 0x1f000000U,
     .end = 0x20000000U,
     .flags = ARMV7_MMU_DEVICE
+  }, {
+    .begin = 0x4e000000U,
+    .end = 0x4f000000U,
+    .flags = ARMV7_MMU_DEVICE
   }
 };
 
