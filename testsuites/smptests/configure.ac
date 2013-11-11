@@ -42,7 +42,6 @@ smp01/Makefile
 smp02/Makefile
 smp03/Makefile
 smp05/Makefile
-smp06/Makefile
 smp07/Makefile
 smp08/Makefile
 smp09/Makefile
