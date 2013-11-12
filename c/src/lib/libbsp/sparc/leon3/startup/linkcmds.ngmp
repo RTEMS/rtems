@@ -1,0 +1,19 @@
+/* Default values, can be overridden */
+
+_PROM_SIZE = DEFINED (_PROM_SIZE) ? _PROM_SIZE : 0;
+
+_RAM_SIZE = DEFINED (_RAM_SIZE) ? _RAM_SIZE : 64M;
+
+/* these are the maximum values */
+
+MEMORY
+{
+  rom     : ORIGIN = 0xC0000000, LENGTH = 256M
+  ram     : ORIGIN = 0x00000000, LENGTH = 2048M
+  sram    : ORIGIN = 0xD0000000, LENGTH = 256M
+}
+
+_PROM_START = ORIGIN (rom);
+_RAM_START = ORIGIN (ram);
+
+INCLUDE linkcmds.base
