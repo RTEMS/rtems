@@ -9,13 +9,6 @@ _PROM_START = DEFINED (_PROM_START) ? _PROM_START : 0x00000000;
 _RAM_SIZE = DEFINED (_RAM_SIZE) ? _RAM_SIZE : 4M;
 _RAM_START = DEFINED (_RAM_START) ? _RAM_START : 0x40000000;
 
-/*
- *  Base address of the on-CPU peripherals
- */
-
-_LEON_REG = 0x80000000;
-LEON_REG = _LEON_REG;
-
 /* these are the maximum values */
 
 MEMORY
