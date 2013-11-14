@@ -8,7 +8,7 @@ imfs_fspatheval_SOURCES += ../../psxtests/include/pmacros.h
 imfs_fspatheval_SOURCES += ../imfs_support/fs_support.c
 imfs_fspatheval_SOURCES += ../imfs_support/fs_config.h 
 
-#dist_rtems_tests_DATA = imfs_fspatheval.scn
+dist_rtems_tests_DATA = imfs_fspatheval.scn
 #dist_rtems_tests_DATA += imfs_fspatheval.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
