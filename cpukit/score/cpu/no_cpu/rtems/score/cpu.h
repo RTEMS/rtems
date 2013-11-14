@@ -1,5 +1,10 @@
 /**
  * @file rtems/score/cpu.h
+ *
+ * @brief NO_CPU Department Source
+ *
+ * This include file contains information pertaining to the NO_CPU
+ * processor.
  */
 
 /*
