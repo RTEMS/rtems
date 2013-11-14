@@ -2,7 +2,9 @@
  *  @file
  *
  *  @brief Mips CPU Dependent Header File
- *
+ */
+
+/*
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
  *           Joel Sherrill <joel@OARcorp.com>.
  *
