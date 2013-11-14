@@ -32,7 +32,8 @@ void BSP_shared_interrupt_init(void)
        int i;
 
        for (i=0; i <= BSP_INTERRUPT_VECTOR_MAX_STD; i++) {
-#if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)
+#if defined(LEON3_MP_IRQ) && \
+    (defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING))
                /* Don't install IRQ handler on IPI interrupt */
                if (i == LEON3_MP_IRQ)
                        continue;
