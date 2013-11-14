@@ -88,7 +88,7 @@ static uint32_t a9mpcore_clock_nanoseconds_since_last_tick(void)
   uint32_t p = pt->load + 1;
 
   if ((pt->irqst & A9MPCORE_PT_IRQST_EFLG) != 0) {
-    c = pt->cntr + p;
+    c = pt->cntr - p;
   }
 
   return (uint32_t) (((p - c) * k) >> 32);
