@@ -134,6 +134,7 @@ static const rtems_assoc_t rtems_monitor_state_assoc[] = {
     { "Wbar",   STATES_WAITING_FOR_BARRIER, 0 },
     { "Wrwlk",  STATES_WAITING_FOR_RWLOCK, 0 },
     { "Wisig",  STATES_INTERRUPTIBLE_BY_SIGNAL, 0 },
+    { "Wwkup",  STATES_WAITING_FOR_BSD_WAKEUP, 0 },
     { 0, 0, 0 },
 };
 
