@@ -156,9 +156,9 @@ typedef struct {
   #endif
   /** This is the maximum length of names. */
   uint16_t          name_length;
-  /** This is this object class' method called when extracting a thread. */
-  Objects_Thread_queue_Extract_callout extract;
   #if defined(RTEMS_MULTIPROCESSING)
+    /** This is this object class' method called when extracting a thread. */
+    Objects_Thread_queue_Extract_callout extract;
     /** This is this object class' pointer to the global name table */
     Chain_Control    *global_table;
   #endif
