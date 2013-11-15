@@ -8,7 +8,7 @@ jffs2_fspermission_SOURCES += ../../psxtests/include/pmacros.h
 jffs2_fspermission_SOURCES += ../jffs2_support/fs_support.c
 jffs2_fspermission_SOURCES += ../jffs2_support/fs_config.h
 
-#dist_rtems_tests_DATA = jffs2_fspermission.scn
+dist_rtems_tests_DATA = jffs2_fspermission.scn
 #dist_rtems_tests_DATA += jffs2_fspermission.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

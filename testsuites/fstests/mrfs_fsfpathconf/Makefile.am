@@ -10,7 +10,7 @@ mrfs_fsfpathconf_SOURCES += ../../psxtests/include/pmacros.h
 mrfs_fsfpathconf_SOURCES += ../mrfs_support/fs_support.c
 mrfs_fsfpathconf_SOURCES += ../mrfs_support/fs_config.h
 
-#dist_rtems_tests_DATA = mrfs_fsfpathconf.scn
+dist_rtems_tests_DATA = mrfs_fsfpathconf.scn
 #dist_rtems_tests_DATA += mrfs_fsfpathconf.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

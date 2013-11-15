@@ -8,7 +8,7 @@ imfs_fssymlink_SOURCES += ../../psxtests/include/pmacros.h
 imfs_fssymlink_SOURCES += ../imfs_support/fs_support.c
 imfs_fssymlink_SOURCES += ../imfs_support/fs_config.h
 
-#dist_rtems_tests_DATA = imfs_fssymlink.scn
+dist_rtems_tests_DATA = imfs_fssymlink.scn
 #dist_rtems_tests_DATA += imfs_fssymlink.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

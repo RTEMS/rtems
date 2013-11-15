@@ -10,7 +10,7 @@ mrfs_fserror_SOURCES += ../../psxtests/include/pmacros.h
 mrfs_fserror_SOURCES += ../mrfs_support/fs_support.c
 mrfs_fserror_SOURCES += ../mrfs_support/fs_config.h
 
-#dist_rtems_tests_DATA = mrfs_fserror.scn
+dist_rtems_tests_DATA = mrfs_fserror.scn
 #dist_rtems_tests_DATA += mrfs_fserror.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

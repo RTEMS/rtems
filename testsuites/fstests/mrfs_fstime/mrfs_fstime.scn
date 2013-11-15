@@ -1,0 +1,9 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED RFS ) ***
+Initializing filesystem MOUNTED RFS
+
+
+*** TIME TEST ***
+Sleep a few seconds
+../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fstime/../fstime/test.c: 128 st.st_ctime == st.st_mtime

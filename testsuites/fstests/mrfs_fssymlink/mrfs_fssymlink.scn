@@ -1,0 +1,37 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED RFS ) ***
+Initializing filesystem MOUNTED RFS
+
+
+*** SYMLINK TEST ***
+Create a file named file
+Create a symlink named symlink to file
+call readlink
+file
+Unlink the file
+call readlink
+Create a dir named file
+Create a symlink named symlink to file
+call readlink
+rmdir the dir
+symlink loop erro test
+Testing creat      with arguments: "path,mode"          EXPECT "ELOOP"
+PASS
+Testing open       with arguments: "path,O_CREAT|O_WRONLY,mode" EXPECT "ELOOP"
+PASS
+Testing truncate   with arguments: "path,0"             EXPECT "ELOOP"
+PASS
+Testing rename     with arguments: "path,file04"        EXPECT "ELOOP"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fssymlink/../fssymlink/test.c: 151
+Testing unlink     with arguments: "path"               EXPECT "ELOOP"
+PASS
+Testing mkdir      with arguments: "path,mode"          EXPECT "ELOOP"
+PASS
+Testing rmdir      with arguments: "path"               EXPECT "ELOOP"
+PASS
+*** END OF SYMLINK TEST ***
+
+
+Shutting down filesystem MOUNTED RFS
+*** END OF FILE SYSTEM TEST ( MOUNTED RFS ) ***

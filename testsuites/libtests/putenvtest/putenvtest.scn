@@ -1,0 +1,6 @@
+
+
+*** PUTENV/GETENV TEST ***
+putenv("FOO=BAR") - expected to work
+getenv("FOO") ==> "BAR"
+*** END OF PUTENV/GETENV TEST ***

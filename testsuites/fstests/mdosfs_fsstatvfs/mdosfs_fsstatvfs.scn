@@ -1,0 +1,12 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED DOSFS ) ***
+Initializing filesystem MOUNTED DOSFS
+
+
+*** STATVFS TEST ***
+*** END OF TEST STATVFS ***
+
+
+Shutting down filesystem MOUNTED DOSFS
+*** END OF FILE SYSTEM TEST ( MOUNTED DOSFS ) ***

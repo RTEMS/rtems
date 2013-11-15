@@ -10,7 +10,7 @@ mrfs_fssymlink_SOURCES += ../../psxtests/include/pmacros.h
 mrfs_fssymlink_SOURCES += ../mrfs_support/fs_support.c
 mrfs_fssymlink_SOURCES += ../mrfs_support/fs_config.h
 
-#dist_rtems_tests_DATA = mrfs_fssymlink.scn
+dist_rtems_tests_DATA = mrfs_fssymlink.scn
 #dist_rtems_tests_DATA += mrfs_fssymlink.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

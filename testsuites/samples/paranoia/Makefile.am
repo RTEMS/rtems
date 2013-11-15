@@ -2,12 +2,12 @@
 rtems_tests_PROGRAMS = paranoia
 paranoia_SOURCES = init.c paranoia.c system.h
 
-dist_rtems_tests_DATA = paranoia.doc
+dist_rtems_tests_DATA = paranoia.scn
+dist_rtems_tests_DATA += paranoia.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
-
 
 #  -DCYGNUS   turns on more verbose msgs
 AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN

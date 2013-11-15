@@ -1,0 +1,96 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED RFS ) ***
+Initializing filesystem MOUNTED RFS
+
+
+*** ERROR TEST ***
+Testing open       with arguments: "name01, O_CREAT | O_EXCL" EXPECT "EEXIST"
+PASS
+Testing mkdir      with arguments: "name01, mode"       EXPECT "EEXIST"
+PASS
+Testing open       with arguments: "name02, O_WRONLY"   EXPECT "EISDIR"
+PASS
+Testing open       with arguments: "name02, O_RDWR"     EXPECT "EISDIR"
+PASS
+Testing open       with arguments: "name, O_WRONLY"     EXPECT "ENOENT"
+PASS
+Testing open       with arguments: "\"\", O_WRONLY"     EXPECT "ENOENT"
+PASS
+Testing open       with arguments: "name03, O_WRONLY"   EXPECT "ENOENT"
+PASS
+Testing mkdir      with arguments: "name, mode"         EXPECT "ENOENT"
+PASS
+Testing mkdir      with arguments: "\"\", mode"         EXPECT "ENOENT"
+PASS
+Testing open       with arguments: "name, O_WRONLY"     EXPECT "ENOTDIR"
+PASS
+Testing mkdir      with arguments: "name, mode"         EXPECT "ENOTDIR"
+PASS
+Testing close      with arguments: "-1"                 EXPECT "EBADF"
+PASS
+Testing close      with arguments: "100"                EXPECT "EBADF"
+PASS
+Testing rename     with arguments: "name01, name"       EXPECT "EINVAL"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 156
+Testing rename     with arguments: "name03, name02"     EXPECT "EISDIR"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 164
+Testing rename     with arguments: "nonexistence, name01" EXPECT "ENOENT"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 171
+Testing rename     with arguments: "\"\", name01"       EXPECT "ENOENT"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 172
+Testing rename     with arguments: "name01, \"\""       EXPECT "ENOENT"
+PASS
+Testing rename     with arguments: "name, name03"       EXPECT "ENOTDIR"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 182
+Testing rename     with arguments: "name03, name"       EXPECT "ENOTDIR"
+PASS
+Testing rename     with arguments: "name02, name03"     EXPECT "ENOTDIR"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 184
+Testing truncate   with arguments: "file, -1"           EXPECT "EINVAL"
+PASS
+Testing rmdir      with arguments: "\"..\""             EXPECT "ENOTEMPTY"
+FAIL   ../../../../../../../rtems/c/src/../../testsuites/fstests/mrfs_fserror/../fserror/test.c: 266
+Testing rmdir      with arguments: "\"tmp\""            EXPECT "ENOTEMPTY"
+PASS
+Testing rmdir      with arguments: "\".\""              EXPECT "EINVAL"
+PASS
+Testing rmdir      with arguments: "\"tmp/.\""          EXPECT "EINVAL"
+PASS
+Testing rmdir      with arguments: "\"\""               EXPECT "ENOENT"
+PASS
+Testing rmdir      with arguments: "nonexistence"       EXPECT "ENOENT"
+PASS
+Testing unlink     with arguments: "\"\""               EXPECT "ENOENT"
+PASS
+Testing unlink     with arguments: "nonexistence"       EXPECT "ENOENT"
+PASS
+Testing rmdir      with arguments: "\"tmp/file\""       EXPECT "ENOTDIR"
+PASS
+Testing unlink     with arguments: "\"tmp/file/dir\""   EXPECT "ENOTDIR"
+PASS
+Testing read       with arguments: "fd, readbuf, 10"    EXPECT "EBADF"
+PASS
+Testing read       with arguments: "100, readbuf, 10"   EXPECT "EBADF"
+PASS
+Testing write      with arguments: "fd, databuf, 10"    EXPECT "EBADF"
+PASS
+Testing write      with arguments: "fd, readbuf, 10"    EXPECT "EBADF"
+PASS
+Testing lseek      with arguments: "fd, -100, SEEK_END" EXPECT "EINVAL"
+PASS
+Testing lseek      with arguments: "fd, -100, SEEK_CUR" EXPECT "EINVAL"
+PASS
+Testing lseek      with arguments: "fd, -100, SEEK_SET" EXPECT "EINVAL"
+PASS
+Testing lseek      with arguments: "fd, huge, SEEK_END" EXPECT "EOVERFLOW"
+PASS
+Testing lseek      with arguments: "fd, huge, SEEK_CUR" EXPECT "EOVERFLOW"
+PASS
+Testing lseek      with arguments: "fd, 0, SEEK_SET"    EXPECT "EBADF"
+PASS
+*** END OF ERROR TEST ***
+
+
+Shutting down filesystem MOUNTED RFS
+*** END OF FILE SYSTEM TEST ( MOUNTED RFS ) ***

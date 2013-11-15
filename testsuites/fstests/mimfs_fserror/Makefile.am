@@ -8,7 +8,7 @@ mimfs_fserror_SOURCES += ../../psxtests/include/pmacros.h
 mimfs_fserror_SOURCES += ../mimfs_support/fs_support.c
 mimfs_fserror_SOURCES += ../mimfs_support/fs_config.h
 
-#dist_rtems_tests_DATA = mimfs_fserror.scn
+dist_rtems_tests_DATA = mimfs_fserror.scn
 #dist_rtems_tests_DATA += mimfs_fserror.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

@@ -10,7 +10,7 @@ mrfs_fspatheval_SOURCES += ../../psxtests/include/pmacros.h
 mrfs_fspatheval_SOURCES += ../mrfs_support/fs_support.c
 mrfs_fspatheval_SOURCES += ../mrfs_support/fs_config.h
 
-#dist_rtems_tests_DATA = mrfs_fspatheval.scn
+dist_rtems_tests_DATA = mrfs_fspatheval.scn
 #dist_rtems_tests_DATA += mrfs_fspatheval.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

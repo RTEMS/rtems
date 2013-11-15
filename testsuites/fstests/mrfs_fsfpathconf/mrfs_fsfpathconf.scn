@@ -1,0 +1,30 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED RFS ) ***
+Initializing filesystem MOUNTED RFS
+
+
+*** FPATHCONF TEST ***
+
+fpathconf of non-existing file give -1 , expected -1
+... creating file "testfile.km"
+*** file created succesfully
+
+request with _PC_LINK_MAX return : 5
+request with _PC_MAX_CANON return : 128
+request with _PC_MAX_INPUT return : 7
+request with _PC_NAME_MAX return : 255
+request with _PC_PATH_MAX return : 255
+request with _PC_PIPE_BUF return : 1024
+request with _PC_CHOWN_RESTRICTED return : 0
+request with _PC_NO_TRUNC return : 1
+request with _PC_VDISABLE return : 0
+request with _PC_ASYNC_IO return : 0
+request with _PC_PRIO_IO return : 0
+request with _PC_SYNC_IO return : 0
+request with bad argument return : -1
+*** END OF FPATHCONF TEST ***
+
+
+Shutting down filesystem MOUNTED RFS
+*** END OF FILE SYSTEM TEST ( MOUNTED RFS ) ***

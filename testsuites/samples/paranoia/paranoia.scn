@@ -1,0 +1,133 @@
+
+
+*** PARANOIA TEST ***
+paranoia version 1.1 [cygnus]
+Program is now RUNNING tests on small integers:
+TEST: 0+0 != 0, 1-1 != 0, 1 <= 0, or 1+1 != 2
+PASS: 0+0 != 0, 1-1 != 0, 1 <= 0, or 1+1 != 2
+TEST: 3 != 2+1, 4 != 3+1, 4+2*(-2) != 0, or 4-3-1 != 0
+PASS: 3 != 2+1, 4 != 3+1, 4+2*(-2) != 0, or 4-3-1 != 0
+TEST: -1+1 != 0, (-1)+abs(1) != 0, or -1+(-1)*(-1) != 0
+PASS: -1+1 != 0, (-1)+abs(1) != 0, or -1+(-1)*(-1) != 0
+TEST: 1/2 + (-1) + 1/2 != 0
+PASS: 1/2 + (-1) + 1/2 != 0
+TEST: 9 != 3*3, 27 != 9*3, 32 != 8*4, or 32-27-4-1 != 0
+PASS: 9 != 3*3, 27 != 9*3, 32 != 8*4, or 32-27-4-1 != 0
+TEST: 5 != 4+1, 240/3 != 80, 240/4 != 60, or 240/5 != 48
+PASS: 5 != 4+1, 240/3 != 80, 240/4 != 60, or 240/5 != 48
+-1, 0, 1/2, 1, 2, 3, 4, 5, 9, 27, 32 & 240 are O.K.
+
+Searching for Radix and Precision.
+Radix = 2.000000 .
+Closest relative separation found is U1 = 1.1102230e-16 .
+
+Recalculating radix and precision
+ confirms closest relative separation U1 .
+Radix confirmed.
+TEST: Radix is too big: roundoff problems
+PASS: Radix is too big: roundoff problems
+TEST: Radix is not as good as 2 or 10
+PASS: Radix is not as good as 2 or 10
+TEST: (1-U1)-1/2 < 1/2 is FALSE, prog. fails?
+PASS: (1-U1)-1/2 < 1/2 is FALSE, prog. fails?
+TEST: Comparison is fuzzy,X=1 but X-1/2-1/2 != 0
+PASS: Comparison is fuzzy,X=1 but X-1/2-1/2 != 0
+The number of significant digits of the Radix is 53.000000 .
+TEST: Precision worse than 5 decimal figures
+PASS: Precision worse than 5 decimal figures
+TEST: Subtraction is not normalized X=Y,X+Z != Y+Z!
+PASS: Subtraction is not normalized X=Y,X+Z != Y+Z!
+Subtraction appears to be normalized, as it should be.
+Checking for guard digit in *, /, and -.
+TEST: * gets too many final digits wrong.
+
+PASS: * gets too many final digits wrong.
+
+TEST: Division lacks a Guard Digit, so error can exceed 1 ulp
+or  1/3  and  3/9  and  9/27 may disagree
+PASS: Division lacks a Guard Digit, so error can exceed 1 ulp
+or  1/3  and  3/9  and  9/27 may disagree
+TEST: Computed value of 1/1.000..1 >= 1
+PASS: Computed value of 1/1.000..1 >= 1
+TEST: * and/or / gets too many last digits wrong
+PASS: * and/or / gets too many last digits wrong
+     *, /, and - appear to have guard digits, as they should.
+Checking rounding on multiply, divide and add/subtract.
+TEST: X * (1/X) differs from 1
+PASS: X * (1/X) differs from 1
+* is neither chopped nor correctly rounded.
+/ is neither chopped nor correctly rounded.
+TEST: Radix * ( 1 / Radix ) differs from 1
+PASS: Radix * ( 1 / Radix ) differs from 1
+TEST: Incomplete carry-propagation in Addition
+PASS: Incomplete carry-propagation in Addition
+Addition/Subtraction neither rounds nor chops.
+Sticky bit used incorrectly or not at all.
+TEST: lack(s) of guard digits or failure(s) to correctly round or chop
+(noted above) count as one flaw in the final tally below
+ERROR: Severity: FLAW:  lack(s) of guard digits or failure(s) to correctly round or chop
+(noted above) count as one flaw in the final tally below.
+PASS: lack(s) of guard digits or failure(s) to correctly round or chop
+(noted above) count as one flaw in the final tally below
+
+Does Multiplication commute?  Testing on 20 random pairs.
+     No failures found in 20 integer pairs.
+
+Running test of square root(x).
+TEST: Square root of 0.0, -0.0 or 1.0 wrong
+PASS: Square root of 0.0, -0.0 or 1.0 wrong
+Testing if sqrt(X * X) == X for 20 Integers X.
+Test for sqrt monotonicity.
+sqrt has passed a test for Monotonicity.
+Testing whether sqrt is rounded or chopped.
+Square root is neither chopped nor correctly rounded.
+Observed errors run from -5.0000000e-01 to 5.0000000e-01 ulps.
+TEST: sqrt gets too many last digits wrong
+PASS: sqrt gets too many last digits wrong
+Testing powers Z^i for small Integers Z and i.
+... no discrepancies found.
+
+Seeking Underflow thresholds UfThold and E0.
+Smallest strictly positive number found is E0 = 4.94066e-324 .
+Since comparison denies Z = 0, evaluating (Z + Z) / Z should be safe.
+What the machine gets for (Z + Z) / Z is  2.00000000000000000e+00 .
+This is O.K., provided Over/Underflow has NOT just been signaled.
+Underflow is gradual; it incurs Absolute Error =
+(roundoff in UfThold) < E0.
+The Underflow threshold is 2.22507385850720188e-308,  below which
+calculation may suffer larger Relative error than merely roundoff.
+Since underflow occurs below the threshold
+UfThold = (2.00000000000000000e+00) ^ (-1.02200000000000000e+03)
+only underflow should afflict the expression
+        (2.00000000000000000e+00) ^ (-2.04400000000000000e+03);
+actually calculating yields: 0.00000000000000000e+00 .
+This computed value is O.K.
+
+Testing X^((X + 1) / (X - 1)) vs. exp(2) = 7.38905609893065218e+00 as X -> 1.
+Accuracy seems adequate.
+Testing powers Z^Q at four nearly extreme values.
+ ... no discrepancies found.
+
+Searching for Overflow threshold:
+This may generate an error.
+Can `Z = -Y' overflow?
+Trying it on Y = -inf .
+Seems O.K.
+Overflow threshold is V  = 1.79769313486231571e+308 .
+Overflow saturates at V0 = inf .
+No Overflow should be signaled for V * 1 = 1.79769313486231571e+308
+                           nor for V / 1 = 1.79769313486231571e+308 .
+Any overflow signal separating this * from the one
+above is a DEFECT.
+
+
+What message and/or values does Division by Zero produce?
+    Trying to compute 1 / 0 produces ...  inf .
+
+    Trying to compute 0 / 0 produces ...  nan .
+
+The number of  FLAWs  discovered =           1.
+
+The arithmetic diagnosed seems Satisfactory though flawed.
+END OF TEST.
+*** END OF PARANOIA TEST ***

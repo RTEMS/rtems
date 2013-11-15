@@ -1,0 +1,15 @@
+
+
+*** FILE SYSTEM TEST ( JFFS2 ) ***
+Initializing filesystem JFFS2
+
+
+*** TIME TEST ***
+Sleep a few seconds
+Sleep a few seconds
+Sleep a few seconds
+*** END OF TIME TEST ***
+
+
+Shutting down filesystem JFFS2
+*** END OF FILE SYSTEM TEST ( JFFS2 ) ***

@@ -8,7 +8,7 @@ jffs2_fstime_SOURCES += ../../psxtests/include/pmacros.h
 jffs2_fstime_SOURCES += ../jffs2_support/fs_support.c
 jffs2_fstime_SOURCES += ../jffs2_support/fs_config.h
 
-#dist_rtems_tests_DATA = jffs2_fstime.scn
+dist_rtems_tests_DATA = jffs2_fstime.scn
 #dist_rtems_tests_DATA += jffs2_fstime.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

@@ -1,0 +1,82 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED DOSFS ) ***
+Initializing filesystem MOUNTED DOSFS
+
+
+*** PATH EVALUATION TEST ***
+Making directory /test1/
+Making directory tets2
+Making directory ///test3
+Making directory test4////
+Making directory ../../test5
+Making directory /test1/../test6
+Making directory ./test7/
+Making directory .././test8
+Making directory test8/./../test9
+Making directory ///test9/../test10
+
+Making directory !#$%&()-@^_`{}~'
+Making directory 0_1_A
+Making directory aaa bbb
+Making directory ccc....ddd
+Making directory  fff
+
+Removing directory test10
+Removing directory test9
+Removing directory test8
+Removing directory test7
+Removing directory test6
+Removing directory test5
+Removing directory test4
+Removing directory test3
+Removing directory tets2
+Removing directory test1
+
+Removing directory  fff
+Removing directory ccc....ddd
+Removing directory aaa bbb
+Removing directory 0_1_A
+Removing directory !#$%&()-@^_`{}~'
+
+Create file /test1
+Create file tets2
+Create file ///test3
+Create file test4
+Create file ../../test5
+Create file /../test6
+Create file ./test7
+Create file .././test8
+Create file /./../test9
+Create file //../test10
+
+Create file !#$%&()-@^_`{}~'
+Create file 0_1_A
+Create file aaa bbb
+Create file ccc....ddd
+Create file  fff
+
+Removing file test10
+Removing file test9
+Removing file test8
+Removing file test7
+Removing file test6
+Removing file test5
+Removing file test4
+Removing file test3
+Removing file tets2
+Removing file test1
+
+Removing file  fff
+Removing file ccc....ddd
+Removing file aaa bbb
+Removing file 0_1_A
+Removing file !#$%&()-@^_`{}~'
+
+mkdir /tmp/a/b
+cd /tmp
+*** END OF PATH EVALUATION TEST ***
+
+
+Shutting down filesystem MOUNTED DOSFS
+*** END OF FILE SYSTEM TEST ( MOUNTED DOSFS ) ***

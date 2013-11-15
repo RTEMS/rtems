@@ -10,6 +10,9 @@ mdosfs_fsstatvfs_SOURCES += ../../psxtests/include/pmacros.h
 mdosfs_fsstatvfs_SOURCES += ../mdosfs_support/fs_support.c
 mdosfs_fsstatvfs_SOURCES += ../mdosfs_support/fs_config.h
 
+dist_rtems_tests_DATA = mdosfs_fsstatvfs.scn
+#dist_rtems_tests_DATA = mdosfs_fsstatvfs.doc
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am

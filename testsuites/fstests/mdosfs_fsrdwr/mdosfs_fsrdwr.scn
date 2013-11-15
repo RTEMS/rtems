@@ -1,0 +1,24 @@
+
+
+*** FILE SYSTEM TEST ( MOUNTED DOSFS ) ***
+Initializing filesystem MOUNTED DOSFS
+test case: read_write_test
+test case: lseek_test
+Create a new file
+Writing 2430 bytes to file
+Successfully wrote 2430
+Check the current position
+2431
+test case: truncate_test03
+test case: truncate_to_zero
+test case: block_read_and_write
+test case: block_rw_case_0
+test case: block_rw_case_1
+test case: block_rw_case_2
+test case: block_rw_case_3
+test case: block_rw_case_4
+test case: write_until_no_space_is_left
+
+
+Shutting down filesystem MOUNTED DOSFS
+*** END OF FILE SYSTEM TEST ( MOUNTED DOSFS ) ***
