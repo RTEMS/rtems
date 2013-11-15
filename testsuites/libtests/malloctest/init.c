@@ -978,7 +978,7 @@ static void test_heap_extend(void)
 
   _Heap_Initialize( heap, area_begin + 768, 256, 0 );
   sub_area_begin = (uint8_t *) heap->first_block;
-  sub_area_end = (uint8_t *) _Heap_Alloc_area_of_block( heap->last_block );
+  sub_area_end = (uint8_t *) heap->first_block->prev_size;
 
   puts( "heap extend - link below" );
   ret = _Protected_heap_Extend( heap, area_begin + 0, 256 );
