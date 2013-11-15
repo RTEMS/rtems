@@ -19,6 +19,7 @@
 
 #include "tmacros.h"
 
+#include <errno.h>
 #include <fcntl.h>
 #include <dirent.h>
 
@@ -459,8 +460,10 @@ static void test_creating_duplicate_directories(
           ++index_duplicate ) {
       snprintf( dirname, sizeof( dirname ), "%s/%s", start_dir,
                 duplicates[index_dir].name_duplicates[index_duplicate] );
+      errno = 0;
       rc = mkdir( dirname, S_IRWXU | S_IRWXG | S_IRWXO );
-      rtems_test_assert( rc < 0 );
+      rtems_test_assert( rc == -1 );
+      rtems_test_assert( errno == EEXIST );
     }
   }
 }
@@ -608,6 +611,11 @@ static void test_duplicated_files( const char *dirname,
 
       rc = close( fd );
       rtems_test_assert( rc == 0 );
+
+      errno = 0;
+      fd = open( filename, O_RDWR | O_CREAT | O_EXCL );
+      rtems_test_assert( fd == -1 );
+      rtems_test_assert( errno == EEXIST );
     }
 
     rc = remove( filename );
