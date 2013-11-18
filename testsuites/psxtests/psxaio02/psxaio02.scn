@@ -1,0 +1,22 @@
+*** POSIX AIO TEST 02 ***
+Init: Open files
+Init: [WQ] aio_write on 1st file
+Init: [WQ] aio_write on 2nd file
+Init: [WQ] aio_read on 2nd file add by priority
+Init: [WQ] aio_write on 3rd file
+Init: [WQ] aio_write on 4th file
+Init: [WQ] aio_write on 5th file  -- [WQ] full
+Init: [IQ] aio_write on 6th file
+Init: [IQ] aio_write on 7th file
+Init: [IQ] aio_read on 7th file add by priority
+Init: [WQ] aio_sync on 1st file add by priority
+Init: [NONE] aio_cancel aiocbp=NULL and invalid fildes
+Init: [NONE] aio_cancel aiocbp=NULL valid fildes not in queue
+Init: [WQ] aio_cancel aiocbp=NULL fildes=fd[1]
+Init: [IQ] aio_cancel aiocbp=NULL fildes=fd[6]
+Init: [NONE] aio_cancel aiocbp->aio_fildes != fildes
+Init: [NONE] aio_cancel FD on [IQ], aiocb not on chain
+Init: [IQ] aio_cancel 6th file only one request
+Init: [WQ] aio_cancel 1st file only one request
+Init: [NONE] aio_cancel empty [IQ]
+*** END OF POSIX AIO TEST 02 ***

@@ -75,7 +75,7 @@ POSIX_Init (void *argument)
   
   puts ("\n\n*** POSIX AIO TEST 02 ***");
   
-  puts (" Init: Open files ");
+  puts ("Init: Open files");
 
   for (i=0; i<MAX; i++)
     {
@@ -84,96 +84,94 @@ POSIX_Init (void *argument)
       rtems_test_assert ( fd[i] != -1);
     }
   
-  puts (" Init: [WQ] aio_write on 1st file ");
+  puts ("Init: [WQ] aio_write on 1st file");
   aiocbp[0] = create_aiocb (fd[0]);
   status = aio_write (aiocbp[0]);
   rtems_test_assert (status != -1);
 
-  puts (" Init: [WQ] aio_write on 2nd file ");
+  puts ("Init: [WQ] aio_write on 2nd file");
   aiocbp[1] = create_aiocb (fd[1]);
   status = aio_write (aiocbp[1]);
   rtems_test_assert (status != -1);
   
-  puts (" Init: [WQ] aio_read on 2nd file add by priority ");
+  puts ("Init: [WQ] aio_read on 2nd file add by priority");
   aiocbp[2] = create_aiocb (fd[1]);
   status = aio_read (aiocbp[2]);
   rtems_test_assert (status != -1);
   
-  puts (" Init: [WQ] aio_write on 3rd file "); 
+  puts ("Init: [WQ] aio_write on 3rd file");
   aiocbp[3] = create_aiocb (fd[2]);
   status = aio_write (aiocbp[3]);
   rtems_test_assert (status != -1);
   
-  puts (" Init: [WQ] aio_write on 4th file ");
+  puts ("Init: [WQ] aio_write on 4th file");
   aiocbp[4] = create_aiocb (fd[3]);
   status = aio_write (aiocbp[4]);
   rtems_test_assert (status != -1);
   
-  puts (" Init: [WQ] aio_write on 5th file  -- [WQ] full ");
+  puts ("Init: [WQ] aio_write on 5th file  -- [WQ] full");
   aiocbp[5] = create_aiocb (fd[4]);
   status = aio_write (aiocbp[5]);
   rtems_test_assert (status != -1);
   
-  puts (" Init: [IQ] aio_write on 6th file ");
+  puts ("Init: [IQ] aio_write on 6th file");
   aiocbp[6] = create_aiocb (fd[5]);
   status = aio_write (aiocbp[6]);
   rtems_test_assert (status != -1);
   
-  puts (" Init: [IQ] aio_write on 7th file ");
+  puts ("Init: [IQ] aio_write on 7th file");
   aiocbp[7] = create_aiocb (fd[6]);
   status = aio_write (aiocbp[7]);
   rtems_test_assert (status != -1);
 
-  puts (" Init: [IQ] aio_read on 7th file add by priority ");
+  puts ("Init: [IQ] aio_read on 7th file add by priority");
   aiocbp[8] = create_aiocb (fd[6]); 
   status = aio_read (aiocbp[8]);
   rtems_test_assert (status != -1);
 
-  puts (" Init: [WQ] aio_sync on 1st file add by priority ");
+  puts ("Init: [WQ] aio_sync on 1st file add by priority");
   aiocbp[9] = create_aiocb (fd[0]); 
   status = aio_fsync (O_SYNC, aiocbp[9]);
   rtems_test_assert (status != -1);
 
-  puts (" Init: [NONE] aio_cancel aiocbp=NULL and invalid fildes ");
+  puts ("Init: [NONE] aio_cancel aiocbp=NULL and invalid fildes");
   status = aio_cancel (WRONG_FD, NULL);
   rtems_test_assert (status == -1);
 
-  puts (" Init: [NONE] aio_cancel aiocbp=NULL valid fildes not in queue ");
+  puts ("Init: [NONE] aio_cancel aiocbp=NULL valid fildes not in queue");
   status = aio_cancel (fd[7], NULL);
   rtems_test_assert (status == AIO_ALLDONE);
 
-  puts (" Init: [WQ] aio_cancel aiocbp=NULL fildes=fd[1] ");
+  puts ("Init: [WQ] aio_cancel aiocbp=NULL fildes=fd[1]");
   status = aio_cancel (fd[1], NULL);
   rtems_test_assert (status == AIO_CANCELED);
 
-  puts (" Init: [IQ] aio_cancel aiocbp=NULL fildes=fd[6] ");
+  puts ("Init: [IQ] aio_cancel aiocbp=NULL fildes=fd[6]");
   status = aio_cancel (fd[6], NULL);
   rtems_test_assert (status == AIO_CANCELED);
 
-  puts (" Init: [NONE] aio_cancel aiocbp->aio_fildes != fildes ");
+  puts ("Init: [NONE] aio_cancel aiocbp->aio_fildes != fildes");
   status = aio_cancel (fd[4],aiocbp[4]);
   rtems_test_assert (status == -1 );
  
-  puts (" Init: [NONE] aio_cancel FD on [IQ], aiocb not on chain ");
+  puts ("Init: [NONE] aio_cancel FD on [IQ], aiocb not on chain");
   aiocbp[10] = create_aiocb (fd[9]);
   status = aio_cancel (fd[9], aiocbp[10]);
   rtems_test_assert (status == -1);
 
-  puts (" Init: [IQ] aio_cancel 6th file only one request ");
+  puts ("Init: [IQ] aio_cancel 6th file only one request");
   status = aio_cancel (fd[5], aiocbp[6]);
   rtems_test_assert (status == AIO_CANCELED);
 
-  puts (" Init: [WQ] aio_cancel 1st file only one request ");
+  puts ("Init: [WQ] aio_cancel 1st file only one request");
   status = aio_cancel (fd[0], aiocbp[9]);
   rtems_test_assert (status == AIO_CANCELED);
 
-  puts (" Init: [NONE] aio_cancel empty [IQ] ");
+  puts ("Init: [NONE] aio_cancel empty [IQ]");
   status = aio_cancel (fd[5], aiocbp[6]);
   rtems_test_assert (status == AIO_ALLDONE);
 
-  puts ("\n\n*** POSIX AIO TEST 02 ***");
-
-  puts ("*** END OF POSIX AIO TEST 01 ***");
+  puts ("*** END OF POSIX AIO TEST 02 ***");
 
   for (i = 0; i < MAX; i++)
     {
