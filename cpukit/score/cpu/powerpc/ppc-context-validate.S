@@ -82,7 +82,7 @@ _CPU_Context_validate:
 	mtlr	r4
 	addi	r4, r3, 26
 	mtctr	r4
-	addi	r4, r3, 27
+	rlwinm	r4, r3, 0, 25, 2
 	mtxer	r4
 	addi	r0, r3, 28
 
@@ -215,7 +215,7 @@ check:
 	mfctr	r5
 	cmpw	r4, r5
 	bne	restore
-	addi	r4, r3, 27
+	rlwinm	r4, r3, 0, 25, 2
 	mfxer	r5
 	cmpw	r4, r5
 	bne	restore
