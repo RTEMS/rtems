@@ -31,28 +31,29 @@ bool _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 )
 {
-  States_Control        state;
+  Thread_queue_Control *the_thread_queue;
 
-  state = the_thread->current_state;
+  #if defined(RTEMS_MULTIPROCESSING)
+    States_Control state;
 
-  if ( _States_Is_waiting_on_thread_queue( state ) ) {
-    #if defined(RTEMS_MULTIPROCESSING)
-      if ( _States_Is_waiting_for_rpc_reply( state ) &&
-           _States_Is_locally_blocked( state ) ) {
-        Objects_Information                  *the_information;
-        Objects_Thread_queue_Extract_callout  proxy_extract_callout;
+    state = the_thread->current_state;
+    if ( _States_Is_waiting_for_rpc_reply( state ) &&
+         _States_Is_locally_blocked( state ) ) {
+      Objects_Information                  *the_information;
+      Objects_Thread_queue_Extract_callout  proxy_extract_callout;
 
-        the_information = _Objects_Get_information_id( the_thread->Wait.id );
-        proxy_extract_callout =
-          (Objects_Thread_queue_Extract_callout) the_information->extract;
+      the_information = _Objects_Get_information_id( the_thread->Wait.id );
+      proxy_extract_callout = the_information->extract;
 
-        if ( proxy_extract_callout )
-          (*proxy_extract_callout)( the_thread );
-      }
-    #endif
-    _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+      if ( proxy_extract_callout != NULL )
+        (*proxy_extract_callout)( the_thread );
+    }
+  #endif
 
-    return true;
+  the_thread_queue = the_thread->Wait.queue;
+  if ( the_thread_queue != NULL ) {
+    return _Thread_queue_Extract( the_thread_queue, the_thread );
+  } else {
+    return false;
   }
-  return false;
 }
