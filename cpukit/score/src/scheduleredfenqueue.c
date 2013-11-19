@@ -31,6 +31,6 @@ void _Scheduler_EDF_Enqueue(
     (Scheduler_EDF_Per_thread*) the_thread->scheduler_info;
   RBTree_Node *node = &(sched_info->Node);
 
-  _RBTree_Insert( &_Scheduler_EDF_Ready_queue, node );
+  _RBTree_Insert_unprotected( &_Scheduler_EDF_Ready_queue, node );
   sched_info->queue_state = SCHEDULER_EDF_QUEUE_STATE_YES;
 }
