@@ -207,72 +207,18 @@ void _RBTree_Initialize(
 );
 
 /**
- *  @brief Obtain the min or max node of a rbtree.
+ * @brief Tries to find a node for the specified key in the tree.
  *
- *  This function removes the min or max node from @a the_rbtree and returns
- *  a pointer to that node.  If @a the_rbtree is empty, then NULL is returned.
- *  @a dir specifies whether to return the min (0) or max (1).
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] the_node A node specifying the key.
  *
- *  @retval This method returns a pointer to a node.  If a node was removed,
- *          then a pointer to that node is returned.  If @a the_rbtree was
- *          empty, then NULL is returned.
- *
- *  @note It disables interrupts to ensure the atomicity of the get operation.
- */
-RBTree_Node *_RBTree_Get(
-  RBTree_Control *the_rbtree,
-  RBTree_Direction dir
-);
-
-/** @brief Find the node with given key in the tree
- *
- *  This function returns a pointer to the node in @a the_rbtree
- *  having key equal to key of  @a the_node if it exists,
- *  and NULL if not. @a the_node has to be made up before a search.
- *
- *  @note If the tree is not unique and contains duplicate keys, the set
- *        of duplicate keys acts as FIFO.
+ * @retval node A node corresponding to the key.  If the tree is not unique
+ * and contains duplicate keys, the set of duplicate keys acts as FIFO.
+ * @retval NULL No node exists in the tree for the key.
  */
 RBTree_Node *_RBTree_Find_unprotected(
   const RBTree_Control *the_rbtree,
   const RBTree_Node *the_node
-);
-
-/**
- *  @brief Find the node with given key in the tree.
- *
- *  This function returns a pointer to the node with key equal to a key
- *  of @a the_node if it exists in the Red-Black Tree @a the_rbtree,
- *  and NULL if not.
- *
- *  @param[in] the_rbtree pointer to rbtree control
- *  @param[in] the_node node with the key to search for
- *  @retval This method returns pointer to control header of rbtree. *
- *          If there is no control header available (the node is not part
- *          of a tree), then NULL is returned. *
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-RBTree_Node *_RBTree_Find(
-  const RBTree_Control *the_rbtree,
-  const RBTree_Node *the_node
-);
-
-/**
- *  @brief Find the control structure of the tree containing the given node.
- *
- *  This function returns a pointer called @a return_header to the
- *  control structure of the tree containing @a the_node, if it exists,
- *   and @a NULL if not.
- *
- *  @param[in] the_node is the pointer to the rbtree node.
- *
- *  -INTERRUPT LATENCY:
- *    + single case
- */
-RBTree_Control *_RBTree_Find_header(
-  RBTree_Node *the_node
 );
 
 /**
@@ -284,9 +230,6 @@ RBTree_Control *_RBTree_Find_header(
  *  @retval -1 NULL @a the_node.
  *  @retval RBTree_Node* if one with equal value to @a the_node 's key exists
  *          in an unique @a the_rbtree.
- *
- *  @note It does NOT disable interrupts to ensure the atomicity
- *        of the extract operation.
  */
 RBTree_Node *_RBTree_Insert_unprotected(
   RBTree_Control *the_rbtree,
@@ -294,48 +237,13 @@ RBTree_Node *_RBTree_Insert_unprotected(
 );
 
 /**
- *  @brief Insert a node on a rbtree.
- *
- *  This routine inserts @a the_node on the tree @a the_rbtree.
- *
- *  @retval 0 Successfully inserted.
- *  @retval -1 NULL @a the_node.
- *  @retval RBTree_Node* if one with equal value to @a the_node 's key exists
- *          in an unique @a the_rbtree.
- *
- *  @note It disables interrupts to ensure the atomicity
- *  of the extract operation.
- */
-RBTree_Node *_RBTree_Insert(
-  RBTree_Control *the_rbtree,
-  RBTree_Node *the_node
-);
-
-
-/**
  *  @brief Extracts (removes) @a the_node from @a the_rbtree (unprotected).
  *
  *  This routine extracts (removes) @a the_node from @a the_rbtree.
- *
- *  @note It does NOT disable interrupts to ensure the atomicity
- *        of the extract operation.
  */
 void _RBTree_Extract_unprotected(
   RBTree_Control *the_rbtree,
   RBTree_Node *the_node
-);
-
-/**
- *  @brief Delete a node from the rbtree.
- *
- *  This routine deletes @a the_node from @a the_rbtree.
- *
- *  @note It disables interrupts to ensure the atomicity of the
- *  append operation.
- */
-void _RBTree_Extract(
-  RBTree_Control *the_rbtree,
-  RBTree_Node    *the_node
 );
 
 /**
@@ -348,16 +256,6 @@ void _RBTree_Extract(
  * @retval otherwise The next node.
  */
 RBTree_Node *_RBTree_Next_unprotected(
-  const RBTree_Node *node,
-  RBTree_Direction dir
-);
-
-/**
- * @copydoc _RBTree_Next_unprotected()
- *
- * The function disables the interrupts protect the operation.
- */
-RBTree_Node *_RBTree_Next(
   const RBTree_Node *node,
   RBTree_Direction dir
 );
@@ -618,18 +516,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
 }
 
 /**
- * @copydoc _RBTree_Predecessor_unprotected()
- *
- * The function disables the interrupts protect the operation.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
-  const RBTree_Node *node
-)
-{
-  return _RBTree_Next( node, RBT_LEFT );
-}
-
-/**
  * @brief Returns the successor of a node.
  *
  * @param[in] node is the node.
@@ -644,23 +530,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
 }
 
 /**
- * @copydoc _RBTree_Successor_unprotected()
- *
- * The function disables the interrupts protect the operation.
- */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
-  const RBTree_Node *node
-)
-{
-  return _RBTree_Next( node, RBT_RIGHT );
-}
-
-/**
  * @brief Get the first node (unprotected).
  *
  * This function removes the minimum or maximum node from the_rbtree and
- * returns a pointer to that node.  It does NOT disable interrupts to ensure
- * the atomicity of the get operation.
+ * returns a pointer to that node.
  *
  * @param[in] the_rbtree is the rbtree to attempt to get the min node from.
  * @param[in] dir specifies whether to get minimum (0) or maximum (1)

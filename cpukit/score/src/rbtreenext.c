@@ -60,18 +60,3 @@ RBTree_Node *_RBTree_Next_unprotected(
 
   return next;
 }
-
-RBTree_Node *_RBTree_Next(
-  const RBTree_Node *node,
-  RBTree_Direction dir
-)
-{
-  RBTree_Node *next;
-  ISR_Level level;
-
-  _ISR_Disable( level );
-  next = _RBTree_Next_unprotected( node, dir );
-  _ISR_Enable( level );
-
-  return next;
-}

@@ -20,21 +20,6 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/isr.h>
 
-RBTree_Node *_RBTree_Find(
-  const RBTree_Control *the_rbtree,
-  const RBTree_Node *search_node
-)
-{
-  ISR_Level          level;
-  RBTree_Node *return_node;
-
-  return_node = NULL;
-  _ISR_Disable( level );
-      return_node = _RBTree_Find_unprotected( the_rbtree, search_node );
-  _ISR_Enable( level );
-  return return_node;
-}
-
 RBTree_Node *_RBTree_Find_unprotected(
   const RBTree_Control *the_rbtree,
   const RBTree_Node *the_node

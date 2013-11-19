@@ -202,30 +202,3 @@ void _RBTree_Extract_unprotected(
   /* set root to black, if it exists */
   if (the_rbtree->root) the_rbtree->root->color = RBT_BLACK;
 }
-
-
-/*
- *  _RBTree_Extract
- *
- *  This kernel routine deletes the given node from a rbtree.
- *
- *  Input parameters:
- *    node - pointer to node in rbtree to be deleted
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    only case
- */
-
-void _RBTree_Extract(
-  RBTree_Control *the_rbtree,
-  RBTree_Node *the_node
-)
-{
-  ISR_Level level;
-
-  _ISR_Disable( level );
-    _RBTree_Extract_unprotected( the_rbtree, the_node );
-  _ISR_Enable( level );
-}

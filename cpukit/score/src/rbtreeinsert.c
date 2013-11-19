@@ -122,34 +122,3 @@ RBTree_Node *_RBTree_Insert_unprotected(
   }
   return (RBTree_Node*)0;
 }
-
-
-/*
- *  _RBTree_Insert
- *
- *  This kernel routine inserts a given node after a specified node
- *  a requested rbtree.
- *
- *  Input parameters:
- *    tree - pointer to RBTree Control for tree to insert to
- *    node       - pointer to node to be inserted
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    only case
- */
-
-RBTree_Node *_RBTree_Insert(
-  RBTree_Control *tree,
-  RBTree_Node *node
-)
-{
-  ISR_Level level;
-  RBTree_Node *return_node;
-
-  _ISR_Disable( level );
-  return_node = _RBTree_Insert_unprotected( tree, node );
-  _ISR_Enable( level );
-  return return_node;
-}

@@ -117,10 +117,10 @@ rtems_task Init(
   node1.key = 1;
   node2.id = 2;
   node2.key = 2;
-  rtems_rbtree_insert( &rbtree1, &node1.Node );
-  rtems_rbtree_insert( &rbtree1, &node2.Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node1.Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node2.Node );
 
-  p = rtems_rbtree_insert( &rbtree1, NULL );
+  p = rtems_rbtree_insert_unprotected( &rbtree1, NULL );
   if (p != (void *)(-1))
     puts( "INIT - FAILED NULL NODE INSERT" );
 
@@ -135,8 +135,8 @@ rtems_task Init(
   if (!rb_assert(rbtree1.root) )
     puts( "INIT - FAILED TREE CHECK" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 1 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 2 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -157,14 +157,14 @@ rtems_task Init(
 
   puts("INIT - Verify rtems_rbtree_insert with the same value twice");
   node2.key = node1.key;
-  rtems_rbtree_insert(&rbtree1, &node1.Node);
-  p = rtems_rbtree_insert(&rbtree1, &node2.Node);
+  rtems_rbtree_insert_unprotected(&rbtree1, &node1.Node);
+  p = rtems_rbtree_insert_unprotected(&rbtree1, &node2.Node);
 
   if (p != &node1.Node)
     puts( "INIT - FAILED DUPLICATE INSERT" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 1 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 1 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -192,11 +192,11 @@ rtems_task Init(
   }
 
   puts( "INIT - Verify rtems_XXX on an empty tree" );
-  if(rtems_rbtree_get_min(&rbtree1)) {
+  if(rtems_rbtree_get_min_unprotected(&rbtree1)) {
     puts("INIT - get_min on empty returned non-NULL");
     rtems_test_exit(0);
   }
-  if(rtems_rbtree_get_max(&rbtree1)) {
+  if(rtems_rbtree_get_max_unprotected(&rbtree1)) {
     puts("INIT - get_max on empty returned non-NULL");
     rtems_test_exit(0);
   }
@@ -216,8 +216,8 @@ rtems_task Init(
   node1.key = 2;
   node2.id = 1;
   node2.key = 1;
-  rtems_rbtree_insert( &rbtree1, &node1.Node );
-  rtems_rbtree_insert( &rbtree1, &node2.Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node1.Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node2.Node );
 
   puts( "INIT - Verify rtems_rbtree_peek_max/min, rtems_rbtree_extract" );
   test_node *t1 = rtems_rbtree_container_of(rtems_rbtree_peek_max(&rbtree1),
@@ -229,16 +229,16 @@ rtems_task Init(
     rtems_test_exit(0);
   }
   p = rtems_rbtree_peek_max(&rbtree1);
-  rtems_rbtree_extract(&rbtree1, p);
+  rtems_rbtree_extract_unprotected(&rbtree1, p);
   t1 = rtems_rbtree_container_of(p,test_node,Node);
   if (t1->key != 2) {
     puts( "INIT - rtems_rbtree_extract failed");
     rtems_test_exit(0);
   }
-  rtems_rbtree_insert(&rbtree1, p);
+  rtems_rbtree_insert_unprotected(&rbtree1, p);
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 1 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 2 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -254,7 +254,7 @@ rtems_task Init(
   for (i = 0; i < 100; i++) {
     node_array[i].id = i;
     node_array[i].key = i;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -262,8 +262,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -287,7 +287,7 @@ rtems_task Init(
   for (i = 0; i < 100; i++) {
     node_array[i].id = 99-i;
     node_array[i].key = 99-i;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -295,8 +295,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -322,7 +322,7 @@ rtems_task Init(
   for (i = 0; i < 100; i++) {
     node_array[i].id = i;
     node_array[i].key = i;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -332,15 +332,15 @@ rtems_task Init(
 
   for (i = 0; i < 20; i++) {
     id = numbers[i];
-    rtems_rbtree_extract( &rbtree1, &node_array[id].Node );
+    rtems_rbtree_extract_unprotected( &rbtree1, &node_array[id].Node );
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
   }
 
   puts( "INIT - Removing 80 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0, i = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0, i = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p, test_node, Node);
 
     while ( id == numbers_sorted[i] ) {
@@ -374,26 +374,26 @@ rtems_task Init(
     node_array[i].id = i;
     node_array[i].key = i;
   }
-  rtems_rbtree_insert( &rbtree1, &node_array[3].Node );
-  rtems_rbtree_insert( &rbtree1, &node_array[1].Node );
-  rtems_rbtree_insert( &rbtree1, &node_array[5].Node );
-  rtems_rbtree_insert( &rbtree1, &node_array[0].Node );
-  rtems_rbtree_insert( &rbtree1, &node_array[2].Node );
-  rtems_rbtree_insert( &rbtree1, &node_array[4].Node );
-  rtems_rbtree_insert( &rbtree1, &node_array[6].Node );
-  rtems_rbtree_extract( &rbtree1, &node_array[2].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[3].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[1].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[5].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[0].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[2].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[4].Node );
+  rtems_rbtree_insert_unprotected( &rbtree1, &node_array[6].Node );
+  rtems_rbtree_extract_unprotected( &rbtree1, &node_array[2].Node );
   /* node_array[1] has now only a left child. */
   if ( !node_array[1].Node.child[RBT_LEFT] ||
         node_array[1].Node.child[RBT_RIGHT] )
      puts( "INIT - LEFT CHILD ONLY NOT FOUND" );
-  rtems_rbtree_extract( &rbtree1, &node_array[3].Node );
-  while( (p = rtems_rbtree_get_max(&rbtree1)) );
+  rtems_rbtree_extract_unprotected( &rbtree1, &node_array[3].Node );
+  while( (p = rtems_rbtree_get_max_unprotected(&rbtree1)) );
 
   puts( "INIT - Verify rtems_rbtree_get_max with 100 nodes value [99,0]" );
   for (i = 0; i < 100; i++) {
     node_array[i].id = 99-i;
     node_array[i].key = 99-i;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -401,8 +401,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_max(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_max(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_max_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_max_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -426,7 +426,7 @@ rtems_task Init(
   for (i = 0; i < 100; i++) {
     node_array[i].id = i;
     node_array[i].key = i;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -434,28 +434,28 @@ rtems_task Init(
 
   puts( "INIT - Verify rtems_rbtree_find" );
   search_node.key = 30;
-  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
+  p = rtems_rbtree_find_unprotected(&rbtree1, &search_node.Node);
   if(rtems_rbtree_container_of(p,test_node,Node)->id != 30) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
 
   puts( "INIT - Verify rtems_rbtree_predecessor/successor");
-  p = rtems_rbtree_predecessor(p);
+  p = rtems_rbtree_predecessor_unprotected(p);
   if(p && rtems_rbtree_container_of(p,test_node,Node)->id != 29) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
-  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
-  p = rtems_rbtree_successor(p);
+  p = rtems_rbtree_find_unprotected(&rbtree1, &search_node.Node);
+  p = rtems_rbtree_successor_unprotected(p);
   if(p && rtems_rbtree_container_of(p,test_node,Node)->id != 31) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
   }
 
-  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
+  p = rtems_rbtree_find_unprotected(&rbtree1, &search_node.Node);
   puts( "INIT - Verify rtems_rbtree_find_header" );
-  if (rtems_rbtree_find_header(p) != &rbtree1) {
+  if (rtems_rbtree_find_header_unprotected(p) != &rbtree1) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
@@ -473,8 +473,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_max(&rbtree1), id = 99 ; p ;
-      p = rtems_rbtree_get_max(&rbtree1) , id-- ) {
+  for ( p = rtems_rbtree_get_max_unprotected(&rbtree1), id = 99 ; p ;
+      p = rtems_rbtree_get_max_unprotected(&rbtree1) , id-- ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id < 0 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -494,11 +494,11 @@ rtems_task Init(
     rtems_test_exit(0);
   }
 
-  if (rtems_rbtree_find_header(&node_array[0].Node) != NULL) {
+  if (rtems_rbtree_find_header_unprotected(&node_array[0].Node) != NULL) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
-  if (rtems_rbtree_find_header(NULL) != NULL) {
+  if (rtems_rbtree_find_header_unprotected(NULL) != NULL) {
     puts ("INIT - ERROR ON RBTREE HEADER MISMATCH");
     rtems_test_exit(0);
   }
@@ -507,7 +507,7 @@ rtems_task Init(
   for (i = 0; i < 20; i++) {
     node_array[i].id = numbers[i];
     node_array[i].key = numbers[i];
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -515,8 +515,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 20 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 19 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -547,8 +547,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -582,7 +582,7 @@ rtems_task Init(
   for (i = 0; i < 100; i++) {
     node_array[i].id = i;
     node_array[i].key = i%5;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -590,7 +590,7 @@ rtems_task Init(
 
   puts( "INIT - Verify rtems_rbtree_find in a duplicate tree" );
   search_node.key = 2;
-  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
+  p = rtems_rbtree_find_unprotected(&rbtree1, &search_node.Node);
   if(rtems_rbtree_container_of(p,test_node,Node)->id != 2) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
@@ -598,8 +598,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
@@ -623,7 +623,7 @@ rtems_task Init(
   for (i = 0; i < 100; i++) {
     node_array[i].id = 99-i;
     node_array[i].key = (99-i)%5;
-    rtems_rbtree_insert( &rbtree1, &node_array[i].Node );
+    rtems_rbtree_insert_unprotected( &rbtree1, &node_array[i].Node );
 
     if (!rb_assert(rbtree1.root) )
       puts( "INIT - FAILED TREE CHECK" );
@@ -631,7 +631,7 @@ rtems_task Init(
 
   puts( "INIT - Verify rtems_rbtree_find in a duplicate tree" );
   search_node.key = 2;
-  p = rtems_rbtree_find(&rbtree1, &search_node.Node);
+  p = rtems_rbtree_find_unprotected(&rbtree1, &search_node.Node);
   if(rtems_rbtree_container_of(p,test_node,Node)->id != 97) {
     puts ("INIT - ERROR ON RBTREE ID MISMATCH");
     rtems_test_exit(0);
@@ -639,8 +639,8 @@ rtems_task Init(
 
   puts( "INIT - Removing 100 nodes" );
 
-  for ( p = rtems_rbtree_get_min(&rbtree1), id = 0 ; p ;
-      p = rtems_rbtree_get_min(&rbtree1) , id++ ) {
+  for ( p = rtems_rbtree_get_min_unprotected(&rbtree1), id = 0 ; p ;
+      p = rtems_rbtree_get_min_unprotected(&rbtree1) , id++ ) {
     test_node *t = rtems_rbtree_container_of(p,test_node,Node);
     if ( id > 99 ) {
       puts( "INIT - TOO MANY NODES ON RBTREE" );
