@@ -21,7 +21,7 @@
  *  @note It does NOT disable interrupts to ensure the atomicity of the
  *        append operation.
  */
-static void _RBTree_Validate_insert_unprotected(
+static void _RBTree_Validate_insert(
     RBTree_Node    *the_node
     )
 {
@@ -73,7 +73,7 @@ static void _RBTree_Validate_insert_unprotected(
  *  @note It does NOT disable interrupts to ensure the atomicity
  *        of the extract operation.
  */
-RBTree_Node *_RBTree_Insert_unprotected(
+RBTree_Node *_RBTree_Insert(
     RBTree_Control *the_rbtree,
     RBTree_Node *the_node
     )
@@ -118,7 +118,7 @@ RBTree_Node *_RBTree_Insert_unprotected(
     } /* while(iter_node) */
 
     /* verify red-black properties */
-    _RBTree_Validate_insert_unprotected(the_node);
+    _RBTree_Validate_insert(the_node);
   }
   return (RBTree_Node*)0;
 }

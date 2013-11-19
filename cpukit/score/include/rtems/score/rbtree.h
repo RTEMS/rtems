@@ -216,13 +216,13 @@ void _RBTree_Initialize(
  * and contains duplicate keys, the set of duplicate keys acts as FIFO.
  * @retval NULL No node exists in the tree for the key.
  */
-RBTree_Node *_RBTree_Find_unprotected(
+RBTree_Node *_RBTree_Find(
   const RBTree_Control *the_rbtree,
   const RBTree_Node *the_node
 );
 
 /**
- *  @brief Insert @a the_node on the Red-Black Tree @a the_rbtree (unprotected).
+ *  @brief Insert @a the_node on the Red-Black Tree @a the_rbtree.
  *
  *  This routine inserts @a the_node on the Red-Black Tree @a the_rbtree.
  *
@@ -231,17 +231,17 @@ RBTree_Node *_RBTree_Find_unprotected(
  *  @retval RBTree_Node* if one with equal value to @a the_node 's key exists
  *          in an unique @a the_rbtree.
  */
-RBTree_Node *_RBTree_Insert_unprotected(
+RBTree_Node *_RBTree_Insert(
   RBTree_Control *the_rbtree,
   RBTree_Node *the_node
 );
 
 /**
- *  @brief Extracts (removes) @a the_node from @a the_rbtree (unprotected).
+ *  @brief Extracts (removes) @a the_node from @a the_rbtree.
  *
  *  This routine extracts (removes) @a the_node from @a the_rbtree.
  */
-void _RBTree_Extract_unprotected(
+void _RBTree_Extract(
   RBTree_Control *the_rbtree,
   RBTree_Node *the_node
 );
@@ -255,7 +255,7 @@ void _RBTree_Extract_unprotected(
  * @retval NULL The in-order next node does not exist.
  * @retval otherwise The next node.
  */
-RBTree_Node *_RBTree_Next_unprotected(
+RBTree_Node *_RBTree_Next(
   const RBTree_Node *node,
   RBTree_Direction dir
 );
@@ -471,7 +471,7 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
  * This function returns a pointer to the header of the Red Black
  * Tree containing @a the_node if it exists, and NULL if not.
  */
-RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header_unprotected(
+RTEMS_INLINE_ROUTINE RBTree_Control *_RBTree_Find_header(
     RBTree_Node *the_node
     )
 {
@@ -508,11 +508,11 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
  * @retval NULL The predecessor does not exist.  Otherwise it returns
  *         the predecessor node.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor(
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next_unprotected( node, RBT_LEFT );
+  return _RBTree_Next( node, RBT_LEFT );
 }
 
 /**
@@ -522,15 +522,15 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Predecessor_unprotected(
  *
  * @retval NULL The successor does not exist.  Otherwise the successor node.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor(
   const RBTree_Node *node
 )
 {
-  return _RBTree_Next_unprotected( node, RBT_RIGHT );
+  return _RBTree_Next( node, RBT_RIGHT );
 }
 
 /**
- * @brief Get the first node (unprotected).
+ * @brief Get the first node.
  *
  * This function removes the minimum or maximum node from the_rbtree and
  * returns a pointer to that node.
@@ -542,13 +542,13 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Successor_unprotected(
  *
  * @note This routine may return NULL if the RBTree is empty.
  */
-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get_unprotected(
+RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get(
     RBTree_Control *the_rbtree,
     RBTree_Direction dir
     )
 {
   RBTree_Node *the_node = the_rbtree->first[dir];
-  _RBTree_Extract_unprotected(the_rbtree, the_node);
+  _RBTree_Extract(the_rbtree, the_node);
   return the_node;
 }
 

@@ -80,7 +80,7 @@ static void insert_into_tree(
   rtems_rbheap_chunk *chunk
 )
 {
-  _RBTree_Insert_unprotected(tree, &chunk->tree_node);
+  _RBTree_Insert(tree, &chunk->tree_node);
 }
 
 rtems_status_code rtems_rbheap_initialize(
@@ -198,7 +198,7 @@ static rtems_rbheap_chunk *find(rtems_rbtree_control *chunk_tree, uintptr_t key)
   rtems_rbheap_chunk chunk = { .begin = key };
 
   return rtems_rbheap_chunk_of_node(
-    _RBTree_Find_unprotected(chunk_tree, &chunk.tree_node)
+    _RBTree_Find(chunk_tree, &chunk.tree_node)
   );
 }
 
@@ -208,7 +208,7 @@ static rtems_rbheap_chunk *get_next(
 )
 {
   return rtems_rbheap_chunk_of_node(
-    _RBTree_Next_unprotected(&chunk->tree_node, dir)
+    _RBTree_Next(&chunk->tree_node, dir)
   );
 }
 
@@ -230,7 +230,7 @@ static void check_and_merge(
     a->size += b->size;
     rtems_chain_extract_unprotected(&b->chain_node);
     add_to_chain(free_chain, b);
-    _RBTree_Extract_unprotected(chunk_tree, &b->tree_node);
+    _RBTree_Extract(chunk_tree, &b->tree_node);
   }
 }
 

@@ -21,7 +21,7 @@
  *  @note It does NOT disable interrupts to ensure the atomicity
  *        of the extract operation.
  */
-static void _RBTree_Extract_validate_unprotected(
+static void _RBTree_Extract_validate(
     RBTree_Node *the_node
     )
 {
@@ -91,7 +91,7 @@ static void _RBTree_Extract_validate_unprotected(
  *  @note It does NOT disable interrupts to ensure the atomicity
  *        of the extract operation.
  */
-void _RBTree_Extract_unprotected(
+void _RBTree_Extract(
     RBTree_Control *the_rbtree,
     RBTree_Node *the_node
     )
@@ -105,7 +105,7 @@ void _RBTree_Extract_unprotected(
   /* check if min needs to be updated */
   if (the_node == the_rbtree->first[RBT_LEFT]) {
     RBTree_Node *next;
-    next = _RBTree_Successor_unprotected(the_node);
+    next = _RBTree_Successor(the_node);
     the_rbtree->first[RBT_LEFT] = next;
   }
 
@@ -113,7 +113,7 @@ void _RBTree_Extract_unprotected(
    * do not use else if here. */
   if (the_node == the_rbtree->first[RBT_RIGHT]) {
     RBTree_Node *previous;
-    previous = _RBTree_Predecessor_unprotected(the_node);
+    previous = _RBTree_Predecessor(the_node);
     the_rbtree->first[RBT_RIGHT] = previous;
   }
 
@@ -139,7 +139,7 @@ void _RBTree_Extract_unprotected(
       leaf->parent = target->parent;
     } else {
       /* fix the tree here if the child is a null leaf. */
-      _RBTree_Extract_validate_unprotected(target);
+      _RBTree_Extract_validate(target);
     }
     victim_color = target->color;
     dir = target != target->parent->child[0];
@@ -176,7 +176,7 @@ void _RBTree_Extract_unprotected(
       leaf->parent = the_node->parent;
     } else {
       /* fix the tree here if the child is a null leaf. */
-      _RBTree_Extract_validate_unprotected(the_node);
+      _RBTree_Extract_validate(the_node);
     }
     victim_color = the_node->color;
 

@@ -35,8 +35,8 @@ void _Scheduler_EDF_Yield( Thread_Control *thread )
    * The RBTree has more than one node, enqueue behind the tasks
    * with the same priority in case there are such ones.
    */
-  _RBTree_Extract_unprotected( &_Scheduler_EDF_Ready_queue, thread_node );
-  _RBTree_Insert_unprotected( &_Scheduler_EDF_Ready_queue, thread_node );
+  _RBTree_Extract( &_Scheduler_EDF_Ready_queue, thread_node );
+  _RBTree_Insert( &_Scheduler_EDF_Ready_queue, thread_node );
 
   _ISR_Flash( level );
 

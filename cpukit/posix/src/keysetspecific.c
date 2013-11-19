@@ -54,7 +54,7 @@ int pthread_setspecific(
       value_pair_ptr->key = key;
       value_pair_ptr->thread_id = _Thread_Executing->Object.id;
       value_pair_ptr->value = value;
-      if ( _RBTree_Insert_unprotected( &_POSIX_Keys_Key_value_lookup_tree,
+      if ( _RBTree_Insert( &_POSIX_Keys_Key_value_lookup_tree,
                                        &(value_pair_ptr->Key_value_lookup_node) ) ) {
         _Freechain_Put( (Freechain_Control *)&_POSIX_Keys_Keypool,
                         (void *) value_pair_ptr );

@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreRBTree
  *
- * @brief _RBTree_Next_unprotected() and _RBTree_Next() implementation.
+ * @brief _RBTree_Next() and _RBTree_Next() implementation.
  */
 
 /*
@@ -27,7 +27,7 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/isr.h>
 
-RBTree_Node *_RBTree_Next_unprotected(
+RBTree_Node *_RBTree_Next(
   const RBTree_Node *node,
   RBTree_Direction dir
 )

@@ -43,7 +43,7 @@ extern "C" {
  * @retval true Stop the iteration.
  * @retval false Continue the iteration.
  *
- * @see _RBTree_Iterate_unprotected().
+ * @see _RBTree_Iterate().
  */
 typedef bool (*RBTree_Visitor)(
   const RBTree_Node *node,
@@ -59,7 +59,7 @@ typedef bool (*RBTree_Visitor)(
  * @param[in] visitor The visitor.
  * @param[in] visitor_arg The visitor argument.
  */
-void _RBTree_Iterate_unprotected(
+void _RBTree_Iterate(
   const RBTree_Control *rbtree,
   RBTree_Direction dir,
   RBTree_Visitor visitor,

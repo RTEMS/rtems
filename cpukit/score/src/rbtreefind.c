@@ -20,7 +20,7 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/isr.h>
 
-RBTree_Node *_RBTree_Find_unprotected(
+RBTree_Node *_RBTree_Find(
   const RBTree_Control *the_rbtree,
   const RBTree_Node *the_node
 )

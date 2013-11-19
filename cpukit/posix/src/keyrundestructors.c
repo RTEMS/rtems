@@ -60,7 +60,7 @@ void _POSIX_Keys_Run_destructors(
      * because Chain_Node is the first member of POSIX_Keys_Key_value_pair
      * structure.
      */
-    _RBTree_Extract_unprotected(
+    _RBTree_Extract(
         &_POSIX_Keys_Key_value_lookup_tree,
         &iter->Key_value_lookup_node
     );

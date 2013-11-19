@@ -187,7 +187,7 @@ static void test_chunk_tree(
     .free_end = free_end
   };
 
-  _RBTree_Iterate_unprotected(
+  _RBTree_Iterate(
     &control->chunk_tree,
     RBT_RIGHT,
     chunk_visitor,

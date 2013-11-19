@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreRBTree
  *
- * @brief _RBTree_Iterate_unprotected() implementation.
+ * @brief _RBTree_Iterate() implementation.
  */
 
 /*
@@ -26,7 +26,7 @@
 
 #include <rtems/score/rbtreeimpl.h>
 
-void _RBTree_Iterate_unprotected(
+void _RBTree_Iterate(
   const RBTree_Control *rbtree,
   RBTree_Direction dir,
   RBTree_Visitor visitor,
@@ -40,6 +40,6 @@ void _RBTree_Iterate_unprotected(
   while ( !stop && current != NULL ) {
     stop = (*visitor)( current, dir, visitor_arg );
 
-    current = _RBTree_Next_unprotected( current, dir );
+    current = _RBTree_Next( current, dir );
   }
 }
