@@ -20,9 +20,9 @@ issues, interrupt processing, exact RTEMS memory requirements,
 performance data, header files, and the assembly language
 interface to the executive.
 
-This document discusses the SPARC architecture
-dependencies in this port of RTEMS.  Currently, only
-implementations of SPARC Version 7 are supported by RTEMS.
+This document discusses the SPARC architecture dependencies in this
+port of RTEMS.  This architectural port is for SPARC Version 7 and
+8. Implementations for SPARC V9 are in the sparc64 target.
 
 It is highly recommended that the SPARC RTEMS
 application developer obtain and become familiar with the
@@ -40,8 +40,6 @@ the following documents available from SPARC International, Inc.
 @item SPARC Standard Version 7.
 
 @item SPARC Standard Version 8.
-
-@item SPARC Standard Version 9.
 @end itemize
 
 @subheading ERC32 Specific Information
