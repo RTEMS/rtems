@@ -491,9 +491,9 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
         _Thread_Disable_dispatch();
         _ISR_Enable( level );
         _Thread_Change_priority(
-          the_mutex->holder,
-          the_mutex->Attributes.priority_ceiling,
-         false
+          executing,
+          ceiling,
+          false
         );
         _Thread_Enable_dispatch();
         return 0;
