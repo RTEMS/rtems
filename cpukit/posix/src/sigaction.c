@@ -38,8 +38,8 @@ extern void PARAMETERS_PASSING_S (int num_signal, const struct sigaction inf);
 
 int sigaction(
   int                     sig,
-  const struct sigaction *act,
-  struct sigaction       *oact
+  const struct sigaction *__restrict act,
+  struct sigaction       *__restrict oact
 )
 {
   ISR_Level     level;

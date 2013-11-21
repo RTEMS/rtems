@@ -23,8 +23,8 @@
 #include <errno.h>
 
 int sigwait(
-  const sigset_t  *set,
-  int             *sig
+  const sigset_t  *__restrict set,
+  int             *__restrict sig
 )
 {
   int status;

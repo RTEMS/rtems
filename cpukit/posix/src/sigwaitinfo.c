@@ -25,8 +25,8 @@
 #include <signal.h>
 
 int sigwaitinfo(
-  const sigset_t  *set,
-  siginfo_t       *info
+  const sigset_t  *__restrict set,
+  siginfo_t       *__restrict info
 )
 {
   return sigtimedwait( set, info, NULL );

@@ -33,8 +33,8 @@
 
 int pthread_sigmask(
   int               how,
-  const sigset_t   *set,
-  sigset_t         *oset
+  const sigset_t   *__restrict set,
+  sigset_t         *__restrict oset
 )
 {
   POSIX_API_Control  *api;

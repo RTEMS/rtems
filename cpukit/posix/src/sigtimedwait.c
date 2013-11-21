@@ -67,9 +67,9 @@ found_it:
  *  3.3.8 Synchronously Accept a Signal, P1003.1b-1993, p. 76
  */
 int sigtimedwait(
-  const sigset_t         *set,
-  siginfo_t              *info,
-  const struct timespec  *timeout
+  const sigset_t         *__restrict set,
+  siginfo_t              *__restrict info,
+  const struct timespec  *__restrict timeout
 )
 {
   Thread_Control    *executing;
