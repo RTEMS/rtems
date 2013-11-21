@@ -25,7 +25,8 @@
 /**
  *  POSIX 1003.1b - X.X.X - XXX
  */
-ssize_t readlink( const char *path, char *buf, size_t bufsize )
+ssize_t readlink( const char *__restrict path, char *__restrict buf,
+                  size_t bufsize )
 {
   ssize_t rv = 0;
   rtems_filesystem_eval_path_context_t ctx;
