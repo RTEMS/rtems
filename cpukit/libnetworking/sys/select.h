@@ -57,10 +57,10 @@ struct selinfo {
    (if not NULL) for exceptional conditions.  If TIMEOUT is not NULL, time out
    after waiting the interval specified therein.  Returns the number of ready
    descriptors, or -1 for errors.  */
-extern int select (int __nfds, fd_set *__readfds,
-                   fd_set *__writefds,
-                   fd_set *__exceptfds,
-                   struct timeval *__timeout);
+extern int select (int __nfds, fd_set *__restrict __readfds,
+                   fd_set *__restrict __writefds,
+                   fd_set *__restrict __exceptfds,
+                   struct timeval *__restrict __timeout);
 
 #ifdef __cplusplus
 }

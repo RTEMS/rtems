@@ -110,7 +110,8 @@ selscan (rtems_id tid, fd_mask **ibits, fd_mask **obits, int nfd, int *retval)
 }
 
 int
-select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *tv)
+select (int nfds, fd_set *__restrict readfds, fd_set *__restrict writefds,
+        fd_set *__restrict exceptfds, struct timeval *__restrict tv)
 {
 	fd_mask *ibits[3], *obits[3];
 	fd_set ob[3];
