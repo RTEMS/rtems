@@ -383,8 +383,8 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
  */
 int
 msdos_dir_stat(
-    const rtems_filesystem_location_info_t *loc,
-    struct stat *buf
+    const rtems_filesystem_location_info_t *__restrict loc,
+    struct stat *__restrict buf
 )
 {
     rtems_status_code  sc = RTEMS_SUCCESSFUL;

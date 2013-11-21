@@ -1015,8 +1015,8 @@ static int rtems_jffs2_rename(
 }
 
 static int rtems_jffs2_statvfs(
-	const rtems_filesystem_location_info_t *loc,
-	struct statvfs *buf
+	const rtems_filesystem_location_info_t *__restrict loc,
+	struct statvfs *__restrict buf
 )
 {
 	struct _inode *inode = rtems_jffs2_get_inode_by_location(loc);

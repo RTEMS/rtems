@@ -21,8 +21,8 @@
 #include <rtems/seterr.h>
 
 int rtems_filesystem_default_statvfs(
-  const rtems_filesystem_location_info_t *loc,
-  struct statvfs *buf
+  const rtems_filesystem_location_info_t *__restrict loc,
+  struct statvfs *__restrict buf
 )
 {
   rtems_set_errno_and_return_minus_one( ENOSYS );

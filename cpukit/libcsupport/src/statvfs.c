@@ -19,7 +19,7 @@
 
 #include <rtems/libio_.h>
 
-int statvfs( const char *path, struct statvfs *buf )
+int statvfs( const char *__restrict path, struct statvfs *__restrict buf )
 {
   int rv = 0;
   rtems_filesystem_eval_path_context_t ctx;

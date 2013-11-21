@@ -186,8 +186,8 @@ static int null_op_rename(
 }
 
 static int null_op_statvfs(
-  const rtems_filesystem_location_info_t *loc,
-  struct statvfs *buf
+  const rtems_filesystem_location_info_t *__restrict loc,
+  struct statvfs *__restrict buf
 )
 {
   return -1;

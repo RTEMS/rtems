@@ -50,7 +50,7 @@ struct statvfs
   unsigned long f_namemax; /**< Maximum filename length. */
 };
 
-extern int statvfs(const char *, struct statvfs *);
+extern int statvfs(const char *__restrict , struct statvfs *__restrict);
 extern int fstatvfs(int, struct statvfs *);
 
 #ifdef __cplusplus

@@ -740,8 +740,9 @@ rtems_rfs_rtems_rename(const rtems_filesystem_location_info_t* old_parent_loc,
  * @return int
  */
 static int
-rtems_rfs_rtems_statvfs (const rtems_filesystem_location_info_t* pathloc,
-                         struct statvfs*                         sb)
+rtems_rfs_rtems_statvfs (
+  const rtems_filesystem_location_info_t *__restrict pathloc,
+  struct statvfs *__restrict                         sb)
 {
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
   size_t                 blocks;

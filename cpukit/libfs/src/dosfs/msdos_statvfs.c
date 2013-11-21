@@ -18,8 +18,9 @@
 #include "fat_fat_operations.h"
 #include "msdos.h"
 
-int msdos_statvfs(const rtems_filesystem_location_info_t *root_loc,
-    struct statvfs *sb)
+int msdos_statvfs(
+  const rtems_filesystem_location_info_t *__restrict root_loc,
+  struct statvfs *__restrict sb)
 {
   msdos_fs_info_t *fs_info = root_loc->mt_entry->fs_info;
   fat_vol_t *vol = &fs_info->fat.vol;
