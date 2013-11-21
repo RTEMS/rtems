@@ -91,13 +91,13 @@ dequeue:
 
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
     _ISR_Enable( level );
-    _Thread_Unblock( the_thread );
   } else {
     _Watchdog_Deactivate( &the_thread->Timer );
     _ISR_Enable( level );
     (void) _Watchdog_Remove( &the_thread->Timer );
-    _Thread_Unblock( the_thread );
   }
+
+  _Thread_Unblock( the_thread );
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
