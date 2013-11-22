@@ -127,7 +127,7 @@ THREAD_LOCAL unsigned short jrand_seed[3];
 #endif
 
 #ifdef _WIN32
-static void gettimeofday (struct timeval *tv, void *dummy)
+static void gettimeofday (struct timeval *__restrict tv, void *__restrict dummy)
 {
 	FILETIME	ftime;
 	uint64_t	n;

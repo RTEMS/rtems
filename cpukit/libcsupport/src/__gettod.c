@@ -38,8 +38,8 @@
  *  @note The solaris gettimeofday does not have a second parameter.
  */
 int gettimeofday(
-  struct timeval  *tp,
-  void * __tz __attribute__((unused))
+  struct timeval *__restrict tp,
+  void *__restrict __tz __attribute__((unused))
 )
 {
   /* struct timezone* tzp = (struct timezone*) __tz; */
