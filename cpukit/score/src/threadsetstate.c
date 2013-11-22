@@ -31,18 +31,18 @@ void _Thread_Set_state(
 )
 {
   ISR_Level      level;
+  States_Control current_state;
 
   _ISR_Disable( level );
-  if ( !_States_Is_ready( the_thread->current_state ) ) {
-    the_thread->current_state =
-       _States_Set( state, the_thread->current_state );
-    _ISR_Enable( level );
-    return;
+
+  current_state = the_thread->current_state;
+  if ( _States_Is_ready( current_state ) ) {
+    the_thread->current_state = state;
+
+    _Scheduler_Block( the_thread );
+  } else {
+    the_thread->current_state = _States_Set( state, current_state);
   }
-
-  the_thread->current_state = state;
-
-  _Scheduler_Block( the_thread );
 
   _ISR_Enable( level );
 }
