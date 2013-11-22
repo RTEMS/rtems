@@ -440,6 +440,13 @@ int at697pci_hw_init(struct at697pci_priv *priv)
 		return -1;
 	}
 
+	/* If not in system slot we are not host and we must abort.
+	 * This is a host only driver.
+	 */
+	if ((regs->pciis & 0x1000) != 0) {
+		return -1;
+	}
+
 	/* Reset PCI Core */
 	regs->pciic = 0xffffffff;
 
@@ -578,7 +585,7 @@ int at697pci_init1(struct drvmgr_dev *dev)
 
 	if (at697pci_init(priv)) {
 		DBG("Failed to initialize at697pci driver\n");
-		return DRVMGR_FAIL;
+		return DRVMGR_EIO;
 	}
 
 	/* Host is always Big-Endian */
