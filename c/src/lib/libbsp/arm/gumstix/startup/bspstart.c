@@ -42,11 +42,3 @@ void bsp_start_default( void )
  *  can override the actual bsp_start routine used.
  */
 void bsp_start (void) __attribute__ ((weak, alias("bsp_start_default")));
-
-
-void bsp_reset( void )
-{
-#if ON_SKYEYE == 1
-  SKYEYE_MAGIC_ADDRESS = 0xff;
-#endif
-}
