@@ -1,0 +1,36 @@
+#  testsuites/psxtests/psx01/psx01.doc
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#  Copyright (c) 2013 Annelies Odermann <annelies.odermann@gmail.com>
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx01
+
+directives:
+  pthread_create
+  pthread_equal
+  pthread_once
+  sched_get_priority_min
+  sched_get_priority_max
+  sched_rr_get_interval
+  sched_yield
+  uname
+
+concepts:
++ Verify that uname gives proper error message when utsname is not defined,
+  or proper data if it is 
++ Verify that sched_get_priority_min and sched_get_priority_max work as
+  expected and give proper error messages when no policy is defined
++ Verify that sched_rr_get_interval works as expected and gives proper error
+  messages
++ Verify that thread creation fails before thread limit is exceeded
++ Verify that thread yielding is operational
++ Verify that pthread_equal works as expected for different combinations of
+  legitimate and illegitimate thread id’s
++ Verify that pthread_once works as expected for different combinations of
+  legitimate and illegitimate thread initiations
