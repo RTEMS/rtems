@@ -12,7 +12,7 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = startup/start.S
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 libbspstart_a_SOURCES += ../shared/start/rtems_crti.S
