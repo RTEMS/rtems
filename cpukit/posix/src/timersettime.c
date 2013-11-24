@@ -33,8 +33,8 @@
 int timer_settime(
   timer_t                  timerid,
   int                      flags,
-  const struct itimerspec *value,
-  struct itimerspec       *ovalue
+  const struct itimerspec *__restrict value,
+  struct itimerspec       *__restrict ovalue
 )
 {
   POSIX_Timer_Control *ptimer;

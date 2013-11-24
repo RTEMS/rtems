@@ -34,8 +34,8 @@
 
 int timer_create(
   clockid_t        clock_id,
-  struct sigevent *evp,
-  timer_t         *timerid
+  struct sigevent *__restrict evp,
+  timer_t         *__restrict timerid
 )
 {
   POSIX_Timer_Control *ptimer;
