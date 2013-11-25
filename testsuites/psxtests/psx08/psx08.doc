@@ -1,0 +1,28 @@
+#  testsuites/psxtests/psx08/psx08.doc
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR). 
+#  Copyright (c) 2013 Steven Kou <kouyongkang@gmail.com>
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx08
+
+directives:
++ pthread_detach
++ pthread_join
++ pthread_create
+
+concepts:
+
++ get the thread id
++ detaches self and joins with child for task 1
++ verify the return value of pthread_join and pointer returned
++ creates 2 pthreads and detaches one of them
++ task 3 joins with task 2
++ joins both new pthreads to the original thread
++ verify the return value and pointer returned of pthread_join after task 2 exits
++ task 3 exits and returned a value, verifies that the pointer is correct
