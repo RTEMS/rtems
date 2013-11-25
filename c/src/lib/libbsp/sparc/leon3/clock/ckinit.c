@@ -55,6 +55,7 @@ static int clkirq;
   #define Adjust_clkirq_for_node() do { clkirq += LEON3_CLOCK_INDEX; } while(0)
 #endif
 
+#ifndef LEON3_QEMU
 #define Clock_driver_support_find_timer() \
   do { \
     struct ambapp_dev *adev; \
@@ -71,12 +72,21 @@ static int clkirq;
       Adjust_clkirq_for_node(); \
     } \
   } while (0)
+#else /* LEON3_QEMU */
+#define Clock_driver_support_find_timer() \
+  do { \
+    LEON3_Timer_Regs = (volatile struct gptimer_regs *) \
+                       0x80000300; \
+    clkirq = 6; \
+  } while (0)
+#endif /* LEON3_QEMU */
 
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
     _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
   } while(0)
 
+#ifndef LEON3_QEMU
 #define Clock_driver_support_initialize_hardware() \
   do { \
     LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload = \
@@ -86,6 +96,17 @@ static int clkirq;
       LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | \
         LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN; \
   } while (0)
+#else
+#define Clock_driver_support_initialize_hardware() \
+  do { \
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload = \
+      40 * (rtems_configuration_get_microseconds_per_tick() - 1); \
+    \
+    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = \
+      LEON3_GPTIMER_EN | LEON3_GPTIMER_RL | \
+        LEON3_GPTIMER_LD | LEON3_GPTIMER_IRQEN; \
+  } while (0)
+#endif
 
 #define Clock_driver_support_shutdown_hardware() \
   do { \
@@ -101,7 +122,11 @@ static uint32_t bsp_clock_nanoseconds_since_last_tick(void)
   if ( !LEON3_Timer_Regs )
     return 0;
 
+#ifndef LEON3_QEMU
   clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
+#else
+  clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value / 40;
+#endif
 
   if ( LEON_Is_interrupt_pending( clkirq ) ) {
     clicks = LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;

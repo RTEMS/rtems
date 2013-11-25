@@ -25,6 +25,7 @@
 int debug_uart_index __attribute__((weak)) = 0;
 static struct apbuart_regs *dbg_uart = NULL;
 
+#ifndef LEON3_QEMU
 /* Before UART driver has registered (or when no UART is available), calls to
  * printk that gets to bsp_out_char() will be filling data into the
  * pre_printk_dbgbuf[] buffer, hopefully the buffer can help debugging the
@@ -73,6 +74,25 @@ void bsp_debug_uart_init(void)
     dbg_uart->status = 0;
   }
 }
+#else
+static void bsp_out_char(char c);
+
+static void leon3_qemu_debug_uart_init(char c)
+{
+  bsp_debug_uart_init();
+
+  BSP_output_char = bsp_out_char;
+
+  bsp_out_char(c);
+}
+
+void bsp_debug_uart_init(void)
+{
+  dbg_uart = (struct apbuart_regs *)0x80000100;
+  dbg_uart->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+  dbg_uart->status = 0;
+}
+#endif
 
 /*
  *  apbuart_outbyte_polled
@@ -128,12 +148,14 @@ int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)
 {
+#ifndef LEON3_QEMU
   if (dbg_uart == NULL) {
     /* Local debug buffer when UART driver has not registered */
     pre_printk_dbgbuf[pre_printk_pos++] = c;
     pre_printk_pos = pre_printk_pos & (sizeof(pre_printk_dbgbuf)-1);
     return;
   }
+#endif
 
   apbuart_outbyte_polled(dbg_uart, c, 1, 1);
 }
@@ -144,7 +166,11 @@ static void bsp_out_char(char c)
 
 #include <rtems/bspIo.h>
 
+#ifndef LEON3_QEMU
 BSP_output_char_function_type BSP_output_char = bsp_out_char;
+#else
+BSP_output_char_function_type BSP_output_char = leon3_qemu_debug_uart_init;
+#endif
 
 static int bsp_in_char(void)
 {

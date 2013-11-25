@@ -217,6 +217,7 @@ static int leon3_console_set_attributes(int minor, const struct termios *t)
   return 0;
 }
 
+#ifndef LEON3_QEMU
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
 static int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
 {
@@ -248,6 +249,18 @@ static void leon3_console_scan_uarts(void)
   ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS), VENDOR_GAISLER,
                   GAISLER_APBUART, find_matching_apbuart, NULL);
 }
+#else /* LEON3_QEMU */
+static void leon3_console_scan_uarts(void)
+{
+  uarts = 1;
+
+  apbuarts[0].regs = (struct apbuart_regs *)0x80000100;
+#if CONSOLE_USE_INTERRUPTS
+  apbuarts[0].irq = 3;
+#endif
+  apbuarts[0].freq_hz = 40000000;
+}
+#endif /* LEON3_QEMU */
 
 /*
  *  Console Device Driver Entry Points

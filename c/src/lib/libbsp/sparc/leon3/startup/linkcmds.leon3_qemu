@@ -1,0 +1,12 @@
+MEMORY {
+  rom : ORIGIN = 0x00000000, LENGTH = 8M
+  ram : ORIGIN = 0x40000000, LENGTH = 64M
+}
+
+_PROM_START = ORIGIN (rom);
+_PROM_SIZE = LENGTH (rom);
+
+_RAM_START = ORIGIN (ram);
+_RAM_SIZE = LENGTH (ram);
+
+INCLUDE linkcmds.base
