@@ -1,0 +1,25 @@
+#  testsuites/psxtests/psx08/psx08.doc
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR). 
+#  Copyright (c) 2013 Steven Kou <kou.yongkang@dhs.sg>
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx09
+
+directives:
++ pthread_getschedparam
++ pthread_setschedparam
++ pthread_mutex_lock
+
+concepts:
++ get the priority of the current thread
++ adjusts the priority of the thread 5 times between high and medium priority
++ creates a mutex with priority ceiling and locks it to the thread
++ thread priority no longer gets adjusted after obtaining mutex
++ thread priority gets locked at the ceiling level
++ unlocks mutex and thread priority is set to low priority successfully
