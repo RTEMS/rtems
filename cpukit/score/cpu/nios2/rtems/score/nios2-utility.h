@@ -159,7 +159,7 @@ extern uint32_t _Nios2_Thread_dispatch_disabled;
  * interrupts.
  *
  * The board support package must provide a global symbol with this name to
- * specifiy the status register mask used in _CPU_ISR_Disable().
+ * specify the status register mask used in _CPU_ISR_Disable().
  */
 extern char _Nios2_ISR_Status_mask [];
 
@@ -168,7 +168,7 @@ extern char _Nios2_ISR_Status_mask [];
  * interrupts.
  *
  * The board support package must provide a global symbol with this name to
- * specifiy the status register bits used in _CPU_ISR_Disable().
+ * specify the status register bits used in _CPU_ISR_Disable().
  */
 extern char _Nios2_ISR_Status_bits [];
 
