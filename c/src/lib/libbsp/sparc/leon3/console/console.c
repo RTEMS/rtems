@@ -85,7 +85,7 @@ static int uarts = 0;
 #if CONSOLE_USE_INTERRUPTS
 
 /* Handle UART interrupts */
-void console_isr(void *arg)
+static void leon3_console_isr(void *arg)
 {
   struct apbuart_priv *uart = arg;
   unsigned int status;
@@ -100,13 +100,10 @@ void console_isr(void *arg)
     rtems_termios_enqueue_raw_characters(uart->cookie, &data, 1);
   }
 
-  if (status & LEON_REG_UART_STATUS_THE) {
-    /* Sent the one char, we disable TX interrupts */
-    uart->regs->ctrl &= ~LEON_REG_UART_CTRL_TI;
-
-    /* Tell close that we sent everything */
-    uart->sending = 0;
-
+  if (
+    (status & LEON_REG_UART_STATUS_THE)
+      && (uart->regs->ctrl & LEON_REG_UART_CTRL_TI) != 0
+  ) {
     /* write_interrupt will get called from this function */
     rtems_termios_dequeue_characters(uart->cookie, 1);
   }
@@ -116,26 +113,33 @@ void console_isr(void *arg)
  *  Console Termios Write-Buffer Support Entry Point
  *
  */
-int console_write_interrupt(int minor, const char *buf, int len)
+static int leon3_console_write_support(int minor, const char *buf, size_t len)
 {
+  struct apbuart_priv *uart;
+  int sending;
+
+  if (minor == 0)
+    uart = &apbuarts[syscon_uart_index];
+  else
+    uart = &apbuarts[minor - 1];
+
   if (len > 0) {
-    struct apbuart_priv *uart;
-
-    if (minor == 0)
-      uart = &apbuarts[syscon_uart_index];
-    else
-      uart = &apbuarts[minor - 1];
-
-    /* Remember what position in buffer */
-
-    /* Enable TX interrupt */
+    /* Enable TX interrupt (interrupt is edge-triggered) */
     uart->regs->ctrl |= LEON_REG_UART_CTRL_TI;
 
     /* start UART TX, this will result in an interrupt when done */
     uart->regs->data = *buf;
 
-    uart->sending = 1;
+    sending = 1;
+  } else {
+    /* No more to send, disable TX interrupts */
+    uart->regs->ctrl &= ~LEON_REG_UART_CTRL_TI;
+
+    /* Tell close that we sent everything */
+    sending = 0;
   }
+
+  uart->sending = sending;
 
   return 0;
 }
@@ -211,6 +215,11 @@ int console_set_attributes(int minor, const struct termios *t)
     uart = &apbuarts[syscon_uart_index];
   else
     uart = &apbuarts[minor - 1];
+
+  /*
+   * FIXME: This read-modify-write sequence is broken since interrupts may
+   * interfere.
+   */
 
   /* Read out current value */
   ctrl = uart->regs->ctrl;
@@ -351,23 +360,91 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
+#if CONSOLE_USE_INTERRUPTS
+static struct rtems_termios_tty *leon3_console_get_tty(
+  rtems_libio_open_close_args_t *args
+)
+{
+  return args->iop->data1;
+}
+#endif
+
+static int leon3_console_first_open(int major, int minor, void *arg)
+{
+  struct apbuart_priv *uart;
+  rtems_status_code sc;
+
+  if (minor == 0)
+    uart = &apbuarts[syscon_uart_index];
+  else
+    uart = &apbuarts[minor - 1];
+
+#if CONSOLE_USE_INTERRUPTS
+  uart->cookie = leon3_console_get_tty(arg);
+
+  /* Register Interrupt handler */
+  sc = rtems_interrupt_handler_install(uart->irq, "console",
+                                       RTEMS_INTERRUPT_SHARED,
+                                       leon3_console_isr,
+                                       uart);
+  if (sc != RTEMS_SUCCESSFUL)
+    return -1;
+
+  uart->sending = 0;
+  /* Enable Receiver and transmitter and Turn on RX interrupts */
+  uart->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE |
+                      LEON_REG_UART_CTRL_RI;
+#else
+  /* Initialize UART on opening */
+  uart->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
+#endif
+  uart->regs->status = 0;
+
+  return 0;
+}
+
+#if CONSOLE_USE_INTERRUPTS
+static int leon3_console_last_close(int major, int minor, void *arg)
+{
+  struct rtems_termios_tty *tty = leon3_console_get_tty(arg);
+  struct apbuart_priv *uart;
+  rtems_interrupt_level level;
+
+  if (minor == 0)
+    uart = &apbuarts[syscon_uart_index];
+  else
+    uart = &apbuarts[minor - 1];
+
+  /* Turn off RX interrupts */
+  rtems_termios_interrupt_lock_acquire(tty, level);
+  uart->regs->ctrl &= ~(LEON_REG_UART_CTRL_RI);
+  rtems_termios_interrupt_lock_release(tty, level);
+
+  /**** Flush device ****/
+  while (uart->sending) {
+    /* Wait until all data has been sent */
+  }
+
+  /* uninstall ISR */
+  rtems_interrupt_handler_remove(uart->irq, leon3_console_isr, uart);
+
+  return 0;
+}
+#endif
+
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  rtems_status_code sc;
-  struct apbuart_priv *uart;
 #if CONSOLE_USE_INTERRUPTS
-  rtems_libio_open_close_args_t *priv = arg;
-
   /* Interrupt mode routines */
   static const rtems_termios_callbacks Callbacks = {
-    NULL,                        /* firstOpen */
-    NULL,                        /* lastClose */
+    leon3_console_first_open,    /* firstOpen */
+    leon3_console_last_close,    /* lastClose */
     NULL,                        /* pollRead */
-    console_write_interrupt,     /* write */
+    leon3_console_write_support, /* write */
     console_set_attributes,      /* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
@@ -376,7 +453,7 @@ rtems_device_driver console_open(
 #else
   /* Polling mode routines */
   static const rtems_termios_callbacks Callbacks = {
-    NULL,                        /* firstOpen */
+    leon3_console_first_open,    /* firstOpen */
     NULL,                        /* lastClose */
     console_pollRead,            /* pollRead */
     console_write_polled,        /* write */
@@ -391,39 +468,7 @@ rtems_device_driver console_open(
   if (minor > uarts || minor == (syscon_uart_index + 1))
     return RTEMS_INVALID_NUMBER;
 
-  sc = rtems_termios_open(major, minor, arg, &Callbacks);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
-
-#if CONSOLE_USE_INTERRUPTS
-  if (priv && priv->iop)
-    uart->cookie = priv->iop->data1;
-  else
-    uart->cookie = NULL;
-
-  /* Register Interrupt handler */
-  sc = rtems_interrupt_handler_install(uart->irq, "console",
-                                       RTEMS_INTERRUPT_SHARED, console_isr,
-                                       uart);
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
-
-  uart->sending = 0;
-  /* Enable Receiver and transmitter and Turn on RX interrupts */
-  uart->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE |
-                      LEON_REG_UART_CTRL_RI;
-#else
-  /* Initialize UART on opening */
-  uart->regs->ctrl |= LEON_REG_UART_CTRL_RE | LEON_REG_UART_CTRL_TE;
-#endif
-  uart->regs->status = 0;
-
-  return RTEMS_SUCCESSFUL;
+  return rtems_termios_open(major, minor, arg, &Callbacks);
 }
 
 rtems_device_driver console_close(
@@ -432,25 +477,6 @@ rtems_device_driver console_close(
   void                    * arg
 )
 {
-#if CONSOLE_USE_INTERRUPTS
-  struct apbuart_priv *uart;
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
-
-  /* Turn off RX interrupts */
-  uart->regs->ctrl &= ~(LEON_REG_UART_CTRL_RI);
-
-  /**** Flush device ****/
-  while (uart->sending) {
-    /* Wait until all data has been sent */
-  }
-
-  /* uninstall ISR */
-  rtems_interrupt_handler_remove(uart->irq, console_isr, uart);
-#endif
   return rtems_termios_close(arg);
 }
 
