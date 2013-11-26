@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup bsp_clock
+ *
+ * @brief Raspberry Pi clock support.
+ */
+
 /*
  * BCM2835 Clock driver
  *

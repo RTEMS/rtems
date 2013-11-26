@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_start
+ *
+ * @brief Raspberry Pi low level start
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *

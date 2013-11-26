@@ -1,7 +1,13 @@
 
-/*
- * raspberrypi.h
+/**
+ * @file
  *
+ * @ingroup raspberrypi_reg
+ *
+ * @brief Register definitions.
+ */
+
+/*
  * Copyright (c) 2013 Alan Cudmore.
  *
  *  The license and distribution terms for this file may be
@@ -20,9 +26,9 @@
 /**
  * @defgroup raspberrypi_reg Register Definitions
  *
- * @ingroup raspberrypi
+ * @ingroup arm_raspberrypi
  *
- * @brief Register definitions.
+ * @brief Register Definitions
  *
  * @{
  */

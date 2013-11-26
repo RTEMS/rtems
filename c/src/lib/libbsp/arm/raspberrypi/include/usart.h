@@ -1,3 +1,20 @@
+/**
+ * @file
+ *
+ * @ingroup raspberrypi_usart
+ *
+ * @brief USART support.
+ */
+
+
+/**
+ * @defgroup raspberrypi_usart USART Support
+ *
+ * @ingroup arm_raspberrypi
+ *
+ * @brief Universal Synchronous/Asynchronous Receiver/Transmitter (USART) Support
+ */
+
 /*
  * Copyright (c) 2013 Alan Cudmore.
  *

@@ -35,7 +35,7 @@ extern "C" {
 /**
  * @defgroup raspberrypi_mmu MMU Support
  *
- * @ingroup raspberrypi
+ * @ingroup arm_raspberrypi
  *
  * @brief MMU support.
  *

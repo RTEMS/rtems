@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup raspberrypi
+ * @ingroup arm_start
  *
- * @brief Startup code.
+ * @brief Rasberry Pi startup code.
  */
 
 /*

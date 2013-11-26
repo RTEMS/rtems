@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup bsp_start
+ * @ingroup arm_start
  *
- * @brief System low level start.
+ * @brief ARM system low level start.
  */
 
 /*
@@ -32,11 +32,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup bsp_start System Start
+ * @defgroup arm_start System Start
  *
- * @ingroup bsp_kit
+ * @ingroup bsp_arm
  *
- * @brief System low level start.
+ * @brief ARM system low level start.
  *
  * @{
  */
@@ -140,3 +140,11 @@ BSP_START_TEXT_SECTION static inline void bsp_start_clear_bss(void)
 #endif /* __cplusplus */
 
 #endif /* LIBBSP_ARM_SHARED_START_H */
+
+/**
+ * @defgroup bsp_arm ARM
+ *
+ * @ingroup bsp_kit
+ *
+ * @brief ARM Board Support Packages.
+ */

@@ -36,3 +36,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 #endif /* LIBBSP_ARM_RASPBERRYPI_BSP_H */
+
+/**
+ * @defgroup arm_raspberrypi Raspberry Pi Support
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief Raspberry Pi support package
+ *
+ */

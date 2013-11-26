@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup raspberrypi_interrupt
  *
  * @brief Interrupt support.
  */

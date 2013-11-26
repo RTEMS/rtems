@@ -1,12 +1,12 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup raspberrypi_interrupt
  *
  * @brief Interrupt definitions.
  */
 
-/*
+/**
  * Copyright (c) 2013 Alan Cudmore
  *
  *  The license and distribution terms for this file may be
@@ -24,6 +24,14 @@
 #include <rtems.h>
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
+
+/**
+ * @defgroup raspberrypi_interrupt Interrrupt Support
+ *
+ * @ingroup arm_raspberrypi
+ *
+ * @brief Interrupt support.
+ */
 
 #define BCM2835_INTC_TOTAL_IRQ       64 + 8
 

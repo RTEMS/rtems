@@ -1,7 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  Clock Tick Device Driver Shell
+ * @ingroup bsp_clock
+ *
+ * @brief Clock Tick Device Driver Shell
  */
 
 /*
@@ -17,38 +19,45 @@
 
 #include <bsp.h>
 
+/**
+ * @defgroup bsp_clock Clock Support
+ *
+ * @ingroup bsp_kit
+ *
+ * @brief Clock support 
+ *
+ */
 #if CLOCK_DRIVER_USE_FAST_IDLE && CLOCK_DRIVER_ISRS_PER_TICK
 #error "clockdrv_shell.h: Fast Idle PLUS n ISRs per tick is not supported"
 #endif
 
-/*
- * This method is rarely used so default it.
+/**
+ * @brief This method is rarely used so default it.
  */
 #ifndef Clock_driver_support_find_timer
   #define Clock_driver_support_find_timer()
 #endif
 
-/*
- *  ISRs until next clock tick
+/**
+ * @brief ISRs until next clock tick
  */
 #if CLOCK_DRIVER_ISRS_PER_TICK
   volatile uint32_t  Clock_driver_isrs;
 #endif
 
-/*
- *  Clock ticks since initialization
+/**
+ * @brief Clock ticks since initialization
  */
 volatile uint32_t    Clock_driver_ticks;
 
 void Clock_exit( void );
 
-/*
- *  Clock_isr
+/**
+ *  @brief Clock_isr
  *
  *  This is the clock tick interrupt handler.
  *
- *  Input parameters:
- *    vector - vector number
+ *  @param vector Vector number.
  *
  *  Output parameters:  NONE
  *
@@ -108,8 +117,8 @@ rtems_isr Clock_isr(
   #endif
 }
 
-/*
- *  Clock_exit
+/**
+ *  @brief Clock_exit
  *
  *  This routine allows the clock driver to exit by masking the interrupt and
  *  disabling the clock's counter.
@@ -129,20 +138,16 @@ void Clock_exit( void )
   /* do not restore old vector */
 }
 
-/*
- *  Clock_initialize
+/**
+ * @brief Clock_initialize
  *
- *  This routine initializes the clock driver.
+ * This routine initializes the clock driver.
  *
- *  Input parameters:
- *    major - clock device major number
- *    minor - clock device minor number
- *    parg  - pointer to optional device driver arguments
+ * @param[in] major Clock device major number.
+ * @param[in] minor Clock device minor number.
+ * @param[in] parg  Pointer to optional device driver arguments
  *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
+ * @retval rtems_device_driver status code
  */
 
 rtems_device_driver Clock_initialize(

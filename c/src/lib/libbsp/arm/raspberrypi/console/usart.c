@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup raspberrypi_usart
+ *
+ * @brief USART support.
+ */
+
 /*
  * Copyright (c) 2013 Alan Cudmore
  *

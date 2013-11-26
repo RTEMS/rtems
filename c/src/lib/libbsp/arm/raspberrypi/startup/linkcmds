@@ -1,18 +1,20 @@
 /**
  * @file
  *
- * @ingroup raspberry_pi
+ * @ingroup raspberrypi_linker
  *
- * @brief Memory map.
+ * @brief Memory map
  */
 
 /**
- * @defgroup raspberry_pi Memory Map
+ * @defgroup raspberrypi_linker Raspberry Pi Memory Map
  *
  * @ingroup bsp_linker
  *
  * @brief Raspberry Pi memory map.
- *
+ */
+
+/**
  * <table>
  *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
  * <tr><td>VECTOR_RAM</td><td>0x08000000</td><td>8k</td></tr>
