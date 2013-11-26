@@ -273,6 +273,43 @@ static inline unsigned int leon_r32_no_cache(uintptr_t addr)
 	return tmp;
 }
 
+/* Let user override which on-chip APBUART will be debug UART
+ * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
+ * 1 = APBUART[0]
+ * 2 = APBUART[1]
+ * 3 = APBUART[2]
+ * ...
+ */
+extern int syscon_uart_index;
+
+/* Let user override which on-chip APBUART will be debug UART
+ * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
+ * 1 = APBUART[0]
+ * 2 = APBUART[1]
+ * 3 = APBUART[2]
+ * ...
+ */
+extern int debug_uart_index;
+
+/*
+ *  apbuart_outbyte_polled
+ *
+ *  This routine transmits a character using polling.
+ */
+void apbuart_outbyte_polled(
+  struct apbuart_regs *regs,
+  unsigned char ch,
+  int do_cr_on_newline,
+  int wait_sent
+);
+
+/*
+ *  apbuart_inbyte_nonblocking
+ *
+ *  This routine polls for a character.
+ */
+int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
+
 #endif /* !ASM */
 
 #ifdef __cplusplus

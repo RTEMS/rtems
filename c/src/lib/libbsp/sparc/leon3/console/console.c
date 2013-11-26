@@ -31,41 +31,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <rtems/bspIo.h>
-#include <amba.h>
+#include <leon.h>
 #include <rtems/termiostypes.h>
 
-/* Let user override which on-chip APBUART will be debug UART
- * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
- * 1 = APBUART[0]
- * 2 = APBUART[1]
- * 3 = APBUART[2]
- * ...
- */
 int syscon_uart_index __attribute__((weak)) = 0;
-
-/*
- *  apbuart_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-
-extern void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int do_cr_on_newline,
-  int wait_sent
-  );
-
-
-/* body is in printk_support.c */
-
-/*
- *  apbuart_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-
-extern int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 
 /* body is in debugputs.c */
 
@@ -154,15 +123,13 @@ static int leon3_console_write_support(int minor, const char *buf, size_t len)
 #else
 
 /*
- * Prototypes to avoid warnings
- */
-ssize_t console_write_polled(int minor, const char *buf, size_t len);
-int console_pollRead(int minor);
-
-/*
  *  Console Termios Support Entry Points
  */
-ssize_t console_write_polled(int minor, const char *buf, size_t len)
+static ssize_t leon3_console_write_polled(
+  int minor,
+  const char *buf,
+  size_t len
+)
 {
   struct apbuart_priv *uart = leon3_console_get_uart(minor);
   int nwrite = 0;
@@ -174,7 +141,7 @@ ssize_t console_write_polled(int minor, const char *buf, size_t len)
   return nwrite;
 }
 
-int console_pollRead(int minor)
+static int leon3_console_pollRead(int minor)
 {
   struct apbuart_priv *uart = leon3_console_get_uart(minor);
 
@@ -183,15 +150,7 @@ int console_pollRead(int minor)
 
 #endif
 
-/*
- * Prototypes to avoid warnings
- */
-int console_set_attributes(int minor, const struct termios *t);
-int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg);
-int console_scan_uarts(void);
-
-
-int console_set_attributes(int minor, const struct termios *t)
+static int leon3_console_set_attributes(int minor, const struct termios *t)
 {
   struct apbuart_priv *uart = leon3_console_get_uart(minor);
   unsigned int scaler;
@@ -259,7 +218,7 @@ int console_set_attributes(int minor, const struct termios *t)
 }
 
 /* AMBA PP find routine. Extract AMBA PnP information into data structure. */
-int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
+static int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
 {
   struct ambapp_apb_info *apb = (struct ambapp_apb_info *)dev->devinfo;
 
@@ -281,15 +240,13 @@ int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
 }
 
 /* Find all UARTs */
-int console_scan_uarts(void)
+static void leon3_console_scan_uarts(void)
 {
   memset(apbuarts, 0, sizeof(apbuarts));
 
   /* Find APBUART cores */
   ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS), VENDOR_GAISLER,
                   GAISLER_APBUART, find_matching_apbuart, NULL);
-
-  return uarts;
 }
 
 /*
@@ -310,7 +267,7 @@ rtems_device_driver console_initialize(
   rtems_termios_initialize();
 
   /* Find UARTs */
-  console_scan_uarts();
+  leon3_console_scan_uarts();
 
   /* Update syscon_uart_index to index used as /dev/console
    * Let user select System console by setting syscon_uart_index. If the
@@ -429,7 +386,7 @@ rtems_device_driver console_open(
     leon3_console_last_close,    /* lastClose */
     NULL,                        /* pollRead */
     leon3_console_write_support, /* write */
-    console_set_attributes,      /* setAttributes */
+    leon3_console_set_attributes,/* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
     1                            /* outputUsesInterrupts */
@@ -439,9 +396,9 @@ rtems_device_driver console_open(
   static const rtems_termios_callbacks Callbacks = {
     leon3_console_first_open,    /* firstOpen */
     NULL,                        /* lastClose */
-    console_pollRead,            /* pollRead */
-    console_write_polled,        /* write */
-    console_set_attributes,      /* setAttributes */
+    leon3_console_pollRead,      /* pollRead */
+    leon3_console_write_polled,  /* write */
+    leon3_console_set_attributes,/* setAttributes */
     NULL,                        /* stopRemoteTx */
     NULL,                        /* startRemoteTx */
     0                            /* outputUsesInterrupts */

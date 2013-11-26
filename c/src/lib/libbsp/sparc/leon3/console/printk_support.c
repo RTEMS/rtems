@@ -16,28 +16,22 @@
  */
 
 #include <bsp.h>
+#include <leon.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
 
-/* Let user override which on-chip APBUART will be debug UART
- * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
- * 1 = APBUART[0]
- * 2 = APBUART[1]
- * 3 = APBUART[2]
- * ...
- */
 int debug_uart_index __attribute__((weak)) = 0;
-struct apbuart_regs *dbg_uart = NULL;
+static struct apbuart_regs *dbg_uart = NULL;
 
 /* Before UART driver has registered (or when no UART is available), calls to
  * printk that gets to bsp_out_char() will be filling data into the
  * pre_printk_dbgbuf[] buffer, hopefully the buffer can help debugging the
  * early BSP boot.. At least the last printk() will be caught.
  */
-char pre_printk_dbgbuf[32] = {0};
-int pre_printk_pos = 0;
+static char pre_printk_dbgbuf[32] = {0};
+static int pre_printk_pos = 0;
 
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
