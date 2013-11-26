@@ -82,6 +82,18 @@ struct apbuart_priv {
 static struct apbuart_priv apbuarts[BSP_NUMBER_OF_TERMIOS_PORTS];
 static int uarts = 0;
 
+static struct apbuart_priv *leon3_console_get_uart(int minor)
+{
+  struct apbuart_priv *uart;
+
+  if (minor == 0)
+    uart = &apbuarts[syscon_uart_index];
+  else
+    uart = &apbuarts[minor - 1];
+
+  return uart;
+}
+
 #if CONSOLE_USE_INTERRUPTS
 
 /* Handle UART interrupts */
@@ -115,13 +127,8 @@ static void leon3_console_isr(void *arg)
  */
 static int leon3_console_write_support(int minor, const char *buf, size_t len)
 {
-  struct apbuart_priv *uart;
+  struct apbuart_priv *uart = leon3_console_get_uart(minor);
   int sending;
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
 
   if (len > 0) {
     /* Enable TX interrupt (interrupt is edge-triggered) */
@@ -157,15 +164,11 @@ int console_pollRead(int minor);
  */
 ssize_t console_write_polled(int minor, const char *buf, size_t len)
 {
-  int nwrite = 0, port;
-
-  if (minor == 0)
-    port = syscon_uart_index;
-  else
-    port = minor - 1;
+  struct apbuart_priv *uart = leon3_console_get_uart(minor);
+  int nwrite = 0;
 
   while (nwrite < len) {
-    apbuart_outbyte_polled(apbuarts[port].regs, *buf++, 1, 0);
+    apbuart_outbyte_polled(uart->regs, *buf++, 1, 0);
     nwrite++;
   }
   return nwrite;
@@ -173,14 +176,9 @@ ssize_t console_write_polled(int minor, const char *buf, size_t len)
 
 int console_pollRead(int minor)
 {
-  int port;
+  struct apbuart_priv *uart = leon3_console_get_uart(minor);
 
-  if (minor == 0)
-    port = syscon_uart_index;
-  else
-    port = minor - 1;
-
-  return apbuart_inbyte_nonblocking(apbuarts[port].regs);
+  return apbuart_inbyte_nonblocking(uart->regs);
 }
 
 #endif
@@ -195,10 +193,10 @@ int console_scan_uarts(void);
 
 int console_set_attributes(int minor, const struct termios *t)
 {
+  struct apbuart_priv *uart = leon3_console_get_uart(minor);
   unsigned int scaler;
   unsigned int ctrl;
   int baud;
-  struct apbuart_priv *uart;
 
   switch (t->c_cflag & CSIZE) {
     default:
@@ -210,11 +208,6 @@ int console_set_attributes(int minor, const struct termios *t)
     case CS8:
       break;
   }
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
 
   /*
    * FIXME: This read-modify-write sequence is broken since interrupts may
@@ -371,15 +364,11 @@ static struct rtems_termios_tty *leon3_console_get_tty(
 
 static int leon3_console_first_open(int major, int minor, void *arg)
 {
-  struct apbuart_priv *uart;
-  rtems_status_code sc;
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
+  struct apbuart_priv *uart = leon3_console_get_uart(minor);
 
 #if CONSOLE_USE_INTERRUPTS
+  rtems_status_code sc;
+
   uart->cookie = leon3_console_get_tty(arg);
 
   /* Register Interrupt handler */
@@ -407,13 +396,8 @@ static int leon3_console_first_open(int major, int minor, void *arg)
 static int leon3_console_last_close(int major, int minor, void *arg)
 {
   struct rtems_termios_tty *tty = leon3_console_get_tty(arg);
-  struct apbuart_priv *uart;
+  struct apbuart_priv *uart = leon3_console_get_uart(minor);
   rtems_interrupt_level level;
-
-  if (minor == 0)
-    uart = &apbuarts[syscon_uart_index];
-  else
-    uart = &apbuarts[minor - 1];
 
   /* Turn off RX interrupts */
   rtems_termios_interrupt_lock_acquire(tty, level);
