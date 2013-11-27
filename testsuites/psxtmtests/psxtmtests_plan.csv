@@ -35,7 +35,7 @@
 "pthread_equal","psxtmthread03","psxtmtest_single w/multiple timings",
 "pthread_getschedparam","psxtmthread04","psxtmtest_single w/multiple timings",
 "pthread_setschedparam - no thread switch","psxtmthread04","psxtmtest_single w/multiple timings",
-"pthread_setschedparam - lower own priority, preempt","psxtmthread05","psxtmtest_single",
+"pthread_setschedparam - lower own priority, preempt","psxtmthread05","psxtmtest_single","Yes"
 "pthread_setschedparam - raise other priority, preempt","psxtmthread06","psxtmtest_single",
 ,,,
 "pthread_once",,,
