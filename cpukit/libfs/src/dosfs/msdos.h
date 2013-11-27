@@ -313,8 +313,8 @@ int msdos_rename(
 );
 
 int msdos_statvfs(
-  const rtems_filesystem_location_info_t *__restrict root_loc,
-  struct statvfs *__restrict sb);
+  const rtems_filesystem_location_info_t *root_loc,
+  struct statvfs *sb);
 
 void msdos_lock(const rtems_filesystem_mount_table_entry_t *mt_entry);
 
@@ -348,8 +348,8 @@ ssize_t msdos_file_write(
 );
 
 int msdos_file_stat(
-  const rtems_filesystem_location_info_t *__restrict loc,
-  struct stat *__restrict buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
 int
@@ -371,8 +371,8 @@ ssize_t msdos_dir_read(
 int msdos_dir_sync(rtems_libio_t *iop);
 
 int msdos_dir_stat(
-  const rtems_filesystem_location_info_t *__restrict loc,
-  struct stat *__restrict buf
+  const rtems_filesystem_location_info_t *loc,
+  struct stat *buf
 );
 
 /**

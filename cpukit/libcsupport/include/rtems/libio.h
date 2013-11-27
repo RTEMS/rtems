@@ -485,8 +485,8 @@ typedef int (*rtems_filesystem_rename_t)(
  * @see rtems_filesystem_default_statvfs().
  */
 typedef int (*rtems_filesystem_statvfs_t)(
-  const rtems_filesystem_location_info_t *__restrict loc,
-  struct statvfs *__restrict buf
+  const rtems_filesystem_location_info_t *loc,
+  struct statvfs *buf
 );
 
 /**
@@ -738,8 +738,8 @@ int rtems_filesystem_default_rename(
  * @see rtems_filesystem_statvfs_t.
  */
 int rtems_filesystem_default_statvfs(
-  const rtems_filesystem_location_info_t *__restrict loc,
-  struct statvfs *__restrict buf
+  const rtems_filesystem_location_info_t *loc,
+  struct statvfs *buf
 );
 
 /** @} */
