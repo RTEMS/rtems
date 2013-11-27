@@ -1,0 +1,34 @@
+#  testsuites/psxtests/psx06/psx06.doc
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR). 
+#  Copyright (c) 2013 Steven Kou <kou.yongkang@dhs.sg>
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx06
+
+directives:
++ pthread_key_create
++ pthread_setspecific
++ pthread_getspecific
++ pthread_key_delete
+
+concepts:
++ gets the ID of the current thread
++ creates 2 more threads for the 2 tasks
++ creates a key
++ attempts to create another key
++ attempts to set and get a value for the key
++ attempts to delete the key
++ sets the value of the key to 0
++ verifies the correct value is set
++ task 1 sets the key value to 1 and verifies it before exiting
++ destructor was invoked 4 times by this stage
++ task 2 sets the key value to 2 and verifies before exiting
++ deletes the key
++ destructor was invoked 5 times in total
+
