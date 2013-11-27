@@ -2,6 +2,7 @@
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *  COPYRIGHT (c) 2013.
+ *  Chirayu Desai (chirayudesai1@gmail.com).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -36,16 +37,14 @@ void benchmark_pthread_setschedparam(void)
 
   /* make test_thread equal to POSIX_Init() */
   pthread_getschedparam(pthread_self(), &policy, &param);
-  
   pthread_setschedparam(thread_ID, policy, &param);
   /* At this point, we've switched to test_thread */
 
   /* Back from test_thread, switch to test_thread again */
-  param.sched_priority = sched_get_priority_min(policy);
+  param.sched_priority = sched_get_priority_max(policy) - 1;
 
   benchmark_timer_initialize();
-  //lower own priority to minimun, scheduler forces an involuntary context switch
-  pthread_setschedparam(pthread_self(), policy, &param);
+  pthread_setschedparam(thread_ID, policy, &param);
 }
 
 void *test_thread(
@@ -53,18 +52,21 @@ void *test_thread(
 )
 {
   long end_time;
+
+  /* switch to POSIX_Init */
   sched_yield();
 
   end_time = benchmark_timer_read();
+
   put_time(
-    "pthread_setschedparam - lower own priority, preempt",
+    "pthread_setschedparam - raise other priority, preempt",
     end_time,
     1,        /* Only executed once */
     0,
     0
   );
 
-  puts( "*** END OF POSIX TIME TEST PSXTMTHREAD05 ***" );
+  puts( "*** END OF POSIX TIME TEST PSXTMTHREAD06 ***" );
   rtems_test_exit(0);
   //Empty thread used in pthread_create().
   return NULL;
@@ -75,7 +77,7 @@ void *POSIX_Init(
 )
 {
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMTHREAD05 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMTHREAD06 ***" );
   benchmark_pthread_setschedparam();
 
   rtems_test_assert( 1 );

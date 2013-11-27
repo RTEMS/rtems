@@ -1,5 +1,7 @@
 #  COPYRIGHT (c) 1989-2011.
 #  On-Line Applications Research Corporation (OAR).
+#  COPYRIGHT (c) 2013.
+#  Chirayu Desai (chirayudesai1@gmail.com).
 #
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
@@ -8,7 +10,7 @@
 
 This test benchmarks the following operations:
 
-+ pthread_setschedparam - lower own priority, preempt
++ pthread_setschedparam - raise other priority, preempt
 
 This file describes the directives and concepts tested by this test set.
 
@@ -20,5 +22,5 @@ directives:
 + pthread_setschedparam
 
 concepts:
-+ Benchmark the call pthread_setschedparam for lowering own priority and the
-  resulting involuntary context switch.
++ Benchmark the call pthread_setschedparam for raising another thread's
+  priority and the resulting context switch.

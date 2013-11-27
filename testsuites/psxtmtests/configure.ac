@@ -117,5 +117,6 @@ psxtmthread01/Makefile
 psxtmthread02/Makefile
 psxtmthread03/Makefile
 psxtmthread05/Makefile
+psxtmthread06/Makefile
 ])
 AC_OUTPUT
