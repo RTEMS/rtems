@@ -1,0 +1,38 @@
+#  testsuites/psxtests/psx05/psx05.doc
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR).
+#  Copyright (c) 2013 Chirayu Desai <chirayudesai1@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx05
+
+directives:
++ pthread_mutexattr_init
++ pthread_mutexattr_destroy
++ pthread_mutexattr_getpshared
++ pthread_mutexattr_setpshared
++ pthread_mutexattr_getprotocol
++ pthread_mutexattr_setprotocol
++ pthread_mutexattr_getprioceiling
++ pthread_mutexattr_setprioceiling
++ pthread_mutex_init
++ pthread_mutex_trylock
++ pthread_mutex_lock
++ pthread_mutex_unlock
++ pthread_mutex_timedlock
++ pthread_mutex_destroy
++ pthread_setschedparam
++ pthread_getschedparam
++ pthread_mutex_getprioceiling
+
+concepts:
+
++ This test makes sure that the above directives work correctly,
+  by passing valid arguments and making sure they work, and
+  making sure that NULL or invalid arguments don't work and
+  return the correct error code.

@@ -140,7 +140,7 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
-  /* tes pthread_mutex_attr_init */
+  /* test pthread_mutex_attr_init */
 
   puts( "Init: pthread_mutexattr_init - EINVAL (NULL attr)" );
   status = pthread_mutexattr_init( NULL );
