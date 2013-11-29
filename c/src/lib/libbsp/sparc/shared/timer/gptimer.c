@@ -141,6 +141,7 @@ struct drvmgr_drv_ops gptimer_ops =
 struct amba_dev_id gptimer_ids[] =
 {
 	{VENDOR_GAISLER, GAISLER_GPTIMER},
+	{VENDOR_GAISLER, GAISLER_GRTIMER},
 	{0, 0}		/* Mark end of table */
 };
 
