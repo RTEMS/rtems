@@ -156,12 +156,11 @@ void _Thread_Dispatch( void )
 #endif
 
     /*
-     * We have to obtain these values again after the context switch since the
+     * We have to obtain this value again after the context switch since the
      * heir thread may have migrated from another processor.  Values from the
      * stack or non-volatile registers reflect the old execution environment.
      */
     per_cpu = _Per_CPU_Get();
-    executing = per_cpu->executing;
 
 #if !defined( RTEMS_SMP )
     _ISR_Disable( level );
