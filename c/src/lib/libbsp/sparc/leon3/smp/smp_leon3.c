@@ -1,7 +1,7 @@
 /**
- *  @file
- *
- *  LEON3 SMP BSP Support
+ * @file
+ * @ingroup sparc_leon3
+ * @brief LEON3 SMP BSP Support
  */
 
 /*

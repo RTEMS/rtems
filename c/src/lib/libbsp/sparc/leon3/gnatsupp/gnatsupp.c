@@ -1,6 +1,10 @@
+/**
+ * @file
+ * @ingroup sparc_leon3
+ * @brief Support for gnat/rtems interrupts and exception handling
+ */
+
 /*
- *
- * Support for gnat/rtems interrupts and exception handling.
  * Jiri Gaisler, ESA/ESTEC, 17-02-1999.
  */
 

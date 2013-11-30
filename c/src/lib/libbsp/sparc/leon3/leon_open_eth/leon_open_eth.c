@@ -1,7 +1,10 @@
-/*
- *  LEON3 Opencores Ethernet MAC Configuration Information
- *
- *  COPYRIGHT (c) 2004.
+/**
+ * @file
+ * @ingroup sparc_leon3
+ * @brief LEON3 Opencores Ethernet MAC Configuration Information
+ */
+
+/*  COPYRIGHT (c) 2004.
  *  Gaisler Research
  *
  *  The license and distribution terms for this file may be

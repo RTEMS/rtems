@@ -1,5 +1,10 @@
-/*  Installs the BSP pre-driver hook
- *
+/**
+ * @file
+ * @ingroup sparc_leon3
+ * @brief Installs the BSP pre-driver hook
+ */
+
+/*
  *  COPYRIGHT (c) 2011
  *  Aeroflex Gaisler
  *

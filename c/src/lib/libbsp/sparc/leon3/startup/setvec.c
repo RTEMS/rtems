@@ -1,6 +1,10 @@
-/*  set_vector
- *
- *  This routine installs an interrupt vector on the SPARC simulator.
+/**  
+ * @file
+ * @ingroup sparc_leon3
+ * @brief Install an interrupt vector on SPARC
+ */
+
+/*  This routine installs an interrupt vector on the SPARC simulator.
  *
  *  INPUT PARAMETERS:
  *    handler - interrupt handler entry point
@@ -12,8 +16,9 @@
  *
  *  RETURNS:
  *    address of previous interrupt handler
- *
- *  COPYRIGHT (c) 1989-1998.
+ */ 
+
+/*  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

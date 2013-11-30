@@ -1,7 +1,7 @@
 /**
- *  @file
- *
- *  LEON3 SMP Obtain CPU Core Number
+ * @file
+ * @ingroup sparc_leon3
+ * @brief LEON3 SMP Obtain CPU Core Number
  */
 
 /*
