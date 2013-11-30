@@ -68,7 +68,7 @@ void *POSIX_Init(
    * unblocking operation.
    */
   benchmark_timer_initialize();
-    status = pthread_barrier_wait( &barrier );
+  status = pthread_barrier_wait( &barrier );
   end_time = benchmark_timer_read();
   /*
    * Upon successful completion return value, the status should be

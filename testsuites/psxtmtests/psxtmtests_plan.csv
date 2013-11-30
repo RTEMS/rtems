@@ -13,26 +13,25 @@
 "pthread_mutex_setprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 "pthread_mutex_getprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 ,,,
-"pthread_cond_init","psxtmcond01","psxtmtest_init_destroy","No"
-"pthread_cond_destroy","psxtmcond01","psxtmtest_init_destroy","No"
-"pthread_cond_signal - no threads waiting","psxtmcond02","psxtmtest_single","No"
-"pthread_cond_signal - thread waiting: no preempt","psxtmcond03","psxtmtest_unblocking_nopreempt","No"
+"pthread_cond_init","psxtmcond01","psxtmtest_init_destroy","Yes"
+"pthread_cond_destroy","psxtmcond01","psxtmtest_init_destroy","Yes"
+"pthread_cond_signal - no threads waiting","psxtmcond02","psxtmtest_single","Yes"
+"pthread_cond_signal - thread waiting: no preempt","psxtmcond03","psxtmtest_unblocking_nopreempt","Yes"
 "pthread_cond_signal - thread waiting: preempt","psxtmcond04","psxtmtest_unblocking_preempt","No"
-"pthread_cond_broadcast - no threads waiting","psxtmcond05","psxtmtest_single","No"
+"pthread_cond_broadcast - no threads waiting","psxtmcond05","psxtmtest_single","Yes"
 "pthread_cond_broadcast -  threads waiting: no preempt","psxtmcond06","psxtmtest_unblocking_nopreempt","No"
 "pthread_cond_broadcast -  threads waiting: preempt","psxtmcond07","psxtmtest_unblocking_preempt","No"
 
-"pthread_cond_wait - blocks (mutex+condvar pattern)","psxtmcond08","psxtmtest_blocking","No"
+"pthread_cond_wait - blocks (mutex+condvar pattern)","psxtmcond08","psxtmtest_blocking","Yes"
 "pthread_cond_timedwait(&time) - blocks (mutex+condvar pattern)","psxtmcond09","psxtmtest_blocking","No"
 "pthread_cond_timedwait(&time) - time in past error","psxtmcond10","psxtmtest_blocking","No"
 ,,,
 "pthread_create - no preempt","psxtmthread01","psxtmtest_single","Yes"
-"pthread_create - preempt","psxtmthread02","psxtmtest_single","No"
+"pthread_create - preempt","psxtmthread02","psxtmtest_single","Yes"
 "pthread_join",,,
 "pthread_detach",,,
 "pthread_exit",,,
-"pthread_self","psxtmthread03","psxtmtest_single w/multiple timings","No"
-"pthread_equal","psxtmthread03","psxtmtest_single w/multiple timings","No"
+"pthread_exit","psxtmthread03","psxtmtest_single","Yes"
 "pthread_getschedparam","psxtmthread04","psxtmtest_single w/multiple timings","No"
 "pthread_setschedparam - no thread switch","psxtmthread04","psxtmtest_single w/multiple timings","No"
 "pthread_setschedparam - lower own priority: preempt","psxtmthread05","psxtmtest_single","Yes"
@@ -61,12 +60,12 @@
 "pthread_barrier_wait - releasing: no preempt","psxtmbarrier03","psxtmtest_unblocking_nopreempt","Yes"
 "pthread_barrier_wait - releasing: preempt","psxtmbarrier04","psxtmtest_unblocking_preempt","Yes"
 ,,,
-"pthread_spin_init","psxspin01","psxtmtest_init_destroy","No"
-"pthread_spin_destroy","psxspin01","psxtmtest_init_destroy","No"
-"pthread_spin_lock - available","psxspin02","psxtmtest_single w/multiple timings","No"
-"pthread_spin_trylock - available","psxspin02","psxtmtest_single w/multiple timings","No"
-"pthread_spin_trylock - not available","psxspin02","psxtmtest_single w/multiple timings","No"
-"pthread_spin_unlock","psxspin02","psxtmtest_single w/multiple timings","No"
+"pthread_spin_init","psxspin01","psxtmtest_init_destroy","Yes"
+"pthread_spin_destroy","psxspin01","psxtmtest_init_destroy","Yes"
+"pthread_spin_lock - available","psxspin02","psxtmtest_single w/multiple timings","Yes"
+"pthread_spin_trylock - available","psxspin02","psxtmtest_single w/multiple timings","Yes"
+"pthread_spin_trylock - not available","psxspin02","psxtmtest_single w/multiple timings","Yes"
+"pthread_spin_unlock","psxspin02","psxtmtest_single w/multiple timings","Yes"
 ,,,
 "pthread_rwlock_init","psxtmrwlock01","psxtmtest_init_destroy","Yes"
 "pthread_rwlock_destroy","psxtmrwlock01","psxtmtest_init_destroy","Yes"

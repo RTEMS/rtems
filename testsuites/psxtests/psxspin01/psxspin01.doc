@@ -1,23 +1,21 @@
-#  COPYRIGHT (c) 1989-2011.
+#  COPYRIGHT (c) 1989-2009.
 #  On-Line Applications Research Corporation (OAR).
-#  COPYRIGHT (c) 2013.
 #
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
 #  http://www.rtems.com/license/LICENSE.
 #
 
-This test benchmarks the following operations:
-
-+ pthread_create - preempt
-
 This file describes the directives and concepts tested by this test set.
 
-test set name: psxtmthread
+test set name:  psxspin
 
 directives:
-+ pthread_create
+
+  pthread_spin_init
+  pthread_spin_destroy
 
 concepts:
-+ Benchmark the call pthread_create for creating a thread with a higher priority
-  and the resulting preempt.
+
++ Ensure that proper error values result when passing different combinations of
+  values to pthread_spin_init and pthread_spin_destroy

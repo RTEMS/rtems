@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 1989-2011.
+#  COPYRIGHT (c) 2013
 #  On-Line Applications Research Corporation (OAR).
 #
 #  The license and distribution terms for this file may be
@@ -8,4 +8,14 @@
 
 This test benchmarks the following operations:
 
-+ 
++ pthread_cond_broadcast - no threads waiting
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxtmcond
+
+directives:
++ pthread_cond_broadcast
+
+concepts:
++ Benchmark the call pthread_cond_broadcast with no threads waiting.
