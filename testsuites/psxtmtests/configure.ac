@@ -80,6 +80,7 @@ AC_CONFIG_FILES([Makefile
 psxtmbarrier01/Makefile
 psxtmbarrier02/Makefile
 psxtmbarrier03/Makefile
+psxtmbarrier04/Makefile
 psxtmcond01/Makefile
 psxtmcond02/Makefile
 psxtmcond03/Makefile

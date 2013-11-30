@@ -6,6 +6,7 @@ if HAS_POSIX
 SUBDIRS += psxtmbarrier01
 SUBDIRS += psxtmbarrier02
 SUBDIRS += psxtmbarrier03
+SUBDIRS += psxtmbarrier04
 SUBDIRS += psxtmcond01
 SUBDIRS += psxtmcond02
 SUBDIRS += psxtmcond03
