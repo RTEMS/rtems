@@ -265,6 +265,7 @@ SYM(_CPU_Context_switch_to_first_task_smp):
 	and	%g1, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g3
 	nop
 	mov	%o0, %o1		! in the delay slot
+	GET_SELF_CPU_CONTROL %o3, %o4
 	ba,a	done_flushing
 #endif
 
