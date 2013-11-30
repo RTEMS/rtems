@@ -13,6 +13,7 @@
 
 #include <timesys.h>
 #include <pthread.h>
+#include <sched.h>
 #include <rtems/timerdrv.h>
 #include "test_support.h"
 
@@ -28,11 +29,18 @@ void benchmark_pthread_create(void)
   pthread_attr_t attr;
   struct sched_param param;
 
-  pthread_attr_init(&attr);
-  pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
-  pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
+  status = pthread_attr_init(&attr);
+  rtems_test_assert( status == 0 );
+
+  status = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+  rtems_test_assert( status == 0 );
+
+  status = pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
+  rtems_test_assert( status == 0 );
+
   param.sched_priority = sched_get_priority_max(SCHED_FIFO) - 1;
-  pthread_attr_setschedparam(&attr, &param);
+  status = pthread_attr_setschedparam(&attr, &param);
+  rtems_test_assert( status == 0 );
 
   /* create second thread with max priority and get preempted on creation */
   benchmark_timer_initialize();
