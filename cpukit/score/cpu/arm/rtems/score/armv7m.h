@@ -81,10 +81,16 @@ typedef struct {
 #define ARMV7M_SCB_AIRCR_VECTCLRACTIVE (1U << 1)
 #define ARMV7M_SCB_AIRCR_VECTRESET (1U << 0)
   uint32_t aircr;
+
   uint32_t scr;
   uint32_t ccr;
   uint8_t shpr [12];
+
+#define ARMV7M_SCB_SHCSR_USGFAULTENA (1U << 18)
+#define ARMV7M_SCB_SHCSR_BUSFAULTENA (1U << 17)
+#define ARMV7M_SCB_SHCSR_MEMFAULTENA (1U << 16)
   uint32_t shcsr;
+
   uint32_t cfsr;
   uint32_t hfsr;
   uint32_t dfsr;
