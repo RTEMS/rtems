@@ -77,6 +77,9 @@ void *POSIX_Init(
    */
   benchmark_timer_initialize();
   status = pthread_barrier_wait( &barrier );
+
+  /* avoid warning but should not be executed */
+  return NULL;
 }
 
 /* configuration information */
