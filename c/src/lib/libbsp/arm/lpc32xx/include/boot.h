@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @defgroup lpc32xx_boot Boot Support
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief Boot support.
  *

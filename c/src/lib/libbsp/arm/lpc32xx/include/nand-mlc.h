@@ -36,7 +36,7 @@ extern "C" {
 /**
  * @defgroup lpc32xx_nand_mlc NAND MLC Controller
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief NAND MLC Controller.
  *

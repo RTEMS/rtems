@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief Global BSP definitions.
  */
@@ -43,9 +43,9 @@ extern "C" {
 struct rtems_bsdnet_ifconfig;
 
 /**
- * @defgroup lpc32xx LPC32XX Support
+ * @defgroup arm_lpc32xx LPC32XX Support
  *
- * @ingroup bsp_kit
+ * @ingroup bsp_arm
  *
  * @brief LPC32XX support package.
  *
@@ -247,7 +247,7 @@ extern uint32_t lpc32xx_magic_zero_size [];
 /**
  * @defgroup lpc LPC Support
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief LPC support package.
  */

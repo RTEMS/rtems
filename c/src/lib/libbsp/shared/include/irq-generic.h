@@ -91,6 +91,8 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * @defgroup bsp_interrupt BSP Interrupt Support
  *
  * @ingroup rtems_interrupt_extension
+ * 
+ * @brief Generic BSP Interrupt Support
  *
  * The BSP interrupt support manages a sequence of interrupt vector numbers
  * ranging from @ref BSP_INTERRUPT_VECTOR_MIN to @ref BSP_INTERRUPT_VECTOR_MAX

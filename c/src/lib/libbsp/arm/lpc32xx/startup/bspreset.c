@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief Reset code.
  */

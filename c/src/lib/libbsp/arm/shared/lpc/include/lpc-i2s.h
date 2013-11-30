@@ -32,8 +32,8 @@ extern "C" {
 /**
  * @defgroup lpc_i2s I2S Support
  *
- * @ingroup lpc24xx
- * @ingroup lpc32xx
+ * @ingroup arm_lpc24xx
+ * @ingroup arm_lpc32xx
  *
  * @brief I2S support.
  *

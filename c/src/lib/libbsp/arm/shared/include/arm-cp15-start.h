@@ -1,3 +1,12 @@
+/**
+ * @file 
+ *
+ * @ingroup arm_start
+ *
+ * @brief Arm CP15 start.
+ */
+
+
 /*
  * Copyright (c) 2013 Hesham AL-Matary.
  * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.

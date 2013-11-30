@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief bsp_idle_thread() implementation.
  */

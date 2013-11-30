@@ -33,7 +33,7 @@
 /**
  * @defgroup lpc32xx_reg Register Definitions
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief Register definitions.
  *

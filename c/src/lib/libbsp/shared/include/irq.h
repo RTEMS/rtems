@@ -27,12 +27,6 @@
 #include <stdint.h>
 
 /**
- * @addtogroup bsp_interrupt
- *
- * @{
- */
-
-/**
  * @brief Minimum vector number.
  */
 #define BSP_INTERRUPT_VECTOR_MIN 0
@@ -79,7 +73,5 @@
  * vector validator check routine.
  */
 #undef BSP_INTERRUPT_CUSTOM_VALID_VECTOR
-
-/** @} */
 
 #endif /* LIBBSP_SHARED_IRQ_CONFIG_H */

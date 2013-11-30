@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup lpc32xx_interrupt
  *
  * @brief Interrupt support.
  */

@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @defgroup lpc32xx_i2c I2C Support
  *
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief I2C Support
  *

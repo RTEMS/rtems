@@ -30,14 +30,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup bsp_interrupt BSP Interrupt Information
- *
- * @ingroup rtems_interrupt_extension
- *
- * @{
- */
-
-/**
  * @brief Prints interrupt information via the printk plugin @a print with the
  * context @a context.
  */

@@ -33,7 +33,7 @@ extern "C" {
  * @defgroup lpc_lcd LCD Support
  *
  * @ingroup lpc
- * @ingroup lpc32xx
+ * @ingroup arm_lpc32xx
  *
  * @brief LCD support.
  *

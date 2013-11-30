@@ -33,8 +33,8 @@ extern "C" {
 /**
  * @defgroup lpc_dma DMA Support
  *
- * @ingroup lpc24xx
- * @ingroup lpc32xx
+ * @ingroup arm_lpc24xx
+ * @ingroup arm_lpc32xx
  *
  * @brief DMA support.
  *

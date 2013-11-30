@@ -1,3 +1,10 @@
+/* @file 
+ *
+ * @ingroup arm_lpc32xx
+ *
+ * @brief Implementations of interrupt mechanisms for Time Test 27
+ */
+
 /*
  * Copyright (c) 2010 embedded brains GmbH.  All rights reserved.
  *

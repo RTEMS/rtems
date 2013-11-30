@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_interrupt
+ * @ingroup lpc32xx_interrupt
  *
  * @brief Interrupt definitions.
  */
@@ -33,7 +33,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup bsp_interrupt
+ * @defgroup lpc32xx_interrupt Interrupt Support
+ *
+ * @ingroup arm_lpc32xx
+ *
+ * @ingroup bsp_interrupt
  *
  * @{
  */
