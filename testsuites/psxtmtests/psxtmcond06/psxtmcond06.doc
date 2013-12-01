@@ -1,0 +1,26 @@
+#  COPYRIGHT (c) 2013
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ pthread_cond_broadcast - threads waiting, no preempt
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxtmcond
+
+directives:
++ pthread_cond_broadcast
++ pthread_mutex_lock
++ pthread_mutex_init
++ pthread_cond_init
++ pthread_create
+
+concepts:
++ Benchmark the call pthread_cond_broadcast to wake all other threads, with no
+  resulting preempt.

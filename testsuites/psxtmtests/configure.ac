@@ -86,6 +86,7 @@ psxtmcond02/Makefile
 psxtmcond03/Makefile
 psxtmcond04/Makefile
 psxtmcond05/Makefile
+psxtmcond06/Makefile
 psxtmcond08/Makefile
 psxtmcond09/Makefile
 psxtmcond10/Makefile
