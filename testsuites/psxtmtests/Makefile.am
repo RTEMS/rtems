@@ -10,6 +10,7 @@ SUBDIRS += psxtmbarrier04
 SUBDIRS += psxtmcond01
 SUBDIRS += psxtmcond02
 SUBDIRS += psxtmcond03
+SUBDIRS += psxtmcond04
 SUBDIRS += psxtmcond05
 SUBDIRS += psxtmcond08
 SUBDIRS += psxtmcond09

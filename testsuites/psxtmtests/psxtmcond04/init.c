@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,17 +30,32 @@ void *Blocker(
   void *argument
 )
 {
+
+  long end_time;
+  struct sched_param param;
+  int policy;
   int status;
 
   status = pthread_mutex_lock(&MutexID);
   rtems_test_assert( status == 0 );
-  
-  /* Unlock mutex, block, wait for CondID to be signaled */
+  status = pthread_getschedparam(pthread_self(), &policy, &param);
+  rtems_test_assert( status == 0 );
+  param.sched_priority = sched_get_priority_max(policy) - 1;
+  status = pthread_setschedparam(pthread_self(), policy, &param);
+  /* Thread blocks, unlocks mutex, waits for CondID to be signaled */
   pthread_cond_wait(&CondID,&MutexID);
- 
- /* should never return */
-  rtems_test_assert( FALSE );
 
+  /* Once signaled, this thread preempts POSIX_Init thread */
+  end_time = benchmark_timer_read();
+  put_time(
+    "pthread_cond_signal - thread waiting, preempt",
+    end_time,
+    1,
+    0,
+    0
+  );
+  puts( "*** END OF POSIX TIME TEST PSXTMCOND04 ***" );
+  rtems_test_exit( 0 );
   return NULL;
 }
 
@@ -50,11 +65,8 @@ void *POSIX_Init(
 {
   int        status;
   pthread_t  threadId;
-  long       end_time;
-  struct sched_param param;
-  int policy;
 
-  puts( "\n\n*** POSIX TIME TEST PSXTMCOND03 ***" );
+  puts( "\n\n*** POSIX TIME TEST PSXTMCOND04 ***" );
 
   status = pthread_create( &threadId, NULL, Blocker, NULL );
   rtems_test_assert( status == 0 );
@@ -70,31 +82,12 @@ void *POSIX_Init(
    * is accounted for.  When we return, we can start the benchmark.
    */
   sched_yield();
-    /* let other thread run */
+  /* let other thread run */
 
-  /* To be extra sure we don't get preempted on the signal */
-  status = pthread_getschedparam(pthread_self(), &policy, &param);
-  rtems_test_assert( status == 0);
-  param.sched_priority = sched_get_priority_max(policy) - 1;
-  status = pthread_setschedparam(pthread_self(), policy, &param);
-  rtems_test_assert( status == 0);
-
+  /* Other thread is blocked and waiting on condition to be signaled */
   benchmark_timer_initialize();
   status = pthread_cond_signal(&CondID);
-  end_time = benchmark_timer_read();
-  rtems_test_assert( status == 0 );
-
-  put_time(
-    "pthread_cond_signal - thread waiting, no preempt",
-    end_time,
-    1,
-    0,
-    0
-  );
-
-  puts( "*** END OF POSIX TIME TEST PSXTMCOND03 ***" );
-  rtems_test_exit( 0 );
-
+  rtems_test_assert ( status == 0 );
   return NULL;
 }
 
