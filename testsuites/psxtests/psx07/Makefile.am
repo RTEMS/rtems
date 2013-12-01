@@ -2,7 +2,8 @@
 rtems_tests_PROGRAMS = psx07
 psx07_SOURCES = init.c task.c system.h ../include/pmacros.h
 
-dist_rtems_tests_DATA = psx07.scn
+dist_rtems_tests_DATA  = psx07.scn
+dist_rtems_tests_DATA += psx07.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

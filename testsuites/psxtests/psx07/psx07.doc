@@ -1,0 +1,75 @@
+#  COPYRIGHT (c) 1989-2009.
+#  On-Line Applications Research Corporation (OAR). 
+#  Copyright (c) 2013 Annelies Odermann <annelies.odermann@gmail.com>.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: psx07
+
+directives:
+  pthread_attr_destroy
+  pthread_attr_getdetachstate
+  pthread_attr_getinheritsched
+  pthread_attr_getschedparam
+  pthread_attr_getschedpolicy
+  pthread_attr_getscope
+  pthread_attr_getstackaddr
+  pthread_attr_getstacksize
+  pthread_attr_init
+  pthread_attr_setcputime
+  pthread_attr_setdetachstate
+  pthread_attr_setinheritsched
+  pthread_attr_setschedparam
+  pthread_attr_setschedpolicy
+  pthread_attr_setscope
+  pthread_attr_setstackaddr
+  pthread_attr_setstacksize
+  pthread_create
+  pthread_getschedparam
+  pthread_join
+  pthread_setschedparam
+  usleep
+
+Concepts:
++ Verifies that pthread_attr_init and pthread_attr_destroy work as
+expected with a variety of attributes, scopes, and schedulers
+
++ Ensures that pthread_create works as expected, and fails with a faulty
+stacksize or inherit scheduler
+
++ Verifies that pthread_attr_setstackaddr works as expected
+
++ Verifies that pthread_attr_getcputime and pthread_attr_setcputime work
+as expected with a variety of valid and invalid attributes and clocks
+
++ Verifies that pthread_attr_setinheritsched and
+pthread_attr_getinheritsched work as expected with a variety of attributes
+and schedules
+
++ Verifies that pthread_join works as expected
+
++ Verifies that pthead_attr_setscope and pthread_attr_getscope work as
+expected with a variety of attributes and scopes
+
++ Verifies that pthread_attr_setschedpolicy and pthread_attr_getschedpolcy
+work as expected with a variety of attributes and policies
+
++ Verifies that pthread_attr_setstacksize and pthread_attr_getstacksize
+work as expected with a variety of stack sizes and attributes
+
++ Verifies that pthread_attr_setstackaddr and pthread_attr_getstackaddr
+work as expected with a variety of attributes and stacks
+
++ Verifies that pthread_attr_setdetachstate and
+pthread_attr_getdetachstate work as expected with a variety of attributes
+and states
+
++ Verifies that pthread_attr_setschedparam and pthread_attr_getschedparam
+work as expected with a variety of attributes, threads, priorities,
+schedules, replenish periods, budgets, and policies
+
++ Verifies that usleep works as expected when executed by a child thread
