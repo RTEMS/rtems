@@ -250,13 +250,6 @@ void *POSIX_Init(
 
   sleep(1);
 
-  /*************** ERROR CASES  ***************/
-  puts("Call pthread_cleanup_push with NULL handler");
-  pthread_cleanup_push(NULL, NULL);
-
-  puts("Call pthread_cleanup_pop with no push");
-  pthread_cleanup_pop(1);
-
   /*************** END OF TEST *****************/
   puts( "*** END OF POSIX CLEANUP TEST ***\n" );
   rtems_test_exit(0);

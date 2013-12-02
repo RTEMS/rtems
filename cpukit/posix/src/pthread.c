@@ -200,7 +200,11 @@ static bool _POSIX_Threads_Create_extension(
   api->cancelation_requested = 0;
   api->cancelability_state = PTHREAD_CANCEL_ENABLE;
   api->cancelability_type = PTHREAD_CANCEL_DEFERRED;
+#ifndef HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT
   _Chain_Initialize_empty (&api->Cancellation_Handlers);
+#else /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
+  api->last_cleanup_context = NULL;
+#endif /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
 
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked

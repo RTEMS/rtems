@@ -19,16 +19,18 @@
 #endif
 
 #include <pthread.h>
-#include <errno.h>
 
-#include <rtems/system.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
+#include <rtems/posix/cancel.h>
+#include <rtems/posix/threadsup.h>
+
+#ifndef HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT
+
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/posix/cancel.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/threadsup.h>
 
 void _POSIX_Threads_cancel_run(
   Thread_Control *the_thread
@@ -57,3 +59,31 @@ void _POSIX_Threads_cancel_run(
     _Workspace_Free( handler );
   }
 }
+
+#else /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
+
+void _POSIX_Threads_cancel_run(
+  Thread_Control *the_thread
+)
+{
+  struct _pthread_cleanup_context *context;
+  POSIX_API_Control               *thread_support;
+
+  _Thread_Disable_dispatch();
+
+  thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  thread_support->cancelability_state = PTHREAD_CANCEL_DISABLE;
+
+  context = thread_support->last_cleanup_context;
+  thread_support->last_cleanup_context = NULL;
+
+  _Thread_Enable_dispatch();
+
+  while ( context != NULL ) {
+    ( *context->_routine )( context->_arg );
+
+    context = context->_previous;
+  }
+}
+
+#endif /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */

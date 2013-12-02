@@ -21,6 +21,7 @@
 
 #include <rtems/posix/threadsup.h>
 
+#ifndef HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT
 /**
  * This structure is used to manage the cancelation handlers.
  */
@@ -32,6 +33,7 @@ typedef struct {
   /** This field is the argument to the cancelation routine. */
   void       *arg;
 }  POSIX_Cancel_Handler_control;
+#endif /* HAVE_STRUCT__PTHREAD_CLEANUP_CONTEXT */
 
 /**
  * @brief POSIX run thread cancelation.

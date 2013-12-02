@@ -140,6 +140,7 @@ AC_CHECK_HEADER([pthread.h],[
   AC_CHECK_TYPES([pthread_rwlock_t])
   AC_CHECK_TYPES([pthread_barrier_t])
   AC_CHECK_TYPES([pthread_spinlock_t])
+  AC_CHECK_TYPES([struct _pthread_cleanup_context],[],[],[#include <pthread.h>])
 ])
 
 AC_CHECK_HEADER([signal.h],[
