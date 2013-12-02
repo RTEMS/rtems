@@ -1,4 +1,4 @@
-#include "console.inl"
+#include "../../shared/console/console.inl"
 #include <rtems/bspIo.h>
 #include <libcpu/stackTrace.h>
 

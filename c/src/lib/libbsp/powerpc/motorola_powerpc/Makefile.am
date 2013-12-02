@@ -52,7 +52,8 @@ libbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
 	../../powerpc/shared/startup/ppc_idle.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
-    ../../shared/gnatinstallhandler.c
+    ../../shared/gnatinstallhandler.c \
+    startup/bspreset.c
 
 
 # tod
@@ -75,7 +76,6 @@ libbsp_a_SOURCES += \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/inch.c \
-    ../../powerpc/shared/console/bspreset.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/keyboard.h \
     ../../powerpc/shared/console/uart.h
