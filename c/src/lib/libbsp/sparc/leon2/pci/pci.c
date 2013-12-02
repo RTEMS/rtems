@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief Basic PCI Io functions
+ */
+
 /*
  * pci.c :  this file contains basic PCI Io functions.
  *

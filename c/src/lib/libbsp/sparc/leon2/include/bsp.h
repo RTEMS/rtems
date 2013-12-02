@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @defgroup sparc_leon2 Sparc Leon2 Handler
+ * @ingroup bsp_kit
+ * @brief Handles Sparc Leon2 simulator
+ */
+
 /*  bsp.h
  *
  *  This include file contains all SPARC simulator definitions.

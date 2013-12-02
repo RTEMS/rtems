@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief TTY driver driver for the serial ports on the LEON console
+ */
+
 /*
  *  This file contains the TTY driver for the serial ports on the LEON.
  *

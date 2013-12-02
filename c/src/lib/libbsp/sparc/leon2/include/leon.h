@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @defgroup leon1 Leon-1 Handler
+ * @ingroup sparc_leon2
+ * @brief Handlers Leon-1
+ */
+
 /*  erc32.h
  *
  *  This include file contains information pertaining to the LEON-1.

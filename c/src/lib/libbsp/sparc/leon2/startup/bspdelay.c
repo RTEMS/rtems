@@ -1,7 +1,7 @@
 /**
- *  @file
- *
- *  LEON2 BSP Delay Method
+ * @file
+ * @ingroup sparc_leon2
+ * @brief LEON2 BSP Delay Method
  */
 
 /*

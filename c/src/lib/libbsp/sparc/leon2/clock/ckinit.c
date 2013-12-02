@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief Clock Tick Device Driver
+ */
+
 /*
  *  Clock Tick Device Driver
  *

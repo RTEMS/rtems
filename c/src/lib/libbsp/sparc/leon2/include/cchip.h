@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @defgroup cchip Companion Chip handler
+ * @ingroup sparc_leon2
+ * @brief Register all drivers supported by the Companion Chip board
+ */
+
 #ifndef __CCHIP_H__
 #define __CCHIP_H__
 

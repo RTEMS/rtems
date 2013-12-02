@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup leon2_rasta
+ * @brief GR-RASTA-IO PCI board driver
+ */
+
 /*
  *  GR-RASTA-IO PCI board driver
  *

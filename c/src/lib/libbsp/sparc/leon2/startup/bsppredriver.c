@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief Installs BSP pre-driver hook
+ */
+
 /*  Installs the BSP pre-driver hook
  *
  *  COPYRIGHT (c) 2011

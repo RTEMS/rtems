@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief Installs an interrupt vector on the SPARC simulator
+ */
+
 /*  set_vector
  *
  *  This routine installs an interrupt vector on the SPARC simulator.

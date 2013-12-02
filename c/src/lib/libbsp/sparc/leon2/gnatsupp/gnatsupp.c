@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief Support for gnat/rtems iterrupts and exception handling
+ */
+
 /*
  *
  * Support for gnat/rtems interrupts and exception handling.

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief SMC91111 Driver
+ */
+
 #include <rtems.h>
 
 #include <bsp.h>

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief LEON2 Cache Snooping Support
+ */
+
 /*
  *  LEON2 Cache Snooping Support
  *

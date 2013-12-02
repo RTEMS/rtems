@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief Implement a benchmark timer using timer 2
+ */
+
 /*  timer.c
  *
  *  This file implements a benchmark timer using timer 2.

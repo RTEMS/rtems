@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief LEON Spurious Trap Handler
+ */
+
 /*
  *  LEON Spurious Trap Handler
  *

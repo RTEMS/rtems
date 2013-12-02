@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief LEON2 Idle Thread 
+ */
+
 /*
  *  LEON2 Idle Thread with power-down function
  *

@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @defgroup leon2_rasta Rasta Handler
+ * @ingroup sparc_leon2
+ * @brief Handles Rasta
+ */
+
 #ifndef __RASTA_H__
 #define __RASTA_H__
 
