@@ -87,7 +87,7 @@ void rtems_bdpart_dump( const rtems_bdpart_partition *pt, size_t count)
     printf(
       " %10" PRIu32 " | %10" PRIu32 " |%52s\n",
       p->begin,
-      p->end,
+      p->end - 1U,
       type
     );
   }
