@@ -119,6 +119,7 @@ psxtmsleep02/Makefile
 psxtmthread01/Makefile
 psxtmthread02/Makefile
 psxtmthread03/Makefile
+psxtmthread04/Makefile
 psxtmthread05/Makefile
 psxtmthread06/Makefile
 ])

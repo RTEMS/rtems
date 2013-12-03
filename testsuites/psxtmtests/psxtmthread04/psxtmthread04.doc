@@ -1,0 +1,24 @@
+#  COPYRIGHT (c) 1989-2013.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ pthread_getschedparam
++ pthread_setschedparam - no thread switch
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxtmthread
+
+directives:
++ pthread_getschedparam
++ pthread_setschedparam
+
+concepts:
++ Benchmark the call pthread_getschedparam and pthread_setschedparam without 
+  triggering a context switch.

@@ -32,8 +32,8 @@
 "pthread_detach",,,
 "pthread_exit",,,
 "pthread_exit","psxtmthread03","psxtmtest_single","Yes"
-"pthread_getschedparam","psxtmthread04","psxtmtest_single w/multiple timings","No"
-"pthread_setschedparam - no thread switch","psxtmthread04","psxtmtest_single w/multiple timings","No"
+"pthread_getschedparam","psxtmthread04","psxtmtest_single w/multiple timings","Yes"
+"pthread_setschedparam - no thread switch","psxtmthread04","psxtmtest_single w/multiple timings","Yes"
 "pthread_setschedparam - lower own priority: preempt","psxtmthread05","psxtmtest_single","Yes"
 "pthread_setschedparam - raise other priority: preempt","psxtmthread06","psxtmtest_single","Yes"
 ,,,
