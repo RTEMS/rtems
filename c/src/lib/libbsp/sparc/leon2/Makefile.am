@@ -48,7 +48,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bsppredriver.c \
     startup/bspstart.c ../../sparc/shared/bsppretaskinghook.c \
-    ../../sparc/shared/bspgetworkarea.c ../../shared/bootcard.c \
+    ../../sparc/shared/startup/bspgetworkarea.c ../../shared/bootcard.c \
     ../../shared/sbrk.c startup/setvec.c startup/spurious.c startup/bspidle.c \
     ../../shared/bspinit.c startup/bspdelay.c \
     ../../sparc/shared/startup/early_malloc.c
