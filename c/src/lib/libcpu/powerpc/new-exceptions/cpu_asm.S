@@ -267,18 +267,19 @@ PROC (_CPU_Context_switch):
 	mfmsr	r5
 	mflr	r6
 	mfcr	r7
-#if defined(RTEMS_MULTIPROCESSING) || defined(RTEMS_SMP)
+
 	/*
 	 * We have to clear the reservation of the executing thread.  See also
-	 * Book E section 6.1.6.2 "Atomic Update Primitives".
+	 * Book E section 6.1.6.2 "Atomic Update Primitives".  Recent GCC
+	 * versions use atomic operations in the C++ library for example.
 	 */
-  #if PPC_CONTEXT_OFFSET_GPR1 != PPC_CONTEXT_CACHE_LINE_0 \
-    || !BSP_DATA_CACHE_ENABLED \
-    || PPC_CACHE_ALIGNMENT != 32
+#if PPC_CONTEXT_OFFSET_GPR1 != PPC_CONTEXT_CACHE_LINE_0 \
+  || !BSP_DATA_CACHE_ENABLED \
+  || PPC_CACHE_ALIGNMENT != 32
 	li	r10, PPC_CONTEXT_OFFSET_GPR1
-  #endif
-	stwcx.	r1, r3, r10
 #endif
+	stwcx.	r1, r3, r10
+
 	stw	r1, PPC_CONTEXT_OFFSET_GPR1(r3)
 	stw	r5, PPC_CONTEXT_OFFSET_MSR(r3)
 	stw	r6, PPC_CONTEXT_OFFSET_LR(r3)
