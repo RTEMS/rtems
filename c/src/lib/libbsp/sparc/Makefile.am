@@ -6,7 +6,7 @@ SUBDIRS = @RTEMS_BSP_FAMILY@
 EXTRA_DIST =
 
 EXTRA_DIST += shared/gnatcommon.c
-EXTRA_DIST += shared/start.S
+EXTRA_DIST += shared/start/start.S
 
 # Interrupt
 EXTRA_DIST += shared/irq/irq-shared.c
