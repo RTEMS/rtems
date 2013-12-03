@@ -44,7 +44,7 @@
 #define INDEX_HTML      "HTTP/1.1 200 OK\r\n" \
                         "Date: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
                         "Last-Modified: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-                        "Etag: \"21dae500.a2\"\r\n" \
+                        "Etag: \"21dae500.162\"\r\n" \
                         "Content-Type: text/html\r\n" \
                         "Content-Length: 162\r\n" \
                         "Connection: close\r\n" \
@@ -80,26 +80,18 @@ static void test_tarfs_load(void)
   printf ("successful\n");
 }
 
-typedef struct {
-  char *string;
-  int size;
-} printctx;
-
-static void *callback(enum mg_event event,
-    struct mg_connection *conn,
-    const struct mg_request_info *request_info)
+static int callback(struct mg_connection *conn)
 {
-  if (event == MG_NEW_REQUEST) {
-    int cbacktest = strncmp(request_info->uri, CBACKTEST_URI, sizeof(CBACKTEST_URI));
-    if (cbacktest == 0)
-    {
-      mg_write(conn, CBACKTEST_TXT, sizeof(CBACKTEST_TXT));
+  int cbacktest = strncmp(mg_get_request_info(conn)->uri, CBACKTEST_URI, sizeof(CBACKTEST_URI));
+  if (cbacktest == 0)
+  {
+    mg_write(conn, CBACKTEST_TXT, sizeof(CBACKTEST_TXT));
 
-      /* Mark as processed */
-      return "";
-    }
+    /* Mark as processed */
+    return 1;
   }
-  return NULL;
+
+  return 0;
 }
 
 static void test_mg_index_html(void)
@@ -172,25 +164,29 @@ static void test_mg_callback(void)
 
 static void test_mongoose(void)
 {
+  const struct mg_callbacks callbacks = {
+    .begin_request = callback
+  };
   const char *options[] = {
     "listening_ports", "80",
-    "document_root", "/www/",
+    "document_root", "/www",
     "num_threads", "1",
-    "max_request_size", "2048",
     "thread_stack_size", "16384",
     "thread_priority", "250",
     "thread_policy", "o",
     NULL};
+  const struct mg_callbacks callbacks2 = {
+    NULL
+  };
   const char *options2[] = {
     "listening_ports", "8080",
-    "document_root", "/www2/",
+    "document_root", "/www2",
     "num_threads", "1",
     "thread_stack_size", "16384",
-    "max_request_size", "2048",
     NULL};
 
-  struct mg_context *mg1 = mg_start(&callback, NULL, options);
-  struct mg_context *mg2 = mg_start(NULL, NULL, options2);
+  struct mg_context *mg1 = mg_start(&callbacks, NULL, options);
+  struct mg_context *mg2 = mg_start(&callbacks2, NULL, options2);
 
   test_mg_index_html();
   test_mg_callback();
