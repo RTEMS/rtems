@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon2
+ * @brief LEON2 Opencores Ethernet MAC Configuration Information
+ */
+
 /*
  *  LEON2 Opencores Ethernet MAC Configuration Information
  */

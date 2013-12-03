@@ -1,3 +1,9 @@
+/** 
+ * @file
+ * @ingroup cchip
+ * @bief Companion Chip PCI board driver
+ */
+
 /*
  *  GR-701 (Companion Chip) PCI board driver
  *
