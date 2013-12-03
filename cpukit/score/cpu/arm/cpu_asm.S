@@ -64,7 +64,7 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 
 /* Start restoring context */
 _restore:
-#ifdef RTEMS_SMP
+#ifdef ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 	clrex
 #endif
 

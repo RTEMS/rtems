@@ -41,6 +41,7 @@ extern "C" {
   || defined(__ARM_ARCH_7R__) \
   || defined(__ARM_ARCH_7M__)
   #define ARM_MULTILIB_HAS_WFI
+  #define ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 #endif
 
 #if defined(__ARM_NEON__)
