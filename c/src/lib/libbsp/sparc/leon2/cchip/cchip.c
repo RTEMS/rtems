@@ -1,7 +1,7 @@
 /** 
  * @file
  * @ingroup cchip
- * @bief Companion Chip PCI board driver
+ * @brief Companion Chip PCI board driver
  */
 
 /*
