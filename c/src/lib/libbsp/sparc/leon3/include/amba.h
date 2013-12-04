@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @defgroup amba AMBA Driver Handler
+ * @ingroup sparc_leon3
+ * @brief AMBA Plag & Play Bus Driver Macros
+ */
+
 /*
  *  AMBA Plag & Play Bus Driver Macros
  *

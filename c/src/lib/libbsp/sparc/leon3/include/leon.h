@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_leon3
+ * @brief LEON3 BSP data types and macros
+ */
+
 /*  leon.h
  *
  *  LEON3 BSP data types and macros.

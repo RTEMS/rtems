@@ -1,5 +1,8 @@
 /**
- * @defgroup sparc_leon3 Sparc Leon3 Handler
+ * @file
+ * @defgroup sparc_leon3 Sparc LEON3 Handler
+ * @ingroup bsp_kit
+ * @brief Handles Sparc LEON3 simulator
  */
 
 /*  bsp.h
