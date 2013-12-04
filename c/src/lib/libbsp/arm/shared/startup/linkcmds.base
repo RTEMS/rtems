@@ -260,20 +260,15 @@ SECTIONS {
 	.got : ALIGN_WITH_INPUT {
 		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.robsdsets : ALIGN_WITH_INPUT {
+	.rtemsroset : ALIGN_WITH_INPUT {
 		/* Special FreeBSD linker set sections */
 		__start_set_sysctl_set = .;
 		*(set_sysctl_*);
 		__stop_set_sysctl_set = .;
 		*(set_domain_*);
 		*(set_pseudo_*);
-		_bsd__start_set_modmetadata_set = .;
-		*(_bsd_set_modmetadata_set);
-		_bsd__stop_set_modmetadata_set = .;
-		_bsd__start_set_sysctl_set = .;
-		*(_bsd_set_sysctl_set);
-		_bsd__stop_set_sysctl_set = .;
 
+		KEEP (*(SORT(.rtemsroset.*)))
 		bsp_section_rodata_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
@@ -352,12 +347,8 @@ SECTIONS {
 	.data1 : ALIGN_WITH_INPUT {
 		*(.data1)
 	} > REGION_DATA AT > REGION_DATA_LOAD
-	.rwbsdsets : ALIGN_WITH_INPUT {
-		/* Special FreeBSD linker set sections */
-		_bsd__start_set_sysinit_set = .;
-		*(_bsd_set_sysinit_set);
-		_bsd__stop_set_sysinit_set = .;
-
+	.rtemsrwset : ALIGN_WITH_INPUT {
+		KEEP (*(SORT(.rtemsrwset.*)))
 		bsp_section_data_end = .;
 	} > REGION_DATA AT > REGION_DATA_LOAD
 	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
