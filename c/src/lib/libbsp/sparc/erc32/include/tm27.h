@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_erc32
+ * @brief Implementations for interrupt mechanisms for Time Test 27
+ */
+
 /*
  *  tm27.h
  *

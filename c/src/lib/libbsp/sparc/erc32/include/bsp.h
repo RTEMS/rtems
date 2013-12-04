@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @defgroup sparc_erc32 SPARC ERC32
+ * @ingroup bsp_kit
+ * @brief SPARC ERC32 BSP
+ */
+
 /*  bsp.h
  *
  *  This include file contains all SPARC simulator definitions.

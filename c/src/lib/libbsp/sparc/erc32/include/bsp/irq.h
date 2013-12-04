@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_erc32
+ * @brief ERC32 generic shared IRQ setup
+ */
+
 /* ERC32 generic shared IRQ setup
  *
  * Based on libbsp/shared/include/irq.h.

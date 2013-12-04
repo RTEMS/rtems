@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup sparc_erc32
+ * @brief Contains information pertaining to the ERC32
+ */
+
 /*  erc32.h
  *
  *  This include file contains information pertaining to the ERC32.
