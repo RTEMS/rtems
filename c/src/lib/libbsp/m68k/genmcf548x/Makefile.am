@@ -4,8 +4,6 @@ include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
 
-dist_project_lib_DATA = bsp_specs
-
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 
@@ -18,12 +16,14 @@ include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
-project_lib_DATA = start.$(OBJEXT)
 
+dist_project_lib_DATA = bsp_specs
+dist_project_lib_DATA += startup/linkcmds.m5484FireEngine.flash
+dist_project_lib_DATA += startup/linkcmds.COBRA5475
+dist_project_lib_DATA += startup/linkcmds.m5484FireEngine
+
+project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
-EXTRA_DIST = startup/linkcmds.m5484FireEngine.flash
-EXTRA_DIST += startup/linkcmds.COBRA5475
-EXTRA_DIST += startup/linkcmds.m5484FireEngine
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =

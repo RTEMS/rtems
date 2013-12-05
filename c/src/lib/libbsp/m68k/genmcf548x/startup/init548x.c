@@ -43,8 +43,11 @@
 |                                                                 |
 \*===============================================================*/
 
-#include <rtems.h>
 #include <bsp.h>
+
+#include <string.h>
+
+#include <bsp/linker-symbols.h>
 
 #if defined(HAS_LOW_LEVEL_INIT)
 #define SYSTEM_PERIOD			10  	/* system bus period in ns */
@@ -66,8 +69,6 @@ extern uint8_t _BssEnd[];
 extern uint8_t _BootFlashBase[];
 extern uint8_t _CodeFlashBase[];
 extern uint8_t RamBase[];
-extern uint32_t InterruptVectorTable[];
-extern uint32_t _VectorRam[];
 
 void gpio_init(void);
 void fbcs_init(void);
@@ -77,9 +78,6 @@ void mcf548x_init(void);
 
 void mcf548x_init(void)
     {
-    uint32_t n;
-    uint8_t *dp, *sp;
-
 #if defined(HAS_LOW_LEVEL_INIT)
     /* set XLB arbiter timeouts */
     MCF548X_XLB_ADRTO = 0x00000100;
@@ -93,36 +91,23 @@ void mcf548x_init(void)
     sdramc_init();
 #endif /* defined(HAS_LOW_LEVEL_INIT) */
 
-    /* Copy the vector table to RAM */
-    if (_VectorRam != InterruptVectorTable)
-    {
-	for( n = 0; n < 256; n++)
-	  {
-      _VectorRam[n] = InterruptVectorTable[n];
-	  }
+    /* Copy the vector table to RAM if necessary */
+    if (bsp_vector0_size == bsp_vector1_size) {
+      memcpy(bsp_vector1_begin, bsp_vector0_begin, (size_t) bsp_vector1_size);
+      m68k_set_vbr((uint32_t)bsp_vector1_begin);
     }
-
-    m68k_set_vbr((uint32_t)_VectorRam);
 
     /* Move initialized data from ROM to RAM. */
-    if (_DataRom != _DataRam)
-    {
-		n = _DataEnd - _DataRam;
-        sp = (uint8_t *)_DataRom;
-        dp = (uint8_t *)_DataRam;
-		while(n--)
-           *dp++ = *sp++;
-     }
-
-    /* Zero uninitialized data */
-    if (_BssStart != _BssEnd)
-    {
-		n = _BssEnd - _BssStart;
-        sp = (uint8_t *)_BssStart;
-        while (n--)
-            *sp++ = 0;
+    if (bsp_section_data_begin != bsp_section_data_load_begin) {
+      memcpy(
+        bsp_section_data_begin,
+        bsp_section_data_load_begin,
+        (size_t) bsp_section_data_size
+      );
     }
 
+    /* Zero uninitialized data */
+    memset(bsp_section_bss_begin, 0, (size_t) bsp_section_bss_size);
 }
 /********************************************************************/
 #if defined(HAS_LOW_LEVEL_INIT)

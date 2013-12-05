@@ -33,10 +33,6 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
-PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
-
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp.h
@@ -56,6 +52,22 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+$(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
+PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
+
+$(PROJECT_LIB)/linkcmds.m5484FireEngine.flash: startup/linkcmds.m5484FireEngine.flash $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.m5484FireEngine.flash
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.m5484FireEngine.flash
+
+$(PROJECT_LIB)/linkcmds.COBRA5475: startup/linkcmds.COBRA5475 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.COBRA5475
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.COBRA5475
+
+$(PROJECT_LIB)/linkcmds.m5484FireEngine: startup/linkcmds.m5484FireEngine $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.m5484FireEngine
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.m5484FireEngine
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)

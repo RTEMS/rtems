@@ -76,8 +76,6 @@ extern int rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config, int at
 /* define which port the console should use - all other ports are then defined as general purpose */
 #define CONSOLE_PORT        0
 
-#define RAM_END 0x4000000 /* 64 MB */
-
 /* functions */
 
 uint32_t get_CPU_clock_speed(void);

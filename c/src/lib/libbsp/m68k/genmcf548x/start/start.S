@@ -47,6 +47,7 @@
 | Includes                                                        |
 \*===============================================================*/
 #include <rtems/asm.h>
+#include <bsp/linker-symbols.h>
 
 /*===============================================================*\
 | External references                                             |
@@ -57,7 +58,6 @@
 .extern _CoreSramSize1
 .extern mcf548x_init
 .extern boot_card
-.extern _SpInit
 
 /*===============================================================*\
 | Global symbols                                                  |
@@ -75,7 +75,7 @@
 .section ".vectors","ax"  	     /* begin of vectors section */
 PUBLIC (InterruptVectorTable)
 SYM(InterruptVectorTable):
-INITSP:		.long	_SpInit		        /* Initial SP		  */
+INITSP:		.long	bsp_initstack_end	/* Initial SP		  */
 INITPC:		.long	start			/* Initial PC		  */
 vector002:	.long	asm_default_interrupt	/* Access Error		  */
 vector003:	.long	asm_default_interrupt	/* Address Error	  */
@@ -335,6 +335,7 @@ vector255:	.long	asm_default_interrupt
 /*===============================================================*\
 | Start of code                                                   |
 \*===============================================================*/
+.text
 PUBLIC (start)
 SYM(start):
     move.w	#0x3700,sr              /* disable interrupts */
@@ -410,7 +411,7 @@ SYM(start_init):
 
     jsr	    mcf548x_init		/* Initialize mcf548x peripherals */
 
-    move.l  #_SpInit,sp		        /* relocate sp */
+    move.l  #bsp_initstack_end,sp	/* relocate sp */
 
     clrl    d0          		/* clear d0 */
     movel   d0,a7@-                     /* command line == 0 */
