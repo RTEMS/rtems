@@ -389,7 +389,7 @@ uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
  * @param[in] max_held_buffers is the maximum number of buffers the RFS holds.
  *
  * @retval 0 Successful operation.
- * @retval error_code An error occurred.
+ * @retval -1 Error. See errno
  */
 int rtems_rfs_fs_open (const char*             name,
                        void*                   user,
@@ -403,7 +403,7 @@ int rtems_rfs_fs_open (const char*             name,
  * @param[in] fs is the file system data.
  *
  * @retval 0 Successful operation.
- * @retval error_code An error occurred.
+ * @retval -1 Error. See errno
  */
 int rtems_rfs_fs_close (rtems_rfs_file_system* fs);
 

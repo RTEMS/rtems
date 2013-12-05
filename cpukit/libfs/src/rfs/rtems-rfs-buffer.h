@@ -68,8 +68,8 @@ typedef struct _rtems_rfs_buffer
   size_t                 size;
   uint32_t               references;
 } rtems_rfs_buffer;
-#define rtems_rfs_buffer_io_request rtems_rfs_buffer_devceio_request
-#define rtems_rfs_buffer_io_release rtems_rfs_uffer_deviceio_release
+#define rtems_rfs_buffer_io_request rtems_rfs_buffer_deviceio_request
+#define rtems_rfs_buffer_io_release rtems_rfs_buffer_deviceio_release
 
 /**
  * Request a buffer from the device I/O.

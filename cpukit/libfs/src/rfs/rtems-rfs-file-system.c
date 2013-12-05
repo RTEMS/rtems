@@ -301,7 +301,6 @@ rtems_rfs_fs_open (const char*             name,
     return -1;
   }
 
-  errno = 0;
   return 0;
 }
 

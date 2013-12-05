@@ -467,15 +467,18 @@ rtems_rfs_write_root_dir (const char* name)
   rc = rtems_rfs_fs_open (name, NULL,
                           RTEMS_RFS_FS_FORCE_OPEN | RTEMS_RFS_FS_NO_LOCAL_CACHE,
                           0, &fs);
-  if (rc < 0)
+  if (rc != 0)
   {
+    rc = errno;
+
     printf ("rtems-rfs: format: file system open failed: %d: %s\n",
-            errno, strerror (errno));
-    return -1;
+            rc, strerror (rc));
+
+    return rc;
   }
 
   rc = rtems_rfs_inode_alloc (fs, RTEMS_RFS_ROOT_INO, &ino);
-  if (rc > 0)
+  if (rc != 0)
   {
     printf ("rtems-rfs: format: inode allocation failed: %d: %s\n",
             rc, strerror (rc));
@@ -487,11 +490,11 @@ rtems_rfs_write_root_dir (const char* name)
   {
     printf ("rtems-rfs: format: allocated inode not root ino: %" PRId32 "\n", ino);
     rtems_rfs_fs_close (fs);
-    return rc;
+    return EINVAL;
   }
 
   rc = rtems_rfs_inode_open (fs, ino, &inode, true);
-  if (rc > 0)
+  if (rc != 0)
   {
     printf ("rtems-rfs: format: inode open failed: %d: %s\n",
             rc, strerror (rc));
@@ -504,26 +507,32 @@ rtems_rfs_write_root_dir (const char* name)
                                    (RTEMS_RFS_S_IFDIR | RTEMS_RFS_S_IRWXU |
                                     RTEMS_RFS_S_IXGRP | RTEMS_RFS_S_IXOTH),
                                    0, 0);
-  if (rc > 0)
+  if (rc != 0)
     printf ("rtems-rfs: format: inode initialise failed: %d: %s\n",
             rc, strerror (rc));
 
   rc = rtems_rfs_dir_add_entry (fs, &inode, ".", 1, ino);
-  if (rc > 0)
+  if (rc != 0)
     printf ("rtems-rfs: format: directory add failed: %d: %s\n",
             rc, strerror (rc));
 
   rc = rtems_rfs_inode_close (fs, &inode);
-  if (rc > 0)
+  if (rc != 0)
     printf ("rtems-rfs: format: inode close failed: %d: %s\n",
             rc, strerror (rc));
 
   rc = rtems_rfs_fs_close (fs);
-  if (rc < 0)
-    printf ("rtems-rfs: format: file system close failed: %d: %s\n",
-            errno, strerror (errno));
+  if (rc != 0)
+  {
+    rc = errno;
 
-  return rc;
+    printf ("rtems-rfs: format: file system close failed: %d: %s\n",
+            rc, strerror (rc));
+
+    return rc;
+  }
+
+  return 0;
 }
 
 int
@@ -554,10 +563,12 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
    * Open the buffer interface.
    */
   rc = rtems_rfs_buffer_open (name, &fs);
-  if (rc > 0)
+  if (rc != 0)
   {
     printf ("rtems-rfs: format: buffer open failed: %d: %s\n",
             rc, strerror (rc));
+
+    errno = rc;
     return -1;
   }
 
@@ -568,6 +579,8 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
   {
     printf ("rtems-rfs: media block is invalid: %" PRIu32 "\n",
             rtems_rfs_fs_media_block_size (&fs));
+
+    errno = EINVAL;
     return -1;
   }
 
@@ -575,7 +588,10 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
    * Check the configuration data.
    */
   if (!rtems_rfs_check_config (&fs, config))
+  {
+    errno = EINVAL;
     return -1;
+  }
 
   if (config->verbose)
   {
@@ -604,40 +620,51 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
   }
 
   rc = rtems_rfs_buffer_setblksize (&fs, rtems_rfs_fs_block_size (&fs));
-  if (rc > 0)
+  if (rc != 0)
   {
     printf ("rtems-rfs: format: setting block size failed: %d: %s\n",
             rc, strerror (rc));
+
+    errno = rc;
     return -1;
   }
 
   if (!rtems_rfs_write_superblock (&fs))
   {
     printf ("rtems-rfs: format: superblock write failed\n");
+
+    errno = EIO;
     return -1;
   }
 
   for (group = 0; group < fs.group_count; group++)
     if (!rtems_rfs_write_group (&fs, group,
                                 config->initialise_inodes, config->verbose))
-      return -1;
+      {
+        errno = EIO;
+        return -1;
+      }
 
   if (config->verbose)
     printf ("\n");
 
   rc = rtems_rfs_buffer_close (&fs);
-  if (rc > 0)
+  if (rc != 0)
   {
     printf ("rtems-rfs: format: buffer close failed: %d: %s\n",
             rc, strerror (rc));
+
+    errno = rc;
     return -1;
   }
 
   rc = rtems_rfs_write_root_dir (name);
-  if (rc > 0)
+  if (rc != 0)
   {
     printf ("rtems-rfs: format: writing root dir failed: %d: %s\n",
             rc, strerror (rc));
+
+    errno = rc;
     return -1;
   }
 
