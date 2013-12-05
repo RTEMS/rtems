@@ -189,6 +189,24 @@ static const rtems_time_of_day problem_2106 = {
   .second = 16
 };
 
+static const rtems_time_of_day problem_2100 = {
+  .year = 2100,
+  .month = 2,
+  .day = 28,
+  .hour = 0,
+  .minute = 0,
+  .second = 0
+};
+
+static const rtems_time_of_day problem_2100_2 = {
+  .year = 2100,
+  .month = 2,
+  .day = 29,
+  .hour = 0,
+  .minute = 0,
+  .second = 0
+};
+
 static void test_tod_to_seconds(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -251,12 +269,26 @@ static void test_problem_year(void)
 #endif /* TEST_APPLICABLE */
 }
 
+static void test_leap_year(void)
+{
+    bool test_status;
+    const rtems_time_of_day *problem = &problem_2100;
+    const rtems_time_of_day *problem2 = &problem_2100_2;
+    // 2100 is not a leap year, so it should have 28 days
+    test_status = _TOD_Validate(problem);
+    rtems_test_assert(test_status == true);
+    test_status = _TOD_Validate(problem2);
+    rtems_test_assert(test_status == false);
+}
+
+
 rtems_task Init(rtems_task_argument argument)
 {
   puts("\n\n*** TEST 2038 ***");
 
   test_tod_to_seconds();
   test_problem_year();
+  test_leap_year();
 
   puts("*** END OF TEST 2038 ***");
 
