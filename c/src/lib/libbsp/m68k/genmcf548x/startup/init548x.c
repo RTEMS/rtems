@@ -77,7 +77,9 @@ void mcf548x_init(void);
 
 
 void mcf548x_init(void)
-    {
+{
+    size_t i;
+
 #if defined(HAS_LOW_LEVEL_INIT)
     /* set XLB arbiter timeouts */
     MCF548X_XLB_ADRTO = 0x00000100;
@@ -108,6 +110,12 @@ void mcf548x_init(void)
 
     /* Zero uninitialized data */
     memset(bsp_section_bss_begin, 0, (size_t) bsp_section_bss_size);
+
+    for (i = 8; i < RTEMS_ARRAY_SIZE(mcf548x_intc_icr_init_values); ++i) {
+      volatile uint8_t *icr = &MCF548X_INTC_ICR0;
+
+      icr[i] = mcf548x_intc_icr_init_values[i];
+    }
 }
 /********************************************************************/
 #if defined(HAS_LOW_LEVEL_INIT)

@@ -90,8 +90,6 @@
 #define Clock_driver_support_initialize_hardware()			\
   do {									\
     int level;								\
-    MCF548X_INTC_ICR54 =   MCF548X_INTC_ICRn_IL(SLT0_IRQ_LEVEL) |	\
-      MCF548X_INTC_ICRn_IP(SLT0_IRQ_PRIORITY);				\
     rtems_interrupt_disable( level );					\
     MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK54);		\
     rtems_interrupt_enable( level );					\

@@ -86,24 +86,8 @@ rtems_isr_entry set_vector(
   int                 type
 );
 
-/*
- * Interrupt assignments
- *  Highest-priority listed first
- */
-#define SLT0_IRQ_LEVEL      4
-#define SLT0_IRQ_PRIORITY   0
-
-#define PSC0_IRQ_LEVEL      3
-#define PSC0_IRQ_PRIORITY   7
-#define PSC1_IRQ_LEVEL      3
-#define PSC1_IRQ_PRIORITY   6
-#define PSC2_IRQ_LEVEL      3
-#define PSC2_IRQ_PRIORITY   5
-#define PSC3_IRQ_LEVEL      3
-#define PSC3_IRQ_PRIORITY   4
-
-#define FEC_IRQ_LEVEL       2
-#define FEC_IRQ_PRIORITY    3
+/* Initial values for the interrupt level and priority registers (INTC_ICRn) */
+extern const uint8_t mcf548x_intc_icr_init_values[64];
 
 /*
  * Network driver configuration

@@ -1288,10 +1288,6 @@ static void mcf548x_fec_init(void *arg)
 	rtems_panic ("Can't attach MFC54xx FEX interrupt handler\n");
       }
 
-      MCF548X_INTC_ICRn(MCF548X_FEC_IRQ_VECTOR(chan) % 64) =
-	MCF548X_INTC_ICRn_IL(FEC_IRQ_LEVEL) |
-	MCF548X_INTC_ICRn_IP(FEC_IRQ_PRIORITY);
-
       MCF548X_INTC_IMRH &= ~(1 << (MCF548X_FEC_IRQ_VECTOR(chan) % 32));
 
       MCF548X_FEC_EIMR(chan) = FEC_INTR_MASK_USED;

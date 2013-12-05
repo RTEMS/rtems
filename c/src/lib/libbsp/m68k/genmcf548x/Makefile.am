@@ -55,6 +55,7 @@ libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq.c
+libbsp_a_SOURCES += irq/intc-icr-init-values.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

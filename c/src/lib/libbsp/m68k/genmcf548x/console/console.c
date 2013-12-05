@@ -487,26 +487,18 @@ IntUartInitialize(void)
 		rtems_interrupt_disable(level);
         switch(chan) {
         case 0:
-            MCF548X_INTC_ICR35 =   MCF548X_INTC_ICRn_IL(PSC0_IRQ_LEVEL) |
-                               MCF548X_INTC_ICRn_IP(PSC0_IRQ_PRIORITY);
             MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK35);
             break;
 
         case 1:
-            MCF548X_INTC_ICR34 =   MCF548X_INTC_ICRn_IL(PSC1_IRQ_LEVEL) |
-                               MCF548X_INTC_ICRn_IP(PSC1_IRQ_PRIORITY);
             MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK34);
             break;
 
         case 2:
-            MCF548X_INTC_ICR33 =   MCF548X_INTC_ICRn_IL(PSC2_IRQ_LEVEL) |
-                               MCF548X_INTC_ICRn_IP(PSC2_IRQ_PRIORITY);
             MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK33);
             break;
 
         case 3:
-            MCF548X_INTC_ICR32 =   MCF548X_INTC_ICRn_IL(PSC3_IRQ_LEVEL) |
-                               MCF548X_INTC_ICRn_IP(PSC3_IRQ_PRIORITY);
             MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK32);
             break;
         }
