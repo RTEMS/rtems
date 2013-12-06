@@ -1,6 +1,12 @@
- /*
- *  Macros used for brm controller
- *
+/**
+ * @file
+ * @ingroup sparc_bsp
+ * @defgroup 1553 B1553BRM
+ * @ingroup 1553
+ * @brief Macros used for brm controller
+ */
+
+/*
  *  COPYRIGHT (c) 2006.
  *  Gaisler Research
  *

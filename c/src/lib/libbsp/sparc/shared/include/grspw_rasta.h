@@ -1,6 +1,10 @@
- /*
- *  Macros used for RASTA PCI GRSPW controller
- *
+/**
+ * @file
+ * @ingroup spw
+ * @brief Macros used for RASTA PCI GRSPW controller
+ */
+
+/*
  *  COPYRIGHT (c) 2006.
  *  Gaisler Research
  *

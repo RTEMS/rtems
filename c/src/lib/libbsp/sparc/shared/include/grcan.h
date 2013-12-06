@@ -1,6 +1,12 @@
+/**
+ * @file
+ * @ingroup sparc_bsp
+ * @defgroup can GRCAN
+ * @ingroup can
+ * @brief Macros used for grcan controller
+ */
+
 /*
- *  Macros used for grcan controller
- *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
  *

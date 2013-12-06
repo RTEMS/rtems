@@ -1,3 +1,11 @@
+/**
+ * @file
+ * @ingroup bsp_kit
+ * @defgroup sparc_bsp SPARC
+ * @ingroup sparc_bsp
+ * @brief Debug Definitions
+ */
+
 #ifndef __DEBUG_DEFS_H__
 #define __DEBUG_DEFS_H__
 

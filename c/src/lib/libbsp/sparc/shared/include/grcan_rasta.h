@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @ingroup can
+ * @brief Registers the GRCAN for RASTA
+ */
+
 #ifndef __GRCAN_RASTA_H__
 #define __GRCAN_RASTA_H__
 

@@ -1,6 +1,12 @@
+/**
+ * @file
+ * @ingroup sparc_bsp
+ * @defgroup spw SpaceWire
+ * @ingroup spw
+ * @brief Macros used for Spacewire bus
+ */
+
 /*
- *  Macros used for Spacewire bus
- *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
  *

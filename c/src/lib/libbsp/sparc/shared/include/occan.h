@@ -1,5 +1,10 @@
-/*  Gaisler wrapper to OpenCores CAN, driver interface
- *
+/**
+ * @file
+ * @ingroup can
+ * @brief Gaisler wrapper to OpenCores CAN - driver interface
+ */
+
+/*
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research.
  *

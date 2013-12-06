@@ -1,6 +1,10 @@
+/**
+ * @file
+ * @ingroup amba
+ * @brief Common GRLIB AMBA Core Register definitions
+ */
+
 /*
- *  Common GRLIB AMBA Core Register definitions
- *
  *  COPYRIGHT (c) 2012
  *  Aeroflex Gaisler
  *

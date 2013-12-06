@@ -1,6 +1,12 @@
+/**
+ * @file
+ * @ingroup sparc_bsp
+ * @defgroup pci PCI
+ * @ingroup pci
+ * @brief PCI defines and function prototypes
+ */
+
 /*
- *
- *	PCI defines and function prototypes
  *	Copyright 1994, Drew Eckhardt
  *	Copyright 1997, 1998 Martin Mares <mj@atrey.karlin.mff.cuni.cz>
  *

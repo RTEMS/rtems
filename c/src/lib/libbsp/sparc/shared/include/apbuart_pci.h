@@ -1,6 +1,10 @@
+/**
+ * @file
+ * @ingroup uart
+ * @brief APBUART via PCI - driver interface
+ */
+
 /*
- *  APBUART via PCI - driver interface
- *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
  *

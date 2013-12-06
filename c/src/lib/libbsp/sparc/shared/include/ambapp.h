@@ -1,6 +1,12 @@
+/**
+ * @file
+ * @ingroup sparc_bsp
+ * @defgroup amba AMBA
+ * @ingroup amba
+ * @brief AMBA Plug &Play routines
+ */
+
 /*
- *  AMBA Plug & Play routines
- *
  *  COPYRIGHT (c) 2009.
  *  Aeroflex Gaisler.
  *

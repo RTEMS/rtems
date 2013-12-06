@@ -1,6 +1,10 @@
- /*
- *  OC_CAN controller via PCI - driver interface
- *
+/**
+ * @file
+ * @ingroup can
+ * @brief OC_CAN controller via PCI - driver interface
+ */
+
+/*
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
  *

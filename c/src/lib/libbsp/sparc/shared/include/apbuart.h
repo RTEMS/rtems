@@ -1,6 +1,12 @@
+/**
+ * @file
+ * @ingroup sparc_bsp
+ * @defgroup uart UART
+ * @ingroup uart
+ * @brief Driver interface for APBUART
+ */
+
 /*
- *  Driver interface for APBUART
- *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
  *

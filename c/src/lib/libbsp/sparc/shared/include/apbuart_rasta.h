@@ -1,6 +1,10 @@
+/**
+ * @file
+ * @ingroup uart
+ * @brief APBUART RASTA via PCI - driver interface
+ */
+
 /*
- *  APBUART RASTA via PCI - driver interface
- *
  *  COPYRIGHT (c) 2007.
  *  Gaisler Research
  *
