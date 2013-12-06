@@ -217,6 +217,30 @@ RTEMS_INLINE_ROUTINE bool rtems_are_statuses_equal(
    return (code1 == code2);
 }
 
+/**
+ *  @brief RTEMS Status Code to Errno Mapping Function
+ *
+ *  This function recieves an RTEMS status code and returns an
+ *  errno error code. The retval values show the mappings between
+ *  rtems_status_codes and errno error codes.
+ *
+ *  @retval 0 RTEMS_SUCCESSFUL
+ *  @retval EIO RTEMS_TASK_EXITED, RTEMS_MP_NOT_CONFIGURED, RTEMS_INVALID_ID,
+ *   RTEMS_TOO_MANY, RTEMS_OBJECT_WAS_DELETED, RTEMS_INVALID_SIZE,
+ *   RTEMS_INVALID_ADDRESS, RTEMS_NOT_DEFINED, RTEMS_INCORRECT_STATE,
+ *   RTEMS_ILLEGAL_ON_SELF, RTEMS_ILLEGAL_ON_REMOTE_OBJECT,
+ *   RTEMS_CALLED_FROM_ISR, RTEMS_INVALID_PRIORITY, RTEMS_INTERNAL_ERROR,
+ *   RTEMS_IO_ERROR, RTEMS_PROXY_BLOCKING
+ *  @retval EINVAL RTEMS_INVALID_NAME, RTEMS_INVALID_CLOCK, RTEMS_INVALID_NODE
+ *  @retval ETIMEDOUT RTEMS_TIMEOUT
+ *  @retval EBADF RTEMS_INVALID_NUMBER
+ *  @retval EBUSY RTEMS_RESOURCE_IN_USE
+ *  @retval ENODEV RTEMS_UNSATISFIED
+ *  @retval ENOSYS RTEMS_NOT_IMPLEMENTED, RTEMS_NOT_CONFIGURED
+ *  @retval ENOMEM RTEMS_NO_MEMORY
+ */
+int rtems_status_code_to_errno(rtems_status_code sc);
+
 /**@}*/
 
 #ifdef __cplusplus

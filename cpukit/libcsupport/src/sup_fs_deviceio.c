@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/deviceio.h>
+#include <rtems/rtems/status.h>
 
 int rtems_deviceio_open(
   rtems_libio_t *iop,
@@ -38,7 +39,7 @@ int rtems_deviceio_open(
 
   status = rtems_io_open( major, minor, &args );
 
-  return rtems_deviceio_errno( status );
+  return rtems_status_code_to_errno( status );
 }
 
 int rtems_deviceio_close(
@@ -56,7 +57,7 @@ int rtems_deviceio_close(
 
   status = rtems_io_close( major, minor, &args );
 
-  return rtems_deviceio_errno( status );
+  return rtems_status_code_to_errno( status );
 }
 
 ssize_t rtems_deviceio_read(
@@ -83,7 +84,7 @@ ssize_t rtems_deviceio_read(
 
     return (ssize_t) args.bytes_moved;
   } else {
-    return rtems_deviceio_errno( status );
+    return rtems_status_code_to_errno( status );
   }
 }
 
@@ -111,7 +112,7 @@ ssize_t rtems_deviceio_write(
 
     return (ssize_t) args.bytes_moved;
   } else {
-    return rtems_deviceio_errno( status );
+    return rtems_status_code_to_errno( status );
   }
 }
 
@@ -134,6 +135,6 @@ int rtems_deviceio_control(
   if ( status == RTEMS_SUCCESSFUL ) {
     return args.ioctl_return;
   } else {
-    return rtems_deviceio_errno(status);
+    return rtems_status_code_to_errno(status);
   }
 }

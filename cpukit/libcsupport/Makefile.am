@@ -136,7 +136,6 @@ libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/sup_fs_mount_iterate.c \
     src/sup_fs_node_type.c \
     src/sup_fs_deviceio.c \
-    src/sup_fs_deviceerrno.c \
     src/clonenode.c \
     src/freenode.c \
     src/resource_snapshot.c \

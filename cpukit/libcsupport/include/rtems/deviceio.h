@@ -39,8 +39,6 @@ extern "C" {
  * This file contains the set of handlers used to map operations on
  * IMFS device nodes onto calls to the RTEMS Classic API IO Manager.
  */
-int rtems_deviceio_errno( rtems_status_code status );
-
 int rtems_deviceio_open(
   rtems_libio_t *iop,
   const char *path,
