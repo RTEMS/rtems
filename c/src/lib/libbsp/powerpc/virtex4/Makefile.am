@@ -40,7 +40,7 @@ libbsp_a_SOURCES = startup/bspclean.c \
                    ../shared/src/memcpy.c
 
 # start
-libbsp_a_SOURCES += startup/start.S
+libbsp_a_SOURCES += start/start.S
 
 # console
 libbsp_a_SOURCES += startup/dummy_console.c \
