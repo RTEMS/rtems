@@ -180,6 +180,7 @@ spmountmgr01/Makefile
 spnotepad01/Makefile
 spnsext01/Makefile
 spobjgetnext/Makefile
+sppagesize/Makefile
 spprintk/Makefile
 spprivenv01/Makefile
 spqreslib/Makefile
