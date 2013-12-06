@@ -39,7 +39,7 @@ libbsp_a_SOURCES = startup/bspclean.c \
                    ../shared/src/memcpy.c
 
 # start
-libbsp_a_SOURCES += startup/start.S
+libbsp_a_SOURCES += start/start.S
 
 # clock & timer
 libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
