@@ -50,6 +50,7 @@
 #include <net/if_var.h>
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <mcf548x/mcf548x.h>
 #include <rtems/rtems_mii_ioctl.h>
 #include <errno.h>
@@ -1288,7 +1289,7 @@ static void mcf548x_fec_init(void *arg)
 	rtems_panic ("Can't attach MFC54xx FEX interrupt handler\n");
       }
 
-      MCF548X_INTC_IMRH &= ~(1 << (MCF548X_FEC_IRQ_VECTOR(chan) % 32));
+      bsp_interrupt_vector_enable(MCF548X_IRQ_FEC(chan));
 
       MCF548X_FEC_EIMR(chan) = FEC_INTR_MASK_USED;
       mcf548x_fec_rx_bd_init(sc);

@@ -50,12 +50,13 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <mcf548x/mcf548x.h>
 
 /*
  * Use SLT 0
  */
-#define CLOCK_VECTOR (64+54)
+#define CLOCK_IRQ MCF548X_IRQ_SLT0
 
 /*
  * Periodic interval timer interrupt handler
@@ -70,7 +71,7 @@
  */
 #define Clock_driver_support_install_isr( _new, _old )                   \
     do {                                                                 \
-        _old = (rtems_isr_entry)set_vector(_new, CLOCK_VECTOR, 1);       \
+        _old = (rtems_isr_entry)set_vector(_new, CLOCK_IRQ + 64, 1);     \
     } while(0)
 
 /*
@@ -89,10 +90,7 @@
  */
 #define Clock_driver_support_initialize_hardware()			\
   do {									\
-    int level;								\
-    rtems_interrupt_disable( level );					\
-    MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK54);		\
-    rtems_interrupt_enable( level );					\
+    bsp_interrupt_vector_enable(CLOCK_IRQ);				\
     MCF548X_SLT_SLTCNT0 = get_CPU_clock_speed()				\
       / 1000								\
       * rtems_configuration_get_microseconds_per_tick()			\

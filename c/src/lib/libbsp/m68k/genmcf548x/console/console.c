@@ -56,6 +56,7 @@
 #include <rtems/termiostypes.h>
 #include <termios.h>
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <malloc.h>
 #include <rtems/mw_uid.h>
 
@@ -483,27 +484,8 @@ IntUartInitialize(void)
 		/* set uart default values */
 		IntUartSetAttributes(chan, NULL);
 
-        /* unmask interrupt */
-		rtems_interrupt_disable(level);
-        switch(chan) {
-        case 0:
-            MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK35);
-            break;
-
-        case 1:
-            MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK34);
-            break;
-
-        case 2:
-            MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK33);
-            break;
-
-        case 3:
-            MCF548X_INTC_IMRH &= ~(MCF548X_INTC_IMRH_INT_MASK32);
-            break;
-        }
-		rtems_interrupt_enable(level);
-
+		/* unmask interrupt */
+		bsp_interrupt_vector_enable(MCF548X_IRQ_PSC(chan));
 	} /* of chan loop */
 
 
