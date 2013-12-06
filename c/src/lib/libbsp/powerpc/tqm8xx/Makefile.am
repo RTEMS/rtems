@@ -25,7 +25,7 @@ include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
 EXTRA_DIST =
 
 noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = startup/start.S
+libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
