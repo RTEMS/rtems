@@ -1,6 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
- *  On-Line Applications Research Corporation (OAR).
+ *  Copyright (c) 2013 Chirayu Desai <cdesai@cyanogenmod.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
