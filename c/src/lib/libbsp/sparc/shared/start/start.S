@@ -1,6 +1,4 @@
 /**
- *  @file
- *
  *  Common start code for SPARC.
  *
  *  This is based on the file srt0.s provided with the binary

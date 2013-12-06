@@ -1,7 +1,8 @@
 /**
  * @file
+ * @ingroup sparc_bsp
  * @defgroup sparc_erc32 SPARC ERC32
- * @ingroup bsp_kit
+ * @ingroup sparc_erc32
  * @brief SPARC ERC32 BSP
  */
 

@@ -1,7 +1,8 @@
 /**
  * @file
- * @defgroup sparc_leon3 Sparc LEON3 Handler
- * @ingroup bsp_kit
+ * @ingroup sparc_bsp
+ * @defgroup sparc_leon3 SPARC LEON3
+ * @ingroup sparc_leon3
  * @brief SPARC LEON3 BSP
  */
 
