@@ -1,7 +1,6 @@
 *** TEST TERMIOS 01 ***
 Test termios_baud2index...
 termios_baud_to_index(-2) - NOT OK
-termios_baud_to_index(572) - NOT OK
 termios_baud_to_index(B0) - OK
 termios_baud_to_index(B50) - OK
 termios_baud_to_index(B75) - OK
@@ -25,7 +24,6 @@ termios_baud_to_index(B460800) - OK
 
 Test termios_baud2number...
 termios_baud_to_number(-2) - NOT OK
-termios_baud_to_number(572) - NOT OK
 termios_baud_to_number(B0) - OK
 termios_baud_to_number(B50) - OK
 termios_baud_to_number(B75) - OK
@@ -49,7 +47,6 @@ termios_baud_to_number(B460800) - OK
 
 Test termios_number_to_baud...
 termios_number_to_baud(-2) - NOT OK
-termios_number_to_baud(572) - NOT OK
 termios_number_to_baud(B0) - OK
 termios_number_to_baud(B50) - OK
 termios_number_to_baud(B75) - OK
@@ -78,6 +75,7 @@ Init - open - /dev/test - OK
 Termios_test_driver - rtems_set_initial_baud - bad baud - OK
 Termios_test_driver - rtems_set_initial_baud - 38400 - OK
 tcsetattr - invalid operation - ENOTSUP
+cfmakeraw - OK
 
 tcsetattr - drain - OK
 set_attributes - B0 5-NONE-1
@@ -301,6 +299,47 @@ cfsetispeed(B230400) - OK
 cfgetispeed(B230400) - OK
 cfsetispeed(B460800) - OK
 cfgetispeed(B460800) - OK
+cfsetspeed(BAD BAUD) - EINVAL
+cfsetspeed(B0) - OK
+cfgetspeed(B0) - checking both inspeed and outspeed - OK
+cfsetspeed(B50) - OK
+cfgetspeed(B50) - checking both inspeed and outspeed - OK
+cfsetspeed(B75) - OK
+cfgetspeed(B75) - checking both inspeed and outspeed - OK
+cfsetspeed(B110) - OK
+cfgetspeed(B110) - checking both inspeed and outspeed - OK
+cfsetspeed(B134) - OK
+cfgetspeed(B134) - checking both inspeed and outspeed - OK
+cfsetspeed(B150) - OK
+cfgetspeed(B150) - checking both inspeed and outspeed - OK
+cfsetspeed(B200) - OK
+cfgetspeed(B200) - checking both inspeed and outspeed - OK
+cfsetspeed(B300) - OK
+cfgetspeed(B300) - checking both inspeed and outspeed - OK
+cfsetspeed(B600) - OK
+cfgetspeed(B600) - checking both inspeed and outspeed - OK
+cfsetspeed(B1200) - OK
+cfgetspeed(B1200) - checking both inspeed and outspeed - OK
+cfsetspeed(B1800) - OK
+cfgetspeed(B1800) - checking both inspeed and outspeed - OK
+cfsetspeed(B2400) - OK
+cfgetspeed(B2400) - checking both inspeed and outspeed - OK
+cfsetspeed(B4800) - OK
+cfgetspeed(B4800) - checking both inspeed and outspeed - OK
+cfsetspeed(B9600) - OK
+cfgetspeed(B9600) - checking both inspeed and outspeed - OK
+cfsetspeed(B19200) - OK
+cfgetspeed(B19200) - checking both inspeed and outspeed - OK
+cfsetspeed(B38400) - OK
+cfgetspeed(B38400) - checking both inspeed and outspeed - OK
+cfsetspeed(B57600) - OK
+cfgetspeed(B57600) - checking both inspeed and outspeed - OK
+cfsetspeed(B115200) - OK
+cfgetspeed(B115200) - checking both inspeed and outspeed - OK
+cfsetspeed(B230400) - OK
+cfgetspeed(B230400) - checking both inspeed and outspeed - OK
+cfsetspeed(B460800) - OK
+cfgetspeed(B460800) - checking both inspeed and outspeed - OK
 Init - close - /dev/test - OK
 Multiple open of the device
 Termios_test_driver - rtems_set_initial_baud - bad baud - OK

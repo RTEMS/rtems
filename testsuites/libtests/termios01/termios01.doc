@@ -20,6 +20,10 @@ directives:
   rtems_termios_open
   rtems_termios_close
   rtems_termios_set_initial_baud
+  cfmakeraw
+  cfsetspeed
+  cfsetispeed
+  cfsetospeed
 
 concepts:
 
