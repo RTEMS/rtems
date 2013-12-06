@@ -48,7 +48,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppretaskinghook.c ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c \
     startup/imbx8xx.c startup/mmutlbtab.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/start.S
+    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c start/start.S
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
