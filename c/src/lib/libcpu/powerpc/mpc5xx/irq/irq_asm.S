@@ -110,9 +110,9 @@ SYM (dispatch_irq_handler):
 	addi	r14, r1, 0
 
 	/*
-	 * store part of _Thread_Dispatch_disable_level address in R15
+	 * store part of THREAD_DISPATCH_DISABLE_LEVEL address in R15
 	 */
-	addis r15, 0, _Thread_Dispatch_disable_level@ha
+	addis r15, 0, THREAD_DISPATCH_DISABLE_LEVEL@ha
 
 	/*
 	 * Retrieve current nesting level from _ISR_Nest_level
@@ -135,9 +135,9 @@ nested:
 	addi	r3, r3, 1
 
 	/*
-	 * Start Incrementing _Thread_Dispatch_disable_level R4 = _Thread_Dispatch_disable_level
+	 * Start Incrementing THREAD_DISPATCH_DISABLE_LEVEL R4 = THREAD_DISPATCH_DISABLE_LEVEL
 	 */
-	lwz	r6, _Thread_Dispatch_disable_level@l(r15)
+	lwz	r6, THREAD_DISPATCH_DISABLE_LEVEL@l(r15)
 
 	/* store new nesting level in _ISR_Nest_level */
 	stw	r3, ISR_NEST_LEVEL@l(r7)
@@ -145,9 +145,9 @@ nested:
 	addi	r6, r6, 1
 
 	/*
-	 * store new _Thread_Dispatch_disable_level value
+	 * store new THREAD_DISPATCH_DISABLE_LEVEL value
 	 */
-	stw	r6, _Thread_Dispatch_disable_level@l(r15)
+	stw	r6, THREAD_DISPATCH_DISABLE_LEVEL@l(r15)
 
 	/*
 	 * We are now running on the interrupt stack. External and decrementer
@@ -167,21 +167,21 @@ nested:
 	/*
 	 * start decrementing nesting level. Note : do not test result against 0
 	 * value as an easy exit condition because if interrupt nesting level > 1
-	 * then _Thread_Dispatch_disable_level > 1
+	 * then THREAD_DISPATCH_DISABLE_LEVEL > 1
 	 */
 	lis		r7, ISR_NEST_LEVEL@ha
 	lwz		r4, ISR_NEST_LEVEL@l(r7)
 
 	/*
-	 * start decrementing _Thread_Dispatch_disable_level
+	 * start decrementing THREAD_DISPATCH_DISABLE_LEVEL
 	 */
-	lwz	r3,_Thread_Dispatch_disable_level@l(r15)
+	lwz	r3,THREAD_DISPATCH_DISABLE_LEVEL@l(r15)
 
 	addi	r4, r4, -1	/* Continue decrementing nesting level */
-	addi	r3, r3, -1	/* Continue decrementing _Thread_Dispatch_disable_level */
+	addi	r3, r3, -1	/* Continue decrementing THREAD_DISPATCH_DISABLE_LEVEL */
 
 	stw	r4, ISR_NEST_LEVEL@l(r7) /* End decrementing nesting level */
-	stw	r3,_Thread_Dispatch_disable_level@l(r15) /* End decrementing _Thread_Dispatch_disable_level */
+	stw	r3,THREAD_DISPATCH_DISABLE_LEVEL@l(r15) /* End decrementing THREAD_DISPATCH_DISABLE_LEVEL */
 
 	cmpwi	r3, 0
 
@@ -190,11 +190,11 @@ nested:
 	 * contention. Could have been done before...)
 	 */
 	addi	r1, r14, 0
-	bne	easy_exit /* if (_Thread_Dispatch_disable_level != 0) goto easy_exit */
+	bne	easy_exit /* if (THREAD_DISPATCH_DISABLE_LEVEL != 0) goto easy_exit */
 
 	/*
 	 * Here we are running again on the thread system stack.
-	 * We have interrupt nesting level = _Thread_Dispatch_disable_level = 0.
+	 * We have interrupt nesting level = THREAD_DISPATCH_DISABLE_LEVEL = 0.
 	 * Interrupt are still disabled. Time to check if scheduler request to
 	 * do something with the current thread...
 	 */
