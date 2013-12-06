@@ -209,6 +209,8 @@ speed_t	cfgetospeed(const struct termios *tp);
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);
 int	cfsetispeed(struct termios *tp, speed_t speed);
+void    cfmakeraw(struct termios *tp);
+int     cfsetspeed(struct termios *tp, speed_t speed);
 
 /** @} */ 
 

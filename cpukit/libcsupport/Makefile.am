@@ -64,7 +64,8 @@ TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/tcflow.c src/tcflush.c src/tcgetpgrp.c src/tcsendbreak.c \
     src/tcsetpgrp.c src/termios.c src/termiosinitialize.c \
     src/termios_baud2index.c src/termios_baud2num.c src/termios_num2baud.c \
-    src/termios_setinitialbaud.c src/termios_baudtable.c
+    src/termios_setinitialbaud.c src/termios_baudtable.c src/cfsetspeed.c \
+    src/cfmakeraw.c
 
 SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/write_r.c \
