@@ -63,7 +63,7 @@ void _BSP_Fatal_error(unsigned int v)
  *  function defined in rtems/c/src/lib/libbsp/shared/main.c. That function
  *  does some of the board independent initialization. It is called from the
  *  SS555 entry point _start() defined in
- *  rtems/c/src/lib/libbsp/powerpc/ss555/startup/start.S
+ *  rtems/c/src/lib/libbsp/powerpc/ss555/start/start.S
  *
  *  _start() has set up a stack, has zeroed the .bss section, has set up the
  *  .data section from contents stored in ROM, has turned off interrupts,
