@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -69,7 +69,7 @@ rtems_task Init(
   puts( "\n\n*** TIME TEST 30 ***" );
 
   rtems_time_test_measure_operation(
-    "rtems_barrier_create",
+    "rtems_barrier_create: only case",
     benchmark_barrier_create,
     NULL,
     OPERATION_COUNT,
@@ -77,7 +77,7 @@ rtems_task Init(
   );
   
   rtems_time_test_measure_operation(
-    "rtems_barrier_ident",
+    "rtems_barrier_ident: only case",
     benchmark_barrier_ident,
     NULL,
     OPERATION_COUNT,
@@ -85,7 +85,7 @@ rtems_task Init(
   );
   
   rtems_time_test_measure_operation(
-    "rtems_barrier_delete",
+    "rtems_barrier_delete: only case",
     benchmark_barrier_delete,
     NULL,
     OPERATION_COUNT,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -109,7 +109,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_partition_create",
+    "rtems_partition_create: only case",
     end_time,
     1,
     0,
@@ -130,7 +130,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_create",
+    "rtems_region_create: only case",
     end_time,
     1,
     0,
@@ -181,7 +181,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_partition_return_buffer",
+    "rtems_partition_return_buffer: only case",
     end_time,
     1,
     0,
@@ -203,7 +203,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_partition_delete",
+    "rtems_partition_delete: only case",
     end_time,
     1,
     0,
@@ -248,7 +248,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_get_segment: not available -- NO_WAIT",
+    "rtems_region_get_segment: not available NO_WAIT",
     end_time,
     1,
     0,
@@ -293,7 +293,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_return_segment: task readied -- preempts caller",
+    "rtems_region_return_segment: task readied preempts caller",
     end_time,
     1,
     0,
@@ -342,7 +342,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_delete",
+    "rtems_region_delete: only case",
     end_time,
     1,
     0,
@@ -360,7 +360,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_io_initialize",
+    "rtems_io_initialize: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -373,7 +373,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_io_open",
+    "rtems_io_open: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -386,7 +386,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_io_close",
+    "rtems_io_close: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -399,7 +399,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_io_read",
+    "rtems_io_read: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -412,7 +412,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_io_write",
+    "rtems_io_write: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -425,7 +425,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_io_control",
+    "rtems_io_control: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -445,7 +445,7 @@ rtems_task Task_2(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_get_segment: not available -- caller blocks",
+    "rtems_region_get_segment: not available caller blocks",
     end_time,
     1,
     0,
@@ -462,7 +462,7 @@ rtems_task Task_2(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_return_segment: task readied -- returns to caller",
+    "rtems_region_return_segment: task readied returns to caller",
     end_time,
     1,
     0,

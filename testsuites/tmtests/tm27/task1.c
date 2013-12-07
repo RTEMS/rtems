@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -126,7 +126,7 @@ rtems_task Task_1(
   Interrupt_return_time = benchmark_timer_read();
 
   put_time(
-    "interrupt entry overhead: returns to interrupted task",
+    "rtems interrupt: entry overhead returns to interrupted task",
     Interrupt_enter_time,
     1,
     0,
@@ -134,7 +134,7 @@ rtems_task Task_1(
   );
 
   put_time(
-    "interrupt exit overhead: returns to interrupted task",
+    "rtems interrupt: exit overhead returns to interrupted task",
     Interrupt_return_time,
     1,
     0,
@@ -162,7 +162,7 @@ rtems_task Task_1(
   _Thread_Dispatch_set_disable_level( 0 );
 
   put_time(
-    "interrupt entry overhead: returns to nested interrupt",
+    "rtems interrupt: entry overhead returns to nested interrupt",
     Interrupt_enter_nested_time,
     1,
     0,
@@ -170,7 +170,7 @@ rtems_task Task_1(
   );
 
   put_time(
-    "interrupt exit overhead: returns to nested interrupt",
+    "rtems interrupt: exit overhead returns to nested interrupt",
     Interrupt_return_nested_time,
     1,
     0,
@@ -232,7 +232,7 @@ rtems_task Task_2(
   end_time = benchmark_timer_read();
 
   put_time(
-    "interrupt entry overhead: returns to preempting task",
+    "rtems interrupt: entry overhead returns to preempting task",
     Interrupt_enter_time,
     1,
     0,
@@ -240,7 +240,7 @@ rtems_task Task_2(
   );
 
   put_time(
-    "interrupt exit overhead: returns to preempting task",
+    "rtems interrupt: exit overhead returns to preempting task",
     end_time,
     1,
     0,

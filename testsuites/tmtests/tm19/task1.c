@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -127,7 +127,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_signal_catch",
+    "rtems_signal_catch: only case",
     end_time,
     1,
     0,

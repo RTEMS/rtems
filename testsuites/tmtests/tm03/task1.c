@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -138,7 +138,7 @@ rtems_task High_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_semaphore_release: task readied -- preempts caller",
+    "rtems_semaphore_release: task readied preempts caller",
     end_time,
     operation_count - 1,
     0,

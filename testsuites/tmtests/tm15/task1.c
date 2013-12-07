@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -120,7 +120,7 @@ void test_init(void)
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_event_receive: not available -- NO_WAIT",
+    "rtems_event_receive: not available NO_WAIT",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -138,7 +138,7 @@ rtems_task Low_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_event_receive: not available -- caller blocks",
+    "rtems_event_receive: not available caller blocks",
     end_time,
     OPERATION_COUNT,
     0,
@@ -186,7 +186,7 @@ rtems_task Low_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_event_send: task readied -- returns to caller",
+    "rtems_event_send: task readied returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -590,7 +590,7 @@ void complete_test( void )
    */
 
   put_time(
-    "_ISR_Disable",
+    "rtems interrupt: _ISR_Disable",
     isr_disable_time,
     1,
     0,
@@ -598,7 +598,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_ISR_Flash",
+    "rtems interrupt: _ISR_Flash",
     isr_flash_time,
     1,
     0,
@@ -606,7 +606,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_ISR_Enable",
+    "rtems interrupt: _ISR_Enable",
     isr_enable_time,
     1,
     0,
@@ -614,7 +614,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Disable_dispatch",
+    "rtems internal: _Thread_Disable_dispatch",
     thread_disable_dispatch_time,
     1,
     0,
@@ -622,7 +622,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Enable_dispatch",
+    "rtems internal: _Thread_Enable_dispatch",
     thread_enable_dispatch_time,
     1,
     0,
@@ -630,7 +630,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Set_state",
+    "rtems internal: _Thread_Set_state",
     thread_set_state_time,
     1,
     0,
@@ -638,7 +638,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Dispatch (NO FP)",
+    "rtems internal: _Thread_Dispatch NO FP",
     thread_dispatch_no_fp_time,
     1,
     0,
@@ -646,7 +646,7 @@ void complete_test( void )
   );
 
   put_time(
-    "context switch: no floating point contexts",
+    "rtems internal: context switch: no floating point contexts",
     context_switch_no_fp_time,
     1,
     0,
@@ -654,7 +654,7 @@ void complete_test( void )
   );
 
   put_time(
-    "context switch: self",
+    "rtems internal: context switch: self",
     context_switch_self_time,
     1,
     0,
@@ -662,7 +662,7 @@ void complete_test( void )
   );
 
   put_time(
-    "context switch: to another task",
+    "rtems internal: context switch to another task",
     context_switch_another_task_time,
     1,
     0,
@@ -671,7 +671,7 @@ void complete_test( void )
 
 #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
   put_time(
-    "fp context switch: restore 1st FP task",
+    "rtems internal: fp context switch restore 1st FP task",
     context_switch_restore_1st_fp_time,
     1,
     0,
@@ -679,7 +679,7 @@ void complete_test( void )
   );
 
   put_time(
-    "fp context switch: save idle, restore initialized",
+    "rtems internal: fp context switch save idle and restore initialized",
     context_switch_save_idle_restore_initted_time,
     1,
     0,
@@ -687,7 +687,7 @@ void complete_test( void )
   );
 
   put_time(
-    "fp context switch: save idle, restore idle",
+    "rtems internal: fp context switch save idle, restore idle",
     context_switch_save_restore_idle_time,
     1,
     0,
@@ -695,21 +695,24 @@ void complete_test( void )
   );
 
   put_time(
-    "fp context switch: save initialized, restore initialized",
+    "rtems internal: fp context switch save initialized, restore initialized",
     context_switch_save_restore_initted_time,
     1,
     0,
     0
   );
 #else
-    puts( "fp context switch: restore 1st FP task - NA" );
-    puts( "fp context switch: save idle, restore initialized - NA" );
-    puts( "fp context switch: save idle, restore idle - NA" );
-    puts( "fp context switch: save initialized, restore initialized - NA" );
+    puts(
+     "rtems internal: fp context switch restore 1st FP task - NA\n"
+     "rtems internal: fp context switch save idle restore initialized - NA\n"
+     "rtems internal: fp context switch save idle restore idle - NA\n"
+     "rtems internal: fp context switch save initialized\n"
+                      " restore initialized - NA"
+   );
 #endif
 
   put_time(
-    "_Thread_Resume",
+    "rtems internal: _Thread_Resume",
     thread_resume_time,
     1,
     0,
@@ -717,7 +720,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Unblock",
+    "rtems internal: _Thread_Unblock",
     thread_unblock_time,
     1,
     0,
@@ -725,7 +728,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Ready",
+    "rtems internal: _Thread_Ready",
     thread_ready_time,
     1,
     0,
@@ -733,7 +736,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Get",
+    "rtems internal: _Thread_Get",
     thread_get_time,
     OPERATION_COUNT,
     0,
@@ -741,7 +744,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Semaphore_Get",
+    "rtems internal: _Semaphore_Get",
     semaphore_get_time,
     OPERATION_COUNT,
     0,
@@ -749,7 +752,7 @@ void complete_test( void )
   );
 
   put_time(
-    "_Thread_Get: invalid id",
+    "rtems internal: _Thread_Get: invalid id",
     thread_get_invalid_time,
     OPERATION_COUNT,
     0,

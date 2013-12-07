@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -76,7 +76,7 @@ rtems_task Test_task (
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_port_create",
+    "rtems_port_create: only case",
     end_time,
     1,
     0,
@@ -93,7 +93,7 @@ rtems_task Test_task (
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_port_external_to_internal",
+    "rtems_port_external_to_internal: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -110,7 +110,7 @@ rtems_task Test_task (
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_port_internal_to_external",
+    "rtems_port_internal_to_external: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -122,7 +122,7 @@ rtems_task Test_task (
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_port_delete",
+    "rtems_port_delete: only case",
     end_time,
     1,
     0,

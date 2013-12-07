@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +45,7 @@ rtems_task Init(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_rate_monotonic_create",
+    "rtems_rate_monotonic_create: only case",
     end_time,
     1,
     0,
@@ -57,7 +57,7 @@ rtems_task Init(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_rate_monotonic_period: initiate period -- returns to caller",
+    "rtems_rate_monotonic_period: initiate period returns to caller",
     end_time,
     1,
     0,
@@ -81,7 +81,7 @@ rtems_task Init(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_rate_monotonic_cancel",
+    "rtems_rate_monotonic_cancel: only case",
     end_time,
     1,
     0,
@@ -197,7 +197,7 @@ rtems_task Low_task(
   overhead = benchmark_timer_read();
 
   put_time(
-    "rtems_rate_monotonic_period: conclude periods -- caller blocks",
+    "rtems_rate_monotonic_period: conclude periods caller blocks",
     end_time,
     OPERATION_COUNT,
     overhead,

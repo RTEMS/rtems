@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -112,7 +112,7 @@ rtems_task High_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_timer_create",
+    "rtems_timer_create: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -293,7 +293,7 @@ rtems_task Low_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_task_wake_when",
+    "rtems_task_wake_when: only case",
     end_time,
     operation_count,
     0,

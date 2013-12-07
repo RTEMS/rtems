@@ -1,6 +1,5 @@
 /*
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -78,7 +77,7 @@ rtems_test_pause();
   end_time = benchmark_timer_read();
 
   put_time(
-    "NULL timer stopped at",
+    "Time Check: NULL timer stopped at",
     end_time,
     1,
     0,
@@ -91,7 +90,7 @@ rtems_test_pause();
   end_time = benchmark_timer_read();
 
   put_time(
-    "LOOP (1000) timer stopped at",
+    "Time Check: LOOP (1000) timer stopped at",
     end_time,
     1,
     0,
@@ -104,7 +103,7 @@ rtems_test_pause();
   end_time = benchmark_timer_read();
 
   put_time(
-    "LOOP (10000) timer stopped at",
+    "Time Check: LOOP (10000) timer stopped at",
     end_time,
     1,
     0,
@@ -117,7 +116,7 @@ rtems_test_pause();
   end_time = benchmark_timer_read();
 
   put_time(
-    "LOOP (50000) timer stopped at",
+    "Time Check: LOOP (50000) timer stopped at",
     end_time,
     1,
     0,
@@ -130,7 +129,7 @@ rtems_test_pause();
   end_time = benchmark_timer_read();
 
   put_time(
-    "LOOP (100000) timer stopped at",
+    "Time Check: LOOP (100000) timer stopped at",
     end_time,
     1,
     0,

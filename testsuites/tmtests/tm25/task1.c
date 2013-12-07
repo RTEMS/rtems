@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -97,7 +97,7 @@ rtems_task Low_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_clock_tick",
+    "rtems_clock_tick: only case",
     end_time,
     1,
     0,

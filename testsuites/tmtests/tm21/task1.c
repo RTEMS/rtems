@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -135,7 +135,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_task_ident",
+    "rtems_task_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -148,7 +148,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_message_queue_ident",
+    "rtems_message_queue_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -161,7 +161,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_semaphore_ident",
+    "rtems_semaphore_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -174,7 +174,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_partition_ident",
+    "rtems_partition_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -187,7 +187,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_region_ident",
+    "rtems_region_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -200,7 +200,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_port_ident",
+    "rtems_port_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -213,7 +213,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_timer_ident",
+    "rtems_timer_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -226,7 +226,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_rate_monotonic_ident",
+    "rtems_rate_monotonic_ident: only case",
     end_time,
     OPERATION_COUNT,
     overhead,

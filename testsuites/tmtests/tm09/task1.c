@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -63,7 +63,7 @@ rtems_task Test_task (
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_message_queue_create",
+    "rtems_message_queue_create: only case",
     end_time,
     1,
     0,
@@ -77,7 +77,7 @@ rtems_task Test_task (
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_message_queue_delete",
+    "rtems_message_queue_delete: only case",
     end_time,
     1,
     0,

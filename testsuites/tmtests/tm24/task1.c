@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -85,7 +85,7 @@ rtems_task High_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_task_wake_after: yield -- returns to caller",
+    "rtems_task_wake_after: yield returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -110,7 +110,7 @@ rtems_task Tasks(
     end_time = benchmark_timer_read();
 
     put_time(
-      "rtems_task_wake_after: yields -- preempts caller",
+      "rtems_task_wake_after: yields preempts caller",
       end_time,
       OPERATION_COUNT,
       overhead,

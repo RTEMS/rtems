@@ -1,6 +1,6 @@
 /*
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -98,7 +98,7 @@ rtems_task High_task(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_message_queue_broadcast: task readied -- returns to caller",
+    "rtems_message_queue_broadcast: task readied returns to caller",
     end_time,
     1,
     0,

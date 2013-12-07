@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -86,7 +86,7 @@ rtems_task Test_task(
     );
   end_time = benchmark_timer_read();
   put_time(
-    "rtems_semaphore_create",
+    "rtems_semaphore_create: only case",
     end_time,
     1,
     0,
@@ -99,7 +99,7 @@ rtems_task Test_task(
     (void) rtems_semaphore_delete( smid );
   end_time = benchmark_timer_read();
   put_time(
-    "rtems_semaphore_delete",
+    "rtems_semaphore_delete: only case",
     end_time,
     1,
     0,
@@ -170,7 +170,7 @@ rtems_task Test_task(
   );
 
   put_time(
-    "rtems_semaphore_obtain: not available -- NO_WAIT",
+    "rtems_semaphore_obtain: not available NO_WAIT",
     semaphore_obtain_no_wait_time,
     OPERATION_COUNT * OPERATION_COUNT,
     semaphore_obtain_loop_time,
