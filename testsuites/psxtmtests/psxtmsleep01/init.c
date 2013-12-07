@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -33,7 +33,7 @@ void *POSIX_Init(
   end_time = benchmark_timer_read();
 
   put_time(
-    "sleep - yield",
+    "sleep: yield",
     end_time,
     1,
     0,

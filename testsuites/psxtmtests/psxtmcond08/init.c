@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -9,13 +9,13 @@
 
 #if   defined(USE_WAIT)
   #define TEST_NUMBER "08"
-  #define TEST_CASE "pthread_cond_wait - blocking"
+  #define TEST_CASE "pthread_cond_wait: blocking"
 #elif defined(USE_TIMEDWAIT_WITH_VALUE)
   #define TEST_NUMBER "09"
-  #define TEST_CASE "pthread_cond_timedwait - blocking"
+  #define TEST_CASE "pthread_cond_timedwait: blocking"
 #elif defined(USE_TIMEDWAIT_WAIT_VALUE_IN_PAST)
   #define TEST_NUMBER "10"
-  #define TEST_CASE "pthread_cond_timedwait - time in past error"
+  #define TEST_CASE "pthread_cond_timedwait: time in past error"
 #else
   #error "How am I being compiled?"
 #endif

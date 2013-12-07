@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,7 +37,7 @@ static void benchmark_sem_getvalue(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_getvalue",
+    "sem_getvalue: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -56,7 +56,7 @@ static void benchmark_sem_wait(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_wait – available",
+    "sem_wait: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -75,7 +75,7 @@ static void benchmark_sem_post(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_post - no threads waiting",
+    "sem_post: no threads waiting",
     end_time,
     1,        /* Only executed once */
     0,
@@ -94,7 +94,7 @@ static void benchmark_sem_trywait_available(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_trywait - available",
+    "sem_trywait: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -114,7 +114,7 @@ static void benchmark_sem_trywait_not_available(void)
   rtems_test_assert( status != 0 );
 
   put_time(
-    "sem_trywait - not available",
+    "sem_trywait: not available",
     end_time,
     1,        /* Only executed once */
     0,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,7 +35,7 @@ void benchmark_signal(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_cond_signal - no threads waiting",
+    "pthread_cond_signal: no threads waiting",
     end_time,
     1,        /* Only executed once */
     0,

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -45,7 +45,7 @@ static void benchmark_mq_open(int printable)
 
   if (printable == 1)
     put_time(
-      "mq_open (first open)",
+      "mq_open: first open",
       end_time,
       1,        /* Only executed once */
       0,
@@ -68,7 +68,7 @@ static void benchmark_mq_open_second(int printable)
 
   if (printable == 1)
     put_time(
-      "mq_open (second open)",
+      "mq_open: second open",
       end_time,
       1,        /* Only executed once */
       0,
@@ -89,7 +89,7 @@ static void benchmark_mq_close(int printable)
 
   if (printable == 1)
     put_time(
-      "mq_close (close of first)",
+      "mq_close: close of first",
       end_time,
       1,        /* Only executed once */
       0,
@@ -109,7 +109,7 @@ static void benchmark_mq_close_second(int printable)
 
   if (printable == 1)
     put_time(
-      "mq_close (close of second)",
+      "mq_close: close of second",
       end_time,
       1,        /* Only executed once */
       0,
@@ -128,7 +128,7 @@ static void benchmark_mq_unlink(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "mq_unlink",
+    "mq_unlink: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -151,7 +151,7 @@ static void benchmark_mq_notify(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "mq_notify",
+    "mq_notify: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -171,7 +171,7 @@ static void benchmark_mq_send(void)
   rtems_test_assert( status != (-1) );
 
   put_time(
-    "mq_send - no threads waiting",
+    "mq_send: no threads waiting",
     end_time,
     1,        /* Only executed once */
     0,
@@ -193,7 +193,7 @@ static void benchmark_mq_receive(void)
   rtems_test_assert( status != (-1) );
 
   put_time(
-    "mq_receive - available",
+    "mq_receive: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -217,7 +217,7 @@ static void benchmark_mq_timedsend(void)
   rtems_test_assert( status != (-1) );
 
   put_time(
-    "mq_timedsend - no threads waiting",
+    "mq_timedsend: no threads waiting",
     end_time,
     1,        /* Only executed once */
     0,
@@ -243,7 +243,7 @@ static void benchmark_mq_timedreceive(void)
   rtems_test_assert( status != (-1) );
 
   put_time(
-    "mq_timedreceive - available",
+    "mq_timedreceive: available",
     end_time,
     1,        /* Only executed once */
     0,

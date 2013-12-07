@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -39,7 +39,7 @@ static void benchmark_sem_init(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_init",
+    "sem_init: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -58,7 +58,7 @@ static void benchmark_sem_destroy(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_destroy",
+    "sem_destroy: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -76,7 +76,7 @@ static void benchmark_sem_open(bool report_time)
 
   if ( report_time ) {
     put_time(
-      "sem_open (first open 'O_CREAT')",
+      "sem_open: first open O_CREAT",
       end_time,
       1,        /* Only executed once */
       0,
@@ -97,7 +97,7 @@ static void benchmark_sem_close(bool report_time)
 
   if ( report_time ) {
     put_time(
-      "sem_close (named first/nested close)",
+      "sem_close: named first/nested close",
       end_time,
       1,        /* Only executed once */
       0,
@@ -134,7 +134,7 @@ static void benchmark_sem_open_second(void)
   end_time = benchmark_timer_read();
 
   put_time(
-    "sem_open (second open 'O_EXCL')",
+    "sem_open: second open O_EXCL",
     end_time,
     1,        /* Only executed once */
     0,
@@ -153,7 +153,7 @@ static void benchmark_sem_close_second(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "sem_close (named second close)",
+    "sem_close: named second close",
     end_time,
     1,        /* Only executed once */
     0,
@@ -178,14 +178,14 @@ void *POSIX_Init(void *argument)
   /* close named semaphore first time  -- does not delete */
   benchmark_sem_close(true);
   /* unlink named semaphore -- does not delete */
-  benchmark_sem_unlink("sem_unlink (does not delete)");
+  benchmark_sem_unlink("sem_unlink: does not delete");
   /*  close semaphore the second time, this actually deletes it */
   benchmark_sem_close_second();
 
   /* recrate named semaphore first time o_flag = O_CREAT */
   benchmark_sem_open(false);
   benchmark_sem_close(false);
-  benchmark_sem_unlink("sem_unlink (deletes semaphore)");
+  benchmark_sem_unlink("sem_unlink: deletes semaphore");
 
   puts( "*** END OF POSIX TIME TEST PSXTMSEM01 ***" );
 

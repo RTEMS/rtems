@@ -48,7 +48,7 @@ void *Blocker(
   /* Once signaled, this thread preempts POSIX_Init thread */
   end_time = benchmark_timer_read();
   put_time(
-    "pthread_cond_signal - thread waiting, preempt",
+    "pthread_cond_signal: thread waiting preempt",
     end_time,
     1,
     0,

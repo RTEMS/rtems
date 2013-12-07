@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *  COPYRIGHT (c) 2013.
  *  Chirayu Desai (chirayudesai1@gmail.com).
@@ -59,7 +59,7 @@ void *test_thread(
   end_time = benchmark_timer_read();
 
   put_time(
-    "pthread_setschedparam - raise other priority, preempt",
+    "pthread_setschedparam: raise other priority preempt",
     end_time,
     1,        /* Only executed once */
     0,

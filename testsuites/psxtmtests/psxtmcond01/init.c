@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -37,7 +37,7 @@ void benchmark_create_cond_var(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_cond_init (single invocation)",
+    "pthread_cond_init: only case",
     end_time,
     1,
     0,
@@ -56,7 +56,7 @@ void benchmark_destroy_cond_var(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_cond_destroy (single invocation)",
+    "pthread_cond_destroy: only case",
     end_time,
     1,
     0,

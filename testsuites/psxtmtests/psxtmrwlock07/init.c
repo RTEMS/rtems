@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -40,7 +40,7 @@ void *Low(
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_unlock - thread waiting, preempt",
+    "pthread_rwlock_unlock: thread waiting preempt",
     end_time,
     OPERATION_COUNT,
     0,

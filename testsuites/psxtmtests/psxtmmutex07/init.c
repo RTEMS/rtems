@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -36,7 +36,7 @@ void test_mutex_setprioceiling(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_mutex_setprioceiling",
+    "pthread_mutex_setprioceiling: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -56,7 +56,7 @@ void test_mutex_getprioceiling(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_mutex_getprioceiling",
+    "pthread_mutex_getprioceiling: only case",
     end_time,
     1,        /* Only executed once */
     0,

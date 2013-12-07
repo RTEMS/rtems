@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +34,7 @@ static void benchmark_pthread_rwlock_init(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_init",
+    "pthread_rwlock_init: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -54,7 +54,7 @@ static void benchmark_pthread_rwlock_rdlock(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_rdlock - available",
+    "pthread_rwlock_rdlock: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -74,7 +74,7 @@ static void benchmark_pthread_rwlock_unlock(int print)
   rtems_test_assert( status == 0 );
   if ( print == 1 ){
     put_time(
-      "pthread_rwlock_unlock - available",
+      "pthread_rwlock_unlock: available",
       end_time,
       1,        /* Only executed once */
       0,
@@ -94,7 +94,7 @@ static void benchmark_pthread_rwlock_tryrdlock(void)
   rtems_test_assert( status == 0 || status == EBUSY );
   if (status == EBUSY) {
     put_time(
-      "pthread_rwlock_tryrdlock - not available",
+      "pthread_rwlock_tryrdlock: not available",
       end_time,
       1,        /* Only executed once */
       0,
@@ -102,7 +102,7 @@ static void benchmark_pthread_rwlock_tryrdlock(void)
     );
   } else if (status == 0) {
     put_time(
-      "pthread_rwlock_tryrdlock - available",
+      "pthread_rwlock_tryrdlock: available",
       end_time,
       1,        /* Only executed once */
       0,
@@ -122,7 +122,7 @@ static void benchmark_pthread_rwlock_timedrdlock(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_timedrdlock - available",
+    "pthread_rwlock_timedrdlock: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -142,7 +142,7 @@ static void benchmark_pthread_rwlock_wrlock(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_wrlock - available",
+    "pthread_rwlock_wrlock: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -163,7 +163,7 @@ static void benchmark_pthread_rwlock_trywrlock(void)
   rtems_test_assert( status == 0 || status == EBUSY );
   if ( status == EBUSY ) {
     put_time(
-      "pthread_rwlock_trywrlock - not available ",
+      "pthread_rwlock_trywrlock: not available ",
       end_time,
       1,        /* Only executed once */
       0,
@@ -171,7 +171,7 @@ static void benchmark_pthread_rwlock_trywrlock(void)
     );
   } else if ( status == 0 ) {
     put_time(
-      "pthread_rwlock_trywrlock - available",
+      "pthread_rwlock_trywrlock: available",
       end_time,
       1,        /* Only executed once */
       0,
@@ -191,7 +191,7 @@ static void benchmark_pthread_rwlock_timedwrlock(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_timedwrlock - available",
+    "pthread_rwlock_timedwrlock: available",
     end_time,
     1,        /* Only executed once */
     0,
@@ -210,7 +210,7 @@ static void benchmark_pthread_rwlock_destroy(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_rwlock_destroy",
+    "pthread_rwlock_destroy: only case",
     end_time,
     1,        /* Only executed once */
     0,

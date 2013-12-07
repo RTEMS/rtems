@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -43,7 +43,7 @@ void *Low(
   end_time = benchmark_timer_read();
 
   put_time(
-    "pthread_barrier_wait – blocking",
+    "pthread_barrier_wait: blocking",
     end_time,
     OPERATION_COUNT,
     0,

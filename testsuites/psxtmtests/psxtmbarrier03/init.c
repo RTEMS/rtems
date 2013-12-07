@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -77,7 +77,7 @@ void *POSIX_Init(
   rtems_test_assert( status == PTHREAD_BARRIER_SERIAL_THREAD );
 
   put_time(
-    "pthread_barrier_wait – releasing, no preempt",
+    "pthread_barrier_wait: releasing no preempt",
     end_time,
     1,
     0,

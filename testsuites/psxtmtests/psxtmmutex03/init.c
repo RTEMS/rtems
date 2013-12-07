@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -38,7 +38,7 @@ void benchmark_mutex_lock_available(void)
   rtems_test_assert( !status );
 
   put_time(
-    "pthread_mutex_lock - available",
+    "pthread_mutex_lock: available",
     end_time,
     1,
     0,
@@ -57,7 +57,7 @@ void benchmark_mutex_unlock_no_threads_waiting(void)
   rtems_test_assert( !status );
 
   put_time(
-    "pthread_mutex_unlock - no threads waiting",
+    "pthread_mutex_unlock: no threads waiting",
     end_time,
     1,
     0,
@@ -76,7 +76,7 @@ void benchmark_mutex_trylock_available(void)
   rtems_test_assert( !status );
 
   put_time(
-    "pthread_mutex_trylock - available",
+    "pthread_mutex_trylock: available",
     end_time,
     1,
     0,
@@ -100,7 +100,7 @@ void benchmark_mutex_trylock_not_available(void)
   rtems_test_assert( status );
 
   put_time(
-    "pthread_mutex_trylock - not available",
+    "pthread_mutex_trylock: not available",
     end_time,
     1,
     0,
@@ -119,7 +119,7 @@ void benchmark_mutex_timedlock_available(void)
   rtems_test_assert( !status );
 
   put_time(
-    "pthread_mutex_timedlock - available",
+    "pthread_mutex_timedlock: available",
     end_time,
     1,
     0,

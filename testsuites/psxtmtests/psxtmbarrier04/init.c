@@ -37,7 +37,7 @@ void *Blocker(
   /* preempt first thread and stop time */
   end_time = benchmark_timer_read();
   put_time(
-    "pthread_barrier_wait – releasing, preempt",
+    "pthread_barrier_wait: releasing preempt",
     end_time,
     1,
     0,

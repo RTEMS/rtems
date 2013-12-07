@@ -55,7 +55,7 @@ void *thread(
 
   end_time = benchmark_timer_read();
   put_time(
-    "pthread_create - preempt",
+    "pthread_create: preempt",
     end_time,
     1,        /* Only executed once */
     0,

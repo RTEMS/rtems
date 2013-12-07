@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2012.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -102,7 +102,7 @@ void *POSIX_Init(
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_cond_broadcast - threads waiting, no preempt",
+    "pthread_cond_broadcast: threads waiting no preempt",
     end_time,
     1,
     0,

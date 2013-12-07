@@ -35,7 +35,7 @@ void benchmark_pthread_getschedparam(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-    "pthread_getschedparam",
+    "pthread_getschedparam: only case",
     end_time,
     1,        /* Only executed once */
     0,
@@ -62,7 +62,7 @@ void benchmark_pthread_setschedparam(void)
   rtems_test_assert( status == 0 );
 
   put_time(
-     "pthread_setschedparam - no thread switch",
+     "pthread_setschedparam: no thread switch",
      end_time,
      1,       /* Only executed once */
      0,
