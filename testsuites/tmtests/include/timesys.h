@@ -1,9 +1,13 @@
-/*  timesys.h
+/**
+ *  @file
+ *  @brief Timing Test Support
  *
- *  This header file contains the global variables for the Time
- *  suite.
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  This header file contains supporting definitions for the
+ *  Timing Test Suites.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -35,7 +39,7 @@
 #define put_time( _message, _total_time, \
                   _iterations, _loop_overhead, _overhead ) \
     printf( \
-      "%s %" PRId32 "\n", \
+      "%s - %" PRId32 "\n", \
       (_message), \
       (((_total_time) - (_loop_overhead)) / (_iterations)) - (_overhead) \
     )
