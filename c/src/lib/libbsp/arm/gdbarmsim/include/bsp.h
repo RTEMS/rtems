@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_gdbarmsim
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -22,9 +30,23 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
 
-/* support for simulated clock tick */
+/**
+ * @defgroup arm_gdbarmsim GDBARMSIM Support
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief GDBARMSIM support package.
+ *
+ * @{
+ */
+
+/**
+ * @brief Support for simulated clock tick
+ */
 Thread clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
+
+/** @} */
 
 #ifdef __cplusplus
 }
