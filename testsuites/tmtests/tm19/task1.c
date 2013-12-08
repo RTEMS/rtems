@@ -154,7 +154,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "exit ASR overhead: returns to calling task",
+    "rtems_signal: exit ASR overhead returns to calling task",
     end_time,
     1,
     0,
@@ -201,7 +201,7 @@ rtems_task Task_3(
   end_time = benchmark_timer_read();
 
   put_time(
-    "exit ASR overhead: returns to preempting task",
+    "rtems_signal: exit ASR overhead returns to preempting task",
     end_time,
     1,
     0,
