@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_csb336
+ *
+ * @brief SMSC LAN91C11x ethernet devices definitions.
+ */
+
 /*
  *  Header file for SMSC LAN91C11x ethernet devices
  *

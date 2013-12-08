@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_csb336
+ *
+ * @brief Helper functions for SMSC LAN91C11x
+ */
+
 /*
  *  Helper functions for SMSC LAN91C11x
  *
