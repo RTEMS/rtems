@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -100,7 +100,7 @@ rtems_task Task_1(
   end_time = benchmark_timer_read();
 
   put_time(
-    "rtems_shutdown_executive",
+    "overhead: rtems_shutdown_executive",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -122,7 +122,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_create",
+         "overhead: rtems_task_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -137,7 +137,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_ident",
+         "overhead: rtems_task_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -152,7 +152,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_start",
+         "overhead: rtems_task_start",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -167,7 +167,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_restart",
+         "overhead: rtems_task_restart",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -182,7 +182,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_delete",
+         "overhead: rtems_task_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -197,7 +197,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_suspend",
+         "overhead: rtems_task_suspend",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -212,7 +212,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_resume",
+         "overhead: rtems_task_resume",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -227,7 +227,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_set_priority",
+         "overhead: rtems_task_set_priority",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -242,7 +242,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_mode",
+         "overhead: rtems_task_mode",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -257,7 +257,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_get_note",
+         "overhead: rtems_task_get_note",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -272,7 +272,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_set_note",
+         "overhead: rtems_task_set_note",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -287,7 +287,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_wake_when",
+         "overhead: rtems_task_wake_when",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -302,7 +302,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_task_wake_after",
+         "overhead: rtems_task_wake_after",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -317,7 +317,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_interrupt_catch",
+         "overhead: rtems_interrupt_catch",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -332,7 +332,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_clock_get",
+         "overhead: rtems_clock_get",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -347,7 +347,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_clock_set",
+         "overhead: rtems_clock_set",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -362,7 +362,7 @@ rtems_task Task_1(
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_clock_tick",
+         "overhead: rtems_clock_tick",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -379,7 +379,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_create",
+         "overhead: rtems_timer_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -394,7 +394,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_delete",
+         "overhead: rtems_timer_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -409,7 +409,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_ident",
+         "overhead: rtems_timer_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -429,7 +429,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_fire_after",
+         "overhead: rtems_timer_fire_after",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -449,7 +449,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_fire_when",
+         "overhead: rtems_timer_fire_when",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -464,7 +464,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_reset",
+         "overhead: rtems_timer_reset",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -479,7 +479,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_timer_cancel",
+         "overhead: rtems_timer_cancel",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -500,7 +500,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_semaphore_create",
+         "overhead: rtems_semaphore_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -515,7 +515,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_semaphore_delete",
+         "overhead: rtems_semaphore_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -530,7 +530,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_semaphore_ident",
+         "overhead: rtems_semaphore_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -545,7 +545,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_semaphore_obtain",
+         "overhead: rtems_semaphore_obtain",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -560,7 +560,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_semaphore_release",
+         "overhead: rtems_semaphore_release",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -580,7 +580,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_create",
+         "overhead: rtems_message_queue_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -599,7 +599,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_ident",
+         "overhead: rtems_message_queue_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -614,7 +614,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_delete",
+         "overhead: rtems_message_queue_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -629,7 +629,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_send",
+         "overhead: rtems_message_queue_send",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -644,7 +644,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_urgent",
+         "overhead: rtems_message_queue_urgent",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -663,7 +663,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_broadcast",
+         "overhead: rtems_message_queue_broadcast",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -683,7 +683,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_receive",
+         "overhead: rtems_message_queue_receive",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -698,7 +698,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_message_queue_flush",
+         "overhead: rtems_message_queue_flush",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -715,7 +715,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_event_send",
+         "overhead: rtems_event_send",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -735,7 +735,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_event_receive",
+         "overhead: rtems_event_receive",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -750,7 +750,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_signal_catch",
+         "overhead: rtems_signal_catch",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -765,7 +765,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_signal_send",
+         "overhead: rtems_signal_send",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -787,7 +787,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_partition_create",
+         "overhead: rtems_partition_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -802,7 +802,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_partition_ident",
+         "overhead: rtems_partition_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -817,7 +817,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_partition_delete",
+         "overhead: rtems_partition_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -832,7 +832,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_partition_get_buffer",
+         "overhead: rtems_partition_get_buffer",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -847,7 +847,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_partition_return_buffer",
+         "overhead: rtems_partition_return_buffer",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -869,7 +869,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_region_create",
+         "overhead: rtems_region_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -884,7 +884,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_region_ident",
+         "overhead: rtems_region_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -899,7 +899,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_region_delete",
+         "overhead: rtems_region_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -920,7 +920,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_region_get_segment",
+         "overhead: rtems_region_get_segment",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -935,7 +935,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_region_return_segment",
+         "overhead: rtems_region_return_segment",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -956,7 +956,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_port_create",
+         "overhead: rtems_port_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -971,7 +971,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_port_ident",
+         "overhead: rtems_port_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -986,7 +986,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_port_delete",
+         "overhead: rtems_port_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1005,7 +1005,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_port_external_to_internal",
+         "overhead: rtems_port_external_to_internal",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1024,7 +1024,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_port_internal_to_external",
+         "overhead: rtems_port_internal_to_external",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1046,7 +1046,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_io_initialize",
+         "overhead: rtems_io_initialize",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1066,7 +1066,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_io_open",
+         "overhead: rtems_io_open",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1086,7 +1086,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_io_close",
+         "overhead: rtems_io_close",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1106,7 +1106,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_io_read",
+         "overhead: rtems_io_read",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1126,7 +1126,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_io_write",
+         "overhead: rtems_io_write",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1146,7 +1146,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_io_control",
+         "overhead: rtems_io_control",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1161,7 +1161,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_fatal_error_occurred",
+         "overhead: rtems_fatal_error_occurred",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1176,7 +1176,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_rate_monotonic_create",
+         "overhead: rtems_rate_monotonic_create",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1191,7 +1191,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_rate_monotonic_ident",
+         "overhead: rtems_rate_monotonic_ident",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1206,7 +1206,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_rate_monotonic_delete",
+         "overhead: rtems_rate_monotonic_delete",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1221,7 +1221,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_rate_monotonic_cancel",
+         "overhead: rtems_rate_monotonic_cancel",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1236,7 +1236,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_rate_monotonic_period",
+         "overhead: rtems_rate_monotonic_period",
          end_time,
          OPERATION_COUNT,
          overhead,
@@ -1251,7 +1251,7 @@ rtems_test_pause();
       end_time = benchmark_timer_read();
 
       put_time(
-         "rtems_multiprocessing_announce",
+         "overhead: rtems_multiprocessing_announce",
          end_time,
          OPERATION_COUNT,
          overhead,
