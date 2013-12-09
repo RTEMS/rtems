@@ -8,7 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -29,54 +29,54 @@
 extern "C" {
 #endif
 
-/*
- *  The following defines the information control block used to manage
+/**
+ *  This defines the information control block used to manage
  *  this class of objects.
  */
-
 POSIX_EXTERN Objects_Information  _POSIX_Semaphore_Information;
 
+/**
+ *  This defines the mapping from Score status codes to POSIX return codes.
+ */
 extern const int
   _POSIX_Semaphore_Return_codes[CORE_SEMAPHORE_STATUS_LAST + 1];
 
-/*
- *  _POSIX_Semaphore_Manager_initialization
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Semaphore Manager Initialization
  *
  *  This routine performs the initialization necessary for this manager.
  */
-
 void _POSIX_Semaphore_Manager_initialization(void);
 
-/*
- *  _POSIX_Semaphore_Allocate
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Semaphore Allocate
  *
  *  This function allocates a semaphore control block from
  *  the inactive chain of free semaphore control blocks.
  */
 
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void );
+RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void )
+{
+  return (POSIX_Semaphore_Control *)
+    _Objects_Allocate( &_POSIX_Semaphore_Information );
+}
 
-/*
- *  _POSIX_Semaphore_Free
- *
- *  DESCRIPTION:
+
+/**
+ *  @brief POSIX Semaphore Free
  *
  *  This routine frees a semaphore control block to the
  *  inactive chain of free semaphore control blocks.
  */
-
 RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
   POSIX_Semaphore_Control *the_semaphore
-);
+)
+{
+  _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
+}
 
-/*
- *  _POSIX_Semaphore_Get
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Semaphore Get
  *
  *  This function maps semaphore IDs to semaphore control blocks.
  *  If ID corresponds to a local semaphore, then it returns
@@ -86,16 +86,18 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
  *  and the_semaphore is undefined.  Otherwise, location is set
  *  to OBJECTS_ERROR and the_semaphore is undefined.
  */
-
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
-  sem_t        *id,
+  sem_t             *id,
   Objects_Locations *location
-);
+)
+{
+  return (POSIX_Semaphore_Control *)
+    _Objects_Get( &_POSIX_Semaphore_Information, (Objects_Id)*id, location );
+}
 
-/*
- *  _POSIX_Semaphore_Create_support
- *
- *  DESCRIPTION:
+
+/**
+ *  @brief POSIX Semaphore Create Support
  *
  *  This routine supports the sem_init and sem_open routines.
  */
@@ -109,9 +111,7 @@ int _POSIX_Semaphore_Create_support(
 );
 
 /**
- * @brief POSIX delete a semaphore. 
- *
- * DESCRIPTION:
+ *  @brief POSIX Semaphore Delete
  *
  * This routine supports the sem_close and sem_unlink routines.
  */
@@ -122,8 +122,6 @@ void _POSIX_Semaphore_Delete(
 /**
  * @brief POSIX semaphore wait support.
  *
- * DESCRIPTION:
- *
  * This routine supports the sem_wait, sem_trywait, and sem_timedwait
  * services.
  */
@@ -133,15 +131,12 @@ int _POSIX_Semaphore_Wait_support(
   Watchdog_Interval    timeout
 );
 
-/*
- *  _POSIX_Semaphore_Translate_core_semaphore_return_code
- *
- *  DESCRIPTION:
+/**
+ *  @brief POSIX Semaphore Translate Score to POSIX Return Codes
  *
  *  A support routine which converts core semaphore status codes into the
  *  appropriate POSIX status values.
  */
-
 RTEMS_INLINE_ROUTINE int
 _POSIX_Semaphore_Translate_core_semaphore_return_code(
   CORE_semaphore_Status  the_semaphore_status
@@ -157,31 +152,9 @@ _POSIX_Semaphore_Translate_core_semaphore_return_code(
   return _POSIX_Semaphore_Return_codes[the_semaphore_status];
 }
  
-/*
- *  _POSIX_Semaphore_Allocate
+/**
+ *  @brief POSIX Semaphore Namespace Remove
  */
- 
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Allocate( void )
-{
-  return (POSIX_Semaphore_Control *)
-    _Objects_Allocate( &_POSIX_Semaphore_Information );
-}
- 
-/*
- *  _POSIX_Semaphore_Free
- */
- 
-RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
-  POSIX_Semaphore_Control *the_semaphore
-)
-{
-  _Objects_Free( &_POSIX_Semaphore_Information, &the_semaphore->Object );
-}
- 
-/*
- *  _POSIX_Semaphore_Namespace_remove
- */
- 
 RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
   POSIX_Semaphore_Control *the_semaphore
 )
@@ -190,20 +163,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
     &_POSIX_Semaphore_Information, &the_semaphore->Object );
 }
  
-
-
-/*
- *  _POSIX_Semaphore_Get
- */
-RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get (
-  sem_t             *id,
-  Objects_Locations *location
-)
-{
-  return (POSIX_Semaphore_Control *)
-    _Objects_Get( &_POSIX_Semaphore_Information, (Objects_Id)*id, location );
-}
-
 /**
  * @see _POSIX_Name_to_id().
  */
