@@ -22,6 +22,9 @@ rtems_task Init(
 
 #include <timesys.h>
 
+rtems_name Task_name[ OPERATION_COUNT+1 ]; /* array of task names */
+rtems_id   Task_id[ OPERATION_COUNT+1 ];   /* array of task ids */
+
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
