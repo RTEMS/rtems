@@ -58,13 +58,17 @@ int _POSIX_Condition_variables_Wait_support(
         return EINVAL;
       }
 
-      (void) pthread_mutex_unlock( mutex );
-/* XXX ignore this for now  since behavior is undefined
+
+      mutex_status = pthread_mutex_unlock( mutex );
+      /*
+       *  Historically, we ignored the return code since the behavior
+       *  is undefined by POSIX. But GNU/Linux returns EPERM in this
+       *  case, so we follow their lead.
+       */
       if ( mutex_status ) {
         _Objects_Put( &the_cond->Object );
-        return EINVAL;
+        return EPERM;
       }
-*/
 
       if ( !already_timedout ) {
         the_cond->Mutex = *mutex;
