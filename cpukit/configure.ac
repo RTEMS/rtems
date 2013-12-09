@@ -97,6 +97,14 @@ RTEMS_CHECK_FUNC([pthread_attr_setguardsize],[#include <pthread.h>])
 RTEMS_CHECK_FUNC([pthread_attr_setstack],[#include <pthread.h>])
 RTEMS_CHECK_FUNC([pthread_attr_getstack],[#include <pthread.h>])
 
+# These are SMP related and were added to newlib by RTEMS.
+RTEMS_CHECK_FUNC([pthread_attr_setaffinity_np],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_attr_getaffinity_np],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_setaffinity_np],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_getaffinity_np],[#include <pthread.h>])
+RTEMS_CHECK_FUNC([pthread_getattr_np],[#include <pthread.h>])
+AC_CHECK_HEADERS([cpuset.h])
+
 # Mandated by POSIX, not declared in some versions of newlib.
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
 
