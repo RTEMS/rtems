@@ -1,19 +1,11 @@
+/**
+ *  @file
+ *
+ *  This file initializes the POSIX Barrier Manager.
+ */
+
 /*
- *  Barrier Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Barrier Manager.
- *
- *  Directives provided are:
- *
- *     + create a barrier
- *     + get an ID of a barrier
- *     + delete a barrier
- *     + acquire a barrier
- *     + release a barrier
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +26,6 @@
 /**
  *  @brief _POSIX_Barrier_Manager_initialization
  */
-
 void _POSIX_Barrier_Manager_initialization(void)
 {
   _Objects_Initialize_information(
