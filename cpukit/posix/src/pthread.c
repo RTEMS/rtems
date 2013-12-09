@@ -138,7 +138,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
    *  This will prevent the thread from consuming its entire "budget"
    *  while at low priority.
    */
-  the_thread->cpu_time_budget = 0xFFFFFFFF; /* XXX should be based on MAX_U32 */
+  the_thread->cpu_time_budget = UINT32_MAX;
 
   new_priority = _POSIX_Priority_To_core(api->schedparam.sched_ss_low_priority);
   the_thread->real_priority = new_priority;
