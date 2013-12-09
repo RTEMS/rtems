@@ -1,19 +1,11 @@
+/**
+ *  @file
+ *
+ *  This file contains the initialization of the POSIX Spinlock Manager.
+ */
+
 /*
- *  Spinlock Manager
- *
- *  DESCRIPTION:
- *
- *  This package is the implementation of the Spinlock Manager.
- *
- *  Directives provided are:
- *
- *     + create a spinlock
- *     + get an ID of a spinlock
- *     + delete a spinlock
- *     + acquire a spinlock
- *     + release a spinlock
- *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -34,7 +26,6 @@
 /**
  *  @brief _POSIX_Spinlock_Manager_initialization
  */
-
 void _POSIX_Spinlock_Manager_initialization(void)
 {
   _Objects_Initialize_information(
