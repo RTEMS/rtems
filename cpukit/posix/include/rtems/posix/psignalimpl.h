@@ -7,7 +7,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -93,8 +93,6 @@ static inline void _POSIX_signals_Add_post_switch_extension(void)
 
 /**
  * @brief Unlock POSIX signals thread.
- *
- * XXX this routine could probably be cleaned up
  */
 bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
