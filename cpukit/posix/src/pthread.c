@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2010.
+ *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -212,9 +212,7 @@ static bool _POSIX_Threads_Create_extension(
    *
    *  The check for class == 1 is debug.  Should never really happen.
    */
-
-  /* XXX use signal constants */
-  api->signals_pending = 0;
+  api->signals_pending = SIGNAL_EMPTY_MASK;
   if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API
        #if defined(RTEMS_DEBUG)
          && _Objects_Get_class( created->Object.id ) == 1
@@ -223,7 +221,7 @@ static bool _POSIX_Threads_Create_extension(
     executing_api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
     api->signals_blocked = executing_api->signals_blocked;
   } else {
-    api->signals_blocked = 0xffffffff;
+    api->signals_blocked = SIGNAL_ALL_MASK;
   }
 
   _Thread_queue_Initialize(
